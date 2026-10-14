@@ -32,7 +32,7 @@ const LESSONS: TutStepMeta[] = [
     copy('カルは「リフト」へ移ったね。墓地のカードはまた引けるけれど、リフトのカードはふつう戻らないよ。', 'Cull moved to the Rift. Graveyard cards can be drawn again; Rift cards normally stay out of this game.', '컬이 리프트로 갔어요. 묘지의 카드는 다시 뽑을 수 있지만 리프트의 카드는 보통 돌아오지 않아요.')),
   lesson('chest', copy('宝箱を開ける', 'Open a chest', '보물상자 열기'),
     copy('宝箱はサイコロで効果が決まるカード。どの目が出ても、この練習はクリアだよ。', 'A chest’s effect is decided by a die. Any roll clears this practice.', '보물상자는 주사위로 효과가 정해져요. 어떤 숫자가 나와도 이번 연습은 완료예요.'),
-    copy('サイコロの目は選べないよ。カードを長押しすると、どんな結果があるか確認できるよ。', 'You cannot choose the roll. Long-press the card to see its possible outcomes.', '주사위 숫자는 고를 수 없어요. 카드를 길게 누르면 가능한 결과를 볼 수 있어요.')),
+    copy('サイコロの目は選べないよ。カードを右クリックすると、どんな結果があるか確認できるよ。', 'You cannot choose the roll. Right-click the card to see its possible outcomes.', '주사위 숫자는 고를 수 없어요. 카드를 우클릭하면 가능한 결과를 볼 수 있어요.')),
   lesson('enchant', copy('次のターンに働く魔法', 'Magic for your next turn', '다음 턴에 발동하는 마법'),
     copy('「知識の泉」は、場に残って次の自分のターンに働く魔法。使ってからターンを終えよう。', 'Fountain of Knowledge stays on the field and works on your next turn. Play it, then end the turn.', '지식의 샘은 필드에 남아 다음 자신의 턴에 발동해요. 사용한 뒤 턴을 끝내 봐요.'),
     copy('次の自分のターンに効果が出たね。すぐ働く魔法も、場に残る魔法も、使うタイミングを考えよう。', 'It worked on your next turn. Some spells act right away; others stay on the field. Think about when you need them.', '다음 자신의 턴에 효과가 나왔어요. 바로 발동하는 마법과 필드에 남는 마법은 쓸 때를 생각해 봐요.')),

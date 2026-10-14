@@ -110,7 +110,7 @@ export function mountDeck(app: App): Screen {
     countEl.textContent = `${deck().length + 1} / ${DECK_SIZE + 1}`;
     q('deckHint').textContent = pending
       ? loungeText(`${cardName(inst(pending,''))}と入れ替えるカードの「⇄」を押す`, `Press ⇄ on a card to replace it with ${cardName(inst(pending,''))}`, `${cardName(inst(pending,''))}(으)로 교체할 카드의 ⇄ 누르기`)
-      : loungeText('＋で追加 · −で外す · カードをタップで拡大','＋ to add · − to remove · Tap a card to enlarge','＋로 추가 · −로 제거 · 카드를 눌러 확대');
+      : loungeText('＋で追加 · −で外す · カードをクリックで拡大','＋ to add · − to remove · Click a card to enlarge','＋로 추가 · −로 제거 · 카드를 눌러 확대');
     (q('deckUndo') as HTMLButtonElement).disabled = saving || (!undo && !pending);
     curEl.classList.toggle('is-replacing', !!pending);
     // ---- 현재 덱: 어튠(고정) + 8장 ----

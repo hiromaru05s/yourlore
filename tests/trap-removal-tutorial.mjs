@@ -42,7 +42,7 @@ try {
       export { buyCost, effAtk } from './client/src/shared/engine';
       export { api } from './client/src/net/api';
       export { setLang, t } from './client/src/i18n';
-      export { closeOverlay } from './client/src/ui/modal';
+      export { closeOverlay, showControlsHelp } from './client/src/ui/modal';
       export { REWARDS } from './server/src/rewards';
     ` }, bundle: true, format: 'esm', platform: 'node', loader: {'.css':'empty'}, outfile: path.join(temp, 'tutorial.mjs'),
     plugins:[{name:'dom-only-monster-renderer',setup(b){
@@ -51,7 +51,7 @@ try {
       b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
     }}],
   });
-  const { TutorialController, TUT_STEPS, mountTutorial, mountCards, DB, STARTERS, buyCost, effAtk, api, setLang, t, closeOverlay, REWARDS, mountTutorialWelcome } = await import(path.join(temp, 'tutorial.mjs'));
+  const { TutorialController, TUT_STEPS, mountTutorial, mountCards, DB, STARTERS, buyCost, effAtk, api, setLang, t, closeOverlay, showControlsHelp, REWARDS, mountTutorialWelcome } = await import(path.join(temp, 'tutorial.mjs'));
   assert.equal(TUT_STEPS.length,12);
   for (const lang of ['ko','ja','en']) {
     setLang(lang);
@@ -61,6 +61,18 @@ try {
     assert.equal(root.querySelectorAll('.tut-steps li').length,12);
     assert.equal(root.querySelectorAll('.claimed').length,1);
     assert(root.querySelector('#ruleNotebook'));
+    assert(!/モバイル|タップ|長押し|mobile|long.press|\btap\b|모바일|길게|탭하면/i.test(root.textContent));
+    // The help must keep mouse instructions even if Steam reports a coarse pointer.
+    for (const coarse of [false, true]) {
+      globalThis.matchMedia = () => ({ matches: coarse, addEventListener() {}, removeEventListener() {} });
+      showControlsHelp();
+      const help = document.querySelector('.help-modal');
+      assert(help.textContent.includes(t('help.d.zoom')));
+      assert(help.textContent.includes(t('help.d.hand')));
+      assert(!/モバイル|タップ|長押し|mobile|long.press|\btap\b|모바일|길게|탭하면/i.test(help.textContent));
+      closeOverlay();
+    }
+    globalThis.matchMedia = () => ({ matches: false, addEventListener() {}, removeEventListener() {} });
     assert(root.textContent.includes('3,000'));
     screen.destroy();root.innerHTML='';
     const gallery = mountCards({ root, home: noop, cards: noop });

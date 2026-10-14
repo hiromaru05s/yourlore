@@ -22,10 +22,10 @@ interface Section { icon: string; h: string; body: string[]; }
 function passiveSection(lang: "ko" | "ja" | "en"): Section {
   const h = lang === "ja" ? "パッシブキーワード" : lang === "en" ? "Passive Keywords" : "패시브 키워드";
   const intro = lang === "ja"
-    ? "カードには<b>キーワード名だけ</b>が書かれています。カードを拡大(右クリック・長押し)すると右側に説明パネルが表示されます。"
+    ? "カードには<b>キーワード名だけ</b>が書かれています。カードを拡大(右クリック)すると右側に説明パネルが表示されます。"
     : lang === "en"
-      ? "Cards show only the <b>keyword name</b>. Enlarge a card (right-click / long-press) to see the description panel beside it."
-      : "카드에는 <b>키워드명만</b> 적혀 있습니다. 카드를 확대(우클릭·길게 누르기)하면 옆에 설명 패널이 표시돼요.";
+      ? "Cards show only the <b>keyword name</b>. Enlarge a card (right-click) to see the description panel beside it."
+      : "카드에는 <b>키워드명만</b> 적혀 있습니다. 카드를 확대(우클릭)하면 옆에 설명 패널이 표시돼요.";
   const body = [intro, ...Object.keys(PASSIVES).map((k) => {
     const loc = PASSIVES[k][lang];
     return `<b>${loc.name}</b> — ${loc.desc}`;
@@ -75,7 +75,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>고독·고귀·포식·귀족·시초</b> 5종족이 있습니다.",
       "<b>같은 종족</b>의 서로 <b>다른</b> 카드를 필드에 <b>2장·3장</b>(시초는 <b>4장</b>까지) 모으면 강력한 동족 시너지가 발동합니다(같은 카드 2장은 인정 X, 게임당 각 1회).",
       "<b>시초</b>는 1~8코스트 각 1종(총 8종, 8코 <b>시초의 미믹</b> 포함)으로 이뤄져 서로 다른 카드를 모으기 가장 좋습니다.",
-      "카드를 확대하면(우클릭·길게 누르기) 종족 태그의 ⓘ에서 보너스 내용을 볼 수 있어요.",
+      "카드를 확대하면(우클릭) 종족 태그의 ⓘ에서 보너스 내용을 볼 수 있어요.",
     ] },
     { icon: "⭐", h: "특수 카드 & 필드", body: [
       "필드에는 <b>몬스터 7장</b>, <b>마법 14장</b>까지 놓을 수 있습니다.",
@@ -97,8 +97,8 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🏆", h: "승리 & 조작", body: [
       "<b>1:1 대전</b>입니다. 상대의 <b>체력을 0</b>으로 만들면 그 즉시 승리해요.",
       "<b>60턴</b>이 끝날 때까지 승부가 나지 않으면 <b>남은 체력이 높은 쪽이 판정승</b>합니다. (동률이면 무승부)",
-      "<b>카드 확대</b>: 손패를 펼친 뒤 카드를 누르면 상세를 볼 수 있어요. 우클릭·길게 누르기도 가능해요. 손패 카드는 필드로 드래그해서 사용해요.",
-      "<b>기권</b>: 우측 로그 패널 맨 아래(모바일은 📜 버튼으로 로그 열기).",
+      "<b>카드 확대</b>: 손패를 클릭해 펼친 뒤 카드를 클릭하면 상세를 볼 수 있어요. 우클릭도 가능해요. 손패 카드는 필드로 드래그해서 사용해요.",
+      "<b>기권</b>: 화면의 기권 버튼을 클릭하세요.",
       "상대 턴에는 상대의 마나가 실시간으로 표시됩니다.",
     ] },
   ],
@@ -143,7 +143,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
       "<b>孤独・高貴・捕食・貴族・始原</b>の5種族があります。",
       "<b>同じ種族</b>の<b>異なる</b>カードを場に<b>2枚・3枚</b>(始原は<b>4枚</b>まで)揃えると強力な同族シナジーが発動します(同じカード2枚は不可、1ゲームに各1回)。",
       "<b>始原</b>は1~8コスト各1種(全8種、8コスト<b>始原のミミック</b>を含む)で構成され、異なるカードを揃えやすい種族です。",
-      "カードを拡大(右クリック・長押し)すると種族タグのⓘでボーナス内容を確認できます。",
+      "カードを拡大(右クリック)すると種族タグのⓘでボーナス内容を確認できます。",
     ] },
     { icon: "⭐", h: "特殊カード & 場", body: [
       "場には<b>モンスター7枚</b>、<b>魔法14枚</b>まで置けます。",
@@ -165,8 +165,8 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🏆", h: "勝利 & 操作", body: [
       "<b>1対1</b>の対戦です。相手の<b>精神力を0</b>にすればその時点で勝利です。",
       "<b>60ターン</b>終了までに決着がつかない場合、<b>残り体力が多い方の判定勝ち</b>になります。（同点なら引き分け）",
-      "<b>カード拡大</b>: 手札を押して広げ、カードをタップして詳細表示。PCは右クリック、モバイルは長押しでも拡大できます。手札の使用は盤面へのドラッグです。",
-      "<b>降参</b>: 右のログパネル最下部(モバイルは📜ボタンでログを開く)。",
+      "<b>カード拡大</b>: 手札をクリックで広げ、カードをクリックして詳細表示。右クリックでも拡大できます。手札の使用は盤面へのドラッグです。",
+      "<b>降参</b>: 画面の降参ボタンをクリックします。",
       "相手のターン中は相手のマナがリアルタイムで表示されます。",
     ] },
   ],
@@ -210,7 +210,7 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🧬", h: "Tribe Synergies", body: [
       "There are 5 tribes: <b>Solitary, Noble, Devour, Aristocrat, Origin</b>.",
       "Gather <b>2 or 3 different cards of the SAME tribe</b> on your field (Origin goes up to <b>4</b>) for powerful same-tribe synergies (copies don't count; once per game each).",
-      "Enlarge a card (right-click / long-press) and tap the tribe tag's ⓘ to see the bonuses.",
+      "Enlarge a card (right-click) and click the tribe tag's ⓘ to see the bonuses.",
     ] },
     { icon: "⭐", h: "Special Cards & Field", body: [
       "The field holds up to <b>7 monsters</b> and <b>14 spells</b>.",
@@ -232,8 +232,8 @@ const SECTIONS: { ko: Section[]; ja: Section[]; en: Section[] } = {
     { icon: "🏆", h: "Winning & Controls", body: [
       "It's a <b>1v1 duel</b>. Drop the opponent's <b>HP to 0</b> to win instantly.",
       "If nobody has won by the end of <b>turn 60</b>, the player with <b>more HP remaining wins the judgment</b> (a tie is a draw).",
-      "<b>Enlarge cards</b>: expand the hand, then tap a card to inspect it. Right-click on PC or long-press on mobile also works. Drag hand cards onto the board to play them.",
-      "<b>Surrender</b>: bottom of the log panel (📜 button opens the log on mobile).",
+      "<b>Enlarge cards</b>: click your hand to expand it, then click a card to inspect it. You can also right-click a card. Drag hand cards onto the board to play them.",
+      "<b>Surrender</b>: click the Surrender button on the board.",
       "The opponent's mana is shown live during their turn.",
     ] },
   ],

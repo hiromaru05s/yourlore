@@ -59,7 +59,7 @@ export function mountHome(app: App): Screen {
   const loadRank = () => void api.rankMe().then(r=>{
     if(disposed)return;
     const el=q('myTier');
-    el.innerHTML=r?homeRankHtml(r):loungeText('ティアを取得できませんでした · タップして再読み込み','Could not load rank · Tap to retry','티어를 불러오지 못했습니다 · 눌러서 재시도');
+    el.innerHTML=r?homeRankHtml(r):loungeText('ティアを取得できませんでした · クリックして再読み込み','Could not load rank · Click to retry','티어를 불러오지 못했습니다 · 눌러서 재시도');
     el.onclick=r?()=>app.leaderboard():loadRank;
   });
   loadRank();
