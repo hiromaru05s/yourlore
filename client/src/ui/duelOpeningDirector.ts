@@ -3,6 +3,7 @@ import {getLang} from '../i18n';
 import {openingAudio,warmOpeningSound} from './openingSound';
 import type {createOpeningRenderer} from './opening/renderer';
 import {warmImages} from './imageAssets';
+import {OPENING_PORTRAIT_URL} from './opening/assets';
 export interface OpeningProfile {name:string;avatar:string|null;}
 export interface OpeningOptions {
   root:HTMLElement;me:OpeningProfile;opp:OpeningProfile;firstIsMe:boolean;signal:AbortSignal;
@@ -20,7 +21,7 @@ let modulePromise:Promise<typeof import('./opening/renderer')>|undefined;
 const rendererModule=()=>modulePromise??=import('./opening/renderer').catch(error=>{modulePromise=undefined;throw error;});
 export async function warmOpening():Promise<void>{
   void warmOpeningSound();
-  await Promise.all([rendererModule().catch(()=>{}),warmImages(['blue','red'].map(color=>`/art/biblion/seeker-${color}-lossless.webp`))]);
+  await Promise.all([rendererModule().catch(()=>{}),warmImages([OPENING_PORTRAIT_URL])]);
 }
 
 /** Approved Caustic → Lumen Weave. Turn banners remain owned by the controller. */

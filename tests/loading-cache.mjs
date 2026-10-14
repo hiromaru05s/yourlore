@@ -1,13 +1,15 @@
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
-import {mkdtemp,rm} from 'node:fs/promises';
+import {access,mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 const temp=await mkdtemp(path.join(tmpdir(),'lore-loading-'));
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 try {
- await build({stdin:{contents:`export {createAssetQueue} from './client/src/ui/assetQueue';export {decodeAsset,warmImages} from './client/src/ui/imageAssets';export {readingAssetBytes,readingAssetUrls,readingBoardUrl} from './client/src/ui/readingAssetCache';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(temp,'cache.mjs')});
- const {createAssetQueue,decodeAsset,warmImages,readingAssetBytes,readingAssetUrls,readingBoardUrl}=await import(path.join(temp,'cache.mjs'));
+ await build({stdin:{contents:`export {OPENING_PORTRAIT_URL} from './client/src/ui/opening/assets';export {createAssetQueue} from './client/src/ui/assetQueue';export {decodeAsset,warmImages} from './client/src/ui/imageAssets';export {readingAssetBytes,readingAssetUrls,readingBoardUrl} from './client/src/ui/readingAssetCache';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(temp,'cache.mjs')});
+ const {OPENING_PORTRAIT_URL,createAssetQueue,decodeAsset,warmImages,readingAssetBytes,readingAssetUrls,readingBoardUrl}=await import(path.join(temp,'cache.mjs'));
+ // Every speculative URL must refer to an asset included in the release.
+ for(const url of [OPENING_PORTRAIT_URL,...readingAssetUrls(false),...readingAssetUrls(true)])await access(path.join('client/public',url.split('?')[0]));
  const queue=createAssetQueue(3,1),started=[],release=new Map();
  const add=(id,priority)=>queue.add(()=>{started.push(id);return new Promise(r=>release.set(id,r));},priority);
  const first=add('low1','low');await flush();const second=add('low2','low'),third=add('low3','low');
