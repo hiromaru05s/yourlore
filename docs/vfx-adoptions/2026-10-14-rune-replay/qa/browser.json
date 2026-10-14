@@ -5,35 +5,35 @@
       "count": 1,
       "width": 1280,
       "reduced": false,
-      "frames": 321
+      "frames": 46
     },
     {
       "side": 1,
       "count": 2,
       "width": 1280,
       "reduced": false,
-      "frames": 211
+      "frames": 38
     },
     {
       "side": 0,
       "count": 1,
       "width": 390,
       "reduced": false,
-      "frames": 198
+      "frames": 73
     },
     {
       "side": 1,
       "count": 1,
       "width": 390,
       "reduced": true,
-      "frames": 155
+      "frames": 59
     },
     {
       "side": 0,
       "count": 0,
       "width": 1280,
       "reduced": false,
-      "frames": 101
+      "frames": 25
     },
     {
       "cancel": true
