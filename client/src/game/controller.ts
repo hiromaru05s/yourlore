@@ -1,3 +1,4 @@
+import {spaceRiteReason,spaceRiteSourceText} from '../ui/spaceRiteStatus';
 import {forbiddenBatches} from '../ui/forbiddenRitual/selection';
 import {fusionPairs} from '../ui/dragonFusion/selection';
 import {paintTurnUrgency} from '../ui/turnUrgency';
@@ -181,8 +182,10 @@ export abstract class BaseController implements BoardHandlers {
     const g = this.state; if (!g || g.over) return;
     const me = g.players[this.you];
     const c = me.hand.find((x) => x.uid === uid);
+    const spaceReason=c?spaceRiteReason(g,this.you,c):null;
     const msg = g.cur !== this.you ? t("play.block.turn")
       : g.pending ? t("play.block.pending")
+      : spaceReason ? spaceReason+" "+spaceRiteSourceText(g,this.you)
       : (c && me.mana < playCost(c, me)) ? t("play.block.mana")
       : t("play.block.cond");
     this.cantPlayToast(msg);
@@ -335,6 +338,7 @@ export abstract class BaseController implements BoardHandlers {
     if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
     if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
     if(events.some(e=>e.type==='nova'))A.warmNova();
+    if(events.some(e=>e.type==='voidGrant'))A.warmVoidGrant();
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
@@ -457,6 +461,9 @@ export abstract class BaseController implements BoardHandlers {
         }
         case 'elementalImpact': await elemental.get(e.group)?.impact(e.index);break;
         case 'elementalEnd': await elemental.get(e.group)?.finished;elemental.delete(e.group);await Promise.all(elementalDeaths.splice(0));break;
+        case 'voidGrant':
+          await A.grantVoid(e.uids);
+          break;
         case 'infinityRelease':
           await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
           break;

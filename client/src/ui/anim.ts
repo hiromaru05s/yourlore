@@ -1313,3 +1313,16 @@ export async function creationBirth(card:CardInst,side:ViewSide,source:HTMLEleme
  try{if(!fxSkip)await boardMotionScope(signal=>playCreation(card,side,source,copy,signal),7000);}
  finally{source?.remove();}
 }
+
+/** Selected pale whole-card Rift coat; the engine supplies newly changed UIDs. */
+let voidGrantRuntime:Promise<typeof import('./dimensionVoid/runtime')>|undefined;
+const loadVoidGrant=()=>voidGrantRuntime??=(import('./dimensionVoid/runtime').catch(error=>{voidGrantRuntime=undefined;throw error;}));
+export function warmVoidGrant():void{void loadVoidGrant().catch(()=>{});}
+export async function grantVoid(uids:string[]):Promise<void>{
+ if(fxSkip||!uids.length)return;
+ await boardMotionScope(async signal=>{
+  const {playVoidGrant}=await loadVoidGrant();
+  if(signal.aborted||fxSkip)return false;
+  return playVoidGrant(uids,signal);
+ },2000);
+}

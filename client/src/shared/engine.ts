@@ -3208,8 +3208,10 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "beginnerMind": { const dn = ctx.drawN(p, v || 4); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → ${dn}장 드로우`, `<span class="t">${p.name}</span> ${cn(card)} → ${dn}枚ドロー`); break; }
     case "voidAll": { // 차원 술식(v41b): 양 필드 모든 몬스터에 '공허' 부여
-      let nv = 0;
-      for (const pl of g.players) for (const m of pl.field) { if (m.hatch != null || hasPassive(m, "void")) continue; (m.passivesG ??= []).push("void"); nv++; }
+      const uids: string[] = [];
+      for (const pl of g.players) for (const m of pl.field) { if (m.hatch != null || hasPassive(m, "void")) continue; (m.passivesG ??= []).push("void"); uids.push(m.uid); }
+      const nv = uids.length;
+      if (nv) ctx.ev.push({type:'voidGrant',player:side(g,p),uids});
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 필드의 몬스터 ${nv}체에 '공허' 부여`, `<span class="t">${p.name}</span> ${cn(card)} → 場のモンスター${nv}体に「虚無」を付与`);
       break;
     }

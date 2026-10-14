@@ -1,3 +1,4 @@
+import {paintSpaceRiteCard,spaceRiteReason,spaceRiteSourceText,syncSpaceRiteStatus} from './spaceRiteStatus';
 import {dualReadyActive} from './monster/dualReady';
 import { questProgressText } from '../shared/cardPresentation';
 import { npcPortrait } from "../shared/botNpcs";
@@ -1005,6 +1006,7 @@ export class GameView {
     const old=new Map([...handEl.querySelectorAll<HTMLElement>(':scope > .card')].map(el=>[el.dataset.uid,el]));
     const keep=new Set(me.hand.map(c=>c.uid));
     for(const [uid,node] of old)if(!keep.has(uid!))node.remove();
+    syncSpaceRiteStatus(this.root,g,this.you,!!discarding);
     const conditionCards:HTMLElement[]=[];
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
@@ -1019,10 +1021,14 @@ export class GameView {
         if(card)card.replaceWith(next);
         card=next;
       }
-      if(!g.over && !discarding && cardPlayConditionMet(g,this.you,c)===true)conditionCards.push(card);
+      const spaceReason=discarding?null:spaceRiteReason(g,this.you,c);
+      paintSpaceRiteCard(card,spaceReason,c);
+      if(spaceReason)card.dataset.spaceRiteReason=spaceReason+" "+spaceRiteSourceText(g,this.you);
+      if(!g.over && !discarding && !spaceReason && cardPlayConditionMet(g,this.you,c)===true)conditionCards.push(card);
       card.classList.remove('is-played');
       if(!aff&&!discarding)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       else delete card.dataset.blockReason;
+      if(spaceReason)card.dataset.blockReason=card.dataset.spaceRiteReason;
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(me.hand.length - idx);
       const position=handEl.children[idx];
@@ -1217,7 +1223,7 @@ export class GameView {
     });
     card.onclick = (e) => {
       e.stopPropagation();
-      if (this.handOpen) zoomCard(c); // tap = enlarge preview; playing is drag-only now
+      if (this.handOpen) zoomCard(c,undefined,card.dataset.spaceRiteReason); // tap = enlarge preview; playing is drag-only now
     };
   }
 
