@@ -59,8 +59,7 @@ try{for(const width of widths){
  await p.screenshot({path:`${out}/shop-${width}.png`});
  await action('ranking',()=>p.locator('[data-nav=leaderboard]').click(),()=>p.waitForSelector('.lb-empty'));
  await action('friends',()=>p.locator('[data-nav=friends]').click());
- await action('profile',()=>p.locator('[data-profile]').click(),()=>p.waitForSelector('#avaBtn'));
- await action('avatar preview',()=>p.locator('#avaBtn').click(),()=>p.waitForSelector('.hooded-live canvas'));await p.locator('.hooded-picker [data-close]').click();
+ await action('profile',()=>p.locator('[data-profile]').click(),()=>p.waitForSelector('.pf-ava'));
  await action('guide',()=>p.locator('[data-nav=tutorial]').click());
  await action('home return',()=>p.locator('[data-nav=home]').click());
  const state=await p.evaluate(()=>({sameHomeCanvas:window.__homeCanvas===document.querySelector('.home-spirit-host canvas'),cache:document.documentElement.dataset.menuCache,worker:!!navigator.serviceWorker?.controller,heap:performance.memory?.usedJSHeapSize,errors:[...document.querySelectorAll('img')].filter(i=>i.getClientRects().length&&(!i.complete||!i.naturalWidth)).map(i=>i.src)}));

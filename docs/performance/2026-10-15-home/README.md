@@ -27,6 +27,10 @@ User request: initial loading may take longer; prepare HOME and menus so artwork
 `home-spirit-cache.mjs`: one scene per App, suspend/resume, localization on reuse and logout disposal.
 Existing asset-readiness retry and selected-menu interaction tests also pass.
 
+## Integration
+
+The local comparison predates main 118c2bac. The release also preserves the subsequently adopted growth/erosion/anesthesia effects, removal of shop board previews, and fixed profile character UI. The final browser script follows the updated profile and does not restore its retired picker.
+
 ## Deployment
 
 Pending guarded staging release and deployed-file/browser verification; see the staging subdirectory when completed.
