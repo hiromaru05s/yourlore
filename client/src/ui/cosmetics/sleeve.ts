@@ -1,3 +1,5 @@
+import {gachaFromUrl} from '../../shared/gachaCosmetics';
+import {animatedMaterial as gachaMaterial} from './gachaTrio/materials';
 import {livingFromUrl} from '../../shared/livingCosmetics';
 import {animatedMaterial} from './living/materials';
 import * as T from 'three';
@@ -14,6 +16,9 @@ function finishMap(t:AtelierTheme){let map=maps.get(t.id);if(map)return map;cons
   const i=(y*size+x)*4;data[i]=Math.round(255*foil);data[i+1]=Math.round(255*(rough*(1-foil*.65)+n*.025));data[i+2]=Math.round(255*(.08+foil*.85));data[i+3]=255;}
  map=new T.DataTexture(data,size,size);map.wrapS=map.wrapT=T.ClampToEdgeWrapping;map.magFilter=T.LinearFilter;map.minFilter=T.LinearMipmapLinearFilter;map.generateMipmaps=true;map.needsUpdate=true;maps.set(t.id,map);return map;}
 export function sleeveMaterial(texture:T.Texture):T.Material{
+ const gacha=gachaFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);
+ if(gacha){const m=gachaMaterial(gacha.variant,texture);m.onBeforeRender=()=>{m.uniforms.time.value=matchMedia('(prefers-reduced-motion: reduce)').matches?0:Math.floor(performance.now()/33.333)/30;};return m;}
+
  const living=livingFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);
  if(living){const m=animatedMaterial(living.variant,false,texture);m.onBeforeRender=()=>{m.uniforms.time.value=matchMedia('(prefers-reduced-motion: reduce)').matches?0:performance.now()/1000;};return m;}
  const theme=themeFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);if(!theme)return new T.MeshBasicMaterial({map:texture,toneMapped:false});

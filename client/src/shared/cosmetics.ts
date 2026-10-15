@@ -1,7 +1,8 @@
 import {isCardEffect} from './cardEffects';
+import {GACHA_THEMES,gachaArt} from './gachaCosmetics';
 import {LIVING_THEMES,livingArt} from './livingCosmetics';
 import {THEMES,asset} from './atelierThemes';
-export interface Cosmetic {id:string;kind:'sleeve'|'furniture';url:string;ko:string;ja:string;en:string;price:number;}
+export interface Cosmetic {id:string;kind:'sleeve'|'furniture';url:string;ko:string;ja:string;en:string;price:number;gachaOnly?:boolean;}
 const themes=[['astral','星図','Star Atlas','성도'],['verdant','翠葉','Verdant','녹엽'],['crimson','緋印','Crimson Seal','홍인'],['ivory','白銀','Ivory Moon','백은']] as const;
 export const COSMETICS:Cosmetic[]=themes.flatMap(([key,ja,en,ko])=>[
  {id:key,kind:'sleeve' as const,url:`/cosmetics/v2/sleeve-${key}.webp`,ja:`${ja}のスリーブ`,en:`${en} Sleeve`,ko:`${ko} 슬리브`,price:0},
@@ -15,6 +16,11 @@ COSMETICS.push(...LIVING_THEMES.flatMap(t=>[
  {id:t.id,kind:'sleeve' as const,url:livingArt(t.id),ja:t.ja+'のスリーブ',en:t.en+' Sleeve',ko:t.ko+' 슬리브',price:0},
  {id:'furniture:'+t.id,kind:'furniture' as const,url:livingArt(t.id),ja:t.ja+'のデッキ置き場＆墓地',en:t.en+' Deck Holder & Graveyard',ko:t.ko+' 덱 받침 & 묘지',price:0}
 ]));
+export const GACHA_COSMETICS:Cosmetic[]=GACHA_THEMES.flatMap(t=>[
+ {id:'sleeve:gacha-'+t.key,kind:'sleeve' as const,url:gachaArt(t.variant),ja:t.ja+'のスリーブ',en:t.en+' Sleeve',ko:t.ko+' 슬리브',price:1000,gachaOnly:true},
+ {id:'furniture:gacha-'+t.key,kind:'furniture' as const,url:gachaArt(t.variant),ja:t.ja+'のデッキ置き場＆墓地',en:t.en+' Deck Holder & Graveyard',ko:t.ko+' 덱 받침 & 묘지',price:1000,gachaOnly:true}
+]);
+COSMETICS.push(...GACHA_COSMETICS);
 export const FURNITURE_LIST=COSMETICS.filter(c=>c.kind==='furniture');
 export const cosmetic=(id:string)=>COSMETICS.find(c=>c.id===id);
 export const furnitureUrl=(id:string|null|undefined)=>FURNITURE_LIST.find(c=>c.id===id)?.url;
