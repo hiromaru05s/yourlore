@@ -1,5 +1,7 @@
 import {Actor,corners} from '../monster/actor';
-import {monsterRect} from '../monster/runtime';
+import {projectedPlacement} from '../boardProjection';
+import type {Rect} from '../monster/catalog';
+const marketRect=(node:HTMLElement):Rect=>{const r=node.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height,matrix:projectedPlacement(node,r.width,r.height)}};
 import {fragmentPose,SPLIT,DEBRIS_END} from './motion';
 /** Use the original DOM imagery and projection, like ordinary monster death.
  * No bitmap downscale, environment lighting, bloom or replacement face. */
@@ -15,7 +17,7 @@ export class NativeMarketBreak{
  }
  paint(cards:HTMLElement[],t:number,dark:boolean){
   this.root.dataset.time=String(t);this.root.style.filter=dark?'brightness(.62)':'none';this.hide();if(t<SPLIT||t>=DEBRIS_END)return;
-  cards.forEach((n,slot)=>{const r=monsterRect(n),a=this.actors[slot];
+  cards.forEach((n,slot)=>{const r=marketRect(n),a=this.actors[slot];
    // The responsive board can scale an ancestor after board projection.
    // Keep the projected face, fitting its bounds to the actual screen card.
    if(r.matrix){const pts=corners(r.matrix,r.w,r.h),xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]),left=Math.min(...xs),top=Math.min(...ys),w=Math.max(...xs)-left,h=Math.max(...ys)-top;
