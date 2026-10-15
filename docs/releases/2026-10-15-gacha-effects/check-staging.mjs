@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 const origin=process.env.LORE_STAGING_ORIGIN||'https://test.yourlore.xyz';
-const root=path.resolve('client/dist'),sha=b=>createHash('sha256').update(b).digest('hex');
+const root=path.resolve(process.env.LORE_DIST_ROOT||'client/dist'),sha=b=>createHash('sha256').update(b).digest('hex');
 const files=(await fs.readdir(root+'/assets')).filter(f=>/\.(js|css|json)$/.test(f)).map(f=>'assets/'+f);
 const cosmetics=(await fs.readdir(root+'/cosmetics')).filter(f=>f.startsWith('effect-')).map(f=>'cosmetics/'+f);
 for(const folder of ['cosmetics/gacha-trio-v1']){try{for(const f of await fs.readdir(root+'/'+folder))cosmetics.push(folder+'/'+f);}catch{}}

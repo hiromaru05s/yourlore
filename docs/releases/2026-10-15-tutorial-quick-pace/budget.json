@@ -1,0 +1,20 @@
+{
+  "lessons": 36,
+  "scenes": 66,
+  "questions": 35,
+  "playerActions": 133,
+  "opponentActions": 35,
+  "manualReviews": 31,
+  "extraPostAnswerConfirmations": 0,
+  "betweenLessonClicks": 0,
+  "chars": 6456,
+  "originalChars": 7596,
+  "assumptions": {
+    "japaneseCharactersPerMinute": 800,
+    "secondsPerPlayerAction": 1.5,
+    "secondsPerAnswerOrReview": 1,
+    "systemAndPaymentAllowanceSeconds": 60
+  },
+  "designBudgetSeconds": 810,
+  "humanStudy": false
+}

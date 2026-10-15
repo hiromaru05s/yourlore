@@ -1,0 +1,147 @@
+{
+  "cases": [
+    {
+      "width": 1280,
+      "hiddenDuringWarm": true,
+      "shots": [
+        {
+          "pose": {
+            "x": 640,
+            "y": 450,
+            "z": 0,
+            "pitch": 0,
+            "yaw": 0,
+            "bank": 0,
+            "scale": 1
+          },
+          "changed": 0,
+          "max": 0,
+          "oldMs": 74.29999999701977,
+          "warmMs": 3
+        },
+        {
+          "pose": {
+            "x": 640,
+            "y": 450,
+            "z": 80,
+            "pitch": 32,
+            "yaw": 25,
+            "bank": 14,
+            "scale": 1
+          },
+          "changed": 0,
+          "max": 0,
+          "oldMs": 52.80000001192093,
+          "warmMs": 2.4000000059604645
+        },
+        {
+          "pose": {
+            "x": 640,
+            "y": 450,
+            "z": 120,
+            "pitch": -26,
+            "yaw": 90,
+            "bank": -18,
+            "scale": 1
+          },
+          "changed": 0,
+          "max": 0,
+          "oldMs": 51.29999999701977,
+          "warmMs": 1.7999999970197678
+        },
+        {
+          "pose": {
+            "x": 640,
+            "y": 450,
+            "z": 30,
+            "pitch": 12,
+            "yaw": 165,
+            "bank": 25,
+            "scale": 1
+          },
+          "changed": 0,
+          "max": 0,
+          "oldMs": 46.30000001192093,
+          "warmMs": 1.9000000059604645
+        }
+      ],
+      "same": true,
+      "concurrentRetained": true,
+      "cleared": true,
+      "balanced": true,
+      "disposed": true
+    },
+    {
+      "width": 390,
+      "hiddenDuringWarm": true,
+      "shots": [
+        {
+          "pose": {
+            "x": 195,
+            "y": 450,
+            "z": 0,
+            "pitch": 0,
+            "yaw": 0,
+            "bank": 0,
+            "scale": 1
+          },
+          "changed": 0,
+          "max": 0,
+          "oldMs": 49,
+          "warmMs": 1.2999999970197678
+        },
+        {
+          "pose": {
+            "x": 195,
+            "y": 450,
+            "z": 80,
+            "pitch": 32,
+            "yaw": 25,
+            "bank": 14,
+            "scale": 1
+          },
+          "changed": 0,
+          "max": 0,
+          "oldMs": 47.400000005960464,
+          "warmMs": 1.2000000029802322
+        },
+        {
+          "pose": {
+            "x": 195,
+            "y": 450,
+            "z": 120,
+            "pitch": -26,
+            "yaw": 90,
+            "bank": -18,
+            "scale": 1
+          },
+          "changed": 0,
+          "max": 0,
+          "oldMs": 44.29999999701977,
+          "warmMs": 1.3999999910593033
+        },
+        {
+          "pose": {
+            "x": 195,
+            "y": 450,
+            "z": 30,
+            "pitch": 12,
+            "yaw": 165,
+            "bank": 25,
+            "scale": 1
+          },
+          "changed": 0,
+          "max": 0,
+          "oldMs": 47.79999999701977,
+          "warmMs": 1.9000000059604645
+        }
+      ],
+      "same": true,
+      "concurrentRetained": true,
+      "cleared": true,
+      "balanced": true,
+      "disposed": true
+    }
+  ],
+  "errors": []
+}

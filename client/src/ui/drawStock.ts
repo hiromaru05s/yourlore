@@ -20,11 +20,15 @@ export function createStockGeometry(w:number,h:number,depth=w*DRAW_THICKNESS_RAT
  const bevel=w*.004,g=new T.ExtrudeGeometry(s,{depth:depth-bevel*2,bevelEnabled:true,bevelSize:bevel,bevelThickness:bevel,bevelSegments:2,steps:1,curveSegments:4});
  g.translate(0,0,-depth+bevel);return g;
 }
-interface DrawStage {add(w:number,h:number,accent?:string):{update(p:StockPose,visible:boolean,glow:number):void;remove():void};render():void;release():void;}
-let shared:{stage:DrawStage;refs:number}|null=null;
+interface DrawStage {add(w:number,h:number,accent?:string):{update(p:StockPose,visible:boolean,glow:number):void;remove():void};render():void;prepare():Promise<void>;release():void;}
+let shared:{stage:DrawStage;refs:number;width:number;height:number;ratio:number;canvas:HTMLCanvasElement;wake:()=>void;destroy:()=>void;timer?:ReturnType<typeof setTimeout>}|null=null;
+let duel:WeakRef<HTMLElement>|undefined;
+const discardIdle=()=>{if(shared?.refs===0)shared.destroy();};
+if(typeof window!=='undefined')window.addEventListener('pagehide',discardIdle);
 /** One small scene shared by simultaneous player/opponent draws; no art textures. */
 export function acquireDrawStage():DrawStage|null{
- if(shared){shared.refs++;return shared.stage;}
+ if(shared?.refs===0&&(shared.width!==innerWidth||shared.height!==innerHeight||shared.ratio!==flightPixelRatio()))shared.destroy();
+ if(shared){clearTimeout(shared.timer);if(shared.refs===0)shared.wake();shared.refs++;return shared.stage;}
  if(typeof WebGL2RenderingContext==='undefined')return null;
  let renderer:T.WebGLRenderer;try{renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
  const width=innerWidth,height=innerHeight;renderer.setPixelRatio(flightPixelRatio());renderer.setSize(width,height);renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
@@ -39,6 +43,9 @@ export function acquireDrawStage():DrawStage|null{
  const ink=new T.LineBasicMaterial({color:0x182b42,transparent:true,opacity:.7});
  let disposed=false;const owners=new Set<T.Group>();
  const disposeObject=(group:T.Group)=>{group.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(m!==paper&&m!==edge&&m!==ink)m.dispose();});}});scene.remove(group);owners.delete(group);};
+ const destroy=()=>{if(disposed)return;disposed=true;if(shared?.stage===stage){clearTimeout(shared.timer);shared=null;}canvas.removeEventListener('webglcontextlost',lost);for(const group of [...owners])disposeObject(group);paper.dispose();edge.dispose();ink.dispose();ground.geometry.dispose();ground.material.dispose();light.shadow.map?.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();};
+ const lost=(event:Event)=>{event.preventDefault();destroy();};canvas.addEventListener('webglcontextlost',lost);
+ const rest=()=>{if(shared?.stage!==stage||shared.refs)return;if(duel?.deref()?.isConnected){shared.timer=setTimeout(rest,30000);return;}destroy();};
  const stage:DrawStage={
   add(w,h,accent){const group=new T.Group();group.matrixAutoUpdate=false;group.visible=false;scene.add(group);owners.add(group);
    const depth=w*DRAW_THICKNESS_RATIO,body=new T.Mesh(createStockGeometry(w,h,depth),[edge,paper]);body.castShadow=true;group.add(body);
@@ -49,7 +56,18 @@ export function acquireDrawStage():DrawStage|null{
    return {update(p,visible,glow){if(disposed)return;group.visible=visible;group.matrix.copy(stockMatrix(p,width,height));rimMat.opacity=glow*.8;},remove(){if(owners.has(group))disposeObject(group);}};
   },
   render(){if(!disposed)renderer.render(scene,camera);},
-  release(){if(!shared||--shared.refs>0)return;disposed=true;shared=null;for(const group of [...owners])disposeObject(group);paper.dispose();edge.dispose();ink.dispose();ground.geometry.dispose();ground.material.dispose();light.shadow.map?.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();}
+  async prepare(){if(!disposed)await renderer.compileAsync(scene,camera);},
+  release(){if(shared?.stage!==stage||shared.refs<=0||--shared.refs>0)return;for(const group of [...owners])disposeObject(group);renderer.clear();canvas.remove();shared.timer=setTimeout(rest,30000);}
  };
- shared={stage,refs:1};return stage;
+ shared={stage,refs:1,width,height,ratio:renderer.getPixelRatio(),canvas,wake(){renderer.clear();document.body.append(canvas);},destroy};return stage;
+}
+
+/** Compile stock, seam, glow and shadow programs while the duel cover is opaque.
+ * Keep one idle stage for this match; no animation clock, sound or event is run. */
+export async function warmDrawStage(root:HTMLElement):Promise<void>{
+ duel=new WeakRef(root);const stage=acquireDrawStage();if(!stage)return;
+ const canvas=shared!.canvas,visibility=canvas.style.visibility;canvas.style.visibility='hidden';
+ const card=stage.add(120,187.5);
+ try{card.update({x:innerWidth/2,y:innerHeight/2,z:0,pitch:0,yaw:0,bank:0,scale:1},true,1);await stage.prepare();stage.render();}
+ finally{card.remove();stage.release();canvas.style.visibility=visibility;}
 }

@@ -33,3 +33,14 @@
 @media(max-width:850px){.academy-chapters{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.academy-chapters button{padding:9px;gap:6px}.academy-chapters b{font-size:11px}.notebook-search{padding:12px 20px 0;gap:8px}.notebook-pages nav{position:static}.academy-coach.tut-coach{max-height:48dvh}.academy-coach .tut-coach-body{font-size:12px}}
 
 .academy-coach .tut-coach-head{position:sticky;top:0;background:#102234;z-index:1}.coach-minimize{margin-left:auto;min-width:30px;min-height:30px;background:none;border:0;color:#c7dce6;font-size:20px;cursor:pointer}.academy-coach .coach-exit{margin-left:0}
+
+/* The same lessons, with cause and result readable while the board is ready. */
+.coach-outcome{font-size:12px;line-height:1.8;color:#d8dfc5;margin:8px 0;padding-left:10px;border-left:2px solid #a7b798}
+.coach-delta,.coach-record{font-size:11px;line-height:1.7;color:#bfd0d8;margin:8px 0}.coach-delta summary,.coach-record summary{cursor:pointer;color:#d5dfc7}.coach-delta p{margin:3px 0}.coach-record p{padding:8px 0;border-bottom:1px solid #b1c8d128}
+[data-pace][aria-pressed=true]{color:#e6dbb7;border-color:#b8c9a777}
+
+.coach-receipt{font-size:10px;color:#dfd0a5;margin:5px 0}
+
+.coach-detail{font-size:11px;line-height:1.8;color:#b8cbd8;margin:8px 0}.coach-detail summary{cursor:pointer}.coach-detail p{margin:6px 0}
+
+.coach-dice{font-size:12px;color:#e7d6ab;margin:7px 0}

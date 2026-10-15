@@ -1,0 +1,51 @@
+/* Keep the architecture visible; give the HOME reading column its own quiet surface. */
+.lounge-shell.horizon-nav::before { height:calc(var(--dock) + 24px); }
+.lounge-shell.selected-menu .lounge-topbar {
+  background:linear-gradient(#05111ff2,#05111fd9 70%,#05111f00);
+}
+.lounge-shell.selected-menu .lounge-user b { font-size:14px; font-weight:600; }
+.lounge-shell.selected-menu .lounge-user small,
+.lounge-shell.selected-menu .lounge-balance small { font-size:11px; color:#d1dfe9; opacity:1; letter-spacing:.02em; }
+.lounge-shell.selected-menu .lounge-balance b { font-size:16px; font-weight:600; }
+.lounge-shell.selected-menu.lounge-home .lounge-home-main {
+  width:427px; padding:18px 22px; gap:12px;
+  background:linear-gradient(110deg,#071522ed,#0b1e2aeb);
+  border-top:1px solid #d4e7f23d; border-bottom:1px solid #d4e7f22b;
+  color:#f2f6fa;
+}
+.lounge-shell.selected-menu.lounge-home .lounge-play { gap:10px; }
+.lounge-shell.selected-menu.lounge-home .gift-courier { width:100%; margin:0; padding:0; }
+.lounge-shell.selected-menu.lounge-home .gift-courier-label strong { font:600 16px/1.5 var(--sans,sans-serif); text-shadow:none; }
+.lounge-shell.selected-menu.lounge-home .gift-courier-label small { font-size:12px; line-height:1.6; color:#d1dfe9; text-shadow:none; }
+.lounge-shell.selected-menu.lounge-home .lounge-mode-tabs { gap:8px; }
+.lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button {
+  flex:1; font-size:14px; font-weight:600; color:#c8d8e5; padding:12px 6px;
+}
+.lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button[aria-pressed=true] { color:#fff; background:#bcd8eb12; }
+.lounge-shell.selected-menu.lounge-home .mode-reward { font-size:12px; line-height:1.7; color:#d1dfe9; }
+.lounge-shell.selected-menu.lounge-home .lounge-play-button > span { font-size:12px; color:#d1dfe9; }
+.lounge-shell.selected-menu.lounge-home .lounge-rank-info { text-align:left; }
+.lounge-shell.selected-menu.lounge-home .home-rank-copy > strong { font-size:16px; color:#f2f6fa; }
+.lounge-shell.selected-menu.lounge-home .home-rank-copy > strong b { font-size:20px; }
+.lounge-shell.selected-menu.lounge-home .home-rank-copy :is(small,.rank-season,.rank-target) { font-size:12px; line-height:1.6; color:#d1dfe9; }
+.lounge-shell.selected-menu.lounge-home .home-rank .rank-track { height:4px; margin:8px 0; background:#bcd8eb30; }
+.lounge-shell.selected-menu.lounge-home .lounge-active-deck { padding:12px 0; }
+.lounge-shell.selected-menu.lounge-home .lounge-deck-label strong { font-size:17px; color:#f2f6fa; }
+.lounge-shell.selected-menu.lounge-home .lounge-deck-label :is(small,span) { font-size:12px; line-height:1.6; color:#d1dfe9; }
+.lounge-shell.selected-menu.lounge-home .home-daily-reward { padding:12px 0; }
+.lounge-shell.selected-menu.lounge-home .home-daily-reward strong { font-size:14px; font-weight:600; }
+.lounge-shell.selected-menu.lounge-home .home-daily-reward small { font-size:12px; line-height:1.6; color:#d1dfe9; }
+.lounge-shell.selected-menu.lounge-home :is(.gift-courier,.lounge-active-deck,.lounge-rank-info,.home-daily-reward):hover { background-color:#bcd8eb0f; }
+@media(max-width:850px) {
+  .lounge-shell.selected-menu.lounge-home .lounge-home-main { width:390px; max-width:100%; padding:14px 18px; margin:0 auto; }
+  .lounge-shell.selected-menu .lounge-user b { font-size:12px; }
+  .lounge-shell.selected-menu .lounge-user small { font-size:10px; letter-spacing:0; }
+  .lounge-shell.selected-menu .lounge-balance b { font-size:14px; }
+  .lounge-shell.selected-menu .lounge-balance small { font-size:10px; }
+}
+@media(max-width:400px) {
+  .lounge-shell.selected-menu.lounge-home .lounge-content > .lounge-home-screen { padding-left:12px; padding-right:12px; }
+  .lounge-shell.selected-menu.lounge-home .lounge-home-main { padding:12px 14px; }
+  .lounge-shell.selected-menu .lounge-balance > span:last-child { flex-direction:column-reverse; align-items:flex-end; gap:0; }
+  .lounge-shell.selected-menu .lounge-balance small { font-size:10px; margin:0; }
+}
