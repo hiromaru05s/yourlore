@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/poison-summon.mjs",
     "tests/erosion.mjs",
     "tests/menu-cache.mjs",
     "tests/menu-preparation.mjs",
