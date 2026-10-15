@@ -314,6 +314,7 @@ export abstract class BaseController implements BoardHandlers {
       await this.playEvents(prev, res, presentedHandDiscards);
       if(wheelResolution)this.consumeLogs(res.events);
     } finally {
+      if(this.wheelReplayUid!==undefined){this.wheelReplayUid=undefined;this.wheelDice?.close();this.wheelDice=null;}
       this.marketCrisis?.cancel();this.marketCrisis=undefined;
       if (!this.dead) this.view.setPlaying(false);
       if (res.state.over) this.outcomePending = false;
