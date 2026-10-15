@@ -1,3 +1,4 @@
+import {medalHtml} from './medal';
 import { npcPortrait } from "../shared/botNpcs";
 import { homeIcon } from "./homeIcons";
 import { artUrl } from "./cardArt";
@@ -54,11 +55,8 @@ export function badgeLabel(key: string): string {
   return lang === "ja" ? m.ja : lang === "en" ? m.en : m.ko;
 }
 
-export function badgeChipHtml(key: string | null | undefined, small = false): string {
-  if (!key) return "";
-  const m = BADGE_META[key];
-  if (!m) return "";
-  return `<span class="badge-chip${small ? " badge-sm" : ""}" style="--bc:${m.color}">${m.icon} ${badgeLabel(key)}</span>`;
+export function badgeChipHtml(key:string|null|undefined,_small=false):string {
+  return medalHtml(key);
 }
 
 export { tierLabel };

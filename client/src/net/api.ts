@@ -177,7 +177,8 @@ export interface Profile {
   wins?: number; losses?: number;
   tier?: string | null; mmr?: number | null; rank?: number | null;
   recent?: { mode: string; result: "win" | "loss" | "draw"; opp: string; turns: number | null; at: number }[];
-  badges?: string[]; // owned badge keys (self only)
+  badges?: string[]; // legacy response compatibility
+  medals?: import("../shared/medals").MedalState;
   credits?: number;  // self only
   sleeve?: string;   // equipped sleeve id (self only)
   furniture?: string;

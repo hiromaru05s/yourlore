@@ -1,3 +1,4 @@
+import {medalName} from '../medal';
 import {OPENING_PORTRAIT_URL} from './assets';
 import {npcPortrait} from "../../shared/botNpcs";
 import {resultScene,RESULT_TIMING} from './result';
@@ -5,7 +6,7 @@ import {createOpeningCoin} from './coin';
 import {createOpeningLight} from './light';
 import {paintSeam,type Point} from './seam';
 import {getLang} from '../../i18n';
-export type Options={first:boolean;light:boolean;reduced:boolean;board:boolean;names?:[string,string];avatars?:[string|null,string|null]};
+export type Options={first:boolean;light:boolean;reduced:boolean;board:boolean;names?:[string,string];avatars?:[string|null,string|null];medals?:[string|null,string|null]};
 const clamp=(n:number)=>Math.min(1,Math.max(0,n));
 const smooth=(n:number)=>{n=clamp(n);return n*n*(3-2*n);};
 const out=(n:number)=>1-(1-clamp(n))**3;
@@ -39,6 +40,14 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
  const fill=(a:number)=>{g.fillStyle=o.light?`rgba(224,219,208,${a})`:`rgba(5,10,17,${a})`;g.fillRect(0,0,W,H);};
  const poly=(points:number[][],color:string)=>{g.beginPath();points.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();g.fillStyle=color;g.fill();};
  const text=(s:string,x:number,y:number,size:number,color=ivory,font='Georgia',spacing=0)=>{g.fillStyle=color;g.textBaseline='middle';g.font=`${font==='sans-serif'?'500':'400'} ${size}px ${font}`;g.textAlign='center';if(!spacing){g.fillText(s,x,y);return;}const letters=[...s],widths=letters.map(c=>g.measureText(c).width),total=widths.reduce((a,b)=>a+b,0)+spacing*(letters.length-1);let pos=x-total/2;g.textAlign='left';letters.forEach((ch,i)=>{g.fillText(ch,pos,y);pos+=widths[i]+spacing;});};
+ const inscription=(side:number,x:number,y:number)=>{
+  const name=medalName(o.medals?.[side]);if(!name)return;
+  g.save();const size=16*U;g.font=`400 ${size}px "Yu Mincho",serif`;
+  const w=Math.min(M?610:450,g.measureText(name).width+40*U),h=27*U;
+  g.fillStyle='#15232ee8';g.strokeStyle='#a598755e';g.lineWidth=1;
+  g.beginPath();g.moveTo(x-w/2,y-h/2);g.lineTo(x+w/2,y-h/2);g.lineTo(x+w/2-6,y);g.lineTo(x+w/2,y+h/2);g.lineTo(x-w/2,y+h/2);g.lineTo(x-w/2+6,y);g.closePath();g.fill();g.stroke();
+  g.fillStyle='#beb6a3';g.textAlign='center';g.textBaseline='middle';g.fillText(name,x,y,w-24*U);g.restore();
+ };
  const coin=(x:number,y:number,r:number,rx:number,ry:number,rz:number,alpha=1,heat=0)=>{if(r<1||alpha<.001)return;const im=coinImage(rx,ry,rz,o.first);g.save();g.globalAlpha*=alpha;if(im){const sz=r*2.82;g.drawImage(im,x-sz/2,y-sz/2,sz,sz);if(heat>0){hg.clearRect(0,0,640,640);hg.globalCompositeOperation='source-over';hg.drawImage(im,0,0);hg.globalCompositeOperation='source-in';hg.fillStyle='#fff3cd';hg.fillRect(0,0,640,640);hg.globalCompositeOperation='source-over';g.save();g.globalAlpha*=heat;g.globalCompositeOperation='screen';g.shadowColor='#ffe3a2';g.shadowBlur=20*heat;g.drawImage(hot,x-sz/2,y-sz/2,sz,sz);g.restore();}}else{g.translate(x,y);g.rotate(rz);g.scale(Math.max(.06,Math.abs(Math.cos(ry))),1);g.fillStyle='#bca273';g.beginPath();g.arc(0,0,r,0,7);g.fill();g.strokeStyle=ivory;g.lineWidth=3;g.stroke();text(o.first?'I':'II',0,0,r*.75,'#18252b');}g.restore();};
  const portrait=(side:number,x:number,y:number,w:number,h:number,zoom=1)=>{
   const avatar=o.avatars?.[side],npc=avatar?npcImages.get(avatar):undefined;
@@ -80,7 +89,7 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
    const bottom=g.createLinearGradient(0,yy+70,0,yy+(M?280:H*.42));bottom.addColorStop(0,'#03081300');bottom.addColorStop(1,'#030813bd');g.fillStyle=bottom;g.fillRect(0,yy,W,H);
    g.restore();
    g.save();g.translate(dx,dy);g.globalAlpha=(1-exit);paintSeam(g,edge,t);g.restore();
-   if(t<1.4){g.save();g.globalAlpha=out((t-.3)/.4)*(1-smooth((t-1.1)/.28));const ny=M?yy+202:H*.81;text(s?'OPPONENT':'YOU',xx,ny,14*U,s?red:blue,'sans-serif',4);text(o.names?.[s]??(getLang()==='ja'?'シーカー':getLang()==='ko'?'시커':'SEEKER'),xx,ny+33*U,25*U,ivory,'"Yu Mincho",serif',2);g.restore();}
+   if(t<1.4){g.save();g.globalAlpha=out((t-.3)/.4)*(1-smooth((t-1.1)/.28));const ny=M?yy+202:H*.81;text(s?'OPPONENT':'YOU',xx,ny,14*U,s?red:blue,'sans-serif',4);text(o.names?.[s]??(getLang()==='ja'?'シーカー':getLang()==='ko'?'시커':'SEEKER'),xx,ny+33*U,25*U,ivory,'"Yu Mincho",serif',2);inscription(s,xx,ny+65*U);g.restore();}
   }
   g.restore();
  }
@@ -114,6 +123,14 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
   coin(x,y,r,rx,ry,rz,smooth((t-v.toss)/.13),1-smooth((t-v.toss-.06)/.32));
  }
  resultScene(g,t,W,H,o,coin);
+ // Keep both identities readable again after the coin, including reduced motion.
+ if(t>=v.land&&t<v.duration){
+  g.save();g.globalAlpha=(1-boardReveal)*smooth((t-v.land)/.25);
+  for(const s of [0,1]){const x=W*(s?.76:.24),y=H*(M?.83:.84);
+   g.font=`400 ${25*U}px "Yu Mincho",serif`;g.fillStyle=ivory;g.textAlign='center';g.textBaseline='middle';
+   g.fillText(o.names?.[s]??'',x,y,W*.40);inscription(s,x,y+34*U);
+  }g.restore();
+ }
  // Quiet framing, with no floating decorative rings or random particle field.
  if(t<1.16){g.save();g.globalAlpha=out(t/.4)*.8;text('L O R E',cx,M?78:46,13,gold,'Georgia',4);g.restore();}
 }

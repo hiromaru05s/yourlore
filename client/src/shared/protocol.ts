@@ -47,6 +47,7 @@ export type GameServerMsg =
  */
 export function redactFor(state: GameState, you: Side): GameState {
   const g: GameState = structuredClone(state);
+  delete g.medalDuel;
   g._wheelSnap = null; // 운명의 수레바퀴 스냅샷은 서버 전용 (클라 불필요 + 숨김정보 보호)
   g.rng = 0; // PRNG state is server-only — leaking it lets a client replay mulberry32 and predict every future roll/shuffle
   // your own deck CONTENTS are yours to see, but its ORDER is hidden information

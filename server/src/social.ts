@@ -1,3 +1,4 @@
+import {medalState} from './medals';
 import {starterCollection,constrainDeckStore} from '../../client/src/shared/collection';
 import {deckStoreForUser} from '../../client/src/shared/cards';
 import {cosmetic,ownedCosmetics} from '../../client/src/shared/cosmetics';
@@ -13,7 +14,7 @@ import {cosmetic,ownedCosmetics} from '../../client/src/shared/cosmetics';
 // ============================================================
 import type { Env, SessionUser } from "./env";
 import { corsHeaders, sanitizeDisplay } from "./auth";
-import { getRating, tierOf, tierWithGm, rankPosition, TIERS } from "./rank";
+import { getRating, tierWithGm, rankPosition } from "./rank";
 
 const CHALLENGE_TTL_MS = 90_000;
 const PRESENCE_ONLINE_MS = 70_000; // presence heartbeat is 30s — 70s covers 2 missed beats
@@ -25,29 +26,9 @@ function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
 }
 
-// ---- badges (computed; ids are stable keys the client renders) ----
-const WIN_BADGES: [number, string][] = [[200, "wins:200"], [50, "wins:50"], [10, "wins:10"]];
-
-export async function ownedBadges(env: Env, userId: string): Promise<string[]> {
-  const out: string[] = [];
-  const u = await env.DB.prepare(`SELECT wins, created_at FROM users WHERE id = ?`).bind(userId).first<{ wins: number; created_at: number }>();
-  if (!u) return out;
-  for (const [n, key] of WIN_BADGES) if (u.wins >= n) out.push(key);
-  // 최고 도달 티어 (전 시즌 peak + 확정 final_tier 포함) → 그 티어까지 전부 소유
-  const r = await env.DB.prepare(
-    `SELECT MAX(peak_mmr) AS peak, MAX(CASE WHEN final_tier = 'gm' THEN 1 ELSE 0 END) AS gm FROM ratings WHERE user_id = ?`
-  ).bind(userId).first<{ peak: number | null; gm: number }>();
-  if (r?.peak != null) {
-    const best = tierOf(r.peak);
-    const idx = TIERS.findIndex((t) => t.key === best);
-    for (let i = 1; i <= idx; i++) out.push(`tier:${TIERS[i].key}`); // iron 제외(기본값이라 뱃지 없음)
-    if (r.gm) out.push("tier:gm");
-  }
-  const tut = await env.DB.prepare(`SELECT 1 AS x FROM rewards WHERE user_id = ? AND key IN ('tut:6','tuto:10')`).bind(userId).first();
-  if (tut) out.push("tutorial");
-  const inv = await env.DB.prepare(`SELECT 1 AS x FROM invite_rewards WHERE inviter_id = ? AND status IN ('earned','paid') LIMIT 1`).bind(userId).first();
-  if (inv) out.push("invite");
-  return out;
+// Legacy field name retained for account and friend compatibility; values are text medals.
+export async function ownedBadges(env:Env,userId:string):Promise<string[]> {
+ return (await medalState(env,userId)).entries.filter(m=>m.earnedAt!==null).map(m=>m.id);
 }
 
 import {isCardEffect} from '../../client/src/shared/cardEffects';
@@ -91,7 +72,7 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     recent,
     byMode: await byModeOf(env, u.id),
     ...(self ? {
-      badges: await ownedBadges(env, u.id),
+      medals: await medalState(env, u.id, Date.now(), true),
       credits: u.credits,
       sleeve: u.sleeve || "default",
       sleeves: ownedCosmetics(u.sleeves).filter(id=>!id.startsWith("furniture:")&&!isCardEffect(id)),
@@ -175,7 +156,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     if (typeof body.badge === "string") {
       if (body.badge) {
         const owned = await ownedBadges(env, user.id);
-        if (!owned.includes(body.badge)) return json(env, { error: "보유하지 않은 뱃지입니다." }, 400);
+        if (!owned.includes(body.badge)) return json(env, { error: "未獲得の勲章は装着できません。" }, 400);
       }
       sets.push("badge = ?"); args.push(body.badge || null);
     }

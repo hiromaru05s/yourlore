@@ -1,3 +1,5 @@
+import {newMedalDuel} from '../../client/src/shared/medalTracking';
+import {equippedMedal,settleMedals} from './medals';
 import { actionChangesState } from '../../client/src/shared/botActions';
 import { experienceStatements, experienceReceipt } from './progression';
 import { BOT_FIRST_CLEAR_EXP, ONLINE_WIN_EXP, ONLINE_LOSS_EXP, type ExperienceReceipt } from '../../client/src/shared/progression';
@@ -197,6 +199,8 @@ export class GameRoom {
       };
       if (bot) this.room.game.players[1].botTune = {...bot.deck.tune};
       this.room.game.botDifficulty=body.challengeDifficulty;
+      this.room.game.medalDuel=newMedalDuel();
+      this.room.game.medals=await Promise.all(this.room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):equippedMedal(this.env,p.id))) as [string|null,string|null];
       this.room.rewardDecks=this.room.game.players.map(p=>[...p.hand,...p.deck,...p.discard].map(c=>c.id)) as [string[],string[]];
       this.room.game.players.forEach(p=>{p.activity={};});
       this.room.daily=await Promise.all(this.room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):ensureDaily(this.env,p.id))) as [QuestState|null,QuestState|null];
@@ -437,6 +441,7 @@ export class GameRoom {
       // If the "winner" never actually joined, this was never a real game → void, don't award rank.
       if (!room.readied[winner]) { room.game.over = true; room.game.phase = "over"; room.game.winner = null; room.recorded = true; continue; }
       room.game.over = true; room.game.phase = "over"; room.game.winner = winner;
+      if(room.game.medalDuel)room.game.medalDuel.forfeited=true;
       await this.persist();
       await this.syncAlarm();
       const remaining = this.sockFor(winner);
@@ -662,6 +667,7 @@ export class GameRoom {
       }
       for(const side of [0,1] as Side[]) {
         if(room.bot?.side===side)continue;
+        if(!room.challengeDifficulty)await settleMedals(this.env,matchId,room.game,side,room.resultAt!);
         await settleProgression(this.env,{matchId,userId:room.players[side].id,mode:room.challengeDifficulty?'bot':room.ranked?'ranked':'online',difficulty:room.challengeDifficulty,
           won:room.game.winner==null?null:room.game.winner===side,player:room.game.players[side],deck:room.rewardDecks?.[side]??[],daily:room.daily?.[side]??undefined,endedAt:room.resultAt!});
         const ws=this.sockFor(side);if(ws)try{this.send(ws,{type:'rewardsSettled'});}catch{/* reconnect reads the ledger */}

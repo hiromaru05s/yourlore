@@ -1,10 +1,11 @@
+import {medalName} from './medal';
 import {DUEL_OPENING_MS,OPENING_TOSS_MS,OPENING_REVEAL_MS,OPENING_EXIT_MS,OPENING_VISUAL_MS,OPENING_DEAL_MS,openingPhase} from '../shared/opening';
 import {getLang} from '../i18n';
 import {openingAudio,warmOpeningSound} from './openingSound';
 import type {createOpeningRenderer} from './opening/renderer';
 import {warmImages} from './imageAssets';
 import {OPENING_PORTRAIT_URL} from './opening/assets';
-export interface OpeningProfile {name:string;avatar:string|null;}
+export interface OpeningProfile {name:string;avatar:string|null;medal?:string|null;}
 export interface OpeningOptions {
   root:HTMLElement;me:OpeningProfile;opp:OpeningProfile;firstIsMe:boolean;signal:AbortSignal;
   /** Adjusted to the authoritative server clock; negative during lead-in. */
@@ -30,7 +31,9 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   const game=o.root.querySelector<HTMLElement>('.game');
   const host=document.createElement('div');host.className='duel-opening duel-opening-v1 duel-opening-caustic cointoss-ov';
   host.style.cssText='display:block;background:#07101d;backdrop-filter:none;animation:none';
-  host.setAttribute('role','region');host.setAttribute('aria-label',label('デュエル開幕','Duel opening','듀얼 시작'));
+  host.setAttribute('role','region');
+  host.dataset.medals=JSON.stringify([o.me.medal??null,o.opp.medal??null]);
+  host.setAttribute('aria-description',[o.me,o.opp].map(p=>`${p.name}: ${medalName(p.medal)}`).join(' / '));host.setAttribute('aria-label',label('デュエル開幕','Duel opening','듀얼 시작'));
   const canvas=document.createElement('canvas');canvas.style.cssText='display:block;width:100%;height:100%';canvas.setAttribute('aria-hidden','true');
   const result=document.createElement('div');result.setAttribute('role','status');result.setAttribute('aria-live','polite');
   result.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)';
@@ -58,7 +61,7 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
       host.style.background='none';
       const visual=reduced&&ms>=0&&ms<OPENING_REVEAL_MS?4100:ms;
       if(!skipped){
-        renderer?.draw(canvas,Math.max(0,visual)/1000,{first:o.firstIsMe,light:false,reduced,board:true,names:[o.me.name,o.opp.name],avatars:[o.me.avatar,o.opp.avatar]});
+        renderer?.draw(canvas,Math.max(0,visual)/1000,{first:o.firstIsMe,light:false,reduced,board:true,names:[o.me.name,o.opp.name],avatars:[o.me.avatar,o.opp.avatar],medals:[o.me.medal??null,o.opp.medal??null]});
         if(!renderer){canvas.style.background=ms<OPENING_VISUAL_MS?'#07101d':'transparent';result.style.cssText='position:absolute;inset:40% 0 auto;text-align:center;color:#f1eadc;font:40px Georgia';}
       }
       const showResult=!skipped&&visual>=OPENING_REVEAL_MS&&ms<OPENING_VISUAL_MS;

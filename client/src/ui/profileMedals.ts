@@ -1,0 +1,26 @@
+import {MEDAL_SERIES,MEDAL_BY_ID,type MedalState,type MedalCategory} from '../shared/medals';
+import {DB,STARTERS} from '../shared/cards';
+import {medalHtml,medalText} from './medal';
+import {loungeText as tr} from './loungeText';
+import {esc,cardName} from '../i18n';
+export function mountProfileMedals(root:HTMLElement,state:MedalState,owned:boolean,equip:(id:string)=>Promise<void>):()=>void {
+ let dead=false,busy=false,filter='all',query='',message='';
+ const categories:Record<MedalCategory,string>={rank:tr('ランク','Rank','랭크'),login:tr('ログイン','Login','로그인'),series:tr('シリーズ','Series','시리즈'),duel:tr('一戦の記録','Duel feats','한 판의 기록'),record:tr('累計実績','Milestones','누적 기록')};
+ const draw=()=>{
+  if(dead)return;
+  const all=state.entries.filter(e=>MEDAL_BY_ID.has(e.id)&&(e.earnedAt!==null)===owned);
+  const entries=all.filter(e=>{const m=MEDAL_BY_ID.get(e.id)!;return(filter==='all'||m.category===filter||m.series===filter)&&(!query||(medalText(m.name)+' '+medalText(m.description)).toLocaleLowerCase().includes(query.toLocaleLowerCase()));});
+  root.innerHTML=`<section class="medal-equipped"><div><span class="menu-eyebrow">${tr('装着中の勲章','EQUIPPED HONOR','장착 중인 훈장')}</span><div class="medal-equipped-name">${medalHtml(state.equipped)||`<span>${tr('未設定','None equipped','미설정')}</span>`}</div><p>${tr('対戦開始時と対戦中、双方の名前に添えて表示します。変更は次の対戦から反映されます。','Shown beside both players’ names at the opening and during play. Changes apply to your next duel.','대전 시작과 진행 중 양쪽 이름에 표시됩니다. 변경은 다음 대전부터 반영됩니다.')}</p></div>${state.equipped?`<button class="btn btn-ghost" data-unequip ${busy?'disabled':''}>${tr('外す','Unequip','해제')}</button>`:''}</section>
+   <div class="medal-controls"><label>${tr('絞り込み','Filter','필터')}<select aria-label="${tr('勲章の絞り込み','Filter honors','훈장 필터')}" data-medal-filter><option value="all">${tr('すべて','All','전체')} (${all.length})</option>${Object.entries(categories).map(([key,label])=>`<option value="${key}" ${filter===key?'selected':''}>${label}</option>`).join('')}<optgroup label="${categories.series}">${MEDAL_SERIES.map(s=>`<option value="${s.id}" ${filter===s.id?'selected':''}>${medalText(s.name)}</option>`).join('')}</optgroup></select></label><label>${tr('検索','Search','검색')}<input data-medal-search type="search" value="${esc(query)}" placeholder="${tr('勲章名・条件','Name or condition','훈장명·조건')}"></label><span>${entries.length} / ${all.length}</span></div>
+   <p class="medal-scope">${tr('対戦の勲章はノーマル・ランクの対人戦が対象です。一戦の記録は降参・切断勝ちを除きます。ログインは累計日数（UTC+9）です。','Duel honors count PvP Normal and Ranked matches. Duel feats exclude forfeits and disconnect wins. Login days use UTC+9.','대전 훈장은 일반·랭크 대인전 대상입니다. 한 판의 기록은 항복·접속 종료 승리를 제외합니다. 로그인은 UTC+9 누적 일수입니다.')}</p>
+   <p class="medal-feedback" role="status">${esc(message)}</p>
+   <div class="medal-list">${entries.length?entries.map(e=>{const m=MEDAL_BY_ID.get(e.id)!,selected=state.equipped===m.id,series=MEDAL_SERIES.find(s=>s.id===m.series);return `<article class="medal-entry${selected?' is-equipped':''}" data-medal-entry="${m.id}"><div class="medal-entry-copy"><span class="medal-category">${categories[m.category]}</span><h3>${medalText(m.name)}</h3><p>${medalText(m.description)}</p>${series?`<details class="medal-card-list"><summary>${tr('対象カード','Eligible cards','대상 카드')} (${series.cards.length})</summary><p>${series.cards.map(id=>DB[id]??STARTERS[id]).filter(Boolean).map(c=>esc(cardName({...c,uid:c.id}))).join(' · ')}</p></details>`:''}</div>${owned?`<button class="btn ${selected?'btn-ghost':'btn-gold'}" data-equip="${m.id}" aria-pressed="${selected}" ${busy||selected?'disabled':''}>${selected?tr('装着中','Equipped','장착 중'):tr('装着する','Equip','장착')}</button>`:`<div class="medal-progress"><span>${e.value.toLocaleString()} / ${e.target.toLocaleString()}</span><progress max="${e.target}" value="${e.value}" aria-label="${esc(medalText(m.name))}"></progress></div>`}</article>`;}).join(''):`<div class="medal-empty">${query||filter!=='all'?tr('該当する勲章はありません。','No matching honors.','해당하는 훈장이 없습니다.'):owned?tr('まだ勲章を獲得していません。「進行中」で次の目標を確認できます。','No honors yet. See In progress for your next goal.','아직 훈장이 없습니다. 진행 중 탭에서 다음 목표를 확인하세요.'):tr('すべての勲章を獲得しました。','Every honor has been earned.','모든 훈장을 획득했습니다.')}</div>`}</div>`;
+  root.querySelector<HTMLSelectElement>('[data-medal-filter]')!.onchange=e=>{filter=(e.target as HTMLSelectElement).value;draw();};
+  const input=root.querySelector<HTMLInputElement>('[data-medal-search]')!;
+  input.oninput=()=>{query=input.value;const pos=input.selectionStart;draw();const next=root.querySelector<HTMLInputElement>('[data-medal-search]')!;next.focus();if(next.type!=='search')next.setSelectionRange(pos,pos);};
+  const save=async(id:string)=>{if(busy)return;busy=true;message='';draw();try{await equip(id);state.equipped=id||null;message=tr('勲章を変更しました。','Honor updated.','훈장을 변경했습니다.');}catch{message=tr('保存できませんでした。もう一度お試しください。','Could not save. Please try again.','저장하지 못했습니다. 다시 시도해 주세요.');}finally{busy=false;draw();}};
+  root.querySelectorAll<HTMLButtonElement>('[data-equip]').forEach(b=>b.onclick=()=>void save(b.dataset.equip!));
+  root.querySelector<HTMLButtonElement>('[data-unequip]')?.addEventListener('click',()=>void save(''));
+ };
+ draw();return()=>{dead=true;};
+}
