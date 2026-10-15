@@ -19,3 +19,12 @@
 ## Deployment
 
 Before deploying the Worker, apply only `server/migrations/0017_starter_collection.sql` to staging. Older schema migrations must not be replayed from an incomplete migration ledger. Production requires this migration separately before any future rollout.
+
+## Verified staging release
+
+- Source: `d3cefc43d24d0f8567e8623950012f61e3ebc083` (includes this collection implementation and shared test-double repairs). Published by the shared guarded staging release; 161/161 production checks and typecheck/build passed.
+- Worker version: `e75a4a21-0981-44df-bc6b-e46728e65595`, 100% traffic.
+- Exact release snapshot: 98 HTML/JS/CSS hashes match staging (`staging-assets.json`).
+- Authenticated staging API: initial inventory, purchase, concurrent replay, one/ten draws, all-owned duplicate refunds, history/auth persistence passed (`staging-api.json`). The isolated QA account and session were removed.
+- Continuous Azure Wake playback, replay without another transaction, and closing during ten-draw loading preserve the confirmed rewards (`motion-check.txt`). The normal menu browser tests remain fixture-backed; live authentication was verified at the API boundary.
+- No production deployment was performed.

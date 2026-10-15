@@ -1,0 +1,1 @@
+PASS continuous Azure Wake playback, replay without spend, mid-animation close preserves all ten rewards; video recorded
