@@ -1,0 +1,33 @@
+{
+  "base": "https://test.yourlore.xyz",
+  "old": true,
+  "normalApi": "real deployed API, unauthenticated",
+  "failureTests": "explicit request failure injection; background test uses account fixture",
+  "results": [
+    {
+      "name": "stalled-geo",
+      "width": 1280,
+      "ms": 7866,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": false,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "stalled-background",
+      "width": 1280,
+      "ms": 22602,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": false,
+        "home": true,
+        "cover": true,
+        "atmosphere": "loading"
+      }
+    }
+  ]
+}

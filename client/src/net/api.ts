@@ -109,7 +109,10 @@ export const api = {
   resendVerify: (email: string) => call<{ ok: true }>("/auth/resend-verify", { email }),
   forgot: (email: string) => call<{ ok: true }>("/auth/forgot", { email }),
   resetPassword: (token: string, password: string) => call<{ ok: true }>("/auth/reset", { token, password }),
-  me: () => call<{ user: User | null }>("/auth/me", undefined, "GET").then((r) => r.user).catch(() => null),
+  me: (options?: { signal?: AbortSignal; strict?: boolean }) => call<{ user: User | null }>("/auth/me", undefined, "GET", options?.signal).then((r) => {
+    if (!Object.hasOwn(r, "user")) throw new Error("Invalid session response");
+    return r.user;
+  }).catch(error => { if (options?.strict) throw error; return null; }),
   rankResult: (matchId: string) => call<{ result: RankChange | null }>("/rank/result?matchId=" + encodeURIComponent(matchId), undefined, "GET", AbortSignal.timeout(8000)).then(r => r.result),
   rankMe: () => call<{ rating: RankInfo | null }>("/rank/me", undefined, "GET").then((r) => r.rating).catch(() => null),
   trackBot: (won: boolean | null, difficulty?: ClearDifficulty) => call<{ ok: boolean; experience: ExperienceReceipt | null }>("/track/bot", { won: won === true, draw: won === null, difficulty }),

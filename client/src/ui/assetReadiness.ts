@@ -60,7 +60,6 @@ export function coverScreen(root:HTMLElement,firstMenu=false,homeEntrance=false,
   await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
   if(abort.signal.aborted)return false;
   if(firstMenu)menuReady=true;
-  loading.update(100,loungeText("準備完了","Ready","준비 완료"));
   // The visible HOME's first complete GPU frame belongs to this screen gate;
   // unrelated duel and catalogue preparation does not. Cancel releases observers.
   if(homeEntrance)await new Promise<void>(resolve=>{
@@ -69,6 +68,8 @@ export function coverScreen(root:HTMLElement,firstMenu=false,homeEntrance=false,
    const observer=new MutationObserver(check);observer.observe(root,{subtree:true,attributes:true,attributeFilter:['data-atmosphere'],childList:true});
    abort.signal.addEventListener('abort',finish,{once:true});check();
   });
+  if(abort.signal.aborted)return false;
+  loading.update(100,loungeText("準備完了","Ready","준비 완료"));
   if(homeEntrance)await playHomeEntrance(root,cover,abort.signal);
   if(abort.signal.aborted)return false;
   release();document.dispatchEvent(new Event("lore:screen-ready"));return true;

@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/startup-recovery.mjs",
     "tests/web-fonts.mjs",
     "tests/webgl-renderer.mjs",
     "tests/duel-scene-changes.mjs",

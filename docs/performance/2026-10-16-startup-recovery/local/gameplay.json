@@ -1,0 +1,2585 @@
+{
+  "base": "http://127.0.0.1:53251",
+  "reuseContext": true,
+  "api": "fixture guest; normal production HOME and local BOT route",
+  "cases": [
+    {
+      "preparationMs": 1858,
+      "preparationWire": [
+        {
+          "url": "http://127.0.0.1:53251/assets/layout-BCOqeY5F.css",
+          "at": 1792082647111.7139,
+          "preload": false,
+          "cache": false,
+          "bytes": 1576
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/controller-bboUdfYs.css",
+          "at": 1792082647111.81,
+          "preload": false,
+          "cache": false,
+          "bytes": 1515
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/game-CeZ0_T_p.css",
+          "at": 1792082647111.858,
+          "preload": false,
+          "cache": false,
+          "bytes": 1413
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/npcs/v2/lumi.webp",
+          "at": 1792082647116.066,
+          "preload": false,
+          "cache": false,
+          "bytes": 234552
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/npcs/v2/noel.webp",
+          "at": 1792082647116.095,
+          "preload": false,
+          "cache": false,
+          "bytes": 223522
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/game-B2JrgmvD.js",
+          "at": 1792082647111.5051,
+          "preload": false,
+          "cache": false,
+          "bytes": 50506
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/controller-CNgsoXCn.js",
+          "at": 1792082647111.5798,
+          "preload": false,
+          "cache": false,
+          "bytes": 46436
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/layout-U5CJkffM.js",
+          "at": 1792082647111.624,
+          "preload": false,
+          "cache": false,
+          "bytes": 39617
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/duelReadiness-BU3JG5Kk.js",
+          "at": 1792082647111.657,
+          "preload": false,
+          "cache": false,
+          "bytes": 4167
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/selection-BZuIRH5R.js",
+          "at": 1792082647111.758,
+          "preload": false,
+          "cache": false,
+          "bytes": 549
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/npcs/v2/vera.webp",
+          "at": 1792082647116.116,
+          "preload": false,
+          "cache": false,
+          "bytes": 222234
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/npcs/v2/sion.webp",
+          "at": 1792082647116.146,
+          "preload": false,
+          "cache": false,
+          "bytes": 218072
+        },
+        {
+          "url": "http://127.0.0.1:53251/fonts/web/files/245a9b460be9cf26c58b871ff52f01e651bdf9b10644239d34e7eec24d1b8a2a.woff2",
+          "at": 1792082647114.692,
+          "preload": false,
+          "cache": false,
+          "bytes": 11481
+        },
+        {
+          "url": "http://127.0.0.1:53251/fonts/web/files/34e91e227b94bf7a055ad5546d89830e40f92a412dbcf0ec8c8e4656d167c73f.woff2",
+          "at": 1792082647114.749,
+          "preload": false,
+          "cache": false,
+          "bytes": 11737
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/duel-preload-c698c2cb9492c07101b5335d.json",
+          "at": 1792082647111.382,
+          "preload": false,
+          "cache": false,
+          "bytes": 1504
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-D7750X94.js",
+          "at": 1792082647135.573,
+          "preload": false,
+          "cache": false,
+          "bytes": 4725
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DzdmpiE1.js",
+          "at": 1792082647135.532,
+          "preload": false,
+          "cache": false,
+          "bytes": 3179
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DvT-Y8Mv.js",
+          "at": 1792082647135.3682,
+          "preload": false,
+          "cache": false,
+          "bytes": 5431
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-zJsdDSxS.js",
+          "at": 1792082647135.666,
+          "preload": false,
+          "cache": false,
+          "bytes": 6452
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/RoundedBoxGeometry-Dk17L699.js",
+          "at": 1792082647137.635,
+          "preload": false,
+          "cache": false,
+          "bytes": 1044
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DpSK4G0n.js",
+          "at": 1792082647137.769,
+          "preload": false,
+          "cache": false,
+          "bytes": 4838
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-Edud4u89.js",
+          "at": 1792082647138.154,
+          "preload": false,
+          "cache": false,
+          "bytes": 5117
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-4UsbBbQ6.js",
+          "at": 1792082647138.597,
+          "preload": false,
+          "cache": false,
+          "bytes": 5339
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/menu-manifest-5fa14911b672788a51e6.json",
+          "at": 1792082647137.1418,
+          "preload": false,
+          "cache": false,
+          "bytes": 110527
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-B804iV4Y.js",
+          "at": 1792082647142.9329,
+          "preload": false,
+          "cache": false,
+          "bytes": 5641
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-BfDLG1Y_.js",
+          "at": 1792082647142.8389,
+          "preload": false,
+          "cache": false,
+          "bytes": 7963
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DMAon5K3.js",
+          "at": 1792082647139.697,
+          "preload": false,
+          "cache": false,
+          "bytes": 4249
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-C754ziek.js",
+          "at": 1792082647142.981,
+          "preload": false,
+          "cache": false,
+          "bytes": 7060
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/sound-VPVHMbFu.js",
+          "at": 1792082647151.509,
+          "preload": false,
+          "cache": false,
+          "bytes": 676
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/catalog-r3pVPBJ4.js",
+          "at": 1792082647151.054,
+          "preload": false,
+          "cache": false,
+          "bytes": 2456
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-kmQU1g7j.js",
+          "at": 1792082647150.811,
+          "preload": false,
+          "cache": false,
+          "bytes": 7000
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/coins-CAE15Opg.js",
+          "at": 1792082647150.904,
+          "preload": false,
+          "cache": false,
+          "bytes": 2670
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-f844a19db7df96cf31f742b9.bin",
+          "at": 1792082647155.479,
+          "preload": true,
+          "cache": false,
+          "bytes": 3427512
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-dc221732af8aaa895a16f118.bin",
+          "at": 1792082647155.531,
+          "preload": true,
+          "cache": false,
+          "bytes": 4158672
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-1e7953f47aacb11cfc188a9d.bin",
+          "at": 1792082647155.583,
+          "preload": true,
+          "cache": false,
+          "bytes": 4095712
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-D0BXuqu5.js",
+          "at": 1792082647156.169,
+          "preload": false,
+          "cache": false,
+          "bytes": 3257
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-81644147e0d42115d71e7f59.bin",
+          "at": 1792082647155.683,
+          "preload": true,
+          "cache": false,
+          "bytes": 3497645
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/scene-Bn62njZe.js",
+          "at": 1792082647156.228,
+          "preload": false,
+          "cache": false,
+          "bytes": 7267
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/stage-CwF-RfDb.js",
+          "at": 1792082647156.2651,
+          "preload": false,
+          "cache": false,
+          "bytes": 11673
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-SihyRxli.js",
+          "at": 1792082647156.296,
+          "preload": false,
+          "cache": false,
+          "bytes": 5314
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-61a0102bac346324e990502b.bin",
+          "at": 1792082647155.414,
+          "preload": true,
+          "cache": false,
+          "bytes": 4071776
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-aea166a3bd28108ca08dd338.bin",
+          "at": 1792082647155.633,
+          "preload": true,
+          "cache": false,
+          "bytes": 3726787
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/assets-DKgEYzCy.js",
+          "at": 1792082647207.5579,
+          "preload": false,
+          "cache": false,
+          "bytes": 948
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/visual-DV5TEr1P.js",
+          "at": 1792082647209.188,
+          "preload": false,
+          "cache": false,
+          "bytes": 3901
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/visual-Btzt2q-_.js",
+          "at": 1792082647212.2651,
+          "preload": false,
+          "cache": false,
+          "bytes": 8082
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-BvO2V3gk.js",
+          "at": 1792082647212.1912,
+          "preload": false,
+          "cache": false,
+          "bytes": 5167
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DOZvpQoe.js",
+          "at": 1792082647218.31,
+          "preload": false,
+          "cache": false,
+          "bytes": 2535
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DvSfLdyX.js",
+          "at": 1792082647218.2131,
+          "preload": false,
+          "cache": false,
+          "bytes": 5698
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/darkRenderer-BOMWpzeC.js",
+          "at": 1792082647222.393,
+          "preload": false,
+          "cache": false,
+          "bytes": 3033
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-CynXsPQC.js",
+          "at": 1792082647222.492,
+          "preload": false,
+          "cache": false,
+          "bytes": 4636
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DucSsMSc.js",
+          "at": 1792082647224.235,
+          "preload": false,
+          "cache": false,
+          "bytes": 4927
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/persistentFlightRenderer-CE-kn8nB.js",
+          "at": 1792082647224.4119,
+          "preload": false,
+          "cache": false,
+          "bytes": 2428
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/scene-OoR34c9Q.js",
+          "at": 1792082647229.042,
+          "preload": false,
+          "cache": false,
+          "bytes": 3584
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/scene-C3EKG8CF.js",
+          "at": 1792082647228.953,
+          "preload": false,
+          "cache": false,
+          "bytes": 3712
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-c01fb464a38881ca4cdbc633.bin",
+          "at": 1792082647223.196,
+          "preload": true,
+          "cache": false,
+          "bytes": 4179373
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-DwkjO30E.js",
+          "at": 1792082647231.596,
+          "preload": false,
+          "cache": false,
+          "bytes": 7458
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-BqboUGOT.js",
+          "at": 1792082647231.6648,
+          "preload": false,
+          "cache": false,
+          "bytes": 4662
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/master-tongues-BWGednSH.js",
+          "at": 1792082647233.5051,
+          "preload": false,
+          "cache": false,
+          "bytes": 2283
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/family-matter-BTFEQu4p.js",
+          "at": 1792082647233.591,
+          "preload": false,
+          "cache": false,
+          "bytes": 2428
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-cd5630369dc764e7b791bce1.bin",
+          "at": 1792082647231.3508,
+          "preload": true,
+          "cache": false,
+          "bytes": 4179606
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-4a4de8d21ba146537bff671d.bin",
+          "at": 1792082647232.2358,
+          "preload": true,
+          "cache": false,
+          "bytes": 4177858
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/ornaments-BydQvQEj.js",
+          "at": 1792082647239.694,
+          "preload": false,
+          "cache": false,
+          "bytes": 2213
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/royal-matter-DDA9FNV3.js",
+          "at": 1792082647239.7612,
+          "preload": false,
+          "cache": false,
+          "bytes": 3241
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-B1I-d6gA.js",
+          "at": 1792082647240.653,
+          "preload": false,
+          "cache": false,
+          "bytes": 8891
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-2OV_OmPc.js",
+          "at": 1792082647240.748,
+          "preload": false,
+          "cache": false,
+          "bytes": 1940
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-cc69d16ccd5754ffb801d60b.bin",
+          "at": 1792082647233.388,
+          "preload": true,
+          "cache": false,
+          "bytes": 4182832
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-4a0fba6a62f84f2dc8e6d646.bin",
+          "at": 1792082647238.3152,
+          "preload": true,
+          "cache": false,
+          "bytes": 4019706
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/drawStock-BfsF4SXQ.js",
+          "at": 1792082647262.501,
+          "preload": false,
+          "cache": false,
+          "bytes": 2549
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-D3ka_ze3.js",
+          "at": 1792082647262.379,
+          "preload": false,
+          "cache": false,
+          "bytes": 4684
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/paperDraw-nrlnuloH.js",
+          "at": 1792082647262.452,
+          "preload": false,
+          "cache": false,
+          "bytes": 3241
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-BH-D11cH.js",
+          "at": 1792082647272.6492,
+          "preload": false,
+          "cache": false,
+          "bytes": 11242
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-BsCC6oJy.js",
+          "at": 1792082647272.937,
+          "preload": false,
+          "cache": false,
+          "bytes": 6520
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-Nk-7iguR.js",
+          "at": 1792082647272.9868,
+          "preload": false,
+          "cache": false,
+          "bytes": 3658
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-BxquxGYn.js",
+          "at": 1792082647274.2058,
+          "preload": false,
+          "cache": false,
+          "bytes": 2790
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-CXRV0BQt.js",
+          "at": 1792082647278.296,
+          "preload": false,
+          "cache": false,
+          "bytes": 5652
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/riftScene-DIB8TB8a.js",
+          "at": 1792082647278.3389,
+          "preload": false,
+          "cache": false,
+          "bytes": 11585
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-C7b8VmRt.js",
+          "at": 1792082647278.219,
+          "preload": false,
+          "cache": false,
+          "bytes": 3473
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-d2ksie9N.js",
+          "at": 1792082647278.385,
+          "preload": false,
+          "cache": false,
+          "bytes": 5580
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-DkMFyjh5.js",
+          "at": 1792082647281.167,
+          "preload": false,
+          "cache": false,
+          "bytes": 2286
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-D9x2JUZK.js",
+          "at": 1792082647281.875,
+          "preload": false,
+          "cache": false,
+          "bytes": 3631
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-a0ca44553f5012a5864356bf.bin",
+          "at": 1792082647278.799,
+          "preload": true,
+          "cache": false,
+          "bytes": 3645358
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-BXRagMud.js",
+          "at": 1792082647283.531,
+          "preload": false,
+          "cache": false,
+          "bytes": 9563
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/ceremonyScene-BS2w9TgG.js",
+          "at": 1792082647284.342,
+          "preload": false,
+          "cache": false,
+          "bytes": 4277
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+          "at": 1792082647287.156,
+          "preload": false,
+          "cache": false,
+          "bytes": 348
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/duelScene-F8fShlnI.js",
+          "at": 1792082647284.39,
+          "preload": false,
+          "cache": false,
+          "bytes": 29346
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-4c2331d3b971676cbaeb8280.bin",
+          "at": 1792082647279.834,
+          "preload": true,
+          "cache": false,
+          "bytes": 4161066
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-H3871uQL.js",
+          "at": 1792082647295.552,
+          "preload": false,
+          "cache": false,
+          "bytes": 2695
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/readingCrystalOptics-BeDvtuSA.js",
+          "at": 1792082647302.219,
+          "preload": false,
+          "cache": false,
+          "bytes": 1589
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/pileModels-DcRnqaxA.js",
+          "at": 1792082647302.281,
+          "preload": false,
+          "cache": false,
+          "bytes": 1368
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/scene-BVLx41Zp.js",
+          "at": 1792082647302.327,
+          "preload": false,
+          "cache": false,
+          "bytes": 31043
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/snapshot-DwcoR5cV.js",
+          "at": 1792082647306.094,
+          "preload": false,
+          "cache": false,
+          "bytes": 1131
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/spacetime-C7dX4hts.js",
+          "at": 1792082647306.0242,
+          "preload": false,
+          "cache": false,
+          "bytes": 5331
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/diceScene-Cpb8t6Ln.js",
+          "at": 1792082647306.166,
+          "preload": false,
+          "cache": false,
+          "bytes": 3815
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/fateWheelRewind-Cn38hMCx.js",
+          "at": 1792082647309.113,
+          "preload": false,
+          "cache": false,
+          "bytes": 1330
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-Ch9eydv_.css",
+          "at": 1792082647310.773,
+          "preload": false,
+          "cache": false,
+          "bytes": 361
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/coiling-fire-BXM1fmiB.webp",
+          "at": 1792082647310.72,
+          "preload": false,
+          "cache": false,
+          "bytes": 510517
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/skull-apparition-jaxyBytm.png",
+          "at": 1792082647310.636,
+          "preload": false,
+          "cache": false,
+          "bytes": 1783389
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/duelScene-Dru0ykCE.css",
+          "at": 1792082647314.969,
+          "preload": false,
+          "cache": false,
+          "bytes": 434
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/cover-1-Ca1f6w1Z.png",
+          "at": 1792082647319.7031,
+          "preload": false,
+          "cache": false,
+          "bytes": 3781094
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/avatar-red-CyF_7AzU.png",
+          "at": 1792082647321.249,
+          "preload": false,
+          "cache": false,
+          "bytes": 2247862
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/avatar-blue-Dgu4sbnI.png",
+          "at": 1792082647322.277,
+          "preload": false,
+          "cache": false,
+          "bytes": 2148895
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/raster.worker-Dbjti9vv.js",
+          "at": 1792082647345.0898,
+          "preload": false,
+          "cache": false,
+          "bytes": 1321
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/purchaseAir.worker-BK14oJEX.js",
+          "at": 1792082647346.01,
+          "preload": false,
+          "cache": false,
+          "bytes": 995
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-7df13647b48657ac221856a0.bin",
+          "at": 1792082647344.255,
+          "preload": true,
+          "cache": false,
+          "bytes": 4026474
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/bot.worker-ChQQ1QWS.js",
+          "at": 1792082647347.056,
+          "preload": false,
+          "cache": false,
+          "bytes": 235272
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-a86954a2878ab78a286ec23f.bin",
+          "at": 1792082647348.938,
+          "preload": true,
+          "cache": false,
+          "bytes": 4101262
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-13ef821b4a69bbbca7f26fd2.bin",
+          "at": 1792082647392.127,
+          "preload": true,
+          "cache": false,
+          "bytes": 4092912
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-5c1f0106b915a95bf49c0658.bin",
+          "at": 1792082647394.711,
+          "preload": true,
+          "cache": false,
+          "bytes": 3744850
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-5fdd439c62ed36553c7cc865.bin",
+          "at": 1792082647429.375,
+          "preload": true,
+          "cache": false,
+          "bytes": 4134938
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-c4dc0a66e2a4af4b3500211b.bin",
+          "at": 1792082647438.823,
+          "preload": true,
+          "cache": false,
+          "bytes": 4033906
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-c0512c7e6fc73cdc72a0d113.bin",
+          "at": 1792082647475.3599,
+          "preload": true,
+          "cache": false,
+          "bytes": 3969124
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-d4281423531b67412b75a6ef.bin",
+          "at": 1792082647481.7551,
+          "preload": true,
+          "cache": false,
+          "bytes": 4065388
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-25b3a47886ed6b6cfd301b77.bin",
+          "at": 1792082647527.7559,
+          "preload": true,
+          "cache": false,
+          "bytes": 3845850
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-d3c418e701c6573c317123e7.bin",
+          "at": 1792082647537.023,
+          "preload": true,
+          "cache": false,
+          "bytes": 4109528
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-5ef0760e0a8f2a7c531e7926.bin",
+          "at": 1792082647553.417,
+          "preload": true,
+          "cache": false,
+          "bytes": 4154498
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-026e50ef098ae3cf9e8ac261.bin",
+          "at": 1792082647555.675,
+          "preload": true,
+          "cache": false,
+          "bytes": 4020352
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-0759a1a468e30670ffc62942.bin",
+          "at": 1792082647579.98,
+          "preload": true,
+          "cache": false,
+          "bytes": 4093586
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-19d9815e906f19891e7f34f4.bin",
+          "at": 1792082647579.708,
+          "preload": true,
+          "cache": false,
+          "bytes": 4099892
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-053c35f6541b356055dc0754.bin",
+          "at": 1792082647610.011,
+          "preload": true,
+          "cache": false,
+          "bytes": 4032748
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-98180e140fa52c6024d105c1.bin",
+          "at": 1792082647611.72,
+          "preload": true,
+          "cache": false,
+          "bytes": 4003926
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-8deb6d869e25df4722c35039.bin",
+          "at": 1792082647644.4421,
+          "preload": true,
+          "cache": false,
+          "bytes": 4105720
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-33c2565f4fd804e0a8a6c6ce.bin",
+          "at": 1792082647647.781,
+          "preload": true,
+          "cache": false,
+          "bytes": 4130572
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-d790876727f0045b2ab86b36.bin",
+          "at": 1792082647675.534,
+          "preload": true,
+          "cache": false,
+          "bytes": 4142896
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-ca079546a0b7349ca69caa7d.bin",
+          "at": 1792082647681.9602,
+          "preload": true,
+          "cache": false,
+          "bytes": 2879702
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/vfx/mimic-family/engraved-brass.png",
+          "at": 1792082647709.5908,
+          "preload": true,
+          "cache": false,
+          "bytes": 3571744
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-5fd81120c976633ca5febfd7.bin",
+          "at": 1792082647712.061,
+          "preload": true,
+          "cache": false,
+          "bytes": 4176780
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-0089e2e6dc22189e61cdb170.bin",
+          "at": 1792082647712.009,
+          "preload": true,
+          "cache": false,
+          "bytes": 3279638
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-1382430a92d92d2aca7274ec.bin",
+          "at": 1792082647735.167,
+          "preload": true,
+          "cache": false,
+          "bytes": 3715962
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-f084092e3137db8ced01d8a6.bin",
+          "at": 1792082647746.77,
+          "preload": true,
+          "cache": false,
+          "bytes": 3898846
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-9903939683afefee8584bcfc.bin",
+          "at": 1792082647749.706,
+          "preload": true,
+          "cache": false,
+          "bytes": 1400580
+        },
+        {
+          "url": "http://127.0.0.1:53251/cosmetics/living-v1/azure-plume/art.png",
+          "at": 1792082647764.689,
+          "preload": true,
+          "cache": false,
+          "bytes": 3198560
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-3b05b41915767a8e45185d10.bin",
+          "at": 1792082647778.013,
+          "preload": true,
+          "cache": false,
+          "bytes": 4145912
+        },
+        {
+          "url": "http://127.0.0.1:53251/cosmetics/v2/material-verdant.webp",
+          "at": 1792082647783.644,
+          "preload": true,
+          "cache": false,
+          "bytes": 95825
+        },
+        {
+          "url": "http://127.0.0.1:53251/cosmetics/v2/sleeve-astral.webp",
+          "at": 1792082647798.315,
+          "preload": true,
+          "cache": false,
+          "bytes": 95619
+        },
+        {
+          "url": "http://127.0.0.1:53251/cosmetics/v2/sleeve-crimson.webp",
+          "at": 1792082647799.656,
+          "preload": true,
+          "cache": false,
+          "bytes": 80113
+        },
+        {
+          "url": "http://127.0.0.1:53251/cosmetics/v2/sleeve-ivory.webp",
+          "at": 1792082647799.9722,
+          "preload": true,
+          "cache": false,
+          "bytes": 87801
+        },
+        {
+          "url": "http://127.0.0.1:53251/cosmetics/v2/sleeve-verdant.webp",
+          "at": 1792082647801.979,
+          "preload": true,
+          "cache": false,
+          "bytes": 76235
+        },
+        {
+          "url": "http://127.0.0.1:53251/fonts/rift-records/CormorantGaramond-Medium-numerals.ttf",
+          "at": 1792082647803.432,
+          "preload": true,
+          "cache": false,
+          "bytes": 10347
+        },
+        {
+          "url": "http://127.0.0.1:53251/frames/sleeve_compass.webp",
+          "at": 1792082647803.918,
+          "preload": true,
+          "cache": false,
+          "bytes": 32779
+        },
+        {
+          "url": "http://127.0.0.1:53251/frames/sleeve_default.webp",
+          "at": 1792082647803.958,
+          "preload": true,
+          "cache": false,
+          "bytes": 99563
+        },
+        {
+          "url": "http://127.0.0.1:53251/frames/sleeve_prism.webp",
+          "at": 1792082647805.44,
+          "preload": true,
+          "cache": false,
+          "bytes": 74721
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/board.glb",
+          "at": 1792082647806.939,
+          "preload": true,
+          "cache": false,
+          "bytes": 3718089
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/crystal-optics.json",
+          "at": 1792082647809.459,
+          "preload": true,
+          "cache": false,
+          "bytes": 1397
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+          "at": 1792082647810.917,
+          "preload": true,
+          "cache": false,
+          "bytes": 380348
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/deck-place.glb",
+          "at": 1792082647809.678,
+          "preload": true,
+          "cache": false,
+          "bytes": 1194449
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/mana-counter.glb",
+          "at": 1792082647811.807,
+          "preload": true,
+          "cache": false,
+          "bytes": 132004
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/mana-crystal-ready.glb",
+          "at": 1792082647812.53,
+          "preload": true,
+          "cache": false,
+          "bytes": 42111
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/mana-crystal-spent.glb",
+          "at": 1792082647822.5579,
+          "preload": true,
+          "cache": false,
+          "bytes": 42107
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/mana-tray.glb",
+          "at": 1792082647822.608,
+          "preload": true,
+          "cache": false,
+          "bytes": 123656
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/reroll-button.glb",
+          "at": 1792082647823.009,
+          "preload": true,
+          "cache": false,
+          "bytes": 454556
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/market.glb",
+          "at": 1792082647822.6409,
+          "preload": true,
+          "cache": false,
+          "bytes": 1668517
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-b0ebd732427ae83812614756.bin",
+          "at": 1792082647823.308,
+          "preload": true,
+          "cache": false,
+          "bytes": 3897659
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-82da3f6834a88e363cc955b0.bin",
+          "at": 1792082647823.186,
+          "preload": true,
+          "cache": false,
+          "bytes": 3961494
+        },
+        {
+          "url": "http://127.0.0.1:53251/vfx/merchant/balance.png",
+          "at": 1792082647828.6309,
+          "preload": true,
+          "cache": false,
+          "bytes": 2073070
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-7b9f6f16e9dc55dc0ce05b96.bin",
+          "at": 1792082647826.5059,
+          "preload": true,
+          "cache": false,
+          "bytes": 3385887
+        },
+        {
+          "url": "http://127.0.0.1:53251/vfx/purchase-air/crystal-72.png",
+          "at": 1792082647831.7249,
+          "preload": true,
+          "cache": false,
+          "bytes": 2854207
+        }
+      ],
+      "gameAssetEntryWire": [],
+      "packFailures": [],
+      "packTimings": [
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-61a0102bac346324e990502b.bin",
+          "ms": 31.099999994039536,
+          "bytes": 4071858,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-f844a19db7df96cf31f742b9.bin",
+          "ms": 12.299999982118607,
+          "bytes": 3427594,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-dc221732af8aaa895a16f118.bin",
+          "ms": 21,
+          "bytes": 4158754,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-1e7953f47aacb11cfc188a9d.bin",
+          "ms": 24.400000005960464,
+          "bytes": 4095794,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-aea166a3bd28108ca08dd338.bin",
+          "ms": 38,
+          "bytes": 3726869,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-81644147e0d42115d71e7f59.bin",
+          "ms": 25.400000005960464,
+          "bytes": 3497727,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-c01fb464a38881ca4cdbc633.bin",
+          "ms": 10.400000005960464,
+          "bytes": 4179455,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-cd5630369dc764e7b791bce1.bin",
+          "ms": 10.5,
+          "bytes": 4179688,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-4a4de8d21ba146537bff671d.bin",
+          "ms": 10.900000005960464,
+          "bytes": 4177940,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-cc69d16ccd5754ffb801d60b.bin",
+          "ms": 21.5,
+          "bytes": 4182914,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-4a0fba6a62f84f2dc8e6d646.bin",
+          "ms": 25.200000017881393,
+          "bytes": 4019788,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-a0ca44553f5012a5864356bf.bin",
+          "ms": 7.100000023841858,
+          "bytes": 3645440,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-4c2331d3b971676cbaeb8280.bin",
+          "ms": 13.700000017881393,
+          "bytes": 4161148,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-7df13647b48657ac221856a0.bin",
+          "ms": 5.600000023841858,
+          "bytes": 4026556,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-a86954a2878ab78a286ec23f.bin",
+          "ms": 16.19999998807907,
+          "bytes": 4101344,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-13ef821b4a69bbbca7f26fd2.bin",
+          "ms": 5.5,
+          "bytes": 4092994,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-5c1f0106b915a95bf49c0658.bin",
+          "ms": 12.400000005960464,
+          "bytes": 3744932,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-5fdd439c62ed36553c7cc865.bin",
+          "ms": 4.600000023841858,
+          "bytes": 4135020,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-c4dc0a66e2a4af4b3500211b.bin",
+          "ms": 7.9000000059604645,
+          "bytes": 4033988,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-c0512c7e6fc73cdc72a0d113.bin",
+          "ms": 5.5999999940395355,
+          "bytes": 3969206,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-d4281423531b67412b75a6ef.bin",
+          "ms": 7.9000000059604645,
+          "bytes": 4065470,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-25b3a47886ed6b6cfd301b77.bin",
+          "ms": 4.9000000059604645,
+          "bytes": 3845932,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-d3c418e701c6573c317123e7.bin",
+          "ms": 6.4000000059604645,
+          "bytes": 4109610,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-5ef0760e0a8f2a7c531e7926.bin",
+          "ms": 7.0999999940395355,
+          "bytes": 4154580,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-026e50ef098ae3cf9e8ac261.bin",
+          "ms": 12,
+          "bytes": 4020434,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-19d9815e906f19891e7f34f4.bin",
+          "ms": 11.099999994039536,
+          "bytes": 4099974,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-0759a1a468e30670ffc62942.bin",
+          "ms": 4.899999976158142,
+          "bytes": 4093668,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-053c35f6541b356055dc0754.bin",
+          "ms": 5.799999982118607,
+          "bytes": 4032830,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-98180e140fa52c6024d105c1.bin",
+          "ms": 19.200000017881393,
+          "bytes": 4004008,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-8deb6d869e25df4722c35039.bin",
+          "ms": 4.699999988079071,
+          "bytes": 4105802,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-33c2565f4fd804e0a8a6c6ce.bin",
+          "ms": 11,
+          "bytes": 4130654,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-d790876727f0045b2ab86b36.bin",
+          "ms": 5.299999982118607,
+          "bytes": 4142978,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-ca079546a0b7349ca69caa7d.bin",
+          "ms": 8.5,
+          "bytes": 2879784,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-0089e2e6dc22189e61cdb170.bin",
+          "ms": 11.099999994039536,
+          "bytes": 3279720,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-5fd81120c976633ca5febfd7.bin",
+          "ms": 10,
+          "bytes": 4176862,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-1382430a92d92d2aca7274ec.bin",
+          "ms": 3.699999988079071,
+          "bytes": 3716044,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-f084092e3137db8ced01d8a6.bin",
+          "ms": 5.300000011920929,
+          "bytes": 3898928,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-9903939683afefee8584bcfc.bin",
+          "ms": 2.800000011920929,
+          "bytes": 1400662,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-3b05b41915767a8e45185d10.bin",
+          "ms": 6.5,
+          "bytes": 4145994,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-82da3f6834a88e363cc955b0.bin",
+          "ms": 9.800000011920929,
+          "bytes": 3961576,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-b0ebd732427ae83812614756.bin",
+          "ms": 8,
+          "bytes": 3897741,
+          "protocol": "http/1.1"
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/art-pack-7b9f6f16e9dc55dc0ce05b96.bin",
+          "ms": 11.299999982118607,
+          "bytes": 3385969,
+          "protocol": "http/1.1"
+        }
+      ],
+      "workerEntryRequests": [],
+      "serverEntryRequests": [],
+      "width": 1280,
+      "homeMs": 4720,
+      "reloadMs": 4558,
+      "duelMs": 9197,
+      "coldWire": [
+        {
+          "url": "http://127.0.0.1:53251/?polish",
+          "at": 1792082637491.243,
+          "preload": false,
+          "cache": false,
+          "bytes": 1143
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/brand/lore-logo-transparent.webp",
+          "at": 1792082637497.195,
+          "preload": false,
+          "cache": false,
+          "bytes": 32741
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/main-DCWzPIun.js",
+          "at": 1792082637497.303,
+          "preload": false,
+          "cache": false,
+          "bytes": 1570
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/preload-helper-DD1OZmLC.js",
+          "at": 1792082637497.326,
+          "preload": false,
+          "cache": false,
+          "bytes": 1158
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/atmosphere-v2/library-wide.png",
+          "at": 1792082637497.278,
+          "preload": false,
+          "cache": false,
+          "bytes": 2720589
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/main-jMRf2aDr.js",
+          "at": 1792082637510.0032,
+          "preload": false,
+          "cache": false,
+          "bytes": 117280
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/atelierThemes-C9ZNrm6d.js",
+          "at": 1792082637510.213,
+          "preload": false,
+          "cache": false,
+          "bytes": 1376
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/social-CKTBd_Fe.css",
+          "at": 1792082637510.272,
+          "preload": false,
+          "cache": false,
+          "bytes": 53515
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/readingAssetCache-DQpGCQwb.js",
+          "at": 1792082637510.185,
+          "preload": false,
+          "cache": false,
+          "bytes": 168376
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/rankPresentation-D-y5ptve.js",
+          "at": 1792082637510.312,
+          "preload": false,
+          "cache": false,
+          "bytes": 8833
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderDensity-eCqR3GeM.js",
+          "at": 1792082637510.3372,
+          "preload": false,
+          "cache": false,
+          "bytes": 513
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/social-BsrLCdnc.js",
+          "at": 1792082637510.155,
+          "preload": false,
+          "cache": false,
+          "bytes": 568968
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/main-CtKLtZfC.css",
+          "at": 1792082637510.559,
+          "preload": false,
+          "cache": false,
+          "bytes": 294796
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/baseFurniture-rCYNh5C7.js",
+          "at": 1792082637510.36,
+          "preload": false,
+          "cache": false,
+          "bytes": 5366
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/sleeve-CiSMbh7j.js",
+          "at": 1792082637510.4238,
+          "preload": false,
+          "cache": false,
+          "bytes": 6679
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/libraryAssets-CE4oRt7u.js",
+          "at": 1792082637510.448,
+          "preload": false,
+          "cache": false,
+          "bytes": 14001
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/materials-CtxuycxT.js",
+          "at": 1792082637510.493,
+          "preload": false,
+          "cache": false,
+          "bytes": 4357
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/BufferGeometryUtils-C7q5sQUZ.js",
+          "at": 1792082637510.469,
+          "preload": false,
+          "cache": false,
+          "bytes": 1699
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792082637665.59,
+          "preload": false,
+          "cache": false,
+          "bytes": 879910
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/stage-v1/sigil.png",
+          "at": 1792082637653.87,
+          "preload": false,
+          "cache": false,
+          "bytes": 1996421
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/duel-ink-v1/disc.png",
+          "at": 1792082637665.8872,
+          "preload": false,
+          "cache": false,
+          "bytes": 1787485
+        },
+        {
+          "url": "http://127.0.0.1:53251/favicon.ico",
+          "at": 1792082637613.58,
+          "preload": false,
+          "cache": false,
+          "bytes": 129
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+          "at": 1792082637667.53,
+          "preload": false,
+          "cache": false,
+          "bytes": 13367
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+          "at": 1792082637667.5068,
+          "preload": false,
+          "cache": false,
+          "bytes": 21741
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/icons/v2/arrow.png",
+          "at": 1792082637667.554,
+          "preload": false,
+          "cache": false,
+          "bytes": 58342
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/seekers/faceless-v2/portrait.webp",
+          "at": 1792082637667.645,
+          "preload": false,
+          "cache": false,
+          "bytes": 45161
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/icons/shard-simple-v1.png",
+          "at": 1792082637667.66,
+          "preload": false,
+          "cache": false,
+          "bytes": 8888
+        },
+        {
+          "url": "http://127.0.0.1:53251/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+          "at": 1792082637659.353,
+          "preload": false,
+          "cache": false,
+          "bytes": 28925
+        },
+        {
+          "url": "http://127.0.0.1:53251/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+          "at": 1792082637654.347,
+          "preload": false,
+          "cache": false,
+          "bytes": 31721
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/gifts/courier.png",
+          "at": 1792082637667.571,
+          "preload": false,
+          "cache": false,
+          "bytes": 1087101
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/homeAtmosphere-PlryK8mI.js",
+          "at": 1792082637662.605,
+          "preload": false,
+          "cache": false,
+          "bytes": 4959
+        },
+        {
+          "url": "http://127.0.0.1:53251/fonts/web/files/fa981b56ecdad0095f14ef8201483fdc1b49efe7d048b64bad3efbbcb1d18eac.woff2",
+          "at": 1792082637722.968,
+          "preload": false,
+          "cache": false,
+          "bytes": 11505
+        },
+        {
+          "url": "http://127.0.0.1:53251/fonts/web/files/471899cd47871528b417fb4f88c7e23d4e2264f88298b49c539ec654ae30fe7b.woff2",
+          "at": 1792082637723.044,
+          "preload": false,
+          "cache": false,
+          "bytes": 11717
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792082637781.076,
+          "preload": false,
+          "cache": false,
+          "bytes": 879910
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/atmosphere-v2/ivy.png",
+          "at": 1792082637781.135,
+          "preload": false,
+          "cache": false,
+          "bytes": 1329864
+        },
+        {
+          "url": "http://127.0.0.1:53251/art/lounge/atmosphere-v2/library-wide.png",
+          "at": 1792082637781.003,
+          "preload": false,
+          "cache": false,
+          "bytes": 2720589
+        },
+        {
+          "url": "http://127.0.0.1:53251/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+          "at": 1792082637782.918,
+          "preload": false,
+          "cache": false,
+          "bytes": 32269
+        },
+        {
+          "url": "https://us.i.posthog.com/static/array.js",
+          "at": 1792082637612.189,
+          "preload": false,
+          "cache": false,
+          "bytes": 99779
+        },
+        {
+          "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+          "at": 1792082638947.9648,
+          "preload": false,
+          "cache": false,
+          "bytes": 822
+        },
+        {
+          "url": "https://us.i.posthog.com/flags/?v=2",
+          "at": 1792082638957.728,
+          "preload": false,
+          "cache": false,
+          "bytes": 579
+        },
+        {
+          "url": "https://us-assets.i.posthog.com/static/1.438.8/surveys.js",
+          "at": 1792082639507.5159,
+          "preload": false,
+          "cache": false,
+          "bytes": 34020
+        },
+        {
+          "url": "http://127.0.0.1:53251/sfx/lore-v3/click-1.mp3",
+          "at": 1792082641709.486,
+          "preload": false,
+          "cache": false,
+          "bytes": 2539
+        },
+        {
+          "url": "http://127.0.0.1:53251/sfx/lore-v3/click-2.mp3",
+          "at": 1792082641709.6091,
+          "preload": false,
+          "cache": false,
+          "bytes": 2748
+        },
+        {
+          "url": "http://127.0.0.1:53251/sfx/lore-v3/click-3.mp3",
+          "at": 1792082641719.538,
+          "preload": false,
+          "cache": false,
+          "bytes": 2853
+        },
+        {
+          "url": "http://127.0.0.1:53251/sfx/lore-v3/pop.mp3",
+          "at": 1792082641719.6309,
+          "preload": false,
+          "cache": false,
+          "bytes": 2329
+        },
+        {
+          "url": "http://127.0.0.1:53251/sfx/lore-v3/error.mp3",
+          "at": 1792082641721.448,
+          "preload": false,
+          "cache": false,
+          "bytes": 2512
+        },
+        {
+          "url": "http://127.0.0.1:53251/favicon.ico",
+          "at": 1792082641848.3328,
+          "preload": false,
+          "cache": false,
+          "bytes": 129
+        }
+      ],
+      "warmPreloads": [],
+      "entryWire": [],
+      "afterReadyWire": [],
+      "samples": [
+        {
+          "label": "idle",
+          "ms": 5005,
+          "count": 301,
+          "p50": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9129
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":2,\"portalPasses\":109,\"displayPasses\":205,\"flightPasses\":0,\"cpuMs\":121.5,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.1935089999999997,
+            "ScriptDuration": 0.12738300000000002,
+            "LayoutDuration": 0.0008140000000000022,
+            "RecalcStyleDuration": 0.013700999999999963,
+            "LayoutCount": 10,
+            "RecalcStyleCount": 11
+          }
+        },
+        {
+          "label": "play card",
+          "ms": 5045,
+          "count": 301,
+          "p50": 16.69999999999709,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9082
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":114,\"displayPasses\":208,\"flightPasses\":0,\"cpuMs\":99.8,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.27468899999999996,
+            "ScriptDuration": 0.17671100000000006,
+            "LayoutDuration": 0.0019580000000000014,
+            "RecalcStyleDuration": 0.02782400000000007,
+            "LayoutCount": 23,
+            "RecalcStyleCount": 25
+          }
+        },
+        {
+          "label": "BOT turn",
+          "ms": 5035,
+          "count": 301,
+          "p50": 16.69999999999709,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 13037,
+            "offscreen": 125
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":32,\"portalPasses\":99,\"displayPasses\":145,\"flightPasses\":0,\"cpuMs\":146.4,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.44461199999999934,
+            "ScriptDuration": 0.18477999999999994,
+            "LayoutDuration": 0.008773000000000003,
+            "RecalcStyleDuration": 0.06783299999999992,
+            "LayoutCount": 68,
+            "RecalcStyleCount": 288
+          }
+        }
+      ],
+      "broken": [],
+      "errors": [],
+      "httpErrors": []
+    },
+    {
+      "preparationMs": 1020,
+      "preparationWire": [
+        {
+          "url": "http://127.0.0.1:53251/assets/layout-BCOqeY5F.css",
+          "at": 1792082688044.585,
+          "preload": false,
+          "cache": false,
+          "bytes": 1576
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/layout-U5CJkffM.js",
+          "at": 1792082688044.467,
+          "preload": false,
+          "cache": false,
+          "bytes": 39617
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/game-B2JrgmvD.js",
+          "at": 1792082688044.369,
+          "preload": false,
+          "cache": false,
+          "bytes": 50506
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/controller-CNgsoXCn.js",
+          "at": 1792082688044.437,
+          "preload": false,
+          "cache": false,
+          "bytes": 46436
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/duelReadiness-BU3JG5Kk.js",
+          "at": 1792082688044.502,
+          "preload": false,
+          "cache": false,
+          "bytes": 4167
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/selection-BZuIRH5R.js",
+          "at": 1792082688044.626,
+          "preload": false,
+          "cache": false,
+          "bytes": 549
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/duel-preload-c698c2cb9492c07101b5335d.json",
+          "at": 1792082688044.242,
+          "preload": false,
+          "cache": false,
+          "bytes": 1504
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DzdmpiE1.js",
+          "at": 1792082688062.867,
+          "preload": false,
+          "cache": false,
+          "bytes": 3179
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DvT-Y8Mv.js",
+          "at": 1792082688062.749,
+          "preload": false,
+          "cache": false,
+          "bytes": 5431
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-D7750X94.js",
+          "at": 1792082688062.909,
+          "preload": false,
+          "cache": false,
+          "bytes": 4725
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-zJsdDSxS.js",
+          "at": 1792082688063.418,
+          "preload": false,
+          "cache": false,
+          "bytes": 6452
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/menu-manifest-5fa14911b672788a51e6.json",
+          "at": 1792082688063.642,
+          "preload": false,
+          "cache": false,
+          "bytes": 110527
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/RoundedBoxGeometry-Dk17L699.js",
+          "at": 1792082688065.659,
+          "preload": false,
+          "cache": false,
+          "bytes": 1044
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DpSK4G0n.js",
+          "at": 1792082688065.821,
+          "preload": false,
+          "cache": false,
+          "bytes": 4838
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-4UsbBbQ6.js",
+          "at": 1792082688066.8699,
+          "preload": false,
+          "cache": false,
+          "bytes": 5339
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-Edud4u89.js",
+          "at": 1792082688065.961,
+          "preload": false,
+          "cache": false,
+          "bytes": 5117
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DMAon5K3.js",
+          "at": 1792082688073.964,
+          "preload": false,
+          "cache": false,
+          "bytes": 4249
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-BfDLG1Y_.js",
+          "at": 1792082688074.036,
+          "preload": false,
+          "cache": false,
+          "bytes": 7963
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-C754ziek.js",
+          "at": 1792082688074.596,
+          "preload": false,
+          "cache": false,
+          "bytes": 7060
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-B804iV4Y.js",
+          "at": 1792082688074.3389,
+          "preload": false,
+          "cache": false,
+          "bytes": 5641
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/coins-CAE15Opg.js",
+          "at": 1792082688077.231,
+          "preload": false,
+          "cache": false,
+          "bytes": 2670
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-kmQU1g7j.js",
+          "at": 1792082688076.563,
+          "preload": false,
+          "cache": false,
+          "bytes": 7000
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/catalog-r3pVPBJ4.js",
+          "at": 1792082688078.954,
+          "preload": false,
+          "cache": false,
+          "bytes": 2456
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/sound-VPVHMbFu.js",
+          "at": 1792082688079.215,
+          "preload": false,
+          "cache": false,
+          "bytes": 676
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-D0BXuqu5.js",
+          "at": 1792082688079.843,
+          "preload": false,
+          "cache": false,
+          "bytes": 3257
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/scene-Bn62njZe.js",
+          "at": 1792082688080.3608,
+          "preload": false,
+          "cache": false,
+          "bytes": 7267
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/assets-DKgEYzCy.js",
+          "at": 1792082688082.179,
+          "preload": false,
+          "cache": false,
+          "bytes": 948
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/stage-CwF-RfDb.js",
+          "at": 1792082688081.761,
+          "preload": false,
+          "cache": false,
+          "bytes": 11673
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-SihyRxli.js",
+          "at": 1792082688081.864,
+          "preload": false,
+          "cache": false,
+          "bytes": 5314
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/visual-DV5TEr1P.js",
+          "at": 1792082688084.248,
+          "preload": false,
+          "cache": false,
+          "bytes": 3901
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-BvO2V3gk.js",
+          "at": 1792082688084.3079,
+          "preload": false,
+          "cache": false,
+          "bytes": 5167
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/visual-Btzt2q-_.js",
+          "at": 1792082688085.351,
+          "preload": false,
+          "cache": false,
+          "bytes": 8082
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DvSfLdyX.js",
+          "at": 1792082688085.6929,
+          "preload": false,
+          "cache": false,
+          "bytes": 5698
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/market-low.glb",
+          "at": 1792082688090.335,
+          "preload": true,
+          "cache": false,
+          "bytes": 427040
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/supply-low.glb",
+          "at": 1792082688090.435,
+          "preload": true,
+          "cache": false,
+          "bytes": 404980
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/deck-place-lod1.glb",
+          "at": 1792082688090.2869,
+          "preload": true,
+          "cache": false,
+          "bytes": 957900
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DOZvpQoe.js",
+          "at": 1792082688092.0032,
+          "preload": false,
+          "cache": false,
+          "bytes": 2535
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/shelf-lod1.glb",
+          "at": 1792082688090.3872,
+          "preload": true,
+          "cache": false,
+          "bytes": 1199321
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/darkRenderer-BOMWpzeC.js",
+          "at": 1792082688092.0752,
+          "preload": false,
+          "cache": false,
+          "bytes": 3033
+        },
+        {
+          "url": "http://127.0.0.1:53251/models/reading-board/v1/board-low.glb",
+          "at": 1792082688090.2158,
+          "preload": true,
+          "cache": false,
+          "bytes": 1350541
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-DucSsMSc.js",
+          "at": 1792082688092.164,
+          "preload": false,
+          "cache": false,
+          "bytes": 4927
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-CynXsPQC.js",
+          "at": 1792082688092.119,
+          "preload": false,
+          "cache": false,
+          "bytes": 4636
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/persistentFlightRenderer-CE-kn8nB.js",
+          "at": 1792082688101.1628,
+          "preload": false,
+          "cache": false,
+          "bytes": 2428
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/scene-C3EKG8CF.js",
+          "at": 1792082688104.302,
+          "preload": false,
+          "cache": false,
+          "bytes": 3712
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-BqboUGOT.js",
+          "at": 1792082688106.335,
+          "preload": false,
+          "cache": false,
+          "bytes": 4662
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/master-tongues-BWGednSH.js",
+          "at": 1792082688106.6948,
+          "preload": false,
+          "cache": false,
+          "bytes": 2283
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-DwkjO30E.js",
+          "at": 1792082688106.2688,
+          "preload": false,
+          "cache": false,
+          "bytes": 7458
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/scene-OoR34c9Q.js",
+          "at": 1792082688106.0842,
+          "preload": false,
+          "cache": false,
+          "bytes": 3584
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/family-matter-BTFEQu4p.js",
+          "at": 1792082688108.292,
+          "preload": false,
+          "cache": false,
+          "bytes": 2428
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/ornaments-BydQvQEj.js",
+          "at": 1792082688108.45,
+          "preload": false,
+          "cache": false,
+          "bytes": 2213
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-D3ka_ze3.js",
+          "at": 1792082688110.6902,
+          "preload": false,
+          "cache": false,
+          "bytes": 4684
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-B1I-d6gA.js",
+          "at": 1792082688109.233,
+          "preload": false,
+          "cache": false,
+          "bytes": 8891
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-2OV_OmPc.js",
+          "at": 1792082688110.574,
+          "preload": false,
+          "cache": false,
+          "bytes": 1940
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/royal-matter-DDA9FNV3.js",
+          "at": 1792082688109.1199,
+          "preload": false,
+          "cache": false,
+          "bytes": 3241
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/paperDraw-nrlnuloH.js",
+          "at": 1792082688113.523,
+          "preload": false,
+          "cache": false,
+          "bytes": 3241
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-BsCC6oJy.js",
+          "at": 1792082688114.399,
+          "preload": false,
+          "cache": false,
+          "bytes": 6520
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/drawStock-BfsF4SXQ.js",
+          "at": 1792082688114.233,
+          "preload": false,
+          "cache": false,
+          "bytes": 2549
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-BH-D11cH.js",
+          "at": 1792082688114.2969,
+          "preload": false,
+          "cache": false,
+          "bytes": 11242
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-Nk-7iguR.js",
+          "at": 1792082688116.2551,
+          "preload": false,
+          "cache": false,
+          "bytes": 3658
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-C7b8VmRt.js",
+          "at": 1792082688116.7441,
+          "preload": false,
+          "cache": false,
+          "bytes": 3473
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-BxquxGYn.js",
+          "at": 1792082688116.658,
+          "preload": false,
+          "cache": false,
+          "bytes": 2790
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-CXRV0BQt.js",
+          "at": 1792082688117.7039,
+          "preload": false,
+          "cache": false,
+          "bytes": 5652
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-DkMFyjh5.js",
+          "at": 1792082688119.125,
+          "preload": false,
+          "cache": false,
+          "bytes": 2286
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/riftScene-DIB8TB8a.js",
+          "at": 1792082688118.701,
+          "preload": false,
+          "cache": false,
+          "bytes": 11585
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-d2ksie9N.js",
+          "at": 1792082688118.8682,
+          "preload": false,
+          "cache": false,
+          "bytes": 5580
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-D9x2JUZK.js",
+          "at": 1792082688120.437,
+          "preload": false,
+          "cache": false,
+          "bytes": 3631
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-BXRagMud.js",
+          "at": 1792082688120.575,
+          "preload": false,
+          "cache": false,
+          "bytes": 9563
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/ceremonyScene-BS2w9TgG.js",
+          "at": 1792082688122.283,
+          "preload": false,
+          "cache": false,
+          "bytes": 4277
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+          "at": 1792082688123.479,
+          "preload": false,
+          "cache": false,
+          "bytes": 348
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/duelScene-F8fShlnI.js",
+          "at": 1792082688122.336,
+          "preload": false,
+          "cache": false,
+          "bytes": 29346
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderer-H3871uQL.js",
+          "at": 1792082688123.939,
+          "preload": false,
+          "cache": false,
+          "bytes": 2695
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/readingCrystalOptics-BeDvtuSA.js",
+          "at": 1792082688124.728,
+          "preload": false,
+          "cache": false,
+          "bytes": 1589
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/pileModels-DcRnqaxA.js",
+          "at": 1792082688126.3071,
+          "preload": false,
+          "cache": false,
+          "bytes": 1368
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/spacetime-C7dX4hts.js",
+          "at": 1792082688126.886,
+          "preload": false,
+          "cache": false,
+          "bytes": 5331
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/scene-BVLx41Zp.js",
+          "at": 1792082688126.765,
+          "preload": false,
+          "cache": false,
+          "bytes": 31043
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/snapshot-DwcoR5cV.js",
+          "at": 1792082688127.251,
+          "preload": false,
+          "cache": false,
+          "bytes": 1131
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/diceScene-Cpb8t6Ln.js",
+          "at": 1792082688128.063,
+          "preload": false,
+          "cache": false,
+          "bytes": 3815
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/fateWheelRewind-Cn38hMCx.js",
+          "at": 1792082688130.052,
+          "preload": false,
+          "cache": false,
+          "bytes": 1330
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/coiling-fire-BXM1fmiB.webp",
+          "at": 1792082688130.6528,
+          "preload": false,
+          "cache": false,
+          "bytes": 510517
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/runtime-Ch9eydv_.css",
+          "at": 1792082688131.371,
+          "preload": false,
+          "cache": false,
+          "bytes": 361
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/skull-apparition-jaxyBytm.png",
+          "at": 1792082688130.542,
+          "preload": false,
+          "cache": false,
+          "bytes": 1783389
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/avatar-blue-Dgu4sbnI.png",
+          "at": 1792082688134.287,
+          "preload": false,
+          "cache": false,
+          "bytes": 2148895
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/avatar-red-CyF_7AzU.png",
+          "at": 1792082688134.114,
+          "preload": false,
+          "cache": false,
+          "bytes": 2247862
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/cover-1-Ca1f6w1Z.png",
+          "at": 1792082688133.983,
+          "preload": false,
+          "cache": false,
+          "bytes": 3781094
+        }
+      ],
+      "gameAssetEntryWire": [],
+      "packFailures": [],
+      "packTimings": [],
+      "workerEntryRequests": [],
+      "serverEntryRequests": [],
+      "width": 390,
+      "homeMs": 4656,
+      "reloadMs": 4565,
+      "duelMs": 8340,
+      "coldWire": [
+        {
+          "url": "http://127.0.0.1:53251/?polish",
+          "at": 1792082678660.039,
+          "preload": false,
+          "cache": false,
+          "bytes": 1143
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/main-DCWzPIun.js",
+          "at": 1792082678663.843,
+          "preload": false,
+          "cache": false,
+          "bytes": 1570
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/preload-helper-DD1OZmLC.js",
+          "at": 1792082678663.876,
+          "preload": false,
+          "cache": false,
+          "bytes": 1158
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/atelierThemes-C9ZNrm6d.js",
+          "at": 1792082678678.196,
+          "preload": false,
+          "cache": false,
+          "bytes": 1376
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/main-jMRf2aDr.js",
+          "at": 1792082678677.981,
+          "preload": false,
+          "cache": false,
+          "bytes": 117280
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/renderDensity-eCqR3GeM.js",
+          "at": 1792082678678.298,
+          "preload": false,
+          "cache": false,
+          "bytes": 513
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/rankPresentation-D-y5ptve.js",
+          "at": 1792082678678.2751,
+          "preload": false,
+          "cache": false,
+          "bytes": 8833
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/readingAssetCache-DQpGCQwb.js",
+          "at": 1792082678678.17,
+          "preload": false,
+          "cache": false,
+          "bytes": 168376
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/BufferGeometryUtils-C7q5sQUZ.js",
+          "at": 1792082678678.459,
+          "preload": false,
+          "cache": false,
+          "bytes": 1699
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/baseFurniture-rCYNh5C7.js",
+          "at": 1792082678678.3271,
+          "preload": false,
+          "cache": false,
+          "bytes": 5366
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/materials-CtxuycxT.js",
+          "at": 1792082678678.478,
+          "preload": false,
+          "cache": false,
+          "bytes": 4357
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/sleeve-CiSMbh7j.js",
+          "at": 1792082678678.3918,
+          "preload": false,
+          "cache": false,
+          "bytes": 6679
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/libraryAssets-CE4oRt7u.js",
+          "at": 1792082678678.432,
+          "preload": false,
+          "cache": false,
+          "bytes": 14001
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/social-BsrLCdnc.js",
+          "at": 1792082678678.139,
+          "preload": false,
+          "cache": false,
+          "bytes": 568968
+        },
+        {
+          "url": "http://127.0.0.1:53251/assets/homeAtmosphere-PlryK8mI.js",
+          "at": 1792082678809.916,
+          "preload": false,
+          "cache": false,
+          "bytes": 4959
+        },
+        {
+          "url": "https://us.i.posthog.com/static/array.js",
+          "at": 1792082678757.385,
+          "preload": false,
+          "cache": false,
+          "bytes": 99760
+        },
+        {
+          "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+          "at": 1792082678999.288,
+          "preload": false,
+          "cache": false,
+          "bytes": 571
+        },
+        {
+          "url": "https://us.i.posthog.com/flags/?v=2",
+          "at": 1792082679013.6099,
+          "preload": false,
+          "cache": false,
+          "bytes": 577
+        },
+        {
+          "url": "https://us-assets.i.posthog.com/static/1.438.8/surveys.js",
+          "at": 1792082679149.281,
+          "preload": false,
+          "cache": false,
+          "bytes": 33456
+        },
+        {
+          "url": "http://127.0.0.1:53251/favicon.ico",
+          "at": 1792082682837.08,
+          "preload": false,
+          "cache": false,
+          "bytes": 129
+        }
+      ],
+      "warmPreloads": [],
+      "entryWire": [],
+      "afterReadyWire": [],
+      "samples": [
+        {
+          "label": "idle",
+          "ms": 5017,
+          "count": 301,
+          "p50": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9715
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":2,\"portalPasses\":107,\"displayPasses\":207,\"flightPasses\":0,\"cpuMs\":113.7,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.20694100000000004,
+            "ScriptDuration": 0.132853,
+            "LayoutDuration": 0.0009269999999999973,
+            "RecalcStyleDuration": 0.016374,
+            "LayoutCount": 12,
+            "RecalcStyleCount": 13
+          }
+        },
+        {
+          "label": "play card",
+          "ms": 5045,
+          "count": 301,
+          "p50": 16.700000000000728,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9582
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":111,\"displayPasses\":208,\"flightPasses\":0,\"cpuMs\":102.9,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.1701349999999997,
+            "ScriptDuration": 0.10596499999999986,
+            "LayoutDuration": 0.0013840000000000033,
+            "RecalcStyleDuration": 0.016315000000000024,
+            "LayoutCount": 23,
+            "RecalcStyleCount": 25
+          }
+        },
+        {
+          "label": "BOT turn",
+          "ms": 5046,
+          "count": 301,
+          "p50": 16.700000000000728,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 22220,
+            "board-flight-canvas": 213
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":35,\"portalPasses\":97,\"displayPasses\":204,\"flightPasses\":73,\"cpuMs\":197.9,\"calls\":42,\"triangles\":84}",
+          "cpu": {
+            "TaskDuration": 0.5480269999999998,
+            "ScriptDuration": 0.226947,
+            "LayoutDuration": 0.009713,
+            "RecalcStyleDuration": 0.09128800000000004,
+            "LayoutCount": 125,
+            "RecalcStyleCount": 347
+          }
+        }
+      ],
+      "broken": [],
+      "errors": [],
+      "httpErrors": []
+    }
+  ]
+}

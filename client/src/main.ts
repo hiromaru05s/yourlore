@@ -47,16 +47,14 @@ function bindUiSounds(): void {
   }, { capture: true });
 }
 
-async function boot(): Promise<void> {
+export async function start(language: "ja" | "ko" | "en"): Promise<void> {
   captureAcquisition();
   initSound();
   bindUiSounds();
   initCardTilt();
   initAnalytics(); // dormant unless POSTHOG_KEY is set
-  let country = "";
-  try { country = ((await fetch("/api/geo").then((r) => r.json())) as { country?: string }).country || ""; } catch { /* offline / dev */ }
-  initLang(country === "JP" ? "ja" : country === "KR" ? "ko" : "en"); // JP→ja, KR→ko, elsewhere→en
+  initLang(language);
   const root = document.getElementById("app");
-  if (root) new App(root).start();
+  if (!root) throw new Error("Missing application root");
+  await new App(root).start();
 }
-boot();

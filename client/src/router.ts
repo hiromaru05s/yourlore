@@ -75,7 +75,7 @@ export class App {
     if (location.hostname.startsWith("admin.")) { this.swap(() => mountAdmin(this)); return; }
     // On the game origin, /admin just bounces to the isolated admin host.
     if (location.pathname === "/admin") { location.href = `${location.protocol}//admin.${location.host.replace(/^www\./, "")}/`; return; }
-    this.user = await api.me();
+    this.user = await api.me({ signal: AbortSignal.timeout(10000), strict: true });
     if (!this.user && canUseLocalGuest()) {
       const params = new URLSearchParams(location.search);
       const devLogin = params.get("devLogin");

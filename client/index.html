@@ -10,7 +10,16 @@
          Google Fonts serves unicode-range subsets, so unused languages cost ~nothing. -->
   </head>
   <body>
+    <style>
+      #startup{position:fixed;inset:0;z-index:2147483647;display:grid;place-content:center;gap:24px;padding:32px;text-align:center;background:#091723;color:#eae3cf;font:16px/1.6 system-ui,sans-serif}
+      #startup strong{font:32px Georgia,serif;letter-spacing:.24em}#startup p{max-width:32em;margin:0}#startup a{color:inherit;text-underline-offset:5px}
+    </style>
+    <section id="startup" aria-label="LORE">
+      <strong>LORE</strong><p id="startup-status" role="status">Opening the library…</p>
+      <a id="startup-reload" href="">Reload / 読み込み直す / 다시 불러오기</a>
+      <noscript>Enable JavaScript to open LORE.</noscript>
+    </section>
     <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/src/startup.ts"></script>
   </body>
 </html>
