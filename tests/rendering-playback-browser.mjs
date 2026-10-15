@@ -12,10 +12,10 @@ try{
  // overlays and the cached board underneath. Keep normal wall-clock playback.
  for(const label of ['ドロー3枚','相手ドロー','デッキ再構成','マナ増加','相手マナ増加','場から虚無','手札から虚無']){
   const button=page.getByRole('button',{name:label,exact:true});await button.click();await page.waitForFunction(label=>[...document.querySelectorAll('[data-polish-controls] button')].find(b=>b.textContent===label)?.disabled===false,label);
-  assert.equal(await page.locator('.rift-fold-canvas,.rift-silver-source,.native-draw-layer,.is-shuffling').count(),0,label+' cleanup');checks.push(label);
+  assert.equal(await page.locator('.rift-fold-canvas,.rift-silver-source,.native-draw-layer,.is-shuffling').count(),0,label+' cleanup');checks.push(label);console.log('PASS playback',label);
  }
  // Both sides animate together on the unchanged board, then settle to counts.
- await page.getByRole('button',{name:'マナ増加',exact:true}).click();await page.getByRole('button',{name:'相手マナ増加',exact:true}).click();await page.waitForTimeout(1900);
+ await page.getByRole('button',{name:'マナ増加',exact:true}).click();await page.getByRole('button',{name:'相手マナ増加',exact:true}).click();await page.waitForFunction(()=>['Me','Opp'].every(side=>{const e=document.querySelector('#portrait'+side+' .pt-mana');return e&&Number(e.dataset.maximum)===Number(e.dataset.crystalsReady)+Number(e.dataset.crystalsSpent)&&Number(e.dataset.formingCrystals)===0;}));
  for(const side of ['Me','Opp']){const state=await page.locator('#portrait'+side+' .pt-mana').evaluate(e=>({max:+e.dataset.maximum,total:+e.dataset.crystalsReady+(+e.dataset.crystalsSpent),forming:+e.dataset.formingCrystals}));assert.equal(state.max,state.total);assert.equal(state.forming,0);}checks.push('simultaneous mana counts');
  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(300);
  for(const label of ['ドロー3枚','デッキ再構成','場から虚無']){const button=page.getByRole('button',{name:label,exact:true});await button.click();await page.waitForFunction(label=>[...document.querySelectorAll('[data-polish-controls] button')].find(b=>b.textContent===label)?.disabled===false,label);checks.push('mobile '+label);}
