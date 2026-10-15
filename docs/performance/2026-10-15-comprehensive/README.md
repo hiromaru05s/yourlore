@@ -38,3 +38,7 @@ Cold transfer bytes increased from 160.1 MB to 219.0 MB (desktop), because more 
 - Deterministic production tests include pack integrity/corruption/sparse repair/404 fallback, exact font SHA/license checks, renderer policy, furniture mutation filtering and hidden lazy chapter admission.
 
 Staging deployment, exact guarded-build parity and live smoke evidence will be appended after release. Local fixture gameplay is not an authenticated online multiplayer claim.
+
+## Live slow-network correction
+
+The first staging browser run exposed four 4 MiB pack requests cancelled at the original 60-second image deadline; completed packs on that browser connection took roughly 45–51 seconds. That is recorded in `staging/initial-slow-network.json`. The final runtime allows bounded 180-second pack transfers, so a slow larger transfer is not prematurely discarded and restarted as dozens of originals. Individual-file requests retain their 60-second deadline. Final staging browser checks reuse one browser cache across desktop and narrow pages; narrow cold behavior is covered by the separate local run.
