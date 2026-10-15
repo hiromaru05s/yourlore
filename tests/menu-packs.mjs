@@ -22,11 +22,11 @@ try{
  stored.delete('https://lore.test/__lore_menu_content__/'+entries[0].hash);await run();assert.deepEqual(calls,[entries[0].url],'Sparse eviction fetches only the missing original');
  stored.clear();calls.length=0;missing=true;await run();assert.equal(stored.size,4);assert.deepEqual(calls,['/assets/pack.bin',...entries.map(e=>e.url)],'Unavailable pack recovers from individual originals');
  stored.clear();calls.length=0;missing=false;
- entries[0].scope='duel';for(const e of entries.slice(1))e.scope='menu';
+ entries[0].scope='duel';for(const e of entries.slice(1))e.scope='menu';entries[3].media='narrow';
  const scoped=await import(dir+'/module.mjs?scoped');
  await scoped.prepareMenuCache(()=>{},new AbortController().signal,'duel');
  assert.deepEqual(calls,[entries[0].url],'Duel admission must not fetch an unrelated menu pack');
- assert.equal(binding.length,entries.length,'Binding and pruning still protect every scope');
+ assert.equal(binding.length,entries.length,'Binding and pruning still protect every scope and viewport variant');
  calls.length=0;await scoped.prepareMenuCache(()=>{},new AbortController().signal,[entries[1].url+'?v=current']);
  assert.deepEqual(calls,[entries[1].url],'Selected page fetches only its requested originals');
  // Restricted persistent storage still prepares selected image AND binary files.

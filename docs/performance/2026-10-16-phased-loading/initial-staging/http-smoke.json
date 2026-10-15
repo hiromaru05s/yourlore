@@ -1,0 +1,32 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "url": "https://test.yourlore.xyz/",
+    "type": "text/html",
+    "bytes": 1690,
+    "sha256": "bb66007cc29be39e9ef945f28f4b9a4ec09c64eb2f08244f403e01b6d75a6d57",
+    "scripts": [
+      "/assets/main-Dmhb3OwF.js"
+    ]
+  },
+  {
+    "path": "/api/auth/me",
+    "status": 200,
+    "url": "https://test.yourlore.xyz/api/auth/me",
+    "type": "application/json",
+    "bytes": 13,
+    "sha256": "2e7fe66d0f26a4cc5aaad5f34dba496c7988c175f79b24dcfa414a1dba289c0a",
+    "body": {
+      "user": null
+    }
+  },
+  {
+    "path": "/menu-cache-sw.js?v=3",
+    "status": 200,
+    "url": "https://test.yourlore.xyz/menu-cache-sw.js?v=3",
+    "type": "text/javascript",
+    "bytes": 3105,
+    "sha256": "051727fdf2be0bf3c09bfc7da4803eb1dbdc74df2dde1238f84f5547f2485c71"
+  }
+]

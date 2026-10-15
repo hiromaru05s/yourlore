@@ -23,7 +23,7 @@ This change keeps original imagery, fonts, resolution, rendering and animation t
   loaded by FontFaceSet. Common dialog icons, all full-resolution card art, possible
   generated cards, cosmetic assets, VFX, models and sounds stay prepared for gameplay.
 - Packs separate menu, duel and font scopes. The service-worker binding still covers
-  the complete compatible manifest so pruning cannot invalidate other screens/tabs.
+  the complete manifest, including both viewport variants so pruning cannot invalidate other screens/tabs.
   Original SHA-256 checks, sparse cache repair, retries and old-client isolation remain.
 - Furniture catalogue images are generated when that catalogue is opened. Navigation
   keeps its visible-image readiness covers; it no longer promises that every possible
@@ -42,7 +42,7 @@ not a statistical speed guarantee. API request interception can affect HTTP cach
 | Cold HOME | 8.885 s | 4.840 s |
 | Bytes through HOME screenshot | 253.065 MB | 15.094 MB |
 | Reload HOME | 4.788 s | 4.594 s |
-| Duel selection to preparation cover removal | 0.956 s | approximately 2.4 s (see JSON) |
+| Duel selection to preparation cover removal | 0.956 s | 2.438 s |
 | Public game transfers after preparation cover removal | 0 | 0 |
 
 HOME bytes fall by approximately 94%. Duel preparation is reported separately rather
@@ -71,4 +71,27 @@ restricted-storage image/binary fallback, corruption rejection and exact byte pa
 `loading-readiness.mjs`: HOME does not fetch the global archive; it waits for the
 visible atmosphere frame, and navigation cancels that wait.
 
-Final guarded release and live staging evidence are recorded below after deployment.
+`local-release.json` repeats the final runtime after integrating the latest approved
+Goldfault cosmetic assets, and also exercises the actual market card's right-click
+inspection. Both widths passed the same zero-late-transfer/error checks. HOME was
+4.982/5.000 s and preparation 6.297/5.749 s while the full release suite ran concurrently.
+Those times include host contention and must not be compared as an isolated benchmark.
+
+## Initial staging verification
+
+Source 173139382d7e1b99df49cad57d7d6733fa4a5fc7, Worker
+c2b822d3-b958-4304-b90a-d9051fff0b45 at 100% traffic. Guarded source build passed
+181/181 production tests, both typechecks and build. `initial-staging/` records
+172/172 exact SHA-256 matches and 1280/390 gameplay with no late public asset requests,
+worker fallbacks, broken images, page errors or HTTP errors, including card inspection.
+Cold desktop HOME was 12.322 s / 11.331 MB; first duel preparation 9.546 s / 195.404 MB.
+The subsequent narrow case reuses the browser context and is not a second cold start.
+
+Live timings are not a controlled benchmark: the host load average exceeded 300 during
+an earlier blank-page timeout and a subsequent Chrome-launch timeout. A first Node
+parity pass also encountered ECONNRESET. The successful browser retry and a resumable
+curl parity pass are recorded; neither earlier attempt is counted as a pass. Use the
+byte reduction and local comparison for attribution, not a universal 126-to-12 s promise.
+
+The final small correction retains prepared model variants in the service-worker
+binding across viewport changes. Its guarded release is recorded in `staging/` below.

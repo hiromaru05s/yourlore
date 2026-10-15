@@ -50,7 +50,7 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
  const entries=compatible.filter(e=>scope==='duel'?(e.scope??assetScope(e.url))==='duel':!wanted||wanted.has(e.url));
  if(!enabled){registration=undefined;await prepareWithoutStorage(progress,signal,scope,entries);return;}
  // Persist this client's binding before loading, including across worker restarts.
- await bind(compatible); // Full binding protects all phases and other tabs during pruning.
+ await bind(inventory.entries); // Protect every phase and viewport already prepared by this tab.
  const cache=await caches.open(CONTENT);
  // One metadata scan instead of opening 1,200 response bodies on every launch.
  const present=new Set((await cache.keys()).map(r=>r.url));
