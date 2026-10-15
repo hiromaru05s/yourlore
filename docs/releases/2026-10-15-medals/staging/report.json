@@ -1,0 +1,13 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "at": "2026-10-15T13:25:05.945Z",
+  "checks": [
+    "real D1 profile ownership, 217 entries, equipped persistence, unauthorized medal rejected, private progression",
+    "real browser profile equip/readback and separate owned/progression tabs",
+    "both authenticated sockets receive server medals; reconnect preserves room snapshot after profile change",
+    "both real browser seats render both equipped medals, desktop and mobile",
+    "authoritative surrender settles win while excluding perfect/speed feats"
+  ],
+  "errors": [],
+  "fixture": "two disposable QA accounts; private room only; cleaned in finally"
+}

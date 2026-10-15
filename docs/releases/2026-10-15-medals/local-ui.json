@@ -8,10 +8,10 @@
     "owned/progress geometry 844x390",
     "series filter, eligible cards and empty search",
     "unequip",
-    "two readable medals below names 1280x800",
-    "two readable medals below names 390x844",
-    "two readable medals below names 320x568",
-    "two readable medals below names 844x390",
+    "two readable medals beside names 1280x800",
+    "two readable medals beside names 390x844",
+    "two readable medals beside names 320x568",
+    "two readable medals beside names 844x390",
     "opening: both identities and text plates, 4 sizes, reduced motion and abort cleanup"
   ],
   "errors": []
