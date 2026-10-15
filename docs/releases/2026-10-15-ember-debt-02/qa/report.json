@@ -4,25 +4,25 @@
       "owner": 0,
       "lethal": false,
       "hits": 2,
-      "frames": 21
+      "frames": 33
     },
     {
       "owner": 0,
       "lethal": true,
       "hits": 1,
-      "frames": 27
+      "frames": 54
     },
     {
       "owner": 1,
       "lethal": false,
       "hits": 2,
-      "frames": 23
+      "frames": 46
     },
     {
       "owner": 1,
       "lethal": true,
       "hits": 1,
-      "frames": 18
+      "frames": 41
     },
     {
       "case": "mobile"
