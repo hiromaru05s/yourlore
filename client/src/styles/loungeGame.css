@@ -2,7 +2,7 @@
 .lounge-shell {
   --rail:204px; --bar:70px;
   --lounge-gold:#ad8d53; --lounge-light:#f1d79d;
-  background-image:linear-gradient(#03122218,#03122240),url('/art/lounge/v1/library.png');
+  background-image:linear-gradient(#03122218,#03122240),var(--menu-library-image);
 }
 .lore-icon { width:30px; height:30px; object-fit:contain; display:inline-block; flex:none; filter:drop-shadow(0 2px 2px #03132466); }
 .lounge-shell button { -webkit-tap-highlight-color:transparent; }

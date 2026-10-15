@@ -1,5 +1,5 @@
 /* Illustrated Biblion and the same living guide used by the actual lessons. */
-.lounge-shell.selected-menu.lounge-home .lounge-atmosphere{inset:0;background-image:linear-gradient(90deg,#09192c0a 30%,#0715256b 62%,#071525c7),url('/art/lounge/illustrated-v1/biblion.webp');background-position:center;background-size:cover;animation:none;will-change:auto}
+.lounge-shell.selected-menu.lounge-home .lounge-atmosphere{inset:0;background-image:linear-gradient(90deg,#09192c0a 30%,#0715256b 62%,#071525c7),var(--menu-library-image);background-position:center;background-size:cover;animation:none;will-change:auto}
 .lounge-shell.selected-menu.lounge-home .lounge-atmosphere::before{display:none}
 .selected-menu.lounge-home .lounge-content>.lounge-home-screen{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,395px);align-items:center;gap:5vw;padding:0 6vw 12px;min-height:100%;height:auto}
 .selected-menu .lounge-home-main{width:100%;max-width:none;margin:0;position:relative;z-index:1}
@@ -11,7 +11,7 @@
 /* Keep the adopted horizon nav; reserve enough room for the longer label. */
 .lounge-shell.horizon-nav .lounge-rail nav{grid-template-columns:repeat(3,minmax(0,1fr)) 1.15fr repeat(2,minmax(0,1fr)) 1.4fr}
 /* Curriculum as a stage selection, with a clear primary action and persistent state. */
-.lounge-shell.lounge-tutorial:has(.academy){background-image:linear-gradient(#071522ab,#071522ed),url('/art/lounge/illustrated-v1/biblion.webp');background-position:center;background-size:cover}
+.lounge-shell.lounge-tutorial:has(.academy){background-image:linear-gradient(#071522ab,#071522ed),var(--menu-library-image);background-position:center;background-size:cover}
 .lounge-tutorial .lounge-content>.academy{padding:6px 4vw 24px}
 .lounge-tutorial .academy .academy-content{width:min(100%,1200px);padding:0 0 32px;background:none;border:0;backdrop-filter:none}
 .academy .academy-notebook{padding:13px 0;min-height:48px;font-size:12px}
@@ -50,7 +50,7 @@
 @media(prefers-reduced-motion:reduce){.lesson-art>img{transition:none}.lesson-tile:has(button:hover) .lesson-art>img{transform:none}}
 /* Override legacy menu geometry and state rules regardless of module load order. */
 .selected-menu.lounge-home .lounge-home-main{width:100%;max-width:none;padding:0;margin:0;display:flex;flex-direction:column}
-.lounge-shell.selected-menu.lounge-tutorial:has(.screen.academy){background-image:linear-gradient(#071522c7,#071522ed),url('/art/lounge/illustrated-v1/biblion.webp')}
+.lounge-shell.selected-menu.lounge-tutorial:has(.screen.academy){background-image:linear-gradient(#071522c7,#071522ed),var(--menu-library-image)}
 .lounge-tutorial .academy .academy-lessons .lesson-tile.claimed{opacity:1}
 .lounge-shell.horizon-nav.selected-menu .lounge-rail nav{grid-template-columns:repeat(3,minmax(0,1fr)) 1.15fr repeat(2,minmax(0,1fr)) 1.4fr}
 @media(max-width:850px){.selected-menu.lounge-home .lounge-home-main{width:min(100%,360px);margin:0 auto}.selected-menu.lounge-home .lounge-content>.lounge-home-screen{padding-top:4px}.selected-menu.lounge-home .lounge-play-button{width:210px;height:210px}.selected-menu.lounge-home .lounge-active-deck{min-height:62px}.selected-menu.lounge-home .lounge-rank-info .rank-emblem{height:42px;width:36px}}
@@ -70,7 +70,7 @@
 .lounge-shell.selected-menu.lounge-tutorial .academy .academy-lessons{margin:0;gap:14px}
 @media(min-width:851px){.lounge-tutorial .academy .academy-hero .academy-spirit{height:115px;width:100px}.lounge-tutorial .academy .lesson-art{height:86px}.lounge-tutorial .academy .academy-map-heading{margin-bottom:12px}}
 @media(max-width:600px){.lounge-shell.selected-menu.lounge-tutorial .academy .academy-lessons{gap:12px}}
-@media(max-width:850px){.lounge-shell.selected-menu.lounge-home .lounge-atmosphere{background-image:linear-gradient(180deg,#081b3026 0%,#081b3026 25%,#081b3066 42%,#061424cf 70%,#061424ee),url('/art/lounge/illustrated-v1/biblion.webp')}}
+@media(max-width:850px){.lounge-shell.selected-menu.lounge-home .lounge-atmosphere{background-image:linear-gradient(180deg,#081b3026 0%,#081b3026 25%,#081b3066 42%,#061424cf 70%,#061424ee),var(--menu-library-image)}}
 
 
 /* With no caption or speech panel, the companion itself owns the left stage. */

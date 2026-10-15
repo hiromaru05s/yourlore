@@ -4,6 +4,7 @@ import '../styles/loungeSelectedMenu.css';
 import '../styles/loungeSupport.css';
 import '../styles/homeDuelInk.css';
 import '../styles/homeAtmosphere.css';
+import '../styles/menuReadability.css';
 import {loungeNavGlyph,loungeUtilityGlyph} from './loungeNavGlyphs';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';

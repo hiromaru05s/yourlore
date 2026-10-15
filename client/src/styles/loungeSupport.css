@@ -13,7 +13,7 @@
 .selected-menu .lounge-play-button > span { top:65%; max-width:74%; }
 
 .lounge-shell.selected-menu:is(.lounge-profile,.lounge-tutorial) {
-  background-image:linear-gradient(100deg,#04101be8,#061420ba),url('/art/lounge/v1/library.webp');
+  background-image:linear-gradient(100deg,#04101be8,#061420ba),var(--menu-library-image);
 }
 .selected-menu:is(.lounge-profile,.lounge-tutorial) .lounge-content > .screen { padding:8px 4vw 30px; }
 .selected-menu:is(.lounge-profile,.lounge-tutorial) .tut {

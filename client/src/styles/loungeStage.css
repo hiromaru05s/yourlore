@@ -3,7 +3,7 @@
   --rail:0px; --bar:86px; --dock:96px;
   --stage-line:#9cafc8; --stage-light:#eef4ff;
   color:#e9eff9; background-size:cover; background-repeat:no-repeat; background-position:center;
-  background-image:linear-gradient(#06132b60,#031024a8),url('/art/lounge/v1/library.png');
+  background-image:linear-gradient(#06132b60,#031024a8),var(--menu-library-image);
 }
 .lounge-shell::after { content:''; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 100px #01081588; }
 .lounge-topbar { left:0; height:var(--bar); padding:10px 28px; gap:16px; border:0; background:linear-gradient(#030b1bd9,transparent); box-shadow:none; }
@@ -62,7 +62,7 @@
 .lounge-content .pf-stat b,.lounge-content .pf-stat .tier-chip { color:#eff6ff; }
 .lounge-content .pf-stat span { color:#b6cae4; }
 .lounge-content :is(.bill-plan,.sl-tile,.shop-item,.lounge-guide-nav) { background:#17304b; border-color:#7792b4; }
-.lounge-content .shop-empty { background:linear-gradient(#07192dc7,#091a31ed),url('/art/lounge/v1/library.png') center/cover; color:#cadbf0; }
+.lounge-content .shop-empty { background:linear-gradient(#07192dc7,#091a31ed),var(--menu-library-image) center/cover; color:#cadbf0; }
 .lounge-content .shop-empty::before { content:''; height:90px; background:url('/art/lounge/icons/v2/shop.png') center/contain no-repeat; }
 .lounge-content .lounge-guide-nav a { color:#d3e7fc; background:#102542; border-color:#718aac; }
 .lounge-content .tut-steps li { background:linear-gradient(#1d3958,#0e223c); border-color:#7291b5; box-shadow:inset 0 1px #e0f3ff20; }
@@ -74,7 +74,7 @@
 .lounge-cards :is(.cards-filters,.cards-hint) { background:#10253e; border-color:#6b8db154; }
 .lounge-cards .cards-grid .card:hover { box-shadow:0 0 0 2px #d1edff,0 0 24px #7dc7ff70; }
 /* Full-screen character scene. All labels, rank and deck data remain live HTML. */
-.lounge-home,.lounge-login,.lounge-lobby { background-image:url('/art/lounge/v1/library.png'); background-position:center; }
+.lounge-home,.lounge-login,.lounge-lobby { background-image:var(--menu-library-image); background-position:center; }
 .lounge-home .lounge-content { overflow:auto; }
 .lounge-content>.lounge-home-screen { display:flex; height:100%; min-height:530px; padding:0 4vw 12px; }
 .lounge-home-main { width:42%; max-width:620px; min-height:0; margin-left:auto; padding:0; display:flex; flex-direction:column; justify-content:center; gap:10px; }
