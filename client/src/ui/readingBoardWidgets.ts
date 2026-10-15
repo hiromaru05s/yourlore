@@ -98,7 +98,13 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
    if(mana.formation)el.dataset.formationProgress=String(mana.formation.handles[0]?.group.userData.progress??1);else if(el.dataset.formationProgress!==undefined)delete el.dataset.formationProgress;
    const key=current+':'+maximum,newState=key!==mana.key||formationChanged;
    if(newState){mana.key=key;mana.maximum=maximum;mana.current=current;shadowDirty=true;}
-   if(!newState&&!animating)continue;changed=true;if(animating)shadowDirty=true;
+   if(!newState&&!animating){
+    // Board text can replace its DOM node without changing the GPU instances.
+    // Restore inspection counts without rebuilding identical crystal geometry.
+    data(el,'crystalsReady',String(mana.batches.ready[0]?.count??0));
+    data(el,'crystalsSpent',String(mana.batches.spent[0]?.count??0));
+    continue;
+   }changed=true;if(animating)shadowDirty=true;
    const counts={ready:0,spent:0},matrix=new T.Matrix4(),q=new T.Quaternion();
    for(let i=0;i<maximum;i++){
     if(forming&&i>=gainFrom)continue;
