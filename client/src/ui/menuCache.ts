@@ -13,17 +13,17 @@ async function connect():Promise<boolean> {
  if(!('serviceWorker' in navigator)||!('caches' in window)||!crypto.subtle||typeof __LORE_MENU_MANIFEST__==='undefined')return false;
  try {
   const script=new URL('/menu-cache-sw.js?v=3',location.origin).href;
-  await withDeadline(navigator.serviceWorker.register(script,{scope:'/',updateViaCache:'none'}),20000);
-  await withDeadline(navigator.serviceWorker.ready,20000);
+  await withDeadline(navigator.serviceWorker.register(script,{scope:'/',updateViaCache:'none'}),60000);
+  await withDeadline(navigator.serviceWorker.ready,60000);
   const current=()=>!!navigator.serviceWorker.controller&&(!navigator.serviceWorker.controller.scriptURL||navigator.serviceWorker.controller.scriptURL===script);
   if(!current())await new Promise<void>((resolve,reject)=>{
    const done=()=>{if(!current())return;clearTimeout(timer);navigator.serviceWorker.removeEventListener('controllerchange',done);resolve();};
-   const timer=setTimeout(()=>{navigator.serviceWorker.removeEventListener('controllerchange',done);reject(Error('Artwork cache activation timed out'));},20000);
+   const timer=setTimeout(()=>{navigator.serviceWorker.removeEventListener('controllerchange',done);reject(new DOMException('Artwork cache activation timed out','TimeoutError'));},60000);
    navigator.serviceWorker.addEventListener('controllerchange',done);if(current())done();
   });
   const cache=await caches.open(CONTENT),probe=key('storage-probe');
   await cache.put(probe,new Response('ok'));await cache.delete(probe);return true;
- }catch{return false;}
+ }catch(error){if((error as Error)?.name==='TimeoutError')throw error;return false;}
 }
 async function bind(entries:Entry[]):Promise<void> {
  await new Promise<void>((resolve,reject)=>{
@@ -37,9 +37,11 @@ async function bind(entries:Entry[]):Promise<void> {
 /** Preload original compressed files, not hundreds of decoded full-size bitmaps.
  * Content hashes reuse unchanged files across deploys and reject stale CDN data. */
 export async function prepareMenuCache(progress:(done:number,total:number)=>void,signal:AbortSignal):Promise<void> {
- const enabled=await(registration??=connect());
+ // A slow worker is not an unsupported worker. Retry activation instead of
+ // permanently selecting thousands of individual image downloads for this tab.
+ const enabled=await(registration??=connect().catch(error=>{registration=undefined;throw error;}));
  if(signal.aborted)return;
- if(!enabled){await prepareWithoutStorage(progress,signal);return;}
+ if(!enabled){registration=undefined;await prepareWithoutStorage(progress,signal);return;}
  const inventory:Manifest=await(manifest??=fetch(__LORE_MENU_MANIFEST__,{cache:'force-cache'}).then(r=>{if(!r.ok)throw Error('Artwork manifest unavailable');return r.json();}).catch(e=>{manifest=undefined;throw e;}));
  const {packs=[]}=inventory,narrow=matchMedia('(max-width:700px)').matches;
  const entries=inventory.entries.filter(e=>!e.media||e.media===(narrow?'narrow':'wide'));

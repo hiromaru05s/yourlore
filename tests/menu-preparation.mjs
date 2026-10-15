@@ -19,5 +19,9 @@ try{
  wrong=false;await prepareMenuCache(()=>{},new AbortController().signal);assert.equal(document.documentElement.dataset.menuCache,'ready');const count=downloads;
  await prepareMenuCache(()=>{},new AbortController().signal);assert.equal(downloads,count,'Re-entry does not revalidate unchanged artwork');
  const aborted=new AbortController();aborted.abort();await prepareMenuCache(()=>{throw Error('Cancelled work published progress');},aborted.signal);
- console.log('PASS: stale-byte rejection, retry recovery, persistent cache hit without transfer, and cancellation');
+ const nativeTimeout=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>nativeTimeout(fn,ms===60000?5:ms,...args);
+ let activate; navigator.serviceWorker.ready=new Promise(r=>activate=r);
+ const retryWorker=await import(dir+'/module.mjs?slow-worker');
+ try {await assert.rejects(retryWorker.prepareMenuCache(()=>{},new AbortController().signal),error=>error.name==='TimeoutError','A worker activation timeout must not fall back to bulk image decode');activate();await retryWorker.prepareMenuCache(()=>{},new AbortController().signal);assert.equal(document.documentElement.dataset.menuCache,'ready');}finally{globalThis.setTimeout=nativeTimeout;}
+ console.log('PASS: stale-byte rejection, retry recovery, persistent cache hit without transfer, cancellation, and recovery after slow worker activation');
 }finally{await fs.rm(dir,{recursive:true,force:true});}
