@@ -212,7 +212,6 @@ body.lounge-active .zoom-details { background:linear-gradient(115deg,#e1d6be,#f8
   .lounge-content .pf-tab { flex-direction:column; font-size:11px; padding:7px 4px; }
 }
 @media(prefers-reduced-motion:reduce) { .lounge-shell * { animation:none!important; transition:none!important; } }
-.lounge-content .pf-ava-edit .lore-icon { width:17px; height:17px; }
 .lounge-content .sl-current-tag .lore-icon { width:19px; height:19px; }
 body.lounge-active .inspect-close { font-size:0; background:#102d43 url('/art/lounge/icons/v2/close.png') center/22px no-repeat; border:1px solid #bfa36b; }
 .lounge-content .lb-rank { position:relative; display:flex; align-items:center; justify-content:center; }
