@@ -6,8 +6,8 @@ const dom=new JSDOM('<body><div id="app"></div></body>',{url:'http://localhost',
 Object.assign(globalThis,{window:dom.window,document:dom.window.document,HTMLElement:dom.window.HTMLElement});
 const make=id=>({id,name:id,t:'spell',cost:1}),DB={A:make('A'),B:make('B')},STARTERS={STARTER_MANA:make('STARTER_MANA')};
 const fresh=()=>({sel:0,list:Array.from({length:5},()=>({cards:['A','A','A','A','B','B','B','B'],watch:[]}))});
-const store=fresh(),zooms=[],saves=[];let rejectSave=false;
-const deps={starterCollection:()=>({A:8,B:8}),constrainDeckStore:s=>s,DB,STARTERS,DECK_POOL:['A','B'],BUYABLE_POOL:['A','B'],DECK_SIZE:8,DECK_MAX_COPIES:8,DECK_SLOTS:5,WATCH_MAX:8,
+const store=fresh(),zooms=[],saves=[];let rejectSave=false,disposedEffects=0;
+const deps={disposeCardEffects:root=>{assert(root.querySelector('#deckCur'));disposedEffects++;},starterCollection:()=>({A:8,B:8}),constrainDeckStore:s=>s,DB,STARTERS,DECK_POOL:['A','B'],BUYABLE_POOL:['A','B'],DECK_SIZE:8,DECK_MAX_COPIES:8,DECK_SLOTS:5,WATCH_MAX:8,
  deckStoreForUser:()=>store,sanitizeDeckName:s=>s.trim(),t:k=>k,cardName:c=>c.name,esc:s=>s,onLangChange:()=>()=>{},loungeText:ja=>ja,homeIcon:()=>'',
  cardEl:c=>{const el=document.createElement('div');el.className='card';el.dataset.card=c.id;return el;},bindZoom:()=>{},zoomCard:c=>zooms.push(c.id),
  revealCards:async(el,nodes)=>el.replaceChildren(...nodes),renderDeckAppearance:()=>{},isLocalDevAccount:()=>false,loadLocalGuestProfile:()=>({}),confirmDialog:async()=>true,
@@ -39,5 +39,5 @@ click('#deckCur .deck-entry:nth-child(2) .deck-hand-action');click('#deckPool [d
 store.list[1].cards=Array(8).fill('A');click('#editTab');
 assert(root.querySelector('#deckPool [data-card="A"] + .deck-card-action').disabled);
 click('#deckPool [data-card="A"]');assert.equal(zooms.at(-1),'A','Copy-limit cards can still enlarge');assert.equal(store.list[1].cards.length,8);
-screen.destroy();assert.equal(root.children.length,0);
+screen.destroy();assert.equal(disposedEffects,1);assert.equal(root.children.length,0);
 console.log('PASS: fixed Attune, full-deck replacement, removal/addition, scoped undo, all-slot validation, active deck persistence, failed save recovery');

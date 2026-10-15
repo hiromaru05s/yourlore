@@ -19,8 +19,8 @@ await test('concurrent invite attribution respects three-person cap and ledger o
  assert.equal(db.prepare('SELECT COUNT(*) n FROM invite_rewards').get().n,3);
  assert.equal(db.prepare("SELECT COUNT(*) n FROM users WHERE invited_by='inviter'").get().n,3);
 });
-await test('current and legacy tutorial completion grant badge; incomplete lesson does not',async()=>{
- for(const [id,key,want]of [['current','tuto:10',true],['legacy','tut:6',true],['unfinished','tuto:6',false]]){user(id);db.prepare('INSERT INTO rewards VALUES(?,?,?,?)').run(id,key,0,Date.now());assert.equal((await ownedBadges(env,id)).includes('tutorial'),want,id)}
+await test('retired tutorial badge keys do not grant unearned text medals',async()=>{
+ for(const [id,key,want]of [['current','tuto:10',false],['legacy','tut:6',false],['unfinished','tuto:6',false]]){user(id);db.prepare('INSERT INTO rewards VALUES(?,?,?,?)').run(id,key,0,Date.now());assert.equal((await ownedBadges(env,id)).includes('tutorial'),want,id)}
 });
 await test('parallel room setup cannot reset an already provisioned game',async()=>{
  let saved;const r=new GameRoom({storage:{get:async()=>saved,put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async()=>{}}},rewardTestEnv());
