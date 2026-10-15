@@ -1,0 +1,46 @@
+{
+  "source": "aadadf88a8e6aa2c4a8785f08495a9ed4c2bb67e",
+  "reuseContext": true,
+  "cases": [
+    {
+      "width": 1280,
+      "homeSeconds": 6.448,
+      "reloadSeconds": 4.652,
+      "preparationSeconds": 9.128,
+      "homeMB": 11.339885,
+      "preparationMB": 195.403661,
+      "late": 0,
+      "workerFallback": 0,
+      "broken": 0,
+      "errors": 0,
+      "httpErrors": 0,
+      "p95": [
+        16.799999999999272,
+        16.799999999999272,
+        16.799999999995634
+      ],
+      "longTasks": [
+        91
+      ]
+    },
+    {
+      "width": 390,
+      "homeSeconds": 5.52,
+      "reloadSeconds": 5.196,
+      "preparationSeconds": 4.172,
+      "homeMB": 1.049613,
+      "preparationMB": 7.26294,
+      "late": 0,
+      "workerFallback": 0,
+      "broken": 0,
+      "errors": 0,
+      "httpErrors": 0,
+      "p95": [
+        16.799999999999272,
+        16.700000000000728,
+        16.700000000004366
+      ],
+      "longTasks": []
+    }
+  ]
+}

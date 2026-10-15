@@ -1,0 +1,20 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "bytes": 1690,
+    "sha256": "b0ff08592435c5e1f45dd63fa52041780b8a76ebfb7e63363498e1dd0973b425"
+  },
+  {
+    "path": "/api/auth/me",
+    "status": 200,
+    "bytes": 13,
+    "sha256": "2e7fe66d0f26a4cc5aaad5f34dba496c7988c175f79b24dcfa414a1dba289c0a"
+  },
+  {
+    "path": "/menu-cache-sw.js?v=3",
+    "status": 200,
+    "bytes": 3105,
+    "sha256": "051727fdf2be0bf3c09bfc7da4803eb1dbdc74df2dde1238f84f5547f2485c71"
+  }
+]

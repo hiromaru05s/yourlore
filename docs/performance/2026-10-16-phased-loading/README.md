@@ -95,3 +95,27 @@ byte reduction and local comparison for attribution, not a universal 126-to-12 s
 
 The final small correction retains prepared model variants in the service-worker
 binding across viewport changes. Its guarded release is recorded in `staging/` below.
+
+
+## Final guarded staging release
+
+Source `aadadf88a8e6aa2c4a8785f08495a9ed4c2bb67e`, Worker `069e8117-3616-45d2-96db-e8c8c4f0ed92`
+at 100% traffic on https://test.yourlore.xyz. Both typechecks, build and **181/181**
+production tests passed again. The final live browser run covered desktop and narrow
+windows, actual card inspection, card play and a BOT turn. Both cases recorded zero
+late game asset transfers, worker network fallbacks, broken visible images, page
+errors and HTTP errors. API responses were fixtures; this is normal local guest BOT
+gameplay with actual staging assets, not authenticated multiplayer verification.
+
+Cold desktop HOME: **6.448 s / 11.340 MB**. Reload HOME: **4.652 s**.
+Initial duel preparation: **9.128 s / 195.404 MB**, followed by the unchanged opening.
+HOME data is approximately 95% below the earlier 248 MB live preload; this is a
+HOME admission reduction, not a 95% reduction of all game data. First duel preparation
+still transfers original full artwork and remains bandwidth-dependent. Public asset
+bytes are reused on subsequent entries. The narrow case reuses this browser context.
+
+`staging/summary.json` records exact per-window measurements and frame samples.
+`staging/asset-parity.json` records the final guarded build hashes; unchanged immutable
+files reuse the successful earlier download verification, and changed contents were
+fetched again. `staging/http-smoke.json` freshly verifies the final HTML/worker hashes
+and unauthenticated API response. No universal no-stutter claim is made.
