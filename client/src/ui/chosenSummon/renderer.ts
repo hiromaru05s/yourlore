@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import {CARD_PADDING} from '../cardSurface';
 import {Weapon,loadWeapons} from './weapon';
 import * as T from 'three';
@@ -10,7 +11,7 @@ function ribbonGeometry(){const g=new T.PlaneGeometry(1,1,72,6);g.userData.origi
 export class Renderer{
  weapons:Weapon[]=[];ready:Promise<void>;gl:T.WebGLRenderer;scene=new T.Scene();camera=new T.OrthographicCamera(-2.6,2.6,2.25,-2.25,.01,40);root=new T.Group();card:T.Mesh;trace:T.Mesh;ground:T.Mesh;rigs:Rig[]=[];textures=new Map<HTMLCanvasElement,T.CanvasTexture>();env:T.WebGLRenderTarget;disposed=false;
  constructor(){
- this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.gl.setPixelRatio(1);this.gl.setSize(700,600);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.15;this.gl.setClearColor(0,0);
+ this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.gl.setPixelRatio(1);this.gl.setSize(700,600);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.15;this.gl.setClearColor(0,0);
  const pm=new T.PMREMGenerator(this.gl),room=new RoomEnvironment();this.env=pm.fromScene(room,.03);this.scene.environment=this.env.texture;room.dispose();pm.dispose();
  this.camera.position.set(0,0,12);this.scene.add(this.root,new T.HemisphereLight(0xece8ff,0x282131,2));const key=new T.DirectionalLight(0xffe6bf,4);key.position.set(-3,6,7);this.scene.add(key);const rim=new T.DirectionalLight(0xbcb2ff,3);rim.position.set(4,0,3);this.scene.add(rim);
  this.card=new T.Mesh(new T.PlaneGeometry(1.55*(1+2*CARD_PADDING),1.55*(1.5+2*CARD_PADDING)),new T.MeshBasicMaterial({transparent:true,side:T.DoubleSide}));this.root.add(this.card);

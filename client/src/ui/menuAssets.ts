@@ -1,13 +1,22 @@
+export {duelFileAssets} from './duelFileAssets';
 import {DB, STARTERS, PASSIVES, SLEEVE_LIST, frameFor, fieldFrameFor} from '../shared/cards';
 import {COSMETICS} from '../shared/cosmetics';
 import {THEMES, asset} from '../shared/atelierThemes';
 import {BOT_NPCS} from '../shared/botNpcs';
 import {artUrl} from './cardArt';
+import {duelImageUrls} from './duelAssets';
 import {HOME_ICONS} from './homeIcons';
 /** Every image reachable from the lounge, including filters, zoom and dialogs.
  * Compressed bytes are stored on disk; only visible images need decoded pixels. */
 export function menuAssetUrls():string[]{
  return [...new Set([
+  ...duelImageUrls(),
+  '/vfx/purchase-air/crystal-72.png','/vfx/chosen-victory/crown.png','/vfx/merchant/balance.png',
+  ...['knight','mage','archer','rogue'].map(k=>`/vfx/chosen-heroes/${k}.png`),
+  '/art/vfx/mimic-family/engraved-brass.png','/art/vfx/mimic-cavity-r3/02-moist-cheeks.png',
+  ...['01-reference-ivory','02-ridged-bone','03-moist-flesh','04-predator-fangs'].map(k=>`/art/vfx/mimic-mouth-r2/${k}.png`),
+  '/art/vfx/taunt-four/lion-relief.png',
+  '/art/lounge/gifts/courier.png',
   ...HOME_ICONS.map(k=>`/art/lounge/icons/v2/${k}.png`),
   '/art/lounge/icons/shard-simple-v1.png',
   '/art/brand/lore-logo-transparent.webp', '/art/lounge/illustrated-v1/biblion.webp',

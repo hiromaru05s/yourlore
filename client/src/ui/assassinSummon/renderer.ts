@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {DURATION} from './catalog';
 export type View='oblique'|'top'|'side';
@@ -126,7 +127,7 @@ export class Renderer{
  private shadow:T.ShaderMaterial;
  private disposed=false;
  constructor(){
-  this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setPixelRatio(1);this.gl.setSize(480,540,false);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;
+  this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setPixelRatio(1);this.gl.setSize(480,540,false);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;
   const material=(shadowPass:number)=>new T.ShaderMaterial({vertexShader:vertex,fragmentShader:fragment,transparent:true,side:T.DoubleSide,depthWrite:shadowPass===0,uniforms:{face:{value:null},clockMs:{value:0},kind:{value:0},rank:{value:1},shadowPass:{value:shadowPass},boardPass:{value:0}}});
   this.main=material(0);this.shadow=material(1);
   for(const mat of [this.shadow,this.main]){const mesh=new T.Mesh(this.geometry,mat);mesh.frustumCulled=false;mesh.renderOrder=mat===this.shadow?0:1;this.scene.add(mesh);this.meshes.push(mesh);}

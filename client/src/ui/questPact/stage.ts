@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 /** Lighting of approved study 01, without the other prototype renderers. */
@@ -5,7 +6,7 @@ export class PactStage {
  readonly renderer:T.WebGLRenderer;readonly canvas:HTMLCanvasElement;readonly scene=new T.Scene();readonly camera=new T.PerspectiveCamera(34,1,.1,80);readonly root=new T.Group();
  private env:T.WebGLRenderTarget;private pm:T.PMREMGenerator;
  constructor(_face:HTMLCanvasElement,_overlay=false){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true});this.canvas=this.renderer.domElement;
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true});this.canvas=this.renderer.domElement;
   this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.toneMapping=T.ACESFilmicToneMapping;
   this.pm=new T.PMREMGenerator(this.renderer);const room=new RoomEnvironment();this.env=this.pm.fromScene(room,.04);room.dispose();this.scene.environment=this.env.texture;this.scene.environmentIntensity=.65;
   this.camera.position.set(0,.8,10.2);this.camera.lookAt(0,0,0);

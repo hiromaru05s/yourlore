@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {motion,ease,type Id} from './catalog';
@@ -12,7 +13,7 @@ export class Renderer{
  private receiver=new T.Mesh(new T.PlaneGeometry(176,266),new T.ShadowMaterial({opacity:.36,transparent:true,depthWrite:false}));
  private faceCache=new Map<HTMLCanvasElement,T.Texture>();private disposed=false;private environment:T.WebGLRenderTarget;
  constructor(){
- this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setSize(600,700,false);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.05;
+ this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setSize(600,700,false);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.05;
  const pmrem=new T.PMREMGenerator(this.gl),room=new RoomEnvironment();this.environment=pmrem.fromScene(room,.035);this.scene.environment=this.environment.texture;room.dispose();pmrem.dispose();this.scene.environmentIntensity=.78;
  this.scene.add(new T.HemisphereLight(0xe8dced,0x342435,1.55));const key=new T.DirectionalLight(0xffe3d2,2.8);key.position.set(-125,190,330);key.castShadow=true;Object.assign(key.shadow.camera,{left:-200,right:200,top:240,bottom:-240,near:1,far:700});key.shadow.mapSize.set(256,256);key.shadow.bias=-.001;key.shadow.normalBias=.1;this.scene.add(key);const rim=new T.DirectionalLight(0xc795e7,1.5);rim.position.set(180,20,130);this.scene.add(rim);
  this.gl.shadowMap.enabled=true;this.gl.shadowMap.type=T.PCFShadowMap;this.receiver.receiveShadow=true;this.scene.add(this.face,this.body,this.shadow,this.receiver,this.studies.group);

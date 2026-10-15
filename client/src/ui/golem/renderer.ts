@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {DURATION,designs,ease,weight} from './catalog';import type {Id} from './catalog';
 import {cells,rock,mineralTexture,noise} from './mineral';
@@ -8,7 +9,7 @@ type Rig={scene:T.Scene;body:T.Group;face:T.Mesh;faceMat:T.MeshBasicMaterial;pie
 export class GolemRenderer{
  readonly renderer:T.WebGLRenderer;private rigs:Rig[]=[];private textures=new Map<Id,T.CanvasTexture>();private geometries:T.BufferGeometry[]=[];private materials:T.Material[]=[];private maps:T.Texture[]=[];
  private camera=new T.OrthographicCamera(-1.5,1.5,1, -1,.01,30);private boardCamera=new T.Camera();private current:Id='GOLEM3';private stoneMap:T.Texture;private heightMap:T.Texture;
- constructor(id:Id='GOLEM3'){this.current=id;this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance',preserveDrawingBuffer:true});this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.setClearColor(0,0);this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.05;this.stoneMap=mineralTexture('color');this.heightMap=mineralTexture('height');this.maps.push(this.stoneMap,this.heightMap);this.rigs.push(this.make(0));}
+ constructor(id:Id='GOLEM3'){this.current=id;this.renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance',preserveDrawingBuffer:true});this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.setClearColor(0,0);this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.05;this.stoneMap=mineralTexture('color');this.heightMap=mineralTexture('height');this.maps.push(this.stoneMap,this.heightMap);this.rigs.push(this.make(0));}
  private mat<M extends T.Material>(m:M):M{this.materials.push(m);return m;}
  private geo<G extends T.BufferGeometry>(g:G):G{this.geometries.push(g);return g;}
  private make(v:number):Rig{

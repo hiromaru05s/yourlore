@@ -1,10 +1,11 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {Skin} from './skin';
 import {curseMaterial,mistMaterial,skullMaterial} from './occult-material';
 import {DURATION,SPELL_LAND,birth,arrival,ease,mix,stateAt,type Rect,type Options} from './model';
 export function createRenderer(faces:HTMLCanvasElement[],skullImage:HTMLImageElement){
- const gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
+ const gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
  gl.setPixelRatio(1);gl.outputColorSpace=T.SRGBColorSpace;gl.toneMapping=T.ACESFilmicToneMapping;gl.toneMappingExposure=.95;
  const scene=new T.Scene(),camera=new T.OrthographicCamera(-5,5,3,-3,.1,70),env=new RoomEnvironment(),pm=new T.PMREMGenerator(gl),rt=pm.fromScene(env,.04);scene.environment=rt.texture;env.dispose();pm.dispose();
  const maps=faces.map(f=>{const m=new T.CanvasTexture(f);m.colorSpace=T.SRGBColorSpace;return m;});

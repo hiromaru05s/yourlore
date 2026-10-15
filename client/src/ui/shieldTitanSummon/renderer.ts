@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {finish,type Finish} from './material';
@@ -11,7 +12,7 @@ export class Renderer{
  private rigs:Rig[]=[];private geometries:T.BufferGeometry[]=[];private materials:T.Material[]=[];private textures:T.Texture[]=[];private faces=new Map<HTMLCanvasElement,T.CanvasTexture>();private environment:T.WebGLRenderTarget;
  private camera=new T.OrthographicCamera(-2,2,1.4,-1.4,.01,30);private boardCamera=new T.Camera();private dead=false;
  constructor(){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
   this.renderer.debug.checkShaderErrors=import.meta.env?.DEV??true;this.renderer.setPixelRatio(1);this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;
   this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
   const pmrem=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.environment=pmrem.fromScene(room,.045);room.dispose();pmrem.dispose();

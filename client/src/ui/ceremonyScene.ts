@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from './webglRenderer';
 import * as T from 'three';
 export type CeremonyKind='opening'|'victory'|'defeat';
 const clamp=(v:number)=>Math.max(0,Math.min(1,v));
@@ -5,7 +6,7 @@ const ease=(v:number)=>1-(1-clamp(v))**3;
 /** One short-lived stage; real curved paper, metal fittings and refractive-looking facets. */
 export function mountCeremony(host:HTMLElement,kind:CeremonyKind){
  if(typeof WebGL2RenderingContext==='undefined')return ()=>{};
- let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return ()=>{};}
+ let renderer:T.WebGLRenderer;try{renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return ()=>{};}
  renderer.debug.checkShaderErrors=import.meta.env?.DEV??true;
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
  renderer.domElement.className='ceremony-canvas';renderer.domElement.setAttribute('aria-hidden','true');host.prepend(renderer.domElement);host.classList.add('has-ceremony');

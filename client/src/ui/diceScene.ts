@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from './webglRenderer';
 /** Real beveled dice with generated enamel and geometric, authoritative pips. */
 import * as T from 'three';
 import {sfx} from './sound';
@@ -58,7 +59,7 @@ export interface DiceScene {
 export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:boolean,signal:AbortSignal):Promise<DiceScene|null> {
   if(signal.aborted||typeof WebGL2RenderingContext==='undefined')return null;
   let renderer:T.WebGLRenderer;
-  try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
+  try{renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
   renderer.debug.checkShaderErrors=import.meta.env?.DEV??true;
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));renderer.setClearColor(0,0);
   renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.92;

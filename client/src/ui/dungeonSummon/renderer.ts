@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {clamp,ease,pulse,DURATION} from './catalog';
 const W=1.7,H=2.55;
@@ -28,7 +29,7 @@ export class DungeonRenderer {
  readonly core:T.Mesh;readonly dust:Rock[]=[];readonly materials:T.Material[]=[];disposed=false;variant=0;draws=0;
  constructor(face:HTMLCanvasElement,art?:HTMLImageElement){
   this.noise=stoneTexture(art);
-  this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setClearColor(0,0);this.gl.setPixelRatio(1);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.25;
+  this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setClearColor(0,0);this.gl.setPixelRatio(1);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.25;
   this.camera.position.set(0,-4.6,14);this.camera.lookAt(0,0,0);
   this.scene.add(new T.HemisphereLight(0xe7f3f0,0x172827,2.5));const light=new T.DirectionalLight(0xffe6bb,3.6);light.position.set(-3,4,7);this.scene.add(light);const rim=new T.DirectionalLight(0x8bbdbf,1.8);rim.position.set(4,0,2);this.scene.add(rim);
   this.scene.add(this.root);this.root.add(this.matter);

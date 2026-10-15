@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as THREE from 'three';
 export function createOpeningLight(){
 let renderer:THREE.WebGLRenderer|undefined,scene:THREE.Scene,camera:THREE.Camera,material:THREE.ShaderMaterial,mesh:THREE.Mesh,texture:THREE.DataTexture;
@@ -10,7 +11,7 @@ function glyphTexture(){
  const tex=new THREE.DataTexture(pixels,512,512);tex.flipY=true;tex.minFilter=tex.magFilter=THREE.LinearFilter;tex.needsUpdate=true;return tex;
 }
 function initLight(){
- renderer=new THREE.WebGLRenderer({alpha:false,antialias:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});renderer.setPixelRatio(1);renderer.setSize(960,540);renderer.outputColorSpace=THREE.LinearSRGBColorSpace;
+ renderer=createWebGLRenderer({alpha:false,antialias:false,preserveDrawingBuffer:true,powerPreference:'high-performance'});renderer.setPixelRatio(1);renderer.setSize(960,540);renderer.outputColorSpace=THREE.LinearSRGBColorSpace;
  texture=glyphTexture();scene=new THREE.Scene();camera=new THREE.Camera();
  material=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,uniforms:{uTime:{value:0},uHeight:{value:720},uUnit:{value:1},uGlyph:{value:texture}},vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,fragmentShader:`
  precision highp float;varying vec2 vUv;uniform float uTime,uHeight,uUnit;uniform sampler2D uGlyph;

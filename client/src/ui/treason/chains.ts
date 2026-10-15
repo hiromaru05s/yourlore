@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 
@@ -31,7 +32,7 @@ export class Chains{
  private light:T.DirectionalLight;private matrix=new T.Matrix4();private dummy=new T.Object3D();
  private tangent=new T.Vector3();private point=new T.Vector3();private axis=new T.Vector3(1,0,0);private roll=new T.Quaternion();
  constructor(){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});this.canvas=this.renderer.domElement;this.canvas.className='treason-chains';this.canvas.dataset.variant='03';this.canvas.style.cssText='position:fixed;inset:0;z-index:8002;pointer-events:none';this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.15;
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});this.canvas=this.renderer.domElement;this.canvas.className='treason-chains';this.canvas.dataset.variant='03';this.canvas.style.cssText='position:fixed;inset:0;z-index:8002;pointer-events:none';this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.15;
   this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
   const pmrem=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.env=pmrem.fromScene(room,.04);this.scene.environment=this.env.texture;room.dispose();pmrem.dispose();
   this.scene.add(new T.HemisphereLight(0xdce9ff,0x302a25,1.2));

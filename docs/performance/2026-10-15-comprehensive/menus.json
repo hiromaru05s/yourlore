@@ -1,0 +1,272 @@
+{
+  "base": "http://127.0.0.1:49713",
+  "api": "fixture; public static resources real",
+  "cases": [
+    {
+      "width": 1280,
+      "homeMs": 9586,
+      "actions": [
+        {
+          "name": "bot opponents",
+          "ms": 141,
+          "styleReads": 25,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards",
+          "ms": 1019,
+          "styleReads": 1016,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards page 2",
+          "ms": 878,
+          "styleReads": 270,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "card zoom",
+          "ms": 109,
+          "styleReads": 173,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "deck",
+          "ms": 221,
+          "styleReads": 1083,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:49713/art/lounge/v1/library.webp",
+              "at": 1792062101965
+            }
+          ]
+        },
+        {
+          "name": "shop",
+          "ms": 59,
+          "styleReads": 366,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "starter catalog",
+          "ms": 397,
+          "styleReads": 59,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "sleeves",
+          "ms": 57,
+          "styleReads": 67,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "furniture",
+          "ms": 66,
+          "styleReads": 53,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "ranking",
+          "ms": 45,
+          "styleReads": 2475,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "friends",
+          "ms": 33,
+          "styleReads": 232,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "profile",
+          "ms": 59,
+          "styleReads": 225,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "guide",
+          "ms": 286,
+          "styleReads": 594,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "home return",
+          "ms": 199,
+          "styleReads": 345,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:49713/art/lounge/atmosphere-v2/library-wide.png",
+              "at": 1792062103554
+            },
+            {
+              "url": "http://127.0.0.1:49713/art/lounge/atmosphere-v1/clouds.png",
+              "at": 1792062103554
+            },
+            {
+              "url": "http://127.0.0.1:49713/art/lounge/duel-ink-v1/disc.png",
+              "at": 1792062103555
+            }
+          ]
+        }
+      ],
+      "lateImages": [
+        {
+          "url": "http://127.0.0.1:49713/art/lounge/v1/library.webp",
+          "at": 1792062101965
+        },
+        {
+          "url": "http://127.0.0.1:49713/art/lounge/atmosphere-v2/library-wide.png",
+          "at": 1792062103554
+        },
+        {
+          "url": "http://127.0.0.1:49713/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792062103554
+        },
+        {
+          "url": "http://127.0.0.1:49713/art/lounge/duel-ink-v1/disc.png",
+          "at": 1792062103555
+        }
+      ],
+      "serverImageTransfers": [],
+      "wireImageTransfers": [],
+      "state": {
+        "sameHomeCanvas": true,
+        "cache": "ready",
+        "worker": true,
+        "heap": 33628558,
+        "errors": []
+      },
+      "errors": [],
+      "httpErrors": [],
+      "warmReload": {
+        "ms": 4966,
+        "preloadTransfers": 0
+      }
+    },
+    {
+      "width": 390,
+      "homeMs": 8815,
+      "actions": [
+        {
+          "name": "bot opponents",
+          "ms": 114,
+          "styleReads": 24,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards",
+          "ms": 951,
+          "styleReads": 1008,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards page 2",
+          "ms": 877,
+          "styleReads": 269,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "card zoom",
+          "ms": 103,
+          "styleReads": 172,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "deck",
+          "ms": 226,
+          "styleReads": 1075,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:49713/art/lounge/v1/library.webp",
+              "at": 1792062120380
+            }
+          ]
+        },
+        {
+          "name": "shop",
+          "ms": 52,
+          "styleReads": 346,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "starter catalog",
+          "ms": 397,
+          "styleReads": 58,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "sleeves",
+          "ms": 59,
+          "styleReads": 64,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "furniture",
+          "ms": 66,
+          "styleReads": 50,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "ranking",
+          "ms": 38,
+          "styleReads": 2465,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "friends",
+          "ms": 35,
+          "styleReads": 224,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "profile",
+          "ms": 58,
+          "styleReads": 216,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "guide",
+          "ms": 288,
+          "styleReads": 586,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "home return",
+          "ms": 174,
+          "styleReads": 337,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:49713/art/lounge/duel-ink-v1/disc.png",
+              "at": 1792062121704
+            }
+          ]
+        }
+      ],
+      "lateImages": [
+        {
+          "url": "http://127.0.0.1:49713/art/lounge/v1/library.webp",
+          "at": 1792062120380
+        },
+        {
+          "url": "http://127.0.0.1:49713/art/lounge/duel-ink-v1/disc.png",
+          "at": 1792062121704
+        }
+      ],
+      "serverImageTransfers": [],
+      "wireImageTransfers": [],
+      "state": {
+        "sameHomeCanvas": true,
+        "cache": "ready",
+        "worker": true,
+        "heap": 31568260,
+        "errors": []
+      },
+      "errors": [],
+      "httpErrors": [],
+      "warmReload": {
+        "ms": 5035,
+        "preloadTransfers": 0
+      }
+    }
+  ]
+}

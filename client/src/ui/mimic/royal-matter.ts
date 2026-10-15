@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {ease} from './motion';
 import {royalPose,windowAt,type RoyalId} from './motion';
@@ -31,7 +32,7 @@ export class RoyalMatter{
  readonly ready:Promise<void>;
  private ornaments:RoyalOrnaments;
  constructor(private id:RoyalId){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:false});
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:false});
   this.renderer.setSize(430,690,false);this.renderer.setPixelRatio(2);this.renderer.setClearColor(0,0);
   this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;
   this.canvas=this.renderer.domElement;this.canvas.dataset.dynamicTongues='royal-mesh';

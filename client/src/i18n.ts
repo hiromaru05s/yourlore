@@ -534,6 +534,9 @@ export function esc(s: string): string {
   return String(s).replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch] as string));
 }
 
+/** Public localized UI text used to warm font glyph subsets before entry. */
+export const localizedInterfaceText=()=>Object.values(D).map(entry=>entry[current]).join(' ');
+
 export function t(key: string): string {
   const e = D[key];
   return e ? e[current] : key;

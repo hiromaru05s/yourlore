@@ -7,8 +7,8 @@ import {webcrypto} from 'node:crypto';
 const dir=await fs.mkdtemp(path.join(os.tmpdir(),'lore-menu-preparation-'));
 const data=new TextEncoder().encode('original artwork'),hash=Buffer.from(await webcrypto.subtle.digest('SHA-256',data)).toString('hex');
 const entries=[{url:'/art/test.webp',hash,bytes:data.length}],stored=new Map();let wrong=true,downloads=0;
-const cache={async match(key){return stored.get(key)?.clone();},async put(key,response){stored.set(key,response.clone());},async delete(key){stored.delete(key);}};
-Object.assign(globalThis,{window:{caches:{}},document:{documentElement:{dataset:{}}},location:new URL('https://lore.test'),caches:{open:async()=>cache}});
+const cache={async keys(){return [...stored.keys()].map(url=>({url}));},async match(key){return stored.get(key)?.clone();},async put(key,response){stored.set(key,response.clone());},async delete(key){stored.delete(key);}};
+Object.assign(globalThis,{matchMedia:()=>({matches:false}),window:{caches:{}},document:{documentElement:{dataset:{}}},location:new URL('https://lore.test'),caches:{open:async()=>cache}});
 Object.defineProperty(globalThis,'navigator',{configurable:true,value:{serviceWorker:{register:async()=>({}),ready:Promise.resolve(),controller:{postMessage(message,ports){if(message.type==='LORE_MENU_BIND')ports[0].postMessage({ok:true});}}}}});
 globalThis.fetch=async url=>{if(url==='/manifest.json')return Response.json({entries});downloads++;return new Response(wrong?'stale release':data,{headers:{'Content-Type':'image/webp'}});};
 try{

@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from './webglRenderer';
 import * as T from 'three';
 
 /** Beveled, reeded metal coin. Diameter 2; physical edge thickness .16. */
@@ -31,7 +32,7 @@ export async function faceTexture(face:HTMLElement):Promise<T.Texture>{
 }
 export async function mountCoinScene(host:HTMLElement,heads:boolean):Promise<(()=>void)|null>{
   if(typeof WebGL2RenderingContext==='undefined')return null;
-  let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
+  let renderer:T.WebGLRenderer;try{renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
   let maps:T.Texture[]=[];let timer=0,abandoned=false;
   try{maps=await Promise.race([Promise.all([...host.querySelectorAll<HTMLElement>('.ct-face')].map(async(e)=>{const map=await faceTexture(e);if(abandoned)map.dispose();return map;})),new Promise<never>((_,reject)=>{timer=setTimeout(()=>reject(new Error('coin texture timeout')),1500);})]);}catch{abandoned=true;maps.forEach(m=>m.dispose());renderer.dispose();return null;}finally{clearTimeout(timer);}
   if(!host.isConnected){maps.forEach(m=>m.dispose());renderer.dispose();return null;}

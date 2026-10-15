@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {makeShields,moveShield,type ShieldRig} from './shields';
 import {pulse,pose,DURATION,SELECTED_SHIELD} from './timing';
@@ -7,7 +8,7 @@ const shape=(points:number[][])=>{const s=new T.Shape();points.forEach(([x,y],i)
 const geom=(points:number[][],depth=5)=>new T.ExtrudeGeometry(shape(points),{depth,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:1.6,bevelThickness:1.2,curveSegments:8});
 const rect=(w:number,h:number,d=4)=>geom([[-w/2,-h/2],[w/2,-h/2],[w/2,h/2],[-w/2,h/2]],d);
 export class Renderer {
- readonly gpu=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});
+ readonly gpu=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});
  private environment:T.CubeTexture;private scene=new T.Scene();private camera=new T.OrthographicCamera();private root=new T.Group();private body=new T.Group();
  private variants=[new T.Group()];
  private currentFace:HTMLCanvasElement|undefined;private surfaces=new Map<HTMLCanvasElement,T.CanvasTexture>();private edges=new Map<HTMLCanvasElement,T.CanvasTexture>();private backing!:T.Mesh;private face:T.Mesh;private relief:T.Mesh;private ground:T.Mesh;

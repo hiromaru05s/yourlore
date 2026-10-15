@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {OrganicStudies} from './organicStudies';
 import {Renderer as ApprovedHalf} from './renderer';
@@ -17,7 +18,7 @@ export class StudyRenderer{
  private table=new T.Group();private previewCamera=new T.OrthographicCamera(-300,300,400,-400,.1,2200);
  private studies=new OrganicStudies();private faceShadow=new T.Mesh(new T.PlaneGeometry(180,280),new T.ShadowMaterial({opacity:.26,transparent:true,depthWrite:false}));
  private glow=new T.PointLight(0xbacb80,0,340,1.3);
- constructor(){this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,premultipliedAlpha:true,powerPreference:'high-performance'});this.gl.setSize(600,800,false);this.gl.setPixelRatio(1);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.08;this.gl.shadowMap.enabled=false;this.gl.shadowMap.type=T.PCFShadowMap;this.camera.position.set(0,0,900);this.camera.lookAt(0,0,0);
+ constructor(){this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,premultipliedAlpha:true,powerPreference:'high-performance'});this.gl.setSize(600,800,false);this.gl.setPixelRatio(1);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.08;this.gl.shadowMap.enabled=false;this.gl.shadowMap.type=T.PCFShadowMap;this.camera.position.set(0,0,900);this.camera.lookAt(0,0,0);
   this.scene.add(new T.AmbientLight(0xffffff,.75));this.scene.add(new T.HemisphereLight(0xf4f2dc,0x273226,2.1));const key=new T.DirectionalLight(0xfff7dc,2.7);key.position.set(-180,300,360);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-300,right:300,top:400,bottom:-250,near:1,far:1100});key.shadow.bias=-.002;key.shadow.normalBias=.12;key.shadow.radius=2;this.scene.add(key);const fill=new T.DirectionalLight(0xc4d9d5,.8);fill.position.set(240,60,-100);this.scene.add(fill);
   this.scene.add(this.studies.group,this.card,this.glow,this.body,this.shadow,this.table,this.faceShadow);this.faceShadow.receiveShadow=true;
   const sc=document.createElement('canvas');sc.width=256;sc.height=356;const sx=sc.getContext('2d')!;sx.filter='blur(13px)';sx.fillStyle='#111c14';sx.fillRect(37,37,182,282);this.shadowMat.map=new T.CanvasTexture(sc);this.shadow.position.z=.06;

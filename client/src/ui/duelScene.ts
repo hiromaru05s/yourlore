@@ -1,3 +1,5 @@
+import {createWebGLRenderer} from './webglRenderer';
+import {changesDuelFurniture} from './duelSceneChanges';
 import {createEquippedCosmetics} from './cosmetics/runtime';
 import {applyFurnitureSkin} from './cosmetics/baseFurniture';
 import {boardPixelRatio,flightPixelRatio} from './renderDensity';
@@ -22,9 +24,9 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   const cosmeticPreview=getCosmeticPreview(root)??createEquippedCosmetics(root);
   const rasterRatio=()=>cosmeticPreview?.pixelRatio??boardPixelRatio(innerWidth,innerHeight);
   let renderer:T.WebGLRenderer;
-  try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{cosmeticPreview.dispose();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
+  try{renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{cosmeticPreview.dispose();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
   let flightRenderer:T.WebGLRenderer;
-  try{flightRenderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{cosmeticPreview.dispose();renderer.dispose();renderer.forceContextLoss();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
+  try{flightRenderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{cosmeticPreview.dispose();renderer.dispose();renderer.forceContextLoss();root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';return ()=>{};}
   // Driver log queries synchronously wait on GPU compilation; keep them in dev.
   renderer.debug.checkShaderErrors=flightRenderer.debug.checkShaderErrors=import.meta.env?.DEV??true;
   renderer.setPixelRatio(rasterRatio());renderer.setClearColor(0,0);renderer.autoClear=false;
@@ -97,7 +99,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     const warm=new T.WebGLRenderTarget(64,64);flightRenderer.setRenderTarget(warm);
     try{flightRenderer.render(flightScene,camera);}finally{flightRenderer.setRenderTarget(null);warm.dispose();}
   });
-  const observer=new MutationObserver(records=>{if(records.some(r=>!(r.target instanceof Element&&r.target.closest('.tc-num,.pt-name,.pt-vitals,.mana-readout'))&&(r.type==='childList'||r.oldValue!==(r.target as Element).getAttribute(r.attributeName!))))dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['class','data-count','data-sleeve','data-face','data-material']});
+  const observer=new MutationObserver(records=>{if(records.some(r=>changesDuelFurniture(r,root)))dirty=true;});observer.observe(root,{childList:true,subtree:true,attributes:true,attributeOldValue:true,attributeFilter:['class','data-count','data-sleeve','data-face','data-material']});
   const onDensity=()=>{width=0;dirty=true;};window.addEventListener('lore:render-density',onDensity);
   const onLayout=()=>{dirty=true;};window.addEventListener('lore:layout',onLayout);
   const dustScene=new T.Scene(), dustCamera=new T.PerspectiveCamera(45,1,1,4000);

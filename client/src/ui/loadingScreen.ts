@@ -13,8 +13,8 @@ export function loadingScreen(className:string, label:string) {
   let value=0;
   const update=(next:number,detail:string)=>{
     value=Math.max(value,Math.min(100,Math.floor(next)));
-    bar.value=value;number.textContent=`${value}%`;phase.textContent=detail;
-    element.style.setProperty('--load-progress',String(value/100));
+    if(bar.value!==value)bar.value=value;if(number.textContent!==`${value}%`)number.textContent=`${value}%`;if(phase.textContent!==detail)phase.textContent=detail;
+    if(element.style.getPropertyValue('--load-progress')!==String(value/100))element.style.setProperty('--load-progress',String(value/100));
   };
   update(0,loungeText('準備を始めています','Getting ready','준비 중'));
   return {element,update};

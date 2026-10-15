@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {CARD_PADDING} from '../cardSurface';
 import {DURATION,designs,ease,pulse,lift} from './catalog';
@@ -20,7 +21,7 @@ export class Renderer{
  private ribbons:T.Mesh<T.BufferGeometry,T.MeshBasicMaterial>[]=[];private binders=new T.Group();private bars:T.Mesh[]=[];private edges:T.Mesh[]=[];
  private purple=new T.MeshBasicMaterial({color:0x9a32ef,transparent:true,opacity:1,depthWrite:false});private light=new T.MeshBasicMaterial({color:0xedc4ff,transparent:true,opacity:1,depthWrite:false});
  constructor(){
-  this.gpu=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.gpu.setPixelRatio(1);this.gpu.setClearColor(0,0);this.gpu.outputColorSpace=T.SRGBColorSpace;
+  this.gpu=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.gpu.setPixelRatio(1);this.gpu.setClearColor(0,0);this.gpu.outputColorSpace=T.SRGBColorSpace;
   this.scene.add(this.root);this.root.add(this.ground,this.card);this.sigils=Array.from({length:4},(_,i)=>purpleSigil(i));
   this.faceMat=new T.ShaderMaterial({vertexShader:vertex,fragmentShader:`varying vec2 vUv;uniform sampler2D face;uniform float energy;uniform vec2 faceUvScale;void main(){vec4 s=texture2D(face,vUv);if(s.a<.001)discard;vec2 p=abs(vUv-.5)*2.*faceUvScale;float edge=pow(max(p.x,p.y),5.);vec3 tint=mix(s.rgb,s.rgb*vec3(.72,.43,.93),energy*.52);tint+=vec3(.28,.015,.5)*edge*energy;gl_FragColor=vec4(tint,s.a);
 #include <colorspace_fragment>

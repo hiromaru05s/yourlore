@@ -1,3 +1,5 @@
+import {homeIsCovered} from './screenCovered';
+import {createWebGLRenderer} from './webglRenderer';
 import {homeDaylight,onHomeDaylightReady} from './homeDaylight';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -29,7 +31,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
   const staticSpirit=()=>{fallback();return {celebrate(){},greet(){},suspend(){},resume(){},destroy(){host.replaceChildren();}};};
   if(typeof WebGL2RenderingContext==='undefined')return staticSpirit();
   let renderer: THREE.WebGLRenderer;
-  try {renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});} catch {return staticSpirit();}
+  try {renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});} catch {return staticSpirit();}
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
   renderer.setClearColor(0,0); renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=options.home?1.04:1.15;
   host.append(renderer.domElement);
@@ -76,6 +78,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
   let pose={...rest}, dead=false, suspended=false, visible=true, raf=0, last=0, time=0;
   const render=(now:number)=>{
     raf=0;if(dead||suspended||!visible||document.hidden)return;
+    if(last&&options.home&&homeIsCovered()){last=now;raf=requestAnimationFrame(render);return;}
     if(now-last>=1000/(options.fps??60)||isStill()||!last){
       const dt=last?Math.min((now-last)/1000,.1):0;last=now;if(!isStill())time+=dt;
       const target=isStill()?rest:motion.tick(dt);

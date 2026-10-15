@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {JSDOM} from 'jsdom';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+const dir=await fs.mkdtemp(path.join(os.tmpdir(),'lore-board-dirty-'));const dom=new JSDOM('<div id="root"><div class="zone-mon"><div class="card"></div></div><div class="pile--shelf"></div><div class="market-counter"></div><button id="endBtn"></button></div>');globalThis.Element=dom.window.Element;
+try{await build({entryPoints:['client/src/ui/duelSceneChanges.ts'],bundle:true,format:'esm',outfile:dir+'/module.mjs'});const {changesDuelFurniture}=await import(dir+'/module.mjs');const root=dom.window.document.querySelector('#root');const observer=new dom.window.MutationObserver(()=>{});observer.observe(root,{subtree:true,childList:true,attributes:true,attributeOldValue:true});
+ const check=(change,expected)=>{change();const records=observer.takeRecords();assert(records.length);assert.equal(records.some(r=>changesDuelFurniture(r,root)),expected);};
+ check(()=>root.querySelector('.card').classList.add('is-attacker'),false);
+ check(()=>root.querySelector('#endBtn').textContent='END TURN',false);
+ check(()=>root.querySelector('.zone-mon').append(dom.window.document.createElement('canvas')),false);
+ const shelf=root.querySelector('.pile--shelf');check(()=>shelf.dataset.count='8',true);check(()=>shelf.classList.add('is-shuffling'),true);
+ check(()=>{const n=dom.window.document.createElement('span');n.className='pile-draw-anchor';shelf.append(n);},false);
+ check(()=>{const n=dom.window.document.createElement('div');n.className='pile-print';shelf.append(n);},true);
+ check(()=>root.querySelector('.market-counter').remove(),true);
+ check(()=>{const n=dom.window.document.createElement('div');n.innerHTML='<div class="pile--deck"></div>';root.append(n);},true);
+ check(()=>{const n=dom.window.document.createElement('div');n.className='awaiting-board';root.append(n);},true);
+ check(()=>shelf.className='',true);observer.disconnect();console.log('PASS: board invalidation follows furniture/structure, ignores foreground/counters/own anchor');
+}finally{dom.window.close();await fs.rm(dir,{recursive:true,force:true});}

@@ -34,6 +34,8 @@ try{for(const width of widths){
  await apiFixture(p,r=>{const u=new URL(r.url),name=u.pathname;
   if(name==='/api/auth/me')return {user:{id:'home-cache-qa',display:'SEEKER',credits:100,avatar:'SEEKER_BLUE',wins:47,losses:19}};
   if(name==='/api/rewards/tutorial')return {offered:true,keys:[],credits:100};
+  if(name==='/api/collection')return {credits:100,starterCards:{STARTER_MANA:1,STARTER_SOUL:8,STARTER_CHEST:2}};
+  if(name==='/api/collection/history')return {receipts:[]};
   if(name==='/api/rank/me')return {rating:{season:'2026-10',mmr:1000,tier:'bronze',rank:123,wins:0,losses:0}};
   if(name.startsWith('/api/social/profile'))return {profile:{id:'home-cache-qa',self:true,display:'SEEKER',credits:100,avatar:'SEEKER_BLUE',wins:47,losses:19,sleeves:['default'],furnitures:[],badges:[],recent:[],h2h:[],stats_public:true}};
   return {ok:true,country:'JP',season:'2026-10',entries:[],friends:[],incoming:[],outgoing:[],challenges:[],keys:[],rows:[],sleeves:['default'],furnitures:[]};
@@ -52,8 +54,7 @@ try{for(const width of widths){
  await action('card zoom',()=>p.locator('#grid .card').first().click(),()=>p.waitForFunction(()=>document.querySelector('.zoom-overlay img')?.complete));await p.locator('.inspect-close').click();
  await action('deck',()=>p.locator('[data-nav=deck]').click(),()=>p.waitForSelector('.deck-screen'));
  await action('shop',()=>p.locator('[data-nav=shop]').click(),()=>p.waitForSelector('.gacha-page'));
- await action('shop astral',()=>p.locator('.gacha-editions [data-edition=astral]').click());
- await action('shop crimson',()=>p.locator('.gacha-editions [data-edition=crimson]').click());
+ await action('starter catalog',()=>p.locator('[data-category=starter]').click());
  await action('sleeves',()=>p.locator('[data-category=sleeve]').click());
  await action('furniture',()=>p.locator('[data-category=furniture]').click(),()=>p.waitForFunction(()=>document.querySelectorAll('.shop-furniture-preview img').length>0&&!document.querySelector('.shop-furniture-loading')));
  await p.screenshot({path:`${out}/shop-${width}.png`});

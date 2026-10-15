@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {portalFragment} from './portal';
 import {VOID_SUMMON_IMPACT} from './selection';
@@ -17,7 +18,7 @@ export class VoidRenderer {
  private card=new T.Group();private aperture=new T.Group();private back:T.Mesh;private front:T.Mesh;private shadow:T.Mesh;
  private disposed=false;
  constructor(){
-  this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setPixelRatio(1);this.gl.setSize(512,512);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;
+  this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setPixelRatio(1);this.gl.setSize(512,512);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;
   this.camera.position.z=10;this.camera.updateProjectionMatrix();const m=this.camera.projectionMatrix.elements;m[9]=.6/2.4;m[8]=.07/2.4;m[13]=6/2.4;m[12]=.7/2.4;this.camera.projectionMatrixInverse.copy(this.camera.projectionMatrix).invert();
   this.material=new T.ShaderMaterial({uniforms:{face:{value:null},reveal:{value:0}},vertexShader:vertex,fragmentShader:fragment,side:T.DoubleSide,transparent:true});
   const face=new T.Mesh(new T.PlaneGeometry(1,1.5),this.material);face.position.z=.016;face.renderOrder=3;this.card.add(face);this.scene.add(this.card);
