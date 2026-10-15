@@ -1,0 +1,5 @@
+.opp-hand .card--back.gacha-trio-back,.native-draw-layer .gacha-trio-back{
+ clip-path:none;border-radius:5.2%;overflow:hidden;
+ box-shadow:0 1px 2px #050b14b3,0 3px 5px #050b1455;
+}
+.gacha-trio-surface{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;pointer-events:none}

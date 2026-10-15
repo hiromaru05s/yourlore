@@ -1,3 +1,5 @@
+import {gachaFromUrl} from '../../shared/gachaCosmetics';
+import {makeFurniture as makeGachaFurniture} from './gachaTrio/furniture';
 import {createWebGLRenderer} from '../webglRenderer';
 import {livingFromUrl} from '../../shared/livingCosmetics';
 import {retainArt} from './living/materials';
@@ -58,6 +60,13 @@ async function renderCatalog():Promise<Map<string,string>> {
     if(!assets.has('deck')||!assets.has('shelf'))throw new Error('Furniture models unavailable');
     const images=new Map<string,string>();
     for(const item of FURNITURE_LIST){
+      const gacha=gachaFromUrl(item.url);
+      if(gacha){
+        for(const [i,grave]of([false,true]as const).entries()){
+          const object=makeGachaFurniture(gacha.variant,grave);livingObjects.push(object);object.tick(1.5);object.root.position.x=i?1.03:-1.03;scene.add(object.root);
+        }
+        renderer.render(scene,camera);images.set(item.id,await snapshot(renderer.domElement));clear();continue;
+      }
       const living=livingFromUrl(item.url);
       if(living){
         lease??=retainArt();await lease.ready;
