@@ -7,6 +7,7 @@
 // tabs without reshaping. PostHog runs in parallel for deep dives.
 // All calendar-day groupings are KST (UTC+9) — the operator's day.
 // ============================================================
+import {issueGift} from './gifts';
 import type { Env, SessionUser } from "./env";
 import { corsHeaders, getUser } from "./auth";
 import { seasonKey, tierOf } from "./rank";
@@ -37,6 +38,8 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(env) });
   const user = await getUser(env, req);
   if (!isAdminUser(env, user)) return json(env, { error: "unauthorized", loggedIn: !!user }, 401);
+
+  if (path === '/admin/gifts' && req.method === 'POST') return issueGift(env,req,user!.id);
 
   if (path === "/admin/stats") {
     const DB = env.DB;

@@ -1,0 +1,47 @@
+{
+  "samples": [
+    {
+      "width": 1280,
+      "height": 900,
+      "gpuCalls": {
+        "duel-objects-3d": 7860,
+        "offscreen": 60
+      },
+      "frames": 299,
+      "p50": 16.69999999999709,
+      "p95": 16.700000000004366,
+      "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":60,\"displayPasses\":181,\"flightPasses\":0,\"cpuMs\":308.2,\"calls\":32,\"triangles\":14196}",
+      "metrics": {
+        "TaskDuration": 1.321881,
+        "ScriptDuration": 0.492348,
+        "LayoutDuration": 0.002529,
+        "RecalcStyleDuration": 0.285282,
+        "LayoutCount": 5,
+        "RecalcStyleCount": 317,
+        "JSHeapUsedSize": -826772
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "gpuCalls": {
+        "duel-objects-3d": 8446,
+        "offscreen": 60
+      },
+      "frames": 301,
+      "p50": 16.69999999999709,
+      "p95": 16.799999999995634,
+      "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":60,\"displayPasses\":180,\"flightPasses\":0,\"cpuMs\":277.3,\"calls\":32,\"triangles\":14196}",
+      "metrics": {
+        "TaskDuration": 1.283589,
+        "ScriptDuration": 0.443746,
+        "LayoutDuration": 0.0019659999999999955,
+        "RecalcStyleDuration": 0.26827500000000004,
+        "LayoutCount": 5,
+        "RecalcStyleCount": 318,
+        "JSHeapUsedSize": -836240
+      }
+    }
+  ],
+  "errors": []
+}

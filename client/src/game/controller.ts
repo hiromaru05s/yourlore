@@ -1,3 +1,9 @@
+import { seekerLevel, type ExperienceReceipt } from '../shared/progression';
+import {createMarketCrisis} from '../ui/marketCrisis/runtime';
+import {fixedMarketWasReplaced} from '../ui/marketCrisis/selection';
+import {erosionPlan} from '../ui/erosion/events';
+import {growthGroups,growthDrawHands} from '../ui/growth/plan';
+import {isSoulHarvestDamage,soulHarvestDamageIndex} from '../ui/soulHarvest/events';
 import {dungeonFloorSummons} from '../ui/dungeonFloor/events';
 import {runeReplayPlan} from '../ui/runeReplay/plan';
 import {TimewarpPresentation,warmTimewarp} from '../ui/timewarp/runtime';
@@ -57,6 +63,7 @@ import {EventSound} from "../ui/eventSound";
 import { RankPresentation } from "../ui/rankPresentation";
 import type { RankChange } from "../shared/rank";
 import { t, getLang, cardName, onLangChange } from "../i18n";
+import {openWheelDice,type WheelDice} from "../ui/fateWheel";
 import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
 
 export interface ControllerExits {
@@ -64,6 +71,7 @@ export interface ControllerExits {
   onRematch(): void;
   onOpeningStart?(elapsedMs:number): void;
   onBattleReady?(): void;
+  onExperience?(): void;
 }
 
 // ---- coin-toss profiles (set by the game screen at mount): the two coin faces ----
@@ -82,9 +90,12 @@ export abstract class BaseController implements BoardHandlers {
   protected view: GameView;
   protected log: GameLog;
   protected state!: GameState;
+  get botDifficulty(): BotDifficulty | undefined { return this.state?.botDifficulty; }
   protected you: Side;
   protected exits: ControllerExits;
   private elementalFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
+  private wheelDice:WheelDice|null=null;
+  private wheelReplayUid:string|undefined;
   private quickFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
   protected ranked = false;
   private rankPresentation = new RankPresentation();
@@ -107,6 +118,7 @@ export abstract class BaseController implements BoardHandlers {
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
   private disposeHandDiscard:(()=>void)|undefined;
+  private marketCrisis:ReturnType<typeof createMarketCrisis>|undefined;
   private marketRefresh:ReturnType<typeof playSupplyRefresh>|undefined;
   private presentedHandDiscards=new Set<string>();
   private handCapBonusKey = ""; // v42: turn key that already received the +10s hand-discard bonus
@@ -141,6 +153,8 @@ export abstract class BaseController implements BoardHandlers {
   // ---- the only mutation entry point (subclass decides how) ----
   protected abstract submit(action: Action): void;
   protected maybeBot(): void {}
+  /** Follow-up UI must wait until the authoritative batch is visible on the board. */
+  protected afterPresentation(callback:()=>void):void { void this.queue.then(()=>{if(!this.dead)callback();}); }
   protected get useTurnClock(): boolean { return true; }
   /** Only public board state and the local player's hand count reach the companion. */
   guideContext() {
@@ -155,6 +169,7 @@ export abstract class BaseController implements BoardHandlers {
   protected fastForward(): void {
     this.timewarp.cancel();
     this.marketRefresh?.cancel();
+    this.marketCrisis?.cancel();
     this.skipGen = this.fxGen;
     stopSounds();
     A.setFxSkip(true);
@@ -280,15 +295,18 @@ export abstract class BaseController implements BoardHandlers {
 
   private async playResult(prev: GameState, res: ReduceResult, animate: boolean, gen: number, presentedHandDiscards:Set<string>): Promise<void> {
     if (this.dead) return;
+    if(this.wheelDice && res.state.pending?.kind!=='reroll' && !res.events.some(e=>e.type==='wheelResolve')){this.wheelDice.close();this.wheelDice=null;}
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     // Hold the existing complete board until newly exposed card art is decoded.
-    if(prev!==res.state){this.view.setPlaying(true);try{await prepareStateArtwork(res.state,this.you,this.openingRoot);}finally{if(!this.dead)this.view.setPlaying(false);}}
+    if(prev!==res.state){const artwork=prepareStateArtwork(res.state,this.you,this.openingRoot);if(artwork){this.view.setPlaying(true);try{await artwork;}finally{if(!this.dead)this.view.setPlaying(false);}}}
     if(this.dead)return;
     // batches older than the player's latest action jump-cut; fresh ones play normally
     A.setFxSkip(gen <= this.skipGen);
-    this.consumeLogs(res.events);
+    const wheelResolution=res.events.some(e=>e.type==='wheelResolve');
+    if(!wheelResolution)this.consumeLogs(res.events);
     if (!animate) {
       this.clearQuickFaces();
+      if(wheelResolution){this.wheelDice?.close();this.wheelDice=null;this.wheelReplayUid=undefined;this.consumeLogs(res.events);}
       this.view.render(res.state);
       this.afterApply(res);
       return;
@@ -296,7 +314,10 @@ export abstract class BaseController implements BoardHandlers {
     this.view.setPlaying(true);
     try {
       await this.playEvents(prev, res, presentedHandDiscards);
+      if(wheelResolution)this.consumeLogs(res.events);
     } finally {
+      if(this.wheelReplayUid!==undefined){this.wheelReplayUid=undefined;this.wheelDice?.close();this.wheelDice=null;}
+      this.marketCrisis?.cancel();this.marketCrisis=undefined;
       if (!this.dead) this.view.setPlaying(false);
       if (res.state.over) this.outcomePending = false;
     }
@@ -336,6 +357,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = counterPresentationEvents(res.events);
+    const growth=growthGroups(events),growthHands=growthDrawHands(prev,res.state,events);
     if(events.some(e=>e.type==='timewarp'||e.type==='turnSkipped'&&e.source==='TIMEWARP'))warmTimewarp();
     for(const event of events)if(event.type==='counter'||event.type==='destroy')A.warmCombat(event.uid);
     if(events.some(e=>e.type==='dice'&&e.source.id==='DUNGEON_FLOOR'))A.warmDungeonFloor();
@@ -351,15 +373,19 @@ export abstract class BaseController implements BoardHandlers {
     if(events.some(e=>e.type==='nova'))A.warmNova();
     if(events.some(e=>e.type==='treason'))A.warmTreason();
     if(events.some(e=>e.type==='voidShot'))A.warmVoidShot();
+    if(events.some(e=>e.type==='elementalStart'&&e.id==='FLAME'))A.warmEmberDebt();
     if(events.some(e=>e.type==='voidGrant'))A.warmVoidGrant();
     if(events.some(e=>e.type==='summon'&&e.rebirth))A.warmRebirth();
     const runeReplays=runeReplayPlan(events);
     if(runeReplays.held.size)A.warmRuneReplay();
+    const erosion=erosionPlan(events);
+    const shownDraws=[0,0];
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
     const treasonExits=new Set<string>();
+    const originRiteDeaths=new Set<string>();
     const massacreDeaths=new Set<string>(),massacreCosts=new Set<Side>();
     const creationSources=new Map<string,HTMLElement>();
     const creationEvents=events.filter((e):e is Extract<GameEvent,{type:'creationBorn'}>=>e.type==='creationBorn');
@@ -408,8 +434,18 @@ export abstract class BaseController implements BoardHandlers {
     };
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
     const playDiceAt=async(index:number)=>{
-      const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||A.isFxSkipped()||this.dead)return;
+      const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||this.dead)return;
       diceDone.add(index);
+      if(res.state.pending?.kind==='reroll' && roll.player===res.state.pending.owner){
+        this.wheelDice?.close();
+        this.wheelDice=this.createWheelDice(roll,res.state,A.isFxSkipped());
+        await this.wheelDice.ready;return;
+      }
+      if(this.wheelReplayUid!==undefined){
+        const held=this.wheelDice,uid=this.wheelReplayUid;this.wheelReplayUid=undefined;
+        if(held){try{await held.finish(roll,uid);}finally{if(this.wheelDice===held)this.wheelDice=null;}return;}
+      }
+      if(A.isFxSkipped())return;
       const taunt=roll.taunt?A.prepareTauntActivation(roll.taunt.sourceUid):undefined;
       const evade=roll.evasion?A.prepareEvasion(roll.evasion.targetUid,sideOf(roll.player),!!roll.success):undefined;
       try{
@@ -425,13 +461,13 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
-      if(summonActivations.has(e)||contactedDamage.has(e)||runeReplays.suppressed.has(i))continue;
+      if(growth.consumed.has(i)||summonActivations.has(e)||contactedDamage.has(e)||runeReplays.suppressed.has(i))continue;
       // glanceable icon rail (topbar): key events → small icons
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = e.type==='destroy'&&(massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth||floorSessions.has(e.uid)))?undefined:eventSound.cue(e);
-      if(cue&&!A.isFxSkipped())sfx(cue);
+      const cue = e.type==='destroy'&&(originRiteDeaths.has(e.uid)||massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth||floorSessions.has(e.uid)))?undefined:eventSound.cue(e);
+      if(cue&&!A.isFxSkipped()&&!isSoulHarvestDamage(e))sfx(cue);
       if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
       if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
@@ -486,7 +522,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case 'elementalStart': {
           let source=this.elementalFaces.find(f=>f.card.id===e.id&&f.side===sideOf(e.player))?.node;
-          if(!source&&e.id.startsWith('FIRE_')&&DB[e.id]&&!A.isFxSkipped()){
+          if(!source&&(e.id.startsWith('FIRE_')||e.id==='FLAME')&&DB[e.id]&&!A.isFxSkipped()){
             const card={...DB[e.id],uid:e.uid};source=await A.revealSpell(card,sideOf(e.player),'discard',undefined,true)??undefined;
             if(source)this.elementalFaces.push({card,side:sideOf(e.player),node:source});
           }
@@ -501,6 +537,42 @@ export abstract class BaseController implements BoardHandlers {
           await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
           break;
         case "enchantActivate": {
+          const erosionPair=erosion.activations.get(i);
+          if(erosionPair){
+            const damage=events[erosionPair.damage];
+            if(damage.type==='damage'){
+              contactedDamage.add(damage);
+              await A.erosionDamage(sideOf(damage.player),e.uid,damage.amount,()=>{
+                if(this.dead)return;
+                hpNow[damage.player]-=damage.amount;
+                if(damage.player===this.you)this.view.pushIcon("hitme");
+                const sound=eventSound.cue(damage);if(sound&&!A.isFxSkipped())sfx(sound);
+                A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+              });
+              break;
+            }
+          }
+
+          const growthPulses=growth.groups.get(i);
+          if(growthPulses){
+            await A.growthRecovery(sideOf(e.player),growthPulses,index=>{
+              if(this.dead)return;const pulse=growthPulses[index];hpNow[pulse.player]+=pulse.amount;
+              if(pulse.amount>0&&pulse.player===this.you)this.view.pushIcon('heal');
+              A.hpBarSet(sideOf(pulse.player),hpNow[pulse.player]);
+            });break;
+          }
+          if(e.originRite){
+            const reaction=e.originRite;
+            // Consume only this rite's immediately following grant; its selected light owns contact.
+            if(reaction.outcome==='brand'){
+              await grantQueues.get(`${reaction.targetPlayer}:brand`);
+              const next=events.slice(i+1).find(event=>event.type!=='log');
+              if(next?.type==='statusGrant'&&next.resource==='brand'&&next.player===reaction.targetPlayer&&next.before===reaction.brandBefore&&next.after===reaction.brandAfter)shownGrants.add(next);
+            }
+            await A.originRite(e.uid,reaction,sideOf(reaction.targetPlayer),ghosts.get(reaction.summonUid)?.el);
+            if(reaction.outcome==='destroy'&&reaction.target?.kind==='monster')originRiteDeaths.add(reaction.target.uid);
+            break;
+          }
           const replay=runeReplays.replays.get(i);
           if(replay){
             const original=events[replay.playIndex];
@@ -595,7 +667,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
-          if(treasonExits.has(e.uid)||massacreDeaths.has(e.uid)){ghosts.get(e.uid)?.el.remove();ghosts.delete(e.uid);releaseMonster(e.uid);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
+          if(originRiteDeaths.has(e.uid)||treasonExits.has(e.uid)||massacreDeaths.has(e.uid)){ghosts.get(e.uid)?.el.remove();ghosts.delete(e.uid);releaseMonster(e.uid);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if(e.cause==='fusion'&&fusionMaterials.has(e.uid)){fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
           if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
           const destroy=async()=>{
@@ -670,6 +742,11 @@ export abstract class BaseController implements BoardHandlers {
           A.monHit(e.uid,e.amount,after,recoil);
           break;
         }
+        case 'wheelResolve': {
+          if(e.reroll)this.wheelReplayUid=e.uid;
+          else {const held=this.wheelDice;try{await held?.finish();}finally{if(this.wheelDice===held)this.wheelDice=null;}}
+          break;
+        }
         case "dice": {
           await playDiceAt(i);
           const summons=dungeonFloorSummons(events,i);
@@ -715,6 +792,10 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "damage": {
+          if(isSoulHarvestDamage(e)){
+            await A.soulHarvest(null,sideOf(e.player),e.amount,()=>{if(this.dead)return;hpNow[e.player]-=e.amount;A.hpBarSet(sideOf(e.player),hpNow[e.player]);});
+            break;
+          }
           hpNow[e.player] -= e.amount;
           if(!e.reversed)A.hpFeedback(sideOf(e.player), "dmg", e.amount);
           A.hpBarSet(sideOf(e.player), hpNow[e.player]);
@@ -764,6 +845,18 @@ export abstract class BaseController implements BoardHandlers {
             if(creation?.sourceUid){
               const face=await A.revealCreation({...def,uid:creation.sourceUid},sideOf(e.player));
               if(face)creationSources.set(creation.sourceUid,face);
+            }else if(def.id==='SOUL_HARVEST'){
+              const damageIndex=soulHarvestDamageIndex(events,i);
+              const damage=damageIndex>=0?events[damageIndex]:undefined;
+              const harvest=damage?.type==='damage'?async(node:HTMLElement)=>{
+                contactedDamage.add(damage);
+                await A.soulHarvest(node,sideOf(damage.player),damage.amount,()=>{
+                  if(this.dead)return;
+                  hpNow[damage.player]-=damage.amount;A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+                  if(damage.player===this.you)this.view.pushIcon('hitme');
+                });
+              }:undefined;
+              await A.revealSpell(placed??{uid:'soul-harvest-source',...def},sideOf(e.player),e.dest,undefined,false,undefined,harvest);
             }else if(def.id==='EXILE_NUKE2'){
               // Consume only this spell's first actual damage event at shell contact.
               // Reflections use the engine's target; echo hits and unrelated reactions remain sequential.
@@ -790,7 +883,7 @@ export abstract class BaseController implements BoardHandlers {
             }else if(def.id==='CHOSEN_AREA'&&isChosenVictory(events,e.player)){
               const face=await A.revealSpell({uid:'chosen-source',...def},sideOf(e.player),e.dest,undefined,true);
               try{if(!this.dead&&!A.isFxSkipped())await playChosenVictory(sideOf(e.player),face);}finally{face?.remove();}
-            }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','FORBIDDEN'].includes(def.id)){
+            }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','FORBIDDEN','FLAME'].includes(def.id)){
               const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{...def,uid:`elemental-${e.id}`};
               const node=await A.revealSpell(card,sideOf(e.player),e.dest,undefined,true);
               if(node){if(this.dead)node.remove();else this.elementalFaces.push({card,side:sideOf(e.player),node});}
@@ -817,8 +910,7 @@ export abstract class BaseController implements BoardHandlers {
               if (e2.type==='enchantActivate'&&DB[e2.id]?.ench==='runeEcho') break;
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
               if (e2.type === "dice" && !e2.evasion && !e2.taunt && !diceDone.has(j)&&!A.isFxSkipped()) {
-                diceDone.add(j);
-                await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
+                await playDiceAt(j);
               }
             }
             // Chest outcomes are already conveyed by the dice, board changes, and battle log.
@@ -847,9 +939,30 @@ export abstract class BaseController implements BoardHandlers {
         case "reshuffle":
           await A.animateReshuffle(sideOf(e.player), e.count);
           break;
-        case "draw":
-          draws[e.player] += e.count;
+        case "draw": {
+          const early=growthHands.get(i);
+          if(early){
+            const hand=document.getElementById(e.player===this.you?'hand':'oppHand'),previousHand=captureHandLayout(hand);
+            this.view.presentDrawHand(res.state,e.player,early.hand);
+            await A.animateDraw(hand,e.count,sideOf(e.player),{previousHand,uids:early.uids,durationScale:.55});
+          }else{
+            draws[e.player] += e.count;
+            if(erosion.draws.has(i)){
+              const pl=e.player,hand=document.getElementById(pl===this.you?'hand':'oppHand');
+              const before=captureHandLayout(hand),old=new Set(prev.players[pl].hand.map(c=>c.uid));
+              const count=events.reduce((n,event)=>n+(event.type==='draw'&&event.player===pl?event.count:0),0);
+              const arrivalIds=new Set(arrivingHandUids(prev.players[pl].hand,res.state.players[pl].hand,count));
+              const arrivals=res.state.players[pl].hand.filter(c=>arrivalIds.has(c.uid));
+              const incoming=arrivals.slice(shownDraws[pl],shownDraws[pl]+draws[pl]);
+              shownDraws[pl]+=draws[pl];
+              const visible=new Set(arrivals.slice(0,shownDraws[pl]).map(c=>c.uid));
+              this.view.presentDrawHand(res.state,pl,res.state.players[pl].hand.filter(c=>old.has(c.uid)||visible.has(c.uid)));
+              await A.animateDraw(hand,draws[pl],sideOf(pl),{previousHand:before,uids:incoming.map(c=>c.uid),durationScale:.5});
+              draws[pl]=0; // Already landed: do not draw these cards again at final render.
+            }
+          }
           break;
+        }
         case "treasure":
           // Reward effects have their own board events; no additional explanation popup.
           break;
@@ -932,7 +1045,12 @@ export abstract class BaseController implements BoardHandlers {
     // Stat animations belong to this batch too: automatic follow-ups must not
     // replace their source cards before all targets finish their shared motion.
     if(events.some(e=>e.type==='turnSkipped'&&e.source==='TIMEWARP'))this.view.syncTurn(res.state);
+    const crisis=!A.isFxSkipped()&&fixedMarketWasReplaced(prev,res.state)?createMarketCrisis(this.view.root):undefined;
+    this.marketCrisis=crisis;
+    if(crisis)await crisis.destroy();
+    if(this.dead){crisis?.cancel();return;}
     effectFinishes.push(this.view.render(res.state));
+    if(crisis)effectFinishes.push(crisis.reveal().finally(()=>{if(this.marketCrisis===crisis)this.marketCrisis=undefined}));
     // The existing draw and HP feedback run alongside birth, once each. Public new
     // UIDs come from the reducer, so a same-name original never becomes a second copy.
     for(const born of creationEvents){
@@ -1010,6 +1128,13 @@ export abstract class BaseController implements BoardHandlers {
     return node??null;
   }
 
+  private createWheelDice(roll:Extract<GameEvent,{type:'dice'}>,state:GameState,instant:boolean):WheelDice {
+    const pending=state.pending;
+    return openWheelDice(roll,pending?.owner===this.you,re=>{
+      if(!this.dead && this.state.pending?.kind==='reroll' && this.state.pending.owner===this.you)this.submit({type:'pick',uid:re?'re':null});
+    },instant);
+  }
+
   private afterApply(res: ReduceResult): void {
     if(this.state.over)this.releaseOpening();
     if (!this.introShown && this.state && this.state.turn === 1 && !this.state.over) {
@@ -1036,6 +1161,10 @@ export abstract class BaseController implements BoardHandlers {
     const g = this.state;
     if(this.castReviewState && this.castReviewState!==g && document.querySelector('.cast-review'))closeOverlay();
     if (g.over) { this.showWin(); return; }
+    if(g.pending?.kind==='reroll'&&!this.wheelDice){
+      const roll=g.pending.data?.dice as Extract<GameEvent,{type:'dice'}>|undefined;
+      if(roll?.type==='dice')this.wheelDice=this.createWheelDice(roll,g,true);
+    }
     // 다중 선택 pending (대숙청 purge / 흑룡 oppRmz / 신수 oppBoard) — 모달에서 한 번에
     // 고른 뒤 1장씩 순차 제출한다 (엔진 프로토콜은 그대로 1장씩 pick)
     const multiKind = g.pending && (g.pending.kind === "purge" || g.pending.kind === "oppRmz" || g.pending.kind === "oppBoard");
@@ -1122,6 +1251,7 @@ export abstract class BaseController implements BoardHandlers {
         return;
       }
       if (g.pending.kind === "reroll") {
+        if(this.wheelDice)return;
         // 운명의 수레바퀴: 결과 유지 / 다시 굴리기
         void confirmDialog({ title: t("wheel.title"), body: t("wheel.body"), confirm: t("wheel.reroll"), cancel: t("wheel.keep") })
           .then((re) => this.submit({ type: "pick", uid: re ? "re" : null }));
@@ -1328,9 +1458,19 @@ export abstract class BaseController implements BoardHandlers {
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     sfx(won===null ? "drawGame" : won ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
-    if (this.state.mode === "bot") void api.trackBot(won);
+    if (this.state.mode === "bot") this.reportBotResult(won);
     aCapture("game_end", { mode: this.state.mode, won, turns: this.state.turn });
     this.openResult();
+  }
+
+  protected reportBotResult(_won: boolean | null): void {}
+  private experienceNote = '';
+  protected receiveExperience(receipt: ExperienceReceipt): void {
+    this.exits.onExperience?.();
+    if(this.dead)return;
+    const progress=seekerLevel(receipt.after);
+    this.experienceNote = `+${receipt.after-receipt.before} EXP · Lv.${progress.level}${progress.max?' MAX':''}${receipt.shards?` · +${receipt.shards} ${t('home.shards')}`:''}`;
+    const el=document.getElementById('winExperience');if(el)el.textContent=this.experienceNote;
   }
 
   /** Result modal — reopenable from the review FAB so the log can be studied (복기). */
@@ -1340,7 +1480,8 @@ export abstract class BaseController implements BoardHandlers {
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
     const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`
-      + (this.resultNote ? `<br><span class="muted">${this.resultNote}</span>` : "");
+      + (this.resultNote ? `<br><span class="muted">${this.resultNote}</span>` : "")
+      + `<br><span id="winExperience" class="muted">${this.experienceNote}</span>`;
     winModal(
       won,
       detail,
@@ -1378,9 +1519,11 @@ export abstract class BaseController implements BoardHandlers {
   private clearQuickFaces():void {this.elementalFaces.splice(0).forEach(x=>x.node.remove());this.quickFaces.splice(0).forEach(x=>x.node.remove());}
 
   destroy(): void {
+    this.wheelDice?.close();this.wheelDice=null;
     this.timewarp.destroy();
     this.combatExits.abort();clearDamageFeedback();
     this.marketRefresh?.cancel();
+    this.marketCrisis?.cancel();
     this.disposeHandDiscard?.();
     this.dead = true;
     disposeStatusExtinctions();
@@ -1427,6 +1570,17 @@ export class LocalController extends BaseController {
     });
     res.state.players[1].botTune = bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
     this.applyResult(res, false);
+  }
+
+  protected reportBotResult(won: boolean | null): void {
+    const report = async () => {
+      for(let attempt=0;attempt<3;attempt++){
+        try { const result=await api.trackBot(won,this.difficulty);if(result.experience)this.receiveExperience(result.experience);else this.exits.onExperience?.();return; }
+        catch { if(attempt<2)await new Promise(resolve=>setTimeout(resolve,1000*(attempt+1))); }
+      }
+      if(!this.dead)this.setResultNote(t('progress.saveFailed'));
+    };
+    void report();
   }
 
   protected applyResult(res: ReduceResult, animate = true): void {

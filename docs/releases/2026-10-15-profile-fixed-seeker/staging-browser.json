@@ -1,0 +1,52 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "api": "fixture",
+  "checks": [
+    {
+      "width": 1280,
+      "height": 900,
+      "avatarCenter": 190.6875,
+      "nameCenter": 190.6796875,
+      "headCenter": 190.6875,
+      "overflow": false,
+      "avatarAboveName": true
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "avatarCenter": 509.5,
+      "nameCenter": 509.4921875,
+      "headCenter": 509.5,
+      "overflow": false,
+      "avatarAboveName": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "avatarCenter": 195,
+      "nameCenter": 194.9921875,
+      "headCenter": 195,
+      "overflow": false,
+      "avatarAboveName": true
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "avatarCenter": 160,
+      "nameCenter": 159.9921875,
+      "headCenter": 160,
+      "overflow": false,
+      "avatarAboveName": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "avatarCenter": 422,
+      "nameCenter": 421.9921875,
+      "headCenter": 422,
+      "overflow": false,
+      "avatarAboveName": true
+    }
+  ],
+  "errors": []
+}

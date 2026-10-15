@@ -27,6 +27,7 @@ void main(){
 interface Item {root:T.Group;sleeve:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;avatar:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;furniture:T.Group}
 export class Rewards{
  root=new T.Group();items:Item[]=[];ready:Promise<void>;kind:RewardKind='sleeve';featured='ivory';
+ cardTextures:T.Texture[]=[];
  uniforms={reveal:{value:0},charge:{value:0},variant:{value:0}};textures:T.Texture[]=[];furnitureAspect=1.45;
  constructor(scene:T.Scene){
   scene.add(this.root);
@@ -78,7 +79,7 @@ export class Rewards{
   for(let i=0;i<this.items.length;i++){
    const {root,sleeve,avatar,furniture}=this.items[i],kind=this.kindAt(i);
    root.visible=i<count&&reveal>0;if(!root.visible)continue;
-   sleeve.visible=kind==='sleeve';avatar.visible=kind==='avatar';furniture.visible=kind==='furniture';sleeve.material.uniforms.art.value=this.textures[picks[i]];
+   sleeve.visible=kind==='sleeve';avatar.visible=kind==='avatar';furniture.visible=kind==='furniture';sleeve.material.uniforms.art.value=this.cardTextures[i]??this.textures[picks[i]];
    const pose=this.pose(i,seconds,frameW,frameH,count,reduced),w=pose.width,h=pose.height;
    root.position.copy(end).addScaledVector(right,pose.x).addScaledVector(up,pose.y).addScaledVector(front,-.006*i);root.quaternion.copy(camera.quaternion);
    sleeve.scale.set(w,h,1);avatar.scale.set(w,h,1);furniture.scale.setScalar(w);

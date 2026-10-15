@@ -1,0 +1,7 @@
+import fs from 'node:fs/promises';import {createHash} from 'node:crypto';import {execFile} from 'node:child_process';import {promisify} from 'node:util';import assert from 'node:assert/strict';
+const run=promisify(execFile),origin='https://test.yourlore.xyz',dist=process.env.LORE_DIST||'client/dist',out='docs/releases/2026-10-15-market-crisis-01';
+const list=await fs.readdir(dist+'/assets'),files=['index.html','cosmetic-studio.html',...list.filter(f=>/\.(js|css)$/.test(f)).map(f=>'assets/'+f),'art/cards-sm/MARKET_CRISIS.webp'];
+const modules=await Promise.all(list.filter(f=>f.endsWith('.js')).map(f=>fs.readFile(dist+'/assets/'+f,'utf8')));assert(modules.some(s=>s.includes('crisis-native-break')&&s.includes('crisis-fragment')),'Selected native fracture must be in runtime bundle');
+const hash=b=>createHash('sha256').update(b).digest('hex'),pending=[...files],assets=[];
+await Promise.all(Array.from({length:4},async()=>{while(pending.length){const file=pending.shift(),local=await fs.readFile(dist+'/'+file),{stdout}=await run('curl',['--location','--fail','--silent','--show-error','--retry','2',origin+'/'+file],{encoding:'buffer',maxBuffer:20e6});assert.equal(hash(stdout),hash(local),file);assets.push({file,sha256:hash(local),bytes:local.length});}}));
+await fs.writeFile(out+'/staging-assets.json',JSON.stringify({origin,checkedAt:new Date().toISOString(),assets,boundary:'Deployed HTML/JS/CSS and source card art parity. Controller fixture playback is separate from authenticated online play.'},null,2));console.log('PASS deployed assets:',assets.length);

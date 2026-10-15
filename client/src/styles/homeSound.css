@@ -5,7 +5,7 @@
 .selected-menu .lounge-seeker .lounge-user { max-width:100%; }
 .selected-menu.lounge-home .lounge-content { top:calc(var(--bar) + 24px); }
 .home-sound {
-  position:absolute; top:100%; left:0; display:flex; align-items:center; gap:8px;
+  position:absolute; top:calc(100% + 24px); left:0; display:flex; align-items:center; gap:8px;
   width:196px; height:44px; color:#c6d9e4;
   background:linear-gradient(90deg,#071421b3,#07142199 88%,#07142166);
 }

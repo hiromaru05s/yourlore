@@ -1,11 +1,12 @@
 import {turnUrgency} from './turnUrgency';
+import {readingAssetBytes} from './readingAssetCache';
 import {createTurnLights} from './turnLight';
 import {getTurnLightPreview,type TurnLightHandle} from './turnLightPreview';
 import {getManaFormation,manaSlotLayout,type FormationHandle} from './manaFormationPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import {mountRiftApertures} from './riftAperture';
 import * as T from 'three';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {loadReadingModel} from './readingModel';
 import {READING_ASSETS,readingScale} from './readingBoardLayout';
 import {addCrystalOptics} from './readingCrystalOptics';
 /** Geometry-only UI; the original native buttons retain keyboard/game authority. */
@@ -28,12 +29,12 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   object.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){mats.add(m);for(const value of Object.values(m))if(value instanceof T.Texture)maps.add(value);}}});
   geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());maps.forEach(m=>{if(typeof ImageBitmap!=='undefined'&&m.image instanceof ImageBitmap)m.image.close();m.dispose();});
  }
- async function load(name:string){const g=await new GLTFLoader().loadAsync(READING_ASSETS+name);if(dead){releaseTemplate(g.scene);throw new Error('disposed');}templates.push(g.scene);return g.scene;}
+ async function load(name:string){const g=await loadReadingModel(READING_ASSETS+name);if(dead){releaseTemplate(g.scene);throw new Error('disposed');}templates.push(g.scene);return g.scene;}
  const opticalMaterials:T.MeshPhysicalMaterial[]=[];
  void (async()=>{
   const [tray,counter,jewel,spent,button,timer,refresh,cut]=await Promise.all([
    ...['mana-tray.glb','mana-counter.glb','mana-crystal-ready.glb','mana-crystal-spent.glb','turn-button.glb','timer-inserts.glb','reroll-button.glb'].map(load),
-   fetch(READING_ASSETS+'crystal-optics.json').then(r=>r.json())
+   readingAssetBytes(READING_ASSETS+'crystal-optics.json').then(bytes=>JSON.parse(new TextDecoder().decode(bytes)))
   ]) as [T.Group,T.Group,T.Group,T.Group,T.Group,T.Group,T.Group,{planes:number[][];center:number[];scale:number}];
   if(dead)return;
   jewel.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial){o.material.color.set('#378bea');o.material.attenuationColor.set('#2373c9');}});

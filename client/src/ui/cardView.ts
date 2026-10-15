@@ -1,3 +1,4 @@
+import {assetHints} from './assetHints';
 import {passiveIcon} from './passiveIcon';
 // ============================================================
 // LORE — card DOM builder. One renderer for every card everywhere
@@ -502,6 +503,15 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // Keep long names inside their frame using a stable card-local scale.
   if (!opt.compactField) nameEl2.style.fontSize = `calc(var(--cw) * ${cardNameScale(nm).toFixed(5)})`;
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
+  if(opt.lazyArt!==undefined)assetHints.set(node,()=>[
+    opt.compactField?fieldFrameFor(c.t):frameFor(c.t,opt.fullArt),
+    artUrl.sm(c.id),
+    ...['attack','health','cost','plaque'].map(k=>`/art/biblion/modular/${k}-ui.webp`),
+    `/ui/cost-${c.t==='quest'?'spell':c.t}.webp?v=2`,
+    ...Array.from(node.querySelectorAll('img'),image=>{
+      image.loading='eager';image.fetchPriority='high';return image.currentSrc||image.src;
+    }),
+  ]);
   // tribe info is shown BESIDE the card in the zoom view (see anim.zoomCard),
   // so no on-art tribe button here (keeps the art clean).
   return node;

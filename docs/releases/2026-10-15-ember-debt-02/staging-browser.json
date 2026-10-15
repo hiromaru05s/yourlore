@@ -1,0 +1,27 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    {
+      "owner": 0,
+      "lethal": false,
+      "hits": 2
+    },
+    {
+      "owner": 0,
+      "lethal": true,
+      "hits": 1
+    },
+    {
+      "owner": 1,
+      "lethal": false,
+      "hits": 2
+    },
+    {
+      "owner": 1,
+      "lethal": true,
+      "hits": 1
+    }
+  ],
+  "errors": [],
+  "boundary": "Unmodified deployed bundles on runtime cosmetic board, driven by authoritative reducer fixtures. Not an authenticated PvP match."
+}

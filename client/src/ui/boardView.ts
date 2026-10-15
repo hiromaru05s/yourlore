@@ -1,3 +1,6 @@
+import {MarketCrashPresentation} from './marketCrash/runtime';
+import {AnesthesiaPresentation} from './anesthesia/runtime';
+import {bindOriginTrap} from './originRite/anchors';
 import {paintSpaceRiteCard,spaceRiteReason,spaceRiteSourceText,syncSpaceRiteStatus} from './spaceRiteStatus';
 import {dualReadyActive} from './monster/dualReady';
 import { questProgressText } from '../shared/cardPresentation';
@@ -96,8 +99,10 @@ export class GameView {
   logEl!: HTMLElement;
   /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
   private disposed = false;
+  private marketCrash: MarketCrashPresentation;
   private statRise: ReturnType<typeof createBoardStatRise>;
   private trickRoom:TrickRoomPresentation;
+  private anesthesia:AnesthesiaPresentation;
   private disposeScene?: () => void;
   private readonly battlefieldBg = pickBattlefieldBg();
 
@@ -106,7 +111,9 @@ export class GameView {
     this.you = you;
     this.h = h;
     this.statRise = createBoardStatRise(root);
+    this.marketCrash = new MarketCrashPresentation(root);
     this.trickRoom = new TrickRoomPresentation(root);
+    this.anesthesia = new AnesthesiaPresentation(root);
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
     // Select projected-board CSS before inserting nodes: otherwise the browser
@@ -301,7 +308,9 @@ export class GameView {
     this.cancelHandDrag?.();
     this.disposeScene?.();
     this.trickRoom.dispose();
+    this.anesthesia.dispose();
     this.statRise.dispose();
+    this.marketCrash.dispose();
     this.handConditions.dispose();
     clearBiblionFx(true);
     if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
@@ -353,8 +362,48 @@ export class GameView {
   syncTurn(g: GameState): void {
     if(g.turn < this.turnSnapshot)return;
     this.turnSnapshot=g.turn;
+    this.anesthesia.advanceTurn(g.turn);
     this.endingTurn=false;
     this.root.dataset.readingTurn=g.cur===this.you&&!g.over?'player':'opponent';
+  }
+
+  /** Present a reducer draw before its triggered effects; all other zones stay on the old board. */
+  presentDrawHand(g:GameState,player:Side,cards:CardInst[]):void{
+    const p={...g.players[player],hand:cards};
+    if(player===this.you)this.renderHand(g,p,g.cur===this.you&&!g.over);
+    else this.renderOpponentHand(p);
+  }
+  private renderOpponentHand(opp:PlayerState):void{
+    // opponent hand (face-down): straight upright stack held to the right of their
+    // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
+    const oh = this.q("oppHand"); oh.innerHTML = "";
+    const n = opp.hand.length;
+    // back size follows the solved portrait size (--pt) so it scales with the viewport
+    const handWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-w-hand")) || 100;
+    const obw = handWidth * .42; // back width (px)
+    const spread = obw * 4.4;
+    const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(6, (spread - obw) / (n - 1)));
+    for (let i = 0; i < n; i++) {
+      const cb = document.createElement("div");
+      cb.className = "card--back";
+      cb.dataset.uid = opp.hand[i].uid;
+      cb.style.width = `${obw}px`;
+      cb.style.height = `${obw / .64}px`;
+      cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
+      cb.style.left = `${i * ostep}px`;
+      cb.style.zIndex = String(n-i);
+      oh.appendChild(cb);
+    }
+    oh.style.width = `${n ? obw + (n - 1) * ostep : 0}px`;
+    if (n > 0) {
+      const cnt = document.createElement("div");
+      cnt.className = "opp-hand-count";
+      cnt.textContent = String(n);
+      oh.appendChild(cnt);
+    }
+
+
+    this.layoutOpponentHand();
   }
 
   render(g: GameState): Promise<void> {
@@ -388,36 +437,7 @@ export class GameView {
     this.q("portraitMe").classList.toggle("is-active", myTurn);
     this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
 
-    // opponent hand (face-down): straight upright stack held to the right of their
-    // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
-    const oh = this.q("oppHand"); oh.innerHTML = "";
-    const n = opp.hand.length;
-    // back size follows the solved portrait size (--pt) so it scales with the viewport
-    const handWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-w-hand")) || 100;
-    const obw = handWidth * .42; // back width (px)
-    const spread = obw * 4.4;
-    const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(6, (spread - obw) / (n - 1)));
-    for (let i = 0; i < n; i++) {
-      const cb = document.createElement("div");
-      cb.className = "card--back";
-      cb.dataset.uid = opp.hand[i].uid;
-      cb.style.width = `${obw}px`;
-      cb.style.height = `${obw / .64}px`;
-      cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
-      cb.style.left = `${i * ostep}px`;
-      cb.style.zIndex = String(n-i);
-      oh.appendChild(cb);
-    }
-    oh.style.width = `${n ? obw + (n - 1) * ostep : 0}px`;
-    if (n > 0) {
-      const cnt = document.createElement("div");
-      cnt.className = "opp-hand-count";
-      cnt.textContent = String(n);
-      oh.appendChild(cnt);
-    }
-
-
-    this.layoutOpponentHand();
+    this.renderOpponentHand(opp);
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);
     this.renderMarket(g, me, myTurn);
@@ -455,6 +475,7 @@ export class GameView {
     for(const id of readyPiles)this.root.querySelector(`#${id}`)?.classList.add('pile--3d-ready');
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
+    this.anesthesia.sync(g);
     settleField(this.root,fieldBefore);
     const trick=this.trickRoom.track(g);
     const stats=this.statRise.update(g,new Set(trick.changes.map(c=>c.uid)));
@@ -545,6 +566,7 @@ export class GameView {
       // Generic trap icon and unknown cost preserve hidden identity for both players.
       const tile = document.createElement("div");
       tile.className = "buff-icon buff-icon--trap";
+      bindOriginTrap(tile,t.card.uid);
       tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('trap')})"></span><span class="buff-art" style="background-image:url(${refinedArt('trap-seal')})"></span><span class="buff-cost" aria-hidden="true"><span>?</span></span>`;
       tile.title = trapLabel;
       tile.setAttribute("aria-label", trapLabel);
@@ -954,7 +976,7 @@ export class GameView {
 
     const rb = this.q("refreshBtn") as HTMLButtonElement;
     const rtok = me.refreshTokens || 0; // 렐릭 헌터(v36): 카운터가 있으면 무료 갱신
-    rb.disabled = !myTurn || !!g.pending || (me.mana < 1 && rtok <= 0);
+    rb.disabled = !myTurn || !!g.pending || !!owner.refreshBlockTurn || (me.mana < 1 && rtok <= 0);
     const rbCost = rb.querySelector("b"); if (rbCost) rbCost.textContent = rtok > 0 ? `0 (${rtok})` : "1";
     rb.title=`${t("duel.rerollFour").replace("4",String(owner.supply.length))} · ${rbCost?.textContent??"1"} ◈`;
     rb.setAttribute("aria-label",rb.title);
@@ -963,6 +985,7 @@ export class GameView {
     rb.onfocus = () => mk.classList.add("reroll-focus");
     rb.onblur = () => mk.classList.remove("reroll-focus");
     rb.onclick = () => this.h.onRefresh();
+    this.marketCrash.sync(g);
   }
 
   /** Portrait counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right. */

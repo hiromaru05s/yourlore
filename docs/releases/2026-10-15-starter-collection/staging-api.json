@@ -1,0 +1,16 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-15T08:20:02.263Z",
+  "checks": [
+    "authenticated initial ownership",
+    "200-Shard purchase",
+    "concurrent request replay without extra spend",
+    "100-Shard draw",
+    "1000-Shard ten draw",
+    "eight-copy duplicate refunds 500 across ten",
+    "persisted history and auth inventory"
+  ],
+  "initialCredits": 5000,
+  "finalCredits": 3200,
+  "fixture": "isolated temporary account; removed after verification"
+}

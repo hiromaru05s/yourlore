@@ -1,3 +1,14 @@
+import {isCastle} from './castleSummon/catalog';
+import {playCastleSummon,cancelCastleSummons} from './castleSummon/runtime';
+import {isPoisonSummon} from './poisonSummon/selection';
+import {playPoisonSummon,cancelPoisonSummons} from './poisonSummon/runtime';
+import {playErosion} from './erosion/runtime';
+import {playGrowth} from './growth/runtime';
+import type {GrowthPulse} from './growth/plan';
+import {findOriginTrap} from './originRite/anchors';
+import {playOriginRite,cancelOriginRites} from './originRite/runtime';
+import type {OriginRiteReaction} from '../shared/types';
+import {playSoulHarvest,cancelSoulHarvest,warmSoulHarvest} from './soulHarvest/runtime';
 import {createDungeonFloor,warmDungeonFloor} from './dungeonFloor/runtime';
 export {warmDungeonFloor};
 import {playCurse,cancelCurse,warmCurse} from './curse/runtime';
@@ -109,7 +120,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -253,6 +264,11 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isPoisonSummon(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playPoisonSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),7000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy&&isShieldTitan(face.dataset.cardId)){
     face.style.visibility='hidden';reveal.remove();
     if(!fxSkip)await boardMotionScope(signal=>playShieldTitanSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
@@ -333,7 +349,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   if(!fxSkip)summonDust(face.getBoundingClientRect());
   return face;
 }
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast): Promise<HTMLElement|null> {
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast,effect?:(node:HTMLElement)=>Promise<void>): Promise<HTMLElement|null> {
   const from = fromRect(side, takeOrigin(side)); if (!from) return null;
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
@@ -342,13 +358,16 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     const persistent=dest==='field'&&!!card.ench;
     const dark=isDarkMerchant(card.id)&&card.t==='spell';
     const crystalModule=crystal&&!fxSkip?import('./voidCrystal/runtime').catch(()=>null):null;
-    if(dark&&!fxSkip)warmDarkMerchant();
-    else if(card.t==='spell'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
+    if(effect&&!fxSkip)warmSoulHarvest();
+    else if(dark&&!fxSkip)warmDarkMerchant();
+    else if(card.id==='FLAME'&&!fxSkip)warmEmberDebt();
+    else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
     const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
     if(!special){
       await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-      if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
-      else if(card.t==='spell'&&!persistent&&card.id!=='FORBIDDEN'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+      if(effect){await parkQuickSpell(node,side);await effect(node);}
+      else if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
+      else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&card.id!=='FORBIDDEN'&&card.id!=='FLAME'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     }
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
@@ -381,6 +400,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
+ if(isPoisonSummon(id)){node.style.visibility='hidden';return;}
  if(isShieldTitan(id)){node.style.visibility='hidden';return;}
  if(isSilenceSummon(id)){node.style.visibility='hidden';return;}
  if(isVoidSummon(id)){node.style.visibility='hidden';return;}
@@ -406,6 +426,10 @@ async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
   const from = fromRect(side, takeOrigin(side)); const target = byUid(uid); const to = rectOf(target);
   if (!from || !to || !target) { summonIn(uid); return; }
+  if(isCastle(card.id)){
+    if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(target,{from,signal,onImpact:()=>sfx('summon')}),10000);
+    return;
+  }
   const ghost = floatAt(cardEl(card, {size:"hand",fullArt:isMimic(card.id)}), from); target.style.visibility = "hidden";
   let face:HTMLElement|undefined;
   try { await focusSummon(ghost, card, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true,card.id==='MIMIC'?'mimic':'summon'); }
@@ -564,6 +588,14 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
   f.style.top = r.top + r.height / 2 - 16 + "px";
   document.body.appendChild(f);
   setTimeout(() => f.remove(), 1100);
+}
+
+/** Apply the authoritative damage exactly once, including interrupted/unavailable VFX. */
+export async function soulHarvest(source:HTMLElement|null,side:ViewSide,damage:number,onImpact:()=>void):Promise<void>{
+ let hit=false;const impact=()=>{if(hit)return;hit=true;onImpact();if(!fxSkip&&!document.hidden)sfx('damage');};
+ const target=document.querySelector<HTMLElement>(side==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring');
+ if(target&&!fxSkip)await boardMotionScope(signal=>playSoulHarvest({source,target,damage,onImpact:impact,signal}),6500);
+ if(!hit){impact();if(!fxSkip&&!document.hidden)hpFeedback(side,'dmg',damage);}
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
@@ -1061,6 +1093,12 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   if(!from||!zone)return null;
   const target=reserveMonster(zone,card.uid);
   if (!target) return null;
+  if(isCastle(card.id)){
+    const countLabel={ja:'カウント',en:'Count',ko:'카운트'}[getLang()];
+    const face=cardEl(card,{field:true,badge:`${countLabel} ${(card as typeof card & {gcount?:number}).gcount||0}`});target.replaceWith(face);onReveal?.(face);
+    if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(face,{from,signal,onImpact:()=>sfx('summon')}),10000);
+    return face.isConnected?face:null;
+  }
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
   node.style.zIndex="135";
   onReveal?.(node);
@@ -1283,6 +1321,30 @@ export async function openingBoard():Promise<void>{
   await boardMotionScope(signal=>moveOnBoard({kind:'opening',signal}),7500);
 }
 
+/** One owner for the summon-to-rite signal, selected golden cut and brand contact. */
+export async function originRite(uid:string,reaction:OriginRiteReaction,side:ViewSide,summon?:HTMLElement):Promise<void>{
+ const find=(id:string)=>document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(id)}"]`)??findOriginTrap(id)??combatCard(id)??byUid(id);
+ const source=find(uid),from=summon??find(reaction.summonUid),portrait=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
+ let badge=portrait?.querySelector<HTMLElement>('.pt-brand')??null;
+ if(reaction.outcome==='brand'&&!badge&&portrait){
+  let resources=portrait.querySelector<HTMLElement>('.pt-resources');
+  if(!resources){resources=document.createElement('span');resources.className='pt-resources';portrait.append(resources);const ring=portrait.querySelector<HTMLElement>('.pt-ring');if(ring&&portrait.closest('.reading-board'))for(const key of ['left','top','width','height'] as const)resources.style[key]=ring.style[key];}
+  badge=document.createElement('span');badge.className='pt-brand';badge.setAttribute('role','img');const number=document.createElement('b');number.id=`brand-${side}`;number.setAttribute('aria-hidden','true');badge.append(number);resources.append(badge);
+  // Reserve native counter geometry without showing the new mark before contact.
+  if(!reaction.brandBefore)badge.style.opacity='0';
+ }
+ const target=reaction.outcome==='brand'?badge:reaction.target?find(reaction.target.uid):null;
+ const grave=document.getElementById(reaction.target?.destination==='rift'?(side==='me'?'rift-me':'rift-opp'):discId(side));
+ let contacted=false;
+ const impact=()=>{if(contacted)return;contacted=true;
+  if(reaction.outcome==='brand'&&badge){const n=reaction.brandAfter??0;badge.style.opacity='';const b=badge.querySelector('b');if(b)b.textContent=String(n);badge.style.setProperty('--resource-number-scale',String(Math.min(.14,.32/String(n).length)));badge.setAttribute('aria-label',`${t('game.brand')} ${n}`);badge.title=t('game.brandTip').replace('{n}',String(n));}
+  if(reaction.outcome==='destroy'&&!fxSkip&&!document.hidden)sfx('death');
+ };
+ if(source&&from&&target&&grave&&!fxSkip)await boardMotionScope(signal=>playOriginRite({source,summon:from,target,grave,reaction,name:cardName({...DB.ORIGIN_RITE,uid}),onImpact:impact,signal}),6800);
+ impact();
+ if(reaction.outcome==='destroy'&&target)target.style.visibility='hidden';
+}
+
 /** Pulse the exact public source, not every remaining spell on the board. */
 export function enchantActivation(uid:string):void{if(fxSkip)return;const source=document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(uid)}"]`);if(source)playBiblionFx('enchant',source);}
 
@@ -1432,3 +1494,19 @@ export async function curseSpell(card:CardInst,side:ViewSide,targetBefore:number
  try{await boardMotionScope(signal=>playCurse(node,side,signal,from,targetBefore),13000);}
  finally{node.remove();}
 }
+
+/** Selected erosion owns the HP contact; generic feedback must not double-fire. */
+export async function erosionDamage(side:ViewSide,source:string,amount:number,onDamage:()=>void):Promise<void>{
+ let applied=false;const apply=()=>{if(!applied){applied=true;onDamage();}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playErosion(side,source,amount,apply,signal),1800);}
+ finally{apply();}
+}
+
+/** Growth owns its heal cue and contact; cancellation still commits every result once. */
+export async function growthRecovery(side:ViewSide,pulses:readonly GrowthPulse[],onHeal:(index:number)=>void):Promise<void>{
+ const applied=new Set<number>();const apply=(i:number)=>{if(applied.has(i))return;applied.add(i);onHeal(i);if(pulses[i].amount>0&&!fxSkip&&!document.hidden){sfx('heal');hpFeedback(side,'heal',pulses[i].amount);}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playGrowth(side,pulses,apply,signal),Math.max(0,...pulses.map(p=>p.delay))+2000);}
+ finally{pulses.forEach((_,i)=>apply(i));}
+}
+/** Selected Ember Debt 02: prepare only its single atlas during the native reveal. */
+export function warmEmberDebt():void {void import('./emberDebt/runtime').then(m=>m.prepareEmberDebt()).catch(()=>{});}

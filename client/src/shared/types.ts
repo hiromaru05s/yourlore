@@ -108,6 +108,8 @@ export interface RevealedCard {
 }
 
 export interface PlayerState {
+  /** Server-owned lifetime duel counters; included in rollback snapshots. */
+  activity?: Partial<Record<import("./progression").Activity, number>>;
   expansion?: { turn: number; extraDraw: number; firePlayed: string[]; fireDiscount: number; dominion: number; directHits?: string[]; directHitTurn?: number; lastDirectHits?: number; lastDirectTurn?: number; reversePlays?: number };
 
   id: string; // user id (online) or "bot"/"local"
@@ -197,6 +199,7 @@ export interface Pending {
 }
 
 export interface GameState {
+  botDifficulty?: import("./bot").BotDifficulty;
   /** Resume a requested turn end after a mandatory attack's optional choices. */
   endingTurn?: { turn: number; force: boolean };
   spellDamageTurn?: number;
@@ -223,6 +226,7 @@ export interface GameState {
   _wheelSnap?: {
     state: unknown;
     action?: Action;
+    resolved?: {state: unknown; events: GameEvent[]};
     idx?: number; // legacy persisted rooms
     outcome?: {pending: Pending | null; over: boolean; phase: GameState["phase"]; winner: Side | null};
   } | null;
@@ -259,7 +263,18 @@ export type DiceSource = { player: Side } & ({ id: string; status?: never } | { 
 /** Public result of spending one counter to survive lethal damage. */
 export interface GutsSurvival { player: Side; uid: string; before: number; after: number }
 
+/** Resolved origin-rite reaction. No hidden card identity is needed for presentation. */
+export interface OriginRiteReaction {
+  summonUid: string;
+  targetPlayer: Side;
+  outcome: 'destroy' | 'brand' | 'blocked';
+  target?: {uid: string; kind: 'monster' | 'trap' | 'enchant'; destination?: 'discard' | 'rift'};
+  brandBefore?: number;
+  brandAfter?: number;
+}
+
 export type GameEvent =
+  | { type: "wheelResolve"; reroll: boolean; player: Side; uid: string }
   | { type: "voidShot"; player: Side; count: number; target: Side } // Resolved public Rift count; damage remains a separate engine event.
   | { type: "treason"; player: Side; target: Side; sourceUid: string; targets: {uid:string;zone:"monster"|"enchant";destination:"discard"|"rift"}[] }
   | { type: "timewarp"; player: Side; sourceUid: string }
@@ -273,7 +288,7 @@ export type GameEvent =
   | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
   | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }
-  | { type: "enchantActivate"; player: Side; uid: string; id: string }
+  | { type: "enchantActivate"; player: Side; uid: string; id: string; originRite?: OriginRiteReaction }
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string; source?: string; ritual?: string; rebirth?: { card: CardInst }; hatchFrom?: { uid: string; id: string }; fusionFrom?: { dragon: { uid: string; id: string }; mate: { uid: string; id: string } } } // id: card id (drives the summon ghost when the monster dies in the same batch)
@@ -285,7 +300,7 @@ export type GameEvent =
   | { type: "hit"; uid: string; amount?: number }
   | { type: "reverseDamage"; id: number; from: Side; to: Side; sourceUids: string[] }
   | { type: "damage"; reversed?: true; reverseId?: number; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
-  | { type: "heal"; player: Side; amount: number; bloodRiteSources?: string[] }
+  | { type: "heal"; player: Side; amount: number; growthSourceUid?: string; bloodRiteSources?: string[] }
   | { type: "decayCounterGrant"; player: Side; uid: string; before: number; after: number }
   | { type: "destroy"; player: Side; uid: string; id?: string; cause?: "decay" | "fusion" | "massacre" }
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }

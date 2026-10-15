@@ -1,0 +1,5 @@
+/* Keep the saved level visible even where the legacy mobile header hides small text. */
+.selected-menu .lounge-user .lounge-experience { display:block; letter-spacing:0; line-height:1.4; }
+@media(max-width:850px) {
+  .selected-menu .lounge-user .lounge-experience { font-size:8px; white-space:normal; }
+}

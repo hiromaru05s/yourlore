@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';import {build} from 'esbuild';import {mkdtemp,rm} from 'node:fs/promises';import {tmpdir} from 'node:os';
+const dir=await mkdtemp(tmpdir()+'/growth-');
+try{
+ await build({stdin:{contents:"export * from './client/src/shared/engine';export {DB} from './client/src/shared/cards';export * from './client/src/ui/growth/plan';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/test.mjs'});
+ const {createGame,reduce,DB,growthGroups,growthDrawHands}=await import(dir+'/test.mjs');let uid=0;const card=id=>({...structuredClone(DB[id]),uid:'growth-test-'+ ++uid});
+ function fixture(side=0,copies=1,mods=0){const g=createGame({mode:'online',seed:42,starting:side,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.cur=side;g.pending=null;g.phase='main';for(const p of g.players)Object.assign(p,{field:[],enchants:[],quests:[],traps:[],hand:[],deck:[],discard:[],removed:[],hp:28,mana:20,maxMana:20,shield:0,dew:0,brand:0,openingDrawReady:false});g.players[side].enchants=Array.from({length:copies},()=>({card:card('GROWTH'),turns:99,bornTurn:0}));g.players[side].deck=Array.from({length:8},()=>card('M4'));if(mods){g.players[mods>0?side:1-side].field=[{...card(mods>0?'ELF':'HIGH_ELF'),dmg:0,exhausted:true,atkMod:0,defMod:0,tempAtk:0,summonedTurn:0}];}return g;}
+ let cases=0;
+ for(const side of [0,1])for(const copies of [1,2])for(const count of [1,3])for(const mods of [-1,0,1]){
+  const g=fixture(side,copies,mods);g.players[side].hand=[card(count===1?'M3':'DISCOVERY')];const r=reduce(g,{type:'play',idx:0}),plan=growthGroups(r.events),pulses=[...plan.groups.values()].flat(),heals=r.events.filter(e=>e.type==='heal'&&e.growthSourceUid);
+  assert.equal(pulses.length,mods<0&&copies===1?1:count*copies);assert.equal(heals.length,mods<0?0:count*copies);assert.equal(r.state.players[side].hp,28+count*copies*(mods<0?0:mods>0?2:1));assert.equal(pulses.reduce((n,p)=>n+p.amount,0),r.state.players[side].hp-28);
+  for(const pulse of pulses)if(pulse.healIndex!==null){assert(plan.consumed.has(pulse.healIndex));assert.equal(r.events[pulse.healIndex].growthSourceUid,pulse.uid)}
+  const hands=growthDrawHands(g,r.state,r.events);assert.equal([...hands.values()].flatMap(h=>h.uids).length,count);assert.deepEqual([...hands.values()].at(-1).hand,r.state.players[side].hand);cases++;
+ }
+ {const g=fixture(0,1,-1);g.players[0].hand=[card('ND2')];const r=reduce(g,{type:'play',idx:0}),p=growthGroups(r.events);const ordinary=r.events.findIndex(e=>e.type==='heal'&&!e.growthSourceUid);assert(ordinary>=0);assert(!p.consumed.has(ordinary),'rounded-zero Growth cannot steal the following unrelated heal');}
+ {const g=fixture();g.players[0].enchants.push({card:card('EROSION'),turns:99});g.players[0].hand=[card('DISCOVERY')];const r=reduce(g,{type:'play',idx:0}),p=growthGroups(r.events);assert.equal(p.groups.size,3);r.events.forEach((e,i)=>{if(e.type==='damage'||e.type==='enchantActivate'&&e.id==='EROSION')assert(!p.consumed.has(i))});}
+ {const g=fixture();g.players[0].hand=[card('BLOOD1')];const r=reduce(g,{type:'play',idx:0});assert.equal(r.state.players[0].hp,19);const p=growthGroups(r.events);assert.equal([...p.groups.values()].flat().length,6);assert(!p.consumed.has(r.events.findIndex(e=>e.type==='damage')));}
+ {const g=fixture();g.players[0].deck=[];g.players[0].discard=[];g.players[0].hand=[card('M3')];const r=reduce(g,{type:'play',idx:0});assert.equal(growthGroups(r.events).groups.size,0);}
+ {const e=[{type:'enchantActivate',id:'GROWTH',uid:'g',player:0},{type:'heal',amount:4,player:1}];assert(!growthGroups(e).consumed.has(1),'different owner heal remains independent');}
+ {const g=fixture();g.players[0].hand=[card('GRAPE')];const r=reduce(g,{type:'play',idx:0});assert.equal(growthGroups(r.events).groups.size,0);assert(!r.events.some(e=>e.growthSourceUid));}
+ {const g=fixture(),n=structuredClone(g);n.players[0].hand=[card('M4'),card('M4'),card('M4')];const events=[{type:'draw',count:1,player:0},{type:'enchantActivate',id:'GROWTH',uid:'g',player:0},{type:'draw',count:2,player:0}];const h=growthDrawHands(g,n,events);assert.equal(h.get(0).hand.length,1);assert.equal(h.get(2).hand.length,3);assert.equal(new Set([...h.values()].flatMap(x=>x.uids)).size,3);}
+ console.log(`PASS growth: ${cases} side/copy/draw/modifier cases; zero-heal attribution, erosion boundaries, blood cost, empty deck, ordinary heal and incremental hand`);
+}finally{await rm(dir,{recursive:true,force:true});}

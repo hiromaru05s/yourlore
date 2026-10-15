@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
   sleeve      TEXT,                       -- 장착 카드 슬리브 id (null = 'default')
   sleeves     TEXT,                       -- 구매 소유한 슬리브 id csv (default는 항상 무료 보유)
   deck        TEXT,                       -- 활성 덱 8장 카드 id csv (null = 기본덱 컬6+상자2; 어튠 1장은 항상 고정)
+  starter_cards TEXT,                    -- collectible starter counts; NULL = initial 8 Cull, 1 Attune, 2 Chest
   decks       TEXT                        -- 덱 프리셋 5슬롯 JSON {sel, list:[{cards[8], watch[]}]} (watch = 마켓 알림이)
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_invite_code ON users(invite_code) WHERE invite_code IS NOT NULL;
@@ -42,7 +43,7 @@ CREATE TABLE IF NOT EXISTS user_days (
   PRIMARY KEY (user_id, day)
 );
 
--- 초대 캠페인 보상 장부: pending(가입) → earned(골드 도달) → paid(크레딧 지급, 크레딧 시스템 오픈 후)
+-- Invite ledger: pending (signup) → paid (Gold reached, both players credited in the ranked transaction).
 CREATE TABLE IF NOT EXISTS invite_rewards (
   invitee_id  TEXT PRIMARY KEY,           -- 초대받은 유저 (1회만 귀속)
   inviter_id  TEXT NOT NULL,
@@ -177,3 +178,66 @@ CREATE TABLE IF NOT EXISTS ranked_results (
   created_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_ratings_order ON ratings(season, mmr DESC, updated_at ASC, user_id ASC);
+
+CREATE TABLE IF NOT EXISTS collection_transactions (
+ user_id TEXT NOT NULL REFERENCES users(id),
+ request_id TEXT NOT NULL,
+ operation TEXT NOT NULL,
+ receipt TEXT NOT NULL,
+ created_at INTEGER NOT NULL,
+ PRIMARY KEY(user_id, request_id)
+);
+CREATE INDEX IF NOT EXISTS idx_collection_history ON collection_transactions(user_id,created_at DESC);
+
+-- EXP starts at zero; historical W/L is deliberately not converted.
+CREATE TABLE IF NOT EXISTS player_experience (
+  user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  exp INTEGER NOT NULL DEFAULT 0 CHECK(exp >= 0 AND exp <= 4900)
+);
+CREATE TABLE IF NOT EXISTS experience_events (
+  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  key TEXT NOT NULL,
+  before_exp INTEGER NOT NULL,
+  after_exp INTEGER NOT NULL,
+  shards INTEGER NOT NULL,
+  created_at INTEGER NOT NULL,
+  PRIMARY KEY(user_id, key)
+);
+CREATE TABLE IF NOT EXISTS daily_challenges (
+ user_id TEXT NOT NULL REFERENCES users(id), day TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 0,
+ quest TEXT NOT NULL, progress INTEGER NOT NULL DEFAULT 0, claimed INTEGER NOT NULL DEFAULT 0,
+ PRIMARY KEY(user_id,day)
+);
+CREATE TABLE IF NOT EXISTS duel_reward_receipts (
+ user_id TEXT NOT NULL REFERENCES users(id), match_id TEXT NOT NULL, day TEXT NOT NULL,
+ mode TEXT NOT NULL, amount INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL,
+ PRIMARY KEY(user_id,match_id)
+);
+CREATE INDEX IF NOT EXISTS duel_reward_daily ON duel_reward_receipts(user_id,day,mode);
+-- Gifts are addressed at issuance; a later account does not inherit an old apology.
+CREATE TABLE IF NOT EXISTS gift_messages (
+ id TEXT PRIMARY KEY,
+ title TEXT NOT NULL,
+ body TEXT NOT NULL,
+ amount INTEGER NOT NULL CHECK(amount BETWEEN 1 AND 100000),
+ created_at INTEGER NOT NULL,
+ expires_at INTEGER NOT NULL,
+ created_by TEXT NOT NULL,
+ audience TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS gift_deliveries (
+ gift_id TEXT NOT NULL REFERENCES gift_messages(id) ON DELETE CASCADE,
+ user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+ read_at INTEGER,
+ claimed_at INTEGER,
+ claim_token TEXT,
+ PRIMARY KEY(gift_id,user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_gift_recipient ON gift_deliveries(user_id,claimed_at);
+CREATE INDEX IF NOT EXISTS idx_gift_claim_token ON gift_deliveries(claim_token,user_id);
+-- Freeze v2 payments without treating the new learning material as completed.
+CREATE TABLE IF NOT EXISTS tutorial_accounts (
+  user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  legacy_paid INTEGER NOT NULL CHECK (legacy_paid BETWEEN 0 AND 3000),
+  created_at INTEGER NOT NULL
+);

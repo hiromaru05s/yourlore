@@ -8,9 +8,7 @@ const tmp=await mkdtemp(path.join(tmpdir(),'lore-rank-'));
 await build({entryPoints:['server/src/rank.ts'],bundle:true,format:'esm',platform:'node',outfile:tmp+'/rank.mjs'});
 const {calculateRating,settleRanked,getRating,rankPosition,handleRank,seasonKey,tierOf}=await import(tmp+'/rank.mjs');
 const sql=new DatabaseSync(':memory:');
-sql.exec(`CREATE TABLE users(id TEXT PRIMARY KEY,display TEXT);CREATE TABLE ratings(user_id TEXT,season TEXT,mmr INTEGER,wins INTEGER,losses INTEGER,peak_mmr INTEGER,updated_at INTEGER,final_rank INTEGER,final_tier TEXT,PRIMARY KEY(user_id,season));`);
-sql.exec(await readFile('server/migrations/0014_ranked_results.sql','utf8'));
-sql.exec(await readFile('server/migrations/0016_ranked_standings.sql','utf8'));
+sql.exec(await readFile('server/schema.sql','utf8'));
 let fail=false;
 class Stmt {
  constructor(query,args=[]){this.query=query;this.args=args;}
@@ -21,7 +19,7 @@ class Stmt {
 }
 const env={GAME_ROOM:{idFromName:name=>({toString:()=> 'durable-'+name})},DB:{prepare:q=>new Stmt(q),batch:async list=>{sql.exec('BEGIN');try{const out=[];for(const [i,s] of list.entries()){out.push(sql.prepare(s.query).run(...s.args));if(fail&&i===1){fail=false;throw Error('injected outage');}}sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}}}};
 const at=Date.UTC(2026,8,21),season='2026-09';
-const add=(id,mmr=1000)=>{sql.prepare('INSERT INTO users VALUES (?,?)').run(id,id);sql.prepare('INSERT INTO ratings VALUES (?,?,?,0,0,?,1,NULL,NULL)').run(id,season,mmr,mmr);};
+const add=(id,mmr=1000)=>{sql.prepare('INSERT INTO users(id,email,password,display,created_at) VALUES (?,?,?,?,0)').run(id,id+'@invalid.test','fixture',id);sql.prepare('INSERT INTO ratings VALUES (?,?,?,0,0,?,1,NULL,NULL)').run(id,season,mmr,mmr);};
 add('a');add('b');add('c');
 assert.deepEqual(calculateRating(1000,1000,1),[1018,984]);assert.deepEqual(calculateRating(1000,1000,0.5),[1000,1000]);assert(calculateRating(800,1400,1)[0]-800>18);assert.equal(calculateRating(0,1000,0)[0],0);
 await Promise.all(Array.from({length:8},()=>settleRanked(env,'match-one','a','b','a',at)));

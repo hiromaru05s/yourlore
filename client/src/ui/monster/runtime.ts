@@ -1,3 +1,5 @@
+import {isCastle} from '../castleSummon/catalog';
+import {isPoisonSummon} from '../poisonSummon/selection';
 import {isShieldTitan} from '../shieldTitanSummon/selection';
 import {isSilenceSummon} from '../silenceSummon/selection';
 import {playSilenceSummon,cancelSilenceSummon,cancelSilenceSummons} from '../silenceSummon/runtime';
@@ -210,6 +212,8 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
  if(kind==='summon'&&isSilenceSummon(source.dataset.cardId))return playSilenceSummon(source,options);
  if(kind==='summon'&&isVoidSummon(source.dataset.cardId))return playVoidSummon(source,options);
  if(kind==='summon'&&isCasino(source.dataset.cardId))return playCasinoSummon(source,options);
+ if(kind==='summon'&&isCastle(source.dataset.cardId))return playSlateSummon(source,options);
+ if(kind==='summon'&&isPoisonSummon(source.dataset.cardId))return playSlateSummon(source,options);
  if(kind==='summon'&&(isShieldTitan(source.dataset.cardId)||isAssassin(source.dataset.cardId)))return playSlateSummon(source,options);
  if(kind==='summon'&&isGolem(source.dataset.cardId))return playGolem(source,options);
  if(kind==='summon')return selectedTribeSummon(source.dataset.cardId)?playTribeSummon(source,options):playSlateSummon(source,options);

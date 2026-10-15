@@ -1,3 +1,4 @@
+import {starterCollection,constrainDeckStore} from '../shared/collection';
 import {renderDeckAppearance} from '../ui/deckAppearance';
 import {isLocalDevAccount,loadLocalGuestProfile} from '../dev/localAccount';
 import {revealCards} from '../ui/assetReadiness';
@@ -46,7 +47,8 @@ export function mountDeck(app: App): Screen {
   app.root.appendChild(wrap);
 
   // ---- 상태: 서버 저장분(프리셋 5슬롯) 로드, 없으면 기존 단일 덱을 1번 슬롯에 승계 ----
-  const store: DeckStore = deckStoreForUser(app.user);
+  const starterCards=starterCollection(app.user?.starterCards);
+  const store: DeckStore = isLocalDevAccount()?deckStoreForUser(app.user):constrainDeckStore(deckStoreForUser(app.user),starterCards);
   let cur = store.sel; // 현재 편집 중인 슬롯 (store.sel = 게임에 사용되는 슬롯)
   let watchQ = "";
   let activeTab:'edit'|'watch'|'appearance'='edit';
@@ -89,12 +91,23 @@ export function mountDeck(app: App): Screen {
     q("deckEditSection").inert = saving; q("deckWatchSection").inert = saving; q("deckAppearanceSection").inert = saving; tabsEl.inert = saving;
     tabsEl.innerHTML = "";
     for (let i = 0; i < DECK_SLOTS; i++) {
+      const row = document.createElement("div");
+      row.className = "deck-tab-row" + (i === cur ? " is-on" : "");
       const b = document.createElement("button");
       b.className = "deck-tab" + (i === cur ? " is-on" : "") + (i === store.sel ? " is-active" : "");
-      b.innerHTML = `<span class="deck-tab-name">${esc(store.list[i].name || t("deck.slot").replace("{n}", String(i + 1)))}</span>${i === store.sel ? ` <span class="deck-star">${homeIcon("check")}</span>` : ""}`;
+      b.innerHTML = `<span class="deck-tab-name">${esc(store.list[i].name || t("deck.slot").replace("{n}", String(i + 1)))}</span>`;
+      b.setAttribute('aria-current', String(i === cur));
       b.title = store.list[i].name || t("deck.slot").replace("{n}", String(i + 1));
       b.onclick = () => { cur = i; pending = null; undo = null; watchQ = ""; searchEl.value = ""; render(); };
-      tabsEl.appendChild(b);
+      row.appendChild(b);
+      if (i === store.sel) {
+        const star = document.createElement('span');
+        star.className = 'deck-star';
+        star.innerHTML = homeIcon('check');
+        star.title = t('deck.inuse');
+        row.appendChild(star);
+      }
+      tabsEl.appendChild(row);
     }
     const rename=document.createElement('button');rename.className='deck-rename';rename.id='deckRename';rename.innerHTML=homeIcon('edit');rename.title=loungeText('デッキ名を変更','Rename deck','덱 이름 변경');rename.setAttribute('aria-label',rename.title);rename.disabled=saving;
     rename.onclick=()=>{
@@ -103,7 +116,7 @@ export function mountDeck(app: App): Screen {
       document.body.append(ov);const input=ov.querySelector<HTMLInputElement>('#deckNameInput')!;
       const apply=()=>{const name=sanitizeDeckName(input.value);if(name)store.list[slot].name=name;else delete store.list[slot].name;ov.remove();render();msgEl.textContent=loungeText('デッキ名を変更しました。「保存」で確定します。','Deck renamed. Save to keep your changes.','덱 이름을 변경했습니다. 저장해 주세요.');};
       ov.querySelector<HTMLButtonElement>('#deckRenameCancel')!.onclick=()=>ov.remove();ov.querySelector<HTMLButtonElement>('#deckRenameApply')!.onclick=apply;input.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)apply();};input.oninput=()=>{input.value=Array.from(input.value).slice(0,24).join('');};input.focus();input.select();
-    };tabsEl.append(rename);
+    };tabsEl.querySelector('.deck-tab-row.is-on .deck-tab')!.after(rename);
     useBtn.innerHTML = cur === store.sel ? `${homeIcon("check")} ${t("deck.inuse")}` : t("deck.use");
     useBtn.disabled = saving || cur === store.sel || store.list.some(d => d.cards.length !== DECK_SIZE);
 
@@ -153,11 +166,13 @@ export function mountDeck(app: App): Screen {
       if(poolType!=='all' && (poolType==='mon'?c.t!=='mon':c.t==='mon'))continue;
       if(poolQuery && ![cardName(c),c.name].join(' ').toLowerCase().includes(poolQuery))continue;
       const n = countOf(id);
-      const full = n >= DECK_MAX_COPIES;
+      const available=isLocalDevAccount()?DECK_MAX_COPIES:(starterCards[id]??0);
+      const full = n >= available;
       const el = cardEl(c, { size: "mkt", playable: !full, dim: full, lazyArt: poolIdx++ });
       const cnt = document.createElement("div");
       cnt.className = "deck-owned" + (n > 0 ? " has" : "");
-      cnt.textContent = `${n}/${DECK_MAX_COPIES}`;
+      cnt.textContent = `${n}/${available}`;
+      cnt.title=loungeText('デッキ内 / 所持枚数','In deck / Owned','덱 구성 / 보유 수');
       el.appendChild(cnt);
       const choose=()=>{if(saving||full)return;if(deck().length<DECK_SIZE){undo=[...deck()];deck().push(id);pending=null;}else pending=pending===id?null:id;render();};
       el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);

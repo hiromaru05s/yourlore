@@ -1,0 +1,25 @@
+{
+  "desktop": {
+    "offers": 2,
+    "refreshDisabled": true,
+    "canvasCount": 1,
+    "tooltip": true,
+    "rerenderStable": true
+  },
+  "release": {
+    "offers": 3,
+    "refreshEnabled": true,
+    "canvasCount": 0
+  },
+  "mobile": {
+    "width": 390,
+    "height": 844,
+    "reversed": true,
+    "tooltip": true,
+    "purchaseLeavesOneCard": true
+  },
+  "boundary": "Local shared GameView plus actual engine actions. Not authenticated online gameplay.",
+  "runtimeErrors": [],
+  "latestRendererReviewed": true,
+  "viewportOverrideReset": true
+}

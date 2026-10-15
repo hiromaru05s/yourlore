@@ -14,6 +14,11 @@ const M: Record<string, { ja: string; en: string; ko?:string }> = {
   "request timed out": {"ja": "通信がタイムアウトしました。接続を確認して再試行してください。", "en": "Request timed out. Check your connection and retry.", "ko": "요청 시간이 초과되었습니다. 연결을 확인하고 다시 시도해주세요."},
   "challenge changed; retry": {"ja": "対戦申請が更新されました。再試行してください。", "en": "Challenge changed. Please retry.", "ko": "대전 신청이 변경되었습니다. 다시 시도해주세요."},
   "room setup failed; retry": {"ja": "対戦の準備に失敗しました。再試行してください。", "en": "Room setup failed. Please retry.", "ko": "대전 준비에 실패했습니다. 다시 시도해주세요."},
+  "not enough shards": {ja:"シャードが不足しています。",en:"Not enough Shards.",ko:"샤드가 부족합니다."},
+  "starter limit reached": {ja:"このカードは8枚所持しています。",en:"You already own eight copies.",ko:"이미 8장을 보유하고 있습니다."},
+  "unowned deck contents": {ja:"未所持のカード・外観は使用できません。",en:"You cannot use cards or cosmetics you do not own.",ko:"보유하지 않은 카드·외형은 사용할 수 없습니다."},
+  "collection busy; retry": {ja:"処理が混み合っています。再試行してください。",en:"Collection busy. Please retry.",ko:"처리가 혼잡합니다. 다시 시도해 주세요."},
+  "collection request conflict": {ja:"前の購入結果を確認してから再試行してください。",en:"Check your previous purchase before retrying.",ko:"이전 구매 결과를 확인한 후 다시 시도해 주세요."},
   // auth
   "올바른 이메일이 아닙니다.": { ja: "正しいメールアドレスではありません。", en: "That's not a valid email." },
   "비밀번호는 6자 이상이어야 합니다.": { ja: "パスワードは6文字以上にしてください。", en: "Password must be at least 6 characters." },
@@ -31,7 +36,7 @@ const M: Record<string, { ja: string; en: string; ko?:string }> = {
   "잘못된 상품입니다.": { ja: "無効な商品です。", en: "Invalid item." },
   "사용자를 찾을 수 없습니다.": { ja: "ユーザーが見つかりません。", en: "User not found." },
   "이미 보유한 슬리브입니다.": { ja: "既に所持しているスリーブです。", en: "You already own this sleeve." },
-  "크레딧이 부족합니다.": { ja: "クレジットが不足しています。", en: "Not enough credits." },
+  "크레딧이 부족합니다.": { ja: "シャードが不足しています。", en: "Not enough Shards.", ko: "샤드가 부족합니다." },
   // friends / challenges
   "이름 또는 이메일을 입력하세요.": { ja: "名前またはメールアドレスを入力してください。", en: "Enter a nickname or email." },
   "해당 유저를 찾을 수 없습니다.": { ja: "該当するユーザーが見つかりません。", en: "Couldn't find that player." },

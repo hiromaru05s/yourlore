@@ -1,3 +1,4 @@
+import { trackActivity } from "./progression";
 import { cloneGameState } from './cloneGameState';
 import { playIntent } from './playIntent';
 import {monsterActivation, observeMonsterEffect} from './monsterEffects';
@@ -14,7 +15,7 @@ import {monsterActivation, observeMonsterEffect} from './monsterEffects';
 // localizes the displayed name, so cn() is reused in both languages.
 // ============================================================
 import type {
-  DiceSource,
+  DiceSource, OriginRiteReaction,
   Action, CardDef, CardInst, Enchant, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet, QuestEvent,
 } from "./types";
 import { ALL_IDS, BUYABLE_POOL, DB, STARTERS, TRIBES, DEFAULT_DECK_8, sanitizeDeck, hasPassive, PASSIVES , isChestCard, enchantHasTurnCountdown } from "./cards";
@@ -452,6 +453,7 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   amount *= 2 ** doubles;
   const before = p.shield ?? 0;
   p.shield = before + amount;
+  trackActivity(p, 'shield', amount);
   ctx.ev.push({type:"statusGrant",player:side(g,p),resource:"shield",before,after:p.shield});
   p.shieldExpiresTurn = side(g, p) === g.cur ? g.turn + 1 : g.turn;
   if (side(g, p) !== g.cur) p.shieldOpponentPeak = Math.max(p.shieldOpponentPeak ?? 0, p.shield);
@@ -511,13 +513,21 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       if (!c) continue;
       p.hand.push(c); drawn++;
     }
+    if (extra) trackActivity(p, 'draw', drawn);
     if (drawn > 0) ev.push({ type: "draw", player: side(g, p), count: drawn });
     if (drawn > 0 && extra && side(g, p) === g.cur) {
       xstate(p).extraDraw += drawn;
       for (let i = 0; i < drawn && !g.over; i++) {
         for (const e of [...p.enchants]) {
           if (g.over) break;
-          if (e.card.ench === 'growth') { enchantFx(g, ev, p, e.card); addHealth(ctx, p, 1); }
+          if (e.card.ench === 'growth') {
+            enchantFx(g, ev, p, e.card);
+            const start=ev.length;
+            addHealth(ctx, p, 1);
+            // Mark the actual recovery only: modifiers may round Growth to zero.
+            const recovery=ev[start];
+            if(recovery?.type==='heal'&&recovery.player===side(g,p))recovery.growthSourceUid=e.card.uid;
+          }
           if (e.card.ench === 'erosion') { enchantFx(g, ev, p, e.card); const depth = spellDepth; spellDepth++; try { dealDamage(g.players[1 - side(g, p)], 1, cn(e.card), cn(e.card), side(g, p)); } finally { spellDepth = depth; } }
         }
       }
@@ -536,6 +546,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       return;
     }
     p.hp += amt;
+    trackActivity(p, 'heal', amt);
     advanceQuest(p,"healthGain",amt);
     ev.push({ type: "heal", player: side(g, p), amount: amt, ...(bloodRiteSources ? {bloodRiteSources} : {}) });
     // 유령 — v25: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격력 +1 (지속)
@@ -602,6 +613,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (absorbed > 0) { breakShield(ctx, target, absorbed); amt -= absorbed; }
     if (amt <= 0) return;
     if (spellDepth > 0) spellDamageRecorded(g, Math.min(Math.max(0, target.hp), amt));
+    if (source !== side(g, target)) trackActivity(g.players[source], 'damage', Math.min(Math.max(0,target.hp),amt));
     target.hp -= amt;
     if (source !== side(g, target)) advanceQuest(target, "opponentDamage", amt);
     // 고통 수확: 상대(=target)가 데미지를 입을 때마다 컬 1장 획득
@@ -654,6 +666,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       // 공허(void): 토큰·공허 패시브 몬스터는 죽으면 게임에서 제외 — 덱 순환에 들어가지 않는다
       if (dead.token || hasPassive(dead, "void")) rmz(owner).push(resetInst(dead));
       else owner.discard.push(resetInst(dead));
+      if (cause === 'decay') trackActivity(g.players[1-side(g,owner)], 'decay');
       ev.push({ type: "destroy", player: side(g, owner), uid: m.uid, id: dead.id, ...(cause ? { cause } : {}) });
       (owner.destroyedLog ??= []).push({ id: dead.id, turn: g.turn }); if (owner.destroyedLog.length > 20) owner.destroyedLog.shift(); // v41b 윤회
       // 리더 골램(v36 leaderGolem): 자신 필드의 몬스터가 쓰러질 때마다 카운터 +1
@@ -3375,13 +3388,17 @@ function diceRollCasino(g: GameState, ev: GameEvent[], pl: Side, source: DiceSou
 }
 // Track only the synchronous causal chain; unrelated rolls/actions can trigger again.
 const resolvingLuckyEcho = new WeakMap<GameState, Set<Side>>();
+// A public die is a decision boundary: retain the exact state before its consequences.
+const wheelCheckpoints = new WeakMap<GameEvent, GameState>();
 function diceRoll(g: GameState, ev: GameEvent[], pl: Side, source: DiceSource, n: number, need?: number, variant?: "casino"): { rolls: number[]; sum: number; ok: boolean } {
   const rolls: number[] = [];
   for (let i = 0; i < n; i++) rolls.push(randInt(g, 6) + 1);
   advanceQuest(g.players[pl], "dice", n);
   const sum = rolls.reduce((a, b) => a + b, 0);
   const ok = need != null ? sum >= need : true;
-  ev.push({ type: "dice", source, player: pl, rolls, need, success: need != null ? ok : undefined, variant });
+  const event: GameEvent = { type: "dice", source, player: pl, rolls, need, success: need != null ? ok : undefined, variant };
+  ev.push(event);
+  if (pl === g.cur && source.player === pl && source.id && !g.players[pl].wheelUsed && g.players[pl].enchants.some(e => e.card.ench === "fateWheel")) wheelCheckpoints.set(event, cloneGameState(g));
   // 카지노: 주사위를 굴릴 때마다 (카지노 주사위 자신은 제외) 필드의 카지노에 카운터 +1
   if (variant !== "casino") {
     for (const pl2 of g.players) for (const cas of pl2.field) if (cas.aura === "casino") cas.gcount = (cas.gcount || 0) + n;
@@ -3709,8 +3726,11 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "FLAME": { // 불꽃: 상대 2 / 자신 1
       ctx.log(`${tag(p, card)} 상대 2 / 자신 1 데미지`, `${tag(p, card)} 相手2 / 自分1ダメージ`);
-      ctx.dealDamage(o, 2, cn(card), cn(card));
-      if (!g.over) ctx.dealDamage(p, 1, cn(card), cn(card));
+      const fx=elementalGroup(ctx,side(g,p),card);
+      try {
+        fx.hit(side(g,o),null,2);ctx.dealDamage(o, 2, cn(card), cn(card));
+        if (!g.over) {fx.hit(side(g,p),null,1);ctx.dealDamage(p, 1, cn(card), cn(card));}
+      } finally {fx.end();}
       break;
     }
     case "NEGOTIATE": { // 협상(v34): 상대 최대 마나 +1 + 2턴 동안 함정 설치 불가
@@ -4157,13 +4177,42 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   if (m.tribe === "시초" && m.id !== "TGE3" && !g.over) {
     for (const e of p.enchants) {
       if (e.card.ench !== "originRite" || g.over) continue;
-      enchantFx(g,ctx.ev,p,e.card);
+      const reaction: OriginRiteReaction = {summonUid:m.uid,targetPlayer:side(g,o),outcome:'blocked'};
+      // The result is filled synchronously below; its presentation stays before death/response events.
+      ctx.ev.push({type:'enchantActivate',player:side(g,p),uid:e.card.uid,id:e.card.id,originRite:reaction});
+      const resolved=(card:CardInst)=>{
+        reaction.outcome='destroy';
+        if(reaction.target)reaction.target.destination=(o.removed??[]).some(x=>x.uid===card.uid)?'rift':'discard';
+      };
       const pool: Array<() => void> = [];
-      o.field.filter((x) => !hasPassive(x, "aura")).forEach((x) => pool.push(() => { ctx.log(`  └ ${cn(e.card)}: ${cn(x)} 파괴`, `  └ ${cn(e.card)}: ${cn(x)} 破壊`); ctx.destroyMonster(o, x); }));
-      o.traps.forEach((_t, i) => pool.push(() => { if (o.traps[i] && !trySnare(g, ctx, o)) { const tr = o.traps.splice(i, 1)[0]; if (tr.card.exileOnDestroy) rmz(o).push(tr.card); else o.discard.push(tr.card); ctx.log(`  └ ${cn(e.card)}: 세트 함정 파괴 (정체: ${cn(tr.card)})`, `  └ ${cn(e.card)}: セットトラップ破壊 (正体: ${cn(tr.card)})`); } }));
-      o.enchants.forEach((_e, i) => pool.push(() => { if (o.enchants[i]) { const ec = o.enchants[i].card; o.enchants.splice(i, 1); ctx.log(`  └ ${cn(e.card)}: 영구마법 ${cn(ec)} 파괴`, `  └ ${cn(e.card)}: 永続魔法 ${cn(ec)} 破壊`); binEnch(g, ctx, o, ec); } }));
-      if (pool.length) pool[randInt(g, pool.length)]();
-      else { gainBrand(g, ctx, o, 1); ctx.log(`  └ ${cn(e.card)}: 파괴할 카드 없음 → ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${cn(e.card)}: 破壊するカードなし → ${o.name} に烙印カウンター+1 (計${o.brand})`); }
+      o.field.filter((x) => !hasPassive(x, "aura")).forEach((x) => pool.push(() => {
+        reaction.target={uid:x.uid,kind:'monster'};
+        ctx.log(`  └ ${cn(e.card)}: ${cn(x)} 파괴`, `  └ ${cn(e.card)}: ${cn(x)} 破壊`);
+        const eventStart=ctx.ev.length;ctx.destroyMonster(o,x);
+        if(ctx.ev.slice(eventStart).some(ev=>ev.type==='destroy'&&ev.uid===x.uid))resolved(x);
+      }));
+      o.traps.forEach((_t,i)=>pool.push(()=>{
+        const target=o.traps[i];if(!target)return;
+        reaction.target={uid:target.card.uid,kind:'trap'};
+        if(!trySnare(g,ctx,o)){
+          const tr=o.traps.splice(i,1)[0];
+          if(tr.card.exileOnDestroy)rmz(o).push(tr.card);else o.discard.push(tr.card);
+          resolved(tr.card);
+          ctx.log(`  └ ${cn(e.card)}: 세트 함정 파괴 (정체: ${cn(tr.card)})`, `  └ ${cn(e.card)}: セットトラップ破壊 (正体: ${cn(tr.card)})`);
+        }
+      }));
+      o.enchants.forEach((_e,i)=>pool.push(()=>{
+        if(!o.enchants[i])return;const ec=o.enchants[i].card;
+        reaction.target={uid:ec.uid,kind:'enchant'};o.enchants.splice(i,1);
+        ctx.log(`  └ ${cn(e.card)}: 영구마법 ${cn(ec)} 파괴`, `  └ ${cn(e.card)}: 永続魔法 ${cn(ec)} 破壊`);
+        binEnch(g,ctx,o,ec);resolved(ec);
+      }));
+      if(pool.length)pool[randInt(g,pool.length)]();
+      else {
+        reaction.outcome='brand';reaction.brandBefore=o.brand??0;
+        gainBrand(g,ctx,o,1);reaction.brandAfter=o.brand??0;
+        ctx.log(`  └ ${cn(e.card)}: 파괴할 카드 없음 → ${o.name} 에게 낙인 카운터 +1 (합계 ${o.brand})`, `  └ ${cn(e.card)}: 破壊するカードなし → ${o.name} に烙印カウンター+1 (計${o.brand})`);
+      }
     }
   }
 }
@@ -5407,8 +5456,17 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       // idx supports rooms persisted by versions before action-based rerolls.
       const replay = snap.action ?? { type: "play" as const, idx: snap.idx! };
       const result = reduce(before, replay);
+      if (snap.resolved) {
+        const first = result.events.findIndex(e => e.type === 'dice' && e.player === prev.cur && e.source.player === prev.cur && e.source.id);
+        if (first >= 0) result.events = result.events.slice(first);
+        result.events.unshift({type:'wheelResolve',reroll:true,player:prev.cur,uid:prev.players[prev.cur].enchants.find(e=>e.card.ench==='fateWheel')?.card.uid??''});
+      }
       result.events.unshift({type:"log",html:"운명의 수레바퀴! 결과를 되감고 다시 굴린다…",htmlJa:"運命の輪！結果を巻き戻して振り直す…"});
       return result;
+    }
+    if (snap?.resolved) {
+      const state = cloneGameState(snap.resolved.state as GameState); state._wheelSnap = null;
+      return {state, events:[{type:'wheelResolve',reroll:false,player:prev.cur,uid:prev.players[prev.cur].enchants.find(e=>e.card.ench==='fateWheel')?.card.uid??''}, ...structuredClone(snap.resolved.events)]};
     }
     const state = cloneGameState(prev);
     state._wheelSnap = null;
@@ -5425,17 +5483,19 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
   const die = result.events.find(e => e.type === "dice" && e.player === owner && e.source.player === owner && e.source.id);
   if (!prev.over && eligible && (prev.pending?.owner ?? owner) === owner && result.state.cur === owner
       && !player.wheelUsed && player.enchants.some(e=>e.card.ench === "fateWheel") && die?.type === "dice") {
-    const g = result.state;
+    const resolved = result.state, checkpoint = wheelCheckpoints.get(die);
+    if (!checkpoint) return result;
+    const g = checkpoint, index = result.events.indexOf(die);
     const before = cloneGameState(prev); before._wheelSnap = null;
-    g._wheelSnap = {state:before,action:structuredClone(action),outcome:{pending:g.pending,over:g.over,phase:g.phase,winner:g.winner}};
+    g._wheelSnap = {state:before,action:structuredClone(action),resolved:{state:resolved,events:result.events.slice(index+1)},outcome:{pending:resolved.pending,over:resolved.over,phase:resolved.phase,winner:resolved.winner}};
+    result.state = g;
     const source = DB[die.source.id!] ?? STARTERS[die.source.id!];
     const name = source ? cn(source) : die.source.id!;
     // Do not finish a lethal result or open its follow-up picker before the
     // player has chosen whether to keep it. The authoritative room sees main.
     g.over = false; g.winner = null; g.phase = "main";
-    g.pending = {kind:"reroll",owner,hint:`운명의 수레바퀴 — ${name} 의 결과를 다시 굴릴 수 있다`,hintJa:`運命の輪 — ${name} の結果を振り直せる`,reason:"reroll",allowCancel:true};
-    result.events = result.events.filter(e=>e.type!=="win" && e.type!=="needTarget");
-    enchantKindFx(g,result.events,"fateWheel",g.players[owner]);
+    g.pending = {kind:"reroll",owner,hint:`운명의 수레바퀴 — ${name} 의 결과를 다시 굴릴 수 있다`,hintJa:`運命の輪 — ${name} の結果を振り直せる`,reason:"reroll",allowCancel:true,data:{dice:structuredClone(die)}};
+    result.events = result.events.slice(0,index+1).filter(e=>e.type!=="needTarget");
     result.events.push({type:"needTarget",pending:g.pending});
   }
   return result;
@@ -5531,6 +5591,10 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
   refreshDewPassives(g2);
   recheckDeaths(g2, questCtx);
   rememberPublicCards(g2);
+  for (const sx of [0,1] as Side[]) {
+    const before = new Set((prev.players[sx].removed??[]).map(c=>c.uid));
+    trackActivity(g2.players[sx], 'rift', (g2.players[sx].removed??[]).filter(c=>!before.has(c.uid)).length);
+  }
   return res;
 }
 
@@ -5710,6 +5774,7 @@ function counterHit(g: GameState, ctx: Ctx, owner: PlayerState, defender: FieldM
   ctx.ev.push(event);
   const start=ctx.ev.length;
   const killed = monsterDamage(g, ctx, attackerOwner, attacker, amount, true);
+  if (killed && owner !== attackerOwner && ctx.ev.slice(start).some(e=>e.type==='destroy'&&e.uid===attacker.uid)) trackActivity(owner, 'counter');
   const hit=ctx.ev.slice(start).find(e=>e.type==='hit'&&e.uid===attacker.uid);
   if(hit?.type==='hit')event.contactDamage=hit.amount??0;
   if (killed && defender.aura === 'devourGrow' && owner.field.includes(defender)) { if (attacker.cost > 0) monsterActivation(g, ctx.ev, owner, defender); defender.atkMod += attacker.cost; defender.defMod += attacker.cost; }

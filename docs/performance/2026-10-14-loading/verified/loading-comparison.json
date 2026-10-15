@@ -1,0 +1,678 @@
+{
+  "conditions": {
+    "bandwidthMbps": 10,
+    "latencyMs": 40,
+    "cpu": 2,
+    "menuDwellMs": 12000,
+    "api": "fixture",
+    "cache": "fresh browser context; immutable JS, revalidated art"
+  },
+  "samples": [
+    {
+      "modelDuplicates": [],
+      "version": "before",
+      "width": 1280,
+      "homeMs": 9839,
+      "boardMs": 25095,
+      "warm": {
+        "models": [],
+        "heap": 10444925
+      },
+      "requests": 147,
+      "bytes": 31676441,
+      "largest": [
+        {
+          "url": "http://127.0.0.1:53910/models/reading-board/v1/board.glb?revision=recessed-rim-v3-20260929",
+          "bytes": 3717872
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/seeker-red.png",
+          "bytes": 2247659
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/seeker-blue.png",
+          "bytes": 2148692
+        },
+        {
+          "url": "http://127.0.0.1:53910/models/reading-board/v1/shelf.glb",
+          "bytes": 1871424
+        },
+        {
+          "url": "http://127.0.0.1:53910/models/reading-board/v1/market.glb",
+          "bytes": 1668300
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/shelf-case.png",
+          "bytes": 1654651
+        },
+        {
+          "url": "http://127.0.0.1:53910/models/reading-board/v1/supply.glb",
+          "bytes": 1594152
+        },
+        {
+          "url": "http://127.0.0.1:53910/music/poised-opening.mp3",
+          "bytes": 1485919
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/deck-5.png",
+          "bytes": 1409146
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/stat-cost.png",
+          "bytes": 1398002
+        },
+        {
+          "url": "http://127.0.0.1:53910/models/reading-board/v1/deck-place.glb",
+          "bytes": 1194232
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/button-idle.png",
+          "bytes": 1004990
+        }
+      ],
+      "modelRequests": [
+        "http://127.0.0.1:53910/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+        "http://127.0.0.1:53910/models/reading-board/v1/board.glb?revision=recessed-rim-v3-20260929",
+        "http://127.0.0.1:53910/models/reading-board/v1/mana-tray.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/mana-counter.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/mana-crystal-ready.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/mana-crystal-spent.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/turn-button.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/timer-inserts.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/reroll-button.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/crystal-optics.json",
+        "http://127.0.0.1:53910/models/reading-board/v1/deck-place.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/shelf.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/market.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/supply.glb"
+      ],
+      "longTasks": [
+        {
+          "start": 24286,
+          "duration": 52
+        },
+        {
+          "start": 24497.10000000149,
+          "duration": 331
+        },
+        {
+          "start": 24898.20000000298,
+          "duration": 399
+        },
+        {
+          "start": 25303.5,
+          "duration": 216
+        },
+        {
+          "start": 33632.80000000447,
+          "duration": 215
+        },
+        {
+          "start": 37312.89999999851,
+          "duration": 167
+        },
+        {
+          "start": 37746.70000000298,
+          "duration": 124
+        },
+        {
+          "start": 38496.30000000447,
+          "duration": 96
+        },
+        {
+          "start": 40364,
+          "duration": 98
+        },
+        {
+          "start": 40517.70000000298,
+          "duration": 186
+        },
+        {
+          "start": 40811.80000000447,
+          "duration": 166
+        },
+        {
+          "start": 47614,
+          "duration": 390
+        },
+        {
+          "start": 48012.80000000447,
+          "duration": 52
+        },
+        {
+          "start": 48097,
+          "duration": 696
+        },
+        {
+          "start": 48796.70000000298,
+          "duration": 83
+        },
+        {
+          "start": 48888.39999999851,
+          "duration": 73
+        },
+        {
+          "start": 53954.20000000298,
+          "duration": 135
+        },
+        {
+          "start": 54409.60000000149,
+          "duration": 73
+        },
+        {
+          "start": 54552.60000000149,
+          "duration": 76
+        },
+        {
+          "start": 61227.20000000298,
+          "duration": 222
+        }
+      ],
+      "scene": "true",
+      "hand": 3,
+      "heap": 29626331,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "modelDuplicates": [],
+      "version": "after",
+      "width": 1280,
+      "homeMs": 8078,
+      "boardMs": 14057,
+      "warm": {
+        "models": [
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/market.glb",
+            "bytes": 1668300
+          }
+        ],
+        "heap": 12091143
+      },
+      "requests": 61,
+      "bytes": 22819592,
+      "largest": [
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/seeker-red.png",
+          "bytes": 2247659
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/seeker-blue.png",
+          "bytes": 2148692
+        },
+        {
+          "url": "http://127.0.0.1:53911/models/reading-board/v1/shelf.glb",
+          "bytes": 1871424
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/shelf-case.png",
+          "bytes": 1654651
+        },
+        {
+          "url": "http://127.0.0.1:53911/music/poised-opening.mp3",
+          "bytes": 1485919
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/deck-5.png",
+          "bytes": 1409146
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/stat-cost.png",
+          "bytes": 1398002
+        },
+        {
+          "url": "http://127.0.0.1:53911/models/reading-board/v1/deck-place.glb",
+          "bytes": 1194232
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/button-idle.png",
+          "bytes": 1004990
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/portrait-opp.png",
+          "bytes": 692936
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/release/rift-purple07-idle16.png",
+          "bytes": 586297
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/portrait-self.png",
+          "bytes": 584472
+        }
+      ],
+      "modelRequests": [
+        "http://127.0.0.1:53911/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+        "http://127.0.0.1:53911/models/reading-board/v1/deck-place.glb",
+        "http://127.0.0.1:53911/models/reading-board/v1/mana-tray.glb",
+        "http://127.0.0.1:53911/models/reading-board/v1/mana-counter.glb",
+        "http://127.0.0.1:53911/models/reading-board/v1/mana-crystal-ready.glb",
+        "http://127.0.0.1:53911/models/reading-board/v1/mana-crystal-spent.glb",
+        "http://127.0.0.1:53911/models/reading-board/v1/shelf.glb",
+        "http://127.0.0.1:53911/models/reading-board/v1/crystal-optics.json",
+        "http://127.0.0.1:53911/models/reading-board/v1/turn-button.glb",
+        "http://127.0.0.1:53911/models/reading-board/v1/timer-inserts.glb",
+        "http://127.0.0.1:53911/models/reading-board/v1/reroll-button.glb"
+      ],
+      "longTasks": [
+        {
+          "start": 21408.90000000596,
+          "duration": 252
+        },
+        {
+          "start": 21866.40000000596,
+          "duration": 369
+        },
+        {
+          "start": 22238,
+          "duration": 161
+        },
+        {
+          "start": 22512.70000000298,
+          "duration": 391
+        },
+        {
+          "start": 23535.10000000149,
+          "duration": 246
+        },
+        {
+          "start": 32157,
+          "duration": 248
+        },
+        {
+          "start": 32817.5,
+          "duration": 168
+        },
+        {
+          "start": 34800.70000000298,
+          "duration": 149
+        },
+        {
+          "start": 34952.90000000596,
+          "duration": 136
+        },
+        {
+          "start": 38715.5,
+          "duration": 578
+        },
+        {
+          "start": 39294.60000000149,
+          "duration": 131
+        },
+        {
+          "start": 43730.10000000149,
+          "duration": 80
+        },
+        {
+          "start": 43857.40000000596,
+          "duration": 76
+        },
+        {
+          "start": 47239.40000000596,
+          "duration": 240
+        }
+      ],
+      "scene": "true",
+      "hand": 3,
+      "heap": 67386734,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "modelDuplicates": [],
+      "version": "before",
+      "width": 390,
+      "homeMs": 8250,
+      "boardMs": 16151,
+      "warm": {
+        "models": [],
+        "heap": 10489294
+      },
+      "requests": 146,
+      "bytes": 26590635,
+      "largest": [
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/seeker-red.png",
+          "bytes": 2247659
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/seeker-blue.png",
+          "bytes": 2148692
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/shelf-case.png",
+          "bytes": 1654651
+        },
+        {
+          "url": "http://127.0.0.1:53910/music/poised-opening.mp3",
+          "bytes": 1485919
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/deck-5.png",
+          "bytes": 1409146
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/stat-cost.png",
+          "bytes": 1398002
+        },
+        {
+          "url": "http://127.0.0.1:53910/models/reading-board/v1/board-low.glb?revision=recessed-rim-v3-20260929",
+          "bytes": 1350324
+        },
+        {
+          "url": "http://127.0.0.1:53910/models/reading-board/v1/shelf-lod1.glb",
+          "bytes": 1199104
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/button-idle.png",
+          "bytes": 1004990
+        },
+        {
+          "url": "http://127.0.0.1:53910/models/reading-board/v1/deck-place-lod1.glb",
+          "bytes": 957684
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/refined/portrait-opp.png",
+          "bytes": 692936
+        },
+        {
+          "url": "http://127.0.0.1:53910/art/biblion/release/rift-purple07-idle16.png",
+          "bytes": 586297
+        }
+      ],
+      "modelRequests": [
+        "http://127.0.0.1:53910/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+        "http://127.0.0.1:53910/models/reading-board/v1/board-low.glb?revision=recessed-rim-v3-20260929",
+        "http://127.0.0.1:53910/models/reading-board/v1/mana-tray.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/mana-counter.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/mana-crystal-ready.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/mana-crystal-spent.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/turn-button.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/timer-inserts.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/reroll-button.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/crystal-optics.json",
+        "http://127.0.0.1:53910/models/reading-board/v1/deck-place-lod1.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/shelf-lod1.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/market-low.glb",
+        "http://127.0.0.1:53910/models/reading-board/v1/supply-low.glb"
+      ],
+      "longTasks": [
+        {
+          "start": 22063.10000000149,
+          "duration": 274
+        },
+        {
+          "start": 22411,
+          "duration": 451
+        },
+        {
+          "start": 22871.40000000596,
+          "duration": 242
+        },
+        {
+          "start": 31262,
+          "duration": 365
+        },
+        {
+          "start": 31657.5,
+          "duration": 53
+        },
+        {
+          "start": 32382.30000000447,
+          "duration": 119
+        },
+        {
+          "start": 32598.5,
+          "duration": 146
+        },
+        {
+          "start": 33525.20000000298,
+          "duration": 109
+        },
+        {
+          "start": 33729.5,
+          "duration": 88
+        },
+        {
+          "start": 34083.60000000149,
+          "duration": 143
+        },
+        {
+          "start": 34382.10000000149,
+          "duration": 152
+        },
+        {
+          "start": 35169.90000000596,
+          "duration": 96
+        },
+        {
+          "start": 35416.10000000149,
+          "duration": 124
+        },
+        {
+          "start": 35564.80000000447,
+          "duration": 62
+        },
+        {
+          "start": 37600.5,
+          "duration": 70
+        },
+        {
+          "start": 41176.80000000447,
+          "duration": 453
+        },
+        {
+          "start": 41629.90000000596,
+          "duration": 128
+        },
+        {
+          "start": 43081.20000000298,
+          "duration": 98
+        },
+        {
+          "start": 47251.90000000596,
+          "duration": 52
+        },
+        {
+          "start": 47343.60000000149,
+          "duration": 61
+        },
+        {
+          "start": 48564.60000000149,
+          "duration": 50
+        }
+      ],
+      "scene": "true",
+      "hand": 3,
+      "heap": 23907771,
+      "errors": [],
+      "failed": []
+    },
+    {
+      "modelDuplicates": [],
+      "version": "after",
+      "width": 390,
+      "homeMs": 9896,
+      "boardMs": 8678,
+      "warm": {
+        "models": [
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/board-low.glb?revision=recessed-rim-v3-20260929",
+            "bytes": 1350324
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/market-low.glb",
+            "bytes": 426824
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/supply-low.glb",
+            "bytes": 404764
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/deck-place-lod1.glb",
+            "bytes": 957684
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/shelf-lod1.glb",
+            "bytes": 1199104
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/mana-tray.glb",
+            "bytes": 123440
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/mana-counter.glb",
+            "bytes": 131788
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/mana-crystal-ready.glb",
+            "bytes": 41896
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/mana-crystal-spent.glb",
+            "bytes": 41892
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/crystal-optics.json",
+            "bytes": 6727
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/turn-button.glb",
+            "bytes": 347068
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/timer-inserts.glb",
+            "bytes": 90936
+          },
+          {
+            "url": "http://127.0.0.1:53911/models/reading-board/v1/reroll-button.glb",
+            "bytes": 454340
+          }
+        ],
+        "heap": 15968106
+      },
+      "requests": 55,
+      "bytes": 15497274,
+      "largest": [
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/modular/base-mon.png",
+          "bytes": 1817892
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/shelf-case.png",
+          "bytes": 1654651
+        },
+        {
+          "url": "http://127.0.0.1:53911/music/poised-opening.mp3",
+          "bytes": 1485919
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/deck-5.png",
+          "bytes": 1409146
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/stat-cost.png",
+          "bytes": 1398002
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/button-idle.png",
+          "bytes": 1004990
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/portrait-opp.png",
+          "bytes": 692936
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/release/rift-purple07-idle16.png",
+          "bytes": 586297
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/biblion/refined/portrait-self.png",
+          "bytes": 584472
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/cards/Q_TOWN.webp?v=20260910-theme-identity-v3",
+          "bytes": 524700
+        },
+        {
+          "url": "http://127.0.0.1:53911/art/cards/QUICK_AID.webp?v=20260910-theme-identity-v3",
+          "bytes": 388870
+        },
+        {
+          "url": "http://127.0.0.1:53911/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+          "bytes": 380132
+        }
+      ],
+      "modelRequests": [
+        "http://127.0.0.1:53911/models/reading-board/v1/fonts/DejaVuSerif.ttf"
+      ],
+      "longTasks": [
+        {
+          "start": 23443.5,
+          "duration": 321
+        },
+        {
+          "start": 23972.80000000447,
+          "duration": 679
+        },
+        {
+          "start": 24668.20000000298,
+          "duration": 542
+        },
+        {
+          "start": 25244.20000000298,
+          "duration": 61
+        },
+        {
+          "start": 25438.5,
+          "duration": 255
+        },
+        {
+          "start": 25715.10000000149,
+          "duration": 172
+        },
+        {
+          "start": 28948.39999999851,
+          "duration": 51
+        },
+        {
+          "start": 31220.5,
+          "duration": 490
+        },
+        {
+          "start": 33164.70000000298,
+          "duration": 148
+        },
+        {
+          "start": 37346.70000000298,
+          "duration": 61
+        },
+        {
+          "start": 37454,
+          "duration": 64
+        },
+        {
+          "start": 40848.89999999851,
+          "duration": 273
+        },
+        {
+          "start": 41154.70000000298,
+          "duration": 57
+        },
+        {
+          "start": 41293.10000000149,
+          "duration": 52
+        },
+        {
+          "start": 41742.39999999851,
+          "duration": 124
+        }
+      ],
+      "scene": "true",
+      "hand": 3,
+      "heap": 64042520,
+      "errors": [],
+      "failed": []
+    }
+  ]
+}

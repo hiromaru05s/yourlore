@@ -1,3 +1,4 @@
+import {OPENING_PORTRAIT_URL} from './assets';
 import {npcPortrait} from "../../shared/botNpcs";
 import {resultScene,RESULT_TIMING} from './result';
 import {createOpeningCoin} from './coin';
@@ -16,7 +17,7 @@ let disposed=false;
 let portraits:HTMLImageElement[]=[];let gpu=true;const hot=document.createElement("canvas");hot.width=hot.height=640;const hg=hot.getContext("2d")!;
 const npcImages=new Map<string,HTMLImageElement>();
 async function loadAssets(avatars:readonly (string|null)[]=[]){
- portraits=await Promise.all([0,1].map(()=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src='/art/seekers/faceless-v2/portrait.webp';}))).catch(()=>[]);
+ portraits=await Promise.all([0,1].map(()=>new Promise<HTMLImageElement>((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=OPENING_PORTRAIT_URL;}))).catch(()=>[]);
  if(disposed)return false;
  await Promise.all([...new Set(avatars)].map(async avatar=>{
   const url=npcPortrait(avatar);if(!url||!avatar)return;

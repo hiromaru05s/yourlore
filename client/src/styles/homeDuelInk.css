@@ -1,0 +1,44 @@
+/* Approved image-generated study 01, 2026-10-15. The PNG owns the surface,
+   silver edge and eye. All three modes retain the existing launch handler. */
+.selected-menu.lounge-home .lounge-play-button {
+  width:230px;height:227px;aspect-ratio:230/227;min-height:0;max-width:100%;
+  position:relative;isolation:isolate;overflow:visible;padding:0;border:0;
+  border-radius:50%;background:none;box-shadow:none;filter:none;
+  transition:transform 130ms ease;
+}
+.selected-menu.lounge-home .lounge-play-button::before {
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:url('/art/lounge/duel-ink-v1/disc.png') center/114.1% 115.5% no-repeat;
+  border:0;border-radius:50%;box-shadow:none;opacity:1;
+  transition:transform 280ms cubic-bezier(.2,.75,.2,1),filter 240ms;
+}
+.selected-menu.lounge-home .lounge-play-button::after {content:none}
+.selected-menu.lounge-home .lounge-play-button > :is(small,strong,span) {z-index:1;position:absolute;left:50%;transform:translate(-50%,-50%);margin:0!important;line-height:1.25;text-align:center;width:max-content;max-width:88%}
+.selected-menu.lounge-home .lounge-play-button > small {top:36%;color:#aec2d0;letter-spacing:.24em}
+.selected-menu.lounge-home .lounge-play-button > strong {top:50%;font-size:25px!important;letter-spacing:.05em;text-shadow:0 1px 4px #0007}
+.selected-menu.lounge-home .lounge-play-button > span {top:64%;color:#b4c7d5;font-size:10px;letter-spacing:.1em}
+.selected-menu.lounge-home .lounge-play-button:hover,
+.selected-menu.lounge-home .lounge-play-button:focus-visible {background:none;filter:none;transform:none}
+.selected-menu.lounge-home .lounge-play-button:is(:hover,:focus-visible)::before {
+  transform:scale(1.035);filter:brightness(1.2) drop-shadow(0 0 7px #a1cde430);
+}
+.selected-menu.lounge-home .lounge-play-button:focus-visible {outline:2px solid #d1ecfa;outline-offset:6px}
+.selected-menu.lounge-home .lounge-play-button:active {transform:scale(.974);box-shadow:none;transition-duration:70ms}
+@media(max-height:700px) and (max-width:850px){
+  .selected-menu.lounge-home .lounge-play-button {width:210px;height:207px}
+  .selected-menu.lounge-home .lounge-play-button > strong {font-size:21px!important}
+}
+@media(max-width:360px){
+  .selected-menu.lounge-home .lounge-play-button {width:195px;height:192px}
+  .selected-menu.lounge-home .lounge-play-button > strong {font-size:20px!important}
+}
+@media(max-width:360px) and (max-height:650px){
+  .selected-menu.lounge-home .lounge-play-button {width:166px;height:164px}
+  .selected-menu.lounge-home .lounge-play-button > strong {font-size:18px!important}
+  .selected-menu.lounge-home .lounge-play-button > span {font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  .selected-menu.lounge-home .lounge-play-button,.selected-menu.lounge-home .lounge-play-button::before {transition:none}
+  .selected-menu.lounge-home .lounge-play-button:is(:hover,:focus-visible,:active),
+  .selected-menu.lounge-home .lounge-play-button:is(:hover,:focus-visible)::before {transform:none}
+}

@@ -1,0 +1,93 @@
+{
+  "revision": "material-emergence",
+  "method": "Codex browser UI and native accessibility controls",
+  "comparison": {
+    "cards": [
+      "POISON_MASTER",
+      "RUST_SLUG",
+      "RUST_SHROOM"
+    ],
+    "variantsPerCard": 4,
+    "sampleTimesMs": [
+      0,
+      640,
+      1100,
+      1400,
+      1700,
+      2400
+    ],
+    "screenshots": 18
+  },
+  "board": {
+    "beforeSummon": "target hidden and hand visible verified in DOM",
+    "peakConfirmed": [
+      "POISON_MASTER own variants 0-3",
+      "POISON_MASTER opponent variants 0-1"
+    ],
+    "peakTimeMs": 1350,
+    "screenshots": [
+      "board-before.png",
+      "board-master-自分側.png",
+      "board-master-相手側.png"
+    ]
+  },
+  "build": "passed; shared chunk size warning",
+  "typecheck": "passed before final board lifecycle edit; final lifecycle edit included in successful Vite build",
+  "console": "No errors observed through comparison review; pre-existing PCFSoftShadowMap deprecation warning from board",
+  "incomplete": [],
+  "reason": "Deferred preview checks completed after the second coordination hold was released.",
+  "resumed": {
+    "date": "2026-10-13",
+    "variantSideChecks": 24,
+    "normalSpeedLoops": {
+      "master": 2,
+      "slug": 2,
+      "shroom": 2
+    },
+    "completed": [
+      "both sides source/target visibility",
+      "before/after and reset lifecycle",
+      "all 12 variants on both sides",
+      "normal-speed loop boundaries for three cards",
+      "typecheck after lifecycle fix"
+    ],
+    "fixed": "arranging guard prevents reentrant draw during GameView.render; opponent source uses card-back element",
+    "evidence": [
+      "resumed-checks.json",
+      "live-master.json",
+      "live-slug.json",
+      "live-shroom.json"
+    ]
+  },
+  "final": {
+    "date": "2026-10-13",
+    "concurrent": "three distinct IDs, three visible overlays, all overlays hidden on reset",
+    "reduced": "flat card faces with material deformation suppressed, completion and reset checked",
+    "responsive": [
+      {
+        "scrollWidth": 312,
+        "width": 320
+      },
+      {
+        "scrollWidth": 382,
+        "width": 390
+      },
+      {
+        "scrollWidth": 836,
+        "width": 844
+      }
+    ],
+    "browserErrors": [],
+    "typecheck": "passed after final lifecycle changes",
+    "fixes": [
+      "redraw when document becomes visible",
+      "concurrent fixture always uses all three card IDs"
+    ],
+    "status": "local preview checks completed"
+  },
+  "limitations": [
+    "No target-device GPU benchmark or mobile FPS guarantee",
+    "No authenticated gameplay integration or visual approval",
+    "Latest production bundle predates the final two small lifecycle fixes; the checked preview uses current Vite source"
+  ]
+}

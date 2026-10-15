@@ -1,0 +1,116 @@
+{
+  "source": "c296c8fe55a7cd32e86cafbdf32088749959e985",
+  "deployment": {
+    "version": "a62fb117-f6a6-42dd-8e97-f5b41b4f04cb",
+    "traffic": 100,
+    "deployedAt": "2026-10-15T08:37:06.245375Z"
+  },
+  "validation": {
+    "typecheck": "passed",
+    "productionSuite": "165/165 passed",
+    "rewardScenarioGroups": 15,
+    "fixtureViewports": [
+      [
+        1280,
+        900
+      ],
+      [
+        1280,
+        720
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        568
+      ],
+      [
+        844,
+        390
+      ]
+    ]
+  },
+  "assetParity": {
+    "at": "2026-10-15T08:39:05.681Z",
+    "sha": "c296c8fe55a7cd32e86cafbdf32088749959e985",
+    "count": 99,
+    "failures": []
+  },
+  "liveApi": {
+    "at": "2026-10-15T08:39:00.756Z",
+    "checks": [
+      {
+        "label": "three daily replacements; fourth rejected",
+        "revision": 3
+      },
+      {
+        "label": "online win/loss and reconnect exact-once",
+        "amounts": [
+          10,
+          5
+        ],
+        "credited": [
+          10,
+          5
+        ]
+      },
+      {
+        "label": "ranked win/loss and reconnect exact-once",
+        "amounts": [
+          20,
+          10
+        ],
+        "credited": [
+          20,
+          10
+        ]
+      },
+      {
+        "label": "real BOT action completes daily; loss has no first-clear payout",
+        "dailyReward": 350,
+        "credits": 380,
+        "progress": 1
+      },
+      {
+        "label": "completed quest cannot grant a second daily",
+        "claimed": true
+      },
+      {
+        "label": "authenticated staging verification complete"
+      }
+    ]
+  },
+  "liveBot": {
+    "at": "2026-10-15T08:40:23.665Z",
+    "winner": 0,
+    "actions": 31,
+    "turns": 13,
+    "botFirstClear": true,
+    "creditDelta": 300
+  },
+  "liveBrowser": {
+    "checks": [
+      {
+        "width": 608,
+        "height": 900,
+        "scrollWidth": 608,
+        "viewportOverflow": false
+      },
+      {
+        "width": 364,
+        "height": 844,
+        "scrollWidth": 364,
+        "viewportOverflow": false
+      },
+      {
+        "width": 294,
+        "height": 568,
+        "scrollWidth": 294,
+        "viewportOverflow": false
+      }
+    ],
+    "errors": []
+  }
+}

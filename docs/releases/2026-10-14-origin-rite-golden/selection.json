@@ -1,0 +1,8 @@
+{
+  "selected": "01 黄光の一閃",
+  "sourceSha256": {
+    "client/src/dev/origin-rite-light-three/renderer.ts": "c2e73307b2217d1f8f369ced3873fbdb0163bfe7fac416ab78d21226f74e5517",
+    "client/src/dev/origin-rite-light-three/model.ts": "4163a30905d7fcc875f26d82613020fcbc251d06e3af777e4b307fd852d44666",
+    "docs/vfx-prototypes/2026-10-14-origin-rite-light-three/manifest.json": "94c4aa401506407925b0b78302ca408b9fd31dda47a8c077d74629454e1d9dd1"
+  }
+}

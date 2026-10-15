@@ -1,5 +1,4 @@
-import {openSeekerPicker} from '../ui/seekerPicker';
-import {seekerName} from '../ui/seekerLabels';
+import { seekerLevel } from '../shared/progression';
 import {renderQuality,setRenderQuality} from '../ui/renderDensity';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
@@ -7,7 +6,7 @@ import { confirmDialog } from "../ui/modal";
 // ============================================================
 // LORE — profile screen. For the signed-in user it's TABBED:
 //   · 프로필  — avatar / rename / badges / record / recent matches
-//   · 설정    — SFX volume / privacy / coupon / billing / language / logout
+//   · 설정    — SFX volume / privacy / coupon / Shards / language / logout
 // Viewing ANOTHER player's profile shows the overview only (read-only,
 // honoring their stats_public setting).
 // ============================================================
@@ -35,7 +34,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   app.root.appendChild(wrap);
 
   let dead = false;
-  let closeCharacterPicker: (()=>void) | undefined;
   let cached: Profile | null = null;
   let tab: Tab = initialTab ?? "overview";
   let recFilter: RecFilter = "ranked";
@@ -92,6 +90,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   // TAB: overview
   // ============================================================
   const renderOverview = (p: Profile): void => {
+    const experience=seekerLevel(app.user?.exp??0);
     const modeLabel = (m: string) => m === "ranked" ? t("mode.ranked") : m === "bot" ? t("mode.bot") : t("mode.online");
     const resLabel = (r: string) => r === "win" ? t("modal.win") : r === "draw" ? t("modal.draw") : t("modal.lose");
     // Never substitute mixed lifetime totals for a selected match mode.
@@ -105,7 +104,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     body().innerHTML = `
       <section class="tut-sec pf-card">
         <div class="pf-head">
-          <button class="pf-ava" id="avaBtn" ${p.self ? "" : "disabled"}>${avatarHtml(p.avatar, p.display, 72)}${p.self ? `<span class="pf-ava-edit">${homeIcon("edit")}</span>` : ""}</button>
+          <div class="pf-ava">${avatarHtml(p.avatar, p.display, 72)}</div>
           <div class="pf-id">
             <div class="pf-name-row">
               <span class="pf-name" id="pfName">${esc(p.display)}</span>
@@ -119,6 +118,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
           <button class="btn btn-gold" id="renameSave">${t("common.confirm")}</button>
         </div>
       </section>
+      ${p.self ? `<details class="tut-sec pf-experience"><summary>${t('home.seekerLevel')} ${experience.level} · ${experience.max?'MAX':`${experience.progress}/100 EXP`}</summary><p>${t('home.levelRule')}</p></details>` : ''}
       ${p.private ? `<section class="tut-sec"><p>${t("profile.private")}</p></section>` : `
       <section class="tut-sec">
         <div class="pf-stats-head">
@@ -166,8 +166,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       save.onclick=async()=>{save.disabled=true;try{const r=await api.updateMe({display:input.value.trim()});if(app.user)app.user.display=r.display;ov.remove();document.dispatchEvent(new Event("lore:user"));if(!dead)void load();}catch(e){ov.querySelector("#renameError")!.textContent=(e as Error).message;save.disabled=false;}};
     });
 
-    // ---- avatar picker ----
-    (body().querySelector("#avaBtn") as HTMLElement | null)?.addEventListener("click", () => openAvatarPicker(p));
   };
 
   // ============================================================
@@ -242,14 +240,8 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <div class="fr-add-msg" id="couponMsg"></div>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">${homeIcon("shard")}</span>${t("settings.billing")}</h3>
+        <h3><span class="tut-ico">${homeIcon("shard")}</span>${t("home.shards")}</h3>
         <div class="set-row"><span class="set-label">${t("home.shards")}</span><span class="set-val">${homeIcon("shard")} <b id="credits">${credits}</b></span></div>
-        <div class="set-row"><span class="set-label">${t("settings.billing.sub")}</span><span class="set-val">${t("settings.billing.none")}</span></div>
-        <div class="bill-plan">
-          <div class="bill-plan-name">LORE PREMIUM</div>
-
-          <button class="btn btn-primary btn-block" disabled>${t("settings.billing.soon")}</button>
-        </div>
       </section>
       <section class="tut-sec">
         <h3><span class="tut-ico">${homeIcon("profile")}</span>${t("settings.account")}</h3>
@@ -258,11 +250,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         </div>
       </section>`;
 
-    const characterSection=document.createElement('section');
-    characterSection.className='tut-sec';
-    characterSection.innerHTML=`<h3>${loungeText('キャラクター','Character','캐릭터')}</h3><div class="set-row">${avatarHtml(p.avatar,p.display,64)}<span class="set-label">${seekerName(p.avatar??'SEEKER_BLUE')}</span><button type="button" class="btn btn-ghost" data-character-settings>${loungeText('変更する','Change','변경')}</button></div>`;
-    body().prepend(characterSection);
-    characterSection.querySelector<HTMLButtonElement>('button')!.onclick=()=>openAvatarPicker(p);
     const qualitySection=document.createElement('section');qualitySection.className='tut-sec';qualitySection.innerHTML=`<h3>${loungeText('描画品質','Graphics','그래픽')}</h3><div class="set-row"><label class="set-label" for="renderQuality">${loungeText('盤面の精細さ','Board detail','보드 선명도')}</label><select id="renderQuality"><option value="balanced">${loungeText('高精細（推奨）','Crisp (recommended)','고해상도 (권장)')}</option><option value="economy">${loungeText('軽量','Economy','경량')}</option></select></div><p class="set-desc">${loungeText('この端末に保存し、次の対戦から適用します。','Saved on this device. Applies to the next match.','이 기기에 저장되며 다음 대전부터 적용됩니다.')}</p>`;body().children[0].after(qualitySection);const quality=qualitySection.querySelector<HTMLSelectElement>('select')!;quality.value=renderQuality();quality.onchange=()=>setRenderQuality(quality.value);
     // volume
     const vol = body().querySelector("#vol") as HTMLInputElement;
@@ -307,22 +294,10 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     };
   };
 
-  // ---- avatar picker (shared) ----
-  const openAvatarPicker = (p: Profile): void => {
-    closeCharacterPicker?.();
-    closeCharacterPicker = openSeekerPicker(p.avatar, async id => {
-      await api.updateMe({avatar:id});
-      if(app.user)app.user.avatar=id;
-      document.dispatchEvent(new Event('lore:user'));
-      sfx('pop');
-      if(!dead){await load();wrap.querySelector<HTMLButtonElement>(tab==='settings'?'[data-character-settings]':'#avaBtn')?.focus();}
-    });
-  };
-
   build();
   void load();
   const unsub = onLangChange(() => { build(); renderTab(); });
-  return { destroy: () => { dead = true; closeCharacterPicker?.(); unsub(); } };
+  return { destroy: () => { dead = true; unsub(); } };
 }
 
 /** Read-only profile popup (used from the friends list). */

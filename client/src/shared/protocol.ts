@@ -1,3 +1,4 @@
+import type { ExperienceReceipt } from './progression';
 // ============================================================
 // LORE — WebSocket protocol shared by client and server.
 // The server is authoritative: clients send Actions, receive
@@ -27,12 +28,14 @@ export type GameClientMsg =
   | { type: "ping" };
 
 export type GameServerMsg =
+  | { type: "rewardsSettled" }
   | { type: "init"; you: Side; state: GameState; events: GameEvent[] }
   | { type: "update"; state: GameState; events: GameEvent[] }
   | { type: "opponentLeft" }
   | { type: "oppConn"; connected: boolean; deadline?: number } // opponent dropped / came back; deadline = epoch ms when the forfeit fires
   | { type: "voided"; message?: string }    // match cancelled (opponent never joined) — no rank change
   | { type: "preview"; until: number | null; market: CardInst[] } // ranked pre-game: study the fixed market (until=null → waiting for opponent)
+  | ({ type: "experienceResult" } & ExperienceReceipt)
   | ({ type: "rankResult" } & RankChange) // ranked game settled — this player's MMR before/after
   | { type: "error"; message: string }
   | { type: "pong" };

@@ -5,7 +5,7 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import assert from 'node:assert/strict';
 const run=promisify(execFile),origin='https://test.yourlore.xyz';
-const dist=process.env.TUTORIAL_RELEASE_DIST,out='docs/releases/2026-10-13-tutorial/staging';
+const dist=process.env.TUTORIAL_RELEASE_DIST,out=process.env.TUTORIAL_QA_OUT||'docs/releases/2026-10-15-tutorial-curriculum/staging';
 assert(dist,'Set TUTORIAL_RELEASE_DIST to the preserved deploy-guard build');
 await fs.mkdir(out,{recursive:true});
 const source=JSON.parse(await fs.readFile(dist+'/source.json','utf8'));

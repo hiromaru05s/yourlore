@@ -1,3 +1,6 @@
+import { noticeModal } from './ui/modal';
+import { getLang } from './i18n';
+import {releaseHomeSpirit} from './ui/homeSpirit';
 import { loungeText } from './ui/loungeText';
 import { mountTutorialWelcome } from './screens/tutorialWelcome';
 import {coverScreen,isMenuReady,imageUrls,hasUnloadedAssets} from './ui/assetReadiness';
@@ -17,7 +20,7 @@ import { saveActiveGame, loadActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
-import { mountGame } from "./screens/lazyGame";
+import { mountGame, warmGame } from "./screens/lazyGame";
 import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
@@ -114,7 +117,7 @@ export class App {
         const entrance=page==='home'&&!this.homeEntranceShown;
         const assets=imageUrls(this.root);
         if(page==='login'||!isMenuReady()||entrance||hasUnloadedAssets(assets)){
-          const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets);this.cancelCover=cover.cancel;
+          const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets,()=>warmGame());this.cancelCover=cover.cancel;
           void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;if(ready)checkGraphics();});
         } else checkGraphics();
       }
@@ -145,7 +148,16 @@ export class App {
   tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this), "tutorial"); }
   tutorialGame(lesson = 0): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial", lesson })); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this), "cards"); }
-  botGame(difficulty: BotDifficulty = "hard"): void { setPresence("bot"); aCapture("game_start", { mode: "bot", difficulty }); this.swap(() => mountGame(this, { mode: "bot", difficulty })); }
+  private startingBot=false;
+  botGame(difficulty: BotDifficulty = "hard"): void {
+    const live=loadActiveGame();if(live)return this.onlineGame(live.roomId,live.you,'?',null,!!live.ranked);
+    if(!this.user || this.user.id==='local-guest-user'){setPresence('bot');this.swap(()=>mountGame(this,{mode:'bot',difficulty}));return;}
+    if(this.startingBot)return;this.startingBot=true;
+    const account=this.user.id;
+    void api.startBot(difficulty,getLang()).then(r=>{if(this.user?.id===account)this.onlineGame(r.roomId,r.you,r.oppName,r.oppAvatar,false,difficulty);})
+      .catch(error=>noticeModal(loungeText('対戦を開始できませんでした','Could not start duel','대전을 시작하지 못했습니다'),String(error.message),loungeText('閉じる','Close','닫기'),()=>{}))
+      .finally(()=>{this.startingBot=false;});
+  }
   // entering a lobby with a live game still stored → rejoin it instead of re-queuing
   onlineLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this), "lobby"); }
   rankedLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this, true), "lobby"); }
@@ -155,11 +167,11 @@ export class App {
   settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
   shop(): void { setPresence("menu"); this.swap(() => mountShop(this), "shop"); }
   deck(): void { setPresence("menu"); this.swap(() => mountDeck(this), "deck"); }
-  onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false): void {
+  onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false, difficulty?: BotDifficulty): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });
     saveActiveGame(roomId, you, ranked); // remember it so a crash/close can rejoin this exact room
-    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar, ranked }));
+    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar, ranked, difficulty }));
   }
 
   async logout(): Promise<void> {
@@ -168,6 +180,7 @@ export class App {
     aReset();
     stopPresence();
     this.user = null;
+    releaseHomeSpirit(this);
     this.login();
   }
 }

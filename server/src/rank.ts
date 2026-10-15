@@ -11,7 +11,7 @@
 // ============================================================
 import type { Env, SessionUser } from "./env";
 import { corsHeaders } from "./auth";
-import { markInviteEarned } from "./invite";
+import { inviteRewardStatements } from "./invite";
 
 import { TIERS, START_MMR, tierOf, tierWithGm, calculateRating, type RankChange } from "../../client/src/shared/rank";
 export { TIERS, tierOf, tierWithGm, calculateRating } from "../../client/src/shared/rank";
@@ -81,13 +81,12 @@ export async function settleRanked(env: Env, matchId: string, aId: string, bId: 
         .bind(an,winner===aId?1:0,winner===bId?1:0,an,stamp,aId,season,matchId),
       env.DB.prepare(`UPDATE ratings SET mmr=?, wins=wins+?, losses=losses+?, peak_mmr=MAX(peak_mmr,?), updated_at=? WHERE user_id=? AND season=? AND ${gate}`)
         .bind(bn,winner===bId?1:0,winner===aId?1:0,bn,stamp,bId,season,matchId),
+      ...(an>=1150 ? inviteRewardStatements(env,aId,matchId,endedAt) : []),
+      ...(bn>=1150 ? inviteRewardStatements(env,bId,matchId,endedAt) : []),
       env.DB.prepare(`UPDATE ranked_results SET a_rank_after=${standingSql}, b_rank_after=${standingSql}, applied=1 WHERE match_id=? AND applied=0`).bind(season,aId,season,bId,matchId),
     ]);
     const result = await env.DB.prepare(`SELECT * FROM ranked_results WHERE match_id = ? AND applied = 1`).bind(matchId).first<Settlement>();
     if (!result) continue;
-    for (const [uid,change] of Object.entries(outcomeOf(result))) {
-      if (change.after >= 1150 && change.before < 1150) await markInviteEarned(env,uid).catch(() => {});
-    }
     return outcomeOf(result);
   }
   throw new Error("Concurrent ranked settlement; retry required");

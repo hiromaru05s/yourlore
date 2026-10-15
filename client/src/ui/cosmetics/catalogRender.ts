@@ -10,10 +10,12 @@ import {FURNITURE_LIST} from '../../shared/cosmetics';
 import {themeFromUrl} from '../../shared/atelierThemes';
 
 let pending:Promise<Map<string,string>>|undefined;
+let prepared:Map<string,string>|undefined;
+export const preparedFurnitureCatalog=()=>prepared;
 /** One short-lived renderer for the whole catalog, never a WebGL context per tile.
  * These are views of the equipped GLBs, not pictures of their texture maps. */
 export function furnitureCatalog():Promise<Map<string,string>> {
-  return pending??=renderCatalog().catch(error=>{pending=undefined;throw error;});
+  return pending??=renderCatalog().then(images=>{prepared=images;return images;}).catch(error=>{pending=undefined;throw error;});
 }
 async function renderCatalog():Promise<Map<string,string>> {
   const renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});

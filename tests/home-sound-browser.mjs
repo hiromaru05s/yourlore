@@ -41,10 +41,11 @@ try {
     await page.waitForTimeout(250);
     const bounds = await page.evaluate(() => {
       const rect = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return { x:r.x, y:r.y, right:r.right, bottom:r.bottom, height:r.height }; };
-      return { bar:rect('.home-sound'), profile:rect('[data-profile]'), mode:rect('.lounge-mode-tabs') };
+      return { bar:rect('.home-sound'), profile:rect('[data-profile]'), mode:rect('.lounge-mode-tabs'), upper:['.lounge-brand','.lounge-balance','.lounge-menu'].map(rect) };
     });
-    assert(bounds.bar.y >= bounds.profile.bottom - 1);
+    assert(bounds.bar.y >= bounds.profile.bottom + 23, 'sound leaves room below profile and its outlined avatar: '+JSON.stringify(bounds));
     assert(bounds.bar.right <= width && bounds.bar.x >= 0);
+    for (const upper of bounds.upper) assert(bounds.bar.y >= upper.bottom + 7 || bounds.bar.right <= upper.x || bounds.bar.x >= upper.right, 'sound clears every upper control: '+JSON.stringify(bounds));
     assert(bounds.bar.bottom <= bounds.mode.y || bounds.bar.right <= bounds.mode.x, 'sound must not overlap duel tabs: '+JSON.stringify(bounds));
     for (const selector of ['.home-sound-toggle','.home-sound-range']) {
       assert(await page.locator(selector).evaluate(el => { const r=el.getBoundingClientRect(); return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)); }), selector+' receives pointer');

@@ -1210,7 +1210,7 @@ DB.WORLD_CARE = { id: "WORLD_CARE", t: "spell", cost: 0, ench: "worldCare", val:
 // ---- 초기 덱 빌딩 풀: 컬/보물상자 + noShop 스타팅 카드 (어튠은 1장 고정으로 별도) ----
 export const DECK_POOL: string[] = ["STARTER_TRASH", "STARTER_CHEST", ...NEW_CARDS10.map((c) => c.id), ...NEW_STARTERS11.map((c) => c.id), ...NEW_STARTERS15.map((c) => c.id)];
 export const DECK_SIZE = 8; // 어튠 제외 자유 슬롯
-export const DECK_MAX_COPIES = 8; // 카드별 보유량 = 8장씩
+export const DECK_MAX_COPIES = 8; // per-card limit; actual ownership comes from the starter collection
 export const DEFAULT_DECK_8: string[] = [...Array<string>(6).fill("STARTER_TRASH"), "STARTER_CHEST", "STARTER_CHEST"];
 /** 저장된 덱을 유효한 8장으로 정규화 (서버/클라 공용 — 불량 입력은 컬로 패딩). */
 export function sanitizeDeck(ids: unknown): string[] {

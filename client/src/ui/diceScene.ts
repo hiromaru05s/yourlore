@@ -46,7 +46,15 @@ export function createDie(map:T.Texture|null,casino=false):T.Group {
   }
   return die;
 }
-export interface DiceScene { finished:Promise<void>; dispose:()=>void; }
+/** Optional retained-stage controls. Ordinary rolls still finish and dispose as before. */
+export interface DiceStage {
+  scene:T.Scene; camera:T.PerspectiveCamera; dice:T.Group[]; entryDistance:number;
+  draw:()=>void; warm:()=>Promise<void>; signal:AbortSignal;
+}
+export interface DiceScene {
+  finished:Promise<void>; dispose:()=>void;
+  replay:(rolls:number[],prepare?:(stage:DiceStage)=>Promise<void>)=>Promise<void>;
+}
 export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:boolean,signal:AbortSignal):Promise<DiceScene|null> {
   if(signal.aborted||typeof WebGL2RenderingContext==='undefined')return null;
   let renderer:T.WebGLRenderer;
@@ -61,8 +69,9 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
   let texture:T.Texture|null=null,environment:T.WebGLRenderTarget|null=null,dead=false,frame=0;
   const scene=new T.Scene();let resolveFinished=()=>{};
   const finished=new Promise<void>(r=>{resolveFinished=r;});
+  let resolveReplay=()=>{},replaying=false;
   function dispose(){
-    if(dead)return;dead=true;cancelAnimationFrame(frame);resolveFinished();signal.removeEventListener('abort',dispose);canvas.removeEventListener('webglcontextlost',lost);
+    if(dead)return;dead=true;cancelAnimationFrame(frame);resolveFinished();resolveReplay();signal.removeEventListener('abort',dispose);canvas.removeEventListener('webglcontextlost',lost);
     const geo=new Set<T.BufferGeometry>(),mats=new Set<T.Material>();
     scene.traverse(o=>{if(o instanceof T.DirectionalLight)o.shadow.dispose();if(o instanceof T.Mesh){geo.add(o.geometry);(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>mats.add(m));}});
     geo.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());texture?.dispose();groundMap?.dispose();environment?.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();host.classList.remove('d3-gpu');
@@ -110,7 +119,7 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
     const warm=new T.WebGLRenderTarget(32,32);renderer.setRenderTarget(warm);
     try{renderer.render(scene,camera);}finally{renderer.setRenderTarget(null);warm.dispose();}
     sfx('diceRoll',{signal});
-    const start=performance.now(),vw=innerWidth,vh=innerHeight;
+    let start=performance.now();const vw=innerWidth,vh=innerHeight;
     const halfView=distance*Math.tan(Math.PI/12)*camera.aspect;
     const tick=(now:number)=>{
       if(dead)return;
@@ -125,8 +134,23 @@ export async function mountDiceScene(host:HTMLElement,rolls:number[],casino:bool
         shadow.position.x=die.position.x;shadow.position.z=die.position.z;shadow.scale.setScalar(.64+pose.lift*.6);shadow.material.opacity=.62/(1+pose.lift*2.5);
       });
       try{renderer.render(scene,camera);}catch{dispose();return;}
-      if(settled){host.dataset.settled=rolls.join(',');resolveFinished();}else frame=requestAnimationFrame(tick);
+      if(settled){host.dataset.settled=dice.map(d=>d.value).join(',');resolveFinished();resolveReplay();}else frame=requestAnimationFrame(tick);
     };frame=requestAnimationFrame(tick);
-    return {finished,dispose};
+    const stage:DiceStage={scene,camera,entryDistance:halfView+1.6,dice:dice.map(d=>d.die),signal,warm:async()=>{
+      if(dead)return;let timer:ReturnType<typeof setTimeout>|undefined;
+      try{await Promise.race([renderer.compileAsync(scene,camera),new Promise<void>(r=>{timer=setTimeout(r,800);})]);}finally{clearTimeout(timer);}
+    },draw:()=>{if(dead)return;dice.forEach(({die,shadow})=>{shadow.position.x=die.position.x;shadow.position.z=die.position.z;shadow.material.opacity=.5/(1+Math.max(0,die.position.y-.5)*2);});renderer.render(scene,camera);}};
+    async function replay(values:number[],prepare?:(stage:DiceStage)=>Promise<void>){
+      if(dead||replaying||values.length!==dice.length||values.some(v=>!Number.isInteger(v)||v<1||v>6))return;
+      replaying=true;
+      try{
+        await finished;if(dead)return;
+        if(prepare)await prepare(stage);if(dead||signal.aborted)return;
+        const done=new Promise<void>(r=>{resolveReplay=r;});
+        dice.forEach((d,i)=>{d.value=values[i];d.die.visible=true;d.die.scale.setScalar(1);});
+        delete host.dataset.settled;start=performance.now();sfx('diceRoll',{signal});frame=requestAnimationFrame(tick);await done;
+      }finally{replaying=false;}
+    }
+    return {finished,dispose,replay};
   }catch{clearTimeout(timeout);dispose();return null;}
 }

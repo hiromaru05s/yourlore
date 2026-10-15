@@ -1,3 +1,4 @@
+import {rewardTestEnv} from './fixtures/rewardTestEnv.mjs';
 import assert from 'node:assert/strict';import {build} from 'esbuild';import {mkdtemp,rm,writeFile,mkdir} from 'node:fs/promises';import path from 'node:path';
 const dir=await mkdtemp('/tmp/lore-dew-room-');
 try{
@@ -5,14 +6,14 @@ try{
  const {GameRoom,createGame,DB}=await import(dir+'/room.mjs');let now=2_000_000;const realNow=Date.now;Date.now=()=>now;let saved;
  class Socket{messages=[];constructor(side){this.side=side;}deserializeAttachment(){return {side:this.side,gen:0};}send(x){this.messages.push(JSON.parse(x));}close(){}}
  const sockets=[new Socket(0),new Socket(1)];const state={storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v);},setAlarm:async()=>{},deleteAlarm:async()=>{}},getWebSockets:tag=>sockets.filter(s=>String(s.side)===tag)};
- const room=new GameRoom(state,{});await room.fetch(new Request('https://local/setup',{method:'POST',body:JSON.stringify({seed:22,ranked:false,players:[{id:'a',name:'A'},{id:'b',name:'B'}]})}));
+ const room=new GameRoom(state,rewardTestEnv());await room.fetch(new Request('https://local/setup',{method:'POST',body:JSON.stringify({seed:22,ranked:false,players:[{id:'a',name:'A'},{id:'b',name:'B'}]})}));
  const send=(r,side,action)=>r.webSocketMessage(sockets[side],JSON.stringify({type:'action',action}));
  await room.webSocketMessage(sockets[0],JSON.stringify({type:'ready'}));await room.webSocketMessage(sockets[1],JSON.stringify({type:'ready'}));
  let seq=0;const card=id=>({...DB[id],uid:'room-'+(++seq)});const mon=id=>({...card(id),dmg:0,exhausted:false,atkMod:0,defMod:0,tempAtk:0,summonedTurn:0});
  const g=createGame({mode:'online',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.pending=null;for(const p of g.players)Object.assign(p,{hand:[],deck:[],field:[],enchants:[],traps:[],quests:[],dew:5,shield:12,hp:100,mana:30,maxMana:30});
  g.players[0].field=[mon('M1'),mon('WORLD_TREE')];g.players[1].field=[mon('M2'),mon('WORLD_TREE')];g.players[1].field[0].def=30;const a=g.players[0].field[0].uid,t=g.players[1].field[0].uid;room.room.game=g;
  await send(room,0,{type:'attack',uid:a});await send(room,0,{type:'pick',uid:t});assert.equal(room.room.game.pending.reason,'WORLD_TREE_ATTACK');await send(room,0,{type:'pick',uid:'grow'});assert.equal(room.room.game.pending.owner,1);await send(room,0,{type:'pick',uid:'grow'});assert.equal(room.room.game.pending.reason,'WORLD_TREE_DEFEND','attacker cannot answer defender choice');
- const restored=new GameRoom(state,{});await restored.webSocketMessage(sockets[1],JSON.stringify({type:'ready'}));assert.equal(restored.room.game.pending.reason,'WORLD_TREE_DEFEND');await send(restored,1,{type:'pick',uid:'grow'});assert.equal(restored.room.game.pending,null);assert.equal(restored.room.game.players[1].field[0].defMod,3);assert.equal(restored.room.game.players[0].field[0].attacksUsed,1);
+ const restored=new GameRoom(state,rewardTestEnv());await restored.webSocketMessage(sockets[1],JSON.stringify({type:'ready'}));assert.equal(restored.room.game.pending.reason,'WORLD_TREE_DEFEND');await send(restored,1,{type:'pick',uid:'grow'});assert.equal(restored.room.game.pending,null);assert.equal(restored.room.game.players[1].field[0].defMod,3);assert.equal(restored.room.game.players[0].field[0].attacksUsed,1);
  // Hand information is revealed to the effect owner only, then hidden again.
  restored.room.game.players[0].dew=10;restored.room.game.players[0].hand=[card('HIGH_ELF')];restored.room.game.players[1].hand=[card('M1'),card('M2')];await send(restored,0,{type:'play',idx:0});assert.equal(restored.room.game.pending.reason,'HIGH_ELF_HAND');assert.equal(sockets[0].messages.at(-1).state.players[1].hand[0].id,'M1');assert.equal(sockets[1].messages.at(-1).state.players[0].hand.length,0);await send(restored,1,{type:'pick',uid:'done'});assert.equal(restored.room.game.pending.reason,'HIGH_ELF_HAND');await send(restored,0,{type:'pick',uid:'done'});assert.equal(sockets[0].messages.at(-1).state.players[1].hand[0].id,'HIDDEN');
  // Timeout safely declines optional growth instead of spending the defending player's Dew.

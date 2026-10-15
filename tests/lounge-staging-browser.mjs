@@ -20,7 +20,7 @@ try{
  for(const [key,selector] of [['deck','#deckCur .card'],['cards','#grid .card'],['friends','.friends-page'],['leaderboard','.lb-row'],['shop','.shop-empty'],['tutorial','.tut-steps']]){
   await nav(key);if(key!=='friends')await page.waitForSelector(selector);await shot(key);
  }
- await page.locator('[data-profile]').click();await page.waitForSelector('#avaBtn');await shot('profile');await page.locator('[data-tab="settings"]').click();await shot('settings');
+ await page.locator('[data-profile]').click();await page.waitForSelector('.pf-ava');await shot('profile');await page.locator('[data-tab="settings"]').click();await shot('settings');
  await page.setViewportSize({width:390,height:844});await nav('home');await shot('mobile-home');await nav('deck');await page.waitForSelector('#deckCur .card');await shot('mobile-deck');await nav('cards');await page.waitForSelector('#grid .card');await shot('mobile-cards');
  await context.clearCookies();await page.setViewportSize({width:1586,height:992});await page.reload();await page.waitForSelector('.lounge-login');await shot('login');
  assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);

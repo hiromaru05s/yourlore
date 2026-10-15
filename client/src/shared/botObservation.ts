@@ -82,6 +82,9 @@ export function observationSample(g: GameState, side: Side, sample: number): Gam
   op.supplyHist = [];
   delete op.botTune;
   st.rng = (Math.floor(rnd() * 4294967296) || 1) >>> 0;
-  if (st._wheelSnap) st._wheelSnap.state = observationSample(st._wheelSnap.state as GameState, side, sample + 1009);
+  if (st._wheelSnap) {
+    st._wheelSnap.state = observationSample(st._wheelSnap.state as GameState, side, sample + 1009);
+    if(st._wheelSnap.resolved) st._wheelSnap.resolved.state = observationSample(st._wheelSnap.resolved.state as GameState, side, sample + 1013);
+  }
   return st;
 }

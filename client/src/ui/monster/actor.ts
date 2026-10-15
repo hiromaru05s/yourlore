@@ -30,6 +30,7 @@ export class Actor{
     if(img.src.includes('/art/cards-')){img.removeAttribute('srcset');img.removeAttribute('sizes');img.src=img.src.replace('/art/cards-xs/','/art/cards-sm/');}
    }
   }
+  this.el.querySelectorAll('.anesthesia-status').forEach(n=>n.remove());
   this.frame=this.el.querySelector('.card-frame');this.art=this.el.querySelector('.card-art');this.badges=new Map();
   for(const key of ['atk','def']){const badge=this.el.querySelector<HTMLElement>('.ad-'+key),value=badge?.querySelector<HTMLElement>('.seal-value');if(badge&&value)this.badges.set(key,{badge,value});}
   this.surface=document.createElement('canvas');this.surface.width=this.surface.height=1;this.surface.className='stat-surface';this.surface.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none';this.el.append(this.surface);

@@ -1,0 +1,18 @@
+.starter-shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px 14px}
+.starter-shop-item{display:flex;align-items:center;flex-direction:column;gap:9px;min-width:0}
+.starter-shop-face{display:flex;justify-content:center;width:100%;padding:0;border:0;background:none;cursor:pointer;color:inherit}
+.starter-shop-face .card{width:154px;flex-shrink:0;pointer-events:none}
+.starter-shop-item>span{font-size:12px;color:#cbd8e5}
+.starter-shop-item>.btn{font-size:12px;min-height:44px;width:100%;white-space:normal}
+.starter-shop-item button:focus-visible{outline:2px solid #b3ddff;outline-offset:3px}
+.shop-categories{flex-wrap:wrap}
+.gacha-page button:disabled{opacity:.45;cursor:default}
+.gacha-editions button{flex:1;min-width:0;width:auto;padding:10px 14px}
+.gacha-editions b{overflow-wrap:anywhere;font-size:13px}
+#collectionNotice:empty{display:none}
+#collectionNotice{font-size:13px;color:#d8dfeb}
+#collectionRecovery[hidden]{display:none}
+.gacha-dialog-body table{table-layout:fixed;width:100%;overflow-wrap:anywhere}
+.gacha-dialog-body th,.gacha-dialog-body td{white-space:normal}
+.gacha-lineup article img{object-fit:contain}
+@media(max-width:600px){.starter-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 8px}.starter-shop-face .card{width:min(154px,100%)}.gacha-editions{gap:6px}.gacha-editions button{padding:8px}.gacha-editions b{font-size:11px}.gacha-editions small{font-size:8px}.gacha-copy h2{white-space:normal!important}.gacha-guarantee{font-size:11px}.gacha-dialog-body th,.gacha-dialog-body td{padding:8px 4px}}

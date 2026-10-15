@@ -1,6 +1,6 @@
 import {READING_ASSETS} from './readingBoardLayout';
 import * as T from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {loadReadingModel} from './readingModel';
 export type FurnitureKind='deck'|'shelf'|'market'|'supply';
 /** Cached GLBs own textures; scene instances own their cloned meshes/materials. */
 export function loadLibraryAssets(onReady:()=>void, kinds:readonly FurnitureKind[]=['deck','shelf','market','supply']) {
@@ -13,7 +13,7 @@ export function loadLibraryAssets(onReady:()=>void, kinds:readonly FurnitureKind
     geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());const bitmaps=new Set<ImageBitmap>();
     maps.forEach(m=>{if(typeof ImageBitmap!=='undefined'&&m.image instanceof ImageBitmap)bitmaps.add(m.image);m.dispose();});bitmaps.forEach(b=>b.close());
   }
-  for(const kind of kinds)void new GLTFLoader().loadAsync(paths[kind]).then(g=>{
+  for(const kind of kinds)void loadReadingModel(paths[kind]).then(g=>{
     if(dead){release(g.scene);return;}cache.set(kind,g.scene);revision++;onReady();
   }).catch(()=>{/* Keep the existing usable furniture fallback. */}).finally(()=>{pending--;onReady();});
   return {

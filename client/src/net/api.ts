@@ -1,4 +1,7 @@
-import type { Action } from '../shared/types';
+import type {GiftInbox,GiftClaim} from '../shared/gifts';
+import type { ClearDifficulty, ExperienceReceipt } from '../shared/progression';
+import type {CollectionState,CollectionResult,CollectionReceipt} from '../shared/collection';
+import type { TutorialAction } from '../shared/tutorialLesson';
 import type { LessonId } from '../shared/tutorialSteps';
 import type { RankChange } from "../shared/rank";
 import type {DeckStore} from '../shared/cards';
@@ -16,7 +19,10 @@ export interface User {
   display: string;
   wins: number;
   losses: number;
+  exp?: number;
+  botClears?: string[];
   credits: number;
+  starterCards?: Record<string,number>;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
   furniture?: string | null;
@@ -31,7 +37,7 @@ export interface ClaimResult {
   credits: number; // fresh balance
 }
 
-export interface ApiError extends Error { needVerify?: boolean }
+export interface ApiError extends Error { needVerify?: boolean; status?:number }
 
 async function call<T>(path: string, body?: unknown, method = "POST", signal?: AbortSignal): Promise<T> {
   const controller=new AbortController();
@@ -48,6 +54,7 @@ async function call<T>(path: string, body?: unknown, method = "POST", signal?: A
   const data = (await res.json().catch(error => {if(controller.signal.aborted)throw error;return {};})) as { error?: string; needVerify?: boolean } & T;
   if (!res.ok) {
     const err = new Error(data?.error ? localizeServerMsg(data.error) : t("api.fail").replace("{n}", String(res.status))) as ApiError;
+    err.status=res.status;
     err.needVerify = !!data?.needVerify;
     throw err;
   }
@@ -82,6 +89,17 @@ function acquisition(): { ref?: string; source?: string } {
 }
 
 export const api = {
+  gifts: (signal?:AbortSignal) => call<GiftInbox>('/gifts',undefined,'GET',signal),
+  readGift: (id:string) => call<{ok:true}>('/gifts/read',{id}),
+  claimGifts: (id?:string) => call<GiftClaim>('/gifts/claim',id?{id}:{all:true}),
+  collection: () => call<CollectionState>("/collection",undefined,"GET"),
+  collectionHistory: () => call<{receipts:CollectionReceipt[]}>("/collection/history",undefined,"GET"),
+  buyStarter: (id:string,requestId:string) => call<CollectionResult>("/collection/buy",{id,requestId}),
+  drawStarters: (count:number,requestId:string) => call<CollectionResult>("/collection/draw",{count,requestId}),
+  duelRewardResult: (roomId:string) => call<{settled:boolean;amount:number}>('/rewards/result?roomId='+encodeURIComponent(roomId),undefined,'GET'),
+  progression: () => call<import('../shared/progression').ProgressionState>('/rewards/progression',undefined,'GET'),
+  rerollDaily: (day:string,revision:number) => call<import('../shared/progression').ProgressionState>('/rewards/daily/reroll',{day,revision}),
+  startBot: (difficulty:import('../shared/bot').BotDifficulty,lang:string) => call<{roomId:string;you:0;oppName:string;oppAvatar:string}>('/rewards/bot/start',{difficulty,lang}),
   // register: {user} (즉시 입장) 또는 {needVerify:true} (인증 메일 발송됨)
   register: (email: string, password: string) => call<{ user?: User; needVerify?: boolean }>("/auth/register", { email, password, ...acquisition() }),
   login: (email: string, password: string) => call<{ user: User }>("/auth/login", { email, password }).then((r) => r.user),
@@ -92,7 +110,7 @@ export const api = {
   me: () => call<{ user: User | null }>("/auth/me", undefined, "GET").then((r) => r.user).catch(() => null),
   rankResult: (matchId: string) => call<{ result: RankChange | null }>("/rank/result?matchId=" + encodeURIComponent(matchId), undefined, "GET", AbortSignal.timeout(8000)).then(r => r.result),
   rankMe: () => call<{ rating: RankInfo | null }>("/rank/me", undefined, "GET").then((r) => r.rating).catch(() => null),
-  trackBot: (won: boolean | null) => call<{ ok: boolean }>("/track/bot", { won: won === true, draw: won === null }).catch(() => null),
+  trackBot: (won: boolean | null, difficulty?: ClearDifficulty) => call<{ ok: boolean; experience: ExperienceReceipt | null }>("/track/bot", { won: won === true, draw: won === null, difficulty }),
   inviteMe: () => call<{ code: string; limit: number; invites: { status: string; created_at: number; display: string }[] }>("/invite/me", undefined, "GET"),
   // 문의 접수 (홈 '문의' 모달 → 어드민 '문의' 탭). 게스트도 전송 가능(서버가 user_id NULL 저장).
   sendInquiry: (title: string, body: string) => call<{ ok: true }>("/inquiry", { title, body }),
@@ -116,9 +134,9 @@ export const api = {
   },
   rankHistory: () => call<{ seasons: (RankInfo & { season: string })[] }>("/rank/history", undefined, "GET").then((r) => r.seasons).catch(() => []),
   // credit rewards (server-authoritative amounts; key e.g. "tut:1")
-  tutorialStatus: () => call<{ keys:string[]; credits:number; offered:boolean }>("/rewards/tutorial", undefined, "GET"),
+  tutorialStatus: () => call<{ keys:string[]; credits:number; offered:boolean; awarded:number; legacyPaid:number; amounts:Record<string,number> }>("/rewards/tutorial", undefined, "GET"),
   tutorialDecision: (decision:'start'|'skip') => call<{ok:true}>("/rewards/tutorial/decision", {decision}),
-  completeTutorial: (lesson:LessonId, actions:Action[]) => call<ClaimResult>("/rewards/tutorial/complete", {lesson,actions}),
+  completeTutorial: (lesson:LessonId, actions:TutorialAction[]) => call<ClaimResult>("/rewards/tutorial/complete", {lesson,actions}),
   claimReward: (key: string) => call<ClaimResult>("/rewards/claim", { key }),
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),

@@ -1,3 +1,7 @@
+import {mountGiftInbox} from '../ui/giftInbox';
+import { BOT_FIRST_CLEAR_EXP } from '../shared/progression';
+import { mountDailyRewards, firstClearLabel } from '../ui/dailyRewards';
+import { BOT_REWARDS } from '../shared/progression';
 // ============================================================
 // LORE — post-login HOME. Choose Random Online or Bot match.
 // ============================================================
@@ -11,9 +15,10 @@ import { homeRankHtml } from "../ui/rankPresentation";
 import { loungeText } from "../ui/loungeText";
 import { sanitizeDecks } from "../shared/cards";
 import { artUrl } from "../ui/cardArt";
-import { mountManaSpirit } from '../ui/manaSpirit';
+import { mountHomeSpirit } from '../ui/homeSpirit';
 import '../styles/homeTutorial.css';
 import { homeIcon } from "../ui/homeIcons";
+import {scheduleGameWarmup,warmGame} from './lazyGame';
 
 
 export function mountHome(app: App): Screen {
@@ -27,11 +32,13 @@ export function mountHome(app: App): Screen {
     </section>
     <section class="lounge-home-main">
       <section class="lounge-play" aria-label="${esc(t("home.ranked.title"))}">
+        <button class="gift-courier" id="homeGifts" type="button"></button>
         <div class="lounge-mode-tabs" role="group" aria-label="${esc(loungeText('対戦モード','Duel mode','대전 모드'))}">
           <button id="rankedMode" aria-pressed="true">${loungeText('ランク','Ranked','랭크')}</button>
           <button id="online" aria-pressed="false">${loungeText('ノーマル','Casual','일반')}</button>
           <button id="bot" aria-pressed="false">BOT</button>
         </div>
+        <p class="mode-reward" id="modeReward"></p>
         <button class="lounge-play-button" id="ranked"><small aria-hidden="true">DUEL</small><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")} →</span></button>
         <button id="myTier" class="lounge-rank-info" aria-live="polite" aria-label="${t("lb.title")}">${t("lb.season")} —</button>
       </section>
@@ -39,17 +46,22 @@ export function mountHome(app: App): Screen {
         <span class="lounge-deck-preview" aria-hidden="true">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,3).map(id=>`<img src="${artUrl.sm(id)}" alt="" loading="lazy">`).join("")}</span>
         <span class="lounge-deck-label"><small>${t("deck.inuse")}</small><strong>${esc(store.list[store.sel].name || t("deck.slot").replace("{n}",String(store.sel+1)))}</strong><span>${t("home.deck.title")}</span></span>${homeIcon("arrow")}
       </button>
+      <button class="home-daily-reward" id="dailyReward"></button>
     </section>`;
   app.root.appendChild(wrap);
-  const spirit=mountManaSpirit(wrap.querySelector('.home-spirit-host')!, {home:true,interactive:wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!});
+  const stopGifts=mountGiftInbox(app,wrap.querySelector<HTMLButtonElement>('#homeGifts')!);
+  const stopDaily=mountDailyRewards(app,wrap.querySelector<HTMLButtonElement>('#dailyReward')!);
+  const stopSpirit=mountHomeSpirit(app,wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   let mode: 'ranked'|'online'|'bot'='ranked';
   const selectMode=(next:typeof mode)=>{
     mode=next;
+    wrap.querySelector('#modeReward')!.textContent=mode==='bot'?loungeText('各難易度の初回クリアでシャード獲得','Earn Shards for each first clear','난이도별 첫 클리어 샤드 보상'):mode==='ranked'?loungeText('勝利20 / 敗北10シャード · 1日300まで','Win 20 / Loss 10 Shards · 300/day','승리 20 / 패배 10 샤드 · 하루 300까지'):loungeText('勝利10 / 敗北5シャード · 1日100まで','Win 10 / Loss 5 Shards · 100/day','승리 10 / 패배 5 샤드 · 하루 100까지');
     for(const [id,key] of [['rankedMode','ranked'],['online','online'],['bot','bot']])q(id).setAttribute('aria-pressed',String(mode===key));
     q('ranked').querySelector('strong')!.textContent=t(`home.${mode}.title`);
     wrap.querySelector('.lounge-play')!.setAttribute('aria-label',t(`home.${mode}.title`));
   };
+  selectMode('ranked');
   q('rankedMode').onclick=()=>selectMode('ranked');
   q('online').onclick=()=>selectMode('online');q('bot').onclick=()=>selectMode('bot');
   q('ranked').onclick=()=>mode==='ranked'?app.rankedLobby():mode==='online'?app.onlineLobby():showBotNpcModal(app);
@@ -63,15 +75,17 @@ export function mountHome(app: App): Screen {
     el.onclick=r?()=>app.leaderboard():loadRank;
   });
   loadRank();
+  const stopWarmup=scheduleGameWarmup(wrap,store.list[store.sel].cards);
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;unsub();spirit.destroy();}};
+  return {destroy:()=>{disposed=true;stopWarmup();unsub();stopSpirit();stopDaily();stopGifts();}};
 }
 
 /** Character cards select an NPC; the separate start action begins a duel. */
 function showBotNpcModal(app: App): void {
   if(document.querySelector('.bot-diff-ov'))return;
   const store=sanitizeDecks(app.user?.decks ?? null),activeDeck=store.list[store.sel];
+  void warmGame(activeDeck.cards);
   let selected:BotDifficulty='normal';
   const previousFocus=document.activeElement as HTMLElement|null;
   const ov = document.createElement("div");
@@ -88,12 +102,13 @@ function showBotNpcModal(app: App): void {
           <button type="button" class="diff-card diff-${npc.difficulty}" data-diff="${npc.difficulty}" aria-pressed="${npc.difficulty===selected}">
             <span class="challenge-selected">${loungeText('選択中','SELECTED','선택됨')}</span>
             <span class="challenge-art" aria-hidden="true"><img src="${npc.portrait}" alt=""></span>
-            <span class="npc-title">${esc(npc.title[getLang()])}</span><span class="diff-name">${esc(npc.name[getLang()])}</span><span class="npc-difficulty">${loungeText("難易度","Difficulty","난이도")} · ${t(`bot.diff.${npc.difficulty}`)}</span><span class="challenge-caption">${esc(npc.style[getLang()])}</span>
+            <span class="npc-title">${esc(npc.title[getLang()])}</span><span class="diff-name">${esc(npc.name[getLang()])}</span><span class="npc-difficulty">${loungeText("難易度","Difficulty","난이도")} · ${t(`bot.diff.${npc.difficulty}`)}</span><span class="challenge-caption">${esc(npc.style[getLang()])}</span><span class="npc-difficulty">${app.user?.botClears?.includes(npc.difficulty)?t("progress.cleared"):`${t("progress.firstClear")} +${BOT_FIRST_CLEAR_EXP[npc.difficulty]} EXP`}</span><span class="npc-first-reward" data-bot-reward="${npc.difficulty}">${firstClearLabel(BOT_REWARDS[npc.difficulty])}</span>
           </button>`).join("")}
       </div>
       <div class="challenge-footer"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div><p id="challengeDescription" aria-live="polite"></p><button class="challenge-start" id="diffStart"></button></div>
     </div>`;
   document.body.appendChild(ov);
+  if(app.user&&app.user.id!=='local-guest-user')void api.progression().then(data=>{if(!ov.isConnected)return;for(const [diff,done] of Object.entries(data.bot)){const el=ov.querySelector(`[data-bot-reward="${diff}"]`);if(el&&done)el.textContent=loungeText('初回報酬 受取済み','First reward received','첫 보상 수령 완료');}}).catch(()=>{});
   const update = () => {
     const npc = botNpc(selected), name = npc.name[getLang()];
     ov.querySelectorAll<HTMLButtonElement>('[data-diff]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.diff === selected)));
@@ -183,7 +198,6 @@ export async function showInviteModal(signal?:AbortSignal): Promise<void> {
         ${data.invites.length === 0 ? `<div class="inv-row inv-empty">${t("invite.empty")}</div>`
           : data.invites.map((v) => `<div class="inv-row"><span>${v.display.replace(/[<>&]/g, "")}</span><span class="inv-st ${v.status}">${stLabel(v.status)}</span></div>`).join("")}
       </div>
-      <div class="inv-note">${t("invite.note")}</div>
       <div class="modal-row"><button class="btn btn-ghost btn-block" id="invClose">${t("common.confirm")}</button></div>
     </div>`;
   document.body.appendChild(ov);

@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "origin": "https://test.yourlore.xyz",
+  "scope": "Public fixture using real controller and reducer; not authenticated online play",
+  "checks": [
+    {
+      "width": 1280,
+      "side": 0,
+      "mode": "normal",
+      "cycles": 1
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "mode": "normal",
+      "cycles": 1
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "mode": "normal",
+      "cycles": 1
+    },
+    {
+      "width": 844,
+      "side": 1,
+      "mode": "normal",
+      "cycles": 1
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "mode": "reduced",
+      "cycles": 0
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "mode": "skip",
+      "cycles": 1
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "mode": "resize",
+      "cycles": 1
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "mode": "hidden",
+      "cycles": 1
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "mode": "normal",
+      "cycles": 1
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "mode": "destroy",
+      "cycles": 1
+    }
+  ],
+  "errors": []
+}

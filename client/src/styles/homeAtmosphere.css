@@ -1,0 +1,19 @@
+/* Generated plate is a static fallback and keeps image readiness/cache ownership. */
+.lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home{
+ inset:0;animation:none;transform:none;will-change:auto;
+ background-image:url('/art/lounge/atmosphere-v2/library-wide.png'),url('/art/lounge/atmosphere-v1/clouds.png'),linear-gradient(#70a9d6,#cadde6);
+ background-position:center;background-size:cover,110% auto,cover;background-repeat:no-repeat;
+}
+.lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::before{display:none}
+.lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::after{
+ content:'';position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(90deg,#06122305 0%,transparent 48%,#0612233d 75%,#06122370 100%),linear-gradient(0deg,#03101dd9 0%,#03101d00 25%,#03101d00 85%,#03101d26 100%);
+}
+.living-home>.home-atmosphere-canvas{display:block;width:100%;height:100%;pointer-events:none}
+@media(max-width:850px){
+ .lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::after{
+  background:linear-gradient(#03101d0a 0%,#03101d0a 30%,#03101d30 50%,#03101d8a 72%,#03101ddb 100%);
+ }
+}
+
+.selected-menu.lounge-home .home-spirit-host{filter:none!important}

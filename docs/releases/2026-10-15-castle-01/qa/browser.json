@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "side": 0,
+      "route": "playMonster",
+      "maxChannelDelta": 0,
+      "sameNativeNode": true
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "route": "playMonster",
+      "maxChannelDelta": 0,
+      "sameNativeNode": true
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "route": "playMonster",
+      "maxChannelDelta": 0,
+      "sameNativeNode": true
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "route": "playMonster",
+      "maxChannelDelta": 1,
+      "sameNativeNode": true
+    },
+    {
+      "route": "hand",
+      "nativeCompletion": true,
+      "noGhost": true
+    },
+    {
+      "route": "generated",
+      "nativeCompletion": true,
+      "noGhost": true
+    }
+  ],
+  "errors": []
+}

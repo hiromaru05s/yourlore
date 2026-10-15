@@ -16,14 +16,14 @@ globalThis.cancelAnimationFrame=()=>{};
 globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
-const entry=`export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
+const entry=`export { findOriginTrap } from './client/src/ui/originRite/anchors'; export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
 await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',loader:{'.css':'empty'},outfile:path.join(temp,'ui.mjs'),plugins:[{name:'dom-only-monster-renderer',setup(b){
  // JSDOM has no Canvas or DOMMatrix. Exercise the real renderer separately in
  // monster-adoption-browser.mjs; this suite checks game DOM and interaction.
  b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
  b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const monsterPresentationNodes=n=>[n],hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
 }}]});
-const {STARTERS,cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+const {findOriginTrap,STARTERS,cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
 // Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.
 const clock=document.createElement('div');clock.setAttribute('aria-hidden','true');
@@ -111,6 +111,9 @@ assert.equal(document.querySelectorAll('#supplyMarket > .card').length,3);
 assert.deepEqual([...document.querySelectorAll('#supplyMarket .mkt-stock')].map(e=>e.textContent),['×1','×1','×1']);
 assert.equal(document.querySelectorAll('.side-rail').length,0);
 assert.equal(document.querySelector('#oppRow [data-uid^="secret"]'),null,'hidden trap identity stays private');
+assert.equal(findOriginTrap(g.players[1].traps[0].card.uid),document.querySelector('#oppRow .buff-icon--trap'),'private association locates only the actual visible face-down surface');
+assert.equal(findOriginTrap('missing-trap'),null);
+assert(!document.querySelector('#oppRow .zone-st').outerHTML.includes(g.players[1].traps[0].card.uid),'no hidden UID is serialized into markup');
 const click=el=>el.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true}));
 const fixed=document.querySelector('#fixedMarket > .card');click(fixed);click(fixed);click(fixed);assert.equal(boughtFixed,0);
 const sup=document.querySelector('#supplyMarket > .card');const original=Number(sup.dataset.supIdx);click(sup);click(sup);click(sup);assert.equal(boughtSupply,original,'sorting keeps original supply index');
@@ -261,14 +264,14 @@ api.updateMe=async(patch)=>{savedAvatar=patch.avatar;return {ok:true,display:'Se
 const app={root:document.getElementById('app'),user:{avatar:savedAvatar},home:noop};
 const screen=mountProfile(app);
 await new Promise(r=>setTimeout(r,10));
-click(document.querySelector('#avaBtn'));
-assert.equal(document.querySelectorAll('.hooded-picker [data-seeker-id]').length,1);
-click(document.querySelector('[data-seeker-id="SEEKER_HOODED"]'));
-assert.equal(savedAvatar,'SEEKER_BLUE','preview does not save before confirmation');
-click(document.querySelector('[data-save]'));
-await new Promise(r=>setTimeout(r,10));
-assert.equal(savedAvatar,'SEEKER_HOODED');assert.equal(app.user.avatar,'SEEKER_HOODED');
-assert(document.querySelector('#avaBtn .hooded-seeker'),'profile re-renders persisted selection');
+assert(document.querySelector('.pf-ava .hooded-seeker'),'profile keeps the fixed seeker portrait');
+assert.equal(document.querySelector('#avaBtn, .pf-ava-edit, .pf-ava button'),null);
+click(document.querySelector('.pf-ava'));
+assert.equal(document.querySelector('.hooded-picker'),null);
+click(document.querySelector('[data-tab="settings"]'));
+assert.equal(document.querySelector('[data-character-settings]'),null);
+assert(document.querySelector('#renderQuality'),'graphics settings remain available');
+assert.equal(savedAvatar,'SEEKER_BLUE','viewing a fixed portrait does not mutate the account');
 screen.destroy?.();
 dom.window.close();await rm(temp,{recursive:true,force:true});
 console.log('PASS: zones, secret traps, market stock/index/confirmation, turn restrictions, 30 mana, HP, avatars, hand states, viewport sizes');

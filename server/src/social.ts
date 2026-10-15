@@ -1,3 +1,4 @@
+import {starterCollection,constrainDeckStore} from '../../client/src/shared/collection';
 import {deckStoreForUser} from '../../client/src/shared/cards';
 import {cosmetic,ownedCosmetics} from '../../client/src/shared/cosmetics';
 // ============================================================
@@ -317,10 +318,10 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       await env.DB.prepare(`UPDATE challenges SET status = 'declined' WHERE id = ? AND status = 'pending'`).bind(ch.id).run();
       return json(env, { ok: true });
     }
-    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, furniture, deck, decks FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; furniture:string|null; deck: string | null; decks:string|null }>();
+    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, furniture, deck, decks, starter_cards FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; furniture:string|null; deck: string | null; decks:string|null;starter_cards:string|null }>();
     if (!challenger) return json(env, { error: "not found" }, 404);
     let presets:unknown=null;try{presets=JSON.parse(challenger.decks||'null');}catch{}
-    const challengerStore=deckStoreForUser({decks:presets,deck:challenger.deck?.split(','),sleeve:challenger.sleeve,furniture:challenger.furniture});
+    const challengerStore=constrainDeckStore(deckStoreForUser({decks:presets,deck:challenger.deck?.split(','),sleeve:challenger.sleeve,furniture:challenger.furniture}),starterCollection(challenger.starter_cards));
     const equipped=challengerStore.list[challengerStore.sel];
     // provision a GameRoom exactly like the matchmaker does (친선전 → ranked=false)
     const roomId = 'friendly-'+ch.id;

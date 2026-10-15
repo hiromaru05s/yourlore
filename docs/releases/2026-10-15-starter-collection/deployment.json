@@ -1,0 +1,19 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "sourceSha": "d3cefc43d24d0f8567e8623950012f61e3ebc083",
+  "deploymentId": "8ec3031b-0bf2-471b-b825-e1f02f42ac2b",
+  "versions": [
+    {
+      "version_id": "e75a4a21-0981-44df-bc6b-e46728e65595",
+      "percentage": 100
+    }
+  ],
+  "createdOn": "2026-10-15T08:18:31.062043Z",
+  "productionTests": {
+    "passed": 161,
+    "total": 161
+  },
+  "assetHashes": 98,
+  "authenticatedApiChecks": 7,
+  "fixtureCleanup": "completed"
+}

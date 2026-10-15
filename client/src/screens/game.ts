@@ -1,3 +1,4 @@
+import { api } from '../net/api';
 import { mountDuelSpiritGuide } from '../ui/duelSpiritGuide';
 import { botNpc } from "../shared/botNpcs";
 import { getLang } from "../i18n";
@@ -19,7 +20,7 @@ import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
 export type GameOpts =
   | { mode: "bot"; difficulty?: BotDifficulty }
   | { mode: "tutorial"; lesson?: number }
-  | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean };
+  | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean; difficulty?:BotDifficulty };
 
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
@@ -52,12 +53,14 @@ export function mountGame(app: App, opts: GameOpts): Screen {
         : undefined,
     });
   };
+  const experienceUserId=app.user?.id;
   const exits: ControllerExits = {
+    onExperience: () => {if(experienceUserId && experienceUserId!=="local-guest-user")void api.me().then(fresh=>{if(fresh?.id===experienceUserId && app.user?.id===experienceUserId){app.user=fresh;document.dispatchEvent(new Event("lore:user"));}});},
     onOpeningStart: opts.mode === "tutorial" ? undefined : startMusic,
     onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
-    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame(opts.lesson) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
+    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame(opts.lesson) : (opts.difficulty??ctrl.botDifficulty) ? app.botGame(opts.difficulty??ctrl.botDifficulty) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
   };
 
   const tutorialUserId = app.user?.id;
@@ -69,6 +72,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
             lesson: opts.lesson,
             guest: !app.user || app.user.id === 'local-guest-user',
             onNext: lesson => app.tutorialGame(lesson),
+            accountId: app.user?.id,
             onCredits: (c) => { if (app.user?.id === tutorialUserId && app.user) { app.user.credits = c; document.dispatchEvent(new Event('lore:user')); } },
           })
         : new OnlineController(root, opts.you, opts.roomId, exits, opts.ranked);
