@@ -186,7 +186,6 @@
     "tests/bot-npcs.mjs": 900000,
     "tests/trap-removal-tutorial.mjs": 300000,
     "tests/dice-source.mjs": 600000,
-    "tests/duel-ui.mjs": 600000,
-    "tests/bot-npcs.mjs": 600000
+    "tests/duel-ui.mjs": 600000
   }
 }

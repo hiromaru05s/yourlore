@@ -44,6 +44,13 @@ try {
   }
  }
  await page.locator('[data-profile]').click();await page.locator('[data-tab="settings"]').click();await page.locator('#langSel').waitFor();await page.screenshot({path:out+'/settings.jpg'});checks.push('seven real authenticated menus in four viewport sizes plus profile/settings');
+ await page.setViewportSize({width:1280,height:900});await page.locator('[data-nav="home"]').click();await page.locator('.screen-loader').waitFor({state:'detached',timeout:300000});
+ await page.locator('#bot').click();await page.locator('#ranked').click();await page.locator('[data-diff="easy"]').click();await page.locator('#diffStart').click();
+ await page.locator('[data-scene-ready="true"]').waitFor();await page.locator('.duel-loader').waitFor({state:'detached'});await page.locator('.duel-opening').waitFor({state:'detached'});
+ await page.screenshot({path:out+'/bot-board.jpg'});const uiRoom=await page.evaluate(()=>JSON.parse(localStorage.getItem('lore_game')).roomId);
+ await page.locator('#giveupBtn').click();await page.locator('.modal .btn-danger').click();await page.waitForFunction(()=>!localStorage.getItem('lore_game'));
+ for(let i=0;i<40;i++){if((await call(0,'/rewards/result?roomId='+uiRoom)).settled)break;if(i===39)throw Error('UI BOT settlement timeout');await new Promise(r=>setTimeout(r,500));}
+ checks.push('real HOME-to-BOT browser startup, rendered board, surrender and settlement');
  assert.deepEqual(errors,[]);await browser.close();browser=undefined;
  }
  await sql(`INSERT INTO friends(user_a,user_b,status,created_at) VALUES('${users[0].id}','${users[1].id}','accepted',${now});`);
