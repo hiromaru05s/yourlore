@@ -4,7 +4,8 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-opening-
 const out=process.env.LORE_TEST_OUTPUT||'docs/performance/2026-09-29/playback',origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5279';
 await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});
-const context=await browser.newContext({viewport:{width:1280,height:720},recordVideo:{dir:out,size:{width:1280,height:720}}});
+const recordVideo=process.env.LORE_RECORD_VIDEO!=='0';
+const context=await browser.newContext({viewport:{width:1280,height:720},...(recordVideo?{recordVideo:{dir:out,size:{width:1280,height:720}}}:{})});
 const page=await context.newPage(),errors=[],checks=[];page.setDefaultTimeout(90000);page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.goto(origin+'/duel-lab.html?polish');await page.waitForSelector('[data-scene-ready=true]');
@@ -24,4 +25,4 @@ try{
  // Leaving a match removes both WebGL canvases and releases their contexts.
  const disposal=await page.evaluate(async()=>{const {mountDuelScene}=await import('/src/ui/duelScene.ts');const root=document.createElement('div');document.body.append(root);const dispose=mountDuelScene(root),canvas=root.querySelector('canvas'),gl=canvas.getContext('webgl2');dispose();root.remove();await new Promise(r=>setTimeout(r,30));return {connected:canvas.isConnected,lost:gl.isContextLost()};});assert.equal(disposal.connected,false);assert.equal(disposal.lost,true);checks.push('renderer context disposal');
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({checks,errors},null,2));console.log('PASS',checks);
-}finally{await context.close();await fs.rename(await page.video().path(),out+'/continuous.webm');await browser.close();}
+}finally{await context.close();if(recordVideo)await fs.rename(await page.video().path(),out+'/continuous.webm');await browser.close();}
