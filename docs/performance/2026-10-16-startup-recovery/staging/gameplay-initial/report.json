@@ -1,0 +1,6 @@
+{
+  "base": "https://test.yourlore.xyz",
+  "reuseContext": true,
+  "api": "fixture guest; normal production HOME and local BOT route",
+  "cases": []
+}

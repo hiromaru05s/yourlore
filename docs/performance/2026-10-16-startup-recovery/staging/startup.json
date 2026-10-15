@@ -1,0 +1,120 @@
+{
+  "base": "https://test.yourlore.xyz",
+  "old": false,
+  "normalApi": "real deployed API, unauthenticated",
+  "failureTests": "explicit request failure injection; background test uses account fixture",
+  "results": [
+    {
+      "name": "unmodified-login",
+      "width": 1280,
+      "ms": 15690,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "unmodified-login",
+      "width": 390,
+      "ms": 2974,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "stalled-geo",
+      "width": 1280,
+      "ms": 3396,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "saved-language",
+      "width": 390,
+      "ms": 5376,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "failed-auth",
+      "width": 1280,
+      "ms": 2895,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "stalled-auth",
+      "width": 390,
+      "ms": 13439,
+      "errors": [],
+      "state": {
+        "startup": true,
+        "error": true,
+        "login": false,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "failed-module",
+      "width": 1280,
+      "ms": 1509,
+      "errors": [],
+      "state": {
+        "startup": true,
+        "error": true,
+        "login": false,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "no-javascript",
+      "width": 390,
+      "ms": 503,
+      "errors": [],
+      "state": {
+        "startup": true,
+        "error": false,
+        "login": false,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "stalled-background",
+      "width": 1280,
+      "ms": 21827,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": false,
+        "home": true,
+        "cover": false,
+        "atmosphere": "fallback"
+      }
+    }
+  ]
+}

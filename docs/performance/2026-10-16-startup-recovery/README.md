@@ -24,3 +24,20 @@ The HOME background retains all normal assets, resolution, shaders, timing and m
 Before/after failure injection and browser screenshots are retained in `before/` and `local/`. Local login checks use an unauthenticated API fixture; their durations are not public-site performance measurements. Browser screenshots confirm recovery layout and visibility, not a new animation-quality review.
 
 Local checks: typecheck/build passed; production suite 182/182 passed. Normal HOME (including its unchanged entrance) was 4.720 s / 4.656 s at 1280 / 390 widths. All sampled gameplay p95 frame intervals were 16.7 ms with zero sampled long tasks and zero post-admission asset requests. These are local fixture measurements, not a universal frame-rate guarantee. The local built browser run preceded the final progress-label-only change; the deployed validation must cover the final guarded snapshot.
+
+## Guarded staging release
+
+Source `d82fd804637088c4900205a8eb4b58ccd0102a91`; Worker version `2ef523dc-b30e-4ae2-8392-e86036192207`, 100% traffic, deployed at `2026-10-15T16:49:13Z` (October 16 local time). `scripts/deploy-guard.mjs staging` passed typecheck, all 182 production tests and build against its clean committed snapshot. All **173/173** guarded HTML/SW/generated asset hashes matched fresh downloads from staging. HTTP root, geo, unauthenticated session and SW checks returned 200.
+
+All nine deployed startup/recovery browser cases passed, including real, unmodified API login/reload at 1280 and 390 widths. The 15.690 s desktop / 2.974 s mobile values in `startup.json` include both initial navigation and reload plus interactions; these are not single-load or controlled comparison measurements.
+
+The initial additional gameplay run (`gameplay-initial/`) reached HOME, but timed out at the browser harness's 120-second scene wait while asset progress remained 0/1341. No HTTP or page error was recorded before that cutoff. Hash verification downloads were running concurrently; this is context, not proof of the delay's cause. The failed attempt is retained. The harness now honors `LORE_LOAD_TIMEOUT` for scene waits as well, and records per-pack bytes/completion/failure in progress diagnostics.
+
+A fresh-context gameplay run after hash verification completed passed both widths with real deployed assets and an API account fixture:
+
+| Width | HOME including entrance | Duel preparation | Post-admission asset requests | Page/HTTP errors |
+| --- | ---: | ---: | ---: | ---: |
+| 1280 | 6.251 s | 10.166 s | 0 | 0 / 0 |
+| 390 | 5.718 s | 5.110 s | 0 | 0 / 0 |
+
+The second width reuses the context cache. No broken visible images or service-worker fallback transfers occurred after duel admission. The completed retry does not erase the initial transfer stall or establish performance on every connection. No authenticated human account or multiplayer match was used. The user's exact original browser/session remains unobserved; the two indefinite failure paths are independently reproduced and fixed.

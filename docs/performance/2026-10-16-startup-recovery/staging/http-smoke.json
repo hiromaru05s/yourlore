@@ -1,0 +1,30 @@
+{
+  "source": "d82fd804637088c4900205a8eb4b58ccd0102a91",
+  "at": "2026-10-15T16:50:53.548Z",
+  "rows": [
+    {
+      "path": "/",
+      "response": "200 0.552926",
+      "sha256": "2ae67f9587b7aaafd285b6be7da699f1707d8acef08d9f88bc084b8aaa8a3f29",
+      "bytes": 1487
+    },
+    {
+      "path": "/api/geo",
+      "response": "200 0.564253",
+      "sha256": "a12d05171222465e18082966ee568388d2a977bc0bda9cc90dd6d945654c0feb",
+      "bytes": 16
+    },
+    {
+      "path": "/api/auth/me",
+      "response": "200 0.733029",
+      "sha256": "2e7fe66d0f26a4cc5aaad5f34dba496c7988c175f79b24dcfa414a1dba289c0a",
+      "bytes": 13
+    },
+    {
+      "path": "/menu-cache-sw.js",
+      "response": "200 0.716015",
+      "sha256": "051727fdf2be0bf3c09bfc7da4803eb1dbdc74df2dde1238f84f5547f2485c71",
+      "bytes": 3105
+    }
+  ]
+}
