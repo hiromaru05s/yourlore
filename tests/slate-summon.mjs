@@ -7,7 +7,7 @@ import path from 'node:path';
 const dom=new JSDOM('<div id="root"><div id="card"></div></div>',{pretendToBeVisual:true});
 for(const k of ['window','document','HTMLElement','Event'])globalThis[k]=dom.window[k];
 globalThis.cancelAnimationFrame=()=>{};
-let reduced=true;globalThis.matchMedia=()=>({matches:reduced});
+let reduced=true;globalThis.matchMedia=()=>({matches:reduced,addEventListener(){},removeEventListener(){}});
 const dir=await mkdtemp(path.join(tmpdir(),'slate-test-'));
 try{
  await build({entryPoints:['client/src/ui/summon/runtime.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'runtime.mjs'),plugins:[{name:'no-gpu',setup(b){b.onResolve({filter:/cardSurface$/},()=>({path:'capture',namespace:'test'}));b.onLoad({filter:/.*/,namespace:'test'},()=>({contents:'export const CARD_PADDING=.12;export const captureCardSurface=async()=>{await new Promise(r=>setTimeout(r,20));throw Error("unavailable texture")};'}));}}]});

@@ -7,7 +7,7 @@ import path from 'node:path';
 const dom=new JSDOM('<div id="root"><div id="anchor" data-board-plane="0"></div></div><div id="source"></div>',{pretendToBeVisual:true});
 for(const k of ['window','document','HTMLElement','Event','HTMLCanvasElement'])globalThis[k]=dom.window[k];
 let reduced=false,now=0,next=0;const frames=new Map();
-globalThis.matchMedia=()=>({matches:reduced});globalThis.performance={now:()=>now};
+globalThis.matchMedia=()=>({matches:reduced,addEventListener(){},removeEventListener(){}});globalThis.performance={now:()=>now};
 globalThis.innerWidth=1280;globalThis.innerHeight=900;globalThis.devicePixelRatio=1;
 globalThis.DOMMatrix=class{translate(){return this;}scale(){return this;}};
 globalThis.requestAnimationFrame=f=>{frames.set(++next,f);return next;};globalThis.cancelAnimationFrame=i=>frames.delete(i);
@@ -22,7 +22,7 @@ try{
  b.onResolve({filter:/boardProjection$/},()=>({path:'projection',namespace:'test'}));
  b.onResolve({filter:/(richRenderer|studyRenderer)$/},()=>({path:'renderer',namespace:'test'}));
  b.onResolve({filter:/^\.\/renderer$/},a=>a.importer.endsWith('/verdant/runtime.ts')?{path:'renderer',namespace:'test'}:null);
- b.onLoad({filter:/.*/,namespace:'test'},a=>({contents:a.path==='capture'?`export const CARD_PADDING=.12;export async function captureCardSurface(){if(verification.hold)await new Promise(r=>verification.release=r);if(verification.fail)throw Error('Unavailable');return {face:document.createElement('canvas')};}`:a.path==='projection'?`const matrix={scale(){return this},toString(){return 'matrix(1,0,0,1,0,0)'}};export const CARD_RATIO=.64;export const boardMatrix=()=>matrix,projectedPlacement=()=>matrix,layoutRect=()=>({left:0,top:0,width:180,height:280});`:`class R{drawBoard(c,f,id,v,ms){verification.draws.push({id,v,ms});}draw(c,f,id,v,ms){verification.draws.push({id,v,ms});}dispose(){verification.disposed++;}}export {R as RichRenderer,R as StudyRenderer,R as Renderer};`}));
+ b.onLoad({filter:/.*/,namespace:'test'},a=>({contents:a.path==='capture'?`export const CARD_PADDING=.12;export async function captureCardSurface(){if(verification.hold)await new Promise(r=>verification.release=r);if(verification.fail)throw Error('Unavailable');return {face:document.createElement('canvas')};}`:a.path==='projection'?`const matrix={scale(){return this},toString(){return 'matrix(1,0,0,1,0,0)'}};export const screenToBoard=(x,y)=>({x,y});export const CARD_RATIO=.64;export const boardMatrix=()=>matrix,projectedPlacement=()=>matrix,layoutRect=()=>({left:0,top:0,width:180,height:280});`:`class R{drawBoard(c,f,id,v,ms){verification.draws.push({id,v,ms});}draw(c,f,id,v,ms){verification.draws.push({id,v,ms});}dispose(){verification.disposed++;}}export {R as RichRenderer,R as StudyRenderer,R as Renderer};`}));
  }}]});
  const {playSlateSummon:play,cancelSummon,cancelSummons,summonPlacement}=await import(path.join(dir,'runtime.mjs'));
  const source=document.getElementById('source'),anchor=document.getElementById('anchor');let impacts=0;
