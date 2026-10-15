@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "three ordinary equipped sets / empty zones / one and ten hand cards / final-card and three-card native draws",
+    "animated native draw back / cancellation without hidden cards or residue",
+    "fixed frame pixels / animated illustration / reduced-motion still",
+    "different sleeve and furniture for both players",
+    "responsive controls at 844 / 390 / 320",
+    "default restore and disposal remove dynamic surfaces"
+  ],
+  "errors": [],
+  "failed": [],
+  "boundary": "ordinary equipped GameView fixture; not authenticated multiplayer or staging"
+}

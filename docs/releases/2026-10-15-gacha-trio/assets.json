@@ -1,0 +1,14 @@
+{
+  "client/public/cosmetics/gacha-trio-v1/tidal.webp": {
+    "sha256": "448f54ff22b7ab743fc252e0ddcc4beda3b76564606708d13060b4018b163fc6",
+    "bytes": 388226
+  },
+  "client/public/cosmetics/gacha-trio-v1/ivory.webp": {
+    "sha256": "ef7cb9b45963c470e71a0204d7674453a2d9c4764c17477c07bb872119a8dcfa",
+    "bytes": 268214
+  },
+  "client/public/cosmetics/gacha-trio-v1/rose.webp": {
+    "sha256": "950da7b2d01a9e2a9a1afb3fc9765221b99ab98d67985ab2e7f2a73f58cfcf4c",
+    "bytes": 260028
+  }
+}
