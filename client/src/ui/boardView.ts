@@ -1,3 +1,4 @@
+import {AnesthesiaPresentation} from './anesthesia/runtime';
 import {bindOriginTrap} from './originRite/anchors';
 import {paintSpaceRiteCard,spaceRiteReason,spaceRiteSourceText,syncSpaceRiteStatus} from './spaceRiteStatus';
 import {dualReadyActive} from './monster/dualReady';
@@ -99,6 +100,7 @@ export class GameView {
   private disposed = false;
   private statRise: ReturnType<typeof createBoardStatRise>;
   private trickRoom:TrickRoomPresentation;
+  private anesthesia:AnesthesiaPresentation;
   private disposeScene?: () => void;
   private readonly battlefieldBg = pickBattlefieldBg();
 
@@ -108,6 +110,7 @@ export class GameView {
     this.h = h;
     this.statRise = createBoardStatRise(root);
     this.trickRoom = new TrickRoomPresentation(root);
+    this.anesthesia = new AnesthesiaPresentation(root);
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
     // Select projected-board CSS before inserting nodes: otherwise the browser
@@ -302,6 +305,7 @@ export class GameView {
     this.cancelHandDrag?.();
     this.disposeScene?.();
     this.trickRoom.dispose();
+    this.anesthesia.dispose();
     this.statRise.dispose();
     this.handConditions.dispose();
     clearBiblionFx(true);
@@ -354,6 +358,7 @@ export class GameView {
   syncTurn(g: GameState): void {
     if(g.turn < this.turnSnapshot)return;
     this.turnSnapshot=g.turn;
+    this.anesthesia.advanceTurn(g.turn);
     this.endingTurn=false;
     this.root.dataset.readingTurn=g.cur===this.you&&!g.over?'player':'opponent';
   }
@@ -456,6 +461,7 @@ export class GameView {
     for(const id of readyPiles)this.root.querySelector(`#${id}`)?.classList.add('pile--3d-ready');
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
+    this.anesthesia.sync(g);
     settleField(this.root,fieldBefore);
     const trick=this.trickRoom.track(g);
     const stats=this.statRise.update(g,new Set(trick.changes.map(c=>c.uid)));
