@@ -5,13 +5,21 @@ import { botActions, actionChangesState } from './botActions';
 /** A bounded same-turn proof search. Unknown draws, dice, face-down traps and
  * opponent decisions cannot be used as evidence for a forced win. */
 export function forcedWin(g: GameState, nodeLimit: number): Action | undefined {
+  return forcedWinPlan(g, nodeLimit)?.[0];
+}
+
+/** The entire reducer-verified line lets simulations finish a tactical win
+ * without reverting to a greedy continuation after its first move. */
+export function forcedWinPlan(g: GameState, nodeLimit: number): Action[] | undefined {
   const side = actingSide(g), other = 1 - side;
   if (side !== g.cur || g.players[other].traps.length) return;
   const p = g.players[side], o = g.players[other];
   // Only a scheduling heuristic: the reducer, not this estimate, proves a win.
   const pressure = p.field.filter(m => monsterCanAttack(g, p, m)).reduce((n, m) => n + Math.max(0, effAtk(p, m, g)) * 2, 0)
     + p.hand.reduce((n, c) => n + (c.t === 'mon' ? (c.atk ?? 0) * 2 : c.act?.includes('buff') ? 6 * p.field.length : (c.val ?? 0) + 8), 0);
-  if (pressure < o.hp + (o.shield ?? 0)) return;
+  // A spell awaiting its target has already left the hand, so its pending
+  // damage/buff is absent from the estimate. Do not prune that winning line.
+  if (!g.pending && pressure < o.hp + (o.shield ?? 0)) return;
   let nodes = 0;
   const visited = new Map<string, number>();
   const walk = (st: GameState, depth: number): Action[] | undefined => {
@@ -50,5 +58,5 @@ export function forcedWin(g: GameState, nodeLimit: number): Action | undefined {
       if (rest) return [child.a, ...rest];
     }
   };
-  return walk(g, 14)?.[0];
+  return walk(g, 14);
 }

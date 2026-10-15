@@ -7,9 +7,9 @@ import { safeGreedy, greedyStep, TUNE } from './bot';
 import { observationSample } from './botObservation';
 import { botActions, actionChangesState } from './botActions';
 import { purchaseEvaluator } from './botEconomy';
-import { forcedWin } from './botTactics';
+import { forcedWin, forcedWinPlan } from './botTactics';
 import { lastingValue, unproductiveOpponentHeal } from './botStrategy';
-export const TACTICS = { proof: true, targets: true, horizon: 4 };
+export const TACTICS = { proof: true, targets: true, horizon: 4, replyNodes: 64 };
 
 export const SEARCH = {
   hard: { width: 8, samples: 2, turns: 2, finalists: 3, extraSamples: 2 },
@@ -108,6 +108,9 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
     for (const arm of arms) { arm.sum += rollout(sample, arm.a, side, cfg.turns); arm.n++; }
   }
   arms.sort((a, b) => b.sum / b.n - a.sum / a.n);
+  // Publish completed comparisons so a busy device keeps the searched move
+  // if the worker deadline arrives during the deeper finalist evaluation.
+  if (level === 'hard') onProgress?.(arms[0].a);
   if (cfg.finalists) {
     const finalists = arms.slice(0, cfg.finalists);
     if (baseline && !finalists.includes(baseline)) finalists.push(baseline);
@@ -116,6 +119,10 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
     for (let i = 0; i < cfg.extraSamples; i++) {
       const sample = observationSample(g, side, i + 101);
       for (const arm of finalists) { arm.sum += rollout(sample, arm.a, side, TACTICS.horizon); arm.n++; }
+      if (onProgress) {
+        const best = finalists.reduce((a, b) => b.sum / b.n > a.sum / a.n ? b : a);
+        onProgress(level === 'hell' && baseline && best.sum / best.n < baseline.sum / baseline.n + 0.02 ? base : best.a);
+      }
     }
     finalists.sort((a, b) => b.sum / b.n - a.sum / a.n);
     if (level === 'hell' && baseline && finalists[0].sum / finalists[0].n < baseline.sum / baseline.n + 0.02) return base;
@@ -124,11 +131,25 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
   return arms[0].a;
 }
 
-function rollout(sample: GameState, action: Action, side: Side, turns: number): number {
+export function rollout(sample: GameState, action: Action, side: Side, turns: number): number {
   let st = reduce(sample, action).state;
   if (!actionChangesState(sample, st)) return -1;
   const endTurn = sample.turn + turns;
+  let checkedTurn = -1;
   for (let steps = 0; !st.over && st.turn < endTurn && steps < 120; steps++) {
+    // Both seats can find lethal combinations rather than wasting their mana
+    // on a greedy summon before a winning buff/burn. This is a prediction on
+    // the already-sampled observation, never proof about a real hidden hand.
+    // Include a pending root target: choosing it greedily can already throw
+    // away the winning line. Opponent-owned reactions are not proof nodes.
+    if (actingSide(st) === st.cur && checkedTurn !== st.turn) {
+      checkedTurn = st.turn;
+      const plan = forcedWinPlan(st, TACTICS.replyNodes);
+      if (plan) {
+        for (const move of plan) st = reduce(st, move).state;
+        return positionValue(st, side);
+      }
+    }
     const next = tacticalStep(st).state;
     if (!actionChangesState(st, next)) break;
     st = next;

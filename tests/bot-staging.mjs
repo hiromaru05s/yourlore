@@ -33,6 +33,16 @@ try{
   else assert.equal(action.type,'buyMarket');
   cases.push({tier,deck:scenario,state:g,expected:action});
  }
+ for(const tier of ['hard','hell']){
+  let g=C.createGame({mode:'bot',seed:115,starting:0,p0:{id:'qa-bot',name:'QA BOT'},p1:{id:'qa-human',name:'QA'}}).state;
+  g.turn=8;g.pending=null;g.market=[];
+  for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],traps:[],enchants:[],quests:[],supply:[],hp:40,mana:2,maxMana:8});
+  g.players[0].field=[9,2].map((atk,i)=>({...card('M2'),tribe:undefined,atk,def:5,dmg:0,tempAtk:0,atkMod:0,defMod:0,exhausted:i===0,summonedTurn:0}));
+  g.players[0].hand=[card('S3')];g.players[1].hp=5;
+  g=C.reduce(g,{type:'play',idx:0}).state;
+  const action=C.botDecide(g,tier);assert.equal(action.type,'chooseTarget');assert.equal(action.uid,g.players[0].field[1].uid);
+  cases.push({tier,deck:'pending-buff-lethal',state:g,expected:action});
+ }
  const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(origin,{waitUntil:'domcontentloaded'});
  const results=await page.evaluate(async({cases,worker})=>{
   const w=new Worker('/assets/'+worker,{type:'module'}),rows=[];let ticks=0;const timer=setInterval(()=>ticks++,10);
