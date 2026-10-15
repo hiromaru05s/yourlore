@@ -14,6 +14,7 @@ import { getRating, handleRank } from "./rank";
 import { handleGoogleOAuth } from "./oauth";
 import { handleInvite } from "./invite";
 import { handleAdmin } from "./admin";
+import { handleGifts } from './gifts';
 import { handleRewards } from "./rewards";
 import { handleSocial } from "./social";
 import { Matchmaker } from "./matchmaker";
@@ -52,6 +53,7 @@ export default {
       return handleRank(env, req, path.slice(4), user); // strip "/api"
     }
     if(path === "/api/collection" || path.startsWith("/api/collection/")) return handleCollection(env,req,path,await getUser(env,req));
+    if (path === '/api/gifts' || path.startsWith('/api/gifts/')) return handleGifts(env,req,path.slice(4));
     // ---- credit rewards ----
     if (path.startsWith("/api/rewards/")) {
       return handleRewards(env, req, path.slice(4)); // strip "/api"

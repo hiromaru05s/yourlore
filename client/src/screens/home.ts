@@ -1,3 +1,4 @@
+import {mountGiftInbox} from '../ui/giftInbox';
 import { BOT_FIRST_CLEAR_EXP } from '../shared/progression';
 import { mountDailyRewards, firstClearLabel } from '../ui/dailyRewards';
 import { BOT_REWARDS } from '../shared/progression';
@@ -31,6 +32,7 @@ export function mountHome(app: App): Screen {
     </section>
     <section class="lounge-home-main">
       <section class="lounge-play" aria-label="${esc(t("home.ranked.title"))}">
+        <button class="gift-courier" id="homeGifts" type="button"></button>
         <div class="lounge-mode-tabs" role="group" aria-label="${esc(loungeText('対戦モード','Duel mode','대전 모드'))}">
           <button id="rankedMode" aria-pressed="true">${loungeText('ランク','Ranked','랭크')}</button>
           <button id="online" aria-pressed="false">${loungeText('ノーマル','Casual','일반')}</button>
@@ -47,6 +49,7 @@ export function mountHome(app: App): Screen {
       <button class="home-daily-reward" id="dailyReward"></button>
     </section>`;
   app.root.appendChild(wrap);
+  const stopGifts=mountGiftInbox(app,wrap.querySelector<HTMLButtonElement>('#homeGifts')!);
   const stopDaily=mountDailyRewards(app,wrap.querySelector<HTMLButtonElement>('#dailyReward')!);
   const stopSpirit=mountHomeSpirit(app,wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
@@ -75,7 +78,7 @@ export function mountHome(app: App): Screen {
   const stopWarmup=scheduleGameWarmup(wrap,store.list[store.sel].cards);
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;stopWarmup();unsub();stopSpirit();stopDaily();}};
+  return {destroy:()=>{disposed=true;stopWarmup();unsub();stopSpirit();stopDaily();stopGifts();}};
 }
 
 /** Character cards select an NPC; the separate start action begins a duel. */

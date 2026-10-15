@@ -165,7 +165,8 @@
     "tests/market-crash.mjs",
     "tests/starter-collection.mjs",
     "tests/player-experience.mjs",
-    "tests/invite-rewards.mjs"
+    "tests/invite-rewards.mjs",
+    "tests/gift-inbox.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

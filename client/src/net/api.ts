@@ -1,3 +1,4 @@
+import type {GiftInbox,GiftClaim} from '../shared/gifts';
 import type { ClearDifficulty, ExperienceReceipt } from '../shared/progression';
 import type {CollectionState,CollectionResult,CollectionReceipt} from '../shared/collection';
 import type { Action } from '../shared/types';
@@ -88,6 +89,9 @@ function acquisition(): { ref?: string; source?: string } {
 }
 
 export const api = {
+  gifts: (signal?:AbortSignal) => call<GiftInbox>('/gifts',undefined,'GET',signal),
+  readGift: (id:string) => call<{ok:true}>('/gifts/read',{id}),
+  claimGifts: (id?:string) => call<GiftClaim>('/gifts/claim',id?{id}:{all:true}),
   collection: () => call<CollectionState>("/collection",undefined,"GET"),
   collectionHistory: () => call<{receipts:CollectionReceipt[]}>("/collection/history",undefined,"GET"),
   buyStarter: (id:string,requestId:string) => call<CollectionResult>("/collection/buy",{id,requestId}),
