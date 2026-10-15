@@ -15,7 +15,7 @@ import type { TutorialAction } from '../../client/src/shared/tutorialLesson';
 import type { Env } from "./env";
 import { corsHeaders, getUser } from "./auth";
 
-/** Reward table — the single source of truth for amounts. */
+/** Retired keys: retained to recognize old clients; these no longer issue payments. */
 export const REWARDS: Record<string, number> = {
   // legacy 6-step tutorial (kept so old grads' claims stay valid) — total 150
   "tut:1": 10, "tut:2": 20, "tut:3": 25, "tut:4": 25, "tut:5": 30, "tut:6": 40,
@@ -119,23 +119,16 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     return json(env, { keys: (rows.results ?? []).map((r) => r.key), credits: user.credits });
   }
 
-  // POST /rewards/claim { key } → grant once; always returns the fresh balance
+  // POST /rewards/claim: retired unverified tutorial route.
   if (path === "/rewards/claim" && req.method === "POST") {
     const body = (await req.json().catch(() => ({}))) as { key?: string };
     const key = typeof body?.key === 'string' ? body.key : '';
     const amount = Object.hasOwn(REWARDS,key) ? REWARDS[key] : 0;
     if (!amount) return json(env, { error: "unknown reward" }, 400);
 
-    // D1 batch is a transaction. changes() refers to the preceding INSERT in
-    // this batch, so duplicate claims cannot pay and failed payments roll back.
-    const [ins] = await env.DB.batch([
-      env.DB.prepare(`INSERT OR IGNORE INTO rewards (user_id, key, amount, created_at) VALUES (?,?,?,?)`).bind(user.id,key,amount,Date.now()),
-      env.DB.prepare(`UPDATE users SET credits = credits + ? WHERE id = ? AND changes() = 1`).bind(amount,user.id),
-    ]);
-    const granted = (ins.meta?.changes ?? 0) > 0;
-    const row = await env.DB.prepare(`SELECT credits FROM users WHERE id = ?`)
-      .bind(user.id).first<{ credits: number }>();
-    return json(env, { granted, amount: granted ? amount : 0, credits: row?.credits ?? 0 });
+    // Historical rows remain readable for migration accounting. New rewards
+    // require the validated lesson transcript at /rewards/tutorial/complete.
+    return json(env, { error: "legacy reward retired; complete the current tutorial" }, 410);
   }
 
   // POST /rewards/coupon { code } → redeem a coupon code (once per user; server-side caps)

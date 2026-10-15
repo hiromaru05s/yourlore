@@ -24,18 +24,16 @@ try {
  const bot=(id,difficulty,won=true,draw=false)=>req('track/bot',id,{difficulty,won,draw});
  add('bot');
  assert.equal((await (await req('auth/me','bot')).json()).user.exp,0,'historical W/L does not become EXP');
- for(const [difficulty,amount] of [['easy',20],['normal',35],['hard',60],['hell',120]]){
-  const before=user('bot').exp;
-  await bot('bot',difficulty,false);await bot('bot',difficulty,false,true);assert.equal(user('bot').exp,before);
-  const result=await (await bot('bot',difficulty)).json();assert.equal(result.experience.after-result.experience.before,amount);
-  await Promise.all(Array.from({length:8},()=>bot('bot',difficulty)));assert.equal(user('bot').exp,before+amount,'first clear paid only once');
+ for(const difficulty of ['easy','normal','hard','hell']){
+  for(const won of [true,false])assert.equal((await (await bot('bot',difficulty,won)).json()).experience,null);
  }
- assert.deepEqual({...user('bot')},{credits:200,exp:235});
+ assert.deepEqual({...user('bot')},{credits:0,exp:0});
+ assert.equal(db.prepare('SELECT count(*) n FROM matches').get().n,0);
  assert.equal((await bot(null,'easy')).status,401);
  for(const invalid of ['impossible','__proto__',null,[],['easy'],{},1])assert.equal((await bot('bot',invalid)).status,400);
- await req('track/bot','bot',{won:true});assert.equal(user('bot').exp,235,'legacy reports without difficulty grant nothing');
- assert.deepEqual((await (await req('auth/me','bot')).json()).user.botClears.sort(),['easy','hard','hell','normal']);
- console.log('PASS BOT amounts, losses/draws, duplicate/concurrent claims, legacy/invalid reports, auth, zero historical conversion');
+ await req('track/bot','bot',{won:true});assert.equal(user('bot').exp,0);
+ assert.deepEqual((await (await req('auth/me','bot')).json()).user.botClears,[]);
+ console.log('PASS unverified BOT reports cannot grant EXP, Shards, clears or match history');
  add('levels');let expected=0;
  for(let level=2;level<=50;level++){
   const reward=({10:300,20:500,30:700,40:1000,50:3000})[level]??100;expected+=reward;
@@ -56,6 +54,17 @@ try {
   const id='match-'+ranked,{r,messages}=room(id,ranked);await r.recordResult();assert.equal(r.room.recorded,true);assert.equal(messages[0].find(m=>m.type==='experienceResult').after-messages[0].find(m=>m.type==='experienceResult').before,20);assert.equal(messages[1].find(m=>m.type==='experienceResult').after-messages[1].find(m=>m.type==='experienceResult').before,5);
   const before=user('winner').exp;await room(id,ranked).r.recordResult();assert.equal(user('winner').exp,before);
  }
+ // Legitimate first clears are awarded only by the persisted challenge room.
+ add('challenge');
+ for(const [difficulty,amount] of [['easy',20],['normal',35],['hard',60],['hell',120]]){
+  const settle=async(id,winner=0)=>{const {r,messages}=room(id,false,winner);r.room.players=[{id:'challenge'},{id:'lore-challenge-bot-'+difficulty}];r.room.challengeDifficulty=difficulty;r.room.bot={side:1};await r.recordResult();assert(r.room.recorded);return messages;};
+  const before=user('challenge').exp;
+  await settle('loss-'+difficulty,1);await settle('draw-'+difficulty,null);assert.equal(user('challenge').exp,before);
+  const messages=await settle('win-'+difficulty);assert.equal(user('challenge').exp,before+amount);assert.equal(messages[0].find(m=>m.type==='experienceResult').after-messages[0].find(m=>m.type==='experienceResult').before,amount);
+  await settle('win-'+difficulty);await settle('repeat-'+difficulty);assert.equal(user('challenge').exp,before+amount);
+ }
+ assert.equal(user('challenge').exp,235);assert.deepEqual((await(await req('auth/me','challenge')).json()).user.botClears.sort(),['easy','hard','hell','normal']);
+ console.log('PASS authoritative challenge wins/defeats/draws, all four first-clear amounts and replay');
  assert.equal(user('winner').exp,40);assert.equal(user('loser').exp,10);
  await room('draw',false,null).r.recordResult();await room('void',true,0,false).r.recordResult();assert.equal(user('winner').exp,40);assert.equal(user('loser').exp,10);
  const failed=room('atomic-fail',false);failAt=9;await failed.r.recordResult();assert.equal(failed.r.room.recorded,false);assert.equal(user('winner').exp,40);assert.equal(db.prepare("SELECT count(*) n FROM matches WHERE id='atomic-fail'").get().n,0);await failed.r.recordResult();assert.equal(user('winner').exp,60);

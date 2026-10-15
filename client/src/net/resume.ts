@@ -11,10 +11,10 @@ import type { Side } from "../shared/types";
 const KEY = "lore_game";
 const WINDOW_MS = 10 * 60 * 1000; // don't try to rejoin games older than this
 
-export interface ActiveGame { roomId: string; you: Side; ts: number; ranked?: boolean; }
+export interface ActiveGame { roomId: string; you: Side; ts: number; ranked?: boolean; userId?: string; }
 
-export function saveActiveGame(roomId: string, you: Side, ranked = false): void {
-  try { localStorage.setItem(KEY, JSON.stringify({ roomId, you, ranked, ts: Date.now() })); } catch { /* private mode */ }
+export function saveActiveGame(roomId: string, you: Side, ranked = false, userId?: string): void {
+  try { localStorage.setItem(KEY, JSON.stringify({ roomId, you, ranked, userId, ts: Date.now() })); } catch { /* private mode */ }
 }
 
 export function clearActiveGame(): void {
@@ -36,12 +36,18 @@ export function touchActiveGame(): void {
 }
 
 /** The stored in-progress game if recent enough to rejoin, else null (stale ones are cleared). */
-export function loadActiveGame(): ActiveGame | null {
+export function loadActiveGame(userId?: string): ActiveGame | null {
   try {
     const s = localStorage.getItem(KEY);
     if (!s) return null;
     const g = JSON.parse(s) as ActiveGame;
-    if (!g?.roomId || Date.now() - g.ts >= WINDOW_MS) { clearActiveGame(); return null; }
+    if (!g || typeof g.roomId !== 'string' || !/^[A-Za-z0-9_-]{1,128}$/.test(g.roomId)
+      || (g.you !== 0 && g.you !== 1) || !Number.isFinite(g.ts)
+      || g.ts > Date.now() || Date.now() - g.ts >= WINDOW_MS
+      || (g.ranked !== undefined && typeof g.ranked !== 'boolean')
+      || (g.userId !== undefined && (typeof g.userId !== 'string' || (userId !== undefined && g.userId !== userId)))) {
+      clearActiveGame(); return null;
+    }
     return g;
-  } catch { return null; }
+  } catch { clearActiveGame(); return null; }
 }

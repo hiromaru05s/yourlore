@@ -70,7 +70,10 @@ export class OnlineController extends BaseController {
       setTimeout(() => { if (!this.closing && !this.state?.over) this.connect(); }, 800 * this.retries);
     } else {
       this.banner(null);
-      noticeModal(t("notice.disc.title"), t("notice.disc.body"), t("modal.home"), () => this.exits.onHome());
+      noticeModal(t("notice.disc.title"), t("notice.disc.body"), t("modal.home"), () => {
+        clearActiveGame();
+        this.exits.onHome();
+      });
     }
   }
 

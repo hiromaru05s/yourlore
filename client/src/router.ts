@@ -16,7 +16,7 @@ import type { User } from "./net/api";
 import { api } from "./net/api";
 import { aIdentify, aReset, aCapture } from "./net/analytics";
 import { setPresence, stopPresence } from "./net/presence";
-import { saveActiveGame, loadActiveGame } from "./net/resume";
+import { saveActiveGame, loadActiveGame, clearActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
@@ -87,7 +87,7 @@ export class App {
     if (this.user) {
       aIdentify(this.user.id, { verified: true });
       // crashed / closed mid-game? reconnect to the in-progress room instead of the home screen.
-      const g = loadActiveGame();
+      const g = loadActiveGame(this.user?.id);
       if (g) this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked);
       else this.afterLogin();
     } else this.login();
@@ -150,7 +150,7 @@ export class App {
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this), "cards"); }
   private startingBot=false;
   botGame(difficulty: BotDifficulty = "hard"): void {
-    const live=loadActiveGame();if(live)return this.onlineGame(live.roomId,live.you,'?',null,!!live.ranked);
+    const live=loadActiveGame(this.user?.id);if(live)return this.onlineGame(live.roomId,live.you,'?',null,!!live.ranked);
     if(!this.user || this.user.id==='local-guest-user'){setPresence('bot');this.swap(()=>mountGame(this,{mode:'bot',difficulty}));return;}
     if(this.startingBot)return;this.startingBot=true;
     const account=this.user.id;
@@ -159,8 +159,8 @@ export class App {
       .finally(()=>{this.startingBot=false;});
   }
   // entering a lobby with a live game still stored → rejoin it instead of re-queuing
-  onlineLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this), "lobby"); }
-  rankedLobby(): void { const g = loadActiveGame(); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this, true), "lobby"); }
+  onlineLobby(): void { const g = loadActiveGame(this.user?.id); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this), "lobby"); }
+  rankedLobby(): void { const g = loadActiveGame(this.user?.id); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this, true), "lobby"); }
   leaderboard(): void { setPresence("menu"); this.swap(() => mountLeaderboard(this), "leaderboard"); }
   profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab), "profile"); }
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this), "friends"); }
@@ -170,13 +170,14 @@ export class App {
   onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false, difficulty?: BotDifficulty): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });
-    saveActiveGame(roomId, you, ranked); // remember it so a crash/close can rejoin this exact room
+    saveActiveGame(roomId, you, ranked, this.user?.id); // remember it so a crash/close can rejoin this exact room
     this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar, ranked, difficulty }));
   }
 
   async logout(): Promise<void> {
     if (this.user?.id === "local-guest-user") localStorage.removeItem(LOCAL_GUEST_KEY);
     await api.logout().catch(() => {});
+    clearActiveGame();
     aReset();
     stopPresence();
     this.user = null;
