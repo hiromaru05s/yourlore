@@ -1,0 +1,88 @@
+/** Preview only. Material coordinates stay attached to the card surface. */
+export type Finish=0|1|2;
+export const finishes=[
+ {name:'虹彩箔',en:'PRISM FOIL',material:'虹色に反射するカットホロ箔',detail:'幅のある虹彩が斜めに走り、三角のカット面と彫り目を照らす。反射の縁で光が弾ける。'},
+ {name:'星砂箔',en:'STARDUST FOIL',material:'微結晶を閉じ込めた箔',detail:'大小のカット結晶が順に光を返し、金銀の鋭いきらめきが浮かぶ。カード面に刻まれた結晶の厚み。'},
+ {name:'水鏡箔',en:'LIQUID PEARL',material:'真珠光沢の透明な膜',detail:'青・真珠色の光の膜が大きくうねり、折り重なる曲面の縁が輝く。濡れたように流れる艶。'},
+] as const;
+type Surface={node:HTMLElement;canvas:HTMLCanvasElement;ctx:CanvasRenderingContext2D;kind:Finish;seed:number;path:Path2D;visible:boolean};
+const TAU=Math.PI*2,frac=(n:number)=>n-Math.floor(n),rand=(n:number)=>frac(Math.sin(n*127.1+311.7)*43758.5453);
+function glint(c:CanvasRenderingContext2D,x:number,y:number,r:number,a:number,tint:string){
+ c.globalAlpha=a;c.fillStyle=tint;c.beginPath();c.moveTo(x-r,y);c.quadraticCurveTo(x-.12*r,y-.12*r,x,y-r*1.65);c.quadraticCurveTo(x+.12*r,y-.12*r,x+r,y);c.quadraticCurveTo(x+.12*r,y+.12*r,x,y+r*1.65);c.quadraticCurveTo(x-.12*r,y+.12*r,x-r,y);c.fill();c.globalAlpha=a*.8;c.fillStyle='#fffef4';c.fillRect(x-.55,y-.55,1.1,1.1);
+}
+function draw(s:Surface,time:number){
+ const {ctx:c,canvas,kind,seed}=s,w=canvas.width,h=canvas.height,t=time+seed*.47;
+ c.clearRect(0,0,w,h);c.save();c.scale(w,h);c.clip(s.path);c.scale(1/w,1/h);
+ // A dark spectral underlayer gives the highlights contrast on pale artwork.
+ // All layers stay inside the art window, below names and numerical seals.
+ if(kind===0){
+  const sweep=(.5+.45*Math.sin(t*.78-.8))*w;
+  const g=c.createLinearGradient(sweep-w*.65,0,sweep+w*.65,h*.38);
+  const stops:[number,string][]=[[0,'#43205b08'],[.10,'#5155ef30'],[.24,'#24d4f86a'],[.39,'#8e65f780'],[.48,'#ef99f290'],[.53,'#fff8dce0'],[.59,'#ffbf6880'],[.71,'#6aefb85c'],[.87,'#18a0be20'],[1,'#38135108']];stops.forEach(([p,col])=>g.addColorStop(p,col));c.fillStyle=g;c.fillRect(0,0,w,h);
+  // Large angular foil facets light up in order across the moving reflection.
+  for(let row=-1;row<12;row++)for(let col=-1;col<8;col++){
+   const x=col*44+(row%2)*22,y=row*44,center=x+y*.27;
+   const a=.025+.19*Math.pow(Math.max(0,1-Math.abs(center-sweep)/(w*.7)),2);
+   c.globalAlpha=a;c.fillStyle=(row+col)%3?'#b4f8ff':'#ffbaf7';c.beginPath();c.moveTo(x,y);c.lineTo(x+44,y+12);c.lineTo(x+22,y+44);c.closePath();c.fill();
+   c.globalAlpha=a*1.8;c.strokeStyle='#e6faff';c.lineWidth=.75;c.beginPath();c.moveTo(x+44,y+12);c.lineTo(x+22,y+44);c.stroke();
+  }
+  for(let k=-24;k<36;k++){const x=k*14,a=Math.pow(Math.max(0,1-Math.abs(x+h*.25-sweep)/(w*.5)),3);c.globalAlpha=a*.48;c.strokeStyle=k%3?'#d8fbff':'#fff2d9';c.lineWidth=k%3?.7:1.4;c.beginPath();c.moveTo(x,0);c.lineTo(x+h*.5,h);c.stroke();}
+  for(let k=0;k<20;k++){const x=rand(k+3)*w,y=(.23+rand(k+62)*.68)*h,a=Math.pow(Math.max(0,1-Math.abs(x-y*.5-sweep+w*.3)/(w*.33)),3);glint(c,x,y,3+rand(k)*3.7,a,'#f7f9ff');}
+ }else if(kind===1){
+  const g=c.createLinearGradient(0,h,w,0);g.addColorStop(0,'#244a7b38');g.addColorStop(.5,'#c48f2d1c');g.addColorStop(1,'#593e701a');c.fillStyle=g;c.fillRect(0,0,w,h);
+  // Larger cut crystals have a dark bevel and two reflective faces. The
+  // material is visible between glints rather than disappearing completely.
+  for(let k=0;k<145;k++){
+   const x=rand(k+11)*w,y=rand(k+809)*h,cycle=t*(1.05+rand(k+400)*.55)+rand(k+50)*TAU;
+   const shine=Math.pow(Math.max(0,Math.sin(cycle)),6),size=2.2+rand(k+63)*4.6;
+   c.globalAlpha=.22+shine*.48;c.fillStyle='#30283d';c.beginPath();c.moveTo(x,y-size);c.lineTo(x+size,y);c.lineTo(x,y+size);c.lineTo(x-size,y);c.closePath();c.fill();
+   c.globalAlpha=.24+shine*.74;c.fillStyle=k%3?'#ffe4a7':'#b4edff';c.beginPath();c.moveTo(x,y-size);c.lineTo(x+size,y);c.lineTo(x,y+size);c.closePath();c.fill();
+   c.globalAlpha=.16+shine*.65;c.fillStyle='#fff8dd';c.beginPath();c.moveTo(x,y-size);c.lineTo(x-size,y);c.lineTo(x,y);c.closePath();c.fill();
+   if(k%3===0){
+    const a=Math.pow(Math.max(0,Math.sin(cycle)),5),r=5.5+rand(k+70)*5.5;
+    c.globalAlpha=a*.28;const halo=c.createRadialGradient(x,y,0,x,y,r*2.3);halo.addColorStop(0,'#ffe8a3');halo.addColorStop(1,'#ffe8a300');c.fillStyle=halo;c.fillRect(x-r*2.3,y-r*2.3,r*4.6,r*4.6);
+    c.save();c.shadowColor='#59401b';c.shadowBlur=2;glint(c,x,y,r,a,'#fff3cb');c.restore();
+   }
+  }
+  // Prominent scintillation sites remain inside the illustrated face even on
+  // small cards. Their phase overlaps, so the finish never looks unprocessed.
+  for(let k=0;k<17;k++){
+   const x=(.16+rand(k+1200)*.67)*w,y=(.25+rand(k+1450)*.61)*h;
+   const a=.3+.7*Math.pow(.5+.5*Math.sin(t*1.6+k*2.4),3),r=5+rand(k+1700)*5;
+   c.save();c.shadowColor='#41271c';c.shadowBlur=2.2;
+   glint(c,x,y,r,a,'#fff5cd');c.restore();
+  }
+ }else{
+  const g=c.createLinearGradient(0,0,w,h);g.addColorStop(0,'#507ed537');g.addColorStop(.55,'#4db8cc22');g.addColorStop(1,'#b977d52d');c.fillStyle=g;c.fillRect(0,0,w,h);
+  // A translucent moving film with wide light folds and narrow caustic edges.
+  for(let band=-3;band<8;band++){
+   const base=band*h*.24+Math.sin(t*.43)*h*.16,wave=(x:number)=>base+Math.sin(x/w*5.2+t*.95+band*.7)*h*.085+x*.32;
+   const ribbon=(offset:number,width:number)=>{c.beginPath();for(let x=-5;x<=w+5;x+=4){const y=wave(x)+offset;if(x===-5)c.moveTo(x,y);else c.lineTo(x,y);}for(let x=w+5;x>=-5;x-=4)c.lineTo(x,wave(x)+offset+width);c.closePath();};
+   ribbon(0,h*.11);const g=c.createLinearGradient(0,base,0,base+h*.5);g.addColorStop(0,'#7d8efb00');g.addColorStop(.25,'#8ddcff76');g.addColorStop(.5,'#edc9ff5c');g.addColorStop(.75,'#b2fff04d');g.addColorStop(1,'#7d8efb00');c.globalAlpha=1;c.fillStyle=g;c.fill();
+   ribbon(-4,4);c.fillStyle='#234d7945';c.fill();
+   c.beginPath();for(let x=-5;x<=w+5;x+=4){const y=wave(x);if(x===-5)c.moveTo(x,y);else c.lineTo(x,y);}c.strokeStyle='#d9ffff';c.globalAlpha=.5+.2*Math.sin(t*.9+band);c.lineWidth=2.1;c.stroke();
+   c.beginPath();for(let x=-5;x<=w+5;x+=4){const y=wave(x)+6;if(x===-5)c.moveTo(x,y);else c.lineTo(x,y);}c.strokeStyle='#e7bfff';c.globalAlpha=.45;c.lineWidth=1.4;c.stroke();
+   const x=(.5+.38*Math.sin(t*.52+band*2))*w;glint(c,x,wave(x),4.6+Math.sin(band)*1.3,Math.pow(Math.max(0,Math.sin(t*1.1+band*1.4)),4),'#e7f9ff');
+  }
+ }
+ // The reflective boundary belongs to the same printed surface, not an aura.
+ c.save();c.scale(w,h);c.globalAlpha=.58;c.strokeStyle=kind===0?'#e0d5ff':kind===1?'#ffe9b7':'#bbf5ff';c.lineWidth=1.6/w;c.stroke(s.path);c.restore();
+ c.restore();
+}
+export function createFinishClock(){
+ const surfaces=new Set<Surface>();let time=1.2,playing=true,speed=1,enabled=true,dead=false,raf=0,last=0,paint=0,forcedReduce=false;
+ const media=matchMedia('(prefers-reduced-motion: reduce)');const isReduced=()=>forcedReduce||media.matches;
+ const observer=new IntersectionObserver(entries=>{for(const entry of entries)for(const s of surfaces)if(s.node===entry.target){s.visible=entry.isIntersecting;if(s.visible&&enabled)draw(s,isReduced()?1.2:time);}});
+ const repaint=()=>{for(const s of surfaces){s.canvas.hidden=!enabled;if(enabled&&s.visible)draw(s,isReduced()?1.2:time);}};
+ function loop(now:number){if(dead)return;const dt=last?Math.min((now-last)/1000,.1):0;last=now;if(playing&&!isReduced()&&!document.hidden){time+=dt*speed;if(now-paint>=1000/30){repaint();paint=now;}}raf=requestAnimationFrame(loop);}
+ const change=()=>repaint();media.addEventListener('change',change);raf=requestAnimationFrame(loop);
+ return {
+  attach(node:HTMLElement,kind:Finish,seed=0){
+   const canvas=document.createElement('canvas');canvas.className='finish-surface';canvas.setAttribute('aria-hidden','true');canvas.width=256;const field=node.classList.contains('card--field');canvas.height=field?256:400;
+   const d=document.querySelector(field?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d')||'M.09 .21H.91V.93H.09Z';
+   const s:Surface={node,canvas,ctx:canvas.getContext('2d')!,kind,seed,path:new Path2D(d),visible:true};node.append(canvas);surfaces.add(s);observer.observe(node);canvas.hidden=!enabled;if(enabled)draw(s,isReduced()?1.2:time);
+   return()=>{observer.unobserve(node);canvas.remove();surfaces.delete(s);};
+  },kind(kind:Finish){surfaces.forEach(s=>s.kind=kind);repaint();},play(value:boolean){playing=value;last=0;},speed(value:number){speed=value;},enabled(value:boolean){enabled=value;repaint();},reduced(value:boolean){forcedReduce=value;repaint();},seek(value:number){time=value;repaint();},info:()=>({time,playing,speed,enabled,reduced:isReduced(),surfaces:surfaces.size,dead}),
+  dispose(){if(dead)return;dead=true;cancelAnimationFrame(raf);observer.disconnect();media.removeEventListener('change',change);surfaces.forEach(s=>s.canvas.remove());surfaces.clear();},
+ };
+}

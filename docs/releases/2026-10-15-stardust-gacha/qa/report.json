@@ -1,0 +1,126 @@
+{
+  "checks": [
+    {
+      "height": 400,
+      "time": 0,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 0,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 1.2,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 1.2,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 2.3,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 2.3,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 6,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 6,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 10,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 400,
+      "time": 10,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 0,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 0,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 1.2,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 1.2,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 2.3,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 2.3,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 6,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 6,
+      "seed": 3,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 10,
+      "seed": 0,
+      "differentChannels": 0
+    },
+    {
+      "height": 256,
+      "time": 10,
+      "seed": 3,
+      "differentChannels": 0
+    }
+  ],
+  "contextRestored": true,
+  "invalidInputsNoOp": true
+}
