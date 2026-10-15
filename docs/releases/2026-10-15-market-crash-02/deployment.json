@@ -1,0 +1,36 @@
+{
+  "url": "https://test.yourlore.xyz",
+  "source": "d3cefc43d24d0f8567e8623950012f61e3ebc083",
+  "featureCommit": "69864587",
+  "testFixtureRepair": "d3cefc43",
+  "deploymentId": "8ec3031b-0bf2-471b-b825-e1f02f42ac2b",
+  "versions": [
+    {
+      "version_id": "e75a4a21-0981-44df-bc6b-e46728e65595",
+      "percentage": 100
+    }
+  ],
+  "annotations": {
+    "workers/message": "d3cefc43d24d0f8567e8623950012f61e3ebc083 guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "tests": {
+    "passed": 161,
+    "total": 161
+  },
+  "assets": {
+    "matched": 97,
+    "total": 97,
+    "scope": "Published index.html and all built JavaScript/CSS chunks"
+  },
+  "browser": {
+    "loginScreenLoaded": true,
+    "runtimeErrors": [],
+    "authenticatedGameplay": false
+  },
+  "notes": [
+    "Selected 02 appears at the opponent turn start; no persistent status label.",
+    "Two unrelated summon test doubles were updated for the shared poison runtime before the successful guarded release.",
+    "Existing staging starter collection schema was verified read-only; no database mutation in this task."
+  ]
+}
