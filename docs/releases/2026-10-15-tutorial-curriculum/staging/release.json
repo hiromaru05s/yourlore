@@ -1,0 +1,22 @@
+{
+  "source": "14647025ab69f1a40aee65f2d25cfafacbdca8ee",
+  "tutorialCommit": "ec9cd2188170826033886cf43fd7ecd3643e45d7",
+  "environment": "staging",
+  "origin": "https://test.yourlore.xyz",
+  "workerVersions": [
+    {
+      "version_id": "b41ab69d-fdc6-4a1c-9bec-09ca4ccaa556",
+      "percentage": 100
+    }
+  ],
+  "deployedAt": "2026-10-15T10:13:12.817632Z",
+  "command": "node scripts/deploy-guard.mjs staging",
+  "coordination": "The cooperative HOME release includes the final tutorial commit. The guard snapshot was preserved and checked by asset hashes.",
+  "typecheck": "client and server passed",
+  "productionTests": {
+    "passed": 167,
+    "total": 167
+  },
+  "build": "passed",
+  "productionDeployed": false
+}

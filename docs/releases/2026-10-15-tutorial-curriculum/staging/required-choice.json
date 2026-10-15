@@ -1,0 +1,6 @@
+{
+  "checkedAt": "2026-10-15T10:16:19.756Z",
+  "origin": "https://test.yourlore.xyz",
+  "status": 400,
+  "check": "A reviewed spell with an empty target list cannot bypass the required Rift demonstration, even for an already paid lesson."
+}

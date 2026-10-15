@@ -1,0 +1,36 @@
+{
+  "migration": "0022_tutorial_curriculum.sql",
+  "environment": "staging",
+  "result": [
+    {
+      "results": [
+        {
+          "Total queries executed": 1,
+          "Rows read": 1,
+          "Rows written": 3,
+          "Database size (MB)": "0.33"
+        }
+      ],
+      "success": true,
+      "finalBookmark": "00000207-00000005-00005105-13eb7d654e3c4a605d424bd934a5cbd7",
+      "meta": {
+        "served_by": "v3-prod",
+        "served_by_region": "APAC",
+        "served_by_colo": "ICN",
+        "served_by_primary": true,
+        "timings": {
+          "sql_duration_ms": 47.052
+        },
+        "duration": 47.052,
+        "changes": 1,
+        "last_row_id": 0,
+        "changed_db": true,
+        "size_after": 327680,
+        "rows_read": 1,
+        "rows_written": 3,
+        "num_tables": 24,
+        "total_attempts": 1
+      }
+    }
+  ]
+}
