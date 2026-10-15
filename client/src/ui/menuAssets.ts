@@ -1,6 +1,7 @@
 export {duelFileAssets} from './duelFileAssets';
 import {DB, STARTERS, PASSIVES, SLEEVE_LIST, frameFor, fieldFrameFor} from '../shared/cards';
 import {COSMETICS} from '../shared/cosmetics';
+import {CARD_EFFECTS} from '../shared/cardEffects';
 import {THEMES, asset} from '../shared/atelierThemes';
 import {BOT_NPCS} from '../shared/botNpcs';
 import {artUrl} from './cardArt';
@@ -30,6 +31,7 @@ export function menuAssetUrls():string[]{
   ...['mon','spell','starter','trap'].map(k=>`/ui/cost-${k}.webp?v=2`),
   ...Object.keys(PASSIVES).map(k=>`/ui/passives/v2/${k}.svg`),
   ...SLEEVE_LIST.map(s=>s.url), ...COSMETICS.map(c=>c.url),
+  ...CARD_EFFECTS.map(e=>e.url), '/cosmetics/effect-empty.svg',
   ...THEMES.flatMap(t=>['body.webp','lining.webp','inlay-mask.webp','finish-mask.svg','surface-normal.webp','surface-roughness.webp'].map(f=>asset(t,f))),
   ...['astral','ivory','crimson','verdant'].map(k=>`/cosmetics/v2/sleeve-${k}.webp`),
   ...['compass','prism'].map(k=>`/frames/sleeve_${k}.webp`),
