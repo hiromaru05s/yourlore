@@ -1,0 +1,154 @@
+{
+  "comparisons": [
+    {
+      "field": false,
+      "seed": 0,
+      "seconds": 0,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 0,
+      "seconds": 0.37,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 0,
+      "seconds": 1.5,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 0,
+      "seconds": 3,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 0,
+      "seconds": 6,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 0,
+      "seconds": 9,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 5,
+      "seconds": 0,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 5,
+      "seconds": 0.37,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 5,
+      "seconds": 1.5,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 5,
+      "seconds": 3,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 5,
+      "seconds": 6,
+      "differing": 0
+    },
+    {
+      "field": false,
+      "seed": 5,
+      "seconds": 9,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 0,
+      "seconds": 0,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 0,
+      "seconds": 0.37,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 0,
+      "seconds": 1.5,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 0,
+      "seconds": 3,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 0,
+      "seconds": 6,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 0,
+      "seconds": 9,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 5,
+      "seconds": 0,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 5,
+      "seconds": 0.37,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 5,
+      "seconds": 1.5,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 5,
+      "seconds": 3,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 5,
+      "seconds": 6,
+      "differing": 0
+    },
+    {
+      "field": true,
+      "seed": 5,
+      "seconds": 9,
+      "differing": 0
+    }
+  ],
+  "hiddenRejected": true,
+  "zeroIntensity": true,
+  "idempotentDispose": true,
+  "decodeAfterDispose": true,
+  "backgroundArtTile": true,
+  "errors": []
+}
