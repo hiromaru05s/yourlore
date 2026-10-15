@@ -43,7 +43,7 @@ try {
       const rect = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return { x:r.x, y:r.y, right:r.right, bottom:r.bottom, height:r.height }; };
       return { bar:rect('.home-sound'), profile:rect('[data-profile]'), mode:rect('.lounge-mode-tabs') };
     });
-    assert(bounds.bar.y >= bounds.profile.bottom - 1);
+    assert(bounds.bar.y >= bounds.profile.bottom + 11, 'sound leaves room below profile and its outlined avatar: '+JSON.stringify(bounds));
     assert(bounds.bar.right <= width && bounds.bar.x >= 0);
     assert(bounds.bar.bottom <= bounds.mode.y || bounds.bar.right <= bounds.mode.x, 'sound must not overlap duel tabs: '+JSON.stringify(bounds));
     for (const selector of ['.home-sound-toggle','.home-sound-range']) {
