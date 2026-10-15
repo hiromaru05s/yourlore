@@ -1,7 +1,6 @@
 import {assetHints} from './assetHints';
 import {withDeadline} from '../net/deadline';
 import {playHomeEntrance} from './homeEntrance';
-import {prepareMenuCache} from './menuCache';
 import {loadingScreen} from './loadingScreen';
 import {loungeText} from './loungeText';
 import {getLang} from '../i18n';
@@ -44,36 +43,12 @@ export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(don
   });
  }
 }
-export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=false,screenAssets=imageUrls(root),prepareDuel?:()=>Promise<void>):{ready:()=>Promise<boolean>;cancel:()=>void}{
+export function coverScreen(root:HTMLElement,firstMenu=false,homeEntrance=false,screenAssets=imageUrls(root)):{ready:()=>Promise<boolean>;cancel:()=>void}{
  const loading=loadingScreen('screen-loader',loungeText('書庫を開いています','Opening the library','서고를 여는 중')),cover=loading.element;
  document.body.append(cover);root.inert=true;root.setAttribute('aria-busy','true');const abort=new AbortController();
  const release=()=>{cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
  const cancel=()=>{abort.abort();release();};
  return {cancel,ready:async()=>{
-  if(preloadMenu){
-   let prepared=false;
-   while(!prepared&&!abort.signal.aborted){
-    try {
-     await prepareMenuCache((done,total)=>loading.update(total?done/total*85:85,loungeText(`メニューの準備 ${done} / ${total}`,`Preparing menus ${done} / ${total}`,`메뉴 준비 ${done} / ${total}`)),abort.signal);
-     if(abort.signal.aborted)return false;
-     loading.update(87,loungeText('ショップの見本を準備しています','Preparing shop previews','상점 미리보기 준비 중'));
-     // WebGL-unavailable clients retain their existing non-3D fallback.
-     if(root.querySelector('.mana-spirit canvas'))await import('./cosmetics/catalogRender').then(m=>m.furnitureCatalog());
-     loading.update(90,loungeText('対戦の準備をしています','Preparing the duel','대전 준비 중'));
-     if(abort.signal.aborted)return false;
-     await prepareDuel?.();
-     prepared=true;
-    }catch(error){
-     if(abort.signal.aborted)return false;
-     console.warn('Menu preparation failed',error);
-     await new Promise<void>(resolve=>{
-      const retry=document.createElement('button');retry.className='asset-retry';retry.textContent=loungeText('準備を再試行','Retry preparation','준비 다시 시도');cover.append(retry);
-      const reload=document.createElement('button');reload.className='asset-retry';reload.textContent=loungeText('ゲームを再読み込み','Reload game','게임 새로고침');reload.onclick=()=>location.reload();cover.append(reload);
-      const finish=()=>{retry.remove();reload.remove();abort.signal.removeEventListener('abort',finish);resolve();};retry.onclick=finish;abort.signal.addEventListener('abort',finish,{once:true});
-     });
-    }
-   }
-  }
   await waitAssets(screenAssets,cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),abort.signal);
   if(abort.signal.aborted)return false;
   loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));
@@ -84,8 +59,16 @@ export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=fals
   await Promise.all([...root.querySelectorAll('img')].filter(i=>i.loading!=='lazy').map(i=>withDeadline(i.decode(),20000,abort.signal).catch(()=>{})));
   await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
   if(abort.signal.aborted)return false;
-  if(preloadMenu)menuReady=true;
+  if(firstMenu)menuReady=true;
   loading.update(100,loungeText("準備完了","Ready","준비 완료"));
+  // The visible HOME's first complete GPU frame belongs to this screen gate;
+  // unrelated duel and catalogue preparation does not. Cancel releases observers.
+  if(homeEntrance)await new Promise<void>(resolve=>{
+   const finish=()=>{observer.disconnect();abort.signal.removeEventListener('abort',finish);resolve();};
+   const check=()=>{if(abort.signal.aborted||!root.isConnected||!root.querySelector('[data-atmosphere="loading"]'))finish();};
+   const observer=new MutationObserver(check);observer.observe(root,{subtree:true,attributes:true,attributeFilter:['data-atmosphere'],childList:true});
+   abort.signal.addEventListener('abort',finish,{once:true});check();
+  });
   if(homeEntrance)await playHomeEntrance(root,cover,abort.signal);
   if(abort.signal.aborted)return false;
   release();document.dispatchEvent(new Event("lore:screen-ready"));return true;

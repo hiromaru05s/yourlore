@@ -8,7 +8,7 @@ const mime={'.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.jpg
  * own hash: a patch can fetch just its changed files instead of the whole pack. */
 export async function menuCacheManifest(root) {
  const bundle=await build({entryPoints:[path.join(root,'src/ui/menuAssets.ts')],bundle:true,platform:'node',format:'esm',write:false});
- const {menuAssetUrls,duelFileAssets}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+ const {menuAssetUrls,duelFileAssets,assetScope}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
  const extra=duelFileAssets(),media=new Map(extra.map(e=>[new URL(e.url,'https://lore.invalid').pathname,e.media]));
  // CSS backgrounds/cursors can be requested by transitional/fallback styles too.
  const cssImages=new Set();
@@ -18,7 +18,7 @@ export async function menuCacheManifest(root) {
  const contents=new Map();
  const entries=await Promise.all(paths.map(async url=>{
   const bytes=await readFile(path.join(root,'public',url)),hash=sha(bytes);contents.set(hash,bytes);
-  return {url,hash,bytes:bytes.length,media:media.get(url),type:mime[path.extname(url)]||'application/octet-stream'};
+  return {url,hash,scope:assetScope(url),bytes:bytes.length,media:media.get(url),type:mime[path.extname(url)]||'application/octet-stream'};
  }));
  const packs=[],assets=[];let batch=[],size=0;
  const flush=()=>{if(!batch.length)return;const source=Buffer.concat(batch.map(e=>contents.get(e.hash))),fileName=`assets/art-pack-${sha(source).slice(0,24)}.bin`;
@@ -26,7 +26,7 @@ export async function menuCacheManifest(root) {
   packs.push({url:'/'+fileName,bytes:source.length});assets.push({fileName,source});batch=[];size=0;
  };
  // Deduplicate identical masters/thumbnail aliases without changing URL identity.
- const unique=new Map();for(const e of entries){if(unique.has(e.hash))continue;unique.set(e.hash,e);if(size+e.bytes>4*1024*1024)flush();batch.push(e);size+=e.bytes;}flush();
+ let scope;const unique=new Map();for(const e of [...entries].sort((a,b)=>a.scope.localeCompare(b.scope)||a.url.localeCompare(b.url))){if(scope!==e.scope){flush();scope=e.scope;}if(unique.has(e.hash))continue;unique.set(e.hash,e);if(size+e.bytes>4*1024*1024)flush();batch.push(e);size+=e.bytes;}flush();
  for(const e of entries){const first=unique.get(e.hash);e.pack=first.pack;e.offset=first.offset;}
  const json=JSON.stringify({entries,packs}),revision=sha(json).slice(0,20);
  return {entries,packs,assets,json,fileName:`assets/menu-manifest-${revision}.json`};

@@ -85,7 +85,7 @@ export function mountHome(app: App): Screen {
 function showBotNpcModal(app: App): void {
   if(document.querySelector('.bot-diff-ov'))return;
   const store=sanitizeDecks(app.user?.decks ?? null),activeDeck=store.list[store.sel];
-  void warmGame(activeDeck.cards);
+  void warmGame(activeDeck.cards).catch(()=>{});
   let selected:BotDifficulty='normal';
   const previousFocus=document.activeElement as HTMLElement|null;
   const ov = document.createElement("div");

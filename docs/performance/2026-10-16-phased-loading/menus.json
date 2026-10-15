@@ -1,0 +1,1995 @@
+{
+  "base": "http://127.0.0.1:61315",
+  "api": "fixture; public static resources real",
+  "cases": [
+    {
+      "width": 1280,
+      "homeMs": 4790,
+      "actions": [
+        {
+          "name": "bot opponents",
+          "ms": 131,
+          "styleReads": 25,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:61315/art/npcs/v2/lumi.webp",
+              "at": 1792078245085
+            },
+            {
+              "url": "http://127.0.0.1:61315/art/npcs/v2/noel.webp",
+              "at": 1792078245089
+            },
+            {
+              "url": "http://127.0.0.1:61315/art/npcs/v2/vera.webp",
+              "at": 1792078245091
+            },
+            {
+              "url": "http://127.0.0.1:61315/art/npcs/v2/sion.webp",
+              "at": 1792078245092
+            }
+          ]
+        },
+        {
+          "name": "cards",
+          "ms": 549,
+          "styleReads": 1016,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards page 2",
+          "ms": 455,
+          "styleReads": 270,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:61315/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+              "at": 1792078246175
+            },
+            {
+              "url": "http://127.0.0.1:61315/art/vfx/mimic-family/engraved-brass.png",
+              "at": 1792078246199
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/gacha-trio-v1/tidal.webp",
+              "at": 1792078246268
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/living-v1/azure-plume/art.png",
+              "at": 1792078246285
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/v2/material-verdant.webp",
+              "at": 1792078246311
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-astral.webp",
+              "at": 1792078246315
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-crimson.webp",
+              "at": 1792078246319
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-ivory.webp",
+              "at": 1792078246321
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-verdant.webp",
+              "at": 1792078246324
+            },
+            {
+              "url": "http://127.0.0.1:61315/frames/sleeve_compass.webp",
+              "at": 1792078246349
+            },
+            {
+              "url": "http://127.0.0.1:61315/frames/sleeve_default.webp",
+              "at": 1792078246350
+            },
+            {
+              "url": "http://127.0.0.1:61315/frames/sleeve_prism.webp",
+              "at": 1792078246355
+            }
+          ]
+        },
+        {
+          "name": "card zoom",
+          "ms": 96,
+          "styleReads": 173,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "deck",
+          "ms": 184,
+          "styleReads": 1083,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop",
+          "ms": 42,
+          "styleReads": 366,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "starter catalog",
+          "ms": 414,
+          "styleReads": 85,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "sleeves",
+          "ms": 65,
+          "styleReads": 67,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "furniture",
+          "ms": 1768,
+          "styleReads": 46,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "ranking",
+          "ms": 47,
+          "styleReads": 2475,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "friends",
+          "ms": 34,
+          "styleReads": 232,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "profile",
+          "ms": 57,
+          "styleReads": 224,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "guide",
+          "ms": 179,
+          "styleReads": 594,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "home return",
+          "ms": 141,
+          "styleReads": 345,
+          "imageNetworkResponses": []
+        }
+      ],
+      "lateImages": [
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/lumi.webp",
+          "at": 1792078245085
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/noel.webp",
+          "at": 1792078245089
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/vera.webp",
+          "at": 1792078245091
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/sion.webp",
+          "at": 1792078245092
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+          "at": 1792078246175
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/vfx/mimic-family/engraved-brass.png",
+          "at": 1792078246199
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/gacha-trio-v1/tidal.webp",
+          "at": 1792078246268
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/living-v1/azure-plume/art.png",
+          "at": 1792078246285
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/material-verdant.webp",
+          "at": 1792078246311
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-astral.webp",
+          "at": 1792078246315
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-crimson.webp",
+          "at": 1792078246319
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-ivory.webp",
+          "at": 1792078246321
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-verdant.webp",
+          "at": 1792078246324
+        },
+        {
+          "url": "http://127.0.0.1:61315/frames/sleeve_compass.webp",
+          "at": 1792078246349
+        },
+        {
+          "url": "http://127.0.0.1:61315/frames/sleeve_default.webp",
+          "at": 1792078246350
+        },
+        {
+          "url": "http://127.0.0.1:61315/frames/sleeve_prism.webp",
+          "at": 1792078246355
+        }
+      ],
+      "serverImageTransfers": [
+        {
+          "url": "/art/npcs/v2/lumi.webp",
+          "at": 1792078245076,
+          "preload": false
+        },
+        {
+          "url": "/art/npcs/v2/noel.webp",
+          "at": 1792078245078,
+          "preload": false
+        },
+        {
+          "url": "/art/npcs/v2/vera.webp",
+          "at": 1792078245079,
+          "preload": false
+        },
+        {
+          "url": "/art/npcs/v2/sion.webp",
+          "at": 1792078245083,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245347,
+          "preload": false
+        },
+        {
+          "url": "/art/cards/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245347,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245353,
+          "preload": false
+        },
+        {
+          "url": "/art/cards/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245359,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/STARTER_CHEST.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245368,
+          "preload": false
+        },
+        {
+          "url": "/art/cards/STARTER_CHEST.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245374,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/search.png",
+          "at": 1792078245513,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/counter.svg",
+          "at": 1792078245515,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/dual.svg",
+          "at": 1792078245516,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/ambush.svg",
+          "at": 1792078245517,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/aura.svg",
+          "at": 1792078245517,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/void.svg",
+          "at": 1792078245518,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/guts.svg",
+          "at": 1792078245519,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/decay.svg",
+          "at": 1792078245519,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/majesty.svg",
+          "at": 1792078245519,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/taunt.svg",
+          "at": 1792078245520,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/evade.svg",
+          "at": 1792078245521,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/relic.svg",
+          "at": 1792078245522,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ANTIQUE_DK.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245523,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/CAVALRY.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245524,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/D_BLACK.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245524,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/D_BLUE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245525,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/D_RED.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245525,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DIVINE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245526,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DRAGON_RIDER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245528,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GUNNER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245528,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/SOLDIER2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245528,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TOKEN00.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245529,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245530,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245530,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245531,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP4.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245533,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245533,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FARM_KEEPER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245533,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GOLEM1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245534,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/RUST_SHROOM.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245536,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TAR1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245539,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TDE1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245539,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245539,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TPO1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245539,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TSO1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245541,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/APPRENTICE_ARMORER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245546,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ASSASSIN1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245555,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/CASTLE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245555,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DUNGEON.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245555,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GHOST.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245555,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GUILD_HALL.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245556,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/SORTER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245558,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TAR2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245558,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TDE2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245558,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245558,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TPO2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245559,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TSO2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245559,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP_BUTLER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245560,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VITAL2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245561,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/WINE_COLLECTOR.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245561,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/CASINO.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245561,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/EGG_HUNTER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245561,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/EGG_MASTER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245562,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GAMBLER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245566,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GOLEM2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245566,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/RUST_SLUG.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245567,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TAR3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245567,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TDE3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245567,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245567,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TPO3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245568,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TSO3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245568,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/UNBRANDER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245569,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VITAL3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245569,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ASSASSIN2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245569,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/BLACK_ALICE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245569,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DARK_ELF.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245570,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ELF.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245570,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ELITE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245570,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TAR5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245570,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TDE4.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245571,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE4.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245571,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TPO5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245572,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TSO5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245572,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VETERAN_ARMORER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245572,
+          "preload": false
+        },
+        {
+          "url": "/art/seekers/faceless-v2/portrait.webp",
+          "at": 1792078245572,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/shard-simple-v1.png",
+          "at": 1792078245573,
+          "preload": false
+        },
+        {
+          "url": "/ui/cost-mon.webp?v=2",
+          "at": 1792078245573,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-sm/GOLEM1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245620,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-sm/RUST_SHROOM.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245632,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-sm/GHOST.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245662,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-sm/GUILD_HALL.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245666,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-sm/GOLEM2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078245713,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VITAL4.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246049,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VOID_APOSTLE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246049,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM5_0.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246050,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM5_2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246051,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM5_3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246051,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GOLEM3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246051,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246052,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DRAGON_EGG.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246052,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FIRE_MASTER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246052,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM6_0.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246054,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM6_1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246054,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM6_7.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246055,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM6_8.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246055,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GUILD_HQ.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246055,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE6.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246055,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ELDER_ELF_KING.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246056,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE7.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246057,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/WORLD_TREE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246058,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GUILD_EYE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246058,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/WINE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246059,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/WORLD_CARE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246059,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/EMPTY_MIND.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246059,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FIRE_ARROW.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246061,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FIRE_ART.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246061,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FLAME.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246061,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GEM_RAIN.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246061,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GRAPE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246061,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TREASON.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246061,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/UNBRAND.webp?v=20260910-theme-identity-v3",
+          "at": 1792078246063,
+          "preload": false
+        },
+        {
+          "url": "/ui/cost-spell.webp?v=2",
+          "at": 1792078246160,
+          "preload": false
+        },
+        {
+          "url": "/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+          "at": 1792078246168,
+          "preload": true
+        },
+        {
+          "url": "/art/vfx/mimic-family/engraved-brass.png",
+          "at": 1792078246193,
+          "preload": true
+        },
+        {
+          "url": "/cosmetics/gacha-trio-v1/tidal.webp",
+          "at": 1792078246259,
+          "preload": true
+        },
+        {
+          "url": "/cosmetics/living-v1/azure-plume/art.png",
+          "at": 1792078246280,
+          "preload": true
+        },
+        {
+          "url": "/cosmetics/v2/material-verdant.webp",
+          "at": 1792078246309,
+          "preload": true
+        },
+        {
+          "url": "/cosmetics/v2/sleeve-astral.webp",
+          "at": 1792078246314,
+          "preload": true
+        },
+        {
+          "url": "/cosmetics/v2/sleeve-crimson.webp",
+          "at": 1792078246316,
+          "preload": true
+        },
+        {
+          "url": "/cosmetics/v2/sleeve-ivory.webp",
+          "at": 1792078246319,
+          "preload": true
+        },
+        {
+          "url": "/cosmetics/v2/sleeve-verdant.webp",
+          "at": 1792078246321,
+          "preload": true
+        },
+        {
+          "url": "/frames/sleeve_compass.webp",
+          "at": 1792078246346,
+          "preload": true
+        },
+        {
+          "url": "/frames/sleeve_default.webp",
+          "at": 1792078246348,
+          "preload": true
+        },
+        {
+          "url": "/frames/sleeve_prism.webp",
+          "at": 1792078246353,
+          "preload": true
+        },
+        {
+          "url": "/art/lounge/icons/v2/close.png",
+          "at": 1792078246861,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/bell.png",
+          "at": 1792078246993,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/check.png",
+          "at": 1792078246993,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/edit.png",
+          "at": 1792078246993,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/friends.png",
+          "at": 1792078249752,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/profile.png",
+          "at": 1792078249800,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/duel.png",
+          "at": 1792078249800,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/settings.png",
+          "at": 1792078249800,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/trophy.png",
+          "at": 1792078249800,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/history.png",
+          "at": 1792078249800,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/book.png",
+          "at": 1792078249893,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792078250032,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/arrow.png",
+          "at": 1792078250035,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/gifts/courier.png",
+          "at": 1792078250035,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792078250045,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/atmosphere-v2/library-wide.png",
+          "at": 1792078250048,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/atmosphere-v2/ivy.png",
+          "at": 1792078250048,
+          "preload": false
+        }
+      ],
+      "wireImageTransfers": [
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/lumi.webp",
+          "at": 1792078245063.9329,
+          "preload": false,
+          "cached": false,
+          "bytes": 234552
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/noel.webp",
+          "at": 1792078245063.961,
+          "preload": false,
+          "cached": false,
+          "bytes": 223522
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/vera.webp",
+          "at": 1792078245063.98,
+          "preload": false,
+          "cached": false,
+          "bytes": 222234
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/sion.webp",
+          "at": 1792078245064,
+          "preload": false,
+          "cached": false,
+          "bytes": 218072
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+          "at": 1792078246168.363,
+          "preload": true,
+          "cached": false,
+          "bytes": 2505082
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/vfx/mimic-family/engraved-brass.png",
+          "at": 1792078246193.202,
+          "preload": true,
+          "cached": false,
+          "bytes": 3571744
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/gacha-trio-v1/tidal.webp",
+          "at": 1792078246259.52,
+          "preload": true,
+          "cached": false,
+          "bytes": 388428
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/living-v1/azure-plume/art.png",
+          "at": 1792078246280.026,
+          "preload": true,
+          "cached": false,
+          "bytes": 3198560
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/material-verdant.webp",
+          "at": 1792078246308.867,
+          "preload": true,
+          "cached": false,
+          "bytes": 95825
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-astral.webp",
+          "at": 1792078246313.91,
+          "preload": true,
+          "cached": false,
+          "bytes": 95619
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-crimson.webp",
+          "at": 1792078246316.211,
+          "preload": true,
+          "cached": false,
+          "bytes": 80113
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-ivory.webp",
+          "at": 1792078246318.67,
+          "preload": true,
+          "cached": false,
+          "bytes": 87801
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/v2/sleeve-verdant.webp",
+          "at": 1792078246321.147,
+          "preload": true,
+          "cached": false,
+          "bytes": 76235
+        },
+        {
+          "url": "http://127.0.0.1:61315/frames/sleeve_compass.webp",
+          "at": 1792078246346.0579,
+          "preload": true,
+          "cached": false,
+          "bytes": 32779
+        },
+        {
+          "url": "http://127.0.0.1:61315/frames/sleeve_default.webp",
+          "at": 1792078246348.133,
+          "preload": true,
+          "cached": false,
+          "bytes": 99563
+        },
+        {
+          "url": "http://127.0.0.1:61315/frames/sleeve_prism.webp",
+          "at": 1792078246352.5432,
+          "preload": true,
+          "cached": false,
+          "bytes": 74721
+        }
+      ],
+      "state": {
+        "sameHomeCanvas": true,
+        "cache": "ready",
+        "worker": true,
+        "heap": 36911674,
+        "errors": []
+      },
+      "errors": [],
+      "httpErrors": []
+    },
+    {
+      "width": 390,
+      "homeMs": 4747,
+      "actions": [
+        {
+          "name": "bot opponents",
+          "ms": 127,
+          "styleReads": 24,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:61315/art/npcs/v2/lumi.webp",
+              "at": 1792078255283
+            },
+            {
+              "url": "http://127.0.0.1:61315/art/npcs/v2/noel.webp",
+              "at": 1792078255284
+            },
+            {
+              "url": "http://127.0.0.1:61315/art/npcs/v2/vera.webp",
+              "at": 1792078255284
+            },
+            {
+              "url": "http://127.0.0.1:61315/art/npcs/v2/sion.webp",
+              "at": 1792078255284
+            }
+          ]
+        },
+        {
+          "name": "cards",
+          "ms": 555,
+          "styleReads": 1008,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards page 2",
+          "ms": 443,
+          "styleReads": 269,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:61315/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+              "at": 1792078256324
+            },
+            {
+              "url": "http://127.0.0.1:61315/art/vfx/mimic-family/engraved-brass.png",
+              "at": 1792078256345
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/gacha-trio-v1/tidal.webp",
+              "at": 1792078256430
+            },
+            {
+              "url": "http://127.0.0.1:61315/cosmetics/living-v1/azure-plume/art.png",
+              "at": 1792078256440
+            }
+          ]
+        },
+        {
+          "name": "card zoom",
+          "ms": 87,
+          "styleReads": 172,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "deck",
+          "ms": 207,
+          "styleReads": 1075,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop",
+          "ms": 48,
+          "styleReads": 346,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "starter catalog",
+          "ms": 416,
+          "styleReads": 82,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "sleeves",
+          "ms": 63,
+          "styleReads": 64,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "furniture",
+          "ms": 1653,
+          "styleReads": 45,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "ranking",
+          "ms": 46,
+          "styleReads": 2465,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "friends",
+          "ms": 35,
+          "styleReads": 224,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "profile",
+          "ms": 57,
+          "styleReads": 216,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "guide",
+          "ms": 180,
+          "styleReads": 586,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "home return",
+          "ms": 153,
+          "styleReads": 343,
+          "imageNetworkResponses": []
+        }
+      ],
+      "lateImages": [
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/lumi.webp",
+          "at": 1792078255283
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/noel.webp",
+          "at": 1792078255284
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/vera.webp",
+          "at": 1792078255284
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/sion.webp",
+          "at": 1792078255284
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+          "at": 1792078256324
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/vfx/mimic-family/engraved-brass.png",
+          "at": 1792078256345
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/gacha-trio-v1/tidal.webp",
+          "at": 1792078256430
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/living-v1/azure-plume/art.png",
+          "at": 1792078256440
+        }
+      ],
+      "serverImageTransfers": [
+        {
+          "url": "/art/npcs/v2/lumi.webp",
+          "at": 1792078255275,
+          "preload": false
+        },
+        {
+          "url": "/art/npcs/v2/noel.webp",
+          "at": 1792078255278,
+          "preload": false
+        },
+        {
+          "url": "/art/npcs/v2/vera.webp",
+          "at": 1792078255278,
+          "preload": false
+        },
+        {
+          "url": "/art/npcs/v2/sion.webp",
+          "at": 1792078255278,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/search.png",
+          "at": 1792078255726,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/counter.svg",
+          "at": 1792078255726,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/dual.svg",
+          "at": 1792078255727,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/ambush.svg",
+          "at": 1792078255727,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/aura.svg",
+          "at": 1792078255727,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/void.svg",
+          "at": 1792078255727,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/guts.svg",
+          "at": 1792078255728,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/decay.svg",
+          "at": 1792078255729,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/majesty.svg",
+          "at": 1792078255729,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/taunt.svg",
+          "at": 1792078255730,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/evade.svg",
+          "at": 1792078255730,
+          "preload": false
+        },
+        {
+          "url": "/ui/passives/v2/relic.svg",
+          "at": 1792078255730,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/CAVALRY.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255732,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/D_BLACK.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255732,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/D_BLUE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255732,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/D_RED.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255732,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DIVINE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255732,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DRAGON_RIDER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255733,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GUNNER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255735,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/SOLDIER2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255735,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TOKEN00.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255735,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255735,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255735,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255737,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP4.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255741,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255741,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FARM_KEEPER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255742,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GOLEM1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255742,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/RUST_SHROOM.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255742,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TAR1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255743,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TDE1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255744,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255744,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TPO1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255744,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TSO1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255745,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ASSASSIN1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255745,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/CASTLE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255747,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DUNGEON.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255750,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GHOST.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255750,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GUILD_HALL.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255751,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/SORTER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255756,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TAR2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255757,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TDE2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255764,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255767,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TPO2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255767,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TSO2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255769,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VAMP_BUTLER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255769,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VITAL2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255769,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/WINE_COLLECTOR.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255771,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/CASINO.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255771,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/EGG_HUNTER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255771,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/EGG_MASTER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255771,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GAMBLER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255771,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GOLEM2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255771,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/RUST_SLUG.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255773,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TAR3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255773,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TDE3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255773,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255773,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TPO3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255774,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TSO3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255774,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/UNBRANDER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255774,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VITAL3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255775,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ASSASSIN2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255775,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/BLACK_ALICE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255775,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/DARK_ELF.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255775,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ELF.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255775,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ELITE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255779,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TAR5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255782,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TDE4.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255782,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE4.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255782,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TPO5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255782,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TSO5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255783,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VETERAN_ARMORER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255785,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/shard-simple-v1.png",
+          "at": 1792078255786,
+          "preload": false
+        },
+        {
+          "url": "/ui/cost-mon.webp?v=2",
+          "at": 1792078255786,
+          "preload": false
+        },
+        {
+          "url": "/art/seekers/faceless-v2/portrait.webp",
+          "at": 1792078255786,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-sm/GOLEM1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255821,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-sm/RUST_SHROOM.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255845,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-sm/GUILD_HALL.webp?v=20260910-theme-identity-v3",
+          "at": 1792078255865,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VITAL4.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256264,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/VOID_APOSTLE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256264,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM5_0.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256265,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM5_2.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256265,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM5_3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256265,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GOLEM3.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256265,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE5.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256266,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FIRE_MASTER.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256266,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM6_0.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256266,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM6_1.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256267,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM6_7.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256267,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GM6_8.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256267,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GUILD_HQ.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256268,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE6.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256269,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/ELDER_ELF_KING.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256269,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TGE7.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256270,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/WORLD_TREE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256271,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GUILD_EYE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256271,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/WINE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256272,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/WORLD_CARE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256272,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/EMPTY_MIND.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256272,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FIRE_ARROW.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256272,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FIRE_ART.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256273,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/FLAME.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256273,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GEM_RAIN.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256273,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/GRAPE.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256274,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/TREASON.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256274,
+          "preload": false
+        },
+        {
+          "url": "/art/cards-xs/UNBRAND.webp?v=20260910-theme-identity-v3",
+          "at": 1792078256274,
+          "preload": false
+        },
+        {
+          "url": "/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+          "at": 1792078256321,
+          "preload": true
+        },
+        {
+          "url": "/art/vfx/mimic-family/engraved-brass.png",
+          "at": 1792078256341,
+          "preload": true
+        },
+        {
+          "url": "/ui/cost-spell.webp?v=2",
+          "at": 1792078256374,
+          "preload": false
+        },
+        {
+          "url": "/cosmetics/gacha-trio-v1/tidal.webp",
+          "at": 1792078256423,
+          "preload": true
+        },
+        {
+          "url": "/cosmetics/living-v1/azure-plume/art.png",
+          "at": 1792078256437,
+          "preload": true
+        },
+        {
+          "url": "/art/lounge/icons/v2/close.png",
+          "at": 1792078256959,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/bell.png",
+          "at": 1792078257091,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/check.png",
+          "at": 1792078257091,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/edit.png",
+          "at": 1792078257091,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/friends.png",
+          "at": 1792078259602,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/profile.png",
+          "at": 1792078259649,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/duel.png",
+          "at": 1792078259649,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/settings.png",
+          "at": 1792078259649,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/trophy.png",
+          "at": 1792078259649,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/history.png",
+          "at": 1792078259649,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/book.png",
+          "at": 1792078259738,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792078259889,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/icons/v2/arrow.png",
+          "at": 1792078259891,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/gifts/courier.png",
+          "at": 1792078259891,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792078259906,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/atmosphere-v2/library-wide.png",
+          "at": 1792078259906,
+          "preload": false
+        },
+        {
+          "url": "/art/lounge/atmosphere-v2/ivy.png",
+          "at": 1792078259906,
+          "preload": false
+        }
+      ],
+      "wireImageTransfers": [
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/lumi.webp",
+          "at": 1792078255263.085,
+          "preload": false,
+          "cached": false,
+          "bytes": 234552
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/noel.webp",
+          "at": 1792078255263.128,
+          "preload": false,
+          "cached": false,
+          "bytes": 223522
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/vera.webp",
+          "at": 1792078255263.146,
+          "preload": false,
+          "cached": false,
+          "bytes": 222234
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/npcs/v2/sion.webp",
+          "at": 1792078255263.167,
+          "preload": false,
+          "cached": false,
+          "bytes": 218072
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+          "at": 1792078256321.229,
+          "preload": true,
+          "cached": false,
+          "bytes": 2505082
+        },
+        {
+          "url": "http://127.0.0.1:61315/art/vfx/mimic-family/engraved-brass.png",
+          "at": 1792078256341.228,
+          "preload": true,
+          "cached": false,
+          "bytes": 3571744
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/gacha-trio-v1/tidal.webp",
+          "at": 1792078256423.136,
+          "preload": true,
+          "cached": false,
+          "bytes": 388428
+        },
+        {
+          "url": "http://127.0.0.1:61315/cosmetics/living-v1/azure-plume/art.png",
+          "at": 1792078256437.0889,
+          "preload": true,
+          "cached": false,
+          "bytes": 3198560
+        }
+      ],
+      "state": {
+        "sameHomeCanvas": true,
+        "cache": "ready",
+        "worker": true,
+        "heap": 31376181,
+        "errors": []
+      },
+      "errors": [],
+      "httpErrors": []
+    }
+  ]
+}

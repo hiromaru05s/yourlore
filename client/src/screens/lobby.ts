@@ -20,7 +20,6 @@ const HB_MS = 20_000;   // same cadence as the in-game socket heartbeat
 const RETRY_MS = 2_000; // requeue delay after an unexpected drop
 
 export function mountLobby(app: App, ranked = false): Screen {
-  void warmGame(app.user?.deck??[]);
   const wrap = document.createElement("div");
   wrap.className = "screen";
   wrap.innerHTML = `
@@ -38,8 +37,8 @@ export function mountLobby(app: App, ranked = false): Screen {
   const title = wrap.querySelector("#lobbyTitle") as HTMLElement;
   const msg = wrap.querySelector("#lobbyMsg") as HTMLElement;
 
-  const started = Date.now();
-  const clock = window.setInterval(() => { const n=Math.floor((Date.now()-started)/1000); wrap.querySelector("#queueTime")!.textContent=String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0"); },1000);
+  let started:number|undefined;
+  const clock = window.setInterval(() => { const n=started===undefined?0:Math.floor((Date.now()-started)/1000); wrap.querySelector("#queueTime")!.textContent=String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0"); },1000);
   let sock: Sock<QueueServerMsg, QueueClientMsg> | null = null;
   let hb: ReturnType<typeof setInterval> | null = null;
   let done = false; // matched / cancelled / unmounted — stop reconnecting
@@ -50,6 +49,7 @@ export function mountLobby(app: App, ranked = false): Screen {
   const shutdown = (): void => { done = true; clearInterval(clock); stopHb(); clearTimeout(matchTimer); sock?.close(); };
 
   const connect = (): void => {
+    started??=Date.now();
     sock = new Sock<QueueServerMsg, QueueClientMsg>(ranked ? "/ws/queue?mode=ranked" : "/ws/queue", {
       onOpen: () => {
         if (done) { sock?.close(); return; }
@@ -86,7 +86,18 @@ export function mountLobby(app: App, ranked = false): Screen {
       onError: () => { title.textContent = t("lobby.connerr"); msg.textContent = t("lobby.connerr.desc"); },
     });
   };
-  connect();
+  // Do not pair players while a cold client is still downloading its game.
+  const prepare=async()=>{
+    msg.textContent=loungeText('対戦素材を準備しています','Preparing duel assets','대전 자료 준비 중');
+    try {await warmGame(app.user?.deck??[]);if(!done){msg.textContent=t('lobby.entered');connect();}}
+    catch {
+      if(done)return;
+      msg.textContent=loungeText('対戦の準備に失敗しました','Duel preparation failed','대전 준비 실패');
+      const retryButton=document.createElement('button');retryButton.className='btn btn-ghost';retryButton.textContent=loungeText('再試行','Retry','다시 시도');
+      retryButton.onclick=()=>{retryButton.remove();void prepare();};msg.after(retryButton);
+    }
+  };
+  void prepare();
 
   (wrap.querySelector("#cancel") as HTMLElement).onclick = () => { sock?.send({ type: "cancel" }); shutdown(); app.home(); };
 

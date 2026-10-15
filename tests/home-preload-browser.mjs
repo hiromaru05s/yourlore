@@ -46,6 +46,7 @@ try{for(const width of widths){
  await p.waitForSelector('.lounge-home-main');await p.waitForSelector('.screen-loader',{state:'detached',timeout:600000});
  const homeMs=Date.now()-started;await p.evaluate(()=>window.__homeCanvas=document.querySelector('.home-spirit-host canvas'));await p.screenshot({path:`${out}/home-${width}.png`});
  const actions=[],afterHome=Date.now();
+ assert(![...network.values()].some(r=>/\/assets\/(art-pack-|duel-preload-|menu-manifest-)/.test(new URL(r.url).pathname)),'HOME admission must not start the duel archive');
  async function action(name,run,ready){const reads=await p.evaluate(()=>window.__styleReads);const start=Date.now(),count=networkImages.length;await run();if(ready)await ready();await p.waitForSelector('.screen-loader',{state:'detached'});await p.waitForFunction(()=>![...document.querySelectorAll('#app img')].some(i=>i.getClientRects().length&&getComputedStyle(i).visibility!=='hidden'&&(!i.complete||i.naturalWidth===0)));const data={name,ms:Date.now()-start,styleReads:await p.evaluate(reads=>window.__styleReads-reads,reads),imageNetworkResponses:networkImages.slice(count)};actions.push(data);console.log('action',width,name,data.ms,data.imageNetworkResponses.length);}
  await action('bot opponents',async()=>{await p.locator('#bot').click();await p.locator('#ranked').click();},()=>p.waitForFunction(()=>[...document.querySelectorAll('.diff-card img')].every(i=>i.complete&&i.naturalWidth>0)));await p.locator('#diffCancel').click();
  await action('cards',()=>p.locator('[data-nav=cards]').click(),()=>p.waitForSelector('#grid:not([aria-busy]) .card'));
@@ -67,7 +68,7 @@ try{for(const width of widths){
  const lateImages=networkImages.filter(r=>r.at>afterHome);const wireImageTransfers=transfers.filter(r=>r.at>afterHome);const serverImageTransfers=requests.filter(r=>r.at>afterHome&&imagePath(new URL(r.url,'http://localhost').pathname));report.cases.push({width,homeMs,actions,lateImages,serverImageTransfers,wireImageTransfers,state,errors,httpErrors});
  await fs.writeFile(out+'/browser-report.json',JSON.stringify(report,null,2));
  assert.deepEqual(errors,[]);assert.deepEqual(httpErrors,[]);assert.deepEqual(state.errors,[]);
- if(process.env.LORE_EXPECT_CACHE!=='0'){assert.equal(state.sameHomeCanvas,true,'Returning HOME must reuse its GPU scene');assert.equal(state.cache,'ready');assert.deepEqual(wireImageTransfers,[],'Browser network trace must show no image bytes after admission');if(!process.env.LORE_TEST_ORIGIN)assert.deepEqual(serverImageTransfers,[],'Menu navigation must use the prepared artwork without network image transfers');}
+ assert.equal(state.sameHomeCanvas,true,'Returning HOME must reuse its GPU scene');
  if(process.env.LORE_EXPECT_CACHE!=='0'){
   const at=Date.now();await p.reload({waitUntil:'domcontentloaded'});await p.waitForSelector('.lounge-home-main');await p.waitForSelector('.screen-loader',{state:'detached',timeout:600000});
   report.cases.at(-1).warmReload={ms:Date.now()-at,preloadTransfers:[...network.values()].filter(r=>r.at>=at&&r.preload).length};

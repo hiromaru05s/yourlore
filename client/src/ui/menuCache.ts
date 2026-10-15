@@ -1,8 +1,9 @@
 import {withDeadline} from '../net/deadline';
 import {decodeAsset} from './imageAssets';
-import {menuAssetUrls} from './menuAssets';
+import {menuAssetUrls,assetScope} from './menuAssets';
+import {duelFileAssets} from './duelFileAssets';
 declare const __LORE_MENU_MANIFEST__: string;
-type Entry={url:string;hash:string;bytes:number;type?:string;media?:'narrow'|'wide';pack?:number;offset?:number};
+type Entry={scope?:'menu'|'duel'|'font';url:string;hash:string;bytes:number;type?:string;media?:'narrow'|'wide';pack?:number;offset?:number};
 type Manifest={entries:Entry[];packs?:{url:string;bytes:number}[]};
 const CONTENT='lore-menu-content-v1';
 const key=(hash:string)=>new URL('/__lore_menu_content__/'+hash,location.origin).href;
@@ -36,17 +37,20 @@ async function bind(entries:Entry[]):Promise<void> {
 }
 /** Preload original compressed files, not hundreds of decoded full-size bitmaps.
  * Content hashes reuse unchanged files across deploys and reject stale CDN data. */
-export async function prepareMenuCache(progress:(done:number,total:number)=>void,signal:AbortSignal):Promise<void> {
+export async function prepareMenuCache(progress:(done:number,total:number)=>void,signal:AbortSignal,scope?:'duel'|readonly string[]):Promise<void> {
  // A slow worker is not an unsupported worker. Retry activation instead of
  // permanently selecting thousands of individual image downloads for this tab.
  const enabled=await(registration??=connect().catch(error=>{registration=undefined;throw error;}));
  if(signal.aborted)return;
- if(!enabled){registration=undefined;await prepareWithoutStorage(progress,signal);return;}
+ if(!enabled&&typeof __LORE_MENU_MANIFEST__==='undefined'){registration=undefined;await prepareWithoutStorage(progress,signal,scope);return;}
  const inventory:Manifest=await(manifest??=fetch(__LORE_MENU_MANIFEST__,{cache:'force-cache'}).then(r=>{if(!r.ok)throw Error('Artwork manifest unavailable');return r.json();}).catch(e=>{manifest=undefined;throw e;}));
  const {packs=[]}=inventory,narrow=matchMedia('(max-width:700px)').matches;
- const entries=inventory.entries.filter(e=>!e.media||e.media===(narrow?'narrow':'wide'));
+ const compatible=inventory.entries.filter(e=>!e.media||e.media===(narrow?'narrow':'wide'));
+ const wanted=Array.isArray(scope)?new Set(scope.map(url=>new URL(url,location.href).pathname)):undefined;
+ const entries=compatible.filter(e=>scope==='duel'?(e.scope??assetScope(e.url))==='duel':!wanted||wanted.has(e.url));
+ if(!enabled){registration=undefined;await prepareWithoutStorage(progress,signal,scope,entries);return;}
  // Persist this client's binding before loading, including across worker restarts.
- await bind(entries);
+ await bind(compatible); // Full binding protects all phases and other tabs during pruning.
  const cache=await caches.open(CONTENT);
  // One metadata scan instead of opening 1,200 response bodies on every launch.
  const present=new Set((await cache.keys()).map(r=>r.url));
@@ -95,17 +99,21 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
  }));
  const failure=results.find((r):r is PromiseRejectedResult=>r.status==='rejected');
  if(failure){
-  if(failure.reason?.name==='QuotaExceededError'||failure.reason?.name==='SecurityError'){await prepareWithoutStorage(progress,signal);return;}
+  if(failure.reason?.name==='QuotaExceededError'||failure.reason?.name==='SecurityError'){await prepareWithoutStorage(progress,signal,scope,entries);return;}
   throw failure.reason;
  }
  if(!signal.aborted){document.documentElement.dataset.menuCache='ready';navigator.serviceWorker.controller?.postMessage({type:'LORE_MENU_PRUNE'});}
 }
 
-async function prepareWithoutStorage(progress:(done:number,total:number)=>void,signal:AbortSignal):Promise<void>{
+async function prepareWithoutStorage(progress:(done:number,total:number)=>void,signal:AbortSignal,scope?:'duel'|readonly string[],entries?:Entry[]):Promise<void>{
  document.documentElement.dataset.menuCache='http-fallback';
- const remaining=menuAssetUrls(),total=remaining.length;let done=0,failed=false;progress(0,total);
+ const wanted=Array.isArray(scope)?new Set(scope.map(url=>new URL(url,location.href).pathname)):undefined;
+ const selected=(url:string)=>scope==='duel'?assetScope(url)==='duel':!wanted||wanted.has(new URL(url,location.href).pathname);
+ const narrow=matchMedia('(max-width:700px)').matches;
+ const files=entries??[...menuAssetUrls().filter(selected).map(url=>({url,type:'image/'})),...duelFileAssets().filter(e=>selected(e.url)&&(!e.media||e.media===(narrow?'narrow':'wide'))).map(e=>({...e,type:''}))];
+ const remaining=files.map(e=>e.type?.startsWith('image/')?()=>decodeAsset(e.url):async()=>{const r=await fetch(e.url,{cache:'force-cache',signal:AbortSignal.timeout(60000)});if(!r.ok)throw Error('Asset unavailable: '+e.url);await r.arrayBuffer();}),total=remaining.length;let done=0,failed=false;progress(0,total);
  const results=await Promise.allSettled(Array.from({length:6},async()=>{
-  try{while(remaining.length&&!signal.aborted&&!failed){await decodeAsset(remaining.shift()!);progress(++done,total);}}catch(error){failed=true;throw error;}
+  try{while(remaining.length&&!signal.aborted&&!failed){await remaining.shift()!();progress(++done,total);}}catch(error){failed=true;throw error;}
  }));
  const failure=results.find((r):r is PromiseRejectedResult=>r.status==='rejected');if(failure)throw failure.reason;
 }

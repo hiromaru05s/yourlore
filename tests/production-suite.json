@@ -10,6 +10,8 @@
     "tests/erosion.mjs",
     "tests/menu-cache.mjs",
     "tests/menu-preparation.mjs",
+    "tests/game-admission.mjs",
+    "tests/duel-fonts.mjs",
     "tests/home-spirit-cache.mjs",
     "tests/reverse-pitch.mjs",
     "tests/rune-replay.mjs",

@@ -1,4 +1,3 @@
-import { noticeModal } from './ui/modal';
 import { getLang } from './i18n';
 import {releaseHomeSpirit} from './ui/homeSpirit';
 import { loungeText } from './ui/loungeText';
@@ -20,7 +19,7 @@ import { saveActiveGame, loadActiveGame, clearActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
-import { mountGame, warmGame } from "./screens/lazyGame";
+import { mountGame, mountGamePreparation } from "./screens/lazyGame";
 import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
@@ -117,7 +116,7 @@ export class App {
         const entrance=page==='home'&&!this.homeEntranceShown;
         const assets=imageUrls(this.root);
         if(page==='login'||!isMenuReady()||entrance||hasUnloadedAssets(assets)){
-          const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets,()=>warmGame());this.cancelCover=cover.cancel;
+          const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets);this.cancelCover=cover.cancel;
           void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;if(ready)checkGraphics();});
         } else checkGraphics();
       }
@@ -154,9 +153,13 @@ export class App {
     if(!this.user || this.user.id==='local-guest-user'){setPresence('bot');this.swap(()=>mountGame(this,{mode:'bot',difficulty}));return;}
     if(this.startingBot)return;this.startingBot=true;
     const account=this.user.id;
-    void api.startBot(difficulty,getLang()).then(r=>{if(this.user?.id===account)this.onlineGame(r.roomId,r.you,r.oppName,r.oppAvatar,false,difficulty);})
-      .catch(error=>noticeModal(loungeText('対戦を開始できませんでした','Could not start duel','대전을 시작하지 못했습니다'),String(error.message),loungeText('閉じる','Close','닫기'),()=>{}))
-      .finally(()=>{this.startingBot=false;});
+    this.swap(()=>mountGamePreparation(this,async()=>{
+      try {
+        const revision=this.screenRevision;
+        const r=await api.startBot(difficulty,getLang());
+        if(this.user?.id===account&&this.screenRevision===revision)this.onlineGame(r.roomId,r.you,r.oppName,r.oppAvatar,false,difficulty);
+      } finally {this.startingBot=false;}
+    },()=>{this.startingBot=false;}));
   }
   // entering a lobby with a live game still stored → rejoin it instead of re-queuing
   onlineLobby(): void { const g = loadActiveGame(this.user?.id); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this), "lobby"); }
