@@ -351,13 +351,14 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     const crystalModule=crystal&&!fxSkip?import('./voidCrystal/runtime').catch(()=>null):null;
     if(effect&&!fxSkip)warmSoulHarvest();
     else if(dark&&!fxSkip)warmDarkMerchant();
+    else if(card.id==='FLAME'&&!fxSkip)warmEmberDebt();
     else if(card.t==='spell'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
     const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
     if(!special){
       await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
       if(effect){await parkQuickSpell(node,side);await effect(node);}
       else if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
-      else if(card.t==='spell'&&!persistent&&card.id!=='FORBIDDEN'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+      else if(card.t==='spell'&&!persistent&&card.id!=='FORBIDDEN'&&card.id!=='FLAME'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     }
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
@@ -1487,3 +1488,5 @@ export async function growthRecovery(side:ViewSide,pulses:readonly GrowthPulse[]
  try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playGrowth(side,pulses,apply,signal),Math.max(0,...pulses.map(p=>p.delay))+2000);}
  finally{pulses.forEach((_,i)=>apply(i));}
 }
+/** Selected Ember Debt 02: prepare only its single atlas during the native reveal. */
+export function warmEmberDebt():void {void import('./emberDebt/runtime').then(m=>m.prepareEmberDebt()).catch(()=>{});}

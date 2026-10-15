@@ -1,3 +1,4 @@
+import {startEmberDebt} from '../emberDebt/runtime';
 import {combatCard,combatPortrait,combatRect} from '../combatAnchor';
 import {Effects} from './effects';
 import {CardMaterial} from './surface';
@@ -6,10 +7,11 @@ import type {GameEvent,Side} from '../../shared/types';
 import './style.css';
 export type ElementalEvent=Extract<GameEvent,{type:'elementalStart'}>;
 export interface Playback {impact(index:number):Promise<void>;finished:Promise<void>;cancel():void;}
-export const supportsElemental=(id:string)=>Object.hasOwn(visualEntries,id);
+export const supportsElemental=(id:string)=>id==='FLAME'||Object.hasOwn(visualEntries,id);
 const anchor=(el:HTMLElement|null|undefined):Anchor|null=>{const r=combatRect(el);return r?{el:el!,x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height}:null};
 /** The reducer owns targets and damage. This clock only reveals its public results. */
 export function startElemental(event:ElementalEvent,you:Side,sourceNode?:HTMLElement):Playback {
+ if(event.id==='FLAME')return startEmberDebt(event,you,sourceNode);
  const entry=visualEntries[event.id],source=sourceNode??combatCard(event.uid),nodes=event.targets.map(t=>t.uid?combatCard(t.uid):combatPortrait(t.player===you?'me':'opp'));
  const measuredOrigin=anchor(source);
  if(!entry||!source||!measuredOrigin||!event.targets.length)return {impact:()=>Promise.resolve(),finished:Promise.resolve(),cancel(){}};

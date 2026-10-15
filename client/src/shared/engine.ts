@@ -3716,8 +3716,11 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "FLAME": { // 불꽃: 상대 2 / 자신 1
       ctx.log(`${tag(p, card)} 상대 2 / 자신 1 데미지`, `${tag(p, card)} 相手2 / 自分1ダメージ`);
-      ctx.dealDamage(o, 2, cn(card), cn(card));
-      if (!g.over) ctx.dealDamage(p, 1, cn(card), cn(card));
+      const fx=elementalGroup(ctx,side(g,p),card);
+      try {
+        fx.hit(side(g,o),null,2);ctx.dealDamage(o, 2, cn(card), cn(card));
+        if (!g.over) {fx.hit(side(g,p),null,1);ctx.dealDamage(p, 1, cn(card), cn(card));}
+      } finally {fx.end();}
       break;
     }
     case "NEGOTIATE": { // 협상(v34): 상대 최대 마나 +1 + 2턴 동안 함정 설치 불가

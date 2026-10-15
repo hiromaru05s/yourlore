@@ -355,6 +355,7 @@ export abstract class BaseController implements BoardHandlers {
     if(events.some(e=>e.type==='nova'))A.warmNova();
     if(events.some(e=>e.type==='treason'))A.warmTreason();
     if(events.some(e=>e.type==='voidShot'))A.warmVoidShot();
+    if(events.some(e=>e.type==='elementalStart'&&e.id==='FLAME'))A.warmEmberDebt();
     if(events.some(e=>e.type==='voidGrant'))A.warmVoidGrant();
     if(events.some(e=>e.type==='summon'&&e.rebirth))A.warmRebirth();
     const runeReplays=runeReplayPlan(events);
@@ -493,7 +494,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case 'elementalStart': {
           let source=this.elementalFaces.find(f=>f.card.id===e.id&&f.side===sideOf(e.player))?.node;
-          if(!source&&e.id.startsWith('FIRE_')&&DB[e.id]&&!A.isFxSkipped()){
+          if(!source&&(e.id.startsWith('FIRE_')||e.id==='FLAME')&&DB[e.id]&&!A.isFxSkipped()){
             const card={...DB[e.id],uid:e.uid};source=await A.revealSpell(card,sideOf(e.player),'discard',undefined,true)??undefined;
             if(source)this.elementalFaces.push({card,side:sideOf(e.player),node:source});
           }
@@ -849,7 +850,7 @@ export abstract class BaseController implements BoardHandlers {
             }else if(def.id==='CHOSEN_AREA'&&isChosenVictory(events,e.player)){
               const face=await A.revealSpell({uid:'chosen-source',...def},sideOf(e.player),e.dest,undefined,true);
               try{if(!this.dead&&!A.isFxSkipped())await playChosenVictory(sideOf(e.player),face);}finally{face?.remove();}
-            }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','FORBIDDEN'].includes(def.id)){
+            }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','FORBIDDEN','FLAME'].includes(def.id)){
               const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{...def,uid:`elemental-${e.id}`};
               const node=await A.revealSpell(card,sideOf(e.player),e.dest,undefined,true);
               if(node){if(this.dead)node.remove();else this.elementalFaces.push({card,side:sideOf(e.player),node});}
