@@ -1,0 +1,3637 @@
+{
+  "checks": [
+    {
+      "route": "home",
+      "width": 1440,
+      "height": 900,
+      "bg": "url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\"), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v1/clouds.png\"), linear-gradient(rgb(112, 169, 214), rgb(202, 221, 230))",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 100.796875,
+          "y": 794,
+          "right": 264.8125,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 264.8125,
+          "y": 794,
+          "right": 428.84375,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 428.84375,
+          "y": 794,
+          "right": 592.875,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 592.875,
+          "y": 794,
+          "right": 781.5,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 781.5,
+          "y": 794,
+          "right": 945.53125,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 945.53125,
+          "y": 794,
+          "right": 1109.5625,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 1109.5625,
+          "y": 794,
+          "right": 1339.1875,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 662,
+          "y": 17,
+          "right": 778,
+          "bottom": 75,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1372,
+          "y": 24,
+          "right": 1408,
+          "bottom": 68,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 26.296875,
+          "right": 168.046875,
+          "bottom": 65.6875,
+          "hit": true
+        },
+        {
+          "text": "\n    \n      \n      \n      \n    \n  ",
+          "x": 32,
+          "y": 89.6875,
+          "right": 68,
+          "bottom": 133.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1219.203125,
+          "y": 32,
+          "right": 1348,
+          "bottom": 60,
+          "hit": true
+        }
+      ],
+      "fonts": [
+        {
+          "text": "届けものはありません",
+          "size": 12
+        },
+        {
+          "text": "勝利20 / 敗北10シャード · 1日300まで",
+          "size": 12
+        },
+        {
+          "text": "2026-10 · #6",
+          "size": 12
+        },
+        {
+          "text": "ブロンズまであと 61 MMR",
+          "size": 12
+        },
+        {
+          "text": "使用中",
+          "size": 12
+        },
+        {
+          "text": "デッキ編集",
+          "size": 12
+        }
+      ],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "home",
+      "width": 1280,
+      "height": 720,
+      "bg": "url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\"), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v1/clouds.png\"), linear-gradient(rgb(112, 169, 214), rgb(202, 221, 230))",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 89.59375,
+          "y": 614,
+          "right": 235.390625,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 235.390625,
+          "y": 614,
+          "right": 381.1875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 381.1875,
+          "y": 614,
+          "right": 527,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 527,
+          "y": 614,
+          "right": 694.671875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 694.671875,
+          "y": 614,
+          "right": 840.46875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 840.46875,
+          "y": 614,
+          "right": 986.28125,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 986.28125,
+          "y": 614,
+          "right": 1190.390625,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 582,
+          "y": 17,
+          "right": 698,
+          "bottom": 75,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1212,
+          "y": 24,
+          "right": 1248,
+          "bottom": 68,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 26.296875,
+          "right": 168.046875,
+          "bottom": 65.6875,
+          "hit": true
+        },
+        {
+          "text": "\n    \n      \n      \n      \n    \n  ",
+          "x": 32,
+          "y": 89.6875,
+          "right": 68,
+          "bottom": 133.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1059.203125,
+          "y": 32,
+          "right": 1188,
+          "bottom": 60,
+          "hit": true
+        }
+      ],
+      "fonts": [
+        {
+          "text": "届けものはありません",
+          "size": 12
+        },
+        {
+          "text": "勝利20 / 敗北10シャード · 1日300まで",
+          "size": 12
+        },
+        {
+          "text": "2026-10 · #6",
+          "size": 12
+        },
+        {
+          "text": "ブロンズまであと 61 MMR",
+          "size": 12
+        },
+        {
+          "text": "使用中",
+          "size": 12
+        },
+        {
+          "text": "デッキ編集",
+          "size": 12
+        }
+      ],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "home",
+      "width": 390,
+      "height": 844,
+      "bg": "url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\"), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v1/clouds.png\"), linear-gradient(rgb(112, 169, 214), rgb(202, 221, 230))",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 752,
+          "right": 63.40625,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 63.40625,
+          "y": 752,
+          "right": 110.828125,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 110.828125,
+          "y": 752,
+          "right": 158.25,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 158.25,
+          "y": 752,
+          "right": 212.78125,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 212.78125,
+          "y": 752,
+          "right": 260.1875,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 260.1875,
+          "y": 752,
+          "right": 307.609375,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 307.609375,
+          "y": 752,
+          "right": 373.984375,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 155,
+          "y": 15,
+          "right": 235,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 347,
+          "y": 16,
+          "right": 372,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 20.5,
+          "right": 93.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "\n    \n      \n      \n      \n    \n  ",
+          "x": 18,
+          "y": 79.5,
+          "right": 54,
+          "bottom": 123.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 272.09375,
+          "y": 26,
+          "right": 335,
+          "bottom": 50,
+          "hit": true
+        }
+      ],
+      "fonts": [
+        {
+          "text": "届けものはありません",
+          "size": 12
+        },
+        {
+          "text": "勝利20 / 敗北10シャード · 1日300まで",
+          "size": 12
+        },
+        {
+          "text": "2026-10 · #6",
+          "size": 12
+        },
+        {
+          "text": "ブロンズまであと 61 MMR",
+          "size": 12
+        },
+        {
+          "text": "使用中",
+          "size": 12
+        },
+        {
+          "text": "デッキ編集",
+          "size": 12
+        }
+      ],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "home",
+      "width": 320,
+      "height": 568,
+      "bg": "url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\"), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v1/clouds.png\"), linear-gradient(rgb(112, 169, 214), rgb(202, 221, 230))",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 5,
+          "y": 476,
+          "right": 46.046875,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 46.046875,
+          "y": 476,
+          "right": 87.109375,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 87.109375,
+          "y": 476,
+          "right": 128.171875,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 128.171875,
+          "y": 476,
+          "right": 175.390625,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 175.390625,
+          "y": 476,
+          "right": 216.453125,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 216.453125,
+          "y": 476,
+          "right": 257.515625,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 257.515625,
+          "y": 476,
+          "right": 314.984375,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 125,
+          "y": 15,
+          "right": 195,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 282,
+          "y": 16,
+          "right": 307,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 13,
+          "y": 20.5,
+          "right": 88.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "\n    \n      \n      \n      \n    \n  ",
+          "x": 13,
+          "y": 79.5,
+          "right": 49,
+          "bottom": 123.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 213.09375,
+          "y": 26,
+          "right": 276,
+          "bottom": 50,
+          "hit": true
+        }
+      ],
+      "fonts": [
+        {
+          "text": "届けものはありません",
+          "size": 12
+        },
+        {
+          "text": "勝利20 / 敗北10シャード · 1日300まで",
+          "size": 12
+        },
+        {
+          "text": "2026-10 · #6",
+          "size": 12
+        },
+        {
+          "text": "ブロンズまであと 61 MMR",
+          "size": 12
+        },
+        {
+          "text": "使用中",
+          "size": 12
+        },
+        {
+          "text": "デッキ編集",
+          "size": 12
+        }
+      ],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "home",
+      "width": 844,
+      "height": 390,
+      "bg": "url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\"), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v1/clouds.png\"), linear-gradient(rgb(112, 169, 214), rgb(202, 221, 230))",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 312,
+          "right": 123.546875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 123.546875,
+          "y": 312,
+          "right": 231.09375,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 231.09375,
+          "y": 312,
+          "right": 338.640625,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 338.640625,
+          "y": 312,
+          "right": 462.328125,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 462.328125,
+          "y": 312,
+          "right": 569.875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 569.875,
+          "y": 312,
+          "right": 677.421875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 677.421875,
+          "y": 312,
+          "right": 827.984375,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 382,
+          "y": 15,
+          "right": 462,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 801,
+          "y": 16,
+          "right": 826,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 20.5,
+          "right": 128.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "\n    \n      \n      \n      \n    \n  ",
+          "x": 18,
+          "y": 79.5,
+          "right": 54,
+          "bottom": 123.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 720.09375,
+          "y": 24,
+          "right": 789,
+          "bottom": 52,
+          "hit": true
+        }
+      ],
+      "fonts": [
+        {
+          "text": "届けものはありません",
+          "size": 12
+        },
+        {
+          "text": "勝利20 / 敗北10シャード · 1日300まで",
+          "size": 12
+        },
+        {
+          "text": "2026-10 · #6",
+          "size": 12
+        },
+        {
+          "text": "ブロンズまであと 61 MMR",
+          "size": 12
+        },
+        {
+          "text": "使用中",
+          "size": 12
+        },
+        {
+          "text": "デッキ編集",
+          "size": 12
+        }
+      ],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "deck",
+      "width": 1440,
+      "height": 900,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 100.796875,
+          "y": 830,
+          "right": 264.8125,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 264.8125,
+          "y": 830,
+          "right": 428.84375,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 428.84375,
+          "y": 830,
+          "right": 592.875,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 592.875,
+          "y": 830,
+          "right": 781.5,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 781.5,
+          "y": 830,
+          "right": 945.53125,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 945.53125,
+          "y": 830,
+          "right": 1109.5625,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 1109.5625,
+          "y": 830,
+          "right": 1339.1875,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 662.5,
+          "y": 6,
+          "right": 777.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1372,
+          "y": 10,
+          "right": 1408,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 12.296875,
+          "right": 168.046875,
+          "bottom": 51.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1219.203125,
+          "y": 18,
+          "right": 1348,
+          "bottom": 46,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "deck",
+      "width": 1280,
+      "height": 720,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 89.59375,
+          "y": 650,
+          "right": 235.390625,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 235.390625,
+          "y": 650,
+          "right": 381.1875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 381.1875,
+          "y": 650,
+          "right": 527,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 527,
+          "y": 650,
+          "right": 694.671875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 694.671875,
+          "y": 650,
+          "right": 840.46875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 840.46875,
+          "y": 650,
+          "right": 986.28125,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 986.28125,
+          "y": 650,
+          "right": 1190.390625,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 582.5,
+          "y": 6,
+          "right": 697.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1212,
+          "y": 10,
+          "right": 1248,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 12.296875,
+          "right": 168.046875,
+          "bottom": 51.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1059.203125,
+          "y": 18,
+          "right": 1188,
+          "bottom": 46,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "deck",
+      "width": 390,
+      "height": 844,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 774,
+          "right": 63.40625,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 63.40625,
+          "y": 774,
+          "right": 110.828125,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 110.828125,
+          "y": 774,
+          "right": 158.25,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 158.25,
+          "y": 774,
+          "right": 212.78125,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 212.78125,
+          "y": 774,
+          "right": 260.1875,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 260.1875,
+          "y": 774,
+          "right": 307.609375,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 307.609375,
+          "y": 774,
+          "right": 373.984375,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 137.5,
+          "y": 6,
+          "right": 252.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 347,
+          "y": 10,
+          "right": 372,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 14.5,
+          "right": 93.96875,
+          "bottom": 49.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 272.09375,
+          "y": 20,
+          "right": 335,
+          "bottom": 44,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "deck",
+      "width": 320,
+      "height": 568,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 5,
+          "y": 514,
+          "right": 46.046875,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 46.046875,
+          "y": 514,
+          "right": 87.109375,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 87.109375,
+          "y": 514,
+          "right": 128.171875,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 128.171875,
+          "y": 514,
+          "right": 175.390625,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 175.390625,
+          "y": 514,
+          "right": 216.453125,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 216.453125,
+          "y": 514,
+          "right": 257.515625,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 257.515625,
+          "y": 514,
+          "right": 314.984375,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 102.5,
+          "y": 4,
+          "right": 217.5,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 282,
+          "y": 4,
+          "right": 307,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 13,
+          "y": 8.5,
+          "right": 88.96875,
+          "bottom": 43.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 213.09375,
+          "y": 14,
+          "right": 276,
+          "bottom": 38,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "deck",
+      "width": 844,
+      "height": 390,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 336,
+          "right": 123.546875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 123.546875,
+          "y": 336,
+          "right": 231.09375,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 231.09375,
+          "y": 336,
+          "right": 338.640625,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 338.640625,
+          "y": 336,
+          "right": 462.328125,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 462.328125,
+          "y": 336,
+          "right": 569.875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 569.875,
+          "y": 336,
+          "right": 677.421875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 677.421875,
+          "y": 336,
+          "right": 827.984375,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 364.5,
+          "y": 4,
+          "right": 479.5,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 801,
+          "y": 4,
+          "right": 826,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 8.5,
+          "right": 128.96875,
+          "bottom": 43.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 720.09375,
+          "y": 12,
+          "right": 789,
+          "bottom": 40,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "cards",
+      "width": 1440,
+      "height": 900,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 100.796875,
+          "y": 830,
+          "right": 264.8125,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 264.8125,
+          "y": 830,
+          "right": 428.84375,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 428.84375,
+          "y": 830,
+          "right": 592.875,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 592.875,
+          "y": 830,
+          "right": 781.5,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 781.5,
+          "y": 830,
+          "right": 945.53125,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 945.53125,
+          "y": 830,
+          "right": 1109.5625,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 1109.5625,
+          "y": 830,
+          "right": 1339.1875,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 662.5,
+          "y": 6,
+          "right": 777.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1372,
+          "y": 10,
+          "right": 1408,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 12.296875,
+          "right": 168.046875,
+          "bottom": 51.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1219.203125,
+          "y": 18,
+          "right": 1348,
+          "bottom": 46,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "cards",
+      "width": 1280,
+      "height": 720,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 89.59375,
+          "y": 650,
+          "right": 235.390625,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 235.390625,
+          "y": 650,
+          "right": 381.1875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 381.1875,
+          "y": 650,
+          "right": 527,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 527,
+          "y": 650,
+          "right": 694.671875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 694.671875,
+          "y": 650,
+          "right": 840.46875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 840.46875,
+          "y": 650,
+          "right": 986.28125,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 986.28125,
+          "y": 650,
+          "right": 1190.390625,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 582.5,
+          "y": 6,
+          "right": 697.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1212,
+          "y": 10,
+          "right": 1248,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 12.296875,
+          "right": 168.046875,
+          "bottom": 51.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1059.203125,
+          "y": 18,
+          "right": 1188,
+          "bottom": 46,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "cards",
+      "width": 390,
+      "height": 844,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 774,
+          "right": 63.40625,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 63.40625,
+          "y": 774,
+          "right": 110.828125,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 110.828125,
+          "y": 774,
+          "right": 158.25,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 158.25,
+          "y": 774,
+          "right": 212.78125,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 212.78125,
+          "y": 774,
+          "right": 260.1875,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 260.1875,
+          "y": 774,
+          "right": 307.609375,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 307.609375,
+          "y": 774,
+          "right": 373.984375,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 137.5,
+          "y": 6,
+          "right": 252.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 347,
+          "y": 10,
+          "right": 372,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 14.5,
+          "right": 93.96875,
+          "bottom": 49.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 272.09375,
+          "y": 20,
+          "right": 335,
+          "bottom": 44,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "cards",
+      "width": 320,
+      "height": 568,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 5,
+          "y": 514,
+          "right": 46.046875,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 46.046875,
+          "y": 514,
+          "right": 87.109375,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 87.109375,
+          "y": 514,
+          "right": 128.171875,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 128.171875,
+          "y": 514,
+          "right": 175.390625,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 175.390625,
+          "y": 514,
+          "right": 216.453125,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 216.453125,
+          "y": 514,
+          "right": 257.515625,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 257.515625,
+          "y": 514,
+          "right": 314.984375,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 102.5,
+          "y": 4,
+          "right": 217.5,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 282,
+          "y": 4,
+          "right": 307,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 13,
+          "y": 8.5,
+          "right": 88.96875,
+          "bottom": 43.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 213.09375,
+          "y": 14,
+          "right": 276,
+          "bottom": 38,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "cards",
+      "width": 844,
+      "height": 390,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 336,
+          "right": 123.546875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 123.546875,
+          "y": 336,
+          "right": 231.09375,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 231.09375,
+          "y": 336,
+          "right": 338.640625,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 338.640625,
+          "y": 336,
+          "right": 462.328125,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 462.328125,
+          "y": 336,
+          "right": 569.875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 569.875,
+          "y": 336,
+          "right": 677.421875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 677.421875,
+          "y": 336,
+          "right": 827.984375,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 364.5,
+          "y": 4,
+          "right": 479.5,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 801,
+          "y": 4,
+          "right": 826,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 8.5,
+          "right": 128.96875,
+          "bottom": 43.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 720.09375,
+          "y": 12,
+          "right": 789,
+          "bottom": 40,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "leaderboard",
+      "width": 1440,
+      "height": 900,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 100.796875,
+          "y": 794,
+          "right": 264.8125,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 264.8125,
+          "y": 794,
+          "right": 428.84375,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 428.84375,
+          "y": 794,
+          "right": 592.875,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 592.875,
+          "y": 794,
+          "right": 781.5,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 781.5,
+          "y": 794,
+          "right": 945.53125,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 945.53125,
+          "y": 794,
+          "right": 1109.5625,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 1109.5625,
+          "y": 794,
+          "right": 1339.1875,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 662,
+          "y": 17,
+          "right": 778,
+          "bottom": 75,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1372,
+          "y": 24,
+          "right": 1408,
+          "bottom": 68,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 26.296875,
+          "right": 168.046875,
+          "bottom": 65.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1219.203125,
+          "y": 32,
+          "right": 1348,
+          "bottom": 60,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "leaderboard",
+      "width": 1280,
+      "height": 720,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 89.59375,
+          "y": 614,
+          "right": 235.390625,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 235.390625,
+          "y": 614,
+          "right": 381.1875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 381.1875,
+          "y": 614,
+          "right": 527,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 527,
+          "y": 614,
+          "right": 694.671875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 694.671875,
+          "y": 614,
+          "right": 840.46875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 840.46875,
+          "y": 614,
+          "right": 986.28125,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 986.28125,
+          "y": 614,
+          "right": 1190.390625,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 582,
+          "y": 17,
+          "right": 698,
+          "bottom": 75,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1212,
+          "y": 24,
+          "right": 1248,
+          "bottom": 68,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 26.296875,
+          "right": 168.046875,
+          "bottom": 65.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1059.203125,
+          "y": 32,
+          "right": 1188,
+          "bottom": 60,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "leaderboard",
+      "width": 390,
+      "height": 844,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 752,
+          "right": 63.40625,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 63.40625,
+          "y": 752,
+          "right": 110.828125,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 110.828125,
+          "y": 752,
+          "right": 158.25,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 158.25,
+          "y": 752,
+          "right": 212.78125,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 212.78125,
+          "y": 752,
+          "right": 260.1875,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 260.1875,
+          "y": 752,
+          "right": 307.609375,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 307.609375,
+          "y": 752,
+          "right": 373.984375,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 155,
+          "y": 15,
+          "right": 235,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 347,
+          "y": 16,
+          "right": 372,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 20.5,
+          "right": 93.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 272.09375,
+          "y": 26,
+          "right": 335,
+          "bottom": 50,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "leaderboard",
+      "width": 320,
+      "height": 568,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 5,
+          "y": 476,
+          "right": 46.046875,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 46.046875,
+          "y": 476,
+          "right": 87.109375,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 87.109375,
+          "y": 476,
+          "right": 128.171875,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 128.171875,
+          "y": 476,
+          "right": 175.390625,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 175.390625,
+          "y": 476,
+          "right": 216.453125,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 216.453125,
+          "y": 476,
+          "right": 257.515625,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 257.515625,
+          "y": 476,
+          "right": 314.984375,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 125,
+          "y": 15,
+          "right": 195,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 282,
+          "y": 16,
+          "right": 307,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 13,
+          "y": 20.5,
+          "right": 88.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 213.09375,
+          "y": 26,
+          "right": 276,
+          "bottom": 50,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "leaderboard",
+      "width": 844,
+      "height": 390,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 312,
+          "right": 123.546875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 123.546875,
+          "y": 312,
+          "right": 231.09375,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 231.09375,
+          "y": 312,
+          "right": 338.640625,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 338.640625,
+          "y": 312,
+          "right": 462.328125,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 462.328125,
+          "y": 312,
+          "right": 569.875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 569.875,
+          "y": 312,
+          "right": 677.421875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 677.421875,
+          "y": 312,
+          "right": 827.984375,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 382,
+          "y": 15,
+          "right": 462,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 801,
+          "y": 16,
+          "right": 826,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 20.5,
+          "right": 128.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 720.09375,
+          "y": 24,
+          "right": 789,
+          "bottom": 52,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "friends",
+      "width": 1440,
+      "height": 900,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 100.796875,
+          "y": 830,
+          "right": 264.8125,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 264.8125,
+          "y": 830,
+          "right": 428.84375,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 428.84375,
+          "y": 830,
+          "right": 592.875,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 592.875,
+          "y": 830,
+          "right": 781.5,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 781.5,
+          "y": 830,
+          "right": 945.53125,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 945.53125,
+          "y": 830,
+          "right": 1109.5625,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 1109.5625,
+          "y": 830,
+          "right": 1339.1875,
+          "bottom": 881,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 662.5,
+          "y": 6,
+          "right": 777.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1372,
+          "y": 10,
+          "right": 1408,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 12.296875,
+          "right": 168.046875,
+          "bottom": 51.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1219.203125,
+          "y": 18,
+          "right": 1348,
+          "bottom": 46,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "friends",
+      "width": 1280,
+      "height": 720,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 89.59375,
+          "y": 650,
+          "right": 235.390625,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 235.390625,
+          "y": 650,
+          "right": 381.1875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 381.1875,
+          "y": 650,
+          "right": 527,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 527,
+          "y": 650,
+          "right": 694.671875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 694.671875,
+          "y": 650,
+          "right": 840.46875,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 840.46875,
+          "y": 650,
+          "right": 986.28125,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 986.28125,
+          "y": 650,
+          "right": 1190.390625,
+          "bottom": 701,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 582.5,
+          "y": 6,
+          "right": 697.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1212,
+          "y": 10,
+          "right": 1248,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 12.296875,
+          "right": 168.046875,
+          "bottom": 51.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1059.203125,
+          "y": 18,
+          "right": 1188,
+          "bottom": 46,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "friends",
+      "width": 390,
+      "height": 844,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 774,
+          "right": 63.40625,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 63.40625,
+          "y": 774,
+          "right": 110.828125,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 110.828125,
+          "y": 774,
+          "right": 158.25,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 158.25,
+          "y": 774,
+          "right": 212.78125,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 212.78125,
+          "y": 774,
+          "right": 260.1875,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 260.1875,
+          "y": 774,
+          "right": 307.609375,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 307.609375,
+          "y": 774,
+          "right": 373.984375,
+          "bottom": 825,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 137.5,
+          "y": 6,
+          "right": 252.5,
+          "bottom": 58,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 347,
+          "y": 10,
+          "right": 372,
+          "bottom": 54,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 14.5,
+          "right": 93.96875,
+          "bottom": 49.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 272.09375,
+          "y": 20,
+          "right": 335,
+          "bottom": 44,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "friends",
+      "width": 320,
+      "height": 568,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 5,
+          "y": 514,
+          "right": 46.046875,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 46.046875,
+          "y": 514,
+          "right": 87.109375,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 87.109375,
+          "y": 514,
+          "right": 128.171875,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 128.171875,
+          "y": 514,
+          "right": 175.390625,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 175.390625,
+          "y": 514,
+          "right": 216.453125,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 216.453125,
+          "y": 514,
+          "right": 257.515625,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 257.515625,
+          "y": 514,
+          "right": 314.984375,
+          "bottom": 558,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 102.5,
+          "y": 4,
+          "right": 217.5,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 282,
+          "y": 4,
+          "right": 307,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 13,
+          "y": 8.5,
+          "right": 88.96875,
+          "bottom": 43.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 213.09375,
+          "y": 14,
+          "right": 276,
+          "bottom": 38,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "friends",
+      "width": 844,
+      "height": 390,
+      "bg": "linear-gradient(rgba(6, 19, 38, 0.376), rgba(3, 16, 36, 0.61)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 336,
+          "right": 123.546875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 123.546875,
+          "y": 336,
+          "right": 231.09375,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 231.09375,
+          "y": 336,
+          "right": 338.640625,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 338.640625,
+          "y": 336,
+          "right": 462.328125,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 462.328125,
+          "y": 336,
+          "right": 569.875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 569.875,
+          "y": 336,
+          "right": 677.421875,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 677.421875,
+          "y": 336,
+          "right": 827.984375,
+          "bottom": 380,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 364.5,
+          "y": 4,
+          "right": 479.5,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 801,
+          "y": 4,
+          "right": 826,
+          "bottom": 48,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 8.5,
+          "right": 128.96875,
+          "bottom": 43.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 720.09375,
+          "y": 12,
+          "right": 789,
+          "bottom": 40,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "shop",
+      "width": 1440,
+      "height": 900,
+      "bg": "linear-gradient(rgba(6, 16, 28, 0.74), rgba(6, 16, 28, 0.85)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 100.796875,
+          "y": 794,
+          "right": 264.8125,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 264.8125,
+          "y": 794,
+          "right": 428.84375,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 428.84375,
+          "y": 794,
+          "right": 592.875,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 592.875,
+          "y": 794,
+          "right": 781.5,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 781.5,
+          "y": 794,
+          "right": 945.53125,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 945.53125,
+          "y": 794,
+          "right": 1109.5625,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 1109.5625,
+          "y": 794,
+          "right": 1339.1875,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 662,
+          "y": 17,
+          "right": 778,
+          "bottom": 75,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1372,
+          "y": 24,
+          "right": 1408,
+          "bottom": 68,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 26.296875,
+          "right": 168.046875,
+          "bottom": 65.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1219.203125,
+          "y": 32,
+          "right": 1348,
+          "bottom": 60,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "shop",
+      "width": 1280,
+      "height": 720,
+      "bg": "linear-gradient(rgba(6, 16, 28, 0.74), rgba(6, 16, 28, 0.85)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 89.59375,
+          "y": 614,
+          "right": 235.390625,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 235.390625,
+          "y": 614,
+          "right": 381.1875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 381.1875,
+          "y": 614,
+          "right": 527,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 527,
+          "y": 614,
+          "right": 694.671875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 694.671875,
+          "y": 614,
+          "right": 840.46875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 840.46875,
+          "y": 614,
+          "right": 986.28125,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 986.28125,
+          "y": 614,
+          "right": 1190.390625,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 582,
+          "y": 17,
+          "right": 698,
+          "bottom": 75,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1212,
+          "y": 24,
+          "right": 1248,
+          "bottom": 68,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 26.296875,
+          "right": 168.046875,
+          "bottom": 65.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1059.203125,
+          "y": 32,
+          "right": 1188,
+          "bottom": 60,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "shop",
+      "width": 390,
+      "height": 844,
+      "bg": "linear-gradient(rgba(6, 16, 28, 0.74), rgba(6, 16, 28, 0.85)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 752,
+          "right": 63.40625,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 63.40625,
+          "y": 752,
+          "right": 110.828125,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 110.828125,
+          "y": 752,
+          "right": 158.25,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 158.25,
+          "y": 752,
+          "right": 212.78125,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 212.78125,
+          "y": 752,
+          "right": 260.1875,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 260.1875,
+          "y": 752,
+          "right": 307.609375,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 307.609375,
+          "y": 752,
+          "right": 373.984375,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 155,
+          "y": 15,
+          "right": 235,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 347,
+          "y": 16,
+          "right": 372,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 20.5,
+          "right": 93.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 272.09375,
+          "y": 26,
+          "right": 335,
+          "bottom": 50,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "shop",
+      "width": 320,
+      "height": 568,
+      "bg": "linear-gradient(rgba(6, 16, 28, 0.74), rgba(6, 16, 28, 0.85)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 5,
+          "y": 476,
+          "right": 46.046875,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 46.046875,
+          "y": 476,
+          "right": 87.109375,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 87.109375,
+          "y": 476,
+          "right": 128.171875,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 128.171875,
+          "y": 476,
+          "right": 175.390625,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 175.390625,
+          "y": 476,
+          "right": 216.453125,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 216.453125,
+          "y": 476,
+          "right": 257.515625,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 257.515625,
+          "y": 476,
+          "right": 314.984375,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 125,
+          "y": 15,
+          "right": 195,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 282,
+          "y": 16,
+          "right": 307,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 13,
+          "y": 20.5,
+          "right": 88.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 213.09375,
+          "y": 26,
+          "right": 276,
+          "bottom": 50,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "shop",
+      "width": 844,
+      "height": 390,
+      "bg": "linear-gradient(rgba(6, 16, 28, 0.74), rgba(6, 16, 28, 0.85)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 312,
+          "right": 123.546875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 123.546875,
+          "y": 312,
+          "right": 231.09375,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 231.09375,
+          "y": 312,
+          "right": 338.640625,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 338.640625,
+          "y": 312,
+          "right": 462.328125,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 462.328125,
+          "y": 312,
+          "right": 569.875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 569.875,
+          "y": 312,
+          "right": 677.421875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 677.421875,
+          "y": 312,
+          "right": 827.984375,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 382,
+          "y": 15,
+          "right": 462,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 801,
+          "y": 16,
+          "right": 826,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 20.5,
+          "right": 128.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 720.09375,
+          "y": 24,
+          "right": 789,
+          "bottom": 52,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "tutorial",
+      "width": 1440,
+      "height": 900,
+      "bg": "linear-gradient(rgba(7, 21, 34, 0.78), rgba(7, 21, 34, 0.93)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 100.796875,
+          "y": 794,
+          "right": 264.8125,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 264.8125,
+          "y": 794,
+          "right": 428.84375,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 428.84375,
+          "y": 794,
+          "right": 592.875,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 592.875,
+          "y": 794,
+          "right": 781.5,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 781.5,
+          "y": 794,
+          "right": 945.53125,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 945.53125,
+          "y": 794,
+          "right": 1109.5625,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 1109.5625,
+          "y": 794,
+          "right": 1339.1875,
+          "bottom": 869,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 662,
+          "y": 17,
+          "right": 778,
+          "bottom": 75,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1372,
+          "y": 24,
+          "right": 1408,
+          "bottom": 68,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 26.296875,
+          "right": 168.046875,
+          "bottom": 65.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1219.203125,
+          "y": 32,
+          "right": 1348,
+          "bottom": 60,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "tutorial",
+      "width": 1280,
+      "height": 720,
+      "bg": "linear-gradient(rgba(7, 21, 34, 0.78), rgba(7, 21, 34, 0.93)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 89.59375,
+          "y": 614,
+          "right": 235.390625,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 235.390625,
+          "y": 614,
+          "right": 381.1875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 381.1875,
+          "y": 614,
+          "right": 527,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 527,
+          "y": 614,
+          "right": 694.671875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 694.671875,
+          "y": 614,
+          "right": 840.46875,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 840.46875,
+          "y": 614,
+          "right": 986.28125,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 986.28125,
+          "y": 614,
+          "right": 1190.390625,
+          "bottom": 689,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 582,
+          "y": 17,
+          "right": 698,
+          "bottom": 75,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 1212,
+          "y": 24,
+          "right": 1248,
+          "bottom": 68,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 32,
+          "y": 26.296875,
+          "right": 168.046875,
+          "bottom": 65.6875,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 1059.203125,
+          "y": 32,
+          "right": 1188,
+          "bottom": 60,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "tutorial",
+      "width": 390,
+      "height": 844,
+      "bg": "linear-gradient(rgba(7, 21, 34, 0.78), rgba(7, 21, 34, 0.93)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 752,
+          "right": 63.40625,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 63.40625,
+          "y": 752,
+          "right": 110.828125,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 110.828125,
+          "y": 752,
+          "right": 158.25,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 158.25,
+          "y": 752,
+          "right": 212.78125,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 212.78125,
+          "y": 752,
+          "right": 260.1875,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 260.1875,
+          "y": 752,
+          "right": 307.609375,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 307.609375,
+          "y": 752,
+          "right": 373.984375,
+          "bottom": 819,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 155,
+          "y": 15,
+          "right": 235,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 347,
+          "y": 16,
+          "right": 372,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 20.5,
+          "right": 93.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 272.09375,
+          "y": 26,
+          "right": 335,
+          "bottom": 50,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "tutorial",
+      "width": 320,
+      "height": 568,
+      "bg": "linear-gradient(rgba(7, 21, 34, 0.78), rgba(7, 21, 34, 0.93)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 5,
+          "y": 476,
+          "right": 46.046875,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 46.046875,
+          "y": 476,
+          "right": 87.109375,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 87.109375,
+          "y": 476,
+          "right": 128.171875,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 128.171875,
+          "y": 476,
+          "right": 175.390625,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 175.390625,
+          "y": 476,
+          "right": 216.453125,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 216.453125,
+          "y": 476,
+          "right": 257.515625,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 257.515625,
+          "y": 476,
+          "right": 314.984375,
+          "bottom": 543,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 125,
+          "y": 15,
+          "right": 195,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 282,
+          "y": 16,
+          "right": 307,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 13,
+          "y": 20.5,
+          "right": 88.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 213.09375,
+          "y": 26,
+          "right": 276,
+          "bottom": 50,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    },
+    {
+      "route": "tutorial",
+      "width": 844,
+      "height": 390,
+      "bg": "linear-gradient(rgba(7, 21, 34, 0.78), rgba(7, 21, 34, 0.93)), url(\"http://127.0.0.1:5598/art/lounge/atmosphere-v2/library-wide.png\")",
+      "controls": [
+        {
+          "text": "ホーム",
+          "x": 16,
+          "y": 312,
+          "right": 123.546875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "デッキ",
+          "x": 123.546875,
+          "y": 312,
+          "right": 231.09375,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "カード",
+          "x": 231.09375,
+          "y": 312,
+          "right": 338.640625,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "ランキング",
+          "x": 338.640625,
+          "y": 312,
+          "right": 462.328125,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "フレンド",
+          "x": 462.328125,
+          "y": 312,
+          "right": 569.875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "ショップ",
+          "x": 569.875,
+          "y": 312,
+          "right": 677.421875,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "チュートリアル",
+          "x": 677.421875,
+          "y": 312,
+          "right": 827.984375,
+          "bottom": 369,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 382,
+          "y": 15,
+          "right": 462,
+          "bottom": 61,
+          "hit": true
+        },
+        {
+          "text": "",
+          "x": 801,
+          "y": 16,
+          "right": 826,
+          "bottom": 60,
+          "hit": true
+        },
+        {
+          "text": "シーカーLv.1 · 0/100 EXP",
+          "x": 18,
+          "y": 20.5,
+          "right": 128.96875,
+          "bottom": 55.5,
+          "hit": true
+        },
+        {
+          "text": "シャード3,000",
+          "x": 720.09375,
+          "y": 24,
+          "right": 789,
+          "bottom": 52,
+          "hit": true
+        }
+      ],
+      "fonts": [],
+      "overflow": false,
+      "contentOverflow": false
+    }
+  ],
+  "errors": [],
+  "oldBackgroundRequests": [],
+  "boundary": "Normal App/router with fixture API responses; real artwork and menu components."
+}
