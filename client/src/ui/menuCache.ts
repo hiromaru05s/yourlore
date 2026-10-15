@@ -12,7 +12,7 @@ const hex=(bytes:ArrayBuffer)=>Array.from(new Uint8Array(bytes),b=>b.toString(16
 async function connect():Promise<boolean> {
  if(!('serviceWorker' in navigator)||!('caches' in window)||!crypto.subtle||typeof __LORE_MENU_MANIFEST__==='undefined')return false;
  try {
-  const script=new URL('/menu-cache-sw.js?v=2',location.origin).href;
+  const script=new URL('/menu-cache-sw.js?v=3',location.origin).href;
   await withDeadline(navigator.serviceWorker.register(script,{scope:'/',updateViaCache:'none'}),20000);
   await withDeadline(navigator.serviceWorker.ready,20000);
   const current=()=>!!navigator.serviceWorker.controller&&(!navigator.serviceWorker.controller.scriptURL||navigator.serviceWorker.controller.scriptURL===script);

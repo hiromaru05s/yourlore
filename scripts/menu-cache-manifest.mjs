@@ -1,5 +1,5 @@
 import {build} from 'esbuild';
-import {readFile} from 'node:fs/promises';
+import {readFile,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -10,7 +10,11 @@ export async function menuCacheManifest(root) {
  const bundle=await build({entryPoints:[path.join(root,'src/ui/menuAssets.ts')],bundle:true,platform:'node',format:'esm',write:false});
  const {menuAssetUrls,duelFileAssets}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
  const extra=duelFileAssets(),media=new Map(extra.map(e=>[new URL(e.url,'https://lore.invalid').pathname,e.media]));
- const paths=[...new Set([...menuAssetUrls(),...extra.map(e=>e.url)].map(u=>new URL(u,'https://lore.invalid').pathname))].sort();
+ // CSS backgrounds/cursors can be requested by transitional/fallback styles too.
+ const cssImages=new Set();
+ async function scan(dir){for(const e of await readdir(dir,{withFileTypes:true})){const file=path.join(dir,e.name);if(e.isDirectory())await scan(file);else if(e.name.endsWith('.css')){const text=await readFile(file,'utf8');for(const match of text.matchAll(/url\(\s*['"]?(\/[^\s'"\)]+)/g)){const url=new URL(match[1],'https://lore.invalid').pathname;if(/\.(png|webp|svg|jpe?g)$/.test(url))cssImages.add(url);}}}}
+ await scan(path.join(root,'src'));
+ const paths=[...new Set([...menuAssetUrls(),...cssImages,...extra.map(e=>e.url)].map(u=>new URL(u,'https://lore.invalid').pathname))].sort();
  const contents=new Map();
  const entries=await Promise.all(paths.map(async url=>{
   const bytes=await readFile(path.join(root,'public',url)),hash=sha(bytes);contents.set(hash,bytes);

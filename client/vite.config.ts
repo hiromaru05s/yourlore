@@ -12,8 +12,9 @@ export default defineConfig({
   define: {__LORE_DUEL_PRELOAD__:JSON.stringify("/"+duelPreloadName),__LORE_FURNITURE_REVISION__:JSON.stringify(await furnitureCacheRevision(new URL(".",import.meta.url).pathname,menuManifest.fileName)),__LORE_MENU_MANIFEST__: JSON.stringify("/"+menuManifest.fileName)},
   plugins: [{name:"menu-cache-manifest",generateBundle(_options,bundle){
     const seen=new Set<string>(),modules:string[]=[],assets=new Set<string>();
-    const visit=(name:string)=>{if(seen.has(name))return;seen.add(name);const chunk=bundle[name];if(!chunk||chunk.type!=="chunk")return;modules.push("/"+name);for(const dependency of [...chunk.imports,...chunk.dynamicImports])visit(dependency);for(const asset of (chunk as any).viteMetadata?.importedAssets??[])assets.add("/"+asset);};
+    const visit=(name:string)=>{if(seen.has(name))return;seen.add(name);const chunk=bundle[name];if(!chunk||chunk.type!=="chunk")return;modules.push("/"+name);for(const dependency of [...chunk.imports,...chunk.dynamicImports])visit(dependency);for(const asset of [...((chunk as any).viteMetadata?.importedAssets??[]),...((chunk as any).viteMetadata?.importedCss??[])])assets.add("/"+asset);};
     for(const [name,item] of Object.entries(bundle))if(item.type==="chunk"&&Object.keys(item.modules).some(id=>id.endsWith("/screens/game.ts")))visit(name);
+    for(const name of Object.keys(bundle))if(/\.worker-[^/]+\.js$/.test(name))assets.add("/"+name);
     this.emitFile({type:"asset",fileName:duelPreloadName,source:JSON.stringify({modules,assets:[...assets]})});
     this.emitFile({type:"asset",fileName:menuManifest.fileName,source:menuManifest.json});for(const asset of menuManifest.assets)this.emitFile({type:"asset",...asset});},configureServer(server){for(const asset of menuManifest.assets)server.middlewares.use("/"+asset.fileName,(_req,res)=>{res.setHeader("Content-Type","application/octet-stream");res.end(asset.source);});server.middlewares.use("/"+menuManifest.fileName,(_req,res)=>{res.setHeader("Content-Type","application/json");res.end(menuManifest.json);});}}],
   server: {

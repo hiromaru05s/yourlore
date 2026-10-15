@@ -13,7 +13,7 @@ export function prepareDuelModules():Promise<void>{
    link.rel='modulepreload';link.href=url;
    const timer=setTimeout(()=>{link.remove();reject(Error('Duel module preparation timed out'));},60000);
    link.onload=()=>{clearTimeout(timer);resolve();};link.onerror=()=>{clearTimeout(timer);link.remove();reject(Error('Duel module unavailable'));};document.head.append(link);
-  })),...assets.map(url=>async()=>{const r=await fetch(url,{cache:'force-cache',signal:AbortSignal.timeout(60000)});if(!r.ok)throw Error('Duel artwork unavailable');await r.arrayBuffer();})];
+  })),...assets.map(url=>async()=>{const r=await fetch(url,{cache:'force-cache',signal:AbortSignal.timeout(180000)});if(!r.ok)throw Error('Duel artwork unavailable');await r.arrayBuffer();})];
   await Promise.all(Array.from({length:4},async()=>{while(jobs.length)await jobs.shift()!();}));
  })().catch(error=>{pending=undefined;throw error;});
 }

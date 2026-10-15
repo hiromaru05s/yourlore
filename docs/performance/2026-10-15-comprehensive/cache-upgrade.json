@@ -1,33 +1,58 @@
 {
-  "oldController": "http://127.0.0.1:49489/menu-cache-sw.js",
-  "controller": "http://127.0.0.1:49489/menu-cache-sw.js?v=2",
+  "oldController": "http://127.0.0.1:51993/menu-cache-sw.js",
+  "controller": "http://127.0.0.1:51993/menu-cache-sw.js?v=3",
   "cache": {
-    "art": 1872,
+    "art": 1952,
     "previews": 14
   },
   "upgradeTransfers": [
     {
-      "url": "/art/biblion/modular/brand-seal-ui.png",
+      "url": "/art/biblion/arcana/dice-enamel.webp",
       "preload": true,
       "phase": "new"
     },
     {
-      "url": "/art/biblion/modular/dew-ui.webp",
+      "url": "/assets/art-pack-de5deb999b4ec56b8434fc3e.bin",
       "preload": true,
       "phase": "new"
     },
     {
-      "url": "/art/biblion/modular/infinity-ui.webp",
+      "url": "/assets/art-pack-b197c2f3642c83900f651d69.bin",
       "preload": true,
       "phase": "new"
     },
     {
-      "url": "/art/biblion/modular/shield-ui.webp",
+      "url": "/assets/art-pack-aea166a3bd28108ca08dd338.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-81644147e0d42115d71e7f59.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-c01fb464a38881ca4cdbc633.bin",
       "preload": true,
       "phase": "new"
     },
     {
       "url": "/art/lounge/gifts/courier.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/lounge/v1/entrance.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/lounge/stage-v1/sigil.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/lounge/v1/library.png",
       "preload": true,
       "phase": "new"
     },
@@ -57,12 +82,7 @@
       "phase": "new"
     },
     {
-      "url": "/art/vfx/mimic-mouth-r2/04-predator-fangs.png",
-      "preload": true,
-      "phase": "new"
-    },
-    {
-      "url": "/art/vfx/taunt-four/lion-relief.png",
+      "url": "/assets/art-pack-520a89ce7289c772a1034e3f.bin",
       "preload": true,
       "phase": "new"
     },
@@ -237,17 +257,12 @@
       "phase": "new"
     },
     {
-      "url": "/assets/art-pack-fd15c47188e99c88b3f5b77e.bin",
+      "url": "/assets/art-pack-b0ebd732427ae83812614756.bin",
       "preload": true,
       "phase": "new"
     },
     {
-      "url": "/vfx/chosen-heroes/rogue.png",
-      "preload": true,
-      "phase": "new"
-    },
-    {
-      "url": "/vfx/chosen-victory/crown.png",
+      "url": "/assets/art-pack-7b9f6f16e9dc55dc0ce05b96.bin",
       "preload": true,
       "phase": "new"
     },

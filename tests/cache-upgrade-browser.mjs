@@ -13,7 +13,7 @@ async function page(){const p=await context.newPage();p.setDefaultTimeout(180000
 async function ready(p){await p.goto(base,{waitUntil:'domcontentloaded'});await p.waitForSelector('.lounge-home-main');await p.waitForSelector('.screen-loader',{state:'detached',timeout:600000});}
 try{
  const old=await page();await ready(old);const oldController=await old.evaluate(()=>navigator.serviceWorker.controller.scriptURL);console.log('Old build ready');
- root=newRoot;const current=await page();await ready(current);const controller=await current.evaluate(()=>navigator.serviceWorker.controller.scriptURL);assert(controller.endsWith('?v=2'));console.log('New build ready, controller upgraded');
+ root=newRoot;const current=await page();await ready(current);const controller=await current.evaluate(()=>navigator.serviceWorker.controller.scriptURL);assert(controller.endsWith('?v=3'));console.log('New build ready, controller upgraded');
  // An older live tab keeps its own binding even after the new worker claims it.
  await old.locator('[data-nav=cards]').click();await old.waitForSelector('#grid:not([aria-busy]) .card');assert.equal(await old.locator('#grid img').evaluateAll(nodes=>nodes.filter(n=>!n.complete||!n.naturalWidth).length),0);
  const cache=await current.evaluate(async()=>({art:(await(await caches.open('lore-menu-content-v1')).keys()).length,previews:(await(await caches.open('lore-furniture-previews-v1')).keys()).length}));assert(cache.previews>0);
