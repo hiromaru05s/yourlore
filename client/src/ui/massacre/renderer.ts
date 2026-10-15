@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 /** Selected R3 direction 03: card-surface torsion, simultaneous rupture, then grave traces. */
 import * as T from "three";
 import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib.js";
@@ -246,7 +247,7 @@ export class TorsionRenderer {
   dust: T.MeshStandardMaterial;
   costMat: T.MeshPhysicalMaterial;
   constructor() {
-    this.renderer = new T.WebGLRenderer({
+    this.renderer = createWebGLRenderer({
       alpha: true,
       antialias: true,
       preserveDrawingBuffer: true,

@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 export function createOpeningCoin(){
@@ -6,7 +7,7 @@ export function createOpeningCoin(){
 let renderer:T.WebGLRenderer|undefined,scene:T.Scene,camera:T.PerspectiveCamera,model:T.Group;
 let environment:T.WebGLRenderTarget;const textures:T.Texture[]=[];
 function initCoin(){
- renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
+ renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
  renderer.setSize(640,640,false);renderer.setPixelRatio(1);renderer.setClearColor(0,0);
  renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;
  scene=new T.Scene();camera=new T.PerspectiveCamera(31,1,.1,40);camera.position.z=5.1;

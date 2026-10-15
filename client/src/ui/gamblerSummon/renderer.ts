@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {DURATION,SOURCE_DURATION,FIRST_FRAME,clamp,ramp} from './catalog';
@@ -9,7 +10,7 @@ export class Renderer {
  renderer:T.WebGLRenderer;scene=new T.Scene();camera=new T.OrthographicCamera(-3,3,2.269230769,-2.269230769,.1,40);
  rigs=new Map<string,Rig>();faceIds=new WeakMap<HTMLCanvasElement,number>();nextFaceId=0;environment:T.WebGLRenderTarget;ground:T.Mesh;disposed=false;
  constructor(){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});this.renderer.setSize(780,590);this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.setClearColor(0,0);
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});this.renderer.setSize(780,590);this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.setClearColor(0,0);
   this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
   const pmrem=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.environment=pmrem.fromScene(room,.055);this.scene.environment=this.environment.texture;room.dispose();pmrem.dispose();
   this.camera.position.set(0,0,14);this.camera.lookAt(0,0,0);

@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {EVADE_DURATION,WIDTH,HEIGHT} from './timing';
 type C=CanvasRenderingContext2D;
@@ -70,7 +71,7 @@ export class Renderer{
  private maps=new Map<HTMLCanvasElement,T.CanvasTexture>();
  private disposed=false;
  constructor(){
-  this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
+  this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});
   this.gl.setPixelRatio(1);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;
   for(const pass of [1,0]){
    const mat=new T.ShaderMaterial({vertexShader:vertex,fragmentShader:fragment,transparent:true,side:T.DoubleSide,depthWrite:pass===0,uniforms:{face:{value:null},timeMs:{value:0},pass:{value:pass},success:{value:1},reduced:{value:0},direction:{value:1}}});

@@ -1,3 +1,5 @@
+import {rasterMatte} from './spellFrame/matteRaster';
+import {frameMaskOffThread} from './spellFrame/rasterClient';
 /** Rasterize the current card layers for a deformable mesh. Layout and text
  * come from the real DOM card, not a second set of card rules or translations. */
 export const CARD_PADDING = .12;
@@ -31,15 +33,14 @@ function urlOf(el: Element): string | null {
 async function matte(url: string): Promise<HTMLCanvasElement> {
   let pending = matteCache.get(url);
   if (!pending) {
-    pending = image(url).then(img => {
-      const c = canvas(RESOLUTION, RESOLUTION * img.naturalHeight / img.naturalWidth);
-      const ctx = c.getContext('2d')!; ctx.drawImage(img, 0, 0, c.width, c.height);
-      const pixels = ctx.getImageData(0, 0, c.width, c.height);
-      for (let i = 0; i < pixels.data.length; i += 4) {
-        const a = Math.min(1, Math.max(0, (pixels.data[i] + pixels.data[i+1] + pixels.data[i+2]) / 255 * 10 - .65));
-        pixels.data[i+3] *= a;
-      }
-      ctx.putImageData(pixels, 0, 0); return c;
+    pending = image(url).then(async img => {
+      const height=RESOLUTION*img.naturalHeight/img.naturalWidth;
+      try{
+        const bitmap=await frameMaskOffThread(img,undefined,[],{width:RESOLUTION,height});
+        const c=canvas(bitmap.width,bitmap.height);
+        try{c.getContext('2d')!.drawImage(bitmap,0,0);}finally{bitmap.close();}
+        return c;
+      }catch{return rasterMatte(img,RESOLUTION,height,()=>document.createElement('canvas'));}
     });
     matteCache.set(url, pending);
     void pending.catch(() => matteCache.delete(url));

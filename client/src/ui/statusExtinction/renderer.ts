@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {art,clamp,smooth,studies,type Family,type Study} from './catalog';
 
@@ -88,7 +89,7 @@ export class Renderer{
  private lastSize=0;
  disposed=false;
  constructor(public assets:Assets){
-  this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,premultipliedAlpha:false,powerPreference:'low-power'});
+  this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,premultipliedAlpha:false,powerPreference:'low-power'});
   this.gl.setClearColor(0,0);this.gl.setPixelRatio(1);this.gl.outputColorSpace=T.LinearSRGBColorSpace;this.camera.position.z=10;
  }
  async warm(){const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d')!;for(const s of studies){this.draw(ctx,s,1,64,64,40);await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));}}

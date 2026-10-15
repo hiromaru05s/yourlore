@@ -1,3 +1,5 @@
+import {homeIsCovered} from './screenCovered';
+import {createWebGLRenderer} from './webglRenderer';
 import {homeDaylight,announceHomeDaylightReady} from './homeDaylight';
 import * as THREE from 'three';
 
@@ -11,7 +13,7 @@ export function mountHomeAtmosphere(host:HTMLElement):()=>void {
  host.dataset.atmosphere='loading';
  if(typeof WebGL2RenderingContext==='undefined'){host.dataset.atmosphere='fallback';return()=>{};}
  let renderer:THREE.WebGLRenderer;
- try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});}
+ try{renderer=createWebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});}
  catch{host.dataset.atmosphere='fallback';return()=>{};}
  renderer.domElement.className='home-atmosphere-canvas';
  renderer.domElement.style.opacity='0';
@@ -112,7 +114,7 @@ function update(){
  for(let i=0;i<count;i++){const s=seed[i],v=(s.v+elapsed*(.004+s.d*.002))%1;const y=150+v*720;const first=shafts[0],f=(y-first.b)/(first.d-first.b);const center=THREE.MathUtils.lerp(first.a,first.center,f);positions[i*3]=center+(s.u-.5)*(55+v*125)+Math.sin(elapsed*.16+i)*6;positions[i*3+1]=H-y;positions[i*3+2]=4+s.d;}
  dustGeo.attributes.position.needsUpdate=true;render();
 }
-function tick(now:number){raf=0;if(disposed||document.hidden)return;const dt=last?Math.min((now-last)/1000,.05):0;last=now;if(!paused&&!comparison&&!showLayers){elapsed+=dt;cloudTime+=dt*speed;update();}if(!paused&&!comparison&&!showLayers)raf=requestAnimationFrame(tick);}
+function tick(now:number){raf=0;if(disposed||document.hidden)return;if(homeIsCovered()){last=now;raf=requestAnimationFrame(tick);return;}const dt=last?Math.min((now-last)/1000,.05):0;last=now;if(!paused&&!comparison&&!showLayers){elapsed+=dt;cloudTime+=dt*speed;update();}if(!paused&&!comparison&&!showLayers)raf=requestAnimationFrame(tick);}
 function resume(){last=0;if(ready&&!raf&&!disposed&&!document.hidden&&!paused&&!comparison&&!showLayers)raf=requestAnimationFrame(tick);}
 
 function visibility(){if(document.hidden){cancelAnimationFrame(raf);raf=0;last=0;}else resume();}

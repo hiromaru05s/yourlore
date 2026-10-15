@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as THREE from 'three';
 import {DURATION,designs,ease,stateAt,damageOf,type Options,type Point} from './model';
 import {frame,bladePoint,cutDirection,EDGE_IN,EDGE_OUT} from './motion';
@@ -16,7 +17,7 @@ void main(){vec2 uv=vec2((U.x-.5)*2.,(.5-U.y)*2.);vec4 acc=vec4(0);for(int i=0;i
 #include <colorspace_fragment>
 }`});}
 export function createRenderer(faces:HTMLCanvasElement[]=[]){
- const gl=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});gl.setClearColor(0,0);gl.setPixelRatio(1);gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.05;
+ const gl=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});gl.setClearColor(0,0);gl.setPixelRatio(1);gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.05;
  const scene=new THREE.Scene(),root=new THREE.Group(),rig=new THREE.Group();scene.add(root);root.add(rig);root.scale.y=-1;
  const camera=new THREE.PerspectiveCamera(40,800/460,1,3000);camera.position.set(400,230,900);camera.lookAt(400,230,0);
  const env=document.createElement('canvas');env.width=1024;env.height=512;const ec=env.getContext('2d')!;ec.fillStyle='#171b26';ec.fillRect(0,0,1024,512);

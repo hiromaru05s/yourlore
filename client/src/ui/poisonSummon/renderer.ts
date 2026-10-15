@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import type {CardId} from './selection';
 import {cardHeight} from './selection';
@@ -10,7 +11,7 @@ const studies=new Map<string,Study>(),faces=new Map<CanvasImageSource,T.Texture>
 const trackedGeometries=new Set<T.BufferGeometry>(),trackedMaterials=new Set<T.Material>(),trackedTextures=new Set<T.Texture>();
 let angle:'oblique'|'side'|'top'='oblique';
 export function setCameraAngle(v:typeof angle){angle=v;}
-function init(){if(renderer)return;renderer=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.setClearColor(0,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;
+function init(){if(renderer)return;renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.setClearColor(0,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;
  scene=new T.Scene();camera=new T.OrthographicCamera(-200,200,180,-180,.1,2400);
  scene.add(new T.HemisphereLight('#fff1d5','#293e32',1.5));const key=new T.DirectionalLight('#fff1ce',2.4);key.position.set(-150,300,170);scene.add(key);
  const g=new T.BoxGeometry(265,4,289),m=new T.MeshStandardMaterial({color:'#242d29',roughness:.96});trackedGeometries.add(g);trackedMaterials.add(m);ground=new T.Mesh(g,m);ground.position.y=-5;scene.add(ground);

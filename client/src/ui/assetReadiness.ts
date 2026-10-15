@@ -77,7 +77,11 @@ export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=fals
   await waitAssets(screenAssets,cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),abort.signal);
   if(abort.signal.aborted)return false;
   loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));
-  await withDeadline(document.fonts.ready,20000,abort.signal).catch(()=>{});await Promise.all([...root.querySelectorAll('img')].map(i=>withDeadline(i.decode()).catch(()=>{})));
+  await withDeadline(document.fonts.ready,20000,abort.signal).catch(()=>{});
+  // imageUrls promotes rendered images to eager. Hidden tutorial chapters keep
+  // lazy images that browsers intentionally do not fetch: decoding those waits
+  // until timeout even when every visible asset is already prepared.
+  await Promise.all([...root.querySelectorAll('img')].filter(i=>i.loading!=='lazy').map(i=>withDeadline(i.decode(),20000,abort.signal).catch(()=>{})));
   await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
   if(abort.signal.aborted)return false;
   if(preloadMenu)menuReady=true;

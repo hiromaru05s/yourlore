@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {Skin} from './skin';
 import {sigilTexture,sigilMaterial,lightSkin} from './sigil';
@@ -5,7 +6,7 @@ import {DURATION,progress as p,smooth as s,lerp as l,type Frame,type Rect} from 
 const PI=Math.PI,TAU=PI*2;
 type XY={x:number;y:number;w:number;h:number};
 export function createRenderer(faces:HTMLCanvasElement[]){
- const renderer=new T.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:false,powerPreference:'high-performance'});
+ const renderer=createWebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:false,powerPreference:'high-performance'});
  renderer.setPixelRatio(1);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
  const scene=new T.Scene(),camera=new T.OrthographicCamera(-5,5,3.2,-3.2,.1,60);

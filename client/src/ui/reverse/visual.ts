@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {LAUNCH,HIT,ease,trajectory,facing,radius} from './motion';
@@ -11,7 +12,7 @@ export class ReverseFlow {
  sigil:T.Mesh;impactMist=new T.Mesh(new T.PlaneGeometry(2,2),smokeMaterial());
  fluid:T.Mesh;fluidRest:Float32Array;tubes:T.Mesh[]=[];strikes:T.Mesh[]=[];geometries=new Set<T.BufferGeometry>();w=0;h=0;
  constructor(){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=.85;this.camera.position.z=700;
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=.85;this.camera.position.z=700;
   const room=new RoomEnvironment(),pmrem=new T.PMREMGenerator(this.renderer);this.environment=pmrem.fromScene(room,.1);this.scene.environment=this.environment.texture;this.scene.environmentIntensity=.35;room.dispose();pmrem.dispose();
   const key=new T.DirectionalLight(0xdad0d7,2);key.position.set(-200,-300,500);const rim=new T.DirectionalLight(0x9b9cb8,1.5);rim.position.set(200,150,240);this.scene.add(key,rim,new T.AmbientLight(0x9b8eaa,.3));
   this.sigil=new T.Mesh(new T.PlaneGeometry(2,2),this.circleMaterials[0]);this.sigil.renderOrder=1;this.scene.add(this.sigil);

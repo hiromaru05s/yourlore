@@ -1,4 +1,4 @@
-/* Only public artwork is cached. HTML, JS, APIs, account data and sockets
+/* Only manifested public artwork, models, fonts and music are cached. HTML, JS, APIs, account data and sockets
  * always use the network. A tab keeps the manifest of its own application build. */
 const CONTENT='lore-menu-content-v1', META='lore-menu-clients-v1';
 const bindings=new Map();
@@ -32,7 +32,7 @@ self.addEventListener('message',event=>{
  maintenance=maintenance.catch(()=>{}).then(async()=>{
   try {
    const entries=event.data.entries;
-   if(!Array.isArray(entries)||entries.length>5000||!entries.every(e=>/^\/(art|ui|frames|cosmetics)\/[^?#]+$/.test(e.url)&&!e.url.includes('..')&&/^[a-f0-9]{64}$/.test(e.hash)))throw Error('Invalid artwork manifest');
+   if(!Array.isArray(entries)||entries.length>5000||!entries.every(e=>/^\/(art|ui|frames|cosmetics|vfx|models|fonts|music)\/[^?#]+$/.test(e.url)&&!e.url.includes('..')&&/^[a-f0-9]{64}$/.test(e.hash)))throw Error('Invalid artwork manifest');
    await (await caches.open(META)).put(metaKey(event.source.id),new Response(JSON.stringify(entries)));
    bindings.set(event.source.id,new Map(entries.map(e=>[e.url,e.hash])));
    event.ports[0]?.postMessage({ok:true});
@@ -41,7 +41,7 @@ self.addEventListener('message',event=>{
 });
 self.addEventListener('fetch',event=>{
  const request=event.request,url=new URL(request.url);
- if(request.method!=='GET'||url.origin!==self.location.origin||!/^\/(art|ui|frames|cosmetics)\//.test(url.pathname)||request.headers.has('X-Lore-Asset-Preload'))return;
+ if(request.method!=='GET'||url.origin!==self.location.origin||!/^\/(art|ui|frames|cosmetics|vfx|models|fonts|music)\//.test(url.pathname)||request.headers.has('X-Lore-Asset-Preload'))return;
  event.respondWith((async()=>{
   try {
    const hash=(await binding(event.clientId))?.get(url.pathname);

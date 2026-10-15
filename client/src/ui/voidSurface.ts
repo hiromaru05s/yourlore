@@ -1,9 +1,10 @@
+import {createWebGLRenderer} from './webglRenderer';
 import * as T from 'three';
 /** One small shared optical texture. The board itself stays cached while this
  * material flows; exile cards sample the same depth and refraction vocabulary. */
 let shared:ReturnType<typeof createOptics>|undefined,users=0;
 function createOptics(){
- const renderer=new T.WebGLRenderer({alpha:false,antialias:false,powerPreference:'low-power',preserveDrawingBuffer:true});
+ const renderer=createWebGLRenderer({alpha:false,antialias:false,powerPreference:'low-power',preserveDrawingBuffer:true});
  renderer.setSize(192,320,false);renderer.setPixelRatio(1);
  const scene=new T.Scene(),camera=new T.OrthographicCamera(-1,1,1,-1,0,2);camera.position.z=1;
  const material=new T.ShaderMaterial({uniforms:{time:{value:0},collapse:{value:0}},vertexShader:'varying vec2 uvp;void main(){uvp=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:`

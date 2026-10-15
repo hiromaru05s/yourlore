@@ -1,8 +1,9 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 /** Approved 01: pale purple, maximum opacity .66, one 760ms inward vortex. */
 export const VOID_GRANT_DURATION=760;
 export class VoidGrantSurface {
- private renderer=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});
+ private renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});
  private scene=new T.Scene();
  private camera=new T.OrthographicCamera(-1,1,1,-1,0,2);
  private geometry=new T.PlaneGeometry(2,2);

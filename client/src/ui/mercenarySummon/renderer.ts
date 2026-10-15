@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {contactDust} from './contactDust';
@@ -16,7 +17,7 @@ export class Renderer{
  private table=new T.Mesh(new T.PlaneGeometry(6000,6000),new T.MeshStandardMaterial({color:'#d9d4c7',roughness:1}));
  private sparks=new T.InstancedMesh(new T.BoxGeometry(1,1,1),new T.MeshStandardMaterial({color:'#706352',roughness:.78}),36);private helper=new T.Object3D();
  constructor(){
-  this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setPixelRatio(1);this.gl.setSize(470,570,false);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1;
+  this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.setPixelRatio(1);this.gl.setSize(470,570,false);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1;
   const room=new RoomEnvironment(),pmrem=new T.PMREMGenerator(this.gl);this.environment=pmrem.fromScene(room,.04);this.scene.environment=this.environment.texture;room.dispose();pmrem.dispose();
   this.scene.add(new T.HemisphereLight('#fff5e4','#1b2636',.9));const key=new T.DirectionalLight('#fff0d5',1.9);key.position.set(-130,120,320);this.scene.add(key);const fill=new T.DirectionalLight('#b9cdeb',.7);fill.position.set(200,-120,130);this.scene.add(fill);
   const sh=document.createElement('canvas');sh.width=256;sh.height=350;const sx=sh.getContext('2d')!;sx.filter='blur(12px)';sx.fillStyle='#14110e';sx.fillRect(38,42,180,265);this.shade.material.map=new T.CanvasTexture(sh);this.shade.position.z=.04;

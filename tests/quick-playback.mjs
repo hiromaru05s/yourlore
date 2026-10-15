@@ -51,7 +51,7 @@ const mocks={
  'tier':'export const tierOf=()=>0,tierLabel=()=>"";',
  'api':'export const api={};',
  'analytics':'export const aCapture=()=>{};',
- 'i18n':'export const t=s=>s,getLang=()=>"ja",cardName=c=>c.id,onLangChange=()=>()=>{};'
+ 'i18n':'export const t=s=>s,getLang=()=>"ja",localizedInterfaceText=()=>"",cardName=c=>c.id,onLangChange=()=>()=>{};'
 };
 try{
  await build({stdin:{contents:"export {BaseController} from './client/src/game/controller';export {createGame,reduce} from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs'),plugins:[{name:'ui-double',setup(b){b.onResolve({filter:/.*/},a=>{const key=a.path.endsWith('/timewarp/runtime')?'timewarpRuntime':a.path.endsWith('/statusGrant/runtime')?'statusGrantRuntime':a.path.split('/').pop();return mocks[key]?{path:key,namespace:'mock'}:null;});b.onLoad({filter:/.*/,namespace:'mock'},a=>({contents:mocks[a.path],loader:'js'}));}}]});

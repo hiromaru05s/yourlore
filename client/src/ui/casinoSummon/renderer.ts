@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {velvet} from './material';
@@ -12,7 +13,7 @@ export class CasinoRenderer {
  private animate:(t:number)=>void=()=>{};private disposed=false;
  private track<A extends {dispose:()=>void}>(item:A):A{this.resources.push(item);return item;}
  constructor(){
- this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});this.renderer.setSize(560,560);this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.setClearColor(0,0);this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=.86;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
+ this.renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});this.renderer.setSize(560,560);this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.setClearColor(0,0);this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=.86;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
  this.camera.position.set(0,0,12);this.camera.lookAt(0,0,0);
  const pmrem=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.environment=pmrem.fromScene(room,.045);this.scene.environment=this.environment.texture;room.dispose();pmrem.dispose();
  this.scene.add(new T.HemisphereLight(0xfff1d5,0x26334a,.55));const key=new T.DirectionalLight(0xffe6c5,1.8);key.position.set(-3,4,11);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:.1,far:20});key.shadow.bias=-.0002;key.shadow.normalBias=.012;this.scene.add(key);const fill=new T.DirectionalLight(0xb8d4f5,.7);fill.position.set(4,-2,4);this.scene.add(fill);

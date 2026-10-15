@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createServer} from 'node:http';
+import {gzipSync} from 'node:zlib';
+import {apiFixture} from './helpers/api-fixture.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-collapse-tools/node_modules/playwright/index.mjs');
+const out=process.env.LORE_TEST_OUT||'/tmp/lore-perf2-browser',root=path.resolve(process.env.LORE_TEST_DIST||'client/dist');await fs.mkdir(out,{recursive:true});
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2','.json':'application/json','.mp3':'audio/mpeg'};
+const serverRequests=[];const server=createServer(async(req,res)=>{serverRequests.push({url:req.url,at:Date.now()});try{const name=new URL(req.url,'http://localhost').pathname,file=path.join(root,name==='/'?'index.html':name),raw=await fs.readFile(file);res.setHeader('Content-Type',mime[path.extname(file)]||'application/octet-stream');res.setHeader('Cache-Control',name.startsWith('/assets/')?'public,max-age=31536000,immutable':'public,max-age=0,must-revalidate');if(/\.(html|js|css|svg|json)$/.test(file)){res.setHeader('Content-Encoding','gzip');res.end(gzipSync(raw));}else res.end(raw);}catch{res.statusCode=404;res.end();}});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const base=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:'+server.address().port;
+const browser=await chromium.launch({channel:'chrome',headless:true});const report={base,api:'fixture guest; normal production HOME and local BOT route',cases:[]};
+try{for(const width of (process.env.LORE_TEST_WIDTHS||'1280,390').split(',').map(Number)){
+ const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1}),p=await context.newPage();p.setDefaultTimeout(120000);
+ const monitor=setInterval(async()=>{try{console.log('progress',width,await p.evaluate(()=>({loader:document.querySelector('.screen-loader,.duel-loader')?.textContent,scene:document.querySelector('[data-scene-ready]')?.dataset.sceneReady})));}catch{}},30000);context.on('close',()=>clearInterval(monitor));
+ const workerRequests=[];context.on('request',r=>{if(r.serviceWorker())workerRequests.push({url:r.url(),at:Date.now()});});
+ const errors=[],httpErrors=[],wire=[],net=new Map();p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400)httpErrors.push({url:r.url(),status:r.status()});});
+ await apiFixture(p,r=>{const n=new URL(r.url).pathname;
+ if(n==='/api/auth/me')return {user:{id:'local-guest-user',display:'SEEKER',credits:100,avatar:'SEEKER_BLUE',wins:47,losses:19}};
+ if(n==='/api/rewards/tutorial')return {offered:true,keys:[],credits:100};
+ if(n==='/api/rank/me')return {rating:{season:'2026-10',mmr:1000,tier:'bronze',wins:0,losses:0}};
+ if(n==='/api/gifts')return {gifts:[],unread:0};
+ return {ok:true,country:'JP',entries:[],friends:[],incoming:[],outgoing:[],challenges:[],keys:[],rows:[],sleeves:['default'],furnitures:[]};});
+ await p.addInitScript(()=>{performance.setResourceTimingBufferSize(20000);window.__long=[];window.__gpu={};new PerformanceObserver(l=>window.__long.push(...l.getEntries().map(e=>({start:e.startTime,ms:e.duration})))).observe({type:'longtask'});for(const proto of [WebGLRenderingContext.prototype,WebGL2RenderingContext.prototype])for(const name of ['drawArrays','drawElements','drawArraysInstanced','drawElementsInstanced']){const f=proto[name];if(f)proto[name]=function(...args){const k=this.canvas.className||'offscreen';window.__gpu[k]=(window.__gpu[k]||0)+1;return f.apply(this,args);};}localStorage.setItem('lore_help_callout_seen',new Date().toISOString().slice(0,10));});
+ const cdp=await context.newCDPSession(p);await cdp.send('Network.enable');await cdp.send('Performance.enable');
+ cdp.on('Network.requestWillBeSent',e=>net.set(e.requestId,{url:e.request.url,at:e.wallTime*1000,preload:Object.keys(e.request.headers).some(k=>k.toLowerCase()==='x-lore-asset-preload')}));cdp.on('Network.requestServedFromCache',e=>{if(net.has(e.requestId))net.get(e.requestId).cache=true;});cdp.on('Network.responseReceived',e=>{if(net.has(e.requestId))net.get(e.requestId).cache||=e.response.fromDiskCache||e.response.fromServiceWorker;});cdp.on('Network.loadingFinished',e=>{const r=net.get(e.requestId);if(r&&!r.cache&&e.encodedDataLength>0)wire.push({...r,bytes:e.encodedDataLength});});
+ if(process.env.LORE_NETWORK_LATENCY)await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:Number(process.env.LORE_NETWORK_LATENCY),downloadThroughput:-1,uploadThroughput:-1});
+ const start=Date.now();await p.goto(base+'/?polish',{waitUntil:'domcontentloaded'});await p.waitForSelector('.lounge-home-main');await p.waitForSelector('.screen-loader',{state:'detached',timeout:600000});const homeMs=Date.now()-start;
+ console.log('HOME',width,homeMs);await p.screenshot({path:`${out}/home-${width}.png`});
+ const coldWire=wire.slice(),reloadAt=Date.now();await p.reload({waitUntil:'domcontentloaded'});await p.waitForSelector('.lounge-home-main');await p.waitForSelector('.screen-loader',{state:'detached',timeout:600000});const reloadMs=Date.now()-reloadAt;
+ const warmPreloads=[...net.values()].filter(r=>r.at>=reloadAt&&r.preload);
+ const beforeDuel=Date.now();await p.locator('#bot').click();await p.locator('#ranked').click();await p.locator('#diffStart').click();await p.waitForSelector('[data-scene-ready=true]');await p.waitForSelector('.duel-loader',{state:'detached'});
+ // Allow the approved opening to finish; timing of the cinematic is unchanged.
+ await p.waitForSelector('.duel-opening',{state:'detached'});await p.waitForFunction(()=>document.querySelector('#endBtn')&&!document.querySelector('#endBtn').disabled,{timeout:120000});const duelMs=Date.now()-beforeDuel;
+ const readyAt=Date.now();await p.screenshot({path:`${out}/duel-${width}.png`});
+ async function sample(label,act){await p.evaluate(()=>{window.__gpu={};window.__long=[];});const a=await cdp.send('Performance.getMetrics');const before=Date.now();if(act)await act();const frames=await p.evaluate(async()=>{const frames=[],start=performance.now();let last=start;await new Promise(resolve=>{const tick=now=>{frames.push(now-last);last=now;if(now-start>=5000)resolve();else requestAnimationFrame(tick);};requestAnimationFrame(tick);});frames.sort((a,b)=>a-b);return {count:frames.length,p50:frames[Math.floor(frames.length*.5)],p95:frames[Math.floor(frames.length*.95)],over50:frames.filter(t=>t>50).length,gpu:window.__gpu,longTasks:window.__long,scene:document.querySelector('[data-scene-perf]')?.dataset.scenePerf};});const b=await cdp.send('Performance.getMetrics'),cpu={};for(const k of ['TaskDuration','ScriptDuration','LayoutDuration','RecalcStyleDuration','LayoutCount','RecalcStyleCount'])cpu[k]=(b.metrics.find(m=>m.name===k)?.value||0)-(a.metrics.find(m=>m.name===k)?.value||0);return {label,ms:Date.now()-before,...frames,cpu};}
+ const samples=[await sample('idle')];
+ const playable=p.locator('#hand .card.is-playable').first();if(await playable.count()){samples.push(await sample('play card',()=>playable.click()));}
+ await p.waitForTimeout(2000);await p.screenshot({path:`${out}/played-${width}.png`});
+ const end=p.locator('#endBtn');if(await end.isEnabled()){samples.push(await sample('BOT turn',()=>end.click()));await p.waitForFunction(()=>!document.querySelector('#endBtn')?.disabled,{timeout:120000});}
+ const broken=await p.evaluate(()=>[...document.querySelectorAll('img')].filter(i=>i.getClientRects().length&&(!i.complete||!i.naturalWidth)).map(i=>i.src));
+ const entryWire=wire.filter(r=>r.at>=beforeDuel),afterReadyWire=wire.filter(r=>r.at>=readyAt);
+ const workerEntryRequests=workerRequests.filter(r=>r.at>=beforeDuel),serverEntryRequests=serverRequests.filter(r=>r.at>=beforeDuel);
+ const result={workerEntryRequests,serverEntryRequests,width,homeMs,reloadMs,duelMs,coldWire,warmPreloads,entryWire,afterReadyWire,samples,broken,errors,httpErrors};report.cases.push(result);await fs.writeFile(out+'/report.json',JSON.stringify(report,null,2));console.log(JSON.stringify({width,homeMs,reloadMs,duelMs,coldRequests:coldWire.length,entryRequests:entryWire.length,samples}));assert.deepEqual(errors,[]);assert.deepEqual(httpErrors,[]);assert.deepEqual(broken,[]);assert.deepEqual(workerEntryRequests,[],'No service-worker network fallback after duel entry');if(!process.env.LORE_TEST_ORIGIN)assert.deepEqual(serverEntryRequests,[],'No hidden network transfers after duel entry');await context.close();
+}}finally{await fs.writeFile(out+'/report.json',JSON.stringify(report,null,2));for(const c of browser.contexts())for(const p of c.pages())await p.screenshot({path:out+'/last.png'}).catch(()=>{});await browser.close();await new Promise(r=>server.close(r));}

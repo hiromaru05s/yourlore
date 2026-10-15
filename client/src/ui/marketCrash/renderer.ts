@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import {RoundedBoxGeometry} from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -26,7 +27,7 @@ function irisModel(steel:T.Material,gold:T.Material,dark:T.Material):Model{
 export class MarketCrashIris{
  readonly canvas:HTMLCanvasElement;private renderer:T.WebGLRenderer;private scene=new T.Scene();private camera=new T.OrthographicCamera();private roots:Model[]=[];private environment:T.WebGLRenderTarget;private texture:T.Texture;private lights:T.DirectionalLight[]=[];private width=0;private height=0;
  constructor(canvas?:HTMLCanvasElement){
- this.renderer=new T.WebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});this.canvas=this.renderer.domElement;this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.15;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;
+ this.renderer=createWebGLRenderer({canvas,alpha:true,antialias:true,powerPreference:'high-performance'});this.canvas=this.renderer.domElement;this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.setClearColor(0,0);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.15;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;
  this.camera.position.set(0,0,1000);this.camera.near=.1;this.camera.far=2000;
  const pm=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.environment=pm.fromScene(room,.035);pm.dispose();room.dispose();this.scene.environment=this.environment.texture;this.scene.environmentIntensity=.75;
  this.scene.add(new T.HemisphereLight(0xe4efff,0x392a20,1.8));

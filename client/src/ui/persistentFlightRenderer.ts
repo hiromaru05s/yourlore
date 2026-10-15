@@ -1,8 +1,9 @@
+import {createWebGLRenderer} from './webglRenderer';
 import * as T from 'three';import {vertex,fragment} from './persistentFlightMaterial';import {motion,ease} from './persistentFlightMotion';
 export type Anchor={x:number;y:number;w:number};
 export class PersistentFlightRenderer{
  readonly gl:T.WebGLRenderer;private scene=new T.Scene();private camera=new T.OrthographicCamera(-2.25,2.25,2.25,-2.25,.1,30);private mesh:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;private textures:T.Texture[];private disposed=false;
- constructor(face:HTMLCanvasElement,tile:HTMLCanvasElement){this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:false});this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.setPixelRatio(1);this.camera.position.z=8;const ft=new T.CanvasTexture(face),tt=new T.CanvasTexture(tile);ft.colorSpace=tt.colorSpace=T.SRGBColorSpace;this.textures=[ft,tt];this.mesh=new T.Mesh(new T.PlaneGeometry(1.6,2.4),new T.ShaderMaterial({vertexShader:vertex,fragmentShader:fragment,transparent:true,side:T.DoubleSide,uniforms:{face:{value:ft},sourceRatio:{value:face.height/face.width},tile:{value:tt},time:{value:0},morph:{value:0},contact:{value:0}}}));this.scene.add(this.mesh);}
+ constructor(face:HTMLCanvasElement,tile:HTMLCanvasElement){this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:false});this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.setPixelRatio(1);this.camera.position.z=8;const ft=new T.CanvasTexture(face),tt=new T.CanvasTexture(tile);ft.colorSpace=tt.colorSpace=T.SRGBColorSpace;this.textures=[ft,tt];this.mesh=new T.Mesh(new T.PlaneGeometry(1.6,2.4),new T.ShaderMaterial({vertexShader:vertex,fragmentShader:fragment,transparent:true,side:T.DoubleSide,uniforms:{face:{value:ft},sourceRatio:{value:face.height/face.width},tile:{value:tt},time:{value:0},morph:{value:0},contact:{value:0}}}));this.scene.add(this.mesh);}
  render(ms:number,resolution:number){
   if(this.disposed)throw Error('Disposed');const m=motion(ms),u=this.mesh.material.uniforms;
   if(this.gl.domElement.width!==resolution)this.gl.setSize(resolution,resolution,false);

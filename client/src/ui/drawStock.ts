@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from './webglRenderer';
 import {flightPixelRatio} from './renderDensity';
 import {DRAW_THICKNESS_RATIO} from './cardThickness';
 import * as T from 'three';
@@ -25,7 +26,7 @@ let shared:{stage:DrawStage;refs:number}|null=null;
 export function acquireDrawStage():DrawStage|null{
  if(shared){shared.refs++;return shared.stage;}
  if(typeof WebGL2RenderingContext==='undefined')return null;
- let renderer:T.WebGLRenderer;try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
+ let renderer:T.WebGLRenderer;try{renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
  const width=innerWidth,height=innerHeight;renderer.setPixelRatio(flightPixelRatio());renderer.setSize(width,height);renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;
  const canvas=renderer.domElement;canvas.className='draw-stock-canvas';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:125';document.body.append(canvas);

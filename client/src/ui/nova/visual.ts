@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as THREE from 'three';
 export type Point={x:number;y:number};
 export type Scene={source:Point;life:Point;target:Point;scale:number;light?:boolean;reduced?:boolean;labels?:boolean;hp?:number;viewport?:{width:number;height:number};self?:Point;center?:Point};
@@ -53,7 +54,7 @@ class Sheet{
 class Renderer{
  renderer:THREE.WebGLRenderer;scene=new THREE.Scene();camera=new THREE.OrthographicCamera(0,800,0,-600,1,2200);root=new THREE.Group();orb:THREE.Mesh<THREE.SphereGeometry,THREE.ShaderMaterial>;shell:THREE.Mesh<THREE.SphereGeometry,THREE.ShaderMaterial>;sheets:Sheet[]=[];payment:Sheet;cloak:Sheet;card:THREE.Mesh<THREE.PlaneGeometry,THREE.MeshBasicMaterial>;cardTexture:THREE.CanvasTexture;textures=variants.map((_,i)=>timeTexture(i));lost=false;shadow:THREE.Mesh;shard:THREE.InstancedMesh;dummy=new THREE.Object3D();lobes:THREE.Mesh[]=[];birth:Sheet[]=[];chronos:Sheet[]=[];dial=dialTexture();hand=handTexture();
  constructor(art:HTMLImageElement){
-  fieldTexture.needsUpdate=true;this.renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});this.renderer.setClearColor(0,0);this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.camera.position.z=1200;this.scene.add(this.root);
+  fieldTexture.needsUpdate=true;this.renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});this.renderer.setClearColor(0,0);this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.camera.position.z=1200;this.scene.add(this.root);
   this.renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();this.lost=true});this.renderer.domElement.addEventListener('webglcontextrestored',()=>{this.lost=false});
   const sphereMat=new THREE.ShaderMaterial({uniforms:{noiseMap:{value:fieldTexture},time:{value:0},pressure:{value:0},cost:{value:0},variant:{value:0}},vertexShader:vertex,fragmentShader:`varying vec2 vUv;varying vec3 vN,vP;uniform float time,pressure,cost,variant;${noise}
   void main(){vec3 n=normalize(vN);float f=fbm(normalize(vP)*2.5+vec3(0.,time*.12,0.));float marble=sin(f*14.+vUv.y*19.+time*.22);float vein=pow(1.-abs(marble),10.);float fres=pow(1.-abs(n.z),3.);float spec=pow(max(0.,dot(n,normalize(vec3(-.5,.65,.9)))),33.);vec3 col=vec3(.0006,.0005,.001)+vec3(.006,.004,.009)*f;col+=vec3(.16,.10,.22)*fres*.38+vec3(.31,.27,.37)*spec*.23;col+=vec3(.15,.10,.20)*vein*(.10+pressure*.22);col+=vec3(.3,.006,.024)*vein*cost;gl_FragColor=vec4(col,1.);

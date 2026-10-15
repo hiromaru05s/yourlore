@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
@@ -13,7 +14,7 @@ export class NacreScene {
  faces=new Map<string,T.CanvasTexture>();geometries=new Set<T.BufferGeometry>();materials=new Set<T.Material>();effect=new T.Group();
  source=new T.Group();sheetFace:Sheet;sourcePos=V();gravePos=V();riftPos=V();unit=1;arrivalScale=1;noise:T.DataTexture;
  constructor(face:HTMLCanvasElement,readonly layout:CreationLayout,readonly copy:boolean){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true});this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1;
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true});this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1;
   this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));this.renderer.setSize(layout.width,layout.height);this.renderer.setClearColor(0,0);this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
   const pm=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.environment=pm.fromScene(room,.04);pm.dispose();room.dispose();this.scene.environment=this.environment.texture;this.scene.environmentIntensity=.5;
   const data=new Uint8Array(128*128*4);for(let i=0;i<128*128;i++){const x=i%128,y=Math.floor(i/128),v=128+Math.sin(x*91.1+y*73.7)*17+Math.sin(x*.2+y*.35)*13;data[i*4]=data[i*4+1]=data[i*4+2]=v;data[i*4+3]=255;}this.noise=new T.DataTexture(data,128,128);this.noise.wrapS=this.noise.wrapT=T.RepeatWrapping;this.noise.needsUpdate=true;

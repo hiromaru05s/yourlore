@@ -1,0 +1,56 @@
+{
+  "result": {
+    "different": 0,
+    "maxDelta": 0,
+    "matteDifference": 0,
+    "times": [
+      {
+        "name": "original main-thread mask",
+        "ms": 64.40000000596046
+      },
+      {
+        "name": "worker mask",
+        "ms": 60.599999994039536
+      }
+    ],
+    "workerFrames": [
+      50,
+      16.69999999999999,
+      16.599999999999966,
+      16.700000000000045,
+      16.69999999999999,
+      16.599999999999966
+    ],
+    "reused": true,
+    "independent": true,
+    "remainingCanvases": 0,
+    "comparisons": [
+      {
+        "ms": 0,
+        "changed": 0,
+        "max": 0
+      },
+      {
+        "ms": 800,
+        "changed": 0,
+        "max": 0
+      },
+      {
+        "ms": 1600,
+        "changed": 0,
+        "max": 0
+      },
+      {
+        "ms": 2600,
+        "changed": 0,
+        "max": 0
+      },
+      {
+        "ms": 3200,
+        "changed": 0,
+        "max": 0
+      }
+    ]
+  },
+  "errors": []
+}

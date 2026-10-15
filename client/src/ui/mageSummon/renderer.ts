@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {reliefTexture,Ribbon,shardGeometry,mineralTextures} from './materials';
@@ -27,7 +28,7 @@ export class Renderer{
  private shell:T.Mesh<T.BufferGeometry,T.MeshPhysicalMaterial>[]=[];private slabs:T.Mesh<T.BufferGeometry,T.MeshPhysicalMaterial>[]=[];private ribbons:Sheet[]=[];private tubes:T.Mesh<T.BufferGeometry,T.MeshPhysicalMaterial>[]=[];
  private pages:Sheet[]=[];private pageMats:T.MeshPhysicalMaterial[]=[];private volume=new Volume();private ray=new T.Vector3();private point=new T.Vector3();
  constructor(onlySelected=false){
- this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,premultipliedAlpha:true,powerPreference:'high-performance'});this.gl.setSize(680,680,false);this.gl.setPixelRatio(1);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=.98;this.gl.shadowMap.enabled=true;this.gl.shadowMap.type=T.PCFSoftShadowMap;
+ this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,premultipliedAlpha:true,powerPreference:'high-performance'});this.gl.setSize(680,680,false);this.gl.setPixelRatio(1);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=.98;this.gl.shadowMap.enabled=true;this.gl.shadowMap.type=T.PCFSoftShadowMap;
  const pmrem=new T.PMREMGenerator(this.gl),room=new RoomEnvironment();this.env=pmrem.fromScene(room,.045);this.scene.environment=this.env.texture;room.dispose();pmrem.dispose();
  this.scene.add(new T.HemisphereLight(0xf4eeea,0x262535,1.05));this.key.position.set(-180,230,380);this.key.castShadow=true;this.key.shadow.mapSize.set(1024,1024);Object.assign(this.key.shadow.camera,{left:-260,right:260,top:340,bottom:-290,near:1,far:1000});this.key.shadow.bias=-.0005;this.key.shadow.normalBias=.2;this.fill.position.set(200,-40,160);this.scene.add(this.key,this.fill,this.sourceLight);
  this.stone.map=this.stoneMap;this.stone.bumpMap=this.stoneMap;this.stone.emissiveMap=this.minerals[1];this.metal.bumpMap=this.metalMap;this.paper.map=this.paperMap;this.paper.bumpMap=this.paperMap;

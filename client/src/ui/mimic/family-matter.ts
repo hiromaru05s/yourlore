@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {ease} from './motion';
 import type {FamilyId} from './selection';
@@ -33,7 +34,7 @@ export class FamilyMatter{
  readonly ready:Promise<void>;
  private ornaments:Ornaments;
  constructor(private id:FamilyId,private variant:number){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:false});
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:false});
   this.renderer.setSize(290,560,false);this.renderer.setPixelRatio(2);this.renderer.setClearColor(0,0);
   this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;
   this.canvas=this.renderer.domElement;this.canvas.dataset.dynamicTongues='independent-family-mesh';

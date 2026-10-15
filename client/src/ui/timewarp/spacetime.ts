@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { makeHourglass } from './hourglass';
@@ -51,7 +52,7 @@ export class Spacetime {
   private span=6.4;
   private width=1;private height=1;private dead=false;
   constructor(board:HTMLCanvasElement,face:CanvasImageSource){
-    this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance',preserveDrawingBuffer:true});
+    this.renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance',preserveDrawingBuffer:true});
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.25,Math.sqrt(1400000/(innerWidth*innerHeight))));this.renderer.transmissionResolutionScale=.5;this.renderer.setClearColor(0,0);this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.1;
     this.renderer.domElement.className='timewarp-optics';this.renderer.domElement.style.cssText='position:fixed;inset:0;z-index:180;pointer-events:none;width:100%;height:100%';this.renderer.domElement.dataset.selection='reverse-helix-03';this.renderer.domElement.setAttribute('aria-hidden','true');document.body.append(this.renderer.domElement);
     this.map=new T.CanvasTexture(board);this.map.colorSpace=T.SRGBColorSpace;this.map.minFilter=T.LinearFilter;

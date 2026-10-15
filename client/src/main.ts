@@ -1,3 +1,4 @@
+import "./styles/fonts.css";
 import "./styles/reading-board.css";
 // ============================================================
 // LORE — client entry point.

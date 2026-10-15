@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from './webglRenderer';
 import * as T from 'three';
 import { captureCardBack } from './cardSurface';
 import { PaperCard } from './paperCard';
@@ -24,7 +25,7 @@ export function shufflePose(t:number,i:number,n:number){
 export async function shufflePaperCards(shelf:HTMLElement,deck:HTMLElement,count:number,signal:AbortSignal):Promise<void>{
   if(signal.aborted)return;
   let renderer:T.WebGLRenderer;
-  try{renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return;}
+  try{renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return;}
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.75));renderer.setSize(innerWidth,innerHeight);
   renderer.setClearColor(0,0);renderer.outputColorSpace=T.SRGBColorSpace;
   const canvas=renderer.domElement;canvas.className='paper-draw-canvas paper-shuffle-canvas';canvas.setAttribute('aria-hidden','true');

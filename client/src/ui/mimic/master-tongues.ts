@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {ease} from './motion';
 
@@ -32,7 +33,7 @@ export class DynamicTongues{
  private tangent=new T.Vector3();private across=new T.Vector3();private depth=new T.Vector3();private vertex=new T.Vector3();
  readonly ready:Promise<void>;
  constructor(){
-  this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:false});
+  this.renderer=createWebGLRenderer({alpha:true,antialias:true,premultipliedAlpha:true,preserveDrawingBuffer:false});
   this.renderer.setSize(240,400,false);this.renderer.setPixelRatio(2);this.renderer.setClearColor(0,0);
   this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;
   this.canvas=this.renderer.domElement;this.canvas.dataset.dynamicTongues='two-independent-meshes';

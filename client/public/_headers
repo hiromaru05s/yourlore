@@ -1,4 +1,4 @@
-# Fixed URLs must revalidate; only hashed /assets files are immutable.
+# Fixed URLs must revalidate; content-hashed assets and font subsets are immutable.
 /art/*
   Cache-Control: public, max-age=0, must-revalidate
 /frames/*
@@ -16,3 +16,6 @@
 
 /music/*
   Cache-Control: public, max-age=0, must-revalidate
+
+/fonts/web/files/*
+  Cache-Control: public, max-age=31536000, immutable

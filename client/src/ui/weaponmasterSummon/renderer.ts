@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {CARD_PADDING} from '../cardSurface';
@@ -15,7 +16,7 @@ export class Renderer {
  private army:T.Group[]=[];private trail=new Ribbon(0xbdeafa);private chips:T.Mesh[]=[];private stamp:T.Mesh;
  constructor(){
   const m=this.mats;
-  this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.debug.onShaderError=(gl,program,vs,fs)=>{this.shaderErrors.push([gl.getProgramInfoLog(program),gl.getShaderInfoLog(vs),gl.getShaderInfoLog(fs)].filter(Boolean).join('\n'));};this.gl.setPixelRatio(1);this.gl.setSize(800,800);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.1;this.gl.shadowMap.enabled=true;this.gl.shadowMap.type=T.PCFShadowMap;
+  this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.gl.debug.onShaderError=(gl,program,vs,fs)=>{this.shaderErrors.push([gl.getProgramInfoLog(program),gl.getShaderInfoLog(vs),gl.getShaderInfoLog(fs)].filter(Boolean).join('\n'));};this.gl.setPixelRatio(1);this.gl.setSize(800,800);this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.toneMapping=T.ACESFilmicToneMapping;this.gl.toneMappingExposure=1.1;this.gl.shadowMap.enabled=true;this.gl.shadowMap.type=T.PCFShadowMap;
   const pm=new T.PMREMGenerator(this.gl),room=new RoomEnvironment();this.env=pm.fromScene(room,.04);this.scene.environment=this.env.texture;this.scene.environmentIntensity=.88;room.dispose();pm.dispose();
   this.scene.add(new T.HemisphereLight(0xdeedff,0x2d1d16,1.1));const key=new T.DirectionalLight(0xffedd8,2.1);key.position.set(-2.5,3,6);key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-2.3;key.shadow.camera.right=2.3;key.shadow.camera.top=2.3;key.shadow.camera.bottom=-2.3;key.shadow.bias=-.0003;key.shadow.normalBias=.01;key.shadow.radius=3;this.scene.add(key);const edge=new T.DirectionalLight(0x9cccf7,1.35);edge.position.set(3,-1,3);this.scene.add(edge);
   this.scene.add(this.root);

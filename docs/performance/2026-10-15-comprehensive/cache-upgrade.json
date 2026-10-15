@@ -1,0 +1,267 @@
+{
+  "oldController": "http://127.0.0.1:49489/menu-cache-sw.js",
+  "controller": "http://127.0.0.1:49489/menu-cache-sw.js?v=2",
+  "cache": {
+    "art": 1872,
+    "previews": 14
+  },
+  "upgradeTransfers": [
+    {
+      "url": "/art/biblion/modular/brand-seal-ui.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/biblion/modular/dew-ui.webp",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/biblion/modular/infinity-ui.webp",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/biblion/modular/shield-ui.webp",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/lounge/gifts/courier.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/seekers/v2/mask-opp.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/seekers/v2/mask-self.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/vfx/mimic-family/engraved-brass.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-0089e2e6dc22189e61cdb170.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/vfx/mimic-mouth-r2/04-predator-fangs.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/art/vfx/taunt-four/lion-relief.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-999f1e441d67c87cfe577e8e.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-eebd15024b633fb8c61f1155.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-546b34debe4dca84640b1d76.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-48a199516dcc5672500277f9.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-8c5806cd8f09a358205d5449.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/f98a60cfa5c901ceb4d17478cdd6a5162ab0f8ad977eb94442d62015835639dc.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/f98e5438ed9cb4783b9afe40ae3af2b37aab02692c923868d0d5642b798f2668.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fa981b56ecdad0095f14ef8201483fdc1b49efe7d048b64bad3efbbcb1d18eac.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/faf21491ad9bd040aa81f0aef6a5ddaf91fd70082aaa7828555bab2f82ec78c8.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fb53abb8275b4f7bce02be67d70e493b16fe2bc69a4e2d7c1ddd52a221d44c07.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fb6dfe852d14c165fb540975c6f06a39beec9d83b91b432032c2ff81f7bc519d.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fbabf641df66d64c777a0b3e1cd2fd1b534f9bf2be4d2352797dd2a1e99b9e81.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fc2a70c09cc281c6d0143666f711b0aa90b87d0dd228448711e9bd29af085271.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fcc7bcfe3bb79214e16ba88099b52c461822a5fc5eaaf82a34efe9fc350d4da4.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fd237e1c09106cb15a4961de0363a91f34c16a3624156f717576e8b4fa4d3038.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fd48f9e36bd351795e73ff5b2ea783ce79e004459ca10f52cbe0eb493856a36e.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fd6459b9a0dd708f76ccebd932ab73761bb2832aab505432c9aa603706551982.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fde6724b8d6f98c963fe694c02a7237ed7a4e453689d9a1563f82c7d85d6bcb3.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fde84787a46dfe43be5a3f315b4bb256929d35855a6af2927167b0482534e52c.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fe568d50a29522314189c7e2189f2cbbca3acfa35b3173452d91b13053337ae7.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/fe61175d6c9808f83c3fd245264f1abf3b51272d0cb2bc938fc301d46319f5ef.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/ff07f44b624e6cf6018db8a3984ba66c0b2d74dc344de2bfe9e6f971b5f669f0.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/fonts/web/files/ff83f85787a4c8c6afcb3246cb94337fa355583d5d95000c6661baae33648b84.woff2",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/board.glb",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/crystal-optics.json",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/deck-place.glb",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/mana-counter.glb",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/mana-crystal-ready.glb",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/mana-crystal-spent.glb",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/mana-tray.glb",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/market.glb",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/models/reading-board/v1/reroll-button.glb",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-82da3f6834a88e363cc955b0.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/assets/art-pack-fd15c47188e99c88b3f5b77e.bin",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/vfx/chosen-heroes/rogue.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/vfx/chosen-victory/crown.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/vfx/merchant/balance.png",
+      "preload": true,
+      "phase": "new"
+    },
+    {
+      "url": "/vfx/purchase-air/crystal-72.png",
+      "preload": true,
+      "phase": "new"
+    }
+  ],
+  "repeat": [],
+  "errors": []
+}

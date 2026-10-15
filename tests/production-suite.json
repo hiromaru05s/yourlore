@@ -1,5 +1,9 @@
 {
   "current": [
+    "tests/web-fonts.mjs",
+    "tests/webgl-renderer.mjs",
+    "tests/duel-scene-changes.mjs",
+    "tests/menu-packs.mjs",
     "tests/castle-summon.mjs",
     "tests/duel-rewards.mjs",
     "tests/poison-summon.mjs",

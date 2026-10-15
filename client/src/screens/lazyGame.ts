@@ -1,3 +1,4 @@
+import {prepareDuelModules} from '../ui/duelModulePreload';
 import type {App,Screen} from '../router';
 import type {GameOpts} from './game';
 import {loadingScreen} from '../ui/loadingScreen';
@@ -9,7 +10,8 @@ let gameModule:Promise<typeof import('./game')>|undefined;
 const loadGame=()=>gameModule??=import('./game').catch(error=>{gameModule=undefined;throw error;});
 /** Importing prepares code only; controllers, sockets and GPU contexts mount on entry. */
 export async function warmGame(cards:readonly string[]=[]):Promise<void>{
- await Promise.allSettled([
+ await Promise.all([
+  prepareDuelModules(),
   loadGame(),
   import('../ui/duelReadiness').then(module=>module.warmDuel()),
   warmImages([...new Set(['STARTER_MANA',...cards])].flatMap(id=>[artUrl.sm(id),artUrl.xs(id),artUrl.full(id)])),

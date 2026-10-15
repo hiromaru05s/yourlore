@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import { hash } from './catalog';
 import { coinPoses } from './physics';
@@ -5,7 +6,7 @@ import type { Pose } from './catalog';
 /** Real bevel, reeded edge, embossed faces and deterministic ballistic flight. */
 export class Coins {
     readonly canvas = document.createElement('canvas');
-    private gl = new T.WebGLRenderer({ canvas: this.canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
+    private gl = createWebGLRenderer({ canvas: this.canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
     private scene = new T.Scene();
     private root = new T.Group();
     private camera = new T.OrthographicCamera(-2, 2, 2, -2, .01, 40);

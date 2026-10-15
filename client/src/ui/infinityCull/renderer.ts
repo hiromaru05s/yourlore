@@ -1,3 +1,4 @@
+import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {DURATION,phase,ease,timing,type Options,type Layout} from './catalog';
@@ -11,7 +12,7 @@ export class InfinityRenderer {
  faces=new Map<string,T.CanvasTexture>();geometries=new Set<T.BufferGeometry>();materials=new Set<T.Material>();sourceFace:T.MeshStandardMaterial;floorMat:T.MeshBasicMaterial;ink:T.MeshPhysicalMaterial;
  dead=false;size='';unit=1;sourcePos=V();riftPos=V();
  constructor(faces:Map<string,HTMLCanvasElement>){
- this.renderer=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.18;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
+ this.renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'high-performance'});this.renderer.setPixelRatio(1);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.18;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
  const pm=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.environment=pm.fromScene(room,.05);room.dispose();pm.dispose();this.scene.environment=this.environment.texture;this.scene.environmentIntensity=.6;
  faces.forEach((face,id)=>{const tex=new T.CanvasTexture(face);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=4;this.faces.set(id,tex);});
  this.scene.add(this.world);this.world.add(this.effect);
