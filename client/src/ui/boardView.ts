@@ -1,3 +1,4 @@
+import {MarketCrashPresentation} from './marketCrash/runtime';
 import {AnesthesiaPresentation} from './anesthesia/runtime';
 import {bindOriginTrap} from './originRite/anchors';
 import {paintSpaceRiteCard,spaceRiteReason,spaceRiteSourceText,syncSpaceRiteStatus} from './spaceRiteStatus';
@@ -98,6 +99,7 @@ export class GameView {
   logEl!: HTMLElement;
   /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
   private disposed = false;
+  private marketCrash: MarketCrashPresentation;
   private statRise: ReturnType<typeof createBoardStatRise>;
   private trickRoom:TrickRoomPresentation;
   private anesthesia:AnesthesiaPresentation;
@@ -109,6 +111,7 @@ export class GameView {
     this.you = you;
     this.h = h;
     this.statRise = createBoardStatRise(root);
+    this.marketCrash = new MarketCrashPresentation(root);
     this.trickRoom = new TrickRoomPresentation(root);
     this.anesthesia = new AnesthesiaPresentation(root);
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
@@ -307,6 +310,7 @@ export class GameView {
     this.trickRoom.dispose();
     this.anesthesia.dispose();
     this.statRise.dispose();
+    this.marketCrash.dispose();
     this.handConditions.dispose();
     clearBiblionFx(true);
     if (this.onLayout) window.removeEventListener("lore:layout", this.onLayout);
@@ -972,7 +976,7 @@ export class GameView {
 
     const rb = this.q("refreshBtn") as HTMLButtonElement;
     const rtok = me.refreshTokens || 0; // 렐릭 헌터(v36): 카운터가 있으면 무료 갱신
-    rb.disabled = !myTurn || !!g.pending || (me.mana < 1 && rtok <= 0);
+    rb.disabled = !myTurn || !!g.pending || !!owner.refreshBlockTurn || (me.mana < 1 && rtok <= 0);
     const rbCost = rb.querySelector("b"); if (rbCost) rbCost.textContent = rtok > 0 ? `0 (${rtok})` : "1";
     rb.title=`${t("duel.rerollFour").replace("4",String(owner.supply.length))} · ${rbCost?.textContent??"1"} ◈`;
     rb.setAttribute("aria-label",rb.title);
@@ -981,6 +985,7 @@ export class GameView {
     rb.onfocus = () => mk.classList.add("reroll-focus");
     rb.onblur = () => mk.classList.remove("reroll-focus");
     rb.onclick = () => this.h.onRefresh();
+    this.marketCrash.sync(g);
   }
 
   /** Portrait counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right. */
