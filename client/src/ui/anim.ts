@@ -1,4 +1,6 @@
 import {playErosion} from './erosion/runtime';
+import {playGrowth} from './growth/runtime';
+import type {GrowthPulse} from './growth/plan';
 import {findOriginTrap} from './originRite/anchors';
 import {playOriginRite,cancelOriginRites} from './originRite/runtime';
 import type {OriginRiteReaction} from '../shared/types';
@@ -1477,4 +1479,11 @@ export async function erosionDamage(side:ViewSide,source:string,amount:number,on
  let applied=false;const apply=()=>{if(!applied){applied=true;onDamage();}};
  try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playErosion(side,source,amount,apply,signal),1800);}
  finally{apply();}
+}
+
+/** Growth owns its heal cue and contact; cancellation still commits every result once. */
+export async function growthRecovery(side:ViewSide,pulses:readonly GrowthPulse[],onHeal:(index:number)=>void):Promise<void>{
+ const applied=new Set<number>();const apply=(i:number)=>{if(applied.has(i))return;applied.add(i);onHeal(i);if(pulses[i].amount>0&&!fxSkip&&!document.hidden){sfx('heal');hpFeedback(side,'heal',pulses[i].amount);}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playGrowth(side,pulses,apply,signal),Math.max(0,...pulses.map(p=>p.delay))+2000);}
+ finally{pulses.forEach((_,i)=>apply(i));}
 }

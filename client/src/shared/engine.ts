@@ -517,7 +517,14 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       for (let i = 0; i < drawn && !g.over; i++) {
         for (const e of [...p.enchants]) {
           if (g.over) break;
-          if (e.card.ench === 'growth') { enchantFx(g, ev, p, e.card); addHealth(ctx, p, 1); }
+          if (e.card.ench === 'growth') {
+            enchantFx(g, ev, p, e.card);
+            const start=ev.length;
+            addHealth(ctx, p, 1);
+            // Mark the actual recovery only: modifiers may round Growth to zero.
+            const recovery=ev[start];
+            if(recovery?.type==='heal'&&recovery.player===side(g,p))recovery.growthSourceUid=e.card.uid;
+          }
           if (e.card.ench === 'erosion') { enchantFx(g, ev, p, e.card); const depth = spellDepth; spellDepth++; try { dealDamage(g.players[1 - side(g, p)], 1, cn(e.card), cn(e.card), side(g, p)); } finally { spellDepth = depth; } }
         }
       }

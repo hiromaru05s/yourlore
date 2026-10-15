@@ -1,4 +1,5 @@
 import {erosionPlan} from '../ui/erosion/events';
+import {growthGroups,growthDrawHands} from '../ui/growth/plan';
 import {isSoulHarvestDamage,soulHarvestDamageIndex} from '../ui/soulHarvest/events';
 import {dungeonFloorSummons} from '../ui/dungeonFloor/events';
 import {runeReplayPlan} from '../ui/runeReplay/plan';
@@ -338,6 +339,7 @@ export abstract class BaseController implements BoardHandlers {
       }
     }
     const events = counterPresentationEvents(res.events);
+    const growth=growthGroups(events),growthHands=growthDrawHands(prev,res.state,events);
     if(events.some(e=>e.type==='timewarp'||e.type==='turnSkipped'&&e.source==='TIMEWARP'))warmTimewarp();
     for(const event of events)if(event.type==='counter'||event.type==='destroy')A.warmCombat(event.uid);
     if(events.some(e=>e.type==='dice'&&e.source.id==='DUNGEON_FLOOR'))A.warmDungeonFloor();
@@ -430,7 +432,7 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
-      if(summonActivations.has(e)||contactedDamage.has(e)||runeReplays.suppressed.has(i))continue;
+      if(growth.consumed.has(i)||summonActivations.has(e)||contactedDamage.has(e)||runeReplays.suppressed.has(i))continue;
       // glanceable icon rail (topbar): key events → small icons
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
@@ -522,6 +524,14 @@ export abstract class BaseController implements BoardHandlers {
             }
           }
 
+          const growthPulses=growth.groups.get(i);
+          if(growthPulses){
+            await A.growthRecovery(sideOf(e.player),growthPulses,index=>{
+              if(this.dead)return;const pulse=growthPulses[index];hpNow[pulse.player]+=pulse.amount;
+              if(pulse.amount>0&&pulse.player===this.you)this.view.pushIcon('heal');
+              A.hpBarSet(sideOf(pulse.player),hpNow[pulse.player]);
+            });break;
+          }
           if(e.originRite){
             const reaction=e.originRite;
             // Consume only this rite's immediately following grant; its selected light owns contact.
@@ -897,19 +907,26 @@ export abstract class BaseController implements BoardHandlers {
           await A.animateReshuffle(sideOf(e.player), e.count);
           break;
         case "draw": {
-          draws[e.player] += e.count;
-          if(erosion.draws.has(i)){
-            const pl=e.player,hand=document.getElementById(pl===this.you?'hand':'oppHand');
-            const before=captureHandLayout(hand),old=new Set(prev.players[pl].hand.map(c=>c.uid));
-            const count=events.reduce((n,event)=>n+(event.type==='draw'&&event.player===pl?event.count:0),0);
-            const arrivalIds=new Set(arrivingHandUids(prev.players[pl].hand,res.state.players[pl].hand,count));
-            const arrivals=res.state.players[pl].hand.filter(c=>arrivalIds.has(c.uid));
-            const incoming=arrivals.slice(shownDraws[pl],shownDraws[pl]+draws[pl]);
-            shownDraws[pl]+=draws[pl];
-            const visible=new Set(arrivals.slice(0,shownDraws[pl]).map(c=>c.uid));
-            this.view.presentDrawHand(res.state,pl,res.state.players[pl].hand.filter(c=>old.has(c.uid)||visible.has(c.uid)));
-            await A.animateDraw(hand,draws[pl],sideOf(pl),{previousHand:before,uids:incoming.map(c=>c.uid),durationScale:.5});
-            draws[pl]=0; // Already landed: do not draw these cards again at final render.
+          const early=growthHands.get(i);
+          if(early){
+            const hand=document.getElementById(e.player===this.you?'hand':'oppHand'),previousHand=captureHandLayout(hand);
+            this.view.presentDrawHand(res.state,e.player,early.hand);
+            await A.animateDraw(hand,e.count,sideOf(e.player),{previousHand,uids:early.uids,durationScale:.55});
+          }else{
+            draws[e.player] += e.count;
+            if(erosion.draws.has(i)){
+              const pl=e.player,hand=document.getElementById(pl===this.you?'hand':'oppHand');
+              const before=captureHandLayout(hand),old=new Set(prev.players[pl].hand.map(c=>c.uid));
+              const count=events.reduce((n,event)=>n+(event.type==='draw'&&event.player===pl?event.count:0),0);
+              const arrivalIds=new Set(arrivingHandUids(prev.players[pl].hand,res.state.players[pl].hand,count));
+              const arrivals=res.state.players[pl].hand.filter(c=>arrivalIds.has(c.uid));
+              const incoming=arrivals.slice(shownDraws[pl],shownDraws[pl]+draws[pl]);
+              shownDraws[pl]+=draws[pl];
+              const visible=new Set(arrivals.slice(0,shownDraws[pl]).map(c=>c.uid));
+              this.view.presentDrawHand(res.state,pl,res.state.players[pl].hand.filter(c=>old.has(c.uid)||visible.has(c.uid)));
+              await A.animateDraw(hand,draws[pl],sideOf(pl),{previousHand:before,uids:incoming.map(c=>c.uid),durationScale:.5});
+              draws[pl]=0; // Already landed: do not draw these cards again at final render.
+            }
           }
           break;
         }

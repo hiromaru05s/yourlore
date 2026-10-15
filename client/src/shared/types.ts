@@ -295,7 +295,7 @@ export type GameEvent =
   | { type: "hit"; uid: string; amount?: number }
   | { type: "reverseDamage"; id: number; from: Side; to: Side; sourceUids: string[] }
   | { type: "damage"; reversed?: true; reverseId?: number; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
-  | { type: "heal"; player: Side; amount: number; bloodRiteSources?: string[] }
+  | { type: "heal"; player: Side; amount: number; growthSourceUid?: string; bloodRiteSources?: string[] }
   | { type: "decayCounterGrant"; player: Side; uid: string; before: number; after: number }
   | { type: "destroy"; player: Side; uid: string; id?: string; cause?: "decay" | "fusion" | "massacre" }
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }

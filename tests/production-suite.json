@@ -151,7 +151,8 @@
     "tests/pile-geometry-cache.mjs",
     "tests/origin-rite.mjs",
     "tests/anesthesia.mjs",
-    "tests/anesthesia-runtime.mjs"
+    "tests/anesthesia-runtime.mjs",
+    "tests/growth.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
