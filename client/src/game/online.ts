@@ -73,6 +73,7 @@ export class OnlineController extends BaseController {
   }
 
   private onServer(msg: GameServerMsg): void {
+    if(msg.type==='rewardsSettled'){document.dispatchEvent(new Event('lore:rewards'));return;}
     if (msg.type === "init" || msg.type === "update") {
       this.echoLockAt = 0;
       if (msg.state.ranked != null) this.ranked = msg.state.ranked;

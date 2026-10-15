@@ -1,3 +1,6 @@
+import { progressionState, rerollDaily } from './progression';
+import { BOT_REWARDS } from '../../client/src/shared/progression';
+import { botNpc } from '../../client/src/shared/botNpcs';
 import { TUT_STEPS } from '../../client/src/shared/tutorialSteps';
 import { replayLesson, TUTORIAL_ACTION_LIMIT } from '../../client/src/shared/tutorialLesson';
 import { isClientMessage } from './gameInput';
@@ -39,6 +42,26 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders(env) });
   const user = await getUser(env, req);
   if (!user) return json(env, { error: "로그인이 필요합니다." }, 401);
+
+  if (path === '/rewards/progression' && req.method === 'GET') return json(env, await progressionState(env,user.id));
+  if (path === '/rewards/daily/reroll' && req.method === 'POST') {
+    const body=await req.json() as {day?:unknown;revision?:unknown};
+    const changed=await rerollDaily(env,user.id,body.day,body.revision);
+    return json(env,{...await progressionState(env,user.id),changed},changed?200:409);
+  }
+  if (path === '/rewards/bot/start' && req.method === 'POST') {
+    const body=await req.json() as {difficulty?:unknown;lang?:unknown};
+    if(typeof body.difficulty!=='string'||!Object.hasOwn(BOT_REWARDS,body.difficulty))return json(env,{error:'invalid difficulty'},400);
+    const difficulty=body.difficulty as keyof typeof BOT_REWARDS,npc=botNpc(difficulty);
+    const roomId=crypto.randomUUID(),botId='lore-challenge-bot-'+difficulty;
+    const lang=body.lang==='en'?'en':body.lang==='ko'?'ko':'ja';
+    const response=await env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId)).fetch(new Request('https://room/setup',{method:'POST',body:JSON.stringify({
+      players:[{id:user.id,name:user.display,deck:user.deck?.join(','),sleeve:user.sleeve,furniture:user.furniture},{id:botId,name:npc.name[lang]}],
+      seed:crypto.getRandomValues(new Uint32Array(1))[0],challengeDifficulty:difficulty,
+    })}));
+    if(!response.ok)return json(env,{error:'could not start duel'},503);
+    return json(env,{roomId,you:0,oppName:npc.name[lang],oppAvatar:npc.avatar,difficulty});
+  }
 
   if (path === '/rewards/tutorial' && req.method === 'GET') {
     const rows = await env.DB.prepare('SELECT key FROM rewards WHERE user_id = ?').bind(user.id).all<{key:string}>();

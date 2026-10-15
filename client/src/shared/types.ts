@@ -108,6 +108,8 @@ export interface RevealedCard {
 }
 
 export interface PlayerState {
+  /** Server-owned lifetime duel counters; included in rollback snapshots. */
+  activity?: Partial<Record<import("./progression").Activity, number>>;
   expansion?: { turn: number; extraDraw: number; firePlayed: string[]; fireDiscount: number; dominion: number; directHits?: string[]; directHitTurn?: number; lastDirectHits?: number; lastDirectTurn?: number; reversePlays?: number };
 
   id: string; // user id (online) or "bot"/"local"
@@ -197,6 +199,7 @@ export interface Pending {
 }
 
 export interface GameState {
+  botDifficulty?: import("./bot").BotDifficulty;
   /** Resume a requested turn end after a mandatory attack's optional choices. */
   endingTurn?: { turn: number; force: boolean };
   spellDamageTurn?: number;

@@ -1,3 +1,4 @@
+import {rewardTestEnv} from './fixtures/rewardTestEnv.mjs';
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';import {build} from 'esbuild';import {DatabaseSync} from 'node:sqlite';
 const dir=await fs.mkdtemp('/tmp/lore-bc-test-');const checks=[];
 await build({stdin:{contents:`export {guardRequest} from './server/src/requestGuard';export {corsHeaders,getUser} from './server/src/auth';export {handleSocial} from './server/src/social';export {Matchmaker} from './server/src/matchmaker';export {GameRoom} from './server/src/gameRoom';`,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:dir+'/test.mjs'});
@@ -38,7 +39,7 @@ await test('queue account reservation, repeated messages and setup failure',asyn
  for(let i=0;i<65;i++)mm.onMsg(a,{data:'{"type":"ping"}'});assert.equal(a.ws.readyState,3);
 });
 await test('failed persistence/alarm never broadcasts uncommitted turn',async()=>{
- let saved,failWrite=false,failAlarm=false;const sockets=[0,1].map(side=>({...socket(),deserializeAttachment:()=>({side,gen:0})}));const state={id:{toString:()=> 'fixture'},getWebSockets:tag=>sockets.filter((_,i)=>String(i)===tag),storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{if(failWrite)throw Error('injected');saved=structuredClone(v)},setAlarm:async()=>{if(failAlarm)throw Error('injected')},deleteAlarm:async()=>{}}};const room=new GameRoom(state,{});
+ let saved,failWrite=false,failAlarm=false;const sockets=[0,1].map(side=>({...socket(),deserializeAttachment:()=>({side,gen:0})}));const state={id:{toString:()=> 'fixture'},getWebSockets:tag=>sockets.filter((_,i)=>String(i)===tag),storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{if(failWrite)throw Error('injected');saved=structuredClone(v)},setAlarm:async()=>{if(failAlarm)throw Error('injected')},deleteAlarm:async()=>{}}};const room=new GameRoom(state,rewardTestEnv());
  await room.fetch(post('/setup',{seed:77,players:[{id:'a',name:'A'},{id:'b',name:'B'}]}));room.room.previewDone=true;room.room.readied=[true,true];room.room.opening=undefined;await room.persist();const turn=saved.game.turn;
  for(const failure of ['write','alarm']){await room.restore();failWrite=failure==='write';failAlarm=failure==='alarm';await assert.rejects(room.handleAction(room.room.game.cur,{type:'endTurn'}));assert.equal(saved.game.turn,turn);assert.equal(sockets.flatMap(s=>s.messages).length,0);assert.equal(room.room,null);failWrite=failAlarm=false;}
 });

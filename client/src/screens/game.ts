@@ -20,7 +20,7 @@ import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
 export type GameOpts =
   | { mode: "bot"; difficulty?: BotDifficulty }
   | { mode: "tutorial"; lesson?: number }
-  | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean };
+  | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean; difficulty?:BotDifficulty };
 
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
@@ -60,7 +60,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
-    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame(opts.lesson) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
+    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame(opts.lesson) : (opts.difficulty??ctrl.botDifficulty) ? app.botGame(opts.difficulty??ctrl.botDifficulty) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
   };
 
   const tutorialUserId = app.user?.id;

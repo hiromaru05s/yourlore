@@ -1,5 +1,9 @@
 import { experienceStatements, experienceReceipt } from './progression';
 import { ONLINE_WIN_EXP, ONLINE_LOSS_EXP, type ExperienceReceipt } from '../../client/src/shared/progression';
+import { botDecide, type BotDifficulty } from '../../client/src/shared/bot';
+import { botNpc, pickNpcDeck } from '../../client/src/shared/botNpcs';
+import { BOT_REWARDS, type QuestState } from '../../client/src/shared/progression';
+import { ensureDaily, settleProgression } from './progression';
 // ============================================================
 // LORE server — GameRoom Durable Object: the AUTHORITATIVE game.
 // Holds the real GameState, validates every action, and pushes
@@ -40,6 +44,9 @@ interface RoomData {
   experienceOutcome?: Record<string, ExperienceReceipt>;
   /** Ranked match — result also updates the seasonal Elo ladder. */
   ranked: boolean;
+  daily?: [QuestState | null, QuestState | null];
+  rewardDecks?: [string[], string[]];
+  challengeDifficulty?: BotDifficulty;
   /** Connection generation per side — a close from an older gen is a replaced socket, not a disconnect. */
   gen: [number, number];
   /** Pending forfeit deadlines (ms epoch) per side; enforced by alarm(). */
@@ -135,6 +142,7 @@ export class GameRoom {
         initSent: r.initSent ?? [true, true],
         opening: r.opening,
         bot: r.bot,
+        daily:r.daily, rewardDecks:r.rewardDecks, challengeDifficulty:r.challengeDifficulty,
         startedAt: r.startedAt ?? Date.now(), // old blobs: degrade to duration≈0 (excluded by admin query)
       };
     }
@@ -149,10 +157,13 @@ export class GameRoom {
     if (url.pathname === "/setup") {
       if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
       if (this.room) return new Response("already provisioned", { status: 409 });
-      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string };
+      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string; challengeDifficulty?: BotDifficulty };
       // Reading the request body yields; a concurrent setup may have won meanwhile.
       if (this.room) return new Response("already provisioned", { status: 409 });
-      const bot = body.botId ? matchBot(body.botId) : undefined;
+      if(body.challengeDifficulty && (!Object.hasOwn(BOT_REWARDS,body.challengeDifficulty)||body.ranked||body.botId))return new Response('invalid difficulty',{status:400});
+      const npc=body.challengeDifficulty?botNpc(body.challengeDifficulty):undefined;
+      const challenge=npc?{id:'lore-challenge-bot-'+npc.difficulty,name:body.players[1].name,deck:pickNpcDeck(npc).deck}:undefined;
+      const bot = challenge ?? (body.botId ? matchBot(body.botId) : undefined);
       if (body.botId && (!matchBotsEnabled(this.env) || !bot || body.players[1]?.id !== bot.id || body.players[0]?.id === bot.id)) return new Response('invalid test bot', {status:403});
       if (bot) body.players[1] = {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')};
       const res = createGame({
@@ -170,6 +181,7 @@ export class GameRoom {
         joinBy: Date.now() + JOIN_GRACE_MS,
         recorded: false,
         ranked: body.ranked ?? false,
+        challengeDifficulty:body.challengeDifficulty,
         gen: [0, 0],
         forfeitAt: [null, null],
         turnStartAt: Date.now(),
@@ -183,6 +195,10 @@ export class GameRoom {
         bot: bot ? {id:bot.id,side:1,nextAt:null} : undefined,
       };
       if (bot) this.room.game.players[1].botTune = {...bot.deck.tune};
+      this.room.game.botDifficulty=body.challengeDifficulty;
+      this.room.rewardDecks=this.room.game.players.map(p=>[...p.hand,...p.deck,...p.discard].map(c=>c.id)) as [string[],string[]];
+      this.room.game.players.forEach(p=>{p.activity={};});
+      this.room.daily=await Promise.all(this.room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):ensureDaily(this.env,p.id))) as [QuestState|null,QuestState|null];
       await this.persist();
       await this.state.storage.setAlarm(this.room.joinBy!);
       return new Response("ok");
@@ -464,7 +480,8 @@ export class GameRoom {
     const room = this.room!, bot = room.bot!;
     bot.nextAt = null;
     if (actingSide(room.game) !== bot.side || room.forfeitAt[1-bot.side] != null || Date.now() < room.turnStartAt) return;
-    for (const action of matchBotActions(room.game, bot.side)) {
+    const choices=room.challengeDifficulty?[botDecide(room.game,room.challengeDifficulty)]:matchBotActions(room.game,bot.side);
+    for (const action of choices) {
       // Engine validation uses the authoritative state, never the strategy's redacted copy.
       const result = reduce(room.game, action);
       if (result.state.turn === room.game.turn && result.state.cur === room.game.cur &&
@@ -624,7 +641,7 @@ export class GameRoom {
         this.env.DB.prepare(`UPDATE users SET wins=wins+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM matches WHERE id=?)`).bind(winner,matchId),
         this.env.DB.prepare(`UPDATE users SET losses=losses+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM matches WHERE id=?)`).bind(loser,matchId),
         this.env.DB.prepare(`INSERT OR IGNORE INTO matches (id,player_a,player_b,winner,mode,created_at,ended_at,cards_a,cards_b,turns,buys_a,buys_b,bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
-          .bind(matchId,room.players[0].id,room.players[1].id,winner,room.ranked?"ranked":"online",room.startedAt,room.resultAt,usesOf(0),usesOf(1),room.game.turn??null,buysOf(0),buysOf(1),BALANCE_VERSION),
+          .bind(matchId,room.players[0].id,room.players[1].id,winner,room.challengeDifficulty?"bot":room.ranked?"ranked":"online",room.startedAt,room.resultAt,usesOf(0),usesOf(1),room.game.turn??null,buysOf(0),buysOf(1),BALANCE_VERSION),
       ]);
       room.experienceOutcome = {};
       if (winner && loser) for (const side of [0,1] as Side[]) {
@@ -638,6 +655,12 @@ export class GameRoom {
           const ws=this.sockFor(side), change=outcome[room.players[side].id];
           if (ws && change) try { this.send(ws,{type:"rankResult",...change}); } catch { /* disconnected */ }
         }
+      }
+      for(const side of [0,1] as Side[]) {
+        if(room.bot?.side===side)continue;
+        await settleProgression(this.env,{matchId,userId:room.players[side].id,mode:room.challengeDifficulty?'bot':room.ranked?'ranked':'online',difficulty:room.challengeDifficulty,
+          won:room.game.winner==null?null:room.game.winner===side,player:room.game.players[side],deck:room.rewardDecks?.[side]??[],daily:room.daily?.[side]??undefined,endedAt:room.resultAt!});
+        const ws=this.sockFor(side);if(ws)try{this.send(ws,{type:'rewardsSettled'});}catch{/* reconnect reads the ledger */}
       }
       room.recorded = true;
       await this.persist();

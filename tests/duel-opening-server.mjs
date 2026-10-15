@@ -1,3 +1,4 @@
+import {rewardTestEnv} from './fixtures/rewardTestEnv.mjs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdtemp,rm} from 'node:fs/promises';
@@ -17,7 +18,7 @@ async function fixture(ranked=false){
   const sockets=[new Socket(0),new Socket(1)];let saved;let alarm=null;
   const storage={get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v);},setAlarm:async at=>{alarm=at;},deleteAlarm:async()=>{alarm=null;}};
   const state={storage,getWebSockets:tag=>sockets.filter(s=>String(s.side)===tag)};
-  const room=new GameRoom(state,{});
+  const room=new GameRoom(state,rewardTestEnv());
   await room.fetch(new Request('https://local/setup',{method:'POST',body:JSON.stringify({seed:22,ranked,players:[{id:'a',name:'A'},{id:'b',name:'B'}]})}));
   const send=(side,msg)=>room.webSocketMessage(sockets[side],JSON.stringify(msg));
   return {room,state,sockets,send,saved:()=>saved,alarm:()=>alarm};
@@ -42,7 +43,7 @@ try{
   await f.send(0,{type:'action',action:{type:'endTurn'}});assert.equal(f.room.room.game.turn,turn);
   now=playable-1;await f.send(0,{type:'action',action:{type:'endTurn'}});assert.equal(f.room.room.game.turn,turn);
   // Hibernation restores the same start and rejects an early action.
-  const restored=new GameRoom(f.state,{});
+  const restored=new GameRoom(f.state,rewardTestEnv());
   await restored.webSocketMessage(f.sockets[0],JSON.stringify({type:'ready',openingVersion:2}));
   assert.equal(f.sockets[0].messages.at(-1).state.opening.playableAt,playable);
   now=playable+2000;

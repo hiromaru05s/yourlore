@@ -1,3 +1,4 @@
+import { trackActivity } from "./progression";
 import { cloneGameState } from './cloneGameState';
 import { playIntent } from './playIntent';
 import {monsterActivation, observeMonsterEffect} from './monsterEffects';
@@ -452,6 +453,7 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   amount *= 2 ** doubles;
   const before = p.shield ?? 0;
   p.shield = before + amount;
+  trackActivity(p, 'shield', amount);
   ctx.ev.push({type:"statusGrant",player:side(g,p),resource:"shield",before,after:p.shield});
   p.shieldExpiresTurn = side(g, p) === g.cur ? g.turn + 1 : g.turn;
   if (side(g, p) !== g.cur) p.shieldOpponentPeak = Math.max(p.shieldOpponentPeak ?? 0, p.shield);
@@ -511,6 +513,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       if (!c) continue;
       p.hand.push(c); drawn++;
     }
+    if (extra) trackActivity(p, 'draw', drawn);
     if (drawn > 0) ev.push({ type: "draw", player: side(g, p), count: drawn });
     if (drawn > 0 && extra && side(g, p) === g.cur) {
       xstate(p).extraDraw += drawn;
@@ -543,6 +546,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       return;
     }
     p.hp += amt;
+    trackActivity(p, 'heal', amt);
     advanceQuest(p,"healthGain",amt);
     ev.push({ type: "heal", player: side(g, p), amount: amt, ...(bloodRiteSources ? {bloodRiteSources} : {}) });
     // 유령 — v25: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격력 +1 (지속)
@@ -609,6 +613,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (absorbed > 0) { breakShield(ctx, target, absorbed); amt -= absorbed; }
     if (amt <= 0) return;
     if (spellDepth > 0) spellDamageRecorded(g, Math.min(Math.max(0, target.hp), amt));
+    if (source !== side(g, target)) trackActivity(g.players[source], 'damage', Math.min(Math.max(0,target.hp),amt));
     target.hp -= amt;
     if (source !== side(g, target)) advanceQuest(target, "opponentDamage", amt);
     // 고통 수확: 상대(=target)가 데미지를 입을 때마다 컬 1장 획득
@@ -661,6 +666,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       // 공허(void): 토큰·공허 패시브 몬스터는 죽으면 게임에서 제외 — 덱 순환에 들어가지 않는다
       if (dead.token || hasPassive(dead, "void")) rmz(owner).push(resetInst(dead));
       else owner.discard.push(resetInst(dead));
+      if (cause === 'decay') trackActivity(g.players[1-side(g,owner)], 'decay');
       ev.push({ type: "destroy", player: side(g, owner), uid: m.uid, id: dead.id, ...(cause ? { cause } : {}) });
       (owner.destroyedLog ??= []).push({ id: dead.id, turn: g.turn }); if (owner.destroyedLog.length > 20) owner.destroyedLog.shift(); // v41b 윤회
       // 리더 골램(v36 leaderGolem): 자신 필드의 몬스터가 쓰러질 때마다 카운터 +1
@@ -5570,6 +5576,10 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
   refreshDewPassives(g2);
   recheckDeaths(g2, questCtx);
   rememberPublicCards(g2);
+  for (const sx of [0,1] as Side[]) {
+    const before = new Set((prev.players[sx].removed??[]).map(c=>c.uid));
+    trackActivity(g2.players[sx], 'rift', (g2.players[sx].removed??[]).filter(c=>!before.has(c.uid)).length);
+  }
   return res;
 }
 
@@ -5749,6 +5759,7 @@ function counterHit(g: GameState, ctx: Ctx, owner: PlayerState, defender: FieldM
   ctx.ev.push(event);
   const start=ctx.ev.length;
   const killed = monsterDamage(g, ctx, attackerOwner, attacker, amount, true);
+  if (killed && owner !== attackerOwner && ctx.ev.slice(start).some(e=>e.type==='destroy'&&e.uid===attacker.uid)) trackActivity(owner, 'counter');
   const hit=ctx.ev.slice(start).find(e=>e.type==='hit'&&e.uid===attacker.uid);
   if(hit?.type==='hit')event.contactDamage=hit.amount??0;
   if (killed && defender.aura === 'devourGrow' && owner.field.includes(defender)) { if (attacker.cost > 0) monsterActivation(g, ctx.ev, owner, defender); defender.atkMod += attacker.cost; defender.defMod += attacker.cost; }

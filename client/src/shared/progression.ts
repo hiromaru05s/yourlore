@@ -21,3 +21,39 @@ export interface ExperienceReceipt {
   after: number;
   shards: number;
 }
+
+import { DB, STARTERS } from './cards';
+import type { PlayerState } from './types';
+export const BOT_REWARDS = { easy: 300, normal: 500, hard: 1000, hell: 2000 } as const;
+export const MATCH_REWARDS = { online: { win: 10, loss: 5, cap: 100 }, ranked: { win: 20, loss: 10, cap: 300 } } as const;
+export type Activity = 'shield'|'heal'|'damage'|'decay'|'rift'|'draw'|'counter';
+export type QuestKind = Activity|'starterWin'|'buySpell'|'buyMonster'|'playSpell'|'playExpensive'|'playCard';
+export interface DailyQuest { kind: QuestKind; target: number; reward: number; card?: string }
+export const QUESTS: DailyQuest[] = [
+ {kind:'starterWin',target:3,reward:300}, {kind:'shield',target:20,reward:350},
+ {kind:'heal',target:40,reward:300}, {kind:'damage',target:150,reward:350},
+ {kind:'buySpell',target:30,reward:400}, {kind:'buyMonster',target:20,reward:300},
+ {kind:'decay',target:3,reward:400}, {kind:'rift',target:30,reward:350},
+ {kind:'draw',target:10,reward:400}, {kind:'counter',target:3,reward:350},
+ {kind:'playSpell',target:50,reward:350}, {kind:'playExpensive',target:20,reward:350},
+ {kind:'playCard',target:1,reward:350},
+];
+export function trackActivity(p: PlayerState, key: Activity, amount = 1): void {
+ if (p.activity && amount > 0) p.activity[key] = (p.activity[key] ?? 0) + amount;
+}
+export function questProgress(q: DailyQuest, p: PlayerState, won: boolean, deck: string[]): number {
+ if(q.kind==='starterWin')return won && deck.includes(q.card!) ? 1 : 0;
+ if(q.kind==='playCard')return p.uses[q.card!]??0;
+ if(q.kind==='buySpell'||q.kind==='buyMonster'||q.kind==='playSpell'||q.kind==='playExpensive') {
+  const entries=q.kind.startsWith('buy')?p.buys:p.uses;
+  return Object.entries(entries??{}).reduce((sum,[id,n])=>{
+   const c=DB[id]??STARTERS[id];if(!c)return sum;
+   const ok=q.kind==='playExpensive'?c.cost>=5:q.kind==='buyMonster'?c.t==='mon':c.t==='spell'||c.t==='quest';
+   return sum+(ok?n:0);
+  },0);
+ }
+ return p.activity?.[q.kind]??0;
+}
+export interface QuestState { day:string; revision:number; quest:DailyQuest; progress:number; claimed:boolean; rerollsLeft:number }
+export interface ProgressionState { daily:QuestState; bot:Partial<Record<keyof typeof BOT_REWARDS,boolean>>; online:number; ranked:number; credits:number; resetsAt:number }
+export const rewardDay=(now=Date.now()):string=>new Date(now+9*3600_000).toISOString().slice(0,10);

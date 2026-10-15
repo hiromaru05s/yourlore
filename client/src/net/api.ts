@@ -92,6 +92,9 @@ export const api = {
   collectionHistory: () => call<{receipts:CollectionReceipt[]}>("/collection/history",undefined,"GET"),
   buyStarter: (id:string,requestId:string) => call<CollectionResult>("/collection/buy",{id,requestId}),
   drawStarters: (count:number,requestId:string) => call<CollectionResult>("/collection/draw",{count,requestId}),
+  progression: () => call<import('../shared/progression').ProgressionState>('/rewards/progression',undefined,'GET'),
+  rerollDaily: (day:string,revision:number) => call<import('../shared/progression').ProgressionState>('/rewards/daily/reroll',{day,revision}),
+  startBot: (difficulty:import('../shared/bot').BotDifficulty,lang:string) => call<{roomId:string;you:0;oppName:string;oppAvatar:string}>('/rewards/bot/start',{difficulty,lang}),
   // register: {user} (즉시 입장) 또는 {needVerify:true} (인증 메일 발송됨)
   register: (email: string, password: string) => call<{ user?: User; needVerify?: boolean }>("/auth/register", { email, password, ...acquisition() }),
   login: (email: string, password: string) => call<{ user: User }>("/auth/login", { email, password }).then((r) => r.user),

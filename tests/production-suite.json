@@ -1,6 +1,7 @@
 {
   "current": [
     "tests/castle-summon.mjs",
+    "tests/duel-rewards.mjs",
     "tests/poison-summon.mjs",
     "tests/erosion.mjs",
     "tests/menu-cache.mjs",

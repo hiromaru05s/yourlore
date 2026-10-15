@@ -89,6 +89,7 @@ export abstract class BaseController implements BoardHandlers {
   protected view: GameView;
   protected log: GameLog;
   protected state!: GameState;
+  get botDifficulty(): BotDifficulty | undefined { return this.state?.botDifficulty; }
   protected you: Side;
   protected exits: ControllerExits;
   private elementalFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];

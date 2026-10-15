@@ -28,6 +28,7 @@ export type GameClientMsg =
   | { type: "ping" };
 
 export type GameServerMsg =
+  | { type: "rewardsSettled" }
   | { type: "init"; you: Side; state: GameState; events: GameEvent[] }
   | { type: "update"; state: GameState; events: GameEvent[] }
   | { type: "opponentLeft" }
