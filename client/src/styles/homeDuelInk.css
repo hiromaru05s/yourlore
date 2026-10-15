@@ -13,10 +13,10 @@
   transition:transform 280ms cubic-bezier(.2,.75,.2,1),filter 240ms;
 }
 .selected-menu.lounge-home .lounge-play-button::after {content:none}
-.selected-menu.lounge-home .lounge-play-button > :is(small,strong,span) {z-index:1}
-.selected-menu.lounge-home .lounge-play-button > small {top:42%;color:#aec2d0;letter-spacing:.24em}
-.selected-menu.lounge-home .lounge-play-button > strong {top:55%;font-size:25px!important;letter-spacing:.05em;text-shadow:0 1px 4px #0007}
-.selected-menu.lounge-home .lounge-play-button > span {top:69%;color:#b4c7d5;font-size:10px;letter-spacing:.1em}
+.selected-menu.lounge-home .lounge-play-button > :is(small,strong,span) {z-index:1;position:absolute;left:50%;transform:translate(-50%,-50%);margin:0!important;line-height:1.25;text-align:center;width:max-content;max-width:88%}
+.selected-menu.lounge-home .lounge-play-button > small {top:36%;color:#aec2d0;letter-spacing:.24em}
+.selected-menu.lounge-home .lounge-play-button > strong {top:50%;font-size:25px!important;letter-spacing:.05em;text-shadow:0 1px 4px #0007}
+.selected-menu.lounge-home .lounge-play-button > span {top:64%;color:#b4c7d5;font-size:10px;letter-spacing:.1em}
 .selected-menu.lounge-home .lounge-play-button:hover,
 .selected-menu.lounge-home .lounge-play-button:focus-visible {background:none;filter:none;transform:none}
 .selected-menu.lounge-home .lounge-play-button:is(:hover,:focus-visible)::before {

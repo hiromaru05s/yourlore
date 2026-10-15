@@ -1,11 +1,13 @@
+import {homeDaylight,announceHomeDaylightReady} from './homeDaylight';
 import * as THREE from 'three';
 
 /** Approved 2026-10-15 cloud / aperture / sunlight study, mounted only on HOME.
+ * v2: approved wide architecture, independently moving ivy and shared mascot lighting.
  * The CSS plate remains underneath until the first complete rendered frame.
  * All motion shares one clock; no menu re-render owns a second renderer. */
 export function mountHomeAtmosphere(host:HTMLElement):()=>void {
- const BASE='/art/lounge/atmosphere-v1/';
- const W=1505,H=1045;
+ const BASE='/art/lounge/atmosphere-v2/';
+ const W=1672,H=941;
  host.dataset.atmosphere='loading';
  if(typeof WebGL2RenderingContext==='undefined'){host.dataset.atmosphere='fallback';return()=>{};}
  let renderer:THREE.WebGLRenderer;
@@ -23,7 +25,7 @@ const camera=new THREE.OrthographicCamera(0,W,H,0,.1,100);
 camera.position.z=20;
 const loader=new THREE.TextureLoader();
 const owned:THREE.Texture[]=[];
-async function texture(name:string){const t=await loader.loadAsync(BASE+name);t.colorSpace=THREE.SRGBColorSpace;if(disposed)t.dispose();else owned.push(t);return t;}
+async function texture(name:string){const t=await loader.loadAsync(name==='clouds.png'?'/art/lounge/atmosphere-v1/clouds.png':BASE+name);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();if(disposed)t.dispose();else owned.push(t);return t;}
 function plane(width:number,height:number,x:number,y:number,z:number,material:THREE.Material){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),material);mesh.position.set(x,H-y,z);scene.add(mesh);return mesh;}
 const skyMat=new THREE.ShaderMaterial({vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec2 vUv;void main(){vec3 low=vec3(.76,.85,.91);vec3 high=vec3(.27,.52,.76);vec3 c=mix(low,high,smoothstep(0.,1.,vUv.y));float sun=exp(-length((vUv-vec2(.12,.84))*vec2(1.,.8))*4.);gl_FragColor=vec4(c+vec3(.14,.12,.07)*sun,1.);#include <colorspace_fragment>\n}`.replace(';#include',';\n#include')});
 plane(W,H,W/2,H/2,-5,skyMat);
@@ -61,9 +63,9 @@ function beam(a:number,b:number,c:number,d:number,topWidth:number,bottomWidth:nu
  const mesh=new THREE.Mesh(geo,new THREE.ShaderMaterial({uniforms,vertexShader:vertex,fragmentShader:fragment,transparent:true,depthWrite:false,depthTest:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending}));mesh.renderOrder=4;scene.add(mesh);shafts.push({mesh,a,b,c,d,topWidth,bottomWidth,uniforms,center:c,width:bottomWidth});
 }
 // Apertures fixed in the artwork coordinate system; floor endpoints stop before the desk.
-beam(211,154,655,1008,69,255);beam(297,284,778,1030,30,116);beam(485,360,845,1018,50,175);beam(859,67,1121,738,78,162);
+beam(308,112,630,860,64,205);beam(470,300,770,886,35,120);beam(644,150,968,885,55,170);beam(1030,90,1210,689,72,142);
 for(const shaft of shafts){
- if(shaft.d<900)continue;
+ if(shaft.d<760)continue;
  const mat=new THREE.ShaderMaterial({uniforms:shaft.uniforms,vertexShader:vertex,fragmentShader:`uniform float amount;uniform float time;uniform float phase;varying vec2 vUv;void main(){vec2 p=vUv-.5;float feather=exp(-dot(p*vec2(2.6,3.5),p*vec2(2.6,3.5))*3.);float broken=.78+.22*sin(vUv.x*12.+time*.09+phase);gl_FragColor=vec4(1.,.85,.58,feather*broken*.3*amount);}`,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending});
  shaft.pool=plane(shaft.bottomWidth*1.5,80,shaft.c,shaft.d-10,3,mat);shaft.pool.renderOrder=5;
 }
@@ -76,6 +78,14 @@ const dust=new THREE.Points(dustGeo,dustMat);dust.renderOrder=6;scene.add(dust);
 function resize(){const r=host.getBoundingClientRect();if(disposed||!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);const aspect=r.width/r.height;const worldAspect=W/H;if(aspect>worldAspect){const height=W/aspect;camera.left=0;camera.right=W;camera.top=H-(H-height)/2;camera.bottom=(H-height)/2;}else{const width=H*aspect;camera.left=(W-width)/2;camera.right=(W+width)/2;camera.top=H;camera.bottom=0;}camera.updateProjectionMatrix();render();}
 const observer=new ResizeObserver(resize);observer.observe(host);
 function render(){if(!disposed)renderer.render(scene,camera);}
+const leafUniforms={time:{value:0},sun:{value:.75},wind:{value:1}};
+const vines:THREE.Mesh[]=[];
+function addVine(map:THREE.Texture,x:number,y:number,w:number,h:number,phase:number,flip=1){
+ const material=new THREE.ShaderMaterial({uniforms:{...leafUniforms,map:{value:map},phase:{value:phase},flip:{value:flip}},transparent:true,depthWrite:false,side:THREE.DoubleSide,
+ vertexShader:`uniform float time,wind,phase;varying vec2 vUv;void main(){vUv=uv;vec3 p=position;float loose=pow(1.-uv.y,1.6);float twig=sin(uv.y*28.+time*1.2+phase)*sin(uv.x*12.+phase);p.x+=wind*(sin(time*.42+phase+(1.-uv.y)*2.)*4.8*loose+twig*1.1*(.2+loose));p.y+=wind*sin(time*.67+phase+uv.y*15.)*.55*loose;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
+ fragmentShader:`uniform sampler2D map;uniform float sun,flip;varying vec2 vUv;void main(){vec2 uv=vec2(flip<0.?1.-vUv.x:vUv.x,vUv.y);vec4 c=texture2D(map,uv);if(c.a<.01)discard;vec3 warm=mix(vec3(.83,.91,1.),vec3(1.07,1.03,.92),sun);gl_FragColor=vec4(c.rgb*warm,c.a);#include <colorspace_fragment>\n}`.replace(';#include',';\n#include')});
+ const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,h,12,64),material);mesh.position.set(x,H-y,1);mesh.renderOrder=3.5;scene.add(mesh);vines.push(mesh);
+}
 function update(){
  for(const c of clouds){let x=((c.start+cloudTime*c.rate+c.width/2)%(W+c.width)+W+c.width)%(W+c.width)-c.width/2;c.mesh.position.x=x;}
  // Visible cloud coverage determines each aperture's transmission independently.
@@ -95,7 +105,11 @@ function update(){
   totalLight+=s.uniforms.amount.value;
  }
  lightUniforms.amount.value=totalLight/shafts.length;
- for(let i=0;i<count;i++){const s=seed[i],v=(s.v+elapsed*(.004+s.d*.002))%1;const y=230+v*760;const first=shafts[0],f=(y-first.b)/(first.d-first.b);const center=THREE.MathUtils.lerp(first.a,first.center,f);positions[i*3]=center+(s.u-.5)*(55+v*125)+Math.sin(elapsed*.16+i)*6;positions[i*3+1]=H-y;positions[i*3+2]=4+s.d;}
+ const targetSun=Math.min(1,Math.max(.2,(shafts[0].uniforms.amount.value*.55+shafts[2].uniforms.amount.value*.45)));
+ homeDaylight.sun=targetSun;homeDaylight.time=cloudTime;
+ leafUniforms.time.value=cloudTime;leafUniforms.sun.value=targetSun;leafUniforms.wind.value=1;
+
+ for(let i=0;i<count;i++){const s=seed[i],v=(s.v+elapsed*(.004+s.d*.002))%1;const y=150+v*720;const first=shafts[0],f=(y-first.b)/(first.d-first.b);const center=THREE.MathUtils.lerp(first.a,first.center,f);positions[i*3]=center+(s.u-.5)*(55+v*125)+Math.sin(elapsed*.16+i)*6;positions[i*3+1]=H-y;positions[i*3+2]=4+s.d;}
  dustGeo.attributes.position.needsUpdate=true;render();
 }
 function tick(now:number){raf=0;if(disposed||document.hidden)return;const dt=last?Math.min((now-last)/1000,.05):0;last=now;if(!paused&&!comparison&&!showLayers){elapsed+=dt;cloudTime+=dt*speed;update();}if(!paused&&!comparison&&!showLayers)raf=requestAnimationFrame(tick);}
@@ -108,7 +122,7 @@ document.addEventListener('visibilitychange',visibility);
 reduce.addEventListener('change',reduced);
 renderer.domElement.addEventListener('webglcontextlost',contextLost);
 async function init(){try{
- const [fg,cloud]=await Promise.all([texture('library-foreground.png'),texture('clouds.png')]);if(disposed)return;
+ const [fg,cloud,ivy]=await Promise.all([texture('library-wide.png'),texture('clouds.png'),texture('ivy.png')]);if(disposed)return;
  // Sample alpha once. No canvas readback or texture allocation in the animation loop.
  const sampler=document.createElement('canvas');sampler.width=alphaW;sampler.height=alphaH;
  const ctx=sampler.getContext('2d',{willReadFrequently:true});
@@ -118,8 +132,27 @@ async function init(){try{
   const span=W+layer.w;
   for(let i=0;i<2;i++){const mesh=plane(layer.w,layer.h,0,layer.y,-3+(layer.rate>4?1:0),new THREE.MeshBasicMaterial({map:cloud,transparent:true,opacity:layer.opacity,depthWrite:false}));mesh.renderOrder=layer.rate>4?2:1;clouds.push({mesh,start:layer.start+i*span/2,rate:layer.rate,width:layer.w,height:layer.h,y:layer.y,opacity:layer.opacity});}
  }
- const front=plane(W,H,W/2,H/2,0,new THREE.MeshBasicMaterial({map:fg,transparent:true,depthWrite:false}));front.renderOrder=3;
- ready=true;resize();update();renderer.domElement.style.opacity='1';host.dataset.atmosphere='ready';resume();
+ // Mild, alpha-aware reconstruction keeps stone edges crisp on dense displays.
+ // This improves sampling; it does not claim new source-image detail.
+ const plate=new THREE.MeshBasicMaterial({map:fg,transparent:true,depthWrite:false});
+ plate.onBeforeCompile=shader=>{
+  shader.uniforms.plateTexel={value:new THREE.Vector2(1/fg.image.width,1/fg.image.height)};
+  shader.fragmentShader='uniform vec2 plateTexel;\n'+shader.fragmentShader;
+  shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
+  #ifdef USE_MAP
+   vec4 c=texture2D(map,vMapUv),l=texture2D(map,vMapUv-vec2(plateTexel.x,0.)),r=texture2D(map,vMapUv+vec2(plateTexel.x,0.)),u=texture2D(map,vMapUv+vec2(0.,plateTexel.y)),d=texture2D(map,vMapUv-vec2(0.,plateTexel.y));
+   float solid=step(.99,min(c.a,min(min(l.a,r.a),min(u.a,d.a))));
+   vec3 detail=c.rgb-(l.rgb+r.rgb+u.rgb+d.rgb)*.25;
+   diffuseColor*=vec4(clamp(c.rgb+detail*.24*solid,0.,1.),c.a);
+  #endif
+  `);
+ };
+ const front=plane(W,H,W/2,H/2,0,plate);front.renderOrder=3;
+ // Independent foliage plates retain the marble under them; no ghost copies.
+ addVine(ivy,752,424,164,646,.4);
+ addVine(ivy,1378,437,106,510,2.4,-1);
+ addVine(ivy,212,459,106,557,4.2,-1);
+ ready=true;resize();update();renderer.domElement.style.opacity='1';host.dataset.atmosphere='ready';announceHomeDaylightReady();resume();
 }catch(err){if(!disposed){host.dataset.atmosphere='fallback';destroy();}}}
 
 function destroy(){
