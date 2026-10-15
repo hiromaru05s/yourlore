@@ -20,6 +20,7 @@ try{
  for(let i=0;i<levels.length;i++){const receipt=(await call(i+2,'/track/bot',{difficulty:'easy',won:true})).experience;assert.equal(receipt.shards,rewards[i]);const me=(await call(i+2,'/auth/me')).user;assert.equal(me.credits,rewards[i]);assert.equal(me.exp,Math.min(4900,(levels[i]-1)*100+15));}
  await call(6,'/track/bot',{difficulty:'hell',won:true});assert.equal((await call(6,'/auth/me')).user.exp,4900);assert.equal((await call(6,'/auth/me')).user.credits,3000);checks.push('all five milestone amounts and Lv50 cap against live D1');
  // Friend challenge bypasses the public queue and cannot match a real player.
+ await sql(`INSERT INTO friends(user_a,user_b,status,created_at) VALUES('${users[0].id}','${users[1].id}','accepted',${now});`);
  const challenge=await call(0,'/social/challenge',{user_id:users[1].id});const game=await call(1,'/social/challenge/respond',{id:challenge.id,accept:true});roomId=game.roomId;assert(roomId);
  await Promise.all([0,1].map(async i=>{const p={ws:new WebSocket(origin.replace('https','wss')+'/ws/room/'+roomId,{headers:{cookie:'lore_session='+users[i].token},handshakeTimeout:20000}),messages:[]};peers[i]=p;p.ws.on('message',raw=>p.messages.push(JSON.parse(raw.toString())));await new Promise((resolve,reject)=>{p.ws.once('open',resolve);p.ws.once('error',reject);});p.ws.send(JSON.stringify({type:'ready'}));}));
  await until(()=>peers.every(p=>p.messages.some(m=>m.type==='init')));
@@ -32,6 +33,6 @@ try{
 }finally{
  for(const p of peers)p?.ws.close();
  const ids=users.map(u=>`'${u.id}'`).join(',');
- await sql(`DELETE FROM experience_events WHERE user_id IN (${ids});DELETE FROM player_experience WHERE user_id IN (${ids});DELETE FROM matches WHERE player_a IN (${ids}) OR player_b IN (${ids});DELETE FROM challenges WHERE challenger IN (${ids}) OR target IN (${ids});DELETE FROM sessions WHERE user_id IN (${ids});DELETE FROM user_days WHERE user_id IN (${ids});DELETE FROM users WHERE id IN (${ids});`);
+ await sql(`DELETE FROM experience_events WHERE user_id IN (${ids});DELETE FROM player_experience WHERE user_id IN (${ids});DELETE FROM matches WHERE player_a IN (${ids}) OR player_b IN (${ids});DELETE FROM challenges WHERE challenger IN (${ids}) OR target IN (${ids});DELETE FROM friends WHERE user_a IN (${ids}) OR user_b IN (${ids});DELETE FROM sessions WHERE user_id IN (${ids});DELETE FROM user_days WHERE user_id IN (${ids});DELETE FROM users WHERE id IN (${ids});`);
  await fs.rm(dir,{recursive:true,force:true});
 }
