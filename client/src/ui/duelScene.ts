@@ -229,7 +229,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       const sleeves=new Set([...items.values()].map(i=>i.element.dataset.sleeve).filter((url):url is string=>!!url));
       for(const url of sleeves){const card=cardStock(texture(url),flightPlaceholder);card.scale.setScalar(cardUnit(root));card.traverse(o=>{o.frustumCulled=false;});flightPrograms.add(card);}
       const previous=flightCanvas.style.visibility;flightCanvas.style.visibility='hidden';
-      try{flightRenderer.setRenderTarget(null);flightRenderer.render(flightScene,camera);flightRenderer.clear();}finally{flightPrograms.visible=false;flightCanvas.style.visibility=previous;}
+      try{flightRenderer.setRenderTarget(null);flightRenderer.render(flightScene,camera);flightRenderer.clear();}finally{flightScene.remove(flightPrograms);flightPrograms.visible=false;flightCanvas.style.visibility=previous;}
       root.dataset.sceneReady='true';
     }
   }
