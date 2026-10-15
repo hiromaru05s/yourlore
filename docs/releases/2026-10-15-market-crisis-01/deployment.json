@@ -1,0 +1,33 @@
+{
+  "id": "dc40e750-0016-433c-8009-83dfce959b27",
+  "source": "wrangler",
+  "strategy": "percentage",
+  "annotations": {
+    "workers/message": "35e84d80f8f6d5d6c52afe85adb00ad2f8f65e2d guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "6aba5744-d697-4ce0-8af5-4de0e3977a1d",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-10-15T07:53:15.548653Z",
+  "sourceSha": "35e84d80f8f6d5d6c52afe85adb00ad2f8f65e2d",
+  "url": "https://test.yourlore.xyz",
+  "guardedRelease": true,
+  "typecheck": "client and server passed",
+  "productionTests": {
+    "passed": 158,
+    "total": 158
+  },
+  "assetParity": {
+    "matched": 97,
+    "manifest": "staging-assets.json"
+  },
+  "browser": {
+    "passed": 10,
+    "report": "staging/report.json",
+    "authenticatedOnlinePlay": false
+  }
+}
