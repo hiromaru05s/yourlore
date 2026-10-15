@@ -1,5 +1,6 @@
+import { actionChangesState } from '../../client/src/shared/botActions';
 import { experienceStatements, experienceReceipt } from './progression';
-import { ONLINE_WIN_EXP, ONLINE_LOSS_EXP, type ExperienceReceipt } from '../../client/src/shared/progression';
+import { BOT_FIRST_CLEAR_EXP, ONLINE_WIN_EXP, ONLINE_LOSS_EXP, type ExperienceReceipt } from '../../client/src/shared/progression';
 import { botDecide, type BotDifficulty } from '../../client/src/shared/bot';
 import { botNpc, pickNpcDeck } from '../../client/src/shared/botNpcs';
 import { BOT_REWARDS, type QuestState } from '../../client/src/shared/progression';
@@ -480,13 +481,11 @@ export class GameRoom {
     const room = this.room!, bot = room.bot!;
     bot.nextAt = null;
     if (actingSide(room.game) !== bot.side || room.forfeitAt[1-bot.side] != null || Date.now() < room.turnStartAt) return;
-    const choices=room.challengeDifficulty?[botDecide(room.game,room.challengeDifficulty)]:matchBotActions(room.game,bot.side);
+    const choices=room.challengeDifficulty?[botDecide(room.game,room.challengeDifficulty),...matchBotActions(room.game,bot.side)]:matchBotActions(room.game,bot.side);
     for (const action of choices) {
       // Engine validation uses the authoritative state, never the strategy's redacted copy.
       const result = reduce(room.game, action);
-      if (result.state.turn === room.game.turn && result.state.cur === room.game.cur &&
-          !result.state.over && !result.events.some(event => event.type !== 'log') &&
-          JSON.stringify(result.state.pending) === JSON.stringify(room.game.pending)) continue;
+      if (!actionChangesState(room.game,result.state) && result.state.rng===room.game.rng) continue;
       await this.handleAction(bot.side, action);
       return;
     }
@@ -637,7 +636,8 @@ export class GameRoom {
     try {
       // Gate totals on the same match row. Retrying telemetry never increments twice.
       await this.env.DB.batch([
-        ...(winner && loser ? [...experienceStatements(this.env,winner,`match:${matchId}`,ONLINE_WIN_EXP,room.resultAt),...experienceStatements(this.env,loser,`match:${matchId}`,ONLINE_LOSS_EXP,room.resultAt)] : []),
+        ...(winner && loser && !room.challengeDifficulty ? [...experienceStatements(this.env,winner,`match:${matchId}`,ONLINE_WIN_EXP,room.resultAt),...experienceStatements(this.env,loser,`match:${matchId}`,ONLINE_LOSS_EXP,room.resultAt)] : []),
+        ...(room.challengeDifficulty && room.game.winner===0 ? experienceStatements(this.env,room.players[0].id,`bot:${room.challengeDifficulty}`,BOT_FIRST_CLEAR_EXP[room.challengeDifficulty],room.resultAt) : []),
         this.env.DB.prepare(`UPDATE users SET wins=wins+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM matches WHERE id=?)`).bind(winner,matchId),
         this.env.DB.prepare(`UPDATE users SET losses=losses+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM matches WHERE id=?)`).bind(loser,matchId),
         this.env.DB.prepare(`INSERT OR IGNORE INTO matches (id,player_a,player_b,winner,mode,created_at,ended_at,cards_a,cards_b,turns,buys_a,buys_b,bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
@@ -645,7 +645,10 @@ export class GameRoom {
       ]);
       room.experienceOutcome = {};
       if (winner && loser) for (const side of [0,1] as Side[]) {
-        const id=room.players[side].id,receipt=await experienceReceipt(this.env,id,`match:${matchId}`);
+        const id=room.players[side].id,key=room.challengeDifficulty?`bot:${room.challengeDifficulty}`:`match:${matchId}`;
+        if(room.challengeDifficulty && (side!==0 || room.game.winner!==0))continue;
+        if(room.challengeDifficulty){const event=await this.env.DB.prepare('SELECT created_at FROM experience_events WHERE user_id=? AND key=?').bind(id,key).first<{created_at:number}>();if(event?.created_at!==room.resultAt)continue;}
+        const receipt=await experienceReceipt(this.env,id,key);
         if(receipt){room.experienceOutcome[id]=receipt;const ws=this.sockFor(side);if(ws)try{this.send(ws,{type:"experienceResult",...receipt});}catch{/* reconnect replays saved receipt */}}
       }
       if (room.ranked) {
