@@ -1,3 +1,5 @@
+import {isCastle} from './castleSummon/catalog';
+import {playCastleSummon,cancelCastleSummons} from './castleSummon/runtime';
 import {isPoisonSummon} from './poisonSummon/selection';
 import {playPoisonSummon,cancelPoisonSummons} from './poisonSummon/runtime';
 import {playErosion} from './erosion/runtime';
@@ -118,7 +120,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -424,6 +426,10 @@ async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
   const from = fromRect(side, takeOrigin(side)); const target = byUid(uid); const to = rectOf(target);
   if (!from || !to || !target) { summonIn(uid); return; }
+  if(isCastle(card.id)){
+    if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(target,{from,signal,onImpact:()=>sfx('summon')}),10000);
+    return;
+  }
   const ghost = floatAt(cardEl(card, {size:"hand",fullArt:isMimic(card.id)}), from); target.style.visibility = "hidden";
   let face:HTMLElement|undefined;
   try { await focusSummon(ghost, card, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true,card.id==='MIMIC'?'mimic':'summon'); }
@@ -1087,6 +1093,12 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   if(!from||!zone)return null;
   const target=reserveMonster(zone,card.uid);
   if (!target) return null;
+  if(isCastle(card.id)){
+    const countLabel={ja:'カウント',en:'Count',ko:'카운트'}[getLang()];
+    const face=cardEl(card,{field:true,badge:`${countLabel} ${(card as typeof card & {gcount?:number}).gcount||0}`});target.replaceWith(face);onReveal?.(face);
+    if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(face,{from,signal,onImpact:()=>sfx('summon')}),10000);
+    return face.isConnected?face:null;
+  }
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
   node.style.zIndex="135";
   onReveal?.(node);
