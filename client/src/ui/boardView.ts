@@ -363,6 +363,45 @@ export class GameView {
     this.root.dataset.readingTurn=g.cur===this.you&&!g.over?'player':'opponent';
   }
 
+  /** Present a reducer draw before its triggered effects; all other zones stay on the old board. */
+  presentDrawHand(g:GameState,player:Side,cards:CardInst[]):void{
+    const p={...g.players[player],hand:cards};
+    if(player===this.you)this.renderHand(g,p,g.cur===this.you&&!g.over);
+    else this.renderOpponentHand(p);
+  }
+  private renderOpponentHand(opp:PlayerState):void{
+    // opponent hand (face-down): straight upright stack held to the right of their
+    // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
+    const oh = this.q("oppHand"); oh.innerHTML = "";
+    const n = opp.hand.length;
+    // back size follows the solved portrait size (--pt) so it scales with the viewport
+    const handWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-w-hand")) || 100;
+    const obw = handWidth * .42; // back width (px)
+    const spread = obw * 4.4;
+    const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(6, (spread - obw) / (n - 1)));
+    for (let i = 0; i < n; i++) {
+      const cb = document.createElement("div");
+      cb.className = "card--back";
+      cb.dataset.uid = opp.hand[i].uid;
+      cb.style.width = `${obw}px`;
+      cb.style.height = `${obw / .64}px`;
+      cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
+      cb.style.left = `${i * ostep}px`;
+      cb.style.zIndex = String(n-i);
+      oh.appendChild(cb);
+    }
+    oh.style.width = `${n ? obw + (n - 1) * ostep : 0}px`;
+    if (n > 0) {
+      const cnt = document.createElement("div");
+      cnt.className = "opp-hand-count";
+      cnt.textContent = String(n);
+      oh.appendChild(cnt);
+    }
+
+
+    this.layoutOpponentHand();
+  }
+
   render(g: GameState): Promise<void> {
     this.trickRoom.finish();
     const fieldBefore=fieldPositions(this.root);
@@ -394,36 +433,7 @@ export class GameView {
     this.q("portraitMe").classList.toggle("is-active", myTurn);
     this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
 
-    // opponent hand (face-down): straight upright stack held to the right of their
-    // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
-    const oh = this.q("oppHand"); oh.innerHTML = "";
-    const n = opp.hand.length;
-    // back size follows the solved portrait size (--pt) so it scales with the viewport
-    const handWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-w-hand")) || 100;
-    const obw = handWidth * .42; // back width (px)
-    const spread = obw * 4.4;
-    const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(6, (spread - obw) / (n - 1)));
-    for (let i = 0; i < n; i++) {
-      const cb = document.createElement("div");
-      cb.className = "card--back";
-      cb.dataset.uid = opp.hand[i].uid;
-      cb.style.width = `${obw}px`;
-      cb.style.height = `${obw / .64}px`;
-      cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
-      cb.style.left = `${i * ostep}px`;
-      cb.style.zIndex = String(n-i);
-      oh.appendChild(cb);
-    }
-    oh.style.width = `${n ? obw + (n - 1) * ostep : 0}px`;
-    if (n > 0) {
-      const cnt = document.createElement("div");
-      cnt.className = "opp-hand-count";
-      cnt.textContent = String(n);
-      oh.appendChild(cnt);
-    }
-
-
-    this.layoutOpponentHand();
+    this.renderOpponentHand(opp);
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);
     this.renderMarket(g, me, myTurn);

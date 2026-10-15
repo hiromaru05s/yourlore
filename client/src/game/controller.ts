@@ -1,3 +1,4 @@
+import {erosionPlan} from '../ui/erosion/events';
 import {isSoulHarvestDamage,soulHarvestDamageIndex} from '../ui/soulHarvest/events';
 import {dungeonFloorSummons} from '../ui/dungeonFloor/events';
 import {runeReplayPlan} from '../ui/runeReplay/plan';
@@ -356,6 +357,8 @@ export abstract class BaseController implements BoardHandlers {
     if(events.some(e=>e.type==='summon'&&e.rebirth))A.warmRebirth();
     const runeReplays=runeReplayPlan(events);
     if(runeReplays.held.size)A.warmRuneReplay();
+    const erosion=erosionPlan(events);
+    const shownDraws=[0,0];
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
@@ -503,6 +506,22 @@ export abstract class BaseController implements BoardHandlers {
           await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
           break;
         case "enchantActivate": {
+          const erosionPair=erosion.activations.get(i);
+          if(erosionPair){
+            const damage=events[erosionPair.damage];
+            if(damage.type==='damage'){
+              contactedDamage.add(damage);
+              await A.erosionDamage(sideOf(damage.player),e.uid,damage.amount,()=>{
+                if(this.dead)return;
+                hpNow[damage.player]-=damage.amount;
+                if(damage.player===this.you)this.view.pushIcon("hitme");
+                const sound=eventSound.cue(damage);if(sound&&!A.isFxSkipped())sfx(sound);
+                A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+              });
+              break;
+            }
+          }
+
           if(e.originRite){
             const reaction=e.originRite;
             // Consume only this rite's immediately following grant; its selected light owns contact.
@@ -877,9 +896,23 @@ export abstract class BaseController implements BoardHandlers {
         case "reshuffle":
           await A.animateReshuffle(sideOf(e.player), e.count);
           break;
-        case "draw":
+        case "draw": {
           draws[e.player] += e.count;
+          if(erosion.draws.has(i)){
+            const pl=e.player,hand=document.getElementById(pl===this.you?'hand':'oppHand');
+            const before=captureHandLayout(hand),old=new Set(prev.players[pl].hand.map(c=>c.uid));
+            const count=events.reduce((n,event)=>n+(event.type==='draw'&&event.player===pl?event.count:0),0);
+            const arrivalIds=new Set(arrivingHandUids(prev.players[pl].hand,res.state.players[pl].hand,count));
+            const arrivals=res.state.players[pl].hand.filter(c=>arrivalIds.has(c.uid));
+            const incoming=arrivals.slice(shownDraws[pl],shownDraws[pl]+draws[pl]);
+            shownDraws[pl]+=draws[pl];
+            const visible=new Set(arrivals.slice(0,shownDraws[pl]).map(c=>c.uid));
+            this.view.presentDrawHand(res.state,pl,res.state.players[pl].hand.filter(c=>old.has(c.uid)||visible.has(c.uid)));
+            await A.animateDraw(hand,draws[pl],sideOf(pl),{previousHand:before,uids:incoming.map(c=>c.uid),durationScale:.5});
+            draws[pl]=0; // Already landed: do not draw these cards again at final render.
+          }
           break;
+        }
         case "treasure":
           // Reward effects have their own board events; no additional explanation popup.
           break;

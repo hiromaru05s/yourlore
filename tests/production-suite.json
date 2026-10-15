@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/erosion.mjs",
     "tests/reverse-pitch.mjs",
     "tests/rune-replay.mjs",
     "tests/timewarp.mjs",

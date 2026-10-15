@@ -1,3 +1,4 @@
+import {playErosion} from './erosion/runtime';
 import {findOriginTrap} from './originRite/anchors';
 import {playOriginRite,cancelOriginRites} from './originRite/runtime';
 import type {OriginRiteReaction} from '../shared/types';
@@ -1469,4 +1470,11 @@ export async function curseSpell(card:CardInst,side:ViewSide,targetBefore:number
  const node=floatAt(cardEl(card,{size:'hand',fullArt:true}),from);
  try{await boardMotionScope(signal=>playCurse(node,side,signal,from,targetBefore),13000);}
  finally{node.remove();}
+}
+
+/** Selected erosion owns the HP contact; generic feedback must not double-fire. */
+export async function erosionDamage(side:ViewSide,source:string,amount:number,onDamage:()=>void):Promise<void>{
+ let applied=false;const apply=()=>{if(!applied){applied=true;onDamage();}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playErosion(side,source,amount,apply,signal),1800);}
+ finally{apply();}
 }
