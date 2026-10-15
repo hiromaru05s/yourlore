@@ -33,4 +33,4 @@ The local comparison predates main 118c2bac. The release also preserves the subs
 
 ## Deployment
 
-Pending guarded staging release and deployed-file/browser verification; see the staging subdirectory when completed.
+Completed at source `583ced2c`: **157/157** production tests and **102/102** deployed file hashes. Both real staging window widths passed zero image wire requests after entry and zero artwork downloads on warm reload. Cold startup measured 42.58/55.58 seconds; warm reload 7.47/7.47 seconds. See [staging evidence](staging/README.md). An additional isolation fix passes duel warmup into readiness from the router, avoiding an unnecessary full-game import in utility tests.

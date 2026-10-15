@@ -1,0 +1,299 @@
+{
+  "base": "https://test.yourlore.xyz",
+  "api": "fixture; public static resources real",
+  "cases": [
+    {
+      "width": 1280,
+      "homeMs": 42577,
+      "actions": [
+        {
+          "name": "bot opponents",
+          "ms": 101,
+          "styleReads": 24,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards",
+          "ms": 433,
+          "styleReads": 1016,
+          "imageNetworkResponses": [
+            {
+              "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+              "at": 1792046737034
+            }
+          ]
+        },
+        {
+          "name": "cards page 2",
+          "ms": 240,
+          "styleReads": 270,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "card zoom",
+          "ms": 48,
+          "styleReads": 173,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "deck",
+          "ms": 170,
+          "styleReads": 1068,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop",
+          "ms": 834,
+          "styleReads": 432,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop astral",
+          "ms": 29,
+          "styleReads": 22,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop crimson",
+          "ms": 47,
+          "styleReads": 22,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "sleeves",
+          "ms": 35,
+          "styleReads": 29,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "furniture",
+          "ms": 72,
+          "styleReads": 43,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "ranking",
+          "ms": 54,
+          "styleReads": 2475,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "friends",
+          "ms": 36,
+          "styleReads": 232,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "profile",
+          "ms": 56,
+          "styleReads": 224,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "guide",
+          "ms": 200,
+          "styleReads": 812,
+          "imageNetworkResponses": [
+            {
+              "url": "https://test.yourlore.xyz/art/lounge/illustrated-v1/biblion.webp",
+              "at": 1792046739788
+            }
+          ]
+        },
+        {
+          "name": "home return",
+          "ms": 53,
+          "styleReads": 322,
+          "imageNetworkResponses": [
+            {
+              "url": "https://test.yourlore.xyz/art/lounge/stage-v1/sigil.webp",
+              "at": 1792046739952
+            }
+          ]
+        }
+      ],
+      "lateImages": [
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+          "at": 1792046737034
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+          "at": 1792046737953
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/illustrated-v1/biblion.webp",
+          "at": 1792046739788
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/stage-v1/sigil.webp",
+          "at": 1792046739952
+        }
+      ],
+      "serverImageTransfers": [],
+      "wireImageTransfers": [],
+      "state": {
+        "sameHomeCanvas": true,
+        "cache": "ready",
+        "worker": true,
+        "heap": 39594748,
+        "errors": []
+      },
+      "errors": [],
+      "httpErrors": [],
+      "warmReload": {
+        "ms": 7473,
+        "preloadTransfers": 0
+      }
+    },
+    {
+      "width": 390,
+      "homeMs": 55579,
+      "actions": [
+        {
+          "name": "bot opponents",
+          "ms": 91,
+          "styleReads": 23,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards",
+          "ms": 411,
+          "styleReads": 1006,
+          "imageNetworkResponses": [
+            {
+              "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+              "at": 1792046803683
+            }
+          ]
+        },
+        {
+          "name": "cards page 2",
+          "ms": 266,
+          "styleReads": 269,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "card zoom",
+          "ms": 53,
+          "styleReads": 172,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "deck",
+          "ms": 168,
+          "styleReads": 1058,
+          "imageNetworkResponses": [
+            {
+              "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+              "at": 1792046804490
+            }
+          ]
+        },
+        {
+          "name": "shop",
+          "ms": 115,
+          "styleReads": 410,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop astral",
+          "ms": 257,
+          "styleReads": 20,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop crimson",
+          "ms": 47,
+          "styleReads": 20,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "sleeves",
+          "ms": 34,
+          "styleReads": 28,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "furniture",
+          "ms": 54,
+          "styleReads": 42,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "ranking",
+          "ms": 58,
+          "styleReads": 2463,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "friends",
+          "ms": 36,
+          "styleReads": 222,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "profile",
+          "ms": 56,
+          "styleReads": 215,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "guide",
+          "ms": 199,
+          "styleReads": 802,
+          "imageNetworkResponses": [
+            {
+              "url": "https://test.yourlore.xyz/art/lounge/illustrated-v1/biblion.webp",
+              "at": 1792046805423
+            }
+          ]
+        },
+        {
+          "name": "home return",
+          "ms": 54,
+          "styleReads": 310,
+          "imageNetworkResponses": [
+            {
+              "url": "https://test.yourlore.xyz/art/lounge/stage-v1/sigil.webp",
+              "at": 1792046805588
+            }
+          ]
+        }
+      ],
+      "lateImages": [
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+          "at": 1792046803683
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+          "at": 1792046804490
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/illustrated-v1/biblion.webp",
+          "at": 1792046805423
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/stage-v1/sigil.webp",
+          "at": 1792046805588
+        }
+      ],
+      "serverImageTransfers": [],
+      "wireImageTransfers": [],
+      "state": {
+        "sameHomeCanvas": true,
+        "cache": "ready",
+        "worker": true,
+        "heap": 33277070,
+        "errors": []
+      },
+      "errors": [],
+      "httpErrors": [],
+      "warmReload": {
+        "ms": 7465,
+        "preloadTransfers": 0
+      }
+    }
+  ]
+}

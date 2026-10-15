@@ -26,7 +26,7 @@ try{for(const width of widths){
  const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1});const p=await context.newPage();p.setDefaultTimeout(180000);
  const transfers=[],network=new Map();
  const cdp=await context.newCDPSession(p);await cdp.send('Network.enable');
- cdp.on('Network.requestWillBeSent',e=>network.set(e.requestId,{url:e.request.url,at:e.wallTime*1000}));
+ cdp.on('Network.requestWillBeSent',e=>network.set(e.requestId,{url:e.request.url,at:e.wallTime*1000,preload:Object.keys(e.request.headers).some(k=>k.toLowerCase()==='x-lore-asset-preload')}));
  cdp.on('Network.requestServedFromCache',e=>{const r=network.get(e.requestId);if(r)r.cached=true;});
  cdp.on('Network.responseReceived',e=>{const r=network.get(e.requestId);if(r)r.cached||=e.response.fromDiskCache||e.response.fromServiceWorker||e.response.fromPrefetchCache;});
  cdp.on('Network.loadingFinished',e=>{const r=network.get(e.requestId);if(r&&!r.cached&&e.encodedDataLength>0&&imagePath(new URL(r.url).pathname))transfers.push({...r,bytes:e.encodedDataLength});});
@@ -69,8 +69,8 @@ try{for(const width of widths){
  if(process.env.LORE_EXPECT_CACHE!=='0'){assert.equal(state.sameHomeCanvas,true,'Returning HOME must reuse its GPU scene');assert.equal(state.cache,'ready');assert.deepEqual(wireImageTransfers,[],'Browser network trace must show no image bytes after admission');if(!process.env.LORE_TEST_ORIGIN)assert.deepEqual(serverImageTransfers,[],'Menu navigation must use the prepared artwork without network image transfers');}
  if(process.env.LORE_EXPECT_CACHE!=='0'){
   const at=Date.now();await p.reload({waitUntil:'domcontentloaded'});await p.waitForSelector('.lounge-home-main');await p.waitForSelector('.screen-loader',{state:'detached',timeout:600000});
-  report.cases.at(-1).warmReload={ms:Date.now()-at,preloadTransfers:requests.filter(r=>r.at>=at&&r.preload).length};
-  if(!process.env.LORE_TEST_ORIGIN)assert.equal(report.cases.at(-1).warmReload.preloadTransfers,0,'A warm start reuses original artwork across page reloads');
+  report.cases.at(-1).warmReload={ms:Date.now()-at,preloadTransfers:[...network.values()].filter(r=>r.at>=at&&r.preload).length};
+  assert.equal(report.cases.at(-1).warmReload.preloadTransfers,0,'A warm start reuses original artwork across page reloads');
  }
  clearInterval(monitor);await context.close();
  }}finally{clearInterval(monitor);await fs.writeFile(out+'/browser-report.json',JSON.stringify(report,null,2));for(const c of browser.contexts())for(const p of c.pages())await p.screenshot({path:out+'/last-state.png'}).catch(()=>{});await browser.close();await new Promise(r=>server.close(r));}
