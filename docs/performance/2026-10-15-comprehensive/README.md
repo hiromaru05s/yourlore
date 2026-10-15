@@ -4,7 +4,7 @@
 
 Preserve original image bytes, fonts, model geometry, shader materials, render density, antialiasing, animation timing and BOT decisions. Front-load gameplay resources so visible cards and effects do not wait for downloads. No rule or BOT strength changes.
 
-- 1,971 public resource URLs are indexed into 62 immutable packs (approximately 4 MiB each); identical bytes are deduplicated. Every extracted entry is length/SHA-256 verified. Sparse updates fetch individual originals. Cache keys are scanned once, with old/new live-client isolation, bounded work, quota fallback and retry retained.
+- 1,970 public resource URLs are indexed into 61 immutable packs (approximately 4 MiB each); identical bytes are deduplicated. Every extracted entry is length/SHA-256 verified. Sparse updates fetch individual originals. Cache keys are scanned once, with old/new live-client isolation, bounded work, quota fallback and retry retained.
 - Include missing duel images and control icons, all public CSS backgrounds/cursors, dynamic game/VFX code and styles, Worker scripts, imported images, responsive board models, 42 original sound effects, music and fonts. Vendor the exact 619 original WOFF2 subsets (20,842,096 bytes), with provenance and original OFL licenses, eliminating the external font dependency. Warm localized glyphs before gameplay.
 - Persist exact 640×400 furniture catalog previews and encode asynchronously; invalidate on source/material/model revisions.
 - Move spell stencil and full-resolution celestial matte pixels to an OffscreenCanvas worker, retaining the exact main-thread fallback. Reuse one idle spell renderer, compile before the duel cover opens, and independently own simultaneous casts.
@@ -34,8 +34,9 @@ Cold transfer bytes increase because more original-quality gameplay assets, CSS 
 
 ## Quality and regression evidence
 
+- `persistent-flight-parity.json`: six original/current persistent-card poses are pixel-identical; warm reuse, concurrent independent ownership, captured-texture release and pagehide context disposal pass. First render in the same comparison: 13.4 ms to 0.4 ms. Original runtime cancellation/native handoff tests also pass. Ordinary purchase/arrival material variants are warmed in the actual flight canvas output format before scene readiness and retained until leaving the match.
 - `draw-stock-parity.json`: all 8 original/current stock poses at 1280/390 px have zero differing RGBA channels. Warm-up is invisible; stage reuse, simultaneous owners, double-release safety and pagehide disposal pass. Same-run first draw/render setup: original 44–74 ms, warmed 1.2–3.0 ms (shared-host timing, not a universal latency guarantee).
-- `build-inventory.json`: 1,971 resources, 62 packs, 84 preloaded modules, 6 styles and 3 workers; no missing literal public asset or emitted worker in the duel graph.
+- `build-inventory.json`: 1,970 resources, 61 packs, 84 preloaded modules, 6 styles and 3 workers; no missing literal public asset or emitted worker in the duel graph.
 - `raster-parity.json`: original vs worker stencil and 1536 px matte have zero differing channels; rendered spell frames at 0, 800, 1600, 2600 and 3200 ms are pixel-identical. Idle renderer reuse, independent simultaneous casts, cleanup and no page errors verified.
 - `playback.json`: draw, shuffle, mana and rift on both sides; simultaneous mana, desktop/mobile, reduced motion and renderer disposal passed. Visual playback reviewed separately from functional assertions.
 - `cache-upgrade.json`: old live tab remains usable when the v3 worker takes control; new cache binding and furniture previews survive reload; repeat preload transfers are zero.

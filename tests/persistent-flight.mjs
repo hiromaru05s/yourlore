@@ -11,14 +11,14 @@ globalThis.DOMMatrix=Matrix;
 dom.window.HTMLCanvasElement.prototype.getContext=()=>({setTransform(){},clearRect(){}});
 Object.defineProperties(HTMLElement.prototype,{offsetWidth:{get:()=>100},offsetHeight:{get:()=>100}});HTMLElement.prototype.getBoundingClientRect=()=>({left:0,top:0,width:100,height:150});
 globalThis.__capture=()=>capture??Promise.resolve({face:document.createElement('canvas')});
-globalThis.__renderer=class{constructor(){allocated++;this.gl={domElement:document.createElement('canvas')};}render(ms){if(fail)throw Error('render failure');draws.push(ms);}trail(){}contact(){}dispose(){disposed++;}};
+globalThis.__renderer=class{constructor(){allocated++;this.gl={domElement:document.createElement('canvas')};}async prepare(){}render(ms){if(fail)throw Error('render failure');draws.push(ms);}trail(){}contact(){}dispose(){disposed++;}};
 const dir=await mkdtemp(path.join(tmpdir(),'persistent-flight-'));const flush=()=>new Promise(r=>setTimeout(r,0));const advance=ms=>{clock+=ms;for(const [key,f]of [...frames]){frames.delete(key);f(clock);}};
 const modules={
  '../shared/cards':'export const FRAME_BACK="";',
  './cardSurface':'export const captureCardSurface=()=>globalThis.__capture();export const captureQuestTile=async()=>document.createElement("canvas");',
  './boardProjection':'export const projectedPlacement=()=>new DOMMatrix();',
  './questFold':'export function nativeQuestGhost(target,face){const host=document.createElement("div");host.className="fx-field-ghost";host.append(face);document.body.append(host);return host;}',
- './persistentFlightRenderer':'export const PersistentFlightRenderer=globalThis.__renderer;'
+ './persistentFlightRenderer':'export const acquirePersistentFlight=(face,tile)=>new globalThis.__renderer(face,tile);export const releasePersistentFlight=r=>r.dispose();'
 };
 try{
  await build({entryPoints:['client/src/ui/persistentFlight.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs'),plugins:[{name:'controlled-flight',setup(b){b.onResolve({filter:/.*/},a=>modules[a.path]?{path:a.path,namespace:'fixture'}:undefined);b.onLoad({filter:/.*/,namespace:'fixture'},a=>({contents:modules[a.path]}));}}]});

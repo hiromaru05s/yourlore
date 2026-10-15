@@ -12,7 +12,7 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
  const host=nativeQuestGhost(target,face),visible=reveal.style.visibility;
  // Capture tile layout before applying board perspective; its localized text is live DOM.
  face.style.transform='translate(-4000px,0)';face.style.visibility='hidden';
- let renderer:import('./persistentFlightRenderer').PersistentFlightRenderer|undefined;
+ let renderer:import('./persistentFlightRenderer').PersistentFlightRenderer|undefined,release:typeof import('./persistentFlightRenderer').releasePersistentFlight|undefined;
  let frame=0,completed=false;
  const place=()=>{face.style.transform=projectedPlacement(target,w,h).toString();face.style.visibility='visible';};
  try{
@@ -24,7 +24,8 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
   ]).finally(()=>signal.removeEventListener('abort',cancel));
   if(!loaded||signal.aborted||!target.isConnected||!reveal.isConnected)return false;
   const [source,tile,module]=loaded;if(!source.face)return false;
-  renderer=new module.PersistentFlightRenderer(source.face,tile);
+  release=module.releasePersistentFlight;renderer=module.acquirePersistentFlight(source.face,tile);
+  await renderer.prepare();if(signal.aborted||!target.isConnected||!reveal.isConnected)return false;
   const sprite=renderer.gl.domElement;sprite.className='persistent-flight-canvas';sprite.setAttribute('aria-hidden','true');
   const base=180,size=base*3.4875;
   sprite.style.cssText=`position:fixed;left:0;top:0;width:${size}px;height:${size}px;transform-origin:0 0;pointer-events:none`;
@@ -53,5 +54,5 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
   });
   if(completed){face.style.opacity='1';place();}return completed;
  }catch(error){console.warn('[persistent-flight] Native fallback',error);return false;}
- finally{cancelAnimationFrame(frame);renderer?.dispose();host.querySelectorAll('canvas').forEach(c=>c.remove());reveal.style.visibility=visible;if(!completed)host.remove();}
+ finally{cancelAnimationFrame(frame);if(renderer)release?.(renderer);host.querySelectorAll('canvas').forEach(c=>c.remove());reveal.style.visibility=visible;if(!completed)host.remove();}
 }

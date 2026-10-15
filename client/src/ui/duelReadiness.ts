@@ -38,6 +38,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     while(!expired&&root.isConnected&&root.dataset.sceneReady!=='true'&&root.dataset.tableState!=='fallback')await new Promise<void>(r=>requestAnimationFrame(()=>r()));
     await import('./spellFrame/scene').then(m=>m.prepareFrameRenderer()).catch(()=>{});
     await import('./drawStock').then(m=>m.warmDrawStage(root)).catch(()=>{});
+    await import('./persistentFlightRenderer').then(m=>m.warmPersistentFlight(root)).catch(()=>{});
     if(!root.isConnected)return;
     loading.update(98,loungeText("もうすぐ始まります","Almost ready","곧 시작합니다"));
     // Two paints allow decoded DOM images and compositing layers to commit.

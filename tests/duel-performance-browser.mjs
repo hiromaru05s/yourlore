@@ -16,6 +16,7 @@ try{for(const width of (process.env.LORE_TEST_WIDTHS||'1280,390').split(',').map
  const workerRequests=[];context.on('request',r=>{if(r.serviceWorker())workerRequests.push({url:r.url(),at:Date.now()});});
  const packFailures=[];p.on('requestfailed',r=>{if(r.url().includes('/assets/art-pack-'))packFailures.push({url:r.url(),error:r.failure()?.errorText,at:Date.now()});});
  const errors=[],httpErrors=[],wire=[],net=new Map();p.on('pageerror',e=>errors.push(e.message));p.on('response',r=>{if(r.status()>=400)httpErrors.push({url:r.url(),status:r.status()});});
+ if(process.env.LORE_GPU_PROFILE)await p.addInitScript(()=>{window.__slowGL=[];for(const proto of [WebGLRenderingContext.prototype,WebGL2RenderingContext.prototype])for(const name of ['getProgramParameter','getShaderParameter','getUniformLocation','getActiveUniform','getActiveAttrib','getAttribLocation','texImage2D','bufferData','drawElements','drawArrays','readPixels','finish','flush','linkProgram']){const f=proto[name];if(f)proto[name]=function(...args){const t=performance.now();try{return f.apply(this,args);}finally{const ms=performance.now()-t;if(ms>30)window.__slowGL.push({name,ms,canvas:this.canvas.className,stack:new Error().stack});}};}});
  await apiFixture(p,r=>{const n=new URL(r.url).pathname;
  if(n==='/api/auth/me')return {user:{id:'local-guest-user',display:'SEEKER',credits:100,avatar:'SEEKER_BLUE',wins:47,losses:19}};
  if(n==='/api/rewards/tutorial')return {offered:true,keys:[],credits:100};
@@ -38,7 +39,8 @@ try{for(const width of (process.env.LORE_TEST_WIDTHS||'1280,390').split(',').map
  const samples=[await sample('idle')];
  const playable=p.locator('#hand .card.is-playable').first();if(await playable.count()){samples.push(await sample('play card',()=>playable.click()));}
  await p.waitForTimeout(2000);await p.screenshot({path:`${out}/played-${width}.png`});
- const end=p.locator('#endBtn');if(await end.isEnabled()){samples.push(await sample('BOT turn',()=>end.click()));await p.waitForFunction(()=>!document.querySelector('#endBtn')?.disabled,{timeout:120000});}
+ const end=p.locator('#endBtn');if(await end.isEnabled()){if(process.env.LORE_GPU_PROFILE){await cdp.send('Profiler.enable');await cdp.send('Profiler.start');}samples.push(await sample('BOT turn',()=>end.click()));await p.waitForFunction(()=>!document.querySelector('#endBtn')?.disabled,{timeout:120000});}
+ if(process.env.LORE_GPU_PROFILE){const {profile}=await cdp.send('Profiler.stop');await fs.writeFile(out+'/cpu-'+width+'.json',JSON.stringify(profile));await fs.writeFile(out+'/gpu-'+width+'.json',JSON.stringify(await p.evaluate(()=>window.__slowGL),null,2));}
  const broken=await p.evaluate(()=>[...document.querySelectorAll('img')].filter(i=>i.getClientRects().length&&(!i.complete||!i.naturalWidth)).map(i=>i.src));
  const entryWire=wire.filter(r=>r.at>=beforeDuel),afterReadyWire=wire.filter(r=>r.at>=readyAt);
  const gameAssetEntryWire=entryWire.filter(r=>new URL(r.url).origin===new URL(base).origin&&/^\/(assets|art|ui|frames|cosmetics|vfx|models|fonts|music|sfx|bg|icons)\//.test(new URL(r.url).pathname));
