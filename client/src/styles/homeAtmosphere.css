@@ -1,0 +1,17 @@
+/* Generated plate is a static fallback and keeps image readiness/cache ownership. */
+.lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home{
+ inset:0;animation:none;transform:none;will-change:auto;
+ background-image:url('/art/lounge/atmosphere-v1/library-foreground.png'),url('/art/lounge/atmosphere-v1/clouds.png'),linear-gradient(#679ecb,#c3d9e8);
+ background-position:center;background-size:cover;background-repeat:no-repeat;
+}
+.lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::before{display:none}
+.lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::after{
+ content:'';position:absolute;inset:0;pointer-events:none;
+ background:linear-gradient(90deg,#09192c0a 30%,#0715256b 62%,#071525c7);
+}
+.living-home>.home-atmosphere-canvas{display:block;width:100%;height:100%;pointer-events:none}
+@media(max-width:850px){
+ .lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::after{
+  background:linear-gradient(180deg,#081b3026 0%,#081b3026 25%,#081b3066 42%,#061424cf 70%,#061424ee);
+ }
+}

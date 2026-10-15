@@ -2,6 +2,7 @@ import '../styles/loungeHorizon.css';
 import '../styles/loungeSelectedMenu.css';
 import '../styles/loungeSupport.css';
 import '../styles/homeDuelInk.css';
+import '../styles/homeAtmosphere.css';
 import {loungeNavGlyph,loungeUtilityGlyph} from './loungeNavGlyphs';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';
@@ -32,6 +33,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
   ];
   let stopNavMotion: (()=>void)|undefined;
   let stopHomeSound: (()=>void)|undefined;
+  let stopAtmosphere: (()=>void)|undefined;
   const paint=()=>{
     stopNavMotion?.();
     stopHomeSound?.();
@@ -60,7 +62,8 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     top.querySelector<HTMLButtonElement>('[data-shop]')!.onclick=()=>app.shop();
     top.querySelector<HTMLButtonElement>('.lounge-menu')!.onclick=e=>{const on=shell.classList.toggle('is-menu-open');(e.currentTarget as HTMLElement).setAttribute('aria-expanded',String(on));};
   };
-  if(page==='home'){const atmosphere=document.createElement('div');atmosphere.className='lounge-atmosphere';atmosphere.setAttribute('aria-hidden','true');shell.append(atmosphere);}
+  if(page==='home'){const atmosphere=document.createElement('div');atmosphere.className='lounge-atmosphere living-home';atmosphere.setAttribute('aria-hidden','true');shell.append(atmosphere);
+    void import('./homeAtmosphere').then(({mountHomeAtmosphere})=>{if(!lifecycle.signal.aborted&&atmosphere.isConnected)stopAtmosphere=mountHomeAtmosphere(atmosphere);}).catch(()=>{atmosphere.dataset.atmosphere='fallback';});}
   shell.append(content); app.root.append(shell); paint();
   const off=onLangChange(paint);
   document.addEventListener('lore:user',paint);
@@ -92,5 +95,5 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{lifecycle.abort();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{lifecycle.abort();stopAtmosphere?.();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
 }
