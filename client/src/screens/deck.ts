@@ -1,3 +1,4 @@
+import {starterCollection,constrainDeckStore} from '../shared/collection';
 import {renderDeckAppearance} from '../ui/deckAppearance';
 import {isLocalDevAccount,loadLocalGuestProfile} from '../dev/localAccount';
 import {revealCards} from '../ui/assetReadiness';
@@ -46,7 +47,8 @@ export function mountDeck(app: App): Screen {
   app.root.appendChild(wrap);
 
   // ---- 상태: 서버 저장분(프리셋 5슬롯) 로드, 없으면 기존 단일 덱을 1번 슬롯에 승계 ----
-  const store: DeckStore = deckStoreForUser(app.user);
+  const starterCards=starterCollection(app.user?.starterCards);
+  const store: DeckStore = isLocalDevAccount()?deckStoreForUser(app.user):constrainDeckStore(deckStoreForUser(app.user),starterCards);
   let cur = store.sel; // 현재 편집 중인 슬롯 (store.sel = 게임에 사용되는 슬롯)
   let watchQ = "";
   let activeTab:'edit'|'watch'|'appearance'='edit';
@@ -153,11 +155,13 @@ export function mountDeck(app: App): Screen {
       if(poolType!=='all' && (poolType==='mon'?c.t!=='mon':c.t==='mon'))continue;
       if(poolQuery && ![cardName(c),c.name].join(' ').toLowerCase().includes(poolQuery))continue;
       const n = countOf(id);
-      const full = n >= DECK_MAX_COPIES;
+      const available=isLocalDevAccount()?DECK_MAX_COPIES:(starterCards[id]??0);
+      const full = n >= available;
       const el = cardEl(c, { size: "mkt", playable: !full, dim: full, lazyArt: poolIdx++ });
       const cnt = document.createElement("div");
       cnt.className = "deck-owned" + (n > 0 ? " has" : "");
-      cnt.textContent = `${n}/${DECK_MAX_COPIES}`;
+      cnt.textContent = `${n}/${available}`;
+      cnt.title=loungeText('デッキ内 / 所持枚数','In deck / Owned','덱 구성 / 보유 수');
       el.appendChild(cnt);
       const choose=()=>{if(saving||full)return;if(deck().length<DECK_SIZE){undo=[...deck()];deck().push(id);pending=null;}else pending=pending===id?null:id;render();};
       el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);

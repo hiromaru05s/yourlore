@@ -1,3 +1,4 @@
+import type {CollectionState,CollectionResult,CollectionReceipt} from '../shared/collection';
 import type { Action } from '../shared/types';
 import type { LessonId } from '../shared/tutorialSteps';
 import type { RankChange } from "../shared/rank";
@@ -17,6 +18,7 @@ export interface User {
   wins: number;
   losses: number;
   credits: number;
+  starterCards?: Record<string,number>;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
   furniture?: string | null;
@@ -31,7 +33,7 @@ export interface ClaimResult {
   credits: number; // fresh balance
 }
 
-export interface ApiError extends Error { needVerify?: boolean }
+export interface ApiError extends Error { needVerify?: boolean; status?:number }
 
 async function call<T>(path: string, body?: unknown, method = "POST", signal?: AbortSignal): Promise<T> {
   const controller=new AbortController();
@@ -48,6 +50,7 @@ async function call<T>(path: string, body?: unknown, method = "POST", signal?: A
   const data = (await res.json().catch(error => {if(controller.signal.aborted)throw error;return {};})) as { error?: string; needVerify?: boolean } & T;
   if (!res.ok) {
     const err = new Error(data?.error ? localizeServerMsg(data.error) : t("api.fail").replace("{n}", String(res.status))) as ApiError;
+    err.status=res.status;
     err.needVerify = !!data?.needVerify;
     throw err;
   }
@@ -82,6 +85,10 @@ function acquisition(): { ref?: string; source?: string } {
 }
 
 export const api = {
+  collection: () => call<CollectionState>("/collection",undefined,"GET"),
+  collectionHistory: () => call<{receipts:CollectionReceipt[]}>("/collection/history",undefined,"GET"),
+  buyStarter: (id:string,requestId:string) => call<CollectionResult>("/collection/buy",{id,requestId}),
+  drawStarters: (count:number,requestId:string) => call<CollectionResult>("/collection/draw",{count,requestId}),
   // register: {user} (즉시 입장) 또는 {needVerify:true} (인증 메일 발송됨)
   register: (email: string, password: string) => call<{ user?: User; needVerify?: boolean }>("/auth/register", { email, password, ...acquisition() }),
   login: (email: string, password: string) => call<{ user: User }>("/auth/login", { email, password }).then((r) => r.user),

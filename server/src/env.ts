@@ -28,6 +28,7 @@ export interface SessionUser {
   wins: number;
   losses: number;
   credits: number;
+  starterCards?: Record<string,number>;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
   furniture?: string | null;

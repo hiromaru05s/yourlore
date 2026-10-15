@@ -159,7 +159,8 @@
     "tests/growth.mjs",
     "tests/ember-debt.mjs",
     "tests/market-crisis.mjs",
-    "tests/market-crash.mjs"
+    "tests/market-crash.mjs",
+    "tests/starter-collection.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

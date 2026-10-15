@@ -1,3 +1,4 @@
+import {starterCollection,constrainDeckStore} from '../../client/src/shared/collection';
 import {deckStoreForUser} from '../../client/src/shared/cards';
 // ============================================================
 // LORE server — email+password auth on D1.
@@ -83,15 +84,16 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   const token = readCookie(req);
   if (!token) return null;
   const row = await env.DB.prepare(
-    `SELECT u.id, u.email, u.display, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.furniture, u.deck, u.decks, s.expires_at
+    `SELECT u.id, u.email, u.display, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.furniture, u.deck, u.decks, u.starter_cards, s.expires_at
      FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ?`
-  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; furniture:string|null; deck: string | null; decks: string | null; expires_at: number }>();
+  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; furniture:string|null; deck: string | null; decks: string | null; starter_cards:string|null; expires_at: number }>();
   if (!row || row.expires_at < Date.now()) return null;
   let decks: unknown = null;
   try { decks = row.decks ? JSON.parse(row.decks) : null; } catch { decks = null; }
-  const store=deckStoreForUser({decks,deck:row.deck?row.deck.split(','):null,sleeve:row.sleeve,furniture:row.furniture});
+  const starterCards=starterCollection(row.starter_cards);
+  const store=constrainDeckStore(deckStoreForUser({decks,deck:row.deck?row.deck.split(','):null,sleeve:row.sleeve,furniture:row.furniture}),starterCards);
   const active=store.list[store.sel];
-  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
+  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, starterCards, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
 }
 
 export async function createSession(env: Env, userId: string): Promise<string> {
@@ -146,7 +148,7 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
         return json(env, { needVerify: true });
       }
       const token = await createSession(env, id);
-      return json(env, { user: { id, email, display, wins: 0, losses: 0, credits: 0 } }, 200, { "Set-Cookie": sessionCookie(token) });
+      return json(env, { user: { id, email, display, wins: 0, losses: 0, credits: 0, starterCards:starterCollection() } }, 200, { "Set-Cookie": sessionCookie(token) });
     }
 
     // login

@@ -6,6 +6,7 @@
 import {guardRequest} from "./requestGuard";
 import type { Env } from "./env";
 import { corsHeaders, getUser, handleAuth } from "./auth";
+import {handleCollection} from "./collection";
 import {saveUserDecks} from "./decks";
 import { getRating, handleRank } from "./rank";
 import { handleGoogleOAuth } from "./oauth";
@@ -48,6 +49,7 @@ export default {
       const user = await getUser(env, req);
       return handleRank(env, req, path.slice(4), user); // strip "/api"
     }
+    if(path === "/api/collection" || path.startsWith("/api/collection/")) return handleCollection(env,req,path,await getUser(env,req));
     // ---- credit rewards ----
     if (path.startsWith("/api/rewards/")) {
       return handleRewards(env, req, path.slice(4)); // strip "/api"
@@ -111,7 +113,7 @@ export default {
       if (!user) return new Response(JSON.stringify({ error: "로그인이 필요합니다" }), { status: 401, headers: hdrs });
       const body = (await req.json().catch(() => ({}))) as { deck?: unknown; decks?: unknown };
       const result=await saveUserDecks(env,user,body);
-      if(!result)return new Response(JSON.stringify({error:"未所持の商品は装備できません"}),{status:400,headers:hdrs});
+      if(!result)return new Response(JSON.stringify({error:"unowned deck contents"}),{status:400,headers:hdrs});
       return new Response(JSON.stringify(result),{headers:hdrs});
     }
 

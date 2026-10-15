@@ -1,3 +1,4 @@
+import {starterCollection,ownsDeck} from '../../client/src/shared/collection';
 import {deckStoreForUser,sanitizeDeck,sanitizeDecks} from '../../client/src/shared/cards';
 import {ownedCosmetics} from '../../client/src/shared/cosmetics';
 import type {Env,SessionUser} from './env';
@@ -10,7 +11,8 @@ export async function saveUserDecks(env:Env,user:SessionUser,body:{deck?:unknown
   // Old clients can still edit cards/names without resetting per-deck equipment.
   store.list.forEach((slot,i)=>{for(const key of ['sleeve','furniture'] as const)if(raw?.list?.[i]?.[key]===undefined)slot[key]=previous.list[i][key];});
  }else store.list[store.sel]={...store.list[store.sel],cards:sanitizeDeck(body.deck)};
- const row=await env.DB.prepare('SELECT sleeves FROM users WHERE id = ?').bind(user.id).first<{sleeves:string|null}>();
+ const row=await env.DB.prepare('SELECT sleeves, starter_cards FROM users WHERE id = ?').bind(user.id).first<{sleeves:string|null;starter_cards:string|null}>();
+ if(!row||store.list.some(slot=>!ownsDeck(slot.cards,starterCollection(row.starter_cards))))return null;
  const owned=new Set(ownedCosmetics(row?.sleeves));
  if(store.list.some(slot=>!owned.has(slot.sleeve)||!owned.has(slot.furniture)))return null;
  const active=store.list[store.sel];
