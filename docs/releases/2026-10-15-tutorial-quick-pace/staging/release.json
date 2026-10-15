@@ -1,0 +1,12 @@
+{
+  "source": "48db6a357ccf5223055a3e8e4c233b6a8e4b80bf",
+  "guard": "scripts/deploy-guard.mjs staging",
+  "workerVersion": "77e03f0b-859f-440b-9cb8-1e29a62b7731",
+  "trafficPercent": 100,
+  "tests": {
+    "passed": 179,
+    "total": 179
+  },
+  "deployedAt": "2026-10-15T13:19:20.92532Z",
+  "productionDeployed": false
+}

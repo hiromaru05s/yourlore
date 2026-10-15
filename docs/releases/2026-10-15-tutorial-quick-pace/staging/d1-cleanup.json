@@ -1,0 +1,93 @@
+[
+  {
+    "results": [
+      {
+        "users": 0,
+        "rewards": 0,
+        "user_days": 0,
+        "coupon_claims": 0,
+        "inquiries": 0,
+        "presence": 0,
+        "email_tokens": 0
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "APAC",
+      "served_by_colo": "ICN",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.3452
+      },
+      "duration": 0.3452,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 352256,
+      "rows_read": 2,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  },
+  {
+    "results": [
+      {
+        "sessions": 0,
+        "ratings": 0,
+        "collection_transactions": 0,
+        "player_experience": 0,
+        "experience_events": 0,
+        "daily_challenges": 0,
+        "duel_reward_receipts": 0
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "APAC",
+      "served_by_colo": "ICN",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.2237
+      },
+      "duration": 0.2237,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 352256,
+      "rows_read": 0,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  },
+  {
+    "results": [
+      {
+        "gift_deliveries": 0,
+        "tutorial_accounts": 0,
+        "medal_progress": 0,
+        "earned_medals": 0,
+        "medal_duel_receipts": 0
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "APAC",
+      "served_by_colo": "ICN",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.2163
+      },
+      "duration": 0.2163,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 352256,
+      "rows_read": 0,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  }
+]

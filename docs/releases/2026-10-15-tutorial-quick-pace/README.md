@@ -19,4 +19,13 @@ Japanese explanations are shortened from 7,596 to 6,456 meaningful characters wh
 - `tests/trap-removal-tutorial.mjs`: full-effects controls plus quick-mode reward failure/retry and in-place handoff.
 - `TUTORIAL_QA_TARGET=pace node tests/tutorial-academy-browser.mjs`: physical first summon, wrong/correct answer, remaining gameplay through actual controller submissions, all question/review buttons, 35 automatic handoffs without replacing the controller or Zeno canvas, all 66 scene records and 5,000 credits; window geometry and pace toggle.
 
-Browser runtime is automation timing only. It does not measure human comprehension. Deployment evidence is recorded after the guarded release.
+Browser runtime is automation timing only. It does not measure human comprehension.
+## Staging release
+
+- Source `48db6a357ccf5223055a3e8e4c233b6a8e4b80bf`, Worker `77e03f0b-859f-440b-9cb8-1e29a62b7731`, 100% staging traffic. This integrated release includes the tutorial commits and concurrent approved work. No production deployment.
+- `staging/production-suite.json`: 179/179 passing groups in the guarded release.
+- `staging/assets.json`: all 103 deployed HTML/JS/CSS files match the exact guarded build. An immediate post-upload request returned a transient 404; retry after propagation passed every hash.
+- `staging/authenticated.json`: real password login with a disposable preverified account, initial offer/skip confirmation, physical Blade Hare drag, +100 Shards, and automatic handoff to lesson two on the same board. All remaining lessons pass the deployed authoritative replay, ending at 36/36 and 5,000 Shards. Concurrent duplicate grants are `[100, 0]`; reload preserves completion. No browser page errors.
+- `staging/d1-balances.json` independently verifies 5,000 credits and 36 receipts; `staging/d1-cleanup.json` verifies removal of the QA account, rewards, session, tutorial ledger and medals. Ephemeral credentials and browser profile are removed.
+
+The live browser test physically plays the first lesson; the other 35 are server replay/payment checks. The local quick-pace browser run drives every lesson through the controller and quiz/review UI. Neither is a beginner human timing study. Email delivery, OAuth and production were not exercised.

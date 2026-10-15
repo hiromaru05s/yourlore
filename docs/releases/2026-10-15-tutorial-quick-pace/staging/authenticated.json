@@ -1,0 +1,23 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "browserTransport": "Chrome headless HTTP/1.1; live staging resources and APIs, no fixtures",
+  "boundary": "Real browser input verifies lesson one; remaining 35 use deployed-server replay/payment. Preverified disposable account; email delivery and OAuth consent are not exercised.",
+  "checkedAt": "2026-10-15T13:23:56.643Z",
+  "credits": 5000,
+  "completed": 36,
+  "concurrentGrants": [
+    100,
+    0
+  ],
+  "checks": [
+    "real password login with disposable preverified account",
+    "first-entry invitation and No confirmation",
+    "genuine drag-to-play and 100-Shard D1 payment",
+    "remaining 35 shared-reducer transcripts accepted by deployed server",
+    "concurrent grant once",
+    "incomplete claim rejected",
+    "reload restores all 36 claims and no repeat invitation",
+    "resized window rule notebook"
+  ],
+  "errors": []
+}

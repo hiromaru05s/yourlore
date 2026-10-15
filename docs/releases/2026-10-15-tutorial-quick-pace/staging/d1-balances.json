@@ -1,0 +1,28 @@
+[
+  {
+    "results": [
+      {
+        "credits": 5000,
+        "completed": 36
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "APAC",
+      "served_by_colo": "ICN",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.2164
+      },
+      "duration": 0.2164,
+      "changes": 0,
+      "last_row_id": 5,
+      "changed_db": false,
+      "size_after": 352256,
+      "rows_read": 38,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  }
+]
