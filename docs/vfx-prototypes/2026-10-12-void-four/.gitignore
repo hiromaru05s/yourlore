@@ -1,0 +1,4 @@
+build/
+qa/*-frame-*.png
+qa/failure.png
+qa/comparison-1050.png

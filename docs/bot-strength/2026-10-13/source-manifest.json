@@ -1,0 +1,36 @@
+{
+  "baseCommit": "8d7cdbe02c056b84fe1c0bb86502a72907c6ede3",
+  "branch": "codex/bot-strength",
+  "deployment": "not_performed",
+  "node": "v22.22.3",
+  "sourceFiles": {
+    "client/src/shared/bot.ts": "d15877e1929143f78d50e2abf6cffebc1b607fd522b800c4e90e2894e9d4ba2e",
+    "client/src/shared/botActions.ts": "c5b39cb07bd4f9c71df7fb5ea3229be5a1a2dbfa8e3e77f432368e0a6a5f03af",
+    "client/src/shared/botDecks.ts": "d27312bd115cc03bdf98eec22583be4132aabef174e32a7781c196fec4d11e7a",
+    "client/src/shared/botObservation.ts": "2da640105b21d451f8f2ba2d3da1c793d28616f32752ef926ea4f2260fe580ad",
+    "client/src/shared/botSearch.ts": "ff1f12fc1ef8e9db986129d080f3e2dd1e0e9d5dbe4492d99518d94c3f567237",
+    "client/src/shared/botValue.ts": "f499579bfa774bf417883a075f2932871ee8fbdaf441a61629e8c0394a08e22c",
+    "client/src/shared/botValueWeights.ts": "a67b30d9d77f91cca6ca7b9403b1fcfe175dd6d4d84e71f6b671665634fb993c",
+    "client/src/shared/cloneGameState.ts": "ab26916bf516aa7c367b2a01582f097f69cc18c5bd637b7a2ef56c52a84c5af6",
+    "client/src/shared/engine.ts": "2a7fe67fbfbfc62ceb699836abd40733fcf408ce5b980c1563a3939380561e38",
+    "client/src/shared/cards.ts": "c62fed2442dd1519293a84d760840883ce64e815a9e09ce74cbf9fc7cbede73b",
+    "client/src/shared/types.ts": "2b11c1f7d785bc875ec1629bda0584f386deb1a9dd324a5e2982db8da8d10219",
+    "client/src/game/controller.ts": "71d587e5b0219d0ffb8e162b0471c6d288a201f0d7c52982844bbefaa95293b6",
+    "client/src/game/botThinker.ts": "ef611c75dc79bde342cad460ef57efdc02a171581ce93c406ce18500e264af1d",
+    "client/src/game/bot.worker.ts": "9f41f8f1461bc2d52ee1c3a4350e8c870f9b05b29f647334691603ca95c19fac"
+  },
+  "frozenBundles": {
+    "deck-exploration.cjs.gz": "033edd59f5968467c55baa8887f25a048e637c0ae1aedca0edbc30512e7c7341",
+    "training-policy.cjs.gz": "abeeea5ea0e78810549ea86810b91485480bc3cda41b4d976f74f346d169b7ce",
+    "accepted-candidate.cjs.gz": "9a1198f48ff99652ccdd963e86161ddec570e5f3c08a64727ab385b807dd5c24",
+    "optimized-candidate.cjs.gz": "4d1f27fdb34b097f9670a01a332b503cfe00e0c30d3797a5c514729f39ded218",
+    "deck-holdout-policy.cjs.gz": "5ca5a04fef7c39b73b811809c3cecab9806be03a8c5351b08650c72fa454cf06",
+    "release-candidate.cjs.gz": "9c31d6f79fa40118aeea227eea2a53216e1293db8c61eab18bf15ccd1a558fa3",
+    "conservative-candidate.cjs.gz": "c750382b185bf40f3753eb2134d69c42f6b28649b7cfd497ab98f8dc39e9ea7b",
+    "pre-guard-candidate.cjs.gz": "092fa858ada01ebea26afa7e265424f8b2954508d29a8115393ea574e3d671ea",
+    "baseline.cjs.gz": "39b0d7a0cbd436a738dbb8f1e88514ec0e0cfc4b780f9c6762dedb325fbc76f5"
+  },
+  "primaryAcceptanceGames": 608,
+  "explorationAndTrainingGames": 12680,
+  "discardedOrPartialRunsExcluded": true
+}

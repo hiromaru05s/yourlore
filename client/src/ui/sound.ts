@@ -1,5 +1,5 @@
 /** TCG v5 sound bank; preserve approved HOME, purchase and draw recordings. */
-export const SFX_NAMES=['click','play','summon','attack','impact','damage','heal','death','trapSet','trap','draw','buy','mana','turn','win','lose','drawGame','match','error','coin','pop','facehit','mimic','mana-pay','void','shuffle','duel-start','discard','coinToss','coinLand','diceRoll','diceLand','rankUp','rankDown','rankPromote'] as const;
+export const SFX_NAMES=['click','play','summon','attack','impact','damage','heal','death','trapSet','trap','draw','buy','mana','turn','win','lose','drawGame','match','error','coin','pop','facehit','mimic','mana-pay','void','shuffle','duel-start','discard','coinToss','coinLand','diceRoll','diceLand','rankUp','rankDown','rankPromote','chosenCrown'] as const;
 export type SfxName=typeof SFX_NAMES[number];
 const UI=new Set<SfxName>(['click','pop','error']),VARIANTS=new Set<SfxName>(['click','attack','impact']);
 const PRESERVED_V4=new Set<SfxName>(['coin','match','buy']);
@@ -10,17 +10,20 @@ const policy=(name:SfxName):Policy=>{
  if(['draw','discard','shuffle','trapSet','buy','coin','mana-pay'].includes(name))return {family:'paper',gap:name==='draw'?65:120,priority:1};
  if(name==='play')return {family:'magic',gap:120,priority:2};
  if(['mana','heal'].includes(name))return {family:'magic',gap:280,priority:2};
- if(['win','lose','drawGame','duel-start','match','rankUp','rankDown','rankPromote'].includes(name))return {family:'ceremony',gap:500,priority:4};
+ if(['win','lose','drawGame','duel-start','match','rankUp','rankDown','rankPromote','chosenCrown'].includes(name))return {family:'ceremony',gap:500,priority:4};
  return {family:'combat',gap:65,priority:3};
 };
 const LIMIT:Record<Family,number>={ui:1,paper:3,combat:3,magic:2,ceremony:1};
 let volume=.7;try{const v=parseFloat(localStorage.getItem('lore_sfx')??'');if(Number.isFinite(v))volume=Math.max(0,Math.min(1,v));}catch{}
+let lastAudibleVolume=.7;
+try{const v=Number(localStorage.getItem('lore_sfx_last_audible'));if(Number.isFinite(v)&&v>0)lastAudibleVolume=Math.min(1,v);}catch{}
+if(volume>0)lastAudibleVolume=volume;
 let ctx:AudioContext|null=null,master:GainNode|null=null,installed=false,unlocked=false,epoch=0;
 const encoded=new Map<string,Promise<ArrayBuffer>>(),decoded=new Map<string,Promise<AudioBuffer>>(),ready=new Map<string,AudioBuffer>();
 const last=new Map<SfxName,number>(),cycle=new Map<SfxName,number>();
 interface Voice {name:SfxName;source:AudioBufferSourceNode;gain:GainNode;family:Family;priority:number;finish:()=>void;}
 const active=new Set<Voice>();
-export const soundUrls=(name:SfxName)=>name==='play'?['/sfx/lore-v7/play.mp3']:name==='summon'?['/sfx/lore-v8/summon.mp3']:name==='draw'?['/sfx/lore-v4/draw-3.mp3']:Array.from({length:VARIANTS.has(name)?3:1},(_,i)=>`/sfx/lore-v${UI.has(name)?3:PRESERVED_V4.has(name)?4:5}/`+name+(VARIANTS.has(name)?'-'+(i+1):'')+'.mp3');
+export const soundUrls=(name:SfxName)=>name==='chosenCrown'?['/sfx/chosen-v2/heavy-blade.mp3']:name==='play'?['/sfx/lore-v7/play.mp3']:name==='summon'?['/sfx/lore-v8/summon.mp3']:name==='draw'?['/sfx/lore-v4/draw-3.mp3']:Array.from({length:VARIANTS.has(name)?3:1},(_,i)=>`/sfx/lore-v${UI.has(name)?3:PRESERVED_V4.has(name)?4:5}/`+name+(VARIANTS.has(name)?'-'+(i+1):'')+'.mp3');
 function bytes(url:string){let p=encoded.get(url);if(!p){p=fetch(url).then(r=>{if(!r.ok)throw new Error('sound unavailable');return r.arrayBuffer();}).catch(e=>{encoded.delete(url);throw e;});encoded.set(url,p);}return p;}
 function buffer(url:string){let p=decoded.get(url);if(!p){p=bytes(url).then(b=>ctx!.decodeAudioData(b.slice(0))).then(b=>{ready.set(url,b);return b;}).catch(e=>{decoded.delete(url);throw e;});decoded.set(url,p);}return p;}
 function unlock(){
@@ -54,8 +57,9 @@ function fadeOut(voice:Voice){
 /** Invalidate pending decodes as well as playing voices. Nothing leaks into the next scene. */
 export function stopSounds(){epoch++;last.clear();for(const voice of [...active])fadeOut(voice);}
 export function getSfxVolume(){return volume;}
-export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));try{localStorage.setItem('lore_sfx',String(volume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();document.dispatchEvent(new Event('lore:volume-change'));}
-export interface SoundOptions {signal?:AbortSignal;}
+export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));if(volume>0)lastAudibleVolume=volume;try{localStorage.setItem('lore_sfx',String(volume));localStorage.setItem('lore_sfx_last_audible',String(lastAudibleVolume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();document.dispatchEvent(new Event('lore:volume-change'));}
+export function toggleSfxMuted(){setSfxVolume(volume>0?0:lastAudibleVolume);}
+export interface SoundOptions {signal?:AbortSignal;gain?:number;rate?:number;pan?:number;}
 export function sfx(name:SfxName,options:SoundOptions={}):void{
  if(!unlocked||!ctx||!master||volume<=0||document.hidden||options.signal?.aborted)return;
  if(ctx.state==='suspended')void ctx.resume().catch(()=>{});
@@ -76,10 +80,11 @@ export function sfx(name:SfxName,options:SoundOptions={}):void{
   const siblings=[...active].filter(v=>v.family===p.family);
   if(siblings.length>=LIMIT[p.family])fadeOut(siblings[0]);
   if(active.size>=8){const oldest=[...active].sort((a,b)=>a.priority-b.priority)[0];if(oldest.priority>p.priority)return;fadeOut(oldest);}
-  const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buf;gain.gain.value=1;
-  source.connect(gain).connect(bus);
+  const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buf;gain.gain.value=Math.max(0,Math.min(1,options.gain??1));if(options.rate!==undefined)source.playbackRate.value=Math.max(.25,Math.min(4,options.rate));
+  const pan=options.pan===undefined?undefined:audio.createStereoPanner();
+  source.connect(gain);if(pan){pan.pan.value=Math.max(-1,Math.min(1,options.pan!));gain.connect(pan).connect(bus);}else gain.connect(bus);
   const abort=()=>fadeOut(voice);
-  const voice:Voice={name,source,gain,...p,finish:()=>{active.delete(voice);options.signal?.removeEventListener('abort',abort);source.disconnect();gain.disconnect();}};
+  const voice:Voice={name,source,gain,...p,finish:()=>{active.delete(voice);options.signal?.removeEventListener('abort',abort);source.disconnect();gain.disconnect();pan?.disconnect();}};
   source.onended=voice.finish;active.add(voice);options.signal?.addEventListener('abort',abort,{once:true});source.start();
  };
  const cached=ready.get(url);if(cached)play(cached);else void buffer(url).then(play).catch(()=>{});

@@ -1,0 +1,8 @@
+{
+  "errors": [],
+  "clock": "real requestAnimationFrame",
+  "cases": [
+    "MERC_MASTER hand me",
+    "MERC_LEADER generated opponent"
+  ]
+}

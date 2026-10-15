@@ -1,0 +1,237 @@
+{
+  "passed": 12,
+  "cases": [
+    {
+      "black": false,
+      "variant": 0,
+      "count": 2,
+      "maxVisible": 2,
+      "maxStep": 0.0140884715009031,
+      "contacts": 6,
+      "firstContacts": [
+        1570,
+        1410
+      ]
+    },
+    {
+      "black": false,
+      "variant": 0,
+      "count": 6,
+      "maxVisible": 6,
+      "maxStep": 0.015657672013610468,
+      "contacts": 19,
+      "firstContacts": [
+        1207,
+        1467,
+        1523,
+        1333,
+        1537,
+        1513
+      ]
+    },
+    {
+      "black": false,
+      "variant": 1,
+      "count": 2,
+      "maxVisible": 2,
+      "maxStep": 0.012726831533883211,
+      "contacts": 8,
+      "firstContacts": [
+        1330,
+        1447
+      ]
+    },
+    {
+      "black": false,
+      "variant": 1,
+      "count": 6,
+      "maxVisible": 6,
+      "maxStep": 0.014433248246680446,
+      "contacts": 17,
+      "firstContacts": [
+        1400,
+        1420,
+        1567,
+        1410,
+        1543,
+        1317
+      ]
+    },
+    {
+      "black": false,
+      "variant": 2,
+      "count": 2,
+      "maxVisible": 2,
+      "maxStep": 0.008772703466945388,
+      "contacts": 6,
+      "firstContacts": [
+        1080,
+        1240
+      ]
+    },
+    {
+      "black": false,
+      "variant": 2,
+      "count": 6,
+      "maxVisible": 6,
+      "maxStep": 0.011351811099456738,
+      "contacts": 17,
+      "firstContacts": [
+        1080,
+        1253,
+        1190,
+        1197,
+        1143,
+        1150
+      ]
+    },
+    {
+      "black": false,
+      "variant": 3,
+      "count": 2,
+      "maxVisible": 2,
+      "maxStep": 0.010990076476042075,
+      "contacts": 5,
+      "firstContacts": [
+        1423,
+        1320
+      ]
+    },
+    {
+      "black": false,
+      "variant": 3,
+      "count": 6,
+      "maxVisible": 6,
+      "maxStep": 0.01870039913643346,
+      "contacts": 15,
+      "firstContacts": [
+        1410,
+        1353,
+        1310,
+        1350,
+        1253,
+        1120
+      ]
+    },
+    {
+      "black": true,
+      "variant": 0,
+      "count": 18,
+      "maxVisible": 18,
+      "maxStep": 0.03041053882652339,
+      "contacts": 42,
+      "firstContacts": [
+        1597,
+        1723,
+        1817,
+        1837,
+        1927,
+        1960,
+        2060,
+        2167,
+        2227,
+        2297,
+        2410,
+        2510,
+        2670,
+        2723,
+        2823,
+        2770,
+        2860,
+        3010
+      ]
+    },
+    {
+      "black": true,
+      "variant": 1,
+      "count": 24,
+      "maxVisible": 24,
+      "maxStep": 0.014765303105918776,
+      "contacts": 62,
+      "firstContacts": [
+        1350,
+        1457,
+        1487,
+        1767,
+        1943,
+        1897,
+        1963,
+        2003,
+        2067,
+        2230,
+        2303,
+        2683,
+        2493,
+        2530,
+        2550,
+        2717,
+        2933,
+        2667,
+        3043,
+        2960,
+        2737,
+        3200,
+        3287,
+        3517
+      ]
+    },
+    {
+      "black": true,
+      "variant": 2,
+      "count": 12,
+      "maxVisible": 12,
+      "maxStep": 0.02998591296110841,
+      "contacts": 32,
+      "firstContacts": [
+        1500,
+        1720,
+        2030,
+        1987,
+        2303,
+        2447,
+        2563,
+        2813,
+        3090,
+        3107,
+        3257,
+        3520
+      ]
+    },
+    {
+      "black": true,
+      "variant": 3,
+      "count": 26,
+      "maxVisible": 26,
+      "maxStep": 0.030420063079601472,
+      "contacts": 87,
+      "firstContacts": [
+        1653,
+        1690,
+        1833,
+        1887,
+        1930,
+        1990,
+        2187,
+        2100,
+        2193,
+        2293,
+        2413,
+        2417,
+        2497,
+        2653,
+        2800,
+        2913,
+        2927,
+        2990,
+        3050,
+        3163,
+        3263,
+        3227,
+        3360,
+        3460,
+        3537,
+        3757
+      ]
+    }
+  ]
+}

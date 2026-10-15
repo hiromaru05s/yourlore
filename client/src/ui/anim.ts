@@ -1,12 +1,83 @@
+import {playErosion} from './erosion/runtime';
+import {playGrowth} from './growth/runtime';
+import type {GrowthPulse} from './growth/plan';
+import {findOriginTrap} from './originRite/anchors';
+import {playOriginRite,cancelOriginRites} from './originRite/runtime';
+import type {OriginRiteReaction} from '../shared/types';
+import {playSoulHarvest,cancelSoulHarvest,warmSoulHarvest} from './soulHarvest/runtime';
+import {createDungeonFloor,warmDungeonFloor} from './dungeonFloor/runtime';
+export {warmDungeonFloor};
+import {playCurse,cancelCurse,warmCurse} from './curse/runtime';
+export {warmCurse};
+import {playReverse,warmReverse} from './reverse/runtime';
+export {warmReverse};
+import {playVoidShot,warmVoidShot,cancelVoidShots} from './voidShot/runtime';
+export {warmVoidShot};
+import {playMassacre,cancelMassacres} from './massacre/runtime';
+import {playNova,warmNova} from './nova/runtime';
+export {warmNova};
+import {playBloodRite} from './bloodRite/runtime';
+import {isWeaponmaster} from './weaponmasterSummon/selection';
+import {playWeaponmasterSummon} from './weaponmasterSummon/runtime';
+import {isShieldTitan} from './shieldTitanSummon/selection';
+import {playShieldTitanSummon} from './shieldTitanSummon/runtime';
+import {isSilenceSummon} from './silenceSummon/selection';
+import {playSilenceSummon} from './silenceSummon/runtime';
+import {playCounter} from './counter/runtime';
+import {warmCardSurface} from './cardSurface';
+import {damageNumber,portraitImpact} from './damageFeedback';
+import {hitMonster,monsterHealth,combatVisualRect} from './monster/runtime';
+import {isVoidSummon} from './voidSummon/selection';
+import {playVoidSummon} from './voidSummon/runtime';
+import {playHatch} from './hatchSummon/runtime';
+import {isCasino} from './casinoSummon/selection';
+import {playCasinoSummon,cancelCasinoSummons} from './casinoSummon/runtime';
+import {isDungeon} from './dungeonSummon/selection';
+import {playDungeonSummon} from './dungeonSummon/runtime';
+import {prepareTaunt,cancelTaunts} from './taunt/runtime';
+export {warmTaunt} from './taunt/runtime';
+import {usesAssassinStrike} from './assassinAttack/model';
+import {prepareEvade,cancelEvades} from './evade/runtime';
+import {isVampire} from './vampireSummon/selection';
+import {playVampireSummon} from './vampireSummon/runtime';
+import {cancelStatusExtinctions} from './statusExtinction/runtime';
+import {isDarkMerchant} from './merchant/selection';
+import {playDarkMerchant,warmDarkMerchant,cancelDarkMerchants} from './merchant/runtime';
+import {isAssassin} from './assassinSummon/selection';
+import {playAssassinSummon} from './assassinSummon/runtime';
+import {isMage} from './mageSummon/selection';
+import {isMercenary} from './mercenarySummon/selection';
+import {playMercenarySummon} from './mercenarySummon/runtime';
+import {isGambler} from './gamblerSummon/selection';
+import {isHexer} from './hexerSummon/selection';
+import {isGolem} from './golem/selection';
+import {playGolem} from './golem/runtime';
+import {isChosenHero} from './chosenSummon/selection';
+import { cardTypeLabel, displayPassives, referencedPassives } from '../shared/cardPresentation';
+import { cardStateEl } from './cardState';
+import {cancelChosenVictory} from './chosenVictory/runtime';
+import {combatCard,combatPortrait} from './combatAnchor';
+import {cancelDewGrants} from './dew/runtime';
+import {cancelStatusGrants} from './statusGrant/runtime';
+import {selectedTribeSummon} from './tribePresentation/selection';
+import {playTribeSummon,cancelTribeSummons} from './tribePresentation/runtime';
+import {holdRiftTarget} from './riftActivity';
+import {cancelTribeSynergy} from './tribeSynergy/runtime';
+import type {ElementalEvent,Playback} from './elemental/runtime';
+import {flyPersistentIntoSlot} from './persistentFlight';
+import {playCreation,warmCreation} from './creation/runtime';
+import type {VoidCrystalCast} from './voidCrystal/runtime';
 import {playSpellFrame,cancelSpellFrames,warmSpellFrame,SPELL_FRAME_RATE} from './spellFrame/runtime';
 import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
-import {playMonster,setMonsterSkip} from './monster/runtime';
+import {playMonster,setMonsterSkip,playGutsEndurance} from './monster/runtime';
 import {summonPlacement} from './summon/runtime';
-import {foldQuestIntoSlot,nativeQuestGhost} from './questFold';
+import {isVerdant} from './verdant/selection';
+import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {passiveIcon} from './passiveIcon';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
+import {damageAction, playSeekerSide, setSeekerSkip} from './seekerAnimation';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
@@ -15,15 +86,16 @@ import {waitForDuel} from './duelReadiness';
 // LORE — animation helpers. Triggered by engine events; never
 // touch game state, only the DOM.
 // ============================================================
-import type { CardInst } from "../shared/types";
-import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, cardPassives, enchantHasTurnCountdown } from "../shared/cards";
+import type { CardInst, GutsSurvival } from "../shared/types";
+import { frameFor, FRAME_BACK, TRIBES, CHEST_ODDS, DB, relatedCardIds, PASSIVES, enchantHasTurnCountdown } from "../shared/cards";
 import { cardEl, cardRulesEl, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
-import { t, getLang, cardText, cardName } from "../i18n";
+import { t, getLang, cardName } from "../i18n";
 
 import { sfx } from "./sound";
 import { moveOnBoard } from "./boardMotion";
 import { projectedPlacement } from "./boardProjection";
 import {playBiblionFx,clearBiblionFx} from './biblionFx';
+import {prepareManaPurchase,MANA_PURCHASE_CONTACT_MS,MANA_PURCHASE_DURATION} from './manaPurchase';
 
 export type ViewSide = "me" | "opp";
 
@@ -36,11 +108,15 @@ const EASE = "cubic-bezier(.4,0,.2,1)";
 // its end state and the player's new action plays fresh.
 let fxSkip = false;
 export const isFxSkipped=()=>fxSkip;
+export function prepareEvasion(uid:string,side:ViewSide,success:boolean){
+ return prepareEvade(fxSkip?null:combatCard(uid),{side,success});
+}
+export function prepareTauntActivation(uid:string){return prepareTaunt(fxSkip?null:combatCard(uid));}
 const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
-  fxSkip = on; setMonsterSkip(on);
-  if(on){cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
+  if(on){cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -184,15 +260,75 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(heavy&&isShieldTitan(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playShieldTitanSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isSilenceSummon(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playSilenceSummon(face,{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isVoidSummon(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playVoidSummon(face,{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isCasino(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playCasinoSummon(face,{anchor:target,signal,onImpact:()=>sfx(landingSound)}),6000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isDungeon(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playDungeonSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isVampire(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playVampireSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),7000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isAssassin(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playAssassinSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isWeaponmaster(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playWeaponmasterSummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isMercenary(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.remove();
+    if(!fxSkip)await boardMotionScope(signal=>playMercenarySummon(face,{anchor:target,from,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&(isMage(face.dataset.cardId)||isHexer(face.dataset.cardId)||isGambler(face.dataset.cardId))){
+    face.style.visibility='hidden';reveal.remove();
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),10000);
+    face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&isGolem(face.dataset.cardId)){
+    face.style.visibility='hidden';reveal.style.visibility='hidden';
+    if(!fxSkip)await boardMotionScope(signal=>playGolem(face,{anchor:target,from,reveal,signal,onImpact:()=>sfx(landingSound)}),10000);
+    reveal.remove();face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
+  if(heavy&&selectedTribeSummon(face.dataset.cardId)){
+    face.style.visibility='hidden';
+    await boardMotionScope(signal=>playTribeSummon(face,{anchor:target,from,reveal,signal,onImpact:()=>sfx(landingSound)}));
+    reveal.remove();face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
+  }
   if(heavy){
     face.style.zIndex='135';reveal.style.zIndex='135';
     // Transfer directly into the selected card-parallel landing, without a second impact.
-    const initial=summonPlacement(target,w,h,0,reduced);
+    const initial=summonPlacement(target,w,h,0,reduced,face.dataset.cardId);
     const transfer=face.animate([{transform:start.toString(),opacity:0},{transform:initial.toString(),opacity:1}],{duration:reduced?80:300,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
     const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:reduced?80:220,fill:'both'});
     await wait(reduced?80:300);transfer.cancel();fade.cancel();reveal.remove();
     face.style.transform=initial.toString();
-    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}));
+    await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),(isVerdant(face.dataset.cardId)||isChosenHero(face.dataset.cardId))?10000:5000);
     face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
   const duration=reduced?120:620;
@@ -204,14 +340,26 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   if(!fxSkip)summonDust(face.getBoundingClientRect());
   return face;
 }
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false): Promise<HTMLElement|null> {
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast,effect?:(node:HTMLElement)=>Promise<void>): Promise<HTMLElement|null> {
   const from = fromRect(side, takeOrigin(side)); if (!from) return null;
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
   try {
-    if(card.t==='spell'&&!fxSkip)warmSpellFrame();
-    await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
-    if(card.t==='spell'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+    if(card.t==='quest'&&!fxSkip)void warmQuestPact().catch(()=>{});
+    const persistent=dest==='field'&&!!card.ench;
+    const dark=isDarkMerchant(card.id)&&card.t==='spell';
+    const crystalModule=crystal&&!fxSkip?import('./voidCrystal/runtime').catch(()=>null):null;
+    if(effect&&!fxSkip)warmSoulHarvest();
+    else if(dark&&!fxSkip)warmDarkMerchant();
+    else if(card.id==='FLAME'&&!fxSkip)warmEmberDebt();
+    else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
+    const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
+    if(!special){
+      await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
+      if(effect){await parkQuickSpell(node,side);await effect(node);}
+      else if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
+      else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&card.id!=='FORBIDDEN'&&card.id!=='FLAME'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+    }
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
@@ -220,16 +368,17 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
         const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="">';
         if(card.t==='quest'){
           const face=questTile(card);
-          if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),6500))return face.parentElement;
+          if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),8500))return face.parentElement;
           // Interrupted or unavailable renderer: preserve the native placed card.
           if(!target.isConnected)return null;
           return nativeQuestGhost(target,face);
         }
-        const face=await flyIntoSlot(node,target,enchantmentTile(card,duration));
-        if(!fxSkip)playBiblionFx('enchant-place',face);
-        return face;
+        const face=enchantmentTile(card,duration);
+        if(!fxSkip&&await boardMotionScope(signal=>flyPersistentIntoSlot(node,target,face,signal),6500))return face.parentElement;
+        if(!target.isConnected)return null;
+        return nativeQuestGhost(target,face);
       }
-    } else if (dest === "discard") await landOnShelf(node,side);
+    } else if (dest === "discard") {if(deferVanish&&!fxSkip){if(card.id==='FORBIDDEN')await parkForbiddenSpell(node);else await parkQuickSpell(node,side);held=true;return node;}await landOnShelf(node,side);}
     else if(dest === "vanish") {
       if(deferVanish&&!fxSkip){await parkQuickSpell(node,side);held=true;return node;}
       await absorbIntoRift(node,side);
@@ -242,6 +391,18 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
+ if(isShieldTitan(id)){node.style.visibility='hidden';return;}
+ if(isSilenceSummon(id)){node.style.visibility='hidden';return;}
+ if(isVoidSummon(id)){node.style.visibility='hidden';return;}
+ if(isCasino(id)){node.style.visibility='hidden';return;}
+ if(isDungeon(id)){node.style.visibility='hidden';return;}
+ if(isVampire(id)){node.style.visibility='hidden';return;}
+ if(isAssassin(id)){node.style.visibility='hidden';return;}
+ if(isWeaponmaster(id)){node.style.visibility='hidden';return;}
+ if(isMage(id)){node.style.visibility='hidden';return;}
+ // Selected hexers begin in their renderer, without a raw DOM reveal or transfer.
+ if(isMercenary(id)||isHexer(id)||isGambler(id)){node.style.visibility='hidden';return;}
+ if(isGolem(id)){node.style.visibility='hidden';return;}
  // Fetch the optional renderer while the unchanged hand reveal is moving.
  const module=isMimic(id)&&!fxSkip?import('./mimic/runtime').catch(()=>null):null;
  await focusCard(node,side,isMimic(id)?id:undefined);
@@ -346,14 +507,42 @@ async function purchaseMana(side:ViewSide,target:DOMRect):Promise<void>{
   const cluster=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
   const source=cluster?.querySelector<HTMLElement>('.mana-crystals')??cluster?.querySelector<HTMLElement>('.pips');
   if(!source)return;
-  const stop=playBiblionFx('purchase',source.getBoundingClientRect(),target);
+  // Preparation races a skippable deadline: cold/failed assets never trap input.
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)await Promise.race([prepareManaPurchase(),wait(800)]);
+  if(fxSkip||document.hidden)return;
+  const stop=playBiblionFx('purchase',()=>source.isConnected?source.getBoundingClientRect():null,target);
   try{
-    await wait(530);if(!fxSkip&&!document.hidden)sfx('mana-pay');
-    await wait(330);
+    await wait(MANA_PURCHASE_CONTACT_MS);if(!fxSkip&&!document.hidden)sfx('mana-pay');
+    await wait(MANA_PURCHASE_DURATION*1000-MANA_PURCHASE_CONTACT_MS);
   }finally{stop();}
 }
 
+export async function finishElementalSpell(node:HTMLElement,side:ViewSide):Promise<void>{
+ try{if(node.isConnected)await landOnShelf(node,side);}finally{node.remove();}
+}
+export async function beginElemental(event:ElementalEvent,you:0|1,source?:HTMLElement):Promise<Playback>{
+ const idle:Playback={impact:()=>Promise.resolve(),finished:Promise.resolve(),cancel(){}};
+ if(fxSkip)return idle;
+ const {startElemental}=await import('./elemental/runtime');if(fxSkip)return idle;
+ const playback=startElemental(event,you,source);
+ void boardMotionScope(async signal=>{signal.addEventListener('abort',playback.cancel,{once:true});await playback.finished;return !signal.aborted;},6500);
+ return playback;
+}
+export async function berserkStrike(uid:string,targetUid:string|null,player:0|1,you:0|1,targetPlayer:0|1,onImpact:()=>void,exhaust:boolean,amount=0):Promise<void>{
+ if(fxSkip)return;sfx('attack');
+ const playback=await beginElemental({type:'elementalStart',group:uid,player,id:'NGA4',uid,targets:[{player:targetPlayer,uid:targetUid,amount}]},you);
+ await playback.impact(0);if(!fxSkip){if(amount>0)sfx(targetUid?'impact':'facehit');onImpact();}await playback.finished;
+ const source=byUid(uid);if(source&&exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
+}
+
 /** Keep the revealed source readable at the board edge while its effect resolves. */
+async function parkForbiddenSpell(node:HTMLElement):Promise<void>{
+ const sample=document.querySelector<HTMLElement>('.zone-mon > .card')?.getBoundingClientRect();
+ const w=Math.max(32,Math.min(110,(sample?.width||innerWidth*.14)*1.15)),h=node.offsetHeight*w/node.offsetWidth;
+ node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left .3s ${EASE},top .3s ${EASE},transform .3s ${EASE}`;
+ node.style.left=`${(innerWidth-w)/2}px`;node.style.top=`${innerHeight*.49-h/2}px`;node.style.transform=`scale(${w/node.offsetWidth})`;
+ await wait(310);
+}
 async function parkQuickSpell(node:HTMLElement,side:ViewSide):Promise<void>{
   const row=rowRect(side),w=Math.min(92,innerWidth*.18),scale=w/node.offsetWidth;
   const h=node.offsetHeight*scale;
@@ -387,12 +576,22 @@ export function floatNum(anchor: Element | null, text: string, kind: "dmg" | "he
   setTimeout(() => f.remove(), 1100);
 }
 
+/** Apply the authoritative damage exactly once, including interrupted/unavailable VFX. */
+export async function soulHarvest(source:HTMLElement|null,side:ViewSide,damage:number,onImpact:()=>void):Promise<void>{
+ let hit=false;const impact=()=>{if(hit)return;hit=true;onImpact();if(!fxSkip&&!document.hidden)sfx('damage');};
+ const target=document.querySelector<HTMLElement>(side==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring');
+ if(target&&!fxSkip)await boardMotionScope(signal=>playSoulHarvest({source,target,damage,onImpact:impact,signal}),6500);
+ if(!hit){impact();if(!fxSkip&&!document.hidden)hpFeedback(side,'dmg',damage);}
+}
+
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
+  const action=kind==='dmg'?damageAction(amount):null;
+  if(action&&!fxSkip)playSeekerSide(side,action);
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
   if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
   if (num) { num.classList.add(kind === "dmg" ? "hp-hit" : "hp-heal"); setTimeout(() => num.classList.remove("hp-hit", "hp-heal"), 450); }
-  if(kind==='dmg')floatNum(bar || num, "-" + amount, kind);
+  if(kind==='dmg'&&!fxSkip){portraitImpact(side);damageNumber(document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-ring`)??combatPortrait(side),amount);}
 }
 
 export function pileFlash(id: string): void {
@@ -402,7 +601,7 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
-  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}));
+  if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isShieldTitan(n.dataset.cardId)||isSilenceSummon(n.dataset.cardId)||isVoidSummon(n.dataset.cardId)||isWeaponmaster(n.dataset.cardId)||isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
 }
 
 export function lunge(uid: string, dir: "up" | "down"): void {
@@ -412,19 +611,47 @@ export function lunge(uid: string, dir: "up" | "down"): void {
 
 /** Physical card attack: anticipation, accelerating contact, hit stop, recoil and a settled return. */
 export async function attackStrike(uid:string,targetUid:string|null,defender:ViewSide,onImpact?:()=>void,exhaust=true,contactDamage=1):Promise<void>{
-  const source=byUid(uid),target=targetUid?byUid(targetUid):document.querySelector<HTMLElement>(defender==='me'?'#portraitMe .avatar':'#portraitOpp .avatar');
+  const source=combatCard(uid),target=targetUid?combatCard(targetUid):combatPortrait(defender);
   if(!source||!target||fxSkip)return;
   sfx('attack');
-  await boardMotionScope(signal=>playMonster(source,'attack',{target,signal,exhaust,side:defender==='opp'?1:-1,onImpact:()=>{if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();}}));
+  let impacted=false;
+  const impact=()=>{if(impacted)return;impacted=true;if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');}if(contactDamage>0)sfx(targetUid?'impact':'facehit');onImpact?.();};
+  await boardMotionScope(async signal=>{
+    if(usesAssassinStrike(source.dataset.cardId)){
+      try{
+        const {playAssassinStrike}=await import('./assassinAttack/runtime');
+        if(signal.aborted||fxSkip)return false;
+        return await playAssassinStrike(source,target,{signal,side:defender==='opp'?0:1,onImpact:impact});
+      }catch(error){if(import.meta.env.DEV)console.warn('Assassin attack presentation failed',error);if(signal.aborted||fxSkip||impacted)return false;}
+    }
+    return playMonster(source,'attack',{target,signal,exhaust,tempo:true,side:defender==='opp'?1:-1,onImpact:impact});
+  });
   if(exhaust){source.dataset.monsterBlocked='true';source.classList.remove('is-attacker');source.style.filter='grayscale(1) brightness(.57)';}
+}
+export function warmCombat(uid:string){
+ const source=combatCard(uid);if(source)warmCardSurface(source);
+}
+/** A counter is presentation metadata, never another ordinary attack action. */
+export async function counterStrike(uid:string,targetUid:string,onImpact?:()=>void,contactDamage=1):Promise<void>{
+ const source=combatCard(uid),target=combatCard(targetUid);
+ if(!source||!target||fxSkip||document.hidden)return;
+ await boardMotionScope(async signal=>{
+  if(signal.aborted||fxSkip)return false;
+  return playCounter(source,target,{signal,compact:true,onLaunch:()=>sfx('attack'),onImpact:()=>{if(contactDamage>0)sfx('impact');onImpact?.();}});
+ });
+}
+/** Starts on the attack contact callback, or on an explicit non-strike survival event. */
+export async function gutsSurvive(result:GutsSurvival,side?:ViewSide):Promise<void>{
+ const card=combatCard(result.uid);if(card&&!fxSkip)await boardMotionScope(signal=>playGutsEndurance(card,result,signal,side==='opp'?-1:side==='me'?1:undefined));
 }
 export async function monsterActivation(uid:string):Promise<void>{
  const n=byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));
 }
 
-export function monHit(uid: string): void {
-  const n = byUid(uid);
-  if (n) { n.classList.add("mhit"); setTimeout(() => n.classList.remove("mhit"), 400); }
+export function monHit(uid:string,amount?:number,hp?:number,recoil=true):void{
+ const node=combatCard(uid);if(!node)return;
+ if(hp!==undefined)monsterHealth(node,hp);
+ if(!fxSkip){if(recoil)hitMonster(node);if(amount!==undefined)damageNumber(node,amount,()=>combatVisualRect(node));}
 }
 
 export function monDie(uid: string, discardId: string): void {
@@ -529,15 +756,41 @@ function miniCardGrid(ids: string[]): HTMLElement {
     if (!def) continue;
     const inst = { ...def, uid: `rel_${id}` } as CardInst;
     const mini = cardEl(inst);
-    mini.onclick = (e) => { e.stopPropagation(); zoomCard(inst); };
+    mini.tabIndex = 0; mini.setAttribute('role', 'button');
+    mini.onclick = (e) => { e.stopPropagation(); openRelatedCard(inst); };
+    mini.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mini.click(); } };
     grid.appendChild(mini);
   }
   return grid;
 }
 
-// right-click to enlarge any card
-export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateText?: string): void {
+type ZoomSnapshot = { overlay: HTMLElement; focus: HTMLElement | null; scroll: {node:HTMLElement;top:number}[] };
+const zoomHistory: ZoomSnapshot[] = [];
+let zoomOpener: HTMLElement | null = null;
+function captureZoom(): ZoomSnapshot | null {
+  const overlay = document.getElementById('zoomOverlay');
+  return overlay ? { overlay, focus: document.activeElement as HTMLElement | null,
+    scroll: Array.from(overlay.querySelectorAll<HTMLElement>('.zoom-wrap,.zoom-details')).map(node=>({node,top:node.scrollTop})) } : null;
+}
+function openRelatedCard(c: CardInst): void {
+  const previous = captureZoom();
+  if (previous) { zoomHistory.push(previous); previous.overlay.remove(); }
+  renderZoom(c);
+}
+function backToPreviousCard(): void {
+  const previous = zoomHistory.pop(); if (!previous) return;
+  document.getElementById('zoomOverlay')?.remove(); document.body.append(previous.overlay);
+  previous.scroll.forEach(({node,top})=>{node.scrollTop=top;});
+  previous.focus?.focus({preventScroll:true});
+}
+
+// Public entry starts a new inspection; only related-card navigation keeps history.
+export function zoomCard(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
   closeZoom();
+  zoomOpener = document.activeElement as HTMLElement | null;
+  renderZoom(c, hp, stateText);
+}
+function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
@@ -546,49 +799,70 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
   ov.setAttribute('aria-label', cardName(c));
   const heading = document.createElement('header'); heading.className = 'inspect-heading';
+  const headingCopy = document.createElement('div'); headingCopy.className = 'inspect-heading-copy';
+  const controls = document.createElement('div'); controls.className = 'inspect-controls';
   const title = document.createElement('h1'); title.textContent = cardName(c);
   const type = document.createElement('span'); type.className = 'inspect-type';
-  const labels = getLang() === 'ja' ? ['モンスター','魔法','罠'] : getLang() === 'en' ? ['Monster','Spell','Trap'] : ['몬스터','마법','함정'];
-  type.textContent = labels[c.t === 'mon' ? 0 : c.t === 'trap' ? 2 : 1];
+  type.textContent = cardTypeLabel(c, getLang());
   const close = document.createElement('button'); close.className = 'inspect-close'; close.textContent = '×';
   close.setAttribute('aria-label', getLang() === 'ja' ? '閉じる' : getLang() === 'en' ? 'Close' : '닫기');
   close.onclick = closeZoom;
-  heading.append(title, type, close); wrap.append(heading);
+  if (zoomHistory.length) {
+    const back = document.createElement('button'); back.type='button'; back.className='inspect-back';
+    back.textContent={ja:'← 元のカード',ko:'← 이전 카드',en:'← Previous card'}[getLang()];
+    back.onclick=e=>{e.stopPropagation();backToPreviousCard();}; controls.append(back);
+  }
+  const returnToRules = document.createElement('button'); returnToRules.type='button'; returnToRules.className='inspect-return-rules'; returnToRules.hidden=true;
+  returnToRules.textContent={ja:'効果本文へ戻る',ko:'효과 본문으로',en:'Back to effect'}[getLang()];
+  headingCopy.append(title, type); controls.append(returnToRules, close);
+  heading.append(headingCopy, controls); wrap.append(heading);
+  heading.onclick=e=>e.stopPropagation();
   const details = document.createElement('section'); details.className = 'zoom-details'; details.tabIndex = 0;
   details.setAttribute('aria-label', getLang() === 'ja' ? 'カード効果と関連情報' : getLang() === 'en' ? 'Card rules and related information' : '카드 효과와 관련 정보');
+  const currentState = cardStateEl(c, hp); if (currentState) details.append(currentState);
   if (stateText) { const state = document.createElement('div'); state.className = 'inspect-state'; state.textContent = stateText; details.append(state); }
-  details.append(cardRulesEl(c));
+  details.append(cardRulesEl(c, key => {
+    const item = details.querySelector<HTMLElement>(`.zoom-psv .psv-item[data-psv="${key}"]`);
+    if (!item) return;
+    const from = details.querySelector<HTMLElement>(`.card-key-label[data-psv="${key}"]`);
+    const scroll = [wrap, details].map(node=>({node,top:node.scrollTop}));
+    returnToRules.hidden=false;
+    returnToRules.onclick=e=>{
+      e.stopPropagation(); returnToRules.hidden=true;
+      scroll.forEach(({node,top})=>{node.scrollTop=top;}); from?.focus({preventScroll:true});
+    };
+    item.style.scrollMarginTop = `${getComputedStyle(wrap).overflowY === 'auto' ? controls.offsetHeight + 16 : 16}px`;
+    item.focus({ preventScroll: true });
+    item.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
+  }));
   details.onclick = e => e.stopPropagation();
-  wrap.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
-  // "(지속)" 스탯 변화 카드: 필드에 있는 동안만 유지된다는 각주
-  if (/\((?:지속|持続|lasting)\)/.test(cardText(c))) {
-    const note = document.createElement("div");
-    note.className = "zoom-note";
-    note.textContent = t("card.dur.note");
-    details.appendChild(note);
-  }
+  // Reserve space for the cost/ATK/HP seals outside the card face.
+  const cardStage = document.createElement('div'); cardStage.className = 'zoom-card-stage';
+  cardStage.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
+  wrap.appendChild(cardStage);
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
-  // 카드 텍스트의 키워드명을 hover(터치: 탭)하면 해당 설명이 하이라이트된다.
-  const psvKeys = [...new Set([...cardPassives(c), ...(((c as { passivesG?: string[] }).passivesG) ?? [])])];
+  // The rules header links each keyword's name and icon to its own explanation.
+  const ownedKeys = displayPassives(c);
+  const psvKeys = [...new Set([...ownedKeys, ...referencedPassives(c)])];
   if (psvKeys.length) {
     const lang0 = getLang();
     const panel = document.createElement("div");
     panel.className = "zoom-tribe zoom-psv";
-    panel.innerHTML = `<h3>${t("psv.title")}</h3>` + psvKeys.map((k) => {
+    const panelTitle = {ja:'能力・用語の説明',ko:'능력·용어 설명',en:'Ability and term definitions'}[lang0];
+    panel.innerHTML = `<h3>${panelTitle}</h3>` + psvKeys.map((k) => {
       const p = PASSIVES[k];
       if (!p) return "";
       const loc = lang0 === "ja" ? p.ja : lang0 === "en" ? p.en : p.ko;
-      return `<div class="psv-item" data-psv="${k}"><b class="psv-name">${passiveIcon(k)}<span>${loc.name}</span></b><div class="psv-desc">${loc.desc}</div></div>`;
+      return `<div class="psv-item" id="zoom-passive-${k}" data-psv="${k}" tabindex="-1" role="group" aria-labelledby="zoom-passive-name-${k}"><b class="psv-name" id="zoom-passive-name-${k}">${passiveIcon(k)}<span>${loc.name}</span></b><div class="psv-desc">${loc.desc}</div></div>`;
     }).join("");
     details.appendChild(panel);
-    // hover/탭 → 우측 설명 하이라이트 (카드 텍스트 안의 .psv 스팬과 연결)
-    details.querySelectorAll<HTMLElement>(".psv").forEach((sp) => {
+    details.querySelectorAll<HTMLElement>(".card-key-label").forEach((sp) => {
       const key = sp.dataset.psv!;
       const item = panel.querySelector<HTMLElement>(`.psv-item[data-psv="${key}"]`);
       if (!item) return;
+      sp.setAttribute('aria-controls', item.id);
       sp.addEventListener("pointerenter", () => item.classList.add("hl"));
       sp.addEventListener("pointerleave", () => item.classList.remove("hl"));
-      sp.addEventListener("click", (e) => { e.stopPropagation(); item.classList.toggle("hl"); });
     });
   }
   if (c.tribe && TRIBES[c.tribe]) {
@@ -629,25 +903,31 @@ export function zoomCard(c: CardInst, hp?: { now: number; max: number }, stateTe
   ov.oncontextmenu = (e) => { e.preventDefault(); closeZoom(); };
   document.body.appendChild(ov);
   ov.onkeydown = e => {
-    if (e.key === 'Escape') { e.stopPropagation(); closeZoom(); }
+    if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); zoomHistory.length ? backToPreviousCard() : closeZoom(); }
     if (e.key === 'Tab') {
-      const focusable = Array.from(ov.querySelectorAll<HTMLElement>('button,[tabindex="0"]'));
+      const focusable = Array.from(ov.querySelectorAll<HTMLElement>('button,summary,[tabindex="0"]')).filter(node=>!node.closest('[hidden]'));
       const first = focusable[0], last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      // A keyword jump focuses a description after the last tab stop.
+      const afterLast = active && last && !!(last.compareDocumentPosition(active) & Node.DOCUMENT_POSITION_FOLLOWING);
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      else if (!e.shiftKey && (active === last || afterLast)) { e.preventDefault(); first?.focus(); }
     }
   };
   close.focus({ preventScroll: true });
 }
 export function closeZoom(): void {
   document.getElementById("zoomOverlay")?.remove();
+  zoomHistory.length=0;
+  if (zoomOpener?.isConnected) zoomOpener.focus({preventScroll:true});
+  zoomOpener=null;
 }
 
 /**
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
-export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number }, stateText?: string): void {
+export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
   el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp, stateText); };
   // Intent, not speculation: by the time a pointer is resting on a card, a
   // right-click or a 380ms long-press is at most a few hundred ms away. Start
@@ -726,13 +1006,82 @@ function monZoneEl(side: ViewSide): HTMLElement | null {
  * field slot and STAYS there (the real board re-renders later). Returns the
  * ghost node so a same-batch destroy can kill it visibly.
  */
-export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number): Promise<HTMLElement | null> {
+export async function hatchSummon(sourceUid:string,card:CardInst):Promise<HTMLElement|null>{
+ const source=byUid(sourceUid);if(!source)return null;
+ const face=cardEl(card,{field:true});
+ if(!fxSkip)await boardMotionScope(signal=>playHatch(source,face,signal),6000);
+ if(!source.isConnected)return null;
+ source.replaceWith(face);return face;
+}
+
+/** Selected fusion owns source removal and result appearance without a graveyard flight. */
+export async function dragonFusionSummon(card:CardInst,side:ViewSide,from:{dragon:{uid:string};mate:{uid:string}}):Promise<HTMLElement|null>{
+ const zone=monZoneEl(side);if(!zone)return null;
+ const face=cardEl(card,{field:true});
+ const source=(uid:string)=>zone.querySelector<HTMLElement>(`.card[data-uid="${CSS.escape(uid)}"]`)??undefined;
+ const dragon=source(from.dragon.uid),mate=source(from.mate.uid);
+ const {playDragonFusion}=await import('./dragonFusion/runtime');
+ await boardMotionScope(signal=>playDragonFusion(dragon,mate,face,zone,[from.dragon.uid,from.mate.uid],signal,fxSkip,()=>sfx('summon')),10000);
+ return face.isConnected?face:null;
+}
+
+let forbiddenRuntime:Promise<typeof import('./forbiddenRitual/runtime')>|undefined;
+const loadForbiddenRitual=()=>forbiddenRuntime??=(import('./forbiddenRitual/runtime').catch(error=>{forbiddenRuntime=undefined;throw error;}));
+export function warmForbiddenRitual():void{void loadForbiddenRitual().catch(()=>{});}
+/** The selected ritual owns all native destination faces; no individual summon fires again. */
+export async function forbiddenSummon(source:HTMLElement,cards:CardInst[],side:ViewSide):Promise<HTMLElement[]>{
+ const zone=monZoneEl(side);if(!zone)return [];
+ const faces:HTMLElement[]=[];
+ for(const card of cards){
+  const target=reserveMonster(zone,card.uid);if(!target)break;
+  const face=cardEl(card,{field:true});face.style.visibility='hidden';target.replaceWith(face);faces.push(face);
+ }
+ try{
+  if(!fxSkip&&faces.length){
+   const completed=await boardMotionScope(async signal=>{
+    const {playForbiddenRitual}=await loadForbiddenRitual();
+    return playForbiddenRitual(source,faces,side,signal);
+   },12000);
+   if(completed){source.remove();sfx('summon');}
+  }
+ }finally{faces.forEach(face=>face.style.removeProperty('visibility'));}
+ return faces;
+}
+
+let rebirthRuntime:Promise<typeof import('./rebirth/runtime')>|undefined;
+const loadRebirth=()=>rebirthRuntime??=(import('./rebirth/runtime').catch(error=>{rebirthRuntime=undefined;throw error;}));
+export function warmRebirth():void{void loadRebirth().catch(()=>{});}
+/** One owner from the selected grave face through landing and the shared Void coat. */
+export async function rebirthSummon(original:CardInst,card:CardInst,side:ViewSide,onReveal?:(node:HTMLElement)=>void):Promise<HTMLElement|null>{
+ const zone=monZoneEl(side);if(!zone)return null;
+ const slot=reserveMonster(zone,card.uid);if(!slot)return null;
+ const face=cardEl(card,{field:true});face.style.visibility='hidden';slot.replaceWith(face);
+ try{
+  if(!fxSkip)await boardMotionScope(async signal=>{
+   const {playRebirth}=await loadRebirth();if(signal.aborted)return false;
+   return playRebirth(original,face,side,signal,()=>{sfx('summon');onReveal?.(face);});
+  },6500);
+ }finally{face.style.removeProperty('visibility');}
+ return face.isConnected?face:null;
+}
+
+/** Dice and all of its arrivals share one renderer and cancellation owner. */
+export function startDungeonFloor(cards:CardInst[],side:ViewSide){
+ const abort=new AbortController(),cancel=()=>abort.abort();fxWaiters.add(cancel);
+ if(fxSkip)abort.abort();
+ const session=createDungeonFloor(cards,side==='me',abort.signal);
+ void session.done.then(()=>fxWaiters.delete(cancel));
+ return session;
+}
+
+export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   if(!from||!zone)return null;
   const target=reserveMonster(zone,card.uid);
   if (!target) return null;
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
   node.style.zIndex="135";
+  onReveal?.(node);
   try {
     await focusSummon(node, card, side);
     const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true,card.id==='MIMIC'?'mimic':'summon');
@@ -742,14 +1091,15 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   } finally { node.remove(); }
 }
 
-/** Kill a summon ghost: death flash then fly a card frame to that side's discard. */
-export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false):Promise<void>{
+/** Complete a public-card death: decay dissolves in place; other causes retain their exit. */
+export async function ghostDie(node:HTMLElement,side:ViewSide,voided=false,mana=true,decay=false):Promise<void>{
  const target=document.getElementById(voided?(side==='me'?'rift-me':'rift-opp'):discId(side));
- if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}));if(!voided)pileFlash(discId(side));}
+ if(decay&&!fxSkip)await boardMotionScope(signal=>import('./decay/runtime').then(({playDecayDissolve})=>playDecayDissolve(node,{signal})),6500);
+ else if(target&&!fxSkip){await boardMotionScope(signal=>playMonster(node,'destroy',{variant:voided?'B':'A',mana,destination:target.querySelector<HTMLElement>('.pile-print .card')??target,side:side==='me'?1:-1,signal}),6500);if(!voided)pileFlash(discId(side));}
  node.style.visibility='hidden';
 }
-export async function destroyAnim(uid:string,side:ViewSide,voided=false):Promise<void>{
- const n=byUid(uid);if(n)await ghostDie(n,side,voided);
+export async function destroyAnim(uid:string,side:ViewSide,voided=false,mana=true,decay=false):Promise<void>{
+ const n=byUid(uid);if(n)await ghostDie(n,side,voided,mana,decay);
 }
 
 /** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */
@@ -837,6 +1187,15 @@ export async function maxHpSurge(side: ViewSide, amount: number): Promise<void> 
   bar.classList.remove("fx-hp-bloom");
 }
 
+/** Selected 01 changes the native card surface, then commits its counter plaque. */
+export async function decayCounterGrant(node:HTMLElement,before:number,after:number):Promise<void>{
+  if(fxSkip)return;
+  await boardMotionScope(async signal=>{
+    const {playDecayCounter}=await import('./decayCounter/runtime');
+    return playDecayCounter(node,before,after,{signal});
+  },6000);
+}
+
 /** Small "-N" feedback on the mana pips when max mana DROPS. */
 export function manaDrop(side: ViewSide, amount: number): void {
   const bar = document.getElementById("hpbar-" + side)?.closest(".pcluster") as HTMLElement | null;
@@ -888,11 +1247,10 @@ async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
     observer.observe(document.body,{subtree:true,childList:true});setTimeout(()=>{copy.remove();observer.disconnect();},5000);
   }
 }
-const riftUsers=new WeakMap<HTMLElement,number>();
 export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<void>{
   const target=document.getElementById(side==='me'?'rift-me':'rift-opp');if(!target||fxSkip)return;
   const a=node.getBoundingClientRect();
-  riftUsers.set(target,(riftUsers.get(target)??0)+1);target.classList.add('is-absorbing');
+  const releaseTarget=holdRiftTarget(target);
   const w=node.offsetWidth||a.width,h=node.offsetHeight||a.height;
   const start=node.style.transform.startsWith('matrix')?new DOMMatrix(node.style.transform):new DOMMatrix().translate(a.left,a.top).scale(a.width/w,a.height/h);
   const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -910,7 +1268,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
     const duration=reduced?100:350;
     const motion=node.animate([{transform:start.toString()},{transform:end.toString()}],{duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
     try{await wait(duration);}finally{motion.cancel();}
-  }finally{const left=(riftUsers.get(target)??1)-1;if(left>0)riftUsers.set(target,left);else{riftUsers.delete(target);target.classList.remove('is-absorbing');}}
+  }finally{releaseTarget();}
 }
 export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
   const r=source?.getBoundingClientRect()||rectOf('#'+discId(side));if(!r)return;
@@ -943,5 +1301,192 @@ export async function openingBoard():Promise<void>{
   await boardMotionScope(signal=>moveOnBoard({kind:'opening',signal}),7500);
 }
 
+/** One owner for the summon-to-rite signal, selected golden cut and brand contact. */
+export async function originRite(uid:string,reaction:OriginRiteReaction,side:ViewSide,summon?:HTMLElement):Promise<void>{
+ const find=(id:string)=>document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(id)}"]`)??findOriginTrap(id)??combatCard(id)??byUid(id);
+ const source=find(uid),from=summon??find(reaction.summonUid),portrait=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
+ let badge=portrait?.querySelector<HTMLElement>('.pt-brand')??null;
+ if(reaction.outcome==='brand'&&!badge&&portrait){
+  let resources=portrait.querySelector<HTMLElement>('.pt-resources');
+  if(!resources){resources=document.createElement('span');resources.className='pt-resources';portrait.append(resources);const ring=portrait.querySelector<HTMLElement>('.pt-ring');if(ring&&portrait.closest('.reading-board'))for(const key of ['left','top','width','height'] as const)resources.style[key]=ring.style[key];}
+  badge=document.createElement('span');badge.className='pt-brand';badge.setAttribute('role','img');const number=document.createElement('b');number.id=`brand-${side}`;number.setAttribute('aria-hidden','true');badge.append(number);resources.append(badge);
+  // Reserve native counter geometry without showing the new mark before contact.
+  if(!reaction.brandBefore)badge.style.opacity='0';
+ }
+ const target=reaction.outcome==='brand'?badge:reaction.target?find(reaction.target.uid):null;
+ const grave=document.getElementById(reaction.target?.destination==='rift'?(side==='me'?'rift-me':'rift-opp'):discId(side));
+ let contacted=false;
+ const impact=()=>{if(contacted)return;contacted=true;
+  if(reaction.outcome==='brand'&&badge){const n=reaction.brandAfter??0;badge.style.opacity='';const b=badge.querySelector('b');if(b)b.textContent=String(n);badge.style.setProperty('--resource-number-scale',String(Math.min(.14,.32/String(n).length)));badge.setAttribute('aria-label',`${t('game.brand')} ${n}`);badge.title=t('game.brandTip').replace('{n}',String(n));}
+  if(reaction.outcome==='destroy'&&!fxSkip&&!document.hidden)sfx('death');
+ };
+ if(source&&from&&target&&grave&&!fxSkip)await boardMotionScope(signal=>playOriginRite({source,summon:from,target,grave,reaction,name:cardName({...DB.ORIGIN_RITE,uid}),onImpact:impact,signal}),6800);
+ impact();
+ if(reaction.outcome==='destroy'&&target)target.style.visibility='hidden';
+}
+
 /** Pulse the exact public source, not every remaining spell on the board. */
 export function enchantActivation(uid:string):void{if(fxSkip)return;const source=document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(uid)}"]`);if(source)playBiblionFx('enchant',source);}
+
+/** One clock owns the selected blood pulse, source cards and HP conversion. */
+export async function bloodRiteRecovery(side:ViewSide,sources:string[],onHeal:()=>void):Promise<void>{
+ let applied=false;
+ const apply=()=>{if(!applied){applied=true;onHeal();}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playBloodRite(side,sources,apply,signal),2200);}
+ finally{apply();}
+}
+
+/** The selected Massacre owns its reveal and destruction, so neither runs twice. */
+export async function massacreSpell(card:CardInst,side:ViewSide,targets:HTMLElement[],paidMana:number,maxLoss:number,exiled:Set<string>):Promise<boolean>{
+ const origin=fromRect(side,takeOrigin(side));if(!origin||fxSkip||document.hidden)return false;
+ const source=cardEl(card,{size:'hand'});
+ return boardMotionScope(signal=>playMassacre({source,targets,side,exiled,from:origin,signal,onCost:()=>{
+  const mana=document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-mana`);
+  if(mana){const max=Math.max(3,Number(mana.dataset.maximum)-maxLoss);mana.dataset.maximum=String(max);mana.dataset.mana=String(paidMana);
+   const value=mana.querySelector('.mana-readout b'),label=mana.querySelector('.pt-mana-max');if(value)value.textContent=String(paidMana);if(label)label.textContent=`/${max}`;
+   mana.setAttribute('aria-label',`${t('game.mana')} ${paidMana}/${max}`);
+   [...mana.querySelectorAll<HTMLElement>('.mana-crystal')].forEach((n,i)=>{n.classList.toggle('is-lit',i<paidMana);if(i>=max)n.style.visibility='hidden';});}
+  if(maxLoss>0)manaDrop(side,maxLoss);if(!fxSkip&&!document.hidden)sfx('mana-pay');
+ },onImpact:()=>{if(!fxSkip&&!document.hidden)sfx('impact');}}),22000);
+}
+
+/** Adopted 05: the enchantment turns pages into Cull at the turn-end checkpoint. */
+export async function infinityCull(sourceUid:string,side:ViewSide,amount:number):Promise<void>{
+  if(fxSkip||amount<=0)return;
+  await boardMotionScope(async signal=>{
+    const {playInfinityCull}=await import('./infinityCull/runtime');
+    if(signal.aborted)return false;
+    await playInfinityCull(sourceUid,side,amount,signal);
+    return !signal.aborted;
+  },6500);
+}
+
+/** Selected Nova consumes the played card in its central orb, with no second frame/exit VFX. */
+export async function novaTimeTheft(card:CardInst,side:ViewSide,fromHp:number,onHp:(hp:number)=>void):Promise<void>{
+ let node:HTMLElement|null=null;
+ try{
+  if(fxSkip||document.hidden)return;
+  const from=fromRect(side,takeOrigin(side));if(!from)return;
+  node=floatAt(cardEl(card,{size:'hand'}),from);
+  await boardMotionScope(signal=>playNova(node!,side,fromHp,onHp,signal),10500);
+ }finally{node?.remove();onHp(1);}
+}
+
+/** Creation 01 owns its face and final Rift exit; no shared spell-frame or second exile. */
+export async function revealCreation(card:CardInst,side:ViewSide):Promise<HTMLElement|null>{
+ if(fxSkip)return null;warmCreation();
+ const from=fromRect(side,takeOrigin(side));if(!from)return null;
+ const node=floatAt(cardEl(card,{size:'hand'}),from);let held=false;
+ try{await focusCard(node,side,undefined,SPELL_FRAME_RATE);
+  const slot=document.querySelector(side==='me'?'#meRow .zone-mon :is(.card,.slot)':'#oppRow .zone-mon :is(.card,.slot)')?.getBoundingClientRect();
+  const w=Math.max(26,Math.min(78,(slot?.width??86)*.9)),h=w*1.55;
+  node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left .3s ${EASE},top .3s ${EASE},transform .3s ${EASE}`;
+  node.style.left=`${Math.max(8,(slot?.left??innerWidth*.4)-w*2.7)}px`;node.style.top=`${Math.max(8,Math.min(innerHeight-h-8,(slot?slot.top+slot.height/2:innerHeight*.5)-h/2))}px`;node.style.transform=`scale(${w/node.offsetWidth})`;
+  await wait(310);if(fxSkip)return null;held=true;return node;}
+ finally{if(!held)node.remove();}
+}
+export async function creationBirth(card:CardInst,side:ViewSide,source:HTMLElement|null,copy:boolean):Promise<void>{
+ try{if(!fxSkip)await boardMotionScope(signal=>playCreation(card,side,source,copy,signal),7000);}
+ finally{source?.remove();}
+}
+
+/** Selected pale whole-card Rift coat; the engine supplies newly changed UIDs. */
+let voidGrantRuntime:Promise<typeof import('./dimensionVoid/runtime')>|undefined;
+const loadVoidGrant=()=>voidGrantRuntime??=(import('./dimensionVoid/runtime').catch(error=>{voidGrantRuntime=undefined;throw error;}));
+export function warmVoidGrant():void{void loadVoidGrant().catch(()=>{});}
+export async function grantVoid(uids:string[]):Promise<void>{
+ if(fxSkip||!uids.length)return;
+ await boardMotionScope(async signal=>{
+  const {playVoidGrant}=await loadVoidGrant();
+  if(signal.aborted||fxSkip)return false;
+  return playVoidGrant(uids,signal);
+ },2000);
+}
+
+/** Crystal 03 owns the central reveal; no shared spell frame or deck thumbnail. */
+export async function voidShotSpell(card:CardInst,side:ViewSide,count:number,onImpact:()=>void,targetSide?:ViewSide,held?:HTMLElement):Promise<void>{
+ let node:HTMLElement|null=held??null,contacted=false;
+ const contact=()=>{if(!contacted){contacted=true;onImpact();}};
+ try{
+  if(fxSkip||document.hidden)return;
+  if(!node){const from=fromRect(side,takeOrigin(side));if(!from)return;node=floatAt(cardEl(card,{size:'hand'}),from);}
+  warmVoidShot();
+  if(!held)await focusCard(node,side,undefined,SPELL_FRAME_RATE);
+  if(!fxSkip)await boardMotionScope(signal=>playVoidShot(node!,side,count,contact,signal,targetSide),6000);
+ }finally{node?.remove();contact();}
+}
+
+/** Load the selected replay while the original public spell is being revealed. */
+export function warmRuneReplay():void {void import('./runeReplay/runtime').catch(()=>{});}
+export async function runeReplay(card:CardInst,side:ViewSide,uids:string[],held?:HTMLElement):Promise<HTMLElement|null>{
+ if(fxSkip||document.hidden)return held??null;
+ let node=held;
+ if(!node){
+  // Some dedicated spells own and consume their original face. Re-present the
+  // already-public identity at the normal resolved-spell anchor, never in the hand.
+  const row=rowRect(side),w=Math.min(92,innerWidth*.18),height=w*1.56;
+  node=floatAt(cardEl(card,{size:'hand'}),{left:innerWidth-w-12,top:Math.max(12,Math.min(innerHeight-height-12,(row?.top??innerHeight*.5)+12))});
+  node.style.width=`${w}px`;node.style.height=`${height}px`;node.style.setProperty('--cw',`${w}px`);node.style.setProperty('--ch',`${height}px`);
+ }
+ const source=node;
+ try{
+  await boardMotionScope(async signal=>{
+   const {playRuneReplay}=await import('./runeReplay/runtime');
+   if(signal.aborted||fxSkip)return false;
+   return playRuneReplay(source,uids,side,signal,()=>fxSkip||signal.aborted?Promise.resolve(false):playSpellFrame(source,signal));
+  },5000);
+  return source;
+ }catch(error){if(!held)source.remove();throw error;}
+}
+
+// Selected TREASON 03. The native destroy runtime still owns every card's exit.
+let treasonModule:Promise<typeof import('./treason/runtime')>|undefined;
+const loadTreason=()=>treasonModule??=import('./treason/runtime');
+export function warmTreason(){void loadTreason().catch(()=>{treasonModule=undefined;});}
+export async function treasonChains(targets:{node:HTMLElement;voided:boolean}[],side:ViewSide):Promise<void>{
+ if(!targets.length||fxSkip||document.hidden)return;
+ await boardMotionScope(async signal=>{
+  const module=await loadTreason();if(signal.aborted)return false;
+  return module.playTreason(targets,signal,async()=>{
+   if(signal.aborted||fxSkip)return;
+   sfx('death');
+   await Promise.all(targets.map(async({node,voided})=>{
+    const pile=document.getElementById(voided?(side==='me'?'rift-me':'rift-opp'):discId(side));
+    if(pile)await playMonster(node,'destroy',{variant:voided?'B':'A',mana:!voided,destination:pile.querySelector<HTMLElement>('.pile-print .card')??pile,side:side==='me'?1:-1,signal});
+    if(!signal.aborted){node.style.visibility='hidden';if(!voided)pileFlash(discId(side));}
+   }));
+  });
+ },30000);
+}
+
+/** Selected reverse 02; the controller resumes result events at physical contact. */
+export async function reverseDamage(from:ViewSide,to:ViewSide,sources:string[],onContact:()=>void):Promise<void>{
+ let applied=false;const contact=()=>{if(!applied){applied=true;onContact();}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playReverse(from,to,sources,contact,signal),5000);}
+ finally{contact();}
+}
+
+/** The selected Curse owns the native hand face, five arrivals and source exit. */
+export async function curseSpell(card:CardInst,side:ViewSide,targetBefore:number):Promise<void>{
+ if(fxSkip||document.hidden)return;
+ const from=fromRect(side,takeOrigin(side));if(!from)return;
+ const node=floatAt(cardEl(card,{size:'hand',fullArt:true}),from);
+ try{await boardMotionScope(signal=>playCurse(node,side,signal,from,targetBefore),13000);}
+ finally{node.remove();}
+}
+
+/** Selected erosion owns the HP contact; generic feedback must not double-fire. */
+export async function erosionDamage(side:ViewSide,source:string,amount:number,onDamage:()=>void):Promise<void>{
+ let applied=false;const apply=()=>{if(!applied){applied=true;onDamage();}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playErosion(side,source,amount,apply,signal),1800);}
+ finally{apply();}
+}
+
+/** Growth owns its heal cue and contact; cancellation still commits every result once. */
+export async function growthRecovery(side:ViewSide,pulses:readonly GrowthPulse[],onHeal:(index:number)=>void):Promise<void>{
+ const applied=new Set<number>();const apply=(i:number)=>{if(applied.has(i))return;applied.add(i);onHeal(i);if(pulses[i].amount>0&&!fxSkip&&!document.hidden){sfx('heal');hpFeedback(side,'heal',pulses[i].amount);}};
+ try{if(!fxSkip&&!document.hidden)await boardMotionScope(signal=>playGrowth(side,pulses,apply,signal),Math.max(0,...pulses.map(p=>p.delay))+2000);}
+ finally{pulses.forEach((_,i)=>apply(i));}
+}
+/** Selected Ember Debt 02: prepare only its single atlas during the native reveal. */
+export function warmEmberDebt():void {void import('./emberDebt/runtime').then(m=>m.prepareEmberDebt()).catch(()=>{});}

@@ -1,0 +1,71 @@
+{
+  "result": "PASS",
+  "method": "Transcribed from the live CUA accessibility output of the ordinary-controller QA page. Original saved AX diffs did not include the result node.",
+  "viewport": [
+    1280,
+    720
+  ],
+  "checks": [
+    {
+      "side": 0,
+      "mode": "normal",
+      "cost": 2,
+      "blocked": false,
+      "frames": 210,
+      "arrival": 45,
+      "coat": 25,
+      "left": 0
+    },
+    {
+      "side": 1,
+      "mode": "normal",
+      "cost": 2,
+      "blocked": false,
+      "frames": 269,
+      "arrival": 55,
+      "coat": 58,
+      "left": 0
+    },
+    {
+      "side": 0,
+      "mode": "skip",
+      "cost": 2,
+      "blocked": false,
+      "frames": 8,
+      "arrival": 8,
+      "coat": 0,
+      "left": 0
+    },
+    {
+      "side": 0,
+      "mode": "resize",
+      "cost": 2,
+      "blocked": false,
+      "frames": 117,
+      "arrival": 11,
+      "coat": 0,
+      "left": 0
+    },
+    {
+      "side": 0,
+      "mode": "normal",
+      "cost": 8,
+      "blocked": false,
+      "frames": 108,
+      "arrival": 0,
+      "coat": 0,
+      "left": 0
+    },
+    {
+      "side": 1,
+      "mode": "normal",
+      "cost": 2,
+      "blocked": true,
+      "frames": 121,
+      "arrival": 0,
+      "coat": 0,
+      "left": 0
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,25 @@
+import '../../styles/tokens.css';import '../../styles/base.css';import '../../styles/card.css';import '../../styles/game-overlays.css';import '../../styles/game.css';import '../../styles/screens.css';import '../../styles/reading-board.css';import '../../styles/presentation.css';
+import {GameView,setMyAvatar,setOppAvatar} from '../../ui/boardView';import {startBoardLayout} from '../../ui/layout';import {waitForDuel} from '../../ui/duelReadiness';import {boardMatrix,layoutRect} from '../../ui/boardProjection';import {clearMonsterStates} from '../../ui/monster/runtime';import {createGame} from '../../shared/engine';import {DB} from '../../shared/cards';import {setLang} from '../../i18n';import {surface} from './surface';import {TitanRenderer} from './renderer';import {DURATION,ease,lift} from './catalog';
+setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');document.body.style.cssText='margin:0;overflow:hidden;background:#f2eee8';const css=document.createElement('style');css.textContent='.topbar,.help-callout,.help-fab,.mute-fab{display:none!important}';document.head.append(css);
+const root=document.getElementById('app')!,noop=()=>{};const view=new GameView(root,0,{onPlay:noop,onBlockedPlay:noop,onAttack:noop,onBlockedAttack:noop,onReorder:noop,onChooseTarget:noop,onBuyMarket:noop,onBuySupply:noop,onRefresh:noop,onEndTurn:noop,onSurrender:noop});
+const renderer=new TitanRenderer();let ready=false,disposed=false,variant=0,ms=0,side=0,multi=false,reduced=false,dark=false,travel=true;let originals:HTMLElement[]=[];let hidden:HTMLElement[]=[];
+const canvas=document.createElement('canvas');canvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;z-index:180;pointer-events:none';document.body.append(canvas);
+const mon=(uid:string)=>({...DB.SHIELD_TITAN,uid,exhausted:false,summonedTurn:0,dmg:0,tempAtk:0,atkMod:0,defMod:0});
+const g=createGame({mode:'bot',seed:71,starting:0,p0:{id:'titan-self',name:'YOU'},p1:{id:'titan-opp',name:'OPPONENT'}}).state;g.turn=3;g.phase='main';g.pending=null;
+for(const [i,p]of g.players.entries()){p.openingDrawReady=false;p.mana=12;p.maxMana=12;p.hp=30;p.enchants=[];p.quests=[];p.traps=[];p.field=[0,1,2].map(j=>mon(`titan-${i}-${j}`));p.hand=[{...DB.SHIELD_TITAN,uid:`titan-hand-${i}`}];}
+view.render(g);view.setHandOpen(true);clearMonsterStates(root);originals=[...root.querySelectorAll<HTMLElement>('.zone-mon .card')];
+function restore(){hidden.forEach(n=>n.style.visibility='');hidden=[];canvas.getContext('2d')!.clearRect(0,0,canvas.width,canvas.height);}
+function hide(n:HTMLElement){n.style.visibility='hidden';hidden.push(n);}
+function draw(){restore();root.style.filter=dark?'brightness(.58)':'';if(!ready||disposed||ms>=DURATION||reduced||document.hidden)return;const d=Math.min(devicePixelRatio,1.5),w=Math.round(innerWidth*d),h=Math.round(innerHeight*d);if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+ const chosen=originals.filter(n=>n.dataset.uid?.startsWith(`titan-${side}-`)&&(multi||n.dataset.uid.endsWith('-1')));
+ const hand=root.querySelector<HTMLElement>(`[data-uid="titan-hand-${side}"]`);const source=hand?.getBoundingClientRect();if(hand&&travel)hide(hand);
+ for(const n of chosen){hide(n);const r=layoutRect(n),elevation=Number(n.closest<HTMLElement>('[data-board-plane]')?.dataset.boardPlane)||0;
+  let m=boardMatrix(r.left+r.width/2,r.top+r.height/2,elevation).scale(r.width,-r.height/1.5625,r.width);
+  if(travel&&source&&ms<450){const begin=new DOMMatrix().translate(source.left+source.width/2,source.top+source.height/2).scale(source.width,-source.height/1.5625,source.width);const a=Array.from(begin.toFloat64Array()),b=Array.from(m.toFloat64Array()),u=ease(0,450,ms);m=new DOMMatrix(a.map((x,i)=>x+(b[i]-x)*u));}
+  renderer.drawBoard(canvas,variant,ms,m,reduced);
+ }
+}
+window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.kind==='titan-suspend'){restore();return;}if(e.data?.kind!=='titan-control')return;const d=e.data;variant=Math.max(0,Math.min(4,Number(d.variant)||0));ms=Math.max(0,Math.min(DURATION,Number(d.ms)||0));side=d.side===1?1:0;multi=!!d.multi;reduced=!!d.reduced;dark=!!d.dark;travel=d.travel!==false;draw();});window.addEventListener('resize',()=>requestAnimationFrame(draw));document.addEventListener('visibilitychange',()=>{if(document.hidden)restore();});
+const stopLayout=startBoardLayout();function dispose(){if(disposed)return;restore();disposed=true;renderer.dispose();canvas.remove();stopLayout();view.destroy();}window.addEventListener('pagehide',dispose,{once:true});
+(window as any).titanBoard={get state(){return{ready,variant,ms,side,multi,reduced,travel,hidden:hidden.length,fieldHidden:originals.filter(n=>n.style.visibility==='hidden').length,height:lift(variant,ms),stats:renderer.stats,disposed};},restore,dispose};
+void(async()=>{await waitForDuel(root);renderer.setFace(await surface());ready=true;parent.postMessage({kind:'titan-ready'},location.origin);})().catch(e=>parent.postMessage({kind:'titan-error',error:String(e)},location.origin));

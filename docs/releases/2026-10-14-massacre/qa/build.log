@@ -1,0 +1,103 @@
+
+> lore-tcg@0.1.0 build
+> node scripts/guard-design.mjs && npm --workspace client run build
+
+✓ guard-design: ok
+
+> lore-client@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 515 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/cosmetic-studio.html                             0.53 kB │ gzip:   0.40 kB
+dist/shield-titan-runtime.html                        0.77 kB │ gzip:   0.41 kB
+dist/assets/purchaseAir.worker-BK14oJEX.js            1.33 kB
+dist/index.html                                       1.61 kB │ gzip:   0.74 kB
+dist/assets/bot.worker-DcrTdgXz.js                  829.20 kB
+dist/assets/avatar-blue-Dgu4sbnI.png              2,148.69 kB
+dist/assets/avatar-red-CyF_7AzU.png               2,247.66 kB
+dist/assets/cover-1-Ca1f6w1Z.png                  3,780.89 kB
+dist/assets/runtime-Ch9eydv_.css                      0.21 kB │ gzip:   0.14 kB
+dist/assets/controller-Cf3pfj3M.css                   1.64 kB │ gzip:   0.61 kB
+dist/assets/board-UDApamK7.css                        2.17 kB │ gzip:   0.89 kB
+dist/assets/layout-BbznuAyi.css                       2.38 kB │ gzip:   0.95 kB
+dist/assets/studio-CmgKc6nL.css                       8.77 kB │ gzip:   2.61 kB
+dist/assets/main-C1tWjJrP.css                       207.70 kB │ gzip:  41.48 kB
+dist/assets/modal-DEo_zEuf.css                      239.93 kB │ gzip:  51.53 kB
+dist/assets/cosmeticPreviewBridge-Dp0XOZ5G.js         0.13 kB │ gzip:   0.12 kB
+dist/assets/selection-BZuIRH5R.js                     0.44 kB │ gzip:   0.32 kB
+dist/assets/renderDensity-eCqR3GeM.js                 0.55 kB │ gzip:   0.28 kB
+dist/assets/sound-BQyzcXn8.js                         0.66 kB │ gzip:   0.43 kB
+dist/assets/handGeometry-Bz96hXgQ.js                  0.95 kB │ gzip:   0.53 kB
+dist/assets/libraryAssets-C-xAKbYQ.js                 1.39 kB │ gzip:   0.73 kB
+dist/assets/RoundedBoxGeometry-CTYQej4s.js            1.73 kB │ gzip:   0.82 kB
+dist/assets/pileModels-D6wmeez6.js                    2.25 kB │ gzip:   1.08 kB
+dist/assets/catalogRender-BW_GEqRM.js                 2.37 kB │ gzip:   1.27 kB
+dist/assets/shieldTitanRuntime-BWC33FEF.js            2.69 kB │ gzip:   1.59 kB
+dist/assets/persistentFlightRenderer-Bq5kfKn1.js      3.50 kB │ gzip:   1.77 kB
+dist/assets/baseFurniture-sDACelq2.js                 3.68 kB │ gzip:   1.80 kB
+dist/assets/readingCrystalOptics-DpLvTpAj.js          3.69 kB │ gzip:   1.36 kB
+dist/assets/atelierThemes-DM29k3s-.js                 3.74 kB │ gzip:   2.09 kB
+dist/assets/combatTempo-A7fR-9eH.js                   3.90 kB │ gzip:   2.17 kB
+dist/assets/ornaments-DzkCyMri.js                     3.92 kB │ gzip:   1.98 kB
+dist/assets/master-tongues-C2wXsFg_.js                4.02 kB │ gzip:   2.03 kB
+dist/assets/family-matter-B7863nSq.js                 4.35 kB │ gzip:   2.18 kB
+dist/assets/catalog-C6Bkoru5.js                       4.79 kB │ gzip:   2.23 kB
+dist/assets/BufferGeometryUtils-6mFNe8-u.js           4.87 kB │ gzip:   1.47 kB
+dist/assets/renderer-riJUmAY6.js                      5.11 kB │ gzip:   2.29 kB
+dist/assets/coins-BFZQgsd1.js                         5.20 kB │ gzip:   2.38 kB
+dist/assets/audit-Ch-vlPRj.js                         5.45 kB │ gzip:   2.88 kB
+dist/assets/darkRenderer-DJZBV6eN.js                  5.86 kB │ gzip:   2.75 kB
+dist/assets/royal-matter-CGHnPvGL.js                  6.33 kB │ gzip:   2.99 kB
+dist/assets/board-C3ee0f_4.js                         6.33 kB │ gzip:   2.97 kB
+dist/assets/renderer-BATmq0iA.js                      6.35 kB │ gzip:   2.93 kB
+dist/assets/diceScene-Dxy0k5eg.js                     6.58 kB │ gzip:   3.24 kB
+dist/assets/sleeve-5cWluyhY.js                        6.64 kB │ gzip:   3.16 kB
+dist/assets/scene-Drbl_ZJ1.js                         6.78 kB │ gzip:   2.85 kB
+dist/assets/runtime-IOKLXSUf.js                       7.09 kB │ gzip:   3.22 kB
+dist/assets/ceremonyScene-Dq5hGloQ.js                 8.97 kB │ gzip:   3.99 kB
+dist/assets/materials-6jBoX_jK.js                     9.07 kB │ gzip:   4.12 kB
+dist/assets/renderer-Cku-2jH2.js                      9.16 kB │ gzip:   4.39 kB
+dist/assets/renderer-CTz6FXcT.js                      9.51 kB │ gzip:   4.00 kB
+dist/assets/paperDraw-cVd85_in.js                     9.72 kB │ gzip:   4.46 kB
+dist/assets/runtime-DFsuRiTc.js                      10.21 kB │ gzip:   4.41 kB
+dist/assets/runtime-C7RmD5tN.js                      10.62 kB │ gzip:   4.43 kB
+dist/assets/renderer-BPGfnrV2.js                     10.94 kB │ gzip:   4.59 kB
+dist/assets/cosmeticStudio-k1sPQVof.js               11.12 kB │ gzip:   4.57 kB
+dist/assets/renderer-DxZaqyQr.js                     11.44 kB │ gzip:   4.68 kB
+dist/assets/renderer-DkENApp4.js                     12.25 kB │ gzip:   5.45 kB
+dist/assets/runtime-BZflr-hp.js                      12.26 kB │ gzip:   5.40 kB
+dist/assets/renderer-BfcI73vO.js                     12.29 kB │ gzip:   4.86 kB
+dist/assets/renderer-B2N3rdy_.js                     12.37 kB │ gzip:   5.09 kB
+dist/assets/runtime-DsRVAtUC.js                      12.45 kB │ gzip:   5.33 kB
+dist/assets/renderer-CcjU58Lc.js                     13.26 kB │ gzip:   5.39 kB
+dist/assets/renderer-BEG_tQBi.js                     14.15 kB │ gzip:   5.18 kB
+dist/assets/renderer-DytZRVzV.js                     14.53 kB │ gzip:   6.20 kB
+dist/assets/renderer-mI5WM0mV.js                     16.54 kB │ gzip:   6.75 kB
+dist/assets/renderer-CWVOOHoq.js                     17.39 kB │ gzip:   6.81 kB
+dist/assets/renderer-Dz4q--Tp.js                     18.37 kB │ gzip:   7.71 kB
+dist/assets/analytics-BGdFecHI.js                    18.66 kB │ gzip:   8.02 kB
+dist/assets/visual-BOMtizyU.js                       19.24 kB │ gzip:   7.79 kB
+dist/assets/runtime-DkqHT9ed.js                      19.64 kB │ gzip:   8.60 kB
+dist/assets/game-DvgNlQHj.js                         19.90 kB │ gzip:   8.30 kB
+dist/assets/renderer-CdNlDMUu.js                     20.20 kB │ gzip:   9.14 kB
+dist/assets/inspection-CWhjhcZf.js                   25.05 kB │ gzip:   7.07 kB
+dist/assets/runtime-CW18EWl6.js                      25.54 kB │ gzip:  10.99 kB
+dist/assets/riftScene-CBtU4vXV.js                    27.44 kB │ gzip:  11.33 kB
+dist/assets/GLTFLoader-DsaYxCCp.js                   43.82 kB │ gzip:  13.22 kB
+dist/assets/duelScene-BwQnlmUt.js                    61.14 kB │ gzip:  23.99 kB
+dist/assets/scene-Dxsc5y_G.js                        88.23 kB │ gzip:  30.72 kB
+dist/assets/layout-Dn3VV47G.js                       88.46 kB │ gzip:  31.77 kB
+dist/assets/controller-BbGKA8T9.js                   99.65 kB │ gzip:  34.42 kB
+dist/assets/main-n4b7gAfV.js                        192.24 kB │ gzip:  71.59 kB
+dist/assets/readingBoardLayout-VwHL1iVq.js          629.15 kB │ gzip: 163.38 kB
+dist/assets/modal-Cfb5PwuE.js                     1,648.12 kB │ gzip: 532.31 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 11.87s

@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "checks": [
+    "real atlas and wake draw pixels; clear at completion",
+    "paid buyReveal: 1280px me",
+    "paid buyReveal: 1280px opp",
+    "paid buyReveal: 390px me",
+    "paid buyReveal: 390px opp",
+    "fast-forward interrupts payment; free bypasses payment; quick retains reveal then resolves",
+    "reduced motion suppresses flight",
+    "board teardown releases VFX; assets can reopen",
+    "asset failure settles without throwing or deadlocking"
+  ],
+  "pixels": [
+    {
+      "t": 0,
+      "occupied": 658
+    },
+    {
+      "t": 0.15,
+      "occupied": 2090
+    },
+    {
+      "t": 0.3,
+      "occupied": 2903
+    },
+    {
+      "t": 0.45,
+      "occupied": 3384
+    },
+    {
+      "t": 0.6,
+      "occupied": 3063
+    },
+    {
+      "t": 0.76,
+      "occupied": 1147
+    },
+    {
+      "t": 0.9,
+      "occupied": 647
+    },
+    {
+      "t": 0.94,
+      "occupied": 0
+    }
+  ],
+  "behavior": {
+    "skippedMs": 121.80000019073486,
+    "freePayment": false,
+    "quickHeld": true,
+    "quickRemoved": true
+  },
+  "errors": [],
+  "fixture": "actual BaseController + buyReveal, local engine fixture; no authenticated online match"
+}

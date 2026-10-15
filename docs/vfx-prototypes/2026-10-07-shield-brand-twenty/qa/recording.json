@@ -1,0 +1,26 @@
+[
+  {
+    "group": "SF",
+    "frames": 205,
+    "maxGap": 100,
+    "duration": 3600
+  },
+  {
+    "group": "SA",
+    "frames": 126,
+    "maxGap": 266.6999999999998,
+    "duration": 3200
+  },
+  {
+    "group": "BF",
+    "frames": 142,
+    "maxGap": 266.60000000000036,
+    "duration": 3600
+  },
+  {
+    "group": "BA",
+    "frames": 142,
+    "maxGap": 100,
+    "duration": 3300
+  }
+]

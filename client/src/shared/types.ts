@@ -1,8 +1,6 @@
-// ============================================================
-// LORE — shared game types (no DOM, no platform deps).
+// =====================================================// LORE — shared game types (no DOM, no platform deps).
 // Imported by both the client UI and the authoritative server.
-// ============================================================
-
+// =====================================================
 export type CardType = "mon" | "spell" | "quest" | "trap" | "starter";
 export type Side = 0 | 1;
 
@@ -74,6 +72,7 @@ export interface FieldMon extends CardInst {
   expireOpponentOf?: Side;
   exhausted: boolean;
   tempAtk: number; // temporary atk (cleared end of turn)
+  tempAtkExpiry?: { turn: number; amount: number }[]; // cross-side buffs expire on the casting turn
   atkMod: number; // permanent atk change
   defMod: number; // permanent def change
   summonedTurn: number;
@@ -171,10 +170,13 @@ export interface PlayerState {
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
   skipNext: boolean; // legacy: if true, this player's next turn is skipped
+  skipTurnSources?: ("TIMEWARP" | "BLACK_NOVA" | null)[]; // FIFO provenance; old saves may omit it
   skipTurns?: number; // queued turn skips; stacks when 시공간 조작 succeeds more than once
   revealedCards?: RevealedCard[]; // cards permanently known to the opponent this game (physical-card UID + card id)
   collection?: string[]; // redacted view only: public card ids the opponent may inspect
   openingDrawReady?: boolean; // second player already received the first three cards at match start
+  /** Public presentation only: already-created Cull, released visually at turn end. */
+  infinityPresentation?: { sourceUid: string; amount: number }[];
   removed?: CardInst[]; // cards permanently exiled from the game (public zone)
   botTune?: { minBuy?: number; minBuyEarly?: number; chestTurn?: number }; // per-archetype bot buy discipline (see bot.ts BOT_DECKS)
   refreshTokens?: number; // 렐릭 헌터(v36): 제시 마켓 무료 갱신 카운터 — 갱신 시 마나 대신 소모
@@ -195,6 +197,8 @@ export interface Pending {
 }
 
 export interface GameState {
+  /** Resume a requested turn end after a mandatory attack's optional choices. */
+  endingTurn?: { turn: number; force: boolean };
   spellDamageTurn?: number;
   spellDamageAmount?: number;
   expansionChoices?: { owner: Side; reason: string; hint: string; data?: Record<string, unknown> }[];
@@ -238,7 +242,7 @@ export interface GameState {
 
 // --- Actions: the only way to mutate a GameState ---
 export type Action =
-  | { type: "play"; idx: number }
+  | { type: "play"; idx: number; sourceUid?: string; targets?: string[] }
   | { type: "buyMarket"; i: number }
   | { type: "buySupply"; i: number }
   | { type: "refresh" }
@@ -252,24 +256,57 @@ export type Action =
 // --- Events: emitted by reduce(), consumed by the UI for animation/log ---
 export type DiceSource = { player: Side } & ({ id: string; status?: never } | { status: "brand" | "solitude"; id?: never });
 
+/** Public result of spending one counter to survive lethal damage. */
+export interface GutsSurvival { player: Side; uid: string; before: number; after: number }
+
+/** Resolved origin-rite reaction. No hidden card identity is needed for presentation. */
+export interface OriginRiteReaction {
+  summonUid: string;
+  targetPlayer: Side;
+  outcome: 'destroy' | 'brand' | 'blocked';
+  target?: {uid: string; kind: 'monster' | 'trap' | 'enchant'; destination?: 'discard' | 'rift'};
+  brandBefore?: number;
+  brandAfter?: number;
+}
+
 export type GameEvent =
+  | { type: "voidShot"; player: Side; count: number; target: Side } // Resolved public Rift count; damage remains a separate engine event.
+  | { type: "treason"; player: Side; target: Side; sourceUid: string; targets: {uid:string;zone:"monster"|"enchant";destination:"discard"|"rift"}[] }
+  | { type: "timewarp"; player: Side; sourceUid: string }
+  | { type: "turnSkipped"; player: Side; source?: "TIMEWARP" | "BLACK_NOVA"; remaining: number }
+  | { type: "voidGrant"; player: Side; uids: string[] } // Newly granted by Dimension Rite; public field UIDs only.
+  | { type: "creationBorn"; player: Side; id: string; uid: string; sourceUid?: string; copy: boolean } // New public instance; never includes hidden deck identities.
+  | { type: "infinityStored"; player: Side; sourceUid: string; cardUids: string[] }
+  | { type: "infinityRelease"; player: Side; sourceUid: string; amount: number }
+  | ({ type: "gutsSurvive" } & GutsSurvival)
+  | { type: "statusExtinction"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: 0 }
+  | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
+  | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }
-  | { type: "enchantActivate"; player: Side; uid: string; id: string }
+  | { type: "enchantActivate"; player: Side; uid: string; id: string; originRite?: OriginRiteReaction }
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
-  | { type: "summon"; player: Side; uid: string; id?: string } // id: card id (drives the summon ghost when the monster dies in the same batch)
-  | { type: "attack"; player: Side; uid: string; targetUid: string | null; contactDamage?: number }
+  | { type: "summon"; player: Side; uid: string; id?: string; source?: string; ritual?: string; rebirth?: { card: CardInst }; hatchFrom?: { uid: string; id: string }; fusionFrom?: { dragon: { uid: string; id: string }; mate: { uid: string; id: string } } } // id: card id (drives the summon ghost when the monster dies in the same batch)
+  | { type: "attack"; player: Side; uid: string; targetUid: string | null; targetPlayer?: Side; contactDamage?: number; guts?: GutsSurvival }
+  | { type: "counter"; player: Side; uid: string; targetUid: string; targetPlayer: Side; contactDamage: number }
+  | { type: "elementalStart"; group:string; player:Side; id:string; uid:string; targets:Array<{player:Side;uid:string|null;amount:number}> }
+  | { type: "elementalImpact"; group:string; index:number }
+  | { type: "elementalEnd"; group:string }
   | { type: "hit"; uid: string; amount?: number }
-  | { type: "damage"; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
-  | { type: "heal"; player: Side; amount: number }
-  | { type: "destroy"; player: Side; uid: string; id?: string }
+  | { type: "reverseDamage"; id: number; from: Side; to: Side; sourceUids: string[] }
+  | { type: "damage"; reversed?: true; reverseId?: number; player: Side; amount: number; srcKo?: string; srcJa?: string } // src: what dealt it (death-cause display)
+  | { type: "heal"; player: Side; amount: number; growthSourceUid?: string; bloodRiteSources?: string[] }
+  | { type: "decayCounterGrant"; player: Side; uid: string; before: number; after: number }
+  | { type: "destroy"; player: Side; uid: string; id?: string; cause?: "decay" | "fusion" | "massacre" }
   | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }
   | { type: "marketRestock"; i: number; id: string } // v40: 고정 마켓 슬롯 매진 → 새 카드 입고
   | { type: "draw"; player: Side; count: number }
   | { type: "reshuffle"; player: Side; count: number } // public count only; no card order
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
-  | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino" } // dice roll (need = min TOTAL for success; undefined = outcome-table roll · variant "casino" = 카지노 전용 연출)
-  | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish" } // spell/starter/enchant played from hand
+  | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino"; evasion?: { targetUid: string; attackerUid: string }; taunt?: { sourceUid: string; attackerUid: string } } // evasion identifies the public defender, including granted passives and duplicates
+  | { type: "curseGenerated"; player: Side; sourceUid: string; before: number; after: number }
+  | { type: "nova"; player: Side; from: number; to: 1 } // Resolved HP cost and time theft, never spell damage.
+  | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish"; riftCount?: number } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard
   | { type: "win"; winner: Side }

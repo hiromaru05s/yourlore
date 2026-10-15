@@ -1,0 +1,176 @@
+{
+  "comparisonGames": 328,
+  "illegalActions": 0,
+  "unfinishedGames": 0,
+  "cardSemanticsUnchanged": true,
+  "cohorts": {
+    "release-greedy": {
+      "mode": "greedy",
+      "games": 192,
+      "sha256": "624eacb52ebf94d8f4079a4ccd83d38964b9e96747b8e4751bd21798733cdaad",
+      "markets": {
+        "priest": {
+          "before": {
+            "games": 32,
+            "wins": 24
+          },
+          "after": {
+            "games": 32,
+            "wins": 31
+          },
+          "improvedPairs": 7,
+          "regressedPairs": 0
+        },
+        "highPriest": {
+          "before": {
+            "games": 32,
+            "wins": 29
+          },
+          "after": {
+            "games": 32,
+            "wins": 31
+          },
+          "improvedPairs": 2,
+          "regressedPairs": 0
+        },
+        "control": {
+          "before": {
+            "games": 32,
+            "wins": 32
+          },
+          "after": {
+            "games": 32,
+            "wins": 32
+          },
+          "improvedPairs": 0,
+          "regressedPairs": 0
+        }
+      },
+      "modules": {
+        "candidate": "853c53061ad55e7537601f607975e0350c902612ee75331cf00875ce2e186e70",
+        "baseline": "9e83ddcb558e2b2ec5c15116099ec413126618b740b979e126fbab8ddc9d73a1"
+      }
+    },
+    "release-natural": {
+      "mode": "greedy",
+      "games": 64,
+      "sha256": "642d4a9b61d62552b5f951feb921c87fad974cafd405d7b3dc93803c0041ca16",
+      "markets": {
+        "natural": {
+          "before": {
+            "games": 32,
+            "wins": 28
+          },
+          "after": {
+            "games": 32,
+            "wins": 28
+          },
+          "improvedPairs": 0,
+          "regressedPairs": 0
+        }
+      },
+      "modules": {
+        "candidate": "853c53061ad55e7537601f607975e0350c902612ee75331cf00875ce2e186e70",
+        "baseline": "9e83ddcb558e2b2ec5c15116099ec413126618b740b979e126fbab8ddc9d73a1"
+      }
+    },
+    "release-hard": {
+      "mode": "hard",
+      "games": 24,
+      "sha256": "4dc81bfafbecda7d2c22761661dde9b16509d9be454a817d0d20c164af9de196",
+      "markets": {
+        "priest": {
+          "before": {
+            "games": 4,
+            "wins": 4
+          },
+          "after": {
+            "games": 4,
+            "wins": 4
+          },
+          "improvedPairs": 0,
+          "regressedPairs": 0
+        },
+        "highPriest": {
+          "before": {
+            "games": 4,
+            "wins": 4
+          },
+          "after": {
+            "games": 4,
+            "wins": 4
+          },
+          "improvedPairs": 0,
+          "regressedPairs": 0
+        },
+        "control": {
+          "before": {
+            "games": 4,
+            "wins": 4
+          },
+          "after": {
+            "games": 4,
+            "wins": 4
+          },
+          "improvedPairs": 0,
+          "regressedPairs": 0
+        }
+      },
+      "modules": {
+        "candidate": "853c53061ad55e7537601f607975e0350c902612ee75331cf00875ce2e186e70",
+        "baseline": "9e83ddcb558e2b2ec5c15116099ec413126618b740b979e126fbab8ddc9d73a1"
+      }
+    },
+    "release-hell": {
+      "mode": "hell",
+      "games": 48,
+      "sha256": "d832aa739283b1f2bb25045423a7e3e285ca6a155b25ded86f9e9565ee469160",
+      "markets": {
+        "priest": {
+          "before": {
+            "games": 8,
+            "wins": 8
+          },
+          "after": {
+            "games": 8,
+            "wins": 8
+          },
+          "improvedPairs": 0,
+          "regressedPairs": 0
+        },
+        "highPriest": {
+          "before": {
+            "games": 8,
+            "wins": 8
+          },
+          "after": {
+            "games": 8,
+            "wins": 8
+          },
+          "improvedPairs": 0,
+          "regressedPairs": 0
+        },
+        "control": {
+          "before": {
+            "games": 8,
+            "wins": 8
+          },
+          "after": {
+            "games": 8,
+            "wins": 8
+          },
+          "improvedPairs": 0,
+          "regressedPairs": 0
+        }
+      },
+      "modules": {
+        "candidate": "853c53061ad55e7537601f607975e0350c902612ee75331cf00875ce2e186e70",
+        "baseline": "9e83ddcb558e2b2ec5c15116099ec413126618b740b979e126fbab8ddc9d73a1"
+      }
+    }
+  },
+  "deployment": {
+    "status": "pending"
+  },
+  "scope": "BOT comparisons and reducer fixtures. No human win-rate measurement."
+}

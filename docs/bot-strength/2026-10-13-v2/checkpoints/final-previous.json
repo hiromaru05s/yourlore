@@ -1,0 +1,237 @@
+{
+  "config": {
+    "A": "new:hell",
+    "B": "old:hell",
+    "n": 60,
+    "start": 38000,
+    "search": {
+      "hard": {
+        "width": 8,
+        "samples": 2,
+        "turns": 2,
+        "finalists": 3,
+        "extraSamples": 2
+      },
+      "hell": {
+        "width": 12,
+        "samples": 3,
+        "turns": 2,
+        "finalists": 4,
+        "extraSamples": 8
+      }
+    },
+    "tactics": {
+      "proof": true,
+      "targets": true,
+      "horizon": 4
+    },
+    "valueModel": null,
+    "value": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0.6
+    },
+    "baselineValue": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0.6
+    },
+    "modules": {
+      "candidate": "c167516df7e951838722234d4234a5b585bace78eebdbb1c0453f7ff8679dfbf",
+      "baseline": "0eeb7ab6bdf7d81625658c3a715d037b24b2788ae4556bdff99ccf2cef07b9a5"
+    },
+    "customA": [
+      {
+        "name": "BOT · DECAY ASSAULT",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "AMBUSH",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      },
+      {
+        "name": "BOT · DECAY RIFT",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "RIFT",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      },
+      {
+        "name": "BOT · DECAY GUARD",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "CASTLE",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      }
+    ],
+    "customB": [
+      {
+        "name": "BOT · COUNTER",
+        "cards": [
+          "RIFT",
+          "RIFT",
+          "TRIAL_AREA",
+          "COUNTERCALC",
+          "SELECTED_SHIELD",
+          "COUNTERCALC",
+          "STARTER_TRASH",
+          "STARTER_TRASH"
+        ],
+        "tune": {}
+      }
+    ],
+    "rosterA": "balanced",
+    "rosterB": "balanced"
+  },
+  "rows": [
+    {
+      "pair": 38000,
+      "seat": 0,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 109,
+      "bad": null
+    },
+    {
+      "pair": 38000,
+      "seat": 1,
+      "da": 0,
+      "db": 0,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · DECAY GUARD"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 35,
+      "steps": 236,
+      "bad": null
+    },
+    {
+      "pair": 38001,
+      "seat": 0,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 86,
+      "bad": null
+    },
+    {
+      "pair": 38001,
+      "seat": 1,
+      "da": 1,
+      "db": 0,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 22,
+      "steps": 149,
+      "bad": null
+    },
+    {
+      "pair": 38002,
+      "seat": 0,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "BOT · DECAY RIFT",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 40,
+      "steps": 248,
+      "bad": null
+    },
+    {
+      "pair": 38002,
+      "seat": 1,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "BOT · COUNTER",
+        "BOT · DECAY RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 18,
+      "steps": 113,
+      "bad": null
+    },
+    {
+      "pair": 38003,
+      "seat": 0,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "BOT · COUNTER"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 33,
+      "steps": 176,
+      "bad": null
+    }
+  ],
+  "source": "/tmp/lore-bot-strength/final-v2/results/final-previous.jsonl",
+  "reason": "Coordinated release pause; completed games preserved, only unfinished game restarts from its original seed"
+}

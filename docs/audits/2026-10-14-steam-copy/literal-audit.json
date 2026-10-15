@@ -1,0 +1,38 @@
+{
+  "files": 508,
+  "literals": 40823,
+  "hits": [
+    {
+      "file": "client/src/main.ts",
+      "line": 12,
+      "text": "./styles/mobile.css",
+      "classification": "stylesheet import"
+    },
+    {
+      "file": "client/src/ui/boardView.ts",
+      "line": 145,
+      "text": "</button></div>\n              </div>\n            </div>\n            <div class=\"prow\" id=\"meRow\"></div>\n            <div class=\"hand-area\" id=\"handArea\">\n              <div class=\"pcluster pcluster--me\">\n                <div class=\"pc-side pc-side--l\"></div>\n                <div class=\"portrait portrait--me\" id=\"portraitMe\"></div>\n                <div class=\"pc-side pc-side--r\"><div class=\"hand\" id=\"hand\"></div></div>\n              </div>\n            </div>\n          </div>\n        </div>\n        <!-- battle log: a left-edge drawer with a mid-left toggle tab.\n             The backdrop guarante",
+      "classification": "non-rendered HTML comment"
+    },
+    {
+      "file": "client/src/ui/riftInkMaterial.ts",
+      "line": 4,
+      "text": "\nprecision highp float;\nvarying vec2 uv;\nuniform sampler2D card;\nuniform sampler2D engraving;\nuniform float clockMs;\nuniform float aspect;\nfloat sat(float x){return clamp(x,0.,1.);}\nfloat ease(float a,float b,float x){float t=sat((x-a)/(b-a));return t*t*(3.-2.*t);}\nfloat hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}\nfloat noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.)),f.x),f.y);}\nfloat fbm(vec2 p){float a=.5,v=0.;mat2 m=mat2(.8,.6,-.6,.8);for(int i=0;i<4;i++){v+=a*noise(p)",
+      "classification": "shader variable pinch"
+    },
+    {
+      "file": "client/src/ui/opening/light.ts",
+      "line": 15,
+      "text": "\n precision highp float;varying vec2 vUv;uniform float uTime,uHeight,uUnit;uniform sampler2D uGlyph;\n float sat(float x){return clamp(x,0.,1.);}float ease(float x){x=sat(x);return 1.-pow(1.-x,3.);}\n mat2 rot(float a){return mat2(cos(a),-sin(a),sin(a),cos(a));}\n float hash(float x){return fract(sin(x*127.1)*43758.5453);}\n float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float n=i.x+i.y*57.;return mix(mix(hash(n),hash(n+1.),f.x),mix(hash(n+57.),hash(n+58.),f.x),f.y);}\n float gauss(float x,float w){return exp(-x*x/max(.0001,w*w));}\n vec3 warm=vec3(1.,.56,.19),ice=vec3(.30,.65,1.);\n ",
+      "classification": "shader layout variable mobile"
+    },
+    {
+      "file": "client/src/ui/dew/glass.ts",
+      "line": 5,
+      "text": "precision highp float;\nvarying vec2 uv;uniform sampler2D backdrop;uniform vec2 resolution;uniform vec2 center;uniform float extent;uniform float kind;uniform float time;uniform float settle;uniform float dark;uniform float design;\nfloat sm(float a,float b,float k){float h=max(k-abs(a-b),0.)/k;return min(a,b)-h*h*k*.25;}\nfloat ell(vec3 p,vec3 r){float a=length(p/r),b=length(p/(r*r));return a*(a-1.)/max(b,.0001);}\nfloat shape(vec3 p){\n float w=sin(time*2.),v=cos(time*2.);p.x+=.045*sin(p.y*3.6+time*3.)*(1.-settle);float d;\n if(kind<.5){vec3 r=vec3(.67+w*.035,.77-w*.03,.66);d=ell(p,r);d+=sin(p.x*6",
+      "classification": "shader variable pinch"
+    }
+  ],
+  "visibleCopyHits": 0,
+  "scope": "All TypeScript/JavaScript string and template literals under client/src (excluding dev) and server/src; manual review of remaining matches. Also searched public textual assets and HTML entry points."
+}

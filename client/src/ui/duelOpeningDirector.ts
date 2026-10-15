@@ -2,6 +2,8 @@ import {DUEL_OPENING_MS,OPENING_TOSS_MS,OPENING_REVEAL_MS,OPENING_EXIT_MS,OPENIN
 import {getLang} from '../i18n';
 import {openingAudio,warmOpeningSound} from './openingSound';
 import type {createOpeningRenderer} from './opening/renderer';
+import {warmImages} from './imageAssets';
+import {OPENING_PORTRAIT_URL} from './opening/assets';
 export interface OpeningProfile {name:string;avatar:string|null;}
 export interface OpeningOptions {
   root:HTMLElement;me:OpeningProfile;opp:OpeningProfile;firstIsMe:boolean;signal:AbortSignal;
@@ -19,9 +21,7 @@ let modulePromise:Promise<typeof import('./opening/renderer')>|undefined;
 const rendererModule=()=>modulePromise??=import('./opening/renderer').catch(error=>{modulePromise=undefined;throw error;});
 export async function warmOpening():Promise<void>{
   void warmOpeningSound();
-  await Promise.all([rendererModule().catch(()=>{}),...['blue','red'].map(async color=>{
-    const image=new Image();image.src=`/art/biblion/seeker-${color}.png`;if(typeof image.decode==='function')await image.decode().catch(()=>{});
-  })]);
+  await Promise.all([rendererModule().catch(()=>{}),warmImages([OPENING_PORTRAIT_URL])]);
 }
 
 /** Approved Caustic → Lumen Weave. Turn banners remain owned by the controller. */
@@ -46,7 +46,7 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   o.signal.addEventListener('abort',cancel,{once:true});document.addEventListener('visibilitychange',onHidden);window.addEventListener('resize',resize);
   try{
     // Asset failure must not bypass the server gate; the visible result can fall back to text.
-    const load=async()=>{if(!canvas.getContext('2d'))return;const module=await rendererModule();if(closed||o.signal.aborted)return;renderer=module.createOpeningRenderer();await renderer.loadAssets();if(closed||o.signal.aborted)return;const warm=document.createElement('canvas');warm.width=320;warm.height=180;for(const time of [1.4,3.22])renderer.draw(warm,time,{first:o.firstIsMe,light:false,reduced:false,board:true});};
+    const load=async()=>{if(!canvas.getContext('2d'))return;const module=await rendererModule();if(closed||o.signal.aborted)return;renderer=module.createOpeningRenderer();await renderer.loadAssets([o.me.avatar,o.opp.avatar]);if(closed||o.signal.aborted)return;const warm=document.createElement('canvas');warm.width=320;warm.height=180;for(const time of [1.4,3.22])renderer.draw(warm,time,{first:o.firstIsMe,light:false,reduced:false,board:true});};
     await Promise.race([load().catch(()=>{}),aborted,new Promise<void>(resolve=>{loadTimer=setTimeout(resolve,3000);})]);
     clearTimeout(loadTimer);if(o.signal.aborted)return;
     resize();const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;

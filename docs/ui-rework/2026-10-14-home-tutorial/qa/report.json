@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "Same 3D guide renders, idles, and greets on click",
+    "Reduced-motion guide remains static, including tap",
+    "Hidden document pauses guide rendering",
+    "12 stages, next incomplete launch, replay, persistent cleared badges",
+    "1280/390/320/844 layouts without horizontal overflow or navigation clipping",
+    "All-clear state, replay and rules notebook",
+    "Three languages and failed progress retry",
+    "Late status cannot paint destroyed route; all guide canvases removed",
+    "No-WebGL fallback and keyboard greeting/tutorial navigation"
+  ],
+  "errors": []
+}

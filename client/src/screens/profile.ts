@@ -13,7 +13,7 @@ import type { App, Screen } from "../router";
 import { api, type Profile } from "../net/api";
 import { t, onLangChange, getLang, setLang, type Lang } from "../i18n";
 import { tierChipHtml } from "../ui/tier";
-import { avatarHtml, avatarPresets } from "../ui/social";
+import { avatarHtml } from "../ui/social";
 import { getSfxVolume, setSfxVolume, sfx } from "../ui/sound";
 
 function esc(s: string): string { return s.replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]!)); }
@@ -102,7 +102,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     body().innerHTML = `
       <section class="tut-sec pf-card">
         <div class="pf-head">
-          <button class="pf-ava" id="avaBtn" ${p.self ? "" : "disabled"}>${avatarHtml(p.avatar, p.display, 72)}${p.self ? `<span class="pf-ava-edit">${homeIcon("edit")}</span>` : ""}</button>
+          <div class="pf-ava">${avatarHtml(p.avatar, p.display, 72)}</div>
           <div class="pf-id">
             <div class="pf-name-row">
               <span class="pf-name" id="pfName">${esc(p.display)}</span>
@@ -163,8 +163,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       save.onclick=async()=>{save.disabled=true;try{const r=await api.updateMe({display:input.value.trim()});if(app.user)app.user.display=r.display;ov.remove();document.dispatchEvent(new Event("lore:user"));if(!dead)void load();}catch(e){ov.querySelector("#renameError")!.textContent=(e as Error).message;save.disabled=false;}};
     });
 
-    // ---- avatar picker ----
-    (body().querySelector("#avaBtn") as HTMLElement | null)?.addEventListener("click", () => openAvatarPicker(p));
   };
 
   // ============================================================
@@ -297,36 +295,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     (body().querySelector("#logout") as HTMLElement).onclick = () => {
       void confirmDialog({ title: t("home.logout"), body: t("settings.logout.confirm"), confirm: t("common.yes"), cancel: t("common.no") }).then(ok => { if (ok) void app.logout(); });
     };
-  };
-
-  // ---- avatar picker (shared) ----
-  const openAvatarPicker = (p: Profile): void => {
-    const ov = document.createElement("div");
-    ov.className = "overlay";
-    const ids = avatarPresets();
-    ov.innerHTML = `
-      <div class="modal ava-modal">
-        <h2>${t("profile.avatar.pick")}</h2>
-        <div class="ava-grid seeker-picker">
-          ${ids.map((id) => `<button class="ava-opt ${p.avatar === id ? "sel" : ""}" data-id="${id}">${avatarHtml(id, "", 128)}<span>${id === "SEEKER_RED" ? "RED" : "BLUE"}</span></button>`).join("")}
-        </div>
-        <div class="modal-row"><button class="btn btn-ghost btn-block" id="avaClose">${t("common.cancel")}</button></div>
-      </div>`;
-    document.body.appendChild(ov);
-    ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
-    (ov.querySelector("#avaClose") as HTMLElement).onclick = () => ov.remove();
-    ov.querySelectorAll(".ava-opt").forEach((b) => {
-      (b as HTMLElement).onclick = () => {
-        const id = (b as HTMLElement).dataset.id!;
-        void api.updateMe({ avatar: id }).then(() => {
-          if (app.user) app.user.avatar = id;
-          document.dispatchEvent(new Event("lore:user"));
-          sfx("pop");
-          ov.remove();
-          void load();
-        }).catch((e) => alert((e as Error).message));
-      };
-    });
   };
 
   build();

@@ -1,0 +1,77 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "player": 0,
+      "copy": false,
+      "frames": 212,
+      "active": 128
+    },
+    {
+      "width": 1280,
+      "player": 0,
+      "copy": true,
+      "frames": 222,
+      "active": 124
+    },
+    {
+      "width": 1280,
+      "player": 1,
+      "copy": false,
+      "frames": 167,
+      "active": 128
+    },
+    {
+      "width": 1280,
+      "player": 1,
+      "copy": true,
+      "frames": 129,
+      "active": 125
+    },
+    {
+      "width": 390,
+      "player": 0,
+      "copy": false,
+      "frames": 151,
+      "active": 114
+    },
+    {
+      "width": 390,
+      "player": 0,
+      "copy": true,
+      "frames": 51,
+      "active": 49
+    },
+    {
+      "width": 390,
+      "player": 1,
+      "copy": false,
+      "frames": 105,
+      "active": 65
+    },
+    {
+      "width": 390,
+      "player": 1,
+      "copy": true,
+      "frames": 99,
+      "active": 98
+    },
+    {
+      "mode": "skip",
+      "remaining": 0
+    },
+    {
+      "mode": "resize",
+      "remaining": 0
+    },
+    {
+      "mode": "hidden",
+      "remaining": 0
+    },
+    {
+      "mode": "reduced",
+      "remaining": 0
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,21 @@
+{
+  "regressionBeforeUpstreamVfxMerge": {
+    "passed": 110,
+    "total": 110
+  },
+  "typecheckAfterMerge": true,
+  "build": true,
+  "decisionConformanceCases": 42,
+  "simulationTransitions": 1369,
+  "browserWorker": "browser.json",
+  "localBoard": "gameplay-browser.json",
+  "cardIntegrity": "card-integrity.json",
+  "guardedReleaseValidation": {
+    "source": "96ba0fc4e70beb4e6c974872e3204ea1e56d2023",
+    "typecheck": true,
+    "passed": 115,
+    "total": 115,
+    "build": true
+  },
+  "stagingWorker": "staging-worker.json"
+}

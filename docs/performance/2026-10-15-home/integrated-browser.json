@@ -1,0 +1,304 @@
+{
+  "base": "http://127.0.0.1:62336",
+  "api": "fixture; public static resources real",
+  "cases": [
+    {
+      "width": 1280,
+      "homeMs": 6967,
+      "actions": [
+        {
+          "name": "bot opponents",
+          "ms": 84,
+          "styleReads": 24,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards",
+          "ms": 415,
+          "styleReads": 1016,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:62336/art/lounge/v1/library.webp",
+              "at": 1792045846355
+            }
+          ]
+        },
+        {
+          "name": "cards page 2",
+          "ms": 280,
+          "styleReads": 270,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "card zoom",
+          "ms": 52,
+          "styleReads": 173,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "deck",
+          "ms": 272,
+          "styleReads": 1068,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:62336/art/lounge/v1/library.webp",
+              "at": 1792045847487
+            }
+          ]
+        },
+        {
+          "name": "shop",
+          "ms": 122,
+          "styleReads": 432,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop astral",
+          "ms": 263,
+          "styleReads": 22,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop crimson",
+          "ms": 41,
+          "styleReads": 22,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "sleeves",
+          "ms": 35,
+          "styleReads": 29,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "furniture",
+          "ms": 65,
+          "styleReads": 43,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "ranking",
+          "ms": 44,
+          "styleReads": 2475,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "friends",
+          "ms": 34,
+          "styleReads": 232,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "profile",
+          "ms": 55,
+          "styleReads": 224,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "guide",
+          "ms": 204,
+          "styleReads": 812,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:62336/art/lounge/illustrated-v1/biblion.webp",
+              "at": 1792045848513
+            }
+          ]
+        },
+        {
+          "name": "home return",
+          "ms": 67,
+          "styleReads": 322,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:62336/art/lounge/stage-v1/sigil.webp",
+              "at": 1792045848694
+            }
+          ]
+        }
+      ],
+      "lateImages": [
+        {
+          "url": "http://127.0.0.1:62336/art/lounge/v1/library.webp",
+          "at": 1792045846355
+        },
+        {
+          "url": "http://127.0.0.1:62336/art/lounge/v1/library.webp",
+          "at": 1792045847487
+        },
+        {
+          "url": "http://127.0.0.1:62336/art/lounge/illustrated-v1/biblion.webp",
+          "at": 1792045848513
+        },
+        {
+          "url": "http://127.0.0.1:62336/art/lounge/stage-v1/sigil.webp",
+          "at": 1792045848694
+        }
+      ],
+      "serverImageTransfers": [],
+      "wireImageTransfers": [],
+      "state": {
+        "sameHomeCanvas": true,
+        "cache": "ready",
+        "worker": true,
+        "heap": 37165415,
+        "errors": []
+      },
+      "errors": [],
+      "httpErrors": [],
+      "warmReload": {
+        "ms": 5801,
+        "preloadTransfers": 0
+      }
+    },
+    {
+      "width": 390,
+      "homeMs": 7435,
+      "actions": [
+        {
+          "name": "bot opponents",
+          "ms": 112,
+          "styleReads": 23,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "cards",
+          "ms": 423,
+          "styleReads": 1006,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:62336/art/lounge/v1/library.webp",
+              "at": 1792045862628
+            }
+          ]
+        },
+        {
+          "name": "cards page 2",
+          "ms": 384,
+          "styleReads": 269,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "card zoom",
+          "ms": 71,
+          "styleReads": 172,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "deck",
+          "ms": 280,
+          "styleReads": 1058,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:62336/art/lounge/v1/library.webp",
+              "at": 1792045863593
+            }
+          ]
+        },
+        {
+          "name": "shop",
+          "ms": 228,
+          "styleReads": 410,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop astral",
+          "ms": 125,
+          "styleReads": 20,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "shop crimson",
+          "ms": 26,
+          "styleReads": 20,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "sleeves",
+          "ms": 37,
+          "styleReads": 28,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "furniture",
+          "ms": 36,
+          "styleReads": 42,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "ranking",
+          "ms": 41,
+          "styleReads": 2463,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "friends",
+          "ms": 34,
+          "styleReads": 222,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "profile",
+          "ms": 56,
+          "styleReads": 215,
+          "imageNetworkResponses": []
+        },
+        {
+          "name": "guide",
+          "ms": 202,
+          "styleReads": 802,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:62336/art/lounge/illustrated-v1/biblion.webp",
+              "at": 1792045864571
+            }
+          ]
+        },
+        {
+          "name": "home return",
+          "ms": 67,
+          "styleReads": 310,
+          "imageNetworkResponses": [
+            {
+              "url": "http://127.0.0.1:62336/art/lounge/stage-v1/sigil.webp",
+              "at": 1792045864746
+            }
+          ]
+        }
+      ],
+      "lateImages": [
+        {
+          "url": "http://127.0.0.1:62336/art/lounge/v1/library.webp",
+          "at": 1792045862628
+        },
+        {
+          "url": "http://127.0.0.1:62336/art/lounge/v1/library.webp",
+          "at": 1792045863593
+        },
+        {
+          "url": "http://127.0.0.1:62336/art/lounge/illustrated-v1/biblion.webp",
+          "at": 1792045864571
+        },
+        {
+          "url": "http://127.0.0.1:62336/art/lounge/stage-v1/sigil.webp",
+          "at": 1792045864746
+        }
+      ],
+      "serverImageTransfers": [],
+      "wireImageTransfers": [],
+      "state": {
+        "sameHomeCanvas": true,
+        "cache": "ready",
+        "worker": true,
+        "heap": 35197363,
+        "errors": []
+      },
+      "errors": [],
+      "httpErrors": [],
+      "warmReload": {
+        "ms": 5875,
+        "preloadTransfers": 0
+      }
+    }
+  ]
+}

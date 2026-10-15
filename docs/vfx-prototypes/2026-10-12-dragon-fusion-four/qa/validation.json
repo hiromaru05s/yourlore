@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-13",
+  "baseCommit": "8d7cdbe02c056b84fe1c0bb86502a72907c6ede3",
+  "commands": [
+    {
+      "command": "node_modules/.bin/tsc --noEmit -p client/tsconfig.json",
+      "exitCode": 0
+    },
+    {
+      "command": "node_modules/.bin/vite build --config client/src/dev/dragon-fusion-four/vite.config.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node scripts/guard-design.mjs",
+      "exitCode": 0
+    },
+    {
+      "command": "node tests/dragon-fusion-four-browser.mjs",
+      "exitCode": 0,
+      "passed": 74
+    },
+    {
+      "command": "git diff --cached --check",
+      "exitCode": 0
+    }
+  ],
+  "sourceSha256": {
+    "client/src/dev/dragon-fusion-four/board.ts": "21e9c1ee55173497cd277af69644bfc483c4ad375fa530179ba00b8d5535d3ef",
+    "client/src/dev/dragon-fusion-four/catalog.ts": "439ba100d96db2136d7343d5e91d0dca3566334f764e562b19c5c7163b196b72",
+    "client/src/dev/dragon-fusion-four/entry.ts": "2a2bfea8f9902be1183040d0c23a636b4e17f0cd62a97a71da8fb64ceb8c1ab1",
+    "client/src/dev/dragon-fusion-four/geometry.ts": "d9e78872a9ee3e43fbfda541ec332e07bade795e590ee7324aa9aa12d3159678",
+    "client/src/dev/dragon-fusion-four/preview.ts": "35f17d198a7a30e49cd2d57ce375a8f79796fe1b98586fbff0295c453eab73a2",
+    "client/src/dev/dragon-fusion-four/renderer.ts": "00f7c077f46814d9320d82af6e7be5dcd89d9a678940d42da64da46c457e01e2",
+    "client/src/dev/dragon-fusion-four/rigs.ts": "c4377a7661c0d694dbc47d390e2300db24ef5d280c92f8bdfcfdd3e7f9e4baa7",
+    "client/src/dev/dragon-fusion-four/style.css": "511705a86c21f17faf06c0fc6936b6e2dfff3cc1671bffdd652a8963ed52715b",
+    "client/src/dev/dragon-fusion-four/surface.ts": "789f29e100dd15e83712bbb06d3ed17246e0e0fdf8efaf08f84a4060a018d93b",
+    "client/src/dev/dragon-fusion-four/vite.config.mjs": "69ac24212992de60672f658d897a181f465460d5f0234d77d0a57175e274e761"
+  },
+  "scope": "Local four-pattern comparison. No runtime selection, staging deployment, or authenticated match validation."
+}

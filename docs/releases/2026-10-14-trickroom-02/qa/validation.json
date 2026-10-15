@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "owner": 0,
+      "enterFrames": 401,
+      "exitFrames": 171,
+      "surface": {
+        "surface": 1,
+        "rims": 20,
+        "live": 1
+      }
+    },
+    {
+      "width": 390,
+      "owner": 1,
+      "enterFrames": 285,
+      "exitFrames": 172,
+      "surface": {
+        "surface": 1,
+        "rims": 16,
+        "live": 1
+      }
+    },
+    {
+      "mode": "skip",
+      "frames": 2
+    },
+    {
+      "mode": "hidden",
+      "frames": 14
+    },
+    {
+      "mode": "reduced",
+      "frames": 8
+    },
+    {
+      "dispose": true,
+      "errors": []
+    }
+  ],
+  "errors": []
+}

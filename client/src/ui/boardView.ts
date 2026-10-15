@@ -1,6 +1,13 @@
-import {monsterCanAttack} from '../shared/engine';
+import {AnesthesiaPresentation} from './anesthesia/runtime';
+import {bindOriginTrap} from './originRite/anchors';
+import {paintSpaceRiteCard,spaceRiteReason,spaceRiteSourceText,syncSpaceRiteStatus} from './spaceRiteStatus';
+import {dualReadyActive} from './monster/dualReady';
+import { questProgressText } from '../shared/cardPresentation';
+import { npcPortrait } from "../shared/botNpcs";
+import {prepareManaPurchase} from './manaPurchase';
+import {monsterCanAttack,monsterCanTarget} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
-import {seekerPortrait} from './seekerAnimation';
+import {seekerPortrait, disposeSeekers} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
 import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
@@ -13,7 +20,7 @@ import {prepareDuel} from './duelReadiness';
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
-import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
+import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isVampFamily, isGolem, marketStockOf } from "../shared/engine";
 import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
@@ -28,12 +35,13 @@ import { projectBoardDOM } from './boardProjection';
 import { installGameCursor } from './gameCursor';
 import { createAttackAim } from './attackAim';
 import { createBoardStatRise } from './statRise';
+import {TrickRoomPresentation} from './trickRoom/runtime';
 import {createRiftRecordWindow,recordVariant} from './riftRecordCount';
 
 // the local player's profile avatar (set by the game screen), shown on MY portrait
 let MY_AVATAR: string | null | undefined;
 export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
-// the opponent's avatar (online games pass it in; bot games fall back to initial)
+// The opponent avatar comes from the online profile or local NPC roster.
 let OPP_AVATAR: string | null | undefined;
 export function setOppAvatar(a?: string | null): void { OPP_AVATAR = a; }
 
@@ -91,6 +99,8 @@ export class GameView {
   /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
   private disposed = false;
   private statRise: ReturnType<typeof createBoardStatRise>;
+  private trickRoom:TrickRoomPresentation;
+  private anesthesia:AnesthesiaPresentation;
   private disposeScene?: () => void;
   private readonly battlefieldBg = pickBattlefieldBg();
 
@@ -99,12 +109,18 @@ export class GameView {
     this.you = you;
     this.h = h;
     this.statRise = createBoardStatRise(root);
+    this.trickRoom = new TrickRoomPresentation(root);
+    this.anesthesia = new AnesthesiaPresentation(root);
     delete this.root.dataset.sceneReady;delete this.root.dataset.boardRendered;delete this.root.dataset.preloadedImages;
     this.root.dataset.tableState=typeof WebGL2RenderingContext!=='undefined'?'loading':'fallback';
+    // Select projected-board CSS before inserting nodes: otherwise the browser
+    // fetches legacy hidden furniture atlases during the first style pass.
+    if(typeof WebGL2RenderingContext!=='undefined')this.root.classList.add('reading-board');
     this.buildSkeleton();
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches)void prepareManaPurchase();
     this.cleanups.push(installGameCursor(this.root));
     const mount=typeof WebGL2RenderingContext!=='undefined'
-      ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed)this.disposeScene=mountDuelScene(this.root);}).catch(()=>{this.root.dataset.tableState='fallback';})
+      ? import('./duelScene').then(({mountDuelScene})=>{if(!this.disposed){this.disposeScene=mountDuelScene(this.root);if(this.root.dataset.tableState==='fallback')this.root.classList.remove('reading-board');}}).catch(()=>{this.root.dataset.tableState='fallback';this.root.classList.remove('reading-board');})
       : Promise.resolve();
     prepareDuel(this.root,mount);
   }
@@ -163,29 +179,8 @@ export class GameView {
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
     // sound button (round button below the logo): click = volume slider popover
     // (ON/OFF만 있던 것을 인게임 볼륨 조절로 확장 — 슬라이더 0 = 음소거)
-    // 조작 방법 안내: 버튼을 은은히 빛내고, 하루 1회 말풍선으로 위치를 알려준다.
-    // ❌로 닫거나 도움말을 실제로 열면 그날은 다시 보이지 않는다 (localStorage 날짜 도장).
     const helpBtn = this.q("helpBtn") as HTMLButtonElement;
-    const CALLOUT_KEY = "lore_help_callout_seen";
-    const today = new Date().toISOString().slice(0, 10);
-    let seenDay = "";
-    try { seenDay = localStorage.getItem(CALLOUT_KEY) ?? ""; } catch { /* private mode */ }
-    let callout: HTMLElement | null = null;
-    const dismissCallout = (remember: boolean): void => {
-      callout?.remove(); callout = null;
-      helpBtn.classList.remove("is-callout");
-      if (remember) { try { localStorage.setItem(CALLOUT_KEY, today); } catch { /* ignore */ } }
-    };
-    if (seenDay !== today) {
-      helpBtn.classList.add("is-callout");
-      callout = document.createElement("div");
-      callout.className = "help-callout";
-      callout.innerHTML = `<span class="hc-text">${t("help.callout")}</span><button class="hc-close" aria-label="${t("common.cancel")}">✕</button>`;
-      (this.root.querySelector(".game") as HTMLElement).appendChild(callout);
-      (callout.querySelector(".hc-close") as HTMLButtonElement).onclick = (e) => { e.stopPropagation(); dismissCallout(true); };
-      callout.onclick = () => { dismissCallout(true); showControlsHelp(); };
-    }
-    helpBtn.onclick = () => { dismissCallout(true); showControlsHelp(); };
+    helpBtn.onclick = () => showControlsHelp();
     const muteBtn = this.q("muteBtn") as HTMLButtonElement;
     let lastVol = getSfxVolume() || 0.7;
     const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = `<img src="/ui/duel-controls/v1/sound.png" alt="" draggable="false"><span class="sound-label">${t("settings.sound")}</span><i class="mute-mark" aria-hidden="true">×</i>`; muteBtn.classList.toggle("muted", m);muteBtn.setAttribute('aria-label',t('settings.sound.volume'));muteBtn.title=t('settings.sound.volume'); };
@@ -306,8 +301,11 @@ export class GameView {
   /** Detach the window/document-level listeners this view installed. */
   destroy(): void {
     this.disposed = true;
+    disposeSeekers(this.root);
     this.cancelHandDrag?.();
     this.disposeScene?.();
+    this.trickRoom.dispose();
+    this.anesthesia.dispose();
     this.statRise.dispose();
     this.handConditions.dispose();
     clearBiblionFx(true);
@@ -360,40 +358,18 @@ export class GameView {
   syncTurn(g: GameState): void {
     if(g.turn < this.turnSnapshot)return;
     this.turnSnapshot=g.turn;
+    this.anesthesia.advanceTurn(g.turn);
     this.endingTurn=false;
     this.root.dataset.readingTurn=g.cur===this.you&&!g.over?'player':'opponent';
   }
 
-  render(g: GameState): void {
-    const fieldBefore=fieldPositions(this.root);
-    const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
-    const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
-    this.root.querySelector('.card-block-tip')?.remove();
-    const me = g.players[this.you];
-    const opp = g.players[1 - this.you];
-    const myTurn = g.cur === this.you && !g.over;
-    const pending = g.pending;
-    if(g.turn>=this.turnSnapshot&&!this.endingTurn)this.syncTurn(g);
-    // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
-    OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
-    if(g.sleeves)setMySleeve(g.sleeves[this.you]);
-    if(g.furnitures)setMyFurniture(g.furnitures[this.you]);
-
-    this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${t(myTurn ? "fx.yourturn" : "fx.oppturn")}</b></span>`;
-    // refresh static labels (so a live language switch updates them)
-    this.q("endBtn").innerHTML = `<span class="end-turn-label">${this.root.dataset.readingTurn==='player' ? "END\nTURN" : "ENEMY\nTURN"}</span>`;
-    const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
-    this.q("logTitle").textContent = t("game.log");
-    for(const [id,key] of [['logTab','game.log'],['giveupBtn','game.surrender'],['helpBtn','help.open'],['muteBtn','settings.sound']] as const){
-      const button=this.q(id);const label=button.querySelector('span');if(label)label.textContent=t(key);button.setAttribute('aria-label',t(key));button.setAttribute('title',t(key));
-    }
-
-    // Hearthstone-style center portraits (opp top / me bottom)
-    this.renderPortrait(this.q("portraitOpp"), opp, false);
-    this.renderPortrait(this.q("portraitMe"), me, true);
-    this.q("portraitMe").classList.toggle("is-active", myTurn);
-    this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
-
+  /** Present a reducer draw before its triggered effects; all other zones stay on the old board. */
+  presentDrawHand(g:GameState,player:Side,cards:CardInst[]):void{
+    const p={...g.players[player],hand:cards};
+    if(player===this.you)this.renderHand(g,p,g.cur===this.you&&!g.over);
+    else this.renderOpponentHand(p);
+  }
+  private renderOpponentHand(opp:PlayerState):void{
     // opponent hand (face-down): straight upright stack held to the right of their
     // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
     const oh = this.q("oppHand"); oh.innerHTML = "";
@@ -424,12 +400,46 @@ export class GameView {
 
 
     this.layoutOpponentHand();
+  }
+
+  render(g: GameState): Promise<void> {
+    this.trickRoom.finish();
+    const fieldBefore=fieldPositions(this.root);
+    const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
+    const oldCards=new Map([...this.root.querySelectorAll<HTMLElement>('.card[data-uid]')].map(el=>[el.dataset.uid,{width:el.offsetWidth,fonts:[...el.querySelectorAll<HTMLElement>('.seal-value')].map(e=>({text:e.textContent,font:e.style.fontSize}))}]));
+    this.root.querySelector('.card-block-tip')?.remove();
+    const me = g.players[this.you];
+    const opp = g.players[1 - this.you];
+    const myTurn = g.cur === this.you && !g.over;
+    const pending = g.pending;
+    if(g.turn>=this.turnSnapshot&&!this.endingTurn)this.syncTurn(g);
+    // opponent's equipped sleeve (server-synced); falls back to default for bot/local games
+    OPP_SLEEVE = sleeveUrl(g.sleeves?.[1 - this.you]);
+    if(g.sleeves)setMySleeve(g.sleeves[this.you]);
+    if(g.furnitures)setMyFurniture(g.furnitures[this.you]);
+
+    this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${t(myTurn ? "fx.yourturn" : "fx.oppturn")}</b></span>`;
+    // refresh static labels (so a live language switch updates them)
+    this.q("endBtn").innerHTML = `<span class="end-turn-label">${this.root.dataset.readingTurn==='player' ? "END\nTURN" : "ENEMY\nTURN"}</span>`;
+    const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
+    this.q("logTitle").textContent = t("game.log");
+    for(const [id,key] of [['logTab','game.log'],['giveupBtn','game.surrender'],['helpBtn','help.open'],['muteBtn','settings.sound']] as const){
+      const button=this.q(id);const label=button.querySelector('span');if(label)label.textContent=t(key);button.setAttribute('aria-label',t(key));button.setAttribute('title',t(key));
+    }
+
+    // Hearthstone-style center portraits (opp top / me bottom)
+    this.renderPortrait(this.q("portraitOpp"), opp, false);
+    this.renderPortrait(this.q("portraitMe"), me, true);
+    this.q("portraitMe").classList.toggle("is-active", myTurn);
+    this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
+
+    this.renderOpponentHand(opp);
     this.renderRow(this.q("oppRow"), g, opp, false, myTurn, pending);
     this.renderRow(this.q("meRow"), g, me, true, myTurn, pending);
     this.renderMarket(g, me, myTurn);
     this.renderHand(g, me, myTurn);
 
-    (this.q("endBtn") as HTMLButtonElement).disabled = this.root.dataset.readingTurn!=='player' || !!pending;
+    (this.q("endBtn") as HTMLButtonElement).disabled = this.root.dataset.readingTurn!=='player' || (!!pending && pending.reason !== 'attack');
 
     // Warm the full-resolution art for everything enlargeable on this board, at
     // idle. A tap on a phone has no hover to hint from, so without this the
@@ -442,7 +452,7 @@ export class GameView {
 
     // target hint banner
     const hint = this.q("targetHint");
-    if (pending && myTurn && (pending.kind === "oppMon" || pending.kind === "myMon")) {
+    if (pending && pending.reason !== 'attack' && myTurn && (pending.kind === "oppMon" || pending.kind === "myMon")) {
       hint.style.display = "block";
       hint.innerHTML = `▸ ${getLang() === "ja" ? pending.hintJa : getLang() === "en" ? logToEn(pending.hint) : pending.hint}` + (pending.allowCancel ? ` &nbsp; <a id="cancelTarget" style="cursor:pointer">[${t("common.cancel")}]</a>` : "");
       const c = hint.querySelector("#cancelTarget") as HTMLElement | null;
@@ -461,8 +471,11 @@ export class GameView {
     for(const id of readyPiles)this.root.querySelector(`#${id}`)?.classList.add('pile--3d-ready');
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
+    this.anesthesia.sync(g);
     settleField(this.root,fieldBefore);
-    this.statRise.update(g);
+    const trick=this.trickRoom.track(g);
+    const stats=this.statRise.update(g,new Set(trick.changes.map(c=>c.uid)));
+    return Promise.all([stats,this.trickRoom.present(trick)]).then(()=>{});
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
@@ -497,6 +510,9 @@ export class GameView {
       // 아우라(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
+        && !(pending!.data?.sourceId === "S3" && m.tribe)
+        && !(pending!.reason === "bloodSecret" && !isVampFamily(m))
+        && (pending!.reason !== "attack" || g.players[g.cur].field.some(a => a.uid === pending!.data?.attackerUid && monsterCanTarget(g,g.players[g.cur],a,m)))
         && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능
         && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 카운터: 알 제외
         && !(pending!.kind === "oppMon" && pending!.reason === "destroyMon" && pending!.data?.maxCost != null && m.cost > (pending!.data.maxCost as number)) // 룬 파열: 코스트 캡
@@ -512,13 +528,15 @@ export class GameView {
       // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
       const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
       const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
-      const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: m.exhausted, ...casinoBadge });
-      if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
+      const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: isMe && myTurn && m.exhausted, ...casinoBadge });
+      if (dualReadyActive(m, canAttack)) card.dataset.monsterDualReady = '04';
+      if (pending?.reason === "attack" && isMe && myTurn && pending.data?.attackerUid === m.uid) card.onclick = () => this.h.onChooseTarget(null);
+      else if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
       else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
       // "현재/최대" exactly like the field tile (v29: the zoom used to show HP only,
       // so a 4/20 monster read as a healthy 20 in the view players trade off).
-      bindZoom(card, { ...m, atk: effAtk(p, m, g), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m) });
+      bindZoom(card, { ...m, atk: effAtk(p, m, g), def: effDef(p, m) }, { now: curHp(p, m), max: effDef(p, m), turn: g.turn });
       // 드래그 = 공격(상대 몬스터/초상화로) + 내 필드 안에서는 순서 변경.
       // 예전엔 몬스터가 2체 이상일 때만 드래그가 붙어서 1체일 땐 공격 드래그가 아예 없었다.
       if (isMe && myTurn && !pending && !g.over && (canAttack || p.field.length > 1)) {
@@ -544,6 +562,7 @@ export class GameView {
       // Generic trap icon and unknown cost preserve hidden identity for both players.
       const tile = document.createElement("div");
       tile.className = "buff-icon buff-icon--trap";
+      bindOriginTrap(tile,t.card.uid);
       tile.innerHTML = `<span class="buff-frame" style="background-image:url(${fieldFrameFor('trap')})"></span><span class="buff-art" style="background-image:url(${refinedArt('trap-seal')})"></span><span class="buff-cost" aria-hidden="true"><span>?</span></span>`;
       tile.title = trapLabel;
       tile.setAttribute("aria-label", trapLabel);
@@ -588,10 +607,10 @@ export class GameView {
       const tile = questTile(q.card,q.progress);
       tile.tabIndex=0;tile.setAttribute("role","button");
       tile.dataset.uid = q.card.uid;
-      const progress = `${q.progress}/${q.card.quest?.target ?? 0}`;
-      tile.title = `${cardName(q.card)} · ${progress} · ${q.card.textJa ?? q.card.text}`;
-      tile.setAttribute("aria-label", `${cardName(q.card)} クエスト進捗 ${progress}`);
-      tile.onclick = () => zoomCard(q.card, undefined, `クエスト進捗 ${progress}`);
+      const progress = questProgressText(q.progress, q.card.quest?.target ?? 0, getLang());
+      tile.title = `${cardName(q.card)} · ${progress} · ${getLang() === "ja" ? q.card.textJa : getLang() === "en" ? q.card.textEn : q.card.text}`;
+      tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
+      tile.onclick = () => zoomCard(q.card, undefined, progress);
       tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tile.click();}};
       sz.appendChild(tile);
     }
@@ -964,31 +983,39 @@ export class GameView {
     rb.onclick = () => this.h.onRefresh();
   }
 
-  /** Portrait counters: health upper-left, shield lower-left, Dew upper-right. */
+  /** Portrait counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right. */
   private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
-    const shield = Math.max(0, p.shield ?? 0), dew = Math.max(0, p.dew ?? 0);
-    const oldPortrait=el.querySelector<HTMLCanvasElement>('.seeker-motion');
+    const shield = Math.max(0, p.shield ?? 0), dew = Math.max(0, p.dew ?? 0), brand = Math.max(0, p.brand ?? 0);
+    const oldRing=el.querySelector<HTMLElement>('.pt-ring');
+    const oldPortrait=oldRing?.querySelector<HTMLCanvasElement>('.seeker-motion');
     const oldMana=el.querySelector<HTMLElement>('.pt-mana');
     const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
     const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
     const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
-    const seeker = avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE" ? avatar : isMe ? "SEEKER_BLUE" : "SEEKER_RED";
+    const npc = npcPortrait(avatar);
+    const seeker = "SEEKER_HOODED";
     el.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b></span>
       </span>
-      <span class="pt-ring">${avatarHtml(seeker, p.name, 100)}</span>
+      <span class="pt-ring">${avatarHtml(npc ? avatar : seeker, p.name, 100)}</span>
       <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
-      ${(p.brand ?? 0) > 0 ? `<span class="pt-brand" title="${esc(t("game.brandTip").replace("{n}", String(p.brand)))}">${t("game.brand")} <b>${p.brand}</b></span>` : ""}
-      ${shield > 0 || dew > 0 ? `<span class="pt-resources">
+      ${shield > 0 || dew > 0 || brand > 0 ? `<span class="pt-resources">
         ${shield > 0 ? `<span class="pt-shield" role="img" aria-label="${t('game.shield')} ${p.shield ?? 0}" title="${esc(t('game.shieldTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.shield ?? 0).length)}"><b id="shield-${sd}" aria-hidden="true">${shield}</b></span>` : ""}
         ${dew > 0 ? `<span class="pt-dew" role="img" aria-label="${t('game.dew')} ${p.dew ?? 0}" title="${esc(t('game.dewTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.dew ?? 0).length)}"><b id="dew-${sd}" aria-hidden="true">${dew}</b></span>` : ""}
+        ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
       <span class="pt-name">${esc(p.name)}</span>`;
-    const portrait=oldPortrait??seekerPortrait(seeker==='SEEKER_RED'?'red':'blue');
-    el.querySelector('.avatar')?.replaceChildren(portrait);
+    const ring = el.querySelector<HTMLElement>('.pt-ring')!;
+    // Keep the frame and canvas together so a counter rerender cannot interrupt a hit.
+    if (oldRing && oldRing.dataset.avatar === (avatar ?? '')) ring.replaceWith(oldRing);
+    else {
+      if (oldPortrait) disposeSeekers(oldRing!);
+      ring.dataset.avatar = avatar ?? '';
+      if (!npc) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true}));
+    }
   }
 
   /** MY hand — straight upright cards (no fan) in two states:
@@ -1004,6 +1031,7 @@ export class GameView {
     const old=new Map([...handEl.querySelectorAll<HTMLElement>(':scope > .card')].map(el=>[el.dataset.uid,el]));
     const keep=new Set(me.hand.map(c=>c.uid));
     for(const [uid,node] of old)if(!keep.has(uid!))node.remove();
+    syncSpaceRiteStatus(this.root,g,this.you,!!discarding);
     const conditionCards:HTMLElement[]=[];
     me.hand.forEach((c, idx) => {
       const pc = playCost(c, me);
@@ -1018,10 +1046,14 @@ export class GameView {
         if(card)card.replaceWith(next);
         card=next;
       }
-      if(!g.over && !discarding && cardPlayConditionMet(g,this.you,c)===true)conditionCards.push(card);
+      const spaceReason=discarding?null:spaceRiteReason(g,this.you,c);
+      paintSpaceRiteCard(card,spaceReason,c);
+      if(spaceReason)card.dataset.spaceRiteReason=spaceReason+" "+spaceRiteSourceText(g,this.you);
+      if(!g.over && !discarding && !spaceReason && cardPlayConditionMet(g,this.you,c)===true)conditionCards.push(card);
       card.classList.remove('is-played');
       if(!aff&&!discarding)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       else delete card.dataset.blockReason;
+      if(spaceReason)card.dataset.blockReason=card.dataset.spaceRiteReason;
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(me.hand.length - idx);
       const position=handEl.children[idx];
@@ -1216,7 +1248,7 @@ export class GameView {
     });
     card.onclick = (e) => {
       e.stopPropagation();
-      if (this.handOpen) zoomCard(c); // tap = enlarge preview; playing is drag-only now
+      if (this.handOpen) zoomCard(c,undefined,card.dataset.spaceRiteReason); // tap = enlarge preview; playing is drag-only now
     };
   }
 

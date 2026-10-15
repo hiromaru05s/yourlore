@@ -13,17 +13,28 @@ function rounded(w:number,h:number,r:number):T.Shape {
   s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);
   s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s;
 }
+// CPU-only templates never enter a scene. Instances own their cloned buffers,
+// so existing disposal remains safe while triangulation runs only once.
+let templates:{edge:T.ExtrudeGeometry;face:T.ShapeGeometry;padded:T.PlaneGeometry}|undefined;
+function stockGeometry(){
+  if(!templates){
+    const shape=rounded(.94,RATIO*.94,.12);
+    const edge=new T.ExtrudeGeometry(shape,{depth:STOCK_THICKNESS,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-STOCK_THICKNESS/2);
+    const face=new T.ShapeGeometry(shape,4),p=face.getAttribute('position'),uv=face.getAttribute('uv');
+    for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
+    templates={edge,face,padded:new T.PlaneGeometry(1+2*CARD_PADDING,RATIO+2*CARD_PADDING)};
+  }
+  return templates;
+}
 /** Same 0.64 proportions/rounded stock as the moving PaperCard, with fewer
  * vertices for resting stacks. The sleeve is shared, never per-card geometry. */
 export function cardStock(map:T.Texture, face?:T.Texture, edgesOnly=false):T.Group {
   const g=new T.Group();g.name='card-stock';
-  const shape=rounded(.94,RATIO*.94,.12);
-  const edge=new T.ExtrudeGeometry(shape,{depth:STOCK_THICKNESS,bevelEnabled:false,curveSegments:4});edge.translate(0,0,-STOCK_THICKNESS/2);
+  const geometry=stockGeometry(),edge=new T.BufferGeometry().copy(geometry.edge);
   const stock=new T.Mesh(edge,[new T.MeshBasicMaterial({visible:false}),new T.MeshStandardMaterial({color:0xccbea5,roughness:.85})]);stock.castShadow=true;stock.receiveShadow=true;g.add(stock);
   const skin=(texture:T.Texture,back:boolean)=>{
     const padded=!back&&!!face;
-    const geo=padded?new T.PlaneGeometry(1+2*CARD_PADDING,RATIO+2*CARD_PADDING):new T.ShapeGeometry(shape,4),p=geo.getAttribute('position'),uv=geo.getAttribute('uv');
-    if(!padded)for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)+.5,p.getY(i)/RATIO+.5);
+    const geo=new T.BufferGeometry().copy(padded?geometry.padded:geometry.face);
     const mesh=new T.Mesh(geo,padded?new T.MeshBasicMaterial({map:texture,toneMapped:false,transparent:true,alphaTest:.025}):sleeveMaterial(texture));
     mesh.name=back?'stock-back':'stock-front';
     mesh.position.z=(back?-1:1)*STOCK_THICKNESS/2;if(back)mesh.rotation.y=Math.PI;

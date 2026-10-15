@@ -1,4 +1,8 @@
+import {releaseHomeSpirit} from './ui/homeSpirit';
+import { loungeText } from './ui/loungeText';
+import { mountTutorialWelcome } from './screens/tutorialWelcome';
 import {coverScreen,isMenuReady,imageUrls,hasUnloadedAssets} from './ui/assetReadiness';
+import {showGraphicsNotice} from './ui/graphicsNotice';
 import { mountLounge, type LoungePage } from "./ui/lounge";
 import { startHomeMusic } from "./ui/homeMusic";
 // ============================================================
@@ -14,7 +18,7 @@ import { saveActiveGame, loadActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
-import { mountGame } from "./screens/lazyGame";
+import { mountGame, warmGame } from "./screens/lazyGame";
 import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
@@ -38,6 +42,9 @@ export class App {
   private navigating = false;
   private homeEntranceShown = false;
   private cancelCover:(()=>void)|undefined;
+  private closeGraphicsNotice:(()=>void)|undefined;
+  private graphicsChecked = false;
+  private screenRevision = 0;
 
   constructor(root: HTMLElement) { this.root = root; }
 
@@ -80,7 +87,7 @@ export class App {
       // crashed / closed mid-game? reconnect to the in-progress room instead of the home screen.
       const g = loadActiveGame();
       if (g) this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked);
-      else this.home();
+      else this.afterLogin();
     } else this.login();
   }
 
@@ -88,6 +95,8 @@ export class App {
   // the mount fn appends to root, so it must run after innerHTML is cleared.)
   private swap(make: () => Screen, page?: LoungePage): void {
     const mount = () => {
+      const revision = ++this.screenRevision;
+      this.closeGraphicsNotice?.(); this.closeGraphicsNotice = undefined;
       this.cancelCover?.();
       this.current?.destroy?.();
       this.leaveLounge?.(); this.leaveLounge = null;
@@ -97,13 +106,18 @@ export class App {
       this.current = make();
       if (keepHomeMusic && !this.stopHomeMusic) this.stopHomeMusic = startHomeMusic();
       if (page) {
+        const checkGraphics = () => {
+          if (revision !== this.screenRevision || this.graphicsChecked || (page !== 'login' && page !== 'home')) return;
+          this.graphicsChecked = true;
+          this.closeGraphicsNotice = showGraphicsNotice();
+        };
         this.leaveLounge = mountLounge(this, page);
         const entrance=page==='home'&&!this.homeEntranceShown;
         const assets=imageUrls(this.root);
         if(page==='login'||!isMenuReady()||entrance||hasUnloadedAssets(assets)){
-          const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets);this.cancelCover=cover.cancel;
-          void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;});
-        }
+          const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets,()=>warmGame());this.cancelCover=cover.cancel;
+          void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;if(ready)checkGraphics();});
+        } else checkGraphics();
       }
     };
     if (this.navigating) return;
@@ -115,8 +129,22 @@ export class App {
 
   login(): void { this.swap(() => mountLogin(this), "login"); }
   home(): void { setPresence("menu"); this.swap(() => mountHome(this), "home"); }
+  afterLogin(): void {
+    this.home();
+    if(!this.user || this.user.id==='local-guest-user')return;
+    const id=this.user.id,revision=this.screenRevision;
+    void api.tutorialStatus().then(status=>{
+      if(this.user?.id===id && this.screenRevision===revision && !status.offered)
+        this.swap(()=>mountTutorialWelcome(this), 'tutorial');
+    }).catch(()=>{
+      if(this.user?.id!==id || this.screenRevision!==revision)return;
+      const retry=document.createElement('button');retry.className='onboarding-retry';
+      retry.textContent=loungeText('チュートリアル案内を読み込めませんでした。再試行','Could not load your tutorial invitation. Retry','튜토리얼 안내를 불러오지 못했어요. 다시 시도');
+      retry.onclick=()=>this.afterLogin();this.root.append(retry);
+    });
+  }
   tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this), "tutorial"); }
-  tutorialGame(): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial" })); }
+  tutorialGame(lesson = 0): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial", lesson })); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this), "cards"); }
   botGame(difficulty: BotDifficulty = "hard"): void { setPresence("bot"); aCapture("game_start", { mode: "bot", difficulty }); this.swap(() => mountGame(this, { mode: "bot", difficulty })); }
   // entering a lobby with a live game still stored → rejoin it instead of re-queuing
@@ -141,6 +169,7 @@ export class App {
     aReset();
     stopPresence();
     this.user = null;
+    releaseHomeSpirit(this);
     this.login();
   }
 }

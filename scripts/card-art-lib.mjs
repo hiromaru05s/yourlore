@@ -1,15 +1,9 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
-import ts from "typescript";
+import { build } from "esbuild";
 
 export const rootDir = process.cwd();
 export const cardsSourcePath = path.join(rootDir, "client/src/shared/cards.ts");
-const cardsEnglishSourcePath = path.join(rootDir, "client/src/shared/cards.en.ts");
-const cardTextSourcePath = path.join(rootDir, "client/src/shared/cardText.ts");
-const flavorNamesSourcePath = path.join(rootDir, "client/src/shared/cardNames.flavor.ts");
-const questQuickSourcePath = path.join(rootDir, "client/src/shared/questQuickCards.ts");
-const cacheDir = path.join(rootDir, "art/.cache");
 export const promptOutputPath = path.join(rootDir, "art/prompts/card-art-prompts.jsonl");
 export const artDir = path.join(rootDir, "client/public/art/cards");
 export const cardArtWidth = 1472;
@@ -28,66 +22,23 @@ let lastCardTextModule = null;
 /** The transpiled shared/cardText module from the last loadCards() call. */
 export async function loadCardText() {
   if (!lastCardTextModule) throw new Error("loadCardText(): call loadCards() first");
-  return import(lastCardTextModule);
+  return lastCardTextModule;
 }
 
 export async function loadCards({ includeStarters = false } = {}) {
-  const source = await fs.readFile(cardsSourcePath, "utf8");
-  const englishSource = await fs.readFile(cardsEnglishSourcePath, "utf8");
-  const cardTextSource = await fs.readFile(cardTextSourcePath, "utf8");
-  const flavorNamesSource = await fs.readFile(flavorNamesSourcePath, "utf8");
-  const questQuickSource = await fs.readFile(questQuickSourcePath, "utf8");
-  const expansionSource = await fs.readFile(path.join(rootDir, "client/src/shared/expansionCards.ts"), "utf8");
-  await fs.mkdir(cacheDir, { recursive: true });
-
-  const englishJs = transpileTs(englishSource);
-  // cardText imports PASSIVES from "./cards" (keyword-chip rule) — the emitted
-  // .mjs must point at the emitted cards.mjs, or the import resolves to nothing.
-  const cardTextJs = transpileTs(cardTextSource)
-    .replaceAll('from "./cards"', 'from "./cards.mjs"')
-    .replaceAll("from './cards'", 'from "./cards.mjs"');
-  const flavorNamesJs = transpileTs(flavorNamesSource);
-  for (const name of ['dewShieldCards','cosmetics']) {
-    const src=await fs.readFile(path.join(rootDir, `client/src/shared/${name}.ts`), 'utf8');
-    await fs.writeFile(path.join(cacheDir, `${name}.mjs`), transpileTs(src));
-  }
-  const cardsJs = transpileTs(source)
-    .replaceAll("from './dewShieldCards'", 'from "./dewShieldCards.mjs"')
-    .replaceAll("from './cosmetics'", 'from "./cosmetics.mjs"')
-    .replaceAll('from "./expansionCards"', 'from "./expansionCards.mjs"')
-    .replaceAll('from "./questQuickCards"', 'from "./questQuickCards.mjs"')
-    .replaceAll('from "./cards.en"', 'from "./cards.en.mjs"')
-    .replaceAll("from './cards.en'", 'from "./cards.en.mjs"')
-    .replaceAll('from "./cardNames.flavor"', 'from "./cardNames.flavor.mjs"')
-    .replaceAll("from './cardNames.flavor'", 'from "./cardNames.flavor.mjs"')
-    .replaceAll('from "./cardText"', 'from "./cardText.mjs"')
-    .replaceAll("from './cardText'", 'from "./cardText.mjs"');
-
-  const englishOut = path.join(cacheDir, "cards.en.mjs");
-  const cardTextOut = path.join(cacheDir, "cardText.mjs");
-  const flavorNamesOut = path.join(cacheDir, "cardNames.flavor.mjs");
-  const cardsOut = path.join(cacheDir, "cards.mjs");
-  await fs.writeFile(path.join(cacheDir, "questQuickCards.mjs"), transpileTs(questQuickSource));
-  await fs.writeFile(path.join(cacheDir, "expansionCards.mjs"), transpileTs(expansionSource));
-  await fs.writeFile(englishOut, englishJs);
-  await fs.writeFile(cardTextOut, cardTextJs);
-  await fs.writeFile(flavorNamesOut, flavorNamesJs);
-  await fs.writeFile(cardsOut, cardsJs);
-
-  lastCardTextModule = `${pathToFileURL(cardTextOut).href}?t=${Date.now()}`;
-  const mod = await import(`${pathToFileURL(cardsOut).href}?t=${Date.now()}`);
+  // Bundle the real dependency graph, including catalog cosmetics and canonical
+  // effects. A handwritten list of transpiled imports silently goes stale.
+  const result = await build({
+    stdin: {
+      contents: 'export { DB, STARTERS, cardPassives, PASSIVES } from "./client/src/shared/cards.ts"; export * from "./client/src/shared/cardText.ts"; export * from "./client/src/shared/cardKeywordText.ts";',
+      resolveDir: rootDir, loader: "ts",
+    },
+    bundle: true, platform: "node", format: "esm", write: false,
+  });
+  const mod = await import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`);
+  lastCardTextModule = mod;
   const cards = Object.values(mod.DB);
   return includeStarters ? cards.concat(Object.values(mod.STARTERS)) : cards;
-}
-
-function transpileTs(source) {
-  return ts.transpileModule(source, {
-    compilerOptions: {
-      module: ts.ModuleKind.ES2022,
-      target: ts.ScriptTarget.ES2022,
-      verbatimModuleSyntax: false,
-    },
-  }).outputText;
 }
 
 export function cardArtPath(card) {
@@ -196,7 +147,7 @@ function subjectHint(card) {
   if (card.id === "WORLD_GUARD") return "a massive world tree guardian made of bark, moss, and gold-green life crystals, standing before ancient roots, protective fantasy titan";
   if (card.id === "GOLIATH_HUNT") return "object-only giant-slaying spell icon, enormous cracked shield with 20-like tally marks pierced by a huge hunter spear, empty arena, no people";
   if (card.id === "DOUBLE_EXEC") return "object-only execution spell icon, two dark monster-shaped stone effigies split by crossed crimson judgment blades, no people";
-  if (card.id === "MASSACRE") return "object-only massacre spell icon, empty battlefield of shattered monster masks swept by a red-black destruction wave, life crystal cracking nearby, no people";
+  if (card.id === "MASSACRE") return "object-only massacre spell illustration, branching matte black iron bands from a broken cobalt power relic coil around ivory beast-record tablets and twist them apart simultaneously, thin oxblood fracture lines and severing life threads, dark stone archive dais, confident visible brushwork and broad painted planes, no people, no photorealism or glossy CGI";
   if (card.id === "MIMIC_KING2") return "a single possessed treasure chest mimic heir, rectangular ornate chest only, the open lid itself is the mouth with sharp teeth along the wooden edges, crown bolted onto the lid, tiny clawed feet under the box, no creature behind it, no lizard body, no animal head, no torso, no arms, no hands, no hair, no cloak, no people";
   if (card.id === "ORIGIN_MIMIC") return "a single ancient primordial treasure chest mimic, rectangular old wooden chest only, the open lid itself is a huge fanged mouth with glowing eyes carved on the front panel, rootlike clawed feet under the box, trap runes carved into the chest, no creature behind it, no lizard body, no animal head, no torso, no arms, no hands, no people";
   if (card.id === "GREED_PRICE") return "object-only greed spell icon, cursed treasure chest spawning two tiny mimic chests while three mimic card shards vanish into a black void, no people";

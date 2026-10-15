@@ -18,8 +18,8 @@ export function addCrystalOptics(material:THREE.MeshPhysicalMaterial,cut:{planes
       #endif
       vCrystalBasis=mat3(crystalTransform);
       vCrystalScale=length(crystalTransform[0].xyz);
-      vCrystalLocal=(position-vec3(${cut.center.join(',')}))/${cut.scale};
-      vCrystalEye=((inverse(crystalTransform)*vec4(cameraPosition,1.0)).xyz-vec3(${cut.center.join(',')}))/${cut.scale};
+      vCrystalLocal=(position-vec3(${cut.center.join(',')}))/float(${cut.scale});
+      vCrystalEye=((inverse(crystalTransform)*vec4(cameraPosition,1.0)).xyz-vec3(${cut.center.join(',')}))/float(${cut.scale});
       vCrystalNormal=normal;
     `);
     shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\n'+varyings+`\nuniform vec4 crystalPlanes[${count}];`);
@@ -45,7 +45,7 @@ export function addCrystalOptics(material:THREE.MeshPhysicalMaterial,cut:{planes
             }
           }
           if(distance>900.0)break;
-          float worldDistance=distance*${cut.scale}*vCrystalScale;
+          float worldDistance=distance*float(${cut.scale})*vCrystalScale;
           throughput*=pow(max(attenuationColor,vec3(0.001)),vec3(worldDistance/max(attenuationDistance,0.001)));
           pos+=ray*distance;
           vec3 escaped=refract(ray,-exitNormal,ratio);
@@ -71,5 +71,5 @@ export function addCrystalOptics(material:THREE.MeshPhysicalMaterial,cut:{planes
       #endif
     `);
   };
-  material.customProgramCacheKey=()=>`lore-crystal-cut-v2-${count}`;
+  material.customProgramCacheKey=()=>`lore-crystal-cut-v3-${count}-${cut.scale}-${cut.center.join(',')}`;
 }

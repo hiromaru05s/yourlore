@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5556',out=process.env.LORE_TEST_OUT||'/tmp/reverse-runtime-qa';await fs.mkdir(out,{recursive:true});
+const b=await chromium.launch({channel:'chrome',headless:true}),ctx=await b.newContext({viewport:{width:1280,height:900}}),p=await ctx.newPage();p.setDefaultTimeout(90000);const errors=[],checks=[];p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error'&&/WebGL|shader|GLSL/i.test(m.text()))errors.push(m.text());});
+try{
+ await p.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await p.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));
+ await p.evaluate(async()=>{
+  const {createGame,reduce}=await import('/src/shared/engine.ts'),{DB}=await import('/src/shared/cards.ts');window.reverseAnim=await import('/src/ui/anim.ts');document.querySelector('.tempo-controls')?.remove();
+  window.reverseFixture=async(caster=0,owner=0,kind='S1',full=false)=>{
+   const c=window.combatTempo.controller;c.fastForward();await c.queue;c.stopTimer();const g=createGame({mode:'bot',seed:42,starting:caster,p0:{id:'self',name:'YOU'},p1:{id:'opponent',name:'OPPONENT'}}).state;g.turn=3;g.cur=caster;g.phase='main';g.pending=null;
+   for(const pl of g.players)Object.assign(pl,{field:[],enchants:[],traps:[],quests:[],hand:[],deck:[],discard:[],removed:[],hp:30,mana:20,maxMana:20,shield:0,dew:0,brand:0,openingDrawReady:false});
+   g.players[owner].enchants=[{card:{...DB.BLACK_REVERSE,uid:'reverse-source'},turns:6,bornTurn:1}];
+   if(kind==='pain')g.players[caster].enchants.push({card:{...DB.NO_PAIN,uid:'pain-source'},turns:99,bornTurn:1});if(kind.startsWith('EXILE_'))g.players[caster].removed=Array.from({length:3},(_,i)=>({...DB.ELF,uid:'record-'+i}));
+   let action={type:'play',idx:0};if(kind==='attack'){g.players[caster].field=[{...DB.INFKNIGHT,uid:'attacker',dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0}];action={type:'attack',uid:'attacker'};}else g.players[caster].hand=[{...DB[kind==='pain'?'S1':kind],uid:'reverse-spell'}];
+   const res=reduce(g,action),rev=res.events.find(e=>e.type==='reverseDamage');if(!rev)throw Error('No reversal');if(!full)res.events=res.events.filter(e=>e.type==='reverseDamage'||e.type==='damage');c.show(g);c.view.setHandOpen(false);await new Promise(r=>setTimeout(r,200));reverseAnim.setFxSkip(false);return{c,g,res,rev};
+  };
+  window.reverseObserve=async(...args)=>{
+   const {c,res,rev}=await reverseFixture(...args);let running=true;const frames=[];
+   const tick=()=>{const el=document.querySelector('.buff-icon[data-uid="reverse-source"]'),fx=document.querySelector('.reverse-pitch-fx');frames.push({t:Number(fx?.dataset.elapsed||0),fx:!!fx,scale:Number(el?.style.scale||1),hp:[Number(document.querySelector('#hp-me').textContent),Number(document.querySelector('#hp-opp').textContent)],numbers:document.querySelectorAll('.combat-damage').length,fallback:fx?.dataset.fallback});if(running)requestAnimationFrame(tick);};requestAnimationFrame(tick);c.applyResult(res);await c.queue;c.stopTimer();running=false;return{frames,rev,expected:res.state.players.map(pl=>pl.hp),hp:[Number(document.querySelector('#hp-me').textContent),Number(document.querySelector('#hp-opp').textContent)],remaining:document.querySelectorAll('.reverse-pitch-fx').length,pose:document.querySelector('.buff-icon[data-uid="reverse-source"]')?.style.scale};
+  };
+ });
+ for(const [width,caster,owner,kind,full] of (process.env.REVERSE_INTERACTIONS?[[1280,0,0,'EXILE_NUKE1',true],[1280,1,0,'EXILE_NUKE2',true],[1280,0,1,'pain',true]]:[[1280,0,0,'S1',true],[1280,1,0,'attack',true],[1280,0,1,'BLOOD1',true],[390,1,1,'S1',false]])){
+  console.log('case',width,caster,owner,kind);await p.setViewportSize({width,height:width===390?844:900});await p.evaluate(args=>{window.playingReverse=reverseObserve(...args)},[caster,owner,kind,full]);await p.waitForSelector('.reverse-pitch-fx');await p.waitForTimeout(1000);await p.screenshot({path:`${out}/${width}-${caster}-${kind}.png`});const r=await p.evaluate(()=>playingReverse);assert.deepEqual(r.hp,r.expected);assert.equal(r.remaining,0);assert(!r.pose);const active=r.frames.filter(f=>f.fx);assert(active.some(f=>f.scale>1.07));assert(active.every(f=>!f.fallback));assert(active.filter(f=>f.t<1580).every(f=>f.hp.every(n=>n===30)),'HP must wait for reverse contact');assert(active.some(f=>f.t>=1580&&f.hp[r.rev.to]===r.expected[r.rev.to]));assert(active.every(f=>f.numbers===0));checks.push({width,caster,owner,kind,full,frames:active.length});await fs.writeFile(`${out}/${width}-${caster}-${kind}.json`,JSON.stringify(r,null,2));
+ }
+ await p.setViewportSize({width:1280,height:900});
+ for(const mode of (process.env.REVERSE_INTERACTIONS?[]:['complete','skip','resize','hidden','detach','reduced','fallback'])){
+  await p.emulateMedia({reducedMotion:mode==='reduced'?'reduce':'no-preference'});const r=await p.evaluate(async mode=>{
+   await reverseFixture();let contacts=0;const source=document.querySelector('.buff-icon[data-uid="reverse-source"]'),before=source.style.cssText;const old=HTMLCanvasElement.prototype.getContext;if(mode==='fallback')HTMLCanvasElement.prototype.getContext=function(kind,...args){return kind==='webgl2'?null:old.call(this,kind,...args)};
+   const one=reverseAnim.reverseDamage('me','opp',['reverse-source'],()=>contacts++),two=reverseAnim.reverseDamage('opp','me',['reverse-source'],()=>contacts++);await new Promise(r=>setTimeout(r,350));const during={count:document.querySelectorAll('.reverse-pitch-fx').length,scale:Number(source.style.scale||1)};
+   if(mode==='skip')reverseAnim.setFxSkip(true);if(mode==='resize')window.dispatchEvent(new Event('resize'));if(mode==='hidden'){Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));}if(mode==='detach')document.querySelector('#portraitMe .pt-ring').remove();
+   await Promise.all([one,two]);HTMLCanvasElement.prototype.getContext=old;if(mode==='hidden')delete document.hidden;reverseAnim.setFxSkip(false);return{during,contacts,restored:source.style.cssText===before,remaining:document.querySelectorAll('.reverse-pitch-fx').length};
+  },mode);assert.equal(r.during.count,2);assert.equal(r.contacts,2);assert(r.restored);assert.equal(r.remaining,0);assert(r.during.scale<=1.08501);if(mode==='reduced')assert.equal(r.during.scale,1);checks.push({mode,...r});
+ }
+ assert.deepEqual(errors.filter(e=>!e.includes('Error creating WebGL context')),[]);await fs.writeFile(out+'/validation.json',JSON.stringify({checks,errors},null,2));console.log('PASS reverse 02 controller/browser + lifecycle');
+}catch(e){await p.screenshot({path:out+'/failure.png'}).catch(()=>{});console.error(await p.locator('body').innerText().catch(()=>''));throw e;}finally{await ctx.close();await b.close();}

@@ -1,0 +1,20 @@
+{
+  "source": "65726a8ff34d5520839d3c8df0b1772f230a8a1e",
+  "deploymentId": "3847d4a5-5192-4441-ae00-e1fa3997ca57",
+  "createdOn": "2026-10-14T08:30:56.387378Z",
+  "versions": [
+    {
+      "version_id": "0d8d711e-2f07-4642-a5a5-388306b3470d",
+      "percentage": 100
+    }
+  ],
+  "message": "65726a8ff34d5520839d3c8df0b1772f230a8a1e guarded release",
+  "tutorialChange": "09ae4fc1",
+  "tutorialRegressionFix": "b3b9e3ae",
+  "sourceIncludesBothTutorialCommits": true,
+  "productionTests": {
+    "passed": 138,
+    "total": 138
+  },
+  "scope": "Local CUA tutorial operations and mobile layout. Deployed source ancestry, 100% Worker traffic, HTTP smoke and 94 asset SHA-256 comparisons. No authenticated staging gameplay claim."
+}

@@ -1,14 +1,14 @@
 /** The real Blender table, drawn behind the DOM with the existing duel renderer. */
 import * as T from 'three';
-import { READING_ASSETS } from './readingBoardLayout';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {readingBoardUrl} from './readingAssetCache';
+import {loadReadingModel} from './readingModel';
 
 export function createDuelTable(root: HTMLElement, scene: T.Scene) {
   let model: T.Group | undefined;
   let dead = false;
   const low = matchMedia('(max-width: 700px)').matches;
   // Versioned URLs prevent a cached model from silently disagreeing with its renderer.
-  const url = READING_ASSETS+`board${low ? '-low' : ''}.glb?revision=recessed-rim-v3-20260929`;
+  const url = readingBoardUrl(low);
   root.dataset.tableState = 'loading';
 
   function release(object: T.Object3D): void {
@@ -33,7 +33,7 @@ export function createDuelTable(root: HTMLElement, scene: T.Scene) {
     bitmaps.forEach(bitmap => bitmap.close());
   }
 
-  void new GLTFLoader().loadAsync(url).then(gltf => {
+  void loadReadingModel(url).then(gltf => {
     if (dead) { release(gltf.scene); return; }
     model = gltf.scene;
     model.traverse(node => {

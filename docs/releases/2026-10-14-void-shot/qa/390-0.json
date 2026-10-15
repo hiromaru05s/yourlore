@@ -1,0 +1,423 @@
+{
+  "frames": [
+    {
+      "age": 0,
+      "active": false,
+      "hp": 120,
+      "canvases": 0
+    },
+    {
+      "age": 0,
+      "active": false,
+      "hp": 120,
+      "canvases": 0
+    },
+    {
+      "age": 0,
+      "active": false,
+      "hp": 120,
+      "canvases": 0
+    },
+    {
+      "age": 0,
+      "active": false,
+      "hp": 120,
+      "canvases": 0
+    },
+    {
+      "age": 0,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 81.30000000223663,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 464.7000000022381,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 798.0000000022337,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 947.9000000022352,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 964.7000000022381,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 997.9000000022352,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1014.7000000022381,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1047.9000000022352,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1064.700000002238,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1097.9000000022352,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1114.6000000022323,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1197.9000000022352,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1231.3000000022366,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1431.3000000022366,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1464.6000000022323,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1514.6000000022323,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1647.9000000022352,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1664.6000000022323,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1747.9000000022352,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1764.5000000022337,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1798.0000000022337,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1814.5000000022337,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1847.9000000022352,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1864.6000000022323,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1964.6000000022323,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1981.3000000022366,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2197.900000002235,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2281.3000000022366,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2397.8000000022366,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2497.900000002235,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2531.200000002238,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2564.6000000022323,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2581.200000002238,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2664.5000000022337,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2731.200000002238,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2764.5000000022337,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2847.900000002235,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2881.200000002238,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2897.8000000022366,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2947.900000002235,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2997.900000002235,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3031.200000002238,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3064.5000000022337,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3147.8000000022366,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3264.6000000022323,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3314.6000000022323,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3331.1000000022323,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3431.1000000022323,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    }
+  ],
+  "nodes": 1,
+  "hp": 112,
+  "remaining": 0
+}

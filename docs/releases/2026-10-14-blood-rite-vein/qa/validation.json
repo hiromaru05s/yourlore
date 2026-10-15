@@ -1,0 +1,99 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "caster": 0,
+      "owner": 0,
+      "full": true,
+      "frames": 94
+    },
+    {
+      "width": 1280,
+      "caster": 1,
+      "owner": 0,
+      "full": false,
+      "frames": 94
+    },
+    {
+      "width": 1280,
+      "caster": 0,
+      "owner": 1,
+      "full": false,
+      "frames": 93
+    },
+    {
+      "width": 390,
+      "caster": 1,
+      "owner": 1,
+      "full": true,
+      "frames": 91
+    },
+    {
+      "mode": "complete",
+      "during": {
+        "count": 2,
+        "scale": 1.075,
+        "lift": "0px -2.7px"
+      },
+      "heals": 2,
+      "restored": true,
+      "count": 0
+    },
+    {
+      "mode": "skip",
+      "during": {
+        "count": 2,
+        "scale": 1.075,
+        "lift": "0px -2.7px"
+      },
+      "heals": 2,
+      "restored": true,
+      "count": 0
+    },
+    {
+      "mode": "resize",
+      "during": {
+        "count": 2,
+        "scale": 1.075,
+        "lift": "0px -2.7px"
+      },
+      "heals": 2,
+      "restored": true,
+      "count": 0
+    },
+    {
+      "mode": "hidden",
+      "during": {
+        "count": 2,
+        "scale": 1.075,
+        "lift": "0px -2.7px"
+      },
+      "heals": 2,
+      "restored": true,
+      "count": 0
+    },
+    {
+      "mode": "detach",
+      "during": {
+        "count": 2,
+        "scale": 1.075,
+        "lift": "0px -2.7px"
+      },
+      "heals": 2,
+      "restored": true,
+      "count": 0
+    },
+    {
+      "mode": "reduced",
+      "during": {
+        "count": 2,
+        "scale": 1.075,
+        "lift": "0px"
+      },
+      "heals": 2,
+      "restored": true,
+      "count": 0
+    }
+  ],
+  "errors": []
+}

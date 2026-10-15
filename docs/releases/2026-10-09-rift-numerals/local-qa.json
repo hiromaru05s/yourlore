@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "Locally bundled Cormorant Garamond Medium loaded for all ten digits",
+    "Unified typeface × 13 counts (0–9,12,99,999), both players, accessible count, number-only display, no card decoration",
+    "pointer and keyboard open actual removed-card list for both sides",
+    "rapid 30 count changes settle with no running animation",
+    "opponent closeup and dark background",
+    "390,760,1024,1440 widths without horizontal overflow or clipped numerals",
+    "Static numeral display and reduced-motion reload"
+  ],
+  "errors": [],
+  "failed": [],
+  "boundary": "Number-only renderer, local GameView fixture. Deployed assets are verified separately; this is not authenticated staging gameplay."
+}

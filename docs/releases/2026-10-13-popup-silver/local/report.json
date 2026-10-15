@@ -1,0 +1,27 @@
+{
+  "origin": "http://127.0.0.1:5196",
+  "checks": [
+    "home-inquiry-1280",
+    "home-confirm-1280",
+    "home-inquiry-390",
+    "home-confirm-390",
+    "home-inquiry-320",
+    "home-confirm-320",
+    "duel-confirm-1280",
+    "duel-picker-1280",
+    "duel-viewer-1280",
+    "duel-confirm-390",
+    "duel-picker-390",
+    "duel-viewer-390",
+    "duel-confirm-320",
+    "duel-picker-320",
+    "duel-viewer-320",
+    "duel-confirm-844",
+    "duel-picker-844",
+    "duel-viewer-844",
+    "duel-exact-en",
+    "duel-exact-ko"
+  ],
+  "errors": [],
+  "fixture": "Actual HOME and board renderer; local game and API fixtures; no authenticated online match."
+}

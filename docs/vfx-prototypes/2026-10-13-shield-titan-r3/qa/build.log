@@ -1,0 +1,25 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 170 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-shield-titan-preview/shield-titan-four.html                  0.29 kB │ gzip:   0.27 kB
+dist-shield-titan-preview/assets/style-C4mrH7G5.css               4.41 kB │ gzip:   1.58 kB
+dist-shield-titan-preview/assets/surface-CDpg3JYh.css            22.08 kB │ gzip:   6.13 kB
+dist-shield-titan-preview/assets/board-DCyTUHTx.css             216.67 kB │ gzip:  45.92 kB
+dist-shield-titan-preview/assets/shield-titan-four-CyGPEvy2.js    2.34 kB │ gzip:   1.17 kB
+dist-shield-titan-preview/assets/renderDensity-DuB4gfMU.js        3.55 kB │ gzip:   1.83 kB
+dist-shield-titan-preview/assets/preview-Ckwd6Del.js              6.35 kB │ gzip:   3.38 kB
+dist-shield-titan-preview/assets/ceremonyScene-BlROzNi-.js        8.92 kB │ gzip:   3.96 kB
+dist-shield-titan-preview/assets/paperDraw-CyQZSXQ6.js           10.29 kB │ gzip:   4.65 kB
+dist-shield-titan-preview/assets/renderer-C0QXnaYf.js            13.55 kB │ gzip:   6.29 kB
+dist-shield-titan-preview/assets/reference-preview-CRytPkqS.js   16.12 kB │ gzip:   7.67 kB
+dist-shield-titan-preview/assets/duelScene-IJwbAJ9d.js          101.43 kB │ gzip:  35.47 kB
+dist-shield-titan-preview/assets/board-C6P68neb.js              189.48 kB │ gzip:  74.94 kB
+dist-shield-titan-preview/assets/surface-fNepC8jG.js            989.96 kB │ gzip: 317.25 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 4.92s

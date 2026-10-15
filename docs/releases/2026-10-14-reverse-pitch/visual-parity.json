@@ -1,0 +1,65 @@
+{
+  "selected": "revision5 / 02",
+  "results": [
+    {
+      "side": 0,
+      "t": 500,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 0,
+      "t": 1000,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 0,
+      "t": 1580,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 0,
+      "t": 1800,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 0,
+      "t": 2200,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 1,
+      "t": 500,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 1,
+      "t": 1000,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 1,
+      "t": 1580,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 1,
+      "t": 1800,
+      "changed": 0,
+      "max": 0
+    },
+    {
+      "side": 1,
+      "t": 2200,
+      "changed": 0,
+      "max": 0
+    }
+  ]
+}

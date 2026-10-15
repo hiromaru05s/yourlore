@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "1280 side 0: controller, one crystal 03, contact HP, cleanup",
+    "1280 side 1: controller, one crystal 03, contact HP, cleanup",
+    "390 side 0: controller, one crystal 03, contact HP, cleanup",
+    "390 side 1: controller, one crystal 03, contact HP, cleanup",
+    "Rift 0",
+    "Rift 1",
+    "Rift 24",
+    "Rift 60",
+    "skip",
+    "resize",
+    "hidden",
+    "detach",
+    "reduced",
+    "fallback"
+  ],
+  "errors": []
+}

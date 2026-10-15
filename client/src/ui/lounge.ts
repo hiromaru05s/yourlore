@@ -9,6 +9,7 @@ import { homeIcon, type HomeIcon } from './homeIcons';
 import { avatarHtml } from './social';
 import { seekerLevel } from './seekerLevel';
 import { showInquiryModal, showInviteModal } from '../screens/home';
+import { mountHomeSound } from './homeSound';
 
 export type LoungePage = 'home'|'deck'|'cards'|'leaderboard'|'friends'|'shop'|'tutorial'|'profile'|'lobby'|'login';
 
@@ -17,6 +18,7 @@ const lastLoungePage=new WeakMap<App,string>();
 
 /** Shared navigation around the existing screen, preserving its live handlers. */
 export function mountLounge(app: App, page: LoungePage): () => void {
+  const lifecycle=new AbortController();
   document.body.classList.add('lounge-active');
   const content = document.createElement('main'); content.className='lounge-content'; content.id='loungeContent';
   content.append(...Array.from(app.root.childNodes));
@@ -28,8 +30,10 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     ['tutorial','book','home.nav.guide',()=>app.tutorial()],
   ];
   let stopNavMotion: (()=>void)|undefined;
+  let stopHomeSound: (()=>void)|undefined;
   const paint=()=>{
     stopNavMotion?.();
+    stopHomeSound?.();
     const user=app.user;
     shell.querySelectorAll(':scope > .lounge-rail, :scope > .lounge-topbar').forEach(n=>n.remove());
     if(page==='login') return;
@@ -38,18 +42,24 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     const top=document.createElement('header'); top.className='lounge-topbar';
     top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile>${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small>${t('home.seekerLevel')} ${seekerLevel(user?.wins??0,user?.losses??0).level}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
     shell.prepend(rail,top);
+    if(page==='home'){
+      const profile=top.querySelector<HTMLButtonElement>('[data-profile]')!;
+      const seeker=document.createElement('div');seeker.className='lounge-seeker';
+      profile.replaceWith(seeker);seeker.append(profile);
+      stopHomeSound=mountHomeSound(seeker);
+    }
     stopNavMotion=mountLoungeNavMotion(rail.querySelector('nav')!,lastLoungePage.get(app));
     lastLoungePage.set(app,page);
     top.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();
     nav.forEach(([key,,,go])=>{rail.querySelector<HTMLButtonElement>(`[data-nav="${key}"]`)!.onclick=go;});
     rail.querySelector<HTMLButtonElement>('[data-utility-settings]')!.onclick=()=>app.settings();
-    rail.querySelector<HTMLButtonElement>('[data-invite]')!.onclick=()=>void showInviteModal();
+    rail.querySelector<HTMLButtonElement>('[data-invite]')!.onclick=()=>void showInviteModal(lifecycle.signal);
     rail.querySelector<HTMLButtonElement>('[data-inquiry]')!.onclick=showInquiryModal;
     top.querySelector<HTMLButtonElement>('[data-profile]')!.onclick=()=>app.profile();
     top.querySelector<HTMLButtonElement>('[data-shop]')!.onclick=()=>app.shop();
     top.querySelector<HTMLButtonElement>('.lounge-menu')!.onclick=e=>{const on=shell.classList.toggle('is-menu-open');(e.currentTarget as HTMLElement).setAttribute('aria-expanded',String(on));};
   };
-  if(page==='home'){const atmosphere=document.createElement('div');atmosphere.className='lounge-atmosphere';atmosphere.setAttribute('aria-hidden','true');atmosphere.innerHTML=Array.from({length:14},(_,i)=>`<i style="--x:${(i*37)%100}%;--y:${(i*23)%90+5}%;--d:${7+i%5}s;--delay:-${i*.8}s"></i>`).join('');shell.append(atmosphere);}
+  if(page==='home'){const atmosphere=document.createElement('div');atmosphere.className='lounge-atmosphere';atmosphere.setAttribute('aria-hidden','true');shell.append(atmosphere);}
   shell.append(content); app.root.append(shell); paint();
   const off=onLangChange(paint);
   document.addEventListener('lore:user',paint);
@@ -65,7 +75,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     });
     previous.forEach((el,ov)=>{if(!ov.isConnected){if(el?.isConnected)el.focus();previous.delete(ov);}});
   };
-  const observer=new MutationObserver(enhance);observer.observe(document.body,{childList:true,subtree:true});enhance();
+  const observer=new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes,...r.removedNodes].some(n=>n instanceof Element&&(n.matches('.overlay')||n.querySelector('.overlay')))))enhance();});observer.observe(document.body,{childList:true,subtree:true});enhance();
   const keyboard=(e:KeyboardEvent)=>{
     const ovs=Array.from(document.querySelectorAll<HTMLElement>('.overlay'));const ov=ovs.at(-1);
     if(!ov){if(e.key==='Escape'){shell.classList.remove('is-menu-open');shell.querySelector('.lounge-menu')?.setAttribute('aria-expanded','false');}return;}
@@ -81,5 +91,5 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{stopNavMotion?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{lifecycle.abort();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
 }

@@ -1,0 +1,23 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    "Blocked damage grants five resources immediately, without generic or page animation",
+    {
+      "case": "turn-end",
+      "owner": 0,
+      "frames": 79,
+      "count": "5"
+    },
+    {
+      "case": "turn-end",
+      "owner": 1,
+      "frames": 204,
+      "count": "5"
+    },
+    "390px, twelve Cull, pixels and clean completion",
+    "Reduced motion retains final resources and cleans fallback",
+    "Controller destruction cancels active renderer"
+  ],
+  "errors": [],
+  "boundary": "Real reducer, BaseController and GameView. Not an authenticated online match."
+}

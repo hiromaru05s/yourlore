@@ -1,0 +1,192 @@
+[
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "side": 0,
+    "path": "direct",
+    "ok": true,
+    "maximum": 1,
+    "slate": 0,
+    "hidden": true,
+    "clean": true,
+    "impacts": 1,
+    "before": [
+      25.205810546875,
+      37.61676025390625
+    ],
+    "after": [
+      25.205810546875,
+      37.61676025390625
+    ]
+  },
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "side": 0,
+    "path": "hand",
+    "ok": true,
+    "maximum": 1,
+    "slate": 0,
+    "hidden": true,
+    "clean": true,
+    "impacts": 0,
+    "before": [
+      25.205810546875,
+      37.61676025390625
+    ],
+    "after": [
+      25.205810546875,
+      37.61676025390625
+    ]
+  },
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "side": 0,
+    "path": "generated",
+    "ok": true,
+    "maximum": 1,
+    "slate": 0,
+    "hidden": false,
+    "clean": true,
+    "impacts": 0,
+    "before": [
+      25.205810546875,
+      37.61676025390625
+    ],
+    "after": [
+      25.209518432617188,
+      37.61676025390625
+    ]
+  },
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "side": 1,
+    "path": "direct",
+    "ok": true,
+    "maximum": 1,
+    "slate": 0,
+    "hidden": true,
+    "clean": true,
+    "impacts": 1,
+    "before": [
+      24.834014892578125,
+      36.51873779296875
+    ],
+    "after": [
+      24.834014892578125,
+      36.51873779296875
+    ]
+  },
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "side": 1,
+    "path": "hand",
+    "ok": true,
+    "maximum": 1,
+    "slate": 0,
+    "hidden": true,
+    "clean": true,
+    "impacts": 0,
+    "before": [
+      24.834014892578125,
+      36.51873779296875
+    ],
+    "after": [
+      24.834014892578125,
+      36.51873779296875
+    ]
+  },
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "side": 1,
+    "path": "generated",
+    "ok": true,
+    "maximum": 1,
+    "slate": 0,
+    "hidden": false,
+    "clean": true,
+    "impacts": 0,
+    "before": [
+      24.834014892578125,
+      36.51873779296875
+    ],
+    "after": [
+      24.837600708007812,
+      36.51873779296875
+    ]
+  },
+  {
+    "id": "APPRENTICE_ARMORER",
+    "side": 0,
+    "path": "direct",
+    "ok": true,
+    "maximum": 0,
+    "slate": 1,
+    "hidden": true,
+    "clean": true,
+    "impacts": 1,
+    "before": [
+      25.205810546875,
+      37.61676025390625
+    ],
+    "after": [
+      25.205810546875,
+      37.61676025390625
+    ]
+  },
+  {
+    "id": "APPRENTICE_ARMORER",
+    "side": 1,
+    "path": "direct",
+    "ok": true,
+    "maximum": 0,
+    "slate": 1,
+    "hidden": true,
+    "clean": true,
+    "impacts": 1,
+    "before": [
+      24.834014892578125,
+      36.51873779296875
+    ],
+    "after": [
+      24.834014892578125,
+      36.51873779296875
+    ]
+  },
+  {
+    "id": "VETERAN_ARMORER",
+    "side": 0,
+    "path": "direct",
+    "ok": true,
+    "maximum": 0,
+    "slate": 1,
+    "hidden": true,
+    "clean": true,
+    "impacts": 1,
+    "before": [
+      25.205810546875,
+      37.61676025390625
+    ],
+    "after": [
+      25.205810546875,
+      37.61676025390625
+    ]
+  },
+  {
+    "id": "VETERAN_ARMORER",
+    "side": 1,
+    "path": "direct",
+    "ok": true,
+    "maximum": 0,
+    "slate": 1,
+    "hidden": true,
+    "clean": true,
+    "impacts": 1,
+    "before": [
+      24.834014892578125,
+      36.51873779296875
+    ],
+    "after": [
+      24.834014892578125,
+      36.51873779296875
+    ]
+  }
+]

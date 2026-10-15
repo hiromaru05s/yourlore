@@ -1,0 +1,18 @@
+.gacha-cinematic{position:fixed;inset:0;width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;padding:0;border:0;overflow:hidden;background:#172833;color:#eee8d7;outline:none}
+.gacha-cinematic::backdrop{background:#101c26}
+.gacha-cinematic>canvas{display:block;width:100%;height:100%;outline:none}
+.gacha-cinematic>header{position:absolute;inset:max(20px,env(safe-area-inset-top)) 24px auto;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.gacha-cinematic>header>span{font:11px Georgia,serif;letter-spacing:.32em;text-shadow:0 2px 8px #000}
+.gacha-cinematic button{pointer-events:auto;min-height:44px;padding:10px 20px;border:1px solid #d6d7c34d;border-radius:2px;color:#f1edde;background:#132330d9;font:inherit;cursor:pointer}
+.gacha-cinematic button:focus-visible{outline:2px solid #e6ce8a;outline-offset:3px}
+.gacha-cinematic>header button{font-size:23px;padding:0;width:44px;border:0}
+.gacha-cinematic>footer{position:absolute;inset:auto 24px max(18px,env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gacha-cinematic>footer p{font-size:10px;letter-spacing:.04em;text-shadow:0 1px 5px #000;margin:0}
+.gacha-cinematic>footer>div{display:flex;gap:8px}
+.gacha-cinematic-loading{position:absolute;inset:0;display:grid;place-content:center;padding:30px;text-align:center;background:#172833;font-size:14px;letter-spacing:.08em}
+.gacha-cinematic-result{position:absolute;inset:auto 16px 88px;text-align:center;pointer-events:none;text-shadow:0 2px 7px #000}
+.gacha-cinematic-result small{font-size:10px;letter-spacing:.2em}.gacha-cinematic-result h2{font:23px Georgia,serif;letter-spacing:.13em;margin:9px 0}
+.gacha-cinematic [hidden]{display:none!important}
+@media(max-width:600px){.gacha-cinematic>header{left:16px;right:16px}.gacha-cinematic>footer{left:16px;right:16px;flex-direction:column-reverse}.gacha-cinematic-result{bottom:116px}.gacha-cinematic>footer p{font-size:9px}}
+
+.gacha-cinematic>header,.gacha-cinematic>footer{z-index:2}

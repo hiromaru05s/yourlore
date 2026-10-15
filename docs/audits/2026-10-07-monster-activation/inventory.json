@@ -1,0 +1,1456 @@
+[
+  {
+    "id": "M1",
+    "name": "スパーク・インプ",
+    "text": "—",
+    "otherFields": []
+  },
+  {
+    "id": "M2",
+    "name": "ストーン・パップ",
+    "text": "—",
+    "otherFields": []
+  },
+  {
+    "id": "M3",
+    "name": "ダスト・スカウト",
+    "text": "【召喚時】カード1枚ドロー",
+    "onSummon": "draw",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "M4",
+    "name": "ブレード・ヘア",
+    "text": "—",
+    "otherFields": []
+  },
+  {
+    "id": "M5",
+    "name": "アイアン・シェル",
+    "text": "【召喚時】自分に2ダメージ",
+    "onSummon": "selfBurn",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "M6",
+    "name": "ツイン・ファング",
+    "text": "【召喚時】相手モンスター1体の体力-2(持続)",
+    "onSummon": "defDown",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "M7",
+    "name": "エンバー・ドレイク",
+    "text": "【常時】攻撃で相手モンスターを破壊したら、そのターンに1度だけ追加攻撃 · 【毎ターン】自分のターン開始にダイス5以上なら自分に3ダメージ",
+    "turnFx": "emberRecoil",
+    "attackFx": "chainKill",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "M8",
+    "name": "グローブ・ウォーデン",
+    "text": "【召喚時】自分の体力1回復",
+    "onSummon": "heal",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "M9",
+    "name": "レリック・ハンター",
+    "text": "【召喚時】カウンター1個 · 自分のターンにカウンターを消費しマナなしで提示を更新できる",
+    "onSummon": "refreshToken",
+    "otherFields": []
+  },
+  {
+    "id": "M10",
+    "name": "マナ・ゴーレム",
+    "text": "【常時】自分の場の他の「ゴーレム」系モンスター1体につき最大マナ+1",
+    "aura": "manaGolem",
+    "passive": [
+      "guts"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "M11",
+    "name": "ウォーロード",
+    "text": "【召喚時】このモンスター以外の味方モンスターが2体以上いるなら、騎士(4/4)1体を召喚",
+    "onSummon": "warlordKnight",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "M12",
+    "name": "タイタン・ゲート",
+    "text": "【召喚時】相手モンスター1体の攻撃力-1(持続)",
+    "onSummon": "atkDown",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "MIMIC",
+    "name": "ミミック",
+    "text": "宝箱のハズレで相手の場に召喚される",
+    "passive": [
+      "void",
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "TSO2",
+    "name": "孤独な狼",
+    "text": "【召喚時】このモンスター以外の自分の場のカード(モンスター·魔法)が1枚以下なら+3/+3",
+    "onSummon": "hermitBuff",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TSO5",
+    "name": "孤独な放浪者",
+    "text": "【条件】自分の場に孤独種族以外のモンスターがいない時のみ召喚可能",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe",
+      "summonReq"
+    ]
+  },
+  {
+    "id": "TPO2",
+    "name": "飢えた獣",
+    "text": "【常時】このモンスターが破壊したモンスターのコスト1につき+1/+1",
+    "aura": "devourGrow",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TPO5",
+    "name": "捕食者",
+    "text": "【召喚時】相手のコスト3~4のモンスター1体を破壊 · 破壊に成功すると最大マナ+1",
+    "onSummon": "preyExec",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TAR2",
+    "name": "没落貴族",
+    "text": "【常時】相手のコスト2以下のモンスターは攻撃できない",
+    "aura": "lowAtkBan",
+    "passive": [
+      "aura"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TAR5",
+    "name": "貴族領主",
+    "text": "【常時】コスト6以下の相手モンスターはこのモンスターを攻撃できず、このモンスターがいる限り直接攻撃も不可",
+    "aura": "eliteGuard",
+    "passive": [
+      "aura",
+      "majesty"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "NMD2",
+    "name": "探書の精霊",
+    "text": "【召喚時】カード2枚ドロー",
+    "onSummon": "draw",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "NMD4",
+    "name": "記録者",
+    "text": "【召喚時】過去5ターンの提示マーケット(更新分含む)から好きなカード1枚をマナを払って購入",
+    "onSummon": "chronicler",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "NMD6",
+    "name": "大賢者",
+    "text": "【常時】デッキ構成に魔法が13枚以上なら魔法の発動コスト-1",
+    "aura": "sageDiscount",
+    "passive": [],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "NGA3",
+    "name": "戦士ゴーレム",
+    "text": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいればこのモンスターにカウンター3個",
+    "onSummon": "golemSquad",
+    "passive": [
+      "guts",
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "NGA4",
+    "name": "剣鬼",
+    "text": "【常時】攻撃対象を選べず、自分の場のモンスターも対象に含まれる",
+    "attackFx": "berserk",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val",
+      "mult"
+    ]
+  },
+  {
+    "id": "NWL3",
+    "name": "ガーディアンゴーレム",
+    "text": "【常時】このモンスターは攻撃を受けるたびカウンター1個を得る",
+    "aura": "gutsOnHit",
+    "passive": [
+      "guts",
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "NHEX",
+    "name": "見習い呪術師",
+    "text": "【毎ターン】デッキ構成に魔法が10枚以上ならダイスを振り5以上で相手の墓地に「呪い」3枚",
+    "turnFx": "hexCurse",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "GM5_0",
+    "name": "古代の狂戦士",
+    "text": "【毎ターン】攻撃力+2(持続)",
+    "turnFx": "growAtk",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "GM5_2",
+    "name": "鋼鉄の戦士",
+    "text": "【常時】モンスター召喚時、そのモンスターの体力+2",
+    "aura": "summonBuff",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "GM5_3",
+    "name": "業火のドレイク",
+    "text": "【毎ターン】相手に3ダメージ",
+    "turnFx": "turnBurn",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "GM6_0",
+    "name": "ドラゴン",
+    "text": "【召喚時】兵士と共に墓地へ行けば「ドラゴンライダー」、騎士と共になら「アンティークドラゴンナイト」召喚 · 両方いれば選択",
+    "onSummon": "dragonFuse",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "GM6_1",
+    "name": "次元幽閉者",
+    "text": "【召喚時】相手の除外カードから最大8枚を自分の除外ゾーンに移す",
+    "onSummon": "jailer",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "GM6_7",
+    "name": "将軍",
+    "text": "【召喚時】騎士(4/4)1体を召喚 · 【常時】相手がモンスターを召喚するたびダイスを振り4以上なら騎士1体を召喚",
+    "onSummon": "generalKnight",
+    "aura": "general",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "GM6_8",
+    "name": "虚空の攻城兵",
+    "text": "破壊されたら兵士(2/2)1体を召喚",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "INFKNIGHT",
+    "name": "騎士",
+    "text": "—",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "NT_SEAL3",
+    "name": "沈黙の番人",
+    "text": "【常時】両プレイヤーは発動コスト4以下の魔法を使用できない",
+    "aura": "sealLow",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "NT_SEAL5",
+    "name": "沈黙の巨神",
+    "text": "【常時】両プレイヤーは発動コスト6以下の魔法を使用できない",
+    "aura": "sealLow",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "TSO3",
+    "name": "孤独な狩人",
+    "text": "【召喚時】自分の墓地にモンスターカードがなければカード6枚ドロー",
+    "onSummon": "gravePure",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe",
+      "val"
+    ]
+  },
+  {
+    "id": "TPO3",
+    "name": "飢えた追跡者",
+    "text": "【常時】相手のモンスターが破壊されるたびダイスを振り5以上ならその複製を自分の場に召喚",
+    "aura": "scavenger",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TAR3",
+    "name": "没落した騎士",
+    "text": "—",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TGE1",
+    "name": "始原の卵",
+    "text": "攻撃不可 · 4ターン後に孵化、耐久2(被弾-1) · 耐久が残れば卵以外の7コスト以下の始原1体を召喚",
+    "otherFields": [
+      "play",
+      "tribe",
+      "hatchTurns",
+      "hatchDur",
+      "hatchInto"
+    ]
+  },
+  {
+    "id": "TGE2",
+    "name": "始原の火種",
+    "text": "[始原] 【召喚時】自分の場の他の始原モンスター1体の攻撃力+2(持続)",
+    "onSummon": "originEmber",
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TGE3",
+    "name": "始原の守護者",
+    "text": "[始原] 【召喚時】自分に3ダメージ",
+    "onSummon": "selfBurn",
+    "otherFields": [
+      "tribe",
+      "val"
+    ]
+  },
+  {
+    "id": "TGE4",
+    "name": "始原の裁判官",
+    "text": "【召喚時】ゲーム中1回：デッキ構成に今召喚した自身以外の始原カードがあれば相手に烙印+1",
+    "onSummon": "originArbiter",
+    "otherFields": [
+      "tribe",
+      "val"
+    ]
+  },
+  {
+    "id": "TGE5",
+    "name": "始原の精霊",
+    "text": "[始原] 【召喚時】「始原の術式」を自分の場に展開",
+    "onSummon": "originRite",
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TGE6",
+    "name": "始原の巨人",
+    "text": "[始原] 【召喚時】カード1枚ドロー · そのカードがモンスターならコスト5以上の「始原」カード1枚をマナを払って購入できる",
+    "onSummon": "giantDraw",
+    "passive": [
+      "aura"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TGE7",
+    "name": "始原の君主",
+    "text": "[始原] 【常時】自分の場の全ての「始原」モンスター+4/+4",
+    "aura": "originLord",
+    "otherFields": [
+      "tribe",
+      "val"
+    ]
+  },
+  {
+    "id": "ASSASSIN1",
+    "name": "初級アサシン",
+    "text": "",
+    "otherFields": [
+      "directOnly"
+    ]
+  },
+  {
+    "id": "ASSASSIN2",
+    "name": "中級アサシン",
+    "text": "",
+    "otherFields": [
+      "directOnly"
+    ]
+  },
+  {
+    "id": "ASSASSIN3",
+    "name": "上級アサシン",
+    "text": "【条件】デッキ構成にこのモンスター以外の「アサシン」系カードがある時のみ召喚可能",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "directOnly",
+      "summonReq"
+    ]
+  },
+  {
+    "id": "ASSASSIN4",
+    "name": "特級アサシン - ナイトロード",
+    "text": "【条件】デッキ構成にこのモンスター以外の「アサシン」3種以上 · 【召喚時】相手に烙印カウンター3個",
+    "onSummon": "nightlord",
+    "passive": [
+      "majesty",
+      "aura",
+      "evade"
+    ],
+    "otherFields": [
+      "mult",
+      "summonReq"
+    ]
+  },
+  {
+    "id": "MIMIC2",
+    "name": "マスターミミック",
+    "text": "【常時】このモンスターが場にいる限り両者は宝箱を使用できない (アチューン・魔は可能)",
+    "aura": "chestLock",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "MANA_GIANT",
+    "name": "ジャイアントゴーレム",
+    "text": "【毎ターン】デッキ構成にこのモンスター以外のゴーレム2種以上なら自分の体力+10",
+    "turnFx": "giantGolem",
+    "otherFields": []
+  },
+  {
+    "id": "MIMIC_LORD",
+    "name": "ミミックリーダー",
+    "text": "【召喚時】自身を除く両者の場の「ミミック」系1体につき+3/+3",
+    "onSummon": "mimicLord",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "AWAKENED_MIMIC",
+    "name": "覚醒ミミック",
+    "text": "【召喚時】自分の場に「ミミック」(3/2)2体を召喚",
+    "onSummon": "awakenMimic",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "MIMIC_KING",
+    "name": "ミミックキング",
+    "text": "【召喚時】除外された自分の「ミミック」系1枚につき+1/+1 · 6枚以上なら「マスターミミック」を自分の場に召喚",
+    "onSummon": "mimicKing",
+    "otherFields": []
+  },
+  {
+    "id": "VITAL2",
+    "name": "世界樹の信徒",
+    "text": "【召喚時】自分の体力3回復 · その後ダイスを1回振り、5以上なら雫1を得る",
+    "onSummon": "dewBeliever",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "VITAL3",
+    "name": "世界樹の守り人",
+    "text": "【召喚時】自分の体力5回復 · 【常時】自分が「世界樹」「エルフ」系カードをプレイするたび、雫1を得る",
+    "onSummon": "heal",
+    "aura": "treeKeeper",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "VITAL4",
+    "name": "鼓舞王",
+    "text": "【常時】自分の場の「兵士」「騎士」に「気合」を付与",
+    "aura": "rallyGuts",
+    "otherFields": []
+  },
+  {
+    "id": "MIMIC_KING2",
+    "name": "ミミックキング2世",
+    "text": "【召喚時】自分のリフトにミミック系6枚以上なら「ミミックの隠れ家」を展開",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "ORIGIN_MIMIC",
+    "name": "始原のミミック",
+    "text": "【召喚時】自分の場・墓地・除外の「ミミック」系1枚につき+2/+2",
+    "onSummon": "originMimic",
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TOKEN00",
+    "name": "かかし",
+    "text": "トークン",
+    "passive": [
+      "void"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "SOLDIER2",
+    "name": "兵士",
+    "text": "トークン",
+    "passive": [
+      "void"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "HORDE",
+    "name": "軍団の旗手",
+    "text": "【召喚時】自分の場の全ての「兵士」「騎士」の攻撃力+4(持続)",
+    "onSummon": "hordeRally",
+    "otherFields": []
+  },
+  {
+    "id": "ELITE",
+    "name": "精鋭騎士団長",
+    "text": "【召喚時】デッキ構成が10枚以下なら兵士(2/2)2体を召喚",
+    "onSummon": "eliteSoldiers",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "DRAGON_EGG",
+    "name": "ドラゴンの卵",
+    "text": "【常時】攻撃不可 · 両者のターンで8ターン後に孵化、耐久6(相手の攻撃で-1) · 耐久が残れば竜1体を召喚",
+    "aura": "ward",
+    "otherFields": [
+      "play",
+      "hatchTurns",
+      "hatchDur",
+      "hatchInto"
+    ]
+  },
+  {
+    "id": "BEAST_EGG",
+    "name": "神獣の卵",
+    "text": "【常時】攻撃不可 · 両者のターンで10ターン後に孵化、耐久7(相手の攻撃で-1) · 耐久が残れば「神獣」を召喚",
+    "aura": "ward",
+    "otherFields": [
+      "play",
+      "hatchTurns",
+      "hatchDur",
+      "hatchInto"
+    ]
+  },
+  {
+    "id": "D_BLACK",
+    "name": "黒竜",
+    "text": "【召喚時】相手が除外したカードから最大8枚を選び相手の墓地へ送る · 相手モンスター全体の体力-3(持続)",
+    "onSummon": "blackDragon",
+    "passive": [
+      "aura",
+      "void",
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "D_RED",
+    "name": "赤竜",
+    "text": "【召喚時】相手に15ダメージ · 【常時】自分の魔法が相手にダメージを与えるたび+3追加ダメージ",
+    "onSummon": "burn",
+    "aura": "spellAmp",
+    "passive": [
+      "aura",
+      "void",
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "D_BLUE",
+    "name": "青竜",
+    "text": "【召喚時】自分の体力+20 · 自分のターン開始時、相手モンスターの数だけ自分の体力増加",
+    "onSummon": "blueDragon",
+    "turnFx": "growMaxHp",
+    "passive": [
+      "aura",
+      "void",
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "DIVINE",
+    "name": "神獣",
+    "text": "【召喚時】最大マナ+15 · 毎ターンドロー+1(永続) · カード3枚を選んで破壊(両方の場: モンスター・永続魔法)",
+    "onSummon": "divine",
+    "aura": "ward",
+    "passive": [
+      "void",
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "EGG_HUNTER",
+    "name": "エッグハンター",
+    "text": "【常時】このモンスターが「卵」を攻撃するとカウンターを6消費させる",
+    "aura": "eggHunter",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "EGG_MASTER",
+    "name": "孵化マスター",
+    "text": "【召喚時】自分の場の全ての「卵」のカウンター+5",
+    "onSummon": "eggMaster",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "VAMP_BUTLER",
+    "name": "ヴァンパイア執事",
+    "text": "【常時】このモンスターが攻撃するとカウンター+1 · 3個ごとに「見習い吸血鬼」1体を召喚 · 「吸血鬼」系列として扱う",
+    "aura": "vampButler",
+    "otherFields": []
+  },
+  {
+    "id": "VAMP1",
+    "name": "見習い吸血鬼",
+    "text": "「血の魔法」発動時: 初級吸血鬼を自分の場に召喚 (1回)",
+    "passive": [
+      "void"
+    ],
+    "otherFields": [
+      "evolveTo"
+    ]
+  },
+  {
+    "id": "VAMP2",
+    "name": "初級吸血鬼",
+    "text": "「血の魔法」発動時: 中級吸血鬼を自分の場に召喚 (1回)",
+    "passive": [
+      "void"
+    ],
+    "otherFields": [
+      "evolveTo"
+    ]
+  },
+  {
+    "id": "VAMP3",
+    "name": "中級吸血鬼",
+    "text": "「血の魔法」発動時: 上級吸血鬼を自分の場に召喚 (1回)",
+    "passive": [
+      "void"
+    ],
+    "otherFields": [
+      "evolveTo"
+    ]
+  },
+  {
+    "id": "VAMP4",
+    "name": "上級吸血鬼",
+    "text": "【常時】「血の魔法」発動時: 特級吸血鬼を召喚 (1回) · 相手に与えたダメージの50%だけ自分の体力を得る",
+    "attackFx": "vampDrain",
+    "passive": [
+      "void"
+    ],
+    "otherFields": [
+      "evolveTo",
+      "val"
+    ]
+  },
+  {
+    "id": "VAMP5",
+    "name": "特級吸血鬼",
+    "text": "【召喚時】相手に15ダメージ、自分の体力+30 · このモンスターが相手に与えたダメージだけ自分の体力+",
+    "onSummon": "vampLord",
+    "attackFx": "vampDrain",
+    "passive": [
+      "void"
+    ],
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "GHOST",
+    "name": "幽霊",
+    "text": "【常時】相手が最大マナ/体力を増やすと自分に2ダメージ · 相手が回復すると「幽霊」全体の攻撃力+1(持続)",
+    "otherFields": [
+      "directOnly",
+      "noShop"
+    ]
+  },
+  {
+    "id": "GUILD_HALL",
+    "name": "アサシンギルド支部",
+    "text": "【常時】「アサシン」かこのモンスターが相手を叩くとカウンター+1 · 3個ごとに相手に14ダメージ · 破壊で消滅",
+    "aura": "assassinGuild",
+    "otherFields": [
+      "noShop"
+    ]
+  },
+  {
+    "id": "GOLEM1",
+    "name": "兵士ゴーレム",
+    "text": "",
+    "passive": [
+      "guts"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "GOLEM2",
+    "name": "リーダーゴーレム",
+    "text": "【常時】自分の場のモンスターが倒れるたびこのモンスターにカウンター1個",
+    "aura": "leaderGolem",
+    "passive": [
+      "guts",
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "GOLEM3",
+    "name": "ゴーレムキング",
+    "text": "【条件】自分の場・デッキ・手札・墓地に他の「ゴーレム」系モンスターがいる時のみ召喚可能",
+    "passive": [
+      "guts"
+    ],
+    "otherFields": [
+      "summonReq"
+    ]
+  },
+  {
+    "id": "RUST_SLUG",
+    "name": "ラストキャップ・スラッグ",
+    "text": "【召喚時】相手モンスター全体にカウンター1個 · 腐敗で相手モンスターを破壊すると最大マナ+1、自分の体力+5",
+    "onSummon": "decayAll",
+    "passive": [
+      "decay"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "CHOSEN_KNIGHT",
+    "name": "選ばれし剣士",
+    "text": "【常時】除外された自分の「カル」2枚につき+1/+1 · このモンスターが攻撃するたび「カル」2枚をゲームから除外",
+    "attackFx": "cullExile2",
+    "condAtk": "cullPlus",
+    "passive": [
+      "guts",
+      "counter"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "CHOSEN_MAGE",
+    "name": "選ばれし魔法使い",
+    "text": "【常時】ゲームから除外された自分の「カル」2枚につき+1/+1 · 【毎ターン】(選択) 除外された「カル」1枚を墓地に戻し相手に8ダメージ",
+    "condAtk": "cullPlus",
+    "passive": [
+      "aura"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "CHOSEN_ARCHER",
+    "name": "選ばれし弓手",
+    "text": "【常時】除外された自分の「カル」2枚につき攻撃力+2 · 体力15以上の相手モンスターを攻撃すると無条件に破壊",
+    "attackFx": "giantSlayer",
+    "condAtk": "cullAtk2",
+    "passive": [
+      "aura",
+      "evade"
+    ],
+    "otherFields": [
+      "directOnly"
+    ]
+  },
+  {
+    "id": "CHOSEN_ROGUE",
+    "name": "選ばれし盗賊",
+    "text": "【常時】除外された自分の「カル」2枚につき攻撃力+2",
+    "condAtk": "cullAtk2",
+    "passive": [
+      "evade",
+      "counter"
+    ],
+    "otherFields": [
+      "directOnly"
+    ]
+  },
+  {
+    "id": "RUST_SHROOM",
+    "name": "ラストマッシュルーム",
+    "text": "このモンスターが場にいる時、腐敗で相手モンスターが破壊されると自分の最大マナ+1",
+    "passive": [
+      "decay"
+    ],
+    "otherFields": [
+      "noShop"
+    ]
+  },
+  {
+    "id": "GAMBLER",
+    "name": "ギャンブラー",
+    "text": "【毎ターン】ダイスを振り4以上なら最大マナ+1",
+    "turnFx": "gambler",
+    "otherFields": [
+      "noShop"
+    ]
+  },
+  {
+    "id": "HALF_ELF",
+    "name": "ハーフエルフ",
+    "text": "【常時】どちらかの場に「世界樹」名のカードがあれば攻撃力+3 · 【召喚時】自分の場にあれば「世界樹の慈しみ」を展開",
+    "onSummon": "halfElf",
+    "condAtk": "worldTree",
+    "otherFields": [
+      "noShop"
+    ]
+  },
+  {
+    "id": "LEGEND_GAMBLER",
+    "name": "伝説のギャンブラー",
+    "text": "【毎ターン】出目を予測しダイス3個 · 的中で最大マナ+4·体力+35·相手カード2枚破壊から1つ(ギャンブラー:全て)",
+    "turnFx": "legendGambler",
+    "passive": [
+      "void",
+      "aura"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "ELF",
+    "name": "エルフ",
+    "text": "【条件】雫4以上 · 【召喚時】雫2を得て、相手の攻撃力9以上のモンスター1体を選んで破壊 · 【常時】自分の場の異なる「世界樹」系カード1種類につき+1/+1 · 両プレイヤーの回復量2倍",
+    "onSummon": "elfDew",
+    "passive": [
+      "evade"
+    ],
+    "otherFields": [
+      "summonReq"
+    ]
+  },
+  {
+    "id": "DARK_ELF",
+    "name": "ダークエルフ",
+    "text": "【条件】雫4以上で、自分の場に「ダークエルフ」以外の「エルフ」系モンスターがいない · 【召喚時】雫4消費 · 相手にシールドがあれば相手に10ダメージ · 【常時】自分の場に「傭兵」系がいれば回避、「魔族」がいればオーラを得る",
+    "onSummon": "darkElfDew",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "directOnly",
+      "summonReq"
+    ]
+  },
+  {
+    "id": "HIGH_ELF",
+    "name": "ハイエルフ",
+    "text": "【条件】雫10以上 · 【召喚時】相手の手札を全て確認し、最大3枚ゲームから除外 · 相手のシールドを全て破壊し、自分の雫を2倍にする · 【常時】自分の場の異なる「世界樹」系カード1種類につき+2/+2 · 相手の回復量半分（端数切り捨て）",
+    "onSummon": "highElfDew",
+    "passive": [
+      "aura",
+      "majesty",
+      "evade"
+    ],
+    "otherFields": [
+      "summonReq"
+    ]
+  },
+  {
+    "id": "ELDER_ELF_KING",
+    "name": "エルダーハイエルフキング",
+    "text": "【条件】雫12以上 · 【召喚時】相手の場のカードを全て破壊し、自分の雫を3倍にする · 【常時】自分の場の異なる「世界樹」系カード1種類につき+4/+4 · 相手がターン中にプレイできるカードは最大3枚 · 【破壊時】雫15を消費し、相手に30ダメージ（雫不足なら不発）",
+    "onSummon": "elderDew",
+    "passive": [
+      "majesty",
+      "aura"
+    ],
+    "otherFields": [
+      "summonReq"
+    ]
+  },
+  {
+    "id": "MERCH1",
+    "name": "見習い商人",
+    "text": "【召喚時】自分の「商会」にカウンターを3個付与",
+    "onSummon": "guildCnt",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "MERCH2",
+    "name": "王都の商売人",
+    "text": "【召喚時】自分の「商会」にカウンターを8個付与",
+    "onSummon": "guildCnt",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "TPO1",
+    "name": "飢えた仔獣",
+    "text": "【召喚時】コスト2以下の相手モンスター1体を手札に戻す · 【条件】相手の場にコスト2以下のモンスターがいる時のみ召喚可能",
+    "onSummon": "preyBounce",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe",
+      "summonReq"
+    ]
+  },
+  {
+    "id": "TSO1",
+    "name": "隠遁者",
+    "text": "召喚後、自分の3ターンの間 他のモンスターを召喚できない",
+    "onSummon": "soloLock",
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TAR1",
+    "name": "貴族の執事",
+    "text": "【常時】自分のターン開始時ドロー+1",
+    "aura": "pageDraw",
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TDE1",
+    "name": "魔族の斥候",
+    "text": "自分の5ターンの間 最大マナ-1 · 【条件】最大マナ5以上の時のみ召喚可能",
+    "onSummon": "manaDebt5",
+    "otherFields": [
+      "tribe",
+      "summonReq"
+    ]
+  },
+  {
+    "id": "TDE2",
+    "name": "魔族の戦士",
+    "text": "【条件】自分の最大マナが5以上 · 【常時】自分の最大マナ-2(最低3)",
+    "aura": "demonTax2",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe",
+      "summonReq"
+    ]
+  },
+  {
+    "id": "TDE3",
+    "name": "魔族の狂戦士",
+    "text": "【毎ターン】ダイスを振り1~3なら最大マナ-1、4~6なら-2(3未満不可)",
+    "turnFx": "demonRoll",
+    "passive": [
+      "counter"
+    ],
+    "otherFields": [
+      "tribe"
+    ]
+  },
+  {
+    "id": "TDE4",
+    "name": "魔王",
+    "text": "【条件】自分の最大マナ5以上＋デッキ構成に魔王以外の魔族モンスター · 【召喚時】自分の最大マナを3に · 【常時】自分の最大マナ増加不可",
+    "onSummon": "manaSet3",
+    "aura": "manaGrowthLock",
+    "passive": [
+      "majesty",
+      "aura"
+    ],
+    "otherFields": [
+      "tribe",
+      "summonReq"
+    ]
+  },
+  {
+    "id": "VOID_APOSTLE",
+    "name": "虚無空間の使徒",
+    "text": "【召喚時】自分に13ダメージ、除外カードごとに+1/+1 · 自分のターンごとにダイス1なら自分に10ダメージ、このモンスターを破壊",
+    "onSummon": "voidApostle",
+    "turnFx": "voidRoll",
+    "otherFields": []
+  },
+  {
+    "id": "CASINO",
+    "name": "カジノ",
+    "text": "【常時】ダイスを振るたびカウンター+1、12個でカジノダイス — ①② 自分30 / ③④ 相手30 / ⑤ 相手40 / ⑥ 相手の最大マナ3",
+    "aura": "casino",
+    "otherFields": [
+      "noShop"
+    ]
+  },
+  {
+    "id": "GUILD_HQ",
+    "name": "アサシンギルド本部",
+    "text": "【常時】「アサシン」が相手を叩くたび相手に烙印カウンター1個 · 【毎ターン】「アサシン」カードを売るナイトマーケット開店",
+    "turnFx": "nightMarket",
+    "aura": "assassinHQ",
+    "otherFields": []
+  },
+  {
+    "id": "WORLD_TREE",
+    "name": "世界樹",
+    "text": "【条件】雫8以上 · 【常時】自分の雫による回復量2倍 · 自分のモンスターの攻撃時、任意で雫1を消費してその攻撃力+6（永続） · 自分のモンスターの被攻撃時、任意で雫1を消費してその体力+6（永続） · 【自分ターン開始時】雫3を得る",
+    "turnFx": "worldTree",
+    "passive": [
+      "aura",
+      "guts"
+    ],
+    "otherFields": [
+      "summonReq"
+    ]
+  },
+  {
+    "id": "DRAGON_RIDER",
+    "name": "ドラゴンライダー",
+    "text": "【常時】2回目の攻撃は攻撃力半分(切り下げ)",
+    "attackFx": "halfSecond",
+    "passive": [
+      "evade",
+      "void",
+      "counter"
+    ],
+    "otherFields": [
+      "mult"
+    ]
+  },
+  {
+    "id": "ANTIQUE_DK",
+    "name": "アンティークドラゴンナイト",
+    "text": "—",
+    "passive": [
+      "evade",
+      "aura",
+      "majesty",
+      "void",
+      "counter"
+    ],
+    "otherFields": [
+      "mult"
+    ]
+  },
+  {
+    "id": "CASTLE",
+    "name": "城",
+    "text": "【召喚時】カウンター2個 · 【常時】カウンター1個で攻撃を無効化 · コスト5以上は召喚不可 · 兵士・騎士召喚時にカウンター+1",
+    "onSummon": "castleInit",
+    "aura": "castle",
+    "passive": [
+      "taunt"
+    ],
+    "otherFields": [
+      "noShop",
+      "val"
+    ]
+  },
+  {
+    "id": "DUNGEON",
+    "name": "生きているダンジョン",
+    "text": "【常時】「気合」「回避」を持たないモンスターは攻撃時に攻撃力が1になる",
+    "aura": "dungeon",
+    "otherFields": []
+  },
+  {
+    "id": "HEXER1",
+    "name": "初級呪術師",
+    "text": "【召喚時】デッキ構成に魔法が8枚以上ならダイスを振り5以上で相手の墓地に「呪い」3枚",
+    "onSummon": "hexSummon",
+    "otherFields": [
+      "val",
+      "val2"
+    ]
+  },
+  {
+    "id": "HEXER2",
+    "name": "中級呪術師",
+    "text": "【召喚時】デッキ構成に魔法が10枚以上ならダイスを振り4以上で相手の墓地に「呪い」4枚",
+    "onSummon": "hexSummon",
+    "otherFields": [
+      "val",
+      "val2"
+    ]
+  },
+  {
+    "id": "HEXER3",
+    "name": "上級呪術師",
+    "text": "【召喚時】魔法13枚以上·ダイス3以上なら相手の墓地に「呪い」5枚 · 【常時】相手の魔法ごとに相手の墓地に「呪い」1枚",
+    "onSummon": "hexSummon",
+    "aura": "hexCurseOnSpell",
+    "passive": [
+      "aura"
+    ],
+    "otherFields": [
+      "val",
+      "val2"
+    ]
+  },
+  {
+    "id": "HEXER4",
+    "name": "特級呪術師 - ケロイド",
+    "text": "【常時】相手の魔法ごとにダイス3以上なら無効 · 「呪術師」全体の攻撃力+5 · 【条件】魔法がデッキの半分以上·15枚以上",
+    "aura": "hexBoss",
+    "passive": [
+      "aura",
+      "majesty",
+      "evade"
+    ],
+    "otherFields": [
+      "summonReq",
+      "val"
+    ]
+  },
+  {
+    "id": "SORTER",
+    "name": "選別者",
+    "text": "【召喚時】「カル」3枚をゲームから除外 · 【常時】自分が「カル」を除外するたび「カル」1枚を追加で除外",
+    "onSummon": "sorterSummon",
+    "aura": "sorter",
+    "otherFields": [
+      "val"
+    ]
+  },
+  {
+    "id": "UNBRANDER",
+    "name": "除印師",
+    "text": "【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く",
+    "onSummon": "unbrand",
+    "otherFields": []
+  },
+  {
+    "id": "GUNNER",
+    "name": "砲撃兵",
+    "text": "【自分のターン終了時】ランダムな相手プレイヤーか相手モンスターに1ダメージ",
+    "onSummon": "expansion",
+    "passive": [
+      "void"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "HEAVY_GUNNER",
+    "name": "大砲兵",
+    "text": "【自分のターン終了時】ランダムな相手プレイヤーか相手モンスターに2ダメージ",
+    "onSummon": "expansion",
+    "passive": [
+      "void"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "FARM_KEEPER",
+    "name": "農場管理者",
+    "text": "【自分のターン終了時】自分の場に「醸造」があれば「かかし」2体を召喚",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "MIMIC_HUNTER",
+    "name": "ミミックハンター",
+    "text": "【自分のターン終了時】両方の場の「ミミック」を全て破壊",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "CAVALRY",
+    "name": "騎馬兵",
+    "text": "【常時】このモンスターが受ける反撃を無効化",
+    "onSummon": "expansion",
+    "passive": [
+      "void"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "MERCENARY",
+    "name": "傭兵",
+    "text": "【召喚時】「兵士」1体を召喚 · 両方の場のいずれかに「カジノ」があればダイス3個を振る",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "MERC_LEADER",
+    "name": "傭兵リーダー",
+    "text": "【召喚時】「兵士」2体を召喚 · 両方の場のいずれかに「カジノ」があればダイス5個を振る",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "MERC_MASTER",
+    "name": "傭兵ギルドマスター",
+    "text": "【召喚時】兵士2体を召喚 · カジノがあればダイス10個 · 【自分のターン開始時】兵士1体を召喚 · カジノがあればダイス10個",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "POISON_MASTER",
+    "name": "ポイズンマスター",
+    "text": "【常時】攻撃した相手モンスターに腐敗カウンターを追加で2個付与",
+    "onSummon": "expansion",
+    "passive": [
+      "decay",
+      "aura"
+    ],
+    "otherFields": []
+  },
+  {
+    "id": "BLACK_ELSA",
+    "name": "黒魔術師 - エルサ",
+    "text": "【召喚時】相手の墓地に呪い7枚 · 【常時】自分が黒魔法を使うたび相手に烙印+1",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "BLACK_ALICE",
+    "name": "黒魔術師 - アリス",
+    "text": "【召喚時】相手の墓地に呪い2枚 · 【常時】自分が黒魔法を使うたび自分の最大マナ+1",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "FIRE_MASTER",
+    "name": "ファイアーマスター",
+    "text": "【常時】自分のファイアー魔法の発動コスト-2 · 【破壊時】自分のデッキ・墓地からファイアー魔法を最大2枚選び手札へ",
+    "onSummon": "expansion",
+    "otherFields": []
+  },
+  {
+    "id": "ASSASSIN_SQUAD",
+    "name": "アサシンスカッド",
+    "text": "【召喚時】【他の味方アサシン】中級アサシン1体召喚、味方全体に回避 · 【攻撃条件】相手の体力11以上",
+    "onSummon": "expansion",
+    "passive": [
+      "ambush"
+    ],
+    "otherFields": [
+      "directOnly"
+    ]
+  },
+  {
+    "id": "APPRENTICE_ARMORER",
+    "name": "見習い装備職人",
+    "text": "【召喚時】自分にシールド4、または自分の他のモンスター1体に+1/+1",
+    "onSummon": "armorer",
+    "otherFields": [
+      "val",
+      "val2"
+    ]
+  },
+  {
+    "id": "VETERAN_ARMORER",
+    "name": "熟練した装備職人",
+    "text": "【召喚時】自分にシールド10、または自分の他のモンスター1体に+2/+2 · 自分の場に「城」があれば両方発動 · 強化対象が「兵士」「騎士」「砲撃兵」「傭兵」系なら+3/+3",
+    "onSummon": "armorer",
+    "otherFields": [
+      "val",
+      "val2"
+    ]
+  },
+  {
+    "id": "SALLY_WEAPONMASTER",
+    "name": "サリィ - ウェポンマスター",
+    "text": "【召喚時】自分にシールド30、または自分の他のモンスター1体に+4/+4 · 【自分ターン開始時】自分の場の「装備職人」1体につきシールド5を得る",
+    "onSummon": "armorer",
+    "turnFx": "weaponmaster",
+    "otherFields": [
+      "val",
+      "val2"
+    ]
+  },
+  {
+    "id": "PRIEST",
+    "name": "神官",
+    "text": "【召喚時】自分にシールド6 · 【常時】自分がシールドを得るたび、雫2を得る",
+    "onSummon": "shield",
+    "aura": "shieldDew",
+    "otherFields": [
+      "val",
+      "val2"
+    ]
+  },
+  {
+    "id": "HIGH_PRIEST",
+    "name": "高等神官",
+    "text": "【召喚時】自分にシールド9 · 【常時】自分がシールドを得るたび、雫3を得る",
+    "onSummon": "shield",
+    "aura": "shieldDew",
+    "otherFields": [
+      "val",
+      "val2"
+    ]
+  },
+  {
+    "id": "SHIELD_TITAN",
+    "name": "盾の巨神",
+    "text": "【条件】直前の相手ターン中にシールド20以上を保有した · 【自分ターン終了時】シールド10を得る · 【常時】このモンスターの効果以外で自分が得るシールド量が2倍になる",
+    "aura": "doubleShieldOther",
+    "passive": [
+      "taunt",
+      "majesty",
+      "aura"
+    ],
+    "otherFields": [
+      "summonReq"
+    ]
+  },
+  {
+    "id": "WINE_COLLECTOR",
+    "name": "ワインコレクター",
+    "text": "【召喚時】手札の「ワイン」2枚をリフトへ送り、「闇商人」を手札に加える · 成功した場合、このモンスターもリフトへ送る",
+    "onSummon": "wineCollector",
+    "otherFields": []
+  }
+]

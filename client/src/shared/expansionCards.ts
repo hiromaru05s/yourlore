@@ -245,7 +245,7 @@ export const EXPANSION_CARDS: CardDef[] = [
       "decay",
       "aura"
     ],
-    "atk": 0,
+    "atk": 1,
     "def": 9,
     "onSummon": "expansion"
   },

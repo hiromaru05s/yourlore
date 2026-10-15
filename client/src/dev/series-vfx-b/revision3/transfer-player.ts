@@ -47,7 +47,7 @@ export async function playTransfers(f:TransferFixture,h:TransferHooks){
  }
 
  for(const e of f.events)if(e.type==='destroy'){
-  if(!h.valid())return;h.phase('元カードの破壊 · 既定シェルフ経路');
+  if(!h.valid())return;h.phase('元カードの破壊 · 既定墓地経路');
   await h.bridge.destroy(e.uid,e.player,f.after.players[e.player].removed?.some(c=>c.uid===e.uid)||false,h.signal,h.reduced);
  }
  if(!h.valid())return;
@@ -60,7 +60,7 @@ export async function playTransfers(f:TransferFixture,h:TransferHooks){
    if(!h.valid())return;const card=f.after.players[e.player].field.find(m=>m.uid===e.uid),node=h.root.querySelector<HTMLElement>(`.card[data-uid="${e.uid}"]`);if(!card||!node)continue;
    const origin=f.origins[e.uid],pile=origin==='deck'?(h.owner===0?'#pile-myDeck':'#pile-oppDeck'):origin==='shelf'?(h.owner===0?'#pile-myDisc':'#pile-oppDisc'):undefined;
    const from=pile?h.root.querySelector<HTMLElement>(pile)!.getBoundingClientRect():targets.values().next().value||sourceRect;
-   h.phase(origin==='effect'?'効果から実カードが現れる':`${origin==='deck'?'デッキ':'シェルフ'}のカードが場へ現れる`);
+   h.phase(origin==='effect'?'効果から実カードが現れる':`${origin==='deck'?'デッキ':'墓地'}のカードが場へ現れる`);
    await glide(card,from,node.getBoundingClientRect(),h);if(h.valid())node.style.visibility='';
   }
  }finally{for(const node of hidden)node.style.visibility='';}

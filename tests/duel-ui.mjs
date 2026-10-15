@@ -16,14 +16,14 @@ globalThis.cancelAnimationFrame=()=>{};
 globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
-const entry=`export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
-await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:path.join(temp,'ui.mjs'),plugins:[{name:'dom-only-monster-renderer',setup(b){
+const entry=`export { findOriginTrap } from './client/src/ui/originRite/anchors'; export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
+await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',loader:{'.css':'empty'},outfile:path.join(temp,'ui.mjs'),plugins:[{name:'dom-only-monster-renderer',setup(b){
  // JSDOM has no Canvas or DOMMatrix. Exercise the real renderer separately in
  // monster-adoption-browser.mjs; this suite checks game DOM and interaction.
  b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
- b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false;',loader:'js'}));
+ b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const monsterPresentationNodes=n=>[n],hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
 }}]});
-const {cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+const {findOriginTrap,STARTERS,cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
 // Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.
 const clock=document.createElement('div');clock.setAttribute('aria-hidden','true');
@@ -111,6 +111,9 @@ assert.equal(document.querySelectorAll('#supplyMarket > .card').length,3);
 assert.deepEqual([...document.querySelectorAll('#supplyMarket .mkt-stock')].map(e=>e.textContent),['×1','×1','×1']);
 assert.equal(document.querySelectorAll('.side-rail').length,0);
 assert.equal(document.querySelector('#oppRow [data-uid^="secret"]'),null,'hidden trap identity stays private');
+assert.equal(findOriginTrap(g.players[1].traps[0].card.uid),document.querySelector('#oppRow .buff-icon--trap'),'private association locates only the actual visible face-down surface');
+assert.equal(findOriginTrap('missing-trap'),null);
+assert(!document.querySelector('#oppRow .zone-st').outerHTML.includes(g.players[1].traps[0].card.uid),'no hidden UID is serialized into markup');
 const click=el=>el.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true}));
 const fixed=document.querySelector('#fixedMarket > .card');click(fixed);click(fixed);click(fixed);assert.equal(boughtFixed,0);
 const sup=document.querySelector('#supplyMarket > .card');const original=Number(sup.dataset.supIdx);click(sup);click(sup);click(sup);assert.equal(boughtSupply,original,'sorting keeps original supply index');
@@ -118,7 +121,13 @@ click(document.querySelector('#refreshBtn'));assert.equal(rerolls,1);
 v.setHandOpen(true);assert(document.querySelector('.game.hand-open'));v.setHandOpen(false);assert(!document.querySelector('.game.hand-open'));
 g.cur=1;v.render(g);assert(document.querySelector('#refreshBtn').disabled);assert(document.querySelector('#endBtn').disabled);
 g.cur=0;g.players[0].supply[1]=null;v.render(g);assert.equal(document.querySelectorAll('#supplyMarket > *').length,3);assert.equal(document.querySelectorAll('#supplyMarket > .is-bought').length,1);
-assert.deepEqual(avatarPresets(),['SEEKER_RED','SEEKER_BLUE']);assert(avatarHtml('SEEKER_RED','A').includes('seeker-red'));
+// Attack targeting is indicated on cards without blocking the end-turn control.
+assert.equal(document.querySelector('.help-callout'),null);
+g.pending={kind:'oppMon',reason:'attack',hint:'',hintJa:'',allowCancel:true,data:{attackerUid:g.players[0].field[0]?.uid}};
+v.render(g);assert.equal(document.querySelector('#targetHint').style.display,'none');assert.equal(document.querySelector('#endBtn').disabled,false);
+g.pending={kind:'myMon',reason:'buffTurn',hint:'',hintJa:'',allowCancel:false};v.render(g);assert.equal(document.querySelector('#endBtn').disabled,true);
+g.pending=null;v.render(g);
+assert.deepEqual(avatarPresets(),['SEEKER_HOODED']);for(const id of ['SEEKER_RED','SEEKER_BLUE','SEEKER_HOODED'])assert(avatarHtml(id,'A').includes('/art/seekers/faceless-v2/portrait.webp'));
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=31);assert.equal(m.underPile,false);}
 // Complete type-specific UI faces and live numeric overlays survive rendering.
 for (const card of document.querySelectorAll('.card[data-card-type]')) {
@@ -133,7 +142,7 @@ for(const def of [mon,trap,spell]) {
  assert(basic.querySelector('.card-name'));assert(!field.querySelector('.card-name'));
  assert(!basic.querySelector('.card-eff'));assert(!field.querySelector('.card-eff'));
  zoomCard(inst);
- assert(document.querySelector('.zoom-wrap > .card .card-name'));
+ assert(document.querySelector('.zoom-card-stage > .card .card-name'));
  assert(document.querySelector('.zoom-details .card-rules'));
  assert.equal(document.querySelectorAll('.zoom-details').length,1);
  document.querySelector('.inspect-close').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
@@ -189,6 +198,35 @@ qstate.players[0].hp=15;v.render(qstate);
 assert(document.querySelector('#fixedMarket .card[data-uid="quick-market"]').classList.contains('is-buyable'));
 const questFace=cardEl({...DB.Q_WINTER,uid:'quest-face'});
 assert(questFace.classList.contains('card--quest'));assert(questFace.querySelector('.card-frame').style.backgroundImage.includes('base-quest-ui.webp'));
+// Spatial Rite is public, persistent state: mark only affected cards and clear on removal.
+const spatial=createGame({mode:'bot',seed:19,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
+spatial.turn=8;spatial.pending=null;spatial.cur=0;
+spatial.players[0].mana=30;spatial.players[0].field=[];
+spatial.players[0].hand=[{...DB.M1,uid:'sp-mon'},{...DB.VOID_RITE,uid:'sp-spell'},{...STARTERS.STARTER_MANA,uid:'sp-starter'},{...DB.Q_WINTER,uid:'sp-quest'}];
+spatial.players[1].enchants=[{card:{...DB.SPACE_RITE,uid:'sp-source-1'},turns:1},{card:{...DB.SPACE_RITE,uid:'sp-source-2'},turns:3}];
+for(const lang of ['ja','ko','en']) {
+ setLang(lang);v.render(spatial);v.setHandOpen(true);
+ assert.equal(document.querySelectorAll('#hand .space-rite-locked').length,3);
+ assert(!document.querySelector('#hand [data-uid="sp-quest"]').classList.contains('space-rite-locked'));
+ assert.equal(document.querySelectorAll('#oppHand .space-rite-locked').length,0);
+ assert(document.querySelector('.space-rite-status').textContent.includes('3'));
+ assert.equal(document.querySelector('.space-rite-status img').getAttribute('src'),'/art/cards/SPACE_RITE.webp');
+ document.querySelector('#hand [data-uid="sp-mon"]').click();
+ assert(document.querySelector('.inspect-state').textContent.includes({ja:'召喚',ko:'소환',en:'summoning'}[lang]));closeZoom();
+}
+setLang('ja');
+spatial.players[0].mana=0;v.render(spatial);
+assert(document.querySelector('#hand [data-uid="sp-spell"]').dataset.blockReason.includes('空間術式'),'persistent source stays readable even with insufficient mana');
+spatial.players[1].enchants.shift();v.render(spatial);
+assert.equal(document.querySelectorAll('#hand .space-rite-locked').length,3,'second source keeps the lock');
+spatial.pending={kind:'discard',player:0,count:1,reason:'handCap'};v.render(spatial);
+assert.equal(document.querySelectorAll('#hand .space-rite-locked').length,0,'discarding must remain selectable');
+spatial.pending=null;v.render(spatial);
+assert.equal(document.querySelectorAll('#hand .space-rite-locked').length,3);
+spatial.players[1].enchants=[];v.render(spatial);
+assert.equal(document.querySelectorAll('.space-rite-lock-badge,.space-rite-status,[data-space-rite-reason]').length,0,'all source UI clears even when mana still blocks play');
+spatial.players[0].mana=30;v.render(spatial);
+assert(document.querySelector('#hand [data-uid="sp-mon"]').classList.contains('is-playable'));
 v.destroy();
 document.getElementById('app').innerHTML='';
 // Regression through the real controller: first banner follows the coin; next turn announces once.
@@ -211,6 +249,12 @@ const banner=document.querySelector('.fx-turn-sigil');
 control.feed({state:structuredClone(next),events:[]});
 await new Promise(r=>setTimeout(r,20));
 assert.equal(document.querySelector('.fx-turn-sigil'),banner,'same-turn updates do not replay banner');
+// The real blocked-drag path names the source rather than a generic condition.
+spatial.cur=0;spatial.players[1].enchants=[{card:{...DB.SPACE_RITE,uid:'toast-source'},turns:2}];
+control.feed({state:spatial,events:[]});control.onBlockedPlay('sp-mon');
+assert(document.querySelector('.cant-toast').textContent.includes('空間術式'));
+assert(document.querySelector('.cant-toast').textContent.includes('召喚'));
+document.querySelector('.cant-toast').remove();
 control.destroy();assert(!document.querySelector('.fx-turn-sigil'));
 document.getElementById('app').innerHTML='';
 let savedAvatar='SEEKER_BLUE';
@@ -220,12 +264,14 @@ api.updateMe=async(patch)=>{savedAvatar=patch.avatar;return {ok:true,display:'Se
 const app={root:document.getElementById('app'),user:{avatar:savedAvatar},home:noop};
 const screen=mountProfile(app);
 await new Promise(r=>setTimeout(r,10));
-click(document.querySelector('#avaBtn'));
-assert.equal(document.querySelectorAll('.seeker-picker .ava-opt').length,2);
-click(document.querySelector('[data-id="SEEKER_RED"]'));
-await new Promise(r=>setTimeout(r,10));
-assert.equal(savedAvatar,'SEEKER_RED');assert.equal(app.user.avatar,'SEEKER_RED');
-assert(document.querySelector('#avaBtn .seeker-red'),'profile re-renders persisted selection');
+assert(document.querySelector('.pf-ava .hooded-seeker'),'profile keeps the fixed seeker portrait');
+assert.equal(document.querySelector('#avaBtn, .pf-ava-edit, .pf-ava button'),null);
+click(document.querySelector('.pf-ava'));
+assert.equal(document.querySelector('.hooded-picker'),null);
+click(document.querySelector('[data-tab="settings"]'));
+assert.equal(document.querySelector('[data-character-settings]'),null);
+assert(document.querySelector('#renderQuality'),'graphics settings remain available');
+assert.equal(savedAvatar,'SEEKER_BLUE','viewing a fixed portrait does not mutate the account');
 screen.destroy?.();
 dom.window.close();await rm(temp,{recursive:true,force:true});
 console.log('PASS: zones, secret traps, market stock/index/confirmation, turn restrictions, 30 mana, HP, avatars, hand states, viewport sizes');

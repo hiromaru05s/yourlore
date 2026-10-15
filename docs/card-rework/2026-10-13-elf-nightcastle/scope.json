@@ -1,0 +1,38 @@
+{
+  "balanceVersion": "v58",
+  "approvedCards": [
+    "ELF",
+    "HIGH_ELF",
+    "ELDER_ELF_KING",
+    "DARK_ELF",
+    "WORLD_TREE"
+  ],
+  "retained": [
+    "ELF keyword and continuous effects",
+    "HIGH_ELF keyword and continuous effects",
+    "ELDER_ELF_KING keyword and continuous effects"
+  ],
+  "gift": {
+    "id": "NIGHT_CASTLE_GIFT",
+    "pool": "starter",
+    "cost": 4,
+    "type": "persistent spell",
+    "count": "4 subsequent owner turn starts",
+    "reward": "choose one new VAMP_PACT or VAMP_WARD in hand, then send Gift to owner graveyard"
+  },
+  "excludedCandidates": [
+    "DRY_SCOUT",
+    "DRY_WARD",
+    "VAMP_INVITE",
+    "NIGHT_GUIDE",
+    "BLOOD_PULSE"
+  ],
+  "knownRuleBoundary": "Existing effect summons bypass normal summon requirements; on-summon Dew loss removes available Dew down to zero. This release does not redefine effect-summon legality.",
+  "balanceEvidence": "Prior 37152-condition study tested a different complete nerf bundle. Its win rates are not measurements of v58.",
+  "validation": {
+    "newReducerGroups": 20,
+    "newServerChecks": 8,
+    "browserChecks": 9,
+    "threeLanguageTexts": 1083
+  }
+}

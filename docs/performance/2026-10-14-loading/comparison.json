@@ -1,0 +1,40 @@
+{
+  "conditions": {
+    "bandwidthMbps": 10,
+    "latencyMs": 40,
+    "cpu": 2,
+    "menuDwellMs": 12000,
+    "api": "fixture",
+    "cache": "fresh browser context; immutable JS, revalidated art"
+  },
+  "baseline": "verified/loading-comparison.json (before entries)",
+  "current": "release/loading-comparison.json",
+  "samples": [
+    {
+      "width": 1280,
+      "beforeBoardMs": 25095,
+      "afterBoardMs": 9080,
+      "boardReductionPercent": 63.8,
+      "beforeEntryBytes": 31676441,
+      "afterEntryBytes": 15127428,
+      "beforeHomeMs": 9839,
+      "afterHomeMs": 11345,
+      "modelDuplicateRequests": [],
+      "errors": [],
+      "failed": []
+    },
+    {
+      "width": 390,
+      "beforeBoardMs": 16151,
+      "afterBoardMs": 11871,
+      "boardReductionPercent": 26.5,
+      "beforeEntryBytes": 26590635,
+      "afterEntryBytes": 17093110,
+      "beforeHomeMs": 8250,
+      "afterHomeMs": 19063,
+      "modelDuplicateRequests": [],
+      "errors": [],
+      "failed": []
+    }
+  ]
+}

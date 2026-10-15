@@ -1,0 +1,308 @@
+{
+  "config": {
+    "A": "new:hell",
+    "B": "old:hell",
+    "n": 60,
+    "start": 40005,
+    "search": {
+      "hard": {
+        "width": 8,
+        "samples": 2,
+        "turns": 2,
+        "finalists": 3,
+        "extraSamples": 2
+      },
+      "hell": {
+        "width": 12,
+        "samples": 3,
+        "turns": 2,
+        "finalists": 4,
+        "extraSamples": 8
+      }
+    },
+    "tactics": {
+      "proof": true,
+      "targets": true,
+      "horizon": 4
+    },
+    "valueModel": null,
+    "value": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0.6
+    },
+    "baselineValue": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0.6
+    },
+    "modules": {
+      "candidate": "c167516df7e951838722234d4234a5b585bace78eebdbb1c0453f7ff8679dfbf",
+      "baseline": "0eeb7ab6bdf7d81625658c3a715d037b24b2788ae4556bdff99ccf2cef07b9a5"
+    },
+    "customA": [
+      {
+        "name": "BOT · DECAY ASSAULT",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "AMBUSH",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      },
+      {
+        "name": "BOT · DECAY RIFT",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "RIFT",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      },
+      {
+        "name": "BOT · DECAY GUARD",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "CASTLE",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      }
+    ],
+    "customB": [
+      {
+        "name": "counter-0",
+        "cards": [
+          "WEAKEN_ALL",
+          "WEAKEN_ALL",
+          "RIFT",
+          "RIFT",
+          "TRIAL_AREA",
+          "COUNTERCALC",
+          "STARTER_TRASH",
+          "STARTER_TRASH"
+        ],
+        "tune": {}
+      },
+      {
+        "name": "counter-1",
+        "cards": [
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "ACID_RAIN",
+          "ACID_RAIN",
+          "RIFT",
+          "TRIAL_AREA",
+          "STARTER_TRASH",
+          "COUNTERCALC"
+        ],
+        "tune": {}
+      },
+      {
+        "name": "counter-2",
+        "cards": [
+          "WEAKEN_ALL",
+          "BLOOD_RITE",
+          "RIFT",
+          "TRIAL_AREA",
+          "COUNTERCALC",
+          "CHOSEN_AREA",
+          "STARTER_TRASH",
+          "STARTER_TRASH"
+        ],
+        "tune": {}
+      },
+      {
+        "name": "counter-3",
+        "cards": [
+          "GHOST",
+          "GHOST",
+          "GHOST",
+          "TRUMPET",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "COUNTERCALC",
+          "FLAME"
+        ],
+        "tune": {}
+      },
+      {
+        "name": "counter-4",
+        "cards": [
+          "GAMBLER",
+          "GAMBLER",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN",
+          "ELF_HAVEN",
+          "HALF_ELF",
+          "HALF_ELF",
+          "COUNTERCALC"
+        ],
+        "tune": {}
+      }
+    ],
+    "rosterA": "balanced",
+    "rosterB": "balanced"
+  },
+  "rows": [
+    {
+      "pair": 40005,
+      "seat": 0,
+      "da": 0,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "counter-0"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 91,
+      "bad": null
+    },
+    {
+      "pair": 40005,
+      "seat": 1,
+      "da": 0,
+      "db": 1,
+      "decks": [
+        "counter-0",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 30,
+      "steps": 172,
+      "bad": null
+    },
+    {
+      "pair": 40006,
+      "seat": 0,
+      "da": 1,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY RIFT",
+        "counter-0"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 31,
+      "steps": 210,
+      "bad": null
+    },
+    {
+      "pair": 40006,
+      "seat": 1,
+      "da": 1,
+      "db": 1,
+      "decks": [
+        "counter-0",
+        "BOT · DECAY RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 52,
+      "steps": 343,
+      "bad": null
+    },
+    {
+      "pair": 40007,
+      "seat": 0,
+      "da": 2,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "counter-0"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 19,
+      "steps": 155,
+      "bad": null
+    },
+    {
+      "pair": 40007,
+      "seat": 1,
+      "da": 2,
+      "db": 1,
+      "decks": [
+        "counter-0",
+        "BOT · DECAY GUARD"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 14,
+      "steps": 97,
+      "bad": null
+    },
+    {
+      "pair": 40008,
+      "seat": 0,
+      "da": 3,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "counter-1"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 113,
+      "bad": null
+    },
+    {
+      "pair": 40008,
+      "seat": 1,
+      "da": 3,
+      "db": 1,
+      "decks": [
+        "counter-1",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 32,
+      "steps": 285,
+      "bad": null
+    }
+  ],
+  "source": "/tmp/lore-bot-strength/final-v2/results/final-counters.jsonl",
+  "reason": "Coordinated release pause; completed games preserved, only unfinished game restarts from its original seed"
+}

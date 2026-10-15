@@ -1,0 +1,35 @@
+vite v5.4.21 building for production...
+
+(!) outDir /tmp/lore-decay-counter-four-build is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+transforming...
+✓ 283 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../../../tmp/lore-decay-counter-four-build/decay-counter-four.html                  0.34 kB │ gzip:   0.30 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/preview-yjAEBUHc.css              6.55 kB │ gzip:   2.09 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/layer-CgHx50i_.css               74.17 kB │ gzip:  17.47 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/board-BbpQflyD.css              171.79 kB │ gzip:  36.27 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/sound-BLHhZEvC.js                 0.82 kB │ gzip:   0.52 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/decay-counter-four-CbJt-hW8.js    2.17 kB │ gzip:   1.11 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/catalog-BlUM61ts.js               4.79 kB │ gzip:   2.22 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/coins-BDp9VzKB.js                 5.54 kB │ gzip:   2.54 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/renderDensity-on5vuAOj.js         7.14 kB │ gzip:   3.36 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/preview-CBx-pqpk.js               7.42 kB │ gzip:   4.02 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/ceremonyScene-CsDnIBDF.js         8.99 kB │ gzip:   4.00 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/renderer-SnlC4uwo.js              9.78 kB │ gzip:   4.12 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/paperDraw-j6P6EEbv.js            10.26 kB │ gzip:   4.65 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/renderer-CCsvGLzY.js             13.63 kB │ gzip:   5.54 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/renderer-BwJgAHnQ.js             16.96 kB │ gzip:   6.93 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/renderer-BLPkxPUB.js             17.92 kB │ gzip:   6.97 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/renderer-PGTPEqyg.js             18.91 kB │ gzip:   7.88 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/duelScene-BsutCwp6.js           106.81 kB │ gzip:  37.28 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/layer-Crr6XI9_.js               515.50 kB │ gzip: 214.81 kB
+../../../../../../../tmp/lore-decay-counter-four-build/assets/board-diAzeauA.js               938.38 kB │ gzip: 283.02 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 29.54s

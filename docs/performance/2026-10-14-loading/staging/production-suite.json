@@ -1,0 +1,747 @@
+[
+  {
+    "file": "tests/reverse-pitch.mjs",
+    "passed": true,
+    "ms": 230
+  },
+  {
+    "file": "tests/rune-replay.mjs",
+    "passed": true,
+    "ms": 947
+  },
+  {
+    "file": "tests/timewarp.mjs",
+    "passed": true,
+    "ms": 207
+  },
+  {
+    "file": "tests/timewarp-lifecycle.mjs",
+    "passed": true,
+    "ms": 815
+  },
+  {
+    "file": "tests/forbidden-ritual.mjs",
+    "passed": true,
+    "ms": 719
+  },
+  {
+    "file": "tests/dragon-fusion.mjs",
+    "passed": true,
+    "ms": 807
+  },
+  {
+    "file": "tests/hatch-summon.mjs",
+    "passed": true,
+    "ms": 764
+  },
+  {
+    "file": "tests/hooded-seekers.mjs",
+    "passed": true,
+    "ms": 1350
+  },
+  {
+    "file": "tests/chosen-victory.mjs",
+    "passed": true,
+    "ms": 150
+  },
+  {
+    "file": "tests/attack-vfx.mjs",
+    "passed": true,
+    "ms": 179
+  },
+  {
+    "file": "tests/assassin-attack.mjs",
+    "passed": true,
+    "ms": 125
+  },
+  {
+    "file": "tests/counter-animation.mjs",
+    "passed": true,
+    "ms": 188
+  },
+  {
+    "file": "tests/combat-tempo.mjs",
+    "passed": true,
+    "ms": 88
+  },
+  {
+    "file": "tests/audio-contact-rules.mjs",
+    "passed": true,
+    "ms": 292
+  },
+  {
+    "file": "tests/audio-v3.mjs",
+    "passed": true,
+    "ms": 646
+  },
+  {
+    "file": "tests/balance-v52.mjs",
+    "passed": true,
+    "ms": 270
+  },
+  {
+    "file": "tests/balance-v57.mjs",
+    "passed": true,
+    "ms": 2107
+  },
+  {
+    "file": "tests/balance-v58.mjs",
+    "passed": true,
+    "ms": 220
+  },
+  {
+    "file": "tests/balance-v58-server.mjs",
+    "passed": true,
+    "ms": 241
+  },
+  {
+    "file": "tests/card-wording.mjs",
+    "passed": true,
+    "ms": 195
+  },
+  {
+    "file": "tests/card-wording-render.mjs",
+    "passed": true,
+    "ms": 1128
+  },
+  {
+    "file": "tests/card-effect-ux.mjs",
+    "passed": true,
+    "ms": 3517
+  },
+  {
+    "file": "tests/biblion-vfx.mjs",
+    "passed": true,
+    "ms": 192
+  },
+  {
+    "file": "tests/connected-return-motion.mjs",
+    "passed": true,
+    "ms": 651
+  },
+  {
+    "file": "tests/dew-shield-v54.mjs",
+    "passed": true,
+    "ms": 257
+  },
+  {
+    "file": "tests/dice-model.mjs",
+    "passed": true,
+    "ms": 214
+  },
+  {
+    "file": "tests/dice-source.mjs",
+    "passed": true,
+    "ms": 3324
+  },
+  {
+    "file": "tests/duel-ui.mjs",
+    "passed": true,
+    "ms": 9195
+  },
+  {
+    "file": "tests/expansion-v50.mjs",
+    "passed": true,
+    "ms": 297
+  },
+  {
+    "file": "tests/fate-wheel.mjs",
+    "passed": true,
+    "ms": 233
+  },
+  {
+    "file": "tests/graphics-capability.mjs",
+    "passed": true,
+    "ms": 549
+  },
+  {
+    "file": "tests/grounded-motion.mjs",
+    "passed": true,
+    "ms": 201
+  },
+  {
+    "file": "tests/half-elf-v48.mjs",
+    "passed": true,
+    "ms": 252
+  },
+  {
+    "file": "tests/hand-condition-rules.mjs",
+    "passed": true,
+    "ms": 4324
+  },
+  {
+    "file": "tests/health-cosmetics-v53.mjs",
+    "passed": true,
+    "ms": 214
+  },
+  {
+    "file": "tests/home-entrance-parity.mjs",
+    "passed": true,
+    "ms": 403
+  },
+  {
+    "file": "tests/library-furniture-model.mjs",
+    "passed": true,
+    "ms": 63
+  },
+  {
+    "file": "tests/lounge-horizon.mjs",
+    "passed": true,
+    "ms": 1002
+  },
+  {
+    "file": "tests/lounge-rank.mjs",
+    "passed": true,
+    "ms": 170
+  },
+  {
+    "file": "tests/lounge-settlement.mjs",
+    "passed": true,
+    "ms": 176
+  },
+  {
+    "file": "tests/menu-records.mjs",
+    "passed": true,
+    "ms": 205
+  },
+  {
+    "file": "tests/menu-selected.mjs",
+    "passed": true,
+    "ms": 1109
+  },
+  {
+    "file": "tests/mana-spirit-motion.mjs",
+    "passed": true,
+    "ms": 146
+  },
+  {
+    "file": "tests/moon-rabbit-preview.mjs",
+    "passed": true,
+    "ms": 644
+  },
+  {
+    "file": "tests/zeno-interaction.mjs",
+    "passed": true,
+    "ms": 80
+  },
+  {
+    "file": "tests/monster-animation-rules.mjs",
+    "passed": true,
+    "ms": 152
+  },
+  {
+    "file": "tests/dual-ready.mjs",
+    "passed": true,
+    "ms": 164
+  },
+  {
+    "file": "tests/monster-effect-activation.mjs",
+    "passed": true,
+    "ms": 392
+  },
+  {
+    "file": "tests/motion-v2.mjs",
+    "passed": true,
+    "ms": 2327
+  },
+  {
+    "file": "tests/opening-hands.mjs",
+    "passed": true,
+    "ms": 283
+  },
+  {
+    "file": "tests/paper-card.mjs",
+    "passed": true,
+    "ms": 216
+  },
+  {
+    "file": "tests/pile-stock.mjs",
+    "passed": true,
+    "ms": 214
+  },
+  {
+    "file": "tests/portal-return-motion.mjs",
+    "passed": true,
+    "ms": 1371
+  },
+  {
+    "file": "tests/purchase-air.mjs",
+    "passed": true,
+    "ms": 219
+  },
+  {
+    "file": "tests/purchase-vfx.mjs",
+    "passed": true,
+    "ms": 100
+  },
+  {
+    "file": "tests/quest-quick.mjs",
+    "passed": true,
+    "ms": 212
+  },
+  {
+    "file": "tests/quest-pact.mjs",
+    "passed": true,
+    "ms": 633
+  },
+  {
+    "file": "tests/quick-playback.mjs",
+    "passed": true,
+    "ms": 322
+  },
+  {
+    "file": "tests/rank-emblem.mjs",
+    "passed": true,
+    "ms": 896
+  },
+  {
+    "file": "tests/rank-sound.mjs",
+    "passed": true,
+    "ms": 822
+  },
+  {
+    "file": "tests/release-furniture-model.mjs",
+    "passed": true,
+    "ms": 66
+  },
+  {
+    "file": "tests/rift-fold.mjs",
+    "passed": true,
+    "ms": 95
+  },
+  {
+    "file": "tests/rift-transmute.mjs",
+    "passed": true,
+    "ms": 116
+  },
+  {
+    "file": "tests/solid-draw.mjs",
+    "passed": true,
+    "ms": 1348
+  },
+  {
+    "file": "tests/stagecraft-models.mjs",
+    "passed": true,
+    "ms": 244
+  },
+  {
+    "file": "tests/stat-rise.mjs",
+    "passed": true,
+    "ms": 156
+  },
+  {
+    "file": "tests/multi-target-buff.mjs",
+    "passed": true,
+    "ms": 195
+  },
+  {
+    "file": "tests/trap-related-rework.mjs",
+    "passed": true,
+    "ms": 206
+  },
+  {
+    "file": "tests/trap-removal.mjs",
+    "passed": true,
+    "ms": 941
+  },
+  {
+    "file": "tests/ceremony-audio-aim.mjs",
+    "passed": true,
+    "ms": 885
+  },
+  {
+    "file": "tests/trap-removal-tutorial.mjs",
+    "passed": true,
+    "ms": 11469
+  },
+  {
+    "file": "tests/tutorial-academy.mjs",
+    "passed": true,
+    "ms": 310
+  },
+  {
+    "file": "tests/production-security.mjs",
+    "passed": true,
+    "ms": 241
+  },
+  {
+    "file": "tests/production-bc.mjs",
+    "passed": true,
+    "ms": 235
+  },
+  {
+    "file": "tests/match-bots.mjs",
+    "passed": true,
+    "ms": 615
+  },
+  {
+    "file": "tests/bot-worker.mjs",
+    "passed": true,
+    "ms": 3106
+  },
+  {
+    "file": "tests/asset-readiness-retry.mjs",
+    "passed": true,
+    "ms": 792
+  },
+  {
+    "file": "tests/purchase-air-worker.mjs",
+    "passed": true,
+    "ms": 591
+  },
+  {
+    "file": "tests/duel-opening-server.mjs",
+    "passed": true,
+    "ms": 229
+  },
+  {
+    "file": "tests/dew-shield-server.mjs",
+    "passed": true,
+    "ms": 225
+  },
+  {
+    "file": "tests/deck-hand-editor.mjs",
+    "passed": true,
+    "ms": 1189
+  },
+  {
+    "file": "tests/turn-banner.mjs",
+    "passed": true,
+    "ms": 864
+  },
+  {
+    "file": "tests/opening-approved.mjs",
+    "passed": true,
+    "ms": 735
+  },
+  {
+    "file": "tests/mimic-approved.mjs",
+    "passed": true,
+    "ms": 91
+  },
+  {
+    "file": "tests/slate-summon.mjs",
+    "passed": true,
+    "ms": 887
+  },
+  {
+    "file": "tests/dungeon-summon.mjs",
+    "passed": true,
+    "ms": 694
+  },
+  {
+    "file": "tests/casino-summon.mjs",
+    "passed": true,
+    "ms": 696
+  },
+  {
+    "file": "tests/spell-frame.mjs",
+    "passed": true,
+    "ms": 669
+  },
+  {
+    "file": "tests/mana-destruction.mjs",
+    "passed": true,
+    "ms": 90
+  },
+  {
+    "file": "tests/decay-dissolve.mjs",
+    "passed": true,
+    "ms": 852
+  },
+  {
+    "file": "tests/decay-counter-grant.mjs",
+    "passed": true,
+    "ms": 840
+  },
+  {
+    "file": "tests/elemental-adoption.mjs",
+    "passed": true,
+    "ms": 343
+  },
+  {
+    "file": "tests/persistent-flight.mjs",
+    "passed": true,
+    "ms": 590
+  },
+  {
+    "file": "tests/tribe-synergy-rules.mjs",
+    "passed": true,
+    "ms": 187
+  },
+  {
+    "file": "tests/tribe-presentation.mjs",
+    "passed": true,
+    "ms": 767
+  },
+  {
+    "file": "tests/golem-guts.mjs",
+    "passed": true,
+    "ms": 200
+  },
+  {
+    "file": "tests/guts-endurance.mjs",
+    "passed": true,
+    "ms": 200
+  },
+  {
+    "file": "tests/zero-attack-rule.mjs",
+    "passed": true,
+    "ms": 233
+  },
+  {
+    "file": "tests/zero-attack-balance.mjs",
+    "passed": true,
+    "ms": 252
+  },
+  {
+    "file": "tests/verdant-summon.mjs",
+    "passed": true,
+    "ms": 861
+  },
+  {
+    "file": "tests/critical-trigger-chains.mjs",
+    "passed": true,
+    "ms": 193
+  },
+  {
+    "file": "tests/status-grant.mjs",
+    "passed": true,
+    "ms": 167
+  },
+  {
+    "file": "tests/status-extinction.mjs",
+    "passed": true,
+    "ms": 237
+  },
+  {
+    "file": "tests/target-choice-ux.mjs",
+    "passed": true,
+    "ms": 319
+  },
+  {
+    "file": "tests/target-choice-ui.mjs",
+    "passed": true,
+    "ms": 780
+  },
+  {
+    "file": "tests/target-choice-server.mjs",
+    "passed": true,
+    "ms": 219
+  },
+  {
+    "file": "tests/dew-grant.mjs",
+    "passed": true,
+    "ms": 189
+  },
+  {
+    "file": "tests/duel-bugfix-oct08.mjs",
+    "passed": true,
+    "ms": 177
+  },
+  {
+    "file": "tests/cross-system-oct08.mjs",
+    "passed": true,
+    "ms": 264
+  },
+  {
+    "file": "tests/combat-anchor.mjs",
+    "passed": true,
+    "ms": 660
+  },
+  {
+    "file": "tests/chosen-heroes-summon.mjs",
+    "passed": true,
+    "ms": 675
+  },
+  {
+    "file": "tests/golem-shell.mjs",
+    "passed": true,
+    "ms": 635
+  },
+  {
+    "file": "tests/gambler-summon.mjs",
+    "passed": true,
+    "ms": 667
+  },
+  {
+    "file": "tests/mercenary-summon.mjs",
+    "passed": true,
+    "ms": 713
+  },
+  {
+    "file": "tests/mage-summon.mjs",
+    "passed": true,
+    "ms": 746
+  },
+  {
+    "file": "tests/assassin-summon.mjs",
+    "passed": true,
+    "ms": 731
+  },
+  {
+    "file": "tests/merchant-runtime.mjs",
+    "passed": true,
+    "ms": 714
+  },
+  {
+    "file": "tests/evade-refraction.mjs",
+    "passed": true,
+    "ms": 752
+  },
+  {
+    "file": "tests/vampire-summon.mjs",
+    "passed": true,
+    "ms": 701
+  },
+  {
+    "file": "tests/vampire-geometry.mjs",
+    "passed": true,
+    "ms": 393
+  },
+  {
+    "file": "tests/taunt-shield.mjs",
+    "passed": true,
+    "ms": 921
+  },
+  {
+    "file": "tests/void-summon.mjs",
+    "passed": true,
+    "ms": 703
+  },
+  {
+    "file": "tests/silence-summon.mjs",
+    "passed": true,
+    "ms": 677
+  },
+  {
+    "file": "tests/bot-strength.mjs",
+    "passed": true,
+    "ms": 11079
+  },
+  {
+    "file": "tests/bot-tactics.mjs",
+    "passed": true,
+    "ms": 747
+  },
+  {
+    "file": "tests/bot-market-strategy.mjs",
+    "passed": true,
+    "ms": 598
+  },
+  {
+    "file": "tests/bot-npcs.mjs",
+    "passed": true,
+    "ms": 10197
+  },
+  {
+    "file": "tests/bot-simulation.mjs",
+    "passed": true,
+    "ms": 1246
+  },
+  {
+    "file": "tests/gacha-azure-motion.mjs",
+    "passed": true,
+    "ms": 542
+  },
+  {
+    "file": "tests/weaponmaster-summon.mjs",
+    "passed": true,
+    "ms": 868
+  },
+  {
+    "file": "tests/shield-titan-summon.mjs",
+    "passed": true,
+    "ms": 607
+  },
+  {
+    "file": "tests/blood-rite.mjs",
+    "passed": true,
+    "ms": 146
+  },
+  {
+    "file": "tests/massacre.mjs",
+    "passed": true,
+    "ms": 184
+  },
+  {
+    "file": "tests/treason.mjs",
+    "passed": true,
+    "ms": 189
+  },
+  {
+    "file": "tests/infinity-cull.mjs",
+    "passed": true,
+    "ms": 179
+  },
+  {
+    "file": "tests/nova.mjs",
+    "passed": true,
+    "ms": 176
+  },
+  {
+    "file": "tests/void-shot.mjs",
+    "passed": true,
+    "ms": 177
+  },
+  {
+    "file": "tests/creation.mjs",
+    "passed": true,
+    "ms": 184
+  },
+  {
+    "file": "tests/void-crystal-rules.mjs",
+    "passed": true,
+    "ms": 181
+  },
+  {
+    "file": "tests/dimension-void.mjs",
+    "passed": true,
+    "ms": 158
+  },
+  {
+    "file": "tests/rebirth.mjs",
+    "passed": true,
+    "ms": 165
+  },
+  {
+    "file": "tests/dungeon-floor.mjs",
+    "passed": true,
+    "ms": 766
+  },
+  {
+    "file": "tests/trick-room.mjs",
+    "passed": true,
+    "ms": 174
+  },
+  {
+    "file": "tests/curse.mjs",
+    "passed": true,
+    "ms": 843
+  },
+  {
+    "file": "tests/soul-harvest.mjs",
+    "passed": true,
+    "ms": 699
+  },
+  {
+    "file": "tests/loading-cache.mjs",
+    "passed": true,
+    "ms": 100
+  },
+  {
+    "file": "tests/loading-readiness.mjs",
+    "passed": true,
+    "ms": 906
+  },
+  {
+    "file": "tests/pile-geometry-cache.mjs",
+    "passed": true,
+    "ms": 1199
+  },
+  {
+    "file": "tests/origin-rite.mjs",
+    "passed": true,
+    "ms": 833
+  }
+]

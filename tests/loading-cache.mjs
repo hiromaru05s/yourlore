@@ -1,0 +1,42 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {access,mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+const temp=await mkdtemp(path.join(tmpdir(),'lore-loading-'));
+const flush=()=>new Promise(resolve=>setImmediate(resolve));
+try {
+ await build({stdin:{contents:`export {OPENING_PORTRAIT_URL} from './client/src/ui/opening/assets';export {createAssetQueue} from './client/src/ui/assetQueue';export {decodeAsset,warmImages} from './client/src/ui/imageAssets';export {readingAssetBytes,readingAssetUrls,readingBoardUrl} from './client/src/ui/readingAssetCache';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(temp,'cache.mjs')});
+ const {OPENING_PORTRAIT_URL,createAssetQueue,decodeAsset,warmImages,readingAssetBytes,readingAssetUrls,readingBoardUrl}=await import(path.join(temp,'cache.mjs'));
+ // Every speculative URL must refer to an asset included in the release.
+ for(const url of [OPENING_PORTRAIT_URL,...readingAssetUrls(false),...readingAssetUrls(true)])await access(path.join('client/public',url.split('?')[0]));
+ const queue=createAssetQueue(3,1),started=[],release=new Map();
+ const add=(id,priority)=>queue.add(()=>{started.push(id);return new Promise(r=>release.set(id,r));},priority);
+ const first=add('low1','low');await flush();const second=add('low2','low'),third=add('low3','low');
+ const high=add('high','high');await flush();assert.deepEqual(started,['low1','high']);
+ third.promote();await flush();assert.deepEqual(started,['low1','high','low3']);
+ release.get('high')();await high.promise;await flush();assert(!started.includes('low2'));
+ release.get('low1')();await first.promise;await flush();assert(started.includes('low2'));
+ release.get('low2')();release.get('low3')();await Promise.all([second.promise,third.promise]);
+ globalThis.location={href:'http://localhost/'};
+ const images=[];
+ globalThis.Image=class {naturalWidth=64;naturalHeight=64;constructor(){images.push(this);}decode(){return new Promise((resolve,reject)=>{this.resolve=resolve;this.reject=reject;});}};
+ const a=decodeAsset('/same.webp','low'),b=decodeAsset('http://localhost/same.webp');assert.equal(a,b);await flush();assert.equal(images.length,1);assert.equal(images[0].fetchPriority,'high');images[0].resolve();await a;
+ await decodeAsset('/same.webp');assert.equal(images.length,1);
+ const failed=decodeAsset('/retry.webp');await flush();images.at(-1).reject(Error('transient'));await assert.rejects(failed);
+ const retried=decodeAsset('/retry.webp');await flush();images.at(-1).resolve();await retried;
+ const start=images.length,warm=warmImages(Array.from({length:10},(_,i)=>`/warm-${i}.webp`));await flush();assert.equal(images.length-start,2);
+ const foreground=decodeAsset('/visible.webp');await flush();assert.equal(images.at(-1).src,'http://localhost/visible.webp');images.at(-1).resolve();await foreground;
+ for(let i=0;i<6;i++){images.forEach(img=>img.resolve());await flush();}await warm;
+ const huge=decodeAsset('/huge.webp');await flush();images.at(-1).naturalWidth=4096;images.at(-1).naturalHeight=4096;images.at(-1).resolve();await huge;const count=images.length;await decodeAsset('/huge.webp');assert.equal(images.length,count,'evicting decoded pixels must retain transfer completion');
+ let fetches=0,finishFetch;
+ globalThis.fetch=async()=>{fetches++;return new Promise(resolve=>{finishFetch=()=>resolve(new Response(new Uint8Array([1,2,3])));});};
+ const url=readingBoardUrl(false);assert(readingAssetUrls(false).includes(url));assert(url.includes('?revision='));assert(readingBoardUrl(true).includes('board-low.glb?'));
+ const bytesA=readingAssetBytes(url,'low'),bytesB=readingAssetBytes(url);assert.equal(bytesA,bytesB);await flush();assert.equal(fetches,1);finishFetch();const data=await bytesA;assert.equal(await readingAssetBytes(url),data);assert.equal(fetches,1);
+ let tries=0;globalThis.fetch=async()=>new Response(new Uint8Array([4]),{status:++tries===1?503:200});
+ await assert.rejects(readingAssetBytes('/retry.glb'));await readingAssetBytes('/retry.glb');assert.equal(tries,2);
+ // Cache retains at most 32 MiB; old entries become refetchable, not immortal.
+ const requests=[];globalThis.fetch=async url=>{requests.push(url);return {ok:true,arrayBuffer:async()=>new ArrayBuffer(20*1024*1024)};};
+ await readingAssetBytes('/large-a.glb');await readingAssetBytes('/large-b.glb');await readingAssetBytes('/large-b.glb');await readingAssetBytes('/large-a.glb');assert.equal(requests.length,3);
+ console.log('PASS foreground priority, bounded speculation, promotion, image dedup/retry, exact board URL, byte reuse/retry/eviction');
+} finally {await rm(temp,{recursive:true,force:true});}

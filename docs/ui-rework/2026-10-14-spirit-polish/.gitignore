@@ -1,0 +1,3 @@
+qa/frames/
+qa/*-samples.json
+staging/deploy.log

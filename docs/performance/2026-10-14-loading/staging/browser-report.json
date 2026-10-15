@@ -1,0 +1,69 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "source": "1719775121e73805b7a5796997cf4e0775f659ef",
+  "at": "2026-10-14T14:00:04.217Z",
+  "anonymousLogin": true,
+  "authenticatedOnlineMatch": false,
+  "botApi": "fixture",
+  "transport": "HTTP/1.1 (headless test; HTTP/2 transfer stalls observed separately)",
+  "cases": [
+    {
+      "width": 1280,
+      "readyMs": 68162,
+      "warmModels": [
+        "https://test.yourlore.xyz/models/reading-board/v1/board.glb?revision=recessed-rim-v3-20260929"
+      ],
+      "brokenVisibleImages": [],
+      "modelDuplicates": [],
+      "hand": 3,
+      "scene": "true",
+      "gameInert": false,
+      "modelRequests": 14,
+      "errors": [],
+      "failed": [],
+      "aborted": [
+        {
+          "url": "https://test.yourlore.xyz/music/yohaku-to-zankyo.mp3",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/cards-xs/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/shelf.glb",
+          "error": "net::ERR_ABORTED"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "readyMs": 52635,
+      "warmModels": [
+        "https://test.yourlore.xyz/models/reading-board/v1/market-low.glb"
+      ],
+      "brokenVisibleImages": [],
+      "modelDuplicates": [],
+      "hand": 3,
+      "scene": "true",
+      "gameInert": false,
+      "modelRequests": 14,
+      "errors": [],
+      "failed": [],
+      "aborted": [
+        {
+          "url": "https://test.yourlore.xyz/music/yohaku-to-zankyo.mp3",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/cards/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/cards-xs/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+          "error": "net::ERR_ABORTED"
+        }
+      ]
+    }
+  ]
+}

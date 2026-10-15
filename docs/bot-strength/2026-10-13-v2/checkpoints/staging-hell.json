@@ -1,0 +1,687 @@
+{
+  "config": {
+    "A": "new:hell",
+    "B": "old:hell",
+    "n": 60,
+    "start": 46002,
+    "search": {
+      "hard": {
+        "width": 8,
+        "samples": 2,
+        "turns": 2,
+        "finalists": 3,
+        "extraSamples": 2
+      },
+      "hell": {
+        "width": 12,
+        "samples": 3,
+        "turns": 2,
+        "finalists": 4,
+        "extraSamples": 8
+      }
+    },
+    "tactics": {
+      "proof": true,
+      "targets": true,
+      "horizon": 4
+    },
+    "valueModel": null,
+    "value": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0.6
+    },
+    "modules": {
+      "candidate": "1bbe703e0d9251ee7be9f7acfa1225df3369c55fc527bb45840a93d04f7d750b",
+      "baseline": "545b462f3b5f2a3b4e91f907430336ac193b7ccac63b760215b017b7e4ffbb23"
+    },
+    "customA": [
+      {
+        "name": "BOT · DECAY ASSAULT",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "AMBUSH",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      },
+      {
+        "name": "BOT · DECAY RIFT",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "RIFT",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      },
+      {
+        "name": "BOT · DECAY GUARD",
+        "cards": [
+          "RUST_SHROOM",
+          "GHOST",
+          "GHOST",
+          "CASTLE",
+          "RUST_SHROOM",
+          "RUST_SHROOM",
+          "COUNTERCALC",
+          "RUST_SHROOM"
+        ],
+        "tune": {
+          "minBuyEarly": 6,
+          "minBuy": 11,
+          "chestTurn": 6
+        }
+      }
+    ],
+    "customB": [
+      {
+        "name": "sion-tempo",
+        "cards": [
+          "GHOST",
+          "TRUMPET",
+          "GUILD_HALL",
+          "FLAME",
+          "FLAME",
+          "STARTER_TRASH",
+          "STARTER_CHEST",
+          "STARTER_CHEST"
+        ],
+        "tune": {
+          "minBuyEarly": 7,
+          "minBuy": 10,
+          "chestTurn": 5
+        }
+      },
+      {
+        "name": "sion-engine",
+        "cards": [
+          "FORESIGHT",
+          "GAMBLER",
+          "GAMBLER",
+          "STARTER_TRASH",
+          "STARTER_TRASH",
+          "STARTER_TRASH",
+          "STARTER_CHEST",
+          "STARTER_CHEST"
+        ],
+        "tune": {
+          "minBuyEarly": 8,
+          "minBuy": 12,
+          "chestTurn": 6
+        }
+      },
+      {
+        "name": "sion-canopy",
+        "cards": [
+          "ELF_HAVEN",
+          "HALF_ELF",
+          "HALF_ELF",
+          "FORESIGHT",
+          "STARTER_TRASH",
+          "STARTER_TRASH",
+          "STARTER_CHEST",
+          "STARTER_CHEST"
+        ],
+        "tune": {
+          "minBuyEarly": 8,
+          "minBuy": 11,
+          "chestTurn": 5
+        }
+      }
+    ],
+    "rosterA": "balanced",
+    "rosterB": "balanced"
+  },
+  "rows": [
+    {
+      "pair": 46002,
+      "seat": 0,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "sion-engine"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 86,
+      "bad": null
+    },
+    {
+      "pair": 46002,
+      "seat": 1,
+      "da": 2,
+      "db": 0,
+      "decks": [
+        "sion-engine",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 12,
+      "steps": 71,
+      "bad": null
+    },
+    {
+      "pair": 46003,
+      "seat": 0,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "BOT · DECAY RIFT",
+        "sion-engine"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 83,
+      "bad": null
+    },
+    {
+      "pair": 46003,
+      "seat": 1,
+      "da": 3,
+      "db": 0,
+      "decks": [
+        "sion-engine",
+        "BOT · DECAY RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 14,
+      "steps": 91,
+      "bad": null
+    },
+    {
+      "pair": 46004,
+      "seat": 0,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "sion-engine"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 11,
+      "steps": 73,
+      "bad": null
+    },
+    {
+      "pair": 46004,
+      "seat": 1,
+      "da": 4,
+      "db": 0,
+      "decks": [
+        "sion-engine",
+        "BOT · DECAY GUARD"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 8,
+      "steps": 55,
+      "bad": null
+    },
+    {
+      "pair": 46005,
+      "seat": 0,
+      "da": 0,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "sion-canopy"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 9,
+      "steps": 52,
+      "bad": null
+    },
+    {
+      "pair": 46005,
+      "seat": 1,
+      "da": 0,
+      "db": 1,
+      "decks": [
+        "sion-canopy",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 8,
+      "steps": 43,
+      "bad": null
+    },
+    {
+      "pair": 46006,
+      "seat": 0,
+      "da": 1,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY RIFT",
+        "sion-canopy"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 11,
+      "steps": 82,
+      "bad": null
+    },
+    {
+      "pair": 46006,
+      "seat": 1,
+      "da": 1,
+      "db": 1,
+      "decks": [
+        "sion-canopy",
+        "BOT · DECAY RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 16,
+      "steps": 117,
+      "bad": null
+    },
+    {
+      "pair": 46007,
+      "seat": 0,
+      "da": 2,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "sion-canopy"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 94,
+      "bad": null
+    },
+    {
+      "pair": 46007,
+      "seat": 1,
+      "da": 2,
+      "db": 1,
+      "decks": [
+        "sion-canopy",
+        "BOT · DECAY GUARD"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 10,
+      "steps": 63,
+      "bad": null
+    },
+    {
+      "pair": 46008,
+      "seat": 0,
+      "da": 3,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "sion-tempo"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 11,
+      "steps": 68,
+      "bad": null
+    },
+    {
+      "pair": 46008,
+      "seat": 1,
+      "da": 3,
+      "db": 1,
+      "decks": [
+        "sion-tempo",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 10,
+      "steps": 68,
+      "bad": null
+    },
+    {
+      "pair": 46009,
+      "seat": 0,
+      "da": 4,
+      "db": 1,
+      "decks": [
+        "BOT · DECAY RIFT",
+        "sion-tempo"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 9,
+      "steps": 57,
+      "bad": null
+    },
+    {
+      "pair": 46009,
+      "seat": 1,
+      "da": 4,
+      "db": 1,
+      "decks": [
+        "sion-tempo",
+        "BOT · DECAY RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 14,
+      "steps": 119,
+      "bad": null
+    },
+    {
+      "pair": 46010,
+      "seat": 0,
+      "da": 0,
+      "db": 2,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "sion-tempo"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 111,
+      "bad": null
+    },
+    {
+      "pair": 46010,
+      "seat": 1,
+      "da": 0,
+      "db": 2,
+      "decks": [
+        "sion-tempo",
+        "BOT · DECAY GUARD"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 10,
+      "steps": 67,
+      "bad": null
+    },
+    {
+      "pair": 46011,
+      "seat": 0,
+      "da": 1,
+      "db": 2,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "sion-engine"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 9,
+      "steps": 57,
+      "bad": null
+    },
+    {
+      "pair": 46011,
+      "seat": 1,
+      "da": 1,
+      "db": 2,
+      "decks": [
+        "sion-engine",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 8,
+      "steps": 52,
+      "bad": null
+    },
+    {
+      "pair": 46012,
+      "seat": 0,
+      "da": 2,
+      "db": 2,
+      "decks": [
+        "BOT · DECAY RIFT",
+        "sion-engine"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 127,
+      "bad": null
+    },
+    {
+      "pair": 46012,
+      "seat": 1,
+      "da": 2,
+      "db": 2,
+      "decks": [
+        "sion-engine",
+        "BOT · DECAY RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 10,
+      "steps": 68,
+      "bad": null
+    },
+    {
+      "pair": 46013,
+      "seat": 0,
+      "da": 3,
+      "db": 2,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "sion-engine"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 84,
+      "bad": null
+    },
+    {
+      "pair": 46013,
+      "seat": 1,
+      "da": 3,
+      "db": 2,
+      "decks": [
+        "sion-engine",
+        "BOT · DECAY GUARD"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 18,
+      "steps": 108,
+      "bad": null
+    },
+    {
+      "pair": 46014,
+      "seat": 0,
+      "da": 4,
+      "db": 2,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "sion-canopy"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 11,
+      "steps": 62,
+      "bad": null
+    },
+    {
+      "pair": 46014,
+      "seat": 1,
+      "da": 4,
+      "db": 2,
+      "decks": [
+        "sion-canopy",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 12,
+      "steps": 86,
+      "bad": null
+    },
+    {
+      "pair": 46015,
+      "seat": 0,
+      "da": 0,
+      "db": 3,
+      "decks": [
+        "BOT · DECAY RIFT",
+        "sion-canopy"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 11,
+      "steps": 71,
+      "bad": null
+    },
+    {
+      "pair": 46015,
+      "seat": 1,
+      "da": 0,
+      "db": 3,
+      "decks": [
+        "sion-canopy",
+        "BOT · DECAY RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 16,
+      "steps": 100,
+      "bad": null
+    },
+    {
+      "pair": 46016,
+      "seat": 0,
+      "da": 1,
+      "db": 3,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "sion-canopy"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 83,
+      "bad": null
+    },
+    {
+      "pair": 46016,
+      "seat": 1,
+      "da": 1,
+      "db": 3,
+      "decks": [
+        "sion-canopy",
+        "BOT · DECAY GUARD"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 12,
+      "steps": 88,
+      "bad": null
+    },
+    {
+      "pair": 46017,
+      "seat": 0,
+      "da": 2,
+      "db": 3,
+      "decks": [
+        "BOT · DECAY ASSAULT",
+        "sion-tempo"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 15,
+      "steps": 108,
+      "bad": null
+    },
+    {
+      "pair": 46017,
+      "seat": 1,
+      "da": 2,
+      "db": 3,
+      "decks": [
+        "sion-tempo",
+        "BOT · DECAY ASSAULT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 10,
+      "steps": 72,
+      "bad": null
+    },
+    {
+      "pair": 46018,
+      "seat": 0,
+      "da": 3,
+      "db": 3,
+      "decks": [
+        "BOT · DECAY RIFT",
+        "sion-tempo"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 11,
+      "steps": 82,
+      "bad": null
+    },
+    {
+      "pair": 46018,
+      "seat": 1,
+      "da": 3,
+      "db": 3,
+      "decks": [
+        "sion-tempo",
+        "BOT · DECAY RIFT"
+      ],
+      "finished": true,
+      "winner": 1,
+      "turns": 14,
+      "steps": 94,
+      "bad": null
+    },
+    {
+      "pair": 46019,
+      "seat": 0,
+      "da": 4,
+      "db": 3,
+      "decks": [
+        "BOT · DECAY GUARD",
+        "sion-tempo"
+      ],
+      "finished": true,
+      "winner": 0,
+      "turns": 13,
+      "steps": 94,
+      "bad": null
+    }
+  ],
+  "source": "/tmp/lore-bot-strength/release-v3/results/staging-hell.jsonl",
+  "reason": "Coordinated release pause; completed games preserved, only unfinished game restarts from its original seed"
+}

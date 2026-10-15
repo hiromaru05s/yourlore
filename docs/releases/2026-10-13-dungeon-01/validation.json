@@ -1,0 +1,12 @@
+{
+  "source": "320405f30e5d51e129e32ee8007f42743593119b",
+  "typecheck": "passed client and server",
+  "productionSuite": {
+    "passed": 107,
+    "total": 107
+  },
+  "browserChecks": 39,
+  "build": "passed",
+  "servedFiles": 64,
+  "authenticatedMatch": false
+}

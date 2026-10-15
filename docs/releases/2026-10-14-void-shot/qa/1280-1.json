@@ -1,0 +1,437 @@
+{
+  "frames": [
+    {
+      "age": 0,
+      "active": false,
+      "hp": 120,
+      "canvases": 0
+    },
+    {
+      "age": 0,
+      "active": false,
+      "hp": 120,
+      "canvases": 0
+    },
+    {
+      "age": 0,
+      "active": false,
+      "hp": 120,
+      "canvases": 0
+    },
+    {
+      "age": 0,
+      "active": false,
+      "hp": 120,
+      "canvases": 0
+    },
+    {
+      "age": 0,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": -43.50000000074215,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 106.5999999992564,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 489.89999999925203,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1489.7999999992535,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1689.7999999992535,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1789.7999999992535,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1823.0999999992564,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1856.4999999992579,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1956.4999999992579,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 1989.7999999992535,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2039.7999999992535,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2056.499999999258,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2106.499999999258,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2123.0999999992564,
+      "active": true,
+      "hp": 120,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2156.399999999252,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2239.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2439.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2489.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2523.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2539.699999999255,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2573.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2606.499999999258,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2706.499999999258,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2823.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2889.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2956.399999999252,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2973.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 2989.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3023.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3056.399999999252,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3073.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3089.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3106.499999999258,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3123.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3156.399999999252,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3173.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3206.499999999258,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3239.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3273.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3356.399999999252,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3389.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3422.999999999258,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3456.399999999252,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3489.699999999255,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3523.0999999992564,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3539.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3556.399999999252,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3572.999999999258,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 3589.7999999992535,
+      "active": true,
+      "hp": 112,
+      "count": "8",
+      "variant": "03",
+      "canvases": 1
+    },
+    {
+      "age": 0,
+      "active": false,
+      "hp": 112,
+      "canvases": 0
+    }
+  ],
+  "nodes": 1,
+  "hp": 112,
+  "remaining": 0
+}

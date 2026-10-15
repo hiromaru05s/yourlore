@@ -14,11 +14,13 @@ import type { QueueClientMsg, QueueServerMsg } from "../shared/protocol";
 import { Sock } from "../net/socket";
 import { t, onLangChange } from "../i18n";
 import { sfx } from "../ui/sound";
+import {warmGame} from './lazyGame';
 
 const HB_MS = 20_000;   // same cadence as the in-game socket heartbeat
 const RETRY_MS = 2_000; // requeue delay after an unexpected drop
 
 export function mountLobby(app: App, ranked = false): Screen {
+  void warmGame(app.user?.deck??[]);
   const wrap = document.createElement("div");
   wrap.className = "screen";
   wrap.innerHTML = `

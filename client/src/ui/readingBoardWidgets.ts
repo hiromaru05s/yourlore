@@ -1,10 +1,12 @@
+import {turnUrgency} from './turnUrgency';
+import {readingAssetBytes} from './readingAssetCache';
 import {createTurnLights} from './turnLight';
 import {getTurnLightPreview,type TurnLightHandle} from './turnLightPreview';
 import {getManaFormation,manaSlotLayout,type FormationHandle} from './manaFormationPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import {mountRiftApertures} from './riftAperture';
 import * as T from 'three';
-import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {loadReadingModel} from './readingModel';
 import {READING_ASSETS,readingScale} from './readingBoardLayout';
 import {addCrystalOptics} from './readingCrystalOptics';
 /** Geometry-only UI; the original native buttons retain keyboard/game authority. */
@@ -27,12 +29,12 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   object.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){mats.add(m);for(const value of Object.values(m))if(value instanceof T.Texture)maps.add(value);}}});
   geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());maps.forEach(m=>{if(typeof ImageBitmap!=='undefined'&&m.image instanceof ImageBitmap)m.image.close();m.dispose();});
  }
- async function load(name:string){const g=await new GLTFLoader().loadAsync(READING_ASSETS+name);if(dead){releaseTemplate(g.scene);throw new Error('disposed');}templates.push(g.scene);return g.scene;}
+ async function load(name:string){const g=await loadReadingModel(READING_ASSETS+name);if(dead){releaseTemplate(g.scene);throw new Error('disposed');}templates.push(g.scene);return g.scene;}
  const opticalMaterials:T.MeshPhysicalMaterial[]=[];
  void (async()=>{
   const [tray,counter,jewel,spent,button,timer,refresh,cut]=await Promise.all([
    ...['mana-tray.glb','mana-counter.glb','mana-crystal-ready.glb','mana-crystal-spent.glb','turn-button.glb','timer-inserts.glb','reroll-button.glb'].map(load),
-   fetch(READING_ASSETS+'crystal-optics.json').then(r=>r.json())
+   readingAssetBytes(READING_ASSETS+'crystal-optics.json').then(bytes=>JSON.parse(new TextDecoder().decode(bytes)))
   ]) as [T.Group,T.Group,T.Group,T.Group,T.Group,T.Group,T.Group,{planes:number[][];center:number[];scale:number}];
   if(dead)return;
   jewel.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial){o.material.color.set('#378bea');o.material.attenuationColor.set('#2373c9');}});
@@ -113,6 +115,11 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   const end=root.querySelector<HTMLButtonElement>('#endBtn'),refresh=root.querySelector<HTMLButtonElement>('#refreshBtn'),enemy=root.dataset.readingTurn!=='player';
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(gray.setRGB(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
+  const urgency=turnUrgency(clock?Number(clock.dataset.remaining):90,!enemy&&!end?.disabled);
+  const jitter=reducedTurnLight.matches?0:Math.sin(now*.067)*Math.sin(now*.019)*urgency;
+  // The complete cap is already in the dynamic display layer; preserve the HDR cache.
+  if(turnCap){turnCap.position.x=jitter*.0035;turnCap.rotation.z=jitter*.045;}
+  if(end)css(end,'--urgency-shift',`${jitter*3.5}px`);
   const litCount=Math.ceil(remaining*24);if(litCount!==clockSegments){clockSegments=litCount;if(turnLights?.renderDisplay)displayDirty=true;else changed=true;}
   segments.forEach((mesh,i)=>{mesh.material=i<litCount?lit:dark;});
   const turnAge=now-turnTime;displayEnemy=enemy;
@@ -133,7 +140,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
    if(!preview)root.dataset.turnlight='porcelain';
   }
   if(turnLights){
-   const lightChanged=turnLights.update({now,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches});
+   const lightChanged=turnLights.update({now,urgency,active:!enemy&&!!end&&!end.disabled,enemy,remaining,hover:!!end?.matches(':hover')||document.activeElement===end,pressed:pressed==='endBtn',reduced:reducedTurnLight.matches});
    // Display-layer emission does not invalidate the static HDR furniture cache.
    if(turnLights.renderDisplay)displayDirty=lightChanged||displayDirty;else changed=lightChanged||changed;
   }

@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-12",
+  "scope": "local comparison only; no runtime adoption or deployment",
+  "durationMs": 1000,
+  "typecheck": "PASS scoped preview and imports",
+  "build": "PASS two Vite entries",
+  "browserChecks": 18,
+  "browserErrors": [],
+  "diceStartElapsedMs": [
+    1006.3,
+    1018.8
+  ],
+  "files": {
+    "client/src/dev/taunt-four/surface.ts": "62eddea69424c803d74ef163dcef14825eea2aa4a0fa14a16869a6d618429430",
+    "client/src/dev/taunt-four/main.ts": "115a443ca6db3b7d69466652ee1a21ff27a9c2009ea076e306ed9968843c95c8",
+    "client/src/dev/taunt-four/style.css": "210b6b8c8a4f0ddb903fedcf073666711ccf9e26060c74131e9532fa73ab30f4",
+    "client/src/dev/taunt-four/renderer.ts": "496da5821c0e1b9488d71c8d0b4597cef83b94c411e8c44ca1844113ee40ceeb",
+    "client/src/dev/taunt-four/tsconfig.json": "31b92ffbf74e46a52f08407dddf01d3098b7670e6fb5a30e0415d645bfd51740",
+    "client/src/dev/taunt-four/board.ts": "6b1293d4dffa6d89d1886a4e13b2d167ab22fb9b517d311a5cedc1b6c224f1db",
+    "client/src/dev/taunt-four/catalog.ts": "ddd65883bbcf87e6f1fc650d8c881b97ee19cdfd0e63a63ad7465d35ec27ae11",
+    "client/taunt-four.html": "1a6a039c7f08a165cadadb642dfde9e0e12f1df2edf65c28a7bf9012ef39526d",
+    "client/taunt-four-board.html": "d4d11e6824ebd6c179f550df793c01bda2f6bdf3b73e156eaf4f887170c83eb8",
+    "scripts/build-taunt-four.mjs": "77f6513ff8cd12a28d3bb3b6101c0e6d24e8d4bf76d1c742c7680355186630d8",
+    "tests/taunt-four-browser.mjs": "6c6a2d145ef67a3a394e75ceb622016d25ce209ef10f7ae10797497bcd717ccb",
+    "tests/taunt-four-capture.mjs": "6b8373d093c3acd8e1a43bd09da88854add563a4f21c00b3e22db68f4ab4d89b",
+    "client/src/dev/taunt-four/richVariants.ts": "6d8f87d42444ac80b117bfca65442d82ff89c118d556d983e7986a41ef8d8e34",
+    "client/src/dev/taunt-four/lionRelief.ts": "a4b4162b40b599c04a3f719259334cef72c971f90c49285f8d8eb5689f280a69",
+    "client/src/dev/taunt-four/qa.ts": "163a78fed04358b34d222b536211d53db1ef1c1cc3c3044c559eed84a4a83aaf",
+    "client/taunt-four-qa.html": "428297cd52f18fda7362bcbdfb4426e4343b111c6c688940610e7358e5395645",
+    "client/public/art/vfx/taunt-four/lion-relief.png": "ff66dd9288e22b16b9c257988d63f7caeb42bca0ed84406754d9b98192a81a4b"
+  },
+  "revision": 2,
+  "browserEnvironment": "Codex in-app browser",
+  "browserReport": "qa/revision-2/browser-report.json"
+}

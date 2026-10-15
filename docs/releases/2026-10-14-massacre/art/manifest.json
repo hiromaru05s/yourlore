@@ -1,0 +1,43 @@
+{
+  "tool": "built-in image_gen",
+  "card": "MASSACRE",
+  "selection": "R3-03 Torsion of the Bound",
+  "prompt": "prompt.txt",
+  "assets": [
+    {
+      "file": "docs/releases/2026-10-14-massacre/art/MASSACRE-source.png",
+      "width": 1312,
+      "height": 1199,
+      "bytes": 2747135,
+      "sha256": "2167532d1272688471b4fe4b023983f7240b7b0968951881e854902717c56360"
+    },
+    {
+      "file": "docs/releases/2026-10-14-massacre/art/MASSACRE.webp",
+      "width": 1472,
+      "height": 1344,
+      "bytes": 450740,
+      "sha256": "b671c58b921c08bb1f55a939cbc24dc61df4c42243142f1f45e22e1a954e9892"
+    },
+    {
+      "file": "client/public/art/cards/MASSACRE.webp",
+      "width": 832,
+      "height": 760,
+      "bytes": 203722,
+      "sha256": "e5cfed9c6df5c5bb2f1759682ae3988bb0f76c7f83573f4ae265d30a31c1bbd6"
+    },
+    {
+      "file": "client/public/art/cards-sm/MASSACRE.webp",
+      "width": 384,
+      "height": 351,
+      "bytes": 33188,
+      "sha256": "3412cb1ec256538a1320e34ac46a9d383489e50be34cf6c8dbe1d24232c692b6"
+    },
+    {
+      "file": "client/public/art/cards-xs/MASSACRE.webp",
+      "width": 192,
+      "height": 175,
+      "bytes": 8770,
+      "sha256": "508214764f7156e920c1810fc3c3818ce18191dc5ae66f5b3234f86dcae83941"
+    }
+  ]
+}

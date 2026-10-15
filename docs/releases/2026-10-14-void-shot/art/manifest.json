@@ -1,0 +1,47 @@
+{
+  "generator": "built-in image_gen",
+  "references": [
+    "client/public/art/cards/EXILE_NUKE1.webp (before)",
+    "client/public/art/cards/SORTER.webp",
+    "client/public/art/cards/CHOSEN_AREA.webp",
+    "docs/key-visuals/2026-09-06-white-library/05-zero-archive-sanctum.png",
+    "accepted crystal 03 contact screenshot"
+  ],
+  "additionalReviewed": [
+    "client/public/art/cards/NHEX.webp",
+    "client/public/art/cards/ELF.webp",
+    "docs/key-visuals/2026-09-07-fixed-duo/01-fixed-duo-reading-duel.png"
+  ],
+  "assets": [
+    {
+      "file": "docs/releases/2026-10-14-void-shot/art/void-shot-source.png",
+      "width": 1313,
+      "height": 1198,
+      "sha256": "b29165d52815d0b3c2d8fd85dc10d2120d88822770c05c478c021e9e98041640"
+    },
+    {
+      "file": "docs/releases/2026-10-14-void-shot/art/EXILE_NUKE1-master.webp",
+      "width": 1472,
+      "height": 1344,
+      "sha256": "a779de94839a1883397ff26cff87629b9278bce804657ea37a3386ecd06b14a4"
+    },
+    {
+      "file": "client/public/art/cards/EXILE_NUKE1.webp",
+      "width": 832,
+      "height": 759,
+      "sha256": "58c5ccf75e66b275624205b8915b5d02c47a8d0a2b3f2b431979cde23fa175ce"
+    },
+    {
+      "file": "client/public/art/cards-sm/EXILE_NUKE1.webp",
+      "width": 384,
+      "height": 350,
+      "sha256": "7fc1ccb1d74f4f5e29250ec39af5198708d713ff22c2271d967e8e9b2d7347f1"
+    },
+    {
+      "file": "client/public/art/cards-xs/EXILE_NUKE1.webp",
+      "width": 192,
+      "height": 175,
+      "sha256": "2286677941e69498c22a56c482fcde8384879b75f7319885053985e8ee25f86d"
+    }
+  ]
+}

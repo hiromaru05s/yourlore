@@ -1,0 +1,59 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "side": 0,
+      "frames": 333,
+      "last": {
+        "time": 5800,
+        "side": 0,
+        "actors": 0,
+        "opacity": 0,
+        "yaw": 3.141592653589793,
+        "minForward": 1
+      },
+      "exit": {
+        "time": 5800,
+        "stack": "Error\n    at finish (http://127.0.0.1:5431/client/src/ui/dungeonFloor/runtime.ts?t=1791977738257:42:45)\n    at tick (http://127.0.0.1:5431/client/src/ui/dungeonFloor/runtime.ts?t=1791977738257:126:9)"
+      }
+    },
+    {
+      "side": 0,
+      "controller": "dice then portal",
+      "count": 4,
+      "cleanup": true
+    },
+    {
+      "side": 1,
+      "frames": 328,
+      "last": {
+        "time": 5800,
+        "side": 1,
+        "actors": 0,
+        "opacity": 0,
+        "yaw": 0,
+        "minForward": 1
+      },
+      "exit": {
+        "time": 5800,
+        "stack": "Error\n    at finish (http://127.0.0.1:5431/client/src/ui/dungeonFloor/runtime.ts?t=1791977738257:42:45)\n    at tick (http://127.0.0.1:5431/client/src/ui/dungeonFloor/runtime.ts?t=1791977738257:126:9)"
+      }
+    },
+    {
+      "side": 1,
+      "controller": "dice then portal",
+      "count": 4,
+      "cleanup": true
+    },
+    {
+      "mobile": 390,
+      "roll": 6,
+      "available": 2,
+      "count": 2
+    },
+    {
+      "skip": true
+    }
+  ],
+  "status": "passed"
+}

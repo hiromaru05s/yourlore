@@ -1,3 +1,4 @@
+@import "./spaceRiteStatus.css";
 /* Biblion duel: a shallow perspective table with one central market.
    Positions are independent of cosmetics; all card values remain live DOM. */
 .game { height:100dvh; position:relative; overflow:hidden; color:#f0e7d5; background:#152036 var(--battlefield-bg) center/100% 100% no-repeat; --metal:#b6a079; }
@@ -27,9 +28,9 @@
 .portrait--opp { --side:#d17478; }
 .pt-ring .avatar { width:100%; height:100%; border:0; display:block; overflow:hidden; border-radius:50%; }
 .avatar-seeker { overflow:hidden; position:relative; display:inline-block; }
-.seeker-sprite { position:absolute; inset:0; display:block; background-size:200% 100%; background-position:left center; }
-.seeker-red { background-image:url(/art/biblion/seeker-red.png); }
-.seeker-blue { background-image:url(/art/biblion/seeker-blue.png); }
+.seeker-sprite { position:absolute; inset:0; display:block; background-size:100% 100%; background-position:center; }
+.seeker-red { background-image:url(/art/seekers/faceless-v2/portrait.webp); }
+.seeker-blue { background-image:url(/art/seekers/faceless-v2/portrait.webp); }
 .pt-vitals { position:absolute; right:calc(100% + 10px); bottom:24%; width:clamp(88px,11vw,168px); display:grid; gap:6px; }
 .pt-hp { display:flex; gap:4px; align-items:baseline; justify-content:flex-end; text-shadow:0 2px 3px #071021; background:linear-gradient(90deg,transparent,#112035d9); border-radius:4px; padding:3px 7px; }
 .pt-hp b { font-size:clamp(20px,2.5vw,32px); font-family:Georgia,serif; font-weight:500; }
@@ -44,7 +45,6 @@
 .pt-mana-max { font-size:13px; }
 .mana-crystals { display:grid; grid-template-columns:repeat(10,1fr); gap:3px; }
 .pt-name { position:absolute; top:100%; left:50%; transform:translateX(-50%); font-size:9px; padding:2px 9px; max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background:#0c1b30df; border-radius:0 0 6px 6px; }
-.pt-brand { position:absolute; right:calc(100% + 15px); top:84%; font-size:10px; background:#522438; border:1px solid #b98873; padding:2px 5px; white-space:nowrap; }
 .pc-side { min-width:0; display:flex; align-items:flex-end; }
 .pc-side--r { padding-left:calc(clamp(95px,12vw,170px) + 24px); align-self:end; max-height:var(--pt); }
 .opp-hand { display:flex; align-items:center; gap:3px; position:relative; }
@@ -893,3 +893,8 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
  .game button.utility-control { width:44px;height:48px; }.utility-control>img { width:39px;height:39px; }.game .utility-control>span { font-size:8px; }
  .game .mute-fab.utility-control { left:60px; }.game .help-fab.utility-control { left:110px; }
 }
+
+/* Close-up painted portrait: the hood and concealed face fill the avatar window. */
+.avatar-seeker {background:#fff;}
+.avatar .hooded-seeker {position:static;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;image-rendering:auto;display:block;}
+.seeker-motion {display:block;width:100%;height:100%;object-fit:contain;image-rendering:auto;background:#fff;}

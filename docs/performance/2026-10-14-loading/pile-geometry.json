@@ -1,0 +1,33 @@
+{
+  "cases": 32,
+  "instancesPerSample": 150,
+  "beforeMs": 213.84412500000008,
+  "afterMs": 80.64408300000014,
+  "reductionPercent": 62.28838037986777,
+  "samples": [
+    {
+      "beforeMs": 213.84412500000008,
+      "afterMs": 79.957584
+    },
+    {
+      "afterMs": 85.37766599999998,
+      "beforeMs": 236.26850000000002
+    },
+    {
+      "beforeMs": 213.065333,
+      "afterMs": 80.64408300000014
+    },
+    {
+      "afterMs": 90.297417,
+      "beforeMs": 253.26262500000007
+    },
+    {
+      "beforeMs": 210.9514999999999,
+      "afterMs": 58.230749999999944
+    }
+  ],
+  "checks": [
+    "identical vertices, normals, UVs, indices, transforms and material properties",
+    "independent geometry ownership after mutation/disposal"
+  ]
+}

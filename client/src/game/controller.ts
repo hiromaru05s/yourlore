@@ -1,4 +1,37 @@
+import {createMarketCrisis} from '../ui/marketCrisis/runtime';
+import {fixedMarketWasReplaced} from '../ui/marketCrisis/selection';
+import {erosionPlan} from '../ui/erosion/events';
+import {growthGroups,growthDrawHands} from '../ui/growth/plan';
+import {isSoulHarvestDamage,soulHarvestDamageIndex} from '../ui/soulHarvest/events';
+import {dungeonFloorSummons} from '../ui/dungeonFloor/events';
+import {runeReplayPlan} from '../ui/runeReplay/plan';
+import {TimewarpPresentation,warmTimewarp} from '../ui/timewarp/runtime';
+import {spaceRiteReason,spaceRiteSourceText} from '../ui/spaceRiteStatus';
+import {forbiddenBatches} from '../ui/forbiddenRitual/selection';
+import {fusionPairs} from '../ui/dragonFusion/selection';
+import {paintTurnUrgency} from '../ui/turnUrgency';
+import {contactPlayback} from './combatTempo';
+import {startCombatExit} from '../ui/combatExit';
+import {clearDamageFeedback} from '../ui/damageFeedback';
+import {combatCard} from '../ui/combatAnchor';
+import {hatchPairs} from '../ui/hatchSummon/selection';
+import { BotThinker } from './botThinker';
+import { observationSample } from '../shared/botObservation';
+import {tauntRollIndex} from '../ui/taunt/timing';
+import {evasionRollIndex} from '../ui/evade/timing';
+import {playStatusExtinction,warmStatusExtinctions,disposeStatusExtinctions} from '../ui/statusExtinction/runtime';
+import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenVictory/runtime';
+import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
+import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
+import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
+import { botNpc, pickNpcDeck } from "../shared/botNpcs";
+import {synergyTier} from '../ui/tribePresentation/selection';
+import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
+import type {Playback} from '../ui/elemental/runtime';
+import {persistentShelfExits} from './shelfExits';
+import {counterPresentationEvents,counterSurvival} from './counterPresentation';
 import {installHandDiscard} from '../ui/handDiscard';
+import {captureSupplyFaces,playSupplyRefresh,supplyWasRefreshed} from '../ui/marketRefresh';
 import {prepareStateArtwork} from '../ui/stateArtwork';
 import {captureHandLayout,arrivingHandUids} from '../ui/handGeometry';
 import {playDuelOpening,warmOpening} from "../ui/duelOpeningDirector";
@@ -8,20 +41,20 @@ import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 // LORE — game controllers.
 // BaseController turns engine events into log + animation + render.
-// Events play back SEQUENTIALLY (summon → trap → destroy …) so the
-// player can follow chains without reading the log.
+// Discrete causes keep their order; impact consequences overlap with recovery.
+// Public graveyard flights survive later board commits and do not gate input.
 // LocalController reduces locally and drives the bot.
 // (OnlineController lives in ./online and reuses BaseController.)
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef } from "../shared/engine";
-import { botDecide, pickBotDeck, type BotDifficulty } from "../shared/bot";
-import { DB, STARTERS, hasPassive } from "../shared/cards";
+import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef, curHp } from "../shared/engine";
+import { safeGreedy, legalBotAction, type BotDifficulty } from "../shared/bot";
+import { DB, STARTERS, hasPassive, isChestCard } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
-import { cardPicker, cardPickerMulti, confirmDialog, treasureModal, winModal, closeOverlay, closeTreasureNotices } from "../ui/modal";
+import { reviewCast, cardPicker, cardPickerMulti, confirmDialog, winModal, closeOverlay } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, stopSounds } from "../ui/sound";
@@ -50,17 +83,20 @@ import { RANDOM_CARDS } from "../shared/cards"; // 주사위·확률 카드 (결
 const wait = (ms: number): Promise<void> => A.fxWait(ms); // skippable: flushes when the player acts
 
 export abstract class BaseController implements BoardHandlers {
+  private timewarp:TimewarpPresentation;
   protected view: GameView;
   protected log: GameLog;
   protected state!: GameState;
   protected you: Side;
   protected exits: ControllerExits;
+  private elementalFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
   private quickFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
   protected ranked = false;
   private rankPresentation = new RankPresentation();
   private winShown = false;
   private outcomePending = false;
-  private dead = false;
+  protected dead = false;
+  private combatExits=new AbortController();
   private queue: Promise<void> = Promise.resolve();
   private unsubLang: () => void;
   private fxGen = 0; // batches queued so far
@@ -69,8 +105,6 @@ export abstract class BaseController implements BoardHandlers {
   private timerKey = "";
   private timerLeft = 0;
   private timerInt: number | null = null;
-  private warned25 = false;
-  private toastEl: HTMLElement | null = null;
   // bot/tutorial (and casual online fallback) use a 90s turn; online games get the
   // authoritative length from the server via g.turnTotalMs (ranked 50s / casual 90s).
   private static readonly LOCAL_TURN_SECS = 90;
@@ -78,6 +112,8 @@ export abstract class BaseController implements BoardHandlers {
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
   private disposeHandDiscard:(()=>void)|undefined;
+  private marketCrisis:ReturnType<typeof createMarketCrisis>|undefined;
+  private marketRefresh:ReturnType<typeof playSupplyRefresh>|undefined;
   private presentedHandDiscards=new Set<string>();
   private handCapBonusKey = ""; // v42: turn key that already received the +10s hand-discard bonus
   private multiPickerOpen = false; // a cardPickerMulti modal is showing (closed when its pending vanishes)
@@ -99,41 +135,70 @@ export abstract class BaseController implements BoardHandlers {
     this.you = you;
     this.exits = exits;
     this.view = new GameView(root, you, this);
+    this.timewarp = new TimewarpPresentation(root,you);
     this.log = new GameLog(this.view.logEl);
     document.addEventListener("keydown", this.onKey);
     // re-render the board (labels + card names) when language changes
     this.unsubLang = onLangChange(() => { if (this.state) this.view.render(this.state); });
   }
 
-  private onKey = (e: KeyboardEvent) => { if (e.key === "Escape") A.closeZoom(); };
+  private onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { A.closeZoom(); if(this.state?.pending?.reason === "attack" && this.state.cur === this.you)this.onChooseTarget(null); } };
 
   // ---- the only mutation entry point (subclass decides how) ----
   protected abstract submit(action: Action): void;
   protected maybeBot(): void {}
+  protected get useTurnClock(): boolean { return true; }
+  /** Only public board state and the local player's hand count reach the companion. */
+  guideContext() {
+    const g = this.state;
+    if (!g) return { yourTurn:false, pending:false, mana:0, hand:0, enemyMonsters:0, over:false };
+    const p = g.players[this.you];
+    return { yourTurn:g.cur===this.you, pending:!!g.pending, mana:p.mana,
+      hand:p.hand.length, enemyMonsters:g.players[1-this.you].field.length, over:g.over };
+  }
 
   /** The player acted — fast-forward any still-playing batches so input never waits. */
   protected fastForward(): void {
+    this.timewarp.cancel();
+    this.marketRefresh?.cancel();
+    this.marketCrisis?.cancel();
     this.skipGen = this.fxGen;
     stopSounds();
     A.setFxSkip(true);
     cancelDiceAnimations();
-    closeTreasureNotices();
   }
 
   // ---- BoardHandlers ----
   // Hand plays are looked up by uid (not index): the on-screen hand can be a
   // batch behind the logical state, and uids stay correct where indices drift.
-  onPlay(uid: string) {
+  private castReviewState: GameState | null = null;
+  async onPlay(uid: string) {
     this.fastForward();
-    const idx = this.state.players[this.you].hand.findIndex((c) => c.uid === uid);
-    if (idx >= 0) this.submit({ type: "play", idx });
+    const before=this.state;
+    if(this.dead || before.over || before.pending || before.cur!==this.you || this.castReviewState)return;
+    const idx=before.players[this.you].hand.findIndex(c=>c.uid===uid),card=before.players[this.you].hand[idx];
+    if(!card)return;
+    if(needsCastReview(before,this.you,card)) {
+      this.castReviewState=before;
+      const plan=playIntent(before,this.you,card);
+      const targets=await reviewCast(before,this.you,card,plan);
+      this.castReviewState=null;
+      if(targets===null || this.dead || this.state!==before){A.setPlayOrigin(null);return;}
+      this.submit({type:'play',idx,sourceUid:uid,...(plan?{targets}:{})});
+    } else this.submit({type:'play',idx,sourceUid:uid});
+  }
+  private choiceOwner(g:GameState,uid:string):string {
+    const owner=targetOwner(g,uid);if(owner===null)return '';
+    return getLang()==='ja'?(owner===this.you?'自分':'相手'):getLang()==='ko'?(owner===this.you?'자신':'상대'):(owner===this.you?'You':'Opponent');
   }
   onBlockedPlay(uid: string) {
     const g = this.state; if (!g || g.over) return;
     const me = g.players[this.you];
     const c = me.hand.find((x) => x.uid === uid);
+    const spaceReason=c?spaceRiteReason(g,this.you,c):null;
     const msg = g.cur !== this.you ? t("play.block.turn")
       : g.pending ? t("play.block.pending")
+      : spaceReason ? spaceReason+" "+spaceRiteSourceText(g,this.you)
       : (c && me.mana < playCost(c, me)) ? t("play.block.mana")
       : t("play.block.cond");
     this.cantPlayToast(msg);
@@ -147,9 +212,28 @@ export abstract class BaseController implements BoardHandlers {
   }
   onBlockedAttack() { this.cantPlayToast(t("attack.block.guarded")); }
   onReorder(from: number, to: number) { this.fastForward(); this.submit({ type: "reorder", from, to }); }
-  onChooseTarget(uid: string | null) { this.fastForward(); this.submit({ type: this.state.pending?.kind === "seek" || this.state.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action); }
-  onBuyMarket(i: number) { this.fastForward(); this.submit({ type: "buyMarket", i }); }
-  onBuySupply(i: number) { this.fastForward(); this.submit({ type: "buySupply", i }); }
+  async onChooseTarget(uid: string | null) {
+    this.fastForward();const before=this.state;
+    if(uid!==null && before.pending?.kind==='oppMon' && before.pending.reason!=='attack' && targetOwner(before,uid)===this.you) {
+      const yes=await confirmDialog({title:getLang()==='ja'?'自分のモンスターを対象にします':getLang()==='ko'?'자신의 몬스터를 대상으로 합니다':'Target your own monster',confirm:t('picker.confirm'),cancel:t('common.cancel'),danger:true});
+      if(!yes||this.dead||this.state!==before)return;
+    }
+    this.submit({ type: before.pending?.kind === "seek" || before.pending?.kind === "recall" ? "pick" : "chooseTarget", uid } as Action);
+  }
+  onBuyMarket(i: number) { void this.reviewPurchase('buyMarket',i); }
+  onBuySupply(i: number) { void this.reviewPurchase('buySupply',i); }
+  private async reviewPurchase(type:'buyMarket'|'buySupply',i:number) {
+    this.fastForward();const before=this.state;
+    if(this.dead||before.over||before.pending||before.cur!==this.you||this.castReviewState)return;
+    if(type==='buySupply') {
+      // Preserve the refresh guard: never buy a new offer through an old tile.
+      const shown=this.view.root.querySelector<HTMLElement>(`#supplyMarket > .card[data-sup-idx="${i}"]`);
+      if(!shown||shown.dataset.uid!==before.players[this.you].supply[i]?.uid)return;
+    }
+    const c=type==='buyMarket'?before.market[i]:before.players[this.you].supply[i];
+    if(c?.quick){this.castReviewState=before;const result=await reviewCast(before,this.you,c,null,true);this.castReviewState=null;if(result===null||this.dead||this.state!==before)return;}
+    this.submit({type,i});
+  }
   onRefresh() { this.fastForward(); this.submit({ type: "refresh" }); }
   onEndTurn() {
     // 연타 가드 — 빠른 더블/트리플 클릭이 (봇 턴이 순식간에 끝난 뒤) 방금 시작된
@@ -158,7 +242,7 @@ export abstract class BaseController implements BoardHandlers {
     const now = Date.now();
     if (now - this.lastEndTurnAt < 900) return;
     if (this.state?.cur === this.you && now - this.turnStartedWall < 500 && this.state.turn > 1) return;
-    if(!this.state||this.state.over||this.state.cur!==this.you||this.state.pending)return;
+    if(!this.state||this.state.over||this.state.cur!==this.you||(this.state.pending && this.state.pending.reason !== 'attack'))return;
     this.view.beginEndTurn();
     this.lastEndTurnAt = now;
     this.fastForward(); this.submit({ type: "endTurn" });
@@ -182,8 +266,9 @@ export abstract class BaseController implements BoardHandlers {
     if (animate && res.state.over && res.state.winner != null) this.outcomePending = true;
     if(res.state.opening)this.serverOffset=Date.now()-res.state.opening.serverNow;
     if(res.state.over||res.state.turn>1)this.openingAbort.abort();
-    this.view.syncTurn(res.state);
+    if(!animate||!res.events.some(e=>e.type==='turnSkipped'&&e.source==='TIMEWARP'))this.view.syncTurn(res.state);
     this.state = res.state; // logical state advances immediately (input guards etc.)
+    if(this.castReviewState && this.castReviewState!==this.state && document.querySelector(".cast-review"))closeOverlay();
     const gen = ++this.fxGen;
     this.queue = this.queue
       .then(() => this.playResult(prev, res, animate, gen, presentedHandDiscards))
@@ -204,7 +289,7 @@ export abstract class BaseController implements BoardHandlers {
     if (this.dead) return;
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     // Hold the existing complete board until newly exposed card art is decoded.
-    if(prev!==res.state){this.view.setPlaying(true);try{await prepareStateArtwork(res.state,this.you,this.openingRoot);}finally{if(!this.dead)this.view.setPlaying(false);}}
+    if(prev!==res.state){const artwork=prepareStateArtwork(res.state,this.you,this.openingRoot);if(artwork){this.view.setPlaying(true);try{await artwork;}finally{if(!this.dead)this.view.setPlaying(false);}}}
     if(this.dead)return;
     // batches older than the player's latest action jump-cut; fresh ones play normally
     A.setFxSkip(gen <= this.skipGen);
@@ -219,18 +304,9 @@ export abstract class BaseController implements BoardHandlers {
     try {
       await this.playEvents(prev, res, presentedHandDiscards);
     } finally {
+      this.marketCrisis?.cancel();this.marketCrisis=undefined;
       if (!this.dead) this.view.setPlaying(false);
       if (res.state.over) this.outcomePending = false;
-    }
-    // 기합(guts): 전투 파괴를 토큰으로 버틴 순간은 보드만 봐서는 모른다 — 배지로 명시
-    if (!this.dead) {
-      for (const pl of [0, 1] as const) {
-        const before = new Map(prev.players[pl].field.map((m) => [m.uid, m]));
-        for (const m of res.state.players[pl].field) {
-          const b = before.get(m.uid);
-          if (b && (b.guts ?? 0) > (m.guts ?? 0)) A.flashBadge(m.uid, `💢 ${t("fx.guts")}`, "good");
-        }
-      }
     }
     if (this.dead) return;
     this.afterApply(res);
@@ -267,41 +343,290 @@ export abstract class BaseController implements BoardHandlers {
         (document.querySelector(`#hand .card[data-uid="${c.uid}"]`) as HTMLElement | null)?.classList.add("is-played");
       }
     }
-    const events = res.events;
+    const events = counterPresentationEvents(res.events);
+    const growth=growthGroups(events),growthHands=growthDrawHands(prev,res.state,events);
+    if(events.some(e=>e.type==='timewarp'||e.type==='turnSkipped'&&e.source==='TIMEWARP'))warmTimewarp();
+    for(const event of events)if(event.type==='counter'||event.type==='destroy')A.warmCombat(event.uid);
+    if(events.some(e=>e.type==='dice'&&e.source.id==='DUNGEON_FLOOR'))A.warmDungeonFloor();
+    const floorSessions=new Map<string,{playback:ReturnType<typeof A.startDungeonFloor>;last:boolean}>();
+    const hatches=hatchPairs(events),heldEggs=new Set<string>();
+    const rituals=forbiddenBatches(events),ritualFaces=new Set<string>();
+    if(rituals.size)A.warmForbiddenRitual();
+    const fusions=fusionPairs(events),fusionMaterials=new Set([...fusions.values()].flatMap(f=>[f.dragon.uid,f.mate.uid]));
+    if(events.some(e=>e.type==='dice'&&e.taunt))A.warmTaunt();
+    if(events.some(e=>e.type==='curseGenerated'))A.warmCurse();
+    if(events.some(e=>e.type==='playSpell'&&e.id==='CHOSEN_AREA'))warmChosenVictory();
+    if(events.some(e=>e.type==='reverseDamage'))A.warmReverse();
+    if(events.some(e=>e.type==='nova'))A.warmNova();
+    if(events.some(e=>e.type==='treason'))A.warmTreason();
+    if(events.some(e=>e.type==='voidShot'))A.warmVoidShot();
+    if(events.some(e=>e.type==='elementalStart'&&e.id==='FLAME'))A.warmEmberDebt();
+    if(events.some(e=>e.type==='voidGrant'))A.warmVoidGrant();
+    if(events.some(e=>e.type==='summon'&&e.rebirth))A.warmRebirth();
+    const runeReplays=runeReplayPlan(events);
+    if(runeReplays.held.size)A.warmRuneReplay();
+    const erosion=erosionPlan(events);
+    const shownDraws=[0,0];
     const eventSound = new EventSound();
     const sideOf = (pl: Side): A.ViewSide => (pl === this.you ? "me" : "opp");
     const ghosts = new Map<string, { el: HTMLElement; side: A.ViewSide }>();
     const spellGhosts:HTMLElement[]=[];
+    const treasonExits=new Set<string>();
+    const originRiteDeaths=new Set<string>();
+    const massacreDeaths=new Set<string>(),massacreCosts=new Set<Side>();
+    const creationSources=new Map<string,HTMLElement>();
+    const creationEvents=events.filter((e):e is Extract<GameEvent,{type:'creationBorn'}>=>e.type==='creationBorn');
+    const creationExits=new Set(creationEvents.flatMap(e=>e.sourceUid?[e.sourceUid]:[]));
+    let statusSource:HTMLElement|undefined;
+    if(events.some(e=>e.type==='statusExtinction'))warmStatusExtinctions();
+    const hasStatusGrants=events.some(e=>e.type==='statusGrant');
+    if(events.some(e=>e.type==='statusGrant'&&e.resource!=='dew'))warmStatusGrants();
+    if(events.some(e=>e.type==='statusGrant'&&e.resource==='dew'))warmDewGrant();
     const questCount=prev.players.map(p=>p.quests?.length??0);
     const buffCount=[prev.players[0].traps.length+prev.players[0].enchants.length,prev.players[1].traps.length+prev.players[1].enchants.length];
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
+    const contactedDamage=new Set<GameEvent>();
+    const elemental=new Map<string,Playback>();
+    const elementalDeaths:Promise<void>[]=[];
     const draws = [0, 0];
+    const gutsHits=new Set<string>();
+    const counterGuts=new Set<GameEvent>();
+    const motionFinishes:Promise<void>[]=[];
+    let voidShotFinish:Promise<void>|undefined;
+    const counterFinishes=new Map<string,Promise<void>>();
+    const grantFinishes:Promise<void>[]=[];
+    const grantQueues=new Map<string,Promise<void>>();
+    const shownGrants=new Set<GameEvent>();
+    const summonActivations=new Set<GameEvent>();
+    const health=new Map(prev.players.flatMap(p=>p.field.map(m=>[m.uid,m.hatch!=null?(m.dur??0):curHp(p,m)] as const)));
+    const grant=(e:Extract<GameEvent,{type:'statusGrant'}>,source?:HTMLElement)=>{
+      if(shownGrants.has(e)||A.isFxSkipped())return;
+      shownGrants.add(e);
+      const key=`${e.player}:${e.resource}`,previous=grantQueues.get(key);
+      const play=()=>{if(this.dead||A.isFxSkipped())return Promise.resolve();return e.resource==='dew'?playDewGrant(sideOf(e.player),e.before,e.after,source):playStatusGrant(sideOf(e.player),e.resource,e.before,e.after,source);};
+      const finished=previous?previous.then(play):play();grantQueues.set(key,finished);grantFinishes.push(finished);void finished.catch(()=>{});
+    };
+    const summonGrants=(index:number,uid:string,source:HTMLElement)=>{
+      const activations:GameEvent[]=[];let granted=false;
+      for(let j=index+1;j<events.length;j++){
+        const next=events[j];
+        if(next.type==='log')continue;
+        if(next.type==='monsterActivate'&&next.uid===uid){activations.push(next);continue;}
+        if(next.type==='statusGrant'&&(!next.sourceUid||next.sourceUid===uid)){grant(next,source);granted=true;continue;}
+        break; // Never cross another cause or a player choice.
+      }
+      if(granted)activations.forEach(event=>summonActivations.add(event));
+    };
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
+    const playDiceAt=async(index:number)=>{
+      const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||A.isFxSkipped()||this.dead)return;
+      diceDone.add(index);
+      const taunt=roll.taunt?A.prepareTauntActivation(roll.taunt.sourceUid):undefined;
+      const evade=roll.evasion?A.prepareEvasion(roll.evasion.targetUid,sideOf(roll.player),!!roll.success):undefined;
+      try{
+        await taunt?.play();
+        if(A.isFxSkipped()||this.dead)return;
+        await diceRollAnim(roll.rolls,{need:roll.need,success:roll.success,mine:roll.player===this.you,casino:roll.variant==='casino',source:roll.source,viewer:this.you});
+        if(!A.isFxSkipped()&&!this.dead)await evade?.play();
+      }finally{taunt?.cancel();evade?.cancel();}
+    };
 
+
+    try {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
+      if(growth.consumed.has(i)||summonActivations.has(e)||contactedDamage.has(e)||runeReplays.suppressed.has(i))continue;
       // glanceable icon rail (topbar): key events → small icons
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
       else if (e.type === "damage" && e.player === this.you) this.view.pushIcon("hitme");
       else if (e.type === "heal" && e.player === this.you) this.view.pushIcon("heal");
-      const cue = eventSound.cue(e);
-      if(cue&&!A.isFxSkipped())sfx(cue);
+      const cue = e.type==='destroy'&&(originRiteDeaths.has(e.uid)||massacreDeaths.has(e.uid)||treasonExits.has(e.uid))?undefined:(e.type==='destroy'&&([...hatches.values()].includes(e.uid)||(e.cause==='fusion'&&fusionMaterials.has(e.uid))))||(e.type==='summon'&&(fusions.has(e.uid)||e.rebirth||floorSessions.has(e.uid)))?undefined:eventSound.cue(e);
+      if(cue&&!A.isFxSkipped()&&!isSoulHarvestDamage(e))sfx(cue);
+      if(e.type==='trapReveal'||e.type==='turnHeader')statusSource=undefined;
+      if(hasStatusGrants&&(e.type==='monsterActivate'||e.type==='enchantActivate'||e.type==='summon'))statusSource=document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.uid)}"]`)??ghosts.get(e.uid)?.el;
       switch (e.type) {
-        case "enchantActivate":
-          A.enchantActivation(e.uid);
-          await wait(140);
+        case 'treason': {
+          const targets=e.targets.flatMap(target=>{
+            const node=ghosts.get(target.uid)?.el??document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(target.uid)}"]`);
+            return node?[{node,voided:target.destination==='rift'}]:[];
+          });
+          await A.treasonChains(targets,sideOf(e.target));
+          targets.forEach(({node})=>{if(node.dataset.uid)treasonExits.add(node.dataset.uid);});
           break;
+        }
+        case 'timewarp':
+          if(!A.isFxSkipped())await this.timewarp.cast(e.player,{...DB.TIMEWARP,uid:e.sourceUid});
+          break;
+        case 'turnSkipped':
+          if(e.source==='TIMEWARP'&&!A.isFxSkipped())await this.timewarp.release(e.player);
+          break;
+        case 'statusExtinction': {
+          const extinct = [e];
+          // One spell may clear both players: share the visual start instead of serial waits.
+          while (events[i + 1]?.type === 'statusExtinction') {
+            const next = events[++i];
+            if (next.type === 'statusExtinction') extinct.push(next);
+          }
+          await Promise.all(extinct.map(event=>grantQueues.get(`${event.player}:${event.resource}`)));
+          if (!A.isFxSkipped()) await Promise.all(extinct.map(event => playStatusExtinction(sideOf(event.player),event.resource,event.before,event.after)));
+          break;
+        }
+        case 'decayCounterGrant': {
+          const grants=[e],uids=new Set([e.uid]);
+          // Whole-field grants share a start, but never cross a destruction/reaction or a second grant on the same card.
+          let next=i+1;
+          while(next<events.length){
+            if(events[next].type==='log'){next++;continue;}
+            const event=events[next];
+            if(event.type!=='decayCounterGrant'||uids.has(event.uid))break;
+            grants.push(event);uids.add(event.uid);i=next++;
+          }
+          if(!A.isFxSkipped())await Promise.all(grants.map(event=>{
+            const target=ghosts.get(event.uid)?.el??this.openingRoot?.querySelector<HTMLElement>(`.zone-mon .card[data-uid="${CSS.escape(event.uid)}"]`);
+            return target?A.decayCounterGrant(target,event.before,event.after):undefined;
+          }));
+          break;
+        }
+        case 'statusGrant': {
+          const source=e.sourceUid?(ghosts.get(e.sourceUid)?.el??document.querySelector<HTMLElement>(`[data-uid="${CSS.escape(e.sourceUid)}"]`)??undefined):statusSource;
+          if(!A.isFxSkipped()){
+            grant(e,source);
+          }
+          break;
+        }
+        case 'elementalStart': {
+          let source=this.elementalFaces.find(f=>f.card.id===e.id&&f.side===sideOf(e.player))?.node;
+          if(!source&&(e.id.startsWith('FIRE_')||e.id==='FLAME')&&DB[e.id]&&!A.isFxSkipped()){
+            const card={...DB[e.id],uid:e.uid};source=await A.revealSpell(card,sideOf(e.player),'discard',undefined,true)??undefined;
+            if(source)this.elementalFaces.push({card,side:sideOf(e.player),node:source});
+          }
+          elemental.set(e.group,await A.beginElemental(e,this.you,source));break;
+        }
+        case 'elementalImpact': await elemental.get(e.group)?.impact(e.index);break;
+        case 'elementalEnd': await elemental.get(e.group)?.finished;elemental.delete(e.group);await Promise.all(elementalDeaths.splice(0));break;
+        case 'voidGrant':
+          await A.grantVoid(e.uids);
+          break;
+        case 'infinityRelease':
+          await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
+          break;
+        case "enchantActivate": {
+          const erosionPair=erosion.activations.get(i);
+          if(erosionPair){
+            const damage=events[erosionPair.damage];
+            if(damage.type==='damage'){
+              contactedDamage.add(damage);
+              await A.erosionDamage(sideOf(damage.player),e.uid,damage.amount,()=>{
+                if(this.dead)return;
+                hpNow[damage.player]-=damage.amount;
+                if(damage.player===this.you)this.view.pushIcon("hitme");
+                const sound=eventSound.cue(damage);if(sound&&!A.isFxSkipped())sfx(sound);
+                A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+              });
+              break;
+            }
+          }
+
+          const growthPulses=growth.groups.get(i);
+          if(growthPulses){
+            await A.growthRecovery(sideOf(e.player),growthPulses,index=>{
+              if(this.dead)return;const pulse=growthPulses[index];hpNow[pulse.player]+=pulse.amount;
+              if(pulse.amount>0&&pulse.player===this.you)this.view.pushIcon('heal');
+              A.hpBarSet(sideOf(pulse.player),hpNow[pulse.player]);
+            });break;
+          }
+          if(e.originRite){
+            const reaction=e.originRite;
+            // Consume only this rite's immediately following grant; its selected light owns contact.
+            if(reaction.outcome==='brand'){
+              await grantQueues.get(`${reaction.targetPlayer}:brand`);
+              const next=events.slice(i+1).find(event=>event.type!=='log');
+              if(next?.type==='statusGrant'&&next.resource==='brand'&&next.player===reaction.targetPlayer&&next.before===reaction.brandBefore&&next.after===reaction.brandAfter)shownGrants.add(next);
+            }
+            await A.originRite(e.uid,reaction,sideOf(reaction.targetPlayer),ghosts.get(reaction.summonUid)?.el);
+            if(reaction.outcome==='destroy'&&reaction.target?.kind==='monster')originRiteDeaths.add(reaction.target.uid);
+            break;
+          }
+          const replay=runeReplays.replays.get(i);
+          if(replay){
+            const original=events[replay.playIndex];
+            if(original.type==='playSpell'&&original.id==='BLACK_CURSE'){A.enchantActivation(e.uid);await wait(140);break;}
+            if(original.type==='playSpell'){
+              const card=prev.players[e.player].hand.find(c=>c.id===original.id)??this.defOf(original.id,`rune-replay-${replay.playIndex}`);
+              if(card){
+                const side=sideOf(e.player);
+                const held=[...this.elementalFaces,...this.quickFaces].reverse().find(x=>x.card.id===card.id&&x.side===side&&x.node.isConnected)?.node
+                  ??[...creationSources.values()].find(x=>x.dataset.cardId===card.id&&x.isConnected);
+                const node=await A.runeReplay(card,side,replay.sourceUids,held);
+                if(node&&!held){if(this.dead)node.remove();else if(original.dest==='vanish')this.quickFaces.push({card,side,node});else this.elementalFaces.push({card,side,node});}
+              }
+            }
+          }else{A.enchantActivation(e.uid);await wait(140);}
+          break;
+        }
         case "summon": {
-          const card = this.findCard(res.state, e.uid) ?? this.defOf(e.id, e.uid);
-          if (card) {
-            const g = await A.ghostSummon(card, sideOf(e.player), fieldCount[e.player]);
-            if (g) ghosts.set(e.uid, { el: g, side: sideOf(e.player) });
+          const ritual=rituals.get(e.uid);
+          if(ritual&&!A.isFxSkipped()){
+            const source=this.elementalFaces.find(x=>x.card.id==='FORBIDDEN'&&x.side===sideOf(e.player))?.node;
+            const cards=ritual.map(event=>{
+              const card=this.findCard(res.state,event.uid)??this.defOf(event.id,event.uid);
+              const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===event.uid);
+              return card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+            }).filter((card):card is CardInst=>!!card);
+            if(source&&cards.length){
+              const faces=await A.forbiddenSummon(source,cards,sideOf(e.player));
+              for(const face of faces){ghosts.set(face.dataset.uid!,{el:face,side:sideOf(e.player)});ritualFaces.add(face.dataset.uid!);}
+            }
+          }
+          if(ritualFaces.has(e.uid)){
+            const face=ghosts.get(e.uid)?.el;if(face){statusSource=face;summonGrants(i,e.uid,face);}
+            fieldCount[e.player]++;break;
+          }
+          const card = this.findCard(res.state, e.uid) ?? (e.rebirth?{...e.rebirth.card,passive:[...new Set([...(e.rebirth.card.passive??[]),'void'])]}:this.defOf(e.id, e.uid));
+          const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===e.uid);
+          const shown=card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
+          const floor=floorSessions.get(e.uid);
+          if(floor){
+            const face=await floor.playback.land(e.uid);
+            if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;summonGrants(i,e.uid,face);}
+            if(floor.last)await floor.playback.done;
+            fieldCount[e.player]++;break;
+          }
+          if(e.rebirth&&shown){
+            const face=await A.rebirthSummon(e.rebirth.card,shown,sideOf(e.player),source=>summonGrants(i,e.uid,source));
+            if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;}
+            fieldCount[e.player]++;break;
+          }
+          const fusion=fusions.get(e.uid);
+          if(fusion&&shown){
+            const face=await A.dragonFusionSummon(shown,sideOf(e.player),fusion);
+            ghosts.delete(fusion.dragon.uid);ghosts.delete(fusion.mate.uid);
+            if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;}
+            fieldCount[e.player]++;break;
+          }
+          const egg=hatches.get(e.uid);
+          if(egg&&heldEggs.delete(egg)){
+            const g=shown?await A.hatchSummon(egg,shown):null;
+            if(g){ghosts.delete(egg);ghosts.set(e.uid,{el:g,side:sideOf(e.player)});statusSource=g;break;}
+            releaseMonster(egg);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);
+          }
+          if (shown) {
+            const g = await A.ghostSummon(shown, sideOf(e.player), fieldCount[e.player],source=>summonGrants(i,e.uid,source));
+            if (g) {ghosts.set(e.uid, { el: g, side: sideOf(e.player) });statusSource=g;}
           }
           fieldCount[e.player]++;
-          await wait(65);
+          break;
+        }
+        case "tribeSynergy": {
+          const victory=e.tribe==='시초'&&e.threshold===6&&events.some(ev=>ev.type==='win'&&ev.winner===e.player);
+          // All approved ordinary stages clamp at 3; actual Origin victory has its own seal.
+          if(!A.isFxSkipped()){
+            const nodes=e.uids.map(uid=>ghosts.get(uid)?.el??this.openingRoot.querySelector<HTMLElement>(`.zone-mon .card[data-uid="${CSS.escape(uid)}"]`)).filter((el):el is HTMLElement=>!!el);
+            await playTribeSynergy(nodes,victory,synergyTier(e.threshold));
+          }
           break;
         }
         case "trapSet":
@@ -319,79 +644,250 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "destroy": {
+          if(originRiteDeaths.has(e.uid)||treasonExits.has(e.uid)||massacreDeaths.has(e.uid)){ghosts.get(e.uid)?.el.remove();ghosts.delete(e.uid);releaseMonster(e.uid);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
+          if(e.cause==='fusion'&&fusionMaterials.has(e.uid)){fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);break;}
+          if([...hatches.values()].includes(e.uid)&&document.querySelector(`.zone-mon .card[data-uid="${CSS.escape(e.uid)}"]`)){heldEggs.add(e.uid);break;}
+          const destroy=async()=>{
           const gh = ghosts.get(e.uid);
+          const shelved=res.state.players[e.player].discard.some(c=>c.uid===e.uid);
           const exiled=res.state.players[e.player].removed?.find(c=>c.uid===e.uid);
-          if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true):A.destroyAnim(e.uid,sideOf(e.player),true));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
-          else if (gh) { await A.ghostDie(gh.el, gh.side); ghosts.delete(e.uid); }
-          else await A.destroyAnim(e.uid, sideOf(e.player));
+          const live=gh?.el??combatCard(e.uid);
+          if(shelved&&!exiled&&e.cause!=='decay'&&live&&!A.isFxSkipped()){
+            // Keep a lethal counter's own face until its short return is complete.
+            const returning=counterFinishes.get(e.uid);if(returning)await returning;
+            if(!this.dead&&!A.isFxSkipped())void startCombatExit(live,sideOf(e.player),this.combatExits.signal).catch(error=>console.warn('[combat exit]',error));
+            ghosts.delete(e.uid);
+          }
+          else if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true,false,e.cause==='decay'):A.destroyAnim(e.uid,sideOf(e.player),true,false,e.cause==='decay'));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
+          else if (gh) { await A.ghostDie(gh.el, gh.side,false,shelved,e.cause==='decay'); ghosts.delete(e.uid); }
+          else await A.destroyAnim(e.uid, sideOf(e.player),false,shelved,e.cause==='decay');
           releaseMonster(e.uid);
           fieldCount[e.player] = Math.max(0, fieldCount[e.player] - 1);
+          };
+          if(elemental.size)elementalDeaths.push(destroy());else await destroy();
+          break;
+        }
+        case 'counter': {
+          const result=counterSurvival(events,i);let survival:Promise<void>|undefined;
+          const playback=contactPlayback(contact=>A.counterStrike(e.uid,e.targetUid,contact,e.contactDamage),()=>{
+            if(e.contactDamage>0)eventSound.contact(e.targetUid,e.targetPlayer);
+            if(result&&!survival){counterGuts.add(result);gutsHits.add(result.uid);survival=A.gutsSurvive(result,sideOf(result.player));}
+          });
+          counterFinishes.set(e.uid,playback.finished);motionFinishes.push(playback.finished);
+          await playback.contact;if(survival)motionFinishes.push(survival);
           break;
         }
         case "attack": {
+          const tauntIndex=tauntRollIndex(events,i);
+          if(tauntIndex>=0)await playDiceAt(tauntIndex);
+          const evadeIndex=evasionRollIndex(events,i);
+          if(evadeIndex>=0){
+            await playDiceAt(evadeIndex);
+            const roll=events[evadeIndex];
+            if(roll.type==='dice'&&roll.success)break;
+          }
           // The shared attack timeline owns launch/contact cues and local target recoil.
-          const defender = sideOf((1 - e.player) as Side);
-          await A.attackStrike(e.uid, e.targetUid, defender,()=>eventSound.contact(e.targetUid,(1-e.player) as Side,e.contactDamage!==0),res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false,e.contactDamage);
+          const targetPlayer=e.targetPlayer ?? ((e.targetUid&&prev.players[e.player].field.some(m=>m.uid===e.targetUid)?e.player:1-e.player) as Side);
+          const defender=sideOf(targetPlayer);
+          const attacker=this.findCard(prev,e.uid)??this.findCard(res.state,e.uid),exhaust=res.state.players[e.player].field.find(m=>m.uid===e.uid)?.exhausted!==false;
+          let survival:Promise<void>|undefined;
+          const contact=()=>{eventSound.contact(e.targetUid,targetPlayer,e.contactDamage!==0);if(e.guts&&!survival)survival=A.gutsSurvive(e.guts,sideOf(e.guts.player));};
+          const playback=contactPlayback(impact=>attacker?.id==='NGA4'?A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,impact,exhaust,e.contactDamage):A.attackStrike(e.uid,e.targetUid,defender,impact,exhaust,e.contactDamage),contact);
+          motionFinishes.push(playback.finished);await playback.contact;
+          if(survival)motionFinishes.push(survival);
+          // The dedicated material already owns this target's recoil at contact.
+          if(e.guts)gutsHits.add(e.guts.uid);
           break;
         }
-        case "monsterActivate":
-          await A.monsterActivation(e.uid);
+        case "gutsSurvive":
+          if(!counterGuts.delete(e))await A.gutsSurvive(e,sideOf(e.player));
           break;
-        case "hit":
-          A.monHit(e.uid);
-          await wait(110);
+        case "monsterActivate": {
+          // Several sources reacting to the same event should be visible together.
+          const uids = new Set([e.uid]);
+          while (events[i + 1]?.type === 'monsterActivate') {
+            const next = events[++i];
+            if (next.type === 'monsterActivate') uids.add(next.uid);
+          }
+          await Promise.all([...uids].map(uid => A.monsterActivation(uid)));
           break;
-        case "dice":
-          if (!diceDone.has(i)&&!A.isFxSkipped()) {
-            diceDone.add(i);
-            await diceRollAnim(e.rolls, { need: e.need, success: e.success, mine: e.player === this.you, casino: e.variant === "casino", source: e.source, viewer: this.you });
+        }
+        case "hit": {
+          const next=events[i+1],recoil=!gutsHits.delete(e.uid)&&!(next?.type==='gutsSurvive'&&next.uid===e.uid);
+          const before=health.get(e.uid),after=before===undefined||e.amount===undefined?undefined:Math.max(0,before-e.amount);
+          if(after!==undefined)health.set(e.uid,after);
+          A.monHit(e.uid,e.amount,after,recoil);
+          break;
+        }
+        case "dice": {
+          await playDiceAt(i);
+          const summons=dungeonFloorSummons(events,i);
+          const cards=summons.flatMap(event=>{
+            const card=this.findCard(res.state,event.uid)??this.defOf(event.id,event.uid);
+            const grant=events.slice(i+1).find(ev=>ev.type==='decayCounterGrant'&&ev.uid===event.uid);
+            return card?[grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card]:[];
+          });
+          if(cards.length){
+            const playback=A.startDungeonFloor(cards,sideOf(e.player));
+            motionFinishes.push(playback.done);
+            cards.forEach((card,index)=>floorSessions.set(card.uid,{playback,last:index===cards.length-1}));
           }
           break;
+        }
+        case 'voidShot': {
+          if(voidShotFinish)await voidShotFinish;
+          const card=prev.players[e.player].hand.find(c=>c.id==='EXILE_NUKE1')??{...DB.EXILE_NUKE1,uid:'void-shot-source'};
+          const heldIndex=this.elementalFaces.findIndex(x=>x.card.id==='EXILE_NUKE1'&&x.side===sideOf(e.player)&&x.node.isConnected);
+          const held=heldIndex<0?undefined:this.elementalFaces.splice(heldIndex,1)[0].node;
+          const nextShot=events.findIndex((next,j)=>j>i&&(next.type==='voidShot'||next.type==='playSpell'));
+          const damage=events.slice(i+1,nextShot<0?events.length:nextShot).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!event.reversed&&!!event.srcKo?.includes('data-card="EXILE_NUKE1"'));
+          const playback=contactPlayback(contact=>A.voidShotSpell(card,sideOf(e.player),e.count,contact,sideOf(e.target),held),()=>{
+            if(this.dead||!damage||contactedDamage.has(damage))return;
+            contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
+            if(damage.player===this.you)this.view.pushIcon('hitme');
+            const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
+            A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+          });
+          voidShotFinish=playback.finished;motionFinishes.push(playback.finished);await playback.contact;
+          break;
+        }
+        case "reverseDamage": {
+          const damage=events.find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&event.reversed===true&&event.reverseId===e.id);
+          const playback=contactPlayback(contact=>A.reverseDamage(sideOf(e.from),sideOf(e.to),e.sourceUids,contact),()=>{
+            if(this.dead||!damage||contactedDamage.has(damage))return;
+            contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
+            if(damage.player===this.you)this.view.pushIcon('hitme');
+            const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
+            A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+          });
+          motionFinishes.push(playback.finished);await playback.contact;
+          break;
+        }
         case "damage": {
+          if(isSoulHarvestDamage(e)){
+            await A.soulHarvest(null,sideOf(e.player),e.amount,()=>{if(this.dead)return;hpNow[e.player]-=e.amount;A.hpBarSet(sideOf(e.player),hpNow[e.player]);});
+            break;
+          }
           hpNow[e.player] -= e.amount;
-          A.hpFeedback(sideOf(e.player), "dmg", e.amount);
+          if(!e.reversed)A.hpFeedback(sideOf(e.player), "dmg", e.amount);
           A.hpBarSet(sideOf(e.player), hpNow[e.player]);
-          await wait(140);
           break;
         }
         case "heal": {
           const healed=Math.max(0,e.amount);
           hpNow[e.player] += healed;
-          if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
-          A.hpBarSet(sideOf(e.player), hpNow[e.player]);
-          await wait(130);
+          if(e.bloodRiteSources?.length){
+            await A.bloodRiteRecovery(sideOf(e.player),e.bloodRiteSources,()=>{
+              if(!this.dead)A.hpBarSet(sideOf(e.player),hpNow[e.player]);
+            });
+          }else{
+            if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
+            A.hpBarSet(sideOf(e.player), hpNow[e.player]);
+            await wait(130);
+          }
+          break;
+        }
+        case "curseGenerated": {
+          const card=prev.players[e.player].hand.find(c=>c.uid===e.sourceUid)??{...DB.BLACK_CURSE,uid:e.sourceUid};
+          await A.curseSpell(card,sideOf(e.player),e.before);
+          break;
+        }
+        case "nova": {
+          const card=prev.players[e.player].hand.find(c=>c.id==='BLACK_NOVA')??{...DB.BLACK_NOVA,uid:'nova-source'};
+          await A.novaTimeTheft(card,sideOf(e.player),e.from,hp=>{if(!this.dead)A.hpBarSet(sideOf(e.player),hp);});
+          hpNow[e.player]=e.to;
           break;
         }
         case "playSpell": {
+          const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
+          if(e.id==='BLACK_CURSE'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='curseGenerated'&&next.player===e.player))break;
+          if(e.id==='EXILE_NUKE1'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='voidShot'&&next.player===e.player))break;
+          // TIMEWARP uses the existing dice first; its typed success event owns the material reveal.
+          if(e.id==='TIMEWARP'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='dice'&&next.source.id==='TIMEWARP'))break;
+          // A resolved Nova owns both the source reveal and its exit; a nullified cast keeps the ordinary reveal.
+          if(e.id==='BLACK_NOVA'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='nova'&&next.player===e.player))break;
+          const grants=events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='statusGrant'||next.type==='decayCounterGrant');
           const def = DB[e.id] ?? STARTERS[e.id]; // 컬/어튠/보물상자 live in STARTERS
           if (def) {
             // Preserve the new public source UID so reactions during this batch can find its ghost.
             const oldUids=new Set([...prev.players[e.player].enchants,...(prev.players[e.player].quests??[])].map(x=>x.card.uid));
             const shownUids=new Set(spellGhosts.map(x=>x.dataset.uid));
             const placed=e.dest==='field'?[...res.state.players[e.player].enchants,...(res.state.players[e.player].quests??[])].find(x=>x.card.id===e.id&&!oldUids.has(x.card.uid)&&!shownUids.has(x.card.uid))?.card:undefined;
-            if(def.quick){
+            const creation=def.id==='CREATION'?creationEvents.find(c=>!c.copy&&c.player===e.player&&c.sourceUid&&!creationSources.has(c.sourceUid)):undefined;
+            if(creation?.sourceUid){
+              const face=await A.revealCreation({...def,uid:creation.sourceUid},sideOf(e.player));
+              if(face)creationSources.set(creation.sourceUid,face);
+            }else if(def.id==='SOUL_HARVEST'){
+              const damageIndex=soulHarvestDamageIndex(events,i);
+              const damage=damageIndex>=0?events[damageIndex]:undefined;
+              const harvest=damage?.type==='damage'?async(node:HTMLElement)=>{
+                contactedDamage.add(damage);
+                await A.soulHarvest(node,sideOf(damage.player),damage.amount,()=>{
+                  if(this.dead)return;
+                  hpNow[damage.player]-=damage.amount;A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+                  if(damage.player===this.you)this.view.pushIcon('hitme');
+                });
+              }:undefined;
+              await A.revealSpell(placed??{uid:'soul-harvest-source',...def},sideOf(e.player),e.dest,undefined,false,undefined,harvest);
+            }else if(def.id==='EXILE_NUKE2'){
+              // Consume only this spell's first actual damage event at shell contact.
+              // Reflections use the engine's target; echo hits and unrelated reactions remain sequential.
+              const damage=events.slice(i+1,nextSpell<0?events.length:nextSpell).find((event):event is Extract<GameEvent,{type:'damage'}>=>event.type==='damage'&&!event.reversed&&!!event.srcKo?.includes('data-card="EXILE_NUKE2"'));
+              const records=prev.players[e.player].removed??[];
+              const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{uid:'void-crystal-source',...def};
+              await A.revealSpell(card,sideOf(e.player),e.dest,undefined,false,{
+                count:e.riftCount??records.length,record:records.at(-1),target:damage?sideOf(damage.player):undefined,
+                onImpact:()=>{
+                  if(this.dead||!damage||contactedDamage.has(damage))return;
+                  contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
+                  if(damage.player===this.you)this.view.pushIcon('hitme');
+                  const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
+                  A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+                },
+              });
+            }else if(def.id==='MASSACRE'){
+              const deaths=events.slice(i+1,nextSpell<0?events.length:nextSpell).filter((event):event is Extract<GameEvent,{type:'destroy'}>=>event.type==='destroy'&&event.cause==='massacre');
+              const nodes=deaths.map(event=>ghosts.get(event.uid)?.el??combatCard(event.uid));
+              const card=prev.players[e.player].hand.find(c=>c.id===e.id&&!res.state.players[e.player].hand.some(n=>n.uid===c.uid))??{uid:'massacre-source',...def};
+              const handled=nodes.every((n):n is HTMLElement=>!!n)&&await A.massacreSpell(card,sideOf(e.player),nodes as HTMLElement[],res.state.players[e.player].mana,Math.min(1,Math.max(0,prev.players[e.player].maxMana-3)),new Set((res.state.players[1-e.player].removed??[]).map(c=>c.uid)));
+              if(handled){deaths.forEach(event=>massacreDeaths.add(event.uid));massacreCosts.add(e.player);}
+              else await A.revealSpell(card,sideOf(e.player),e.dest);
+            }else if(def.id==='CHOSEN_AREA'&&isChosenVictory(events,e.player)){
+              const face=await A.revealSpell({uid:'chosen-source',...def},sideOf(e.player),e.dest,undefined,true);
+              try{if(!this.dead&&!A.isFxSkipped())await playChosenVictory(sideOf(e.player),face);}finally{face?.remove();}
+            }else if(['FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','FORBIDDEN','FLAME'].includes(def.id)){
+              const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{...def,uid:`elemental-${e.id}`};
+              const node=await A.revealSpell(card,sideOf(e.player),e.dest,undefined,true);
+              if(node){if(this.dead)node.remove();else this.elementalFaces.push({card,side:sideOf(e.player),node});}
+            }else if(def.quick){
               // A purchase and playSpell describe the same card: reveal it once and defer its exit.
               if(!this.quickFaces.some(x=>x.card.id===e.id&&x.side===sideOf(e.player))){
                 const card=res.state.players[e.player].removed?.find(c=>c.id===e.id&&!(prev.players[e.player].removed??[]).some(old=>old.uid===c.uid))??{uid:'fx',...def};
                 const node=await A.revealSpell(card,sideOf(e.player),'vanish',undefined,true);
                 if(node){if(this.dead)node.remove();else this.quickFaces.push({card,side:sideOf(e.player),node});}
               }
+            }else if(e.dest==='discard'&&(grants||runeReplays.held.has(i))){
+              const face=await A.revealSpell({uid:'status-source',...def},sideOf(e.player),e.dest,undefined,true);
+              if(face){if(this.dead)face.remove();else{statusSource=face;this.elementalFaces.push({card:{uid:'status-source',...def},side:sideOf(e.player),node:face});}}
             }else{
               const face=await A.revealSpell(placed??{ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
               if(face){spellGhosts.push(face);if(def.t==='quest')questCount[e.player]++;else buffCount[e.player]++;}
             }
           }
+          statusSource= this.elementalFaces.find(x=>x.card.id===e.id)?.node??this.quickFaces.find(x=>x.card.id===e.id)?.node??spellGhosts.at(-1)??statusSource;
           // random-roll cards: roll the 3D dice first, THEN show the outcome popup
-          if (def && RANDOM_CARDS.has(def.id)) {
+          if (def && RANDOM_CARDS.has(def.id) && !["FIRE_ARROW","FIRE_METEOR","FORBIDDEN"].includes(def.id)) {
             for (let j = i + 1; j < events.length; j++) {
               const e2 = events[j];
+              if (e2.type==='enchantActivate'&&DB[e2.id]?.ench==='runeEcho') break;
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
-              if (e2.type === "dice" && !diceDone.has(j)&&!A.isFxSkipped()) {
+              if (e2.type === "dice" && !e2.evasion && !e2.taunt && !diceDone.has(j)&&!A.isFxSkipped()) {
                 diceDone.add(j);
                 await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
               }
             }
-            const lines = this.effectLines(events, i);
+            // Chest outcomes are already conveyed by the dice, board changes, and battle log.
+            const lines = isChestCard(def) ? [] : this.effectLines(events, i);
             if (lines.length) {
               const mine = e.player === this.you;
               const title = (mine ? "" : `${t("fx.opp")} · `) + cardName({ uid: "fx", ...def });
@@ -416,19 +912,46 @@ export abstract class BaseController implements BoardHandlers {
         case "reshuffle":
           await A.animateReshuffle(sideOf(e.player), e.count);
           break;
-        case "draw":
-          draws[e.player] += e.count;
-          break;
-        case "treasure": {
-          const mine = e.player === this.you && !e.isBot;
-          const text = getLang() === "ja" ? e.textJa : getLang() === "en" ? logToEn(e.text) : e.text;
-          treasureModal(e.kind, (mine ? "" : `${t("fx.opp")} · `) + text);
+        case "draw": {
+          const early=growthHands.get(i);
+          if(early){
+            const hand=document.getElementById(e.player===this.you?'hand':'oppHand'),previousHand=captureHandLayout(hand);
+            this.view.presentDrawHand(res.state,e.player,early.hand);
+            await A.animateDraw(hand,e.count,sideOf(e.player),{previousHand,uids:early.uids,durationScale:.55});
+          }else{
+            draws[e.player] += e.count;
+            if(erosion.draws.has(i)){
+              const pl=e.player,hand=document.getElementById(pl===this.you?'hand':'oppHand');
+              const before=captureHandLayout(hand),old=new Set(prev.players[pl].hand.map(c=>c.uid));
+              const count=events.reduce((n,event)=>n+(event.type==='draw'&&event.player===pl?event.count:0),0);
+              const arrivalIds=new Set(arrivingHandUids(prev.players[pl].hand,res.state.players[pl].hand,count));
+              const arrivals=res.state.players[pl].hand.filter(c=>arrivalIds.has(c.uid));
+              const incoming=arrivals.slice(shownDraws[pl],shownDraws[pl]+draws[pl]);
+              shownDraws[pl]+=draws[pl];
+              const visible=new Set(arrivals.slice(0,shownDraws[pl]).map(c=>c.uid));
+              this.view.presentDrawHand(res.state,pl,res.state.players[pl].hand.filter(c=>old.has(c.uid)||visible.has(c.uid)));
+              await A.animateDraw(hand,draws[pl],sideOf(pl),{previousHand:before,uids:incoming.map(c=>c.uid),durationScale:.5});
+              draws[pl]=0; // Already landed: do not draw these cards again at final render.
+            }
+          }
           break;
         }
+        case "treasure":
+          // Reward effects have their own board events; no additional explanation popup.
+          break;
         default:
           break; // log / turnHeader / win / needTarget — no board animation
       }
     }
+
+    // Expiry and removal of public spells/quests often emit logs rather than destroy.
+    await Promise.all(persistentShelfExits(prev,res.state,events).filter(({card})=>!treasonExits.has(card.uid)).map(async({player,card})=>{
+      if(!A.isFxSkipped())sfx('death');
+      await A.destroyAnim(card.uid,sideOf(player));
+    }));
+
+    await Promise.all([...motionFinishes,...grantFinishes]);
+    if(this.dead)return;
 
     // Overflow picks emit logs only; animate the public zone delta before commit.
     for(const pl of [0,1] as Side[]){
@@ -437,7 +960,7 @@ export abstract class BaseController implements BoardHandlers {
       const played=new Map<string,number>();
       for(const e of events)if(e.type==='playSpell'&&e.player===pl&&e.dest==='discard')played.set(e.id,(played.get(e.id)||0)+1);
       for(const c of res.state.players[pl].discard){
-        if(!inHand.has(c.uid)||previousDiscard.has(c.uid))continue;
+        if(!inHand.has(c.uid)||previousDiscard.has(c.uid)||fusionMaterials.has(c.uid))continue;
         const n=played.get(c.id)||0;if(n){played.set(c.id,n-1);continue;}
         // The picker already landed this exact card before submitting the pick.
         if(pl===this.you&&presentedHandDiscards.has(c.uid))continue;
@@ -451,6 +974,7 @@ export abstract class BaseController implements BoardHandlers {
     for(const e of events)if(e.type==='playSpell'&&e.dest==='vanish'){
       const ids=animatedIds[e.player];ids.set(e.id,(ids.get(e.id)||0)+1);
     }
+    const infinityStored = new Set(events.flatMap(e => e.type === 'infinityStored' ? e.cardUids : []));
     const destroyed=new Set(events.filter(e=>e.type==='destroy').map(e=>e.uid));
     for(const pl of [0,1] as Side[]){
       const before=prev.players[pl];
@@ -458,7 +982,7 @@ export abstract class BaseController implements BoardHandlers {
       const existed=new Set([...before.hand,...before.deck,...before.discard,...before.field,...before.enchants.map(e=>e.card),...before.traps.map(t=>t.card),...(before.quests??[]).map(q=>q.card),...before.exile.map(e=>e.card)].map(c=>c.uid));
       const generated:CardInst[]=[];
       for(const c of res.state.players[pl].removed??[]){
-        if(old.has(c.uid)||destroyed.has(c.uid))continue;
+        if(old.has(c.uid)||treasonExits.has(c.uid)||destroyed.has(c.uid)||infinityStored.has(c.uid)||creationExits.has(c.uid))continue;
         const n=animatedIds[pl].get(c.id)||0;if(n){animatedIds[pl].set(c.id,n-1);continue;}
         if(!existed.has(c.uid)){generated.push(c);continue;}
         await A.exileCard(c,sideOf(pl),document.querySelector<HTMLElement>(`.card[data-uid="${c.uid}"],.card--back[data-uid="${c.uid}"],.buff-icon[data-uid="${c.uid}"]`));
@@ -475,7 +999,7 @@ export abstract class BaseController implements BoardHandlers {
       if (this.dead) return;
       const dMana = res.state.players[pl].maxMana - prev.players[pl].maxMana;
       if (dMana > 0) manaGains.push({side:sideOf(pl),amount:dMana});
-      else if (dMana < 0) A.manaDrop(sideOf(pl), -dMana);
+      else if (dMana < 0&&!massacreCosts.has(pl)) A.manaDrop(sideOf(pl), -dMana);
     }
 
     if (this.dead) return;
@@ -490,7 +1014,26 @@ export abstract class BaseController implements BoardHandlers {
     }
     const handLayouts=[draws[this.you]>0?captureHandLayout(document.getElementById('hand')):undefined,
       draws[1-this.you]>0?captureHandLayout(document.getElementById('oppHand')):undefined];
-    this.view.render(res.state);
+    const supplyFaces=!A.isFxSkipped()&&supplyWasRefreshed(prev,res.state)?captureSupplyFaces(this.view.root):undefined;
+    // Stat animations belong to this batch too: automatic follow-ups must not
+    // replace their source cards before all targets finish their shared motion.
+    if(events.some(e=>e.type==='turnSkipped'&&e.source==='TIMEWARP'))this.view.syncTurn(res.state);
+    const crisis=!A.isFxSkipped()&&fixedMarketWasReplaced(prev,res.state)?createMarketCrisis(this.view.root):undefined;
+    this.marketCrisis=crisis;
+    if(crisis)await crisis.destroy();
+    if(this.dead){crisis?.cancel();return;}
+    effectFinishes.push(this.view.render(res.state));
+    if(crisis)effectFinishes.push(crisis.reveal().finally(()=>{if(this.marketCrisis===crisis)this.marketCrisis=undefined}));
+    // The existing draw and HP feedback run alongside birth, once each. Public new
+    // UIDs come from the reducer, so a same-name original never becomes a second copy.
+    for(const born of creationEvents){
+      const card=this.findCard(res.state,born.uid)??this.defOf(born.id,born.uid);
+      if(card)effectFinishes.push(A.creationBirth(card,sideOf(born.player),born.sourceUid?creationSources.get(born.sourceUid)??null:null,born.copy));
+    }
+    if(supplyFaces){
+      const refresh=playSupplyRefresh(this.view.root,supplyFaces);this.marketRefresh=refresh;
+      effectFinishes.push(refresh.done.finally(()=>{if(this.marketRefresh===refresh)this.marketRefresh=undefined;}));
+    }
     for(const gain of manaGains)effectFinishes.push(A.manaSurge(gain.side,gain.amount));
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
@@ -508,6 +1051,10 @@ export abstract class BaseController implements BoardHandlers {
     }
 
     await Promise.all(effectFinishes);
+    if(this.elementalFaces.length&&(!res.state.pending||res.state.over)){
+      await Promise.all(this.elementalFaces.splice(0).map(x=>A.finishElementalSpell(x.node,x.side)));
+    }
+    } finally { floorSessions.forEach(({playback})=>playback.cancel()); creationSources.forEach(node=>node.remove()); }
   }
 
   /** Plain-text log lines describing the effect right after events[idx] (for result popups). */
@@ -575,8 +1122,10 @@ export abstract class BaseController implements BoardHandlers {
     if(!this.state.over)this.exits.onBattleReady?.();
     this.syncTimer();
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
+    this.timewarp.sync(this.state);
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     const g = this.state;
+    if(this.castReviewState && this.castReviewState!==g && document.querySelector('.cast-review'))closeOverlay();
     if (g.over) { this.showWin(); return; }
     // 다중 선택 pending (대숙청 purge / 흑룡 oppRmz / 신수 oppBoard) — 모달에서 한 번에
     // 고른 뒤 1장씩 순차 제출한다 (엔진 프로토콜은 그대로 1장씩 pick)
@@ -594,7 +1143,11 @@ export abstract class BaseController implements BoardHandlers {
         return;
       }
       if (g.pending.kind === "cardChoice") {
-        cardPicker(g.pending.hintJa, effectChoices(g), uid => this.submit({ type: "pick", uid }), !!g.pending.allowCancel);
+        const pending=g.pending;
+        const rebirth=pending.reason==='QUICK_REBIRTH',lang=getLang();
+        const title=rebirth?(lang==='ja'?'墓地からモンスターを選択':lang==='en'?'Choose a monster from your graveyard':'묘지에서 몬스터 선택'):(lang==='ja'?pending.hintJa:lang==='en'?logToEn(pending.hint):pending.hint);
+        const description=rebirth?(lang==='ja'?'購入コスト7以下なら、虚無を付与して召喚します。コスト8以上は効果がありません。':lang==='en'?'A monster costing 7 or less is summoned with Void. Cost 8 or more has no effect.':'구매 비용이 7 이하면 허무를 부여하여 소환합니다. 비용이 8 이상이면 효과가 없습니다.'):undefined;
+        cardPicker(title,effectChoices(g),uid=>{if(this.state===g)this.submit({type:'pick',uid});},!!pending.allowCancel,{confirm:true,description,label:rebirth?undefined:uid=>this.choiceOwner(g,uid)});
         return;
       }
       if (multiKind) {
@@ -612,7 +1165,7 @@ export abstract class BaseController implements BoardHandlers {
         if (g.pending.kind === "purge") {
           // 시련의 영역(trialExile): 묘지에서만 · 리프레시: 패에서만
           const zone = g.pending.data?.zone;
-          pool = (zone === "hand" ? [...me.hand] : zone === "discard" ? [...me.discard] : [...me.deck, ...me.discard]).sort((a, b) => a.cost - b.cost);
+          pool = (zone === "hand" ? [...me.hand] : zone === "discard" ? [...me.discard] : [...me.deck, ...me.discard]).filter(c=>handCap||!hasPassive(c,"relic")).sort((a, b) => a.cost - b.cost);
         }
         else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
         else { // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법 · 필터: noMon(함정·영구마법만) / trapOnly / enchOnly · anySide면 내 필드도 대상
@@ -640,7 +1193,7 @@ export abstract class BaseController implements BoardHandlers {
           if (!uids.length) { if (!handCap) this.submit({ type: "pick", uid: null }); else this.afterApply({ state: this.state, events: [] }); return; } // 아무것도 안 고름 = 취소 (handCap은 다시 묻는다)
           this.purgePicks = uids.slice(1);
           this.submit({ type: "pick", uid: uids[0] });
-        }, { exact: handCap });
+        }, { exact: handCap, label:uid=>this.choiceOwner(g,uid) });
         return;
       }
       if (g.pending.kind === "giantShop") {
@@ -656,7 +1209,7 @@ export abstract class BaseController implements BoardHandlers {
           : ids.filter((id) => defOf(id) && (free || (defOf(id).cost <= me.mana && purchaseAllowed(g, me, { ...defOf(id), uid: id })))).map((id) => ({ uid: id, ...defOf(id) }));
         const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
-        cardPicker(hint, pool, (uid) => this.submit({ type: "pick", uid }));
+        cardPicker(hint, pool, (uid) => {if(this.state===g)this.submit({ type: "pick", uid });},g.pending.allowCancel,{confirm:true});
         return;
       }
       if (g.pending.kind === "reroll") {
@@ -697,6 +1250,7 @@ export abstract class BaseController implements BoardHandlers {
   // ============================================================
   private syncTimer(): void {
     if (this.dead) return;
+    if (!this.useTurnClock) { this.stopTimer(); return; }
     const g = this.state;
     if (!g || g.over) { this.stopTimer(); return; }
     const key = `${g.turn}:${g.cur}`;
@@ -711,7 +1265,6 @@ export abstract class BaseController implements BoardHandlers {
       this.timerLeft = g.turnLeftMs != null
         ? Math.max(1, Math.ceil(g.turnLeftMs / 1000))
         : this.turnTotal;
-      this.warned25 = this.timerLeft <= 25; // don't re-fire the 25s popup mid-turn on reconnect
       this.turnStartedWall = Date.now();    // guard against a stale ~0 clock instantly skipping the turn
       // a reconnect straight into the discard choice: the server clock already includes the bonus
       this.handCapBonusKey = g.pending?.reason === "handCap" ? key : "";
@@ -738,7 +1291,6 @@ export abstract class BaseController implements BoardHandlers {
       const serverLeft = Math.max(1, Math.ceil(g.turnLeftMs / 1000));
       if (serverLeft < this.timerLeft - 3) {
         this.timerLeft = serverLeft;
-        this.warned25 = this.warned25 || serverLeft <= 25;
         this.renderTimer();
       }
     }
@@ -749,8 +1301,6 @@ export abstract class BaseController implements BoardHandlers {
     this.timerLeft--;
     this.renderTimer();
     const s = this.timerLeft;
-    if (s === 25 && !this.warned25) { this.warned25 = true; this.turnToast(t("game.timer.sec").replace("{n}", String(s)), "small", 1500); }
-    else if (s <= 5 && s >= 1) this.turnToast(String(s), "big", 900);
     if (s <= 0) {
       // never auto-end within the first ~2s of a turn — a stale/near-zero clock (e.g. after a
       // skip or a reconnect) must not instantly skip the turn; give the player real time.
@@ -841,16 +1391,6 @@ export abstract class BaseController implements BoardHandlers {
     }
   }
 
-  private turnToast(text: string, size: "big" | "small", ms: number): void {
-    this.toastEl?.remove();
-    const el = document.createElement("div");
-    el.className = `turn-toast ${size}`;
-    el.textContent = text;
-    document.body.appendChild(el);
-    this.toastEl = el;
-    setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 300); }, ms);
-  }
-
   /** Centered popup explaining why a card can't be played (condition not met, etc.). */
   private cantPlayToast(msg: string): void {
     sfx("error");
@@ -863,6 +1403,7 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   private stopTimer(): void {
+    paintTurnUrgency(0,false);
     if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
     this.timerKey = "";
     for (const id of ["clock-me", "clock-opp"]) {
@@ -925,22 +1466,25 @@ export abstract class BaseController implements BoardHandlers {
     if (el) this.rankPresentation.mount(el, () => this.retryRankResult());
   }
 
-  private clearQuickFaces():void {this.quickFaces.splice(0).forEach(x=>x.node.remove());}
+  private clearQuickFaces():void {this.elementalFaces.splice(0).forEach(x=>x.node.remove());this.quickFaces.splice(0).forEach(x=>x.node.remove());}
 
   destroy(): void {
+    this.timewarp.destroy();
+    this.combatExits.abort();clearDamageFeedback();
+    this.marketRefresh?.cancel();
+    this.marketCrisis?.cancel();
     this.disposeHandDiscard?.();
     this.dead = true;
+    disposeStatusExtinctions();
     this.rankPresentation.destroy();
     stopSounds();
     this.openingAbort.abort();this.releaseOpening();
     this.clearQuickFaces();
     A.setFxSkip(true);
     cancelDiceAnimations();
-    closeTreasureNotices();
     document.querySelectorAll(".fx-turnbanner,.cointoss-ov,.fx-card-flight,.cast-veil").forEach(n => n.remove());
     this.stopTimer();
     this.view.destroy();
-    this.toastEl?.remove();
     A.closeZoom(); // a zoom left open would sit over the NEXT screen (its Esc handler dies below)
     document.removeEventListener("keydown", this.onKey);
     A.removeReviewFab();
@@ -952,22 +1496,34 @@ export abstract class BaseController implements BoardHandlers {
 // ============================================================
 // LocalController — single device, you vs bot
 // ============================================================
+const lastNpcDecks = new Map<string, number>();
+
 export class LocalController extends BaseController {
   private botTimer = 0;
+  private thinker = new BotThinker();
+  private botBusy = false;
+  private botDisposed = false;
   private difficulty: BotDifficulty;
 
   constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
     super(root, 0, exits);
     this.difficulty = difficulty;
-    const bot = pickBotDeck(); // roll a random archetype (deck + buy discipline) per game
+    const npc = botNpc(difficulty);
+    const { index, deck: bot } = pickNpcDeck(npc, lastNpcDecks.get(npc.id));
+    lastNpcDecks.set(npc.id, index);
     const res = createGame({
       mode: "bot",
       p0: { id: "local", name: playerName, deck },
-      p1: { id: "bot", name: bot.name, isBot: true, deck: bot.cards },
+      p1: { id: "bot", name: npc.name[getLang()], isBot: true, deck: bot.cards },
       starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn
     });
     res.state.players[1].botTune = bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
     this.applyResult(res, false);
+  }
+
+  protected applyResult(res: ReduceResult, animate = true): void {
+    if(res.state.over){clearTimeout(this.botTimer);this.thinker.destroy();}
+    super.applyResult(res,animate);
   }
 
   protected submit(action: Action): void {
@@ -980,7 +1536,7 @@ export class LocalController extends BaseController {
 
   protected maybeBot(): void {
     const g = this.state;
-    if (g.over) return;
+    if (g.over) { this.thinker.destroy(); return; }
     if (g.players[actingSide(g)].isBot) {
       clearTimeout(this.botTimer);
       // playback has already finished by the time afterApply runs — a short beat is enough
@@ -990,20 +1546,30 @@ export class LocalController extends BaseController {
 
   private botTurnNo = -1;
   private botTurnSteps = 0;
-  private botStep(): void {
+  private async botStep(): Promise<void> {
     const g = this.state;
-    if (g.over || !g.players[actingSide(g)].isBot) return;
+    if (this.botDisposed || this.botBusy || g.over || !g.players[actingSide(g)].isBot) return;
     // 안전망: 봇이 한 턴에서 비정상적으로 많은 행동을 반복하면(거부 루프 등) 강제 턴 종료.
     // 정상 턴은 수십 액션 이내 — 200회는 버그가 아니면 도달 불가.
     if (g.turn !== this.botTurnNo) { this.botTurnNo = g.turn; this.botTurnSteps = 0; }
     if (++this.botTurnSteps > 200) {
       console.warn("[bot] loop guard — forcing endTurn on turn", g.turn);
-      this.applyResult(reduce(g, g.pending?.allowCancel ? ({ type: "pick", uid: null } as Action) : ({ type: "endTurn" } as Action)));
+      // Finish mandatory choices before ending the turn; endTurn is refused
+      // while a non-cancellable target is pending.
+      const action = g.pending
+        ? legalBotAction(g, { type: 'pick', uid: null })
+        : { type: 'endTurn' } as Action;
+      this.applyResult(reduce(g, action));
       return;
     }
-    const action = botDecide(g, this.difficulty);
-    this.applyResult(reduce(g, action));
+    this.botBusy = true;
+    try {
+      const action = await this.thinker.decide(g, this.difficulty);
+      if (this.botDisposed || this.state !== g || g.over) return;
+      this.applyResult(reduce(g, action ?? legalBotAction(g, safeGreedy(observationSample(g, actingSide(g), 0)))));
+    } finally { this.botBusy = false; }
+
   }
 
-  destroy(): void { clearTimeout(this.botTimer); super.destroy(); }
+  destroy(): void { this.botDisposed = true; clearTimeout(this.botTimer); this.thinker.destroy(); super.destroy(); }
 }

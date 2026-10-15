@@ -1,5 +1,8 @@
+import { npcPortrait } from "../shared/botNpcs";
 import { homeIcon } from "./homeIcons";
 import { artUrl } from "./cardArt";
+import {seekerPoster, SEEKER_ID} from './seekerMotion';
+import {seekerName} from './seekerLabels';
 // ============================================================
 // LORE — social presentation helpers: preset avatars (card art)
 // and badge metadata. Badge OWNERSHIP is computed server-side;
@@ -11,19 +14,19 @@ import { getLang } from "../i18n";
 // ---- avatars: preset = a card id, art served from /art/cards/<id>.webp ----
 export function avatarHtml(avatar: string | null | undefined, display: string, size = 40): string {
   const initial = (display || "?").trim().charAt(0).toUpperCase().replace(/[&<>"\']/g, "?");
-  if (avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
-    const color = avatar === "SEEKER_RED" ? "red" : "blue";
-    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><span class="seeker-sprite seeker-${color}" role="img" aria-label="${color === "red" ? "Red Seeker" : "Blue Seeker"}"></span></span>`;
+  if (!avatar || avatar === SEEKER_ID || avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
+    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><img class="hooded-seeker" src="${seekerPoster()}" alt="${seekerName()}" width="512" height="512"></span>`;
   }
-  const img = avatar && /^[A-Za-z0-9_]+$/.test(avatar)
+  const portrait = npcPortrait(avatar);
+  const img = portrait ? `<img src="${portrait}" alt="" onerror="this.remove()">` : avatar && /^[A-Za-z0-9_]+$/.test(avatar)
     ? `<img src="${artUrl.sm(avatar)}" alt="" loading="lazy" onerror="this.remove()">`
     : "";
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;
 }
 
-/** All monster cards double as avatar presets (they all have art). */
+/** One selectable character; legacy red/blue accounts render the same neutral portrait. */
 export function avatarPresets(): string[] {
-  return ["SEEKER_RED", "SEEKER_BLUE"];
+  return [SEEKER_ID];
 }
 
 // ---- badges ----

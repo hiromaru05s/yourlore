@@ -1,0 +1,70 @@
+{
+  "elapsed": 12.91,
+  "data": [
+    {
+      "side": 0,
+      "before": 0,
+      "elapsed": 2337.39999999851,
+      "events": [
+        {
+          "type": "decayCounterGrant",
+          "player": 0,
+          "uid": "target-0",
+          "before": 0,
+          "after": 1
+        },
+        {
+          "type": "log",
+          "html": "  └ <b class=\"log-card\" data-card=\"M4\">블레이드 헤어</b> 카운터 1/3",
+          "htmlJa": "  └ <b class=\"log-card\" data-card=\"M4\">블레이드 헤어</b> カウンター 1/3"
+        }
+      ]
+    },
+    {
+      "side": 1,
+      "before": 2,
+      "elapsed": 7729.699999999255,
+      "events": [
+        {
+          "type": "decayCounterGrant",
+          "player": 1,
+          "uid": "target-1",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "type": "log",
+          "html": "  └ <b class=\"log-card\" data-card=\"M4\">블레이드 헤어</b> 카운터 3/3",
+          "htmlJa": "  └ <b class=\"log-card\" data-card=\"M4\">블레이드 헤어</b> カウンター 3/3"
+        },
+        {
+          "type": "log",
+          "html": "  └ <span class=\"dmg\">부패 붕괴!</span> <b class=\"log-card\" data-card=\"M4\">블레이드 헤어</b> 파괴",
+          "htmlJa": "  └ <span class=\"dmg\">腐敗崩壊！</span> <b class=\"log-card\" data-card=\"M4\">블레이드 헤어</b> 破壊"
+        },
+        {
+          "type": "destroy",
+          "player": 1,
+          "uid": "target-1",
+          "id": "M4",
+          "cause": "decay"
+        },
+        {
+          "type": "log",
+          "html": "  └ <span class=\"dmg\">3 데미지</span> → OPPONENT (체력 47) <span class=\"muted\">[부패]</span>",
+          "htmlJa": "  └ <span class=\"dmg\">3 ダメージ</span> → OPPONENT (体力 47) <span class=\"muted\">[腐敗]</span>"
+        },
+        {
+          "type": "damage",
+          "player": 1,
+          "amount": 3,
+          "srcKo": "부패",
+          "srcJa": "腐敗"
+        }
+      ]
+    }
+  ],
+  "boundary": "Normal wall-clock playback of real reducer/controller on a development board.",
+  "exportedClip": "continuous.mp4: first normal-speed 0 -> 1 grant; second threshold run is covered by deterministic board QA",
+  "clipSeconds": 7.4
+}

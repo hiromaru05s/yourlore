@@ -1,0 +1,30 @@
+{
+  "source": "e8a5d08eb84379c3482aeb7bfb9ca037e92644c5",
+  "origin": "https://test.yourlore.xyz",
+  "samples": [
+    {
+      "width": 1280,
+      "height": 900,
+      "counts": [
+        "0",
+        "0"
+      ],
+      "decoration": 0,
+      "font": true,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "counts": [
+        "0",
+        "0"
+      ],
+      "decoration": 0,
+      "font": true,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed assets and BOT board verified. Authentication/API responses are fixtures. No authenticated online match or account mutation."
+}

@@ -1,0 +1,95 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 1,
+      "copies": 1,
+      "erosion": false,
+      "frames": 49
+    },
+    {
+      "width": 1280,
+      "side": 1,
+      "count": 3,
+      "copies": 2,
+      "erosion": false,
+      "frames": 84
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 3,
+      "copies": 2,
+      "erosion": false,
+      "frames": 73
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 1,
+      "copies": 1,
+      "erosion": false,
+      "frames": 49
+    },
+    {
+      "width": 1280,
+      "side": 0,
+      "count": 3,
+      "copies": 1,
+      "erosion": true,
+      "frames": 145
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 3,
+      "copies": 1,
+      "erosion": true,
+      "frames": 144
+    },
+    {
+      "mode": "complete",
+      "heals": 2,
+      "count": 2,
+      "left": 0,
+      "unchanged": true
+    },
+    {
+      "mode": "skip",
+      "heals": 2,
+      "count": 2,
+      "left": 0,
+      "unchanged": true
+    },
+    {
+      "mode": "resize",
+      "heals": 2,
+      "count": 2,
+      "left": 0,
+      "unchanged": true
+    },
+    {
+      "mode": "hidden",
+      "heals": 2,
+      "count": 2,
+      "left": 0,
+      "unchanged": true
+    },
+    {
+      "mode": "detach",
+      "heals": 2,
+      "count": 2,
+      "left": 0,
+      "unchanged": true
+    },
+    {
+      "mode": "reduced",
+      "heals": 2,
+      "count": 2,
+      "left": 0,
+      "unchanged": true
+    }
+  ],
+  "errors": []
+}

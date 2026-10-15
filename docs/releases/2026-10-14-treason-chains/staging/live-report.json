@@ -1,0 +1,111 @@
+{
+  "checks": [
+    "staging 1280 side 0: shipped controller, 03 binding once, prepared native x5, brand and cleanup",
+    "staging 390 side 1: shipped controller, 03 binding once, prepared native x5, brand and cleanup"
+  ],
+  "runs": [
+    {
+      "width": 1280,
+      "side": 0,
+      "chains": 1,
+      "bound": true,
+      "native": 5,
+      "prepared": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1533,
+          "prepareMs": 3,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1534,
+          "prepareMs": 4,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1535,
+          "prepareMs": 4,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1535,
+          "prepareMs": 4,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1535,
+          "prepareMs": 4,
+          "phase": "reform"
+        }
+      ],
+      "brand": 4,
+      "field": 0,
+      "enchants": 0,
+      "quests": 1,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "chains": 1,
+      "bound": true,
+      "native": 5,
+      "prepared": [
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+      ],
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1535,
+          "prepareMs": 2,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1535,
+          "prepareMs": 3,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1536,
+          "prepareMs": 3,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1536,
+          "prepareMs": 3,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 1537,
+          "prepareMs": 3,
+          "phase": "reform"
+        }
+      ],
+      "brand": 4,
+      "field": 0,
+      "enchants": 0,
+      "quests": 1,
+      "remaining": 0
+    }
+  ],
+  "errors": []
+}

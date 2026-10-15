@@ -1,0 +1,440 @@
+{
+  "passed": true,
+  "cases": 72,
+  "reference": "a74380eb, ambush-four revision 2, variant 01",
+  "method": "Canvas draw commands and transformed vertices, normal and reduced",
+  "rows": [
+    {
+      "side": 0,
+      "t": 1,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 1,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 80,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 80,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 145,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 145,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 175,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 175,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 205,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 205,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 210,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 210,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 265,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 265,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 300,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 300,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 310,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 310,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 355,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 355,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 390,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 390,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 470,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 470,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 650,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 650,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 700,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 700,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 760,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 760,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 840,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 840,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 950,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 950,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 1000,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 0,
+      "t": 1000,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 1,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 1,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 80,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 80,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 145,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 145,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 175,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 175,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 205,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 205,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 210,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 210,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 265,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 265,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 300,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 300,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 310,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 310,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 355,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 355,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 390,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 390,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 470,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 470,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 650,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 650,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 700,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 700,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 760,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 760,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 840,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 840,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 950,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 950,
+      "reduced": true,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 1000,
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "side": 1,
+      "t": 1000,
+      "reduced": true,
+      "passed": true
+    }
+  ]
+}

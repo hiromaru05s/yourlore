@@ -1,0 +1,30 @@
+{
+  "source": "e8a5d08eb84379c3482aeb7bfb9ca037e92644c5",
+  "fixCommit": "c588cb0f",
+  "url": "https://test.yourlore.xyz",
+  "versionId": "71142c14-9834-4f03-9f84-a59f1e09651c",
+  "deploymentId": "80afda3a-70a8-4d71-8d2a-716b8db3d747",
+  "createdOn": "2026-10-09T09:24:38.472719Z",
+  "suitePassed": 86,
+  "suiteTotal": 86,
+  "assetsMatched": 53,
+  "assetsTotal": 53,
+  "newHeadingsPresent": [
+    "このカードが持つ能力",
+    "この効果で付与する能力",
+    "効果文に出てくる能力",
+    "이 카드가 가진 능력",
+    "이 효과로 부여하는 능력",
+    "효과 설명에 나오는 능력",
+    "Abilities this card has",
+    "Abilities granted by this effect",
+    "Abilities mentioned in the effect text"
+  ],
+  "oldHeadingsAbsent": [
+    "効果中の用語",
+    "효과에 나오는 용어",
+    "Terms used in this effect"
+  ],
+  "artifactProvenance": "Artifacts copied from the committed guarded release snapshot",
+  "scope": "Local shared card detail component browser checks plus guarded source and public asset parity; no authenticated staging match claim."
+}

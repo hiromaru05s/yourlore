@@ -1,0 +1,27 @@
+vite v5.4.21 building for production...
+
+(!) outDir /tmp/lore-merchant-six-build is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+transforming...
+✓ 236 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../../../../../tmp/lore-merchant-six-build/merchant-six.html                     0.32 kB │ gzip:   0.28 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/preview-DDELTYmA.css           6.45 kB │ gzip:   2.01 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/renderer-CDpg3JYh.css         22.08 kB │ gzip:   6.13 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/board-BxqwN_w9.css           224.45 kB │ gzip:  47.82 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/merchant-six-BkhAqbDx.js       2.17 kB │ gzip:   1.11 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/preview-9R8WHCxd.js            6.25 kB │ gzip:   3.40 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/renderDensity-tsApr_Z6.js      7.11 kB │ gzip:   3.35 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/ceremonyScene-jNYhCOQD.js      8.92 kB │ gzip:   3.96 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/paperDraw-Ca8wO-yI.js         10.26 kB │ gzip:   4.64 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/duelScene-DY4d0yCY.js        111.61 kB │ gzip:  39.60 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/board-DM8TCqtF.js            272.90 kB │ gzip: 106.93 kB
+../../../../../../../tmp/lore-merchant-six-build/assets/renderer-CFC2xa2Z.js       1,117.98 kB │ gzip: 369.15 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.22s

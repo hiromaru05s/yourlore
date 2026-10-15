@@ -1,0 +1,110 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "caster": 0,
+      "owner": 0,
+      "kind": "S1",
+      "full": true,
+      "frames": 162
+    },
+    {
+      "width": 1280,
+      "caster": 1,
+      "owner": 0,
+      "kind": "attack",
+      "full": true,
+      "frames": 157
+    },
+    {
+      "width": 1280,
+      "caster": 0,
+      "owner": 1,
+      "kind": "BLOOD1",
+      "full": true,
+      "frames": 160
+    },
+    {
+      "width": 390,
+      "caster": 1,
+      "owner": 1,
+      "kind": "S1",
+      "full": false,
+      "frames": 151
+    },
+    {
+      "mode": "complete",
+      "during": {
+        "count": 2,
+        "scale": 1.07052
+      },
+      "contacts": 2,
+      "restored": true,
+      "remaining": 0
+    },
+    {
+      "mode": "skip",
+      "during": {
+        "count": 2,
+        "scale": 1.06242
+      },
+      "contacts": 2,
+      "restored": true,
+      "remaining": 0
+    },
+    {
+      "mode": "resize",
+      "during": {
+        "count": 2,
+        "scale": 1.08365
+      },
+      "contacts": 2,
+      "restored": true,
+      "remaining": 0
+    },
+    {
+      "mode": "hidden",
+      "during": {
+        "count": 2,
+        "scale": 1.05527
+      },
+      "contacts": 2,
+      "restored": true,
+      "remaining": 0
+    },
+    {
+      "mode": "detach",
+      "during": {
+        "count": 2,
+        "scale": 1.08044
+      },
+      "contacts": 2,
+      "restored": true,
+      "remaining": 0
+    },
+    {
+      "mode": "reduced",
+      "during": {
+        "count": 2,
+        "scale": 1
+      },
+      "contacts": 2,
+      "restored": true,
+      "remaining": 0
+    },
+    {
+      "mode": "fallback",
+      "during": {
+        "count": 2,
+        "scale": 1.085
+      },
+      "contacts": 2,
+      "restored": true,
+      "remaining": 0
+    }
+  ],
+  "errors": [
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context.",
+    "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context."
+  ]
+}

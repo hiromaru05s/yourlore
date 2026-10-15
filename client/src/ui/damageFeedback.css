@@ -1,0 +1,10 @@
+.combat-damage{position:fixed;z-index:230;display:grid;place-items:center;pointer-events:none;user-select:none;color:#ea1730;font-family:LoreBoardSerif,Georgia,serif;font-weight:600;font-variant-numeric:lining-nums tabular-nums;line-height:1;letter-spacing:-.025em;-webkit-text-stroke:.65px #fff3db;paint-order:stroke fill;text-shadow:0 1px 2px #24000dbb;opacity:0;}
+.combat-damage.in{opacity:1;animation:combat-number .8s both;}
+@keyframes combat-number{0%{opacity:1;scale:1.26}15%{scale:.96}28%,74%{opacity:1;scale:1}100%{opacity:0;scale:1.02;translate:0 -5px}}
+@media(prefers-reduced-motion:reduce){.combat-damage.in{animation:none}}
+/* Fallback button retains the warning without the WebGL furniture. */
+#endBtn.turn-urgent{animation:turn-urgency-pulse var(--turn-pulse) ease-in-out infinite}
+@keyframes turn-urgency-pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(calc(1 + var(--turn-urgency)*.7));color:#ffb19e}}
+.reading-board[data-table-state=fallback] #endBtn.turn-urgent{animation:turn-urgency-pulse var(--turn-pulse) ease-in-out infinite,turn-urgency-shake .18s linear infinite}
+@keyframes turn-urgency-shake{0%,100%{translate:0 0}25%{translate:var(--turn-shake) 0}75%{translate:calc(-1*var(--turn-shake)) 0}}
+@media(prefers-reduced-motion:reduce){#endBtn.turn-urgent,.reading-board[data-table-state=fallback] #endBtn.turn-urgent{animation:none;color:#d74331;outline:2px solid #d74331}}

@@ -1,0 +1,29 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "caster": 0,
+      "owner": 0,
+      "kind": "EXILE_NUKE1",
+      "full": true,
+      "frames": 156
+    },
+    {
+      "width": 1280,
+      "caster": 1,
+      "owner": 0,
+      "kind": "EXILE_NUKE2",
+      "full": true,
+      "frames": 160
+    },
+    {
+      "width": 1280,
+      "caster": 0,
+      "owner": 1,
+      "kind": "pain",
+      "full": true,
+      "frames": 159
+    }
+  ],
+  "errors": []
+}
