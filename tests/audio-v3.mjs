@@ -49,6 +49,7 @@ try{
  a.sfx('mana');document.dispatchEvent(new Event('visibilitychange'));a.setSfxVolume(0);assert.equal(starts.length-stops.length,0);
  assert.deepEqual(a.soundUrls('play'),['/sfx/lore-v7/play.mp3']);
  assert.deepEqual(a.soundUrls('summon'),['/sfx/lore-v8/summon.mp3']);
+ assert.deepEqual(a.soundUrls('chosenCrown'),['/sfx/chosen-v2/heavy-blade.mp3']);
  const e=new a.EventSound();
  assert.equal(e.cue({type:"hit",uid:"immune",amount:0}),undefined,"prevented hit without preceding animation is silent");
  e.contact(null,1,false);assert.equal(e.cue({type:'damage',player:1,amount:2}),'damage','zero contact must not swallow later effect damage');

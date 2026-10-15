@@ -9,6 +9,6 @@ export function duelFileAssets(){
   ...SFX_NAMES.flatMap(soundUrls).map(url=>({url,media:undefined})),
   ...WEB_FONT_FILES.map(url=>({url,media:undefined})),
   ...[...new Set([...low,...full])].map(url=>({url,media:low.has(url)&&full.has(url)?undefined:low.has(url)?'narrow':'wide'})),
-  ...['/models/reading-board/v1/fonts/DejaVuSerif.ttf','/fonts/rift-records/CormorantGaramond-Medium-numerals.ttf','/music/clash-of-blades.mp3','/music/poised-opening.mp3'].map(url=>({url,media:undefined})),
+  ...['/models/reading-board/v1/fonts/DejaVuSerif.ttf','/fonts/rift-records/CormorantGaramond-Medium-numerals.ttf','/music/yohaku-to-zankyo.mp3','/music/clash-of-blades.mp3','/music/poised-opening.mp3'].map(url=>({url,media:undefined})),
  ];
 }

@@ -10,7 +10,7 @@ import {HOME_ICONS} from './homeIcons';
  * Compressed bytes are stored on disk; only visible images need decoded pixels. */
 export function menuAssetUrls():string[]{
  return [...new Set([
-  ...duelImageUrls(),
+  ...duelImageUrls(),'/art/biblion/duel-table.png',
   '/vfx/purchase-air/crystal-72.png','/vfx/chosen-victory/crown.png','/vfx/merchant/balance.png',
   ...['knight','mage','archer','rogue'].map(k=>`/vfx/chosen-heroes/${k}.png`),
   '/art/vfx/mimic-family/engraved-brass.png','/art/vfx/mimic-cavity-r3/02-moist-cheeks.png',
