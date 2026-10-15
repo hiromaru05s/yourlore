@@ -196,7 +196,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
   // Free catalog claims are atomic/idempotent; the client never sets prices or ownership.
   if ((path === '/social/buy-sleeve'||path==='/social/buy-cosmetic') && req.method === 'POST') {
     const body=await req.json().catch(()=>({})) as {id?:string};const item=cosmetic(body.id||'');
-    if(!item||item.price!==0)return json(env,{error:'販売中の商品ではありません'},400);
+    if(!item||item.price!==0||('gachaOnly' in item&&item.gachaOnly))return json(env,{error:'販売中の商品ではありません'},400);
     await env.DB.prepare(`UPDATE users SET sleeves = json_insert(CASE WHEN json_valid(sleeves) AND json_type(sleeves) = 'array' THEN sleeves ELSE '[]' END, '$[#]', ?1) WHERE id = ?2 AND NOT EXISTS (SELECT 1 FROM json_each(CASE WHEN json_valid(sleeves) AND json_type(sleeves) = 'array' THEN sleeves ELSE '[]' END) WHERE value = ?1)`).bind(item.id,user.id).run();
     const row=await env.DB.prepare('SELECT credits,sleeves FROM users WHERE id = ?').bind(user.id).first<{credits:number;sleeves:string|null}>();
     const ids=ownedCosmetics(row?.sleeves);return json(env,{ok:true,credits:row?.credits??0,sleeves:ids.filter(id=>!id.startsWith('furniture:')&&!isCardEffect(id)),furnitures:ids.filter(id=>id==='default'||id.startsWith('furniture:'))});

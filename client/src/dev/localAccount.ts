@@ -63,7 +63,7 @@ export function saveLocalGuestProfile(profile: LocalGuestProfile): LocalGuestPro
 
 export function buyLocalGuestSleeve(id: string): { credits: number; sleeves: string[]; furnitures:string[] } {
   const sleeve = cosmetic(id);
-  if (!sleeve || sleeve.price < 0) throw new Error("구매할 수 없는 상품입니다.");
+  if (!sleeve || sleeve.price < 0 || ('gachaOnly' in sleeve&&sleeve.gachaOnly)) throw new Error("구매할 수 없는 상품입니다.");
   const profile = loadLocalGuestProfile();
   if (profile.sleeves.includes(id)) return { credits: profile.credits, sleeves: profile.sleeves, furnitures:profile.sleeves.filter(id=>id.startsWith("furniture:")) };
   if (profile.credits < sleeve.price) throw new Error(t("shop.nocredit"));

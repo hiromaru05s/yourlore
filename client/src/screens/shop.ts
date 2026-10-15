@@ -65,7 +65,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     if(collectionBusy)throw Error(loungeText('処理中です','Processing','처리 중입니다'));
     collectionBusy=true;notice='';refreshCollectionUi();
     try{
-      const result=await purchaseCollection(uid,op);credits=result.credits;starterCards=result.starterCards;
+      const result=await purchaseCollection(uid,op);credits=result.credits;starterCards=result.starterCards;for(const id of result.cosmetics??[])owned.add(id);
       if(app.user?.id===uid){app.user.credits=credits;app.user.starterCards=starterCards;app.user.effects=result.effects;document.dispatchEvent(new Event('lore:user'));}
       notice=loungeText('購入が完了しました。','Purchase complete.','구매가 완료되었습니다.');
       return result;
@@ -124,18 +124,19 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
           <div class="sl-name">${s[getLang()]}</div>
           ${has
             ? `<button class="btn btn-mini btn-ghost" disabled>${homeIcon("check")} ${t("shop.owned")}</button>`
-            : `<button class="btn btn-mini btn-gold" data-buy="${s.id}" ${pending.has(s.id)?'disabled':''}>${t("shop.buy")} ${homeIcon("shard")}${s.price}</button>`}
+            : ('gachaOnly' in s&&s.gachaOnly)?`<button class="btn btn-mini btn-ghost" data-gacha-item>${loungeText('ガチャで入手','Get in gacha','뽑기로 획득')}</button>`: `<button class="btn btn-mini btn-gold" data-buy="${s.id}" ${pending.has(s.id)?'disabled':''}>${t("shop.buy")} ${homeIcon("shard")}${s.price}</button>`}
         </div>`;
     }).join("");
 
     const current=cosmetic(selected)!;
-    wrap.querySelector('#shopSelection')!.innerHTML=`${current.kind==='furniture'?furnitureArt(current.id,true):`<img src="${current.url}" alt="">`}<div><small>${loungeText('プレビュー中','Preview','미리보기')}</small><strong>${esc(current[getLang()])}</strong>${current.kind==='furniture'?`<span class="shop-furniture-label">${loungeText('左：デッキ置き場 ／ 右：墓地','Left: deck holder / Right: graveyard','왼쪽: 덱 받침 / 오른쪽: 묘지')}</span>`:''}<span>${owned.has(current.id)?t('shop.owned'):current.price+' '+t('home.shards')}</span></div>`;
+    wrap.querySelector('#shopSelection')!.innerHTML=`${current.kind==='furniture'?furnitureArt(current.id,true):`<img src="${current.url}" alt="">`}<div><small>${loungeText('プレビュー中','Preview','미리보기')}</small><strong>${esc(current[getLang()])}</strong>${current.kind==='furniture'?`<span class="shop-furniture-label">${loungeText('左：デッキ置き場 ／ 右：墓地','Left: deck holder / Right: graveyard','왼쪽: 덱 받침 / 오른쪽: 묘지')}</span>`:''}<span>${owned.has(current.id)?t('shop.owned'):('gachaOnly' in current&&current.gachaOnly)?loungeText('ガチャで入手','Get in gacha','뽑기로 획득'):current.price+' '+t('home.shards')}</span></div>`;
     grid.querySelectorAll<HTMLButtonElement>('[data-preview]').forEach(button=>button.onclick=()=>{selected=button.dataset.preview!;renderGrid();grid.querySelector<HTMLButtonElement>(`[data-preview="${selected}"]`)?.focus({preventScroll:true})});
+    grid.querySelectorAll<HTMLButtonElement>('[data-gacha-item]').forEach(button=>button.onclick=()=>{category='gacha';build();});
     grid.querySelectorAll("[data-buy]").forEach((btn) => {
       (btn as HTMLElement).onclick = () => {
         const id = (btn as HTMLElement).dataset.buy!;
         if(pending.has(id))return;
-        const s = cosmetic(id)!;
+        const s = cosmetic(id)!;if('gachaOnly' in s&&s.gachaOnly)return;
         if (credits < s.price) { sfx("error"); alert(t("shop.nocredit")); return; }
 
         pending.add(id);

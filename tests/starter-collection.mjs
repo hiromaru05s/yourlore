@@ -4,8 +4,8 @@ import {build} from 'esbuild';
 import fs from 'node:fs/promises';
 const dir=await fs.mkdtemp('/tmp/lore-starter-test-');
 try{
- await build({stdin:{contents:`export {default as worker} from './server/src/index';export * from './client/src/shared/collection';export * from './client/src/shared/cardEffects';export {deckStoreForUser} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
- const {worker,starterCollection,COLLECTIBLE_STARTERS,deckStoreForUser,PLANNED_GACHA_RATES,DUPLICATE_REFUNDS,gachaCategory,CARD_EFFECTS}=await import(dir+'/module.mjs');
+ await build({stdin:{contents:`export {default as worker} from './server/src/index';export * from './client/src/shared/collection';export * from './client/src/shared/cardEffects';export {GACHA_COSMETICS} from './client/src/shared/cosmetics';export {deckStoreForUser} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
+ const {worker,starterCollection,COLLECTIBLE_STARTERS,deckStoreForUser,PLANNED_GACHA_RATES,DUPLICATE_REFUNDS,gachaCategory,CARD_EFFECTS,GACHA_COSMETICS}=await import(dir+'/module.mjs');
  const db=new DatabaseSync(':memory:');db.exec(await fs.readFile('server/schema.sql','utf8'));
  for(const id of ['a','b']){db.prepare('INSERT INTO users(id,email,password,display,created_at,credits) VALUES(?,?,?,?,?,?)').run(id,id+'@test.invalid','fixture',id,Date.now(),10000);db.prepare('INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES(?,?,?,?)').run(id,id,Date.now(),Date.now()+600000);}
  let failLedger=false,queued;
@@ -38,12 +38,20 @@ try{
  let cap;try{cap=await (await draw(10)).json();}finally{crypto.getRandomValues=original;}
  assert.equal(cap.receipt.refund,450);assert.equal(cap.receipt.rewards[0].refund,0);assert.equal(cap.starterCards[first],8);assert.equal(cap.credits,1450);
  // Exhaust every category integer; effect choice has its own unbiased draw.
- const categories={starter:0,empty:0,effect:0};for(let i=0;i<10000;i++)categories[gachaCategory(i)]++;
- assert.deepEqual(categories,{starter:9250,empty:700,effect:50});
- assert.equal(gachaCategory(9249),'starter');assert.equal(gachaCategory(9250),'empty');assert.equal(gachaCategory(9949),'empty');assert.equal(gachaCategory(9950),'effect');
+ const categories={starter:0,cosmetic:0,effect:0};for(let i=0;i<10000;i++)categories[gachaCategory(i)]++;
+ assert.deepEqual(categories,{starter:9250,cosmetic:700,effect:50});
+ assert.equal(gachaCategory(9249),'starter');assert.equal(gachaCategory(9250),'cosmetic');assert.equal(gachaCategory(9949),'cosmetic');assert.equal(gachaCategory(9950),'effect');
  const forced=async(values,count=1,key=crypto.randomUUID())=>{let i=0;crypto.getRandomValues=a=>{a[0]=values[i++%values.length];return a;};try{return await (await draw(count,key)).json();}finally{crypto.getRandomValues=original;}};
  db.prepare("UPDATE users SET credits=5000 WHERE id='a'").run();
+ const catalog=[...GACHA_COSMETICS];GACHA_COSMETICS.length=0;
  const emptyBefore=await state(),empty=await forced([9250]);assert.equal(empty.receipt.rewards[0].kind,'empty');assert.equal(empty.receipt.refund,0);assert.equal(empty.credits,emptyBefore.credits-100);assert.deepEqual(empty.starterCards,emptyBefore.starterCards);assert.deepEqual(empty.effects,[]);
+ GACHA_COSMETICS.push(...catalog);assert.equal(catalog.length,6);
+ for(let i=0;i<catalog.length;i++){
+  const item=catalog[i],hit=await forced([9250,i]);assert.equal(hit.receipt.rewards[0].id,item.id);assert.equal(hit.receipt.rewards[0].kind,'cosmetic');assert.equal(hit.receipt.refund,0);assert(hit.cosmetics.includes(item.id));
+  const duplicate=await forced([9250,i]);assert.equal(duplicate.receipt.refund,100);
+  for(const route of ['/social/buy-cosmetic','/social/buy-sleeve'])assert.equal((await call(route,{id:item.id,price:0},'b')).status,400);
+ }
+ const appearance=await (await call('/social/profile')).json();assert(appearance.profile.sleeves.every(id=>!id.startsWith('effect:')));assert.equal(appearance.profile.sleeves.filter(id=>id.startsWith('sleeve:gacha-')).length,3);assert.equal(appearance.profile.furnitures.filter(id=>id.startsWith('furniture:gacha-')).length,3);
  for(let i=0;i<CARD_EFFECTS.length;i++){
   const id=CARD_EFFECTS[i].id,key=crypto.randomUUID();const result=await forced([9950,i],1,key);assert.deepEqual(result.receipt.rewards,[{kind:'effect',id,refund:0,owned:1}]);assert(result.effects.includes(id));
   const replay=await (await draw(1,key)).json();assert.equal(replay.credits,result.credits);assert.deepEqual(replay.receipt,result.receipt);

@@ -1,3 +1,4 @@
+import {GACHA_COSMETICS,cosmetic} from '../../client/src/shared/cosmetics';
 import {CARD_EFFECTS,isCardEffect,type CardEffectId} from '../../client/src/shared/cardEffects';
 import {COLLECTIBLE_STARTERS,starterCollection,STARTER_PRICE,GACHA_PRICE,DUPLICATE_REFUNDS,type CollectionReceipt,gachaCategory,type CollectionReward} from '../../client/src/shared/collection';
 import type {Env,SessionUser} from './env';
@@ -17,8 +18,8 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
   const inventory:string[]=Array.isArray(stored)?stored.filter((id:unknown)=>typeof id==='string'):[];
   return {...row,inventory,starterCards:starterCollection(row.starter_cards)};
  };
- const respond=async(receipt:CollectionReceipt)=>{const s=await state();return json(env,{credits:s.credits,starterCards:s.starterCards,effects:s.inventory.filter(isCardEffect),receipt});};
- if(path==='/api/collection'&&req.method==='GET'){const s=await state();return json(env,{credits:s.credits,starterCards:s.starterCards,effects:s.inventory.filter(isCardEffect)});}
+ const respond=async(receipt:CollectionReceipt)=>{const s=await state();return json(env,{credits:s.credits,starterCards:s.starterCards,effects:s.inventory.filter(isCardEffect),cosmetics:s.inventory.filter(id=>!!cosmetic(id)),receipt});};
+ if(path==='/api/collection'&&req.method==='GET'){const s=await state();return json(env,{credits:s.credits,starterCards:s.starterCards,effects:s.inventory.filter(isCardEffect),cosmetics:s.inventory.filter(id=>!!cosmetic(id))});}
  if(path==='/api/collection/history'&&req.method==='GET'){
   const rows=await env.DB.prepare('SELECT receipt FROM collection_transactions WHERE user_id = ? ORDER BY created_at DESC, request_id DESC LIMIT 50').bind(user.id).all<{receipt:string}>();
   return json(env,{receipts:rows.results.map(r=>JSON.parse(r.receipt) as CollectionReceipt)});
@@ -33,7 +34,7 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
  const operation=JSON.stringify({kind,id:kind==='buy'?id:null,count});
  const cost=kind==='buy'?STARTER_PRICE:GACHA_PRICE*count;
  // Draw once per request. A CAS retry never rerolls the request's selection.
- let picks:Array<{kind:'starter'|'empty'|'effect';id:string}>|undefined;
+ let picks:Array<{kind:'starter'|'empty'|'effect'|'cosmetic';id:string}>|undefined;
  for(let attempt=0;attempt<6;attempt++){
   const previous=await env.DB.prepare('SELECT operation, receipt FROM collection_transactions WHERE user_id = ? AND request_id = ?').bind(user.id,body.requestId).first<{operation:string;receipt:string}>();
   if(previous)return previous.operation===operation?respond(JSON.parse(previous.receipt)):json(env,{error:'collection request conflict'},409);
@@ -46,9 +47,14 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
    if(committed)return committed.operation===operation?respond(JSON.parse(committed.receipt)):json(env,{error:'collection request conflict'},409);
    return json(env,{error:rejection},400);
   }
-  picks??=kind==='buy'?[{kind:'starter',id:id as string}]:Array.from({length:count},()=>{const category=gachaCategory(randomIndex(10000));return {kind:category,id:category==='starter'?COLLECTIBLE_STARTERS[randomIndex(COLLECTIBLE_STARTERS.length)]:category==='effect'?CARD_EFFECTS[randomIndex(CARD_EFFECTS.length)].id:'cosmetic-pending'};});
+  picks??=kind==='buy'?[{kind:'starter',id:id as string}]:Array.from({length:count},()=>{
+   const category=gachaCategory(randomIndex(10000));
+   if(category==='cosmetic')return GACHA_COSMETICS.length?{kind:'cosmetic' as const,id:GACHA_COSMETICS[randomIndex(GACHA_COSMETICS.length)].id}:{kind:'empty' as const,id:'cosmetic-pending'};
+   return {kind:category,id:category==='starter'?COLLECTIBLE_STARTERS[randomIndex(COLLECTIBLE_STARTERS.length)]:CARD_EFFECTS[randomIndex(CARD_EFFECTS.length)].id};
+  });
   const rewards:CollectionReward[]=picks.map(pick=>{
    if(pick.kind==='empty')return {kind:'empty',id:'cosmetic-pending',refund:0,owned:0};
+   if(pick.kind==='cosmetic'){const duplicate=s.inventory.includes(pick.id);if(!duplicate)s.inventory.push(pick.id);return {kind:'cosmetic',id:pick.id,refund:duplicate?DUPLICATE_REFUNDS.cosmetic:0,owned:1};}
    if(pick.kind==='effect'){const effect=pick.id as CardEffectId,duplicate=s.inventory.includes(effect);if(!duplicate)s.inventory.push(effect);return {kind:'effect',id:effect,refund:duplicate?DUPLICATE_REFUNDS.effect:0,owned:1};}
    const card=pick.id,duplicate=s.starterCards[card]>=8;if(!duplicate)s.starterCards[card]++;return {kind:'starter',id:card,refund:duplicate?DUPLICATE_REFUNDS.starter:0,owned:s.starterCards[card]};
   });

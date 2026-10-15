@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "independent presets; locked unowned effect; save",
+    "saved selection restored; deck and zoom coated; pool uncoated; mobile fits",
+    "mixed ten draw cinematic and explicit empty/effect/500 refund results",
+    "actual GameView: starter hand and own/opponent field, hidden backs excluded, continuous vs reduced motion",
+    "market acquisition immediately coats new card; clone maintains two crystal layers; teardown removes surfaces"
+  ],
+  "errors": []
+}

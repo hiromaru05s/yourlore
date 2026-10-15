@@ -4,12 +4,12 @@ export type StarterCollection = Record<string, number>;
 export const STARTER_PRICE = 200;
 export const GACHA_PRICE = 100;
 export const DUPLICATE_REFUNDS = {starter:50, cosmetic:100, effect:500} as const;
-// Cosmetic rewards are reserved; their 7% currently produces an explicit empty result.
+// Each category is selected first; its items then use equal unbiased odds.
 export const ACTIVE_GACHA_RATES = {starter:92.5, cosmetic:7, effect:0.5} as const;
 export const PLANNED_GACHA_RATES = ACTIVE_GACHA_RATES;
-export function gachaCategory(roll:number):'starter'|'empty'|'effect' {
+export function gachaCategory(roll:number):'starter'|'cosmetic'|'effect' {
  if(!Number.isInteger(roll)||roll<0||roll>=10000)throw Error('Invalid gacha roll');
- return roll<9250?'starter':roll<9950?'empty':'effect';
+ return roll<9250?'starter':roll<9950?'cosmetic':'effect';
 }
 export const COLLECTIBLE_STARTERS = DECK_POOL.filter(id=>id!=='STARTER_TRASH'&&id!=='STARTER_MANA');
 export function starterCollection(raw?:unknown):StarterCollection {
@@ -29,7 +29,8 @@ export function constrainDeckStore(store:DeckStore,owned:StarterCollection):Deck
 export interface StarterReward {kind?:'starter';id:string;refund:number;owned:number}
 export interface EffectReward {kind:'effect';id:CardEffectId;refund:number;owned:number}
 export interface EmptyReward {kind:'empty';id:'cosmetic-pending';refund:0;owned:0}
-export type CollectionReward=StarterReward|EffectReward|EmptyReward;
+export interface CosmeticReward {kind:'cosmetic';id:string;refund:number;owned:number}
+export type CollectionReward=StarterReward|EffectReward|EmptyReward|CosmeticReward;
 export interface CollectionReceipt {requestId:string;kind:'buy'|'draw';cost:number;refund:number;rewards:CollectionReward[];createdAt:number}
-export interface CollectionState {credits:number;starterCards:StarterCollection;effects?:string[]}
+export interface CollectionState {credits:number;starterCards:StarterCollection;effects?:string[];cosmetics?:string[]}
 export interface CollectionResult extends CollectionState {receipt:CollectionReceipt}
