@@ -1,0 +1,45 @@
+{
+  "checks": [
+    {
+      "owner": 0,
+      "lethal": false,
+      "hits": 2,
+      "frames": 21
+    },
+    {
+      "owner": 0,
+      "lethal": true,
+      "hits": 1,
+      "frames": 27
+    },
+    {
+      "owner": 1,
+      "lethal": false,
+      "hits": 2,
+      "frames": 23
+    },
+    {
+      "owner": 1,
+      "lethal": true,
+      "hits": 1,
+      "frames": 18
+    },
+    {
+      "case": "mobile"
+    },
+    {
+      "case": "reduced"
+    },
+    {
+      "case": "skip"
+    },
+    {
+      "case": "concurrent and idempotent cancellation"
+    },
+    {
+      "case": "failed atlas releases all impact waits and retains correct HP"
+    }
+  ],
+  "errors": [],
+  "boundary": "Real controller and reducer fixtures; not authenticated PvP."
+}
