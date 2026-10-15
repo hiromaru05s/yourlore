@@ -12,6 +12,7 @@ for (const k of ['window', 'document', 'location', 'HTMLElement', 'HTMLImageElem
   Object.defineProperty(globalThis, k, { value: dom.window[k], configurable: true });
 }
 Object.defineProperty(navigator,'connection',{value:{saveData:true}});
+dom.window.HTMLElement.prototype.scrollIntoView=function(){};
 dom.window.Range.prototype.getBoundingClientRect = () => new dom.window.DOMRect();
 dom.window.Range.prototype.getClientRects = () => [];
 globalThis.getComputedStyle = el=>dom.window.getComputedStyle(el);
@@ -52,13 +53,13 @@ try {
     }}],
   });
   const { TutorialController, TUT_STEPS, mountTutorial, mountCards, DB, STARTERS, buyCost, effAtk, api, setLang, t, closeOverlay, showControlsHelp, REWARDS, mountTutorialWelcome } = await import(path.join(temp, 'tutorial.mjs'));
-  assert.equal(TUT_STEPS.length,12);
+  assert.equal(TUT_STEPS.length,36);
   for (const lang of ['ko','ja','en']) {
     setLang(lang);
-    api.tutorialStatus=async()=>({keys:['tutorial:v2:mana','tuto:7'],credits:250,offered:true});
+    api.tutorialStatus=async()=>({keys:['tutorial:v3:mana','tuto:7'],credits:100,awarded:100,legacyPaid:0,amounts:{},offered:true});
     const screen=mountTutorial({root,user:{id:'qa'},home:noop,botGame:noop,tutorialGame:noop,tutorial:noop});
     await tick();
-    assert.equal(root.querySelectorAll('.tut-steps li').length,12);
+    assert.equal(root.querySelectorAll('.tut-steps li').length,36);
     assert.equal(root.querySelectorAll('.claimed').length,1);
     assert(root.querySelector('#ruleNotebook'));
     assert(!/モバイル|タップ|長押し|mobile|long.press|\btap\b|모바일|길게|탭하면/i.test(root.textContent));
@@ -73,7 +74,7 @@ try {
       closeOverlay();
     }
     globalThis.matchMedia = () => ({ matches: false, addEventListener() {}, removeEventListener() {} });
-    assert(root.textContent.includes('3,000'));
+    assert(root.textContent.includes('5,000'));
     screen.destroy();root.innerHTML='';
     const gallery = mountCards({ root, home: noop, cards: noop });
     await tick();
@@ -113,14 +114,16 @@ try {
   assert.equal(document.querySelector('.tutorial-basics'),null);
   controller.onEndTurn();assert.equal(controller.snapshot().cur,0);assert.equal(root.querySelector('#endBtn').textContent.replace(/\s+/g,' '),'END TURN','Rejected pass must not lock the turn button');
   controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,1);
-  assert(root.querySelector('.tut-coach-body').textContent.includes('攻撃しよう'));
-  root.querySelector('[data-basics]').click();assert(document.querySelector('.tutorial-basics[open]'));
-  controller.destroy();controller=null;root.innerHTML='';assert.equal(document.querySelector('.tutorial-basics'),null,'Destroy removes open primer');
+  await tick();assert(root.querySelector('[data-answer]'),'Summoning ends with a comprehension check');
+  root.querySelector('[data-notebook]').click();assert(document.querySelector('.rule-notebook[open]'));
+  controller.destroy();controller=null;root.innerHTML='';assert.equal(document.querySelector('.rule-notebook'),null,'Destroy removes open notebook');
+  localStorage.clear();
   let attempts=0,credits=0;
-  api.completeTutorial=async()=>{attempts++;if(attempts===1)throw Error('offline');return{amount:250,credits:250,granted:true};};
-  controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:TUT_STEPS.findIndex(s=>s.id==='mana'),onCredits:n=>credits=n});
-  controller.act({type:'play',idx:0});await tick();assert(root.querySelector('[data-retry]'));assert.equal(credits,0);
-  root.querySelector('[data-retry]').click();await tick();assert.equal(credits,250);assert(root.querySelector('[data-next]'));
+  api.completeTutorial=async()=>{attempts++;if(attempts===1)throw Error('offline');return{amount:100,credits:100,granted:true};};
+  controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:TUT_STEPS.findIndex(s=>s.id==='summon'),onCredits:n=>credits=n});
+  for(let page=0;page<5;page++)document.querySelector('.tutorial-basics [data-next]').click();
+  controller.act({type:'play',idx:0});await tick();root.querySelector('[data-answer="'+controller.run.scenes[0].question.correct+'"]').click();root.querySelector('[data-continue]').click();await tick();assert(root.querySelector('[data-retry]'));assert.equal(credits,0);
+  root.querySelector('[data-retry]').click();await tick();assert.equal(credits,100);assert(root.querySelector('[data-next]'));
   controller.act({type:'play',idx:0});await tick();assert.equal(attempts,2,'completed lesson does not pay twice');
   controller.destroy();controller=null;root.innerHTML='';
   console.log('PASS tutorial DOM: three languages, progress, onboarding confirmation, payment retry, lifecycle and gallery filters');

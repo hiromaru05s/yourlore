@@ -1,10 +1,11 @@
+import {tutorialStatus,grantTutorial} from './tutorialRewards';
 import { progressionState, rerollDaily } from './progression';
 import { BOT_REWARDS } from '../../client/src/shared/progression';
 import { botNpc } from '../../client/src/shared/botNpcs';
 import { TUT_STEPS } from '../../client/src/shared/tutorialSteps';
 import { replayLesson, TUTORIAL_ACTION_LIMIT } from '../../client/src/shared/tutorialLesson';
 import { isClientMessage } from './gameInput';
-import type { Action } from '../../client/src/shared/types';
+import type { TutorialAction } from '../../client/src/shared/tutorialLesson';
 // ============================================================
 // LORE server — one-shot credit rewards (tutorial steps, …).
 // The client only ever sends a reward KEY; amounts live here
@@ -30,6 +31,15 @@ export const REWARDS: Record<string, number> = {
   "tuto:9": 80,   // 어튠
   "tuto:10": 200, // 승리
 };
+
+
+function isTutorialTranscriptAction(action:unknown):boolean {
+ if(!action||typeof action!=='object'||Array.isArray(action))return false;
+ const a=action as Record<string,unknown>;
+ if(a.type==='continueLesson')return Object.keys(a).length===1;
+ if(a.type==='answer')return Object.keys(a).length===2&&Number.isInteger(a.choice)&&Number(a.choice)>=0&&Number(a.choice)<2;
+ return isClientMessage({type:'action',action});
+}
 
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
@@ -71,15 +81,13 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   }
 
   if (path === '/rewards/tutorial' && req.method === 'GET') {
-    const rows = await env.DB.prepare('SELECT key FROM rewards WHERE user_id = ?').bind(user.id).all<{key:string}>();
-    const keys = (rows.results ?? []).map(r=>r.key);
-    return json(env,{keys,credits:user.credits,offered:keys.some(k=>k.startsWith('tutorial:v2:'))});
+    return json(env,await tutorialStatus(env,user.id,user.credits));
   }
   if (path === '/rewards/tutorial/decision' && req.method === 'POST') {
     const body = await req.json().catch(()=>null) as {decision?:unknown}|null;
     if(body?.decision !== 'start' && body?.decision !== 'skip')return json(env,{error:'invalid decision'},400);
     await env.DB.prepare('INSERT OR IGNORE INTO rewards (user_id,key,amount,created_at) VALUES (?,?,0,?)')
-      .bind(user.id,`tutorial:v2:intro:${body.decision}`,Date.now()).run();
+      .bind(user.id,`tutorial:v3:intro:${body.decision}`,Date.now()).run();
     return json(env,{ok:true});
   }
   if (path === '/rewards/tutorial/complete' && req.method === 'POST') {
@@ -97,17 +105,11 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     try { body=JSON.parse(raw); } catch {return json(env,{error:'invalid transcript'},400);}
     const lesson=TUT_STEPS.find(s=>s.id===body?.lesson);
     const actions=body?.actions;
-    if(!lesson || !Array.isArray(actions) || actions.length>TUTORIAL_ACTION_LIMIT || !actions.every(action=>isClientMessage({type:'action',action})))return json(env,{error:'invalid transcript'},400);
+    if(!lesson || !Array.isArray(actions) || actions.length>TUTORIAL_ACTION_LIMIT || !actions.every(action=>isTutorialTranscriptAction(action)))return json(env,{error:'invalid transcript'},400);
     let complete=false;
-    try {complete=replayLesson(lesson.id,actions as Action[]);} catch { /* Invalid replay is never a reward. */ }
+    try {complete=replayLesson(lesson.id,actions as TutorialAction[]);} catch { /* Invalid replay is never a reward. */ }
     if(!complete)return json(env,{error:'lesson not completed'},400);
-    const [ins]=await env.DB.batch([
-      env.DB.prepare('INSERT OR IGNORE INTO rewards (user_id,key,amount,created_at) VALUES (?,?,?,?)').bind(user.id,lesson.key,lesson.reward,Date.now()),
-      env.DB.prepare('UPDATE users SET credits = credits + ? WHERE id = ? AND changes() = 1').bind(lesson.reward,user.id),
-    ]);
-    const granted=(ins.meta?.changes??0)>0;
-    const row=await env.DB.prepare('SELECT credits FROM users WHERE id = ?').bind(user.id).first<{credits:number}>();
-    return json(env,{granted,amount:granted?lesson.reward:0,credits:row?.credits??0});
+    return json(env,await grantTutorial(env,user.id,lesson.id));
   }
 
   // GET /rewards/claimed → keys already paid to this user (+ current balance)

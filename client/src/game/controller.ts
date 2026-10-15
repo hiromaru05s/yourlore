@@ -153,6 +153,8 @@ export abstract class BaseController implements BoardHandlers {
   // ---- the only mutation entry point (subclass decides how) ----
   protected abstract submit(action: Action): void;
   protected maybeBot(): void {}
+  /** Follow-up UI must wait until the authoritative batch is visible on the board. */
+  protected afterPresentation(callback:()=>void):void { void this.queue.then(()=>{if(!this.dead)callback();}); }
   protected get useTurnClock(): boolean { return true; }
   /** Only public board state and the local player's hand count reach the companion. */
   guideContext() {

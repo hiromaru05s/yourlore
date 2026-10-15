@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "36 lessons grouped in eight chapters",
+    "searchable notebook and empty state",
+    "WebGL Zeno",
+    "two-stage skip confirmation with 5000",
+    "physical drag, attack and target selection",
+    "wrong answer and comprehension gates",
+    "resume after real action",
+    "opponent turn progression",
+    "nine multi-scene controller transcripts",
+    "reward deduplication and retry",
+    "four window geometries",
+    "three languages",
+    "guide teardown"
+  ],
+  "errors": []
+}

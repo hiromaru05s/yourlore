@@ -1,7 +1,7 @@
 import type {GiftInbox,GiftClaim} from '../shared/gifts';
 import type { ClearDifficulty, ExperienceReceipt } from '../shared/progression';
 import type {CollectionState,CollectionResult,CollectionReceipt} from '../shared/collection';
-import type { Action } from '../shared/types';
+import type { TutorialAction } from '../shared/tutorialLesson';
 import type { LessonId } from '../shared/tutorialSteps';
 import type { RankChange } from "../shared/rank";
 import type {DeckStore} from '../shared/cards';
@@ -134,9 +134,9 @@ export const api = {
   },
   rankHistory: () => call<{ seasons: (RankInfo & { season: string })[] }>("/rank/history", undefined, "GET").then((r) => r.seasons).catch(() => []),
   // credit rewards (server-authoritative amounts; key e.g. "tut:1")
-  tutorialStatus: () => call<{ keys:string[]; credits:number; offered:boolean }>("/rewards/tutorial", undefined, "GET"),
+  tutorialStatus: () => call<{ keys:string[]; credits:number; offered:boolean; awarded:number; legacyPaid:number; amounts:Record<string,number> }>("/rewards/tutorial", undefined, "GET"),
   tutorialDecision: (decision:'start'|'skip') => call<{ok:true}>("/rewards/tutorial/decision", {decision}),
-  completeTutorial: (lesson:LessonId, actions:Action[]) => call<ClaimResult>("/rewards/tutorial/complete", {lesson,actions}),
+  completeTutorial: (lesson:LessonId, actions:TutorialAction[]) => call<ClaimResult>("/rewards/tutorial/complete", {lesson,actions}),
   claimReward: (key: string) => call<ClaimResult>("/rewards/claim", { key }),
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),

@@ -72,6 +72,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
             lesson: opts.lesson,
             guest: !app.user || app.user.id === 'local-guest-user',
             onNext: lesson => app.tutorialGame(lesson),
+            accountId: app.user?.id,
             onCredits: (c) => { if (app.user?.id === tutorialUserId && app.user) { app.user.credits = c; document.dispatchEvent(new Event('lore:user')); } },
           })
         : new OnlineController(root, opts.you, opts.roomId, exits, opts.ranked);
