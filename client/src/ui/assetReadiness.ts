@@ -44,7 +44,7 @@ export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(don
   });
  }
 }
-export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=false,screenAssets=imageUrls(root)):{ready:()=>Promise<boolean>;cancel:()=>void}{
+export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=false,screenAssets=imageUrls(root),prepareDuel?:()=>Promise<void>):{ready:()=>Promise<boolean>;cancel:()=>void}{
  const loading=loadingScreen('screen-loader',loungeText('書庫を開いています','Opening the library','서고를 여는 중')),cover=loading.element;
  document.body.append(cover);root.inert=true;root.setAttribute('aria-busy','true');const abort=new AbortController();
  const release=()=>{cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
@@ -60,7 +60,8 @@ export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=fals
      // WebGL-unavailable clients retain their existing non-3D fallback.
      if(root.querySelector('.mana-spirit canvas'))await import('./cosmetics/catalogRender').then(m=>m.furnitureCatalog());
      loading.update(90,loungeText('対戦の準備をしています','Preparing the duel','대전 준비 중'));
-     await import('../screens/lazyGame').then(m=>m.warmGame());
+     if(abort.signal.aborted)return false;
+     await prepareDuel?.();
      prepared=true;
     }catch(error){
      if(abort.signal.aborted)return false;

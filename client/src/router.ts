@@ -18,7 +18,7 @@ import { saveActiveGame, loadActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
-import { mountGame } from "./screens/lazyGame";
+import { mountGame, warmGame } from "./screens/lazyGame";
 import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
@@ -115,7 +115,7 @@ export class App {
         const entrance=page==='home'&&!this.homeEntranceShown;
         const assets=imageUrls(this.root);
         if(page==='login'||!isMenuReady()||entrance||hasUnloadedAssets(assets)){
-          const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets);this.cancelCover=cover.cancel;
+          const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets,()=>warmGame());this.cancelCover=cover.cancel;
           void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;if(ready)checkGraphics();});
         } else checkGraphics();
       }
