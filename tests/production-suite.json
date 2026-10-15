@@ -140,6 +140,7 @@
     "tests/bot-market-strategy.mjs",
     "tests/bot-adaptive.mjs",
     "tests/bot-npcs.mjs",
+    "tests/bot-server-challenge.cjs",
     "tests/bot-simulation.mjs",
     "tests/gacha-azure-motion.mjs",
     "tests/weaponmaster-summon.mjs",
