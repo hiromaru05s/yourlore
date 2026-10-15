@@ -20,6 +20,12 @@ The earlier selection experiments, rejected candidates, actual-difficulty compar
 
 Incomplete or illegal games fail the run and are not silently counted as losses. This small holdout checks regressions and integration; it cannot establish a 70% win rate against advanced humans or an unbeatable Hell. The machine was under memory pressure during part of the run, so wall-clock maxima must be separated from normal browser performance.
 
+All **48/48** planned games completed, with **0 illegal actions and 0 cutoffs**. Each of the 24 same-seat old/new comparisons had the same outcome (12 cases containing both seats). Hard scored **8/10 before and 8/10 after**; Hell scored **8/14 before and 8/14 after**. The tiers face different cases, so these fractions do not compare Hard versus Hell. The baseline here already contains the previously unshipped adaptive purchases and 5/7 rosters; this is not a direct comparison to the old staging release.
+
+There was no observed win-rate increase from the additional tactical corrections in this small sample. Their direct evidence is the previously missed lethal fixture and improved progress retention, with no outcome regressions in this holdout. The summary's degenerate bootstrap interval reflects identical observed outcomes, not proof of universal equivalence or strength. Human performance is still unmeasured.
+
+The final partitions are rows 0–23, 24–43 and 44–47. The second process was stopped only after row 43 was saved, and the last four games ran separately with identical frozen bundles and inputs. The merge checks all 48 indices, module hashes, completion and uniqueness. `holdout.json.gz` contains every result; `holdout-summary.json` separates market, difficulty and build.
+
 ## Integration and execution evidence
 
 - Client/server type checks and the product build passed. The full production suite passed **168/168**.
@@ -30,4 +36,10 @@ Incomplete or illegal games fail the run and are not silently counted as losses.
 - A state captured from the control-market holdout returned a legal action in 631 ms (Hard) / 1,685 ms (Hell), publishing 4 / 13 completed recommendations. Before correction the same state took 400 / 1,045 ms and only published 1 / 2 recommendations. Both policies chose the same discard in this specific state.
 - All 18 NPC decks remain legal and distinct within their difficulty; copied tuning, non-repeating selection and 36 opening simulations passed. The 28 adaptive BUY/action regression groups also passed.
 
-The fixed holdout and guarded staging release are recorded separately after completion. Holdout wall-clock timings include initial memory contention, a deliberate pause of one shard, and a brief debugger capture of the control-market state; use the browser and isolated-state measurements above for execution evidence.
+Holdout wall-clock timings include initial memory contention, a deliberate pause of one shard, and a brief debugger capture of the control-market state; use the browser and isolated-state measurements above for execution evidence.
+
+## Reproduction and release
+
+Extract `before.cjs.gz` and `evaluated.cjs.gz` into a fresh directory as `before.cjs` and `candidate.cjs`. Run `node ml/bot-strength/reply-holdout.cjs <directory> <fresh-output.json> 0 48`, or use disjoint row ranges. Merge complete partitions with `merge-adaptive-v58.cjs` and summarize with `summarize-adaptive-v58.cjs`. `final.cjs.gz` adds progress publication and the main integration; its decision/state parity is verified in `integrity.json`.
+
+Guarded staging deployment and public worker parity are recorded after release.

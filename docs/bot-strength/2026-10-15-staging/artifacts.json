@@ -10,5 +10,20 @@
   "final.cjs.gz": {
     "rawSHA256": "90c48c675eff7486037cfcf4915a34fc03d09adb1393aa7ee652bfd5baed14d7",
     "compressedSHA256": "21d92cdcdc720a34e32e9e751a78d3916579300c35adef40f50539f5e32b4308"
+  },
+  "holdout-a.json.gz": {
+    "compressedSHA256": "7f2171ef1055e8639b19ebf5ed47f908e8bdf31a2a59e4d364aca152b5ae0513"
+  },
+  "holdout-b-prefix.json.gz": {
+    "compressedSHA256": "bfeda8c7a84266d6c59f4abf26ca4b90036797912a7876555be012ac1b7f85b2"
+  },
+  "holdout-c.json.gz": {
+    "compressedSHA256": "a7020b19ba758b69e2edfbf55018020bf2d8b467efd1190df20f4e73e9c17b02"
+  },
+  "holdout.json.gz": {
+    "compressedSHA256": "b46307384df384a48b9350ad0cfa899e3fbff27e6f76204ff18cc82df09e515c"
+  },
+  "long-control-state.json.gz": {
+    "compressedSHA256": "70b370882a227ecfe271205bdb8451231d681b694a925d00a1ea32c9a2c2803d"
   }
 }

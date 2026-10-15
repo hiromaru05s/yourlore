@@ -1,0 +1,313 @@
+{
+  "modules": {
+    "candidate": "d32b723255f1f7e5d1f6828a7b2f8fd380178bc8e1e7673226ae006fff30a0ca",
+    "baseline": "ca54cbd83019e2b586fe5e7d34ed4b6a8f4f8face36648cdc6970c499fd8b9eb"
+  },
+  "opponentTier": "hard",
+  "games": 48,
+  "invalid": 0,
+  "overall": {
+    "pairs": 12,
+    "seedClusters": 12,
+    "before": 0.6666666666666666,
+    "after": 0.6666666666666666,
+    "delta": 0,
+    "pairedDelta95": [
+      0,
+      0
+    ],
+    "improved": 0,
+    "worsened": 0,
+    "tied": 12
+  },
+  "slices": {
+    "tier/hard": {
+      "pairs": 5,
+      "seedClusters": 5,
+      "before": 0.8,
+      "after": 0.8,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 5
+    },
+    "tier/hell": {
+      "pairs": 7,
+      "seedClusters": 7,
+      "before": 0.5714285714285714,
+      "after": 0.5714285714285714,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 7
+    },
+    "market/natural": {
+      "pairs": 3,
+      "seedClusters": 3,
+      "before": 0.6666666666666666,
+      "after": 0.6666666666666666,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 3
+    },
+    "market/recovery": {
+      "pairs": 3,
+      "seedClusters": 3,
+      "before": 0.6666666666666666,
+      "after": 0.6666666666666666,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 3
+    },
+    "market/control": {
+      "pairs": 2,
+      "seedClusters": 2,
+      "before": 1,
+      "after": 1,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "market/elf": {
+      "pairs": 2,
+      "seedClusters": 2,
+      "before": 0.5,
+      "after": 0.5,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "market/curse": {
+      "pairs": 2,
+      "seedClusters": 2,
+      "before": 0.5,
+      "after": 0.5,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "name/BOT · DECAY_BLOOD": {
+      "pairs": 2,
+      "seedClusters": 2,
+      "before": 0.5,
+      "after": 0.5,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "name/BOT · DECAY_SUPPRESSION": {
+      "pairs": 2,
+      "seedClusters": 2,
+      "before": 0.75,
+      "after": 0.75,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "name/BOT · SUPPRESSION_COUNTER": {
+      "pairs": 2,
+      "seedClusters": 2,
+      "before": 0.75,
+      "after": 0.75,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "name/BOT · BLOOD_COUNTER": {
+      "pairs": 2,
+      "seedClusters": 2,
+      "before": 1,
+      "after": 1,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "name/BOT · DECAY_SWARM": {
+      "pairs": 2,
+      "seedClusters": 2,
+      "before": 0.5,
+      "after": 0.5,
+      "delta": 0,
+      "pairedDelta95": [
+        0,
+        0
+      ],
+      "improved": 0,
+      "worsened": 0,
+      "tied": 2
+    },
+    "name/BOT · BLOOD_RAIN": {
+      "pairs": 1,
+      "seedClusters": 1,
+      "before": 1,
+      "after": 1,
+      "delta": 0,
+      "pairedDelta95": null,
+      "improved": 0,
+      "worsened": 0,
+      "tied": 1
+    },
+    "name/BOT · BLOOD_AMBUSH": {
+      "pairs": 1,
+      "seedClusters": 1,
+      "before": 0,
+      "after": 0,
+      "delta": 0,
+      "pairedDelta95": null,
+      "improved": 0,
+      "worsened": 0,
+      "tied": 1
+    }
+  },
+  "pairs": [
+    {
+      "name": "BOT · DECAY_BLOOD",
+      "tier": "hard",
+      "market": "natural",
+      "seed": 8157000,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "BOT · DECAY_SUPPRESSION",
+      "tier": "hard",
+      "market": "recovery",
+      "seed": 8157001,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "BOT · SUPPRESSION_COUNTER",
+      "tier": "hard",
+      "market": "control",
+      "seed": 8157002,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "BOT · BLOOD_COUNTER",
+      "tier": "hard",
+      "market": "elf",
+      "seed": 8157003,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "BOT · DECAY_SWARM",
+      "tier": "hard",
+      "market": "curse",
+      "seed": 8157004,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "BOT · DECAY_BLOOD",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 8157005,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "BOT · DECAY_SUPPRESSION",
+      "tier": "hell",
+      "market": "recovery",
+      "seed": 8157006,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "BOT · BLOOD_RAIN",
+      "tier": "hell",
+      "market": "control",
+      "seed": 8157007,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "BOT · BLOOD_AMBUSH",
+      "tier": "hell",
+      "market": "elf",
+      "seed": 8157008,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "BOT · SUPPRESSION_COUNTER",
+      "tier": "hell",
+      "market": "curse",
+      "seed": 8157009,
+      "before": 0.5,
+      "after": 0.5
+    },
+    {
+      "name": "BOT · BLOOD_COUNTER",
+      "tier": "hell",
+      "market": "natural",
+      "seed": 8157010,
+      "before": 1,
+      "after": 1
+    },
+    {
+      "name": "BOT · DECAY_SWARM",
+      "tier": "hell",
+      "market": "recovery",
+      "seed": 8157011,
+      "before": 0.5,
+      "after": 0.5
+    }
+  ]
+}
