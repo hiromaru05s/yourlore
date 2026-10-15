@@ -20,6 +20,14 @@ The earlier selection experiments, rejected candidates, actual-difficulty compar
 
 Incomplete or illegal games fail the run and are not silently counted as losses. This small holdout checks regressions and integration; it cannot establish a 70% win rate against advanced humans or an unbeatable Hell. The machine was under memory pressure during part of the run, so wall-clock maxima must be separated from normal browser performance.
 
-## Release evidence
+## Integration and execution evidence
 
-Validation and deployment evidence will be recorded after the fixed holdout and guarded staging release complete.
+- Client/server type checks and the product build passed. The full production suite passed **168/168**.
+- Current definitions are unchanged: v58, 358 cards, SHA-256 `7d3ac71f7bad5c4d42a419da7d6297ea0d8438dd6c1932d07077ba2f3e8934a4` (definitions and pools).
+- The final bundle, including completed-pass publication and the latest main merge, matched the evaluated bundle over 1,200 state transitions, 11,988 purchase evaluations and 40 actual Hard/Hell decisions. `integrity.json` identifies all three bundles; the two baseline/candidate versions and final integration are archived separately.
+- Browser worker openings: Hard 222 ms, Hell 510 ms. The long-game and tactical-heavy fixtures took 10,293 ms and 4,296 ms, with live UI heartbeats and legal actions. Cancellation, supersession, deadline fallback, progress retention and state purity passed. These are measured samples, not an upper bound on every device.
+- The real controller advanced both Hard and Hell through two turns to turn 5, with no browser errors.
+- A state captured from the control-market holdout returned a legal action in 631 ms (Hard) / 1,685 ms (Hell), publishing 4 / 13 completed recommendations. Before correction the same state took 400 / 1,045 ms and only published 1 / 2 recommendations. Both policies chose the same discard in this specific state.
+- All 18 NPC decks remain legal and distinct within their difficulty; copied tuning, non-repeating selection and 36 opening simulations passed. The 28 adaptive BUY/action regression groups also passed.
+
+The fixed holdout and guarded staging release are recorded separately after completion. Holdout wall-clock timings include initial memory contention, a deliberate pause of one shard, and a brief debugger capture of the control-market state; use the browser and isolated-state measurements above for execution evidence.

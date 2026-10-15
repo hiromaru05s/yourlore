@@ -1,0 +1,190 @@
+[
+  {
+    "version": "before",
+    "tier": "hard",
+    "ms": 400.464375,
+    "action": {
+      "type": "pick",
+      "uid": "u52"
+    },
+    "progress": [
+      {
+        "ms": 31.609417000000008,
+        "action": {
+          "type": "pick",
+          "uid": "u9"
+        }
+      }
+    ],
+    "legal": true
+  },
+  {
+    "version": "before",
+    "tier": "hell",
+    "ms": 1044.52425,
+    "action": {
+      "type": "pick",
+      "uid": "u52"
+    },
+    "progress": [
+      {
+        "ms": 11.927665999999988,
+        "action": {
+          "type": "pick",
+          "uid": "u9"
+        }
+      },
+      {
+        "ms": 294.367458,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      }
+    ],
+    "legal": true
+  },
+  {
+    "version": "after",
+    "tier": "hard",
+    "ms": 630.9569579999998,
+    "action": {
+      "type": "pick",
+      "uid": "u52"
+    },
+    "progress": [
+      {
+        "ms": 23.897457999999915,
+        "action": {
+          "type": "pick",
+          "uid": "u9"
+        }
+      },
+      {
+        "ms": 324.5345,
+        "action": {
+          "type": "pick",
+          "uid": "u116"
+        }
+      },
+      {
+        "ms": 482.17845799999986,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 630.8359580000001,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      }
+    ],
+    "legal": true
+  },
+  {
+    "version": "after",
+    "tier": "hell",
+    "ms": 1685.2651660000001,
+    "action": {
+      "type": "pick",
+      "uid": "u52"
+    },
+    "progress": [
+      {
+        "ms": 10.986916000000292,
+        "action": {
+          "type": "pick",
+          "uid": "u9"
+        }
+      },
+      {
+        "ms": 239.56341599999996,
+        "action": {
+          "type": "pick",
+          "uid": "u116"
+        }
+      },
+      {
+        "ms": 383.80220800000006,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 513.916041,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 514.0013330000002,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 935.2863750000001,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 1057.0942910000003,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 1163.962458,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 1280.3621660000003,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 1406.6255,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 1509.8589160000001,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 1607.328583,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      },
+      {
+        "ms": 1685.174458,
+        "action": {
+          "type": "pick",
+          "uid": "u52"
+        }
+      }
+    ],
+    "legal": true
+  }
+]

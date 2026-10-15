@@ -10,6 +10,8 @@ const modules={candidate:hash(lab+'/candidate.cjs'),baseline:hash(lab+'/before.c
 const markets={natural:null,recovery:['PRIEST','HIGH_PRIEST','IRON_WALL','DESERTIFICATION','S15','ELF','WORLD_HEART'],control:['BLACK_REVERSE','STRONG_ACID','DISARM1','DISARM2','POISON_MASTER','S15','M2'],elf:['ELF','HIGH_ELF','DARK_ELF','WORLD_TREE','PRIEST','DESERTIFICATION','DISARM1'],curse:['BLACK_REVERSE','BLACK_CURSE','BLACK_INFINITY','SOUL_HARVEST','DISARM1','POISON_MASTER','S15']};
 const counters=JSON.parse(fs.readFileSync('docs/bot-strength/2026-10-13-v2/counters.json')).map(x=>x.cards);
 const opponents=[...counters,...B.BOT_HELL_DECKS.map(x=>x.cards)];
+for(const deck of [...opponents,...C.BOT_ELITE_DECKS.map(x=>x.cards),...C.BOT_HELL_DECKS.map(x=>x.cards)])assert.deepEqual(C.sanitizeDeck(deck),deck,'invalid holdout deck');
+for(const ids of Object.values(markets))for(const id of ids??[])assert(C.BUYABLE_POOL.includes(id),'invalid fixed market');
 const rows=[];let index=0,caseIndex=0;const started=Date.now();
 for(const tier of ['hard','hell'])for(const deck of tier==='hard'?C.BOT_ELITE_DECKS:C.BOT_HELL_DECKS){
  const market=Object.keys(markets)[caseIndex%5],other=opponents[caseIndex%opponents.length],seed=8157000+caseIndex++;

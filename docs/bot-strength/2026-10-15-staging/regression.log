@@ -1,0 +1,23 @@
+PASS multi-action lethal, ready-target selection, dice/trap proof boundaries, public deck ID constraints
+PASS chip attacks accumulate and are not skipped
+PASS mandatory target no-op is detected after reducer cloning
+PASS attack candidates obey current damaged-HP and high-cost restrictions
+PASS recall does not select the casting recall card
+PASS hidden order/location and actual RNG do not affect sampled observation
+PASS public inspection choices retain the revealed hand/deck membership
+PASS attack target search commits instead of entering an attack/cancel cycle
+PASS unknown card identities and private offered markets cannot influence hypotheses
+PASS an inferred Inquisition target cannot create a refused-action loop
+PASS unrevealed collection and trap identity/counter remain private
+PASS different samples produce different unknown outcomes
+PASS search is pure and takes a visible immediate lethal
+PASS defender-owned choices use defender perspective
+PASS free self-redraw telemetry loop is not counted as useful progress
+PASS hand reorder during free self-redraw is not strategic progress
+PASS elite rosters are legal ordinary starter decks for both upper tiers
+PASS profitable draw recycling still has a finite per-turn bot budget
+PASS native reducer parity across 1000 decisions and nested clone isolation
+PASS 18 bot strength suites
+PASS: 4 NPCs, 18 legal decks (distinct within each roster), non-repeating selection, copied tuning, 36 opening simulations
+{"cases":36,"heartbeats":602,"maxMainMs":600.6558330000003,"maxWorkerMs":600.4133750000001,"cancellation":true,"supersession":true,"fallback":true}
+PASS public market adaptation, hidden-information boundary, available stock, removal eligibility/target, hard/hell recovery counter and lethal priority, persistent Dew
