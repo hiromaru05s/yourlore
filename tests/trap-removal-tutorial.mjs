@@ -6,6 +6,7 @@ import { JSDOM } from 'jsdom';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import {tutorialTranscripts} from './fixtures/tutorialCurriculum.mjs';
 
 const dom = new JSDOM('<div id="app"></div>', { url: 'http://localhost', pretendToBeVisual: true });
 for (const k of ['window', 'document', 'location', 'HTMLElement', 'HTMLImageElement', 'Element', 'Node', 'localStorage', 'navigator', 'DOMRect', 'CustomEvent', 'Event', 'Image']) {
@@ -138,6 +139,9 @@ try {
   assert.equal(controller,same);assert.equal(controller.run.id,'combat','successful retry hands off in place');assert.equal(controller.lastReward,100);assert.equal(controller.run.actions.length,0);
   controller.loadLesson(TUT_STEPS.findIndex(s=>s.id==='defend'));await tick();await tick();
   const beforeHint=root.querySelector('.coach-reason').textContent;root.querySelector('[data-hint]').click();assert.notEqual(root.querySelector('.coach-reason').textContent,beforeHint,'free exercise exposes its actionable hint');
+  const evasion=(await tutorialTranscripts()).evasion;localStorage.setItem('lore:tutorial:v3:run:quick-qa:evasion',JSON.stringify(evasion.slice(0,evasion.findIndex(a=>a.type==='continueLesson'))));
+  controller.loadLesson(TUT_STEPS.findIndex(s=>s.id==='evasion'));await tick();await tick();
+  assert.equal(controller.run.phase,'review');assert(root.querySelector('.coach-dice').textContent.includes('4'),'resumed scene restores the actual roll');
   controller.destroy();controller=null;root.innerHTML='';
   console.log('PASS tutorial DOM: three languages, progress, onboarding confirmation, payment retry, lifecycle and gallery filters');
 } finally {
