@@ -1,0 +1,208 @@
+{
+  "baselineCode": "1719775121e73805b7a5796997cf4e0775f659ef",
+  "conditions": "Chrome headless, DPR 1, 1280/390 x 900, API fixture, fresh context, same local server with deployed Cache-Control; unthrottled; one sample each, shared machine load varies. Not an FPS or authenticated online benchmark.",
+  "cases": [
+    {
+      "width": 1280,
+      "homeMs": {
+        "before": 5574,
+        "after": 10004
+      },
+      "warmReload": {
+        "ms": 7175,
+        "preloadTransfers": 0
+      },
+      "imageNetworkRequestsAfterHome": {
+        "before": 509,
+        "after": 0
+      },
+      "actions": [
+        {
+          "name": "bot opponents",
+          "beforeMs": 97,
+          "afterMs": 151,
+          "beforeStyleReads": 24,
+          "afterStyleReads": 24
+        },
+        {
+          "name": "cards",
+          "beforeMs": 920,
+          "afterMs": 1001,
+          "beforeStyleReads": 12038,
+          "afterStyleReads": 1016
+        },
+        {
+          "name": "cards page 2",
+          "beforeMs": 356,
+          "afterMs": 892,
+          "beforeStyleReads": 4311,
+          "afterStyleReads": 270
+        },
+        {
+          "name": "card zoom",
+          "beforeMs": 57,
+          "afterMs": 73,
+          "beforeStyleReads": 173,
+          "afterStyleReads": 173
+        },
+        {
+          "name": "deck",
+          "beforeMs": 226,
+          "afterMs": 252,
+          "beforeStyleReads": 2345,
+          "afterStyleReads": 1068
+        },
+        {
+          "name": "shop",
+          "beforeMs": 130,
+          "afterMs": 235,
+          "beforeStyleReads": 432,
+          "afterStyleReads": 432
+        },
+        {
+          "name": "shop astral",
+          "beforeMs": 250,
+          "afterMs": 111,
+          "beforeStyleReads": 22,
+          "afterStyleReads": 22
+        },
+        {
+          "name": "shop crimson",
+          "beforeMs": 34,
+          "afterMs": 31,
+          "beforeStyleReads": 22,
+          "afterStyleReads": 22
+        },
+        {
+          "name": "sleeves",
+          "beforeMs": 40,
+          "afterMs": 40,
+          "beforeStyleReads": 29,
+          "afterStyleReads": 29
+        },
+        {
+          "name": "furniture",
+          "beforeMs": 4949,
+          "afterMs": 88,
+          "beforeStyleReads": 43,
+          "afterStyleReads": 43
+        },
+        {
+          "name": "guide",
+          "beforeMs": 171,
+          "afterMs": 288,
+          "beforeStyleReads": 812,
+          "afterStyleReads": 812
+        },
+        {
+          "name": "home return",
+          "beforeMs": 150,
+          "afterMs": 56,
+          "beforeStyleReads": 308,
+          "afterStyleReads": 308
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "homeMs": {
+        "before": 4893,
+        "after": 8083
+      },
+      "warmReload": {
+        "ms": 5791,
+        "preloadTransfers": 0
+      },
+      "imageNetworkRequestsAfterHome": {
+        "before": 546,
+        "after": 0
+      },
+      "actions": [
+        {
+          "name": "bot opponents",
+          "beforeMs": 147,
+          "afterMs": 99,
+          "beforeStyleReads": 23,
+          "afterStyleReads": 23
+        },
+        {
+          "name": "cards",
+          "beforeMs": 989,
+          "afterMs": 415,
+          "beforeStyleReads": 12028,
+          "afterStyleReads": 1006
+        },
+        {
+          "name": "cards page 2",
+          "beforeMs": 899,
+          "afterMs": 268,
+          "beforeStyleReads": 4310,
+          "afterStyleReads": 269
+        },
+        {
+          "name": "card zoom",
+          "beforeMs": 80,
+          "afterMs": 55,
+          "beforeStyleReads": 172,
+          "afterStyleReads": 172
+        },
+        {
+          "name": "deck",
+          "beforeMs": 435,
+          "afterMs": 160,
+          "beforeStyleReads": 2335,
+          "afterStyleReads": 1058
+        },
+        {
+          "name": "shop",
+          "beforeMs": 148,
+          "afterMs": 220,
+          "beforeStyleReads": 410,
+          "afterStyleReads": 410
+        },
+        {
+          "name": "shop astral",
+          "beforeMs": 256,
+          "afterMs": 117,
+          "beforeStyleReads": 20,
+          "afterStyleReads": 20
+        },
+        {
+          "name": "shop crimson",
+          "beforeMs": 29,
+          "afterMs": 28,
+          "beforeStyleReads": 20,
+          "afterStyleReads": 20
+        },
+        {
+          "name": "sleeves",
+          "beforeMs": 40,
+          "afterMs": 39,
+          "beforeStyleReads": 28,
+          "afterStyleReads": 28
+        },
+        {
+          "name": "furniture",
+          "beforeMs": 2097,
+          "afterMs": 55,
+          "beforeStyleReads": 42,
+          "afterStyleReads": 42
+        },
+        {
+          "name": "guide",
+          "beforeMs": 297,
+          "afterMs": 234,
+          "beforeStyleReads": 802,
+          "afterStyleReads": 802
+        },
+        {
+          "name": "home return",
+          "beforeMs": 210,
+          "afterMs": 53,
+          "beforeStyleReads": 298,
+          "afterStyleReads": 310
+        }
+      ]
+    }
+  ]
+}

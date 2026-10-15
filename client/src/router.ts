@@ -1,3 +1,4 @@
+import {releaseHomeSpirit} from './ui/homeSpirit';
 import { loungeText } from './ui/loungeText';
 import { mountTutorialWelcome } from './screens/tutorialWelcome';
 import {coverScreen,isMenuReady,imageUrls,hasUnloadedAssets} from './ui/assetReadiness';
@@ -168,6 +169,7 @@ export class App {
     aReset();
     stopPresence();
     this.user = null;
+    releaseHomeSpirit(this);
     this.login();
   }
 }

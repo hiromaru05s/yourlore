@@ -22,10 +22,10 @@ export function mountManaSpirit(host: HTMLElement, options: {
   form?: (body:THREE.Group, pearl:THREE.Material, blue:THREE.Material) => SpiritForm;
   silhouette?: boolean;
   viewYaw?: number | (()=>number);
-} = {}): { celebrate():void; greet():void; destroy():void } {
+} = {}): { celebrate():void; greet():void; suspend():void; resume():void; destroy():void } {
   host.classList.add('mana-spirit'); host.setAttribute('aria-hidden','true');
   const fallback=()=>{host.innerHTML='<svg viewBox="0 0 120 140"><defs><linearGradient id="spiritPearl" x2=".8" y2="1"><stop stop-color="#fffdf0"/><stop offset=".55" stop-color="#e4f0eb"/><stop offset="1" stop-color="#89aec1"/></linearGradient></defs><ellipse cx="60" cy="127" rx="26" ry="5" fill="#315569" opacity=".22"/><ellipse cx="42" cy="29" rx="9" ry="26" fill="url(#spiritPearl)"/><ellipse cx="78" cy="29" rx="9" ry="26" fill="url(#spiritPearl)"/><path d="M60 41C91 41 99 70 91 91C82 123 38 123 29 91C21 70 29 41 60 41" fill="url(#spiritPearl)" stroke="#98bdcf" stroke-width="1"/><path d="M33 60Q60 45 87 60L82 79Q60 90 38 79Z" fill="#20374e"/><ellipse cx="48" cy="68" rx="3" ry="6" fill="#9ee6f0"/><ellipse cx="72" cy="68" rx="3" ry="6" fill="#9ee6f0"/><path d="M60 89C57 95 51 101 52 106C53 115 67 115 68 106C69 101 63 95 60 89Z" fill="#9ce8ee" stroke="#c5dedf"/><ellipse cx="60" cy="107" rx="3" ry="4" fill="#ddfff2"/></svg>';};
-  const staticSpirit=()=>{fallback();return {celebrate(){},greet(){},destroy(){host.replaceChildren();}};};
+  const staticSpirit=()=>{fallback();return {celebrate(){},greet(){},suspend(){},resume(){},destroy(){host.replaceChildren();}};};
   if(typeof WebGL2RenderingContext==='undefined')return staticSpirit();
   let renderer: THREE.WebGLRenderer;
   try {renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});} catch {return staticSpirit();}
@@ -72,9 +72,9 @@ export function mountManaSpirit(host: HTMLElement, options: {
   const turn=createZenoTurn();
   const interactive=options.interactive??!options.form;
   const targetElement=interactive instanceof HTMLElement?interactive:host;
-  let pose={...rest}, dead=false, visible=true, raf=0, last=0, time=0;
+  let pose={...rest}, dead=false, suspended=false, visible=true, raf=0, last=0, time=0;
   const render=(now:number)=>{
-    raf=0;if(dead||!visible||document.hidden)return;
+    raf=0;if(dead||suspended||!visible||document.hidden)return;
     if(now-last>=1000/(options.fps??60)||isStill()||!last){
       const dt=last?Math.min((now-last)/1000,.1):0;last=now;if(!isStill())time+=dt;
       const target=isStill()?rest:motion.tick(dt);
@@ -96,7 +96,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
     }
     if(!isStill())raf=requestAnimationFrame(render);
   };
-  const start=()=>{if(!dead&&!raf&&visible&&!document.hidden)raf=requestAnimationFrame(render);};
+  const start=()=>{if(!dead&&!suspended&&!raf&&visible&&!document.hidden)raf=requestAnimationFrame(render);};
   const stop=()=>{cancelAnimationFrame(raf);raf=0;last=0;};
   const size=()=>{const b=host.getBoundingClientRect();renderer.setSize(Math.max(1,b.width),Math.max(1,b.height),false);camera.aspect=Math.max(1,b.width)/Math.max(1,b.height);camera.updateProjectionMatrix();start();};
   const resize=new ResizeObserver(size);resize.observe(host);
@@ -109,6 +109,8 @@ export function mountManaSpirit(host: HTMLElement, options: {
   const unbind=interactive?bindZenoInteraction(targetElement,turn,greet,start):()=>{};
   return {
     greet,
+    suspend(){suspended=true;stop();},
+    resume(){if(dead)return;suspended=false;visible=true;size();},
     celebrate(){if(dead||isStill())return;motion.celebrate();start();},
     destroy(){
       dead=true;unbind();stop();resize.disconnect();intersection?.disconnect();document.removeEventListener('visibilitychange',onVisibility);reduced.removeEventListener('change',onReduced);

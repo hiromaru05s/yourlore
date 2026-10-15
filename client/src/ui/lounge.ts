@@ -75,7 +75,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     });
     previous.forEach((el,ov)=>{if(!ov.isConnected){if(el?.isConnected)el.focus();previous.delete(ov);}});
   };
-  const observer=new MutationObserver(enhance);observer.observe(document.body,{childList:true,subtree:true});enhance();
+  const observer=new MutationObserver(records=>{if(records.some(r=>[...r.addedNodes,...r.removedNodes].some(n=>n instanceof Element&&(n.matches('.overlay')||n.querySelector('.overlay')))))enhance();});observer.observe(document.body,{childList:true,subtree:true});enhance();
   const keyboard=(e:KeyboardEvent)=>{
     const ovs=Array.from(document.querySelectorAll<HTMLElement>('.overlay'));const ov=ovs.at(-1);
     if(!ov){if(e.key==='Escape'){shell.classList.remove('is-menu-open');shell.querySelector('.lounge-menu')?.setAttribute('aria-expanded','false');}return;}

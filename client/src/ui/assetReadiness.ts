@@ -1,6 +1,7 @@
+import {assetHints} from './assetHints';
 import {withDeadline} from '../net/deadline';
 import {playHomeEntrance} from './homeEntrance';
-import {menuAssetUrls} from './menuAssets';
+import {prepareMenuCache} from './menuCache';
 import {loadingScreen} from './loadingScreen';
 import {loungeText} from './loungeText';
 import {getLang} from '../i18n';
@@ -10,16 +11,16 @@ export const decodeAsset=(url:string)=>decodeImage(url);
 let menuReady=false;
 export const isMenuReady=()=>menuReady;
 export function imageUrls(root:HTMLElement):string[]{
- const urls=new Set<string>(),hidden=new WeakSet<Element>();
- for(const el of [root,...root.querySelectorAll<HTMLElement>('*')]){
-  // display:none furniture belongs to the retired raster board. Do not make
-  // the live 3D board download it. visibility/opacity hide opening actors too,
-  // so those must still be prepared before the entrance begins.
-  if(el.parentElement&&hidden.has(el.parentElement)){hidden.add(el);continue;}
-  const base=getComputedStyle(el);
-  if(base.display==='none'){hidden.add(el);continue;}
+ const urls=new Set<string>(),pending:Element[]=[root];
+ while(pending.length){
+  const el=pending.pop()!,base=getComputedStyle(el);
+  // Visibility/opacity may hide prepared entrance actors; display:none is absent.
+  if(base.display==='none')continue;
+  const declared=assetHints.get(el);
+  if(declared){for(const url of declared())if(url)urls.add(url);continue;}
   if(el instanceof HTMLImageElement){el.loading='eager';el.fetchPriority='high';if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);}
   for(const pseudo of [null,'::before','::after']){const style=pseudo?getComputedStyle(el,pseudo):base;if(style.display==='none'||pseudo&&(style.content==='none'||style.content==='normal'))continue;for(const m of style.backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(m[1]);}
+  pending.push(...Array.from(el.children).reverse());
  }
  return [...urls];
 }
@@ -49,7 +50,30 @@ export function coverScreen(root:HTMLElement,preloadMenu=false,homeEntrance=fals
  const release=()=>{cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
  const cancel=()=>{abort.abort();release();};
  return {cancel,ready:async()=>{
-  await waitAssets([...screenAssets,...(preloadMenu?menuAssetUrls():[])],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),abort.signal);
+  if(preloadMenu){
+   let prepared=false;
+   while(!prepared&&!abort.signal.aborted){
+    try {
+     await prepareMenuCache((done,total)=>loading.update(total?done/total*85:85,loungeText(`メニューの準備 ${done} / ${total}`,`Preparing menus ${done} / ${total}`,`메뉴 준비 ${done} / ${total}`)),abort.signal);
+     if(abort.signal.aborted)return false;
+     loading.update(87,loungeText('ショップの見本を準備しています','Preparing shop previews','상점 미리보기 준비 중'));
+     // WebGL-unavailable clients retain their existing non-3D fallback.
+     if(root.querySelector('.mana-spirit canvas'))await import('./cosmetics/catalogRender').then(m=>m.furnitureCatalog());
+     loading.update(90,loungeText('対戦の準備をしています','Preparing the duel','대전 준비 중'));
+     await import('../screens/lazyGame').then(m=>m.warmGame());
+     prepared=true;
+    }catch(error){
+     if(abort.signal.aborted)return false;
+     console.warn('Menu preparation failed',error);
+     await new Promise<void>(resolve=>{
+      const retry=document.createElement('button');retry.className='asset-retry';retry.textContent=loungeText('準備を再試行','Retry preparation','준비 다시 시도');cover.append(retry);
+      const reload=document.createElement('button');reload.className='asset-retry';reload.textContent=loungeText('ゲームを再読み込み','Reload game','게임 새로고침');reload.onclick=()=>location.reload();cover.append(reload);
+      const finish=()=>{retry.remove();reload.remove();abort.signal.removeEventListener('abort',finish);resolve();};retry.onclick=finish;abort.signal.addEventListener('abort',finish,{once:true});
+     });
+    }
+   }
+  }
+  await waitAssets(screenAssets,cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),abort.signal);
   if(abort.signal.aborted)return false;
   loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));
   await withDeadline(document.fonts.ready,20000,abort.signal).catch(()=>{});await Promise.all([...root.querySelectorAll('img')].map(i=>withDeadline(i.decode()).catch(()=>{})));

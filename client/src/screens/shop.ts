@@ -1,3 +1,4 @@
+import {preparedFurnitureCatalog} from '../ui/cosmetics/catalogRender';
 import {mountShopGacha, type GachaVariant} from '../ui/shopGacha';
 import '../styles/shopPreview.css';
 import {COSMETICS,cosmetic} from '../shared/cosmetics';
@@ -20,7 +21,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
 
   let dead = false;
   let destroyGacha:(()=>void)|undefined;
-  let furnitureImages:Map<string,string>|undefined;
+  let furnitureImages:Map<string,string>|undefined=preparedFurnitureCatalog();
   let furnitureLoading=false, furnitureFailed=false;
   const furnitureArt=(id:string,selectedArt=false):string=>{
     const url=furnitureImages?.get(id);
