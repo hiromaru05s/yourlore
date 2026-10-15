@@ -21,6 +21,9 @@ export function tutorialOpponentAction(run:LessonRun):Action|null {
  for(const a of candidates){const next=reduce(g,a);if(next.state.rng!==g.rng||actionChangesState(g,next.state))return a;}
  return {type:'endTurn'};
 }
+function choiceMatches(run:LessonRun,uid:string,id:string):boolean {
+ return run.state.players.some(p=>[...p.hand,...p.deck,...p.discard,...p.field,...(p.removed??[])].some(c=>c.uid===uid&&c.id===id));
+}
 export function tutorialActionAllowed(run:LessonRun,action:TutorialAction):boolean {
  if(run.done||run.actions.length>=TUTORIAL_ACTION_LIMIT)return false;
  if(action.type==='continueLesson')return run.phase==='review';
@@ -30,14 +33,19 @@ export function tutorialActionAllowed(run:LessonRun,action:TutorialAction):boole
  if(action.type==='reorder')return true;
  if(run.state.pending){
    const step=currentScene(run).steps[run.step],target=step?.targetId;
-   if(step?.requiredChoice===run.state.pending.reason&&(action.type==='pick'||action.type==='chooseTarget')&&action.uid===null)return false;
+   if(step?.requiredChoice===run.state.pending.reason&&(action.type==='pick'||action.type==='chooseTarget')){
+    if(action.uid===null||target&&!choiceMatches(run,action.uid,target))return false;
+   }
    if(target&&run.state.pending.reason==='attack'&&(action.type==='pick'||action.type==='chooseTarget'))return run.state.players[1].field.some(m=>m.uid===action.uid&&m.id===target);
    return action.type==='pick'||action.type==='chooseTarget';
  }
  const step=currentScene(run).steps[run.step];if(!step)return false;
  if(step.action==='free')return true;
  if(action.type!==step.action)return false;
- if(action.type==='play')return run.state.players[0].hand[action.idx]?.id===step.id;
+ if(action.type==='play'){
+   if(step.requiredChoice&&action.targets!==undefined&&(!action.targets.length||step.targetId&&action.targets.some(uid=>!choiceMatches(run,uid,step.targetId!))))return false;
+   return run.state.players[0].hand[action.idx]?.id===step.id;
+ }
  if(action.type==='buyMarket')return run.state.market[action.i]?.id===step.id;
  if(action.type==='buySupply')return run.state.players[0].supply[action.i]?.id===step.id;
  if(action.type==='attack')return run.state.players[0].field.some(m=>m.uid===action.uid&&(!step.id||m.id===step.id)&&monsterCanAttack(run.state,run.state.players[0],m));
