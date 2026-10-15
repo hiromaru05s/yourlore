@@ -1,0 +1,21 @@
+{
+  "rates": "BIBLION / GACHA\n×\n提供割合\nスターター\t92.5%\nスリーブ・デッキ置き場＆墓地\t7%\nエフェクト3種（均等）\t0.5%\n\nスリーブ4種とデッキ置き場＆墓地4種は別々に排出、各0.875%。スターターは各種類均等、エフェクトは各1/600（約0.1667%）。10回も1回ずつ同じ抽選です。\n\n重複還元：スターター8枚所持時50／スリーブ・家具100／エフェクト500シャード。\n\n閉じる",
+  "separateRewards": 2,
+  "equipped": {
+    "cards": [
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "watch": [],
+    "effect": "default",
+    "sleeve": "sleeve:gacha-goldfault",
+    "furniture": "furniture:gacha-goldfault"
+  },
+  "errors": []
+}

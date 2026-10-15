@@ -93,3 +93,6 @@ body.lounge-active .bot-diff{width:min(940px,94vw);max-width:940px;background:li
 @media(min-width:701px){.deck-cosmetic{padding:10px;gap:5px}.deck-cosmetic-art.sleeve-preview{width:52px;height:78px}.deck-cosmetic-art.furniture-preview{width:106px;height:78px!important}.deck-cosmetic-name{min-height:0}.deck-cosmetic-group h4{margin:12px 0 8px}.deck-appearance-head{margin-bottom:5px}}
 /* Safe inset inside both irregular frame masks, including heavy recoil and pooled cloak. */
 .portrait .seeker-motion{transform:none}
+/* Goldfault already depicts both sculpted objects; do not draw the legacy frame over it. */
+[data-cosmetic-id="furniture:gacha-goldfault"] .furniture-preview{background-size:contain;background-repeat:no-repeat;background-color:transparent;border:0;box-shadow:none;border-radius:0}
+[data-cosmetic-id="furniture:gacha-goldfault"] .furniture-preview:after{content:none}

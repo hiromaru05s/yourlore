@@ -1,3 +1,4 @@
+import {GOLDFAULT_SLEEVE,GOLDFAULT_FURNITURE} from '../../shared/goldfaultCosmetics';
 import {cosmetic} from '../../shared/cosmetics';
 import {setPreviewCardThickness,CARD_THICKNESS_SCALE,STOCK_THICKNESS,DRAW_THICKNESS_RATIO} from '../../ui/cardThickness';
 import {ACTIONS,replayAction,type StudioAction} from './actions';
@@ -29,6 +30,7 @@ export async function mountBoard(){
   state={...next,time:undefined};materials.setMotion(next.motion);if(next.time!==undefined)materials.seek(next.time);
   g.sleeves=[theme&&(next.side==='self'||next.side==='both')?theme.id:'default',theme&&(next.side==='opponent'||next.side==='both')?theme.id:'default'];
   g.furnitures=g.sleeves?.map(id=>id==='default'?'default':'furniture:'+id) as [string,string];
+  if(next.set==='goldfault'){g.sleeves=([0,1] as const).map(i=>next.side==='both'||next.side===(i?'opponent':'self')?GOLDFAULT_SLEEVE:'default') as [string,string];g.furnitures=g.sleeves.map(id=>id===GOLDFAULT_SLEEVE?GOLDFAULT_FURNITURE:'default') as [string,string];}
   if(shopItem){
    g.sleeves=[shopItem.kind==='sleeve'?shopItem.id:'default','default'];
    g.furnitures=[shopItem.kind==='furniture'?shopItem.id:'default','default'];
@@ -41,6 +43,7 @@ export async function mountBoard(){
   parent.postMessage({type:'atelier-applied',state},location.origin);
  }
  state.set=shopItem?'default':params.get('set')??state.set;const side=params.get('side');if(side==='self'||side==='opponent'||side==='both')state.side=side;
+ const count=Number(params.get('count'));if(params.has('count')&&[0,1,8,12,40].includes(count))state.count=count;
  await apply(state);
  async function replay(kind:StudioAction){
   if(busy)return;busy=true;root.dataset.replay=kind;parent.postMessage({type:'atelier-replay',busy:true,kind},location.origin);
@@ -48,7 +51,7 @@ export async function mountBoard(){
   finally{busy=false;delete root.dataset.replay;parent.postMessage({type:'atelier-replay',busy:false,kind},location.origin);}
  }
  root.dataset.thickness=String(CARD_THICKNESS_SCALE);
- const message=(e:MessageEvent)=>{if(e.origin!==location.origin||e.source!==parent||!['atelier-state','atelier-action','atelier-focus'].includes(e.data?.type))return;if(e.data.type==='atelier-focus'){focusZoom=e.data.zoom===2.6?2.6:1;window.dispatchEvent(new Event('lore:render-density'));return;}if(e.data.type==='atelier-action'){if(ACTIONS.includes(e.data.action))void replay(e.data.action);return;}if(busy)return;const n=e.data.state;if(!n||!['default',...THEMES.map(t=>t.id)].includes(n.set)||!['self','opponent','both'].includes(n.side)||![0,1,8,12,40].includes(n.count))return;void apply({set:n.set,side:n.side,motion:!!n.motion,count:n.count,dense:!!n.dense,time:typeof n.time==='number'?n.time:undefined});};
+ const message=(e:MessageEvent)=>{if(e.origin!==location.origin||e.source!==parent||!['atelier-state','atelier-action','atelier-focus'].includes(e.data?.type))return;if(e.data.type==='atelier-focus'){focusZoom=e.data.zoom===2.6?2.6:1;window.dispatchEvent(new Event('lore:render-density'));return;}if(e.data.type==='atelier-action'){if(ACTIONS.includes(e.data.action))void replay(e.data.action);return;}if(busy)return;const n=e.data.state;if(!n||!['default','goldfault',...THEMES.map(t=>t.id)].includes(n.set)||!['self','opponent','both'].includes(n.side)||![0,1,8,12,40].includes(n.count))return;void apply({set:n.set,side:n.side,motion:!!n.motion,count:n.count,dense:!!n.dense,time:typeof n.time==='number'?n.time:undefined});};
  window.addEventListener('message',message);
  Object.assign(window,{atelier:{apply,info:()=>materials.info(),state:()=>state,controller:ctl,replay,dimensions:()=>({scale:CARD_THICKNESS_SCALE,stock:STOCK_THICKNESS,draw:DRAW_THICKNESS_RATIO})}});
  if(params.get('tempo')==='1'){const {mountCombatTempo}=await import('../combatTempo');mountCombatTempo(ctl);}

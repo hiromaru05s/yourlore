@@ -1,3 +1,4 @@
+import {GOLDFAULT_SLEEVE,GOLDFAULT_FURNITURE,GOLDFAULT_ART,GOLDFAULT_FURNITURE_ART} from './goldfaultCosmetics';
 import {isCardEffect} from './cardEffects';
 import {GACHA_THEMES,gachaArt} from './gachaCosmetics';
 import {LIVING_THEMES,livingArt} from './livingCosmetics';
@@ -20,6 +21,10 @@ export const GACHA_COSMETICS:Cosmetic[]=GACHA_THEMES.flatMap(t=>[
  {id:'sleeve:gacha-'+t.key,kind:'sleeve' as const,url:gachaArt(t.variant),ja:t.ja+'のスリーブ',en:t.en+' Sleeve',ko:t.ko+' 슬리브',price:1000,gachaOnly:true},
  {id:'furniture:gacha-'+t.key,kind:'furniture' as const,url:gachaArt(t.variant),ja:t.ja+'のデッキ置き場＆墓地',en:t.en+' Deck Holder & Graveyard',ko:t.ko+' 덱 받침 & 묘지',price:1000,gachaOnly:true}
 ]);
+GACHA_COSMETICS.push(
+ {id:GOLDFAULT_SLEEVE,kind:'sleeve',url:GOLDFAULT_ART,ja:'金脈の黒曜のスリーブ',en:'Goldfault Sleeve',ko:'금맥의 흑요석 슬리브',price:1000,gachaOnly:true},
+ {id:GOLDFAULT_FURNITURE,kind:'furniture',url:GOLDFAULT_FURNITURE_ART,ja:'金脈の黒曜のデッキ置き場＆墓地',en:'Goldfault Deck Holder & Graveyard',ko:'금맥의 흑요석 덱 받침 & 묘지',price:1000,gachaOnly:true}
+);
 COSMETICS.push(...GACHA_COSMETICS);
 export const FURNITURE_LIST=COSMETICS.filter(c=>c.kind==='furniture');
 export const cosmetic=(id:string)=>COSMETICS.find(c=>c.id===id);

@@ -898,3 +898,6 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .avatar-seeker {background:#fff;}
 .avatar .hooded-seeker {position:static;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;image-rendering:auto;display:block;}
 .seeker-motion {display:block;width:100%;height:100%;object-fit:contain;image-rendering:auto;background:#fff;}
+
+/* Keep equipped Goldfault geometry aligned with the cached WebGL board on resize. */
+#app .pile[data-material*="/cosmetics/goldfault-v1/"] { transition:none; }
