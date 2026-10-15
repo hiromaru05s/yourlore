@@ -1,0 +1,28 @@
+{
+  "checks": [
+    {
+      "cls": "card",
+      "width": 256,
+      "height": 400,
+      "differentChannels": 0
+    },
+    {
+      "cls": "card card--field",
+      "width": 256,
+      "height": 256,
+      "differentChannels": 0
+    },
+    {
+      "cls": "buff-icon",
+      "width": 256,
+      "height": 256,
+      "differentChannels": 0
+    }
+  ],
+  "cloneAlive": true,
+  "reducedPendingRAF": 0,
+  "disposal": {
+    "surfaces": 0,
+    "pendingRAF": 0
+  }
+}

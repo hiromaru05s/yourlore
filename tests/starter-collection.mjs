@@ -4,8 +4,8 @@ import {build} from 'esbuild';
 import fs from 'node:fs/promises';
 const dir=await fs.mkdtemp('/tmp/lore-starter-test-');
 try{
- await build({stdin:{contents:`export {default as worker} from './server/src/index';export * from './client/src/shared/collection';export {deckStoreForUser} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
- const {worker,starterCollection,COLLECTIBLE_STARTERS,deckStoreForUser,PLANNED_GACHA_RATES,DUPLICATE_REFUNDS}=await import(dir+'/module.mjs');
+ await build({stdin:{contents:`export {default as worker} from './server/src/index';export * from './client/src/shared/collection';export * from './client/src/shared/cardEffects';export {deckStoreForUser} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
+ const {worker,starterCollection,COLLECTIBLE_STARTERS,deckStoreForUser,PLANNED_GACHA_RATES,DUPLICATE_REFUNDS,gachaCategory,CARD_EFFECTS}=await import(dir+'/module.mjs');
  const db=new DatabaseSync(':memory:');db.exec(await fs.readFile('server/schema.sql','utf8'));
  for(const id of ['a','b']){db.prepare('INSERT INTO users(id,email,password,display,created_at,credits) VALUES(?,?,?,?,?,?)').run(id,id+'@test.invalid','fixture',id,Date.now(),10000);db.prepare('INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES(?,?,?,?)').run(id,id,Date.now(),Date.now()+600000);}
  let failLedger=false,queued;
@@ -30,12 +30,37 @@ try{
  const last=await Promise.all([buy(first),buy(first)]);assert.deepEqual(last.map(r=>r.status).sort(),[200,400]);assert.equal((await state()).starterCards[first],8);
  assert.equal((await buy(first)).status,400);
  const all=starterCollection(Object.fromEntries(COLLECTIBLE_STARTERS.map(id=>[id,8])));db.prepare('UPDATE users SET starter_cards=?,credits=2000 WHERE id=?').run(JSON.stringify(all),'a');
- const ten=await (await draw(10)).json();assert.equal(ten.receipt.rewards.length,10);assert.equal(ten.receipt.cost,1000);assert.equal(ten.receipt.refund,500);assert.equal(ten.credits,1500);assert(ten.receipt.rewards.every(r=>r.refund===50&&r.owned===8));
+ const random=crypto.getRandomValues.bind(crypto);crypto.getRandomValues=a=>{a[0]=0;return a;};
+ const ten=await (await draw(10)).json();crypto.getRandomValues=random;assert.equal(ten.receipt.rewards.length,10);assert.equal(ten.receipt.cost,1000);assert.equal(ten.receipt.refund,500);assert.equal(ten.credits,1500);assert(ten.receipt.rewards.every(r=>r.refund===50&&r.owned===8));
  // Force all ten hits onto a card with 7 copies: the first grants #8; nine refund.
  all[first]=7;db.prepare('UPDATE users SET starter_cards=?,credits=2000 WHERE id=?').run(JSON.stringify(all),'a');
  const original=crypto.getRandomValues.bind(crypto);crypto.getRandomValues=a=>{a[0]=COLLECTIBLE_STARTERS.indexOf(first);return a;};
  let cap;try{cap=await (await draw(10)).json();}finally{crypto.getRandomValues=original;}
  assert.equal(cap.receipt.refund,450);assert.equal(cap.receipt.rewards[0].refund,0);assert.equal(cap.starterCards[first],8);assert.equal(cap.credits,1450);
+ // Exhaust every category integer; effect choice has its own unbiased draw.
+ const categories={starter:0,empty:0,effect:0};for(let i=0;i<10000;i++)categories[gachaCategory(i)]++;
+ assert.deepEqual(categories,{starter:9250,empty:700,effect:50});
+ assert.equal(gachaCategory(9249),'starter');assert.equal(gachaCategory(9250),'empty');assert.equal(gachaCategory(9949),'empty');assert.equal(gachaCategory(9950),'effect');
+ const forced=async(values,count=1,key=crypto.randomUUID())=>{let i=0;crypto.getRandomValues=a=>{a[0]=values[i++%values.length];return a;};try{return await (await draw(count,key)).json();}finally{crypto.getRandomValues=original;}};
+ db.prepare("UPDATE users SET credits=5000 WHERE id='a'").run();
+ const emptyBefore=await state(),empty=await forced([9250]);assert.equal(empty.receipt.rewards[0].kind,'empty');assert.equal(empty.receipt.refund,0);assert.equal(empty.credits,emptyBefore.credits-100);assert.deepEqual(empty.starterCards,emptyBefore.starterCards);assert.deepEqual(empty.effects,[]);
+ for(let i=0;i<CARD_EFFECTS.length;i++){
+  const id=CARD_EFFECTS[i].id,key=crypto.randomUUID();const result=await forced([9950,i],1,key);assert.deepEqual(result.receipt.rewards,[{kind:'effect',id,refund:0,owned:1}]);assert(result.effects.includes(id));
+  const replay=await (await draw(1,key)).json();assert.equal(replay.credits,result.credits);assert.deepEqual(replay.receipt,result.receipt);
+ }
+ const duplicate=await forced([9999,0]);assert.equal(duplicate.receipt.refund,500);assert.equal(duplicate.effects.length,3);
+ const effectDeck=deckStoreForUser();effectDeck.list[1].effect=CARD_EFFECTS[0].id;
+ assert.equal((await call('/deck',{decks:effectDeck},'b')).status,400);
+ assert.equal((await call('/social/buy-cosmetic',{id:CARD_EFFECTS[0].id},'b')).status,400);
+ assert.equal((await call('/deck',{decks:effectDeck})).status,200);
+ const legacy=JSON.parse(JSON.stringify(effectDeck));for(const slot of legacy.list)delete slot.effect;
+ const preserved=await (await call('/deck',{decks:legacy})).json();assert.equal(preserved.decks.list[1].effect,CARD_EFFECTS[0].id);
+ effectDeck.sel=1;assert.equal((await call('/deck',{decks:effectDeck})).status,200);
+ const equipped=(await (await call('/auth/me')).json()).user;assert.equal(equipped.effect,CARD_EFFECTS[0].id);
+ await worker.fetch(new Request('https://test.yourlore.xyz/ws/queue?effect=effect:prism-veil',{headers:{Cookie:'lore_session=a'}}),env);assert.equal(queued.searchParams.get('effect'),CARD_EFFECTS[0].id);
+ // Transaction failure rolls back effect inventory as well as spend.
+ db.prepare("UPDATE users SET sleeves='[]' WHERE id='a'").run();const rollback=await state();failLedger=true;await assert.rejects(forced([9950,0]),/injected/);failLedger=false;assert.deepEqual(await state(),rollback);
+ const multi=await forced([9950,0],10);assert.equal(multi.receipt.refund,4500);assert.equal(multi.effects.length,1);
  db.prepare("UPDATE users SET credits=99 WHERE id='a'").run();const low=await state();assert.equal((await draw()).status,400);assert.deepEqual(await state(),low);
  for(const count of [0,2,11,-1,'10',1.5])assert.equal((await draw(count)).status,400);
  assert.equal((await call('/collection/buy',{id:first,requestId:'bad'})).status,400);

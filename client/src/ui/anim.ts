@@ -472,7 +472,7 @@ export async function trapRevealAnim(card: CardInst, side: ViewSide, hold = 2000
 }
 
 /** Purchases fly to the shelf; quick spells return a revealed face for effect-first playback. */
-export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null, source?:HTMLElement|null, remaining=0,paidMana=card.cost): Promise<HTMLElement|null> {
+export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null, source?:HTMLElement|null, remaining=0,paidMana=card.cost,effect?:string): Promise<HTMLElement|null> {
   if(fxSkip)return null;
   const destination = card.quick ? (side === "me" ? "rift-me" : "rift-opp") : discId(side);
   const to = rectOf("#" + destination);
@@ -487,13 +487,13 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
     if(remaining<=0){source.style.visibility='hidden';source.style.pointerEvents='none';source.setAttribute('aria-hidden','true');}
     else {const stock=source.querySelector('.mkt-stock');if(stock)stock.textContent=`×${remaining}`;}
     if(!card.quick){
-      const target=document.getElementById(destination),print=cardEl(card,{size:'mkt'});
+      const target=document.getElementById(destination),print=cardEl(card,{effect,size:'mkt'});
       try {if(target&&await boardMotionScope(signal=>moveOnBoard({kind:'purchase',source,target,card:print,signal}),3500))return null;}
       catch { /* The projected fallback keeps the purchase pipeline alive. */ }
       if(fxSkip)return null;
     }
   }
-  const node = floatAt(cardEl(card, { size: "mkt" }), src);
+  const node = floatAt(cardEl(card, {effect, size: "mkt" }), src);
   const pose=source?fieldPlacement(source,node.offsetWidth,node.offsetHeight):new DOMMatrix().translate(src.left,src.top);
   node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=pose.toString();
   let held=false;
@@ -799,12 +799,12 @@ function backToPreviousCard(): void {
 }
 
 // Public entry starts a new inspection; only related-card navigation keeps history.
-export function zoomCard(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
+export function zoomCard(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string): void {
   closeZoom();
   zoomOpener = document.activeElement as HTMLElement | null;
-  renderZoom(c, hp, stateText);
+  renderZoom(c, hp, stateText, effect);
 }
-function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
+function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string): void {
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
@@ -852,7 +852,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   details.onclick = e => e.stopPropagation();
   // Reserve space for the cost/ATK/HP seals outside the card face.
   const cardStage = document.createElement('div'); cardStage.className = 'zoom-card-stage';
-  cardStage.appendChild(cardEl(c, { fullArt: true, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
+  cardStage.appendChild(cardEl(c, { fullArt: true, effect, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
   wrap.appendChild(cardStage);
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
   // The rules header links each keyword's name and icon to its own explanation.
@@ -941,8 +941,8 @@ export function closeZoom(): void {
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
-export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string): void {
-  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp, stateText); };
+export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string): void {
+  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp, stateText, effect??el.dataset.cardEffect); };
   // Intent, not speculation: by the time a pointer is resting on a card, a
   // right-click or a 380ms long-press is at most a few hundred ms away. Start
   // the full-resolution art then, so the overlay has it by the time it opens.
@@ -956,7 +956,7 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
     fired = false;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
     clearTimeout(timer);
-    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp, stateText); }, 380);
+    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp, stateText, effect??el.dataset.cardEffect); }, 380);
   }, { passive: true });
   const cancel = () => clearTimeout(timer);
   el.addEventListener("touchmove", (e) => {

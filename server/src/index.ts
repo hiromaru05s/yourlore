@@ -139,8 +139,8 @@ export default {
       // real opponents and can never enter the rooms they are paired into.
       if (!user) return new Response("unauthorized", { status: 401 });
       const fwd = new URL(req.url);
-      for (const key of ["uid","name","avatar","sleeve","furniture","deck","mmr"]) fwd.searchParams.delete(key);
-      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("furniture",user.furniture??""); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
+      for (const key of ["uid","name","avatar","sleeve","furniture","effect","deck","mmr"]) fwd.searchParams.delete(key);
+      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("furniture",user.furniture??""); fwd.searchParams.set("effect",user.effect??"default"); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
       // ranked queue: must be logged in; attach current MMR for band matching
       if (fwd.searchParams.get("mode") === "ranked") {
         if (!user) return new Response("unauthorized", { status: 401 });

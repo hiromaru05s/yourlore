@@ -50,6 +50,7 @@ export async function ownedBadges(env: Env, userId: string): Promise<string[]> {
   return out;
 }
 
+import {isCardEffect} from '../../client/src/shared/cardEffects';
 interface ProfileRow { id: string; display: string; avatar: string | null; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; credits: number; sleeve: string | null; sleeves: string | null; furniture: string | null; }
 
 async function profileOf(env: Env, targetId: string, viewer: SessionUser | null): Promise<Response | Record<string, unknown> | null> {
@@ -93,7 +94,8 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
       badges: await ownedBadges(env, u.id),
       credits: u.credits,
       sleeve: u.sleeve || "default",
-      sleeves: ownedCosmetics(u.sleeves).filter(id=>!id.startsWith("furniture:")),
+      sleeves: ownedCosmetics(u.sleeves).filter(id=>!id.startsWith("furniture:")&&!isCardEffect(id)),
+      effects: ownedCosmetics(u.sleeves).filter(isCardEffect),
       furniture: u.furniture || "default",
       furnitures: ownedCosmetics(u.sleeves).filter(id=>id.startsWith("furniture:")||id==="default"),
       h2h: await h2hOf(env, u.id),
@@ -197,7 +199,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     if(!item||item.price!==0)return json(env,{error:'販売中の商品ではありません'},400);
     await env.DB.prepare(`UPDATE users SET sleeves = json_insert(CASE WHEN json_valid(sleeves) AND json_type(sleeves) = 'array' THEN sleeves ELSE '[]' END, '$[#]', ?1) WHERE id = ?2 AND NOT EXISTS (SELECT 1 FROM json_each(CASE WHEN json_valid(sleeves) AND json_type(sleeves) = 'array' THEN sleeves ELSE '[]' END) WHERE value = ?1)`).bind(item.id,user.id).run();
     const row=await env.DB.prepare('SELECT credits,sleeves FROM users WHERE id = ?').bind(user.id).first<{credits:number;sleeves:string|null}>();
-    const ids=ownedCosmetics(row?.sleeves);return json(env,{ok:true,credits:row?.credits??0,sleeves:ids.filter(id=>!id.startsWith('furniture:')),furnitures:ids.filter(id=>id==='default'||id.startsWith('furniture:'))});
+    const ids=ownedCosmetics(row?.sleeves);return json(env,{ok:true,credits:row?.credits??0,sleeves:ids.filter(id=>!id.startsWith('furniture:')&&!isCardEffect(id)),furnitures:ids.filter(id=>id==='default'||id.startsWith('furniture:'))});
   }
 
   // ---- friends ----
@@ -318,7 +320,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       await env.DB.prepare(`UPDATE challenges SET status = 'declined' WHERE id = ? AND status = 'pending'`).bind(ch.id).run();
       return json(env, { ok: true });
     }
-    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, furniture, deck, decks, starter_cards FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; furniture:string|null; deck: string | null; decks:string|null;starter_cards:string|null }>();
+    const challenger = await env.DB.prepare(`SELECT id, display, sleeve, furniture, deck, decks, starter_cards, sleeves FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; furniture:string|null; deck: string | null; decks:string|null;starter_cards:string|null;sleeves:string|null }>();
     if (!challenger) return json(env, { error: "not found" }, 404);
     let presets:unknown=null;try{presets=JSON.parse(challenger.decks||'null');}catch{}
     const challengerStore=constrainDeckStore(deckStoreForUser({decks:presets,deck:challenger.deck?.split(','),sleeve:challenger.sleeve,furniture:challenger.furniture}),starterCollection(challenger.starter_cards));
@@ -331,7 +333,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const stub = env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId));
     const setup = await stub.fetch("https://do/setup", {
       method: "POST",
-      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: equipped.sleeve, furniture:equipped.furniture, deck: equipped.cards.join(",") }, { id: user.id, name: user.display, sleeve: user.sleeve, furniture:user.furniture, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
+      body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: equipped.sleeve, furniture:equipped.furniture, effect:ownedCosmetics(challenger.sleeves).includes(equipped.effect??'default')?equipped.effect:'default', deck: equipped.cards.join(",") }, { id: user.id, name: user.display, sleeve: user.sleeve, furniture:user.furniture, effect:user.effect, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
     });
     if(!setup.ok&&setup.status!==409)return json(env,{error:'room setup failed; retry'},503);
     await env.DB.prepare(`UPDATE challenges SET status = 'accepted', room_id = ? WHERE id = ? AND status='provisioning'`).bind(roomId, ch.id).run();

@@ -11,7 +11,7 @@ import type { Env } from "./env";
 import type { QueueClientMsg, QueueServerMsg } from "../../client/src/shared/protocol";
 import { ensureMatchBots, MATCH_BOTS, MATCH_BOT_WAIT_MS, matchBotsEnabled } from './matchBots';
 
-interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; furniture:string|null; deck: string | null; ranked: boolean; mmr: number; since: number; phase?:'pairing'|'matched'; messages?:number[]; }
+interface Waiter { ws: WebSocket; id: string; name: string; avatar: string | null; sleeve: string | null; furniture:string|null; effect:string|null; deck: string | null; ranked: boolean; mmr: number; since: number; phase?:'pairing'|'matched'; messages?:number[]; }
 
 const SWEEP_MS = 5000;
 const BAND_START = 100;
@@ -47,6 +47,7 @@ export class Matchmaker {
       avatar: url.searchParams.get("avatar") || null,
       sleeve: url.searchParams.get("sleeve") || null,
       furniture:url.searchParams.get("furniture")||null,
+      effect:url.searchParams.get("effect")||null,
       deck: url.searchParams.get("deck") || null,
       ranked: url.searchParams.get("mode") === "ranked",
       mmr: url.searchParams.has("mmr") && Number.isFinite(Number(url.searchParams.get("mmr"))) ? Math.max(0,Number(url.searchParams.get("mmr"))) : 1000,
@@ -175,7 +176,7 @@ export class Matchmaker {
       if (human.ws.readyState !== WebSocket.OPEN) { human.phase = undefined; this.remove(human.ws); return; }
       const setup = await this.env.GAME_ROOM.get(this.env.GAME_ROOM.idFromName(roomId)).fetch('https://do/setup', {
         method: 'POST', body: JSON.stringify({
-          players: [{id:human.id,name:human.name,sleeve:human.sleeve,furniture:human.furniture,deck:human.deck},
+          players: [{id:human.id,name:human.name,sleeve:human.sleeve,furniture:human.furniture,effect:human.effect,deck:human.deck},
             {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')}],
           seed: crypto.getRandomValues(new Uint32Array(1))[0], ranked: human.ranked, botId: bot.id,
         }),
@@ -221,7 +222,7 @@ export class Matchmaker {
     try {
       const setup=await stub.fetch("https://do/setup", {
         method: "POST",
-        body: JSON.stringify({ players: [{ id: a.id, name: a.name, sleeve: a.sleeve, furniture:a.furniture, deck: a.deck }, { id: b.id, name: b.name, sleeve: b.sleeve, furniture:b.furniture, deck: b.deck }], seed, ranked }),
+        body: JSON.stringify({ players: [{ id: a.id, name: a.name, sleeve: a.sleeve, furniture:a.furniture,effect:a.effect, deck: a.deck }, { id: b.id, name: b.name, sleeve: b.sleeve, furniture:b.furniture,effect:b.effect, deck: b.deck }], seed, ranked }),
       });
       if(!setup.ok)throw new Error('room setup failed');
     } catch {

@@ -1,3 +1,4 @@
+import {cardEffectId} from './cardEffects';
 import { DEW_SHIELD_CARDS, DEW_SHIELD_STARTERS, applyDewShieldRework, localizeDewShieldCards } from './dewShieldCards';
 import { applyBalance58, NIGHT_CASTLE_GIFT } from './balance58';
 import { applyBalance57 } from './balance57';
@@ -1233,7 +1234,7 @@ export function sanitizeDeck(ids: unknown): string[] {
 // ---- 덱 프리셋 (5슬롯) + 덱별 "마켓 알림이" 워치리스트 ----
 export const DECK_SLOTS = 5;
 export const WATCH_MAX = 12; // 알림이 최대 — 너무 많으면 하이라이트가 의미 없어짐
-export interface DeckPreset { cards: string[]; watch: string[]; name?: string; sleeve: string; furniture: string }
+export interface DeckPreset { cards: string[]; watch: string[]; name?: string; sleeve: string; furniture: string; effect?:string }
 export function sanitizeDeckName(value: unknown): string {
   return typeof value === "string" ? Array.from(value.replace(/[\u0000-\u001f\u007f]/g, "").trim()).slice(0,24).join("") : "";
 }
@@ -1244,7 +1245,7 @@ export function sanitizeDecks(raw: unknown, legacy: {sleeve?:string|null;furnitu
   const listIn = Array.isArray(o.list) ? o.list : [];
   const list: DeckPreset[] = [];
   for (let i = 0; i < DECK_SLOTS; i++) {
-    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown; name?: unknown; sleeve?:unknown; furniture?:unknown };
+    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown; name?: unknown; sleeve?:unknown; furniture?:unknown;effect?:unknown };
     const cards = sanitizeDeck(d.cards ?? DEFAULT_DECK_8);
     const wIn = Array.isArray(d.watch) ? d.watch : [];
     const watch: string[] = [];
@@ -1253,7 +1254,7 @@ export function sanitizeDecks(raw: unknown, legacy: {sleeve?:string|null;furnitu
       if (!watch.includes(id) && watch.length < WATCH_MAX) watch.push(id);
     }
     const name = sanitizeDeckName(d.name);
-    list.push({ cards, watch, ...(name ? {name} : {}), sleeve:equipmentId(d.sleeve===undefined?legacy.sleeve:d.sleeve,'sleeve'), furniture:equipmentId(d.furniture===undefined?legacy.furniture:d.furniture,'furniture') });
+    list.push({ cards, watch, effect:cardEffectId(d.effect), ...(name ? {name} : {}), sleeve:equipmentId(d.sleeve===undefined?legacy.sleeve:d.sleeve,'sleeve'), furniture:equipmentId(d.furniture===undefined?legacy.furniture:d.furniture,'furniture') });
   }
   let sel = typeof o.sel === "number" && Number.isFinite(o.sel) ? Math.floor(o.sel) : 0;
   if (sel < 0 || sel >= DECK_SLOTS) sel = 0;

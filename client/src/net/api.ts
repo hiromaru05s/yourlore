@@ -23,6 +23,8 @@ export interface User {
   botClears?: string[];
   credits: number;
   starterCards?: Record<string,number>;
+  effects?:string[];
+  effect?:string;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
   furniture?: string | null;
@@ -180,6 +182,7 @@ export interface Profile {
   sleeve?: string;   // equipped sleeve id (self only)
   furniture?: string;
   furnitures?: string[];
+  effects?:string[];
   sleeves?: string[]; // owned sleeve ids incl. 'default' (self only)
   // per-mode W/L aggregates for the record filter (self only)
   byMode?: { ranked: { w: number; l: number }; online: { w: number; l: number }; bot: { w: number; l: number } };

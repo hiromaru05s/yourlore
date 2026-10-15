@@ -102,6 +102,15 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
       ctx.restore();
     });
   }
+  // Sample the live material before typography, preserving its art-window clip.
+  for(const layer of node.querySelectorAll<HTMLCanvasElement>('.card-effect-surface')){
+    if(!layer.width||!layer.height)continue;
+    const snapshot=canvas(layer.width,layer.height);snapshot.getContext('2d')!.drawImage(layer,0,0);
+    const b=box(layer),artLayer=!!layer.closest('.card-art');
+    const blend=getComputedStyle(layer).mixBlendMode==='screen'?'screen':'source-over';
+    const path=document.querySelector(node.classList.contains('card--field')?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d');
+    layers.push(async()=>{ctx.save();if(artLayer&&path){ctx.translate(pad,pad);ctx.scale(w,h);ctx.clip(new Path2D(path));ctx.scale(1/w,1/h);ctx.translate(-pad,-pad);}ctx.globalCompositeOperation=blend;ctx.drawImage(snapshot,b.x,b.y,b.w,b.h);ctx.restore();});
+  }
   // Capture text measurements BEFORE awaits or hiding the destination.
   const drawText = (el: HTMLElement): (() => Promise<void>) => {
     const style = getComputedStyle(el), b = box(el);
@@ -141,6 +150,7 @@ export async function capturePileSurface(node:HTMLElement,sleeve:string,preserve
   const host=document.createElement('div');host.className='pile-print';
   host.style.cssText='position:fixed;left:-1000px;top:0;width:128px;height:200px;visibility:hidden;pointer-events:none';
   const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('style');
+  const originalLayers=node.querySelectorAll<HTMLCanvasElement>('.card-effect-surface');copy.querySelectorAll<HTMLCanvasElement>('.card-effect-surface').forEach((layer,i)=>{const original=originalLayers[i];if(original?.width)layer.getContext('2d')!.drawImage(original,0,0);});
   copy.classList.remove('fx-card-flight','cast-reveal','is-picked','is-armed','card--dim','is-dim','is-exhausted','is-playable','is-buyable');
   copy.style.cssText='--cw:128px;--ch:200px;width:128px;height:200px;transform:none';
   const originalWidth=node.offsetWidth||parseFloat(getComputedStyle(node).width)||128;
@@ -179,6 +189,7 @@ export async function captureQuestTile(node:HTMLElement):Promise<HTMLCanvasEleme
   if(path){c.translate(pad,pad);c.scale(w,h);c.clip(new Path2D(path));c.scale(1/w,1/h);c.translate(-pad,-pad);}
   const scale=Math.max(w/ar.naturalWidth,h/ar.naturalHeight),sw=w/scale,sh=h/scale;
   c.drawImage(ar,(ar.naturalWidth-sw)/2,(ar.naturalHeight-sh)/2,sw,sh,pad,pad,w,h);c.restore();
+  for(const layer of node.querySelectorAll<HTMLCanvasElement>('.card-effect-surface')){if(!layer.width)continue;c.save();if(path){c.translate(pad,pad);c.scale(w,h);c.clip(new Path2D(path));c.scale(1/w,1/h);c.translate(-pad,-pad);}c.globalCompositeOperation=getComputedStyle(layer).mixBlendMode==='screen'?'screen':'source-over';const b=box(layer);c.drawImage(layer,b.x,b.y,b.w,b.h);c.restore();}
   c.drawImage(seal,cb.x,cb.y,cb.w,cb.h);text(cost.textContent||'',cb,cs);
   if(!label||!lb||!ls){
     if(infinity&&ib)c.drawImage(await matte(infinity.src),ib.x,ib.y,ib.w,ib.h);

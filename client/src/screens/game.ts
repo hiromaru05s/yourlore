@@ -1,3 +1,4 @@
+import {setLocalCardEffect,clearCardEffectContext,disposeCardEffects} from '../ui/cardFinish';
 import { api } from '../net/api';
 import { mountDuelSpiritGuide } from '../ui/duelSpiritGuide';
 import { botNpc } from "../shared/botNpcs";
@@ -29,6 +30,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait
   setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : npc?.avatar ?? null);
   const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
+  clearCardEffectContext();setLocalCardEffect(opts.mode==='bot'?activeDeck.effect:undefined);
   setMySleeve(activeDeck.sleeve); setMyFurniture(activeDeck.furniture);  // apply my equipped card sleeve to my deck/set-trap backs
   // 마켓 알림이: 활성 덱 프리셋의 워치리스트를 인게임 마켓 하이라이트에 연결
   setMarketWatch(activeDeck.watch);
@@ -82,5 +84,5 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   const stopLayout = startBoardLayout();
   const stopGuide = opts.mode === "tutorial" ? undefined : mountDuelSpiritGuide(root, () => ctrl.guideContext());
 
-  return { destroy: () => { stopMusic?.(); stopGuide?.(); stopLayout(); ctrl.destroy(); } };
+  return { destroy: () => { stopMusic?.(); stopGuide?.(); stopLayout(); ctrl.destroy(); disposeCardEffects(); clearCardEffectContext(); } };
 }

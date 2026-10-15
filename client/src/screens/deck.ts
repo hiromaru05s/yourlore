@@ -1,3 +1,4 @@
+import {disposeCardEffects} from '../ui/cardFinish';
 import {starterCollection,constrainDeckStore} from '../shared/collection';
 import {renderDeckAppearance} from '../ui/deckAppearance';
 import {isLocalDevAccount,loadLocalGuestProfile} from '../dev/localAccount';
@@ -128,7 +129,7 @@ export function mountDeck(app: App): Screen {
     curEl.classList.toggle('is-replacing', !!pending);
     // ---- 현재 덱: 어튠(고정) + 8장 ----
     curEl.innerHTML = "";
-    const attune = cardEl(inst("STARTER_MANA", "fx_mana"), { size: "mkt" });
+    const attune = cardEl(inst("STARTER_MANA", "fx_mana"), { size: "mkt", effect:store.list[cur].effect });
     attune.classList.add("deck-fixed");
     const entry=(card:HTMLElement,c:CardInst,index:number,fixed=false)=>{
       const row=document.createElement('div');row.className='deck-entry'+(fixed?' is-fixed':'');
@@ -137,7 +138,7 @@ export function mountDeck(app: App): Screen {
       const activate=()=>{if(saving)return;if(fixed)return;undo=[...deck()];if(pending){deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);render();};
       card.tabIndex=0;card.setAttribute('role','button');
       card.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
-      card.onclick=()=>zoomCard(c);card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c);}};
+      card.onclick=()=>zoomCard(c,undefined,undefined,store.list[cur].effect);card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c,undefined,undefined,store.list[cur].effect);}};
       if(fixed){const lock=document.createElement('span');lock.className='deck-attune-lock';lock.innerHTML=`<span class="deck-lock-glyph" aria-hidden="true"></span><span>${t('deck.fixed')}</span>`;row.append(lock);}
       else {const action=document.createElement('button');action.className='deck-hand-action';action.textContent=pending?'⇄':'−';action.disabled=saving;action.setAttribute('aria-label',`${cardName(c)} · ${pending?loungeText('入れ替え','Replace','교체'):t('deck.remove')}`);action.onclick=activate;row.append(action);}
       curEl.append(row);
@@ -145,7 +146,7 @@ export function mountDeck(app: App): Screen {
     entry(attune,inst('STARTER_MANA','fx_mana'),0,true);
     deck().forEach((id, i) => {
       const c = inst(id, "dk" + i);
-      const el = cardEl(c, { size: "mkt", playable: true });
+      const el = cardEl(c, { size: "mkt", playable: true, effect:store.list[cur].effect });
       entry(el,c,i+1);
     });
     for (let k = deck().length; k < DECK_SIZE; k++) {
@@ -238,7 +239,7 @@ export function mountDeck(app: App): Screen {
       if (dead) return;
       Object.assign(store, r.decks);
       saved = JSON.stringify(store);
-      if (app.user) { app.user.decks = r.decks; app.user.deck = r.deck; const active=r.decks.list[r.decks.sel];app.user.sleeve=active.sleeve;app.user.furniture=active.furniture; }
+      if (app.user) { app.user.decks = r.decks; app.user.deck = r.deck; const active=r.decks.list[r.decks.sel];app.user.sleeve=active.sleeve;app.user.furniture=active.furniture;app.user.effect=active.effect; }
       msgEl.textContent = t("deck.saved");
     } catch (e) {
       msgEl.textContent = (e as Error).message || t("api.fail");
@@ -255,7 +256,7 @@ export function mountDeck(app: App): Screen {
 
   const loadOwned=async()=>{
     cosmeticError=false;
-    try {const profile=isLocalDevAccount()?loadLocalGuestProfile():await api.profile();if(dead)return;owned=new Set(['default',...(profile.sleeves??[]),...('furnitures' in profile?profile.furnitures??[]:[])]);}
+    try {const profile=isLocalDevAccount()?loadLocalGuestProfile():await api.profile();if(dead)return;owned=new Set(['default',...(profile.sleeves??[]),...('furnitures' in profile?profile.furnitures??[]:[]),...('effects' in profile?profile.effects??[]:[])]);}
     catch {if(dead)return;cosmeticError=true;}
     render();
   };
@@ -266,6 +267,6 @@ export function mountDeck(app: App): Screen {
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { disposeCardEffects(wrap); dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

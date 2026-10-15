@@ -242,6 +242,7 @@ export interface GameState {
       OPPONENT's card backs with their chosen sleeve. index = Side. null = default back. */
   sleeves?: [string | null, string | null];
   furnitures?: [string | null, string | null];
+  effects?: [string | null, string | null];
 }
 
 // --- Actions: the only way to mutate a GameState ---

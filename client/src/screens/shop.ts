@@ -66,7 +66,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     collectionBusy=true;notice='';refreshCollectionUi();
     try{
       const result=await purchaseCollection(uid,op);credits=result.credits;starterCards=result.starterCards;
-      if(app.user?.id===uid){app.user.credits=credits;app.user.starterCards=starterCards;document.dispatchEvent(new Event('lore:user'));}
+      if(app.user?.id===uid){app.user.credits=credits;app.user.starterCards=starterCards;app.user.effects=result.effects;document.dispatchEvent(new Event('lore:user'));}
       notice=loungeText('購入が完了しました。','Purchase complete.','구매가 완료되었습니다.');
       return result;
     }catch(error){notice=(error as Error).message;throw error;}
@@ -160,7 +160,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     if (dead) return;
     owned = new Set([...(p.sleeves??["default"]),...(p.furnitures??[])]);
     credits = collection.credits;starterCards=collection.starterCards;collectionReady=true;
-    if(app.user){app.user.credits=credits;app.user.starterCards=starterCards;}
+    if(app.user){app.user.credits=credits;app.user.starterCards=starterCards;app.user.effects=collection.effects;}
     build();
   }).catch((e) => { if (!dead){notice=(e as Error).message;build();} });
 
