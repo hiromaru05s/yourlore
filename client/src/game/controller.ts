@@ -1,3 +1,5 @@
+import {createMarketCrisis} from '../ui/marketCrisis/runtime';
+import {fixedMarketWasReplaced} from '../ui/marketCrisis/selection';
 import {erosionPlan} from '../ui/erosion/events';
 import {growthGroups,growthDrawHands} from '../ui/growth/plan';
 import {isSoulHarvestDamage,soulHarvestDamageIndex} from '../ui/soulHarvest/events';
@@ -110,6 +112,7 @@ export abstract class BaseController implements BoardHandlers {
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
   private turnStartedWall = 0; // wall-clock ms when the current turn's timer started (anti instant-skip)
   private disposeHandDiscard:(()=>void)|undefined;
+  private marketCrisis:ReturnType<typeof createMarketCrisis>|undefined;
   private marketRefresh:ReturnType<typeof playSupplyRefresh>|undefined;
   private presentedHandDiscards=new Set<string>();
   private handCapBonusKey = ""; // v42: turn key that already received the +10s hand-discard bonus
@@ -158,6 +161,7 @@ export abstract class BaseController implements BoardHandlers {
   protected fastForward(): void {
     this.timewarp.cancel();
     this.marketRefresh?.cancel();
+    this.marketCrisis?.cancel();
     this.skipGen = this.fxGen;
     stopSounds();
     A.setFxSkip(true);
@@ -300,6 +304,7 @@ export abstract class BaseController implements BoardHandlers {
     try {
       await this.playEvents(prev, res, presentedHandDiscards);
     } finally {
+      this.marketCrisis?.cancel();this.marketCrisis=undefined;
       if (!this.dead) this.view.setPlaying(false);
       if (res.state.over) this.outcomePending = false;
     }
@@ -1013,7 +1018,12 @@ export abstract class BaseController implements BoardHandlers {
     // Stat animations belong to this batch too: automatic follow-ups must not
     // replace their source cards before all targets finish their shared motion.
     if(events.some(e=>e.type==='turnSkipped'&&e.source==='TIMEWARP'))this.view.syncTurn(res.state);
+    const crisis=!A.isFxSkipped()&&fixedMarketWasReplaced(prev,res.state)?createMarketCrisis(this.view.root):undefined;
+    this.marketCrisis=crisis;
+    if(crisis)await crisis.destroy();
+    if(this.dead){crisis?.cancel();return;}
     effectFinishes.push(this.view.render(res.state));
+    if(crisis)effectFinishes.push(crisis.reveal().finally(()=>{if(this.marketCrisis===crisis)this.marketCrisis=undefined}));
     // The existing draw and HP feedback run alongside birth, once each. Public new
     // UIDs come from the reducer, so a same-name original never becomes a second copy.
     for(const born of creationEvents){
@@ -1462,6 +1472,7 @@ export abstract class BaseController implements BoardHandlers {
     this.timewarp.destroy();
     this.combatExits.abort();clearDamageFeedback();
     this.marketRefresh?.cancel();
+    this.marketCrisis?.cancel();
     this.disposeHandDiscard?.();
     this.dead = true;
     disposeStatusExtinctions();

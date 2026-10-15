@@ -352,13 +352,13 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     if(effect&&!fxSkip)warmSoulHarvest();
     else if(dark&&!fxSkip)warmDarkMerchant();
     else if(card.id==='FLAME'&&!fxSkip)warmEmberDebt();
-    else if(card.t==='spell'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
+    else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
     const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
     if(!special){
       await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
       if(effect){await parkQuickSpell(node,side);await effect(node);}
       else if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
-      else if(card.t==='spell'&&!persistent&&card.id!=='FORBIDDEN'&&card.id!=='FLAME'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
+      else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&card.id!=='FORBIDDEN'&&card.id!=='FLAME'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
     }
     const to = dest === "discard" ? rectOf("#" + discId(side)) : trapZoneRect(side);
     if (to && dest === "field" && (card.ench || card.t === "quest")) {
