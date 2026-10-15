@@ -1,0 +1,16 @@
+{
+  "sourceCommit": "ca78d37a32bb2c84662eb9205c2387c90956a282",
+  "castleCommit": "1505f669c10322738e580ca3fdd0694ddd54c632",
+  "url": "https://test.yourlore.xyz",
+  "workerVersion": "60945c0d-4e52-4ce6-a431-05521d21a44a",
+  "trafficPercent": 100,
+  "typecheck": true,
+  "productionTests": {
+    "passed": 163,
+    "failed": 0
+  },
+  "build": true,
+  "assetsMatched": 100,
+  "smoke": "HTTP 200; login UI; zero page errors",
+  "authenticatedOnlineGameplay": false
+}
