@@ -1,0 +1,21 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-15T10:14:53.908Z",
+  "boundary": "Authenticated deployed API and real D1 with a disposable legacy-payment fixture; no browser UI claim.",
+  "legacyPaid": 3000,
+  "newPaid": 2000,
+  "finalCredits": 5000,
+  "completed": 36,
+  "concurrentGrants": [
+    40,
+    0
+  ],
+  "checks": [
+    "old receipts do not mark new lessons learned",
+    "remaining budget exactly 2000",
+    "all 36 authoritative replays accepted",
+    "duplicate concurrent grant paid once",
+    "final total exactly 5000",
+    "retry pays zero"
+  ]
+}
