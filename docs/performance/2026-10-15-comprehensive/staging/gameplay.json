@@ -1,0 +1,1797 @@
+{
+  "base": "https://test.yourlore.xyz",
+  "reuseContext": true,
+  "api": "fixture guest; normal production HOME and local BOT route",
+  "cases": [
+    {
+      "gameAssetEntryWire": [],
+      "packFailures": [],
+      "packTimings": [],
+      "workerEntryRequests": [],
+      "serverEntryRequests": [],
+      "width": 1280,
+      "homeMs": 126204,
+      "reloadMs": 14612,
+      "duelMs": 9382,
+      "coldWire": [
+        {
+          "url": "https://test.yourlore.xyz/?polish",
+          "at": 1792070519558.513,
+          "preload": false,
+          "cache": false,
+          "bytes": 1511
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/atelierThemes-DM29k3s-.js",
+          "at": 1792070521439.916,
+          "preload": false,
+          "cache": false,
+          "bytes": 2432
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/BufferGeometryUtils-BhFiIUQQ.js",
+          "at": 1792070521440.133,
+          "preload": false,
+          "cache": false,
+          "bytes": 1836
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/main-BILxHK-S.js",
+          "at": 1792070521439.87,
+          "preload": false,
+          "cache": false,
+          "bytes": 87890
+        },
+        {
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+          "at": 1792070521440.366,
+          "preload": false,
+          "cache": false,
+          "bytes": 10438
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/sleeve-DCOs8W0K.js",
+          "at": 1792070521440.0789,
+          "preload": false,
+          "cache": false,
+          "bytes": 4602
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+          "at": 1792070521440.043,
+          "preload": false,
+          "cache": false,
+          "bytes": 575
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/brand/lore-logo-transparent.webp",
+          "at": 1792070521439.6719,
+          "preload": false,
+          "cache": false,
+          "bytes": 32977
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/materials-B6YmKf8u.js",
+          "at": 1792070521440.191,
+          "preload": false,
+          "cache": false,
+          "bytes": 4579
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/baseFurniture-BuL3aZIk.js",
+          "at": 1792070521440.106,
+          "preload": false,
+          "cache": false,
+          "bytes": 5665
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/analytics-BgCo-JyA.js",
+          "at": 1792070521440.014,
+          "preload": false,
+          "cache": false,
+          "bytes": 9266
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/readingAssetCache-Dh1SRnqh.js",
+          "at": 1792070521439.9568,
+          "preload": false,
+          "cache": false,
+          "bytes": 174725
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/catalogRender-Bqd1yUyJ.js",
+          "at": 1792070521440.223,
+          "preload": false,
+          "cache": false,
+          "bytes": 2094
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/main-CtKLtZfC.css",
+          "at": 1792070521440.307,
+          "preload": false,
+          "cache": false,
+          "bytes": 109650
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/libraryAssets-DoIX_hw_.js",
+          "at": 1792070521440.1619,
+          "preload": false,
+          "cache": false,
+          "bytes": 14919
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/social-D0rnQI4N.css",
+          "at": 1792070521440.274,
+          "preload": false,
+          "cache": false,
+          "bytes": 59580
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/social-COkTYN8q.js",
+          "at": 1792070521439.987,
+          "preload": false,
+          "cache": false,
+          "bytes": 560512
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+          "at": 1792070521439.823,
+          "preload": false,
+          "cache": false,
+          "bytes": 2723749
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/homeAtmosphere-C-IA2G6O.js",
+          "at": 1792070526112.753,
+          "preload": false,
+          "cache": false,
+          "bytes": 5349
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+          "at": 1792070526124.7202,
+          "preload": false,
+          "cache": false,
+          "bytes": 21865
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/icons/v2/arrow.png",
+          "at": 1792070526124.815,
+          "preload": false,
+          "cache": false,
+          "bytes": 58498
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+          "at": 1792070526104.285,
+          "preload": false,
+          "cache": false,
+          "bytes": 29092
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+          "at": 1792070526083.93,
+          "preload": false,
+          "cache": false,
+          "bytes": 31912
+        },
+        {
+          "url": "https://us.i.posthog.com/static/array.js",
+          "at": 1792070525901.202,
+          "preload": false,
+          "cache": false,
+          "bytes": 99881
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+          "at": 1792070526124.77,
+          "preload": false,
+          "cache": false,
+          "bytes": 13497
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/seekers/faceless-v2/portrait.webp",
+          "at": 1792070526125.011,
+          "preload": false,
+          "cache": false,
+          "bytes": 45303
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/icons/shard-simple-v1.png",
+          "at": 1792070526125.0588,
+          "preload": false,
+          "cache": false,
+          "bytes": 8996
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792070526120.368,
+          "preload": false,
+          "cache": false,
+          "bytes": 881022
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/stage-v1/sigil.png",
+          "at": 1792070526082.543,
+          "preload": false,
+          "cache": false,
+          "bytes": 1998774
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/gifts/courier.png",
+          "at": 1792070526124.881,
+          "preload": false,
+          "cache": false,
+          "bytes": 1088475
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/471899cd47871528b417fb4f88c7e23d4e2264f88298b49c539ec654ae30fe7b.woff2",
+          "at": 1792070526287.08,
+          "preload": false,
+          "cache": false,
+          "bytes": 11825
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fa981b56ecdad0095f14ef8201483fdc1b49efe7d048b64bad3efbbcb1d18eac.woff2",
+          "at": 1792070526286.895,
+          "preload": false,
+          "cache": false,
+          "bytes": 11604
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+          "at": 1792070526320.759,
+          "preload": false,
+          "cache": false,
+          "bytes": 32426
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/duel-ink-v1/disc.png",
+          "at": 1792070526121.053,
+          "preload": false,
+          "cache": false,
+          "bytes": 1789653
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792070526918.8298,
+          "preload": false,
+          "cache": false,
+          "bytes": 327
+        },
+        {
+          "url": "https://us.i.posthog.com/flags/?v=2",
+          "at": 1792070531234.6448,
+          "preload": false,
+          "cache": false,
+          "bytes": 580
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/ivy.png",
+          "at": 1792070526918.9502,
+          "preload": false,
+          "cache": false,
+          "bytes": 1331452
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/menu-manifest-735bbea07e500aec93ac.json",
+          "at": 1792070528705.242,
+          "preload": false,
+          "cache": false,
+          "bytes": 103940
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+          "at": 1792070526918.606,
+          "preload": false,
+          "cache": false,
+          "bytes": 270
+        },
+        {
+          "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+          "at": 1792070527663.7449,
+          "preload": false,
+          "cache": false,
+          "bytes": 828
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-f844a19db7df96cf31f742b9.bin",
+          "at": 1792070532681.326,
+          "preload": true,
+          "cache": false,
+          "bytes": 3431431
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-81644147e0d42115d71e7f59.bin",
+          "at": 1792070532681.721,
+          "preload": true,
+          "cache": false,
+          "bytes": 3501664
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-61a0102bac346324e990502b.bin",
+          "at": 1792070532681.1472,
+          "preload": true,
+          "cache": false,
+          "bytes": 4076472
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-1e7953f47aacb11cfc188a9d.bin",
+          "at": 1792070532681.542,
+          "preload": true,
+          "cache": false,
+          "bytes": 4100423
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-aea166a3bd28108ca08dd338.bin",
+          "at": 1792070532681.635,
+          "preload": true,
+          "cache": false,
+          "bytes": 3731015
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-dc221732af8aaa895a16f118.bin",
+          "at": 1792070532681.4429,
+          "preload": true,
+          "cache": false,
+          "bytes": 4163424
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-c01fb464a38881ca4cdbc633.bin",
+          "at": 1792070537642.239,
+          "preload": true,
+          "cache": false,
+          "bytes": 4184122
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-5e3db3c4345db03a6022d2a7.bin",
+          "at": 1792070541261.92,
+          "preload": true,
+          "cache": false,
+          "bytes": 4184382
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-73dd0ca66b49ecba6ce5a906.bin",
+          "at": 1792070542709.159,
+          "preload": true,
+          "cache": false,
+          "bytes": 4182630
+        },
+        {
+          "url": "https://us-assets.i.posthog.com/static/1.438.8/surveys.js",
+          "at": 1792070533146.765,
+          "preload": false,
+          "cache": false,
+          "bytes": 33790
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-5fb70737f34f3de7eaa1c461.bin",
+          "at": 1792070544359.6821,
+          "preload": true,
+          "cache": false,
+          "bytes": 4187603
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-f812c02fa6b4365bac1dfda7.bin",
+          "at": 1792070544793.984,
+          "preload": true,
+          "cache": false,
+          "bytes": 4024326
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-14a65e83c59d44d91830924e.bin",
+          "at": 1792070544813.364,
+          "preload": true,
+          "cache": false,
+          "bytes": 4079057
+        },
+        {
+          "url": "https://test.yourlore.xyz/cdn-cgi/rum?",
+          "at": 1792070548933.2659,
+          "preload": false,
+          "cache": false,
+          "bytes": 381
+        },
+        {
+          "url": "https://test.yourlore.xyz/favicon.ico",
+          "at": 1792070548936.45,
+          "preload": false,
+          "cache": false,
+          "bytes": 283
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-f4cb13907a49ec6711dbee69.bin",
+          "at": 1792070547701.609,
+          "preload": true,
+          "cache": false,
+          "bytes": 3636685
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-0052df9e17ffa36dcdf20b87.bin",
+          "at": 1792070545987.243,
+          "preload": true,
+          "cache": false,
+          "bytes": 4198259
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-69ef76a22b6f50b5b83ced88.bin",
+          "at": 1792070547588.023,
+          "preload": true,
+          "cache": false,
+          "bytes": 4049153
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-5c1f0106b915a95bf49c0658.bin",
+          "at": 1792070550244.312,
+          "preload": true,
+          "cache": false,
+          "bytes": 3749139
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-bc1d541e17e872c9db0e0b6b.bin",
+          "at": 1792070550091.63,
+          "preload": true,
+          "cache": false,
+          "bytes": 4086852
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-5fdd439c62ed36553c7cc865.bin",
+          "at": 1792070550504.2378,
+          "preload": true,
+          "cache": false,
+          "bytes": 4139687
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-c4dc0a66e2a4af4b3500211b.bin",
+          "at": 1792070551704.205,
+          "preload": true,
+          "cache": false,
+          "bytes": 4038523
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-c0512c7e6fc73cdc72a0d113.bin",
+          "at": 1792070551722.7039,
+          "preload": true,
+          "cache": false,
+          "bytes": 3973627
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-a9453c81e12b83fe3daa035c.bin",
+          "at": 1792070551732.908,
+          "preload": true,
+          "cache": false,
+          "bytes": 4069980
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-25b3a47886ed6b6cfd301b77.bin",
+          "at": 1792070552717.03,
+          "preload": true,
+          "cache": false,
+          "bytes": 3850215
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-2c88990cdd888b5fc54043f9.bin",
+          "at": 1792070552736.016,
+          "preload": true,
+          "cache": false,
+          "bytes": 4114198
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-79e4d8a0fa84aa2365bef1ed.bin",
+          "at": 1792070553221.352,
+          "preload": true,
+          "cache": false,
+          "bytes": 4159250
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-03b1606b82ccc3cffd578050.bin",
+          "at": 1792070554234.267,
+          "preload": true,
+          "cache": false,
+          "bytes": 4145984
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-67a5d5c5a3cf89293ec83594.bin",
+          "at": 1792070554976.754,
+          "preload": true,
+          "cache": false,
+          "bytes": 3983600
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-0759a1a468e30670ffc62942.bin",
+          "at": 1792070555275.131,
+          "preload": true,
+          "cache": false,
+          "bytes": 4098238
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-053c35f6541b356055dc0754.bin",
+          "at": 1792070556587.573,
+          "preload": true,
+          "cache": false,
+          "bytes": 4037331
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-98180e140fa52c6024d105c1.bin",
+          "at": 1792070557708.175,
+          "preload": true,
+          "cache": false,
+          "bytes": 4008467
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-b5d88b7b57d9abc67352237e.bin",
+          "at": 1792070558428.4438,
+          "preload": true,
+          "cache": false,
+          "bytes": 4099209
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-117cc551e8ab6d1cc040c32c.bin",
+          "at": 1792070557750.376,
+          "preload": true,
+          "cache": false,
+          "bytes": 4146416
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/key-visuals/concepts/lore-kv-03-crimson-eclipse-duel-arena.png",
+          "at": 1792070559022.168,
+          "preload": true,
+          "cache": false,
+          "bytes": 2680990
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-524f8814acdce82c9c0d9f75.bin",
+          "at": 1792070559017.662,
+          "preload": true,
+          "cache": false,
+          "bytes": 3727466
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+          "at": 1792070559484.231,
+          "preload": true,
+          "cache": false,
+          "bytes": 339
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/ivy.png",
+          "at": 1792070560023.6968,
+          "preload": true,
+          "cache": false,
+          "bytes": 270
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+          "at": 1792070560843.441,
+          "preload": true,
+          "cache": false,
+          "bytes": 297
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-a7bbaacc076bef8427fe5172.bin",
+          "at": 1792070561526.406,
+          "preload": true,
+          "cache": false,
+          "bytes": 4175053
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-a334a6cddfb588ec2d430a55.bin",
+          "at": 1792070562468.742,
+          "preload": true,
+          "cache": false,
+          "bytes": 3368766
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-199cda824a9e6896c358bac0.bin",
+          "at": 1792070562631.116,
+          "preload": true,
+          "cache": false,
+          "bytes": 3890089
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+          "at": 1792070562653.5698,
+          "preload": true,
+          "cache": false,
+          "bytes": 2508003
+        },
+        {
+          "url": "https://test.yourlore.xyz/art/vfx/mimic-family/engraved-brass.png",
+          "at": 1792070562692.494,
+          "preload": true,
+          "cache": false,
+          "bytes": 3575869
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-0089e2e6dc22189e61cdb170.bin",
+          "at": 1792070563025.1108,
+          "preload": true,
+          "cache": false,
+          "bytes": 3283464
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-a97fc8473a1e545e69194def.bin",
+          "at": 1792070563588.645,
+          "preload": true,
+          "cache": false,
+          "bytes": 4040332
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-520a89ce7289c772a1034e3f.bin",
+          "at": 1792070563548.63,
+          "preload": true,
+          "cache": false,
+          "bytes": 3831094
+        },
+        {
+          "url": "https://test.yourlore.xyz/cosmetics/gacha-trio-v1/tidal.webp",
+          "at": 1792070564995.919,
+          "preload": true,
+          "cache": false,
+          "bytes": 388956
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-28f0f31ab51513f790ca5b7b.bin",
+          "at": 1792070564761.54,
+          "preload": true,
+          "cache": false,
+          "bytes": 4168148
+        },
+        {
+          "url": "https://test.yourlore.xyz/cosmetics/living-v1/azure-plume/art.png",
+          "at": 1792070565238.17,
+          "preload": true,
+          "cache": false,
+          "bytes": 3202207
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-3b05b41915767a8e45185d10.bin",
+          "at": 1792070565285.366,
+          "preload": true,
+          "cache": false,
+          "bytes": 4150639
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-999f1e441d67c87cfe577e8e.bin",
+          "at": 1792070568769.741,
+          "preload": true,
+          "cache": false,
+          "bytes": 4188360
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-eebd15024b633fb8c61f1155.bin",
+          "at": 1792070568955.81,
+          "preload": true,
+          "cache": false,
+          "bytes": 4198798
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/f98a60cfa5c901ceb4d17478cdd6a5162ab0f8ad977eb94442d62015835639dc.woff2",
+          "at": 1792070571584.6838,
+          "preload": true,
+          "cache": false,
+          "bytes": 71405
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-546b34debe4dca84640b1d76.bin",
+          "at": 1792070569646.636,
+          "preload": true,
+          "cache": false,
+          "bytes": 4160012
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-48a199516dcc5672500277f9.bin",
+          "at": 1792070569809.697,
+          "preload": true,
+          "cache": false,
+          "bytes": 4159714
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/f98e5438ed9cb4783b9afe40ae3af2b37aab02692c923868d0d5642b798f2668.woff2",
+          "at": 1792070573168.254,
+          "preload": true,
+          "cache": false,
+          "bytes": 12151
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-8c5806cd8f09a358205d5449.bin",
+          "at": 1792070570500.994,
+          "preload": true,
+          "cache": false,
+          "bytes": 4196693
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/faf21491ad9bd040aa81f0aef6a5ddaf91fd70082aaa7828555bab2f82ec78c8.woff2",
+          "at": 1792070574544.8352,
+          "preload": true,
+          "cache": false,
+          "bytes": 14270
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fa981b56ecdad0095f14ef8201483fdc1b49efe7d048b64bad3efbbcb1d18eac.woff2",
+          "at": 1792070574410.444,
+          "preload": true,
+          "cache": false,
+          "bytes": 292
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fb53abb8275b4f7bce02be67d70e493b16fe2bc69a4e2d7c1ddd52a221d44c07.woff2",
+          "at": 1792070576197.4758,
+          "preload": true,
+          "cache": false,
+          "bytes": 12811
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fbabf641df66d64c777a0b3e1cd2fd1b534f9bf2be4d2352797dd2a1e99b9e81.woff2",
+          "at": 1792070576206.523,
+          "preload": true,
+          "cache": false,
+          "bytes": 12464
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fb6dfe852d14c165fb540975c6f06a39beec9d83b91b432032c2ff81f7bc519d.woff2",
+          "at": 1792070576206.239,
+          "preload": true,
+          "cache": false,
+          "bytes": 53870
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fc2a70c09cc281c6d0143666f711b0aa90b87d0dd228448711e9bd29af085271.woff2",
+          "at": 1792070576207.306,
+          "preload": true,
+          "cache": false,
+          "bytes": 1203
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fcc7bcfe3bb79214e16ba88099b52c461822a5fc5eaaf82a34efe9fc350d4da4.woff2",
+          "at": 1792070576226.1118,
+          "preload": true,
+          "cache": false,
+          "bytes": 15135
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fd237e1c09106cb15a4961de0363a91f34c16a3624156f717576e8b4fa4d3038.woff2",
+          "at": 1792070576484.4749,
+          "preload": true,
+          "cache": false,
+          "bytes": 21786
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fd6459b9a0dd708f76ccebd932ab73761bb2832aab505432c9aa603706551982.woff2",
+          "at": 1792070576692.417,
+          "preload": true,
+          "cache": false,
+          "bytes": 28736
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fd48f9e36bd351795e73ff5b2ea783ce79e004459ca10f52cbe0eb493856a36e.woff2",
+          "at": 1792070576692.1848,
+          "preload": true,
+          "cache": false,
+          "bytes": 13516
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fde6724b8d6f98c963fe694c02a7237ed7a4e453689d9a1563f82c7d85d6bcb3.woff2",
+          "at": 1792070576699.0918,
+          "preload": true,
+          "cache": false,
+          "bytes": 3590
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fde84787a46dfe43be5a3f315b4bb256929d35855a6af2927167b0482534e52c.woff2",
+          "at": 1792070576699.462,
+          "preload": true,
+          "cache": false,
+          "bytes": 15278
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fe568d50a29522314189c7e2189f2cbbca3acfa35b3173452d91b13053337ae7.woff2",
+          "at": 1792070576699.707,
+          "preload": true,
+          "cache": false,
+          "bytes": 19978
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/fe61175d6c9808f83c3fd245264f1abf3b51272d0cb2bc938fc301d46319f5ef.woff2",
+          "at": 1792070577100.224,
+          "preload": true,
+          "cache": false,
+          "bytes": 32193
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/ff07f44b624e6cf6018db8a3984ba66c0b2d74dc344de2bfe9e6f971b5f669f0.woff2",
+          "at": 1792070581219.9148,
+          "preload": true,
+          "cache": false,
+          "bytes": 14445
+        },
+        {
+          "url": "https://test.yourlore.xyz/fonts/web/files/ff83f85787a4c8c6afcb3246cb94337fa355583d5d95000c6661baae33648b84.woff2",
+          "at": 1792070582073.108,
+          "preload": true,
+          "cache": false,
+          "bytes": 59801
+        },
+        {
+          "url": "https://test.yourlore.xyz/frames/sleeve_compass.webp",
+          "at": 1792070582528.6719,
+          "preload": true,
+          "cache": false,
+          "bytes": 32966
+        },
+        {
+          "url": "https://test.yourlore.xyz/frames/sleeve_default.webp",
+          "at": 1792070582633.172,
+          "preload": true,
+          "cache": false,
+          "bytes": 99820
+        },
+        {
+          "url": "https://test.yourlore.xyz/frames/sleeve_prism.webp",
+          "at": 1792070582977.215,
+          "preload": true,
+          "cache": false,
+          "bytes": 74925
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/crystal-optics.json",
+          "at": 1792070583832.6362,
+          "preload": true,
+          "cache": false,
+          "bytes": 1587
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/deck-place.glb",
+          "at": 1792070583848.228,
+          "preload": true,
+          "cache": false,
+          "bytes": 1195864
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+          "at": 1792070583854.0872,
+          "preload": true,
+          "cache": false,
+          "bytes": 211879
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/board.glb",
+          "at": 1792070583824.068,
+          "preload": true,
+          "cache": false,
+          "bytes": 3722330
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-counter.glb",
+          "at": 1792070584060.0222,
+          "preload": true,
+          "cache": false,
+          "bytes": 132228
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-crystal-ready.glb",
+          "at": 1792070585532.318,
+          "preload": true,
+          "cache": false,
+          "bytes": 42283
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-crystal-spent.glb",
+          "at": 1792070587768.7932,
+          "preload": true,
+          "cache": false,
+          "bytes": 42311
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-tray.glb",
+          "at": 1792070588010.997,
+          "preload": true,
+          "cache": false,
+          "bytes": 123905
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/market.glb",
+          "at": 1792070588139.3472,
+          "preload": true,
+          "cache": false,
+          "bytes": 1670452
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/reroll-button.glb",
+          "at": 1792070588419.186,
+          "preload": true,
+          "cache": false,
+          "bytes": 455191
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-4e54f95167b711db4fffc0cb.bin",
+          "at": 1792070588485.21,
+          "preload": true,
+          "cache": false,
+          "bytes": 2015952
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-82da3f6834a88e363cc955b0.bin",
+          "at": 1792070588482.142,
+          "preload": true,
+          "cache": false,
+          "bytes": 3966004
+        },
+        {
+          "url": "https://test.yourlore.xyz/music/yohaku-to-zankyo.mp3",
+          "at": 1792070588653.2668,
+          "preload": true,
+          "cache": false,
+          "bytes": 5124985
+        },
+        {
+          "url": "https://test.yourlore.xyz/vfx/chosen-victory/crown.png",
+          "at": 1792070589817.648,
+          "preload": true,
+          "cache": false,
+          "bytes": 2208928
+        },
+        {
+          "url": "https://test.yourlore.xyz/vfx/merchant/balance.png",
+          "at": 1792070589836.885,
+          "preload": true,
+          "cache": false,
+          "bytes": 2075546
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/art-pack-5dc71dde9913eacb9013872b.bin",
+          "at": 1792070589369.4429,
+          "preload": true,
+          "cache": false,
+          "bytes": 3067315
+        },
+        {
+          "url": "https://test.yourlore.xyz/vfx/purchase-air/crystal-72.png",
+          "at": 1792070590049.7798,
+          "preload": true,
+          "cache": false,
+          "bytes": 2857531
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/riftGeometry-CTqwEi4L.js",
+          "at": 1792070612250.4639,
+          "preload": false,
+          "cache": false,
+          "bytes": 1587
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/selection-BZuIRH5R.js",
+          "at": 1792070612250.811,
+          "preload": false,
+          "cache": false,
+          "bytes": 643
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/duelReadiness-Bg3UU3bJ.js",
+          "at": 1792070612250.246,
+          "preload": false,
+          "cache": false,
+          "bytes": 4823
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/game-CeZ0_T_p.css",
+          "at": 1792070612251.086,
+          "preload": false,
+          "cache": false,
+          "bytes": 1557
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/controller-bboUdfYs.css",
+          "at": 1792070612250.97,
+          "preload": false,
+          "cache": false,
+          "bytes": 1674
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/layout-BCOqeY5F.css",
+          "at": 1792070612250.602,
+          "preload": false,
+          "cache": false,
+          "bytes": 1768
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/controller-Cnph3E3v.js",
+          "at": 1792070612250.073,
+          "preload": false,
+          "cache": false,
+          "bytes": 48033
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/game-C8K0KpHN.js",
+          "at": 1792070612249.938,
+          "preload": false,
+          "cache": false,
+          "bytes": 51003
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/duel-preload-8336daf3b444bafa1ef801da.json",
+          "at": 1792070612249.6208,
+          "preload": false,
+          "cache": false,
+          "bytes": 1650
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/layout-WbwkSwre.js",
+          "at": 1792070612250.159,
+          "preload": false,
+          "cache": false,
+          "bytes": 39782
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-REfZJxzB.js",
+          "at": 1792070612545.447,
+          "preload": false,
+          "cache": false,
+          "bytes": 10165
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/readingCrystalOptics-V4LruFDx.js",
+          "at": 1792070612546.1099,
+          "preload": false,
+          "cache": false,
+          "bytes": 1716
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/scene-C7PwMOgA.js",
+          "at": 1792070612546.77,
+          "preload": false,
+          "cache": false,
+          "bytes": 3781
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/duelScene-CDGOeF9H.js",
+          "at": 1792070612545.833,
+          "preload": false,
+          "cache": false,
+          "bytes": 27108
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+          "at": 1792070612546.008,
+          "preload": false,
+          "cache": false,
+          "bytes": 397
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/paperDraw-wVr3yV6m.js",
+          "at": 1792070612546.526,
+          "preload": false,
+          "cache": false,
+          "bytes": 3447
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-D0BXuqu5.js",
+          "at": 1792070612571.023,
+          "preload": false,
+          "cache": false,
+          "bytes": 3488
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/drawStock-DU5oISeA.js",
+          "at": 1792070612546.64,
+          "preload": false,
+          "cache": false,
+          "bytes": 2681
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-iIeblZ6p.js",
+          "at": 1792070612570.6838,
+          "preload": false,
+          "cache": false,
+          "bytes": 5093
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/ceremonyScene-BT3BVzGD.js",
+          "at": 1792070612546.4302,
+          "preload": false,
+          "cache": false,
+          "bytes": 4589
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/scene-C1QnoB0e.js",
+          "at": 1792070612571.248,
+          "preload": false,
+          "cache": false,
+          "bytes": 7665
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/pileModels-DpWL-KpH.js",
+          "at": 1792070612546.177,
+          "preload": false,
+          "cache": false,
+          "bytes": 1473
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/duelScene-Dru0ykCE.css",
+          "at": 1792070612546.295,
+          "preload": false,
+          "cache": false,
+          "bytes": 498
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/stage-GBb4WEEA.js",
+          "at": 1792070612571.4978,
+          "preload": false,
+          "cache": false,
+          "bytes": 12461
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/RoundedBoxGeometry-Bd-NgsxO.js",
+          "at": 1792070614754.186,
+          "preload": false,
+          "cache": false,
+          "bytes": 1191
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer--YnbEAro.js",
+          "at": 1792070614755.7012,
+          "preload": false,
+          "cache": false,
+          "bytes": 5687
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/assets-Cbq_huAw.js",
+          "at": 1792070614968.078,
+          "preload": false,
+          "cache": false,
+          "bytes": 1041
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/visual-CVpmIIbj.js",
+          "at": 1792070614982.537,
+          "preload": false,
+          "cache": false,
+          "bytes": 4119
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-r2VpbTCG.js",
+          "at": 1792070614986.9238,
+          "preload": false,
+          "cache": false,
+          "bytes": 5490
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/visual-C9ggFslU.js",
+          "at": 1792070614989.1328,
+          "preload": false,
+          "cache": false,
+          "bytes": 8531
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-CrHwT4Pg.js",
+          "at": 1792070616186.969,
+          "preload": false,
+          "cache": false,
+          "bytes": 5148
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-DuI0GxXE.js",
+          "at": 1792070616185.925,
+          "preload": false,
+          "cache": false,
+          "bytes": 6835
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-Bcp4OcVP.js",
+          "at": 1792070616397.1401,
+          "preload": false,
+          "cache": false,
+          "bytes": 5840
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-CG6SbWCS.js",
+          "at": 1792070616602.746,
+          "preload": false,
+          "cache": false,
+          "bytes": 3429
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-BLdWFrWu.js",
+          "at": 1792070616612.55,
+          "preload": false,
+          "cache": false,
+          "bytes": 5676
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-Bz6y6Hzr.js",
+          "at": 1792070616607.2732,
+          "preload": false,
+          "cache": false,
+          "bytes": 5504
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-RavmZkfq.js",
+          "at": 1792070616813.8389,
+          "preload": false,
+          "cache": false,
+          "bytes": 4542
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-I2wqk2h5.js",
+          "at": 1792070616847.111,
+          "preload": false,
+          "cache": false,
+          "bytes": 8481
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-B0oWlZh6.js",
+          "at": 1792070616895.576,
+          "preload": false,
+          "cache": false,
+          "bytes": 6037
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-CR6GgjwD.js",
+          "at": 1792070616928.782,
+          "preload": false,
+          "cache": false,
+          "bytes": 7503
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-Pqyl1ibp.js",
+          "at": 1792070617067.806,
+          "preload": false,
+          "cache": false,
+          "bytes": 7400
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/coins-CvNHW1DF.js",
+          "at": 1792070617125.898,
+          "preload": false,
+          "cache": false,
+          "bytes": 2825
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/catalog-CoSrYhcF.js",
+          "at": 1792070617170.12,
+          "preload": false,
+          "cache": false,
+          "bytes": 2701
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/sound-CE1d9j4x.js",
+          "at": 1792070617225.118,
+          "preload": false,
+          "cache": false,
+          "bytes": 750
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-ZbthXye0.js",
+          "at": 1792070617356.772,
+          "preload": false,
+          "cache": false,
+          "bytes": 6024
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-zg8beIQg.js",
+          "at": 1792070617398.023,
+          "preload": false,
+          "cache": false,
+          "bytes": 2725
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/darkRenderer-CBD9mKo5.js",
+          "at": 1792070617425.7058,
+          "preload": false,
+          "cache": false,
+          "bytes": 3241
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-BK0Bj6V_.js",
+          "at": 1792070617459.1538,
+          "preload": false,
+          "cache": false,
+          "bytes": 4931
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-CWcypCbL.js",
+          "at": 1792070617627.068,
+          "preload": false,
+          "cache": false,
+          "bytes": 5242
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/persistentFlightRenderer-COoqyroI.js",
+          "at": 1792070617643.344,
+          "preload": false,
+          "cache": false,
+          "bytes": 2548
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/scene-nbQlAtM0.js",
+          "at": 1792070617668.244,
+          "preload": false,
+          "cache": false,
+          "bytes": 3944
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-Bl0vIw1G.js",
+          "at": 1792070617720.728,
+          "preload": false,
+          "cache": false,
+          "bytes": 7938
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/master-tongues-D1vZfrsx.js",
+          "at": 1792070618204.511,
+          "preload": false,
+          "cache": false,
+          "bytes": 2446
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-CACUJu7H.js",
+          "at": 1792070618202.365,
+          "preload": false,
+          "cache": false,
+          "bytes": 4942
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/family-matter-BfLqfFnu.js",
+          "at": 1792070618205.428,
+          "preload": false,
+          "cache": false,
+          "bytes": 2601
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/ornaments-BoJpix5T.js",
+          "at": 1792070618207.69,
+          "preload": false,
+          "cache": false,
+          "bytes": 2408
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/royal-matter-CEZbRYw3.js",
+          "at": 1792070618585.747,
+          "preload": false,
+          "cache": false,
+          "bytes": 3438
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-D5vU66Lo.js",
+          "at": 1792070618589.253,
+          "preload": false,
+          "cache": false,
+          "bytes": 9391
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-C4DPKyYf.js",
+          "at": 1792070618592.4302,
+          "preload": false,
+          "cache": false,
+          "bytes": 2040
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-CMVakasr.js",
+          "at": 1792070618593.018,
+          "preload": false,
+          "cache": false,
+          "bytes": 4984
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-A93RbfcB.js",
+          "at": 1792070618907.842,
+          "preload": false,
+          "cache": false,
+          "bytes": 11881
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-DLCaHGoY.js",
+          "at": 1792070618967.68,
+          "preload": false,
+          "cache": false,
+          "bytes": 6859
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-DT2w0KkP.js",
+          "at": 1792070618967.958,
+          "preload": false,
+          "cache": false,
+          "bytes": 3826
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-COxFxrqD.js",
+          "at": 1792070618986.708,
+          "preload": false,
+          "cache": false,
+          "bytes": 2949
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-BFSqHdxD.js",
+          "at": 1792070619367.511,
+          "preload": false,
+          "cache": false,
+          "bytes": 3704
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-xSnFCeE7.js",
+          "at": 1792070619380.5461,
+          "preload": false,
+          "cache": false,
+          "bytes": 5905
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/riftScene-BfphkmkK.js",
+          "at": 1792070619379.639,
+          "preload": false,
+          "cache": false,
+          "bytes": 12257
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-DL3vF9Fr.js",
+          "at": 1792070619371.9548,
+          "preload": false,
+          "cache": false,
+          "bytes": 5940
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-CKmE9Gp7.js",
+          "at": 1792070619679.1602,
+          "preload": false,
+          "cache": false,
+          "bytes": 2409
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-d4IAJKRB.js",
+          "at": 1792070619764.79,
+          "preload": false,
+          "cache": false,
+          "bytes": 3888
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/snapshot-CbXCc6OH.js",
+          "at": 1792070620066.3308,
+          "preload": false,
+          "cache": false,
+          "bytes": 1200
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/renderer-6nIodomc.js",
+          "at": 1792070619963.772,
+          "preload": false,
+          "cache": false,
+          "bytes": 2879
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/scene-bskXgv5q.js",
+          "at": 1792070619874.503,
+          "preload": false,
+          "cache": false,
+          "bytes": 32704
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/spacetime-DmFZvuAO.js",
+          "at": 1792070619991.2979,
+          "preload": false,
+          "cache": false,
+          "bytes": 5752
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/diceScene-DZtZMvgb.js",
+          "at": 1792070620481.53,
+          "preload": false,
+          "cache": false,
+          "bytes": 4008
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/fateWheelRewind-CoZY4Q7g.js",
+          "at": 1792070620482.771,
+          "preload": false,
+          "cache": false,
+          "bytes": 1408
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/skull-apparition-jaxyBytm.png",
+          "at": 1792070620487.667,
+          "preload": false,
+          "cache": false,
+          "bytes": 1785470
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/coiling-fire-BXM1fmiB.webp",
+          "at": 1792070620516.846,
+          "preload": false,
+          "cache": false,
+          "bytes": 511231
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/runtime-Ch9eydv_.css",
+          "at": 1792070620742.455,
+          "preload": false,
+          "cache": false,
+          "bytes": 457
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/cover-1-Ca1f6w1Z.png",
+          "at": 1792070628278.187,
+          "preload": false,
+          "cache": false,
+          "bytes": 3785463
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/raster.worker-Dbjti9vv.js",
+          "at": 1792070630924.177,
+          "preload": false,
+          "cache": false,
+          "bytes": 1478
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/avatar-red-CyF_7AzU.png",
+          "at": 1792070629600.9778,
+          "preload": false,
+          "cache": false,
+          "bytes": 2250549
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/avatar-blue-Dgu4sbnI.png",
+          "at": 1792070630884.765,
+          "preload": false,
+          "cache": false,
+          "bytes": 2151456
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/purchaseAir.worker-BK14oJEX.js",
+          "at": 1792070636842.591,
+          "preload": false,
+          "cache": false,
+          "bytes": 1101
+        },
+        {
+          "url": "https://test.yourlore.xyz/assets/bot.worker-BOO6jSYP.js",
+          "at": 1792070639066.218,
+          "preload": false,
+          "cache": false,
+          "bytes": 224783
+        }
+      ],
+      "warmPreloads": [],
+      "entryWire": [
+        {
+          "url": "https://test.yourlore.xyz/favicon.ico",
+          "at": 1792070664556.927,
+          "preload": false,
+          "cache": false,
+          "bytes": 301
+        }
+      ],
+      "afterReadyWire": [],
+      "samples": [
+        {
+          "label": "idle",
+          "ms": 5010,
+          "count": 301,
+          "p50": 16.700000000000728,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 8996
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":290,\"fullPasses\":2,\"portalPasses\":109,\"displayPasses\":197,\"flightPasses\":0,\"cpuMs\":225.9,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.3047620000000002,
+            "ScriptDuration": 0.2046420000000002,
+            "LayoutDuration": 0.0014260000000000106,
+            "RecalcStyleDuration": 0.029398000000000035,
+            "LayoutCount": 11,
+            "RecalcStyleCount": 12
+          }
+        },
+        {
+          "label": "play card",
+          "ms": 5057,
+          "count": 301,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9125
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":111,\"displayPasses\":205,\"flightPasses\":0,\"cpuMs\":166.9,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.29298,
+            "ScriptDuration": 0.18291499999999994,
+            "LayoutDuration": 0.0021230000000000138,
+            "RecalcStyleDuration": 0.03262900000000002,
+            "LayoutCount": 22,
+            "RecalcStyleCount": 24
+          }
+        },
+        {
+          "label": "BOT turn",
+          "ms": 5149,
+          "count": 290,
+          "p50": 16.69999999999709,
+          "p95": 16.700000000004366,
+          "over50": 2,
+          "gpu": {
+            "duel-objects-3d": 17479,
+            "board-flight-canvas": 126,
+            "offscreen": 108
+          },
+          "longTasks": [
+            {
+              "start": 37267.09999999404,
+              "ms": 68
+            },
+            {
+              "start": 38345.5,
+              "ms": 101
+            }
+          ],
+          "scene": "{\"seconds\":5,\"ticks\":289,\"fullPasses\":30,\"portalPasses\":96,\"displayPasses\":199,\"flightPasses\":43,\"cpuMs\":373.9,\"calls\":42,\"triangles\":84}",
+          "cpu": {
+            "TaskDuration": 1.1835189999999995,
+            "ScriptDuration": 0.5048900000000001,
+            "LayoutDuration": 0.02112,
+            "RecalcStyleDuration": 0.16787799999999997,
+            "LayoutCount": 71,
+            "RecalcStyleCount": 259
+          }
+        }
+      ],
+      "broken": [],
+      "errors": [],
+      "httpErrors": []
+    },
+    {
+      "gameAssetEntryWire": [],
+      "packFailures": [],
+      "packTimings": [],
+      "workerEntryRequests": [],
+      "serverEntryRequests": [],
+      "width": 390,
+      "homeMs": 10860,
+      "reloadMs": 5867,
+      "duelMs": 18912,
+      "coldWire": [
+        {
+          "url": "https://test.yourlore.xyz/?polish",
+          "at": 1792070701453.8528,
+          "preload": false,
+          "cache": false,
+          "bytes": 1368
+        },
+        {
+          "url": "https://us-assets.i.posthog.com/static/1.438.8/surveys.js",
+          "at": 1792070701895.0642,
+          "preload": false,
+          "cache": false,
+          "bytes": 33370
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/deck-place-lod1.glb",
+          "at": 1792070702418.783,
+          "preload": true,
+          "cache": false,
+          "bytes": 959125
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/market-low.glb",
+          "at": 1792070702418.905,
+          "preload": true,
+          "cache": false,
+          "bytes": 427627
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/supply-low.glb",
+          "at": 1792070702419.148,
+          "preload": true,
+          "cache": false,
+          "bytes": 405495
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/shelf-lod1.glb",
+          "at": 1792070702419.019,
+          "preload": true,
+          "cache": false,
+          "bytes": 1200729
+        },
+        {
+          "url": "https://test.yourlore.xyz/models/reading-board/v1/board-low.glb",
+          "at": 1792070702418.572,
+          "preload": true,
+          "cache": false,
+          "bytes": 1352144
+        },
+        {
+          "url": "https://test.yourlore.xyz/cdn-cgi/rum?",
+          "at": 1792070702731.3608,
+          "preload": false,
+          "cache": false,
+          "bytes": 364
+        },
+        {
+          "url": "https://test.yourlore.xyz/favicon.ico",
+          "at": 1792070711969.415,
+          "preload": false,
+          "cache": false,
+          "bytes": 300
+        }
+      ],
+      "warmPreloads": [],
+      "entryWire": [],
+      "afterReadyWire": [],
+      "samples": [
+        {
+          "label": "idle",
+          "ms": 5007,
+          "count": 301,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 12505
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":292,\"fullPasses\":35,\"portalPasses\":97,\"displayPasses\":199,\"flightPasses\":31,\"cpuMs\":318.6,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.39060899999999954,
+            "ScriptDuration": 0.25257200000000024,
+            "LayoutDuration": 0.0015030000000000043,
+            "RecalcStyleDuration": 0.03637899999999994,
+            "LayoutCount": 13,
+            "RecalcStyleCount": 86
+          }
+        },
+        {
+          "label": "play card",
+          "ms": 5047,
+          "count": 301,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999995634,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9854
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":113,\"displayPasses\":207,\"flightPasses\":0,\"cpuMs\":167.8,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.31619699999999984,
+            "ScriptDuration": 0.18462299999999976,
+            "LayoutDuration": 0.0021650000000000003,
+            "RecalcStyleDuration": 0.03197099999999997,
+            "LayoutCount": 23,
+            "RecalcStyleCount": 25
+          }
+        },
+        {
+          "label": "BOT turn",
+          "ms": 5062,
+          "count": 296,
+          "p50": 16.69999999999709,
+          "p95": 16.80000000000291,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 19331,
+            "draw-stock-canvas": 970,
+            "board-flight-canvas": 96
+          },
+          "longTasks": [
+            {
+              "start": 39210.39999999106,
+              "ms": 60
+            }
+          ],
+          "scene": "{\"seconds\":5,\"ticks\":297,\"fullPasses\":35,\"portalPasses\":98,\"displayPasses\":171,\"flightPasses\":31,\"cpuMs\":316.9,\"calls\":42,\"triangles\":84}",
+          "cpu": {
+            "TaskDuration": 1.0576070000000009,
+            "ScriptDuration": 0.4435119999999997,
+            "LayoutDuration": 0.021281000000000008,
+            "RecalcStyleDuration": 0.20309100000000013,
+            "LayoutCount": 191,
+            "RecalcStyleCount": 445
+          }
+        }
+      ],
+      "broken": [],
+      "errors": [],
+      "httpErrors": []
+    }
+  ]
+}

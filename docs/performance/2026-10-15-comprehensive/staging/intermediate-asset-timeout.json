@@ -1,0 +1,3663 @@
+{
+  "errors": [],
+  "httpErrors": [],
+  "resources": [
+    {
+      "url": "https://test.yourlore.xyz/art/brand/lore-logo-transparent.webp",
+      "ms": 2243,
+      "bytes": 32840
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+      "ms": 2242.2000000029802,
+      "bytes": 371134
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/main-CHVCMrxA.js",
+      "ms": 3078.0999999940395,
+      "bytes": 84415
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/atelierThemes-DM29k3s-.js",
+      "ms": 3077,
+      "bytes": 2442
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/readingAssetCache-wSl5XjY6.js",
+      "ms": 3081.7000000029802,
+      "bytes": 174327
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/social-ByXaMKGO.js",
+      "ms": 3081.8999999910593,
+      "bytes": 547322
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/analytics-D7J5l33q.js",
+      "ms": 527.0999999940395,
+      "bytes": 9272
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+      "ms": 2361,
+      "bytes": 586
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/baseFurniture-DOVCMXYU.js",
+      "ms": 3076.5,
+      "bytes": 2160
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/sleeve-OIDy0iTy.js",
+      "ms": 3076.7000000029802,
+      "bytes": 3612
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/BufferGeometryUtils-ZSIL4Jif.js",
+      "ms": 2242.9000000059605,
+      "bytes": 1844
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/libraryAssets-DVTJ5-Hz.js",
+      "ms": 2360.3999999910593,
+      "bytes": 14889
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/materials-BytyfBOj.js",
+      "ms": 3076.7000000029802,
+      "bytes": 4589
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/catalogRender-BgIxxSXH.js",
+      "ms": 3076.8999999910593,
+      "bytes": 2061
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/social--exAuL7Z.css",
+      "ms": 3075.2000000029802,
+      "bytes": 58279
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/main-Dozcn9wp.css",
+      "ms": 3076.9000000059605,
+      "bytes": 108824
+    },
+    {
+      "url": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+      "ms": 1402.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://us.i.posthog.com/static/array.js",
+      "ms": 2025.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/stage-v1/sigil.png",
+      "ms": 5428.399999991059,
+      "bytes": 1996519
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+      "ms": 1070.4000000059605,
+      "bytes": 31820
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+      "ms": 4263.399999991059,
+      "bytes": 29024
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/homeAtmosphere-CMqYOqvc.js",
+      "ms": 479.1000000089407,
+      "bytes": 5189
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+      "ms": 4082.0999999940395,
+      "bytes": 2720687
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+      "ms": 1242.2999999970198,
+      "bytes": 880009
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/duel-ink-v1/disc.png",
+      "ms": 2256.7999999970198,
+      "bytes": 1787583
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+      "ms": 474,
+      "bytes": 21840
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+      "ms": 4249.0999999940395,
+      "bytes": 13466
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/gifts/courier.png",
+      "ms": 4250,
+      "bytes": 1087199
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/icons/v2/arrow.png",
+      "ms": 4251.70000000298,
+      "bytes": 58442
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/icons/shard-simple-v1.png",
+      "ms": 1239.1000000089407,
+      "bytes": 8989
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/seekers/faceless-v2/portrait.webp",
+      "ms": 4250.100000008941,
+      "bytes": 45260
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fa981b56ecdad0095f14ef8201483fdc1b49efe7d048b64bad3efbbcb1d18eac.woff2",
+      "ms": 1250.800000011921,
+      "bytes": 11604
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/471899cd47871528b417fb4f88c7e23d4e2264f88298b49c539ec654ae30fe7b.woff2",
+      "ms": 4243.5,
+      "bytes": 11816
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+      "ms": 4177.899999991059,
+      "bytes": 32368
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+      "ms": 5487.5,
+      "bytes": 300
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+      "ms": 4694.9000000059605,
+      "bytes": 300
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/ivy.png",
+      "ms": 5483.5,
+      "bytes": 1329962
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/menu-manifest-93f74a16622f94a7b7ff.json",
+      "ms": 4268.5,
+      "bytes": 98708
+    },
+    {
+      "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+      "ms": 15961,
+      "bytes": 0
+    },
+    {
+      "url": "https://us.i.posthog.com/flags/?v=2",
+      "ms": 690,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-c07fa92807ba277918940c51.bin",
+      "ms": 9238.199999988079,
+      "bytes": 3174084
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-d10a2e7af51a45bfe2900424.bin",
+      "ms": 2529.5999999940395,
+      "bytes": 3282842
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-789a7ac6204b4852760b8f95.bin",
+      "ms": 12716.300000011921,
+      "bytes": 4180936
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-7b27c1d7de9f442b00f0bae6.bin",
+      "ms": 8709.79999999702,
+      "bytes": 4181936
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-4d5b40edd27ce4063d2979d2.bin",
+      "ms": 13875.10000000894,
+      "bytes": 4163572
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-9ec55ae511e463c1c54b1976.bin",
+      "ms": 14180.60000000894,
+      "bytes": 4194192
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-09600cf43cfcd6df863136d0.bin",
+      "ms": 12786,
+      "bytes": 4006540
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-8c1e0ea8732d2a04080c5f1b.bin",
+      "ms": 9305.5,
+      "bytes": 3866592
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-c56bbac53d1db98e575a3e38.bin",
+      "ms": 10674.5,
+      "bytes": 4149108
+    },
+    {
+      "url": "https://us-assets.i.posthog.com/static/1.438.8/surveys.js",
+      "ms": 16455.09999999404,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-3c350a0f0dcbb2a7cdc1daeb.bin",
+      "ms": 9673.10000000894,
+      "bytes": 4104876
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-eac80cd633f1ac7b0d7b489e.bin",
+      "ms": 10902,
+      "bytes": 4119256
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-3eb6cba66d63353aaeffbf8a.bin",
+      "ms": 12446.59999999404,
+      "bytes": 4100288
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-79f005f5fe9c938c540ef02b.bin",
+      "ms": 13015.5,
+      "bytes": 4177822
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-2e2d9de2cdb00670498e1ef0.bin",
+      "ms": 12352.10000000894,
+      "bytes": 4016910
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-155423147cbfeb55fcf44f64.bin",
+      "ms": 12665.90000000596,
+      "bytes": 4015576
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-ff35b7a8fe0ed510a291a5c2.bin",
+      "ms": 11690.40000000596,
+      "bytes": 3917754
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-2411e2dee4f753028e611c60.bin",
+      "ms": 12297.20000000298,
+      "bytes": 4181164
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-cf93fbb18678f300662ae5c1.bin",
+      "ms": 12648.5,
+      "bytes": 4082942
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-0fa2766dc9bc1dd6d270ceb2.bin",
+      "ms": 12792.09999999404,
+      "bytes": 4108844
+    },
+    {
+      "url": "https://test.yourlore.xyz/cdn-cgi/rum?",
+      "ms": 3691.2999999970198,
+      "bytes": 300
+    },
+    {
+      "url": "https://test.yourlore.xyz/favicon.ico",
+      "ms": 6697.79999999702,
+      "bytes": 309
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-5d6931080b890ff5cb244b2f.bin",
+      "ms": 12390.199999988079,
+      "bytes": 4125110
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-d8337f8450ab74def1bc7e37.bin",
+      "ms": 12173,
+      "bytes": 4076502
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-67715faa5701ca205c59dd05.bin",
+      "ms": 12654.89999999106,
+      "bytes": 4112690
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-8af950d6ec955bdb77ef7de3.bin",
+      "ms": 12003.29999999702,
+      "bytes": 4167788
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-a16de2423c6f905f3ea4b610.bin",
+      "ms": 11717.70000000298,
+      "bytes": 4093392
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-36a30cd1bd51a25992eddf61.bin",
+      "ms": 12800.29999999702,
+      "bytes": 4181734
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-a8e4e35da4577dc918f3c7d1.bin",
+      "ms": 13161.59999999404,
+      "bytes": 4145880
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-016ac0e2a0da58cdda0f3303.bin",
+      "ms": 11740,
+      "bytes": 2616028
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/key-visuals/concepts/lore-kv-02-midnight-astral-observatory.png",
+      "ms": 11144.40000000596,
+      "bytes": 2474222
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/key-visuals/concepts/lore-kv-03-crimson-eclipse-duel-arena.png",
+      "ms": 9468.10000000894,
+      "bytes": 2677967
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+      "ms": 5832.5999999940395,
+      "bytes": 300
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/ivy.png",
+      "ms": 4607.70000000298,
+      "bytes": 300
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+      "ms": 2578.4000000059605,
+      "bytes": 300
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-a7bbaacc076bef8427fe5172.bin",
+      "ms": 4010.300000011921,
+      "bytes": 4170375
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-7fe228cc39bba143402ff65d.bin",
+      "ms": 4949.800000011921,
+      "bytes": 2789747
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+      "ms": 5338.5999999940395,
+      "bytes": 2505180
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/vfx/mimic-family/engraved-brass.png",
+      "ms": 7878.4000000059605,
+      "bytes": 3571842
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-0089e2e6dc22189e61cdb170.bin",
+      "ms": 8774.59999999404,
+      "bytes": 3279720
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-5fd81120c976633ca5febfd7.bin",
+      "ms": 11300.20000000298,
+      "bytes": 4176862
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-1382430a92d92d2aca7274ec.bin",
+      "ms": 11343.79999999702,
+      "bytes": 3716044
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-9435bbea4cb37e98c9fefe19.bin",
+      "ms": 11616.59999999404,
+      "bytes": 3369324
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/living-v1/azure-plume/art.png",
+      "ms": 12041.90000000596,
+      "bytes": 3198658
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-3b05b41915767a8e45185d10.bin",
+      "ms": 11961.79999999702,
+      "bytes": 4145994
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-999f1e441d67c87cfe577e8e.bin",
+      "ms": 13253.79999999702,
+      "bytes": 4183636
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-eebd15024b633fb8c61f1155.bin",
+      "ms": 13167.199999988079,
+      "bytes": 4194064
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-546b34debe4dca84640b1d76.bin",
+      "ms": 13489.5,
+      "bytes": 4155340
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-48a199516dcc5672500277f9.bin",
+      "ms": 13971.40000000596,
+      "bytes": 4155092
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-8c5806cd8f09a358205d5449.bin",
+      "ms": 13775.699999988079,
+      "bytes": 4192008
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f98a60cfa5c901ceb4d17478cdd6a5162ab0f8ad977eb94442d62015835639dc.woff2",
+      "ms": 7862.199999988079,
+      "bytes": 71312
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f98e5438ed9cb4783b9afe40ae3af2b37aab02692c923868d0d5642b798f2668.woff2",
+      "ms": 6011.29999999702,
+      "bytes": 12124
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fa981b56ecdad0095f14ef8201483fdc1b49efe7d048b64bad3efbbcb1d18eac.woff2",
+      "ms": 5951.4000000059605,
+      "bytes": 300
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/faf21491ad9bd040aa81f0aef6a5ddaf91fd70082aaa7828555bab2f82ec78c8.woff2",
+      "ms": 3633.800000011921,
+      "bytes": 14208
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fb53abb8275b4f7bce02be67d70e493b16fe2bc69a4e2d7c1ddd52a221d44c07.woff2",
+      "ms": 2765.2000000029802,
+      "bytes": 12728
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fb6dfe852d14c165fb540975c6f06a39beec9d83b91b432032c2ff81f7bc519d.woff2",
+      "ms": 2429.1000000089407,
+      "bytes": 53824
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fbabf641df66d64c777a0b3e1cd2fd1b534f9bf2be4d2352797dd2a1e99b9e81.woff2",
+      "ms": 1674.2000000029802,
+      "bytes": 12448
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fc2a70c09cc281c6d0143666f711b0aa90b87d0dd228448711e9bd29af085271.woff2",
+      "ms": 989.9000000059605,
+      "bytes": 1208
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fcc7bcfe3bb79214e16ba88099b52c461822a5fc5eaaf82a34efe9fc350d4da4.woff2",
+      "ms": 989.1000000089407,
+      "bytes": 15116
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd237e1c09106cb15a4961de0363a91f34c16a3624156f717576e8b4fa4d3038.woff2",
+      "ms": 989.5999999940395,
+      "bytes": 21744
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd48f9e36bd351795e73ff5b2ea783ce79e004459ca10f52cbe0eb493856a36e.woff2",
+      "ms": 964.1000000089407,
+      "bytes": 13456
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd6459b9a0dd708f76ccebd932ab73761bb2832aab505432c9aa603706551982.woff2",
+      "ms": 939.0999999940395,
+      "bytes": 28716
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fde6724b8d6f98c963fe694c02a7237ed7a4e453689d9a1563f82c7d85d6bcb3.woff2",
+      "ms": 858.4000000059605,
+      "bytes": 3544
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fde84787a46dfe43be5a3f315b4bb256929d35855a6af2927167b0482534e52c.woff2",
+      "ms": 709.8999999910593,
+      "bytes": 15260
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fe568d50a29522314189c7e2189f2cbbca3acfa35b3173452d91b13053337ae7.woff2",
+      "ms": 710.5999999940395,
+      "bytes": 19968
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fe61175d6c9808f83c3fd245264f1abf3b51272d0cb2bc938fc301d46319f5ef.woff2",
+      "ms": 709.4000000059605,
+      "bytes": 32176
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ff07f44b624e6cf6018db8a3984ba66c0b2d74dc344de2bfe9e6f971b5f669f0.woff2",
+      "ms": 708.5,
+      "bytes": 14400
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ff83f85787a4c8c6afcb3246cb94337fa355583d5d95000c6661baae33648b84.woff2",
+      "ms": 703.9000000059605,
+      "bytes": 59740
+    },
+    {
+      "url": "https://test.yourlore.xyz/frames/sleeve_compass.webp",
+      "ms": 701.0999999940395,
+      "bytes": 32878
+    },
+    {
+      "url": "https://test.yourlore.xyz/frames/sleeve_default.webp",
+      "ms": 837.2999999970198,
+      "bytes": 99662
+    },
+    {
+      "url": "https://test.yourlore.xyz/frames/sleeve_prism.webp",
+      "ms": 703.2000000029802,
+      "bytes": 74820
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/board.glb",
+      "ms": 3516.5,
+      "bytes": 3718172
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/crystal-optics.json",
+      "ms": 222.29999999701977,
+      "bytes": 1538
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/deck-place.glb",
+      "ms": 4446.4000000059605,
+      "bytes": 1194532
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+      "ms": 783.3999999910593,
+      "bytes": 211728
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-counter.glb",
+      "ms": 4236.29999999702,
+      "bytes": 132088
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-crystal-ready.glb",
+      "ms": 3753.2000000029802,
+      "bytes": 42196
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-crystal-spent.glb",
+      "ms": 3741,
+      "bytes": 42192
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-tray.glb",
+      "ms": 3694.6000000089407,
+      "bytes": 123740
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/market.glb",
+      "ms": 2401.199999988079,
+      "bytes": 1668600
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/reroll-button.glb",
+      "ms": 1675.2999999970198,
+      "bytes": 454640
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-82da3f6834a88e363cc955b0.bin",
+      "ms": 4426.79999999702,
+      "bytes": 3961576
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/art-pack-fd15c47188e99c88b3f5b77e.bin",
+      "ms": 6491.9000000059605,
+      "bytes": 3510201
+    },
+    {
+      "url": "https://test.yourlore.xyz/vfx/chosen-heroes/rogue.png",
+      "ms": 6836,
+      "bytes": 804155
+    },
+    {
+      "url": "https://test.yourlore.xyz/vfx/chosen-victory/crown.png",
+      "ms": 8675.20000000298,
+      "bytes": 2206465
+    },
+    {
+      "url": "https://test.yourlore.xyz/vfx/merchant/balance.png",
+      "ms": 8384.09999999404,
+      "bytes": 2073168
+    },
+    {
+      "url": "https://test.yourlore.xyz/vfx/purchase-air/crystal-72.png",
+      "ms": 8960.800000011921,
+      "bytes": 2854305
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/deck-place.glb",
+      "ms": 1.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/shelf.glb",
+      "ms": 2.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/v2/material-astral.webp",
+      "ms": 0.6000000089406967,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/v2/material-verdant.webp",
+      "ms": 0.5999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/v2/material-crimson.webp",
+      "ms": 0.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/v2/material-ivory.webp",
+      "ms": 0.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/nocturne/body.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/nocturne/lining.webp",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/nocturne/inlay-mask.webp",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/nocturne/finish-mask.svg",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/nocturne/surface-normal.webp",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/nocturne/surface-roughness.webp",
+      "ms": 1.2999999970197678,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/porcelain/body.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/porcelain/lining.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/porcelain/inlay-mask.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/porcelain/finish-mask.svg",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/porcelain/surface-normal.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/porcelain/surface-roughness.webp",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/garnet/body.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/garnet/lining.webp",
+      "ms": 1.1000000089406967,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/garnet/inlay-mask.webp",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/garnet/finish-mask.svg",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/garnet/surface-normal.webp",
+      "ms": 1.300000011920929,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/garnet/surface-roughness.webp",
+      "ms": 1.300000011920929,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/verdigris/body.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/verdigris/lining.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/verdigris/inlay-mask.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/verdigris/finish-mask.svg",
+      "ms": 1.1000000089406967,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/verdigris/surface-normal.webp",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/verdigris/surface-roughness.webp",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/amber/body.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/amber/lining.webp",
+      "ms": 1.1000000089406967,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/amber/inlay-mask.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/amber/finish-mask.svg",
+      "ms": 1.0999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/amber/surface-normal.webp",
+      "ms": 1.0999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/amber/surface-roughness.webp",
+      "ms": 1.2000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/tidal/body.webp",
+      "ms": 0.800000011920929,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/tidal/lining.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/tidal/inlay-mask.webp",
+      "ms": 0.8999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/tidal/finish-mask.svg",
+      "ms": 0.8999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/tidal/surface-normal.webp",
+      "ms": 1.0999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/tidal/surface-roughness.webp",
+      "ms": 1.0999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/silverflow/body.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/silverflow/lining.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/silverflow/inlay-mask.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/silverflow/finish-mask.svg",
+      "ms": 0.8999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/silverflow/surface-normal.webp",
+      "ms": 1.0999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/silverflow/surface-roughness.webp",
+      "ms": 1.0999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/emberheart/body.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/emberheart/lining.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/emberheart/inlay-mask.webp",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/emberheart/finish-mask.svg",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/emberheart/surface-normal.webp",
+      "ms": 1.0999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/atelier-v1/emberheart/surface-roughness.webp",
+      "ms": 1.0999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/living-v1/azure-plume/art.png",
+      "ms": 1,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/cosmetics/living-v1/pressed-fern/art.png",
+      "ms": 1.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/duel-preload-60134f4ba03be32ad44a420a.json",
+      "ms": 220.70000000298023,
+      "bytes": 1477
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/layout-CWGEDryv.js",
+      "ms": 548.3000000119209,
+      "bytes": 39638
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/controller-N739qEhA.js",
+      "ms": 1089.1000000089407,
+      "bytes": 47934
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/game-BecHHO-V.js",
+      "ms": 1090.800000011921,
+      "bytes": 45775
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/duelReadiness-DLRDHlBM.js",
+      "ms": 480.70000000298023,
+      "bytes": 4636
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/riftGeometry-CTqwEi4L.js",
+      "ms": 548.3999999910593,
+      "bytes": 1553
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/game-CeZ0_T_p.css",
+      "ms": 482.1000000089407,
+      "bytes": 1560
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/controller-bboUdfYs.css",
+      "ms": 1087.2999999970198,
+      "bytes": 1684
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/layout-BCOqeY5F.css",
+      "ms": 1088.2999999970198,
+      "bytes": 1720
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/selection-BZuIRH5R.js",
+      "ms": 1088,
+      "bytes": 626
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+      "ms": 0.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/cards-xs/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+      "ms": 0.6000000089406967,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/cards/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+      "ms": 0.29999999701976776,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-BP0j05vT.js",
+      "ms": 867.0999999940395,
+      "bytes": 5065
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-D0BXuqu5.js",
+      "ms": 866.5,
+      "bytes": 3459
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/scene-BvkK1SRE.js",
+      "ms": 866.7999999970198,
+      "bytes": 7630
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v3/click-1.mp3",
+      "ms": 606.1999999880791,
+      "bytes": 2639
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v3/click-2.mp3",
+      "ms": 605.9000000059605,
+      "bytes": 2848
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4eb439a3c46da02c503bd872764075d743865c42dc3235020dcbd754701eb2fc.woff2",
+      "ms": 1.6000000089406967,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/019a204fceacd1bcb37eac4e50155f3e946f2cd3e17dc60e9f2fadc8ca132ddf.woff2",
+      "ms": 1.5999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/51ed9d4212677acf9d15e4fffcd4904dfd2f1b788b7d8313bd219775eb39690f.woff2",
+      "ms": 4.399999991059303,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b202df6a7554f8bd0b992710b626e34a14b6ac811c3ef3f16136387906421cb5.woff2",
+      "ms": 5.4000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b4088b4856085fec830dfeb76816be4d174eeeb80212ab91b2a5ad4789b4bff3.woff2",
+      "ms": 5.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c7a90887dbbd973c62fb42adc6e3438405dcbb053099763322fcaad318f2015e.woff2",
+      "ms": 5.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d055773f17672527dec847f382322c6c65c7b707a6e4addeb024fb69924c5420.woff2",
+      "ms": 7.899999991059303,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/073b7acc2d2a814899a0bbf8c8b89ad4b14e58985ea262bed591e78c83fababb.woff2",
+      "ms": 8.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c68d718c6d0cce754e032846f27a394eaa445fb223a85021efd2844971114efa.woff2",
+      "ms": 8.700000002980232,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/aa9f3cbb7d37a12b811a48c1d915139a4350b4a5f2a7c29b5c479930ecc1ee7f.woff2",
+      "ms": 8.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e094e583bd0cc683bbbd6fc771aae6b564bfbc97d4ce2577af0ec3aefdcb9f41.woff2",
+      "ms": 11.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d6cb78f87718bff48509a39b27e8e8e9358b5ba3abf9e4efc7b70f894a53c6c1.woff2",
+      "ms": 11.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/431a09a61226b124a0fa60d7dbc2f944f1cfb4cefa8c2d91049fa1c006bfcfae.woff2",
+      "ms": 13.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e78ef0077c220d00bbba0062a587dbc2e8ba29f9e488800bf2b77421e74a27ce.woff2",
+      "ms": 13.700000002980232,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/1ee0cf0a0e5d3c9e62ed4f0aeaf6dc2566c4e6566969a871b98eb466913d23ce.woff2",
+      "ms": 14.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ff07f44b624e6cf6018db8a3984ba66c0b2d74dc344de2bfe9e6f971b5f669f0.woff2",
+      "ms": 14.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4f844cc6406a163ebbff6f175e9c433a4891bb7eb28c42b256bf210ab82bd908.woff2",
+      "ms": 14.200000002980232,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/356e082348fe88ad8189c0982a77229c62733594875f13c2972d38f000656af5.woff2",
+      "ms": 14.299999997019768,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/48a0faf4ae2b1a308965d18bdc673d018c4b2f3f18f913491b693703a4285e60.woff2",
+      "ms": 14.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4424dbba58396bd154951e099b739380a55658ee0ab3fc48db98fb94f1d10936.woff2",
+      "ms": 17,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c11ca44df2acc16e7a1f5b67819277b4cda60d827513640e89aaa679627d53b9.woff2",
+      "ms": 16.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c1d5806518a37dc513bfd42c2884c5cdf1bc7cd62bdc8aa7bfc92f16133b6150.woff2",
+      "ms": 17,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c96b56e575ab713c9ed949199a7d7da93c414400ae063f2f0d63975d687d3c1b.woff2",
+      "ms": 17.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/3594c96859e4863a631de90c9b6a43b7e50bb92fbf5bded9ad521b2b8cdc355f.woff2",
+      "ms": 17.799999997019768,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/0bd05f66966870593d1b14f56ac6b3fda1087725458a1fedd5e1e2ac919f21ba.woff2",
+      "ms": 18.30000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/faf21491ad9bd040aa81f0aef6a5ddaf91fd70082aaa7828555bab2f82ec78c8.woff2",
+      "ms": 18.399999991059303,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e92b8aed5210b5e2823d7eb2d8e5cb8420012311a8cdfc6cc523b77a3ec910a6.woff2",
+      "ms": 19.200000002980232,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/80d3a858a3f62ca94cd0307e06874db776e97b79d51443e11eda81d9610aed6f.woff2",
+      "ms": 19.399999991059303,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/10a94badf4b462f153f04e5bb4d069d6daea5db827e3fd3800ba77a5bf876e73.woff2",
+      "ms": 19.299999997019768,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/076325c5c09d03d856e53a9c12757ae6a75d6a55e142fd028621f5e8893ba830.woff2",
+      "ms": 19.700000002980232,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/1972780b520d8d094e1b6e46916f3593614d8fd30e20cfbe003c30bc9ae03ebc.woff2",
+      "ms": 19.69999998807907,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/7010e9af5264782749113d90f2c6b22e8a350a710fc6cd8aa6b607553ad9aae3.woff2",
+      "ms": 22,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/0fb5ba4e24d9e00381c6ab9bf7bd7c959c346e80c5d8f99006597ed24be63f62.woff2",
+      "ms": 22,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4e96af3e9470848659e78aaf37d07d398861bc2634627d1a01c99878b81e10d8.woff2",
+      "ms": 22.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/8ad5bafa0b2390336f46699d2b4b9e135ce0284858e66c2ef60c45edbb7cca3a.woff2",
+      "ms": 23.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4bfc331469f0a568bf1f1323c502b7c199c42567c8ce68a227bb984a0bb0d46f.woff2",
+      "ms": 24.299999997019768,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/3f6c335ab54249207e5482f430a7dcd33c088862f1978a2a792d560be402edd8.woff2",
+      "ms": 24.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b12e623714022b65a9e3718d94aee560d4969cde3ae2063aa82d979bebdd8d76.woff2",
+      "ms": 24.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/eb75f2bf0cae8aac9cb07539ed3d95a71800401469665887052d83295f49ad15.woff2",
+      "ms": 24.700000002980232,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b62bb2ba3e15f179447720d73e2b156f25e41c7629c8f57526b4f6b4658bce57.woff2",
+      "ms": 24.799999997019768,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/5bdf9bea7c6a910233bf4e466c3550e271a108579934a96ff9709bf673fe6bf9.woff2",
+      "ms": 26,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/49451caf73cc87b89d7c26f18e635ebf84752b8f7d6aa2297999fe96fe30dbd7.woff2",
+      "ms": 27.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9fa31e86b77b71a61fd039b06584a36ea14f7b1ff3da44248ba177a51316476a.woff2",
+      "ms": 28,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/7d881e3067e4679d3fa478904f5c9e7e43d98ae6f05930a3dd0baa4ae0c8e171.woff2",
+      "ms": 27.899999991059303,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b5b184c38b660a24daa8f6cd96b32a64c101a00f8ff71959806f70153aa4c7e3.woff2",
+      "ms": 27.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d2bb5c99b98e300fcf4e8cc43fc5c09c46a10a6b47717c187042a710d984fd73.woff2",
+      "ms": 27.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9cef090ef82b2dfebe696392a6e87a4e50debd08a3602f9b10bba9aec3f55917.woff2",
+      "ms": 28.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/14a861b37fdc7212894d8fc4d942fc3a6634037f136cb9a522d73d868664a15b.woff2",
+      "ms": 28.200000002980232,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/443a6e82e0742fdda49f413416fc95edfd4ee07c4fba683d4cb5350c93e24845.woff2",
+      "ms": 28.200000002980232,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4b22b7f6eaf62639044291530acf5564e8db6a5cade9e55a4923520f7d02c3d2.woff2",
+      "ms": 29.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/8112d0237d410e5b407097afd609bd832657e28c2096a6f4b8b3245a5945c395.woff2",
+      "ms": 29.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd48f9e36bd351795e73ff5b2ea783ce79e004459ca10f52cbe0eb493856a36e.woff2",
+      "ms": 29.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/15fa6353120081b673b8e1a9bc012e49d6a2f5ed5eea836abbaacadc055d9c43.woff2",
+      "ms": 29.799999997019768,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/247e7bf0ba0e8a0d4b94eeaae926a1de10a77d10cdd155840add5459943b8399.woff2",
+      "ms": 29.799999997019768,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/351baf17b795267d874e4904ef8f6ef670e8f6480349a91492b0eabff23b15cb.woff2",
+      "ms": 29.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/34e91e227b94bf7a055ad5546d89830e40f92a412dbcf0ec8c8e4656d167c73f.woff2",
+      "ms": 30.799999997019768,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b38f13a700dedf8e0cec14a78dc3bc2289a78cc03e86862d9d6aaf45279aa437.woff2",
+      "ms": 30.899999991059303,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/245a9b460be9cf26c58b871ff52f01e651bdf9b10644239d34e7eec24d1b8a2a.woff2",
+      "ms": 31,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/16a4546bb6bf0d4fb46f52702400781642a1d0222ce96219b3e9b8dd4c8f3412.woff2",
+      "ms": 31,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/7c29e2756be741283e5d5a5ce1f59a0aa5113fbbdf498fea481a87e4ceb8baf6.woff2",
+      "ms": 31.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/87723aa4abdbeb540486d10fae9392f6fdd967bd1bd135dda4d48ef4364b9f6f.woff2",
+      "ms": 33,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/688bdfb74e4855d50de14b196b69b22719e3855974807f6d95034e3a11c24022.woff2",
+      "ms": 33,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/16d3514c7ee642390f5c199fe03643177d98a840b2e52c1f09ce4fd623821ab8.woff2",
+      "ms": 32.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/55a97464fad9f6484739ce6e284faef124bb3e3a8957a5e8fa13146634201f89.woff2",
+      "ms": 33.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/10e521290dc7461bc08e777d5f281f1b9e4d4922d273ff5936bdde5ebbd55b28.woff2",
+      "ms": 33,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/eaf88f745789ece193eab3a4e46aa0f00d7293ee1d11a2c555b816771fad66e8.woff2",
+      "ms": 34.80000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/bd9e3a6f3ce0b7633d821a9b6eb532f8da66f2268cee2c86403776965f3c4f15.woff2",
+      "ms": 34.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/142451aa2008635a817cfdfefddf1f8450d3dd083e5ecd0e57406af4575a728b.woff2",
+      "ms": 34.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6e4dae3cbcda7728c50e6690c6d4e291f3dabc7d58f9cb6e40c192186000a160.woff2",
+      "ms": 35.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/2470cccd14f17eaa33edad5b71d0604dbc6e2630d3cdeabd0de6adce35457c82.woff2",
+      "ms": 35.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d75a619b322794b148c95cd729bcc3326cc54ea866bbbf84b8e588549c535980.woff2",
+      "ms": 35.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/70cbc2e69bd336e03253d221ea4dd11af280952ab8fc6d9a1c98a246fb3681fa.woff2",
+      "ms": 35.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/0ef20b27e58dd809b2b9c08f8a3fcaf16ea0fff616d3c47f3044b0c0228bc6b9.woff2",
+      "ms": 35.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/dc1b3cdadb53e89166948890f14bd8049124b290fa03b64d19fdae4faf6437f4.woff2",
+      "ms": 36,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6efd1efe488e0b65a3ab3b93d59528a635ae12c2fe91c735d9e2ca50f0334a51.woff2",
+      "ms": 36.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fcc7bcfe3bb79214e16ba88099b52c461822a5fc5eaaf82a34efe9fc350d4da4.woff2",
+      "ms": 36.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/7f2dca27826086d1bdc7b56a6308e36cf0c20e5f3298c834c4e9173274f20c98.woff2",
+      "ms": 36.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d2d5e3b22c6994ce1870791e9a683016fb2658fb1161c74b5c9ebf5cace45839.woff2",
+      "ms": 37.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/3e50b8e2bac7561c00de286eff2632427d8aab2c99714c0039a4f256068fe74a.woff2",
+      "ms": 37.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fb53abb8275b4f7bce02be67d70e493b16fe2bc69a4e2d7c1ddd52a221d44c07.woff2",
+      "ms": 37.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/1e9df2ad2c2e005eb801f07282d23f3464df8158fe6c9b7e4d8f5032997b5bb3.woff2",
+      "ms": 38.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a10b6ada5b1871c5e6afa4167ad6121fc0d653c6151878019a4bd43b2d8712d2.woff2",
+      "ms": 38.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e3822ebfeb8a3a3110e2605343d1f1f199fd84e73b7b514d92047c5de931a9b6.woff2",
+      "ms": 38.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/410a8af3586be4139bb115e414d8b22d4ccc9f0991c13dde408403614857ffe3.woff2",
+      "ms": 38.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/54c9e55a52a4b3a523a265dbe6589c0f5eb3c36c3339d3668279a14a7334ce77.woff2",
+      "ms": 38.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/2c63b50153ce1b37f6cadcb95f9cee6740e04b8037d74dafa770b2173f4f5310.woff2",
+      "ms": 39,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/1017ac7fa6f2176319769a8518c5031ad67bea351b65d66f924afe78a1c81e65.woff2",
+      "ms": 39.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/186fe97da4c4d09bafebe46d5f5a16756f53d198049d45dc179a0bb2abbdad8c.woff2",
+      "ms": 39.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ac85049a75e07df912d76e8f94d3fca0e4591483fc7c097b97a77c0c8948ae50.woff2",
+      "ms": 39.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/98110337f8711e43c1d953f951cdc59604e0956634dfc909e592ca1fd8f58567.woff2",
+      "ms": 40,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/34eab4737a996481a6c150596c1083a3798a5b3c227044eacb510816b179c125.woff2",
+      "ms": 40.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d518d07aad5541982df76204ac8e7ef0bf6c6db3c5a3fad949a98d1c78075c79.woff2",
+      "ms": 40.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/280ed63b3de84ddd2bf608a0ad20cfcd917ada886151e405c557d7d2bbaf2cfa.woff2",
+      "ms": 40,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d097a9a53a20a3ced445b2226bc28bc1357ce7ac1d3925d599bf7d049c407731.woff2",
+      "ms": 40.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/47b7ac6e7b17171d098ddead0ceecccac9e93f0992bfb607d28c25edd0d7f7d0.woff2",
+      "ms": 40.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c308b49192649b83eea6b60bb3d73b74c058fa4d97ec253624774a7154309b86.woff2",
+      "ms": 40.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b83cb7476ff8d45b4a34e9e9462efac4a53e87395f9948a593642377344688ab.woff2",
+      "ms": 40.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/71cb22ee32f9dfcfc5446f91c2982870c83e5ff7802f75e10c762e3bc5a17c1b.woff2",
+      "ms": 40.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/15710ff9ec6f5b266ed771c8d7ff876b90fcb2dc635e15da4c8ba233fdde7417.woff2",
+      "ms": 40.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/942ac7a147ee8d07e5639515687819db00990928cf53d10cf26beab4361ee2a5.woff2",
+      "ms": 41.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ba4f617c4b9d2ebfd9c6437417222b8fae887623925dffecc7ad191511b16bc9.woff2",
+      "ms": 41.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/360a3f71b3cbb4dd6c6f88e4b450fc0fb6ff52b282fd1e750d3974a717e4e5cb.woff2",
+      "ms": 41.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b93e8d2d8b4038eca00a5077795489292805c1929a3219882a23a2c34972b9ef.woff2",
+      "ms": 41.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e06428f0e3728c0fde84740960ee4b23f505c02a2ce00ef298ce8ff7a9f8122d.woff2",
+      "ms": 41.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/19faba246f91fd7d02eefd9183c2871a787baacd094ce3b7fe9cdf0df8359b8d.woff2",
+      "ms": 42.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/76bc7d3b5b19428d036ca2e4e69c479dafe05bad037c86fe37865a767991a019.woff2",
+      "ms": 43.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/857a1eed6ecd4c317970916baaa3628a3e6ac376e086b286c982754c054c9220.woff2",
+      "ms": 43.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/131f3d4811e0b4a081543347a93a2bee00f8ec4fa79de987bc9778e748b16c71.woff2",
+      "ms": 43.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b39cfb20bee82455ac00c6be8a63b55b4bf0373f05fbb538338cd2ce7cb906c9.woff2",
+      "ms": 44.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/26de709b8b77a4dbcd2ad9901ed461010deadf3427646f770b99463ec90fbad9.woff2",
+      "ms": 44.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/20c98d4db3ebca44b8d03b5f9a4b9f65918176f7f97e9592b8d8bc2636d6a2e0.woff2",
+      "ms": 45.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4f9fb2659e0b80620abbe2ee5a8a73d4962cf84f6491f1fdc6bc28cc5c2dc996.woff2",
+      "ms": 45.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d456a69fdb35569fa187a4287528309b2b87e0080440dfa888f20553778278c4.woff2",
+      "ms": 45.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/60de8741981ac2da14cde79592a905dc7f72392d3da6d90637d48f112fe5fa9b.woff2",
+      "ms": 45.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/1d26da4e4f7e43f89f6ab82e0c51a8961e17944262c95b9226daadc8a658493a.woff2",
+      "ms": 45.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/8b2973782bc40da33733291829d28e6de08d05aafeccd9236e807e14f4a1a465.woff2",
+      "ms": 45.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4456ddda13ebade1c5c71c9d43b1ff602403738144d0161ee95e36b20b16c3e9.woff2",
+      "ms": 46.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/02ce942fc4e5c10545c2d12a783ad952d919fbadccac47c5b1a743957cdeca9c.woff2",
+      "ms": 46.19999998807907,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/17e56acdd3357116f72ad3e5c3d973c453b2ecd373b40d79b4171e66d66955a1.woff2",
+      "ms": 46.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/76c2b90c6c1d091b0e599006e9abd54a6ce434686a6f88a553a28cb9e989b3db.woff2",
+      "ms": 46.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/662067c7ed53f8e52f603a8b7cad6cee358b9031b436c8097bcf89100e7aa759.woff2",
+      "ms": 46.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/295cd873a2aac32140bd5b1f1bdc24c5d164a3a4cc69f9089076d4fd13b471f6.woff2",
+      "ms": 46.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/766aefd5a6e44e59467dedfa0b000a088576ba03c861f05bfa329bc1ff651828.woff2",
+      "ms": 46.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a9c6b0564594b9214ecf862bd68d51e017efdbb86847a60c3dd989eb90541471.woff2",
+      "ms": 45.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c7554bfeb88fbe9588ad08f0732b86ef02eb302dbaae7d8c8ab09ef063f9a720.woff2",
+      "ms": 45.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f98a60cfa5c901ceb4d17478cdd6a5162ab0f8ad977eb94442d62015835639dc.woff2",
+      "ms": 45.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e6c51058cdc92c8d05254df59cba07332835ebaf52d24e8b01ba39d71105f3a4.woff2",
+      "ms": 45.80000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/5166370a8d1753cff1a1901a97b505974cd45e1d96aa9c4ff981bdef3dffdf87.woff2",
+      "ms": 45.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/728de30fbb6807cad7e5f1d453aea33286f62f88e72e7ab6298d7bb14bec0eca.woff2",
+      "ms": 45.80000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/254d08e49912af60c2b52fc76fa17cd1394d80989326bc657c6bb0efac616aa5.woff2",
+      "ms": 45.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/8a36502fe63c1352d3f127577fa17e354ca6a9c584c606ede718cb44176a6310.woff2",
+      "ms": 46.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b0a5c4e2dc3152424fd89a52accb9550b6411147dad91ef9b51f0b1ac7bc0b5a.woff2",
+      "ms": 46.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d294f1f0ac523075b1e55e11d3bec303f7441b0b652976ad62c9b81ac0cc2738.woff2",
+      "ms": 46.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/abcbb8c8ff4c93a72eb76f3be6cd13c60b9b298947f1261dbef02139a185b802.woff2",
+      "ms": 47.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/2851fc6089ae1ec37129de47e0a9c51bffe03398554ec51472b8a712f908fad7.woff2",
+      "ms": 48.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/1a1ae65dbf9bf053ec49e160c5417e0d74b5f87c3a9475856706261907c6d605.woff2",
+      "ms": 48.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/db837c17225fb8fc82d85179a3c68333a179caa4f248aabf925bd5d3b58fc22e.woff2",
+      "ms": 48.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a8273b7a66fcdf8aef8e20f63c28b07d064dc8a78e87f074c1bf02325bfc400d.woff2",
+      "ms": 48.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fde84787a46dfe43be5a3f315b4bb256929d35855a6af2927167b0482534e52c.woff2",
+      "ms": 49.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a05723ee06e28bed2872b0c828ecfa94b6d47a4a0a14bcceedc168986050e4d3.woff2",
+      "ms": 49.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4eccbbfe908e81e05131263f9691cd327165fef534150cdaf3e0df14a7653998.woff2",
+      "ms": 49.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a28d4f0bc76ad5459f6d80e876c56417b890377ad627d6f0d99a340bf0676e50.woff2",
+      "ms": 50,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e2cc646ba19ba06b22ef19e48203f10a1b136bccc6c2bfdf7673dd0402903d62.woff2",
+      "ms": 49.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/239c913fe318c6b87b13b1785cec4e95509f7b58c43500c37f84a78bd2b55203.woff2",
+      "ms": 50,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/13438b2b30261790826f3bb764599499f2721e8c953656618db41e6d3fc23082.woff2",
+      "ms": 50,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4257ce21b91e540263de50c28fe3cb19f5669eb45e2ba4b26d53b0db0bd5a571.woff2",
+      "ms": 50,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/2479c5251b0ed20696839c484de07536fbad4c9035333c4169b5ea4309b67ab2.woff2",
+      "ms": 49.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/0f44eb22d6b25ee8b04a20edf20ac3e59d23c585289d5bf3509df6eec84965f8.woff2",
+      "ms": 49.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/95b62f6788d6536820c25e3e4e264a60dc6d90fc532e642a024ba893d304dba6.woff2",
+      "ms": 51.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/108a820f03e3f4f9ebd75e968a7e79173444ef57e5d323c3d713ef96f6ed9e00.woff2",
+      "ms": 51.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/dea4921da6184c5981d46accad583fb5040575ef8b6fc377d57722c14eafd0e3.woff2",
+      "ms": 51.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c1a6fcacbe125bcb71af49541e353d4eef7638ff82d429f680b0492ddf49f10f.woff2",
+      "ms": 51,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9e2d705394772eaff11617e1972fba698ed9f927b4d8a156c6a412c9bc090be9.woff2",
+      "ms": 51.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/3134bfc81721a637b374a1ef63109282913afe0ea86f182bfe79a5e91218e4cb.woff2",
+      "ms": 51.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6ae87cba7a92ef9f92bdbeca2f5f2e6fc8de6fb75a3dfe35dcfb1859f050fe5d.woff2",
+      "ms": 51.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/84269a9d342d84200035e4595cad39dfde37100b61d1d701b7d140a64fc7cf2e.woff2",
+      "ms": 51.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4330b5587a1b38bd906a3b89f0e4073d9e213c2b5241e77034fa177605a73f26.woff2",
+      "ms": 51.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/5cc175b78970130d22c0e82c878c0a3d03d419ba296458246ff1a643150e5e1d.woff2",
+      "ms": 51.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c05838ca17499fda8e8a23e548025f9e8f99359619fcfb6360148b963aa65536.woff2",
+      "ms": 51.80000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/bbf924bca4818ff2abca18e9b5e1d7bb960bda97b85e3e48fa2e15c7ce9c8f54.woff2",
+      "ms": 51.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/5e68f80cc4a2eee9cc061663339839744dfb80ea235be97d17a368e6064e3477.woff2",
+      "ms": 51.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/170bff4ecf76ab0ab1efd92f0712b655302fa8f9808e81f154c686eaaa2f4376.woff2",
+      "ms": 54,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/873d14a00754b53991b47f39dee3a4512d5c64c434fceb79058ab75e9513e9be.woff2",
+      "ms": 54,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ce59cb6b493a3dbe7bb18f5c672ace863c84bd7a3042f63b908710ad3783bba2.woff2",
+      "ms": 53.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9bac04cb0c751fdfec55b171013b88a5ac0891f32d5ed93e4120042cbb779641.woff2",
+      "ms": 54,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/146b09a38db4eff6ab684ae2c89c9abb9ab27a4a1cbf24a5dfce5b276017d103.woff2",
+      "ms": 54,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/10fd59ed15e1ff0e6137a088f2934256be82bf9a4f8a0e9e154ba09646b84f36.woff2",
+      "ms": 54.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f2fc299301c942704c86886f4df9eca816e553f015559f1bf1f4d703a49d4eea.woff2",
+      "ms": 54.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/76754fdd24c155878599935e82eef030c53f1e2f5af30e33888cbba805011670.woff2",
+      "ms": 54.30000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/1399f89d290afd29ca252facafa48a6195ddec5d3ba13962d0baf783c8ed1b2f.woff2",
+      "ms": 54.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6f05ed0a4ab0d28f6684da2a48520912a7e18e66d357968af1c6e2f7c41e1e13.woff2",
+      "ms": 54.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/87e168f5f550d56930eb450025dc6dd0455f583edc279cb071038b6d03784b71.woff2",
+      "ms": 54.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/153363c2a994cc0cf083bfe1640983bd1814c61e05b29b8b3fd8d4590cf01f13.woff2",
+      "ms": 54.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fbabf641df66d64c777a0b3e1cd2fd1b534f9bf2be4d2352797dd2a1e99b9e81.woff2",
+      "ms": 54.69999998807907,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/cdeb9bbae5baf661ce2637670e2c11b1d92613dcd809c203e8e506f03c08fbbf.woff2",
+      "ms": 54.69999998807907,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/07b9f585b1d6e3842ff3c2d21df23e3fae7bd1386079262abc72b4169d7dcf25.woff2",
+      "ms": 55.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a901b562e01e2eff9c3d64071323d90f7edb3b89c41c9c1a7e5c22886dd56118.woff2",
+      "ms": 55.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6decbc197dccac98c917126381b189494268b9c95c4eed83fc16e8794dfc455f.woff2",
+      "ms": 55.30000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/81842e291b2d5317fd0ec513c6fa645d831ce48cef0dc89698cb6009b554269d.woff2",
+      "ms": 55.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/8fff956af93f97d43591cdd9c9f4eec9a709af97308b0a3fe471e44d95218a26.woff2",
+      "ms": 56.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/02a5dfebc99421af2e352ddb22a5b8ebbbf479a3bcdb99730be437c66b98d45d.woff2",
+      "ms": 56.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/41a6266727dca2294b32ed8e1568adb9b97ac475b587d6b9e4786e9983e9898f.woff2",
+      "ms": 56.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b1d4df39d04c34554d50d727433242813b4fdcbc446ca50e96ca34b71089abd4.woff2",
+      "ms": 56.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/cf61dc844a7e85aecaf0cd4646a3db8e3c17188bd1193c740c2ef7d283b17733.woff2",
+      "ms": 56.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/18289435ac85a790b19e9a04be8d6ab86119c82a4570de0d856eecd9e17a34a9.woff2",
+      "ms": 56.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d63e6171487f28bdb32188ee884d7ea11417c6172d9af741af33030a8dde5d41.woff2",
+      "ms": 57,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/18c1de219849b0d2e55a6cd4298d2806101a7b3ba4bbe7933d2253c58f206a67.woff2",
+      "ms": 57.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/aed4208a2f5fba3e259ea4e1f9a1439c4de128f3e8284f812013ee0103dde31b.woff2",
+      "ms": 56,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/34315bf199cdec99628e768abaa36ad198cf6d0edc9ad16ef434c5ed0f2137d7.woff2",
+      "ms": 56,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9d492c3de8286bc57c06f65b9779c2f7319e08f602e4959db2b4c0dde44d16ab.woff2",
+      "ms": 55.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b9a45126feabbdaa16e84d58aee74db7dc776c5b0e44aa6bc9fcde2694150b00.woff2",
+      "ms": 57.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d52152ee784646d60a8de24fe20f88ee0d5675995fd53a5081c34265b8d2997a.woff2",
+      "ms": 58.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/62df09ae5ec9743b0efbe6af7828703a0bd6be7b1f0553e50530ab0dcd72c17b.woff2",
+      "ms": 58,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9e1e3b9932c26df34bfef164b0c9f7baa145ddce727bab9248ac10e076379e1d.woff2",
+      "ms": 58.30000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a34957642f1e4af31b5e2ad43142ec4d0fe08057fe0c191803889dc481055846.woff2",
+      "ms": 58.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b2cecb46486dbade80bd952b08f9d2044eb00584b7fe2e80a5ab7e2d5122af7b.woff2",
+      "ms": 58.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/8f00917dbdbc15744f62d32a6ebfe3adf2c29ea19df9db2a9a5a3df12659062b.woff2",
+      "ms": 58.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/37530fc0872fd60a1414975382851bd07935e7e698013066db22c446e1cd76cd.woff2",
+      "ms": 59.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/bcc1cdf6bb98ab0672b60f1dee37bb47203f3e8ff446cd50c15351e2cb041f19.woff2",
+      "ms": 59.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b6c51ed27c23fe1f6dff86de592e590780c67a1a407f096a1e9480651b7cbb23.woff2",
+      "ms": 59.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ca2f68cef364be39c4e7769a6246002ab4c54194e929b429df9fde02bddcbe88.woff2",
+      "ms": 59.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/5fc525779da0884e6fd7d2fc0eee7ab7f01a89b330959163f2b60b2050800c57.woff2",
+      "ms": 59.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6a28279ff7836f3669b89b91aef33e9f44eca0bbde42f610e97df201ff4e7a95.woff2",
+      "ms": 59.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a99c3c5367f71f52264a7e60e02f2360b439fec75ea9f3a48e0172ac4146cb49.woff2",
+      "ms": 59.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4b6472e8ff17995c0cfad206e63a3794433593b679726aac85cd836c882bac03.woff2",
+      "ms": 59.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e6097f5a14d9e102e181f75274818c6856d28c23e37ac48abbe481c50558b4a6.woff2",
+      "ms": 59.80000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9d65a43423a9924b66d636a9fa1bae97f9734a3a432c5bf05a54943726748504.woff2",
+      "ms": 60.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/77b8207c4ab9db5d979148fd52943ad3addc00566b8ef82bb36465674c403494.woff2",
+      "ms": 60.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4bcacc3eb053c4f8200a1ab837c2eece6888db03c7a30217393177fcde247bc1.woff2",
+      "ms": 60.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4863f8885e2521089d77e649ee0c9c4ebc7f432a3f9108bb9c68a9703c128957.woff2",
+      "ms": 60.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/5ca22fafe8359f452cc453b1f4eed0a1390b9b5adc4dc20b114d0da76b5d0b3b.woff2",
+      "ms": 61.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b03b77e8e190a4e09595475fce1e5fb6209db2a61a40a274c74e19033098c22f.woff2",
+      "ms": 61,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/da29d363ff470eb17afa53a61ffcc6ab94fd29272ed7813539d06c59dc4dcac3.woff2",
+      "ms": 61.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/8a389832bc5fa8e119ec4d62a3115d7137dda19a896e424cd7e4fff2b873e63e.woff2",
+      "ms": 61.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e5612c0ac4e147be753e42903a986974fed214bcd8cff152f27a6d14bba7ad53.woff2",
+      "ms": 61.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f86638d5cec624bd9c0a3480f33f97636371c156e9ef6fab9ae3ff9465dce54f.woff2",
+      "ms": 61.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d6104a78d07c52541946ef4314ce47c5f1fc4fb99cb5f655a11bca36b8ccbdd5.woff2",
+      "ms": 61.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d34bf9dddc2f00119ee59f0f5ff439bb5a9e388ef1ead8bd793f340c1488d738.woff2",
+      "ms": 61.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/22944c0820076856cdb30f7f4aec3589289828503aca5e59579c5b8dc17a22a3.woff2",
+      "ms": 61.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a36784e6d9c17107b81cf62b67c78f9cfbedf1a49256ada61d60171fd54240c1.woff2",
+      "ms": 61.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/47202145a8afbfefa84f16914ebb7bca8bb659be32e0df6dc268402077449ac1.woff2",
+      "ms": 61.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b1f4774e5b05d505f9521b22da58b770a4a2620de3daae1bd0463627c52fbd26.woff2",
+      "ms": 62.099999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/175140f30bbae3f05ce7e83b6d76b569063908a02ae51aadc95db9eb4a8c4a5f.woff2",
+      "ms": 62.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4f4b26852583e232ab62d24d4fba54d86e7dc53fb8a6cbeae7b7c3f93be504a1.woff2",
+      "ms": 62.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d197b6d31b00ffc1fd3b7b958d615a7a871af1209e76a98832911d649aa6db7c.woff2",
+      "ms": 62.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/063b1a68fcd9a79ae74090fbde7768338e582e6260e64ba78ab8a8bd2871c1bc.woff2",
+      "ms": 62.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4901c6ecd5715ad6f0cb8f44141acc18bb727d3161cfd84f03a57fdc309b88cb.woff2",
+      "ms": 62.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b357b7db3ac61bdfb54c70bb45813b212ae6749b092013a1225859016f4f6216.woff2",
+      "ms": 62.599999994039536,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/efb4f33347b9b855183e6eeb39747503ae4f4ab13d7129a6e16cc60c7aff0fc7.woff2",
+      "ms": 62.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/262e6f20561f41cb762225872a5ac83611c41647af87d7027dfa61fab9b4e488.woff2",
+      "ms": 63.30000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/deaf28e71223122718efd5ed55ba61d0f6983376788c4f0d106d21a10f575933.woff2",
+      "ms": 63.400000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f98e5438ed9cb4783b9afe40ae3af2b37aab02692c923868d0d5642b798f2668.woff2",
+      "ms": 63.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4f3fefc2692fb4ed78032d8da8e95dad44aff113a7900e56182aa5ac36be0e81.woff2",
+      "ms": 63.6000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b29c0dd5e7cfc2f5722a88a76fd57941ff8f326776d7620d0f08d7e3bb0aae66.woff2",
+      "ms": 63.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/7663f1bfe7c3136e48cf84d3f26ad8a39bc87ca8400f70397d2feef4d95e1006.woff2",
+      "ms": 63.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/94306017b82625d1e36228a152c5b1946372095013d695028afa5580cff06883.woff2",
+      "ms": 63.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4a3a6479cb5e27eb5d514c2996c082e47b117d103c57d10944bea0157e03c08e.woff2",
+      "ms": 63.900000005960464,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/7940365c350cb164e3b70f6707feffc64be999ed06bf3972dd6d9b0157c787f9.woff2",
+      "ms": 64.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/0fb9726f0d8c0d73ad2d1150d62946098f80a05f21d780dd9c245736bd81e655.woff2",
+      "ms": 64.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/2361ccb25cb59ab6231b4ff62aeaa4e919f223d2e3fd3c949d4c2d145b9ebb2d.woff2",
+      "ms": 64.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/2f5716a5efe56902d813543b042374e7e50b9ab39984be1723f8fce08ef37ad7.woff2",
+      "ms": 64.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/5bc41a4d80ce20dfba9ffae51c60337673d3b6b3f63e937dd67a6ca18ba7ace7.woff2",
+      "ms": 64.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/09e70d74a149d7222ed807db129fd4f325348afcb8aaefd5abf76cecc711c7b0.woff2",
+      "ms": 65.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a184aa8011a5974def93450110beed545b4bdc19f445f730fe0e08ef9331a00f.woff2",
+      "ms": 65.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/918f050b5eb8e39a01bb741cc2a20830d0ae25b7009474c3785b9626b9f39762.woff2",
+      "ms": 65.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/40e6c6841c279f156439c85f841c25746e0764dca3710e1c6c9dc5c2da5494ae.woff2",
+      "ms": 65.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/87ffa487dc346ae4841e5321a204d77f9ed1f71f5658cc11c622332eb2080d27.woff2",
+      "ms": 65.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/79d3d880d20088015cdea9cb8c540077d9c5b07f087bbd7ed2442ad0691568ac.woff2",
+      "ms": 66.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/436ccda36caba3ab193272bb7d8a5a9ff7dea73f6d29eed66e15b269a45fb818.woff2",
+      "ms": 66.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd6459b9a0dd708f76ccebd932ab73761bb2832aab505432c9aa603706551982.woff2",
+      "ms": 66.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fe61175d6c9808f83c3fd245264f1abf3b51272d0cb2bc938fc301d46319f5ef.woff2",
+      "ms": 66.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d47806eaad5ccb1226d8bd716153b40b6d0dffdba948143c64855ed040627ce2.woff2",
+      "ms": 65.90000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/eb9918d846673765da7a60652fad8033ac69f129d3e32f453a28a23b63368358.woff2",
+      "ms": 66.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/2b1630ea7da7295add99bb54ec43cbadff59a33b231849c7b76da39098d96ed2.woff2",
+      "ms": 66.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/39451ca3e05244f1ddfd1aa5a46608304e90cd04bbe03ba906cf2e08196cd9f3.woff2",
+      "ms": 66.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b9df7810a66e8d2b31833e4c968fc326117fba46d1486f65a6ac880f68f52a94.woff2",
+      "ms": 66.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/68ce66639d66a6070a74727c8299eb8d12bc09a07ec002ebeb22ede5417263e1.woff2",
+      "ms": 67.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/dd4b968769ee0c8b4f0a092483442a1d663292f3506c95638741f90b68a73159.woff2",
+      "ms": 67.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4dfc0f77371ec52138e80a724d74ac6ea895e2b41be6b6e3cb3192755c0bf8cd.woff2",
+      "ms": 68.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/12c2a8e788f9c62e6d5cda9cea49e0e21f9f08de26a64e8c656f9bedc2c5b91e.woff2",
+      "ms": 68.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/076683c53a9ede79109d392319962e48c79ae0539f6ef2d25e5c06faf8f67d16.woff2",
+      "ms": 68.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c219dd62843b3a713957cbaef1d93e1b671adeda8e103828caf593a15420da69.woff2",
+      "ms": 68.59999999403954,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/99ec0b3ea83e49bd00734150d1eab781ac0b319ea9bb878e89050c4dd281321a.woff2",
+      "ms": 68.59999999403954,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e0eb852273009f95561cb4267b53cd9f0e113ed600518fd19d903a5920913e98.woff2",
+      "ms": 68.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/731c5b20b9c657706bfd360bfac26464e1f1d1856477e8eda777554d81fadac3.woff2",
+      "ms": 69.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/08ece4af5dab7b4f1cddb30ce6cacd173f2bbb2e51b67bf381dcde13bd644a18.woff2",
+      "ms": 69.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6f4b59448b6674e844aedf12ca731983d55ce306745f6b223e854e23d47f92c7.woff2",
+      "ms": 69.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f3ef5b9fe4650a1e8474b0e44f5dda68f26d8f5fb3b21a4d165bbc7b8a7a3d49.woff2",
+      "ms": 69.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e09e18b76580419508c0ea22f1213ed92ae09ce65fd059f0fbf0fa447a620b51.woff2",
+      "ms": 69.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/984530d640f12381c6e2104ea2f70ae31503ae273312c3315b19b5d6664dcb8f.woff2",
+      "ms": 69.59999999403954,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fe568d50a29522314189c7e2189f2cbbca3acfa35b3173452d91b13053337ae7.woff2",
+      "ms": 69.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/719a95a81aa2f4fc5f75931beef933f7f892c30bbebf7b715d0941577d0bd381.woff2",
+      "ms": 69.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/009709def6f2bbb9827c60a1265abfc5fc6afa90b387a1f8bd3b16bfa95ce1bd.woff2",
+      "ms": 69.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6b500513a4cb4328b6a3fdb4482d368114e07ffca45852b83506eaed6733adfd.woff2",
+      "ms": 69.90000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d9a84b8300079136145698976b1c8b9e60895c0cc88673c4ea0dbcb28f99511f.woff2",
+      "ms": 70,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/7418dc3bd59729ecdefa7a36f31953d4866d977c516df37f8e0c8047e3344a81.woff2",
+      "ms": 70,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/bc332e58a1ae8e7234864aaf637bac3338ca53c63cc20b980c9cc9b3892592d6.woff2",
+      "ms": 70.19999998807907,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ab05c4a9bee318021843f46f1139c56d5488fc433ddd16a752a2b828a7f34358.woff2",
+      "ms": 70.19999998807907,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4c2ccdbe298de0510aaaecc8a61ecf59d9001d13f3a0bcd1a9a8f26f6d73e753.woff2",
+      "ms": 70.09999999403954,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6e1b17bdd0dd4f357698ea71d37571f691fdcd44ddf2aae7d9ed2943acc7ff6f.woff2",
+      "ms": 71.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d8e0ba34314deff2b1a393223c6d1286efcab6024a2985e9e91b382f3cb64734.woff2",
+      "ms": 71.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4d7ca14c9eea5afdbc4ed10c30d875c706a65ddaaceaca702600712da9288b1f.woff2",
+      "ms": 71.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/336db5373f820565120565d80326380b662f98bde8c15e665887a8ca99843557.woff2",
+      "ms": 71.59999999403954,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/8ba4241cca98b04822b61ba9bb3e2f91f81709e3294317e50dd340302edd82f9.woff2",
+      "ms": 71.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/91eea7a9e124efec4d6b435ec8096cf0e7b8118bb6fa49bf38cb4dc2746e30e1.woff2",
+      "ms": 72,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/b2d87199260e5b1954de4f16e442672d30751aab3610ec56114320d446156910.woff2",
+      "ms": 72.29999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/61fb2788fb317a6781247e9abbba9b805d81624cce847bbe632e607ff1fc1daf.woff2",
+      "ms": 72.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/bde28debfa6489e5da1808d36d5c50dbf79403b99448c3470678306f95967e51.woff2",
+      "ms": 72.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/69b2985f9b4520f4a8f11852bd5054a9dcfe1af4b53c570e6b5cb81f3f171d2d.woff2",
+      "ms": 72.59999999403954,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/367ebd6d6ae02b7ad96466b8916c19aa0a50cbdaff175b77bf3075d0d5ac3d62.woff2",
+      "ms": 72.59999999403954,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/64ec79c6ea108eaaa352044d749c6eabac901bc662a823ffda7ed6ad21fa5681.woff2",
+      "ms": 72.69999998807907,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/95dc6f7a3cffa3050327c7b8e62964832fb57df035c67f9cee3654243d9a58d5.woff2",
+      "ms": 72.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a0140d7af30c40505bcaa747c4d13727a48fbd65c07545c1fc43513d5fcd5b82.woff2",
+      "ms": 72.90000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/d9b1b57892c0484008fccd4af07dcd8303569b1022af59cbd6dd1dbb2c552dbc.woff2",
+      "ms": 73,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/04835dd1a5e7977ba584d72c078d572ef131c074fde28b1f8d6b87c779725bb5.woff2",
+      "ms": 72.90000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/662df765fb4c06e2b62a7eb0ee6d77f323fe6f87e50af822575dab0109f59d8c.woff2",
+      "ms": 73.1000000089407,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/c4557a49dcd65c5168dec4dc8e3b4d5059c7ecac38733acc9bc96576cdc152e0.woff2",
+      "ms": 73.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/450ae5f071847470de2a44b2baf60f7f4fb859bdac401e5d4e60c97d42b9af64.woff2",
+      "ms": 73.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/0f17b2748b52c59bc97ae562aabb38e7232409659641e64c2be4277ccd608b41.woff2",
+      "ms": 73.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/20217ea3b246ebadd90737aaedf3874cc934a781d7d17903c0a65a32698eb329.woff2",
+      "ms": 73.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6e4e9355deb91d40e98d014b296ce6a2cfd5be73e27bfd1618939f036b41a758.woff2",
+      "ms": 73.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4ba5ffc310182ba6dd4a2b762967c4600774665ef54f621004acdbb905ba753d.woff2",
+      "ms": 73.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9599b975b5bd4bd9e79e8b19710f2fe4250d57380ee2f08e97e1491f86a4326c.woff2",
+      "ms": 73.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/e8b5680f69489d24a0857537a764fdf539cb7eb3d411aa50290b2f1eb215a589.woff2",
+      "ms": 73.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd237e1c09106cb15a4961de0363a91f34c16a3624156f717576e8b4fa4d3038.woff2",
+      "ms": 73.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/18c4caeda214240fede839a9a1677df15852097e6ddfdc2b10a8abb43071bd9c.woff2",
+      "ms": 73.8999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9746bd72270dc0efc4556a06d9ec5511153e0df3753fe332197510485d5344ff.woff2",
+      "ms": 73.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/6403394a9980dafe0ceee3b7edad1975fd52b6630e242ffc3dc369d66cedb551.woff2",
+      "ms": 74,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/9a11a2f335bd9e84964dd1d62d3e014d06a1eec60dd3cf20ecff986e0d895cd2.woff2",
+      "ms": 74.09999999403954,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/4bc049769a14c1c25d8eca994cf17a56070aaa72c59c4566bc48ef43cc7d29e3.woff2",
+      "ms": 74.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/63a5792ca5f4942bfe44289bdc0bc8dd57e3f8b0210f5a0e34d7ebe588915d61.woff2",
+      "ms": 74.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/a20b7431a801b17936af0b15fd2082da8fa3cb12c8d55035390ade372ab1d8a2.woff2",
+      "ms": 74.30000001192093,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/701aa37e03b10aeb64ed937c94d2e9365a06b253a6bb439a26fa7045de121298.woff2",
+      "ms": 74.3999999910593,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f349e5c5f705a845a4f93d70b63f6e5a4bd139dc3bb5c75e6cf74da6d84940dc.woff2",
+      "ms": 75.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/bcf3f4c1d2503f1f4c36e664ea446ba4bd0bd0c14948b8bc039a7adc74d29735.woff2",
+      "ms": 75.20000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+      "ms": 73.19999998807907,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/duel-start.mp3",
+      "ms": 578.2999999970198,
+      "bytes": 6954
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/coinToss.mp3",
+      "ms": 579.5,
+      "bytes": 2637
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-CmNwKGas.js",
+      "ms": 578.5999999940395,
+      "bytes": 9771
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/duelScene-BWAEpm3C.js",
+      "ms": 1006.2000000029802,
+      "bytes": 25703
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/readingCrystalOptics-DvWfSfWL.js",
+      "ms": 578.7999999970198,
+      "bytes": 1730
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "ms": 580,
+      "bytes": 407
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/pileModels-CTpQQwNP.js",
+      "ms": 579.2999999970198,
+      "bytes": 1494
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/ceremonyScene-CWzfMF8D.js",
+      "ms": 579.5,
+      "bytes": 4493
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/paperDraw-BeaKYEA3.js",
+      "ms": 579.6000000089407,
+      "bytes": 4900
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/scene-D9CTDtck.js",
+      "ms": 579.2000000029802,
+      "bytes": 3760
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/board.glb?revision=recessed-rim-v3-20260929",
+      "ms": 80.40000000596046,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/market.glb",
+      "ms": 72.79999999701977,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/brand/lore-logo-transparent.webp",
+      "ms": 72.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-mon-ui.webp",
+      "ms": 72.70000000298023,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/supply.glb",
+      "ms": 5.199999988079071,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-mon-lossless.webp",
+      "ms": 4.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-tray.glb",
+      "ms": 0.3999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/field-mon-ui.webp",
+      "ms": 0.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-counter.glb",
+      "ms": 0.5999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-crystal-ready.glb",
+      "ms": 0.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/mana-crystal-spent.glb",
+      "ms": 0.4000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/crystal-optics.json",
+      "ms": 0.5999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/turn-button.glb",
+      "ms": 0.5999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/timer-inserts.glb",
+      "ms": 0.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/reroll-button.glb",
+      "ms": 0.4000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-spell-ui.webp",
+      "ms": 0.3999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-spell-lossless.webp",
+      "ms": 0.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/field-spell-ui.webp",
+      "ms": 0.6000000089406967,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-quest-ui.webp",
+      "ms": 0.4000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-quest-lossless.webp",
+      "ms": 0.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/field-quest-ui.webp",
+      "ms": 0.3999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-trap-ui.webp",
+      "ms": 0.3999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/base-trap-lossless.webp",
+      "ms": 0.9000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/field-trap-ui.webp",
+      "ms": 0.5999999940395355,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/cost-ui.webp",
+      "ms": 0.4000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/attack-ui.webp",
+      "ms": 0.30000001192092896,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/health-ui.webp",
+      "ms": 0.29999999701976776,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/shield-ui.webp",
+      "ms": 0.29999999701976776,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/dew-ui.webp",
+      "ms": 0.20000000298023224,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/plaque-ui.webp",
+      "ms": 0.20000000298023224,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/infinity-ui.webp",
+      "ms": 0.29999999701976776,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/biblion/modular/brand-seal-ui.png",
+      "ms": 0.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/seekers/v2/mask-self.png",
+      "ms": 0.7000000029802322,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/seekers/v2/mask-opp.png",
+      "ms": 0.3999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/counter.svg",
+      "ms": 0.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/dual.svg",
+      "ms": 0.4000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/ambush.svg",
+      "ms": 0.3999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/aura.svg",
+      "ms": 0.30000001192092896,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/void.svg",
+      "ms": 0.5,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/guts.svg",
+      "ms": 0.4000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/decay.svg",
+      "ms": 0.20000000298023224,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/majesty.svg",
+      "ms": 0.20000000298023224,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/taunt.svg",
+      "ms": 0.29999999701976776,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/evade.svg",
+      "ms": 0.29999999701976776,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/passives/v2/relic.svg",
+      "ms": 0.4000000059604645,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/seekers/faceless-v2/poses.webp",
+      "ms": 0.3999999910593033,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/coin-toss/coin-option-1-front.png",
+      "ms": 0.30000001192092896,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/ui/coin-toss/coin-option-1-back.png",
+      "ms": 0.29999999701976776,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/seekers/faceless-v2/portrait.webp",
+      "ms": 0.20000000298023224,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/models/reading-board/v1/fonts/DejaVuSerif.ttf",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fe568d50a29522314189c7e2189f2cbbca3acfa35b3173452d91b13053337ae7.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd237e1c09106cb15a4961de0363a91f34c16a3624156f717576e8b4fa4d3038.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/ff07f44b624e6cf6018db8a3984ba66c0b2d74dc344de2bfe9e6f971b5f669f0.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/faf21491ad9bd040aa81f0aef6a5ddaf91fd70082aaa7828555bab2f82ec78c8.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd48f9e36bd351795e73ff5b2ea783ce79e004459ca10f52cbe0eb493856a36e.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fa981b56ecdad0095f14ef8201483fdc1b49efe7d048b64bad3efbbcb1d18eac.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fcc7bcfe3bb79214e16ba88099b52c461822a5fc5eaaf82a34efe9fc350d4da4.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fb53abb8275b4f7bce02be67d70e493b16fe2bc69a4e2d7c1ddd52a221d44c07.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f98a60cfa5c901ceb4d17478cdd6a5162ab0f8ad977eb94442d62015835639dc.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fde84787a46dfe43be5a3f315b4bb256929d35855a6af2927167b0482534e52c.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fbabf641df66d64c777a0b3e1cd2fd1b534f9bf2be4d2352797dd2a1e99b9e81.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/f98e5438ed9cb4783b9afe40ae3af2b37aab02692c923868d0d5642b798f2668.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fe61175d6c9808f83c3fd245264f1abf3b51272d0cb2bc938fc301d46319f5ef.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/fonts/web/files/fd6459b9a0dd708f76ccebd932ab73761bb2832aab505432c9aa603706551982.woff2",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/stage-Cm8X0XpE.js",
+      "ms": 500.6000000089407,
+      "bytes": 12459
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/RoundedBoxGeometry-BK7DFacA.js",
+      "ms": 497.80000001192093,
+      "bytes": 1126
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-B0FO79jB.js",
+      "ms": 426.19999998807907,
+      "bytes": 5669
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v3/click-3.mp3",
+      "ms": 427.6000000089407,
+      "bytes": 2953
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/assets-Cvmi-4HQ.js",
+      "ms": 497.29999999701977,
+      "bytes": 1016
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v7/play.mp3",
+      "ms": 498.70000000298023,
+      "bytes": 6602
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/coinLand.mp3",
+      "ms": 496,
+      "bytes": 2898
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v4/draw-3.mp3",
+      "ms": 496.6000000089407,
+      "bytes": 4412
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v8/summon.mp3",
+      "ms": 492,
+      "bytes": 6394
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/visual-zqDNCwBr.js",
+      "ms": 489.59999999403954,
+      "bytes": 4137
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-By70Vl6g.js",
+      "ms": 500.80000001192093,
+      "bytes": 5480
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/visual-lXvDPRd7.js",
+      "ms": 496.70000000298023,
+      "bytes": 8536
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/attack-1.mp3",
+      "ms": 498,
+      "bytes": 4203
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-BNrvY2tt.js",
+      "ms": 497.40000000596046,
+      "bytes": 6847
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-w_Dcd2rH.js",
+      "ms": 489,
+      "bytes": 5103
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/attack-2.mp3",
+      "ms": 489.40000000596046,
+      "bytes": 4099
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-Clj5mOml.js",
+      "ms": 486.5,
+      "bytes": 5784
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/attack-3.mp3",
+      "ms": 621,
+      "bytes": 4151
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-QoHweDTP.js",
+      "ms": 483.79999999701977,
+      "bytes": 3364
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-nr4PrFnI.js",
+      "ms": 413.70000000298023,
+      "bytes": 5457
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-Bmf1Qe7i.js",
+      "ms": 563.0999999940395,
+      "bytes": 5659
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/impact-1.mp3",
+      "ms": 564.2000000029802,
+      "bytes": 3993
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-18nDj8Va.js",
+      "ms": 562.9000000059605,
+      "bytes": 4524
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-DXewURH-.js",
+      "ms": 497.3999999910593,
+      "bytes": 8466
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-DdH7QJ5M.js",
+      "ms": 494.59999999403954,
+      "bytes": 5993
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/impact-2.mp3",
+      "ms": 561.7000000029802,
+      "bytes": 4071
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-CfrIVAtB.js",
+      "ms": 407.59999999403954,
+      "bytes": 7457
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-dgqWy2L8.js",
+      "ms": 1376.3999999910593,
+      "bytes": 7400
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/impact-3.mp3",
+      "ms": 679.5,
+      "bytes": 4542
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/coins-C5Qy3Kda.js",
+      "ms": 679,
+      "bytes": 2832
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/catalog-DPWM0s_J.js",
+      "ms": 405.90000000596046,
+      "bytes": 2627
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/damage.mp3",
+      "ms": 1176.2999999970198,
+      "bytes": 4019
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/sound-CX0jnt7T.js",
+      "ms": 970.7999999970198,
+      "bytes": 733
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-BrU8-i1z.js",
+      "ms": 970.2000000029802,
+      "bytes": 6025
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-CD2J7Z_E.js",
+      "ms": 699.2999999970198,
+      "bytes": 2698
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/heal.mp3",
+      "ms": 699.7000000029802,
+      "bytes": 10929
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/darkRenderer-DI2rz54F.js",
+      "ms": 1050.5999999940395,
+      "bytes": 3199
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/death.mp3",
+      "ms": 1985.7000000029802,
+      "bytes": 6498
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-COXO8Epg.js",
+      "ms": 1569,
+      "bytes": 4864
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-BJ-rj1Is.js",
+      "ms": 1049.4000000059605,
+      "bytes": 5202
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/persistentFlightRenderer-b8DM-AOM.js",
+      "ms": 2151.5999999940395,
+      "bytes": 2127
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/trapSet.mp3",
+      "ms": 1203.9000000059605,
+      "bytes": 4491
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/scene-DtRztlKk.js",
+      "ms": 1536.0999999940395,
+      "bytes": 3942
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-BqqhRKLM.js",
+      "ms": 1879.7000000029802,
+      "bytes": 7895
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/trap.mp3",
+      "ms": 1999.8999999910593,
+      "bytes": 4723
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-DT22KgSz.js",
+      "ms": 2044,
+      "bytes": 4880
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v4/buy.mp3",
+      "ms": 2635,
+      "bytes": 13361
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/master-tongues-Do-3YFdJ.js",
+      "ms": 2467.5,
+      "bytes": 2413
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/family-matter-Vt71I2aZ.js",
+      "ms": 2034.9000000059605,
+      "bytes": 2575
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/ornaments-B3jypW0p.js",
+      "ms": 1846.5,
+      "bytes": 2364
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/mana.mp3",
+      "ms": 2194.3999999910593,
+      "bytes": 7589
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/royal-matter-C7WC5YxA.js",
+      "ms": 1785.5,
+      "bytes": 3427
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/turn.mp3",
+      "ms": 890.4000000059605,
+      "bytes": 4276
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-CNgiLpJx.js",
+      "ms": 1276.0999999940395,
+      "bytes": 9329
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-DT7JjSkI.js",
+      "ms": 1386.2000000029802,
+      "bytes": 2045
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-D5e44uCB.js",
+      "ms": 1417.5,
+      "bytes": 4994
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/win.mp3",
+      "ms": 1593.300000011921,
+      "bytes": 13675
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-D6nLMoY2.js",
+      "ms": 1861.6000000089407,
+      "bytes": 11914
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/lose.mp3",
+      "ms": 2563.1000000089407,
+      "bytes": 8407
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-BHD4-6QO.js",
+      "ms": 2175,
+      "bytes": 6846
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-BrSxD53U.js",
+      "ms": 2064.2000000029802,
+      "bytes": 3835
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-D2tKAfv8.js",
+      "ms": 1920.6000000089407,
+      "bytes": 2926
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/drawGame.mp3",
+      "ms": 1820.2000000029802,
+      "bytes": 9139
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-2XZdHZeS.js",
+      "ms": 1782,
+      "bytes": 3667
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v4/match.mp3",
+      "ms": 2143.3999999910593,
+      "bytes": 26045
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-CG5XovQK.js",
+      "ms": 2143.5,
+      "bytes": 5917
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/riftScene-D7B01Ide.js",
+      "ms": 1195.5,
+      "bytes": 12252
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-B_a9JFDC.js",
+      "ms": 2419.5,
+      "bytes": 5866
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v3/error.mp3",
+      "ms": 1782,
+      "bytes": 2612
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-BJ9L0KpJ.js",
+      "ms": 1549.7000000029802,
+      "bytes": 2412
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-B3iJM_IV.js",
+      "ms": 1325.7999999970198,
+      "bytes": 3843
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v4/coin.mp3",
+      "ms": 827.7000000029802,
+      "bytes": 8532
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/scene-CFCsRywo.js",
+      "ms": 1563.5999999940395,
+      "bytes": 32656
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-FPk_zn4z.js",
+      "ms": 1243.800000011921,
+      "bytes": 2855
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v3/pop.mp3",
+      "ms": 1687.699999988079,
+      "bytes": 2429
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/spacetime-C0WAkvGT.js",
+      "ms": 1328.5,
+      "bytes": 5667
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/snapshot-C5jXv322.js",
+      "ms": 1686.9000000059605,
+      "bytes": 1207
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/facehit.mp3",
+      "ms": 2122.1000000089407,
+      "bytes": 4513
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/diceScene-BvyEYYLk.js",
+      "ms": 1383,
+      "bytes": 3994
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/fateWheelRewind-R9zT8S8t.js",
+      "ms": 1380.9000000059605,
+      "bytes": 1419
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/skull-apparition-jaxyBytm.png",
+      "ms": 32858,
+      "bytes": 1783486
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/mimic.mp3",
+      "ms": 32502.60000000894,
+      "bytes": 5715
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/coiling-fire-BXM1fmiB.webp",
+      "ms": 37115.70000000298,
+      "bytes": 510614
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/mana-pay.mp3",
+      "ms": 36235.5,
+      "bytes": 3995
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/cover-1-Ca1f6w1Z.png",
+      "ms": 60008.60000000894,
+      "bytes": 300
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/avatar-red-CyF_7AzU.png",
+      "ms": 56437.40000000596,
+      "bytes": 2247959
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/avatar-blue-Dgu4sbnI.png",
+      "ms": 60000.80000001192,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/void.mp3",
+      "ms": 61881.29999999702,
+      "bytes": 6913
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/shuffle.mp3",
+      "ms": 73369.79999999702,
+      "bytes": 10880
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+      "ms": 0,
+      "bytes": 0
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/discard.mp3",
+      "ms": 16095.79999999702,
+      "bytes": 5717
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/diceRoll.mp3",
+      "ms": 647.5999999940395,
+      "bytes": 5658
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/diceLand.mp3",
+      "ms": 220.59999999403954,
+      "bytes": 2585
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/rankUp.mp3",
+      "ms": 482.70000000298023,
+      "bytes": 4328
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/rankDown.mp3",
+      "ms": 508.20000000298023,
+      "bytes": 4067
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/rankPromote.mp3",
+      "ms": 658.1000000089407,
+      "bytes": 8941
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/chosen-v2/heavy-blade.mp3",
+      "ms": 856.7999999970198,
+      "bytes": 44697
+    }
+  ],
+  "wire": [
+    {
+      "url": "https://test.yourlore.xyz/assets/riftScene-D7B01Ide.js",
+      "at": 1792063753260.0342,
+      "preload": false,
+      "cache": false,
+      "bytes": 12293
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v4/match.mp3",
+      "at": 1792063753259.228,
+      "preload": false,
+      "cache": false,
+      "bytes": 26158
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-CG5XovQK.js",
+      "at": 1792063753259.9648,
+      "preload": false,
+      "cache": false,
+      "bytes": 5943
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-B_a9JFDC.js",
+      "at": 1792063753304.3772,
+      "preload": false,
+      "cache": false,
+      "bytes": 5862
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v3/error.mp3",
+      "at": 1792063754001.091,
+      "preload": false,
+      "cache": false,
+      "bytes": 2627
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-BJ9L0KpJ.js",
+      "at": 1792063754234.081,
+      "preload": false,
+      "cache": false,
+      "bytes": 2403
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/runtime-B3iJM_IV.js",
+      "at": 1792063754458.614,
+      "preload": false,
+      "cache": false,
+      "bytes": 3831
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v4/coin.mp3",
+      "at": 1792063755403.5,
+      "preload": false,
+      "cache": false,
+      "bytes": 8562
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/renderer-FPk_zn4z.js",
+      "at": 1792063755726.55,
+      "preload": false,
+      "cache": false,
+      "bytes": 2851
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/scene-CFCsRywo.js",
+      "at": 1792063755405.437,
+      "preload": false,
+      "cache": false,
+      "bytes": 32732
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/spacetime-C0WAkvGT.js",
+      "at": 1792063755784.927,
+      "preload": false,
+      "cache": false,
+      "bytes": 5767
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v3/pop.mp3",
+      "at": 1792063755783.7778,
+      "preload": false,
+      "cache": false,
+      "bytes": 2457
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/snapshot-C5jXv322.js",
+      "at": 1792063755785.76,
+      "preload": false,
+      "cache": false,
+      "bytes": 1199
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/facehit.mp3",
+      "at": 1792063756232.2568,
+      "preload": false,
+      "cache": false,
+      "bytes": 4510
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/fateWheelRewind-R9zT8S8t.js",
+      "at": 1792063756974.067,
+      "preload": false,
+      "cache": false,
+      "bytes": 1435
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/diceScene-BvyEYYLk.js",
+      "at": 1792063756972.311,
+      "preload": false,
+      "cache": false,
+      "bytes": 3996
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/skull-apparition-jaxyBytm.png",
+      "at": 1792063757116.171,
+      "preload": false,
+      "cache": false,
+      "bytes": 1785509
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/mimic.mp3",
+      "at": 1792063757472.5608,
+      "preload": false,
+      "cache": false,
+      "bytes": 5714
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/coiling-fire-BXM1fmiB.webp",
+      "at": 1792063757474.093,
+      "preload": false,
+      "cache": false,
+      "bytes": 511273
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/mana-pay.mp3",
+      "at": 1792063758354.871,
+      "preload": false,
+      "cache": false,
+      "bytes": 4048
+    },
+    {
+      "url": "https://test.yourlore.xyz/assets/avatar-red-CyF_7AzU.png",
+      "at": 1792063758356.3672,
+      "preload": false,
+      "cache": false,
+      "bytes": 2250462
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/void.mp3",
+      "at": 1792063789983.718,
+      "preload": false,
+      "cache": false,
+      "bytes": 6929
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/shuffle.mp3",
+      "at": 1792063794591.6482,
+      "preload": false,
+      "cache": false,
+      "bytes": 10910
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/discard.mp3",
+      "at": 1792063851866.1448,
+      "preload": false,
+      "cache": false,
+      "bytes": 5734
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/diceLand.mp3",
+      "at": 1792063867962.838,
+      "preload": false,
+      "cache": false,
+      "bytes": 2688
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/diceRoll.mp3",
+      "at": 1792063867961.8508,
+      "preload": false,
+      "cache": false,
+      "bytes": 5686
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/rankUp.mp3",
+      "at": 1792063868184.245,
+      "preload": false,
+      "cache": false,
+      "bytes": 4326
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/rankDown.mp3",
+      "at": 1792063868610.3179,
+      "preload": false,
+      "cache": false,
+      "bytes": 4056
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/lore-v5/rankPromote.mp3",
+      "at": 1792063868667.9448,
+      "preload": false,
+      "cache": false,
+      "bytes": 8942
+    },
+    {
+      "url": "https://test.yourlore.xyz/sfx/chosen-v2/heavy-blade.mp3",
+      "at": 1792063869119.3718,
+      "preload": false,
+      "cache": false,
+      "bytes": 44758
+    }
+  ]
+}

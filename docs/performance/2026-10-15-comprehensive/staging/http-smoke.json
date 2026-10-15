@@ -1,0 +1,24 @@
+[
+  {
+    "route": "/",
+    "status": 200,
+    "url": "https://test.yourlore.xyz/",
+    "contentType": "text/html",
+    "sha256": "3405c0804e7685306e8d0e43bd833fd81717de82c7d45453d8cc88ac7ab92765"
+  },
+  {
+    "route": "/api/auth/me",
+    "status": 200,
+    "url": "https://test.yourlore.xyz/api/auth/me",
+    "contentType": "application/json",
+    "sha256": "2e7fe66d0f26a4cc5aaad5f34dba496c7988c175f79b24dcfa414a1dba289c0a",
+    "anonymous": true
+  },
+  {
+    "route": "/menu-cache-sw.js?v=3",
+    "status": 200,
+    "url": "https://test.yourlore.xyz/menu-cache-sw.js?v=3",
+    "contentType": "text/javascript",
+    "sha256": "051727fdf2be0bf3c09bfc7da4803eb1dbdc74df2dde1238f84f5547f2485c71"
+  }
+]

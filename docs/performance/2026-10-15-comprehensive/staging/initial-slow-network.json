@@ -1,0 +1,943 @@
+{
+  "id": 6,
+  "result": {
+    "result": {
+      "type": "object",
+      "value": {
+        "now": 449964.299999997,
+        "resources": [
+          {
+            "url": "https://test.yourlore.xyz/art/brand/lore-logo-transparent.webp",
+            "ms": 3050.300000011921,
+            "bytes": 32840,
+            "start": 896.3999999910593
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/v1/library.webp",
+            "ms": 2388.2999999970198,
+            "bytes": 371134,
+            "start": 896.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/atelierThemes-DM29k3s-.js",
+            "ms": 2445.6000000089407,
+            "bytes": 2442,
+            "start": 896.5999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/main-D_WAuS_d.js",
+            "ms": 2446.1000000089407,
+            "bytes": 84419,
+            "start": 896.5999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/readingAssetCache-wSl5XjY6.js",
+            "ms": 3521.0999999940395,
+            "bytes": 174333,
+            "start": 896.7000000029802
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/analytics-FW5Q9irv.js",
+            "ms": 2388.5999999940395,
+            "bytes": 9274,
+            "start": 896.7999999970198
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "ms": 3050.0999999940395,
+            "bytes": 586,
+            "start": 896.7999999970198
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/social-DX3m6PSk.js",
+            "ms": 5010.5999999940395,
+            "bytes": 547379,
+            "start": 896.7999999970198
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/baseFurniture-DOVCMXYU.js",
+            "ms": 2445,
+            "bytes": 2160,
+            "start": 897
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/BufferGeometryUtils-ZSIL4Jif.js",
+            "ms": 2445.3999999910593,
+            "bytes": 1844,
+            "start": 897
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/sleeve-OIDy0iTy.js",
+            "ms": 3520.5999999940395,
+            "bytes": 3612,
+            "start": 897
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/materials-BytyfBOj.js",
+            "ms": 2388.6000000089407,
+            "bytes": 4589,
+            "start": 897.0999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/libraryAssets-DVTJ5-Hz.js",
+            "ms": 2774.5,
+            "bytes": 14889,
+            "start": 897.0999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/catalogRender-BFUwvZD4.js",
+            "ms": 2775.7000000029802,
+            "bytes": 2061,
+            "start": 897.0999999940395
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920",
+            "ms": 889.8999999910593,
+            "bytes": 0,
+            "start": 897.2000000029802
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/main-Dozcn9wp.css",
+            "ms": 2775.7999999970198,
+            "bytes": 108824,
+            "start": 897.2000000029802
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/social--exAuL7Z.css",
+            "ms": 3049.199999988079,
+            "bytes": 58279,
+            "start": 897.2000000029802
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "ms": 1905.2000000029802,
+            "bytes": 0,
+            "start": 5944.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/stage-v1/sigil.png",
+            "ms": 22696.90000000596,
+            "bytes": 1996519,
+            "start": 6070.5999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "ms": 17746.10000000894,
+            "bytes": 31820,
+            "start": 6071.0999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "ms": 17713,
+            "bytes": 29024,
+            "start": 6105.20000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/homeAtmosphere-CIFMunr0.js",
+            "ms": 231.70000000298023,
+            "bytes": 5189,
+            "start": 6111.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+            "ms": 14455.20000000298,
+            "bytes": 2720687,
+            "start": 6121
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+            "ms": 7122.600000008941,
+            "bytes": 880009,
+            "start": 6121.0999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/duel-ink-v1/disc.png",
+            "ms": 6793,
+            "bytes": 1787583,
+            "start": 6121.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "ms": 779.7000000029802,
+            "bytes": 21840,
+            "start": 6124.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/icons/v2/arrow.png",
+            "ms": 725.1000000089407,
+            "bytes": 58442,
+            "start": 6124.5999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "ms": 725.4000000059605,
+            "bytes": 13466,
+            "start": 6124.5999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/seekers/faceless-v2/portrait.webp",
+            "ms": 11414.59999999404,
+            "bytes": 45260,
+            "start": 6124.70000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/gifts/courier.png",
+            "ms": 17693,
+            "bytes": 1087199,
+            "start": 6124.70000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/icons/shard-simple-v1.png",
+            "ms": 778.9000000059605,
+            "bytes": 8989,
+            "start": 6124.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/fonts/web/files/fa981b56ecdad0095f14ef8201483fdc1b49efe7d048b64bad3efbbcb1d18eac.woff2",
+            "ms": 23658.70000000298,
+            "bytes": 11604,
+            "start": 6246.29999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/fonts/web/files/471899cd47871528b417fb4f88c7e23d4e2264f88298b49c539ec654ae30fe7b.woff2",
+            "ms": 22596.60000000894,
+            "bytes": 11816,
+            "start": 6246.399999991059
+          },
+          {
+            "url": "https://test.yourlore.xyz/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "ms": 24567.5,
+            "bytes": 32368,
+            "start": 6280
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+            "ms": 26658.30000001192,
+            "bytes": 300,
+            "start": 6364.899999991059
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+            "ms": 23671.90000000596,
+            "bytes": 300,
+            "start": 6365.0999999940395
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/ivy.png",
+            "ms": 26656.90000000596,
+            "bytes": 1329962,
+            "start": 6365.0999999940395
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "ms": 966.7999999970198,
+            "bytes": 0,
+            "start": 7882
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "ms": 961.9000000059605,
+            "bytes": 0,
+            "start": 7895.5999999940395
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.8/surveys.js",
+            "ms": 686,
+            "bytes": 0,
+            "start": 8850.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/menu-manifest-93f74a16622f94a7b7ff.json",
+            "ms": 23029.39999999106,
+            "bytes": 98708,
+            "start": 9992.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/cdn-cgi/rum?",
+            "ms": 1117.5999999940395,
+            "bytes": 300,
+            "start": 33150.20000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/favicon.ico",
+            "ms": 2089.0999999940395,
+            "bytes": 309,
+            "start": 33150.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-c07fa92807ba277918940c51.bin",
+            "ms": 36649.29999999702,
+            "bytes": 3174084,
+            "start": 33155.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-d10a2e7af51a45bfe2900424.bin",
+            "ms": 43171.39999999106,
+            "bytes": 3282842,
+            "start": 33155.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-789a7ac6204b4852760b8f95.bin",
+            "ms": 44691.5,
+            "bytes": 4180936,
+            "start": 33155.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-7b27c1d7de9f442b00f0bae6.bin",
+            "ms": 50595.59999999404,
+            "bytes": 4181936,
+            "start": 33155.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-4d5b40edd27ce4063d2979d2.bin",
+            "ms": 60002.79999999702,
+            "bytes": 300,
+            "start": 33155.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-9ec55ae511e463c1c54b1976.bin",
+            "ms": 60002.80000001192,
+            "bytes": 300,
+            "start": 33155.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-09600cf43cfcd6df863136d0.bin",
+            "ms": 45048.39999999106,
+            "bytes": 4006540,
+            "start": 69822.20000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-8c1e0ea8732d2a04080c5f1b.bin",
+            "ms": 50445.5,
+            "bytes": 3866592,
+            "start": 76341.29999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-c56bbac53d1db98e575a3e38.bin",
+            "ms": 60001.69999998808,
+            "bytes": 300,
+            "start": 77891.70000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-3c350a0f0dcbb2a7cdc1daeb.bin",
+            "ms": 60001.40000000596,
+            "bytes": 300,
+            "start": 83816.39999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/M7.webp",
+            "ms": 30397.40000000596,
+            "bytes": 36568,
+            "start": 93158.39999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TGE6.webp",
+            "ms": 34313.89999999106,
+            "bytes": 43382,
+            "start": 93158.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-eac80cd633f1ac7b0d7b489e.bin",
+            "ms": 45577.30000001192,
+            "bytes": 4119256,
+            "start": 114913.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/M8.webp",
+            "ms": 27227.5,
+            "bytes": 41678,
+            "start": 123557
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-3eb6cba66d63353aaeffbf8a.bin",
+            "ms": 44722.39999999106,
+            "bytes": 4100288,
+            "start": 126805.20000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TGE7.webp",
+            "ms": 28981,
+            "bytes": 41016,
+            "start": 127473.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLACK_REVERSE.webp",
+            "ms": 31061.20000000298,
+            "bytes": 452276,
+            "start": 137893.39999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CHOSEN_ROGUE.webp",
+            "ms": 27710.10000000894,
+            "bytes": 175624,
+            "start": 143817.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/M9.webp",
+            "ms": 20742.10000000894,
+            "bytes": 29162,
+            "start": 150785.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TIMEWARP.webp",
+            "ms": 15148.60000000894,
+            "bytes": 25848,
+            "start": 156455.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-79f005f5fe9c938c540ef02b.bin",
+            "ms": 25279.60000000894,
+            "bytes": 4177822,
+            "start": 160512.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD1.webp",
+            "ms": 17604.89999999106,
+            "bytes": 161806,
+            "start": 168959.20000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/COLOSSEUM.webp",
+            "ms": 15609.59999999404,
+            "bytes": 174062,
+            "start": 171535.70000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MAGMA_RAIN.webp",
+            "ms": 15675.60000000894,
+            "bytes": 29652,
+            "start": 171536.39999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-2e2d9de2cdb00670498e1ef0.bin",
+            "ms": 29470.79999999702,
+            "bytes": 4016910,
+            "start": 171547.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TOKEN00.webp",
+            "ms": 22513.5,
+            "bytes": 31718,
+            "start": 171605.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-155423147cbfeb55fcf44f64.bin",
+            "ms": 27128,
+            "bytes": 4015576,
+            "start": 185809.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD_ANGER.webp",
+            "ms": 26581.90000000596,
+            "bytes": 193928,
+            "start": 186565.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/COLOSSEUM_REST.webp",
+            "ms": 26710.40000000596,
+            "bytes": 156780,
+            "start": 187146.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MAJESTY_RITE.webp",
+            "ms": 26925.90000000596,
+            "bytes": 32836,
+            "start": 187213.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TPO1.webp",
+            "ms": 20019,
+            "bytes": 37260,
+            "start": 194120.29999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-ff35b7a8fe0ed510a291a5c2.bin",
+            "ms": 24831.09999999404,
+            "bytes": 3917754,
+            "start": 201043.20000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-2411e2dee4f753028e611c60.bin",
+            "ms": 25888.5,
+            "bytes": 4181164,
+            "start": 212969.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD_FEST.webp",
+            "ms": 13537.5,
+            "bytes": 222908,
+            "start": 213149
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/COUNTERCALC.webp",
+            "ms": 25388.09999999404,
+            "bytes": 121490,
+            "start": 213858.70000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MANA_GIANT.webp",
+            "ms": 25106.5,
+            "bytes": 38000,
+            "start": 214140.70000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TPO2.webp",
+            "ms": 25293.5,
+            "bytes": 35682,
+            "start": 214140.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-cf93fbb18678f300662ae5c1.bin",
+            "ms": 23892.60000000894,
+            "bytes": 4082942,
+            "start": 225893.39999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD_JOY.webp",
+            "ms": 23098.40000000596,
+            "bytes": 227240,
+            "start": 226687.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-0fa2766dc9bc1dd6d270ceb2.bin",
+            "ms": 22460.5,
+            "bytes": 4108844,
+            "start": 238882.29999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CREATION.webp",
+            "ms": 20631.59999999404,
+            "bytes": 516960,
+            "start": 239248.29999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MARKET_CRISIS.webp",
+            "ms": 13320.20000000298,
+            "bytes": 32538,
+            "start": 239248.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TPO3.webp",
+            "ms": 20513.30000001192,
+            "bytes": 34630,
+            "start": 239435.39999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD_PLEASURE.webp",
+            "ms": 11944,
+            "bytes": 185590,
+            "start": 249791.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-5d6931080b890ff5cb244b2f.bin",
+            "ms": 22273.90000000596,
+            "bytes": 4125110,
+            "start": 249801.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MASSACRE.webp",
+            "ms": 19573.70000000298,
+            "bytes": 33488,
+            "start": 252569.79999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CROSSROADS.webp",
+            "ms": 12880.59999999404,
+            "bytes": 147120,
+            "start": 259886.20000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TPO5.webp",
+            "ms": 12816,
+            "bytes": 34386,
+            "start": 259951.29999999702
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-d8337f8450ab74def1bc7e37.bin",
+            "ms": 21431.5,
+            "bytes": 4076502,
+            "start": 261383.20000000298
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD_RITE.webp",
+            "ms": 21734.89999999106,
+            "bytes": 214336,
+            "start": 261740
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-67715faa5701ca205c59dd05.bin",
+            "ms": 23610.29999999702,
+            "bytes": 4112690,
+            "start": 272119
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MEDITATE.webp",
+            "ms": 11330.5,
+            "bytes": 24666,
+            "start": 272144.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CULL_FARM.webp",
+            "ms": 23615.20000000298,
+            "bytes": 142650,
+            "start": 272772
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TREASON.webp",
+            "ms": 23616.09999999404,
+            "bytes": 28204,
+            "start": 272772.299999997
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-8af950d6ec955bdb77ef7de3.bin",
+            "ms": 27055.29999999702,
+            "bytes": 4167788,
+            "start": 282852.799999997
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD_SECRET.webp",
+            "ms": 27000.20000000298,
+            "bytes": 156712,
+            "start": 283480.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MERCENARY.webp",
+            "ms": 26465.70000000298,
+            "bytes": 33680,
+            "start": 283480.39999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-a16de2423c6f905f3ea4b610.bin",
+            "ms": 27957.20000000298,
+            "bytes": 4093392,
+            "start": 295765.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CULL_FLOOD.webp",
+            "ms": 28060.70000000298,
+            "bytes": 163828,
+            "start": 296391.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TRIAL_AREA.webp",
+            "ms": 28061.70000000298,
+            "bytes": 17466,
+            "start": 296392.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MERCH1.webp",
+            "ms": 14507,
+            "bytes": 31488,
+            "start": 309947.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-36a30cd1bd51a25992eddf61.bin",
+            "ms": 26892.19999998808,
+            "bytes": 4181734,
+            "start": 309951.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD_SHIELD.webp",
+            "ms": 20008.29999999702,
+            "bytes": 195958,
+            "start": 310483.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-a8e4e35da4577dc918f3c7d1.bin",
+            "ms": 24388.70000000298,
+            "bytes": 4145880,
+            "start": 323766.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CURSE.webp",
+            "ms": 23999.29999999702,
+            "bytes": 171418,
+            "start": 324457.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TRIBE_PACT.webp",
+            "ms": 23994.39999999106,
+            "bytes": 31934,
+            "start": 324464.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MERCH2.webp",
+            "ms": 23994.80000001192,
+            "bytes": 35110,
+            "start": 324464.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BLOOD_SORROW.webp",
+            "ms": 19016,
+            "bytes": 185292,
+            "start": 330503
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-016ac0e2a0da58cdda0f3303.bin",
+            "ms": 20855,
+            "bytes": 2616028,
+            "start": 336882.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/key-visuals/concepts/lore-kv-02-midnight-astral-observatory.png",
+            "ms": 15887.70000000298,
+            "bytes": 2474222,
+            "start": 348197.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/DARK_ELF.webp",
+            "ms": 15624.5,
+            "bytes": 177880,
+            "start": 348462.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MERC_ART.webp",
+            "ms": 15622.5,
+            "bytes": 34406,
+            "start": 348464.200000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TRICKROOM.webp",
+            "ms": 15623,
+            "bytes": 23360,
+            "start": 348464.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BREWING.webp",
+            "ms": 14864.40000000596,
+            "bytes": 150876,
+            "start": 349523.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/key-visuals/concepts/lore-kv-03-crimson-eclipse-duel-arena.png",
+            "ms": 13673.09999999404,
+            "bytes": 2677967,
+            "start": 357767.299999997
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v1/clouds.png",
+            "ms": 7751.899999991059,
+            "bytes": 300,
+            "start": 364103.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MERC_LEADER.webp",
+            "ms": 7336.5,
+            "bytes": 31202,
+            "start": 364103.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/DARK_MERCHANT.webp",
+            "ms": 7749.300000011921,
+            "bytes": 110062,
+            "start": 364103.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TRUMPET.webp",
+            "ms": 7335,
+            "bytes": 25470,
+            "start": 364104.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BUDGET.webp",
+            "ms": 7784.100000008941,
+            "bytes": 134040,
+            "start": 364392.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TSO1.webp",
+            "ms": 724.1000000089407,
+            "bytes": 29120,
+            "start": 371451.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/ivy.png",
+            "ms": 1185.5999999940395,
+            "bytes": 300,
+            "start": 371463.5
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MERC_MASTER.webp",
+            "ms": 1183.5999999940395,
+            "bytes": 31238,
+            "start": 371463.799999997
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/DECAY_CRAFT.webp",
+            "ms": 1689.199999988079,
+            "bytes": 235046,
+            "start": 371860.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/lounge/atmosphere-v2/library-wide.png",
+            "ms": 1680.5,
+            "bytes": 300,
+            "start": 371870.299999997
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TSO2.webp",
+            "ms": 1370.2000000029802,
+            "bytes": 28788,
+            "start": 372179.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/BUYOUT.webp",
+            "ms": 1491.300000011921,
+            "bytes": 153310,
+            "start": 372179.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MIMIC.webp",
+            "ms": 1422,
+            "bytes": 31130,
+            "start": 372654.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-a7bbaacc076bef8427fe5172.bin",
+            "ms": 14652.90000000596,
+            "bytes": 4170375,
+            "start": 372660.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TSO3.webp",
+            "ms": 13756.79999999702,
+            "bytes": 32918,
+            "start": 373558
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/DEFENSIVE_STANCE.webp",
+            "ms": 14971.20000000298,
+            "bytes": 545256,
+            "start": 373558.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-7fe228cc39bba143402ff65d.bin",
+            "ms": 24851.29999999702,
+            "bytes": 2789747,
+            "start": 373560
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CASINO.webp",
+            "ms": 15638.90000000596,
+            "bytes": 144904,
+            "start": 373672.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MIMIC2.webp",
+            "ms": 24384.79999999702,
+            "bytes": 39558,
+            "start": 374079.799999997
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/TSO5.webp",
+            "ms": 11126.20000000298,
+            "bytes": 30886,
+            "start": 387338.799999997
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+            "ms": 17332.79999999702,
+            "bytes": 2505180,
+            "start": 387351.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/DEMON_REALM.webp",
+            "ms": 16525.39999999106,
+            "bytes": 218046,
+            "start": 388531.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CASTLE.webp",
+            "ms": 16115.79999999702,
+            "bytes": 164080,
+            "start": 389316
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/vfx/mimic-family/engraved-brass.png",
+            "ms": 15873,
+            "bytes": 3571842,
+            "start": 398448.09999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MIMIC_HIDEOUT.webp",
+            "ms": 7330.9000000059605,
+            "bytes": 31282,
+            "start": 398465.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/UNBRAND.webp",
+            "ms": 7331.4000000059605,
+            "bytes": 27222,
+            "start": 398466.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-0089e2e6dc22189e61cdb170.bin",
+            "ms": 18975.29999999702,
+            "bytes": 3279720,
+            "start": 404700.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/DESERTIFICATION.webp",
+            "ms": 19350.30000001192,
+            "bytes": 739292,
+            "start": 405058.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CATALYST.webp",
+            "ms": 19114.10000000894,
+            "bytes": 126082,
+            "start": 405435.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MIMIC_HUNTER.webp",
+            "ms": 18748.09999999404,
+            "bytes": 32334,
+            "start": 405800.700000003
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/UNBRANDER.webp",
+            "ms": 18747.29999999702,
+            "bytes": 30224,
+            "start": 405802.299999997
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-5fd81120c976633ca5febfd7.bin",
+            "ms": 21015.09999999404,
+            "bytes": 4176862,
+            "start": 414334
+          },
+          {
+            "url": "https://test.yourlore.xyz/assets/art-pack-1382430a92d92d2aca7274ec.bin",
+            "ms": 21862.59999999404,
+            "bytes": 3716044,
+            "start": 423699
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/DISARM1.webp",
+            "ms": 21262.5,
+            "bytes": 137232,
+            "start": 424416.39999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/MIMIC_KING.webp",
+            "ms": 21480.70000000298,
+            "bytes": 37660,
+            "start": 424553.59999999404
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards/CAVALRY.webp",
+            "ms": 22792.80000001192,
+            "bytes": 399996,
+            "start": 424553.89999999106
+          },
+          {
+            "url": "https://test.yourlore.xyz/art/cards-sm/VAMP1.webp",
+            "ms": 21697,
+            "bytes": 30504,
+            "start": 424554
+          }
+        ]
+      }
+    }
+  }
+}
