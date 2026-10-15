@@ -22,6 +22,9 @@ try{
  const responses=await Promise.all([buy(first,key),buy(first,key),buy(first,key)]);assert(responses.every(r=>r.status===200));assert.equal((await state()).credits,9800);assert.equal((await state()).starterCards[first],1);assert.equal(db.prepare('SELECT COUNT(*) AS n FROM collection_transactions').get().n,1);
  const replay=await (await buy(first,key)).json();assert.equal(replay.receipt.requestId,key);assert.equal(replay.credits,9800);assert.equal((await draw(1,key)).status,409);
  for(const id of ['STARTER_TRASH','STARTER_MANA','M1','__proto__'])assert.equal((await buy(id)).status,400);
+ db.prepare("UPDATE users SET credits=200 WHERE id='a'").run();
+ const exactKey=crypto.randomUUID();const exact=await Promise.all([buy('STARTER_CHEST',exactKey),buy('STARTER_CHEST',exactKey)]);assert(exact.every(r=>r.status===200));assert.equal((await state()).credits,0);assert.equal((await state()).starterCards.STARTER_CHEST,3);
+ db.prepare("UPDATE users SET credits=9800 WHERE id='a'").run();
  const before=await state();failLedger=true;await assert.rejects(buy(first),/injected/);failLedger=false;assert.deepEqual(await state(),before);
  await Promise.all(Array.from({length:6},()=>buy(first)));assert.equal((await state()).starterCards[first],7);
  const last=await Promise.all([buy(first),buy(first)]);assert.deepEqual(last.map(r=>r.status).sort(),[200,400]);assert.equal((await state()).starterCards[first],8);

@@ -418,7 +418,7 @@ const D: Record<string, Entry> = {
   "home.deck.title": { ko: "덱 편집", ja: "デッキ編集", en: "Deck Builder" },
   "home.deck.desc": { ko: "초기 덱 9장을 자유롭게 구성 (어튠 1장 고정)", ja: "初期デッキ9枚を自由に構成 (アチューン1枚固定)", en: "Build your 9-card starting deck (Attune is fixed)" },
   "deck.title": { ko: "덱 편집", ja: "デッキ編集", en: "Deck Builder" },
-  "deck.note": { ko: "초기 덱은 9장 — 어튠 1장은 고정, 나머지 8장을 아래 카드들로 자유롭게 구성하세요. 각 카드는 8장씩 보유하고 있습니다. 스타팅 카드는 상점에 나오지 않습니다.", ja: "初期デッキは9枚 — アチューン1枚は固定、残り8枚を下のカードで自由に構成。各カードは8枚ずつ所持。スターティングカードはショップに出ません。", en: "Your starting deck has 9 cards — 1 Attune is fixed; pick the other 8 below. You own 8 copies of each. Starting cards never appear in the shop." },
+  "deck.note": { ko: "초기 덱은 9장 — 어튠 1장은 고정, 나머지 8장을 아래 카드들로 자유롭게 구성하세요. 보유한 수량만 사용할 수 있습니다. 초기 보유는 컬 8장·어튠 1장·보물상자 2장이며, 다른 스타터는 상점이나 뽑기로 수집합니다.", ja: "初期デッキは9枚 — アチューン1枚は固定、残り8枚を下のカードで自由に構成。所持枚数の範囲で使用できます。初期所持はカル8枚・アチューン1枚・宝箱2枚。他のスターターはショップやガチャで集められます。", en: "Your starting deck has 9 cards — 1 Attune is fixed; pick the other 8 below. Use cards within your owned counts. You start with 8 Cull, 1 Attune and 2 Treasure Chests; collect other starters through the shop or gacha." },
   "deck.current": { ko: "현재 덱", ja: "現在のデッキ", en: "Current deck" },
   "deck.pool": { ko: "보유 스타팅 카드 (클릭해서 추가)", ja: "所持スターティングカード (クリックで追加)", en: "Your starting cards (click to add)" },
   "deck.fixed": { ko: "고정", ja: "固定", en: "Fixed" },

@@ -34,8 +34,14 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
   const previous=await env.DB.prepare('SELECT operation, receipt FROM collection_transactions WHERE user_id = ? AND request_id = ?').bind(user.id,body.requestId).first<{operation:string;receipt:string}>();
   if(previous)return previous.operation===operation?respond(JSON.parse(previous.receipt)):json(env,{error:'collection request conflict'},409);
   const s=await state();
-  if(s.credits<cost)return json(env,{error:'not enough shards'},400);
-  if(kind==='buy'&&s.starterCards[id as string]>=8)return json(env,{error:'starter limit reached'},400);
+  const rejection=s.credits<cost?'not enough shards':kind==='buy'&&s.starterCards[id as string]>=8?'starter limit reached':null;
+  if(rejection){
+   // Another copy of this same request may have committed between the ledger
+   // read and this balance read (including spending the last available Shards).
+   const committed=await env.DB.prepare('SELECT operation, receipt FROM collection_transactions WHERE user_id = ? AND request_id = ?').bind(user.id,body.requestId).first<{operation:string;receipt:string}>();
+   if(committed)return committed.operation===operation?respond(JSON.parse(committed.receipt)):json(env,{error:'collection request conflict'},409);
+   return json(env,{error:rejection},400);
+  }
   picks??=kind==='buy'?[id as string]:Array.from({length:count},()=>COLLECTIBLE_STARTERS[randomIndex(COLLECTIBLE_STARTERS.length)]);
   const rewards:StarterReward[]=picks.map(card=>{const duplicate=s.starterCards[card]>=8;if(!duplicate)s.starterCards[card]++;return {id:card,refund:duplicate?DUPLICATE_REFUNDS.starter:0,owned:s.starterCards[card]};});
   const refund=rewards.reduce((sum,r)=>sum+r.refund,0);
