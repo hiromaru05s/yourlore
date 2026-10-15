@@ -1,3 +1,4 @@
+import { api } from '../net/api';
 import { mountDuelSpiritGuide } from '../ui/duelSpiritGuide';
 import { botNpc } from "../shared/botNpcs";
 import { getLang } from "../i18n";
@@ -52,7 +53,9 @@ export function mountGame(app: App, opts: GameOpts): Screen {
         : undefined,
     });
   };
+  const experienceUserId=app.user?.id;
   const exits: ControllerExits = {
+    onExperience: () => {if(experienceUserId && experienceUserId!=="local-guest-user")void api.me().then(fresh=>{if(fresh?.id===experienceUserId && app.user?.id===experienceUserId){app.user=fresh;document.dispatchEvent(new Event("lore:user"));}});},
     onOpeningStart: opts.mode === "tutorial" ? undefined : startMusic,
     onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),

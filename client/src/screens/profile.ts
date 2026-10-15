@@ -1,3 +1,4 @@
+import { seekerLevel } from '../shared/progression';
 import {renderQuality,setRenderQuality} from '../ui/renderDensity';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
@@ -89,6 +90,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   // TAB: overview
   // ============================================================
   const renderOverview = (p: Profile): void => {
+    const experience=seekerLevel(app.user?.exp??0);
     const modeLabel = (m: string) => m === "ranked" ? t("mode.ranked") : m === "bot" ? t("mode.bot") : t("mode.online");
     const resLabel = (r: string) => r === "win" ? t("modal.win") : r === "draw" ? t("modal.draw") : t("modal.lose");
     // Never substitute mixed lifetime totals for a selected match mode.
@@ -116,6 +118,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
           <button class="btn btn-gold" id="renameSave">${t("common.confirm")}</button>
         </div>
       </section>
+      ${p.self ? `<details class="tut-sec pf-experience"><summary>${t('home.seekerLevel')} ${experience.level} · ${experience.max?'MAX':`${experience.progress}/100 EXP`}</summary><p>${t('home.levelRule')}</p></details>` : ''}
       ${p.private ? `<section class="tut-sec"><p>${t("profile.private")}</p></section>` : `
       <section class="tut-sec">
         <div class="pf-stats-head">

@@ -1,3 +1,4 @@
+import type { ClearDifficulty, ExperienceReceipt } from '../shared/progression';
 import type {CollectionState,CollectionResult,CollectionReceipt} from '../shared/collection';
 import type { Action } from '../shared/types';
 import type { LessonId } from '../shared/tutorialSteps';
@@ -17,6 +18,8 @@ export interface User {
   display: string;
   wins: number;
   losses: number;
+  exp?: number;
+  botClears?: string[];
   credits: number;
   starterCards?: Record<string,number>;
   avatar?: string | null; // preset avatar (card id)
@@ -99,7 +102,7 @@ export const api = {
   me: () => call<{ user: User | null }>("/auth/me", undefined, "GET").then((r) => r.user).catch(() => null),
   rankResult: (matchId: string) => call<{ result: RankChange | null }>("/rank/result?matchId=" + encodeURIComponent(matchId), undefined, "GET", AbortSignal.timeout(8000)).then(r => r.result),
   rankMe: () => call<{ rating: RankInfo | null }>("/rank/me", undefined, "GET").then((r) => r.rating).catch(() => null),
-  trackBot: (won: boolean | null) => call<{ ok: boolean }>("/track/bot", { won: won === true, draw: won === null }).catch(() => null),
+  trackBot: (won: boolean | null, difficulty?: ClearDifficulty) => call<{ ok: boolean; experience: ExperienceReceipt | null }>("/track/bot", { won: won === true, draw: won === null, difficulty }),
   inviteMe: () => call<{ code: string; limit: number; invites: { status: string; created_at: number; display: string }[] }>("/invite/me", undefined, "GET"),
   // 문의 접수 (홈 '문의' 모달 → 어드민 '문의' 탭). 게스트도 전송 가능(서버가 user_id NULL 저장).
   sendInquiry: (title: string, body: string) => call<{ ok: true }>("/inquiry", { title, body }),

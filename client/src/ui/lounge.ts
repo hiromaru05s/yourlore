@@ -1,3 +1,4 @@
+import '../styles/playerExperience.css';
 import '../styles/loungeHorizon.css';
 import '../styles/loungeSelectedMenu.css';
 import '../styles/loungeSupport.css';
@@ -38,12 +39,13 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     stopNavMotion?.();
     stopHomeSound?.();
     const user=app.user;
+    const experience=seekerLevel(user?.exp??0);
     shell.querySelectorAll(':scope > .lounge-rail, :scope > .lounge-topbar').forEach(n=>n.remove());
     if(page==='login') return;
     const rail=document.createElement('aside'); rail.className='lounge-rail'; rail.id='loungeNavigation';
     rail.innerHTML=`<nav aria-label="${esc(t('home.navigation'))}">${nav.map(([key,,label],index)=>`<button data-nav="${key}" ${key===page?'aria-current="page"':''}>${loungeNavGlyph(index)}<span>${t(label)}</span></button>`).join('')}</nav><div class="lounge-rail-bottom" id="loungeUtilities"><button data-utility-settings>${loungeUtilityGlyph('settings')}<span>${t('home.settings')}</span></button><button data-invite>${loungeUtilityGlyph('invite')}<span>${t('invite.title')}</span></button><button data-inquiry>${loungeUtilityGlyph('inquiry')}<span>${t('home.inquiry.title')}</span></button></div>`;
     const top=document.createElement('header'); top.className='lounge-topbar';
-    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile>${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small>${t('home.seekerLevel')} ${seekerLevel(user?.wins??0,user?.losses??0).level}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
+    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile title="${esc(t('home.levelRule'))}">${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small class="lounge-experience" aria-label="${esc(t('home.seekerLevel'))}">Lv.${experience.level}${experience.max?" MAX":` · ${experience.progress}/100 EXP`}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
     shell.prepend(rail,top);
     if(page==='home'){
       const profile=top.querySelector<HTMLButtonElement>('[data-profile]')!;

@@ -84,16 +84,16 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   const token = readCookie(req);
   if (!token) return null;
   const row = await env.DB.prepare(
-    `SELECT u.id, u.email, u.display, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.furniture, u.deck, u.decks, u.starter_cards, s.expires_at
-     FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ?`
-  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; furniture:string|null; deck: string | null; decks: string | null; starter_cards:string|null; expires_at: number }>();
+    `SELECT u.id, u.email, u.display, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.furniture, u.deck, u.decks, u.starter_cards, COALESCE(x.exp,0) AS exp, (SELECT json_group_array(substr(key,5)) FROM experience_events WHERE user_id=u.id AND key LIKE 'bot:%') AS bot_clears, s.expires_at
+     FROM sessions s JOIN users u ON u.id = s.user_id LEFT JOIN player_experience x ON x.user_id=u.id WHERE s.token = ?`
+  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; furniture:string|null; deck: string | null; decks: string | null; starter_cards:string|null; exp:number; bot_clears:string; expires_at: number }>();
   if (!row || row.expires_at < Date.now()) return null;
   let decks: unknown = null;
   try { decks = row.decks ? JSON.parse(row.decks) : null; } catch { decks = null; }
   const starterCards=starterCollection(row.starter_cards);
   const store=constrainDeckStore(deckStoreForUser({decks,deck:row.deck?row.deck.split(','):null,sleeve:row.sleeve,furniture:row.furniture}),starterCards);
   const active=store.list[store.sel];
-  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, starterCards, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
+  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, exp: row.exp, botClears: JSON.parse(row.bot_clears), starterCards, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
 }
 
 export async function createSession(env: Env, userId: string): Promise<string> {

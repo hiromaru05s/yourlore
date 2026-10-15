@@ -1,3 +1,4 @@
+import { BOT_FIRST_CLEAR_EXP } from '../shared/progression';
 // ============================================================
 // LORE — post-login HOME. Choose Random Online or Bot match.
 // ============================================================
@@ -91,7 +92,7 @@ function showBotNpcModal(app: App): void {
           <button type="button" class="diff-card diff-${npc.difficulty}" data-diff="${npc.difficulty}" aria-pressed="${npc.difficulty===selected}">
             <span class="challenge-selected">${loungeText('選択中','SELECTED','선택됨')}</span>
             <span class="challenge-art" aria-hidden="true"><img src="${npc.portrait}" alt=""></span>
-            <span class="npc-title">${esc(npc.title[getLang()])}</span><span class="diff-name">${esc(npc.name[getLang()])}</span><span class="npc-difficulty">${loungeText("難易度","Difficulty","난이도")} · ${t(`bot.diff.${npc.difficulty}`)}</span><span class="challenge-caption">${esc(npc.style[getLang()])}</span>
+            <span class="npc-title">${esc(npc.title[getLang()])}</span><span class="diff-name">${esc(npc.name[getLang()])}</span><span class="npc-difficulty">${loungeText("難易度","Difficulty","난이도")} · ${t(`bot.diff.${npc.difficulty}`)}</span><span class="challenge-caption">${esc(npc.style[getLang()])}</span><span class="npc-difficulty">${app.user?.botClears?.includes(npc.difficulty)?t("progress.cleared"):`${t("progress.firstClear")} +${BOT_FIRST_CLEAR_EXP[npc.difficulty]} EXP`}</span>
           </button>`).join("")}
       </div>
       <div class="challenge-footer"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div><p id="challengeDescription" aria-live="polite"></p><button class="challenge-start" id="diffStart"></button></div>

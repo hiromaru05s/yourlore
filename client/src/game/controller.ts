@@ -1,3 +1,4 @@
+import { seekerLevel, type ExperienceReceipt } from '../shared/progression';
 import {createMarketCrisis} from '../ui/marketCrisis/runtime';
 import {fixedMarketWasReplaced} from '../ui/marketCrisis/selection';
 import {erosionPlan} from '../ui/erosion/events';
@@ -69,6 +70,7 @@ export interface ControllerExits {
   onRematch(): void;
   onOpeningStart?(elapsedMs:number): void;
   onBattleReady?(): void;
+  onExperience?(): void;
 }
 
 // ---- coin-toss profiles (set by the game screen at mount): the two coin faces ----
@@ -1419,9 +1421,19 @@ export abstract class BaseController implements BoardHandlers {
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     sfx(won===null ? "drawGame" : won ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
-    if (this.state.mode === "bot") void api.trackBot(won);
+    if (this.state.mode === "bot") this.reportBotResult(won);
     aCapture("game_end", { mode: this.state.mode, won, turns: this.state.turn });
     this.openResult();
+  }
+
+  protected reportBotResult(_won: boolean | null): void {}
+  private experienceNote = '';
+  protected receiveExperience(receipt: ExperienceReceipt): void {
+    this.exits.onExperience?.();
+    if(this.dead)return;
+    const progress=seekerLevel(receipt.after);
+    this.experienceNote = `+${receipt.after-receipt.before} EXP · Lv.${progress.level}${progress.max?' MAX':''}${receipt.shards?` · +${receipt.shards} ${t('home.shards')}`:''}`;
+    const el=document.getElementById('winExperience');if(el)el.textContent=this.experienceNote;
   }
 
   /** Result modal — reopenable from the review FAB so the log can be studied (복기). */
@@ -1431,7 +1443,8 @@ export abstract class BaseController implements BoardHandlers {
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
     const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`
-      + (this.resultNote ? `<br><span class="muted">${this.resultNote}</span>` : "");
+      + (this.resultNote ? `<br><span class="muted">${this.resultNote}</span>` : "")
+      + `<br><span id="winExperience" class="muted">${this.experienceNote}</span>`;
     winModal(
       won,
       detail,
@@ -1519,6 +1532,17 @@ export class LocalController extends BaseController {
     });
     res.state.players[1].botTune = bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
     this.applyResult(res, false);
+  }
+
+  protected reportBotResult(won: boolean | null): void {
+    const report = async () => {
+      for(let attempt=0;attempt<3;attempt++){
+        try { const result=await api.trackBot(won,this.difficulty);if(result.experience)this.receiveExperience(result.experience);else this.exits.onExperience?.();return; }
+        catch { if(attempt<2)await new Promise(resolve=>setTimeout(resolve,1000*(attempt+1))); }
+      }
+      if(!this.dead)this.setResultNote(t('progress.saveFailed'));
+    };
+    void report();
   }
 
   protected applyResult(res: ReduceResult, animate = true): void {

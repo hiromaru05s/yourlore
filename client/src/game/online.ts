@@ -117,6 +117,8 @@ export class OnlineController extends BaseController {
       // ranked pre-game market study (before coin toss). until=null → still waiting for the opponent.
       if (!this.preview) this.preview = marketPreview(msg.market, () => this.sock.send({ type: "startReady" }));
       this.preview.setUntil(msg.until);
+    } else if (msg.type === "experienceResult") {
+      this.receiveExperience(msg);
     } else if (msg.type === "rankResult") {
       // ranked game settled — remember my MMR change and paint it onto the (already-open) result screen
       this.receiveRankChange(msg);

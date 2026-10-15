@@ -1,3 +1,5 @@
+import { BOT_FIRST_CLEAR_EXP, type ClearDifficulty } from '../../client/src/shared/progression';
+import { experienceStatements, experienceReceipt } from './progression';
 // ============================================================
 // LORE server — Worker entry. Routes auth (/api/*) and WebSocket
 // traffic (/ws/queue, /ws/room/:id) to the Durable Objects,
@@ -68,14 +70,21 @@ export default {
     if (path.startsWith("/api/admin/")) {
       return handleAdmin(env, req, path.slice(4));
     }
-    // ---- bot-game result report (analytics only; client-authoritative) ----
+    // ---- Local BOT result report; first-clear awards are server-defined and paid once. ----
     if (path === "/api/track/bot" && req.method === "POST") {
       const user = await getUser(env, req);
       if (!user) return new Response(JSON.stringify({ ok: false }), { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
-      const body = (await req.json().catch(() => ({}))) as { won?: boolean; draw?: boolean };
+      const body = (await req.json().catch(() => ({}))) as { won?: boolean; draw?: boolean; difficulty?: string };
+      if (body.difficulty !== undefined && (typeof body.difficulty !== 'string' || !Object.hasOwn(BOT_FIRST_CLEAR_EXP, body.difficulty))) return Response.json({error:"invalid difficulty"},{status:400});
+      let experience = null;
+      if (body.won === true && !body.draw && body.difficulty) {
+        const key = `bot:${body.difficulty}`;
+        const results = await env.DB.batch(experienceStatements(env,user.id,key,BOT_FIRST_CLEAR_EXP[body.difficulty as ClearDifficulty]));
+        if ((results[1].meta.changes ?? 0) > 0) experience = await experienceReceipt(env,user.id,key);
+      }
       await env.DB.prepare(`INSERT INTO matches (id, player_a, player_b, winner, mode, created_at, ended_at) VALUES (?,?,?,?,?,?,?)`)
         .bind(crypto.randomUUID(), user.id, "bot", body.draw ? null : body.won ? user.id : "bot", "bot", Date.now(), Date.now()).run().catch(() => { /* best effort */ });
-      return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
+      return new Response(JSON.stringify({ ok: true, experience }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
     }
     // ---- 문의 접수 (요청사항/버그) — 로그인 없이도 허용(게스트 계정 대비) ----
     if (path === "/api/inquiry" && req.method === "POST") {

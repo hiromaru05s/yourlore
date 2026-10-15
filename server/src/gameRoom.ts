@@ -1,3 +1,5 @@
+import { experienceStatements, experienceReceipt } from './progression';
+import { ONLINE_WIN_EXP, ONLINE_LOSS_EXP, type ExperienceReceipt } from '../../client/src/shared/progression';
 // ============================================================
 // LORE server — GameRoom Durable Object: the AUTHORITATIVE game.
 // Holds the real GameState, validates every action, and pushes
@@ -35,6 +37,7 @@ interface RoomData {
   recorded: boolean;
   resultAt?: number;
   rankOutcome?: RankOutcome;
+  experienceOutcome?: Record<string, ExperienceReceipt>;
   /** Ranked match — result also updates the seasonal Elo ladder. */
   ranked: boolean;
   /** Connection generation per side — a close from an older gen is a replaced socket, not a disconnect. */
@@ -120,6 +123,7 @@ export class GameRoom {
         recorded: r.recorded ?? false,
         resultAt: r.resultAt,
         rankOutcome: r.rankOutcome,
+        experienceOutcome: r.experienceOutcome,
         ranked: r.ranked ?? false,
         gen: r.gen ?? [0, 0],
         forfeitAt: r.forfeitAt ?? [null, null],
@@ -311,6 +315,8 @@ export class GameRoom {
       await this.sendInit(att.side);
       const outcome=room.rankOutcome?.[room.players[att.side].id];
       if (room.game.over && outcome) this.send(ws,{type:"rankResult",...outcome});
+      const experience=room.experienceOutcome?.[room.players[att.side].id];
+      if(room.game.over && experience) this.send(ws,{type:"experienceResult",...experience});
       return;
     }
     if (msg.type === "startReady") {
@@ -614,11 +620,17 @@ export class GameRoom {
     try {
       // Gate totals on the same match row. Retrying telemetry never increments twice.
       await this.env.DB.batch([
+        ...(winner && loser ? [...experienceStatements(this.env,winner,`match:${matchId}`,ONLINE_WIN_EXP,room.resultAt),...experienceStatements(this.env,loser,`match:${matchId}`,ONLINE_LOSS_EXP,room.resultAt)] : []),
         this.env.DB.prepare(`UPDATE users SET wins=wins+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM matches WHERE id=?)`).bind(winner,matchId),
         this.env.DB.prepare(`UPDATE users SET losses=losses+1 WHERE id=? AND NOT EXISTS (SELECT 1 FROM matches WHERE id=?)`).bind(loser,matchId),
         this.env.DB.prepare(`INSERT OR IGNORE INTO matches (id,player_a,player_b,winner,mode,created_at,ended_at,cards_a,cards_b,turns,buys_a,buys_b,bver) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`)
           .bind(matchId,room.players[0].id,room.players[1].id,winner,room.ranked?"ranked":"online",room.startedAt,room.resultAt,usesOf(0),usesOf(1),room.game.turn??null,buysOf(0),buysOf(1),BALANCE_VERSION),
       ]);
+      room.experienceOutcome = {};
+      if (winner && loser) for (const side of [0,1] as Side[]) {
+        const id=room.players[side].id,receipt=await experienceReceipt(this.env,id,`match:${matchId}`);
+        if(receipt){room.experienceOutcome[id]=receipt;const ws=this.sockFor(side);if(ws)try{this.send(ws,{type:"experienceResult",...receipt});}catch{/* reconnect replays saved receipt */}}
+      }
       if (room.ranked) {
         const outcome = await settleRanked(this.env,matchId,room.players[0].id,room.players[1].id,winner,room.resultAt);
         room.rankOutcome=outcome;

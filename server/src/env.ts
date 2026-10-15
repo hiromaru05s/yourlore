@@ -27,6 +27,8 @@ export interface SessionUser {
   display: string;
   wins: number;
   losses: number;
+  exp?: number;
+  botClears?: string[];
   credits: number;
   starterCards?: Record<string,number>;
   avatar?: string | null; // preset avatar (card id)
