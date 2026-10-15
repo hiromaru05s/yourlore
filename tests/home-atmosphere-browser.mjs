@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {createServer} from 'vite';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-collapse-tools/node_modules/playwright/index.mjs');
-const out='docs/releases/2026-10-15-home-atmosphere-v2/local';await fs.mkdir(out,{recursive:true});
+const out=process.env.HOME_ATMOSPHERE_QA_OUT||'docs/releases/2026-10-15-home-atmosphere-v2/local';await fs.mkdir(out,{recursive:true});
 const css=['reading-board','tokens','base','card','game-overlays','game','dice','screens','mobile','duel-opening','lounge','loungeGame','loungeStage','presentation','deckWorkspace','cardsWorkspace','menuApproved','menuWorkspace'];
 const fixture=css.map(name=>`import '/src/styles/${name}.css';`).join('\n')+`
 import {mountHome} from '/src/screens/home.ts';import {mountTutorial} from '/src/screens/tutorial.ts';import {mountLounge} from '/src/ui/lounge.ts';import {setLang} from '/src/i18n.ts';import {api} from '/src/net/api.ts';
@@ -13,7 +13,8 @@ api.rankMe=async()=>({season:'2026-10',mmr:1080,tier:'bronze',rank:27,wins:8,los
 const clear=()=>{chrome?.();screen?.destroy();chrome=null;screen=null;root.replaceChildren();};
 const app={root,user:{id:'qa',display:'SEEKER',wins:8,losses:4,credits:0,avatar:'M1'},home(){clear();screen=mountHome(app);chrome=mountLounge(app,'home')},tutorial(){clear();screen=mountTutorial(app);chrome=mountLounge(app,'tutorial')},tutorialGame(){},deck(){calls.push('deck')},rankedLobby(){calls.push('ranked')},onlineLobby(){},botGame(){},leaderboard(){},cards(){},friends(){},shop(){},settings(){},profile(){}};
 window.homeQA={app,clear,calls};app.home();`;
-const server=await createServer({root:'client',configFile:'client/vite.config.ts',logLevel:'error',plugins:[{name:'home-atmosphere-fixture',resolveId(id){if(id==='/@atmosphere-fixture.js')return '\0atmosphere-fixture';},load(id){if(id==='\0atmosphere-fixture')return fixture;},configureServer(s){s.middlewares.use((req,res,next)=>{if(req.url==='/atmosphere-qa'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"></head><body><div id="app"></div><script type="module" src="/@atmosphere-fixture.js"></script></body></html>');}else next();});}}],server:{host:'127.0.0.1',port:5592,strictPort:true,hmr:false}});await server.listen();
+// Runtime fixture serves source/assets directly; release manifest generation belongs to build checks.
+const server=await createServer({root:'client',configFile:false,optimizeDeps:{noDiscovery:true,include:['three']},logLevel:'error',plugins:[{name:'home-atmosphere-fixture',resolveId(id){if(id==='/@atmosphere-fixture.js')return '\0atmosphere-fixture';},load(id){if(id==='\0atmosphere-fixture')return fixture;},configureServer(s){s.middlewares.use((req,res,next)=>{if(req.url==='/atmosphere-qa'){res.setHeader('Content-Type','text/html');res.end('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"></head><body><div id="app"></div><script type="module" src="/@atmosphere-fixture.js"></script></body></html>');}else next();});}}],server:{host:'127.0.0.1',port:5592,strictPort:true,hmr:false}});await server.listen();
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--enable-unsafe-swiftshader']});
 const context=await browser.newContext({viewport:{width:1280,height:800}});const page=await context.newPage(),errors=[],checks=[];page.on('pageerror',e=>errors.push(e.message));
 const ready=()=>page.locator('.living-home[data-atmosphere=ready]').waitFor({timeout:60000});

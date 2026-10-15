@@ -57,7 +57,7 @@ const vertex=`varying vec2 vUv;varying vec2 vWorld;void main(){vUv=uv;vWorld=pos
 const fragment=`uniform float time;uniform float amount;uniform float phase;varying vec2 vUv;varying vec2 vWorld;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}
-void main(){float x=vUv.x,y=vUv.y;float edge=pow(max(0.,sin(x*3.14159)),1.5);float lengthFade=smoothstep(0.,.09,y)*(1.-smoothstep(.68,1.,y));float veil=noise(vec2(x*4.-time*.07+phase,y*.45+phase));float striation=.62+.38*noise(vec2(x*22.-time*.055+phase,y*1.6-time*.025));float cloudGap=smoothstep(.18,.72,veil);float a=edge*lengthFade*striation*(.38+.62*cloudGap)*amount*.25;gl_FragColor=vec4(1.,.86,.62,a);}`;
+void main(){float x=vUv.x,y=vUv.y;float edge=pow(max(0.,sin(x*3.14159)),1.5);float lengthFade=smoothstep(0.,.09,y)*(1.-smoothstep(.68,1.,y));float veil=noise(vec2(x*4.-time*.17+phase,y*.45+phase));float striation=.62+.38*noise(vec2(x*22.-time*.13+phase,y*1.6-time*.06));float cloudGap=smoothstep(.18,.72,veil);float a=edge*lengthFade*striation*(.38+.62*cloudGap)*amount*.32;gl_FragColor=vec4(1.,.86,.62,a);}`;
 function beam(a:number,b:number,c:number,d:number,topWidth:number,bottomWidth:number){
  const pos=new Float32Array([a-topWidth/2,H-b,2,a+topWidth/2,H-b,2,c-bottomWidth/2,H-d,2,c+bottomWidth/2,H-d,2]);
  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.BufferAttribute(new Float32Array([0,0,1,0,0,1,1,1]),2));geo.setIndex([0,2,1,1,2,3]);
@@ -84,7 +84,7 @@ const leafUniforms={time:{value:0},sun:{value:.75},wind:{value:1}};
 const vines:THREE.Mesh[]=[];
 function addVine(map:THREE.Texture,x:number,y:number,w:number,h:number,phase:number,flip=1){
  const material=new THREE.ShaderMaterial({uniforms:{...leafUniforms,map:{value:map},phase:{value:phase},flip:{value:flip}},transparent:true,depthWrite:false,side:THREE.DoubleSide,
- vertexShader:`uniform float time,wind,phase;varying vec2 vUv;void main(){vUv=uv;vec3 p=position;float loose=pow(1.-uv.y,1.6);float twig=sin(uv.y*28.+time*1.2+phase)*sin(uv.x*12.+phase);p.x+=wind*(sin(time*.42+phase+(1.-uv.y)*2.)*4.8*loose+twig*1.1*(.2+loose));p.y+=wind*sin(time*.67+phase+uv.y*15.)*.55*loose;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
+ vertexShader:`uniform float time,wind,phase;varying vec2 vUv;void main(){vUv=uv;vec3 p=position;float loose=pow(1.-uv.y,1.6);float twig=sin(uv.y*28.+time*1.45+phase)*sin(uv.x*12.+phase);p.x+=wind*(sin(time*.52+phase+(1.-uv.y)*2.)*11.*loose+twig*1.8*(.15+loose)*smoothstep(0.,.12,1.-uv.y));p.y+=wind*sin(time*.81+phase+uv.y*15.)*1.15*loose;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
  fragmentShader:`uniform sampler2D map;uniform float sun,flip;varying vec2 vUv;void main(){vec2 uv=vec2(flip<0.?1.-vUv.x:vUv.x,vUv.y);vec4 c=texture2D(map,uv);if(c.a<.01)discard;vec3 warm=mix(vec3(.83,.91,1.),vec3(1.07,1.03,.92),sun);gl_FragColor=vec4(c.rgb*warm,c.a);#include <colorspace_fragment>\n}`.replace(';#include',';\n#include')});
  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,h,12,64),material);mesh.position.set(x,H-y,1);mesh.renderOrder=3.5;scene.add(mesh);vines.push(mesh);
 }
@@ -93,23 +93,25 @@ function update(){
  // Visible cloud coverage determines each aperture's transmission independently.
  // Keep the aperture anchored: only the illuminated part of its footprint drifts.
  lightUniforms.time.value=cloudTime;
+ // Slow, overlapping changes read within a few seconds without pulsing in unison.
+ const sweep=Math.sin(cloudTime*.22);
  let totalLight=0;
  for(const [i,s] of shafts.entries()){
   const cover=transmission(s.a,s.b),phase=i*1.87;
-  const breath=.82+.12*Math.sin(cloudTime*.17+phase)+.06*Math.sin(cloudTime*.071+phase*2.3);
+  const breath=.88+.34*Math.sin(cloudTime*.38+phase*.45)+.16*Math.sin(cloudTime*.19+phase*1.3);
   s.uniforms.amount.value=comparison?0:strength*(.16+.96*cover)*breath;
-  const drift=12*Math.sin(cloudTime*.085)+6*Math.sin(cloudTime*.139+phase);
-  const spread=.78+.23*cover+.09*Math.sin(cloudTime*.117+phase);
+  const drift=56*sweep+18*Math.sin(cloudTime*.37+phase);
+  const spread=.75+.30*cover+.25*Math.sin(cloudTime*.29+phase);
   s.center=s.c+drift;s.width=s.bottomWidth*spread;
   const p=s.mesh.geometry.getAttribute('position') as THREE.BufferAttribute;
   p.setX(2,s.center-s.width/2);p.setX(3,s.center+s.width/2);p.needsUpdate=true;
-  if(s.pool){s.pool.position.x=s.center;s.pool.scale.x=spread;s.pool.scale.y=.85+.15*cover;}
+  if(s.pool){s.pool.position.x=s.center;s.pool.scale.x=spread;s.pool.scale.y=.85+.15*cover+.12*Math.sin(cloudTime*.29+phase);}
   totalLight+=s.uniforms.amount.value;
  }
  lightUniforms.amount.value=totalLight/shafts.length;
  const targetSun=Math.min(1,Math.max(.2,(shafts[0].uniforms.amount.value*.55+shafts[2].uniforms.amount.value*.45)));
- homeDaylight.sun=targetSun;homeDaylight.time=cloudTime;
- leafUniforms.time.value=cloudTime;leafUniforms.sun.value=targetSun;leafUniforms.wind.value=1;
+ homeDaylight.sun=targetSun;homeDaylight.time=cloudTime;homeDaylight.sweep=sweep;
+ leafUniforms.time.value=cloudTime;leafUniforms.sun.value=targetSun;leafUniforms.wind.value=.95+.20*Math.sin(cloudTime*.31)+.10*Math.sin(cloudTime*.73);
 
  for(let i=0;i<count;i++){const s=seed[i],v=(s.v+elapsed*(.004+s.d*.002))%1;const y=150+v*720;const first=shafts[0],f=(y-first.b)/(first.d-first.b);const center=THREE.MathUtils.lerp(first.a,first.center,f);positions[i*3]=center+(s.u-.5)*(55+v*125)+Math.sin(elapsed*.16+i)*6;positions[i*3+1]=H-y;positions[i*3+2]=4+s.d;}
  dustGeo.attributes.position.needsUpdate=true;render();

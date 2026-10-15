@@ -98,7 +98,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
       form.update?.({...pose,mood:target.mood,elapsed:target.elapsed},isStill()?0:dt,time);
       if(options.home){
         key.intensity=.55+homeDaylight.sun*1.85;
-        key.position.set(-5+Math.sin(homeDaylight.time*.07)*.22,5,2.5);
+        key.position.set(-5+homeDaylight.sweep*.65,5,2.5);
         skyFill.intensity=1.06+(1-homeDaylight.sun)*.16;
         scene.environmentIntensity=.24+homeDaylight.sun*.10;
       }
