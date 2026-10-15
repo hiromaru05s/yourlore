@@ -91,12 +91,23 @@ export function mountDeck(app: App): Screen {
     q("deckEditSection").inert = saving; q("deckWatchSection").inert = saving; q("deckAppearanceSection").inert = saving; tabsEl.inert = saving;
     tabsEl.innerHTML = "";
     for (let i = 0; i < DECK_SLOTS; i++) {
+      const row = document.createElement("div");
+      row.className = "deck-tab-row" + (i === cur ? " is-on" : "");
       const b = document.createElement("button");
       b.className = "deck-tab" + (i === cur ? " is-on" : "") + (i === store.sel ? " is-active" : "");
-      b.innerHTML = `<span class="deck-tab-name">${esc(store.list[i].name || t("deck.slot").replace("{n}", String(i + 1)))}</span>${i === store.sel ? ` <span class="deck-star">${homeIcon("check")}</span>` : ""}`;
+      b.innerHTML = `<span class="deck-tab-name">${esc(store.list[i].name || t("deck.slot").replace("{n}", String(i + 1)))}</span>`;
+      b.setAttribute('aria-current', String(i === cur));
       b.title = store.list[i].name || t("deck.slot").replace("{n}", String(i + 1));
       b.onclick = () => { cur = i; pending = null; undo = null; watchQ = ""; searchEl.value = ""; render(); };
-      tabsEl.appendChild(b);
+      row.appendChild(b);
+      if (i === store.sel) {
+        const star = document.createElement('span');
+        star.className = 'deck-star';
+        star.innerHTML = homeIcon('check');
+        star.title = t('deck.inuse');
+        row.appendChild(star);
+      }
+      tabsEl.appendChild(row);
     }
     const rename=document.createElement('button');rename.className='deck-rename';rename.id='deckRename';rename.innerHTML=homeIcon('edit');rename.title=loungeText('デッキ名を変更','Rename deck','덱 이름 변경');rename.setAttribute('aria-label',rename.title);rename.disabled=saving;
     rename.onclick=()=>{
@@ -105,7 +116,7 @@ export function mountDeck(app: App): Screen {
       document.body.append(ov);const input=ov.querySelector<HTMLInputElement>('#deckNameInput')!;
       const apply=()=>{const name=sanitizeDeckName(input.value);if(name)store.list[slot].name=name;else delete store.list[slot].name;ov.remove();render();msgEl.textContent=loungeText('デッキ名を変更しました。「保存」で確定します。','Deck renamed. Save to keep your changes.','덱 이름을 변경했습니다. 저장해 주세요.');};
       ov.querySelector<HTMLButtonElement>('#deckRenameCancel')!.onclick=()=>ov.remove();ov.querySelector<HTMLButtonElement>('#deckRenameApply')!.onclick=apply;input.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)apply();};input.oninput=()=>{input.value=Array.from(input.value).slice(0,24).join('');};input.focus();input.select();
-    };tabsEl.append(rename);
+    };tabsEl.querySelector('.deck-tab-row.is-on .deck-tab')!.after(rename);
     useBtn.innerHTML = cur === store.sel ? `${homeIcon("check")} ${t("deck.inuse")}` : t("deck.use");
     useBtn.disabled = saving || cur === store.sel || store.list.some(d => d.cards.length !== DECK_SIZE);
 
