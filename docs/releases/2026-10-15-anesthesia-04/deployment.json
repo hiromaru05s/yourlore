@@ -1,0 +1,34 @@
+{
+  "environment": "staging",
+  "url": "https://test.yourlore.xyz",
+  "source": "43e82d074a87199f85780ccb6fd00b4cdf25140f",
+  "deployedAt": "2026-10-15T06:20:44.297979Z",
+  "deploymentId": "a5b8a9ef-d652-44ea-ba6a-f25bd4c6debe",
+  "versions": [
+    {
+      "version_id": "796297b6-cf55-488c-8496-485c0e22ec06",
+      "percentage": 100
+    }
+  ],
+  "guard": "scripts/deploy-guard.mjs staging",
+  "validation": {
+    "typecheck": "passed",
+    "productionTests": {
+      "passed": 151,
+      "total": 151
+    },
+    "build": "passed",
+    "servedBuildFiles": {
+      "matched": 106,
+      "total": 106,
+      "failed": 0
+    },
+    "anesthesiaRuntimeBundles": [
+      "assets/modal-u5R9oH6c.js",
+      "assets/layout-BBOBRSlO.js"
+    ],
+    "homeHttpStatus": 200,
+    "authenticatedOnlineGameplay": "not tested"
+  },
+  "checkedAt": "2026-10-15T06:21:46.877359+00:00"
+}
