@@ -21,3 +21,4 @@ export async function tutorialTranscripts(){
  const {build}=await import('esbuild'),fs=await import('node:fs/promises'),{tmpdir}=await import('node:os'),path=await import('node:path');
  const dir=await fs.mkdtemp(path.join(tmpdir(),'lore-tutorial-transcripts-'));
  try{await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/tutorialLesson';export * from './client/src/shared/tutorialSteps';export * from './client/src/shared/engine';export * from './client/src/shared/botActions';`},bundle:true,format:'esm',platform:'node',outfile:dir+'/rules.mjs',logLevel:'silent'});const lib=await import(dir+'/rules.mjs');return Object.fromEntries(lib.TUT_STEPS.map(s=>[s.id,solveTutorial(lib,s.id).actions]));}finally{await fs.rm(dir,{recursive:true,force:true});}
+}

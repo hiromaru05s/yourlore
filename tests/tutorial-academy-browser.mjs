@@ -33,6 +33,12 @@ const transcripts=await tutorialTranscripts();
 const quiz=async()=>{await p.waitForFunction(()=>academyQA.ctrl&&!academyQA.ctrl.presenting);if(await p.locator('[data-answer]').count()){await p.locator('[data-answer="'+await p.evaluate(()=>academyQA.answer())+'"]').click();}await p.locator('[data-continue]').click();};
 const finish=async(id)=>{for(let i=0;i<240;i++){await p.waitForFunction(()=>academyQA.ctrl&&!academyQA.ctrl.presenting);const state=await p.evaluate(()=>({done:academyQA.ctrl.run.done,n:academyQA.ctrl.run.actions.length,turn:academyQA.ctrl.state.cur,phase:academyQA.ctrl.run.phase}));if(state.done)break;if(state.turn===1&&state.phase==='play'){await p.waitForTimeout(600);continue;}const action=transcripts[id][state.n];assert(action,id+' missing action '+state.n);await p.evaluate(a=>academyQA.ctrl.apply(a),action);}await p.waitForSelector('[data-next]');};
 try {
+ if(process.env.TUTORIAL_QA_TARGET==='picker'){
+  await p.goto('http://127.0.0.1:5298/academy-qa');await p.waitForSelector('.academy-lessons li');
+  await p.evaluate(actions=>{localStorage.setItem('lore:tutorial:v3:run:qa:rift',JSON.stringify(actions));academyQA.lesson('rift');},transcripts.rift.slice(0,2));await settle();
+  await p.evaluate(a=>academyQA.ctrl.apply(a),transcripts.rift[2]);await p.waitForFunction(()=>!academyQA.ctrl.presenting);await p.locator('.picker-modal .btn-ghost').click();await p.waitForSelector('.picker-modal');
+  assert.equal(await p.evaluate(()=>academyQA.ctrl.run.phase),'play');await p.locator('.picker-modal .card[data-card-id="M1"]').click();await p.waitForSelector('[data-continue]');assert(await p.evaluate(()=>academyQA.ctrl.state.players[0].removed.some(c=>c.id==='M1')));await p.screenshot({path:out+'/required-choice-recovery.png'});assert.deepEqual(errors,[]);console.log('PASS required picker cancellation restores choice without false completion');
+ }else{
  await p.goto('http://127.0.0.1:5298/academy-qa');await p.waitForSelector('.academy-lessons li');await p.waitForTimeout(600);
  assert.equal(await p.locator('.academy-lessons li').count(),36);assert.equal(await p.locator('.academy-lessons li:visible').count(),4);
  await p.screenshot({path:out+'/academy-desktop.png',fullPage:true});assert.equal(await p.locator('.academy-spirit canvas').count(),1);
@@ -53,4 +59,5 @@ try {
  for(const lang of ['ko','en']){await p.evaluate(lang=>{academyQA.language(lang);academyQA.app.tutorial();},lang);await p.waitForTimeout(200);assert.equal(await p.locator('.academy-lessons li').count(),36);await p.screenshot({path:out+'/academy-'+lang+'.png',fullPage:true});}
  await p.setViewportSize({width:1280,height:900});await p.evaluate(()=>academyQA.clear());assert.equal(await p.locator('.mana-spirit canvas').count(),0);assert.deepEqual(errors,[]);
  await fs.writeFile(out+'/browser.json',JSON.stringify({checks:['36 lessons grouped in eight chapters','searchable notebook and empty state','WebGL Zeno','two-stage skip confirmation with 5000','physical drag, attack and target selection','wrong answer and comprehension gates','resume after real action','opponent turn progression','nine multi-scene controller transcripts','reward deduplication and retry','four window geometries','three languages','guide teardown'],errors},null,2));console.log('PASS academy browser',out);
+}
 }catch(e){await p.screenshot({path:out+'/failure.png',fullPage:true});console.error(await p.evaluate(()=>({run:academyQA.ctrl?.run&&{id:academyQA.ctrl.run.id,phase:academyQA.ctrl.run.phase,scene:academyQA.ctrl.run.scene,step:academyQA.ctrl.run.step,actions:academyQA.ctrl.run.actions,presenting:academyQA.ctrl.presenting},text:document.body.innerText.slice(-4000)})));throw e;}finally{await context.close();await browser.close();await server.close();}

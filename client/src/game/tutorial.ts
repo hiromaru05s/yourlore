@@ -36,7 +36,10 @@ export class TutorialController extends BaseController {
  protected submit(action:Action):void {
   if(this.disposed||this.introActive||this.presenting||this.run.done||actingSide(this.run.state)!==0)return;
   if(action.type==='surrender'){this.exits.onHome();return;}
-  if(!isTutorialActionAllowed(this.run,action)){this.redirected=true;this.coach.classList.remove('minimized');this.renderCoach();return;}
+  if(!isTutorialActionAllowed(this.run,action)){this.redirected=true;this.coach.classList.remove('minimized');this.renderCoach();
+   // A cancelled picker closes before submit. Restore it when this demonstration requires a choice.
+   if(this.run.state.pending&&action.type==='pick'&&action.uid===null)this.applyResult({state:this.run.state,events:[]},false);
+   return;}
   this.redirected=false;this.apply(action);
  }
  override onEndTurn():void {
