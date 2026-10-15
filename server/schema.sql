@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS user_days (
   PRIMARY KEY (user_id, day)
 );
 
--- 초대 캠페인 보상 장부: pending(가입) → earned(골드 도달) → paid(크레딧 지급, 크레딧 시스템 오픈 후)
+-- Invite ledger: pending (signup) → paid (Gold reached, both players credited in the ranked transaction).
 CREATE TABLE IF NOT EXISTS invite_rewards (
   invitee_id  TEXT PRIMARY KEY,           -- 초대받은 유저 (1회만 귀속)
   inviter_id  TEXT NOT NULL,

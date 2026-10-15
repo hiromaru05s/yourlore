@@ -1,3 +1,4 @@
+import { t } from '../i18n';
 import {cosmetic} from '../shared/cosmetics';
 import { DECK_POOL, type DeckStore, sanitizeDecks } from "../shared/cards";
 
@@ -65,7 +66,7 @@ export function buyLocalGuestSleeve(id: string): { credits: number; sleeves: str
   if (!sleeve || sleeve.price < 0) throw new Error("구매할 수 없는 상품입니다.");
   const profile = loadLocalGuestProfile();
   if (profile.sleeves.includes(id)) return { credits: profile.credits, sleeves: profile.sleeves, furnitures:profile.sleeves.filter(id=>id.startsWith("furniture:")) };
-  if (profile.credits < sleeve.price) throw new Error("크리스탈이 부족합니다.");
+  if (profile.credits < sleeve.price) throw new Error(t("shop.nocredit"));
   profile.credits -= sleeve.price;
   profile.sleeves.push(id);
   const saved = saveLocalGuestProfile(profile);

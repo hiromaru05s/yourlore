@@ -195,7 +195,6 @@ export async function showInviteModal(signal?:AbortSignal): Promise<void> {
         ${data.invites.length === 0 ? `<div class="inv-row inv-empty">${t("invite.empty")}</div>`
           : data.invites.map((v) => `<div class="inv-row"><span>${v.display.replace(/[<>&]/g, "")}</span><span class="inv-st ${v.status}">${stLabel(v.status)}</span></div>`).join("")}
       </div>
-      <div class="inv-note">${t("invite.note")}</div>
       <div class="modal-row"><button class="btn btn-ghost btn-block" id="invClose">${t("common.confirm")}</button></div>
     </div>`;
   document.body.appendChild(ov);

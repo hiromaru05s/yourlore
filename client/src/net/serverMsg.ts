@@ -36,7 +36,7 @@ const M: Record<string, { ja: string; en: string; ko?:string }> = {
   "잘못된 상품입니다.": { ja: "無効な商品です。", en: "Invalid item." },
   "사용자를 찾을 수 없습니다.": { ja: "ユーザーが見つかりません。", en: "User not found." },
   "이미 보유한 슬리브입니다.": { ja: "既に所持しているスリーブです。", en: "You already own this sleeve." },
-  "크레딧이 부족합니다.": { ja: "クレジットが不足しています。", en: "Not enough credits." },
+  "크레딧이 부족합니다.": { ja: "シャードが不足しています。", en: "Not enough Shards.", ko: "샤드가 부족합니다." },
   // friends / challenges
   "이름 또는 이메일을 입력하세요.": { ja: "名前またはメールアドレスを入力してください。", en: "Enter a nickname or email." },
   "해당 유저를 찾을 수 없습니다.": { ja: "該当するユーザーが見つかりません。", en: "Couldn't find that player." },

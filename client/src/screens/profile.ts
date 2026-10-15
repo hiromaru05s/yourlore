@@ -6,7 +6,7 @@ import { confirmDialog } from "../ui/modal";
 // ============================================================
 // LORE — profile screen. For the signed-in user it's TABBED:
 //   · 프로필  — avatar / rename / badges / record / recent matches
-//   · 설정    — SFX volume / privacy / coupon / billing / language / logout
+//   · 설정    — SFX volume / privacy / coupon / Shards / language / logout
 // Viewing ANOTHER player's profile shows the overview only (read-only,
 // honoring their stats_public setting).
 // ============================================================
@@ -240,14 +240,8 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <div class="fr-add-msg" id="couponMsg"></div>
       </section>
       <section class="tut-sec">
-        <h3><span class="tut-ico">${homeIcon("shard")}</span>${t("settings.billing")}</h3>
+        <h3><span class="tut-ico">${homeIcon("shard")}</span>${t("home.shards")}</h3>
         <div class="set-row"><span class="set-label">${t("home.shards")}</span><span class="set-val">${homeIcon("shard")} <b id="credits">${credits}</b></span></div>
-        <div class="set-row"><span class="set-label">${t("settings.billing.sub")}</span><span class="set-val">${t("settings.billing.none")}</span></div>
-        <div class="bill-plan">
-          <div class="bill-plan-name">LORE PREMIUM</div>
-
-          <button class="btn btn-primary btn-block" disabled>${t("settings.billing.soon")}</button>
-        </div>
       </section>
       <section class="tut-sec">
         <h3><span class="tut-ico">${homeIcon("profile")}</span>${t("settings.account")}</h3>

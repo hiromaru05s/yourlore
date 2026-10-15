@@ -261,17 +261,17 @@ export function mountAdmin(app: App): Screen {
       const maxB = Math.max(1, ...bucketRows.map(([, n]) => n));
       body.innerHTML = `
         <div class="adm-kpis">
-          ${kpi("발행 크레딧 (누적)", num(c.issuedTotal), "튜토리얼+쿠폰 등 전체 지급")}
-          ${kpi("유통 크레딧 (보유)", num(c.circulating), `유저당 평균 ${Math.round(c.avgHold)}`)}
-          ${kpi("소진 크레딧", num(c.spent), c.issuedTotal > 0 ? `싱크율 ${pctS(c.spent / c.issuedTotal)} — 살 게 있어야 오릅니다` : "")}
+          ${kpi("발행 샤드 (누적)", num(c.issuedTotal), "튜토리얼+쿠폰 등 전체 지급")}
+          ${kpi("유통 샤드 (보유)", num(c.circulating), `유저당 평균 ${Math.round(c.avgHold)}`)}
+          ${kpi("소진 샤드", num(c.spent), c.issuedTotal > 0 ? `싱크율 ${pctS(c.spent / c.issuedTotal)} — 살 게 있어야 오릅니다` : "")}
           ${kpi("슬리브 구매 유저", num(c.sleeveOwners), "유료 스킨 보유 (기본 제외)")}
         </div>
         <div class="adm-grid">
-          <section><h3>크레딧 발행 경로</h3><table>
+          <section><h3>샤드 발행 경로</h3><table>
             ${c.issuedRewards.map((r) => `<tr><td>${esc(rewardKo[r.k] ?? r.k)}</td><td class="num">${num(r.amt)}</td><td class="num">${num(r.n)}건</td></tr>`).join("")}
             <tr><td>쿠폰</td><td class="num">${num(c.couponIssued)}</td><td class="num">${num(c.couponClaims)}건</td></tr>
           </table><p class="adm-note">초대 캠페인 보상(1,000×양측)은 'earned' 상태로 대기 중 — 지급 로직 연결 시 여기 잡힙니다.</p></section>
-          <section><h3>크레딧 보유 분포</h3><table>
+          <section><h3>샤드 보유 분포</h3><table>
             ${bucketRows.map(([l, n]) => `<tr><td>${l}</td><td class="num">${num(n)}</td><td class="barcell">${bar(n, maxB)}</td></tr>`).join("")}
           </table><p class="adm-note">첫 스킨(1,000) 도달 유저가 늘어야 이코노미가 도는 겁니다.</p></section>
           <section><h3>슬리브 판매 현황</h3><table>
@@ -284,7 +284,7 @@ export function mountAdmin(app: App): Screen {
         <div class="adm-kpis" style="margin-top:18px">
           ${kpi("구독", num(m.subscriptions))}
           ${kpi("해지", num(m.cancellations))}
-          ${kpi("크레딧 판매", num(m.sales))}
+          ${kpi("샤드 판매", num(m.sales))}
           ${kpi("광고 수익", `$${m.adRevenue}`)}
         </div>
         <p class="adm-note">${m.note}. 확정 수익구조는 docs/monetization.md ($7 단일 구독 · 파워 판매 금지).</p>`;
@@ -355,7 +355,7 @@ export function mountAdmin(app: App): Screen {
     const list = users.filter((u) => !q || u.email.toLowerCase().includes(q) || u.display.toLowerCase().includes(q));
     box.className = "";
     box.innerHTML = `<table>
-      <tr class="hd"><td>가입일</td><td>닉네임</td><td>이메일</td><td>로그인</td><td class="num">전적</td><td class="num">MMR</td><td class="num">크레딧</td><td>최근접속</td><td>소스</td><td>초대</td></tr>
+      <tr class="hd"><td>가입일</td><td>닉네임</td><td>이메일</td><td>로그인</td><td class="num">전적</td><td class="num">MMR</td><td class="num">샤드</td><td>최근접속</td><td>소스</td><td>초대</td></tr>
       ${list.slice(0, 200).map((u) => `<tr>
         <td>${new Date(u.created_at).toISOString().slice(0, 10)}</td><td>${esc(u.display)}</td>
         <td>${esc(u.email)}${u.verified ? "" : ` <span style="color:var(--vermil-hi)">미인증</span>`}</td>
