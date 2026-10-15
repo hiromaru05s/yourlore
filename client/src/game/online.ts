@@ -1,3 +1,5 @@
+import { botNpc } from '../shared/botNpcs';
+import { setOppAvatar } from '../ui/boardView';
 import {OPENING_VERSION} from '../shared/opening';
 import { api } from "../net/api";
 // ============================================================
@@ -79,6 +81,7 @@ export class OnlineController extends BaseController {
       if (msg.state.ranked != null) this.ranked = msg.state.ranked;
     } // server echoed — next action may go
     if (msg.type === "init") {
+      if(msg.state.botDifficulty)setOppAvatar(botNpc(msg.state.botDifficulty).avatar);
       const firstInit = !this.started; // 이 클라이언트가 처음 받는 init (새로고침/크래시 복귀 포함)
       this.started = true;
       this.banner(null); // reconnected & resynced

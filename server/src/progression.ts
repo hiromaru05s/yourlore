@@ -1,3 +1,4 @@
+import { starterCollection } from '../../client/src/shared/collection';
 import type { Env } from './env';
 import { EXP_PER_LEVEL, MAX_EXP, LEVEL_MILESTONES, type ExperienceReceipt } from '../../client/src/shared/progression';
 
@@ -29,19 +30,25 @@ export { rewardDay } from '../../client/src/shared/progression';
 interface Row { day:string; revision:number; quest:string; progress:number; claimed:number }
 const isHuman=(id:string)=>!id.startsWith('lore-test-bot-')&&!id.startsWith('lore-challenge-bot-');
 const decode=(r:Row):QuestState=>({day:r.day,revision:r.revision,quest:JSON.parse(r.quest),progress:r.progress,claimed:!!r.claimed,rerollsLeft:Math.max(0,3-r.revision)});
-function choose(previous?:DailyQuest):DailyQuest {
+function choose(starters:string[],previous?:DailyQuest):DailyQuest {
  const pool=QUESTS.filter(q=>q.kind!==previous?.kind),roll=crypto.getRandomValues(new Uint32Array(2));
  const quest={...pool[roll[0]%pool.length]};
  // Use the real playable catalogs; never assign retired cards or token-only cards.
- if(quest.kind==='starterWin')quest.card=DECK_POOL[roll[1]%DECK_POOL.length];
- if(quest.kind==='playCard')quest.card=BUYABLE_POOL[roll[1]%BUYABLE_POOL.length];
+ if(quest.kind==='starterWin')quest.card=starters[roll[1]%starters.length];
+ if(quest.kind==='playCard'){const cards=[...new Set([...starters,...BUYABLE_POOL])];quest.card=cards[roll[1]%cards.length];}
  return quest;
 }
+async function eligibleStarters(env:Env,id:string):Promise<string[]> {
+ const user=await env.DB.prepare('SELECT starter_cards FROM users WHERE id=?').bind(id).first<{starter_cards:string|null}>();
+ const owned=starterCollection(user?.starter_cards);
+ return DECK_POOL.filter(id=>(owned[id]??0)>0);
+}
 export async function ensureDaily(env:Env,id:string,now=Date.now()):Promise<QuestState> {
- const day=rewardDay(now);
- await env.DB.prepare('INSERT OR IGNORE INTO daily_challenges (user_id,day,quest) VALUES (?,?,?)').bind(id,day,JSON.stringify(choose())).run();
- const row=await env.DB.prepare('SELECT * FROM daily_challenges WHERE user_id=? AND day=?').bind(id,day).first<Row>();
- if(!row)throw Error('daily quest unavailable');return decode(row);
+ const day=rewardDay(now),select=()=>env.DB.prepare('SELECT * FROM daily_challenges WHERE user_id=? AND day=?').bind(id,day).first<Row>();
+ const existing=await select();if(existing)return decode(existing);
+ const starters=await eligibleStarters(env,id);
+ await env.DB.prepare('INSERT OR IGNORE INTO daily_challenges (user_id,day,quest) VALUES (?,?,?)').bind(id,day,JSON.stringify(choose(starters))).run();
+ const row=await select();if(!row)throw Error('daily quest unavailable');return decode(row);
 }
 export async function progressionState(env:Env,id:string,now=Date.now()):Promise<ProgressionState> {
  const daily=await ensureDaily(env,id,now);
@@ -57,8 +64,9 @@ export async function progressionState(env:Env,id:string,now=Date.now()):Promise
 export async function rerollDaily(env:Env,id:string,day:unknown,revision:unknown,now=Date.now()):Promise<boolean> {
  const current=await ensureDaily(env,id,now);
  if(day!==current.day||revision!==current.revision||current.claimed||current.progress>=current.quest.target||current.rerollsLeft===0)return false;
+ const starters=await eligibleStarters(env,id);
  const result=await env.DB.prepare('UPDATE daily_challenges SET quest=?,progress=0,revision=revision+1 WHERE user_id=? AND day=? AND revision=? AND claimed=0 AND progress<?')
- .bind(JSON.stringify(choose(current.quest)),id,current.day,current.revision,current.quest.target).run();
+ .bind(JSON.stringify(choose(starters,current.quest)),id,current.day,current.revision,current.quest.target).run();
  return (result.meta.changes??0)>0;
 }
 export interface Settlement { matchId:string; userId:string; mode:'online'|'ranked'|'bot'; difficulty?:keyof typeof BOT_REWARDS; won:boolean|null; player:PlayerState; deck:string[]; daily?:QuestState; endedAt:number }
