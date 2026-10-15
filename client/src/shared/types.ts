@@ -226,6 +226,7 @@ export interface GameState {
   _wheelSnap?: {
     state: unknown;
     action?: Action;
+    resolved?: {state: unknown; events: GameEvent[]};
     idx?: number; // legacy persisted rooms
     outcome?: {pending: Pending | null; over: boolean; phase: GameState["phase"]; winner: Side | null};
   } | null;
@@ -273,6 +274,7 @@ export interface OriginRiteReaction {
 }
 
 export type GameEvent =
+  | { type: "wheelResolve"; reroll: boolean; player: Side; uid: string }
   | { type: "voidShot"; player: Side; count: number; target: Side } // Resolved public Rift count; damage remains a separate engine event.
   | { type: "treason"; player: Side; target: Side; sourceUid: string; targets: {uid:string;zone:"monster"|"enchant";destination:"discard"|"rift"}[] }
   | { type: "timewarp"; player: Side; sourceUid: string }

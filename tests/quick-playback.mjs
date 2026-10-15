@@ -34,6 +34,7 @@ globalThis.CSS={escape:value=>String(value)}; // DOM double ignores selector con
 globalThis.document={querySelector:()=>null,querySelectorAll:()=>[],getElementById:()=>null};
 globalThis.requestAnimationFrame=fn=>{fn();return 1;};
 const mocks={
+ 'fateWheel':'export const openWheelDice=()=>{throw Error("Wheel sessions are exercised in fate-wheel-runtime tests")};',
  'timewarpRuntime':'export const warmTimewarp=()=>{};export class TimewarpPresentation {cast(...a){return globalThis.__fx("timewarpCast",...a)}release(...a){return globalThis.__fx("timewarpRelease",...a)}sync(){}cancel(){}destroy(){}}',
  'combatExit':'export const startCombatExit=async()=>{};',
  'damageFeedback':'export const clearDamageFeedback=()=>{};',

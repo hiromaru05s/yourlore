@@ -63,6 +63,7 @@ import {EventSound} from "../ui/eventSound";
 import { RankPresentation } from "../ui/rankPresentation";
 import type { RankChange } from "../shared/rank";
 import { t, getLang, cardName, onLangChange } from "../i18n";
+import {openWheelDice,type WheelDice} from "../ui/fateWheel";
 import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
 
 export interface ControllerExits {
@@ -93,6 +94,8 @@ export abstract class BaseController implements BoardHandlers {
   protected you: Side;
   protected exits: ControllerExits;
   private elementalFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
+  private wheelDice:WheelDice|null=null;
+  private wheelReplayUid:string|undefined;
   private quickFaces: {card:CardInst;side:A.ViewSide;node:HTMLElement}[] = [];
   protected ranked = false;
   private rankPresentation = new RankPresentation();
@@ -290,15 +293,18 @@ export abstract class BaseController implements BoardHandlers {
 
   private async playResult(prev: GameState, res: ReduceResult, animate: boolean, gen: number, presentedHandDiscards:Set<string>): Promise<void> {
     if (this.dead) return;
+    if(this.wheelDice && res.state.pending?.kind!=='reroll' && !res.events.some(e=>e.type==='wheelResolve')){this.wheelDice.close();this.wheelDice=null;}
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     // Hold the existing complete board until newly exposed card art is decoded.
     if(prev!==res.state){const artwork=prepareStateArtwork(res.state,this.you,this.openingRoot);if(artwork){this.view.setPlaying(true);try{await artwork;}finally{if(!this.dead)this.view.setPlaying(false);}}}
     if(this.dead)return;
     // batches older than the player's latest action jump-cut; fresh ones play normally
     A.setFxSkip(gen <= this.skipGen);
-    this.consumeLogs(res.events);
+    const wheelResolution=res.events.some(e=>e.type==='wheelResolve');
+    if(!wheelResolution)this.consumeLogs(res.events);
     if (!animate) {
       this.clearQuickFaces();
+      if(wheelResolution){this.wheelDice?.close();this.wheelDice=null;this.wheelReplayUid=undefined;this.consumeLogs(res.events);}
       this.view.render(res.state);
       this.afterApply(res);
       return;
@@ -306,6 +312,7 @@ export abstract class BaseController implements BoardHandlers {
     this.view.setPlaying(true);
     try {
       await this.playEvents(prev, res, presentedHandDiscards);
+      if(wheelResolution)this.consumeLogs(res.events);
     } finally {
       this.marketCrisis?.cancel();this.marketCrisis=undefined;
       if (!this.dead) this.view.setPlaying(false);
@@ -424,8 +431,18 @@ export abstract class BaseController implements BoardHandlers {
     };
     const diceDone = new Set<number>(); // dice events already animated (pre-rolled ahead of a result popup)
     const playDiceAt=async(index:number)=>{
-      const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||A.isFxSkipped()||this.dead)return;
+      const roll=events[index];if(roll?.type!=='dice'||diceDone.has(index)||this.dead)return;
       diceDone.add(index);
+      if(res.state.pending?.kind==='reroll' && roll.player===res.state.pending.owner){
+        this.wheelDice?.close();
+        this.wheelDice=this.createWheelDice(roll,res.state,A.isFxSkipped());
+        await this.wheelDice.ready;return;
+      }
+      if(this.wheelReplayUid!==undefined){
+        const held=this.wheelDice,uid=this.wheelReplayUid;this.wheelReplayUid=undefined;
+        if(held){try{await held.finish(roll,uid);}finally{if(this.wheelDice===held)this.wheelDice=null;}return;}
+      }
+      if(A.isFxSkipped())return;
       const taunt=roll.taunt?A.prepareTauntActivation(roll.taunt.sourceUid):undefined;
       const evade=roll.evasion?A.prepareEvasion(roll.evasion.targetUid,sideOf(roll.player),!!roll.success):undefined;
       try{
@@ -722,6 +739,11 @@ export abstract class BaseController implements BoardHandlers {
           A.monHit(e.uid,e.amount,after,recoil);
           break;
         }
+        case 'wheelResolve': {
+          if(e.reroll)this.wheelReplayUid=e.uid;
+          else {const held=this.wheelDice;try{await held?.finish();}finally{if(this.wheelDice===held)this.wheelDice=null;}}
+          break;
+        }
         case "dice": {
           await playDiceAt(i);
           const summons=dungeonFloorSummons(events,i);
@@ -885,8 +907,7 @@ export abstract class BaseController implements BoardHandlers {
               if (e2.type==='enchantActivate'&&DB[e2.id]?.ench==='runeEcho') break;
               if (e2.type === "playSpell" || e2.type === "trapSet" || e2.type === "trapReveal" || e2.type === "buy" || e2.type === "turnHeader" || e2.type === "win") break;
               if (e2.type === "dice" && !e2.evasion && !e2.taunt && !diceDone.has(j)&&!A.isFxSkipped()) {
-                diceDone.add(j);
-                await diceRollAnim(e2.rolls, { need: e2.need, success: e2.success, mine: e2.player === this.you, casino: e2.variant === "casino", source: e2.source, viewer: this.you });
+                await playDiceAt(j);
               }
             }
             // Chest outcomes are already conveyed by the dice, board changes, and battle log.
@@ -1104,6 +1125,13 @@ export abstract class BaseController implements BoardHandlers {
     return node??null;
   }
 
+  private createWheelDice(roll:Extract<GameEvent,{type:'dice'}>,state:GameState,instant:boolean):WheelDice {
+    const pending=state.pending;
+    return openWheelDice(roll,pending?.owner===this.you,re=>{
+      if(!this.dead && this.state.pending?.kind==='reroll' && this.state.pending.owner===this.you)this.submit({type:'pick',uid:re?'re':null});
+    },instant);
+  }
+
   private afterApply(res: ReduceResult): void {
     if(this.state.over)this.releaseOpening();
     if (!this.introShown && this.state && this.state.turn === 1 && !this.state.over) {
@@ -1130,6 +1158,10 @@ export abstract class BaseController implements BoardHandlers {
     const g = this.state;
     if(this.castReviewState && this.castReviewState!==g && document.querySelector('.cast-review'))closeOverlay();
     if (g.over) { this.showWin(); return; }
+    if(g.pending?.kind==='reroll'&&!this.wheelDice){
+      const roll=g.pending.data?.dice as Extract<GameEvent,{type:'dice'}>|undefined;
+      if(roll?.type==='dice')this.wheelDice=this.createWheelDice(roll,g,true);
+    }
     // 다중 선택 pending (대숙청 purge / 흑룡 oppRmz / 신수 oppBoard) — 모달에서 한 번에
     // 고른 뒤 1장씩 순차 제출한다 (엔진 프로토콜은 그대로 1장씩 pick)
     const multiKind = g.pending && (g.pending.kind === "purge" || g.pending.kind === "oppRmz" || g.pending.kind === "oppBoard");
@@ -1216,6 +1248,7 @@ export abstract class BaseController implements BoardHandlers {
         return;
       }
       if (g.pending.kind === "reroll") {
+        if(this.wheelDice)return;
         // 운명의 수레바퀴: 결과 유지 / 다시 굴리기
         void confirmDialog({ title: t("wheel.title"), body: t("wheel.body"), confirm: t("wheel.reroll"), cancel: t("wheel.keep") })
           .then((re) => this.submit({ type: "pick", uid: re ? "re" : null }));
@@ -1483,6 +1516,7 @@ export abstract class BaseController implements BoardHandlers {
   private clearQuickFaces():void {this.elementalFaces.splice(0).forEach(x=>x.node.remove());this.quickFaces.splice(0).forEach(x=>x.node.remove());}
 
   destroy(): void {
+    this.wheelDice?.close();this.wheelDice=null;
     this.timewarp.destroy();
     this.combatExits.abort();clearDamageFeedback();
     this.marketRefresh?.cancel();

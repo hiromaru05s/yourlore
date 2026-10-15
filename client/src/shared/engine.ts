@@ -3388,13 +3388,17 @@ function diceRollCasino(g: GameState, ev: GameEvent[], pl: Side, source: DiceSou
 }
 // Track only the synchronous causal chain; unrelated rolls/actions can trigger again.
 const resolvingLuckyEcho = new WeakMap<GameState, Set<Side>>();
+// A public die is a decision boundary: retain the exact state before its consequences.
+const wheelCheckpoints = new WeakMap<GameEvent, GameState>();
 function diceRoll(g: GameState, ev: GameEvent[], pl: Side, source: DiceSource, n: number, need?: number, variant?: "casino"): { rolls: number[]; sum: number; ok: boolean } {
   const rolls: number[] = [];
   for (let i = 0; i < n; i++) rolls.push(randInt(g, 6) + 1);
   advanceQuest(g.players[pl], "dice", n);
   const sum = rolls.reduce((a, b) => a + b, 0);
   const ok = need != null ? sum >= need : true;
-  ev.push({ type: "dice", source, player: pl, rolls, need, success: need != null ? ok : undefined, variant });
+  const event: GameEvent = { type: "dice", source, player: pl, rolls, need, success: need != null ? ok : undefined, variant };
+  ev.push(event);
+  if (pl === g.cur && source.player === pl && source.id && !g.players[pl].wheelUsed && g.players[pl].enchants.some(e => e.card.ench === "fateWheel")) wheelCheckpoints.set(event, cloneGameState(g));
   // 카지노: 주사위를 굴릴 때마다 (카지노 주사위 자신은 제외) 필드의 카지노에 카운터 +1
   if (variant !== "casino") {
     for (const pl2 of g.players) for (const cas of pl2.field) if (cas.aura === "casino") cas.gcount = (cas.gcount || 0) + n;
@@ -5452,8 +5456,17 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
       // idx supports rooms persisted by versions before action-based rerolls.
       const replay = snap.action ?? { type: "play" as const, idx: snap.idx! };
       const result = reduce(before, replay);
+      if (snap.resolved) {
+        const first = result.events.findIndex(e => e.type === 'dice' && e.player === prev.cur && e.source.player === prev.cur && e.source.id);
+        if (first >= 0) result.events = result.events.slice(first);
+        result.events.unshift({type:'wheelResolve',reroll:true,player:prev.cur,uid:prev.players[prev.cur].enchants.find(e=>e.card.ench==='fateWheel')?.card.uid??''});
+      }
       result.events.unshift({type:"log",html:"운명의 수레바퀴! 결과를 되감고 다시 굴린다…",htmlJa:"運命の輪！結果を巻き戻して振り直す…"});
       return result;
+    }
+    if (snap?.resolved) {
+      const state = cloneGameState(snap.resolved.state as GameState); state._wheelSnap = null;
+      return {state, events:[{type:'wheelResolve',reroll:false,player:prev.cur,uid:prev.players[prev.cur].enchants.find(e=>e.card.ench==='fateWheel')?.card.uid??''}, ...structuredClone(snap.resolved.events)]};
     }
     const state = cloneGameState(prev);
     state._wheelSnap = null;
@@ -5470,17 +5483,19 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
   const die = result.events.find(e => e.type === "dice" && e.player === owner && e.source.player === owner && e.source.id);
   if (!prev.over && eligible && (prev.pending?.owner ?? owner) === owner && result.state.cur === owner
       && !player.wheelUsed && player.enchants.some(e=>e.card.ench === "fateWheel") && die?.type === "dice") {
-    const g = result.state;
+    const resolved = result.state, checkpoint = wheelCheckpoints.get(die);
+    if (!checkpoint) return result;
+    const g = checkpoint, index = result.events.indexOf(die);
     const before = cloneGameState(prev); before._wheelSnap = null;
-    g._wheelSnap = {state:before,action:structuredClone(action),outcome:{pending:g.pending,over:g.over,phase:g.phase,winner:g.winner}};
+    g._wheelSnap = {state:before,action:structuredClone(action),resolved:{state:resolved,events:result.events.slice(index+1)},outcome:{pending:resolved.pending,over:resolved.over,phase:resolved.phase,winner:resolved.winner}};
+    result.state = g;
     const source = DB[die.source.id!] ?? STARTERS[die.source.id!];
     const name = source ? cn(source) : die.source.id!;
     // Do not finish a lethal result or open its follow-up picker before the
     // player has chosen whether to keep it. The authoritative room sees main.
     g.over = false; g.winner = null; g.phase = "main";
-    g.pending = {kind:"reroll",owner,hint:`운명의 수레바퀴 — ${name} 의 결과를 다시 굴릴 수 있다`,hintJa:`運命の輪 — ${name} の結果を振り直せる`,reason:"reroll",allowCancel:true};
-    result.events = result.events.filter(e=>e.type!=="win" && e.type!=="needTarget");
-    enchantKindFx(g,result.events,"fateWheel",g.players[owner]);
+    g.pending = {kind:"reroll",owner,hint:`운명의 수레바퀴 — ${name} 의 결과를 다시 굴릴 수 있다`,hintJa:`運命の輪 — ${name} の結果を振り直せる`,reason:"reroll",allowCancel:true,data:{dice:structuredClone(die)}};
+    result.events = result.events.slice(0,index+1).filter(e=>e.type!=="needTarget");
     result.events.push({type:"needTarget",pending:g.pending});
   }
   return result;
