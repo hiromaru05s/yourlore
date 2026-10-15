@@ -43,7 +43,10 @@ export async function medalState(env:Env,userId:string,now=Date.now(),markDay=fa
  const owned=new Map((earned.results??[]).map(r=>[r.medal_id,r.earned_at]));
  const newly=MEDALS.filter(m=>!owned.has(m.id)&&(values[m.metric]??0)>=m.target);
  if(newly.length){
-  await db.batch(newly.map(m=>db.prepare('INSERT OR IGNORE INTO earned_medals(user_id,medal_id,earned_at) VALUES (?,?,?)').bind(userId,m.id,now)));
+  // D1 limits bound parameters per statement; restore large histories in small inserts.
+  const inserts:D1PreparedStatement[]=[];
+  for(let i=0;i<newly.length;i+=30){const chunk=newly.slice(i,i+30);inserts.push(db.prepare('INSERT OR IGNORE INTO earned_medals(user_id,medal_id,earned_at) VALUES '+chunk.map(()=>'(?,?,?)').join(',')).bind(...chunk.flatMap(m=>[userId,m.id,now])));}
+  await db.batch(inserts);
   for(const m of newly)owned.set(m.id,now);
  }
  return {equipped:user?.badge&&MEDAL_BY_ID.has(user.badge)&&owned.has(user.badge)?user.badge:null,
