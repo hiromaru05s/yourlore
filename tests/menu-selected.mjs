@@ -9,7 +9,7 @@ const base={t:key=>key,esc:s=>String(s).replaceAll('<','&lt;'),onLangChange:()=>
 async function load(name,deps){const source=(await fs.readFile(new URL(`../client/src/screens/${name}.ts`,import.meta.url),'utf8')).replace(/^import .*;\s*$/gm,'');const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;const exports={};new Function('exports',...Object.keys(deps),js)(exports,...Object.values(deps));return exports;}
 const root=document.querySelector('#app');const calls=[];
 const app={root,user:{id:'local-guest-user',decks:null},rankedLobby:()=>calls.push('ranked'),onlineLobby:()=>calls.push('online'),botGame:d=>calls.push(d),deck:()=>calls.push('deck'),leaderboard:()=>calls.push('rank'),home(){}};
-const npcBundle=await build({entryPoints:['client/src/shared/botNpcs.ts'],bundle:true,platform:'node',format:'cjs',write:false});
+const npcBundle=await build({stdin:{contents:"export * from './client/src/shared/botNpcs';export {BOT_FIRST_CLEAR_EXP} from './client/src/shared/progression';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'cjs',write:false});
 const npcModule={exports:{}};new Function('module','exports',npcBundle.outputFiles[0].text)(npcModule,npcModule.exports);const npcs=npcModule.exports;
 let warmups=0,cancelledWarmups=0;
 const {mountHome}=await load('home',{...base,scheduleGameWarmup:()=>{warmups++;return()=>{cancelledWarmups++;}},warmGame:async()=>{warmups++;},mountHomeSpirit:()=>()=>{},...npcs,getLang:()=> 'ja',api:{rankMe:async()=>null},homeRankHtml:()=>'',sanitizeDecks:()=>({sel:0,list:[{name:'Deck',cards:[]}]}),artUrl:{sm:id=>id}});
