@@ -92,6 +92,7 @@ export const api = {
   collectionHistory: () => call<{receipts:CollectionReceipt[]}>("/collection/history",undefined,"GET"),
   buyStarter: (id:string,requestId:string) => call<CollectionResult>("/collection/buy",{id,requestId}),
   drawStarters: (count:number,requestId:string) => call<CollectionResult>("/collection/draw",{count,requestId}),
+  duelRewardResult: (roomId:string) => call<{settled:boolean;amount:number}>('/rewards/result?roomId='+encodeURIComponent(roomId),undefined,'GET'),
   progression: () => call<import('../shared/progression').ProgressionState>('/rewards/progression',undefined,'GET'),
   rerollDaily: (day:string,revision:number) => call<import('../shared/progression').ProgressionState>('/rewards/daily/reroll',{day,revision}),
   startBot: (difficulty:import('../shared/bot').BotDifficulty,lang:string) => call<{roomId:string;you:0;oppName:string;oppAvatar:string}>('/rewards/bot/start',{difficulty,lang}),

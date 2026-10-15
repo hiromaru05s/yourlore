@@ -74,8 +74,18 @@ export class OnlineController extends BaseController {
     }
   }
 
+  private rewardsRequested=false;
+  private retryRewards():void {
+    if(this.rewardsRequested)return;this.rewardsRequested=true;
+    // Continue the bounded settlement check after leaving the result screen.
+    // The account-checked exit callback refreshes balance even if HOME opened early.
+    void (async()=>{for(let attempt=0;attempt<15;attempt++){
+      try{if((await api.duelRewardResult(this.roomId)).settled){this.exits.onExperience?.();document.dispatchEvent(new Event('lore:rewards'));return;}}catch{/* retry transient failures */}
+      await new Promise(resolve=>setTimeout(resolve,1500));
+    }})();
+  }
   private onServer(msg: GameServerMsg): void {
-    if(msg.type==='rewardsSettled'){document.dispatchEvent(new Event('lore:rewards'));return;}
+    if(msg.type==='rewardsSettled'){this.exits.onExperience?.();document.dispatchEvent(new Event('lore:rewards'));return;}
     if (msg.type === "init" || msg.type === "update") {
       this.echoLockAt = 0;
       if (msg.state.ranked != null) this.ranked = msg.state.ranked;
@@ -88,14 +98,14 @@ export class OnlineController extends BaseController {
       this.preview?.close(); this.preview = undefined; // preview phase over → game begins (coin toss shows on turn 1)
       closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
-      if (this.state?.over) { clearActiveGame(); this.retryRankResult(); } // rejoined a game that already finished
+      if (this.state?.over) { clearActiveGame(); this.retryRankResult(); this.retryRewards(); } // rejoined a game that already finished
       // 진행 중인 게임에 처음 합류(=크래시/탭 종료 후 복귀): 안심 배너 + 현황 파악 시간
       else if (firstInit && this.state && this.state.turn > 1) {
         void eventBanner(`↩ ${t("fx.resume")}`, `${t("game.turn")} ${this.state.turn}`, "info", 1700);
       }
     } else if (msg.type === "update") {
       this.applyResult({ state: msg.state, events: msg.events });
-      if (this.state?.over) { this.stopOppTicker(); this.banner(null); clearActiveGame(); this.retryRankResult(); } // game ended → nothing to rejoin
+      if (this.state?.over) { this.stopOppTicker(); this.banner(null); clearActiveGame(); this.retryRankResult(); this.retryRewards(); } // game ended → nothing to rejoin
       else touchActiveGame(); // keep the rejoin record alive for games longer than its TTL
     } else if (msg.type === "oppConn") {
       if (msg.connected) {

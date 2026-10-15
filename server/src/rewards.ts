@@ -43,6 +43,13 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   const user = await getUser(env, req);
   if (!user) return json(env, { error: "로그인이 필요합니다." }, 401);
 
+  if(path==='/rewards/result'&&req.method==='GET') {
+    const roomId=new URL(req.url).searchParams.get('roomId')??'';
+    if(!/^[A-Za-z0-9_-]{1,128}$/.test(roomId))return json(env,{error:'invalid room'},400);
+    const matchId=env.GAME_ROOM.idFromName(roomId).toString();
+    const receipt=await env.DB.prepare('SELECT amount FROM duel_reward_receipts WHERE user_id=? AND match_id=?').bind(user.id,matchId).first<{amount:number}>();
+    return json(env,{settled:!!receipt,amount:receipt?.amount??0});
+  }
   if (path === '/rewards/progression' && req.method === 'GET') return json(env, await progressionState(env,user.id));
   if (path === '/rewards/daily/reroll' && req.method === 'POST') {
     const body=await req.json() as {day?:unknown;revision?:unknown};
