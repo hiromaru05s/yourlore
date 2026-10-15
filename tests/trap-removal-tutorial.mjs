@@ -107,6 +107,7 @@ try {
     act(a){this.submit(a);}
     snapshot(){return this.state;}
   }
+  localStorage.setItem('lore:tutorial:pace','full');
   controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:0,guest:true});
   assert(document.querySelector('.tutorial-basics[open]'));
   controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,0,'Primer blocks card play');
@@ -117,7 +118,7 @@ try {
   await tick();assert(root.querySelector('[data-answer]'),'Summoning ends with a comprehension check');
   root.querySelector('[data-notebook]').click();assert(document.querySelector('.rule-notebook[open]'));
   controller.destroy();controller=null;root.innerHTML='';assert.equal(document.querySelector('.rule-notebook'),null,'Destroy removes open notebook');
-  localStorage.clear();
+  localStorage.clear();localStorage.setItem('lore:tutorial:pace','full');
   let attempts=0,credits=0;
   api.completeTutorial=async()=>{attempts++;if(attempts===1)throw Error('offline');return{amount:100,credits:100,granted:true};};
   controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:TUT_STEPS.findIndex(s=>s.id==='summon'),onCredits:n=>credits=n});
@@ -125,6 +126,18 @@ try {
   controller.act({type:'play',idx:0});await tick();root.querySelector('[data-answer="'+controller.run.scenes[0].question.correct+'"]').click();root.querySelector('[data-continue]').click();await tick();assert(root.querySelector('[data-retry]'));assert.equal(credits,0);
   root.querySelector('[data-retry]').click();await tick();assert.equal(credits,100);assert(root.querySelector('[data-next]'));
   controller.act({type:'play',idx:0});await tick();assert.equal(attempts,2,'completed lesson does not pay twice');
+  controller.destroy();controller=null;root.innerHTML='';
+  localStorage.clear();let quickAttempts=0;
+  api.completeTutorial=async()=>{if(++quickAttempts===1)throw Error('offline');return{amount:100,credits:100,granted:true};};
+  controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:1,accountId:'quick-qa'});
+  assert.equal(document.querySelector('.tutorial-basics'),null);
+  controller.act({type:'attack',uid:controller.state.players[0].field[0].uid});await tick();
+  root.querySelector('[data-answer="'+controller.run.scenes[0].question.correct+'"]').click();await tick();
+  assert(root.querySelector('[data-retry]'));assert.equal(controller.run.id,'attack','failed payment keeps finished transcript and lesson');
+  const same=controller;root.querySelector('[data-retry]').click();await tick();await tick();
+  assert.equal(controller,same);assert.equal(controller.run.id,'combat','successful retry hands off in place');assert.equal(controller.lastReward,100);assert.equal(controller.run.actions.length,0);
+  controller.loadLesson(TUT_STEPS.findIndex(s=>s.id==='defend'));await tick();await tick();
+  const beforeHint=root.querySelector('.coach-reason').textContent;root.querySelector('[data-hint]').click();assert.notEqual(root.querySelector('.coach-reason').textContent,beforeHint,'free exercise exposes its actionable hint');
   controller.destroy();controller=null;root.innerHTML='';
   console.log('PASS tutorial DOM: three languages, progress, onboarding confirmation, payment retry, lifecycle and gallery filters');
 } finally {

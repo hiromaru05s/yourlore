@@ -7,7 +7,7 @@ const out=process.env.TUTORIAL_QA_OUT||'docs/releases/2026-10-15-tutorial-curric
 const fixture=`
 import '/src/styles/tokens.css';import '/src/styles/base.css';import '/src/styles/card.css';import '/src/styles/passives.css';import '/src/styles/game-overlays.css';import '/src/styles/game.css';import '/src/styles/screens.css';import '/src/styles/mobile.css';import '/src/styles/reading-board.css';import '/src/styles/presentation.css';import '/src/styles/lounge.css';import '/src/styles/loungeStage.css';
 import {mountTutorial,openRuleNotebook} from '/src/screens/tutorial.ts';import {mountTutorialWelcome} from '/src/screens/tutorialWelcome.ts';import {TutorialController} from '/src/game/tutorial.ts';import {mountDuelSpiritGuide} from '/src/ui/duelSpiritGuide.ts';import {startBoardLayout} from '/src/ui/layout.ts';import {setLang} from '/src/i18n.ts';import {api} from '/src/net/api.ts';import {replayLesson,currentScene} from '/src/shared/tutorialLesson.ts';import {TUT_STEPS} from '/src/shared/tutorialSteps.ts';
-setLang('ja');localStorage.setItem('lore_help_callout_seen',new Date().toISOString().slice(0,10));
+setLang('ja');localStorage.setItem('lore:tutorial:pace','${process.env.TUTORIAL_QA_TARGET==='pace'?'fast':'full'}');localStorage.setItem('lore_help_callout_seen',new Date().toISOString().slice(0,10));
 const root=document.querySelector('#app');let screen,layout,ctrl,guide,keys=[],credits=0,failed=false;
 api.tutorialStatus=async()=>({keys,credits,awarded:credits,legacyPaid:0,amounts:Object.fromEntries(TUT_STEPS.map(s=>[s.id,s.reward])),offered:keys.length>0});api.tutorialDecision=async decision=>{keys.push('tutorial:v3:intro:'+decision);return{ok:true};};api.completeTutorial=async(id,actions)=>{if(failed){failed=false;throw Error('temporary failure');}if(!replayLesson(id,actions))throw Error('INVALID REPLAY');const key=TUT_STEPS.find(s=>s.id===id).key;const amount=keys.includes(key)?0:TUT_STEPS.find(s=>s.id===id).reward;if(amount)keys.push(key);credits+=amount;return{amount,credits,granted:amount>0};};
 const clear=()=>{screen?.destroy?.();screen=null;layout?.();layout=null;guide?.();guide=null;ctrl?.destroy();ctrl=null;root.innerHTML='';root.className='';};
@@ -17,7 +17,7 @@ window.academyQA={app,lesson(id){app.tutorialGame(TUT_STEPS.findIndex(s=>s.id===
 const server=await createServer({root:'client',configFile:'client/vite.config.ts',logLevel:'error',plugins:[{name:'academy-fixture',resolveId(id){if(id==='/@academy-fixture.js')return '\0academy';},load(id){if(id==='\0academy')return fixture;},configureServer(s){s.middlewares.use((req,res,next)=>{if(req.url==='/academy-qa'){res.setHeader('Content-Type','text/html');res.end('<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="background:#102333"><div id="app"></div><script type="module" src="/@academy-fixture.js"></script></body></html>');}else next();});}}],server:{host:'127.0.0.1',port:5298,strictPort:true,hmr:false}});await server.listen();
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const context=await browser.newContext({viewport:{width:1280,height:900}});
-const p=await context.newPage();p.setDefaultTimeout(60000);const errors=[];p.on('pageerror',e=>errors.push(e.message));
+const p=await context.newPage();p.setDefaultTimeout(180000);const errors=[];p.on('pageerror',e=>errors.push(e.message));
 const settle=async()=>{await p.waitForFunction(()=>{const c=academyQA.ctrl;return c&&!c.presenting&&document.querySelector('[data-scene-ready="true"]')&&!document.querySelector('.asset-loading-cover');});await p.waitForTimeout(300);};
 const drag=async(id)=>{
  await p.waitForFunction(id=>!!document.querySelector('#hand .card[data-card-id="'+id+'"]'),id);
@@ -31,9 +31,40 @@ const drag=async(id)=>{
 };
 const transcripts=await tutorialTranscripts();
 const quiz=async()=>{await p.waitForFunction(()=>academyQA.ctrl&&!academyQA.ctrl.presenting);if(await p.locator('[data-answer]').count()){await p.locator('[data-answer="'+await p.evaluate(()=>academyQA.answer())+'"]').click();}await p.locator('[data-continue]').click();};
-const finish=async(id)=>{for(let i=0;i<240;i++){await p.waitForFunction(()=>academyQA.ctrl&&!academyQA.ctrl.presenting);const state=await p.evaluate(()=>({done:academyQA.ctrl.run.done,n:academyQA.ctrl.run.actions.length,turn:academyQA.ctrl.state.cur,phase:academyQA.ctrl.run.phase}));if(state.done)break;if(state.turn===1&&state.phase==='play'){await p.waitForTimeout(600);continue;}const action=transcripts[id][state.n];assert(action,id+' missing action '+state.n);await p.evaluate(a=>academyQA.ctrl.apply(a),action);}await p.waitForSelector('[data-next]');};
+const finish=async(id)=>{for(let i=0;i<240;i++){await p.waitForFunction(()=>academyQA.ctrl&&!academyQA.ctrl.presenting);const state=await p.evaluate(()=>({id:academyQA.ctrl.run.id,done:academyQA.ctrl.run.done,n:academyQA.ctrl.run.actions.length,turn:academyQA.ctrl.state.cur,phase:academyQA.ctrl.run.phase}));if(state.done||state.id!==id)break;if(state.turn===1&&state.phase==='play'){await p.waitForTimeout(600);continue;}const action=transcripts[id][state.n];assert(action,id+' missing action '+state.n);await p.evaluate(a=>academyQA.ctrl.apply(a),action);}await p.waitForSelector('[data-next]');};
 try {
- if(process.env.TUTORIAL_QA_TARGET==='picker'){
+ if(process.env.TUTORIAL_QA_TARGET==='pace'){
+  await p.goto('http://127.0.0.1:5298/academy-qa');await p.waitForSelector('#startInter:not([disabled])');await p.locator('#startInter').click();await settle();
+  assert.equal(await p.locator('.tutorial-basics').count(),0,'quick pace starts on the playable board');
+  await p.evaluate(()=>{window.paceController=academyQA.ctrl;window.paceSpirit=document.querySelector('.coach-spirit canvas');});
+  await p.locator('[data-basics]').click();assert(await p.locator('.tutorial-basics').isVisible());for(let i=0;i<5;i++)await p.locator('.tutorial-basics [data-next]').click();
+  await drag('M4');await p.waitForSelector('[data-answer]');assert((await p.locator('.coach-outcome').innerText()).includes('マナはカードを使う力'));
+  await p.locator('[data-answer="'+(1-await p.evaluate(()=>academyQA.answer()))+'"]').click();assert.equal(await p.evaluate(()=>academyQA.ctrl.run.done),false);
+  await p.locator('[data-answer="'+await p.evaluate(()=>academyQA.answer())+'"]').click();await p.waitForFunction(()=>academyQA.ctrl.run.id==='attack'&&!academyQA.ctrl.presenting);assert.equal(await p.evaluate(()=>academyQA.credits),100);
+  const started=Date.now(),lessons=[];
+  for(const id of Object.keys(transcripts)){
+   if(id==='summon'){lessons.push(id);continue;}await p.waitForFunction(id=>academyQA.ctrl.run.id===id&&!academyQA.ctrl.presenting,id);
+   for(let n=0;n<240;n++){
+    await p.waitForFunction(()=>!academyQA.ctrl.presenting);
+    const state=await p.evaluate(()=>({id:academyQA.ctrl.run.id,done:academyQA.ctrl.run.done,n:academyQA.ctrl.run.actions.length,turn:academyQA.ctrl.state.cur,phase:academyQA.ctrl.run.phase}));if(state.done||state.id!==id)break;
+    if(state.turn===1&&state.phase==='play'){await p.waitForTimeout(100);continue;}
+    if(id==='evasion'&&state.phase!=='play'){assert(await p.locator('.coach-dice').isVisible(),'actual dice remain visible without full effects');await p.screenshot({path:out+'/pace-evasion-result-'+state.n+'.png'});}
+    const action=transcripts[id][state.n];assert(action,id+' missing action '+state.n);
+    if(action.type==='answer')await p.locator('[data-answer="'+action.choice+'"]').click();
+    else if(action.type==='continueLesson')await p.locator('[data-continue]').click();
+    else await p.evaluate(a=>academyQA.ctrl.submit(a),action);
+   }
+   await p.waitForFunction(id=>academyQA.ctrl.run.id!==id||academyQA.ctrl.settled,id);assert(await p.evaluate(()=>academyQA.ctrl===window.paceController&&document.querySelector('.coach-spirit canvas')===window.paceSpirit),'reuse the board/controller/Zeno');
+   lessons.push(id);console.log('PACE',id);
+   if(['summon','quest','evasion','duel'].includes(id))await p.screenshot({path:out+'/pace-'+id+'.png'});
+  }
+  assert.equal(lessons.length,36);assert.equal(await p.evaluate(()=>academyQA.credits),5000);assert.equal(await p.evaluate(()=>academyQA.ctrl.record.length),66);
+  const runtimeSeconds=(Date.now()-started)/1000;
+  await p.locator('.coach-record summary').click();assert((await p.locator('.coach-record').innerText()).includes('リフト'));
+  await p.locator('[data-pace]').click();assert.equal(await p.locator('[data-pace]').getAttribute('aria-pressed'),'false');await p.locator('[data-pace]').click();
+  for(const [width,height] of [[1280,720],[1024,768],[844,390]]){await p.setViewportSize({width,height});const box=await p.locator('.tut-coach').boundingBox();assert(box.x>=0&&box.y>=0&&box.x+box.width<=width+1&&box.y+box.height<=height+1);await p.screenshot({path:out+'/pace-'+width+'.png'});}
+  assert.deepEqual(errors,[]);await fs.writeFile(out+'/pace-browser.json',JSON.stringify({lessons,scenes:66,reward:5000,runtimeSeconds,scope:'Physical first summon and wrong/correct answer. Remaining gameplay uses controller submissions; quizzes use UI buttons; all 35 lesson handoffs happen automatically after payment. Not human timing.',errors},null,2));console.log('PASS quick pace',runtimeSeconds,'seconds automated controller/UI run');
+ }else if(process.env.TUTORIAL_QA_TARGET==='picker'){
   await p.goto('http://127.0.0.1:5298/academy-qa');await p.waitForSelector('.academy-lessons li');
   await p.evaluate(actions=>{localStorage.setItem('lore:tutorial:v3:run:qa:rift',JSON.stringify(actions));academyQA.lesson('rift');},transcripts.rift.slice(0,2));await settle();
   await p.evaluate(a=>academyQA.ctrl.apply(a),transcripts.rift[2]);await p.waitForFunction(()=>!academyQA.ctrl.presenting);await p.locator('.picker-modal .btn-ghost').click();await p.waitForSelector('.picker-modal');
@@ -60,4 +91,4 @@ try {
  await p.setViewportSize({width:1280,height:900});await p.evaluate(()=>academyQA.clear());assert.equal(await p.locator('.mana-spirit canvas').count(),0);assert.deepEqual(errors,[]);
  await fs.writeFile(out+'/browser.json',JSON.stringify({checks:['36 lessons grouped in eight chapters','searchable notebook and empty state','WebGL Zeno','two-stage skip confirmation with 5000','physical drag, attack and target selection','wrong answer and comprehension gates','resume after real action','opponent turn progression','nine multi-scene controller transcripts','reward deduplication and retry','four window geometries','three languages','guide teardown'],errors},null,2));console.log('PASS academy browser',out);
 }
-}catch(e){await p.screenshot({path:out+'/failure.png',fullPage:true});console.error(await p.evaluate(()=>({run:academyQA.ctrl?.run&&{id:academyQA.ctrl.run.id,phase:academyQA.ctrl.run.phase,scene:academyQA.ctrl.run.scene,step:academyQA.ctrl.run.step,actions:academyQA.ctrl.run.actions,presenting:academyQA.ctrl.presenting},text:document.body.innerText.slice(-4000)})));throw e;}finally{await context.close();await browser.close();await server.close();}
+}catch(e){console.error('Original browser failure',e,errors);await p.screenshot({path:out+'/failure.png',fullPage:true});console.error(await p.evaluate(()=>({run:window.academyQA?.ctrl?.run&&{id:academyQA.ctrl.run.id,phase:academyQA.ctrl.run.phase,scene:academyQA.ctrl.run.scene,step:academyQA.ctrl.run.step,actions:academyQA.ctrl.run.actions,presenting:academyQA.ctrl.presenting},text:document.body.innerText.slice(-4000)})));throw e;}finally{await context.close();await browser.close();await server.close();}

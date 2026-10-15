@@ -84,6 +84,7 @@
     "tests/ceremony-audio-aim.mjs",
     "tests/trap-removal-tutorial.mjs",
     "tests/tutorial-academy.mjs",
+    "tests/tutorial-pace.mjs",
     "tests/production-security.mjs",
     "tests/production-bc.mjs",
     "tests/match-bots.mjs",
