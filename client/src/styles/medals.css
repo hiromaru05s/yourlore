@@ -1,0 +1,36 @@
+/* A restrained engraved inscription: no icon, badge image, glow or idle motion. */
+.medal-inscription{display:inline-block;max-width:100%;padding:4px 15px;color:#c4bca7;font:400 12px/1.35 LoreBoardSerif,"Yu Mincho",Georgia,serif;letter-spacing:.04em;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;background:linear-gradient(90deg,#13202b00,#172633e8 12%,#172633e8 88%,#13202b00);border-block:1px solid #9e8c5f60;box-shadow:inset 0 1px #e2d7b70d;clip-path:polygon(0 0,100% 0,97% 50%,100% 100%,0 100%,3% 50%)}
+.pf-id>.medal-inscription{margin-top:5px;font-size:12px}
+.pf-tabs{flex-wrap:wrap}
+.medal-equipped{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 0;border-bottom:1px solid #b1b9c42b}
+.medal-equipped-name{margin-top:8px;min-height:30px;color:#a4abb5}
+.medal-equipped-name .medal-inscription{font-size:14px;max-width:100%}
+.medal-equipped p,.medal-scope{font-size:12px;line-height:1.7;color:#a1aab9;margin:8px 0 0}
+.medal-controls{display:flex;align-items:end;gap:14px;margin:20px 0 10px;flex-wrap:wrap}
+.medal-controls label{display:grid;gap:5px;font-size:12px;color:#b3bdcc;flex:1;min-width:160px}
+.medal-controls select,.medal-controls input{width:100%;min-width:0;min-height:42px;padding:8px 12px;border:1px solid #8294aa55;border-radius:5px;color:#e5eaf1;background:#111c2bd9;font:inherit}
+.medal-controls>span{font-size:12px;color:#a2adbc;padding-block:12px}
+.medal-feedback{min-height:20px;font-size:13px;color:#d2c7a8}
+.medal-entry{display:flex;gap:24px;align-items:center;padding:20px 8px;border-top:1px solid #95a3b128}
+.medal-entry.is-equipped{background:linear-gradient(90deg,#9f8d5520,transparent);border-left:2px solid #a99b77;padding-left:12px}
+.medal-entry-copy{flex:1;min-width:0}.medal-category{color:#929faf;font-size:10px;letter-spacing:.09em}
+.medal-entry h3{font-family:LoreBoardSerif,"Yu Mincho",Georgia,serif;font-size:17px;font-weight:500;color:#ddd5c1;margin:5px 0 6px;overflow-wrap:anywhere}
+.medal-entry p{font-size:12px;line-height:1.7;color:#aeb8c7;margin:0;overflow-wrap:anywhere}
+.medal-entry button{flex:none;min-width:88px;min-height:44px}
+.medal-progress{width:135px;flex:none;text-align:right;color:#c0ccda;font-size:12px}
+.medal-progress progress{appearance:none;width:100%;height:4px;display:block;margin-top:10px;border:0;background:#263142;border-radius:2px;overflow:hidden}
+.medal-progress progress::-webkit-progress-bar{background:#263142}.medal-progress progress::-webkit-progress-value{background:#a79c7a}.medal-progress progress::-moz-progress-bar{background:#a79c7a}
+.medal-card-list{margin-top:9px;font-size:11px;color:#a6b2c3}.medal-card-list summary{cursor:pointer;padding:4px 0;min-height:24px}.medal-card-list p{padding:8px 0;font-size:11px}
+.medal-empty{padding:42px 16px;text-align:center;font-size:14px;line-height:1.8;color:#aeb9c9}
+.medal-controls :focus-visible,.medal-entry :focus-visible{outline:2px solid #a3c3dc;outline-offset:3px}
+/* Names keep the original portrait anchor. The inscription is attached beneath it. */
+:is(#app,.reading-board).reading-board .portrait .pt-name:has(.medal-inscription){overflow:visible;height:auto;white-space:normal}
+.portrait .pt-name .pt-player-name{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+:is(#app,.reading-board).reading-board .portrait .pt-name .medal-inscription{display:block;position:absolute;top:max(100%,12px);left:50%;transform:translateX(-50%);width:max-content;max-width:min(180px,22vw);font-size:clamp(7px,calc(var(--board-meter)*.008),10px);line-height:1.25;padding:2px 9px;margin-top:3px;pointer-events:auto}
+@media(max-width:600px){.medal-equipped{padding:15px 0;align-items:flex-start}.medal-equipped>div{min-width:0}.medal-equipped-name .medal-inscription{font-size:12px}.medal-controls{gap:8px}.medal-controls label{min-width:120px}.medal-entry{gap:12px;padding:17px 2px;flex-wrap:wrap}.medal-entry-copy{flex-basis:65%}.medal-entry h3{font-size:15px}.medal-entry button{min-width:72px;padding-inline:10px}.medal-progress{width:100%;display:flex;gap:15px;align-items:center;flex-direction:row-reverse}.medal-progress>span{flex:none}.medal-progress progress{margin:0;flex:1}.pf-tabs .pf-tab{font-size:12px;padding-inline:10px}.medal-scope{font-size:11px}}
+.medal-equipped>button{flex:none;min-width:64px;white-space:nowrap}
+:is(#app,.reading-board).reading-board .portrait .pt-name:has(.medal-inscription){font-size:clamp(10px,calc(var(--board-meter)*.013),15px);color:#d7d0c0}
+:is(#app,.reading-board).reading-board .portrait .pt-name .medal-inscription{max-width:min(220px,36vw);font-size:clamp(8px,calc(var(--board-meter)*.010),11px);top:max(100%,15px);white-space:normal;line-height:1.3}
+:is(#app,.reading-board).reading-board #portraitOpp .pt-name .medal-inscription{top:auto;bottom:calc(100% + 5px);margin-top:0}
+
+.portrait .pt-name:has(.medal-inscription) .pt-player-name{color:#e2dfd5;background:linear-gradient(90deg,transparent,#0b1620d9 12%,#0b1620d9 88%,transparent);text-shadow:0 1px 2px #000}

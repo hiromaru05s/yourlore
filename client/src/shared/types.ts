@@ -199,6 +199,9 @@ export interface Pending {
 }
 
 export interface GameState {
+  medals?: [string|null,string|null];
+  /** Server-authoritative achievement counters; never sent to the opponent. */
+  medalDuel?: import("./medalTracking").MedalDuel;
   botDifficulty?: import("./bot").BotDifficulty;
   /** Resume a requested turn end after a mandatory attack's optional choices. */
   endingTurn?: { turn: number; force: boolean };

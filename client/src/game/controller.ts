@@ -75,7 +75,7 @@ export interface ControllerExits {
 }
 
 // ---- coin-toss profiles (set by the game screen at mount): the two coin faces ----
-interface CoinProfile { avatar: string | null; name: string; }
+interface CoinProfile { avatar: string | null; name: string; medal?:string|null; }
 let COIN_ME: CoinProfile = { avatar: null, name: "YOU" };
 let COIN_OPP: CoinProfile = { avatar: null, name: "OPP" };
 export function setCoinProfiles(me: CoinProfile, opp: CoinProfile): void { COIN_ME = me; COIN_OPP = opp; }
@@ -1402,7 +1402,7 @@ export abstract class BaseController implements BoardHandlers {
       if(this.dead||this.state.over||this.openingAbort.signal.aborted)return;
       this.openingWait?.remove();this.openingWait=null;
       const opening=this.state.opening,startsAt=opening?.startsAt;
-      await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name},opp:{...COIN_OPP,name:this.state.players[(1-this.you) as Side].name},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
+      await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name,medal:this.state.medals?.[this.you]},opp:{...COIN_OPP,name:this.state.players[(1-this.you) as Side].name,medal:this.state.medals?.[(1-this.you) as Side]},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
         onStart:this.exits.onOpeningStart,
         elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,
         durationMs:startsAt!=null&&opening?.playableAt!=null?opening.playableAt-startsAt:undefined,
@@ -1568,6 +1568,7 @@ export class LocalController extends BaseController {
       p1: { id: "bot", name: npc.name[getLang()], isBot: true, deck: bot.cards },
       starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn
     });
+    res.state.medals=[COIN_ME.medal??null,null];
     res.state.players[1].botTune = bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
     this.applyResult(res, false);
   }

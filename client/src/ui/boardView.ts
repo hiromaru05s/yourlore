@@ -1,3 +1,4 @@
+import {medalHtml} from './medal';
 import {MarketCrashPresentation} from './marketCrash/runtime';
 import {AnesthesiaPresentation} from './anesthesia/runtime';
 import {bindOriginTrap} from './originRite/anchors';
@@ -432,8 +433,8 @@ export class GameView {
     }
 
     // Hearthstone-style center portraits (opp top / me bottom)
-    this.renderPortrait(this.q("portraitOpp"), opp, false);
-    this.renderPortrait(this.q("portraitMe"), me, true);
+    this.renderPortrait(this.q("portraitOpp"), opp, false, g.medals?.[(1-this.you) as Side]);
+    this.renderPortrait(this.q("portraitMe"), me, true, g.medals?.[this.you]);
     this.q("portraitMe").classList.toggle("is-active", myTurn);
     this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
 
@@ -989,7 +990,7 @@ export class GameView {
   }
 
   /** Portrait counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right. */
-  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean): void {
+  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean, medal?:string|null): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
@@ -1012,7 +1013,7 @@ export class GameView {
         ${dew > 0 ? `<span class="pt-dew" role="img" aria-label="${t('game.dew')} ${p.dew ?? 0}" title="${esc(t('game.dewTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.dew ?? 0).length)}"><b id="dew-${sd}" aria-hidden="true">${dew}</b></span>` : ""}
         ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
-      <span class="pt-name">${esc(p.name)}</span>`;
+      <span class="pt-name"><span class="pt-player-name">${esc(p.name)}</span>${medalHtml(medal)}</span>`;
     const ring = el.querySelector<HTMLElement>('.pt-ring')!;
     // Keep the frame and canvas together so a counter rerender cannot interrupt a hit.
     if (oldRing && oldRing.dataset.avatar === (avatar ?? '')) ring.replaceWith(oldRing);

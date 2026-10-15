@@ -1,3 +1,5 @@
+import {mountProfileMedals} from '../ui/profileMedals';
+import {medalHtml} from '../ui/medal';
 import { seekerLevel } from '../shared/progression';
 import {renderQuality,setRenderQuality} from '../ui/renderDensity';
 import { homeIcon } from "../ui/homeIcons";
@@ -24,7 +26,7 @@ function fmtDate(ts: number): string {
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export type ProfileTab = "overview" | "h2h" | "settings";
+export type ProfileTab = "overview" | "owned" | "progress" | "h2h" | "settings";
 type Tab = ProfileTab;
 type RecFilter = "ranked" | "online" | "bot";
 
@@ -34,6 +36,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   app.root.appendChild(wrap);
 
   let dead = false;
+  let disposeMedals: (()=>void)|undefined;
   let cached: Profile | null = null;
   let tab: Tab = initialTab ?? "overview";
   let recFilter: RecFilter = "ranked";
@@ -42,6 +45,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 
   // ---- shell (head + optional tab bar + body) ----
   const build = (): void => {
+    disposeMedals?.();disposeMedals=undefined;
     wrap.dataset.profileTab = tab;
     wrap.innerHTML = `
       <div class="tut">
@@ -52,6 +56,8 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         ${isSelf() ? `
         <div class="pf-tabs">
           <button class="pf-tab ${tab === "overview" ? "is-active" : ""}" data-tab="overview" aria-pressed="${tab === "overview"}">${homeIcon("profile")} ${t("profile.tab.overview")}</button>
+          <button class="pf-tab ${tab === "owned" ? "is-active" : ""}" data-tab="owned" aria-pressed="${tab === "owned"}">${loungeText("保有中","Owned honors","보유 훈장")}</button>
+          <button class="pf-tab ${tab === "progress" ? "is-active" : ""}" data-tab="progress" aria-pressed="${tab === "progress"}">${loungeText("進行中","In progress","진행 중")}</button>
           <button class="pf-tab ${tab === "h2h" ? "is-active" : ""}" data-tab="h2h" aria-pressed="${tab === "h2h"}">${homeIcon("duel")} ${t("profile.tab.h2h")}</button>
           <button class="pf-tab ${tab === "settings" ? "is-active" : ""}" data-tab="settings" aria-pressed="${tab === "settings"}">${homeIcon("settings")} ${t("profile.tab.settings")}</button>
         </div>` : ""}
@@ -82,6 +88,14 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     body().classList.toggle("pf-overview", tab === "overview");
     if (!cached) return;
     if (!cached.self || tab === "overview") renderOverview(cached);
+    else if (tab === "owned" || tab === "progress") {
+      const profile=cached;
+      if(!profile.medals){body().innerHTML=`<p>${loungeText('勲章を読み込めませんでした。再読み込みしてください。','Could not load honors. Please reload.','훈장을 불러오지 못했습니다. 새로고침해 주세요.')}</p>`;return;}
+      disposeMedals=mountProfileMedals(body(),profile.medals,tab==='owned',async id=>{
+        const result=await api.updateMe({badge:id});profile.badge=result.badge;
+        if(app.user){app.user.badge=result.badge;document.dispatchEvent(new Event('lore:user'));}
+      });
+    }
     else if (tab === "h2h") renderH2H(cached);
     else renderSettings(cached);
   };
@@ -110,6 +124,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
               <span class="pf-name" id="pfName">${esc(p.display)}</span>
               ${p.self ? `<button class="btn btn-ghost btn-mini" id="renameBtn">${homeIcon("edit")} ${t("profile.rename")}</button>` : ""}
             </div>
+            ${medalHtml(p.medals?.equipped ?? p.badge)}
             <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${modeLabel(recFilter)} · ${cur.w}${t("home.win")} ${cur.l}${t("home.loss")}`} · ${fmtDate(p.created_at)}~</div>
           </div>
         </div>
@@ -297,7 +312,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   build();
   void load();
   const unsub = onLangChange(() => { build(); renderTab(); });
-  return { destroy: () => { dead = true; unsub(); } };
+  return { destroy: () => { dead = true; disposeMedals?.(); unsub(); } };
 }
 
 /** Read-only profile popup (used from the friends list). */
@@ -314,7 +329,7 @@ export async function showProfileModal(userId: string): Promise<void> {
       <div class="pf-head">
         ${avatarHtml(p.avatar, p.display, 64)}
         <div class="pf-id">
-          <div class="pf-name">${esc(p.display)}</div>
+          <div class="pf-name">${esc(p.display)}</div>${medalHtml(p.badge)}
         </div>
       </div>
       ${p.private

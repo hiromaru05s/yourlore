@@ -1,3 +1,4 @@
+import {trackMedalDuel} from './medalTracking';
 import { trackActivity } from "./progression";
 import { cloneGameState } from './cloneGameState';
 import { playIntent } from './playIntent';
@@ -5595,6 +5596,7 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
     const before = new Set((prev.players[sx].removed??[]).map(c=>c.uid));
     trackActivity(g2.players[sx], 'rift', (g2.players[sx].removed??[]).filter(c=>!before.has(c.uid)).length);
   }
+  trackMedalDuel(prev,g2,res.events,action);
   return res;
 }
 

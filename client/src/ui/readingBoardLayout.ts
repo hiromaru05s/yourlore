@@ -47,7 +47,11 @@ export function placeReadingBoard(root:HTMLElement):void {
   if(hp){hp.style.left=`${cx-size*.58}px`;hp.style.top=`${portraitTop+size*.06}px`;hp.style.width=`${size*.30}px`;hp.style.height=`${size*.36}px`;}
 
   place(`#portrait${p} .pt-mana`,-.345,sign*.397,.350,.077);
-  place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,-.345,sign*.455,.34,.017);
+  const hasMedal=!!root.querySelector(`#portrait${p} .medal-inscription`);
+  // Keep the two-line identity clear of the lower viewport edge on short displays.
+  const identityZ=sign>0&&hasMedal&&innerHeight<500?.375:sign*.455;
+  const identityX=sign>0&&hasMedal&&innerHeight<500?-.75:-.345;
+  place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,identityX,identityZ,.34,.017);
   const resources=root.querySelector<HTMLElement>(`#portrait${p} .pt-resources`);
   if(resources){resources.style.left=`${cx-size*.5}px`;resources.style.top=`${portraitTop}px`;resources.style.width=resources.style.height=`${size}px`;}
  }

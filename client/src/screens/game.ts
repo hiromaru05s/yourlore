@@ -35,7 +35,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   // coin-toss faces = the two players' profile avatars (opponent falls back to initial)
   const ownSeeker = app.user?.avatar === "SEEKER_RED" ? "SEEKER_RED" : "SEEKER_BLUE";
   setCoinProfiles(
-    { avatar: ownSeeker, name: app.user?.display ?? "YOU" },
+    { avatar: ownSeeker, name: app.user?.display ?? "YOU", medal:app.user?.badge },
     opts.mode === "online"
       ? { avatar: opts.oppAvatar === "SEEKER_BLUE" ? "SEEKER_BLUE" : "SEEKER_RED", name: opts.oppName }
       : npc ? { avatar: npc.avatar, name: npc.name[getLang()] } : { avatar: "SEEKER_RED", name: "TUTOR" },
