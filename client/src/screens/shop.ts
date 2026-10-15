@@ -1,4 +1,3 @@
-import {openShopBoardPreview} from '../ui/shopBoardPreview';
 import {mountShopGacha, type GachaVariant} from '../ui/shopGacha';
 import '../styles/shopPreview.css';
 import {COSMETICS,cosmetic} from '../shared/cosmetics';
@@ -20,7 +19,6 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
   app.root.appendChild(wrap);
 
   let dead = false;
-  let closePreview:(()=>void)|undefined;
   let destroyGacha:(()=>void)|undefined;
   let furnitureImages:Map<string,string>|undefined;
   let furnitureLoading=false, furnitureFailed=false;
@@ -49,7 +47,6 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
   let credits = app.user?.credits ?? 0;
 
   const build = (): void => {
-    closePreview?.();closePreview=undefined;
     destroyGacha?.();destroyGacha=undefined;
     wrap.classList.toggle('shop-gacha-active',category==='gacha');
     wrap.innerHTML = `
@@ -103,8 +100,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     }).join("");
 
     const current=cosmetic(selected)!;
-    wrap.querySelector('#shopSelection')!.innerHTML=`${current.kind==='furniture'?furnitureArt(current.id,true):`<img src="${current.url}" alt="">`}<div><small>${loungeText('プレビュー中','Preview','미리보기')}</small><strong>${esc(current[getLang()])}</strong>${current.kind==='furniture'?`<span class="shop-furniture-label">${loungeText('左：デッキ置き場 ／ 右：墓地','Left: deck holder / Right: graveyard','왼쪽: 덱 받침 / 오른쪽: 묘지')}</span>`:''}<span>${owned.has(current.id)?t('shop.owned'):current.price+' '+t('home.shards')}</span><button class="btn btn-mini" data-board-preview>${loungeText('実盤面で見る','View on board','보드에서 보기')}</button></div>`;
-    wrap.querySelector<HTMLButtonElement>('[data-board-preview]')!.onclick=()=>{closePreview?.();closePreview=openShopBoardPreview(current);};
+    wrap.querySelector('#shopSelection')!.innerHTML=`${current.kind==='furniture'?furnitureArt(current.id,true):`<img src="${current.url}" alt="">`}<div><small>${loungeText('プレビュー中','Preview','미리보기')}</small><strong>${esc(current[getLang()])}</strong>${current.kind==='furniture'?`<span class="shop-furniture-label">${loungeText('左：デッキ置き場 ／ 右：墓地','Left: deck holder / Right: graveyard','왼쪽: 덱 받침 / 오른쪽: 묘지')}</span>`:''}<span>${owned.has(current.id)?t('shop.owned'):current.price+' '+t('home.shards')}</span></div>`;
     grid.querySelectorAll<HTMLButtonElement>('[data-preview]').forEach(button=>button.onclick=()=>{selected=button.dataset.preview!;renderGrid();grid.querySelector<HTMLButtonElement>(`[data-preview="${selected}"]`)?.focus({preventScroll:true})});
     grid.querySelectorAll("[data-buy]").forEach((btn) => {
       (btn as HTMLElement).onclick = () => {
@@ -140,5 +136,5 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
 
   build();
   const unsub = onLangChange(() => build());
-  return { destroy: () => { dead = true; closePreview?.(); destroyGacha?.(); unsub(); } };
+  return { destroy: () => { dead = true; destroyGacha?.(); unsub(); } };
 }
