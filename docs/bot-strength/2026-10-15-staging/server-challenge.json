@@ -1,0 +1,33 @@
+{
+  "scope": "local real GameRoom setup, in-memory D1/storage, restore and runBot; not authenticated staging",
+  "results": [
+    {
+      "tier": "hard",
+      "roster": 5,
+      "setup": true,
+      "restoredDifficulty": "hard",
+      "action": {
+        "type": "chooseTarget",
+        "uid": "server-proof-1"
+      },
+      "reducerParity": true,
+      "persisted": true,
+      "alarmRearmed": true,
+      "ms": 1.7725839999999948
+    },
+    {
+      "tier": "hell",
+      "roster": 7,
+      "setup": true,
+      "restoredDifficulty": "hell",
+      "action": {
+        "type": "chooseTarget",
+        "uid": "server-proof-4"
+      },
+      "reducerParity": true,
+      "persisted": true,
+      "alarmRearmed": true,
+      "ms": 0.6172499999999985
+    }
+  ]
+}

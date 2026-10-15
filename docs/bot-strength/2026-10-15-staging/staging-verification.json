@@ -1,0 +1,32 @@
+{
+  "before": {
+    "id": "a2401469-9948-4142-9194-efead3cddbb2",
+    "annotations": {
+      "workers/message": "7b1fc3591c421cb45b4c84f759b340c26c092bc7 guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "eaadec34-8737-4009-b95f-7f9bdf2f96c3",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-10-15T11:24:30.452967Z"
+  },
+  "after": {
+    "id": "a2401469-9948-4142-9194-efead3cddbb2",
+    "annotations": {
+      "workers/message": "7b1fc3591c421cb45b4c84f759b340c26c092bc7 guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "eaadec34-8737-4009-b95f-7f9bdf2f96c3",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-10-15T11:24:30.452967Z"
+  },
+  "stableDeployment": true,
+  "containsBotSource": "4ded3fb004f37b49d14166d2ae66ea9df881a75d"
+}

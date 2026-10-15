@@ -91,4 +91,4 @@
 - 実探索の製品比較: `SAMPLES=1 OFFSET=4000000 TIERS=hard,hell OPPONENT_TIER=hard MARKETS=natural SHIPPED_ROSTER=1` とし、`adaptive-v58.cjs product`。旧版は各難易度の旧3構築、新版は採用5／7構築。同じ相手・シードで先後と旧新版を比較。分割実行した結果は `merge-adaptive-v58.cjs` で重複・欠落・ハッシュを検査して統合する。
 - `summarize-adaptive-v58.cjs` は4対局一組の完全性を検査し、シード単位の再標本化で差分区間を作る。市場・難易度・構築別も出力する。対人測定には使わない。
 
-検証用スクリプトは `ml/bot-strength/`。バンドルのSHA-256とカード不変の確認は `integrity.json`。ブラウザの結果は `browser.json` と `gameplay-browser.json`。ローカル検証であり、ステージング・本番へは未配信。
+検証用スクリプトは `ml/bot-strength/`。バンドルのSHA-256とカード不変の確認は `integrity.json`。ブラウザの結果は `browser.json` と `gameplay-browser.json`。この10月14日の記録は未配信時点のローカル検証。10月15日の追加修正・共有main統合・ステージング配信と確認結果は [配信記録](../2026-10-15-staging/README.md) を参照。

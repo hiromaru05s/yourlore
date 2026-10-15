@@ -25,5 +25,23 @@
   },
   "long-control-state.json.gz": {
     "compressedSHA256": "70b370882a227ecfe271205bdb8451231d681b694a925d00a1ea32c9a2c2803d"
+  },
+  "staging-worker.json": {
+    "sha256": "33b2babecded323a413c84266acdeaea160c5d24947bda8208bc42f390ac13ea"
+  },
+  "staging-verification.json": {
+    "sha256": "323b015b65424b369625e8cb59ca3c9d67b2f382fd24f661b2a9c777e3f7ff90"
+  },
+  "server-challenge.json": {
+    "sha256": "aaa09e19b49a4cbf519a6bb5cc24441cf7c9c3f45a78cb47139b0431861ea625"
+  },
+  "initial-release.json": {
+    "sha256": "7c5191ae0741bc2650b27ea7d32f46fa5cd6cf3e970c23ef9e7a3bea40859fb4"
+  },
+  "guard-production-suite.json": {
+    "sha256": "94a3d4d761e059e38fc2b965ff2a2b88ada99455ec287fd026545a7182473efe"
+  },
+  "final-production-suite.json": {
+    "sha256": "e2886181b257c4f781a51746b0403077a8941ebe5dea5d8f0101e3b0417b4e5f"
   }
 }
