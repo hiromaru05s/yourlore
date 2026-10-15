@@ -1,6 +1,7 @@
 import '../styles/loungeHorizon.css';
 import '../styles/loungeSelectedMenu.css';
 import '../styles/loungeSupport.css';
+import '../styles/homeDuelInk.css';
 import {loungeNavGlyph,loungeUtilityGlyph} from './loungeNavGlyphs';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';

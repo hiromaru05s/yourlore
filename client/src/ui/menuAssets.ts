@@ -11,7 +11,7 @@ export function menuAssetUrls():string[]{
   ...HOME_ICONS.map(k=>`/art/lounge/icons/v2/${k}.png`),
   '/art/lounge/icons/shard-simple-v1.png',
   '/art/brand/lore-logo-transparent.webp', '/art/lounge/illustrated-v1/biblion.webp',
-  '/art/lounge/stage-v1/sigil.webp', '/art/lounge/v1/library.webp',
+  '/art/lounge/stage-v1/sigil.webp', '/art/lounge/duel-ink-v1/disc.png', '/art/lounge/v1/library.webp',
   '/art/seekers/faceless-v2/portrait.webp', '/art/seekers/faceless-v2/poses.webp',
   ...BOT_NPCS.map(n=>n.portrait),
   ...Object.keys({...DB,...STARTERS}).flatMap(id=>[artUrl.sm(id),artUrl.xs(id),artUrl.full(id)]),
