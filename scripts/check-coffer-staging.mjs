@@ -45,6 +45,6 @@ try{
  }
 }finally{
  await browser?.close();
- await sql(`DELETE FROM collection_transactions WHERE user_id='${uid}'; DELETE FROM sessions WHERE user_id='${uid}'; DELETE FROM user_days WHERE user_id='${uid}'; DELETE FROM users WHERE id='${uid}';`);
+ await sql(`DELETE FROM daily_challenges WHERE user_id='${uid}'; DELETE FROM duel_reward_receipts WHERE user_id='${uid}'; DELETE FROM rewards WHERE user_id='${uid}'; DELETE FROM ratings WHERE user_id='${uid}'; DELETE FROM collection_transactions WHERE user_id='${uid}'; DELETE FROM sessions WHERE user_id='${uid}'; DELETE FROM user_days WHERE user_id='${uid}'; DELETE FROM users WHERE id='${uid}';`);
  await fs.rm(dir,{recursive:true,force:true});
 }

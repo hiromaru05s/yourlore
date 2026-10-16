@@ -745,7 +745,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
     const origin=[deck.querySelector('.pile-draw-anchor'),deck.querySelector('.pile-card'),deck]
       .map(node=>node?.getBoundingClientRect()).find(rect=>rect&&rect.width>0&&rect.height>0);
     if(!origin||abort.signal.aborted)return;
-    window.dispatchEvent(new CustomEvent('lore:draw-start',{detail:{pile:deck.id}}));
+    window.dispatchEvent(new window.CustomEvent('lore:draw-start',{detail:{pile:deck.id}}));
     await Promise.race([cancelled, import('./paperDraw').then(async ({ drawPaperCards }) => {
       if (abort.signal.aborted || fxSkip || !handEl.isConnected) return;
       await drawPaperCards({ cards: incoming, origin, sleeve: deck.dataset.sleeve || FRAME_BACK,

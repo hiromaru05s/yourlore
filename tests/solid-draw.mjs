@@ -15,14 +15,14 @@ const deck=document.getElementById('pile-myDeck'),anchor=deck.firstElementChild,
 deck.getBoundingClientRect=()=>rect(200,100);
 anchor.getBoundingClientRect=()=>rect(210,painted?80:0);
 cards.forEach(n=>n.getBoundingClientRect=()=>rect(300,100));
-const calls=[];
+const calls=[],releasedPiles=[];window.addEventListener('lore:draw-start',e=>releasedPiles.push(e.detail.pile));
 globalThis.__draw=async args=>{calls.push(args);assert.equal(args.cards[0].style.visibility,'hidden');if(delay)await new Promise(r=>{release=r;args.signal.addEventListener('abort',r,{once:true});});if(!args.signal.aborted)args.cards.forEach(args.onLand);};
 try{
  await build({stdin:{contents:`export {animateDraw,setFxSkip} from './client/src/ui/anim';export {arrivingHandUids} from './client/src/ui/handGeometry';export {createStockGeometry,stockMatrix} from './client/src/ui/drawStock';export {Vector3} from 'three';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',define:{'import.meta.env.DEV':'false'},outfile:dir+'/test.mjs',plugins:[{name:'capture-flight',setup(b){b.onResolve({filter:/^\.\/paperDraw$/},()=>({path:'flight',namespace:'mock'}));b.onLoad({filter:/.*/,namespace:'mock'},()=>({contents:'export const drawPaperCards=args=>globalThis.__draw(args);',loader:'js'}));}}]});
  const {animateDraw,setFxSkip,arrivingHandUids,createStockGeometry,stockMatrix,Vector3}=await import(dir+'/test.mjs');
  // Regression: a freshly rebuilt 3D pile anchor has zero bounds until paint.
  await animateDraw(document.getElementById('hand'),1,'me',{uids:['new']});
- assert.equal(calls.length,1);assert.equal(calls[0].origin.width,80);assert.equal(calls[0].origin.left,210);
+ assert.deepEqual(releasedPiles,['pile-myDeck']);assert.equal(calls.length,1);assert.equal(calls[0].origin.width,80);assert.equal(calls[0].origin.left,210);
  assert.deepEqual(calls[0].cards,[cards[1]]);assert(cards.every(n=>n.style.visibility===''));
  // Bad/missing projections fall back to the real pile, without silently skipping.
  anchor.getBoundingClientRect=()=>rect(0,0);
