@@ -1,0 +1,164 @@
+{
+  "base": "http://127.0.0.1:51133",
+  "reuseContext": false,
+  "api": "fixture guest; normal production HOME and local BOT route",
+  "cases": [
+    {
+      "width": 1280,
+      "homeMs": 4844,
+      "reloadMs": 4609,
+      "preparationMs": 1813,
+      "duelMs": 9136,
+      "samples": [
+        {
+          "label": "idle",
+          "ms": 5019,
+          "count": 302,
+          "p50": 16.69999999999891,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9213
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":2,\"portalPasses\":113,\"displayPasses\":206,\"flightPasses\":0,\"cpuMs\":137.5,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.21549399999999963,
+            "ScriptDuration": 0.14790999999999999,
+            "LayoutDuration": 0.0009410000000000043,
+            "RecalcStyleDuration": 0.01736199999999999,
+            "LayoutCount": 11,
+            "RecalcStyleCount": 12
+          }
+        },
+        {
+          "label": "play card",
+          "ms": 5045,
+          "count": 301,
+          "p50": 16.700000000000728,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9338
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":0,\"portalPasses\":113,\"displayPasses\":213,\"flightPasses\":0,\"cpuMs\":115.4,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.19345100000000004,
+            "ScriptDuration": 0.11975200000000008,
+            "LayoutDuration": 0.0014040000000000025,
+            "RecalcStyleDuration": 0.01634399999999997,
+            "LayoutCount": 22,
+            "RecalcStyleCount": 24
+          }
+        },
+        {
+          "label": "BOT turn",
+          "ms": 5044,
+          "count": 301,
+          "p50": 16.700000000000728,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 19167,
+            "draw-stock-canvas": 988
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":47,\"portalPasses\":93,\"displayPasses\":216,\"flightPasses\":0,\"cpuMs\":207.9,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.4674020000000003,
+            "ScriptDuration": 0.25109500000000007,
+            "LayoutDuration": 0.008458999999999994,
+            "RecalcStyleDuration": 0.07844099999999998,
+            "LayoutCount": 111,
+            "RecalcStyleCount": 347
+          }
+        }
+      ],
+      "errors": [],
+      "httpErrors": [],
+      "broken": [],
+      "preparationTransferBytes": 67425674,
+      "coldTransferBytes": 11724359
+    },
+    {
+      "width": 700,
+      "homeMs": 4756,
+      "reloadMs": 4090,
+      "preparationMs": 1782,
+      "duelMs": 14592,
+      "samples": [
+        {
+          "label": "idle",
+          "ms": 5016,
+          "count": 301,
+          "p50": 16.700000000000728,
+          "p95": 16.700000000000728,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 12696
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":301,\"fullPasses\":32,\"portalPasses\":98,\"displayPasses\":184,\"flightPasses\":0,\"cpuMs\":316.4,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.5060659999999997,
+            "ScriptDuration": 0.34638900000000006,
+            "LayoutDuration": 0.0022139999999999938,
+            "RecalcStyleDuration": 0.0486930000000001,
+            "LayoutCount": 13,
+            "RecalcStyleCount": 101
+          }
+        },
+        {
+          "label": "play card",
+          "ms": 5047,
+          "count": 301,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 9213
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":300,\"fullPasses\":0,\"portalPasses\":110,\"displayPasses\":202,\"flightPasses\":0,\"cpuMs\":266.3,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.4659689999999994,
+            "ScriptDuration": 0.305253,
+            "LayoutDuration": 0.0028299999999999853,
+            "RecalcStyleDuration": 0.043937000000000004,
+            "LayoutCount": 22,
+            "RecalcStyleCount": 24
+          }
+        },
+        {
+          "label": "BOT turn",
+          "ms": 5064,
+          "count": 299,
+          "p50": 16.69999999999709,
+          "p95": 16.799999999999272,
+          "over50": 0,
+          "gpu": {
+            "duel-objects-3d": 20441,
+            "draw-stock-canvas": 1932
+          },
+          "longTasks": [],
+          "scene": "{\"seconds\":5,\"ticks\":299,\"fullPasses\":60,\"portalPasses\":87,\"displayPasses\":209,\"flightPasses\":0,\"cpuMs\":291.5,\"calls\":32,\"triangles\":14196}",
+          "cpu": {
+            "TaskDuration": 0.7025930000000002,
+            "ScriptDuration": 0.3625119999999997,
+            "LayoutDuration": 0.01596700000000001,
+            "RecalcStyleDuration": 0.12501799999999996,
+            "LayoutCount": 184,
+            "RecalcStyleCount": 488
+          }
+        }
+      ],
+      "errors": [],
+      "httpErrors": [],
+      "broken": [],
+      "preparationTransferBytes": 61379488,
+      "coldTransferBytes": 11724192
+    }
+  ],
+  "assertions": "desktop passed; narrow rerun passed after tiny state-control preload correction"
+}

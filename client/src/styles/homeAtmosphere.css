@@ -4,7 +4,7 @@
 /* Generated plate is a static fallback and keeps image readiness/cache ownership. */
 .lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home{
  inset:0;animation:none;transform:none;will-change:auto;
- background-image:var(--menu-library-image),url('/art/lounge/atmosphere-v1/clouds.png'),linear-gradient(#70a9d6,#cadde6);
+ background-image:var(--menu-library-image),url('/art/lounge/atmosphere-v1/clouds.webp'),linear-gradient(#70a9d6,#cadde6);
  background-position:center;background-size:cover,110% auto,cover;background-repeat:no-repeat;
 }
 .lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::before{display:none}

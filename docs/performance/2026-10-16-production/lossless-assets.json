@@ -1,0 +1,164 @@
+[
+  {
+    "original": "/art/lounge/atmosphere-v2/library-wide.png",
+    "optimized": "/art/lounge/atmosphere-v2/library-wide.webp",
+    "before": 2720387,
+    "after": 2014296,
+    "width": 1672,
+    "height": 941,
+    "rgbaSha256": "28e892b9d75ab1032474fc3fc2e56de283b1e472c1eca2128c43151e90cf01f0"
+  },
+  {
+    "original": "/art/lounge/atmosphere-v2/ivy.png",
+    "optimized": "/art/lounge/atmosphere-v2/ivy.webp",
+    "before": 1329662,
+    "after": 991236,
+    "width": 727,
+    "height": 2162,
+    "rgbaSha256": "a53064a8aa056508d4e88249d889b4585b622a721568d97f430834c434d0dd12"
+  },
+  {
+    "original": "/art/lounge/atmosphere-v1/clouds.png",
+    "optimized": "/art/lounge/atmosphere-v1/clouds.webp",
+    "before": 879709,
+    "after": 656256,
+    "width": 1774,
+    "height": 887,
+    "rgbaSha256": "596fa4bf046c0db1e68f49849bb3a0983d353405bba1b1a920e8f2fc72fd01ba"
+  },
+  {
+    "original": "/art/biblion/modular/brand-seal-ui.png",
+    "optimized": "/art/biblion/modular/brand-seal-ui.webp",
+    "before": 1451394,
+    "after": 928870,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "6b49c757678c0acbf35ef48e9ab37d5fabad63db19de2c72c26ff098f872a41c"
+  },
+  {
+    "original": "/vfx/purchase-air/crystal-72.png",
+    "optimized": "/vfx/purchase-air/crystal-72.webp",
+    "before": 2854005,
+    "after": 1570170,
+    "width": 3840,
+    "height": 1920,
+    "rgbaSha256": "864ae223d72af18a9aabc7c6a990cdef6bdb123749d58e876a280454953e21cb"
+  },
+  {
+    "original": "/vfx/chosen-victory/crown.png",
+    "optimized": "/vfx/chosen-victory/crown.webp",
+    "before": 2206165,
+    "after": 1429020,
+    "width": 1536,
+    "height": 1024,
+    "rgbaSha256": "fe5bb090873b16d6671dbdb06af85b66a27889273b0f637d77ab0a2f4e9c1280"
+  },
+  {
+    "original": "/vfx/merchant/balance.png",
+    "optimized": "/vfx/merchant/balance.webp",
+    "before": 2072868,
+    "after": 1361628,
+    "width": 1536,
+    "height": 1024,
+    "rgbaSha256": "7fc4641c7d6c2f77f2e145d5a6cf3f6ee8c95b88a1d414572dbf3c640b4a7ddc"
+  },
+  {
+    "original": "/art/vfx/mimic-family/engraved-brass.png",
+    "optimized": "/art/vfx/mimic-family/engraved-brass.webp",
+    "before": 3571542,
+    "after": 2576056,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "4ed542cc3372a621f6c376727fa2bc9ca572241d4c35f1d338ef9f4770be029b"
+  },
+  {
+    "original": "/art/vfx/mimic-cavity-r3/02-moist-cheeks.png",
+    "optimized": "/art/vfx/mimic-cavity-r3/02-moist-cheeks.webp",
+    "before": 2504880,
+    "after": 1766610,
+    "width": 1774,
+    "height": 887,
+    "rgbaSha256": "a1bc70caa2ea2420a52cc2f247097878939786de57a365ec475c3fd5a36a46e1"
+  },
+  {
+    "original": "/art/vfx/taunt-four/lion-relief.png",
+    "optimized": "/art/vfx/taunt-four/lion-relief.webp",
+    "before": 2498161,
+    "after": 1593492,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "ea5a829d5d8cb83d9745afb0a33512b471b447e858d0deb8e706cab5842d58b4"
+  },
+  {
+    "original": "/vfx/chosen-heroes/knight.png",
+    "optimized": "/vfx/chosen-heroes/knight.webp",
+    "before": 362830,
+    "after": 208212,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "f1652ec3252b3a373ed19e3281eedbedf9841abd8d41681a3c09039be7dfc29f"
+  },
+  {
+    "original": "/vfx/chosen-heroes/mage.png",
+    "optimized": "/vfx/chosen-heroes/mage.webp",
+    "before": 375649,
+    "after": 222688,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "8c991a0a33e875d05bdf14a5395c9714bc3d25dae54b7ddcbd2307a140b5a71e"
+  },
+  {
+    "original": "/vfx/chosen-heroes/archer.png",
+    "optimized": "/vfx/chosen-heroes/archer.webp",
+    "before": 377809,
+    "after": 213896,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "56358ce4e5c7ab9060f991e50e986bc86a9ca1eae079508d5fca24de0dc86235"
+  },
+  {
+    "original": "/vfx/chosen-heroes/rogue.png",
+    "optimized": "/vfx/chosen-heroes/rogue.webp",
+    "before": 803855,
+    "after": 474460,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "b646ade5f6ce464117346a05df422e0f14a08e41ceb8d9220b314c84ae49b27e"
+  },
+  {
+    "original": "/art/vfx/mimic-mouth-r2/01-reference-ivory.png",
+    "optimized": "/art/vfx/mimic-mouth-r2/01-reference-ivory.webp",
+    "before": 1144197,
+    "after": 790440,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "069ffb032c49c6fa9f20b9316d53efa5fb37d6137bbb9cd27adcafee791e670e"
+  },
+  {
+    "original": "/art/vfx/mimic-mouth-r2/02-ridged-bone.png",
+    "optimized": "/art/vfx/mimic-mouth-r2/02-ridged-bone.webp",
+    "before": 1065789,
+    "after": 736246,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "cba4ade1571ec89c088854392af81ef378d29b515fe000abc4b1e6c987e6a1dc"
+  },
+  {
+    "original": "/art/vfx/mimic-mouth-r2/03-moist-flesh.png",
+    "optimized": "/art/vfx/mimic-mouth-r2/03-moist-flesh.webp",
+    "before": 1069434,
+    "after": 746628,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "d7e90da56806639abc9a36e05d9601afd300e3d342fe5247a02345eac0add525"
+  },
+  {
+    "original": "/art/vfx/mimic-mouth-r2/04-predator-fangs.png",
+    "optimized": "/art/vfx/mimic-mouth-r2/04-predator-fangs.webp",
+    "before": 1094125,
+    "after": 749940,
+    "width": 1254,
+    "height": 1254,
+    "rgbaSha256": "9dd118df4067010ba2a66676e260ee3b7095093284c4069a546545733ddb420d"
+  }
+]

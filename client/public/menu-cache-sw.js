@@ -1,7 +1,7 @@
 /* Only manifested public artwork, models, fonts and music are cached. HTML, JS, APIs, account data and sockets
  * always use the network. A tab keeps the manifest of its own application build. */
 const CONTENT='lore-menu-content-v1', META='lore-menu-clients-v1';
-const bindings=new Map();
+const bindings=new Map(), transfers=new Map();
 let maintenance=Promise.resolve();
 const key=hash=>new URL('/__lore_menu_content__/'+hash,self.location.origin).href;
 const metaKey=id=>new URL('/__lore_menu_client__/'+id,self.location.origin).href;
@@ -45,7 +45,26 @@ self.addEventListener('fetch',event=>{
  event.respondWith((async()=>{
   try {
    const hash=(await binding(event.clientId))?.get(url.pathname);
-   if(hash){const cached=await (await caches.open(CONTENT)).match(key(hash));if(cached)return cached;}
+   if(hash){
+    const cache=await caches.open(CONTENT),cached=await cache.match(key(hash));if(cached)return cached;
+    // A complete cached body may satisfy Range with 200. Partial network bodies
+    // must never be shared with a consumer expecting a complete image/model.
+    if(request.headers.has('Range'))return fetch(request);
+    // Share a transfer across same-release consumers, including while its
+    // streamed response is being hashed. Never save unverified/stale CDN bytes.
+    let task=transfers.get(hash);
+    if(!task){
+     task=fetch(request);transfers.set(hash,task);
+     const saved=task.then(async response=>{
+      if(!response.ok||response.status!==200)return;
+      const copy=response.clone(),bytes=await copy.arrayBuffer();
+      const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
+      if(digest===hash)await cache.put(key(hash),new Response(bytes,{headers:{'Content-Type':response.headers.get('Content-Type')||'application/octet-stream'}}));
+     }).catch(()=>{}).finally(()=>transfers.delete(hash));
+     event.waitUntil(saved);
+    }
+    return (await task).clone();
+   }
   }catch{/* Restricted storage or eviction falls back to the normal request. */}
   return fetch(request);
  })());

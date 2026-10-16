@@ -10,12 +10,16 @@ function cardRadius(a:number){const x=Math.abs(Math.cos(a))/HALF_W,y=Math.abs(Ma
 function roundedProfile(r:number){return .055*Math.exp(-Math.pow((r-.92)/.025,2))+.042*Math.exp(-Math.pow((r-.84)/.016,2))+.045*Math.exp(-Math.pow((r-.39)/.024,2))+.12*Math.exp(-Math.pow(r/.15,4))}
 export class SolidRegion {
  geometry:T.BufferGeometry;mesh:T.Mesh;coords:Array<[number,number,number,number]>=[];region:Region;angular:number;radial:number;
+ // These values depend only on the authored mesh, never on the frame clock.
+ private samples:Array<{radius:number;profile:number;bevel:number;cos:number;sin:number;wave:number}>=[];
+ private shape='';
  constructor(region:Region,front:T.Material,body:T.Material,back:T.Material){
   this.region=region;this.angular=Math.max(12,Math.ceil((region.a1-region.a0)/TAU*144));this.radial=Math.max(7,Math.ceil((region.r1-region.r0)*26));
   const A=this.angular,R=this.radial,N=(A+1)*(R+1),indices:number[]=[],uv:number[]=[],wuv:number[]=[];
   for(let layer=0;layer<2;layer++)for(let j=0;j<=R;j++)for(let i=0;i<=A;i++){
    const a=region.a0+(region.a1-region.a0)*i/A,r=region.r0+(region.r1-region.r0)*j/R;
-   this.coords.push([a,r,layer,j/R]);const radius=cardRadius(a);uv.push(layer===0?(Math.cos(a)*radius*r+HALF_W)/(2*HALF_W):.5+Math.cos(a)*r*.5,layer===0?(Math.sin(a)*radius*r+HALF_H)/(2*HALF_H):.5+Math.sin(a)*r*.5);wuv.push(.5+Math.cos(a)*r*.5,.5+Math.sin(a)*r*.5);
+   this.coords.push([a,r,layer,j/R]);const radius=cardRadius(a);
+   this.samples.push({radius,profile:roundedProfile(r),bevel:1-Math.min(1,Math.min(j/R,1-j/R)/.10),cos:Math.cos(a),sin:Math.sin(a),wave:Math.sin(j/R*Math.PI)});uv.push(layer===0?(Math.cos(a)*radius*r+HALF_W)/(2*HALF_W):.5+Math.cos(a)*r*.5,layer===0?(Math.sin(a)*radius*r+HALF_H)/(2*HALF_H):.5+Math.sin(a)*r*.5);wuv.push(.5+Math.cos(a)*r*.5,.5+Math.sin(a)*r*.5);
   }
   const top:number[]=[];for(let j=0;j<R;j++)for(let i=0;i<A;i++){const a=j*(A+1)+i,b=a+1,d=a+A+1,e=d+1;top.push(a,d,b,b,d,e)}
   indices.push(...top);const frontCount=indices.length;
@@ -29,20 +33,26 @@ export class SolidRegion {
   const {morph:m,volume:v,activity:e,style:s,time:t}=f,reg=this.region;
   const positions=this.geometry.attributes.position as T.BufferAttribute;
   const thickness=.014+v*([.24,.28,.29,.22,.38][s])*(f.legend?1.14:1);
+  // Spin-only frames keep identical positions/normals. The transform below
+  // still advances at the original rate, with the same vertex count/materials.
+  const shape=(s===0||s===3)?`${m}:${v}:${s}:${f.legend}`:'';
+  if(!shape||shape!==this.shape){
+  this.shape=shape;
   for(let i=0;i<this.coords.length;i++){
-   const [a,r,layer,q]=this.coords[i];const radius=cardRadius(a);
+   const [a,r,layer]=this.coords[i],sample=this.samples[i],radius=sample.radius;
    let angle=a,rr=r,extraZ=0;
-   if(s===1){angle+=Math.sin(reg.index*.48+t*3)*.028*e;rr+=.017*e*Math.sin(q*Math.PI);extraZ=.042*e*Math.sin(reg.index/12*TAU+t*3);}
+   if(s===1){angle+=Math.sin(reg.index*.48+t*3)*.028*e;rr+=.017*e*sample.wave;extraZ=.042*e*Math.sin(reg.index/12*TAU+t*3);}
    if(s===2){rr+=Math.sin(a*5-t*9+r*5)*.04*e*(.3+r);angle+=Math.sin(r*5-t*5)*.11*e;extraZ=Math.sin(r*10-a*3-t*11)*.065*e*Math.sin(Math.PI*r);}
    if(s===4){angle+=r*r*Math.sin(t*Math.PI)*.10*e;}
    const outer=(radius*(1-m)+1.33*m)*rr;
-   const boundary=Math.min(q,1-q),bevel=(1-Math.min(1,boundary/.10))*.025*v;
-   const profile=roundedProfile(r)*v;
+   const bevel=sample.bevel*.025*v;
+   const profile=sample.profile*v;
    const z=layer===0?thickness*.50+profile-bevel+extraZ:-thickness*.50+bevel+extraZ*.2;
-   positions.setXYZ(i,Math.cos(angle)*outer,Math.sin(angle)*outer,z);
+   positions.setXYZ(i,(angle===a?sample.cos:Math.cos(angle))*outer,(angle===a?sample.sin:Math.sin(angle))*outer,z);
   }
   positions.needsUpdate=true;this.geometry.computeVertexNormals();
   if(reg.a1-reg.a0>TAU-.0001){const normals=this.geometry.attributes.normal as T.BufferAttribute;const A=this.angular,R=this.radial,N=(A+1)*(R+1);for(let layer=0;layer<2;layer++)for(let j=0;j<=R;j++){const i=layer*N+j*(A+1),k=i+A;const vec=new T.Vector3(normals.getX(i)+normals.getX(k),normals.getY(i)+normals.getY(k),normals.getZ(i)+normals.getZ(k)).normalize();normals.setXYZ(i,vec.x,vec.y,vec.z);normals.setXYZ(k,vec.x,vec.y,vec.z);}normals.needsUpdate=true;}
+  }
   this.mesh.rotation.set(0,0,0);this.mesh.position.set(0,0,0);
   if(s===3){this.mesh.rotation.z=f.spin*(reg.index===1?-1:reg.index===2?2:1);this.mesh.position.z=[.11,.015,-.05][reg.index]*v;}
   else this.mesh.rotation.z=f.spin;

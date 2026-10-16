@@ -1,0 +1,19 @@
+{
+  "environment": "local Node CPU microbenchmark, 6 alternating trials; not gameplay FPS",
+  "results": [
+    {
+      "style": 0,
+      "frames": 180,
+      "beforeMs": 375.6114580000003,
+      "afterMs": 126.51174999999989,
+      "positionsAndNormalsIdentical": true
+    },
+    {
+      "style": 1,
+      "frames": 180,
+      "beforeMs": 450.384,
+      "afterMs": 199.33324999999968,
+      "positionsAndNormalsIdentical": true
+    }
+  ]
+}

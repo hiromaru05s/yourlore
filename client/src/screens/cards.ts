@@ -12,7 +12,7 @@ import type { App, Screen } from "../router";
 import type { CardInst, CardType } from "../shared/types";
 import { DB, STARTERS, PASSIVES } from "../shared/cards";
 import { cardEl } from "../ui/cardView";
-import { zoomCard } from "../ui/anim";
+import { zoomCard } from "../ui/cardInspection";
 import { t, cardName, onLangChange, getLang } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 

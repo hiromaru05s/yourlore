@@ -9,6 +9,9 @@ const mime={'.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.jpg
 export async function menuCacheManifest(root) {
  const bundle=await build({entryPoints:[path.join(root,'src/ui/menuAssets.ts')],bundle:true,platform:'node',format:'esm',write:false});
  const {menuAssetUrls,duelFileAssets,assetScope}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+ // Large legacy CSS fallbacks stay available on demand. Keep tiny CSS controls
+ // resident too: mana-empty, cursors and state icons can appear mid-turn.
+ const known=new Set(menuAssetUrls().map(u=>new URL(u,'https://lore.invalid').pathname));
  const extra=duelFileAssets(),media=new Map(extra.map(e=>[new URL(e.url,'https://lore.invalid').pathname,e.media]));
  // CSS backgrounds/cursors can be requested by transitional/fallback styles too.
  const cssImages=new Set();
@@ -18,7 +21,7 @@ export async function menuCacheManifest(root) {
  const contents=new Map();
  const entries=await Promise.all(paths.map(async url=>{
   const bytes=await readFile(path.join(root,'public',url)),hash=sha(bytes);contents.set(hash,bytes);
-  return {url,hash,scope:assetScope(url),bytes:bytes.length,media:media.get(url),type:mime[path.extname(url)]||'application/octet-stream'};
+  return {url,hash,scope:known.has(url)||media.has(url)||bytes.length<64*1024?assetScope(url):'menu',bytes:bytes.length,media:media.get(url),type:mime[path.extname(url)]||'application/octet-stream'};
  }));
  const packs=[],assets=[];let batch=[],size=0;
  const flush=()=>{if(!batch.length)return;const source=Buffer.concat(batch.map(e=>contents.get(e.hash))),fileName=`assets/art-pack-${sha(source).slice(0,24)}.bin`;

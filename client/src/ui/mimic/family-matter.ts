@@ -44,7 +44,7 @@ export class FamilyMatter{
   const fill=new T.DirectionalLight(0x9eadd0,.55);fill.position.set(150,-50,130);this.scene.add(fill);
   this.texture=new T.Texture();
   this.ready=new Promise<void>((resolve,reject)=>{
-   new T.TextureLoader().load('/art/vfx/mimic-mouth-r2/01-reference-ivory.png',texture=>{
+   new T.TextureLoader().load('/art/vfx/mimic-mouth-r2/01-reference-ivory.webp',texture=>{
     if(this.disposed){texture.dispose();resolve();return;}
     this.texture.dispose();this.texture=texture;texture.colorSpace=T.SRGBColorSpace;
     // Reuse only the fleshy central patch of the approved tongue atlas, never its silhouette.

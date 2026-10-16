@@ -8,6 +8,7 @@ import {getLang} from '../i18n';
 export function prepareStateArtwork(state:GameState,you:Side,root:HTMLElement):Promise<void>|undefined{
  if(typeof Image==='undefined'||typeof Image.prototype.decode!=='function')return;
  const cards=[...state.market,...state.players[state.cur].supply,...state.players.flatMap(p=>[...p.field,...p.enchants.map(e=>e.card),...p.discard.slice(-1)]),...state.players[you].hand];
+ void warmImages([...new Set(cards.filter(c=>c&&(DB[c.id]||STARTERS[c.id])).map(c=>artUrl.full(c!.id)))]);
  const urls=[...new Set(cards.filter(c=>c&&(DB[c.id]||STARTERS[c.id])).map(c=>artUrl.sm(c!.id)))].filter(url=>hasUnloadedAssets([url]));
  // Only our deck is known. Never speculate from the opponent's hidden cards.
  void warmImages(state.players[you].deck.filter(c=>DB[c.id]||STARTERS[c.id]).map(c=>artUrl.sm(c.id)));

@@ -12,16 +12,16 @@ import {HOME_ICONS} from './homeIcons';
 export function menuAssetUrls():string[]{
  return [...new Set([
   ...duelImageUrls(),'/art/biblion/duel-table.png',
-  '/vfx/purchase-air/crystal-72.png','/vfx/chosen-victory/crown.png','/vfx/merchant/balance.png',
-  ...['knight','mage','archer','rogue'].map(k=>`/vfx/chosen-heroes/${k}.png`),
-  '/art/vfx/mimic-family/engraved-brass.png','/art/vfx/mimic-cavity-r3/02-moist-cheeks.png',
-  ...['01-reference-ivory','02-ridged-bone','03-moist-flesh','04-predator-fangs'].map(k=>`/art/vfx/mimic-mouth-r2/${k}.png`),
-  '/art/vfx/taunt-four/lion-relief.png',
+  '/vfx/purchase-air/crystal-72.webp','/vfx/chosen-victory/crown.webp','/vfx/merchant/balance.webp',
+  ...['knight','mage','archer','rogue'].map(k=>`/vfx/chosen-heroes/${k}.webp`),
+  '/art/vfx/mimic-family/engraved-brass.webp','/art/vfx/mimic-cavity-r3/02-moist-cheeks.webp',
+  ...['01-reference-ivory','02-ridged-bone','03-moist-flesh','04-predator-fangs'].map(k=>`/art/vfx/mimic-mouth-r2/${k}.webp`),
+  '/art/vfx/taunt-four/lion-relief.webp',
   '/art/lounge/gifts/courier.png',
   ...HOME_ICONS.map(k=>`/art/lounge/icons/v2/${k}.png`),
   '/art/lounge/icons/shard-simple-v1.png',
   '/art/brand/lore-logo-transparent.webp',
-  '/art/lounge/atmosphere-v2/library-wide.png', '/art/lounge/atmosphere-v2/ivy.png', '/art/lounge/atmosphere-v1/clouds.png',
+  '/art/lounge/atmosphere-v2/library-wide.webp', '/art/lounge/atmosphere-v2/ivy.webp', '/art/lounge/atmosphere-v1/clouds.webp',
   '/art/lounge/stage-v1/sigil.webp', '/art/lounge/duel-ink-v1/disc.png',
   '/art/seekers/faceless-v2/portrait.webp', '/art/seekers/faceless-v2/poses.webp',
   ...BOT_NPCS.map(n=>n.portrait),
@@ -40,11 +40,4 @@ export function menuAssetUrls():string[]{
  ])];
 }
 
-/** Menu-only galleries and locale font files are not duel admission requirements.
- * Fonts are selected by the browser from the current language's actual glyphs. */
-export function assetScope(url:string):'menu'|'duel'|'font'{
- if(url.startsWith('/art/lounge/icons/'))return 'duel';
- if(url.startsWith('/fonts/web/'))return 'font';
- if(/^\/(art\/(lounge|key-visuals)|bg)\//.test(url)||url==='/music/yohaku-to-zankyo.mp3')return 'menu';
- return 'duel';
-}
+export {assetScope} from './menuAssetScope';

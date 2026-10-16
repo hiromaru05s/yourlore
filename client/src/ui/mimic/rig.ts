@@ -24,12 +24,12 @@ export class MimicRig {
   this.body.append(this.canvas,this.top,this.bottom);if(matter)this.body.append(matter.canvas);this.node.append(this.shadow,this.body);
   this.node.dataset.card=id;this.node.dataset.variant=String(selected[id].variant);
   if(id==='MIMIC_KING'||id==='MIMIC_KING2')for(const half of [this.top,this.bottom]){
-   const foil=document.createElement('div');foil.style.cssText='position:absolute;inset:8px 16px 0;background:url(/art/vfx/mimic-family/engraved-brass.png) center/180px 180px;mix-blend-mode:screen;opacity:0;pointer-events:none;border:1px solid #e8c076;box-shadow:inset 0 0 8px #ffc76577;';half.append(foil);this.foils.push(foil);
+   const foil=document.createElement('div');foil.style.cssText='position:absolute;inset:8px 16px 0;background:url(/art/vfx/mimic-family/engraved-brass.webp) center/180px 180px;mix-blend-mode:screen;opacity:0;pointer-events:none;border:1px solid #e8c076;box-shadow:inset 0 0 8px #ffc76577;';half.append(foil);this.foils.push(foil);
   }
  }
 
  async ready(){
-  const [cavity,teeth]=await Promise.all([image('/art/vfx/mimic-cavity-r3/02-moist-cheeks.png'),image(`/art/vfx/mimic-mouth-r2/${this.atlas.file}.png`),this.matter?.ready,...[...this.node.querySelectorAll('img')].map(i=>i.decode().catch(()=>{}))]);this.cavity=cavity;this.teeth=teeth;
+  const [cavity,teeth]=await Promise.all([image('/art/vfx/mimic-cavity-r3/02-moist-cheeks.webp'),image(`/art/vfx/mimic-mouth-r2/${this.atlas.file}.webp`),this.matter?.ready,...[...this.node.querySelectorAll('img')].map(i=>i.decode().catch(()=>{}))]);this.cavity=cavity;this.teeth=teeth;
  }
  private pose(time:number,reduced:boolean){
   const t=clock(time,this.id),id=this.id;

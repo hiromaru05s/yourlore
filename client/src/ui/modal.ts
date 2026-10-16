@@ -8,7 +8,7 @@ import {outcomeCrest} from './duelOutcome';
 import type { CardInst, GameState, Side } from "../shared/types";
 import { attachDuelClock } from "./duelClock";
 import { cardEl } from "./cardView";
-import { bindZoom } from "./anim";
+import { bindZoom } from "./cardInspection";
 import { TRIBES } from "../shared/cards";
 import { t, getLang, cardName, cardText } from "../i18n";
 

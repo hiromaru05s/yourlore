@@ -1,7 +1,7 @@
 import {COLLECTIBLE_STARTERS,STARTER_PRICE,type StarterCollection} from '../shared/collection';
 import {DB,STARTERS} from '../shared/cards';
 import {cardEl} from './cardView';
-import {zoomCard} from './anim';
+import {zoomCard} from './cardInspection';
 import {cardName,esc} from '../i18n';
 import {loungeText as l} from './loungeText';
 

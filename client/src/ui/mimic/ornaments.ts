@@ -1,7 +1,7 @@
 import {batchOrnament} from './batch';
 import * as T from 'three';import {ease} from './motion';import type {FamilyId} from './selection';
 const gold=new T.MeshStandardMaterial({color:0xd9caa4,metalness:.28,roughness:.48,bumpScale:.38});
-const loadMetal=()=>new Promise<void>((resolve,reject)=>new T.TextureLoader().load('/art/vfx/mimic-family/engraved-brass.png',texture=>{texture.colorSpace=T.SRGBColorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=4;gold.map=texture;gold.bumpMap=texture;gold.needsUpdate=true;resolve();},undefined,reject));
+const loadMetal=()=>new Promise<void>((resolve,reject)=>new T.TextureLoader().load('/art/vfx/mimic-family/engraved-brass.webp',texture=>{texture.colorSpace=T.SRGBColorSpace;texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=4;gold.map=texture;gold.bumpMap=texture;gold.needsUpdate=true;resolve();},undefined,reject));
 let metalPromise:Promise<void>|undefined;
 export const metalReady=()=>metalPromise??=(loadMetal().catch(error=>{metalPromise=undefined;throw error;}));
 const dark=new T.MeshStandardMaterial({color:0x302825,roughness:.83});

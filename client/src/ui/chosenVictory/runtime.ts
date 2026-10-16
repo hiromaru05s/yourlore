@@ -5,7 +5,7 @@ import {CHOSEN_DURATION_MS,CHOSEN_FLASH_MS,crownCue} from './timing';
 import type {GameEvent,Side} from '../../shared/types';
 const active=new Set<()=>void>();
 let asset:Promise<HTMLImageElement>|undefined;
-function image(){return asset??=new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>{asset=undefined;reject(Error('Chosen crown unavailable'));};im.src='/vfx/chosen-victory/crown.png';});}
+function image(){return asset??=new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>{asset=undefined;reject(Error('Chosen crown unavailable'));};im.src='/vfx/chosen-victory/crown.webp';});}
 export function warmChosenVictory(){void image().catch(()=>{});void warmSounds(['chosenCrown']);void import('./renderer');}
 export function cancelChosenVictory(){for(const cancel of [...active])cancel();}
 /** Only the public cast in the winning batch can trigger this special victory. */

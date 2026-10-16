@@ -27,7 +27,7 @@ const camera=new THREE.OrthographicCamera(0,W,H,0,.1,100);
 camera.position.z=20;
 const loader=new THREE.TextureLoader();
 const owned:THREE.Texture[]=[];
-async function texture(name:string){const t=await loader.loadAsync(name==='clouds.png'?'/art/lounge/atmosphere-v1/clouds.png':BASE+name);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();if(disposed)t.dispose();else owned.push(t);return t;}
+async function texture(name:string){const t=await loader.loadAsync(name==='clouds.webp'?'/art/lounge/atmosphere-v1/clouds.webp':BASE+name);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();if(disposed)t.dispose();else owned.push(t);return t;}
 function plane(width:number,height:number,x:number,y:number,z:number,material:THREE.Material){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),material);mesh.position.set(x,H-y,z);scene.add(mesh);return mesh;}
 const skyMat=new THREE.ShaderMaterial({vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec2 vUv;void main(){vec3 low=vec3(.76,.85,.91);vec3 high=vec3(.27,.52,.76);vec3 c=mix(low,high,smoothstep(0.,1.,vUv.y));float sun=exp(-length((vUv-vec2(.12,.84))*vec2(1.,.8))*4.);gl_FragColor=vec4(c+vec3(.14,.12,.07)*sun,1.);#include <colorspace_fragment>\n}`.replace(';#include',';\n#include')});
 plane(W,H,W/2,H/2,-5,skyMat);
@@ -126,7 +126,7 @@ document.addEventListener('visibilitychange',visibility);
 reduce.addEventListener('change',reduced);
 renderer.domElement.addEventListener('webglcontextlost',contextLost);
 async function init(){try{
- const [fg,cloud,ivy]=await Promise.all([texture('library-wide.png'),texture('clouds.png'),texture('ivy.png')]);if(disposed)return;
+ const [fg,cloud,ivy]=await Promise.all([texture('library-wide.webp'),texture('clouds.webp'),texture('ivy.webp')]);if(disposed)return;
  // Sample alpha once. No canvas readback or texture allocation in the animation loop.
  const sampler=document.createElement('canvas');sampler.width=alphaW;sampler.height=alphaH;
  const ctx=sampler.getContext('2d',{willReadFrequently:true});

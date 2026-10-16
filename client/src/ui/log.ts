@@ -6,7 +6,7 @@
 // ============================================================
 import { DB, STARTERS } from "../shared/cards";
 import type { CardDef } from "../shared/types";
-import { zoomCard } from "./anim";
+import { zoomCard } from "./cardInspection";
 import { cardName, getLang, onLangChange, t } from "../i18n";
 import { logToEn } from "../shared/logEn";
 

@@ -8,7 +8,7 @@ function texture(kind:'ivory'|'wood'|'stone'|'metal'){
  c.lineWidth=kind==='ivory'?1.2:.6;for(let i=0;i<170;i++){let x=rand()*256,y=rand()*256;c.strokeStyle=kind==='ivory'?'#34402b88':kind==='metal'?'#36362266':'#101a1666';c.beginPath();c.moveTo(x,y);for(let j=0;j<5;j++){x+=(rand()-.45)*(kind==='wood'?3:14);y+=rand()*12;c.lineTo(x,y);}c.stroke();}
  if(kind==='ivory'){for(let i=0;i<40;i++){c.fillStyle=i%2?'#5b614548':'#362e2044';c.beginPath();c.ellipse(rand()*256,rand()*256,3+rand()*18,1+rand()*5,rand()*6,0,Math.PI*2);c.fill();}}const tex=new T.CanvasTexture(canvas);tex.colorSpace=T.SRGBColorSpace;tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.anisotropy=4;return tex;
 }
-export function materials(){const ivory=texture('ivory'),wood=texture('wood'),stone=texture('stone'),metal=texture('metal');const loader=new T.TextureLoader(),brass=loader.load('/art/vfx/mimic-family/engraved-brass.png'),mouth=loader.load('/art/vfx/mimic-cavity-r3/02-moist-cheeks.png');for(const map of [brass,mouth]){map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;}return {
+export function materials(){const ivory=texture('ivory'),wood=texture('wood'),stone=texture('stone'),metal=texture('metal');const loader=new T.TextureLoader(),brass=loader.load('/art/vfx/mimic-family/engraved-brass.webp'),mouth=loader.load('/art/vfx/mimic-cavity-r3/02-moist-cheeks.webp');for(const map of [brass,mouth]){map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;}return {
  ivory:new T.MeshStandardMaterial({map:ivory,bumpMap:ivory,bumpScale:.025,roughness:.7,color:0xe5d9b2}),
  wood:new T.MeshStandardMaterial({map:wood,bumpMap:wood,bumpScale:.045,roughness:.86}),
  brass:new T.MeshStandardMaterial({map:brass,bumpMap:metal,bumpScale:.018,metalness:.78,roughness:.4,color:0xd9c59b}),

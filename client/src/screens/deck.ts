@@ -14,7 +14,7 @@ import type { App, Screen } from "../router";
 import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, DECK_SLOTS, WATCH_MAX, BUYABLE_POOL, deckStoreForUser, sanitizeDeckName, type DeckStore } from "../shared/cards";
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
-import { bindZoom, zoomCard } from "../ui/anim";
+import { bindZoom, zoomCard } from "../ui/cardInspection";
 import { confirmDialog } from "../ui/modal";
 import { api } from "../net/api";
 import { t, cardName, onLangChange, esc } from "../i18n";

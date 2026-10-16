@@ -1,7 +1,6 @@
 import {withDeadline} from '../net/deadline';
 import {decodeAsset} from './imageAssets';
-import {menuAssetUrls,assetScope} from './menuAssets';
-import {duelFileAssets} from './duelFileAssets';
+import {assetScope} from './menuAssetScope';
 declare const __LORE_MENU_MANIFEST__: string;
 type Entry={scope?:'menu'|'duel'|'font';url:string;hash:string;bytes:number;type?:string;media?:'narrow'|'wide';pack?:number;offset?:number};
 type Manifest={entries:Entry[];packs?:{url:string;bytes:number}[]};
@@ -13,7 +12,7 @@ const hex=(bytes:ArrayBuffer)=>Array.from(new Uint8Array(bytes),b=>b.toString(16
 async function connect():Promise<boolean> {
  if(!('serviceWorker' in navigator)||!('caches' in window)||!crypto.subtle||typeof __LORE_MENU_MANIFEST__==='undefined')return false;
  try {
-  const script=new URL('/menu-cache-sw.js?v=3',location.origin).href;
+  const script=new URL('/menu-cache-sw.js?v=4',location.origin).href;
   await withDeadline(navigator.serviceWorker.register(script,{scope:'/',updateViaCache:'none'}),60000);
   await withDeadline(navigator.serviceWorker.ready,60000);
   const current=()=>!!navigator.serviceWorker.controller&&(!navigator.serviceWorker.controller.scriptURL||navigator.serviceWorker.controller.scriptURL===script);
@@ -110,6 +109,7 @@ async function prepareWithoutStorage(progress:(done:number,total:number)=>void,s
  const wanted=Array.isArray(scope)?new Set(scope.map(url=>new URL(url,location.href).pathname)):undefined;
  const selected=(url:string)=>scope==='duel'?assetScope(url)==='duel':!wanted||wanted.has(new URL(url,location.href).pathname);
  const narrow=matchMedia('(max-width:700px)').matches;
+ const {menuAssetUrls,duelFileAssets}=entries?{menuAssetUrls:()=>[],duelFileAssets:()=>[]}:await import('./menuAssets');
  const files=entries??[...menuAssetUrls().filter(selected).map(url=>({url,type:'image/'})),...duelFileAssets().filter(e=>selected(e.url)&&(!e.media||e.media===(narrow?'narrow':'wide'))).map(e=>({...e,type:''}))];
  const remaining=files.map(e=>e.type?.startsWith('image/')?()=>decodeAsset(e.url):async()=>{const r=await fetch(e.url,{cache:'force-cache',signal:AbortSignal.timeout(60000)});if(!r.ok)throw Error('Asset unavailable: '+e.url);await r.arrayBuffer();}),total=remaining.length;let done=0,failed=false;progress(0,total);
  const results=await Promise.allSettled(Array.from({length:6},async()=>{

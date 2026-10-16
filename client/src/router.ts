@@ -1,3 +1,4 @@
+import {prepareMenuCache} from './ui/menuCache';
 import { getLang } from './i18n';
 import {releaseHomeSpirit} from './ui/homeSpirit';
 import { loungeText } from './ui/loungeText';
@@ -72,6 +73,9 @@ export class App {
   }
 
   async start(): Promise<void> {
+    // Bind the current release without downloading the catalogue. Normal visible
+    // requests populate the verified content cache and survive screen/reload changes.
+    void prepareMenuCache(()=>{},new AbortController().signal,[]).catch(()=>{});
     // Isolated admin origin (admin.yourlore.xyz) → dashboard only, nothing else.
     if (location.hostname.startsWith("admin.")) { this.swap(() => mountAdmin(this)); return; }
     // On the game origin, /admin just bounces to the isolated admin host.

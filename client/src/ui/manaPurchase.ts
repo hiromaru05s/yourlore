@@ -4,7 +4,7 @@ export type ManaRect=Pick<DOMRect,'left'|'top'|'width'|'height'>;
 export const MANA_PURCHASE_DURATION=.94;
 export const MANA_PURCHASE_CONTACT_MS=620;
 export const PURCHASE_CRYSTAL_SCALE=1.2;
-export const PURCHASE_CRYSTAL_ATLAS='/vfx/purchase-air/crystal-72.png';
+export const PURCHASE_CRYSTAL_ATLAS='/vfx/purchase-air/crystal-72.webp';
 const clamp=(x:number)=>Math.max(0,Math.min(1,x));
 const smooth=(x:number)=>{x=clamp(x);return x*x*(3-2*x);};
 const ease=(a:number,b:number,x:number)=>smooth((x-a)/(b-a));

@@ -5,7 +5,7 @@ import type {DarkRenderer} from './darkRenderer';
 import type {ContactSound} from './sound';
 const active=new Map<HTMLElement,()=>void>();
 let artwork:Promise<HTMLImageElement>|undefined;
-function loadArt(){return artwork??=new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>{artwork=undefined;reject(Error('Merchant art unavailable'));};im.src='/vfx/merchant/balance.png';});}
+function loadArt(){return artwork??=new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>{artwork=undefined;reject(Error('Merchant art unavailable'));};im.src='/vfx/merchant/balance.webp';});}
 export function warmDarkMerchant(){void Promise.all([loadArt(),import('./darkRenderer'),import('./sound')]).catch(()=>{});}
 export function cancelDarkMerchants(){for(const cancel of [...active.values()])cancel();}
 /** Owns the expanded spell reveal, including its flight from the public source card. */

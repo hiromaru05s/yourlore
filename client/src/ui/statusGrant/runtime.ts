@@ -3,7 +3,7 @@ import {Surface} from './surface';
 import {transferLight} from './light';
 import {t} from '../../i18n';
 type Resource='shield'|'brand';
-const paths={shield:'/art/biblion/modular/shield-ui.webp',brand:'/art/biblion/modular/brand-seal-ui.png'};
+const paths={shield:'/art/biblion/modular/shield-ui.webp',brand:'/art/biblion/modular/brand-seal-ui.webp'};
 const images=new Map<Resource,Promise<HTMLImageElement>>();
 const load=(resource:Resource)=>{let p=images.get(resource);if(!p){p=new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.onload=()=>resolve(image);image.onerror=()=>{images.delete(resource);reject(Error('Status material unavailable'));};image.src=paths[resource];});images.set(resource,p);}return p;};
 const jobs=new Set<()=>void>();
