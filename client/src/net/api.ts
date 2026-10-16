@@ -105,7 +105,10 @@ export const api = {
   // register: {user} (즉시 입장) 또는 {needVerify:true} (인증 메일 발송됨)
   register: (email: string, password: string) => call<{ user?: User; needVerify?: boolean }>("/auth/register", { email, password, ...acquisition() }),
   login: (email: string, password: string) => call<{ user: User }>("/auth/login", { email, password }).then((r) => r.user),
-  logout: () => call<{ ok: true }>("/auth/logout", {}),
+  logout: () => call<{ ok: true }>("/auth/logout", {}).then(result => {
+    if (result.ok !== true) throw new Error(t("login.err.generic"));
+    return result;
+  }),
   resendVerify: (email: string) => call<{ ok: true }>("/auth/resend-verify", { email }),
   forgot: (email: string) => call<{ ok: true }>("/auth/forgot", { email }),
   resetPassword: (token: string, password: string) => call<{ ok: true }>("/auth/reset", { token, password }),

@@ -36,6 +36,8 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   app.root.appendChild(wrap);
 
   let dead = false;
+  let logoutPending = false;
+  let logoutError = "";
   let disposeMedals: (()=>void)|undefined;
   let cached: Profile | null = null;
   let tab: Tab = initialTab ?? "overview";
@@ -261,8 +263,9 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       <section class="tut-sec">
         <h3><span class="tut-ico">${homeIcon("profile")}</span>${t("settings.account")}</h3>
         <div class="set-row"><span class="set-label">${p.self ? esc(p.display) : ""}</span>
-          <button class="btn btn-ghost" id="logout">${t("home.logout")}</button>
+          <button class="btn btn-ghost" id="logout" ${logoutPending ? 'disabled' : ''}>${t("home.logout")}</button>
         </div>
+        <p id="logoutMsg" role="alert">${esc(logoutError)}</p>
       </section>`;
 
     const qualitySection=document.createElement('section');qualitySection.className='tut-sec';qualitySection.innerHTML=`<h3>${loungeText('描画品質','Graphics','그래픽')}</h3><div class="set-row"><label class="set-label" for="renderQuality">${loungeText('盤面の精細さ','Board detail','보드 선명도')}</label><select id="renderQuality"><option value="balanced">${loungeText('高精細（推奨）','Crisp (recommended)','고해상도 (권장)')}</option><option value="economy">${loungeText('軽量','Economy','경량')}</option></select></div><p class="set-desc">${loungeText('この端末に保存し、次の対戦から適用します。','Saved on this device. Applies to the next match.','이 기기에 저장되며 다음 대전부터 적용됩니다.')}</p>`;body().children[0].after(qualitySection);const quality=qualitySection.querySelector<HTMLSelectElement>('select')!;quality.value=renderQuality();quality.onchange=()=>setRenderQuality(quality.value);
@@ -304,8 +307,32 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     (body().querySelector("#coupon") as HTMLInputElement).onkeydown = (e) => { if (e.key === "Enter") redeem(); };
 
     // logout
-    (body().querySelector("#logout") as HTMLElement).onclick = () => {
-      void confirmDialog({ title: t("home.logout"), body: t("settings.logout.confirm"), confirm: t("common.yes"), cancel: t("common.no") }).then(ok => { if (ok) void app.logout(); });
+    const logoutButton = body().querySelector<HTMLButtonElement>("#logout")!;
+    const logoutMsg = body().querySelector<HTMLElement>("#logoutMsg")!;
+    logoutButton.onclick = async () => {
+      if (logoutPending || dead) return;
+      logoutPending = true;
+      logoutError = "";
+      logoutButton.disabled = true;
+      logoutMsg.textContent = "";
+      try {
+        const ok = await confirmDialog({ title: t("home.logout"), body: t("settings.logout.confirm"), confirm: t("common.yes"), cancel: t("common.no") });
+        if (ok && !dead) await app.logout();
+      } catch {
+        logoutError = loungeText(
+          'ログアウトを確認できませんでした。接続を確認して、もう一度ログアウトしてください。',
+          'Could not confirm logout. Check your connection and try logging out again.',
+          '로그아웃을 확인하지 못했습니다. 연결을 확인한 후 다시 로그아웃해 주세요.',
+        );
+      } finally {
+        logoutPending = false;
+        if (!dead) {
+          const currentButton = body().querySelector<HTMLButtonElement>('#logout');
+          const currentMessage = body().querySelector<HTMLElement>('#logoutMsg');
+          if (currentButton) currentButton.disabled = false;
+          if (currentMessage) currentMessage.textContent = logoutError;
+        }
+      }
     };
   };
 

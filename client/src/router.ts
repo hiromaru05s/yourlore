@@ -41,6 +41,7 @@ export class App {
   private leaveLounge: (() => void) | null = null;
   private stopHomeMusic: (() => void) | null = null;
   private navigating = false;
+  private loggingOut = false;
   private homeEntranceShown = false;
   private cancelCover:(()=>void)|undefined;
   private closeGraphicsNotice:(()=>void)|undefined;
@@ -121,7 +122,7 @@ export class App {
         } else checkGraphics();
       }
     };
-    if (this.navigating) return;
+    if (this.navigating || this.loggingOut) return;
     if (this.current?.beforeLeave) {
       this.navigating = true;
       void this.current.beforeLeave().then(ok => { if (ok) mount(); }).finally(() => { this.navigating = false; });
@@ -178,8 +179,14 @@ export class App {
   }
 
   async logout(): Promise<void> {
-    if (this.user?.id === "local-guest-user") localStorage.removeItem(LOCAL_GUEST_KEY);
-    await api.logout().catch(() => {});
+    if (this.loggingOut) return;
+    this.loggingOut = true;
+    try {
+      if (this.user?.id === "local-guest-user") localStorage.removeItem(LOCAL_GUEST_KEY);
+      else await api.logout();
+    } finally { this.loggingOut = false; }
+    // Only announce logout once the server has invalidated its HttpOnly session.
+    // A failed request must retain the account and allow a visible retry.
     clearActiveGame();
     aReset();
     stopPresence();
