@@ -1,3 +1,4 @@
+import {fetchAssetPack} from './assetTransfer';
 import {withDeadline} from '../net/deadline';
 import {decodeAsset} from './imageAssets';
 import {assetScope} from './menuAssetScope';
@@ -80,7 +81,7 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
    let data:ArrayBuffer;
    // A pack is much larger than one image. Do not discard a progressing
    // transfer on a slow connection and restart it as dozens of originals.
-   try{const r=await fetch(pack.url,{cache:'no-store',headers:{'X-Lore-Asset-Preload':'1'},signal:AbortSignal.timeout(180000)});if(!r.ok)throw Error('Artwork pack unavailable');data=await r.arrayBuffer();if(data.byteLength!==pack.bytes)throw Error('Incomplete artwork pack');}
+   try{data=await fetchAssetPack(pack.url,pack.bytes);}
    catch{for(const e of group){if(signal.aborted||failed)return;await single(e);}return;}
    const written=new Set<string>();
    for(const e of group){

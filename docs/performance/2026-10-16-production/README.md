@@ -32,3 +32,9 @@ Validation:
 The baseline public-origin browser run reached HOME at 35.3 seconds but timed out during the 177 MiB duel preload after four minutes. Local timings include the approved entrance/opening animations. Network, device and cache conditions materially affect elapsed load time. Fixture account APIs and local BOT play do not establish authenticated production PvP or reward behavior; server gameplay/reward logic is unchanged.
 
 Compact reports accompany this note. Raw screenshots, network traces and CPU profiles are in `/tmp/lore-performance-*` for this execution. Production deployment and asset parity are verified separately after the guarded release.
+
+## Production follow-up: progressing pack transfers
+
+The first guarded release passed 143/143 deployed-file hashes. Its remote browser probe reached HOME in 14.4 seconds, but two pack requests were aborted at the existing fixed 180-second deadline after already receiving 3.12 and 3.83 MiB. Retrying those files individually discarded useful progress. An additional transfer helper now keeps reading while bytes arrive and times out only after 60 seconds without progress. It preallocates the expected bounded size, rejects incomplete/oversized bodies and preserves SHA-256 verification before storage. A new regression proves a transfer can exceed its idle window in total duration without restarting, and that true stalls still fail and clean up. The product suite now includes 190 tests.
+
+A separate HTTP/2 curl probe fetched a 3.03 MiB pack in 4.16 seconds; browser transport and public-origin timing must therefore be kept distinct from payload-size savings. The remote probe uses fixture account APIs and cannot establish authenticated PvP behavior.

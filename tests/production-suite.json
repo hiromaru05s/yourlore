@@ -15,6 +15,7 @@
     "tests/poison-summon.mjs",
     "tests/erosion.mjs",
     "tests/menu-cache.mjs",
+    "tests/asset-transfer.mjs",
     "tests/menu-preparation.mjs",
     "tests/game-admission.mjs",
     "tests/gambler-geometry-performance.mjs",
