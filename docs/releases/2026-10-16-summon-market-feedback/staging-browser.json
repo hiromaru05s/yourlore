@@ -1,0 +1,120 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    {
+      "hidden": false,
+      "reduced": false,
+      "fxGen": 1,
+      "skipGen": 0,
+      "dead": false,
+      "id": "SORTER",
+      "owner": 0,
+      "activations": 2,
+      "exits": [
+        "grave-0",
+        "grave-1",
+        "grave-2",
+        "deck-0",
+        "deck-1",
+        "deck-2"
+      ],
+      "layers": [
+        "slate-summon"
+      ],
+      "buffers": [],
+      "left": 0
+    },
+    {
+      "hidden": false,
+      "reduced": false,
+      "fxGen": 2,
+      "skipGen": 0,
+      "dead": false,
+      "id": "SORTER",
+      "owner": 1,
+      "activations": 2,
+      "exits": [
+        "grave-0",
+        "grave-1",
+        "grave-2",
+        "deck-0",
+        "deck-1",
+        "deck-2"
+      ],
+      "layers": [
+        "slate-summon"
+      ],
+      "buffers": [],
+      "left": 0
+    },
+    {
+      "hidden": false,
+      "reduced": false,
+      "fxGen": 3,
+      "skipGen": 0,
+      "dead": false,
+      "id": "CHOSEN_KNIGHT",
+      "owner": 0,
+      "activations": 0,
+      "exits": [],
+      "layers": [
+        "chosen-hero-summon"
+      ],
+      "buffers": [],
+      "left": 0
+    },
+    {
+      "hidden": false,
+      "reduced": false,
+      "fxGen": 4,
+      "skipGen": 0,
+      "dead": false,
+      "id": "FIRE_MASTER",
+      "owner": 1,
+      "activations": 0,
+      "exits": [],
+      "layers": [
+        "mage-summon"
+      ],
+      "buffers": [
+        {
+          "width": 1280,
+          "height": 900,
+          "cssWidth": 1280,
+          "cssHeight": 900
+        }
+      ],
+      "left": 0
+    },
+    {
+      "owner": 0,
+      "damage": {
+        "y": 31.327791213989258,
+        "height": 900,
+        "font": "Alegreya, Georgia, serif",
+        "weight": "800",
+        "animation": "combat-number",
+        "duration": "0.8s"
+      }
+    },
+    {
+      "owner": 1,
+      "damage": {
+        "y": 691.4285278320312,
+        "height": 900,
+        "font": "Alegreya, Georgia, serif",
+        "weight": "800",
+        "animation": "combat-number",
+        "duration": "0.8s"
+      }
+    }
+  ],
+  "errors": [],
+  "boundary": "Deployed production controller using local reducer snapshots; not authenticated multiplayer.",
+  "renderer": "Native Chrome, DPR 1; local browser-report covers DPR 2 at desktop and mobile widths.",
+  "httpSmoke": {
+    "/": 200,
+    "/cosmetic-studio": 200
+  },
+  "visualReview": "Inspected deployed damage screenshot after waiting for the previous number to disappear; asserted upper/lower target placement. Local continuous summon/Rift frames and mobile damage screenshot reviewed separately."
+}
