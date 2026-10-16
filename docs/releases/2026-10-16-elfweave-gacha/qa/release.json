@@ -1,0 +1,30 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "source": "b24b03178fa094a9ea5beed9adb92215231d48de",
+  "worker": [
+    {
+      "version_id": "f565fd6a-36cc-4ed8-8cd6-717058ccb545",
+      "percentage": 100
+    }
+  ],
+  "guardedRegressionTests": {
+    "passed": 185,
+    "total": 185
+  },
+  "typecheck": "client and server passed in guarded snapshot",
+  "assetParity": {
+    "matched": 138,
+    "failed": 0,
+    "basis": "local build of the same deployed source; HTML/JS/CSS/JSON and Elfweave artwork"
+  },
+  "liveRuntimeChecks": 10,
+  "liveRngDraws": 780,
+  "qaAccountsRemaining": 0,
+  "gachaRatePerItemPercent": 0.35,
+  "notes": [
+    "Furniture and sleeve drawn separately; furniture duplicates refunded 100 Shards.",
+    "Authenticated browser equipment save and lineup verified.",
+    "Public runtime fixture uses the real duel renderer; not a two-player online match.",
+    "Self-draw browser check now awaits replay completion instead of polling a transient flag."
+  ]
+}

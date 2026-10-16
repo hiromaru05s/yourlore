@@ -1,0 +1,14 @@
+{
+  "remainingAccounts": 0,
+  "removedAccounts": 1,
+  "tables": [
+    "ratings",
+    "daily_challenges",
+    "duel_reward_receipts",
+    "rewards",
+    "collection_transactions",
+    "sessions",
+    "user_days",
+    "users"
+  ]
+}

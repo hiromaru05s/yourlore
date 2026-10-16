@@ -1,0 +1,58 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "pulls": 780,
+  "hits": [
+    {
+      "pulls": 80,
+      "kind": "cosmetic",
+      "id": "furniture:gacha-elfweave",
+      "refund": 0,
+      "owned": 1
+    },
+    {
+      "pulls": 200,
+      "kind": "cosmetic",
+      "id": "furniture:gacha-elfweave",
+      "refund": 100,
+      "owned": 1
+    },
+    {
+      "pulls": 490,
+      "kind": "cosmetic",
+      "id": "furniture:gacha-elfweave",
+      "refund": 100,
+      "owned": 1
+    },
+    {
+      "pulls": 630,
+      "kind": "cosmetic",
+      "id": "furniture:gacha-elfweave",
+      "refund": 100,
+      "owned": 1
+    },
+    {
+      "pulls": 700,
+      "kind": "cosmetic",
+      "id": "furniture:gacha-elfweave",
+      "refund": 100,
+      "owned": 1
+    },
+    {
+      "pulls": 780,
+      "kind": "cosmetic",
+      "id": "sleeve:gacha-elfweave",
+      "refund": 0,
+      "owned": 1
+    }
+  ],
+  "checks": [
+    "unowned sleeve rejected",
+    "unowned furniture rejected",
+    "first reward does not unlock partner",
+    "both items drawn by live Worker with replay-safe ledger",
+    "independent equipment persisted",
+    "inventory survives authenticated reload",
+    "authenticated browser equipment save and both live lineup entries"
+  ],
+  "historyReceipts": 50
+}
