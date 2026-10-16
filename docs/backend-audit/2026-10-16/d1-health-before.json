@@ -1,0 +1,40 @@
+[
+  {
+    "results": [
+      {
+        "metric": "negative_credits",
+        "n": 0
+      },
+      {
+        "metric": "foreign_key_errors",
+        "n": 0
+      },
+      {
+        "metric": "expired_sessions",
+        "n": 4
+      },
+      {
+        "metric": "recent_unsettled_matches",
+        "n": 0
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "APAC",
+      "served_by_colo": "ICN",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 0.5125
+      },
+      "duration": 0.5125,
+      "changes": 0,
+      "last_row_id": 5,
+      "changed_db": false,
+      "size_after": 356352,
+      "rows_read": 141,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "checks": [
+    {
+      "name": "unsupported auth methods cannot bypass rate/body guards or mutate sessions",
+      "passed": false,
+      "error": "DELETE login\n\n401 !== 405\n"
+    },
+    {
+      "name": "failed room initialization remains retryable without publishing partial state",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ {\n+   bot: undefined,\n+   challengeDifficulty: undefined,\n+   forfeit"
+    },
+    {
+      "name": "concurrent setup sees retryable busy until durable room is complete",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n409 !== 503\n"
+    },
+    {
+      "name": "alarm failure cannot persist a room with no cleanup deadline",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ {\n+   bot: undefined,\n+   challengeDifficulty: undefined,\n+   daily: "
+    },
+    {
+      "name": "Google verification removes unverified password/session but keeps verified credentials",
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n\n200 !== 401\n"
+    }
+  ]
+}

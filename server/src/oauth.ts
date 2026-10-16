@@ -102,7 +102,7 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     try {
       payload = JSON.parse(atob(tok.id_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
     } catch { return htmlError("구글 응답을 해석할 수 없습니다."); }
-    if (!payload.email || payload.email_verified === false) return htmlError("이메일이 확인되지 않은 구글 계정입니다.");
+    if (!payload.email || payload.email_verified !== true) return htmlError("이메일이 확인되지 않은 구글 계정입니다.");
     const email = payload.email.trim().toLowerCase();
 
     // upsert: existing email (password or oauth) logs straight in; new email creates an account.
@@ -117,7 +117,15 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
         .bind(id, email, "oauth:google", display, Date.now(), (source || "").slice(0, 120) || null).run();
       if (ref) await applyInviteAtSignup(env, id, ref).catch(() => { /* best effort */ });
     } else {
-      await env.DB.prepare(`UPDATE users SET verified = 1 WHERE id = ?`).bind(id).run();
+      // An unverified signup may have been created by someone who does not own
+      // this email. Google proves ownership, never that earlier password.
+      // Retire all unverified credentials atomically before creating the owner's
+      // session, while preserving passwords of already verified accounts.
+      await env.DB.batch([
+        env.DB.prepare(`DELETE FROM sessions WHERE user_id=? AND EXISTS (SELECT 1 FROM users WHERE id=? AND verified=0)`).bind(id,id),
+        env.DB.prepare(`DELETE FROM email_tokens WHERE user_id=? AND EXISTS (SELECT 1 FROM users WHERE id=? AND verified=0)`).bind(id,id),
+        env.DB.prepare(`UPDATE users SET password=CASE WHEN verified=0 THEN 'oauth:google' ELSE password END, verified=1 WHERE id=?`).bind(id),
+      ]);
     }
     const token = await createSession(env, id);
     const headers = new Headers({ Location: returnTo });

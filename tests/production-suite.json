@@ -1,6 +1,7 @@
 {
   "current": [
     "tests/logout-recovery.mjs",
+    "tests/backend-audit-oct16.mjs",
     "tests/cull-exile-events.mjs",
     "tests/supply-persistence.mjs",
     "tests/startup-recovery.mjs",

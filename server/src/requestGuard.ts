@@ -1,4 +1,10 @@
 import type { Env } from './env';
+const authMethods: Record<string, string> = {
+  '/api/auth/me':'GET', '/api/auth/verify':'GET',
+  '/api/auth/google':'GET', '/api/auth/google/callback':'GET',
+  '/api/auth/login':'POST', '/api/auth/register':'POST', '/api/auth/logout':'POST',
+  '/api/auth/reset':'POST', '/api/auth/forgot':'POST', '/api/auth/resend-verify':'POST',
+};
 const textFields: Record<string, number> = {email:254,password:1024,token:256,ref:128,source:120,q:254,user_id:128,id:128,display:96,avatar:128,badge:128,sleeve:128,furniture:128,key:128,code:128,title:100,body:2000,state:16};
 export function invalidBody(value: unknown): boolean {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return true;
@@ -10,6 +16,10 @@ export function invalidBody(value: unknown): boolean {
 }
 export async function guardRequest(req: Request, env: Env): Promise<Request | Response> {
   const path=new URL(req.url).pathname;
+  // Reject alternate methods before reading bodies or reaching auth handlers;
+  // otherwise DELETE can bypass the POST rate limiter and payload bounds.
+  const method=authMethods[path];
+  if(method && req.method!==method && req.method!=='OPTIONS')return Response.json({error:'method not allowed'},{status:405,headers:{Allow:method}});
   if (!path.startsWith('/api/') || !['POST','PUT','PATCH'].includes(req.method)) return req;
   const limiter = path.startsWith('/api/auth/') ? env.AUTH_RATE_LIMITER : path==='/api/inquiry' ? env.INQUIRY_RATE_LIMITER : undefined;
   if (limiter) {

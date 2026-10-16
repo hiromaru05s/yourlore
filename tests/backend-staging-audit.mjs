@@ -1,0 +1,77 @@
+/** Live staging only. Credentials and fixture IDs come from a private temporary file. */
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import WebSocket from 'ws';
+const origin='https://test.yourlore.xyz';
+const {users,coupon,gift}=JSON.parse(await fs.readFile(process.env.LORE_BACKEND_AUTH_FILE,'utf8'));
+assert(users.length===2&&users.every(u=>u.id.startsWith('qa-backend-')));
+assert(coupon.startsWith('QA-BACKEND-')&&gift.startsWith('qa-backend-'));
+const checks=[],sockets=[];
+const api=async(i,path,body,method=body===undefined?'GET':'POST')=>{
+ const r=await fetch(origin+path,{method,headers:{cookie:'lore_session='+users[i].token,'content-type':'application/json'},body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(30000)});
+ return {status:r.status,body:await r.json()};
+};
+const check=name=>{checks.push(name);console.log('PASS',name)};
+const until=async(fn)=>{const end=Date.now()+45000;while(Date.now()<end){const value=fn();if(value)return value;await new Promise(r=>setTimeout(r,100));}throw Error('Timed out waiting for staging socket/settlement');};
+async function socket(i,path){
+ const ws=new WebSocket(origin.replace('https:','wss:')+path,{headers:{cookie:'lore_session='+users[i].token}}),messages=[];
+ sockets.push(ws);ws.on('message',raw=>messages.push(JSON.parse(String(raw))));
+ await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('WebSocket open timeout')),20000);ws.once('open',()=>{clearTimeout(timer);resolve()});ws.once('error',e=>{clearTimeout(timer);reject(e)})});
+ return {ws,messages,send:body=>ws.send(JSON.stringify(body))};
+}
+try{
+ for(const method of ['DELETE','PUT','PATCH'])assert.equal((await api(0,'/api/auth/login',{email:'absent@example.invalid',password:'no-login'},method)).status,405);
+ assert.equal((await api(0,'/api/auth/logout',undefined,'GET')).status,405);
+ assert.equal((await api(0,'/api/auth/me')).body.user.id,users[0].id);
+ assert.equal((await fetch(origin+'/ws/queue')).status,401);
+ assert.equal((await fetch(origin+'/ws/room/qa/setup',{method:'POST',body:'{}'})).status,400);
+ assert.equal((await api(0,'/api/admin/stats')).status,404);
+ check('auth method enforcement, preserved session, anonymous queue and admin/setup boundaries');
+ const before=(await api(0,'/api/collection')).body;
+ const requestId='qa-backend-buy-'+crypto.randomUUID();
+ const purchases=await Promise.all([0,1].map(()=>api(0,'/api/collection/buy',{requestId,id:'STARTER_CHEST',count:1})));
+ assert(purchases.every(r=>r.status===200));assert.deepEqual(purchases[0].body.receipt,purchases[1].body.receipt);
+ const bought=(await api(0,'/api/collection')).body;
+ assert.equal(bought.credits,before.credits-200);assert.equal(bought.starterCards.STARTER_CHEST,3);
+ assert.equal((await api(0,'/api/collection/buy',{requestId,id:'STARTER_CHEST',count:2})).status,409);
+ const drawId='qa-backend-draw-'+crypto.randomUUID(),draw=await api(0,'/api/collection/draw',{requestId:drawId,count:1});
+ assert.equal(draw.status,200);assert.deepEqual((await api(0,'/api/collection/draw',{requestId:drawId,count:1})).body.receipt,draw.body.receipt);
+ assert.equal((await api(0,'/api/collection')).body.credits,bought.credits-100+draw.body.receipt.refund);
+ check('real D1 concurrent purchase, inventory, conflicting request rejection and gacha replay');
+ const couponResults=await Promise.all([0,1].map(i=>api(i,'/api/rewards/coupon',{code:coupon})));
+ assert.deepEqual(couponResults.map(r=>r.status).sort(),[200,410]);
+ const gifts=await Promise.all([0,1].map(()=>api(0,'/api/gifts/claim',{id:gift})));
+ assert(gifts.every(r=>r.status===200));assert.equal(gifts.reduce((n,r)=>n+r.body.amount,0),11);
+ check('coupon global cap and concurrent gift claim pay once');
+ const queues=await Promise.all([0,1].map(i=>socket(i,'/ws/queue?mode=ranked')));
+ queues.forEach(q=>q.send({type:'queue'}));
+ const matches=await Promise.all(queues.map(q=>until(()=>q.messages.find(m=>m.type==='matched'))));
+ assert.equal(matches[0].roomId,matches[1].roomId);queues.forEach(q=>q.ws.close());
+ const roomId=matches[0].roomId,rooms=await Promise.all([0,1].map(i=>socket(i,'/ws/room/'+roomId)));
+ rooms.forEach(r=>r.send({type:'ready'}));
+ await Promise.all(rooms.map(r=>until(()=>r.messages.find(m=>m.type==='preview'))));
+ rooms.forEach(r=>r.send({type:'startReady'}));
+ const init=await Promise.all(rooms.map(r=>until(()=>r.messages.find(m=>m.type==='init'))));
+ for(let i=0;i<2;i++)assert(init[i].state.players[1-matches[i].you].hand.every(c=>c.id==='HIDDEN'));
+ rooms[0].send({type:'action',action:{type:'surrender',player:matches[0].you}});
+ await Promise.all(rooms.map(r=>until(()=>r.messages.some(m=>m.type==='rewardsSettled'))));
+ const ranks=await Promise.all([0,1].map(i=>api(i,'/api/rank/result?matchId='+roomId)));
+ assert(ranks.every(r=>r.body.result));assert(ranks[0].body.result.after<ranks[0].body.result.before);assert(ranks[1].body.result.after>ranks[1].body.result.before);
+ assert((await api(0,'/api/rewards/result?roomId='+roomId)).body.settled);
+ const balances=await Promise.all([0,1].map(async i=>(await api(i,'/api/auth/me')).body.user.credits));
+ rooms[0].ws.close();const resumed=await socket(0,'/ws/room/'+roomId);resumed.send({type:'ready'});
+ const recovered=await until(()=>resumed.messages.find(m=>m.type==='rankResult'));
+ assert.equal(recovered.after,ranks[0].body.result.after);
+ resumed.send({type:'action',action:{type:'surrender',player:matches[0].you}});
+ assert.deepEqual(await Promise.all([0,1].map(async i=>(await api(i,'/api/auth/me')).body.user.credits)),balances);
+ check('authenticated ranked queue, two-player room, private hands, settlement and reconnect without duplicate payout');
+ const started=await api(0,'/api/rewards/bot/start',{difficulty:'easy',lang:'ja'});assert.equal(started.status,200);
+ const bot=await socket(0,'/ws/room/'+started.body.roomId);bot.send({type:'ready'});
+ await until(()=>bot.messages.some(m=>m.type==='init'));
+ bot.send({type:'action',action:{type:'surrender',player:0}});
+ await until(()=>bot.messages.some(m=>m.type==='rewardsSettled'));
+ assert((await api(0,'/api/rewards/result?roomId='+started.body.roomId)).body.settled);
+ check('authenticated BOT creation, ready, authoritative loss and persisted reward receipt');
+ const report={origin,checkedAt:new Date().toISOString(),checks,ranked:{roomId,ratings:ranks.map(r=>r.body.result)},boundary:'Real staging API, D1 and authenticated WebSockets; no UI rendering or injected live infrastructure failure. Google OAuth is disabled on staging and covered by local mocked-provider tests.'};
+ await fs.writeFile(process.env.LORE_BACKEND_STAGING_OUT,JSON.stringify(report,null,2)+'\n');
+}finally{for(const ws of sockets)ws.close();}

@@ -106,6 +106,7 @@ export class GameRoom {
   private joinTimes: [number[], number[]] = [[], []];
   /** recent message timestamps per socket — a looping client must not burn the DO request budget. */
   private recording: Promise<void> | null = null;
+  private provisioning = false;
   private msgTimes = new Map<WebSocket, number[]>();
 
   constructor(state: DurableObjectState, env: Env) {
@@ -159,9 +160,11 @@ export class GameRoom {
     // provisioning call from the matchmaker
     if (url.pathname === "/setup") {
       if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
+      if (this.provisioning) return new Response("room provisioning; retry", { status: 503 });
       if (this.room) return new Response("already provisioned", { status: 409 });
       const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string; challengeDifficulty?: BotDifficulty };
       // Reading the request body yields; a concurrent setup may have won meanwhile.
+      if (this.provisioning) return new Response("room provisioning; retry", { status: 503 });
       if (this.room) return new Response("already provisioned", { status: 409 });
       if(body.challengeDifficulty && (!Object.hasOwn(BOT_REWARDS,body.challengeDifficulty)||body.ranked||body.botId))return new Response('invalid difficulty',{status:400});
       const npc=body.challengeDifficulty?botNpc(body.challengeDifficulty):undefined;
@@ -176,37 +179,45 @@ export class GameRoom {
         p1: { id: body.players[1].id, name: body.players[1].name, deck: body.players[1].deck ? body.players[1].deck.split(",") : undefined },
         starting: (body.seed & 1) as Side, // coin toss: seed parity decides who goes first (fair, server-authoritative)
       });
-      this.room = {
-        players: body.players,
-        game: res.state,
-        initEvents: res.events,
-        readied: [false, !!bot],
-        joinBy: Date.now() + JOIN_GRACE_MS,
-        recorded: false,
-        ranked: body.ranked ?? false,
-        challengeDifficulty:body.challengeDifficulty,
-        gen: [0, 0],
-        forfeitAt: [null, null],
-        turnStartAt: Date.now(),
-        turnBonusMs: 0,
-        previewUntil: null,
-        previewDone: !(body.ranked ?? false), // ranked → run the 15s market preview; else start on ready
-        startReady: [false, !!bot],
-        initSent: [false, false],
-        startedAt: Date.now(),
-        opening: {version:OPENING_VERSION,capable:[false,!!bot],ready:[false,!!bot],prepareBy:null,startsAt:null},
-        bot: bot ? {id:bot.id,side:1,nextAt:null} : undefined,
-      };
-      if (bot) this.room.game.players[1].botTune = {...bot.deck.tune};
-      this.room.game.botDifficulty=body.challengeDifficulty;
-      this.room.game.medalDuel=newMedalDuel();
-      this.room.game.medals=await Promise.all(this.room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):equippedMedal(this.env,p.id))) as [string|null,string|null];
-      this.room.rewardDecks=this.room.game.players.map(p=>[...p.hand,...p.deck,...p.discard].map(c=>c.id)) as [string[],string[]];
-      this.room.game.players.forEach(p=>{p.activity={};});
-      this.room.daily=await Promise.all(this.room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):ensureDaily(this.env,p.id))) as [QuestState|null,QuestState|null];
-      await this.persist();
-      await this.state.storage.setAlarm(this.room.joinBy!);
-      return new Response("ok");
+      this.provisioning = true;
+      try {
+        const room: RoomData = {
+          players: body.players,
+          game: res.state,
+          initEvents: res.events,
+          readied: [false, !!bot],
+          joinBy: Date.now() + JOIN_GRACE_MS,
+          recorded: false,
+          ranked: body.ranked ?? false,
+          challengeDifficulty:body.challengeDifficulty,
+          gen: [0, 0],
+          forfeitAt: [null, null],
+          turnStartAt: Date.now(),
+          turnBonusMs: 0,
+          previewUntil: null,
+          previewDone: !(body.ranked ?? false), // ranked → run the 15s market preview; else start on ready
+          startReady: [false, !!bot],
+          initSent: [false, false],
+          startedAt: Date.now(),
+          opening: {version:OPENING_VERSION,capable:[false,!!bot],ready:[false,!!bot],prepareBy:null,startsAt:null},
+          bot: bot ? {id:bot.id,side:1,nextAt:null} : undefined,
+        };
+        if (bot) room.game.players[1].botTune = {...bot.deck.tune};
+        room.game.botDifficulty=body.challengeDifficulty;
+        room.game.medalDuel=newMedalDuel();
+        room.game.medals=await Promise.all(room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):equippedMedal(this.env,p.id))) as [string|null,string|null];
+        room.rewardDecks=room.game.players.map(p=>[...p.hand,...p.deck,...p.discard].map(c=>c.id)) as [string[],string[]];
+        room.game.players.forEach(p=>{p.activity={};});
+        room.daily=await Promise.all(room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):ensureDaily(this.env,p.id))) as [QuestState|null,QuestState|null];
+        // Do not expose partially initialized rooms to retries or sockets. Arm the
+        // deadline first: a failed room write may leave a harmless empty alarm,
+        // but a persisted room must never be left without its cleanup deadline.
+        room.joinBy = Date.now() + JOIN_GRACE_MS;
+        await this.state.storage.setAlarm(room.joinBy);
+        await this.state.storage.put("room", room);
+        this.room = room;
+        return new Response("ok");
+      } finally { this.provisioning = false; }
     }
 
     // player WebSocket

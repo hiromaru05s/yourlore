@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "name": "unsupported auth methods cannot bypass rate/body guards or mutate sessions",
+      "passed": true
+    },
+    {
+      "name": "failed room initialization remains retryable without publishing partial state",
+      "passed": true
+    },
+    {
+      "name": "concurrent setup sees retryable busy until durable room is complete",
+      "passed": true
+    },
+    {
+      "name": "alarm failure cannot persist a room with no cleanup deadline",
+      "passed": true
+    },
+    {
+      "name": "Google verification removes unverified password/session but keeps verified credentials",
+      "passed": true
+    }
+  ]
+}
