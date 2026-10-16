@@ -30,6 +30,11 @@ try{
  const cookie=r.headers.get('set-cookie').split(';')[0];assert(r.headers.get('set-cookie').includes('HttpOnly'));assert(r.headers.get('set-cookie').includes('Secure'));
  const u=(await (await call('/auth/me',undefined,cookie)).json()).user;
  assert.equal(u.exp,0);assert.equal(u.credits,0);assert.deepEqual(Object.fromEntries(Object.entries(u.starterCards).filter(([,n])=>n>0)),{STARTER_TRASH:8,STARTER_MANA:1,STARTER_CHEST:2});
+ // A real gacha commit must survive session replacement, not just /auth/me
+ // reads using the session that performed the draw.
+ await env.DB.prepare('UPDATE users SET credits=1000 WHERE id=?').bind(u.id).run();
+ const acquired=await (await call('/collection/draw',{count:10,requestId:crypto.randomUUID()},cookie)).json();
+ assert.equal(acquired.receipt.rewards.length,10);
  assert.equal((await call('/auth/forgot',{email})).status,200);assert.equal(messages.length,2);
  const reset=await env.DB.prepare("SELECT token FROM email_tokens WHERE user_id=? AND kind='reset'").bind(pending.id).first();
  const next='second-password-2026';assert.equal((await call('/auth/reset',{token:reset.token,password:next})).status,200);
@@ -37,13 +42,32 @@ try{
  assert.equal((await call('/auth/reset',{token:reset.token,password:next})).status,400);
  assert.equal((await call('/auth/login',{email,password})).status,401);
  r=await call('/auth/login',{email,password:next});assert.equal(r.status,200);const fresh=r.headers.get('set-cookie').split(';')[0];
+ const relogged=(await r.json()).user;assert.deepEqual(relogged.starterCards,acquired.starterCards);assert.equal(relogged.credits,acquired.credits);
+ assert.deepEqual((await (await call('/collection/history',undefined,fresh)).json()).receipts,[acquired.receipt]);
  assert.equal((await call('/auth/logout',{},fresh)).status,200);assert.equal((await (await call('/auth/me',undefined,fresh)).json()).user,null);
  const callback=(state='test')=>handleGoogleOAuth(env,new Request('https://yourlore.xyz/api/auth/google/callback?code=test&state='+state,{headers:{cookie:'lore_oauth_state=test'}}),'/auth/google/callback');
  assert.equal((await callback('wrong')).status,400);
  r=await callback();assert.equal(r.status,302);const oauthCookie=r.headers.get('set-cookie').split(';')[0];
  assert.equal((await (await call('/auth/me',undefined,oauthCookie)).json()).user.email,googleEmail);
+ const googleUser=(await (await call('/auth/me',undefined,oauthCookie)).json()).user;
+ await env.DB.prepare('UPDATE users SET credits=1000 WHERE id=?').bind(googleUser.id).run();
+ const googleAcquired=await (await call('/collection/draw',{count:10,requestId:crypto.randomUUID()},oauthCookie)).json();
+ assert.equal(googleAcquired.receipt.rewards.length,10);
+ await call('/auth/logout',{},oauthCookie);
+ r=await callback();const googleRelogin=r.headers.get('set-cookie').split(';')[0];
+ const restored=(await (await call('/auth/me',undefined,googleRelogin)).json()).user;
+ assert.equal(restored.id,googleUser.id);assert.deepEqual(restored.starterCards,googleAcquired.starterCards);assert.equal(restored.credits,googleAcquired.credits);
+ assert.deepEqual((await (await call('/collection/history',undefined,googleRelogin)).json()).receipts,[googleAcquired.receipt]);
+ // Separate Google emails are separate accounts even with the same display name.
+ const firstGoogleEmail=googleEmail;googleEmail='oauth-other@example.invalid';
+ r=await callback();const otherCookie=r.headers.get('set-cookie').split(';')[0];
+ const other=(await (await call('/auth/me',undefined,otherCookie)).json()).user;
+ assert.equal(other.display,restored.display);assert.notEqual(other.id,restored.id);assert.equal(other.credits,0);
+ assert.deepEqual(other.starterCards,u.starterCards);assert.deepEqual((await (await call('/collection/history',undefined,otherCookie)).json()).receipts,[]);
+ googleEmail=firstGoogleEmail;
+ r=await callback();assert.deepEqual((await (await call('/auth/me',undefined,r.headers.get('set-cookie').split(';')[0])).json()).user.starterCards,googleAcquired.starterCards);
  assert.equal((await callback()).status,302);assert.equal((await env.DB.prepare('SELECT COUNT(*) AS n FROM users WHERE email=?').bind(googleEmail).first()).n,1);
  googleVerified=false;googleEmail='unverified@example.invalid';assert.equal((await callback()).status,400);
  assert.equal(await env.DB.prepare('SELECT id FROM users WHERE email=?').bind(googleEmail).first(),null);
- console.log('PASS email registration/verification/login/reset/logout, fresh defaults, Google signup/relogin and invalid state/email rejection (providers mocked)');
+ console.log('PASS email registration/verification/login/reset/logout, gacha persistence across password and Google relogin, same-name account isolation, fresh defaults and invalid state/email rejection (providers mocked)');
 }finally{globalThis.fetch=nativeFetch;await rm(dir,{recursive:true,force:true});}

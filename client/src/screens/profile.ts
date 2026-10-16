@@ -262,6 +262,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       </section>
       <section class="tut-sec">
         <h3><span class="tut-ico">${homeIcon("profile")}</span>${t("settings.account")}</h3>
+        ${p.self && app.user?.id === p.id && app.user.email ? `<div class="set-row"><span class="set-label">${t("login.email")}</span><span class="set-val" style="overflow-wrap:anywhere;min-width:0" data-account-email>${esc(app.user.email)}</span></div>` : ""}
         <div class="set-row"><span class="set-label">${p.self ? esc(p.display) : ""}</span>
           <button class="btn btn-ghost" id="logout" ${logoutPending ? 'disabled' : ''}>${t("home.logout")}</button>
         </div>
