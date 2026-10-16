@@ -1,10 +1,10 @@
-/** Optional appearance adapter for the isolated cosmetic studio. No catalog or
- * account changes: ordinary games never register an adapter. */
+/** Appearance adapter shared by equipped cosmetics and the isolated studio.
+ * Studio overrides are registered explicitly; ordinary games resolve equipment. */
 import type * as T from 'three';
 import type {PileModel} from './pileModels';
 export interface CosmeticPreviewAdapter {
  readonly revision:number;
- /** Audit-only raster override. Ordinary matches never register this adapter. */
+ /** Optional bounded raster density for fine cosmetic geometry. */
  readonly pixelRatio?:number;
  /** Optional coverage sampling for magnified inspection. */
  readonly antialiasSamples?:number;

@@ -1,3 +1,5 @@
+import {isAmethystFurniture} from '../../shared/amethystCosmetics';
+import {amethystFurniture} from './amethyst/furniture';
 import {gachaFromUrl} from '../../shared/gachaCosmetics';
 import {makeFurniture as makeGachaFurniture} from './gachaTrio/furniture';
 import {createWebGLRenderer} from '../webglRenderer';
@@ -60,6 +62,12 @@ async function renderCatalog():Promise<Map<string,string>> {
     if(!assets.has('deck')||!assets.has('shelf'))throw new Error('Furniture models unavailable');
     const images=new Map<string,string>();
     for(const item of FURNITURE_LIST){
+      if(isAmethystFurniture(item.url)){
+        for(const [i,grave]of([false,true]as const).entries()){
+          const object=amethystFurniture(grave);livingObjects.push({root:object.group,tick:object.tick,dispose:object.dispose});object.tick(1.5);object.group.position.x=i?1.03:-1.03;scene.add(object.group);
+        }
+        renderer.render(scene,camera);images.set(item.id,await snapshot(renderer.domElement));clear();continue;
+      }
       const gacha=gachaFromUrl(item.url);
       if(gacha){
         for(const [i,grave]of([false,true]as const).entries()){

@@ -1,5 +1,7 @@
 import {quietLuxuryFromUrl} from '../../shared/quietLuxuryCosmetics';
 import {quietLuxurySleeve} from './quietLuxury/sleeve';
+import {isAmethystSleeve} from '../../shared/amethystCosmetics';
+import {amethystSleeve} from './amethyst/sleeve';
 import {isGoldfaultSleeve} from '../../shared/goldfaultCosmetics';
 import {goldfaultSleeve} from './goldfault/sleeve';
 import {gachaFromUrl} from '../../shared/gachaCosmetics';
@@ -22,6 +24,7 @@ function finishMap(t:AtelierTheme){let map=maps.get(t.id);if(map)return map;cons
 export function sleeveMaterial(texture:T.Texture):T.Material{
  const quiet=quietLuxuryFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);
  if(quiet)return quietLuxurySleeve(quiet.variant);
+ if(isAmethystSleeve(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src))return amethystSleeve();
  if(isGoldfaultSleeve(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src))return goldfaultSleeve();
  const gacha=gachaFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);
  if(gacha){const m=gachaMaterial(gacha.variant,texture);m.onBeforeRender=()=>{m.uniforms.time.value=matchMedia('(prefers-reduced-motion: reduce)').matches?0:Math.floor(performance.now()/33.333)/30;};return m;}
