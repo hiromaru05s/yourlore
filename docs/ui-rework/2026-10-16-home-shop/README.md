@@ -19,3 +19,5 @@ Validation:
 - `tests/home-shop-browser.mjs`: six viewports with populated rank and quest, no HOME/document overflow, visible duel/deck, cosmetic lists without an aside, HOME remount.
 
 Browser checks use fixture accounts with real local assets. Live staging API and deployment verification are recorded separately after release.
+
+Release validation note: the first guarded run hit the BOT worker's existing 15-second reply deadline under host load. The isolated 36-case parity/lifecycle run passed (maximum worker decision 13.14 seconds), but the whole parity run exceeded the suite's default 120-second process budget. Its suite budget is now 300 seconds; runtime deadlines and test assertions are unchanged. The guard is rerun in full on current main.
