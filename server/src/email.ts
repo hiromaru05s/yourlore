@@ -22,6 +22,12 @@ export async function sendEmail(env: Env, to: string, subject: string, html: str
     headers: { "Authorization": `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({ from: FROM, to: [to], subject, html }),
   }).catch(() => null);
+  if (!res?.ok) {
+    // Keep recipient, payload and credentials out of logs while exposing provider
+    // failures for operational verification of signup/reset delivery.
+    const failure = await res?.json().catch(() => null) as {name?: unknown} | null | undefined;
+    console.error('email_delivery_failed', {status: res?.status ?? 0, providerError: typeof failure?.name === 'string' ? failure.name : 'unknown'});
+  }
   return !!res && res.ok;
 }
 
