@@ -16,9 +16,9 @@
     "ticks": 301,
     "fullPasses": 0,
     "portalPasses": 111,
-    "displayPasses": 301,
+    "displayPasses": 203,
     "flightPasses": 0,
-    "cpuMs": 1060.6,
+    "cpuMs": 511.1,
     "calls": 95,
     "triangles": 24026
   }

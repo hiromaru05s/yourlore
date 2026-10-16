@@ -15,3 +15,5 @@ Selected by the user on 2026-10-16 for staging and gacha. Uses the approved wood
 - `scripts/check-coffer-staging.mjs`: isolated temporary authenticated staging account, real server RNG until both rewards and duplicates, replay checks, persistence and optional live UI. Removes its QA account/session/transactions in `finally`.
 
 Release/deployed evidence is recorded separately; local fixtures are not authenticated live gameplay.
+
+Integrated with the concurrently approved Amethyst Cleft and three Quiet Luxury sets. Local integrated catalog has 18 cosmetic rewards (9 sleeves, 9 furniture items), so the two coffer rewards are each 7/18% (about 0.3889%). Runtime and gacha UI fixtures passed again after integration; runtime full-board passes remained 0 during a five-second animation sample. Client and server typecheck passed.
