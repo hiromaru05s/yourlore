@@ -1,3 +1,4 @@
+import {ELFWEAVE_SLEEVE,ELFWEAVE_FURNITURE,ELFWEAVE_ART,ELFWEAVE_FURNITURE_ART} from './elfweaveCosmetics';
 import {QUIET_LUXURY_THEMES,quietLuxuryId,quietLuxuryArt} from './quietLuxuryCosmetics';
 import {AMETHYST_SLEEVE,AMETHYST_FURNITURE,AMETHYST_ART,AMETHYST_FURNITURE_ART} from './amethystCosmetics';
 import {GOLDFAULT_SLEEVE,GOLDFAULT_FURNITURE,GOLDFAULT_ART,GOLDFAULT_FURNITURE_ART} from './goldfaultCosmetics';
@@ -31,6 +32,10 @@ GACHA_COSMETICS.push(...QUIET_LUXURY_THEMES.flatMap(t=>(['sleeve','furniture'] a
 GACHA_COSMETICS.push(
  {id:AMETHYST_SLEEVE,kind:'sleeve',url:AMETHYST_ART,ja:'紫晶の断層のスリーブ',en:'Amethyst Cleft Sleeve',ko:'자수정 단층 슬리브',price:1000,gachaOnly:true},
  {id:AMETHYST_FURNITURE,kind:'furniture',url:AMETHYST_FURNITURE_ART,ja:'紫晶の断層のデッキ置き場＆墓地',en:'Amethyst Cleft Deck Holder & Graveyard',ko:'자수정 단층 덱 받침 & 묘지',price:1000,gachaOnly:true}
+);
+GACHA_COSMETICS.push(
+ {id:ELFWEAVE_SLEEVE,kind:'sleeve',url:ELFWEAVE_ART,ja:'エルフの葉織のスリーブ',en:'Elven Leafweave Sleeve',ko:'엘프의 잎직조 슬리브',price:1000,gachaOnly:true},
+ {id:ELFWEAVE_FURNITURE,kind:'furniture',url:ELFWEAVE_FURNITURE_ART,ja:'エルフの葉織のデッキ置き場＆墓地',en:'Elven Leafweave Deck Holder & Graveyard',ko:'엘프의 잎직조 덱 받침 & 묘지',price:1000,gachaOnly:true}
 );
 COSMETICS.push(...GACHA_COSMETICS);
 export const FURNITURE_LIST=COSMETICS.filter(c=>c.kind==='furniture');

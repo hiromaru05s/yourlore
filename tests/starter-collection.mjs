@@ -45,7 +45,7 @@ try{
  db.prepare("UPDATE users SET credits=5000 WHERE id='a'").run();
  const catalog=[...GACHA_COSMETICS];GACHA_COSMETICS.length=0;
  const emptyBefore=await state(),empty=await forced([9250]);assert.equal(empty.receipt.rewards[0].kind,'empty');assert.equal(empty.receipt.refund,0);assert.equal(empty.credits,emptyBefore.credits-100);assert.deepEqual(empty.starterCards,emptyBefore.starterCards);assert.deepEqual(empty.effects,[]);
- GACHA_COSMETICS.push(...catalog);assert(catalog.some(c=>c.id==='sleeve:gacha-amethyst-cleft'));assert(catalog.some(c=>c.id==='furniture:gacha-amethyst-cleft'));
+ GACHA_COSMETICS.push(...catalog);assert(catalog.some(c=>c.id==='sleeve:gacha-elfweave'));assert(catalog.some(c=>c.id==='furniture:gacha-elfweave'));assert(catalog.some(c=>c.id==='sleeve:gacha-amethyst-cleft'));assert(catalog.some(c=>c.id==='furniture:gacha-amethyst-cleft'));
  for(let i=0;i<catalog.length;i++){
   const item=catalog[i],hit=await forced([9250,i]);assert.equal(hit.receipt.rewards[0].id,item.id);assert.equal(hit.receipt.rewards[0].kind,'cosmetic');assert.equal(hit.receipt.refund,0);assert(hit.cosmetics.includes(item.id));
   if(item.id==='sleeve:gacha-amethyst-cleft')assert(!hit.cosmetics.includes('furniture:gacha-amethyst-cleft'));
@@ -70,6 +70,15 @@ try{
  assert.equal((await call('/deck',{decks:amethystDeck},'b')).status,400);
  assert.equal((await call('/deck',{decks:amethystDeck})).status,200);
  const savedAmethyst=await (await call('/auth/me')).json();assert.equal(savedAmethyst.user.decks.list[0].sleeve,amethystDeck.list[0].sleeve);assert.equal(savedAmethyst.user.decks.list[0].furniture,amethystDeck.list[0].furniture);
+ // Elfweave rewards persist independently; neither reward unlocks its partner.
+ const elfDeck=deckStoreForUser();elfDeck.list[0].sleeve='sleeve:gacha-elfweave';elfDeck.list[0].furniture='default';
+ assert.equal((await call('/deck',{decks:elfDeck},'b')).status,400);
+ db.prepare("UPDATE users SET sleeves=? WHERE id='b'").run(JSON.stringify(['sleeve:gacha-elfweave']));
+ assert.equal((await call('/deck',{decks:elfDeck},'b')).status,200);
+ elfDeck.list[0].furniture='furniture:gacha-elfweave';assert.equal((await call('/deck',{decks:elfDeck},'b')).status,400);
+ assert.equal((await call('/deck',{decks:elfDeck})).status,200);
+ const savedElf=await (await call('/auth/me')).json();assert.equal(savedElf.user.decks.list[0].sleeve,elfDeck.list[0].sleeve);assert.equal(savedElf.user.decks.list[0].furniture,elfDeck.list[0].furniture);
+ db.prepare("UPDATE users SET sleeves='[]',decks=NULL WHERE id='b'").run();
  // Goldfault rewards remain independent, ownership-gated equipment slots.
  const goldDeck=deckStoreForUser();goldDeck.list[0].sleeve='sleeve:gacha-goldfault';goldDeck.list[0].furniture='furniture:gacha-goldfault';
  assert.equal((await call('/deck',{decks:goldDeck},'b')).status,400);
