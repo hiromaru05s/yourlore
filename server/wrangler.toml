@@ -1,5 +1,5 @@
 name = "lore-server"
-main = "src/index.ts"
+main = "src/production.ts"
 compatibility_date = "2024-11-01"
 compatibility_flags = ["nodejs_compat"]
 
@@ -22,15 +22,22 @@ not_found_handling = "single-page-application"
 # --- Durable Objects: SQLite-backed (required on the Workers FREE plan) ---
 [[durable_objects.bindings]]
 name = "MATCHMAKER"
-class_name = "Matchmaker"
+class_name = "MatchmakerLive"
 
 [[durable_objects.bindings]]
 name = "GAME_ROOM"
-class_name = "GameRoom"
+class_name = "GameRoomLive"
 
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Matchmaker", "GameRoom"]
+
+# User-authorized production fresh start. Delete all legacy room storage and
+# alarms, then use the same implementations in new empty SQLite namespaces.
+[[migrations]]
+tag = "v2-production-reset-20261016"
+deleted_classes = ["Matchmaker", "GameRoom"]
+new_sqlite_classes = ["MatchmakerLive", "GameRoomLive"]
 
 # --- D1: users / sessions / match records ---
 [[d1_databases]]
@@ -51,6 +58,7 @@ ADMIN_EMAILS = "maruru836818@gmail.com,suhwoo3@gmail.com"
 # ============================================================================
 [env.staging]
 name = "lore-server-staging"
+main = "src/index.ts"
 routes = [
   { pattern = "test.yourlore.xyz", custom_domain = true },
 ]
