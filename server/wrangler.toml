@@ -32,11 +32,10 @@ class_name = "GameRoomLive"
 tag = "v1"
 new_sqlite_classes = ["Matchmaker", "GameRoom"]
 
-# User-authorized production fresh start. Delete all legacy room storage and
-# alarms, then use the same implementations in new empty SQLite namespaces.
+# Production fresh start phase 1: switch bindings to empty namespaces.
+# Retire the old classes in a subsequent deploy after references are removed.
 [[migrations]]
 tag = "v2-production-reset-20261016"
-deleted_classes = ["Matchmaker", "GameRoom"]
 new_sqlite_classes = ["MatchmakerLive", "GameRoomLive"]
 
 # --- D1: users / sessions / match records ---
