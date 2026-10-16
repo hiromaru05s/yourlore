@@ -1,0 +1,19 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-16T01:16:29.334Z",
+  "draws": 560,
+  "selectedRewards": [
+    "sleeve:gacha-mimic-coffer",
+    "furniture:gacha-mimic-coffer"
+  ],
+  "duplicateRefund": 100,
+  "checks": [
+    "unowned equipment rejected",
+    "both items granted separately by real RNG",
+    "both duplicate refunds",
+    "idempotent receipt replay without spending",
+    "authenticated inventory/profile persistence",
+    "both equipped slots saved"
+  ],
+  "fixture": "isolated temporary QA account; removed after verification"
+}

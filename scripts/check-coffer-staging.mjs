@@ -16,7 +16,7 @@ try{
  await build({stdin:{contents:"export * from './client/src/shared/collection';export {deckStoreForUser} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:dir+'/collection.mjs'});
  const {COLLECTIBLE_STARTERS,starterCollection,deckStoreForUser}=await import(dir+'/collection.mjs');
  const all=starterCollection(Object.fromEntries(COLLECTIBLE_STARTERS.map(id=>[id,8])));
- await sql(`INSERT INTO users(id,email,password,display,created_at,verified,credits,starter_cards) VALUES('${uid}','${uid}@example.invalid','qa-fixture','Coffer QA',${now},1,150000,'${JSON.stringify(all)}'); INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES('${token}','${uid}',${now},${now+1800000});`);
+ await sql(`INSERT INTO users(id,email,password,display,created_at,verified,credits,starter_cards) VALUES('${uid}','${uid}@example.invalid','qa-fixture','Coffer QA',${now},1,150000,'${JSON.stringify(all)}'); INSERT INTO rewards(user_id,key,amount,created_at) VALUES('${uid}','tutorial:v3:intro:skip',0,${now}); INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES('${token}','${uid}',${now},${now+1800000});`);
  const initial=await call('/collection');assert(ids.every(id=>!initial.cosmetics.includes(id)));
  const decks=deckStoreForUser();decks.list[0].sleeve=ids[0];decks.list[0].furniture=ids[1];await call('/deck',{decks},400);
  const first=new Map(),duplicates=new Set();let latest=initial,draws=0;
@@ -39,8 +39,8 @@ try{
  await fs.writeFile(out+'/api.json',JSON.stringify(report,null,2));console.log('PASS authenticated staging coffer API',JSON.stringify(report));
  if(process.env.LORE_SKIP_BROWSER!=='1'){
  const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
- browser=await chromium.launch({channel:'chrome',headless:true});const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});await context.addCookies([{name:'lore_session',value:token,url:origin,httpOnly:true,secure:true,sameSite:'Lax'}]);const page=await context.newPage();page.setDefaultTimeout(120000);
- await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('[data-nav="deck"]').click();await page.locator('#appearanceTab').click();for(const id of ids)await page.waitForSelector(`[data-cosmetic-id="${id}"]:enabled`);await page.screenshot({path:out+'/authenticated-equipment.png'});
+ browser=await chromium.launch({channel:'chrome',headless:true});const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});await context.addCookies([{name:'lore_session',value:token,url:origin,httpOnly:true,secure:true,sameSite:'Lax'}]);await context.addInitScript(()=>localStorage.setItem('lore_lang','ja'));const page=await context.newPage();page.setDefaultTimeout(120000);
+ await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('.lounge-home').waitFor();await page.locator('.screen-loader').waitFor({state:'detached',timeout:300000});await page.locator('[data-nav="deck"]').click();await page.locator('#appearanceTab').click();for(const id of ids)await page.waitForSelector(`[data-cosmetic-id="${id}"]:enabled`);await page.screenshot({path:out+'/authenticated-equipment.png'});
  await page.locator('[data-nav="shop"]').click();await page.locator('[data-info="items"]').first().click();assert.equal(await page.locator('.gacha-lineup article').filter({hasText:'貪欲な宝箱'}).count(),2);await page.screenshot({path:out+'/authenticated-lineup.png'});await fs.writeFile(out+'/browser.json',JSON.stringify({checks:['authenticated equipped inventory enabled','both gacha lineup entries'],origin},null,2));console.log('PASS authenticated staging equipment and lineup browser');
  }
 }finally{

@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-16T01:15:32.335Z",
+  "origin": "https://test.yourlore.xyz",
+  "checks": [
+    "deployed normal renderer",
+    "opponent empty deck and grave",
+    "animated opponent hand",
+    "stocked piles",
+    "real draw and cleanup",
+    "2x density"
+  ],
+  "density": {
+    "width": 2880,
+    "height": 1800,
+    "ratio": 2
+  },
+  "errors": [],
+  "scope": "deployed board fixture, not authenticated multiplayer"
+}

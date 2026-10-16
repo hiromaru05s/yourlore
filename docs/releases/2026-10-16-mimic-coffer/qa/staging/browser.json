@@ -1,0 +1,7 @@
+{
+  "checks": [
+    "authenticated equipped inventory enabled",
+    "both gacha lineup entries"
+  ],
+  "origin": "https://test.yourlore.xyz"
+}
