@@ -1,0 +1,26 @@
+{
+  "checks": [
+    "empty deck and grave, opponent hand",
+    "native furniture raster is 2x on standard-DPI screens",
+    "hand mask animates",
+    "actual opponent draw and cleanup",
+    "mixed independent equipment",
+    "self draw cleanup",
+    "reduced motion and responsive geometry",
+    "five equip/remove cycles without remnants",
+    "animation does not repaint full board each frame",
+    "controller disposal"
+  ],
+  "errors": [],
+  "perf": {
+    "seconds": 5,
+    "ticks": 301,
+    "fullPasses": 0,
+    "portalPasses": 111,
+    "displayPasses": 214,
+    "flightPasses": 0,
+    "cpuMs": 1108.2,
+    "calls": 269,
+    "triangles": 76026
+  }
+}
