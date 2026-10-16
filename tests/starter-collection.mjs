@@ -86,6 +86,19 @@ try{
  await worker.fetch(new Request('https://test.yourlore.xyz/ws/queue?deck='+first,{headers:{Cookie:'lore_session=b'}}),env);assert(!queued.searchParams.get('deck').includes(first));
  await buy(first,crypto.randomUUID(),'b');assert.equal((await call('/deck',{decks:store},'b')).status,200);
  store.list[0].cards[1]=first;assert.equal((await call('/deck',{decks:store},'b')).status,400);
+ // Bulk purchase is a single idempotent transaction with an all-or-nothing cap.
+ db.prepare("UPDATE users SET starter_cards='{}',credits=2000 WHERE id='b'").run();
+ const bulkKey=crypto.randomUUID(),bulk=()=>call('/collection/buy',{id:first,count:3,requestId:bulkKey},'b');
+ const bulkResults=await Promise.all([bulk(),bulk(),bulk()]);assert(bulkResults.every(r=>r.status===200));
+ const bulkReceipt=await bulkResults[0].json();assert.equal(bulkReceipt.credits,1400);assert.equal(bulkReceipt.starterCards[first],3);assert.equal(bulkReceipt.receipt.cost,600);assert.equal(bulkReceipt.receipt.rewards.length,3);
+ assert.equal((await call('/collection/buy',{id:first,count:2,requestId:bulkKey},'b')).status,409);
+ const bulkBefore=await (await call('/collection',undefined,'b')).json();
+ for(const count of [0,-1,9,1.5,'2',null,6])assert.equal((await call('/collection/buy',{id:first,count,requestId:crypto.randomUUID()},'b')).status,400);
+ assert.deepEqual(await (await call('/collection',undefined,'b')).json(),bulkBefore);
+ db.prepare("UPDATE users SET credits=399 WHERE id='b'").run();assert.equal((await call('/collection/buy',{id:first,count:2,requestId:crypto.randomUUID()},'b')).status,400);
+ db.prepare("UPDATE users SET credits=2000 WHERE id='b'").run();failLedger=true;await assert.rejects(call('/collection/buy',{id:first,count:3,requestId:crypto.randomUUID()},'b'),/injected/);failLedger=false;
+ const bulkLast=await Promise.all([3,3].map(count=>call('/collection/buy',{id:first,count,requestId:crypto.randomUUID()},'b')));assert.deepEqual(bulkLast.map(r=>r.status).sort(),[200,400]);
+ assert.equal((await (await call('/collection',undefined,'b')).json()).starterCards[first],6);
  const hist=await (await call('/collection/history')).json();assert(hist.receipts.some(r=>r.requestId===key));assert(hist.receipts.every(r=>r.rewards.length===1||r.rewards.length===10));
  db.close();console.log('PASS starter collection: defaults, full catalog, atomic purchase, rollback, concurrent/idempotent spend, caps, 10-draw refunds, insufficient funds, validation, ownership, queue, history');
 }finally{await fs.rm(dir,{recursive:true,force:true});}

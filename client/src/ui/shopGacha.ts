@@ -37,7 +37,7 @@ export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;c
   finally{busy=false;if(!dead)render();}
  }
  function render(){
-  host.innerHTML=`<section class="gacha-page gacha-v2" data-edition="ivory" aria-label="${l('ガチャ','Gacha','뽑기')}"><div class="gacha-editions"><button aria-pressed="true"><span><small>01 / STANDARD</small><b>${label()}</b></span></button></div>
+  host.innerHTML=`<section class="gacha-page gacha-v2" data-edition="ivory" aria-label="${l('ガチャ','Gacha','뽑기')}">
    <div class="gacha-stage"><div class="gacha-stage-art" aria-hidden="true"></div><div class="gacha-copy"><div class="gacha-kicker"><span>${l('常設ガチャ','STANDARD GACHA','상시 뽑기')}</span></div><p class="gacha-english">STARTER COLLECTION</p><h2>${label()}</h2><p class="gacha-poem">${l('新しい一枚で、デッキを広げよう。','Discover new cards for your deck.','새로운 한 장으로 덱을 넓혀 보세요.')}</p><div class="gacha-feature"><span>92.5% / 7% / 0.5%</span><strong>${l('スターター / スリーブ・家具 / エフェクト','Starters / Sleeves & furniture / Effects','스타터 / 슬리브·가구 / 이펙트')}</strong></div></div>
    <button class="gacha-artwork" data-info="items" aria-label="${l('排出カード一覧','Card lineup','카드 목록')}"><span class="gacha-halo"></span>${[COLLECTIBLE_STARTERS[1],COLLECTIBLE_STARTERS[2],COLLECTIBLE_STARTERS[0]].map((id,i)=>`<img class="gacha-card gacha-card-${['left','right','main'][i]}" src="${artUrl.sm(id)}" alt="${esc(name(id))}">`).join('')}<span class="gacha-art-caption">${label()}<i>↗</i></span></button>
    <div class="gacha-guarantee"><b>${l('同じカードを8枚所持済みなら50シャード還元','50 Shards refunded when you already own 8 copies','동일 카드 8장 보유 시 50샤드 환급')}</b></div></div>

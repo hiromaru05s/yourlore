@@ -14,8 +14,8 @@ try{
  await page.locator('[data-category=furniture]').click();
  await page.waitForFunction(()=>document.querySelectorAll('.shop-furniture-preview img').length===14);
  assert.equal(await page.locator('.furniture-preview').count(),0);
- assert.equal(await page.locator('#shopSelection a[target="_blank"]').count(),0);
- await page.locator('[data-preview="furniture:porcelain"]').click();
+ assert.equal(await page.locator('#shopSelection').count(),0);
+ await page.locator('[data-preview="furniture:porcelain"]').waitFor();
  await page.screenshot({path:out+'/shop-desktop.png'});
  const url=page.url();
  for(const [width,height] of [[1280,800],[390,844],[320,667],[844,390]]){
@@ -25,7 +25,8 @@ try{
    const tiles=page.locator('[data-preview]');
    for(const index of [0,await tiles.count()-1]){
     const tile=tiles.nth(index);await tile.click();
-    assert.equal(await tile.getAttribute('aria-pressed'),'true');
+    assert.equal(await tile.getAttribute('aria-pressed'),null);
+    assert.equal(await page.locator('#shopSelection').count(),0);
     assert.equal(await page.locator('[data-board-preview], .shop-board-dialog, #shopSelection a').count(),0);
     assert.equal(page.url(),url);
    }
@@ -35,5 +36,5 @@ try{
    await page.screenshot({path:`${out}/shop-${category}-${width}.png`});
   }
  }
- assert.deepEqual(errors,[]);await fs.writeFile(out+'/results.json',JSON.stringify({passed:true,errors,checks:['12 actual model thumbnails','no board preview in either category','selection and purchase controls retained','desktop mobile and landscape without overflow']},null,2));console.log('PASS shop preview');
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/results.json',JSON.stringify({passed:true,errors,checks:['12 actual model thumbnails','no board preview in either category','catalog and purchase controls retained','desktop mobile and landscape without overflow']},null,2));console.log('PASS shop preview');
 }catch(error){await page.screenshot({path:out+'/failure.png'}).catch(()=>{});console.error(errors);throw error;}finally{await browser.close();}

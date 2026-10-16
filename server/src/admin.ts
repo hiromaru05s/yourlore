@@ -98,7 +98,7 @@ export async function handleAdmin(env: Env, req: Request, path: string): Promise
       // ---- credit economy ----
       one(DB.prepare(`SELECT SUM(credits) AS s, COUNT(*) AS n FROM users`).first<{ s: number; n: number }>()),
       DB.prepare(`SELECT CASE WHEN key LIKE 'tuto:%' THEN 'tutorial' WHEN key LIKE 'tut:%' THEN 'tutorial_legacy' ELSE key END AS k, SUM(amount) AS amt, COUNT(*) AS n FROM rewards GROUP BY k ORDER BY amt DESC`).all<{ k: string; amt: number; n: number }>(),
-      one(DB.prepare(`SELECT SUM(co.amount) AS amt, COUNT(*) AS n FROM coupon_claims cc JOIN coupons co ON co.code = cc.code`).first<{ amt: number; n: number }>()),
+      one(DB.prepare(`SELECT SUM(co.amount * cc.claim_count) AS amt, SUM(cc.claim_count) AS n FROM coupon_claims cc JOIN coupons co ON co.code = cc.code`).first<{ amt: number; n: number }>()),
       DB.prepare(`SELECT code, amount, max_uses, uses, expires_at FROM coupons ORDER BY code`).all<{ code: string; amount: number; max_uses: number | null; uses: number; expires_at: number | null }>(),
       DB.prepare(`SELECT CASE WHEN credits=0 THEN 'b0' WHEN credits<500 THEN 'b1' WHEN credits<1000 THEN 'b2' WHEN credits<2000 THEN 'b3' ELSE 'b4' END AS b, COUNT(*) AS n FROM users GROUP BY b`).all<{ b: string; n: number }>(),
       DB.prepare(`SELECT sleeves FROM users WHERE sleeves IS NOT NULL AND sleeves != ''`).all<{ sleeves: string }>(),

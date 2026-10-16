@@ -1,5 +1,5 @@
 import {starterCollection,type CollectionResult} from '../shared/collection';
-import {renderShopStarters} from '../ui/shopStarters';
+import {renderShopStarters,confirmStarterPurchase} from '../ui/shopStarters';
 import {pendingPurchase,purchaseCollection,type PendingPurchase} from '../ui/collectionPurchase';
 import '../styles/shopStarters.css';
 import {preparedFurnitureCatalog} from '../ui/cosmetics/catalogRender';
@@ -27,9 +27,9 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
   let destroyGacha:(()=>void)|undefined;
   let furnitureImages:Map<string,string>|undefined=preparedFurnitureCatalog();
   let furnitureLoading=false, furnitureFailed=false;
-  const furnitureArt=(id:string,selectedArt=false):string=>{
+  const furnitureArt=(id:string):string=>{
     const url=furnitureImages?.get(id);
-    return url?`<img ${selectedArt?'class="shop-furniture-selected"':''} src="${url}" alt="">`:`<span class="shop-furniture-loading">${furnitureFailed?loungeText('見本を読み込めませんでした','Preview unavailable','미리보기를 불러오지 못했습니다'):loungeText('見本を準備中…','Preparing preview…','미리보기 준비 중…')}</span>`;
+    return url?`<img src="${url}" alt="">`:`<span class="shop-furniture-loading">${furnitureFailed?loungeText('見本を読み込めませんでした','Preview unavailable','미리보기를 불러오지 못했습니다'):loungeText('見本を準備中…','Preparing preview…','미리보기 준비 중…')}</span>`;
   };
   const loadFurniture=()=>{
     if(furnitureImages||furnitureLoading||furnitureFailed)return;
@@ -37,8 +37,6 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     const paint=()=>{
       if(dead||category!=='furniture')return;
       wrap.querySelectorAll<HTMLElement>('.shop-furniture-preview').forEach(tile=>{tile.innerHTML=furnitureArt(tile.dataset.preview!);});
-      const placeholder=wrap.querySelector('#shopSelection>.shop-furniture-loading');
-      if(placeholder)placeholder.outerHTML=furnitureArt(selected,true);
     };
     void import('../ui/cosmetics/catalogRender').then(m=>m.furnitureCatalog()).then(images=>{
       furnitureImages=images;
@@ -46,7 +44,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     }).catch(()=>{furnitureFailed=true;paint();}).finally(()=>{furnitureLoading=false;});
   };
   let category: 'gacha'|'starter'|'sleeve'|'furniture'='gacha';
-  let selected=COSMETICS[0].id;
+  let closePurchase:(()=>void)|undefined;
   const pending=new Set<string>();
   let owned = new Set<string>(["default"]);
   let credits = app.user?.credits ?? 0;
@@ -58,8 +56,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     const recovery=wrap.querySelector<HTMLElement>('#collectionRecovery');
     if(recovery){recovery.hidden=!pendingPurchase(uid);const b=recovery.querySelector('button');if(b)b.disabled=collectionBusy;}
     const msg=wrap.querySelector<HTMLElement>('#collectionNotice');if(msg)msg.textContent=notice;
-    const balance=wrap.querySelector('#shopCredits');if(balance)balance.textContent=String(credits);
-    if(category==='starter')renderShopStarters(wrap.querySelector('#shopStarters')!,starterCards,credits,!collectionReady||collectionBusy,id=>{void transact({kind:'buy',id}).catch(()=>{});});
+    if(category==='starter')renderShopStarters(wrap.querySelector('#shopStarters')!,starterCards,credits,!collectionReady||collectionBusy,(id,count)=>{closePurchase?.();closePurchase=confirmStarterPurchase(id,count,()=>{if(!dead)void transact({kind:'buy',id,count}).catch(()=>{});});});
   };
   const transact=async(op:Omit<PendingPurchase,'requestId'>):Promise<CollectionResult>=>{
     if(collectionBusy)throw Error(loungeText('処理中です','Processing','처리 중입니다'));
@@ -73,6 +70,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     finally{collectionBusy=false;if(!dead)refreshCollectionUi();}
   };
   const build = (): void => {
+    closePurchase?.();closePurchase=undefined;
     destroyGacha?.();destroyGacha=undefined;
     wrap.classList.toggle('shop-gacha-active',category==='gacha');
     wrap.innerHTML = `
@@ -80,7 +78,6 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
         <div class="tut-head">
           <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
           <div><small class="menu-eyebrow">BIBLION / SHOP</small><h2>${t("shop.title")}</h2><p class="menu-subtitle">${loungeText("あなたのデッキに、しるしを。","Make your deck your own.","나의 덱에, 나만의 표식을.")}</p></div>
-          <span class="shop-credits">${homeIcon("shard")} <b id="shopCredits">${credits}</b></span>
         </div>
         <div class="tut-body">
           <section class="tut-sec">
@@ -88,7 +85,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
             <div id="collectionRecovery" hidden><button class="btn" id="collectionRetry">${loungeText('購入結果を確認','Check purchase result','구매 결과 확인')}</button></div><p id="collectionNotice" role="status"></p>
             ${category==='gacha'?'<div id="shopGacha"></div>':category==='starter'?'<div id="shopStarters"></div>':`
             <p class="set-desc">${loungeText('デッキ構成の「外観」から、デッキごとに装備できます。','Equip cosmetics for each deck from Appearance in the deck builder.','덱 구성의 「외관」에서 덱마다 장착할 수 있습니다.')}</p>
-            <div class="shop-catalog"><div class="shop-grid" id="grid"></div><aside class="shop-selection" id="shopSelection" aria-live="polite"></aside></div>
+            <div class="shop-catalog"><div class="shop-grid" id="grid"></div></div>
             `}
           </section>
         </div>
@@ -96,7 +93,6 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
     wrap.querySelectorAll<HTMLButtonElement>('[data-category]').forEach(button=>button.onclick=()=>{
       category=button.dataset.category as typeof category;
-      if(category==='sleeve'||category==='furniture')selected=COSMETICS.find(c=>c.kind===category)!.id;
       build();
       wrap.querySelector<HTMLButtonElement>(`[data-category="${category}"]`)?.focus({preventScroll:true});
     });
@@ -119,8 +115,8 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     grid.innerHTML = buyable.map((s) => {
       const has = owned.has(s.id);
       return `
-        <div class="shop-item ${has ? "is-owned" : ""} ${selected===s.id?'is-selected':''}">
-          <button class="sl-preview ${s.kind==='furniture'?'shop-furniture-preview':''}" data-preview="${s.id}" aria-label="${esc(s[getLang()])}" aria-pressed="${selected===s.id}" ${s.kind==='sleeve'?`style="background-image:url(${s.url})"`:''}>${s.kind==='furniture'?furnitureArt(s.id):''}</button>
+        <div class="shop-item ${has ? "is-owned" : ""}">
+          <div class="sl-preview ${s.kind==='furniture'?'shop-furniture-preview':''}" data-preview="${s.id}" aria-label="${esc(s[getLang()])}" ${s.kind==='sleeve'?`style="background-image:url(${s.url})"`:''}>${s.kind==='furniture'?furnitureArt(s.id):''}</div>
           <div class="sl-name">${s[getLang()]}</div>
           ${has
             ? `<button class="btn btn-mini btn-ghost" disabled>${homeIcon("check")} ${t("shop.owned")}</button>`
@@ -128,9 +124,6 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
         </div>`;
     }).join("");
 
-    const current=cosmetic(selected)!;
-    wrap.querySelector('#shopSelection')!.innerHTML=`${current.kind==='furniture'?furnitureArt(current.id,true):`<img src="${current.url}" alt="">`}<div><small>${loungeText('プレビュー中','Preview','미리보기')}</small><strong>${esc(current[getLang()])}</strong>${current.kind==='furniture'?`<span class="shop-furniture-label">${loungeText('左：デッキ置き場 ／ 右：墓地','Left: deck holder / Right: graveyard','왼쪽: 덱 받침 / 오른쪽: 묘지')}</span>`:''}<span>${owned.has(current.id)?t('shop.owned'):('gachaOnly' in current&&current.gachaOnly)?loungeText('ガチャで入手','Get in gacha','뽑기로 획득'):current.price+' '+t('home.shards')}</span></div>`;
-    grid.querySelectorAll<HTMLButtonElement>('[data-preview]').forEach(button=>button.onclick=()=>{selected=button.dataset.preview!;renderGrid();grid.querySelector<HTMLButtonElement>(`[data-preview="${selected}"]`)?.focus({preventScroll:true})});
     grid.querySelectorAll<HTMLButtonElement>('[data-gacha-item]').forEach(button=>button.onclick=()=>{category='gacha';build();});
     grid.querySelectorAll("[data-buy]").forEach((btn) => {
       (btn as HTMLElement).onclick = () => {
@@ -148,7 +141,6 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
           owned = new Set([...r.sleeves,...r.furnitures]);
           if (app.user) app.user.credits = r.credits;
           sfx("coin");
-          (wrap.querySelector("#shopCredits") as HTMLElement).textContent = String(credits);
           document.dispatchEvent(new Event("lore:user"));
           renderGrid();
         }).catch((e) => { pending.delete(id);if(dead)return;renderGrid(); sfx("error"); alert((e as Error).message); });
@@ -167,5 +159,5 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
 
   build();
   const unsub = onLangChange(() => build());
-  return { destroy: () => { dead = true; destroyGacha?.(); unsub(); } };
+  return { destroy: () => { dead = true; closePurchase?.(); destroyGacha?.(); unsub(); } };
 }

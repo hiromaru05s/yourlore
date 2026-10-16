@@ -10,6 +10,7 @@ const user={id:'collection-qa',email:'qa@example.invalid',display:'シーカー'
 const receipts=[],seen=new Map();let dropped=false,dropNext=false,purchaseCalls=0;
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic']});
 const page=await browser.newPage({viewport:{width:1440,height:900}});page.setDefaultTimeout(120000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.addInitScript(()=>localStorage.setItem('lore_lang','ja'));
 await apiFixture(page,req=>{
  const p=new URL(req.url).pathname;
  if(p==='/api/auth/me')return {user};if(p==='/api/geo')return {country:'JP'};
@@ -20,7 +21,7 @@ await apiFixture(page,req=>{
  if(p==='/api/collection/buy'||p==='/api/collection/draw'){
   purchaseCalls++;const b=req.body;
   if(!seen.has(b.requestId)){
-   const kind=p.endsWith('buy')?'buy':'draw',count=kind==='buy'?1:b.count,cost=kind==='buy'?200:count*100;
+   const kind=p.endsWith('buy')?'buy':'draw',count=b.count??1,cost=(kind==='buy'?200:100)*count;
    const rewards=Array.from({length:count},(_,i)=>{const id=kind==='buy'?b.id:COLLECTIBLE_STARTERS[i%COLLECTIBLE_STARTERS.length],refund=user.starterCards[id]>=8?50:0;if(!refund)user.starterCards[id]++;return {id,refund,owned:user.starterCards[id]};});
    const receipt={kind,cost,refund:rewards.reduce((s,r)=>s+r.refund,0),rewards,requestId:b.requestId,createdAt:Date.now()};user.credits-=cost-receipt.refund;receipts.push(receipt);seen.set(b.requestId,receipt);
   }
@@ -32,18 +33,26 @@ await apiFixture(page,req=>{
 });
 try{
  await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('[data-nav="shop"]').click();await page.waitForSelector('[data-pull="1"]:enabled');
+ assert.equal(await page.locator('.gacha-editions,#shopCredits,.shop-credits').count(),0);
  assert(!/\b(?:SSR|SR)\b/.test(await page.locator('.gacha-page').innerText()));
  await page.locator('[data-info="rates"]').click();assert((await page.locator('.gacha-dialog').innerText()).includes('92.5%'));await page.locator('.gacha-dialog [data-close]').first().click();
  for(const [w,h] of [[1440,900],[1024,600],[390,844],[320,740],[844,390]]){
   await page.setViewportSize({width:w,height:h});await page.screenshot({path:`${out}/gacha-${w}.png`});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`gacha overflow ${w}`);
+  assert(await page.locator('.gacha-stage').evaluate(el=>el.getBoundingClientRect().width>=el.parentElement.getBoundingClientRect().width-2),`gacha fills its available width ${w}`);
   await page.locator('[data-category="starter"]').click();assert.equal(await page.locator('[data-buy-starter]').count(),COLLECTIBLE_STARTERS.length);
-  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`shop overflow ${w}`);await page.screenshot({path:`${out}/starters-${w}.png`});
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`shop overflow ${w}`);
+  const ratio=await page.locator('.starter-shop-face .card').first().evaluate(el=>{const r=el.getBoundingClientRect();return r.width/r.height;});assert(Math.abs(ratio-.64)<.002,`card ratio ${w}: ${ratio}`);await page.screenshot({path:`${out}/starters-${w}.png`});
   await page.locator('[data-category="gacha"]').click();
  }
  await page.setViewportSize({width:1440,height:900});await page.locator('[data-category="starter"]').click();
- const id=COLLECTIBLE_STARTERS[1];await page.locator(`[data-buy-starter="${id}"]`).click();await page.waitForFunction(()=>document.querySelector('#shopCredits')?.textContent==='9800');assert.equal(user.starterCards[id],1);
- dropNext=true;await page.locator(`[data-buy-starter="${id}"]`).click();await page.waitForSelector('#collectionRecovery:not([hidden])');await page.locator('#collectionRetry').click();await page.waitForFunction(()=>document.querySelector('#shopCredits')?.textContent==='9600');assert.equal(user.starterCards[id],2);assert.equal(receipts.length,2);assert.equal(purchaseCalls,3);
+ const id=COLLECTIBLE_STARTERS[1];
+ await page.locator(`[data-starter-quantity="${id}"]`).selectOption('3');await page.locator(`[data-buy-starter="${id}"]`).click();
+ assert((await page.locator('.starter-purchase-dialog').innerText()).includes('600'));assert.equal(purchaseCalls,0);
+ await page.locator('[data-purchase-no]').click();assert.equal(purchaseCalls,0);
+ await page.locator(`[data-buy-starter="${id}"]`).click();await page.keyboard.press('Escape');assert.equal(purchaseCalls,0);
+ await page.locator(`[data-buy-starter="${id}"]`).click();await page.locator('[data-purchase-yes]').click();await page.waitForFunction(()=>document.querySelector('#collectionNotice')?.textContent?.includes('購入が完了'));assert.equal(user.starterCards[id],3);assert.equal(user.credits,9400);
+ dropNext=true;await page.locator(`[data-buy-starter="${id}"]`).click();await page.locator('[data-purchase-yes]').click();await page.waitForSelector('#collectionRecovery:not([hidden])');await page.locator('#collectionRetry').click();await page.waitForFunction(()=>document.querySelector('#collectionRecovery')?.hidden);assert.equal(user.starterCards[id],4);assert.equal(user.credits,9200);assert.equal(receipts.length,2);assert.equal(purchaseCalls,3);
  await page.locator('[data-nav="deck"]').click();await page.waitForSelector('#deckPool');assert.equal(await page.locator('.deck-pool-tile').filter({has:page.locator(`[data-card-id="${COLLECTIBLE_STARTERS[2]}"]`)}).locator('.deck-card-action').isDisabled(),true);
  await page.locator('[data-nav="shop"]').click();await page.waitForSelector('[data-pull="1"]:enabled');await page.locator('[data-pull="1"]').click();await page.waitForSelector('.gacha-cinematic');await page.waitForSelector('.gacha-cinematic[data-ready="true"]');
  if(await page.locator('.gacha-cinematic [data-skip]').isVisible())await page.locator('.gacha-cinematic [data-skip]').click();await page.waitForSelector('.gacha-cinematic[data-phase="result"]');await page.screenshot({path:out+'/draw-result-animation.png'});await page.locator('.gacha-cinematic [data-done]').click();assert((await page.locator('.gacha-dialog').innerText()).includes('獲得結果'));await page.screenshot({path:out+'/draw-result.png'});await page.locator('.gacha-dialog [data-close]').first().click();

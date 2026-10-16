@@ -28,18 +28,18 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
  if(!kind||req.method!=='POST')return json(env,{error:'not found'},404);
  const body=await req.json().catch(()=>null) as {requestId?:unknown;id?:unknown;count?:unknown}|null;
  if(!body||typeof body.requestId!=='string'||!/^[a-zA-Z0-9_-]{16,80}$/.test(body.requestId))return json(env,{error:'invalid request'},400);
- const id=body.id,count=kind==='buy'?1:body.count;
+ const id=body.id,count=kind==='buy'&&body.count===undefined?1:body.count;
  if(kind==='buy'&&(typeof id!=='string'||!COLLECTIBLE_STARTERS.includes(id)))return json(env,{error:'잘못된 상품입니다.'},400);
- if(count!==1&&count!==10)return json(env,{error:'invalid request'},400);
+ if(typeof count!=='number'||!Number.isInteger(count)||(kind==='buy'?(count<1||count>8):(count!==1&&count!==10)))return json(env,{error:'invalid request'},400);
  const operation=JSON.stringify({kind,id:kind==='buy'?id:null,count});
- const cost=kind==='buy'?STARTER_PRICE:GACHA_PRICE*count;
+ const cost=(kind==='buy'?STARTER_PRICE:GACHA_PRICE)*count;
  // Draw once per request. A CAS retry never rerolls the request's selection.
  let picks:Array<{kind:'starter'|'empty'|'effect'|'cosmetic';id:string}>|undefined;
  for(let attempt=0;attempt<6;attempt++){
   const previous=await env.DB.prepare('SELECT operation, receipt FROM collection_transactions WHERE user_id = ? AND request_id = ?').bind(user.id,body.requestId).first<{operation:string;receipt:string}>();
   if(previous)return previous.operation===operation?respond(JSON.parse(previous.receipt)):json(env,{error:'collection request conflict'},409);
   const s=await state();
-  const rejection=s.credits<cost?'not enough shards':kind==='buy'&&s.starterCards[id as string]>=8?'starter limit reached':null;
+  const rejection=s.credits<cost?'not enough shards':kind==='buy'&&s.starterCards[id as string]+count>8?'starter limit reached':null;
   if(rejection){
    // Another copy of this same request may have committed between the ledger
    // read and this balance read (including spending the last available Shards).
@@ -47,7 +47,7 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
    if(committed)return committed.operation===operation?respond(JSON.parse(committed.receipt)):json(env,{error:'collection request conflict'},409);
    return json(env,{error:rejection},400);
   }
-  picks??=kind==='buy'?[{kind:'starter',id:id as string}]:Array.from({length:count},()=>{
+  picks??=kind==='buy'?Array.from({length:count},()=>({kind:'starter' as const,id:id as string})):Array.from({length:count},()=>{
    const category=gachaCategory(randomIndex(10000));
    if(category==='cosmetic')return GACHA_COSMETICS.length?{kind:'cosmetic' as const,id:GACHA_COSMETICS[randomIndex(GACHA_COSMETICS.length)].id}:{kind:'empty' as const,id:'cosmetic-pending'};
    return {kind:category,id:category==='starter'?COLLECTIBLE_STARTERS[randomIndex(COLLECTIBLE_STARTERS.length)]:CARD_EFFECTS[randomIndex(CARD_EFFECTS.length)].id};

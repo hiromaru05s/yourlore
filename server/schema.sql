@@ -81,9 +81,11 @@ CREATE TABLE IF NOT EXISTS coupons (
   amount      INTEGER NOT NULL,
   max_uses    INTEGER,                        -- NULL = 무제한
   uses        INTEGER NOT NULL DEFAULT 0,
-  expires_at  INTEGER                         -- NULL = 무기한
+  expires_at  INTEGER,                        -- NULL = 무기한
+  repeatable  INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS coupon_claims (
+  claim_count INTEGER NOT NULL DEFAULT 1,
   code        TEXT NOT NULL,
   user_id     TEXT NOT NULL,
   created_at  INTEGER NOT NULL,

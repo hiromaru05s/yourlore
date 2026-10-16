@@ -6,6 +6,7 @@ import '../styles/loungeSupport.css';
 import '../styles/homeDuelInk.css';
 import '../styles/homeAtmosphere.css';
 import '../styles/menuReadability.css';
+import '../styles/homeViewport.css';
 import {loungeNavGlyph,loungeUtilityGlyph} from './loungeNavGlyphs';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';
@@ -34,6 +35,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     ['friends','friends','friends.title',()=>app.friends()],['shop','shop','shop.title',()=>app.shop()],
     ['tutorial','book','home.nav.guide',()=>app.tutorial()],
   ];
+  const dailyReward=content.querySelector<HTMLButtonElement>('#dailyReward');
   let stopNavMotion: (()=>void)|undefined;
   let stopHomeSound: (()=>void)|undefined;
   const paint=()=>{
@@ -53,6 +55,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
       const seeker=document.createElement('div');seeker.className='lounge-seeker';
       profile.replaceWith(seeker);seeker.append(profile);
       stopHomeSound=mountHomeSound(seeker);
+      if(dailyReward)seeker.append(dailyReward);
     }
     stopNavMotion=mountLoungeNavMotion(rail.querySelector('nav')!,lastLoungePage.get(app));
     lastLoungePage.set(app,page);

@@ -1,0 +1,82 @@
+/* HOME fits the viewport. Long catalogs and dialogs retain their own scrolling. */
+.lounge-shell.selected-menu.lounge-home .lounge-content{overflow:hidden;overscroll-behavior:none;container-type:size}
+.lounge-shell.selected-menu.lounge-home .lounge-content>.lounge-home-screen:has(.gift-courier){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,427px);grid-template-rows:minmax(0,1fr);height:100%;min-height:0;padding:8px 4vw 12px;gap:4vw}
+.lounge-shell.selected-menu.lounge-home .lounge-home-main:has(.gift-courier){display:flex;flex-direction:column;align-self:center;width:100%;max-width:100%;height:min(100%,620px);min-height:0;margin:0;padding:12px 22px;gap:8px;flex-shrink:1}
+.lounge-shell.selected-menu.lounge-home .lounge-play{display:grid;grid-template-rows:60px 44px auto minmax(60px,1fr) auto;gap:6px;flex:1;min-height:0;margin:0;padding:0;width:100%;background:none}
+.lounge-shell.selected-menu.lounge-home .gift-courier{min-height:0;height:100%;gap:10px}
+.lounge-shell.selected-menu.lounge-home .gift-courier-art{width:64px;height:58px}
+.lounge-shell.selected-menu.lounge-home .gift-courier-label strong{font-size:14px}
+.lounge-shell.selected-menu.lounge-home .gift-courier-label small{font-size:11px}
+.lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button{min-height:0;padding:8px 4px}
+.lounge-shell.selected-menu.lounge-home .lounge-play-button{width:auto;height:100%;max-height:227px;max-width:100%;aspect-ratio:230/227;min-height:0;margin:auto;align-self:center;justify-self:center}
+.lounge-shell.selected-menu.lounge-home .lounge-active-deck{min-height:60px;padding:6px 0;gap:12px;flex:none}
+.lounge-shell.selected-menu.lounge-home .lounge-deck-preview img{width:32px;height:46px}
+.lounge-shell.selected-menu.lounge-home .lounge-deck-label strong{font-size:15px}
+.lounge-shell.selected-menu.lounge-home .lounge-deck-label :is(small,span){font-size:10px}
+.lounge-shell.selected-menu.lounge-home .home-companion{min-height:0;height:100%;padding:0}
+.lounge-shell.selected-menu.lounge-home .home-spirit-touch{height:min(100%,460px)}
+.lounge-shell.selected-menu.lounge-home .lounge-seeker .home-daily-reward{padding:10px 12px}
+.lounge-shell.selected-menu.lounge-home .lounge-seeker .home-daily-reward strong{font-size:12px;font-weight:400}
+.lounge-shell.selected-menu.lounge-home .lounge-seeker .home-daily-reward small{font-size:10px}
+@media(max-height:750px){
+ .lounge-shell.selected-menu.lounge-home .lounge-home-main:has(.gift-courier){padding:6px 16px;gap:4px}
+ .lounge-shell.selected-menu.lounge-home .lounge-play{grid-template-rows:42px 38px auto minmax(60px,1fr) auto;gap:3px}
+ .lounge-shell.selected-menu.lounge-home .gift-courier-art{width:48px;height:42px}
+ .lounge-shell.selected-menu.lounge-home .gift-courier-label small{display:none}
+ .lounge-shell.selected-menu.lounge-home .mode-reward{font-size:10px;line-height:1.5}
+ .lounge-shell.selected-menu.lounge-home .home-rank-copy :is(small,.rank-season,.rank-target){font-size:10px;line-height:1.4}
+ .lounge-shell.selected-menu.lounge-home .home-rank-copy>strong{font-size:13px}
+ .lounge-shell.selected-menu.lounge-home .home-rank-copy>strong b{font-size:16px}
+ .lounge-shell.selected-menu.lounge-home .lounge-rank-info .rank-emblem{width:30px;height:36px}
+ .lounge-shell.selected-menu.lounge-home .home-rank .rank-track{margin:4px 0;height:2px}
+ .lounge-shell.selected-menu.lounge-home .lounge-play-button>strong{font-size:20px!important}
+}
+@media(max-width:850px) and (min-height:501px){
+ .lounge-shell.selected-menu.lounge-home .lounge-content>.lounge-home-screen:has(.gift-courier){display:block;padding:138px 18px 8px;position:relative}
+ .lounge-shell.selected-menu.lounge-home .home-companion{position:absolute;right:8px;top:0;width:120px;height:138px}
+ .lounge-shell.selected-menu.lounge-home .home-spirit-touch{width:120px;height:138px}
+ .lounge-shell.selected-menu.lounge-home .lounge-home-main:has(.gift-courier){width:min(100%,390px);height:100%;margin:0 auto;padding:8px 14px;gap:4px}
+ .lounge-shell.selected-menu.lounge-home .lounge-play{grid-template-rows:44px 38px auto minmax(60px,1fr) auto;gap:4px}
+ .lounge-shell.selected-menu.lounge-home .gift-courier-art{width:48px;height:42px}
+ .lounge-shell.selected-menu.lounge-home .gift-courier-label small{display:none}
+ .lounge-shell.selected-menu.lounge-home .lounge-seeker .home-daily-reward{width:min(230px,calc(100vw - 120px))}
+ .lounge-shell.selected-menu.lounge-home .lounge-seeker .home-daily-reward>b{font-size:10px}
+ .lounge-shell.selected-menu.lounge-home .lounge-active-deck{min-height:52px}
+ .lounge-shell.selected-menu.lounge-home .lounge-deck-preview img{width:28px;height:40px}
+}
+@media(max-width:850px) and (max-height:700px){
+ .lounge-shell.selected-menu.lounge-home{--bar:64px;--dock:84px}
+ .lounge-shell.selected-menu.lounge-home .lounge-rail{height:64px;bottom:10px}
+ .lounge-shell.selected-menu.lounge-home .lounge-play-button>small,.lounge-shell.selected-menu.lounge-home .lounge-play-button>span{display:none}
+ .lounge-shell.selected-menu.lounge-home .lounge-rank-info{min-height:24px;font-size:10px}
+ .lounge-shell.selected-menu.lounge-home .home-rank-copy .rank-target{display:none}
+}
+@media(max-height:500px) and (min-width:601px){
+ .lounge-shell.selected-menu.lounge-home{--bar:58px;--dock:78px}
+ .lounge-shell.selected-menu.lounge-home .lounge-content{top:var(--bar)}
+ .lounge-shell.selected-menu.lounge-home .lounge-content>.lounge-home-screen:has(.gift-courier){grid-template-columns:minmax(0,1fr) minmax(0,52%);padding:4px 20px 4px;gap:20px}
+ .lounge-shell.selected-menu.lounge-home .lounge-home-main:has(.gift-courier){padding:4px 12px}
+ .lounge-shell.selected-menu.lounge-home .lounge-play{grid-template-columns:minmax(0,1fr) 90px;grid-template-rows:36px 34px auto auto;gap:3px 12px}
+ .lounge-shell.selected-menu.lounge-home .gift-courier{grid-column:1;grid-row:1;justify-content:flex-start}
+ .lounge-shell.selected-menu.lounge-home .gift-courier-art{width:38px;height:34px}
+ .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs{grid-column:1;grid-row:2}
+ .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button{font-size:11px}
+ .lounge-shell.selected-menu.lounge-home .mode-reward{grid-column:1;grid-row:3;font-size:9px}
+ .lounge-shell.selected-menu.lounge-home .lounge-play-button{grid-column:2;grid-row:1/4;width:90px;height:89px}
+ .lounge-shell.selected-menu.lounge-home .lounge-play-button>strong{font-size:16px!important}
+ .lounge-shell.selected-menu.lounge-home .lounge-rank-info{grid-column:1/-1;grid-row:4}
+ .lounge-shell.selected-menu.lounge-home .lounge-active-deck{min-height:44px;padding:2px 0}
+ .lounge-shell.selected-menu.lounge-home .lounge-deck-preview img{width:24px;height:34px}
+ .lounge-shell.selected-menu.lounge-home .home-companion{position:relative;align-self:center;margin-left:auto;width:140px;height:180px}
+ .lounge-shell.selected-menu.lounge-home .home-spirit-touch{width:140px;height:180px}
+ .lounge-shell.selected-menu.lounge-home .lounge-seeker .home-daily-reward{width:210px}
+}
+/* Keep the mode label on one line even when a short viewport shrinks the disc. */
+.lounge-shell.selected-menu.lounge-home .lounge-play-button{container-type:size}
+.lounge-shell.selected-menu.lounge-home .lounge-play-button>strong{font-size:clamp(11px,10cqw,25px)!important;white-space:nowrap;max-width:94%}
+@media(max-width:850px) and (min-height:501px) and (max-height:700px){
+ .lounge-shell.selected-menu.lounge-home .lounge-content>.lounge-home-screen:has(.gift-courier){padding-top:126px}
+ .lounge-shell.selected-menu.lounge-home .lounge-play{grid-template-rows:32px 38px auto minmax(80px,1fr) auto}
+ .lounge-shell.selected-menu.lounge-home .gift-courier-art{height:32px;width:36px}
+ .lounge-shell.selected-menu.lounge-home .gift-courier-label strong{font-size:12px}
+}

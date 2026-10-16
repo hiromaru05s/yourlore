@@ -51,3 +51,8 @@
 @media(forced-colors:active) {
   .home-sound-range { appearance:auto; }
 }
+/* Keep quests directly below sound, in the same persistent profile column. */
+.selected-menu .lounge-seeker .home-daily-reward{position:absolute;top:calc(100% + 78px);left:0;width:260px;min-height:64px;padding:10px 12px;gap:10px;background:#071421b3;border-bottom:1px solid #c6ddeb25;align-items:flex-start}
+.selected-menu .lounge-seeker .home-daily-reward>span{display:grid;gap:5px}
+.selected-menu .lounge-seeker .home-daily-reward strong{font-size:11px;font-weight:400;line-height:1.5;white-space:normal}
+.selected-menu .lounge-seeker .home-daily-reward>b{font-size:11px;white-space:nowrap}

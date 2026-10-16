@@ -131,26 +131,29 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     return json(env, { error: "legacy reward retired; complete the current tutorial" }, 410);
   }
 
-  // POST /rewards/coupon { code } → redeem a coupon code (once per user; server-side caps)
+  // POST /rewards/coupon { code } → redeem a coupon code (once per user unless explicitly repeatable)
   if (path === "/rewards/coupon" && req.method === "POST") {
     const body = (await req.json().catch(() => ({}))) as { code?: string };
     const code = (typeof body?.code === 'string' ? body.code : '').trim().toUpperCase().slice(0, 32);
     if (!code) return json(env, { error: "쿠폰 코드를 입력하세요." }, 400);
-    const c = await env.DB.prepare(`SELECT code, amount, max_uses, uses, expires_at FROM coupons WHERE code = ?`)
-      .bind(code).first<{ code: string; amount: number; max_uses: number | null; uses: number; expires_at: number | null }>();
+    const c = await env.DB.prepare(`SELECT code, amount, max_uses, uses, expires_at, repeatable FROM coupons WHERE code = ?`)
+      .bind(code).first<{ code: string; amount: number; max_uses: number | null; uses: number; expires_at: number | null; repeatable: number }>();
     if (!c) return json(env, { error: "존재하지 않는 쿠폰입니다." }, 404);
     if (c.expires_at != null && c.expires_at < Date.now()) return json(env, { error: "만료된 쿠폰입니다." }, 410);
     if (c.max_uses != null && c.uses >= c.max_uses) return json(env, { error: "소진된 쿠폰입니다." }, 410);
     const [ins] = await env.DB.batch([
-      env.DB.prepare(`INSERT OR IGNORE INTO coupon_claims (code,user_id,created_at)
-        SELECT code,?,? FROM coupons WHERE code=? AND (max_uses IS NULL OR uses<max_uses) AND (expires_at IS NULL OR expires_at>=?)`)
+      env.DB.prepare(`INSERT INTO coupon_claims (code,user_id,created_at)
+        SELECT code,?,? FROM coupons WHERE code=? AND (max_uses IS NULL OR uses<max_uses) AND (expires_at IS NULL OR expires_at>=?)
+        ON CONFLICT(code,user_id) DO UPDATE SET claim_count=coupon_claims.claim_count+1,created_at=excluded.created_at
+        WHERE (SELECT repeatable FROM coupons WHERE code=excluded.code)=1`)
         .bind(user.id,Date.now(),code,Date.now()),
       env.DB.prepare(`UPDATE users SET credits = credits + (SELECT amount FROM coupons WHERE code=?) WHERE id=? AND changes()=1`).bind(code,user.id),
       env.DB.prepare(`UPDATE coupons SET uses = uses + 1 WHERE code = ? AND changes()=1`).bind(code),
     ]);
     if ((ins.meta?.changes ?? 0) === 0) {
       const prior=await env.DB.prepare(`SELECT 1 AS claimed FROM coupon_claims WHERE code=? AND user_id=?`).bind(code,user.id).first();
-      return json(env,{error:prior ? '이미 사용한 쿠폰입니다.' : '소진되었거나 만료된 쿠폰입니다.'},prior ? 409 : 410);
+      const alreadyUsed=prior&&!c.repeatable;
+      return json(env,{error:alreadyUsed ? '이미 사용한 쿠폰입니다.' : '소진되었거나 만료된 쿠폰입니다.'},alreadyUsed ? 409 : 410);
     }
     const row = await env.DB.prepare(`SELECT credits FROM users WHERE id = ?`).bind(user.id).first<{ credits: number }>();
     return json(env, { granted: true, amount: c.amount, credits: row?.credits ?? 0 });

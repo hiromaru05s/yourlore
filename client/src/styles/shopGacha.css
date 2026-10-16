@@ -148,3 +148,5 @@
  .gacha-copy,.gacha-v2 .gacha-copy{padding-top:12px}
  .gacha-artwork,.gacha-v2 .gacha-artwork{height:160px;min-height:160px}
 }
+/* The single permanent banner no longer has an edition-selector column. */
+.gacha-page.gacha-v2{display:block}

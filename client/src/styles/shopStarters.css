@@ -16,3 +16,18 @@
 .gacha-dialog-body th,.gacha-dialog-body td{white-space:normal}
 .gacha-lineup article img{object-fit:contain}
 @media(max-width:600px){.starter-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 8px}.starter-shop-face .card{width:min(154px,100%)}.gacha-editions{gap:6px}.gacha-editions button{padding:8px}.gacha-editions b{font-size:11px}.gacha-editions small{font-size:8px}.gacha-copy h2{white-space:normal!important}.gacha-guarantee{font-size:11px}.gacha-dialog-body th,.gacha-dialog-body td{padding:8px 4px}}
+/* Use the same complete 0.64 card face as the card collection. */
+.starter-shop-face .card{--cw:154px;--ch:calc(var(--cw)/.64);width:var(--cw);height:var(--ch)}
+.starter-shop-quantity{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;font-size:12px;color:#cbd8e5}
+.starter-shop-quantity select{width:64px;padding:5px 10px;min-height:36px}
+.starter-purchase-dialog{width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:28px;border:1px solid #aac8da66;border-radius:4px;background:#0a1b2b;color:#e0edf5;overflow:auto}
+.starter-purchase-dialog::backdrop{background:#020a14c9}
+.starter-purchase-dialog h2{font-size:22px;line-height:1.5;margin:0 0 18px}
+.starter-purchase-dialog p{line-height:1.7;margin:12px 0}
+.starter-purchase-dialog .modal-row{display:flex;justify-content:flex-end;gap:12px;margin-top:22px}
+.starter-purchase-dialog button{min-width:90px;min-height:44px}
+.starter-purchase-dialog button:focus-visible{outline:2px solid #d0eafa;outline-offset:3px}
+.selected-menu .shop-catalog{grid-template-columns:minmax(0,1fr)}
+.selected-menu .shop-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.selected-menu .shop-item .sl-preview{cursor:default}
+@media(max-width:600px){.starter-shop-face .card{--cw:min(154px,calc((100vw - 116px)/2));width:var(--cw)}.selected-menu .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
