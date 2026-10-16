@@ -33,10 +33,14 @@ tag = "v1"
 new_sqlite_classes = ["Matchmaker", "GameRoom"]
 
 # Production fresh start phase 1: switch bindings to empty namespaces.
-# Retire the old classes in a subsequent deploy after references are removed.
 [[migrations]]
 tag = "v2-production-reset-20261016"
 new_sqlite_classes = ["MatchmakerLive", "GameRoomLive"]
+
+# Phase 2: bindings already point to the new namespaces; erase legacy data.
+[[migrations]]
+tag = "v3-production-retire-20261016"
+deleted_classes = ["Matchmaker", "GameRoom"]
 
 # --- D1: users / sessions / match records ---
 [[d1_databases]]
