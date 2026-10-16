@@ -1,0 +1,25 @@
+{
+  "checks": [
+    "empty deck and grave, opponent hand",
+    "hand creature animates",
+    "actual opponent draw and cleanup",
+    "mixed independent equipment",
+    "self draw cleanup",
+    "reduced motion and responsive geometry",
+    "five equip/remove cycles without remnants",
+    "animation does not repaint full board each frame",
+    "controller disposal"
+  ],
+  "errors": [],
+  "perf": {
+    "seconds": 5,
+    "ticks": 301,
+    "fullPasses": 0,
+    "portalPasses": 111,
+    "displayPasses": 301,
+    "flightPasses": 0,
+    "cpuMs": 1060.6,
+    "calls": 95,
+    "triangles": 24026
+  }
+}

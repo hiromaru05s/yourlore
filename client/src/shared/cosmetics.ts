@@ -1,3 +1,4 @@
+import {COFFER_SLEEVE,COFFER_FURNITURE,COFFER_ART,COFFER_FURNITURE_ART} from './mimicCofferCosmetics';
 import {ELFWEAVE_SLEEVE,ELFWEAVE_FURNITURE,ELFWEAVE_ART,ELFWEAVE_FURNITURE_ART} from './elfweaveCosmetics';
 import {QUIET_LUXURY_THEMES,quietLuxuryId,quietLuxuryArt} from './quietLuxuryCosmetics';
 import {AMETHYST_SLEEVE,AMETHYST_FURNITURE,AMETHYST_ART,AMETHYST_FURNITURE_ART} from './amethystCosmetics';
@@ -36,6 +37,10 @@ GACHA_COSMETICS.push(
 GACHA_COSMETICS.push(
  {id:ELFWEAVE_SLEEVE,kind:'sleeve',url:ELFWEAVE_ART,ja:'エルフの葉織のスリーブ',en:'Elven Leafweave Sleeve',ko:'엘프의 잎직조 슬리브',price:1000,gachaOnly:true},
  {id:ELFWEAVE_FURNITURE,kind:'furniture',url:ELFWEAVE_FURNITURE_ART,ja:'エルフの葉織のデッキ置き場＆墓地',en:'Elven Leafweave Deck Holder & Graveyard',ko:'엘프의 잎직조 덱 받침 & 묘지',price:1000,gachaOnly:true}
+);
+GACHA_COSMETICS.push(
+ {id:COFFER_SLEEVE,kind:'sleeve',url:COFFER_ART,ja:'貪欲な宝箱のスリーブ',en:'The Hungry Coffer Sleeve',ko:'탐욕의 보물상자 슬리브',price:1000,gachaOnly:true},
+ {id:COFFER_FURNITURE,kind:'furniture',url:COFFER_FURNITURE_ART,ja:'貪欲な宝箱のデッキ置き場＆墓地',en:'The Hungry Coffer Deck Holder & Graveyard',ko:'탐욕의 보물상자 덱 받침 & 묘지',price:1000,gachaOnly:true}
 );
 COSMETICS.push(...GACHA_COSMETICS);
 export const FURNITURE_LIST=COSMETICS.filter(c=>c.kind==='furniture');

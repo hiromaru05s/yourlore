@@ -1,3 +1,5 @@
+import {isCofferSleeve} from '../../shared/mimicCofferCosmetics';
+import {cofferSleeve} from './coffer/sleeve';
 import {isElfweaveSleeve} from '../../shared/elfweaveCosmetics';
 import {elfweaveSleeve} from './elfweave/sleeve';
 import {quietLuxuryFromUrl} from '../../shared/quietLuxuryCosmetics';
@@ -24,6 +26,7 @@ function finishMap(t:AtelierTheme){let map=maps.get(t.id);if(map)return map;cons
   const i=(y*size+x)*4;data[i]=Math.round(255*foil);data[i+1]=Math.round(255*(rough*(1-foil*.65)+n*.025));data[i+2]=Math.round(255*(.08+foil*.85));data[i+3]=255;}
  map=new T.DataTexture(data,size,size);map.wrapS=map.wrapT=T.ClampToEdgeWrapping;map.magFilter=T.LinearFilter;map.minFilter=T.LinearMipmapLinearFilter;map.generateMipmaps=true;map.needsUpdate=true;maps.set(t.id,map);return map;}
 export function sleeveMaterial(texture:T.Texture):T.Material{
+ if(isCofferSleeve(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src))return cofferSleeve();
  if(isElfweaveSleeve(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src))return elfweaveSleeve();
  const quiet=quietLuxuryFromUrl(texture.userData.url||(texture.image as HTMLImageElement)?.currentSrc||(texture.image as HTMLImageElement)?.src);
  if(quiet)return quietLuxurySleeve(quiet.variant);

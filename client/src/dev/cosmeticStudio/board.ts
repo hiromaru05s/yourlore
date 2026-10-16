@@ -1,3 +1,4 @@
+import {COFFER_SLEEVE,COFFER_FURNITURE} from '../../shared/mimicCofferCosmetics';
 import {ELFWEAVE_SLEEVE,ELFWEAVE_FURNITURE} from '../../shared/elfweaveCosmetics';
 import {AMETHYST_SLEEVE,AMETHYST_FURNITURE} from '../../shared/amethystCosmetics';
 import {GOLDFAULT_SLEEVE,GOLDFAULT_FURNITURE} from '../../shared/goldfaultCosmetics';
@@ -34,6 +35,7 @@ export async function mountBoard(){
   g.furnitures=g.sleeves?.map(id=>id==='default'?'default':'furniture:'+id) as [string,string];
   if(next.set==='amethyst-cleft'){g.sleeves=([0,1] as const).map(i=>next.side==='both'||next.side===(i?'opponent':'self')?AMETHYST_SLEEVE:'default') as [string,string];g.furnitures=g.sleeves.map(id=>id===AMETHYST_SLEEVE?AMETHYST_FURNITURE:'default') as [string,string];}
   if(next.set==='goldfault'){g.sleeves=([0,1] as const).map(i=>next.side==='both'||next.side===(i?'opponent':'self')?GOLDFAULT_SLEEVE:'default') as [string,string];g.furnitures=g.sleeves.map(id=>id===GOLDFAULT_SLEEVE?GOLDFAULT_FURNITURE:'default') as [string,string];}
+  if(next.set==='coffer'){g.sleeves=([0,1] as const).map(i=>next.side==='both'||next.side===(i?'opponent':'self')?COFFER_SLEEVE:'default') as [string,string];g.furnitures=g.sleeves.map(id=>id===COFFER_SLEEVE?COFFER_FURNITURE:'default') as [string,string];}
   if(next.set==='elfweave'){g.sleeves=([0,1] as const).map(i=>next.side==='both'||next.side===(i?'opponent':'self')?ELFWEAVE_SLEEVE:'default') as [string,string];g.furnitures=g.sleeves.map(id=>id===ELFWEAVE_SLEEVE?ELFWEAVE_FURNITURE:'default') as [string,string];}
   if(shopItem){
    g.sleeves=[shopItem.kind==='sleeve'?shopItem.id:'default','default'];
@@ -55,7 +57,7 @@ export async function mountBoard(){
   finally{busy=false;delete root.dataset.replay;parent.postMessage({type:'atelier-replay',busy:false,kind},location.origin);}
  }
  root.dataset.thickness=String(CARD_THICKNESS_SCALE);
- const message=(e:MessageEvent)=>{if(e.origin!==location.origin||e.source!==parent||!['atelier-state','atelier-action','atelier-focus'].includes(e.data?.type))return;if(e.data.type==='atelier-focus'){focusZoom=e.data.zoom===2.6?2.6:1;window.dispatchEvent(new Event('lore:render-density'));return;}if(e.data.type==='atelier-action'){if(ACTIONS.includes(e.data.action))void replay(e.data.action);return;}if(busy)return;const n=e.data.state;if(!n||!['default','goldfault','amethyst-cleft','elfweave',...THEMES.map(t=>t.id)].includes(n.set)||!['self','opponent','both'].includes(n.side)||![0,1,8,12,40].includes(n.count))return;void apply({set:n.set,side:n.side,motion:!!n.motion,count:n.count,dense:!!n.dense,time:typeof n.time==='number'?n.time:undefined});};
+ const message=(e:MessageEvent)=>{if(e.origin!==location.origin||e.source!==parent||!['atelier-state','atelier-action','atelier-focus'].includes(e.data?.type))return;if(e.data.type==='atelier-focus'){focusZoom=e.data.zoom===2.6?2.6:1;window.dispatchEvent(new Event('lore:render-density'));return;}if(e.data.type==='atelier-action'){if(ACTIONS.includes(e.data.action))void replay(e.data.action);return;}if(busy)return;const n=e.data.state;if(!n||!['default','goldfault','coffer','amethyst-cleft','elfweave',...THEMES.map(t=>t.id)].includes(n.set)||!['self','opponent','both'].includes(n.side)||![0,1,8,12,40].includes(n.count))return;void apply({set:n.set,side:n.side,motion:!!n.motion,count:n.count,dense:!!n.dense,time:typeof n.time==='number'?n.time:undefined});};
  window.addEventListener('message',message);
  Object.assign(window,{atelier:{apply,info:()=>materials.info(),state:()=>state,controller:ctl,replay,dimensions:()=>({scale:CARD_THICKNESS_SCALE,stock:STOCK_THICKNESS,draw:DRAW_THICKNESS_RATIO})}});
  if(params.get('tempo')==='1'){const {mountCombatTempo}=await import('../combatTempo');mountCombatTempo(ctl);}

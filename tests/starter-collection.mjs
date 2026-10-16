@@ -45,9 +45,10 @@ try{
  db.prepare("UPDATE users SET credits=5000 WHERE id='a'").run();
  const catalog=[...GACHA_COSMETICS];GACHA_COSMETICS.length=0;
  const emptyBefore=await state(),empty=await forced([9250]);assert.equal(empty.receipt.rewards[0].kind,'empty');assert.equal(empty.receipt.refund,0);assert.equal(empty.credits,emptyBefore.credits-100);assert.deepEqual(empty.starterCards,emptyBefore.starterCards);assert.deepEqual(empty.effects,[]);
- GACHA_COSMETICS.push(...catalog);assert(catalog.some(c=>c.id==='sleeve:gacha-elfweave'));assert(catalog.some(c=>c.id==='furniture:gacha-elfweave'));assert(catalog.some(c=>c.id==='sleeve:gacha-amethyst-cleft'));assert(catalog.some(c=>c.id==='furniture:gacha-amethyst-cleft'));
+ GACHA_COSMETICS.push(...catalog);assert(catalog.some(c=>c.id==='sleeve:gacha-mimic-coffer'));assert(catalog.some(c=>c.id==='furniture:gacha-mimic-coffer'));assert(catalog.some(c=>c.id==='sleeve:gacha-elfweave'));assert(catalog.some(c=>c.id==='furniture:gacha-elfweave'));assert(catalog.some(c=>c.id==='sleeve:gacha-amethyst-cleft'));assert(catalog.some(c=>c.id==='furniture:gacha-amethyst-cleft'));
  for(let i=0;i<catalog.length;i++){
   const item=catalog[i],hit=await forced([9250,i]);assert.equal(hit.receipt.rewards[0].id,item.id);assert.equal(hit.receipt.rewards[0].kind,'cosmetic');assert.equal(hit.receipt.refund,0);assert(hit.cosmetics.includes(item.id));
+  if(item.id==='sleeve:gacha-mimic-coffer')assert(!hit.cosmetics.includes('furniture:gacha-mimic-coffer'));
   if(item.id==='sleeve:gacha-amethyst-cleft')assert(!hit.cosmetics.includes('furniture:gacha-amethyst-cleft'));
   const duplicate=await forced([9250,i]);assert.equal(duplicate.receipt.refund,100);
   for(const route of ['/social/buy-cosmetic','/social/buy-sleeve'])assert.equal((await call(route,{id:item.id,price:0},'b')).status,400);
@@ -84,6 +85,11 @@ try{
  assert.equal((await call('/deck',{decks:goldDeck},'b')).status,400);
  assert.equal((await call('/deck',{decks:goldDeck})).status,200);
  const savedGold=await (await call('/auth/me')).json();assert.equal(savedGold.user.decks.list[0].sleeve,goldDeck.list[0].sleeve);assert.equal(savedGold.user.decks.list[0].furniture,goldDeck.list[0].furniture);
+ // Coffer rewards remain independent, ownership-gated equipment slots.
+ const cofferDeck=deckStoreForUser();cofferDeck.list[0].sleeve='sleeve:gacha-mimic-coffer';cofferDeck.list[0].furniture='furniture:gacha-mimic-coffer';
+ assert.equal((await call('/deck',{decks:cofferDeck},'b')).status,400);
+ assert.equal((await call('/deck',{decks:cofferDeck})).status,200);
+ const savedCoffer=await (await call('/auth/me')).json();assert.equal(savedCoffer.user.decks.list[0].sleeve,cofferDeck.list[0].sleeve);assert.equal(savedCoffer.user.decks.list[0].furniture,cofferDeck.list[0].furniture);
  const appearance=await (await call('/social/profile')).json();assert(appearance.profile.sleeves.every(id=>!id.startsWith('effect:')));assert.equal(appearance.profile.sleeves.filter(id=>catalog.some(c=>c.id===id&&c.kind==='sleeve')).length,catalog.filter(c=>c.kind==='sleeve').length);assert.equal(appearance.profile.furnitures.filter(id=>catalog.some(c=>c.id===id&&c.kind==='furniture')).length,catalog.filter(c=>c.kind==='furniture').length);
  for(let i=0;i<CARD_EFFECTS.length;i++){
   const id=CARD_EFFECTS[i].id,key=crypto.randomUUID();const result=await forced([9950,i],1,key);assert.deepEqual(result.receipt.rewards,[{kind:'effect',id,refund:0,owned:1}]);assert(result.effects.includes(id));
