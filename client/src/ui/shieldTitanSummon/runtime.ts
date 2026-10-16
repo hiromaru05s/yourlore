@@ -1,3 +1,4 @@
+import {summonPixelRatio} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
 import {projectedPlacement} from '../boardProjection';
@@ -33,7 +34,7 @@ export function playShieldTitanSummon(source:HTMLElement,options:Options={}):Pro
    const width=surface.face.width/(1+2*CARD_PADDING),pad=width*CARD_PADDING,height=surface.face.height-2*pad;
    face=document.createElement('canvas');face.width=768;face.height=1200;face.getContext('2d')!.drawImage(surface.face,pad,pad,width,height,0,0,768,1200);
    host=document.createElement('canvas');host.className='shield-titan-summon';host.dataset.cardId=id;host.dataset.variant='5';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';
-   const density=Math.min(devicePixelRatio||1,1.5,Math.sqrt(2600000/(innerWidth*innerHeight)));host.width=Math.round(innerWidth*density);host.height=Math.round(innerHeight*density);const c=host.getContext('2d')!;
+   const density=summonPixelRatio();host.width=Math.round(innerWidth*density);host.height=Math.round(innerHeight*density);const c=host.getContext('2d')!;
    const paint=(ms:number)=>{
     const width=anchor.offsetWidth||anchor.getBoundingClientRect().width,H=1.5625;
     let placement=projectedPlacement(anchor,1,H).translate(.5,H/2).scale(1,-1,width);

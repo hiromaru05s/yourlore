@@ -1,3 +1,5 @@
+import {settleSummonFace} from '../summon/quality';
+import {sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {projectedPlacement,layoutRect} from '../boardProjection';
@@ -31,10 +33,10 @@ export function playVampireSummon(source:HTMLElement,options:Options={}):Promise
    const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost?.remove();captureHost=undefined;if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(!surface.face)throw Error('Public face unavailable');
    face=document.createElement('canvas');face.width=640;face.height=Math.round(face.width*surface.face.height/surface.face.width);face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
-   host=document.createElement('canvas');host.className='vampire-summon';host.dataset.cardId=id;host.dataset.variant='1';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';host.width=innerWidth;host.height=innerHeight;const c=host.getContext('2d')!;
+   host=document.createElement('canvas');host.className='vampire-summon';host.dataset.cardId=id;host.dataset.variant='1';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';sizeSummonCanvas(host);const c=host.getContext('2d')!;
    const paint=(ms:number)=>{const box=layoutRect(anchor);let placement=projectedPlacement(anchor,180,280).translate(90,140).scale(1,-1,box.width/180);c.clearRect(0,0,host!.width,host!.height);
     const from=options.from;if(from&&ms<420){const start=new DOMMatrix().translate(from.left+from.width/2,from.top+from.height/2).scale(from.width/180,-from.height/280,from.width/180),a=Array.from(start.toFloat64Array()),b=Array.from(placement.toFloat64Array()),q=ease(0,420,ms);placement=new DOMMatrix(a.map((n,j)=>n+(b[j]-n)*q));}
-    lease!.renderer.drawBoard(c,face!,id,0,ms,placement,host!.width,host!.height);host!.dataset.time=String(Math.round(ms));};
+    lease!.renderer.drawBoard(c,face!,id,0,ms,summonPixelMatrix(placement),host!.width,host!.height);host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,DURATION);};
    paint(0);document.body.append(host);const start=performance.now();
    const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
    frame=requestAnimationFrame(tick);

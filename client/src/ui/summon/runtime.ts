@@ -1,3 +1,4 @@
+import {settleSummonFace} from './quality';
 import {isCastle} from '../castleSummon/catalog';
 import {playCastleSummon,cancelCastleSummon,cancelCastleSummons} from '../castleSummon/runtime';
 import {isPoisonSummon} from '../poisonSummon/selection';
@@ -124,6 +125,7 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
      el.style.transform=pass==='ground'?ground:summonPlacement(anchor,180,270,ms).toString();
      if(paint){c.clearRect(0,0,684,684);renderer!.draw(c,face,SUMMON_VARIANT,Math.min(DURATION,ms),342,342,180,false,pass,false);if(pass==='ground')coins?.draw(c,MERCHANT_VARIANT,coinsCount,ms,342,342,180,false);}
     }
+    settleSummonFace(source,host!,ms,total);
     if(ms===total){finish(true);return;}frame=requestAnimationFrame(tick);
    };tick(start);
   })().catch(error=>{if(!ended){console.warn('[summon] Native card fallback',error);options.onImpact?.();finish();}});

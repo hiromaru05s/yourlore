@@ -1,6 +1,16 @@
-.combat-damage{position:fixed;z-index:230;display:grid;place-items:center;pointer-events:none;user-select:none;color:#ea1730;font-family:LoreBoardSerif,Georgia,serif;font-weight:600;font-variant-numeric:lining-nums tabular-nums;line-height:1;letter-spacing:-.025em;-webkit-text-stroke:.65px #fff3db;paint-order:stroke fill;text-shadow:0 1px 2px #24000dbb;opacity:0;}
+.combat-damage{position:fixed;z-index:230;display:grid;place-items:center;pointer-events:none;user-select:none;color:#d92337;font-family:Alegreya,Georgia,serif;font-weight:800;font-variant-numeric:lining-nums tabular-nums;font-synthesis:none;line-height:1;letter-spacing:-.04em;-webkit-text-stroke:1.2px #390d19;paint-order:stroke fill;text-shadow:0 1px 0 #ff8877,0 3px 0 #490f21,0 5px 7px #24000d50;opacity:0;transform-origin:50% 58%;}
 .combat-damage.in{opacity:1;animation:combat-number .8s both;}
-@keyframes combat-number{0%{opacity:1;scale:1.26}15%{scale:.96}28%,74%{opacity:1;scale:1}100%{opacity:0;scale:1.02;translate:0 -5px}}
+/* A short strike, two diminishing recoils, then a readable hold. The anchor
+   keeps following the portrait while this local motion settles independently. */
+@keyframes combat-number{
+ 0%{opacity:0;transform:translate(0,5px) rotate(-7deg) scale(.72)}
+ 9%{opacity:1;transform:translate(-3px,-3px) rotate(-4deg) scale(1.18)}
+ 19%{transform:translate(3px,1px) rotate(2.8deg) scale(.97)}
+ 29%{transform:translate(-2px,-1px) rotate(-1.8deg) scale(1.035)}
+ 40%{transform:translate(1px,0) rotate(.7deg) scale(1)}
+ 53%,76%{opacity:1;transform:translate(0,0) rotate(-.5deg) scale(1)}
+ 100%{opacity:0;transform:translate(0,-9px) rotate(-.5deg) scale(.98)}
+}
 @media(prefers-reduced-motion:reduce){.combat-damage.in{animation:none}}
 /* Fallback button retains the warning without the WebGL furniture. */
 #endBtn.turn-urgent{animation:turn-urgency-pulse var(--turn-pulse) ease-in-out infinite}

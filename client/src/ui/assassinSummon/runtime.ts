@@ -1,3 +1,5 @@
+import {settleSummonFace} from '../summon/quality';
+import {sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {boardMatrix,layoutRect,projectedPlacement} from '../boardProjection';
@@ -30,7 +32,7 @@ export function playAssassinSummon(source:HTMLElement,options:Options={}):Promis
    const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost?.remove();captureHost=undefined;if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(!surface.face)throw Error('Public face unavailable');
    face=document.createElement('canvas');face.width=540;face.height=Math.round(540*surface.face.height/surface.face.width);face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
-   host=document.createElement('canvas');host.className='assassin-summon';host.dataset.cardId=id;host.dataset.variant='5';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';host.width=innerWidth;host.height=innerHeight;const c=host.getContext('2d')!;
+   host=document.createElement('canvas');host.className='assassin-summon';host.dataset.cardId=id;host.dataset.variant='5';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';sizeSummonCanvas(host);const c=host.getContext('2d')!;
    // Same hand-to-board placement and clock as the approved comparison.
    const paint=(ms:number)=>{
     const dest=projectedPlacement(anchor,180,270),plane=anchor.closest<HTMLElement>('[data-board-plane]');
@@ -44,8 +46,8 @@ export function playAssassinSummon(source:HTMLElement,options:Options={}):Promis
      placement=new DOMMatrix(a.map((value,i)=>value+(b[i]-value)*t));
     }
     c.clearRect(0,0,host!.width,host!.height);
-    lease!.renderer.drawBoard(c,face!,VARIANT,ms,id,placement,host!.width,host!.height);
-    host!.dataset.time=String(Math.round(ms));host!.dataset.placement=placement.toString();
+    lease!.renderer.drawBoard(c,face!,VARIANT,ms,id,summonPixelMatrix(placement),host!.width,host!.height);
+    host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,DURATION);host!.dataset.placement=placement.toString();
    };
    paint(0);document.body.append(host);const start=performance.now();
    const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};

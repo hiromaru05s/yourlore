@@ -1,3 +1,4 @@
+import {sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {boardMatrix,layoutRect,screenToBoard} from '../boardProjection';
@@ -43,7 +44,7 @@ export function playPoisonSummon(source:HTMLElement,options:Options={}):Promise<
    face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
    host=document.createElement('div');host.className='poison-summon';host.dataset.cardId=id;host.dataset.variant=String(POISON_SELECTION[id]+1);host.setAttribute('aria-hidden','true');
    host.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:136';
-   const canvas=document.createElement('canvas');canvas.width=innerWidth;canvas.height=innerHeight;canvas.style.cssText='width:100%;height:100%';host.append(canvas);
+   const canvas=document.createElement('canvas');sizeSummonCanvas(canvas);canvas.style.cssText='width:100%;height:100%';host.append(canvas);
    const c=canvas.getContext('2d')!;
    const paint=(ms:number)=>{
     const r=layoutRect(anchor),plane=Number(anchor.closest<HTMLElement>('[data-board-plane]')?.dataset.boardPlane)||0;
@@ -51,7 +52,7 @@ export function playPoisonSummon(source:HTMLElement,options:Options={}):Promise<
     const sx=r.width/144,sz=r.height/224,tx=r.left+r.width/2+(parseFloat(translate[0])||0),tz=r.top+r.height/2+(parseFloat(translate[1])||0);
     const from=options.from,origin=from?screenToBoard(from.left+from.width/2,from.top+from.height/2,plane+cardHeight(ms)*sx):{x:tx,y:tz};
     const travel=ease(0,CONTACT_MS,ms),m=boardMatrix(origin.x+(tx-origin.x)*travel,origin.y+(tz-origin.y)*travel,plane).scale(sx,sz,sx);
-    c.clearRect(0,0,canvas.width,canvas.height);renderBoard(c,face!,id,POISON_SELECTION[id],ms,m,canvas.width,canvas.height);
+    c.clearRect(0,0,canvas.width,canvas.height);renderBoard(c,face!,id,POISON_SELECTION[id],ms,summonPixelMatrix(m),canvas.width,canvas.height);
     host!.dataset.time=String(Math.round(ms));
    };
    // Compile and paint before starting the shared physical clock.

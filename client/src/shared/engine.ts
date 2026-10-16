@@ -142,13 +142,18 @@ export function cullExiled(p: PlayerState): number {
   return (p.removed ?? []).filter((c) => c.star === "trash").length;
 }
 /** '컬' n장을 게임에서 제외 (묘지 → 덱 → 패 순). 실제로 제외한 장수를 돌려준다. */
-function exileCulls(p: PlayerState, n: number): number {
+function exileCulls(g: GameState, events: GameEvent[], p: PlayerState, n: number, sourceUid: string): number {
+  const cards: Extract<GameEvent, {type:'cullExile'}>['cards'] = [];
   let ex = 0;
   for (let i = 0; i < n; i++) {
     let done = false;
-    for (const z of [p.discard, p.deck, p.hand]) { const ci = z.findIndex((c) => c.star === "trash"); if (ci >= 0) { rmz(p).push(z.splice(ci, 1)[0]); ex++; done = true; break; } }
+    for (const from of ['discard', 'deck', 'hand'] as const) {
+      const z = p[from], ci = z.findIndex(c => c.star === 'trash');
+      if (ci >= 0) { const card = z.splice(ci, 1)[0]; rmz(p).push(card); cards.push({card, from}); ex++; done = true; break; }
+    }
     if (!done) break;
   }
+  if (cards.length) events.push({type:'cullExile', player:side(g,p), sourceUid, cards});
   return ex;
 }
 /** 무법지대(v41 lawless): 몬스터의 체력(최대)을 1로 만든다 — 누적 데미지도 초기화. */
@@ -776,7 +781,14 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   p.mana = effMaxMana(p);
   tickExile(ctx, p);
   if (!first) {
-    rollSupply(g, p);
+    // Offers persist across turns, including purchased/empty slots. Only an
+    // explicit refresh or a card effect rolls new identities. Market Crash
+    // removes the final offer at its next-turn boundary without rerolling two.
+    if (p.supplyShrink > 0) {
+      const keep = Math.max(2, 3 - p.supplyShrink);
+      p.supply = p.supply.map((card, index) => index < keep ? card : null);
+      p.supplyShrink = 0;
+    }
     const enchDraw = p.enchants.filter((e) => e.card.ench === "bonusDraw").reduce((s, e) => s + (e.card.val2 || 0), 0);
     const dp = p.drawPenaltyNext || 0; p.drawPenaltyNext = 0; // 흉조: 이번 턴 드로우 차감 (1회성)
     if (dp > 0) ctx.log(`  └ <span class="dmg">흉조</span>: 드로우 -${dp}`, `  └ <span class="dmg">凶兆</span>: ドロー-${dp}`);
@@ -2376,8 +2388,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
   // 선택받은 검사(v36 cullExile2): 공격할 때마다 컬 2장을 게임에서 제외 (묘지 → 덱 → 패 순)
   if (att.attackFx === "cullExile2" && !g.over) {
-    const ex = exileCulls(p, 2);
-    if (ex > 0) monsterActivation(g, ctx.ev, p, att);
+    const at = ctx.ev.length, ex = exileCulls(g, ctx.ev, p, 2, att.uid);
+    if (ex > 0) monsterActivation(g, ctx.ev, p, att, at);
     if (ex > 0) ctx.log(`  └ ${cn(att)} 컬 ${ex}장 게임에서 제외 (누적 ${cullExiled(p)})`, `  └ ${cn(att)} カル${ex}枚をゲームから除外 (累計${cullExiled(p)})`);
   }
   // 뱀파이어 집사(vampButler · v36: 직접 공격도 포함): 공격할 때마다 흡혈 카운트 +1, 3카운트마다 견습 흡혈귀 소환
@@ -2549,7 +2561,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`  └ 소환 효과: ${n}장 드로우`, `  └ 召喚効果: ${n}枚ドロー`); break; }
     case "burn": ctx.dealDamage(o, v, `${cn(m)} 소환`, `${cn(m)} 召喚`); break;
     case "sorterSummon": { // 선별자(v41): 컬 3장 제외 (상시 효과의 추가 제외는 reduce() 후처리)
-      const ex = exileCulls(p, v || 3);
+      const ex = exileCulls(g, ctx.ev, p, v || 3, m.uid);
       if (ex > 0) ctx.log(`  └ 컬 ${ex}장 게임에서 제외 (누적 ${cullExiled(p)})`, `  └ カル${ex}枚をゲームから除外 (累計${cullExiled(p)})`);
       else ctx.log("  └ 제외할 컬이 없음", "  └ 除外するカルがない");
       break;
@@ -5518,8 +5530,9 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
         const culls = fresh().filter(c => c.star === "trash").length;
         const sorters = pl.field.filter(m => m.aura === "sorter").length;
         if (culls && sorters) {
-          const extra = exileCulls(pl, culls * sorters);
-          if (extra) for (const m of pl.field) if (m.aura === "sorter") monsterActivation(g2, res.events, pl, m);
+          const sources = pl.field.filter(m => m.aura === 'sorter'), at = res.events.length;
+          const extra = exileCulls(g2, res.events, pl, culls * sorters, sources[0].uid);
+          if (extra) for (const m of sources) monsterActivation(g2, res.events, pl, m, at);
           if (extra) questCtx.log(`선별자: 컬 ${extra}장 추가 제외`, `選別者: カル${extra}枚を追加で除外`);
         }
         const added = fresh();

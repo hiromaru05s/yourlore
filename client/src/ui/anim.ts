@@ -1295,6 +1295,25 @@ export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|
   const node=floatAt(source?source.cloneNode(true) as HTMLElement:cardEl(card,{size:'hand'}),r);node.classList.remove('is-played');node.style.visibility='visible';if(source){node.style.width=`${source.offsetWidth}px`;node.style.height=`${source.offsetHeight}px`;node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=fieldPlacement(source,source.offsetWidth,source.offsetHeight).toString();source.style.visibility='hidden';}
   try{await absorbIntoRift(node,side);}finally{node.remove();} // The old source stays hidden until the authoritative board render.
 }
+/** Explicit public Culls resolve beside their cause, from the actual zone.
+ * A staggered group shares the Rift clock instead of queuing six full exits. */
+export async function exileCulls(cards:{card:CardInst;from:'discard'|'deck'|'hand'}[],side:ViewSide):Promise<void>{
+ for(let offset=0;offset<cards.length&&!fxSkip;offset+=3){
+  await Promise.all(cards.slice(offset,offset+3).map(async({card,from},i)=>{
+   await wait(i*110);if(fxSkip)return;
+   const hand=from==='hand'?document.querySelector<HTMLElement>(`.card[data-uid="${CSS.escape(card.uid)}"]`):null;
+   const pile=document.getElementById(from==='deck'?(side==='me'?'pile-myDeck':'pile-oppDeck'):discId(side));
+   const origin=hand??(from==='hand'?document.getElementById(side==='me'?'hand':'oppHand'):pile);
+   const rect=origin?.getBoundingClientRect();if(!rect)return;
+   if(hand){await exileCard(card,side,hand);return;}
+   const w=Math.min(76,innerWidth*.15),h=w/.64;
+   const node=floatAt(cardEl(card,{size:'hand',fullArt:true}),{left:rect.left+rect.width/2-w/2+i*8,top:rect.top+rect.height/2-h/2-i*6});
+   node.dataset.cullExile=card.uid;node.dataset.fromZone=from;
+   node.style.width=`${w}px`;node.style.height=`${h}px`;node.style.setProperty('--cw',`${w}px`);node.style.setProperty('--ch',`${h}px`);
+   try{await absorbIntoRift(node,side);}finally{node.remove();}
+  }));
+ }
+}
 /** Conjured removals have no library/hand origin. Show up to three staggered apparitions. */
 export async function exileGeneratedCards(cards:CardInst[],side:ViewSide,origin?:DOMRect):Promise<void>{
   const row=rectOf(`${side==='me'?'#meRow':'#oppRow'} .zone-mon`)??rowRect(side);if(!row||fxSkip)return;

@@ -1,3 +1,4 @@
+import {settleSummonFace} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
 import {silencePlacement} from './placement';
@@ -38,7 +39,7 @@ export function playSilenceSummon(source:HTMLElement,options:Options={}):Promise
    lease=acquire(Renderer,face);host=document.createElement('div');host.className='silence-summon';host.dataset.cardId=id;host.dataset.variant='4';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;left:0;top:0;width:180px;height:270px;transform-origin:0 0;pointer-events:none;z-index:136';
    // The study's two passes share the same board transform; its camera owns lift.
    const planes=(['ground','card'] as const).map(pass=>{const canvas=document.createElement('canvas');canvas.dataset.silencePass=pass;canvas.width=canvas.height=720;canvas.style.cssText='position:absolute;left:-198px;top:-153px;width:576px;height:576px';host!.append(canvas);const c=canvas.getContext('2d')!;c.setTransform(1.25,0,0,1.25,0,0);return{pass,c};});
-   const paint=(ms:number)=>{host!.style.transform=silencePlacement(anchor).toString();for(const{c,pass}of planes){c.clearRect(0,0,576,576);lease!.renderer.draw(c,face,SILENCE_VARIANT,ms,288,288,180,false,pass,false,id==='NT_SEAL5');}host!.dataset.time=String(Math.round(ms));};
+   const paint=(ms:number)=>{host!.style.transform=silencePlacement(anchor).toString();for(const{c,pass}of planes){c.clearRect(0,0,576,576);lease!.renderer.draw(c,face,SILENCE_VARIANT,ms,288,288,180,false,pass,false,id==='NT_SEAL5');}host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,DURATION);};
    // Compile and paint frame zero before the clock starts or the source is replaced.
    paint(0);document.body.append(host);const start=performance.now();let lastPaint=start;
    const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(matchMedia('(prefers-reduced-motion: reduce)').matches){impact();finish(true);return;}const ms=Math.min(DURATION,now-start);if(now-lastPaint>=1000/30||ms===DURATION){paint(ms);lastPaint=now;}if(ms>=designs[SILENCE_VARIANT].hit){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};

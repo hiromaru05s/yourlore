@@ -51,7 +51,7 @@ async function matte(url: string): Promise<HTMLCanvasElement> {
 /** Warm independent layers together before a contact-triggered material needs them. */
 export function warmCardSurface(node:HTMLElement):void{
  for(const el of node.querySelectorAll('.card-frame,.seal-face')){const url=urlOf(el);if(url)void matte(url).catch(()=>{});}
- const art=node.querySelector<HTMLImageElement>('.card-art img');if(art)void image(art.currentSrc||art.src).catch(()=>{});
+ const art=node.querySelector<HTMLImageElement>('.card-art img');if(art)void image(art.src.replace(/\/art\/cards-(sm|xs)\//,'/art/cards/')).catch(()=>{});
  if(node.querySelector('.card-status .ec,.card-status .kw,.badge'))void matte('/art/biblion/modular/plaque-ui.webp').catch(()=>{});
 }
 
@@ -87,11 +87,14 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   layers.push(async () => { ctx.drawImage(await matte(frameUrl), pad, pad, w, h); });
   const art = node.querySelector<HTMLImageElement>('.card-art img');
   if (art) {
-    const b = box(art), src = art.srcset?(art.currentSrc||art.src):art.src;
+    const b = box(art), fallback = art.srcset?(art.currentSrc||art.src):art.src;
+    // A projected thumbnail must never become the source of an enlarged VFX
+    // face. The identity is already public here; retain the original as fallback.
+    const src = art.src.replace(/\/art\/cards-(sm|xs)\//,'/art/cards/');
     const position = getComputedStyle(art).objectPosition.split(' ').map(v => parseFloat(v)/100);
     const path = document.querySelector(node.classList.contains('card--field')?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d');
     layers.push(async () => {
-      let img:HTMLImageElement;try{img=await image(src);}catch{return;}
+      let img:HTMLImageElement;try{img=await image(src);}catch{try{img=await image(fallback);}catch{return;}}
       ctx.save();
       if (path) {
         ctx.translate(pad,pad); ctx.scale(w,h); ctx.clip(new Path2D(path)); ctx.scale(1/w,1/h); ctx.translate(-pad,-pad);

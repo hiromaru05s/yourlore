@@ -1,3 +1,4 @@
+import {settleSummonFace} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {boardMatrix,layoutRect,projectedPlacement} from '../boardProjection';
@@ -54,7 +55,7 @@ export function playChosenSummon(source:HTMLElement,options:Options={}):Promise<
     if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const ms=Math.min(DURATION,now-start);host!.dataset.time=String(Math.round(ms));if(ms>=designs[VARIANT].hit){impact();if(ended)return;}
     if(now-lastPaint>=1000/30){lastPaint=now;for(const {el,c,pass} of planes){el.style.transform=(pass==='ground'?projectedPlacement(anchor,180,270):chosenPlacement(anchor,180,270,ms)).toString();c.clearRect(0,0,684,684);lease!.renderer.draw(c,face!,hero,VARIANT,ms,342,342,180,false,pass,false);}}
-    if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
+    settleSummonFace(source,host!,ms,DURATION);if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
    }catch(error){fallback(error);}};tick(start);
   })().catch(fallback);
  });

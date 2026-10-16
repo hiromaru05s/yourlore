@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/cull-exile-events.mjs",
+    "tests/supply-persistence.mjs",
     "tests/startup-recovery.mjs",
     "tests/web-fonts.mjs",
     "tests/webgl-renderer.mjs",

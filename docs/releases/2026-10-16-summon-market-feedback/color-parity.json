@@ -1,0 +1,16 @@
+[
+  {
+    "toneMapped": true,
+    "mostCommon": [
+      "107,39,170",
+      68820
+    ]
+  },
+  {
+    "toneMapped": false,
+    "mostCommon": [
+      "100,50,150",
+      68820
+    ]
+  }
+]

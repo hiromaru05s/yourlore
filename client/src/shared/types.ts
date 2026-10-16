@@ -168,7 +168,7 @@ export interface PlayerState {
   lowSummonBanTurn?: boolean; // 〃 (활성)
   refreshBlockNext?: boolean; // 마켓 크래시(v34): 다음 턴 제시 갱신 불가 (예약)
   refreshBlockTurn?: boolean; // 〃 (활성)
-  supplyShrink: number; // if >0, this player's next 제시 roll offers 2 cards instead of 3
+  supplyShrink: number; // Market Crash: trim to two offers at the next own turn, retaining their identities
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
   skipNext: boolean; // legacy: if true, this player's next turn is skipped
@@ -292,6 +292,7 @@ export type GameEvent =
   | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
   | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }
+  | { type: "cullExile"; player: Side; sourceUid: string; cards: { card: CardInst; from: "discard" | "deck" | "hand" }[] }
   | { type: "enchantActivate"; player: Side; uid: string; id: string; originRite?: OriginRiteReaction }
   | { type: "log"; html: string; htmlJa: string }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
