@@ -36,4 +36,5 @@ const duel=m.entries.filter(e=>e.scope==='duel'&&e.media!=='narrow');
 assert(duel.reduce((n,e)=>n+e.bytes,0)<60*1024*1024,'Do not restore the full master/gallery archive to duel admission');
 assert(!duel.some(e=>e.url.startsWith('/art/cards/')));
 assert(duel.some(e=>e.url==='/ui/mana/empty.svg'),'State-dependent mana controls must be ready before play');
+assert(duel.some(e=>e.url==='/art/biblion/arcana/dice-enamel.webp'),'Dice enamel must be ready before its first roll');
 console.log('PASS: actual menu files, content hashes, no revalidation, per-client release isolation, worker restart, non-art bypass, eviction fallback, and bounded stale cache cleanup',m.entries.length,'files');
