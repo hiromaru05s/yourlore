@@ -33,6 +33,6 @@ try{
  }finally{await browser.close();}
  console.log(`PASS authenticated staging: both rewards observed in ${draws} draws; equipment and lineup verified`);
 }finally{
- if(created)await sql(`DELETE FROM collection_transactions WHERE user_id='${uid}'; DELETE FROM sessions WHERE user_id='${uid}'; DELETE FROM user_days WHERE user_id='${uid}'; DELETE FROM users WHERE id='${uid}';`);
+ if(created)await sql(`DELETE FROM daily_challenges WHERE user_id='${uid}'; DELETE FROM duel_reward_receipts WHERE user_id='${uid}'; DELETE FROM rewards WHERE user_id='${uid}'; DELETE FROM collection_transactions WHERE user_id='${uid}'; DELETE FROM sessions WHERE user_id='${uid}'; DELETE FROM user_days WHERE user_id='${uid}'; DELETE FROM users WHERE id='${uid}';`);
  await fs.rm(dir,{recursive:true,force:true});
 }
