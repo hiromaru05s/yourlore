@@ -86,8 +86,9 @@ export function redactFor(state: GameState, you: Side): GameState {
   opp.traps = opp.traps.map((t) => (t.card.react === "infoDealer" && t.cnt != null
     ? { card: structuredClone(t.card), cnt: t.cnt }
     : { card: placeholder(t.card.uid) }));
-  // opponent's offered supply is only visible on their own turn
-  if (g.cur === you) opp.supply = opp.supply.map((c) => (c ? placeholder(c.uid) : null));
-  opp.supplyHist = []; // 기록자(v36) 이력은 본인 전용
+  // Offers are a shared public row, also for rooms persisted before this rule fix.
+  const offers = g.players[g.cur].supply;
+  for (const player of g.players) player.supply = offers.slice();
+  opp.supplyHist = []; // Legacy histories can still contain formerly private offers.
   return g;
 }

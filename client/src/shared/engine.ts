@@ -368,7 +368,7 @@ export function createGame(opts: CreateOpts): ReduceResult {
 
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
-  g.players.forEach((p) => rollSupply(g, p));
+  rollSupply(g, g.players[start]);
   ctx.drawN(g.players[start], 3, false);
   ctx.drawN(g.players[second], 3, false);
   g.players[second].openingDrawReady = true;
@@ -382,22 +382,35 @@ export function createGame(opts: CreateOpts): ReduceResult {
   return { state: g, events: ev };
 }
 
-function rollSupply(g: GameState, p: PlayerState): void {
+/** The two legacy player fields carry one public row, including after JSON reloads.
+ * Always update both explicitly; array identity is not preserved on the wire. */
+function shareSupply(g: GameState, cards: (CardInst | null)[]): void {
+  for (const player of g.players) player.supply = cards.slice();
+}
+
+function rollSupply(g: GameState, p: PlayerState, refill = false): void {
+  const want = p.supplyShrink > 0 ? Math.max(2, 3 - p.supplyShrink) : 3;
+  p.supplyShrink = 0;
+  const before = g.players[g.cur].supply;
+  if (refill && before.length === 3 && before.slice(0, want).every(Boolean) && before.slice(want).every(c => !c)) return;
   const hi = effMaxMana(p);
-  const inMarket = new Set(g.market.map((c) => c.id)); // 고정 마켓과 중복 금지
-  const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= hi && DB[id].cost > 0 && !DB[id].noShop && !inMarket.has(id));
-  const avail = pool.slice();
-  const want = p.supplyShrink > 0 ? Math.max(2, 3 - p.supplyShrink) : 3; // 마켓 크래시: 다음 제시 축소 (v34: 최대 2장까지)
-  if (p.supplyShrink > 0) p.supplyShrink = 0;
-  const picks: (CardInst | null)[] = [];
-  while (picks.length < want && avail.length) picks.push(inst(g, avail.splice(randInt(g, avail.length), 1)[0])); // distinct
-  while (picks.length < want) picks.push(pool.length ? inst(g, pool[randInt(g, pool.length)]) : null);
-  while (picks.length < 3) picks.push(null); // keep 3 slots; shrunk rolls leave an empty slot
-  p.supply = picks;
-  // 기록자(v36): 제시 이력 기록 (갱신분 포함) — 최근 40회만 보관
-  const hist = (p.supplyHist ??= []);
-  hist.push({ turn: g.turn, ids: picks.filter((c): c is CardInst => !!c).map((c) => c.id) });
-  if (hist.length > 40) hist.splice(0, hist.length - 40);
+  const inMarket = new Set(g.market.map(c => c.id));
+  const pool = ALL_IDS.filter(id => DB[id].cost >= 1 && DB[id].cost <= hi && !DB[id].noShop && !inMarket.has(id));
+  const picks = Array.from({length: 3}, (_, i) => refill && i < want ? before[i] ?? null : null);
+  const retained = new Set(picks.filter((c): c is CardInst => !!c).map(c => c.id));
+  const avail = pool.filter(id => !retained.has(id));
+  for (let i = 0; i < want; i++) {
+    if (picks[i]) continue;
+    if (avail.length) picks[i] = inst(g, avail.splice(randInt(g, avail.length), 1)[0]);
+  }
+  shareSupply(g, picks);
+  if (picks.every((card, i) => card?.uid === before[i]?.uid)) return;
+  // Both players observed these public offers (including refreshes/refills).
+  for (const player of g.players) {
+    const hist = (player.supplyHist ??= []);
+    hist.push({turn: g.turn, ids: picks.filter((c): c is CardInst => !!c).map(c => c.id)});
+    if (hist.length > 40) hist.splice(0, hist.length - 40);
+  }
 }
 
 // ============================================================
@@ -781,14 +794,9 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   p.mana = effMaxMana(p);
   tickExile(ctx, p);
   if (!first) {
-    // Offers persist across turns, including purchased/empty slots. Only an
-    // explicit refresh or a card effect rolls new identities. Market Crash
-    // removes the final offer at its next-turn boundary without rerolling two.
-    if (p.supplyShrink > 0) {
-      const keep = Math.max(2, 3 - p.supplyShrink);
-      p.supply = p.supply.map((card, index) => index < keep ? card : null);
-      p.supplyShrink = 0;
-    }
+    // Keep unsold public offers; fill only empty slots when the next turn starts.
+    // Market Crash limits that turn to two slots without rerolling survivors.
+    rollSupply(g, p, true);
     const enchDraw = p.enchants.filter((e) => e.card.ench === "bonusDraw").reduce((s, e) => s + (e.card.val2 || 0), 0);
     const dp = p.drawPenaltyNext || 0; p.drawPenaltyNext = 0; // 흉조: 이번 턴 드로우 차감 (1회성)
     if (dp > 0) ctx.log(`  └ <span class="dmg">흉조</span>: 드로우 -${dp}`, `  └ <span class="dmg">凶兆</span>: ドロー-${dp}`);
@@ -5615,6 +5623,8 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
 
 function reduceCore(prev: GameState, action: Action): ReduceResult {
   const g: GameState = cloneGameState(prev);
+  // Legacy rooms resume from the currently visible row, never the inactive private row.
+  shareSupply(g, g.players[g.cur].supply);
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
   refreshDewPassives(g);
@@ -5679,7 +5689,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
       if (card && p.mana >= bc) {
         if (bc === 0) p.freeBuysTurn = (p.freeBuysTurn ?? 0) + 1;
         const bought = inst(g, card.id);
-        p.mana -= bc; if (!bought.quick) p.discard.push(bought); p.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
+        p.mana -= bc; if (!bought.quick) p.discard.push(bought); for (const player of g.players) player.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[${card.quick ? "게임에서 제외" : "묘지로"}]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[${card.quick ? "ゲームから除外" : "墓地へ"}]</span>`);
         ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id });
         havenPurchase(g, ctx, p, bought);

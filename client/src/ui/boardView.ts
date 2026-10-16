@@ -855,8 +855,7 @@ export class GameView {
   }
 
   private renderMarket(g: GameState, me: PlayerState, myTurn: boolean): void {
-    // The 제시 (supply) on display belongs to whoever's turn it is — your own
-    // on your turn, your opponent's (public) on theirs.
+    // Both player fields mirror the same public row. Costs/controls use the active player.
     const owner = g.players[g.cur];
     const mk = this.q("market");
     // 재렌더로 카드 노드가 갈리면 body에 떠 있던 확인 배지는 가리킬 대상을 잃는다

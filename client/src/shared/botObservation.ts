@@ -78,7 +78,9 @@ export function observationSample(g: GameState, side: Side, sample: number): Gam
       shuffle(op.deck);
     }
   }
-  if (st.cur === side) op.supply = op.supply.map((c, i) => c ? { ...instance(BUYABLE_POOL[Math.floor(rnd() * BUYABLE_POOL.length)]), uid: `hypothesis-supply-${side}-${i}` } : null);
+  // Shared offers are public evidence, not hidden-card hypotheses.
+  const offers = st.players[st.cur].supply;
+  for (const player of st.players) player.supply = offers.slice();
   op.supplyHist = [];
   delete op.botTune;
   st.rng = (Math.floor(rnd() * 4294967296) || 1) >>> 0;

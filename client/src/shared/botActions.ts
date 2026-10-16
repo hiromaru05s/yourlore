@@ -85,5 +85,7 @@ export function actionChangesState(a: GameState, b: GameState): boolean {
       for (const key of ['uid', 'dmg', 'exhausted', 'tempAtk', 'atkMod', 'defMod', 'attacksUsed', 'gcount', 'hatch', 'dur'] as const) if (x.field[i][key] !== y.field[i][key]) return true;
     }
   }
-  return !same(a.players, b.players) || !same(a.marketStock, b.marketStock);
+  // Synchronizing an inactive legacy offer mirror is not a successful move.
+  const players = (g: GameState) => g.players.map((p, side) => side === g.cur ? p : {...p, supply: g.players[g.cur].supply});
+  return !same(players(a), players(b)) || !same(a.marketStock, b.marketStock);
 }

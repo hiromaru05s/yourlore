@@ -139,6 +139,8 @@ export abstract class BaseController implements BoardHandlers {
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
     this.openingRoot=root;
+    // Cover before GameView inserts its first board, including async asset waits.
+    root.classList.add('opening-pending');
     this.you = you;
     this.exits = exits;
     this.view = new GameView(root, you, this);
@@ -1161,6 +1163,7 @@ export abstract class BaseController implements BoardHandlers {
       this.releaseOpening();
     }
     if(this.openingActive&&!this.state.over)return;
+    this.releaseOpening();
     if(!this.state.over)this.exits.onBattleReady?.();
     this.syncTimer();
     if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
@@ -1397,6 +1400,7 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   private releaseOpening():void{
+    this.openingRoot.classList.remove('opening-pending');
     this.openingWait?.remove();this.openingWait=null;
     const game=this.openingRoot.querySelector<HTMLElement>('.game');
     if(game){game.inert=false;game.classList.remove('opening-hands');}

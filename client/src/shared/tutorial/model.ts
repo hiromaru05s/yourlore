@@ -20,6 +20,9 @@ export function practiceBoard(scene:PracticeScene):GameState {
  g.market[0]=card('M4');g.marketStock=Array(7).fill(3);g.pending=null;delete g.opening;
  const mon=(id:string,side:Side=0,extra:Partial<FieldMon>={}):FieldMon=>{const c=card(id);const m:FieldMon={...c,exhausted:false,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0,...(hasPassive(c,'guts')?{guts:1}:{}),...(c.hatchTurns?{hatch:c.hatchTurns,dur:c.hatchDur}:{}),...extra};g.players[side].field.push(m);return m;};
  scene.setup({g,me,opp,card,mon,hand:(...ids)=>{me.hand=ids.map(card);},mana:(n)=>{me.maxMana=me.mana=n;},removed:(n,id='STARTER_TRASH')=>{me.removed=Array.from({length:n},()=>card(id));}});
+ // Prepared dice examples must not depend on initial market/deck RNG consumption.
+ if(scene.seed!==undefined)g.rng=scene.seed;
+ for(const p of g.players)p.supply=g.players[0].supply.slice();
  return g;
 }
 export const play=(id:string,hint?:Copy):PracticeStep=>({action:'play',id,hint});

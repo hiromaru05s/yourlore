@@ -44,7 +44,7 @@ try{
  const root=document.querySelector('main');let deals=0,starts=0;
  const options=(abort,first=true)=>({root,me:{name:'A',avatar:'SEEKER_BLUE'},opp:{name:'B',avatar:'SEEKER_RED'},firstIsMe:first,signal:abort.signal,elapsed:()=>now,onStart:()=>starts++,onDeal:async()=>{deals++;}});
  for(const first of [true,false]){
-  now=-350;const abort=new AbortController(),before=deals,p=playDuelOpening(options(abort,first));await flush();
+  root.classList.add('opening-pending');now=-350;const abort=new AbortController(),before=deals,p=playDuelOpening(options(abort,first));assert(!root.classList.contains('opening-pending'));assert.equal(document.querySelector('.duel-opening').style.background,'rgb(7, 16, 29)');await flush();
   await step(0);await step(1460);await step(3220);
   assert.equal(document.querySelector('[role=status]').textContent,first?'あなたが先攻':'相手が先攻');
   assert(!document.body.textContent.includes('BATTLE START'));assert(!document.body.textContent.includes('ターンです'));

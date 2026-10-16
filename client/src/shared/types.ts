@@ -132,7 +132,7 @@ export interface PlayerState {
   exile: ExileEntry[];
   field: FieldMon[];
   traps: TrapSet[];
-  supply: (CardInst | null)[];
+  supply: (CardInst | null)[]; // compatibility mirror of the shared public offer row
   boughtCount: number;
   taxFlag: boolean;
   enchants: Enchant[]; // active persistent spells (public, on field)

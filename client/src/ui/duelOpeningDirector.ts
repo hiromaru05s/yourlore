@@ -38,6 +38,8 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   const result=document.createElement('div');result.setAttribute('role','status');result.setAttribute('aria-live','polite');
   result.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)';
   host.append(canvas,result);document.body.append(host);game?.classList.add('duel-intro-active');
+  // The opaque cinematic is mounted before releasing the pre-opening cover.
+  o.root.classList.remove('opening-pending');
   const life=new AbortController(),audio=openingAudio();
   let closed=false,redraw=()=>{};
   let renderer:ReturnType<typeof createOpeningRenderer>|undefined,frame=0,last=-1,started=false,skipped=false,dealt=false;

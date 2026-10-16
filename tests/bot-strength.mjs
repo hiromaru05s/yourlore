@@ -35,7 +35,7 @@ try {
     assert(!C.botActions(pending).some(a=>a.uid===null));
     for(const diff of ['hard','hell']){const a=C.botDecide(pending,diff);assert.notEqual(a.uid,null);const next=C.reduce(pending,a).state;assert(!next.pending || next.pending.reason!=='attack');}
   });
-  test('unknown card identities and private offered markets cannot influence hypotheses',()=>{
+  test('hidden card identities and inactive legacy offers cannot influence hypotheses',()=>{
     const g=fresh();g.players[1].hand=[card('M2')];g.players[1].deck=[card('S1')];g.players[1].supply=[card('M2')];
     const twin=structuredClone(g);twin.players[1].hand=[card('WORLD_TREE')];twin.players[1].deck=[card('S8')];twin.players[1].supply=[card('S3')];
     assert.deepEqual(C.observationSample(g,0,17),C.observationSample(twin,0,17));

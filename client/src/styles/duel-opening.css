@@ -1,3 +1,5 @@
+/* Remains behind the preparation UI until the opaque opening host is mounted. */
+.opening-pending::after { content:'';position:fixed;inset:0;z-index:129;background:#07101d;pointer-events:auto; }
 .duel-opening { position:fixed;inset:0;z-index:130;isolation:isolate;overflow:hidden;pointer-events:auto;color:#f3eadb;font-family:Georgia,'Yu Mincho',serif; }
 .duel-opening-veil { position:absolute;inset:0;background:radial-gradient(ellipse at 50% 38%,#101c326e 0%,#040a16eb 82%);pointer-events:none; }
 .duel-opening-lines { position:absolute;inset:12% 5%;border-top:1px solid #c7ad7955;border-bottom:1px solid #c7ad7933;pointer-events:none; }
