@@ -1,3 +1,6 @@
+/* Fill the shared plate's sky cutouts on static menus; only HOME owns the animated sky. */
+.lounge-shell:not(.lounge-home){background-color:#8ab8e1}
+
 /* Generated plate is a static fallback and keeps image readiness/cache ownership. */
 .lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home{
  inset:0;animation:none;transform:none;will-change:auto;
