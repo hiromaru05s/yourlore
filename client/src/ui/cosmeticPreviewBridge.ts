@@ -6,6 +6,8 @@ export interface CosmeticPreviewAdapter {
  readonly revision:number;
  /** Audit-only raster override. Ordinary matches never register this adapter. */
  readonly pixelRatio?:number;
+ /** Optional coverage sampling for magnified inspection. */
+ readonly antialiasSamples?:number;
  applyFurniture(model:T.Group,element:HTMLElement):void;
  decoratePile(pile:PileModel,element:HTMLElement):()=>void;
  tick(now:number):boolean;

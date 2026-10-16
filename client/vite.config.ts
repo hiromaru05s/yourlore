@@ -30,6 +30,7 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       input: {
+        quietLuxury: new URL('./gacha-minimal-three.html',import.meta.url).pathname,
         shieldTitanRuntime: new URL('./shield-titan-runtime.html', import.meta.url).pathname,
         main: new URL('./index.html', import.meta.url).pathname,
         cosmeticStudio: new URL('./cosmetic-studio.html',import.meta.url).pathname,

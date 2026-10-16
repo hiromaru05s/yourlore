@@ -131,7 +131,7 @@ export function mountDuelScene(root:HTMLElement):()=>void {
   function render(now:number):void {
     if(dead)return;frame=requestAnimationFrame(render);if(document.hidden||now-last<16)return;last=now;
     if(!root.isConnected){dispose();return;}
-    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=rasterRatio();renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(Math.min(cosmeticPreview?.pixelRatio??flightPixelRatio(),2));renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.samples=ratio>1.5||width*height*ratio*ratio>3000000?0:2;cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
+    if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=rasterRatio();renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(Math.min(cosmeticPreview?.pixelRatio??flightPixelRatio(),2));renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.samples=Math.min(renderer.capabilities.maxSamples,cosmeticPreview?.antialiasSamples??(ratio>1.5||width*height*ratio*ratio>3000000?0:2));cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
     const paintStart=performance.now();
     const widgetMotion=widgets.tick(now),boardMotion=motion.tick(now),riftMotion=widgets.tickRift(now),displayMotion=widgets.takeDisplayUpdate();
     const cosmeticMotion=cosmeticPreview?.tick(now)??false;

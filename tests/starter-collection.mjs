@@ -45,18 +45,31 @@ try{
  db.prepare("UPDATE users SET credits=5000 WHERE id='a'").run();
  const catalog=[...GACHA_COSMETICS];GACHA_COSMETICS.length=0;
  const emptyBefore=await state(),empty=await forced([9250]);assert.equal(empty.receipt.rewards[0].kind,'empty');assert.equal(empty.receipt.refund,0);assert.equal(empty.credits,emptyBefore.credits-100);assert.deepEqual(empty.starterCards,emptyBefore.starterCards);assert.deepEqual(empty.effects,[]);
- GACHA_COSMETICS.push(...catalog);assert.equal(catalog.length,8);
+ GACHA_COSMETICS.push(...catalog);assert.equal(catalog.length,14);
  for(let i=0;i<catalog.length;i++){
   const item=catalog[i],hit=await forced([9250,i]);assert.equal(hit.receipt.rewards[0].id,item.id);assert.equal(hit.receipt.rewards[0].kind,'cosmetic');assert.equal(hit.receipt.refund,0);assert(hit.cosmetics.includes(item.id));
   const duplicate=await forced([9250,i]);assert.equal(duplicate.receipt.refund,100);
   for(const route of ['/social/buy-cosmetic','/social/buy-sleeve'])assert.equal((await call(route,{id:item.id,price:0},'b')).status,400);
  }
+ // Quiet luxury items are separately owned; a sleeve never grants its furniture.
+ for(const item of catalog.filter(c=>c.id.startsWith('sleeve:quiet-'))){
+  const pair=item.id.replace('sleeve:','furniture:');
+  db.prepare("UPDATE users SET sleeves=? WHERE id='b'").run(JSON.stringify([item.id]));
+  const deck=deckStoreForUser();deck.list[0].sleeve=item.id;
+  assert.equal((await call('/deck',{decks:deck},'b')).status,200);
+  deck.list[0].furniture=pair;assert.equal((await call('/deck',{decks:deck},'b')).status,400);
+  db.prepare("UPDATE users SET sleeves=? WHERE id='b'").run(JSON.stringify([item.id,pair]));
+  assert.equal((await call('/deck',{decks:deck},'b')).status,200);
+  const saved=(await (await call('/auth/me',undefined,'b')).json()).user.decks.list[0];
+  assert.equal(saved.sleeve,item.id);assert.equal(saved.furniture,pair);
+ }
+ db.prepare("UPDATE users SET sleeves='[]',decks=NULL WHERE id='b'").run();
  // Goldfault rewards remain independent, ownership-gated equipment slots.
  const goldDeck=deckStoreForUser();goldDeck.list[0].sleeve='sleeve:gacha-goldfault';goldDeck.list[0].furniture='furniture:gacha-goldfault';
  assert.equal((await call('/deck',{decks:goldDeck},'b')).status,400);
  assert.equal((await call('/deck',{decks:goldDeck})).status,200);
  const savedGold=await (await call('/auth/me')).json();assert.equal(savedGold.user.decks.list[0].sleeve,goldDeck.list[0].sleeve);assert.equal(savedGold.user.decks.list[0].furniture,goldDeck.list[0].furniture);
- const appearance=await (await call('/social/profile')).json();assert(appearance.profile.sleeves.every(id=>!id.startsWith('effect:')));assert.equal(appearance.profile.sleeves.filter(id=>id.startsWith('sleeve:gacha-')).length,4);assert.equal(appearance.profile.furnitures.filter(id=>id.startsWith('furniture:gacha-')).length,4);
+ const appearance=await (await call('/social/profile')).json();assert(appearance.profile.sleeves.every(id=>!id.startsWith('effect:')));assert.equal(appearance.profile.sleeves.filter(id=>id.startsWith('sleeve:gacha-')||id.startsWith('sleeve:quiet-')).length,7);assert.equal(appearance.profile.furnitures.filter(id=>id.startsWith('furniture:gacha-')||id.startsWith('furniture:quiet-')).length,7);
  for(let i=0;i<CARD_EFFECTS.length;i++){
   const id=CARD_EFFECTS[i].id,key=crypto.randomUUID();const result=await forced([9950,i],1,key);assert.deepEqual(result.receipt.rewards,[{kind:'effect',id,refund:0,owned:1}]);assert(result.effects.includes(id));
   const replay=await (await draw(1,key)).json();assert.equal(replay.credits,result.credits);assert.deepEqual(replay.receipt,result.receipt);
