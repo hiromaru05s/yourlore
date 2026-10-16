@@ -127,6 +127,6 @@ try{
  db.prepare("UPDATE users SET credits=2000 WHERE id='b'").run();failLedger=true;await assert.rejects(call('/collection/buy',{id:first,count:3,requestId:crypto.randomUUID()},'b'),/injected/);failLedger=false;
  const bulkLast=await Promise.all([3,3].map(count=>call('/collection/buy',{id:first,count,requestId:crypto.randomUUID()},'b')));assert.deepEqual(bulkLast.map(r=>r.status).sort(),[200,400]);
  assert.equal((await (await call('/collection',undefined,'b')).json()).starterCards[first],6);
- const hist=await (await call('/collection/history')).json();assert(hist.receipts.some(r=>r.requestId===key));assert(hist.receipts.every(r=>r.rewards.length===1||r.rewards.length===10));
+ const hist=await (await call('/collection/history')).json();assert.deepEqual(hist.receipts.map(r=>r.requestId),db.prepare("SELECT request_id FROM collection_transactions WHERE user_id='a' ORDER BY created_at DESC,request_id DESC LIMIT 50").all().map(r=>r.request_id));assert(hist.receipts.every(r=>r.rewards.length===1||r.rewards.length===10));
  db.close();console.log('PASS starter collection: defaults, full catalog, atomic purchase, rollback, concurrent/idempotent spend, caps, 10-draw refunds, insufficient funds, validation, ownership, queue, history');
 }finally{await fs.rm(dir,{recursive:true,force:true});}
