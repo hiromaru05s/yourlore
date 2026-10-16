@@ -193,9 +193,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Draw 2 cards."
   },
   "NMD4": {
-    "ja": "【召喚時】自分の提示マーケットの直近10ターン分（双方通算）の履歴（更新分を含む）からカード1枚を選び、マナを払って購入できる。",
-    "ko": "【소환시】자신 제시 마켓의 최근 10턴(양쪽 합계) 기록(갱신 포함)에서 카드 1장을 선택해 마나를 지불하고 구매할 수 있다.",
-    "en": "【On Summon】You may choose 1 card from your offer-market history over the last 10 turns, counting both players, including refreshes, and pay mana to buy it."
+    "ja": "【召喚時】共用の提示マーケットの直近10ターン分（双方通算）の履歴（更新分を含む）からカード1枚を選び、マナを払って購入できる。",
+    "ko": "【소환시】공유 제시 마켓의 최근 10턴(양쪽 합계) 기록(갱신 포함)에서 카드 1장을 선택해 마나를 지불하고 구매할 수 있다.",
+    "en": "【On Summon】You may choose 1 card from the shared offer-market history over the last 10 turns, counting both players, including refreshes, and pay mana to buy it."
   },
   "NMD6": {
     "ja": "【場にいる間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低0）。",

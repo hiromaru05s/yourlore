@@ -18,7 +18,7 @@ const rows=[
  ['combat',0,'M1',copy('戦闘と貫通','Combat and overflow','전투와 관통'),copy('傷は残るよ。倒すのに必要な量を超えたダメージも見てみよう。','Damage stays. See where damage beyond a monster’s remaining HP goes.','피해는 남아요. 남은 체력을 넘는 피해가 어디로 가는지 봐요.')],
  ['hand',0,'S4',copy('ターンと手札','Turns and your hand','턴과 손패'),copy('手札を7枚まで残して、次の自分の番を迎えよう。','Keep up to seven cards and begin your next turn.','손패 7장을 남기고 다음 차례를 맞아요.')],
  ['mana',1,'STARTER_MANA',copy('マナを育てる','Grow your mana','마나 키우기'),copy('今使えるマナと、毎ターン回復する最大マナを分けて考えよう。','Separate mana available now from your maximum refill.','지금 쓸 마나와 매 턴 회복할 최대 마나를 구분해요.')],
- ['market',1,'M4',copy('マーケットを使う','Use the markets','마켓 이용하기'),copy('固定と提示、在庫と更新。ほしいカードを探そう。','Explore fixed offers, personal offers, stock and refresh.','고정·제시 마켓, 재고와 갱신을 알아봐요.')],
+ ['market',1,'M4',copy('マーケットを使う','Use the markets','마켓 이용하기'),copy('固定と提示、在庫と更新。ほしいカードを探そう。','Explore fixed offers, shared offers, stock and refresh.','고정·제시 마켓, 재고와 갱신을 알아봐요.')],
  ['cycle',1,'M4',copy('買ったカードはどこへ？','Where does a purchase go?','구매한 카드는 어디로?'),copy('購入から墓地、デッキ、手札までを追ってみよう。','Follow a purchase through graveyard, deck and hand.','구매한 카드가 묘지·덱·손패로 이동하는 과정을 봐요.')],
  ['rift',1,'STARTER_TRASH',copy('リフトとは？','What is the Rift?','리프트란?'),copy('墓地は再び引く場所。リフトは普通の循環から外れる場所だよ。','The graveyard cycles back. The Rift is outside that normal cycle.','묘지는 다시 순환해요. 리프트는 보통 순환에서 벗어난 곳이에요.')],
  ['deck',1,'STARTER_CHEST',copy('デッキを整える','Shape your deck','덱 다듬기'),copy('自由枠8枚と固定アチューン1枚。試合中の購入と圧縮も試そう。','Eight chosen starters and one fixed Attune. Try buying and thinning during a duel.','자유 스타터 8장과 고정 어튠 1장. 대전 중 구매와 압축도 해 봐요.')],

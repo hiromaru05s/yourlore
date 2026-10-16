@@ -25,7 +25,7 @@ export function tutorialCue(run:LessonRun,handOpen=true):LessonCue {
  case 'play':return cue(handOpen?c(`「${names.ja}」を場へドラッグしよう。`,`Drag ${names.en} onto the field.`,`「${names.ko}」을 필드로 드래그해요.`):c('下の手札をクリックして、手札を広げよう。','Click your hand at the bottom to open it.','아래 손패를 클릭해 펼쳐요.'),'play',undefined,step.id);
  case 'attack':return cue(c(`自分の「${names.ja}」をクリックして攻撃しよう。`,`Click your ${names.en} to attack.`,`내 「${names.ko}」을 클릭해 공격해요.`),'attack',undefined,step.id);
  case 'buyMarket':case 'buySupply':return cue(c(`マーケットの「${names.ja}」をダブルクリックして購入しよう。`,`Double-click ${names.en} in the market to buy it.`,`마켓의 「${names.ko}」을 더블클릭해 구매해요.`),step.action,undefined,step.id);
- case 'refresh':return cue(c('提示マーケットの「更新」をクリックしよう。','Click Refresh in the personal offers.','제시 마켓의 갱신을 클릭해요.'),'refresh');
+ case 'refresh':return cue(c('提示マーケットの「更新」をクリックしよう。','Click Refresh in the shared offers.','제시 마켓의 갱신을 클릭해요.'),'refresh');
  case 'endTurn':return cue(c('「ターン終了」をクリックしよう。','Click End Turn.','턴 종료를 클릭해요.'),'endTurn');
  default:return cue(c('ここは自分で行動を選んでみよう。','Choose your own actions here.','여기서는 행동을 직접 골라 봐요.'),'free');
  }
