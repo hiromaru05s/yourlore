@@ -1,0 +1,15 @@
+{
+  "id": "98580ba9-acd5-4350-8804-438e4ee5a509",
+  "created_on": "2026-10-16T01:14:33.203325Z",
+  "strategy": "percentage",
+  "annotations": {
+    "workers/message": "b24b03178fa094a9ea5beed9adb92215231d48de guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "f565fd6a-36cc-4ed8-8cd6-717058ccb545",
+      "percentage": 100
+    }
+  ]
+}

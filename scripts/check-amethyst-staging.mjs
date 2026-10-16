@@ -7,7 +7,7 @@ import {execFileSync} from 'node:child_process';
 const origin='https://test.yourlore.xyz',dir=await fs.mkdtemp(path.join(os.tmpdir(),'lore-amethyst-live-'));
 const uid='qa-amethyst-'+crypto.randomUUID(),token=crypto.randomUUID()+crypto.randomUUID(),now=Date.now();
 const ids=['sleeve:gacha-amethyst-cleft','furniture:gacha-amethyst-cleft'];let created=false;
-const sql=async contents=>{const file=path.join(dir,'operation.sql');await fs.writeFile(file,contents,{mode:0o600});execFileSync('npm',['exec','--','wrangler','d1','execute','lore-db-staging','--remote','--env','staging','-c','server/wrangler.toml','--file',file,'--json'],{stdio:'pipe',timeout:120000});};
+const sql=async contents=>{const file=path.join(dir,'operation.sql');await fs.writeFile(file,contents,{mode:0o600});execFileSync('npm',['exec','--','wrangler','d1','execute','lore-db-staging','--remote','--env','staging','-c','server/wrangler.toml',...(contents.startsWith('DELETE')?['--command',contents]:['--file',file]),'--json'],{stdio:'pipe',timeout:120000});};
 const call=async(p,body)=>{const r=await fetch(origin+'/api'+p,{method:body?'POST':'GET',headers:{Cookie:'lore_session='+token,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});const data=await r.json();assert.equal(r.status,200,JSON.stringify(data));return data;};
 try{
  created=true;await sql(`INSERT INTO users(id,email,password,display,created_at,verified,credits) VALUES('${uid}','${uid}@example.invalid','qa-fixture','Amethyst QA',${now},1,250000); INSERT INTO rewards(user_id,key,amount,created_at) VALUES('${uid}','tutorial:v3:intro:skip',0,${now}); INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES('${token}','${uid}',${now},${now+1200000});`);
@@ -33,6 +33,6 @@ try{
  }finally{await browser.close();}
  console.log(`PASS authenticated staging: both rewards observed in ${draws} draws; equipment and lineup verified`);
 }finally{
- if(created)await sql(`DELETE FROM daily_challenges WHERE user_id='${uid}'; DELETE FROM duel_reward_receipts WHERE user_id='${uid}'; DELETE FROM rewards WHERE user_id='${uid}'; DELETE FROM collection_transactions WHERE user_id='${uid}'; DELETE FROM sessions WHERE user_id='${uid}'; DELETE FROM user_days WHERE user_id='${uid}'; DELETE FROM users WHERE id='${uid}';`);
+ if(created)await sql(`DELETE FROM daily_challenges WHERE user_id='${uid}'; DELETE FROM duel_reward_receipts WHERE user_id='${uid}'; DELETE FROM rewards WHERE user_id='${uid}'; DELETE FROM collection_transactions WHERE user_id='${uid}'; DELETE FROM sessions WHERE user_id='${uid}'; DELETE FROM user_days WHERE user_id='${uid}'; DELETE FROM ratings WHERE user_id='${uid}'; DELETE FROM presence WHERE user_id='${uid}'; DELETE FROM users WHERE id='${uid}';`);
  await fs.rm(dir,{recursive:true,force:true});
 }

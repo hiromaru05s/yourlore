@@ -1,0 +1,19 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-16T01:21:07.256Z",
+  "draws": 1340,
+  "observed": [
+    "furniture:gacha-amethyst-cleft",
+    "sleeve:gacha-amethyst-cleft"
+  ],
+  "checks": [
+    "real staging RNG grants both independent rewards",
+    "request replay without additional spend",
+    "persisted inventory",
+    "authenticated browser equipment save",
+    "both live gacha lineup entries"
+  ],
+  "errors": [],
+  "fixture": "isolated temporary account; removed after verifying ratings and presence cleanup",
+  "cleanedAt": "2026-10-16T01:23:41.049Z"
+}
