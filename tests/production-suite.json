@@ -192,6 +192,7 @@
   },
   "browser": "All *-browser.mjs require Chrome/Playwright and run separately; not Node unit tests.",
   "timeoutMs": {
+    "tests/bot-strength.mjs": 600000,
     "tests/bot-worker.mjs": 300000,
     "tests/bot-npcs.mjs": 900000,
     "tests/trap-removal-tutorial.mjs": 300000,

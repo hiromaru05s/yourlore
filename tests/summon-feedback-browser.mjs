@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-exp-browser/node_modules/playwright/index.mjs');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5576',out=process.env.LORE_TEST_OUT||'/tmp/lore-summon-feedback';await fs.mkdir(out,{recursive:true});
-const browser=await chromium.launch({channel:'chrome',headless:true});const context=await browser.newContext({viewport:{width:1280,height:900},deviceScaleFactor:2,recordVideo:{dir:out+'/video',size:{width:1280,height:900}}});const page=await context.newPage();page.setDefaultTimeout(120000);const errors=[],checks=[];
+const browser=await chromium.launch({channel:'chrome',headless:true});const context=await browser.newContext({viewport:{width:1280,height:900},deviceScaleFactor:2,...(process.env.LORE_RECORD_VIDEO?{recordVideo:{dir:out+'/video',size:{width:1280,height:900}}}:{})});const page=await context.newPage();page.setDefaultTimeout(120000);const errors=[],checks=[];
 page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.text().includes('fallback')||m.text().includes('[playback]'))errors.push(m.text());});
 try{
- await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));
- await page.evaluate(async()=>{
+ console.log('loading fixture');await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));
+ console.log('fixture ready');await page.evaluate(async()=>{
   document.querySelector('.tempo-controls').style.display='none';
   const {DB,STARTERS}=await import('/src/shared/cards.ts'),{reduce}=await import('/src/shared/engine.ts'),{redactFor}=await import('/src/shared/protocol.ts');
   window.summonQA=async(id,owner=0,stale=false,interrupt='')=>{
@@ -35,7 +35,7 @@ try{
   const cards=width===1280?['SORTER','CHOSEN_KNIGHT','FIRE_MASTER','HEXER1','MERCENARY','ASSASSIN1','VAMP1','VOID_APOSTLE','NT_SEAL5','SHIELD_TITAN']:['SORTER','FIRE_MASTER','ASSASSIN1'];
   for(const [index,id]of cards.entries()){
    const owner=width===390?1:index%2;
-   await page.evaluate(({id,owner})=>{window.qaRunning=summonQA(id,owner,id==='SORTER'&&owner===0)}, {id,owner});
+   console.log('start',width,id,owner);await page.evaluate(({id,owner})=>{window.qaRunning=summonQA(id,owner,id==='SORTER'&&owner===0)}, {id,owner});
    if(id==='SORTER'){
     await page.waitForSelector('.slate-summon');await page.waitForTimeout(900);await page.screenshot({path:out+`/sorter-${width}-summon.png`,scale:'css'});
 

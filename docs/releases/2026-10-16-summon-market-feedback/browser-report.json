@@ -1,0 +1,375 @@
+{
+  "checks": [
+    {
+      "id": "SORTER",
+      "owner": 0,
+      "stale": true,
+      "interrupt": "",
+      "activations": 2,
+      "exits": [
+        "grave-0",
+        "grave-1",
+        "grave-2",
+        "deck-0",
+        "deck-1",
+        "deck-2"
+      ],
+      "families": [
+        "slate-summon"
+      ],
+      "buffers": [],
+      "removed": 6,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "CHOSEN_KNIGHT",
+      "owner": 1,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "chosen-hero-summon"
+      ],
+      "buffers": [],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "FIRE_MASTER",
+      "owner": 0,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "mage-summon"
+      ],
+      "buffers": [
+        {
+          "name": "mage-summon",
+          "width": 2385,
+          "height": 1677,
+          "cssWidth": 1280,
+          "cssHeight": 900
+        }
+      ],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "HEXER1",
+      "owner": 1,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "hexer-summon"
+      ],
+      "buffers": [
+        {
+          "name": "hexer-summon",
+          "width": 2385,
+          "height": 1677,
+          "cssWidth": 1280,
+          "cssHeight": 900
+        }
+      ],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "MERCENARY",
+      "owner": 0,
+      "stale": false,
+      "interrupt": "",
+      "activations": 1,
+      "exits": [],
+      "families": [
+        "mercenary-summon",
+        "slate-summon"
+      ],
+      "buffers": [
+        {
+          "name": "mercenary-summon",
+          "width": 2385,
+          "height": 1677,
+          "cssWidth": 1280,
+          "cssHeight": 900
+        }
+      ],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "ASSASSIN1",
+      "owner": 1,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "assassin-summon"
+      ],
+      "buffers": [
+        {
+          "name": "assassin-summon",
+          "width": 2385,
+          "height": 1677,
+          "cssWidth": 1280,
+          "cssHeight": 900
+        }
+      ],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "VAMP1",
+      "owner": 0,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "vampire-summon"
+      ],
+      "buffers": [
+        {
+          "name": "vampire-summon",
+          "width": 2385,
+          "height": 1677,
+          "cssWidth": 1280,
+          "cssHeight": 900
+        }
+      ],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "VOID_APOSTLE",
+      "owner": 1,
+      "stale": false,
+      "interrupt": "",
+      "activations": 1,
+      "exits": [],
+      "families": [
+        "void-summon"
+      ],
+      "buffers": [],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "NT_SEAL5",
+      "owner": 0,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "silence-summon"
+      ],
+      "buffers": [],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "SHIELD_TITAN",
+      "owner": 1,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "shield-titan-summon"
+      ],
+      "buffers": [
+        {
+          "name": "shield-titan-summon",
+          "width": 2385,
+          "height": 1677,
+          "cssWidth": 1280,
+          "cssHeight": 900
+        }
+      ],
+      "removed": 0,
+      "left": 0,
+      "width": 1280
+    },
+    {
+      "id": "SORTER",
+      "owner": 1,
+      "stale": false,
+      "interrupt": "",
+      "activations": 2,
+      "exits": [
+        "grave-0",
+        "grave-1",
+        "grave-2",
+        "deck-0",
+        "deck-1",
+        "deck-2"
+      ],
+      "families": [
+        "slate-summon"
+      ],
+      "buffers": [],
+      "removed": 6,
+      "left": 0,
+      "width": 390
+    },
+    {
+      "id": "FIRE_MASTER",
+      "owner": 1,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "mage-summon"
+      ],
+      "buffers": [
+        {
+          "name": "mage-summon",
+          "width": 780,
+          "height": 1688,
+          "cssWidth": 390,
+          "cssHeight": 844
+        }
+      ],
+      "removed": 0,
+      "left": 0,
+      "width": 390
+    },
+    {
+      "id": "ASSASSIN1",
+      "owner": 1,
+      "stale": false,
+      "interrupt": "",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "assassin-summon"
+      ],
+      "buffers": [
+        {
+          "name": "assassin-summon",
+          "width": 780,
+          "height": 1688,
+          "cssWidth": 390,
+          "cssHeight": 844
+        }
+      ],
+      "removed": 0,
+      "left": 0,
+      "width": 390
+    },
+    {
+      "id": "SORTER",
+      "owner": 0,
+      "stale": false,
+      "interrupt": "skip",
+      "activations": 0,
+      "exits": [],
+      "families": [
+        "slate-summon"
+      ],
+      "buffers": [],
+      "removed": 6,
+      "left": 0
+    },
+    {
+      "id": "SORTER",
+      "owner": 0,
+      "stale": false,
+      "interrupt": "resize",
+      "activations": 2,
+      "exits": [
+        "grave-0",
+        "grave-1",
+        "grave-2",
+        "deck-0",
+        "deck-1",
+        "deck-2"
+      ],
+      "families": [
+        "slate-summon"
+      ],
+      "buffers": [],
+      "removed": 6,
+      "left": 0
+    },
+    {
+      "id": "SORTER",
+      "owner": 0,
+      "stale": false,
+      "interrupt": "",
+      "activations": 2,
+      "exits": [
+        "grave-0",
+        "grave-1",
+        "grave-2",
+        "deck-0",
+        "deck-1",
+        "deck-2"
+      ],
+      "families": [],
+      "buffers": [],
+      "removed": 6,
+      "left": 0,
+      "reduced": true
+    },
+    {
+      "side": "me",
+      "number": {
+        "font": "Alegreya, Georgia, serif",
+        "weight": "800",
+        "animation": "combat-number",
+        "rect": {
+          "x": 142.47560119628906,
+          "y": 495.45477294921875,
+          "width": 104.90359497070312,
+          "height": 104.903564453125,
+          "top": 495.45477294921875,
+          "right": 247.3791961669922,
+          "bottom": 600.3583374023438,
+          "left": 142.47560119628906
+        }
+      }
+    },
+    {
+      "side": "opp",
+      "number": {
+        "font": "Alegreya, Georgia, serif",
+        "weight": "800",
+        "animation": "combat-number",
+        "rect": {
+          "x": 141.88543701171875,
+          "y": 242.95913696289062,
+          "width": 105.396484375,
+          "height": 105.396484375,
+          "top": 242.95913696289062,
+          "right": 247.28192138671875,
+          "bottom": 348.3556213378906,
+          "left": 141.88543701171875
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "boundary": "Real GameView/BaseController with reducer and redacted snapshots; not authenticated multiplayer.",
+  "visualReview": [
+    "PC and mobile card faces inspected",
+    "Damage number screenshot inspected separately from functional checks"
+  ]
+}
