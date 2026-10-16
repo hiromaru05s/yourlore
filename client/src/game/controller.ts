@@ -1404,7 +1404,10 @@ export abstract class BaseController implements BoardHandlers {
       if(this.dead||this.state.over||this.openingAbort.signal.aborted)return;
       this.openingWait?.remove();this.openingWait=null;
       const opening=this.state.opening,startsAt=opening?.startsAt;
-      await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name,medal:this.state.medals?.[this.you]},opp:{...COIN_OPP,name:this.state.players[(1-this.you) as Side].name,medal:this.state.medals?.[(1-this.you) as Side]},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
+      // Rejoining a server BOT room may mount without an opponent avatar. Resolve
+      // its NPC from the authoritative state, just like the board portrait.
+      const opponentAvatar=this.state.botDifficulty?botNpc(this.state.botDifficulty).avatar:COIN_OPP.avatar;
+      await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name,medal:this.state.medals?.[this.you]},opp:{...COIN_OPP,avatar:opponentAvatar,name:this.state.players[(1-this.you) as Side].name,medal:this.state.medals?.[(1-this.you) as Side]},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
         onStart:this.exits.onOpeningStart,
         elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,
         durationMs:startsAt!=null&&opening?.playableAt!=null?opening.playableAt-startsAt:undefined,

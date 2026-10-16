@@ -39,7 +39,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   setCoinProfiles(
     { avatar: ownSeeker, name: app.user?.display ?? "YOU", medal:app.user?.badge },
     opts.mode === "online"
-      ? { avatar: opts.oppAvatar === "SEEKER_BLUE" ? "SEEKER_BLUE" : "SEEKER_RED", name: opts.oppName }
+      ? { avatar: opts.oppAvatar ?? "SEEKER_RED", name: opts.oppName }
       : npc ? { avatar: npc.avatar, name: npc.name[getLang()] } : { avatar: "SEEKER_RED", name: "TUTOR" },
   );
 

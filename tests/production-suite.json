@@ -181,7 +181,8 @@
     "tests/deck-appearance.mjs",
     "tests/audit-reward-authority.mjs",
     "tests/resume-account.mjs",
-    "tests/medals.mjs"
+    "tests/medals.mjs",
+    "tests/bot-opening-profile.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
