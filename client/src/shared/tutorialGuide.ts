@@ -18,7 +18,12 @@ export function tutorialCue(run:LessonRun,handOpen=true):LessonCue {
  if(run.done||run.phase==='review')return cue(scene.result,'review',c('確かめたら、次へ進もう。','When you are ready, continue.','확인했으면 다음으로 가요.'));
  if(run.phase==='question')return cue(scene.question!.prompt,'question',run.wrongAnswer?scene.question!.explanation:c('今の盤面で起きたことを、一緒に確かめよう。間違えてもやり直せるよ。','Let’s check what happened. You can try again if you miss it.','방금 일어난 일을 확인해요. 틀려도 다시 고를 수 있어요.'));
  if(actingSide(run.state)===1)return cue(c('相手の動きを見よう。','Watch the opponent’s action.','상대 행동을 봐요.'),'wait',c('攻撃や効果が終わるまで待ってね。時間制限はないよ。','Wait for the attack or effect to finish. There is no timer.','공격·효과가 끝날 때까지 기다려요. 시간제한은 없어요.'));
- if(run.state.pending)return cue(c('光っている対象や、表示された選択肢から選ぼう。','Choose a highlighted target or an offered option.','빛나는 대상이나 표시된 선택지를 골라요.'),'target');
+ if(run.state.pending){
+  const target=step?.targetId&&(DB[step.targetId]??STARTERS[step.targetId]);
+  if(target)return cue(c(`「${target.nameJa??target.name}」を選ぼう。`,`Choose ${target.nameEn??target.name}.`,`「${target.name}」을 골라요.`),'target');
+  if(run.state.pending.reason==='attack')return cue(c('相手の場の、攻撃したいモンスターをクリックしよう。','Click the enemy monster you want to attack.','공격할 상대 필드의 몬스터를 클릭해요.'),'target');
+  return cue(c('表示された選択肢から、効果を使う対象を選ぼう。','Choose an effect target from the offered options.','표시된 선택지에서 효과 대상을 골라요.'),'target');
+ }
  const card=step.id?(DB[step.id]??STARTERS[step.id]):undefined;
  const names=card?c(card.nameJa??card.name,card.nameEn??card.name,card.name):c('味方','your monster','아군');
  switch(step.action){

@@ -10,11 +10,8 @@ try{
   assert(l.replayLesson(lesson.id,solved.actions));
  }
  assert.equal(scenes,66);assert.equal(questions,35);assert.equal(playerActions,133);assert.equal(l.TUT_STEPS.reduce((n,s)=>n+s.reward,0),5000);assert(chars<originalChars);
- // Design budget, NOT a measured human completion time. Reading and action time
- // are added (no assumed overlap). Cold downloads and voluntary rereading excluded.
- const assumptions={japaneseCharactersPerMinute:800,secondsPerPlayerAction:1.5,secondsPerAnswerOrReview:1,systemAndPaymentAllowanceSeconds:60};
- const seconds=chars/assumptions.japaneseCharactersPerMinute*60+playerActions*assumptions.secondsPerPlayerAction+(questions+reviews)*assumptions.secondsPerAnswerOrReview+assumptions.systemAndPaymentAllowanceSeconds;
- assert(seconds<=900,`Quick-path design budget ${seconds}s exceeds 15 minutes`);
- const report={lessons:36,scenes,questions,playerActions,opponentActions,manualReviews:reviews,extraPostAnswerConfirmations:0,betweenLessonClicks:0,chars,originalChars,assumptions,designBudgetSeconds:Math.round(seconds),humanStudy:false};
- if(process.env.TUTORIAL_PACE_REPORT)await writeFile(process.env.TUTORIAL_PACE_REPORT,JSON.stringify(report,null,2)+'\n');console.log('PASS tutorial pace design budget',JSON.stringify(report));
+ // Reading speed is not a completion-time claim. The default flow now pauses
+ // at playable checkpoints and retains each lesson clear until the user continues.
+ const report={lessons:36,scenes,questions,playerActions,opponentActions,manualReviews:reviews,betweenLessonClicks:35,chars,originalChars,humanStudy:false};
+ if(process.env.TUTORIAL_PACE_REPORT)await writeFile(process.env.TUTORIAL_PACE_REPORT,JSON.stringify(report,null,2)+'\n');console.log('PASS tutorial content and replay coverage',JSON.stringify(report));
 }finally{await rm(dir,{recursive:true,force:true});}

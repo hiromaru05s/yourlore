@@ -44,3 +44,31 @@
 .coach-detail{font-size:11px;line-height:1.8;color:#b8cbd8;margin:8px 0}.coach-detail summary{cursor:pointer}.coach-detail p{margin:6px 0}
 
 .coach-dice{font-size:12px;color:#e7d6ab;margin:7px 0}
+
+/* Play / pause: instruction and result dialogs leave the whole board available between moves. */
+.tutorial-dialog{position:fixed;inset:0;margin:auto;width:min(620px,calc(100vw - 40px));max-height:calc(100dvh - 40px);box-sizing:border-box;overflow:auto;padding:28px 32px 25px;border:1px solid #b8cdd17d;border-top:3px solid #ceb782;border-radius:12px;background:linear-gradient(145deg,#20394a,#0c1c2c 75%);color:#edf3f1;box-shadow:0 32px 100px #0009,0 0 0 5px #09172580;font-family:var(--sans,sans-serif)}
+.tutorial-dialog::backdrop{background:#030c17b0;backdrop-filter:blur(3px)}
+.tutorial-dialog .coach-spirit{float:right;width:88px;height:105px;margin:32px 0 0 18px;pointer-events:none}
+.tutorial-popup-header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.tutorial-eyebrow{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;color:#c9b788}
+.tutorial-icon-button{display:grid;place-items:center;width:36px;height:36px;flex:none;border:1px solid #b6cbd13d;border-radius:6px;background:#152c3c;color:#dce7ea;font:22px var(--sans,sans-serif);cursor:pointer}
+.tutorial-dialog .tutorial-chapter{margin:4px 0 12px;font-size:12px;color:#afc7d4}
+.tutorial-dialog h2{margin:0 0 16px;font-size:clamp(22px,3vw,28px);line-height:1.4;letter-spacing:.025em;font-weight:600;color:#f3f5ee}
+.tutorial-message{font-size:16px;line-height:1.9;margin:0 0 20px;color:#dae5e9}
+.tutorial-next-action{clear:both;padding:16px 18px;margin:20px 0;background:#071625a6;border-left:3px solid #96cbd7;border-radius:3px}
+.tutorial-next-action>span{display:block;font-size:11px;color:#9cbccb;margin-bottom:7px}
+.tutorial-next-action strong{display:block;font-size:16px;line-height:1.65;color:#f0f5f2;font-weight:600}
+.tutorial-game-button{display:flex;align-items:center;justify-content:center;gap:16px;min-height:50px;padding:12px 20px;box-sizing:border-box;border:1px solid #98b8c4;border-radius:6px;background:linear-gradient(#34596d,#203c50);box-shadow:inset 0 1px #ebf8ff24,0 3px 0 #061523;color:#edf5f7;font:600 14px/1.6 var(--sans,sans-serif);cursor:pointer;text-align:center}
+.tutorial-primary{width:100%;background:linear-gradient(#efddb0,#c4a66d);border-color:#f2dcaa;color:#242c31;box-shadow:inset 0 1px #fff8,0 4px 0 #6b5434}
+.tutorial-game-button:hover{filter:brightness(1.13)}.tutorial-game-button:active{translate:0 2px;box-shadow:inset 0 1px #ebf8ff24,0 1px 0 #061523}
+.tutorial-dialog button:focus-visible,.tutorial-dialog summary:focus-visible,.tutorial-goal button:focus-visible{outline:3px solid #a9e8ff;outline-offset:4px}
+.tutorial-check{clear:both;border:0;padding:6px 0 0;margin:16px 0}.tutorial-check legend{font-size:15px;line-height:1.7;font-weight:600;color:#e5ece8;width:100%}.tutorial-check .coach-answers{gap:10px;margin:12px 0 4px}.tutorial-check .tutorial-game-button{justify-content:flex-start;text-align:left;white-space:normal}
+.tutorial-changes{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:0 0 18px;clear:both}.tutorial-changes li{font-size:12px;line-height:1.5;padding:6px 9px;background:#9cc5c218;border:1px solid #9cc5c22e;border-radius:4px;color:#c5e3db}
+.tutorial-dialog .coach-payment{font-size:17px;text-align:center;margin:18px 0;color:#e8d4a2}.tutorial-dialog .coach-redirect{font-size:13px}
+.tutorial-tools{clear:both;margin-top:22px;padding-top:16px;border-top:1px solid #b5cbd42b;color:#a9c0ce;font-size:12px;line-height:1.8}.tutorial-tools>summary{cursor:pointer;width:fit-content}.tutorial-tools p{margin:12px 0}.tutorial-tool-buttons{display:flex;flex-wrap:wrap;gap:8px}.tutorial-tool-buttons button{border:1px solid #9cb7c450;border-radius:4px;background:#203b4d;padding:9px 12px;color:#d6e4ea;cursor:pointer;font:inherit}
+.tutorial-goal{position:fixed;z-index:110;left:50%;top:12px;transform:translateX(-50%);width:max-content;max-width:min(660px,calc(100vw - 36px));box-sizing:border-box;display:flex;align-items:center;gap:16px;padding:12px 16px;background:#0b1e30f2;border:1px solid #a6c6d266;border-left:3px solid #c9b17e;border-radius:8px;box-shadow:0 8px 28px #0005;color:#e6eff2}
+.tutorial-goal[hidden]{display:none}.tutorial-goal>div{min-width:0}.tutorial-goal strong{display:block;font-size:14px;line-height:1.6;margin-top:4px;font-weight:500}.tutorial-goal button{flex:none;min-width:36px;min-height:36px;padding:7px 9px;border:1px solid #aac8d156;border-radius:5px;background:#203e51;color:#e3edf1;font:12px var(--sans,sans-serif);cursor:pointer}.tutorial-goal button:disabled{opacity:.4;cursor:default}
+@media(max-width:600px){.tutorial-dialog{width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:18px 20px}.tutorial-dialog .coach-spirit{width:56px;height:76px;margin-left:10px}.tutorial-message{font-size:14px}.tutorial-next-action{padding:12px 14px;margin:16px 0}.tutorial-next-action strong{font-size:14px}.tutorial-goal{top:8px;gap:8px;padding:9px 10px;max-width:calc(100vw - 20px)}.tutorial-goal strong{font-size:12px}.tutorial-goal .tutorial-eyebrow{font-size:9px}.tutorial-changes li{font-size:11px}}
+@media(max-height:500px){.tutorial-dialog{padding:14px 24px;max-height:calc(100dvh - 16px)}.tutorial-dialog .coach-spirit{width:55px;height:70px;margin-top:14px}.tutorial-dialog h2{font-size:22px;margin-bottom:10px}.tutorial-message{font-size:14px;margin-bottom:12px}.tutorial-next-action{margin:12px 0;padding:10px 14px}.tutorial-goal{top:6px;padding:7px 12px}.tutorial-goal strong{font-size:12px}}
+/* Keep the opponent's portrait and Spirit readable while the player acts. */
+@media(min-width:701px){.tutorial-goal{left:auto;right:16px;transform:none;width:min(360px,calc(50vw - 100px));max-width:none;gap:9px;padding:10px 12px}.tutorial-goal strong{font-size:13px}}

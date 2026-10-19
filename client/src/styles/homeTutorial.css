@@ -86,3 +86,12 @@
  .home-companion{align-self:start;position:sticky;top:0}
  .home-spirit-touch{width:225px;height:225px}
 }
+
+/* Raised controls distinguish launching a lesson from reading its description. */
+.academy .academy-notebook{width:fit-content;max-width:100%;justify-self:start;gap:12px;min-height:48px;margin:8px 0 16px;padding:11px 18px;border:1px solid #b6cbd37a;border-radius:6px;background:linear-gradient(#314b60,#192e42);box-shadow:inset 0 1px #e1efff26,0 3px 0 #071420;color:#edf2ed;font-size:13px;font-weight:600}
+.academy .academy-notebook>span:last-child{margin-left:12px;color:#e2c993}
+.academy .academy-lesson-start{margin:0 12px 14px;padding:12px 14px;min-height:54px;align-items:center;justify-content:space-between;flex-direction:row;flex-wrap:wrap;gap:8px;border:1px solid #e7ce99;border-radius:6px;background:linear-gradient(#e8d6a9,#bda06c);box-shadow:inset 0 1px #fff6,0 4px 0 #6b5331;color:#29313a;text-shadow:none}
+.lounge-tutorial .academy .academy-lesson-start .tut-step-r{color:#3a413f;font-size:10px}.academy .academy-lesson-start .lesson-action{color:#182c3d;font-size:13px;font-weight:700;align-self:auto}
+.academy .claimed .academy-lesson-start{border-color:#8eb8b0;background:linear-gradient(#365c5d,#224247);box-shadow:inset 0 1px #dbffe522,0 4px 0 #102a30}.academy .claimed .academy-lesson-start .lesson-action,.lounge-tutorial .academy .claimed .academy-lesson-start .tut-step-r{color:#dbefe5}
+.academy .academy-notebook:hover,.academy .academy-lesson-start:not(:disabled):hover{filter:brightness(1.12)}.academy .academy-notebook:active,.academy .academy-lesson-start:not(:disabled):active{translate:0 2px;box-shadow:inset 0 1px #fff2,0 1px 0 #071420}
+@media(max-width:600px){.academy .academy-lesson-start{justify-content:center;margin:0 10px 13px;padding:10px;gap:5px;min-height:66px;flex-direction:column}.academy .academy-notebook{font-size:12px;padding:10px 14px}}
