@@ -18,7 +18,7 @@ dom.window.Range.prototype.getBoundingClientRect = () => new dom.window.DOMRect(
 dom.window.Range.prototype.getClientRects = () => [];
 globalThis.getComputedStyle = el=>dom.window.getComputedStyle(el);
 dom.window.HTMLImageElement.prototype.decode=()=>Promise.resolve();
-// JSDOM has no native dialog implementation; browser focus/inert behavior is checked with CUA.
+// JSDOM has no native dialog implementation; browser focus/inert behavior is checked by tutorial-academy-browser.mjs.
 dom.window.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','');};
 dom.window.HTMLDialogElement.prototype.close=function(){this.removeAttribute('open');};
 // Canvas visuals are covered by the browser renderer suites.
@@ -110,12 +110,14 @@ try {
   }
   localStorage.setItem('lore:tutorial:pace','full');
   controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:0,guest:true});
-  assert(document.querySelector('.tutorial-basics[open]'));
-  controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,0,'Primer blocks card play');
-  for(let page=0;page<5;page++)document.querySelector('.tutorial-basics [data-next]').click();
+  assert(document.querySelector('.tutorial-dialog[open]'));
+  assert.equal(document.querySelector('.tutorial-basics'),null,'Start on the practice board with one instruction');
+  controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,0,'Instruction popup blocks card play');
+  root.querySelector('[data-start]').click();
   assert.equal(document.querySelector('.tutorial-basics'),null);
   controller.onEndTurn();assert.equal(controller.snapshot().cur,0);assert.equal(root.querySelector('#endBtn').textContent.replace(/\s+/g,' '),'END TURN','Rejected pass must not lock the turn button');
-  controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,1);
+  assert(document.querySelector('.tutorial-dialog[open]'),'Wrong action reopens the current instruction');
+  root.querySelector('[data-start]').click();controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,1);
   await tick();assert(root.querySelector('[data-answer]'),'Summoning ends with a comprehension check');
   root.querySelector('[data-notebook]').click();assert(document.querySelector('.rule-notebook[open]'));
   controller.destroy();controller=null;root.innerHTML='';assert.equal(document.querySelector('.rule-notebook'),null,'Destroy removes open notebook');
@@ -123,22 +125,23 @@ try {
   let attempts=0,credits=0;
   api.completeTutorial=async()=>{attempts++;if(attempts===1)throw Error('offline');return{amount:100,credits:100,granted:true};};
   controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:TUT_STEPS.findIndex(s=>s.id==='summon'),onCredits:n=>credits=n});
-  for(let page=0;page<5;page++)document.querySelector('.tutorial-basics [data-next]').click();
-  controller.act({type:'play',idx:0});await tick();root.querySelector('[data-answer="'+controller.run.scenes[0].question.correct+'"]').click();root.querySelector('[data-continue]').click();await tick();assert(root.querySelector('[data-retry]'));assert.equal(credits,0);
+  root.querySelector('[data-start]').click();
+  controller.act({type:'play',idx:0});await tick();root.querySelector('[data-answer="'+controller.run.scenes[0].question.correct+'"]').click();await tick();assert(root.querySelector('[data-retry]'));assert.equal(credits,0);
   root.querySelector('[data-retry]').click();await tick();assert.equal(credits,100);assert(root.querySelector('[data-next]'));
   controller.act({type:'play',idx:0});await tick();assert.equal(attempts,2,'completed lesson does not pay twice');
   controller.destroy();controller=null;root.innerHTML='';
-  localStorage.clear();let quickAttempts=0;
+  localStorage.clear();localStorage.setItem('lore:tutorial:pace','fast');let quickAttempts=0;
   api.completeTutorial=async()=>{if(++quickAttempts===1)throw Error('offline');return{amount:100,credits:100,granted:true};};
   controller=new TestTutorial(root,{onHome:noop,onRematch:noop},'SEEKER',{lesson:1,accountId:'quick-qa'});
   assert.equal(document.querySelector('.tutorial-basics'),null);
-  controller.act({type:'attack',uid:controller.state.players[0].field[0].uid});await tick();
+  root.querySelector('[data-start]').click();controller.act({type:'attack',uid:controller.state.players[0].field[0].uid});await tick();
   root.querySelector('[data-answer="'+controller.run.scenes[0].question.correct+'"]').click();await tick();
   assert(root.querySelector('[data-retry]'));assert.equal(controller.run.id,'attack','failed payment keeps finished transcript and lesson');
   const same=controller;root.querySelector('[data-retry]').click();await tick();await tick();
-  assert.equal(controller,same);assert.equal(controller.run.id,'combat','successful retry hands off in place');assert.equal(controller.lastReward,100);assert.equal(controller.run.actions.length,0);
+  assert.equal(controller,same);assert.equal(controller.run.id,'attack','successful retry retains the clear popup');assert(root.querySelector('.coach-payment').textContent.includes('100'));
+  root.querySelector('[data-next]').click();await tick();await tick();assert.equal(controller.run.id,'combat','explicit next hands off in place');assert.equal(controller.run.actions.length,0);
   controller.loadLesson(TUT_STEPS.findIndex(s=>s.id==='defend'));await tick();await tick();
-  const beforeHint=root.querySelector('.coach-reason').textContent;root.querySelector('[data-hint]').click();assert.notEqual(root.querySelector('.coach-reason').textContent,beforeHint,'free exercise exposes its actionable hint');
+  root.querySelector('.tutorial-tools>summary').click();assert(root.querySelector('.tutorial-tools').open);assert(root.querySelector('.tutorial-tools').textContent.includes('シールドや回復'),'free exercise exposes its actionable hint');
   const evasion=(await tutorialTranscripts()).evasion;localStorage.setItem('lore:tutorial:v3:run:quick-qa:evasion',JSON.stringify(evasion.slice(0,evasion.findIndex(a=>a.type==='continueLesson'))));
   controller.loadLesson(TUT_STEPS.findIndex(s=>s.id==='evasion'));await tick();await tick();
   assert.equal(controller.run.phase,'review');assert(root.querySelector('.coach-dice').textContent.includes('4'),'resumed scene restores the actual roll');
