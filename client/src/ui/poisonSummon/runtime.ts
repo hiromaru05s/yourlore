@@ -1,4 +1,4 @@
-import {sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
+import {sizeSummonCanvas,summonPixelMatrix,settleSummonFace} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {boardMatrix,layoutRect,screenToBoard} from '../boardProjection';
@@ -36,12 +36,11 @@ export function playPoisonSummon(source:HTMLElement,options:Options={}):Promise<
    copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
    copy.style.cssText='position:relative;width:180px;height:280px;--cw:180px;--ch:280px;transform:none;translate:none;opacity:1;visibility:visible';
    captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost?.remove();captureHost=undefined;
+   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);captureHost?.remove();captureHost=undefined;
    if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
    if(!surface.face)throw Error('Public card surface unavailable');
-   face=document.createElement('canvas');face.width=640;face.height=Math.round(640*surface.face.height/surface.face.width);
-   face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
+   face=surface.face;
    host=document.createElement('div');host.className='poison-summon';host.dataset.cardId=id;host.dataset.variant=String(POISON_SELECTION[id]+1);host.setAttribute('aria-hidden','true');
    host.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:136';
    const canvas=document.createElement('canvas');sizeSummonCanvas(canvas);canvas.style.cssText='width:100%;height:100%';host.append(canvas);
@@ -59,7 +58,7 @@ export function playPoisonSummon(source:HTMLElement,options:Options={}):Promise<
    paint(0);document.body.append(host);const start=performance.now();
    const tick=(now:number)=>{try{
     if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
-    const ms=Math.min(DURATION,now-start);paint(ms);
+    const ms=Math.min(DURATION,now-start);paint(ms);settleSummonFace(source,host!,ms,DURATION);
     if(ms>=CONTACT_MS){impact();if(ended)return;}
     if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
    }catch(error){fallback(error);}};

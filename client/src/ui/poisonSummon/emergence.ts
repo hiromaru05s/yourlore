@@ -131,6 +131,7 @@ void main(){
  gl_FragColor=vec4(color,alpha);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
+ gl_FragColor.rgb=mix(linearToOutputTexel(vec4(cardColor,1.)).rgb,gl_FragColor.rgb,cardAlpha<.1?1.:smoothstep(.01,.32,c));
 }`;
 export function createEmergence(texture:T.Texture,id:CardId,variant:number){
  const family=id==='POISON_MASTER'?0:id==='RUST_SLUG'?1:2;

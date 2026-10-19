@@ -1,4 +1,4 @@
-import {summonPixelRatio} from '../summon/quality';
+import {summonPixelRatio,settleSummonFace} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
 import {projectedPlacement} from '../boardProjection';
@@ -29,10 +29,10 @@ export function playShieldTitanSummon(source:HTMLElement,options:Options={}):Pro
    const {Renderer}=await import('./renderer');if(ended)return;lease=acquire(Renderer);
    captureHost=document.createElement('div');captureHost.className='game';captureHost.style.cssText='position:fixed;left:-4000px;top:0;width:180px;pointer-events:none';
    const copy=source.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');copy.style.cssText='position:relative;width:180px;height:281.25px;--cw:180px;--ch:281.25px;transform:none;opacity:1;visibility:visible';captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost?.remove();captureHost=undefined;if(ended)return;
+   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);captureHost?.remove();captureHost=undefined;if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(!surface.face)throw Error('Public face unavailable');
    const width=surface.face.width/(1+2*CARD_PADDING),pad=width*CARD_PADDING,height=surface.face.height-2*pad;
-   face=document.createElement('canvas');face.width=768;face.height=1200;face.getContext('2d')!.drawImage(surface.face,pad,pad,width,height,0,0,768,1200);
+   face=document.createElement('canvas');face.width=1536;face.height=2400;face.getContext('2d')!.drawImage(surface.face,pad,pad,width,height,0,0,face.width,face.height);
    host=document.createElement('canvas');host.className='shield-titan-summon';host.dataset.cardId=id;host.dataset.variant='5';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';
    const density=summonPixelRatio();host.width=Math.round(innerWidth*density);host.height=Math.round(innerHeight*density);const c=host.getContext('2d')!;
    const paint=(ms:number)=>{
@@ -41,8 +41,8 @@ export function playShieldTitanSummon(source:HTMLElement,options:Options={}):Pro
     const from=options.from;if(from&&ms<450){const start=new DOMMatrix().translate(from.left+from.width/2,from.top+from.height/2).scale(from.width,-from.height/H,from.width),a=Array.from(start.toFloat64Array()),b=Array.from(placement.toFloat64Array()),q=ms/450,f=q*q*(3-2*q);placement=new DOMMatrix(a.map((n,j)=>n+(b[j]-n)*f));}
     c.clearRect(0,0,host!.width,host!.height);lease!.renderer.setFace(face!);lease!.renderer.drawBoard(host!,VARIANT,ms,placement);host!.dataset.time=String(Math.round(ms));
    };
-   paint(0);document.body.append(host);const start=performance.now();let lastPaint=-Infinity;
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);if(now-lastPaint>=1000/30){paint(ms);lastPaint=now;}if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
+   paint(0);document.body.append(host);const start=performance.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);settleSummonFace(source,host!,ms,DURATION);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
    frame=requestAnimationFrame(tick);
   })().catch(fallback);
  });

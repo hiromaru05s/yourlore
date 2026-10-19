@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {projectedPlacement,layoutRect} from '../boardProjection';
 import {HatchRenderer} from './renderer';
 import {DURATION,designs,smooth} from './catalog';
@@ -27,7 +28,7 @@ export function playHatch(source:HTMLElement,result:HTMLElement,signal?:AbortSig
    lease=acquire();host=document.createElement('div');host.className='game hatch-summon';host.dataset.variant='2';host.setAttribute('aria-hidden','true');
    host.style.cssText=`position:fixed;left:0;top:0;width:${w}px;height:${h}px;transform-origin:0 0;pointer-events:none;z-index:136`;
    const copies=[source,result].map(n=>{
-    const copy=n.cloneNode(true) as HTMLElement;
+    const copy=cloneCardNode(n);
     for(const node of [copy,...copy.querySelectorAll<HTMLElement>('[id],[data-uid]')]){node.removeAttribute('id');node.removeAttribute('data-uid');}
     copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
     copy.style.cssText=`position:absolute;left:0;top:0;margin:0;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px;transform:none;translate:none;opacity:1;visibility:visible`;

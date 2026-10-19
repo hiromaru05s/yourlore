@@ -1,3 +1,4 @@
+import {settleSummonFace,sizeSummonPlane,sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {boardMatrix,layoutRect,projectedPlacement} from '../boardProjection';
@@ -41,13 +42,12 @@ export function playVerdant(source:HTMLElement,id:Id,options:Options={}):Promise
    copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
    copy.style.cssText='position:relative;width:180px;height:280px;--cw:180px;--ch:280px;transform:none;opacity:1;visibility:visible';
    captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false);
+   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);
    captureHost.remove();captureHost=undefined;
    if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
    if(!surface.face)throw Error('Public card surface unavailable');
-   const face=document.createElement('canvas');face.width=640;face.height=Math.round(640*surface.face.height/surface.face.width);
-   face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
+   const face=surface.face;
    if(id==='HALF_ELF')half=new HalfRenderer();else renderer=new RichRenderer();
    host=document.createElement('div');host.className='verdant-summon';host.setAttribute('aria-hidden','true');
    host.dataset.cardId=id;host.dataset.variant=String(variant+1);
@@ -55,34 +55,33 @@ export function playVerdant(source:HTMLElement,id:Id,options:Options={}):Promise
    const canvas=document.createElement('canvas'),c=canvas.getContext('2d')!;
    if(half){
     host.style.cssText='position:fixed;left:0;top:0;width:180px;height:280px;transform-origin:0 0;pointer-events:none;z-index:136';
-    canvas.width=900;canvas.height=1200;
+    sizeSummonPlane(canvas,600,800);
     canvas.style.cssText='position:absolute;left:-210px;top:-260px;width:600px;height:800px';
    }else{
-    const dpr=Math.min(devicePixelRatio,2);canvas.width=Math.round(innerWidth*dpr);canvas.height=Math.round(innerHeight*dpr);
-    canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%';c.setTransform(dpr,0,0,dpr,0,0);
+    sizeSummonCanvas(canvas);
+    canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%';
    }
    host.append(canvas);document.body.append(host);source.style.visibility='hidden';
-   const start=performance.now();let lastPaint=-Infinity;
+   const start=performance.now();
    const tick=(now:number)=>{
     try{
     if(ended)return;
     if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const ms=Math.min(DURATION,now-start);host!.dataset.time=String(Math.round(ms));
     if(ms>=(half?2700/4.2*3.1:CONTACT)){impact();if(ended)return;}
-    if(now-lastPaint>=1000/30){
-     lastPaint=now;
+    {
      if(half){
       host!.style.transform=projectedPlacement(anchor,180,280).toString();
-      c.setTransform(1.5,0,0,1.5,0,0);c.clearRect(0,0,600,800);half.draw(c,face,id,0,ms,300,400,180);
+      c.clearRect(0,0,600,800);half.draw(c,face,id,0,ms,300,400,180);
      }else{
-      c.clearRect(0,0,innerWidth,innerHeight);
+      c.clearRect(0,0,canvas.width,canvas.height);
       const plane=anchor.closest<HTMLElement>('[data-board-plane]'),box=plane?layoutRect(anchor):anchor.getBoundingClientRect();
       const matrix=(plane?boardMatrix(box.left+box.width/2,box.top+box.height/2,Number(plane.dataset.boardPlane)||0):new DOMMatrix().translate(box.left+box.width/2,box.top+box.height/2))
        .scale(box.width/180,-box.height/280,box.width/180);
-      renderer!.drawBoard(c,face,id,variant,ms,matrix,innerWidth,innerHeight);
+      renderer!.drawBoard(c,face,id,variant,ms,summonPixelMatrix(matrix),canvas.width,canvas.height);
      }
     }
-    if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
+    settleSummonFace(source,host!,ms,DURATION);if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
     }catch(error){fallback(error);}
    };tick(start);
   })().catch(fallback);

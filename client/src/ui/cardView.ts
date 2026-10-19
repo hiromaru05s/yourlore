@@ -66,7 +66,7 @@ export interface CardOpts {
   game?: GameState; // live field conditions, including the opponent
 
   size?: "board" | "mkt" | "hand";
-  fullArt?: boolean; // zoom overlay: load the full-resolution art (default: 384px thumb)
+  fullArt?: boolean; // Explicit master art; bounded live views also use the master.
   /** Gallery grids (card list / deck pool / pickers) render hundreds of cards —
    *  those defer their art. Screens with a bounded, all-visible set (board,
    *  hand, market, zoom) must NOT: see artEl().
@@ -186,19 +186,9 @@ export function prefetchZoomArt(cardId: string, now = false): void {
 }
 
 // ---- art sizes ----------------------------------------------------------------
-// Every card view except the zoom overlay renders art far smaller than the 384px
-// thumbnail: the gallery grid shows it at ~92 CSS px on a desktop. Decoding and
-// rasterising 384x561 for a 92px box costs about four times what it needs to,
-// and the browser does that work one image at a time — which is why the LAST
-// cards in a grid appeared a few hundred ms after the first ones. Measured over
-// 336 warm images: p90 504ms -> 175ms when the source is 192px.
-//
-// `sizes` mirrors the .cards-grid breakpoints in screens.css (art window is
-// ~86% of the card, card width = (min(1040px,96vw) - 8px - 8px*(cols-1)) / cols),
-// so a 3x phone still picks the 384px file and stays sharp.
-// Zoom art window ≈ 86.6% of the card: 346px at the 400px desktop size, 84vw*0.866
-// on phones.
-const ZOOM_SIZES = "(max-width: 860px) 73vw, 346px";
+// Large galleries retain responsive thumbnails. Bounded live views share the
+// master with inspection: projected and expanded cards must not magnify a
+// compressed thumbnail. These sizes mirror the gallery grid breakpoints.
 const GALLERY_SIZES = "(max-width:650px) 118px, 134px";
 
 /** Cards past this index in a gallery grid defer their art; the ones before it
@@ -209,6 +199,7 @@ function lazyFor(v: boolean | number | undefined): boolean {
 }
 
 function artEl(cardId: string, full = false, lazy = false, gallery = false): HTMLElement {
+  full ||= !gallery;
   const art = el("div", "card-art");
   const variant = full ? "full" : gallery ? "gal" : "sm";
   const key = `${cardId}:${variant}`;
@@ -246,10 +237,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
     // it never actually showed.
     art.style.backgroundImage = `url(${artUrl.sm(cardId)})`;
     art.classList.add("has-thumb");
-    // 1x screens need ~346px for a 400px card — the 384px thumb already covers
-    // that, so they never fetch the master at all.
-    img.sizes = ZOOM_SIZES;
-    img.srcset = `${artUrl.sm(cardId)} 384w, ${artUrl.full(cardId)} 832w`;
+    // Use the same master in hand, market and zoom, even at DPR 1.
   }
   const done = (): void => {
     artOk.add(key);
@@ -271,7 +259,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
     img.remove();
     art.classList.add("art-done");
   };
-  if (gallery) {
+  if (gallery && !full) {
     // let the browser pick 192px or 384px by its own pixel density
     img.sizes = GALLERY_SIZES;
     img.srcset = `${artUrl.xs(cardId)} 192w, ${artUrl.sm(cardId)} 384w`;
@@ -413,7 +401,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // The frame has its name plaque; cost and combat seals are separate raster layers.
   node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined));
   const frameEl = el("div", "card-frame");
-  frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t,opt.fullArt)})`;
+  frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t,opt.fullArt || opt.lazyArt === undefined)})`;
   node.appendChild(frameEl);
 
   if (opt.playable) node.classList.add("is-playable");
@@ -512,7 +500,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   if (!opt.compactField) nameEl2.style.fontSize = `calc(var(--cw) * ${cardNameScale(nm).toFixed(5)})`;
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
   if(opt.lazyArt!==undefined)assetHints.set(node,()=>[
-    opt.compactField?fieldFrameFor(c.t):frameFor(c.t,opt.fullArt),
+    opt.compactField?fieldFrameFor(c.t):frameFor(c.t,opt.fullArt || opt.lazyArt === undefined),
     artUrl.sm(c.id),
     ...['attack','health','cost','plaque'].map(k=>`/art/biblion/modular/${k}-ui.webp`),
     `/ui/cost-${c.t==='quest'?'spell':c.t}.webp?v=2`,

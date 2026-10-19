@@ -34,7 +34,7 @@ export class DungeonRenderer {
   this.scene.add(new T.HemisphereLight(0xe7f3f0,0x172827,2.5));const light=new T.DirectionalLight(0xffe6bb,3.6);light.position.set(-3,4,7);this.scene.add(light);const rim=new T.DirectionalLight(0x8bbdbf,1.8);rim.position.set(4,0,2);this.scene.add(rim);
   this.scene.add(this.root);this.root.add(this.matter);
   this.tex=new T.CanvasTexture(face);this.tex.colorSpace=T.SRGBColorSpace;this.tex.anisotropy=4;this.faces.set(face,this.tex);
-  const cardMat=new T.MeshBasicMaterial({map:this.tex,transparent:true,side:T.DoubleSide,vertexColors:true});this.materials.push(cardMat);
+  const cardMat=new T.MeshBasicMaterial({map:this.tex,transparent:true,side:T.DoubleSide,vertexColors:true,toneMapped:false});this.materials.push(cardMat);
   // Independent halves share the exact same UV space; opening never stretches a painted tooth.
   for(let half=0;half<2;half++){
    const g=new T.PlaneGeometry(W,H/2,24,24);g.translate(0,(half?1:-1)*H/4,0);const uv=g.attributes.uv;

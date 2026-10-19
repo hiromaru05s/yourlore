@@ -43,12 +43,15 @@ export class Renderer {
   if(style===3){rig.root.rotation.x=-.48*formed;rig.root.rotation.y=-.2*formed;}
   if(style===4){rig.root.rotation.x=reduced?0:Math.PI*2*ramp(t,.33,.73);rig.root.rotation.y=-.25*formed;rig.root.position.z+=.26*formed;rig.pieces[0].mesh.rotation.z=.16*formed;}
   const contact=reduced?0:ramp(t,.86,.91)*(1-ramp(t,.91,1));rig.root.scale.set(1+.008*contact,1-.012*contact,1);
-  this.renderer.render(this.scene,this.camera);
-  if(canvas.width!==780||canvas.height!==590){canvas.width=780;canvas.height=590}const c=canvas.getContext('2d')!;c.clearRect(0,0,780,590);
+  const density=transparent?Math.max(1,devicePixelRatio):1,w=Math.ceil(540*density),h=Math.ceil(w*590/780);
+  if(this.renderer.domElement.width!==w||this.renderer.domElement.height!==h)this.renderer.setSize(w,h,false);this.renderer.render(this.scene,this.camera);
+  if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}const c=canvas.getContext('2d')!;c.setTransform(w/780,0,0,h/590,0,0);c.clearRect(0,0,780,590);
   if(!transparent){const bg=c.createRadialGradient(390,240,20,390,290,460);bg.addColorStop(0,dark?'#2a2831':'#fffdf8');bg.addColorStop(1,dark?'#14141a':'#d9d1c4');c.fillStyle=bg;c.fillRect(0,0,780,590)}
-  c.drawImage(this.renderer.domElement,0,0);
+  c.drawImage(this.renderer.domElement,0,0,780,590);
  }
- refreshFace(face:HTMLCanvasElement){for(const rig of this.rigs.values())if(rig.source===face)rig.face.needsUpdate=true;}
+ /** A captured master can be larger than the pending wheel's placeholder.
+  * Reallocate GPU storage before uploading the new canvas dimensions. */
+ refreshFace(face:HTMLCanvasElement){for(const rig of this.rigs.values())if(rig.source===face){rig.face.dispose();rig.face.needsUpdate=true;}}
  releaseFace(face:HTMLCanvasElement){for(const [key,r]of this.rigs)if(r.source===face){r.pieces.forEach(p=>p.dispose());r.face.dispose();r.wheel.dispose();r.surface.material.dispose();r.body.dispose();r.back.dispose();this.scene.remove(r.root);this.rigs.delete(key);}}
  get stats(){return {rigs:this.rigs.size,geometries:this.renderer.info.memory.geometries,textures:this.renderer.info.memory.textures,drawCalls:this.renderer.info.render.calls}}
  dispose(){if(this.disposed)return;this.disposed=true;for(const r of this.rigs.values()){r.pieces.forEach(p=>p.dispose());r.face.dispose();r.wheel.dispose();r.surface.material.dispose();r.body.dispose();r.back.dispose()}this.rigs.clear();this.ground.geometry.dispose();(this.ground.material as T.Material).dispose();this.environment.dispose();this.renderer.dispose();this.renderer.forceContextLoss()}

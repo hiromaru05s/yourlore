@@ -66,7 +66,7 @@ export async function captureCardBack(sleeve:string,ratio=1/.64):Promise<CardSur
   paintSleeve(back.getContext('2d')!,await image(sleeve),pad,w,h);
   return {face:null,back};
 }
-export async function captureCardSurface(node: HTMLElement, sleeve: string, reveal: boolean, includeBack=true): Promise<CardSurface> {
+export async function captureCardSurface(node: HTMLElement, sleeve: string, reveal: boolean, includeBack=true, liveSource=node): Promise<CardSurface> {
   const r = node.getBoundingClientRect();
   const ratio = r.height / r.width;
   // Opponent path never reads, copies or requests a face or card identity.
@@ -106,9 +106,12 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
     });
   }
   // Sample the live material before typography, preserving its art-window clip.
+  const liveLayers=liveSource.querySelectorAll<HTMLCanvasElement>('.card-effect-surface');
+  let layerIndex=0;
   for(const layer of node.querySelectorAll<HTMLCanvasElement>('.card-effect-surface')){
+    const pixels=liveLayers[layerIndex++]??layer;
     if(!layer.width||!layer.height)continue;
-    const snapshot=canvas(layer.width,layer.height);snapshot.getContext('2d')!.drawImage(layer,0,0);
+    const snapshot=canvas(layer.width,layer.height);snapshot.getContext('2d')!.drawImage(pixels,0,0);
     const b=box(layer),artLayer=!!layer.closest('.card-art');
     const blend=getComputedStyle(layer).mixBlendMode==='screen'?'screen':'source-over';
     const path=document.querySelector(node.classList.contains('card--field')?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d');
@@ -142,6 +145,17 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
     layers.push(async () => { ctx.drawImage(await matte('/art/biblion/modular/plaque-ui.webp'), b.x,b.y,b.w,b.h); });
     layers.push(drawText(label));
   }
+  for(const icon of node.querySelectorAll<HTMLElement>('.card-status .passive-icon')){
+    const img=icon.querySelector<HTMLImageElement>('img');
+    if(img){const b=box(img),url=img.currentSrc||img.src;layers.push(async()=>{ctx.drawImage(await image(url),b.x,b.y,b.w,b.h);});}
+    const halo=icon.querySelector<SVGSVGElement>('.passive-halo svg');
+    if(halo){const b=box(halo),strokes=[...halo.querySelectorAll('path')].map(path=>({path:new Path2D(path.getAttribute('d')||''),style:getComputedStyle(path)}));
+      layers.push(async()=>{ctx.save();ctx.translate(b.x,b.y);ctx.scale(b.w/32,b.h/32);ctx.lineJoin='round';ctx.lineCap='round';for(const {path,style} of strokes){ctx.strokeStyle=style.stroke;ctx.lineWidth=parseFloat(style.strokeWidth);ctx.globalAlpha=parseFloat(style.opacity);ctx.stroke(path);}ctx.restore();});
+    }
+    if(icon.classList.contains('kw--granted')){const b=box(icon);layers.push(async()=>{ctx.save();ctx.translate(b.x+b.w*.885,b.y+b.h*.115);ctx.rotate(Math.PI/4);ctx.fillStyle='#c1f2dc';ctx.strokeStyle='#234e46';ctx.lineWidth=w/r.width;ctx.fillRect(-b.w*.115,-b.h*.115,b.w*.23,b.h*.23);ctx.strokeRect(-b.w*.115,-b.h*.115,b.w*.23,b.h*.23);ctx.restore();});}
+    const count=icon.querySelector<HTMLElement>('b');
+    if(count){const b=box(count),style=getComputedStyle(count);layers.push(async()=>{ctx.save();ctx.fillStyle=style.backgroundColor;ctx.beginPath();ctx.roundRect(b.x,b.y,b.w,b.h,b.h*.3);ctx.fill();ctx.restore();});layers.push(drawText(count));}
+  }
   await Promise.all([backImage, image(frameUrl), ...(art ? [image(art.currentSrc || art.src).catch(()=>null)] : [])]);
   for (const draw of layers) await draw();
   const sleeveImage=await backImage;if(sleeveImage)paintSleeve(backCtx,sleeveImage,pad,w,h);
@@ -162,7 +176,7 @@ export async function capturePileSurface(node:HTMLElement,sleeve:string,preserve
   if(art){const original=art.currentSrc||art.src;art.removeAttribute('srcset');art.removeAttribute('sizes');const full=art.src.replace(/\/art\/cards-(sm|xs)\//,'/art/cards/');try{await image(full);art.src=full;}catch{art.src=original;}try{await art.decode();}catch{}}
   host.append(copy);document.body.append(host);
   try{const result=await captureCardSurface(copy,sleeve,true);
-    if(preserveDim&&node.classList.contains('is-dim')&&getComputedStyle(node).filter!=='none'&&result.face){const c=canvas(result.face.width,result.face.height),ctx=c.getContext('2d')!;ctx.filter='grayscale(1) brightness(.55) contrast(.9)';ctx.drawImage(result.face,0,0);result.face=c;}
+    if(preserveDim&&node.classList.contains('is-dim')&&result.face){const c=canvas(result.face.width,result.face.height),ctx=c.getContext('2d')!;ctx.filter='grayscale(1) brightness(.55) contrast(.9)';ctx.drawImage(result.face,0,0);result.face=c;}
     return result;
   }finally{host.remove();}
 }

@@ -1,6 +1,6 @@
-import {settleSummonFace} from '../summon/quality';
+import {settleSummonFace,sizeSummonPlane} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
-import {captureCardSurface,CARD_PADDING} from '../cardSurface';
+import {captureCardSurface} from '../cardSurface';
 import {silencePlacement} from './placement';
 import {isSilenceSummon,SILENCE_VARIANT} from './selection';
 import {DURATION,designs} from './catalog';
@@ -33,16 +33,16 @@ export function playSilenceSummon(source:HTMLElement,options:Options={}):Promise
    const copy=source.cloneNode(true) as HTMLElement;
    for(const node of [copy,...copy.querySelectorAll<HTMLElement>('[id],[data-uid]')]){node.removeAttribute('id');node.removeAttribute('data-uid');}
    copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost.remove();captureHost=undefined;if(ended)return;
+   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);captureHost.remove();captureHost=undefined;if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(!surface.face)throw Error('Public silence card face unavailable');
-   const face=document.createElement('canvas');face.width=Math.round(540*(1+2*CARD_PADDING));face.height=Math.round(810+1080*CARD_PADDING);face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
+   const face=surface.face;
    lease=acquire(Renderer,face);host=document.createElement('div');host.className='silence-summon';host.dataset.cardId=id;host.dataset.variant='4';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;left:0;top:0;width:180px;height:270px;transform-origin:0 0;pointer-events:none;z-index:136';
    // The study's two passes share the same board transform; its camera owns lift.
-   const planes=(['ground','card'] as const).map(pass=>{const canvas=document.createElement('canvas');canvas.dataset.silencePass=pass;canvas.width=canvas.height=720;canvas.style.cssText='position:absolute;left:-198px;top:-153px;width:576px;height:576px';host!.append(canvas);const c=canvas.getContext('2d')!;c.setTransform(1.25,0,0,1.25,0,0);return{pass,c};});
+   const planes=(['ground','card'] as const).map(pass=>{const canvas=document.createElement('canvas');canvas.dataset.silencePass=pass;sizeSummonPlane(canvas,576);canvas.style.cssText='position:absolute;left:-198px;top:-153px;width:576px;height:576px';host!.append(canvas);const c=canvas.getContext('2d')!;return{pass,c};});
    const paint=(ms:number)=>{host!.style.transform=silencePlacement(anchor).toString();for(const{c,pass}of planes){c.clearRect(0,0,576,576);lease!.renderer.draw(c,face,SILENCE_VARIANT,ms,288,288,180,false,pass,false,id==='NT_SEAL5');}host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,DURATION);};
    // Compile and paint frame zero before the clock starts or the source is replaced.
-   paint(0);document.body.append(host);const start=performance.now();let lastPaint=start;
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(matchMedia('(prefers-reduced-motion: reduce)').matches){impact();finish(true);return;}const ms=Math.min(DURATION,now-start);if(now-lastPaint>=1000/30||ms===DURATION){paint(ms);lastPaint=now;}if(ms>=designs[SILENCE_VARIANT].hit){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
+   paint(0);document.body.append(host);const start=performance.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(matchMedia('(prefers-reduced-motion: reduce)').matches){impact();finish(true);return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=designs[SILENCE_VARIANT].hit){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
    frame=requestAnimationFrame(tick);
   })().catch(fallback);
  });

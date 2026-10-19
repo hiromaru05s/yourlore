@@ -38,7 +38,7 @@ export class VoidRenderer {
   this.aperture.visible=opening>0&&closing<1&&options.pass!=='ground';this.aperture.position.set(0,.28,.18);this.aperture.scale.set(radius,radius,1);
   for(const mesh of [this.back,this.front]){const u=(mesh.material as T.ShaderMaterial).uniforms;u.time.value=t/1000*(jailer?-.88:1);u.opening.value=opening;u.closing.value=closing;u.release.value=ramp(t,180,finish+70);}
   this.shadow.visible=options.pass!=='card';this.shadow.scale.set(1.5+after*.45,2.1+after*.4,1);(this.shadow.material as T.MeshBasicMaterial).opacity=emerge*(.17+.17*land);
-  this.gl.render(this.scene,this.camera);const c=canvas.getContext('2d')!;c.clearRect(0,0,canvas.width,canvas.height);c.drawImage(this.gl.domElement,0,0,canvas.width,canvas.height);
+  if(this.gl.domElement.width!==canvas.width||this.gl.domElement.height!==canvas.height)this.gl.setSize(canvas.width,canvas.height,false);this.gl.render(this.scene,this.camera);const c=canvas.getContext('2d')!;c.clearRect(0,0,canvas.width,canvas.height);c.drawImage(this.gl.domElement,0,0,canvas.width,canvas.height);
  }
  get resources(){return {...this.gl.info.memory};}
  releaseFace(face:HTMLCanvasElement){this.faces.get(face)?.dispose();this.faces.delete(face);}

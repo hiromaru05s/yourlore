@@ -30,9 +30,9 @@ export function playVampireSummon(source:HTMLElement,options:Options={}):Promise
    const {Renderer}=await import('./renderer');if(ended)return;lease=acquire(Renderer);await lease.renderer.ready;if(ended)return;
    captureHost=document.createElement('div');captureHost.className='game';captureHost.style.cssText='position:fixed;left:-4000px;top:0;width:180px;pointer-events:none';
    const copy=source.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');copy.style.cssText='position:relative;width:180px;height:280px;--cw:180px;--ch:280px;transform:none;opacity:1;visibility:visible';captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost?.remove();captureHost=undefined;if(ended)return;
+   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);captureHost?.remove();captureHost=undefined;if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(!surface.face)throw Error('Public face unavailable');
-   face=document.createElement('canvas');face.width=640;face.height=Math.round(face.width*surface.face.height/surface.face.width);face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
+   face=surface.face;
    host=document.createElement('canvas');host.className='vampire-summon';host.dataset.cardId=id;host.dataset.variant='1';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';sizeSummonCanvas(host);const c=host.getContext('2d')!;
    const paint=(ms:number)=>{const box=layoutRect(anchor);let placement=projectedPlacement(anchor,180,280).translate(90,140).scale(1,-1,box.width/180);c.clearRect(0,0,host!.width,host!.height);
     const from=options.from;if(from&&ms<420){const start=new DOMMatrix().translate(from.left+from.width/2,from.top+from.height/2).scale(from.width/180,-from.height/280,from.width/180),a=Array.from(start.toFloat64Array()),b=Array.from(placement.toFloat64Array()),q=ease(0,420,ms);placement=new DOMMatrix(a.map((n,j)=>n+(b[j]-n)*q));}

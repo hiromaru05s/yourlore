@@ -1,3 +1,4 @@
+import {settleSummonFace} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {projectedPlacement} from '../boardProjection';
@@ -52,7 +53,7 @@ export function playGamblerSummon(source:HTMLElement,options:Options={}):Promise
      if(ended)return;
      if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
      // A slow face capture may hold the wheel, but never reveal an empty texture.
-     clock=Math.min(faceReady?DURATION:1600,clock+Math.max(0,now-last));last=now;paint(clock);
+     clock=Math.min(faceReady?DURATION:1600,clock+Math.max(0,now-last));last=now;paint(clock);settleSummonFace(source,host!,clock,DURATION);
      if(clock>=IMPACT){impact();if(ended)return;}
      if(clock===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
     }catch(error){fallback(error);}
@@ -61,10 +62,10 @@ export function playGamblerSummon(source:HTMLElement,options:Options={}):Promise
    captureHost=document.createElement('div');captureHost.className='game';captureHost.style.cssText='position:fixed;left:-4000px;top:0;width:180px;pointer-events:none';
    const copy=source.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
    copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';captureHost.append(copy);document.body.append(captureHost);
-   void captureCardSurface(copy,FRAME_BACK,true,false).then(surface=>{
+   void captureCardSurface(copy,FRAME_BACK,true,false,source).then(surface=>{
     captureHost?.remove();captureHost=undefined;if(ended)return;
     if(!surface.face)throw Error('Public face unavailable');
-    face!.height=Math.round(face!.width*surface.face.height/surface.face.width);face!.getContext('2d')!.drawImage(surface.face,0,0,face!.width,face!.height);lease!.renderer.refreshFace(face!);faceReady=true;
+    face!.width=surface.face.width;face!.height=surface.face.height;face!.getContext('2d')!.drawImage(surface.face,0,0,face!.width,face!.height);lease!.renderer.refreshFace(face!);faceReady=true;
    }).catch(fallback);
   }catch(error){fallback(error);}
  });

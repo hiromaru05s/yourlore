@@ -1,4 +1,4 @@
-import {settleSummonFace} from './quality';
+import {settleSummonFace,sizeSummonPlane} from './quality';
 import {isCastle} from '../castleSummon/catalog';
 import {playCastleSummon,cancelCastleSummon,cancelCastleSummons} from '../castleSummon/runtime';
 import {isPoisonSummon} from '../poisonSummon/selection';
@@ -96,11 +96,11 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
    copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
    copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';
    captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false);
+   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);
    captureHost.remove();captureHost=undefined;
    if(ended)return;
    if(!source.isConnected||!anchor.isConnected||options.signal?.aborted||!surface.face){finish();return;}
-   const face=document.createElement('canvas');face.width=540;face.height=Math.round(540*surface.face.height/surface.face.width);face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);
+   const face=surface.face;
    if(coinsCount){const [visual,audio]=await Promise.all([import('../merchant/coins'),import('../merchant/sound')]);if(ended)return;coins=new visual.Coins();coinSound=new audio.ContactSound(coinsCount);}
    renderer=new Renderer();
    host=document.createElement('div');host.className='slate-summon';host.setAttribute('aria-hidden','true');
@@ -108,22 +108,21 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
    const planes=['ground','card'].map(pass=>{
     const el=document.createElement('div');el.dataset.summonPass=pass;
     el.style.cssText='position:absolute;left:0;top:0;width:180px;height:270px;transform-origin:0 0';
-    const canvas=document.createElement('canvas');canvas.width=canvas.height=684;
+    const canvas=document.createElement('canvas');sizeSummonPlane(canvas,684);
     canvas.style.cssText='position:absolute;left:-252px;top:-207px;width:684px;height:684px';
     el.append(canvas);host!.append(el);return {el,c:canvas.getContext('2d')!,pass:pass as 'ground'|'card'};
    });
    document.body.append(host);source.style.visibility='hidden';
-   const ground=projectedPlacement(anchor,180,270).toString(),start=performance.now();let impacted=false,lastPaint=-Infinity;
+   const ground=projectedPlacement(anchor,180,270).toString(),start=performance.now();let impacted=false;
    const tick=(now:number)=>{
     if(ended)return;
     if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const ms=Math.max(0,Math.min(total,now-start));
     host!.dataset.time=String(Math.round(ms));host!.dataset.variant=coinsCount?'merchant-03':'slate';if(coinsCount)host!.dataset.coinCount=String(coinsCount);coinSound?.advance(ms);
     if(!impacted&&ms>=790){impacted=true;options.onImpact?.();if(ended)return;}
-    const paint=now-lastPaint>=1000/30;if(paint)lastPaint=now;
     for(const {el,c,pass} of planes){
      el.style.transform=pass==='ground'?ground:summonPlacement(anchor,180,270,ms).toString();
-     if(paint){c.clearRect(0,0,684,684);renderer!.draw(c,face,SUMMON_VARIANT,Math.min(DURATION,ms),342,342,180,false,pass,false);if(pass==='ground')coins?.draw(c,MERCHANT_VARIANT,coinsCount,ms,342,342,180,false);}
+     c.clearRect(0,0,684,684);renderer!.draw(c,face,SUMMON_VARIANT,Math.min(DURATION,ms),342,342,180,false,pass,false);if(pass==='ground')coins?.draw(c,MERCHANT_VARIANT,coinsCount,ms,342,342,180,false);
     }
     settleSummonFace(source,host!,ms,total);
     if(ms===total){finish(true);return;}frame=requestAnimationFrame(tick);

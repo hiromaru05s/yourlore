@@ -1,3 +1,4 @@
+import {settleSummonFace,sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {layoutRect,projectedPlacement} from '../boardProjection';
@@ -47,16 +48,16 @@ export function playDungeonSummon(source:HTMLElement,options:Options={}):Promise
    copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
    copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';
    captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost?.remove();captureHost=undefined;if(ended)return;
+   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);captureHost?.remove();captureHost=undefined;if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
    if(!surface.face)throw Error('Public dungeon face unavailable');
    // Remove captureCardSurface's transparent padding, just as in the approved lab.
-   const face=document.createElement('canvas');face.width=768;face.height=1152;
+   const face=document.createElement('canvas');face.width=1536;face.height=2304;
    const pad=surface.face.width*.12/1.24;
-   face.getContext('2d')!.drawImage(surface.face,pad,pad,surface.face.width-pad*2,surface.face.height-pad*2,0,0,768,1152);
+   face.getContext('2d')!.drawImage(surface.face,pad,pad,surface.face.width-pad*2,surface.face.height-pad*2,0,0,face.width,face.height);
    lease=acquire(DungeonRenderer,face,art);
    host=document.createElement('canvas');host.className='dungeon-summon';host.dataset.cardId='DUNGEON';host.dataset.variant='1';host.setAttribute('aria-hidden','true');
-   host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';host.width=innerWidth;host.height=innerHeight;
+   host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';sizeSummonCanvas(host);
    const flight=options.from?420:0,total=flight+DURATION;
    const paint=(elapsed:number)=>{
     const box=layoutRect(anchor);let placement=projectedPlacement(anchor,180,270),width=box.width;
@@ -65,14 +66,14 @@ export function playDungeonSummon(source:HTMLElement,options:Options={}):Promise
      const a=Array.from(start.toFloat64Array()),b=Array.from(placement.toFloat64Array()),q=ease(0,flight,elapsed);
      placement=new DOMMatrix(a.map((n,j)=>n+(b[j]-n)*q));width=from.width+(width-from.width)*q;
     }
-    lease!.renderer.drawBoard(host!,face,Math.max(0,elapsed-flight),placement,width);
+    lease!.renderer.drawBoard(host!,face,Math.max(0,elapsed-flight),summonPixelMatrix(placement),width);
     host!.dataset.time=String(Math.round(elapsed));host!.dataset.placement=placement.toString();
    };
    // Compile, then paint frame zero before starting the real-time clock.
    paint(0);document.body.append(host);const start=performance.now();
    const tick=(now:number)=>{try{
     if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
-    const elapsed=Math.min(total,now-start);paint(elapsed);
+    const elapsed=Math.min(total,now-start);paint(elapsed);settleSummonFace(source,host!,elapsed,total);
     if(elapsed>=flight+2040){impact();if(ended)return;}
     if(elapsed===total){finish(true);return;}frame=requestAnimationFrame(tick);
    }catch(error){fallback(error);}};

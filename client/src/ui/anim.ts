@@ -1,3 +1,4 @@
+import {cloneCardNode} from './cardClone';
 import {isCastle} from './castleSummon/catalog';
 import {playCastleSummon,cancelCastleSummons} from './castleSummon/runtime';
 import {isPoisonSummon} from './poisonSummon/selection';
@@ -429,7 +430,7 @@ export async function summonFromHand(card: CardInst, uid: string, side: ViewSide
   }
   const ghost = floatAt(cardEl(card, {size:"hand",fullArt:isMimic(card.id)}), from); target.style.visibility = "hidden";
   let face:HTMLElement|undefined;
-  try { await focusSummon(ghost, card, side); face=await flyIntoSlot(ghost,target,target.cloneNode(true) as HTMLElement,true,card.id==='MIMIC'?'mimic':'summon'); }
+  try { await focusSummon(ghost, card, side); face=await flyIntoSlot(ghost,target,cloneCardNode(target),true,card.id==='MIMIC'?'mimic':'summon'); }
   finally { ghost.remove(); face?.remove(); target.style.visibility = ""; }
 }
 /** Public hand-to-shelf movement, including the end-turn overflow picker. */

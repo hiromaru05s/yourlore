@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {projectedPlacement} from '../boardProjection';
 import {CasinoRenderer} from './renderer';
 import {DURATION,IMPACT} from './timing';
@@ -35,7 +36,7 @@ export function playCasinoSummon(source:HTMLElement,options:Options={}):Promise<
   try{
    lease=acquire();host=document.createElement('div');host.className='game casino-summon';host.dataset.cardId='CASINO';host.dataset.variant='2';host.setAttribute('aria-hidden','true');
    host.style.cssText='position:fixed;left:0;top:0;width:180px;height:270px;transform-origin:0 0;pointer-events:none;z-index:136';
-   const copy=source.cloneNode(true) as HTMLElement;
+   const copy=cloneCardNode(source);
    for(const node of [copy,...copy.querySelectorAll<HTMLElement>('[id],[data-uid]')]){node.removeAttribute('id');node.removeAttribute('data-uid');}
    copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
    copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';

@@ -1,4 +1,4 @@
-import {settleSummonFace} from '../summon/quality';
+import {settleSummonFace,sizeSummonPlane} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
 import {voidPlacement} from './placement';
@@ -31,11 +31,11 @@ export function playVoidSummon(source:HTMLElement,options:Options={}):Promise<bo
    const {VoidRenderer}=await import('./renderer');if(ended)return;
    captureHost=document.createElement('div');captureHost.className='game';captureHost.dataset.voidCapture='true';captureHost.style.cssText='position:fixed;left:-4000px;top:0;width:180px;pointer-events:none';
    const copy=source.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false);captureHost.remove();captureHost=undefined;if(ended)return;
+   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);captureHost.remove();captureHost=undefined;if(ended)return;
    if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(!surface.face)throw Error('Public void card face unavailable');
-   const face=document.createElement('canvas');face.width=540;face.height=810;const pad=surface.face.width*CARD_PADDING/(1+2*CARD_PADDING);face.getContext('2d')!.drawImage(surface.face,pad,pad,surface.face.width-pad*2,surface.face.height-pad*2,0,0,540,810);
+   const face=document.createElement('canvas');face.width=1536;face.height=2304;const pad=surface.face.width*CARD_PADDING/(1+2*CARD_PADDING);face.getContext('2d')!.drawImage(surface.face,pad,pad,surface.face.width-pad*2,surface.face.height-pad*2,0,0,face.width,face.height);
    lease=acquire(VoidRenderer,face);host=document.createElement('div');host.className='void-summon';host.dataset.cardId=id;host.dataset.variant='1';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;left:0;top:0;width:180px;height:270px;transform-origin:0 0;pointer-events:none;z-index:136';
-   const canvas=document.createElement('canvas');canvas.width=canvas.height=512;canvas.style.cssText='position:absolute;left:-342px;top:-297px;width:864px;height:864px';host.append(canvas);
+   const canvas=document.createElement('canvas');sizeSummonPlane(canvas,864);canvas.getContext('2d')!.setTransform(1,0,0,1,0,0);canvas.style.cssText='position:absolute;left:-342px;top:-297px;width:864px;height:864px';host.append(canvas);
    const paint=(ms:number)=>{host!.style.transform=voidPlacement(anchor).toString();lease!.renderer.render(canvas,face,id,ms);host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,VOID_SUMMON_DURATION);};
    paint(0);document.body.append(host);const start=performance.now();
    const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(matchMedia('(prefers-reduced-motion: reduce)').matches){impact();finish(true);return;}const ms=Math.min(VOID_SUMMON_DURATION,now-start);paint(ms);if(ms>=VOID_SUMMON_IMPACT){impact();if(ended)return;}if(ms===VOID_SUMMON_DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};

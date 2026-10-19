@@ -74,7 +74,7 @@ export class Renderer{
   this.purple.opacity=this.light.opacity=1-retire;this.shadow.scale.setScalar(.7+.3*grow);(this.shadow.material as T.MeshBasicMaterial).opacity=alive?.4+energy*.6:.3;
   this.card.visible=pass!=='ground';this.ground.visible=pass!=='card';
   if(studio){this.camera.position.set(0,-7.5,8.5);this.camera.up.set(0,0,1);this.camera.lookAt(0,0,.25);}else{this.camera.position.set(0,0,10);this.camera.up.set(0,1,0);this.camera.lookAt(0,0,0);}this.camera.updateProjectionMatrix();if(!studio){this.camera.projectionMatrix.elements[9]=.325/3.2;this.camera.projectionMatrix.elements[13]=10*.325/3.2;}
-  const sz=Math.max(256,Math.min(950,Math.round(w*3.2*Math.min(devicePixelRatio,1.5))));if(this.gpu.domElement.width!==sz)this.gpu.setSize(sz,sz,false);this.gpu.render(this.scene,this.camera);c.drawImage(this.gpu.domElement,x-w*1.6,y-w*1.6,w*3.2,w*3.2);
+  const sz=Math.max(256,Math.ceil(w*3.2*Math.hypot(c.getTransform().a,c.getTransform().b)));if(this.gpu.domElement.width!==sz)this.gpu.setSize(sz,sz,false);this.gpu.render(this.scene,this.camera);c.drawImage(this.gpu.domElement,x-w*1.6,y-w*1.6,w*3.2,w*3.2);
  }
  releaseFace(face:HTMLCanvasElement){this.textures.get(face)?.dispose();this.textures.delete(face);}
  stats(){return{geometries:this.gpu.info.memory.geometries,textures:this.gpu.info.memory.textures,calls:this.gpu.info.render.calls};}
