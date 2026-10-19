@@ -1,0 +1,18 @@
+{
+  "source": "ffdb125980647eb0e7b58386422ebe97047e2136",
+  "deploymentId": "90df5b69-893c-4ca7-a119-7aab0b8f62f2",
+  "versions": [
+    {
+      "version_id": "de65404c-f012-49a8-86d4-73a4723f5c4c",
+      "percentage": 100
+    }
+  ],
+  "createdOn": "2026-10-19T05:15:54.622876Z",
+  "tests": {
+    "passed": 192,
+    "total": 192
+  },
+  "typecheck": true,
+  "build": true,
+  "assetParityCount": 116
+}

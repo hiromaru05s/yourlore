@@ -17,3 +17,13 @@
 - 初心者によるユーザーテストや所要時間の実測は行っていない。
 
 ローカル結果は `qa/browser.json`。本番確認は `scripts/check-tutorial-production.mjs` で配信JS/CSSのSHA-256照合、隔離した一時QAアカウントによる実操作・実報酬・再読込を実施し、アカウントを削除する。OAuthログインそのものはこの確認の対象ではない。
+
+## プロダクション反映
+
+- 公開ソース: `ffdb125980647eb0e7b58386422ebe97047e2136`
+- Worker: `de65404c-f012-49a8-86d4-73a4723f5c4c`、100%配信。
+- guarded release: typecheck / 192件全成功 / build。
+- 配信済み116ファイルのSHA-256一致。
+- 本番の隔離QAセッションで召喚ドラッグ・直接攻撃・回答・実習間遷移を操作。合計200シャード、2実習の保存、重複付与なし、再読込後の進捗を確認。一時QAアカウントは削除し、残存0件を確認。
+- `production/browser.json`、`production/cleanup.json`、`production/deployment.json` を参照。
+- リリース後の追記は検証記録と検証スクリプトのみ。ゲーム本体の公開コードには変更なし。

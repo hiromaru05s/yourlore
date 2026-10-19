@@ -1,0 +1,17 @@
+{
+  "origin": "https://yourlore.xyz",
+  "source": "ffdb125980647eb0e7b58386422ebe97047e2136",
+  "checkedAt": "2026-10-19T05:18:27.469Z",
+  "checks": [
+    "exact deployed JS/CSS hashes",
+    "authenticated menu buttons and rule search",
+    "physical drag and central result popup",
+    "real first and second lesson payments",
+    "duplicate reward rejected",
+    "reload shows two persisted completions",
+    "1024px popup fits"
+  ],
+  "credits": 200,
+  "boundary": "Disposable preverified QA session; actual production assets and APIs. OAuth sign-in is not exercised. All 36 lessons are covered locally.",
+  "errors": []
+}
