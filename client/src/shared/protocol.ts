@@ -22,12 +22,13 @@ export type QueueServerMsg =
 // ---- in-game (GameRoom Durable Object) ----
 export type GameClientMsg =
   | { type: "action"; action: Action }
-  | { type: "ready"; openingVersion?:1|2 }
+  | { type: "ready"; openingVersion?:1|2; battleLogVersion?:1 }
   | { type: "openingReady" }
   | { type: "startReady" } // ranked market-preview: this player wants to start early
   | { type: "ping" };
 
 export type GameServerMsg =
+  | { type: "logHistory"; reset: boolean; events: import('./battleLog').BattleLogEvent[] }
   | { type: "rewardsSettled" }
   | { type: "init"; you: Side; state: GameState; events: GameEvent[] }
   | { type: "update"; state: GameState; events: GameEvent[] }

@@ -329,6 +329,16 @@ export abstract class BaseController implements BoardHandlers {
     this.afterApply(res);
   }
 
+  protected restoreLog(events: GameEvent[], reset: boolean): void {
+    // Stay in the presentation queue: an older queued action must not append again
+    // after the server's replacement history has already included it.
+    this.queue = this.queue.then(() => {
+      if (this.dead) return;
+      if (reset) this.log.clear();
+      this.consumeLogs(events);
+    });
+  }
+
   private consumeLogs(events: GameEvent[]): void {
     for (const e of events) {
       if (e.type === "turnHeader") this.log.turnHeader(e.turn, e.name, e.isBot, e.player != null ? e.player === this.you : undefined);
@@ -337,7 +347,7 @@ export abstract class BaseController implements BoardHandlers {
         // just spam it). Only the ACTING player gets a friendly popup. Online: the server
         // never even sends the opponent these; in bot mode this guard suppresses the bot's
         // blocked attempts (cur !== you).
-        if (/불가|사용할 수 없|없습니다|가득|できません|cannot|not allowed/i.test(e.html)) {
+        if (e.rejected) {
           if (this.state.cur === this.you) {
             const reason = this.stripHtml(getLang() === "ja" ? e.htmlJa : getLang() === "en" ? logToEn(e.html) : e.html).replace(/^\s*[└·\-]\s*/, "").trim();
             this.cantPlayToast(reason || t("play.block.cond"));

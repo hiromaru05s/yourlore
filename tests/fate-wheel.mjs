@@ -50,7 +50,7 @@ try {
   const kept=keep(first);assert.equal(kept.events[0].type,'wheelResolve');assert.equal(kept.events[0].reroll,false);
   const again=re(first);assert.equal(again.events.filter(e=>e.type==='playSpell').length,0,'no second chest presentation');assert.equal(again.events.filter(e=>e.type==='wheelResolve').length,1);
   const direct=structuredClone(g);direct.players[side].enchants=[];
-  assert.deepEqual(kept.events.slice(1),reduce(direct,{type:'play',idx:0}).events.slice(first.events.findIndex(e=>e.type==='dice')+1),'accepted consequence events once');
+  assert.deepEqual(kept.events.slice(2),reduce(direct,{type:'play',idx:0}).events.slice(first.events.findIndex(e=>e.type==='dice')+1),'accepted consequence events once');
  }
  console.log('PASS Fate Wheel: starters/spells/summon dice, choice continuation, no-roll suppression, keep/replay accounting, once per turn, lethal deferral, redaction, legacy rooms');
 }finally{await fs.rm(dir,{recursive:true,force:true});}

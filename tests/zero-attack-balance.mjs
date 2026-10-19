@@ -1,3 +1,4 @@
+import {journalState} from './fixtures/journalStorage.mjs';
 import {rewardTestEnv} from './fixtures/rewardTestEnv.mjs';
 import assert from 'node:assert/strict';
 import { build } from 'esbuild';
@@ -88,7 +89,7 @@ try {
   const sockets = [0, 1].map(side => ({ deserializeAttachment: () => ({ side, gen: 0 }), send() {}, close() {} }));
   const storage = { get: async () => structuredClone(saved), put: async (_k, v) => { saved = structuredClone(v); }, setAlarm: async () => {}, deleteAlarm: async () => {} };
   const state = { storage, getWebSockets: tag => sockets.filter(s => String(s.deserializeAttachment().side) === tag) };
-  const room = new GameRoom(state,rewardTestEnv());
+  const room = new GameRoom(journalState(state),rewardTestEnv());
   await room.fetch(new Request('https://local/setup', { method: 'POST', body: JSON.stringify({ seed: 17, ranked: false, players: [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }] }) }));
   for (const socket of sockets) await room.webSocketMessage(socket, JSON.stringify({ type: 'ready' }));
   g = fresh(); g = play(g, 'WEAKEN_ALL').state; g.cur = 1; g = play(g, 'WEAKEN_ALL').state;
@@ -98,7 +99,7 @@ try {
   assert.equal(count(room.room.game), 2);
   assert.equal(room.room.game.players[1].mana, before);
   assert.equal(room.room.game.players[1].hand.length, 1);
-  const restored = new GameRoom(state,rewardTestEnv());
+  const restored = new GameRoom(journalState(state),rewardTestEnv());
   await restored.webSocketMessage(sockets[1], JSON.stringify({ type: 'ready' }));
   assert.equal(count(restored.room.game), 2);
   console.log('PASS: ATK 1 buffs, World Tree growth, global two-copy cap, refunds, UI/BOT eligibility, removal/recast, localization and authoritative room persistence');

@@ -50,7 +50,7 @@ export class OnlineController extends BaseController {
 
   private connect(): void {
     this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:OPENING_VERSION }); this.startHb(); },
+      onOpen: () => { this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:OPENING_VERSION, battleLogVersion:1 }); this.startHb(); },
       onMessage: (msg) => { this.lastMsgAt = Date.now(); this.onServer(msg); },
       onClose: () => this.onSockClose(),
     });
@@ -88,6 +88,7 @@ export class OnlineController extends BaseController {
     }})();
   }
   private onServer(msg: GameServerMsg): void {
+    if (msg.type === 'logHistory') { this.restoreLog(msg.events, msg.reset); return; }
     if(msg.type==='rewardsSettled'){this.exits.onExperience?.();document.dispatchEvent(new Event('lore:rewards'));return;}
     if (msg.type === "init" || msg.type === "update") {
       this.echoLockAt = 0;

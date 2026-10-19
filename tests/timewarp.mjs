@@ -17,7 +17,7 @@ try{
   if(success){assert(r.events.indexOf(events[0])>r.events.indexOf(dice[0]));assert.equal(events[0].sourceUid,'cast-TIMEWARP');if(side===0)successState=structuredClone(r.state);}
   for(const viewer of [0,1])assert.deepEqual(redactFor(r.state,viewer).players[1-side].skipTurnSources,success?['TIMEWARP']:[]);
   const ended=end(r.state),skips=ended.events.filter(e=>e.type==='turnSkipped');assert.equal(skips.length,success?1:0);assert.equal(ended.state.cur,success?side:1-side);assert.equal(ended.state.turn,success?9:8);
-  if(success){assert.deepEqual(skips[0],{type:'turnSkipped',player:1-side,source:'TIMEWARP',remaining:0});assert(ended.events.indexOf(skips[0])<ended.events.findIndex(e=>e.type==='turnHeader'));}
+  if(success){assert.deepEqual(skips[0],{type:'turnSkipped',player:1-side,source:'TIMEWARP',remaining:0});assert(ended.events.indexOf(skips[0])<ended.events.findIndex(e=>e.type==='turnHeader'&&e.turn===ended.state.turn));}
  }
  assert.equal(faces.size,12);
  // FIFO mixed sources keep Nova's reserved skip separate from the selected hourglass.

@@ -1,3 +1,4 @@
+import {journalState} from './fixtures/journalStorage.mjs';
 import {rewardTestEnv} from './fixtures/rewardTestEnv.mjs';
 import {build} from 'esbuild';import assert from 'node:assert/strict';import fs from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
 const dir=await fs.mkdtemp(path.join(os.tmpdir(),'status-extinction-'));
@@ -31,7 +32,7 @@ try{
  class Socket{messages=[];constructor(side){this.side=side;}deserializeAttachment(){return {side:this.side,gen:0};}send(message){this.messages.push(JSON.parse(message));}close(){}}
  const sockets=[new Socket(0),new Socket(1)];let saved;
  const storage={get:async()=>structuredClone(saved),put:async(_k,v)=>{saved=structuredClone(v);},setAlarm:async()=>{},deleteAlarm:async()=>{}};
- const state={storage,getWebSockets:tag=>sockets.filter(s=>String(s.side)===tag)},room=new E.GameRoom(state,rewardTestEnv());
+ const state={storage,getWebSockets:tag=>sockets.filter(s=>String(s.side)===tag)},room=new E.GameRoom(journalState(state),rewardTestEnv());
  await room.fetch(new Request('https://local/setup',{method:'POST',body:JSON.stringify({seed:73,ranked:false,players:[{id:'a',name:'A'},{id:'b',name:'B'}]})}));
  for(const socket of sockets)await room.webSocketMessage(socket,JSON.stringify({type:'ready'}));
  for(const owner of [0,1])for(const [id,resource,target] of [['ARMOR_BREAK','shield',1-owner],['DESERTIFICATION','dew',1-owner],['UNBRAND','brand',owner]]){
@@ -40,7 +41,7 @@ try{
   for(const socket of sockets){const update=socket.messages.at(-1);assert.deepEqual(extinct(update.events),[{type:'statusExtinction',player:target,resource,before:8,after:0}]);assert.equal(update.state.players[target][resource],0);}
   checks.push('both-sockets-'+owner+'-'+resource);
  }
- const restored=new E.GameRoom(state,rewardTestEnv());await restored.webSocketMessage(sockets[0],JSON.stringify({type:'ready'}));assert.equal(extinct(sockets[0].messages.at(-1).events).length,0);checks.push('reconnect-does-not-replay');
+ const restored=new E.GameRoom(journalState(state),rewardTestEnv());await restored.webSocketMessage(sockets[0],JSON.stringify({type:'ready'}));assert.equal(extinct(sockets[0].messages.at(-1).events).length,0);checks.push('reconnect-does-not-replay');
  for(const [a,b,yes] of [[8,0,true],[8,5,false],[0,0,false],[0,8,false],[NaN,0,false]])assert.equal(E.isExtinction(a,b),yes);
  assert.deepEqual(['shield','dew','brand'].map(f=>E.approvedExtinction(f).id),['S1','D2','B2']);
  console.log(JSON.stringify({passed:true,checks},null,2));

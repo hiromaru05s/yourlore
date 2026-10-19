@@ -1,3 +1,4 @@
+import {journalState} from './fixtures/journalStorage.mjs';
 import {rewardTestEnv} from './fixtures/rewardTestEnv.mjs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
@@ -9,7 +10,7 @@ try {
   const {GameRoom,createGame,DB}=await import(dir+'/room.mjs');let saved,seq=0,checks=0;
   class Socket {messages=[];constructor(side){this.side=side;}deserializeAttachment(){return {side:this.side,gen:0};}send(x){this.messages.push(JSON.parse(x));}close(){}}
   const sockets=[new Socket(0),new Socket(1)],state={storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v);},setAlarm:async()=>{},deleteAlarm:async()=>{}},getWebSockets:tag=>sockets.filter(s=>String(s.side)===tag)};
-  const room=new GameRoom(state,rewardTestEnv());await room.fetch(new Request('https://local/setup',{method:'POST',body:JSON.stringify({seed:22,ranked:false,players:[{id:'a',name:'A'},{id:'b',name:'B'}]})}));
+  const room=new GameRoom(journalState(state),rewardTestEnv());await room.fetch(new Request('https://local/setup',{method:'POST',body:JSON.stringify({seed:22,ranked:false,players:[{id:'a',name:'A'},{id:'b',name:'B'}]})}));
   for(const s of sockets)await room.webSocketMessage(s,JSON.stringify({type:'ready'}));
   const send=(r,owner,a)=>r.webSocketMessage(sockets[owner],JSON.stringify({type:'action',action:a}));
   const card=id=>({...structuredClone(DB[id]),uid:`gift-room-${++seq}`});
@@ -21,7 +22,7 @@ try {
     for(let i=0;i<8;i++)await send(room,room.room.game.cur,{type:'endTurn'});
     assert.equal(room.room.game.pending.reason,'NIGHT_CASTLE_GIFT');assert.equal(room.room.game.pending.owner,owner);
     await send(room,1-owner,{type:'pick',uid:'VAMP_WARD'});assert.equal(room.room.game.pending.reason,'NIGHT_CASTLE_GIFT');checks++;
-    const restored=new GameRoom(state,rewardTestEnv());await restored.webSocketMessage(sockets[owner],JSON.stringify({type:'ready'}));assert.equal(restored.room.game.pending.reason,'NIGHT_CASTLE_GIFT');assert.equal(restored.room.game.players[owner].enchants[0].turns,0);checks++;
+    const restored=new GameRoom(journalState(state),rewardTestEnv());await restored.webSocketMessage(sockets[owner],JSON.stringify({type:'ready'}));assert.equal(restored.room.game.pending.reason,'NIGHT_CASTLE_GIFT');assert.equal(restored.room.game.players[owner].enchants[0].turns,0);checks++;
     await send(restored,owner,{type:'pick',uid:'VAMP_WARD'});assert.equal(restored.room.game.pending,null);assert.equal(restored.room.game.players[owner].enchants.length,0);assert.equal(restored.room.game.players[owner].hand.filter(c=>c.id==='VAMP_WARD').length,1);
     assert(sockets[owner].messages.at(-1).state.players[owner].hand.some(c=>c.id==='VAMP_WARD'));assert(sockets[1-owner].messages.at(-1).state.players[owner].hand.every(c=>c.id==='HIDDEN'));checks++;
     // Let the authoritative timer finish an unresolved mandatory choice.

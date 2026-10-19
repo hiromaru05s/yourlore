@@ -1,3 +1,4 @@
+import {journalState} from './fixtures/journalStorage.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {build} from 'esbuild';
@@ -22,9 +23,9 @@ async function fixture(ranked=false,index=0,seed=23){
  const bot=MATCH_BOTS[index],id='human-'+(++roomSeq);db.prepare('INSERT INTO users(id,email,password,display,created_at) VALUES(?,?,?,?,?)').run(id,id+'@test.invalid','disabled',id,now);
  const ws=socket(0);let saved,alarm=null;
  const state={id:{toString:()=>id+'-room'},storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async n=>{alarm=n},deleteAlarm:async()=>{alarm=null}},getWebSockets:tag=>tag==='0'&&ws.readyState===1?[ws]:[]};
- let room=new GameRoom(state,env);
+ let room=new GameRoom(journalState(state),env);
  await room.fetch(new Request('https://do/setup',{method:'POST',body:JSON.stringify({players:[{id,name:id},{id:bot.id,name:bot.name}],seed,ranked,botId:bot.id})}));
- const f={id,ws,state,get room(){return room},saved:()=>saved,alarm:()=>alarm,send:msg=>room.webSocketMessage(ws,JSON.stringify(msg)),restore:()=>{room=new GameRoom(state,env)}};
+ const f={id,ws,state,get room(){return room},saved:()=>saved,alarm:()=>alarm,send:msg=>room.webSocketMessage(ws,JSON.stringify(msg)),restore:()=>{room=new GameRoom(journalState(state),env)}};
  return f;
 }
 async function start(f,ranked=false){

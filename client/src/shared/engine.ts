@@ -413,6 +413,11 @@ function rollSupply(g: GameState, p: PlayerState, refill = false): void {
   }
 }
 
+function logSupplyRefresh(ctx: Ctx, p: PlayerState, costKo: string, costJa: string): void {
+  const offers = p.supply.filter((c): c is CardInst => !!c).map(cn).join(", ") || "—";
+  ctx.log(`${p.name}: 마켓 리롤 (${costKo}) → ${offers}`, `${p.name}: マーケットをリロール (${costJa}) → ${offers}`);
+}
+
 // ============================================================
 // mutation context
 // ============================================================
@@ -525,6 +530,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     for (let i = 0; i < n; i++) {
       if (!p.deck.length) {
         if (!p.discard.length) break;
+        log(`${p.name}: 묘지 ${p.discard.length}장을 덱으로 섞는다`, `${p.name}: 墓地${p.discard.length}枚をデッキに戻してシャッフル`);
         ev.push({ type: "reshuffle", player: side(g, p), count: p.discard.length });
         p.deck = shuffle(g, p.discard.splice(0));
       }
@@ -738,6 +744,7 @@ function reserveTurnSkip(p: PlayerState, source: "TIMEWARP" | "BLACK_NOVA"): voi
 }
 function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   const p = g.players[g.cur];
+  ctx.ev.push({ type: "turnHeader", turn: g.turn, name: p.name, isBot: p.isBot, player: g.cur });
   const shieldOwner = g.players[1 - g.cur];
   shieldOwner.shieldOpponentPeak = shieldOwner.shield ?? 0;
   const skips = (p.skipTurns ?? 0) + (p.skipNext ? 1 : 0);
@@ -841,7 +848,6 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   // 선택받은 마법사: 턴 시작 선택 발동 (다른 턴 시작 pending이 없을 때만 — 시련의 영역 제외 후에는 체인으로 이어짐)
   if (!first && !g.over) offerChosenMage(g, ctx);
   g.phase = "main";
-  ctx.ev.push({ type: "turnHeader", turn: g.turn, name: p.name, isBot: p.isBot, player: g.cur });
   for (const m of [...p.field]) if (!g.over && m.id === 'MERC_MASTER') { const finish = observeMonsterEffect(g, ctx.ev, p, m, MAX_MANA); mercEffect(g, ctx, p, m, true); finish(); }
 
 }
@@ -1479,6 +1485,7 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
       return;
     }
   }
+  ctx.log(`${p.name}: 턴 종료 (마나 ${p.mana}, 손패 ${p.hand.length})`, `${p.name}: ターン終了 (マナ${p.mana}・手札${p.hand.length}枚)`);
   for (const m of p.field) if (m.id === 'SHIELD_TITAN') { const finish = observeMonsterEffect(g, ctx.ev, p, m, MAX_MANA); gainShield(g, ctx, p, 10, m); finish(); }
   expansionEnd(g, ctx, p);
   if (g.over) return;
@@ -2657,7 +2664,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
         } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
-    case "refresh": rollSupply(g, p); ctx.log("  └ 제시를 무료 갱신", "  └ 提示を無料更新"); break;
+    case "refresh": rollSupply(g, p); logSupplyRefresh(ctx, p, "카드 효과 · 무료", "カード効果・無料"); break;
     case "hpUp": { // 활력 계열: 체력 +v
       addHealth(ctx, p, v);
 
@@ -3306,7 +3313,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (o.hand.length) { const c = o.hand.splice(randInt(g, o.hand.length), 1)[0]; o.exile.push({ card: c, turns: 2 }); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 패 1장 2턴 제외`, `<span class="t">${p.name}</span> ${cn(card)} → 相手の手札1枚を2ターン除外`); }
       else ctx.log("  └ 상대 패가 없음", "  └ 相手の手札がない");
       break;
-    case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 제시 강제 갱신`, `<span class="t">${p.name}</span> ${cn(card)} → 相手の提示を強制更新`); if (v2 > 0) ctx.drawN(p, v2); break;
+    case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 제시 강제 갱신: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`, `<span class="t">${p.name}</span> ${cn(card)} → マーケットを強制リロール: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`); if (v2 > 0) ctx.drawN(p, v2); break;
     case "manaUp": { addMaxMana(p, v); const dn = v2 > 0 ? ctx.drawN(p, v2) : 0; ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 최대 마나 +${v}${dn ? `, ${dn}장 드로우` : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → 最大マナ +${v}${dn ? `、${dn}枚ドロー` : ""}`); break; }
     case "destroyTrap": {
       const n = v || 1; let k = 0;
@@ -4804,6 +4811,8 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
   if (uid === null) {
     if (pending.allowCancel) {
       g.pending = null;
+      // Attack targeting is uncommitted; declining an already triggered effect is public.
+      if (pending.reason !== "attack") ctx.log(`${p.name}: 선택 효과 종료 — ${pending.hint}`, `${p.name}: 選択効果を終了 — ${pending.hintJa}`);
       // 시련의 영역 제외를 끝냈으면(취소 포함) 같은 턴의 마법사 발동 기회를 이어서 제공
       if (pending.reason === "trialExile") offerChosenMage(g, ctx);
     } else if (pending.kind === "oppMon" && pending.reason !== "attack") {
@@ -4999,8 +5008,9 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
         const n = ctx.drawN(p, 1);
         ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 게임에서 제외 + ${n}장 드로우`, `<span class="t">${p.name}</span> ${cn(c)} をゲームから除外 + ${n}枚ドロー`);
       } else {
-        p.hand.push(p.discard.splice(i, 1)[0]);
-        ctx.log(`<span class="t">${p.name}</span> 리콜 → 1장 회수`, `<span class="t">${p.name}</span> リコール → 1枚回収`);
+        const recovered = p.discard.splice(i, 1)[0];
+        p.hand.push(recovered);
+        ctx.log(`<span class="t">${p.name}</span> 리콜 → ${cn(recovered)} 회수`, `<span class="t">${p.name}</span> リコール → ${cn(recovered)} を回収`);
       }
     }
   } else if (pending.kind === "purge") {
@@ -5482,23 +5492,32 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
         if (first >= 0) result.events = result.events.slice(first);
         result.events.unshift({type:'wheelResolve',reroll:true,player:prev.cur,uid:prev.players[prev.cur].enchants.find(e=>e.card.ench==='fateWheel')?.card.uid??''});
       }
-      result.events.unshift({type:"log",html:"운명의 수레바퀴! 결과를 되감고 다시 굴린다…",htmlJa:"運命の輪！結果を巻き戻して振り直す…"});
+      result.events.unshift({type:"log",html:`${prev.players[prev.cur].name}: 운명의 수레바퀴! 결과를 되감고 다시 굴린다…`,htmlJa:`${prev.players[prev.cur].name}: 運命の輪！結果を巻き戻して振り直す…`});
       return result;
     }
+    const keepLog: GameEvent = {type:"log",html:`${prev.players[prev.cur].name}: 운명의 수레바퀴 — 결과 유지`,htmlJa:`${prev.players[prev.cur].name}: 運命の輪 — 出目を維持`};
     if (snap?.resolved) {
       const state = cloneGameState(snap.resolved.state as GameState); state._wheelSnap = null;
-      return {state, events:[{type:'wheelResolve',reroll:false,player:prev.cur,uid:prev.players[prev.cur].enchants.find(e=>e.card.ench==='fateWheel')?.card.uid??''}, ...structuredClone(snap.resolved.events)]};
+      return {state, events:[{type:'wheelResolve',reroll:false,player:prev.cur,uid:prev.players[prev.cur].enchants.find(e=>e.card.ench==='fateWheel')?.card.uid??''}, keepLog, ...structuredClone(snap.resolved.events)]};
     }
     const state = cloneGameState(prev);
     state._wheelSnap = null;
     state.pending = structuredClone(snap?.outcome?.pending ?? null);
     if (snap?.outcome) Object.assign(state, {over:snap.outcome.over,phase:snap.outcome.phase,winner:snap.outcome.winner});
-    const events:GameEvent[]=[];
+    const events:GameEvent[]=[keepLog];
     if (state.pending) events.push({type:"needTarget",pending:state.pending});
     if (state.over && state.winner !== null) events.push({type:"win",winner:state.winner});
     return {state,events};
   }
   const result = reduceEffects(prev, action);
+  const noPublicEvent = !result.events.some(e => e.type !== "log");
+  const unchangedRefresh = action.type === "refresh" && result.state.rng === prev.rng
+    && result.state.players[prev.cur].mana === prev.players[prev.cur].mana
+    && result.state.players[prev.cur].refreshTokens === prev.players[prev.cur].refreshTokens;
+  if (noPublicEvent && !result.state.over && result.state.cur === prev.cur
+      && (action.type === "play" || action.type === "attack" || unchangedRefresh)) {
+    for (const e of result.events) if (e.type === "log") e.rejected = true;
+  }
   const owner = prev.cur, player = prev.players[owner];
   const eligible = ["play", "pick", "chooseTarget", "attack"].includes(action.type);
   const die = result.events.find(e => e.type === "dice" && e.player === owner && e.source.player === owner && e.source.id);
@@ -5700,8 +5719,15 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
     }
     case "refresh":
       if (p.refreshBlockTurn) { ctx.log(`  └ <span class="dmg">마켓 크래시</span>: 이번 턴 제시를 갱신할 수 없다`, `  └ <span class="dmg">マーケットクラッシュ</span>: このターン提示を更新できない`); break; }
-      if ((p.refreshTokens || 0) > 0) { p.refreshTokens = (p.refreshTokens || 1) - 1; rollSupply(g, p); ctx.log(`<span class="t">${p.name}</span> 제시 갱신 (카운터 소모 · 남은 ${p.refreshTokens})`, `<span class="t">${p.name}</span> 提示更新 (カウンター消費 · 残り${p.refreshTokens})`); }
-      else if (p.mana >= 1) { p.mana -= 1; rollSupply(g, p); ctx.log(`<span class="t">${p.name}</span> 제시 갱신 (1 마나)`, `<span class="t">${p.name}</span> 提示更新 (1マナ)`); }
+      if ((p.refreshTokens || 0) > 0) {
+        p.refreshTokens = (p.refreshTokens || 1) - 1;
+        rollSupply(g, p);
+        logSupplyRefresh(ctx, p, `카운터 소모 · 남은 ${p.refreshTokens}`, `カウンター消費 · 残り${p.refreshTokens}`);
+      } else if (p.mana >= 1) {
+        p.mana -= 1;
+        rollSupply(g, p);
+        logSupplyRefresh(ctx, p, "1 마나", "1マナ");
+      }
       break;
     case "attack": {
       if (noAttackActive(g)) { ctx.log(`  └ <span class="dmg">평화 협정</span>: 공격 불가`, `  └ <span class="dmg">平和協定</span>: 攻撃不可`); break; }
@@ -5735,12 +5761,13 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
     }
     case "reorder": {
       // Rearrange own field monsters — purely cosmetic (attacks target by uid),
-      // so no log/events; both clients just re-render in the new order.
+      // record the public move so the opponent can follow board positions.
       const { from, to } = action;
       const f = p.field;
       if (Number.isInteger(from) && Number.isInteger(to) && from >= 0 && from < f.length && to >= 0 && to < f.length && from !== to) {
         const [m] = f.splice(from, 1);
         f.splice(to, 0, m);
+        ctx.log(`${p.name}: ${cn(m)} 위치 변경 (${from + 1} → ${to + 1})`, `${p.name}: ${cn(m)} を並べ替え (${from + 1} → ${to + 1})`);
       }
       break;
     }
@@ -5999,7 +6026,11 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
   const q=g.pending!; const options=dewShieldChoices(g); if(options===null)return false;
   const p=g.players[actingSide(g)],o=g.players[1-actingSide(g)];
   if(uid===null && ['WORLD_TREE_ATTACK','WORLD_TREE_DEFEND','HIGH_ELF_HAND'].includes(q.reason))uid=q.reason==='HIGH_ELF_HAND'?'done':'pass';
-  if (uid===null && q.reason==='SELECTED_SWORD') { g.pending=null; return true; }
+  if (uid===null && q.reason==='SELECTED_SWORD') {
+    g.pending=null;
+    ctx.log(`${p.name}: ${cn(DB.SELECTED_SWORD)} 선택 효과 종료`, `${p.name}: ${cn(DB.SELECTED_SWORD)} の選択効果を終了`);
+    return true;
+  }
   const chosen=options.find(c=>c.uid===uid); if(!chosen)return true;
   if(q.reason==='HIGH_ELF_HAND' && uid!=='done' && hasPassive(chosen,'relic')) {ctx.log('신기는 제외할 수 없습니다','神器はゲームから除外できません');return true;}
   g.pending=null;
@@ -6013,21 +6044,31 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
       break;
     }
     case 'ARMORER_MODE':
+      ctx.log(`${p.name}: ${uid==='shield'?'실드 획득 선택':'아군 강화 선택'}`, `${p.name}: ${uid==='shield'?'シールド獲得を選択':'味方強化を選択'}`);
       if(uid==='shield')gainShield(g,ctx,p,Number(q.data?.shield),p.field.find(m=>m.uid===q.data?.sourceUid));
       else queueExpansionChoice(g,p,'ARMORER_TARGET','強化する自分の他のモンスターを選択',q.data);
       break;
     case 'ARMORER_TARGET': {
       const m=chosen as FieldMon;
       const special=q.data?.sourceId==='VETERAN_ARMORER' && /병사|기사|포격병|용병|兵士|騎士|砲撃兵|傭兵/.test(m.name+(m.nameJa ?? ''));
-      const n=special?3:Number(q.data?.buff);m.atkMod+=n;m.defMod+=n;break;
+      const n=special?3:Number(q.data?.buff);m.atkMod+=n;m.defMod+=n;
+      ctx.log(`${p.name}: ${cn(m)} 공격력 +${n} / 체력 +${n}(지속)`, `${p.name}: ${cn(m)} 攻撃力+${n}・体力+${n} (永続)`);
+      break;
     }
-    case 'ELF_DESTROY':ctx.destroyMonster(o,chosen as FieldMon);break;
+    case 'ELF_DESTROY':
+      ctx.log(`${p.name}: ${cn(DB.ELF)} → ${cn(chosen)} 파괴`, `${p.name}: ${cn(DB.ELF)} → ${cn(chosen)} を破壊`);
+      ctx.destroyMonster(o,chosen as FieldMon);break;
     case 'SELECTED_SWORD': {
       const m=chosen as FieldMon,amount=Number(q.data?.amount ?? 0);
-      m.tempAtk+=amount;(m.tempAtkExpiry??=[]).push({turn:g.turn,amount});break;
+      m.tempAtk+=amount;(m.tempAtkExpiry??=[]).push({turn:g.turn,amount});
+      ctx.log(`${p.name}: ${cn(DB.SELECTED_SWORD)} → ${cn(m)} 공격력 +${amount} (이번 턴)`, `${p.name}: ${cn(DB.SELECTED_SWORD)} → ${cn(m)} 攻撃力+${amount} (このターン)`);
+      break;
     }
     case 'HIGH_ELF_HAND': {
-      if(uid!=='done') {o.hand=o.hand.filter(c=>c.uid!==uid);rmz(o).push(chosen);}
+      if(uid!=='done') {
+        o.hand=o.hand.filter(c=>c.uid!==uid);rmz(o).push(chosen);
+        ctx.log(`${p.name}: ${cn(DB.HIGH_ELF)} → ${cn(chosen)} 게임에서 제외`, `${p.name}: ${cn(DB.HIGH_ELF)} → ${cn(chosen)} をゲームから除外`);
+      } else ctx.log(`${p.name}: ${cn(DB.HIGH_ELF)} 확인 종료`, `${p.name}: ${cn(DB.HIGH_ELF)} 手札の確認を終了`);
       const left=Number(q.data?.left ?? 1)-1;
       if(uid!=='done' && left>0 && o.hand.some(c=>!hasPassive(c,'relic')))queueExpansionChoice(g,p,'HIGH_ELF_HAND',`相手手札からあと${left}枚まで除外（終了可）`,{left,sourceUid:q.data?.sourceUid});
       else {breakShield(ctx,o);}
@@ -6041,7 +6082,8 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
       if(uid==='grow' && target && (p.dew ?? 0)>0 && p.field.some(m=>m.id==='WORLD_TREE')) {
         for (const tree of p.field) if (tree.id === 'WORLD_TREE') monsterActivation(g, ctx.ev, p, tree);
         loseStatus(ctx, p, 'dew', 1); if(q.reason==='WORLD_TREE_ATTACK')target.atkMod+=3;else target.defMod+=3;
-      }
+        ctx.log(`${p.name}: ${cn(DB.WORLD_TREE)} 이슬 1 소비 → ${cn(target)} ${q.reason==='WORLD_TREE_ATTACK'?'공격력':'체력'} +3(지속)`, `${p.name}: ${cn(DB.WORLD_TREE)} 雫1を消費 → ${cn(target)} ${q.reason==='WORLD_TREE_ATTACK'?'攻撃力':'体力'}+3 (永続)`);
+      } else ctx.log(`${p.name}: ${cn(DB.WORLD_TREE)} 이슬을 소비하지 않고 계속`, `${p.name}: ${cn(DB.WORLD_TREE)} 雫を消費せず続行`);
       const stage=q.reason==='WORLD_TREE_ATTACK'?1:2;
       if(q.data?.friendlyPlayer) resolveFriendlyPlayerAttack(g,ctx,attacker,stage);
       else if(q.data?.friendly) {const ally=p.field.find(m=>m.uid===targetUid);if(ally)resolveFriendlyFire(g,ctx,attacker,ally,Boolean(q.data?.pierce),stage);}

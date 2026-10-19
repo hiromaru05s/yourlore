@@ -1,3 +1,4 @@
+import {journalState} from './fixtures/journalStorage.mjs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdtemp,rm,writeFile} from 'node:fs/promises';
@@ -27,7 +28,7 @@ try{
  function roomFixture(env=rewardTestEnv()){
   let saved,alarm;
   const state={storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async at=>{alarm=at}},getWebSockets:()=>[]};
-  return {room:new GameRoom(state,env),state,saved:()=>saved,alarm:()=>alarm};
+  return {room:new GameRoom(journalState(state),env),state,saved:()=>saved,alarm:()=>alarm};
  }
  const setup=f=>f.room.fetch(req('/setup',body));
  await test('failed room initialization remains retryable without publishing partial state',async()=>{

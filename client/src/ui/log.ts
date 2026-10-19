@@ -53,7 +53,7 @@ export class GameLog {
     this.unsub = onLangChange(() => this.renderAll());
   }
 
-  clear(): void { this.entries = []; this.el.innerHTML = ""; }
+  clear(): void { this.entries = []; this.curMine = undefined; this.el.innerHTML = ""; }
 
   turnHeader(turn: number, name: string, isBot: boolean, mine?: boolean): void {
     if (isBot) mine = false; // 봇 턴은 항상 상대

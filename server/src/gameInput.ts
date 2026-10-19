@@ -22,7 +22,7 @@ export function isClientMessage(v: unknown): v is GameClientMsg {
   if (!object(v)) return false;
   switch (v.type) {
     case 'action': return isAction(v.action);
-    case 'ready': return v.openingVersion === undefined || v.openingVersion === 1 || v.openingVersion === 2;
+    case 'ready': return (v.openingVersion === undefined || v.openingVersion === 1 || v.openingVersion === 2) && (v.battleLogVersion === undefined || v.battleLogVersion === 1);
     case 'openingReady': case 'startReady': case 'ping': return true;
     default: return false;
   }
@@ -34,7 +34,7 @@ export function isClientMessage(v: unknown): v is GameClientMsg {
  */
 export function resolveTurnTimeout(game: GameState): ReduceResult {
   let state = game;
-  const events: ReduceResult['events'] = [];
+  const events: ReduceResult['events'] = game.over ? [] : [{type:'log',html:`${game.players[game.cur].name}: 시간 초과 — 턴 자동 종료`,htmlJa:`${game.players[game.cur].name}: 時間切れ — ターンを自動終了`}];
   const turn = game.turn;
   for (let step = 0; step < 128 && !state.over && state.turn === turn; step++) {
     const pending = state.pending;

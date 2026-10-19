@@ -1,3 +1,4 @@
+import {journalState} from './fixtures/journalStorage.mjs';
 import {rewardTestEnv} from './fixtures/rewardTestEnv.mjs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
@@ -11,7 +12,7 @@ async function test(name,fn){try{await fn();checks.push({name,passed:true});}cat
 function fixture(){
  let saved;const sockets=[0,1].map(side=>({messages:[],deserializeAttachment:()=>({side,gen:0}),send(raw){this.messages.push(JSON.parse(raw));},close(){}}));
  const state={id:{toString:()=> 'qa-audit-room'},storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async()=>{},deleteAlarm:async()=>{}},getWebSockets:tag=>sockets.filter((_,i)=>String(i)===tag)};
- return {room:new GameRoom(state,rewardTestEnv()),sockets,state};
+ return {room:new GameRoom(journalState(state),rewardTestEnv()),sockets,state};
 }
 const setupBody={seed:22,players:[{id:'qa-a',name:'A'},{id:'qa-b',name:'B'}]};
 const setup=async f=>f.room.fetch(new Request('https://do/setup',{method:'POST',body:JSON.stringify(setupBody)}));

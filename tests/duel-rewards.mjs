@@ -1,3 +1,4 @@
+import {journalState} from './fixtures/journalStorage.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {build} from 'esbuild';
@@ -33,7 +34,7 @@ await test('actual engine: extra draw excludes ordinary turn draw; prevented dam
 await test('actual engine: counter counts destruction, not survival; decay credits opposing owner',()=>{let g=fresh();const a=mon('M1'),d=mon('M1');a.atk=1;a.def=1;d.atk=30;d.def=30;d.passive=['counter'];g.players[0].field=[a];g.players[1].field=[d];g=reduce(g,{type:'attack',uid:a.uid}).state;g=reduce(g,{type:'chooseTarget',uid:d.uid}).state;assert.equal(g.players[1].activity.counter,1);
  g=fresh();const poison=mon('RUST_SHROOM'),target=mon('M1');target.decayCnt=2;g.players[0].field=[poison];g.players[1].field=[target];g=reduce(g,{type:'attack',uid:poison.uid}).state;g=reduce(g,{type:'chooseTarget',uid:target.uid}).state;assert.equal(g.players[0].activity.decay,1);
 });
-await test('server BOT room uses difficulty, persists metrics, excludes no-contest and repeats settlement safely',async()=>{const id=user(),ws={messages:[],deserializeAttachment:()=>({side:0,gen:0}),send(m){this.messages.push(JSON.parse(m))}};let saved,alarm;const state={id:{toString:()=>id+'room'},storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async at=>{alarm=at},deleteAlarm:async()=>{}},getWebSockets:()=>[ws]};let room=new GameRoom(state,env);const setup=await room.fetch(new Request('https://do/setup',{method:'POST',body:JSON.stringify({players:[{id,name:id},{id:'lore-challenge-bot-easy',name:'Lumi'}],seed:24,challengeDifficulty:'easy'})}));assert.equal(setup.status,200);assert.equal(saved.challengeDifficulty,'easy');assert(saved.daily[0]);assert.deepEqual(saved.game.players[0].activity,{});await room.webSocketMessage(ws,JSON.stringify({type:'ready',openingVersion:OPENING_VERSION}));room.room.opening=undefined;room.room.turnStartAt=Date.now()-1;room.room.game.over=true;room.room.game.winner=0;await room.recordResult();assert.equal(balance(id),300);room=new GameRoom(state,env);await room.restore();room.room.recorded=false;await room.recordResult();assert.equal(balance(id),300);assert(ws.messages.some(m=>m.type==='rewardsSettled'));});
+await test('server BOT room uses difficulty, persists metrics, excludes no-contest and repeats settlement safely',async()=>{const id=user(),ws={messages:[],deserializeAttachment:()=>({side:0,gen:0}),send(m){this.messages.push(JSON.parse(m))}};let saved,alarm;const state={id:{toString:()=>id+'room'},storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async at=>{alarm=at},deleteAlarm:async()=>{}},getWebSockets:()=>[ws]};let room=new GameRoom(journalState(state),env);const setup=await room.fetch(new Request('https://do/setup',{method:'POST',body:JSON.stringify({players:[{id,name:id},{id:'lore-challenge-bot-easy',name:'Lumi'}],seed:24,challengeDifficulty:'easy'})}));assert.equal(setup.status,200);assert.equal(saved.challengeDifficulty,'easy');assert(saved.daily[0]);assert.deepEqual(saved.game.players[0].activity,{});await room.webSocketMessage(ws,JSON.stringify({type:'ready',openingVersion:OPENING_VERSION}));room.room.opening=undefined;room.room.turnStartAt=Date.now()-1;room.room.game.over=true;room.room.game.winner=0;await room.recordResult();assert.equal(balance(id),300);room=new GameRoom(journalState(state),env);await room.restore();room.room.recorded=false;await room.recordResult();assert.equal(balance(id),300);assert(ws.messages.some(m=>m.type==='rewardsSettled'));});
 await test('HTTP rejects unauthenticated/forged first-clear claims and invalid BOT difficulty',async()=>{
  assert.equal((await handleRewards(env,new Request('https://local/api/rewards/progression'),'/rewards/progression')).status,401);
  const id=user();db.prepare('INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES(?,?,?,?)').run('reward-fixture',id,0,Date.now()+60000);
@@ -44,7 +45,7 @@ await test('HTTP rejects unauthenticated/forged first-clear claims and invalid B
 await test('a full server-controlled BOT duel settles from real actions and resumes the same receipt',async()=>{
  const id=user(),ws={deserializeAttachment:()=>({side:0,gen:0}),send(){}};let saved;
  const state={id:{toString:()=>id+'-real'},storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async()=>{},deleteAlarm:async()=>{}},getWebSockets:tag=>tag==='0'?[ws]:[]};
- let room=new GameRoom(state,env);await room.fetch(new Request('https://do/setup',{method:'POST',body:JSON.stringify({players:[{id,name:id},{id:'lore-challenge-bot-easy',name:'Lumi'}],seed:24,challengeDifficulty:'easy'})}));
+ let room=new GameRoom(journalState(state),env);await room.fetch(new Request('https://do/setup',{method:'POST',body:JSON.stringify({players:[{id,name:id},{id:'lore-challenge-bot-easy',name:'Lumi'}],seed:24,challengeDifficulty:'easy'})}));
  Object.assign(room.room,{readied:[true,true],opening:undefined,joinBy:null});let actions=0;
  while(!room.room.game.over&&actions++<2500){
   const g=room.room.game,side=E.actingSide(g);
@@ -52,7 +53,7 @@ await test('a full server-controlled BOT duel settles from real actions and resu
  }
  assert(room.room.game.over,'duel must finish');assert(room.room.recorded);assert(actions>20);assert(db.prepare('SELECT 1 FROM matches WHERE id=?').get(id+'-real'));
  const receipt=db.prepare('SELECT * FROM duel_reward_receipts WHERE user_id=?').get(id);assert(receipt);assert.equal(receipt.mode,'bot');
- const before=balance(id);room=new GameRoom(state,env);await room.restore();room.room.recorded=false;await room.recordResult();assert.equal(balance(id),before);
+ const before=balance(id);room=new GameRoom(journalState(state),env);await room.restore();room.room.recorded=false;await room.recordResult();assert.equal(balance(id),before);
 });
 await test('new daily starter targets come only from the owned starter collection',async()=>{
  const id=user();for(let i=0;i<80;i++){const q=await ensureDaily(env,id,now+i*86400000);if(q.quest.kind==='starterWin')assert(['STARTER_TRASH','STARTER_CHEST'].includes(q.quest.card));}

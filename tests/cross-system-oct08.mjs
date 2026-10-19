@@ -1,3 +1,4 @@
+import {journalState} from './fixtures/journalStorage.mjs';
 import {rewardTestEnv} from './fixtures/rewardTestEnv.mjs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
@@ -23,7 +24,7 @@ await test('retired tutorial badge keys do not grant unearned text medals',async
  for(const [id,key,want]of [['current','tuto:10',false],['legacy','tut:6',false],['unfinished','tuto:6',false]]){user(id);db.prepare('INSERT INTO rewards VALUES(?,?,?,?)').run(id,key,0,Date.now());assert.equal((await ownedBadges(env,id)).includes('tutorial'),want,id)}
 });
 await test('parallel room setup cannot reset an already provisioned game',async()=>{
- let saved;const r=new GameRoom({storage:{get:async()=>saved,put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async()=>{}}},rewardTestEnv());
+ let saved;const r=new GameRoom(journalState({storage:{get:async()=>saved,put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async()=>{}}}),rewardTestEnv());
  let release;const body={seed:1,players:[{id:'a',name:'A'},{id:'b',name:'B'}]};
  const slow={url:'https://do/setup',method:'POST',json:()=>new Promise(resolve=>release=resolve)};
  const pending=r.fetch(slow);while(!release)await Promise.resolve();
@@ -32,7 +33,7 @@ await test('parallel room setup cannot reset an already provisioned game',async(
 });
 await test('timeout write failure never sends an uncommitted board',async()=>{
  let saved,fail=false;const sockets=[0,1].map(side=>({messages:[],deserializeAttachment:()=>({side,gen:0}),send(raw){this.messages.push(JSON.parse(raw))}}));
- const r=new GameRoom({id:{toString:()=> 'room'},getWebSockets:tag=>sockets.filter((_,i)=>String(i)===tag),storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{if(fail)throw Error('injected');saved=structuredClone(v)},setAlarm:async()=>{},deleteAlarm:async()=>{}}},rewardTestEnv());
+ const r=new GameRoom(journalState({id:{toString:()=> 'room'},getWebSockets:tag=>sockets.filter((_,i)=>String(i)===tag),storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{if(fail)throw Error('injected');saved=structuredClone(v)},setAlarm:async()=>{},deleteAlarm:async()=>{}}}),rewardTestEnv());
  await r.fetch(post('/setup',{seed:77,players:[{id:'a',name:'A'},{id:'b',name:'B'}]}));Object.assign(r.room,{opening:undefined,readied:[true,true],joinBy:null,turnStartAt:Date.now()-200000});await r.persist();fail=true;
  await assert.rejects(r.alarm());assert.equal(sockets.flatMap(s=>s.messages).length,0);assert.equal(r.room,null);
 });

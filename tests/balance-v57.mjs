@@ -65,7 +65,7 @@ try {
     for(const n of counts)assert(n>480&&n<720,JSON.stringify(counts));console.log('Target sample counts',counts);
   });
   test('Ending turn consumes both attacks and respects prior attacks',()=>{for(const used of [0,1,2]){const g=fresh(),m=mon('NGA4',{attacksUsed:used,exhausted:used===2});g.players[0].field=[m];const r=reduce(g,{type:'endTurn'});assert.equal(r.events.filter(e=>e.type==='attack').length,2-used);assert.equal(r.state.turn,4);}});
-  test('Both sides, deterministic replay, serialization and server timeout',()=>{for(const side of [0,1]){const g=fresh();g.cur=side;g.players[side].field=[mon('NGA4')];const a=reduce(g,{type:'endTurn'}),b=resolveTurnTimeout(JSON.parse(JSON.stringify(g)));assert.deepEqual(JSON.parse(JSON.stringify(a)),JSON.parse(JSON.stringify(b)));assert.equal(a.state.cur,1-side);assert.equal(a.events.filter(e=>e.type==='attack').length,2);}});
+  test('Both sides, deterministic replay, serialization and server timeout',()=>{for(const side of [0,1]){const g=fresh();g.cur=side;g.players[side].field=[mon('NGA4')];const a=reduce(g,{type:'endTurn'}),b=resolveTurnTimeout(JSON.parse(JSON.stringify(g)));assert.match(b.events[0].htmlJa,/時間切れ/);assert.deepEqual(JSON.parse(JSON.stringify(a)),JSON.parse(JSON.stringify({...b,events:b.events.slice(1)})));assert.equal(a.state.cur,1-side);assert.equal(a.events.filter(e=>e.type==='attack').length,2);}});
   test('Attack prohibitions allow ending without deadlock or attack events',()=>{
     for(const blocked of ['zero','exhausted','noAttack','glass','highCost','majesty','noTargets']){
       const g=fresh(),m=mon('NGA4');g.players[0].field=[m];

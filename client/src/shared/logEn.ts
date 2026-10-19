@@ -7,6 +7,22 @@
 
 const R: [RegExp, string][] = [
   // ---- full/long phrases first (order matters) ----
+  [/실드 획득 선택/g, "chose Shield"],
+  [/아군 강화 선택/g, "chose ally enhancement"],
+  [/확인 종료/g, "finished hand inspection"],
+  [/이슬을 소비하지 않고 계속/g, "continued without spending Dew"],
+  [/이슬 1 소비/g, "spent 1 Dew"],
+  [/연결 끊김 — 패배/g, "disconnected — forfeited"],
+  [/마켓 리롤 \(카드 효과 · 무료\)/g, "rerolled the market (card effect · free)"],
+  [/마켓 리롤 \(1 마나\)/g, "rerolled the market (1 mana)"],
+  [/마켓 리롤 \(카운터 소모 · 남은 (\d+)\)/g, "rerolled the market (counter spent · $1 left)"],
+  [/위치 변경/g, "reordered"],
+  [/리콜 → (.+?) 회수/g, "Recall → recovered $1"],
+  [/선택 효과 종료/g, "finished optional effect"],
+  [/턴 종료 \(마나 (\d+), 손패 (\d+)\)/g, "ended turn ($1 mana, $2 cards in hand)"],
+  [/묘지 (\d+)장을 덱으로 섞는다/g, "shuffled $1 graveyard cards into the deck"],
+  [/운명의 수레바퀴 — 결과 유지/g, "Wheel of Fate — kept the roll"],
+  [/시간 초과 — 턴 자동 종료/g, "time expired — turn ended automatically"],
   [/패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택/g, 'Choose Vampiric Pact or Vampiric Secret Art to add to your hand'],
   [/밤성의 선물:/g, 'Gift from the Night Castle:'],
   [/1장을 패에 넣는다/g, 'add 1 card to your hand'],

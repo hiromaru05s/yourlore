@@ -22,6 +22,7 @@ import { ensureDaily, settleProgression } from './progression';
 // Forfeit grace periods use the Alarms API (in-memory timers would
 // not survive hibernation, and pending timers block it).
 // ============================================================
+import { battleLogEvents, type BattleLogEvent } from '../../client/src/shared/battleLog';
 import type { Env } from "./env";
 import type { Action, GameEvent, GameState, Side } from "../../client/src/shared/types";
 import type { GameClientMsg, GameServerMsg } from "../../client/src/shared/protocol";
@@ -40,6 +41,8 @@ interface RoomData {
   players: [PlayerRef, PlayerRef];
   game: GameState;
   initEvents: GameEvent[];
+  logBatchCount?: number;
+  battleLogReady?: [boolean, boolean];
   readied: [boolean, boolean];
   recorded: boolean;
   resultAt?: number;
@@ -114,10 +117,28 @@ export class GameRoom {
     this.env = env;
   }
 
+  private logWrites: Record<string, BattleLogEvent[]> = {};
+
+  private recordLog(events: GameEvent[]): void {
+    if (!this.room) return;
+    const logs = battleLogEvents(events);
+    for (let i = 0; i < logs.length; i += 64) {
+      const seq = this.room.logBatchCount ?? 0;
+      this.logWrites[`battle-log:${String(seq).padStart(8, '0')}`] = logs.slice(i, i + 64);
+      this.room.logBatchCount = seq + 1;
+    }
+  }
+
   private async persist(): Promise<void> {
     if (!this.room) return;
-    try { await this.state.storage.put("room", this.room); }
-    catch { this.room=null; console.error('room_persistence_failed'); throw new Error('room persistence failed'); }
+    const writes = this.logWrites;
+    this.logWrites = {};
+    try {
+      // One atomic write keeps the game snapshot and its journal cursor together.
+      if (Object.keys(writes).length) await this.state.storage.put({...writes, room:this.room});
+      else await this.state.storage.put("room", this.room);
+    }
+    catch { this.room=null; this.logWrites={}; console.error('room_persistence_failed'); throw new Error('room persistence failed'); }
   }
 
   private async restore(): Promise<RoomData | null> {
@@ -129,6 +150,8 @@ export class GameRoom {
         players: r.players as [PlayerRef, PlayerRef],
         game: r.game as GameState,
         initEvents: r.initEvents ?? [],
+        logBatchCount: r.logBatchCount ?? 0,
+        battleLogReady: r.battleLogReady,
         readied: r.readied ?? [false, false],
         joinBy: r.joinBy ?? null,
         recorded: r.recorded ?? false,
@@ -315,6 +338,7 @@ export class GameRoom {
       return;
     }
     if (msg.type === "ready") {
+      (room.battleLogReady ??= [false,false])[att.side] = msg.battleLogVersion === 1;
       if (room.opening && room.opening.startsAt == null) room.opening.capable[att.side] = msg.openingVersion === OPENING_VERSION;
       room.readied[att.side] = true;
       if (room.readied[0] && room.readied[1]) room.joinBy = null; // both joined → no join-timeout void
@@ -406,7 +430,7 @@ export class GameRoom {
     }
     if (times.length) await this.state.storage.setAlarm(Math.min(...times));
     else await this.state.storage.deleteAlarm();
-      } catch { this.room=null;console.error('room_alarm_failed');throw new Error('room alarm failed'); }
+      } catch { this.room=null;this.logWrites={};console.error('room_alarm_failed');throw new Error('room alarm failed'); }
   }
 
   async alarm(): Promise<void> {
@@ -453,12 +477,14 @@ export class GameRoom {
       if (!room.readied[winner]) { room.game.over = true; room.game.phase = "over"; room.game.winner = null; room.recorded = true; continue; }
       room.game.over = true; room.game.phase = "over"; room.game.winner = winner;
       if(room.game.medalDuel)room.game.medalDuel.forfeited=true;
+      const forfeitEvents: GameEvent[] = [{type:'log',html:`${room.players[s].name}: 연결 끊김 — 패배`,htmlJa:`${room.players[s].name}: 接続切れにより敗北`},{type:'win',winner}];
+      this.recordLog(forfeitEvents);
       await this.persist();
       await this.syncAlarm();
       const remaining = this.sockFor(winner);
       if (remaining) {
         try {
-          this.send(remaining, { type: "update", state: redactFor(room.game, winner), events: [{ type: "win", winner }] });
+          this.send(remaining, { type: "update", state: redactFor(room.game, winner), events: forfeitEvents });
           this.send(remaining, { type: "opponentLeft" });
         } catch { /* dropped */ }
       }
@@ -474,7 +500,8 @@ export class GameRoom {
         const prevTurn = room.game.turn, prevCur = room.game.cur;
         const { state: st, events: evs } = resolveTurnTimeout(room.game);
         room.game = st;
-        if (st.turn !== prevTurn || st.cur !== prevCur) {
+        this.recordLog(evs);
+        if (st.turn !== prevTurn || st.cur !== prevCur || st.over) {
           room.turnStartAt = Date.now(); room.turnBonusMs = 0;
           await this.persist();
           await this.syncAlarm();
@@ -528,20 +555,21 @@ export class GameRoom {
     const prevTurn = g.turn;
     const res = reduce(g, action);
     room.game = res.state;
+    const rejected = res.events.some(e => e.type === 'log' && e.rejected);
+    if (!rejected) this.recordLog(res.events);
     // Restart the server clock whenever a NEW turn begins. Keying off turn NUMBER (not just
     // cur) is essential: a skip (e.g. TIMEWARP) runs endTurn twice, so cur returns to the same
     // player while turn advances by 2 — checking cur alone would leave a stale turnStartAt,
     // making the resumed turn's clock read ~0 and instantly auto-end (cascading turn skips).
     if (res.state.turn !== prevTurn || res.state.cur !== prevCur) { room.turnStartAt = Date.now(); room.turnBonusMs = 0; await this.syncAlarm(); } // re-arm the turn-timeout alarm
     else if (res.state.pending?.reason === "handCap" && !room.turnBonusMs) { room.turnBonusMs = HAND_CAP_BONUS_MS; await this.syncAlarm(); } // v42: +10s to choose the discards
+
     await this.persist();
     // A rejected play (condition not met, sealed, etc.) produces only "log" events and
     // no state advance. Don't broadcast it to the OPPONENT — otherwise their client logs
     // the blocked attempt and their timer blinks, leaking that the actor spammed a card.
     // Send the rejection privately to the actor so they still get the friendly popup.
-    const rejected = (action.type === "play" || action.type === "attack")
-      && res.state.cur === prevCur && !res.state.over
-      && !res.events.some((e) => e.type !== "log");
+
     if (rejected) {
       const ws = this.sockFor(side);
       if (ws) { try { this.send(ws, { type: "update", state: this.redact(side), events: res.events }); } catch { /* dropped */ } }
@@ -591,7 +619,19 @@ export class GameRoom {
     const events = room.initSent[side] ? [] : room.initEvents;
     room.initSent[side] = true;
     await this.persist();
-    try { this.send(ws, { type: "init", you: side, state: this.redact(side), events }); } catch { /* dropped */ }
+    if (!room.battleLogReady?.[side]) {
+      // Tabs opened before this release still consume their original init events.
+      try { this.send(ws, {type:'init',you:side,state:this.redact(side),events}); } catch { /* dropped */ }
+      return;
+    }
+    // Read all batches before sending anything. No awaits between history and init,
+    // so a live action cannot interleave with the restored snapshot on this socket.
+    const batches = await this.state.storage.list<BattleLogEvent[]>({prefix:'battle-log:'});
+    try {
+      this.send(ws, {type:'logHistory', reset:true, events:battleLogEvents(room.initEvents)});
+      for (const batch of batches.values()) this.send(ws, {type:'logHistory', reset:false, events:batch});
+      this.send(ws, { type: "init", you: side, state: this.redact(side), events:events.filter(e => e.type !== 'log' && e.type !== 'turnHeader') });
+    } catch { /* dropped */ }
   }
 
   /** End the ranked market-preview phase → the game truly begins (coin toss happens client-side on init). */

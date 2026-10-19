@@ -294,7 +294,7 @@ export type GameEvent =
   | { type: "monsterActivate"; player: Side; uid: string }
   | { type: "cullExile"; player: Side; sourceUid: string; cards: { card: CardInst; from: "discard" | "deck" | "hand" }[] }
   | { type: "enchantActivate"; player: Side; uid: string; id: string; originRite?: OriginRiteReaction }
-  | { type: "log"; html: string; htmlJa: string }
+  | { type: "log"; html: string; htmlJa: string; rejected?: boolean }
   | { type: "turnHeader"; turn: number; name: string; isBot: boolean; player?: Side } // player: whose turn (log tinting)
   | { type: "summon"; player: Side; uid: string; id?: string; source?: string; ritual?: string; rebirth?: { card: CardInst }; hatchFrom?: { uid: string; id: string }; fusionFrom?: { dragon: { uid: string; id: string }; mate: { uid: string; id: string } } } // id: card id (drives the summon ghost when the monster dies in the same batch)
   | { type: "attack"; player: Side; uid: string; targetUid: string | null; targetPlayer?: Side; contactDamage?: number; guts?: GutsSurvival }
