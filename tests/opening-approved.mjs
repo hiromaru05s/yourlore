@@ -33,8 +33,8 @@ try{
   resultScene(ctx,RESULT_TIMING.end,1280,height,opts,coin);assert.equal(poses.length,0);
   for(const lang of ['ja','en','ko']){
    setLang(lang);glyphs.length=0;resultScene(ctx,4.1,1280,height,opts,coin);
-   assert(glyphs.join('').includes(lang==='ja'?(first?'あなたが':'相手が'):lang==='en'?(first?'YOU GO':'OPPONENT GOES'):(first?'당신이':'상대가')));
-   assert(glyphs.join('').includes(lang==='ja'?'先攻':lang==='en'?'FIRST':'선공'));
+   assert(glyphs.join('').includes(lang==='ja'?'あなたは':lang==='en'?'YOU GO':'당신은'));
+   assert(glyphs.join('').includes(lang==='ja'?(first?'先攻':'後攻'):lang==='en'?(first?'FIRST':'SECOND'):(first?'선공':'후공')));
   }
   poses=[];for(const t of [3.5,4.5])resultScene(ctx,t,1280,height,{...opts,reduced:true},coin);
   assert.deepEqual(poses[0],poses[1],'reduced motion holds a static authoritative result');
@@ -46,7 +46,7 @@ try{
  for(const first of [true,false]){
   root.classList.add('opening-pending');now=-350;const abort=new AbortController(),before=deals,p=playDuelOpening(options(abort,first));assert(!root.classList.contains('opening-pending'));assert.equal(document.querySelector('.duel-opening').style.background,'rgb(7, 16, 29)');await flush();
   await step(0);await step(1460);await step(3220);
-  assert.equal(document.querySelector('[role=status]').textContent,first?'あなたが先攻':'相手が先攻');
+  assert.equal(document.querySelector('[role=status]').textContent,first?'あなたは先攻':'あなたは後攻');
   assert(!document.body.textContent.includes('BATTLE START'));assert(!document.body.textContent.includes('ターンです'));
   await step(5120);assert(document.querySelector('.game').classList.contains('intro-docked'));
   await step(5580);assert.equal(deals,before+1);assert.equal(document.querySelector('[role=status]').textContent,'');
@@ -61,7 +61,7 @@ try{
  // Abort while artwork is pending releases promptly, and late completion owns no resources.
  let finishLoad;qa.load=()=>new Promise(r=>finishLoad=r);abort=new AbortController();now=0;p=playDuelOpening(options(abort));await flush();const disposed=qa.disposed;abort.abort();await p;assert.equal(qa.disposed,disposed+1);finishLoad();await flush();assert(!document.querySelector('.duel-opening'));qa.load=()=>Promise.resolve();
  // Reduced motion still reveals the authoritative winner, without spinning or a new banner.
- reduced=true;now=0;abort=new AbortController();p=playDuelOpening(options(abort,false));await flush();assert.equal(document.querySelector('[role=status]').textContent,'相手が先攻');assert(qa.draws.at(-1).o.reduced);await step(6930);await p;
+ reduced=true;now=0;abort=new AbortController();p=playDuelOpening(options(abort,false));await flush();assert.equal(document.querySelector('[role=status]').textContent,'あなたは後攻');assert(qa.draws.at(-1).o.reduced);await step(6930);await p;
  assert.equal(frames.size,0,'no pending frame after completion/abort');
  console.log('PASS: real result pose continuity, localized outcomes, static reduced pose; both outcomes, no duplicated turn/start banner or cue, one deal, server deadline, old room, hidden tab, pending load abort, reduced motion, cleanup');
 }finally{globalThis.performance=realPerformance;delete globalThis.openingQA;dom.window.close();await rm(dir,{recursive:true,force:true});}

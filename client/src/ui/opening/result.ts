@@ -13,13 +13,13 @@ export function resultScene(g:CanvasRenderingContext2D,t:number,W:number,H:numbe
  const {land,exit:exitAt,end}=RESULT_TIMING;if(t<land||t>=end)return;
  const a=o.reduced?1.05:t-land,exit=sm((t-exitAt)/(end-exitAt)),mobile=H>1000,U=mobile?1.18:1,tossU=mobile?1.25:1,cx=W/2,cy=H*(mobile?.475:.47);
  const p=out(a/.54),late=out((a-.31)/.37);
- const gold='#dac398',white='#fff4dc',ink=o.light?'#192937':'#f8efdb',muted=o.light?'#52616b':'#acb9c2',accent=o.first?'#9bcdeb':'#e8aa9f',deep=o.first?'#172f45':'#44252e';
- const lang=getLang(),who=lang==='ja'?(o.first?'あなたが':'相手が'):lang==='ko'?(o.first?'당신이':'상대가'):(o.first?'YOU GO':'OPPONENT GOES'),first=lang==='ja'?'先攻':lang==='ko'?'선공':'FIRST',eng=o.first?'YOU GO FIRST':'OPPONENT GOES FIRST';
+ const gold='#dac398',white='#fff4dc',ink=o.light?'#192937':'#f8efdb',muted=o.light?'#52616b':'#acb9c2',accent=o.first?'#72b7ff':'#ff8187',deep=o.first?'#172f45':'#44252e';
+ const lang=getLang(),who=lang==='ja'?'あなたは':lang==='ko'?'당신은':'YOU GO',order=lang==='ja'?(o.first?'先攻':'後攻'):lang==='ko'?(o.first?'선공':'후공'):(o.first?'FIRST':'SECOND'),eng=o.first?'YOU GO FIRST':'YOU GO SECOND';
  const txt=(s:string,x:number,y:number,size:number,col:string|CanvasGradient=ink,spacing=0,font='"Shippori Mincho", "Yu Mincho", serif',weight=600)=>{g.save();g.font=`${weight} ${size}px ${font}`;g.textAlign='center';g.textBaseline='middle';g.fillStyle=col;let width=g.measureText(s).width+spacing*([...s].length-1);let xx=x-width/2;g.textAlign='left';for(const c of s){g.fillText(c,xx,y);xx+=g.measureText(c).width+spacing;}g.restore();};
  const small=(s:string,x:number,y:number,col=muted)=>txt(s,x,y,13*U,col,3*U,'Arial',500);
  const line=(x:number,y:number,x1:number,y1:number,color=gold,width=1)=>{g.beginPath();g.moveTo(x,y);g.lineTo(x1,y1);g.strokeStyle=color;g.lineWidth=width;g.stroke();};
  const glow=(x:number,y:number,rx:number,ry:number,color:string,alpha=1)=>{g.save();g.globalAlpha*=cl(alpha);g.translate(x,y);g.scale(1,ry/rx);const z=g.createRadialGradient(0,0,0,0,0,rx);z.addColorStop(0,color);z.addColorStop(.28,color+'88');z.addColorStop(1,color+'00');g.fillStyle=z;g.fillRect(-rx,-rx,rx*2,rx*2);g.restore();};
- const material=(y:number,h:number)=>{let z=g.createLinearGradient(0,y-h/2,0,y+h/2);([[0,'#f8eac9'],[.08,'#ae9160'],[.46,'#d9c393'],[.5,'#f8e9c3'],[.55,'#a88757'],[1,'#efdcb0']]).forEach(([n,c])=>z.addColorStop(n as number,c as string));return z;};
+ const material=(y:number,h:number)=>{let z=g.createLinearGradient(0,y-h/2,0,y+h/2);(o.first?[[0,'#c9e5ff'],[.08,'#467dca'],[.46,'#72b7ff'],[.5,'#c3e2ff'],[.55,'#3976ca'],[1,'#8cc7ff']]:[[0,'#ffd0d2'],[.08,'#c44956'],[.46,'#ff8187'],[.5,'#ffc4c8'],[.55,'#c93d50'],[1,'#ff9ba2']]).forEach(([n,c])=>z.addColorStop(n as number,c as string));return z;};
  const lettering=(s:string,x:number,y:number,size:number,q=late,col?:string|CanvasGradient)=>{g.save();g.font=`600 ${size}px "Shippori Mincho", "Yu Mincho", serif`;
  // Keep the approved Japanese reveal width; longer translations must reveal every glyph.
  const ww=Math.max(size*2.6,g.measureText(s).width+size*.09*([...s].length-1)+size*.15);g.beginPath();g.rect(x-ww/2,y-size*.7,ww*cl(q),size*1.5);g.clip();txt(s,x,y+2,size,'#00000090',size*.09);txt(s,x,y,size,col??material(y,size),size*.09);g.restore();};
@@ -34,7 +34,7 @@ export function resultScene(g:CanvasRenderingContext2D,t:number,W:number,H:numbe
    const z=g.createLinearGradient(0,-100,len,160);z.addColorStop(0,white);z.addColorStop(.13,'#e7bc72b0');z.addColorStop(.42,accent+'80');z.addColorStop(1,accent+'00');
    g.beginPath();g.moveTo(0,-38);g.bezierCurveTo(len*.27,-105,len*.62,260*(1-spread)-40,len,10);g.bezierCurveTo(len*.6,55,len*.28,-17,0,11);g.closePath();g.fillStyle=z;g.fill();
    g.beginPath();g.moveTo(3,-35);g.bezierCurveTo(len*.3,-101,len*.61,-42,len,10);g.strokeStyle=white;g.lineWidth=1.7;g.stroke();g.restore();}
-  g.restore();g.save();g.globalAlpha*=late;txt(who,cx,cy+47*U,25*U,o.light?'#324956':accent,3);lettering(first,cx,cy+128*U,(lang==='en'?85:117)*U,late,o.light?'#213342':undefined);small(eng,cx,cy+226*U,o.light?'#665944':gold);g.restore();
+  g.restore();g.save();g.globalAlpha*=late;txt(who,cx,cy+47*U,25*U,o.light?(o.first?'#245ea8':'#a52c40'):accent,3);lettering(order,cx,cy+128*U,(lang==='en'?85:117)*U,late,o.light?(o.first?'#245ea8':'#a52c40'):undefined);small(eng,cx,cy+226*U,o.light?(o.first?'#245ea8':'#a52c40'):accent);g.restore();
   flare(cx,cy+205*U,Math.sin(cl((a-.38)/.75)*Math.PI)*.6,290);
 
  g.restore();

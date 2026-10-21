@@ -64,10 +64,10 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
       const visual=reduced&&ms>=0&&ms<OPENING_REVEAL_MS?4100:ms;
       if(!skipped){
         renderer?.draw(canvas,Math.max(0,visual)/1000,{first:o.firstIsMe,light:false,reduced,board:true,names:[o.me.name,o.opp.name],avatars:[o.me.avatar,o.opp.avatar],medals:[o.me.medal??null,o.opp.medal??null]});
-        if(!renderer){canvas.style.background=ms<OPENING_VISUAL_MS?'#07101d':'transparent';result.style.cssText='position:absolute;inset:40% 0 auto;text-align:center;color:#f1eadc;font:40px Georgia';}
+        if(!renderer){canvas.style.background=ms<OPENING_VISUAL_MS?'#07101d':'transparent';result.style.cssText='position:absolute;inset:40% 0 auto;text-align:center;color:'+(o.firstIsMe?'#72b7ff':'#ff8187')+';font:40px Georgia';}
       }
       const showResult=!skipped&&visual>=OPENING_REVEAL_MS&&ms<OPENING_VISUAL_MS;
-      result.textContent=showResult?(o.firstIsMe?label('あなたが先攻','You go first','당신이 선공'):label('相手が先攻','Opponent goes first','상대 선공')):'';
+      result.textContent=showResult?(o.firstIsMe?label('あなたは先攻','You go first','당신은 선공'):label('あなたは後攻','You go second','당신은 후공')):'';
       if(!reduced&&!skipped&&o.sampleMs==null){
         for(const [at,key] of [[180,'rise'],[OPENING_TOSS_MS,'toss'],[OPENING_REVEAL_MS,'land']] as const)
           if(!(key==='rise'&&o.onStart)&&last<at&&ms>=at&&ms-at<150)audio.play(key);
