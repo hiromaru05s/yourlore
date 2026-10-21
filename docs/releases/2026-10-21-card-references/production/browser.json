@@ -1,0 +1,249 @@
+{
+  "base": "https://yourlore.xyz",
+  "scope": "production assets and real card menu with isolated API fixtures",
+  "checks": [
+    {
+      "lang": "ja",
+      "width": 1280,
+      "id": "CREATION",
+      "source": "EMPTY_MIND",
+      "reverse": true
+    },
+    {
+      "lang": "ja",
+      "width": 1280,
+      "id": "DOMINION",
+      "source": "Q_TOWN",
+      "reverse": true
+    },
+    {
+      "lang": "ja",
+      "width": 1280,
+      "id": "EMPTY_MIND",
+      "hover": true,
+      "history": true
+    },
+    {
+      "lang": "ja",
+      "width": 1280,
+      "id": "MIMIC_KING",
+      "hoverSeries": true,
+      "previewNavigation": true
+    },
+    {
+      "lang": "ja",
+      "width": 1280,
+      "id": "BLACK_ELSA",
+      "keyboard": true
+    },
+    {
+      "lang": "ja",
+      "width": 1280,
+      "id": "GUILD_CHEST",
+      "diceReference": true
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "id": "CREATION",
+      "source": "EMPTY_MIND",
+      "reverse": true
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "id": "DOMINION",
+      "source": "Q_TOWN",
+      "reverse": true
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "id": "EMPTY_MIND",
+      "hover": true,
+      "history": true
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "id": "MIMIC_KING",
+      "hoverSeries": true,
+      "previewNavigation": true
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "id": "BLACK_ELSA",
+      "keyboard": true
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "id": "GUILD_CHEST",
+      "diceReference": true
+    },
+    {
+      "lang": "ko",
+      "width": 1280,
+      "id": "CREATION",
+      "source": "EMPTY_MIND",
+      "reverse": true
+    },
+    {
+      "lang": "ko",
+      "width": 1280,
+      "id": "DOMINION",
+      "source": "Q_TOWN",
+      "reverse": true
+    },
+    {
+      "lang": "ko",
+      "width": 1280,
+      "id": "EMPTY_MIND",
+      "hover": true,
+      "history": true
+    },
+    {
+      "lang": "ko",
+      "width": 1280,
+      "id": "MIMIC_KING",
+      "hoverSeries": true,
+      "previewNavigation": true
+    },
+    {
+      "lang": "ko",
+      "width": 1280,
+      "id": "BLACK_ELSA",
+      "keyboard": true
+    },
+    {
+      "lang": "ko",
+      "width": 1280,
+      "id": "GUILD_CHEST",
+      "diceReference": true
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "id": "CREATION",
+      "source": "EMPTY_MIND",
+      "reverse": true
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "id": "DOMINION",
+      "source": "Q_TOWN",
+      "reverse": true
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "id": "EMPTY_MIND",
+      "hover": true,
+      "history": true
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "id": "MIMIC_KING",
+      "hoverSeries": true,
+      "previewNavigation": true
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "id": "BLACK_ELSA",
+      "keyboard": true
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "id": "GUILD_CHEST",
+      "diceReference": true
+    },
+    {
+      "lang": "en",
+      "width": 1280,
+      "id": "CREATION",
+      "source": "EMPTY_MIND",
+      "reverse": true
+    },
+    {
+      "lang": "en",
+      "width": 1280,
+      "id": "DOMINION",
+      "source": "Q_TOWN",
+      "reverse": true
+    },
+    {
+      "lang": "en",
+      "width": 1280,
+      "id": "EMPTY_MIND",
+      "hover": true,
+      "history": true
+    },
+    {
+      "lang": "en",
+      "width": 1280,
+      "id": "MIMIC_KING",
+      "hoverSeries": true,
+      "previewNavigation": true
+    },
+    {
+      "lang": "en",
+      "width": 1280,
+      "id": "BLACK_ELSA",
+      "keyboard": true
+    },
+    {
+      "lang": "en",
+      "width": 1280,
+      "id": "GUILD_CHEST",
+      "diceReference": true
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "id": "CREATION",
+      "source": "EMPTY_MIND",
+      "reverse": true
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "id": "DOMINION",
+      "source": "Q_TOWN",
+      "reverse": true
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "id": "EMPTY_MIND",
+      "hover": true,
+      "history": true
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "id": "MIMIC_KING",
+      "hoverSeries": true,
+      "previewNavigation": true
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "id": "BLACK_ELSA",
+      "keyboard": true
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "id": "GUILD_CHEST",
+      "diceReference": true
+    }
+  ],
+  "errors": [],
+  "loadRetries": [],
+  "networkFailures": []
+}

@@ -1,0 +1,18 @@
+{
+  "initial": {
+    "result": "HOME artwork preparation 8/10; 180-second timeout before card navigation",
+    "pageErrors": []
+  },
+  "second": {
+    "result": "4 reference checks passed; test searched for an incorrect BLACK_ELSA name",
+    "correction": "Use the actual name fragment エルサ. Also dismiss the preview before closing its parent inspector.",
+    "pageErrors": []
+  },
+  "final": {
+    "result": "PASS",
+    "checks": 36,
+    "pageErrors": [],
+    "loadRetries": [],
+    "networkFailures": []
+  }
+}
