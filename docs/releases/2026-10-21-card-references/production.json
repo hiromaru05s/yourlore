@@ -28,5 +28,15 @@
     "errors": [],
     "loadRetries": [],
     "networkFailures": []
+  },
+  "finalObservedDeployment": {
+    "id": "98b0e123-43e7-493a-a095-055d04602043",
+    "source": "17bf2419f4c1933946741d826a3d2e377ae27196 guarded release",
+    "versions": [
+      {
+        "version_id": "3fe62dd5-e6f6-46b8-b2d2-b7b5c7e9c0b9",
+        "percentage": 100
+      }
+    ]
   }
 }
