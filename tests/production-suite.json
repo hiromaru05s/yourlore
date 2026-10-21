@@ -46,6 +46,7 @@
     "tests/card-wording.mjs",
     "tests/card-wording-render.mjs",
     "tests/card-effect-ux.mjs",
+    "tests/card-references.mjs",
     "tests/biblion-vfx.mjs",
     "tests/connected-return-motion.mjs",
     "tests/dew-shield-v54.mjs",

@@ -2361,7 +2361,7 @@ export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0 && !DB[id].no
 // ---- related cards (for the zoom panel): what a card summons / references ----
 // Auto-derived by matching OTHER cards' names inside a card's text, plus a manual
 // map for abbreviated references (e.g. "초급·중급 암살자") the name-scan can't catch.
-const RELATED_MANUAL: Record<string, string[]> = {
+export const RELATED_MANUAL: Record<string, string[]> = {
   INTERCEPT: ["GUNNER", "HEAVY_GUNNER", "CASTLE", "SOLDIER2"],
   REINFORCE: ["INFKNIGHT", "SOLDIER2", "GUNNER"],
   FARM_KEEPER: ["BREWING", "TOKEN00"],

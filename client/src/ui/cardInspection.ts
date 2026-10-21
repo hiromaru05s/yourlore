@@ -1,5 +1,7 @@
+import {cardRelations,REFERENCE_CARDS} from '../shared/cardReferences';
+import {bindCardReferences} from './cardReferencePreview';
 import type {CardInst} from '../shared/types';
-import {DB,TRIBES,CHEST_ODDS,PASSIVES,relatedCardIds} from '../shared/cards';
+import {DB,TRIBES,CHEST_ODDS,PASSIVES} from '../shared/cards';
 import {cardTypeLabel,displayPassives,referencedPassives} from '../shared/cardPresentation';
 import {cardStateEl} from './cardState';
 import {cardEl,cardRulesEl,prefetchZoomArt} from './cardView';
@@ -12,21 +14,25 @@ function miniCardGrid(ids: string[]): HTMLElement {
   const grid = document.createElement("div");
   grid.className = "ztc-grid";
   for (const id of ids) {
-    const def = DB[id];
+    const def = REFERENCE_CARDS[id];
     if (!def) continue;
     const inst = { ...def, uid: `rel_${id}` } as CardInst;
     const mini = cardEl(inst);
-    mini.tabIndex = 0; mini.setAttribute('role', 'button');
+    mini.tabIndex = 0; mini.setAttribute('role', 'button');mini.setAttribute('aria-label',cardName(inst));
     mini.onclick = (e) => { e.stopPropagation(); openRelatedCard(inst); };
     bindInspectContext(mini, () => openRelatedCard(inst));
     mini.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mini.click(); } };
-    grid.appendChild(mini);
+    const item=document.createElement('div');item.className='related-card-item';
+    const caption=document.createElement('span');caption.textContent=cardName(inst);caption.onclick=()=>mini.click();
+    item.append(mini,caption);grid.appendChild(item);
   }
   return grid;
 }
 
 type ZoomSnapshot = { overlay: HTMLElement; focus: HTMLElement | null; scroll: {node:HTMLElement;top:number}[] };
 const zoomHistory: ZoomSnapshot[] = [];
+const closePreviews = new WeakMap<HTMLElement,(restoreFocus?:boolean)=>boolean>();
+function closeCurrentPreview(restoreFocus=false):boolean { const ov=document.getElementById('zoomOverlay');return ov?closePreviews.get(ov)?.(restoreFocus)??false:false; }
 let zoomOpener: HTMLElement | null = null;
 function captureZoom(): ZoomSnapshot | null {
   const overlay = document.getElementById('zoomOverlay');
@@ -34,11 +40,14 @@ function captureZoom(): ZoomSnapshot | null {
     scroll: Array.from(overlay.querySelectorAll<HTMLElement>('.zoom-wrap,.zoom-details')).map(node=>({node,top:node.scrollTop})) } : null;
 }
 function openRelatedCard(c: CardInst): void {
+  closeCurrentPreview();
+  if(document.getElementById('zoomOverlay')?.dataset.cardId===c.id)return;
   const previous = captureZoom();
   if (previous) { zoomHistory.push(previous); previous.overlay.remove(); }
   renderZoom(c);
 }
 function backToPreviousCard(): void {
+  closeCurrentPreview();
   const previous = zoomHistory.pop(); if (!previous) return;
   document.getElementById('zoomOverlay')?.remove(); document.body.append(previous.overlay);
   previous.scroll.forEach(({node,top})=>{node.scrollTop=top;});
@@ -55,6 +64,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
+  ov.dataset.cardId=c.id;
   const wrap = document.createElement("div");
   wrap.className = "zoom-wrap";
   ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
@@ -142,14 +152,18 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
     }
     details.appendChild(panel);
   }
-  // cards that SUMMON or REFERENCE other specific cards → show those cards
-  const related = relatedCardIds(c.id);
-  if (related.length) {
-    const panel = document.createElement("div");
-    panel.className = "zoom-tribe zoom-related";
-    panel.innerHTML = `<h3>${t("card.related")}</h3><div class="ztc-head" style="margin-top:2px">${t("card.related.sub")}</div>`;
-    panel.appendChild(miniCardGrid(related));
-    details.appendChild(panel);
+  const relations=cardRelations(c.id);
+  const relationTitles={
+    sources:{ja:'このカードを生み出すカード',ko:'이 카드를 생성하는 카드',en:'Cards that create this card'},
+    generated:{ja:'このカードが生み出すカード',ko:'이 카드가 생성하는 카드',en:'Cards created by this card'},
+    references:{ja:'このカードの関連カード',ko:'이 카드의 관련 카드',en:'Related cards'},
+    referencedBy:{ja:'このカードに関連するカード',ko:'이 카드와 관련된 카드',en:'Cards linked to this card'},
+  };
+  for(const kind of ['sources','generated','references','referencedBy'] as const) {
+    if(!relations[kind].length)continue;
+    const panel=document.createElement('section');panel.className='zoom-tribe zoom-related';panel.dataset.relation=kind;
+    const title=document.createElement('h3');title.textContent=relationTitles[kind][getLang()];panel.append(title,miniCardGrid(relations[kind]));
+    if(kind==='sources')details.insertBefore(panel,details.querySelector('.zoom-tribe'));else details.append(panel);
   }
   if (c.star === "chest") {
     const odds = CHEST_ODDS[getLang()];
@@ -163,8 +177,9 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   ov.onclick = closeZoom;
   ov.oncontextmenu = (e) => { e.preventDefault(); closeZoom(); };
   document.body.appendChild(ov);
+  closePreviews.set(ov,bindCardReferences(ov,c,openRelatedCard));
   ov.onkeydown = e => {
-    if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); zoomHistory.length ? backToPreviousCard() : closeZoom(); }
+    if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); if(!closeCurrentPreview(true))zoomHistory.length ? backToPreviousCard() : closeZoom(); }
     if (e.key === 'Tab') {
       const focusable = Array.from(ov.querySelectorAll<HTMLElement>('button,summary,[tabindex="0"]')).filter(node=>!node.closest('[hidden]'));
       const first = focusable[0], last = focusable[focusable.length - 1];
@@ -178,6 +193,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   close.focus({ preventScroll: true });
 }
 export function closeZoom(): void {
+  closeCurrentPreview();
   document.getElementById("zoomOverlay")?.remove();
   zoomHistory.length=0;
   if (zoomOpener?.isConnected) zoomOpener.focus({preventScroll:true});
