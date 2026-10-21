@@ -1,0 +1,349 @@
+{
+  "calls": 26,
+  "receipts": 26,
+  "geometries": [
+    {
+      "w": 390,
+      "h": 844,
+      "kind": "starter",
+      "screen": 390,
+      "scroll": 390,
+      "width": 390,
+      "art": {
+        "x": 18,
+        "y": 102,
+        "width": 354,
+        "height": 415.125,
+        "top": 102,
+        "right": 372,
+        "bottom": 517.125,
+        "left": 18
+      },
+      "copy": {
+        "x": 18,
+        "y": 517.125,
+        "width": 354,
+        "height": 145.875,
+        "top": 517.125,
+        "right": 372,
+        "bottom": 663,
+        "left": 18
+      }
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "kind": "sleeve",
+      "screen": 390,
+      "scroll": 390,
+      "width": 390,
+      "art": {
+        "x": 18,
+        "y": 102,
+        "width": 354,
+        "height": 415.125,
+        "top": 102,
+        "right": 372,
+        "bottom": 517.125,
+        "left": 18
+      },
+      "copy": {
+        "x": 18,
+        "y": 517.125,
+        "width": 354,
+        "height": 145.875,
+        "top": 517.125,
+        "right": 372,
+        "bottom": 663,
+        "left": 18
+      }
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "kind": "furniture",
+      "screen": 390,
+      "scroll": 390,
+      "width": 390,
+      "art": {
+        "x": 18,
+        "y": 102,
+        "width": 354,
+        "height": 398.4375,
+        "top": 102,
+        "right": 372,
+        "bottom": 500.4375,
+        "left": 18
+      },
+      "copy": {
+        "x": 18,
+        "y": 500.4375,
+        "width": 354,
+        "height": 162.5625,
+        "top": 500.4375,
+        "right": 372,
+        "bottom": 663,
+        "left": 18
+      }
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "kind": "effect",
+      "screen": 390,
+      "scroll": 390,
+      "width": 390,
+      "art": {
+        "x": 18,
+        "y": 102,
+        "width": 354,
+        "height": 397.53125,
+        "top": 102,
+        "right": 372,
+        "bottom": 499.53125,
+        "left": 18
+      },
+      "copy": {
+        "x": 18,
+        "y": 499.53125,
+        "width": 354,
+        "height": 163.46875,
+        "top": 499.53125,
+        "right": 372,
+        "bottom": 663,
+        "left": 18
+      }
+    },
+    {
+      "w": 320,
+      "h": 740,
+      "kind": "starter",
+      "screen": 320,
+      "scroll": 320,
+      "width": 320,
+      "art": {
+        "x": 18,
+        "y": 102,
+        "width": 284,
+        "height": 311.125,
+        "top": 102,
+        "right": 302,
+        "bottom": 413.125,
+        "left": 18
+      },
+      "copy": {
+        "x": 18,
+        "y": 413.125,
+        "width": 284,
+        "height": 145.875,
+        "top": 413.125,
+        "right": 302,
+        "bottom": 559,
+        "left": 18
+      }
+    },
+    {
+      "w": 320,
+      "h": 740,
+      "kind": "sleeve",
+      "screen": 320,
+      "scroll": 320,
+      "width": 320,
+      "art": {
+        "x": 18,
+        "y": 102,
+        "width": 284,
+        "height": 311.125,
+        "top": 102,
+        "right": 302,
+        "bottom": 413.125,
+        "left": 18
+      },
+      "copy": {
+        "x": 18,
+        "y": 413.125,
+        "width": 284,
+        "height": 145.875,
+        "top": 413.125,
+        "right": 302,
+        "bottom": 559,
+        "left": 18
+      }
+    },
+    {
+      "w": 320,
+      "h": 740,
+      "kind": "furniture",
+      "screen": 320,
+      "scroll": 320,
+      "width": 320,
+      "art": {
+        "x": 18,
+        "y": 102,
+        "width": 284,
+        "height": 262.546875,
+        "top": 102,
+        "right": 302,
+        "bottom": 364.546875,
+        "left": 18
+      },
+      "copy": {
+        "x": 18,
+        "y": 364.546875,
+        "width": 284,
+        "height": 194.453125,
+        "top": 364.546875,
+        "right": 302,
+        "bottom": 559,
+        "left": 18
+      }
+    },
+    {
+      "w": 320,
+      "h": 740,
+      "kind": "effect",
+      "screen": 320,
+      "scroll": 320,
+      "width": 320,
+      "art": {
+        "x": 18,
+        "y": 102,
+        "width": 284,
+        "height": 293.53125,
+        "top": 102,
+        "right": 302,
+        "bottom": 395.53125,
+        "left": 18
+      },
+      "copy": {
+        "x": 18,
+        "y": 395.53125,
+        "width": 284,
+        "height": 163.46875,
+        "top": 395.53125,
+        "right": 302,
+        "bottom": 559,
+        "left": 18
+      }
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "kind": "starter",
+      "screen": 844,
+      "scroll": 844,
+      "width": 844,
+      "art": {
+        "x": 24,
+        "y": 82,
+        "width": 387,
+        "height": 183,
+        "top": 82,
+        "right": 411,
+        "bottom": 265,
+        "left": 24
+      },
+      "copy": {
+        "x": 433,
+        "y": 113.1875,
+        "width": 387,
+        "height": 120.625,
+        "top": 113.1875,
+        "right": 820,
+        "bottom": 233.8125,
+        "left": 433
+      }
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "kind": "sleeve",
+      "screen": 844,
+      "scroll": 844,
+      "width": 844,
+      "art": {
+        "x": 24,
+        "y": 82,
+        "width": 387,
+        "height": 183,
+        "top": 82,
+        "right": 411,
+        "bottom": 265,
+        "left": 24
+      },
+      "copy": {
+        "x": 433,
+        "y": 113.1875,
+        "width": 387,
+        "height": 120.625,
+        "top": 113.1875,
+        "right": 820,
+        "bottom": 233.8125,
+        "left": 433
+      }
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "kind": "furniture",
+      "screen": 844,
+      "scroll": 844,
+      "width": 844,
+      "art": {
+        "x": 24,
+        "y": 82,
+        "width": 434.171875,
+        "height": 183,
+        "top": 82,
+        "right": 458.171875,
+        "bottom": 265,
+        "left": 24
+      },
+      "copy": {
+        "x": 458.171875,
+        "y": 93.1875,
+        "width": 361.828125,
+        "height": 160.625,
+        "top": 93.1875,
+        "right": 820,
+        "bottom": 253.8125,
+        "left": 458.171875
+      }
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "kind": "effect",
+      "screen": 844,
+      "scroll": 844,
+      "width": 844,
+      "art": {
+        "x": 24,
+        "y": 82,
+        "width": 387,
+        "height": 183,
+        "top": 82,
+        "right": 411,
+        "bottom": 265,
+        "left": 24
+      },
+      "copy": {
+        "x": 433,
+        "y": 104.390625,
+        "width": 387,
+        "height": 138.21875,
+        "top": 104.390625,
+        "right": 820,
+        "bottom": 242.609375,
+        "left": 433
+      }
+    }
+  ],
+  "errors": [],
+  "motion": [
+    "effect:crystal-facets",
+    "effect:stardust-foil",
+    "effect:prism-veil"
+  ],
+  "furnitureFamilies": 10
+}
