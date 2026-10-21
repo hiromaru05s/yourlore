@@ -51,7 +51,7 @@ export function bindCardReferences(overlay:HTMLElement, source:CardInst, openCar
     popup.addEventListener('focusout',deferClose);popup.onclick=e=>e.stopPropagation();popup.oncontextmenu=e=>{e.preventDefault();e.stopPropagation();};
     window.addEventListener('resize',onResize);
   };
-  for(const body of overlay.querySelectorAll<HTMLElement>('.card-effect-body,.dr-fx,.psv-desc,.zoom-tribe > .note,.zoom-tribe > .b')) {
+  for(const body of overlay.querySelectorAll<HTMLElement>('.card-effect-body,.dr-fx,.psv-rule-text,.zoom-tribe > .note,.zoom-tribe > .b')) {
     const text=body.textContent??'';body.replaceChildren();
     for(const part of effectReferenceParts(text,lang,source.id)) {
       if(!part.reference){body.append(document.createTextNode(part.text));continue;}

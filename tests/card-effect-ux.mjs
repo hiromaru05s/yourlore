@@ -11,7 +11,7 @@ dom.window.matchMedia=globalThis.matchMedia;
 dom.window.HTMLElement.prototype.scrollIntoView=function(){this.dataset.scrolled='true';};
 const dir=await mkdtemp('/tmp/lore-effect-ux-');
 try {
- await build({stdin:{contents:`export {DB,STARTERS,PASSIVES} from './client/src/shared/cards';export * from './client/src/shared/cardPresentation';export * from './client/src/shared/cardEffectNotes';export * from './client/src/shared/cardRuleMetadata';export {cardEl,cardRulesEl} from './client/src/ui/cardView';export {cardStateEl} from './client/src/ui/cardState';export {zoomCard,closeZoom} from './client/src/ui/anim';export {setLang} from './client/src/i18n';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',define:{'import.meta.env.DEV':'false'},outfile:dir+'/ui.mjs',logLevel:'silent'});
+ await build({stdin:{contents:`export {DB,STARTERS,PASSIVES} from './client/src/shared/cards';export * from './client/src/shared/cardPresentation';export * from './client/src/shared/cardEffectNotes';export * from './client/src/shared/cardKeywordText';export * from './client/src/shared/cardRuleMetadata';export {cardEl,cardRulesEl} from './client/src/ui/cardView';export {cardStateEl} from './client/src/ui/cardState';export {zoomCard,closeZoom} from './client/src/ui/anim';export {setLang} from './client/src/i18n';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',define:{'import.meta.env.DEV':'false'},outfile:dir+'/ui.mjs',logLevel:'silent'});
  const E=await import(dir+'/ui.mjs'),all=[...Object.values(E.DB),...Object.values(E.STARTERS)];
  const card=id=>({...structuredClone(E.DB[id]??E.STARTERS[id]),uid:id});
  const mon=(id,extra={})=>({...card(id),summonedTurn:1,tempAtk:0,atkMod:0,defMod:0,dmg:0,exhausted:false,...extra});
@@ -27,6 +27,9 @@ try {
     const chip=document.querySelector(`button.card-key-label[data-psv="${key}"]`),target=document.querySelector(`.psv-item[data-psv="${key}"]`);
     assert(chip && target,`${c.id}/${lang}/${key}: readable term and linked definition`);
     assert.equal(chip.getAttribute('aria-controls'),target.id);
+    const rows=E.keywordRules(key,lang,E.displayPassives(c).includes(key)?c:undefined);
+    assert.deepEqual([...target.querySelectorAll('.psv-rule')].map(row=>({label:row.querySelector('dt').textContent,text:row.querySelector('dd').textContent})),rows,`${c.id}/${lang}/${key}: definition structure and complete wording survive reference enhancement`);
+    assert.equal(E.PASSIVES[key][lang].desc,E.keywordRules(key,lang).map(row=>`${row.label}: ${row.text}`).join('\n'),'tooltip and detailed rules share the same source');
    }
    assert(E.cardSearchText(c).includes(c[{ja:'textJa',ko:'text',en:'textEn'}[lang]].normalize('NFKC').toLocaleLowerCase()),`${c.id}/${lang}: full effect searchable`);
    const notes=['ja','ko','en'].map(l=>E.cardEffectNotes(c,l).length);assert.equal(new Set(notes).size,1,`${c.id}: same glossary in all locales`);

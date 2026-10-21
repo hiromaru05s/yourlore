@@ -47,6 +47,7 @@
     "scripts/check-card-text.mjs",
     "tests/card-wording.mjs",
     "tests/card-wording-render.mjs",
+    "tests/passive-explanations.mjs",
     "tests/card-effect-ux.mjs",
     "tests/card-references.mjs",
     "tests/biblion-vfx.mjs",

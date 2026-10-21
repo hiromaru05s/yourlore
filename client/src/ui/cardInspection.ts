@@ -7,6 +7,7 @@ import {cardStateEl} from './cardState';
 import {cardEl,cardRulesEl,prefetchZoomArt} from './cardView';
 import {t,getLang,cardName} from '../i18n';
 import {passiveIcon} from './passiveIcon';
+import {keywordRules} from '../shared/cardKeywordText';
 
 // Shared inspection UI has no dependency on duel animation renderers.
 /** A scrollable grid of small, clickable card thumbnails (click → zoom that card). */
@@ -124,7 +125,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
       const p = PASSIVES[k];
       if (!p) return "";
       const loc = lang0 === "ja" ? p.ja : lang0 === "en" ? p.en : p.ko;
-      return `<div class="psv-item" id="zoom-passive-${k}" data-psv="${k}" tabindex="-1" role="group" aria-labelledby="zoom-passive-name-${k}"><b class="psv-name" id="zoom-passive-name-${k}">${passiveIcon(k)}<span>${loc.name}</span></b><div class="psv-desc">${loc.desc}</div></div>`;
+      return `<div class="psv-item" id="zoom-passive-${k}" data-psv="${k}" tabindex="-1" role="group" aria-labelledby="zoom-passive-name-${k}"><b class="psv-name" id="zoom-passive-name-${k}">${passiveIcon(k)}<span>${loc.name}</span></b><dl class="psv-desc">${keywordRules(k, lang0, ownedKeys.includes(k) ? c : undefined).map(row => `<div class="psv-rule"><dt>${row.label}</dt><dd class="psv-rule-text">${row.text}</dd></div>`).join('')}</dl></div>`;
     }).join("");
     details.appendChild(panel);
     details.querySelectorAll<HTMLElement>(".card-key-label").forEach((sp) => {

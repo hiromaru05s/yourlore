@@ -890,3 +890,9 @@
 @media(max-width:560px){.card-reference-preview{padding:14px}.reference-member-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.reference-single{grid-template-columns:minmax(0,1fr)}.reference-single>.reference-member{justify-self:center}.reference-rules{font-size:16px}}
 .related-card-item{display:flex;flex-direction:column;align-items:center;gap:10px;width:110px;min-width:0;padding:4px 6px 8px}
 .related-card-item>span{font:500 13px/1.55 var(--gothic-ui,var(--ui));text-align:center;overflow-wrap:anywhere;color:#dce7f1;cursor:pointer}
+
+/* Each passive explains its condition/result separately, using the shared rule text. */
+.zoom-details .psv-desc { margin:10px 0 0; }
+.zoom-details .psv-rule + .psv-rule { margin-top:12px; }
+.zoom-details .psv-rule dt { font-size:1rem; font-weight:700; }
+.zoom-details .psv-rule dd { margin:3px 0 0; font-size:1rem; line-height:1.75; }
