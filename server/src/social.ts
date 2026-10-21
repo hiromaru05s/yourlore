@@ -1,3 +1,4 @@
+import {parseUsername} from '../../client/src/shared/username';
 import {medalState} from './medals';
 import {starterCollection,constrainDeckStore} from '../../client/src/shared/collection';
 import {deckStoreForUser} from '../../client/src/shared/cards';
@@ -13,7 +14,7 @@ import {cosmetic,ownedCosmetics} from '../../client/src/shared/cosmetics';
 //     both sides join it exactly like a matchmade online game.
 // ============================================================
 import type { Env, SessionUser } from "./env";
-import { corsHeaders, sanitizeDisplay } from "./auth";
+import { corsHeaders } from "./auth";
 import { getRating, tierWithGm, rankPosition } from "./rank";
 
 const CHALLENGE_TTL_MS = 90_000;
@@ -23,7 +24,7 @@ const MAX_FRIENDS = 100;
 // Owned cosmetics are account-wide; equipment is selected per deck.
 
 function json(env: Env, body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
+  return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...corsHeaders(env) } });
 }
 
 // Legacy field name retained for account and friend compatibility; values are text medals.
@@ -146,7 +147,9 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const sets: string[] = [];
     const args: unknown[] = [];
     if (typeof body.display === "string") {
-      const d = sanitizeDisplay(body.display);
+      const d = parseUsername(body.display);
+      if (!d) return json(env, { error: "invalid username" }, 400);
+      sets.push("username_set = 1");
       sets.push("display = ?"); args.push(d);
     }
     if (typeof body.avatar === "string") {
@@ -169,9 +172,9 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     }
     if (!sets.length) return json(env, { error: "no changes" }, 400);
     await env.DB.prepare(`UPDATE users SET ${sets.join(", ")} WHERE id = ?`).bind(...args, user.id).run();
-    const u = await env.DB.prepare(`SELECT display, avatar, badge, stats_public, sleeve, furniture FROM users WHERE id = ?`).bind(user.id)
-      .first<{ display: string; avatar: string | null; badge: string | null; stats_public: number; sleeve: string | null; furniture: string | null }>();
-    return json(env, { ok: true, display: u?.display, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve||"default", furniture:u?.furniture||"default" });
+    const u = await env.DB.prepare(`SELECT display, username_set, avatar, badge, stats_public, sleeve, furniture FROM users WHERE id = ?`).bind(user.id)
+      .first<{ display: string; username_set: number; avatar: string | null; badge: string | null; stats_public: number; sleeve: string | null; furniture: string | null }>();
+    return json(env, { ok: true, display: u?.display, needsUsername: u?.username_set !== 1, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve||"default", furniture:u?.furniture||"default" });
   }
 
   // Free catalog claims are atomic/idempotent; the client never sets prices or ownership.

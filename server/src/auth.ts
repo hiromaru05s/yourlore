@@ -55,7 +55,7 @@ export function corsHeaders(env: Env): Record<string, string> {
 function json(env: Env, body: unknown, status = 200, extra: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...corsHeaders(env), ...extra },
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...corsHeaders(env), ...extra },
   });
 }
 export function sessionCookie(token: string): string {
@@ -72,11 +72,9 @@ function readCookie(req: Request): string | null {
   return m ? m[1] : null;
 }
 
-/** Display names are rendered into innerHTML across the game UI (board, battle log),
- *  so they MUST be sanitized at the only chokepoint: account creation. Allowlist only. */
-export function sanitizeDisplay(raw: string): string {
-  const clean = (raw || "").replace(/[^0-9A-Za-z가-힣ㄱ-ㅎぁ-んァ-ヶ一-龯ー\s._-]/g, "").replace(/\s+/g, " ").trim().slice(0, 24);
-  return clean || "Player" + Math.floor(Math.random() * 9000 + 1000);
+/** A neutral temporary name contains no email, Google name, or account identifier. */
+export function temporaryDisplay(): string {
+  return 'Seeker-' + crypto.randomUUID().replace(/-/g, '').slice(0, 12);
 }
 
 import {ownedCosmetics} from '../../client/src/shared/cosmetics';
@@ -86,9 +84,9 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   const token = readCookie(req);
   if (!token) return null;
   const row = await env.DB.prepare(
-    `SELECT u.id, u.email, u.display, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.furniture, u.deck, u.decks, u.starter_cards, u.sleeves, COALESCE(x.exp,0) AS exp, (SELECT json_group_array(substr(key,5)) FROM experience_events WHERE user_id=u.id AND key LIKE 'bot:%') AS bot_clears, s.expires_at
+    `SELECT u.id, u.email, u.display, u.username_set, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.furniture, u.deck, u.decks, u.starter_cards, u.sleeves, COALESCE(x.exp,0) AS exp, (SELECT json_group_array(substr(key,5)) FROM experience_events WHERE user_id=u.id AND key LIKE 'bot:%') AS bot_clears, s.expires_at
      FROM sessions s JOIN users u ON u.id = s.user_id LEFT JOIN player_experience x ON x.user_id=u.id WHERE s.token = ?`
-  ).bind(token).first<{ id: string; email: string; display: string; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; furniture:string|null; deck: string | null; decks: string | null; starter_cards:string|null; sleeves:string|null; exp:number; bot_clears:string; expires_at: number }>();
+  ).bind(token).first<{ id: string; email: string; display: string; username_set: number; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; furniture:string|null; deck: string | null; decks: string | null; starter_cards:string|null; sleeves:string|null; exp:number; bot_clears:string; expires_at: number }>();
   if (!row || row.expires_at < Date.now()) return null;
   let decks: unknown = null;
   try { decks = row.decks ? JSON.parse(row.decks) : null; } catch { decks = null; }
@@ -97,7 +95,7 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   const effects=ownedCosmetics(row.sleeves).filter(isCardEffect);
   for(const slot of store.list)if(!effects.includes(slot.effect as typeof effects[number]))slot.effect='default';
   const active=store.list[store.sel];
-  return { id: row.id, email: row.email, display: row.display, wins: row.wins, losses: row.losses, credits: row.credits, exp: row.exp, botClears: JSON.parse(row.bot_clears), starterCards, effects, effect:active.effect, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
+  return { id: row.id, email: row.email, display: row.display, needsUsername: row.username_set !== 1, wins: row.wins, losses: row.losses, credits: row.credits, exp: row.exp, botClears: JSON.parse(row.bot_clears), starterCards, effects, effect:active.effect, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
 }
 
 export async function createSession(env: Env, userId: string): Promise<string> {
@@ -140,7 +138,7 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
       const exists = await env.DB.prepare(`SELECT id FROM users WHERE email = ?`).bind(email).first();
       if (exists) return json(env, { error: "이미 가입된 이메일입니다." }, 409);
       const id = crypto.randomUUID();
-      const display = sanitizeDisplay(email.split("@")[0]);
+      const display = temporaryDisplay();
       const mailOn = emailConfigured(env);
       const source = (body.source || "").slice(0, 120) || null;
       await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified, source) VALUES (?,?,?,?,?,?,?)`)
@@ -152,7 +150,8 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
         return json(env, { needVerify: true });
       }
       const token = await createSession(env, id);
-      return json(env, { user: { id, email, display, wins: 0, losses: 0, credits: 0, starterCards:starterCollection() } }, 200, { "Set-Cookie": sessionCookie(token) });
+      const user = await getUser(env, new Request(req.url, {headers: {Cookie: `${COOKIE}=${token}`}}));
+      return json(env, { user }, 200, { "Set-Cookie": sessionCookie(token) });
     }
 
     // login

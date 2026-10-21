@@ -19,6 +19,7 @@ const M: Record<string, { ja: string; en: string; ko?:string }> = {
   "unowned deck contents": {ja:"未所持のカード・外観は使用できません。",en:"You cannot use cards or cosmetics you do not own.",ko:"보유하지 않은 카드·외형은 사용할 수 없습니다."},
   "collection busy; retry": {ja:"処理が混み合っています。再試行してください。",en:"Collection busy. Please retry.",ko:"처리가 혼잡합니다. 다시 시도해 주세요."},
   "collection request conflict": {ja:"前の購入結果を確認してから再試行してください。",en:"Check your previous purchase before retrying.",ko:"이전 구매 결과를 확인한 후 다시 시도해 주세요."},
+  "invalid username": {ja:"ユーザー名は2〜24文字で、文字・数字・スペース・._-を使ってください。メールアドレスは使えません。",en:"Use 2–24 letters, numbers, spaces, or ._-. Email addresses are not allowed.",ko:"사용자 이름은 2~24자의 문자, 숫자, 공백 또는 ._-를 사용하세요. 이메일 주소는 사용할 수 없어요."},
   // auth
   "올바른 이메일이 아닙니다.": { ja: "正しいメールアドレスではありません。", en: "That's not a valid email." },
   "비밀번호는 6자 이상이어야 합니다.": { ja: "パスワードは6文字以上にしてください。", en: "Password must be at least 6 characters." },

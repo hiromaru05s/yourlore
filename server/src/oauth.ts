@@ -8,7 +8,7 @@
 // it can never match a PBKDF2 hash, so password login safely fails.
 // ============================================================
 import type { Env } from "./env";
-import { createSession, sanitizeDisplay, sessionCookie } from "./auth";
+import { createSession, temporaryDisplay, sessionCookie } from "./auth";
 import { applyInviteAtSignup } from "./invite";
 
 /** URL parsing treats backslashes/control characters as redirect syntax too. */
@@ -57,7 +57,7 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     auth.searchParams.set("client_id", env.GOOGLE_CLIENT_ID);
     auth.searchParams.set("redirect_uri", redirectUri);
     auth.searchParams.set("response_type", "code");
-    auth.searchParams.set("scope", "openid email profile");
+    auth.searchParams.set("scope", "openid email");
     auth.searchParams.set("state", state);
     auth.searchParams.set("prompt", "select_account");
     const ref = (url.searchParams.get("ref") || "").slice(0, 16);
@@ -98,7 +98,7 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     if (!tokenRes.ok || !tok.id_token) return htmlError("구글 인증에 실패했습니다.");
 
     // decode the JWT payload (base64url)
-    let payload: { email?: string; email_verified?: boolean; name?: string };
+    let payload: { email?: string; email_verified?: boolean };
     try {
       payload = JSON.parse(atob(tok.id_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
     } catch { return htmlError("구글 응답을 해석할 수 없습니다."); }
@@ -111,7 +111,7 @@ export async function handleGoogleOAuth(env: Env, req: Request, path: string): P
     let id = row?.id;
     if (!id) {
       id = crypto.randomUUID();
-      const display = sanitizeDisplay(payload.name || email.split("@")[0]);
+      const display = temporaryDisplay();
       const [ref, source] = ctx.split("|");
       await env.DB.prepare(`INSERT INTO users (id, email, password, display, created_at, verified, source) VALUES (?,?,?,?,?,1,?)`)
         .bind(id, email, "oauth:google", display, Date.now(), (source || "").slice(0, 120) || null).run();
