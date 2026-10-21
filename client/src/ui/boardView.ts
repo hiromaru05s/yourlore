@@ -540,7 +540,7 @@ export class GameView {
       if (dualReadyActive(m, canAttack)) card.dataset.monsterDualReady = '04';
       if (pending?.reason === "attack" && isMe && myTurn && pending.data?.attackerUid === m.uid) card.onclick = () => this.h.onChooseTarget(null);
       else if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
-      else if (canAttack) card.onclick = () => this.h.onAttack(m.uid);
+      else if (canAttack && g.players[1 - this.you].field.length === 0) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
       // "현재/최대" exactly like the field tile (v29: the zoom used to show HP only,
       // so a 4/20 monster read as a healthy 20 in the view players trade off).
@@ -555,6 +555,7 @@ export class GameView {
           canAttack,
           oppHasMon: opp.field.length > 0,
           directOnly: !!m.directOnly,
+          targetUids: new Set(opp.field.filter(target => monsterCanTarget(g,p,m,target)).map(target => target.uid)),
         });
       }
       mz.appendChild(card);
@@ -686,11 +687,11 @@ export class GameView {
    *   - sideways inside my own monster zone  → reorder (drop marker)
    *   - up toward the opponent               → ATTACK (drop on a monster, or on the
    *     enemy portrait for a direct attack)
-   *  Playing a card is already a drag, so attacking had to become one too. Tap still
-   *  attacks (desktop habit) and a long press still zooms. */
+   *  Tap attacks only an empty opposing field; a long press still zooms.
+   *  Releasing away from a target cancels, so another drag can start immediately. */
   private enableMonsterDrag(
     card: HTMLElement, index: number, zone: HTMLElement,
-    o: { uid: string; canReorder: boolean; canAttack: boolean; oppHasMon: boolean; directOnly: boolean },
+    o: { uid: string; canReorder: boolean; canAttack: boolean; oppHasMon: boolean; directOnly: boolean; targetUids: Set<string> },
   ): void {
     card.style.touchAction = "none"; // keep pointermove alive on touch
     // native HTML5 drag (e.g. of the card art <img>) fires pointercancel and
@@ -726,8 +727,9 @@ export class GameView {
       /** What is under the pointer? (the ghost is pointer-events:none so it never blocks) */
       const targetAt = (x: number, y: number): { mon: HTMLElement | null; portrait: HTMLElement | null } => {
         const el = document.elementFromPoint(x, y) as HTMLElement | null;
+        const mon = el?.closest<HTMLElement>("#oppRow .zone-mon .card") ?? null;
         return {
-          mon: (el?.closest("#oppRow .zone-mon .card") as HTMLElement | null) ?? null,
+          mon: mon?.dataset.uid && o.targetUids.has(mon.dataset.uid) ? mon : null,
           portrait: (el?.closest("#portraitOpp .pt-ring,#portraitOpp .pt-vitals") as HTMLElement | null) ?? null,
         };
       };
@@ -770,6 +772,7 @@ export class GameView {
       const cleanup = (): void => {
         if(done)return;
         done = true;
+        if (started) swallowNextClick(card);
         ghost?.remove(); marker?.remove(); aim?.remove();
         setHot(null);
         card.classList.remove("is-dragging", "is-aiming");
@@ -808,16 +811,14 @@ export class GameView {
         const aimed = mode === "attack";
         cleanup();
         if (!dragged) return;
-        // swallow the click that follows pointerup so it doesn't ALSO trigger an attack
-        swallowNextClick(card);
         if (aimed && o.canAttack) {
           const tUid = t.mon?.dataset.uid;
           if (tUid) { this.h.onAttack(o.uid, tUid); return; }               // dropped on a monster
-          if (t.portrait || !o.oppHasMon) {                                  // dropped on the face (or the board is clear)
+          if (t.portrait) {                                                // dropped on the face
             if (o.oppHasMon && !o.directOnly) { this.h.onBlockedAttack(); return; }
             this.h.onAttack(o.uid); return;
           }
-          this.h.onAttack(o.uid); return;                                    // aimed forward, no precise target → engine asks
+          return;                                                         // no target: cancel without opening a target picker
         }
         if (o.canReorder && to !== index) this.h.onReorder(index, to);
       };

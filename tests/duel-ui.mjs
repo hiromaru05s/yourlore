@@ -81,7 +81,27 @@ const rejected=reduce(monCap,{type:'play',idx:0,player:0}).state;
 assert.equal(rejected.players[0].field.length,7);assert.equal(rejected.players[0].hand[0].uid,'eighth-mon');
 setMyAvatar('SEEKER_RED');setOppAvatar('SEEKER_BLUE');
 let boughtFixed=-1,boughtSupply=-1,rerolls=0;
+const attackCalls=[];
 const noop=()=>{};
+const attackRoot=document.createElement('div');document.body.append(attackRoot);
+const attackView=new GameView(attackRoot,0,{onPlay:noop,onBlockedPlay:noop,onAttack:(...args)=>attackCalls.push(args),onBlockedAttack:noop,onReorder:noop,onChooseTarget:noop,onBuyMarket:i=>boughtFixed=i,onBuySupply:i=>boughtSupply=i,onRefresh:()=>rerolls++,onEndTurn:noop,onSurrender:noop});
+// Tapping cannot enter the attack target picker, including direct-only monsters.
+const attackState=structuredClone(g);attackState.pending=null;attackState.turn=4;
+const basic={...mon,atk:3,def:10,aura:undefined,passive:undefined,attackFx:undefined,uid:'tap-attacker',exhausted:false,summonedTurn:0};
+attackState.players.forEach(p=>{p.traps=[];p.enchants=[];p.noDirectTurn=false;});
+attackState.players[0].field=[basic];
+attackState.players[1].field=[{...basic,uid:'tap-defender'}];
+attackView.render(attackState);
+attackRoot.querySelector('#meRow .zone-mon .card').click();
+assert.deepEqual(attackCalls,[],'enemy monsters require a drag');
+basic.directOnly=true;attackView.render(attackState);
+attackRoot.querySelector('#meRow .zone-mon .card').click();
+assert.deepEqual(attackCalls,[],'direct-only does not enable tap while enemies remain');
+attackState.players[1].field=[];attackView.render(attackState);
+attackRoot.querySelector('#meRow .zone-mon .card').click();
+assert.deepEqual(attackCalls,[['tap-attacker']],'empty enemy field permits tap direct attack');
+attackCalls.length=0;
+attackView.destroy();attackRoot.remove();
 const v=new GameView(document.getElementById('app'),0,{onPlay:noop,onBlockedPlay:noop,onAttack:noop,onBlockedAttack:noop,onReorder:noop,onChooseTarget:noop,onBuyMarket:i=>boughtFixed=i,onBuySupply:i=>boughtSupply=i,onRefresh:()=>rerolls++,onEndTurn:noop,onSurrender:noop});
 v.render(g);
 for(const id of ['meRow','oppRow']) {
