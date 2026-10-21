@@ -101,11 +101,10 @@ function tuneFor(p: PlayerState): typeof TUNE {
 }
 // FLAME/AMBUSH deal face damage but the engine resolves them by id (no `act`),
 // so the lethal planner and the burn branch look their damage up here.
-// castable() already gates the self-damage; AMBUSH is only legal on the opening
-// turn (opponent still at max mana 4).
-function burnDmg(c: CardInst, o: PlayerState): number {
-  if (c.id === "FLAME") return 2;
-  if (c.id === "AMBUSH") return o.maxMana === 4 ? 8 : 0;
+// castable() already gates self-damage and the opposing max-mana requirement.
+function burnDmg(c: CardInst, p: PlayerState, o: PlayerState): number {
+  if (c.id === "FLAME") return (p.uses.FLAME ?? 0) >= 9 ? 5 : 2;
+  if (c.id === "AMBUSH") return o.maxMana === 4 ? 13 : 0;
   return 0;
 }
 
@@ -380,7 +379,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const disenchant = spells.find((x) => x.c.id === "COUNTERCALC");
   if (disenchant) return { type: "play", idx: disenchant.i };
   // 직접 데미지 마법 + 불꽃/기습 번 (castable가 자해 리스크를 게이트)
-  const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon" || burnDmg(x.c, o) > 0);
+  const direct = spells.find((x) => x.c.act === "dmg" || x.c.act === "siphon" || burnDmg(x.c, p, o) > 0);
   if (direct) return { type: "play", idx: direct.i };
   // The Night Castle reward must be usable after the bot chooses the Pact.
   const vampirePact = spells.find(({c}) => c.id === 'VAMP_PACT');
@@ -461,7 +460,7 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
   let spellIdx: number | null = null;
   let manaLeft = p.mana;
   const dmg = spells
-    .map((x) => ({ i: x.i, cost: playCost(x.c, p), d: x.faceDamage ?? ((x.c.act === "dmg" || x.c.act === "siphon") ? (['S1','GS8_0','TIMEWARP','GAMBLE'].includes(x.c.id) ? 0 : x.c.val || 0) : burnDmg(x.c, o)) }))
+    .map((x) => ({ i: x.i, cost: playCost(x.c, p), d: x.faceDamage ?? ((x.c.act === "dmg" || x.c.act === "siphon") ? (['S1','GS8_0','TIMEWARP','GAMBLE'].includes(x.c.id) ? 0 : x.c.val || 0) : burnDmg(x.c, p, o)) }))
     .filter((x) => x.d > 0)
     .sort((a, b) => b.d - a.d);
   for (const s of dmg) {
