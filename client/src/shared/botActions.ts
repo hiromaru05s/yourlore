@@ -1,5 +1,5 @@
 import type { Action, GameState } from './types';
-import { effectChoices, monsterCanAttack, playBlockReason, playCost, purchaseAllowed, buyCost, freeBuyBlocked } from './engine';
+import { purgeChoices, effectChoices, monsterCanAttack, playBlockReason, playCost, purchaseAllowed, buyCost, freeBuyBlocked } from './engine';
 
 /** Bound recyclable draw/tutor chains so the bot eventually commits its board.
  * This is a thinking/play policy limit; the authoritative card rules stay unchanged.
@@ -23,7 +23,7 @@ export function botActions(g: GameState): Action[] {
       if (q.data?.anySide) p.field.forEach(c => pick(c.uid));
     } else if (q.kind === 'seek') p.deck.forEach(c => pick(c.uid));
     else if (q.kind === 'recall') p.discard.filter(c => c.uid !== q.data?.exclude).forEach(c => pick(c.uid));
-    else if (q.kind === 'purge') (q.data?.zone === 'hand' ? p.hand : q.data?.zone === 'discard' ? p.discard : [...p.deck, ...p.discard]).forEach(c => pick(c.uid));
+    else if (q.kind === 'purge') purgeChoices(p, q).forEach(c => pick(c.uid));
     else if (q.kind === 'oppRmz') (o.removed ?? []).forEach(c => pick(c.uid));
     else if (q.kind === 'oppBoard') {
       for (const pl of [o, p]) {

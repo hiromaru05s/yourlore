@@ -1067,6 +1067,11 @@ export class GameView {
       if(!aff&&!discarding)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       else delete card.dataset.blockReason;
       if(spaceReason)card.dataset.blockReason=card.dataset.spaceRiteReason;
+      if (c.id === 'FLAME') {
+        const count = me.uses.FLAME ?? 0;
+        card.dataset.cardStateText = getLang() === 'ja' ? `この対戦での使用回数：${count}回` : getLang() === 'ko' ? `이번 대전 사용 횟수: ${count}회` : `Uses this duel: ${count}`;
+        card.tabIndex = 0;
+      }
       card.style.setProperty("--hi", String(idx));
       card.style.zIndex = String(me.hand.length - idx);
       const position=handEl.children[idx];
@@ -1126,7 +1131,7 @@ export class GameView {
 
   /** Drag onto the visible board to play; return to the hand to cancel. */
   private bindHandCard(card: HTMLElement, c: CardInst): void {
-    bindInspectContext(card, () => zoomCard(c, undefined, card.dataset.spaceRiteReason));
+    bindInspectContext(card, () => zoomCard(c, undefined, [card.dataset.cardStateText, card.dataset.spaceRiteReason].filter(Boolean).join(' · ')));
     card.style.touchAction = "none";
     card.draggable = false;
     card.addEventListener("dragstart", (e) => e.preventDefault());
@@ -1262,7 +1267,7 @@ export class GameView {
     });
     card.onclick = (e) => {
       e.stopPropagation();
-      if (this.handOpen) zoomCard(c,undefined,card.dataset.spaceRiteReason); // tap = enlarge preview; playing is drag-only now
+      if (this.handOpen) zoomCard(c,undefined,[card.dataset.cardStateText, card.dataset.spaceRiteReason].filter(Boolean).join(' · ')); // tap = enlarge preview; playing is drag-only now
     };
   }
 

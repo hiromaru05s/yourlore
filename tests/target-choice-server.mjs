@@ -14,14 +14,14 @@ try{
  const card=id=>({...structuredClone(DB[id]??STARTERS[id]),uid:'room-'+(++seq)});const mon=id=>({...card(id),tempAtk:0,atkMod:0,defMod:0,dmg:0,exhausted:false,summonedTurn:0});
  const g=createGame({mode:'online',seed:41,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.pending=null;
  for(const p of g.players)Object.assign(p,{hp:100,mana:30,maxMana:30,hand:[],deck:[],discard:[],field:[],traps:[],enchants:[],quests:[],removed:[]});
- const sword=card('SELECTED_SWORD'),target=mon('M1');g.players[0].hand=[sword];g.players[0].removed=Array.from({length:4},()=>card('STARTER_TRASH'));g.players[1].field=[target];g.players[1].hand=[card('M2')];room.room.game=g;
+ const sword=card('SELECTED_SWORD'),target=mon('M1');g.players[0].hand=[sword];g.players[0].removed=Array.from({length:4},()=>card('STARTER_TRASH'));g.players[0].field=[target];g.players[1].hand=[card('M2')];room.room.game=g;
  const send=(r,side,action)=>r.webSocketMessage(sockets[side],JSON.stringify({type:'action',action}));
  const action={type:'play',idx:0,sourceUid:sword.uid,targets:[target.uid]};
  await send(room,1,action);assert.equal(room.room.game.players[0].mana,30,'opponent cannot commit owner cast');
  await send(room,0,{...action,sourceUid:'old-card'});assert.equal(room.room.game.players[0].mana,30);
  await send(room,0,{...action,targets:['bad']});assert.equal(room.room.game.players[0].mana,30);
- await send(room,0,action);assert.equal(room.room.game.players[0].mana,29);assert.equal(room.room.game.players[1].field[0].tempAtk,4);assert.equal(room.room.game.pending,null);assert.equal(sockets[0].messages.at(-1).state.players[1].hand[0].id,'HIDDEN');
- const restored=new GameRoom(journalState(state),rewardTestEnv());await restored.webSocketMessage(sockets[0],JSON.stringify({type:'ready'}));assert.equal(restored.room.game.players[1].field[0].tempAtk,4);
- await send(restored,0,{type:'endTurn'});assert.equal(restored.room.game.players[1].field[0].tempAtk,0);
+ await send(room,0,action);assert.equal(room.room.game.players[0].mana,27);assert.equal(room.room.game.players[0].field[0].tempAtk,8);assert.equal(room.room.game.pending,null);assert.equal(sockets[0].messages.at(-1).state.players[1].hand[0].id,'HIDDEN');
+ const restored=new GameRoom(journalState(state),rewardTestEnv());await restored.webSocketMessage(sockets[0],JSON.stringify({type:'ready'}));assert.equal(restored.room.game.players[0].field[0].tempAtk,8);
+ await send(restored,0,{type:'endTurn'});assert.equal(restored.room.game.players[0].field[0].tempAtk,0);
  console.log('PASS authoritative sockets: wrong owner / stale card / invalid target rejection, atomic sword cast, private hand redaction, hibernation and exact buff expiry');
 }finally{await rm(dir,{recursive:true,force:true});}

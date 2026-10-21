@@ -1,0 +1,43 @@
+{
+  "origin": "http://127.0.0.1:5279",
+  "fixture": true,
+  "checks": [
+    "Hand hover/focus popup reports lifetime same-name usage in all three languages",
+    "Popup updates to 10 while the surviving hand card stays hovered",
+    "All six final illustrations decode from the game asset paths",
+    "Real board and prayer detail rendered; desktop and mobile screenshots captured"
+  ],
+  "assets": [
+    {
+      "id": "FARM",
+      "width": 1312,
+      "height": 1199
+    },
+    {
+      "id": "FARMER",
+      "width": 1313,
+      "height": 1198
+    },
+    {
+      "id": "HARVEST",
+      "width": 1312,
+      "height": 1199
+    },
+    {
+      "id": "APPLE",
+      "width": 1312,
+      "height": 1199
+    },
+    {
+      "id": "GOLDEN_APPLE",
+      "width": 1312,
+      "height": 1199
+    },
+    {
+      "id": "FARMER_PRAYER",
+      "width": 1312,
+      "height": 1199
+    }
+  ],
+  "errors": []
+}

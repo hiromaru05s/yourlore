@@ -36,6 +36,7 @@ for (const [key,tribe] of Object.entries(TRIBES)) CARD_SERIES['tribe:'+key]={nam
 
 /** Explicit creation/summon/deploy results. Existing-card retrieval is not creation. */
 export const CARD_GENERATES: Record<string,string[]> = {
+  FARM:['APPLE'], FARMER:['FARMER_PRAYER'], HARVEST:['GOLDEN_APPLE'], FARMER_PRAYER:['GOLDEN_APPLE'],
   SCARECROW:['TOKEN00'], LEVY:['SOLDIER2'], BUDGET:['SOLDIER2'], HALF_ELF:['WORLD_CARE'], BREWING:['WINE'],
   FORBIDDEN:ids(c=>c.t==='mon'&&!!c.tribe&&c.tribe!=='시초'), Q_TRIBE:ids(c=>c.t==='mon'&&!!c.tribe),
   M11:['INFKNIGHT'], NHEX:['CURSE'], AJIN:['STARTER_MANA'], GM6_0:['DRAGON_RIDER','ANTIQUE_DK'],

@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/balance-v60-server.mjs",
+    "tests/balance-v60.mjs",
     "tests/username-ui.mjs",
     "tests/private-usernames.mjs",
     "tests/auth-lifecycle.mjs",

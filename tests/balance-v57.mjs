@@ -17,7 +17,7 @@ try {
   test('catalog, costs and reviewed text',()=>{
     assert(Number(E.BALANCE_VERSION.slice(1))>=58);
     for(const [id,atk,hp] of [['M11',4,3],['NGA3',3,1],['ELITE',3,3],['GM6_8',12,1],['NGA4',7,1]])assert.deepEqual([DB[id].atk,DB[id].def],[atk,hp]);
-    assert.equal(playCost(card('ACID_RAIN')),4);assert.equal(DB.ACID_RAIN.cost,2);
+    assert.equal(playCost(card('ACID_RAIN')),5);assert.equal(DB.ACID_RAIN.cost,2);
     assert.equal(DB.NGA4.mult,2);assert.equal(DB.VITAL3.onSummon,undefined);
     assert(DB.NGA4.textJa.includes('両プレイヤー'));assert(!DB.VITAL3.textJa.includes('召喚時'));
   });
@@ -50,7 +50,7 @@ try {
   test('Warrior Golem adds one conditional counter to initial Guts',()=>{for(const ally of [null,'M1','GOLEM1']){let g=fresh();if(ally)g.players[0].field=[mon(ally)];g=play(g,'NGA3').state;assert.equal(g.players[0].field.at(-1).guts,ally==='GOLEM1'?2:1);}});
   test('Elite nine/ten composition boundary includes hand, deck, graveyard, field',()=>{for(const zone of ['hand','deck','discard','field'])for(const n of [9,10]){let g=fresh();const p=g.players[0];p.deck=Array.from({length:n-2},()=>card('STARTER_TRASH'));if(zone==='field')p.field=[mon('M1')];else p[zone].push(card('M1'));g=play(g,'ELITE').state;assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,n===9?2:0,zone+' '+n);}});
   test('Keeper loses summon healing and retains card-play Dew',()=>{let g=play(fresh(),'VITAL3').state;assert.equal(g.players[0].hp,1000);assert.equal(g.players[0].dew,0);g=play(g,'WORLD_CARE').state;assert.equal(g.players[0].dew,1);});
-  test('Acid Rain costs four to activate',()=>{for(const mana of [3,4]){const g=fresh();g.players[0].mana=mana;const r=play(g,'ACID_RAIN');assert.equal(r.state.players[0].enchants.length,mana===4?1:0);assert.equal(r.state.players[0].mana,mana===4?0:3);}});
+  test('Acid Rain costs five to activate',()=>{for(const mana of [4,5]){const g=fresh();g.players[0].mana=mana;const r=play(g,'ACID_RAIN');assert.equal(r.state.players[0].enchants.length,mana===5?1:0);assert.equal(r.state.players[0].mana,mana===5?0:4);}});
   test('Acid Rain checks every Decay kill: 600 seeds, exact four-plus boundary',()=>{
     const faces=new Set();
     for(let seed=1;seed<=600;seed++){let g=fresh(seed);g.players[0].enchants=[{card:card('ACID_RAIN'),turns:99}];g.players[1].field=[mon('M1',{decayCnt:2})];const r=play(g,'RUST_SLUG');const rolls=r.events.filter(e=>e.type==='dice'&&e.source.id==='ACID_RAIN');assert.equal(rolls.length,1);const face=rolls[0].rolls[0];faces.add(face);assert.equal(r.state.players[1].brand??0,face>=4?1:0);}

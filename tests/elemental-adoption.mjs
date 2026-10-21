@@ -12,8 +12,10 @@ try{
  // 2026-10-16 intentionally removes the turn-start offer roll (and its RNG
  // draws). Apply only that rule correction to the frozen visual baseline;
  // compare all remaining state/RNG instead of masking those differences.
- const baselineSource=frozenSource.replace('  if (!first) {\n    rollSupply(g, p);','  if (!first) {');
+ let baselineSource=frozenSource.replace('  if (!first) {\n    rollSupply(g, p);','  if (!first) {');
  assert.notEqual(baselineSource,frozenSource,'locate the retired automatic offer roll');
+ // v59 approved numeric rework: keep this visual parity baseline at 7 damage.
+ baselineSource=baselineSource.split('\n').map(line=>line.includes("case 'FIRE_BALL':")?line.replaceAll('6ダメージ','7ダメージ').replaceAll(', 6)',', 7)').replaceAll(', 6,',', 7,'):line).join('\n');
  const baseline=await bundle(baselineSource,'baseline',path.resolve('client/src/shared'));
  const {DB,STARTERS}=current;let seq=0,cases=0;
  const card=id=>({...DB[id]??STARTERS[id],uid:'qa-'+ ++seq});

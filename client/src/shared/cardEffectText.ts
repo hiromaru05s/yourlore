@@ -838,9 +838,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Deal 15 damage to the opponent. Restore 30 of your HP.\n\n【On Attack】Restore your HP by the damage this monster's attack deals to the opponent."
   },
   "FLAME": {
-    "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。",
-    "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다.",
-    "en": "【On Cast】Deal 2 damage to the opponent, you take 1 damage."
+    "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて10回以上なら、相手へのダメージは代わりに5になる。",
+    "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다. 이번 사용을 포함해 이 대전에서 자신이 동명 카드를 사용한 횟수가 10회 이상이면 상대에게 주는 데미지는 대신 5가 된다.",
+    "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 10 times this duel, including this use, deal 5 to the opponent instead."
   },
   "GHOST": {
     "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（持続）。\n\n【行動の終了後】1回の行動で相手の最大マナが増えた場合、自分に2ダメージを与える。その行動で相手が回復した場合も、自分に2ダメージ（それぞれ行動ごとに1回）。",
@@ -848,9 +848,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (lasting).\n\n【After an Action】If the opponent's max mana increases during an action, you take 2 damage. If they restore HP during that action, you also take 2 damage; each condition triggers once per action."
   },
   "BLOOD_RITE": {
-    "ja": "【場にある間】両プレイヤーへの魔法ダメージを無効にし、受けるはずだった量だけそのプレイヤーの体力を回復する。\n\n【期間】双方のターンが合計14ターン経過したターン開始時にこの魔法を破壊する。\n\n【破壊時】破壊されたこの魔法は墓地の代わりに自分のリフトへ送る。",
-    "ko": "【필드에 있는 동안】양 플레이어가 받을 마법 데미지를 무효화하고 그 양만큼 해당 플레이어의 체력 회복한다.\n\n【기간】양쪽 턴이 합계 14턴 지난 턴 시작시 이 마법을 파괴한다.\n\n【파괴 시】파괴된 이 마법은 묘지 대신 자신의 리프트로 보낸다.",
-    "en": "【While on the Field】Prevent spell damage to either player and restore that player's HP by the prevented amount.\n\n【Duration】Destroy this spell at turn start after 14 turns, counting both players.\n\n【On Destruction】When destroyed, send this spell to your Rift instead of your graveyard."
+    "ja": "【場にある間】両プレイヤーへの魔法ダメージを無効にし、受けるはずだった量だけそのプレイヤーの体力を回復する。\n\n【期間】双方のターンが合計10ターン経過したターン開始時にこの魔法を破壊する。\n\n【破壊時】破壊されたこの魔法は墓地の代わりに自分のリフトへ送る。",
+    "ko": "【필드에 있는 동안】양 플레이어가 받을 마법 데미지를 무효화하고 그 양만큼 해당 플레이어의 체력 회복한다.\n\n【기간】양쪽 턴이 합계 10턴 지난 턴 시작시 이 마법을 파괴한다.\n\n【파괴 시】파괴된 이 마법은 묘지 대신 자신의 리프트로 보낸다.",
+    "en": "【While on the Field】Prevent spell damage to either player and restore that player's HP by the prevented amount.\n\n【Duration】Destroy this spell at turn start after 10 turns, counting both players.\n\n【On Destruction】When destroyed, send this spell to your Rift instead of your graveyard."
   },
   "WEAKEN_ALL": {
     "ja": "【設置上限】この魔法は両方の場を合わせて最大2枚まで存在できる。\n\n【場にある間】両方の場の全モンスターの攻撃力-2（後から場に出るものも含む）。この魔法が場を離れると、この減少はなくなる。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
@@ -858,9 +858,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Field Limit】At most 2 copies across both fields.\n\n【While on the Field】All monsters on both fields have -2 ATK, including later arrivals. This reduction ends when this spell leaves the field.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
   },
   "GUILD_HALL": {
-    "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターかこのモンスターの攻撃で相手プレイヤーにダメージを与えるたび、このモンスターにカウンター1個を付与する。3個以上になると全て取り除き、相手に14ダメージを与える。",
-    "ko": "【공격으로 상대에게 데미지를 줄 때】자신 암살자 계열 몬스터 또는 이 몬스터의 공격으로 상대 플레이어에게 데미지를 줄 때마다 이 몬스터에 카운터 1개를 놓는다. 3개 이상이면 전부 제거하고 상대에게 14 데미지를 준다.",
-    "en": "【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster or this monster damages the opponent with an attack, put 1 counter on this monster. At 3 or more, remove them all and deal 14 damage to the opponent."
+    "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターの攻撃で相手プレイヤーにダメージを与えるたび、このモンスターにカウンター1個を付与する。3個以上になると全て取り除き、相手に14ダメージを与える。\n\n【場にある間】このモンスターはいかなる状況でも攻撃できない。",
+    "ko": "【공격으로 상대에게 데미지를 줄 때】자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 데미지를 줄 때마다 이 몬스터에 카운터 1개를 놓는다. 3개 이상이면 전부 제거하고 상대에게 14 데미지를 준다.\n\n【필드에 있는 동안】이 몬스터는 어떤 상황에서도 공격할 수 없다.",
+    "en": "【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster damages the opponent with an attack, put 1 counter on this monster. At 3 or more, remove them all and deal 14 damage to the opponent.\n\n【While on the Field】This monster cannot attack under any circumstances."
   },
   "FATE_WHEEL": {
     "ja": "【出目を確認した後】自分のダイス結果を確認後、その行動のダイス1個を振り直せる（自分の各ターン1回）。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
@@ -868,14 +868,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【After Seeing the Roll】After seeing your dice results, you may reroll the dice for that action, once during each of your turns.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
   },
   "COUNTERCALC": {
-    "ja": "【発動条件】相手の最大マナが7以下で、相手の場に永続魔法がある。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。",
-    "ko": "【발동 조건】상대의 최대 마나가 7 이하이고 상대의 필드에 영구마법이 있다.\n\n【발동 시】상대 영구마법 1장을 무작위로 파괴한다.",
-    "en": "【Play Requirement】The opponent's max mana is at most 7 and they control a persistent spell.\n\n【On Cast】Destroy 1 random enemy persistent spell."
+    "ja": "【発動条件】相手の最大マナが7以下で、相手の場に永続魔法がある。 同名カード合計で自分の各ターン1回まで使用できる。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。",
+    "ko": "【발동 조건】상대의 최대 마나가 7 이하이고 상대의 필드에 영구마법이 있다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.\n\n【발동 시】상대 영구마법 1장을 무작위로 파괴한다.",
+    "en": "【Play Requirement】The opponent's max mana is at most 7 and they control a persistent spell. You may play cards with this name only 1 time during each of your turns in total.\n\n【On Cast】Destroy 1 random enemy persistent spell."
   },
   "AMBUSH": {
-    "ja": "【発動条件】相手の最大マナが4。\n\n【発動時】相手に8ダメージを与える。自分に3ダメージを与える。この魔法を自分のリフトへ送る。",
-    "ko": "【발동 조건】상대의 최대 마나가 4.\n\n【발동 시】상대에게 8 데미지를 준다. 자신에게 3 데미지를 준다. 이 마법을 자신의 리프트로 보낸다.",
-    "en": "【Play Requirement】The opponent's max mana is exactly 4.\n\n【On Cast】Deal 8 damage to the opponent. You take 3 damage. Send this spell to your Rift."
+    "ja": "【発動条件】相手の最大マナが4。\n\n【発動時】相手に13ダメージを与える。その後、自分に8ダメージを与え、この魔法を自分のリフトへ送る。",
+    "ko": "【발동 조건】상대의 최대 마나가 4.\n\n【발동 시】상대에게 13 데미지를 준다. 그 후 자신에게 8 데미지를 주고 이 마법을 자신의 리프트로 보낸다.",
+    "en": "【Play Requirement】The opponent’s max mana is exactly 4.\n\n【On Cast】Deal 13 damage to the opponent. Then you take 8 damage and send this spell to your Rift."
   },
   "TRUMPET": {
     "ja": "【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。",
@@ -958,9 +958,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【While on the Field】This monster gets +2 ATK for every 2 Culls in your Rift."
   },
   "RUST_SHROOM": {
-    "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。",
-    "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).",
-    "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1; multiple copies do not stack."
+    "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。5以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
+    "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 5 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
+    "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 5 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
   },
   "CHOSEN_AREA": {
     "ja": "【発動条件】自分のリフトに「カル」が25枚以上ある。\n\n【発動時】自分は直ちに勝利する。",
@@ -1063,9 +1063,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Restore 2 of your HP."
   },
   "BREWING": {
-    "ja": "【自分のターン開始時】自分の手札の「ぶどう」「高品質ぶどう」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、この魔法にカウンターを付与する。\n\n【期間】発動後、6回目の自分のターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。",
-    "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 6번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
-    "en": "【At the Start of Your Turn】Send all Grapes and Premium Grapes in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Premium Grape sent.\n\n【Duration】At your 6th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
+    "ja": "【自分のターン開始時】自分の手札の「ぶどう」「高品質ぶどう」「りんご」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、「りんご」1枚につき5個、この魔法にカウンターを付与する。\n\n【期間】発動後、6回目の自分のターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。",
+    "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도·사과를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개, 사과 1장당 5개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 6번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
+    "en": "【At the Start of Your Turn】Send all Grapes, Premium Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Premium Grape and 5 per Apple sent.\n\n【Duration】At your 6th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
   },
   "MERCH1": {
     "ja": "【召喚時】自分の場の「商会」にカウンター3個を付与する。",
@@ -1148,19 +1148,19 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (lasting).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster."
   },
   "CASINO": {
-    "ja": "【ダイスを振った時】どちらかがダイス1個を振るたび、このモンスターにカウンター1個を付与する（カジノダイスは除く）。\n\n【カウンター蓄積時】12個ごとに12個を消費してカジノダイス1個を振る — 1-2: 自分に30ダメージを与える / 3-4: 相手に30ダメージを与える / 5: 相手に40ダメージを与える / 6: 相手の最大マナを3にする。",
-    "ko": "【주사위를 굴릴 때】누구든 주사위 1개를 굴릴 때마다 이 몬스터에 카운터 1개를 놓는다(카지노 주사위 제외).\n\n【카운터 축적 시】12개마다 12개를 소비해 카지노 주사위 1개를 굴린다 — 1-2: 자신에게 30 데미지를 준다 / 3-4: 상대에게 30 데미지를 준다 / 5: 상대에게 40 데미지를 준다 / 6: 상대의 최대 마나를 3으로 만든다.",
-    "en": "【When Dice Are Rolled】Whenever either player rolls 1 die, put 1 counter on this monster, except for Casino dice.\n\n【When Counters Accumulate】For every 12 counters, spend 12 to roll 1 Casino die — 1-2: You take 30 damage / 3-4: Deal 30 damage to the opponent / 5: Deal 40 damage to the opponent / 6: Set the opponent's max mana to 3."
+    "ja": "【ダイスを振った時】どちらかがダイス1個を振るたび、このモンスターにカウンター1個を付与する（カジノダイスは除く）。\n\n【カウンター蓄積時】12個ごとに12個を消費してカジノダイス1個を振る — 1-2: 自分に35ダメージを与える / 3-4: 相手に35ダメージを与える / 5: 相手に50ダメージを与える / 6: 相手のシールドと雫を全て取り除き、相手の体力を1にする。",
+    "ko": "【주사위를 굴릴 때】누구든 주사위 1개를 굴릴 때마다 이 몬스터에 카운터 1개를 놓는다(카지노 주사위 제외).\n\n【카운터 축적 시】12개마다 12개를 소비해 카지노 주사위 1개를 굴린다 — 1-2: 자신에게 35 데미지를 준다 / 3-4: 상대에게 35 데미지를 준다 / 5: 상대에게 50 데미지를 준다 / 6: 상대의 실드와 이슬을 모두 제거하고 상대의 체력을 1로 만든다.",
+    "en": "【When Dice Are Rolled】Whenever either player rolls 1 die, put 1 counter on this monster, except for Casino dice.\n\n【When Counters Accumulate】For every 12 counters, spend 12 to roll 1 Casino die — 1-2: You take 35 damage / 3-4: Deal 35 damage to the opponent / 5: Deal 50 damage to the opponent / 6: Remove all of the opponent's Shield and Dew, then set their HP to 1."
   },
   "REFRESH_HAND": {
-    "ja": "【発動時】カードを1枚引く。その後、自分の手札からカードを2枚まで選び、自分のリフトへ送る。",
-    "ko": "【발동 시】카드를 1장 뽑는다. 그 후 자신의 패에서 카드를 최대 2장 선택해 자신의 리프트로 보낸다.",
-    "en": "【On Cast】Draw 1 card. Then choose up to 2 cards in your hand and send them to your Rift."
+    "ja": "【発動時】カードを1枚引く。その後、自分の手札・墓地からカードを2枚まで選び、自分のリフトへ送る。",
+    "ko": "【발동 시】카드를 1장 뽑는다. 그 후 자신의 패·묘지에서 카드를 최대 2장 선택해 자신의 리프트로 보낸다.",
+    "en": "【On Cast】Draw 1 card. Then choose up to 2 cards from your hand and graveyard and send them to your Rift."
   },
   "FOCUS": {
-    "ja": "【発動時】自分のデッキ・墓地からカードを合計3枚まで選び、自分のリフトへ送る。",
-    "ko": "【발동 시】자신의 덱·묘지에서 카드를 합계 최대 3장 선택해 자신의 리프트로 보낸다.",
-    "en": "【On Cast】Choose up to 3 cards total from your deck and graveyard and send them to your Rift."
+    "ja": "【発動時】自分のデッキ・墓地・場からカードを合計3枚まで選び、自分のリフトへ送る。",
+    "ko": "【발동 시】자신의 덱·묘지·필드에서 카드를 합계 최대 3장 선택해 자신의 리프트로 보낸다.",
+    "en": "【On Cast】Choose up to 3 cards total from your deck, graveyard and field and send them to your Rift."
   },
   "GUILD_HQ": {
     "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターか「アサシンギルド支部」の攻撃で相手プレイヤーにダメージを与えるたび、相手に烙印カウンター1個を付与する。\n\n【自分のターン開始時】ナイトマーケットから「アサシン」系カード1枚を選び、マナを払って購入できる。",
@@ -1193,9 +1193,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "—"
   },
   "CASTLE": {
-    "ja": "【召喚時】このモンスターにカウンター2個を付与する。\n\n【攻撃を受ける時】このモンスターが攻撃を受ける時、このモンスターのカウンター1個を消費してその攻撃を無効にする。\n\n【場にある間】自分は購入コスト5以上のモンスターを召喚できない。\n\n【自分のモンスター召喚時】自分が「兵士」「騎士」を召喚するたび、このモンスターにカウンター1個を付与する。",
-    "ko": "【소환 시】이 몬스터에 카운터 2개를 놓는다.\n\n【공격받을 때】이 몬스터가 공격받을 때 이 몬스터의 카운터 1개를 소비해 그 공격을 무효화한다.\n\n【필드에 있는 동안】자신은 구매 코스트 5 이상 몬스터를 소환할 수 없다.\n\n【자신의 몬스터 소환 시】자신이 병사·기사를 소환할 때마다 이 몬스터에 카운터 1개를 놓는다.",
-    "en": "【On Summon】Put 2 counters on this monster.\n\n【When Attacked】When this monster is attacked, spend 1 counter from this monster to negate the attack.\n\n【While on the Field】You cannot summon monsters of purchase cost 5 or more.\n\n【When You Summon a Monster】Whenever you summon a Soldier or Knight, put 1 counter on this monster."
+    "ja": "【召喚時】このモンスターにカウンター2個を付与する。\n\n【攻撃を受ける時】このモンスターが攻撃を受ける時、このモンスターのカウンター1個を消費してその攻撃を無効にする。\n\n【場にある間】自分は購入コスト5以上のモンスターを召喚できない。\n\n【自分のモンスター召喚時】自分が「兵士」「騎士」「砲撃兵」「大砲兵」を召喚するたび、このモンスターにカウンター1個を付与する。",
+    "ko": "【소환 시】이 몬스터에 카운터 2개를 놓는다.\n\n【공격받을 때】이 몬스터가 공격받을 때 이 몬스터의 카운터 1개를 소비해 그 공격을 무효화한다.\n\n【필드에 있는 동안】자신은 구매 코스트 5 이상 몬스터를 소환할 수 없다.\n\n【자신의 몬스터 소환 시】자신이 병사·기사·포격병·대포병을 소환할 때마다 이 몬스터에 카운터 1개를 놓는다.",
+    "en": "【On Summon】Put 2 counters on this monster.\n\n【When Attacked】When this monster is attacked, spend 1 counter from this monster to negate the attack.\n\n【While on the Field】You cannot summon monsters of purchase cost 5 or more.\n\n【When You Summon a Monster】Whenever you summon a Soldier, Knight, Gunner or Heavy Gunner, put 1 counter on this monster."
   },
   "ACID_RAIN": {
     "ja": "【相手のモンスター腐敗破壊時】相手モンスターが腐敗で破壊されるたび、ダイス1個を振る。4以上なら、相手に烙印カウンター1個を付与する。",
@@ -1308,9 +1308,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Set every non-Egg monster's max HP to 1 and remove its accumulated damage (lasting).\n\n【When Either Player Summons a Monster】Apply the same change to non-Egg monsters summoned later."
   },
   "RIFT": {
-    "ja": "【自分のリフト追加時】自分のリフトにカードが1枚追加されるたび、自分の体力を5回復する。",
-    "ko": "【자신의 리프트에 추가 시】자신의 리프트에 카드가 1장 추가될 때마다 자신의 체력을 5 회복한다.",
-    "en": "【Card Added to Your Rift】Whenever 1 card is added to your Rift, restore 5 of your HP."
+    "ja": "【自分のリフト追加時】自分のリフトにカードが1枚追加されるたび、自分の体力を1回復する。",
+    "ko": "【자신의 리프트에 추가 시】자신의 리프트에 카드가 1장 추가될 때마다 자신의 체력을 1 회복한다.",
+    "en": "【Card Added to Your Rift】Whenever 1 card is added to your Rift, restore 1 of your HP."
   },
   "FREE_REWARD": {
     "ja": "【自分のカード使用時】自分が購入コスト0のカードを使用するたび、カードを1枚引く。",
@@ -1488,9 +1488,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the End of Your Turn】Randomly select 1 target from the opponent and their monsters, then deal 2 damage to it."
   },
   "FARM_KEEPER": {
-    "ja": "【自分のターン終了時】自分の場に「醸造」があれば「かかし」2体を召喚する。",
-    "ko": "【자신의 턴 종료 시】자신의 필드에 양조가 있으면 허수아비 2체 소환한다.",
-    "en": "【At the End of Your Turn】If you control Brewing, summon 2 Scarecrows."
+    "ja": "【自分のターン終了時】自分の場に「農場」か「醸造」があれば、「かかし」3体を召喚する。\n\n【場にある間】自分の場の「農民」の最大体力+5。このモンスターが場を離れると、この増加はなくなる。",
+    "ko": "【자신의 턴 종료 시】자신의 필드에 농장 또는 양조가 있으면 허수아비 3체를 소환한다.\n\n【필드에 있는 동안】자신의 필드의 농민의 최대 체력 +5. 이 몬스터가 필드를 떠나면 이 증가는 사라진다.",
+    "en": "【At the End of Your Turn】If you control Farm or Brewing, summon 3 Scarecrows.\n\n【While on the Field】Your Farmers have +5 max HP. This increase ends when this monster leaves the field."
   },
   "MIMIC_HUNTER": {
     "ja": "【自分のターン終了時】両方の場の「ミミック」を全て破壊する（同名カードのみ）。",
@@ -1638,9 +1638,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Deal 6 damage to all monsters on both fields."
   },
   "FIRE_BALL": {
-    "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、6ダメージを与える。",
-    "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 6 데미지를 준다.",
-    "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 6 damage to that target."
+    "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、7ダメージを与える。",
+    "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 7 데미지를 준다.",
+    "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 7 damage to that target."
   },
   "FIRE_ARROW": {
     "ja": "【発動時】自分に1ダメージを与える。相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、1ダメージを与える処理を3回行う。",
@@ -1753,9 +1753,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Destroy all enemy Shield if it is less than your monsters’ total ATK."
   },
   "SELECTED_SWORD": {
-    "ja": "【発動時】どちらかの場のモンスター1体を選び、自分のリフトの「カル」1枚につき、その攻撃力+1（このターン終了まで）。",
-    "ko": "【발동 시】어느 쪽 필드든 몬스터 1체를 선택해 자신의 리프트의 컬 1장당 그 공격력 +1(이번 턴 종료까지).",
-    "en": "【On Cast】Choose 1 monster on either field; it gets +1 ATK per Cull in your Rift until this turn ends."
+    "ja": "【発動時】自分の場のモンスター1体を選び、自分のリフトの「カル」1枚につき、その攻撃力+2。この強化はこのターン終了時になくなる。",
+    "ko": "【발동 시】자신의 필드의 몬스터 1체를 선택해 자신의 리프트의 컬 1장당 공격력 +2. 이 강화는 이번 턴 종료 시 사라진다.",
+    "en": "【On Cast】Choose 1 monster on your field. It gets +2 ATK per Cull in your Rift until this turn ends."
   },
   "SELECTED_SHIELD": {
     "ja": "【発動時】自分のリフトの「カル」枚数と同じ量のシールドを自分が得る。",
@@ -1806,5 +1806,35 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "ja": "【自分のターン開始時】発動後、4回目の自分のターン開始時に「吸血契約」「吸血の極意」から1枚を選び、その新しいカードを自分の手札に加える。その後、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。",
     "ko": "【자신의 턴 시작 시】발동 후 자신의 4번째 턴 시작에 흡혈 계약 또는 흡혈의 극의 중 1장을 선택해 새 카드를 자신의 패에 넣는다. 그 후 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다.",
     "en": "【At the Start of Your Turn】At your 4th turn start after casting this spell, choose Vampiric Pact or Vampiric Secret Art and add a new copy to your hand. Then send this spell to your graveyard. Do not count the turn it was cast or the opponent’s turns."
+  },
+  "FARM": {
+    "ja": "【自分のターン開始時】発動後、7回目の自分のターン開始時に、新しい「りんご」1枚を自分の手札に加え、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。場を離れると経過ターン数はリセットされる。",
+    "ko": "【자신의 턴 시작 시】발동 후 자신의 7번째 턴 시작에 새 사과 1장을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다. 필드를 떠나면 경과 턴 수는 초기화된다.",
+    "en": "【At the Start of Your Turn】At your 7th turn start after casting, add a new Apple to your hand and send this spell to your graveyard. Do not count its casting turn or opposing turns. Its progress resets when it leaves the field."
+  },
+  "FARMER": {
+    "ja": "【召喚時】自分の場に「農場」があり、「農民の祈り」がなければ、新しい「農民の祈り」1枚を自分の場に展開する。",
+    "ko": "【소환 시】자신의 필드에 농장이 있고 농민의 기도가 없으면 새 농민의 기도 1장을 자신의 필드에 전개한다.",
+    "en": "【On Summon】If you control Farm and no Farmer’s Prayer, deploy a new Farmer’s Prayer to your field."
+  },
+  "HARVEST": {
+    "ja": "【場にある間】自分の「農場」の効果でりんごを収穫した時、新しい「黄金のりんご」1枚を自分の手札に加え、この魔法を自分の墓地へ送る。「農民の祈り」で収穫物が変わった場合も発動する。",
+    "ko": "【필드에 있는 동안】자신의 농장 효과로 사과를 수확하면 새 황금 사과 1장을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다. 농민의 기도로 수확물이 바뀐 경우에도 발동한다.",
+    "en": "【While on the Field】When your Farm harvests an Apple, add a new Golden Apple to your hand and send this spell to your graveyard. This also triggers when Farmer’s Prayer replaces the harvest."
+  },
+  "APPLE": {
+    "ja": "【発動時】自分の体力を7回復する。自分の場に「エルフ」系か「世界樹」系のカードがあれば、さらに自分の体力を7回復する。",
+    "ko": "【발동 시】자신의 체력을 7 회복한다. 자신의 필드에 엘프 또는 세계수 계열 카드가 있으면 추가로 자신의 체력을 7 회복한다.",
+    "en": "【On Cast】Restore 7 of your HP. If you control an Elf-family or World Tree-family card, restore another 7 of your HP."
+  },
+  "GOLDEN_APPLE": {
+    "ja": "【発動時】自分は雫8を得る。",
+    "ko": "【발동 시】자신은 이슬 8을 얻는다.",
+    "en": "【On Cast】Gain 8 Dew."
+  },
+  "FARMER_PRAYER": {
+    "ja": "【設置上限】自分の場に最大1枚。「農民」の効果でのみ展開される。\n\n【場にある間】自分が入手する新しい「りんご」は、全て代わりに「黄金のりんご」になる。既に所持しているりんごのドロー・回収では変換しない。",
+    "ko": "【설치 제한】자신의 필드에 최대 1장. 농민의 효과로만 전개된다.\n\n【필드에 있는 동안】자신이 새로 얻는 사과는 모두 대신 황금 사과가 된다. 이미 소유한 사과를 뽑거나 회수할 때는 변환하지 않는다.",
+    "en": "【Field Limit】At most 1 on your field. Deployed only by Farmer.\n\n【While on the Field】Every new Apple you obtain becomes a Golden Apple instead. Drawing or recovering an Apple you already own does not transform it."
   }
 };

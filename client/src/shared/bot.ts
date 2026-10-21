@@ -1,7 +1,7 @@
 // Four difficulty levels share the same rules and legal-action safety.
 // Hard/hell use paired imperfect-information rollouts; easy/normal retain mistakes.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
+import { purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
 import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { cardPower } from "./cardEval";
 import { searchDecide } from "./botSearch";
@@ -551,7 +551,7 @@ function lethalActions(g: GameState): Action[] {
       uniqueCards(p.discard, (a, b) => cardPower(b) - cardPower(a)).forEach((c) => add(pick(c.uid)));
       if (pend.allowCancel) add(pick(null));
     } else if (pend.kind === "purge") {
-      const zpool = pend.data?.zone === "hand" ? [...p.hand] : pend.data?.zone === "discard" ? [...p.discard] : [...p.deck, ...p.discard];
+      const zpool = purgeChoices(p, pend);
       uniqueCards(zpool, (a, b) => cardPower(a) - cardPower(b)).forEach((c) => add(pick(c.uid)));
       if (pend.allowCancel) add(pick(null));
     }
@@ -717,8 +717,7 @@ function autoTarget(g: GameState): Action {
   }
   if (pending.kind === "purge") { // 덱·묘지(또는 패)에서 제외: 저가치부터, 살릴 가치가 있으면 종료
     const discOnly = pending.data?.zone === "discard"; // 시련의 영역: 묘지에서만 — 컬 우선 제외 (선택받은 시리즈 연료)
-    const handOnly = pending.data?.zone === "hand"; // 리프레시(v35): 패에서만
-    const pool = (handOnly ? [...p.hand] : discOnly ? [...p.discard] : [...p.deck, ...p.discard]).sort((a, b) => cardPower(a) - cardPower(b));
+    const pool = purgeChoices(p, pending).sort((a, b) => cardPower(a) - cardPower(b));
     if (pending.reason === "handCap") { // v42: 턴 종료 손패 이월 — 반드시 val장 버린다: 가장 가치 낮은 카드부터
       const worst0 = pool[0] ?? p.hand[p.hand.length - 1];
       return { type: "pick", uid: worst0 ? worst0.uid : null };

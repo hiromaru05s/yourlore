@@ -7,7 +7,7 @@ export { CARD_EFFECT_HEADINGS, CARD_RULE_GROUP_LABELS, effectRuleGroup } from ".
 export type KeywordNamesOf = (c: CardDef, lang: "ko" | "ja" | "en") => string[];
 
 // The board uses global-turn limits for these two enchantments.
-export const ENCH_TURN_LIMITS: Record<string, number> = { spellHeal: 14, ancientCiv: 9 };
+export const ENCH_TURN_LIMITS: Record<string, number> = { spellHeal: 10, ancientCiv: 9 };
 
 /** Only explicit authored paragraph boundaries create sections. */
 export function effectSections(text: string): { heading: string; body: string }[] {

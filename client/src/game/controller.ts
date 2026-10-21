@@ -1,3 +1,4 @@
+import { purgeChoices } from '../shared/engine';
 import {summonFaceFactory} from '../ui/summon/face';
 import {syncCardEffects,localCardEffect} from '../ui/cardFinish';
 import { seekerLevel, type ExperienceReceipt } from '../shared/progression';
@@ -1228,8 +1229,7 @@ export abstract class BaseController implements BoardHandlers {
         let pool: CardInst[];
         if (g.pending.kind === "purge") {
           // 시련의 영역(trialExile): 묘지에서만 · 리프레시: 패에서만
-          const zone = g.pending.data?.zone;
-          pool = (zone === "hand" ? [...me.hand] : zone === "discard" ? [...me.discard] : [...me.deck, ...me.discard]).filter(c=>handCap||!hasPassive(c,"relic")).sort((a, b) => a.cost - b.cost);
+          pool = purgeChoices(me, g.pending).filter(c=>handCap||!hasPassive(c,"relic")).sort((a, b) => a.cost - b.cost);
         }
         else if (g.pending.kind === "oppRmz") pool = [...(opp.removed ?? [])].sort((a, b) => a.cost - b.cost);
         else { // oppBoard: 상대 몬스터(아우라 제외) + 세트 함정(뒷면) + 영구마법 · 필터: noMon(함정·영구마법만) / trapOnly / enchOnly · anySide면 내 필드도 대상

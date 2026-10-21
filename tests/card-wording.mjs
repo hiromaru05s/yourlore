@@ -12,7 +12,7 @@ try {
   const play=(g,id)=>{g.players[g.cur].hand.push(card(id));return E.reduce(g,{type:'play',idx:g.players[g.cur].hand.length-1}).state;};
   // These are behavioral discrepancies discovered in the wording audit. Assert
   // actual engine outcomes, not a regex against the same text implementation.
-  {let g=fresh();g.players[1].maxMana=4;g=play(g,'AMBUSH');assert.equal(g.players[1].hp,92);assert.equal(g.players[0].hp,97);}
+  {let g=fresh();g.players[1].maxMana=4;g=play(g,'AMBUSH');assert.equal(g.players[1].hp,87);assert.equal(g.players[0].hp,92);}
   {let g=fresh();g.players[0].field=[mon('TGE3')];g=play(g,'GENESIS_MAGIC');assert.equal(g.players[0].field[0].atkMod,4);assert.equal(g.players[0].field[0].defMod,4);}
   {for(const empty of [true,false]){let g=fresh();g.players[1].maxMana=10;if(!empty)g.players[0].field=[mon('M1')];g=play(g,'AHEUK');assert.equal(g.players[1].maxMana,empty?8:9);}}
   {let g=fresh();const own=mon('M1'),enemy=mon('M1');own.atk=1;own.def=30;enemy.atk=2;enemy.def=2;g.players[0].field=[own];g.players[1].field=[enemy];g=play(g,'WALLBREAK1');assert(!g.players[0].field.some(m=>m.uid===own.uid),'highest stat sum on either field is automatic');assert(g.players[1].field.some(m=>m.uid===enemy.uid));assert.equal(g.pending,null);}

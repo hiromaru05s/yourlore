@@ -12,11 +12,11 @@ try {
  const reviewed=(g,c,targets)=>E.reduce(g,{type:'play',idx:g.players[g.cur].hand.findIndex(h=>h.uid===c.uid),sourceUid:c.uid,...(targets===undefined?{}:{targets})});
  const check=(label,fn)=>{fn();count++;console.log('PASS',label);};
  const culls=n=>Array.from({length:n},()=>card('STARTER_TRASH'));
- for(const owner of [0,1])for(const n of [0,1,4])check(`Sword either-side choice, exact amount and casting-turn expiry (${owner}/${n})`,()=>{
-  let g=fresh();g.cur=owner;g.players[owner].removed=culls(n);g.players[1-owner].field=[mon('M1')];const target=g.players[1-owner].field[0];target.tempAtk=2;const c=card('SELECTED_SWORD');g.players[owner].hand=[c];
+ for(const owner of [0,1])for(const n of [0,1,4])check(`Sword own-side choice, exact amount and casting-turn expiry (${owner}/${n})`,()=>{
+  let g=fresh();g.cur=owner;g.players[owner].removed=culls(n);g.players[owner].field=[mon('M1')];const target=g.players[owner].field[0];target.tempAtk=0;const c=card('SELECTED_SWORD');g.players[owner].hand=[c];
   assert(E.playIntent(g,owner,c).pool.some(m=>m.uid===target.uid));
-  g=reviewed(g,c,[target.uid]).state;assert.equal(g.pending,null);assert.equal(g.players[1-owner].field[0].tempAtk,n+2);assert.equal(g.players[owner].mana,29);assert.equal(g.players[owner].removed.at(-1).id,c.id);
-  g=step(g,{type:'endTurn'});assert.equal(g.players[1-owner].field[0].tempAtk,2,'only this cast bonus expires');
+  g=reviewed(g,c,[target.uid]).state;assert.equal(g.pending,null);assert.equal(g.players[owner].field[0].tempAtk,2*n);assert.equal(g.players[owner].mana,27);assert.equal(g.players[owner].removed.at(-1).id,c.id);
+  g=step(g,{type:'endTurn'});assert.equal(g.players[owner].field[0].tempAtk,0,'the cast bonus expires');
  });
  check('Sword empty board / enemy Aura / invalid target rejected before costs',()=>{
   for(const scenario of ['empty','aura','bogus','zero']){let g=fresh();const c=card('SELECTED_SWORD');g.players[0].hand=[c];if(scenario!=='empty'){const m=mon('M1');if(scenario==='aura')m.passive=['aura'];g.players[1].field=[m];}
@@ -24,8 +24,8 @@ try {
   }
  });
  check('Legacy Sword choice may be declined; timeout never buffs enemy; bot chooses ally',()=>{
-  let g=fresh();g.players[0].removed=culls(4);g.players[1].field=[mon('M1')];g.players[0].hand=[card('SELECTED_SWORD')];g=step(g,{type:'play',idx:0});assert(g.pending.allowCancel);const stopped=E.resolveTurnTimeout(g).state;assert.equal(stopped.players[1].field[0].tempAtk,0);assert.equal(stopped.cur,1);
-  assert.equal(E.greedyDecide(g).uid,null);g=step(g,{type:'pick',uid:null});assert.equal(g.pending,null);
+  let g=fresh();g.players[0].removed=culls(4);g.players[0].field=[mon('M1')];g.players[1].field=[mon('M1')];g.players[0].hand=[card('SELECTED_SWORD')];g=step(g,{type:'play',idx:0});assert(g.pending.allowCancel);const stopped=E.resolveTurnTimeout(g).state;assert.equal(stopped.players[1].field[0].tempAtk,0);assert.equal(stopped.cur,1);
+  assert.equal(E.greedyDecide(g).uid,g.players[0].field[0].uid);g=step(g,{type:'pick',uid:null});assert.equal(g.pending,null);
  });
  check('Preview is pure, hides traps, canonicalizes deck order, never exposes draw or RNG',()=>{
   const g=fresh();g.players[0].deck=[card('M2'),card('M1')];g.players[1].traps=[{card:{...card('M1'),t:'trap',react:'secret'}}];
@@ -64,7 +64,7 @@ try {
  });
  check('Rune echo keeps its second Sword choice instead of silently cancelling it',()=>{
   let g=fresh();g.players[0].removed=culls(4);g.players[0].field=[mon('M1')];g.players[0].enchants=[{card:card('RUNE3'),turns:99,bornTurn:0}];const c=card('SELECTED_SWORD');g.players[0].hand=[c];const uid=g.players[0].field[0].uid;
-  g=reviewed(g,c,[uid]).state;assert.equal(g.players[0].field[0].tempAtk,4);assert.equal(g.pending.reason,'SELECTED_SWORD');g=step(g,{type:'pick',uid});assert.equal(g.players[0].field[0].tempAtk,8);assert.equal(g.players[0].mana,29);
+  g=reviewed(g,c,[uid]).state;assert.equal(g.players[0].field[0].tempAtk,8);assert.equal(g.pending.reason,'SELECTED_SWORD');g=step(g,{type:'pick',uid});assert.equal(g.players[0].field[0].tempAtk,16);assert.equal(g.players[0].mana,27);
  });
  check('Zero shield and risky summon/chest/global effects are reviewed',()=>{const g=fresh();for(const id of ['SELECTED_SHIELD','M5','TGE3','VOID_APOSTLE','STARTER_CHEST','MAGMA_RAIN','HANDRESET','BLOOD_JOY','TRIAL_AREA'])assert(E.needsCastReview(g,0,card(id)),id);assert(!E.needsCastReview(g,0,card('STARTER_TRASH')));});
  // Every metadata-driven preselection must resolve exactly like the original

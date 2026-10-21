@@ -24,8 +24,9 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
   switch (c.id) {
     // These IDs override their legacy act with automatic target rules.
     case 'WALLBREAK1': case 'SNIPE1': return null;
-    case 'FOCUS': case 'PURGE_ALL': return plan('purge',[...p.deck,...p.discard,c].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),c.id==='FOCUS'?3:99,0);
-    case 'SELECTED_SWORD': return plan(c.id, [...p.field, ...enemy]);
+    case 'FOCUS': return plan('purge',[...p.deck,...p.discard,c,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),3,0);
+    case 'PURGE_ALL': return plan('purge',[...p.deck,...p.discard,c].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),99,0);
+    case 'SELECTED_SWORD': return plan(c.id, p.field);
     case 'TRUMPET': return plan('buffTurn', p.field, 3, 0);
     case 'AEM': return plan('golemBuff', p.field.filter(isGolem), 2, 2);
     case 'NL_SECRET': return plan('nlTarget', p.field);
