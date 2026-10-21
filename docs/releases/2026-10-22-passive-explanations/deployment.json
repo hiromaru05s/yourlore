@@ -1,0 +1,14 @@
+{
+  "source": "4eb5ac617107ed9c1040ff7d31520f98688b904a",
+  "deploymentId": "d25a227d-374d-445a-b658-4859f1c2b4ee",
+  "annotations": {
+    "workers/message": "4eb5ac617107ed9c1040ff7d31520f98688b904a guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "b4ae7063-4839-4957-8be9-65ca55953e50",
+      "percentage": 100
+    }
+  ]
+}

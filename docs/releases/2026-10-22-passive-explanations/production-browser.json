@@ -1,0 +1,681 @@
+{
+  "base": "https://yourlore.xyz",
+  "scope": "production assets and real card menu with isolated API fixtures",
+  "checks": [
+    {
+      "id": "M6",
+      "key": "counter",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "NGA4",
+      "key": "dual",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "ASSASSIN1",
+      "key": "ambush",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR2",
+      "key": "aura",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TOKEN00",
+      "key": "void",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "WINE",
+      "key": "void",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "FORESIGHT",
+      "key": "void",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "GOLEM1",
+      "key": "guts",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "RUST_SLUG",
+      "key": "decay",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR5",
+      "key": "majesty",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "CASTLE",
+      "key": "taunt",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "key": "evade",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "STARTER_MANA",
+      "key": "relic",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "VOID_RITE",
+      "key": "void",
+      "lang": "ja",
+      "width": 1280,
+      "rows": 5,
+      "returnFocus": true
+    },
+    {
+      "id": "M6",
+      "key": "counter",
+      "lang": "ja",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "NGA4",
+      "key": "dual",
+      "lang": "ja",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "ASSASSIN1",
+      "key": "ambush",
+      "lang": "ja",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR2",
+      "key": "aura",
+      "lang": "ja",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TOKEN00",
+      "key": "void",
+      "lang": "ja",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "WINE",
+      "key": "void",
+      "lang": "ja",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "FORESIGHT",
+      "key": "void",
+      "lang": "ja",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "GOLEM1",
+      "key": "guts",
+      "lang": "ja",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "RUST_SLUG",
+      "key": "decay",
+      "lang": "ja",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR5",
+      "key": "majesty",
+      "lang": "ja",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "CASTLE",
+      "key": "taunt",
+      "lang": "ja",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "key": "evade",
+      "lang": "ja",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "STARTER_MANA",
+      "key": "relic",
+      "lang": "ja",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "VOID_RITE",
+      "key": "void",
+      "lang": "ja",
+      "width": 390,
+      "rows": 5,
+      "returnFocus": true
+    },
+    {
+      "id": "M6",
+      "key": "counter",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "NGA4",
+      "key": "dual",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "ASSASSIN1",
+      "key": "ambush",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR2",
+      "key": "aura",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TOKEN00",
+      "key": "void",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "WINE",
+      "key": "void",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "FORESIGHT",
+      "key": "void",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "GOLEM1",
+      "key": "guts",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "RUST_SLUG",
+      "key": "decay",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR5",
+      "key": "majesty",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "CASTLE",
+      "key": "taunt",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "key": "evade",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "STARTER_MANA",
+      "key": "relic",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "VOID_RITE",
+      "key": "void",
+      "lang": "ko",
+      "width": 1280,
+      "rows": 5,
+      "returnFocus": true
+    },
+    {
+      "id": "M6",
+      "key": "counter",
+      "lang": "ko",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "NGA4",
+      "key": "dual",
+      "lang": "ko",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "ASSASSIN1",
+      "key": "ambush",
+      "lang": "ko",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR2",
+      "key": "aura",
+      "lang": "ko",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TOKEN00",
+      "key": "void",
+      "lang": "ko",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "WINE",
+      "key": "void",
+      "lang": "ko",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "FORESIGHT",
+      "key": "void",
+      "lang": "ko",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "GOLEM1",
+      "key": "guts",
+      "lang": "ko",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "RUST_SLUG",
+      "key": "decay",
+      "lang": "ko",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR5",
+      "key": "majesty",
+      "lang": "ko",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "CASTLE",
+      "key": "taunt",
+      "lang": "ko",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "key": "evade",
+      "lang": "ko",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "STARTER_MANA",
+      "key": "relic",
+      "lang": "ko",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "VOID_RITE",
+      "key": "void",
+      "lang": "ko",
+      "width": 390,
+      "rows": 5,
+      "returnFocus": true
+    },
+    {
+      "id": "M6",
+      "key": "counter",
+      "lang": "en",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "NGA4",
+      "key": "dual",
+      "lang": "en",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "ASSASSIN1",
+      "key": "ambush",
+      "lang": "en",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR2",
+      "key": "aura",
+      "lang": "en",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TOKEN00",
+      "key": "void",
+      "lang": "en",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "WINE",
+      "key": "void",
+      "lang": "en",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "FORESIGHT",
+      "key": "void",
+      "lang": "en",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "GOLEM1",
+      "key": "guts",
+      "lang": "en",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "RUST_SLUG",
+      "key": "decay",
+      "lang": "en",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR5",
+      "key": "majesty",
+      "lang": "en",
+      "width": 1280,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "CASTLE",
+      "key": "taunt",
+      "lang": "en",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "key": "evade",
+      "lang": "en",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "STARTER_MANA",
+      "key": "relic",
+      "lang": "en",
+      "width": 1280,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "VOID_RITE",
+      "key": "void",
+      "lang": "en",
+      "width": 1280,
+      "rows": 5,
+      "returnFocus": true
+    },
+    {
+      "id": "M6",
+      "key": "counter",
+      "lang": "en",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "NGA4",
+      "key": "dual",
+      "lang": "en",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "ASSASSIN1",
+      "key": "ambush",
+      "lang": "en",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR2",
+      "key": "aura",
+      "lang": "en",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "TOKEN00",
+      "key": "void",
+      "lang": "en",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "WINE",
+      "key": "void",
+      "lang": "en",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "FORESIGHT",
+      "key": "void",
+      "lang": "en",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "GOLEM1",
+      "key": "guts",
+      "lang": "en",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "RUST_SLUG",
+      "key": "decay",
+      "lang": "en",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "TAR5",
+      "key": "majesty",
+      "lang": "en",
+      "width": 390,
+      "rows": 2,
+      "returnFocus": true
+    },
+    {
+      "id": "CASTLE",
+      "key": "taunt",
+      "lang": "en",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "key": "evade",
+      "lang": "en",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "STARTER_MANA",
+      "key": "relic",
+      "lang": "en",
+      "width": 390,
+      "rows": 3,
+      "returnFocus": true
+    },
+    {
+      "id": "VOID_RITE",
+      "key": "void",
+      "lang": "en",
+      "width": 390,
+      "rows": 5,
+      "returnFocus": true
+    }
+  ],
+  "errors": [],
+  "loadRetries": [],
+  "networkFailures": []
+}
