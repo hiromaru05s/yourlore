@@ -1,0 +1,32 @@
+{
+  "source": "17bf2419f4c1933946741d826a3d2e377ae27196",
+  "deployment": "b3ade7dc-9650-4b40-ae89-a142c34e3d27",
+  "versions": [
+    {
+      "version_id": "12e1537a-8829-4f9b-8e54-3538b283a386",
+      "percentage": 100
+    }
+  ],
+  "deployedAt": "2026-10-21T14:31:41.511528Z",
+  "origin": "https://yourlore.xyz",
+  "regression": {
+    "passed": 200,
+    "total": 200
+  },
+  "text": {
+    "cards": 367,
+    "locales": 3,
+    "renderings": 1101
+  },
+  "assetParity": {
+    "matched": 748,
+    "total": 748
+  },
+  "scope": "Actual production assets; browser interaction report uses API fixtures, not an authenticated live match.",
+  "productionBrowser": {
+    "checks": 36,
+    "errors": [],
+    "loadRetries": [],
+    "networkFailures": []
+  }
+}
