@@ -24,6 +24,7 @@ export type Rarity='R'|'SR'|'SSR';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z),lerp=T.MathUtils.lerp;
 export class LibraryScene{
  renderer:T.WebGLRenderer;scene=new T.Scene();camera=new T.PerspectiveCamera(40,1,.1,90);composer:EffectComposer;bokeh:BokehPass;contact:ContactShadowPass;bloom:UnrealBloomPass;ready:Promise<void>;books:Grimoire[]=[];variant=0;rarity:Rarity='SSR';width=1;height=1;
+ hideRewardModels=false;
  private disposed=false;featuredSleeve='ivory';
  radiance!:Radiance;count=1;rewardKind:RewardKind='sleeve';introLight:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;env:T.WebGLRenderTarget;mana=new T.PointLight('#90d8ff',0,7,2);wake:ManaWake;dust:T.Points;halo:T.Sprite;lastT=0;library:ReturnType<typeof arcaneLibrary>;
  constructor(public canvas:HTMLCanvasElement){
@@ -75,6 +76,7 @@ export class LibraryScene{
   this.radiance.rewards.featured=this.featuredSleeve;this.radiance.kind=this.rewardKind;this.radiance.count=this.count;this.radiance.rarity=rarity;const burst=this.radiance.render(seconds,v,this.camera,reduced);
   this.bloom.strength+=burst.charge*.30;this.renderer.toneMappingExposure-=burst.charge*.12;
   this.mana.intensity+=burst.charge*1.4;
+  this.radiance.rewards.root.visible=!this.hideRewardModels;
   this.lastT=playback/studies[v].duration;this.composer.render();
  }
  dispose(){
