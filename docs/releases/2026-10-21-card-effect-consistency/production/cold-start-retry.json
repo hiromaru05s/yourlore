@@ -1,0 +1,29 @@
+{
+  "firstRun": "24/24 card inspections passed; 0 page errors",
+  "additionalCaptureAttempt": {
+    "result": "timeout",
+    "stage": "HOME screen-loader waiting to detach",
+    "timeoutMs": 90000
+  },
+  "note": "This separate cold-start failure does not count as a passing visual check. A retry with a longer asset-loading timeout is recorded separately.",
+  "additionalCaptureRetry": {
+    "reached": "WORLD_TREE card inspection, complete frame and effect hierarchy visible",
+    "result": "global networkidle wait timeout",
+    "timeoutMs": 90000,
+    "pageErrors": [],
+    "correction": "Wait for the visible card frame to decode instead of all page traffic becoming idle."
+  },
+  "languageSwitchAttempt": {
+    "result": "16/24 checks passed, then English search timed out",
+    "pageErrors": [],
+    "cause": "Language change remounts the cards screen asynchronously; test filled the old search before remount.",
+    "correction": "Wait for the prior search element to detach and the new screen loader to finish before searching."
+  },
+  "finalRun": {
+    "result": "PASS",
+    "checks": 24,
+    "pageErrors": [],
+    "readiness": "Wait for language screen remount and visible card frame decode",
+    "report": "browser.json"
+  }
+}

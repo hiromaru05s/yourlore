@@ -1,0 +1,28 @@
+{
+  "origin": "https://yourlore.xyz",
+  "source": "4326e0428283de5521cf70ac435e458fa95fecfc",
+  "deployment": "58cd703e-0a83-4b0c-946b-5ed5e1e97502",
+  "versions": [
+    {
+      "version_id": "14d6e89a-163f-40f0-b34f-133ca07d124a",
+      "percentage": 100
+    }
+  ],
+  "deployedAt": "2026-10-21T13:55:39.43098Z",
+  "validation": {
+    "textCards": 361,
+    "textLocales": 3,
+    "textRenderings": 1083,
+    "changedCards": 349,
+    "changedTexts": 602,
+    "regression": {
+      "passed": 193,
+      "total": 193
+    },
+    "localLayouts": 120,
+    "productionLayouts": 24,
+    "productionBrowserErrors": [],
+    "matchingAssets": 116
+  },
+  "scope": "Production asset parity and actual card-menu navigation. Browser API fixtures only; no authenticated live match or player-account mutation."
+}
