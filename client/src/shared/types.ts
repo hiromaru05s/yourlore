@@ -110,6 +110,7 @@ export interface RevealedCard {
 export interface PlayerState {
   /** Server-owned lifetime duel counters; included in rollback snapshots. */
   activity?: Partial<Record<import("./progression").Activity, number>>;
+  // Legacy expansion.dominion values may remain in saved states; they no longer change play costs.
   expansion?: { turn: number; extraDraw: number; firePlayed: string[]; fireDiscount: number; dominion: number; directHits?: string[]; directHitTurn?: number; lastDirectHits?: number; lastDirectTurn?: number; reversePlays?: number };
 
   id: string; // user id (online) or "bot"/"local"
@@ -172,7 +173,7 @@ export interface PlayerState {
   defendHeal: number; // heal this much whenever this player is attacked
   manaGainNext: number; // max mana to gain at the start of this player's next turn
   skipNext: boolean; // legacy: if true, this player's next turn is skipped
-  skipTurnSources?: ("TIMEWARP" | "BLACK_NOVA" | null)[]; // FIFO provenance; old saves may omit it
+  skipTurnSources?: ("TIMEWARP" | "BLACK_NOVA" | "DOMINION" | null)[]; // FIFO provenance; old saves may omit it
   skipTurns?: number; // queued turn skips; stacks when 시공간 조작 succeeds more than once
   revealedCards?: RevealedCard[]; // cards permanently known to the opponent this game (physical-card UID + card id)
   collection?: string[]; // redacted view only: public card ids the opponent may inspect
@@ -282,7 +283,7 @@ export type GameEvent =
   | { type: "voidShot"; player: Side; count: number; target: Side } // Resolved public Rift count; damage remains a separate engine event.
   | { type: "treason"; player: Side; target: Side; sourceUid: string; targets: {uid:string;zone:"monster"|"enchant";destination:"discard"|"rift"}[] }
   | { type: "timewarp"; player: Side; sourceUid: string }
-  | { type: "turnSkipped"; player: Side; source?: "TIMEWARP" | "BLACK_NOVA"; remaining: number }
+  | { type: "turnSkipped"; player: Side; source?: "TIMEWARP" | "BLACK_NOVA" | "DOMINION"; remaining: number }
   | { type: "voidGrant"; player: Side; uids: string[] } // Newly granted by Dimension Rite; public field UIDs only.
   | { type: "creationBorn"; player: Side; id: string; uid: string; sourceUid?: string; copy: boolean } // New public instance; never includes hidden deck identities.
   | { type: "infinityStored"; player: Side; sourceUid: string; cardUids: string[] }

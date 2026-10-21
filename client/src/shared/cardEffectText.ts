@@ -1543,9 +1543,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Completion Requirement】After deployment, a Soldier is summoned, a Casino is summoned, and Wine is played, at least 1 time each; either player's actions count.\n\n【On Completion】Create 1 new Dominion in your hand."
   },
   "DOMINION": {
-    "ja": "【発動時】カードを3枚引く。このターン次に自分が手札から使うカード3枚の使用コストを1にする。相手の最大マナ-1、自分の最大マナ+1。",
-    "ko": "【발동 시】카드를 3장 뽑는다. 이번 턴 다음에 자신이 패에서 사용하는 카드 3장의 사용 코스트를 1로 만든다. 상대의 최대 마나 -1, 자신의 최대 마나 +1.",
-    "en": "【On Cast】Draw 3 cards. The next 3 cards you play from hand this turn cost 1 mana each. The opponent's max mana -1 and your max mana +1."
+    "ja": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。",
+    "ko": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다.",
+    "en": "【On Cast】Draw 2 cards. Also, skip the opponent's next turn."
   },
   "POISON_MASTER": {
     "ja": "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。",

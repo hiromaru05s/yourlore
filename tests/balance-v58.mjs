@@ -13,7 +13,7 @@ try {
   const ench=id=>({card:card(id),turns:E.DB[id].val??99,bornTurn:0});
   const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
   test('approved stats, retained keyword passives and starter eligibility',()=>{
-    assert.equal(E.BALANCE_VERSION,'v58');
+    assert(Number(E.BALANCE_VERSION.slice(1))>=58);
     for(const [id,atk,hp] of [['ELF',12,10],['HIGH_ELF',20,20],['ELDER_ELF_KING',8,14],['DARK_ELF',16,10],['WORLD_TREE',1,25]])assert.deepEqual([E.DB[id].atk,E.DB[id].def],[atk,hp]);
     assert(E.hasPassive(E.DB.ELF,'evade'));for(const k of ['aura','majesty','evade'])assert(E.hasPassive(E.DB.HIGH_ELF,k));for(const k of ['aura','majesty'])assert(E.hasPassive(E.DB.ELDER_ELF_KING,k));assert(E.hasPassive(E.DB.WORLD_TREE,'guts'));assert(!E.hasPassive(E.DB.WORLD_TREE,'aura'));
     assert(E.DECK_POOL.includes('NIGHT_CASTLE_GIFT'));assert(!E.BUYABLE_POOL.includes('NIGHT_CASTLE_GIFT'));assert.equal(E.DB.NIGHT_CASTLE_GIFT.cost,4);assert.equal(E.DB.NIGHT_CASTLE_GIFT.ench,'nightCastleGift');

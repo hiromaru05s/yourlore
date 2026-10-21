@@ -6886,12 +6886,14 @@
     },
     "DOMINION": {
       "nameJa": "支配",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "cd2f167e154a1f25202cb3504d333e7cdbf33b1375585da0ac610f922e5f8c4a",
-      "textSha256": "54849b2449ac37bdeb56054c71d02cf1c0a3d98fc7ea66fd63a4359cc160989f",
+      "textSha256": "883b33c643e2f415d494fbc87d75ae30e68223cda4b17f0a767669b8b86c57e3",
       "hooks": {
         "act": "expansion"
       },
@@ -6901,9 +6903,9 @@
         "en": "【On Cast】Draw 3 cards. The next 3 cards you play from hand this turn cost 1 mana each. The opponent's max mana -1 and your max mana +1."
       },
       "after": {
-        "ja": "【発動時】カードを3枚引く。このターン次に自分が手札から使うカード3枚の使用コストを1にする。相手の最大マナ-1、自分の最大マナ+1。",
-        "ko": "【발동 시】카드를 3장 뽑는다. 이번 턴 다음에 자신이 패에서 사용하는 카드 3장의 사용 코스트를 1로 만든다. 상대의 최대 마나 -1, 자신의 최대 마나 +1.",
-        "en": "【On Cast】Draw 3 cards. The next 3 cards you play from hand this turn cost 1 mana each. The opponent's max mana -1 and your max mana +1."
+        "ja": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。",
+        "ko": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다.",
+        "en": "【On Cast】Draw 2 cards. Also, skip the opponent's next turn."
       }
     },
     "POISON_MASTER": {

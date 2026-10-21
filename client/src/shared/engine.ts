@@ -280,7 +280,6 @@ export function supplyRange(p: PlayerState): [number, number] {
 /** Cost to PLAY a card from hand (may be < its buy cost).
  *  p를 넘기면 플레이어 상태 의존 할인(엘프의 쉼터: '세계수' 카드 시전 0)을 반영한다. */
 export function playCost(c: CardInst, p?: PlayerState): number {
-  if (p && (p.expansion?.dominion ?? 0) > 0) return 1;
   if (p && c.id === "ROGUE_ART" && p.field.some(isAssassinCard)) return 0;
   if (p && (c.name || "").includes("세계수") && p.enchants.some((e) => e.card.ench === "elfHaven")) return 0;
   let base = c.play ?? c.cost;
@@ -736,7 +735,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
 // turn flow
 // ============================================================
 /** Preserve cause order without changing the existing skip count or legacy semantics. */
-function reserveTurnSkip(p: PlayerState, source: "TIMEWARP" | "BLACK_NOVA"): void {
+function reserveTurnSkip(p: PlayerState, source: "TIMEWARP" | "BLACK_NOVA" | "DOMINION"): void {
   const count = p.skipTurns ?? 0;
   const sources = (p.skipTurnSources ?? []).slice(0, count);
   while (sources.length < count) sources.push(null);
@@ -5914,7 +5913,6 @@ function expansionEnd(g: GameState, ctx: Ctx, p: PlayerState): void {
 }
 function expansionAfterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
   const x = xstate(p);
-  if (!card.quick && x.dominion > 0) x.dominion--;
   if (card.id === 'BLACK_REVERSE') x.reversePlays = (x.reversePlays ?? 0) + 1;
   if (card.id === 'WINE') townEvent(g, 'wine');
   if (isBlack(card)) for (const m of p.field) {
@@ -5943,7 +5941,7 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'INTERCEPT': { const extra = p.field.some(m => m.id === 'CASTLE' || isSoldier(m)); effectSummon(g, ctx, p, 'GUNNER'); if (extra) effectSummon(g, ctx, p, 'HEAVY_GUNNER'); break; }
     case 'REINFORCE': for (const id of ['INFKNIGHT','SOLDIER2','GUNNER']) { const before = new Set(p.field.map(m => m.uid)); effectSummon(g, ctx, p, id); for (const m of p.field) if (!before.has(m.uid)) m.expireOpponentOf = side(g, p); } break;
     case 'STABLE': queueExpansionChoice(g, p, card.id, '騎馬兵に交代する騎士を選択'); break;
-    case 'DOMINION': ctx.drawN(p, 3); x.dominion = 3; o.maxMana = Math.max(MIN_MANA, o.maxMana - 1); addMaxMana(p, 1); break;
+    case 'DOMINION': ctx.drawN(p, 2); reserveTurnSkip(o, 'DOMINION'); break;
     case 'ADVANCE': for (const m of p.field) m.atkMod += ['SOLDIER2','INFKNIGHT','CAVALRY'].includes(m.id) ? 3 : 2; break;
     case 'EMPTY_MIND': p.hand.push(inst(g, 'CREATION')); break;
     case 'CREATION': {

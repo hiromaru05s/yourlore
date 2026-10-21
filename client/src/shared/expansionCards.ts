@@ -224,9 +224,9 @@ export const EXPANSION_CARDS: CardDef[] = [
     "name": "지배",
     "nameEn": "Dominion",
     "cost": 0,
-    "textJa": "カード3枚ドロー · このターン次に使う手札3枚のコスト1 · 相手の最大マナ-1、自分の最大マナ+1",
-    "text": "카드 3장 드로우 · 이번 턴 다음 패 3장 사용 코스트 1 · 상대 최대 마나 -1, 자신 최대 마나 +1",
-    "textEn": "Draw 3 · Next 3 hand plays this turn cost 1 · Foe max mana -1, your max mana +1",
+    "textJa": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。",
+    "text": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다.",
+    "textEn": "【On Cast】Draw 2 cards. Also, skip the opponent's next turn.",
     "t": "spell",
     "act": "expansion",
     "noShop": true
