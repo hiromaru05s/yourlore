@@ -1,0 +1,51 @@
+{
+  "sourceCommit": "e9dfa2334c9f1225c232a43a9d9fb69fce389db7",
+  "workerVersions": [
+    {
+      "version_id": "8920f2a4-5cee-4b1d-b9b0-947f1a0da9b8",
+      "percentage": 100
+    }
+  ],
+  "productionTests": {
+    "passed": 200,
+    "total": 200
+  },
+  "browser": {
+    "env": "production",
+    "passed": true,
+    "googleConfigured": true,
+    "timeline": [
+      {
+        "kind": "entrance",
+        "at": 6195.800000011921
+      },
+      {
+        "kind": "modal",
+        "at": 10018.800000011921,
+        "entrance": false,
+        "home": true
+      }
+    ],
+    "checks": [
+      "HOME entrance completes before popup",
+      "HOME visible behind popup",
+      "mandatory popup stays on Escape",
+      "initial blank private name",
+      "invalid email rejected",
+      "save",
+      "profile rename",
+      "public profile excludes email",
+      "password relogin persists",
+      "Google scope excludes profile"
+    ],
+    "errors": []
+  },
+  "assets": {
+    "env": "production",
+    "matched": 123,
+    "semanticManifestMatches": 0,
+    "entrypoint": true
+  },
+  "remainingQaAccounts": 0,
+  "googleConsentRoundtrip": "Not repeated; provider integration tests and live redirect scope checked."
+}
