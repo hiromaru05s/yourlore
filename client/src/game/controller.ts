@@ -111,6 +111,7 @@ export abstract class BaseController implements BoardHandlers {
   private skipGen = 0; // batches up to this gen fast-forward
   // ---- turn timer ----
   private timerKey = "";
+  private announcedTimerKey = "";
   private timerLeft = 0;
   private timerInt: number | null = null;
   // bot/tutorial (and casual online fallback) use a 90s turn; online games get the
@@ -281,6 +282,9 @@ export abstract class BaseController implements BoardHandlers {
     if(res.state.over||res.state.turn>1)this.openingAbort.abort();
     if(!animate||!res.events.some(e=>e.type==='turnSkipped'&&e.source==='TIMEWARP'))this.view.syncTurn(res.state);
     this.state = res.state; // logical state advances immediately (input guards etc.)
+    // An already-running clock must follow logical state, not the animation queue.
+    // Keep initial clock/announcement startup behind the opening cinematic.
+    if (this.timerKey) this.syncTimer(false);
     if(this.castReviewState && this.castReviewState!==this.state && document.querySelector(".cast-review"))closeOverlay();
     const gen = ++this.fxGen;
     this.queue = this.queue
@@ -1309,14 +1313,13 @@ export abstract class BaseController implements BoardHandlers {
   // 5s; the timer chip shakes at ≤5s; on 0 the active player's turn
   // auto-ends (online: only my own client submits, server validates).
   // ============================================================
-  private syncTimer(): void {
+  private syncTimer(announce = true): void {
     if (this.dead) return;
     if (!this.useTurnClock) { this.stopTimer(); return; }
     const g = this.state;
     if (!g || g.over) { this.stopTimer(); return; }
     const key = `${g.turn}:${g.cur}`;
     if (key !== this.timerKey) {
-      const firstTurn = this.timerKey === "";
       this.timerKey = key;
       // full turn length for THIS turn: server-authoritative online (ranked 50 / casual 90),
       // else the local 90s default (bot / tutorial).
@@ -1329,13 +1332,9 @@ export abstract class BaseController implements BoardHandlers {
       this.turnStartedWall = Date.now();    // guard against a stale ~0 clock instantly skipping the turn
       // a reconnect straight into the discard choice: the server clock already includes the bonus
       this.handCapBonusKey = g.pending?.reason === "handCap" ? key : "";
-      if (!firstTurn && g.cur === this.you) sfx("turn"); // my turn begins
-      // The opening announcement belongs AFTER the coin, never underneath it.
-      // Reconnected games beyond turn 1 still announce their current turn.
-      if (!(firstTurn && g.turn === 1) && !document.querySelector(".cointoss-ov")) A.turnBanner(g.cur === this.you, g.turn);
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
-      this.timerInt = window.setInterval(() => this.tickTimer(), 1000);
+      this.timerInt = window.setInterval(() => this.tickTimer(key), 1000);
     } else if (g.pending?.reason === "handCap" && this.handCapBonusKey !== key) {
       // v42: the end-turn hand-discard choice appeared → +10s to pick (server adds the same bonus online)
       this.handCapBonusKey = key;
@@ -1355,10 +1354,21 @@ export abstract class BaseController implements BoardHandlers {
         this.renderTimer();
       }
     }
+    // Presentation still follows playback; synchronizing the clock on receipt must
+    // not announce a new turn over the preceding action or the opening coin.
+    if (announce && this.announcedTimerKey !== key) {
+      const firstTurn = this.announcedTimerKey === "";
+      this.announcedTimerKey = key;
+      if (!firstTurn && g.cur === this.you) sfx("turn");
+      if (!(firstTurn && g.turn === 1) && !document.querySelector(".cointoss-ov")) A.turnBanner(g.cur === this.you, g.turn);
+    }
   }
 
-  private tickTimer(): void {
+  private tickTimer(key = this.timerKey): void {
     if (this.dead || this.state.over) { this.stopTimer(); return; }
+    // A callback already queued before clearInterval belongs to its original turn.
+    if (key !== this.timerKey) return;
+    if (key !== `${this.state.turn}:${this.state.cur}`) { this.syncTimer(false); return; }
     this.timerLeft--;
     this.renderTimer();
     const s = this.timerLeft;
@@ -1471,6 +1481,7 @@ export abstract class BaseController implements BoardHandlers {
     paintTurnUrgency(0,false);
     if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
     this.timerKey = "";
+    this.announcedTimerKey = "";
     for (const id of ["clock-me", "clock-opp"]) {
       const el = document.getElementById(id);
       if (el) { el.className = "mp-clock"; el.replaceChildren(); }
