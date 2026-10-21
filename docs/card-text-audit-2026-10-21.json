@@ -6968,12 +6968,9 @@
     },
     "EMPTY_MIND": {
       "nameJa": "無の境地",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko"
-      ],
-      "definitionSha256": "85817d4d4fffc1a6b89c84dddff2e760ebf69ad3627fdaaeb18ee7ca4add1afd",
+      "status": "reworked",
+      "changedLocales": [],
+      "definitionSha256": "7708eafd2b172db0f5f4c7c40fb5e731b8fe52ff7ca4d33069025c653721142b",
       "textSha256": "5ffd6eb4d53079c957221fc2e8bce16f3e5defae66009c99ace0f20b90240e53",
       "hooks": {
         "act": "expansion"
@@ -6991,14 +6988,14 @@
     },
     "CREATION": {
       "nameJa": "創造",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "4918a1db83beb2edeca02edcba0ceb5f2c4d3393d8fa7ffbfaf9efabaaf0d6c4",
-      "textSha256": "e30581140226c2b3697a9c122df594c42394ebdfd520fd7c514d5abfb234fc0d",
+      "definitionSha256": "4a5b06553fffc06844209d916ccd9f618834293608c88811f94a8af47cf69613",
+      "textSha256": "e4696fdfb6940943506229f5520cf686868e887da02610feb7e12cd18a8031b0",
       "hooks": {
         "act": "expansion"
       },
@@ -7008,9 +7005,9 @@
         "en": "【On Cast】Draw 1 card and restore 1 of your HP. Create 1 new Creation in your graveyard. If your Rift contains at least 10 Creations, including this card, choose 1 card in the opponent's deck and add a copy to your graveyard.\n\n【Use Limit】3 plays during each of your turns across all copies of this name."
       },
       "after": {
-        "ja": "【発動時】カードを1枚引き、自分の体力を1回復する。新しい「創造」1枚を自分の墓地に追加する。このカードを含め自分のリフトに「創造」が10枚以上あれば、相手のデッキからカード1枚を選び、その複製を自分の墓地に追加する。\n\n【回数制限】同名カード合計で自分の各ターン3回まで使用できる。",
-        "ko": "【발동 시】카드를 1장 뽑는다. 자신의 체력을 1 회복한다. 새로운 창조 1장을 자신의 묘지에 추가한다. 이 카드를 포함해 자신의 리프트에 창조가 10장 이상이면 상대의 덱에서 카드 1장을 선택해 그 복제를 자신의 묘지에 추가한다.\n\n【횟수 제한】같은 이름의 카드 합계로 자신의 턴마다 3회까지 사용할 수 있다.",
-        "en": "【On Cast】Draw 1 card and restore 1 of your HP. Create 1 new Creation in your graveyard. If your Rift contains at least 10 Creations, including this card, choose 1 card in the opponent's deck and add a copy to your graveyard.\n\n【Use Limit】You may play cards with this name only 3 times during each of your turns in total."
+        "ja": "【発動時】生成専用・スターター・クイック魔法を除く魔法カードからランダムに1枚選び、新しいカードを自分の手札に加える。",
+        "ko": "【발동 시】생성 전용 카드, 스타터, 퀵 마법을 제외한 마법 카드 중 무작위로 1장을 골라 새로운 카드를 자신의 패에 추가한다.",
+        "en": "【On Cast】Choose 1 random spell, excluding generated-only cards, starters, and Quick spells, and add a new copy to your hand."
       }
     },
     "ROGUE_ART": {

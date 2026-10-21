@@ -6116,7 +6116,7 @@
 
 ### EMPTY_MIND — 無の境地
 
-構造監査：表記改定（ja / ko）。実装キー：`{"act":"expansion"}`。
+効果リワーク（2026-10-21）：コスト2。既存の購入・発動条件を維持。
 
 **ja**
 
@@ -6142,29 +6142,21 @@
 >
 > 【On Cast】Create 1 new Creation in your hand.
 
-
 ### CREATION — 創造
 
-構造監査：表記改定（ja / ko / en）。実装キー：`{"act":"expansion"}`。
+効果リワーク（2026-10-21）：コスト0。ランダムな通常魔法1枚を手札へ。生成専用・スターター・クイック魔法を除外。虚無を維持、使用回数制限を削除。
 
 **ja**
 
-> 【発動時】カードを1枚引き、自分の体力を1回復する。新しい「創造」1枚を自分の墓地に追加する。このカードを含め自分のリフトに「創造」が10枚以上あれば、相手のデッキからカード1枚を選び、その複製を自分の墓地に追加する。
->
-> 【回数制限】同名カード合計で自分の各ターン3回まで使用できる。
+> 【発動時】生成専用・スターター・クイック魔法を除く魔法カードからランダムに1枚選び、新しいカードを自分の手札に加える。
 
 **ko**
 
-> 【발동 시】카드를 1장 뽑는다. 자신의 체력을 1 회복한다. 새로운 창조 1장을 자신의 묘지에 추가한다. 이 카드를 포함해 자신의 리프트에 창조가 10장 이상이면 상대의 덱에서 카드 1장을 선택해 그 복제를 자신의 묘지에 추가한다.
->
-> 【횟수 제한】같은 이름의 카드 합계로 자신의 턴마다 3회까지 사용할 수 있다.
+> 【발동 시】생성 전용 카드, 스타터, 퀵 마법을 제외한 마법 카드 중 무작위로 1장을 골라 새로운 카드를 자신의 패에 추가한다.
 
 **en**
 
-> 【On Cast】Draw 1 card and restore 1 of your HP. Create 1 new Creation in your graveyard. If your Rift contains at least 10 Creations, including this card, choose 1 card in the opponent's deck and add a copy to your graveyard.
->
-> 【Use Limit】You may play cards with this name only 3 times during each of your turns in total.
-
+> 【On Cast】Choose 1 random spell, excluding generated-only cards, starters, and Quick spells, and add a new copy to your hand.
 
 ### ROGUE_ART — 盗賊の心得
 

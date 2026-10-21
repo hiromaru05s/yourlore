@@ -1568,9 +1568,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Purchase Requirement】Your deck composition contains at least 9 spells.\n\n【Play Requirement】You already played at least 4 spells this turn.\n\n【On Cast】Create 1 new Creation in your hand."
   },
   "CREATION": {
-    "ja": "【発動時】カードを1枚引き、自分の体力を1回復する。新しい「創造」1枚を自分の墓地に追加する。このカードを含め自分のリフトに「創造」が10枚以上あれば、相手のデッキからカード1枚を選び、その複製を自分の墓地に追加する。\n\n【回数制限】同名カード合計で自分の各ターン3回まで使用できる。",
-    "ko": "【발동 시】카드를 1장 뽑는다. 자신의 체력을 1 회복한다. 새로운 창조 1장을 자신의 묘지에 추가한다. 이 카드를 포함해 자신의 리프트에 창조가 10장 이상이면 상대의 덱에서 카드 1장을 선택해 그 복제를 자신의 묘지에 추가한다.\n\n【횟수 제한】같은 이름의 카드 합계로 자신의 턴마다 3회까지 사용할 수 있다.",
-    "en": "【On Cast】Draw 1 card and restore 1 of your HP. Create 1 new Creation in your graveyard. If your Rift contains at least 10 Creations, including this card, choose 1 card in the opponent's deck and add a copy to your graveyard.\n\n【Use Limit】You may play cards with this name only 3 times during each of your turns in total."
+    "ja": "【発動時】生成専用・スターター・クイック魔法を除く魔法カードからランダムに1枚選び、新しいカードを自分の手札に加える。",
+    "ko": "【발동 시】생성 전용 카드, 스타터, 퀵 마법을 제외한 마법 카드 중 무작위로 1장을 골라 새로운 카드를 자신의 패에 추가한다.",
+    "en": "【On Cast】Choose 1 random spell, excluding generated-only cards, starters, and Quick spells, and add a new copy to your hand."
   },
   "ROGUE_ART": {
     "ja": "【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。",

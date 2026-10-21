@@ -2310,8 +2310,8 @@ Object.assign(DB.MIMIC_KING2, { text: "【소환시】리프트에 미믹 계열
 DB.GUILD_CHEST.textEn += " · If you control an Assassin-family card, results 9–12 draw 4 instead.";
 DB.GUILD_CHEST.text += " · 아군 필드에 암살자 계열 카드가 있으면 9~12는 카드 4장 드로우";
 // v52: approved post-expansion balance rework, after all language overrides.
-for (const id of ["DISCOVERY_SMALL", "DISCOVERY", "DISCOVERY_LARGE", "CREATION"]) {
-  const c = DB[id], limit = id === "CREATION" ? 3 : 1;
+for (const id of ["DISCOVERY_SMALL", "DISCOVERY", "DISCOVERY_LARGE"]) {
+  const c = DB[id], limit = 1;
   c.maxUsesPerTurn = limit;
   c.text = c.text.replace(/[.。]+$/, "") + ` · 【동명 합계: 자신의 턴마다 ${limit}회까지】`;
   c.textJa += ` · 【同名合計：自分の各ターン${limit}回まで】`;
@@ -2461,7 +2461,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v60"; // Farm / Apple expansion and October 21 balance rework
+export const BALANCE_VERSION = "v61"; // Empty Mind cost and random spell Creation rework
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

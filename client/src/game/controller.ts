@@ -409,7 +409,8 @@ export abstract class BaseController implements BoardHandlers {
     const massacreDeaths=new Set<string>(),massacreCosts=new Set<Side>();
     const creationSources=new Map<string,HTMLElement>();
     const creationEvents=events.filter((e):e is Extract<GameEvent,{type:'creationBorn'}>=>e.type==='creationBorn');
-    const creationExits=new Set(creationEvents.flatMap(e=>e.sourceUid?[e.sourceUid]:[]));
+    const creationGrants=events.filter((e):e is Extract<GameEvent,{type:'creationGranted'}>=>e.type==='creationGranted');
+    const creationExits=new Set([...creationEvents,...creationGrants].flatMap(e=>e.sourceUid?[e.sourceUid]:[]));
     let statusSource:HTMLElement|undefined;
     if(events.some(e=>e.type==='statusExtinction'))warmStatusExtinctions();
     const hasStatusGrants=events.some(e=>e.type==='statusGrant');
@@ -867,7 +868,7 @@ export abstract class BaseController implements BoardHandlers {
             const oldUids=new Set([...prev.players[e.player].enchants,...(prev.players[e.player].quests??[])].map(x=>x.card.uid));
             const shownUids=new Set(spellGhosts.map(x=>x.dataset.uid));
             const placed=e.dest==='field'?[...res.state.players[e.player].enchants,...(res.state.players[e.player].quests??[])].find(x=>x.card.id===e.id&&!oldUids.has(x.card.uid)&&!shownUids.has(x.card.uid))?.card:undefined;
-            const creation=def.id==='CREATION'?creationEvents.find(c=>!c.copy&&c.player===e.player&&c.sourceUid&&!creationSources.has(c.sourceUid)):undefined;
+            const creation=def.id==='CREATION'?[...creationEvents.filter(c=>!c.copy),...creationGrants].find(c=>c.player===e.player&&c.sourceUid&&!creationSources.has(c.sourceUid)):undefined;
             if(creation?.sourceUid){
               const face=await A.revealCreation({...def,uid:creation.sourceUid},sideOf(e.player));
               if(face)creationSources.set(creation.sourceUid,face);
@@ -1082,6 +1083,14 @@ export abstract class BaseController implements BoardHandlers {
     for(const born of creationEvents){
       const card=this.findCard(res.state,born.uid)??this.defOf(born.id,born.uid);
       if(card)effectFinishes.push(A.creationBirth(card,sideOf(born.player),born.sourceUid?creationSources.get(born.sourceUid)??null:null,born.copy));
+    }
+    for(const sourceUid of new Set(creationGrants.map(e=>e.sourceUid))){
+      const grants=creationGrants.filter(e=>e.sourceUid===sourceUid),player=grants[0].player;
+      const hand=document.getElementById(player===this.you?'hand':'oppHand');
+      const nodes=[...hand?.querySelectorAll<HTMLElement>(player===this.you?'.card':'.card--back')??[]];
+      const offset=Math.max(0,res.state.players[player].hand.length-nodes.length);
+      const arrivals=grants.flatMap(e=>{const card=res.state.players[player].hand[e.handIndex],target=nodes[e.handIndex-offset];return card&&target?[{card:player===this.you?card:{uid:'hidden-creation-'+e.handIndex,id:'HIDDEN',t:'spell' as const,cost:0,name:'',text:''},target}]:[];});
+      effectFinishes.push(A.creationHand(arrivals,sideOf(player),creationSources.get(sourceUid)??null));
     }
     if(supplyFaces){
       const refresh=playSupplyRefresh(this.view.root,supplyFaces);this.marketRefresh=refresh;

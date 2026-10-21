@@ -285,6 +285,7 @@ export type GameEvent =
   | { type: "timewarp"; player: Side; sourceUid: string }
   | { type: "turnSkipped"; player: Side; source?: "TIMEWARP" | "BLACK_NOVA" | "DOMINION"; remaining: number }
   | { type: "voidGrant"; player: Side; uids: string[] } // Newly granted by Dimension Rite; public field UIDs only.
+  | { type: "creationGranted"; player: Side; sourceUid: string; handIndex: number } // Public hand position, never the private generated identity or UID.
   | { type: "creationBorn"; player: Side; id: string; uid: string; sourceUid?: string; copy: boolean } // New public instance; never includes hidden deck identities.
   | { type: "infinityStored"; player: Side; sourceUid: string; cardUids: string[] }
   | { type: "infinityRelease"; player: Side; sourceUid: string; amount: number }

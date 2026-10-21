@@ -13,12 +13,13 @@ export class NacreScene {
  renderer:T.WebGLRenderer;scene=new T.Scene();camera=new T.PerspectiveCamera();environment:T.WebGLRenderTarget;
  faces=new Map<string,T.CanvasTexture>();geometries=new Set<T.BufferGeometry>();materials=new Set<T.Material>();effect=new T.Group();
  source=new T.Group();sheetFace:Sheet;sourcePos=V();gravePos=V();riftPos=V();unit=1;arrivalScale=1;noise:T.DataTexture;
- constructor(face:HTMLCanvasElement,readonly layout:CreationLayout,readonly copy:boolean){
+ constructor(face:HTMLCanvasElement,readonly layout:CreationLayout,readonly copy:boolean,sourceFace:HTMLCanvasElement=face){
   this.renderer=createWebGLRenderer({alpha:true,antialias:true});this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1;
   this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));this.renderer.setSize(layout.width,layout.height);this.renderer.setClearColor(0,0);this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
   const pm=new T.PMREMGenerator(this.renderer),room=new RoomEnvironment();this.environment=pm.fromScene(room,.04);pm.dispose();room.dispose();this.scene.environment=this.environment.texture;this.scene.environmentIntensity=.5;
   const data=new Uint8Array(128*128*4);for(let i=0;i<128*128;i++){const x=i%128,y=Math.floor(i/128),v=128+Math.sin(x*91.1+y*73.7)*17+Math.sin(x*.2+y*.35)*13;data[i*4]=data[i*4+1]=data[i*4+2]=v;data[i*4+3]=255;}this.noise=new T.DataTexture(data,128,128);this.noise.wrapS=this.noise.wrapT=T.RepeatWrapping;this.noise.needsUpdate=true;
   const texture=new T.CanvasTexture(face);texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=4;this.faces.set('face',texture);
+  const sourceTexture=new T.CanvasTexture(sourceFace);sourceTexture.colorSpace=T.SRGBColorSpace;sourceTexture.anisotropy=4;this.faces.set('source',sourceTexture);
   const {width:w,height:h,source,grave,rift}=layout,f=h*2;this.camera.aspect=w/h;this.camera.fov=2*Math.atan(h/(2*f))*180/Math.PI;this.camera.near=f*.25;this.camera.far=f*4;this.camera.position.set(0,f*Math.cos(.30),f*Math.sin(.30));this.camera.lookAt(0,0,0);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();
   const project=(r:DOMRect)=>{const ray=new T.Raycaster();ray.setFromCamera(new T.Vector2((r.x+r.width/2)/w*2-1,1-(r.y+r.height/2)/h*2),this.camera);return ray.ray.intersectPlane(new T.Plane(V(0,1,0),0),V())!;};
   this.unit=source.width;this.sourcePos.copy(project(source));this.gravePos.copy(project(grave));this.riftPos.copy(project(rift));this.arrivalScale=grave.width/this.unit;
@@ -27,7 +28,7 @@ export class NacreScene {
   const fill=new T.DirectionalLight(0xa3d7f4,.9);fill.position.set(4*U,5*U,-5*U);this.scene.add(key,key.target,fill,new T.HemisphereLight(0xe9e8f2,0x444050,.8));
   const shadow=this.mesh(new T.PlaneGeometry(w*4,h*4),this.mat(new T.ShadowMaterial({opacity:.25})));shadow.rotation.x=-Math.PI/2;shadow.position.y=-.04*U;shadow.castShadow=false;shadow.receiveShadow=true;
   const body=this.mesh(new T.BoxGeometry(1,.029,1.55),this.mat(new T.MeshStandardMaterial({color:0x645961,metalness:.3,roughness:.4})),this.source);body.position.y=.025;
-  const faceMesh=this.mesh(new T.PlaneGeometry(1,1.55),this.mat(new T.MeshStandardMaterial({map:texture,color:0xffffff,roughness:.62,metalness:.02,transparent:true})),this.source);faceMesh.rotation.x=-Math.PI/2;faceMesh.position.y=.043;
+  const faceMesh=this.mesh(new T.PlaneGeometry(1,1.55),this.mat(new T.MeshStandardMaterial({map:sourceTexture,color:0xffffff,roughness:.62,metalness:.02,transparent:true})),this.source);faceMesh.rotation.x=-Math.PI/2;faceMesh.position.y=.043;
   this.sheetFace=this.sheet('face');this.sheetFace.mesh.material.metalness=.34;this.sheetFace.mesh.material.roughness=.27;this.sheetFace.tint.value.set('#9ce4d6');
  }
  mat<M extends T.Material>(m:M){this.materials.add(m);return m;}

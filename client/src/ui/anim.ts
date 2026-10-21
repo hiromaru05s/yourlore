@@ -1226,6 +1226,12 @@ export async function creationBirth(card:CardInst,side:ViewSide,source:HTMLEleme
  finally{source?.remove();}
 }
 
+/** Keep generated identities in the owner's hand; the opposing viewer passes card backs. */
+export async function creationHand(arrivals:{card:CardInst;target:HTMLElement}[],side:ViewSide,source:HTMLElement|null):Promise<void>{
+ try{if(!fxSkip)await boardMotionScope(signal=>Promise.all(arrivals.map(({card,target})=>playCreation(card,side,source,false,signal,target))).then(()=>true),7000);}
+ finally{source?.remove();}
+}
+
 /** Selected pale whole-card Rift coat; the engine supplies newly changed UIDs. */
 let voidGrantRuntime:Promise<typeof import('./dimensionVoid/runtime')>|undefined;
 const loadVoidGrant=()=>voidGrantRuntime??=(import('./dimensionVoid/runtime').catch(error=>{voidGrantRuntime=undefined;throw error;}));
