@@ -19,7 +19,7 @@ if (import.meta.env.DEV) {
   api.updateMe = async patch => {
     if (failSave) {failSave = false; throw new Error('保存テスト');}
     avatar = patch.avatar || avatar; localStorage.setItem('lore_profile_lab_avatar',avatar);
-    return {ok:true,display:'シーカー',avatar,badge:null,stats_public:true,sleeve:'default',furniture:'default'};
+    return {ok:true,needsUsername:false,display:'シーカー',avatar,badge:null,stats_public:true,sleeve:'default',furniture:'default'};
   };
   mountProfile({root:document.getElementById('app')!,user:{avatar},home:()=>{location.href='/duel-lab.html';}} as App);
 }

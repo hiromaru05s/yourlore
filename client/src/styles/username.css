@@ -1,0 +1,12 @@
+.username-screen { display:grid; place-items:center; min-height:100dvh; padding:24px 18px; box-sizing:border-box; overflow-y:auto; }
+.username-sheet { width:min(100%,480px); margin:auto; padding:32px; box-sizing:border-box; background:rgba(12,18,29,.96); border:1px solid rgba(200,210,226,.2); border-radius:12px; }
+.username-sheet h1 { font-size:clamp(24px,5vw,32px); margin:12px 0 20px; }
+.username-sheet p,.username-form p { line-height:1.7; overflow-wrap:anywhere; }
+.username-form { display:grid; gap:12px; margin:24px 0 16px; }
+.username-form .field-label { display:grid; gap:10px; }
+.username-form .input { width:100%; min-width:0; box-sizing:border-box; font-size:16px; min-height:44px; }
+.username-form p { margin:0; }
+.username-form [role=alert] { color:#f5ada7; }
+.username-form button { min-height:44px; }
+@media(max-width:480px) { .username-sheet { padding:24px 20px; } }
+.username-screen .set-desc { color:#b6c9e2; }

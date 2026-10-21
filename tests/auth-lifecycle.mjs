@@ -62,7 +62,7 @@ try{
  const firstGoogleEmail=googleEmail;googleEmail='oauth-other@example.invalid';
  r=await callback();const otherCookie=r.headers.get('set-cookie').split(';')[0];
  const other=(await (await call('/auth/me',undefined,otherCookie)).json()).user;
- assert.equal(other.display,restored.display);assert.notEqual(other.id,restored.id);assert.equal(other.credits,0);
+ assert.notEqual(other.display,restored.display);assert.match(other.display,/^Seeker-[0-9a-f]{12}$/);assert.notEqual(other.id,restored.id);assert.equal(other.credits,0);
  assert.deepEqual(other.starterCards,u.starterCards);assert.deepEqual((await (await call('/collection/history',undefined,otherCookie)).json()).receipts,[]);
  googleEmail=firstGoogleEmail;
  r=await callback();assert.deepEqual((await (await call('/auth/me',undefined,r.headers.get('set-cookie').split(';')[0])).json()).user.starterCards,googleAcquired.starterCards);

@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS users (
   id          TEXT PRIMARY KEY,           -- uuid
   email       TEXT NOT NULL UNIQUE,
   password    TEXT NOT NULL,              -- PBKDF2 hash (salt:hash) / 'oauth:google', never plaintext
-  display     TEXT NOT NULL,              -- shown name (defaults to email local-part)
+  display     TEXT NOT NULL,              -- public name, never derived from email/provider
+  username_set INTEGER NOT NULL DEFAULT 0 CHECK(username_set IN (0,1)),
   created_at  INTEGER NOT NULL,
   wins        INTEGER NOT NULL DEFAULT 0,
   losses      INTEGER NOT NULL DEFAULT 0,

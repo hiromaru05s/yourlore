@@ -17,6 +17,7 @@ export interface User {
   id: string;
   email: string;
   display: string;
+  needsUsername?: boolean;
   wins: number;
   losses: number;
   exp?: number;
@@ -159,7 +160,7 @@ export const api = {
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
   updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string; furniture?: string }) =>
-    call<{ ok: true; display: string; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string; furniture: string }>("/social/me", patch),
+    call<{ ok: true; display: string; needsUsername: boolean; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string; furniture: string }>("/social/me", patch),
   buySleeve: (id: string) => {
     if (isLocalDevAccount()) return Promise.resolve({ ok: true as const, ...buyLocalGuestSleeve(id) });
     return call<{ ok: true; credits: number; sleeves: string[]; furnitures:string[] }>("/social/buy-sleeve", { id });

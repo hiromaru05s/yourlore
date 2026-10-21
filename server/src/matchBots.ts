@@ -20,7 +20,7 @@ export const matchBot = (id: string) => MATCH_BOTS.find(bot => bot.id === id);
 export async function ensureMatchBots(env: Env): Promise<void> {
   if (!matchBotsEnabled(env)) throw new Error('Match test bots disabled');
   await env.DB.batch(MATCH_BOTS.map(bot => env.DB.prepare(
-    'INSERT OR IGNORE INTO users (id,email,password,display,created_at,verified,source,avatar,deck) VALUES (?,?,?,?,?,0,?,?,?)',
+    'INSERT INTO users (id,email,password,display,created_at,verified,source,avatar,deck,username_set) VALUES (?,?,?,?,?,0,?,?,?,1) ON CONFLICT(id) DO UPDATE SET display=excluded.display, username_set=1',
   ).bind(bot.id, `${bot.id}@bots.invalid`, 'bot-disabled', bot.name, Date.now(), 'match-test-bot', bot.avatar, bot.deck.cards.join(','))));
 }
 

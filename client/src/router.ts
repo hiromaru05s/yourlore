@@ -1,3 +1,4 @@
+import {mountUsername} from './screens/username';
 import {prepareMenuCache} from './ui/menuCache';
 import { getLang } from './i18n';
 import {releaseHomeSpirit} from './ui/homeSpirit';
@@ -91,9 +92,7 @@ export class App {
     if (this.user) {
       aIdentify(this.user.id, { verified: true });
       // crashed / closed mid-game? reconnect to the in-progress room instead of the home screen.
-      const g = loadActiveGame(this.user?.id);
-      if (g) this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked);
-      else this.afterLogin();
+      this.afterLogin();
     } else this.login();
   }
 
@@ -109,6 +108,10 @@ export class App {
       const keepHomeMusic = page !== undefined && HOME_MUSIC_PAGES.has(page);
       if (!keepHomeMusic) { this.stopHomeMusic?.(); this.stopHomeMusic = null; }
       this.root.innerHTML = "";
+      if (this.user?.needsUsername) {
+        this.current = mountUsername(this);
+        return;
+      }
       this.current = make();
       if (keepHomeMusic && !this.stopHomeMusic) this.stopHomeMusic = startHomeMusic();
       if (page) {
@@ -136,6 +139,9 @@ export class App {
   login(): void { this.swap(() => mountLogin(this), "login"); }
   home(): void { setPresence("menu"); this.swap(() => mountHome(this), "home"); }
   afterLogin(): void {
+    if(this.user?.needsUsername){this.swap(()=>mountUsername(this));return;}
+    const active=loadActiveGame(this.user?.id);
+    if(active){this.onlineGame(active.roomId,active.you,"?",null,!!active.ranked);return;}
     this.home();
     if(!this.user || this.user.id==='local-guest-user')return;
     const id=this.user.id,revision=this.screenRevision;

@@ -1,3 +1,4 @@
+import {publicNameEvents} from './publicNames';
 import {newMedalDuel} from '../../client/src/shared/medalTracking';
 import {equippedMedal,settleMedals} from './medals';
 import { actionChangesState } from '../../client/src/shared/botActions';
@@ -38,6 +39,7 @@ interface PlayerRef { id: string; name: string; sleeve?: string | null; furnitur
 
 /** Everything the room needs — persisted so deploys/evictions/hibernation can't kill a live game. */
 interface RoomData {
+  publicNamesVersion?: number;
   players: [PlayerRef, PlayerRef];
   game: GameState;
   initEvents: GameEvent[];
@@ -141,12 +143,39 @@ export class GameRoom {
     catch { this.room=null; this.logWrites={}; console.error('room_persistence_failed'); throw new Error('room persistence failed'); }
   }
 
+  private restoring: Promise<RoomData | null> | null = null;
   private async restore(): Promise<RoomData | null> {
     if (this.room) return this.room;
+    if (this.restoring) return this.restoring;
+    this.restoring = this.loadRoom();
+    try { return await this.restoring; } finally { this.restoring = null; }
+  }
+
+  private async loadRoom(): Promise<RoomData | null> {
     const r = await this.state.storage.get<Partial<RoomData>>("room");
     if (r?.game && r.players) {
+      // Old rooms may contain provider names in both snapshots and public logs.
+      // Resolve names and scrub the journal before exposing any restored state.
+      if (r.publicNamesVersion !== 1) {
+        const replacements = new Map<string,string>();
+        for (const [side,player] of r.players.entries()) {
+          if (r.bot?.side === side) continue;
+          const fresh = await this.env.DB.prepare('SELECT display FROM users WHERE id = ?').bind(player.id).first<{display:string}>();
+          const name = fresh?.display ?? 'Seeker';
+          for (const old of [player.name, r.game.players[side].name]) if(old && old !== name) replacements.set(old, name);
+          player.name = name; r.game.players[side].name = name;
+        }
+        r.initEvents=publicNameEvents(r.initEvents??[],replacements);
+        if(replacements.size && r.logBatchCount) {
+          const batches=await this.state.storage.list<BattleLogEvent[]>({prefix:'battle-log:'});
+          for(const [key,events] of batches)await this.state.storage.put(key,publicNameEvents(events,replacements));
+        }
+        r.publicNamesVersion=1;
+        await this.state.storage.put('room',r);
+      }
       // defaults cover blobs written by the pre-hibernation version
       this.room = {
+        publicNamesVersion: r.publicNamesVersion,
         players: r.players as [PlayerRef, PlayerRef],
         game: r.game as GameState,
         initEvents: r.initEvents ?? [],
@@ -222,6 +251,7 @@ export class GameRoom {
           startReady: [false, !!bot],
           initSent: [false, false],
           startedAt: Date.now(),
+          publicNamesVersion: 1,
           opening: {version:OPENING_VERSION,capable:[false,!!bot],ready:[false,!!bot],prepareBy:null,startsAt:null},
           bot: bot ? {id:bot.id,side:1,nextAt:null} : undefined,
         };

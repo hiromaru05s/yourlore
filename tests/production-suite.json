@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/username-ui.mjs",
+    "tests/private-usernames.mjs",
     "tests/auth-lifecycle.mjs",
     "tests/logout-recovery.mjs",
     "tests/backend-audit-oct16.mjs",

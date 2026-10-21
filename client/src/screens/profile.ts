@@ -1,3 +1,4 @@
+import {mountUsernameForm} from '../ui/usernameForm';
 import {mountProfileMedals} from '../ui/profileMedals';
 import {medalHtml} from '../ui/medal';
 import { seekerLevel } from '../shared/progression';
@@ -36,6 +37,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   app.root.appendChild(wrap);
 
   let dead = false;
+  let closeRename: (()=>void)|undefined;
   let logoutPending = false;
   let logoutError = "";
   let disposeMedals: (()=>void)|undefined;
@@ -130,10 +132,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
             <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${modeLabel(recFilter)} · ${cur.w}${t("home.win")} ${cur.l}${t("home.loss")}`} · ${fmtDate(p.created_at)}~</div>
           </div>
         </div>
-        <div class="pf-rename" id="renameRow" style="display:none">
-          <input class="input" id="renameInput" maxlength="24" placeholder="${t("profile.rename.ph")}">
-          <button class="btn btn-gold" id="renameSave">${t("common.confirm")}</button>
-        </div>
       </section>
       ${p.self ? `<details class="tut-sec pf-experience"><summary>${t('home.seekerLevel')} ${experience.level} · ${experience.max?'MAX':`${experience.progress}/100 EXP`}</summary><p>${t('home.levelRule')}</p></details>` : ''}
       ${p.private ? `<section class="tut-sec"><p>${t("profile.private")}</p></section>` : `
@@ -175,12 +173,13 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 
     // ---- rename ----
     (body().querySelector("#renameBtn") as HTMLElement | null)?.addEventListener("click", () => {
-      const ov=document.createElement("div");ov.className="overlay";
-      ov.innerHTML=`<div class="modal"><h2>${t("profile.rename")}</h2><label class="field-label" for="renameInput">${t("profile.rename.ph")}</label><input class="input" id="renameInput" maxlength="24" value="${esc(p.display)}"><div id="renameCount" class="set-desc"></div><p id="renameError" role="status"></p><div class="modal-row"><button class="btn btn-ghost" id="renameCancel">${t("common.cancel")}</button><button class="btn btn-gold" id="renameSave">${t("common.confirm")}</button></div></div>`;
-      document.body.append(ov);const input=ov.querySelector<HTMLInputElement>("#renameInput")!,save=ov.querySelector<HTMLButtonElement>("#renameSave")!;
-      const update=()=>{ov.querySelector("#renameCount")!.textContent=`${input.value.length} / 24`;save.disabled=input.value.trim().length<2;};update();input.oninput=update;
-      ov.querySelector<HTMLButtonElement>("#renameCancel")!.onclick=()=>ov.remove();
-      save.onclick=async()=>{save.disabled=true;try{const r=await api.updateMe({display:input.value.trim()});if(app.user)app.user.display=r.display;ov.remove();document.dispatchEvent(new Event("lore:user"));if(!dead)void load();}catch(e){ov.querySelector("#renameError")!.textContent=(e as Error).message;save.disabled=false;}};
+      closeRename?.();
+      const ov=document.createElement('div');ov.className='overlay';
+      ov.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-labelledby="rename-title"><h2 id="rename-title">${t('profile.rename')}</h2><div data-rename-form></div><button class="btn btn-ghost" data-cancel>${t('common.cancel')}</button></div>`;
+      document.body.append(ov);
+      const dispose=mountUsernameForm(ov.querySelector('[data-rename-form]')!,app,p.display,()=>{closeRename?.();if(!dead)void load();});
+      closeRename=()=>{dispose();ov.remove();closeRename=undefined;};
+      ov.querySelector<HTMLButtonElement>('[data-cancel]')!.onclick=()=>closeRename?.();
     });
 
   };
@@ -340,7 +339,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   build();
   void load();
   const unsub = onLangChange(() => { build(); renderTab(); });
-  return { destroy: () => { dead = true; disposeMedals?.(); unsub(); } };
+  return { destroy: () => { dead = true; closeRename?.(); disposeMedals?.(); unsub(); } };
 }
 
 /** Read-only profile popup (used from the friends list). */

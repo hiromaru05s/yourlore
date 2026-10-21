@@ -25,6 +25,7 @@ export interface SessionUser {
   id: string;
   email: string;
   display: string;
+  needsUsername?: boolean;
   wins: number;
   losses: number;
   exp?: number;
