@@ -24,14 +24,14 @@ export function bindCardReferences(overlay:HTMLElement, source:CardInst, openCar
     const header=document.createElement('header');const title=document.createElement('strong');title.textContent=referenceTitle(ref,lang);
     const dismiss=document.createElement('button');dismiss.type='button';dismiss.textContent='×';dismiss.className='reference-close';
     dismiss.setAttribute('aria-label',{ja:'プレビューを閉じる',ko:'미리보기 닫기',en:'Close preview'}[lang]);
-    dismiss.onclick=e=>{e.stopPropagation();const from=anchor;close();from?.focus({preventScroll:true});close();};header.append(title,dismiss);popup.append(header);
+    dismiss.onclick=e=>{e.stopPropagation();close(true);};header.append(title,dismiss);popup.append(header);
     const list=document.createElement('div');list.className=ref.kind==='series'?'reference-member-grid':'reference-single';
     for(const id of referenceCardIds(ref)) {
       const c={...REFERENCE_CARDS[id],uid:'reference_'+id};
       const item=document.createElement('button');item.type='button';item.className='reference-member';item.dataset.cardId=id;
       item.setAttribute('aria-label',cardName(c));item.append(cardEl(c,{fullArt:true}));
       const caption=document.createElement('span');caption.textContent=cardName(c);item.append(caption);
-      item.onclick=e=>{e.stopPropagation();close();openCard(c);};list.append(item);
+      item.onclick=e=>{e.stopPropagation();close(true);openCard(c);};list.append(item);
       if(ref.kind==='card') {const rules=cardRulesEl(c);rules.classList.add('reference-rules');list.append(rules);}
     }
     if(ref.kind==='series') {const note=document.createElement('p');note.className='reference-series-note';note.textContent={ja:`該当カード ${referenceCardIds(ref).length}枚。効果の対象は本文の条件に従います。`,ko:`해당 카드 ${referenceCardIds(ref).length}장. 효과 대상은 본문의 조건을 따릅니다.`,en:`${referenceCardIds(ref).length} matching cards. Effect targets still follow the conditions in the text.`}[lang];popup.append(note);}

@@ -118,7 +118,8 @@ export function effectReferenceParts(text:string,lang:EffectLocale,sourceId:stri
       const key=({兵士:'militarySoldier',騎士:'militaryKnight',砲撃兵:'militaryGunner',병사:'militarySoldier',기사:'militaryKnight',포격병:'militaryGunner',Soldier:'militarySoldier',Knight:'militaryKnight',Gunner:'militaryGunner'} as Record<string,string>)[candidate.text];
       if(key)reference={kind:'series',id:key};
     }
-    out.push({text:candidate.text,reference});i+=candidate.text.length;
+    const token=candidate.text+(lang==='en'&&/^s\b/.test(text.slice(i+candidate.text.length))?'s':'');
+    out.push({text:token,reference});i+=token.length;
   }
   if(plain)out.push({text:plain});return out;
 }
