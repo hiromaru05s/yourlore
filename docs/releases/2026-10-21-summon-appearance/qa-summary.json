@@ -1,0 +1,702 @@
+{
+  "desktop": {
+    "errors": [],
+    "cases": [
+      {
+        "appearance": {
+          "checked": 278,
+          "tones": {
+            "ready": 117,
+            "blocked": 44,
+            "plain": 117
+          },
+          "grayError": 0,
+          "expectedError": 0.5026530115277752,
+          "color": 17.363055555555555
+        }
+      },
+      {
+        "id": "RUST_SHROOM",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "poison-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "RUST_SLUG",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "poison-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "POISON_MASTER",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "poison-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "CHOSEN_KNIGHT",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "chosen-hero-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "FIRE_MASTER",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "mage-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "HEXER1",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "hexer-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "MERCENARY",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 1,
+        "exits": [],
+        "families": [
+          "mercenary-summon",
+          "slate-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "ASSASSIN1",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "assassin-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "VAMP1",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "vampire-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "VOID_APOSTLE",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 1,
+        "exits": [],
+        "families": [
+          "void-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "NT_SEAL5",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "silence-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "SHIELD_TITAN",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "shield-titan-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "SALLY_WEAPONMASTER",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 1,
+        "exits": [],
+        "families": [
+          "weaponmaster-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "DUNGEON",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "dungeon-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "GAMBLER",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "gambler-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "GOLEM1",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "golem-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "HALF_ELF",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "verdant-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "ELF",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 1,
+        "exits": [],
+        "families": [
+          "verdant-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "TAR3",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          ""
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "SORTER",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 2,
+        "exits": [
+          "grave-0",
+          "grave-1",
+          "grave-2",
+          "deck-0",
+          "deck-1",
+          "deck-2"
+        ],
+        "families": [
+          "slate-summon"
+        ],
+        "removed": 6,
+        "left": 0
+      },
+      {
+        "id": "RUST_SHROOM",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "skip",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "poison-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "RUST_SHROOM",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "resize",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "poison-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "RUST_SHROOM",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [],
+        "removed": 0,
+        "left": 0,
+        "reduced": true
+      }
+    ]
+  },
+  "mobile": {
+    "errors": [],
+    "cases": [
+      {
+        "appearance": {
+          "checked": 278,
+          "tones": {
+            "ready": 117,
+            "blocked": 44,
+            "plain": 117
+          },
+          "grayError": 0,
+          "expectedError": 0.5026530115277752,
+          "color": 17.363055555555555
+        }
+      },
+      {
+        "id": "RUST_SHROOM",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "poison-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "VOID_APOSTLE",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 1,
+        "exits": [],
+        "families": [
+          "void-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "CHOSEN_KNIGHT",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "chosen-hero-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "SORTER",
+        "owner": 1,
+        "stale": false,
+        "interrupt": "",
+        "activations": 2,
+        "exits": [
+          "grave-0",
+          "grave-1",
+          "grave-2",
+          "deck-0",
+          "deck-1",
+          "deck-2"
+        ],
+        "families": [
+          "slate-summon"
+        ],
+        "removed": 6,
+        "left": 0
+      },
+      {
+        "id": "RUST_SHROOM",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "skip",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "poison-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "RUST_SHROOM",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "resize",
+        "activations": 0,
+        "exits": [],
+        "families": [
+          "poison-summon"
+        ],
+        "removed": 0,
+        "left": 0
+      },
+      {
+        "id": "RUST_SHROOM",
+        "owner": 0,
+        "stale": false,
+        "interrupt": "",
+        "activations": 0,
+        "exits": [],
+        "families": [],
+        "removed": 0,
+        "left": 0,
+        "reduced": true
+      }
+    ]
+  },
+  "special": {
+    "results": [
+      {
+        "kind": "CASINO",
+        "owner": 0,
+        "families": [
+          "game casino-summon"
+        ],
+        "tones": [
+          "blocked"
+        ],
+        "bad": [],
+        "arrivals": [
+          "CASINO"
+        ],
+        "field": [
+          "CASINO"
+        ]
+      },
+      {
+        "kind": "CASTLE",
+        "owner": 0,
+        "families": [
+          "castle-summon"
+        ],
+        "tones": [
+          "blocked"
+        ],
+        "bad": [],
+        "arrivals": [
+          "CASTLE"
+        ],
+        "field": [
+          "CASTLE"
+        ]
+      },
+      {
+        "kind": "hatch",
+        "owner": 0,
+        "families": [
+          "game hatch-summon"
+        ],
+        "tones": [
+          "plain"
+        ],
+        "bad": [],
+        "arrivals": [
+          "DIVINE"
+        ],
+        "field": [
+          "DIVINE"
+        ]
+      },
+      {
+        "kind": "fusion",
+        "owner": 0,
+        "families": [
+          "dragon-fusion-summon"
+        ],
+        "tones": [
+          "ready"
+        ],
+        "bad": [],
+        "arrivals": [
+          "GM6_0",
+          "DRAGON_RIDER"
+        ],
+        "field": [
+          "DRAGON_RIDER"
+        ]
+      },
+      {
+        "kind": "rebirth",
+        "owner": 0,
+        "families": [
+          "rebirth"
+        ],
+        "tones": [
+          "ready"
+        ],
+        "bad": [],
+        "arrivals": [
+          "VOID_APOSTLE"
+        ],
+        "field": [
+          "VOID_APOSTLE"
+        ]
+      },
+      {
+        "kind": "ritual",
+        "owner": 0,
+        "families": [
+          "forbidden-ritual"
+        ],
+        "tones": [
+          "ready"
+        ],
+        "bad": [],
+        "arrivals": [
+          "TDE2",
+          "TDE3",
+          "TDE4"
+        ],
+        "field": [
+          "TDE1",
+          "TDE2",
+          "TDE3",
+          "TDE4"
+        ]
+      },
+      {
+        "kind": "floor",
+        "owner": 0,
+        "families": [
+          "dungeon-floor-overlay"
+        ],
+        "tones": [
+          "ready"
+        ],
+        "bad": [],
+        "arrivals": [
+          "MIMIC",
+          "MIMIC"
+        ],
+        "field": [
+          "MIMIC",
+          "MIMIC"
+        ]
+      },
+      {
+        "kind": "CASINO",
+        "owner": 1,
+        "families": [
+          "game casino-summon"
+        ],
+        "tones": [
+          "blocked"
+        ],
+        "bad": [],
+        "arrivals": [
+          "CASINO"
+        ],
+        "field": [
+          "CASINO"
+        ]
+      },
+      {
+        "kind": "CASTLE",
+        "owner": 1,
+        "families": [
+          "castle-summon"
+        ],
+        "tones": [
+          "blocked"
+        ],
+        "bad": [],
+        "arrivals": [
+          "CASTLE"
+        ],
+        "field": [
+          "CASTLE"
+        ]
+      },
+      {
+        "kind": "hatch",
+        "owner": 1,
+        "families": [
+          "game hatch-summon"
+        ],
+        "tones": [
+          "plain"
+        ],
+        "bad": [],
+        "arrivals": [
+          "DIVINE"
+        ],
+        "field": [
+          "DIVINE"
+        ]
+      },
+      {
+        "kind": "fusion",
+        "owner": 1,
+        "families": [
+          "dragon-fusion-summon"
+        ],
+        "tones": [
+          "plain"
+        ],
+        "bad": [],
+        "arrivals": [
+          "GM6_0",
+          "DRAGON_RIDER"
+        ],
+        "field": [
+          "DRAGON_RIDER"
+        ]
+      },
+      {
+        "kind": "rebirth",
+        "owner": 1,
+        "families": [
+          "rebirth"
+        ],
+        "tones": [
+          "plain"
+        ],
+        "bad": [],
+        "arrivals": [
+          "VOID_APOSTLE"
+        ],
+        "field": [
+          "VOID_APOSTLE"
+        ]
+      },
+      {
+        "kind": "ritual",
+        "owner": 1,
+        "families": [
+          "forbidden-ritual"
+        ],
+        "tones": [
+          "plain"
+        ],
+        "bad": [],
+        "arrivals": [
+          "TDE2",
+          "TDE3",
+          "TDE4"
+        ],
+        "field": [
+          "TDE1",
+          "TDE2",
+          "TDE3",
+          "TDE4"
+        ]
+      },
+      {
+        "kind": "floor",
+        "owner": 1,
+        "families": [
+          "dungeon-floor-overlay"
+        ],
+        "tones": [
+          "plain"
+        ],
+        "bad": [],
+        "arrivals": [
+          "MIMIC",
+          "MIMIC"
+        ],
+        "field": [
+          "MIMIC",
+          "MIMIC"
+        ]
+      }
+    ],
+    "errors": [],
+    "boundary": "Real reducer and controller in a local actual-board fixture; not authenticated multiplayer."
+  },
+  "boundary": "Actual reducer/controller fixture; physical-device and authenticated multiplayer testing are not claimed."
+}

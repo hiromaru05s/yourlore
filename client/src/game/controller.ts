@@ -1,3 +1,4 @@
+import {summonFaceFactory} from '../ui/summon/face';
 import {syncCardEffects,localCardEffect} from '../ui/cardFinish';
 import { seekerLevel, type ExperienceReceipt } from '../shared/progression';
 import {createMarketCrisis} from '../ui/marketCrisis/runtime';
@@ -615,7 +616,7 @@ export abstract class BaseController implements BoardHandlers {
               return card&&grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card;
             }).filter((card):card is CardInst=>!!card);
             if(source&&cards.length){
-              const faces=await A.forbiddenSummon(source,cards,sideOf(e.player));
+              const faces=await A.forbiddenSummon(source,cards,sideOf(e.player),summonFaceFactory(res.state,e.player,this.you));
               for(const face of faces){ghosts.set(face.dataset.uid!,{el:face,side:sideOf(e.player)});ritualFaces.add(face.dataset.uid!);}
             }
           }
@@ -634,25 +635,25 @@ export abstract class BaseController implements BoardHandlers {
             fieldCount[e.player]++;break;
           }
           if(e.rebirth&&shown){
-            const face=await A.rebirthSummon(e.rebirth.card,shown,sideOf(e.player),source=>summonGrants(i,e.uid,source));
+            const face=await A.rebirthSummon(e.rebirth.card,shown,sideOf(e.player),source=>summonGrants(i,e.uid,source),summonFaceFactory(res.state,e.player,this.you));
             if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;}
             fieldCount[e.player]++;break;
           }
           const fusion=fusions.get(e.uid);
           if(fusion&&shown){
-            const face=await A.dragonFusionSummon(shown,sideOf(e.player),fusion);
+            const face=await A.dragonFusionSummon(shown,sideOf(e.player),fusion,summonFaceFactory(res.state,e.player,this.you));
             ghosts.delete(fusion.dragon.uid);ghosts.delete(fusion.mate.uid);
             if(face){ghosts.set(e.uid,{el:face,side:sideOf(e.player)});statusSource=face;}
             fieldCount[e.player]++;break;
           }
           const egg=hatches.get(e.uid);
           if(egg&&heldEggs.delete(egg)){
-            const g=shown?await A.hatchSummon(egg,shown):null;
+            const g=shown?await A.hatchSummon(egg,shown,summonFaceFactory(res.state,e.player,this.you)):null;
             if(g){ghosts.delete(egg);ghosts.set(e.uid,{el:g,side:sideOf(e.player)});statusSource=g;break;}
             releaseMonster(egg);fieldCount[e.player]=Math.max(0,fieldCount[e.player]-1);
           }
           if (shown) {
-            const g = await A.ghostSummon(shown, sideOf(e.player), fieldCount[e.player],source=>summonGrants(i,e.uid,source));
+            const g = await A.ghostSummon(shown, sideOf(e.player), fieldCount[e.player],source=>summonGrants(i,e.uid,source),summonFaceFactory(res.state,e.player,this.you));
             if (g) {ghosts.set(e.uid, { el: g, side: sideOf(e.player) });statusSource=g;}
           }
           fieldCount[e.player]++;
@@ -776,7 +777,7 @@ export abstract class BaseController implements BoardHandlers {
             return card?[grant?.type==='decayCounterGrant'?{...card,decayCnt:grant.before}:card]:[];
           });
           if(cards.length){
-            const playback=A.startDungeonFloor(cards,sideOf(e.player));
+            const playback=A.startDungeonFloor(cards,sideOf(e.player),summonFaceFactory(res.state,e.player,this.you));
             motionFinishes.push(playback.done);
             cards.forEach((card,index)=>floorSessions.set(card.uid,{playback,last:index===cards.length-1}));
           }

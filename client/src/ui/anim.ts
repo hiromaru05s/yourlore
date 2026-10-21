@@ -1,3 +1,5 @@
+import {prepareSummonAppearance,refreshSummonAppearance,mountSummonAppearance} from './summon/appearance';
+import {defaultSummonFace,type SummonFaceFactory} from './summon/face';
 import {cloneCardNode} from './cardClone';
 import {isCastle} from './castleSummon/catalog';
 import {playCastleSummon,cancelCastleSummons} from './castleSummon/runtime';
@@ -249,8 +251,11 @@ export const fieldPlacement = projectedPlacement;
 async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElement,heavy=false,landingSound:'summon'|'mimic'='summon'):Promise<HTMLElement> {
   if(!target.isConnected || !reveal.isConnected)return face;
   const from=reveal.getBoundingClientRect();
-  const w=target.offsetWidth,h=target.offsetHeight;
+  const w=target.offsetWidth*2,h=target.offsetHeight*2;
+  prepareSummonAppearance(face);
   floatAt(face,{left:0,top:0});face.classList.add('fx-field-ghost');
+  for(const el of face.querySelectorAll<HTMLElement>('[style]'))if(el.style.fontSize.endsWith('px')&&el.parentElement){const base=parseFloat(getComputedStyle(el.parentElement).fontSize);if(base)el.style.fontSize=`${parseFloat(el.style.fontSize)/base}em`;}
+  refreshSummonAppearance(face,2);
   face.style.visibility='visible';
   face.style.width=`${w}px`;face.style.height=`${h}px`;face.style.setProperty('--cw',`${w}px`);face.style.setProperty('--ch',`${h}px`);
   face.style.transformOrigin='0 0';
@@ -812,18 +817,18 @@ function monZoneEl(side: ViewSide): HTMLElement | null {
  * field slot and STAYS there (the real board re-renders later). Returns the
  * ghost node so a same-batch destroy can kill it visibly.
  */
-export async function hatchSummon(sourceUid:string,card:CardInst):Promise<HTMLElement|null>{
+export async function hatchSummon(sourceUid:string,card:CardInst,makeFace:SummonFaceFactory=defaultSummonFace):Promise<HTMLElement|null>{
  const source=byUid(sourceUid);if(!source)return null;
- const face=cardEl(card,{field:true});
+ const face=makeFace(card);
  if(!fxSkip)await boardMotionScope(signal=>playHatch(source,face,signal),6000);
  if(!source.isConnected)return null;
  source.replaceWith(face);return face;
 }
 
 /** Selected fusion owns source removal and result appearance without a graveyard flight. */
-export async function dragonFusionSummon(card:CardInst,side:ViewSide,from:{dragon:{uid:string};mate:{uid:string}}):Promise<HTMLElement|null>{
+export async function dragonFusionSummon(card:CardInst,side:ViewSide,from:{dragon:{uid:string};mate:{uid:string}},makeFace:SummonFaceFactory=defaultSummonFace):Promise<HTMLElement|null>{
  const zone=monZoneEl(side);if(!zone)return null;
- const face=cardEl(card,{field:true});
+ const face=makeFace(card);
  const source=(uid:string)=>zone.querySelector<HTMLElement>(`.card[data-uid="${CSS.escape(uid)}"]`)??undefined;
  const dragon=source(from.dragon.uid),mate=source(from.mate.uid);
  const {playDragonFusion}=await import('./dragonFusion/runtime');
@@ -835,12 +840,12 @@ let forbiddenRuntime:Promise<typeof import('./forbiddenRitual/runtime')>|undefin
 const loadForbiddenRitual=()=>forbiddenRuntime??=(import('./forbiddenRitual/runtime').catch(error=>{forbiddenRuntime=undefined;throw error;}));
 export function warmForbiddenRitual():void{void loadForbiddenRitual().catch(()=>{});}
 /** The selected ritual owns all native destination faces; no individual summon fires again. */
-export async function forbiddenSummon(source:HTMLElement,cards:CardInst[],side:ViewSide):Promise<HTMLElement[]>{
+export async function forbiddenSummon(source:HTMLElement,cards:CardInst[],side:ViewSide,makeFace:SummonFaceFactory=defaultSummonFace):Promise<HTMLElement[]>{
  const zone=monZoneEl(side);if(!zone)return [];
  const faces:HTMLElement[]=[];
  for(const card of cards){
   const target=reserveMonster(zone,card.uid);if(!target)break;
-  const face=cardEl(card,{field:true});face.style.visibility='hidden';target.replaceWith(face);faces.push(face);
+  const face=makeFace(card);face.style.visibility='hidden';target.replaceWith(face);faces.push(face);
  }
  try{
   if(!fxSkip&&faces.length){
@@ -858,10 +863,10 @@ let rebirthRuntime:Promise<typeof import('./rebirth/runtime')>|undefined;
 const loadRebirth=()=>rebirthRuntime??=(import('./rebirth/runtime').catch(error=>{rebirthRuntime=undefined;throw error;}));
 export function warmRebirth():void{void loadRebirth().catch(()=>{});}
 /** One owner from the selected grave face through landing and the shared Void coat. */
-export async function rebirthSummon(original:CardInst,card:CardInst,side:ViewSide,onReveal?:(node:HTMLElement)=>void):Promise<HTMLElement|null>{
+export async function rebirthSummon(original:CardInst,card:CardInst,side:ViewSide,onReveal?:(node:HTMLElement)=>void,makeFace:SummonFaceFactory=defaultSummonFace):Promise<HTMLElement|null>{
  const zone=monZoneEl(side);if(!zone)return null;
  const slot=reserveMonster(zone,card.uid);if(!slot)return null;
- const face=cardEl(card,{field:true});face.style.visibility='hidden';slot.replaceWith(face);
+ const face=makeFace(card);face.style.visibility='hidden';slot.replaceWith(face);
  try{
   if(!fxSkip)await boardMotionScope(async signal=>{
    const {playRebirth}=await loadRebirth();if(signal.aborted)return false;
@@ -872,22 +877,22 @@ export async function rebirthSummon(original:CardInst,card:CardInst,side:ViewSid
 }
 
 /** Dice and all of its arrivals share one renderer and cancellation owner. */
-export function startDungeonFloor(cards:CardInst[],side:ViewSide){
+export function startDungeonFloor(cards:CardInst[],side:ViewSide,makeFace:SummonFaceFactory=defaultSummonFace){
  const abort=new AbortController(),cancel=()=>abort.abort();fxWaiters.add(cancel);
  if(fxSkip)abort.abort();
- const session=createDungeonFloor(cards,side==='me',abort.signal);
+ const session=createDungeonFloor(cards,side==='me',abort.signal,makeFace);
  void session.done.then(()=>fxWaiters.delete(cancel));
  return session;
 }
 
-export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void): Promise<HTMLElement | null> {
+export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void,makeFace:SummonFaceFactory=defaultSummonFace): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   if(!from||!zone)return null;
   const target=reserveMonster(zone,card.uid);
   if (!target) return null;
   if(isCastle(card.id)){
     const countLabel={ja:'カウント',en:'Count',ko:'카운트'}[getLang()];
-    const face=cardEl(card,{field:true,badge:`${countLabel} ${(card as typeof card & {gcount?:number}).gcount||0}`});target.replaceWith(face);onReveal?.(face);
+    const face=makeFace(card,{badge:`${countLabel} ${(card as typeof card & {gcount?:number}).gcount||0}`});target.replaceWith(face);onReveal?.(face);
     if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(face,{from,signal,onImpact:()=>sfx('summon')}),10000);
     return face.isConnected?face:null;
   }
@@ -896,10 +901,10 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
   onReveal?.(node);
   try {
     await focusSummon(node, card, side);
-    const face=await flyIntoSlot(node,target,cardEl(card,{field:true}),true,card.id==='MIMIC'?'mimic':'summon');
+    const face=await flyIntoSlot(node,target,makeFace(card),true,card.id==='MIMIC'?'mimic':'summon');
     // Hand the exact landing face to the lane before another summon opens space.
     face.removeAttribute('style');face.classList.remove('fx-field-ghost','fx-card-flight');
-    target.replaceWith(face);return face;
+    target.replaceWith(face);mountSummonAppearance(face);return face;
   } finally { node.remove(); }
 }
 

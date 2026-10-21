@@ -1,3 +1,4 @@
+import {refreshSummonAppearance,settleSummonPose} from './appearance';
 /** Match the native board density, including Retina and high-density phones. */
 export function summonPixelRatio():number {
  return Math.max(1,globalThis.devicePixelRatio||1);
@@ -12,7 +13,7 @@ export function summonPixelMatrix(matrix:DOMMatrix):DOMMatrix {
  * final renderer layer retires. Keep the original visibility for cancellation. */
 export function settleSummonFace(source:HTMLElement,layer:HTMLElement,ms:number,end:number):void {
  const t=Math.max(0,Math.min(1,(ms-(end-180))/180));
- if(t>0){source.style.visibility='visible';layer.style.opacity=String(1-t*t*(3-2*t));}
+ if(t>0){refreshSummonAppearance(source);settleSummonPose(source);source.style.visibility='visible';layer.style.opacity=String(1-t*t*(3-2*t));}
 }
 
 /** Rasterize local planes at display density while retaining authored CSS coordinates. */

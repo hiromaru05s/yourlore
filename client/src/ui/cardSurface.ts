@@ -1,5 +1,6 @@
 import {rasterMatte} from './spellFrame/matteRaster';
 import {frameMaskOffThread} from './spellFrame/rasterClient';
+import {refreshSummonAppearance} from './summon/appearance';
 /** Rasterize the current card layers for a deformable mesh. Layout and text
  * come from the real DOM card, not a second set of card rules or translations. */
 export const CARD_PADDING = .12;
@@ -71,6 +72,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   const ratio = r.height / r.width;
   // Opponent path never reads, copies or requests a face or card identity.
   if (!reveal) return captureCardBack(sleeve,ratio);
+  refreshSummonAppearance(node,2);
   const w = RESOLUTION, h = w * ratio, pad = w * CARD_PADDING;
   const back = canvas(w + pad*2, h + pad*2);
   const backCtx = back.getContext('2d')!;
@@ -80,11 +82,23 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
     const b = el.getBoundingClientRect();
     return { x: pad+(b.left-r.left)/r.width*w, y: pad+(b.top-r.top)/r.height*h, w:b.width/r.width*w, h:b.height/r.height*h };
   };
+  // The matte is already rasterized. Preserve the remaining native CSS filters
+  // at capture density instead of replacing the frame with a flat, bright print.
+  const filter=(el:Element)=>getComputedStyle(el).filter.replace(/url\([^)]*\)/g,'').replace(/(-?[\d.]+)px/g,(_,n)=>`${Number(n)*w/(node.offsetWidth||r.width)}px`).trim()||'none';
+  const stateFilter=node.matches('.is-dim,.is-exhausted,[data-summon-rest="blocked"],.field-resting-face')?getComputedStyle(node.querySelector('.card-art')??node).filter:'none';
+  const rootFilter=filter(node)==='none'?stateFilter:filter(node);
   const layers: (() => Promise<void>)[] = [];
   const frame = node.querySelector('.card-frame');
   if (!frame || !urlOf(frame)) throw new Error('Missing card frame');
   const frameUrl = urlOf(frame)!;
-  layers.push(async () => { ctx.drawImage(await matte(frameUrl), pad, pad, w, h); });
+  // State glows pulse on a shared live clock; baking one phase into a texture
+  // leaves a bright frozen halo at the handoff. Capture only the physical frame.
+  const restingShadow=node.style.getPropertyValue('--rest-shadow');
+  if(node.classList.contains('summon-face'))node.style.setProperty('--rest-shadow','drop-shadow(0 0 0 #0000)');
+  const frameFilter=stateFilter!=='none'?filter(frame).replace(/(?:grayscale|brightness|contrast)\([^)]*\)/g,'').trim():filter(frame);
+  if(restingShadow)node.style.setProperty('--rest-shadow',restingShadow);
+  const frameInk=frameFilter||'none';
+  layers.push(async () => {const image=await matte(frameUrl);ctx.save();ctx.filter=frameInk;ctx.drawImage(image,pad,pad,w,h);ctx.restore();});
   const art = node.querySelector<HTMLImageElement>('.card-art img');
   if (art) {
     const b = box(art), fallback = art.srcset?(art.currentSrc||art.src):art.src;
@@ -158,6 +172,10 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   }
   await Promise.all([backImage, image(frameUrl), ...(art ? [image(art.currentSrc || art.src).catch(()=>null)] : [])]);
   for (const draw of layers) await draw();
+  if(rootFilter!=='none'){
+    const print=canvas(face.width,face.height);print.getContext('2d')!.drawImage(face,0,0);
+    ctx.clearRect(0,0,face.width,face.height);ctx.save();ctx.filter=rootFilter;ctx.drawImage(print,0,0);ctx.restore();
+  }
   const sleeveImage=await backImage;if(sleeveImage)paintSleeve(backCtx,sleeveImage,pad,w,h);
   return { face, back };
 }

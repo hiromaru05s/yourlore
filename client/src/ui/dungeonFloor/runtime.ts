@@ -1,5 +1,5 @@
 import type {CardInst} from '../../shared/types';
-import {cardEl} from '../cardView';
+import {defaultSummonFace,type SummonFaceFactory} from '../summon/face';
 import {reserveMonster} from '../fieldLayout';
 import {sfx} from '../sound';
 import type {Stage} from './stage';
@@ -16,7 +16,7 @@ export type FloorSession = {
 
 /** One portal owns the entire dice result. The controller releases each landing
  * in event order, so intervening enchantment reactions cannot be overtaken. */
-export function createDungeonFloor(cards:CardInst[], mine:boolean, signal:AbortSignal):FloorSession {
+export function createDungeonFloor(cards:CardInst[], mine:boolean, signal:AbortSignal,makeFace:SummonFaceFactory=defaultSummonFace):FloorSession {
   const zone=document.querySelector<HTMLElement>(`#${mine?'me':'opp'}Row .zone-mon`);
   const entries=cards.slice(0,6).map(card=>({card,target:zone?reserveMonster(zone,card.uid):null,
     face:null as HTMLElement|null,requested:false,resolve:null as null|((el:HTMLElement|null)=>void)}));
@@ -26,7 +26,7 @@ export function createDungeonFloor(cards:CardInst[], mine:boolean, signal:AbortS
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const reveal=(i:number)=>{
     const e=entries[i];
-    if(!e.face&&e.target?.isConnected){e.face=cardEl(e.card,{field:true});e.target.replaceWith(e.face);}
+    if(!e.face&&e.target?.isConnected){e.face=makeFace(e.card);e.target.replaceWith(e.face);}
     if(e.resolve){e.resolve(e.face);e.resolve=null;}
   };
   const finish=()=>{

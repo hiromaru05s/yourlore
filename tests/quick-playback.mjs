@@ -34,6 +34,7 @@ globalThis.CSS={escape:value=>String(value)}; // DOM double ignores selector con
 globalThis.document={querySelector:()=>null,querySelectorAll:()=>[],getElementById:()=>null};
 globalThis.requestAnimationFrame=fn=>{fn();return 1;};
 const mocks={
+ 'summonFace':'export const summonFaceFactory=()=>()=>{throw Error("Native faces are exercised in browser tests")};',
  'fateWheel':'export const openWheelDice=()=>{throw Error("Wheel sessions are exercised in fate-wheel-runtime tests")};',
  'timewarpRuntime':'export const warmTimewarp=()=>{};export class TimewarpPresentation {cast(...a){return globalThis.__fx("timewarpCast",...a)}release(...a){return globalThis.__fx("timewarpRelease",...a)}sync(){}cancel(){}destroy(){}}',
  'combatExit':'export const startCombatExit=async()=>{};',
@@ -54,7 +55,7 @@ const mocks={
  'i18n':'export const esc=s=>String(s),t=s=>s,getLang=()=>"ja",localizedInterfaceText=()=>"",cardName=c=>c.id,onLangChange=()=>()=>{};'
 };
 try{
- await build({stdin:{contents:"export {BaseController} from './client/src/game/controller';export {createGame,reduce} from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs'),plugins:[{name:'ui-double',setup(b){b.onResolve({filter:/.*/},a=>{const key=a.path.endsWith('/timewarp/runtime')?'timewarpRuntime':a.path.endsWith('/statusGrant/runtime')?'statusGrantRuntime':a.path.split('/').pop();return mocks[key]?{path:key,namespace:'mock'}:null;});b.onLoad({filter:/.*/,namespace:'mock'},a=>({contents:mocks[a.path],loader:'js'}));}}]});
+ await build({stdin:{contents:"export {BaseController} from './client/src/game/controller';export {createGame,reduce} from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs'),plugins:[{name:'ui-double',setup(b){b.onResolve({filter:/.*/},a=>{const key=a.path.endsWith('/summon/face')?'summonFace':a.path.endsWith('/timewarp/runtime')?'timewarpRuntime':a.path.endsWith('/statusGrant/runtime')?'statusGrantRuntime':a.path.split('/').pop();return mocks[key]?{path:key,namespace:'mock'}:null;});b.onLoad({filter:/.*/,namespace:'mock'},a=>({contents:mocks[a.path],loader:'js'}));}}]});
  const {BaseController,createGame,reduce,DB}=await import(path.join(dir,'test.mjs'));
  const card=(id,uid=id)=>({...DB[id],uid});
  const mon=(id,uid=id)=>({...card(id,uid),tempAtk:0,atkMod:0,defMod:0,dmg:0,exhausted:false,summonedTurn:0});

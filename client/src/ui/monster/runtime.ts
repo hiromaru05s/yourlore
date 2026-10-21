@@ -1,3 +1,4 @@
+import {paintRestingAppearance} from '../summon/appearance';
 import {isCastle} from '../castleSummon/catalog';
 import {isPoisonSummon} from '../poisonSummon/selection';
 import {isShieldTitan} from '../shieldTitanSummon/selection';
@@ -22,7 +23,7 @@ import {playManaDestruction,cancelManaDestruction} from '../manaDestruction/runt
 import {playSlateSummon,cancelSummons,cancelSummon} from '../summon/runtime';
 import {Actor} from './actor';
 import {duration,ease, type Kind, type Variant, type Rect} from './catalog';
-import {drawEffect, ongoingFilter} from './renderer';
+import {drawEffect} from './renderer';
 import {mountAnimationLayers} from './layers';
 import {projectedPlacement} from '../boardProjection';
 
@@ -63,7 +64,7 @@ function paintHit(source:HTMLElement,actor:Actor,now:number){
  const t=(now-start)/300;if(t>=1){hits.delete(source);const state=states.get(source);if(state)state.dirty=true;return;}
  const q=reduced()?0:Math.sin(t*Math.PI*5)*(1-t)*5;
  actor.el.style.setProperty('translate',`${q}px ${Math.abs(q)*.2}px`);
- actor.el.style.setProperty('filter',actor.el.style.filter+` brightness(${1+.28*(1-t)})`,'important');
+ actor.el.style.setProperty('filter',(actor.el.style.filter==='none'?'':actor.el.style.filter)+` brightness(${1+.28*(1-t)})`,'important');
  actor.el.dataset.hitReaction='true';
 }
 /** Freeze the currently visible pose before a destruction takes ownership. */
@@ -142,12 +143,9 @@ function tick(now:number){
   const k=ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
   s.actor.paint(k,v,t,r,r,reduced(),true,side);if(n.style.opacity!=='0')n.style.opacity='0';s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':v;
   if(dual){s.dual??=new DualReadySurface(s.actor,2);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
-  if(n.dataset.monsterAura){
-   if(!ready&&!blocked)s.actor.el.style.setProperty('filter',ongoingFilter('C',t,reduced()),'important');
-   else {const f=s.actor.el.style.filter;s.actor.el.style.setProperty('filter',`${f} ${ongoingFilter('C',(now%4400)/4400,reduced()).replace('drop-shadow(0 2px 4px #0009)','')}`,'important');}
-  }
+  paintRestingAppearance(s.actor.el,ready?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,2,reduced());
   for(const cls of ['is-aiming','is-atk-target','is-targetable'])s.actor.el.classList.toggle(cls,n.classList.contains(cls));
-  if(n.classList.contains('is-atk-target')||n.classList.contains('is-targetable'))s.actor.el.style.setProperty('filter',s.actor.el.style.filter+' drop-shadow(0 0 5px #ff7955)','important');
+  if(n.classList.contains('is-atk-target')||n.classList.contains('is-targetable'))s.actor.el.style.setProperty('filter','drop-shadow(0 0 5px #ff7955)','important');
   s.actor.el.style.removeProperty('translate');delete s.actor.el.dataset.hitReaction;paintHit(n,s.actor,now);
   if(ready&&!dual)drawEffect(s.layer.foreground,'ready','C',t,r,r,{active:true,reduced:reduced(),side,pass:'front'});
  }

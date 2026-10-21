@@ -54,6 +54,35 @@ try{
    return{finishPixels:diff(live,blank),iconPixels:diff(blank,noIcon),width:live.width};
   }finally{host.remove();}
  });assert(surface.finishPixels>10000,'cloned cosmetic canvas retains its live pixels');assert(surface.iconPixels>1000,'captured decay plate remains visible');checks.push({surface});
+ // The animation print must already carry the final rule-derived tone. Exercise
+ // every monster definition for both owners, including immediate CSS resolution.
+ const appearance=await page.evaluate(async()=>{
+  const {DB,FRAME_BACK}=await import('/src/shared/cards.ts'),{summonFaceFactory}=await import('/src/ui/summon/face.ts'),{fieldVisualState}=await import('/src/ui/fieldVisualState.ts');
+  const {captureCardSurface}=await import('/src/ui/cardSurface.ts');
+  const host=document.createElement('div');host.className='game';host.style.cssText='position:fixed;left:-4000px;top:0';document.body.append(host);
+  let checked=0;const tones={};
+  try{
+   for(const owner of [0,1])for(const def of Object.values(DB).filter(c=>c.t==='mon')){
+    const g=combatTempo.fixture('summon',owner).prev;g.cur=owner;g.pending=null;g.over=undefined;
+    const mon={...def,uid:'appearance-'+def.id,exhausted:false,summonedTurn:g.turn,tempAtk:0,atkMod:0,defMod:0,dmg:0};g.players[owner].field=[mon];
+    const node=summonFaceFactory(g,owner,0)(mon);host.append(node);
+    const actual=getComputedStyle(node.querySelector('.card-art')).filter,expected=fieldVisualState(g,g.players[owner],mon).blocked;
+    if(actual.includes('grayscale(1)')!==expected)throw Error(def.id+' does not match native blocked tone: '+actual);
+    if(getComputedStyle(node).filter!=='none')throw Error(def.id+' filters its entire printed face');
+    tones[node.dataset.summonRest]=(tones[node.dataset.summonRest]||0)+1;checked++;node.remove();
+   }
+   const {cardEl}=await import('/src/ui/cardView.ts'),{prepareSummonAppearance}=await import('/src/ui/summon/appearance.ts');
+   const node=cardEl({...DB.RUST_SHROOM,uid:'tone-pixels'},{field:true});node.dataset.summonRest='plain';prepareSummonAppearance(node);node.style.cssText='width:180px;height:280px;--cw:180px;--ch:280px';host.append(node);
+   const art=node.querySelector('.card-art img');await art.decode();
+   const plain=(await captureCardSurface(node,FRAME_BACK,true,false)).face;
+   node.dataset.summonRest='blocked';const blocked=(await captureCardSurface(node,FRAME_BACK,true,false)).face;
+   const sample=c=>c.getContext('2d').getImageData(Math.floor(c.width*.4),Math.floor(c.height*.4),120,120).data;
+   const a=sample(plain),b=sample(blocked);let grayError=0,expectedError=0,color=0;
+   for(let i=0;i<a.length;i+=4){grayError+=Math.max(b[i],b[i+1],b[i+2])-Math.min(b[i],b[i+1],b[i+2]);expectedError+=Math.abs(b[i]-.57*(.2126*a[i]+.7152*a[i+1]+.0722*a[i+2]));color+=Math.max(a[i],a[i+1],a[i+2])-Math.min(a[i],a[i+1],a[i+2]);}
+   return{checked,tones,grayError:grayError/(a.length/4),expectedError:expectedError/(a.length/4),color:color/(a.length/4)};
+  }finally{host.remove();}
+ });
+ assert(appearance.checked>100);assert(appearance.tones.blocked>0&&appearance.tones.ready>0&&appearance.tones.plain>0);assert(appearance.color>5);assert(appearance.grayError<1);assert(appearance.expectedError<2,'capture applies blocked tone once, without retaining full-color art or double dimming');checks.push({appearance});console.log('PASS appearance',appearance);
  for(const id of (process.env.LORE_QA_CARDS?.split(',')||['RUST_SHROOM','RUST_SLUG','POISON_MASTER','CHOSEN_KNIGHT','FIRE_MASTER','HEXER1','MERCENARY','ASSASSIN1','VAMP1','VOID_APOSTLE','NT_SEAL5','SHIELD_TITAN','SALLY_WEAPONMASTER','DUNGEON','GAMBLER','GOLEM1','HALF_ELF','ELF','TAR3','SORTER'])){
   const owner=checks.length%2;console.log('start',id,owner);
   await page.evaluate(({id,owner})=>{window.qaRunning=summonQA(id,owner)}, {id,owner});

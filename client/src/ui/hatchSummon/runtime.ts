@@ -1,3 +1,4 @@
+import {refreshSummonAppearance} from '../summon/appearance';
 import {cloneCardNode} from '../cardClone';
 import {projectedPlacement,layoutRect} from '../boardProjection';
 import {HatchRenderer} from './renderer';
@@ -38,6 +39,7 @@ export function playHatch(source:HTMLElement,result:HTMLElement,signal?:AbortSig
    const size=w*4.6/1.36;canvas.style.cssText=`position:absolute;left:${w/2-size/2}px;top:${h/2-size*.515}px;width:${size}px;height:${size}px;pointer-events:none`;
    host.append(canvas);const ctx=canvas.getContext('2d');if(!ctx)throw Error('Canvas unavailable');
    const paint=(ms:number)=>{
+    copies.forEach(copy=>refreshSummonAppearance(copy,1));
     host!.style.transform=projectedPlacement(source,w,h).toString();
     const reveal=smooth(designs[HATCH_VARIANT].hit+150,2480,ms);
     copies[1].style.clipPath=reveal>=1?'none':`ellipse(${reveal*150}% ${reveal*150}% at 50% 43%)`;

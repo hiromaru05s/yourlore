@@ -1,3 +1,4 @@
+import {refreshSummonAppearance} from '../summon/appearance';
 import {cloneCardNode} from '../cardClone';
 import {projectedPlacement} from '../boardProjection';
 import {CasinoRenderer} from './renderer';
@@ -45,6 +46,7 @@ export function playCasinoSummon(source:HTMLElement,options:Options={}):Promise<
    canvas.style.cssText='position:absolute;left:-162px;top:-117px;width:504px;height:504px;pointer-events:none';
    art.append(canvas);host.append(copy);
    const paint=(elapsed:number)=>{
+    refreshSummonAppearance(copy,2);
     host!.style.transform=projectedPlacement(anchor,180,270).toString();
     lease!.renderer.draw(canvas,elapsed);host!.dataset.time=String(Math.round(elapsed));
    };

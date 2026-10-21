@@ -14,7 +14,7 @@ export class Actor{
  private readonly styled=new WeakMap<HTMLElement,string>();
  readonly el:HTMLElement;readonly surface:HTMLCanvasElement;readonly pieces:HTMLElement[]=[];readonly polygons:Point[][]=[];stats?:Partial<Record<'atk'|'def',{from:number;to:number}>>;masks:Point[][]=[];matrix=new DOMMatrix();
  constructor(source:HTMLElement,readonly root:HTMLElement,private readonly density=1){
-  this.el=source.cloneNode(true) as HTMLElement;this.el.removeAttribute('id');this.el.removeAttribute('data-uid');this.el.classList.remove('can-attack','ready','exhausted','summon-in','is-attacker','is-exhausted','is-targetable','monster-blocked');this.el.classList.add('duet-card');root.append(this.el);
+  this.el=source.cloneNode(true) as HTMLElement;this.el.removeAttribute('id');this.el.removeAttribute('data-uid');this.el.classList.remove('summon-face','field-resting-face','can-attack','ready','exhausted','summon-in','is-attacker','is-exhausted','is-targetable','monster-blocked');this.el.classList.add('duet-card');root.append(this.el);
   // Rasterize filtered, projected faces at twice the CSS resolution. Normalize
   // fitted inline text first so it scales with the face, including three-digit stats.
   if(density>1){
