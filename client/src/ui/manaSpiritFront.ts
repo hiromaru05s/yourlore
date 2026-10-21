@@ -15,5 +15,6 @@ export function buildDewFront(body:T.Group){
     const drop=add(new T.LatheGeometry(profile,64),new T.MeshPhysicalMaterial({color:0x9ce8ee,transmission:.7,thickness:.16,roughness:.07,ior:1.36,attenuationColor:0x4babca,attenuationDistance:.42,clearcoat:1,envMapIntensity:1.1}),0,0,.052);drop.scale.z=.52;
     const seed=sphere(.055,new T.MeshPhysicalMaterial({color:0xddfff2,roughness:.18,emissive:0x3d98ac,emissiveIntensity:.25}),0,-.075,.069);seed.scale.set(.65,1,.35);
 
+  lip.name='zeno-dew-rim';drop.name='zeno-dew-glass';seed.name='zeno-dew-seed';
   return root;
 }

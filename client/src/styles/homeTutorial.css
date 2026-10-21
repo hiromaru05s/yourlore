@@ -7,7 +7,12 @@
 .home-spirit-touch{display:block;width:100%;max-width:450px;height:clamp(300px,54vh,450px);border:0;background:none;padding:0;cursor:pointer;touch-action:manipulation}
 .home-spirit-host{display:block;width:100%;height:100%;filter:drop-shadow(0 14px 12px #09162730)}
 .home-spirit-host canvas,.home-spirit-host svg{display:block;width:100%;height:100%}
-.home-spirit-touch:focus-visible{outline:2px solid #cee5ed;outline-offset:-12px;border-radius:50%}
+/* The stage-sized hit area must never become a circle around the character.
+ * Keep a small ivory keyboard cue, independent of global button focus rules. */
+.lounge-shell.selected-menu.lounge-home .home-spirit-touch{position:relative;outline:none;border-radius:0;box-shadow:none;-webkit-tap-highlight-color:transparent}
+.lounge-shell.selected-menu.lounge-home .home-spirit-touch:is(:focus,:focus-visible){outline:none;box-shadow:none}
+.home-spirit-touch::after{content:'';position:absolute;left:calc(50% - 13px);bottom:9%;width:26px;height:3px;background:#eee0b8;box-shadow:0 1px 3px #152b42;opacity:0;pointer-events:none}
+.home-spirit-touch:focus-visible::after{opacity:1}
 /* Keep the adopted horizon nav; reserve enough room for the longer label. */
 .lounge-shell.horizon-nav .lounge-rail nav{grid-template-columns:repeat(3,minmax(0,1fr)) 1.15fr repeat(2,minmax(0,1fr)) 1.4fr}
 /* Curriculum as a stage selection, with a clear primary action and persistent state. */

@@ -8,6 +8,7 @@ import { buildMoonRabbit } from './zenoRig';
 import { bindZenoInteraction, createZenoTurn, ZENO_TURN_LIMIT } from './zenoInteraction';
 import { loungeText } from './loungeText';
 import { buildDewFront } from './manaSpiritFront';
+import {createHomePearl,createHomeReflectionRoom,disposeHomeReflectionRoom,finishHomeSpirit} from './zenoHomeSurface';
 
 export type SpiritPose = ReturnType<ReturnType<typeof createSpiritMotion>['tick']>;
 export type SpiritForm = {left:THREE.Group;right:THREE.Group;update?:(pose:SpiritPose,dt:number,time:number)=>void};
@@ -33,22 +34,30 @@ export function mountManaSpirit(host: HTMLElement, options: {
   let renderer: THREE.WebGLRenderer;
   try {renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});} catch {return staticSpirit();}
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
-  renderer.setClearColor(0,0); renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=options.home?1.04:1.15;
+  renderer.setClearColor(0,0); renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=options.home?1.12:1.15;
+  if(options.home){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;}
   host.append(renderer.domElement);
   const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(32,1,.1,20);
   camera.position.set(0,.35,5.4); camera.lookAt(0,.05,0);
   if(options.closeUp){camera.position.set(0,-.17,2.35);camera.lookAt(0,-.32,.4);}
   // A real reflection environment gives the crystal distinct windows and dark facets.
-  const room=new RoomEnvironment(), pmrem=new THREE.PMREMGenerator(renderer);
+  const room=options.home?createHomeReflectionRoom():new RoomEnvironment(), pmrem=new THREE.PMREMGenerator(renderer);
   const environment=pmrem.fromScene(room,.025); scene.environment=environment.texture;
-  scene.environmentIntensity=options.home ? .28 : .65; room.dispose(); pmrem.dispose();
-  const skyFill=new THREE.HemisphereLight(options.home?0xc6def4:0xe9f6ff,options.home?0xa99b79:0x324c69,options.home?1.12:.8);scene.add(skyFill);
-  const key=new THREE.DirectionalLight(options.home?0xffe5b7:0xffeedb,options.home?1.8:2.4); key.position.set(options.home?-5:-3,5,options.home?2.5:4); scene.add(key);
+  scene.environmentIntensity=options.home ? .36 : .65;
+  if(room instanceof RoomEnvironment)room.dispose();else disposeHomeReflectionRoom(room);
+  pmrem.dispose();
+  const skyFill=new THREE.HemisphereLight(options.home?0xc1d8ed:0xe9f6ff,options.home?0xb6a28b:0x324c69,options.home?.74:.8);scene.add(skyFill);
+  const key=new THREE.DirectionalLight(options.home?0xffedd4:0xffeedb,options.home?1.8:2.4); key.position.set(options.home?-5:-3,5,options.home?2.5:4); scene.add(key);
+  if(options.home){
+    key.castShadow=true;key.shadow.mapSize.set(1024,1024);key.shadow.camera.left=-1.65;key.shadow.camera.right=1.65;
+    key.shadow.camera.top=2.1;key.shadow.camera.bottom=-1.35;key.shadow.camera.near=.1;key.shadow.camera.far=14;
+    key.shadow.bias=-.00015;key.shadow.normalBias=.012;key.shadow.radius=3;
+  }
   const rim=new THREE.DirectionalLight(options.home?0xa5c5df:0x8bd8f3,options.home ? .32 : 1.8); rim.position.set(3,1,-2); scene.add(rim);
-  const pearl=new THREE.MeshPhysicalMaterial({color:options.home?0xf1eee5:0xe9f0e9,roughness:.34,metalness:.025,clearcoat:.38,clearcoatRoughness:.25});
+  const pearl=options.home?createHomePearl():new THREE.MeshPhysicalMaterial({color:0xe9f0e9,roughness:.34,metalness:.025,clearcoat:.38,clearcoatRoughness:.25});
   const blue=new THREE.MeshPhysicalMaterial({color:0x437e9d,roughness:.38,metalness:.13,clearcoat:.25});
-  const ink=new THREE.MeshPhysicalMaterial({color:0x0b2032,roughness:.62,clearcoat:.08,envMapIntensity:.22});
-  const light=new THREE.MeshStandardMaterial({color:0xa9eef2,emissive:0x54b5d1,emissiveIntensity:.35,roughness:.3});
+  const ink=new THREE.MeshPhysicalMaterial({color:options.home?0x25394e:0x0b2032,roughness:options.home?.82:.62,clearcoat:options.home?0:.08,envMapIntensity:options.home?.16:.22,specularIntensity:options.home?.3:1});
+  const light=new THREE.MeshStandardMaterial({color:options.home?0xc4e2df:0xa9eef2,emissive:0x54b5d1,emissiveIntensity:options.home?.2:.35,roughness:options.home?.65:.3});
   const spirit=new THREE.Group(); scene.add(spirit);
   const mesh=(g:THREE.BufferGeometry,m:THREE.Material,x=0,y=0,z=0,parent:THREE.Object3D=spirit)=>{const n=new THREE.Mesh(g,m);n.position.set(x,y,z);parent.add(n);return n;};
   const face=mesh(new THREE.SphereGeometry(.47,64,40),ink,0,.15,.43); face.scale.set(1,.56,.26);
@@ -64,6 +73,15 @@ export function mountManaSpirit(host: HTMLElement, options: {
   (options.front??buildDewFront)(spirit);
 
   const form:SpiritForm=options.form?options.form(spirit,pearl,blue):buildMoonRabbit(spirit,pearl);
+  if(options.home){
+    finishHomeSpirit(spirit);
+    spirit.traverse(object=>{if(object instanceof THREE.Mesh){
+      // Contact on the torso; thin waving palms should not acquire hard shadow
+      // map islands as they cross the body silhouette.
+      object.receiveShadow=object.name==='zeno-shell';
+      object.castShadow=object.material===pearl||object===face;
+    }});
+  }
   const {left,right}=form;
   const shadow=mesh(new THREE.CircleGeometry(.53,64),new THREE.MeshBasicMaterial({color:0x284157,transparent:true,opacity:.13,depthWrite:false}),0,-1.07,0,scene);shadow.rotation.x=-Math.PI/2;shadow.scale.y=.65;shadow.visible=!options.home;
   const silhouetteMaterial=options.silhouette?new THREE.MeshBasicMaterial({color:0x122534}):null;
@@ -97,10 +115,10 @@ export function mountManaSpirit(host: HTMLElement, options: {
       mouth.scale.x=.8+.2*pose.smile;shadow.scale.x=1-pose.y*.3;
       form.update?.({...pose,mood:target.mood,elapsed:target.elapsed},isStill()?0:dt,time);
       if(options.home){
-        key.intensity=.55+homeDaylight.sun*1.85;
+        key.intensity=.95+homeDaylight.sun*1.85;
         key.position.set(-5+homeDaylight.sweep*.65,5,2.5);
-        skyFill.intensity=1.06+(1-homeDaylight.sun)*.16;
-        scene.environmentIntensity=.24+homeDaylight.sun*.10;
+        skyFill.intensity=.9+(1-homeDaylight.sun)*.12;
+        scene.environmentIntensity=.30+homeDaylight.sun*.08;
       }
       renderer.render(scene,camera);
     }
@@ -127,7 +145,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
       dead=true;offDaylight();unbind();stop();resize.disconnect();intersection?.disconnect();document.removeEventListener('visibilitychange',onVisibility);reduced.removeEventListener('change',onReduced);
       const geometries=new Set<THREE.BufferGeometry>(),materials=new Set<THREE.Material>([pearl,blue]);
       scene.traverse(o=>{if(o instanceof THREE.Mesh){geometries.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material])materials.add(m);}});
-      geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());silhouetteMaterial?.dispose();environment.dispose();renderer.dispose();renderer.forceContextLoss();host.replaceChildren();delete host.dataset.spiritMood;delete host.dataset.zenoYaw;delete host.dataset.zenoPitch;
+      geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());silhouetteMaterial?.dispose();key.shadow.dispose();environment.dispose();renderer.dispose();renderer.forceContextLoss();host.replaceChildren();delete host.dataset.spiritMood;delete host.dataset.zenoYaw;delete host.dataset.zenoPitch;
       if(interactive&&targetElement===host){host.removeAttribute('role');host.removeAttribute('tabindex');host.removeAttribute('aria-label');}
     },
   };

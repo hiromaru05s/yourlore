@@ -24,7 +24,7 @@ export function rabbitGesture(p:SpiritPose,time:number){
 export function buildMoonRabbit(body:T.Group,pearl:T.Material):SpiritForm{
  const add=(g:T.BufferGeometry,m:T.Material,parent:T.Object3D=body)=>{const o=new T.Mesh(g,m);parent.add(o);return o;};
  const profile=new T.SplineCurve([[0,-.70],[.29,-.66],[.49,-.42],[.55,-.01],[.54,.36],[.38,.65],[0,.76]].map(([x,y])=>new T.Vector2(x,y))).getPoints(100).map(p=>new T.Vector2(Math.max(0,p.x),p.y));
- const shell=add(new T.LatheGeometry(profile,96),pearl);shell.scale.z=.87;
+ const shell=add(new T.LatheGeometry(profile,96),pearl);shell.name='zeno-shell';shell.scale.z=.87;
  for(const side of [-1,1]){const foot=add(new T.SphereGeometry(1,40,28),pearl);foot.position.set(side*.22,-.61,0);foot.scale.set(.23,.18,.29);}
  const hand=(side:number)=>{
   const pivot=new T.Group();pivot.position.set(side*.47,-.06,.025);body.add(pivot);
@@ -43,6 +43,7 @@ export function buildMoonRabbit(body:T.Group,pearl:T.Material):SpiritForm{
   for(let j=0;j<rows;j++)for(let i=0;i<2;i++){const a=j*3+i;inIndices.push(a,a+1,a+4,a,a+4,a+3);}
   inner.setAttribute('position',new T.BufferAttribute(inPositions,3).setUsage(T.DynamicDrawUsage));inner.setIndex(inIndices);
   const outerMesh=add(geometry,pearl,group),innerMesh=add(inner,earMaterial,group);outerMesh.frustumCulled=false;innerMesh.frustumCulled=false;
+  innerMesh.name='zeno-ear-inset';
   const length=.79+(side>0?.018:0);
   const centers:Array<[number,number,number,number]>=[];
   const update=(droop:number,sway:number,tip:number,joy:number)=>{
@@ -64,7 +65,7 @@ export function buildMoonRabbit(body:T.Group,pearl:T.Material):SpiritForm{
     const t=.13+j/rows*.74,idx=t*rows,k0=Math.floor(idx),f=idx-k0,a=centers[k0],b=centers[Math.min(rows,k0+1)];
     const x=a[0]+(b[0]-a[0])*f,y=a[1]+(b[1]-a[1])*f,z=a[2]+(b[2]-a[2])*f,angle=a[3]+(b[3]-a[3])*f;
     const w=.139*Math.pow(Math.sin(Math.PI*(.14+.86*t)),.62),narrow=Math.sin(Math.PI*j/rows)*.45;
-    for(let i=0;i<3;i++){const u=(i-1)*narrow,xx=w*u,k=(j*3+i)*3;inPositions[k]=x+Math.cos(angle)*xx;inPositions[k+1]=y-Math.sin(angle)*xx;inPositions[k+2]=z+w*.53*Math.sqrt(1-u*u)+.0015;}
+    for(let i=0;i<3;i++){const u=(i-1)*narrow,xx=w*u,k=(j*3+i)*3;inPositions[k]=x+Math.cos(angle)*xx;inPositions[k+1]=y-Math.sin(angle)*xx;inPositions[k+2]=z+w*.53*Math.sqrt(1-u*u)+.0045;}
    }
    geometry.attributes.position.needsUpdate=true;geometry.computeVertexNormals();inner.attributes.position.needsUpdate=true;inner.computeVertexNormals();
   };
