@@ -18,6 +18,7 @@ function miniCardGrid(ids: string[]): HTMLElement {
     const mini = cardEl(inst);
     mini.tabIndex = 0; mini.setAttribute('role', 'button');
     mini.onclick = (e) => { e.stopPropagation(); openRelatedCard(inst); };
+    bindInspectContext(mini, () => openRelatedCard(inst));
     mini.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); mini.click(); } };
     grid.appendChild(mini);
   }
@@ -183,12 +184,17 @@ export function closeZoom(): void {
   zoomOpener=null;
 }
 
+/** Keep inspection gestures from reaching a parent pile or zoom overlay. */
+export function bindInspectContext(el: HTMLElement, inspect: () => void): void {
+  el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); inspect(); };
+}
+
 /**
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
 export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string): void {
-  el.oncontextmenu = (e) => { e.preventDefault(); zoomCard(card, hp, stateText, effect??el.dataset.cardEffect); };
+  bindInspectContext(el, () => zoomCard(card, hp, stateText, effect??el.dataset.cardEffect));
   // Intent, not speculation: by the time a pointer is resting on a card, a
   // right-click or a 380ms long-press is at most a few hundred ms away. Start
   // the full-resolution art then, so the overlay has it by the time it opens.

@@ -12,7 +12,7 @@ import type { App, Screen } from "../router";
 import type { CardInst, CardType } from "../shared/types";
 import { DB, STARTERS, PASSIVES } from "../shared/cards";
 import { cardEl } from "../ui/cardView";
-import { zoomCard } from "../ui/cardInspection";
+import { bindZoom, zoomCard } from "../ui/cardInspection";
 import { t, cardName, onLangChange, getLang } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 
@@ -161,6 +161,7 @@ export function mountCards(app: App): Screen {
       const node = cardEl(c, { size: "mkt", lazyArt: i });
       node.style.cursor = "pointer";
       node.onclick = () => zoomCard(c);
+      bindZoom(node, c);
       node.tabIndex = 0; node.setAttribute("role","button"); node.setAttribute("aria-label",cardName(c));
       node.onkeydown = e => { if(e.key === "Enter" || e.key === " "){e.preventDefault();zoomCard(c);} };
       frag.appendChild(node);

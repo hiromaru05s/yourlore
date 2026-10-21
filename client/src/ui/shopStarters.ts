@@ -1,7 +1,7 @@
 import {COLLECTIBLE_STARTERS,STARTER_PRICE,type StarterCollection} from '../shared/collection';
 import {DB,STARTERS} from '../shared/cards';
 import {cardEl} from './cardView';
-import {zoomCard} from './cardInspection';
+import {bindZoom,zoomCard} from './cardInspection';
 import {cardName,esc} from '../i18n';
 import {loungeText as l} from './loungeText';
 
@@ -24,7 +24,7 @@ export function renderShopStarters(host:HTMLElement,owned:StarterCollection,cred
  const grid=host.querySelector('.starter-shop-grid')!;
  for(const id of COLLECTIBLE_STARTERS){
   const c={...(STARTERS[id]??DB[id]),uid:'shop-'+id},tile=document.createElement('article');tile.className='starter-shop-item';
-  const face=document.createElement('button');face.className='starter-shop-face';face.setAttribute('aria-label',cardName(c));face.append(cardEl(c,{size:'mkt'}));face.onclick=()=>zoomCard(c);
+  const face=document.createElement('button');face.className='starter-shop-face';face.setAttribute('aria-label',cardName(c));face.append(cardEl(c,{size:'mkt'}));face.onclick=()=>zoomCard(c);bindZoom(face,c);
   const count=document.createElement('span');count.textContent=l('所持','Owned','보유')+` ${owned[id]??0}/8`;
   const max=Math.max(0,Math.min(8-(owned[id]??0),Math.floor(credits/STARTER_PRICE)));
   const quantity=document.createElement('label');quantity.className='starter-shop-quantity';quantity.textContent=l('数量','Quantity','수량');

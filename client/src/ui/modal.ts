@@ -8,7 +8,7 @@ import {outcomeCrest} from './duelOutcome';
 import type { CardInst, GameState, Side } from "../shared/types";
 import { attachDuelClock } from "./duelClock";
 import { cardEl } from "./cardView";
-import { bindZoom } from "./cardInspection";
+import { bindZoom, zoomCard } from "./cardInspection";
 import { TRIBES } from "../shared/cards";
 import { t, getLang, cardName, cardText } from "../i18n";
 
@@ -177,7 +177,7 @@ export function showTribeInfo(tribe: string): void {
 /** In-game mouse controls. Steam uses the same help regardless of pointer detection. */
 export function showControlsHelp(): void {
   const rows: [string, string[]][] = [
-    ["help.h.cards", ["help.d.zoom", "help.d.hand"]],
+    ["help.h.cards", ["help.d.zoom", "help.d.piles", "help.d.hand"]],
     ["help.h.play", ["help.d.play"]],
     ["help.h.attack", ["help.d.attack", "help.d.reorder"]],
     ["help.h.market", ["help.d.market"]],
@@ -195,7 +195,7 @@ export function showControlsHelp(): void {
 }
 
 /** Seek/Recall picker. Calls onPick with chosen uid (or null on cancel). */
-export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string; description?: string } = {}): void {
+export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string; description?: string; browse?: boolean } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML = `<h2 style="font-size:14px">${title}</h2><div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div><div class="modal-row"></div>`;
@@ -205,8 +205,9 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
   const ok = document.createElement('button'); ok.className='btn btn-gold'; ok.textContent=t('picker.confirm'); ok.disabled=true;
   ok.onclick=()=>{if(selected){closeOverlay();onPick(selected);}};
   pool.forEach((c, i) => {
-    const card = cardEl(c, { playable: true, lazyArt: i });
+    const card = cardEl(c, { playable: !opts.browse, lazyArt: i });
     card.onclick = () => {
+      if (opts.browse) { zoomCard(c); return; }
       if(!opts.confirm){closeOverlay();onPick(c.uid);return;}
       selected=c.uid;grid.querySelectorAll('.is-picked').forEach(el=>el.classList.remove('is-picked'));card.classList.add('is-picked');ok.disabled=false;
     };
@@ -214,6 +215,7 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
     bindZoom(card, c); // 우클릭 / 길게 누르면 확대
     if(!opts.label) grid.appendChild(card);
   });
+  if (opts.browse && !pool.length) grid.textContent = t("deck.empty");
   if(opts.confirm) m.querySelector(".modal-row")!.appendChild(ok);
   const cancel = document.createElement("button");
   cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
@@ -355,7 +357,8 @@ export function reviewCast(g: GameState, owner: Side, source: CardInst, intent: 
     if(!intent)for(const c of automaticCastTargets(g,owner,source)) {
       const own=targetOwner(g,c.uid)===owner,wrap=document.createElement('div'),label=document.createElement('p');
       label.textContent=ja?`現在の盤面での自動処理の破壊対象（${own?'自分':'相手'}）`:ko?`현재 필드의 자동 파괴 대상 (${own?'자신':'상대'})`:`Current automatic destruction target (${own?'You':'Opponent'})`;
-      wrap.append(label,cardEl(c,{lazyArt:0}));grid.append(wrap);
+      const card=cardEl(c,{lazyArt:0});bindZoom(card,c);
+      wrap.append(label,card);grid.append(wrap);
     }
     cancel.onclick=()=>{settle(null);closeOverlay();};
     ok.onclick=()=>{if(!ok.disabled){settle([...picked]);closeOverlay();}};

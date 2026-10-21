@@ -44,12 +44,14 @@ export class GameLog {
   constructor(el: HTMLElement) {
     this.el = el;
     // clicking a card name in the log zooms that card
-    this.el.addEventListener("click", (e) => {
+    const inspect = (e: MouseEvent) => {
       const t = (e.target as HTMLElement).closest(".log-card") as HTMLElement | null;
       const id = t?.dataset.card;
       const def = id ? this.cardDef(id) : undefined;
-      if (id && def) zoomCard({ uid: "log_" + id, ...def });
-    });
+      if (id && def) { e.preventDefault(); e.stopPropagation(); zoomCard({ uid: "log_" + id, ...def }); }
+    };
+    this.el.addEventListener("click", inspect);
+    this.el.addEventListener("contextmenu", inspect);
     this.unsub = onLangChange(() => this.renderAll());
   }
 

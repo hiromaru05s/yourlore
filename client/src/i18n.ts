@@ -359,6 +359,7 @@ const D: Record<string, Entry> = {
   "help.h.attack": { ko: "공격", ja: "攻撃", en: "Attacking" },
   "help.h.market": { ko: "마켓", ja: "マーケット", en: "Market" },
   // mouse controls
+  "help.d.piles": { ko: "묘지·덱·리프트를 우클릭하면 목록이 열립니다. 목록의 카드를 우클릭하면 확대됩니다.", ja: "墓地・デッキ・リフトを右クリックで一覧表示。一覧のカードを右クリックで拡大できます。", en: "Right-click the graveyard, deck or rift to browse its cards. Right-click a card in the list to enlarge it." },
   "help.d.zoom": { ko: "카드를 우클릭하면 자세히 볼 수 있어요.", ja: "カードを右クリックすると、詳しい効果を確認できます。", en: "Right-click a card to inspect its effects." },
   "help.d.hand": { ko: "화면 아래의 손패를 클릭하면 펼쳐집니다. 펼친 손패의 카드를 클릭하면 자세히 볼 수 있어요.", ja: "画面下の手札をクリックすると広がります。広げた手札のカードはクリックでも拡大できます。", en: "Click your hand at the bottom of the screen to expand it. Click a card in the expanded hand to inspect it." },
   "help.d.play": { ko: "손패 카드를 위로 드래그하면 사용합니다. 손패로 되돌리면 취소.", ja: "手札のカードを上にドラッグで使用。手札に戻せばキャンセル。", en: "Drag a hand card upward to play it; drop it back on the hand to cancel." },

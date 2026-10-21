@@ -138,6 +138,7 @@ export function mountDeck(app: App): Screen {
       const activate=()=>{if(saving)return;if(fixed)return;undo=[...deck()];if(pending){deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);render();};
       card.tabIndex=0;card.setAttribute('role','button');
       card.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
+      bindZoom(card, c, undefined, undefined, store.list[cur].effect);
       card.onclick=()=>zoomCard(c,undefined,undefined,store.list[cur].effect);card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c,undefined,undefined,store.list[cur].effect);}};
       if(fixed){const lock=document.createElement('span');lock.className='deck-attune-lock';lock.innerHTML=`<span class="deck-lock-glyph" aria-hidden="true"></span><span>${t('deck.fixed')}</span>`;row.append(lock);}
       else {const action=document.createElement('button');action.className='deck-hand-action';action.textContent=pending?'⇄':'−';action.disabled=saving;action.setAttribute('aria-label',`${cardName(c)} · ${pending?loungeText('入れ替え','Replace','교체'):t('deck.remove')}`);action.onclick=activate;row.append(action);}
@@ -177,6 +178,7 @@ export function mountDeck(app: App): Screen {
       el.appendChild(cnt);
       const choose=()=>{if(saving||full)return;if(deck().length<DECK_SIZE){undo=[...deck()];deck().push(id);pending=null;}else pending=pending===id?null:id;render();};
       el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
+      bindZoom(el, c);
       el.classList.toggle('is-candidate',pending===id);el.onclick=()=>zoomCard(c);el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c);}};
       const add=document.createElement('button');add.className='deck-card-action';add.textContent='+';add.disabled=saving||full;
       add.setAttribute('aria-label',`${cardName(c)} · ${loungeText('追加・入れ替え','Add or replace','추가 또는 교체')}`);add.setAttribute('aria-pressed',String(pending===id));add.onclick=choose;

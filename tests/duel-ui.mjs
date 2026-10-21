@@ -117,6 +117,26 @@ assert.equal(document.querySelectorAll('#oppRow .buff-icon--trap').length,7);
 assert(!document.querySelector('#rift-me').classList.contains('is-absorbing'));
 g.players[0].removed=[{...mon,uid:'removed-new'}];v.render(g);
 assert(document.querySelector('#rift-me').classList.contains('is-absorbing'));
+// Inspection never selects, plays or buys a card; pile gestures browse first.
+const rightClick=el=>{assert(el);const e=new dom.window.MouseEvent('contextmenu',{bubbles:true,cancelable:true,button:2});el.dispatchEvent(e);assert(e.defaultPrevented);};
+const beforeInspect=JSON.stringify(g);
+for(const id of ['pile-myDisc','pile-oppDisc','pile-myDeck','pile-oppDeck','rift-me','rift-opp']) {
+ rightClick(document.getElementById(id));
+ assert(document.querySelector('#overlayRoot .modal'),id+' opens a list');
+ assert(!document.getElementById('zoomOverlay'),id+' does not enlarge the top card');
+ const card=document.querySelector('#overlayRoot .picker-grid .card');
+ if(card){rightClick(card);assert(document.getElementById('zoomOverlay'));closeZoom();assert(card.isConnected,'list remains after zoom');}
+ closeOverlay();
+}
+for(const selector of ['#hand .card','#meRow .zone-mon .card','#oppRow .zone-mon .card','#fixedMarket .card','#supplyMarket .card']) {
+ rightClick(document.querySelector(selector));assert(document.getElementById('zoomOverlay'),selector);closeZoom();
+}
+assert.equal(JSON.stringify(g),beforeInspect);assert.equal(boughtFixed,-1);assert.equal(boughtSupply,-1);
+// Related-card context menus must not bubble to the enclosing zoom's close handler.
+zoomCard({...DB.TSO2,uid:'related-parent'});
+const related=document.querySelector('.ztc-grid .card');
+assert(related);rightClick(related);assert(document.querySelector('.inspect-back'));
+document.querySelector('.inspect-back').click();assert(!document.querySelector('.inspect-back'));closeZoom();
 const clockMe=document.getElementById('clock-me');paintDuelClock(clockMe,41,90,true);
 cardPickerMulti('捨てるカード',g.players[0].hand,2,()=>{},{exact:true});
 assert.equal(document.querySelector('.dialog-clock').textContent,'41秒');

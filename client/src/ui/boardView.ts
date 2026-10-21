@@ -29,6 +29,7 @@ import { ENCH_TURN_LIMITS } from "../shared/cardText";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
 import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
+import { bindInspectContext } from "./cardInspection";
 import { t, getLang, esc, cardName } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
@@ -497,7 +498,7 @@ export class GameView {
     const graveTop = p.discard[p.discard.length - 1];
     const graveArt = graveTop && graveTop.id !== "HIDDEN" ? artUrl.full(graveTop.id) : graveTop ? frameFor(graveTop.t) : null;
     const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
-      () => { if (p.discard.length) cardPicker(`${esc(p.name)} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => { /* browse only */ }); });
+      () => cardPicker(`${esc(p.name)} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => {}, true, { browse: true }));
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
     // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
@@ -620,6 +621,7 @@ export class GameView {
       tile.title = `${cardName(q.card)} · ${progress} · ${getLang() === "ja" ? q.card.textJa : getLang() === "en" ? q.card.textEn : q.card.text}`;
       tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
       tile.onclick = () => zoomCard(q.card, undefined, progress);
+      bindZoom(tile, q.card, undefined, progress);
       tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tile.click();}};
       sz.appendChild(tile);
     }
@@ -660,7 +662,9 @@ export class GameView {
       rbtn.append(createRiftRecordWindow(removed.length, previous, isMe ? 'me' : 'opp', recordVariant(this.root.dataset.riftCountVariant)));
       rbtn.title = `${t("deck.removed")} ${removed.length}`;
       rbtn.setAttribute('aria-label', rbtn.title);
-      rbtn.onclick = () => cardPicker(`${esc(p.name)} — ${t("deck.removed")} (${removed.length})`, removed, () => { /* browse only */ });
+      const openRift = () => cardPicker(`${esc(p.name)} — ${t("deck.removed")} (${removed.length})`, removed, () => {}, true, { browse: true });
+      rbtn.onclick = openRift;
+      bindInspectContext(rbtn, openRift);
       piles.appendChild(rbtn);
     }
 
@@ -1122,6 +1126,7 @@ export class GameView {
 
   /** Drag onto the visible board to play; return to the hand to cancel. */
   private bindHandCard(card: HTMLElement, c: CardInst): void {
+    bindInspectContext(card, () => zoomCard(c, undefined, card.dataset.spaceRiteReason));
     card.style.touchAction = "none";
     card.draggable = false;
     card.addEventListener("dragstart", (e) => e.preventDefault());
@@ -1295,8 +1300,12 @@ export class GameView {
     }
     const tg = document.createElement("div"); tg.className = "pile-tag"; tg.textContent = tag; pile.appendChild(tg);
     const cnt = document.createElement("div"); cnt.className = "pile-count"; cnt.textContent = String(count); pile.appendChild(cnt);
-    if (faceCard && faceCard.id !== "HIDDEN") bindZoom(pile, faceCard);
-    if (onOpen) { pile.style.cursor = "pointer"; pile.title = "click: browse"; pile.addEventListener("click", onOpen); }
+    if (onOpen) {
+      pile.style.cursor = "pointer";
+      pile.title = t("help.d.piles");
+      pile.addEventListener("click", onOpen);
+      bindInspectContext(pile, onOpen);
+    }
     return pile;
   }
 

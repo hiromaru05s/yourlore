@@ -1,5 +1,6 @@
 import {CARD_EFFECTS} from '../shared/cardEffects';
 import {cardEl} from './cardView';
+import {bindZoom} from './cardInspection';
 import {STARTERS} from '../shared/cards';
 import {SLEEVE_LIST,type DeckPreset} from '../shared/cards';
 import {FURNITURE_LIST,cosmetic} from '../shared/cosmetics';
@@ -17,7 +18,7 @@ export function renderDeckAppearance(host:HTMLElement,options:{deck:DeckPreset;n
    const selected=(deck[kind]??'default')===item.id,unlocked=!!owned?.has(item.id),label=item[getLang()];
    return `<button type="button" class="deck-cosmetic ${selected?'is-selected':''}" data-cosmetic-kind="${kind}" data-cosmetic-id="${item.id}" aria-pressed="${selected}" aria-label="${esc(label)}" ${unlocked?'':'disabled'}><span class="deck-cosmetic-art ${kind==='furniture'?'furniture-preview':'sleeve-preview'}" style="${item.url?`background-image:url('${item.url}')`:''}"></span><span class="deck-cosmetic-name">${esc(label)}</span><span class="deck-cosmetic-state">${selected?loungeText('選択中','Selected','선택됨'):unlocked?loungeText('選択する','Select','선택'):(kind==='effect'||('gachaOnly' in (cosmetic(item.id)??{})))?loungeText('ガチャで入手','Get in gacha','뽑기로 획득'):loungeText('ショップで入手','Get in shop','상점에서 획득')}</span></button>`;
   }).join('')}</div>`;
-  if(kind==='effect'){const preview=cardEl({...STARTERS.STARTER_CHEST,uid:'effect-preview'},{size:'mkt',effect:deck.effect});preview.style.cssText='width:128px;height:200px;--cw:128px;--ch:200px;margin:12px auto';section.append(preview);}
+  if(kind==='effect'){const card={...STARTERS.STARTER_CHEST,uid:'effect-preview'},preview=cardEl(card,{size:'mkt',effect:deck.effect});bindZoom(preview,card,undefined,undefined,deck.effect);preview.style.cssText='width:128px;height:200px;--cw:128px;--ch:200px;margin:12px auto';section.append(preview);}
   section.querySelectorAll<HTMLButtonElement>('[data-cosmetic-id]').forEach(b=>b.onclick=()=>onPick(kind,b.dataset.cosmeticId!));groups.append(section);
  }
  host.querySelector<HTMLButtonElement>('[data-cosmetic-shop]')!.onclick=onShop;
