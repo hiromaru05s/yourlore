@@ -40,6 +40,7 @@
     "tests/balance-v57.mjs",
     "tests/balance-v58.mjs",
     "tests/balance-v58-server.mjs",
+    "scripts/check-card-text.mjs",
     "tests/card-wording.mjs",
     "tests/card-wording-render.mjs",
     "tests/card-effect-ux.mjs",
