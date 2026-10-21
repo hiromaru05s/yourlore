@@ -1,4 +1,4 @@
-import {mountRewardStage} from './gachaRewardStage';
+import {mountRewardStage,prepareRewardCard} from './gachaRewardStage';
 import type {CollectionReward} from '../shared/collection';
 import {loungeText as l} from './loungeText';
 import type {LibraryScene} from './gachaAzure/scene';
@@ -7,6 +7,7 @@ import '../styles/gachaCinematic.css';
 export interface GachaCinematicOptions {count:number;rewards?:CollectionReward[];edition:'astral'|'ivory'|'crimson';onClose:()=>void}
 /** Selected Azure Wake presentation. Receives server-confirmed rewards; never draws, spends or grants items. */
 export function openGachaCinematic(options:GachaCinematicOptions):()=>void{
+ if(options.rewards?.[0])void prepareRewardCard(options.rewards[0]).catch(()=>{});
  const dialog=document.createElement('dialog');dialog.className='gacha-cinematic';dialog.dataset.selection='azure-wake-01';dialog.dataset.rewards=String(!!options.rewards?.length);dialog.setAttribute('aria-label',l('ガチャ演出','Gacha animation','뽑기 연출'));
  dialog.innerHTML=`<canvas aria-label="${l('ビブリオンから届く魔導書','A grimoire from Biblion','비블리온에서 온 마도서')}"></canvas><header><span>BIBLION</span><button data-close aria-label="${l('閉じる','Close','닫기')}">×</button></header><div class="gacha-cinematic-loading" role="status">${l('魔導書を準備しています…','Preparing the grimoire…','마도서를 준비하고 있습니다…')}</div><div class="gacha-cinematic-result" hidden><small>${options.rewards?l('抽選結果','DRAW RESULTS','추첨 결과'):l('演出サンプル','ANIMATION SAMPLE','연출 샘플')}</small><h2>${options.count===10?l('10の出会い','Ten encounters','열 번의 만남'):l('記録との出会い','An encounter with a record','기록과의 만남')}</h2></div><footer><p>${options.rewards?l('抽選結果は保存済みです','Your results have been saved','추첨 결과는 저장되었습니다'):l('演出プレビュー · 抽選・消費なし','Animation preview · No draw or Shard spend','연출 미리보기 · 추첨·소모 없음')}</p><div><button data-skip disabled>${l('結果へ','Skip to results','결과 보기')}</button><button data-done hidden>${options.rewards?l('獲得結果を見る','View results','획득 결과 보기'):l('戻る','Back','돌아가기')}</button></div></footer>`;
  document.body.append(dialog);dialog.showModal();

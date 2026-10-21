@@ -1,6 +1,8 @@
 import type {CollectionReward} from '../shared/collection';
 import {cosmetic} from '../shared/cosmetics';
-import {STARTERS,DB} from '../shared/cards';
+import {STARTERS,DB,frameFor} from '../shared/cards';
+import {artUrl} from './cardArt';
+import {decodeAsset} from './imageAssets';
 import {esc} from '../i18n';
 import {cardEl} from './cardView';
 import {disposeCardEffects} from './cardFinish';
@@ -10,7 +12,13 @@ import '../styles/gachaRewards.css';
 export const rewardKind=(r:CollectionReward)=>r.kind==='cosmetic'?(cosmetic(r.id)?.kind??'sleeve'):r.kind??'starter';
 const category=(kind:string)=>kind==='starter'?l('スターターカード','STARTER CARD','스타터 카드'):kind==='sleeve'?l('スリーブ','SLEEVE','슬리브'):kind==='furniture'?l('デッキ置き場 ＆ 墓地','DECK HOLDER & GRAVEYARD','덱 받침 & 묘지'):kind==='effect'?l('カードエフェクト','CARD EFFECT','카드 이펙트'):l('獲得結果','RESULT','획득 결과');
 const note=(kind:string)=>kind==='starter'?l('新しい一枚を、次のデッキへ。','A new possibility for your next deck.','새로운 한 장을 다음 덱으로.'):kind==='sleeve'?l('手札に宿る、あなただけの装い。','A signature on every card in your hand.','손패에 깃드는 나만의 모습.'):kind==='furniture'?l('二つの造形が、あなたの盤面を彩る。','Two sculptures. A new presence on your board.','두 조형물이 나만의 보드를 꾸밉니다.'):l('光が巡るたび、カードの表情が変わる。','A different expression with every turn of the light.','빛이 흐를 때마다 달라지는 카드의 표정.');
-function face(r:CollectionReward,uid:string){const def=r.kind==='effect'?STARTERS.STARTER_CHEST:STARTERS[r.id]??DB[r.id];return def?cardEl({...def,uid},{fullArt:true,size:'mkt',effect:r.kind==='effect'?r.id:'default'}):undefined;}
+const cardDefinition=(r:CollectionReward)=>r.kind==='effect'?STARTERS.STARTER_CHEST:STARTERS[r.id]??DB[r.id];
+function face(r:CollectionReward,uid:string){const def=cardDefinition(r);return def?cardEl({...def,uid},{fullArt:true,size:'mkt',effect:r.kind==='effect'?r.id:'default'}):undefined;}
+/** Decode the complete face before revealing it; CSS backgrounds have no load event. */
+export async function prepareRewardCard(r:CollectionReward):Promise<void>{
+ if(!['starter','effect'].includes(rewardKind(r)))return;const def=cardDefinition(r);if(!def)return;
+ await Promise.all([frameFor(def.t,true),artUrl.full(def.id),...['cost','attack','health'].map(k=>`/art/biblion/modular/${k}-ui.webp`)].map(url=>decodeAsset(url)));
+}
 /** Lightweight overview retains the complete card frame and each reward's own proportions. */
 export function mountRewardGallery(host:HTMLElement,rewards:CollectionReward[],inspect:(index:number)=>void):()=>void{
  let dead=false;
@@ -46,7 +54,8 @@ export function mountRewardStage(host:HTMLElement,rewards:CollectionReward[],opt
   function tick(now:number){if(dead||ticket!==generation)return;if(!document.hidden&&(media.matches||now-last>=1000/30)){last=now;try{draw(media.matches?1.5:now/1000,media.matches?1:Math.min(1,(now-born)/1400));}catch{failed();return;}}if(!media.matches&&(kind==='sleeve'||kind==='furniture'))raf=requestAnimationFrame(tick);}
   cleanup=()=>dispose();
   if(kind==='starter'||kind==='effect'){
-   const card=face(r,`gacha-hero-${ticket}`);if(card)art.append(card);ready();
+   const card=face(r,`gacha-hero-${ticket}`);if(card)art.append(card);status.textContent=l('カードを準備しています…','Preparing your card…','카드 준비 중…');
+   void prepareRewardCard(r).then(()=>{if(dead||ticket!==generation)return;status.textContent='';ready();}).catch(failed);
   }else if(kind==='sleeve'){
    const item=cosmetic(r.id)!;art.innerHTML=`<div class="reward-sleeve-fan"><div class="reward-sleeve-echo echo-left" style="background-image:url('${p.image}')"></div><div class="reward-sleeve-echo echo-right" style="background-image:url('${p.image}')"></div><div class="reward-sleeve-main card--back" style="background-image:url('${p.image}')"></div></div>`;
    void import('./gachaRewardSleeve').then(m=>{if(dead||ticket!==generation)return;return m.createRewardSleeve(art.querySelector('.reward-sleeve-main')!,item);}).then(view=>{if(!view)return;if(dead||ticket!==generation){view.dispose();return;}draw=view.draw;dispose=view.dispose;ready();}).catch(failed);
