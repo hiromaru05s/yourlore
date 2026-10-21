@@ -24,13 +24,13 @@ export function cardEffectNotes(card: CardDef, lang: EffectLocale): string[] {
     'Rift: the zone for exiled cards, separate from the graveyard. It does not refill your deck. Only effects that explicitly refer to it can move cards out.',
   );
   if (terms.includes('lasting')) add(
-    '持続：変更を受けたモンスターが場を離れるまで続く。「場にいる間／場にある間」の補正は、条件や発生源がなくなると終了する。',
-    '지속: 변경을 받은 몬스터가 필드를 떠날 때까지 유지된다. 필드에 있는 동안/놓인 동안의 보정은 조건이나 발생원이 사라지면 끝난다.',
-    'Lasting: remains until the affected monster leaves the field. A “While on the Field” or “While Deployed” bonus ends when its condition or source is no longer present.',
+    '持続：変更を受けたモンスターが場を離れるまで続く。「場にある間」の補正は、条件や発生源がなくなると終了する。',
+    '지속: 변경을 받은 몬스터가 필드를 떠날 때까지 유지된다. 필드에 있는 동안의 보정은 조건이나 발생원이 사라지면 끝난다.',
+    'Lasting: remains until the affected monster leaves the field. A “While on the Field” bonus ends when its condition or source is no longer present.',
   );
   if (card.t === 'mon' || card.ench) add(
     '場の効果：召喚時・破壊時などの記載に従って処理する。繰り返す効果は、このカードが場にある間に発動する。場を離れても続く効果は本文に明記する。',
-    '필드 효과: 소환시·파괴시 등 적힌 시점에 처리한다. 반복 효과는 이 카드가 필드에 있는 동안 발동한다. 필드를 떠나도 이어지는 효과는 본문에 명시한다.',
+    '필드 효과: 소환 시·파괴 시 등 적힌 시점에 처리한다. 반복 효과는 이 카드가 필드에 있는 동안 발동한다. 필드를 떠나도 이어지는 효과는 본문에 명시한다.',
     'Field effects resolve at the stated time, such as on summon or destruction. Recurring effects trigger while this card is on the field. Effects that continue after it leaves say so explicitly.',
   );
   if (terms.includes('counters')) add(

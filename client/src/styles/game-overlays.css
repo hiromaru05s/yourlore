@@ -857,3 +857,16 @@
 .zoom-details .ztc-head { font-family:var(--gothic-ui,var(--ui)); font-size:.875rem; line-height:1.5; letter-spacing:.02em; text-transform:none; color:#d7cbb4; }
 .zoom-details .dr-roll { font-size:1rem; line-height:1.75; font-variant-numeric:tabular-nums; }
 .zoom-details :is(.psv-desc,.card-rule-notes p,.inspect-current-state dd,.zoom-tribe .b):lang(ko) { word-break:keep-all; overflow-wrap:anywhere; }
+
+/* Major rule groups own the timing labels. Readable hierarchy without nested panels. */
+.zoom-details .card-rule-group + .card-rule-group{margin-top:28px;padding-top:22px;border-top:1px solid #bda87855}
+.zoom-details .card-rule-group > .card-rule-heading{margin:0 0 16px;color:#f4ead6;font:700 1.25rem/1.5 var(--gothic-ui,var(--ui));letter-spacing:.06em}
+.zoom-details .card-rule-group > .card-effect-section{padding-inline-start:16px;border-inline-start:2px solid #bda87840}
+.zoom-details .card-rule-group > .card-effect-section + .card-effect-section{margin-top:18px;padding-top:0;border-top:0}
+.zoom-details .card-rule-group .card-key-group{margin-bottom:18px}
+.zoom-details .card-rule-group .card-key-heading{margin-top:0}
+.zoom-details .card-rule-group .card-keys{justify-content:flex-start}
+.zoom-details .card-effect-section .card-dice{margin-top:12px}
+@media(max-width:850px){
+  .zoom-details .card-rule-group > .card-effect-section{padding-inline-start:12px}
+}

@@ -3,7 +3,7 @@
 import type { CardDef } from "./types";
 import { CARD_EFFECT_TEXT } from "./cardEffectText";
 export { CARD_EFFECT_TEXT } from "./cardEffectText";
-export { CARD_EFFECT_HEADINGS } from "./cardEffectHeadings";
+export { CARD_EFFECT_HEADINGS, CARD_RULE_GROUP_LABELS, effectRuleGroup } from "./cardEffectHeadings";
 export type KeywordNamesOf = (c: CardDef, lang: "ko" | "ja" | "en") => string[];
 
 // The board uses global-turn limits for these two enchantments.

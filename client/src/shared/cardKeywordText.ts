@@ -3,8 +3,8 @@ import type { EffectLocale } from './cardEffectText';
 /** Keyword names stay stable; descriptions use the same rules as card effects. */
 export const CARD_KEYWORD_TEXT: Record<string, Record<EffectLocale, string>> = {
   counter: {
-    ja: 'このモンスターが攻撃を受け、その攻撃が無効にならなかった場合、攻撃したモンスターに、このモンスターの攻撃力の半分（切り上げ）のダメージを与える。このモンスターが倒されても発動する。反撃では貫通・再反撃・攻撃時効果は発生しない。',
-    ko: '이 몬스터가 공격받고 그 공격이 무효화되지 않았다면 공격한 몬스터에게 이 몬스터 공격력의 절반(올림)만큼 데미지를 준다. 이 몬스터가 파괴되어도 발동한다. 반격으로는 관통·재반격·공격시 효과가 발생하지 않는다.',
+    ja: 'このモンスターが攻撃を受け、その攻撃が無効にならなかった場合、攻撃したモンスターに、このモンスターの攻撃力の半分（切り上げ）のダメージを与える。このモンスターが破壊されても発動する。反撃では貫通・再反撃・攻撃時効果は発生しない。',
+    ko: '이 몬스터가 공격받고 그 공격이 무효화되지 않았다면 공격한 몬스터에게 이 몬스터 공격력의 절반(올림)만큼 데미지를 준다. 이 몬스터가 파괴되어도 발동한다. 반격으로는 관통·재반격·공격 시 효과가 발생하지 않는다.',
     en: 'When this monster receives an attack that is not negated, deal damage to the attacking monster equal to half this monster\'s ATK, rounded up. This happens even if this monster is destroyed. Counter damage causes no piercing, further counterattack, or attack triggers.',
   },
   dual: {
@@ -29,16 +29,16 @@ export const CARD_KEYWORD_TEXT: Record<string, Record<EffectLocale, string>> = {
   },
   guts: {
     ja: 'このモンスターは召喚時にカウンター1個を得る。攻撃・反撃で致命ダメージを受ける時、そのカウンター1個を消費して体力1で生き残る。自分プレイヤーへの貫通ダメージは防がない。',
-    ko: '이 몬스터는 소환시 카운터 1개를 얻는다. 공격·반격으로 치명 데미지를 받을 때 그 카운터 1개를 소비하고 체력 1로 생존한다. 자신 플레이어에게 오는 관통 데미지는 막지 않는다.',
+    ko: '이 몬스터는 소환 시 카운터 1개를 얻는다. 공격·반격으로 치명 데미지를 받을 때 그 카운터 1개를 소비하고 체력 1로 생존한다. 자신 플레이어에게 오는 관통 데미지는 막지 않는다.',
     en: 'This monster gains 1 counter on summon. When attack or counterattack damage would be lethal, spend 1 of these counters to survive at 1 HP. This does not prevent piercing damage to you.',
   },
   decay: {
-    ja: 'このモンスターが卵以外の相手モンスターを攻撃する時、相手モンスターにカウンター1個を置く。腐敗の処理で置かれたカウンターが3個以上になると、そのモンスターを破壊し、その持ち主に3ダメージを与える。回避された攻撃では置かない。',
+    ja: 'このモンスターが卵以外の相手モンスターを攻撃する時、相手モンスターにカウンター1個を付与する。腐敗の処理で付与されたカウンターが3個以上になると、そのモンスターを破壊し、その持ち主に3ダメージを与える。回避された攻撃では付与しない。',
     ko: '이 몬스터가 알 이외 상대 몬스터를 공격할 때 상대 몬스터에 카운터 1개를 놓는다. 부패 처리로 놓인 카운터가 3개 이상이면 그 몬스터를 파괴하고 소유자에게 3 데미지를 준다. 회피된 공격에는 놓지 않는다.',
     en: 'When this monster attacks a non-Egg enemy monster, put 1 counter on that monster. At 3 or more counters applied through Decay, destroy it and deal 3 damage to its owner. Evaded attacks do not apply the counter.',
   },
   majesty: {
-    ja: 'このモンスターが場にいる間、相手のモンスターは召喚されたターンに攻撃できない。',
+    ja: 'このモンスターが場にある間、相手のモンスターは召喚されたターンに攻撃できない。',
     ko: '이 몬스터가 필드에 있는 동안 상대 몬스터는 소환된 턴에 공격할 수 없다.',
     en: 'While this monster is on the field, enemy monsters cannot attack during the turn they were summoned.',
   },

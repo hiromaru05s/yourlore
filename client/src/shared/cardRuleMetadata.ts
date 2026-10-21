@@ -81,7 +81,7 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   AMBUSH: {"terms":["rift"]},
   FORESIGHT: {"terms":["graveyard","rift"]},
   GOLEM2: {"terms":["counters"],"mentions":["guts"]},
-  GOLEM3: {"terms":["graveyard"]},
+  GOLEM3: {"terms":["composition"]},
   DECAY_CRAFT: {"terms":["lasting","counters"],"mentions":["decay"],"grants":["decay"]},
   RUST_SLUG: {"terms":["counters"],"mentions":["decay"]},
   MAJESTY_RITE: {"terms":["lasting"],"mentions":["majesty"],"grants":["majesty"]},

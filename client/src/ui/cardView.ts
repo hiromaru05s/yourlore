@@ -12,6 +12,7 @@ import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../
 import { curHp, effAtk, effDef, playCost } from "../shared/engine";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable, effectSections } from "../shared/cardText";
+import { CARD_RULE_GROUP_LABELS, effectRuleGroup, type EffectRuleGroup } from "../shared/cardEffectHeadings";
 import { cardEffectNotes } from "../shared/cardEffectNotes";
 import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, passiveSearchKeys, decayStateDescription } from '../shared/cardPresentation';
 
@@ -269,27 +270,36 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
   return art;
 }
 
-function ruleBlocks(text: string, className: string): HTMLElement {
-  const container = el('div', className);
-  for (const { heading, body } of effectSections(text)) {
-    const section = el('section', 'card-effect-section');
-    if (heading) {
-      section.setAttribute('aria-label', heading);
-      const label = el('h3', 'fx-tag'); label.textContent = heading; section.append(label);
-    }
-    for (const line of body.split('\n')) {
-      const p = el('p', 'card-effect-body'); p.textContent = line; section.append(p);
-    }
-    container.append(section);
+function ruleBlock(heading: string, body: string): HTMLElement {
+  const section = el('section', 'card-effect-section');
+  if (heading) {
+    section.setAttribute('aria-label', heading);
+    const label = el('h3', 'fx-tag'); label.textContent = heading; section.append(label);
   }
-  return container;
+  const table = parseDiceTable(body);
+  for (const line of (table?.head ?? body).split('\n')) {
+    if (!line) continue;
+    const p = el('p', 'card-effect-body'); p.textContent = line; section.append(p);
+  }
+  if (table) {
+    const tb = el('div', 'card-dice');
+    tb.setAttribute('role', 'table');
+    tb.setAttribute('aria-label', {ja:'ダイスの結果',ko:'주사위 결과',en:'Dice results'}[getLang()]);
+    for (const [roll, fx] of table.rows) {
+      const row = el('div', 'dr'); row.setAttribute('role', 'row');
+      const label = el('span', 'dr-roll'); label.textContent = roll; label.setAttribute('role', 'rowheader');
+      const body = el('span', 'dr-fx'); body.textContent = fx; body.setAttribute('role', 'cell');
+      row.append(label, body); tb.append(row);
+    }
+    section.append(tb);
+  }
+  return section;
 }
 
 /** Complete rules, including costs, keyword names and dice tables. Never fitted to card pixels. */
 export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void): HTMLElement {
   const pc = playCost(c);
   const rawTxt = cardText(c).trim();
-  const table = rawTxt && rawTxt !== "—" ? parseDiceTable(rawTxt) : null;
   const txt = rawTxt;
   const hasCast = c.t !== "starter" && pc !== c.cost;
   const keyChips = displayPassives(c);
@@ -305,6 +315,22 @@ export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void)
       cast.title = t(c.t === "mon" ? "card.summon.tip" : "card.cast.tip");
       eff.appendChild(cast);
     }
+    // A single major heading owns all effect timings, including keyword-only monsters.
+    const groups = new Map<EffectRuleGroup, HTMLElement>();
+    const groupEl = (kind: EffectRuleGroup): HTMLElement => {
+      const existing = groups.get(kind); if (existing) return existing;
+      const group = el('section', 'card-rule-group'); group.dataset.ruleGroup = kind;
+      const title = CARD_RULE_GROUP_LABELS[kind][getLang()];
+      group.setAttribute('aria-label', title);
+      const heading = el('h2', 'card-rule-heading'); heading.textContent = title; group.append(heading);
+      groups.set(kind, group); return group;
+    };
+    const sections = txt && txt !== '—' ? effectSections(txt) : [];
+    for (const {heading, body} of sections) groupEl(effectRuleGroup(heading)).append(ruleBlock(heading, body));
+    if (keyChips.length) groupEl('effects');
+    for (const kind of ['requirements', 'effects', 'notes'] as const) {
+      const group = groups.get(kind); if (group) eff.append(group);
+    }
     for (const [group, keys] of [
       ['owned', keyChips],
       ['granted', references.filter(k => grants.includes(k))],
@@ -317,7 +343,8 @@ export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void)
         granted: {ja:'この効果で付与する能力',ko:'이 효과로 부여하는 능력',en:'Abilities granted by this effect'},
         references: {ja:'効果文に出てくる能力',ko:'효과 설명에 나오는 능력',en:'Abilities mentioned in the effect text'},
       }[group][getLang()];
-      eff.append(groupLabel);
+      const keywordGroup = el('div', 'card-key-group');
+      keywordGroup.append(groupLabel);
       const row = el("div", "card-keys" + (txt && txt !== "—" ? "" : " card-keys--only"));
       for (const k of keys) {
         const pd = PASSIVES[k];
@@ -335,25 +362,12 @@ export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void)
         const name = el('span'); name.textContent = pd[getLang()].name; chip.append(name);
         row.append(chip);
       }
-      if (row.childElementCount) eff.appendChild(row);
-    }
-    // Effect body follows the keyword labels.
-    if (table) {
-      if (table.head) eff.appendChild(ruleBlocks(table.head, 'card-dice-head'));
-      const tb = el("div", "card-dice");
-      tb.setAttribute('role', 'table');
-      tb.setAttribute('aria-label', {ja:'ダイスの結果',ko:'주사위 결과',en:'Dice results'}[getLang()]);
-      for (const [roll, fx] of table.rows) {
-        const row = el("div", "dr");
-        row.setAttribute('role', 'row');
-        const label = el('span', 'dr-roll'); label.textContent = roll; label.setAttribute('role', 'rowheader');
-        const body = el('span', 'dr-fx'); body.textContent = fx; body.setAttribute('role', 'cell');
-        row.append(label, body);
-        tb.appendChild(row);
+      if (row.childElementCount) {
+        keywordGroup.append(row);
+        if (group === 'owned') {
+          const effects = groupEl('effects'); effects.insertBefore(keywordGroup, effects.children[1] ?? null);
+        } else eff.append(keywordGroup);
       }
-      eff.appendChild(tb);
-    } else if (txt && txt !== "—") {
-      eff.appendChild(ruleBlocks(txt, 'card-eff-txt'));
     }
     const notes = cardEffectNotes(c, getLang());
     if (notes.length) {
