@@ -21,10 +21,15 @@ await apiFixture(page,async r=>{const p=new URL(r.url).pathname;
 });
 await page.addInitScript(()=>localStorage.setItem('lore_lang','ja'));
 try {
- await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.lounge-home').waitFor();await page.locator('.screen-loader').waitFor({state:'detached'});
- await page.locator('[data-nav=cards]').click();await page.locator('.cards-search').waitFor();await page.locator('.screen-loader').waitFor({state:'detached'});
+ await page.goto(base,{waitUntil:'domcontentloaded'});await page.locator('.lounge-home').waitFor();await page.locator('.screen-loader').waitFor({state:'detached',timeout:180000});
+ await page.locator('[data-nav=cards]').click();await page.locator('.cards-search').waitFor();await page.locator('.screen-loader').waitFor({state:'detached',timeout:180000});
  for(const lang of ['ja','ko','en']) {
+  const previousLanguage=await page.locator('.cards-lang select').inputValue();
+  const previousSearch=await page.locator('.cards-search').elementHandle();
   await page.locator('.cards-lang select').selectOption(lang);
+  if(previousLanguage!==lang)await page.waitForFunction(node=>!node.isConnected,previousSearch);
+  await page.locator('.cards-search').waitFor();
+  await page.locator('.screen-loader').waitFor({state:'detached',timeout:180000});
   for(const [id,search] of [['WORLD_TREE','世界樹'],['CASINO','カジノ'],['ASSASSIN1','初級アサシン'],['M1','スパーク・インプ']]) {
    await page.locator('.cards-search').fill(search);
    for(const [width,height] of [[1280,900],[390,844]]) {
@@ -42,10 +47,14 @@ try {
     assert.equal(result.effects,id==='M1'?0:1);assert(!result.overflow);
     if(id==='CASINO')assert.equal(result.dice,4);
     if(id==='WORLD_TREE')assert(result.groups.includes({ja:'効果',ko:'효과',en:'Effects'}[lang]));
-    if(lang==='ja'&&id==='WORLD_TREE')await page.screenshot({path:`${out}/world-tree-${width}.png`});
+    if(lang==='ja'&&id==='WORLD_TREE'){await page.locator('#zoomOverlay .card-frame').evaluate(async frame=>{const match=getComputedStyle(frame).backgroundImage.match(/url\(["']?(.*?)["']?\)/);if(match){const image=new Image();image.src=match[1];await image.decode();}});await page.screenshot({path:`${out}/world-tree-${width}.png`});}
     checks.push({lang,id,width,...result});await page.keyboard.press('Escape');
    }
   }
  }
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/browser.json',JSON.stringify({base,scope:'deployed assets and real card menu; API fixture, no live account or match',checks,errors},null,2));console.log(`PASS ${checks.length} deployed card-menu inspections, 0 browser errors`);
+} catch(error) {
+ await page.screenshot({path:out+'/failure.png'});
+ await fs.writeFile(out+'/failure.json',JSON.stringify({base,message:String(error),checks,errors,body:await page.locator('body').innerText()},null,2));
+ throw error;
 } finally {await browser.close();}

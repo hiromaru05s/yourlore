@@ -1,0 +1,373 @@
+{
+  "base": "https://yourlore.xyz",
+  "scope": "deployed assets and real card menu; API fixture, no live account or match",
+  "checks": [
+    {
+      "lang": "ja",
+      "id": "WORLD_TREE",
+      "width": 1280,
+      "title": "世界樹",
+      "groups": [
+        "使用条件",
+        "効果"
+      ],
+      "headings": [
+        "召喚条件",
+        "召喚時",
+        "場にある間",
+        "自分のモンスター攻撃時",
+        "自分のモンスター被攻撃時",
+        "自分のターン開始時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "WORLD_TREE",
+      "width": 390,
+      "title": "世界樹",
+      "groups": [
+        "使用条件",
+        "効果"
+      ],
+      "headings": [
+        "召喚条件",
+        "召喚時",
+        "場にある間",
+        "自分のモンスター攻撃時",
+        "自分のモンスター被攻撃時",
+        "自分のターン開始時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "CASINO",
+      "width": 1280,
+      "title": "カジノ",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "ダイスを振った時",
+        "カウンター蓄積時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 4
+    },
+    {
+      "lang": "ja",
+      "id": "CASINO",
+      "width": 390,
+      "title": "カジノ",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "ダイスを振った時",
+        "カウンター蓄積時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 4
+    },
+    {
+      "lang": "ja",
+      "id": "ASSASSIN1",
+      "width": 1280,
+      "title": "初級アサシン",
+      "groups": [
+        "効果"
+      ],
+      "headings": [],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "ASSASSIN1",
+      "width": 390,
+      "title": "初級アサシン",
+      "groups": [
+        "効果"
+      ],
+      "headings": [],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "M1",
+      "width": 1280,
+      "title": "スパーク・インプ",
+      "groups": [],
+      "headings": [],
+      "effects": 0,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "M1",
+      "width": 390,
+      "title": "スパーク・インプ",
+      "groups": [],
+      "headings": [],
+      "effects": 0,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ko",
+      "id": "WORLD_TREE",
+      "width": 1280,
+      "title": "세계수",
+      "groups": [
+        "사용 조건",
+        "효과"
+      ],
+      "headings": [
+        "소환 조건",
+        "소환 시",
+        "필드에 있는 동안",
+        "자신의 몬스터 공격 시",
+        "자신의 몬스터가 공격받을 때",
+        "자신의 턴 시작 시"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ko",
+      "id": "WORLD_TREE",
+      "width": 390,
+      "title": "세계수",
+      "groups": [
+        "사용 조건",
+        "효과"
+      ],
+      "headings": [
+        "소환 조건",
+        "소환 시",
+        "필드에 있는 동안",
+        "자신의 몬스터 공격 시",
+        "자신의 몬스터가 공격받을 때",
+        "자신의 턴 시작 시"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ko",
+      "id": "CASINO",
+      "width": 1280,
+      "title": "카지노",
+      "groups": [
+        "효과"
+      ],
+      "headings": [
+        "주사위를 굴릴 때",
+        "카운터 축적 시"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 4
+    },
+    {
+      "lang": "ko",
+      "id": "CASINO",
+      "width": 390,
+      "title": "카지노",
+      "groups": [
+        "효과"
+      ],
+      "headings": [
+        "주사위를 굴릴 때",
+        "카운터 축적 시"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 4
+    },
+    {
+      "lang": "ko",
+      "id": "ASSASSIN1",
+      "width": 1280,
+      "title": "초급 암살자",
+      "groups": [
+        "효과"
+      ],
+      "headings": [],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ko",
+      "id": "ASSASSIN1",
+      "width": 390,
+      "title": "초급 암살자",
+      "groups": [
+        "효과"
+      ],
+      "headings": [],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ko",
+      "id": "M1",
+      "width": 1280,
+      "title": "스파크 임프",
+      "groups": [],
+      "headings": [],
+      "effects": 0,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ko",
+      "id": "M1",
+      "width": 390,
+      "title": "스파크 임프",
+      "groups": [],
+      "headings": [],
+      "effects": 0,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "en",
+      "id": "WORLD_TREE",
+      "width": 1280,
+      "title": "World Tree",
+      "groups": [
+        "Requirements",
+        "Effects"
+      ],
+      "headings": [
+        "Summon Requirement",
+        "On Summon",
+        "While on the Field",
+        "When Your Monster Attacks",
+        "When Your Monster Is Attacked",
+        "At the Start of Your Turn"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "en",
+      "id": "WORLD_TREE",
+      "width": 390,
+      "title": "World Tree",
+      "groups": [
+        "Requirements",
+        "Effects"
+      ],
+      "headings": [
+        "Summon Requirement",
+        "On Summon",
+        "While on the Field",
+        "When Your Monster Attacks",
+        "When Your Monster Is Attacked",
+        "At the Start of Your Turn"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "en",
+      "id": "CASINO",
+      "width": 1280,
+      "title": "Casino",
+      "groups": [
+        "Effects"
+      ],
+      "headings": [
+        "When Dice Are Rolled",
+        "When Counters Accumulate"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 4
+    },
+    {
+      "lang": "en",
+      "id": "CASINO",
+      "width": 390,
+      "title": "Casino",
+      "groups": [
+        "Effects"
+      ],
+      "headings": [
+        "When Dice Are Rolled",
+        "When Counters Accumulate"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 4
+    },
+    {
+      "lang": "en",
+      "id": "ASSASSIN1",
+      "width": 1280,
+      "title": "Novice Assassin",
+      "groups": [
+        "Effects"
+      ],
+      "headings": [],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "en",
+      "id": "ASSASSIN1",
+      "width": 390,
+      "title": "Novice Assassin",
+      "groups": [
+        "Effects"
+      ],
+      "headings": [],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "en",
+      "id": "M1",
+      "width": 1280,
+      "title": "Spark Imp",
+      "groups": [],
+      "headings": [],
+      "effects": 0,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "en",
+      "id": "M1",
+      "width": 390,
+      "title": "Spark Imp",
+      "groups": [],
+      "headings": [],
+      "effects": 0,
+      "overflow": false,
+      "dice": 0
+    }
+  ],
+  "errors": []
+}
