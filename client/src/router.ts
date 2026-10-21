@@ -1,4 +1,4 @@
-import {mountUsername} from './screens/username';
+import {showUsernameSetup} from './ui/usernameSetup';
 import {prepareMenuCache} from './ui/menuCache';
 import { getLang } from './i18n';
 import {releaseHomeSpirit} from './ui/homeSpirit';
@@ -49,6 +49,8 @@ export class App {
   private closeGraphicsNotice:(()=>void)|undefined;
   private graphicsChecked = false;
   private screenRevision = 0;
+  private currentPage?: LoungePage;
+  private closeUsernameSetup?: () => void;
 
   constructor(root: HTMLElement) { this.root = root; }
 
@@ -99,34 +101,42 @@ export class App {
   // Clear the root BEFORE mounting the next screen. (Passing a thunk matters:
   // the mount fn appends to root, so it must run after innerHTML is cleared.)
   private swap(make: () => Screen, page?: LoungePage): void {
+    // Unconfirmed accounts enter the real HOME, then choose their public name.
+    // Keep that HOME mounted while its entrance or naming dialog is active.
+    if (this.user?.needsUsername) {
+      if (this.currentPage === 'home') return;
+      make = () => mountHome(this); page = 'home';
+    }
     const mount = () => {
       const revision = ++this.screenRevision;
+      this.closeUsernameSetup?.(); this.closeUsernameSetup = undefined;
       this.closeGraphicsNotice?.(); this.closeGraphicsNotice = undefined;
+      this.currentPage = page;
       this.cancelCover?.();
       this.current?.destroy?.();
       this.leaveLounge?.(); this.leaveLounge = null;
       const keepHomeMusic = page !== undefined && HOME_MUSIC_PAGES.has(page);
       if (!keepHomeMusic) { this.stopHomeMusic?.(); this.stopHomeMusic = null; }
       this.root.innerHTML = "";
-      if (this.user?.needsUsername) {
-        this.current = mountUsername(this);
-        return;
-      }
       this.current = make();
       if (keepHomeMusic && !this.stopHomeMusic) this.stopHomeMusic = startHomeMusic();
       if (page) {
-        const checkGraphics = () => {
-          if (revision !== this.screenRevision || this.graphicsChecked || (page !== 'login' && page !== 'home')) return;
-          this.graphicsChecked = true;
-          this.closeGraphicsNotice = showGraphicsNotice();
+        const onReady = () => {
+          if (revision !== this.screenRevision) return;
+          if (page === 'home' && this.user?.needsUsername) {
+            this.closeUsernameSetup = showUsernameSetup(this, () => {
+              this.closeUsernameSetup?.(); this.closeUsernameSetup = undefined;
+              this.afterLogin(true);
+            });
+          } else this.checkGraphics(page, revision);
         };
         this.leaveLounge = mountLounge(this, page);
         const entrance=page==='home'&&!this.homeEntranceShown;
         const assets=imageUrls(this.root);
         if(page==='login'||!isMenuReady()||entrance||hasUnloadedAssets(assets)){
           const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets);this.cancelCover=cover.cancel;
-          void cover.ready().then(ready=>{if(ready&&entrance)this.homeEntranceShown=true;if(ready)checkGraphics();});
-        } else checkGraphics();
+          void cover.ready().then(ready=>{if(revision!==this.screenRevision)return;if(ready&&entrance)this.homeEntranceShown=true;if(ready)onReady();});
+        } else onReady();
       }
     };
     if (this.navigating || this.loggingOut) return;
@@ -138,16 +148,22 @@ export class App {
 
   login(): void { this.swap(() => mountLogin(this), "login"); }
   home(): void { setPresence("menu"); this.swap(() => mountHome(this), "home"); }
-  afterLogin(): void {
-    if(this.user?.needsUsername){this.swap(()=>mountUsername(this));return;}
+  private checkGraphics(page: LoungePage | undefined, revision: number): void {
+    if (revision !== this.screenRevision || this.graphicsChecked || (page !== 'login' && page !== 'home')) return;
+    this.graphicsChecked = true;
+    this.closeGraphicsNotice = showGraphicsNotice();
+  }
+  afterLogin(homeReady = false): void {
+    if(this.user?.needsUsername){this.home();return;}
     const active=loadActiveGame(this.user?.id);
     if(active){this.onlineGame(active.roomId,active.you,"?",null,!!active.ranked);return;}
-    this.home();
+    if(!homeReady)this.home();
     if(!this.user || this.user.id==='local-guest-user')return;
     const id=this.user.id,revision=this.screenRevision;
     void api.tutorialStatus().then(status=>{
-      if(this.user?.id===id && this.screenRevision===revision && !status.offered)
-        this.swap(()=>mountTutorialWelcome(this), 'tutorial');
+      if(this.user?.id!==id || this.screenRevision!==revision)return;
+      if(!status.offered)this.swap(()=>mountTutorialWelcome(this), 'tutorial');
+      else if(homeReady)this.checkGraphics('home',revision);
     }).catch(()=>{
       if(this.user?.id!==id || this.screenRevision!==revision)return;
       const retry=document.createElement('button');retry.className='onboarding-retry';
