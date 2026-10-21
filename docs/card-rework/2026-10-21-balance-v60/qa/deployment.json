@@ -1,0 +1,33 @@
+{
+  "balanceVersion": "v60",
+  "sourceCommit": "17bf2419f4c1933946741d826a3d2e377ae27196",
+  "stagingVersion": "f090f0f1-0d65-46da-92a9-303dd4b689f4",
+  "productionStatus": {
+    "id": "98b0e123-43e7-493a-a095-055d04602043",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "maruru836818@gmail.com",
+    "annotations": {
+      "workers/message": "17bf2419f4c1933946741d826a3d2e377ae27196 guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "3fe62dd5-e6f6-46b8-b2d2-b7b5c7e9c0b9",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-10-21T14:38:51.428635Z"
+  },
+  "productionTests": {
+    "passed": 200,
+    "total": 200
+  },
+  "checks": {
+    "typecheck": "passed",
+    "build": "passed",
+    "assetsPerEnvironment": 140,
+    "cardInspectionsPerEnvironment": 14,
+    "authenticatedLiveMatch": false
+  }
+}

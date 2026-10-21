@@ -1,0 +1,223 @@
+{
+  "base": "https://test.yourlore.xyz",
+  "scope": "deployed assets and real card menu; API fixture, no live account or match",
+  "checks": [
+    {
+      "lang": "ja",
+      "id": "FARM",
+      "width": 1280,
+      "title": "農場",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "自分のターン開始時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "FARM",
+      "width": 390,
+      "title": "農場",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "自分のターン開始時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "FARMER",
+      "width": 1280,
+      "title": "農民",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "召喚時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "FARMER",
+      "width": 390,
+      "title": "農民",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "召喚時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "HARVEST",
+      "width": 1280,
+      "title": "収穫",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "場にある間"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "HARVEST",
+      "width": 390,
+      "title": "収穫",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "場にある間"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "APPLE",
+      "width": 1280,
+      "title": "りんご",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "発動時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "APPLE",
+      "width": 390,
+      "title": "りんご",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "発動時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "GOLDEN_APPLE",
+      "width": 1280,
+      "title": "黄金のりんご",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "発動時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "GOLDEN_APPLE",
+      "width": 390,
+      "title": "黄金のりんご",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "発動時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "FARMER_PRAYER",
+      "width": 1280,
+      "title": "農民の祈り",
+      "groups": [
+        "使用条件",
+        "効果"
+      ],
+      "headings": [
+        "設置上限",
+        "場にある間"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "FARMER_PRAYER",
+      "width": 390,
+      "title": "農民の祈り",
+      "groups": [
+        "使用条件",
+        "効果"
+      ],
+      "headings": [
+        "設置上限",
+        "場にある間"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 0
+    },
+    {
+      "lang": "ja",
+      "id": "CASINO",
+      "width": 1280,
+      "title": "カジノ",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "ダイスを振った時",
+        "カウンター蓄積時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 4
+    },
+    {
+      "lang": "ja",
+      "id": "CASINO",
+      "width": 390,
+      "title": "カジノ",
+      "groups": [
+        "効果"
+      ],
+      "headings": [
+        "ダイスを振った時",
+        "カウンター蓄積時"
+      ],
+      "effects": 1,
+      "overflow": false,
+      "dice": 4
+    }
+  ],
+  "errors": []
+}
