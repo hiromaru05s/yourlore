@@ -361,6 +361,8 @@ function bodyValue(c: CardDef): number {
 
 // v50 priorities are initial effect estimates, not measured win rates.
 const EXPANSION_EFFECT_PTS: Record<string, number> = {
+  TRAINING_GROUND: 20, FARM: 5, FARMER: 3, HARVEST: 3, APPLE: 7 * HEAL,
+  GOBLIN_LEADER: 5, GOBLIN_KING: 9,
   INTERCEPT: 7, REINFORCE: 11, GUNNER: 3, HEAVY_GUNNER: 6,
   FARM_KEEPER: 4, MIMIC_HUNTER: 3, QUICK_HELLFIRE: 16, STABLE: 10, CAVALRY: 3,
   MERCENARY: 4, MERC_LEADER: 8, MERC_MASTER: 19, MERC_ART: 15,

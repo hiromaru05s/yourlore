@@ -42,21 +42,20 @@ export const BOT_DECKS: BotDeck[] = [
 // v20 A/B (greedy, 기존 3덱 필드 상대): GAMBLER 70% 채택 · ELF 46% 채택(아키타입 다양성)
 // 탈락: TRUMPET 더블 템포 30%(나팔 스타터 승률은 상관관계였음) · MIMIC 41% · 순정 컬덱 45%
 /** Roll a random archetype for a new bot game (caller supplies the RNG roll in [0,1)). */
-// v58: selected against the previous Hell roster and counter-builds, then
-// checked on disjoint seeds. Strong builds share a decay core; a preliminary
-// seven-family roster was rejected for losing badly to the previous Hell.
-// Ordinary legal starters and identical resources; no hidden-deck selection.
-// Evidence: docs/bot-strength/2026-10-14-adaptive.
+// v62: counter-market selection on current rules, including double suppression,
+// Guardian, recovery and stronger Goblin/mixed opponents. Ordinary starters;
+// deck selection is independent of the opponent's private cards and market RNG.
+// Evidence: docs/bot-strength/2026-10-23-rework.
 export const BOT_HELL_DECKS: BotDeck[] = [
-  {"name": "BOT · DECAY_BLOOD", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "BLOOD_RITE", "COUNTERCALC", "RUST_SHROOM"], "tune": {}},
+  {"name": "BOT · MIXED_RALLY", "cards": ["RUST_SHROOM", "RUST_SHROOM", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], "tune": {}},
+  {"name": "BOT · GOBLIN_SWARM", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], "tune": {}},
+  {"name": "BOT · GOBLIN_RALLY", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
   {"name": "BOT · DECAY_SUPPRESSION", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "WEAKEN_ALL", "COUNTERCALC", "RUST_SHROOM"], "tune": {}},
-  {"name": "BOT · BLOOD_RAIN", "cards": ["RUST_SHROOM", "RUST_SHROOM", "NOURISHING_RAIN", "COUNTERCALC", "RUST_SHROOM", "BLOOD_RITE", "COUNTERCALC", "RUST_SHROOM"], "tune": {}},
-  {"name": "BOT · BLOOD_AMBUSH", "cards": ["RUST_SHROOM", "BLOOD_RITE", "AMBUSH", "RUST_SHROOM", "NOURISHING_RAIN", "RUST_SHROOM", "COUNTERCALC", "RUST_SHROOM"], "tune": {}},
-  {"name": "BOT · SUPPRESSION_COUNTER", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "WEAKEN_ALL", "COUNTERCALC", "COUNTERCALC"], "tune": {}},
-  {"name": "BOT · BLOOD_COUNTER", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "BLOOD_RITE", "COUNTERCALC", "COUNTERCALC"], "tune": {}},
+  {"name": "BOT · GOBLIN_CONTROL", "cards": ["GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "WEAKEN_ALL", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
   {"name": "BOT · DECAY_SWARM", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "COUNTERCALC"], "tune": {}},
+  {"name": "BOT · DECAY_BLOOD", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "BLOOD_RITE", "COUNTERCALC", "RUST_SHROOM"], "tune": {}},
 ];
-export const BOT_ELITE_DECKS: BotDeck[] = [0, 1, 4, 5, 6].map(i => BOT_HELL_DECKS[i]);
+export const BOT_ELITE_DECKS: BotDeck[] = [0, 1, 2, 3, 4].map(i => BOT_HELL_DECKS[i]);
 export function pickBotDeck(rnd: number = Math.random(), difficulty: BotDifficulty = 'normal'): BotDeck {
   const roster = difficulty === 'hell' ? BOT_HELL_DECKS : difficulty === 'hard' ? BOT_ELITE_DECKS : BOT_DECKS;
   const roll = Number.isFinite(rnd) ? rnd : 0;

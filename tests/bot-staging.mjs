@@ -1,11 +1,11 @@
-/** Public staging worker execution, not authenticated menu/match QA. */
+/** Public deployed worker execution, not authenticated menu/match QA. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {build} from 'esbuild';
 const {chromium}=await import(process.env.LORE_PLAYWRIGHT_MODULE||'playwright');
-const origin='https://test.yourlore.xyz',out=process.env.BOT_QA_OUT,dist=process.env.BOT_DIST||'client/dist';
+const origin=process.env.BOT_ORIGIN||'https://test.yourlore.xyz',out=process.env.BOT_QA_OUT,dist=process.env.BOT_DIST||'client/dist';
 assert(out,'Set BOT_QA_OUT');await fs.mkdir(out,{recursive:true});
 const dir=await fs.mkdtemp('/tmp/lore-bot-staging-');
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic','--disable-http2']});
@@ -43,11 +43,29 @@ try{
   const action=C.botDecide(g,tier);assert.equal(action.type,'chooseTarget');assert.equal(action.uid,g.players[0].field[1].uid);
   cases.push({tier,deck:'pending-buff-lethal',state:g,expected:action});
  }
+ for(const tier of ['hard','hell'])for(const scenario of ['suppression-answer','guardian-answer','restore-attacks']) {
+  const g=C.createGame({mode:'bot',seed:471,starting:0,p0:{id:'qa-bot',name:'QA BOT'},p1:{id:'qa-human',name:'QA'}}).state;
+  g.turn=11;g.pending=null;
+  for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],traps:[],enchants:[],quests:[],supply:[],removed:[],exile:[],revealedCards:[],hp:40,mana:3,maxMana:8});
+  const mon=id=>({...card(id),dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0,guts:C.hasPassive(C.DB[id],'guts')?1:0});
+  if(scenario==='guardian-answer'){
+   g.players[1].field=[mon('NWL3')];g.players[0].hand=[card('S15')];g.market=[];g.marketStock=[];
+  } else {
+   g.players[1].enchants=[{card:card('WEAKEN_ALL'),turns:99}];g.players[1].maxMana=9;
+   g.players[0].field=[mon('RUST_SHROOM'),mon('RUST_SHROOM')].map(m=>({...m,atkMod:-2}));
+   g.players[0].hand=scenario==='restore-attacks'?[card('ADVANCE')]:Array.from({length:4},()=>card('RUST_SHROOM'));
+   g.players[0].deck=[card('COUNTERCALC')];g.market=scenario==='suppression-answer'?[card('DISARM1')]:[];g.marketStock=g.market.map(()=>3);
+  }
+  const action=C.botDecide(g,tier);
+  if(scenario==='suppression-answer')assert.equal(action.type,'buyMarket',tier+' must reserve the price of the answer');
+  else {assert.equal(action.type,'play');assert.equal(g.players[0].hand[action.idx].id,scenario==='guardian-answer'?'S15':'ADVANCE');}
+  cases.push({tier,deck:scenario,state:g,expected:action});
+ }
  const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(origin,{waitUntil:'domcontentloaded'});
  const results=await page.evaluate(async({cases,worker})=>{
   const w=new Worker('/assets/'+worker,{type:'module'}),rows=[];let ticks=0;const timer=setInterval(()=>ticks++,10);
   try{for(let id=0;id<cases.length;id++){const t=performance.now();const reply=await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('worker timeout')),15000);w.onmessage=({data})=>{if(data.id===id&&!data.progress){clearTimeout(timeout);resolve(data);}};w.onerror=e=>{clearTimeout(timeout);reject(Error(e.message));};w.postMessage({id,state:cases[id].state,difficulty:cases[id].tier});});rows.push({tier:cases[id].tier,deck:cases[id].deck,ms:performance.now()-t,reply});}return {rows,ticks};}finally{clearInterval(timer);w.terminate();}
  },{cases,worker});
  for(let i=0;i<cases.length;i++){const r=results.rows[i];assert(!r.reply.error);assert.deepEqual(r.reply.action,cases[i].expected);assert(C.actionChangesState(cases[i].state,C.reduce(cases[i].state,r.reply.action).state));}
- assert.deepEqual(errors,[]);await fs.writeFile(path.join(out,'staging-worker.json'),JSON.stringify({origin,scope:'public deployed worker; no authenticated match',worker,parity,...results,errors},null,2));console.log(JSON.stringify({assets:parity.length,cases:cases.length,ticks:results.ticks,errors}));
+ assert.deepEqual(errors,[]);await fs.writeFile(path.join(out,process.env.BOT_ORIGIN?'deployed-worker.json':'staging-worker.json'),JSON.stringify({origin,scope:'public deployed worker; no authenticated match',worker,parity,...results,errors},null,2));console.log(JSON.stringify({assets:parity.length,cases:cases.length,ticks:results.ticks,errors}));
 }finally{await browser.close();await fs.rm(dir,{recursive:true,force:true});}

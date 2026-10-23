@@ -12,6 +12,11 @@ const canonical = (a: CardInst, b: CardInst): number => a.id.localeCompare(b.id)
 const starterIds = new Set(['STARTER_MANA', ...DECK_POOL]);
 const hypotheses = [...new Map([
   ['STARTER_MANA', ...Array<string>(6).fill('STARTER_TRASH'), 'STARTER_CHEST', 'STARTER_CHEST'],
+  // Human counter-builds are plausible before they reveal cards too. Never
+  // condition these hypotheses on the authoritative hand/deck or RNG.
+  ['STARTER_MANA','WEAKEN_ALL','WEAKEN_ALL','COUNTERCALC','GAMBLER','GAMBLER','GOBLIN_RAIDER','GOBLIN','GOBLIN'],
+  ['STARTER_MANA','CASTLE','CASTLE','WEAKEN_ALL','BLOOD_RITE','COUNTERCALC','NOURISHING_RAIN','RUST_SHROOM','RUST_SHROOM'],
+  ['STARTER_MANA','GOBLIN','GOBLIN','GOBLIN_RAIDER','GOBLIN_RAIDER','GOBLIN_SETTLEMENT','WEAKEN_ALL','COUNTERCALC','BLOOD_RITE'],
   ...[...BOT_DECKS, ...BOT_ELITE_DECKS, ...BOT_HELL_DECKS].map(d => ['STARTER_MANA', ...d.cards]),
 ].map(deck => [[...deck].sort().join(','), deck])).values()];
 const trapIds = BUYABLE_POOL.filter(id => DB[id].t === 'trap');

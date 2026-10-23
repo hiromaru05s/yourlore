@@ -2,6 +2,7 @@ import type { Action, GameState, PlayerState, Side } from './types';
 import { actingSide, reduce, curHp, effAtk, playCost } from './engine';
 import { cardPower } from './cardEval';
 import { learnedValue } from './botValue';
+import { resilience } from './botMatchup';
 import { hasPassive } from './cards';
 import { safeGreedy, greedyStep, TUNE } from './bot';
 import { observationSample } from './botObservation';
@@ -15,7 +16,7 @@ export const SEARCH = {
   hard: { width: 8, samples: 2, turns: 2, finalists: 3, extraSamples: 2 },
   hell: { width: 12, samples: 3, turns: 2, finalists: 4, extraSamples: 8 },
 };
-export const VALUE = { hp: 1, attack: 1.7, health: 0.65, mana: 3.5, deck: 0.65, hand: 0.8, enchant: 0.55, learned: 0.6 };
+export const VALUE = { hp: 1, attack: 1.7, health: 0.65, mana: 3.5, deck: 0.65, hand: 0.8, enchant: 0.55, learned: 0.25 };
 
 function strength(g: GameState, p: PlayerState): number {
   let value = VALUE.hp * (Math.min(100, p.hp) + Math.log1p(Math.max(0, p.hp - 100)) * 10 + (p.shield ?? 0) * 0.8 + (p.dew ?? 0) * 2.5);
@@ -23,11 +24,12 @@ function strength(g: GameState, p: PlayerState): number {
   for (const m of p.field) {
     if (m.hatch != null) { value += 3 + (m.dur ?? 1) * 2 + Math.max(0, (m.hatchTurns ?? 8) - m.hatch) * 2; continue; }
     const atk = Math.max(0, effAtk(p, m, g));
-    value += atk * VALUE.attack + curHp(p, m) * VALUE.health + 2;
+    value += atk * VALUE.attack + curHp(p, m) * VALUE.health + (atk>0 || m.aura || m.turnFx ? 2 : 0);
     if (m.directOnly) value += atk * 0.5;
     if (hasPassive(m, 'dual')) value += atk * 0.8;
     if (hasPassive(m, 'counter')) value += atk * 0.45;
     if (hasPassive(m, 'evade')) value += 2;
+    value += resilience(g,p,m);
     if (m.aura || m.turnFx) value += Math.min(20, cardPower(m) * 0.22);
   }
   for (const e of p.enchants) value += Math.min(30, cardPower(e.card)) * VALUE.enchant;
@@ -87,15 +89,21 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
   const purchase = purchaseEvaluator(g, g.players[g.cur], TUNE);
   const ranked = root.map(a => {
     const next = reduce(firstSample, a).state;
-    const legal = actionChangesState(firstSample, next) && !unproductiveOpponentHeal(firstSample,a,next);
+    let legal = actionChangesState(firstSample, next) && !unproductiveOpponentHeal(firstSample,a,next);
     let prior = positionValue(next, side);
     const p = g.players[g.cur];
     if (a.type === 'buyMarket' || a.type === 'buySupply') {
       const c = a.type === 'buyMarket' ? g.market[a.i] : p.supply[a.i];
-      if (c) prior += Math.max(-0.08, Math.min(0.08, purchase(c, a.type === 'buyMarket' ? a.i : undefined).margin / 150));
+      if (c) {
+        const margin=purchase(c,a.type==='buyMarket'?a.i:undefined).margin;
+        prior += Math.max(-0.08,Math.min(0.08,margin/150));
+        // Uncastable speculation must not gain deck-material points merely by
+        // being purchased. Immediate engine-proven wins retain their priority.
+        if(margin<=0 && !(next.over&&next.winner===side))legal=false;
+      }
     }
     if (key(a) === baseKey) prior += 0.08;
-    return { a, legal, prior, winsNow: !g.players[1 - side].traps.length && next.over && next.winner === side && next.rng === firstSample.rng, sum: 0, n: 0 };
+    return { a, legal, prior, winsNow: !g.players[1 - side].traps.length && next.over && next.winner === side && next.rng === firstSample.rng, sum: 0, n: 0, worst: 1 };
   }).filter(x => x.legal).sort((a, b) => b.prior - a.prior);
   const win = ranked.find(arm => arm.winsNow);
   if (win) return win.a;
@@ -103,11 +111,13 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
   const baseline = ranked.find(x => key(x.a) === baseKey);
   if (baseline && !arms.includes(baseline)) arms[arms.length - 1] = baseline;
   if (!arms.length) return base;
+  const score=(arm: typeof arms[number]):number=>.85*arm.sum/arm.n+.15*arm.worst;
+  const record=(arm:typeof arms[number],v:number):void=>{arm.sum+=v;arm.n++;arm.worst=Math.min(arm.worst,v);};
   for (let i = 0; i < cfg.samples; i++) {
     const sample = observationSample(g, side, i + 17);
-    for (const arm of arms) { arm.sum += rollout(sample, arm.a, side, cfg.turns); arm.n++; }
+    for (const arm of arms) { record(arm,rollout(sample, arm.a, side, cfg.turns)); }
   }
-  arms.sort((a, b) => b.sum / b.n - a.sum / a.n);
+  arms.sort((a, b) => score(b) - score(a));
   // Publish completed comparisons so a busy device keeps the searched move
   // if the worker deadline arrives during the deeper finalist evaluation.
   if (level === 'hard') onProgress?.(arms[0].a);
@@ -115,27 +125,27 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
     const finalists = arms.slice(0, cfg.finalists);
     if (baseline && !finalists.includes(baseline)) finalists.push(baseline);
     // Re-evaluate finalists on the same deeper horizon; do not mix horizons.
-    finalists.forEach(a => { a.sum = 0; a.n = 0; });
+    finalists.forEach(a => { a.sum = 0; a.n = 0; a.worst=1; });
     for (let i = 0; i < cfg.extraSamples; i++) {
       const sample = observationSample(g, side, i + 101);
-      for (const arm of finalists) { arm.sum += rollout(sample, arm.a, side, TACTICS.horizon); arm.n++; }
+      for (const arm of finalists) { record(arm,rollout(sample, arm.a, side, TACTICS.horizon, level==='hell'?3:2)); }
       if (onProgress) {
-        const best = finalists.reduce((a, b) => b.sum / b.n > a.sum / a.n ? b : a);
-        onProgress(level === 'hell' && baseline && best.sum / best.n < baseline.sum / baseline.n + 0.02 ? base : best.a);
+        const best = finalists.reduce((a, b) => score(b) > score(a) ? b : a);
+        onProgress(level === 'hell' && baseline && score(best) < score(baseline) + 0.01 ? base : best.a);
       }
     }
-    finalists.sort((a, b) => b.sum / b.n - a.sum / a.n);
-    if (level === 'hell' && baseline && finalists[0].sum / finalists[0].n < baseline.sum / baseline.n + 0.02) return base;
+    finalists.sort((a, b) => score(b) - score(a));
+    if (level === 'hell' && baseline && score(finalists[0]) < score(baseline) + 0.01) return base;
     return finalists[0].a;
   }
   return arms[0].a;
 }
 
-export function rollout(sample: GameState, action: Action, side: Side, turns: number): number {
+export function rollout(sample: GameState, action: Action, side: Side, turns: number, replyWidth = 0): number {
   let st = reduce(sample, action).state;
   if (!actionChangesState(sample, st)) return -1;
   const endTurn = sample.turn + turns;
-  let checkedTurn = -1;
+  let checkedTurn = -1, plannedTurn=-1;
   for (let steps = 0; !st.over && st.turn < endTurn && steps < 120; steps++) {
     // Both seats can find lethal combinations rather than wasting their mana
     // on a greedy summon before a winning buff/burn. This is a prediction on
@@ -149,6 +159,13 @@ export function rollout(sample: GameState, action: Action, side: Side, turns: nu
         for (const move of plan) st = reduce(st, move).state;
         return positionValue(st, side);
       }
+    }
+    // At most one sequence comparison per side/turn. The reply is selected
+    // for that side, so our branch must survive a purposeful opposing turn.
+    if (replyWidth && !st.pending && plannedTurn!==st.turn) {
+      plannedTurn=st.turn;
+      st=plannedContinuation(st,replyWidth);
+      continue;
     }
     const next = tacticalStep(st).state;
     if (!actionChangesState(st, next)) break;
@@ -175,6 +192,45 @@ export function tacticalStep(g: GameState): {action: Action; state: GameState} {
     if (!actionChangesState(g,state)) continue;
     const score = positionValue(state,side);
     if (score > value) { best = {action,state}; value = score; }
+  }
+  return best;
+}
+
+
+/** Compare complete continuations, not just the material after one summon.
+ * One alternative first move followed by target-aware play can preserve mana
+ * for an answer, set an engine before its payoff, or decline an overextension.
+ * This runs inside sampled worlds only and never returns a hidden-state plan.
+ */
+function plannedContinuation(g: GameState, width: number): GameState {
+  const side=g.cur, base=greedyStep(g);
+  const candidates=[base], purchase=purchaseEvaluator(g,g.players[side],TUNE);
+  const seen=new Set<string>();
+  for(const action of botActions(g)) {
+    if (JSON.stringify(action)===JSON.stringify(base.action)) continue;
+    if(action.type==='play') {
+      const c=g.players[side].hand[action.idx];
+      if(seen.has(c.id))continue;seen.add(c.id);
+    }
+    // Refresh sampling is already covered by the main search, not a reason to
+    // pick a lucky single-roll outcome in the tactical reply model.
+    if(action.type==='refresh')continue;
+    if(action.type==='buyMarket'||action.type==='buySupply'){const c=action.type==='buyMarket'?g.market[action.i]:g.players[side].supply[action.i];if(c&&purchase(c,action.type==='buyMarket'?action.i:undefined).margin<=0)continue;}
+    const state=reduce(g,action).state;
+    if(actionChangesState(g,state)&&!unproductiveOpponentHeal(g,action,state))candidates.push({action,state});
+  }
+  const ranked=candidates.slice(1).map(step=>({step,value:positionValue(step.state,side)}))
+    .sort((a,b)=>b.value-a.value).slice(0,width-1).map(x=>x.step);
+  let best=base.state, bestValue=-Infinity;
+  for(const step of [base,...ranked]) {
+    let st=step.state;
+    for(let n=0;n<36&&!st.over&&st.turn===g.turn;n++) {
+      const next=tacticalStep(st).state;
+      if(!actionChangesState(st,next))break;
+      st=next;
+    }
+    const value=positionValue(st,side);
+    if(value>bestValue){best=st;bestValue=value;}
   }
   return best;
 }

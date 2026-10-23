@@ -163,6 +163,7 @@
     "tests/bot-tactics.mjs",
     "tests/bot-market-strategy.mjs",
     "tests/bot-adaptive.mjs",
+    "tests/bot-rework.mjs",
     "tests/bot-npcs.mjs",
     "tests/bot-server-challenge.cjs",
     "tests/bot-simulation.mjs",
@@ -221,6 +222,7 @@
     "tests/bot-npcs.mjs": 900000,
     "tests/trap-removal-tutorial.mjs": 300000,
     "tests/dice-source.mjs": 600000,
-    "tests/duel-ui.mjs": 600000
+    "tests/duel-ui.mjs": 600000,
+    "tests/bot-rework.mjs": 300000
   }
 }

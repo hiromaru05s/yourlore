@@ -1,8 +1,9 @@
-import type { CardDef, CardInst, FieldMon, GameState, PlayerState } from './types';
+import type { CardDef, CardInst, GameState, PlayerState } from './types';
 import { ALL_IDS, DB, hasPassive } from './cards';
 import { MAX_TURNS, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet } from './engine';
 import { cardPower } from './cardEval';
 import { strategicPowerEvaluator } from './botStrategy';
+import { enteringAttack, matchupPlan, removalHits } from './botMatchup';
 
 /** Components are policy estimates in cardPower units, not card-balance tiers. */
 export const ECONOMY_DEFAULTS = {minBuy:11,minBuyEarly:6,costW:1,floorK:1.25};
@@ -27,6 +28,7 @@ const enchantAnswer = (c: CardDef): boolean => c.act === 'destroyEnch' || ['DISA
 /** Build once per position; marginal purchases must not discount already-owned material. */
 export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY_DEFAULTS): (c: CardInst, marketIndex?: number) => PurchaseValue {
   const o = g.players[p === g.players[0] ? 1 : 0], own = inventory(p), known = publicInventory(o);
+  const plan = matchupPlan(g,p,known);
   const cycle = [...p.hand, ...p.deck, ...p.discard];
   const counts = new Map<string, number>();
   own.forEach(c => counts.set(c.id, (counts.get(c.id) ?? 0) + 1));
@@ -69,6 +71,22 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
       synergy += Math.min(18,curses*2 + count('BLACK_CURSE')*5 + own.filter(x=>x.aura==='hexCurseOnSpell'||x.turnFx==='hexCurse').length*3);
       if (!curses && !own.some(x=>x.id==='BLACK_CURSE'||x.aura==='hexCurseOnSpell'||x.turnFx==='hexCurse')) readiness -= 13;
     }
+    if (c.id === 'ADVANCE') synergy += Math.min(18,monsters*2 + plan.stopped*4);
+    if (c.id === 'TRAINING_GROUND') synergy += count('CASTLE') ? 12 : 5;
+    if (c.id === 'GOBLIN_KING' && !own.some(x=>x.id.startsWith('GOBLIN')&&x.id!=='GOBLIN_KING')) readiness -= 20;
+    if (c.id==='GOBLIN_LEADER'||c.id==='GOBLIN_KING') synergy += Math.min(14,own.filter(x=>x.id.startsWith('GOBLIN')&&x.id!==c.id).length*2);
+    if (c.id==='FARMER') synergy += count('FARM') ? 20 : 0;
+    if (c.id==='FARM_KEEPER') synergy += count('FARM')||count('BREWING') ? 15 : 0;
+    if (c.id==='FARM') {
+      synergy += Math.min(15,count('FARMER')*8+count('HARVEST')*5+count('FARM_KEEPER')*6);
+      if(ownTurnsLeft<drawTurns+7) readiness -= base+synergy;
+    }
+    if (c.id==='HARVEST') {synergy += count('FARM')?10:0;if(!count('FARM'))readiness-=base;}
+    if (c.id==='APPLE') {
+      if(p.field.some(x=>['ELF','HIGH_ELF','HALF_ELF','DARK_ELF','WORLD_TREE','WORLD_TREE_ELDER'].includes(x.id))) synergy+=4;
+      if(p.enchants.some(e=>e.card.ench==='farmerPrayer'))synergy+=28;
+    }
+    if (c.id === 'EMPTY_MIND' && spells<9) readiness -= base*.8;
     if (c.id === 'RUNE2' || c.id === 'RUNE3' || c.ench === 'runeEcho') synergy += spells * 2 >= own.length ? Math.min(8,spells) : -10;
     if (c.act?.startsWith('buff') || c.id === 'TRUMPET') synergy += monsters ? Math.min(6,monsters*1.5) : -8;
     // Market support is an option, discounted heavily compared with owned support.
@@ -92,10 +110,19 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     readiness -= Math.min(base*.6,Math.max(0,playCost(c,p)-mana)*4);
     // Attack-dependent bodies cannot deliver their payoff at zero ATK.
     // Account for the public global stat swap and suppression on entry.
-    if (suppression && c.t==='mon' && (c.directOnly || hasPassive(c,'decay'))) {
-      const swapped = (g.trickLeft ?? 0)>0;
-      const future: FieldMon = {...c,atk:swapped?c.def:c.atk,def:swapped?c.atk:c.def,atkMod:-2*suppression,defMod:0,dmg:0,tempAtk:0,exhausted:false,summonedTurn:g.turn};
-      if (effAtk(p,future,g)<=0) readiness -= base*.65/(1+(ownSuppression?0:answerCoverage));
+    if (c.t==='mon') {
+      const attack=enteringAttack(g,p,c);
+      if (suppression && attack<=0) {
+        const reliant=c.directOnly||hasPassive(c,'decay')||(!c.onSummon&&!c.turnFx&&!c.aura);
+        readiness -= base*(reliant?.8:.35)/(1+(ownSuppression?0:answerCoverage*.5));
+      }
+      // Small attackers are not a sustainable plan into an affordable wall.
+      // Decay still gets credit when it can actually attack through suppression.
+      if ((c.atk??0)<=2 && !hasPassive(c,'decay') && !c.directOnly && !c.turnFx && !c.aura)
+        matchup -= plan.wallRisk*base*.45;
+      if (attack>=4 && !c.summonReq) matchup += Math.min(10,plan.suppressRisk*6+plan.wallRisk*4);
+      if (c.directOnly && !o.field.some(m=>m.aura==='eliteGuard') && !reverse)
+        matchup += plan.wallRisk*5;
     }
     if (p.field.some(m=>m.id==='CASTLE') && c.t==='mon' && c.cost>=5) readiness -= base*.7;
     if (c.quest && copies) redundancy -= base + 30;
@@ -106,15 +133,21 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
       const active = o.enchants.length;
       const future = g.market.some((x,i)=>x.ench && (g.marketStock?.[i]??3)>0 && x.cost<=o.maxMana+2);
       const coverage = answerCoverage;
+      if(plan.blocked && o.enchants.some(e=>e.card.ench==='weakenAll'||e.card.ench==='noAttack'))
+        matchup += Math.min(24,plan.stopped*5+plan.small*2)/(1+coverage);
       matchup += Math.min(22,active*9 + Math.max(0,threats.length-active)*3 + (future?2:0)) / (1+coverage);
       if (c.id==='COUNTERCALC' && o.maxMana>7) readiness -= base + matchup;
     }
+    const wallAnswer=c.act==='destroyMon' && plan.walls.some(m=>removalHits(g,o,c,m));
     if (c.act==='destroyMon') {
-      const targets = o.field.filter(m=>!hasPassive(m,'aura') && (!c.cap || m.cost<=c.cap)
-        && (c.id!=='RUNE1'||m.cost>=5) && (!c.id.startsWith('WALLBREAK')||effAtk(o,m,g)<=2)
-        && (!c.id.startsWith('SNIPE')||curHp(o,m)<=(c.id==='SNIPE1'?3:2)));
-      matchup += Math.min(14,Math.max(0,...targets.map(m=>effAtk(o,m,g)+curHp(o,m)*.3))) / (1+own.filter(x=>x.act==='destroyMon').length);
+      const targets=o.field.filter(m=>removalHits(g,o,c,m));
+      const coverage=own.filter(x=>plan.walls.some(m=>removalHits(g,o,x,m))).length;
+      const future=plan.offers.some(m=>(m.def??0)>=7&&removalHits(g,o,c,m));
+      matchup += (Math.min(20,Math.max(0,...targets.map(m=>effAtk(o,m,g)+curHp(o,m)*.5+(m.guts??0)*2)))
+        + (wallAnswer?12:future?8:0))/(1+coverage);
     }
+    if (c.id==='ADVANCE' || c.act==='buffAllTurn' || c.act==='buffPerm')
+      matchup += plan.blocked ? Math.min(18,plan.small*3)/(1+own.filter(x=>x.id==='ADVANCE'||x.act==='buffPerm').length) : 0;
     if (c.id==='POISON_MASTER') matchup += Math.min(10,o.field.filter(m=>m.hatch==null&&curHp(o,m)>=8).length*4);
     const faceSpell = ['S13','FLAME','AMBUSH'].includes(c.id);
     const recipient = reverse ? p : o;
@@ -136,7 +169,9 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     const value = Math.max(0,base+synergy+matchup+readiness+redundancy+delay+denial)-cost*tuning.costW;
     // A strong deck can still lack an answer. Its printed average is not an
     // appropriate floor for the first card that covers an active engine.
-    const firstAnswer = usableAnswer(c) && o.enchants.length>0 && !answerCoverage && readiness>=0;
+    const firstAnswer = (usableAnswer(c) && o.enchants.length>0 && !answerCoverage && readiness>=0)
+      || (wallAnswer && !own.some(x=>plan.walls.some(m=>removalHits(g,o,x,m))))
+      || (plan.blocked && c.id==='ADVANCE' && !count('ADVANCE'));
     const threshold = c.quick ? 0 : firstAnswer ? Math.min(floor,12) : floor;
     return {base,synergy,matchup,readiness,redundancy,delay,denial,cost,value,floor:threshold,margin:value-threshold};
   };

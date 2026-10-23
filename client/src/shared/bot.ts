@@ -9,8 +9,9 @@ import { observationSample } from "./botObservation";
 import { botActions, actionChangesState, withinBotTurnBudget } from "./botActions";
 import { DB, hasPassive } from "./cards";
 import { withoutMonsterPresentation } from './monsterEffects';
+import { enteringAttack, matchupPlan, removalHits } from './botMatchup';
 import { recoveryEngine } from './botStrategy';
-import { purchaseEvaluator, refreshValue } from './botEconomy';
+import { purchaseEvaluator, refreshValue, publicInventory } from './botEconomy';
 
 export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
@@ -206,6 +207,11 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.t === "spell" && p.spellCastCap != null && (p.spellsCastTurn || 0) >= p.spellCastCap) return false; // 마족 시너지
     if (blocked?.has(c.uid)) return false; // proven no-op this decision (safety-net retry)
     // 영구마법 중복/존 제약 — 엔진이 지불 전에 거부하는 조건들 (누락 시 무한 재시도)
+    if(c.ench==='weakenAll') {
+      const lost=(q:PlayerState):number=>q.field.reduce((n,m)=>n+Math.min(2,Math.max(0,effAtk(q,m,g)))*(m.mult??1)
+        +(hasPassive(m,'decay')&&effAtk(q,m,g)>0&&effAtk(q,m,g)<=2?3:0),0);
+      if(lost(o)<=lost(p))return false;
+    }
     if (c.ench === "worldCare" && p.enchants.some((e) => e.card.ench === "worldCare")) return false;
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return false;
     if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return false; // 상회 중복
@@ -249,6 +255,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "S3" && !p.field.some((m) => !m.tribe)) return false; // 칼날의 속삭임: 비종족 대상 필요
     // 폐기 경제 카드: 대상이 있어야 시전
     if (c.act === "exilePick" && p.discard.length === 0) return false;
+    if (c.act === 'destroyMon' && !o.field.some(m=>removalHits(g,o,c,m))) return false;
     if (c.act === "destroyMon" && c.cap && !o.field.some((m) => m.cost <= c.cap!)) return false; // 룬 파열: 코스트 캡 대상 필요
     if (c.id === "WALLBREAK1" && ![...o.field, ...p.field].some((m) => effAtk(o, m, g) <= 2)) return false;
     if (c.id === "WALLBREAK2" && !o.field.some((m) => effAtk(o, m, g) <= 2)) return false;
@@ -274,6 +281,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "AEM" && (!p.field.some((m) => isGolem(m)) || new Set([...p.deck, ...p.hand, ...p.discard, ...p.field].filter((x) => x.t === "mon" && isGolem(x)).map((x) => x.id)).size < 2)) return false;
     if ((c.id === "KNIGHT_TEACH" || c.id === "NL_SECRET") && p.field.length === 0) return false;
     if (c.id === "TRUMPET" && p.field.length === 0) return false;
+    if(c.id==='MANA_BACKFLOW') return false; // No immediate benefit; its own countdown eventually resets our mana.
+    if(c.act==='relicProtection' && !(p.shield??0)) return false;
     if (c.id === "NEGOTIATE") return false; // 봇은 상대 마나를 올려주지 않는다
     // forbidden ritual: needs HP to spare AND a non-시초 tribe monster to duplicate
     if (c.id === "FORBIDDEN" && !p.field.some((m) => m.tribe && m.tribe !== "시초")) return false;
@@ -323,6 +332,12 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const enchantRemoval = spells.find(({c}) => c.act === 'destroyEnch' || c.id === 'DISARM3');
   if (enchantRemoval && o.enchants.length) return {type:'play',idx:enchantRemoval.i};
 
+  // A recurring removal can consume the entire budget forever. Grow past
+  // that maintenance cost instead of repeatedly answering and never improving.
+  const growth=p.hand.findIndex(c=>c.star==='mana' && castable(c) && playCost(c,p)<=p.mana);
+  if(growth>=0 && p.maxMana<Math.max(5,Math.min(10,o.maxMana+1))
+    && (p.field.length>=2 || o.field.length===0)) return {type:'play',idx:growth};
+
   // Preserve the setup mana that a summon-first rollout used to spend.
   // Suppression matters when it removes substantially more enemy pressure.
   const suppress = spells.find(({c})=>c.ench==='weakenAll');
@@ -345,8 +360,37 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     || (c.act === 'spearShield' && (o.shield ?? 0) > 0 && (o.shield ?? 0) < p.field.reduce((n,m) => n + Math.max(0,effAtk(p,m,g)),0)));
   if (counter) return {type:'play',idx:counter.i};
 
+  // Break a stalled attack plan before spending the turn on more low-ATK bodies.
+  // This also supplies a realistic continuation to both sides of the search.
+  const matchup=matchupPlan(g,p,publicInventory(o));
+  if (matchup.blocked || matchup.walls.length) {
+    const advance=spells.find(({c})=>c.id==='ADVANCE'||c.act==='buffAllTurn'||c.act==='buffPerm');
+    if (advance && p.field.length>=2) return {type:'play',idx:advance.i};
+    const ramp=p.hand.findIndex(c=>c.star==='mana' && castable(c) && playCost(c,p)<=p.mana);
+    if (ramp>=0) return {type:'play',idx:ramp};
+    const evaluate=purchaseEvaluator(g,p,T);
+    const needsAnswer=!matchup.own.some(c=>(c.act==='destroyEnch'&&o.enchants.length)
+      || c.id==='ADVANCE' || matchup.walls.some(m=>removalHits(g,o,c,m)));
+    // Preserve the price of the first way out; purchases enter the discard,
+    // so immediate lethal/blocking moves above still take precedence.
+    if (needsAnswer && (p.field.length>=2 || !monsters.length || monsters.every(({c})=>enteringAttack(g,p,c)<=2))) {
+      let best: Action|undefined, margin=0;
+      for (const [pool,type] of [[g.market,'buyMarket'],[p.supply,'buySupply']] as const) pool.forEach((c,i)=>{
+        if (!c || !buyableByBot(p,c,g)) return;
+        const answer=(matchup.blocked && (c.act==='destroyEnch'||c.id==='DISARM3'||c.id==='ADVANCE'))
+          || matchup.walls.some(m=>removalHits(g,o,c,m));
+        if (!answer) return;
+        const v=evaluate(c,type==='buyMarket'?i:undefined).margin;
+        if(v>margin){margin=v;best={type,i};}
+      });
+      if(best)return best;
+    }
+  }
+
   // 4) develop board — summon the strongest affordable monster
-  if (monsters.length) return { type: "play", idx: monsters[0].i };
+  const development=monsters.find(({c})=>!matchup.blocked || enteringAttack(g,p,c)>0
+    || c.onSummon || c.turnFx || c.aura || p.field.length<2);
+  if (development) return { type: "play", idx: development.i };
 
   // 5) buffs — only when there is a ready attacker to benefit
   const buff = spells.find((x) =>
@@ -395,7 +439,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   // 8) utility spells (draw / ramp / disruption)
   const util = spells.find((x) => x.c.id === "CATALYST" || ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
-  const sustain = spells.find(({c}) => c.act === 'dew' || c.act === 'golemShield' || c.act === 'cullShield');
+  const sustain = spells.find(({c}) => c.act === 'apple' || c.act === 'relicProtection' || c.act === 'dew' || c.act === 'golemShield' || c.act === 'cullShield');
   if (sustain) return {type:'play',idx:sustain.i};
 
   // 8.5) 금단의 술식 / 복권 상자류 — castable() 가드 통과 시 저우선순위로 사용
@@ -633,6 +677,9 @@ function autoTarget(g: GameState): Action {
   const pending = g.pending!;
   const p = g.players[g.cur];
   const o = g.players[1 - g.cur];
+  const evaluate=purchaseEvaluator(g,p);
+  const usable=(c:CardInst):number=>{const v=evaluate(c);return Math.max(0,v.base+v.synergy+v.matchup+v.readiness);};
+  const bestUsable=(pool:CardInst[])=>[...pool].sort((a,b)=>usable(b)-usable(a))[0];
 
   if (pending.kind === "oppMon") {
     if (pending.reason === "attack") {
@@ -647,7 +694,7 @@ function autoTarget(g: GameState): Action {
       const legal = (tm: FieldMon): boolean => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 6) && (!reflected || !att || reflectedOverflow(att,tm,a,curHp(o,tm)) < p.hp+(p.shield??0)); // 귀족 영주
       const killable = o.field
         .filter(legal)
-        .filter((tm) => a >= curHp(o, tm) || tm.hatch != null || (att && hasPassive(att,'decay') && (tm.decayCnt ?? 0) + (att.id==='POISON_MASTER'?3:1) >= 3))
+        .filter((tm) => (a >= curHp(o, tm) && !(tm.guts??0)) || tm.hatch != null || (att && hasPassive(att,'decay') && (tm.decayCnt ?? 0) + (att.id==='POISON_MASTER'?3:1) >= 3))
         .sort((x, y) => (threat(y)-(reflected&&att?reflectedOverflow(att,y,a,curHp(o,y))*2:0)) - (threat(x)-(reflected&&att?reflectedOverflow(att,x,a,curHp(o,x))*2:0)));
       const target = killable[0] ?? lowestDef(o, o.field.filter(legal));
       return { type: "chooseTarget", uid: target ? target.uid : null };
@@ -711,12 +758,12 @@ function autoTarget(g: GameState): Action {
     return { type: "chooseTarget", uid: t ? t.uid : null };
   }
   if (pending.kind === "seek") {
-    const best = bestOf(p.deck);
+    const best = bestUsable(p.deck);
     return { type: "pick", uid: best ? best.uid : (p.deck[0]?.uid ?? null) };
   }
   if (pending.kind === "purge") { // 덱·묘지(또는 패)에서 제외: 저가치부터, 살릴 가치가 있으면 종료
     const discOnly = pending.data?.zone === "discard"; // 시련의 영역: 묘지에서만 — 컬 우선 제외 (선택받은 시리즈 연료)
-    const pool = purgeChoices(p, pending).sort((a, b) => cardPower(a) - cardPower(b));
+    const pool = purgeChoices(p, pending).sort((a, b) => usable(a) - usable(b));
     if (pending.reason === "handCap") { // v42: 턴 종료 손패 이월 — 반드시 val장 버린다: 가장 가치 낮은 카드부터
       const worst0 = pool[0] ?? p.hand[p.hand.length - 1];
       return { type: "pick", uid: worst0 ? worst0.uid : null };
@@ -726,7 +773,7 @@ function autoTarget(g: GameState): Action {
       if (cull) return { type: "pick", uid: cull.uid };
     }
     const worst = pool[0];
-    if (worst && cardPower(worst) < 8) return { type: "pick", uid: worst.uid };
+    if (worst && usable(worst) < 8) return { type: "pick", uid: worst.uid };
     return { type: "pick", uid: null };
   }
   if (pending.kind === "recall") {
@@ -734,7 +781,7 @@ function autoTarget(g: GameState): Action {
       const worst = [...p.discard].sort((a, b) => cardPower(a) - cardPower(b))[0];
       return { type: "pick", uid: worst ? worst.uid : (p.discard[0]?.uid ?? null) };
     }
-    const best = bestOf(p.discard.filter(c => c.uid !== pending.data?.exclude));
+    const best = bestUsable(p.discard.filter(c => c.uid !== pending.data?.exclude));
     return { type: "pick", uid: best ? best.uid : (p.discard[0]?.uid ?? null) };
   }
   if (pending.kind === "reroll") return { type: "pick", uid: null }; // 수레바퀴: 봇은 결과 유지
@@ -796,7 +843,4 @@ function autoTarget(g: GameState): Action {
 
 function lowestDef(p: PlayerState, field: FieldMon[]): FieldMon | undefined {
   return [...field].sort((a, b) => curHp(p, a) - curHp(p, b))[0];
-}
-function bestOf(pool: CardInst[]): CardInst | undefined {
-  return [...pool].sort((a, b) => cardPower(b) - cardPower(a))[0];
 }
