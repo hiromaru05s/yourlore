@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "three simultaneous moving frame concepts / 6.2s continuous recording",
+    "pause stable / resume changes rendered frame",
+    "reduced motion keeps static distinctive frame",
+    "effect toggle removes all preview layers and restores native type chip",
+    "ordinary spell receives no quick frame",
+    "five actual quick spell card surfaces",
+    "native inspection: all three variants, close releases effect resources",
+    "390px: no horizontal overflow; complete native inspection card",
+    "dispose clears canvases and observers"
+  ],
+  "errors": [],
+  "scope": "Local DEV comparison and native inspection, not authenticated gameplay"
+}

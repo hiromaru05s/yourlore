@@ -1,0 +1,16 @@
+{
+  "state": {
+    "cardId": "QUICK_POISON",
+    "selected": 1,
+    "effects": 1
+  },
+  "board": {
+    "tableState": "ready",
+    "readingTurn": "player",
+    "boardRendered": "true",
+    "widgetsReady": "true",
+    "turnlight": "porcelain",
+    "sceneReady": "true",
+    "preloadedImages": "93"
+  }
+}
