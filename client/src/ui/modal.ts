@@ -115,6 +115,7 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
 export function marketPreview(market: CardInst[], onReady: () => void): { setUntil(u: number | null): void; close(): void } {
   const m = document.createElement("div");
   m.className = "preview-modal";
+  m.style.setProperty('--pv-table', "url('/art/biblion/duel-table.png')");
   m.style.setProperty('--pv-cards', String(Math.max(1, market.length)));
   m.innerHTML = `<header class="pv-heading"><span class="pv-eyebrow">BIBLION · DUEL</span><h2>${t("game.std")}</h2><p>${t("preview.sub")}</p></header>`
     + `<div class="pv-stage"><div class="pv-cards"></div><p class="pv-hint"><span class="pv-swipe">${t("preview.swipe")} · </span>${t("preview.inspect")}</p></div>`
