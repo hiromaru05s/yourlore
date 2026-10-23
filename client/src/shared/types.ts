@@ -201,6 +201,10 @@ export interface Pending {
   data?: Record<string, unknown>;
 }
 
+export interface TribePactDefeat {
+  kind: "tribePact"; player: Side; uid: string; turn: number;
+}
+
 export interface GameState {
   medals?: [string|null,string|null];
   /** Server-authoritative achievement counters; never sent to the opponent. */
@@ -219,6 +223,7 @@ export interface GameState {
   pending: Pending | null;
   over: boolean;
   winner: Side | null;
+  defeatCause?: TribePactDefeat;
   market: CardInst[];
   marketStock?: number[]; // v40: 고정 마켓 슬롯별 남은 재고 (없으면 MARKET_STOCK 기본) — 0이 되면 슬롯이 새 카드로 교체
   dmgTally: [number, number];
@@ -323,7 +328,7 @@ export type GameEvent =
   | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish"; riftCount?: number } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)
   | { type: "trapReveal"; player: Side; id: string } // a trap fired → reveal then discard
-  | { type: "win"; winner: Side }
+  | { type: "win"; winner: Side; cause?: TribePactDefeat }
   | { type: "matchDraw" } // 60-turn limit reached with tied HP — the game ends in a draw
   | { type: "needTarget"; pending: Pending };
 

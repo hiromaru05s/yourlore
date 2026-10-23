@@ -1,3 +1,4 @@
+import {playTribePactDefeat,tribePactVerdict} from '../ui/tribePactDefeat/runtime';
 import {STANDARD_FX} from '../ui/animationTempo';
 import { purgeChoices } from '../shared/engine';
 import {summonFaceFactory} from '../ui/summon/face';
@@ -560,6 +561,7 @@ export abstract class BaseController implements BoardHandlers {
           await A.infinityCull(e.sourceUid, sideOf(e.player), e.amount);
           break;
         case "enchantActivate": {
+          if (res.state.defeatCause?.uid === e.uid) break; // The terminal contract owns its source.
           const erosionPair=erosion.activations.get(i);
           if(erosionPair){
             const damage=events[erosionPair.damage];
@@ -991,6 +993,10 @@ export abstract class BaseController implements BoardHandlers {
           }
           break;
         }
+        case "win":
+          if(e.cause?.kind==='tribePact' && !this.dead && !A.isFxSkipped())
+            await playTribePactDefeat(e.cause,sideOf(e.cause.player));
+          break;
         case "treasure":
           // Reward effects have their own board events; no additional explanation popup.
           break;
@@ -1526,7 +1532,10 @@ export abstract class BaseController implements BoardHandlers {
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     const meHp = Math.max(0, this.state.players[this.you].hp);
     const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
+    const pactReason = this.state.defeatCause?.kind === "tribePact"
+      ? tribePactVerdict(this.state.defeatCause.player === this.you ? "me" : "opp") : "";
     const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`
+      + (pactReason ? `<br><strong>${pactReason}</strong>` : "")
       + (this.resultNote ? `<br><span class="muted">${this.resultNote}</span>` : "")
       + `<br><span id="winExperience" class="muted">${this.experienceNote}</span>`;
     winModal(

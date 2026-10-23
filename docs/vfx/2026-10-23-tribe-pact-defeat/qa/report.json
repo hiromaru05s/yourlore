@@ -1,0 +1,293 @@
+{
+  "records": [
+    {
+      "you": 0,
+      "owner": 0,
+      "samples": [
+        {
+          "phase": "preparing",
+          "time": null,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "reveal",
+          "time": 0,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "breach",
+          "time": 1560,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "tear",
+          "time": 2210,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "judgment",
+          "time": 3360,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "verdict",
+          "time": 4260,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        }
+      ]
+    },
+    {
+      "you": 0,
+      "owner": 1,
+      "samples": [
+        {
+          "phase": "preparing",
+          "time": null,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "reveal",
+          "time": 0,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "breach",
+          "time": 1564,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "tear",
+          "time": 2214,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "judgment",
+          "time": 3364,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "verdict",
+          "time": 4264,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        }
+      ]
+    },
+    {
+      "you": 1,
+      "owner": 0,
+      "samples": [
+        {
+          "phase": "preparing",
+          "time": null,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "reveal",
+          "time": 0,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "breach",
+          "time": 1562,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "tear",
+          "time": 2212,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "judgment",
+          "time": 3362,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "verdict",
+          "time": 4262,
+          "side": "opp",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成相手の敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        }
+      ]
+    },
+    {
+      "reconnect": "passed"
+    },
+    {
+      "cancel": "skip",
+      "passed": true
+    },
+    {
+      "cancel": "destroy",
+      "passed": true
+    },
+    {
+      "cancel": "hidden",
+      "passed": true
+    },
+    {
+      "reducedMotion": "passed"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "samples": [
+        {
+          "phase": "preparing",
+          "time": null,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "reveal",
+          "time": 0,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "breach",
+          "time": 1565,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "tear",
+          "time": 2215,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "judgment",
+          "time": 3365,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "verdict",
+          "time": 4265,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "samples": [
+        {
+          "phase": "preparing",
+          "time": null,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "reveal",
+          "time": 0,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "breach",
+          "time": 1557,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "tear",
+          "time": 2207,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "judgment",
+          "time": 3357,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        },
+        {
+          "phase": "verdict",
+          "time": 4257,
+          "side": "me",
+          "text": "多種族契約契約不履行45ターン到達 · 種族シナジー未達成あなたの敗北",
+          "earlyModal": false,
+          "wordsInBounds": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

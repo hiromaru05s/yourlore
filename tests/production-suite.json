@@ -3,6 +3,7 @@
     "tests/background-music.mjs",
     "tests/goblin-expansion.mjs",
     "tests/goblin-expansion-server.mjs",
+    "tests/tribe-pact-defeat.mjs",
     "tests/balance-v60-server.mjs",
     "tests/balance-v60.mjs",
     "tests/username-ui.mjs",

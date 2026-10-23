@@ -1,0 +1,11 @@
+.pact-defeat{position:fixed;inset:0;z-index:135;pointer-events:none;overflow:hidden;isolation:isolate}
+.pact-defeat__shade{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#25122208 12%,#1c101b60 65%,#160c1d8a);opacity:0}
+.pact-defeat__canvas{position:fixed;left:0;top:0;width:652.174px;height:652.174px;transform-origin:0 0;pointer-events:none}
+.pact-defeat__words{position:absolute;left:50%;top:59%;transform:translateX(-50%);width:min(560px,94vw);box-sizing:border-box;padding:17px 12px 20px;text-align:center;color:#fff0d2;background:linear-gradient(90deg,#21132200,#211322f5 17%,#211322f5 83%,#21132200);text-shadow:0 2px 5px #08030a;opacity:0}
+.pact-defeat__name{font:600 13px/1.6 serif;letter-spacing:.18em;color:#ddc393}
+.pact-defeat__title{margin:7px 0;font:600 clamp(25px,4vw,40px)/1.2 serif;letter-spacing:.13em;color:#ffc0a0}
+.pact-defeat__condition{font:13px/1.7 sans-serif;color:#e6d2c4}
+.pact-defeat__verdict{margin-top:9px;font:600 17px/1.5 serif;letter-spacing:.13em;color:#fff1d6}
+.pact-defeat__contact{position:fixed;border-radius:50%;border:2px solid #ef8a65;box-shadow:inset 0 0 24px #d33d4870,0 0 14px #b4324060;opacity:0}
+.pact-defeat[data-phase=static] .pact-defeat__words{top:42%;opacity:1}
+@media(max-height:560px){.pact-defeat__words{top:52%;padding:9px}.pact-defeat__title{font-size:26px;margin:3px 0}.pact-defeat__verdict{margin-top:3px}}

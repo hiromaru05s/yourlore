@@ -1440,6 +1440,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       // 다종족 계약(v37): 45턴까지 종족 시너지를 발동하지 못하면 패배
       if (e.card.ench === "tribeContract" && ownerTurn && !g.over && g.turn >= 45 && pl.tribesFired.length === 0) {
         ctx.log(`<span class="t">${cn(e.card)}</span> <span class="dmg">계약 불이행! ${pl.name} 패배</span>`, `<span class="t">${cn(e.card)}</span> <span class="dmg">契約不履行！ ${pl.name} の敗北</span>`);
+        g.defeatCause = {kind: "tribePact", player: side(g, pl), uid: e.card.uid, turn: g.turn};
         handleDefeat(g, ctx, pl, side(g, opp));
       }
       emitActivation();
@@ -1630,7 +1631,7 @@ function handleDefeat(g: GameState, ctx: Ctx, loser: PlayerState, _finisher: Sid
   const loserIdx = g.players.indexOf(loser) as Side;
   const winner = (1 - loserIdx) as Side;
   g.over = true; g.phase = "over"; g.winner = winner;
-  ctx.ev.push({ type: "win", winner });
+  ctx.ev.push({ type: "win", winner, ...(g.defeatCause ? {cause: g.defeatCause} : {}) });
 }
 
 // ============================================================

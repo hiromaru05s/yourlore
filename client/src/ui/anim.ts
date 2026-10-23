@@ -1,3 +1,4 @@
+import {cancelTribePactDefeat} from './tribePactDefeat/runtime';
 import {STANDARD_FX,SPECIAL_FX} from './animationTempo';
 import {merchantCount} from './merchant/selection';
 import {prepareSummonAppearance,refreshSummonAppearance,mountSummonAppearance} from './summon/appearance';
@@ -122,7 +123,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
-  if(on){cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){cancelTribePactDefeat();cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
