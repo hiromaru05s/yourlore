@@ -27,7 +27,8 @@ export class LibraryScene{
  hideRewardModels=false;
  private disposed=false;featuredSleeve='ivory';
  radiance!:Radiance;count=1;rewardKind:RewardKind='sleeve';introLight:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;env:T.WebGLRenderTarget;mana=new T.PointLight('#90d8ff',0,7,2);wake:ManaWake;dust:T.Points;halo:T.Sprite;lastT=0;library:ReturnType<typeof arcaneLibrary>;
- constructor(public canvas:HTMLCanvasElement){
+ constructor(public canvas:HTMLCanvasElement,options:{hideRewardModels?:boolean}={}){
+  this.hideRewardModels=!!options.hideRewardModels;
   this.renderer=createWebGLRenderer({canvas,alpha:false,antialias:true,preserveDrawingBuffer:false,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=.92;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;
   const pmrem=new T.PMREMGenerator(this.renderer),envRoom=new RoomEnvironment();this.env=pmrem.fromScene(envRoom,.04);envRoom.dispose();pmrem.dispose();this.scene.environment=this.env.texture;this.scene.environmentIntensity=.32;
   this.scene.background=new T.Color('#283c48');this.scene.fog=new T.FogExp2('#536d78',.013);
@@ -41,13 +42,15 @@ export class LibraryScene{
   this.introLight.renderOrder=20;this.scene.add(this.introLight);
   const pos=[];for(let i=0;i<140;i++)pos.push(Math.sin(i*47.83)*7,1+(Math.cos(i*13.43)+1)*4.5,-10+Math.sin(i*5.43)*15);const pg=new T.BufferGeometry();pg.setAttribute('position',new T.Float32BufferAttribute(pos,3));this.dust=new T.Points(pg,new T.PointsMaterial({map:gmap,color:'#e2e7df',size:.024,opacity:.28,transparent:true,depthWrite:false}));this.scene.add(this.dust);
   this.wake=new ManaWake(this.scene);
-  const bookReady=loadCover(0).then(async art=>{const b=makeBook(art,0,true);this.books.push(b);this.scene.add(b.root);this.radiance=new Radiance(this.scene,b.finalPages);await this.radiance.ready;
+  const bookReady=loadCover(0).then(async art=>{const b=makeBook(art,0,true);this.books.push(b);this.scene.add(b.root);this.radiance=new Radiance(this.scene,b.finalPages,!this.hideRewardModels);await this.radiance.ready;
   });
   this.ready=Promise.allSettled([bookReady,this.library.ready]).then(async results=>{
    const failure=results.find(r=>r.status==='rejected');if(failure?.status==='rejected')throw failure.reason;
    if(this.disposed)return;
-   // Compile all reward silhouettes behind the loading layer, avoiding a first-reveal hitch.
-   this.library.set(0);this.rewardKind='mixed';this.count=10;this.render(19,'SSR',true);await this.renderer.compileAsync(this.scene,this.camera);this.rewardKind='sleeve';this.count=1;
+   // Compile the opening; previews also compile their reward silhouettes.
+   this.library.set(0);this.rewardKind=this.hideRewardModels?'sleeve':'mixed';this.count=10;
+   this.render(19,'SSR',true);
+   await this.renderer.compileAsync(this.scene,this.camera);this.rewardKind='sleeve';this.count=1;
   });
  }
  setVariant(v:number){this.variant=v;this.library.set(0)}

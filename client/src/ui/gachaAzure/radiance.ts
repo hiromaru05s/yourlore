@@ -23,10 +23,10 @@ const glowFragment=`
  }`;
 export class Radiance{
  root=new T.Group();sheets:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>[]=[];rewards:Rewards;kind:RewardKind='sleeve';ready:Promise<void>;count=1;rarity='SSR';
- constructor(scene:T.Scene,public pages:T.Mesh[]){
+ constructor(scene:T.Scene,public pages:T.Mesh[],loadRewardModels=true){
   scene.add(this.root);
   for(let n=0;n<20;n++){const page=pages[n%2];const mat=new T.ShaderMaterial({vertexShader:vertex,fragmentShader:glowFragment,transparent:true,depthWrite:false,side:T.DoubleSide,blending:T.AdditiveBlending,uniforms:{mask:{value:(page.material as T.Material).userData.glyphMask},amount:{value:0},travel:{value:0},time:{value:0},variant:{value:0}}});const m=new T.Mesh(new T.PlaneGeometry(2.05,2.99,40,26),mat);m.frustumCulled=false;this.sheets.push(m);this.root.add(m);}
-  this.rewards=new Rewards(scene);this.ready=this.rewards.ready;
+  this.rewards=new Rewards(scene,loadRewardModels);this.ready=this.rewards.ready;
  }
  render(seconds:number,variant:number,camera:T.Camera,reduced=false){
   const start=13.25,travel=ease(start,16.5,seconds),charge=ease(12.6,14.25,seconds)*(1-ease(16.8,18.2,seconds));

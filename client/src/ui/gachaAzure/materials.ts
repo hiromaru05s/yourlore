@@ -6,5 +6,14 @@ export function grain(scale=1){return canvasMap(512,512,c=>{const img=c.createIm
 export function paperMap(edge=false){return canvasMap(edge?128:768,edge?1024:1024,c=>{const w=c.canvas.width,h=c.canvas.height;c.fillStyle='#dfd8c5';c.fillRect(0,0,w,h);for(let i=0;i<10000;i++){c.fillStyle=`rgba(80,61,38,${hash(i+3)*.026})`;c.fillRect(hash(i)*w,hash(i+1)*h,1+hash(i+2)*3,1)}if(edge){for(let x=0;x<w;x+=2){c.strokeStyle=`rgba(86,76,55,${.08+hash(x)*.16})`;c.beginPath();c.moveTo(x,0);c.bezierCurveTo(x+.3,340,x-.3,700,x,h);c.stroke()}return}c.strokeStyle='#a28f67';c.lineWidth=1;c.strokeRect(61,69,646,885);c.strokeRect(67,75,634,873);c.strokeStyle='#867755';c.globalAlpha=.34;c.beginPath();c.arc(384,512,140,0,Math.PI*2);c.stroke();for(let i=0;i<16;i++){const a=i/16*Math.PI*2;c.beginPath();c.moveTo(384+Math.cos(a)*125,512+Math.sin(a)*125);c.lineTo(384+Math.cos(a)*148,512+Math.sin(a)*148);c.stroke()}c.beginPath();c.moveTo(246,512);c.quadraticCurveTo(384,424,522,512);c.quadraticCurveTo(384,600,246,512);c.stroke();c.beginPath();c.arc(384,512,35,0,Math.PI*2);c.stroke();for(let y=115;y<930;y+=20){if(y>325&&y<696)continue;for(let x=102;x<658;x+=20){c.lineWidth=.8;c.beginPath();const a=hash(x+y)*5;c.moveTo(x,y);c.lineTo(x+7,y-a);c.lineTo(x+13,y+2);c.moveTo(x+6,y-5);c.lineTo(x+8,y+5);c.stroke()}}c.globalAlpha=1;});}
 export function marble(){return canvasMap(1024,1024,c=>{c.fillStyle='#b8beb9';c.fillRect(0,0,1024,1024);for(let i=0;i<850;i++){c.strokeStyle=`rgba(54,77,82,${.008+hash(i)*.018})`;c.lineWidth=.4+hash(i+9)*1.8;c.beginPath();const y=hash(i)*1500-300;c.moveTo(0,y);c.bezierCurveTo(240,y+Math.sin(i)*70,670,y+210,1024,y+440);c.stroke()}})}
 export function physical(color:T.ColorRepresentation,metalness=0,roughness=.6,map?:T.Texture){return new T.MeshPhysicalMaterial({color,metalness,roughness,...(map?{map}:{}),clearcoat:metalness>.5?.25:.07,clearcoatRoughness:.32});}
-export async function loadCover(_index=0){const t=await new T.TextureLoader().loadAsync(new URL('./assets/cover-1.png',import.meta.url).href);t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;return t}
+let coverImage:Promise<HTMLImageElement>|undefined;
+export function prepareCover():Promise<HTMLImageElement>{
+ return coverImage??=new Promise<HTMLImageElement>((resolve,reject)=>{
+  const image=new Image();image.decoding='async';image.fetchPriority='low';
+  image.src=new URL('./assets/cover-1.png',import.meta.url).href;
+  image.decode().then(()=>resolve(image),reject);
+ }).catch(error=>{coverImage=undefined;throw error;});
+}
+export async function loadCover(_index=0){const t=new T.Texture(await prepareCover());t.needsUpdate=true;t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;return t}
+
 export function glowMap(){return canvasMap(128,128,c=>{const g=c.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.08,'rgba(255,255,255,.68)');g.addColorStop(.4,'rgba(255,255,255,.1)');g.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=g;c.fillRect(0,0,128,128)})}

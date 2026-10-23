@@ -1,0 +1,104 @@
+{
+  "network": {
+    "latencyMs": 80,
+    "downloadMbps": 10
+  },
+  "ref": "4eb5ac61",
+  "results": [
+    {
+      "version": "before",
+      "ms": 14715.59999999404,
+      "assetBytes": 11737583,
+      "assets": [
+        {
+          "url": "http://127.0.0.1:5537/models/reading-board/v1/mana-crystal-ready.glb",
+          "bytes": 41896,
+          "duration": 665.9000000059605
+        },
+        {
+          "url": "http://127.0.0.1:5537/models/reading-board/v1/crystal-optics.json",
+          "bytes": 6727,
+          "duration": 531.5999999940395
+        },
+        {
+          "url": "http://127.0.0.1:5537/src/ui/gachaAzure/assets/cover-1.png",
+          "bytes": 3780891,
+          "duration": 4690.29999999702
+        },
+        {
+          "url": "http://127.0.0.1:5537/models/reading-board/v1/deck-place.glb",
+          "bytes": 1194232,
+          "duration": 4109.0999999940395
+        },
+        {
+          "url": "http://127.0.0.1:5537/models/reading-board/v1/shelf.glb",
+          "bytes": 1871424,
+          "duration": 5733.70000000298
+        },
+        {
+          "url": "http://127.0.0.1:5537/cosmetics/v2/sleeve-ivory.webp",
+          "bytes": 87600,
+          "duration": 525.2000000029802
+        },
+        {
+          "url": "http://127.0.0.1:5537/cosmetics/v2/sleeve-astral.webp",
+          "bytes": 95418,
+          "duration": 548.8000000119209
+        },
+        {
+          "url": "http://127.0.0.1:5537/frames/sleeve_compass.webp",
+          "bytes": 32578,
+          "duration": 293.59999999403954
+        },
+        {
+          "url": "http://127.0.0.1:5537/cosmetics/v2/sleeve-verdant.webp",
+          "bytes": 76034,
+          "duration": 480.09999999403954
+        },
+        {
+          "url": "http://127.0.0.1:5537/frames/sleeve_prism.webp",
+          "bytes": 74520,
+          "duration": 667.4000000059605
+        },
+        {
+          "url": "http://127.0.0.1:5537/cosmetics/v2/sleeve-crimson.webp",
+          "bytes": 79912,
+          "duration": 879.7000000029802
+        },
+        {
+          "url": "http://127.0.0.1:5537/src/ui/gachaAzure/assets/avatar-red.png",
+          "bytes": 2247659,
+          "duration": 6462.4000000059605
+        },
+        {
+          "url": "http://127.0.0.1:5537/src/ui/gachaAzure/assets/avatar-blue.png",
+          "bytes": 2148692,
+          "duration": 6385.399999991059
+        }
+      ]
+    },
+    {
+      "version": "after",
+      "ms": 6507,
+      "assetBytes": 3829514,
+      "assets": [
+        {
+          "url": "http://127.0.0.1:5537/models/reading-board/v1/mana-crystal-ready.glb",
+          "bytes": 41896,
+          "duration": 291.40000000596046
+        },
+        {
+          "url": "http://127.0.0.1:5537/models/reading-board/v1/crystal-optics.json",
+          "bytes": 6727,
+          "duration": 164.1000000089407
+        },
+        {
+          "url": "http://127.0.0.1:5537/src/ui/gachaAzure/assets/cover-1.png",
+          "bytes": 3780891,
+          "duration": 4525.20000000298
+        }
+      ]
+    }
+  ],
+  "boundary": "Same local assets and browser; fresh context, cold cinematic only, no speculative prewarm. API excluded."
+}

@@ -1,0 +1,104 @@
+{
+  "origin": "http://127.0.0.1:5537",
+  "baseline": true,
+  "entryMs": 3457,
+  "loadMs": 2417,
+  "checks": [
+    {
+      "width": 1280,
+      "height": 900,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 885.609375,
+          "y": 529.59375,
+          "width": 172,
+          "height": 66,
+          "visible": true
+        },
+        {
+          "count": "10",
+          "x": 1069.609375,
+          "y": 529.59375,
+          "width": 172,
+          "height": 66,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 16,
+          "y": 561.734375,
+          "width": 174,
+          "height": 66,
+          "visible": true
+        },
+        {
+          "count": "10",
+          "x": 200,
+          "y": 561.734375,
+          "width": 174,
+          "height": 66,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 10,
+          "y": 630.34375,
+          "width": 145,
+          "height": 66,
+          "visible": false
+        },
+        {
+          "count": "10",
+          "x": 165,
+          "y": 630.34375,
+          "width": 145,
+          "height": 66,
+          "visible": false
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 526.6875,
+          "y": 513.59375,
+          "width": 140,
+          "height": 66,
+          "visible": false
+        },
+        {
+          "count": "10",
+          "x": 678.6875,
+          "y": 513.59375,
+          "width": 140,
+          "height": 66,
+          "visible": false
+        }
+      ]
+    }
+  ],
+  "calls": 1,
+  "obsolete": [
+    "http://127.0.0.1:5537/models/reading-board/v1/deck-place.glb",
+    "http://127.0.0.1:5537/models/reading-board/v1/shelf.glb",
+    "http://127.0.0.1:5537/src/ui/gachaAzure/assets/avatar-red.png",
+    "http://127.0.0.1:5537/src/ui/gachaAzure/assets/avatar-blue.png"
+  ],
+  "errors": []
+}

@@ -148,14 +148,19 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     });
   };
 
-  // load current ownership + credits
-  void Promise.all([api.profile(),api.collection()]).then(([p,collection]) => {
+  // Collection is the purchase authority. Unrelated profile latency must not gate draws.
+  void api.collection().then(collection => {
     if (dead) return;
-    owned = new Set([...(p.sleeves??["default"]),...(p.furnitures??[])]);
     credits = collection.credits;starterCards=collection.starterCards;collectionReady=true;
+    for(const id of collection.cosmetics??[])owned.add(id);
     if(app.user){app.user.credits=credits;app.user.starterCards=starterCards;app.user.effects=collection.effects;}
     build();
   }).catch((e) => { if (!dead){notice=(e as Error).message;build();} });
+  void api.profile().then(p => {
+    if(dead)return;
+    owned=new Set([...owned,...(p.sleeves??['default']),...(p.furnitures??[])]);
+    if(category==='sleeve'||category==='furniture')renderGrid();
+  }).catch(()=>{});
 
   build();
   const unsub = onLangChange(() => build());

@@ -4,6 +4,12 @@ import {loungeText as l} from './loungeText';
 import type {LibraryScene} from './gachaAzure/scene';
 import {DURATION} from './gachaAzure/timing';
 import '../styles/gachaCinematic.css';
+let preparation:Promise<void>|undefined;
+/** Warm only the opening module and its cover; no WebGL context or reward catalogue. */
+export function prepareGachaCinematic():Promise<void>{
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches)return Promise.resolve();
+ return preparation??=Promise.all([import('./gachaAzure/scene'),import('./gachaAzure/materials').then(m=>m.prepareCover())]).then(()=>{}).catch(error=>{preparation=undefined;throw error;});
+}
 export interface GachaCinematicOptions {count:number;rewards?:CollectionReward[];edition:'astral'|'ivory'|'crimson';onClose:()=>void}
 /** Selected Azure Wake presentation. Receives server-confirmed rewards; never draws, spends or grants items. */
 export function openGachaCinematic(options:GachaCinematicOptions):()=>void{
@@ -29,7 +35,7 @@ export function openGachaCinematic(options:GachaCinematicOptions):()=>void{
  media.addEventListener('change',()=>{if(ready&&media.matches){cancelAnimationFrame(raf);seconds=DURATION;render();}},{signal:events.signal});
  if(media.matches&&options.rewards){finishUI();}
  else void import('./gachaAzure/scene').then(async ({LibraryScene})=>{
-  if(dead||ended)return;scene=new LibraryScene(canvas);scene.count=options.count===10?10:1;scene.featuredSleeve=options.edition;resize();await scene.ready;if(dead||ended)return;
+  if(dead||ended)return;scene=new LibraryScene(canvas,{hideRewardModels:!!options.rewards});scene.count=options.count===10?10:1;scene.featuredSleeve=options.edition;resize();await scene.ready;if(dead||ended)return;
   scene.hideRewardModels=!!options.rewards;scene.setVariant(0);scene.count=options.count===10?10:1;scene.rewardKind='sleeve';resize();ready=true;loading.hidden=true;skip.disabled=false;dialog.dataset.ready='true';start();
  }).catch(error=>{scene?.dispose();if(dead||ended)return;loading.textContent=l('演出を読み込めませんでした。閉じて再度お試しください。','The animation could not load. Close and try again.','연출을 불러오지 못했습니다. 닫고 다시 시도해 주세요.');done.hidden=false;done.textContent=l('獲得結果を見る','View results','획득 결과 보기');dialog.dataset.phase='error';console.error('Gacha animation failed',error);});
  return ()=>{if(dead)return;dead=true;cancelAnimationFrame(raf);events.abort();observer.disconnect();clearTimeout(bridgeTimer);stopRewards?.();retiringScene?.dispose();scene?.dispose();dialog.close();dialog.remove();};

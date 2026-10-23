@@ -29,8 +29,10 @@ export class Rewards{
  root=new T.Group();items:Item[]=[];ready:Promise<void>;kind:RewardKind='sleeve';featured='ivory';
  cardTextures:T.Texture[]=[];
  uniforms={reveal:{value:0},charge:{value:0},variant:{value:0}};textures:T.Texture[]=[];furnitureAspect=1.45;
- constructor(scene:T.Scene){
+ constructor(scene:T.Scene,loadModels=true){
   scene.add(this.root);
+  // Production reveals confirmed rewards in their own stage; retain pose math only.
+  if(!loadModels){this.ready=Promise.resolve();return;}
   this.ready=assetBatch([assetBatch(assets.map(url=>new T.TextureLoader().loadAsync(url))),new GLTFLoader().loadAsync('/models/reading-board/v1/deck-place.glb'),new GLTFLoader().loadAsync('/models/reading-board/v1/shelf.glb')]).then(([textures,deck,grave])=>{
    this.textures=textures;textures.forEach(t=>{t.colorSpace=T.NoColorSpace;t.anisotropy=8});
    // Reuse the actual board furniture, with its depth, cloth, wood, feet and metal trim.

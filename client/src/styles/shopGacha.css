@@ -150,3 +150,54 @@
 }
 /* The single permanent banner no longer has an edition-selector column. */
 .gacha-page.gacha-v2{display:block}
+/* The draw action shares the first view with the banner, ahead of supporting details. */
+.gacha-page.gacha-entry{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:0 28px;align-items:start}
+.gacha-entry .gacha-stage{grid-column:1;grid-row:1;min-height:350px}
+.gacha-entry .gacha-purchase{grid-column:2;grid-row:1;align-self:center;padding:26px 0;border-top:2px solid #d6c18d;border-bottom:1px solid #c2d6e43b}
+.gacha-purchase h3{margin:0 0 12px;font:600 24px/1.3 var(--serif,serif);color:#f3eddd}
+.gacha-page p.gacha-balance{margin:0 0 22px;font:12px/1.5 var(--ui,sans-serif);color:#b9c7d3}
+.gacha-balance strong{font-size:21px;color:#fff;margin:0 5px}
+.gacha-entry .gacha-actions{display:grid;grid-template-columns:1fr;gap:12px}
+.gacha-entry .gacha-actions .gacha-draw{width:100%;min-width:0;min-height:76px;border-radius:4px;flex-direction:row;justify-content:space-between;padding:14px 18px;background:#e8ddbf;color:#243345;border-color:#fff0c9;box-shadow:inset 0 0 0 3px #b39c7226}
+.gacha-entry .gacha-draw>span{font:600 17px/1.4 var(--ui,sans-serif);letter-spacing:0}
+.gacha-entry .gacha-draw b{flex-direction:column;gap:0;font-size:18px}
+.gacha-entry .gacha-draw:disabled{opacity:.55;cursor:default;filter:none}
+.gacha-entry .gacha-draw:not(:disabled):hover{background:#fff2cf}
+.gacha-page p.gacha-purchase-status{font:11px/1.6 var(--ui,sans-serif);color:#becbd5;margin:14px 0 0;min-height:18px}
+.gacha-entry .gacha-copy{padding:26px 0 50px 24px}
+.lounge-content .gacha-entry .gacha-copy h2{white-space:normal;font-size:clamp(24px,2.5vw,36px);overflow-wrap:anywhere}
+.gacha-entry .gacha-feature{display:block}.gacha-entry .gacha-feature>span{display:block;border:0;padding:0;margin-bottom:7px}
+.gacha-entry .gacha-feature strong{font-size:11px;line-height:1.6}
+.gacha-entry .gacha-guarantee{left:24px;right:20px;font-size:10px}
+.gacha-entry .gacha-footer{grid-column:1/-1;padding-top:16px}
+#collectionNotice:empty{display:none}
+@media(max-width:1000px){
+ .gacha-page.gacha-entry{grid-template-columns:minmax(0,1fr) 290px;gap:0 18px}
+ .gacha-entry .gacha-actions .gacha-draw{padding:12px}.gacha-entry .gacha-draw>span{font-size:15px}
+}
+@media(max-width:700px),(max-height:700px){
+ .gacha-page.gacha-entry{display:flex;flex-direction:column;gap:16px}
+ .gacha-entry .gacha-purchase{order:0;width:100%;box-sizing:border-box;padding:14px 0 12px}
+ .gacha-purchase-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}
+ .gacha-purchase h3{font-size:20px;margin:0}.gacha-page p.gacha-balance{font-size:10px;margin:0}.gacha-balance strong{font-size:18px}
+ .gacha-entry .gacha-actions{grid-template-columns:1fr 1fr;gap:10px}
+ .gacha-entry .gacha-actions .gacha-draw{flex-direction:column;justify-content:center;gap:5px;min-height:76px;padding:10px 5px}
+ .gacha-entry .gacha-draw>span{font-size:15px}.gacha-entry .gacha-draw b{flex-direction:row;align-items:baseline;gap:4px;font-size:16px}
+ .gacha-page p.gacha-purchase-status{font-size:10px;margin-top:9px}
+ .gacha-entry .gacha-stage{order:1;width:100%;grid-template-columns:58% 42%;min-height:225px}
+ .gacha-entry .gacha-copy{padding:18px 0 40px 16px}.lounge-content .gacha-entry .gacha-copy h2{font-size:22px;line-height:1.45;letter-spacing:.02em}
+ .gacha-entry .gacha-kicker{font-size:9px}.gacha-entry .gacha-english{margin:12px 0 5px;font-size:7px}
+ .gacha-entry .gacha-feature{margin-top:12px}.gacha-entry .gacha-feature>span{font-size:16px}.gacha-entry .gacha-feature strong{font-size:9px}
+ .gacha-entry .gacha-artwork{height:100%;min-height:200px;margin:0}.gacha-entry .gacha-card-main{height:auto;width:80%;max-width:none;bottom:23%}.gacha-entry .gacha-halo{inset:15% 8% 20%}.gacha-entry .gacha-art-caption{display:none}
+ .gacha-entry .gacha-guarantee{left:16px;right:12px;bottom:12px;font-size:9px}
+ .gacha-entry .gacha-footer{order:2;padding:0 0 8px;align-self:center}
+}
+@media(max-height:700px) and (min-width:701px){
+ .selected-menu.lounge-shop .shop-gacha-active .tut-head{display:none}
+ .selected-menu .shop-gacha-active .shop-categories{margin-bottom:8px}
+ .gacha-entry .gacha-purchase{display:grid;grid-template-columns:200px 1fr;gap:0 20px;padding:8px 0}
+ .gacha-purchase-heading{display:block;margin:0}.gacha-purchase h3{font-size:19px;margin:4px 0 6px}
+ .gacha-entry .gacha-actions .gacha-draw{min-height:54px;flex-direction:row;gap:8px}
+ .gacha-page p.gacha-purchase-status{grid-column:1/-1;margin-top:4px}
+}
+@media(max-width:360px){.gacha-entry .gacha-draw>span{font-size:13px}.gacha-purchase h3{font-size:18px}.gacha-balance strong{font-size:16px}}
