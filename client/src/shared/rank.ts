@@ -21,9 +21,9 @@ export function tierOf(mmr: number): TierKey {
   return t;
 }
 /** Final tier incl. GM: rank is the player's position on that season's ladder (1-based). */
-export function tierWithGm(mmr: number, rank: number): TierKey {
+export function tierWithGm(mmr: number, rank: number | null): TierKey {
   const base = tierOf(mmr);
-  return base === "master" && rank <= GM_TOP && mmr >= MASTER_MIN ? "gm" : base;
+  return base === "master" && rank !== null && rank > 0 && rank <= GM_TOP && mmr >= MASTER_MIN ? "gm" : base;
 }
 
 

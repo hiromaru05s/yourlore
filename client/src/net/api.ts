@@ -70,7 +70,7 @@ async function call<T>(path: string, body?: unknown, method = "POST", signal?: A
 
 export interface RankInfo {
   season: string; mmr: number; wins: number; losses: number; peak_mmr: number;
-  rank: number; tier: string; // iron..master | gm
+  rank: number | null; tier: string; // null until the first completed ranked match
 }
 export interface LbEntry {
   rank: number;

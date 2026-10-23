@@ -67,7 +67,7 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     ...base,
     stats_public: !!u.stats_public,
     wins: u.wins, losses: u.losses,
-    tier: rating ? tierWithGm(rating.mmr,rank ?? 1) : null,
+    tier: rating ? tierWithGm(rating.mmr,rank) : null,
     mmr: rating?.mmr ?? null,
     rank,
     recent,

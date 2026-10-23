@@ -50,14 +50,25 @@ function outcomeOf(r: Settlement): RankOutcome {
   const change = (side: "a" | "b"): RankChange => {
     const before = r[`${side}_before`], after = r[`${side}_after`];
     const rankBefore = r[`${side}_rank_before`] ?? undefined, rankAfter = r[`${side}_rank_after`] ?? undefined;
-    return { matchId: r.match_id, season: r.season, before, after, rankBefore, rankAfter,
+    return { matchId: r.match_id, season: r.season, before, after,
+      ...(rankBefore == null ? {} : { rankBefore }), ...(rankAfter == null ? {} : { rankAfter }),
       tierBefore: rankBefore ? tierWithGm(before, rankBefore) : tierOf(before),
       tierAfter: rankAfter ? tierWithGm(after, rankAfter) : tierOf(after) };
   };
   return { [r.a_id]: change("a"), [r.b_id]: change("b") };
 }
+// A rating row is also created by HOME/profile reads. Only completed ranked
+// play qualifies, including draws and previous seasons (but never future ones).
+// Rating counters preserve eligibility for games played before the result ledger.
+const rankedEligibilitySql = `(EXISTS (
+  SELECT 1 FROM ratings played WHERE played.user_id=r.user_id
+    AND played.season<=r.season AND played.wins+played.losses>0
+) OR EXISTS (
+  SELECT 1 FROM ranked_results result WHERE result.applied=1 AND result.season<=r.season
+    AND (result.a_id=r.user_id OR result.b_id=r.user_id)
+))`;
 // Run inside the settlement transaction, before/after BOTH players are updated.
-const standingSql = `(SELECT position FROM (SELECT user_id, ROW_NUMBER() OVER (ORDER BY mmr DESC, updated_at ASC, user_id ASC) AS position FROM ratings WHERE season=?) WHERE user_id=?)`;
+const standingSql = `(SELECT position FROM (SELECT r.user_id, ROW_NUMBER() OVER (ORDER BY r.mmr DESC, r.updated_at ASC, r.user_id ASC) AS position FROM ratings r JOIN users u ON u.id=r.user_id WHERE r.season=? AND ${rankedEligibilitySql}) WHERE user_id=?)`;
 
 /** Ledger + both rating updates commit together. CAS retries resolve concurrent rooms. */
 export async function settleRanked(env: Env, matchId: string, aId: string, bId: string, winner: string | null, endedAt: number): Promise<RankOutcome> {
@@ -83,7 +94,10 @@ export async function settleRanked(env: Env, matchId: string, aId: string, bId: 
         .bind(bn,winner===bId?1:0,winner===aId?1:0,bn,stamp,bId,season,matchId),
       ...(an>=1150 ? inviteRewardStatements(env,aId,matchId,endedAt) : []),
       ...(bn>=1150 ? inviteRewardStatements(env,bId,matchId,endedAt) : []),
-      env.DB.prepare(`UPDATE ranked_results SET a_rank_after=${standingSql}, b_rank_after=${standingSql}, applied=1 WHERE match_id=? AND applied=0`).bind(season,aId,season,bId,matchId),
+      // Mark applied before computing standings so a first draw qualifies too.
+      // Both statements remain in the same atomic batch as the rating updates.
+      env.DB.prepare(`UPDATE ranked_results SET applied=1 WHERE match_id=? AND applied=0`).bind(matchId),
+      env.DB.prepare(`UPDATE ranked_results SET a_rank_after=${standingSql}, b_rank_after=${standingSql} WHERE match_id=? AND applied=1 AND a_rank_after IS NULL`).bind(season,aId,season,bId,matchId),
     ]);
     const result = await env.DB.prepare(`SELECT * FROM ranked_results WHERE match_id = ? AND applied = 1`).bind(matchId).first<Settlement>();
     if (!result) continue;
@@ -93,9 +107,9 @@ export async function settleRanked(env: Env, matchId: string, aId: string, bId: 
 }
 
 /** Stable tie break, shared by personal standing and the leaderboard. */
-export async function rankPosition(env: Env, userId: string, season: string): Promise<number> {
-  const r = await env.DB.prepare(`SELECT position FROM (SELECT user_id, ROW_NUMBER() OVER (ORDER BY mmr DESC, updated_at ASC, user_id ASC) AS position FROM ratings WHERE season = ?) WHERE user_id = ?`).bind(season,userId).first<{position:number}>();
-  return r?.position ?? 1;
+export async function rankPosition(env: Env, userId: string, season: string): Promise<number | null> {
+  const r = await env.DB.prepare(`SELECT ${standingSql} AS position`).bind(season,userId).first<{position:number | null}>();
+  return r?.position ?? null;
 }
 
 // ---- REST: /api/rank/* ----
@@ -129,9 +143,9 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
     const offset = Math.max(Number.isFinite(rawOffset) ? rawOffset : 0, 0);
     const rows = await env.DB.prepare(
       `SELECT r.mmr, r.wins, r.losses, u.display FROM ratings r JOIN users u ON u.id = r.user_id
-       WHERE r.season = ? ORDER BY r.mmr DESC, r.updated_at ASC, r.user_id ASC LIMIT ? OFFSET ?`
+       WHERE r.season = ? AND ${rankedEligibilitySql} ORDER BY r.mmr DESC, r.updated_at ASC, r.user_id ASC LIMIT ? OFFSET ?`
     ).bind(season, limit, offset).all<{ mmr: number; wins: number; losses: number; display: string }>();
-    const totalRow = await env.DB.prepare(`SELECT COUNT(*) AS total FROM ratings WHERE season = ?`)
+    const totalRow = await env.DB.prepare(`SELECT COUNT(*) AS total FROM ratings r JOIN users u ON u.id=r.user_id WHERE r.season = ? AND ${rankedEligibilitySql}`)
       .bind(season).first<{ total: number }>();
     const entries = (rows.results ?? []).map((r, i) => ({
       rank: offset + i + 1, display: r.display, mmr: r.mmr, wins: r.wins, losses: r.losses,
@@ -153,7 +167,7 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
     if (!user) return json(env, { seasons: [] });
     const cur = seasonKey();
     const rows = await env.DB.prepare(
-      `SELECT season, mmr, wins, losses, peak_mmr, final_rank, final_tier FROM ratings WHERE user_id = ? AND season != ? ORDER BY season DESC LIMIT 24`
+      `SELECT season, mmr, wins, losses, peak_mmr, final_rank, final_tier FROM ratings r WHERE user_id = ? AND season != ? AND ${rankedEligibilitySql} ORDER BY season DESC LIMIT 24`
     ).bind(user.id, cur).all<{ season: string; mmr: number; wins: number; losses: number; peak_mmr: number; final_rank: number | null; final_tier: string | null }>();
     const seasons = [];
     for (const r of rows.results ?? []) {
@@ -176,7 +190,7 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
     const season = (url.searchParams.get("season") || prevSeasonKey()).slice(0, 7);
     if (season >= seasonKey()) return json(env, { error: "진행 중인 시즌은 확정할 수 없습니다." }, 400);
     const rows = await env.DB.prepare(
-      `SELECT user_id, mmr FROM ratings WHERE season = ? ORDER BY mmr DESC, updated_at ASC, user_id ASC`
+      `SELECT r.user_id, r.mmr FROM ratings r JOIN users u ON u.id=r.user_id WHERE r.season = ? AND ${rankedEligibilitySql} ORDER BY r.mmr DESC, r.updated_at ASC, r.user_id ASC`
     ).bind(season).all<{ user_id: string; mmr: number }>();
     const list = rows.results ?? [];
     if (!list.length) return json(env, { season, finalized: 0 });

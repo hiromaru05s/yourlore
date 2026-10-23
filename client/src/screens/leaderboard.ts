@@ -51,7 +51,7 @@ export function mountLeaderboard(app: App): Screen {
           </div>`).join("");
       }
       const me = await api.rankMe();
-      if (me) {
+      if (me?.rank != null) {
         meEl.innerHTML = `${rankEmblem(me.tier)}<div><small>${t("lb.myrank")}</small><strong>#${me.rank}</strong><span>${tierLabel(me.tier)} · ${me.mmr} MMR</span><small>${me.wins}${t("home.win")} ${me.losses}${t("home.loss")}</small></div>`;
       }
     } catch {
