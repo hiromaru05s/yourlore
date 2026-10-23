@@ -41,15 +41,15 @@ try {
  const reset=()=>{for(const z of document.querySelectorAll('.zone-mon'))z.innerHTML='<div class="slot"></div>'.repeat(7);};
  const advance=ms=>{for(let x=0;x<ms;x+=50){clock+=50;for(const [i,f]of [...frames]){frames.delete(i);f(clock);}}};
  for(const mine of [true,false]){
-  reset();const s=R.createDungeonFloor(cards,mine,new AbortController().signal);const first=s.land(cards[0].uid);await flush();advance(2200);assert.equal((await first).dataset.uid,cards[0].uid);
-  advance(2000);assert.equal(document.querySelectorAll('.card').length,1,'next arrival waits for event ownership');
-  const second=s.land(cards[1].uid);advance(100);await second;
-  const third=s.land(cards[2].uid);advance(7000);await third;await s.done;
+  reset();const s=R.createDungeonFloor(cards,mine,new AbortController().signal);const first=s.land(cards[0].uid);await flush();advance(2200 * .75);assert.equal((await first).dataset.uid,cards[0].uid);
+  advance(2000 * .75);assert.equal(document.querySelectorAll('.card').length,1,'next arrival waits for event ownership');
+  const second=s.land(cards[1].uid);advance(100 * .75);await second;
+  const third=s.land(cards[2].uid);advance(7000 * .75);await third;await s.done;
   assert.equal(document.querySelectorAll('.card').length,3);assert.equal(draws.at(-1).side,mine?0:1);assert.equal(frames.size,0);assert.equal(document.querySelectorAll('canvas').length,0);
  }
  for(const mode of ['abort','resize','hidden','detached','reduced','gpu-failure','context-lost']){
   reset();reduced=mode==='reduced';failed=mode==='gpu-failure';const abort=new AbortController();const s=R.createDungeonFloor(cards,true,abort.signal);const landed=s.land(cards[0].uid);await flush();
-  if(mode==='abort')abort.abort();if(mode==='resize')window.dispatchEvent(new Event('resize'));if(mode==='hidden')document.dispatchEvent(new Event('visibilitychange'));if(mode==='detached'){document.querySelector('[data-reserved-uid]').remove();advance(100);}if(mode==='context-lost')document.querySelector('canvas').dispatchEvent(new Event('webglcontextlost'));
+  if(mode==='abort')abort.abort();if(mode==='resize')window.dispatchEvent(new Event('resize'));if(mode==='hidden')document.dispatchEvent(new Event('visibilitychange'));if(mode==='detached'){document.querySelector('[data-reserved-uid]').remove();advance(100 * .75);}if(mode==='context-lost')document.querySelector('canvas').dispatchEvent(new Event('webglcontextlost'));
   await landed;await s.done;assert.equal(frames.size,0);assert.equal(document.querySelectorAll('canvas').length,0);
  }
  assert.equal(alloc,disposed);dom.window.close();console.log(`PASS ${cases} reducer roll/side/capacity cases; exact source ownership; sequential landing barriers; both directions; abort/resize/visibility/detachment/reduced/GPU failure/context loss; renderer and RAF cleanup`);

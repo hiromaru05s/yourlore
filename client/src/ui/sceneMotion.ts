@@ -38,7 +38,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       const depth=focal-Math.sin(angle)*(start.y-cy)-Math.cos(angle)*elevation;
       const size=purchase?unit:from.width*depth/focal;
       req.card.style.visibility='hidden';req.target.dataset.motion='arrival';
-      try{await timeline(reduced?100:purchase?620:420,req.signal,t=>{
+      try{await timeline((reduced?100:purchase?620:420)*(req.kind==='arrival'?(req.durationScale??1):1),req.signal,t=>{
         const p=purchase?smooth(sat((t-.18)/.82)):smooth(t),lift=Math.sin(Math.PI*t)*unit*(purchase?1.15:.65);
         moving.position.set(start.x-cx+(r.left+r.width/2-start.x)*p,elevation+(height-elevation)*p+lift,start.y-cy+(r.top+r.height/2-start.y)*p);
         moving.scale.setScalar(size+(unit-size)*p);

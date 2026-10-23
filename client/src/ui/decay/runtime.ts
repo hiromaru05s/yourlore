@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
 import {projectedPlacement} from '../boardProjection';
@@ -45,15 +46,15 @@ export function playDecayDissolve(source:HTMLElement,options:{signal?:AbortSigna
    const c=canvas.getContext('2d')!;c.setTransform(size/612,0,0,size/612,0,0);
    const paint=(ms:number)=>{c.clearRect(0,0,612,612);renderer!.draw(c,face,ms,306,306,180);host!.dataset.time=String(Math.round(ms));};
    paint(0);if(invalid()){finish();return;}
-   document.body.append(host);source.style.visibility='hidden';const start=performance.now();
-   const tick=(now:number)=>{if(invalid()){finish();return;}const ms=Math.min(DECAY_DURATION,Math.max(0,now-start));try{paint(ms);}catch{finish();return;}if(ms===DECAY_DURATION)finish(true);else frame=requestAnimationFrame(tick);};
-   frame=requestAnimationFrame(tick);
+   document.body.append(host);source.style.visibility='hidden';const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{if(invalid()){finish();return;}const ms=Math.min(DECAY_DURATION,Math.max(0,now-start));try{paint(ms);}catch{finish();return;}if(ms===DECAY_DURATION)finish(true);else frame=SPECIAL_FX.requestFrame(tick);};
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(()=>{
    if(invalid()){finish();return;}
    // Explicit no-GPU/texture fallback: a short native dissolve, never the normal shatter.
    host?.remove();captureHost?.remove();source.style.visibility=visibility;
    if(!source.animate){finish(true);return;}
-   fallback=source.animate([{opacity:1,filter:'sepia(.3)'},{opacity:0,filter:'sepia(.7) hue-rotate(35deg)'}],{duration:220,easing:'ease-out'});
+   fallback=source.animate([{opacity:1,filter:'sepia(.3)'},{opacity:0,filter:'sepia(.7) hue-rotate(35deg)'}],{duration:SPECIAL_FX.milliseconds(220),easing:'ease-out'});
    void fallback.finished.then(()=>finish(true),()=>finish(false));
   });
  });

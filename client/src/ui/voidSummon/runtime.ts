@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,sizeSummonPlane} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
@@ -37,9 +38,9 @@ export function playVoidSummon(source:HTMLElement,options:Options={}):Promise<bo
    lease=acquire(VoidRenderer,face);host=document.createElement('div');host.className='void-summon';host.dataset.cardId=id;host.dataset.variant='1';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;left:0;top:0;width:180px;height:270px;transform-origin:0 0;pointer-events:none;z-index:136';
    const canvas=document.createElement('canvas');sizeSummonPlane(canvas,864);canvas.getContext('2d')!.setTransform(1,0,0,1,0,0);canvas.style.cssText='position:absolute;left:-342px;top:-297px;width:864px;height:864px';host.append(canvas);
    const paint=(ms:number)=>{host!.style.transform=voidPlacement(anchor).toString();lease!.renderer.render(canvas,face,id,ms);host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,VOID_SUMMON_DURATION);};
-   paint(0);document.body.append(host);const start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(matchMedia('(prefers-reduced-motion: reduce)').matches){impact();finish(true);return;}const ms=Math.min(VOID_SUMMON_DURATION,now-start);paint(ms);if(ms>=VOID_SUMMON_IMPACT){impact();if(ended)return;}if(ms===VOID_SUMMON_DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(matchMedia('(prefers-reduced-motion: reduce)').matches){impact();finish(true);return;}const ms=Math.min(VOID_SUMMON_DURATION,now-start);paint(ms);if(ms>=VOID_SUMMON_IMPACT){impact();if(ended)return;}if(ms===VOID_SUMMON_DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);}catch(error){fallback(error);}};
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }

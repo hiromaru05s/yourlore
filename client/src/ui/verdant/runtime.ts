@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,sizeSummonPlane,sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
@@ -62,7 +63,7 @@ export function playVerdant(source:HTMLElement,id:Id,options:Options={}):Promise
     canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%';
    }
    host.append(canvas);document.body.append(host);source.style.visibility='hidden';
-   const start=performance.now();
+   const start=SPECIAL_FX.now();
    const tick=(now:number)=>{
     try{
     if(ended)return;
@@ -81,7 +82,7 @@ export function playVerdant(source:HTMLElement,id:Id,options:Options={}):Promise
       renderer!.drawBoard(c,face,id,variant,ms,summonPixelMatrix(matrix),canvas.width,canvas.height);
      }
     }
-    settleSummonFace(source,host!,ms,DURATION);if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
+    settleSummonFace(source,host!,ms,DURATION);if(ms===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);
     }catch(error){fallback(error);}
    };tick(start);
   })().catch(fallback);

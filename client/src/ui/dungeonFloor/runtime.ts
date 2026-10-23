@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import type {CardInst} from '../../shared/types';
 import {defaultSummonFace,type SummonFaceFactory} from '../summon/face';
 import {reserveMonster} from '../fieldLayout';
@@ -77,11 +78,11 @@ export function createDungeonFloor(cards:CardInst[], mine:boolean, signal:AbortS
       stage!.draw({time,variant:2,roll:entries.length,slots:entries.length,side:mine?0:1,screen});
       entries.forEach((e,i)=>{if(e.requested&&!e.face&&time>=cardReveal(i)){reveal(i);sfx('mimic');}});
       if(time>=duration){finish();return;}
-      frame=requestAnimationFrame(tick);
+      frame=SPECIAL_FX.requestFrame(tick);
     } catch {finish();}
   };
   void (async()=>{
-    try{const {Stage}=await loadRenderer();if(closed)return;stage=new Stage(canvas!,true);await stage.ready();if(!closed)frame=requestAnimationFrame(tick);}
+    try{const {Stage}=await loadRenderer();if(closed)return;stage=new Stage(canvas!,true);await stage.ready();if(!closed)frame=SPECIAL_FX.requestFrame(tick);}
     catch{finish();}
   })();
   return session;

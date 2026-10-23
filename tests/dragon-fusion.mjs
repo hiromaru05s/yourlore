@@ -32,7 +32,7 @@ try{
   const {dragon,mate,face}=reset(),ac=new AbortController();globalThis.reduced=reason==='reduced';metrics.fail=reason==='failure';
   const warn=console.warn;console.warn=()=>{};
   const p=play(reason==='missing'?undefined:dragon,mate,face,zone,['dragon','mate'],ac.signal,reason==='skip',()=>metrics.impacts++);await flush();
-  if(reason==='abort')ac.abort();else advance(4000);
+  if(reason==='abort')ac.abort();else advance(4000 * .75);
   await p;console.warn=warn;
   assert.equal(document.querySelectorAll('.dragon-fusion-summon').length,0,reason);assert.equal(zone.querySelectorAll('.card').length,1,reason);assert.equal(face.style.visibility,'',reason);assert.equal(frames.size,0,reason);assert.equal(metrics.created,metrics.disposed,reason);
  }

@@ -1,12 +1,13 @@
+import {SPECIAL_FX} from './animationTempo';
 /** Selected 01: the clutch grips the retained die and reverses its native roll. */
 import * as T from 'three';
 import {diePose,type DiceStage} from './diceScene';
 export function wheelTime(ms:number,signal:AbortSignal,paint:(p:number)=>void):Promise<void>{
-  return new Promise((resolve,reject)=>{if(signal.aborted||document.hidden){resolve();return;}let frame=0;const start=performance.now();
+  return new Promise((resolve,reject)=>{if(signal.aborted||document.hidden){resolve();return;}let frame=0;const start=SPECIAL_FX.now();
     const end=()=>{cancelAnimationFrame(frame);signal.removeEventListener('abort',end);document.removeEventListener('visibilitychange',hidden);resolve();};
     const hidden=()=>{if(document.hidden)end();};
     signal.addEventListener('abort',end,{once:true});document.addEventListener('visibilitychange',hidden);
-    const tick=(now:number)=>{if(signal.aborted){end();return;}const p=Math.min(1,(now-start)/ms);try{paint(p);}catch(error){reject(error);end();return;}if(p===1)end();else frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(tick);
+    const tick=(now:number)=>{if(signal.aborted){end();return;}const p=Math.min(1,(now-start)/ms);try{paint(p);}catch(error){reject(error);end();return;}if(p===1)end();else frame=SPECIAL_FX.requestFrame(tick);};frame=SPECIAL_FX.requestFrame(tick);
   });
 }
 const smooth=(a:number,b:number,p:number)=>{const v=T.MathUtils.clamp((p-a)/(b-a),0,1);return v*v*(3-2*v);};

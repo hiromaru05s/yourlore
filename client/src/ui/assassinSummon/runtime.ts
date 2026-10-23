@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace} from '../summon/quality';
 import {sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
@@ -49,9 +50,9 @@ export function playAssassinSummon(source:HTMLElement,options:Options={}):Promis
     lease!.renderer.drawBoard(c,face!,VARIANT,ms,id,summonPixelMatrix(placement),host!.width,host!.height);
     host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,DURATION);host!.dataset.placement=placement.toString();
    };
-   paint(0);document.body.append(host);const start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);}catch(error){fallback(error);}};
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }

@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace} from '../summon/quality';
 import {sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
@@ -36,9 +37,9 @@ export function playMercenarySummon(source:HTMLElement,options:Options={}):Promi
    host=document.createElement('canvas');host.className='mercenary-summon';host.dataset.cardId=id;host.dataset.variant='2';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';sizeSummonCanvas(host);const c=host.getContext('2d')!;
    const effectTime=(ms:number)=>options.from?Math.max(0,(ms-350)*3600/3250):ms;
    const paint=(ms:number)=>{const plane=anchor.closest<HTMLElement>('[data-board-plane]'),box=plane?layoutRect(anchor):anchor.getBoundingClientRect();const matrix=(plane?boardMatrix(box.left+box.width/2,box.top+box.height/2,Number(plane.dataset.boardPlane)||0):new DOMMatrix().translate(box.left+box.width/2,box.top+box.height/2)).scale(box.width/180,-box.height/270,box.width/180);c.clearRect(0,0,host!.width,host!.height);let placement=matrix;const from=options.from;if(from&&ms<350){const start=new DOMMatrix().translate(from.left+from.width/2,from.top+from.height/2).scale(from.width/180,-from.height/270,from.width/180),a=Array.from(start.toFloat64Array()),b=Array.from(matrix.toFloat64Array()),q=ms/350,f=q*q*(3-2*q);placement=new DOMMatrix(a.map((n,j)=>n+(b[j]-n)*f));}lease!.renderer.tier=MERCENARY_IDS.indexOf(id);lease!.renderer.drawBoard(c,face!,VARIANT,effectTime(ms),summonPixelMatrix(placement),host!.width,host!.height);host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,DURATION);};
-   paint(0);document.body.append(host);const start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(effectTime(ms)>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(effectTime(ms)>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);}catch(error){fallback(error);}};
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }

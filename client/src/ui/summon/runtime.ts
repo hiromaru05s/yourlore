@@ -1,3 +1,5 @@
+import {isMimic} from '../mimic/selection';
+import {STANDARD_FX,SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,sizeSummonPlane} from './quality';
 import {isCastle} from '../castleSummon/catalog';
 import {playCastleSummon,cancelCastleSummon,cancelCastleSummons} from '../castleSummon/runtime';
@@ -74,6 +76,7 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
  if(isChosenHero(source.dataset.cardId))return playChosenSummon(source,options);
  if(isVerdant(source.dataset.cardId))return playVerdant(source,source.dataset.cardId,options);
  const anchor=options.anchor??source,coinsCount=merchantCount(source.dataset.cardId),total=coinsCount?3100:DURATION;
+ const clock=coinsCount||isMimic(source.dataset.cardId??'')?SPECIAL_FX:STANDARD_FX;
  if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted)return Promise.resolve(false);
  return new Promise(resolve=>{
   const visibility=source.style.visibility;
@@ -113,7 +116,7 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
     el.append(canvas);host!.append(el);return {el,c:canvas.getContext('2d')!,pass:pass as 'ground'|'card'};
    });
    document.body.append(host);source.style.visibility='hidden';
-   const ground=projectedPlacement(anchor,180,270).toString(),start=performance.now();let impacted=false;
+   const ground=projectedPlacement(anchor,180,270).toString(),start=clock.now();let impacted=false;
    const tick=(now:number)=>{
     if(ended)return;
     if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
@@ -125,7 +128,7 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
      c.clearRect(0,0,684,684);renderer!.draw(c,face,SUMMON_VARIANT,Math.min(DURATION,ms),342,342,180,false,pass,false);if(pass==='ground')coins?.draw(c,MERCHANT_VARIANT,coinsCount,ms,342,342,180,false);
     }
     settleSummonFace(source,host!,ms,total);
-    if(ms===total){finish(true);return;}frame=requestAnimationFrame(tick);
+    if(ms===total){finish(true);return;}frame=clock.requestFrame(tick);
    };tick(start);
   })().catch(error=>{if(!ended){console.warn('[summon] Native card fallback',error);options.onImpact?.();finish();}});
  });

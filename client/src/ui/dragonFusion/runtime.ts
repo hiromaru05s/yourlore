@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import * as T from 'three';
 import {boardMatrix,layoutRect,projectBoardDOM} from '../boardProjection';
 import {captureCardSurface} from '../cardSurface';
@@ -48,12 +49,12 @@ export async function playDragonFusion(dragon:HTMLElement|undefined,mate:HTMLEle
   const paint=(ms:number)=>{renderer!.drawBoard(DRAGON_FUSION_VARIANT,ms,result.dataset.cardId as ResultId,faces,origins,matrix,innerWidth,innerHeight);canvas.dataset.time=String(Math.round(ms));};
   paint(0);document.body.append(canvas);
   return await new Promise<boolean>(resolve=>{
-   resolveMotion=resolve;const start=performance.now();let impacted=false;
+   resolveMotion=resolve;const start=SPECIAL_FX.now();let impacted=false;
    const tick=(now:number)=>{
     if(finished)return;
     if(signal.aborted||document.hidden||!result.isConnected){finish();return;}
-    try{const ms=Math.min(designs[DRAGON_FUSION_VARIANT].duration,now-start);paint(ms);if(!impacted&&ms>=designs[DRAGON_FUSION_VARIANT].hit){impacted=true;onImpact();}if(ms===designs[DRAGON_FUSION_VARIANT].duration)finish(true);else frame=requestAnimationFrame(tick);}catch(error){console.warn('[dragon-fusion] Native face fallback',error);finish();}
-   };frame=requestAnimationFrame(tick);
+    try{const ms=Math.min(designs[DRAGON_FUSION_VARIANT].duration,now-start);paint(ms);if(!impacted&&ms>=designs[DRAGON_FUSION_VARIANT].hit){impacted=true;onImpact();}if(ms===designs[DRAGON_FUSION_VARIANT].duration)finish(true);else frame=SPECIAL_FX.requestFrame(tick);}catch(error){console.warn('[dragon-fusion] Native face fallback',error);finish();}
+   };frame=SPECIAL_FX.requestFrame(tick);
   });
  }catch(error){console.warn('[dragon-fusion] Native face fallback',error);finish();return false;}
  finally{finish();}

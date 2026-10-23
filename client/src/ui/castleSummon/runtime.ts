@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {projectedPlacement} from '../boardProjection';
 import {DURATION,STONE_CLEAR_MS,ease,isCastle} from './catalog';
 import type {CastleRenderer} from './renderer';
@@ -58,14 +59,14 @@ export function playCastleSummon(source:HTMLElement,options:Options={}):Promise<
     }
     lease!.renderer.drawBoard(host!,0,t,pose,false,true);
    };
-   paint(0);document.body.append(host);source.style.visibility='visible';const start=performance.now();
+   paint(0);document.body.append(host);source.style.visibility='visible';const start=SPECIAL_FX.now();
    const tick=(now:number)=>{try{
     if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const elapsed=Math.min(total,now-start);paint(elapsed);
     if(elapsed>=flight+800){impact();if(ended)return;}
-    if(elapsed===total){finish(true);return;}frame=requestAnimationFrame(tick);
+    if(elapsed===total){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);
    }catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }

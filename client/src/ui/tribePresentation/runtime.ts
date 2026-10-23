@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,sizeSummonPlane,summonPixelRatio} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {capturePileSurface} from '../cardSurface';
@@ -29,13 +30,13 @@ export function playTribeSummon(node:HTMLElement,options:Options={}):Promise<boo
    const painter=new TribeRenderer();host=document.createElement('div');host.dataset.tribeSummon=selection.tribe;host.dataset.variant=String(selection.variant+1);host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;left:0;top:0;width:180px;height:280px;transform-origin:0 0;pointer-events:none;z-index:136';
    const canvas=document.createElement('canvas');sizeSummonPlane(canvas,480,640);canvas.style.cssText='position:absolute;left:-150px;top:-180px;width:480px;height:640px';host.append(canvas);document.body.append(host);
    if(options.from){flight=document.createElement('canvas');flight.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:136';document.body.append(flight);}
-   node.style.visibility='hidden';if(options.reveal)options.reveal.style.visibility='hidden';const start=performance.now();
+   node.style.visibility='hidden';if(options.reveal)options.reveal.style.visibility='hidden';const start=SPECIAL_FX.now();
    const tick=(now:number)=>{if(ended)return;if(!node.isConnected||!anchor.isConnected){finish();return;}const ms=now-start;if(ms>=1800){impact();finish(true);return;}
     host!.dataset.time=String(Math.round(ms));if(ms>=selection.impact)impact();if(ended)return;
     const flying=!!flight&&ms<450;host!.style.visibility=flying?'hidden':'visible';
     if(flying){const dpr=summonPixelRatio();if(flight!.width!==Math.round(innerWidth*dpr)||flight!.height!==Math.round(innerHeight*dpr)){flight!.width=Math.round(innerWidth*dpr);flight!.height=Math.round(innerHeight*dpr);flight!.style.width=innerWidth+'px';flight!.style.height=innerHeight+'px';}const c=flight!.getContext('2d')!;c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,innerWidth,innerHeight);const a=options.from!,b=anchor.getBoundingClientRect(),q=ease(0,1,ms/450);painter.summon(c,texture,selection.tribe,selection.variant,ms,(a.x+a.width/2)*(1-q)+(b.x+b.width/2)*q,(a.y+a.height/2)*(1-q)+(b.y+b.height/2)*q-40*Math.sin(q*Math.PI),a.width*(1-q)+b.width*q);}
     else{flight?.remove();flight=undefined;host!.style.transform=projectedPlacement(anchor,180,280).toString();const c=canvas.getContext('2d')!;c.clearRect(0,0,480,640);painter.summon(c,texture,selection.tribe,selection.variant,ms,240,320,180);}
-    settleSummonFace(node,host!,ms,1800);raf=requestAnimationFrame(tick);
+    settleSummonFace(node,host!,ms,1800);raf=SPECIAL_FX.requestFrame(tick);
    };tick(start);
   })().catch(error=>{if(!ended){console.warn('[tribe-summon] Native fallback',error);impact();finish();}});
  });

@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
 import {DURATION,type Rect} from './model';
@@ -38,12 +39,12 @@ export function playForbiddenRitual(source:HTMLElement,targets:HTMLElement[],sid
    renderer=createRenderer(faces);host=document.createElement('div');host.className='forbidden-ritual';host.dataset.selection=FORBIDDEN_RITUAL_SELECTION;host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:138';host.append(renderer.canvas);document.body.append(host);
    const rect=(node:HTMLElement):Rect=>{const r=node.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height};};
    const from=rect(source),to=targets.map(rect);if(!from.w||to.some(r=>!r.w)){finish();return;}
-   source.style.visibility='hidden';const start=performance.now();
+   source.style.visibility='hidden';const start=SPECIAL_FX.now();
    const tick=(now:number)=>{
     if(ended)return;if(signal?.aborted||document.hidden||!source.isConnected||targets.some(n=>!n.isConnected)){finish();return;}
     const time=Math.max(0,Math.min(DURATION,now-start));host!.dataset.time=String(Math.round(time));
     try{renderer!.draw({time,side:side==='me'?0:1,source:from,targets:to,width:innerWidth,height:innerHeight});}catch{finish();return;}
-    if(time>=DURATION){finish(true);return;}raf=requestAnimationFrame(tick);
+    if(time>=DURATION){finish(true);return;}raf=SPECIAL_FX.requestFrame(tick);
    };tick(start);
   })().catch(()=>finish(false));
  });

@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
@@ -47,7 +48,7 @@ export function playGamblerSummon(source:HTMLElement,options:Options={}):Promise
     host!.dataset.time=String(Math.round(ms));
    };
    paint(0);document.body.append(host);
-   let clock=0,last=performance.now();
+   let clock=0,last=SPECIAL_FX.now();
    const tick=(now:number)=>{
     try{
      if(ended)return;
@@ -55,10 +56,10 @@ export function playGamblerSummon(source:HTMLElement,options:Options={}):Promise
      // A slow face capture may hold the wheel, but never reveal an empty texture.
      clock=Math.min(faceReady?DURATION:1600,clock+Math.max(0,now-last));last=now;paint(clock);settleSummonFace(source,host!,clock,DURATION);
      if(clock>=IMPACT){impact();if(ended)return;}
-     if(clock===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
+     if(clock===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);
     }catch(error){fallback(error);}
    };
-   frame=requestAnimationFrame(tick);
+   frame=SPECIAL_FX.requestFrame(tick);
    captureHost=document.createElement('div');captureHost.className='game';captureHost.style.cssText='position:fixed;left:-4000px;top:0;width:180px;pointer-events:none';
    const copy=source.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
    copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';captureHost.append(copy);document.body.append(captureHost);

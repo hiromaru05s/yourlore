@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace} from '../summon/quality';
 import {sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
@@ -37,9 +38,9 @@ export function playVampireSummon(source:HTMLElement,options:Options={}):Promise
    const paint=(ms:number)=>{const box=layoutRect(anchor);let placement=projectedPlacement(anchor,180,280).translate(90,140).scale(1,-1,box.width/180);c.clearRect(0,0,host!.width,host!.height);
     const from=options.from;if(from&&ms<420){const start=new DOMMatrix().translate(from.left+from.width/2,from.top+from.height/2).scale(from.width/180,-from.height/280,from.width/180),a=Array.from(start.toFloat64Array()),b=Array.from(placement.toFloat64Array()),q=ease(0,420,ms);placement=new DOMMatrix(a.map((n,j)=>n+(b[j]-n)*q));}
     lease!.renderer.drawBoard(c,face!,id,0,ms,summonPixelMatrix(placement),host!.width,host!.height);host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,DURATION);};
-   paint(0);document.body.append(host);const start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);}catch(error){fallback(error);}};
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }

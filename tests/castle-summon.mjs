@@ -22,17 +22,17 @@ try{
  source.style.transform='rotate(0deg)';source.style.visibility='visible';let impacts=0;
  const p=play(source,{from:{left:0,top:600,width:80,height:125},onImpact:()=>impacts++});await flush();
  assert.deepEqual(checks.draws[0],{v:0,t:0,native:true,mounted:false});assert.equal(source.style.visibility,'visible');assert.equal(document.querySelector('.castle-summon').dataset.variant,'1');
- advance(1239);assert.equal(impacts,0);advance(1);assert.equal(impacts,1);assert.equal(source.style.transform,'rotate(0deg)','native seated transform restored before reveal ends');
- advance(1640);const draws=checks.draws.length;assert.equal(document.querySelector('.castle-summon').dataset.time,'2440');advance(160);assert.equal(await p,true);assert.equal(checks.draws.length,draws,'no empty GPU transfer at the seam');assert.equal(impacts,1);assert.equal(source.style.transform,'rotate(0deg)');
+ advance(1239 * .75);assert.equal(impacts,0);advance(1 * .75);assert.equal(impacts,1);assert.equal(source.style.transform,'rotate(0deg)','native seated transform restored before reveal ends');
+ advance(1640 * .75);const draws=checks.draws.length;assert.equal(document.querySelector('.castle-summon').dataset.time,'2440');advance(160 * .75);assert.equal(await p,true);assert.equal(checks.draws.length,draws,'no empty GPU transfer at the seam');assert.equal(impacts,1);assert.equal(source.style.transform,'rotate(0deg)');
  for(const reason of ['single','root','abort','resize','hidden','disconnect','pagehide','motion']){
   const ac=new AbortController(),p=play(source,{signal:ac.signal});await flush();
   if(reason==='single')cancel(source);if(reason==='root')all(root);if(reason==='abort')ac.abort();if(reason==='resize'||reason==='pagehide')window.dispatchEvent(new Event(reason));
-  if(reason==='hidden'){Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'))}if(reason==='disconnect'){source.remove();advance(16)}if(reason==='motion')motionChange();
+  if(reason==='hidden'){Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'))}if(reason==='disconnect'){source.remove();advance(16 * .75)}if(reason==='motion')motionChange();
   assert.equal(await p,false,reason);assert.equal(source.style.visibility,'visible');assert.equal(source.style.transform,'rotate(0deg)');assert.equal(document.querySelectorAll('.castle-summon').length,0);Object.defineProperty(document,'hidden',{configurable:true,value:false});root.append(source);
  }
  const pending=play(source);cancel(source);await flush();assert.equal(await pending,false);
  const a=play(source),b=play(source);await flush();assert.equal(await a,false);cancel(source);assert.equal(await b,false);
- const other=source.cloneNode(true);root.append(other);const count=checks.created;const multi=[play(source),play(other)];await flush();assert.equal(checks.created,count+1,'simultaneous summons share one GPU');assert.equal(document.querySelectorAll('.castle-summon').length,2);cancel(source);assert.equal(document.querySelectorAll('.castle-summon').length,1);advance(2600);assert.deepEqual(await Promise.all(multi),[false,true]);other.remove();
+ const other=source.cloneNode(true);root.append(other);const count=checks.created;const multi=[play(source),play(other)];await flush();assert.equal(checks.created,count+1,'simultaneous summons share one GPU');assert.equal(document.querySelectorAll('.castle-summon').length,2);cancel(source);assert.equal(document.querySelectorAll('.castle-summon').length,1);advance(2600 * .75);assert.deepEqual(await Promise.all(multi),[false,true]);other.remove();
  reduced=true;const created=checks.created;assert.equal(await play(source,{onImpact:()=>impacts++}),true);assert.equal(checks.created,created);reduced=false;
  const ac=new AbortController();ac.abort();assert.equal(await play(source,{signal:ac.signal}),false);source.dataset.cardId='ELF';assert.equal(await play(source),false);source.dataset.cardId='CASTLE';
  const warn=console.warn;console.warn=()=>{};checks.fail=true;const failed=play(source,{onImpact:()=>impacts++});await flush();assert.equal(await failed,false);assert.equal(source.style.visibility,'visible');assert.equal(source.style.transform,'rotate(0deg)');checks.fail=false;console.warn=warn;

@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {getLang} from '../../i18n';
 import {STARTERS} from '../../shared/cards';
 import {cardEl} from '../cardView';
@@ -31,20 +32,20 @@ export async function playInfinityCull(uid:string,side:'me'|'opp',amount:number,
   let raf=0,done=false,release:(()=>void)|undefined;
   const finish=()=>{if(done)return;done=true;cancelAnimationFrame(raf);clearTimeout(deadline);release?.();canvas.remove();renderer.dispose();signal.removeEventListener('abort',finish);document.removeEventListener('visibilitychange',finish);window.removeEventListener('pagehide',finish);window.removeEventListener('resize',finish);resolve();};
   const deadline=setTimeout(finish,DURATION+500);signal.addEventListener('abort',finish,{once:true});document.addEventListener('visibilitychange',finish,{once:true});window.addEventListener('pagehide',finish,{once:true});window.addEventListener('resize',finish,{once:true});
-  const start=performance.now();const count=Math.min(24,Math.trunc(amount)); // Bounded stock for extreme amplified damage; never clamps engine resources.
+  const start=SPECIAL_FX.now();const count=Math.min(24,Math.trunc(amount)); // Bounded stock for extreme amplified damage; never clamps engine resources.
   const tick=(now:number)=>{if(done)return;const ms=now-start;if(signal.aborted||document.hidden||!source.isConnected||!target.isConnected||ms>=DURATION){finish();return;}
    canvas.dataset.time=String(Math.round(ms));
    if(!release&&ms>=timing(0,count).arrive-100)release=holdRiftTarget(target);
    try{renderer.draw(canvas,{ms,amount:count,side:0,dark:true,reduced:false},sample());}catch(error){console.warn('[infinity-page-five] Render stopped',error);finish();return;}
-   raf=requestAnimationFrame(tick);
-  };raf=requestAnimationFrame(tick);
+   raf=SPECIAL_FX.requestFrame(tick);
+  };raf=SPECIAL_FX.requestFrame(tick);
  });
 }
 async function fallback(source:HTMLElement,target:HTMLElement,signal:AbortSignal,reduced:boolean){
  if(signal.aborted)return;
  const a=source.getBoundingClientRect(),b=target.getBoundingClientRect(),node=cardEl({...STARTERS.STARTER_TRASH,uid:'infinity-fallback'});
  const w=Math.max(20,Math.min(a.width,52));node.dataset.infinityFallback='05';node.style.cssText=`position:fixed;left:${a.left+a.width/2-w/2}px;top:${a.top}px;width:${w}px;height:${w*1.56}px;--cw:${w}px;--ch:${w*1.56}px;pointer-events:none;z-index:190;transform-origin:center`;
- document.body.append(node);const duration=reduced?160:420;
+ document.body.append(node);const duration=SPECIAL_FX.milliseconds(reduced?160:420);
  const flight=node.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${b.left+b.width/2-a.left-a.width/2}px,${b.top+b.height/2-a.top}px) scale(.08)`,opacity:0}],{duration,fill:'forwards',easing:'ease-in'});
  if(reduced)flight.cancel();
  await new Promise<void>(resolve=>{const finish=()=>{clearTimeout(timer);flight.cancel();node.remove();signal.removeEventListener('abort',finish);resolve();};const timer=setTimeout(finish,duration);signal.addEventListener('abort',finish,{once:true});});

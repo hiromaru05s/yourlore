@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {Glass} from './glass';
 import {t} from '../../i18n';
 
@@ -35,7 +36,7 @@ export function playDewGrant(side:'me'|'opp',before:number,after:number,source?:
    const faces=[...document.querySelectorAll<HTMLImageElement>('.zone-mon .card-art img,.zone-buff .card-art img,.cast-reveal .card-art img,.fx-field-ghost .card-art img')];
    const sourceArt=source?.querySelector<HTMLImageElement>('.card-art img');if(sourceArt&&!faces.includes(sourceArt))faces.push(sourceArt);
    const portraits=[...document.querySelectorAll<HTMLCanvasElement>('.seeker-motion')];
-   const start=performance.now();
+   const start=SPECIAL_FX.now();
    const tick=(now:number)=>{if(ended)return;try{
     if(!target.isConnected||document.hidden){finish();return;}
     const ms=Math.min(DEW_DURATION,now-start),r=target.getBoundingClientRect();if(r.width<1){finish();return;}
@@ -59,7 +60,7 @@ export function playDewGrant(side:'me'|'opp',before:number,after:number,source?:
     }
     if(ms>=DEW_CONTACT&&!contact){contact=true;target.style.opacity=opacity;update(after);reaction=target.animate([{filter:'brightness(1)',transform:'scale(1)'},{filter:'brightness(1.16)',transform:'scale(1.065)'},{filter:'brightness(1)',transform:'scale(1)'}],{duration:290,easing:'ease-out'});}
     host!.dataset.time=String(Math.round(ms));host!.dataset.contact=String(contact);
-    if(ms>=DEW_DURATION)finish();else raf=requestAnimationFrame(tick);
+    if(ms>=DEW_DURATION)finish();else raf=SPECIAL_FX.requestFrame(tick);
    }catch{finish();}};tick(start);
   }).catch(finish);
  });

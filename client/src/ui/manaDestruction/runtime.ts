@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {DB,FRAME_BACK} from '../../shared/cards';
 import {cardEl} from '../cardView';
 import {captureCardSurface,captureQuestTile,CARD_PADDING} from '../cardSurface';
@@ -94,9 +95,9 @@ export function playManaDestruction(source:HTMLElement,destination:HTMLElement,s
     ctx.resetTransform();ctx.clearRect(0,0,canvas!.width,canvas!.height);ctx.setTransform(dpr,0,0,dpr,-left*dpr,-top*dpr);
     draw(ctx,ms>=timing.arriveAt?returned:material,0,ms,project(source),project(destination));
     canvas!.dataset.phase=ms<timing.breakAt?'charge':ms<timing.joinAt?'fracture':ms<timing.arriveAt?'flight':'reform';
-    if(ms===timing.duration)finish(true);else raf=requestAnimationFrame(tick);
+    if(ms===timing.duration)finish(true);else raf=SPECIAL_FX.requestFrame(tick);
     }catch{cancel();}
-   };raf=requestAnimationFrame(tick);
+   };raf=SPECIAL_FX.requestFrame(tick);
   }).catch(cancel);
  });
 }

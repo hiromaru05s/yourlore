@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {FRAME_BACK} from '../../shared/cards';
 import {capturePileSurface} from '../cardSurface';
 import {projectedPlacement} from '../boardProjection';
@@ -30,14 +31,14 @@ export function playTribeSynergy(nodes:HTMLElement[],isVictory=false,stage=1):Pr
    if(ended)return;
    if(isVictory){magic=document.createElement('canvas');magic.dataset.tribeVictory='true';magic.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:181';document.body.append(magic);}
    if(!rigs.length&&!magic){done();return;}
-   const start=performance.now(),duration=isVictory?4800:synergyDuration(stage);
+   const start=SPECIAL_FX.now(),duration=isVictory?4800:synergyDuration(stage);
    const draw=(now:number)=>{
     if(ended)return;const ms=now-start;
     if(ms>=duration||rigs.some(r=>!r.node.isConnected)){done();return;}
     for(const r of rigs){r.el.dataset.tribeTime=String(Math.round(ms));r.el.style.transform=projectedPlacement(r.node,180,280).toString();r.node.style.visibility='hidden';r.el.style.visibility='visible';const c=r.canvas.getContext('2d')!;c.setTransform(1.5,0,0,1.5,0,0);c.clearRect(0,0,480,640);if(isVictory)painter.victorySource(c,r.face,Math.min(ms,950),240,320,180,reduced);else painter.synergy(c,r.face,stage,ms,240,320,180,reduced);}
     if(magic){const dpr=Math.min(devicePixelRatio,2);if(magic.width!==Math.round(innerWidth*dpr)||magic.height!==Math.round(innerHeight*dpr)){magic.width=Math.round(innerWidth*dpr);magic.height=Math.round(innerHeight*dpr);}const c=magic.getContext('2d')!;c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,innerWidth,innerHeight);const x=innerWidth*.5,y=innerHeight*.54,r=Math.min(innerWidth*.29,innerHeight*.34,260);c.strokeStyle=`rgba(214,167,72,${Math.sin(Math.PI*ms/4800)*.6})`;c.lineWidth=1;for(const rig of rigs){const b=rig.node.getBoundingClientRect();c.beginPath();c.moveTo(b.x+b.width/2,b.y+b.height/2);c.quadraticCurveTo(b.x+b.width/2,y,x,y);c.stroke();}drawVictory(c,ms,x,y,r,reduced);}
-    raf=requestAnimationFrame(draw);
-   };raf=requestAnimationFrame(draw);
+    raf=SPECIAL_FX.requestFrame(draw);
+   };raf=SPECIAL_FX.requestFrame(draw);
   }).catch(done);
  });
 }

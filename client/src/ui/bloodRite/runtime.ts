@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {drawBloodRite,bloodRiteActivation,BLOOD_RITE_DURATION,BLOOD_RITE_HEAL} from './visual';
 
 // Shared sources use the largest current pulse; simultaneous heals never compound scale.
@@ -26,7 +27,7 @@ export function playBloodRite(side:'me'|'opp',uids:string[],onHeal:()=>void,sign
  Object.assign(canvas.style,{position:'fixed',pointerEvents:'none',zIndex:'125'});
  const c=canvas.getContext('2d');
  return new Promise(resolve=>{
-  let raf=0,done=false,applied=false;const start=performance.now();
+  let raf=0,done=false,applied=false;const start=SPECIAL_FX.now();
   const finish=(completed=false)=>{
    if(done)return;done=true;cancelAnimationFrame(raf);canvas.remove();
    signal.removeEventListener('abort',abort);window.removeEventListener('resize',abort);document.removeEventListener('visibilitychange',hidden);
@@ -49,7 +50,7 @@ export function playBloodRite(side:'me'|'opp',uids:string[],onHeal:()=>void,sign
    canvas.style.left=`${r.left+r.width/2-size/2}px`;canvas.style.top=`${r.top+r.height/2-size/2}px`;
    c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,pixels,pixels);c.setTransform(dpr*scale,0,0,dpr*scale,pixels/2,pixels/2);drawBloodRite(c,age,reduced);
    for(const el of sources){const state=activeSources.get(el)!;state.pulses.set(key,bloodRiteActivation(age));sourcePose(el,state);}
-   raf=requestAnimationFrame(frame);
-  };raf=requestAnimationFrame(frame);
+   raf=SPECIAL_FX.requestFrame(frame);
+  };raf=SPECIAL_FX.requestFrame(frame);
  });
 }

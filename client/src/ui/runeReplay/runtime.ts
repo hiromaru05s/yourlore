@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {FRAME_BACK} from '../../shared/cards';
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 const ease=(a:number,b:number,t:number)=>{const x=clamp((t-a)/(b-a));return x*x*(3-2*x)};
@@ -26,7 +27,7 @@ export function playRuneReplay(card:HTMLElement,uids:string[],side:'me'|'opp',si
  Object.assign(back.style,{inset:'3%',borderRadius:'7%',backgroundImage:sleeveImage&&sleeveImage!=='none'?sleeveImage:`url("${FRAME_BACK}")`,backgroundSize:'100% 100%',transform:'rotateY(180deg)'});
  turn.append(front,back);document.body.append(layer);card.style.visibility='hidden';
  return new Promise(resolve=>{
-  let raf=0,done=false,replayed=false,replayDone=false,replayOK=false;const start=performance.now();
+  let raf=0,done=false,replayed=false,replayDone=false,replayOK=false;const start=SPECIAL_FX.now();
   const finish=(complete:boolean)=>{if(done)return;done=true;cancelAnimationFrame(raf);clearTimeout(deadline);layer.remove();card.style.visibility=savedVisibility;signal.removeEventListener('abort',abort);window.removeEventListener('resize',abort);window.removeEventListener('pagehide',abort);document.removeEventListener('visibilitychange',hidden);observer.disconnect();if(active.get(card)===abort)active.delete(card);for(const el of nodes){const s=sources.get(el);if(!s)continue;s.pulses.delete(key);paintSource(el,s);if(!s.pulses.size)sources.delete(el);}resolve(complete);};
   const abort=()=>finish(false),hidden=()=>{if(document.hidden)abort();};
   const observer=new MutationObserver(()=>{if(!card.isConnected)abort();});observer.observe(document.body,{childList:true,subtree:true});
@@ -37,7 +38,7 @@ export function playRuneReplay(card:HTMLElement,uids:string[],side:'me'|'opp',si
    for(const el of nodes){const s=sources.get(el);if(s){s.pulses.set(key,a);paintSource(el,s);}}
    if(!replayed){const q=ease(140,880,t),wave=Math.sin(Math.PI*q),u=r.width/124,press=ease(880,930,t)*(1-ease(930,980,t));turn.style.transform=reduced?'none':`translate3d(${14*wave*u}px,${(-30*wave+5*press)*u}px,${25*wave}px) rotateX(${-8*wave}deg) rotateY(${360*q}deg) rotateZ(${2.58*wave}deg) scale(${1+.03*wave-.025*press})`;front.style.filter=`drop-shadow(0 ${3+8*wave}px ${3+5*wave}px #14203540)`;back.style.boxShadow=`0 ${3+8*wave}px ${3+5*wave}px #14203540`;}
    if(t>=release&&!replayed){replayed=true;layer.remove();card.style.visibility=savedVisibility;void Promise.resolve().then(()=>done?false:onReplay()).then(ok=>{replayDone=true;replayOK=ok;},()=>{replayDone=true;replayOK=false;});}
-   if(t>=release+460&&replayDone){finish(replayOK);return;}raf=requestAnimationFrame(frame);
+   if(t>=release+460&&replayDone){finish(replayOK);return;}raf=SPECIAL_FX.requestFrame(frame);
   };frame(start);
  });
 }

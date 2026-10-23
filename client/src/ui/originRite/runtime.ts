@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import type {OriginRiteReaction} from '../../shared/types';
 import type {Anchor,Layout} from './renderer';
 import {originSurface} from './surface';
@@ -20,14 +21,14 @@ export function playOriginRite(o:Options):Promise<boolean>{
    if(done)return;
    const l:Layout={summon:anchor(o.summon),source:anchor(o.source),target:anchor(o.target),grave:anchor(o.grave),name:o.name};
    if([l.summon,l.source,l.target,l.grave].some(a=>a.w<=0||a.h<=0)){abort();return;}
-   canvas=document.createElement('canvas');canvas.className='origin-rite-fx';canvas.dataset.variant='golden-01';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:180';const d=Math.min(2,devicePixelRatio||1);canvas.width=Math.ceil(innerWidth*d);canvas.height=Math.ceil(innerHeight*d);const c=canvas.getContext('2d');if(!c){abort();return;}document.body.append(canvas);const start=performance.now();
+   canvas=document.createElement('canvas');canvas.className='origin-rite-fx';canvas.dataset.variant='golden-01';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:180';const d=Math.min(2,devicePixelRatio||1);canvas.width=Math.ceil(innerWidth*d);canvas.height=Math.ceil(innerHeight*d);const c=canvas.getContext('2d');if(!c){abort();return;}document.body.append(canvas);const start=SPECIAL_FX.now();
    const tick=(now:number)=>{
     if(done)return;if(o.signal?.aborted||document.hidden||![o.source,o.summon,o.target,o.grave].every(n=>n.isConnected)){abort();return;}
     try{
      const age=now-start,ms=reduced?(age<90?1000:render.HIT+age-90):Math.min(render.END,420+age);
      if(!hit&&ms>=render.HIT){hit=true;if(o.reaction.outcome==='destroy')o.target.style.visibility='hidden';o.onImpact();if(done)return;}
      c.setTransform(d,0,0,d,0,0);c.clearRect(0,0,innerWidth,innerHeight);render.renderGolden(c,ms,l,face,o.reaction.outcome,reduced);canvas!.dataset.time=String(Math.round(ms));
-     if(reduced?age>=240:ms>=render.END)finish(true);else raf=requestAnimationFrame(tick);
+     if(reduced?age>=240:ms>=render.END)finish(true);else raf=SPECIAL_FX.requestFrame(tick);
     }catch{abort();}
    };tick(start);
   }).catch(abort);

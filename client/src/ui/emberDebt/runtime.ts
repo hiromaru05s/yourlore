@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {combatPortrait,combatRect} from '../combatAnchor';
 import {drawEmber} from './visual';
 import type {GameEvent,Side} from '../../shared/types';
@@ -29,7 +30,7 @@ export function startEmberDebt(event:Extract<GameEvent,{type:'elementalStart'}>,
   Object.assign(canvas.style,{position:'fixed',inset:'0',width:'100vw',height:'100vh',pointerEvents:'none',zIndex:'125'});
   const dpr=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(innerWidth*dpr);canvas.height=Math.round(innerHeight*dpr);
   const ctx=canvas.getContext('2d');if(!ctx){cancel();return;}ctx.setTransform(dpr,0,0,dpr,0,0);document.body.append(canvas);
-  const start=performance.now();
+  const start=SPECIAL_FX.now();
   function tick(now:number){
    if(closed)return;if(document.hidden||(source&&!source.isConnected)||!nodes.some(n=>combatRect(n))){cancel();return;}
    const elapsed=now-start;ctx!.clearRect(0,0,innerWidth,innerHeight);
@@ -37,9 +38,9 @@ export function startEmberDebt(event:Extract<GameEvent,{type:'elementalStart'}>,
     drawEmber(ctx!,sheet,{x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height},t,300+i*80,i===0?1:.55,reduced);
    });
    while(next<due.length&&elapsed>=due[next]){canvas!.dataset.impact=String(next);resolvers[next++]();}
-   if(elapsed>=duration){cancel();return;}raf=requestAnimationFrame(tick);
+   if(elapsed>=duration){cancel();return;}raf=SPECIAL_FX.requestFrame(tick);
   }
-  raf=requestAnimationFrame(tick);
+  raf=SPECIAL_FX.requestFrame(tick);
  }).catch(cancel);
  return {impact:index=>impacts[index]??Promise.resolve(),finished,cancel};
 }

@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import type {CardInst} from '../../shared/types';
 import {FRAME_BACK} from '../../shared/cards';
 import {cardEl} from '../cardView';
@@ -20,7 +21,7 @@ export async function playCreation(card:CardInst,side:Side,source:HTMLElement|nu
  let scene:NacreScene|undefined,frame=0,timer:ReturnType<typeof setTimeout>|undefined,done:((ok:boolean)=>void)|undefined;
  const oldVisibility=source?.style.visibility,targetVisibility=handTarget?.style.visibility;let hidden=false;
  if(handTarget)handTarget.style.visibility='hidden';
- const fallback=()=>new Promise<boolean>(resolve=>{if(signal.aborted){resolve(false);return;}done=resolve;if(!capture.isConnected)document.body.append(capture);capture.dataset.creationFallback='true';capture.style.cssText=`position:fixed;left:${graveRect.left}px;top:${graveRect.top}px;width:${graveRect.width}px;height:${graveRect.height}px;--cw:${graveRect.width}px;--ch:${graveRect.height}px;pointer-events:none;z-index:145;outline:1px solid #9ce4d6`;timer=setTimeout(()=>resolve(true),240);});
+ const fallback=()=>new Promise<boolean>(resolve=>{if(signal.aborted){resolve(false);return;}done=resolve;if(!capture.isConnected)document.body.append(capture);capture.dataset.creationFallback='true';capture.style.cssText=`position:fixed;left:${graveRect.left}px;top:${graveRect.top}px;width:${graveRect.width}px;height:${graveRect.height}px;--cw:${graveRect.width}px;--ch:${graveRect.height}px;pointer-events:none;z-index:145;outline:1px solid #9ce4d6`;timer=setTimeout(()=>resolve(true),SPECIAL_FX.milliseconds(240));});
  const cancel=()=>{cancelAnimationFrame(frame);if(timer)clearTimeout(timer);scene?.dispose();scene=undefined;capture.remove();if(hidden&&source)source.style.visibility=oldVisibility??'';hidden=false;if(handTarget)handTarget.style.visibility=targetVisibility??'';done?.(false);};
  signal.addEventListener('abort',cancel,{once:true});
  try{
@@ -36,8 +37,8 @@ export async function playCreation(card:CardInst,side:Side,source:HTMLElement|nu
   const overlay=scene.renderer.domElement;overlay.dataset.creationFx=copy?'copy':'birth';overlay.dataset.creationUid=card.uid;overlay.dataset.creationDestination=handTarget?'hand':'grave';overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:145';scene.draw(900);scene.draw(0);document.body.append(overlay);
   if(!copy&&source){source.style.visibility='hidden';hidden=true;}
   capture.remove();
-  return await new Promise<boolean>(resolve=>{done=resolve;const start=performance.now(),duration=copy?2050:2180;
-   const tick=(now:number)=>{if(signal.aborted||!anchor.isConnected||!grave.isConnected||(root&&!root.isConnected)){resolve(false);return;}overlay.dataset.time=String(Math.round(now-start));scene!.draw(Math.min(now-start,duration));if(now-start>=duration){resolve(true);return;}frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(tick);
+  return await new Promise<boolean>(resolve=>{done=resolve;const start=SPECIAL_FX.now(),duration=copy?2050:2180;
+   const tick=(now:number)=>{if(signal.aborted||!anchor.isConnected||!grave.isConnected||(root&&!root.isConnected)){resolve(false);return;}overlay.dataset.time=String(Math.round(now-start));scene!.draw(Math.min(now-start,duration));if(now-start>=duration){resolve(true);return;}frame=SPECIAL_FX.requestFrame(tick);};frame=SPECIAL_FX.requestFrame(tick);
   });
  }catch{if(signal.aborted)return false;scene?.dispose();scene=undefined;return await fallback();}
  finally{signal.removeEventListener('abort',cancel);cancel();}

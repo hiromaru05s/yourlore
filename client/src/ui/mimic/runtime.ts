@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {selected,type MimicId} from './selection';
 import {createRig,type MimicRig} from './rig';
 
@@ -22,13 +23,13 @@ export async function playMimic(source:HTMLElement,card:HTMLElement,id:MimicId,s
   rig.node.style.transform=`translate(${rect.left}px,${rect.top}px) scale(${rect.width/180},${rect.height/280})`;
   rig.draw(0,reduced);document.body.append(rig.node);source.style.visibility='hidden';
   return await new Promise<boolean>(resolve=>{
-   finish=resolve;const start=performance.now(),duration=selected[id].duration;
+   finish=resolve;const start=SPECIAL_FX.now(),duration=selected[id].duration;
    const tick=(now:number)=>{
     if(signal.aborted||document.hidden||!source.isConnected){cancel();return;}
-    try{const time=Math.min(duration,now-start);rig!.draw(time,reduced);if(time>=duration){resolve(true);return;}frame=requestAnimationFrame(tick);}
+    try{const time=Math.min(duration,now-start);rig!.draw(time,reduced);if(time>=duration){resolve(true);return;}frame=SPECIAL_FX.requestFrame(tick);}
     catch(error){if(import.meta.env.DEV)console.warn('[mimic frame fallback]',error);resolve(false);}
    };
-   frame=requestAnimationFrame(tick);
+   frame=SPECIAL_FX.requestFrame(tick);
   });
  }catch(error){if(import.meta.env.DEV)console.warn('[mimic reveal fallback]',error);return false;}
  finally{signal.removeEventListener('abort',cancel);cancel();}

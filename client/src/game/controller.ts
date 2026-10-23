@@ -1,3 +1,4 @@
+import {STANDARD_FX} from '../ui/animationTempo';
 import { purgeChoices } from '../shared/engine';
 import {summonFaceFactory} from '../ui/summon/face';
 import {syncCardEffects,localCardEffect} from '../ui/cardFinish';
@@ -598,7 +599,7 @@ export abstract class BaseController implements BoardHandlers {
           const replay=runeReplays.replays.get(i);
           if(replay){
             const original=events[replay.playIndex];
-            if(original.type==='playSpell'&&original.id==='BLACK_CURSE'){A.enchantActivation(e.uid);await wait(140);break;}
+            if(original.type==='playSpell'&&original.id==='BLACK_CURSE'){A.enchantActivation(e.uid);await wait(STANDARD_FX.milliseconds(140));break;}
             if(original.type==='playSpell'){
               const card=prev.players[e.player].hand.find(c=>c.id===original.id)??this.defOf(original.id,`rune-replay-${replay.playIndex}`);
               if(card){
@@ -609,7 +610,7 @@ export abstract class BaseController implements BoardHandlers {
                 if(node&&!held){if(this.dead)node.remove();else if(original.dest==='vanish')this.quickFaces.push({card,side,node});else this.elementalFaces.push({card,side,node});}
               }
             }
-          }else{A.enchantActivation(e.uid);await wait(140);}
+          }else{A.enchantActivation(e.uid);await wait(STANDARD_FX.milliseconds(140));}
           break;
         }
         case "summon": {

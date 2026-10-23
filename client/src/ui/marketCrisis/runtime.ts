@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {NativeMarketBreak} from './nativeBreak';
 import {SPLIT,revealAt,ease} from './motion';
 const active=new WeakMap<HTMLElement,MarketCrisisTransition>();
@@ -20,8 +21,8 @@ export function createMarketCrisis(root:HTMLElement):MarketCrisisTransition{
  const observer=new MutationObserver(()=>{if(!root.isConnected)cancel()});
  const run=(duration:number,paint:(age:number)=>void)=>new Promise<void>(resolve=>{
   if(cancelled||document.hidden||!root.isConnected){cancel();resolve();return}
-  resolveStep=resolve;const start=performance.now();
-  const frame=(now:number)=>{if(closed)return;try{paint(Math.min(duration,now-start))}catch{cancel();return}if(now-start>=duration)clearStep();else raf=requestAnimationFrame(frame)};
+  resolveStep=resolve;const start=SPECIAL_FX.now();
+  const frame=(now:number)=>{if(closed)return;try{paint(Math.min(duration,now-start))}catch{cancel();return}if(now-start>=duration)clearStep();else raf=SPECIAL_FX.requestFrame(frame)};
   timer=window.setTimeout(cancel,duration+500);frame(start);
  });
  const transition:MarketCrisisTransition={

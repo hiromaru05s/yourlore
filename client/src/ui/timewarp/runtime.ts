@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import type {CardInst,GameState,Side} from '../../shared/types';
 import {DB,FRAME_BACK} from '../../shared/cards';
 import {cardEl} from '../cardView';
@@ -85,7 +86,7 @@ export class TimewarpPresentation {
       if(phase==='hold'){this.optics.draw('hold',0,this.source,this.anchor(),this.reduced());return;}
       const duration=this.reduced()?650:phase==='cast'?CAST_MS:RELEASE_MS;
       await new Promise<void>((resolve,reject)=>{
-        const start=performance.now();let last=-Infinity;
+        const start=SPECIAL_FX.now();let last=-Infinity;
         const tick=(now:number)=>{
           if(signal.aborted||this.dead||!this.root.isConnected||document.hidden){resolve();return;}
           const elapsed=Math.min(duration,now-start);
@@ -93,8 +94,8 @@ export class TimewarpPresentation {
             last=now;
             try{this.optics?.draw(phase,elapsed/duration*(phase==='cast'?CAST_MS:RELEASE_MS),this.source,this.anchor(),this.reduced());}catch(e){reject(e);return;}
           }
-          if(elapsed===duration){resolve();return;}frame=requestAnimationFrame(tick);
-        };frame=requestAnimationFrame(tick);
+          if(elapsed===duration){resolve();return;}frame=SPECIAL_FX.requestFrame(tick);
+        };frame=SPECIAL_FX.requestFrame(tick);
       });
       signal.throwIfAborted();
       if(phase==='cast'){this.optics?.draw('hold',0,this.source,this.anchor(),this.reduced());}

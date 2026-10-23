@@ -1,10 +1,11 @@
+import {STANDARD_FX} from './animationTempo';
 import {FRAME_BACK} from '../shared/cards';
 import {captureCardSurface,CARD_PADDING} from './cardSurface';
 import {projectedPlacement} from './boardProjection';
 import type {QuestPactRenderer} from './questPact/renderer';
 import {DURATION,smooth} from './questPact/timing';
 
-export const QUEST_FOLD_MS=DURATION;
+export const QUEST_FOLD_MS=STANDARD_FX.milliseconds(DURATION);
 let rendererModule:Promise<typeof import('./questPact/renderer')>|undefined;
 export function warmQuestPact(){return rendererModule??=import('./questPact/renderer').catch(error=>{rendererModule=undefined;throw error;});}
 
@@ -45,7 +46,7 @@ export async function foldQuestIntoSlot(reveal:HTMLElement,target:HTMLElement,fa
   const start=new DOMMatrix().translate(from.left+from.width/2,from.top+from.height/2),sa=start.toFloat64Array();
   await new Promise<void>(resolve=>{
    let ended=false;const finish=()=>{if(ended)return;ended=true;cancelAnimationFrame(frame);signal.removeEventListener('abort',finish);resolve();};
-   signal.addEventListener('abort',finish,{once:true});const begun=performance.now();
+   signal.addEventListener('abort',finish,{once:true});const begun=STANDARD_FX.now();
    const tick=(now:number)=>{
     if(signal.aborted||document.hidden||!target.isConnected||!reveal.isConnected){finish();return;}
     const ms=Math.min(DURATION,now-begun),travel=smooth(3460,4640,ms);
@@ -57,7 +58,7 @@ export async function foldQuestIntoSlot(reveal:HTMLElement,target:HTMLElement,fa
     const enter=smooth(0,180,ms),native=smooth(4510,4780,ms);
     reveal.style.opacity=String((1-enter)*Number(opacity||1));if(enter===1)reveal.style.visibility='hidden';
     face.style.opacity=String(native);if(native>0)place();canvas.style.opacity=String(enter*(1-native));
-    if(ms===DURATION){completed=true;finish();return;}frame=requestAnimationFrame(tick);
+    if(ms===DURATION){completed=true;finish();return;}frame=STANDARD_FX.requestFrame(tick);
    };tick(begun);
   });
   if(completed){face.style.opacity='1';place();}return completed;

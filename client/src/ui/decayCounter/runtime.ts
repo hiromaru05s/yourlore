@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {getLang} from '../../i18n';
 import {decayStateDescription} from '../../shared/cardPresentation';
 import {Material,TILE_W,TILE_H} from './material';
@@ -39,7 +40,7 @@ function tick(now:number){
    batch.forEach(({job},index)=>{const ctx=job.canvas.getContext('2d')!;ctx.clearRect(0,0,TILE_W,TILE_H);ctx.drawImage(atlas,index*TILE_W,0,TILE_W,TILE_H,0,0,TILE_W,TILE_H);});
   }
  }catch{for(const {job}of ready)job.finish(false);stopRenderer();}
- if(jobs.size)raf=requestAnimationFrame(tick);
+ if(jobs.size)raf=SPECIAL_FX.requestFrame(tick);
 }
 export function playDecayCounter(node:HTMLElement,before:number,after:number,opt:{signal?:AbortSignal}={}):Promise<boolean>{
  if(!node.isConnected||opt.signal?.aborted||!Number.isFinite(before)||!Number.isFinite(after)||after<=before)return Promise.resolve(false);
@@ -65,6 +66,6 @@ export function playDecayCounter(node:HTMLElement,before:number,after:number,opt
   opt.signal?.addEventListener('abort',cancel,{once:true});window.addEventListener('resize',cancel);window.addEventListener('pagehide',cancel);document.addEventListener('visibilitychange',cancel);
   timer=setTimeout(cancel,5500);
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){finish(true);return;}
-  void decayFace(node,capture.signal).then(face=>{if(done)return;job.face=face;if(!raf)raf=requestAnimationFrame(tick);},()=>finish(false));
+  void decayFace(node,capture.signal).then(face=>{if(done)return;job.face=face;if(!raf)raf=SPECIAL_FX.requestFrame(tick);},()=>finish(false));
  });
 }

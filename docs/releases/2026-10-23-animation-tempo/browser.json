@@ -1,0 +1,349 @@
+{
+  "checks": [
+    {
+      "id": "M1",
+      "owner": 0,
+      "interrupt": "",
+      "ms": 2814.7000000029802,
+      "frames": 156,
+      "stages": {
+        "slate-summon": {
+          "first": 3547.6,
+          "last": 5314.2,
+          "rate": 1.4284848484848485,
+          "sampleCount": 102
+        }
+      },
+      "events": [
+        "log",
+        "summon"
+      ],
+      "remaining": 0,
+      "field": [
+        "M1"
+      ],
+      "enchants": 0,
+      "quests": 0
+    },
+    {
+      "id": "M1",
+      "owner": 1,
+      "interrupt": "",
+      "ms": 2586.699999988079,
+      "frames": 140,
+      "stages": {
+        "slate-summon": {
+          "first": 6530.8,
+          "last": 8297.4,
+          "rate": 1.4284792567262408,
+          "sampleCount": 96
+        }
+      },
+      "events": [
+        "log",
+        "summon"
+      ],
+      "remaining": 0,
+      "field": [
+        "M1"
+      ],
+      "enchants": 0,
+      "quests": 0
+    },
+    {
+      "id": "S1",
+      "owner": 0,
+      "interrupt": "",
+      "ms": 4836.29999999702,
+      "frames": 271,
+      "stages": {},
+      "events": [
+        "playSpell",
+        "dice",
+        "log",
+        "damage"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 0,
+      "quests": 0
+    },
+    {
+      "id": "Q_RIFT",
+      "owner": 0,
+      "interrupt": "",
+      "ms": 4043.5,
+      "frames": 230,
+      "stages": {
+        "quest-fold-canvas": {
+          "first": 14447.1,
+          "last": 17897,
+          "rate": 1.4284402265421705,
+          "sampleCount": 201
+        }
+      },
+      "events": [
+        "playSpell",
+        "log"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 0,
+      "quests": 1
+    },
+    {
+      "id": "Q_RIFT",
+      "owner": 1,
+      "interrupt": "",
+      "ms": 4066.5,
+      "frames": 232,
+      "stages": {
+        "quest-fold-canvas": {
+          "first": 18830.2,
+          "last": 22296.8,
+          "rate": 1.4284844054580894,
+          "sampleCount": 201
+        }
+      },
+      "events": [
+        "playSpell",
+        "log"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 0,
+      "quests": 1
+    },
+    {
+      "id": "NHEAL",
+      "owner": 0,
+      "interrupt": "",
+      "ms": 1891.8999999910593,
+      "frames": 109,
+      "stages": {
+        "persistent-flight-canvas": {
+          "first": 23013.5,
+          "last": 24546.7,
+          "rate": 1.42837437064625,
+          "sampleCount": 93
+        }
+      },
+      "events": [
+        "log",
+        "playSpell"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 1,
+      "quests": 0
+    },
+    {
+      "id": "CASTLE",
+      "owner": 0,
+      "interrupt": "",
+      "ms": 4016.0999999940395,
+      "frames": 232,
+      "stages": {
+        "castle-summon": {
+          "first": 24996.7,
+          "last": 27379.9,
+          "rate": 1.3335855992215786,
+          "sampleCount": 138
+        }
+      },
+      "events": [
+        "log",
+        "summon",
+        "monsterActivate",
+        "log"
+      ],
+      "remaining": 0,
+      "field": [
+        "CASTLE"
+      ],
+      "enchants": 0,
+      "quests": 0
+    },
+    {
+      "id": "FIRE_MASTER",
+      "owner": 1,
+      "interrupt": "",
+      "ms": 3310.8999999910593,
+      "frames": 180,
+      "stages": {
+        "mage-summon": {
+          "first": 29529.8,
+          "last": 32529.7,
+          "rate": 1.3335515310204382,
+          "sampleCount": 173
+        }
+      },
+      "events": [
+        "log",
+        "summon"
+      ],
+      "remaining": 0,
+      "field": [
+        "FIRE_MASTER"
+      ],
+      "enchants": 0,
+      "quests": 0
+    },
+    {
+      "id": "BLACK_CURSE",
+      "owner": 0,
+      "interrupt": "",
+      "ms": 4653.699999988079,
+      "frames": 233,
+      "stages": {
+        "curse-fx": {
+          "first": 33096.4,
+          "last": 37546.2,
+          "sampleCount": 0
+        }
+      },
+      "events": [
+        "playSpell",
+        "log",
+        "curseGenerated"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 0,
+      "quests": 0
+    },
+    {
+      "id": "Q_RIFT",
+      "owner": 1,
+      "interrupt": "",
+      "ms": 4001.300000011921,
+      "frames": 234,
+      "stages": {
+        "quest-fold-canvas": {
+          "first": 38512.9,
+          "last": 41929.3,
+          "sampleCount": 203
+        }
+      },
+      "events": [
+        "playSpell",
+        "log"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 0,
+      "quests": 1
+    },
+    {
+      "id": "NHEAL",
+      "owner": 1,
+      "interrupt": "",
+      "ms": 1762,
+      "frames": 103,
+      "stages": {
+        "persistent-flight-canvas": {
+          "first": 42479.4,
+          "last": 44012.6,
+          "sampleCount": 93
+        }
+      },
+      "events": [
+        "log",
+        "playSpell"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 1,
+      "quests": 0
+    },
+    {
+      "id": "CASTLE",
+      "owner": 1,
+      "interrupt": "skip",
+      "ms": 795.7999999970198,
+      "frames": 41,
+      "stages": {
+        "castle-summon": {
+          "first": 44429.3,
+          "last": 45112.6,
+          "sampleCount": 39
+        }
+      },
+      "events": [
+        "log",
+        "summon",
+        "monsterActivate",
+        "log"
+      ],
+      "remaining": 0,
+      "field": [
+        "CASTLE"
+      ],
+      "enchants": 0,
+      "quests": 0
+    },
+    {
+      "id": "M1",
+      "owner": 0,
+      "interrupt": "resize",
+      "ms": 795.1000000089407,
+      "frames": 41,
+      "stages": {
+        "slate-summon": {
+          "first": 46129.2,
+          "last": 46229.2,
+          "sampleCount": 4
+        }
+      },
+      "events": [
+        "log",
+        "summon"
+      ],
+      "remaining": 0,
+      "field": [
+        "M1"
+      ],
+      "enchants": 0,
+      "quests": 0
+    },
+    {
+      "id": "Q_RIFT",
+      "owner": 0,
+      "interrupt": "hidden",
+      "ms": 798.7000000029802,
+      "frames": 42,
+      "stages": {
+        "quest-fold-canvas": {
+          "first": 47029.2,
+          "last": 47345.8,
+          "sampleCount": 18
+        }
+      },
+      "events": [
+        "playSpell",
+        "log"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 0,
+      "quests": 1
+    },
+    {
+      "id": "Q_RIFT",
+      "owner": 0,
+      "interrupt": "",
+      "ms": 203.69999998807907,
+      "frames": 9,
+      "stages": {},
+      "events": [
+        "playSpell",
+        "log"
+      ],
+      "remaining": 0,
+      "field": [],
+      "enchants": 0,
+      "quests": 1
+    }
+  ],
+  "errors": []
+}

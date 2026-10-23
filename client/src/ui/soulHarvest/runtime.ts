@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {DURATION,designs,ease} from './model';
 import type {createRenderer} from './scene';
 export const SOUL_HARVEST_VARIANT=0;
@@ -31,13 +32,13 @@ export function playSoulHarvest({source,target,damage,onImpact,signal}:SoulHarve
     target.style.translate=`${kick*.99156}px ${kick*-.12964}px`;target.style.rotate=`${kick*.16}deg`;
     if(impact)target.style.filter=`${original.filter} brightness(${1+impact*.35}) saturate(${1-impact*.4})`;
     scene!.draw(canvas!,{variant:SOUL_HARVEST_VARIANT,ms,side:0,count:0,damage,dark:false,reduced,concurrent:false,board:{source:s?{x:s.left+s.width/2,y:s.top+s.height/2}:{x:r.left+r.width/2,y:r.top+r.height/2},target:{x:r.left+r.width/2,y:r.top+r.height/2},scale:Math.max(.42,Math.min(.82,innerWidth/1350))}});
-    if(ms>=DURATION)finish(true);else raf=requestAnimationFrame(tick);
+    if(ms>=DURATION)finish(true);else raf=SPECIAL_FX.requestFrame(tick);
    }catch{abort();}
   };
   void import('./scene').then(m=>{
    if(done)return;scene=m.createRenderer();if(done){scene.dispose();return;}
    canvas=document.createElement('canvas');canvas.className='soul-harvest-fx';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:145';canvas.width=innerWidth;canvas.height=innerHeight;document.body.append(canvas);
-   start=performance.now();tick(start);
+   start=SPECIAL_FX.now();tick(start);
   }).catch(abort);
  });
 }

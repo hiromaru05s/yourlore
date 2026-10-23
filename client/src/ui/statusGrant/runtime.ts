@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {GrantMaterial,approvedGrant} from './material';
 import {Surface} from './surface';
 import {transferLight} from './light';
@@ -46,7 +47,7 @@ export function playStatusGrant(side:'me'|'opp',resource:Resource,before:number,
    number.style.visibility='hidden';
    let from:DOMRect|undefined=source?.isConnected?source.getBoundingClientRect():undefined;
    if(from&&from.width>0){flight=document.createElement('canvas');flight.className='status-grant-flight';flight.setAttribute('aria-hidden','true');flight.width=Math.ceil(innerWidth*px);flight.height=Math.ceil(innerHeight*px);flight.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:169';document.body.append(flight);}
-   target.style.backgroundImage='none';const start=performance.now();let committed=false;
+   target.style.backgroundImage='none';const start=SPECIAL_FX.now();let committed=false;
    const labelStyle=getComputedStyle(number),labelY=extent/2+(resource==='shield'?-.04*rect.height:0);
    let labelFont=`${labelStyle.fontWeight} ${labelStyle.fontSize} ${labelStyle.fontFamily}`;
    const tick=(now:number)=>{
@@ -58,9 +59,9 @@ export function playStatusGrant(side:'me'|'opp',resource:Resource,before:number,
      const n=ms>=study.contact?after:before;if(n){c.font=labelFont;c.textAlign='center';c.textBaseline='middle';c.fillStyle='#fffaf0';c.shadowColor='#060913';c.shadowBlur=2*px;c.fillText(String(n),extent/2,labelY);c.shadowBlur=0;}
      host!.dataset.time=String(Math.round(ms));
      if(flight&&from){const f=flight.getContext('2d')!;f.setTransform(px,0,0,px,0,0);f.clearRect(0,0,innerWidth,innerHeight);transferLight(f,ms/study.duration,[from.x+from.width/2,from.y+from.height/2],[rect.x+rect.width/2,rect.y+rect.height/2],resource==='brand',Math.max(.5,size/139));}
-     if(ms>=study.duration)finish();else frame=requestAnimationFrame(tick);
+     if(ms>=study.duration)finish();else frame=SPECIAL_FX.requestFrame(tick);
     }catch{finish();}
-   };frame=requestAnimationFrame(tick);
+   };frame=SPECIAL_FX.requestFrame(tick);
   }).catch(finish);
  });
 }

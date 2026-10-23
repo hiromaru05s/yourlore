@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {holdRiftTarget} from '../riftActivity';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
@@ -51,9 +52,9 @@ export function playRiftDestruction(node:HTMLElement,target:HTMLElement,signal?:
    // Compile/upload before the source disappears or the animation clock starts.
    paint(0);if(invalid()){cancel();return;}document.body.append(canvas,local);node.style.visibility='hidden';hidden=true;
    releaseTarget=holdRiftTarget(target);
-   const started=performance.now();
-   const tick=(now:number)=>{if(invalid()){cancel();return;}try{const ms=Math.min(DURATION,now-started);paint(ms);if(ms===DURATION)finish(true);else raf=requestAnimationFrame(tick);}catch{cancel();}};
-   raf=requestAnimationFrame(tick);
+   const started=SPECIAL_FX.now();
+   const tick=(now:number)=>{if(invalid()){cancel();return;}try{const ms=Math.min(DURATION,now-started);paint(ms);if(ms===DURATION)finish(true);else raf=SPECIAL_FX.requestFrame(tick);}catch{cancel();}};
+   raf=SPECIAL_FX.requestFrame(tick);
   })().catch(()=>{
    if(invalid()){cancel();return;}
    // Capture/WebGL failure uses a short DOM darkening instead of losing the card.

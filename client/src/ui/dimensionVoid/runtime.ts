@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {combatVisualRect} from '../monster/runtime';
 import {VoidGrantSurface,VOID_GRANT_DURATION} from './surface';
 
@@ -18,7 +19,7 @@ export function playVoidGrant(uids:string[],signal:AbortSignal):Promise<boolean>
  const brief=reduced||!surface,duration=brief?190:VOID_GRANT_DURATION;
  canvas.dataset.reduced=String(brief);
  return new Promise(resolve=>{
-  let raf=0,done=false;const start=performance.now();
+  let raf=0,done=false;const start=SPECIAL_FX.now();
   const finish=(complete=false)=>{
    if(done)return;done=true;clearTimeout(deadline);cancelAnimationFrame(raf);canvas.remove();surface?.dispose();
    for(const source of sources)if(owners.get(source)===abort)owners.delete(source);
@@ -44,8 +45,8 @@ export function playVoidGrant(uids:string[],signal:AbortSignal):Promise<boolean>
      else{c.save();c.globalAlpha=.66*Math.min(1,age/20)*Math.min(1,(duration-age)/110);c.fillStyle='#a080c3';c.beginPath();c.roundRect(r.left,r.top,r.width,r.height,r.width*.035);c.fill();c.restore();}
     }
    }catch{abort();return;}
-   raf=requestAnimationFrame(frame);
+   raf=SPECIAL_FX.requestFrame(frame);
   };
-  raf=requestAnimationFrame(frame);
+  raf=SPECIAL_FX.requestFrame(frame);
  });
 }

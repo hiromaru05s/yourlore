@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import type {CardInst} from '../../shared/types';
 import {FRAME_BACK} from '../../shared/cards';
 import {cardEl} from '../cardView';
@@ -47,7 +48,7 @@ export function playVoidCrystal(card:HTMLElement,definition:CardInst,side:'me'|'
    renderer=new Renderer(face,record);document.body.append(overlay);
    const dpr=Math.min(devicePixelRatio,1.5);overlay.width=Math.round(innerWidth*dpr);overlay.height=Math.round(innerHeight*dpr);
    const ctx=overlay.getContext('2d')!;const source=center(rift.getBoundingClientRect()),target=center(hp.getBoundingClientRect()),spell=center(card.getBoundingClientRect());
-   const unit=Math.max(35,Math.min(85,innerWidth*.075)),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,start=performance.now();
+   const unit=Math.max(35,Math.min(85,innerWidth*.075)),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches,start=SPECIAL_FX.now();
    const tick=(now:number)=>{
     if(done)return;if(signal.aborted||document.hidden||!card.isConnected||!hp.isConnected||!rift.isConnected){abort();return;}
     try{
@@ -56,7 +57,7 @@ export function playVoidCrystal(card:HTMLElement,definition:CardInst,side:'me'|'
      if(!hit&&ms>=HIT){hit=true;cast.onImpact();}
      const r=reaction(0,ms,reduced,cast.count);hp.style.transform=`${before.transform} translate(${r.x*unit*(side==='opp'?-1:1)}px,${r.y*unit}px) scale(${r.sx},${r.sy})`;hp.style.filter=r.light?`brightness(${1+r.light})`:before.filter;
      card.style.opacity=String(Math.max(0,1-Math.max(0,Math.min(1,(ms-350)/450)),Math.max(0,Math.min(1,(ms-5450)/450))));
-     if(ms>=DURATION)finish(true);else frame=requestAnimationFrame(tick);
+     if(ms>=DURATION)finish(true);else frame=SPECIAL_FX.requestFrame(tick);
     }catch{abort();}
    };tick(start);
   }).catch(abort);

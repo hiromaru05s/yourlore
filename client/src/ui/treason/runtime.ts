@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {Chains,BREAK,type Anchor} from './chains';
 import {monsterRect} from '../monster/runtime';
 import {prepareManaDestruction} from '../manaDestruction/runtime';
@@ -20,8 +21,8 @@ export async function playTreason(targets:{node:HTMLElement;voided:boolean}[],si
  const motion=(from:number,to:number)=>new Promise<void>(resolve=>{
   let start:number|undefined;finishFrame=resolve;
   const tick=(now:number)=>{if(stopped()){resolve();return;}start??=now;const ms=Math.min(to,from+now-start);chains!.paint(ms);chains!.canvas.dataset.elapsed=String(Math.round(ms));
-   if(ms<to)raf=requestAnimationFrame(tick);else{finishFrame=undefined;resolve();}};
-  raf=requestAnimationFrame(tick);
+   if(ms<to)raf=SPECIAL_FX.requestFrame(tick);else{finishFrame=undefined;resolve();}};
+  raf=SPECIAL_FX.requestFrame(tick);
  });
  try{
   // A missing WebGL context keeps the authoritative native destruction available.

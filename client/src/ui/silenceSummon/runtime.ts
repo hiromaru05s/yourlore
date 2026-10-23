@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,sizeSummonPlane} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
@@ -41,9 +42,9 @@ export function playSilenceSummon(source:HTMLElement,options:Options={}):Promise
    const planes=(['ground','card'] as const).map(pass=>{const canvas=document.createElement('canvas');canvas.dataset.silencePass=pass;sizeSummonPlane(canvas,576);canvas.style.cssText='position:absolute;left:-198px;top:-153px;width:576px;height:576px';host!.append(canvas);const c=canvas.getContext('2d')!;return{pass,c};});
    const paint=(ms:number)=>{host!.style.transform=silencePlacement(anchor).toString();for(const{c,pass}of planes){c.clearRect(0,0,576,576);lease!.renderer.draw(c,face,SILENCE_VARIANT,ms,288,288,180,false,pass,false,id==='NT_SEAL5');}host!.dataset.time=String(Math.round(ms));settleSummonFace(source,host!,ms,DURATION);};
    // Compile and paint frame zero before the clock starts or the source is replaced.
-   paint(0);document.body.append(host);const start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(matchMedia('(prefers-reduced-motion: reduce)').matches){impact();finish(true);return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=designs[SILENCE_VARIANT].hit){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}if(matchMedia('(prefers-reduced-motion: reduce)').matches){impact();finish(true);return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms>=designs[SILENCE_VARIANT].hit){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);}catch(error){fallback(error);}};
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }

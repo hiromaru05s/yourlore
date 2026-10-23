@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,sizeSummonPlane} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
@@ -50,12 +51,12 @@ export function playChosenSummon(source:HTMLElement,options:Options={}):Promise<
    face=surface.face;
    host=document.createElement('div');host.className='chosen-hero-summon';host.dataset.cardId=source.dataset.cardId;host.dataset.variant='1';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:136;isolation:isolate';
    const planes=(['ground','card'] as const).map(pass=>{const el=document.createElement('div');el.dataset.chosenPass=pass;el.style.cssText='position:absolute;left:0;top:0;width:180px;height:270px;transform-origin:0 0';const canvas=document.createElement('canvas');sizeSummonPlane(canvas,684);canvas.style.cssText='position:absolute;left:-252px;top:-207px;width:684px;height:684px';el.append(canvas);host!.append(el);return{el,c:canvas.getContext('2d')!,pass};});
-   document.body.append(host);source.style.visibility='hidden';const start=performance.now();
+   document.body.append(host);source.style.visibility='hidden';const start=SPECIAL_FX.now();
    const tick=(now:number)=>{try{
     if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const ms=Math.min(DURATION,now-start);host!.dataset.time=String(Math.round(ms));if(ms>=designs[VARIANT].hit){impact();if(ended)return;}
     {for(const {el,c,pass} of planes){el.style.transform=(pass==='ground'?projectedPlacement(anchor,180,270):chosenPlacement(anchor,180,270,ms)).toString();c.clearRect(0,0,684,684);lease!.renderer.draw(c,face!,hero,VARIANT,ms,342,342,180,false,pass,false);}}
-    settleSummonFace(source,host!,ms,DURATION);if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);
+    settleSummonFace(source,host!,ms,DURATION);if(ms===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);
    }catch(error){fallback(error);}};tick(start);
   })().catch(fallback);
  });

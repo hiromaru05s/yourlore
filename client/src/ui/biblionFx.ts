@@ -1,3 +1,4 @@
+import {STANDARD_FX} from './animationTempo';
 import {MANA_GAIN_MS} from './manaGainTiming';
 import {drawManaGain} from './manaGain';
 import {drawAttackVisual,ATTACK_DURATION_MS} from './attackVisual';
@@ -70,7 +71,7 @@ function render(now:number){
   context.setTransform(dpr,0,0,dpr,0,0);context.clearRect(0,0,w,h);
  }
  for(let i=entries.length-1;i>=0;i--){
-  const e=entries[i],age=(now-e.start)/1000;e.last=e.anchor()||e.last;
+  const e=entries[i],age=(now-e.start)/1000/(['spell','quest','quick','enchant','enchant-place','summon-charge','summon-impact'].includes(e.kind)?STANDARD_FX.durationScale:1);e.last=e.anchor()||e.last;
   if(age>=EFFECT_DURATION[e.kind]||!e.last){entries.splice(i,1);continue;}
   const layer=layers[biblionLayer(e.kind)];if(layer)drawBiblionEffect(layer.context,e.kind,e.last,age,e.destination?.()??undefined);
  }

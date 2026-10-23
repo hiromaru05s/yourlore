@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,summonPixelRatio} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
@@ -43,8 +44,8 @@ export function playGolem(source:HTMLElement,options:Options={}):Promise<boolean
    // Match the reviewed renderer's unpadded 1 : 1.5625 card surface exactly.
    const face=document.createElement('canvas');face.width=1536;face.height=2400;const sw=surface.face.width/(1+CARD_PADDING*2),pad=sw*CARD_PADDING;
    face.getContext('2d')!.drawImage(surface.face,pad,pad,sw,sw*1.5625,0,0,face.width,face.height);renderer.setFace(id,face);
-   const travel=options.from?440:0,start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.max(0,Math.min(DURATION+travel,now-start));paint(ms);settleSummonFace(source,host,ms,DURATION+travel);if(ms>=travel+designs[0].hit)impact();if(ended)return;if(ms>=DURATION+travel){finish(true);return;}raf=requestAnimationFrame(tick);}catch(error){console.warn('[golem] Native card fallback',error);try{impact();}finally{finish();}}};tick(start);
+   const travel=options.from?440:0,start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.max(0,Math.min(DURATION+travel,now-start));paint(ms);settleSummonFace(source,host,ms,DURATION+travel);if(ms>=travel+designs[0].hit)impact();if(ended)return;if(ms>=DURATION+travel){finish(true);return;}raf=SPECIAL_FX.requestFrame(tick);}catch(error){console.warn('[golem] Native card fallback',error);try{impact();}finally{finish();}}};tick(start);
   })().catch(error=>{if(!ended){console.warn('[golem] Native card fallback',error);try{impact();}finally{finish();}}});
  });
 }

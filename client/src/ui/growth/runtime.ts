@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {drawGrowth,GROWTH_START,GROWTH_HEAL,GROWTH_DURATION} from './visual';
 import type {Anchor} from './visual';
 import type {GrowthPulse} from './plan';
@@ -22,7 +23,7 @@ export async function playGrowth(side:'me'|'opp',pulses:readonly GrowthPulse[],o
  const hp=anchor(target),anchors=sources.map(node=>node?anchor(node,true):null),applied=new Set<number>();
  const end=Math.max(0,...pulses.map(p=>p.delay))+GROWTH_DURATION;
  return new Promise(resolve=>{
-  let raf=0,done=false;const start=performance.now();
+  let raf=0,done=false;const start=SPECIAL_FX.now();
   const finish=(success=false)=>{if(done)return;done=true;cancelAnimationFrame(raf);canvas.remove();signal.removeEventListener('abort',abort);window.removeEventListener('resize',abort);document.removeEventListener('visibilitychange',hidden);observer.disconnect();resolve(success);};
   const abort=()=>finish(false),hidden=()=>{if(document.hidden)abort();};
   const observer=new MutationObserver(()=>{if(!target.isConnected||sources.some(node=>node&&!node.isConnected))abort();});
@@ -35,7 +36,7 @@ export async function playGrowth(side:'me'|'opp',pulses:readonly GrowthPulse[],o
     if(t>=GROWTH_HEAL&&!applied.has(i)){applied.add(i);onHeal(i);}
     const source=anchors[i];if(source)drawGrowth(c,{source,hp,dark:false,reduced,sourceName:cardName({...DB.GROWTH,uid:p.uid})},t+GROWTH_START,p.amount>0);
    });
-   if(age>=end){finish(true);return;}raf=requestAnimationFrame(frame);
-  };raf=requestAnimationFrame(frame);
+   if(age>=end){finish(true);return;}raf=SPECIAL_FX.requestFrame(frame);
+  };raf=SPECIAL_FX.requestFrame(frame);
  });
 }

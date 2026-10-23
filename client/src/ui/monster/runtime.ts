@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {paintRestingAppearance} from '../summon/appearance';
 import {isCastle} from '../castleSummon/catalog';
 import {isPoisonSummon} from '../poisonSummon/selection';
@@ -227,7 +228,7 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
   let settled=false;const abort=()=>finish(false);
   const timer=setTimeout(abort,6000);
   const finish=(complete:boolean)=>{if(settled)return;settled=true;clearTimeout(timer);options.signal?.removeEventListener('abort',abort);actor.dispose();if(j.hit){j.hit.actor.dispose();j.hit.node.style.opacity=j.hit.opacity;}source.style.opacity=oldOpacity;jobs.delete(source);resolve(complete);release();};
-  const j:Job={source,actor,kind,variant,start:performance.now(),ms:reduced()?100:kind==='attack'&&(options.tempo||options.exhaust===false)?820:duration(kind,variant),r,target:options.target?monsterRect(options.target):r,destination:dest,options,opacity:oldOpacity,finish,impacted:false};
+  const j:Job={source,actor,kind,variant,start:performance.now(),ms:(reduced()?100:kind==='attack'&&(options.tempo||options.exhaust===false)?820:duration(kind,variant))*(kind==='trigger'||kind==='destroy'?SPECIAL_FX.durationScale:1),r,target:options.target?monsterRect(options.target):r,destination:dest,options,opacity:oldOpacity,finish,impacted:false};
   jobs.set(source,j);options.signal?.addEventListener('abort',abort,{once:true});schedule();
  });
 }

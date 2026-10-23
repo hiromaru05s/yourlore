@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import { FRAME_BACK } from "../../shared/cards";
 import { captureCardSurface, CARD_PADDING } from "../cardSurface";
 import { projectedPlacement } from "../boardProjection";
@@ -221,7 +222,7 @@ export function playMassacre(o: Options): Promise<boolean> {
       started = true;
       clearTimeout(timeout);
       timeout = setTimeout(abort, END + 2000);
-      const start = performance.now(),
+      const start = SPECIAL_FX.now(),
         end = reduced ? 1150 : END,
         hit = reduced ? 850 : IMPACT;
       const tick = (now: number) => {
@@ -257,7 +258,7 @@ export function playMassacre(o: Options): Promise<boolean> {
           finish();
           return;
         }
-        frame = requestAnimationFrame(tick);
+        frame = SPECIAL_FX.requestFrame(tick);
       };
       tick(start);
     })().catch((error) => {

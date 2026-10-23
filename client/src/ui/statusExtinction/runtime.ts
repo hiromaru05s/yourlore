@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {approvedExtinction,isExtinction,type Family} from './catalog';
 import {Renderer,loadAssets,type Assets} from './renderer';
 
@@ -52,7 +53,7 @@ export function playStatusExtinction(side:Side,resource:Family,before:number,aft
       c.fillText(String(before),extent/2,extent/2+rect.height*(resource==='shield'?-.04:resource==='dew'?.035:0));c.shadowBlur=0;
     };
     // First frame is painted before suppressing the native face: no missing-frame flash.
-    const start=performance.now(),duration=material?study.duration:160;
+    const start=SPECIAL_FX.now(),duration=material?study.duration:160;
     const tick=(now:number)=>{
       if(ended)return;
       if(!target.isConnected||document.hidden){finish();return;}
@@ -64,7 +65,7 @@ export function playStatusExtinction(side:Side,resource:Family,before:number,aft
         if(material)material.draw(c,study,ms,extent/2,extent/2,r.width,r.height,before);
         else {c.save();c.globalAlpha=1-ms/duration;native();c.restore();}
         target.style.visibility='hidden';host!.dataset.time=String(Math.round(ms));
-        if(ms>=duration)finish();else frame=requestAnimationFrame(tick);
+        if(ms>=duration)finish();else frame=SPECIAL_FX.requestFrame(tick);
       } catch {finish();}
     };
     tick(start);

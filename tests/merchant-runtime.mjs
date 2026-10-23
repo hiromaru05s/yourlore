@@ -26,12 +26,12 @@ try{
  const {playDarkMerchant:play,cancelDarkMerchants:cancel}=await import(path.join(dir,'runtime.mjs'));
  const card=document.getElementById('card');card.style.visibility='visible';
  const p=play(card);await settle();assert.equal(document.querySelector('.dark-merchant-reveal').dataset.variant,'3');assert.equal(card.style.visibility,'hidden');assert.equal(checks.draws[0].t,0);assert.equal(checks.draws[0].v,2);assert(checks.draws[0].board);assert(checks.draws[0].keep);
- await advance(3300);assert.equal(checks.draws.at(-1).t,3300);await advance(3300);assert.equal(await p,true);assert.equal(card.style.visibility,'visible');assert.match(card.style.transform,/scale/);
+ await advance(3300 * .75);assert.equal(checks.draws.at(-1).t,3300);await advance(3300 * .75);assert.equal(await p,true);assert.equal(card.style.visibility,'visible');assert.match(card.style.transform,/scale/);
  for(const reason of ['cancel','abort','resize','pagehide','hidden','disconnect']){
   const ac=new AbortController(),p=play(card,ac.signal);await settle();
   if(reason==='cancel')cancel();if(reason==='abort')ac.abort();if(['resize','pagehide'].includes(reason))window.dispatchEvent(new Event(reason));
   if(reason==='hidden'){Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));}
-  if(reason==='disconnect'){card.remove();await advance(20);}
+  if(reason==='disconnect'){card.remove();await advance(20 * .75);}
   assert.equal(await p,false,reason);assert.equal(card.style.visibility,'visible');Object.defineProperty(document,'hidden',{configurable:true,value:false});document.body.append(card);
  }
  checks.hold=true;const pending=play(card);await settle();cancel();assert.equal(await pending,false);checks.release();await settle();checks.hold=false;assert.equal(document.querySelector('.dark-merchant-reveal'),null);

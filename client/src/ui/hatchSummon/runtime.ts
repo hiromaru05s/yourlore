@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {refreshSummonAppearance} from '../summon/appearance';
 import {cloneCardNode} from '../cardClone';
 import {projectedPlacement,layoutRect} from '../boardProjection';
@@ -47,9 +48,9 @@ export function playHatch(source:HTMLElement,result:HTMLElement,signal?:AbortSig
     ctx.clearRect(0,0,640,640);ctx.drawImage(lease!.renderer.render(HATCH_VARIANT,outcome,ms,false,true),0,0);
     host!.dataset.time=String(Math.round(ms));
    };
-   paint(0);source.style.visibility='hidden';document.body.append(host);const start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||document.hidden||signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){console.warn('[hatch] Native face fallback',error);finish();}};
-   frame=requestAnimationFrame(tick);
+   paint(0);source.style.visibility='hidden';document.body.append(host);const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||document.hidden||signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);if(ms===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);}catch(error){console.warn('[hatch] Native face fallback',error);finish();}};
+   frame=SPECIAL_FX.requestFrame(tick);
   }catch(error){console.warn('[hatch] Native face fallback',error);finish();}
  });
 }

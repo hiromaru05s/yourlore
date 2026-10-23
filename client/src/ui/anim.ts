@@ -1,3 +1,5 @@
+import {STANDARD_FX,SPECIAL_FX} from './animationTempo';
+import {merchantCount} from './merchant/selection';
 import {prepareSummonAppearance,refreshSummonAppearance,mountSummonAppearance} from './summon/appearance';
 import {defaultSummonFace,type SummonFaceFactory} from './summon/face';
 import {cloneCardNode} from './cardClone';
@@ -235,13 +237,13 @@ function summonDust(rect: DOMRect): void {
   if (fxSkip || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   window.dispatchEvent(new CustomEvent("lore:summon-dust", { detail: rect }));
 }
-async function landCard(node: HTMLElement, to: DOMRect, fade = false): Promise<void> {
+async function landCard(node: HTMLElement, to: DOMRect, fade = false, durationScale = STANDARD_FX.durationScale): Promise<void> {
   const scale = to.width / (node.offsetWidth || 100);
-  node.style.transition = `left .3s ${EASE}, top .3s ${EASE}, transform .3s ${EASE}, opacity .3s`;
+  node.style.transition = `left ${.3*durationScale}s ${EASE}, top ${.3*durationScale}s ${EASE}, transform ${.3*durationScale}s ${EASE}, opacity ${.3*durationScale}s`;
   node.style.left = `${to.left}px`; node.style.top = `${to.top}px`;
   node.style.transform = `perspective(1400px) rotateX(8deg) rotateY(0deg) scale(${scale})`;
   if (fade) node.style.opacity = "0";
-  await wait(310);
+  await wait(310*durationScale);
 }
 /** Exact transformed slot in screen coordinates, including the row's perspective
  * and frame aspect correction. No bounding-box-only approximation at landing. */
@@ -335,15 +337,15 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   if(heavy){
     face.style.zIndex='135';reveal.style.zIndex='135';
     // Transfer directly into the selected card-parallel landing, without a second impact.
-    const initial=summonPlacement(target,w,h,0,reduced,face.dataset.cardId);
-    const transfer=face.animate([{transform:start.toString(),opacity:0},{transform:initial.toString(),opacity:1}],{duration:reduced?80:300,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
-    const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:reduced?80:220,fill:'both'});
-    await wait(reduced?80:300);transfer.cancel();fade.cancel();reveal.remove();
+    const initial=summonPlacement(target,w,h,0,reduced,face.dataset.cardId),tempo=summonTempo(face.dataset.cardId);
+    const transfer=face.animate([{transform:start.toString(),opacity:0},{transform:initial.toString(),opacity:1}],{duration:tempo.milliseconds(reduced?80:300),easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
+    const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:tempo.milliseconds(reduced?80:220),fill:'both'});
+    await wait(tempo.milliseconds(reduced?80:300));transfer.cancel();fade.cancel();reveal.remove();
     face.style.transform=initial.toString();
     await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),(isVerdant(face.dataset.cardId)||isChosenHero(face.dataset.cardId))?10000:5000);
     face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
-  const duration=reduced?120:620;
+  const duration=STANDARD_FX.milliseconds(reduced?120:620);
   const options:KeyframeAnimationOptions={duration,easing:'linear',fill:'both'};
   const moving=face.animate([{transform:start.toString(),opacity:0},{transform:end.toString(),opacity:1}],options);
   const old=reveal.animate([{transform:oldStart.toString(),opacity:1},{transform:oldEnd.toString(),opacity:0}],options);
@@ -367,7 +369,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
     const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
     if(!special){
-      await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:1);
+      await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:STANDARD_FX.rate);
       if(effect){await parkQuickSpell(node,side);await effect(node);}
       else if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
       else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&card.id!=='FORBIDDEN'&&card.id!=='FLAME'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
@@ -400,6 +402,10 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   } finally { if(!held)node.remove(); }
   return null;
 }
+function summonTempo(id:string|undefined){
+ if(!id)return STANDARD_FX;
+ return isCastle(id)||isPoisonSummon(id)||isWeaponmaster(id)||isShieldTitan(id)||isSilenceSummon(id)||isVoidSummon(id)||isCasino(id)||isDungeon(id)||isVampire(id)||isAssassin(id)||isMage(id)||isMercenary(id)||isGambler(id)||isHexer(id)||isGolem(id)||isChosenHero(id)||isVerdant(id)||isMimic(id)||selectedTribeSummon(id)||merchantCount(id)?SPECIAL_FX:STANDARD_FX;
+}
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
@@ -418,7 +424,7 @@ async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise
  if(isGolem(id)){node.style.visibility='hidden';return;}
  // Fetch the optional renderer while the unchanged hand reveal is moving.
  const module=isMimic(id)&&!fxSkip?import('./mimic/runtime').catch(()=>null):null;
- await focusCard(node,side,isMimic(id)?id:undefined);
+ await focusCard(node,side,isMimic(id)?id:undefined,summonTempo(id).rate);
  if(!module||!isMimic(id)||fxSkip||document.hidden)return;
  await boardMotionScope(async signal=>{
   const renderer=await module;
@@ -457,7 +463,7 @@ export async function trapSetAnim(side: ViewSide): Promise<void> {
   if (!from || !to) return;
   const node = floatAt(backEl(side), from);
   try {
-    await focusCard(node, side);
+    await focusCard(node, side,undefined,STANDARD_FX.rate);
     const size = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--field-card-size")) || 60;
     await landCard(node, new DOMRect(to.left, to.top, size, size * .7), true);
   } finally { node.remove(); }
@@ -556,18 +562,18 @@ export async function berserkStrike(uid:string,targetUid:string|null,player:0|1,
 async function parkForbiddenSpell(node:HTMLElement):Promise<void>{
  const sample=document.querySelector<HTMLElement>('.zone-mon > .card')?.getBoundingClientRect();
  const w=Math.max(32,Math.min(110,(sample?.width||innerWidth*.14)*1.15)),h=node.offsetHeight*w/node.offsetWidth;
- node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left .3s ${EASE},top .3s ${EASE},transform .3s ${EASE}`;
+ node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left ${STANDARD_FX.milliseconds(.3)}s ${EASE},top ${STANDARD_FX.milliseconds(.3)}s ${EASE},transform ${STANDARD_FX.milliseconds(.3)}s ${EASE}`;
  node.style.left=`${(innerWidth-w)/2}px`;node.style.top=`${innerHeight*.49-h/2}px`;node.style.transform=`scale(${w/node.offsetWidth})`;
- await wait(310);
+ await wait(STANDARD_FX.milliseconds(310));
 }
 async function parkQuickSpell(node:HTMLElement,side:ViewSide):Promise<void>{
   const row=rowRect(side),w=Math.min(92,innerWidth*.18),scale=w/node.offsetWidth;
   const h=node.offsetHeight*scale;
   node.dataset.quickPhase='resolving';
-  node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left .3s ${EASE},top .3s ${EASE},transform .3s ${EASE}`;
+  node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left ${STANDARD_FX.milliseconds(.3)}s ${EASE},top ${STANDARD_FX.milliseconds(.3)}s ${EASE},transform ${STANDARD_FX.milliseconds(.3)}s ${EASE}`;
   node.style.left=`${innerWidth-w-12}px`;node.style.top=`${Math.max(12,Math.min(innerHeight-h-12,(row?.top??innerHeight*.5)+12))}px`;
   node.style.transform=`scale(${scale})`;
-  await wait(310);
+  await wait(STANDARD_FX.milliseconds(310));
 }
 export async function finishQuickSpell(node:HTMLElement,side:ViewSide):Promise<void>{
   try{node.dataset.quickPhase='exile';if(node.isConnected)await absorbIntoRift(node,side);}finally{node.remove();}
@@ -1055,7 +1061,7 @@ async function boardMotionScope(run:(signal:AbortSignal)=>Promise<boolean>,deadl
 }
 async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
   const target=document.getElementById(discId(side));if(!target||fxSkip)return;
-  const moved=await boardMotionScope(signal=>moveOnBoard({kind:'arrival',target,card:node,signal}));
+  const moved=await boardMotionScope(signal=>moveOnBoard({kind:'arrival',target,card:node,signal,durationScale:STANDARD_FX.durationScale}));
   if(!moved&&!fxSkip){
     const r=(target.querySelector('.pile-card')||target).getBoundingClientRect();await landCard(node,r);
     // Fallback stays visible until the authoritative board replaces it.
@@ -1082,7 +1088,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
     }
     node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transition='none';
     const end=new DOMMatrix().translate(a.left+a.width/2,a.top+a.height/2).scale(0);
-    const duration=reduced?100:350;
+    const duration=SPECIAL_FX.milliseconds(reduced?100:350);
     const motion=node.animate([{transform:start.toString()},{transform:end.toString()}],{duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
     try{await wait(duration);}finally{motion.cancel();}
   }finally{releaseTarget();}
@@ -1216,9 +1222,9 @@ export async function revealCreation(card:CardInst,side:ViewSide):Promise<HTMLEl
  try{await focusCard(node,side,undefined,SPELL_FRAME_RATE);
   const slot=document.querySelector(side==='me'?'#meRow .zone-mon :is(.card,.slot)':'#oppRow .zone-mon :is(.card,.slot)')?.getBoundingClientRect();
   const w=Math.max(26,Math.min(78,(slot?.width??86)*.9)),h=w*1.55;
-  node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left .3s ${EASE},top .3s ${EASE},transform .3s ${EASE}`;
+  node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left ${SPECIAL_FX.milliseconds(.3)}s ${EASE},top ${SPECIAL_FX.milliseconds(.3)}s ${EASE},transform ${SPECIAL_FX.milliseconds(.3)}s ${EASE}`;
   node.style.left=`${Math.max(8,(slot?.left??innerWidth*.4)-w*2.7)}px`;node.style.top=`${Math.max(8,Math.min(innerHeight-h-8,(slot?slot.top+slot.height/2:innerHeight*.5)-h/2))}px`;node.style.transform=`scale(${w/node.offsetWidth})`;
-  await wait(310);if(fxSkip)return null;held=true;return node;}
+  await wait(SPECIAL_FX.milliseconds(310));if(fxSkip)return null;held=true;return node;}
  finally{if(!held)node.remove();}
 }
 export async function creationBirth(card:CardInst,side:ViewSide,source:HTMLElement|null,copy:boolean):Promise<void>{

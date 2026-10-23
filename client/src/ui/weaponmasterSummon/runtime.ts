@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,sizeSummonPlane} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
@@ -47,12 +48,12 @@ export function playWeaponmasterSummon(source:HTMLElement,options:Options={}):Pr
    const canvas=document.createElement('canvas');sizeSummonPlane(canvas,800);canvas.style.cssText=`position:absolute;left:${CARD_WIDTH/2-400}px;top:${CARD_HEIGHT/2-400}px;width:800px;height:800px`;el.append(canvas);host.append(el);const c=canvas.getContext('2d')!;
    const transfer=options.from?420:0,total=DURATION+transfer;
    const paint=(ms:number)=>{let matrix=projectedPlacement(anchor,CARD_WIDTH,CARD_HEIGHT);if(options.from&&ms<transfer){const f=options.from,start=new DOMMatrix().translate(f.left,f.top).scale(f.width/CARD_WIDTH,f.height/CARD_HEIGHT),a=Array.from(start.toFloat64Array()),b=Array.from(matrix.toFloat64Array()),q=ease(0,transfer,ms);matrix=new DOMMatrix(a.map((n,i)=>n+(b[i]-n)*q));}el.style.transform=matrix.toString();c.clearRect(0,0,800,800);lease!.renderer.draw(c,face!,Math.max(0,ms-transfer),400,400,CARD_WIDTH);if(lease!.renderer.shaderErrors.length)throw Error(lease!.renderer.shaderErrors.join('\n'));};
-   paint(0);document.body.append(host);const start=performance.now();
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
    const tick=(now:number)=>{try{
     if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const ms=Math.min(total,now-start);host!.dataset.time=String(Math.round(ms));if(ms>=CONTACT+transfer){impact();if(ended)return;}
     paint(ms);settleSummonFace(source,host!,ms,total);
-    if(ms===total){finish(true);return;}frame=requestAnimationFrame(tick);
+    if(ms===total){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);
    }catch(error){fallback(error);}};tick(start);
   })().catch(fallback);
  });

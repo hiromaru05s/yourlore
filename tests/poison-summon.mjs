@@ -14,23 +14,23 @@ try{
  const source=document.getElementById('source'),anchor=document.getElementById('anchor'),root=document.getElementById('root');let impacts=0;
  for(const [id,v]of [['POISON_MASTER',2],['RUST_SLUG',0],['RUST_SHROOM',3]]){
   source.dataset.cardId=id;source.style.visibility='visible';checks.draws=[];const before=impacts,p=play(source,{anchor,onImpact:()=>impacts++});assert.equal(source.style.visibility,'hidden');await flush();assert.deepEqual(checks.draws[0],{id,v,t:0,mounted:false});assert.equal(document.querySelector('.poison-summon').dataset.variant,String(v+1));
-  advance(639);assert.equal(impacts,before);advance(1);assert.equal(impacts,before+1);advance(2160);assert.equal(await p,true);assert.equal(impacts,before+1);assert.equal(source.style.visibility,'visible');
+  advance(639 * .75);assert.equal(impacts,before);advance(1 * .75);assert.equal(impacts,before+1);advance(2160 * .75);assert.equal(await p,true);assert.equal(impacts,before+1);assert.equal(source.style.visibility,'visible');
  }
  for(const reason of ['single','root','abort','resize','hidden','disconnect','pagehide','motion']){
   const ac=new AbortController(),p=play(source,{anchor,signal:ac.signal});await flush();
   if(reason==='single')cancel(source);if(reason==='root')all(root);if(reason==='abort')ac.abort();if(reason==='resize'||reason==='pagehide')window.dispatchEvent(new Event(reason));
   if(reason==='hidden'){Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'))}
-  if(reason==='disconnect'){anchor.remove();advance(16)}if(reason==='motion')motionChange();
+  if(reason==='disconnect'){anchor.remove();advance(16 * .75)}if(reason==='motion')motionChange();
   assert.equal(await p,false,reason);assert.equal(source.style.visibility,'visible');assert.equal(document.querySelectorAll('.poison-summon').length,0);
   Object.defineProperty(document,'hidden',{configurable:true,value:false});root.append(anchor);
  }
  let unblock;checks.pending=new Promise(r=>unblock=r);const before=checks.draws.length;const pending=play(source);cancel(source);unblock();await flush();assert.equal(await pending,false);assert.equal(checks.draws.length,before,'cancellation during capture never mounts');checks.pending=null;
  const a=play(source),b=play(source);await flush();assert.equal(await a,false);cancel(source);assert.equal(await b,false);assert.equal(source.style.visibility,'visible');
- const other=source.cloneNode(true);document.body.append(other);const multi=[play(source,{anchor}),play(other,{anchor})];await flush();assert.equal(document.querySelectorAll('.poison-summon').length,2);cancel(source);assert.equal(document.querySelectorAll('.poison-summon').length,1);advance(2800);assert.deepEqual(await Promise.all(multi),[false,true]);other.remove();
+ const other=source.cloneNode(true);document.body.append(other);const multi=[play(source,{anchor}),play(other,{anchor})];await flush();assert.equal(document.querySelectorAll('.poison-summon').length,2);cancel(source);assert.equal(document.querySelectorAll('.poison-summon').length,1);advance(2800 * .75);assert.deepEqual(await Promise.all(multi),[false,true]);other.remove();
  reduced=true;const captures=checks.capture;assert.equal(await play(source,{onImpact:()=>impacts++}),true);assert.equal(checks.capture,captures);reduced=false;
  const ac=new AbortController();ac.abort();assert.equal(await play(source,{signal:ac.signal}),false);source.dataset.cardId='ELF';assert.equal(await play(source),false);source.dataset.cardId='POISON_MASTER';
  const warn=console.warn;console.warn=()=>{};checks.fail=true;const failed=play(source,{onImpact:()=>impacts++});await flush();assert.equal(await failed,false);assert.equal(source.style.visibility,'visible');checks.fail=false;
- const p=play(source,{onImpact:()=>impacts++});await flush();advance(640);const beforeContact=impacts;checks.fail=true;advance(16);assert.equal(await p,false);assert.equal(impacts,beforeContact);checks.fail=false;console.warn=warn;
+ const p=play(source,{onImpact:()=>impacts++});await flush();advance(640 * .75);const beforeContact=impacts;checks.fail=true;advance(16 * .75);assert.equal(await p,false);assert.equal(impacts,beforeContact);checks.fail=false;console.warn=warn;
  assert.equal(frames.size,0);assert.equal(document.querySelectorAll('.poison-summon').length,0);
  for(const file of ['client/src/ui/anim.ts','client/src/ui/monster/runtime.ts','client/src/ui/summon/runtime.ts'])assert.match(await readFile(file,'utf8'),/isPoisonSummon/);
  console.log('PASS poison selection 03/01/04: contact once, frame zero, both native routes, cancellation during capture, replacement, concurrency isolation, reduced motion, GPU fallback and cleanup');

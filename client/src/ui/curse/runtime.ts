@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {DURATION,SPELL_LAND,stateAt,type Rect,type Layout} from './model';
 import {placeSource} from './nativeCard';
 import {cardEl} from '../cardView';
@@ -35,13 +36,13 @@ export function playCurse(source:HTMLElement,side:'me'|'opp',signal?:AbortSignal
     if(!spent&&ms>=SPELL_LAND){spent=true;setPile(0,1,'BLACK_CURSE');}
     renderer!.draw(canvas!,{ms,variant:0,side:side==='me'?0:1,dark:false,reduced,concurrent:false,hideSource:true,skullOpacity:.45,pixelRatio:Math.min(2,devicePixelRatio),board:layout});
     canvas!.dataset.deposited=String(deposited);
-    if(ms>=DURATION)finish(true);else raf=requestAnimationFrame(tick);
+    if(ms>=DURATION)finish(true);else raf=SPECIAL_FX.requestFrame(tick);
    }catch{abort();}
   };
   void Promise.all([import('./renderer'),import('./assets').then(m=>m.loadCurseAssets())]).then(([m,a])=>{
    if(done)return;renderer=m.createRenderer(a.faces,a.skull);
    canvas=document.createElement('canvas');canvas.className='curse-fx';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:145';const d=Math.min(2,devicePixelRatio);canvas.width=Math.round(innerWidth*d);canvas.height=Math.round(innerHeight*d);document.body.append(canvas);
-   start=performance.now();tick(start);
+   start=SPECIAL_FX.now();tick(start);
   }).catch(abort);
  });
 }

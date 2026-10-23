@@ -1,3 +1,4 @@
+import {STANDARD_FX} from './animationTempo';
 import {FRAME_BACK} from '../shared/cards';
 import {captureCardSurface,captureQuestTile} from './cardSurface';
 import {projectedPlacement} from './boardProjection';
@@ -37,7 +38,7 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
   const r=target.getBoundingClientRect(),s={x:from.left+from.width/2,y:from.top+from.height/2,w:from.width},d={x:r.left+r.width/2,y:r.top+r.height/2,w:r.width};
   await new Promise<void>(resolve=>{
    let ended=false;const finish=()=>{if(ended)return;ended=true;cancelAnimationFrame(frame);signal.removeEventListener('abort',finish);resolve();};
-   signal.addEventListener('abort',finish,{once:true});const begun=performance.now();
+   signal.addEventListener('abort',finish,{once:true});const begun=STANDARD_FX.now();
    const tick=(now:number)=>{
     if(signal.aborted||document.hidden||!target.isConnected||!reveal.isConnected){finish();return;}
     try{
@@ -48,7 +49,7 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
      ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,innerWidth,innerHeight);renderer!.trail(ctx,ms,s,d);renderer!.contact(ctx,ms,d);
      reveal.style.visibility='hidden';
      const native=ease(1400,1500,ms);face.style.opacity=String(native);if(native>0)place();sprite.style.opacity=String(1-native);
-     if(ms===DURATION){completed=true;finish();return;}frame=requestAnimationFrame(tick);
+     if(ms===DURATION){completed=true;finish();return;}frame=STANDARD_FX.requestFrame(tick);
     }catch(error){console.warn('[persistent-flight] Native fallback',error);finish();}
    };tick(begun);
   });

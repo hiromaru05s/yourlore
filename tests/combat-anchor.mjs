@@ -22,9 +22,9 @@ try{
  const avatar=document.querySelector('.avatar'),ring=document.querySelector('.pt-ring');avatar.getBoundingClientRect=()=>rect(0,0,0,0);ring.getBoundingClientRect=()=>rect(550,25,180,180);assert.equal(combatPortrait('opp'),ring);
  const event={type:'elementalStart',group:'test',id:'FIRE_ARROW',uid:'source',player:0,targets:[{player:1,uid:'missing',amount:1},{player:1,uid:'target',amount:1},{player:1,uid:null,amount:1}]};
  const playback=startElemental(event,0);const impacts=[];for(let i=0;i<3;i++)playback.impact(i).then(()=>impacts.push(i));
- step(1300);await Promise.resolve();assert.deepEqual(impacts,[]);
+ step(1300 * .75);await Promise.resolve();assert.deepEqual(impacts,[]);
  const draw=draws.at(-1),anchors=draw[4],hits=draw[5];assert.deepEqual(anchors.map(p=>[p.x,p.y]),[[640,260],[640,115]]);assert.deepEqual(hits.map(h=>[h.target,h.at]),[[0,1780],[1,2210]],'missing target must not shift the remaining flight times');
- step(1350);await Promise.resolve();assert.deepEqual(impacts,[0]);step(1780);await Promise.resolve();assert.deepEqual(impacts,[0,1]);step(2210);await Promise.resolve();assert.deepEqual(impacts,[0,1,2]);step(3600);await playback.finished;assert.equal(frames.size,0);assert.equal(document.querySelector('.element-overlay'),null);
+ step(1350 * .75);await Promise.resolve();assert.deepEqual(impacts,[0]);step(1780 * .75);await Promise.resolve();assert.deepEqual(impacts,[0,1]);step(2210 * .75);await Promise.resolve();assert.deepEqual(impacts,[0,1,2]);step(3600 * .75);await playback.finished;assert.equal(frames.size,0);assert.equal(document.querySelector('.element-overlay'),null);
  const cancel=startElemental(event,0);cancel.cancel();await Promise.all([cancel.finished,cancel.impact(0),cancel.impact(2)]);assert.equal(frames.size,0);
  source.getBoundingClientRect=()=>rect(0,0,0,0);const invalid=startElemental(event,0);await invalid.finished;assert.equal(frames.size,0,'invalid origin creates no flight');
  target.getBoundingClientRect=()=>rect(NaN,200);assert.equal(combatCard('target'),null);dom.window.close();

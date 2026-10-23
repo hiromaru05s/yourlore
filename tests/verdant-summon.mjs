@@ -29,7 +29,7 @@ try{
  for(const id of ['ELF','DARK_ELF','HIGH_ELF','ELDER_ELF_KING','WORLD_TREE','HALF_ELF']){
   source.dataset.cardId=id;source.style.visibility='visible';const p=play(source,{anchor,onImpact:()=>impacts++});await settle();
   assert.equal(document.querySelector('.verdant-summon').dataset.variant,id==='HALF_ELF'?'1':'4');assert.equal(document.querySelector('.slate-summon'),null);
-  assert.equal(source.style.visibility,'hidden');const before=impacts;await advance(id==='HALF_ELF'?1992:2249);assert.equal(impacts,before);await advance(2);assert.equal(impacts,before+1);await advance(5000);
+  assert.equal(source.style.visibility,'hidden');const before=impacts;await advance((id==='HALF_ELF'?1992:2249) * .75);assert.equal(impacts,before);await advance(2 * .75);assert.equal(impacts,before+1);await advance(5000 * .75);
   assert.equal(await p,true);assert.equal(impacts,before+1);assert.equal(source.style.visibility,'visible');assert.equal(document.querySelector('.verdant-summon'),null);
   assert.equal(summonPlacement(anchor,180,280,0,false,id).toString(),'matrix(1,0,0,1,0,0)');
  }
@@ -43,7 +43,7 @@ try{
   if(reason==='abort')controller.abort();
   if(reason==='resize')window.dispatchEvent(new Event('resize'));
   if(reason==='hidden'){Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));}
-  if(reason==='disconnect'){anchor.remove();await advance(40);}
+  if(reason==='disconnect'){anchor.remove();await advance(40 * .75);}
   assert.equal(await p,false,reason);assert.equal(source.style.visibility,'visible');assert.equal(document.querySelector('.verdant-summon'),null);Object.defineProperty(document,'hidden',{configurable:true,value:false});document.getElementById('root').append(anchor);
  }
  verification.hold=true;const pending=play(source);cancelSummon(source);verification.release();assert.equal(await pending,false);await settle();verification.hold=false;

@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import type {GameState} from '../../shared/types';
 import {getLang} from '../../i18n';
 import type {MarketCrashIris,Target,Rect} from './renderer';
@@ -29,7 +30,7 @@ export class MarketCrashPresentation {
  }
  sync(g:GameState){
   if(this.dead)return;
-  const key=crashTurn(g),now=performance.now();
+  const key=crashTurn(g),now=SPECIAL_FX.now();
   if(key!==this.key){
    if(key){this.start=this.seen?now:now-1600;this.end=null;this.failed=false;}
    else if(this.key){this.end=now;this.hideTip();}
@@ -75,7 +76,7 @@ export class MarketCrashPresentation {
    const stage=new MarketCrashIris(canvas);this.canvas=canvas;this.stage=stage;document.body.append(canvas);
    canvas.addEventListener('webglcontextlost',this.contextLost,{once:true});
    // Loading never consumes the entrance motion; reconnection restores the settled pose.
-   if(performance.now()-this.start<1600)this.start=performance.now();
+   if(SPECIAL_FX.now()-this.start<1600)this.start=SPECIAL_FX.now();
   }).catch(()=>{this.failed=true;}).finally(()=>{
    if(generation!==this.generation)return;this.loading=false;this.redraw();
   });
@@ -98,11 +99,11 @@ export class MarketCrashPresentation {
   if(this.dead||document.hidden)return;
   if(!this.root.isConnected){this.dispose();return;}
   if(!this.key&&this.end===null)return;
-  this.measure();const now=performance.now();
+  this.measure();const now=SPECIAL_FX.now();
   if(this.end!==null&&(this.motion.matches||now-this.end>=1300)){this.end=null;this.dropStage();return;}
   const time=this.end===null?800+Math.min(1600,now-this.start):4600+now-this.end;
   try{this.stage?.draw(this.targets,time,innerWidth,innerHeight,this.motion.matches);}catch{this.dropStage();this.failed=true;this.measure();}
-  if((this.end!==null||(!this.motion.matches&&now-this.start<1600))&&!this.frame)this.frame=requestAnimationFrame(this.tick);
+  if((this.end!==null||(!this.motion.matches&&now-this.start<1600))&&!this.frame)this.frame=SPECIAL_FX.requestFrame(this.tick);
  };
  private tick=()=>{this.frame=0;this.redraw();};
  private visibility=()=>{

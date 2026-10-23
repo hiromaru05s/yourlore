@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import type {CardInst} from '../../shared/types';
 import {FRAME_BACK} from '../../shared/cards';
 import {cardEl} from '../cardView';
@@ -51,7 +52,7 @@ export async function playRebirth(original:CardInst,face:HTMLElement,side:'me'|'
   const c=canvas.getContext('2d');if(!c)return false;
   document.body.append(canvas);pile.style.visibility='hidden';
   const completed=await new Promise<boolean>(resolve=>{
-   let done=false;const start=performance.now();
+   let done=false;const start=SPECIAL_FX.now();
    const finish=(ok:boolean)=>{if(done)return;done=true;cancelAnimationFrame(raf);clearTimeout(timer);abort.signal.removeEventListener('abort',stop);resolve(ok);};
    const stop=()=>finish(false);abort.signal.addEventListener('abort',stop,{once:true});timer=window.setTimeout(stop,2800);
    const frame=(now:number)=>{
@@ -62,7 +63,7 @@ export async function playRebirth(original:CardInst,face:HTMLElement,side:'me'|'
     if(ms>=DEPART&&pile.dataset.uid!==original.uid)pile.style.visibility=sourceVisibility;
     c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,canvas!.width,canvas!.height);c.setTransform(dpr,0,0,dpr,0,0);
     try{render(c,{source,target:surface(face),face:portrait,targetFace:arrival,reduced:false,dark:false,outcome:'return',board:true},ms);}catch{finish(false);return;}
-    raf=requestAnimationFrame(frame);
+    raf=SPECIAL_FX.requestFrame(frame);
    };frame(start);
   });
   canvas.remove();if(!completed||abort.signal.aborted)return false;

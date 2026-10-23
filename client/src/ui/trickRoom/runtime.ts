@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {fxWait,isFxSkipped} from '../anim';
 import {monsterPresentationNodes} from '../monster/runtime';
 import {PersistentLight,frameMasks} from './surface';
@@ -46,7 +47,7 @@ export class TrickRoomPresentation{
   if(!this.frame)this.last=0;
   this.active=plan.active;
   if(plan.initial){this.level=plan.active?1:0;this.fade=undefined;}
-  else if(plan.entered||plan.exited)this.fade={from:this.level,to:plan.active?1:0,age:0,duration:plan.active?850:750};
+  else if(plan.entered||plan.exited)this.fade={from:this.level,to:plan.active?1:0,age:0,duration:SPECIAL_FX.milliseconds(plan.active?850:750)};
   if(plan.active||this.fade)this.ensureLight();
   this.light?.bind(this.cards());
   const fast=isFxSkipped()||document.hidden;
@@ -61,7 +62,7 @@ export class TrickRoomPresentation{
    for(const {card,before} of targets){setValues(card,before);const a=card.querySelector<HTMLElement>('.ad-atk'),b=card.querySelector<HTMLElement>('.ad-def');if(!a||!b)continue;
     for(const [i,el] of [a,b].entries())seals.push({el,sign:i?-1:1,other:i?a:b,style:properties.map(p=>el.style.getPropertyValue(p))});
    }
-   const duration=this.reduced.matches?180:600;
+   const duration=SPECIAL_FX.milliseconds(this.reduced.matches?180:600);
    done=new Promise(resolve=>{this.job={age:0,duration,committed:false,commit:()=>targets.forEach(({card,after})=>setValues(card,after)),seals,resolve};});
    const job=this.job;
    // Shares the controller's fast-forward clock, including tab changes and user input.

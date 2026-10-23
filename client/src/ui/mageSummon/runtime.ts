@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
@@ -34,9 +35,9 @@ export function playMageSummon(source:HTMLElement,options:Options={}):Promise<bo
    face=surface.face;
    host=document.createElement('canvas');host.className='mage-summon';host.dataset.cardId=id;host.dataset.variant='1';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';sizeSummonCanvas(host);const c=host.getContext('2d')!;
    const paint=(ms:number)=>{const plane=anchor.closest<HTMLElement>('[data-board-plane]'),box=plane?layoutRect(anchor):anchor.getBoundingClientRect();const matrix=(plane?boardMatrix(box.left+box.width/2,box.top+box.height/2,Number(plane.dataset.boardPlane)||0):new DOMMatrix().translate(box.left+box.width/2,box.top+box.height/2)).scale(box.width/180,-box.height/270,box.width/180);c.clearRect(0,0,host!.width,host!.height);const blend=Math.max(0,Math.min(1,(ms-3500)/300));source.style.visibility=blend>0?'visible':'hidden';source.style.opacity=blend>0?String(blend):opacity;c.globalAlpha=1-blend;lease!.renderer.drawBoard(c,face!,MAGE_SUMMON_VARIANT,ms,summonPixelMatrix(matrix),host!.width,host!.height,false,MAGE_CARDS.indexOf(id));c.globalAlpha=1;host!.dataset.time=String(Math.round(ms));host!.dataset.visualTime=String(mageVisualTime(ms));};
-   paint(0);document.body.append(host);const start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(MAGE_DURATION,now-start);paint(ms);if(ms>=2260){impact();if(ended)return;}if(ms===MAGE_DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(MAGE_DURATION,now-start);paint(ms);if(ms>=2260){impact();if(ended)return;}if(ms===MAGE_DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);}catch(error){fallback(error);}};
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }

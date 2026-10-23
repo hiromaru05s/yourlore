@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from './animationTempo';
 import {playSilverRift} from './riftInkScene';
 import {FRAME_BACK} from '../shared/cards';
 import {RIFT_MOUNT,readingScale} from './readingBoardLayout';
@@ -65,7 +66,7 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
  let frame=0,finish=()=>{};
  const abort=()=>finish();signal.addEventListener('abort',abort,{once:true});
  try{
-  document.body.append(canvas);const begun=performance.now();
+  document.body.append(canvas);const begun=SPECIAL_FX.now();
   await new Promise<void>(resolve=>{
    let ended=false;finish=()=>{if(ended)return;ended=true;cancelAnimationFrame(frame);resolve();};
    const tick=(now:number)=>{
@@ -100,7 +101,7 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
       for(const ids of [[a,b,e],[a,e,d]])triangle(c,texture,ids.map(i=>grid[i].uv),ids.map(i=>points[i]));
      }
     });
-    if(ms===RIFT_DURATION){finish();return;}frame=requestAnimationFrame(tick);
+    if(ms===RIFT_DURATION){finish();return;}frame=SPECIAL_FX.requestFrame(tick);
    };
    tick(begun);if(face)node.style.visibility='hidden';started();
   });

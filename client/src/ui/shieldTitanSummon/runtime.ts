@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {summonPixelRatio,settleSummonFace} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
@@ -41,9 +42,9 @@ export function playShieldTitanSummon(source:HTMLElement,options:Options={}):Pro
     const from=options.from;if(from&&ms<450){const start=new DOMMatrix().translate(from.left+from.width/2,from.top+from.height/2).scale(from.width,-from.height/H,from.width),a=Array.from(start.toFloat64Array()),b=Array.from(placement.toFloat64Array()),q=ms/450,f=q*q*(3-2*q);placement=new DOMMatrix(a.map((n,j)=>n+(b[j]-n)*f));}
     c.clearRect(0,0,host!.width,host!.height);lease!.renderer.setFace(face!);lease!.renderer.drawBoard(host!,VARIANT,ms,placement);host!.dataset.time=String(Math.round(ms));
    };
-   paint(0);document.body.append(host);const start=performance.now();
-   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);settleSummonFace(source,host!,ms,DURATION);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=requestAnimationFrame(tick);}catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
+   const tick=(now:number)=>{try{if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}const ms=Math.min(DURATION,now-start);paint(ms);settleSummonFace(source,host!,ms,DURATION);if(ms>=CONTACT){impact();if(ended)return;}if(ms===DURATION){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);}catch(error){fallback(error);}};
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }

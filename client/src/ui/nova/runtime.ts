@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import type {createNovaRenderer} from './visual';
 import {getLang} from '../../i18n';
 const DURATION=6200;
@@ -40,10 +41,10 @@ export function playNova(source:HTMLElement,side:'me'|'opp',fromHp:number,onHp:(
     else{canvas.dataset.fallback='true';ctx.fillStyle='#17111fea';ctx.beginPath();ctx.arc(center.x,center.y,48*u,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#bba0b3';ctx.lineWidth=2;ctx.beginPath();ctx.arc(center.x,center.y,30*u,0,Math.PI*2);ctx.moveTo(center.x,center.y-23*u);ctx.lineTo(center.x,center.y);ctx.lineTo(center.x+15*u,center.y);ctx.stroke();}
     for(const stat of [hp,enemyHp])if(stat){const r=stat.getBoundingClientRect();ctx.clearRect(r.x-2,r.y-2,r.width+4,r.height+4);}
     if(t>=5150){if(!marker.isConnected)document.body.append(marker);marker.style.left=Math.max(85,Math.min(w-85,enemy.x))+'px';marker.style.top=Math.max(5,Math.min(h-35,enemy.y+63*u))+'px';}
-    raf=requestAnimationFrame(draw);
+    raf=SPECIAL_FX.requestFrame(draw);
    }catch{finish(false);}
   };
   void Promise.all([import('./visual'),art()]).then(([m,img])=>{if(done)return;try{renderer=m.createNovaRenderer(img)}catch{/* Canvas fallback retains state timing. */}begin();}).catch(()=>{if(!done)begin()});
-  function begin(){if(done||signal.aborted)return;source.style.visibility='hidden';document.body.append(canvas);start=performance.now();draw(start);}
+  function begin(){if(done||signal.aborted)return;source.style.visibility='hidden';document.body.append(canvas);start=SPECIAL_FX.now();draw(start);}
  });
 }

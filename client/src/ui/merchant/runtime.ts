@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
 import {MERCHANT_VARIANT,isDarkMerchant} from './selection';
@@ -31,7 +32,7 @@ export function playDarkMerchant(card:HTMLElement,signal?:AbortSignal):Promise<b
    host=document.createElement('canvas');host.className='dark-merchant-reveal';host.dataset.variant='3';host.setAttribute('aria-hidden','true');host.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:136';
    const w=innerWidth,h=innerHeight,dpr=Math.min(devicePixelRatio||1,1.5);host.width=Math.round(w*dpr);host.height=Math.round(h*dpr);const c=host.getContext('2d')!;c.scale(dpr,dpr);
    document.body.append(host);card.style.visibility='hidden';
-   const start=performance.now();let lastPaint=-Infinity;
+   const start=SPECIAL_FX.now();let lastPaint=-Infinity;
    const tick=(now:number)=>{if(done)return;if(!card.isConnected||signal?.aborted||document.hidden){abort();return;}
     try{const ms=Math.max(0,Math.min(6600,now-start));host!.dataset.time=String(Math.round(ms));sound!.advance(ms);
      if(now-lastPaint>=1000/30){lastPaint=now;c.clearRect(0,0,w,h);renderer!.dark(c,face,MERCHANT_VARIANT,Math.min(ms,6599),w,h,false,true,{x:from.left+from.width/2,y:from.top+from.height/2,w:from.width},true);}
@@ -40,7 +41,7 @@ export function playDarkMerchant(card:HTMLElement,signal?:AbortSignal):Promise<b
       const scale=Math.min(w/960,h/650),cw=Math.max(scale*138,Math.min(w*.29,110));
       const nw=card.offsetWidth||100,nh=card.offsetHeight||150,targetW=cw*.98;
       card.style.transition='none';card.style.transformOrigin='0 0';card.style.left=`${w/2-targetW/2}px`;card.style.top=`${h*.49-scale*12-targetW*nh/nw/2}px`;card.style.transform=`scale(${targetW/nw})`;finish(true);return;
-     }frame=requestAnimationFrame(tick);
+     }frame=SPECIAL_FX.requestFrame(tick);
     }catch(error){console.warn('[merchant] Native spell fallback',error);abort();}
    };tick(start);
   })().catch(error=>{if(!done)console.warn('[merchant] Native spell fallback',error);finish();});

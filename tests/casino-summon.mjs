@@ -11,12 +11,12 @@ try{
  const {playCasinoSummon:play,cancelCasinoSummon:cancel,cancelCasinoSummons:all}=await import(path.join(dir,'runtime.mjs'));
  const source=document.getElementById('source'),anchor=document.getElementById('anchor'),root=document.getElementById('root');let impacts=0;
  source.style.visibility='visible';const first=play(source,{anchor,onImpact:()=>impacts++});assert.equal(source.style.visibility,'hidden');assert.deepEqual(checks.draws[0],{t:0,mounted:false});assert.equal(document.querySelector('.casino-summon').dataset.variant,'2');assert.equal(document.querySelectorAll('#source').length,1);assert.equal(document.querySelector('.casino-summon .card-cost').textContent,'3');
- advance(1759);assert.equal(impacts,0);advance(1);assert.equal(impacts,1);advance(1040);assert.equal(await first,true);assert.equal(impacts,1);assert.equal(source.style.visibility,'visible');
+ advance(1759 * .75);assert.equal(impacts,0);advance(1 * .75);assert.equal(impacts,1);advance(1040 * .75);assert.equal(await first,true);assert.equal(impacts,1);assert.equal(source.style.visibility,'visible');
  for(const reason of ['single','root','abort','resize','hidden','disconnect','pagehide','motion']){
   const ac=new AbortController(),p=play(source,{anchor,signal:ac.signal});
   if(reason==='single')cancel(source);if(reason==='root')all(root);if(reason==='abort')ac.abort();if(reason==='resize'||reason==='pagehide')window.dispatchEvent(new Event(reason));
   if(reason==='hidden'){Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'))}
-  if(reason==='disconnect'){anchor.remove();advance(16)}if(reason==='motion')motionChange();
+  if(reason==='disconnect'){anchor.remove();advance(16 * .75)}if(reason==='motion')motionChange();
   assert.equal(await p,false,reason);assert.equal(source.style.visibility,'visible');assert.equal(document.querySelectorAll('.casino-summon').length,0);
   Object.defineProperty(document,'hidden',{configurable:true,value:false});root.append(anchor);
  }
@@ -25,7 +25,7 @@ try{
  reduced=true;assert.equal(await play(source,{onImpact:()=>impacts++}),true);reduced=false;const ac=new AbortController();ac.abort();assert.equal(await play(source,{signal:ac.signal}),false);source.dataset.cardId='GAMBLER';assert.equal(await play(source),false);source.dataset.cardId='CASINO';
  const warn=console.warn;console.warn=()=>{};
  for(const field of ['constructorFail','fail']){checks[field]=true;const before=impacts;assert.equal(await play(source,{onImpact:()=>impacts++}),false);assert.equal(impacts,before+1);assert.equal(source.style.visibility,'visible');checks[field]=false;}
- const p=play(source,{onImpact:()=>impacts++});advance(1760);const beforeContact=impacts;checks.fail=true;advance(16);assert.equal(await p,false);assert.equal(impacts,beforeContact);checks.fail=false;console.warn=warn;
+ const p=play(source,{onImpact:()=>impacts++});advance(1760 * .75);const beforeContact=impacts;checks.fail=true;advance(16 * .75);assert.equal(await p,false);assert.equal(impacts,beforeContact);checks.fail=false;console.warn=warn;
  assert.equal(frames.size,0);assert.equal(document.querySelectorAll('.casino-summon').length,0);assert.equal(checks.created,checks.disposed);
  console.log('PASS casino 02: frame zero before mount, native frame, impact once, source/anchor cancellation, shared GPU, cancellation, replacement, reduced, fallback and cleanup');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close()}

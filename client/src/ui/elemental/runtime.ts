@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {startEmberDebt} from '../emberDebt/runtime';
 import {combatCard,combatPortrait,combatRect} from '../combatAnchor';
 import {Effects} from './effects';
@@ -27,7 +28,7 @@ export function startElemental(event:ElementalEvent,you:Side,sourceNode?:HTMLEle
  canvas.dataset.duration=String(duration);canvas.dataset.hits=String(allHits.length);document.body.append(canvas);
  const ctx=canvas.getContext('2d')!,dpr=Math.min(devicePixelRatio,1.5);canvas.width=Math.round(innerWidth*dpr);canvas.height=Math.round(innerHeight*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
  const fx=new Effects(),materials=[...new Set([source,...nodes.filter((n):n is HTMLElement=>!!n&&n.classList.contains('card'))])].map(el=>new CardMaterial(el));
- const saved={translate:source.style.translate,rotate:source.style.rotate},start=performance.now();let raf=0,closed=false,next=0,done!:()=>void;
+ const saved={translate:source.style.translate,rotate:source.style.rotate},start=SPECIAL_FX.now();let raf=0,closed=false,next=0,done!:()=>void;
  const finished=new Promise<void>(r=>done=r);
  function cleanup(){if(closed)return;closed=true;cancelAnimationFrame(raf);source!.style.translate=saved.translate;source!.style.rotate=saved.rotate;materials.forEach(m=>m.dispose());fx.dispose();canvas.remove();resolvers.forEach(r=>r());done();}
  function tick(now:number){
@@ -43,8 +44,8 @@ export function startElemental(event:ElementalEvent,you:Side,sourceNode?:HTMLEle
   }
   if(hits.length)fx.render(ctx,entry,time,origin,targets,hits,reduced);
   while(next<due.length&&elapsed>=due[next]){canvas.dataset.impact=String(next);resolvers[next++]();}
-  if(elapsed>=duration){cleanup();return;}raf=requestAnimationFrame(tick);
+  if(elapsed>=duration){cleanup();return;}raf=SPECIAL_FX.requestFrame(tick);
  }
- raf=requestAnimationFrame(tick);
+ raf=SPECIAL_FX.requestFrame(tick);
  return {impact:index=>promises[index]??Promise.resolve(),finished,cancel:cleanup};
 }

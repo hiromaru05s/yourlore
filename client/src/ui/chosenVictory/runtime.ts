@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {sfx,warmSounds} from '../sound';
 import {DB} from '../../shared/cards';
 import {cardName,t} from '../../i18n';
@@ -24,7 +25,7 @@ export async function playChosenVictory(side:'me'|'opp',source?:HTMLElement|null
   const loaded=await Promise.race([Promise.all([image(),import('./renderer'),warmSounds(['chosenCrown'])]),done.then(()=>null)]);
   if(ended||!loaded)return;
   renderer=new loaded[1].ChosenRenderer([loaded[0]]);const c=cv.getContext('2d');if(!c)return;
-  const start=performance.now(),reduced=motion.matches,fire=crownCue(reduced),duration=reduced?1300:CHOSEN_DURATION_MS;
+  const start=SPECIAL_FX.now(),reduced=motion.matches,fire=crownCue(reduced),duration=reduced?1300:CHOSEN_DURATION_MS;
   clearTimeout(watchdog);watchdog=window.setTimeout(cleanup,duration+300);
   const draw=(now:number)=>{
    if(ended)return;const ms=now-start;if(ms>=duration){cleanup();return;}
@@ -34,7 +35,7 @@ export async function playChosenVictory(side:'me'|'opp',source?:HTMLElement|null
    renderer!.draw(c,w,h,0,ms,{board:true,dark:true,reduced,source:r?{x:r.x+r.width/2,y:r.y+r.height/2}:undefined,rift:rf?{x:rf.x+rf.width/2,y:rf.y+rf.height/2}:undefined,title:cardName({...DB.CHOSEN_AREA,uid:'chosen-title'}),victoryLabel:t(side==='me'?'modal.win':'modal.lose')});
    host.dataset.time=String(Math.round(ms));host.dataset.phase=reduced?'reduced':ms<CHOSEN_FLASH_MS?'forming':'complete';
    if(fire(ms)){host.dataset.cueAt=String(Math.round(ms));sfx('chosenCrown',{signal:abort.signal});}
-   raf=requestAnimationFrame(draw);
+   raf=SPECIAL_FX.requestFrame(draw);
   };draw(start);await done;
  }catch(error){console.warn('[chosen victory]',error);}finally{cleanup();}
 }

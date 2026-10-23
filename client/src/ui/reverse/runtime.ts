@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {END,HIT,ease} from './motion';
 import type {MotionScene} from './motion';
 import type {ReverseFlow} from './visual';
@@ -23,7 +24,7 @@ export async function playReverse(from:'me'|'opp',to:'me'|'opp',uids:string[],on
  const canvas=document.createElement('canvas');canvas.className='reverse-pitch-fx';canvas.dataset.variant='02';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:180';
  const c=canvas.getContext('2d');
  return new Promise(resolve=>{
-  let raf=0,done=false,contacted=false;const start=performance.now();
+  let raf=0,done=false,contacted=false;const start=SPECIAL_FX.now();
   const finish=(ok=false)=>{if(done)return;done=true;cancelAnimationFrame(raf);clearTimeout(deadline);canvas.remove();observer.disconnect();signal.removeEventListener('abort',abort);window.removeEventListener('resize',abort);window.removeEventListener('pagehide',abort);document.removeEventListener('visibilitychange',hidden);for(const n of cards){const p=poses.get(n);if(!p)continue;p.pulses.delete(key);pose(n,p,reduced);if(!p.pulses.size)poses.delete(n);}if(--users===0){renderer?.dispose();renderer=undefined;}resolve(ok);};
   const abort=()=>finish(),hidden=()=>{if(document.hidden)abort();},deadline=setTimeout(abort,4500);
   const observer=new MutationObserver(()=>{if(!source.isConnected||!target.isConnected)abort();});observer.observe(document.body,{childList:true,subtree:true});
@@ -40,7 +41,7 @@ export async function playReverse(from:'me'|'opp',to:'me'|'opp',uids:string[],on
    }
    const amount=t<=0||t>=END?0:ease(t/260)*(1-ease((t-2100)/550));for(const n of cards){const p=poses.get(n)!;p.pulses.set(key,amount);pose(n,p,reduced);}
    if(t>=HIT&&!contacted){contacted=true;onContact();}
-   if(t>=END)finish(true);else raf=requestAnimationFrame(frame);
-  };raf=requestAnimationFrame(frame);
+   if(t>=END)finish(true);else raf=SPECIAL_FX.requestFrame(frame);
+  };raf=SPECIAL_FX.requestFrame(frame);
  });
 }

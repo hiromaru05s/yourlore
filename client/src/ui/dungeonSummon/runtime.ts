@@ -1,3 +1,4 @@
+import {SPECIAL_FX} from '../animationTempo';
 import {settleSummonFace,sizeSummonCanvas,summonPixelMatrix} from '../summon/quality';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
@@ -70,14 +71,14 @@ export function playDungeonSummon(source:HTMLElement,options:Options={}):Promise
     host!.dataset.time=String(Math.round(elapsed));host!.dataset.placement=placement.toString();
    };
    // Compile, then paint frame zero before starting the real-time clock.
-   paint(0);document.body.append(host);const start=performance.now();
+   paint(0);document.body.append(host);const start=SPECIAL_FX.now();
    const tick=(now:number)=>{try{
     if(ended)return;if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const elapsed=Math.min(total,now-start);paint(elapsed);settleSummonFace(source,host!,elapsed,total);
     if(elapsed>=flight+2040){impact();if(ended)return;}
-    if(elapsed===total){finish(true);return;}frame=requestAnimationFrame(tick);
+    if(elapsed===total){finish(true);return;}frame=SPECIAL_FX.requestFrame(tick);
    }catch(error){fallback(error);}};
-   frame=requestAnimationFrame(tick);
+   frame=SPECIAL_FX.requestFrame(tick);
   })().catch(fallback);
  });
 }
