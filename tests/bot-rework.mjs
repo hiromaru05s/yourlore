@@ -18,7 +18,7 @@ try {
   wall.marketStock=[0];assert.equal(value(wall,'WALLBREAK1').margin,value(plain,'WALLBREAK1').margin);
  });
  test('actual Hard/Hell reserve a suppression answer instead of filling seven blocked slots',()=>{
-  for(const tier of ['hard','hell']) {
+  for(const tier of ['hard','hell']) for(let variant=0;variant<3;variant++) {
    const g=fresh(['DISARM1']);g.players[1].enchants=[{card:card('WEAKEN_ALL'),turns:99}];g.players[1].maxMana=9;
    g.players[0].field=[mon('RUST_SHROOM'),mon('RUST_SHROOM')].map(m=>({...m,atkMod:-2}));
    g.players[0].hand=Array.from({length:4},()=>card('RUST_SHROOM'));g.players[0].deck=[card('COUNTERCALC')];

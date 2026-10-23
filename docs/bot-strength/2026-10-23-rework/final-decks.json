@@ -1,0 +1,142 @@
+{
+  "BOT · MIXED_RALLY": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "TRUMPET"
+  ],
+  "BOT · GOBLIN_SWARM": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "TRUMPET"
+  ],
+  "BOT · GOBLIN_RALLY": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "BOT · SWARM_BLOOD": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "BOT · RALLY_COUNTER": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "COUNTERCALC"
+  ],
+  "BOT · RALLY_TRUMPET": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "TRUMPET"
+  ],
+  "BOT · MIXED_BLOOD": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "BOT · DECAY_BLOOD": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "BLOOD_RITE",
+    "COUNTERCALC",
+    "RUST_SHROOM"
+  ],
+  "BOT · DECAY_SUPPRESSION": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "WEAKEN_ALL",
+    "COUNTERCALC",
+    "RUST_SHROOM"
+  ],
+  "BOT · BLOOD_RAIN": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "NOURISHING_RAIN",
+    "COUNTERCALC",
+    "RUST_SHROOM",
+    "BLOOD_RITE",
+    "COUNTERCALC",
+    "RUST_SHROOM"
+  ],
+  "BOT · BLOOD_AMBUSH": [
+    "RUST_SHROOM",
+    "BLOOD_RITE",
+    "AMBUSH",
+    "RUST_SHROOM",
+    "NOURISHING_RAIN",
+    "RUST_SHROOM",
+    "COUNTERCALC",
+    "RUST_SHROOM"
+  ],
+  "BOT · SUPPRESSION_COUNTER": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "WEAKEN_ALL",
+    "COUNTERCALC",
+    "COUNTERCALC"
+  ],
+  "BOT · BLOOD_COUNTER": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "BLOOD_RITE",
+    "COUNTERCALC",
+    "COUNTERCALC"
+  ],
+  "BOT · DECAY_SWARM": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "COUNTERCALC"
+  ]
+}

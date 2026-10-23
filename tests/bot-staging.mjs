@@ -49,16 +49,28 @@ try{
   for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],traps:[],enchants:[],quests:[],supply:[],removed:[],exile:[],revealedCards:[],hp:40,mana:3,maxMana:8});
   const mon=id=>({...card(id),dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0,guts:C.hasPassive(C.DB[id],'guts')?1:0});
   if(scenario==='guardian-answer'){
-   g.players[1].field=[mon('NWL3')];g.players[0].hand=[card('S15')];g.market=[];g.marketStock=[];
+   g.players[1].field=[mon('NWL3')];g.players[0].field=[mon('RUST_SHROOM'),mon('RUST_SHROOM')];g.players[0].hand=[card('S15')];g.market=[];g.marketStock=[];
   } else {
    g.players[1].enchants=[{card:card('WEAKEN_ALL'),turns:99}];g.players[1].maxMana=9;
    g.players[0].field=[mon('RUST_SHROOM'),mon('RUST_SHROOM')].map(m=>({...m,atkMod:-2}));
+   if(scenario==='restore-attacks'){g.players[0].field.push({...mon('RUST_SHROOM'),atkMod:-2});g.players[1].hp=12;}
    g.players[0].hand=scenario==='restore-attacks'?[card('ADVANCE')]:Array.from({length:4},()=>card('RUST_SHROOM'));
    g.players[0].deck=[card('COUNTERCALC')];g.market=scenario==='suppression-answer'?[card('DISARM1')]:[];g.marketStock=g.market.map(()=>3);
   }
   const action=C.botDecide(g,tier);
-  if(scenario==='suppression-answer')assert.equal(action.type,'buyMarket',tier+' must reserve the price of the answer');
-  else {assert.equal(action.type,'play');assert.equal(g.players[0].hand[action.idx].id,scenario==='guardian-answer'?'S15':'ADVANCE');}
+  if(scenario==='suppression-answer'){
+   let st=g, acquired=false;
+   for(let step=0;step<4&&!acquired;step++){
+    const a=step===0?action:C.botDecide(st,tier);
+    cases.push({tier,deck:scenario+'-'+step,state:st,expected:a});
+    const next=C.reduce(st,a).state;assert(C.actionChangesState(st,next));
+    acquired=next.players[0].discard.some(c=>c.id==='DISARM1');st=next;
+    if(st.cur!==0||st.players[0].mana<2)break;
+   }
+   assert(acquired,tier+' must acquire its answer before exhausting the purchase mana');
+   continue;
+  }
+  assert.equal(action.type,'play',tier+'/'+scenario);assert.equal(g.players[0].hand[action.idx].id,scenario==='guardian-answer'?'S15':'ADVANCE');
   cases.push({tier,deck:scenario,state:g,expected:action});
  }
  const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(origin,{waitUntil:'domcontentloaded'});

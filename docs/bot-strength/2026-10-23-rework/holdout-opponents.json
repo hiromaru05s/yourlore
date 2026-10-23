@@ -1,0 +1,42 @@
+{
+  "control": [
+    "WEAKEN_ALL",
+    "WEAKEN_ALL",
+    "COUNTERCALC",
+    "GAMBLER",
+    "GAMBLER",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "BLOOD_RITE"
+  ],
+  "decay": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "BLOOD_RITE",
+    "COUNTERCALC",
+    "RUST_SHROOM"
+  ],
+  "goblin": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "mixed": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "TRUMPET"
+  ]
+}

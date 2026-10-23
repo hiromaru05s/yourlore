@@ -1,0 +1,304 @@
+{
+  "paired": {
+    "meta": {
+      "candidate": "f4d232a8e161ea6acf6b2c5256f87d0e1f15e6425422c90fe07beea2800f710e",
+      "before": "2b382f9afcef1f52f3846290a20a5776792fc01068ebfb5169a0c62a2323b574",
+      "balance": "v62"
+    },
+    "seconds": 45.531,
+    "groups": {
+      "greedy/natural/before": {
+        "games": 56,
+        "points": 28,
+        "invalid": 0,
+        "maxMs": 29.81125
+      },
+      "greedy/natural/after": {
+        "games": 56,
+        "points": 26,
+        "invalid": 0,
+        "maxMs": 6.429917000000046
+      },
+      "greedy/wall/before": {
+        "games": 56,
+        "points": 34,
+        "invalid": 0,
+        "maxMs": 4.116750000000138
+      },
+      "greedy/wall/after": {
+        "games": 56,
+        "points": 43,
+        "invalid": 0,
+        "maxMs": 11.975167000000056
+      },
+      "greedy/recovery/before": {
+        "games": 56,
+        "points": 45,
+        "invalid": 0,
+        "maxMs": 5.345249999999396
+      },
+      "greedy/recovery/after": {
+        "games": 56,
+        "points": 44,
+        "invalid": 0,
+        "maxMs": 6.813208000000486
+      },
+      "greedy/suppression/before": {
+        "games": 56,
+        "points": 32,
+        "invalid": 0,
+        "maxMs": 3.428208999997878
+      },
+      "greedy/suppression/after": {
+        "games": 56,
+        "points": 36,
+        "invalid": 0,
+        "maxMs": 3.6179169999995793
+      }
+    }
+  },
+  "rosters": {
+    "hard": {
+      "before": {
+        "games": 400,
+        "points": 248,
+        "markets": {
+          "natural": {
+            "games": 100,
+            "points": 36
+          },
+          "wall": {
+            "games": 100,
+            "points": 73
+          },
+          "recovery": {
+            "games": 100,
+            "points": 87
+          },
+          "suppression": {
+            "games": 100,
+            "points": 52
+          }
+        }
+      },
+      "after": {
+        "games": 400,
+        "points": 318,
+        "markets": {
+          "natural": {
+            "games": 100,
+            "points": 86
+          },
+          "wall": {
+            "games": 100,
+            "points": 80
+          },
+          "recovery": {
+            "games": 100,
+            "points": 87
+          },
+          "suppression": {
+            "games": 100,
+            "points": 65
+          }
+        }
+      }
+    },
+    "hell": {
+      "before": {
+        "games": 560,
+        "points": 328,
+        "markets": {
+          "natural": {
+            "games": 140,
+            "points": 47
+          },
+          "wall": {
+            "games": 140,
+            "points": 103
+          },
+          "recovery": {
+            "games": 140,
+            "points": 114
+          },
+          "suppression": {
+            "games": 140,
+            "points": 64
+          }
+        }
+      },
+      "after": {
+        "games": 560,
+        "points": 453,
+        "markets": {
+          "natural": {
+            "games": 140,
+            "points": 121
+          },
+          "wall": {
+            "games": 140,
+            "points": 115
+          },
+          "recovery": {
+            "games": 140,
+            "points": 123
+          },
+          "suppression": {
+            "games": 140,
+            "points": 94
+          }
+        }
+      }
+    }
+  },
+  "search": {
+    "before": [
+      {
+        "market": "wall",
+        "seat": 0,
+        "tier": "hard",
+        "result": 1,
+        "turn": 31,
+        "maxMs": 360.49333300000035,
+        "deadlineHits": 0
+      },
+      {
+        "market": "wall",
+        "seat": 0,
+        "tier": "hell",
+        "result": 1,
+        "turn": 35,
+        "maxMs": 2359.0488750000077,
+        "deadlineHits": 0
+      },
+      {
+        "market": "wall",
+        "seat": 1,
+        "tier": "hard",
+        "result": 1,
+        "turn": 18,
+        "maxMs": 437.33808400001726,
+        "deadlineHits": 0
+      },
+      {
+        "market": "wall",
+        "seat": 1,
+        "tier": "hell",
+        "result": 1,
+        "turn": 30,
+        "maxMs": 2089.2964999999967,
+        "deadlineHits": 0
+      },
+      {
+        "market": "suppression",
+        "seat": 0,
+        "tier": "hard",
+        "result": 1,
+        "turn": 21,
+        "maxMs": 226.42679199995473,
+        "deadlineHits": 0
+      },
+      {
+        "market": "suppression",
+        "seat": 0,
+        "tier": "hell",
+        "result": 1,
+        "turn": 23,
+        "maxMs": 2381.6897500000196,
+        "deadlineHits": 0
+      },
+      {
+        "market": "suppression",
+        "seat": 1,
+        "tier": "hard",
+        "result": 1,
+        "turn": 20,
+        "maxMs": 243.4926250000135,
+        "deadlineHits": 0
+      },
+      {
+        "market": "suppression",
+        "seat": 1,
+        "tier": "hell",
+        "result": 1,
+        "turn": 24,
+        "maxMs": 4332.699708,
+        "deadlineHits": 0
+      }
+    ],
+    "after": [
+      {
+        "market": "wall",
+        "seat": 0,
+        "tier": "hard",
+        "result": 1,
+        "turn": 11,
+        "maxMs": 539.088583,
+        "deadlineHits": 0
+      },
+      {
+        "market": "wall",
+        "seat": 0,
+        "tier": "hell",
+        "result": 1,
+        "turn": 11,
+        "maxMs": 1483.6571660000009,
+        "deadlineHits": 0
+      },
+      {
+        "market": "wall",
+        "seat": 1,
+        "tier": "hard",
+        "result": 1,
+        "turn": 12,
+        "maxMs": 369.50416699999914,
+        "deadlineHits": 0
+      },
+      {
+        "market": "wall",
+        "seat": 1,
+        "tier": "hell",
+        "result": 1,
+        "turn": 12,
+        "maxMs": 1408.8624999999993,
+        "deadlineHits": 0
+      },
+      {
+        "market": "suppression",
+        "seat": 0,
+        "tier": "hard",
+        "result": 1,
+        "turn": 17,
+        "maxMs": 843.3658750000031,
+        "deadlineHits": 0
+      },
+      {
+        "market": "suppression",
+        "seat": 0,
+        "tier": "hell",
+        "result": 1,
+        "turn": 15,
+        "maxMs": 2426.319500000005,
+        "deadlineHits": 0
+      },
+      {
+        "market": "suppression",
+        "seat": 1,
+        "tier": "hard",
+        "result": 1,
+        "turn": 12,
+        "maxMs": 453.67179199999373,
+        "deadlineHits": 0
+      },
+      {
+        "market": "suppression",
+        "seat": 1,
+        "tier": "hell",
+        "result": 1,
+        "turn": 12,
+        "maxMs": 2043.2126250000001,
+        "deadlineHits": 0
+      }
+    ]
+  }
+}

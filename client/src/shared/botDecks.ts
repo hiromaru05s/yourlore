@@ -50,12 +50,12 @@ export const BOT_HELL_DECKS: BotDeck[] = [
   {"name": "BOT · MIXED_RALLY", "cards": ["RUST_SHROOM", "RUST_SHROOM", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], "tune": {}},
   {"name": "BOT · GOBLIN_SWARM", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], "tune": {}},
   {"name": "BOT · GOBLIN_RALLY", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
-  {"name": "BOT · DECAY_SUPPRESSION", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "WEAKEN_ALL", "COUNTERCALC", "RUST_SHROOM"], "tune": {}},
-  {"name": "BOT · GOBLIN_CONTROL", "cards": ["GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "WEAKEN_ALL", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
-  {"name": "BOT · DECAY_SWARM", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "COUNTERCALC"], "tune": {}},
-  {"name": "BOT · DECAY_BLOOD", "cards": ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "BLOOD_RITE", "COUNTERCALC", "RUST_SHROOM"], "tune": {}},
+  {"name": "BOT · SWARM_BLOOD", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
+  {"name": "BOT · RALLY_COUNTER", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "COUNTERCALC"], "tune": {}},
+  {"name": "BOT · RALLY_TRUMPET", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], "tune": {}},
+  {"name": "BOT · MIXED_BLOOD", "cards": ["RUST_SHROOM", "RUST_SHROOM", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
 ];
-export const BOT_ELITE_DECKS: BotDeck[] = [0, 1, 2, 3, 4].map(i => BOT_HELL_DECKS[i]);
+export const BOT_ELITE_DECKS: BotDeck[] = [0, 1, 2, 5, 6].map(i => BOT_HELL_DECKS[i]);
 export function pickBotDeck(rnd: number = Math.random(), difficulty: BotDifficulty = 'normal'): BotDeck {
   const roster = difficulty === 'hell' ? BOT_HELL_DECKS : difficulty === 'hard' ? BOT_ELITE_DECKS : BOT_DECKS;
   const roll = Number.isFinite(rnd) ? rnd : 0;

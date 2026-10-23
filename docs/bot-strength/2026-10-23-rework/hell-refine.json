@@ -1,0 +1,62 @@
+{
+  "RALLY_TRUMPET": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "TRUMPET"
+  ],
+  "SWARM_BLOOD": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "MIXED_BLOOD": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "HEAVY_RALLY": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "TRUMPET"
+  ],
+  "HEAVY_BLOOD": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "RALLY_COUNTER": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "COUNTERCALC"
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "balance": "v62",
+  "cards": 374,
+  "cardHash": "be98978b13670e393f215d6ca8c9033d8fdb897c2f9fed4116fd2518db8b57c0",
+  "cardDefinitionsUnchanged": true,
+  "baseline": "2b382f9afcef1f52f3846290a20a5776792fc01068ebfb5169a0c62a2323b574",
+  "candidate": "f4d232a8e161ea6acf6b2c5256f87d0e1f15e6425422c90fe07beea2800f710e",
+  "hard": [
+    {
+      "name": "BOT · MIXED_RALLY",
+      "cards": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · GOBLIN_SWARM",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · GOBLIN_RALLY",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · RALLY_TRUMPET",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · MIXED_BLOOD",
+      "cards": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "tune": {}
+    }
+  ],
+  "hell": [
+    {
+      "name": "BOT · MIXED_RALLY",
+      "cards": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · GOBLIN_SWARM",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · GOBLIN_RALLY",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · SWARM_BLOOD",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · RALLY_COUNTER",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "COUNTERCALC"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · RALLY_TRUMPET",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "tune": {}
+    },
+    {
+      "name": "BOT · MIXED_BLOOD",
+      "cards": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "tune": {}
+    }
+  ]
+}

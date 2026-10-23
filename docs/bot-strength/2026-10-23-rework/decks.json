@@ -1,0 +1,122 @@
+{
+  "GOBLIN_RALLY": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "GOBLIN_CONTROL": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "WEAKEN_ALL",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "GOBLIN_SWARM": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "TRUMPET"
+  ],
+  "MIXED_RALLY": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "COUNTERCALC",
+    "TRUMPET"
+  ],
+  "MIXED_CONTROL": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "WEAKEN_ALL",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "DECAY_TRUMPET": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "TRUMPET",
+    "TRUMPET",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "DECAY_TRICK": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "TRICKROOM",
+    "COUNTERCALC",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "FORTUNE_CONTROL": [
+    "GAMBLER",
+    "GAMBLER",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "WEAKEN_ALL",
+    "COUNTERCALC",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "FORTUNE_DECAY": [
+    "GAMBLER",
+    "GAMBLER",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "COUNTERCALC",
+    "COUNTERCALC",
+    "BLOOD_RITE"
+  ],
+  "CASTLE_CONTROL": [
+    "CASTLE",
+    "CASTLE",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "WEAKEN_ALL",
+    "COUNTERCALC",
+    "BLOOD_RITE",
+    "TRUMPET"
+  ],
+  "GOBLIN_SHIELDS": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "RELIC_BOUNTY",
+    "COUNTERCALC",
+    "BLOOD_RITE",
+    "TRUMPET"
+  ],
+  "GOBLIN_LATE": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_RAIDER",
+    "GOBLIN_SETTLEMENT",
+    "COUNTERCALC",
+    "BLOOD_RITE",
+    "TRUMPET"
+  ]
+}
