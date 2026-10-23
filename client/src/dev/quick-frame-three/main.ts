@@ -1,3 +1,4 @@
+import {disposeQuickSpellFrame} from '../../ui/quickSpellFrame';
 import '../../styles/tokens.css';
 import '../../styles/card.css';
 import '../../styles/passives.css';
@@ -42,7 +43,7 @@ if(boardMode){
 }
 function openZoom(v:Variant){
  selected=v;zoomCard(make(cardId));const card=document.querySelector<HTMLElement>('#zoomOverlay .zoom-card-stage > .card');
- if(card&&DB[cardId].quick)clock.attach(card,v);
+ if(card&&DB[cardId].quick){disposeQuickSpellFrame(card);clock.attach(card,v);}
  const ov=document.getElementById('zoomOverlay')!;ov.classList.add('quick-inspection');
  const nav=document.createElement('nav');nav.className='q-zoom-switch';nav.setAttribute('aria-label','フレームの候補');
  nav.innerHTML=variants.map((f,i)=>`<button data-zoom="${i}" aria-pressed="${i===v}">${i+1} ${f.name}</button>`).join('');

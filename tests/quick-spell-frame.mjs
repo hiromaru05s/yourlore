@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {JSDOM} from 'jsdom';
+import {mkdtemp,rm} from 'node:fs/promises';
+const dom=new JSDOM('<body></body>',{pretendToBeVisual:true});
+for(const key of ['window','document','HTMLElement','Event'])globalThis[key]=dom.window[key];
+let reduced=false,hidden=false,next=0,disconnects=0;const frames=new Map(),mediaListeners=new Set();
+Object.defineProperty(document,'hidden',{get:()=>hidden});
+globalThis.matchMedia=()=>({get matches(){return reduced;},addEventListener(_,f){mediaListeners.add(f);},removeEventListener(_,f){mediaListeners.delete(f);}});
+globalThis.requestAnimationFrame=f=>{frames.set(++next,f);return next;};globalThis.cancelAnimationFrame=id=>frames.delete(id);
+globalThis.ResizeObserver=class {observe(){}disconnect(){disconnects++;}};
+globalThis.Path2D=class {moveTo(){}lineTo(){}closePath(){}};
+const gradient={addColorStop(){}};
+const ctx=new Proxy({createLinearGradient:()=>gradient},{get:(obj,k)=>obj[k]??(()=>{})});
+dom.window.HTMLCanvasElement.prototype.getContext=()=>ctx;
+const card=()=>{const n=document.createElement('div');n.innerHTML='<div class="card-frame"></div><div class="card-status"><span class="kw">Quick spell</span></div>';n.getBoundingClientRect=()=>({width:360});document.body.append(n);return n;};
+const advance=now=>{const pending=[...frames];frames.clear();pending.forEach(([,f])=>f(now));};
+const dir=await mkdtemp('/tmp/lore-quick-frame-');
+try {
+ await build({entryPoints:['client/src/ui/quickSpellFrame.ts'],bundle:true,platform:'node',format:'esm',outfile:dir+'/frame.mjs'});
+ const {mountQuickSpellFrame,disposeQuickSpellFrame}=await import(dir+'/frame.mjs');const n=card();
+ const f=mountQuickSpellFrame(n,'クイック魔法');assert.equal(n.querySelector('.kw').hidden,true);assert.equal(frames.size,1);advance(100);advance(116);assert.equal(frames.size,1);
+ f.pause();assert.equal(frames.size,0);n.remove();f.resume();assert.equal(frames.size,0);document.body.append(n);f.resume();assert.equal(frames.size,1);
+ hidden=true;document.dispatchEvent(new Event('visibilitychange'));assert.equal(frames.size,0);hidden=false;document.dispatchEvent(new Event('visibilitychange'));assert.equal(frames.size,1);
+ reduced=true;mediaListeners.forEach(f=>f());assert.equal(frames.size,0);assert(n.querySelector('.quick-spell-frame-badge'));reduced=false;mediaListeners.forEach(f=>f());assert.equal(frames.size,1);
+ const replacement=mountQuickSpellFrame(n,'Quick spell');assert.equal(n.querySelectorAll('canvas').length,1);assert.equal(frames.size,1);f.dispose();assert.equal(frames.size,1,'old handle cannot tear down replacement');
+ replacement.dispose();replacement.dispose();assert.equal(frames.size,0);assert.equal(mediaListeners.size,0);assert.equal(n.querySelector('.kw').hidden,false);assert(!n.querySelector('canvas'));
+ globalThis.Path2D=undefined;const fallback=mountQuickSpellFrame(n,'퀵 마법');assert.equal(frames.size,0);assert.equal(n.querySelector('.quick-spell-frame-badge').textContent,'ϟ퀵 마법');fallback.dispose();
+ globalThis.Path2D=class {moveTo(){}lineTo(){}closePath(){}};mountQuickSpellFrame(n,'Quick spell');window.dispatchEvent(new Event('pagehide'));assert.equal(frames.size,0);assert.equal(mediaListeners.size,0);disposeQuickSpellFrame(n);assert(disconnects>=4);
+ console.log('PASS quick spell frame: history pause/resume, visibility, live reduced motion, replacement, fallback, pagehide and idempotent cleanup');
+} finally {await rm(dir,{recursive:true,force:true});dom.window.close();}

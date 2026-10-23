@@ -1,3 +1,4 @@
+import {mountQuickSpellFrame,type QuickSpellFrame} from './quickSpellFrame';
 import {cardRelations,REFERENCE_CARDS} from '../shared/cardReferences';
 import {bindCardReferences} from './cardReferencePreview';
 import type {CardInst} from '../shared/types';
@@ -32,6 +33,8 @@ function miniCardGrid(ids: string[]): HTMLElement {
 
 type ZoomSnapshot = { overlay: HTMLElement; focus: HTMLElement | null; scroll: {node:HTMLElement;top:number}[] };
 const zoomHistory: ZoomSnapshot[] = [];
+const quickFrames=new WeakMap<HTMLElement,QuickSpellFrame>();
+function disposeQuickFrame(overlay:HTMLElement|null):void { if(overlay){quickFrames.get(overlay)?.dispose();quickFrames.delete(overlay);} }
 const closePreviews = new WeakMap<HTMLElement,(restoreFocus?:boolean)=>boolean>();
 function closeCurrentPreview(restoreFocus=false):boolean { const ov=document.getElementById('zoomOverlay');return ov?closePreviews.get(ov)?.(restoreFocus)??false:false; }
 let zoomOpener: HTMLElement | null = null;
@@ -44,13 +47,15 @@ function openRelatedCard(c: CardInst): void {
   closeCurrentPreview();
   if(document.getElementById('zoomOverlay')?.dataset.cardId===c.id)return;
   const previous = captureZoom();
-  if (previous) { zoomHistory.push(previous); previous.overlay.remove(); }
+  if (previous) { quickFrames.get(previous.overlay)?.pause(); zoomHistory.push(previous); previous.overlay.remove(); }
   renderZoom(c);
 }
 function backToPreviousCard(): void {
   closeCurrentPreview();
   const previous = zoomHistory.pop(); if (!previous) return;
+  disposeQuickFrame(document.getElementById('zoomOverlay'));
   document.getElementById('zoomOverlay')?.remove(); document.body.append(previous.overlay);
+  quickFrames.get(previous.overlay)?.resume();
   previous.scroll.forEach(({node,top})=>{node.scrollTop=top;});
   previous.focus?.focus({preventScroll:true});
 }
@@ -178,6 +183,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   ov.onclick = closeZoom;
   ov.oncontextmenu = (e) => { e.preventDefault(); closeZoom(); };
   document.body.appendChild(ov);
+  if(c.t==='spell'&&c.quick)quickFrames.set(ov,mountQuickSpellFrame(cardStage.firstElementChild as HTMLElement,cardTypeLabel(c,getLang())));
   closePreviews.set(ov,bindCardReferences(ov,c,openRelatedCard));
   ov.onkeydown = e => {
     if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); if(!closeCurrentPreview(true))zoomHistory.length ? backToPreviousCard() : closeZoom(); }
@@ -195,6 +201,8 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
 }
 export function closeZoom(): void {
   closeCurrentPreview();
+  disposeQuickFrame(document.getElementById("zoomOverlay"));
+  for(const snapshot of zoomHistory)disposeQuickFrame(snapshot.overlay);
   document.getElementById("zoomOverlay")?.remove();
   zoomHistory.length=0;
   if (zoomOpener?.isConnected) zoomOpener.focus({preventScroll:true});
