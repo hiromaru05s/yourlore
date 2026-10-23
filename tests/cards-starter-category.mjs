@@ -23,7 +23,7 @@ try{
  DECK_POOL.push('TEST_ELIGIBLE');
  expected.push('TEST_ELIGIBLE');expected.sort();
  const deps={...catalog,t:k=>k,cardName:c=>c.nameJa||c.name,getLang:()=> 'ja',onLangChange:()=>()=>{},loungeText:ja=>ja,
-  passiveIcon:()=>'',homeIcon:()=>'',langSelectEl:()=>document.createElement('select'),bindZoom:()=>{},zoomCard:()=>{},
+  bindTouchActivation:()=>()=>{},passiveIcon:()=>'',homeIcon:()=>'',langSelectEl:()=>document.createElement('select'),bindZoom:()=>{},zoomCard:()=>{},
   cardEl:c=>{const el=document.createElement('div');el.className='card';el.dataset.cardId=c.id;return el;},
   revealCards:async(el,nodes)=>el.replaceChildren(...nodes),cancelRevealCards:()=>{}};
  const source=(await fs.readFile('client/src/screens/cards.ts','utf8')).replace(/^import .*;\s*$/gm,'');

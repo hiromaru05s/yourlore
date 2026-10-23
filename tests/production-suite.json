@@ -205,7 +205,8 @@
     "tests/battle-log-ui.mjs",
     "tests/turn-clock.mjs",
     "tests/cards-starter-category.mjs",
-    "tests/quick-spell-frame.mjs"
+    "tests/quick-spell-frame.mjs",
+    "tests/touch-activation.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

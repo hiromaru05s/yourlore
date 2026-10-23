@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {JSDOM} from 'jsdom';
+const dom=new JSDOM('<main><button id="next">Next</button><details><summary>Filters</summary></details></main>');
+for(const key of ['Element','HTMLElement','HTMLButtonElement','AbortController'])globalThis[key]=dom.window[key];
+const result=await build({entryPoints:['client/src/ui/touchActivation.ts'],bundle:true,platform:'node',format:'esm',write:false});
+const {bindTouchActivation}=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
+const root=dom.window.document.querySelector('main'),button=root.querySelector('button');let clicks=0;button.onclick=()=>clicks++;
+const stop=bindTouchActivation(root,'button,summary');
+function pointer(type,extra={},el=button){const e=new dom.window.MouseEvent(type,{bubbles:true,cancelable:true,clientX:20,clientY:20,...extra});for(const [k,v]of Object.entries({pointerId:1,pointerType:'touch',isPrimary:true,...extra}))if(!(k in e))Object.defineProperty(e,k,{value:v});el.dispatchEvent(e);}
+const tap=(extra={})=>{pointer('pointerdown',extra);pointer('pointerup',extra);};
+tap();assert.equal(clicks,1,'Release activates even when Safari sends no click');
+button.dispatchEvent(new dom.window.MouseEvent('click',{bubbles:true,cancelable:true,detail:1}));assert.equal(clicks,1,'Trailing compatibility click cannot advance twice');
+button.click();assert.equal(clicks,2,'Keyboard/programmatic click remains available');
+pointer('pointerdown');pointer('pointermove',{clientX:40});pointer('pointerup');assert.equal(clicks,2,'Dragging cancels activation');
+pointer('pointerdown');root.dispatchEvent(new dom.window.Event('scroll'));pointer('pointerup');assert.equal(clicks,2,'Scrolling cancels activation');
+pointer('pointerdown');pointer('pointercancel');pointer('pointerup');assert.equal(clicks,2,'Canceled touches do not activate');
+tap({isPrimary:false});assert.equal(clicks,2,'Secondary touches do not activate');
+button.disabled=true;tap();assert.equal(clicks,2);button.disabled=false;
+tap({pointerType:'mouse'});assert.equal(clicks,2,'Mouse remains on native click');button.click();assert.equal(clicks,3);
+const summary=root.querySelector('summary');pointer('pointerdown',{},summary);pointer('pointerup',{},summary);assert(root.querySelector('details').open,'Summary keeps native details behavior');
+stop();tap();assert.equal(clicks,3,'Screen teardown removes gesture listeners');
+dom.window.close();console.log('PASS: absent/duplicate compatibility click, keyboard, scroll, drag, cancel, multitouch, disabled, mouse, details, teardown');

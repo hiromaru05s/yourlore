@@ -1,3 +1,4 @@
+import {bindTouchActivation} from '../ui/touchActivation';
 import { cardSearchText, passiveSearchKeys, type PassiveSearchScope } from '../shared/cardPresentation';
 import {passiveIcon} from '../ui/passiveIcon';
 import {revealCards,cancelRevealCards} from '../ui/assetReadiness';
@@ -74,11 +75,14 @@ export function mountCards(app: App): Screen {
   const typeRow = wrap.querySelector("#typeRow") as HTMLElement;
   const costRow = wrap.querySelector("#costRow") as HTMLElement;
   const advanced=wrap.querySelector<HTMLDetailsElement>('.cards-advanced')!;
-  const closeFilters=(event:PointerEvent):void=>{if(!advanced.contains(event.target as Node))advanced.open=false;};
+  // Dismiss after activation: removing the panel during pointerdown changes
+  // the layout before Safari has completed the tap's compatibility click.
+  const closeFilters=(event:MouseEvent):void=>{if(advanced.open&&!advanced.contains(event.target as Node))advanced.open=false;};
   const escapeFilters=(event:KeyboardEvent):void=>{
     if(event.key==='Escape'&&advanced.open){advanced.open=false;advanced.querySelector('summary')!.focus();}
   };
-  document.addEventListener('pointerdown',closeFilters);
+  document.addEventListener('click',closeFilters);
+  const stopTouch=bindTouchActivation(wrap,'.cards-toolbar button, .cards-advanced summary, .collection-pager button');
   wrap.addEventListener('keydown',escapeFilters);
 
   // ---- type chips ----
@@ -174,5 +178,5 @@ export function mountCards(app: App): Screen {
   render();
 
   const unsub = onLangChange(() => app.cards());
-  return { destroy: ()=>{revision++;cancelRevealCards(grid);document.removeEventListener('pointerdown',closeFilters);wrap.removeEventListener('keydown',escapeFilters);unsub();} };
+  return { destroy: ()=>{revision++;cancelRevealCards(grid);stopTouch();document.removeEventListener('click',closeFilters);wrap.removeEventListener('keydown',escapeFilters);unsub();} };
 }
