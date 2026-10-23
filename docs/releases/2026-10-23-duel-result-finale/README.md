@@ -13,4 +13,12 @@ Adopts selected round-two direction 01, the horizontal verdict banner over the f
 
 `rankLab` now waits for the board and reuses its initially prepared controller before its first outcome, avoiding screenshots over the preparation overlay.
 
-Production deployment and public asset parity are recorded separately after the guarded release.
+## Production release
+
+- Guarded source: `204cfb5e05574cc24a3001be2104531e96b53ed8`.
+- `209/209` current production checks passed; client/server typecheck and clean snapshot build passed.
+- Worker version: `4a995e08-a536-46c0-8844-0f6d68ada06d`, 100% traffic, verified through deployment status.
+- Deployed at `2026-10-23T08:51:55Z` to `https://yourlore.xyz`.
+- Public SHA-256 parity: `141/141` HTML/JS/CSS/JSON files match the exact temporary committed snapshot built by the guard. The manifest was captured before guard cleanup, avoiding local preview source contamination.
+- Evidence: `production-status.json` and `production-parity.json`.
+- Authenticated online match completion was not exercised in this release check. Local real-board/presenter checks and production asset parity are separate evidence.
