@@ -37,7 +37,7 @@ export interface CardDef {
   hatchDur?: number; // 알(egg): durability — enemy monster attacks consume 1; 0 = egg destroyed
   hatchInto?: string[]; // 알(egg): card ids the egg can hatch into (random pick)
   evolveTo?: string; // 흡혈귀: card id summoned when the owner casts a 피의 마법 (once per card)
-  noShop?: boolean; // 스타팅(덱 구성) 전용 — 고정/제시 마켓에 등장하지 않음
+  noShop?: boolean; // Excluded from markets (including generated-only cards); starter eligibility comes from DECK_POOL.
   exileOnDestroy?: boolean; // 영구마법: 파괴/제거 시 묘지 대신 게임에서 제외
   passive?: string[]; // 키워드 패시브 (cards.PASSIVES 키 — 기합/부패/위엄/도발/회피/공허/아우라 …)
   grantPassive?: string; // 마법(buffPerm): 강화 대상 몬스터에게 부여하는 패시브 키워드 (거암의 가호 → 도발)

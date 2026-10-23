@@ -10,7 +10,7 @@ import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 import type { App, Screen } from "../router";
 import type { CardInst, CardType } from "../shared/types";
-import { DB, STARTERS, PASSIVES } from "../shared/cards";
+import { DB, STARTERS, DECK_POOL, PASSIVES } from "../shared/cards";
 import { cardEl } from "../ui/cardView";
 import { bindZoom, zoomCard } from "../ui/cardInspection";
 import { t, cardName, onLangChange, getLang } from "../i18n";
@@ -134,8 +134,9 @@ export function mountCards(app: App): Screen {
     filterCount.hidden=activeCount===0;filterCount.textContent=String(activeCount);
 
     const list = ALL.filter((c) => {
-      // "스타터" 탭 = 컬/보물상자/어튠 + 덱 구성 전용(noShop) 스타팅 카드 전부
-      if (typeF === "starter") { if (!(c.t === "starter" || c.noShop)) return false; }
+      // Use the deck editor's eligibility list, plus its fixed Attune slot.
+      // noShop only excludes markets; generated-only cards also carry it.
+      if (typeF === "starter") { if (!(c.id === "STARTER_MANA" || DECK_POOL.includes(c.id))) return false; }
       else if (typeF === "quick") { if (!c.quick) return false; }
       else if (typeF !== "all" && c.t !== typeF) return false;
       if (passiveFilters.size && ![...passiveFilters].every(k=>passiveSearchKeys(c,passiveScope).includes(k))) return false;
