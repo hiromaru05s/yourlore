@@ -1,0 +1,121 @@
+{
+  "base": "http://127.0.0.1:58811",
+  "old": false,
+  "normalApi": "local unauthenticated fixture",
+  "failureTests": "explicit request failure injection; background test uses account fixture",
+  "results": [
+    {
+      "name": "unmodified-login",
+      "width": 1280,
+      "ms": 3099,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "unmodified-login",
+      "width": 390,
+      "ms": 1969,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "stalled-geo",
+      "width": 1280,
+      "ms": 1176,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "saved-language",
+      "width": 390,
+      "ms": 900,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "failed-auth",
+      "width": 1280,
+      "ms": 2180,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": true,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "stalled-auth",
+      "width": 390,
+      "ms": 11272,
+      "errors": [],
+      "state": {
+        "startup": true,
+        "error": true,
+        "login": false,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "failed-module",
+      "width": 1280,
+      "ms": 1477,
+      "errors": [],
+      "state": {
+        "startup": true,
+        "error": true,
+        "login": false,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "no-javascript",
+      "width": 390,
+      "ms": 298,
+      "errors": [],
+      "state": {
+        "startup": true,
+        "error": false,
+        "login": false,
+        "home": false,
+        "cover": false
+      }
+    },
+    {
+      "name": "stalled-background",
+      "width": 1280,
+      "ms": 20764,
+      "errors": [],
+      "state": {
+        "startup": false,
+        "login": false,
+        "home": true,
+        "cover": false,
+        "atmosphere": "fallback"
+      }
+    }
+  ],
+  "failureInjectionNote": "The last case blocks service workers so explicit network fault injection cannot be bypassed by the verified asset cache."
+}
