@@ -1,7 +1,7 @@
 import { buyCost, playCost } from '../shared/engine';
 import { automaticCastTargets, targetOwner, type PlayIntent } from '../shared/playIntent';
-import {outcomeCrest} from './duelOutcome';
 import '../styles/marketPreview.css';
+import '../styles/outcomeFinale.css';
 // ============================================================
 // LORE — overlays: generic modal, confirm (surrender), win,
 // treasure reveal, and the seek/recall card picker.
@@ -92,19 +92,19 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   const m = document.createElement("div");
   m.className = "modal";
   const title = won == null ? t("modal.draw") : won ? t("modal.win") : t("modal.lose");
-  m.className='modal outcome-result '+(won==null?'is-draw':won?'is-victory':'is-defeat');
-  const color = "var(--outcome-light)";
-  m.innerHTML = `<div class="outcome-eyebrow">BIBLION · ARCHIVE</div>${outcomeCrest(won)}<h2 style="color:${color}">${title}</h2><p id="winDetail" style="color:var(--paper);font-size:14px">${detail}</p><div class="win-rank" id="winRankDelta" style="display:none"></div><p>${t("modal.gameover")}</p><div class="modal-row"></div>`;
+  m.className='modal outcome-result outcome-finale '+(won==null?'is-draw':won?'is-victory':'is-defeat');
+  const verdict = won == null ? 'DRAW' : won ? 'VICTORY' : 'DEFEAT';
+  m.innerHTML = `<header class="finale-banner"><div class="finale-eyebrow">DUEL COMPLETE</div><div class="finale-title"><h2 aria-label="${title}">${verdict}</h2>${getLang()==='en'?'':`<span class="finale-local-title" aria-hidden="true">${title}</span>`}</div></header><section class="finale-progress"><div class="win-rank" id="winRankDelta" style="display:none"></div><div id="winDetail" class="finale-detail">${detail}</div></section><div class="modal-row finale-actions"></div>`;
   const row = m.querySelector(".modal-row")!;
-  const home = document.createElement("button"); home.className = "btn btn-ghost"; home.textContent = t("modal.home");
+  const home = document.createElement("button"); home.className = "btn btn-ghost finale-home"; home.textContent = t("modal.home");
   home.onclick = () => { closeOverlay(); onHome(); };
   row.append(home);
   if (onReview) {
-    const rev = document.createElement("button"); rev.className = "btn btn-ghost"; rev.textContent = t("modal.review");
+    const rev = document.createElement("button"); rev.className = "btn btn-ghost finale-review"; rev.textContent = t("modal.review");
     rev.onclick = () => { closeOverlay(); onReview(); };
     row.append(rev);
   }
-  const again = document.createElement("button"); again.className = "btn btn-gold"; again.textContent = t("modal.again");
+  const again = document.createElement("button"); again.className = "btn btn-gold finale-again"; again.textContent = t("modal.again");
   again.onclick = () => { closeOverlay(); onAgain(); };
   row.append(again);
   mount(m);

@@ -1,0 +1,104 @@
+/* Selected result study 01: the verdict is a band across the final board.
+   RankPresentation retains ownership of counting, crest motion and settlement. */
+.overlay:has(>.outcome-finale){padding:0;background:none;backdrop-filter:none;overflow:hidden}
+.overlay>.modal.outcome-result.outcome-finale{
+  --finale-accent:#ebd19b;--finale-pale:#fff1cd;
+  position:relative;isolation:isolate;container-type:size;width:100%;height:100dvh;max-width:none;max-height:none;
+  padding:0;border:0;border-radius:0;box-shadow:none;overflow:auto;text-align:center;
+  background:linear-gradient(0deg,#08111bfa,#0a1524e0 53%,#0a14226b);color:var(--finale-accent);
+  animation:finaleVeil .5s both;
+}
+.overlay>.outcome-finale::before,.overlay>.outcome-finale::after{display:none}
+.outcome-result.outcome-finale .finale-banner{
+  position:absolute;top:14%;left:0;right:0;height:142px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  border-block:1px solid #d7bd8060;background:linear-gradient(90deg,#11203400,#112034ef 19%,#112034ef 81%,#11203400);
+  animation:finaleBand .9s cubic-bezier(.16,1,.3,1) both;
+}
+.outcome-result.outcome-finale .finale-banner::after{content:'';position:absolute;top:-1px;left:5%;right:5%;height:1px;background:linear-gradient(90deg,transparent,var(--finale-pale),transparent);animation:finaleEdge 1.5s both;pointer-events:none}
+.outcome-result.outcome-finale .finale-eyebrow{font:8px/1.3 var(--ui,sans-serif);letter-spacing:.45em;color:#c0cad5}
+.outcome-result.outcome-finale .finale-title{display:flex;align-items:center;justify-content:center;gap:24px}
+.outcome-result.outcome-finale .finale-title h2{
+  font:500 clamp(56px,6.5vw,96px)/.95 'Baskerville','Times New Roman',serif;letter-spacing:.035em;margin:0;
+  background:linear-gradient(178deg,#fff8e4 7%,#ead5a4 43%,#b7975e 47%,#ffedbc 53%,#d4b278 82%);
+  background-clip:text;-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 4px 1px #0006);
+  animation:finaleVerdict 1s .05s cubic-bezier(.16,1,.3,1) both;
+}
+.outcome-result.outcome-finale .finale-local-title{font:20px var(--serif,serif);letter-spacing:.2em;white-space:nowrap}
+.outcome-result.outcome-finale .finale-progress{position:absolute;top:calc(14% + 158px);left:50%;transform:translateX(-50%);width:min(500px,88vw);animation:finaleCopy .7s .12s both}
+.outcome-result.outcome-finale .rank-result{
+  display:grid;grid-template-columns:170px minmax(0,1fr);grid-template-rows:30px 50px 12px minmax(20px,auto) minmax(24px,auto);
+  column-gap:24px;align-items:center;min-height:166px;width:100%;margin:0;padding:0;border:0;border-radius:0;background:none;color:#edf1f6;
+}
+.outcome-result.outcome-finale .rank-medal{grid-column:1;grid-row:1/-1;width:170px;height:166px;margin:0;align-self:center}
+.outcome-result.outcome-finale .rank-tier-name{grid-column:2;grid-row:1;font-size:20px;min-height:0;line-height:1.3;text-align:left}
+.outcome-result.outcome-finale .rank-score{grid-column:2;grid-row:2;justify-content:flex-start;margin:0;gap:8px}
+.outcome-result.outcome-finale .rank-score>b{font-size:38px}
+.outcome-result.outcome-finale .rank-score>span{font-size:10px}
+.outcome-result.outcome-finale .rank-score .rank-delta{font-size:22px;margin-left:10px}
+.outcome-result.outcome-finale .rank-result>.rank-track{grid-column:2;grid-row:3;width:100%;margin:0;height:5px}
+.outcome-result.outcome-finale .rank-target{grid-column:2;grid-row:4;font-size:11px;min-height:0;text-align:left;overflow-wrap:anywhere}
+.outcome-result.outcome-finale .rank-verdict{grid-column:2;grid-row:5;padding:0;min-height:0;font-size:12px;text-align:left}
+.outcome-result.outcome-finale .rank-pending{max-width:450px;margin:20px auto;border:0;padding:20px;font-size:13px}
+.outcome-result.outcome-finale .finale-detail{display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;color:#b7c3d2;font:12px/1.5 var(--ui,sans-serif);margin:16px auto 0;max-width:440px;overflow-wrap:anywhere}
+.outcome-result.outcome-finale .finale-detail>span:empty{display:none}
+.outcome-result.outcome-finale .finale-detail .muted{color:inherit}
+.outcome-result.outcome-finale .finale-actions{position:absolute;bottom:max(5%,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(280px,84vw);margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 0;animation:finaleCopy .8s .35s both}
+.outcome-result.outcome-finale .finale-actions .btn{border-radius:0;min-height:36px;text-transform:none;box-shadow:none;letter-spacing:.07em;font-family:var(--ui,sans-serif)}
+.outcome-result.outcome-finale .finale-actions .finale-again{grid-row:1;grid-column:1/-1;min-height:46px;padding:0 20px;border:1px solid #e2c995;background:linear-gradient(110deg,#e9d5a9,#bca06a);color:#17202c;font-size:13px;font-weight:500;position:relative}
+.outcome-result.outcome-finale .finale-again::after{content:'→';position:absolute;right:18px;font-size:18px;top:50%;transform:translateY(-50%)}
+.outcome-result.outcome-finale .finale-again:hover{background:#fff0ca;box-shadow:0 0 24px #f5d19533}
+.outcome-result.outcome-finale .finale-actions .btn-ghost{grid-row:2;padding:5px 8px;border:0;background:none;color:#b9c0c9;font-size:11px;font-weight:400}
+.outcome-result.outcome-finale .finale-review{grid-column:1}
+.outcome-result.outcome-finale .finale-home{grid-column:2}
+.outcome-result.outcome-finale .finale-home:only-of-type{grid-column:1/-1}
+.outcome-result.outcome-finale .finale-actions:not(:has(.finale-review)) .finale-home{grid-column:1/-1}
+.outcome-result.outcome-finale .finale-actions .btn-ghost:hover{color:#fff;background:#ffffff08}
+.outcome-result.outcome-finale .finale-actions button:focus-visible{outline:2px solid #f1d594;outline-offset:4px}
+.overlay>.outcome-finale.is-defeat{--finale-accent:#b8c7d9;--finale-pale:#e9f1fa}
+.outcome-finale.is-defeat .finale-title h2{background-image:linear-gradient(178deg,#e6edf5,#a0b3c8 43%,#75889e 47%,#d0dce7 53%,#a6b4c7);animation-name:finaleFall}
+.outcome-finale.is-defeat .finale-banner{border-color:#a9c2db55}
+.outcome-finale.is-defeat .finale-actions .finale-again{background:#bdc9d7;border-color:#d3deeb}
+.outcome-finale.is-defeat .finale-actions .finale-again:hover{background:#e2ebf4}
+@keyframes finaleVeil{from{opacity:0}to{opacity:1}}
+@keyframes finaleBand{from{opacity:0;clip-path:inset(0 50%)}to{opacity:1;clip-path:inset(0 0)}}
+@keyframes finaleEdge{0%{scale:0 1;opacity:0}35%{scale:.6 1;opacity:1}100%{scale:1 1;opacity:0}}
+@keyframes finaleVerdict{from{opacity:0;transform:scale(1.13);filter:blur(3px)}to{opacity:1;transform:none;filter:drop-shadow(0 4px 1px #0006)}}
+@keyframes finaleFall{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:none}}
+@keyframes finaleCopy{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+@media(max-width:650px){
+  .outcome-result.outcome-finale .finale-banner{top:15%;height:118px;gap:12px}
+  .outcome-result.outcome-finale .finale-title{gap:12px}
+  .outcome-result.outcome-finale .finale-title h2{font-size:14.7vw}
+  .outcome-result.outcome-finale .finale-local-title{font-size:15px}
+  .outcome-result.outcome-finale .finale-eyebrow{font-size:7px;letter-spacing:.35em}
+  .outcome-result.outcome-finale .finale-progress{top:calc(15% + 138px)}
+  .outcome-result.outcome-finale .rank-result{grid-template-columns:112px minmax(0,1fr);column-gap:14px;grid-template-rows:28px 44px 10px minmax(20px,auto) minmax(24px,auto);min-height:148px}
+  .outcome-result.outcome-finale .rank-medal{width:112px;height:140px}
+  .outcome-result.outcome-finale .rank-tier-name{font-size:17px}
+  .outcome-result.outcome-finale .rank-score>b{font-size:30px}
+  .outcome-result.outcome-finale .rank-score .rank-delta{font-size:19px;margin-left:3px}
+  .outcome-result.outcome-finale .rank-score>span{font-size:9px}
+  .outcome-result.outcome-finale .rank-score{gap:5px}
+  .outcome-result.outcome-finale .rank-target{font-size:10px}
+  .outcome-result.outcome-finale .rank-verdict{font-size:11px}
+  .outcome-result.outcome-finale .finale-detail{font-size:11px}
+  .outcome-result.outcome-finale .finale-actions{bottom:max(6%,env(safe-area-inset-bottom))}
+}
+@media(max-height:600px){
+  .outcome-result.outcome-finale .finale-banner{top:6%;height:104px}
+  .outcome-result.outcome-finale .finale-title h2{font-size:clamp(45px,7vw,72px)}
+  .outcome-result.outcome-finale .finale-progress{top:calc(6% + 112px)}
+  .outcome-result.outcome-finale .rank-result{min-height:130px;grid-template-rows:25px 39px 10px minmax(18px,auto) minmax(20px,auto)}
+  .outcome-result.outcome-finale .rank-medal{height:125px}
+  .outcome-result.outcome-finale .rank-score>b{font-size:30px}
+  .outcome-result.outcome-finale .finale-detail{margin-top:6px;font-size:10px}
+  .outcome-result.outcome-finale .finale-actions{bottom:max(12px,env(safe-area-inset-bottom));gap:2px}
+}
+@media(max-height:450px) and (min-width:651px){
+  .outcome-result.outcome-finale .finale-progress{left:27%;width:420px}
+  .outcome-result.outcome-finale .finale-actions{left:77%;bottom:15%;width:240px}
+  .outcome-result.outcome-finale .rank-result{grid-template-columns:135px minmax(0,1fr);column-gap:12px}
+  .outcome-result.outcome-finale .rank-medal{width:135px}
+}
+@media(max-width:350px){.outcome-result.outcome-finale .rank-result{grid-template-columns:90px minmax(0,1fr);column-gap:10px}.outcome-result.outcome-finale .rank-medal{width:90px}.outcome-result.outcome-finale .rank-tier-name{font-size:15px}.outcome-result.outcome-finale .rank-score>b{font-size:27px}}
+@media(prefers-reduced-motion:reduce){.overlay>.outcome-finale,.outcome-result.outcome-finale .finale-banner,.outcome-result.outcome-finale .finale-banner::after,.outcome-result.outcome-finale .finale-title h2,.outcome-result.outcome-finale .finale-progress,.outcome-result.outcome-finale .finale-actions{animation:none!important;transition:none!important}}

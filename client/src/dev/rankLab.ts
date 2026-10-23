@@ -14,6 +14,7 @@ if(import.meta.env.DEV){
   result(c:RankChange){this.receiveRankChange(c);}
   early(){this.showWin();}
   slow(){this.rankResultPending(true);}
+  isFinished(){return this.state.over;}
  }
  let controller:RankLab;
  function reset(you:Side=0,ranked=true){controller?.destroy();closeOverlay();setFxSkip(false);controller=new RankLab(you,ranked);}
@@ -35,7 +36,7 @@ if(import.meta.env.DEV){
  const panel=document.createElement('div');panel.className='rank-lab-controls';panel.style.cssText='position:fixed;left:10px;top:10px;z-index:99999;padding:12px;background:#08172eee;border:1px solid #89a8c9;color:white;display:flex;gap:8px;flex-wrap:wrap;max-width:calc(100vw - 20px);font:12px sans-serif';
  panel.innerHTML='<span>MMR演出プレビュー</span><select id="scenario"><option value="promotion">ゴールド昇格</option><option value="bronze">ブロンズ昇格</option><option value="silver">シルバー昇格</option><option value="platinum">プラチナ昇格</option><option value="diamond">ダイヤモンド昇格</option><option value="master">マスター昇格</option><option value="win">勝利</option><option value="defeat">敗北</option><option value="demotion">降格</option><option value="draw">引き分け</option><option value="gm">GM昇格</option><option value="gmExit">GM降格</option></select><button id="play">盤面から再生</button><button id="crest">紋章から再生</button><button id="gallery">8ティア一覧</button>';
  document.body.append(panel);
- const play=(key:string)=>{dismiss();reset();const v=scenarios[key];controller.result({...v.change,season:'2026-09'});controller.finish(v.winner);};
+ const play=async(key:string)=>{dismiss();if(controller.isFinished())reset();const active=controller;await waitForDuel(document.querySelector('#app')!);if(active!==controller)return;const v=scenarios[key];controller.result({...v.change,season:'2026-09'});controller.finish(v.winner);};
  panel.querySelector<HTMLButtonElement>('#play')!.onclick=()=>play(panel.querySelector<HTMLSelectElement>('select')!.value);
  let inspection:HTMLElement|undefined, presentation:RankPresentation|undefined;
  const dismiss=()=>{presentation?.destroy();inspection?.remove();};

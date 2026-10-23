@@ -62,12 +62,10 @@ export class RankPresentation {
     const direction=order(after)-order(before), changed=before!==after;
     const label=direction>0?tr('昇格','PROMOTED','승급'):direction<0?tr('ティア更新','TIER UPDATED','티어 변경'):tr('ランク更新','RANK UPDATED','랭크 갱신');
     el.className='win-rank rank-result';el.dataset.direction=delta>0?'up':delta<0?'down':'flat';
-    el.innerHTML=`<div class="rank-result-header"><span>${tr('ランクマッチ','RANKED DUEL','랭크 매치')}</span><span>${esc(c.season??'')}</span></div>
-      <div class="rank-medal" style="--rank-metal:${TIER_META[before].color}"><div class="rank-old">${rankEmblem(before)}</div><div class="rank-new" style="--rank-metal:${TIER_META[after].color}">${rankEmblem(after)}</div></div>
+    el.innerHTML=`<div class="rank-medal" style="--rank-metal:${TIER_META[before].color}"><div class="rank-old">${rankEmblem(before)}</div><div class="rank-new" style="--rank-metal:${TIER_META[after].color}">${rankEmblem(after)}</div></div>
       <div class="rank-tier-name">${tierLabel(before)}</div><div class="rank-score"><b>${c.before}</b><span>MMR</span><strong class="rank-delta">${delta>0?'+':delta===0?'±':''}${delta}</strong></div>
       <div class="rank-track"><i></i><span class="rank-track-head"></span></div>
-      <div class="rank-target"></div><div class="rank-verdict" aria-live="polite"></div>
-      <div class="rank-previous">${c.before} → ${c.after}${c.rankAfter?` · #${c.rankAfter}`:''}</div>`;
+      <div class="rank-target"></div><div class="rank-verdict" aria-live="polite"></div>`;
     const medal=el.querySelector<HTMLElement>('.rank-medal')!, score=el.querySelector('.rank-score b')!, fill=el.querySelector<HTMLElement>('.rank-track i')!, head=el.querySelector<HTMLElement>('.rank-track-head')!, target=el.querySelector('.rank-target')!, name=el.querySelector('.rank-tier-name')!, verdict=el.querySelector('.rank-verdict')!;
     const oldCrest=medal.querySelector<HTMLElement>('.rank-old')!, newCrest=medal.querySelector<HTMLElement>('.rank-new')!;
     applyEmblemPose(oldCrest,assembledPose());applyEmblemPose(newCrest,arrivingPose(0));

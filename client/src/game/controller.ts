@@ -1530,14 +1530,11 @@ export abstract class BaseController implements BoardHandlers {
   private openResult(): void {
     A.removeReviewFab();
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
-    const meHp = Math.max(0, this.state.players[this.you].hp);
-    const oppHp = Math.max(0, this.state.players[1 - this.you].hp);
     const pactReason = this.state.defeatCause?.kind === "tribePact"
       ? tribePactVerdict(this.state.defeatCause.player === this.you ? "me" : "opp") : "";
-    const detail = `${t("modal.hp.me")} ${meHp} · ${t("modal.hp.opp")} ${oppHp}`
-      + (pactReason ? `<br><strong>${pactReason}</strong>` : "")
-      + (this.resultNote ? `<br><span class="muted">${this.resultNote}</span>` : "")
-      + `<br><span id="winExperience" class="muted">${this.experienceNote}</span>`;
+    const detail = (pactReason ? `<strong>${pactReason}</strong>` : "")
+      + `<span id="winResultNote" class="muted">${this.resultNote??''}</span>`
+      + `<span id="winExperience" class="muted">${this.experienceNote}</span>`;
     winModal(
       won,
       detail,
@@ -1548,14 +1545,14 @@ export abstract class BaseController implements BoardHandlers {
     this.renderRankDelta(); // fill the ranked MMR line if we already have the result
   }
 
-  /** One-line reason under the result HP line (e.g. "won by opponent disconnect").
+  /** One-line exceptional result note (e.g. "won by opponent disconnect").
    *  Set it BEFORE the modal opens when possible; setResultNote also patches an
    *  ALREADY-OPEN modal — the server's opponentLeft arrives after the win update. */
   protected resultNote?: string;
   protected setResultNote(note: string): void {
     this.resultNote = note;
-    const el = document.getElementById("winDetail");
-    if (el && !el.textContent?.includes(note)) el.innerHTML += `<br><span class="muted">${note}</span>`;
+    const el = document.getElementById("winResultNote");
+    if (el) el.textContent = note;
   }
 
   protected rankChange?: RankChange;
