@@ -1,0 +1,15 @@
+{
+  "board": {
+    "tableState": "ready",
+    "readingTurn": "player",
+    "boardRendered": "true",
+    "widgetsReady": "true",
+    "turnlight": "porcelain",
+    "sceneReady": "true",
+    "preloadedImages": "93"
+  },
+  "canvases": 1,
+  "previewCanvases": 0,
+  "plaque": "ϟクイック魔法",
+  "errors": []
+}
