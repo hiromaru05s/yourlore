@@ -34,7 +34,7 @@
 @keyframes reward-furniture-in{from{opacity:0}to{opacity:1}}
 .gacha-cinematic-rewards{position:absolute;inset:64px 0 88px}.gacha-cinematic[data-result-settled=true]>canvas{visibility:hidden}.gacha-cinematic[data-phase=result]{background:#13212d}.gacha-cinematic[data-rewards=true][data-phase=result]>.gacha-cinematic-result{display:none}
 .gacha-dialog.reward-results-dialog{width:min(1160px,95vw);max-width:1160px}.reward-results-summary{display:flex;gap:24px;justify-content:space-between;font-size:12px;line-height:1.8;color:#aec7cf;margin:0 0 20px}.reward-results-summary strong{color:#efe5cc;font-size:16px}
-.reward-gallery.gacha-lineup{grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:22px 18px}.reward-gallery.gacha-lineup article{padding:0;background:none;border:0;min-width:0}.reward-gallery .reward-tile{display:flex;flex-direction:column;align-items:stretch;gap:8px;width:100%;height:100%;text-align:left;background:linear-gradient(#69808b0c,#69808b08);border:0;border-bottom:1px solid #a2b8c333;padding:12px;color:inherit;cursor:pointer}.reward-gallery .reward-tile:focus-visible{outline:2px solid #e2ce9e;outline-offset:2px}.reward-gallery .reward-tile:hover{background:#b0cfdf13}.reward-tile-kind{color:#b0c6d2;font-size:9px;letter-spacing:.1em}.reward-tile-art{display:grid;place-items:center;height:210px;position:relative;min-width:0;font-size:11px}.reward-tile-art>.card{--cw:128px;--ch:200px;width:var(--cw);height:var(--ch);pointer-events:none;background:transparent;box-shadow:none}.reward-gallery .reward-tile-art>img{width:auto;height:200px;max-width:100%;object-fit:contain;aspect-ratio:auto}.reward-gallery article[data-presentation=furniture]{grid-column:span 2}.reward-gallery article[data-presentation=furniture] .reward-tile-art>img{width:100%;height:210px}.reward-gallery article[data-presentation=effect] .reward-tile{background:radial-gradient(ellipse at 50% 30%,#a588d329,transparent 70%)}.reward-gallery .reward-tile strong{font-size:13px;line-height:1.5}.reward-gallery .reward-tile small{font-size:10px;line-height:1.6;color:#aec2cf}.reward-detail-host{height:min(680px,72dvh)}
+.reward-gallery.gacha-lineup{grid-template-columns:repeat(5,minmax(0,1fr));gap:16px 18px}.reward-gallery.gacha-lineup article{padding:0;background:none;border:0;min-width:0}.reward-gallery .reward-tile{display:flex;flex-direction:column;align-items:stretch;gap:8px;width:100%;height:100%;text-align:left;background:linear-gradient(#69808b0c,#69808b08);border:0;border-bottom:1px solid #a2b8c333;padding:12px;color:inherit;cursor:pointer}.reward-gallery .reward-tile:focus-visible{outline:2px solid #e2ce9e;outline-offset:2px}.reward-gallery .reward-tile:hover{background:#b0cfdf13}.reward-tile-kind{color:#b0c6d2;font-size:9px;letter-spacing:.1em}.reward-tile-art{display:grid;place-items:center;height:210px;position:relative;min-width:0;font-size:11px}.reward-tile-art>.card{--cw:128px;--ch:200px;width:var(--cw);height:var(--ch);pointer-events:none;background:transparent;box-shadow:none}.reward-gallery .reward-tile-art>img{width:auto;height:200px;max-width:100%;object-fit:contain;aspect-ratio:auto}.reward-gallery article[data-presentation=furniture]{grid-column:auto}.reward-gallery article[data-presentation=furniture] .reward-tile-art>img{width:100%;height:210px}.reward-gallery article[data-presentation=effect] .reward-tile{background:radial-gradient(ellipse at 50% 30%,#a588d329,transparent 70%)}.reward-gallery .reward-tile strong{font-size:13px;line-height:1.5}.reward-gallery .reward-tile small{font-size:10px;line-height:1.6;color:#aec2cf}.reward-detail-host{height:min(680px,72dvh)}
 @media(max-width:700px){.gacha-cinematic-rewards{inset:60px 0 108px}.reward-stage{padding:12px 18px}.reward-stage-heading{font-size:9px;letter-spacing:.14em}.reward-composition{grid-template-columns:1fr;grid-template-rows:minmax(190px,1fr) auto;gap:0}.reward-object{min-height:190px;max-height:none}.reward-object-art>.card{--cw:clamp(128px,min(50vw,33vh),220px)}.reward-sleeve-fan{width:clamp(130px,min(46vw,30vh),205px)}.reward-copy{text-align:center;padding:12px 0 0}.reward-copy h2{font-size:24px;margin:10px 0 8px}.reward-acquired{font-size:8px;padding-bottom:7px}.reward-poem{font-size:11px;margin:0 0 8px}.reward-detail{font-size:10px;padding-top:8px}.reward-copy>small{font-size:9px;margin-top:5px}.reward-navigation{margin-top:9px;gap:4px;min-height:44px}.reward-stage .reward-navigation button{min-width:32px;padding:5px}.reward-index{gap:1px}.reward-stage[data-kind=furniture] .reward-copy h2{font-size:22px}.reward-stage[data-kind=furniture] .reward-composition{grid-template-rows:minmax(200px,1fr) auto}.reward-pair-labels{gap:32px;font-size:9px}.reward-gallery.gacha-lineup{grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 9px}.reward-gallery .reward-tile{padding:6px}.reward-tile-art{height:190px}.reward-tile-art>.card{--cw:min(116px,30vw);--ch:calc(var(--cw)/.64)}.reward-gallery .reward-tile-art>img{height:174px}.reward-gallery .reward-tile strong{font-size:11px}.reward-results-summary{gap:8px;font-size:10px}.reward-results-summary strong{font-size:13px}.reward-detail-host{height:72dvh}}
 @media(max-height:540px) and (min-width:600px){.gacha-cinematic-rewards{inset:48px 0 65px}.reward-stage{padding:8px 24px}.reward-composition{grid-template-columns:1fr 1fr;grid-template-rows:1fr;gap:22px}.reward-object{min-height:150px}.reward-object-art>.card{--cw:min(170px,35vh)}.reward-sleeve-fan{width:135px}.reward-copy{padding:0}.reward-copy h2{font-size:24px;margin:12px 0}.reward-poem{margin-bottom:8px}.reward-acquired{padding-bottom:8px}.reward-detail{padding-top:8px}.reward-navigation{margin-top:0;min-height:40px}.reward-stage[data-kind=furniture] .reward-composition{grid-template-columns:1.2fr 1fr;grid-template-rows:1fr}.reward-stage[data-kind=furniture] .reward-object{min-height:160px}.reward-stage[data-kind=furniture] .reward-copy h2{font-size:24px}.gacha-cinematic>footer{flex-direction:row}.reward-pair-labels{gap:15px}}
 @media(prefers-reduced-motion:reduce){.reward-stage *, .reward-stage *::after{animation:none!important;transition:none!important}.reward-object-art{clip-path:none!important;transform:none!important}.reward-sleeve-main::after{display:none}}
@@ -51,3 +51,36 @@
 
 /* Overview image rules must not change the shared card aperture crop. */
 .reward-gallery .card .card-art img{object-fit:cover;aspect-ratio:auto}
+
+/* Ten pulls open together; each object keeps its actual shape and card frame. */
+.gacha-dialog.reward-results-dialog{max-height:94dvh}
+.gacha-dialog.reward-results-dialog header{padding:12px 28px 10px}
+.gacha-dialog.reward-results-dialog .gacha-dialog-body{padding:14px 28px}
+.gacha-dialog.reward-results-dialog footer{padding:10px 28px}
+.reward-results-dialog .reward-results-summary{margin-bottom:12px}
+.reward-gallery .reward-tile-kind{min-height:14px;font-size:10px;line-height:1.4;letter-spacing:.04em}
+.reward-gallery .reward-tile-art{height:clamp(100px,18vh,180px)}
+.reward-gallery .reward-tile-art>.card{--ch:clamp(100px,18vh,180px);--cw:calc(var(--ch)*.64)}
+.reward-gallery .reward-tile-art>img,.reward-gallery article[data-presentation=furniture] .reward-tile-art>img{height:clamp(100px,18vh,180px);max-height:clamp(100px,18vh,180px)}
+.reward-gallery .reward-tile small{margin:0}
+.reward-gallery .reward-tile strong{font-weight:600}
+.reward-gallery .reward-tile-art[data-ready=false]>.card,.reward-gallery .reward-tile-art[data-ready=error]>.card{visibility:hidden}
+.reward-tile-status{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.reward-sample-note{font-size:9px;line-height:1.4;color:#c9b4e0}
+.reward-gallery[data-count="1"]{grid-template-columns:minmax(0,240px);justify-content:center}
+@media(max-width:700px){
+ .reward-gallery.gacha-lineup{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .reward-results-dialog header,.reward-results-dialog .gacha-dialog-body,.gacha-dialog.reward-results-dialog footer{padding:12px}
+ .reward-gallery .reward-tile-art{height:180px}
+ .reward-gallery .reward-tile-art>.card{--cw:min(110px,29vw);--ch:calc(var(--cw)/.64)}
+ .reward-gallery[data-count="1"]{grid-template-columns:minmax(0,240px)}
+}
+
+.gacha-dialog.reward-results-dialog header>small{display:none}
+.gacha-dialog.reward-results-dialog header h2{font-size:22px;line-height:1.4;margin:0}
+.reward-gallery .reward-tile{padding:8px;gap:6px}
+.reward-gallery .reward-tile strong{font-size:12px;line-height:1.4}
+/* Inspection lives inside the results dialog, narrower than the cinematic. */
+.reward-detail-host .reward-sleeve-fan{width:min(55%,280px)}
+@media(max-width:700px){.reward-detail-host .reward-sleeve-fan{width:min(55%,205px)}}
+@media(max-height:540px) and (min-width:600px){.reward-detail-host .reward-sleeve-fan{width:min(45%,120px)}}
