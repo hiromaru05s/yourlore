@@ -320,7 +320,9 @@ const D: Record<string, Entry> = {
   "rank.label": { ko: "랭크", ja: "ランク", en: "Rank" },
   // ranked pre-game market preview
   "preview.title": { ko: "고정 마켓 미리보기", ja: "固定マーケット プレビュー", en: "Market Preview" },
-  "preview.sub": { ko: "코인토스 전에 살 수 있는 카드를 미리 살펴보세요 (랭크 전용)", ja: "コイントスの前に購入できるカードを確認 (ランク限定)", en: "Study the buyable cards before the coin toss (ranked only)" },
+  "preview.sub": { ko: "이번 듀얼에서 구매할 카드를 미리 살펴보세요", ja: "このデュエルで購入できるカードを確認", en: "Study the cards available in this duel" },
+  "preview.swipe": { ko: "좌우로 스와이프", ja: "左右にスワイプ", en: "Swipe to browse" },
+  "preview.inspect": { ko: "카드를 선택해 자세히 보기", ja: "カードを選択して詳細を見る", en: "Select a card to inspect it" },
   "preview.ready": { ko: "준비 완료 — 바로 시작", ja: "準備完了 — すぐ開始", en: "Ready — start now" },
   "preview.waiting": { ko: "상대 대기 중…", ja: "相手を待っています…", en: "Waiting for opponent…" },
   "preview.starting": { ko: "시작합니다…", ja: "開始します…", en: "Starting…" },

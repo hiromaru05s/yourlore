@@ -1,6 +1,7 @@
 import { buyCost, playCost } from '../shared/engine';
 import { automaticCastTargets, targetOwner, type PlayIntent } from '../shared/playIntent';
 import {outcomeCrest} from './duelOutcome';
+import '../styles/marketPreview.css';
 // ============================================================
 // LORE — overlays: generic modal, confirm (surrender), win,
 // treasure reveal, and the seek/recall card picker.
@@ -8,7 +9,7 @@ import {outcomeCrest} from './duelOutcome';
 import type { CardInst, GameState, Side } from "../shared/types";
 import { attachDuelClock } from "./duelClock";
 import { cardEl } from "./cardView";
-import { bindZoom, zoomCard } from "./cardInspection";
+import { bindZoom, zoomCard, closeZoom } from "./cardInspection";
 import { TRIBES } from "../shared/cards";
 import { t, getLang, cardName, cardText } from "../i18n";
 
@@ -48,7 +49,7 @@ function mount(node: HTMLElement): void {
   }
   const ov = document.createElement("div");
   ov.className = "overlay";
-  if (!node.classList.contains("outcome-result") && document.querySelector(".game")) {
+  if (!node.classList.contains("outcome-result") && !node.classList.contains("preview-modal") && document.querySelector(".game")) {
     ov.classList.add("duel-overlay");
     node.classList.add("duel-dialog");
     if (document.querySelector(".game .mp-clock.show")) attachDuelClock(heading);
@@ -113,12 +114,19 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
     Returns handles so the caller can update the countdown (setUntil) and dismiss it (close). */
 export function marketPreview(market: CardInst[], onReady: () => void): { setUntil(u: number | null): void; close(): void } {
   const m = document.createElement("div");
-  m.className = "modal preview-modal";
-  m.innerHTML = `<h2 style="font-size:16px">${t("preview.title")}</h2><p style="color:var(--paper-dim);font-size:13px;margin-bottom:8px">${t("preview.sub")}</p>`
-    + `<div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:10px 0;max-height:52vh;overflow:auto"></div>`
-    + `<div class="pv-foot" style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px"><div class="pv-count" id="pvCount" style="font-family:var(--mono);color:var(--brass-hi);font-size:13px;min-width:120px;text-align:right"></div><button class="btn btn-gold" id="pvReady">${t("preview.ready")}</button></div>`;
-  const grid = m.querySelector(".picker-grid") as HTMLElement;
-  for (const c of market) { const el = cardEl(c, {}); bindZoom(el, c); grid.appendChild(el); }
+  m.className = "preview-modal";
+  m.style.setProperty('--pv-cards', String(Math.max(1, market.length)));
+  m.innerHTML = `<header class="pv-heading"><span class="pv-eyebrow">BIBLION · DUEL</span><h2>${t("game.std")}</h2><p>${t("preview.sub")}</p></header>`
+    + `<div class="pv-stage"><div class="pv-cards"></div><p class="pv-hint"><span class="pv-swipe">${t("preview.swipe")} · </span>${t("preview.inspect")}</p></div>`
+    + `<footer class="pv-foot"><div class="pv-count" id="pvCount" role="status"></div><button class="btn btn-gold" id="pvReady">${t("preview.ready")}</button></footer>`;
+  const grid = m.querySelector(".pv-cards") as HTMLElement;
+  for (const c of market) {
+    const el = cardEl(c, { fullArt: true });
+    el.tabIndex = 0; el.setAttribute('role', 'button'); el.setAttribute('aria-label', cardName(c));
+    el.onclick = () => zoomCard(c);
+    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
+    bindZoom(el, c); grid.appendChild(el);
+  }
   const btn = m.querySelector("#pvReady") as HTMLButtonElement;
   const count = m.querySelector("#pvCount") as HTMLElement;
   let until: number | null = null;
@@ -128,12 +136,15 @@ export function marketPreview(market: CardInst[], onReady: () => void): { setUnt
     count.textContent = left > 0 ? `${left}${t("preview.secs")}` : t("preview.starting");
   };
   const timer = window.setInterval(tick, 250);
+  const observer = new MutationObserver(() => { if (!m.isConnected) { clearInterval(timer); observer.disconnect(); } });
   btn.onclick = () => { btn.disabled = true; btn.textContent = t("preview.waiting"); onReady(); };
   mount(m);
+  observer.observe(getRoot(), { childList: true });
+  btn.focus({ preventScroll: true });
   tick();
   return {
     setUntil(u: number | null): void { until = u; tick(); },
-    close(): void { clearInterval(timer); closeOverlay(); },
+    close(): void { clearInterval(timer); observer.disconnect(); if (m.isConnected) { closeZoom(); closeOverlay(); } },
   };
 }
 

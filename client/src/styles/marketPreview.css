@@ -1,0 +1,65 @@
+/* Pregame study uses the duel's Biblion tabletop raster without another renderer. */
+body #overlayRoot .overlay:has(>.preview-modal) {
+  background:#101b2b url('/art/biblion/duel-table.png') center/cover no-repeat;
+  backdrop-filter:none; animation:none;
+}
+.preview-modal {
+  --pv-gap:clamp(10px,1.3vw,24px);
+  position:relative; display:grid;
+  grid-template-rows:minmax(100px,1fr) auto minmax(110px,1fr);
+  align-items:center; width:100%; height:100%; height:100dvh;
+  min-height:0; overflow-y:auto; overflow-x:hidden;
+  color:#eee8da; text-align:center;
+  background:linear-gradient(180deg,#071321ed 0%,#0b192967 26%,#0a182520 48%,#08162599 76%,#071321f5 100%);
+}
+.preview-modal .pv-heading { padding:26px 20px 8px; align-self:center; }
+.preview-modal .pv-eyebrow { font:10px var(--mono); letter-spacing:.34em; color:#b9c4cf; }
+.preview-modal h2 { margin:14px 0 10px; font:500 clamp(24px,2.8vw,40px) Georgia,'Yu Mincho',serif; letter-spacing:.12em; text-shadow:0 2px 12px #081522; }
+.preview-modal p { margin:0; font-size:13px; line-height:1.7; color:#d6dce0; }
+.preview-modal .pv-stage { min-width:0; width:100%; padding:0 24px; }
+.preview-modal .pv-cards {
+  display:flex; flex-wrap:nowrap; align-items:center; justify-content:safe center;
+  gap:var(--pv-gap); width:100%; max-width:1600px; margin:auto;
+  padding:24px 14px 30px; overflow-x:auto; overflow-y:hidden;
+  scroll-snap-type:x proximity; scroll-padding:14px; overscroll-behavior-x:contain;
+  scrollbar-width:thin; scrollbar-color:#c7b89460 #06132230;
+  border-block:1px solid #d8d0b94a;
+}
+.preview-modal .pv-cards>.card {
+  --cw:clamp(125px,calc((100vw - 100px - (var(--pv-cards) - 1)*var(--pv-gap))/var(--pv-cards)),200px);
+  --ch:calc(var(--cw)*1.4);
+  scroll-snap-align:center; cursor:pointer;
+  filter:drop-shadow(0 12px 9px #03101b80);
+}
+.preview-modal .pv-cards>.card:hover { transform:translateY(-5px); }
+.preview-modal .pv-cards>.card:focus-visible { outline:2px solid #f2e5c9; outline-offset:5px; }
+.preview-modal .pv-hint { margin-top:14px; font-size:12px; color:#e3e3dd; text-shadow:0 1px 4px #071321; }
+.preview-modal .pv-swipe { display:none; }
+.preview-modal .pv-foot { display:grid; justify-items:center; gap:14px; padding:20px 16px max(24px,env(safe-area-inset-bottom)); }
+.preview-modal .pv-count { min-height:20px; font:13px var(--mono); color:#dce5ee; }
+.preview-modal #pvReady { min-height:48px; min-width:240px; border-radius:3px; border:1px solid #cbb68b; background:linear-gradient(180deg,#263d50,#132537); color:#f2e5c9; box-shadow:0 4px 20px #020b1650,inset 0 1px #ffffff18; font-size:14px; letter-spacing:.07em; }
+.preview-modal #pvReady:hover:not(:disabled) { background:#304b60; }
+.preview-modal #pvReady:disabled { opacity:.65; }
+@media(max-width:600px) {
+  .preview-modal { grid-template-rows:minmax(125px,1fr) auto minmax(130px,1fr); }
+  .preview-modal .pv-stage { padding:0 12px; }
+  .preview-modal .pv-swipe { display:inline; }
+  .preview-modal .pv-cards { justify-content:flex-start; gap:16px; padding:22px 12px 28px; }
+  .preview-modal .pv-cards>.card { --cw:clamp(150px,43vw,190px); }
+  .preview-modal .pv-heading { padding-top:max(24px,env(safe-area-inset-top)); }
+  .preview-modal .pv-heading p { font-size:12px; }
+}
+@media(max-height:540px) and (min-width:601px) {
+  .preview-modal { grid-template-rows:auto auto auto; }
+  .preview-modal .pv-heading { padding:12px 16px 8px; }
+  .preview-modal .pv-eyebrow { display:none; }
+  .preview-modal h2 { font-size:22px; margin:0 0 4px; }
+  .preview-modal .pv-cards { padding-block:12px; }
+  .preview-modal .pv-cards>.card { --cw:min(125px,25dvh); }
+  .preview-modal .pv-hint { margin-top:6px; font-size:10px; }
+  .preview-modal .pv-foot { display:flex; justify-content:center; gap:20px; padding:10px 16px max(12px,env(safe-area-inset-bottom)); }
+  .preview-modal #pvReady { min-height:44px; min-width:210px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .preview-modal .card { transition:none; }
+}
