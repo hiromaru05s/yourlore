@@ -10,7 +10,7 @@ const errors=[],requests=[],checks=[];let calls=0,releaseProfile;
 const profileGate=new Promise(resolve=>releaseProfile=resolve);
 const user={id:'gacha-entry-qa',email:'qa@example.invalid',display:'シーカー',wins:0,losses:0,credits:2400};
 await page.addInitScript(()=>localStorage.setItem('lore_lang','ja'));
-page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
+page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>console.error('REQUEST FAILED',r.url(),r.failure()?.errorText));page.on('response',r=>{if(r.status()>=400)console.error('HTTP',r.status(),r.url());});page.on('request',r=>requests.push(r.url()));
 await apiFixture(page,async req=>{const p=new URL(req.url).pathname;
  if(p==='/api/auth/me')return {user};if(p==='/api/geo')return {country:'JP'};if(p==='/api/rank/me')return {rating:null};if(p==='/api/rewards/tutorial')return {keys:['tuto:1','tuto:10'],credits:user.credits,offered:true};
  if(p==='/api/social/profile'){await (baseline?new Promise(r=>setTimeout(r,3500)):profileGate);return {profile:{...user,created_at:0,self:true,sleeves:['default'],furnitures:[]}};}
@@ -31,4 +31,4 @@ try{
  await page.keyboard.press('Escape');await page.locator('.gacha-dialog [data-close]').first().click();assert.equal(calls,1);
  const obsolete=requests.filter(u=>/avatar-(red|blue).*\.png|\/models\/reading-board\/v1\/(deck-place|shelf)\.glb/.test(u));if(!baseline)assert.deepEqual(obsolete,[]);
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({origin,baseline,entryMs,loadMs,checks,calls,obsolete,errors},null,2));console.log(JSON.stringify({entryMs,loadMs,obsolete,checks,calls,errors}));
-}finally{releaseProfile();await context.close();await browser.close();}
+}catch(error){await page.screenshot({path:out+'/failure.png'});console.error(await page.locator('body').innerText(),errors);throw error;}finally{releaseProfile();await context.close();await browser.close();}

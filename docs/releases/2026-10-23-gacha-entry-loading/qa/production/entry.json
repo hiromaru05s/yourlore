@@ -1,0 +1,143 @@
+{
+  "origin": "https://yourlore.xyz",
+  "baseline": false,
+  "entryMs": 279,
+  "loadMs": 3820,
+  "checks": [
+    {
+      "width": 1280,
+      "height": 900,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 911.609375,
+          "y": 336.4375,
+          "width": 330,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "count": "10",
+          "x": 911.609375,
+          "y": 424.4375,
+          "width": 330,
+          "height": 76,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 911.609375,
+          "y": 336.4375,
+          "width": 330,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "count": "10",
+          "x": 911.609375,
+          "y": 424.4375,
+          "width": 330,
+          "height": 76,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "height": 600,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 245.3125,
+          "y": 151,
+          "width": 281.6875,
+          "height": 61.6875,
+          "visible": true
+        },
+        {
+          "count": "10",
+          "x": 537,
+          "y": 151,
+          "width": 281.6875,
+          "height": 61.6875,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 16,
+          "y": 195,
+          "width": 174,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "count": "10",
+          "x": 200,
+          "y": 195,
+          "width": 174,
+          "height": 76,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 10,
+          "y": 256,
+          "width": 145,
+          "height": 76,
+          "visible": true
+        },
+        {
+          "count": "10",
+          "x": 165,
+          "y": 256,
+          "width": 145,
+          "height": 76,
+          "visible": true
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "boxes": [
+        {
+          "count": "1",
+          "x": 245.3125,
+          "y": 151,
+          "width": 281.6875,
+          "height": 61.6875,
+          "visible": true
+        },
+        {
+          "count": "10",
+          "x": 537,
+          "y": 151,
+          "width": 281.6875,
+          "height": 61.6875,
+          "visible": true
+        }
+      ]
+    }
+  ],
+  "calls": 1,
+  "obsolete": [],
+  "errors": []
+}
