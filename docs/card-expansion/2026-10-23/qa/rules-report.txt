@@ -1,0 +1,22 @@
+PASS catalog separates seven starters and three market cards
+PASS raider aura stacks, includes itself, excludes opponent and other goblins, leaves cleanly
+PASS settlement activation condition checked before payment and correct owner tick
+PASS settlement spell destruction retaliates for eight, including own spell
+PASS settlement monster destruction and pure exile do not retaliate
+PASS relic protection skips exactly one expiry, including Shield gained later
+PASS relic protection is consumed even if no Shield remains
+PASS relic protection works across skipped opponent turns and serialization
+PASS bounty grants per copy per cost-one spell with Shield multiplier and priest
+PASS bounty triggers for monster destruction, but not summon or Rift destination
+PASS bounty ignores purchases and deck-to-graveyard generation
+PASS bounty sees hand-cap discard immediately
+PASS bounty does not count a cost-one enchantment entering field
+PASS mana device expires after exactly fifteen subsequent owner turns
+PASS mana device other-card destruction and pure exile distinguish correctly
+PASS battlefield damages only the starting player, stacks and respects Shield
+PASS leader counts own goblin spells, duplicate monsters and itself
+PASS king all dice branches, current acquired composition and delayed Rift
+PASS training all dice branches, Castle replacement and destroyed copies never tick
+PASS relic exile replacement counts field origin, but not an already removed relic
+PASS king destruction respects a trap with Void
+PASS 21 Goblin expansion scenario groups

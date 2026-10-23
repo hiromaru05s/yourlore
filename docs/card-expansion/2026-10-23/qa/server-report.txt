@@ -1,0 +1,1 @@
+PASS authoritative room: both sockets, private hand, summon damage, Shield grant, hibernation, one-expiry retention
