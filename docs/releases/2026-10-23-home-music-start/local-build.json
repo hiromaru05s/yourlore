@@ -1,0 +1,14 @@
+{
+  "origin": "http://127.0.0.1:5584",
+  "baseline": false,
+  "networkDelayMs": 2500,
+  "ready": 6710.5,
+  "created": 1438.2999999970198,
+  "loaded": 6257.4000000059605,
+  "loadStarted": 2041.7000000029802,
+  "playing": 7322.70000000298,
+  "gapMs": 612.2000000029802,
+  "active": 1,
+  "errors": [],
+  "boundary": "API fixture; actual HOME, entrance and native audio; autoplay allowed to isolate startup timing"
+}

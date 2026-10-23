@@ -1,0 +1,14 @@
+{
+  "origin": "https://yourlore.xyz",
+  "baseline": true,
+  "networkDelayMs": 2500,
+  "ready": 6592.0999999940395,
+  "created": 6593.29999999702,
+  "loaded": 9904.29999999702,
+  "loadStarted": 6610.20000000298,
+  "playing": 9904.29999999702,
+  "gapMs": 3312.2000000029802,
+  "active": 1,
+  "errors": [],
+  "boundary": "API fixture; actual HOME, entrance and native audio; autoplay allowed to isolate startup timing"
+}
