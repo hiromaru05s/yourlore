@@ -8,7 +8,9 @@
       "kind": "gallery",
       "width": 1102,
       "scroll": 1102,
-      "columns": 5
+      "columns": 5,
+      "bottom": 593.484375,
+      "dialogBottom": 693.484375
     },
     {
       "w": 390,
@@ -16,7 +18,9 @@
       "kind": "gallery",
       "width": 313,
       "scroll": 313,
-      "columns": 2
+      "columns": 2,
+      "bottom": 1533.078125,
+      "dialogBottom": 818.671875
     },
     {
       "w": 320,
@@ -24,7 +28,9 @@
       "kind": "gallery",
       "width": 246,
       "scroll": 246,
-      "columns": 2
+      "columns": 2,
+      "bottom": 1595.5625,
+      "dialogBottom": 717.796875
     },
     {
       "w": 844,
@@ -32,7 +38,9 @@
       "kind": "gallery",
       "width": 744,
       "scroll": 744,
-      "columns": 5
+      "columns": 5,
+      "bottom": 535.484375,
+      "dialogBottom": 378.296875
     },
     {
       "w": 1440,
