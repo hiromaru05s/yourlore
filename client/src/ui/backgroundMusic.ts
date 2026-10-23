@@ -6,16 +6,18 @@ interface MusicOptions {
   gain: number;
   gapMs?: number;
   ready?: boolean;
+  preload?: boolean;
+  startDelayMs?: number;
   intro?: { url: string; durationSeconds: number; offsetSeconds?: number };
 }
 
 /** One screen owns one recording and its restart timer. */
-export function startBackgroundMusic({ url, gain, gapMs = 0, ready = true, intro }: MusicOptions): () => void {
+export function startBackgroundMusic({ url, gain, gapMs = 0, ready = true, preload = false, startDelayMs = 0, intro }: MusicOptions): () => void {
   let audio: HTMLAudioElement | undefined;
   let disposed = false;
   const introStartedAt = performance.now() - (intro?.offsetSeconds ?? 0) * 1000;
   let pending = false;
-  let restartAt = 0;
+  let restartAt = ready ? performance.now() + startDelayMs : 0;
   let restartTimer: ReturnType<typeof setTimeout> | undefined;
   const releaseAudio = () => {
     if (!audio) return;
@@ -40,7 +42,21 @@ export function startBackgroundMusic({ url, gain, gapMs = 0, ready = true, intro
     clearTimeout(restartTimer);
     restartTimer = setTimeout(sync, gapMs);
   };
+  const prepareAudio = () => {
+    if (audio) return;
+    audio = new Audio(intro?.url ?? url);
+    audio.loop = !intro && gapMs === 0;
+    audio.preload = preload ? "auto" : "none";
+    audio.volume = gain * getSfxVolume() ** 2;
+    if (intro?.offsetSeconds) audio.currentTime = intro.offsetSeconds;
+    if (intro || gapMs > 0) audio.addEventListener("ended", onEnded);
+    audio.addEventListener("error", onError);
+    if (preload) audio.load();
+  };
   const sync = () => {
+    // Prepare HOME's recording alongside its artwork/entrance, without playing
+    // under the loading cover or spending bandwidth while muted/backgrounded.
+    if (preload && !disposed && !document.hidden && getSfxVolume() > 0) prepareAudio();
     if (!audible()) { audio?.pause(); return; }
     // Rejoin, mute and hidden-tab recovery follow the opening clock, not a stale fanfare.
     if (intro && (!audio || audio.paused)) {
@@ -56,15 +72,8 @@ export function startBackgroundMusic({ url, gain, gapMs = 0, ready = true, intro
       restartTimer = setTimeout(sync, remaining);
       return;
     }
-    if (!audio) {
-      audio = new Audio(intro?.url ?? url);
-      audio.loop = !intro && gapMs === 0;
-      audio.preload = "none";
-      audio.volume = gain * getSfxVolume() ** 2;
-      if (intro?.offsetSeconds) audio.currentTime = intro.offsetSeconds;
-      if (intro || gapMs > 0) audio.addEventListener("ended", onEnded);
-      audio.addEventListener("error", onError);
-    }
+    prepareAudio();
+    if (!audio) return;
     if (!audio.paused || pending) return;
     if (audio.ended) audio.currentTime = 0;
     pending = true;
@@ -74,7 +83,11 @@ export function startBackgroundMusic({ url, gain, gapMs = 0, ready = true, intro
       // Autoplay may require the next user gesture. Navigation remains available.
     }).finally(() => { pending = false; });
   };
-  const onReady = () => { ready = true; sync(); };
+  const onReady = () => {
+    // Later menu-ready events must not postpone the first start or a loop gap.
+    if (!ready) { ready = true; restartAt = performance.now() + startDelayMs; }
+    sync();
+  };
   document.addEventListener("lore:screen-ready", onReady);
   document.addEventListener("lore:volume-change", sync);
   document.addEventListener("pointerdown", sync, true);
