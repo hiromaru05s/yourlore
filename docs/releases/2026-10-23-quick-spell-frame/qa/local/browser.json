@@ -1,0 +1,119 @@
+{
+  "base": "http://127.0.0.1:5278",
+  "scope": "real shipped card menu with isolated API fixture; no live account or multiplayer",
+  "checks": [
+    {
+      "lang": "ja",
+      "width": 1280,
+      "text": "ϟクイック魔法",
+      "font": 18.6624,
+      "widthRatio": 0.6399764897368659,
+      "heightRatio": 0.07199074074074074,
+      "left": 207.671875,
+      "right": 428.84375,
+      "screen": 1280,
+      "overflow": false
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "text": "ϟクイック魔法",
+      "font": 11,
+      "widthRatio": 0.6399238782051282,
+      "heightRatio": 0.07198717948717949,
+      "left": 149.75,
+      "right": 249.578125,
+      "screen": 390,
+      "overflow": false
+    },
+    {
+      "lang": "ko",
+      "width": 1280,
+      "text": "ϟ퀵 마법",
+      "font": 18.6624,
+      "widthRatio": 0.6399764897368659,
+      "heightRatio": 0.07199074074074074,
+      "left": 207.671875,
+      "right": 428.84375,
+      "screen": 1280,
+      "overflow": false
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "text": "ϟ퀵 마법",
+      "font": 11,
+      "widthRatio": 0.6399238782051282,
+      "heightRatio": 0.07198717948717949,
+      "left": 149.75,
+      "right": 249.578125,
+      "screen": 390,
+      "overflow": false
+    },
+    {
+      "lang": "en",
+      "width": 1280,
+      "text": "ϟQuick spell",
+      "font": 18.6624,
+      "widthRatio": 0.6399764897368659,
+      "heightRatio": 0.07199074074074074,
+      "left": 207.671875,
+      "right": 428.84375,
+      "screen": 1280,
+      "overflow": false
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "text": "ϟQuick spell",
+      "font": 11,
+      "widthRatio": 0.6399238782051282,
+      "heightRatio": 0.07198717948717949,
+      "left": 149.75,
+      "right": 249.578125,
+      "screen": 390,
+      "overflow": false
+    },
+    {
+      "id": "QUICK_MIMIC",
+      "quick": true
+    },
+    {
+      "id": "QUICK_SURVIVAL",
+      "quick": true
+    },
+    {
+      "id": "QUICK_POISON",
+      "quick": true
+    },
+    {
+      "id": "QUICK_WORLD",
+      "quick": true
+    },
+    {
+      "id": "QUICK_MUSTER",
+      "quick": true
+    },
+    {
+      "id": "QUICK_SORT",
+      "quick": true
+    },
+    {
+      "id": "QUICK_REBIRTH",
+      "quick": true
+    },
+    {
+      "id": "QUICK_GRIMOIRE",
+      "quick": true
+    },
+    {
+      "id": "QUICK_ASSAULT",
+      "quick": true
+    },
+    {
+      "history": "quick to related monster and back resumes animation"
+    }
+  ],
+  "errors": [],
+  "networkFailures": []
+}
