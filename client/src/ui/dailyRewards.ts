@@ -3,8 +3,11 @@ import { api } from '../net/api';
 import { cardName, esc, t } from '../i18n';
 import { loungeText as L } from './loungeText';
 import { DB, STARTERS } from '../shared/cards';
+import { artUrl } from './cardArt';
+import { homeIcon } from './homeIcons';
 import { BOT_REWARDS, MATCH_REWARDS, type DailyQuest, type ProgressionState } from '../shared/progression';
 import '../styles/dailyRewards.css';
+import '../styles/dailyQuestCard.css';
 export function questLabel(q:DailyQuest):string {
  const def=q.card?(DB[q.card]??STARTERS[q.card]):null;
  const name=def?cardName({...def,uid:'quest-name'}):q.card??'';
@@ -30,7 +33,14 @@ export function syncCredits(app:App,state:ProgressionState):void {if(app.user){a
 export function mountDailyRewards(app:App,button:HTMLButtonElement):()=>void {
  let request=0;let dead=false,data:ProgressionState|undefined,timer:ReturnType<typeof setTimeout>|undefined;
  const guest=!app.user||app.user.id==='local-guest-user',account=app.user?.id;
- const render=()=>{button.innerHTML=`<span><small>${L('デイリークエスト','Daily quest','일일 퀘스트')}</small><strong>${esc(data?questLabel(data.daily.quest):guest?L('ログインして報酬を獲得','Log in to earn rewards','로그인하고 보상 받기'):L('クエスト・対戦報酬を確認','View quests and duel rewards','퀘스트・대전 보상 보기'))}</strong></span>${data?`<b>${data.daily.claimed?'✓ ':''}${shardLabel(data.daily.quest.reward)}<small>${data.daily.progress} / ${data.daily.quest.target}</small></b>`:'<b>→</b>'}`;};
+ const render=()=>{
+  const daily=data?.daily,claimed=daily?.claimed??false;
+  const label=daily?questLabel(daily.quest):guest?L('ログインして報酬を獲得','Log in to earn rewards','로그인하고 보상 받기'):L('クエスト・対戦報酬を確認','View quests and duel rewards','퀘스트・대전 보상 보기');
+  const progress=daily?Math.min(daily.quest.target,Math.max(0,daily.progress)):0;
+  const status=claimed?L('達成・受取済み','Reward received','달성・수령 완료'):progress?L('進行中','In progress','진행 중'):L('未着手','Not started','시작 전');
+  button.classList.toggle('is-complete',claimed);
+  button.innerHTML=`<span class="dq-art" aria-hidden="true"><img src="${artUrl.sm('D_RED')}" alt="" decoding="async"><span class="dq-wordmark">DAILY<b>QUEST</b></span><span class="dq-seal">${claimed?'✓':'Ⅰ'}</span></span><span class="dq-body"><span class="dq-kicker">${L('今日のクエスト','Today’s quest','오늘의 퀘스트')}<span>${L('00:00 更新','00:00 UTC+9','00:00 갱신')}</span></span><strong class="dq-title">${esc(label)}</strong>${daily?`<span class="dq-progress"><span>${status}</span><span><b>${progress}</b> / ${daily.quest.target}</span></span><progress class="dq-meter" value="${progress}" max="${daily.quest.target}" aria-label="${esc(L('クエスト進捗','Quest progress','퀘스트 진행'))}"></progress>`:''}<span class="dq-footer">${daily?`<span class="dq-reward">${homeIcon('shard')}<b>${daily.quest.reward}</b><span>${L('シャード','Shards','샤드')}</span></span>`:`<span class="dq-status">${guest?L('ログインへ','Log in','로그인'):L('詳細を開く','View details','자세히 보기')}</span>`}<span class="dq-arrow" aria-hidden="true">↗</span></span></span>`;
+ };
  const load=()=>{if(guest)return;const serial=++request;void api.progression().then(next=>{if(dead||serial!==request||app.user?.id!==account)return;data=next;render();syncCredits(app,next);clearTimeout(timer);timer=setTimeout(load,Math.max(1000,next.resetsAt-Date.now()+100));}).catch(()=>{});};
  button.onclick=()=>{if(guest){app.login();return;}showDailyRewards(app);};
  const focus=()=>load();window.addEventListener('focus',focus);document.addEventListener('lore:rewards',load);render();load();

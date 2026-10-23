@@ -71,6 +71,18 @@ export function mountLounge(app: App, page: LoungePage): () => void {
   if(page==='home'){const atmosphere=document.createElement('div');atmosphere.className='lounge-atmosphere living-home';atmosphere.dataset.atmosphere='loading';atmosphere.setAttribute('aria-hidden','true');shell.append(atmosphere);
     loadHomeAtmosphere(atmosphere,lifecycle.signal);}
   shell.append(content); app.root.append(shell); paint();
+  const companion=content.querySelector<HTMLElement>('.home-companion');
+  const homeScreen=content.querySelector('.lounge-home-screen');
+  // Quest names and translations can wrap differently. Reserve their measured
+  // height on portrait HOME without shrinking the text or overlapping play.
+  const dailyLayout=dailyReward?new ResizeObserver(()=>{
+    // Keep Zeno visible beside the sound row when the quest spans a phone.
+    if(companion&&homeScreen){const host=matchMedia('(max-width:850px) and (min-height:501px)').matches?shell:homeScreen;if(companion.parentElement!==host)host.prepend(companion);}
+    const clearance=Math.ceil(dailyReward.getBoundingClientRect().bottom-content.getBoundingClientRect().top+12);
+    const value=`${Math.max(0,clearance)}px`;
+    if(shell.style.getPropertyValue('--home-quest-clearance')!==value)shell.style.setProperty('--home-quest-clearance',value);
+  }):null;
+  if(dailyReward){dailyLayout?.observe(dailyReward);dailyLayout?.observe(shell);}
   const off=onLangChange(paint);
   document.addEventListener('lore:user',paint);
   // All existing dialogs share keyboard/focus behavior without duplicating network flows.
@@ -101,5 +113,5 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{lifecycle.abort();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{lifecycle.abort();dailyLayout?.disconnect();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
 }

@@ -1,0 +1,86 @@
+/* Adopted quest card 01, compacted from the 306px comparison to 276px.
+ * The existing button and progression owner retain all account/API behavior. */
+.lounge-home #dailyReward {
+ position:absolute;top:calc(100% + 78px);left:0;width:276px;min-height:0;
+ display:block;padding:0;gap:0;text-align:left;white-space:normal;
+ color:#eaf3f8;background:#102638;border:1px solid #a6c9db80;border-radius:0;
+ box-shadow:0 8px 24px #07111c55;overflow:hidden;cursor:pointer;
+}
+.lounge-home #dailyReward:hover {background:#163044;border-color:#d0e7f3;}
+.lounge-home #dailyReward:active {filter:brightness(.94);}
+.lounge-home #dailyReward:focus-visible {outline:2px solid #e1f3ff;outline-offset:4px;}
+.lounge-home #dailyReward .dq-art {display:block;position:relative;height:80px;overflow:hidden;border-bottom:1px solid #adcbdb55;background:#152d40;}
+.dq-art>img {width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;}
+.dq-art::after {content:'';position:absolute;inset:0;background:linear-gradient(90deg,#071727db,transparent 90%),linear-gradient(0deg,#102638,transparent 80%);}
+.dq-wordmark {position:absolute;left:17px;top:12px;z-index:1;font:10px/1.2 Georgia,serif;letter-spacing:3px;color:#d7e9f2;}
+.dq-wordmark b {display:block;font:25px/1.2 Georgia,serif;letter-spacing:2px;margin-top:3px;color:#fff;}
+.dq-seal {position:absolute;right:14px;top:13px;z-index:1;display:grid;place-items:center;width:26px;height:33px;border:1px solid #d4e8f088;background:#122638b3;color:#dcecf4;font:19px Georgia,serif;}
+.lounge-home #dailyReward .dq-body {display:block;padding:14px 17px 11px;}
+.dq-kicker {display:flex;justify-content:space-between;gap:8px;font:10px/1.5 var(--sans,sans-serif);color:#bed4e1;}
+.dq-kicker>span {font-size:9px;color:#a9c2d0;white-space:nowrap;}
+.lounge-home #dailyReward .dq-title {display:block;font:600 17px/1.5 var(--sans,sans-serif);letter-spacing:.01em;color:#f0f7fb;white-space:normal;overflow-wrap:anywhere;margin:10px 0 15px;}
+.dq-progress {display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:#bed2df;font:10px/1.4 var(--sans,sans-serif);}
+.dq-progress b {font:23px/1 Georgia,serif;color:#f2f9ff;}
+.dq-meter {display:block;appearance:none;border:0;border-radius:0;width:100%;height:4px;margin:8px 0 0;background:#ffffff26;color:#b6e3f4;}
+.dq-meter::-webkit-progress-bar {background:#ffffff26;}
+.dq-meter::-webkit-progress-value {background:#b6e3f4;}
+.dq-meter::-moz-progress-bar {background:#b6e3f4;}
+.dq-footer {display:flex;align-items:center;justify-content:space-between;border-top:1px solid #bdd0db30;margin-top:16px;padding-top:9px;gap:8px;}
+.dq-reward {display:flex;align-items:center;gap:6px;}
+.lounge-home #dailyReward .dq-reward .lore-icon {width:22px;height:29px;object-fit:contain;}
+.dq-reward b {font:25px/1.1 Georgia,serif;color:#eadfbc;}
+.dq-reward>span {font:10px var(--sans,sans-serif);color:#d6cdad;}
+.dq-arrow {font:21px/1 Georgia,serif;color:#c0d7e5;}
+.dq-status {font:11px var(--sans,sans-serif);color:#c0d7e5;}
+.is-complete .dq-seal,.is-complete .dq-progress>span:first-child {color:#d3e8b5;}
+.is-complete .dq-meter::-webkit-progress-value {background:#c6dfa9;}
+.is-complete .dq-meter::-moz-progress-bar {background:#c6dfa9;}
+/* A horizontal card preserves readable text and the HOME play area on phones. */
+@media(max-width:850px) and (min-height:501px) {
+ .lounge-shell.selected-menu.lounge-home>.home-companion {position:absolute;inset:58px 18px auto auto;z-index:3;width:64px;height:64px;padding:0;}
+ .lounge-shell.selected-menu.lounge-home>.home-companion .home-spirit-touch {width:64px;height:64px;margin:0;}
+ .lounge-home #dailyReward {width:calc(100vw - 36px);display:grid;grid-template-columns:62px minmax(0,1fr);}
+ .lounge-home #dailyReward .dq-art {height:100%;border-bottom:0;border-right:1px solid #adcbdb55;}
+ .dq-art>img {position:absolute;inset:0;}
+ .dq-wordmark {left:7px;top:12px;font-size:8px;letter-spacing:1px;}
+ .dq-wordmark b {font-size:14px;letter-spacing:0;}
+ .dq-seal {top:auto;bottom:12px;right:18px;width:24px;height:29px;font-size:17px;}
+ .lounge-home #dailyReward .dq-body {padding:10px 12px;}
+ .lounge-home #dailyReward .dq-title {font-size:14px;line-height:1.4;margin:6px 0 8px;}
+ .dq-kicker {font-size:9px;}.dq-kicker>span {font-size:8px;}
+ .dq-progress {font-size:9px;}.dq-progress b {font-size:18px;}
+ .dq-meter {margin-top:5px;height:3px;}
+ .dq-footer {margin-top:8px;padding-top:6px;}
+ .dq-reward b {font-size:20px;}.dq-reward>span {font-size:9px;}
+ .lounge-home #dailyReward .dq-reward .lore-icon {height:22px;width:18px;}
+ .lounge-home:has(#dailyReward) .lounge-content>.lounge-home-screen:has(.gift-courier) {padding-top:max(138px,var(--home-quest-clearance,190px));}
+}
+/* Landscape phones keep the card in the left column, below sound. */
+@media(max-height:500px) and (min-width:601px), (min-width:851px) and (max-width:1100px) {
+ .lounge-home #dailyReward {width:240px;display:grid;grid-template-columns:54px minmax(0,1fr);}
+ .lounge-home #dailyReward .dq-art {height:100%;border:0;}
+ .dq-art>img {position:absolute;inset:0;}
+ .dq-wordmark {left:6px;top:10px;font-size:7px;letter-spacing:1px;}.dq-wordmark b {font-size:12px;letter-spacing:0;}
+ .dq-seal {display:none;}
+ .lounge-home #dailyReward .dq-body {padding:9px 10px;}
+ .lounge-home #dailyReward .dq-title {font-size:13px;margin:5px 0 7px;line-height:1.35;}
+ .dq-kicker {font-size:9px;}.dq-kicker>span {display:none;}
+ .dq-progress {font-size:9px;}.dq-progress b {font-size:17px;}
+ .dq-meter {margin-top:5px;height:3px;}.dq-footer {margin-top:7px;padding-top:5px;}
+ .dq-reward b {font-size:19px;}.dq-reward>span {font-size:9px;}
+ .lounge-home #dailyReward .dq-reward .lore-icon {height:21px;width:16px;}
+}
+@media(min-width:851px) and (max-width:1300px) {
+ .lounge-shell.selected-menu.lounge-home .home-companion .home-spirit-touch {width:clamp(180px,calc(100vw - 780px),350px);margin-left:auto;}
+}
+@media(max-width:850px) and (min-height:501px) and (max-height:700px) {
+ .lounge-home:has(#dailyReward) .lounge-play {grid-template-columns:minmax(0,1fr) 86px;grid-template-rows:32px 38px auto auto;gap:3px 10px;}
+ .lounge-home:has(#dailyReward) .gift-courier {grid-column:1;grid-row:1;justify-content:flex-start;}
+ .lounge-home:has(#dailyReward) .lounge-mode-tabs {grid-column:1;grid-row:2;gap:2px;}
+ .lounge-home:has(#dailyReward) .lounge-mode-tabs button {font-size:11px;padding:6px 1px;}
+ .lounge-home:has(#dailyReward) .mode-reward {grid-column:1;grid-row:3;font-size:9px;}
+ .lounge-home:has(#dailyReward) .lounge-play-button {grid-column:2;grid-row:1/4;width:86px;height:85px;}
+ .lounge-home:has(#dailyReward) .lounge-rank-info {grid-column:1/-1;grid-row:4;}
+ .lounge-home:has(#dailyReward) .lounge-active-deck {min-height:46px;padding:3px 0;}
+ .lounge-home:has(#dailyReward) .lounge-deck-preview img {width:24px;height:34px;}
+}
