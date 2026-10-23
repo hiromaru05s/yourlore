@@ -1,0 +1,18 @@
+{
+  "source": "fcb58472fb8577f01aef43cc50c7e2ed6f6c7e4a",
+  "created_on": "2026-10-23T09:20:27.410745Z",
+  "deployment": "0f2bcade-d095-47d6-a83d-d5d977619483",
+  "versions": [
+    {
+      "version_id": "9b74bda1-4edb-40c6-8a97-0c85dc9a69f0",
+      "percentage": 100
+    }
+  ],
+  "html": {
+    "url": "https://yourlore.xyz/?bot-release=fcb58472",
+    "sha256": "94c9f556650b3f82379295b9b50de84f873e4e802e07a2911ba203edd9320910",
+    "exact": true
+  },
+  "suite": "210/210",
+  "scope": "production deployment status and public HTML; no authenticated match"
+}
