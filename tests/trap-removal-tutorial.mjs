@@ -40,7 +40,7 @@ try {
       export { mountTutorial } from './client/src/screens/tutorial';
       export { mountTutorialWelcome } from './client/src/screens/tutorialWelcome';
       export { mountCards } from './client/src/screens/cards';
-      export { DB, STARTERS } from './client/src/shared/cards';
+      export { DB, STARTERS, DECK_POOL } from './client/src/shared/cards';
       export { buyCost, effAtk } from './client/src/shared/engine';
       export { api } from './client/src/net/api';
       export { setLang, t } from './client/src/i18n';
@@ -53,7 +53,7 @@ try {
       b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const monsterPresentationNodes=n=>[n],hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
     }}],
   });
-  const { TutorialController, TUT_STEPS, mountTutorial, mountCards, DB, STARTERS, buyCost, effAtk, api, setLang, t, closeOverlay, showControlsHelp, REWARDS, mountTutorialWelcome } = await import(path.join(temp, 'tutorial.mjs'));
+  const { TutorialController, TUT_STEPS, mountTutorial, mountCards, DB, STARTERS, DECK_POOL, buyCost, effAtk, api, setLang, t, closeOverlay, showControlsHelp, REWARDS, mountTutorialWelcome } = await import(path.join(temp, 'tutorial.mjs'));
   assert.equal(TUT_STEPS.length,36);
   for (const lang of ['ko','ja','en']) {
     setLang(lang);
@@ -90,7 +90,7 @@ try {
     for (const [index, type] of ['all', 'mon', 'spell', 'quick', 'quest', 'starter'].entries()) {
       chips[index].click();
       await tick();
-      const expected = definitions.filter(c => type === 'all' || (type === 'quick' ? c.quick : type === 'starter' ? c.t === 'starter' || c.noShop : c.t === type));
+      const expected = definitions.filter(c => type === 'all' || (type === 'quick' ? c.quick : type === 'starter' ? c.id === 'STARTER_MANA' || DECK_POOL.includes(c.id) : c.t === type));
       assert.deepEqual(await allPages(), expected.map(c=>c.id).sort(), `${lang}: ${type} filter retains all paginated cards`);
     }
     gallery.destroy(); root.innerHTML = '';
