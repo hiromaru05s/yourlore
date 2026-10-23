@@ -1,0 +1,72 @@
+{
+  "origin": "https://yourlore.xyz",
+  "engine": "chromium",
+  "checks": [
+    {
+      "size": {
+        "width": 1194,
+        "height": 834
+      },
+      "droppedCompatibilityClick": false,
+      "passed": true
+    },
+    {
+      "size": {
+        "width": 1194,
+        "height": 834
+      },
+      "droppedCompatibilityClick": true,
+      "passed": true
+    },
+    {
+      "size": {
+        "width": 834,
+        "height": 1194
+      },
+      "droppedCompatibilityClick": false,
+      "passed": true
+    },
+    {
+      "size": {
+        "width": 834,
+        "height": 1194
+      },
+      "droppedCompatibilityClick": true,
+      "passed": true
+    },
+    {
+      "size": {
+        "width": 1024,
+        "height": 768
+      },
+      "droppedCompatibilityClick": false,
+      "passed": true
+    },
+    {
+      "size": {
+        "width": 1024,
+        "height": 768
+      },
+      "droppedCompatibilityClick": true,
+      "passed": true
+    },
+    {
+      "size": {
+        "width": 768,
+        "height": 1024
+      },
+      "droppedCompatibilityClick": false,
+      "passed": true
+    },
+    {
+      "size": {
+        "width": 768,
+        "height": 1024
+      },
+      "droppedCompatibilityClick": true,
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "scope": "API fixture with real assets; no physical iPad confirmation"
+}
