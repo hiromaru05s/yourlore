@@ -12,7 +12,7 @@ try {
   const {cardEl,cardRulesEl}=await import('/src/ui/cardView.ts');const {GOBLIN_CARDS}=await import('/src/shared/goblinCards.ts');const {DB}=await import('/src/shared/cards.ts');const {setLang}=await import('/src/i18n.ts');setLang('ja');
   window.catalog={cardEl,cardRulesEl,DB,setLang,ids:GOBLIN_CARDS.map(c=>c.id)};
   const app=document.querySelector('#app');app.style.cssText='padding:24px;display:grid;grid-template-columns:repeat(5,1fr);gap:24px;grid-auto-rows:max-content;justify-items:center;background:#1b2023;min-height:100vh';
-  for(const id of catalog.ids){const c={...DB[id],uid:id};const box=document.createElement('div');const face=cardEl(c,{fullArt:true});face.style.width="220px";face.style.height="334px";box.append(face);app.append(box);}
+  for(const id of catalog.ids){const c={...DB[id],uid:id};const box=document.createElement('div');const face=cardEl(c,{fullArt:true});face.style.setProperty("--cw","220px");face.style.width="220px";face.style.height="334px";box.append(face);app.append(box);}
   await Promise.all([...document.images].map(img=>img.decode().catch(()=>{})));
  });
  await page.screenshot({path:out+'/cards-ja.png',fullPage:true});

@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+const origin=process.env.LORE_LIVE_ORIGIN||'https://yourlore.xyz';
+const out=process.env.LORE_LIVE_REPORT||'/tmp/lore-goblin-live-report.json';
+const manifest=JSON.parse(await fs.readFile('docs/card-expansion/2026-10-23/asset-manifest.json','utf8'));
+const ids=JSON.parse(await fs.readFile('docs/card-expansion/2026-10-23/art-prompts.json','utf8')).assets.map(x=>x.id);
+const get=async path=>{const url=new URL(path,origin);url.searchParams.set('release-check',process.env.LORE_RELEASE_SHA||'goblin-v62');const res=await fetch(url,{signal:AbortSignal.timeout(30000)});assert.equal(res.status,200,String(url));return res;};
+const html=await (await get('/')).text();
+const entry=html.match(/<script[^>]+src="([^"]+\.js)"/)?.[1];assert(entry,'HTML has a JavaScript entrypoint');
+const entryCode=await (await get(entry)).text();
+const social=entryCode.match(/assets\/social-[\w-]+\.js/)?.[0];assert(social,'Entrypoint references the shared card catalog');
+const catalog=await (await get('/'+social)).text();
+for(const id of ids)assert(catalog.includes(id),`live catalog includes ${id}`);
+const assets=[];
+for(let i=0;i<manifest.length;i+=5)assets.push(...await Promise.all(manifest.slice(i,i+5).map(async expected=>{
+ const path=expected.path.replace('client/public','');const data=Buffer.from(await (await get(path)).arrayBuffer());const sha256=createHash('sha256').update(data).digest('hex');
+ assert.equal(sha256,expected.sha256,path);return {path,bytes:data.length,sha256,matched:true};
+})));
+const report={checkedAt:new Date().toISOString(),origin,sourceSha:process.env.LORE_RELEASE_SHA||null,entry,catalog:'/'+social,catalogIds:ids,matchedAssets:assets.length,assets,evidence:'Public production HTML, served JavaScript catalog and exact artwork bytes; no authenticated matchmaking claim'};
+await fs.writeFile(out,JSON.stringify(report,null,2)+'\n');console.log(`PASS live catalog (${ids.length} cards) and ${assets.length} exact artwork hashes: ${out}`);
