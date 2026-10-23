@@ -1,0 +1,152 @@
+[
+  {
+    "path": "client/public/art/cards/GOBLIN.webp",
+    "bytes": 652072,
+    "sha256": "a7d4dbcfebaae5949a55d1f1968e1757e38721a18bdcb82708df658f68d860ae"
+  },
+  {
+    "path": "client/public/art/cards-sm/GOBLIN.webp",
+    "bytes": 43458,
+    "sha256": "ed039674b9f3bac74557d712d995e7dab1172e7cf00b69572dc1508bc5fbf367"
+  },
+  {
+    "path": "client/public/art/cards-xs/GOBLIN.webp",
+    "bytes": 11384,
+    "sha256": "712a79abe758d6faa728f63bc2078ba6de84d52292ab7b957d9160f7b2333681"
+  },
+  {
+    "path": "client/public/art/cards/GOBLIN_RAIDER.webp",
+    "bytes": 462172,
+    "sha256": "629e9cb8c48f699f872c5011e41b0e01a7477d48f67fe830f7be93296e4a0a02"
+  },
+  {
+    "path": "client/public/art/cards-sm/GOBLIN_RAIDER.webp",
+    "bytes": 35934,
+    "sha256": "4329211ae8e68c24255e8b902285f881ae80e8dbe6577e5af40094ecf3e6148c"
+  },
+  {
+    "path": "client/public/art/cards-xs/GOBLIN_RAIDER.webp",
+    "bytes": 10654,
+    "sha256": "e36f38daf377dbf07fa42ca8b8dab656669932352fc67e5d854efb17d6315024"
+  },
+  {
+    "path": "client/public/art/cards/GOBLIN_SETTLEMENT.webp",
+    "bytes": 762426,
+    "sha256": "24eff12890888364232723b3fed42463f2c878b4eaea39ed2d2f91be881cead4"
+  },
+  {
+    "path": "client/public/art/cards-sm/GOBLIN_SETTLEMENT.webp",
+    "bytes": 48214,
+    "sha256": "2b29da6e3694bae459191e0d584a85e8e98f44aee38faa378cc5369cebf7f7e6"
+  },
+  {
+    "path": "client/public/art/cards-xs/GOBLIN_SETTLEMENT.webp",
+    "bytes": 11710,
+    "sha256": "05288e44375da4eb68835504232b87871dac15726cc758126ee277ffd6872be6"
+  },
+  {
+    "path": "client/public/art/cards/RELIC_PROTECTION.webp",
+    "bytes": 548436,
+    "sha256": "0557a2c1361364e17ee306754be34cda8b7313eb4179842a8a9456144ec958a0"
+  },
+  {
+    "path": "client/public/art/cards-sm/RELIC_PROTECTION.webp",
+    "bytes": 36946,
+    "sha256": "da8e28fa8e4bf6bda5173f165381c2a36d8dfd358444914af0b5e8e0ee9bcfdd"
+  },
+  {
+    "path": "client/public/art/cards-xs/RELIC_PROTECTION.webp",
+    "bytes": 9734,
+    "sha256": "ef0482fbe0a92157ce540c549ce8969905870205b91efe41082d2792c0823910"
+  },
+  {
+    "path": "client/public/art/cards/RELIC_BOUNTY.webp",
+    "bytes": 543830,
+    "sha256": "06a55f2eeefd593baff2a5fce96f9b552384e273f88ebb7800150d9f242bad66"
+  },
+  {
+    "path": "client/public/art/cards-sm/RELIC_BOUNTY.webp",
+    "bytes": 38450,
+    "sha256": "62b880c70bddbdde646d5cf626de3d2371f358c727791929b28a10aec5be6e14"
+  },
+  {
+    "path": "client/public/art/cards-xs/RELIC_BOUNTY.webp",
+    "bytes": 10140,
+    "sha256": "c86ec94bb0d69fd45e7cff807effbfcc99fe5ac01c9c432e43ad0b94a32e0dd1"
+  },
+  {
+    "path": "client/public/art/cards/MANA_BACKFLOW.webp",
+    "bytes": 429120,
+    "sha256": "40bcf0bc79948c78d1817cd730b7ea7e28080e9bac2a4e622f7eaedd1b2286a6"
+  },
+  {
+    "path": "client/public/art/cards-sm/MANA_BACKFLOW.webp",
+    "bytes": 33914,
+    "sha256": "24f57491b2ce1383c4fddb0c7ee36c2411fd91953d3d75bd1407830dd9cf029d"
+  },
+  {
+    "path": "client/public/art/cards-xs/MANA_BACKFLOW.webp",
+    "bytes": 9320,
+    "sha256": "4977531b5c30f1e0e30904336bb47909b131d90a5ec9f996d06f29a8c565d4c9"
+  },
+  {
+    "path": "client/public/art/cards/BATTLEFIELD.webp",
+    "bytes": 670300,
+    "sha256": "16229330fd1fb6c66c1d5f099758282a90354586494b3d9b4cbb389958bb5a99"
+  },
+  {
+    "path": "client/public/art/cards-sm/BATTLEFIELD.webp",
+    "bytes": 36838,
+    "sha256": "bd65cd16f26a9764f39fccf2fc7770a402e0444452c576ed2042e87454c786bb"
+  },
+  {
+    "path": "client/public/art/cards-xs/BATTLEFIELD.webp",
+    "bytes": 9174,
+    "sha256": "1e164cf55a84faf137cdc48cde0bdf8fcb3949c44b91bdc95103663cd0275277"
+  },
+  {
+    "path": "client/public/art/cards/TRAINING_GROUND.webp",
+    "bytes": 533794,
+    "sha256": "c1bf76b660f00b6af3192584f17e07fa3108c9946e50aab51534c708f7888976"
+  },
+  {
+    "path": "client/public/art/cards-sm/TRAINING_GROUND.webp",
+    "bytes": 35758,
+    "sha256": "0e71f3350193263af3e4b879d10e97942445c884870ba43abd145eae78ab7ecc"
+  },
+  {
+    "path": "client/public/art/cards-xs/TRAINING_GROUND.webp",
+    "bytes": 9450,
+    "sha256": "164d31a1077e3cfaebec8b70b85b7cdab37dd231ddb5fc1988d41465c7026ed7"
+  },
+  {
+    "path": "client/public/art/cards/GOBLIN_LEADER.webp",
+    "bytes": 528496,
+    "sha256": "452488925b1906aec1a1224c4513615c2473ae4e3825809cf442b9f08e261029"
+  },
+  {
+    "path": "client/public/art/cards-sm/GOBLIN_LEADER.webp",
+    "bytes": 40462,
+    "sha256": "03aee2a00fd12669d27c4cdf0d28eb081a5ae8887bb4fdf8bc9439c69d56b2ed"
+  },
+  {
+    "path": "client/public/art/cards-xs/GOBLIN_LEADER.webp",
+    "bytes": 10890,
+    "sha256": "441d693dcc4abfe5b1abf097fdb0bae5b4a16d0ae693e2af93c624f3dbbd7422"
+  },
+  {
+    "path": "client/public/art/cards/GOBLIN_KING.webp",
+    "bytes": 518630,
+    "sha256": "cca2b5f9cbbed2d9158c014c50599b83e8adbb580862187287e05dac5d4587e0"
+  },
+  {
+    "path": "client/public/art/cards-sm/GOBLIN_KING.webp",
+    "bytes": 35488,
+    "sha256": "cfc8b8855286f7a6f501312c94833e0e42acb88f28900efd5c43d4977bf56a3e"
+  },
+  {
+    "path": "client/public/art/cards-xs/GOBLIN_KING.webp",
+    "bytes": 9824,
+    "sha256": "f6d8a2d236cdaf46a1e60e8223767e8ac2d5673dc3cd0381628c8d56f6353f1b"
+  }
+]

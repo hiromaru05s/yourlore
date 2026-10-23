@@ -8,8 +8,8 @@ const dir=await mkdtemp(path.join(tmpdir(),'lore-worker-'));
 const seedRandom=()=>{let seed=83;Math.random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);};
 let live=0,constructed=0;
 try{
- await build({entryPoints:['client/src/game/botPlanner.worker.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'worker.mjs')});
- await writeFile(path.join(dir,'bridge.mjs'),`import {parentPort} from 'node:worker_threads';globalThis.postMessage=data=>parentPort.postMessage(data);await import('./worker.mjs');parentPort.on('message',data=>{(${seedRandom.toString()})();globalThis.onmessage({data});});`);
+ await build({entryPoints:['client/src/game/bot.worker.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'worker.mjs')});
+ await writeFile(path.join(dir,'bridge.mjs'),`import {parentPort} from 'node:worker_threads';globalThis.self=globalThis;globalThis.postMessage=data=>parentPort.postMessage(data);await import('./worker.mjs');parentPort.on('message',data=>{(${seedRandom.toString()})();globalThis.onmessage({data});});`);
  await build({stdin:{contents:`export {BotPlanner} from './client/src/game/botPlanner';export {botDecide} from './client/src/shared/bot';export {createGame,reduce} from './client/src/shared/engine';export {BOT_NPCS} from './client/src/shared/botNpcs';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs')});
  class BrowserWorker{
   constructor(){live++;constructed++;this.thread=new Thread(path.join(dir,'bridge.mjs'));this.thread.on('message',data=>this.onmessage?.({data}));this.thread.on('error',()=>this.onerror?.({preventDefault(){}}));}

@@ -1,3 +1,4 @@
+import { GOBLIN_CARDS } from './goblinCards';
 // Canonical player-facing effects. Explicit paragraphs define rule boundaries.
 // Edit all three languages together; see docs/card-text-style.md.
 export type EffectLocale = "ja" | "ko" | "en";
@@ -1838,3 +1839,5 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Field Limit】At most 1 on your field. Deployed only by Farmer.\n\n【While on the Field】Every new Apple you obtain becomes a Golden Apple instead. Drawing or recovering an Apple you already own does not transform it."
   }
 };
+
+for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};

@@ -68,6 +68,7 @@ export interface CardInst extends CardDef {
 }
 
 export interface FieldMon extends CardInst {
+  riftAtTurnEnd?: number;
   immuneDamageTurn?: number;
   expireOpponentOf?: Side;
   exhausted: boolean;
@@ -119,6 +120,7 @@ export interface PlayerState {
   hp: number;
   dew?: number; // persistent healing resource; not consumed by turn-start recovery
   shield?: number; // temporary HP, active immediately
+  shieldRetainTurn?: number;
   shieldExpiresTurn?: number; // expires after this opponent turn finishes
   shieldOpponentPeak?: number; // peak during the current opponent turn
   previousOpponentShieldPeak?: number; // most recent completed opponent turn

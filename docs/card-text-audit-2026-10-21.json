@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 367,
+  "count": 377,
   "engineSha256": "067fc3637bc7ce607723b8988d6fd6715d7ae641579dbcf631602beaad28d898",
   "cards": {
     "M1": {
@@ -8206,6 +8206,204 @@
         "ko": "【설치 제한】자신의 필드에 최대 1장. 농민의 효과로만 전개된다.\n\n【필드에 있는 동안】자신이 새로 얻는 사과는 모두 대신 황금 사과가 된다. 이미 소유한 사과를 뽑거나 회수할 때는 변환하지 않는다.",
         "en": "【Field Limit】At most 1 on your field. Deployed only by Farmer.\n\n【While on the Field】Every new Apple you obtain becomes a Golden Apple instead. Drawing or recovering an Apple you already own does not transform it."
       }
+    },
+    "GOBLIN": {
+      "nameJa": "ゴブリン",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "a179546ea13c5749743f00061847c3aede20733a248e41fac4cab536176b8165",
+      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
+      "hooks": {},
+      "before": null,
+      "after": {
+        "ja": "—",
+        "ko": "—",
+        "en": "—"
+      }
+    },
+    "GOBLIN_RAIDER": {
+      "nameJa": "特攻ゴブリン",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "28331b61dbf4386f7ea4b8bd11c33a30a2ce5de7868be4bee83a5e9a0bd85293",
+      "textSha256": "d19838284c07f6875a873d71617a6a46c003105ea52f361e8765dd2222f9b045",
+      "hooks": {
+        "aura": "goblinAttack"
+      },
+      "before": null,
+      "after": {
+        "ja": "【場にある間】自分の場の「ゴブリン」「特攻ゴブリン」の攻撃力+1。",
+        "ko": "【필드에 있는 동안】자신의 필드에 있는 고블린과 돌격 고블린의 공격력 +1.",
+        "en": "【While on the Field】Your Goblins and Goblin Raiders on the field have +1 ATK."
+      }
+    },
+    "GOBLIN_SETTLEMENT": {
+      "nameJa": "ゴブリン集落",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "74d44f3339a8ed6f08fec63c986117979be7ab238952c749b90a8b487c065239",
+      "textSha256": "1b04486e6a864c5f0de950e5aec3064cba1db31e2c49f84c364d2deb911d78f9",
+      "hooks": {
+        "ench": "goblinSettlement"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動条件】自分の場に「ゴブリン」か「特攻ゴブリン」がいる。\n\n【自分のターン開始時】自分の場の「ゴブリン」「特攻ゴブリン」の体力+1（持続）。\n\n【破壊時】魔法カードの効果で破壊された場合、相手に8ダメージを与える。",
+        "ko": "【발동 조건】자신의 필드에 고블린 또는 돌격 고블린이 있다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 고블린과 돌격 고블린의 체력 +1(지속).\n\n【파괴 시】마법 카드의 효과로 파괴됐다면 상대에게 8 데미지를 준다.",
+        "en": "【Play Requirement】You control a Goblin or Goblin Raider.\n\n【At the Start of Your Turn】Your Goblins and Goblin Raiders on the field gain +1 HP (lasting).\n\n【On Destruction】If destroyed by a spell card’s effect, deal 8 damage to the opponent."
+      }
+    },
+    "RELIC_PROTECTION": {
+      "nameJa": "神器の加護",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "3866581d4926c18e3ee7add1dd86d1d882fee0be65ceeda443c5b2adb6d306e7",
+      "textSha256": "96b9d3c0e14355130690d6aa98d0569aef4bf58be89629767e29deb37869ac69",
+      "hooks": {
+        "act": "relicProtection"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動時】次の相手のターン終了時に限り、自分に残ったシールドは消失せず維持される。その次の相手のターン終了時には通常どおり消失する。",
+        "ko": "【발동 시】다음 상대 턴 종료 시에 한해 자신의 남은 실드가 소멸하지 않고 유지된다. 그다음 상대 턴 종료 시에는 정상적으로 소멸한다.",
+        "en": "【On Cast】At the end of the next opponent turn only, retain your remaining Shield instead of losing it. It expires normally at the end of the following opponent turn."
+      }
+    },
+    "RELIC_BOUNTY": {
+      "nameJa": "神器の恵み",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "b150b2597b18f30cdd608b49ed4763b7d1ec0bbc97811d3a3777e5ca2e85bf7b",
+      "textSha256": "7da5d6b9b21ecbd64c2240778ea8bad171818d72a649d69288a1950e9098a232",
+      "hooks": {
+        "ench": "relicBounty"
+      },
+      "before": null,
+      "after": {
+        "ja": "【場にある間】自分の場・手札からコスト1のカードが墓地に行くたび、自分にシールド1を与える。",
+        "ko": "【필드에 있는 동안】자신의 필드·패에서 코스트 1 카드가 묘지로 갈 때마다 자신에게 실드 1을 준다.",
+        "en": "【While on the Field】Whenever a cost-1 card goes from your field or hand to your graveyard, gain 1 Shield."
+      }
+    },
+    "MANA_BACKFLOW": {
+      "nameJa": "マナ逆流装置",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "1fdfc0b97f31ebe68b21b426875c95fec056aa2a77a961ce0c594327a3ab263a",
+      "textSha256": "a0eca622d677a97c296d7e1a4318b13d7ec6b04833b912e9675bb8e2ba3a7f39",
+      "hooks": {
+        "ench": "manaBackflow"
+      },
+      "before": null,
+      "after": {
+        "ja": "【自分のターン開始時】発動した後の自分の15回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分の最大マナを3にする。他のカードの効果で破壊された場合、相手の最大マナ-1。",
+        "ko": "【자신의 턴 시작 시】발동 후 자신의 15번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 최대 마나를 3으로 만든다. 다른 카드의 효과로 파괴됐다면 상대의 최대 마나 -1.",
+        "en": "【At the Start of Your Turn】At the start of your 15th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, set your max mana to 3. If destroyed by another card’s effect, the opponent loses 1 max mana."
+      }
+    },
+    "BATTLEFIELD": {
+      "nameJa": "戦場",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "5b71899197f14ce57c8674edc66ba7ad93c9525d1585ae78eab4cf9c27555ae9",
+      "textSha256": "22f813e386d273fdb7117fb1f8bccb1c32fcca4e8dce92a3df43c99a01a90df6",
+      "hooks": {
+        "ench": "battlefield"
+      },
+      "before": null,
+      "after": {
+        "ja": "【各ターン開始時】そのターンのプレイヤーに2ダメージを与える。",
+        "ko": "【각 턴 시작 시】그 턴의 플레이어에게 2 데미지를 준다.",
+        "en": "【At the Start of Each Turn】Deal 2 damage to the player whose turn is starting."
+      }
+    },
+    "TRAINING_GROUND": {
+      "nameJa": "訓練所",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "d3d5e3784209d2e11fc6999412195c9bf647040ff132acdf483c860448df968c",
+      "textSha256": "949a0a37ed2dfb0ab17571339ad336e96bf280de5aae9cd99c67ef8eefcd64f8",
+      "hooks": {
+        "ench": "trainingGround"
+      },
+      "before": null,
+      "after": {
+        "ja": "【自分のターン開始時】ダイスを1回振る。\n1～3：「砲撃兵」1体を自分の場に召喚する。\n4～5：「大砲兵」1体を自分の場に召喚する。\n6：自分の場の「訓練所」を全て破壊する。自分の場に「城」がある場合、破壊する代わりに「騎士」2体を自分の場に召喚する。",
+        "ko": "【자신의 턴 시작 시】주사위를 1회 굴린다.\n1~3: 포격병 1체를 자신의 필드에 소환한다.\n4~5: 대포병 1체를 자신의 필드에 소환한다.\n6: 자신의 필드에 있는 훈련소를 전부 파괴한다. 자신의 필드에 성이 있으면 파괴하는 대신 기사 2체를 자신의 필드에 소환한다.",
+        "en": "【At the Start of Your Turn】Roll 1 die.\n1–3: Summon 1 Gunner to your field.\n4–5: Summon 1 Heavy Gunner to your field.\n6: Destroy all Training Grounds on your field. If you control a Castle, summon 2 Knights to your field instead of destroying them."
+      }
+    },
+    "GOBLIN_LEADER": {
+      "nameJa": "ゴブリンリーダー",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "437b3ae0c1c4d9c3ca8d58897813b8356b84c100f8dfd89065e0497e74696c03",
+      "textSha256": "2cf404dba12a79ba221485b4c86cd4d9e8ece7d87ba7fc9190edddee635914c0",
+      "hooks": {
+        "onSummon": "goblinLeader"
+      },
+      "before": null,
+      "after": {
+        "ja": "【召喚時】自分の場の「ゴブリン」関連カードの枚数分、相手にダメージを与える。このモンスター自身と永続魔法も数える。",
+        "ko": "【소환 시】자신의 필드에 있는 고블린 계열 카드 수만큼 상대에게 데미지를 준다. 이 몬스터 자신과 지속 마법도 센다.",
+        "en": "【On Summon】Deal damage to the opponent equal to the number of Goblin-related cards on your field, including this monster and persistent spells."
+      }
+    },
+    "GOBLIN_KING": {
+      "nameJa": "ゴブリンキング",
+      "status": "added-reviewed-2026-10-23",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "650915d56274fccd6211473365832586a0c2933a2f8099edd10ebe47987fee68",
+      "textSha256": "a1b37d7d9a59b5527afbaec417222611949cb7ec473f3916303384c62dacbf84",
+      "hooks": {
+        "onSummon": "goblinKing"
+      },
+      "before": null,
+      "after": {
+        "ja": "【召喚時】ダイスを1回振る。\n1～2：自分のデッキ・手札・墓地・場に「ゴブリン」関連カードが2種類未満なら、このカード以外の自分の場のカードを全て破壊する。その場合、このターン終了時にこのカードを自分のリフトへ送る。\n3～6：自分の場の「ゴブリン」系モンスター全てを+2/+2（持続）。",
+        "ko": "【소환 시】주사위를 1회 굴린다.\n1~2: 자신의 덱·패·묘지·필드에 고블린 계열 카드가 2종류 미만이면 이 카드 외 자신의 필드 카드를 전부 파괴한다. 그 경우 이번 턴 종료 시 이 카드를 자신의 리프트로 보낸다.\n3~6: 자신의 필드에 있는 고블린 계열 몬스터 전부 +2/+2(지속).",
+        "en": "【On Summon】Roll 1 die.\n1–2: If your deck, hand, graveyard and field contain fewer than 2 distinct Goblin-related cards, destroy all other cards on your field. If so, send this card to your Rift at the end of this turn.\n3–6: Give all Goblin monsters on your field +2/+2 (lasting)."
+      }
     }
   },
   "keywords": {
@@ -8402,5 +8600,17 @@
     ],
     "evidence": "docs/card-rework/2026-10-21-balance-v60/release.md",
     "engineSha256": "2b8b1e6f91673ff3820a1316415ac25d77bc70d546ba2daf22e0bc74fd4eeca3"
-  }
+  },
+  "additions20261023": [
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN_SETTLEMENT",
+    "RELIC_PROTECTION",
+    "RELIC_BOUNTY",
+    "MANA_BACKFLOW",
+    "BATTLEFIELD",
+    "TRAINING_GROUND",
+    "GOBLIN_LEADER",
+    "GOBLIN_KING"
+  ]
 }

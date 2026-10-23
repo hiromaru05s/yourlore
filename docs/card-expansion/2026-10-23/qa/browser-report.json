@@ -1,0 +1,63 @@
+{
+  "origin": "http://127.0.0.1:5298",
+  "evidence": "local fixture, production renderer/controller, no authenticated online match",
+  "checks": [
+    "Ten new full-resolution card images decode",
+    "Full rules rendered through production card renderer",
+    "Real controller resolves Goblin Leader damage and summon",
+    "Relic Protection cast grants Shield from Relic Bounty"
+  ],
+  "assets": [
+    {
+      "id": "GOBLIN",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "GOBLIN_RAIDER",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "GOBLIN_SETTLEMENT",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "RELIC_PROTECTION",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "RELIC_BOUNTY",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "MANA_BACKFLOW",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "BATTLEFIELD",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "TRAINING_GROUND",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "GOBLIN_LEADER",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "GOBLIN_KING",
+      "width": 1472,
+      "height": 1344
+    }
+  ],
+  "errors": []
+}
