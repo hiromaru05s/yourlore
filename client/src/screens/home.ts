@@ -81,7 +81,7 @@ export function mountHome(app: App): Screen {
   return {destroy:()=>{disposed=true;stopWarmup();unsub();stopSpirit();stopDaily();stopGifts();}};
 }
 
-/** Character cards select an NPC; the separate start action begins a duel. */
+/** Select an NPC, then start centrally or double-click its card. */
 function showBotNpcModal(app: App): void {
   if(document.querySelector('.bot-diff-ov'))return;
   const store=sanitizeDecks(app.user?.decks ?? null),activeDeck=store.list[store.sel];
@@ -105,7 +105,11 @@ function showBotNpcModal(app: App): void {
             <span class="npc-title">${esc(npc.title[getLang()])}</span><span class="diff-name">${esc(npc.name[getLang()])}</span><span class="npc-difficulty">${loungeText("難易度","Difficulty","난이도")} · ${t(`bot.diff.${npc.difficulty}`)}</span><span class="challenge-caption">${esc(npc.style[getLang()])}</span><span class="npc-difficulty">${app.user?.botClears?.includes(npc.difficulty)?t("progress.cleared"):`${t("progress.firstClear")} +${BOT_FIRST_CLEAR_EXP[npc.difficulty]} EXP`}</span><span class="npc-first-reward" data-bot-reward="${npc.difficulty}">${firstClearLabel(BOT_REWARDS[npc.difficulty])}</span>
           </button>`).join("")}
       </div>
-      <div class="challenge-footer"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div><p id="challengeDescription" aria-live="polite"></p><button class="challenge-start" id="diffStart"></button></div>
+      <div class="challenge-footer">
+        <button type="button" class="challenge-start" id="diffStart"></button>
+        <p class="challenge-shortcut">${loungeText('相手のカードをダブルクリックでも開始','Double-click an opponent to start','상대 카드를 더블 클릭해도 시작')}</p>
+        <div class="challenge-details"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div><p id="challengeDescription" aria-live="polite"></p></div>
+      </div>
     </div>`;
   document.body.appendChild(ov);
   if(app.user&&app.user.id!=='local-guest-user')void api.progression().then(data=>{if(!ov.isConnected)return;for(const [diff,done] of Object.entries(data.bot)){const el=ov.querySelector(`[data-bot-reward="${diff}"]`);if(el&&done)el.textContent=loungeText('初回報酬 受取済み','First reward received','첫 보상 수령 완료');}}).catch(()=>{});
@@ -115,13 +119,20 @@ function showBotNpcModal(app: App): void {
     ov.querySelector('#challengeDescription')!.textContent = `${t(`bot.diff.${selected}.desc`)} ${loungeText('3種類のデッキを使い分けます。','Uses three different decks.','세 가지 덱을 사용합니다.')}`;
     ov.querySelector('#diffStart')!.textContent = loungeText(`${name}と対戦 →`, `Duel ${name} →`, `${name}와 대전 →`);
   };
-  const close = () => {ov.remove();previousFocus?.focus();};
+  let closed = false;
+  const close = () => {closed=true;ov.remove();previousFocus?.focus();};
+  const start = (difficulty: BotDifficulty = selected) => {
+    if(closed || !ov.isConnected)return;
+    close();
+    app.botGame(difficulty);
+  };
   (ov.querySelector("#diffCancel") as HTMLElement).onclick = close;
   ov.onclick = (e) => { if (e.target === ov) close(); };
   ov.querySelectorAll<HTMLButtonElement>(".diff-card").forEach((b) => {
     b.onclick = () => { selected=b.dataset.diff as BotDifficulty;update(); };
+    b.ondblclick = () => start(b.dataset.diff as BotDifficulty);
   });
-  (ov.querySelector('#diffStart') as HTMLButtonElement).onclick=()=>{close();app.botGame(selected);};
+  (ov.querySelector('#diffStart') as HTMLButtonElement).onclick=()=>start();
   ov.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();close();}if(e.key==='Tab'){const buttons=[...ov.querySelectorAll<HTMLButtonElement>('button')],at=buttons.indexOf(document.activeElement as HTMLButtonElement);e.preventDefault();buttons[(at+(e.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}};
   update();ov.querySelector<HTMLButtonElement>('[aria-pressed=true]')!.focus();
 }
