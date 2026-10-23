@@ -4,7 +4,7 @@ import { startupLanguage } from './startupLanguage';
 const shell = document.getElementById('startup');
 const message = document.getElementById('startup-status');
 const reload = document.getElementById('startup-reload');
-const language = (navigator.language || 'en').slice(0, 2);
+const language = (document.documentElement.lang || navigator.language || 'en').slice(0, 2);
 const copy = language === 'ja'
   ? ['書庫を開いています', '読み込み直す', '接続に時間がかかっています。通信状態を確認し、読み込み直してください。', '起動できませんでした。通信状態を確認し、読み込み直してください。']
   : language === 'ko'
@@ -17,6 +17,19 @@ const slow = setTimeout(() => { if (message) message.textContent = copy[2]; }, 1
 void Promise.all([import('./main'), startupLanguage()])
   .then(async ([{ start }, language]) => {
     await start(language);
+    // Preserve the existing ritual's clock when the app takes over its loader.
+    const next = document.querySelector('.screen-loader.game-loading');
+    if (shell && next) {
+      const clocks = new Map(shell.getAnimations({ subtree: true })
+        .filter((animation): animation is CSSAnimation => animation instanceof CSSAnimation)
+        .map(animation => [animation.animationName, animation.startTime]));
+      for (const animation of next.getAnimations({ subtree: true })) {
+        if (animation instanceof CSSAnimation) {
+          const startTime = clocks.get(animation.animationName);
+          if (typeof startTime === 'number') animation.startTime = startTime;
+        }
+      }
+    }
     shell?.remove();
   })
   .catch(error => {

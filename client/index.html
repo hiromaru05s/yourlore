@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -11,14 +11,39 @@
   </head>
   <body>
     <style>
-      #startup{position:fixed;inset:0;z-index:2147483647;display:grid;place-content:center;gap:24px;padding:32px;text-align:center;background:#091723;color:#eae3cf;font:16px/1.6 system-ui,sans-serif}
-      #startup strong{font:32px Georgia,serif;letter-spacing:.24em}#startup p{max-width:32em;margin:0}#startup a{color:inherit;text-underline-offset:5px}
+      /* Generated from the runtime loader by Vite, before any module is needed. */
+      /* LORE_LOADING_CSS */
+      #startup{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+      #startup-reload{position:absolute;bottom:max(16px,env(safe-area-inset-bottom));color:inherit;font:12px/1.6 sans-serif;letter-spacing:0;text-underline-offset:5px}
+      #startup noscript{position:absolute;top:16px;font:12px sans-serif}
     </style>
-    <section id="startup" aria-label="LORE">
-      <strong>LORE</strong><p id="startup-status" role="status">Opening the library…</p>
-      <a id="startup-reload" href="">Reload / 読み込み直す / 다시 불러오기</a>
-      <noscript>Enable JavaScript to open LORE.</noscript>
+    <section id="startup" class="game-loading" aria-label="LORE" role="status" aria-live="polite">
+      <img class="loading-logo" src="/art/brand/lore-logo-transparent.webp" alt="LORE">
+      <span id="startup-status" class="loading-title">書庫を開いています</span>
+      <!-- LORE_LOADING_RITUAL -->
+      <div class="loading-progress"><progress max="100" value="0" aria-label="読み込みの進捗"></progress><b>0%</b></div>
+      <small id="startup-phase" class="loading-phase">準備を始めています</small>
+      <a id="startup-reload" href="">読み込み直す</a>
+      <noscript>JavaScript を有効にしてください / Enable JavaScript / JavaScript를 활성화해 주세요</noscript>
     </section>
+    <script>
+      // Runs before the first paint, including when the entry module cannot download.
+      (() => {
+        let language = (navigator.language || 'en').slice(0, 2);
+        try { const saved = localStorage.getItem('lore_lang'); if (['ja', 'ko', 'en'].includes(saved)) language = saved; } catch {}
+        if (!['ja', 'ko'].includes(language)) language = 'en';
+        document.documentElement.lang = language;
+        const copy = language === 'ja'
+          ? ['書庫を開いています', '準備を始めています', '読み込み直す', '読み込みの進捗']
+          : language === 'ko'
+            ? ['서고를 여는 중', '준비 중', '다시 불러오기', '로딩 진행률']
+            : ['Opening the library', 'Getting ready', 'Reload', 'Loading progress'];
+        document.getElementById('startup-status').textContent = copy[0];
+        document.getElementById('startup-phase').textContent = copy[1];
+        document.getElementById('startup-reload').textContent = copy[2];
+        document.querySelector('#startup progress').setAttribute('aria-label', copy[3]);
+      })();
+    </script>
     <div id="app"></div>
     <script type="module" src="/src/startup.ts"></script>
   </body>

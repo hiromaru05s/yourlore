@@ -1,0 +1,50 @@
+{
+  "base": "http://127.0.0.1:58362",
+  "results": [
+    {
+      "name": "1280-720-ja-blocked-modules",
+      "status": "書庫を開いています",
+      "cards": 3,
+      "externalJsCss": "blocked",
+      "passed": true
+    },
+    {
+      "name": "390-844-ja-blocked-modules",
+      "status": "書庫を開いています",
+      "cards": 3,
+      "externalJsCss": "blocked",
+      "passed": true
+    },
+    {
+      "name": "320-568-ko-blocked-modules",
+      "status": "서고를 여는 중",
+      "cards": 3,
+      "externalJsCss": "blocked",
+      "passed": true
+    },
+    {
+      "name": "844-390-en-blocked-modules",
+      "status": "Opening the library",
+      "cards": 3,
+      "externalJsCss": "blocked",
+      "passed": true
+    },
+    {
+      "name": "390-844-ja-no-js",
+      "status": "書庫を開いています",
+      "cards": 3,
+      "externalJsCss": "blocked",
+      "passed": true
+    },
+    {
+      "name": "runtime-handoff",
+      "clocks": {
+        "before": 41.045000005397014,
+        "after": 41.045000005397014
+      },
+      "login": true,
+      "errors": [],
+      "passed": true
+    }
+  ]
+}
