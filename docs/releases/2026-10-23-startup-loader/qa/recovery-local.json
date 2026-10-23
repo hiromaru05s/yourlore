@@ -1,5 +1,5 @@
 {
-  "base": "http://127.0.0.1:58811",
+  "base": "http://127.0.0.1:59548",
   "old": false,
   "normalApi": "local unauthenticated fixture",
   "failureTests": "explicit request failure injection; background test uses account fixture",
@@ -7,7 +7,7 @@
     {
       "name": "unmodified-login",
       "width": 1280,
-      "ms": 3099,
+      "ms": 5869,
       "errors": [],
       "state": {
         "startup": false,
@@ -19,7 +19,7 @@
     {
       "name": "unmodified-login",
       "width": 390,
-      "ms": 1969,
+      "ms": 8363,
       "errors": [],
       "state": {
         "startup": false,
@@ -31,7 +31,7 @@
     {
       "name": "stalled-geo",
       "width": 1280,
-      "ms": 1176,
+      "ms": 4795,
       "errors": [],
       "state": {
         "startup": false,
@@ -43,7 +43,7 @@
     {
       "name": "saved-language",
       "width": 390,
-      "ms": 900,
+      "ms": 7572,
       "errors": [],
       "state": {
         "startup": false,
@@ -55,7 +55,7 @@
     {
       "name": "failed-auth",
       "width": 1280,
-      "ms": 2180,
+      "ms": 17924,
       "errors": [],
       "state": {
         "startup": false,
@@ -67,7 +67,7 @@
     {
       "name": "stalled-auth",
       "width": 390,
-      "ms": 11272,
+      "ms": 12057,
       "errors": [],
       "state": {
         "startup": true,
@@ -80,7 +80,7 @@
     {
       "name": "failed-module",
       "width": 1280,
-      "ms": 1477,
+      "ms": 841,
       "errors": [],
       "state": {
         "startup": true,
@@ -93,7 +93,7 @@
     {
       "name": "no-javascript",
       "width": 390,
-      "ms": 298,
+      "ms": 311,
       "errors": [],
       "state": {
         "startup": true,
@@ -106,7 +106,7 @@
     {
       "name": "stalled-background",
       "width": 1280,
-      "ms": 20764,
+      "ms": 23659,
       "errors": [],
       "state": {
         "startup": false,
@@ -116,6 +116,5 @@
         "atmosphere": "fallback"
       }
     }
-  ],
-  "failureInjectionNote": "The last case blocks service workers so explicit network fault injection cannot be bypassed by the verified asset cache."
+  ]
 }
