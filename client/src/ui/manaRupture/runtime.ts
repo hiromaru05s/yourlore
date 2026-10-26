@@ -28,7 +28,11 @@ export function prepareManaRupture(root:HTMLElement):ManaRupture {
     ended=true;abort.abort();clearTimeout(timer);cancelAnimationFrame(frame);
     window.removeEventListener('resize',cancel);window.removeEventListener('pagehide',cancel);
     document.removeEventListener('visibilitychange',visibility);motion.removeEventListener('change',cancel);
-    sound?.close();host?.remove();renderer?.dispose();renderer=undefined;
+    // A driver/audio teardown error must never keep the result promise pending.
+    try{sound?.close();}catch(error){console.warn('[mana rupture audio cleanup]',error);}
+    host?.remove();
+    try{renderer?.dispose();}catch(error){console.warn('[mana rupture GPU cleanup]',error);}
+    renderer=undefined;
     if(canvas)canvas.width=canvas.height=1;
     if(!complete)root.removeAttribute('data-mana-ruined');
     else root.dataset.manaFxFinished=String(Math.round(performance.now()));
