@@ -177,6 +177,8 @@ export interface PlayerState {
   refreshBlockTurn?: boolean; // 〃 (활성)
   supplyShrink: number; // Market Crash: trim to two offers at the next own turn, retaining their identities
   defendHeal: number; // heal this much whenever this player is attacked
+  magicTrainTurns?: number; // Quiet turns reserved for immediately before the next own turn.
+  magicBankBonusTotal?: number; // Successful bank bonus gains, for action-level presentation.
   manaGainNext: number; // max mana to gain at the start of this player's next turn
   skipNext: boolean; // legacy: if true, this player's next turn is skipped
   skipTurnSources?: ("TIMEWARP" | "BLACK_NOVA" | "DOMINION" | null)[]; // FIFO provenance; old saves may omit it

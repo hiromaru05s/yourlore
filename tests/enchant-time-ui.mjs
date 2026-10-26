@@ -13,6 +13,7 @@ try{
  assert.deepEqual([s('ANCIENT_CIV').remaining,s('ANCIENT_CIV').mode,s('ANCIENT_CIV').fill],[2,'fill',7/9]);assert.equal(s('ANCIENT_CIV').timing,'delayed-own');
  for(const id of ['BREWING','FARM','NIGHT_CASTLE_GIFT']){assert.equal(s(id).mode,'fill');assert.equal(s(id).timing,'own-start');}
  assert.equal(s('BREWING').fill,.5);assert.equal(s('BREWING').remaining,3);assert.equal(state(e('BREWING'),{turn:90},owner).remaining,3,'owner upkeeps do not come from global turn');
+ assert.equal(s('MAGIC_BANK',2).timing,'own-end');assert(describe(s('MAGIC_BANK',2)).includes('自分のターン終了'));
  assert.equal(s('E2').timing,'both-start');assert.equal(s('MANA_BACKFLOW').timing,'own-start');assert.equal(s('GUILD_CO'),null);assert.equal(s('TRIBE_PACT').remaining,37);assert.equal(state(e('TRIBE_PACT'),g,{tribesFired:['x']}),null);
  // These are also the source faces printed into the cast/landing mesh, before board render.
  for(const [id,remaining] of [['BLOOD_RITE','3'],['ANCIENT_CIV','2'],['BREWING','3'],['E3','3'],['TRIBE_PACT','37']]){

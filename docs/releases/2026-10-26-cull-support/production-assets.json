@@ -1,0 +1,37 @@
+{
+  "base": "https://yourlore.xyz",
+  "checkedAt": "2026-10-26T14:50:50.149Z",
+  "entriesMatch": true,
+  "assets": [
+    {
+      "path": "/assets/main-Do1XR1z1.js",
+      "sha256": "f2797ef4e332d8efc6843822149747ebf4469548c60779f098db36be665665bf",
+      "bytes": 2585
+    },
+    {
+      "path": "/assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "sha256": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "bytes": 711
+    },
+    {
+      "path": "/assets/preload-helper-BXl3LOEh.js",
+      "sha256": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "bytes": 1110
+    },
+    {
+      "path": "/assets/assetQueue-pj8dvauC.js",
+      "sha256": "016fff874ee3eab410b697eeb2cfdb0d38bbf4fd690e7d47661d599e91ae2011",
+      "bytes": 1254449
+    },
+    {
+      "path": "/assets/bot.worker-DpKExoXR.js",
+      "sha256": "fef52ddb26ee6638f04af639952cad5d719acfd8239a2902b823ba816919ddb1",
+      "bytes": 891102
+    },
+    {
+      "path": "/assets/social-C0Ki7ZbL.js",
+      "sha256": "2cc51e6bef9fec02034d1c57e595726d9b8c3658fb1cbdb81c93b69593ac230b",
+      "bytes": 400194
+    }
+  ]
+}

@@ -12,6 +12,8 @@
     "GOBLIN_LEADER",
     "GOBLIN_KING",
     "RIFT_MATTER",
-    "RIFT_METALIGHT"
+    "RIFT_METALIGHT",
+    "MAGIC_TRAIN",
+    "MAGIC_BANK"
   ]
 }

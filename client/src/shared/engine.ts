@@ -1,3 +1,4 @@
+import { RIFT_REWORK_IDS } from './riftReworkCards';
 import { GOBLIN_IDS, isBasicGoblin } from './goblinCards';
 import {trackMedalDuel} from './medalTracking';
 import { trackActivity } from "./progression";
@@ -56,6 +57,37 @@ function obtainedCard(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): C
 
 /** Permanently-exiled zone (lazy init for states persisted before this field existed). */
 function rmz(pl: PlayerState): CardInst[] { return (pl.removed ??= []); }
+/** Explicit card-effect transfer. Own Void/token cleanup deliberately uses rmz directly. */
+function sendToRift(g: GameState, owner: PlayerState, card: CardInst, sourceUid?: string): void {
+  rmz(owner).push(card);
+  if (RIFT_REWORK_IDS.has(card.id) && sourceUid !== card.uid)
+    queueExpansionChoice(g, owner, 'RIFT_TRIGGER', '', { uid: card.uid, id: card.id });
+}
+function returnRiftCard(ctx: Ctx, p: PlayerState, uid: unknown): void {
+  const i = rmz(p).findIndex(c => c.uid === uid);
+  if (i < 0) return;
+  const card = rmz(p).splice(i, 1)[0];
+  p.discard.push(resetInst(card));
+  ctx.log(`${cn(card)}: 리프트에서 자신의 묘지로`, `${cn(card)}: リフトから自分の墓地へ戻る`);
+}
+function resolveRiftTrigger(g: GameState, ctx: Ctx, p: PlayerState, data?: Record<string, unknown>): void {
+  const card = rmz(p).find(c => c.uid === data?.uid);
+  if (!card) return;
+  ctx.log(`${cn(card)}: 다른 카드의 효과로 리프트에 보내져 발동`, `${cn(card)}: 他のカードの効果でリフトに送られたため発動`);
+  if (card.id === 'GM6_1') {
+    offerEffectChoice(g, ctx, p, 'RIFT_JAILER', '次元幽閉者 — 自分のリフトへ移す相手のリフトのカードを最大8枚選択', {left:8, returnUid:card.uid});
+    return;
+  }
+  if (card.id === 'VOID_APOSTLE') for (let i = 0; i < 5; i++) rmz(p).push(starter(g, 'STARTER_TRASH'));
+  if (card.id === 'GM6_8') {
+    // Bound attempts even if a summon reaction immediately destroys the token.
+    const slots = Math.max(0, Math.min(FIELD_MAX, p.summonCap ?? FIELD_MAX) - p.field.length);
+    for (let i = 0; i < slots && !g.over; i++) if (!effectSummon(g, ctx, p, 'HEAVY_GUNNER')) break;
+  }
+  if (card.id === 'SORTER') effectSummon(g, ctx, p, CHOSEN_IDS[randInt(g, CHOSEN_IDS.length)]);
+  if (card.id !== 'GM6_8') returnRiftCard(ctx, p, card.uid);
+}
+
 /** Reset a field card to its printed form without changing the physical card identity. */
 function resetInst(card: CardInst): CardInst {
   const def = DB[card.id] ?? STARTERS[card.id];
@@ -779,7 +811,93 @@ function reserveTurnSkip(p: PlayerState, source: "TIMEWARP" | "BLACK_NOVA" | "DO
   if (source === 'DOMINION' && sources.includes('DOMINION')) return;
   sources.push(source); p.skipTurnSources = sources; p.skipTurns = count + 1;
 }
+function finishAtTurnLimit(g: GameState, ctx: Ctx): boolean {
+  if (g.turn >= MAX_TURNS && !g.over) {
+    g.over = true; g.phase = "over";
+    const [pa, pb] = g.players;
+    const winner: Side | null = pa.hp > pb.hp ? 0 : pb.hp > pa.hp ? 1 : null;
+    g.winner = winner;
+    if (winner != null) {
+      const w = g.players[winner];
+      ctx.log(
+        `<span class="dmg">${MAX_TURNS}턴 경과 — 체력 판정으로 ${w.name} 승리! (${pa.hp} vs ${pb.hp})</span>`,
+        `<span class="dmg">${MAX_TURNS}ターン経過 — 体力判定で ${w.name} の勝利！ (${pa.hp} vs ${pb.hp})</span>`,
+      );
+      ctx.ev.push({ type: "win", winner });
+    } else {
+      ctx.log(
+        `<span class="dmg">${MAX_TURNS}턴 경과 — 체력 동률, 무승부!</span>`,
+        `<span class="dmg">${MAX_TURNS}ターン経過 — 体力同点、引き分け！</span>`,
+      );
+      ctx.ev.push({ type: "matchDraw" });
+    }
+    return true;
+  }
+  return g.over;
+}
+
+/** Advance duration clocks only. No synthetic actions, draws, ticks or rewards. */
+function advanceQuietTurns(g: GameState, ctx: Ctx, count: number): void {
+  for (let step = 0; step < count && !g.over; step++) {
+    const current = g.players[g.cur];
+    for (const pl of g.players) {
+      const own = pl === current;
+      for (const e of [...pl.enchants]) {
+        const elapsed = (e.card.ench === 'noAttack' || own) && enchantHasTurnCountdown(e.card);
+        const absolute = e.card.ench === 'spellHeal' && g.turn >= (e.bornTurn ?? 0) + 10;
+        if (elapsed) e.turns = Math.max(0, e.turns - 1);
+        if ((elapsed && e.turns === 0) || absolute) {
+          pl.enchants.splice(pl.enchants.indexOf(e), 1);
+          // Expiration removes continuous modifiers; it does not pay end rewards.
+          binEnch(g, ctx, pl, e.card, false, 'exile');
+        }
+      }
+      if (own) {
+        for (const e of pl.exile) e.turns = Math.max(0, e.turns - 1);
+        for (const t of pl.traps) if (t.card.react === 'doomsday' && t.cnt != null) t.cnt = Math.max(0, t.cnt - 1);
+        pl.trapBlockTurns = Math.max(0, (pl.trapBlockTurns ?? 0) - 1);
+        const skips = (pl.skipTurns ?? 0) + (pl.skipNext ? 1 : 0);
+        if (skips) { pl.skipTurns = skips - 1; pl.skipNext = false; pl.skipTurnSources?.shift(); }
+        pl.spellDiscountTurn = 0; pl.spellDiscountCharges = [];
+        pl.noDirectTurn = false; pl.noHighAtkTurn = false;
+        pl.trapBlockTurn = false; pl.trapBlockNext = false;
+        pl.lowSummonBanTurn = false; pl.lowSummonBanNext = false;
+        pl.refreshBlockTurn = false; pl.refreshBlockNext = false;
+        pl.spellSealTurn = false; pl.nextPenalty = 0; pl.manaPenalty = 0;
+        pl.drawPenaltyNext = 0;
+      }
+      for (const m of [...pl.field]) {
+        if (m.hatch != null) m.hatch = Math.max(0, m.hatch - 1);
+        const expired = (m.tempAtkExpiry ?? []).filter(e => e.turn <= g.turn);
+        m.tempAtk -= expired.reduce((n,e) => n + e.amount, 0);
+        if (m.tempAtkExpiry) m.tempAtkExpiry = m.tempAtkExpiry.filter(e => e.turn > g.turn);
+        if (own) { m.tempAtk = 0; m.tempAtkExpiry = []; m.exhausted = false; m.attacksUsed = 0; }
+        if (m.immuneDamageTurn != null && m.immuneDamageTurn <= g.turn) delete m.immuneDamageTurn;
+        if ((m.riftAtTurnEnd != null && m.riftAtTurnEnd <= g.turn) || (m.expireOpponentOf != null && m.expireOpponentOf !== g.cur)) {
+          pl.field.splice(pl.field.indexOf(m), 1);
+          if (m.riftAtTurnEnd != null || m.token || hasPassive(m, 'void')) rmz(pl).push(resetInst(m));
+          else pl.discard.push(resetInst(m));
+          ctx.ev.push({type:'destroy',player:side(g,pl),uid:m.uid,id:m.id});
+        }
+      }
+      if ((pl.shieldExpiresTurn ?? Infinity) <= g.turn) { pl.shield = 0; delete pl.shieldExpiresTurn; }
+      if ((pl.shieldRetainTurn ?? Infinity) <= g.turn) delete pl.shieldRetainTurn;
+    }
+    if ((g.trickLeft ?? 0) > 0 && --g.trickLeft! === 0)
+      for (const pl of g.players) for (const m of pl.field) if (m.trickSwapped) trickSwapWithWeaken(g, m);
+    if (finishAtTurnLimit(g, ctx)) return;
+    g.turn++; g.cur = (1 - g.cur) as Side;
+  }
+}
+
 function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
+  if (!first && (g.players[g.cur].magicTrainTurns ?? 0) > 0) {
+    const count = g.players[g.cur].magicTrainTurns!;
+    delete g.players[g.cur].magicTrainTurns;
+    ctx.log(`마도 열차: 효과를 발동하지 않고 ${count}턴 진행`, `魔道列車: 途中の効果を発動せず${count}ターン進行`);
+    advanceQuietTurns(g, ctx, count);
+    if (g.over) return;
+  }
   const p = g.players[g.cur];
   ctx.ev.push({ type: "turnHeader", turn: g.turn, name: p.name, isBot: p.isBot, player: g.cur });
   const shieldOwner = g.players[1 - g.cur];
@@ -1451,7 +1569,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         handleDefeat(g, ctx, pl, side(g, opp));
       }
       emitActivation();
-      if (e.card.ench !== "manaBackflow" && enchantHasTurnCountdown(e.card) && (everyTurn || ownerTurn)) {
+      if (e.card.ench !== "manaBackflow" && e.card.ench !== "magicBank" && enchantHasTurnCountdown(e.card) && (everyTurn || ownerTurn)) {
         e.turns--;
         if (e.turns <= 0) {
           fieldToGrave(g,ctx,pl,e.card);
@@ -1598,29 +1716,13 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
       ctx.ev.push({ type: 'infinityRelease', player, ...item });
     delete owner.infinityPresentation;
   }
+  for (const e of [...p.enchants]) if (e.card.ench === 'magicBank' && --e.turns <= 0) {
+    p.enchants.splice(p.enchants.indexOf(e), 1);
+    binEnch(g, ctx, p, e.card, false, 'self');
+  }
   // 60-turn limit: before a new turn would begin, judge the game by remaining HP
   // (higher HP wins; an exact tie is a draw).
-  if (g.turn >= MAX_TURNS && !g.over) {
-    g.over = true; g.phase = "over";
-    const [pa, pb] = g.players;
-    const winner: Side | null = pa.hp > pb.hp ? 0 : pb.hp > pa.hp ? 1 : null;
-    g.winner = winner;
-    if (winner != null) {
-      const w = g.players[winner];
-      ctx.log(
-        `<span class="dmg">${MAX_TURNS}턴 경과 — 체력 판정으로 ${w.name} 승리! (${pa.hp} vs ${pb.hp})</span>`,
-        `<span class="dmg">${MAX_TURNS}ターン経過 — 体力判定で ${w.name} の勝利！ (${pa.hp} vs ${pb.hp})</span>`,
-      );
-      ctx.ev.push({ type: "win", winner });
-    } else {
-      ctx.log(
-        `<span class="dmg">${MAX_TURNS}턴 경과 — 체력 동률, 무승부!</span>`,
-        `<span class="dmg">${MAX_TURNS}ターン経過 — 体力同点、引き分け！</span>`,
-      );
-      ctx.ev.push({ type: "matchDraw" });
-    }
-    return;
-  }
+  if (finishAtTurnLimit(g, ctx)) return;
   o.previousOpponentShieldPeak = Math.max(o.shieldOpponentPeak ?? 0, o.shield ?? 0);
   if (o.shieldExpiresTurn != null && o.shieldExpiresTurn <= g.turn) {
     if (o.shieldRetainTurn === g.turn) o.shieldExpiresTurn = g.turn + 2;
@@ -1797,7 +1899,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (tgt0?.tribe === "포식" && o.traps.some((t) => t.card.react === "preyGuard") && (tc = takeTrap(g, ctx, o, "preyGuard"))) {
     att.exhausted = true;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${cn(att)} ${(att.cost ?? 0) <= 5 ? "파괴 후 게임에서 제외" : "파괴"}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${cn(att)} ${(att.cost ?? 0) <= 5 ? "を破壊後ゲームから除外" : "を破壊"}`);
-    if ((att.cost ?? 0) <= 5) { const ai = p.field.findIndex((x) => x.uid === att.uid); if (ai >= 0) { const dead = p.field.splice(ai, 1)[0]; if (!dead.token) rmz(p).push(resetInst(dead)); ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id }); } }
+    if ((att.cost ?? 0) <= 5) { const ai = p.field.findIndex((x) => x.uid === att.uid); if (ai >= 0) { const dead = p.field.splice(ai, 1)[0]; if (!dead.token) sendToRift(g, p, resetInst(dead)); ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id }); } }
     else trapKill(p, att);
     return;
   }
@@ -2022,7 +2124,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (ai >= 0) {
       const dead = p.field.splice(ai, 1)[0];
       if (dead.aura === "drainMana") addMaxMana(o, (dead.drained ?? (dead.val || 3)));
-      if (!dead.token) rmz(p).push(resetInst(dead)); // 파괴가 아니라 제외 — 덱 순환에서 영구히 빠진다
+      if (!dead.token) sendToRift(g, p, resetInst(dead)); // 파괴가 아니라 제외 — 덱 순환에서 영구히 빠진다
       ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id });
     }
     return;
@@ -2038,7 +2140,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       if (di >= 0) {
         const dead = p.field.splice(di, 1)[0];
         if (dead.aura === "drainMana") addMaxMana(o, (dead.val || 3));
-        if (!dead.token) rmz(p).push(resetInst(dead));
+        if (!dead.token) sendToRift(g, p, resetInst(dead));
         ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id });
       }
     } else {
@@ -2687,10 +2789,9 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     case "draw": { const n = ctx.drawN(p, v); ctx.log(`  └ 소환 효과: ${n}장 드로우`, `  └ 召喚効果: ${n}枚ドロー`); break; }
     case "burn": ctx.dealDamage(o, v, `${cn(m)} 소환`, `${cn(m)} 召喚`); break;
-    case "sorterSummon": { // 선별자(v41): 컬 3장 제외 (상시 효과의 추가 제외는 reduce() 후처리)
-      const ex = exileCulls(g, ctx.ev, p, v || 3, m.uid);
-      if (ex > 0) ctx.log(`  └ 컬 ${ex}장 게임에서 제외 (누적 ${cullExiled(p)})`, `  └ カル${ex}枚をゲームから除外 (累計${cullExiled(p)})`);
-      else ctx.log("  └ 제외할 컬이 없음", "  └ 除外するカルがない");
+    case "sorterSummon": {
+      rmz(p).push(starter(g, 'STARTER_TRASH'));
+      ctx.log('  └ 새로운 컬 1장을 자신의 리프트에 추가', '  └ 新しいカル1枚を自分のリフトに追加');
       break;
     }
     case "unbrand": { // 제인사(v41): 자신의 낙인 카운터 1개 제거
@@ -3100,11 +3201,10 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else ctx.log("  └ 기록된 제시 없음", "  └ 記録された提示なし");
       break;
     }
-    case "jailer": { // 차원 유폐자: 상대 제외존에서 최대 8장을 자신의 제외존으로
-      if ((o.removed?.length ?? 0) > 0 && !g.pending) {
-        g.pending = { kind: "oppRmz", reason: "jailer", allowCancel: true, data: { val: 8 }, hint: "차원 유폐자 — 자신의 제외존으로 옮길 카드 선택 (상대의 제외존, 최대 8장)", hintJa: "次元幽閉者 — 自分の除外ゾーンに移すカードを選択 (相手の除外ゾーン、最大8枚)" };
-        ctx.ev.push({ type: "needTarget", pending: g.pending });
-      } else ctx.log("  └ 상대의 제외된 카드가 없음", "  └ 相手の除外カードがない");
+    case "jailer": {
+      if (rmz(o).some(c => !hasPassive(c, 'relic')))
+        queueExpansionChoice(g, p, 'RIFT_JAILER', '次元幽閉者 — 自分のリフトへ移す相手のリフトのカードを最大8枚選択', {left:8});
+      else ctx.log('  └ 상대의 리프트에 대상이 없음', '  └ 相手のリフトに対象がない');
       break;
     }
     case "originArbiter": { // v49: 게임 중 1회 — 이번에 소환한 자신 외 시초 카드가 있으면 상대 낙인 +1
@@ -3486,6 +3586,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
 // custom (bespoke) spell effects — dispatched by card id
 // ============================================================
 export const CUSTOM_SPELLS = new Set<string>([
+  'MAGIC_TRAIN',
   "S1", "S5", "S7", "AMA_KEEP", "ND2", "ND3", "ND5", "GS5_0", "GS5_2", "GS6_0", "GS6_2", "GS6_3", "GS10_3",
   "GS7_0", "GS7_2", "GS8_0", "GS8_2", "GS8_3", "GS8_4", "GS8_5", "GS9_0", "GS9_2", "GS10_0", "GS10_1", "GS10_2",
   "HANDRESET", "TIMEWARP", "GAMBLE", "DICE8",
@@ -3610,6 +3711,10 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
   const o = g.players[1 - g.cur];
   const v = card.val || 0, v2 = card.val2 || 0;
   switch (card.id) {
+    case 'MAGIC_TRAIN':
+      p.magicTrainTurns = (p.magicTrainTurns ?? 0) + 6;
+      ctx.log(`${tag(p, card)} 다음 자신의 턴 직전에 6턴 진행 예약`, `${tag(p, card)} 次の自分のターン開始直前に6ターン進める予約`);
+      break;
     case "CURSE": { // 저주(v36 토큰): 자신에게 1 데미지 · 공허(사용 후 게임에서 제외 — void 패시브가 처리)
       ctx.log(`${tag(p, card)} 자신에게 1 데미지`, `${tag(p, card)} 自分に1ダメージ`);
       ctx.dealDamage(p, 1, cn(card), cn(card));
@@ -3838,7 +3943,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (!g.over && p.discard.length) {
         const top = [...p.discard].sort((a, b) => b.cost - a.cost)[0];
         const i = p.discard.findIndex((c2) => c2.uid === top.uid);
-        rmz(p).push(p.discard.splice(i, 1)[0]);
+        sendToRift(g, p, p.discard.splice(i, 1)[0], card.uid);
         ctx.log(`  └ ${cn(top)} 게임에서 제외`, `  └ ${cn(top)} をゲームから除外`);
       }
       break;
@@ -4485,7 +4590,7 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
       for (const tm of [...o.field]) {
         if (ward && isVampFamily(tm)) { enchantKindFx(g,ctx.ev,"vampWard");ctx.log(`  └ 흡혈의 극의: ${cn(tm)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(tm)} は破壊されない`); continue; }
         const fi = o.field.findIndex((x) => x.uid === tm.uid);
-        if (fi >= 0) { o.field.splice(fi, 1); rmz(o).push(resetInst(tm)); ctx.ev.push({ type: "destroy", player: side(g, o), uid: tm.uid, id: tm.id }); }
+        if (fi >= 0) { o.field.splice(fi, 1); sendToRift(g, o, resetInst(tm)); ctx.ev.push({ type: "destroy", player: side(g, o), uid: tm.uid, id: tm.id }); }
       }
       if (o.traps.length && trySnare(g, ctx, o)) { /* 덫 속의 덫: 파괴 무효 */ }
       else o.traps.splice(0).forEach((t) => rmz(o).push(t.card));
@@ -4771,6 +4876,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       const discarded = p.discard.findIndex(c => c.uid === card.uid);
       if (discarded >= 0) p.discard.splice(discarded, 1);
       p.enchants.push({ card, turns: card.val || 1, bornTurn: g.turn });
+      if (card.ench === 'magicBank') {
+        p.maxMana = Math.max(MIN_MANA, p.maxMana - 1);
+        ctx.log('  └ 마도 은행: 자신의 최대 마나 -1', '  └ 魔道銀行: 自分の最大マナ-1');
+      }
       const perm = (card.val || 0) >= 99;
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 발동 (지속 ${perm ? "영구" : `${card.val}턴`})`, `<span class="t">${p.name}</span> ${cn(card)} 発動 (${perm ? "永続" : `持続${card.val}ターン`})`);
       ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "field" });
@@ -5136,7 +5245,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (i >= 0) {
       if (pending.reason === "exilePick") {
         const c = p.discard.splice(i, 1)[0];
-        rmz(p).push(c);
+        sendToRift(g, p, c);
         const n = ctx.drawN(p, 1);
         ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 게임에서 제외 + ${n}장 드로우`, `<span class="t">${p.name}</span> ${cn(c)} をゲームから除外 + ${n}枚ドロー`);
       } else {
@@ -5165,7 +5274,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (qi >= 0) c = p.quests!.splice(qi,1)[0].card;
     if (c) {
       if (toDiscard) { fieldToGrave(g,ctx,p,c); ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 을(를) 버린다 (손패 이월 상한)`, `<span class="t">${p.name}</span> ${cn(c)} を捨てる (手札持ち越し上限)`); }
-      else { if (!rmz(p).some(x => x.uid === c!.uid)) rmz(p).push(c); ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 게임에서 제외`, `<span class="t">${p.name}</span> ${cn(c)} をゲームから除外`); }
+      else { if (!rmz(p).some(x => x.uid === c!.uid)) sendToRift(g, p, c); ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 게임에서 제외`, `<span class="t">${p.name}</span> ${cn(c)} をゲームから除外`); }
       const remaining = toDiscard ? Math.max(0,p.hand.length-HAND_CARRY) : ((d.val as number) ?? 1) - 1;
       const poolLeft = purgeChoices(p, pending).length;
       if (remaining > 0 && poolLeft > 0) {
@@ -5186,7 +5295,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     const i = list.findIndex((x) => x.uid === uid);
     if (i >= 0) {
       const c = list.splice(i, 1)[0];
-      if (pending.reason === "jailer") { rmz(p).push(c); ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 을(를) 자신의 제외존으로 유폐`, `<span class="t">${p.name}</span> ${cn(c)} を自分の除外ゾーンに幽閉`); }
+      if (pending.reason === "jailer") { sendToRift(g, p, c); ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 을(를) 자신의 제외존으로 유폐`, `<span class="t">${p.name}</span> ${cn(c)} を自分の除外ゾーンに幽閉`); }
       else { o.discard.push(c); ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 을(를) 상대 묘지로 되돌림`, `<span class="t">${p.name}</span> ${cn(c)} を相手の墓地に戻す`); }
       const remaining = ((d.val as number) ?? 1) - 1;
       if (remaining > 0 && list.length > 0) {
@@ -5340,7 +5449,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
         const di3 = o.deck.findIndex((c) => c.id === uid);
         if (di3 >= 0) {
           const exd = o.deck.splice(di3, 1)[0];
-          rmz(o).push(exd);
+          sendToRift(g, o, exd);
           ctx.log(`<span class="t">${p.name}</span> 은월포 → 상대 덱의 ${cn(exd)} 게임에서 제외`, `<span class="t">${p.name}</span> 銀月砲 → 相手のデッキの ${cn(exd)} をゲームから除外`);
         }
       }
@@ -5384,7 +5493,15 @@ function addMaxMana(p: PlayerState, amount: number): number {
   if (amount <= 0 || maxManaGrowthBlocked(p)) return 0;
   const before = p.maxMana;
   p.maxMana += amount;
-  if (Math.min(MAX_MANA, p.maxMana) > Math.min(MAX_MANA, before)) p.maxManaIncreases = (p.maxManaIncreases ?? 0) + 1;
+  if (Math.min(MAX_MANA, p.maxMana) > Math.min(MAX_MANA, before)) {
+    p.maxManaIncreases = (p.maxManaIncreases ?? 0) + 1;
+    // Snapshot active banks. Bonus gains never recurse into this gate.
+    const banks = p.enchants.filter(e => e.card.ench === 'magicBank' && e.turns > 0).length;
+    const bonus = Math.min(banks, Math.max(0, MAX_MANA - p.maxMana));
+    p.maxMana += bonus;
+    p.maxManaIncreases += bonus;
+    p.magicBankBonusTotal = (p.magicBankBonusTotal ?? 0) + bonus;
+  }
   return p.maxMana - before;
 }
 function addHealth(ctx: Ctx, p: PlayerState, amount: number): void {
@@ -5434,16 +5551,18 @@ export function effectChoices(g: GameState): CardInst[] {
     case "QUICK_SORT":
     case "Q_ASSASSIN": return [...o.field.filter(m => !hasPassive(m, "aura")), ...o.enchants.map(e => e.card), ...(o.quests ?? []).map(q => q.card)];
     case "RIFT_MATTER": return [...o.field.filter(m => !hasPassive(m, "aura")), ...o.enchants.map(e => e.card), ...o.traps.map(t => t.card), ...(o.quests ?? []).map(q => q.card)].filter(c => !hasPassive(c, 'relic'));
+    case "RIFT_JAILER": return rmz(o).filter(c => !hasPassive(c, "relic"));
     case "RIFT_METALIGHT": return o.discard.filter(c => !hasPassive(c, 'relic'));
     default: return [];
   }
 }
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
-  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: reason === "SELECTED_SWORD", data };
+  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: reason === "SELECTED_SWORD" || reason === "RIFT_JAILER", data };
   if (reason === 'NIGHT_CASTLE_GIFT') g.pending.hint = '패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택';
+  if (reason === 'RIFT_JAILER') g.pending.hint = '차원 유폐자 — 자신의 리프트로 옮길 상대 리프트 카드 최대 8장 선택';
   if (reason === 'RIFT_MATTER') g.pending.hint = data?.left === 1 ? '리프트로 보낼 상대 필드의 두 번째 카드를 선택' : '리프트 광석 - 스타라이트 — 리프트로 보낼 상대 필드의 카드 2장을 선택';
   if (reason === 'RIFT_METALIGHT') g.pending.hint = '리프트 광석 - 메타라이트 — 리프트로 보낼 상대 묘지의 카드 1장을 선택';
-  if (!effectChoices(g).length) { g.pending = null; ctx.log("対象がないため効果は不発", "対象がないため効果は不発"); return; }
+  if (!effectChoices(g).length) { if (reason === 'RIFT_JAILER') returnRiftCard(ctx, p, data?.returnUid); g.pending = null; ctx.log("対象がないため効果は不発", "対象がないため効果は不発"); return; }
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
 function effectSummonAllowed(g: GameState, p: PlayerState, def: CardDef, leaving = 0): boolean {
@@ -5469,11 +5588,12 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
   const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
   if (resolveDewShieldChoice(g,ctx,uid)) return;
   const choices = effectChoices(g);
+  if (pending.reason === 'RIFT_JAILER' && (uid === null || !choices.length)) { g.pending = null; returnRiftCard(ctx, p, pending.data?.returnUid); return; }
   if (!choices.length) { g.pending = null; return; }
   const card = choices.find(c => c.uid === uid);
   if (!card) return; // invalid input must not consume a paid or earned effect
   g.pending = null;
-  if (expansionChoiceResolve(g, ctx, pending, p, card)) { ctx.log(`${cn(DB[pending.reason])} → ${cn(card)}`); return; }
+  if (expansionChoiceResolve(g, ctx, pending, p, card)) { ctx.log(`${cn(DB[pending.reason === "RIFT_JAILER" ? "GM6_1" : pending.reason])} → ${cn(card)}`); return; }
   switch (pending.reason) {
     case "QUICK_POISON":
       spellDepth++;
@@ -5499,9 +5619,17 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
       break;
     }
     case "Q_TRIBE": effectSummon(g, ctx, p, card.id); break;
+    case "RIFT_JAILER": {
+      const i = rmz(o).findIndex(c => c.uid === card.uid);
+      sendToRift(g, p, rmz(o).splice(i, 1)[0]);
+      const left = Number(pending.data?.left ?? 8) - 1;
+      if (left > 0) offerEffectChoice(g, ctx, p, pending.reason, pending.hintJa, {...pending.data, left});
+      else returnRiftCard(ctx, p, pending.data?.returnUid);
+      break;
+    }
     case "RIFT_METALIGHT": {
       const i = o.discard.findIndex(c => c.uid === card.uid);
-      if (i >= 0) rmz(o).push(o.discard.splice(i, 1)[0]);
+      if (i >= 0) sendToRift(g, o, o.discard.splice(i, 1)[0]);
       break;
     }
     case "QUICK_SORT":
@@ -5513,7 +5641,7 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
         if (exile) {
           o.field.splice(o.field.indexOf(m), 1);
           if (m.aura === 'drainMana') addMaxMana(p, m.drained ?? (m.val || 3));
-          rmz(o).push(resetInst(m));
+          sendToRift(g, o, resetInst(m));
           ctx.ev.push({ type: "destroy", player: side(g, o), uid: m.uid, id: m.id });
           recheckDeaths(g, ctx);
         } else ctx.destroyMonster(o, m);
@@ -5536,7 +5664,7 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
       break;
     }
   }
-  ctx.log(`${cn(DB[pending.reason])} → ${cn(card)}`, `${cn(DB[pending.reason])} → ${cn(card)}`);
+  ctx.log(`${cn(DB[pending.reason === "RIFT_JAILER" ? "GM6_1" : pending.reason])} → ${cn(card)}`, `${cn(DB[pending.reason === "RIFT_JAILER" ? "GM6_1" : pending.reason])} → ${cn(card)}`);
 }
 
 function resolveQuick(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
@@ -5703,6 +5831,13 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
   const res = reduceCore(prev, action);
   const g2 = res.state;
   const questCtx = makeCtx(g2, res.events as GameEvent[]);
+  for (const sx of [0, 1] as Side[]) {
+    const pl = g2.players[sx], bonus = (pl.magicBankBonusTotal ?? 0) - (prev.players[sx].magicBankBonusTotal ?? 0);
+    if (bonus > 0) {
+      enchantKindFx(g2, res.events, 'magicBank', pl);
+      questCtx.log(`마도 은행: 추가 최대 마나 +${bonus}`, `魔道銀行: 追加の最大マナ+${bonus}`);
+    }
+  }
   const exileSeen = prev.players.map(p => new Set((p.removed ?? []).map(c => c.uid)));
   const settle = (): void => {
     for (let pass = 0; pass < 64 && !g2.over; pass++) {
@@ -5795,7 +5930,13 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
   }
   settle();
   sweepRelics(g2, makeCtx(g2, res.events as GameEvent[]), prev); // v40: 신기는 제외되지 않는다
-  drainExpansionChoices(g2, questCtx);
+  // Each drained Rift effect can create more entries; settle their aura/quest
+  // reactions in this same action, including when a later choice is pending.
+  for (let pass = 0; pass < 64 && !g2.over; pass++) {
+    drainExpansionChoices(g2, questCtx);
+    settle();
+    if (g2.pending || !g2.expansionChoices?.length) break;
+  }
   normalizeManaCaps(g2);
   refreshDewPassives(g2);
   recheckDeaths(g2, questCtx);
@@ -6040,7 +6181,8 @@ function queueExpansionChoice(g: GameState, p: PlayerState, reason: string, hint
 function drainExpansionChoices(g: GameState, ctx: Ctx): void {
   while (!g.pending && !g.over && g.expansionChoices?.length) {
     const c = g.expansionChoices.shift()!;
-    offerEffectChoice(g, ctx, g.players[c.owner], c.reason, c.hint, c.data);
+    if (c.reason === 'RIFT_TRIGGER') resolveRiftTrigger(g, ctx, g.players[c.owner], c.data);
+    else offerEffectChoice(g, ctx, g.players[c.owner], c.reason, c.hint, c.data);
   }
 }
 function mercEffect(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon, start: boolean): void {
@@ -6162,14 +6304,14 @@ function expansionChoiceResolve(g: GameState, ctx: Ctx, q: NonNullable<GameState
   const o = g.players[1 - side(g, p)];
   switch (q.reason) {
     case 'STABLE': ctx.destroyMonster(p, card as FieldMon); if (!p.field.some(m => m.uid === card.uid)) effectSummon(g, ctx, p, 'CAVALRY'); return true;
-    case 'Q_CHEAT': o.deck.splice(o.deck.findIndex(c => c.uid === card.uid), 1); rmz(o).push(card); return true;
+    case 'Q_CHEAT': o.deck.splice(o.deck.findIndex(c => c.uid === card.uid), 1); sendToRift(g, o, card); return true;
     case 'CREATION': {
       const born=obtainedCard(g,ctx,p,inst(g,card.id));p.discard.push(born);
       ctx.ev.push({type:'creationBorn',player:side(g,p),id:born.id,uid:born.uid,copy:true});
       return true;
     }
     case 'ROGUE_ART': (card as FieldMon).passivesG = [...new Set([...((card as FieldMon).passivesG ?? []), 'evade'])]; return true;
-    case 'FIRE_ZONE': p.hand.splice(p.hand.findIndex(c => c.uid === card.uid), 1); rmz(p).push(card); spellDepth++; try { areaDamage(g, ctx, p, Number(q.data?.damage ?? 5), false, { ...inst(g, 'FIRE_ZONE'), uid:String(q.data?.sourceUid??'zone') }); } finally { spellDepth--; } return true;
+    case 'FIRE_ZONE': p.hand.splice(p.hand.findIndex(c => c.uid === card.uid), 1); sendToRift(g, p, card, String(q.data?.sourceUid)); spellDepth++; try { areaDamage(g, ctx, p, Number(q.data?.damage ?? 5), false, { ...inst(g, 'FIRE_ZONE'), uid:String(q.data?.sourceUid??'zone') }); } finally { spellDepth--; } return true;
     case 'FIRE_MASTER': { for (const zone of [p.deck,p.discard]) { const i = zone.findIndex(c => c.uid === card.uid); if (i >= 0) { p.hand.push(zone.splice(i, 1)[0]); break; } } if (Number(q.data?.left ?? 2) > 1) queueExpansionChoice(g, p, q.reason, '手札に加える2枚目のファイアー魔法を選択', { left: 1 }); return true; }
     case 'FIRE_BALL': { const targetSide=(card.uid.startsWith('player-')?Number(card.uid.slice(-1)):p.field.some(m=>m.uid===card.uid)?side(g,p):side(g,o)) as Side;const fx=elementalGroup(ctx,side(g,p),{...DB.FIRE_BALL,uid:String(q.data?.sourceUid??'ball')});fx.hit(targetSide,card.uid.startsWith('player-')?null:card.uid,7);spellDepth++; try { if (card.uid.startsWith('player-')) ctx.dealDamage(g.players[Number(card.uid.slice(-1))], 7, cn(DB.FIRE_BALL), cn(DB.FIRE_BALL), side(g, p)); else { const owner = p.field.some(m => m.uid === card.uid) ? p : o; monsterDamage(g, ctx, owner, card as FieldMon, 7); } } finally { spellDepth--;fx.end(); } return true; }
     default: return false;
@@ -6241,7 +6383,7 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
     }
     case 'HIGH_ELF_HAND': {
       if(uid!=='done') {
-        o.hand=o.hand.filter(c=>c.uid!==uid);rmz(o).push(chosen);
+        o.hand=o.hand.filter(c=>c.uid!==uid);sendToRift(g,o,chosen);
         ctx.log(`${p.name}: ${cn(DB.HIGH_ELF)} → ${cn(chosen)} 게임에서 제외`, `${p.name}: ${cn(DB.HIGH_ELF)} → ${cn(chosen)} をゲームから除外`);
       } else ctx.log(`${p.name}: ${cn(DB.HIGH_ELF)} 확인 종료`, `${p.name}: ${cn(DB.HIGH_ELF)} 手札の確認を終了`);
       const left=Number(q.data?.left ?? 1)-1;

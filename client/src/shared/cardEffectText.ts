@@ -1,3 +1,4 @@
+import { ARCANE_CARDS } from './riftReworkCards';
 import { GOBLIN_CARDS } from './goblinCards';
 import { RIFT_MATTER, RIFT_METALIGHT } from './riftMatter';
 // Canonical player-facing effects. Explicit paragraphs define rule boundaries.
@@ -275,9 +276,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】If you control a Soldier or Knight, use 1 of them and this monster as materials to summon the following monster to your field. If both are available, choose which material to use.\nUsing a Soldier: 1 Dragon Rider.\nUsing a Knight: 1 Antique Dragon Knight.\nSend the materials to your graveyard. Send Token or Void materials to your Rift instead."
   },
   "GM6_1": {
-    "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。",
-    "ko": "【소환 시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.",
-    "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift."
+    "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、このカードの召喚時効果を発動し、その後このカードをリフトから自分の墓地に戻す。",
+    "ko": "【소환 시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 이 카드의 소환 시 효과를 발동하고, 그 후 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+    "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, activate its On Summon effect, then return this card from your Rift to your graveyard."
   },
   "GM6_7": {
     "ja": "【召喚時】自分の場に「城」「兵士」「騎士」「砲撃兵」「大砲兵」のいずれかがあれば、「騎士」2体を自分の場に召喚する。\n\n【相手のモンスター召喚時】相手がモンスターを召喚するたび、ダイス1個を振る。6なら「兵士」1体を自分の場に召喚する。",
@@ -285,9 +286,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】If you control a Castle, Soldier, Knight, Gunner or Heavy Gunner, summon 2 Knights to your field.\n\n【When the Opponent Summons a Monster】Whenever the opponent summons a monster, roll 1 die. On 6, summon 1 Soldier to your field."
   },
   "GM6_8": {
-    "ja": "【破壊時】「兵士」1体を自分の場に召喚する。",
-    "ko": "【파괴 시】병사 1체를 자신의 필드에 소환한다.",
-    "en": "【On Destruction】Summon 1 Soldier to your field."
+    "ja": "【破壊時】「兵士」1体を自分の場に召喚する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、可能な限り「大砲兵」を自分の場に召喚する。",
+    "ko": "【파괴 시】병사 1체를 자신의 필드에 소환한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 가능한 한 많은 대포병을 자신의 필드에 소환한다.",
+    "en": "【On Destruction】Summon 1 Soldier to your field.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, summon as many Heavy Gunners as possible to your field."
   },
   "GS6_4": {
     "ja": "【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
@@ -1145,9 +1146,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Restore 1 of your HP for each card in your Rift."
   },
   "VOID_APOSTLE": {
-    "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（持続）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。",
-    "ko": "【소환 시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(지속).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.",
-    "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (lasting).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster."
+    "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（持続）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
+    "ko": "【소환 시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(지속).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+    "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (lasting).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
   },
   "CASINO": {
     "ja": "【ダイスを振った時】どちらかがダイス1個を振るたび、このモンスターにカウンター1個を付与する（カジノダイスは除く）。\n\n【カウンター蓄積時】12個ごとに12個を消費してカジノダイス1個を振る — 1-2: 自分に35ダメージを与える / 3-4: 相手に35ダメージを与える / 5: 相手に50ダメージを与える / 6: 相手のシールドと雫を全て取り除き、相手の体力を1にする。",
@@ -1285,9 +1286,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Summon Requirement】Your deck composition contains at least 15 spells and at least half its cards are spells.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, roll 1 die; on 3 or more, negate that spell.\n\n【While on the Field】All Hexer-family monsters on your field get +5 ATK."
   },
   "SORTER": {
-    "ja": "【召喚時】自分の「カル」3枚を自動でリフトへ送る（墓地、デッキ、手札の順）。\n\n【自分のリフト追加時】自分のリフトに「カル」が追加されるたび、自分の「カル」1枚を同じ順で追加で送る（この追加分では再発動しない）。",
-    "ko": "【소환 시】자신의 컬 3장을 자동으로 리프트로 보낸다(묘지, 덱, 패 순서).\n\n【자신의 리프트에 추가 시】자신의 리프트에 컬이 추가될 때마다 자신의 컬 1장을 같은 순서로 추가로 보낸다(이 추가분으로 재발동하지 않음).",
-    "en": "【On Summon】Automatically send 3 of your Culls to your Rift, taking from graveyard, deck, then hand.\n\n【Card Added to Your Rift】Whenever a Cull is added to your Rift, send 1 additional Cull in the same order; this extra Cull does not trigger this effect again."
+    "ja": "【召喚時】新しい「カル」1枚を自分のリフトに追加する。\n\n【自分のリフト追加時】自分のリフトに「カル」が追加されるたび、自分の「カル」1枚を墓地、デッキ、手札の順で追加で送る（この追加分では再発動しない）。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、「選ばれし」モンスター4種からランダムに1体を自分の場に召喚し、このカードをリフトから自分の墓地に戻す。",
+    "ko": "【소환 시】새로운 컬 1장을 자신의 리프트에 추가한다.\n\n【자신의 리프트에 추가 시】자신의 리프트에 컬이 추가될 때마다 자신의 컬 1장을 묘지, 덱, 패 순서로 추가로 보낸다(이 추가분으로 재발동하지 않음).\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 선택받은 몬스터 4종 중 무작위 1체를 자신의 필드에 소환하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+    "en": "【On Summon】Add 1 new Cull to your Rift.\n\n【Card Added to Your Rift】Whenever a Cull is added to your Rift, send 1 additional Cull from your graveyard, deck, then hand; this extra Cull does not trigger this effect again.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, randomly summon 1 of the 4 Chosen monsters to your field, then return this card from your Rift to your graveyard."
   },
   "COLOSSEUM_REST": {
     "ja": "【自分のターン開始時】自分のリフトの「カル」1枚につき、自分の体力を1回復する。",
@@ -1844,3 +1845,5 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
 for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
 CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};
 CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};
+
+for (const c of ARCANE_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
