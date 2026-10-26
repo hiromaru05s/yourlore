@@ -29,7 +29,7 @@ try{
   await page.screenshot({path:`${out}/${width}x${height}.png`});checks.push({width,height,...layout});
  }
  await page.setViewportSize({width:1440,height:900});
- for(const [tier,count] of [['easy',1],['normal',4],['hard',7],['hell',7]]){await page.locator(`[data-diff=${tier}]`).click();assert((await page.locator('#challengeDescription').textContent()).includes(String(count)));}
+ for(const tier of ['easy','normal','hard','hell']){await page.locator(`[data-diff=${tier}]`).click();assert.equal(await page.locator(`[data-diff=${tier}]`).getAttribute('aria-pressed'),'true');}
  await page.locator('[data-diff=hard]').click();assert((await page.locator('#diffStart').textContent()).includes({ja:'ヴェラ',en:'Vera',ko:'베라'}[lang]));
  await page.locator('#diffStart').focus();await page.keyboard.press('Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'diffCancel');await page.keyboard.press('Shift+Tab');assert.equal(await page.evaluate(()=>document.activeElement.id),'diffStart');
  await page.keyboard.press('Escape');assert.equal(await page.locator('.bot-npcs').count(),0);

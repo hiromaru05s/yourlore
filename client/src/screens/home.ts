@@ -95,7 +95,6 @@ function showBotNpcModal(app: App): void {
   ov.innerHTML = `
     <div class="modal support-dialog bot-diff bot-challenge bot-npcs" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
       <header class="support-dialog-heading">
-        <span class="menu-eyebrow">SINGLE</span>
         <h2 id="challengeTitle">${loungeText("対戦相手を選ぶ","Choose your opponent","대전 상대 선택")}</h2>
         <button class="challenge-back" id="diffCancel">← ${t('common.back')}</button>
       </header>
@@ -104,22 +103,21 @@ function showBotNpcModal(app: App): void {
           <button type="button" class="diff-card diff-${npc.difficulty}" data-diff="${npc.difficulty}" aria-pressed="${npc.difficulty===selected}">
             <span class="challenge-selected">${loungeText('選択中','SELECTED','선택됨')}</span>
             <span class="challenge-art" aria-hidden="true"><img src="${npc.portrait}" alt=""></span>
-            <span class="npc-title">${esc(npc.title[getLang()])}</span><span class="diff-name">${esc(npc.name[getLang()])}</span><span class="npc-difficulty">${loungeText("難易度","Difficulty","난이도")} · ${t(`bot.diff.${npc.difficulty}`)}</span><span class="challenge-caption">${esc(npc.style[getLang()])}</span><span class="npc-difficulty">${app.user?.botClears?.includes(npc.difficulty)?t("progress.cleared"):`${t("progress.firstClear")} +${BOT_FIRST_CLEAR_EXP[npc.difficulty]} EXP`}</span><span class="npc-first-reward" data-bot-reward="${npc.difficulty}">${firstClearLabel(BOT_REWARDS[npc.difficulty])}</span>
+            <span class="diff-name">${esc(npc.name[getLang()])}</span>
+            <span class="npc-difficulty">${t(`bot.diff.${npc.difficulty}`)}</span>
+            <span class="npc-first-reward" data-bot-reward="${npc.difficulty}">${app.user?.botClears?.includes(npc.difficulty)?loungeText('クリア済み','Cleared','클리어 완료'):`${firstClearLabel(BOT_REWARDS[npc.difficulty])} · ${BOT_FIRST_CLEAR_EXP[npc.difficulty]} EXP`}</span>
           </button>`).join("")}
       </div>
       <div class="challenge-footer">
         <button type="button" class="challenge-start" id="diffStart"></button>
-        <p class="challenge-shortcut">${loungeText('相手のカードをダブルクリックでも開始','Double-click an opponent to start','상대 카드를 더블 클릭해도 시작')}</p>
-        <div class="challenge-details"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div><p id="challengeDescription" aria-live="polite"></p></div>
+        <div class="challenge-details"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div></div>
       </div>
     </div>`;
   document.body.appendChild(ov);
-  if(app.user&&app.user.id!=='local-guest-user')void api.progression().then(data=>{if(!ov.isConnected)return;for(const [diff,done] of Object.entries(data.bot)){const el=ov.querySelector(`[data-bot-reward="${diff}"]`);if(el&&done)el.textContent=loungeText('初回報酬 受取済み','First reward received','첫 보상 수령 완료');}}).catch(()=>{});
+  if(app.user&&app.user.id!=='local-guest-user')void api.progression().then(data=>{if(!ov.isConnected)return;for(const [diff,done] of Object.entries(data.bot)){const el=ov.querySelector(`[data-bot-reward="${diff}"]`);if(el&&done)el.textContent=loungeText('クリア済み','Cleared','클리어 완료');}}).catch(()=>{});
   const update = () => {
     const npc = botNpc(selected), name = npc.name[getLang()];
     ov.querySelectorAll<HTMLButtonElement>('[data-diff]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.diff === selected)));
-    const count=npc.decks.length;
-    ov.querySelector('#challengeDescription')!.textContent = `${t(`bot.diff.${selected}.desc`)} ${loungeText(`${count}種類のデッキを使用します。`,`Uses ${count} ${count===1?'deck':'different decks'}.`,`${count}종류의 덱을 사용합니다.`)}`;
     ov.querySelector('#diffStart')!.textContent = loungeText(`${name}と対戦 →`, `Duel ${name} →`, `${name}와 대전 →`);
   };
   let closed = false;
