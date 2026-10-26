@@ -1,7 +1,7 @@
 /* Quick spell inspection only — selected Edge Veil, with the enlarged type plaque. */
 .quick-spell-frame { isolation:isolate; }
 .quick-spell-frame-sheen { z-index:2!important; pointer-events:none; filter:url(#celestial-matte) brightness(2) drop-shadow(0 0 2px #c4b1ff)!important; mix-blend-mode:screen; }
-.quick-spell-frame-badge {
+.card-type-badge {
  position:absolute; z-index:4; bottom:-1.8%; left:18%; width:64%; height:7.2%;
  display:flex; justify-content:center; align-items:center; gap:.25em; pointer-events:none;
  color:#ded1ff; font-size:max(11px,calc(var(--cw) * .054)); font-family:var(--gothic-ui,var(--ui));
@@ -10,4 +10,5 @@
  box-shadow:0 1px 4px #000c,inset 0 0 0 2px #08121e;
  clip-path:polygon(6% 0,94% 0,100% 50%,94% 100%,6% 100%,0 50%);
 }
-.quick-spell-frame-badge>span { font:italic 1.65em Georgia,serif; }
+.card-type-badge>span { font:italic 1.65em Georgia,serif; }
+.zoom-card-stage .card--quest .card-status .kw[hidden] { display:none; }

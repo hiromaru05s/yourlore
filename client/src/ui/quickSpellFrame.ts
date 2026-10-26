@@ -31,7 +31,7 @@ class VeilFrame {
   if(this.typeChip){this.chipWasHidden=this.typeChip.hidden;this.typeChip.hidden=true;}
   this.sheen=node.querySelector<HTMLElement>('.card-frame')!.cloneNode(true) as HTMLElement;
   this.sheen.classList.add('quick-spell-frame-sheen');this.sheen.setAttribute('aria-hidden','true');
-  this.badge.className='quick-spell-frame-badge';
+  this.badge.className='card-type-badge quick-spell-frame-badge';
   const mark=document.createElement('span');mark.setAttribute('aria-hidden','true');mark.textContent='ϟ';
   this.badge.append(mark,document.createTextNode(label));
   node.append(this.sheen,this.canvas,this.badge);
