@@ -1,0 +1,20 @@
+[
+  {
+    "path": "art/cards/RIFT_MATTER.webp",
+    "status": 200,
+    "bytes": 444436,
+    "sha256": "a6f6d40291b012a6d70316a6fcbd51f7e2110d989ac3e1827e7b3076655e3f3a"
+  },
+  {
+    "path": "art/cards-sm/RIFT_MATTER.webp",
+    "status": 200,
+    "bytes": 25782,
+    "sha256": "98f0ea4815b8d186f2d0db928787c374911ec2e1c2d5519798e4e7297b626002"
+  },
+  {
+    "path": "art/cards-xs/RIFT_MATTER.webp",
+    "status": 200,
+    "bytes": 7164,
+    "sha256": "b21688fba2427b99b646629002c8b508664d3d7fee27ab6bf41d8bde73852ee8"
+  }
+]

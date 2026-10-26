@@ -22,3 +22,14 @@ New artwork only: `client/public/art/cards/RIFT_MATTER.webp`, 1472×1344, WebP q
 - Local type checks and build passed. The first full run found the expected outdated text audit, missing Rift glossary registration and old Fire-family parity assertion; all three were corrected and their focused checks passed. The guarded production release reruns the complete suite before publishing; its final outcome is recorded separately.
 
 Visual review: inspected the generated image and rendered card faces/rules at normal size. This is implementation review, not a claim of user visual approval. Browser and server fixture evidence does not establish an authenticated live PvP match or real-device performance.
+
+## Production result
+
+- Source: `e97bc14ccd90466cfba0797163df8835dd781231`, including the preceding notification-badge release.
+- Deployed to `https://yourlore.xyz` on 2026-10-26 at 15:34 KST/JST.
+- Version: `45704b80-e02a-438f-a437-8ab7727043cd` at 100% traffic (`deployment.json`).
+- Guarded release: client/server type checks, **215/215** production test files, design guard and Vite build passed (`suite.json`).
+- Post-deployment: all **125** built HTML/JS/CSS/JSON files matched the live bytes; all **3** Rift Matter artwork sizes matched their SHA-256 (`asset-parity.json`, `art-parity.json`).
+- No authenticated production PvP match was performed. The two-client/reconnect test above is an authoritative GameRoom fixture.
+
+Browser runner setup if needed: `npm install --prefix /tmp/lore-starter-tools playwright`; run Vite on port 5307, then `node tests/starter-rift-browser.mjs`.
