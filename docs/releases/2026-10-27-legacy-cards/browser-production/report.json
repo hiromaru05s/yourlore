@@ -1,0 +1,379 @@
+{
+  "base": "https://yourlore.xyz",
+  "scope": "shipped static assets, actual App/menu/card renderer; isolated API fixtures; no authenticated account or online duel",
+  "checks": [
+    "グローブ・ウォーデン current effect text on desktop and 390px",
+    "タイタン・ゲート current effect text on desktop and 390px",
+    "除印師 current effect text on desktop and 390px",
+    "アイアン・シェル current effect text on desktop and 390px",
+    "ブレード・ヘア current effect text on desktop and 390px",
+    "ストーン・パップ current effect text on desktop and 390px",
+    "コロシアムの休憩場 current effect text on desktop and 390px",
+    "運営予算 current effect text on desktop and 390px",
+    "鋼脈刻印 current effect text on desktop and 390px",
+    "夜城からの贈り物 current effect text on desktop and 390px",
+    "アチューン・黒 current effect text on desktop and 390px",
+    "銀月砲 current effect text on desktop and 390px",
+    "時空間操作 current effect text on desktop and 390px",
+    "大地の祝福 current effect text on desktop and 390px",
+    "業火のドレイク current effect text on desktop and 390px",
+    "見習い呪術師 current effect text on desktop and 390px",
+    "初級呪術師 current effect text on desktop and 390px",
+    "中級呪術師 current effect text on desktop and 390px",
+    "上級呪術師 current effect text on desktop and 390px",
+    "All 19 card inspections rendered without JS errors"
+  ],
+  "assets": [
+    {
+      "url": "https://yourlore.xyz/art/cards/M8.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/M12.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/UNBRANDER.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/UNBRAND.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 759
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/TREASON.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/ACID_RAIN.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/CURSE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/PENANCE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/M5.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/M4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/M2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/COLOSSEUM_REST.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/SORTER.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 759
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/COLOSSEUM.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/CHOSEN_AREA.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/SORTER.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 759
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/COLOSSEUM.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/BUDGET.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/SOLDIER2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/CASTLE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/S12.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/NIGHT_CASTLE_GIFT.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/VAMP_PACT.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 759
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/VAMP_WARD.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/AHEUK.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/GS8_0.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/TIMEWARP.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/S14.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/GM5_3.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/NHEX.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/CURSE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER1.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER3.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER1.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER3.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER1.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/CURSE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/NHEX.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER3.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/NHEX.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER3.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/CURSE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/NHEX.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER1.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER3.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/NHEX.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER1.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER3.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER3.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/CURSE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/NHEX.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER1.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/NHEX.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER1.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER2.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/HEXER4.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    }
+  ],
+  "errors": []
+}

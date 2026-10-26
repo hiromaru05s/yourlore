@@ -1,0 +1,16 @@
+{
+  "source": "c6fdc343799c67abd5dce3cc2ed2c81dd0304112",
+  "gachaCommit": "b1120ad0",
+  "deploymentId": "12c6c9e9-75c2-4237-9d3e-6e555e4076f8",
+  "versionId": "9b93c38f-fa5a-4dee-affc-cb474f3877ab",
+  "percentage": 100,
+  "createdOn": "2026-10-26T15:25:20.314195Z",
+  "localTime": "2026-10-27 00:25:20 Asia/Seoul",
+  "productionTests": {
+    "passed": 237,
+    "total": 237
+  },
+  "url": "https://yourlore.xyz",
+  "releaseLog": "/private/tmp/lore-board-deploy.log",
+  "releaseMethod": "Existing guarded deployment of the integrated main; confirmed the gacha commit is its ancestor."
+}

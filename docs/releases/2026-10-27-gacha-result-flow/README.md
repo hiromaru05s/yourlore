@@ -30,4 +30,11 @@
 - 目視: PC/スマホの共通枠、カード端、白磁スリーブ、結果本文と操作、YES/NOの表示を確認。動画は `/tmp/lore-gacha-result-flow/video/` に保存。
 - 実アカウントでのシャード消費・実機検証は実施していない。機能fixtureの成功と実購入を混同しない。
 
-本番のsource/versionと反映確認はデプロイ完了後に追記する。
+## 本番反映
+
+- 2026-10-27 00:25（Asia/Seoul）、統合main `c6fdc343799c67abd5dce3cc2ed2c81dd0304112` を本番へ公開済み。ガチャ実装 `b1120ad0` を含むことを ancestry で確認。待機中に入った盤面復元・既存カード改修も含む最新mainのguarded deploymentを利用し、同一版の重複公開はしていない。
+- Version: `9b93c38f-fa5a-4dee-affc-cb474f3877ab`、100%。[本番](https://yourlore.xyz)。詳細は `deployment.json`。
+- 公開ゲート: 型チェック、デザインガード、ビルド、production suite **237/237** 成功。`deploy-summary.txt`。
+- 本番URLに対して `tests/gacha-rewards-browser.mjs` を再実行し成功。サーバーAPIだけfixtureに置き換え、本番配信のJS/CSS/画像/演出で直接結果・ホバー・NO/Esc・YES連打・残高・固定位置・5サイズを確認。`production-browser-report.json`。
+- 本番の結果一覧とショップのスクリーンショットも目視確認し、採用済みの背景と標準UIを維持していることを確認。
+- 本番の実アカウント購入および実機確認は未実施。今回のブラウザ確認では実データの変更・実シャードの消費はない。

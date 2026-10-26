@@ -1,0 +1,48 @@
+{
+  "origin": "https://yourlore.xyz",
+  "worker": "bot.worker-DY732Fzr.js",
+  "scope": "Actual public BOT worker, hard and hell, controlled states; no authenticated server duel",
+  "results": [
+    {
+      "name": "Rest heals most damaged ally",
+      "difficulty": "hard",
+      "expected": "pick",
+      "action": {
+        "type": "pick",
+        "uid": "worker-2"
+      },
+      "ms": 830.1000000014901
+    },
+    {
+      "name": "Curse becomes healing",
+      "difficulty": "hard",
+      "expected": "play",
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "ms": 45
+    },
+    {
+      "name": "Rest heals most damaged ally",
+      "difficulty": "hell",
+      "expected": "pick",
+      "action": {
+        "type": "pick",
+        "uid": "worker-2"
+      },
+      "ms": 178.19999999552965
+    },
+    {
+      "name": "Curse becomes healing",
+      "difficulty": "hell",
+      "expected": "play",
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "ms": 158.20000000298023
+    }
+  ],
+  "errors": []
+}

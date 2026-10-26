@@ -2,6 +2,7 @@ import {homeIsCovered} from './screenCovered';
 import {createWebGLRenderer} from './webglRenderer';
 import {homeDaylight,announceHomeDaylightReady} from './homeDaylight';
 import * as THREE from 'three';
+import {createHomeWaterMaterial} from './homeWater';
 import {createDistantBirds} from './homeDistantBirds';
 
 /** Approved 2026-10-26 cel background, mounted only on HOME.
@@ -141,7 +142,7 @@ async function init(){try{
   for(let i=0;i<2;i++){const mesh=plane(layer.w,layer.h,0,layer.y,-3+(layer.rate>4?1:0),new THREE.MeshBasicMaterial({map:cloud,transparent:true,opacity:layer.opacity,depthWrite:false}));mesh.renderOrder=layer.rate>4?2:1;clouds.push({mesh,start:layer.start+i*span/2,rate:layer.rate,width:layer.w,height:layer.h,y:layer.y,opacity:layer.opacity});}
  }
  // The approved balanced artwork is sampled directly, without extra contour sharpening.
- const plate=new THREE.MeshBasicMaterial({map:fg,transparent:true,depthWrite:false});
+ const plate=createHomeWaterMaterial(fg,lightUniforms.time);
  const front=plane(W,H,W/2,H/2,0,plate);front.renderOrder=3;
  // Independent foliage plates retain the marble under them; no ghost copies.
  addVine(ivy,752,424,164,646,.4);

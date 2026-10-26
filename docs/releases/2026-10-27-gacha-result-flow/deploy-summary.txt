@@ -1,0 +1,6 @@
+237/237 passed; historical/browser scopes are explicit in production-suite.json
+✓ guard-design: ok
+Worker Startup Time: 23 ms
+Deployed lore-server triggers (2.43 sec)
+Current Version ID: 9b93c38f-fa5a-4dee-affc-cb474f3877ab
+Deployed committed snapshot c6fdc343799c67abd5dce3cc2ed2c81dd0304112 production
