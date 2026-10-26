@@ -2,20 +2,28 @@ import '../styles/rankedProfile.css';
 import type {Profile} from '../net/api';
 import {DB,STARTERS} from '../shared/cards';
 import {cardName,getLang} from '../i18n';
-import {tierChipHtml} from './tier';
+import {tierLabel} from './tier';
+import {rankEmblem} from './rankEmblem';
 import {cardEl} from './cardView';
 import {bindZoom,zoomCard} from './cardInspection';
 import {purchaseCards} from './purchaseCards';
 import {loungeText as L} from './loungeText';
 
-export function renderRankedProfile(host:HTMLElement,p:Profile):void {
+export function renderRankedProfile(host:HTMLElement,p:Profile,rankHost?:HTMLElement):void {
   host.classList.add('ranked-profile');host.replaceChildren();
   if(p.private){const note=document.createElement('p');note.textContent=L('戦績は非公開です。','This profile’s stats are private.','전적이 비공개입니다.');host.append(note);return;}
   const data=p.ranked;
   const rank=document.createElement('section');rank.className='rp-rank';
-  const title=document.createElement('h3');title.textContent=L('現在のランク','Current rank','현재 랭크');
-  const badge=document.createElement('div');badge.innerHTML=p.tier?tierChipHtml(p.tier,p.mmr??undefined)+(p.mmr==null?'':' <span class="rp-mmr-label">MMR</span>'):'—';
-  rank.append(title,badge);
+  rank.setAttribute('aria-label',L('現在のランク','Current rank','현재 랭크'));
+  const values=document.createElement('div');values.className='rp-rank-values';
+  const tier=document.createElement('span');tier.className='rp-tier-label';tier.textContent=p.tier?tierLabel(p.tier):'—';
+  const rating=document.createElement('div');rating.className='rp-rating';
+  const score=document.createElement('strong');score.textContent=String(p.mmr??'—');
+  const unit=document.createElement('span');unit.className='rp-mmr-label';unit.textContent='MMR';
+  rating.append(score,unit);values.append(tier,rating);
+  if(p.tier)rank.innerHTML=rankEmblem(p.tier);
+  rank.append(values);
+  (rankHost??host).append(rank);
   const stats=document.createElement('div');stats.className='rp-stats';
   const items=[
     [L('ランク試合数','Ranked games','랭크 경기 수'),data?.games],
@@ -45,5 +53,5 @@ export function renderRankedProfile(host:HTMLElement,p:Profile):void {
     }else{const empty=document.createElement('p');empty.className='rp-empty';empty.textContent=L('デッキの記録なし','No deck recorded','덱 기록 없음');panel.append(empty);}
     grid.append(panel);
   }
-  decks.append(decksTitle,grid);host.append(rank,stats,note,decks,purchase);
+  decks.append(decksTitle,grid);host.append(stats,note,decks,purchase);
 }

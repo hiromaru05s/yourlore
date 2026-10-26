@@ -1,14 +1,12 @@
 /* Shared ranked profile, used by ranking, friends, and the profile overview. */
 :root body .overlay>.modal.ranked-profile-modal:not(.outcome-result){width:min(1020px,94vw);max-width:1020px;max-height:90dvh;display:flex;flex-direction:column;overflow:hidden;padding:28px;color:var(--lore-text);}
-.ranked-profile-modal .profile-content>.pf-head{padding-bottom:18px;border-bottom:1px solid #a9c6df30;gap:16px;padding-right:52px}
+.ranked-profile-modal .profile-content>.pf-head{padding-bottom:18px;border-bottom:1px solid #a9c6df30;gap:32px;padding-right:0}
 .ranked-profile-modal .pf-name{font:24px/1.4 var(--serif,serif);overflow-wrap:anywhere}
 .ranked-profile-modal>.profile-close{position:absolute;right:18px;top:14px;z-index:2}
 .ranked-profile-modal>.profile-content{margin-top:34px;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-color:#829fb8 #13243b}
 .ranked-profile{min-width:0;color:var(--lore-text,#d8e5f3);font-size:13px}
 .ranked-profile h3{font-size:14px;letter-spacing:.04em;margin:0 0 15px;color:inherit}
 .ranked-profile>section{padding:20px 0;border-bottom:1px solid #a9c6df26}
-.ranked-profile>.rp-rank{display:flex;align-items:center;gap:24px;padding-top:0}
-.rp-rank h3{margin:0}.rp-rank .tier-chip{color:var(--lore-text);background:none;border:0;font-size:15px}
 .rp-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:20px 0 12px;gap:16px}
 .rp-stats>div{display:flex;flex-direction:column;gap:8px;min-width:0}.rp-stats b{font:28px Georgia,serif}.rp-stats span{color:#a8bdcd;font-size:11px}
 .rp-note{color:#99b0c5;font-size:11px;line-height:1.7;margin:10px 0}
@@ -30,7 +28,8 @@
 .purchase-cards-detail .purchase-card-item{flex-direction:column;align-items:center;text-align:center;gap:9px}
 .purchase-cards-detail .purchase-card-icon{width:46px;height:46px}
 .purchase-card-label{font-size:11px;overflow-wrap:anywhere}.purchase-card-item>b{font:19px Georgia}
-.selected-menu.lounge-profile .pf-overview>.pf-ranked-content{min-width:0;grid-column:2;grid-row:1/5}
+.selected-menu.lounge-profile .pf-overview{display:block}
+.selected-menu.lounge-profile .pf-overview>.pf-card{padding:0 0 20px;border:0;border-bottom:1px solid var(--lore-line)}
 .selected-menu.lounge-leaderboard .lb-row{grid-template-columns:35px minmax(90px,240px) 120px 70px 76px 184px}
 .selected-menu.lounge-leaderboard .lb-row>:nth-child(6){padding-left:20px}
 .selected-menu.lounge-leaderboard .lb-columns>:nth-child(6){text-align:left}
@@ -49,4 +48,36 @@
 .selected-menu.lounge-profile .tut{position:relative}
 .selected-menu.lounge-profile .profile-page-close{position:absolute;top:18px;right:18px;z-index:2}
 .selected-menu.lounge-profile .tut-head{padding-right:48px}
-.rp-rank>div{display:flex;align-items:center;gap:6px}.rp-mmr-label{font-size:11px;color:#a8bdcd}
+/* The current rank shares the identity header, with the rating as its main number. */
+:root body .pf-head.pf-rank-header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:32px;text-align:left}
+.pf-rank-header .pf-identity{display:flex;align-items:center;gap:18px;min-width:0}
+.pf-rank-header .pf-identity>.avatar,.pf-rank-header .pf-ava{flex:none}
+.pf-rank-header .pf-id{min-width:0}
+.pf-rank-header .pf-name{overflow-wrap:anywhere}
+:root body .pf-rank-header .rp-rank{display:flex;align-items:center;gap:20px;margin:0;padding:0;border:0;color:var(--lore-text)}
+:root body .rp-rank>.rank-emblem{width:176px;height:176px;margin:0}
+.rp-rank-values{min-width:0}
+.rp-tier-label{display:block;font-size:19px;letter-spacing:.08em;color:#c5d9e9}
+.rp-rating{display:flex;align-items:baseline;gap:10px;margin-top:6px;white-space:nowrap}
+.rp-rating strong{font:64px/1.05 Georgia,serif;letter-spacing:-.035em;color:#f0f6fc;font-variant-numeric:tabular-nums}
+.rp-mmr-label{font-size:13px;letter-spacing:.12em;color:#a8bdcd}
+@media(max-width:850px){
+ :root body .pf-head.pf-rank-header{gap:18px}
+ :root body .pf-rank-header .rp-rank{gap:10px}
+ :root body .rp-rank>.rank-emblem{width:128px;height:128px}
+ .rp-rating strong{font-size:52px}.rp-tier-label{font-size:16px}
+}
+@media(max-width:650px){
+ .pf-rank-header .pf-identity{gap:12px}
+ :root body .rp-rank>.rank-emblem{width:104px;height:104px}
+ .rp-rating strong{font-size:42px}.rp-tier-label{font-size:14px}
+ .rp-mmr-label{font-size:10px}.rp-rating{gap:6px}
+}
+@media(max-width:480px){
+ :root body .pf-head.pf-rank-header{grid-template-columns:minmax(0,1fr) 124px;gap:12px}
+ .pf-rank-header .pf-identity{flex-direction:column;align-items:flex-start;gap:10px}
+ :root body .pf-rank-header .rp-rank{flex-direction:column;gap:0;text-align:center}
+ :root body .rp-rank>.rank-emblem{width:100px;height:100px}
+ .rp-rating{justify-content:center}.rp-rating strong{font-size:38px}.rp-tier-label{font-size:12px;letter-spacing:0}
+ :root body .pf-rank-header .pf-name{font-size:20px}
+}
