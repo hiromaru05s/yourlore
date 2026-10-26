@@ -22,8 +22,10 @@ export function mountShopRewardPreviews(root:HTMLElement):()=>void{
  const motion=matchMedia('(prefers-reduced-motion: reduce)'),events=new AbortController();
  const resize=new ResizeObserver(entries=>{for(const {target} of entries){const host=target as HTMLElement;host.style.setProperty('--preview-cw',`${host.clientWidth}px`);host.style.setProperty('--preview-ch',`${host.clientHeight}px`);}});
  const views=new Map<HTMLElement,{visible:boolean;loaded:boolean;draw?:(t:number)=>void;dispose?:()=>void}>();
+ // Navigation may temporarily make the whole page inert. Prepare the surface
+ // regardless; playback alone pauses until interaction resumes.
  async function load(host:HTMLElement){
-  const state=views.get(host)!;if(state.loaded||dead||host.closest('[inert]'))return;state.loaded=true;
+  const state=views.get(host)!;if(state.loaded||dead)return;state.loaded=true;
   const id=host.dataset.sampleId!,item=cosmetic(id);
   try{
    if(item?.kind==='sleeve'){

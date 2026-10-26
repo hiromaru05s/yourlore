@@ -15,3 +15,5 @@ The shared sleeve inspector also now retains the trio artwork before shader crea
 Visual review: desktop, 390/320 portrait and 844 landscape, translucent title, full panel illustration/rim, three-card hands, standalone cosmetic shapes, Attune effect gallery. This reuses existing approved animations; it is not a new animation-art approval. No real account was charged and no physical-device verification is claimed.
 
 Release status and exact production evidence are recorded after guarded deployment below.
+
+The final browser pass also covers temporary page-navigation inertness: surface preparation must not wait for interaction to be enabled, since IntersectionObserver may not fire again when inertness clears. Playback still pauses while inert. The initial guarded attempt was stopped during tests before publishing to correct this timing case. Final visual/interaction and purchase suites passed after the correction; see `qa/`.

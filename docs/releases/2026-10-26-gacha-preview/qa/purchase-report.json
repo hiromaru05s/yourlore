@@ -1,0 +1,123 @@
+{
+  "scope": "shop-only",
+  "origin": "http://127.0.0.1:5518",
+  "dailyCards": 5,
+  "totalStarterPool": 43,
+  "rollover": true,
+  "geometry": [
+    {
+      "width": 1440,
+      "height": 900,
+      "gacha": {
+        "x": 43.1875,
+        "y": 92,
+        "width": 1353.625,
+        "height": 682
+      },
+      "starter": {
+        "x": 43.1875,
+        "y": 92,
+        "width": 1353.625,
+        "height": 682
+      },
+      "accessories": {
+        "x": 43.1875,
+        "y": 92,
+        "width": 1353.625,
+        "height": 682
+      }
+    },
+    {
+      "width": 1024,
+      "height": 600,
+      "gacha": {
+        "x": 30.71875,
+        "y": 92,
+        "width": 962.5625,
+        "height": 382
+      },
+      "starter": {
+        "x": 30.71875,
+        "y": 92,
+        "width": 962.5625,
+        "height": 382
+      },
+      "accessories": {
+        "x": 30.71875,
+        "y": 92,
+        "width": 962.5625,
+        "height": 382
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "gacha": {
+        "x": 16,
+        "y": 70,
+        "width": 358,
+        "height": 662
+      },
+      "starter": {
+        "x": 16,
+        "y": 70,
+        "width": 358,
+        "height": 662
+      },
+      "accessories": {
+        "x": 16,
+        "y": 70,
+        "width": 358,
+        "height": 662
+      }
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "gacha": {
+        "x": 10,
+        "y": 66,
+        "width": 300,
+        "height": 474
+      },
+      "starter": {
+        "x": 10,
+        "y": 66,
+        "width": 300,
+        "height": 474
+      },
+      "accessories": {
+        "x": 10,
+        "y": 66,
+        "width": 300,
+        "height": 474
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "gacha": {
+        "x": 25.3125,
+        "y": 64,
+        "width": 793.375,
+        "height": 236
+      },
+      "starter": {
+        "x": 25.3125,
+        "y": 64,
+        "width": 793.375,
+        "height": 236
+      },
+      "accessories": {
+        "x": 25.3125,
+        "y": 64,
+        "width": 793.375,
+        "height": 236
+      }
+    }
+  ],
+  "receipts": 4,
+  "purchaseCalls": 5,
+  "viewports": 5,
+  "errors": []
+}
