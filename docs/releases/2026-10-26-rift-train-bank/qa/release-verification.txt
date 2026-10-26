@@ -1,0 +1,8 @@
+Integrated guarded release; process 72977 in starter-living-art worktree.
+Our source commits 9a9a85ed and 6508a5af are ancestors of the deployed source.
+234/234 passed; historical/browser scopes are explicit in production-suite.json
+✓ built in 5.18s
+Uploaded lore-server (17.30 sec)
+Deployed lore-server triggers (2.90 sec)
+Current Version ID: c0eb0e1a-8919-4531-900a-40578a59528f
+Deployed committed snapshot ed86e67c94336abd165c4fc4bb55d41260bc8e31 production
