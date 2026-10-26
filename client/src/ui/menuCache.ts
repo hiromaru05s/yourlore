@@ -6,6 +6,9 @@ declare const __LORE_MENU_MANIFEST__: string;
 type Entry={scope?:'menu'|'duel'|'font';url:string;hash:string;bytes:number;type?:string;media?:'narrow'|'wide';pack?:number;offset?:number};
 type Manifest={entries:Entry[];packs?:{url:string;bytes:number}[]};
 const CONTENT='lore-menu-content-v1';
+// Cache Storage and service-worker calls can each consume their own timeout.
+// Give duel admission one budget for the entire cache inspection instead.
+const DUEL_CACHE_CHECK_MS=5000;
 const key=(hash:string)=>new URL('/__lore_menu_content__/'+hash,location.origin).href;
 let manifest:Promise<Manifest>|undefined, registration:Promise<boolean>|undefined;
 const downloaded=new Map<string,Promise<void>>();
@@ -40,6 +43,10 @@ async function bind(entries:Entry[]):Promise<void> {
 /** Preload original compressed files, not hundreds of decoded full-size bitmaps.
  * Content hashes reuse unchanged files across deploys and reject stale CDN data. */
 export async function prepareMenuCache(progress:(done:number,total:number)=>void,signal:AbortSignal,scope?:'duel'|readonly string[]):Promise<void> {
+ const cacheCheckEnds=performance.now()+DUEL_CACHE_CHECK_MS;
+ const inspect=<T>(task:Promise<T>,regularLimit?:number):Promise<T>=>scope==='duel'
+  ?withDeadline(task,Math.max(1,cacheCheckEnds-performance.now()),signal)
+  :regularLimit?withDeadline(task,regularLimit,signal):task;
  // A slow worker is not an unsupported worker. Retry activation instead of
  // permanently selecting thousands of individual image downloads for this tab.
  const connection=registration??=connect().catch(error=>{registration=undefined;throw error;});
@@ -47,13 +54,13 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
  try {
   // A duel must remain playable when a browser never activates its worker.
   // HOME's speculative registration can continue while this attempt uses HTTP.
-  enabled=await(scope==='duel'?withDeadline(connection,10000):connection);
+  enabled=await inspect(connection);
  }catch(error){if(scope!=='duel'||(error as Error)?.name!=='TimeoutError')throw error;}
  if(signal.aborted)return;
  if(!enabled&&typeof __LORE_MENU_MANIFEST__==='undefined'){registration=undefined;await prepareWithoutStorage(progress,signal,scope);return;}
  const inventoryRequest=manifest??=fetch(__LORE_MENU_MANIFEST__,{cache:'force-cache',signal:AbortSignal.timeout(60000)}).then(r=>{if(!r.ok)throw Error('Artwork manifest unavailable');return r.json() as Promise<Manifest>;}).catch(e=>{manifest=undefined;throw e;});
  let inventory:Manifest;
- try {inventory=await(scope==='duel'?withDeadline(inventoryRequest,10000):inventoryRequest);}
+ try {inventory=await inspect(inventoryRequest);}
  catch(error){if(scope!=='duel')throw error;await prepareWithoutStorage(progress,signal,scope);return;}
  const {packs=[]}=inventory,narrow=matchMedia('(max-width:700px)').matches;
  const compatible=inventory.entries.filter(e=>!e.media||e.media===(narrow?'narrow':'wide'));
@@ -63,10 +70,10 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
  // Persist this client's binding before loading, including across worker restarts.
  let cache:Cache,present:Set<string>;
  try {
-  await bind(inventory.entries); // Protect every phase and viewport already prepared by this tab.
-  cache=await withDeadline(caches.open(CONTENT),10000);
+  await inspect(bind(inventory.entries)); // Protect every phase and viewport already prepared by this tab.
+  cache=await inspect(caches.open(CONTENT),10000);
   // One metadata scan instead of opening 1,200 response bodies on every launch.
-  present=new Set((await withDeadline(cache.keys(),10000)).map(r=>r.url));
+  present=new Set((await inspect(cache.keys(),10000)).map(r=>r.url));
  }catch{
   registration=undefined;
   await prepareWithoutStorage(progress,signal,scope,entries);return;
@@ -124,10 +131,20 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
 
 async function prepareWithoutStorage(progress:(done:number,total:number)=>void,signal:AbortSignal,scope?:'duel'|readonly string[],entries?:Entry[]):Promise<void>{
  document.documentElement.dataset.menuCache='http-fallback';
+ if(signal.aborted)return;
+ // Make the handoff visible before loading the fallback inventory chunk.
+ progress(0,1);
+ if(scope==='duel'){
+  // The admission gate also loads duel code, the visible board, and the
+  // selected deck. Without persistent storage, downloading the entire card
+  // archive here only delays the room; other card art can load when needed.
+  progress(1,1);
+  return;
+ }
  const wanted=Array.isArray(scope)?new Set(scope.map(url=>new URL(url,location.href).pathname)):undefined;
- const selected=(url:string)=>scope==='duel'?assetScope(url)==='duel':!wanted||wanted.has(new URL(url,location.href).pathname);
+ const selected=(url:string)=>!wanted||wanted.has(new URL(url,location.href).pathname);
  const narrow=matchMedia('(max-width:700px)').matches;
- const {menuAssetUrls,duelFileAssets}=entries?{menuAssetUrls:()=>[],duelFileAssets:()=>[]}:await import('./menuAssets');
+ const {menuAssetUrls,duelFileAssets}=entries?{menuAssetUrls:()=>[],duelFileAssets:()=>[]}:await withDeadline(import('./menuAssets'),10000,signal);
  const files=entries??[...menuAssetUrls().filter(selected).map(url=>({url,type:'image/'})),...duelFileAssets().filter(e=>selected(e.url)&&(!e.media||e.media===(narrow?'narrow':'wide'))).map(e=>({...e,type:''}))];
  const remaining=files.map(e=>e.type?.startsWith('image/')?()=>decodeAsset(e.url):async()=>{const r=await fetch(e.url,{cache:'force-cache',signal:AbortSignal.timeout(60000)});if(!r.ok)throw Error('Asset unavailable: '+e.url);await r.arrayBuffer();}),total=remaining.length;let done=0,failed=false;progress(0,total);
  const results=await Promise.allSettled(Array.from({length:6},async()=>{

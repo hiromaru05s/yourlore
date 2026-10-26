@@ -25,13 +25,17 @@ try{
  try {await assert.rejects(retryWorker.prepareMenuCache(()=>{},new AbortController().signal),error=>error.name==='TimeoutError','A worker activation timeout must not fall back to bulk image decode');activate();await retryWorker.prepareMenuCache(()=>{},new AbortController().signal);assert.equal(document.documentElement.dataset.menuCache,'ready');}finally{globalThis.setTimeout=nativeTimeout;}
  // Match admission cannot wait indefinitely for HOME's speculative worker activation.
  let releaseWorker; navigator.serviceWorker.ready=new Promise(resolve=>releaseWorker=resolve);
- const workerTimer=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>workerTimer(fn,ms===10000?5:ms,...args);
+ const workerTimer=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>workerTimer(fn,ms<=5000?5:ms,...args);
  const stalledWorker=await import(dir+'/module.mjs?stalled-worker'),workerFallbackProgress=[];
- try{await stalledWorker.prepareMenuCache((a,b)=>workerFallbackProgress.push([a,b]),new AbortController().signal,'duel');assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(workerFallbackProgress.at(-1),[1,1]);}finally{globalThis.setTimeout=workerTimer;releaseWorker();navigator.serviceWorker.ready=Promise.resolve();}
+ try{const before=downloads;await stalledWorker.prepareMenuCache((a,b)=>workerFallbackProgress.push([a,b]),new AbortController().signal,'duel');assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(workerFallbackProgress,[[0,1],[1,1]]);assert.equal(downloads,before,'Broken storage must not force the full duel archive download');}finally{globalThis.setTimeout=workerTimer;releaseWorker();navigator.serviceWorker.ready=Promise.resolve();}
  // Reproduce the 0% admission stall: Cache.keys never resolves after HOME.
  const keys=cache.keys;cache.keys=()=>new Promise(()=>{});
  const originalTimer=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>originalTimer(fn,ms===10000?5:ms,...args);
  const stuckStorage=await import(dir+'/module.mjs?stuck-storage'),fallbackProgress=[];
  try{await stuckStorage.prepareMenuCache((a,b)=>fallbackProgress.push([a,b]),new AbortController().signal);assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(fallbackProgress.at(-1),[1,1]);}finally{cache.keys=keys;globalThis.setTimeout=originalTimer;}
+ cache.keys=()=>new Promise(()=>{});
+ const duelTimer=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>duelTimer(fn,ms<=5000?5:ms,...args);
+ const stalledDuelScan=await import(dir+'/module.mjs?stalled-duel-scan'),duelProgress=[];
+ try{const before=downloads;await stalledDuelScan.prepareMenuCache((a,b)=>duelProgress.push([a,b]),new AbortController().signal,'duel');assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(duelProgress,[[0,1],[1,1]]);assert.equal(downloads,before);}finally{cache.keys=keys;globalThis.setTimeout=duelTimer;}
  console.log('PASS: stalled cache scan falls back to original network assets; stale-byte rejection, retry recovery, persistent cache hit without transfer, cancellation, and recovery after slow worker activation');
 }finally{await fs.rm(dir,{recursive:true,force:true});}
