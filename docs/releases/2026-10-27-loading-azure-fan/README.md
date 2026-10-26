@@ -25,3 +25,5 @@ Production is deployed only through `scripts/deploy-guard.mjs production`: commo
 Deployment result and served-asset verification are recorded separately after release.
 
 The initial guarded run exposed absolute public-art URLs in three Node-only UI test bundles. Those bundles now treat `/art/*` as external static-server resources; assertions are unchanged. The 1,143-inspection card-effect UI test also receives the same 300-second host-load allowance as the existing card-reference test. All three corrected tests passed individually before rerunning the complete deployment guard.
+
+Integration with the concurrently approved HOME duel frame adds external SVG `<image>` artwork to the existing readiness gate. This prevents the new frame/pigment from appearing only after HOME is admitted on a slow connection; local fragment references are excluded. The readiness regression test covers this alongside HTML images and CSS backgrounds.

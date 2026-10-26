@@ -19,6 +19,12 @@ export function imageUrls(root:HTMLElement):string[]{
   const declared=assetHints.get(el);
   if(declared){for(const url of declared())if(url)urls.add(url);continue;}
   if(el instanceof HTMLImageElement){el.loading='eager';el.fetchPriority='high';if(el.currentSrc||el.src)urls.add(el.currentSrc||el.src);}
+  // Painted HOME controls use SVG image viewports. Their external artwork is
+  // just as visible as <img>, and must be ready before the cover opens.
+  if(el.namespaceURI==='http://www.w3.org/2000/svg'&&el.localName==='image'){
+   const href=el.getAttribute('href')||el.getAttributeNS('http://www.w3.org/1999/xlink','href');
+   if(href&&!href.startsWith('#'))urls.add(href);
+  }
   for(const pseudo of [null,'::before','::after']){const style=pseudo?getComputedStyle(el,pseudo):base;if(style.display==='none'||pseudo&&(style.content==='none'||style.content==='normal'))continue;for(const m of style.backgroundImage.matchAll(/url\(["']?(.*?)["']?\)/g))urls.add(m[1]);}
   pending.push(...Array.from(el.children).reverse());
  }
