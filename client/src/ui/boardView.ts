@@ -1,3 +1,4 @@
+import {retainCardPrint} from './cardContinuity';
 import {createBoardEnchantTimes,enchantTimeState,enchantTimeDescription} from './enchantTime';
 import {activeEnchantmentTile} from './enchantmentView';
 import {createBoardCardCounters,createCardCounter,enchantCounterValue} from './cardCounter';
@@ -512,6 +513,8 @@ export class GameView {
   }
 
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
+    const previousFaces=new Map([...row.querySelectorAll<HTMLElement>('.zone-mon > .card[data-uid]')].map(n=>[n.dataset.uid!,n]));
+    const previousGrave=row.querySelector<HTMLElement>('.pile--shelf .pile-print:not([data-mana-landing]) .card');
     row.innerHTML = "";
     const onTurn = !g.over && g.cur === (g.players.indexOf(p) as Side);
 
@@ -523,6 +526,8 @@ export class GameView {
     const graveArt = graveTop && graveTop.id !== "HIDDEN" ? artUrl.full(graveTop.id) : graveTop ? frameFor(graveTop.t) : null;
     const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
       () => cardPicker(`${esc(p.name)} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => {}, true, { browse: true }));
+    const nextGrave=gravePile.querySelector<HTMLElement>('.pile-print .card');
+    if(previousGrave&&nextGrave&&previousGrave.dataset.cardId===nextGrave.dataset.cardId)retainCardPrint(previousGrave,nextGrave);
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
     const collection = this.collectionOf(p, isMe);
     // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
@@ -559,6 +564,8 @@ export class GameView {
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && monsterCanAttack(g,p,m);
       const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: isMe && myTurn && m.exhausted });
+      const previousFace=previousFaces.get(m.uid);
+      if(previousFace?.dataset.cardId===m.id)retainCardPrint(previousFace,card);
       if (dualReadyActive(m, canAttack)) card.dataset.monsterDualReady = '04';
       if (pending?.reason === "attack" && isMe && myTurn && pending.data?.attackerUid === m.uid) card.onclick = () => this.h.onChooseTarget(null);
       else if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);

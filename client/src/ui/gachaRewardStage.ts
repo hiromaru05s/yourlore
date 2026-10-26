@@ -21,7 +21,7 @@ function face(r:CollectionReward,uid:string){const def=cardDefinition(r);return 
 /** Decode the complete face before revealing it; CSS backgrounds have no load event. */
 export async function prepareRewardCard(r:CollectionReward):Promise<void>{
  if(!['starter','effect'].includes(rewardKind(r)))return;const def=cardDefinition(r);if(!def)return;
- await Promise.all([frameFor(def.t,true),artUrl.full(def.id),...['cost','attack','health'].map(k=>`/art/biblion/modular/${k}-ui.webp`)].map(url=>decodeAsset(url)));
+ await Promise.all([frameFor(def.t,true),artUrl.full(def.id),...['cost','attack','health'].map(k=>`/art/biblion/modular/${k}-print.webp`)].map(url=>decodeAsset(url)));
 }
 /** Lightweight overview retains the complete card frame and each reward's own proportions. */
 export function mountRewardGallery(host:HTMLElement,rewards:CollectionReward[],inspect:(index:number)=>void):()=>void{

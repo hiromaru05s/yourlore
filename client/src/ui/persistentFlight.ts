@@ -31,7 +31,7 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
   const base=180,size=base*3.4875;
   sprite.style.cssText=`position:fixed;left:0;top:0;width:${size}px;height:${size}px;transform-origin:0 0;pointer-events:none`;
   const fx=document.createElement('canvas');fx.className='persistent-flight-trail';fx.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none';
-  const ratio=Math.min(devicePixelRatio,1.5);fx.width=Math.round(innerWidth*ratio);fx.height=Math.round(innerHeight*ratio);
+  const ratio=Math.min(devicePixelRatio,3);fx.width=Math.round(innerWidth*ratio);fx.height=Math.round(innerHeight*ratio);
   host.append(fx,sprite);const ctx=fx.getContext('2d')!;
   const start=new DOMMatrix().translate(from.left+from.width/2-base/2*from.width/base,from.top+from.height/2-base/2*from.width/base).scale(from.width/base);
   const end=projectedPlacement(target,base,base),sa=start.toFloat64Array(),ea=end.toFloat64Array();
@@ -43,7 +43,7 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
     if(signal.aborted||document.hidden||!target.isConnected||!reveal.isConnected){finish();return;}
     try{
      const ms=Math.min(DURATION,now-begun),m=motion(ms);
-     renderer!.render(ms,Math.min(900,Math.max(400,Math.round(from.width*3.4875*ratio))));
+     renderer!.render(ms,Math.min(2048,Math.max(400,Math.ceil(Math.max(from.width,r.width)*3.4875*ratio))));
      const matrix=new DOMMatrix().translate(0,m.lift*from.width).multiply(new DOMMatrix(Array.from(sa,(v,i)=>v+(ea[i]-v)*m.p))).translate(base/2,base/2).rotate(m.angle*180/Math.PI).translate(-size/2,-size/2);
      sprite.style.transform=matrix.toString();sprite.dataset.time=String(Math.round(ms));
      ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,innerWidth,innerHeight);renderer!.trail(ctx,ms,s,d);renderer!.contact(ctx,ms,d);

@@ -12,9 +12,8 @@ export function restingCardFilter(kind:RestingKind,aura:boolean,now:number,densi
 export function refreshSummonAppearance(node:HTMLElement,density=Number(node.dataset.summonDensity)||1){
  if(!node.classList.contains('summon-face'))return;
  node.dataset.summonDensity=String(density);
- const actor=node.dataset.summonRest!=='plain'||!!node.dataset.monsterAura;
- node.style.setProperty('--summon-frame-unit',`${density/(actor?2:1)}px`);
- setRestingFilters(node,(node.dataset.summonRest??'plain') as RestingKind,!!node.dataset.monsterAura,performance.now(),density,matchMedia('(prefers-reduced-motion:reduce)').matches);
+ node.style.setProperty('--summon-frame-unit',`${density*2}px`);
+ setRestingFilters(node,(node.dataset.summonRest??'plain') as RestingKind,!!node.dataset.monsterAura,performance.now(),density*2,matchMedia('(prefers-reduced-motion:reduce)').matches);
 }
 function setRestingFilters(node:HTMLElement,kind:RestingKind,aura:boolean,now:number,density:number,reduced:boolean){
  const filter=restingCardFilter(kind,aura,now,density,reduced).replace(/(?:grayscale|brightness)\([^)]*\)/g,'').trim();
@@ -23,8 +22,9 @@ function setRestingFilters(node:HTMLElement,kind:RestingKind,aura:boolean,now:nu
 }
 /** Keep the illustration out of a filtered root's flattened compositor bitmap. */
 export function paintRestingAppearance(node:HTMLElement,kind:RestingKind,aura:boolean,now:number,density:number,reduced:boolean){
+ node.style.setProperty('--summon-frame-unit',`${density*2}px`);
  node.classList.add('field-resting-face');node.style.setProperty('filter','none','important');
- setRestingFilters(node,kind,aura,now,density,reduced);
+ setRestingFilters(node,kind,aura,now,density*2,reduced);
 }
 export function prepareSummonAppearance(node:HTMLElement){
  if(!node.dataset.summonRest)node.dataset.summonRest=node.dataset.monsterBlocked||node.classList.contains('is-exhausted')?'blocked':node.classList.contains('is-attacker')?'ready':'plain';

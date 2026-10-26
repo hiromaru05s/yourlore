@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {pose,baselinePose,vi,clamp,ease,mix,isBuff,isDebuff,isStat,statKind,type Kind,type Variant,type Rect} from './catalog';
 import {chevron,ongoingFilter} from './renderer';
 export type Point=[number,number];
@@ -13,8 +14,11 @@ export class Actor{
  private readonly badges:Map<string,{badge:HTMLElement;value:HTMLElement}>;
  private readonly styled=new WeakMap<HTMLElement,string>();
  readonly el:HTMLElement;readonly surface:HTMLCanvasElement;readonly pieces:HTMLElement[]=[];readonly polygons:Point[][]=[];stats?:Partial<Record<'atk'|'def',{from:number;to:number}>>;masks:Point[][]=[];matrix=new DOMMatrix();
- constructor(source:HTMLElement,readonly root:HTMLElement,private readonly density=1){
-  this.el=source.cloneNode(true) as HTMLElement;this.el.removeAttribute('id');this.el.removeAttribute('data-uid');this.el.classList.remove('summon-face','field-resting-face','can-attack','ready','exhausted','summon-in','is-attacker','is-exhausted','is-targetable','monster-blocked');this.el.classList.add('duet-card');root.append(this.el);
+ private readonly nativeStyle:string='';
+ private readonly nativeClass:string='';
+ constructor(source:HTMLElement,readonly root:HTMLElement,private readonly density=1,private readonly native=false){
+  this.nativeStyle=source.style.cssText;this.nativeClass=source.className;
+  this.el=(native?source:cloneCardNode(source)) as HTMLElement;if(!native){this.el.removeAttribute('id');this.el.removeAttribute('data-uid');}if(!native)this.el.classList.remove('summon-face','field-resting-face','can-attack','ready','exhausted','summon-in','is-attacker','is-exhausted','is-targetable','monster-blocked');if(!native){this.el.classList.add('duet-card');root.append(this.el);}
   // Rasterize filtered, projected faces at twice the CSS resolution. Normalize
   // fitted inline text first so it scales with the face, including three-digit stats.
   if(density>1){
@@ -30,10 +34,10 @@ export class Actor{
     if(img.src.includes('/art/cards-')){img.removeAttribute('srcset');img.removeAttribute('sizes');img.src=img.src.replace('/art/cards-xs/','/art/cards-sm/');}
    }
   }
-  this.el.querySelectorAll('.anesthesia-status').forEach(n=>n.remove());
+  if(!native)this.el.querySelectorAll('.anesthesia-status').forEach(n=>n.remove());
   this.frame=this.el.querySelector('.card-frame');this.art=this.el.querySelector('.card-art');this.badges=new Map();
   for(const key of ['atk','def']){const badge=this.el.querySelector<HTMLElement>('.ad-'+key),value=badge?.querySelector<HTMLElement>('.seal-value');if(badge&&value)this.badges.set(key,{badge,value});}
-  this.surface=document.createElement('canvas');this.surface.width=this.surface.height=1;this.surface.className='stat-surface';this.surface.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none';this.el.append(this.surface);
+  this.surface=document.createElement('canvas');this.surface.width=this.surface.height=1;this.surface.className='stat-surface';this.surface.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none';if(!native)this.el.append(this.surface);
   const xs=[0,.47,1],ys=[0,.21,.53,.77,1];
   for(let y=0;y<4;y++)for(let x=0;x<2;x++)for(let tri=0;tri<2;tri++){
    const p0:Point=[xs[x]+(x===1?(y%2?.07:-.025):0),ys[y]],p1:Point=[xs[x+1]+(x===0?(y%2?.07:-.025):0),ys[y]],p2:Point=[xs[x+1]+(x===0?((y+1)%2?.07:-.025):0),ys[y+1]],p3:Point=[xs[x]+(x===1?((y+1)%2?.07:-.025):0),ys[y+1]];this.polygons.push(tri?[p0,p2,p3]:[p0,p1,p2]);
@@ -41,7 +45,9 @@ export class Actor{
   for(const img of this.el.querySelectorAll('img')){const done=()=>{img.classList.add('art-loaded');img.parentElement?.classList.add('art-done');};if(img.complete&&img.naturalWidth)done();else img.addEventListener('load',done,{once:true});}this.hide();
  }
  style(n:HTMLElement,r:Rect,x:number,y:number,angle:number,scale:number,z=0,rock=0){
-  const m=placement(r,x,y,angle,scale,z,rock),raster=m.scale(1/this.density),size=`${r.w}/${r.h}`;
+  const m=placement(r,x,y,angle,scale,z,rock);
+  if(this.native){const base=r.matrix??new DOMMatrix().translate(r.x-r.w/2,r.y-r.h/2);n.style.transformOrigin='0 0';n.style.transform=base.inverse().multiply(m).toString();return m;}
+  const raster=m.scale(1/this.density),size=`${r.w}/${r.h}`;
   if(this.styled.get(n)!==size){this.styled.set(n,size);n.style.cssText=`position:absolute!important;left:0!important;top:0!important;width:${r.w*this.density}px!important;height:${r.h*this.density}px!important;--cw:${r.w*this.density}px;--ch:${r.h*this.density}px;--field-card-size:${r.w*this.density}px;margin:0!important;transform:${raster.toString()}!important;transform-origin:0 0!important;transition:none!important;animation:none!important;pointer-events:none!important;z-index:2;filter:none!important;box-shadow:none!important;`;}else{n.style.setProperty('transform',raster.toString(),'important');n.style.setProperty('filter','none','important');}return m;
  }
  paint(k:Kind,v:Variant,t:number,r:Rect,target:Rect,reduced:boolean,active=true,side=1,destination?:Rect){
@@ -51,7 +57,7 @@ export class Actor{
   if(k==='aura'&&active)this.el.style.setProperty('filter',ongoingFilter(v,t,reduced),'important');
   if(k==='ready'){const b=reduced?.5:.5-.5*Math.cos(t*4*Math.PI);this.el.style.setProperty('filter',`drop-shadow(0 ${2*this.density}px ${4*this.density}px #0009) drop-shadow(0 0 ${(4+5*b)*this.density}px rgba(255,122,77,${.4+.6*b}))`,'important');}
   const frame=this.frame,art=this.art;
-  if(frame){frame.style.filter=k==='trigger'?`url(#celestial-matte) brightness(${1+p.edge*.45})`:isBuff(k)?`url(#celestial-matte) brightness(${1+p.edge*.12}) drop-shadow(0 0 2px #56c8ff)`:'';frame.style.transform=isBuff(k)?`scale(${1+p.edge*.025})`:'';}
+  if(frame){frame.style.filter=k==='trigger'?`brightness(1) brightness(${1+p.edge*.45})`:isBuff(k)?`brightness(1) brightness(${1+p.edge*.12}) drop-shadow(0 0 2px #56c8ff)`:'';frame.style.transform=isBuff(k)?`scale(${1+p.edge*.025})`:'';}
   if(art)art.style.filter=k==='trigger'?`brightness(${1-p.edge*.12}) contrast(${1+p.edge*.12})`:'';
   for(const key of ['atk','def']){const parts=this.badges.get(key);if(!parts)continue;const {badge,value:val}=parts;const sk=statKind(k),change=this.stats?.[key as 'atk'|'def'],selected=isStat(k)&&(sk==='both'||sk==='atk'&&key==='atk'||sk==='hp'&&key==='def');if(change)val.textContent=String(t>=.46||reduced?change.to:change.from);badge.style.filter=selected?`brightness(${1+p.edge*.45})`:'';badge.style.transform=selected?`scale(${1+p.edge*.10})`:'';}
   this.drawSurface(k,v,t,r,reduced,active);
@@ -89,6 +95,6 @@ export class Actor{
   }
  }
  baseline(k:'summon'|'attack',ms:number,r:Rect,target:Rect){this.hide();const p=baselinePose(k,ms,r,target);this.matrix=this.style(this.el,r,p.x,p.y,p.angle,p.scale);this.el.style.display='block';this.masks=[corners(this.matrix,r.w,r.h)];}
- hide(){if(this.el.style.display!=='none')this.el.style.display='none';this.pieces.forEach(n=>{if(n.style.display!=='none')n.style.display='none';});this.masks=[];}
- dispose(){this.el.remove();this.pieces.forEach(n=>n.remove());}
+ hide(){if(this.native)return;if(this.el.style.display!=='none')this.el.style.display='none';this.pieces.forEach(n=>{if(n.style.display!=='none')n.style.display='none';});this.masks=[];}
+ dispose(){if(this.native){this.el.style.cssText=this.nativeStyle;this.el.className=this.nativeClass;}else this.el.remove();this.pieces.forEach(n=>n.remove());}
 }

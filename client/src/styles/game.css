@@ -401,7 +401,7 @@
 .zone-st .slot,.buff-icon { aspect-ratio:4/5; }
 .buff-icon { background:none; border:0; border-radius:0; box-shadow:none; }
 .buff-frame,.buff-art { position:absolute; inset:0; background-size:100% 100%; background-position:center; pointer-events:none; }
-.buff-frame { filter:url(#celestial-matte); }
+.buff-frame { filter:none; }
 .buff-art { background-size:cover; clip-path:url(#celestial-field-spell); }
 .buff-cost { position:absolute; left:3.4%; top:4.4%; width:15%; height:12%; display:grid; place-items:center; color:#fff6de; font:10px Georgia,serif; line-height:1; z-index:2; }
 .buff-duration { z-index:3; right:2%; bottom:1%; border:1px solid #b9c7d76b; }
@@ -410,11 +410,11 @@
 
 /* Permanent and finite enchantment indicators have distinct generated skins. */
 .buff-cost { width:26%; height:auto; aspect-ratio:1; top:-2%; left:-6%; font-size:10px; }
-.buff-cost::before { content:''; position:absolute; inset:0; background:url(/art/biblion/modular/cost-ui.webp) center/100% 100%; filter:url(#celestial-matte); }
+.buff-cost::before { content:''; position:absolute; inset:0; background:url(/art/biblion/modular/cost-print.webp) center/100% 100%; filter:none; }
 .buff-cost > span { position:relative; z-index:1; }
-.buff-infinity { position:absolute; z-index:4; width:55%; height:55%; object-fit:contain; bottom:-13%; right:-4%; filter:url(#celestial-matte) drop-shadow(0 1px 2px #000); pointer-events:none; }
+.buff-infinity { position:absolute; z-index:4; width:55%; height:55%; object-fit:contain; bottom:-13%; right:-4%; filter:drop-shadow(0 1px 2px #000); pointer-events:none; }
 .buff-duration,.buff-counter { position:absolute; bottom:-5%; right:-7%; min-width:72%; height:25%; padding:0 4px; z-index:4; border:0; border-radius:0; background:none; display:grid; place-items:center; color:#fff0cd; font-size:clamp(9px,.72vw,12px); font-variant-numeric:tabular-nums; }
-.buff-duration::before,.buff-counter::before { content:''; position:absolute; inset:-15% 0; z-index:-1; background:url(/art/biblion/modular/plaque-ui.webp) center/100% 100%; filter:url(#celestial-matte); }
+.buff-duration::before,.buff-counter::before { content:''; position:absolute; inset:-15% 0; z-index:-1; background:url(/art/biblion/modular/plaque-print.webp) center/100% 100%; filter:none; }
 .buff-counter { right:auto; left:-5%; bottom:15%; min-width:48%; }
 .buff-duration::before,.buff-counter::before { background-size:100% 180%; background-position:center 45%; }
 
@@ -627,7 +627,7 @@
 @media(prefers-reduced-motion:reduce) { .rift-sprite,.treasure-notice { animation:none!important; } }
 
 .game .buff-icon--quest { border:0; background:none; box-shadow:none; padding:0; }
-.game .buff-icon--quest .buff-frame { filter:url(#celestial-matte); }
+.game .buff-icon--quest .buff-frame { filter:none; }
 .game .buff-icon--quest .quest-progress { inset:auto 6% 3%; padding:1px 0; border-top:1px solid #c6a8df88; background:linear-gradient(90deg,#231330dd,#38214bef,#231330dd); color:#f7e7ff; font-size:clamp(7px,.72vw,11px); line-height:1.1; }
 .game .portrait:not(.portrait--opp) .pt-ring { width:117%; height:117%; left:-8.5%; top:-4%; }
 .game .rift-sprite { width:140%; left:-20%; top:-12%; }
@@ -673,7 +673,7 @@ body:has(.game) :is([data-block-reason],[data-block-reason] *,button:disabled,[a
 body:has(.game.drag-play) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!important; }
 body:has(.opening-hands) *,body:has(.game) [aria-busy=true] { cursor:url(/ui/cursors/loading.svg) 3 3,progress!important; }
 .card-block-tip { position:fixed;z-index:250;pointer-events:none;max-width:min(320px,90vw);padding:9px 14px;color:#f2e3cd;background:#20283bf5;border:1px solid #bca27a;border-radius:8px 8px 8px 2px;box-shadow:0 5px 16px #070c2350;font-size:12px;line-height:1.5; }
-.game .card-frame { filter:url(#celestial-matte) drop-shadow(0 1px 0 #d3c3a0) drop-shadow(0 1px 0 #655846); }
+.game .card-frame { filter:drop-shadow(0 1px 0 #d3c3a0) drop-shadow(0 1px 0 #655846); }
 .game .pcluster--opp { transform:translateY(calc(var(--pt) * -.15)); }
 .game .pcluster--me { bottom:calc(var(--pt) * -.07); }
 .game .portrait .pt-ring::after { background-image:url(/art/biblion/refined/portrait-opp.png);background-size:contain;inset:0; }
@@ -807,7 +807,7 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 /* Purchase selection follows the cutout frame and stat seals, never a box. */
 .game .market-cards .card.is-armed { outline:0;box-shadow:none; }
 .game .market-cards .card.is-armed .card-frame,
-.game .market-cards .card.is-armed .seal-face { filter:url(#celestial-matte) drop-shadow(0 0 1px #d4f3ff) drop-shadow(0 0 3px #68c3f6); }
+.game .market-cards .card.is-armed .seal-face { filter:drop-shadow(0 0 1px #d4f3ff) drop-shadow(0 0 3px #68c3f6); }
 .draw-grip { isolation:isolate; }
 
 .game .portrait .mana-readout { border:1px solid #baa77888;border-radius:3px;background:linear-gradient(145deg,#294155ed,#142537ed);box-shadow:inset 0 1px 0 #e6dbbd26,inset 0 -2px 0 #080f2070,0 2px 3px #13203126;color:#f4ead3; }
@@ -917,24 +917,27 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 /* Keep projected lettering in the final screen raster. Group filters on the
    whole card force Chromium to enlarge a low-resolution intermediate bitmap. */
 .game .card,.game .card:is(.is-dim,.is-exhausted,.is-playable,.is-buyable):hover { filter:none; }
-.game .card-frame { filter:url(#celestial-matte) drop-shadow(0 1px 0 #d3c3a0) drop-shadow(0 1px 0 #655846) drop-shadow(0 2px 4px #0009); }
-.game .card.is-playable:hover .card-frame,.game .card.is-buyable:hover .card-frame { filter:url(#celestial-matte) drop-shadow(0 8px 14px #000c); }
+.game .card-frame,.card:is(.fx-card-flight,.cast-reveal,.native-card-flight) .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009); }
+.game .card.is-playable:hover .card-frame,.game .card.is-buyable:hover .card-frame { filter:drop-shadow(0 16px 28px #000c); }
 .game .card.is-dim > :not(.card-frame) { filter:grayscale(1) brightness(.55) contrast(.9); }
-.game .card.is-dim .card-frame { filter:url(#celestial-matte) grayscale(1) brightness(.55) contrast(.9) drop-shadow(0 2px 4px #0009); }
+.game .card.is-dim .card-frame { filter:grayscale(1) brightness(.55) contrast(.9) drop-shadow(0 4px 8px #0009); }
 .game .card.is-dim:hover > :not(.card-frame) { filter:grayscale(.95) brightness(.65) contrast(.9); }
-.game .card.is-dim:hover .card-frame { filter:url(#celestial-matte) grayscale(.95) brightness(.65) contrast(.9) drop-shadow(0 2px 4px #0009); }
+.game .card.is-dim:hover .card-frame { filter:grayscale(.95) brightness(.65) contrast(.9) drop-shadow(0 4px 8px #0009); }
 .game .card.is-exhausted:not(.is-dim) > :not(.card-frame) { filter:grayscale(.7) brightness(.6); }
-.game .card.is-exhausted:not(.is-dim) .card-frame { filter:url(#celestial-matte) grayscale(.7) brightness(.6) drop-shadow(0 2px 4px #0009); }
+.game .card.is-exhausted:not(.is-dim) .card-frame { filter:grayscale(.7) brightness(.6) drop-shadow(0 4px 8px #0009); }
 /* Floating summon faces use the same print and silhouette as a field Actor.
    Their parent is body while travelling, so .game descendant rules cannot own them. */
 .card.summon-face { filter:none!important;animation:none!important;transition:none!important; }
 .card:is(.summon-face,.field-resting-face) > :not(.card-frame) { filter:var(--rest-tone,brightness(1)); }
-.card:is(.summon-face,.field-resting-face) .card-frame { filter:url(#celestial-matte) drop-shadow(0 var(--summon-frame-unit,1px) 0 #d3c3a0) drop-shadow(0 var(--summon-frame-unit,1px) 0 #655846) drop-shadow(0 calc(2 * var(--summon-frame-unit,1px)) calc(4 * var(--summon-frame-unit,1px)) #0009) var(--rest-shadow,drop-shadow(0 0 0 #0000)) var(--rest-tone,brightness(1));animation:none!important; }
+.card:is(.summon-face,.field-resting-face) .card-frame { filter:drop-shadow(0 var(--summon-frame-unit,1px) 0 #d3c3a0) drop-shadow(0 var(--summon-frame-unit,1px) 0 #655846) drop-shadow(0 calc(2 * var(--summon-frame-unit,1px)) calc(4 * var(--summon-frame-unit,1px)) #0009) var(--rest-shadow,drop-shadow(0 0 0 #0000)) var(--rest-tone,brightness(1));animation:none!important; }
 
 .game .card:is(.is-attacker,.is-targetable) { animation:none; }
 .game .card.is-attacker .card-frame { animation:projectedAttackerPulse 1.1s infinite; }
 .game .card.is-targetable .card-frame { animation:projectedAttackerPulse .8s infinite; }
 @keyframes projectedAttackerPulse {
-  0%,100% { filter:url(#celestial-matte) drop-shadow(0 2px 4px #0009) drop-shadow(0 0 4px #ff7a4d66); }
-  50% { filter:url(#celestial-matte) drop-shadow(0 2px 4px #0009) drop-shadow(0 0 9px #ff7a4d); }
+  0%,100% { filter:drop-shadow(0 4px 8px #0009) drop-shadow(0 0 8px #ff7a4d66); }
+  50% { filter:drop-shadow(0 4px 8px #0009) drop-shadow(0 0 18px #ff7a4d); }
 }
+
+/* Permanent spell/quest plates share the bounded native print sampling. */
+.buff-frame,.buff-art {width:200%;height:200%;right:auto;bottom:auto;scale:.5;transform-origin:0 0;}

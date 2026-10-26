@@ -14,7 +14,7 @@ async function capture(node:HTMLElement,ratio:number){
  for(const el of [copy,...copy.querySelectorAll<HTMLElement>('[id],[data-uid]')]){el.removeAttribute('id');el.removeAttribute('data-uid');}
  copy.style.cssText=`position:fixed;left:-4000px;top:0;width:180px;height:${180*ratio}px;--cw:180px;--ch:${180*ratio}px;transform:none;translate:none;visibility:visible`;
  document.body.append(copy);
- try{const surface=await captureCardSurface(copy,FRAME_BACK,true,false);if(!surface.face)throw Error('Missing fusion face');return surface.face;}finally{copy.remove();}
+ try{const surface=await captureCardSurface(copy,FRAME_BACK,true,false,node);if(!surface.face)throw Error('Missing fusion face');return surface.face;}finally{copy.remove();}
 }
 
 /** Own both materials and the result slot. Cancellation settles to the authoritative result. */

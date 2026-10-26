@@ -1,3 +1,4 @@
+import {captureNativePrint,cardPrintWidth} from './cardPrintCapture';
 import {rasterMatte} from './spellFrame/matteRaster';
 import {frameMaskOffThread} from './spellFrame/rasterClient';
 import {refreshSummonAppearance} from './summon/appearance';
@@ -36,6 +37,7 @@ async function matte(url: string): Promise<HTMLCanvasElement> {
   if (!pending) {
     pending = image(url).then(async img => {
       const height=RESOLUTION*img.naturalHeight/img.naturalWidth;
+      if(url.includes('-print.webp')){const c=canvas(RESOLUTION,height);c.getContext('2d')!.drawImage(img,0,0,c.width,c.height);return c;}
       try{
         const bitmap=await frameMaskOffThread(img,undefined,[],{width:RESOLUTION,height});
         const c=canvas(bitmap.width,bitmap.height);
@@ -53,7 +55,7 @@ async function matte(url: string): Promise<HTMLCanvasElement> {
 export function warmCardSurface(node:HTMLElement):void{
  for(const el of node.querySelectorAll('.card-frame,.seal-face')){const url=urlOf(el);if(url)void matte(url).catch(()=>{});}
  const art=node.querySelector<HTMLImageElement>('.card-art img');if(art)void image(art.src.replace(/\/art\/cards-(sm|xs)\//,'/art/cards/')).catch(()=>{});
- if(node.querySelector('.card-status .ec,.card-status .kw,.badge'))void matte('/art/biblion/modular/plaque-ui.webp').catch(()=>{});
+ if(node.querySelector('.card-status .ec,.card-status .kw,.badge'))void matte('/art/biblion/modular/plaque-print.webp').catch(()=>{});
 }
 
 export interface CardSurface { face: HTMLCanvasElement | null; back: HTMLCanvasElement; }
@@ -72,6 +74,12 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   const ratio = r.height / r.width;
   // Opponent path never reads, copies or requests a face or card identity.
   if (!reveal) return captureCardBack(sleeve,ratio);
+  refreshSummonAppearance(node);
+  try{
+    const face=await captureNativePrint(node,cardPrintWidth(liveSource),CARD_PADDING,liveSource);
+    const back=includeBack?(await captureCardBack(sleeve,ratio)).back:canvas(1,1);
+    return {face,back};
+  }catch(error){console.warn('[card-print] Native capture fallback',error);}
   refreshSummonAppearance(node,2);
   const w = RESOLUTION, h = w * ratio, pad = w * CARD_PADDING;
   const back = canvas(w + pad*2, h + pad*2);
@@ -156,7 +164,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   }
   for (const label of node.querySelectorAll<HTMLElement>('.card-status .ec,.card-status .kw,.badge')) {
     const b = box(label);
-    layers.push(async () => { ctx.drawImage(await matte('/art/biblion/modular/plaque-ui.webp'), b.x,b.y,b.w,b.h); });
+    layers.push(async () => { ctx.drawImage(await matte('/art/biblion/modular/plaque-print.webp'), b.x,b.y,b.w,b.h); });
     layers.push(drawText(label));
   }
   for(const icon of node.querySelectorAll<HTMLElement>('.card-status .passive-icon')){
@@ -202,40 +210,5 @@ export async function capturePileSurface(node:HTMLElement,sleeve:string,preserve
 /** Capture the actual public persistent spell or quest tile at its native size, including the cost
  * seal and localized progress. Padding is identical to captureCardSurface. */
 export async function captureQuestTile(node:HTMLElement):Promise<HTMLCanvasElement> {
-  const r=node.getBoundingClientRect(),w=768,h=w*r.height/r.width,pad=w*CARD_PADDING;
-  const out=canvas(w+pad*2,h+pad*2),c=out.getContext('2d')!;
-  const box=(el:Element)=>{const b=el.getBoundingClientRect();return {x:pad+(b.left-r.left)/r.width*w,y:pad+(b.top-r.top)/r.width*w,w:b.width/r.width*w,h:b.height/r.width*w};};
-  const frame=node.querySelector<HTMLElement>('.buff-frame')!,art=node.querySelector<HTMLElement>('.buff-art')!;
-  const cost=node.querySelector<HTMLElement>('.buff-cost')!,label=node.querySelector<HTMLElement>('.quest-progress');
-  const cb=box(cost),cs=getComputedStyle(cost);
-  const infinity=node.querySelector<HTMLImageElement>('.buff-infinity');
-  const ib=infinity?box(infinity):null;
-  // Print the very same self-contained SVG badges used by the native landing.
-  const badges=[...node.querySelectorAll<SVGSVGElement>('.enchant-time > svg,.card-counter > svg')].map(svg=>{
-    const copy=svg.cloneNode(true) as SVGSVGElement;
-    copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width','64');copy.setAttribute('height','64');
-    return {box:box(svg),src:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(copy))};
-  });
-  const lb=label?box(label):null,ls=label?getComputedStyle(label):null;
-  const text=(value:string,b:ReturnType<typeof box>,style:CSSStyleDeclaration)=>{
-    c.save();c.font=`${style.fontWeight} ${parseFloat(style.fontSize)*w/r.width}px ${style.fontFamily}`;
-    c.textAlign='center';c.textBaseline='middle';c.fillStyle=style.color;c.shadowColor='#000';c.shadowBlur=3*w/r.width;c.shadowOffsetY=w/r.width;
-    c.fillText(value,b.x+b.w/2,b.y+b.h/2,b.w);c.restore();
-  };
-  const [fr,ar,seal]=await Promise.all([matte(urlOf(frame)!),image(urlOf(art)!),matte('/art/biblion/modular/cost-ui.webp')]);
-  c.drawImage(fr,pad,pad,w,h);c.save();
-  const path=document.querySelector('#celestial-field-spell path')?.getAttribute('d');
-  if(path){c.translate(pad,pad);c.scale(w,h);c.clip(new Path2D(path));c.scale(1/w,1/h);c.translate(-pad,-pad);}
-  const scale=Math.max(w/ar.naturalWidth,h/ar.naturalHeight),sw=w/scale,sh=h/scale;
-  c.drawImage(ar,(ar.naturalWidth-sw)/2,(ar.naturalHeight-sh)/2,sw,sh,pad,pad,w,h);c.restore();
-  for(const layer of node.querySelectorAll<HTMLCanvasElement>('.card-effect-surface')){if(!layer.width)continue;c.save();if(path){c.translate(pad,pad);c.scale(w,h);c.clip(new Path2D(path));c.scale(1/w,1/h);c.translate(-pad,-pad);}c.globalCompositeOperation=getComputedStyle(layer).mixBlendMode==='screen'?'screen':'source-over';const b=box(layer);c.drawImage(layer,b.x,b.y,b.w,b.h);c.restore();}
-  c.drawImage(seal,cb.x,cb.y,cb.w,cb.h);text(cost.textContent||'',cb,cs);
-  for(const badge of badges){const b=badge.box;c.drawImage(await image(badge.src),b.x,b.y,b.w,b.h);}
-  if(!label||!lb||!ls){
-    if(infinity&&ib)c.drawImage(await matte(infinity.src),ib.x,ib.y,ib.w,ib.h);
-    return out;
-  }
-  const gradient=c.createLinearGradient(lb.x,0,lb.x+lb.w,0);gradient.addColorStop(0,'#231330dd');gradient.addColorStop(.5,'#38214bef');gradient.addColorStop(1,'#231330dd');
-  c.fillStyle=gradient;c.fillRect(lb.x,lb.y,lb.w,lb.h);c.fillStyle=ls.borderTopColor;c.fillRect(lb.x,lb.y,lb.w,parseFloat(ls.borderTopWidth)*w/r.width);
-  text(label.textContent||'',lb,ls);return out;
+  return captureNativePrint(node,768,CARD_PADDING);
 }

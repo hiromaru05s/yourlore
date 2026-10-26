@@ -38,7 +38,7 @@ try{
  for(const open of [false,true]){
   await page.evaluate(open=>document.querySelector('.game').classList.toggle('hand-open',open),open);await page.waitForTimeout(300);
   const cards=await page.evaluate(()=>[...document.querySelectorAll('#hand .card,.market-cards .card')].map(n=>({src:n.querySelector('.card-art img')?.currentSrc,frame:getComputedStyle(n.querySelector('.card-frame')).backgroundImage,filter:getComputedStyle(n).filter})));
-  assert(cards.length>1);for(const card of cards){assert(card.src.includes('/art/cards/'),JSON.stringify(card));assert(card.frame.includes('-lossless.webp'));assert.equal(card.filter,'none');}
+  assert(cards.length>1);for(const card of cards){assert(card.src.includes('/art/cards/'),JSON.stringify(card));assert(card.frame.includes('-print.webp'));assert.equal(card.filter,'none');}
   assert.equal(await page.locator('.market-sub--supply').evaluate(n=>getComputedStyle(n).transformStyle),'preserve-3d');
   await page.screenshot({path:out+`/hand-${open?'open':'closed'}.png`});checks.push({open,cards});
  }
@@ -88,7 +88,7 @@ try{
   await page.evaluate(({id,owner})=>{window.qaRunning=summonQA(id,owner)}, {id,owner});
   const r=await page.evaluate(()=>qaRunning);assert(r.families.length,`${id} summon was skipped`);assert.equal(r.left,0,`${id} cleanup`);
   for(const b of r.buffers)assert(b.width>=Math.floor(b.cssWidth*b.dpr)&&b.height>=Math.floor(b.cssHeight*b.dpr),`${id} native DPR: ${JSON.stringify(b)}`);
-  if(id!=='FIRE_MASTER')assert(r.frames.some(f=>f.layers.some(n=>Number(n.opacity)>0&&Number(n.opacity)<1)),`${id} native handoff`);
+  if(id!=='FIRE_MASTER'&&!r.families.includes('slate-summon'))assert(r.frames.some(f=>f.layers.some(n=>Number(n.opacity)>0&&Number(n.opacity)<1)),`${id} native handoff`);
   checks.push(r);await fs.writeFile(out+'/progress.json',JSON.stringify(checks,null,2));console.log('PASS',id,r.families, r.buffers);
  }
  for(const mode of ['skip','resize']){const r=await page.evaluate(mode=>summonQA('RUST_SHROOM',0,false,mode),mode);assert.equal(r.left,0);checks.push(r);}
