@@ -104,6 +104,10 @@
 :root body .overlay > .modal:not(.outcome-result) .btn:hover:not(:disabled) {
   filter:brightness(1.12); border-color:#e1f1f8; transform:none;
 }
+
+/* Risky casts ask for one decision; target casts keep only the required choices. */
+:root body .overlay > .modal.cast-target-review:not(.outcome-result) .picker-grid { max-height:43dvh!important;padding:4px!important;gap:10px!important; }
+:root body .overlay > .modal.cast-target-review:not(.outcome-result) .picker-grid .card { --cw:min(90px,24vw);--ch:calc(var(--cw) * 1.5625);flex:0 0 var(--cw); }
 :root body .overlay > .modal:not(.outcome-result) .btn:active:not(:disabled) { filter:brightness(.92); }
 :root body .overlay > .modal:not(.outcome-result) .btn:disabled { opacity:.4; cursor:not-allowed; }
 :root body .overlay > .modal:not(.outcome-result) :is(button,input,textarea,select):focus-visible {
@@ -199,3 +203,12 @@
   :root body .overlay:has(> .modal:not(.outcome-result)),
   :root body .overlay > .modal:not(.outcome-result) { animation:none; }
 }
+
+/* Keep compact cast confirmation compact after the shared duel popup rules. */
+:root body .overlay > .modal.cast-review.duel-dialog:not(.outcome-result) { --popup-x:18px;--popup-y:16px;width:min(540px,calc(100vw - 24px))!important;padding:16px 18px; }
+:root body .overlay > .modal.cast-confirm.duel-dialog:not(.outcome-result) { width:min(360px,calc(100vw - 24px))!important; }
+:root body .overlay > .modal.cast-review.duel-dialog:not(.outcome-result) > .popup-heading { position:static;margin:0 0 12px;padding:0 0 12px;background:none;gap:8px; }
+:root body .overlay > .modal.cast-review.duel-dialog:not(.outcome-result) h2 { font-size:18px!important;line-height:1.4;letter-spacing:0; }
+:root body .overlay > .modal.cast-review.duel-dialog:not(.outcome-result) .dialog-clock { min-width:56px;padding:7px 8px;font-size:12px; }
+:root body .overlay > .modal.cast-review.duel-dialog:not(.outcome-result) > .modal-row { position:static;margin:0;padding:0;background:none;border:0;gap:8px; }
+:root body .overlay > .modal.cast-review.duel-dialog:not(.outcome-result) .modal-row .btn { flex:1 1 0;min-width:0;min-height:42px;padding:8px 12px; }

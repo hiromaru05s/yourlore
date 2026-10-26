@@ -1,5 +1,4 @@
-import { buyCost, playCost } from '../shared/engine';
-import { automaticCastTargets, targetOwner, type PlayIntent } from '../shared/playIntent';
+import { targetOwner, type PlayIntent } from '../shared/playIntent';
 import '../styles/marketPreview.css';
 import '../styles/outcomeFinale.css';
 // ============================================================
@@ -11,7 +10,7 @@ import { attachDuelClock } from "./duelClock";
 import { cardEl } from "./cardView";
 import { bindZoom, zoomCard, closeZoom } from "./cardInspection";
 import { TRIBES } from "../shared/cards";
-import { t, getLang, cardName, cardText } from "../i18n";
+import { t, getLang, cardName } from "../i18n";
 
 let root: HTMLElement | null = null;
 let returnFocus:HTMLElement|null=null;
@@ -331,25 +330,19 @@ export function deckViewer(title: string, composition: CardInst[], remaining: Ca
 export function reviewCast(g: GameState, owner: Side, source: CardInst, intent: PlayIntent | null, purchase = false): Promise<string[] | null> {
   return new Promise(resolve => {
     const ja=getLang()==='ja',ko=getLang()==='ko';
-    const m=document.createElement('div');m.className='modal picker-modal cast-review';
-    Object.assign(m.style,{maxWidth:'720px',width:'min(720px, 94vw)',maxHeight:'90dvh',overflowY:'auto',boxSizing:'border-box'});
-    const heading=document.createElement('h2');heading.textContent=cardName(source);
-    const rules=document.createElement('p');rules.textContent=cardText(source);rules.style.whiteSpace='pre-line';
-    const note=document.createElement('p');note.className='cast-review-note';
-    note.textContent=ja?`消費マナ ${purchase?buyCost(g.players[owner],source):playCost(source,g.players[owner])} · 確定するまでカード・マナは消費しません。`
-      :ko?`소비 마나 ${purchase?buyCost(g.players[owner],source):playCost(source,g.players[owner])} · 확정 전에는 카드와 마나를 소비하지 않습니다.`
-      :`Mana ${purchase?buyCost(g.players[owner],source):playCost(source,g.players[owner])} · No card or mana is spent until you confirm.`;
+    const m=document.createElement('div');m.className=`modal cast-review ${intent?'picker-modal cast-target-review':'cast-confirm'}`;
+    const heading=document.createElement('h2');
+    heading.textContent=ja?`「${cardName(source)}」を${purchase?'購入して':''}発動しますか？`:ko?`「${cardName(source)}」 카드를 ${purchase?'구매하고 ':''}발동하시겠습니까?`:`${purchase?'Buy and cast':'Cast'} “${cardName(source)}”?`;
     const grid=document.createElement('div');grid.className='picker-grid';Object.assign(grid.style,{display:'flex',gap:'9px',flexWrap:'wrap',justifyContent:'center'});
     const caution=document.createElement('p');caution.className='cast-review-caution';caution.setAttribute('aria-live','polite');
     const selection=document.createElement('p');selection.className='cast-review-selection';selection.setAttribute('aria-live','polite');
     const row=document.createElement('div');row.className='modal-row';
-    const cancel=document.createElement('button');cancel.className='btn btn-ghost';cancel.textContent=t('common.cancel');
-    const ok=document.createElement('button');ok.className='btn btn-gold';ok.textContent=purchase?(ja?'購入して発動':ko?'구매 후 발동':'Buy and cast'):(ja?'発動を確定':ko?'발동 확정':'Confirm cast');
+    const cancel=document.createElement('button');cancel.className='btn btn-ghost';cancel.textContent=t('common.no');
+    const ok=document.createElement('button');ok.className='btn btn-gold';ok.textContent=t('common.yes');
     const picked:string[]=[];let settled=false;let observer:MutationObserver|undefined;
     const settle=(value:string[]|null)=>{if(settled)return;settled=true;observer?.disconnect();resolve(value);};
     const paint=()=>{
       ok.disabled=!!intent && (intent.min>0 && picked.length<intent.min);
-      if(intent)ok.textContent=picked.length?(ja?'この対象で発動':ko?'이 대상으로 발동':'Cast on selected targets'):(ja?'対象を選ばず発動':ko?'대상 없이 발동':'Cast without targets');
       selection.textContent=intent?(intent.pool.length?(ja?`対象 ${picked.length} / ${intent.max} · 選び直し・キャンセル可`:ko?`대상 ${picked.length} / ${intent.max} · 재선택 또는 취소 가능`:`Targets ${picked.length} / ${intent.max} · Change selection or cancel`):(ja?'選べる対象がありません。カードは使用されていません。':ko?'선택 가능한 대상이 없습니다. 카드는 사용되지 않았습니다.':'No legal targets. The card has not been played.')):'';
       const harmful=picked.filter(uid=>source.id==='SELECTED_SWORD'?targetOwner(g,uid)!==owner:
         ['destroyMon','destroyEnch','destroyTrap','bloodShower','FIRE_BALL','STABLE','bloodSecret'].includes(intent?.reason??'')&&targetOwner(g,uid)===owner);
@@ -366,16 +359,10 @@ export function reviewCast(g: GameState, owner: Side, source: CardInst, intent: 
       card.onclick=choose;card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}};bindZoom(card,c);
       wrap.append(label,card);grid.append(wrap);
     });
-    if(!intent)for(const c of automaticCastTargets(g,owner,source)) {
-      const own=targetOwner(g,c.uid)===owner,wrap=document.createElement('div'),label=document.createElement('p');
-      label.textContent=ja?`現在の盤面での自動処理の破壊対象（${own?'自分':'相手'}）`:ko?`현재 필드의 자동 파괴 대상 (${own?'자신':'상대'})`:`Current automatic destruction target (${own?'You':'Opponent'})`;
-      const card=cardEl(c,{lazyArt:0});bindZoom(card,c);
-      wrap.append(label,card);grid.append(wrap);
-    }
     cancel.onclick=()=>{settle(null);closeOverlay();};
     ok.onclick=()=>{if(!ok.disabled){settle([...picked]);closeOverlay();}};
     m.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();cancel.click();}});
-    row.append(cancel,ok);m.append(heading,rules,note,selection,caution,grid,row);paint();mount(m);
+    row.append(cancel,ok);m.append(heading);if(intent)m.append(selection,caution,grid);m.append(row);paint();mount(m);
     observer=new MutationObserver(()=>{if(!m.isConnected)settle(null);});observer.observe(getRoot(),{childList:true});
   });
 }

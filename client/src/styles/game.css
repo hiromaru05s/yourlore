@@ -862,47 +862,43 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .mana-gain-label { position:absolute;left:64%;top:-24px;pointer-events:none;font:600 clamp(17px,2vw,25px) Georgia,serif;color:#d9f5ff;text-shadow:0 1px 3px #082847,0 0 12px #72c8ef;z-index:8; }
 .pt-mana[data-gain-phase="bloom"] .mana-readout { filter:drop-shadow(0 0 calc(10px * var(--mana-bloom,0)) #a4e2ff); }
 
-/* Image-authored Biblion utility plaques; native buttons keep input semantics. */
-.game button.utility-control { width:54px;height:58px;padding:0;border:0;border-radius:0;background:none;box-shadow:none;display:flex;align-items:center;justify-content:flex-start;flex-direction:column;gap:0;overflow:visible;transition:filter .16s,translate .12s; }
-.utility-control>img { display:block;width:48px;height:48px;object-fit:contain;pointer-events:none; }
-.game .utility-control>span { display:block;font:10px/1.1 system-ui,sans-serif;white-space:nowrap;color:#e5dcc6;text-shadow:0 1px 3px #000;letter-spacing:.02em; }
-.game .utility-control:hover,.game .utility-control.on { filter:brightness(1.2); }
-.game .utility-control:active { translate:0 2px; }
+/* Duel utilities follow HOME's quiet monochrome icon family. */
+.game button.utility-control { position:absolute;z-index:51;top:7px;right:auto;width:54px;min-width:0;height:58px;padding:3px 2px 5px;border:0;border-bottom:1px solid #b6cedc35;border-radius:0;background:#07172791;box-shadow:none;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;overflow:visible;color:#bdc9d5;cursor:pointer;transition:color .18s,background .18s,border-color .18s; }
+.game .utility-control .duel-utility-glyph { width:29px;height:29px;flex:none;display:block;pointer-events:none; }
+.duel-utility-glyph svg { width:100%;height:100%;display:block; }
+.game .utility-control>span:not(.duel-utility-glyph) { display:block;font:11px/1.2 var(--ui),system-ui,sans-serif;white-space:nowrap;color:inherit;text-shadow:0 1px 3px #000;letter-spacing:.02em; }
+.game .utility-control:hover,.game .utility-control.on { color:#fff;background:#16344dba;border-color:#bbdded; }
+.game .utility-control:active { background:#0c2439e8; }
+.game .utility-control:focus-visible { outline:2px solid #b9e7ff;outline-offset:2px; }
 .game .log-tab.utility-control,.game.log-open .log-tab.utility-control { top:7px;left:10px; }
 .game .mute-fab.utility-control { top:7px;left:71px; }
 .game .help-fab.utility-control { top:7px;left:132px; }
-.game .giveup-btn.utility-control { top:-3px;right:0; }
-.game .utility-control .mute-mark { display:none;position:absolute;right:7px;top:3px;width:15px;height:15px;border-radius:50%;background:#1b2636;color:#eee0c6;font:16px/14px system-ui;text-align:center;pointer-events:none; }
+.game .giveup-btn.utility-control { top:7px;left:193px;right:auto;color:#ed9f9f;border-color:#b75a5b70;background:#32141b91; }
+.game .giveup-btn.utility-control:hover { color:#ffe2df;background:#5b252dd9;border-color:#e5a0a0; }
+.game .utility-control .mute-mark { display:none;position:absolute;right:4px;top:3px;width:14px;height:14px;border-radius:50%;background:#182a38;color:#f4e7e3;font:14px/13px system-ui;text-align:center;pointer-events:none; }
 .game .utility-control.muted .mute-mark { display:block; }
-.game .utility-control.muted img { filter:saturate(.2) brightness(.7); }
+.game .utility-control.muted .duel-utility-glyph { opacity:.55; }
 .game .vol-pop { top:70px;left:71px; }
 .game .help-callout { top:70px;left:132px; }
 @media(max-width:700px) and (orientation:portrait){
- .game button.utility-control { width:44px;height:50px; }
- .utility-control>img { width:41px;height:41px; }
- .game .utility-control>span { font-size:8px; }
- .game .log-tab.utility-control,.game.log-open .log-tab.utility-control { top:4px;left:2px; }
- .game .mute-fab.utility-control { top:57px;left:2px; }
- .game .help-fab.utility-control { top:110px;left:2px; }
- .game .giveup-btn.utility-control { top:-6px;right:-6px; }
- .game .vol-pop { top:57px;left:47px; }.game .help-callout { top:110px;left:47px; }
+ .game button.utility-control { width:43px;height:49px;padding:2px 1px 3px;gap:1px; }
+ .game .utility-control .duel-utility-glyph { width:25px;height:25px; }
+ .game .utility-control>span:not(.duel-utility-glyph) { font-size:9px; }
+ .game .log-tab.utility-control,.game.log-open .log-tab.utility-control { top:4px;left:3px; }
+ .game .mute-fab.utility-control { top:55px;left:3px; }
+ .game .help-fab.utility-control { top:106px;left:3px; }
+ .game .giveup-btn.utility-control { top:157px;left:3px;right:auto; }
+ .game .vol-pop { top:55px;left:48px; }.game .help-callout { top:106px;left:48px; }
 }
 @media(max-height:550px) and (orientation:landscape){
- .game button.utility-control { width:44px;height:48px; }.utility-control>img { width:39px;height:39px; }.game .utility-control>span { font-size:8px; }
- .game .mute-fab.utility-control { left:60px; }.game .help-fab.utility-control { left:110px; }
+ .game button.utility-control { width:44px;height:48px; }
+ .game .utility-control .duel-utility-glyph { width:25px;height:25px; }
+ .game .utility-control>span:not(.duel-utility-glyph) { font-size:9px; }
+ .game .log-tab.utility-control,.game.log-open .log-tab.utility-control { left:5px; }
+ .game .mute-fab.utility-control { left:56px; }
+ .game .help-fab.utility-control { left:107px; }
+ .game .giveup-btn.utility-control { left:158px; }
 }
-
-/* Keep surrender legible and distinct from the neutral utility plaques. */
-.game .giveup-btn.utility-control {
- top:0;right:0;width:auto;min-width:92px;height:44px;padding:0 12px 0 8px;
- flex-direction:row;justify-content:center;gap:6px;
- border:1px solid #ed9390;border-radius:7px;
- background:linear-gradient(180deg,#ad343b,#7d202c);
- box-shadow:inset 0 1px 0 #ffffff24,0 3px 8px #16070a66;
- cursor:pointer;
-}
-.game .giveup-btn.utility-control>img { width:28px;height:28px; }
-.game .giveup-btn.utility-control>.gv-label { font-size:13px;font-weight:700;line-height:1.2;color:#fff5ef;text-shadow:0 1px 2px #4d111b; }
 .game .giveup-btn.utility-control:hover:not(:disabled) { background:linear-gradient(180deg,#c13e45,#922733);filter:none; }
 .game .giveup-btn.utility-control:focus-visible { outline:3px solid #fff0cf;outline-offset:3px; }
 @media(max-width:700px) and (orientation:portrait), (max-height:550px) and (orientation:landscape){

@@ -10,7 +10,6 @@ const paths=['/index.html','/art/lounge/stage-v1/stage.png','/art/lounge/stage-v
 for(const dir of ['art/seekers/v2','ui/passives/v1','art/lounge/icons/active-v1','ui/loading/v1','art/seekers/menu-v1'])for(const f of await fs.readdir('client/dist/'+dir))paths.push('/'+dir+'/'+f);
 paths.push('/art/lounge/stage-v1/stage.webp','/art/lounge/v1/library.webp','/art/lounge/stage-v1/sigil.webp','/art/brand/lore-logo-transparent.webp');
 for(const f of await fs.readdir('client/dist/assets'))if(/\.(js|css)$/.test(f))paths.push('/assets/'+f);
-for(const name of ['log','sound','help','surrender'])paths.push('/ui/duel-controls/v1/'+name+'.png');
 for(const dir of ['sfx/lore-v2','sfx/opening-v1'])for(const f of await fs.readdir('client/dist/'+dir))if(f.endsWith('.mp3'))paths.push('/'+dir+'/'+f);
 const scope=process.env.LORE_VERIFY_SCOPE||'full';
 if(scope==='menu')paths.splice(0,paths.length,...paths.filter(p=>p==='/index.html'||p.startsWith('/assets/')||p.includes('/active-v1/')||p.includes('/ui/loading/')||p.includes('/seekers/menu-v1/')||p.endsWith('/stage.webp')||p.endsWith('/library.webp')||p.endsWith('/sigil.webp')||p.endsWith('/lore-logo-transparent.webp')));

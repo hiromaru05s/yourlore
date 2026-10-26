@@ -22,3 +22,14 @@ const utilityPaths = {
 export function loungeUtilityGlyph(action:keyof typeof utilityPaths):string {
   return `<span class="lounge-utility-glyph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square" stroke-linejoin="miter" focusable="false">${utilityPaths[action]}</svg></span>`;
 }
+
+/** Duel controls use the same 40px grid and quiet line weight as HOME. */
+const duelPaths = {
+  log: '<path d="M20 10Q13 7 6 9v23q7-3 14 1 7-4 14-1V9q-7-2-14 1v23M10 15l6 1m-6 5 6 1m8-6 6-1m-6 7 6-1"/>',
+  sound: '<path d="M6 16h7l9-7v22l-9-7H6zM27 15q5 5 0 10M30 10q10 10 0 20"/>',
+  help: '<path d="M20 5 34 20 20 35 6 20Z"/><path d="M15 15q1-4 5-4 5 0 5 4 0 3-5 5v4M20 28v2"/>',
+  surrender: '<path d="M9 34V7m0 2q6-3 11 0 5 3 11 0v16q-6 3-11 0-5-3-11 0M6 34h8"/><path d="m17 15 6 6m0-6-6 6"/>',
+} as const;
+export function duelUtilityGlyph(action:keyof typeof duelPaths):string {
+  return `<span class="duel-utility-glyph" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square" stroke-linejoin="miter" focusable="false">${duelPaths[action]}</svg></span>`;
+}

@@ -34,6 +34,7 @@ import { bindInspectContext } from "./cardInspection";
 import { t, getLang, esc, cardName } from "../i18n";
 import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
+import { duelUtilityGlyph } from "./loungeNavGlyphs";
 import { deckBucket, refinedArt } from "./duelMaterials";
 import { avatarHtml } from "./social";
 import { projectBoardDOM } from './boardProjection';
@@ -142,10 +143,10 @@ export class GameView {
         <div class="topbar">
           <div class="brand"><div class="mark"></div><h1>LORE</h1></div>
           <div class="turn-info" id="turnInfo"></div>
-          <button class="giveup-btn utility-control" id="giveupBtn" title="${t("game.surrender")}" aria-label="${t("game.surrender")}"><img src="/ui/duel-controls/v1/surrender.png" alt="" draggable="false"><span class="gv-label">${t("game.surrender")}</span></button>
         </div>
         <button class="mute-fab utility-control" id="muteBtn" title="${t("game.mute")}" aria-label="${t("game.mute")}"></button>
-        <button class="help-fab utility-control" id="helpBtn" title="${t("help.title")}" aria-label="${t("help.title")}"><img src="/ui/duel-controls/v1/help.png" alt="" draggable="false"><span class="hf-label">${t("help.open")}</span></button>
+        <button class="help-fab utility-control" id="helpBtn" title="${t("help.title")}" aria-label="${t("help.title")}">${duelUtilityGlyph('help')}<span class="hf-label">${t("help.open")}</span></button>
+        <button class="giveup-btn utility-control" id="giveupBtn" title="${t("game.surrender")}" aria-label="${t("game.surrender")}">${duelUtilityGlyph('surrender')}<span class="gv-label">${t("game.surrender")}</span></button>
         <div class="stage">
           <div class="board-col">
             <div class="pcluster pcluster--opp">
@@ -177,7 +178,7 @@ export class GameView {
              The backdrop guarantees a tap anywhere outside the drawer closes it,
              whatever is (or isn't) under the finger. -->
         <div class="log-backdrop" id="logBackdrop"></div>
-        <button class="log-tab utility-control" id="logTab" title="${t("game.log")}" aria-label="${t("game.log")}"><img src="/ui/duel-controls/v1/log.png" alt="" draggable="false"><span class="log-label">${t("game.log")}</span></button>
+        <button class="log-tab utility-control" id="logTab" title="${t("game.log")}" aria-label="${t("game.log")}">${duelUtilityGlyph('log')}<span class="log-label">${t("game.log")}</span></button>
         <div class="panel logpanel" id="logPanel">
           <div class="panel-title" id="logTitle">${t("game.log")}</div>
           <div class="log" id="log"></div>
@@ -188,13 +189,13 @@ export class GameView {
     this.root.querySelector(".mid-aside")!.prepend(this.q("turnInfo"));
     (this.q("endBtn") as HTMLButtonElement).onclick = () => this.h.onEndTurn();
     (this.q("giveupBtn") as HTMLButtonElement).onclick = () => this.h.onSurrender();
-    // sound button (round button below the logo): click = volume slider popover
+    // Sound control: click opens the volume slider popover.
     // (ON/OFF만 있던 것을 인게임 볼륨 조절로 확장 — 슬라이더 0 = 음소거)
     const helpBtn = this.q("helpBtn") as HTMLButtonElement;
     helpBtn.onclick = () => showControlsHelp();
     const muteBtn = this.q("muteBtn") as HTMLButtonElement;
     let lastVol = getSfxVolume() || 0.7;
-    const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = `<img src="/ui/duel-controls/v1/sound.png" alt="" draggable="false"><span class="sound-label">${t("settings.sound")}</span><i class="mute-mark" aria-hidden="true">×</i>`; muteBtn.classList.toggle("muted", m);muteBtn.setAttribute('aria-label',t('settings.sound.volume'));muteBtn.title=t('settings.sound.volume'); };
+    const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = `${duelUtilityGlyph('sound')}<span class="sound-label">${t("settings.sound")}</span><i class="mute-mark" aria-hidden="true">×</i>`; muteBtn.classList.toggle("muted", m);muteBtn.setAttribute('aria-label',t('settings.sound.volume'));muteBtn.title=t('settings.sound.volume'); };
     const volPop = document.createElement("div");
     volPop.className = "vol-pop";
     volPop.innerHTML = `<input type="range" min="0" max="100" step="5" aria-label="volume">`;
@@ -453,7 +454,7 @@ export class GameView {
     const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
     for(const [id,key] of [['logTab','game.log'],['giveupBtn','game.surrender'],['helpBtn','help.open'],['muteBtn','settings.sound']] as const){
-      const button=this.q(id);const label=button.querySelector('span');if(label)label.textContent=t(key);button.setAttribute('aria-label',t(key));button.setAttribute('title',t(key));
+      const button=this.q(id);const label=button.querySelector(':scope > span:not(.duel-utility-glyph)');if(label)label.textContent=t(key);button.setAttribute('aria-label',t(key));button.setAttribute('title',t(key));
     }
 
     // Hearthstone-style center portraits (opp top / me bottom)
