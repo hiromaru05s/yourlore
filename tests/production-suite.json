@@ -216,7 +216,9 @@
     "tests/notification-badges.mjs",
     "tests/starter-rift-rework.mjs",
     "tests/starter-rift-server.mjs",
-    "tests/ranked-decks.mjs"
+    "tests/ranked-decks.mjs",
+    "tests/rift-ores.mjs",
+    "tests/rift-ores-server.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
