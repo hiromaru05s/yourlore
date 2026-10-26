@@ -1,0 +1,29 @@
+{
+  "sourceCommit": "96329cc5b660e4b1c070d5868d837c7db60e70b4",
+  "implementationCommit": "22160b85",
+  "url": "https://yourlore.xyz/",
+  "deploymentId": "fee928dc-202f-45ed-acc7-b91938451084",
+  "versionId": "a3ecb00b-3659-431a-b467-5764244cc0df",
+  "trafficPercent": 100,
+  "deployedAt": "2026-10-26T12:04:18.389363Z",
+  "validation": {
+    "typecheck": "passed",
+    "productionSuite": {
+      "passed": 228,
+      "total": 228
+    },
+    "build": "passed",
+    "publicCSS": {
+      "matched": 11,
+      "checked": 11
+    },
+    "htmlEntrypointsMatch": true,
+    "browserChecks": [
+      "1911x893 initial and mid-scroll",
+      "390x844 portrait",
+      "844x390 workspace scroll to collection lower rim",
+      "pointer hit testing and filters"
+    ]
+  },
+  "scope": "Local guest rendering verified; publicly served CSS matches the guarded production build. No authenticated production deck mutation."
+}

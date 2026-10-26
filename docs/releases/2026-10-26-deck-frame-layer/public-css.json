@@ -1,0 +1,85 @@
+{
+  "checkedAt": "2026-10-26T12:04:31.866010+00:00",
+  "sourceCommit": "96329cc5b660e4b1c070d5868d837c7db60e70b4",
+  "cssChecked": 11,
+  "cssMatched": 11,
+  "htmlEntrypointsMatch": true,
+  "entrypoints": [
+    "/assets/main-JVxFM6c2.js",
+    "/assets/modulepreload-polyfill-B5Qt9EMX.js",
+    "/assets/preload-helper-BXl3LOEh.js"
+  ],
+  "expectedEntrypoints": [
+    "/assets/main-JVxFM6c2.js",
+    "/assets/modulepreload-polyfill-B5Qt9EMX.js",
+    "/assets/preload-helper-BXl3LOEh.js"
+  ],
+  "files": [
+    {
+      "path": "assets/layout-CdbqZM8A.css",
+      "bytes": 7472,
+      "sha256": "a665ec02233f56b8de0b4f9df4cc0839e8d780b32060c92c181640cb4f201cbb",
+      "match": true
+    },
+    {
+      "path": "assets/passives-UDApamK7.css",
+      "bytes": 2167,
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "match": true
+    },
+    {
+      "path": "assets/social-Ci0Xf_yi.css",
+      "bytes": 267139,
+      "sha256": "68d6a5d5fc16c21cb3f38a8aaf891dbd0041210d23a4d94a1e072f95723a3a8c",
+      "match": true
+    },
+    {
+      "path": "assets/main-hjV_uVEz.css",
+      "bytes": 1023628,
+      "sha256": "5c97a1f4aae160dcb37505cc0a4d40d80a11890f1664ec599d4122baca41088e",
+      "match": true
+    },
+    {
+      "path": "assets/style-BmSCny8F.css",
+      "bytes": 1004,
+      "sha256": "4ae8815bad476a60b375bf79b787616c2c3a4119580433ab696fbcbed41ec7e6",
+      "match": true
+    },
+    {
+      "path": "assets/controller-bboUdfYs.css",
+      "bytes": 3733,
+      "sha256": "ecd20d2c291671bbc93a98a201b1a6e1ac9f67f0dc1bbcd8faa2c1e651a53e00",
+      "match": true
+    },
+    {
+      "path": "assets/domSleeves-Dru0ykCE.css",
+      "bytes": 287,
+      "sha256": "a63fb32e7762741252e721880aece1f04a96cdf596b627156c6fbab0584e9ff7",
+      "match": true
+    },
+    {
+      "path": "assets/runtime-Ch9eydv_.css",
+      "bytes": 214,
+      "sha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "match": true
+    },
+    {
+      "path": "assets/studio-CmgKc6nL.css",
+      "bytes": 8771,
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "match": true
+    },
+    {
+      "path": "assets/opponent-fbJVnZdc.css",
+      "bytes": 2790,
+      "sha256": "7dd76b6f4ca07f829ab69088c3b5d1c5391bba6639018f8bd85a846599a3c945",
+      "match": true
+    },
+    {
+      "path": "assets/game-CeZ0_T_p.css",
+      "bytes": 3600,
+      "sha256": "c3a917c33744ff03edb04c76979bf8fb070230e7358a5da1272b96b7bac52062",
+      "match": true
+    }
+  ]
+}
