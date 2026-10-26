@@ -1,6 +1,5 @@
 import {withDeadline} from '../net/deadline';
 import {prepareMenuCache} from '../ui/menuCache';
-import {prepareDuelFonts} from '../ui/duelFonts';
 import type {App,Screen} from '../router';
 import type {GameOpts} from './game';
 import {loadingScreen} from '../ui/loadingScreen';
@@ -11,7 +10,7 @@ import {warmImages} from '../ui/imageAssets';
 let gameModule:Promise<typeof import('./game')>|undefined;
 const loadGame=()=>gameModule??=withDeadline(import('./game'),60000).catch(error=>{gameModule=undefined;throw error;});
 const preparations=new Map<boolean,Promise<void>>();
-type PreparationPhase='cache'|'assets'|'modules'|'models'|'deck';
+type PreparationPhase='cache'|'assets'|'modules';
 type Progress=(done:number,total:number,phase:PreparationPhase)=>void;
 const listeners=new Set<Progress>();
 let progress:[number,number,PreparationPhase]=[0,0,'cache'];
@@ -19,8 +18,8 @@ function reportProgress(done:number,total:number,phase:PreparationPhase):void{
  progress=[done,total,phase];for(const listener of listeners)listener(...progress);
 }
 /** Shared, retryable admission. Opponent selection and an immediate Start join
- * the same preparation of required code, board assets and the selected deck. */
-export async function warmGame(cards:readonly string[]=[],onProgress?:Progress):Promise<void>{
+ * the same preparation of required code and the current cache binding. */
+export async function warmGame(_cards:readonly string[]=[],onProgress?:Progress):Promise<void>{
  if(onProgress){listeners.add(onProgress);onProgress(...progress);}
  try {
   const narrow=matchMedia('(max-width:700px)').matches;
@@ -35,9 +34,6 @@ export async function warmGame(cards:readonly string[]=[],onProgress?:Progress):
    loadGame(),
   ]).then(()=>{}).catch(error=>{abort.abort();preparations.delete(narrow);throw error;});preparations.set(narrow,preparation);}
   await preparation;
-  reportProgress(0,0,'deck');
-  // Language and selected deck can change after the first prepared match.
-  await Promise.all([prepareDuelFonts(),warmImages([...new Set(['STARTER_MANA',...cards])].flatMap(id=>[artUrl.sm(id),artUrl.xs(id),artUrl.full(id)]))]);
  } finally {if(onProgress)listeners.delete(onProgress);}
 }
 
@@ -46,7 +42,7 @@ export async function warmGame(cards:readonly string[]=[],onProgress?:Progress):
  * No model, shop preview, all-language font or full card archive blocks HOME. */
 export function scheduleGameWarmup(host:HTMLElement,cards:readonly string[]):()=>void{
  let dead=false,timer=0,idle=0,started=false;
- const begin=()=>{if(dead||started||!host.isConnected||document.hidden||document.querySelector('.screen-loader'))return;started=true;void warmImages([...new Set(['STARTER_MANA',...cards])].flatMap(id=>[artUrl.sm(id),artUrl.xs(id),artUrl.full(id)])).catch(()=>{});};
+ const begin=()=>{if(dead||started||!host.isConnected||document.hidden||document.querySelector('.screen-loader'))return;started=true;void warmImages([...new Set(['STARTER_MANA',...cards])].map(id=>artUrl.sm(id))).catch(()=>{});};
  const schedule=()=>{
   if(dead||started||timer||idle)return;
   timer=window.setTimeout(()=>{timer=0;if('requestIdleCallback' in window)idle=window.requestIdleCallback(()=>{idle=0;begin();},{timeout:1500});else begin();},1000);
@@ -69,10 +65,8 @@ export function mountGamePreparation(app:App,start:()=>Promise<void>,onDispose?:
    cache:loungeText('対戦素材のキャッシュを確認中','Checking duel asset cache','대전 소재 캐시 확인 중'),
    assets:loungeText(`対戦素材の準備 ${done} / ${total}`,`Preparing duel assets ${done} / ${total}`,`대전 준비 ${done} / ${total}`),
    modules:loungeText('対戦プログラムの準備中','Preparing duel code','대전 프로그램 준비 중'),
-   models:loungeText('盤面と演出の素材を準備中','Preparing board and effects assets','보드와 연출 소재 준비 중'),
-   deck:loungeText('デッキと文字の準備中','Preparing deck and fonts','덱과 글꼴 준비 중'),
   };
-  loading.update(phase==='cache'?0:phase==='assets'?(total?done/total*80:0):phase==='modules'?80:phase==='models'?85:95,labels[phase]);
+  loading.update(phase==='cache'?0:phase==='assets'?(total?done/total*80:0):80,labels[phase]);
  };
  const load=async()=>{
   if(running||disposed)return;running=true;
