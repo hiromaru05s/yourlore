@@ -928,8 +928,8 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 /* Floating summon faces use the same print and silhouette as a field Actor.
    Their parent is body while travelling, so .game descendant rules cannot own them. */
 .card.summon-face { filter:none!important;animation:none!important;transition:none!important; }
-.card:is(.summon-face,.field-resting-face) > :not(.card-frame) { filter:var(--rest-tone,brightness(1)); }
-.card:is(.summon-face,.field-resting-face) .card-frame { filter:drop-shadow(0 var(--summon-frame-unit,1px) 0 #d3c3a0) drop-shadow(0 var(--summon-frame-unit,1px) 0 #655846) drop-shadow(0 calc(2 * var(--summon-frame-unit,1px)) calc(4 * var(--summon-frame-unit,1px)) #0009) var(--rest-shadow,drop-shadow(0 0 0 #0000)) var(--rest-tone,brightness(1));animation:none!important; }
+.card:is(.summon-face,.field-resting-face) > :not(.card-frame),.game .zone-mon .card.field-resting-face > :not(.card-frame) { filter:var(--rest-tone,brightness(1)); }
+.card:is(.summon-face,.field-resting-face) .card-frame,.game .zone-mon .card.field-resting-face .card-frame { filter:drop-shadow(0 var(--summon-frame-unit,1px) 0 #d3c3a0) drop-shadow(0 var(--summon-frame-unit,1px) 0 #655846) drop-shadow(0 calc(2 * var(--summon-frame-unit,1px)) calc(4 * var(--summon-frame-unit,1px)) #0009) var(--rest-shadow,drop-shadow(0 0 0 #0000)) var(--rest-tone,brightness(1));animation:none!important; }
 
 .game .card:is(.is-attacker,.is-targetable) { animation:none; }
 .game .card.is-attacker .card-frame { animation:projectedAttackerPulse 1.1s infinite; }

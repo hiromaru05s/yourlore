@@ -19,7 +19,7 @@ export function retainCardPrint(previous:HTMLElement,next:HTMLElement):void {
  * owner in place. Return it atomically even when playback is interrupted. */
 export function borrowCardPrint(source:HTMLElement,flight:HTMLElement):()=>void {
  delete flight.dataset.cardEffect;delete flight.dataset.cardFrame;
- flight.dataset.borrowedCardPrint='true';
+ flight.dataset.borrowedCardPrint='true';flight.dataset.cardFrameBorrowed='true';
  const all=[...source.children] as HTMLElement[],prepared=[...flight.children] as HTMLElement[];
  const nodes=all.filter(node=>prepared.some(copy=>copy.className===node.className));
  const styles=nodes.map(node=>node.getAttribute('style'));

@@ -148,7 +148,7 @@ function tick(now:number){
   const k=ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
   s.actor.paint(k,v,t,r,r,reduced(),true,side);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':v;
   if(dual){s.dual??=new DualReadySurface(s.actor,1);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
-  paintRestingAppearance(s.actor.el,ready?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,1,reduced());
+  paintRestingAppearance(s.actor.el,ready?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,1,reduced(),r.w);
   for(const cls of ['is-aiming','is-atk-target','is-targetable'])s.actor.el.classList.toggle(cls,n.classList.contains(cls));
   if(n.classList.contains('is-atk-target')||n.classList.contains('is-targetable'))s.actor.el.style.setProperty('filter','drop-shadow(0 0 5px #ff7955)','important');
   s.actor.el.style.removeProperty('translate');delete s.actor.el.dataset.hitReaction;paintHit(n,s.actor,now);

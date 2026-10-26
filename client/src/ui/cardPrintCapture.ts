@@ -8,10 +8,16 @@ function dataUrl(url:string):Promise<string>{
  let pending=assets.get(url);
  if(!pending){
   pending=fetch(url).then(r=>{if(!r.ok)throw Error('Card layer '+r.status);return r.blob();}).then(async blob=>{
-   const value=await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob);});
+   let value=await new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=()=>reject(reader.error);reader.readAsDataURL(blob);});
    // WebKit resolves the outer SVG before its first embedded WebP decode.
    // Warm this exact data URL, not just the original network URL, first.
-   if(blob.type.startsWith('image/')){const image=new Image();image.src=value;await image.decode();}
+   if(blob.type.startsWith('image/')){
+    const image=new Image();image.src=value;await image.decode();
+    // WebKit's SVG foreignObject can race its embedded WebP decoder even after
+    // decode(). A lossless PNG snapshot of the decoded pixels is deterministic.
+    // This is capture-only and cached; the game still transfers compact WebP.
+    if(blob.type==='image/webp'){const pixels=document.createElement('canvas');pixels.width=image.naturalWidth;pixels.height=image.naturalHeight;pixels.getContext('2d')!.drawImage(image,0,0);value=pixels.toDataURL();}
+   }
    return value;
   });assets.set(url,pending);void pending.catch(()=>assets.delete(url));if(assets.size>48)assets.delete(assets.keys().next().value!);
  }
@@ -55,7 +61,7 @@ export async function captureNativePrint(source:HTMLElement,width:number,padding
   let target=copies[i];const cs=getComputedStyle(node),style=(target as HTMLElement|SVGElement).style;
   if(!style)return;
   const declarations:string[]=[];
-  for(const key of cs){if(!visualProperty.test(key))continue;const value=cs.getPropertyValue(key);declarations.push(`${key}:${scaled(key,value.includes('url(')?await inlineValue(value):value)}`);}
+  for(const key of cs){if(!visualProperty.test(key))continue;const value=cs.getPropertyValue(key);declarations.push(`${key}:${(node instanceof SVGElement&&!(node instanceof SVGSVGElement))?value:scaled(key,value.includes('url(')?await inlineValue(value):value)}`);}
   style.cssText=declarations.join(';')+';animation:none!important;transition:none!important;visibility:visible!important';
   if(i===0)target.removeAttribute('id');target.removeAttribute('data-uid');
   if(node instanceof HTMLImageElement){(target as HTMLImageElement).removeAttribute('srcset');(target as HTMLImageElement).removeAttribute('sizes');(target as HTMLImageElement).src=await dataUrl(node.currentSrc||node.src);}
@@ -79,7 +85,7 @@ export async function captureNativePrint(source:HTMLElement,width:number,padding
   // A new image document then consumes that decoded image cache atomically.
   await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
  }
- throw Error('Card print did not decode its illustration');
+ throw Error(`Card print did not decode its illustration: ${source.dataset.cardId??source.className} ${width}x${height}`);
 }
 
 /** Reserve enough texels for the largest projected pose without giving every
