@@ -48,26 +48,31 @@ async function printFonts(source:HTMLElement):Promise<string>{
 export async function captureNativePrint(source:HTMLElement,width:number,padding:number,liveSource=source):Promise<HTMLCanvasElement>{
  const rootStyle=getComputedStyle(source),w=parseFloat(rootStyle.width)||source.offsetWidth,h=parseFloat(rootStyle.height)||source.offsetHeight;if(!w||!h)throw Error('Card print has no layout');
  const scale=width/w,pad=width*padding,height=width*h/w;
- const scaled=(key:string,value:string)=>{
-  if(key==='transform'&&value!=='none'){const matrix=new DOMMatrix(value);matrix.m41*=scale;matrix.m42*=scale;matrix.m43*=scale;return matrix.toString();}
-  return value.replace(/url\([^)]*\)|(-?[\d.]+)px\b/g,(whole,n)=>n===undefined?whole:`${Number(n)*scale}px`);
+ const scaled=(key:string,value:string,factor=scale)=>{
+  if(key==='transform'&&value!=='none'){const matrix=new DOMMatrix(value);matrix.m41*=factor;matrix.m42*=factor;matrix.m43*=factor;return matrix.toString();}
+  return value.replace(/url\([^)]*\)|(-?[\d.]+)px\b/g,(whole,n)=>n===undefined?whole:`${Number(n)*factor}px`);
  };
  await document.fonts.ready;
  await Promise.all([...source.querySelectorAll('img')].map(image=>image.decode().catch(()=>{})));
  const originals=[source,...source.querySelectorAll('*')];
  const copy=source.cloneNode(true) as HTMLElement,copies=[copy,...copy.querySelectorAll('*')];
+ // Native layers supersample at 2x then scale down. This document already lays
+ // out in output pixels: normalize that extra layer scale to avoid a 4800px
+ // filtered intermediate on WebKit and four times the unnecessary raster work.
+ const sampled=originals.filter(n=>n.matches('.card-art,.card-frame,.buff-art,.buff-frame')&&getComputedStyle(n).scale==='0.5');
  const liveCanvases=[...liveSource.querySelectorAll('canvas')],sourceCanvases=[...source.querySelectorAll('canvas')];
  await Promise.all(originals.map(async(node,i)=>{
-  let target=copies[i];const cs=getComputedStyle(node),style=(target as HTMLElement|SVGElement).style;
+  let target=copies[i];const cs=getComputedStyle(node),style=(target as HTMLElement|SVGElement).style,factor=scale*(sampled.some(layer=>layer===node||layer.contains(node))?.5:1);
   if(!style)return;
   const declarations:string[]=[];
-  for(const key of cs){if(!visualProperty.test(key))continue;const value=cs.getPropertyValue(key);declarations.push(`${key}:${(node instanceof SVGElement&&!(node instanceof SVGSVGElement))?value:scaled(key,value.includes('url(')?await inlineValue(value):value)}`);}
+  for(const key of cs){if(!visualProperty.test(key))continue;const value=cs.getPropertyValue(key);declarations.push(`${key}:${(node instanceof SVGElement&&!(node instanceof SVGSVGElement))?value:scaled(key,value.includes('url(')?await inlineValue(value):value,factor)}`);}
   style.cssText=declarations.join(';')+';animation:none!important;transition:none!important;visibility:visible!important';
+  if(sampled.includes(node)){style.scale='1';style.right='auto';style.bottom='auto';}
   if(i===0)target.removeAttribute('id');target.removeAttribute('data-uid');
   if(node instanceof HTMLImageElement){(target as HTMLImageElement).removeAttribute('srcset');(target as HTMLImageElement).removeAttribute('sizes');(target as HTMLImageElement).src=await dataUrl(node.currentSrc||node.src);}
   if(node instanceof HTMLCanvasElement){const original=liveCanvases[sourceCanvases.indexOf(node)]??node;if(original.width&&original.height){const img=document.createElement('img');img.style.cssText=style.cssText;img.src=original.toDataURL();target.replaceWith(img);target=img;}}
   // Pseudo-elements (quest labels, badge plates) are part of the print too.
-  for(const pseudo of ['::before','::after']){const ps=getComputedStyle(node,pseudo);if(ps.content==='none'||ps.content==='normal'||ps.display==='none')continue;const el=document.createElement('span');const ds=[];for(const key of ps){if(!visualProperty.test(key))continue;const value=ps.getPropertyValue(key);ds.push(`${key}:${scaled(key,value.includes('url(')?await inlineValue(value):value)}`);}el.style.cssText=ds.join(';');el.textContent=ps.content.replace(/^["']|["']$/g,'');pseudo==='::before'?target.prepend(el):target.append(el);}
+  for(const pseudo of ['::before','::after']){const ps=getComputedStyle(node,pseudo);if(ps.content==='none'||ps.content==='normal'||ps.display==='none')continue;const el=document.createElement('span');const ds=[];for(const key of ps){if(!visualProperty.test(key))continue;const value=ps.getPropertyValue(key);ds.push(`${key}:${scaled(key,value.includes('url(')?await inlineValue(value):value,factor)}`);}el.style.cssText=ds.join(';');el.textContent=ps.content.replace(/^["']|["']$/g,'');pseudo==='::before'?target.prepend(el):target.append(el);}
  }));
  copy.style.cssText+=`;position:absolute!important;left:${pad}px!important;top:${pad}px!important;width:${width}px!important;height:${height}px!important;margin:0!important;transform:none!important;translate:none!important;rotate:none!important;scale:none!important;opacity:1!important`;
  copy.setAttribute('xmlns','http://www.w3.org/1999/xhtml');

@@ -55,5 +55,5 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
   });
   if(completed){face.style.opacity='1';place();}return completed;
  }catch(error){console.warn('[persistent-flight] Native fallback',error);return false;}
- finally{cancelAnimationFrame(frame);if(renderer)release?.(renderer);host.querySelectorAll('canvas').forEach(c=>c.remove());reveal.style.visibility=visible;if(!completed)host.remove();}
+ finally{cancelAnimationFrame(frame);if(renderer)release?.(renderer);host.querySelectorAll('.persistent-flight-canvas,.persistent-flight-trail').forEach(c=>c.remove());reveal.style.visibility=visible;if(!completed)host.remove();}
 }

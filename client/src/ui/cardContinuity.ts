@@ -7,7 +7,7 @@ export function retainCardPrint(previous:HTMLElement,next:HTMLElement):void {
   // Finish renderers own their canvas lifecycle; keep the new owner's live
   // material instead of moving a canvas that the previous owner will dispose.
   if(selector==='.card-art'&&(previous.dataset.cardEffect||next.dataset.cardEffect))continue;
-  if(selector==='.card-frame'&&(previous.dataset.cardFrame||next.dataset.cardFrame))continue;
+  if(['.card-frame','.card-cost','.ad-atk','.ad-def'].includes(selector)&&(previous.dataset.cardFrame||next.dataset.cardFrame))continue;
   const equal=selector==='.card-art'?
    old.querySelector<HTMLImageElement>('img')?.src===fresh.querySelector<HTMLImageElement>('img')?.src&&old.querySelectorAll('canvas').length===fresh.querySelectorAll('canvas').length:
    old.outerHTML===fresh.outerHTML;
