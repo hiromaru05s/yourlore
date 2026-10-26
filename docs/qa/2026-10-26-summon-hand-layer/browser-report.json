@@ -169,6 +169,18 @@
       },
       "dragFromOpen": true,
       "submitted": true
+    },
+    {
+      "fallback": {
+        "order": {
+          "hand": 0,
+          "effect": 4,
+          "app": "auto",
+          "stage": "6",
+          "handZ": "145"
+        },
+        "handInViewport": true
+      }
     }
   ],
   "errors": [],

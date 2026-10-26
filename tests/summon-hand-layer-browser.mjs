@@ -107,6 +107,21 @@ try{
    checks.push({viewport,dragFromOpen:open,submitted:true});
   }
  }
+ // The same stacking contract must hold when WebGL falls back to the flat
+ // board: production still mounts that board below the outer #app element.
+ await page.setViewportSize({width:1280,height:900});
+ const fallback=await page.evaluate(()=>{
+  qa.reset();const root=document.getElementById('gameScreen');root.classList.remove('reading-board');
+  qa.ctl.view.setHandOpen(true);
+  const layer=document.createElement('div');layer.style.cssText='position:fixed;inset:0;z-index:136;pointer-events:none';document.body.append(layer);
+  const order=qa.order(layer),hand=document.getElementById('hand').getBoundingClientRect();layer.remove();
+  return {order,handInViewport:hand.width>0&&hand.height>0&&hand.left<innerWidth&&hand.right>0&&hand.top<innerHeight&&hand.bottom>0};
+ });
+ assert(fallback.order.hand>=0&&fallback.order.effect>fallback.order.hand,'Fallback hand must paint above summon: '+JSON.stringify(fallback));
+ assert.equal(fallback.order.app,'auto');assert(fallback.handInViewport,'Fallback hand must remain visible');
+ await page.evaluate(()=>qa.ctl.view.setHandOpen(false));
+ assert.equal(await page.locator('#handArea #hand').count(),1);
+ checks.push({fallback});
  assert.deepEqual(errors,[]);
  await page.evaluate(()=>qa.ctl.destroy());
  await fs.writeFile(path.join(out,'report.json'),JSON.stringify({checks,errors,source:process.cwd(),url:page.url(),boundary:'Local Chrome with current product styles, controller and engine; no authenticated PvP or physical-device performance claim.'},null,2));

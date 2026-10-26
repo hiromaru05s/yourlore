@@ -94,7 +94,10 @@
 .game:not(.hand-open) .hand { width:calc(var(--h-w-compact) * .42); height:calc(var(--card-h-hand) * .42); }
 .game:not(.hand-open) .hand .card { left:calc(var(--hi) * var(--h-step-compact) * .42); transform:scale(.42); transform-origin:bottom left; }
 .game:not(.hand-open) .hand::after { content:""; position:absolute; inset:-10px -6px; }
-.game.hand-open .hand { position:fixed; left:50%; bottom:8px; transform:translateX(-50%); z-index:120; max-height:none; filter:drop-shadow(0 7px 25px #000a); }
+/* The hand leaves .stage while open. Release #app's stacking context so it
+   paints above body-mounted summon effects (135/136), below dialogs (150). */
+#app:has(.game.hand-open) { z-index:auto; }
+.game.hand-open .hand { position:fixed; left:50%; bottom:8px; transform:translateX(-50%); z-index:145; max-height:none; filter:drop-shadow(0 7px 25px #000a); }
 .game.hand-open .hand .card:hover { z-index:60!important; transform:translateY(-12px); }
 .game.drag-play #meRow .zones { filter:drop-shadow(0 0 8px #4bacff); }
 .cast-veil { position:fixed; inset:0; pointer-events:none; z-index:124; background:radial-gradient(ellipse,#0b173647,transparent 72%); }

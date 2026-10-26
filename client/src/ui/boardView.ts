@@ -336,7 +336,7 @@ export class GameView {
     // Keep the expanded hand outside the stage stacking context, so summon
     // prints mounted on body cannot cover it. Preserve the live card nodes and
     // their pointer handlers; compact mode returns to the original layout.
-    if (open && game && hand?.parentNode && this.root.classList.contains('reading-board')) {
+    if (open && game && hand?.parentNode) {
       this.handDock = { parent: hand.parentNode, next: hand.nextSibling };
       game.append(hand);
     } else if (!open && hand && this.handDock) {
