@@ -19,6 +19,7 @@ Keep the entry's position and rotation fixed across hover/focus and keep removal
 
 - Before fix, the browser regression failed: the first card hit area's x position changed from 339.112px to 344px, y from 142.494px to 130px, and the removal button moved from y=315.113px to 301.5px. `before.json` preserves this observation. This measures geometry, not the user's exact pointer trajectory.
 - `tests/deck-hover-browser.mjs` exercises the built application with API-only fixtures: four edges on all eight editable cards at 1440×900, 1024×768, 844×390 and 390×844; frame-by-frame hover stability, fixed hit areas, keyboard removal/undo, replacement and touch with reduced motion.
+- Chromium: all 128 boundaries passed, with zero hover changes and stationary card/action hit areas. WebKit: all 32 desktop boundaries passed, plus keyboard, replacement and emulated mobile touch checks. Both final runs reported zero page errors. Summaries: `chromium.json`, `webkit.json`; representative screenshots: `deck-1440.png`, `deck-390.png`.
 - `tests/deck-hand-editor.mjs` and `tests/deck-drag.mjs` passed. The full build and design guard passed.
 - Visual inspection checks the preserved art/layout and card lift separately from automated assertions. Browser viewport/touch emulation is not physical-device verification. Fixture interaction does not modify real account decks.
 

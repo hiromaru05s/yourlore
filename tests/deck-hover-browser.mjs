@@ -2,11 +2,12 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {apiFixture} from './helpers/api-fixture.mjs';
-const {chromium}=await import(process.env.LORE_PLAYWRIGHT || 'playwright');
+const playwright=await import(process.env.LORE_PLAYWRIGHT || 'playwright');
+const engine=process.env.LORE_TEST_BROWSER || 'chromium';
 const origin=process.env.LORE_TEST_ORIGIN || 'http://127.0.0.1:5193';
 const out=process.env.LORE_TEST_OUTPUT || '/tmp/lore-deck-hover';
 await fs.mkdir(out,{recursive:true});
-const browser=await chromium.launch({channel:'chrome',headless:true});
+const browser=await playwright[engine].launch({...(engine==='chromium'?{channel:'chrome'}:{}),headless:true});
 const checks=[],errors=[];
 async function openDeck(options){
  const page=await browser.newPage(options);page.setDefaultTimeout(120000);
@@ -32,7 +33,7 @@ const geometry=el=>{
 };
 const stableRect=(before,after,label)=>{for(const key of ['x','y','width','height'])assert(Math.abs(before[key]-after[key])<.1,`${label} ${key}: ${before[key]} -> ${after[key]}`)};
 try{
- for(const viewport of [{width:1440,height:900},{width:1024,height:768},{width:844,height:390},{width:390,height:844}]){
+ for(const viewport of JSON.parse(process.env.LORE_TEST_VIEWPORTS || '[{"width":1440,"height":900},{"width":1024,"height":768},{"width":844,"height":390},{"width":390,"height":844}]')){
   const page=await openDeck({viewport});
   const rows=page.locator('#deckCur .deck-entry:not(.is-fixed):not(.deck-slot)');
   for(let index=0;index<await rows.count();index++){
@@ -82,6 +83,6 @@ try{
  await touch.close();assert.deepEqual(errors,[]);
  console.log('PASS: stable card and action boundaries, keyboard removal, replacement, touch and reduced motion',checks.length);
 }finally{
- await fs.writeFile(`${out}/report.json`,JSON.stringify({origin,checks,errors},null,2)+'\n');
+ await fs.writeFile(`${out}/report.json`,JSON.stringify({origin,engine,checks,errors},null,2)+'\n');
  await browser.close();
 }
