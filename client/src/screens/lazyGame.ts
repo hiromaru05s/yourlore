@@ -1,5 +1,4 @@
 import {withDeadline} from '../net/deadline';
-import {prepareDuelModules} from '../ui/duelModulePreload';
 import {prepareMenuCache} from '../ui/menuCache';
 import {prepareDuelFonts} from '../ui/duelFonts';
 import type {App,Screen} from '../router';
@@ -19,8 +18,8 @@ let progress:[number,number,PreparationPhase]=[0,0,'cache'];
 function reportProgress(done:number,total:number,phase:PreparationPhase):void{
  progress=[done,total,phase];for(const listener of listeners)listener(...progress);
 }
-/** Shared, retryable admission. Opponent selection and an immediate Start join the same
- * transfers. Public bytes finish before decoders/models request those same files. */
+/** Shared, retryable admission. Opponent selection and an immediate Start join
+ * the same preparation of required code, board assets and the selected deck. */
 export async function warmGame(cards:readonly string[]=[],onProgress?:Progress):Promise<void>{
  if(onProgress){listeners.add(onProgress);onProgress(...progress);}
  try {
@@ -31,7 +30,8 @@ export async function warmGame(cards:readonly string[]=[],onProgress?:Progress):
    const abort=new AbortController();
    preparation=Promise.all([
    prepareMenuCache((done,total)=>{if(!abort.signal.aborted)reportProgress(done,total,done===total?'modules':'assets');},abort.signal,'duel'),
-   prepareDuelModules(),loadGame(),
+   // Full VFX module archives load on demand; only the game entry is required here.
+   loadGame(),
   ]).then(async()=>{reportProgress(0,0,'models');await withDeadline(import('../ui/duelReadiness').then(module=>module.warmDuel()),125000);}).catch(error=>{abort.abort();preparations.delete(narrow);throw error;});preparations.set(narrow,preparation);}
   await preparation;
   reportProgress(0,0,'deck');
