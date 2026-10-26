@@ -1,0 +1,196 @@
+{
+  "results": [
+    {
+      "engine": "chromium",
+      "width": 390,
+      "frame": "frame:mirror-silver",
+      "draw": {
+        "seen": true,
+        "same": true,
+        "live": true,
+        "returned": true
+      },
+      "purchase": {
+        "flightSeen": true,
+        "missing": false,
+        "frame": "frame:mirror-silver",
+        "layers": 4
+      },
+      "summon": {
+        "frame": "frame:mirror-silver",
+        "layers": 4
+      },
+      "cards": [
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:mirror-silver",
+          "layers": 4
+        },
+        {
+          "id": "RUST_SHROOM",
+          "frame": "frame:mirror-silver",
+          "layers": 4
+        },
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:mirror-silver",
+          "layers": 4
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "frame": "frame:flowing-gold",
+      "draw": {
+        "seen": true,
+        "same": true,
+        "live": true,
+        "returned": true
+      },
+      "purchase": {
+        "flightSeen": true,
+        "missing": false,
+        "frame": "frame:flowing-gold",
+        "layers": 4
+      },
+      "summon": {
+        "frame": "frame:flowing-gold",
+        "layers": 4
+      },
+      "cards": [
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:flowing-gold",
+          "layers": 4
+        },
+        {
+          "id": "RUST_SHROOM",
+          "frame": "frame:flowing-gold",
+          "layers": 4
+        },
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:flowing-gold",
+          "layers": 4
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "frame": "frame:obsidian-ember",
+      "draw": {
+        "seen": true,
+        "same": true,
+        "live": true,
+        "returned": true
+      },
+      "purchase": {
+        "flightSeen": true,
+        "missing": false,
+        "frame": "frame:obsidian-ember",
+        "layers": 4
+      },
+      "summon": {
+        "frame": "frame:obsidian-ember",
+        "layers": 4
+      },
+      "cards": [
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:obsidian-ember",
+          "layers": 4
+        },
+        {
+          "id": "RUST_SHROOM",
+          "frame": "frame:obsidian-ember",
+          "layers": 4
+        },
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:obsidian-ember",
+          "layers": 4
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "frame": "frame:nacre-prism",
+      "draw": {
+        "seen": true,
+        "same": true,
+        "live": true,
+        "returned": true
+      },
+      "purchase": {
+        "flightSeen": true,
+        "missing": false,
+        "frame": "frame:nacre-prism",
+        "layers": 4
+      },
+      "summon": {
+        "frame": "frame:nacre-prism",
+        "layers": 4
+      },
+      "cards": [
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:nacre-prism",
+          "layers": 4
+        },
+        {
+          "id": "RUST_SHROOM",
+          "frame": "frame:nacre-prism",
+          "layers": 4
+        },
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:nacre-prism",
+          "layers": 4
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "width": 390,
+      "frame": "frame:verdigris-runes",
+      "draw": {
+        "seen": true,
+        "same": true,
+        "live": true,
+        "returned": true
+      },
+      "purchase": {
+        "flightSeen": true,
+        "missing": false,
+        "frame": "frame:verdigris-runes",
+        "layers": 4
+      },
+      "summon": {
+        "frame": "frame:verdigris-runes",
+        "layers": 4
+      },
+      "cards": [
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:verdigris-runes",
+          "layers": 4
+        },
+        {
+          "id": "RUST_SHROOM",
+          "frame": "frame:verdigris-runes",
+          "layers": 4
+        },
+        {
+          "id": "SOLDIER2",
+          "frame": "frame:verdigris-runes",
+          "layers": 4
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "boundary": "Local real board/reducer/controller; emulated viewports, no authenticated PvP."
+}

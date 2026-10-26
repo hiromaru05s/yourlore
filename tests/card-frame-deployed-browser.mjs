@@ -1,0 +1,17 @@
+import fs from 'node:fs/promises';import assert from 'node:assert/strict';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-continuity-browser/node_modules/playwright/index.mjs');
+const origin=process.env.LORE_TEST_ORIGIN,out=process.env.LORE_TEST_OUT;if(!origin||!out)throw Error('Explicit deployed origin and output required');await fs.mkdir(out,{recursive:true});
+const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
+try{for(const width of [1280,390]){
+ const ctx=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width<500?2:1}),page=await ctx.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(/Native capture fallback|could not be prepared|Shader Error|GL_INVALID/.test(m.text()))errors.push(m.text());});
+ await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));
+ for(const frame of ['frame:mirror-silver','frame:flowing-gold','frame:obsidian-ember','frame:nacre-prism','frame:verdigris-runes']){
+  const result=await page.evaluate(async frame=>{
+   document.querySelector('.tempo-controls').style.display='none';const c=combatTempo.controller;await c.queue;const f=combatTempo.fixture('summon',0);f.prev.frames=f.res.state.frames=[frame,frame];c.show(f.prev);await new Promise(r=>setTimeout(r,600));
+   const before=document.querySelector('#hand .card'),layer=before.querySelector('.card-frame-material'),pixels=layer?.toDataURL();await new Promise(r=>setTimeout(r,250));const animated=layer?.toDataURL()!==pixels;
+   c.applyResult(f.res);await c.queue;await new Promise(r=>setTimeout(r,120));const field=document.querySelector('#meRow [data-uid="tempo-priest"]');const summon={frame:field?.dataset.cardFrame,layers:field?.querySelectorAll('.card-frame-material').length};
+   const g=combatTempo.fixture('counter',0).prev;g.frames=[frame,frame];c.show(g);await new Promise(r=>setTimeout(r,250));const expected=g.market[0].id;let seen=false,missing=false,running=true;const sample=()=>{for(const n of document.querySelectorAll('.native-card-flight')){seen=true;missing||=n.dataset.cardFrame!==frame||!n.querySelector('.card-frame-material');}if(running)requestAnimationFrame(sample);};sample();c.onBuyMarket(0);await c.queue;running=false;await new Promise(r=>setTimeout(r,100));const bought=document.querySelector('#pile-myDisc .pile-print .card');return{frame,animated,summon,purchase:{seen,missing,id:bought?.dataset.cardId,expected,frame:bought?.dataset.cardFrame,layers:bought?.querySelectorAll('.card-frame-material').length}};
+  },frame);assert(result.animated);assert(result.summon.frame===frame&&result.summon.layers>=4,JSON.stringify(result));assert(result.purchase.seen&&!result.purchase.missing&&result.purchase.frame===frame&&result.purchase.layers>=2,JSON.stringify(result));assert.equal(result.purchase.id,result.purchase.expected);results.push({width,...result});console.log('PASS deployed frame',width,frame);if(frame==='frame:obsidian-ember')await page.screenshot({path:`${out}/board-${width}.png`});
+ }
+ assert.deepEqual(errors,[]);await ctx.close();await fs.writeFile(out+'/report.json',JSON.stringify({origin,results,errors,boundary:'Unmodified deployed assets, real reducer/controller in shipped cosmetic-studio fixture. No authenticated PvP or real purchase account.'},null,2));
+}}finally{await browser.close();}
