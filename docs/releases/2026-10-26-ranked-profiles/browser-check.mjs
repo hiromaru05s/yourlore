@@ -8,7 +8,7 @@ await p.addInitScript(()=>localStorage.setItem('lore_lang','ja'));
 const purchases={sampleGames:10,cards:['MASSACRE','EXILE_NUKE1','EXILE_NUKE2','RIFT_MATTER','RIFT_METALIGHT'].map((id,i)=>({id,games:10-i,rate:(10-i)/10}))};
 const cards=['STARTER_MANA',...Array(6).fill('STARTER_TRASH'),'STARTER_CHEST','STARTER_CHEST'];
 let profileMode='full',delay=0;
-const profile=()=>({id:'a',display:'PYAP',avatar:null,badge:null,created_at:Date.now()-86400000,self:false,tier:'bronze',mmr:1036,rank:1,private:profileMode==='private',ranked:profileMode==='empty'?{games:0,wins:0,losses:0,draws:0,winRate:null,recentDecks:[],purchases:{sampleGames:0,cards:[]}}:{games:10,wins:6,losses:3,draws:1,winRate:.6,recentDecks:(profileMode==='missing'?[0,1]:[0,1,2]).map(i=>({matchId:`game-${i}`,at:Date.now()-i*86400000,cards:profileMode==='missing'||(profileMode==='mixed'&&i>0)?null:cards})),purchases}});
+const profile=()=>({id:'a',display:'PYAP',avatar:null,badge:null,created_at:Date.now()-86400000,self:profileMode==='self',tier:'bronze',mmr:1036,rank:1,private:profileMode==='private',ranked:profileMode==='empty'?{games:0,wins:0,losses:0,draws:0,winRate:null,recentDecks:[],purchases:{sampleGames:0,cards:[]}}:{games:10,wins:6,losses:3,draws:1,winRate:.6,recentDecks:(profileMode==='missing'?[0,1]:[0,1,2]).map(i=>({matchId:`game-${i}`,at:Date.now()-i*86400000,cards:profileMode==='missing'||(profileMode==='mixed'&&i>0)?null:cards})),purchases}});
 await apiFixture(p,async req=>{const path=new URL(req.url).pathname;
 if(path==='/api/auth/me')return {user:{id:'qa',display:'SEEKER',credits:100,wins:1,losses:2}};
 if(path==='/api/geo')return {country:'JP'};
@@ -54,7 +54,23 @@ for(const mode of ['missing','mixed']){
 }
 for(const mode of ['empty','private']){profileMode=mode;await p.locator('[data-pf=a]').click();await p.locator('.ranked-profile').waitFor();await p.waitForTimeout(100);assert.equal(await p.locator('.rp-deck-cards').count(),0);if(mode==='empty'){assert.equal(await p.locator('.rp-deck').count(),3);assert.equal(await p.locator('.purchase-card-icon.is-empty').count(),5);}else assert.equal(await p.locator('.rp-stats').count(),0);await p.screenshot({path:`${out}/profile-${mode}.png`});await p.locator('#pfClose').click();}
 profileMode='full';await p.locator('[data-pf=a]').click();await p.locator('.rp-deck-cards').first().waitFor();
-for(const width of [390,320]){await p.setViewportSize({width,height:844});await p.waitForTimeout(400);assert.equal(await p.locator('.ranked-profile-modal').evaluate(e=>e.scrollWidth>e.clientWidth),false);await p.screenshot({path:`${out}/profile-${width}.png`});}await p.locator('#pfClose').click();
-delay=500;await p.locator('[data-pf=a]').click();await p.locator('#pfClose').click();await p.waitForTimeout(650);assert.equal(await p.locator('.ranked-profile-modal').count(),0,'late response cannot resurrect modal');assert.deepEqual(errors,[]);
-await fs.writeFile(out+'/checks.json',JSON.stringify({origin,api:'synthetic fixtures',widths:[1440,1070,820,390,320],checks:['aligned columns','purchase column spacing','missing deck dates hidden','mixed deck contents aligned','plain name hover','tooltip hover and keyboard','ranked stats include draws','three repeated decks','card inspection','shared friends profile','empty and private data','mobile modal overflow','focus restore','closed modal late response'],errors},null,2));console.log('PASS ranking/profile browser checks');
+for(const width of [1440,390,320]){
+ await p.setViewportSize({width,height:844});await p.waitForTimeout(400);assert.equal(await p.locator('.ranked-profile-modal').evaluate(e=>e.scrollWidth>e.clientWidth),false);
+ assert.equal(await p.locator('#pfClose').evaluate(e=>getComputedStyle(e).fontSize),'26px');const before=await p.locator('#pfClose').boundingBox();assert(before.width>=44&&before.height>=44);
+ await p.locator('.profile-content').evaluate(e=>e.scrollTop=e.scrollHeight);await p.waitForTimeout(100);
+ const after=await p.locator('#pfClose').boundingBox();assert(Math.abs(after.y-before.y)<1,'close stays fixed while profile scrolls');
+ const x=after.x+after.width/2,y=after.y+after.height/2;
+ assert(await p.evaluate(({x,y})=>document.elementFromPoint(x,y)?.closest('#pfClose')!=null,{x,y}),'close receives pointer after scroll');
+ await p.screenshot({path:`${out}/profile-${width}.png`});await p.mouse.click(x,y);assert.equal(await p.locator('.ranked-profile-modal').count(),0);
+ await p.locator('[data-pf=a]').click();await p.locator('.rp-deck-cards').first().waitFor();
+}await p.locator('#pfClose').click();
+delay=500;await p.locator('[data-pf=a]').click();await p.locator('#pfClose').click();await p.waitForTimeout(650);assert.equal(await p.locator('.ranked-profile-modal').count(),0,'late response cannot resurrect modal');profileMode='self';delay=0;
+for(const width of [1440,390,320]){
+ await p.setViewportSize({width,height:1000});await p.locator('.lounge-user').click();await p.locator('.profile-page-close').waitFor();await ready();await p.waitForTimeout(700);
+ const btn=p.locator('.profile-page-close'),rect=await btn.boundingBox(),panel=await p.locator('.lounge-profile .tut').boundingBox();
+ assert(rect.width>=44&&rect.height>=44);assert(rect.x>panel.x+panel.width/2&&rect.y<panel.y+70,'page close in upper right');
+ await p.screenshot({path:`${out}/profile-page-${width}.png`});await btn.click();await p.locator('.lounge-home').waitFor();
+}
+assert.deepEqual(errors,[]);
+await fs.writeFile(out+'/checks.json',JSON.stringify({origin,api:'synthetic fixtures',widths:[1440,1070,820,390,320],checks:['aligned columns','purchase column spacing','missing deck dates hidden','mixed deck contents aligned','plain name hover','tooltip hover and keyboard','ranked stats include draws','three repeated decks','card inspection','shared friends profile','empty and private data','mobile modal overflow','focus restore','closed modal late response','fixed close after scroll','profile page close returns home'],errors},null,2));console.log('PASS ranking/profile browser checks');
 }catch(e){await p.screenshot({path:out+'/failure.png'});console.log(errors);throw e;}finally{await b.close()}

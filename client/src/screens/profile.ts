@@ -51,6 +51,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     wrap.dataset.profileTab = tab;
     wrap.innerHTML = `
       <div class="tut">
+        <button type="button" class="btn btn-ghost lore-button-quiet profile-page-close" aria-label="${loungeText('閉じる','Close','닫기')}">×</button>
         <div class="tut-head">
           <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
           <div class="support-heading"><span class="menu-eyebrow">${tab === "settings" ? "PREFERENCES" : "SEEKER PROFILE"}</span><h2>${t(tab === "settings" ? "home.settings" : "profile.title")}</h2><p class="menu-subtitle">${tab === "settings" ? loungeText("音・言語・公開範囲を、あなたに合わせて。", "Make LORE your own.", "소리, 언어, 공개 범위를 설정하세요.") : loungeText("デュエルの記録と、シーカーの現在地。", "Your duels, your progress.", "듀얼 기록과 시커의 현재 위치.")}</p></div>
@@ -66,6 +67,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <div class="tut-body" id="pbody"><div class="pf-loading">…</div></div>
       </div>`;
     (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
+    wrap.querySelector<HTMLButtonElement>('.profile-page-close')!.onclick = () => app.home();
     wrap.querySelectorAll(".pf-tab").forEach((b) => {
       (b as HTMLElement).onclick = () => {
         const next = (b as HTMLElement).dataset.tab as Tab;
@@ -303,7 +305,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 export async function showProfileModal(userId: string): Promise<void> {
   const previous=document.activeElement as HTMLElement|null;
   const ov=document.createElement('div');ov.className='overlay';
-  ov.innerHTML=`<div class="modal ranked-profile-modal" role="dialog" aria-modal="true" aria-label="${t('profile.title')}"><button class="btn btn-ghost profile-close" id="pfClose" aria-label="${loungeText('閉じる','Close','닫기')}">×</button><div class="profile-content" aria-live="polite">${loungeText('読み込み中…','Loading…','불러오는 중…')}</div></div>`;
+  ov.innerHTML=`<div class="modal ranked-profile-modal" role="dialog" aria-modal="true" aria-label="${t('profile.title')}"><button type="button" class="btn btn-ghost lore-button-quiet profile-close" id="pfClose" aria-label="${loungeText('閉じる','Close','닫기')}">×</button><div class="profile-content" aria-live="polite">${loungeText('読み込み中…','Loading…','불러오는 중…')}</div></div>`;
   const close=()=>{ov.remove();if(previous?.isConnected)previous.focus();};
   ov.querySelector<HTMLButtonElement>('#pfClose')!.onclick=close;
   ov.onclick=e=>{if(e.target===ov)close();};
