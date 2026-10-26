@@ -1,4 +1,15 @@
-# 最終統合・BE/DB・性能監査（進行中）
+# 最終統合・BE/DB・性能監査（完了）
+
+## 最終結果（2026-10-26 23:43 UTC / 2026-10-27 08:43 KST）
+
+- 本番公開・全ユーザーデータ消去・再開・公開後確認まで完了。公開source `6b47faeb455958b8634424e83bfc2e5ee08a7f5c`、version `fd2c9460-fd36-44cc-a9e2-770834026f02`、100% traffic。https://yourlore.xyz
+- 他のLOREセッション完了を確認後、採用済みBOT/HOME変更を統合。元のdirty checkout・未採用試作は保全。shared deploy guardでmain・公開祖先・schema・型・246/246テスト・buildを確認して公開。
+- 全7アカウントを例外なく消去。27ユーザーテーブルは消去直後と待機後とも全件0、coupon使用数0。旧対戦・マッチング・BOT巡回のDO namespaceは消去前に削除。新namespaceで本番再開。データexportは作成せず、件数のみ保存。再開後の新規登録は再消去しない。
+- ステージングの本物の認証API/WSで購入・ガチャ・報酬・ランク/フレンド戦・再接続・全4BOTを検証。一時QAアカウントと関連記録の後片付け完了。実Googleプロバイダへのログイン操作と各ユーザー実機でのFPSは今回の検証範囲に含まない。
+- 本番3originでmaintenance解除・匿名auth正常応答を確認。実ブラウザの初回/再訪ログイン画面、collection/social/queueの認証境界が成功。page error・HTTP失敗・可視画像欠落0。エントリの参照先とビルド済み140ファイルのSHA256が配信内容に一致。
+- 本番匿名モバイルviewportの準備時間はcold 2754ms / warm 649ms、TBT 964ms / 0ms。端末/通信を固定した改善比較ではない。初回のmain-thread長時間処理は残っており、全端末の無ラグを保証しない。resource encodedBodySizeはSW/cacheを含むため実転送量とは扱わない。
+- galleryの同条件前後比較は画像bytes約85%減、準備待ち約80%減（27.6→5.4秒）。本番起動時間の改善率ではない。相手手札DOM再生成・袖転写・重複GET・presenceのDB負荷も削減済み。
+- 最終証拠：`production-reset.json`、`production-release.json`、`suite-production-final.json`、`production-final/report.json`、`production-assets.json`。下記は時系列の途中記録で、当時の「未実施」「残作業」はこの最終結果が上書きする。
 
 - 初期参照: `f9f05fe5dec6d7162ede3ac271e6255447726260`（gh/main）。元フォルダの保存ブランチと88件のtracked変更は触らず隔離。
 - 作業: `/Users/hiromaru05s/.codex/worktrees/final-backend-performance-audit/LORE_TCG`、`codex/final-backend-performance-audit`。
@@ -131,3 +142,8 @@
 - deployment statusのannotationがCLIで省略されるため、消去前検証が安全停止した（この時点では消去未実行）。完全なversion metadataで公開SHAとguard stampを照合するよう`9de2063f`で修正し、guardで再公開。version `d4e14cde-3702-43e1-be63-ea7c9b940a11`、246/246成功。
 - 3originのmaintenance、実DB全table、現在main/公開source/100%traffic/lockを照合後、承認済みSQLを実行。7アカウントを含む全27ユーザーテーブルが0件。5秒後も全27tableが0、coupon使用数も0。例外アカウントなし。`production-reset.json`に件数のみ記録。新規データexportなし。
 - 旧DO削除後にD1を消去しており、古い対戦から書き戻せない。次のPhase Cでmaintenanceを解除する。再開後の新規登録は再消去しない。
+
+
+## Phase C・公開後検証完了
+
+`6b47faeb`でproductionのUSER_DATA_RESETを削除、新DO bindingとv4/v5 migration履歴を保持。guardによる246/246・型・build成功後に公開し、3originのauthを200/user=nullで確認した。production-readonly-browserと140asset hash照合成功。検証のための本番QAアカウントは作成していない。初回と再訪の画面を検査し、390pxで操作領域・文字の欠落なし。最終記録をmainへ保存した後、依頼された10分監視を終了する。

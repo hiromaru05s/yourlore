@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-26T23:42:55.298Z",
+  "source": "6b47faeb455958b8634424e83bfc2e5ee08a7f5c",
+  "deployment": "263abc11-89cc-47d2-8728-98792f0e7054",
+  "version": "fd2c9460-fd36-44cc-a9e2-770834026f02",
+  "traffic": 100,
+  "origins": [
+    {
+      "origin": "https://yourlore.xyz",
+      "status": 200,
+      "user": null
+    },
+    {
+      "origin": "https://www.yourlore.xyz",
+      "status": 200,
+      "user": null
+    },
+    {
+      "origin": "https://admin.yourlore.xyz",
+      "status": 200,
+      "user": null
+    }
+  ],
+  "tests": {
+    "total": 246,
+    "passed": 246
+  },
+  "maintenance": false
+}
