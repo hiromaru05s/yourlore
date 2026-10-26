@@ -1,0 +1,1039 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-10-26T04:13:09.188Z",
+  "source": "641391b1",
+  "scope": "HTML, JS, CSS and JSON from the actual guarded build",
+  "total": 147,
+  "passed": 147,
+  "files": [
+    {
+      "file": "art/vfx/mimic-mouth-r2/atlas.json",
+      "status": 200,
+      "local": "34f1e1008ffac9c4861daba35de4aaa086011368db5a29e0972e5d05580d80a9",
+      "remote": "34f1e1008ffac9c4861daba35de4aaa086011368db5a29e0972e5d05580d80a9",
+      "match": true
+    },
+    {
+      "file": "assets/assets-BcCsXC3z.js",
+      "status": 200,
+      "local": "92f1a242f769c8f58bba37175bf2d991c80469277ec6ca68592d0634fc9c0edd",
+      "remote": "92f1a242f769c8f58bba37175bf2d991c80469277ec6ca68592d0634fc9c0edd",
+      "match": true
+    },
+    {
+      "file": "assets/atelierThemes-C9ZNrm6d.js",
+      "status": 200,
+      "local": "ba61a5df721ea0960354e7bb9b42fb2558d5c0ea0010466b68f2cc6ab10fe914",
+      "remote": "ba61a5df721ea0960354e7bb9b42fb2558d5c0ea0010466b68f2cc6ab10fe914",
+      "match": true
+    },
+    {
+      "file": "assets/audit-CfxFjhEy.js",
+      "status": 200,
+      "local": "060310048ba4893638cb5fd66dbbd5ef4d91d89c33fba926e3e44bc33f89fcc3",
+      "remote": "060310048ba4893638cb5fd66dbbd5ef4d91d89c33fba926e3e44bc33f89fcc3",
+      "match": true
+    },
+    {
+      "file": "assets/baseFurniture-NmLFCmRM.js",
+      "status": 200,
+      "local": "925753675840324ff56dbaa255e5170132b89a3309ad4e2ef8174c15757c3fcd",
+      "remote": "925753675840324ff56dbaa255e5170132b89a3309ad4e2ef8174c15757c3fcd",
+      "match": true
+    },
+    {
+      "file": "assets/board-B5HTYnLE.js",
+      "status": 200,
+      "local": "9c79b577ec54eec455c80f90a8d303e90b6c80f46be525a1df83d89d2b2cf47f",
+      "remote": "9c79b577ec54eec455c80f90a8d303e90b6c80f46be525a1df83d89d2b2cf47f",
+      "match": true
+    },
+    {
+      "file": "assets/board-CkyyG9hX.js",
+      "status": 200,
+      "local": "8b5edb03f104a4a3b8a98692b3f40d23f14d337745b13aba5cad1c9095e4ab3e",
+      "remote": "8b5edb03f104a4a3b8a98692b3f40d23f14d337745b13aba5cad1c9095e4ab3e",
+      "match": true
+    },
+    {
+      "file": "assets/bot.worker-BcaZGBGS.js",
+      "status": 200,
+      "local": "e74d88a80a3e083a86761fb0c9d581e7993b94c95f15ff2897acce6019810224",
+      "remote": "e74d88a80a3e083a86761fb0c9d581e7993b94c95f15ff2897acce6019810224",
+      "match": true
+    },
+    {
+      "file": "assets/BufferGeometryUtils-CfpUJs2q.js",
+      "status": 200,
+      "local": "cd3da447792238e88b579b98944955768797cdfdcdbf728cbb3ca7f7657ed922",
+      "remote": "cd3da447792238e88b579b98944955768797cdfdcdbf728cbb3ca7f7657ed922",
+      "match": true
+    },
+    {
+      "file": "assets/cardSurface-CAks4jef.js",
+      "status": 200,
+      "local": "762e75510d48ad02d9fba89386d3f17d15f67a7daee87fa65aebf6597a078267",
+      "remote": "762e75510d48ad02d9fba89386d3f17d15f67a7daee87fa65aebf6597a078267",
+      "match": true
+    },
+    {
+      "file": "assets/catalog-CJmaorNf.js",
+      "status": 200,
+      "local": "86dcc903067f848ba0969e4406b2389095571faeeea94edef20dedeb2ded511b",
+      "remote": "86dcc903067f848ba0969e4406b2389095571faeeea94edef20dedeb2ded511b",
+      "match": true
+    },
+    {
+      "file": "assets/catalog-IYJjIXRa.js",
+      "status": 200,
+      "local": "6cc38b1b7611b2736cd572b008da6f8b12954654b3a81b9fabe8d073fd0d333a",
+      "remote": "6cc38b1b7611b2736cd572b008da6f8b12954654b3a81b9fabe8d073fd0d333a",
+      "match": true
+    },
+    {
+      "file": "assets/ceremonyScene-mlZEDe5e.js",
+      "status": 200,
+      "local": "618dbe44ff90797a2774ea2bc27ca3ae591deca2cf39ba17893928fc439e9a76",
+      "remote": "618dbe44ff90797a2774ea2bc27ca3ae591deca2cf39ba17893928fc439e9a76",
+      "match": true
+    },
+    {
+      "file": "assets/coins-0X0rq-8r.js",
+      "status": 200,
+      "local": "3978c7c71d70e3a1389dace3868f8b873b26ab422f5b89f285c327162826121d",
+      "remote": "3978c7c71d70e3a1389dace3868f8b873b26ab422f5b89f285c327162826121d",
+      "match": true
+    },
+    {
+      "file": "assets/combatTempo-DaOsMM5k.js",
+      "status": 200,
+      "local": "c7d42e961e74826edbf182ec3f6a9f9b477517a83cad23a5beafd5a13c7aaa5e",
+      "remote": "c7d42e961e74826edbf182ec3f6a9f9b477517a83cad23a5beafd5a13c7aaa5e",
+      "match": true
+    },
+    {
+      "file": "assets/controller-bboUdfYs.css",
+      "status": 200,
+      "local": "ecd20d2c291671bbc93a98a201b1a6e1ac9f67f0dc1bbcd8faa2c1e651a53e00",
+      "remote": "ecd20d2c291671bbc93a98a201b1a6e1ac9f67f0dc1bbcd8faa2c1e651a53e00",
+      "match": true
+    },
+    {
+      "file": "assets/controller-BCrBzT5j.js",
+      "status": 200,
+      "local": "2eab7ff36f4096389f15b72aa54c97195067e61672f9daad8c1267c7843e1653",
+      "remote": "2eab7ff36f4096389f15b72aa54c97195067e61672f9daad8c1267c7843e1653",
+      "match": true
+    },
+    {
+      "file": "assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "status": 200,
+      "local": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "remote": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "match": true
+    },
+    {
+      "file": "assets/cosmeticStudio-BY1dJbND.js",
+      "status": 200,
+      "local": "64dcbe852a57f60f0a231429db368f0b8ad371f3126558a87c5313e0b3e8edac",
+      "remote": "64dcbe852a57f60f0a231429db368f0b8ad371f3126558a87c5313e0b3e8edac",
+      "match": true
+    },
+    {
+      "file": "assets/darkRenderer-DR9bpFaQ.js",
+      "status": 200,
+      "local": "9066edf44906ae8fa52c18b3272187bd179d669dca7594cd042a866e1754090b",
+      "remote": "9066edf44906ae8fa52c18b3272187bd179d669dca7594cd042a866e1754090b",
+      "match": true
+    },
+    {
+      "file": "assets/diceScene-tQulqXHG.js",
+      "status": 200,
+      "local": "5ef61c8280fbb348712a4e35f4c033106d87849e2f2331264f233a728d4e7453",
+      "remote": "5ef61c8280fbb348712a4e35f4c033106d87849e2f2331264f233a728d4e7453",
+      "match": true
+    },
+    {
+      "file": "assets/domSleeves-B8Nlcz3N.js",
+      "status": 200,
+      "local": "c494f24997fedd389eadb7e9c5f4869853aae067c62335345dabf1788a79ea31",
+      "remote": "c494f24997fedd389eadb7e9c5f4869853aae067c62335345dabf1788a79ea31",
+      "match": true
+    },
+    {
+      "file": "assets/domSleeves-Dru0ykCE.css",
+      "status": 200,
+      "local": "a63fb32e7762741252e721880aece1f04a96cdf596b627156c6fbab0584e9ff7",
+      "remote": "a63fb32e7762741252e721880aece1f04a96cdf596b627156c6fbab0584e9ff7",
+      "match": true
+    },
+    {
+      "file": "assets/drawStock-DrEirwwS.js",
+      "status": 200,
+      "local": "245f0e91e6af0d9fa24eb0b2610ed82fe70b0c78fb3bd8a4d5ea7813c8066e4a",
+      "remote": "245f0e91e6af0d9fa24eb0b2610ed82fe70b0c78fb3bd8a4d5ea7813c8066e4a",
+      "match": true
+    },
+    {
+      "file": "assets/duel-preload-7df9c0d454c0a98a40605d2c.json",
+      "status": 200,
+      "local": "bd5ca8a2b710c50a7e66a51be1c852b46b68081c24c96b6e00433fc3d59e4728",
+      "remote": "bd5ca8a2b710c50a7e66a51be1c852b46b68081c24c96b6e00433fc3d59e4728",
+      "match": true
+    },
+    {
+      "file": "assets/duelAssets-Cbv6h7XX.js",
+      "status": 200,
+      "local": "6105ea88b7aba59544c30940d7c6913369ccccd8c9beafa2ef4863bf5d24a3d3",
+      "remote": "6105ea88b7aba59544c30940d7c6913369ccccd8c9beafa2ef4863bf5d24a3d3",
+      "match": true
+    },
+    {
+      "file": "assets/duelReadiness-hUTD7Y3h.js",
+      "status": 200,
+      "local": "bab4569f318c00f53c6bd5537a8278fa046fca962df9560c38d72b363a235e6d",
+      "remote": "bab4569f318c00f53c6bd5537a8278fa046fca962df9560c38d72b363a235e6d",
+      "match": true
+    },
+    {
+      "file": "assets/duelScene-D3H-xqkU.js",
+      "status": 200,
+      "local": "7051335d0dc8df52f4e94b4e2297dfb3d750588b1f917830e9b23320ce78c8c6",
+      "remote": "7051335d0dc8df52f4e94b4e2297dfb3d750588b1f917830e9b23320ce78c8c6",
+      "match": true
+    },
+    {
+      "file": "assets/family-matter--yz2nQNP.js",
+      "status": 200,
+      "local": "094a931d45e7016d4f9580b45abb29b09e0a923876fd0f965e95e6b4de1e4e1d",
+      "remote": "094a931d45e7016d4f9580b45abb29b09e0a923876fd0f965e95e6b4de1e4e1d",
+      "match": true
+    },
+    {
+      "file": "assets/fateWheelRewind-BAwd0jal.js",
+      "status": 200,
+      "local": "a98f04e795212b4ff5610a00c035caa19e0c546d40c48c965545dc67f4d8f3bc",
+      "remote": "a98f04e795212b4ff5610a00c035caa19e0c546d40c48c965545dc67f4d8f3bc",
+      "match": true
+    },
+    {
+      "file": "assets/furniture-C1gdxlXq.js",
+      "status": 200,
+      "local": "cb7aee3ea8935fd3348fab2fe524d40cc131c0a05f1251020847f71e9c6a8d9f",
+      "remote": "cb7aee3ea8935fd3348fab2fe524d40cc131c0a05f1251020847f71e9c6a8d9f",
+      "match": true
+    },
+    {
+      "file": "assets/furniture-DkZpw8hq.js",
+      "status": 200,
+      "local": "133cdff8e3328a2871d8c0d4133f1d76300dbe577784fb4b159ebe8745b61ed8",
+      "remote": "133cdff8e3328a2871d8c0d4133f1d76300dbe577784fb4b159ebe8745b61ed8",
+      "match": true
+    },
+    {
+      "file": "assets/furniture-Dpo4D4uB.js",
+      "status": 200,
+      "local": "f3a2440cfdb3fb627d760dc575d00de49d27e350c9a8651226dd953b73fea18e",
+      "remote": "f3a2440cfdb3fb627d760dc575d00de49d27e350c9a8651226dd953b73fea18e",
+      "match": true
+    },
+    {
+      "file": "assets/gachaRewardFurniture-DAbaen9i.js",
+      "status": 200,
+      "local": "926a859128367b7a7822f0fc16286793d8d9711586d551891889a40a4a05df1a",
+      "remote": "926a859128367b7a7822f0fc16286793d8d9711586d551891889a40a4a05df1a",
+      "match": true
+    },
+    {
+      "file": "assets/gachaRewardSleeve-CUpLObyH.js",
+      "status": 200,
+      "local": "c33f0b46d7064a7220c9e1584a0f4d2da3bdb227a287b8893df3a97dd1d60a7a",
+      "remote": "c33f0b46d7064a7220c9e1584a0f4d2da3bdb227a287b8893df3a97dd1d60a7a",
+      "match": true
+    },
+    {
+      "file": "assets/game-CeZ0_T_p.css",
+      "status": 200,
+      "local": "c3a917c33744ff03edb04c76979bf8fb070230e7358a5da1272b96b7bac52062",
+      "remote": "c3a917c33744ff03edb04c76979bf8fb070230e7358a5da1272b96b7bac52062",
+      "match": true
+    },
+    {
+      "file": "assets/game-pOO6G_44.js",
+      "status": 200,
+      "local": "49cf9af4fe02b2a84ff5549abdf6b723aeaa38e8ce21b36f2ad8dda5c9f8fdf7",
+      "remote": "49cf9af4fe02b2a84ff5549abdf6b723aeaa38e8ce21b36f2ad8dda5c9f8fdf7",
+      "match": true
+    },
+    {
+      "file": "assets/homeAtmosphere-47vdXwOO.js",
+      "status": 200,
+      "local": "d871cbb89788ed24a95ae8a91385bd4b2ec0cc3ff0f5aa04ea6ee723f79dd3fc",
+      "remote": "d871cbb89788ed24a95ae8a91385bd4b2ec0cc3ff0f5aa04ea6ee723f79dd3fc",
+      "match": true
+    },
+    {
+      "file": "assets/inspection-B9Ju7crj.js",
+      "status": 200,
+      "local": "eb9c200b3d5b9f44c3431122ab1f03576dd579b5590223ea46744632d15bb4c7",
+      "remote": "eb9c200b3d5b9f44c3431122ab1f03576dd579b5590223ea46744632d15bb4c7",
+      "match": true
+    },
+    {
+      "file": "assets/layout-CwH1gcrG.js",
+      "status": 200,
+      "local": "c7e356910ba8127c34fe5bd939f60e75ac5fa64defcdb187b4517f449d74e7bf",
+      "remote": "c7e356910ba8127c34fe5bd939f60e75ac5fa64defcdb187b4517f449d74e7bf",
+      "match": true
+    },
+    {
+      "file": "assets/layout-CZhhoKvR.css",
+      "status": 200,
+      "local": "7d1a5aede5d1556c5151a07f4249344f9b117a4a66021c496496664414d37054",
+      "remote": "7d1a5aede5d1556c5151a07f4249344f9b117a4a66021c496496664414d37054",
+      "match": true
+    },
+    {
+      "file": "assets/libraryAssets-DaaImceT.js",
+      "status": 200,
+      "local": "d57994be52bad15fc8ee88703b1f37d7d0f35eaa1e7a7f06e7c775144a364fda",
+      "remote": "d57994be52bad15fc8ee88703b1f37d7d0f35eaa1e7a7f06e7c775144a364fda",
+      "match": true
+    },
+    {
+      "file": "assets/main-BuWi6hMY.js",
+      "status": 200,
+      "local": "b63ec24a8623b11db9f4340335ad68babd7c32abe838a589785339bb05f81764",
+      "remote": "b63ec24a8623b11db9f4340335ad68babd7c32abe838a589785339bb05f81764",
+      "match": true
+    },
+    {
+      "file": "assets/main-CgOkyWJY.js",
+      "status": 200,
+      "local": "43f5dc45ac7c728d8cb2bd0f9b973ab50b06812014e5e4edfb7f543626d68c26",
+      "remote": "43f5dc45ac7c728d8cb2bd0f9b973ab50b06812014e5e4edfb7f543626d68c26",
+      "match": true
+    },
+    {
+      "file": "assets/main-Dkxe7OOY.css",
+      "status": 200,
+      "local": "3ab67756b09e33d49138df957568dd7357c02c8cc4d0e639c3740e4057f81ff8",
+      "remote": "3ab67756b09e33d49138df957568dd7357c02c8cc4d0e639c3740e4057f81ff8",
+      "match": true
+    },
+    {
+      "file": "assets/master-tongues-Bzn1y4c0.js",
+      "status": 200,
+      "local": "030fb72e7f4c947938a82af626e3a361890b2ee0843fd4b9c0f7782c95c797e5",
+      "remote": "030fb72e7f4c947938a82af626e3a361890b2ee0843fd4b9c0f7782c95c797e5",
+      "match": true
+    },
+    {
+      "file": "assets/materials-a-woAYkl.js",
+      "status": 200,
+      "local": "c22e14447a87603529fb6b4850a58981950dbd09856f693b1b97afb4ea6fa144",
+      "remote": "c22e14447a87603529fb6b4850a58981950dbd09856f693b1b97afb4ea6fa144",
+      "match": true
+    },
+    {
+      "file": "assets/materials-BvGiVGcV.js",
+      "status": 200,
+      "local": "bbf91e711e0d5d934a6a5e6b57e3ffeb0bffa89177343d7c95e3926081d8c4d3",
+      "remote": "bbf91e711e0d5d934a6a5e6b57e3ffeb0bffa89177343d7c95e3926081d8c4d3",
+      "match": true
+    },
+    {
+      "file": "assets/menu-manifest-ec8bf68114b3c2355cca.json",
+      "status": 200,
+      "local": "ec8bf68114b3c2355cca736ac07343a98bddfa2e50b099183f1a4e0dbb1ff256",
+      "remote": "ec8bf68114b3c2355cca736ac07343a98bddfa2e50b099183f1a4e0dbb1ff256",
+      "match": true
+    },
+    {
+      "file": "assets/menuAssets-BDLDrdR-.js",
+      "status": 200,
+      "local": "254a0c262aca7c552f2b137e5872c692c6398e77a0f0fbdf9439271eabfa537f",
+      "remote": "254a0c262aca7c552f2b137e5872c692c6398e77a0f0fbdf9439271eabfa537f",
+      "match": true
+    },
+    {
+      "file": "assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "status": 200,
+      "local": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "remote": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "match": true
+    },
+    {
+      "file": "assets/objects-DLYyU0sK.js",
+      "status": 200,
+      "local": "13a53c553e2c3dec5e6fefe78dd908bef7352e1b9e54c657fbd2b177bef08731",
+      "remote": "13a53c553e2c3dec5e6fefe78dd908bef7352e1b9e54c657fbd2b177bef08731",
+      "match": true
+    },
+    {
+      "file": "assets/opponent-fbJVnZdc.css",
+      "status": 200,
+      "local": "7dd76b6f4ca07f829ab69088c3b5d1c5391bba6639018f8bd85a846599a3c945",
+      "remote": "7dd76b6f4ca07f829ab69088c3b5d1c5391bba6639018f8bd85a846599a3c945",
+      "match": true
+    },
+    {
+      "file": "assets/opponent-NdiHkXXp.js",
+      "status": 200,
+      "local": "bba4e51c95346515ea222f14d4cb522ffbfd28254d40d887d3a503a76b824883",
+      "remote": "bba4e51c95346515ea222f14d4cb522ffbfd28254d40d887d3a503a76b824883",
+      "match": true
+    },
+    {
+      "file": "assets/ornaments-CfX6beM9.js",
+      "status": 200,
+      "local": "83e0f69141e46653bf4a69ffdb52ade9bcce39706f5dd02dbe7240273627f906",
+      "remote": "83e0f69141e46653bf4a69ffdb52ade9bcce39706f5dd02dbe7240273627f906",
+      "match": true
+    },
+    {
+      "file": "assets/paperDraw-CZ53upu1.js",
+      "status": 200,
+      "local": "505de78d74a3e42781e0a81a0eb910fcce9d02d784abd8b2ee1c4ad84cdf0414",
+      "remote": "505de78d74a3e42781e0a81a0eb910fcce9d02d784abd8b2ee1c4ad84cdf0414",
+      "match": true
+    },
+    {
+      "file": "assets/passives-UDApamK7.css",
+      "status": 200,
+      "local": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "remote": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "match": true
+    },
+    {
+      "file": "assets/persistentFlightRenderer-OWQ6_60a.js",
+      "status": 200,
+      "local": "fdbd06f205e09c7e3af6ba2ac4295e7d10c11e0d2950941e874bf1627589438b",
+      "remote": "fdbd06f205e09c7e3af6ba2ac4295e7d10c11e0d2950941e874bf1627589438b",
+      "match": true
+    },
+    {
+      "file": "assets/pileModels-DUeGWCI4.js",
+      "status": 200,
+      "local": "757c2ae176fa75581b09c0430167492b427614c316e43be7466f5bf2bad2b980",
+      "remote": "757c2ae176fa75581b09c0430167492b427614c316e43be7466f5bf2bad2b980",
+      "match": true
+    },
+    {
+      "file": "assets/preload-helper-BXl3LOEh.js",
+      "status": 200,
+      "local": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "remote": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "match": true
+    },
+    {
+      "file": "assets/purchaseAir.worker-BK14oJEX.js",
+      "status": 200,
+      "local": "f46b05531c87c4fb81cb1fbcbe8f685a977952e84fa4bea3c51b9deb52918164",
+      "remote": "f46b05531c87c4fb81cb1fbcbe8f685a977952e84fa4bea3c51b9deb52918164",
+      "match": true
+    },
+    {
+      "file": "assets/quietLuxury-DQ7yq_C2.js",
+      "status": 200,
+      "local": "028e0a31017cbc506f93b932674381c9d0ae8f9a0a1496b60395e18f3ef33110",
+      "remote": "028e0a31017cbc506f93b932674381c9d0ae8f9a0a1496b60395e18f3ef33110",
+      "match": true
+    },
+    {
+      "file": "assets/rankPresentation-DnOIfsxr.js",
+      "status": 200,
+      "local": "a145415cb7a6e36a50ee173e417175571e6695501ca5bb165f704590e76e66ef",
+      "remote": "a145415cb7a6e36a50ee173e417175571e6695501ca5bb165f704590e76e66ef",
+      "match": true
+    },
+    {
+      "file": "assets/raster.worker-Dbjti9vv.js",
+      "status": 200,
+      "local": "51ec8e21ec72b22893fbaf21a9ef10c1551ed86bc6a281a6a9823e9d88b60fe8",
+      "remote": "51ec8e21ec72b22893fbaf21a9ef10c1551ed86bc6a281a6a9823e9d88b60fe8",
+      "match": true
+    },
+    {
+      "file": "assets/readingAssetCache-DUGABenX.js",
+      "status": 200,
+      "local": "14e8652f4e849f1238d59e7e80e8a62850b49a200c6da0f688a7a2f811198ec4",
+      "remote": "14e8652f4e849f1238d59e7e80e8a62850b49a200c6da0f688a7a2f811198ec4",
+      "match": true
+    },
+    {
+      "file": "assets/readingCrystalOptics-TuOdo0W6.js",
+      "status": 200,
+      "local": "da2fb12bcc66e7fbb1b1ef919dfef19ac8eb6eb4573fe59e74f3b1706bb876e2",
+      "remote": "da2fb12bcc66e7fbb1b1ef919dfef19ac8eb6eb4573fe59e74f3b1706bb876e2",
+      "match": true
+    },
+    {
+      "file": "assets/renderDensity-eCqR3GeM.js",
+      "status": 200,
+      "local": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "remote": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-8mRpfSOo.js",
+      "status": 200,
+      "local": "c50f3e3e7aca0db39d35628bf973fd67cd124335b01e5f029afbfa77a00b18fc",
+      "remote": "c50f3e3e7aca0db39d35628bf973fd67cd124335b01e5f029afbfa77a00b18fc",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-BPOI2QBR.js",
+      "status": 200,
+      "local": "f07644de60ab3451d2097543695354a7b5272ac00a788bcf767a301048b28eda",
+      "remote": "f07644de60ab3451d2097543695354a7b5272ac00a788bcf767a301048b28eda",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-CEe-9kDU.js",
+      "status": 200,
+      "local": "2254fb350f4dd7ff9164b95587c6b0ced7a39c21899071c0555a459dcb1de07e",
+      "remote": "2254fb350f4dd7ff9164b95587c6b0ced7a39c21899071c0555a459dcb1de07e",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-CHphy9_c.js",
+      "status": 200,
+      "local": "0d333f418dd82a05b0fcf8d082e6c4552b29d52989e6a642e37c27260a2bc1c0",
+      "remote": "0d333f418dd82a05b0fcf8d082e6c4552b29d52989e6a642e37c27260a2bc1c0",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-COysMM2w.js",
+      "status": 200,
+      "local": "1147b9b928a2cacdeed12a80ca1c53c402e580ebb697b07ed2e4b091f33e963b",
+      "remote": "1147b9b928a2cacdeed12a80ca1c53c402e580ebb697b07ed2e4b091f33e963b",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-CUbltT0W.js",
+      "status": 200,
+      "local": "2056278e518687ddfb6c6879128788b0fd9661baf81e34181af8a03e6364b271",
+      "remote": "2056278e518687ddfb6c6879128788b0fd9661baf81e34181af8a03e6364b271",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-D_NF66Gz.js",
+      "status": 200,
+      "local": "e4c84fe687f668b212bf2da80e4c33cd4203e15e91366acec96c13aec0e44048",
+      "remote": "e4c84fe687f668b212bf2da80e4c33cd4203e15e91366acec96c13aec0e44048",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-D0BXuqu5.js",
+      "status": 200,
+      "local": "5d3492104202a0d0e8a1f651aa7465bc4cb760652c946320c016076d1b0d2523",
+      "remote": "5d3492104202a0d0e8a1f651aa7465bc4cb760652c946320c016076d1b0d2523",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-D4uO2yqW.js",
+      "status": 200,
+      "local": "2c041628acbc90c0b623317643ceddb7f3a66761a72f5c858ae062638b918fe8",
+      "remote": "2c041628acbc90c0b623317643ceddb7f3a66761a72f5c858ae062638b918fe8",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-DAo0CmWb.js",
+      "status": 200,
+      "local": "a2397b782a830cb8519454adcfcb2a85bb44089505b29b3fa8238e0e8e583311",
+      "remote": "a2397b782a830cb8519454adcfcb2a85bb44089505b29b3fa8238e0e8e583311",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-De-oVM0y.js",
+      "status": 200,
+      "local": "81d391df78060a6b85b7d04f857a4360ce615c85dd0b8cfb317cc5bb124d2efe",
+      "remote": "81d391df78060a6b85b7d04f857a4360ce615c85dd0b8cfb317cc5bb124d2efe",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-De8qRpa2.js",
+      "status": 200,
+      "local": "a7fa45a3965c2707486120221afb20fe3967900f546209ae905108011faa64d5",
+      "remote": "a7fa45a3965c2707486120221afb20fe3967900f546209ae905108011faa64d5",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-Djb5P9Up.js",
+      "status": 200,
+      "local": "6d6115bd69562767e1a0ab671e74ed6c46d395ba2471c97106c778438bbae487",
+      "remote": "6d6115bd69562767e1a0ab671e74ed6c46d395ba2471c97106c778438bbae487",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-DPMpr3d6.js",
+      "status": 200,
+      "local": "5862c574a8752a604c2275e0ea01bec2aa7521fe157c547e2a5a8a11c253e25f",
+      "remote": "5862c574a8752a604c2275e0ea01bec2aa7521fe157c547e2a5a8a11c253e25f",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-E0zv8aCV.js",
+      "status": 200,
+      "local": "9e6b87bc1d91ae1be89fe5d56685f4614dbddc788bbcf8dfe33fe8d42b9f043a",
+      "remote": "9e6b87bc1d91ae1be89fe5d56685f4614dbddc788bbcf8dfe33fe8d42b9f043a",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-e7FnDnVH.js",
+      "status": 200,
+      "local": "3f42725d7eae3f0c621b3d44da9baab862c0b08e6229741207bd332ac5278361",
+      "remote": "3f42725d7eae3f0c621b3d44da9baab862c0b08e6229741207bd332ac5278361",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-i93uUJp-.js",
+      "status": 200,
+      "local": "b2dee20b48a001d5c074a4723c44fe666431113e5c2bea2169572c0b9625d81a",
+      "remote": "b2dee20b48a001d5c074a4723c44fe666431113e5c2bea2169572c0b9625d81a",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-MFz6-jxC.js",
+      "status": 200,
+      "local": "a55399e520d8ab382bc65e5deba7a5adfa201d179057c9ba423f44956e274f16",
+      "remote": "a55399e520d8ab382bc65e5deba7a5adfa201d179057c9ba423f44956e274f16",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-oQG3za3e.js",
+      "status": 200,
+      "local": "32157949c1fac8f323d16d7578a64296be225ae213cba57e855f5e43c7ccd164",
+      "remote": "32157949c1fac8f323d16d7578a64296be225ae213cba57e855f5e43c7ccd164",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-Pchzxpeq.js",
+      "status": 200,
+      "local": "f445bf9064c631b2bf56a2cea406478586d3c78fc6e55c1ebcdfebc15bafb619",
+      "remote": "f445bf9064c631b2bf56a2cea406478586d3c78fc6e55c1ebcdfebc15bafb619",
+      "match": true
+    },
+    {
+      "file": "assets/renderer-Y42uZoR0.js",
+      "status": 200,
+      "local": "94dbb166a5ab7831b8f5a7c4b05828a20f0cd4b6a79db2c18df0d90fb39aa425",
+      "remote": "94dbb166a5ab7831b8f5a7c4b05828a20f0cd4b6a79db2c18df0d90fb39aa425",
+      "match": true
+    },
+    {
+      "file": "assets/riftScene-D8tKM2pI.js",
+      "status": 200,
+      "local": "e042950e217974a862a6f52aa8a52ae3801d59ac2c83bcdb81580cd7bc990ade",
+      "remote": "e042950e217974a862a6f52aa8a52ae3801d59ac2c83bcdb81580cd7bc990ade",
+      "match": true
+    },
+    {
+      "file": "assets/RoundedBoxGeometry-lG43OsH-.js",
+      "status": 200,
+      "local": "00fc0c4b9e24960a7e1fad88c22e4b2be48a86980d97469d086d61ae4d347e9f",
+      "remote": "00fc0c4b9e24960a7e1fad88c22e4b2be48a86980d97469d086d61ae4d347e9f",
+      "match": true
+    },
+    {
+      "file": "assets/royal-matter-C9Uzx-S4.js",
+      "status": 200,
+      "local": "2ed866159bd53e3fd31c71ee7ede985170aaba4453d6c34e0655c40bec18ef41",
+      "remote": "2ed866159bd53e3fd31c71ee7ede985170aaba4453d6c34e0655c40bec18ef41",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-B_HCXzb_.js",
+      "status": 200,
+      "local": "95051b861586b1714fa5fc2ec90751a469e0fa6bb0ef1a40702c3dad5bd5be97",
+      "remote": "95051b861586b1714fa5fc2ec90751a469e0fa6bb0ef1a40702c3dad5bd5be97",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-B309rEL_.js",
+      "status": 200,
+      "local": "2c443fc8b6c11e433d4546d51d7f35cc3352d8b5b637bdce8296ed5f40281396",
+      "remote": "2c443fc8b6c11e433d4546d51d7f35cc3352d8b5b637bdce8296ed5f40281396",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-C1VDWlNm.js",
+      "status": 200,
+      "local": "42c738de9c730735be0157a8e84174a897e1eef89c1f26b21729a17b3bd15638",
+      "remote": "42c738de9c730735be0157a8e84174a897e1eef89c1f26b21729a17b3bd15638",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-Ch9eydv_.css",
+      "status": 200,
+      "local": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "remote": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-CLXf-ctK.js",
+      "status": 200,
+      "local": "3ebf40cbfa9ae8914ba842ed145d7933916d2198a0632baec5d6c6a6721f98ef",
+      "remote": "3ebf40cbfa9ae8914ba842ed145d7933916d2198a0632baec5d6c6a6721f98ef",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-CTL7As6V.js",
+      "status": 200,
+      "local": "646ef0fbf267b51bf2317bcf6865beead09f9e8aaf8aaa241cfe43f8846ee4e4",
+      "remote": "646ef0fbf267b51bf2317bcf6865beead09f9e8aaf8aaa241cfe43f8846ee4e4",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-CvFayqyM.js",
+      "status": 200,
+      "local": "5b694f58fb4a84012a778f8a49cfd27e5208110a3ece045d9a193781dc1fafa3",
+      "remote": "5b694f58fb4a84012a778f8a49cfd27e5208110a3ece045d9a193781dc1fafa3",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-D_IHxYSd.js",
+      "status": 200,
+      "local": "9f7d2356ce070d9b3b483913ec6fc9f462e322d03a5b63a6ea15379aadf4fd46",
+      "remote": "9f7d2356ce070d9b3b483913ec6fc9f462e322d03a5b63a6ea15379aadf4fd46",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-D8QWwxXQ.js",
+      "status": 200,
+      "local": "3cc99fc05ec3ddb927ada54cdf3778bf679ac8f55141ad187168c9b97cb68f50",
+      "remote": "3cc99fc05ec3ddb927ada54cdf3778bf679ac8f55141ad187168c9b97cb68f50",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-DAWnQzAg.js",
+      "status": 200,
+      "local": "b314c5bb55d2a6894ada951f0203243ab77a19bb621b9b269d6cd098d0a046b1",
+      "remote": "b314c5bb55d2a6894ada951f0203243ab77a19bb621b9b269d6cd098d0a046b1",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-DBD2GrD_.js",
+      "status": 200,
+      "local": "6e0add4f8e12eb2a1c0ee34099ef30fd64543b7dfa112ca6c3e0413c633c205d",
+      "remote": "6e0add4f8e12eb2a1c0ee34099ef30fd64543b7dfa112ca6c3e0413c633c205d",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-DCUhf47u.js",
+      "status": 200,
+      "local": "a75601c60e251b9da0a21cee6d6bd19126dcc46ac225079236e417cb8ea83caa",
+      "remote": "a75601c60e251b9da0a21cee6d6bd19126dcc46ac225079236e417cb8ea83caa",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-DfCNNlww.js",
+      "status": 200,
+      "local": "7fa51e8096a4f59e68d98443722139fd22988822595e9b5dd6fc31707675f413",
+      "remote": "7fa51e8096a4f59e68d98443722139fd22988822595e9b5dd6fc31707675f413",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-Dhp8G-nc.js",
+      "status": 200,
+      "local": "2527daf4adf6b4acc8ef956e891d77b80e77acfe153fdb215c768787c76a7b28",
+      "remote": "2527daf4adf6b4acc8ef956e891d77b80e77acfe153fdb215c768787c76a7b28",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-DzIBPkWM.js",
+      "status": 200,
+      "local": "a9b78b817f71e5103058e174f960fbb606a402f203b9e5763b4cfe56a9f826c4",
+      "remote": "a9b78b817f71e5103058e174f960fbb606a402f203b9e5763b4cfe56a9f826c4",
+      "match": true
+    },
+    {
+      "file": "assets/runtime-zN6R4Iga.js",
+      "status": 200,
+      "local": "2b2de76967e22ce28c318561b756dc1cb974b5a0ae32cf1abb3792e0df23aa3d",
+      "remote": "2b2de76967e22ce28c318561b756dc1cb974b5a0ae32cf1abb3792e0df23aa3d",
+      "match": true
+    },
+    {
+      "file": "assets/scene-_gJbUttx.js",
+      "status": 200,
+      "local": "2bd1ee93cd3a68df2b3c7a251ce4565c5a63293a39919c9e3e0d189186b1aab5",
+      "remote": "2bd1ee93cd3a68df2b3c7a251ce4565c5a63293a39919c9e3e0d189186b1aab5",
+      "match": true
+    },
+    {
+      "file": "assets/scene-Btg0b22X.js",
+      "status": 200,
+      "local": "14088628f64bd564c7b7668a0002069d15fe6570e47ae07f149dda327f265c80",
+      "remote": "14088628f64bd564c7b7668a0002069d15fe6570e47ae07f149dda327f265c80",
+      "match": true
+    },
+    {
+      "file": "assets/scene-BvHHDhXX.js",
+      "status": 200,
+      "local": "28f51ee7379e8b891dc0952a5389c687f5f91c90acedc3d4e18934e40b66e2bc",
+      "remote": "28f51ee7379e8b891dc0952a5389c687f5f91c90acedc3d4e18934e40b66e2bc",
+      "match": true
+    },
+    {
+      "file": "assets/scene-BvQFYvwU.js",
+      "status": 200,
+      "local": "101187714c2cfe891816aa304de3a3833822026ffa9a31c517fff7f9a18cdb5e",
+      "remote": "101187714c2cfe891816aa304de3a3833822026ffa9a31c517fff7f9a18cdb5e",
+      "match": true
+    },
+    {
+      "file": "assets/selection-BZuIRH5R.js",
+      "status": 200,
+      "local": "dfe2619dd833c70a02edea2dc8fb5fc485caf369085440f353c733532824aacd",
+      "remote": "dfe2619dd833c70a02edea2dc8fb5fc485caf369085440f353c733532824aacd",
+      "match": true
+    },
+    {
+      "file": "assets/shieldTitanRuntime-Bnqxk_ra.js",
+      "status": 200,
+      "local": "fc88670c81ae5b83b214c24336e5a615fd771996e4b57c489b15a6b6b30e8fd6",
+      "remote": "fc88670c81ae5b83b214c24336e5a615fd771996e4b57c489b15a6b6b30e8fd6",
+      "match": true
+    },
+    {
+      "file": "assets/sleeve-DEQ-yI6y.js",
+      "status": 200,
+      "local": "860bed94e191d6226abb1780ffb6102f0da9b50c2175670a0ae2a8d175415922",
+      "remote": "860bed94e191d6226abb1780ffb6102f0da9b50c2175670a0ae2a8d175415922",
+      "match": true
+    },
+    {
+      "file": "assets/snapshot-CWtq53Qh.js",
+      "status": 200,
+      "local": "31415f468e3664f872303fcde344e34f635587176cc19a258c7fd139d0e34529",
+      "remote": "31415f468e3664f872303fcde344e34f635587176cc19a258c7fd139d0e34529",
+      "match": true
+    },
+    {
+      "file": "assets/social-BrOZO_GF.css",
+      "status": 200,
+      "local": "59d5d6cd905447fd6541fa1bef030c47dd8b4d4e9685d2a59aa5d284375ea673",
+      "remote": "59d5d6cd905447fd6541fa1bef030c47dd8b4d4e9685d2a59aa5d284375ea673",
+      "match": true
+    },
+    {
+      "file": "assets/social-org3DEJC.js",
+      "status": 200,
+      "local": "a7798cdddda85fe67b11a3d9e0220253d6fa7f734218c60a18a7ad53781b2ed4",
+      "remote": "a7798cdddda85fe67b11a3d9e0220253d6fa7f734218c60a18a7ad53781b2ed4",
+      "match": true
+    },
+    {
+      "file": "assets/sound-CAnzqXMH.js",
+      "status": 200,
+      "local": "abfab762b9ed625120c6c8b85524eb4cd29b8fcb2767592665691dcbe2e3a0e1",
+      "remote": "abfab762b9ed625120c6c8b85524eb4cd29b8fcb2767592665691dcbe2e3a0e1",
+      "match": true
+    },
+    {
+      "file": "assets/spacetime-DXrfQuy8.js",
+      "status": 200,
+      "local": "16b2e7ad9569e1d79e21788e8b3391f9d4ff4d08e0bd633cf77c4dacac378ad7",
+      "remote": "16b2e7ad9569e1d79e21788e8b3391f9d4ff4d08e0bd633cf77c4dacac378ad7",
+      "match": true
+    },
+    {
+      "file": "assets/stage-C2LWcKXU.js",
+      "status": 200,
+      "local": "ff8d9b9da8f0e0e0dae52c6c6e50e1cab584b84f25e3365b1b165ec86f694baf",
+      "remote": "ff8d9b9da8f0e0e0dae52c6c6e50e1cab584b84f25e3365b1b165ec86f694baf",
+      "match": true
+    },
+    {
+      "file": "assets/studio-CmgKc6nL.css",
+      "status": 200,
+      "local": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "remote": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "match": true
+    },
+    {
+      "file": "assets/style-BmSCny8F.css",
+      "status": 200,
+      "local": "4ae8815bad476a60b375bf79b787616c2c3a4119580433ab696fbcbed41ec7e6",
+      "remote": "4ae8815bad476a60b375bf79b787616c2c3a4119580433ab696fbcbed41ec7e6",
+      "match": true
+    },
+    {
+      "file": "assets/UnrealBloomPass-DfDwSNkf.js",
+      "status": 200,
+      "local": "628f5a13cdb31878effe6184a163888995ddbd629a3dd7f119354b170a560053",
+      "remote": "628f5a13cdb31878effe6184a163888995ddbd629a3dd7f119354b170a560053",
+      "match": true
+    },
+    {
+      "file": "assets/visual-Cb8Fpip9.js",
+      "status": 200,
+      "local": "6093be2c47c5bbf51723a224e95e78117b263b244f187d91eea492db73e46ecc",
+      "remote": "6093be2c47c5bbf51723a224e95e78117b263b244f187d91eea492db73e46ecc",
+      "match": true
+    },
+    {
+      "file": "assets/visual-DsLCxd2Q.js",
+      "status": 200,
+      "local": "06d2ea64db9e1aa1401ba4ecb8316d37de98fabf179e3bb83cb1d22dbb1484a5",
+      "remote": "06d2ea64db9e1aa1401ba4ecb8316d37de98fabf179e3bb83cb1d22dbb1484a5",
+      "match": true
+    },
+    {
+      "file": "cardtest.html",
+      "status": 200,
+      "local": "16d2dc9c2574099c50887859f0786436b6ccddd5e64b14d881b1c7e87f416d93",
+      "remote": "16d2dc9c2574099c50887859f0786436b6ccddd5e64b14d881b1c7e87f416d93",
+      "match": true
+    },
+    {
+      "file": "cosmetic-studio.html",
+      "status": 200,
+      "local": "59cdaa30c8a1d92d3c0e93aeba2776737ebf5d9f376550af8751761972a56cd0",
+      "remote": "59cdaa30c8a1d92d3c0e93aeba2776737ebf5d9f376550af8751761972a56cd0",
+      "match": true
+    },
+    {
+      "file": "fonts/web/sources.json",
+      "status": 200,
+      "local": "e7022ef775a8e7a0e9ebf65c4367e4da8e30439c5d81b4c8c7604cd341dba240",
+      "remote": "e7022ef775a8e7a0e9ebf65c4367e4da8e30439c5d81b4c8c7604cd341dba240",
+      "match": true
+    },
+    {
+      "file": "gacha-minimal-three.html",
+      "status": 200,
+      "local": "d99d24773abd521e15ab53ea304b0a303d7eeb20ffcdd3756c422afd268b2335",
+      "remote": "d99d24773abd521e15ab53ea304b0a303d7eeb20ffcdd3756c422afd268b2335",
+      "match": true
+    },
+    {
+      "file": "index.html",
+      "status": 200,
+      "local": "8d2a95cb17a36434add3eb82d5ab29e36c7da89b59079143f51d0dac7ee056fe",
+      "remote": "8d2a95cb17a36434add3eb82d5ab29e36c7da89b59079143f51d0dac7ee056fe",
+      "match": true
+    },
+    {
+      "file": "menu-cache-sw.js",
+      "status": 200,
+      "local": "f125cf2e5716ae63361bee940022ef268064bd12c8b725a596216ba3a7e30806",
+      "remote": "f125cf2e5716ae63361bee940022ef268064bd12c8b725a596216ba3a7e30806",
+      "match": true
+    },
+    {
+      "file": "models/cosmetics/deck_holder_biblion_ivory/v1/asset.json",
+      "status": 200,
+      "local": "33cf56aab2211a219de11355517279cb9807b16ae6102dc7f2fe7cf2f064acde",
+      "remote": "33cf56aab2211a219de11355517279cb9807b16ae6102dc7f2fe7cf2f064acde",
+      "match": true
+    },
+    {
+      "file": "models/lore-table/manifest.json",
+      "status": 200,
+      "local": "0644fa4d95969b01d99caf492ae38fb47bae74c0d95435d4f9ce7887b7097ee3",
+      "remote": "0644fa4d95969b01d99caf492ae38fb47bae74c0d95435d4f9ce7887b7097ee3",
+      "match": true
+    },
+    {
+      "file": "models/reading-board/v1/board-export-report.json",
+      "status": 200,
+      "local": "f496be6f23d0ee0b2266a047d5f56a480b44d77803cb4a9902811bb59cd5cc58",
+      "remote": "f496be6f23d0ee0b2266a047d5f56a480b44d77803cb4a9902811bb59cd5cc58",
+      "match": true
+    },
+    {
+      "file": "models/reading-board/v1/crystal-optics.json",
+      "status": 200,
+      "local": "5cb8f587a931e6bc045c93a1c215c9adf656678cb3b2637194e3fd8c53fabeab",
+      "remote": "5cb8f587a931e6bc045c93a1c215c9adf656678cb3b2637194e3fd8c53fabeab",
+      "match": true
+    },
+    {
+      "file": "rift-concepts.html",
+      "status": 200,
+      "local": "a18afdf4980837166ceb063df4021433f67ca8804b221f804e7d6ba46b865af9",
+      "remote": "a18afdf4980837166ceb063df4021433f67ca8804b221f804e7d6ba46b865af9",
+      "match": true
+    },
+    {
+      "file": "rift-purple-concepts.html",
+      "status": 200,
+      "local": "43aab52e2df986343cc96426738472a0dba1480492288175ec72bc8b4cb493d7",
+      "remote": "43aab52e2df986343cc96426738472a0dba1480492288175ec72bc8b4cb493d7",
+      "match": true
+    },
+    {
+      "file": "sfx/lore-v2/manifest.json",
+      "status": 200,
+      "local": "5bf5c435a952a98d80e33e7d606362877c208c53bcdc64e9bae2d5d7577ebd0e",
+      "remote": "5bf5c435a952a98d80e33e7d606362877c208c53bcdc64e9bae2d5d7577ebd0e",
+      "match": true
+    },
+    {
+      "file": "sfx/lore-v3/manifest.json",
+      "status": 200,
+      "local": "84215cc25bc2c367edb0d729df734e7a74f28a2ce79c2644aeb0852254a6f2d9",
+      "remote": "84215cc25bc2c367edb0d729df734e7a74f28a2ce79c2644aeb0852254a6f2d9",
+      "match": true
+    },
+    {
+      "file": "sfx/lore-v4/manifest.json",
+      "status": 200,
+      "local": "ba0b459b8440642e7c481b7b2877c43e7e4f749c0084eeea16f16e8fe1765557",
+      "remote": "ba0b459b8440642e7c481b7b2877c43e7e4f749c0084eeea16f16e8fe1765557",
+      "match": true
+    },
+    {
+      "file": "sfx/lore-v5/manifest.json",
+      "status": 200,
+      "local": "f7108c87aa90e9fad65c4c2e522a5431773b1ce090dd9e382626ead0a4f16e0f",
+      "remote": "f7108c87aa90e9fad65c4c2e522a5431773b1ce090dd9e382626ead0a4f16e0f",
+      "match": true
+    },
+    {
+      "file": "sfx/lore-v6/manifest.json",
+      "status": 200,
+      "local": "185c5ff91ca81e5ba6d4555b09a1911cc90ea18b5fb3dd30a642e6401861e176",
+      "remote": "185c5ff91ca81e5ba6d4555b09a1911cc90ea18b5fb3dd30a642e6401861e176",
+      "match": true
+    },
+    {
+      "file": "sfx/lore-v7/manifest.json",
+      "status": 200,
+      "local": "297ac093b1a94be35e474c6b093261148c04fe6ccfc5969581e97907f2289cc1",
+      "remote": "297ac093b1a94be35e474c6b093261148c04fe6ccfc5969581e97907f2289cc1",
+      "match": true
+    },
+    {
+      "file": "sfx/lore-v8/manifest.json",
+      "status": 200,
+      "local": "a5b991b706e4abdb8026eb6510c5ee54cd976611852fcf9a73a9064f34c397d1",
+      "remote": "a5b991b706e4abdb8026eb6510c5ee54cd976611852fcf9a73a9064f34c397d1",
+      "match": true
+    },
+    {
+      "file": "sfx/opening-v1/manifest.json",
+      "status": 200,
+      "local": "20c5c52de30408ad87fcd1c0b7c1300641f47237d8e3e9b90c6dc5012f7b679a",
+      "remote": "20c5c52de30408ad87fcd1c0b7c1300641f47237d8e3e9b90c6dc5012f7b679a",
+      "match": true
+    },
+    {
+      "file": "shield-titan-runtime.html",
+      "status": 200,
+      "local": "d336e3dd1d0daac85f6d96d96cfd44351e3eec19a0052b091c199e0e9295f1e1",
+      "remote": "d336e3dd1d0daac85f6d96d96cfd44351e3eec19a0052b091c199e0e9295f1e1",
+      "match": true
+    },
+    {
+      "file": "vfx/purchase-air/manifest.json",
+      "status": 200,
+      "local": "5767f5e7de5b2ba6d7f0d4f3235c1f91375b3eb025d2d43bf2cae328f32a641b",
+      "remote": "5767f5e7de5b2ba6d7f0d4f3235c1f91375b3eb025d2d43bf2cae328f32a641b",
+      "match": true
+    }
+  ]
+}
