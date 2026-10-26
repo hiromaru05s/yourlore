@@ -1,0 +1,13 @@
+{
+  "origin": "http://127.0.0.1:57482",
+  "sourceCommit": "659eb6b7 + Cull support changes",
+  "worktree": "/Users/hiromaru05s/.codex/worktrees/cull-card-rework/LORE_TCG",
+  "checks": [
+    "Scrapper exact two materials on 1280px and 390px",
+    "Cost-zero Cull excluded from material picker",
+    "One atomic cast pays 2 mana and gains 1 max mana",
+    "Focus accepts only one target",
+    "No JavaScript errors"
+  ],
+  "errors": []
+}

@@ -1,0 +1,24 @@
+PASS catalog purchase/cast costs and balance version
+PASS Furnace on either side caps both players after multipliers (0)
+PASS Furnace on either side caps both players after multipliers (1)
+PASS Furnace preserves existing Shield and blocked gains do not trigger Priest
+PASS Furnace leaving lifts the cap; old automatic graveyard purge is gone
+PASS Scrapper excludes self, zero-cost, wrong zones and Relic before payment (0)
+PASS Scrapper excludes self, zero-cost, wrong zones and Relic before payment (1)
+PASS Scrapper preselection requires exactly two distinct eligible hand cards
+PASS Scrapper legacy picks reject invalid/cancel and gain mana only on second card; BOT resolves mandatory choice
+PASS Scrapper timeout resolves both materials and completes the turn
+PASS Scrapper copied spell cannot create an empty mandatory picker or free mana
+PASS Great Purge includes hand and every own field zone, excludes enemy and Relic
+PASS Great Purge may cast with only hand/field and empty deck/graveyard
+PASS Focus has one target at review and reducer; second pick cannot exile
+PASS Cull Flood adds four Culls with no purge choice
+PASS Trial costs 5 HP once and only adds one Cull each owner start
+PASS Refresh heals only when actual drawn card is a spell: S4
+PASS Refresh heals only when actual drawn card is a spell: FURNACE
+PASS Refresh heals only when actual drawn card is a spell: M1
+PASS Refresh heals only when actual drawn card is a spell: STARTER_TRASH
+PASS Refresh heals only when actual drawn card is a spell: STARTER_CHEST
+PASS Refresh heals only when actual drawn card is a spell: Q_RIFT
+PASS Refresh handles reshuffle and recovery modifiers
+PASS 23 Cull support scenario groups

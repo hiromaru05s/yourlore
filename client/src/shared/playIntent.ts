@@ -24,8 +24,9 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
   switch (c.id) {
     // These IDs override their legacy act with automatic target rules.
     case 'WALLBREAK1': case 'SNIPE1': return null;
-    case 'FOCUS': return plan('purge',[...p.deck,...p.discard,c,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),3,0);
-    case 'PURGE_ALL': return plan('purge',[...p.deck,...p.discard,c].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),99,0);
+    case 'FOCUS': return plan('purge',[...p.deck,...p.discard,c,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),1,0);
+    case 'PURGE_ALL': return plan('purge',[...p.deck,...p.discard,...p.hand,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),99,0);
+    case 'SCRAPPER': return plan('scrapper',p.hand.filter(h=>h.uid!==c.uid && h.cost===1 && !hasPassive(h,'relic')),2,2);
     case 'SELECTED_SWORD': return plan(c.id, p.field);
     case 'TRUMPET': return plan('buffTurn', p.field, 3, 0);
     case 'AEM': return plan('golemBuff', p.field.filter(isGolem), 2, 2);
@@ -59,7 +60,7 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
 /** Choices following draws, random results, summons or quest completion stay after
  * resolution. Review these casts first; cancelling that later choice is not a refund. */
 export const FOLLOWUP_CASTS = new Set([
-  'DECAY_CRAFT', 'REFRESH_HAND', 'FOCUS', 'CULL_FLOOD', 'PURGE_ALL',
+  'DECAY_CRAFT',
   'LAND_GRANT', 'DARK_MERCHANT', 'GS8_0', 'CREATION',
 ]);
 
@@ -79,7 +80,7 @@ export function needsCastReview(g: GameState, owner: Side, c: CardInst): boolean
   if(c.onSummon==='selfBurn')return true;
   if(c.act==='cullShield' && !(g.players[owner].removed??[]).some(c=>c.star==='trash'))return true;
   if (c.t !== 'spell') return false;
-  return ['trialArea','lawless','weakenAll','demonWorld'].includes(c.ench ?? '')
+  return ['trialArea','furnace','lawless','weakenAll','demonWorld'].includes(c.ench ?? '')
     || ['blackReverse','brandMagic','hexCurseOnSpell','hexBoss'].some(fx =>
       g.players.some(p => p.field.some(m => m.aura === fx) || p.enchants.some(e => e.card.ench === fx)));
 }
