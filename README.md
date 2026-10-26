@@ -1,125 +1,150 @@
 # LORE — デッキビルド × TCG
 
-スパゲティだった単一HTMLを、**サーバー連携前提のモジュール構成**に作り直しました。フロント（Vite + TypeScript）と、Cloudflare上の権威サーバー（Workers + Durable Objects + D1）に分離し、**ゲームロジックは両者で完全共有**しています。
+対戦中にマーケットからカードを購入し、デッキを育てるブラウザカードゲームです。フロントエンドはVite + TypeScript + Three.js、サーバーはCloudflare Workers + Durable Objects + D1で構成しています。
 
----
+- 本番: [yourlore.xyz](https://yourlore.xyz)
+- ステージング: [test.yourlore.xyz](https://test.yourlore.xyz)
+- 対応言語: 日本語・韓国語・英語
 
-## 何が変わったか
+## 主な機能
 
-旧 `reliquary-prototype.html`（1ファイル1595行・ロジック/UI/Bot/アニメ/カードDB/画像が全部混在）→ 関心ごとに分離：
+- 通常・ランク・フレンド対戦、難易度別BOT対戦、チュートリアル
+- スターターカードの収集、5つのデッキプリセット、マーケットのウォッチリスト
+- ランキング、プロフィール、フレンド、メダル
+- 経験値・デイリークエスト・報酬、ショップ・ガチャ、スリーブ・家具・カード表面エフェクトの装備
+- メールアドレスとパスワードによる認証、Googleログイン、メール認証・パスワード再設定
 
-```
+## ゲームの基本
+
+- 初期デッキは自由枠8枚と固定の「アチューン」1枚。対戦中にカードを購入して構築を進めます。
+- 先攻は体力40、後攻は体力45で開始します。最大マナの範囲は3〜30です。
+- 毎ターン3枚ドローし、手札はターン終了時に7枚まで持ち越せます。超過分は選択して捨て、時間切れでは右側から破棄されます。
+- 固定マーケットは各枠の在庫が3枚。売り切れると、現在の固定マーケットにないコスト1〜6のカードへ入れ替わります。
+- 提示マーケットは両者共用の3枠。購入した枠はそのターン中は空欄になり、次のターン開始時に空き枠だけ補充されます。
+- 相手の手札・山札のカード名は非公開です。公開されたカードは、その対戦のデッキ構成表示に記録されます。
+- 罠カードとトラップマスターは廃止済みです。経緯は[罠廃止の作業記録](docs/card-rework/2026-09-09-trap-removal/README.md)を参照してください。
+
+個別の効果や例外はゲーム内の「遊び方」とカード説明を参照してください。ルール処理は[engine.ts](client/src/shared/engine.ts)、カード定義と調整の適用は[cards.ts](client/src/shared/cards.ts)が起点です。
+
+## 構成
+
+```text
 LORE_TCG/
-├─ client/                      # フロント（Cloudflare Pages にデプロイ）
-│  ├─ index.html
+├─ client/
+│  ├─ public/                 # カードアート・音声・フォントなど
 │  └─ src/
-│     ├─ shared/                # ★サーバーと共有するゲームコア（DOM非依存・決定論的）
-│     │  ├─ types.ts            #   状態・アクション・イベントの型
-│     │  ├─ cards.ts            #   全カードDB（単一の真実）
-│     │  ├─ engine.ts           #   reduce(state, action) → {state, events}（純粋関数）
-│     │  ├─ bot.ts              #   Bot AI（botDecide(state) → Action）
-│     │  └─ protocol.ts         #   通信メッセージ型 + redactFor（秘匿情報の隠蔽）
-│     ├─ ui/                    # 描画・アニメ・モーダル・ログ（状態は触らない）
-│     ├─ game/                  # controller（engine↔UI↔Bot/通信の仲介）
-│     ├─ net/                   # api（認証）/ socket（WebSocket）
-│     ├─ screens/               # login / home / lobby / game
-│     ├─ styles/                # tokens / base / card / game / screens
-│     ├─ router.ts              # 画面遷移 + セッション
-│     └─ main.ts
-├─ server/                      # 権威サーバー（Cloudflare Workers）
-│  ├─ wrangler.toml
-│  ├─ schema.sql                # D1: users / sessions / matches
-│  └─ src/
-│     ├─ index.ts               # ルーティング（/api/* と /ws/*）
-│     ├─ auth.ts                # Email+パスワード認証（PBKDF2 + セッションCookie）
-│     ├─ matchmaker.ts          # Matchmaker Durable Object（マッチング待機列）
-│     └─ gameRoom.ts            # GameRoom Durable Object（権威ゲーム・共有engineを実行）
-└─ legacy/                      # 旧プロトタイプと仕様書（参照用に保管）
+│     ├─ shared/              # サーバーと共有するルール・カード・BOT・通信型
+│     ├─ game/                # ゲーム進行とUI・通信の仲介
+│     ├─ net/                 # API・WebSocket・対戦再接続
+│     ├─ screens/             # HOME・デッキ・カード・対戦・ショップなど
+│     ├─ ui/                  # 盤面・3D描画・アニメーション・共通UI
+│     ├─ styles/              # スタイル・共通トークン
+│     └─ dev/                 # ローカル開発・比較試作
+├─ server/
+│  ├─ src/
+│  │  ├─ production.ts        # 本番用エントリーポイント・DOクラスの公開
+│  │  ├─ index.ts             # API・WebSocket・静的アセットのルーティング
+│  │  ├─ auth.ts / oauth.ts   # セッション認証・Google OAuth
+│  │  ├─ matchmaker.ts        # マッチング用Durable Object
+│  │  └─ gameRoom.ts          # 対戦用Durable Object・権威ゲーム進行
+│  ├─ schema.sql             # 新規DB用スキーマ
+│  ├─ migrations/            # 既存DBへの変更SQL
+│  └─ wrangler.toml          # 本番・ステージングの設定
+├─ scripts/                  # ビルド・配信ガード・アート処理・検証
+├─ tests/                    # ルール・サーバー・UIの検証とブラウザ検証
+├─ docs/                     # 世界観・デザイン方針・調査・リリース記録
+└─ ml/                       # BOT学習・評価
 ```
 
-設計の要点は **`shared/engine.ts` が純粋・決定論的（seedベースPRNG）** であること。同じコードをクライアント（Bot戦をローカル実行）とサーバー（オンライン戦を権威実行）の両方が使うため、**ロジックの二重実装が発生しません**。カードの隠匿情報（相手の手札・山札・伏せ罠）は `redactFor` でサーバー側が削ってから配信するので、クライアントに覗かれません＝ブラフ（読み合い）が成立します。
+ゲームコアは`client/src/shared/`をサーバーからも参照します。オンライン戦とログイン済みのBOT戦はサーバー側で進行し、ローカルゲストのBOT戦はクライアントで実行します。[protocol.ts](client/src/shared/protocol.ts)の`redactFor`が、配信する状態から相手の手札・山札の内容や乱数状態などを隠します。
 
-実装した要望：
+フロントのビルド成果物`client/dist`はWorkers Static Assetsから配信します。フロント・`/api`・`/ws`は同一オリジンで動作し、Pagesへの別デプロイは不要です。
 
-- **HOME画面 + ログイン**（Emailのみで登録 / パスワード設定可）— `screens/login.ts`, `server/src/auth.ts`
-- **ログイン後HOME → ランダムオンライン対戦 / BOT対戦** — `screens/home.ts`, `lobby.ts`
-- **リッチなデザイン**（参照画像準拠）+ **全カードサイズの一貫化** — `styles/tokens.css` の `--card-w/--card-h` を全ゾーン（モンスター/魔法罠/マーケット/手札/デッキ/捨て札）が共有
-- **ログUI下部にサレンダーボタン**（押すと「정말 기권하시겠습니까? YES/NO」ポップアップ）— `boardView.ts` の `#surrenderBtn` → `confirmDialog`
+## ローカル開発
 
-> 検証：Bot対Botの自動対戦200試合を実行し、全試合が例外・無限ループなく勝者決定まで完走（平均27ターン、先攻 107勝 / 後攻 93勝）。
-
----
-
-## ゲームルール
-
-- 罠カード全32種類を削除し、指定の関連カード7枚を削除・10枚をリワーク、トラップマスターを廃止しました（v44）。削除一覧・影響カード・並行デザイン作業とのマージ手順は [罠廃止の作業記録](docs/card-rework/2026-09-09-trap-removal/README.md) を参照してください。
-- 最大マナは30が上限です。カード効果・種族シナジー・オーラで最大マナが増える場合も、実効値と表示は30を超えません。
-- 最大マナは3が下限です（v40）。魔族・経済危機・カジノなどどの効果でも、実効値と表示は3を下回りません。
-- 先攻は体力40、後攻は体力45で開始します（v40）。
-- 毎ターン3枚ドローします。手札はターン終了時に捨てられず持ち越されますが、持ち越せるのは5枚までです。6枚以上残る場合は捨てるカードを選択し（この選択にはターンの残り時間に加えて10秒が与えられます）、間に合わなければ右にあるカードから順に破棄されます（v42）。
-- カウンターの名称は「カウンター」に統一されています（腐敗・気合・城・マーケット等の個別名称は廃止、v42）。**烙印カウンターだけは別概念**で、カウンターの仕組み（カウンターを参照・除去する効果）には含まれず、カード上でも常に「烙印カウンター」と明記されます。
-- 提示マーケットは両者共用の3枠。購入した枠はそのターン中は空欄となり、次のターン開始時に空き枠だけ補充する。未購入のカードは維持し、明示的な更新は共用の提示カードを入れ替える。
-- 固定マーケットの各スロットには在庫3があり、売り切れたスロットは現在のマーケットにない新しいランダムカード（コスト1〜6）に入れ替わり、在庫3で再入荷します（v40）。
-- 「アチューン」はパッシブ「神器」を持ち、いかなる効果でもゲームから除外されません（除外の代わりに墓地へ戻ります）（v40）。
-- 相手の手札・山札のカード名は非公開です。相手のカードは、プレイされた、墓地に置かれた、または場に公開された時点でDECK構成に公開され、そのゲーム中は手札・山札へ戻っても公開状態が維持されます。
-- `시공간 조작` のターンスキップは成功回数ぶん蓄積します。2回成功した場合、相手の次のターンを2回スキップします。
-
----
-
-## 技術スタックの推奨（ご質問への回答）
-
-以前の **Clerk + Convex + Cloudflare Pages** から、**Cloudflare一本化**に寄せるのを推奨します。
-
-| 役割 | 旧 | 新（推奨） | 理由 |
-|---|---|---|---|
-| ホスティング | CF Pages | **CF Pages** | 据え置き。無料・高速 |
-| 認証 | Clerk | **自前（D1 + PBKDF2 + Cookie）** or Better Auth | 「Emailのみ」要件はごく薄い実装で足り、外部依存と無料枠の制約が消える |
-| DB | Convex | **Cloudflare D1**（SQLite） | users/戦績の保存に十分。同一プラットフォーム |
-| リアルタイム対戦 | Convex | **Durable Objects + WebSocket** | ★ここが最大の理由 |
-
-**Durable Objects が決定打**です。カードゲームは「隠匿情報あり・1部屋に状態を集約・不正対策に権威サーバーが必須」という要件で、DO はまさにそれ用の部品（1ルーム = 1オブジェクト = 単一の状態 + WebSocket）。Convex のリアクティブDBでも作れますが、権威ロジックを別途持つ必要があり構成が増えます。DOなら **共有engineをそのままサーバーで走らせる**だけで、ロジックが1本化します。
-
-すべて Cloudflare 無料枠（Pages 無制限・Workers 10万req/日・DO・D1）に収まり、プロバイダが1社になるぶん運用も単純です。認証だけは外部の **Better Auth**（Cloudflare対応・無料・OSS）に差し替える選択肢も残しています（現状は外部依存ゼロの自前実装）。
-
----
-
-## ローカル実行
+Node.js **22.12.0以上**とnpmを使用します。以下はリポジトリのルートで実行してください。
 
 ```bash
-# 1) フロント
-cd client && npm install && npm run dev          # http://localhost:5173
-
-# 2) サーバー（別ターミナル）— オンライン対戦/認証を使う場合
-cd server && npm install
-npx wrangler d1 create lore-db                    # 出力の database_id を wrangler.toml に貼る
-npm run db:init                                   # ローカルD1にスキーマ適用
-npx wrangler secret put AUTH_SECRET               # 任意のランダム文字列
-npm run dev                                       # http://127.0.0.1:8787（Viteが /api と /ws をプロキシ）
+npm ci
+npm run dev
 ```
 
-BOT対戦は**サーバー不要**（フロントだけで完結）。オンライン対戦・ログイン保存にはサーバーを起動してください。
+[localhost:5173](http://localhost:5173)を開き、ログイン画面の「게스트로 입장」からローカルゲストで入れます。サーバーなしでBOT戦やUIを確認できます。ゲストボタンは`localhost`・`127.0.0.1`・`::1`に限定され、ゲストの設定はブラウザのローカルストレージに保存されます。
 
-## 無料デプロイ（Cloudflare）
+### ログイン・オンライン対戦も確認する場合
+
+初回は静的アセットをビルドし、ローカルD1を初期化します。
 
 ```bash
-# サーバー（Workers + DO + D1）
-cd server
-npx wrangler d1 create lore-db                    # database_id を wrangler.toml に反映
-npm run db:init:remote                            # 本番D1にスキーマ
-npx wrangler secret put AUTH_SECRET
-npm run deploy                                    # Durable Objects 込みでデプロイ
-
-# フロント（Pages）
-cd ../client && npm run build
-npx wrangler pages deploy dist --project-name lore-tcg
+npm run build
+npm --workspace server run db:init
 ```
 
-**本番の注意（Cookie）**：ログインCookieをWebSocketにも効かせるため、フロントとAPIを**同一ドメイン**に揃えてください（Pagesのカスタムドメイン配下にWorkerをルーティング、または Pages Functions 経由でWorkerへ）。ローカルではViteのプロキシで同一オリジンになるため、そのまま動きます。`server/src/auth.ts` の `APP_ORIGIN` は本番フロントのオリジンに設定します。
+別ターミナルでサーバーを起動します。フロントの`npm run dev`も起動しておきます。
 
----
+```bash
+npm run server:dev
+```
 
-## 既知のTODO（プレイテスト後）
+Viteが`/api`と`/ws`を`127.0.0.1:8787`へプロキシします。ローカル確認のためにリモートD1を新規作成する必要はありません。既存ローカルDBの更新には、適用状況に応じた`server/migrations/`のSQLを使います。`schema.sql`の再実行だけでは既存テーブルの列追加は行われません。
 
-- 数値バランス（先攻有利・スノーボール・Warlord/Void Reaver/Mirror Thorn）
-- カード中央の絵（現状は◆プレースホルダ）
-- タッチ操作（右クリック拡大 → 長押し）
+### 認証・外部サービスの設定
+
+ローカルの秘密情報はGit管理対象外の`server/.dev.vars`に置きます。設定名は[env.ts](server/src/env.ts)、公開設定は[wrangler.toml](server/wrangler.toml)を参照してください。
+
+| 設定名 | 用途 |
+| --- | --- |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google OAuth。利用するオリジンの`/api/auth/google/callback`をGoogle側に登録 |
+| `RESEND_API_KEY` | Resendによるメール認証・パスワード再設定メールの送信 |
+| `APP_ORIGIN` | APIのCORS設定 |
+| `ADMIN_EMAILS` | 管理画面へのアクセスを許可するメールアドレス |
+
+`RESEND_API_KEY`未設定時は登録時のメール認証を省略し、メールを送信しません。Google OAuthやメールの疎通確認には、それぞれの外部サービス設定が必要です。
+
+## 検証コマンド
+
+リポジトリのルートで実行します。
+
+| コマンド | 内容 |
+| --- | --- |
+| `npm run typecheck` | クライアント・サーバー両方の型検査 |
+| `npm run build` | デザインガード・クライアント型検査・Viteビルド |
+| `npm run test:production` | `tests/production-suite.json`の`current`に登録された検証を実行 |
+| `npm run text:check` | カードテキストの整合性検査 |
+| `npm run art:check` | カードアートの検査 |
+| `npm run art:thumbs` | カード画像のサムネイル生成 |
+
+`test:production`はローカルで検証スクリプトを実行するコマンドです。`*-browser.mjs`のブラウザ検証は別途実行し、Chrome・Playwrightなど各スクリプトの実行環境を用意します。実アカウントでの対戦、端末上の描画性能、演出の見た目は、それぞれ確認結果を記録してください。
+
+## デプロイ
+
+[deploy-guard.mjs](scripts/deploy-guard.mjs)を通して、フロントとサーバーを同じコミットから配信します。Cloudflareへの認証・対象環境のバインディング・秘密情報が設定済みであることが前提です。
+
+1. 変更をコミットし、GitHubの`main`へ反映します。
+2. 最新の`gh/main`と同じHEADで、追跡ファイルに未コミット変更のないチェックアウトを用意します。ローカル`main`のコミットもすべて含まれている必要があります。
+3. 対象環境のコマンドをリポジトリのルートで実行します。
+
+```bash
+# ステージング: test.yourlore.xyz
+npm run deploy:staging
+
+# 本番: yourlore.xyz（本番リリース時に実行）
+npm run deploy
+```
+
+ガードは環境ごとの共有ロックを取得し、`gh/main`・配信中のソースとバージョンを確認します。コミット済みスナップショットで`npm ci`・型検査・検証スイート・ビルドを実行し、配信直前に再確認してからデプロイします。直接の`wrangler deploy`やPagesへの配信でガードを迂回しないでください。
+
+本番とステージングはWorker・Durable Objects・D1を分離しています。DBの変更は対象環境と適用済みSQLを確認して別途適用し、秘密情報も環境ごとに設定します。デプロイコマンドはDBスキーマを更新しません。設定の起点は[server/wrangler.toml](server/wrangler.toml)です。
+
+## 開発時に読むドキュメント
+
+- [AGENTS.md](AGENTS.md): 作業時の共通指示
+- [世界観の正本](docs/world-bible.md): カード・画面・用語の世界観
+- [標準UI](docs/default-ui-design.md)・[メニュー設計](docs/menu-design-insights.md): 対戦画面外を含む共通UIの方針
+- [アニメーション品質基準](docs/animation-quality-benchmark.md)・[VFXアート方針](docs/vfx-art-direction.md): 制作前に読む最低品質と表現の指定
+- [カードアート方針](docs/card-art-direction.md)・[制作パイプライン](docs/card-art-pipeline.md): 画像制作と取り込み
+- [カードテキスト表記](docs/card-text-style.md): 効果説明・用語の統一
+- [収益・報酬設計](docs/monetization.md): 通貨・ショップ・報酬の設計
+- [BOT学習・評価](ml/README.md): 学習とシミュレーション
+
+リリース・監査・試作の記録は`docs/releases/`・`docs/qa/`・`docs/vfx-prototypes/`などにあります。記録には当時の実装や未採用案も含まれるため、現在のコードと各記録の確認範囲を併せて参照してください。
