@@ -32,4 +32,3 @@ Source: `7d48c2e31b2c5de058faa0d9f4eaec6fddcc0d0d`。
 
 ![公開先PC・通知件数は検証データ](qa/production/home-1280-900.png)
 ![公開先スマートフォン・通知件数は検証データ](qa/production/home-390-844.png)
-
