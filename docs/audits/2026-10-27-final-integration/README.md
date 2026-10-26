@@ -42,6 +42,11 @@
 - 全381カードを強制eagerにしていたgalleryの入場処理を修正。初期viewportのみ準備し、画面外336/341枚のlazy指定を維持。1280/390pxの可視カード欠落なし、末尾scroll・検索成功。ローカルViteでは2292/1294ms。API fixture、同時負荷が変動するため本番の短縮率ではない。`gallery-admission/report.json`参照。
 - 公開guardにread-only DB contract検査を追加。必要table/column/type/indexが欠落すれば公開前に止まる。本番の実スキーマへの試行は、今回の未適用3索引を正しく検出。
 
+- 追加migration0026/0027/0028をステージングに適用（2026-10-26T17:24 UTC頃）。変更はCREATE TABLE/INDEX IF NOT EXISTSのみ。remote schema contract検査成功。
+- 最新採用main `b5295ad0`をmerge `549cc2d6`へ取り込み。HOME SVGのreadiness検証とgallery最適化の両方を維持。初回のURL解決4件・gallery/deck検証・型checkは成功。
+- BOT workerのテストは、制限時間内の結果なら全探索と一致、期限到達なら最後の完了済み合法手を検証する現在の契約へ修正。Worker禁止時の安全な貪欲手も確認。再実行36ケース成功、timeout0。失敗時もworker/timerを閉じる。
+- ビルド済みコードでauth500ms/main2000msの遅延を与え、authがmain取得中に完了、authリクエスト1回、admin chunk未取得を確認。`startup-overlap/report.json`参照。
+
 ## 残作業
 
 他チャットの採用済みmainを統合 → 全suite/型/ビルドを最終commitで検証 → ステージングの追加migration → 認証済みQAアカウントによるAPI/WS/購入/報酬/再接続検証と後片付け → 本番schema/version/ロック再照合 → guardで本番公開 → 静的配信・匿名境界・DB確認 → 監視停止。

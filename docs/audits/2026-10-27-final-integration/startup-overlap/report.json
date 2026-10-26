@@ -1,0 +1,29 @@
+{
+  "origin": "http://127.0.0.1:5490",
+  "root": "/Users/hiromaru05s/.codex/worktrees/final-backend-performance-audit/LORE_TCG/client/dist",
+  "api": "fixture",
+  "art": "built production assets",
+  "controlledDelayMs": {
+    "auth": 500,
+    "main": 2000
+  },
+  "events": [
+    {
+      "event": "main-start",
+      "at": 1495
+    },
+    {
+      "event": "auth-start",
+      "at": 1498
+    },
+    {
+      "event": "auth-end",
+      "at": 2000
+    },
+    {
+      "event": "main-end",
+      "at": 3498
+    }
+  ],
+  "errors": []
+}
