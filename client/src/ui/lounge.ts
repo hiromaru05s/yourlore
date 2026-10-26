@@ -36,6 +36,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     ['tutorial','book','home.nav.guide',()=>app.tutorial()],
   ];
   const dailyReward=content.querySelector<HTMLButtonElement>('#dailyReward');
+  const gifts=content.querySelector<HTMLButtonElement>('#homeGifts');
   let stopNavMotion: (()=>void)|undefined;
   let stopHomeSound: (()=>void)|undefined;
   const paint=()=>{
@@ -56,6 +57,12 @@ export function mountLounge(app: App, page: LoungePage): () => void {
       profile.replaceWith(seeker);seeker.append(profile);
       stopHomeSound=mountHomeSound(seeker);
       if(dailyReward)seeker.append(dailyReward);
+      // Move the existing inbox button so claims, refreshes and focus keep their owner.
+      if(gifts){
+        const actions=document.createElement('div');actions.className='lounge-header-actions';
+        actions.append(gifts,top.querySelector('[data-shop]')!,top.querySelector('.lounge-menu')!);
+        top.append(actions);
+      }
     }
     stopNavMotion=mountLoungeNavMotion(rail.querySelector('nav')!,lastLoungePage.get(app));
     lastLoungePage.set(app,page);

@@ -4,7 +4,7 @@ import {esc,getLang} from '../i18n';
 import {loungeText as L} from './loungeText';
 import type {GiftInbox,GiftItem} from '../shared/gifts';
 import '../styles/giftInbox.css';
-const ART='/art/lounge/gifts/courier.png';
+const ART='/art/lounge/gifts/letter-v1.webp';
 const title=()=>L('プレゼント','Gifts','선물');
 const shard=()=>L('無償シャード','Free Shards','무료 샤드');
 const date=(ms:number)=>new Date(ms).toLocaleString(getLang()==='ja'?'ja-JP':getLang()==='ko'?'ko-KR':'en-US',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
@@ -15,8 +15,11 @@ export function mountGiftInbox(app:App,button:HTMLButtonElement):()=>void {
  const pending=(g:GiftItem)=>!g.claimedAt&&g.expiresAt>(data?.now??Date.now());
  const paintButton=()=>{
   if(dead)return;const n=data?.pendingCount??0;
-  button.setAttribute('aria-label',title()+(data?L(`、未受取${n}件`,`, ${n} unclaimed`,` 미수령 ${n}개`):''));
-  button.innerHTML=`<span class="gift-courier-art"><img src="${ART}" alt="" draggable="false">${n?`<span class="gift-courier-count">${n>99?'99+':n}</span>`:''}</span><span class="gift-courier-label"><strong>${title()}</strong><small>${guest?L('ログインして確認','Log in to view','로그인 후 확인'):data?n?L(`未受取 ${n}件`,`${n} unclaimed`,`미수령 ${n}개`):L('届けものはありません','No new gifts','새 선물이 없습니다'):failed?L('開いて再読み込み','Open to retry','열어서 다시 시도'):L('確認中…','Checking…','확인 중…')}</small></span>`;
+  const status=guest?L('ログインして確認','Log in to view','로그인 후 확인'):data?L(`未受取 ${n}件`,`${n} unclaimed`,`미수령 ${n}개`):failed?L('開いて再読み込み','Open to retry','열어서 다시 시도'):L('確認中…','Checking…','확인 중…');
+  const label=`${title()}、${status}`;
+  button.setAttribute('aria-label',label);button.title=label;
+  button.setAttribute('aria-haspopup','dialog');
+  button.innerHTML=`<span class="gift-mail-art"><img src="${ART}" alt="" draggable="false">${n?`<span class="gift-mail-count" aria-hidden="true">${n>99?'99+':n}</span>`:''}</span>`;
  };
  const close=()=>{dialog?.close();dialog?.remove();dialog=null;if(button.isConnected)button.focus();};
  const load=async()=>{

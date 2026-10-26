@@ -32,7 +32,7 @@ export function mountHome(app: App): Screen {
     </section>
     <section class="lounge-home-main">
       <section class="lounge-play" aria-label="${esc(t("home.ranked.title"))}">
-        <button class="gift-courier" id="homeGifts" type="button"></button>
+        <button class="gift-mail" id="homeGifts" type="button"></button>
         <div class="lounge-mode-tabs" role="group" aria-label="${esc(loungeText('対戦モード','Duel mode','대전 모드'))}">
           <button id="rankedMode" aria-pressed="true">${loungeText('ランク','Ranked','랭크')}</button>
           <button id="online" aria-pressed="false">${loungeText('ノーマル','Casual','일반')}</button>

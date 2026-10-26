@@ -14,9 +14,6 @@
   color:#f2f6fa;
 }
 .lounge-shell.selected-menu.lounge-home .lounge-play { gap:10px; }
-.lounge-shell.selected-menu.lounge-home .gift-courier { width:100%; margin:0; padding:0; }
-.lounge-shell.selected-menu.lounge-home .gift-courier-label strong { font:600 16px/1.5 var(--sans,sans-serif); text-shadow:none; }
-.lounge-shell.selected-menu.lounge-home .gift-courier-label small { font-size:12px; line-height:1.6; color:#d1dfe9; text-shadow:none; }
 .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs { gap:8px; }
 .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button {
   flex:1; font-size:14px; font-weight:600; color:#c8d8e5; padding:12px 6px;
@@ -35,7 +32,7 @@
 .lounge-shell.selected-menu.lounge-home .home-daily-reward { padding:12px 0; }
 .lounge-shell.selected-menu.lounge-home .home-daily-reward strong { font-size:14px; font-weight:600; }
 .lounge-shell.selected-menu.lounge-home .home-daily-reward small { font-size:12px; line-height:1.6; color:#d1dfe9; }
-.lounge-shell.selected-menu.lounge-home :is(.gift-courier,.lounge-active-deck,.lounge-rank-info,.home-daily-reward):hover { background-color:#bcd8eb0f; }
+.lounge-shell.selected-menu.lounge-home :is(.lounge-active-deck,.lounge-rank-info,.home-daily-reward):hover { background-color:#bcd8eb0f; }
 @media(max-width:850px) {
   .lounge-shell.selected-menu.lounge-home .lounge-home-main { width:390px; max-width:100%; padding:14px 18px; margin:0 auto; }
   .lounge-shell.selected-menu .lounge-user b { font-size:12px; }
