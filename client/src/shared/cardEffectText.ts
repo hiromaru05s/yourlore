@@ -960,9 +960,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【While on the Field】This monster gets +2 ATK for every 2 Culls in your Rift."
   },
   "RUST_SHROOM": {
-    "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。5以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
-    "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 5 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
-    "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 5 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
+    "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。4以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
+    "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 4 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
+    "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 4 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
   },
   "CHOSEN_AREA": {
     "ja": "【発動条件】自分のリフトに「カル」が25枚以上ある。\n\n【発動時】自分は直ちに勝利する。",
@@ -1460,9 +1460,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Purchase】Increase your max mana by 1 and gain 2 HP."
   },
   "QUICK_GRIMOIRE": {
-    "ja": "【購入時】このターン終了まで、自分が手札から使う魔法の発動コスト-1（最低0）。",
-    "ko": "【구매 시】이번 턴 종료까지 자신이 패에서 사용하는 마법의 시전 코스트 -1(최저 0).",
-    "en": "【On Purchase】Until this turn ends, your spells played from hand cost 1 less to cast, to a minimum of 0."
+    "ja": "【購入時】このターン終了まで、次に自分が手札から使う魔法5回の発動コスト-1（最低0）。購入1回ごとに5回分を持ち、複数購入分の割引は重複する。コスト0や無効になった魔法も回数を消費する。",
+    "ko": "【구매 시】이번 턴 종료까지 다음에 자신이 패에서 사용하는 마법 5회의 시전 코스트 -1(최저 0). 구매마다 5회분을 가지며 여러 번 구매한 할인은 중첩된다. 코스트 0 또는 무효화된 마법도 횟수를 소비한다.",
+    "en": "【On Purchase】Until this turn ends, your next 5 spells played from hand cost 1 less to cast, to a minimum of 0. Each purchase has 5 uses and multiple discounts stack. Spells that cost 0 or are negated also consume a use."
   },
   "QUICK_ASSAULT": {
     "ja": "【購入条件】自分の場にモンスターが2体以上いる。\n\n【購入時】自分の場の異なる個体2体を選び、このターン終了までそれぞれの攻撃力+2（同名可）。",
@@ -1545,9 +1545,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Completion Requirement】After deployment, a Soldier is summoned, a Casino is summoned, and Wine is played, at least 1 time each; either player's actions count.\n\n【On Completion】Create 1 new Dominion in your hand."
   },
   "DOMINION": {
-    "ja": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。",
-    "ko": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다.",
-    "en": "【On Cast】Draw 2 cards. Also, skip the opponent's next turn."
+    "ja": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。「支配」による未消化のスキップ予約は1回まで。\n\n【回数制限】各プレイヤーは同名カード合計でこのゲーム中に3回まで使用できる。無効になった使用も回数に含む。",
+    "ko": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다. 지배로 예약한 미소비 턴 스킵은 1회까지.\n\n【횟수 제한】각 플레이어는 같은 이름의 카드 합계로 이 게임에서 3회까지 사용할 수 있다. 무효화된 사용도 횟수에 포함한다.",
+    "en": "【On Cast】Draw 2 cards. Also, skip the opponent’s next turn. Only 1 unconsumed turn skip from Dominion may be queued.\n\n【Use Limit】Each player may play cards with this name only 3 times in total this game. Negated plays also count."
   },
   "POISON_MASTER": {
     "ja": "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。",

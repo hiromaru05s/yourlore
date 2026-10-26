@@ -7,7 +7,7 @@
     "en"
   ],
   "count": 379,
-  "engineSha256": "58f7a9d90438197ab4719bb5ba9152b8ab2d38f7fea14ed4702ba55cd86cddfd",
+  "engineSha256": "cbdf972ce43e4681fa1ef967aee6952dccd466eaa26b4b431342e4d7d76f1de5",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -4205,24 +4205,24 @@
     },
     "RUST_SHROOM": {
       "nameJa": "ラストマッシュルーム",
-      "status": "balance-v60-reworked",
+      "status": "balance-rework-v64",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "1755c026db821742773b8bde42c9981d60f3decb0d6e71233467bfad42ba50f5",
-      "textSha256": "c9fa60f180f3b299a26dd6b1d2077f04a1102a1c615de0776eb43985ca0d0b66",
+      "textSha256": "9beeb8537d9d4335b0ff5635a9bff1ace30a48072d19c6ea402b34cec6fab42c",
       "hooks": {},
       "before": {
-        "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。",
-        "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).",
-        "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1; multiple copies do not stack."
-      },
-      "after": {
         "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。5以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
         "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 5 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
         "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 5 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
+      },
+      "after": {
+        "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。4以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
+        "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 4 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
+        "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 4 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
       }
     },
     "CHOSEN_AREA": {
@@ -6481,24 +6481,26 @@
     },
     "QUICK_GRIMOIRE": {
       "nameJa": "呪術魔法書",
-      "status": "reworded",
+      "status": "balance-rework-v64",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "50f8408a3339cba8c1366f023a96dceec3bbcc57d43269fca9d85b32e0665f9d",
-      "textSha256": "6a5e404b4218aa1f6815266cb3a5052b55b18a963dc937fd1600aa47e4e19764",
+      "textSha256": "218c48c9e42f908537bfa0eb5c16481ee154407ff40eb10b5f7c58fbaa9dc2d8",
       "hooks": {
         "quick": true
       },
       "before": {
         "ja": "【購入時】このターン終了まで、自分が手札から使う魔法の発動コスト-1（最低0）。",
-        "ko": "【구매시】이번 턴 종료까지 자신이 패에서 사용하는 마법의 시전 코스트 -1(최저 0).",
+        "ko": "【구매 시】이번 턴 종료까지 자신이 패에서 사용하는 마법의 시전 코스트 -1(최저 0).",
         "en": "【On Purchase】Until this turn ends, your spells played from hand cost 1 less to cast, to a minimum of 0."
       },
       "after": {
-        "ja": "【購入時】このターン終了まで、自分が手札から使う魔法の発動コスト-1（最低0）。",
-        "ko": "【구매 시】이번 턴 종료까지 자신이 패에서 사용하는 마법의 시전 코스트 -1(최저 0).",
-        "en": "【On Purchase】Until this turn ends, your spells played from hand cost 1 less to cast, to a minimum of 0."
+        "ja": "【購入時】このターン終了まで、次に自分が手札から使う魔法5回の発動コスト-1（最低0）。購入1回ごとに5回分を持ち、複数購入分の割引は重複する。コスト0や無効になった魔法も回数を消費する。",
+        "ko": "【구매 시】이번 턴 종료까지 다음에 자신이 패에서 사용하는 마법 5회의 시전 코스트 -1(최저 0). 구매마다 5회분을 가지며 여러 번 구매한 할인은 중첩된다. 코스트 0 또는 무효화된 마법도 횟수를 소비한다.",
+        "en": "【On Purchase】Until this turn ends, your next 5 spells played from hand cost 1 less to cast, to a minimum of 0. Each purchase has 5 uses and multiple discounts stack. Spells that cost 0 or are negated also consume a use."
       }
     },
     "QUICK_ASSAULT": {
@@ -6882,26 +6884,27 @@
     },
     "DOMINION": {
       "nameJa": "支配",
-      "status": "reworked",
+      "status": "balance-rework-v64",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "cd2f167e154a1f25202cb3504d333e7cdbf33b1375585da0ac610f922e5f8c4a",
-      "textSha256": "883b33c643e2f415d494fbc87d75ae30e68223cda4b17f0a767669b8b86c57e3",
+      "definitionSha256": "23858c6296510d4fb6eeca6dc2ad7fd114f054a9f407aa025e1b504bdcff39d6",
+      "textSha256": "98d5384eca0198236f40978b312c0d85ed756cce3dc09003d7965596fa3c7673",
       "hooks": {
-        "act": "expansion"
+        "act": "expansion",
+        "maxUsesPerGame": 3
       },
       "before": {
-        "ja": "【発動時】カードを3枚引く。このターン次に自分が手札から使うカード3枚の使用コストを1にする。相手の最大マナ-1、自分の最大マナ+1。",
-        "ko": "【발동시】카드를 3장 뽑는다. 이번 턴 다음에 자신이 패에서 사용하는 카드 3장의 사용 코스트를 1로 만든다. 상대의 최대 마나 -1, 자신의 최대 마나 +1.",
-        "en": "【On Cast】Draw 3 cards. The next 3 cards you play from hand this turn cost 1 mana each. The opponent's max mana -1 and your max mana +1."
-      },
-      "after": {
         "ja": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。",
         "ko": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다.",
         "en": "【On Cast】Draw 2 cards. Also, skip the opponent's next turn."
+      },
+      "after": {
+        "ja": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。「支配」による未消化のスキップ予約は1回まで。\n\n【回数制限】各プレイヤーは同名カード合計でこのゲーム中に3回まで使用できる。無効になった使用も回数に含む。",
+        "ko": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다. 지배로 예약한 미소비 턴 스킵은 1회까지.\n\n【횟수 제한】각 플레이어는 같은 이름의 카드 합계로 이 게임에서 3회까지 사용할 수 있다. 무효화된 사용도 횟수에 포함한다.",
+        "en": "【On Cast】Draw 2 cards. Also, skip the opponent’s next turn. Only 1 unconsumed turn skip from Dominion may be queued.\n\n【Use Limit】Each player may play cards with this name only 3 times in total this game. Negated plays also count."
       }
     },
     "POISON_MASTER": {
@@ -8241,22 +8244,27 @@
     },
     "GOBLIN_RAIDER": {
       "nameJa": "特攻ゴブリン",
-      "status": "added-reviewed-2026-10-23",
+      "status": "balance-rework-v64",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "28331b61dbf4386f7ea4b8bd11c33a30a2ce5de7868be4bee83a5e9a0bd85293",
-      "textSha256": "d19838284c07f6875a873d71617a6a46c003105ea52f361e8765dd2222f9b045",
+      "definitionSha256": "84507442fc1df4b63f1f67e489da8b3cedab2530c2673d61c47cf04882cebc4a",
+      "textSha256": "9e8acba0ed4ed367801bd4b47118981e1cea0a9cc59367b7d23be17b8f7cb58a",
       "hooks": {
-        "aura": "goblinAttack"
+        "aura": "goblinAttack",
+        "summonReq": "uniqueRaider"
       },
-      "before": null,
-      "after": {
+      "before": {
         "ja": "【場にある間】自分の場の「ゴブリン」「特攻ゴブリン」の攻撃力+1。",
         "ko": "【필드에 있는 동안】자신의 필드에 있는 고블린과 돌격 고블린의 공격력 +1.",
         "en": "【While on the Field】Your Goblins and Goblin Raiders on the field have +1 ATK."
+      },
+      "after": {
+        "ja": "【設置上限】自分の場に最大1体。\n\n【場にある間】自分の場の「ゴブリン」「特攻ゴブリン」の攻撃力+1。\n\n【召喚時】召喚したプレイヤーの次の相手のターン終了時に、このモンスターを必ず破壊する。",
+        "ko": "【설치 제한】자신의 필드에 최대 1체.\n\n【필드에 있는 동안】자신의 필드에 있는 고블린과 돌격 고블린의 공격력 +1.\n\n【소환 시】소환한 플레이어의 다음 상대 턴 종료 시 이 몬스터를 반드시 파괴한다.",
+        "en": "【Field Limit】At most 1 on your field.\n\n【While on the Field】Your Goblins and Goblin Raiders on the field have +1 ATK.\n\n【On Summon】Destroy this monster at the end of the summoning player’s next opponent turn, without exception."
       }
     },
     "GOBLIN_SETTLEMENT": {

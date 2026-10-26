@@ -21,6 +21,7 @@ export interface CardDef {
   val?: number; // generic effect magnitude (also enchant duration)
   val2?: number; // secondary magnitude (e.g. heal+draw, atk+def buff, enchant amount)
   play?: number; // play/cast cost (defaults to `cost`); buy cost stays `cost`
+  maxUsesPerGame?: number; // same-name committed casts per player, including negated casts
   maxUsesPerTurn?: number; // same-name casts across all copies, including generated copies and negated casts
   quick?: boolean; // spell: resolve once on purchase, then permanently leave the game
   quest?: { event: QuestEvent; target: number };
@@ -142,7 +143,8 @@ export interface PlayerState {
   taxFlag: boolean;
   enchants: Enchant[]; // active persistent spells (public, on field)
   quests?: QuestState[]; // public active quests; optional for persisted older matches
-  spellDiscountTurn?: number;
+  spellDiscountTurn?: number; // active Grimoire layers; legacy saves may omit charges
+  spellDiscountCharges?: number[]; // each purchased Grimoire discounts the next five hand spells this turn
   tribesFired: string[]; // "<tribe>:<count>" synergy thresholds already used this game
   bonusDrawPerm: number; // permanent extra draw at turn start (귀족 3 synergy)
   bleed: number; // persistent damage taken at the start of each of this player's turns

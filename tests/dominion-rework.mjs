@@ -32,18 +32,18 @@ try {
     assert.equal(e.state.players[1-side].skipTurns,0);
     assert.equal(end(e.state).state.cur,1-side,'opponent resumes normally after exactly one skip');
   }
-  // Repeated casts queue one skip per resolution, preserving other cards' provenance.
+  // Repeated casts share one unconsumed Dominion skip, preserving other cards' provenance.
   for(const sources of [[],['TIMEWARP','BLACK_NOVA']]) {
     let g=fresh(0);g.players[1].skipTurns=sources.length;g.players[1].skipTurnSources=[...sources];
     g=play(g).state;g=play(g).state;assert.equal(g.players[0].hand.length,4);
-    const order=[...sources,'DOMINION','DOMINION'];assert.deepEqual(g.players[1].skipTurnSources,order);
+    const order=[...sources,'DOMINION'];assert.deepEqual(g.players[1].skipTurnSources,order);
     for(const source of order){const r=end(g);assert.equal(r.state.cur,0);assert.equal(r.events.find(e=>e.type==='turnSkipped').source,source);g=r.state;}
     assert.equal(end(g).state.cur,1);
   }
-  // Spell replay resolves both draw and skip twice; cancelled spells resolve neither.
-  {const g=fresh(0),echo=Object.values(DB).find(c=>c.ench==='runeEcho');assert(echo);g.players[0].enchants=[{card:card(echo.id),turns:99}];const r=play(g);assert.equal(r.state.players[0].hand.length,4);assert.deepEqual(r.state.players[1].skipTurnSources,['DOMINION','DOMINION']);}
+  // Spell replay draws twice but shares the same Dominion skip; cancelled spells resolve neither.
+  {const g=fresh(0),echo=Object.values(DB).find(c=>c.ench==='runeEcho');assert(echo);g.players[0].enchants=[{card:card(echo.id),turns:99}];const r=play(g);assert.equal(r.state.players[0].hand.length,4);assert.deepEqual(r.state.players[1].skipTurnSources,['DOMINION']);}
   {const g=fresh(0);g.players[1].traps=[{card:{id:'legacy-null',uid:'null',t:'trap',cost:0,react:'nullspell',name:'Null'}}];const r=play(g);assert(r.events.some(e=>e.type==='trapReveal'));assert.equal(r.state.players[0].hand.length,0);assert.equal(r.state.players[1].skipTurns,0);}
   // Old saved cost overrides have no effect after the rework.
   {const g=fresh(0);g.players[0].expansion={turn:7,extraDraw:0,firePlayed:[],fireDiscount:0,dominion:3};for(const id of ['STARTER_TRASH','M6'])assert.equal(playCost(card(id),g.players[0]),playCost(card(id)));}
-  console.log('PASS Dominion: both sides, draw 2, unchanged mana/cost, exactly one skip, normal resumption, redaction, stacking, mixed FIFO, echo, nullification, legacy cost state');
+  console.log('PASS Dominion: both sides, draw 2, unchanged mana/cost, exactly one skip, normal resumption, redaction, non-stacking, mixed FIFO, echo, nullification, legacy cost state');
 } finally {await rm(dir,{recursive:true,force:true});}
