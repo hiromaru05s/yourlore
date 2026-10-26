@@ -99,7 +99,7 @@
 .lounge-deck-label small { color:#b4cbe4; font-size:11px; }.lounge-deck-label strong { font:20px var(--serif,serif); }.lounge-deck-label>span { font-size:11px; color:#acc8e6; }
 .lounge-active-deck>.lore-icon { width:24px; height:24px; }
 /* Login, queue and dialogs use the same stage materials. */
-.lounge-login .lounge-content { inset:0; }.lounge-login .auth-card::before { content:''; height:70px; background:url('/art/brand/lore-logo-transparent.png') center/contain no-repeat; }
+.lounge-login .lounge-content { inset:0; }.lounge-login .lounge-content > .screen { align-items: safe center; }
 .lounge-login .auth-tabs button { color:#bfd1e8; }.lounge-login .auth-or span { background:#10243e; }.lounge-login .login-help { background:#06172c; }
 .lounge-lobby .lounge-content>.screen { justify-items:end; padding-right:7vw; }.lounge-lobby .auth-card { max-width:500px; background:#0b1c34ee; }
 .lounge-queue-time { color:#d1ecff; }.lounge-lobby .spinner { border:0; box-shadow:none; background:url('/art/lounge/stage-v1/sigil.png') center/contain; width:150px; height:150px; }.lounge-lobby .spinner .lore-icon { visibility:hidden; }
@@ -133,7 +133,7 @@ body.lounge-active .inspect-type { color:#aec8e5; }
   .lounge-play { display:flex; flex-direction:column; align-items:center; }.lounge-rank-info { align-self:flex-end; font-size:12px; min-height:28px; gap:4px; }.lounge-rank-info small { font-size:10px; }
   .lounge-play-button { width:210px; margin:-8px 0 -10px auto; }.lounge-play-button strong { font-size:23px; }.lounge-play-button>span { font-size:10px; }
   .lounge-secondary-modes { width:100%; }.lounge-secondary-modes button { min-height:47px; font-size:13px; }.lounge-active-deck { min-height:76px; padding:9px 15px; }.lounge-deck-preview img { width:36px; height:51px; }
-  .lounge-login { background-position:34% top; }.lounge-login .lounge-content>.screen { justify-content:center; padding:160px 18px 30px; background:linear-gradient(transparent,#051125bc); }.lounge-login .auth-card { padding:26px; }
+  .lounge-login { background-position:34% top; }.lounge-login .lounge-content>.screen { justify-content:center; padding:76px 18px 30px; background:linear-gradient(transparent,#051125bc); }.lounge-login .auth-card { padding:26px; }
   .lounge-content .cards-head { gap:10px; }.lounge-content .cards-head h2 { font-size:20px; }.lounge-content .cards-filters { padding:8px 10px 0; }.lounge-content .cards-hint { padding:6px 10px; }.lounge-content .cards-grid { padding:18px 8px; }
 }
 @media(max-width:360px) { .lounge-user b { max-width:58px; }.lounge-topbar .lounge-brand { width:61px; }.lounge-content .cards-grid .card { --cw:112px; --ch:175px; }.lounge-rail nav button { font-size:8px; } }
