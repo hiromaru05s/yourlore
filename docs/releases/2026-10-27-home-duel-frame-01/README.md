@@ -44,3 +44,5 @@ built-in imagegen使用。元の制作場所は `/Users/hiromaru05s/Desktop/LORE
 `tests/menu-selected.mjs` でモード選択／開始遷移、枠共用、ランク枠差分、同モード再選択時の再割当なし、旧renderer破棄、HOME終了時の全解放を確認。ブラウザでは3色の表示、マウスホバーによる流墨、控えめなハイライトを確認。機能確認とユーザーの見た目採用は区別する。実PvP・物理スマホの確認は含まない。
 
 追加ブラウザ確認: WebGLをボタンだけ無効にしたfixtureで `motion=static`・canvasなし・同一静止素材の表示を確認。390×844と320×640のiframeを目視し、短い画面の既存コンパクト枠は86pxの円とモード名だけで可読性を保った。ホバーの実測は `brightness(1.055)`、`drop-shadow(... 0.24 ... 5px)`、`motion=fluid`、再入場回数の更新を確認。console errorなし。保存画像はローカルfixtureで、本番ログイン済みHOMEの証跡ではない。
+
+公開ガードで既存 `quick-playback` のNode用バンドルが新しいloadingScreen.css内の公開画像URLを解決しようとして失敗したため、他のNode用描画テストと同様に `.css` を空ローダーにした。検証対象のゲームイベント・順序のアサーションは変更せず、対象テストの成功を確認。
