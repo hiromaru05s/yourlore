@@ -1,0 +1,32 @@
+{
+  "source": "394e7b6e75058a5b3e5b1e3e4c8a57bc1e14bfe2",
+  "verifiedAt": "2026-10-26T10:00:06.660152+00:00",
+  "files": [
+    {
+      "url": "/index.html",
+      "sha256": "93590614b1b9a42e84792f38a768d419fa8e02de2fd2bbbc7f35ced59010c4e3",
+      "bytes": 21250,
+      "status": 200,
+      "matched": true
+    },
+    {
+      "url": "/assets/layout-B2Xcm31n.js",
+      "sha256": "bf074fc07abd32716b96796f97b55ce76a6c3caeb60055ffb3945d4b50f0e70d",
+      "bytes": 901170,
+      "status": 200,
+      "matched": true
+    },
+    {
+      "url": "/assets/layout-CdbqZM8A.css",
+      "sha256": "a665ec02233f56b8de0b4f9df4cc0839e8d780b32060c92c181640cb4f201cbb",
+      "bytes": 7472,
+      "status": 200,
+      "matched": true
+    }
+  ],
+  "productionSuite": "228/228 passed",
+  "scope": "Actual GameView and shared engine checked locally; production public assets verified. Authenticated online match not performed.",
+  "deploymentId": "638a951c-0d22-4253-882a-4b550575cdd9",
+  "version": "e6b70717-470b-4a9f-8231-d1a5223b32ea",
+  "percentage": 100
+}
