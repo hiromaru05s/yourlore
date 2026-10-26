@@ -1,0 +1,68 @@
+{
+  "base": "https://yourlore.xyz",
+  "sourceCommit": "ffe29c6697642af9772b047b70f44b6f4532673f",
+  "scope": "actual App/menu/card renderer served from base; isolated API fixtures; no authenticated account or online duel",
+  "checks": [
+    "溶鉱炉 current effect text on desktop and 390px",
+    "スクラップ収集家 current effect text on desktop and 390px",
+    "大粛清 current effect text on desktop and 390px",
+    "選択と集中 current effect text on desktop and 390px",
+    "カルの洗礼 current effect text on desktop and 390px",
+    "試練の領域 current effect text on desktop and 390px",
+    "リフレッシュ current effect text on desktop and 390px",
+    "All seven card inspections rendered without JS errors"
+  ],
+  "assets": [
+    {
+      "url": "https://yourlore.xyz/art/cards/FURNACE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/SCRAPPER.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/PURGE_ALL.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/FOCUS.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/CULL_FLOOD.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/TRIAL_AREA.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/REFRESH_HAND.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/MARKET_CRISIS.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    }
+  ],
+  "errors": []
+}
