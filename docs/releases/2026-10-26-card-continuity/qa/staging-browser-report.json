@@ -1,0 +1,231 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "results": [
+    {
+      "width": 1280,
+      "kind": "summon",
+      "finished": [],
+      "left": 0,
+      "prints": [
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-quest-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")"
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "counter",
+      "finished": [],
+      "left": 0,
+      "prints": [
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-quest-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")"
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "lethal",
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 2144,
+          "prepareMs": 1272,
+          "phase": "reform"
+        }
+      ],
+      "left": 0,
+      "prints": [
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-quest-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")"
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "mutual",
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1949,
+          "prepareMs": 986,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 2797,
+          "prepareMs": 1872,
+          "phase": "reform"
+        }
+      ],
+      "left": 0,
+      "prints": [
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-quest-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")"
+      ]
+    },
+    {
+      "width": 1280,
+      "purchase": {
+        "expected": "WINE_COLLECTOR",
+        "actual": "WINE_COLLECTOR",
+        "seen": true,
+        "painted": true
+      }
+    },
+    {
+      "width": 390,
+      "kind": "summon",
+      "finished": [],
+      "left": 0,
+      "prints": [
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-quest-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")"
+      ]
+    },
+    {
+      "width": 390,
+      "kind": "counter",
+      "finished": [],
+      "left": 0,
+      "prints": [
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-quest-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")"
+      ]
+    },
+    {
+      "width": 390,
+      "kind": "lethal",
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1947,
+          "prepareMs": 1064,
+          "phase": "reform"
+        }
+      ],
+      "left": 0,
+      "prints": [
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-quest-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")"
+      ]
+    },
+    {
+      "width": 390,
+      "kind": "mutual",
+      "finished": [
+        {
+          "complete": true,
+          "elapsed": 1580,
+          "prepareMs": 598,
+          "phase": "reform"
+        },
+        {
+          "complete": true,
+          "elapsed": 2152,
+          "prepareMs": 1175,
+          "phase": "reform"
+        }
+      ],
+      "left": 0,
+      "prints": [
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-quest-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-spell-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")",
+        "url(\"https://test.yourlore.xyz/art/biblion/modular/base-mon-print.webp\")"
+      ]
+    },
+    {
+      "width": 390,
+      "purchase": {
+        "expected": "WINE_COLLECTOR",
+        "actual": "WINE_COLLECTOR",
+        "seen": true,
+        "painted": true
+      }
+    }
+  ],
+  "errors": [],
+  "boundary": "Unmodified deployed game modules and reducer/controller on the shipped cosmetic-studio board fixture. No authenticated PvP or real account purchase; emulated viewport, not physical-device FPS."
+}

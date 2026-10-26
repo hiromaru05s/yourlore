@@ -43,3 +43,14 @@ Cloned public counters now copy their WeakMap presentation identity/sample. This
 - Continuous playback and board images were inspected separately from assertions. Normal/mage timelines are retained in qa; alpha-shaped print edges and same-source landings replace the extraneous rectangular backing. Browser emulation does not establish physical-device FPS or authenticated online play.
 - Frame-pack measurement: transfer 7,572,102 → 2,652,924 bytes (old unique UI pack plus old four lossless base frames vs replacement pack); decoded RGBA 38,273,024 → 41,396,224 bytes, approximately +3 MiB. These exclude illustrations, compositor surfaces and GPU memory. No per-device FPS increase/decrease is claimed.
 - Latest full production suite before final focused follow-ups: 229/229 passed. Guarded releases rerun the full suite against the exact committed snapshot.
+
+### Guarded release
+
+Source: `ffe29c6697642af9772b047b70f44b6f4532673f`, including latest adopted Cull rules. Two lifecycle mocks were aligned with the real renderer pixel-ratio API and browser computed styles; no production behavior was bypassed.
+
+- Staging: guarded typecheck, **231/231** full-suite checks and build passed. Worker version `a951a87e-8019-4bc0-a6b1-99df87b97009`, deployment `4dbe37fc-0e53-4e50-a1de-98faf65bb6f6`.
+- Production: the concurrent Cull release guard published the **same exact source SHA**, after **231/231** checks. Its verified log is `/tmp/lore-cull-deploy-final.log`. This task independently queried deployed status: Worker version `36ccfc96-0a6c-4d99-bf3e-10918df2a3cf`, deployment `27724839-244b-4ebc-b2f4-4d420f73799b`. No second redundant deployment was performed.
+- Staging deployed verification: **150 file SHA-256 matches**, desktop/mobile summon, counter, lethal, mutual and market-purchase paths passed, no runtime/capture fallback errors. The harness waits for the loading cover to leave before starting its actions.
+- Compiled preview source was this worktree's `client/dist`, port 5578. Deployment verification uses `https://test.yourlore.xyz` and `https://yourlore.xyz`, shipped cosmetic-studio board/controller fixture. These runs do not spend account currency and are not authenticated PvP.
+
+Production verification completed: **150 file SHA-256 matches**, all 10 desktop/mobile controller cases (including purchases) passed, no runtime/capture fallback errors. Selected production screenshots are retained under qa; continuous recordings remain at `/tmp/lore-card-continuity-production-browser/video`. Local Chrome/WebKit and 20-family special coverage are separate evidence from this deployed smoke test. Visual checks inspected the print contour, landing and lack of a generic outer rectangular backing; functional assertions do not substitute for visual judgment.
