@@ -4,6 +4,7 @@ import {esc,getLang} from '../i18n';
 import {loungeText as L} from './loungeText';
 import type {GiftInbox,GiftItem} from '../shared/gifts';
 import '../styles/giftInbox.css';
+import '../styles/notificationBadges.css';
 const ART='/art/lounge/gifts/letter-v1.webp';
 const title=()=>L('プレゼント','Gifts','선물');
 const shard=()=>L('無償シャード','Free Shards','무료 샤드');
@@ -14,8 +15,8 @@ export function mountGiftInbox(app:App,button:HTMLButtonElement):()=>void {
  let dialog:HTMLDialogElement|null=null,selected='',history=false,busy=false,message='',error='';
  const pending=(g:GiftItem)=>!g.claimedAt&&g.expiresAt>(data?.now??Date.now());
  const paintButton=()=>{
-  if(dead)return;const n=data?.pendingCount??0;
-  const status=guest?L('ログインして確認','Log in to view','로그인 후 확인'):data?L(`未受取 ${n}件`,`${n} unclaimed`,`미수령 ${n}개`):failed?L('開いて再読み込み','Open to retry','열어서 다시 시도'):L('確認中…','Checking…','확인 중…');
+  if(dead)return;const n=data?(data.unreadCount??data.items.filter(g=>pending(g)&&!g.readAt).length):0;
+  const status=guest?L('ログインして確認','Log in to view','로그인 후 확인'):data?L(`新着 ${n}件`,`${n} new`,`새 알림 ${n}개`):failed?L('開いて再読み込み','Open to retry','열어서 다시 시도'):L('確認中…','Checking…','확인 중…');
   const label=`${title()}、${status}`;
   button.setAttribute('aria-label',label);button.title=label;
   button.setAttribute('aria-haspopup','dialog');
@@ -27,8 +28,14 @@ export function mountGiftInbox(app:App,button:HTMLButtonElement):()=>void {
   try{const next=await api.gifts(controller.signal);if(dead||request!==serial||app.user?.id!==account)return;data=next;failed=false;error='';paintButton();if(dialog)paintDialog();}
   catch{if(dead||request!==serial)return;failed=true;error=L('取得できませんでした。再読み込みしてください。','Could not load gifts. Please retry.','선물을 불러오지 못했습니다. 다시 시도해 주세요.');paintButton();if(dialog)paintDialog();}
  };
+ const reading=new Set<string>();
  const select=async(id:string)=>{
-  selected=id;const g=data?.items.find(g=>g.id===id);if(g&&!g.readAt){g.readAt=Date.now();void api.readGift(id).catch(()=>{if(g)g.readAt=null;});}paintDialog();
+  selected=id;const g=data?.items.find(g=>g.id===id);paintDialog();
+  if(!g||g.readAt||reading.has(id))return;
+  reading.add(id);
+  try{await api.readGift(id);if(!dead&&app.user?.id===account)void load();}
+  catch{/* Keep the unread count until the server confirms the read. */}
+  finally{reading.delete(id);}
  };
  const claim=async(all:boolean)=>{
   if(busy||!data)return;busy=true;error='';message='';controller?.abort();++serial;paintDialog();

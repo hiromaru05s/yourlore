@@ -165,7 +165,7 @@ export const api = {
     if (isLocalDevAccount()) return Promise.resolve({ ok: true as const, ...buyLocalGuestSleeve(id) });
     return call<{ ok: true; credits: number; sleeves: string[]; furnitures:string[] }>("/social/buy-sleeve", { id });
   },
-  friends: () => call<FriendsData>("/social/friends", undefined, "GET"),
+  friends: (signal?: AbortSignal) => call<FriendsData>("/social/friends", undefined, "GET", signal),
   friendRequest: (q: string) => call<{ ok: true; display: string }>("/social/friends/request", { q }),
   friendRespond: (user_id: string, accept: boolean) => call<{ ok: true }>("/social/friends/respond", { user_id, accept }),
   friendRemove: (user_id: string) => call<{ ok: true }>("/social/friends/remove", { user_id }),

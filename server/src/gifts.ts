@@ -7,8 +7,8 @@ export async function giftInbox(env:Env,userId:string,now=Date.now()):Promise<Gi
  const rows=await env.DB.prepare(`SELECT m.id,m.title,m.body,m.amount,m.created_at AS createdAt,m.expires_at AS expiresAt,d.read_at AS readAt,d.claimed_at AS claimedAt
  FROM gift_deliveries d JOIN gift_messages m ON m.id=d.gift_id WHERE d.user_id=?
  ORDER BY CASE WHEN d.claimed_at IS NULL AND m.expires_at>? THEN 0 ELSE 1 END,m.created_at DESC,m.id LIMIT 300`).bind(userId,now).all<GiftItem>();
- const summary=await env.DB.prepare(`SELECT COUNT(*) AS n,COALESCE(SUM(m.amount),0) AS amount FROM gift_deliveries d JOIN gift_messages m ON m.id=d.gift_id WHERE d.user_id=? AND d.claimed_at IS NULL AND m.expires_at>?`).bind(userId,now).first<{n:number;amount:number}>();
- return {items:rows.results??[],pendingCount:summary?.n??0,pendingAmount:summary?.amount??0,now};
+ const summary=await env.DB.prepare(`SELECT COUNT(*) AS n,COALESCE(SUM(CASE WHEN d.read_at IS NULL THEN 1 ELSE 0 END),0) AS unread,COALESCE(SUM(m.amount),0) AS amount FROM gift_deliveries d JOIN gift_messages m ON m.id=d.gift_id WHERE d.user_id=? AND d.claimed_at IS NULL AND m.expires_at>?`).bind(userId,now).first<{n:number;unread:number;amount:number}>();
+ return {items:rows.results??[],pendingCount:summary?.n??0,unreadCount:summary?.unread??0,pendingAmount:summary?.amount??0,now};
 }
 export async function claimGifts(env:Env,userId:string,id:string|null,now=Date.now()):Promise<GiftClaim>{
  const token=crypto.randomUUID();

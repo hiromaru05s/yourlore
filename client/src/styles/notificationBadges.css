@@ -1,0 +1,7 @@
+.gift-mail-art>.gift-mail-count,.horizon-glyph>.friend-new-count{position:absolute;display:block;top:-7px;right:-7px;min-width:19px;height:19px;box-sizing:border-box;padding:0 5px;border:1.5px solid #0b1d2c;border-radius:11px;background:#ee4e50;color:#fff;font:600 11px/16px system-ui,-apple-system,sans-serif;letter-spacing:0;text-align:center;box-shadow:0 1px 3px #0004;z-index:5;pointer-events:none}
+.horizon-glyph{position:relative;overflow:visible}
+.horizon-glyph>.friend-new-count{top:-5px;right:-8px}
+@media(max-width:600px){
+ .gift-mail-art>.gift-mail-count,.horizon-glyph>.friend-new-count{min-width:17px;height:17px;padding:0 4px;font-size:10px;line-height:14px}
+ .horizon-glyph>.friend-new-count{top:-4px;right:-7px}
+}

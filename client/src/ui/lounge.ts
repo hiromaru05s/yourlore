@@ -10,6 +10,7 @@ import '../styles/homeViewport.css';
 import '../styles/homeFiligree.css';
 import '../styles/loungeLayout.css';
 import {loungeNavGlyph,loungeUtilityGlyph} from './loungeNavGlyphs';
+import {mountFriendBadge} from './friendBadge';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';
 import { t, esc, onLangChange } from '../i18n';
@@ -39,6 +40,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
   ];
   const dailyReward=content.querySelector<HTMLButtonElement>('#dailyReward');
   const gifts=content.querySelector<HTMLButtonElement>('#homeGifts');
+  const friendBadge=mountFriendBadge(app,shell,page!=='friends'&&page!=='login');
   let stopNavMotion: (()=>void)|undefined;
   let stopHomeSound: (()=>void)|undefined;
   const paint=()=>{
@@ -71,6 +73,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     top.append(actions);
     stopNavMotion=mountLoungeNavMotion(rail.querySelector('nav')!,lastLoungePage.get(app));
     lastLoungePage.set(app,page);
+    friendBadge.paint();
     top.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();
     nav.forEach(([key,,,go])=>{rail.querySelector<HTMLButtonElement>(`[data-nav="${key}"]`)!.onclick=go;});
     rail.querySelector<HTMLButtonElement>('[data-utility-settings]')!.onclick=()=>app.settings();
@@ -125,5 +128,5 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{lifecycle.abort();dailyLayout?.disconnect();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{friendBadge.destroy();lifecycle.abort();dailyLayout?.disconnect();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
 }

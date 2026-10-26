@@ -24,5 +24,14 @@ await test('credit failure rolls back claim marker and ledger; retry pays once',
 await test('HTTP auth, own read state, and forged amounts',async()=>{assert.equal((await handleGifts(env,new Request('https://local/api/gifts'),'/gifts')).status,401);await handleGifts(env,req({id:'gift-all'},true),'/gifts/read');assert(db.prepare("SELECT read_at FROM gift_deliveries WHERE user_id='alice' AND gift_id='gift-all'").get().read_at);assert.equal(db.prepare("SELECT read_at FROM gift_deliveries WHERE user_id='bob' AND gift_id='gift-all'").get().read_at,null);assert.equal((await handleGifts(env,req({id:{},amount:9999999},true),'/gifts/claim')).status,400);const r=await(await handleGifts(env,req({id:'gift-one',amount:9999999},true),'/gifts/claim')).json();assert.equal(r.amount,0);assert.equal(balance('alice'),1600)});
 await test('malformed distribution rejected',async()=>{for(const extra of [{amount:-1},{amount:1.5},{amount:100001},{expiresAt:0},{title:''},{userId:'missing'},{all:true,userId:'alice'}])assert((await issueGift(env,req(msg('bad',extra)),'operator')).status>=400)});
 await test('gifts survive reload and deletion cascades only their own deliveries',async()=>{assert.equal((await giftInbox(env,'alice',now+2000)).pendingCount,0);db.prepare("DELETE FROM users WHERE id='bob'").run();assert.equal(db.prepare("SELECT COUNT(*) AS n FROM gift_deliveries WHERE user_id='bob'").get().n,0);assert.equal(db.prepare("SELECT COUNT(*) AS n FROM gift_deliveries WHERE user_id='alice'").get().n,4)});
+await test('unread count excludes read, claimed and expired gifts and spans the 300-row page',async()=>{
+ const insert=db.prepare('INSERT INTO gift_messages(id,title,body,amount,created_at,expires_at,created_by,audience) VALUES(?,?,?,?,?,?,?,?)');
+ const deliver=db.prepare('INSERT INTO gift_deliveries(gift_id,user_id) VALUES(?,?)');
+ for(let i=0;i<305;i++){const id='unread-'+i;insert.run(id,'Test','Body',1,now,now+86400000,'operator','alice');deliver.run(id,'alice');}
+ let inbox=await giftInbox(env,'alice',now+2000);assert.equal(inbox.items.length,300);assert.equal(inbox.unreadCount,305);
+ await handleGifts(env,req({id:'unread-0'},true),'/gifts/read');
+ inbox=await giftInbox(env,'alice',now+2000);assert.equal(inbox.unreadCount,304);assert.equal(inbox.pendingCount,305);
+ await claimGifts(env,'alice','unread-1',now+2000);assert.equal((await giftInbox(env,'alice',now+2000)).unreadCount,303);
+});
 console.log(`${count} gift inbox scenario groups passed`);
 }finally{db.close();await fs.rm(tmp,{recursive:true,force:true})}

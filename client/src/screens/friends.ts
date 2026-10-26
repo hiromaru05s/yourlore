@@ -1,3 +1,4 @@
+import {publishFriendNotifications} from '../ui/friendBadge';
 import { homeIcon } from "../ui/homeIcons";
 // ============================================================
 // LORE — friends screen: add/accept/remove friends, online
@@ -51,8 +52,10 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
 
   const lists = wrap.querySelector("#frLists") as HTMLElement;
   const msg = wrap.querySelector("#frMsg") as HTMLElement;
+  const account=app.user?.id;
   let dead = false;
   let listTimer = 0;
+  let listSerial = 0;
   let pollTimer = 0;
   let knownChallenges = new Set<string>();
   let challengeModalOpen = false;
@@ -143,7 +146,7 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
       </div>`;
     document.body.appendChild(ov);modals.add(ov);
     const close = (): void => { ov.remove();modals.delete(ov); challengeModalOpen = false; };
-    (ov.querySelector("#chNo") as HTMLElement).onclick = () => { void api.challengeRespond(c.id, false).catch(() => null); close(); };
+    (ov.querySelector("#chNo") as HTMLElement).onclick = () => { void api.challengeRespond(c.id, false).then(()=>refresh()).catch(showError); close(); };
     (ov.querySelector("#chYes") as HTMLElement).onclick = () => {
       (ov.querySelector("#chYes") as HTMLButtonElement).disabled=true;
       void api.challengeRespond(c.id, true).then((r) => {
@@ -196,12 +199,15 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
   // ---- list refresh loop ----
   const refresh = async (): Promise<void> => {
     if (dead) return;
+    const request=++listSerial;clearTimeout(listTimer);
     try {
       const d = await api.friends();
-      if (dead) return;
+      if (dead||request!==listSerial||app.user?.id!==account) return;
+      publishFriendNotifications(account,d);
       render(d);
       maybeShowChallenge(d);
-    } catch { if (!dead && !lists.querySelector(".fr-row")) lists.innerHTML = `<p role="status">${t("lobby.connerr")}</p>`; }
+    } catch { if (!dead && request===listSerial && !lists.querySelector(".fr-row")) lists.innerHTML = `<p role="status">${t("lobby.connerr")}</p>`; }
+    if(dead||request!==listSerial||app.user?.id!==account)return;
     clearTimeout(listTimer);
     listTimer = window.setTimeout(() => void refresh(), POLL_LIST_MS);
   };
