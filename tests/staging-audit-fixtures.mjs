@@ -13,7 +13,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict'),{DatabaseSync}=
 const args=process.argv.slice(2);assert(args.includes('lore-db-staging'));assert(!args.includes('lore-db'));assert.equal(args[args.indexOf('--env')+1],'staging');assert(args.includes('--remote'));
 const db=new DatabaseSync(process.env.QA_TEST_DB);let result;
 if(args.includes('--file')){db.exec(fs.readFileSync(args[args.indexOf('--file')+1],'utf8'));console.log('├ Upload complete');result=[{success:true,results:[{'Total queries executed':1}]}];}
-else result=[{success:true,results:db.prepare(args[args.indexOf('--command')+1]).all()}];
+else {const sql=args[args.indexOf('--command')+1];assert(!sql.includes('UNION ALL'),'Mirror remote compound SELECT restriction');result=sql.split(';').filter(s=>s.trim()).map(s=>({success:true,results:db.prepare(s).all()}));}
 db.close();console.log(JSON.stringify(result,null,2));
 `,{mode:0o700});
  const run=action=>spawnSync(process.execPath,['scripts/staging-audit-fixtures.mjs',action],{encoding:'utf8',env:{...process.env,PATH:dir+path.delimiter+process.env.PATH,QA_TEST_DB:database,LORE_BACKEND_AUTH_FILE:file}});

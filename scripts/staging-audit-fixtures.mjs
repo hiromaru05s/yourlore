@@ -42,7 +42,15 @@ if(action==='setup'){
  statements.push(`DELETE FROM gift_messages WHERE id=${quote(fixture.gift)};`,`DELETE FROM coupon_claims WHERE code=${quote(fixture.coupon)};`,`DELETE FROM coupons WHERE code=${quote(fixture.coupon)};`,`DELETE FROM users WHERE id IN (${ids});`);
  execute(statements.join('\n'));
  const checks=[...conditions,{name:'users',where:`id IN (${ids})`},{name:'coupons',where:`code=${quote(fixture.coupon)}`},{name:'gift_messages',where:`id=${quote(fixture.gift)}`}];
- const results=execute(checks.map(({name,where})=>`SELECT '${name}' AS name,COUNT(*) AS remaining FROM "${name}" WHERE ${where}`).join('\nUNION ALL\n')+';',true);
- if(results[0]?.results?.length!==checks.length||results[0].results.some(row=>row.remaining!==0))throw Error('Staging fixture cleanup verification failed');
+ const remaining=[];
+ // Use independent statements: the remote D1 API rejects compound SELECTs.
+ for(let i=0;i<checks.length;i+=10){
+  const chunk=checks.slice(i,i+10);
+  const results=execute(chunk.map(({name,where})=>`SELECT '${name}' AS name,COUNT(*) AS remaining FROM "${name}" WHERE ${where}`).join(';')+';',true);
+  const rows=results.flatMap(result=>result.results??[]);
+  if(rows.length!==chunk.length)throw Error('Incomplete staging cleanup count result');
+  remaining.push(...rows);
+ }
+ if(remaining.some(row=>row.remaining!==0))throw Error('Staging fixture cleanup verification failed');
  fs.rmSync(file);console.log('Removed staging QA identities and all related application rows; verified zero remaining.');
 }

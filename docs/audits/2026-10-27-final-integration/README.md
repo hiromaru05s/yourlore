@@ -104,3 +104,15 @@
 - ステージングQAは通常フレンド戦にランク専用previewを要求していた手順を修正。未決済の対戦が残っている場合はアカウントを消さずprivate recovery fileを保全し、遅延書込み後の孤児データを防ぐ。
 - 一時アカウントによる本物のAPI/WS検証の後、route差替えなしの認証済みブラウザで6メニュー往復を確認する手順を追加。
 - BOTの重い局面はpeer検証でworkerd約16.55秒。採用版は手番残り45秒未満で短い探索へ切り替える。全局面や実機の最大ラグを保証する結果ではない。
+
+
+## ステージング実通信検証（2026-10-26 23:15–23:19 UTC）
+
+- `57fb12d8`をguard経由でstaging公開。version `45189916-171c-470b-8025-424c7a0978d4`。guardで型/buildと246/246回帰検査成功（`suite-final.json`）。
+- 本物のAPI/D1/認証WebSocketで、購入の同時実行・ガチャ再送、coupon上限・gift重複防止、不正deck保全、ランク2人接続・秘匿手札・MMR確定・再接続、フレンド招待/受理/対戦/決済、BOT開始/決済を確認（`staging-live.json`）。
+- route差替えなしの認証ブラウザで1280/700px、6画面×2往復を確認。HTTP失敗・pageerror・可視画像欠落0。カード画面初回2003/1030ms、再訪324/379ms（CDN・端末・ネットワークを固定していない実配信測定。前後比較の改善率とはしない）。`staging-live-browser/report.json`。現行HOMEとカード画面を目視確認。
+- 後片付けのD1件数確認はcompound SELECTを拒否された。ユーザー削除自体は完了していたが、確認完了までprivate recovery fileを保全。独立SELECTのbatchに修正し、全関連行0を確認して認証fileを削除した。再現テストと本番reset count処理にも修正を反映。`staging-cleanup.txt`。
+- 本番0028の3索引適用成功。read-only schema contractとアプリ全28tableの完全照合成功、未知tableなし。
+- 次はproduction Phase Aのmaintenance＋新namespace切替。ユーザーデータはまだ消去していない。
+
+- stagingで全4難易度の認証開始・BOT実応答・降参決済と一時account/対戦記録の削除を確認（`staging-bot/authenticated-npc.json`、cleanup=true）。

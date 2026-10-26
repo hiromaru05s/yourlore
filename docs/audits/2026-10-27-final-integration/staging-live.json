@@ -1,0 +1,37 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "checkedAt": "2026-10-26T23:15:58.830Z",
+  "checks": [
+    "auth method enforcement, preserved session, anonymous queue and admin/setup boundaries",
+    "real D1 concurrent purchase, inventory, conflicting request rejection and gacha replay",
+    "malformed deck write rejected without changing saved decks",
+    "coupon global cap and concurrent gift claim pay once",
+    "authenticated ranked queue, two-player room, private hands, settlement and reconnect without duplicate payout",
+    "authenticated friend request, challenge inbox/accept replay/poll, two-player friendly game and settlement",
+    "authenticated BOT creation, ready, authoritative loss and persisted reward receipt"
+  ],
+  "ranked": {
+    "roomId": "07ffe5b9-c4cc-42a3-a784-17d9a84b4726",
+    "ratings": [
+      {
+        "matchId": "3229f6e4d60de2c801b62631f2da8ba32f900244fa192961b2d59238f4370858",
+        "season": "2026-10",
+        "before": 1000,
+        "after": 984,
+        "rankAfter": 6,
+        "tierBefore": "iron",
+        "tierAfter": "iron"
+      },
+      {
+        "matchId": "3229f6e4d60de2c801b62631f2da8ba32f900244fa192961b2d59238f4370858",
+        "season": "2026-10",
+        "before": 1000,
+        "after": 1018,
+        "rankAfter": 3,
+        "tierBefore": "iron",
+        "tierAfter": "iron"
+      }
+    ]
+  },
+  "boundary": "Real staging API, D1 and authenticated WebSockets; no UI rendering or injected live infrastructure failure. Google OAuth is disabled on staging and covered by local mocked-provider tests."
+}

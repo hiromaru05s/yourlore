@@ -1,5 +1,7 @@
-// Production's 2026-10-16 fresh start uses new namespaces. The implementation
-// stays shared with staging; legacy class exports must not survive deletion.
+// Phase A: fresh production namespaces; legacy objects can only retire data.
 export { default } from './index';
-export { Matchmaker as MatchmakerLive } from './matchmaker';
-export { GameRoom as GameRoomLive } from './gameRoom';
+export { Matchmaker as MatchmakerFresh20261027 } from './matchmaker';
+export { GameRoom as GameRoomFresh20261027 } from './gameRoom';
+import { RetiredUserData } from './retiredUserData';
+export class MatchmakerLive extends RetiredUserData {}
+export class GameRoomLive extends RetiredUserData {}

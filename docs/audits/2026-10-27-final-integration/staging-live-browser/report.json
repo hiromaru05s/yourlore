@@ -1,0 +1,164 @@
+{
+  "base": "https://test.yourlore.xyz",
+  "api": "authenticated staging; no route interception",
+  "cases": [
+    {
+      "width": 1280,
+      "routes": [
+        {
+          "round": 1,
+          "key": "deck",
+          "ms": 4477,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "cards",
+          "ms": 2003,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "leaderboard",
+          "ms": 87,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "friends",
+          "ms": 35,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "shop",
+          "ms": 5373,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "home",
+          "ms": 211,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "deck",
+          "ms": 1165,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "cards",
+          "ms": 324,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "leaderboard",
+          "ms": 80,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "friends",
+          "ms": 32,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "shop",
+          "ms": 35,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "home",
+          "ms": 177,
+          "broken": []
+        }
+      ],
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 700,
+      "routes": [
+        {
+          "round": 1,
+          "key": "deck",
+          "ms": 3445,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "cards",
+          "ms": 1030,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "leaderboard",
+          "ms": 68,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "friends",
+          "ms": 37,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "shop",
+          "ms": 328,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "home",
+          "ms": 215,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "deck",
+          "ms": 77,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "cards",
+          "ms": 379,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "leaderboard",
+          "ms": 68,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "friends",
+          "ms": 29,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "shop",
+          "ms": 33,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "home",
+          "ms": 189,
+          "broken": []
+        }
+      ],
+      "errors": [],
+      "http": []
+    }
+  ]
+}

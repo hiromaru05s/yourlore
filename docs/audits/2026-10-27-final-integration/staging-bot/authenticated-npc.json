@@ -1,0 +1,121 @@
+{
+  "origin": "https://test.yourlore.xyz",
+  "at": "2026-10-26T23:18:47.022Z",
+  "scope": "temporary QA account and persisted session; authenticated API/WebSocket NPC start, observed BOT response and surrender settlement; not human strength or a full played match",
+  "results": [
+    {
+      "tier": "easy",
+      "authenticatedStart": true,
+      "marketBias": false,
+      "initialMarket": [
+        "GOBLIN_LEADER",
+        "GS5_3",
+        "TDE2",
+        "MAGIC_BANK",
+        "LAND_GRANT",
+        "CROSSROADS",
+        "VOID_RITE"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "HALF_ELF": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "log",
+          "summon"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "normal",
+      "authenticatedStart": true,
+      "marketBias": false,
+      "initialMarket": [
+        "EXILE_NUKE1",
+        "Q_RIFT",
+        "HPS_GRAFT",
+        "GS6_4",
+        "VOID_RITE",
+        "ASSASSIN3",
+        "EXPANSION"
+      ],
+      "botResponse": {
+        "turn": 1,
+        "uses": {
+          "GOBLIN_RAIDER": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "log",
+          "summon"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "hard",
+      "authenticatedStart": true,
+      "marketBias": true,
+      "initialMarket": [
+        "HPS_SCALE",
+        "ADVANCE",
+        "ELITE",
+        "GOBLIN_KING",
+        "ASSASSIN_SQUAD",
+        "TRAINING_GROUND",
+        "QUICK_GRIMOIRE"
+      ],
+      "botResponse": {
+        "turn": 1,
+        "uses": {
+          "STARTER_MANA": 1,
+          "GOBLIN": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "log",
+          "summon"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "hell",
+      "authenticatedStart": true,
+      "marketBias": true,
+      "initialMarket": [
+        "Q_BRAND",
+        "QUICK_MUSTER",
+        "ELF",
+        "WORLD_HEART",
+        "S3",
+        "HPS_GRAFT",
+        "M4"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "ELF_HAVEN": 1
+        },
+        "buys": {
+          "VITAL2": 1
+        },
+        "eventTypes": [
+          "log",
+          "buy",
+          "enchantActivate",
+          "statusGrant"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    }
+  ],
+  "cleanup": true
+}

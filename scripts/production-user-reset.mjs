@@ -14,7 +14,7 @@ const cli=args=>{
  const out=execFileSync('npm',['exec','--','wrangler',...args],{encoding:'utf8',maxBuffer:10*1024*1024});
  const start=out.search(/^[\[{]/m);if(start<0)throw Error('Missing Wrangler JSON result');return JSON.parse(out.slice(start));
 };
-const query=sql=>{const r=cli(['d1','execute','lore-db','--remote','-c','server/wrangler.toml','--command',sql,'--json']);assert(r.length&&r.every(x=>x.success!==false));return r[0].results};
+const query=sql=>{const r=cli(['d1','execute','lore-db','--remote','-c','server/wrangler.toml','--command',sql,'--json']);assert(r.length&&r.every(x=>x.success!==false));return r.flatMap(x=>x.results??[])};
 const status=()=>cli(['deployments','status','-c','server/wrangler.toml','--json']);
 const lock=path.join(path.resolve(git('rev-parse','--git-common-dir')),'lore-deploy-production.lock');
 fs.mkdirSync(lock);
@@ -35,17 +35,17 @@ try{
  const db=new DatabaseSync(':memory:');db.exec(schema);const expected=db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all().map(r=>r.name).sort();db.close();
  const remote=query("SELECT name FROM sqlite_master WHERE type='table'").map(r=>r.name).filter(n=>!n.startsWith('_cf_')&&!n.startsWith('sqlite_')&&n!=='d1_migrations').sort();assert.deepEqual(remote,expected,'Unclassified remote table: review before wiping');
  const tables=[...wipe.matchAll(/DELETE FROM (\w+);/g)].map(m=>m[1]).sort();assert.deepEqual(tables,expected.filter(n=>n!=='coupons'));
- const countSql=tables.map(n=>`SELECT '${n}' AS name,COUNT(*) AS count FROM "${n}"`).join(' UNION ALL ');
- const report={at:new Date().toISOString(),source:sha,deployment:deployed.id,productionDatabase:'lore-db',before:query(countSql),executed:false};
+ const counts=()=>{const rows=[];for(let i=0;i<tables.length;i+=10){const batch=tables.slice(i,i+10);const result=query(batch.map(n=>`SELECT '${n}' AS name,COUNT(*) AS count FROM "${n}"`).join(';'));assert.equal(result.length,batch.length);rows.push(...result);}return rows;};
+ const report={at:new Date().toISOString(),source:sha,deployment:deployed.id,productionDatabase:'lore-db',before:counts(),executed:false};
  if(!execute){console.log(JSON.stringify(report,null,2));}
  else{
   fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
   // Recheck immediately before the destructive step, while the shared lock is held.
   assert.equal(status().id,deployed.id);await maintenance();
   const result=cli(['d1','execute','lore-db','--remote','-c','server/wrangler.toml','--file','scripts/sql/production-user-wipe-20261027.sql','--json']);assert(result.length&&result.every(r=>r.success!==false));
-  report.executed=true;report.after=query(countSql);assert(report.after.every(r=>r.count===0));
+  report.executed=true;report.after=counts();assert(report.after.every(r=>r.count===0));
   assert.equal(query('SELECT COALESCE(SUM(uses),0) AS uses FROM coupons')[0].uses,0);
-  await new Promise(r=>setTimeout(r,5000));await maintenance();report.afterQuietPeriod=query(countSql);assert(report.afterQuietPeriod.every(r=>r.count===0),'Old activity repopulated user data');
+  await new Promise(r=>setTimeout(r,5000));await maintenance();report.afterQuietPeriod=counts();assert(report.afterQuietPeriod.every(r=>r.count===0),'Old activity repopulated user data');
   fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');console.log('PASS all '+tables.length+' production user tables empty; coupon usage reset; maintenance remains enabled.');
  }
 }finally{fs.rmSync(lock,{recursive:true,force:true})}

@@ -22,11 +22,11 @@ not_found_handling = "single-page-application"
 # --- Durable Objects: SQLite-backed (required on the Workers FREE plan) ---
 [[durable_objects.bindings]]
 name = "MATCHMAKER"
-class_name = "MatchmakerLive"
+class_name = "MatchmakerFresh20261027"
 
 [[durable_objects.bindings]]
 name = "GAME_ROOM"
-class_name = "GameRoomLive"
+class_name = "GameRoomFresh20261027"
 
 [[migrations]]
 tag = "v1"
@@ -42,6 +42,11 @@ new_sqlite_classes = ["MatchmakerLive", "GameRoomLive"]
 tag = "v3-production-retire-20261016"
 deleted_classes = ["Matchmaker", "GameRoom"]
 
+# Authorized full-user reset: cut over while APIs are in maintenance.
+[[migrations]]
+tag = "v4-production-reset-20261027"
+new_sqlite_classes = ["MatchmakerFresh20261027", "GameRoomFresh20261027"]
+
 # --- D1: users / sessions / match records ---
 [[d1_databases]]
 binding = "DB"
@@ -50,6 +55,7 @@ database_id = "050d409e-913f-4a07-92b8-0d150ee6ce4d"
 
 # AUTH_SECRET / GOOGLE_CLIENT_SECRET are set via `wrangler secret put <NAME>`
 [vars]
+USER_DATA_RESET = "1"
 APP_ORIGIN = "*"
 GOOGLE_CLIENT_ID = "955911680552-9i1tcrojam3v759dmampaga63d387gvt.apps.googleusercontent.com"
 ADMIN_EMAILS = "maruru836818@gmail.com,suhwoo3@gmail.com"
