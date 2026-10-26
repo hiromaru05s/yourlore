@@ -29,12 +29,14 @@ try{
  assert.equal(binding.length,entries.length,'Binding and pruning still protect every scope and viewport variant');
  calls.length=0;await scoped.prepareMenuCache(()=>{},new AbortController().signal,[entries[1].url+'?v=current']);
  assert.deepEqual(calls,[entries[1].url],'Selected page fetches only its requested originals');
- // Restricted persistent storage still prepares selected image AND binary files.
+ // Duel admission defers bulk fallback to visible-board/deck preparation; explicit URLs still preload image and binary files.
  delete navigator.serviceWorker;calls.length=0;
  globalThis.Image=class{naturalWidth=1;naturalHeight=1;decode(){calls.push(this.src);return Promise.resolve();}};
  globalThis.fetch=async url=>{if(url==='/manifest.json')return Response.json({entries:[entries[0],entries[1],{url:'/sfx/duel.mp3',type:'audio/mpeg',scope:'duel'}]});calls.push(url);return new Response('audio');};
- const fallback=await import(dir+'/module.mjs?restricted');await fallback.prepareMenuCache(()=>{},new AbortController().signal,'duel');
- assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(calls.sort(),['/sfx/duel.mp3','https://lore.test'+entries[0].url].sort());
+ const fallback=await import(dir+'/module.mjs?restricted'),progress=[];await fallback.prepareMenuCache((done,total)=>progress.push([done,total]),new AbortController().signal,'duel');
+ assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(calls,[],'Storage fallback must not bulk-fetch duel art at the admission gate');assert.deepEqual(progress.at(-1),[1,1]);
+ await fallback.prepareMenuCache(()=>{},new AbortController().signal,[entries[0].url,'/sfx/duel.mp3']);
+ assert.deepEqual(calls.sort(),['/sfx/duel.mp3','https://lore.test'+entries[0].url].sort(),'Explicit page assets still preload image and binary files without persistent storage');
  const m=await menuCacheManifest(process.cwd()+'/client');assert(m.assets.length<m.entries.length/20,'Packs collapse more than 20 individual requests on average');for(const url of ['/ui/cursors/normal.svg','/ui/mana/empty.svg','/ui/duel-controls/v1/help.png','/sfx/lore-v5/shuffle.mp3'])assert(m.entries.some(e=>e.url===url),'Include late CSS/control/audio resource '+url);for(const e of m.entries){const original=await fs.readFile(path.join('client/public',e.url)),packed=m.assets[e.pack].source.subarray(e.offset,e.offset+e.bytes);assert.deepEqual(packed,original,'Packed bytes preserve original art exactly');}
  const scopes=new Map();for(const e of m.entries){const set=scopes.get(e.pack)??new Set();set.add(e.scope);scopes.set(e.pack,set);}assert([...scopes.values()].every(s=>s.size===1),'Packs must not combine menu, duel and locale fonts');
  console.log('PASS: phased admission, complete binding, pack corruption rejection, original-byte parity, cache hit, sparse repair, pack-404 fallback;',m.entries.length,'URLs in',m.assets.length,'packs');
