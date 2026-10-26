@@ -36,7 +36,7 @@ let sequence=0;
 function paint(badge:HTMLElement,fill:number){
  const h=46*clamp(fill),y=54-h;
  const rect=badge.querySelector('.enchant-time-level')!;rect.setAttribute('height',String(h));rect.setAttribute('y',String(y));
- badge.querySelector('.enchant-time-surface')!.setAttribute('d',`M8 ${y}h48`);badge.dataset.timePosition=String(fill);
+ const surface=badge.querySelector('.enchant-time-surface')!;surface.setAttribute('d',`M8 ${y}h48`);surface.setAttribute('opacity',fill>0&&fill<1?'1':'0');badge.dataset.timePosition=String(fill);
 }
 export function createEnchantTime(s:EnchantTime):HTMLElement {
  const badge=document.createElement('span'),id='enchant-time-clip-'+(++sequence),color=s.mode==='fill'?'#bcd6bc':'#d4bdab';
