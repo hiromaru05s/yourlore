@@ -1,0 +1,34 @@
+{
+  "source": "ecadb50edab44fc50488fa52a65e2f3f01f0c529",
+  "deploymentId": "b19d78bf-141e-4e7d-bbf4-20f6801c1197",
+  "version": "1ff4d48f-2bb7-4e9b-a28d-9e1ce0457fe0",
+  "percentage": 100,
+  "verifiedAt": "2026-10-26T10:48:47.218351+00:00",
+  "origin": "https://yourlore.xyz",
+  "files": [
+    {
+      "url": "/index.html",
+      "sha256": "e627381c404f696a9ee6498f64a88c908a5ff27cb3b648ff875b1f9e0c449ba6",
+      "bytes": 21254,
+      "status": 200,
+      "matched": true
+    },
+    {
+      "url": "/assets/social-Cjx6gm2z.js",
+      "sha256": "4b20ba8b32477c3707cf63297298076ebc0993141bfad54c69f18c9e26b51662",
+      "bytes": 1035837,
+      "status": 200,
+      "matched": true
+    },
+    {
+      "url": "/assets/social-Bg84rOIv.css",
+      "sha256": "529f543f0e8222200488b01305272ac08ffd9aa2fb7e3631d46de0808d896691",
+      "bytes": 267087,
+      "status": 200,
+      "matched": true
+    }
+  ],
+  "productionSuiteCount": 228,
+  "validation": "Guarded release observed through typecheck, production test suite, build and deployment. Per-test log for this combined release belongs to its releasing process.",
+  "scope": "Real GameView field/market/hand snapshots checked locally; production public asset hashes verified. Authenticated online match not performed."
+}
