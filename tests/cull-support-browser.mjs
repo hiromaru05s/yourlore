@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
 import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.LORE_PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:57482';
@@ -40,6 +41,6 @@ try{
  await page.screenshot({path:out+'/focus-390.png'});await page.locator('.cast-review .btn-gold').click();await page.waitForSelector('.cast-review',{state:'detached'});
  assert.equal(await page.evaluate(()=>qa.c.state.players[0].removed.filter(c=>c.id!=='STARTER_TRASH').length),1);
  assert.deepEqual(errors,[]);
- await fs.writeFile(out+'/report.json',JSON.stringify({origin,sourceCommit:'659eb6b7 + Cull support changes',worktree:process.cwd(),checks:['Scrapper exact two materials on 1280px and 390px','Cost-zero Cull excluded from material picker','One atomic cast pays 2 mana and gains 1 max mana','Focus accepts only one target','No JavaScript errors'],errors},null,2));
+ await fs.writeFile(out+'/report.json',JSON.stringify({origin,sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),worktree:process.cwd(),checks:['Scrapper exact two materials on 1280px and 390px','Cost-zero Cull excluded from material picker','One atomic cast pays 2 mana and gains 1 max mana','Focus accepts only one target','No JavaScript errors'],errors},null,2));
  console.log('PASS Cull support real-controller browser checks');
 }finally{await page.evaluate(()=>qa?.c.destroy()).catch(()=>{});await browser.close();}

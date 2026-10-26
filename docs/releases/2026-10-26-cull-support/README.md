@@ -16,7 +16,8 @@
 
 ## ソースと表示確認
 
-- ベース: `659eb6b7`（最新 `gh/main`、開始時の本番ソース `64902739` を包含）。
+- 初期ベース: `659eb6b7`（開始時の本番ソース `64902739` を包含）。
+- 統合: `7df1a99d`。最新mainのカード描画更新 `2a94fdd7` を取り込み、以下のブラウザ表示を再確認。
 - カード定義: `client/src/shared/cards.ts`。実処理: `client/src/shared/engine.ts`。表示文: `client/src/shared/cardEffectText.ts`。
 - 既存の `client/src/game/controller.ts`、カード一覧・詳細、`client/src/styles/defaultUI.css` / `defaultButtons.css`、`client/public/art/cards/*.webp` を使用。
 - ローカル起動元: `/Users/hiromaru05s/.codex/worktrees/cull-card-rework/LORE_TCG/client`、URL: `http://127.0.0.1:57482`。起動元と配信されたカード画像・定義を確認。

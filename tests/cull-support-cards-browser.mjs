@@ -1,6 +1,7 @@
 // Exercise shipped bundles and real menu/card inspection with isolated API fixtures.
 // This is a browser rendering test, not an authenticated account or online duel.
 import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
 import fs from 'node:fs/promises';
 import {apiFixture} from './helpers/api-fixture.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
@@ -38,5 +39,5 @@ try {
   await page.screenshot({path:out+'/'+id+'.png'});await page.setViewportSize({width:390,height:844});await page.screenshot({path:out+'/'+id+'-390.png'});await page.locator('.zoom-overlay .inspect-close').click();await page.locator('.zoom-overlay').waitFor({state:'detached'});await page.setViewportSize({width:1280,height:900});checks.push(name+' current effect text on desktop and 390px');
  }
  assert.deepEqual(errors,[]);checks.push('All seven card inspections rendered without JS errors');
- await fs.writeFile(out+'/report.json',JSON.stringify({base,scope:'actual App/menu/card renderer served from base; isolated API fixtures; no authenticated account or online duel',checks,assets,errors},null,2));console.log('PASS',checks);
+ await fs.writeFile(out+'/report.json',JSON.stringify({base,sourceCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),scope:'actual App/menu/card renderer served from base; isolated API fixtures; no authenticated account or online duel',checks,assets,errors},null,2));console.log('PASS',checks);
 }catch(e){await page.screenshot({path:out+'/failure.png'}).catch(()=>{});throw e;}finally{await browser.close();}

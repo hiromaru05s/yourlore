@@ -1,6 +1,7 @@
 {
   "base": "http://127.0.0.1:57482",
-  "scope": "Vite dev source, actual App/menu/card renderer; isolated API fixtures; no authenticated account or online duel",
+  "sourceCommit": "7df1a99d142d2f3325865905c813056561a8effe",
+  "scope": "actual App/menu/card renderer served from base; isolated API fixtures; no authenticated account or online duel",
   "checks": [
     "溶鉱炉 current effect text on desktop and 390px",
     "スクラップ収集家 current effect text on desktop and 390px",

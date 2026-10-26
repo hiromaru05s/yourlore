@@ -1,6 +1,6 @@
 {
   "origin": "http://127.0.0.1:57482",
-  "sourceCommit": "659eb6b7 + Cull support changes",
+  "sourceCommit": "7df1a99d142d2f3325865905c813056561a8effe",
   "worktree": "/Users/hiromaru05s/.codex/worktrees/cull-card-rework/LORE_TCG",
   "checks": [
     "Scrapper exact two materials on 1280px and 390px",
