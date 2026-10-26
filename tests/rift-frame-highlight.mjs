@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {pathToFileURL} from 'node:url';
+import {mkdtemp,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+const dir=await mkdtemp(join(tmpdir(),'rift-frame-'));
+try{
+ await build({stdin:{contents:`export * from './client/src/ui/riftFrameHighlight'; export * as T from 'three';`,resolveDir:process.cwd(),loader:'ts'},bundle:true,platform:'node',format:'esm',outfile:join(dir,'test.mjs')});
+ const {createRiftFrameHighlight,T}=await import(pathToFileURL(join(dir,'test.mjs')));
+ const media={matches:false};globalThis.matchMedia=()=>media;
+ const active={me:false,opp:false};
+ const root={querySelector:id=>({matches:()=>active[id.slice(6)]})};
+ const model=new T.Group();
+ const silver=new T.MeshStandardMaterial();silver.name='WarmSilver';
+ const wood=new T.MeshStandardMaterial();wood.name='InkWood';
+ const rail=new T.Mesh(new T.BoxGeometry(),silver),other=new T.Mesh(new T.BoxGeometry(),wood);model.add(rail,other);
+ const effect=createRiftFrameHighlight(root,model),clone=rail.material;
+ assert.notEqual(clone,silver);assert.equal(other.material,wood);
+ const shader={uniforms:{},vertexShader:'#include <begin_vertex>',fragmentShader:'#include <emissivemap_fragment>'};clone.onBeforeCompile(shader);
+ const strength=shader.uniforms.riftFrameStrength.value;
+ assert.equal(effect.tick(16),false);assert.deepEqual(strength.toArray(),[0,0]);assert.equal(rail.layers.mask,1);
+ active.me=true;assert.equal(effect.tick(32),true);assert(strength.x>0&&strength.x<1);assert.equal(strength.y,0);assert.equal(rail.layers.mask,1);
+ for(let n=48;n<2000;n+=16)effect.tick(n);
+ assert.equal(strength.x,1);assert.equal(effect.tick(2000),false);assert.equal(rail.layers.mask,1);
+ active.me=false;active.opp=true;media.matches=true;
+ assert.equal(effect.tick(2016),true);assert.deepEqual(strength.toArray(),[0,1]);assert.equal(rail.layers.mask,1);
+ active.opp=false;assert.equal(effect.tick(2032),true);assert.deepEqual(strength.toArray(),[0,0]);assert.equal(rail.layers.mask,1);
+ assert.equal(effect.tick(2048),false);assert.equal(rail.layers.mask,1);
+ let disposed=0;clone.addEventListener('dispose',()=>disposed++);
+ effect.dispose();effect.dispose();assert.equal(disposed,1);assert.equal(rail.material,silver);assert.equal(other.material,wood);assert.equal(effect.tick(2064),false);
+ console.log('PASS: independent sides, easing/rest, reduced motion, final redraw, material ownership and disposal');
+}finally{await rm(dir,{recursive:true,force:true});}

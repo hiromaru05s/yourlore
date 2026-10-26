@@ -61,6 +61,7 @@
     "tests/dice-source.mjs",
     "tests/duel-ui.mjs",
     "tests/outcome-finale.mjs",
+    "tests/mana-rupture.mjs",
     "tests/expansion-v50.mjs",
     "tests/dominion-rework.mjs",
     "tests/fate-wheel.mjs",
@@ -97,6 +98,7 @@
     "tests/rank-emblem.mjs",
     "tests/rank-sound.mjs",
     "tests/release-furniture-model.mjs",
+    "tests/rift-frame-highlight.mjs",
     "tests/rift-fold.mjs",
     "tests/rift-transmute.mjs",
     "tests/solid-draw.mjs",
@@ -221,7 +223,8 @@
     "tests/rift-ores-server.mjs",
     "tests/balance-caps.mjs",
     "tests/balance-caps-server.mjs",
-    "tests/card-counters.mjs"
+    "tests/card-counters.mjs",
+    "tests/deck-drag.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
@@ -229,6 +232,7 @@
   },
   "browser": "All *-browser.mjs require Chrome/Playwright and run separately; not Node unit tests.",
   "timeoutMs": {
+    "tests/card-references.mjs": 300000,
     "tests/bot-strength.mjs": 600000,
     "tests/bot-worker.mjs": 300000,
     "tests/bot-npcs.mjs": 900000,

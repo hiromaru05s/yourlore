@@ -65,6 +65,8 @@ import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, stopSounds } from "../ui/sound";
 import {EventSound} from "../ui/eventSound";
+import {prepareManaRupture,type ManaRupture} from "../ui/manaRupture/runtime";
+import {lethalOutcomeSide} from "../ui/manaRupture/plan";
 import { RankPresentation } from "../ui/rankPresentation";
 import type { RankChange } from "../shared/rank";
 import { t, getLang, cardName, onLangChange } from "../i18n";
@@ -106,6 +108,8 @@ export abstract class BaseController implements BoardHandlers {
   private rankPresentation = new RankPresentation();
   private winShown = false;
   private outcomePending = false;
+  private lethalOutcome:ManaRupture|undefined;
+  private lethalSide:Side|null=null;
   protected dead = false;
   private combatExits=new AbortController();
   private queue: Promise<void> = Promise.resolve();
@@ -294,6 +298,7 @@ export abstract class BaseController implements BoardHandlers {
       .then(() => this.playResult(prev, res, animate, gen, presentedHandDiscards))
       .catch((err) => {
         console.error("[playback]", err);
+        this.lethalOutcome?.cancel();
         this.clearQuickFaces();
         // A playback exception must not strand the game: afterApply is what
         // re-arms the bot (LocalController) and pending pickers. Skipping it for
@@ -325,7 +330,22 @@ export abstract class BaseController implements BoardHandlers {
     }
     this.view.setPlaying(true);
     try {
+      const loser=lethalOutcomeSide(prev,res);
+      if(loser!==null && !A.isFxSkipped()){
+        const portrait=this.view.root.querySelector<HTMLElement>(loser===this.you?"#portraitMe":"#portraitOpp");
+        if(portrait){
+          this.lethalOutcome?.cancel();this.lethalSide=loser;
+          this.lethalOutcome=prepareManaRupture(portrait);
+          await this.lethalOutcome.ready;
+        }
+      }
+      if(this.dead)return;
       await this.playEvents(prev, res, presentedHandDiscards);
+      if(loser!==null && this.lethalOutcome){
+        if(A.isFxSkipped())this.lethalOutcome.cancel();
+        else this.lethalOutcome.start(); // Missing-contact fallback uses the final native HP display.
+        await this.lethalOutcome.finished;
+      }
       if(wheelResolution)this.consumeLogs(res.events);
     } finally {
       if(this.wheelReplayUid!==undefined){this.wheelReplayUid=undefined;this.wheelDice?.close();this.wheelDice=null;}
@@ -423,6 +443,10 @@ export abstract class BaseController implements BoardHandlers {
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
+    const presentHp=(side:A.ViewSide,hp:number)=>{
+      A.hpBarSet(side,hp);
+      if(hp<=0 && this.lethalSide!==null && side===(this.lethalSide===this.you?"me":"opp"))this.lethalOutcome?.start();
+    };
     const contactedDamage=new Set<GameEvent>();
     const elemental=new Map<string,Playback>();
     const elementalDeaths:Promise<void>[]=[];
@@ -572,7 +596,7 @@ export abstract class BaseController implements BoardHandlers {
                 hpNow[damage.player]-=damage.amount;
                 if(damage.player===this.you)this.view.pushIcon("hitme");
                 const sound=eventSound.cue(damage);if(sound&&!A.isFxSkipped())sfx(sound);
-                A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+                presentHp(sideOf(damage.player),hpNow[damage.player]);
               });
               break;
             }
@@ -583,7 +607,7 @@ export abstract class BaseController implements BoardHandlers {
             await A.growthRecovery(sideOf(e.player),growthPulses,index=>{
               if(this.dead)return;const pulse=growthPulses[index];hpNow[pulse.player]+=pulse.amount;
               if(pulse.amount>0&&pulse.player===this.you)this.view.pushIcon('heal');
-              A.hpBarSet(sideOf(pulse.player),hpNow[pulse.player]);
+              presentHp(sideOf(pulse.player),hpNow[pulse.player]);
             });break;
           }
           if(e.originRite){
@@ -804,7 +828,7 @@ export abstract class BaseController implements BoardHandlers {
             contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
             if(damage.player===this.you)this.view.pushIcon('hitme');
             const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
-            A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+            A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);presentHp(sideOf(damage.player),hpNow[damage.player]);
           });
           voidShotFinish=playback.finished;motionFinishes.push(playback.finished);await playback.contact;
           break;
@@ -816,19 +840,19 @@ export abstract class BaseController implements BoardHandlers {
             contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
             if(damage.player===this.you)this.view.pushIcon('hitme');
             const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
-            A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+            presentHp(sideOf(damage.player),hpNow[damage.player]);
           });
           motionFinishes.push(playback.finished);await playback.contact;
           break;
         }
         case "damage": {
           if(isSoulHarvestDamage(e)){
-            await A.soulHarvest(null,sideOf(e.player),e.amount,()=>{if(this.dead)return;hpNow[e.player]-=e.amount;A.hpBarSet(sideOf(e.player),hpNow[e.player]);});
+            await A.soulHarvest(null,sideOf(e.player),e.amount,()=>{if(this.dead)return;hpNow[e.player]-=e.amount;presentHp(sideOf(e.player),hpNow[e.player]);});
             break;
           }
           hpNow[e.player] -= e.amount;
           if(!e.reversed)A.hpFeedback(sideOf(e.player), "dmg", e.amount);
-          A.hpBarSet(sideOf(e.player), hpNow[e.player]);
+          presentHp(sideOf(e.player), hpNow[e.player]);
           break;
         }
         case "heal": {
@@ -836,11 +860,11 @@ export abstract class BaseController implements BoardHandlers {
           hpNow[e.player] += healed;
           if(e.bloodRiteSources?.length){
             await A.bloodRiteRecovery(sideOf(e.player),e.bloodRiteSources,()=>{
-              if(!this.dead)A.hpBarSet(sideOf(e.player),hpNow[e.player]);
+              if(!this.dead)presentHp(sideOf(e.player),hpNow[e.player]);
             });
           }else{
             if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
-            A.hpBarSet(sideOf(e.player), hpNow[e.player]);
+            presentHp(sideOf(e.player), hpNow[e.player]);
             await wait(130);
           }
           break;
@@ -852,7 +876,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "nova": {
           const card=prev.players[e.player].hand.find(c=>c.id==='BLACK_NOVA')??{...DB.BLACK_NOVA,uid:'nova-source'};
-          await A.novaTimeTheft(card,sideOf(e.player),e.from,hp=>{if(!this.dead)A.hpBarSet(sideOf(e.player),hp);});
+          await A.novaTimeTheft(card,sideOf(e.player),e.from,hp=>{if(!this.dead)presentHp(sideOf(e.player),hp);});
           hpNow[e.player]=e.to;
           break;
         }
@@ -882,7 +906,7 @@ export abstract class BaseController implements BoardHandlers {
                 contactedDamage.add(damage);
                 await A.soulHarvest(node,sideOf(damage.player),damage.amount,()=>{
                   if(this.dead)return;
-                  hpNow[damage.player]-=damage.amount;A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+                  hpNow[damage.player]-=damage.amount;presentHp(sideOf(damage.player),hpNow[damage.player]);
                   if(damage.player===this.you)this.view.pushIcon('hitme');
                 });
               }:undefined;
@@ -900,7 +924,7 @@ export abstract class BaseController implements BoardHandlers {
                   contactedDamage.add(damage);hpNow[damage.player]-=damage.amount;
                   if(damage.player===this.you)this.view.pushIcon('hitme');
                   const cue=eventSound.cue(damage);if(cue&&!A.isFxSkipped())sfx(cue);
-                  A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);A.hpBarSet(sideOf(damage.player),hpNow[damage.player]);
+                  A.hpFeedback(sideOf(damage.player),'dmg',damage.amount);presentHp(sideOf(damage.player),hpNow[damage.player]);
                 },
               });
             }else if(def.id==='MASSACRE'){
@@ -1579,6 +1603,7 @@ export abstract class BaseController implements BoardHandlers {
     this.marketCrisis?.cancel();
     this.disposeHandDiscard?.();
     this.dead = true;
+    this.lethalOutcome?.cancel();this.lethalOutcome=undefined;this.lethalSide=null;
     disposeStatusExtinctions();
     this.rankPresentation.destroy();
     stopSounds();

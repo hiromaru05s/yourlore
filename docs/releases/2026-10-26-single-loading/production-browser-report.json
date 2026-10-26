@@ -1,0 +1,33 @@
+{
+  "origin": "https://yourlore.xyz",
+  "api": "guest fixture; real built assets",
+  "checks": [
+    {
+      "width": 1280,
+      "stalledCache": false,
+      "cacheMode": "ready",
+      "readyMs": 20024,
+      "hand": 3,
+      "sceneReady": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "stalledCache": false,
+      "cacheMode": "ready",
+      "readyMs": 21611,
+      "hand": 3,
+      "sceneReady": true,
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "stalledCache": true,
+      "cacheMode": "http-fallback",
+      "readyMs": 67899,
+      "hand": 3,
+      "sceneReady": true,
+      "errors": []
+    }
+  ]
+}

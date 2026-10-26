@@ -133,9 +133,10 @@ export function mountDuelScene(root:HTMLElement):()=>void {
     if(!root.isConnected){dispose();return;}
     if(width!==innerWidth||height!==innerHeight){width=innerWidth;height=innerHeight;const ratio=rasterRatio();renderer.setPixelRatio(ratio);flightRenderer.setPixelRatio(Math.min(cosmeticPreview?.pixelRatio??flightPixelRatio(),2));renderer.setSize(width,height);flightRenderer.setSize(width,height);cachedBoard.samples=Math.min(renderer.capabilities.maxSamples,cosmeticPreview?.antialiasSamples??(ratio>1.5||width*height*ratio*ratio>3000000?0:2));cachedBoard.setSize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));dirty=true;}
     const paintStart=performance.now();
+    const frameMotion=table.tickRiftFrame(now);
     const widgetMotion=widgets.tick(now),boardMotion=motion.tick(now),riftMotion=widgets.tickRift(now),displayMotion=widgets.takeDisplayUpdate();
     const cosmeticMotion=cosmeticPreview?.tick(now)??false;
-    const full=dirty||openingDirty||widgetMotion||(root.dataset.sceneReady!=='true'&&now-lastPaint>=2000);
+    const full=dirty||openingDirty||widgetMotion||frameMotion||(root.dataset.sceneReady!=='true'&&now-lastPaint>=2000);
     const active=flightScene.children.length>1;
     const overlay=!!(dusts.length||flows.length)||dustActive;
     // Card flights own their renderer. Button emission and rifts own separate
