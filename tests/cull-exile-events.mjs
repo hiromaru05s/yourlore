@@ -9,9 +9,10 @@ try{
   const p=g.players[owner];p.hand=[{...DB.SORTER,uid:'sorter'}];
   for(let i=0;i<count;i++)p[['discard','deck','hand'][i%3]].push({...STARTERS.STARTER_TRASH,uid:'cull'+i});
   const r=reduce(g,{type:'play',idx:0}),events=r.events,exits=events.filter(e=>e.type==='cullExile');
-  assert.equal(exits.length,count>3?2:count?1:0);assert.equal(exits.flatMap(e=>e.cards).length,Math.min(count,6));
-  assert.deepEqual(new Set(exits.flatMap(e=>e.cards.map(c=>c.card.uid))),new Set(r.state.players[owner].removed.map(c=>c.uid)));
+  assert.equal(exits.length,count?1:0);assert.equal(exits.flatMap(e=>e.cards).length,Math.min(count,1));
+  assert.equal(r.state.players[owner].removed.length,1+Math.min(count,1));
+  assert.deepEqual(new Set(exits.flatMap(e=>e.cards.map(c=>c.card.uid))),new Set(r.state.players[owner].removed.filter(c=>c.uid.startsWith("cull")).map(c=>c.uid)));
   for(const e of exits){assert.equal(e.player,owner);assert.equal(e.sourceUid,'sorter');assert.equal(events.slice(0,events.indexOf(e)).findLast(e=>e.type!=='log').type,'monsterActivate');for(const {card,from}of e.cards){assert(p[from].some(c=>c.uid===card.uid));assert(redactFor(r.state,1-owner).players[owner].removed.some(c=>c.uid===card.uid),'only newly public removed cards enter the event');}}
  }
- console.log('PASS Culls: no-op silence, summon and passive causality, real zone origins, no double exile, both owners and public-state privacy');
+ console.log('PASS Culls: new Cull generation plus passive causality, real zone origins, no double exile, both owners and public-state privacy');
 }finally{await rm(tmp,{recursive:true,force:true});}

@@ -1,0 +1,89 @@
+{
+  "origin": "http://127.0.0.1:5307",
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/rift-train-bank/LORE_TCG",
+  "baseCommit": "64902739c23c1d3884ee83ed44eadda9d16ac68e",
+  "sources": [
+    "client/src/main.ts",
+    "client/src/ui/cardView.ts",
+    "client/src/game/controller.ts",
+    "client/src/ui/boardView.ts",
+    "client/public/art/cards"
+  ],
+  "css": [
+    "/src/styles/fonts.css",
+    "/src/styles/reading-board.css",
+    "/src/styles/tokens.css",
+    "/src/styles/base.css",
+    "/src/styles/card.css",
+    "/src/styles/game-overlays.css",
+    "/src/styles/game.css",
+    "/src/styles/dice.css",
+    "/src/styles/screens.css",
+    "/src/styles/mobile.css",
+    "/src/styles/duel-opening.css",
+    "/src/styles/lounge.css",
+    "/src/styles/loungeGame.css",
+    "/src/styles/loungeStage.css",
+    "/src/styles/presentation.css",
+    "/src/styles/deckWorkspace.css",
+    "/src/styles/cardsWorkspace.css",
+    "/src/styles/menuApproved.css",
+    "/src/styles/menuWorkspace.css",
+    "/src/styles/popupSilver.css",
+    "/src/styles/defaultUI.css",
+    "/src/styles/defaultButtons.css",
+    "/src/styles/deckLayout.css",
+    "/src/styles/deckActions.css"
+  ],
+  "evidence": "local fixture using current production renderer/controller; no authenticated live PvP match",
+  "checks": [
+    "Seven updated cards: actual production card/rules renderer, all three languages, new artwork decoded at 1472x1344",
+    "Inactive player resolves Jailer via actual picker clicks; both targets transfer and Jailer returns to graveyard",
+    "Production controller plays Bank/Train; end timing label correct, six quiet turns expire Bank and draw only once"
+  ],
+  "assets": [
+    {
+      "id": "MAGIC_TRAIN",
+      "width": 1472,
+      "height": 1344,
+      "src": "http://127.0.0.1:5307/art/cards/MAGIC_TRAIN.webp"
+    },
+    {
+      "id": "MAGIC_BANK",
+      "width": 1472,
+      "height": 1344,
+      "src": "http://127.0.0.1:5307/art/cards/MAGIC_BANK.webp"
+    },
+    {
+      "id": "VOID_APOSTLE",
+      "width": 832,
+      "height": 760,
+      "src": "http://127.0.0.1:5307/art/cards/VOID_APOSTLE.webp"
+    },
+    {
+      "id": "GM6_8",
+      "width": 832,
+      "height": 760,
+      "src": "http://127.0.0.1:5307/art/cards/GM6_8.webp"
+    },
+    {
+      "id": "GM6_1",
+      "width": 832,
+      "height": 760,
+      "src": "http://127.0.0.1:5307/art/cards/GM6_1.webp"
+    },
+    {
+      "id": "SORTER",
+      "width": 832,
+      "height": 759,
+      "src": "http://127.0.0.1:5307/art/cards/SORTER.webp"
+    },
+    {
+      "id": "QUICK_SORT",
+      "width": 832,
+      "height": 760,
+      "src": "http://127.0.0.1:5307/art/cards/QUICK_SORT.webp"
+    }
+  ],
+  "errors": []
+}
