@@ -34,7 +34,7 @@
   .auth-card,
   .academy-content,
   .welcome-sheet,
-  .overlay > .modal,
+  .overlay > .modal:not(.outcome-result),
   dialog:not(.gacha-cinematic),
   .zoom-wrap,
   .card-reference-preview,
@@ -78,30 +78,30 @@
 :root body .rule-notebook .tut-sec {
   background:transparent!important;box-shadow:none;outline:none;
 }
-:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic),.zoom-details,.card-reference-preview) {
+:root body :is(.lounge-content,.overlay > .modal:not(.outcome-result),dialog:not(.gacha-cinematic),.zoom-details,.card-reference-preview) {
   --paper:var(--lore-text);--paper-dim:var(--lore-muted);--paper-faint:#9db3c4;
   --brass:var(--lore-accent);--brass-hi:#dcecf6;--line:var(--lore-line);
 }
 /* Controls keep existing dimensions, handlers, disabled and selected states. */
-:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) .btn,
+:root body :is(.lounge-content,.overlay > .modal:not(.outcome-result),dialog:not(.gacha-cinematic)) .btn,
 :root body :is(.tutorial-game-button,.tutorial-icon-button) {
   border-radius:1px;box-shadow:none;text-shadow:none;
   border-color:#b4c5d279;background:#10243d66;color:var(--lore-text);
 }
-:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) :is(.btn-gold,.btn-primary),
+:root body :is(.lounge-content,.overlay > .modal:not(.outcome-result),dialog:not(.gacha-cinematic)) :is(.btn-gold,.btn-primary),
 :root body .tutorial-primary {
   background:var(--lore-action);color:var(--lore-text);border-color:#b4c5d279;box-shadow:none;
 }
-:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) .btn-danger {
+:root body :is(.lounge-content,.overlay > .modal:not(.outcome-result),dialog:not(.gacha-cinematic)) .btn-danger {
   background:#512a3a;color:#ffe7ed;border-color:#d39caa;
 }
-:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) :is(.input,input:not([type=range]):not([type=checkbox]),select,textarea) {
+:root body :is(.lounge-content,.overlay > .modal:not(.outcome-result),dialog:not(.gacha-cinematic)) :is(.input,input:not([type=range]):not([type=checkbox]),select,textarea) {
   border-radius:1px;border-color:#a8c1d65c;background:var(--lore-field);color:var(--lore-text);
 }
-:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) :is(button,input,textarea,select):focus-visible {
+:root body :is(.lounge-content,.overlay > .modal:not(.outcome-result),dialog:not(.gacha-cinematic)) :is(button,input,textarea,select):focus-visible {
   outline:2px solid #c4e5ff;outline-offset:2px;
 }
-:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) .btn:hover:not(:disabled) {filter:brightness(1.12);}
+:root body :is(.lounge-content,.overlay > .modal:not(.outcome-result),dialog:not(.gacha-cinematic)) .btn:hover:not(:disabled) {filter:brightness(1.12);}
 :root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading,.popup-heading) {
   background:#172d4666;border-bottom-color:var(--lore-line);
 }
