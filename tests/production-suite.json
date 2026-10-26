@@ -80,6 +80,7 @@
     "tests/mana-spirit-motion.mjs",
     "tests/moon-rabbit-preview.mjs",
     "tests/zeno-interaction.mjs",
+    "tests/zeno-toon.mjs",
     "tests/monster-animation-rules.mjs",
     "tests/dual-ready.mjs",
     "tests/monster-effect-activation.mjs",

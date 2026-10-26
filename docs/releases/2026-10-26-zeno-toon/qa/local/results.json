@@ -1,0 +1,13 @@
+{
+  "origin": "http://127.0.0.1:5549",
+  "api": "fixture, no authenticated server",
+  "checks": [
+    "Pointer and keyboard focus: no circle; compact keyboard cue",
+    "Greeting, continuous idle, drag and return; reduced motion remains still",
+    "Complete ambient gesture and hidden-document suspension",
+    "Tutorial and HOME return retain the cached scene",
+    "Four viewport sizes render without missing or duplicate guide",
+    "WebGL unavailable retains the explicit SVG fallback"
+  ],
+  "errors": []
+}

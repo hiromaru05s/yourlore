@@ -63,6 +63,9 @@ try{
   checks.push('Complete ambient gesture and hidden-document suspension');
   await page.evaluate(()=>window.__zenoCanvas=document.querySelector('.home-spirit-host canvas'));
   await page.locator('[data-nav=tutorial]').click();await page.locator('.academy').waitFor();
+  await page.locator('.academy-spirit canvas').waitFor();
+  await page.waitForFunction(()=>!document.querySelector('#startup,.screen-loader.game-loading'));
+  await page.waitForTimeout(500);
   await page.screenshot({path:out+'/tutorial.png'});
   await page.locator('[data-nav=home]').click();await touch.waitFor();
   assert(await page.evaluate(()=>document.querySelector('.home-spirit-host canvas')===window.__zenoCanvas),'HOME reuses its existing renderer');

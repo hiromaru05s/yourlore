@@ -4,6 +4,7 @@ import {homeDaylight,onHomeDaylightReady} from './homeDaylight';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createSpiritMotion } from './manaSpiritMotion';
+import {applyZenoToonSurface} from './zenoToonSurface';
 import { buildMoonRabbit } from './zenoRig';
 import { bindZenoInteraction, createZenoTurn, ZENO_TURN_LIMIT } from './zenoInteraction';
 import { loungeText } from './loungeText';
@@ -82,6 +83,8 @@ export function mountManaSpirit(host: HTMLElement, options: {
       object.castShadow=object.material===pearl||object===face;
     }});
   }
+  // Keep comparison-lab custom forms and silhouettes independent of the adopted material.
+  if(!options.form&&!options.silhouette)applyZenoToonSurface(spirit,pearl,face);
   const {left,right}=form;
   const shadow=mesh(new THREE.CircleGeometry(.53,64),new THREE.MeshBasicMaterial({color:0x284157,transparent:true,opacity:.13,depthWrite:false}),0,-1.07,0,scene);shadow.rotation.x=-Math.PI/2;shadow.scale.y=.65;shadow.visible=!options.home;
   const silhouetteMaterial=options.silhouette?new THREE.MeshBasicMaterial({color:0x122534}):null;
