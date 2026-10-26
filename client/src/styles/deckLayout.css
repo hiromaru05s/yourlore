@@ -1,5 +1,5 @@
 /* Approved 2026-10-26 deck scene. Shared HOME/nav, frame and common buttons remain owned by the lounge. */
-:root body .lounge-deck .lounge-content{inset:64px 12px 82px;padding:0;overflow:visible}
+:root body .lounge-deck .lounge-content{inset:calc(var(--bar) + 8px) 12px calc(var(--dock) + 10px);padding:0;overflow:visible}
 :root body .lounge-deck .lounge-content>.deck-screen{padding:0;width:100%;height:100%;overflow:visible}
 :root body .lounge-deck .deck-panel{display:grid;grid-template-columns:106px minmax(0,1fr);grid-template-rows:263px minmax(0,1fr);gap:8px 12px;width:100%;max-width:none;height:100%;padding:0!important;margin:0;border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important;backdrop-filter:none;overflow:visible}
 .lounge-deck .deck-panel>h2,.lounge-deck .deck-controls>#back{display:none}
@@ -87,7 +87,7 @@
 .lounge-deck .deck-drag-guide:empty{display:none}
 .lounge-deck .deck-drag-over .deck-stage-depth{box-shadow:inset 0 -2px #9bd2eb}
 @media(max-width:760px){
- :root body .lounge-deck .lounge-content{inset:62px 8px 76px}
+ :root body .lounge-deck .lounge-content{inset:calc(var(--bar) + 8px) 8px calc(var(--dock) + 10px)}
  :root body .lounge-deck .deck-panel{grid-template-columns:65px minmax(0,1fr);grid-template-rows:39px 199px minmax(0,1fr);gap:7px}
  .lounge-deck .deck-panel>.deck-tabs{grid-column:1/-1;grid-row:1;flex-direction:row;gap:2px;padding:2px}
  .lounge-deck .deck-tab-row .deck-tab{font-size:9px;padding:0 3px;min-height:28px}
@@ -133,3 +133,15 @@
 /* defaultUI's grouped selector has dialog-level specificity; opt out only this layout container. */
 :root body .lounge-deck .deck-panel#deckWorkspace{border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important}
 .lounge-deck #deckCur{box-shadow:none;border-radius:0}
+
+/* Short landscape screens scroll the workspace inside the same header/nav safe area. */
+@media(max-height:500px){
+ :root body .lounge-deck .lounge-content>.deck-screen{overflow:auto;padding:3px}
+ :root body .lounge-deck .deck-panel{height:auto;min-height:100%;grid-template-rows:190px 190px}
+ .lounge-deck .deck-screen:not([data-tab=edit]) .deck-panel{grid-template-rows:38px 190px}
+}
+@media(max-height:650px) and (max-width:760px){
+ :root body .lounge-deck .lounge-content>.deck-screen{overflow:auto;padding:3px}
+ :root body .lounge-deck .deck-panel{height:auto;min-height:100%;grid-template-rows:39px 199px 190px}
+ .lounge-deck .deck-screen:not([data-tab=edit]) .deck-panel{grid-template-rows:39px 36px 190px}
+}
