@@ -6,11 +6,25 @@ import {acquireDrawStage,type StockPose} from './drawStock';
 import {sfx} from './sound';
 export {handCardMatrix} from './handGeometry';
 export interface PaperDrawOptions {cards:HTMLElement[];origin:DOMRect;sleeve:string;reveal:boolean;signal:AbortSignal;onLand:(node:HTMLElement)=>void;previousHand?:HandLayout;durationScale?:number;}
-function nativeCopy(node:HTMLElement){
+function nativeCopy(node:HTMLElement,arriving=false){
  const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.setAttribute('aria-hidden','true');
  const cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight;copy.classList.remove('is-picked','is-armed','is-played');copy.style.cssText+=`;position:absolute;inset:0;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px;margin:0;transform:none;transition:none;animation:none;visibility:visible;pointer-events:none;`;
- copy.style.setProperty('filter',cs.filter,'important');copy.style.fontFamily=cs.fontFamily;
- const originals=node.querySelectorAll<HTMLElement>('.card-frame');copy.querySelectorAll<HTMLElement>('.card-frame').forEach((f,i)=>{f.style.filter=getComputedStyle(originals[i]).filter;});return copy;
+ if(arriving){
+  // Payment/condition cues belong to the hand, after the card has landed.
+  copy.classList.remove('is-dim','is-exhausted','is-playable','is-buyable','has-play-condition');
+  copy.querySelectorAll('.hand-condition-effect').forEach(effect=>effect.remove());
+  // Resolve the neutral print in its native CSS context before moving to body.
+  node.parentElement!.append(copy);
+ }
+ try{
+  const source=arriving?copy:node;
+  copy.style.setProperty('filter',getComputedStyle(source).filter,'important');copy.style.fontFamily=cs.fontFamily;
+  // Existing/landed hand copies retain every layer's dimming, including art
+  // and condition opacity; an arriving face retains only its neutral print.
+  const tones=Array.from(source.children,layer=>{const style=getComputedStyle(layer);return {filter:style.filter,opacity:style.opacity};});
+  Array.from(copy.children).forEach((layer,i)=>{const style=(layer as HTMLElement).style;style.filter=tones[i].filter;style.opacity=tones[i].opacity;});
+ }finally{if(arriving)copy.remove();}
+ return copy;
 }
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 function mixMatrix(a:DOMMatrix,b:DOMMatrix,t:number){return new DOMMatrix([mix(a.a,b.a,t),mix(a.b,b.b,t),mix(a.c,b.c,t),mix(a.d,b.d,t),mix(a.e,b.e,t),mix(a.f,b.f,t)]);}
@@ -22,7 +36,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
  const flights=cards.map(node=>{
   const cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight,root=document.createElement('div');
   root.className='native-draw-card';root.style.cssText=`position:absolute;left:0;top:0;width:${w}px;height:${h}px;transform-origin:50% 50%;transform-style:preserve-3d;will-change:transform;display:none`;
-  if(reveal){const front=nativeCopy(node);front.style.backfaceVisibility='hidden';front.style.transform='translateZ(.015px)';root.append(front);}
+  if(reveal){const front=nativeCopy(node,true);front.style.backfaceVisibility='hidden';front.style.transform='translateZ(.015px)';root.append(front);}
   const back=document.createElement('div');back.className='draw-stock-back';back.style.cssText=`position:absolute;inset:0;border-radius:5.2%;background-image:url("${sleeve}");background-size:100% 100%;backface-visibility:hidden;transform:translateZ(${-w*DRAW_THICKNESS_RATIO}px) rotateY(180deg);box-shadow:inset 0 0 0 1px #b1c3d155`;root.append(back);
   // A narrow, short-lived mana edge follows the same rigid surface.
   const light=document.createElement('div');light.style.cssText=`position:absolute;inset:1%;border-radius:5%;border:1px solid #98ddff;box-shadow:0 0 5px #64bdff66,inset 0 0 3px #64bdff44;transform:translateZ(${-w*(DRAW_THICKNESS_RATIO+.001)}px);opacity:0;pointer-events:none`;root.append(light);

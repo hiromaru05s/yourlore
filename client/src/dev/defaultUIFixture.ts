@@ -5,6 +5,7 @@ import {setLang} from '../i18n';
 import {confirmDialog, cardPicker, winModal} from '../ui/modal';
 import {openTutorialBasics} from '../ui/tutorialBasics';
 import {DB} from '../shared/cards';
+import {confirmStarterPurchase} from '../ui/shopStarters';
 const q=new URLSearchParams(location.search);
 if(!import.meta.env.DEV || !['localhost','127.0.0.1'].includes(location.hostname))throw Error('Local fixture only');
 setLang('ja');
@@ -33,3 +34,6 @@ if(q.get('popup')==='basics')openTutorialBasics(()=>{},()=>{},true);
 
 if(q.get('popup')==='picker')cardPicker('カードを選択してください',['M1','M2','M3','M4','M5','M6','M7','M8'].map((id,i)=>({...DB[id],uid:'qa-'+i})),()=>{},true,{confirm:true});
 if(q.get('popup')==='result')winModal(true,'プレビュー',()=>app.home(),()=>app.home());
+
+if(q.get('popup')==='danger')void confirmDialog({title:'デッキを削除しますか？',body:'削除ボタンの表示確認です。',confirm:'削除する',cancel:'キャンセル',danger:true});
+if(q.get('popup')==='purchase')confirmStarterPurchase('M4',1,()=>{});

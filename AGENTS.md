@@ -14,3 +14,5 @@ HOME・デッキ・カード・ランキング・フレンド・ショップ・�
 # LORE default UI
 
 2026-10-26以降、全ページ・ポップアップの標準UIは02「蒼銀の面取り」（外周も面取りした版）。UIを制作／改修するときは `docs/default-ui-design.md` を読み、`client/src/styles/defaultUI.css` の共通面とトークンを使う。以前の枠デザインへ戻さない。
+
+標準ボタンは同日採用の02「隅のしるし」。`client/src/styles/defaultButtons.css` と `docs/default-ui-design.md` のボタン仕様を使用する。
