@@ -1,0 +1,18 @@
+{
+  "id": "0b395bcf-6ecd-4ad0-957d-e500b51fbbbe",
+  "source": "wrangler",
+  "strategy": "percentage",
+  "annotations": {
+    "workers/message": "da66fd19e9dd971de0835edf04671bb9bdbf5b34 guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "9dac66f7-7239-4996-b83d-3115a2461a24",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-10-26T15:59:22.062296Z",
+  "gitSource": "da66fd19e9dd971de0835edf04671bb9bdbf5b34",
+  "url": "https://yourlore.xyz"
+}
