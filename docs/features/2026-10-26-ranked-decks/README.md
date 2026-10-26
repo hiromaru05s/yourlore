@@ -11,6 +11,7 @@ Validation:
 - `npm run typecheck`
 - `node tests/ranked-decks.mjs`: production SQL against SQLite, 100/101 boundary, private profiles, inactive ratings, membership revocation, composition equality/copy counts, retention, retries, methods, empty state, complete authoritative ranked room settlement, casual and void rooms.
 - `node tests/ranked-decks-browser.mjs`: deterministic API fixtures with the real UI, 100 accessible entries, 3 deck selections, card inspection, long names, empty #100, navigation cleanup; desktop, 390px, 320px and 844px landscape, no horizontal overflow and 44px deck controls.
+- The browser checks also passed after integrating the current default open-corner buttons.
 - `npm run test:production` and `npm run build` are required before release.
 
 Screenshots show fixture data, not authenticated live PvP or user visual approval. Release and live verification are recorded in `release.md` after deployment.
