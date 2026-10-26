@@ -20,7 +20,7 @@ const lock=path.join(path.resolve(git('rev-parse','--git-common-dir')),'lore-dep
 fs.mkdirSync(lock);
 try{
  const sha=git('rev-parse','HEAD');fs.writeFileSync(path.join(lock,'owner.json'),JSON.stringify({pid:process.pid,host:os.hostname(),sha,operation:'authorized-user-reset',at:new Date().toISOString()}));
- assert.equal(git('status','--porcelain','--untracked-files=no'),'','Commit source changes before resetting');git('fetch','gh','main');assert.equal(git('rev-parse','gh/main'),sha);
+ assert.equal(git('status','--porcelain','--untracked-files=no'),'','Commit source changes before resetting');git('fetch','gh','main','--quiet');assert.equal(git('rev-parse','gh/main'),sha);
  const config=fs.readFileSync('server/wrangler.toml','utf8').split('[env.staging]')[0],entry=fs.readFileSync('server/src/production.ts','utf8');
  assert.match(config,/USER_DATA_RESET\s*=\s*"1"/);
  for(const name of ['MatchmakerFresh20261027','GameRoomFresh20261027']){assert(config.includes('class_name = "'+name+'"'));assert(entry.includes(name));}

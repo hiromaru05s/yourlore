@@ -3,7 +3,12 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import WebSocket from 'ws';
 const origin='https://test.yourlore.xyz';
-const {users,coupon,gift}=JSON.parse(await fs.readFile(process.env.LORE_BACKEND_AUTH_FILE,'utf8'));
+const fixture=JSON.parse(await fs.readFile(process.env.LORE_BACKEND_AUTH_FILE,'utf8'));
+const {users,coupon,gift}=fixture;
+const activeRooms=fixture.activeRooms??=[];
+const saveRooms=()=>fs.writeFile(process.env.LORE_BACKEND_AUTH_FILE,JSON.stringify(fixture),{mode:0o600});
+const trackRoom=async(id,players)=>{activeRooms.push({id,players});await saveRooms();};
+const settledRoom=async id=>{const n=activeRooms.findIndex(r=>r.id===id);if(n>=0)activeRooms.splice(n,1);await saveRooms();};
 assert(users.length===2&&users.every(u=>u.id.startsWith('qa-backend-')));
 assert(coupon.startsWith('QA-BACKEND-')&&gift.startsWith('qa-backend-'));
 const checks=[],sockets=[];
@@ -55,7 +60,7 @@ try{
  queues.forEach(q=>q.send({type:'queue'}));
  const matches=await Promise.all(queues.map(q=>until(()=>q.messages.find(m=>m.type==='matched'))));
  assert.equal(matches[0].roomId,matches[1].roomId);queues.forEach(q=>q.ws.close());
- const roomId=matches[0].roomId,rooms=await Promise.all([0,1].map(i=>socket(i,'/ws/room/'+roomId)));
+ const roomId=matches[0].roomId;await trackRoom(roomId,[0,1]);const rooms=await Promise.all([0,1].map(i=>socket(i,'/ws/room/'+roomId)));
  rooms.forEach(r=>r.send({type:'ready'}));
  await Promise.all(rooms.map(r=>until(()=>r.messages.find(m=>m.type==='preview'))));
  rooms.forEach(r=>r.send({type:'startReady'}));
@@ -66,6 +71,7 @@ try{
  const ranks=await Promise.all([0,1].map(i=>api(i,'/api/rank/result?matchId='+roomId)));
  assert(ranks.every(r=>r.body.result));assert(ranks[0].body.result.after<ranks[0].body.result.before);assert(ranks[1].body.result.after>ranks[1].body.result.before);
  assert((await api(0,'/api/rewards/result?roomId='+roomId)).body.settled);
+ await settledRoom(roomId);
  const balances=await Promise.all([0,1].map(async i=>(await api(i,'/api/auth/me')).body.user.credits));
  rooms[0].ws.close();const resumed=await socket(0,'/ws/room/'+roomId);resumed.send({type:'ready'});
  const recovered=await until(()=>resumed.messages.find(m=>m.type==='rankResult'));
@@ -80,18 +86,33 @@ try{
  const accept=await api(1,'/api/social/challenge/respond',{id:challenge.body.id,accept:true});assert.equal(accept.status,200);
  const replay=await api(1,'/api/social/challenge/respond',{id:challenge.body.id,accept:true});assert.equal(replay.body.roomId,accept.body.roomId);
  const poll=await api(0,'/api/social/challenge/poll?id='+challenge.body.id);assert.equal(poll.body.roomId,accept.body.roomId);assert.equal(poll.body.status,'accepted');
+ await trackRoom(accept.body.roomId,[0,1]);
  const friendly=await Promise.all([0,1].map(i=>socket(i,'/ws/room/'+accept.body.roomId)));friendly.forEach(r=>r.send({type:'ready'}));
- await Promise.all(friendly.map(r=>until(()=>r.messages.some(m=>m.type==='preview'))));friendly.forEach(r=>r.send({type:'startReady'}));
  await Promise.all(friendly.map(r=>until(()=>r.messages.some(m=>m.type==='init'))));friendly[0].send({type:'action',action:{type:'surrender',player:0}});
  await Promise.all(friendly.map(r=>until(()=>r.messages.some(m=>m.type==='rewardsSettled'))));
+ await settledRoom(accept.body.roomId);
  check('authenticated friend request, challenge inbox/accept replay/poll, two-player friendly game and settlement');
  const started=await api(0,'/api/rewards/bot/start',{difficulty:'easy',lang:'ja'});assert.equal(started.status,200);
+ await trackRoom(started.body.roomId,[0]);
  const bot=await socket(0,'/ws/room/'+started.body.roomId);bot.send({type:'ready'});
  await until(()=>bot.messages.some(m=>m.type==='init'));
  bot.send({type:'action',action:{type:'surrender',player:0}});
  await until(()=>bot.messages.some(m=>m.type==='rewardsSettled'));
  assert((await api(0,'/api/rewards/result?roomId='+started.body.roomId)).body.settled);
+ await settledRoom(started.body.roomId);
  check('authenticated BOT creation, ready, authoritative loss and persisted reward receipt');
  const report={origin,checkedAt:new Date().toISOString(),checks,ranked:{roomId,ratings:ranks.map(r=>r.body.result)},boundary:'Real staging API, D1 and authenticated WebSockets; no UI rendering or injected live infrastructure failure. Google OAuth is disabled on staging and covered by local mocked-provider tests.'};
  await fs.writeFile(process.env.LORE_BACKEND_STAGING_OUT,JSON.stringify(report,null,2)+'\n');
-}finally{for(const ws of sockets)ws.close();}
+}finally{
+ // Failed assertions must not leave a live room capable of writing after account cleanup.
+ for(const room of [...activeRooms])try{
+  const peers=await Promise.all(room.players.map(i=>socket(i,'/ws/room/'+room.id)));
+  peers.forEach(p=>p.send({type:'ready'}));
+  peers.forEach(p=>p.send({type:'startReady'}));
+  await Promise.all(peers.map(p=>until(()=>p.messages.some(m=>m.type==='init'))));
+  peers[0].send({type:'action',action:{type:'surrender',player:0}});
+  await Promise.all(peers.map(p=>until(()=>p.messages.some(m=>m.type==='rewardsSettled'))));
+  await settledRoom(room.id);
+ }catch{console.error('Unsettled staging room retained for recovery:',room.id);}
+ for(const ws of sockets)ws.close();
+}

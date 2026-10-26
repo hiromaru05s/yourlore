@@ -91,3 +91,16 @@
 6. この追加依頼も含めて完了するまでheartbeatを停止しない。今回のwipe依頼に対する再確認は不要。旧namespaceが削除できない、未知のDB tableがある、maintenanceが確認できない場合はDB消去へ進まず原因を解決する。
 
 検証：`tests/user-data-reset.mjs`（maintenanceがDB/認証へ到達しない、旧DOのsocket/alarm/storage終了、FK順の消去、全table網羅、schema/coupon定義保持）が成功。既存BE監査・server型checkも実行。
+
+
+## 最終統合開始（2026-10-26 23:05 UTC）
+
+- `list_threads` / `wait_threads`でBOTと他2セッションの完了を確認。本チャットだけがactive。
+- 採用main `1a5b5b19`をmerge `91721ba8`へ統合。最新本番コードは`2ea49db9`、deployment `d845ca9c-716f-42d3-8634-14e28b973e4c`、version `36608318-89ef-4c98-b2e7-5fa44cd76075`。いずれも統合版の祖先。
+- BOT変更はD1追加table/migrationを採用しておらず、巡回をGAME_ROOMのユーザー別DOへ保存する。今回の旧namespace削除に含まれる。0028索引の番号衝突なし。最終schemaと27ユーザーテーブルのwipe SQLの網羅性検証成功。
+- BOT workerテストの競合は新しいchallenge設定と、こちらの15秒deadline/途中結果/worker後片付け検証の双方を保持して解消した。
+- BOT開始のDO予約・setup通信例外と不正な予約indexを503で返すよう修正。null/不正payloadは400。ローカル認証ハンドラーで6種の成功・障害経路を確認。
+- 現行のNPC選択画面ではユーザーの追加依頼で補足説明を削除済み。古い「3構築」の説明を復活させない。
+- ステージングQAは通常フレンド戦にランク専用previewを要求していた手順を修正。未決済の対戦が残っている場合はアカウントを消さずprivate recovery fileを保全し、遅延書込み後の孤児データを防ぐ。
+- 一時アカウントによる本物のAPI/WS検証の後、route差替えなしの認証済みブラウザで6メニュー往復を確認する手順を追加。
+- BOTの重い局面はpeer検証でworkerd約16.55秒。採用版は手番残り45秒未満で短い探索へ切り替える。全局面や実機の最大ラグを保証する結果ではない。

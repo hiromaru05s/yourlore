@@ -28,6 +28,20 @@ try {
  assert.equal((await worker.fetch(request('/api/presence',{state:'online'}),env)).status,401);
  assert.equal((await env.DB.prepare('SELECT state FROM presence WHERE user_id=?').bind('a').first()).state,'menu');
  console.log('PASS presence uses identity-only authentication, rejects expired sessions, exact cookie match');
+ await run('UPDATE sessions SET expires_at=? WHERE token=?',Date.now()+60000,'fixture');
+ for(const body of [null,{}, {difficulty:'invalid'}])assert.equal((await worker.fetch(request('/api/rewards/bot/start',body),env)).status,400);
+ for(const mode of ['rotation-throw','rotation-http','rotation-invalid','setup-throw','setup-http','ok']){
+  env.GAME_ROOM={idFromName:x=>x,get:()=>({fetch:async req=>{
+   if(new URL(req.url).pathname==='/npc-deck'){
+    if(mode==='rotation-throw')throw Error('outage');
+    return Response.json({index:mode==='rotation-invalid'?99:0},{status:mode==='rotation-http'?503:200});
+   }
+   if(mode==='setup-throw')throw Error('outage');
+   return new Response('setup',{status:mode==='setup-http'?503:200});
+  }})};
+  assert.equal((await worker.fetch(request('/api/rewards/bot/start',{difficulty:'easy'}),env)).status,mode==='ok'?200:503,mode);
+ }
+ console.log('PASS NPC start rejects malformed inputs and returns retryable failures for rotation/setup outages');
  const social=(id,path,body)=>handleSocial(env,request('/api'+path,body),path,{...user,id,display:id});
  await run("INSERT INTO friends(user_a,user_b,status,created_at) VALUES ('a','b','accepted',0)");
  let setupResponse=()=>Promise.reject(Error('network outage'));

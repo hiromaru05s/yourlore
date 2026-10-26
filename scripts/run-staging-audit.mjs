@@ -10,6 +10,7 @@ try{
  run(['scripts/check-db-schema.mjs','staging']);
  run(['scripts/staging-audit-fixtures.mjs','setup']);
  run(['tests/backend-staging-audit.mjs']);
+ run(['tests/staging-menu-browser.mjs']);
 }finally{
  if(fs.existsSync(env.LORE_BACKEND_AUTH_FILE)){
   try{run(['scripts/staging-audit-fixtures.mjs','cleanup']);}

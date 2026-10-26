@@ -16,7 +16,7 @@ try{
  const sha=git('rev-parse','HEAD');await fs.writeFile(path.join(lock,'owner.json'),JSON.stringify({pid:process.pid,host:os.hostname(),sha,at:new Date().toISOString()}));
  if(git('status','--porcelain','--untracked-files=no'))throw Error('Commit or isolate tracked changes before deploying');
  const check=()=>{
-  if(stopped)throw Error('Deployment interrupted');git('fetch','gh','main');
+  if(stopped)throw Error('Deployment interrupted');git('fetch','gh','main','--quiet');
   if(git('rev-parse','gh/main')!==sha)throw Error('HEAD must equal current gh/main; integrate changes before deploying');
   try{git('merge-base','--is-ancestor','main',sha);}catch{throw Error('Local main has unintegrated commits; inspect it before deploying');}
  };check();

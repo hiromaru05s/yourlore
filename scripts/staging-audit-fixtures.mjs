@@ -27,6 +27,7 @@ if(action==='setup'){
  execute(sql.join('\n'));console.log('Created two isolated staging QA accounts and one coupon/gift; credentials stay in private temporary file.');
 }else{
  const fixture=JSON.parse(fs.readFileSync(file,'utf8'));
+ if(fixture.activeRooms?.length)throw Error('Settle retained QA rooms before deleting their accounts');
  if(fixture.users.length!==2||fixture.users.some(u=>!/^qa-backend-[a-f0-9]{16}-[01]$/.test(u.id))||!/^QA-BACKEND-[A-F0-9]{16}$/.test(fixture.coupon)||!/^qa-backend-[a-f0-9]{16}$/.test(fixture.gift))throw Error('Unexpected fixture identity');
  const ids=fixture.users.map(u=>quote(u.id)).join(','),db=new DatabaseSync(':memory:');db.exec(fs.readFileSync('server/schema.sql','utf8'));
  const identityColumns=new Set(['user_id','a_id','b_id','player_a','player_b','winner','challenger','target','user_a','user_b','inviter_id','invitee_id','invited_by','created_by']);
