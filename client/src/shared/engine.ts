@@ -1,3 +1,4 @@
+import { botMarketIndex, challengeMarket } from './botMarket';
 import { RIFT_REWORK_IDS } from './riftReworkCards';
 import { GOBLIN_IDS, isBasicGoblin } from './goblinCards';
 import {trackMedalDuel} from './medalTracking';
@@ -392,6 +393,7 @@ function normalizeManaCaps(g: GameState): void {
 }
 
 export interface CreateOpts {
+  challenge?: { difficulty: import("./bot").BotDifficulty; side: Side };
   seed?: number;
   mode: "bot" | "online";
   p0: { id: string; name: string; isBot?: boolean; deck?: string[] };
@@ -410,6 +412,10 @@ export function createGame(opts: CreateOpts): ReduceResult {
   };
   g.players[0] = mkPlayer(g, opts.p0.id, opts.p0.name, !!opts.p0.isBot, opts.p0.deck);
   g.players[1] = mkPlayer(g, opts.p1.id, opts.p1.name, !!opts.p1.isBot, opts.p1.deck);
+  if (opts.challenge) {
+    g.botDifficulty = opts.challenge.difficulty;
+    if (opts.challenge.difficulty === 'hard' || opts.challenge.difficulty === 'hell') g.botMarket = challengeMarket(opts.challenge.side);
+  }
   // v40: starting player 40 HP, the player going second 45 HP (tempo compensation; was 35/42)
   const start = (opts.starting ?? 0) as Side;
   const second = (1 - start) as Side;
@@ -419,7 +425,7 @@ export function createGame(opts: CreateOpts): ReduceResult {
   // v20: 1–4 → 1–6 — 저코만 나오면 구조적으로 어그로 판이 과다해져 상한 확대
   const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop);
   g.market = [];
-  while (g.market.length < MARKET_SIZE && lowAvail.length) g.market.push(inst(g, lowAvail.splice(randInt(g, lowAvail.length), 1)[0]));
+  while (g.market.length < MARKET_SIZE && lowAvail.length) g.market.push(inst(g, lowAvail.splice(botMarketIndex(g, lowAvail, () => rand(g)), 1)[0]));
   g.marketStock = g.market.map(() => MARKET_STOCK); // v40: 슬롯당 재고 3
 
   const ev: GameEvent[] = [];
@@ -457,7 +463,7 @@ function rollSupply(g: GameState, p: PlayerState, refill = false): void {
   const avail = pool.filter(id => !retained.has(id));
   for (let i = 0; i < want; i++) {
     if (picks[i]) continue;
-    if (avail.length) picks[i] = inst(g, avail.splice(randInt(g, avail.length), 1)[0]);
+    if (avail.length) picks[i] = inst(g, avail.splice(botMarketIndex(g, avail, () => rand(g)), 1)[0]);
   }
   shareSupply(g, picks);
   if (picks.every((card, i) => card?.uid === before[i]?.uid)) return;
@@ -490,7 +496,7 @@ function consumeMarketStock(g: GameState, ctx: Ctx, i: number): void {
   const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop && !inMarket.has(id));
   const old = g.market[i];
   if (!pool.length) { g.marketStock[i] = MARKET_STOCK; return; }
-  const next = inst(g, pool[randInt(g, pool.length)]);
+  const next = inst(g, pool[botMarketIndex(g, pool, () => rand(g))]);
   g.market[i] = next;
   g.marketStock[i] = MARKET_STOCK;
   ctx.log(`  └ 고정 마켓 ${cn(old)} 매진 → ${cn(next)} 입고 (재고 ${MARKET_STOCK})`, `  └ 固定マーケット ${cn(old)} 売り切れ → ${cn(next)} 入荷 (在庫${MARKET_STOCK})`);
@@ -4130,7 +4136,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       const lowAvail = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop);
       const nextMk: CardInst[] = [];
       const availMk = lowAvail.slice();
-      while (nextMk.length < MARKET_SIZE && availMk.length) nextMk.push(inst(g, availMk.splice(randInt(g, availMk.length), 1)[0]));
+      while (nextMk.length < MARKET_SIZE && availMk.length) nextMk.push(inst(g, availMk.splice(botMarketIndex(g, availMk, () => rand(g)), 1)[0]));
       g.market = nextMk;
       g.marketStock = nextMk.map(() => MARKET_STOCK); // v40: 재고도 초기화
       ctx.log(`${tag(p, card)} <span class="dmg">경제 위기!</span> 고정 마켓 ${MARKET_SIZE}장 전부 갱신`, `${tag(p, card)} <span class="dmg">経済危機！</span> 固定マーケット${MARKET_SIZE}枚を全て更新`);

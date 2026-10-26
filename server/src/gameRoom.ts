@@ -1,3 +1,4 @@
+import { reserveNpcDeck } from './botRotation';
 import {publicNameEvents} from './publicNames';
 import {newMedalDuel} from '../../client/src/shared/medalTracking';
 import {equippedMedal,settleMedals} from './medals';
@@ -89,6 +90,11 @@ interface RoomData {
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
 const TURN_MS_CASUAL = 90000; // everything else: 90s per turn
 const turnMsFor = (ranked: boolean): number => (ranked ? TURN_MS_RANKED : TURN_MS_CASUAL);
+/** Reserve time to execute the rest of a long NPC turn. This changes only
+ * thinking effort, never the challenge roster, market bias or rewards. */
+export function npcThinkingDifficulty(difficulty: BotDifficulty, remainingMs: number): BotDifficulty {
+  return (difficulty === 'hard' || difficulty === 'hell') && remainingMs < 45000 ? 'normal' : difficulty;
+}
 const HAND_CAP_BONUS_MS = 10000; // v42: end-turn hand-discard choice grants +10s
 /** Server-side slack past the client's clock before the room force-ends a turn.
  *  Honest clients auto-end themselves at 0 — this only catches stalled/modified
@@ -208,6 +214,7 @@ export class GameRoom {
 
   async fetch(req: Request): Promise<Response> {
     const url = new URL(req.url);
+    if (url.pathname === "/npc-deck") return reserveNpcDeck(this.state.storage, req);
     await this.restore();
 
     // provisioning call from the matchmaker
@@ -215,18 +222,19 @@ export class GameRoom {
       if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
       if (this.provisioning) return new Response("room provisioning; retry", { status: 503 });
       if (this.room) return new Response("already provisioned", { status: 409 });
-      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string; challengeDifficulty?: BotDifficulty };
+      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string; challengeDifficulty?: BotDifficulty; challengeDeckIndex?: number };
       // Reading the request body yields; a concurrent setup may have won meanwhile.
       if (this.provisioning) return new Response("room provisioning; retry", { status: 503 });
       if (this.room) return new Response("already provisioned", { status: 409 });
       if(body.challengeDifficulty && (!Object.hasOwn(BOT_REWARDS,body.challengeDifficulty)||body.ranked||body.botId))return new Response('invalid difficulty',{status:400});
       const npc=body.challengeDifficulty?botNpc(body.challengeDifficulty):undefined;
-      const challenge=npc?{id:'lore-challenge-bot-'+npc.difficulty,name:body.players[1].name,deck:pickNpcDeck(npc).deck}:undefined;
+      const challenge=npc?{id:'lore-challenge-bot-'+npc.difficulty,name:body.players[1].name,deck:Number.isInteger(body.challengeDeckIndex)&&npc.decks[body.challengeDeckIndex!] ? npc.decks[body.challengeDeckIndex!] : pickNpcDeck(npc).deck}:undefined;
       const bot = challenge ?? (body.botId ? matchBot(body.botId) : undefined);
       if (body.botId && (!matchBotsEnabled(this.env) || !bot || body.players[1]?.id !== bot.id || body.players[0]?.id === bot.id)) return new Response('invalid test bot', {status:403});
       if (bot) body.players[1] = {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')};
       const res = createGame({
         mode: "online",
+        challenge: body.challengeDifficulty ? {difficulty: body.challengeDifficulty, side: 1} : undefined,
         seed: body.seed,
         p0: { id: body.players[0].id, name: body.players[0].name, deck: body.players[0].deck ? body.players[0].deck.split(",") : undefined },
         p1: { id: body.players[1].id, name: body.players[1].name, deck: body.players[1].deck ? body.players[1].deck.split(",") : undefined },
@@ -555,7 +563,9 @@ export class GameRoom {
     const room = this.room!, bot = room.bot!;
     bot.nextAt = null;
     if (actingSide(room.game) !== bot.side || room.forfeitAt[1-bot.side] != null || Date.now() < room.turnStartAt) return;
-    const choices=room.challengeDifficulty?[botDecide(room.game,room.challengeDifficulty),...matchBotActions(room.game,bot.side)]:matchBotActions(room.game,bot.side);
+    const remainingMs=room.turnStartAt+turnMsFor(room.ranked)+(room.turnBonusMs||0)-Date.now();
+    const thinking=room.challengeDifficulty ? npcThinkingDifficulty(room.challengeDifficulty,remainingMs) : undefined;
+    const choices=thinking?[botDecide(room.game,thinking),...matchBotActions(room.game,bot.side)]:matchBotActions(room.game,bot.side);
     for (const action of choices) {
       // Engine validation uses the authoritative state, never the strategy's redacted copy.
       const result = reduce(room.game, action);

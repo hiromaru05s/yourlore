@@ -1,0 +1,17 @@
+{
+  "groups": {
+    "hard/after": {
+      "games": 4,
+      "points": 2,
+      "invalid": 0,
+      "maxMs": 8510.177415999991
+    },
+    "hell/after": {
+      "games": 4,
+      "points": 4,
+      "invalid": 0,
+      "maxMs": 4831.9649999999965
+    }
+  },
+  "seconds": 230.008
+}

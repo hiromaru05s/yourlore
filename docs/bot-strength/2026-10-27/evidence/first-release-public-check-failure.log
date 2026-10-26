@@ -1,0 +1,18 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: hard/guardian-answer
+
+'refresh' !== 'play'
+
+    at file:///Users/hiromaru05s/.codex/worktrees/bot-strength/LORE_TCG/tests/bot-staging.mjs:77:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'refresh',
+  expected: 'play',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

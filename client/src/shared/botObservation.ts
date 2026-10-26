@@ -1,6 +1,6 @@
 import { cloneGameState } from './cloneGameState';
 import { DB, STARTERS, DECK_POOL, BUYABLE_POOL } from './cards';
-import { BOT_DECKS, BOT_ELITE_DECKS, BOT_HELL_DECKS } from './botDecks';
+import { OPPONENT_STARTER_MODELS } from './botOpponentModels';
 import type { CardInst, GameState, Side } from './types';
 
 function hash(text: string): number {
@@ -17,7 +17,7 @@ const hypotheses = [...new Map([
   ['STARTER_MANA','WEAKEN_ALL','WEAKEN_ALL','COUNTERCALC','GAMBLER','GAMBLER','GOBLIN_RAIDER','GOBLIN','GOBLIN'],
   ['STARTER_MANA','CASTLE','CASTLE','WEAKEN_ALL','BLOOD_RITE','COUNTERCALC','NOURISHING_RAIN','RUST_SHROOM','RUST_SHROOM'],
   ['STARTER_MANA','GOBLIN','GOBLIN','GOBLIN_RAIDER','GOBLIN_RAIDER','GOBLIN_SETTLEMENT','WEAKEN_ALL','COUNTERCALC','BLOOD_RITE'],
-  ...[...BOT_DECKS, ...BOT_ELITE_DECKS, ...BOT_HELL_DECKS].map(d => ['STARTER_MANA', ...d.cards]),
+  ...OPPONENT_STARTER_MODELS.map(cards => ['STARTER_MANA', ...cards]),
 ].map(deck => [[...deck].sort().join(','), deck])).values()];
 const trapIds = BUYABLE_POOL.filter(id => DB[id].t === 'trap');
 

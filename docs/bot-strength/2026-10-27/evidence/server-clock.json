@@ -1,0 +1,57 @@
+{
+  "scope": "local real GameRoom setup, in-memory D1/storage, restore and runBot; not authenticated staging",
+  "results": [
+    {
+      "tier": "hard",
+      "roster": 7,
+      "setup": true,
+      "restoredDifficulty": "hard",
+      "action": {
+        "type": "chooseTarget",
+        "uid": "server-proof-1"
+      },
+      "reducerParity": true,
+      "persisted": true,
+      "alarmRearmed": true,
+      "ms": 2.3372090000000014
+    },
+    {
+      "tier": "hard",
+      "clockPressure": true,
+      "remainingMs": 30000,
+      "thinking": "normal",
+      "action": {
+        "type": "buyMarket",
+        "i": 5
+      },
+      "reducerParity": true,
+      "ms": 104.728917
+    },
+    {
+      "tier": "hell",
+      "roster": 7,
+      "setup": true,
+      "restoredDifficulty": "hell",
+      "action": {
+        "type": "chooseTarget",
+        "uid": "server-proof-4"
+      },
+      "reducerParity": true,
+      "persisted": true,
+      "alarmRearmed": true,
+      "ms": 0.42849999999998545
+    },
+    {
+      "tier": "hell",
+      "clockPressure": true,
+      "remainingMs": 30000,
+      "thinking": "normal",
+      "action": {
+        "type": "buyMarket",
+        "i": 5
+      },
+      "reducerParity": true,
+      "ms": 97.08829200000002
+    }
+  ]
+}

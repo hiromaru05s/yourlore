@@ -116,6 +116,7 @@ body.lounge-active .modal.bot-diff.bot-npcs .diff-card{height:auto;padding:0 0 1
 .bot-diff.bot-npcs .npc-title{font-size:10px;letter-spacing:.06em;color:#b6c9d8;line-height:1.5}
 body.lounge-active .modal.bot-diff.bot-npcs .diff-name{font-size:25px;line-height:1.6;color:#f2f6fa}
 .bot-diff.bot-npcs .npc-difficulty{font-size:11px;color:#d7e3eb;line-height:1.7}
+.bot-diff.bot-npcs .npc-first-reward{margin:8px 14px 0;overflow-wrap:anywhere}
 .bot-diff.bot-npcs .challenge-caption{margin-top:6px;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
 .bot-diff.bot-npcs .support-dialog-heading{padding-right:66px}
 @media(max-width:650px){
@@ -123,7 +124,7 @@ body.lounge-active .modal.bot-diff.bot-npcs .diff-name{font-size:25px;line-heigh
  .bot-diff.bot-npcs .challenge-art{margin-bottom:8px;aspect-ratio:1.4}
  .bot-diff.bot-npcs .npc-title,.bot-diff.bot-npcs .npc-difficulty,.bot-diff.bot-npcs .challenge-caption,body.lounge-active .modal.bot-diff.bot-npcs .diff-name{margin-left:9px;margin-right:9px}
  body.lounge-active .modal.bot-diff.bot-npcs .diff-name{font-size:21px}
- .bot-diff.bot-npcs .challenge-caption{font-size:10px}
+ .bot-diff.bot-npcs .npc-first-reward{margin:6px 9px 0;font-size:10px}
  .bot-diff.bot-npcs .challenge-selected{font-size:9px;left:4px;top:4px}
  .bot-diff.bot-npcs .challenge-deck{flex:1 1 100%}
  .bot-diff.bot-npcs #challengeDescription{flex-basis:100%}

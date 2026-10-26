@@ -1,0 +1,88 @@
+{
+  "balance": "v68",
+  "candidate": "8ca393901599a0454c792301ca778cdb60fe23a4f2430edf73fe330e8592d3ad",
+  "before": "094eed847e0934086e97e414695352bb427f5c1a063f5f224a183e6f8f0afbbc",
+  "opponents": {
+    "aggro": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC"
+    ],
+    "antiAggro": [
+      "CASTLE",
+      "CASTLE",
+      "WEAKEN_ALL",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "GAMBLER",
+      "GAMBLER",
+      "BLOOD_RITE"
+    ],
+    "decay": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "ACID_RAIN",
+      "COUNTERCALC",
+      "BLOOD_RITE",
+      "STARTER_TRASH"
+    ],
+    "recovery": [
+      "ELF_HAVEN",
+      "HALF_ELF",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "CASTLE",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "STARTER_TRASH"
+    ],
+    "ramp": [
+      "GAMBLER",
+      "GAMBLER",
+      "GAMBLER",
+      "GAMBLER",
+      "STARTER_CHEST",
+      "STARTER_CHEST",
+      "WEAKEN_ALL",
+      "COUNTERCALC"
+    ],
+    "balanced": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC",
+      "TRUMPET",
+      "BLOOD_RITE"
+    ],
+    "beginner": [
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ]
+  },
+  "tiers": [
+    "easy",
+    "normal",
+    "hard",
+    "hell"
+  ],
+  "pairs": 7,
+  "opponentPolicy": "greedy",
+  "scope": "paired development comparison, seeds also used during tuning; not independent human evaluation",
+  "seedBase": 41100000,
+  "beforeReuse": "before Hard/ordinary rows from release-validation; before Hell expert rows from diverse-control. Identical unbiased engine behavior verified; all after rows freshly run on final candidate"
+}

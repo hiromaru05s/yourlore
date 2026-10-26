@@ -1,0 +1,451 @@
+{
+  "balance": "v68",
+  "families": {
+    "rift": {
+      "core": [
+        "RIFT",
+        "STARTER_TRASH",
+        "STARTER_TRASH"
+      ],
+      "pool": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "RIFT",
+        "FOCUS",
+        "CASTLE",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "NOURISHING_RAIN",
+        "STARTER_CHEST",
+        "SELECTED_SHIELD"
+      ]
+    }
+  },
+  "scores": [
+    {
+      "family": "rift",
+      "selected": {
+        "deck": [
+          "RIFT",
+          "STARTER_TRASH",
+          "STARTER_TRASH",
+          "STARTER_TRASH",
+          "STARTER_TRASH",
+          "FOCUS",
+          "STARTER_CHEST",
+          "STARTER_CHEST"
+        ],
+        "score": 0.5,
+        "invalid": 0,
+        "validation": 0.5416666666666666
+      },
+      "candidates": [
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "FOCUS",
+            "SELECTED_SHIELD"
+          ],
+          "score": 0.5625,
+          "invalid": 0,
+          "validation": 0.3333333333333333
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "SELECTED_SHIELD",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5625,
+          "invalid": 0,
+          "validation": 0.3958333333333333
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "FOCUS",
+            "STARTER_CHEST",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.5416666666666666
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "RIFT",
+            "STARTER_TRASH",
+            "SELECTED_SHIELD",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.25
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "FOCUS",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "RIFT",
+            "COUNTERCALC",
+            "CASTLE",
+            "CASTLE",
+            "STARTER_TRASH"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "CASTLE",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "FOCUS",
+            "STARTER_CHEST",
+            "SELECTED_SHIELD",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "FOCUS",
+            "COUNTERCALC",
+            "SELECTED_SHIELD",
+            "STARTER_CHEST"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "FOCUS",
+            "CASTLE",
+            "NOURISHING_RAIN",
+            "FOCUS",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "RIFT",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "CASTLE",
+            "COUNTERCALC",
+            "COUNTERCALC"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "CASTLE",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "RIFT"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "CASTLE",
+            "STARTER_TRASH"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "RIFT",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "STARTER_TRASH"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "RIFT",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "FOCUS",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "NOURISHING_RAIN",
+            "CASTLE"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "RIFT",
+            "STARTER_TRASH",
+            "FOCUS",
+            "COUNTERCALC"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "CASTLE",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "FOCUS",
+            "COUNTERCALC"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "CASTLE",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "STARTER_TRASH"
+          ],
+          "score": 0.1875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "RIFT",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "RIFT",
+            "CASTLE"
+          ],
+          "score": 0.1875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "CASTLE",
+            "WEAKEN_ALL",
+            "FOCUS"
+          ],
+          "score": 0.0625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "RIFT",
+            "RIFT",
+            "STARTER_TRASH"
+          ],
+          "score": 0,
+          "invalid": 0
+        }
+      ],
+      "finalists": [
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "FOCUS",
+            "STARTER_CHEST",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.5416666666666666
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "SELECTED_SHIELD",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5625,
+          "invalid": 0,
+          "validation": 0.3958333333333333
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "FOCUS",
+            "SELECTED_SHIELD"
+          ],
+          "score": 0.5625,
+          "invalid": 0,
+          "validation": 0.3333333333333333
+        },
+        {
+          "deck": [
+            "RIFT",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "RIFT",
+            "STARTER_TRASH",
+            "SELECTED_SHIELD",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.25
+        }
+      ]
+    }
+  ],
+  "games": 576,
+  "seconds": 94.095
+}

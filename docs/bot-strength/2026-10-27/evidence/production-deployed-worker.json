@@ -1,0 +1,1118 @@
+{
+  "origin": "https://yourlore.xyz",
+  "scope": "public deployed entry and worker; no authenticated match",
+  "entryAssets": [
+    "/assets/main-DqXS-Jjf.js",
+    "/assets/modulepreload-polyfill-B5Qt9EMX.js",
+    "/assets/preload-helper-BXl3LOEh.js"
+  ],
+  "worker": "bot.worker-BY_X1MOU.js",
+  "parity": [
+    {
+      "file": "BufferGeometryUtils-BIH-tPDT.js",
+      "sha256": "d7c676b46fd5bc44b0fafb6dcdadc7db07189a5aada046de96133a32c53a5777"
+    },
+    {
+      "file": "GLTFLoader-qPoILpJv.js",
+      "sha256": "21dda8bde5cd029bf7666ba13d2d373d21fd567bf66c17efab8f772d8218a102"
+    },
+    {
+      "file": "RoundedBoxGeometry-CEzrF759.js",
+      "sha256": "ffc58a1a83961040fbf95fd4ada490e9e7df71d82a699cf50c76ca6eeb75ecc7"
+    },
+    {
+      "file": "UnrealBloomPass-B0yUycqo.js",
+      "sha256": "8d72382cc7e1e545e559dc647c129b674637dd7bbec686ed0f1c4e6f1f6ad205"
+    },
+    {
+      "file": "assetQueue-B47s4qgf.js",
+      "sha256": "061f16f364baa50f099a17788cf07b369faa11b2b0fa88659c5fca0f60507ae6"
+    },
+    {
+      "file": "assetQueue-CNZBDA90.css",
+      "sha256": "48d561e7c5ef3a4359166c0b2a351ee84acfaea64f0f99695e7c8c68145ece6d"
+    },
+    {
+      "file": "assets-CrZSwIZk.js",
+      "sha256": "97396263e8589706a85856076fc1fbc8037cbf7b1b9f40b0ab03e3c416bb7a64"
+    },
+    {
+      "file": "atelierThemes-C9ZNrm6d.js",
+      "sha256": "ba61a5df721ea0960354e7bb9b42fb2558d5c0ea0010466b68f2cc6ab10fe914"
+    },
+    {
+      "file": "audit-CfxFjhEy.js",
+      "sha256": "060310048ba4893638cb5fd66dbbd5ef4d91d89c33fba926e3e44bc33f89fcc3"
+    },
+    {
+      "file": "board-BdNBlcg4.js",
+      "sha256": "5f9c8e86d2c5571027bf2b5b8b0a5394aac04ff39b0e421324eea743be04a413"
+    },
+    {
+      "file": "board-DraEN7VA.js",
+      "sha256": "4f960c8d60ce1a4ebc1f14e7c3b71102e9f2db4a6d51b152bad9a06b1eff4ae0"
+    },
+    {
+      "file": "bot.worker-BY_X1MOU.js",
+      "sha256": "8e31589e3566398a1f2f1fa1d57663bf5d8ae119d45db90591fe1aea8be92f4a"
+    },
+    {
+      "file": "cardSurface-DwFGF2so.js",
+      "sha256": "1309d234a372508c8c9d1a661c8ca2bd9b3eeb29994ee99535b9e9c97f81f533"
+    },
+    {
+      "file": "catalog-CJmaorNf.js",
+      "sha256": "86dcc903067f848ba0969e4406b2389095571faeeea94edef20dedeb2ded511b"
+    },
+    {
+      "file": "catalog-vkSjhTGB.js",
+      "sha256": "7957d74ef7ea2b81b57f1c3bc50d4a457e61b7294cb9c2499521fabc20ef98e2"
+    },
+    {
+      "file": "ceremonyScene-DaZ4pG-1.js",
+      "sha256": "caeab967cfb2b2805a2e8afbc2aa258022cfdd9d649e5538b4a2b3adaf02585b"
+    },
+    {
+      "file": "coins-CUCkXfd1.js",
+      "sha256": "371b2eff02072b17b719c32b738b7ae60ed04cd6c38ada9a8a803abdf0d586b1"
+    },
+    {
+      "file": "combatTempo-CqcOY6lM.js",
+      "sha256": "e9e27836e0530f1f0d890b3555dfb94b5d8c5cd8c5a19fb1952358eda7a04fa5"
+    },
+    {
+      "file": "controller-BB1uspbO.js",
+      "sha256": "9b11e7ffc4da498d976b0a6f6246353e3aa8db4e8ca3d0819d3412461b971767"
+    },
+    {
+      "file": "controller-bboUdfYs.css",
+      "sha256": "ecd20d2c291671bbc93a98a201b1a6e1ac9f67f0dc1bbcd8faa2c1e651a53e00"
+    },
+    {
+      "file": "cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700"
+    },
+    {
+      "file": "cosmeticStudio-huJ0HEYN.js",
+      "sha256": "8b2d80019dd35e5a39d76d177282be8a86ccb16cee3c282e84cb85b3b555ae0b"
+    },
+    {
+      "file": "darkRenderer-zfpvQf-a.js",
+      "sha256": "c4a4ed1ebb8262fe9abdf912c7a01a951d065b00b34acb2f8b2850655023a8c9"
+    },
+    {
+      "file": "diceScene-BsHQWw6s.js",
+      "sha256": "39a256b6ebe86a971c85f42b12baedf7edaef494f4a350c9e33f5f02fa2cebda"
+    },
+    {
+      "file": "domSleeve-Bo6KxNRz.js",
+      "sha256": "8299c9ad43bc8b44eab3e5db87f0a0b2f716def1967deee97dc3daf8ff886bc7"
+    },
+    {
+      "file": "domSleeves-BXsdM9Fa.js",
+      "sha256": "b55bbeb3a0f4450c5a71820057d9a3ced1211227c80f5bbdd1d061d68f57318e"
+    },
+    {
+      "file": "domSleeves-Dru0ykCE.css",
+      "sha256": "a63fb32e7762741252e721880aece1f04a96cdf596b627156c6fbab0584e9ff7"
+    },
+    {
+      "file": "drawStock-CmU3bgsU.js",
+      "sha256": "f3c806bde0427222413e93dc086656daa77382ae8f827501b477a031cb7e1650"
+    },
+    {
+      "file": "duelAssets-BDApOGX2.js",
+      "sha256": "cb1a8a33e5c861566a3d74cb9a6a6e244ab5be61219e16740cbc5d6452da8b69"
+    },
+    {
+      "file": "duelScene-CXnIycS5.js",
+      "sha256": "57ba22b269ffab998c1c1104ac4b27bfd8c2c5c3e03a00fd120b3e5400118ff2"
+    },
+    {
+      "file": "family-matter-DyaP8tpW.js",
+      "sha256": "a95cd2c8bfc2e63056ab781d3e077011e54acba2f3abe8df4ee19b9c910625bd"
+    },
+    {
+      "file": "fateWheelRewind-CHCOfajF.js",
+      "sha256": "444986bb3035722655de5ab6877fae29323def0db0c9e8311d42fdea4dc899e9"
+    },
+    {
+      "file": "furniture-BKhBdmmN.js",
+      "sha256": "fae87803f64c8cb581178c20cebcd48bd8d3a1cef94381c828a21e16ace9243c"
+    },
+    {
+      "file": "furniture-BQ_945jb.js",
+      "sha256": "80e309e9deff1983352389748eb2e8e165e159a42efea53cd7e9cf32e2802584"
+    },
+    {
+      "file": "furniture-Bhpn7dte.js",
+      "sha256": "43343020a13ed26f53cf0329d7ce8fe6682c2b6251b867787db28c07a9947467"
+    },
+    {
+      "file": "furniture-Cs5oyUCm.js",
+      "sha256": "95f84a50a9eccebef23f25e06736f45c49aacc0138724390825131eb02a73a84"
+    },
+    {
+      "file": "furniture-DOzpWLw8.js",
+      "sha256": "4ab3389028e03c66a38e66d37f87b51a2ce24148a802e726140f8588ffed9cce"
+    },
+    {
+      "file": "gachaRewardFurniture-dhCQ2zAF.js",
+      "sha256": "46db1af42f647924a841deceb46b4f5f208be7f6446d3c080d280abf65037983"
+    },
+    {
+      "file": "gachaRewardSleeve-BNUteHOm.js",
+      "sha256": "67ca5e75501b9187bdaa1a23e0809f55027c73ba9279ccac86d17f421fcb8ef4"
+    },
+    {
+      "file": "game-6BFPNOZi.js",
+      "sha256": "95dd550da1f9f4dc8a60d9dca082f048cd88d32576a028ac379e9ebb13ab7db2"
+    },
+    {
+      "file": "game-CeZ0_T_p.css",
+      "sha256": "c3a917c33744ff03edb04c76979bf8fb070230e7358a5da1272b96b7bac52062"
+    },
+    {
+      "file": "homeAtmosphere-CBbW2ZM6.js",
+      "sha256": "fc8d49158d9cb49c7546f4b064cbbf79389c7e4aa4b4f427f4ddefcc9ed43a1b"
+    },
+    {
+      "file": "inspection-DgttG9Bg.js",
+      "sha256": "770bd42b280a57456642b6add896a90ff80cc0cbe2c78005ae30e8acedffffdf"
+    },
+    {
+      "file": "layout-BZWwuwiu.js",
+      "sha256": "7d0c600015d88064908dfbbcb999ce137d9cc61dab0d7a7cfd21eaf4789b0ea2"
+    },
+    {
+      "file": "layout-CdbqZM8A.css",
+      "sha256": "a665ec02233f56b8de0b4f9df4cc0839e8d780b32060c92c181640cb4f201cbb"
+    },
+    {
+      "file": "main-AkYvG33F.css",
+      "sha256": "b15e639aaf9bdd4e39c649c87074021fe9bd6864e857016fa73d9cf220371e67"
+    },
+    {
+      "file": "main-DqXS-Jjf.js",
+      "sha256": "5b68608a5e56222f6f99aa658140ece7e18e4c2edd1d912852d524278252c496"
+    },
+    {
+      "file": "main-HEqwEtlb.js",
+      "sha256": "81a79f1e8e589e8bbafbc6c9deced9c75e957a7351fc2e4295177caad42b1584"
+    },
+    {
+      "file": "master-tongues-DtMNtymV.js",
+      "sha256": "ff8aa9c3ca588098e095dd4cfae514d44578bec2eeafe199b9239ab7378255c6"
+    },
+    {
+      "file": "materials-CQNnF8VK.js",
+      "sha256": "f97f86b8f8fdc747143d109f135e40eda89752572276c6a583f4e6f9c11763d3"
+    },
+    {
+      "file": "materials-CZORGe9C.js",
+      "sha256": "b35f6e2ac058846d36a9076029409bafb837e6ab6591225820e39e8b3944deb2"
+    },
+    {
+      "file": "materials-tN2kcHTA.js",
+      "sha256": "09d3bec9ff5fabf5aef026a4d3179f2d2d8b2d398e4d5a53c0eb4355c81a1fbe"
+    },
+    {
+      "file": "menuAssets-DE4AaJp4.js",
+      "sha256": "2ae5dddc3c2114b595ac695eb8ee410b2bc25c163574df853be49296dfa8dba0"
+    },
+    {
+      "file": "modulepreload-polyfill-B5Qt9EMX.js",
+      "sha256": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0"
+    },
+    {
+      "file": "objects-CSuG1_dH.js",
+      "sha256": "9581e22580592dd7aa21c436d6e066a484dd1c24dd862e27b905ca9f8dc90647"
+    },
+    {
+      "file": "opponent-NdiHkXXp.js",
+      "sha256": "bba4e51c95346515ea222f14d4cb522ffbfd28254d40d887d3a503a76b824883"
+    },
+    {
+      "file": "opponent-fbJVnZdc.css",
+      "sha256": "7dd76b6f4ca07f829ab69088c3b5d1c5391bba6639018f8bd85a846599a3c945"
+    },
+    {
+      "file": "ornaments-CS6HBbN3.js",
+      "sha256": "1ed71581d8c6f8a56f128ac3d31b69339e87af50201bd627b8869fd4022be97a"
+    },
+    {
+      "file": "paperDraw-DwbrYs9Q.js",
+      "sha256": "40345e4a094f2f6390d42c08198114d22ee2ea50536b2adbbefdac98c671d266"
+    },
+    {
+      "file": "passives-UDApamK7.css",
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22"
+    },
+    {
+      "file": "persistentFlightRenderer-XAtVWFgz.js",
+      "sha256": "a737b19dff697f3b93d8be2a35e0f99668bb75c85a06e6cb854df7e098c1b1ed"
+    },
+    {
+      "file": "pileModels-R8hO0PJ1.js",
+      "sha256": "29bed1abe565aeaf66df995231d949c998b87abbd59f1b3f60b4bd9bfd577234"
+    },
+    {
+      "file": "preload-helper-BXl3LOEh.js",
+      "sha256": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6"
+    },
+    {
+      "file": "purchaseAir.worker-BK14oJEX.js",
+      "sha256": "f46b05531c87c4fb81cb1fbcbe8f685a977952e84fa4bea3c51b9deb52918164"
+    },
+    {
+      "file": "quietLuxury-DLy22KLt.js",
+      "sha256": "75098e954ab6ad5858f134fac6909e2f1e43bd99096aa60611cf7d8c2de0f655"
+    },
+    {
+      "file": "rankPresentation-DWV7oDEp.js",
+      "sha256": "96e176311d5dbae34bce84a7f1a097d72a921314e593ed924618ad1bd0da0802"
+    },
+    {
+      "file": "raster.worker-Dbjti9vv.js",
+      "sha256": "51ec8e21ec72b22893fbaf21a9ef10c1551ed86bc6a281a6a9823e9d88b60fe8"
+    },
+    {
+      "file": "readingAssetCache-DWMRNUdz.js",
+      "sha256": "f1a4ff663681a7d10686720f5db3770fe4f3f37d4d10068ec25f150b0e171010"
+    },
+    {
+      "file": "readingBoardLayout-C3T5YqXG.js",
+      "sha256": "1686b0411bb78a8ee1e1f380f89422086014ed63edc2741bbc8d0ba96f922d4c"
+    },
+    {
+      "file": "readingCrystalOptics-iMVZrr2k.js",
+      "sha256": "026bc9d72fa3419d2d18a3c014a7cd0357ce8d212e3cb9fa8bbe34e507384e9b"
+    },
+    {
+      "file": "renderDensity-eCqR3GeM.js",
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699"
+    },
+    {
+      "file": "renderer-3U5qjbq1.js",
+      "sha256": "deec6e41699eceba0528db60eef7219a252b3ad6e22ed4c84bea1ffff1ae2e51"
+    },
+    {
+      "file": "renderer-4jRHwnhp.js",
+      "sha256": "d5e56cb29bf71055f733f34b803d09dfccb3a6fe95b3c8b25ea3ef364971e743"
+    },
+    {
+      "file": "renderer-BMZd15Bi.js",
+      "sha256": "772c270432b9e3637eeceadeba5cd6e88b129918b1ecd4249838ff59003daf74"
+    },
+    {
+      "file": "renderer-BRPLjlv5.js",
+      "sha256": "9ed41254775bc256183f81309934c299e9777ebcee99f2050a28b474e14a4ce1"
+    },
+    {
+      "file": "renderer-BWdamOhp.js",
+      "sha256": "edc2ae9475203af493f30c04b54d705b04acf833b77b73e996fa53ea6a3fdafd"
+    },
+    {
+      "file": "renderer-Bq-JhcWP.js",
+      "sha256": "0d8aa396a59114141b0ebaf62f4bc1530d85ec267c274d2036d6dde7f9a813d0"
+    },
+    {
+      "file": "renderer-Bxbv0Q-0.js",
+      "sha256": "9d0020ec1c7cb50923b3587f07ed56518bad3630aabdecff220f7ce1ed11964c"
+    },
+    {
+      "file": "renderer-C63DdRuN.js",
+      "sha256": "026a7ea261884e8d20d00aead453e926426742b0d7f5de615672d1fc4f6601d0"
+    },
+    {
+      "file": "renderer-CENu17lq.js",
+      "sha256": "e2b4fe613d24c28c1393abb0a6e2bac49d5048b84a6b0c8f768991614ce33d77"
+    },
+    {
+      "file": "renderer-CLbBCaq1.js",
+      "sha256": "955b9fa14cf07a49de26ae8159a642f2af3ebf233c2c337c2032f38811bd80ab"
+    },
+    {
+      "file": "renderer-CaORlBRt.js",
+      "sha256": "7f6846694a3cce9e3a4bf175ccd9411264e8fa280542e6fe5a3d915e945e7b5e"
+    },
+    {
+      "file": "renderer-Cbwxb0OD.js",
+      "sha256": "200c2cc48c39f46d1f258dd2a97e0e95b03b7c4d98eac340fc64e33a52ccf2e9"
+    },
+    {
+      "file": "renderer-Cdpmi-VD.js",
+      "sha256": "f71e1cebc7394b2fcd4707962f50542a96bf17b3aaa5ba508b1d749b4303e125"
+    },
+    {
+      "file": "renderer-D-pbI03F.js",
+      "sha256": "1fe9c390fd46802925a8494ce92cd1291d8a7a34fc0a3f16df07e71fec04aff2"
+    },
+    {
+      "file": "renderer-D0BXuqu5.js",
+      "sha256": "5d3492104202a0d0e8a1f651aa7465bc4cb760652c946320c016076d1b0d2523"
+    },
+    {
+      "file": "renderer-D0NfigWw.js",
+      "sha256": "a9c528e7faf4efeab00bbd20e9c35eae0ffbeb9acc2b5305d8ee28167c03915a"
+    },
+    {
+      "file": "renderer-DD_EfPbQ.js",
+      "sha256": "45897220c4ad589b2c494e761b092bbbfc870a6bfe7a3d00ea4fed139507658f"
+    },
+    {
+      "file": "renderer-DGWqSmt7.js",
+      "sha256": "6767954d1323798bfe2b1febbc357a5196ab8b948a123f28f2e30cad87331ad6"
+    },
+    {
+      "file": "renderer-DYfO-6i-.js",
+      "sha256": "ed301fedf59014d811ba89fa53009a0a2ab8e22b0de0c40c164d773d8a4e2fa5"
+    },
+    {
+      "file": "renderer-DmMNgdMe.js",
+      "sha256": "97943cbeb8dd318e46a3458686903359eb9b72ea655a731f554f9b0175c0dfb8"
+    },
+    {
+      "file": "renderer-Dq_nOVc4.js",
+      "sha256": "8bb82af455a943375e463a462620639ae01a269f1ec77ae82d235e708d513e6e"
+    },
+    {
+      "file": "renderer-KOE3DejE.js",
+      "sha256": "16904b255ccf5ebfb4b8604179a4ee80ddbf52ec12ccc744cc0a0eefe651c254"
+    },
+    {
+      "file": "riftScene-D6pVXhBQ.js",
+      "sha256": "aa328a5ddce197a73956c2da75d4f22b3c796f2a70c4d45ec0693717b0c846ff"
+    },
+    {
+      "file": "royal-matter-Au9-s3PQ.js",
+      "sha256": "b094fb57f82a0f9fee2e76f8245183645e027f2518ac3cd6a14263ad7503b355"
+    },
+    {
+      "file": "runtime-B2GnhSgL.js",
+      "sha256": "b9b9eaf625787855988e316b810143a2690a656ce3dacf797db25c2d287c98da"
+    },
+    {
+      "file": "runtime-BeZa8Hv9.js",
+      "sha256": "ce24a3985e0ff43d95c2bff34a46070e4aa04a6c6b4663087bfaec843b171e50"
+    },
+    {
+      "file": "runtime-C2wlYgPy.js",
+      "sha256": "10eb083fd214ff0b6507039f047a55b2365801fdd11409817d01bb37b1e442b5"
+    },
+    {
+      "file": "runtime-CCOSCtuq.js",
+      "sha256": "9c3b817f0628a1a5dd9997fab9f588144b9b89422cba4eedc39b8c92718fbd15"
+    },
+    {
+      "file": "runtime-Cb1rh-c0.js",
+      "sha256": "3e7be3b743fd624f731ac1f1190dd042ff6a2da43a964104c598c9eb64e97edd"
+    },
+    {
+      "file": "runtime-Ch9eydv_.css",
+      "sha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c"
+    },
+    {
+      "file": "runtime-CnEjyCGL.js",
+      "sha256": "21cef0617ea0266bf10708b5a9458b62565e8a7614f058ecb8f9389d840d8736"
+    },
+    {
+      "file": "runtime-Cr3_VCJS.js",
+      "sha256": "e45cd47b324b9c988cae915bea4f329745f2c9fd1664f83ea4b006f8bdac6c71"
+    },
+    {
+      "file": "runtime-D-b_KFl4.js",
+      "sha256": "1c53b1e79437dc7d1e7ee83dbdd25cff6e88406ccecbcec599e8a9e48af954f7"
+    },
+    {
+      "file": "runtime-D13R-Csa.js",
+      "sha256": "0f9c88d899a511255adb1425e00a6b09c0fc316f5d590bcd7c4ee4f0795bcf84"
+    },
+    {
+      "file": "runtime-DCWkYWle.js",
+      "sha256": "60faf73920433a88e2c9c27033d164c5676ea00f5eaa2662a077e04bb69414ac"
+    },
+    {
+      "file": "runtime-DMCevuw0.js",
+      "sha256": "2624112973fd39dc51fea7c608dd26515461516710188f2f074288e50bead319"
+    },
+    {
+      "file": "runtime-DRy3AI2I.js",
+      "sha256": "8bd2a76ae4a84e857d719a396edbe8a2667702bd86e35ddac61357e86f19c49a"
+    },
+    {
+      "file": "runtime-D_qOlmBK.js",
+      "sha256": "986595861fdbc7c8a7bc391f0310cf30d257ce2c4de4f7994f47782f34f5d3d8"
+    },
+    {
+      "file": "runtime-JKccnfDm.js",
+      "sha256": "9852f5fdf2b1b726b05bcdd13ff69d76bd5fd757481fe887da78065a674128d0"
+    },
+    {
+      "file": "runtime-LhLIaiM-.js",
+      "sha256": "692bebe04b5d6dceede22f9b57166f495df0f62f2149e5c1d2a5d00b8cddf8c9"
+    },
+    {
+      "file": "scene-BAYZCFzQ.js",
+      "sha256": "a15158551cd67c9d9ff69aba4b51b0372e15f70e3d2fb269e258b5b90de30030"
+    },
+    {
+      "file": "scene-C1I6P24I.js",
+      "sha256": "fc2475c847167a78206baf751aa814a51aebee81b89b00075131368193fb1382"
+    },
+    {
+      "file": "scene-eXdyTOYh.js",
+      "sha256": "6917492f2ef4241209eb207b6d91e50bb6024b13b4aca22d1d783fc572838e26"
+    },
+    {
+      "file": "scene-qrTbntOf.js",
+      "sha256": "52b227aaa047a971924157eec72e081aaaf8ada853973acd8902f7dfcec90634"
+    },
+    {
+      "file": "selection-BZuIRH5R.js",
+      "sha256": "dfe2619dd833c70a02edea2dc8fb5fc485caf369085440f353c733532824aacd"
+    },
+    {
+      "file": "shieldTitanRuntime-D57q50n2.js",
+      "sha256": "3aa07bb3c793f86c03c08c05fcc4e83ea424ea8c7bb3441560ab85494567eb0f"
+    },
+    {
+      "file": "sleeve-C0_3IGBo.js",
+      "sha256": "e10febab55716d5315526b4ccd120a6dcae74112350d1887a1c743f565396322"
+    },
+    {
+      "file": "sleeve-CC1hoB6n.js",
+      "sha256": "20d9e8522f4237b625a877ee9ee27a2aba7156f424618bde5f3b9a34bb0e319b"
+    },
+    {
+      "file": "sleeve-CQ08gNXD.js",
+      "sha256": "9e27b902ea16dc9f6a61f10ca86bfcfe7b68c32debea63d798c9518005ca0944"
+    },
+    {
+      "file": "sleeve-CSBK_EaW.js",
+      "sha256": "d65efafeb8aac7040ec43192d10055037c84d166c52c708e2cb811bb661c8bee"
+    },
+    {
+      "file": "sleeve-CfyJ6wf4.js",
+      "sha256": "755b71adcf194e24471d4cd6fe02f35de9b97fed9e1ee65c0c5fd7671aad1416"
+    },
+    {
+      "file": "sleeve-DzaSSjaP.js",
+      "sha256": "ffdab7ffb2836feb5a304c6ba4307f1eab0c1727bacc9b57251fac43054ca354"
+    },
+    {
+      "file": "snapshot-toLh5BQ8.js",
+      "sha256": "fdd9d329e5c57a0f78ecde445c0dd7555f50c9d4dc5694fff9d1b75f1cc78ca4"
+    },
+    {
+      "file": "social-B07N6Pfz.css",
+      "sha256": "e400e0f7327ff8462e7323a86654b08075c7a9bf78e9b937414047ede5ad7fa8"
+    },
+    {
+      "file": "social-BirT-032.js",
+      "sha256": "25f6867b5ce38529e991f6cebc3d1de3e57a59bf294d93910453aedf37207ac9"
+    },
+    {
+      "file": "sound-BpRL1kcp.js",
+      "sha256": "ef92430ed96af2db6e124b6d0d18f8e6d78b2184062d3103638b13f9ca64a83b"
+    },
+    {
+      "file": "spacetime-bEoVvnP4.js",
+      "sha256": "4da36854e4ffe0226979233ea9c86e949c3e628351e306d20b9ecf357a02a9f7"
+    },
+    {
+      "file": "stage-Vua0D3Ns.js",
+      "sha256": "ca5b2ec48e65a57c69b3e48afab78503e923030b940c434cd1d51c213d0fac64"
+    },
+    {
+      "file": "studio-CmgKc6nL.css",
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e"
+    },
+    {
+      "file": "style-BmSCny8F.css",
+      "sha256": "4ae8815bad476a60b375bf79b787616c2c3a4119580433ab696fbcbed41ec7e6"
+    },
+    {
+      "file": "visual-D0SyVZ91.js",
+      "sha256": "ea7120df046db7896494245a47bcdf051879a8bf55a3798b837c25d6894f4f73"
+    },
+    {
+      "file": "visual-DIqnABmZ.js",
+      "sha256": "0aa762b7c2baa63b0b5937931eaa15bea4b2a13f8394d0cc785c2477d4812163"
+    }
+  ],
+  "rows": [
+    {
+      "tier": "normal",
+      "deck": "BOT · GOBLIN",
+      "ms": 756.6000000089407,
+      "reply": {
+        "id": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "normal",
+      "deck": "BOT · GOBLIN",
+      "ms": 5.899999991059303,
+      "reply": {
+        "id": 1,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "normal",
+      "deck": "BOT · DECAY",
+      "ms": 6.300000011920929,
+      "reply": {
+        "id": 2,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "normal",
+      "deck": "BOT · DECAY",
+      "ms": 4,
+      "reply": {
+        "id": 3,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "normal",
+      "deck": "BOT · FORTRESS",
+      "ms": 7.199999988079071,
+      "reply": {
+        "id": 4,
+        "action": {
+          "type": "play",
+          "idx": 2
+        }
+      }
+    },
+    {
+      "tier": "normal",
+      "deck": "BOT · FORTRESS",
+      "ms": 0.30000001192092896,
+      "reply": {
+        "id": 5,
+        "action": {
+          "type": "endTurn"
+        }
+      }
+    },
+    {
+      "tier": "normal",
+      "deck": "BOT · RAMP",
+      "ms": 3.7999999970197678,
+      "reply": {
+        "id": 6,
+        "action": {
+          "type": "play",
+          "idx": 2
+        }
+      }
+    },
+    {
+      "tier": "normal",
+      "deck": "BOT · RAMP",
+      "ms": 9.700000002980232,
+      "reply": {
+        "id": 7,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · GOBLIN",
+      "ms": 442.69999998807907,
+      "reply": {
+        "id": 8,
+        "action": {
+          "type": "buyMarket",
+          "i": 6
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · GOBLIN",
+      "ms": 449.70000000298023,
+      "reply": {
+        "id": 9,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · DECAY",
+      "ms": 328.6000000089407,
+      "reply": {
+        "id": 10,
+        "action": {
+          "type": "buySupply",
+          "i": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · DECAY",
+      "ms": 299.69999998807907,
+      "reply": {
+        "id": 11,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · FORTRESS",
+      "ms": 278.6000000089407,
+      "reply": {
+        "id": 12,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · FORTRESS",
+      "ms": 169.79999999701977,
+      "reply": {
+        "id": 13,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · DEW_CONTROL",
+      "ms": 289.20000000298023,
+      "reply": {
+        "id": 14,
+        "action": {
+          "type": "buySupply",
+          "i": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · DEW_CONTROL",
+      "ms": 187.79999999701977,
+      "reply": {
+        "id": 15,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · FIRE_CONTROL",
+      "ms": 354.5,
+      "reply": {
+        "id": 16,
+        "action": {
+          "type": "buySupply",
+          "i": 1
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · FIRE_CONTROL",
+      "ms": 336,
+      "reply": {
+        "id": 17,
+        "action": {
+          "type": "refresh"
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · RIFT",
+      "ms": 364.29999999701977,
+      "reply": {
+        "id": 18,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · RIFT",
+      "ms": 300.90000000596046,
+      "reply": {
+        "id": 19,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · MIXED_RALLY",
+      "ms": 329.5,
+      "reply": {
+        "id": 20,
+        "action": {
+          "type": "buySupply",
+          "i": 1
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "BOT · MIXED_RALLY",
+      "ms": 311.3999999910593,
+      "reply": {
+        "id": 21,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · GOBLIN",
+      "ms": 301.40000000596046,
+      "reply": {
+        "id": 22,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · GOBLIN",
+      "ms": 333.90000000596046,
+      "reply": {
+        "id": 23,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · DECAY",
+      "ms": 342,
+      "reply": {
+        "id": 24,
+        "action": {
+          "type": "refresh"
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · DECAY",
+      "ms": 280.19999998807907,
+      "reply": {
+        "id": 25,
+        "action": {
+          "type": "buySupply",
+          "i": 2
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · FORTRESS",
+      "ms": 267.70000000298023,
+      "reply": {
+        "id": 26,
+        "action": {
+          "type": "buyMarket",
+          "i": 6
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · FORTRESS",
+      "ms": 122.70000000298023,
+      "reply": {
+        "id": 27,
+        "action": {
+          "type": "refresh"
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · DEW_CONTROL",
+      "ms": 267.5,
+      "reply": {
+        "id": 28,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · DEW_CONTROL",
+      "ms": 295.90000000596046,
+      "reply": {
+        "id": 29,
+        "action": {
+          "type": "refresh"
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · FIRE_CONTROL",
+      "ms": 330.79999999701977,
+      "reply": {
+        "id": 30,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · FIRE_CONTROL",
+      "ms": 259.5,
+      "reply": {
+        "id": 31,
+        "action": {
+          "type": "buyMarket",
+          "i": 3
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · RIFT",
+      "ms": 346.70000000298023,
+      "reply": {
+        "id": 32,
+        "action": {
+          "type": "buySupply",
+          "i": 0
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · RIFT",
+      "ms": 271.3999999910593,
+      "reply": {
+        "id": 33,
+        "action": {
+          "type": "endTurn"
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · MIXED_RALLY",
+      "ms": 321.29999999701977,
+      "reply": {
+        "id": 34,
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "BOT · MIXED_RALLY",
+      "ms": 279.40000000596046,
+      "reply": {
+        "id": 35,
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "recovery-market",
+      "ms": 159.20000000298023,
+      "reply": {
+        "id": 36,
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "remove-dew",
+      "ms": 224.09999999403954,
+      "reply": {
+        "id": 37,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "recovery-market",
+      "ms": 144.79999999701977,
+      "reply": {
+        "id": 38,
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "remove-dew",
+      "ms": 219.5,
+      "reply": {
+        "id": 39,
+        "action": {
+          "type": "play",
+          "idx": 1
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "pending-buff-lethal",
+      "ms": 0.6000000089406967,
+      "reply": {
+        "id": 40,
+        "action": {
+          "type": "chooseTarget",
+          "uid": "staging-market-45"
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "pending-buff-lethal",
+      "ms": 0,
+      "reply": {
+        "id": 41,
+        "action": {
+          "type": "chooseTarget",
+          "uid": "staging-market-48"
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "suppression-answer-0",
+      "ms": 0.29999999701976776,
+      "reply": {
+        "id": 42,
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "guardian-answer",
+      "ms": 0.29999999701976776,
+      "reply": {
+        "id": 43,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hard",
+      "deck": "restore-attacks",
+      "ms": 0.10000000894069672,
+      "reply": {
+        "id": 44,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "suppression-answer-0",
+      "ms": 0.09999999403953552,
+      "reply": {
+        "id": 45,
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "guardian-answer",
+      "ms": 0,
+      "reply": {
+        "id": 46,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    },
+    {
+      "tier": "hell",
+      "deck": "restore-attacks",
+      "ms": 0.20000000298023224,
+      "reply": {
+        "id": 47,
+        "action": {
+          "type": "play",
+          "idx": 0
+        }
+      }
+    }
+  ],
+  "ticks": 996,
+  "errors": []
+}

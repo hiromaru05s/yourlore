@@ -1,0 +1,119 @@
+{
+  "goblin": {
+    "core": [
+      "GOBLIN",
+      "GOBLIN_RAIDER"
+    ],
+    "pool": [
+      "GOBLIN",
+      "COUNTERCALC",
+      "TRUMPET",
+      "BLOOD_RITE",
+      "STARTER_TRASH",
+      "GOBLIN_SETTLEMENT",
+      "WEAKEN_ALL"
+    ]
+  },
+  "decay": {
+    "core": [
+      "RUST_SHROOM",
+      "RUST_SHROOM"
+    ],
+    "pool": [
+      "RUST_SHROOM",
+      "ACID_RAIN",
+      "COUNTERCALC",
+      "WEAKEN_ALL",
+      "BLOOD_RITE",
+      "TRUMPET",
+      "STARTER_TRASH",
+      "NOURISHING_RAIN"
+    ]
+  },
+  "fortress": {
+    "core": [
+      "CASTLE",
+      "WEAKEN_ALL"
+    ],
+    "pool": [
+      "CASTLE",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "BLOOD_RITE",
+      "NOURISHING_RAIN",
+      "GAMBLER",
+      "TRICKROOM",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "GHOST"
+    ]
+  },
+  "mimic": {
+    "core": [
+      "DUNGEON_FLOOR",
+      "DUNGEON_FLOOR"
+    ],
+    "pool": [
+      "DUNGEON_FLOOR",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "GAMBLER",
+      "TRUMPET",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "BLOOD_RITE"
+    ]
+  },
+  "attrition": {
+    "core": [
+      "BATTLEFIELD",
+      "NOURISHING_RAIN"
+    ],
+    "pool": [
+      "BATTLEFIELD",
+      "NOURISHING_RAIN",
+      "CASTLE",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "BLOOD_RITE",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "GHOST"
+    ]
+  },
+  "rift": {
+    "core": [
+      "RIFT",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "pool": [
+      "RIFT",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "TRIAL_AREA",
+      "CHOSEN_AREA",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "NOURISHING_RAIN",
+      "FOCUS"
+    ]
+  },
+  "ramp": {
+    "core": [
+      "GAMBLER",
+      "GAMBLER"
+    ],
+    "pool": [
+      "GAMBLER",
+      "DUNGEON_FLOOR",
+      "CASINO",
+      "NOURISHING_RAIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "BLOOD_RITE",
+      "STARTER_TRASH",
+      "STARTER_CHEST"
+    ]
+  }
+}

@@ -13,12 +13,13 @@ try {
     assert.equal(botNpc(npc.difficulty), npc);
     assert.equal(npcPortrait(npc.avatar), npc.portrait);
     await access('client/public' + npc.portrait);
-    const count = {easy:3,normal:3,hard:5,hell:7}[npc.difficulty];
+    const count = {easy:1,normal:4,hard:7,hell:7}[npc.difficulty];
     const signatures = new Set();
     assert.equal(npc.decks.length, count);
     for (const lang of ['ja', 'en', 'ko']) assert(npc.name[lang] && npc.title[lang] && npc.style[lang]);
     assert.deepEqual(Array.from({length:count},(_,i)=>pickNpcDeck(npc,undefined,(i+.5)/count).index),Array.from({length:count},(_,i)=>i));
     for (let previous = 0; previous < count; previous++) {
+      if(count===1){assert.equal(pickNpcDeck(npc,previous,0).index,0);continue;}
       const choices = new Set(Array.from({length:count-1},(_,i)=>pickNpcDeck(npc,previous,(i+.5)/(count-1)).index));
       assert.equal(choices.size, count-1);
       assert(!choices.has(previous), 'A rematch must not repeat the last deck');
@@ -35,7 +36,7 @@ try {
       assert(!signatures.has(signature), deck.name + ' must have a distinct composition');
       signatures.add(signature);decksChecked++;
       for (const starting of [0, 1]) {
-        let g = createGame({ mode: 'bot', seed: 71, starting, p0: { id: 'me', name: 'YOU' }, p1: { id: 'bot', name: npc.name.ja, isBot: true, deck: deck.cards } }).state;
+        let g = createGame({ mode: 'bot', seed: 71, starting, challenge: {difficulty:npc.difficulty,side:1}, p0: { id: 'me', name: 'YOU' }, p1: { id: 'bot', name: npc.name.ja, isBot: true, deck: deck.cards } }).state;
         g.players[1].botTune = { ...deck.tune };
         const p = g.players[1];
         assert.deepEqual([...p.hand, ...p.deck].map(c => c.id).sort(), ['STARTER_MANA', ...deck.cards].sort());

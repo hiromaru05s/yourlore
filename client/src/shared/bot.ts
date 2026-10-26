@@ -1,5 +1,5 @@
 // Four difficulty levels share the same rules and legal-action safety.
-// Hard/hell use paired imperfect-information rollouts; easy/normal retain mistakes.
+// Normal and upper tiers search imperfect-information rollouts; easy retains mistakes.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
 import { purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
 import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
@@ -17,7 +17,7 @@ export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
 const SELF_HARM_SPELLS = new Set(['CATALYST','BLOOD1','BLOOD2','BLOOD_JOY','BLOOD_ANGER','BLOOD_SORROW','BLOOD_PLEASURE','VAMP_PACT','SHATTER','GREED_PRICE','MASSACRE','FLAME','AMBUSH','FORBIDDEN']);
 
-const BLUNDER: Record<BotDifficulty, number> = { easy: 0.45, normal: 0.18, hard: 0, hell: 0 };
+const BLUNDER: Record<BotDifficulty, number> = { easy: 0.45, normal: 0, hard: 0, hell: 0 };
 
 export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress?: (action: Action) => void): Action {
   return withoutMonsterPresentation(() => decideFromObservation(g, diff, onProgress));
@@ -26,7 +26,9 @@ export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress
 function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void): Action {
   // All policies, including tactical checks, see sampled hidden information.
   const view = observationSample(g, g.pending?.owner ?? g.cur, 0);
-  let best = diff === "hard" || diff === "hell" ? searchDecide(view, diff, true, onProgress ? a => onProgress(legalBotAction(g, a, view)) : undefined) : safeGreedy(view);
+  // Both upper tiers use the full ensemble. Challenge-market probabilities
+  // distinguish them; Hard no longer throws away most finalist samples.
+  let best = diff !== "easy" ? searchDecide(view, diff === 'normal' ? 'normal' : 'hell', true, onProgress ? a => onProgress(legalBotAction(g, a, view)) : undefined) : safeGreedy(view);
   if (BLUNDER[diff] > 0 && Math.random() < BLUNDER[diff]) {
     const alternatives = botActions(view).filter(a => JSON.stringify(a) !== JSON.stringify(best))
       .filter(a => actionChangesState(view, reduce(view, a).state));

@@ -1,0 +1,12 @@
+{
+  "origin": "https://yourlore.xyz",
+  "codeCommit": "d597d8d06b2b52476b0f323fa480bbf67d1703fe",
+  "deploymentId": "82974cd9-f007-4474-8f2a-00fa37413503",
+  "versionId": "53a86487-f33c-4f34-b6b0-8186d51ad16d",
+  "deployedAt": "2026-10-26T22:24:18.641026Z",
+  "guard": "scripts/deploy-guard.mjs production",
+  "guardExit": 0,
+  "regressionPassed": 240,
+  "regressionTotal": 240,
+  "balance": 68
+}

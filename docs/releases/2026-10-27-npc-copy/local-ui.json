@@ -1,0 +1,105 @@
+{
+  "origin": "http://127.0.0.1:5279",
+  "lang": "ja",
+  "checks": [
+    {
+      "width": 1440,
+      "height": 900,
+      "button": {
+        "x": 500,
+        "y": 640.015625,
+        "width": 440,
+        "height": 64,
+        "bottom": 704.015625
+      },
+      "modal": {
+        "x": 200,
+        "width": 1040
+      },
+      "overflow": false,
+      "scrollable": false,
+      "rosterHeight": 353
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "button": {
+        "x": 420,
+        "y": 550.015625,
+        "width": 440,
+        "height": 64,
+        "bottom": 614.015625
+      },
+      "modal": {
+        "x": 120,
+        "width": 1040
+      },
+      "overflow": false,
+      "scrollable": false,
+      "rosterHeight": 353
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "button": {
+        "x": 35,
+        "y": 662.625,
+        "width": 320,
+        "height": 56,
+        "bottom": 718.625
+      },
+      "modal": {
+        "x": 12,
+        "width": 366
+      },
+      "overflow": false,
+      "scrollable": false,
+      "rosterHeight": 461
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "button": {
+        "x": 35,
+        "y": 444,
+        "width": 250,
+        "height": 56,
+        "bottom": 500
+      },
+      "modal": {
+        "x": 12,
+        "width": 296
+      },
+      "overflow": false,
+      "scrollable": true,
+      "rosterHeight": 300
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "button": {
+        "x": 202,
+        "y": 274,
+        "width": 440,
+        "height": 56,
+        "bottom": 330
+      },
+      "modal": {
+        "x": 16,
+        "width": 812
+      },
+      "overflow": false,
+      "scrollable": true,
+      "rosterHeight": 167
+    }
+  ],
+  "errors": [],
+  "launches": [
+    {
+      "difficulty": "easy",
+      "lang": "ja"
+    }
+  ],
+  "layoutOnly": false,
+  "boundary": "Real UI and assets, fixture account/API. No authenticated server duel."
+}

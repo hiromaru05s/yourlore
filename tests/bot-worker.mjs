@@ -22,7 +22,7 @@ try{
  pulse=setInterval(()=>heartbeats++,10);
  let fixture;
  for(const npc of BOT_NPCS)for(const deck of npc.decks){
-  let g=createGame({mode:'bot',seed:71,starting:1,p0:{id:'me',name:'YOU'},p1:{id:'bot',name:'BOT',isBot:true,deck:deck.cards}}).state;
+  let g=createGame({mode:'bot',seed:71,starting:1,challenge:{difficulty:npc.difficulty,side:1},p0:{id:'me',name:'YOU'},p1:{id:'bot',name:'BOT',isBot:true,deck:deck.cards}}).state;
   g.players[1].botTune={...deck.tune};fixture=g;
   // Compare both the opening decision and its successor with identical randomness.
   for(let i=0;i<2;i++){

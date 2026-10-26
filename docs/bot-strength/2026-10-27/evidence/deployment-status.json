@@ -1,0 +1,13 @@
+{
+  "id": "e05f1c4b-869f-47fa-adfd-d071e7b41d4a",
+  "created_on": "2026-10-26T22:40:49.342075Z",
+  "source": "wrangler",
+  "strategy": "percentage",
+  "versions": [
+    {
+      "version_id": "10ccc9b0-b060-4b31-8cff-76ec30a30c39",
+      "percentage": 100
+    }
+  ],
+  "message": "46a1feb3b746750523961d858dbdcbe82649734b guarded release"
+}

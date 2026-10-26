@@ -1,0 +1,1762 @@
+{
+  "balance": "v68",
+  "families": {
+    "ramp": {
+      "core": [
+        "GAMBLER",
+        "GAMBLER",
+        "GAMBLER"
+      ],
+      "pool": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "NOURISHING_RAIN",
+        "BLOOD_RITE"
+      ]
+    },
+    "mimic": {
+      "core": [
+        "DUNGEON_FLOOR",
+        "DUNGEON_FLOOR",
+        "WEAKEN_ALL"
+      ],
+      "pool": [
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "GAMBLER",
+        "COUNTERCALC",
+        "NOURISHING_RAIN",
+        "BLOOD_RITE",
+        "TRUMPET",
+        "DUNGEON_FLOOR"
+      ]
+    },
+    "attrition": {
+      "core": [
+        "BATTLEFIELD",
+        "NOURISHING_RAIN",
+        "CASTLE"
+      ],
+      "pool": [
+        "BATTLEFIELD",
+        "NOURISHING_RAIN",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "BLOOD_RITE",
+        "STARTER_CHEST",
+        "STARTER_TRASH"
+      ]
+    },
+    "shield": {
+      "core": [
+        "RELIC_BOUNTY",
+        "RELIC_PROTECTION",
+        "SELECTED_SHIELD"
+      ],
+      "pool": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "CASTLE",
+        "BLOOD_RITE"
+      ]
+    }
+  },
+  "scores": [
+    {
+      "family": "ramp",
+      "selected": {
+        "deck": [
+          "GAMBLER",
+          "GAMBLER",
+          "GAMBLER",
+          "STARTER_TRASH",
+          "NOURISHING_RAIN",
+          "STARTER_TRASH",
+          "WEAKEN_ALL",
+          "STARTER_TRASH"
+        ],
+        "score": 0.5,
+        "invalid": 0,
+        "validation": 0.4583333333333333
+      },
+      "candidates": [
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5625,
+          "invalid": 0,
+          "validation": 0.375
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.4583333333333333
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.375
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.2708333333333333
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "BLOOD_RITE",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "STARTER_TRASH"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_CHEST",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "STARTER_TRASH"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "BLOOD_RITE"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "STARTER_CHEST"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_CHEST"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_CHEST",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "STARTER_CHEST"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "BLOOD_RITE",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "COUNTERCALC"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN",
+            "STARTER_CHEST",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "COUNTERCALC"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "BLOOD_RITE"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "STARTER_TRASH"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "STARTER_TRASH"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        }
+      ],
+      "finalists": [
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.4583333333333333
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5625,
+          "invalid": 0,
+          "validation": 0.375
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.375
+        },
+        {
+          "deck": [
+            "GAMBLER",
+            "GAMBLER",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.2708333333333333
+        }
+      ]
+    },
+    {
+      "family": "mimic",
+      "selected": {
+        "deck": [
+          "DUNGEON_FLOOR",
+          "DUNGEON_FLOOR",
+          "WEAKEN_ALL",
+          "DUNGEON_FLOOR",
+          "STARTER_TRASH",
+          "DUNGEON_FLOOR",
+          "STARTER_CHEST",
+          "DUNGEON_FLOOR"
+        ],
+        "score": 0.625,
+        "invalid": 0,
+        "validation": 0.6041666666666666
+      },
+      "candidates": [
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "TRUMPET",
+            "STARTER_TRASH",
+            "DUNGEON_FLOOR"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.3541666666666667
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "DUNGEON_FLOOR",
+            "STARTER_TRASH",
+            "DUNGEON_FLOOR",
+            "STARTER_CHEST",
+            "DUNGEON_FLOOR"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.6041666666666666
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "DUNGEON_FLOOR",
+            "STARTER_TRASH"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.375
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "BLOOD_RITE"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.3854166666666667
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "NOURISHING_RAIN",
+            "GAMBLER",
+            "COUNTERCALC"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "TRUMPET",
+            "TRUMPET",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "TRUMPET"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "TRUMPET",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "NOURISHING_RAIN",
+            "BLOOD_RITE",
+            "DUNGEON_FLOOR"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "TRUMPET",
+            "BLOOD_RITE",
+            "DUNGEON_FLOOR",
+            "STARTER_TRASH",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "TRUMPET",
+            "COUNTERCALC",
+            "GAMBLER",
+            "STARTER_CHEST",
+            "COUNTERCALC"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "DUNGEON_FLOOR",
+            "NOURISHING_RAIN",
+            "BLOOD_RITE"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "TRUMPET",
+            "TRUMPET",
+            "BLOOD_RITE",
+            "GAMBLER",
+            "DUNGEON_FLOOR"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "BLOOD_RITE",
+            "GAMBLER",
+            "GAMBLER"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "DUNGEON_FLOOR"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "TRUMPET",
+            "DUNGEON_FLOOR",
+            "TRUMPET",
+            "STARTER_CHEST",
+            "BLOOD_RITE"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "COUNTERCALC",
+            "TRUMPET"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "GAMBLER",
+            "DUNGEON_FLOOR",
+            "BLOOD_RITE",
+            "TRUMPET",
+            "STARTER_CHEST"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "BLOOD_RITE",
+            "COUNTERCALC",
+            "TRUMPET",
+            "BLOOD_RITE"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "DUNGEON_FLOOR",
+            "STARTER_CHEST",
+            "GAMBLER"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "DUNGEON_FLOOR",
+            "GAMBLER",
+            "DUNGEON_FLOOR",
+            "TRUMPET",
+            "TRUMPET"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "NOURISHING_RAIN",
+            "NOURISHING_RAIN",
+            "TRUMPET",
+            "BLOOD_RITE"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "NOURISHING_RAIN",
+            "NOURISHING_RAIN",
+            "COUNTERCALC"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "GAMBLER",
+            "STARTER_TRASH",
+            "GAMBLER",
+            "TRUMPET"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        }
+      ],
+      "finalists": [
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "DUNGEON_FLOOR",
+            "STARTER_TRASH",
+            "DUNGEON_FLOOR",
+            "STARTER_CHEST",
+            "DUNGEON_FLOOR"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.6041666666666666
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "BLOOD_RITE"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.3854166666666667
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "DUNGEON_FLOOR",
+            "STARTER_TRASH"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.375
+        },
+        {
+          "deck": [
+            "DUNGEON_FLOOR",
+            "DUNGEON_FLOOR",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "TRUMPET",
+            "STARTER_TRASH",
+            "DUNGEON_FLOOR"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.3541666666666667
+        }
+      ]
+    },
+    {
+      "family": "attrition",
+      "selected": {
+        "deck": [
+          "BATTLEFIELD",
+          "NOURISHING_RAIN",
+          "CASTLE",
+          "NOURISHING_RAIN",
+          "WEAKEN_ALL",
+          "BLOOD_RITE",
+          "COUNTERCALC",
+          "WEAKEN_ALL"
+        ],
+        "score": 0.625,
+        "invalid": 0,
+        "validation": 0.5833333333333334
+      },
+      "candidates": [
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "STARTER_CHEST"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.4375
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "BATTLEFIELD",
+            "WEAKEN_ALL",
+            "BATTLEFIELD",
+            "STARTER_TRASH",
+            "STARTER_CHEST"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.4583333333333333
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "COUNTERCALC",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.5833333333333334
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_CHEST",
+            "BATTLEFIELD",
+            "BATTLEFIELD",
+            "BLOOD_RITE",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5625,
+          "invalid": 0,
+          "validation": 0.4583333333333333
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "BLOOD_RITE",
+            "COUNTERCALC",
+            "BLOOD_RITE"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "COUNTERCALC",
+            "COUNTERCALC"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_CHEST",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "BATTLEFIELD",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "BATTLEFIELD",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "BLOOD_RITE"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "BATTLEFIELD",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "WEAKEN_ALL",
+            "COUNTERCALC"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "STARTER_TRASH",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "BLOOD_RITE",
+            "NOURISHING_RAIN",
+            "NOURISHING_RAIN",
+            "COUNTERCALC",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "BATTLEFIELD",
+            "STARTER_TRASH",
+            "BATTLEFIELD",
+            "WEAKEN_ALL",
+            "COUNTERCALC"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "BLOOD_RITE",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_TRASH",
+            "BATTLEFIELD",
+            "BATTLEFIELD",
+            "STARTER_TRASH",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "BLOOD_RITE"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "NOURISHING_RAIN",
+            "BLOOD_RITE"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "COUNTERCALC",
+            "BATTLEFIELD",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "STARTER_CHEST"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "BATTLEFIELD",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "BATTLEFIELD"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "BATTLEFIELD",
+            "STARTER_TRASH",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "NOURISHING_RAIN",
+            "BATTLEFIELD",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "BATTLEFIELD"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        }
+      ],
+      "finalists": [
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "COUNTERCALC",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.5833333333333334
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "BATTLEFIELD",
+            "WEAKEN_ALL",
+            "BATTLEFIELD",
+            "STARTER_TRASH",
+            "STARTER_CHEST"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.4583333333333333
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_CHEST",
+            "BATTLEFIELD",
+            "BATTLEFIELD",
+            "BLOOD_RITE",
+            "STARTER_TRASH"
+          ],
+          "score": 0.5625,
+          "invalid": 0,
+          "validation": 0.4583333333333333
+        },
+        {
+          "deck": [
+            "BATTLEFIELD",
+            "NOURISHING_RAIN",
+            "CASTLE",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "STARTER_CHEST"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.4375
+        }
+      ]
+    },
+    {
+      "family": "shield",
+      "selected": {
+        "deck": [
+          "RELIC_BOUNTY",
+          "RELIC_PROTECTION",
+          "SELECTED_SHIELD",
+          "STARTER_CHEST",
+          "STARTER_CHEST",
+          "WEAKEN_ALL",
+          "STARTER_CHEST",
+          "WEAKEN_ALL"
+        ],
+        "score": 0.625,
+        "invalid": 0,
+        "validation": 0.4791666666666667
+      },
+      "candidates": [
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.4791666666666667
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.3541666666666667
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "BLOOD_RITE",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "BLOOD_RITE"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.4583333333333333
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "BLOOD_RITE",
+            "STARTER_CHEST",
+            "CASTLE",
+            "WEAKEN_ALL",
+            "BLOOD_RITE"
+          ],
+          "score": 0.4375,
+          "invalid": 0,
+          "validation": 0.22916666666666666
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "BLOOD_RITE",
+            "BLOOD_RITE"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "CASTLE",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "WEAKEN_ALL",
+            "STARTER_TRASH"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "STARTER_TRASH"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "BLOOD_RITE",
+            "STARTER_TRASH"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "BLOOD_RITE",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "CASTLE",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "CASTLE"
+          ],
+          "score": 0.375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "WEAKEN_ALL",
+            "CASTLE",
+            "CASTLE",
+            "BLOOD_RITE",
+            "STARTER_TRASH"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "BLOOD_RITE",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "WEAKEN_ALL",
+            "BLOOD_RITE"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "CASTLE",
+            "CASTLE",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "STARTER_TRASH"
+          ],
+          "score": 0.3125,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "BLOOD_RITE",
+            "BLOOD_RITE",
+            "CASTLE",
+            "STARTER_CHEST",
+            "BLOOD_RITE"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "BLOOD_RITE",
+            "CASTLE",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "CASTLE"
+          ],
+          "score": 0.25,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "BLOOD_RITE",
+            "STARTER_TRASH",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.1875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "CASTLE",
+            "CASTLE",
+            "CASTLE",
+            "CASTLE",
+            "STARTER_CHEST"
+          ],
+          "score": 0.1875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "CASTLE"
+          ],
+          "score": 0.1875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "CASTLE",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "BLOOD_RITE",
+            "COUNTERCALC"
+          ],
+          "score": 0.1875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "CASTLE",
+            "STARTER_TRASH"
+          ],
+          "score": 0.1875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "BLOOD_RITE",
+            "STARTER_TRASH"
+          ],
+          "score": 0.0625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "COUNTERCALC",
+            "BLOOD_RITE",
+            "BLOOD_RITE",
+            "COUNTERCALC",
+            "STARTER_TRASH"
+          ],
+          "score": 0.0625,
+          "invalid": 0
+        }
+      ],
+      "finalists": [
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.625,
+          "invalid": 0,
+          "validation": 0.4791666666666667
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "BLOOD_RITE",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "BLOOD_RITE"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.4583333333333333
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0,
+          "validation": 0.3541666666666667
+        },
+        {
+          "deck": [
+            "RELIC_BOUNTY",
+            "RELIC_PROTECTION",
+            "SELECTED_SHIELD",
+            "BLOOD_RITE",
+            "STARTER_CHEST",
+            "CASTLE",
+            "WEAKEN_ALL",
+            "BLOOD_RITE"
+          ],
+          "score": 0.4375,
+          "invalid": 0,
+          "validation": 0.22916666666666666
+        }
+      ]
+    }
+  ],
+  "games": 2304,
+  "seconds": 938.249
+}

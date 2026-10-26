@@ -1,3 +1,4 @@
+import { nextNpcDeck, type BotRotation } from '../shared/botRotation';
 import {syncCardFrames,localCardFrame} from '../ui/cardFrame';
 import {playTribePactDefeat,tribePactVerdict} from '../ui/tribePactDefeat/runtime';
 import {STANDARD_FX} from '../ui/animationTempo';
@@ -31,7 +32,7 @@ import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenV
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
 import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
 import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
-import { botNpc, pickNpcDeck } from "../shared/botNpcs";
+import { botNpc } from "../shared/botNpcs";
 import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
@@ -1636,7 +1637,7 @@ export abstract class BaseController implements BoardHandlers {
 // ============================================================
 // LocalController — single device, you vs bot
 // ============================================================
-const lastNpcDecks = new Map<string, number>();
+const lastNpcDecks = new Map<string, BotRotation>();
 
 export class LocalController extends BaseController {
   private botTimer = 0;
@@ -1649,10 +1650,12 @@ export class LocalController extends BaseController {
     super(root, 0, exits);
     this.difficulty = difficulty;
     const npc = botNpc(difficulty);
-    const { index, deck: bot } = pickNpcDeck(npc, lastNpcDecks.get(npc.id));
-    lastNpcDecks.set(npc.id, index);
+    const { index, rotation } = nextNpcDeck(npc, lastNpcDecks.get(npc.id));
+    const bot = npc.decks[index];
+    lastNpcDecks.set(npc.id, rotation);
     const res = createGame({
       mode: "bot",
+      challenge: {difficulty, side: 1},
       p0: { id: "local", name: playerName, deck },
       p1: { id: "bot", name: npc.name[getLang()], isBot: true, deck: bot.cards },
       starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn

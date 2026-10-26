@@ -1,0 +1,886 @@
+{
+  "balance": "v68",
+  "families": {
+    "dew_control": {
+      "core": [
+        "ELF_HAVEN",
+        "WEAKEN_ALL",
+        "HALF_ELF"
+      ],
+      "pool": [
+        "ELF_HAVEN",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "NOURISHING_RAIN",
+        "REFRESH_HAND"
+      ]
+    },
+    "fire_control": {
+      "core": [
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "WEAKEN_ALL"
+      ],
+      "pool": [
+        "FLAME",
+        "WEAKEN_ALL",
+        "REFRESH_HAND",
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "CASTLE",
+        "COUNTERCALC"
+      ]
+    }
+  },
+  "scores": [
+    {
+      "family": "dew_control",
+      "selected": {
+        "deck": [
+          "ELF_HAVEN",
+          "WEAKEN_ALL",
+          "HALF_ELF",
+          "COUNTERCALC",
+          "ELF_HAVEN",
+          "STARTER_CHEST",
+          "WEAKEN_ALL",
+          "STARTER_TRASH"
+        ],
+        "score": 0.75,
+        "invalid": 0,
+        "validation": 0.7291666666666666
+      },
+      "candidates": [
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "COUNTERCALC",
+            "ELF_HAVEN",
+            "STARTER_CHEST",
+            "WEAKEN_ALL",
+            "STARTER_TRASH"
+          ],
+          "score": 0.75,
+          "invalid": 0,
+          "validation": 0.7291666666666666
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "ELF_HAVEN"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.6875
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "REFRESH_HAND"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.6666666666666666
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "STARTER_CHEST"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.6458333333333334
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH",
+            "STARTER_TRASH"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "ELF_HAVEN",
+            "REFRESH_HAND",
+            "STARTER_TRASH",
+            "REFRESH_HAND",
+            "STARTER_CHEST"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "REFRESH_HAND",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "ELF_HAVEN",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "ELF_HAVEN",
+            "ELF_HAVEN",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "ELF_HAVEN",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "STARTER_TRASH"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "NOURISHING_RAIN",
+            "ELF_HAVEN",
+            "ELF_HAVEN"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "REFRESH_HAND"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_TRASH",
+            "REFRESH_HAND",
+            "NOURISHING_RAIN",
+            "COUNTERCALC",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "COUNTERCALC"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_TRASH",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "NOURISHING_RAIN",
+            "ELF_HAVEN"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "REFRESH_HAND",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "ELF_HAVEN",
+            "STARTER_TRASH",
+            "ELF_HAVEN",
+            "NOURISHING_RAIN",
+            "COUNTERCALC"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "ELF_HAVEN",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "ELF_HAVEN"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "ELF_HAVEN",
+            "ELF_HAVEN",
+            "STARTER_TRASH",
+            "REFRESH_HAND",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "REFRESH_HAND",
+            "WEAKEN_ALL",
+            "NOURISHING_RAIN"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_TRASH",
+            "NOURISHING_RAIN",
+            "ELF_HAVEN",
+            "NOURISHING_RAIN",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "REFRESH_HAND",
+            "NOURISHING_RAIN",
+            "STARTER_TRASH"
+          ],
+          "score": 0.4375,
+          "invalid": 0
+        }
+      ],
+      "finalists": [
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "COUNTERCALC",
+            "ELF_HAVEN",
+            "STARTER_CHEST",
+            "WEAKEN_ALL",
+            "STARTER_TRASH"
+          ],
+          "score": 0.75,
+          "invalid": 0,
+          "validation": 0.7291666666666666
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "ELF_HAVEN"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.6875
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "REFRESH_HAND"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.6666666666666666
+        },
+        {
+          "deck": [
+            "ELF_HAVEN",
+            "WEAKEN_ALL",
+            "HALF_ELF",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "STARTER_CHEST"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.6458333333333334
+        }
+      ]
+    },
+    {
+      "family": "fire_control",
+      "selected": {
+        "deck": [
+          "FLAME",
+          "FLAME",
+          "FLAME",
+          "WEAKEN_ALL",
+          "STARTER_TRASH",
+          "CASTLE",
+          "FLAME",
+          "REFRESH_HAND"
+        ],
+        "score": 0.6875,
+        "invalid": 0,
+        "validation": 0.6666666666666666
+      },
+      "candidates": [
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "STARTER_TRASH",
+            "CASTLE"
+          ],
+          "score": 0.75,
+          "invalid": 0,
+          "validation": 0.5625
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "CASTLE",
+            "CASTLE"
+          ],
+          "score": 0.75,
+          "invalid": 0,
+          "validation": 0.6458333333333334
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "CASTLE"
+          ],
+          "score": 0.75,
+          "invalid": 0,
+          "validation": 0.6041666666666666
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "CASTLE",
+            "FLAME",
+            "REFRESH_HAND"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.6666666666666666
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "FLAME",
+            "REFRESH_HAND",
+            "COUNTERCALC",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.6875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "STARTER_TRASH",
+            "REFRESH_HAND"
+          ],
+          "score": 0.6875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "FLAME",
+            "STARTER_CHEST",
+            "FLAME",
+            "COUNTERCALC"
+          ],
+          "score": 0.6875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "COUNTERCALC",
+            "COUNTERCALC",
+            "CASTLE"
+          ],
+          "score": 0.6875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "FLAME",
+            "CASTLE",
+            "STARTER_CHEST",
+            "COUNTERCALC"
+          ],
+          "score": 0.6875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "FLAME",
+            "FLAME",
+            "CASTLE",
+            "REFRESH_HAND"
+          ],
+          "score": 0.6875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "STARTER_TRASH"
+          ],
+          "score": 0.6875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "STARTER_TRASH",
+            "STARTER_TRASH",
+            "FLAME"
+          ],
+          "score": 0.6875,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "CASTLE",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "FLAME"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "COUNTERCALC",
+            "FLAME",
+            "COUNTERCALC"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "FLAME",
+            "FLAME",
+            "CASTLE",
+            "COUNTERCALC"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "FLAME",
+            "REFRESH_HAND",
+            "COUNTERCALC"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "STARTER_CHEST",
+            "COUNTERCALC",
+            "CASTLE"
+          ],
+          "score": 0.625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "STARTER_CHEST",
+            "REFRESH_HAND"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "STARTER_CHEST",
+            "STARTER_TRASH",
+            "CASTLE",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "STARTER_CHEST",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "STARTER_CHEST",
+            "FLAME"
+          ],
+          "score": 0.5625,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "STARTER_CHEST",
+            "REFRESH_HAND",
+            "WEAKEN_ALL"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "STARTER_CHEST",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "CASTLE",
+            "WEAKEN_ALL",
+            "STARTER_CHEST"
+          ],
+          "score": 0.5,
+          "invalid": 0
+        }
+      ],
+      "finalists": [
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "STARTER_TRASH",
+            "CASTLE",
+            "FLAME",
+            "REFRESH_HAND"
+          ],
+          "score": 0.6875,
+          "invalid": 0,
+          "validation": 0.6666666666666666
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "CASTLE",
+            "CASTLE"
+          ],
+          "score": 0.75,
+          "invalid": 0,
+          "validation": 0.6458333333333334
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "WEAKEN_ALL",
+            "COUNTERCALC",
+            "CASTLE"
+          ],
+          "score": 0.75,
+          "invalid": 0,
+          "validation": 0.6041666666666666
+        },
+        {
+          "deck": [
+            "FLAME",
+            "FLAME",
+            "FLAME",
+            "WEAKEN_ALL",
+            "WEAKEN_ALL",
+            "REFRESH_HAND",
+            "STARTER_TRASH",
+            "CASTLE"
+          ],
+          "score": 0.75,
+          "invalid": 0,
+          "validation": 0.5625
+        }
+      ]
+    }
+  ],
+  "games": 1152,
+  "seconds": 58.561
+}

@@ -1,0 +1,8 @@
+{
+  "scope": "Protect a greedy wall/suppression answer already held in hand from speculative market refreshes that consume its casting mana",
+  "benchmarkPolicySha256": "8ca393901599a0454c792301ca778cdb60fe23a4f2430edf73fe330e8592d3ad",
+  "releasePolicySha256": "cae0a8a4ae38b87ef6d1a9857a8e94d9bc3d8b61255b06d474fa898ce593861d",
+  "comparisonTables": "The 2856-game comparison precedes this final tactical correction; not a measured win rate of the corrected policy",
+  "discovery": "Tactical assertion in public parity test failed before remote worker execution; live entry/assets parity had passed",
+  "regressionCases": "Hard/Hell x four public UID seeds; cast Rune Burst, destroy Guardian Golem, retain both allied attackers"
+}

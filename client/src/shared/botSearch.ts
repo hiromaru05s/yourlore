@@ -13,6 +13,7 @@ import { lastingValue, unproductiveOpponentHeal } from './botStrategy';
 export const TACTICS = { proof: true, targets: true, horizon: 4, replyNodes: 64 };
 
 export const SEARCH = {
+  normal: { width: 4, samples: 1, turns: 2, finalists: 0, extraSamples: 0 },
   hard: { width: 8, samples: 2, turns: 2, finalists: 3, extraSamples: 2 },
   hell: { width: 12, samples: 3, turns: 2, finalists: 4, extraSamples: 8 },
 };
@@ -57,14 +58,16 @@ export function positionValue(g: GameState, s: Side): number {
 }
 
 /** Compare complete own-turn / opponent-reply sequences under common random samples. */
-export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void): Action {
-  if (prove && TACTICS.proof) { const win = forcedWin(g, level === 'hell' ? 900 : 350); if (win) return win; }
+export function searchDecide(g: GameState, level: 'normal' | 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void): Action {
+  if (prove && TACTICS.proof) { const win = forcedWin(g, level === 'hell' ? 1400 : level === 'hard' ? 550 : 160); if (win) return win; }
   const side = actingSide(g), cfg = SEARCH[level];
   // Preserve the greedy policy's public, currently affordable escape from a
   // stalled board. Sampled refreshes must not spend its reserved purchase mana.
   const policy = safeGreedy(g), owner = g.players[side], opponent = g.players[1-side];
-  if (policy.type === 'buyMarket' || policy.type === 'buySupply') {
-    const card = policy.type === 'buyMarket' ? g.market[policy.i] : owner.supply[policy.i];
+  if (policy.type === 'buyMarket' || policy.type === 'buySupply' || policy.type === 'play') {
+    // An answer already in hand needs its casting mana just as a market
+    // answer needs its purchase mana. Speculative refreshes must not spend it.
+    const card = policy.type === 'play' ? owner.hand[policy.idx] : policy.type === 'buyMarket' ? g.market[policy.i] : owner.supply[policy.i];
     const plan = matchupPlan(g, owner, publicInventory(opponent));
     if (card && ((plan.blocked && (card.act === 'destroyEnch' || card.id === 'DISARM3' || card.id === 'ADVANCE'))
         || plan.walls.some(m => removalHits(g, opponent, card, m)))) return policy;
@@ -137,7 +140,7 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
     finalists.forEach(a => { a.sum = 0; a.n = 0; a.worst=1; });
     for (let i = 0; i < cfg.extraSamples; i++) {
       const sample = observationSample(g, side, i + 101);
-      for (const arm of finalists) { record(arm,rollout(sample, arm.a, side, TACTICS.horizon, level==='hell'?3:2)); }
+      for (const arm of finalists) { record(arm,rollout(sample, arm.a, side, TACTICS.horizon, level==='hell'?3:2, level==='hell'?6:4)); }
       if (onProgress) {
         const best = finalists.reduce((a, b) => score(b) > score(a) ? b : a);
         onProgress(level === 'hell' && baseline && score(best) < score(baseline) + 0.01 ? base : best.a);
@@ -150,7 +153,7 @@ export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true,
   return arms[0].a;
 }
 
-export function rollout(sample: GameState, action: Action, side: Side, turns: number, replyWidth = 0): number {
+export function rollout(sample: GameState, action: Action, side: Side, turns: number, replyWidth = 0, continuationTurns = 0): number {
   let st = reduce(sample, action).state;
   if (!actionChangesState(sample, st)) return -1;
   const endTurn = sample.turn + turns;
@@ -180,7 +183,18 @@ export function rollout(sample: GameState, action: Action, side: Side, turns: nu
     if (!actionChangesState(st, next)) break;
     st = next;
   }
-  return positionValue(st, side);
+  const near = positionValue(st, side);
+  if (!continuationTurns || st.over) return near;
+  // Delayed engines need more than two own turns to demonstrate their payoff.
+  // Extend each paired hypothetical world cheaply, without further branching.
+  // Keep the near-term estimate as well: distant sampled markets are uncertain.
+  const strategicEnd = sample.turn + turns + continuationTurns;
+  for(let steps=0;!st.over&&st.turn<strategicEnd&&steps<180;steps++) {
+    const next=greedyStep(st).state;
+    if(!actionChangesState(st,next))break;
+    st=next;
+  }
+  return near*.35 + positionValue(st,side)*.65;
 }
 
 /** Rollout opponents choose valuable targets instead of always hitting the first

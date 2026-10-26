@@ -1,0 +1,26 @@
+(node:42446) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS server Hard/Hell roster selection, difficulty restoration, lethal target, authoritative reducer parity, persistence and alarm [
+  {
+    tier: 'hard',
+    roster: 7,
+    setup: true,
+    restoredDifficulty: 'hard',
+    action: { type: 'chooseTarget', uid: 'server-proof-1' },
+    reducerParity: true,
+    persisted: true,
+    alarmRearmed: true,
+    ms: 5.95750000000001
+  },
+  {
+    tier: 'hell',
+    roster: 7,
+    setup: true,
+    restoredDifficulty: 'hell',
+    action: { type: 'chooseTarget', uid: 'server-proof-4' },
+    reducerParity: true,
+    persisted: true,
+    alarmRearmed: true,
+    ms: 2.0670829999999967
+  }
+]

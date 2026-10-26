@@ -1,0 +1,100 @@
+{
+  "origin": "http://127.0.0.1:5279",
+  "lang": "ja",
+  "checks": [
+    {
+      "width": 1440,
+      "height": 900,
+      "button": {
+        "x": 500,
+        "y": 658.03125,
+        "width": 440,
+        "height": 64,
+        "bottom": 722.03125
+      },
+      "modal": {
+        "x": 200,
+        "width": 1040
+      },
+      "overflow": false,
+      "scrollable": false,
+      "rosterHeight": 402
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "button": {
+        "x": 420,
+        "y": 524.265625,
+        "width": 440,
+        "height": 64,
+        "bottom": 588.265625
+      },
+      "modal": {
+        "x": 120,
+        "width": 1040
+      },
+      "overflow": false,
+      "scrollable": true,
+      "rosterHeight": 314
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "button": {
+        "x": 35,
+        "y": 693.5,
+        "width": 320,
+        "height": 56,
+        "bottom": 749.5
+      },
+      "modal": {
+        "x": 12,
+        "width": 366
+      },
+      "overflow": false,
+      "scrollable": true,
+      "rosterHeight": 531
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "button": {
+        "x": 35,
+        "y": 417.5,
+        "width": 250,
+        "height": 56,
+        "bottom": 473.5
+      },
+      "modal": {
+        "x": 12,
+        "width": 296
+      },
+      "overflow": false,
+      "scrollable": true,
+      "rosterHeight": 255
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "button": {
+        "x": 202,
+        "y": 274,
+        "width": 440,
+        "height": 56,
+        "bottom": 330
+      },
+      "modal": {
+        "x": 16,
+        "width": 812
+      },
+      "overflow": false,
+      "scrollable": true,
+      "rosterHeight": 167
+    }
+  ],
+  "errors": [],
+  "launches": [],
+  "layoutOnly": true,
+  "boundary": "Real UI and assets, fixture account/API. No authenticated server duel."
+}

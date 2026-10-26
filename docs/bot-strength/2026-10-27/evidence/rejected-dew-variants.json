@@ -1,0 +1,48 @@
+{
+  "seedBase": 43100000,
+  "scope": "development public greedy proxies for rejected resource heuristics; adopted policy preserves first-copy evaluation and only penalizes additional unplayed copies",
+  "groups": {
+    "all-resources": {
+      "none": {
+        "games": 896,
+        "points": 522
+      },
+      "hard": {
+        "games": 896,
+        "points": 559
+      },
+      "hell": {
+        "games": 896,
+        "points": 560
+      }
+    },
+    "dark-elf-only": {
+      "none": {
+        "games": 896,
+        "points": 525
+      },
+      "hard": {
+        "games": 896,
+        "points": 558
+      },
+      "hell": {
+        "games": 896,
+        "points": 551
+      }
+    },
+    "same-card-including-first": {
+      "none": {
+        "games": 896,
+        "points": 524
+      },
+      "hard": {
+        "games": 896,
+        "points": 557
+      },
+      "hell": {
+        "games": 896,
+        "points": 557
+      }
+    }
+  }
+}
