@@ -1,6 +1,7 @@
 import {assetHints} from './assetHints';
 import {withDeadline} from '../net/deadline';
-import {playHomeEntrance} from './homeEntrance';
+import {playHomeEntrance,homeEntranceChrome} from './homeEntrance';
+import {loadingCardUrl} from './loadingSigil';
 import {loadingScreen} from './loadingScreen';
 import {loungeText} from './loungeText';
 import {getLang} from '../i18n';
@@ -45,11 +46,13 @@ export async function waitAssets(urls:string[],host:HTMLElement,onProgress?:(don
 }
 export function coverScreen(root:HTMLElement,firstMenu=false,homeEntrance=false,screenAssets=imageUrls(root)):{ready:()=>Promise<boolean>;cancel:()=>void}{
  const loading=loadingScreen('screen-loader',loungeText('書庫を開いています','Opening the library','서고를 여는 중')),cover=loading.element;
+ const chrome=homeEntrance?[...root.querySelectorAll<HTMLElement>(homeEntranceChrome)].map(el=>({el,opacity:el.style.opacity})):[];
+ if(homeEntrance){cover.classList.add('is-home-loader');chrome.forEach(({el})=>el.style.opacity='0');}
  document.body.append(cover);root.inert=true;root.setAttribute('aria-busy','true');const abort=new AbortController();
- const release=()=>{cover.remove();root.inert=false;root.removeAttribute('aria-busy');};
+ const release=()=>{cover.remove();chrome.forEach(({el,opacity})=>el.style.opacity=opacity);root.inert=false;root.removeAttribute('aria-busy');};
  const cancel=()=>{abort.abort();release();};
  return {cancel,ready:async()=>{
-  await waitAssets(screenAssets,cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),abort.signal);
+  await waitAssets([...screenAssets,loadingCardUrl],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),abort.signal);
   if(abort.signal.aborted)return false;
   loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));
   await withDeadline(document.fonts.ready,20000,abort.signal).catch(()=>{});
