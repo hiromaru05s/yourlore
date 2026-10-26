@@ -33,9 +33,10 @@ export function renderRankedProfile(host:HTMLElement,p:Profile):void {
   const grid=document.createElement('div');grid.className='rp-decks';
   for(let i=0;i<3;i++){
     const deck=data?.recentDecks[i],panel=document.createElement('article');panel.className='rp-deck';
-    const h=document.createElement('h4');h.textContent=L(`${i+1}試合前`,`${i+1} game${i?'s':''} ago`,`${i+1}경기 전`);panel.append(h);
-    if(deck){const date=document.createElement('small');date.textContent=new Intl.DateTimeFormat(getLang(),{dateStyle:'short',timeStyle:'short'}).format(deck.at);panel.append(date);}
-    if(deck?.cards){
+    const heading=document.createElement('header');heading.className='rp-deck-heading';
+    const h=document.createElement('h4');h.textContent=L(`${i+1}試合前`,`${i+1} game${i?'s':''} ago`,`${i+1}경기 전`);heading.append(h);panel.append(heading);
+    if(deck?.cards?.length){
+      const date=document.createElement('small');date.textContent=new Intl.DateTimeFormat(getLang(),{dateStyle:'short',timeStyle:'short'}).format(deck.at);heading.append(date);
       const cards=document.createElement('div');cards.className='rp-deck-cards';
       deck.cards.forEach((id,index)=>{const def=STARTERS[id]??DB[id];if(!def)return;const c={...def,uid:`profile-${i}-${index}`};
         const el=cardEl(c,{lazyArt:0});el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',cardName(c));
