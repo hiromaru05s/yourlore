@@ -75,6 +75,10 @@
     "bytes": 1629,
     "sha256": "f5dafb42d321b7c503ca15f48a06d7b12c3ba74c26bd48ca4975928cad00a4c5"
   },
+  "deployment-status.json": {
+    "bytes": 340,
+    "sha256": "f881cf71db5772914deebd0dfa233fa8ea76faf056e6e89eedaa063aca68a198"
+  },
   "development-adversarial.jsonl.gz": {
     "bytes": 3612,
     "sha256": "ddaff2c8a22a5ad608634c0cafb8ea2956996f1058faab04fa7bf80f4edac07b"
@@ -275,6 +279,18 @@
     "bytes": 20088,
     "sha256": "079ee2d0be2f172d8dd4f51460d5dec4ce62b35ad11f5572784a0b5b4c0ad859"
   },
+  "production-authenticated-npc.json": {
+    "bytes": 2544,
+    "sha256": "b7fe90969204b51b7821e7bf17f0c15b81928149faf1d2bfb290766886a82434"
+  },
+  "production-deployed-worker.json": {
+    "bytes": 28669,
+    "sha256": "c60a6323a0305e3454fbf760e69ea28b92f48a27c56adcb1091723a77c8db0d2"
+  },
+  "production-suite.json": {
+    "bytes": 20016,
+    "sha256": "0f6cdc6f0d351ba5ee5a393fd8c5a2acb626884d8272bf9dc75f8db67754d167"
+  },
   "refined-selection-games.json.gz": {
     "bytes": 116612,
     "sha256": "14008d62f9ea70d323ce40b0688efa5a57b57471a463ecb812f6ec69b041e974"
@@ -322,6 +338,10 @@
   "rejected-market-learning-initial.json": {
     "bytes": 54631,
     "sha256": "7b16a41e5895416a9ea7752f9de7381d8caaffe94c6e8c62b5b7cfbf7a2c1bd4"
+  },
+  "release.json": {
+    "bytes": 397,
+    "sha256": "a9dd9b30aa01199f374040c067d67d3e9410c37e08eebf3eecbf0f233d05470d"
   },
   "rework.log": {
     "bytes": 1041,

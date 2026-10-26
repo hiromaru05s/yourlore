@@ -1,0 +1,124 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-10-26T22:51:29.022Z",
+  "scope": "temporary QA account and persisted session; authenticated API/WebSocket NPC start, observed BOT response and surrender settlement; not human strength or a full played match",
+  "results": [
+    {
+      "tier": "easy",
+      "authenticatedStart": true,
+      "marketBias": false,
+      "initialMarket": [
+        "MULTI_CULTURE",
+        "FIRE_ARROW",
+        "LUCKY_ECHO",
+        "COLOSSEUM",
+        "BLACK_NOVA",
+        "EGG_MASTER",
+        "RUNE2"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "HALF_ELF": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "log",
+          "summon"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "normal",
+      "authenticatedStart": true,
+      "marketBias": false,
+      "initialMarket": [
+        "MAGIC_TRAIN",
+        "Q_CASTLE",
+        "ANESTHESIA",
+        "TPO3",
+        "PRIEST",
+        "HPS_SOIL",
+        "ARMOR_BREAK"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "NOURISHING_RAIN": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "playSpell",
+          "statusGrant",
+          "log"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "hard",
+      "authenticatedStart": true,
+      "marketBias": true,
+      "initialMarket": [
+        "Q_TRIBE",
+        "AEM",
+        "TPO3",
+        "VITAL3",
+        "HPS_GRAFT",
+        "ADVANCE",
+        "STABLE"
+      ],
+      "botResponse": {
+        "turn": 1,
+        "uses": {
+          "ELF_HAVEN": 1
+        },
+        "buys": {
+          "VITAL3": 1
+        },
+        "eventTypes": [
+          "log",
+          "buy",
+          "enchantActivate",
+          "statusGrant"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "hell",
+      "authenticatedStart": true,
+      "marketBias": true,
+      "initialMarket": [
+        "QUICK_MIMIC",
+        "CULL_FARM",
+        "TSO5",
+        "GROWTH",
+        "DARK_ELF",
+        "AMA",
+        "AJIN"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "QUICK_MIMIC": 1
+        },
+        "buys": {
+          "QUICK_MIMIC": 1,
+          "Q_TOWN": 1
+        },
+        "eventTypes": [
+          "log",
+          "buy"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    }
+  ],
+  "cleanup": true
+}

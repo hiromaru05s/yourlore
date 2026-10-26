@@ -10,11 +10,29 @@ const origin=process.env.BOT_ORIGIN;
 assert(['https://yourlore.xyz','https://test.yourlore.xyz'].includes(origin));
 const out=process.env.BOT_QA_OUT;assert(out,'Set BOT_QA_OUT');await fs.mkdir(out,{recursive:true});
 const staging=origin.includes('test.'),temp=await fs.mkdtemp('/tmp/lore-live-npc-'),id='qa-npc-'+randomUUID(),token=randomBytes(24).toString('hex'),now=Date.now(),peers=[],results=[];
-let created=false,cleanup=false,failure;
-const sql=async query=>{const file=temp+'/operation.sql';await fs.writeFile(file,query,{mode:0o600});const raw=execFileSync('npm',['exec','--','wrangler','d1','execute',staging?'lore-db-staging':'lore-db','--remote',...(staging?['--env','staging']:[]),'-c','server/wrangler.toml','--file',file,'--json'],{encoding:'utf8',timeout:120000});return JSON.parse(raw).flatMap(r=>r.results??[]);};
+let created=false,cleanup=false,failure,cleanupTables=[];
+// --file uses D1's bulk import path and progress output. Queries and PRAGMAs
+// need --command; execFileSync passes SQL directly without a shell. Never
+// include the command arguments (which can contain the QA token) in errors.
+const sql=async(query,grouped=false)=>{
+ let raw;
+ try{raw=execFileSync('npm',['exec','--','wrangler','d1','execute',staging?'lore-db-staging':'lore-db','--remote',...(staging?['--env','staging']:[]),'-c','server/wrangler.toml','--command',query,'--json'],{encoding:'utf8',timeout:120000});}
+ catch(e){throw Error('D1 release QA query failed (exit '+e.status+'): '+String(e.stderr??'').replaceAll(token,'[redacted]'));}
+ let result;try{result=JSON.parse(raw);}catch{throw Error('D1 release QA returned non-JSON output');}
+ assert(Array.isArray(result)&&result.every(r=>r.success!==false));
+ return grouped?result.map(r=>r.results??[]):result.flatMap(r=>r.results??[]);
+};
 const call=async(path,body)=>{const r=await fetch(origin+'/api'+path,{method:body===undefined?'GET':'POST',headers:{cookie:'lore_session='+token,'content-type':'application/json',origin},body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(30000)});const data=await r.json();assert.equal(r.status,200,path+': '+JSON.stringify(data));return data;};
 const until=async(predicate,ms=50000)=>{const end=Date.now()+ms;while(!predicate()){if(Date.now()>end)throw Error('live NPC state timeout');await new Promise(r=>setTimeout(r,150));}};
 try{
+ // D1 authorizes explicit PRAGMA table_info, not the table-valued PRAGMA
+ // join. Check the cleanup path before creating anything in production.
+ const tables=(await sql("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name;")).filter(t=>!t.name.startsWith('_'));
+ assert(tables.every(t=>/^[A-Za-z0-9_]+$/.test(t.name)));
+ const columns=await sql(tables.map(t=>`PRAGMA table_info("${t.name}");`).join('\n'),true);
+ assert.equal(columns.length,tables.length);
+ cleanupTables=tables.filter((_,i)=>columns[i].some(c=>c.name==='user_id'));
+ assert(cleanupTables.some(t=>t.name==='sessions'));
  created=true; // Cleanup also covers a partially completed insertion.
  await sql(`INSERT INTO users(id,email,password,display,username_set,verified,created_at,stats_public) VALUES('${id}','${id}@example.invalid','disabled:release-qa','NPC Release QA',1,1,${now},0); INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES('${token}','${id}',${now},${now+3600000});`);
  for(const tier of ['easy','normal','hard','hell']){
@@ -49,10 +67,8 @@ finally{
  try{
   if(created){
    assert(peers.every(p=>p.settled),'Keep isolated QA account until every room has settled; prevents a late result recreating deleted records');
-   const tables=await sql("SELECT DISTINCT m.name FROM sqlite_master m JOIN pragma_table_info(m.name) p WHERE m.type='table' AND p.name='user_id' ORDER BY m.name;");
-   assert(tables.every(t=>/^[A-Za-z0-9_]+$/.test(t.name)));
    const botIds=['easy','normal','hard','hell'].map(t=>`'lore-challenge-bot-${t}'`).join(',');
-   await sql(tables.map(t=>`DELETE FROM "${t.name}" WHERE user_id='${id}';`).join('\n')+`\nUPDATE users SET wins=MAX(0,wins-(SELECT COUNT(*) FROM matches WHERE winner=users.id AND player_a='${id}')) WHERE id IN (${botIds}); DELETE FROM matches WHERE player_a='${id}' OR player_b='${id}'; DELETE FROM friends WHERE user_a='${id}' OR user_b='${id}'; DELETE FROM challenges WHERE challenger='${id}' OR target='${id}'; DELETE FROM users WHERE id='${id}';`);
+   await sql(cleanupTables.map(t=>`DELETE FROM "${t.name}" WHERE user_id='${id}';`).join('\n')+`\nUPDATE users SET wins=MAX(0,wins-(SELECT COUNT(*) FROM matches WHERE winner=users.id AND player_a='${id}')) WHERE id IN (${botIds}); DELETE FROM matches WHERE player_a='${id}' OR player_b='${id}'; DELETE FROM friends WHERE user_a='${id}' OR user_b='${id}'; DELETE FROM challenges WHERE challenger='${id}' OR target='${id}'; DELETE FROM users WHERE id='${id}';`);
    assert.equal((await sql(`SELECT COUNT(*) AS n FROM users WHERE id='${id}';`))[0].n,0);
   }
   cleanup=true;
