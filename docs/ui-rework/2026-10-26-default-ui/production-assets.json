@@ -1,13 +1,14 @@
 {
-  "commit": "d909a95666a3155feca14f794d718bc8cf5e37ad",
-  "version": "109584b5-c3f8-4618-8370-b4e2efb5b403",
+  "commit": "7d63c67d2689a5fb0f815af0be3600b211db9e6a",
+  "version": "4a0a5ba3-23ce-4fa3-8bd3-3fdba20b8681",
   "css": [
     {
-      "url": "https://yourlore.xyz/assets/main-DySoUkzl.css",
-      "containsFrame": true,
-      "containsCornerCut": true
+      "url": "https://yourlore.xyz/assets/main-BqywsiOP.css",
+      "cutCorners": true,
+      "inspectionOuterFrame": true
     }
   ],
   "assetMatch": true,
-  "sha256": "49643cab309191bdc7b33a7368e10825ff6f35b311daf50c667d60322af737e2"
+  "sha256": "49643cab309191bdc7b33a7368e10825ff6f35b311daf50c667d60322af737e2",
+  "regression": "215/215 passed"
 }
