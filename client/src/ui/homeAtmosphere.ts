@@ -5,11 +5,11 @@ import * as THREE from 'three';
 import {createDistantBirds} from './homeDistantBirds';
 
 /** Approved 2026-10-26 cel background, mounted only on HOME.
- * Fine colored architecture contours, natural smaller drifting clouds, swaying ivy and distant birds.
+ * Balanced colored architecture contours, natural smaller drifting clouds, swaying ivy and distant birds.
  * The CSS plate remains underneath until the first complete rendered frame.
  * All motion shares one clock; no menu re-render owns a second renderer. */
 export function mountHomeAtmosphere(host:HTMLElement):()=>void {
- const BASE='/art/lounge/toon-soft-20261026/';
+ const BASE='/art/lounge/toon-balanced-20261026/';
  const W=1672,H=941;
  host.dataset.atmosphere='loading';
  if(typeof WebGL2RenderingContext==='undefined'){host.dataset.atmosphere='fallback';return()=>{};}
@@ -28,7 +28,7 @@ const camera=new THREE.OrthographicCamera(0,W,H,0,.1,100);
 camera.position.z=20;
 const loader=new THREE.TextureLoader();
 const owned:THREE.Texture[]=[];
-async function texture(name:string){const t=await loader.loadAsync(BASE+name);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();if(disposed)t.dispose();else owned.push(t);return t;}
+async function texture(name:string){const t=await loader.loadAsync(name==='clouds.webp'?'/art/lounge/toon-soft-20261026/clouds.webp':BASE+name);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();if(disposed)t.dispose();else owned.push(t);return t;}
 function plane(width:number,height:number,x:number,y:number,z:number,material:THREE.Material){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),material);mesh.position.set(x,H-y,z);scene.add(mesh);return mesh;}
 const skyMat=new THREE.ShaderMaterial({vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec2 vUv;void main(){vec3 low=vec3(.76,.85,.91);vec3 high=vec3(.27,.52,.76);vec3 c=mix(low,high,smoothstep(0.,1.,vUv.y));float sun=exp(-length((vUv-vec2(.12,.84))*vec2(1.,.8))*4.);gl_FragColor=vec4(c+vec3(.14,.12,.07)*sun,1.);#include <colorspace_fragment>\n}`.replace(';#include',';\n#include')});
 plane(W,H,W/2,H/2,-5,skyMat);
@@ -140,7 +140,7 @@ async function init(){try{
   const span=W+layer.w;
   for(let i=0;i<2;i++){const mesh=plane(layer.w,layer.h,0,layer.y,-3+(layer.rate>4?1:0),new THREE.MeshBasicMaterial({map:cloud,transparent:true,opacity:layer.opacity,depthWrite:false}));mesh.renderOrder=layer.rate>4?2:1;clouds.push({mesh,start:layer.start+i*span/2,rate:layer.rate,width:layer.w,height:layer.h,y:layer.y,opacity:layer.opacity});}
  }
- // The softened artwork is sampled directly, without re-darkening its thin contours.
+ // The approved balanced artwork is sampled directly, without extra contour sharpening.
  const plate=new THREE.MeshBasicMaterial({map:fg,transparent:true,depthWrite:false});
  const front=plane(W,H,W/2,H/2,0,plate);front.renderOrder=3;
  // Independent foliage plates retain the marble under them; no ghost copies.

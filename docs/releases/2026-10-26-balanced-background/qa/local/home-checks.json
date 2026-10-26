@@ -1,0 +1,33 @@
+{
+  "origin": "http://127.0.0.1:5549",
+  "api": "synthetic fixtures, no account mutations",
+  "plate": "url(\"http://127.0.0.1:5549/art/lounge/toon-balanced-20261026/library-wide.webp\"), url(\"http://127.0.0.1:5549/art/lounge/toon-soft-20261026/clouds.webp\"), linear-gradient(rgb(112, 169, 214), rgb(202, 221, 230))",
+  "assets": [
+    {
+      "url": "http://127.0.0.1:5549/art/lounge/toon-balanced-20261026/library-wide.webp",
+      "sha256": "888ec274d6a7e913cd69e5408372ec33588a76a947b0c80b80f9c785009edc5a"
+    },
+    {
+      "url": "http://127.0.0.1:5549/art/lounge/toon-soft-20261026/clouds.webp",
+      "sha256": "9c0b00f0fd0a8270ab0a4c8eb64d892732263c9b7d7305e944a95cd1dae165b5"
+    },
+    {
+      "url": "http://127.0.0.1:5549/art/lounge/toon-balanced-20261026/library-wide.webp",
+      "sha256": "888ec274d6a7e913cd69e5408372ec33588a76a947b0c80b80f9c785009edc5a"
+    },
+    {
+      "url": "http://127.0.0.1:5549/art/lounge/toon-soft-20261026/clouds.webp",
+      "sha256": "9c0b00f0fd0a8270ab0a4c8eb64d892732263c9b7d7305e944a95cd1dae165b5"
+    },
+    {
+      "url": "http://127.0.0.1:5549/art/lounge/toon-balanced-20261026/ivy.webp",
+      "sha256": "d89660aa7f92857fafbf2f62ff0d9083ffbfcd5e54d192d6db8be4666ad47752"
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "Real HOME with approved balanced art and unchanged natural clouds",
+    "36 seconds continuous playback recorded",
+    "Desktop and mobile render without horizontal overflow"
+  ]
+}

@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 
 const WIDTH=1672,HEIGHT=941;
-const PERIOD=54,FLIGHT=19;
+// Each flock fully exits before the next 15-second departure.
+const PERIOD=15,FLIGHT=11;
 
 /** Small cel silhouettes, continuously deformed from one mesh per bird.
  * Transparent sorting places the flock after clouds (2), before the castle plate (3).

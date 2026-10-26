@@ -1,4 +1,4 @@
-:root { --menu-library-image: url('/art/lounge/toon-soft-20261026/library-wide.webp'); }
+:root { --menu-library-image: url('/art/lounge/toon-balanced-20261026/library-wide.webp'); }
 /* Biblion Lounge: player menus only. Card faces and the duel keep their own tokens. */
 .lounge-shell{--rail:210px;--bar:76px;position:relative;height:100dvh;overflow:hidden;background:linear-gradient(#05142616,#05142635),var(--menu-library-image) center/cover;color:#102c4e;font-size:14px}
 .lounge-rail{position:absolute;z-index:20;inset:0 auto 0 0;width:var(--rail);display:flex;flex-direction:column;background:linear-gradient(110deg,#061a30f5,#092741f7);border-right:1px solid #6584a1;color:#f4efe2;box-shadow:5px 0 20px #00142750}
