@@ -29,7 +29,9 @@
 .lounge-deck .deck-stage-floor{position:absolute;left:0;bottom:0;width:100%;height:87px;filter:drop-shadow(0 7px 9px #01070b90)}
 .lounge-deck #deckCur{display:flex;position:relative;align-items:flex-start;justify-content:safe center;flex-wrap:nowrap;gap:5px;min-height:0;width:100%;height:225px;margin:0;padding:16px 30px 25px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;border:0;background:none;--hand-card:120px}
 .lounge-deck #deckCur .deck-entry{display:block;padding:0;border:0;background:none;position:relative;top:var(--hand-lift,0px);flex:none;width:120px;height:187.5px;margin:0;container-type:inline-size;isolation:isolate;transform:rotate(var(--hand-turn,0deg));transform-origin:50% 100%;z-index:1}
-.lounge-deck #deckCur .deck-entry:is(:hover,:focus-within){z-index:20;top:calc(var(--hand-lift,0px) - 8px)}
+/* Hover must not move its own hit area or the removal/replacement control.
+   Override the older menuApproved transform as well as keeping top stable. */
+.lounge-deck #deckCur .deck-entry:is(:hover,:focus-within){z-index:20;top:var(--hand-lift,0px);transform:rotate(var(--hand-turn,0deg))}
 .lounge-deck .deck-card-float{position:relative;width:100%;height:100%}
 .lounge-deck .deck-card-shadow{position:absolute;left:7%;right:7%;bottom:-25px;height:14px;border-radius:50%;background:radial-gradient(ellipse,#000a,#0005 40%,transparent 72%);z-index:-1;animation:lore-deck-shadow 6.8s ease-in-out var(--idle-delay) infinite}
 .lounge-deck .deck-entry:is(:hover,:focus-within) .deck-card-shadow,.lounge-deck .idle-paused .deck-card-shadow{animation-play-state:paused}
@@ -49,6 +51,8 @@
 .lounge-deck .deck-pool-tile{position:relative;width:88px;height:137.5px;container-type:inline-size}
 .lounge-deck .deck-pool-face{position:relative;width:100%;height:100%}
 .lounge-deck #deckCur .deck-entry .card,.lounge-deck #deckPool .card{--cw:100cqw;--ch:calc(100cqw / .64);width:100%;height:auto;aspect-ratio:.64;font-size:13.5cqw;filter:none;transform:none;margin:0;transition:none;opacity:1}
+.lounge-deck #deckCur .deck-entry .card{transition:transform 140ms ease}
+@media(min-width:761px){.lounge-deck #deckCur .deck-entry:is(:hover,:focus-within) .card{transform:translateY(-8px)}}
 .lounge-deck #deckCur .card::after{content:none!important}
 .lounge-deck :is(#deckCur,#deckPool) .card-name{left:12%;right:8%;font-size:min(9.65cqw,calc(76cqw / var(--title-units,1)));font-weight:600;text-shadow:0 1px 0 #07101b;letter-spacing:-.025em}
 .lounge-deck :is(#deckCur,#deckPool) .card :is(.card-cost,.ad-atk,.ad-def){filter:none;text-shadow:0 1px 0 #05111c}
@@ -129,10 +133,10 @@
 }
 @media(max-width:360px){.lounge-deck .deck-controls button{font-size:8px;padding:0 3px}.lounge-deck .deck-secondary-actions{gap:2px}.lounge-deck .deck-controls .deck-formation{min-width:72px;padding:0 5px}}
 @media(max-height:500px) and (min-width:761px){:root body .lounge-deck .deck-panel{grid-template-rows:190px minmax(0,1fr)}.lounge-deck #deckCur{height:152px}.lounge-deck #deckCur .deck-entry{width:76px;height:118.75px}.lounge-deck .deck-tab-row .deck-tab{font-size:10px}}
-@media(prefers-reduced-motion:reduce){.lounge-deck .deck-card-float,.lounge-deck .deck-card-shadow{animation:none}.lounge-deck .deck-pool-search{transition:none}}
+@media(prefers-reduced-motion:reduce){.lounge-deck .deck-card-float,.lounge-deck .deck-card-shadow{animation:none}.lounge-deck .deck-pool-search,.lounge-deck #deckCur .deck-entry .card{transition:none}}
 
 .lounge-deck .deck-attune-lock::before{content:none}
-@media(max-width:760px){.lounge-deck #deckCur .deck-entry{transform:none}.lounge-deck #deckCur .deck-entry:is(:hover,:focus-within){top:var(--hand-lift,0px)}}
+@media(max-width:760px){.lounge-deck #deckCur .deck-entry,.lounge-deck #deckCur .deck-entry:is(:hover,:focus-within){transform:none}}
 /* defaultUI's grouped selector has dialog-level specificity; opt out only this layout container. */
 :root body .lounge-deck .deck-panel#deckWorkspace{border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important}
 .lounge-deck #deckCur{box-shadow:none;border-radius:0}
