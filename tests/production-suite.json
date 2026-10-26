@@ -122,6 +122,7 @@
     "tests/opening-approved.mjs",
     "tests/mimic-approved.mjs",
     "tests/slate-summon.mjs",
+    "tests/summon-card-contour.mjs",
     "tests/dungeon-summon.mjs",
     "tests/casino-summon.mjs",
     "tests/spell-frame.mjs",

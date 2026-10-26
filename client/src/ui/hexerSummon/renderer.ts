@@ -1,3 +1,4 @@
+import {renderSummonBoard} from '../summon/boardRender';
 import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
@@ -44,7 +45,7 @@ export class Renderer{
  }
  private atlas=document.createElement('canvas');
  drawBoard(c:C,face:HTMLCanvasElement,id:Id,v:number,ms:number,matrix:DOMMatrix,w:number,h:number,reduced=false){
- if(this.disposed)return;this.gl.shadowMap.enabled=true;this.prepare(face,id,v,ms,reduced);if(this.gl.domElement.width!==w||this.gl.domElement.height!==h)this.gl.setSize(w,h,false);const screen=new T.Matrix4().set(2/w,0,0,-1,0,-2/h,0,1,0,0,-1/2000,0,0,0,0,1);this.boardCamera.projectionMatrix.copy(screen.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))));this.boardCamera.projectionMatrixInverse.copy(this.boardCamera.projectionMatrix).invert();this.gl.render(this.scene,this.boardCamera);c.drawImage(this.gl.domElement,0,0,w,h);
+ if(this.disposed)return;this.gl.shadowMap.enabled=true;this.prepare(face,id,v,ms,reduced);if(this.gl.domElement.width!==w||this.gl.domElement.height!==h)this.gl.setSize(w,h,false);const screen=new T.Matrix4().set(2/w,0,0,-1,0,-2/h,0,1,0,0,-1/2000,0,0,0,0,1);this.boardCamera.projectionMatrix.copy(screen.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))));this.boardCamera.projectionMatrixInverse.copy(this.boardCamera.projectionMatrix).invert();renderSummonBoard(this.gl,this.scene,this.boardCamera,[this.body,this.shadow,this.receiver]);c.drawImage(this.gl.domElement,0,0,w,h);
  }
  releaseFace(face:HTMLCanvasElement){const tex=this.faceCache.get(face);if(tex){tex.dispose();this.faceCache.delete(face);}}
  get status(){return {revision:2,disposed:this.disposed,geometries:this.gl.info.memory.geometries,textures:this.gl.info.memory.textures,faces:this.faceCache.size};}

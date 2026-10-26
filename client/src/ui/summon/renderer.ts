@@ -8,7 +8,7 @@ const rand=(i:number)=>{const n=Math.sin(i*127.1+311.7)*43758.5453;return n-Math
 /** Orthographic review camera. X/Y is the tabletop; Z is height normal to it. */
 export const REVIEW_PLANE={angle:-14*Math.PI/180,compression:.58};
 export class Renderer{
- private relief=new Map<HTMLCanvasElement,HTMLCanvasElement>();private dust=acquireDustMaterial();private original:ReturnType<typeof dustTexture>|undefined;private tinted:HTMLCanvasElement[]=[];
+ private relief=new Map<HTMLCanvasElement,HTMLCanvasElement>();private sheens=new Map<HTMLCanvasElement,HTMLCanvasElement>();private dust=acquireDustMaterial();private original:ReturnType<typeof dustTexture>|undefined;private tinted:HTMLCanvasElement[]=[];
  private prepareLegacyDust(){if(this.original)return;this.original=dustTexture();for(const color of ['#b4a38a','#8c7c65']){const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d')!;x.drawImage(this.original.image as HTMLCanvasElement,0,0);x.globalCompositeOperation='source-in';x.fillStyle=color;x.fillRect(0,0,128,128);this.tinted.push(c);}}
  /** Board callers render independent ground/card planes, then project the card's Z height with boardMatrix. */
  draw(c:C,face:HTMLCanvasElement,v:number,ms:number,x:number,y:number,w:number,reduced=false,pass:Pass='all',studio=true){
@@ -17,8 +17,7 @@ export class Renderer{
   const plane=(height=0)=>{c.save();c.translate(x,y-(studio?height*w*Math.sqrt(1-REVIEW_PLANE.compression**2):0));c.scale(w,w);if(studio){const a=REVIEW_PLANE.angle,k=REVIEW_PLANE.compression;c.transform(Math.cos(a),Math.sin(a)*k,-Math.sin(a),Math.cos(a)*k,0,0);}};
   if(pass!=='card'){
    plane();
-   // A rectangular shadow is the projection of the entire face, directly below it.
-   c.save();c.globalAlpha=.13+.15*(1-clamp(m.lift/.7));c.fillStyle='#252927';c.shadowColor='#252927';c.shadowBlur=w*(.012+m.lift*.14);c.beginPath();c.roundRect(-.49,-.74,.98,1.48,.045);c.fill();c.restore();
+   // The native card owns its shadow. An extra ground plate reads as an outer frame.
    if(studio){c.save();c.strokeStyle='#8b938347';c.lineWidth=.005;c.setLineDash([.025,.035]);c.strokeRect(-.51,-.76,1.02,1.52);c.restore();}
    if(!reduced&&!baseline&&age>=0&&ms<DURATION){c.drawImage(this.dust.material.draw(v,age,false,Math.min(480,w*2.5)),-1.9,-1.9,3.8,3.8);this.fragments(c,v,age,false);this.fragments(c,v,age,true);}
    if(!reduced&&baseline&&age>=0&&age<1.9){this.prepareLegacyDust();for(let i=0;i<64;i++){const p=dustPose(age/1.9,i,true,100);if(p.opacity<=0)continue;c.save();c.translate(p.x/100,.75-p.y/100);c.rotate(p.rotation);c.globalAlpha=p.opacity;if(i<32)c.drawImage(this.tinted[i%3?0:1],-p.size/200,-p.size*.72/200,p.size/100,p.size*.72/100);else{c.fillStyle='#8c785b';c.fillRect(-p.size/200,-p.size/200,p.size/100,p.size/100);}c.restore();}}
@@ -36,7 +35,13 @@ export class Renderer{
   if(!reduced&&!baseline){
    // A narrow reflection travels across the captured illustration and carved frame.
    const charge=ease(70,m.hit*.75,ms)*(1-ease(m.hit+45,m.hit+350,ms));
-   if(charge>0){c.save();c.globalCompositeOperation='screen';c.globalAlpha=charge*(v===3?.23:v===5?.18:.075);const yy=-.9+ease(0,m.hit+180,ms)*1.8;const g=c.createLinearGradient(-.5,yy-.3,.5,yy+.3);g.addColorStop(0,'transparent');g.addColorStop(.45,designs[v].color);g.addColorStop(.50,'#fff9de');g.addColorStop(.55,designs[v].color);g.addColorStop(1,'transparent');c.fillStyle=g;c.fillRect(-.46,-.68,.92,1.36);c.restore();}
+   if(charge>0){
+    let sheen=this.sheens.get(face);if(!sheen){sheen=document.createElement('canvas');sheen.width=face.width;sheen.height=face.height;this.sheens.set(face,sheen);}
+    const sc=sheen.getContext('2d')!;sc.clearRect(0,0,sheen.width,sheen.height);sc.save();sc.setTransform(sheen.width/1.24,0,0,sheen.height/1.74,sheen.width/2,sheen.height/2);
+    const yy=-.9+ease(0,m.hit+180,ms)*1.8,g=sc.createLinearGradient(-.5,yy-.3,.5,yy+.3);g.addColorStop(0,'transparent');g.addColorStop(.45,designs[v].color);g.addColorStop(.50,'#fff9de');g.addColorStop(.55,designs[v].color);g.addColorStop(1,'transparent');sc.fillStyle=g;sc.fillRect(-.46,-.68,.92,1.36);sc.restore();
+    sc.save();sc.globalCompositeOperation='destination-in';sc.drawImage(face,0,0);sc.restore();
+    c.save();c.globalCompositeOperation='screen';c.globalAlpha=charge*(v===3?.23:v===5?.18:.075);c.drawImage(sheen,-.62,-.87,1.24,1.74);c.restore();
+   }
   }
    c.restore();
   }
@@ -53,5 +58,5 @@ export class Renderer{
    c.restore();
   }
  }
- dispose(){this.dust.release();this.original?.dispose();this.tinted=[];this.relief.clear();}
+ dispose(){this.dust.release();this.original?.dispose();this.tinted=[];this.relief.clear();this.sheens.clear();}
 }

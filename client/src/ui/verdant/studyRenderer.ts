@@ -1,3 +1,4 @@
+import {renderSummonBoard} from '../summon/boardRender';
 import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {OrganicStudies} from './organicStudies';
@@ -52,7 +53,7 @@ this.glow.position.set(0,0,95);
   if(this.disposed)return;this.prepare(face,id,v,ms,reduced);this.table.visible=false;this.gl.setSize(width,height,false);
   const screen=new T.Matrix4().set(2/width,0,0,-1,0,-2/height,0,1,0,0,-1/2000,0,0,0,0,1);
   this.camera.position.set(0,0,0);this.camera.rotation.set(0,0,0);this.camera.updateMatrixWorld();this.camera.projectionMatrix.copy(screen.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))));this.camera.projectionMatrixInverse.copy(this.camera.projectionMatrix).invert();
-  this.gl.render(this.scene,this.camera);c.drawImage(this.gl.domElement,0,0,width,height);
+  renderSummonBoard(this.gl,this.scene,this.camera,[this.body,this.shadow,this.faceShadow]);c.drawImage(this.gl.domElement,0,0,width,height);
  }
  get status(){return{renderer:'webgl-physical',disposed:this.disposed,textures:this.textures.size,geometries:160,physics:'board-normal / back-face contact'};}
  dispose(){if(this.disposed)return;this.disposed=true;this.half?.dispose();this.studies.dispose();this.faceShadow.geometry.dispose();this.faceShadow.material.dispose();this.textures.forEach(t=>t.dispose());this.card.geometry.dispose();this.cardMat.dispose();this.body.geometry.dispose();this.body.material.dispose();this.shadow.geometry.dispose();this.shadowMat.map?.dispose();this.shadowMat.dispose();this.table.traverse(o=>{const m=o as T.Mesh;if(m.geometry)m.geometry.dispose();if(m.material)(m.material as T.Material).dispose();});this.gl.dispose();this.gl.forceContextLoss();}

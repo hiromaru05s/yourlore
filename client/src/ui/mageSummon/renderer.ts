@@ -1,3 +1,4 @@
+import {renderSummonBoard} from '../summon/boardRender';
 import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -98,7 +99,7 @@ export class Renderer{
  }
  drawBoard(c:CanvasRenderingContext2D,face:HTMLCanvasElement,v:number,ms:number,matrix:DOMMatrix,width:number,height:number,reduced=false,kind=0){
  if(this.disposed)return;this.ray.set(0,.309,-.951);this.prepare(face,v,ms,reduced,kind);this.table.visible=false;this.ghost.visible=true;this.gl.setSize(width,height,false);
- const screen=new T.Matrix4().set(2/width,0,0,-1,0,-2/height,0,1,0,0,-1/2000,0,0,0,0,1);this.boardCam.position.set(0,-325,1000);this.boardCam.up.set(0,0,1);this.boardCam.lookAt(0,0,0);this.boardCam.updateMatrixWorld();this.boardCam.projectionMatrix.copy(screen.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))).multiply(this.boardCam.matrixWorld));this.boardCam.projectionMatrixInverse.copy(this.boardCam.projectionMatrix).invert();this.boardCam.updateMatrixWorld();this.gl.render(this.scene,this.boardCam);c.drawImage(this.gl.domElement,0,0,width,height);
+ const screen=new T.Matrix4().set(2/width,0,0,-1,0,-2/height,0,1,0,0,-1/2000,0,0,0,0,1);this.boardCam.position.set(0,-325,1000);this.boardCam.up.set(0,0,1);this.boardCam.lookAt(0,0,0);this.boardCam.updateMatrixWorld();this.boardCam.projectionMatrix.copy(screen.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))).multiply(this.boardCam.matrixWorld));this.boardCam.projectionMatrixInverse.copy(this.boardCam.projectionMatrix).invert();this.boardCam.updateMatrixWorld();renderSummonBoard(this.gl,this.scene,this.boardCam,[this.shadow]);c.drawImage(this.gl.domElement,0,0,width,height);
  }
  releaseFace(face:HTMLCanvasElement){this.textures.get(face)?.dispose();this.textures.delete(face);}
  get status(){return{renderer:'three-physical-volumetric-r2',disposed:this.disposed,textures:this.textures.size,contact:CONTACT};}

@@ -1,6 +1,6 @@
 import {drawEffect as approvedEffect,chevron} from './rendererBase';
 import type {Kind as OldKind,Variant as OldVariant} from './catalogBase';
-import {pose,approved,isDebuff,statKind,attackTiming,duration,strikeMs,vi,clamp,ease,out,asRect,type Kind,type Variant,type Rect} from './catalog';
+import {pose,approved,isDebuff,statKind,attackTiming,duration,strikeMs,vi,ease,out,asRect,type Kind,type Variant,type Rect} from './catalog';
 import {attackPlan} from '../attackVisual';
 import {placement,corners} from './actor';
 export {chevron};
@@ -17,8 +17,7 @@ export function drawEffect(c:C,k:Kind,v:Variant,t:number,r:Rect,target:Rect,o:Op
  const p=pose(k,v,t,r,target,false,o.active,o.side),u=r.w,ms=t*duration(k,v);
  c.save();
  if(o.pass==='rear'){
-  if(k==='summon'&&t<1){c.save();face(c,r,{...p,x:r.x,y:r.y,scale:1,z:0,rock:0});const near=1-clamp(p.z/(u*.75));c.globalAlpha=.06+.18*near;c.fillStyle='#182027';c.shadowColor='#182027';c.shadowBlur=u*(.09-.065*near);c.beginPath();c.roundRect(u*.04,r.h*.025,u*.92,r.h*.95,u*.055);c.fill();c.restore();}
-  if(k==='attack'&&ms<strikeMs(v)){face(c,r,{...p,z:0,rock:0});c.globalAlpha=.18;c.fillStyle='#182027';c.shadowColor='#182027';c.shadowBlur=u*.035;c.beginPath();c.roundRect(2,3,u-4,r.h-6,u*.06);c.fill();}
+  // Contact material belongs here; a second card-shaped plate does not.
   if(k==='summon')drawContactDust(c,r,v,t,'rear');
   c.restore();return;
  }

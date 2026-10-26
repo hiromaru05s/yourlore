@@ -1,3 +1,4 @@
+import {renderSummonBoard} from '../summon/boardRender';
 import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -59,7 +60,7 @@ export class Renderer{
  }
  drawBoard(c:C,face:HTMLCanvasElement,v:number,t:number,matrix:DOMMatrix,width:number,height:number,reduced=false){
   if(this.disposed)return;this.prepare(face,v,t,reduced);this.table.visible=false;if(this.gl.domElement.width!==width||this.gl.domElement.height!==height)this.gl.setSize(width,height,false);
-  const screen=new T.Matrix4().set(2/width,0,0,-1,0,-2/height,0,1,0,0,-1/2000,0,0,0,0,1);this.boardCam.projectionMatrix.copy(screen.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))));this.boardCam.projectionMatrixInverse.copy(this.boardCam.projectionMatrix).invert();this.boardCam.updateMatrixWorld();this.gl.render(this.scene,this.boardCam);c.drawImage(this.gl.domElement,0,0,width,height);
+  const screen=new T.Matrix4().set(2/width,0,0,-1,0,-2/height,0,1,0,0,-1/2000,0,0,0,0,1);this.boardCam.projectionMatrix.copy(screen.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))));this.boardCam.projectionMatrixInverse.copy(this.boardCam.projectionMatrix).invert();this.boardCam.updateMatrixWorld();renderSummonBoard(this.gl,this.scene,this.boardCam,[this.shade,this.contactShadow]);c.drawImage(this.gl.domElement,0,0,width,height);
  }
  releaseFace(face:HTMLCanvasElement){this.textures.get(face)?.dispose();this.textures.delete(face);}
  get status(){return{renderer:'card-surface-material',contexts:1,textures:this.textures.size,sheets:0,links:0,disposed:this.disposed};}

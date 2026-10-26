@@ -55,18 +55,12 @@ function cardSpace(c:C,r:Rect,p:ReturnType<typeof pose>){
 }
 export function drawEffect(c:C,k:Kind,v:Variant,t:number,r:Rect,target:Rect,o:Options){
  if(k==='blocked')return;
+ // Card-sized rear rectangles remain visible outside the carved raster frame.
+ // Keep contact dust and surface effects; the native card supplies its own shadow.
+ if(o.pass==='rear')return;
  if(!['aura','ready'].includes(k)&&(t<=0||t>=1||o.reduced))return;
  const idx=vi(v),u=r.w,p=pose(k,v,t,r,target,o.reduced,o.active,o.side);
  c.save();
- if(o.pass==='rear'){
-  if(k==='summon'){
-   cardSpace(c,r,{...p,x:r.x,y:r.y,z:0,rock:0,scale:1});
-   const a=1-clamp(p.z/u);c.globalAlpha=.08+.20*a;c.fillStyle='#07121b';c.shadowColor='#07121b';c.shadowBlur=u*(.13-.10*a);c.fillRect(u*.03,r.h*.02,u*.94,r.h*.96);
-  }else if(k==='trigger'||isBuff(k)){
-   cardSpace(c,r,{...p,x:r.x,y:r.y,scale:1,z:0,rock:0});c.globalAlpha=.13*p.edge;c.fillStyle='#04121a';c.shadowColor='#06171f';c.shadowBlur=u*.07;c.fillRect(0,0,u,r.h);
-  }
-  c.restore();return;
- }
  if(k==='summon'){
   const hit=contactTime(k,v),q=(t-hit)/(1-hit);
   // The receiver is the whole card footprint, never its upright bottom edge.

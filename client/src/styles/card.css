@@ -12,9 +12,10 @@
   height: var(--ch);
   flex: 0 0 auto;
   border-radius: 5%;
-  background: #111b2a;
-  border: 1px solid #a88a5f;
-  box-shadow: inset 0 0 0 2px #1b2638, 0 3px 6px #02081380;
+  /* The raster frame owns the contour. The wrapper must never paint a plate. */
+  background: none;
+  border: 0;
+  box-shadow: none;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   font-size: calc(var(--cw) * 0.135);
@@ -347,8 +348,6 @@
 .card--field-back { /* (no longer used for set traps — kept for safety) */
   background-size: cover;
   background-position: center;
-  border: 1px solid #5c6c88;
-  box-shadow: inset 0 0 0 2px #050811, 0 2px 7px #000b;
 }
 /* SET traps: owner-coloured trap-jaw icon tile (mine = blue / opponent = red).
    The icon PNG has its own built-in dark bevel frame — no card back, no green
@@ -357,14 +356,12 @@
   background-size: cover;
   background-position: center;
   border-radius: 5%;
-  box-shadow: 0 2px 7px #000b;
 }
 .zone .slot {
   --cw: var(--field-card-size);
   --ch: calc(var(--field-card-size) * 1.25);
 }
 /* Modular celestial PNGs: independently adjustable name, cost, attack and HP. */
-.card { background:none; border:0; box-shadow:none; }
 .card-frame { z-index:0; border-radius:0; filter:url(#celestial-matte); }
 .card .card-art { z-index:1; inset:0; width:100%; height:100%; border-radius:0; clip-path:url(#celestial-base-spell); }
 .card--field .card-art { clip-path:url(#celestial-field-spell); }

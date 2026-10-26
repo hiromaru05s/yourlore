@@ -219,12 +219,9 @@
 .mp-clock.warn { animation:none; }
 .mp-clock.warn .tc-num { color:#ffb3a1; }
 .mid-aside { top:92px; right:12px; gap:6px; }
-.cast-reveal { box-shadow:0 26px 50px #0009,0 0 45px #7faedf44; will-change:transform,left,top; }
-.cast-reveal::after { content:""; position:absolute; inset:0; z-index:12; pointer-events:none; background:linear-gradient(110deg,transparent 20%,#e8f7ff44 42%,transparent 60%); background-size:250% 100%; animation:castSheen .8s ease-out both; }
-@keyframes castSheen { from { background-position:100% 0; } to { background-position:0 0; } }
+.cast-reveal { will-change:transform,left,top; }
 @media(max-width:699px) { .mana-crystal { height:12px; } .mp-clock.show { width:45px; height:74px; } .hourglass-anchor { width:45px; height:56px; } .mp-clock .tc-num { font-size:16px; } .mid-aside { right:6px; top:calc(7vh + var(--pt) + 8px); } .pile-col { gap:5px; } }
 @media(max-height:550px) { .mana-crystal { height:10px; } .mp-clock.show { width:45px; height:66px; } .hourglass-anchor { width:45px; height:50px; } .mp-clock .tc-num { font-size:15px; } .mid-aside { top:61px; } }
-@media(prefers-reduced-motion:reduce) { .cast-reveal::after { animation:none; } }
 
 .pile-card { position:absolute; inset:15% 10%; background:#152039 center/contain no-repeat; border:1px solid #ae956a; border-radius:3px; }
 .pile--shelf { width:calc(var(--field-card-size) * 1.15); height:calc(var(--field-card-size) * 1.2); background:none; border:0; box-shadow:none; transform:none; }

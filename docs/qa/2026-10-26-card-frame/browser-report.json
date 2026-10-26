@@ -1,0 +1,264 @@
+{
+  "checks": [
+    {
+      "cls": "card",
+      "style": {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "shadow": "none"
+      }
+    },
+    {
+      "cls": "card card--field-back",
+      "style": {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "shadow": "none"
+      }
+    },
+    {
+      "cls": "card card--field-trap",
+      "style": {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px",
+        "shadow": "none"
+      }
+    },
+    {
+      "alpha": [
+        {
+          "ms": 0,
+          "pass": "ground",
+          "cornerAlpha": 0,
+          "totalAlpha": 0
+        },
+        {
+          "ms": 0,
+          "pass": "card",
+          "cornerAlpha": 0,
+          "totalAlpha": 410748
+        },
+        {
+          "ms": 300,
+          "pass": "ground",
+          "cornerAlpha": 0,
+          "totalAlpha": 0
+        },
+        {
+          "ms": 300,
+          "pass": "card",
+          "cornerAlpha": 0,
+          "totalAlpha": 413139
+        },
+        {
+          "ms": 650,
+          "pass": "ground",
+          "cornerAlpha": 0,
+          "totalAlpha": 0
+        },
+        {
+          "ms": 650,
+          "pass": "card",
+          "cornerAlpha": 0,
+          "totalAlpha": 417904
+        },
+        {
+          "ms": 650,
+          "pass": "ground",
+          "blank": true,
+          "totalAlpha": 0
+        },
+        {
+          "ms": 650,
+          "pass": "card",
+          "blank": true,
+          "totalAlpha": 0
+        }
+      ]
+    },
+    {
+      "rear": [
+        {
+          "kind": "summon",
+          "variant": "A",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "summon",
+          "variant": "B",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "summon",
+          "variant": "C",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "attack",
+          "variant": "A",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "attack",
+          "variant": "B",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "attack",
+          "variant": "C",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "trigger",
+          "variant": "A",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "trigger",
+          "variant": "B",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "trigger",
+          "variant": "C",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "atk",
+          "variant": "A",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "atk",
+          "variant": "B",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "atk",
+          "variant": "C",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "hp",
+          "variant": "A",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "hp",
+          "variant": "B",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "hp",
+          "variant": "C",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "both",
+          "variant": "A",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "both",
+          "variant": "B",
+          "totalAlpha": 0
+        },
+        {
+          "kind": "both",
+          "variant": "C",
+          "totalAlpha": 0
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "side": "me",
+      "reveal": {
+        "background": "rgba(0, 0, 0, 0)",
+        "image": "none",
+        "border": "0px",
+        "shadow": "none",
+        "outline": "none",
+        "after": "none"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "side": "opp",
+      "reveal": {
+        "background": "rgba(0, 0, 0, 0)",
+        "image": "none",
+        "border": "0px",
+        "shadow": "none",
+        "outline": "none",
+        "after": "none"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "side": "me",
+      "reveal": {
+        "background": "rgba(0, 0, 0, 0)",
+        "image": "none",
+        "border": "0px",
+        "shadow": "none",
+        "outline": "none",
+        "after": "none"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "side": "opp",
+      "reveal": {
+        "background": "rgba(0, 0, 0, 0)",
+        "image": "none",
+        "border": "0px",
+        "shadow": "none",
+        "outline": "none",
+        "after": "none"
+      },
+      "complete": true
+    },
+    {
+      "spell": "me",
+      "complete": true
+    },
+    {
+      "spell": "opp",
+      "complete": true
+    },
+    {
+      "simultaneous": true,
+      "complete": true
+    },
+    {
+      "mode": "skip",
+      "complete": true
+    },
+    {
+      "mode": "reduced",
+      "complete": true
+    },
+    {
+      "mode": "resize",
+      "complete": true
+    }
+  ],
+  "errors": [],
+  "boundary": "Local real-board/controller fixtures. No authenticated match or deployment."
+}

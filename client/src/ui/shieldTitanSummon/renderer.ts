@@ -1,3 +1,4 @@
+import {renderSummonBoard} from '../summon/boardRender';
 import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
@@ -5,7 +6,7 @@ import {finish,type Finish} from './material';
 import {DURATION,designs,ease,lift} from './catalog';
 const H=1.5625;
 type Surface={mesh:T.Mesh;rest:Float32Array;finish:Finish;};
-type Rig={scene:T.Scene;body:T.Group;surfaces:Surface[];table:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;shadow:T.Mesh;key:T.DirectionalLight;face:T.MeshBasicMaterial;wash:T.Mesh<T.BufferGeometry,T.MeshBasicMaterial>;glow:T.PointLight;strokes:T.Line[]};
+type Rig={scene:T.Scene;body:T.Group;stock:T.Mesh;catcher:T.Mesh;surfaces:Surface[];table:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;shadow:T.Mesh;key:T.DirectionalLight;face:T.MeshBasicMaterial;wash:T.Mesh<T.BufferGeometry,T.MeshBasicMaterial>;glow:T.PointLight;strokes:T.Line[]};
 const noise=(n:number)=>{const a=Math.sin(n*127.1+9.7)*43758.5453;return a-Math.floor(a);};
 export class Renderer{
  readonly renderer:T.WebGLRenderer;
@@ -37,7 +38,7 @@ export class Renderer{
   const cv=document.createElement('canvas');cv.width=cv.height=128;const ctx=cv.getContext('2d')!,grad=ctx.createRadialGradient(64,64,1,64,64,64);grad.addColorStop(0,'rgba(120,218,255,.62)');grad.addColorStop(.4,'rgba(65,168,218,.22)');grad.addColorStop(1,'rgba(25,120,175,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,128,128);const tex=new T.CanvasTexture(cv);this.textures.push(tex);
   const wash=new T.Mesh(this.geo(new T.PlaneGeometry(2.7,3.2)),this.mat(new T.MeshBasicMaterial({map:tex,transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending})));wash.position.z=-.01;scene.add(wash);
   const glow=new T.PointLight('#68cfff',0,2.5,2);glow.position.set(0,0,.32);scene.add(glow);
-  const r:Rig={scene,body,surfaces:[],table,shadow,key,face,wash,glow,strokes:[]};
+  const r:Rig={scene,body,stock:thickness,catcher,surfaces:[],table,shadow,key,face,wash,glow,strokes:[]};
   const grid=(width:number,nx:number,ny:number,x=0)=>{
    const g=new T.PlaneGeometry(width,H,nx,ny);g.translate(x,0,0);const p=g.attributes.position,uv=g.attributes.uv;
    for(let i=0;i<p.count;i++){const xx=p.getX(i),yy=p.getY(i);if(Math.abs(xx-x)<width*.49&&Math.abs(yy)<.77)p.setXY(i,xx+(noise(i)*2-1)*.012,yy+(noise(i+66)*2-1)*.019);uv.setXY(i,p.getX(i)+.5,p.getY(i)/H+.5);}
@@ -90,7 +91,7 @@ export class Renderer{
  drawBoard(canvas:HTMLCanvasElement,v:number,t:number,matrix:DOMMatrix,reduced=false){if(this.dead)return;this.size(canvas.width,canvas.height);
   // Preserve DOM projection while giving PBR a real eye position for reflection and absorption.
   this.boardCamera.position.set(.42,-3,4.9);this.boardCamera.up.set(0,0,1);this.boardCamera.lookAt(0,0,.13);this.boardCamera.updateMatrixWorld(true);
-  const ndc=new T.Matrix4().set(2/innerWidth,0,0,-1,0,-2/innerHeight,0,1,0,0,-.0001,0,0,0,0,1);this.boardCamera.projectionMatrix.copy(ndc.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))).multiply(this.boardCamera.matrixWorld));this.boardCamera.projectionMatrixInverse.copy(this.boardCamera.projectionMatrix).invert();const r=this.update(v,t,reduced);r.table.visible=false;r.shadow.visible=true;this.renderer.render(r.scene,this.boardCamera);canvas.getContext('2d')!.drawImage(this.renderer.domElement,0,0);}
+  const ndc=new T.Matrix4().set(2/innerWidth,0,0,-1,0,-2/innerHeight,0,1,0,0,-.0001,0,0,0,0,1);this.boardCamera.projectionMatrix.copy(ndc.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))).multiply(this.boardCamera.matrixWorld));this.boardCamera.projectionMatrixInverse.copy(this.boardCamera.projectionMatrix).invert();const r=this.update(v,t,reduced);r.table.visible=false;r.shadow.visible=true;renderSummonBoard(this.renderer,r.scene,this.boardCamera,[r.stock,r.shadow,r.catcher]);canvas.getContext('2d')!.drawImage(this.renderer.domElement,0,0);}
  private size(w:number,h:number){if(this.renderer.domElement.width!==w||this.renderer.domElement.height!==h)this.renderer.setSize(w,h,false);}
  get stats(){return{contexts:this.dead?0:1,geometries:this.renderer.info.memory.geometries,textures:this.renderer.info.memory.textures,drawCalls:this.renderer.info.render.calls};}
  dispose(){if(this.dead)return;this.dead=true;this.geometries.forEach(g=>g.dispose());this.materials.forEach(m=>m.dispose());this.textures.forEach(t=>t.dispose());this.faces.forEach(t=>t.dispose());this.faces.clear();this.environment.dispose();this.rigs.forEach(r=>r.key.shadow.map?.dispose());this.renderer.dispose();this.renderer.forceContextLoss();}
