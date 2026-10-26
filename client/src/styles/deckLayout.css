@@ -1,0 +1,136 @@
+/* Approved 2026-10-26 deck scene. Shared HOME/nav, frame and common buttons remain owned by the lounge. */
+:root body .lounge-deck .lounge-content{inset:64px 12px 82px;padding:0;overflow:visible}
+:root body .lounge-deck .lounge-content>.deck-screen{padding:0;width:100%;height:100%;overflow:visible}
+:root body .lounge-deck .deck-panel{display:grid;grid-template-columns:106px minmax(0,1fr);grid-template-rows:251px minmax(0,1fr);gap:8px 12px;width:100%;max-width:none;height:100%;padding:0!important;margin:0;border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important;overflow:visible}
+.lounge-deck .deck-panel>h2,.lounge-deck .deck-controls>#back{display:none}
+.lounge-deck .deck-panel>.deck-tabs{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:5px;min-height:0;margin:0;padding:5px;border:0;overflow:visible}
+.lounge-deck .deck-tab-row{position:relative;flex:1;min-height:28px;padding:0;border:0;background:none}
+.lounge-deck .deck-tab-row .deck-tab{width:100%;height:100%;min-height:28px;padding:0 9px;font-size:11px;justify-content:flex-start;text-align:left}
+.lounge-deck .deck-tab-row.is-on{border:0;background:none}
+.lounge-deck .deck-tab-row.is-on .deck-tab{padding-right:26px}
+.lounge-deck .deck-tab-row .deck-rename{position:absolute;right:0;top:5px;width:25px;height:32px;min-height:0;padding:0}
+.lounge-deck .deck-tab-row .deck-rename .lore-icon{width:16px;height:16px}
+.lounge-deck .deck-star{position:absolute;right:3px;bottom:2px;pointer-events:none;width:10px;height:10px}
+.lounge-deck .deck-editor{position:relative;grid-column:2;grid-row:1;min-width:0;padding:0 18px;isolation:isolate}
+.lounge-deck .deck-controls{display:flex;align-items:center;gap:8px;width:100%;height:38px;margin:0;padding:0;border:0;flex-wrap:nowrap;flex-direction:row;position:relative;z-index:5}
+.lounge-deck .deck-controls button{min-height:30px;font-size:11px;white-space:nowrap;padding:0 12px}
+.lounge-deck .deck-secondary-actions{display:flex;gap:8px;margin-left:auto}
+.lounge-deck .deck-controls .deck-formation{display:flex;align-items:center;justify-content:space-between;gap:20px;min-width:126px;height:36px;padding:0 15px;font-weight:400}
+.lounge-deck .deck-formation>span{font-size:11px;letter-spacing:.16em}
+.lounge-deck #deckCount{display:flex;align-items:baseline;gap:5px;white-space:nowrap;font-weight:400;font-variant-numeric:tabular-nums}
+.lounge-deck #deckCount>span{font:400 21px/1 Georgia,serif;color:#f4f7fc}
+.lounge-deck #deckCount>small{font:400 12px/1 Georgia,serif;color:#b2c3d5}
+.lounge-deck #deckUndo{width:30px;padding:0;font-size:19px;min-height:30px}
+.lounge-deck #useBtn{max-width:140px;font-size:10px;padding:0 8px}
+.lounge-deck #useBtn:disabled{display:none}
+.lounge-deck #deckEditSection{display:block;position:static;padding:0;overflow:visible}
+.lounge-deck .deck-stage{position:absolute;inset:27px 10px -4px;z-index:-1;pointer-events:none;overflow:hidden}
+.lounge-deck .deck-stage-depth{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 84%,#3e6d7d51,transparent 65%),linear-gradient(90deg,transparent,#07151de8 9%,#0a202cf5 45%,#07151deb 91%,transparent);mask-image:linear-gradient(transparent,#000 17%,#000 89%,transparent)}
+.lounge-deck .deck-stage-floor{position:absolute;left:0;bottom:0;width:100%;height:87px;filter:drop-shadow(0 7px 9px #01070b90)}
+.lounge-deck #deckCur{display:flex;position:relative;align-items:flex-start;justify-content:safe center;flex-wrap:nowrap;gap:6px;min-height:0;width:100%;height:213px;margin:0;padding:16px 30px 25px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;border:0;background:none;--hand-card:112px}
+.lounge-deck #deckCur .deck-entry{display:block;padding:0;border:0;background:none;position:relative;flex:none;width:112px;height:175px;margin:0;container-type:inline-size;isolation:isolate;transform:translateY(var(--hand-lift,0px)) rotate(var(--hand-turn,0deg));transform-origin:50% 100%;z-index:1}
+.lounge-deck #deckCur .deck-entry:is(:hover,:focus-within){z-index:20;transform:translateY(var(--hand-lift,0px)) rotate(var(--hand-turn,0deg))}
+.lounge-deck .deck-card-float{position:relative;width:100%;height:100%;animation:lore-deck-idle 6.8s ease-in-out var(--idle-delay) infinite}
+.lounge-deck .deck-card-shadow{position:absolute;left:7%;right:7%;bottom:-25px;height:14px;border-radius:50%;background:radial-gradient(ellipse,#000a,#0005 40%,transparent 72%);z-index:-1;animation:lore-deck-shadow 6.8s ease-in-out var(--idle-delay) infinite}
+.lounge-deck .deck-entry:is(:hover,:focus-within) :is(.deck-card-float,.deck-card-shadow),.lounge-deck .idle-paused :is(.deck-card-float,.deck-card-shadow){animation-play-state:paused}
+@keyframes lore-deck-idle{0%,100%{transform:translateY(1.5px)}50%{transform:translateY(-1.5px)}}
+@keyframes lore-deck-shadow{0%,100%{opacity:.64;transform:scaleX(.94)}50%{opacity:.4;transform:scaleX(1.08)}}
+.lounge-deck #deckHint{position:absolute;top:38px;left:18px;right:18px;z-index:7;text-align:center;background:#0d2a3ef2;font-size:10px;line-height:1.5;pointer-events:none}
+.lounge-deck #deckHint:empty{display:none}
+.lounge-deck .deck-panel>.deck-filters{grid-column:1;grid-row:2;position:relative;align-self:start;display:flex;flex-direction:column;gap:5px;padding:5px;z-index:15}
+.lounge-deck .deck-pool-types{display:flex;flex-direction:column;gap:5px}
+.lounge-deck .deck-pool-types button{width:100%;height:43px;min-height:0;padding:0 9px;text-align:left;font-size:11px}
+.lounge-deck .deck-search-slot{position:relative;height:43px;flex:none}
+.lounge-deck .deck-pool-search{position:absolute;top:0;left:0;display:flex;align-items:center;gap:6px;width:100%;height:43px;min-width:0;margin:0;padding:0 9px;background:#091a2fef;border:0;border-bottom:1px solid #b9c6d230;transition:width 260ms cubic-bezier(.2,.75,.25,1);z-index:1}
+.lounge-deck .deck-pool-search .lore-icon{width:16px;height:16px;flex:none}
+:root body .lounge-deck #poolSearch{width:100%;min-width:0;height:100%;padding:0;font-size:11px;border:0;background:none;outline:none;box-shadow:none}
+.lounge-deck .deck-pool-search:focus-within{width:min(280px,calc(100vw - 48px));box-shadow:0 6px 18px #0009;outline:1px solid #b9c6d250}
+.lounge-deck .deck-panel>#deckCandidates{grid-column:2;grid-row:2;display:block;min-width:0;min-height:0;overflow:hidden;padding:0;container-type:normal}
+.lounge-deck #deckPool{display:grid;grid-template-columns:repeat(auto-fill,88px);grid-auto-rows:max-content;justify-content:space-between;align-content:start;justify-items:stretch;gap:24px 20px;width:100%;height:100%;padding:14px 26px 24px;overflow:auto;--collection-card-width:88px}
+.lounge-deck .deck-pool-tile{position:relative;width:88px;height:137.5px;container-type:inline-size}
+.lounge-deck .deck-pool-face{position:relative;width:100%;height:100%}
+.lounge-deck #deckCur .deck-entry .card,.lounge-deck #deckPool .card{--cw:100cqw;--ch:calc(100cqw / .64);width:100%;height:auto;aspect-ratio:.64;font-size:13.5cqw;filter:none;transform:none;margin:0;transition:none;opacity:1}
+.lounge-deck #deckCur .card::after{content:none!important}
+.lounge-deck :is(#deckCur,#deckPool) .card-name{left:12%;right:8%;font-size:min(9.65cqw,calc(76cqw / var(--title-units,1)));font-weight:600;text-shadow:0 1px 0 #07101b;letter-spacing:-.025em}
+.lounge-deck :is(#deckCur,#deckPool) .card :is(.card-cost,.ad-atk,.ad-def){filter:none;text-shadow:0 1px 0 #05111c}
+.lounge-deck :is(#deckCur,#deckPool) .card-art-img{transition:none}
+.lounge-deck .native-matte,.deck-drag-ghost .native-matte{filter:none}
+.lounge-deck #deckPool .card{cursor:grab;touch-action:pan-y}
+.lounge-deck .deck-owned{position:absolute;right:0;bottom:26px;top:auto;z-index:8;padding:3px 5px;color:#ecf6ff;font:12px/1.4 system-ui,sans-serif;background:#091725ed;border:0;border-radius:0;pointer-events:none}
+.lounge-deck .deck-owned.has{color:#ecf6ff;background:#16354bef}
+.lounge-deck .card-action{position:absolute;left:auto;bottom:-12px;right:calc(50% - 14px);z-index:8}
+.lounge-deck #deckPool .card-action{right:-5px;bottom:-12px;width:28px;height:28px}
+.lounge-deck .deck-attune-lock{border:0;position:absolute;bottom:-14px;left:calc(50% - 17px);width:34px;height:36px;display:grid;place-items:center;background:linear-gradient(#32586d,#0c2638);clip-path:polygon(0 0,100% 0,94% 78%,50% 100%,6% 78%);z-index:8;color:#ebf7ff;box-shadow:inset 0 1px #c1d8e1}
+.lounge-deck .deck-attune-lock svg{width:18px;height:22px}
+.lounge-deck #deckCur .deck-slot{width:112px;height:175px;display:grid;place-items:center;transform:none;border:1px dashed #9bb8cd4d;color:#88a5b9;background:#07131c30;font-size:26px}
+.lounge-deck #deckCur.is-replacing .deck-entry:not(.is-fixed) .card,.lounge-deck #deckPool .is-candidate{outline:1px solid #b8deee;outline-offset:3px}
+.lounge-deck .deck-frame,.lounge-deck .deck-tabs{position:relative;isolation:isolate;border:3px solid transparent;border-radius:0;background:none;box-shadow:none;backdrop-filter:none;color:var(--lore-text);--deck-cut:20px;--deck-frame:40px}
+.lounge-deck :is(.deck-frame,.deck-tabs)::before,.lounge-deck #deckCandidates::after{content:'';position:absolute;inset:-3px;z-index:-1;border:1px solid transparent;border-image:var(--lore-panel-image) 100 fill / var(--deck-frame) / 0 stretch;clip-path:polygon(var(--deck-cut) 0,calc(100% - var(--deck-cut)) 0,100% var(--deck-cut),100% calc(100% - var(--deck-cut)),calc(100% - var(--deck-cut)) 100%,var(--deck-cut) 100%,0 calc(100% - var(--deck-cut)),0 var(--deck-cut));opacity:.96;pointer-events:none}
+.lounge-deck :is(.deck-filters,.deck-tabs){--deck-cut:12px;--deck-frame:24px}
+.lounge-deck #deckCandidates::before{opacity:.78}
+.lounge-deck #deckCandidates::after{border-image:var(--lore-panel-image) 100 / var(--deck-frame) / 0 stretch;opacity:.82}
+.lounge-deck .deck-msg{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);z-index:20;background:#10243df5;padding:7px 14px;font-size:12px;border-bottom:1px solid #b8d6ed;max-width:90%;pointer-events:none}
+.lounge-deck .deck-msg:empty{display:none}
+.lounge-deck .deck-screen:not([data-tab=edit]) .deck-panel{grid-template-rows:38px minmax(0,1fr)}
+.lounge-deck .deck-screen:not([data-tab=edit]) .deck-tabs{grid-row:1/-1;max-height:251px}
+.lounge-deck .deck-panel>:is(#deckWatchSection,#deckAppearanceSection){grid-column:2;grid-row:2;overflow:auto;padding:20px}
+.lounge-deck #deckAppearanceSection .deck-cosmetic-grid{gap:12px}
+.lounge-deck .lounge-rail{left:12px;right:12px;bottom:8px;height:64px}
+.lounge-deck .lounge-rail nav button:not(.lounge-brand){font-size:11px}
+.lounge-deck .lounge-rail .horizon-glyph{width:22px;height:22px}
+.deck-drag-ghost{position:fixed;z-index:1000;pointer-events:none;container-type:inline-size;aspect-ratio:.64}
+.deck-drag-ghost .card{--cw:100cqw;--ch:calc(100cqw / .64);width:100%;height:auto;aspect-ratio:.64;font-size:13.5cqw;filter:none}
+.deck-drag-ghost .card-name{font-size:min(9.65cqw,calc(76cqw / var(--title-units,1)))}
+.deck-drag-ghost .deck-owned{display:none}
+.lounge-deck .deck-drag-source{outline:1px solid #b8deee;outline-offset:3px}
+.lounge-deck .deck-drop-target .card{outline:2px solid #c9ebfa!important;outline-offset:3px}
+.lounge-deck .deck-drag-guide{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);padding:5px 12px;background:#0b2439f5;border-bottom:1px solid #a6d6ec;color:#eaf7ff;font-size:11px;white-space:nowrap;z-index:40;pointer-events:none}
+.lounge-deck .deck-drag-guide:empty{display:none}
+.lounge-deck .deck-drag-over .deck-stage-depth{box-shadow:inset 0 -2px #9bd2eb}
+@media(max-width:760px){
+ :root body .lounge-deck .lounge-content{inset:62px 8px 76px}
+ :root body .lounge-deck .deck-panel{grid-template-columns:65px minmax(0,1fr);grid-template-rows:39px 176px minmax(0,1fr);gap:7px}
+ .lounge-deck .deck-panel>.deck-tabs{grid-column:1/-1;grid-row:1;flex-direction:row;gap:2px;padding:2px}
+ .lounge-deck .deck-tab-row .deck-tab{font-size:9px;padding:0 3px;min-height:28px}
+ .lounge-deck .deck-tab-row.is-on .deck-tab{padding-right:15px}
+ .lounge-deck .deck-tab-row .deck-rename{width:16px;height:25px;top:3px}
+ .lounge-deck .deck-tab-row .deck-rename .lore-icon{width:13px;height:13px}
+ .lounge-deck .deck-star{width:7px;height:7px}
+ .lounge-deck .deck-editor{grid-column:1/-1;grid-row:2;padding:0 4px}
+ .lounge-deck .deck-controls{height:36px;gap:4px}
+ .lounge-deck .deck-controls button{font-size:9px;padding:0 6px;min-height:28px}
+ .lounge-deck .deck-secondary-actions{gap:4px}
+ .lounge-deck .deck-controls .deck-formation{height:30px;min-width:80px;padding:0 8px;gap:8px}
+ .lounge-deck .deck-formation>span{font-size:10px;letter-spacing:0}
+ .lounge-deck #deckCount{gap:2px}.lounge-deck #deckCount>span{font-size:18px}.lounge-deck #deckCount>small{font-size:10px}
+ .lounge-deck #deckUndo{width:20px;font-size:16px;padding:0}
+ .lounge-deck #useBtn{position:absolute;top:34px;right:0;z-index:21;font-size:9px}
+ .lounge-deck #deckCur{height:140px;padding:10px 12px 22px;justify-content:flex-start;gap:6px;--hand-card:68px}
+ .lounge-deck #deckCur .deck-entry{width:68px;height:106.25px;transform:none}
+ .lounge-deck .deck-panel>.deck-filters{grid-column:1;grid-row:3;padding:3px;gap:4px}
+ .lounge-deck .deck-pool-types{gap:4px}.lounge-deck .deck-pool-types button{padding:0 3px;height:40px;font-size:9px}
+ .lounge-deck .deck-search-slot,.lounge-deck .deck-pool-search{height:40px}
+ .lounge-deck .deck-pool-search{padding:0 4px;gap:3px}.lounge-deck .deck-pool-search .lore-icon{width:13px;height:13px}
+ :root body .lounge-deck #poolSearch{font-size:16px}
+ .lounge-deck .deck-panel>#deckCandidates{grid-column:2;grid-row:3}
+ .lounge-deck #deckPool{grid-template-columns:repeat(auto-fill,64px);gap:23px 10px;padding:12px 8px 24px}
+ .lounge-deck .deck-pool-tile{width:64px;height:100px}
+ .lounge-deck .deck-owned{font-size:10px;bottom:25px;padding:2px 3px}
+ .lounge-deck .deck-frame{--deck-cut:15px;--deck-frame:30px}
+ .lounge-deck .deck-screen:not([data-tab=edit]) .deck-panel{grid-template-rows:39px 36px minmax(0,1fr)}
+ .lounge-deck .deck-screen:not([data-tab=edit]) .deck-tabs{grid-row:1}
+ .lounge-deck .deck-panel>:is(#deckWatchSection,#deckAppearanceSection){grid-column:1/-1;grid-row:3;padding:14px}
+ .lounge-deck .lounge-rail{height:60px;bottom:6px;left:8px;right:8px}
+ .lounge-deck .lounge-rail nav button:not(.lounge-brand){font-size:9px}
+ .lounge-deck .lounge-rail .horizon-glyph{width:20px;height:20px}
+ .lounge-deck .deck-drag-guide{max-width:95%;font-size:9px;white-space:normal}
+}
+@media(max-width:360px){.lounge-deck .deck-controls button{font-size:8px;padding:0 3px}.lounge-deck .deck-secondary-actions{gap:2px}.lounge-deck .deck-controls .deck-formation{min-width:72px;padding:0 5px}}
+@media(max-height:500px) and (min-width:761px){:root body .lounge-deck .deck-panel{grid-template-rows:190px minmax(0,1fr)}.lounge-deck #deckCur{height:152px}.lounge-deck #deckCur .deck-entry{width:76px;height:118.75px}.lounge-deck .deck-tab-row .deck-tab{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.lounge-deck .deck-card-float,.lounge-deck .deck-card-shadow{animation:none}.lounge-deck .deck-pool-search{transition:none}}
+
+.lounge-deck .deck-attune-lock::before{content:none}
+@media(max-width:760px){.lounge-deck #deckCur .deck-entry:is(:hover,:focus-within){transform:none}}
+/* defaultUI's grouped selector has dialog-level specificity; opt out only this layout container. */
+:root body .lounge-deck .deck-panel#deckWorkspace{border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important}
+.lounge-deck #deckCur{box-shadow:none;border-radius:0}
