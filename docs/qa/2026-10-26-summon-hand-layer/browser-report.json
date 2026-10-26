@@ -1,0 +1,178 @@
+{
+  "checks": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "id": "M2",
+      "owner": 0,
+      "order": {
+        "hand": 0,
+        "effect": 1,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "modalOrder": {
+        "hand": 1,
+        "effect": 0,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "id": "M2",
+      "owner": 1,
+      "order": {
+        "hand": 0,
+        "effect": 4,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "modalOrder": {
+        "hand": 1,
+        "effect": 0,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "id": "ELF",
+      "owner": 0,
+      "order": {
+        "hand": 0,
+        "effect": 2,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "modalOrder": {
+        "hand": 1,
+        "effect": 0,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "dragFromOpen": false,
+      "submitted": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "dragFromOpen": true,
+      "submitted": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "M2",
+      "owner": 0,
+      "order": {
+        "hand": 0,
+        "effect": 1,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "modalOrder": {
+        "hand": 1,
+        "effect": 0,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "M2",
+      "owner": 1,
+      "order": {
+        "hand": 0,
+        "effect": 4,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "modalOrder": {
+        "hand": 1,
+        "effect": 0,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "id": "ELF",
+      "owner": 0,
+      "order": {
+        "hand": 0,
+        "effect": 2,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "modalOrder": {
+        "hand": 1,
+        "effect": 0,
+        "app": "auto",
+        "stage": "6",
+        "handZ": "145"
+      },
+      "complete": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dragFromOpen": false,
+      "submitted": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dragFromOpen": true,
+      "submitted": true
+    }
+  ],
+  "errors": [],
+  "source": "/Users/hiromaru05s/.codex/worktrees/summon-hand-layer/LORE_TCG",
+  "url": "http://127.0.0.1:5173/hand-layer-qa",
+  "boundary": "Local Chrome with current product styles, controller and engine; no authenticated PvP or physical-device performance claim."
+}
