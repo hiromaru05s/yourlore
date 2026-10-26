@@ -24,7 +24,7 @@
 - 新旧カードの枠・UIは現行 `client/src/ui/cardView.ts`、`ui/boardView.ts`、`game/controller.ts` を使用。CSSの読み込み順は `client/src/main.ts` から抽出。
 - プレビュー起動元: `/Users/hiromaru05s/.codex/worktrees/rift-train-bank/LORE_TCG`、`http://127.0.0.1:5307/rift-train-bank-fixture.html`。
 
-最新のカル関連改修とカード表面更新 `ffe29c66` を取り込み、既存の溶鉱炉・スクラップ収集家の新仕様を維持。表示検証も統合後のカード表面を使用する。
+最新のカル関連改修とカード表面更新 `ffe29c66` を取り込み、既存の溶鉱炉・スクラップ収集家の新仕様を維持。表示検証も統合後のカード表面を使用し、実装コミット `9a9a85ed` のブラウザー検証で再確認した。
 
 ## 検証
 

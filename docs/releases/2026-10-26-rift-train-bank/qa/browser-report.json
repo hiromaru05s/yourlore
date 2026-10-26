@@ -1,7 +1,7 @@
 {
   "origin": "http://127.0.0.1:5307",
   "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/rift-train-bank/LORE_TCG",
-  "baseCommit": "64902739c23c1d3884ee83ed44eadda9d16ac68e",
+  "baseCommit": "9a9a85ed5809873e7d413dc7a267b9c1ea9abdbf",
   "sources": [
     "client/src/main.ts",
     "client/src/ui/cardView.ts",
