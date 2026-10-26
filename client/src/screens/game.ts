@@ -25,6 +25,7 @@ export type GameOpts =
 
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
+  root.dataset.duelMode = opts.mode;
   app.root.appendChild(root);
   const npc = opts.mode === "bot" ? botNpc(opts.difficulty ?? "hard") : null;
   setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait

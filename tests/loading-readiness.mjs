@@ -8,7 +8,7 @@ const dom=new JSDOM('<body></body>',{url:'http://localhost',pretendToBeVisual:tr
 for(const key of ['document','window','location','HTMLElement','HTMLImageElement','MutationObserver','localStorage','CustomEvent','Event'])globalThis[key]=dom.window[key];
 const timer=globalThis.setTimeout;
 // Exercise a 20s caller deadline against the longer shared transfer deterministically.
-globalThis.setTimeout=(fn,ms,...args)=>timer(fn,ms===20000?20:ms===60000?500:ms,...args);
+globalThis.setTimeout=(fn,ms,...args)=>timer(fn,ms===20000?20:ms===30000?30:ms===60000?500:ms,...args);
 const temp=await mkdtemp(path.join(tmpdir(),'lore-readiness-'));
 let behavior,created=0;
 globalThis.Image=class {naturalWidth=64;naturalHeight=64;constructor(){created++;}decode(){return behavior(this.src);}};
@@ -32,5 +32,6 @@ try {
  const home=host();home.innerHTML='<div data-atmosphere="loading"></div>';let revealed=false;const entrance=coverScreen(home,true,true,[]);const admission=entrance.ready().then(()=>{revealed=true;});await new Promise(r=>timer(r,10));assert.equal(revealed,false,'Visible HOME must wait for its first complete atmosphere frame');home.firstChild.dataset.atmosphere='ready';await admission;assert.equal(revealed,true);home.remove();
  const navigating=host();navigating.innerHTML='<div data-atmosphere="loading"></div>';const cancelledEntrance=coverScreen(navigating,true,true,[]),cancelledAdmission=cancelledEntrance.ready();await new Promise(r=>timer(r,10));cancelledEntrance.cancel();assert.equal(await cancelledAdmission,false);navigating.remove();
  let offline=true;behavior=url=>offline&&url.includes('mask-self')?Promise.reject(Error('offline')):Promise.resolve();const duel=host();duel.dataset.boardRendered='true';duel.dataset.sceneReady='true';prepareDuel(duel,Promise.resolve());await until(()=>!!duel.querySelector('.asset-retry'));await new Promise(r=>timer(r,5));assert.equal(duel.querySelectorAll('.asset-retry').length,1,'only the final readiness pass owns retry UI');offline=false;duel.querySelector('.asset-retry').click();await waitForDuel(duel);assert.equal(duel.querySelector('.duel-loader'),null);duel.remove();
+ behavior=()=>new Promise(()=>{});const bot=host();bot.innerHTML='<img src="/stalled-bot.webp">';bot.dataset.duelMode='bot';bot.dataset.boardRendered='true';bot.dataset.sceneReady='true';prepareDuel(bot,Promise.resolve());await waitForDuel(bot);assert.equal(bot.dataset.assetFallback,'true','BOT must not wait indefinitely for artwork');assert.equal(bot.querySelector('.duel-loader'),null);bot.remove();
  console.log('PASS single duel retry owner, transient retry, shared slow transfer, abort while awaiting manual retry, detached host cleanup');
 } finally {globalThis.setTimeout=timer;dom.window.close();await rm(temp,{recursive:true,force:true});}
