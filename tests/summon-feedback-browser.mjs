@@ -42,13 +42,13 @@ try{
    }
    if(id!=='SORTER'){await page.waitForTimeout(2300);await page.screenshot({path:out+`/${id}-${width}-during.png`,scale:'css'});}
    const r=await page.evaluate(()=>qaRunning);assert(r.families.length,`${id} summon was skipped`);assert.equal(r.left,0,`${id} cleanup`);console.log('result',id,JSON.stringify({activations:r.activations,exits:r.exits,buffers:r.buffers,families:r.families}));
-   if(id==='SORTER'){assert.equal(r.activations,2);assert.equal(r.exits.length,6);assert.equal(r.removed,6);assert(r.frames.some(f=>f.rift>1),'Culls share the Rift clock');}
+   if(id==='SORTER'){assert.equal(r.activations,2);assert.equal(r.exits.length,1);assert.equal(r.removed,2);assert(r.frames.some(f=>f.rift>0),'The additional existing Cull enters the Rift');}
    for(const b of r.buffers)assert(b.width>b.cssWidth&&b.height>b.cssHeight,`${id} Retina buffer`);
    checks.push({...r,width});await fs.writeFile(out+'/progress.json',JSON.stringify(checks,null,2));console.log('PASS',width,id,owner,r.activations,r.exits.length);
   }
  }
  for(const mode of ['skip','resize']){const r=await page.evaluate(mode=>summonQA('SORTER',0,false,mode),mode);assert.equal(r.left,0);checks.push(r);}
- await page.emulateMedia({reducedMotion:'reduce'});const reduced=await page.evaluate(()=>summonQA('SORTER'));assert.equal(reduced.removed,6);assert.equal(reduced.left,0);checks.push({...reduced,reduced:true});await page.emulateMedia({reducedMotion:'no-preference'});
+ await page.emulateMedia({reducedMotion:'reduce'});const reduced=await page.evaluate(()=>summonQA('SORTER'));assert.equal(reduced.removed,2);assert.equal(reduced.left,0);checks.push({...reduced,reduced:true});await page.emulateMedia({reducedMotion:'no-preference'});
  for(const side of ['me','opp']){
   await page.evaluate(async side=>{const {hpFeedback}=await import('/src/ui/anim.ts');hpFeedback(side,'dmg',12)},side);await page.waitForSelector('.combat-damage.in');await page.waitForTimeout(150);await page.screenshot({path:out+`/damage-${side}.png`,scale:'css'});
   const number=await page.locator('.combat-damage.in').evaluate(n=>({font:getComputedStyle(n).fontFamily,weight:getComputedStyle(n).fontWeight,animation:getComputedStyle(n).animationName,rect:n.getBoundingClientRect().toJSON()}));assert(number.font.includes('Alegreya'));assert.equal(number.weight,'800');checks.push({side,number});await page.waitForSelector('.combat-damage',{state:'detached'});

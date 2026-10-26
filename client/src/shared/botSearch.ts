@@ -2,12 +2,12 @@ import type { Action, GameState, PlayerState, Side } from './types';
 import { actingSide, reduce, curHp, effAtk, playCost } from './engine';
 import { cardPower } from './cardEval';
 import { learnedValue } from './botValue';
-import { resilience } from './botMatchup';
+import { resilience, matchupPlan, removalHits } from './botMatchup';
 import { hasPassive } from './cards';
 import { safeGreedy, greedyStep, TUNE } from './bot';
 import { observationSample } from './botObservation';
 import { botActions, actionChangesState } from './botActions';
-import { purchaseEvaluator } from './botEconomy';
+import { purchaseEvaluator, publicInventory } from './botEconomy';
 import { forcedWin, forcedWinPlan } from './botTactics';
 import { lastingValue, unproductiveOpponentHeal } from './botStrategy';
 export const TACTICS = { proof: true, targets: true, horizon: 4, replyNodes: 64 };
@@ -60,9 +60,18 @@ export function positionValue(g: GameState, s: Side): number {
 export function searchDecide(g: GameState, level: 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void): Action {
   if (prove && TACTICS.proof) { const win = forcedWin(g, level === 'hell' ? 900 : 350); if (win) return win; }
   const side = actingSide(g), cfg = SEARCH[level];
+  // Preserve the greedy policy's public, currently affordable escape from a
+  // stalled board. Sampled refreshes must not spend its reserved purchase mana.
+  const policy = safeGreedy(g), owner = g.players[side], opponent = g.players[1-side];
+  if (policy.type === 'buyMarket' || policy.type === 'buySupply') {
+    const card = policy.type === 'buyMarket' ? g.market[policy.i] : owner.supply[policy.i];
+    const plan = matchupPlan(g, owner, publicInventory(opponent));
+    if (card && ((plan.blocked && (card.act === 'destroyEnch' || card.id === 'DISARM3' || card.id === 'ADVANCE'))
+        || plan.walls.some(m => removalHits(g, opponent, card, m)))) return policy;
+  }
   // Hell retains Hard's move as its expert baseline. More breadth alone can
   // overfit a lucky hidden-card sample and make an otherwise strong move worse.
-  const base = level === 'hell' ? searchDecide(g, 'hard', false, onProgress) : safeGreedy(g);
+  const base = level === 'hell' ? searchDecide(g, 'hard', false, onProgress) : policy;
   // A completed lower-cost policy remains available if the worker hits its deadline.
   onProgress?.(base);
   const seenPlays = new Set<string>();

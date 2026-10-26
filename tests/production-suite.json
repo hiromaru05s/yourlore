@@ -230,7 +230,9 @@
     "tests/sage-goblin-server.mjs",
     "tests/card-counters.mjs",
     "tests/deck-drag.mjs",
-    "tests/enchant-time-ui.mjs"
+    "tests/enchant-time-ui.mjs",
+    "tests/rift-train-bank.mjs",
+    "tests/rift-train-bank-server.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
