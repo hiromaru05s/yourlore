@@ -10,3 +10,7 @@
 # LORE menu design
 
 HOME・デッキ・カード・ランキング・フレンド・ショップ・遊び方など、対戦画面以外のUIを制作／改修するときは `docs/menu-design-insights.md` を先に読む。下ナビの採用基準、実例研究、未承認案の区別を共有する。世界観は `docs/world-bible.md` に従う。
+
+# LORE default UI
+
+2026-10-26以降、全ページ・ポップアップの標準UIは02「蒼銀の面取り」（外周も面取りした版）。UIを制作／改修するときは `docs/default-ui-design.md` を読み、`client/src/styles/defaultUI.css` の共通面とトークンを使う。以前の枠デザインへ戻さない。

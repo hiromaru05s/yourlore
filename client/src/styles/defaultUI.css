@@ -1,0 +1,146 @@
+/* LORE default UI — approved 02 蒼銀の面取り, 2026-10-26.
+ * This is the shared surface, not a replacement for page layout or card artwork.
+ * border-image keeps corners at their authored size while the centre stretches.
+ * Clip the filled bitmap too: an angled line on a square backing is not sufficient.
+ */
+:root {
+  --lore-panel-image:url('/art/ui/lore-panel-azure-cut.png');
+  --lore-surface:#14243d;
+  --lore-text:#e8eef4;
+  --lore-muted:#a6b7c7;
+  --lore-accent:#b8d6ed;
+  --lore-line:#b9c6d230;
+  --lore-field:#0d2036;
+  --lore-action:#2a4664;
+  --lore-frame-width:40px;
+  --lore-corner-cut:20px;
+}
+/* Explicit page owners plus the two shared dialog primitives cover existing UI.
+ * New custom content should opt in with .lore-surface, or use modal/dialog.
+ * The full-screen gacha canvas is a scene; its textual result is a surface.
+ */
+:root body :is(
+  .lore-surface,
+  .lounge-home-main,
+  .lounge-home #dailyReward,
+  .preview-modal,
+  .treasure-notice,
+  .cant-to,
+  .toast,
+  .lounge-content .deck-panel,
+  .lounge-content .cards,
+  .lounge-content .lb,
+  .lounge-content .tut,
+  .auth-card,
+  .academy-content,
+  .welcome-sheet,
+  .overlay > .modal,
+  dialog:not(.gacha-cinematic),
+  .zoom-details,
+  .card-reference-preview,
+  .cards-filter-panel,
+  .lounge-shell.is-menu-open .lounge-rail-bottom,
+  .duel-spirit-panel,
+  .gacha-cinematic-result
+) {
+  --paper:var(--lore-text);
+  --paper-dim:var(--lore-muted);
+  --paper-faint:#9db3c4;
+  --brass:var(--lore-accent);
+  --brass-hi:#dcecf6;
+  --line:var(--lore-line);
+  color:var(--lore-text);
+  background:transparent!important;
+  border:1px solid transparent!important;
+  border-image:var(--lore-panel-image) 100 fill / var(--lore-frame-width) / 0 stretch!important;
+  border-radius:0!important;
+  outline:none!important;
+  box-shadow:none!important;
+  clip-path:polygon(var(--lore-corner-cut) 0,calc(100% - var(--lore-corner-cut)) 0,
+    100% var(--lore-corner-cut),100% calc(100% - var(--lore-corner-cut)),
+    calc(100% - var(--lore-corner-cut)) 100%,var(--lore-corner-cut) 100%,
+    0 calc(100% - var(--lore-corner-cut)),0 var(--lore-corner-cut));
+  scrollbar-color:#829fb8 #13243b;
+}
+/* Retire old engraved/paper backings, not content or the HOME duel disc. */
+:root body :is(.lounge-home-main,.auth-card,.deck-panel,.lb,.tut)::before,
+:root body :is(.lounge-home-main,.auth-card,.deck-panel,.lb,.tut)::after {
+  content:none!important;
+}
+/* Frame clearance is independent of each screen's existing scrolling/layout. */
+:root body .lounge-content :is(.deck-panel,.cards) {padding:14px!important;}
+:root body .lounge-content .shop-gacha-active > .tut {padding:16px!important;}
+:root body .lounge-home-main {padding-inline:max(20px,2vw);}
+:root body .lounge-shell.is-menu-open .lounge-rail-bottom {padding:16px;}
+:root body .gacha-cinematic-result {padding:20px;max-width:760px;margin-inline:auto;}
+/* One quiet surface: internal sections use separators rather than another frame. */
+:root body .lounge-content :is(.tut-head,.cards-head,.deck-head,.lb-head,.tut-body,.tut-sec),
+:root body .rule-notebook .tut-sec {
+  background:transparent!important;box-shadow:none;outline:none;
+}
+:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic),.zoom-details,.card-reference-preview) {
+  --paper:var(--lore-text);--paper-dim:var(--lore-muted);--paper-faint:#9db3c4;
+  --brass:var(--lore-accent);--brass-hi:#dcecf6;--line:var(--lore-line);
+}
+/* Controls keep existing dimensions, handlers, disabled and selected states. */
+:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) .btn,
+:root body :is(.tutorial-game-button,.tutorial-icon-button) {
+  border-radius:1px;box-shadow:none;text-shadow:none;
+  border-color:#b4c5d279;background:#10243d66;color:var(--lore-text);
+}
+:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) :is(.btn-gold,.btn-primary),
+:root body .tutorial-primary {
+  background:var(--lore-action);color:var(--lore-text);border-color:#b4c5d279;box-shadow:none;
+}
+:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) .btn-danger {
+  background:#512a3a;color:#ffe7ed;border-color:#d39caa;
+}
+:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) :is(.input,input:not([type=range]):not([type=checkbox]),select,textarea) {
+  border-radius:1px;border-color:#a8c1d65c;background:var(--lore-field);color:var(--lore-text);
+}
+:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) :is(button,input,textarea,select):focus-visible {
+  outline:2px solid #c4e5ff;outline-offset:2px;
+}
+:root body :is(.lounge-content,.overlay > .modal,dialog:not(.gacha-cinematic)) .btn:hover:not(:disabled) {filter:brightness(1.12);}
+:root body .overlay > .modal:not(.outcome-result) > :is(h2,.support-dialog-heading,.popup-heading) {
+  background:#172d4666;border-bottom-color:var(--lore-line);
+}
+:root body .rule-notebook :is(h2,h3,p,li,.note-number,.notebook-empty),
+:root body .graphics-notice :is(h1,h2,p),
+:root body .tutorial-basics :is(h2,.basics-body) {color:var(--lore-text);}
+:root body .rule-notebook :is(header,.notebook-search,.notebook-body) {background:transparent;}
+:root body .lounge-home .lounge-mode-tabs {border-color:#a8c1d64d;background:#10243d55;}
+:root body .lounge-home .lounge-mode-tabs button[aria-pressed=true] {border-bottom-color:var(--lore-accent);}
+:root body .lounge-home .lounge-active-deck {border-color:#a8c1d64d;background:#10243d55;}
+@media(max-width:650px) {
+  :root {--lore-frame-width:30px;--lore-corner-cut:15px;}
+  :root body .lounge-content :is(.deck-panel,.cards) {padding:10px!important;}
+  :root body .lounge-content .shop-gacha-active > .tut {padding:12px!important;}
+}
+
+/* Small informational panels retain the same edge at a quieter scale. */
+:root body :is(.lounge-home #dailyReward,.treasure-notice,.cant-to,.toast,.duel-spirit-panel) {
+  --lore-frame-width:24px;--lore-corner-cut:12px;
+}
+:root body .lounge-home #dailyReward {padding:14px 16px;}
+:root body .lounge-home #dailyReward :is(.dq-insignia,.dq-reward) {color:var(--lore-accent);}
+:root body .lounge-home .home-sound {background:#14243ded;border-color:#b4c5d279;box-shadow:none;}
+:root body :is(.gacha-draw,.gacha-dialog footer button,.gift-footer button) {
+  background:var(--lore-action);border:1px solid #b4c5d279;border-radius:1px;
+  color:var(--lore-text);box-shadow:none;text-shadow:none;
+}
+:root body .gacha-purchase {border-top-color:#b9c6d250;}
+:root body .lounge-tutorial .academy .academy-content {padding:22px 28px 32px;}
+:root body .academy :is(.academy-notebook,.academy-lesson-start) {
+  background:#20384f;border:1px solid #a8c1d65c;border-radius:1px;box-shadow:none;color:var(--lore-text);
+}
+:root body .academy :is(.academy-hero,.academy-progress,.academy-controls) .btn {
+  background:var(--lore-action);color:var(--lore-text);border:1px solid #b4c5d279;box-shadow:none;
+}
+@media(max-width:650px){:root body .lounge-tutorial .academy .academy-content{padding:18px 16px 24px;}}
+:root body .rule-notebook :is(a,.menu-eyebrow) {color:var(--lore-muted);}
+:root body .rule-notebook :is(b,button) {color:var(--lore-text);}
+:root body :is(.lounge-content,dialog) input::placeholder {color:#91aabe;}
+:root body .overlay > .modal:not(.outcome-result) :is(.btn-gold,.btn-primary) {
+  background:var(--lore-action);border-color:#b4c5d279;color:var(--lore-text);box-shadow:none;
+}
