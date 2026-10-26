@@ -2,7 +2,7 @@
 
 2026-10-26。ユーザー指定「召喚中のモンスターは拡大手札より奥に表示する」を適用。
 
-最新採用実装 `b41f6118` を土台に、`client/src/ui/boardView.ts` と `client/src/styles/reading-board.css` を修正。元のDesktop作業フォルダは未確定変更があるため変更していない。修正コミットは `d2e430ef`、検証の追加は `2c0f9cac`。
+最新採用実装 `d74077f2` を土台に、`client/src/ui/boardView.ts` と `client/src/styles/reading-board.css` を修正。元のDesktop作業フォルダは未確定変更があるため変更していない。修正コミットは `8edc8f06`、検証の追加は `5c49467f`。
 
 ## 修正
 
