@@ -26,7 +26,10 @@ try{
  for(const name of ['MatchmakerFresh20261027','GameRoomFresh20261027']){assert(config.includes('class_name = "'+name+'"'));assert(entry.includes(name));}
  assert.match(config,/tag\s*=\s*"v5-production-retire-20261027"\s+deleted_classes\s*=\s*\["MatchmakerLive", "GameRoomLive"\]/);
  assert(!/\b(MatchmakerLive|GameRoomLive)\b/.test(entry),'Retired classes must no longer be exported');
- const deployed=status();assert.equal(deployed.annotations?.['workers/message'],sha+' guarded release');assert.equal(deployed.versions.length,1);assert.equal(deployed.versions[0].percentage,100);
+ // Deployment summaries truncate annotations; version metadata retains the complete source stamp.
+ const deployed=status();assert.equal(deployed.versions.length,1);assert.equal(deployed.versions[0].percentage,100);
+ const version=cli(['versions','view',deployed.versions[0].version_id,'-c','server/wrangler.toml','--json']);
+ assert.equal(version.id,deployed.versions[0].version_id);assert.equal(version.annotations?.['workers/message'],sha+' guarded release');
  const maintenance=async()=>{for(const origin of ['https://yourlore.xyz','https://www.yourlore.xyz','https://admin.yourlore.xyz']){
   const r=await fetch(origin+'/api/auth/me',{cache:'no-store',signal:AbortSignal.timeout(15000)});assert.equal(r.status,503,origin);assert.equal((await r.json()).maintenance,true,origin);
  }};
