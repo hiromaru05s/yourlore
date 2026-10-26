@@ -28,6 +28,10 @@ try{
  await page.waitForTimeout(150);assert.equal(await page.locator('.zone-mon .card-counter').count(),10);assert.equal(await page.locator('.zone-mon .ad-def--durability').count(),4);assert.equal(await page.locator('.zone-st .card-counter').count(),2);assert.equal(await page.locator('.zone-mon .ec-h,.zone-mon .ec-d,.buff-counter').count(),0);
  const ratios=await page.locator('.zone-mon .card-counter[data-counter-index="0"]').evaluateAll(nodes=>nodes.map(n=>{const c=n.closest('.card');return n.getBoundingClientRect().width/Math.max(...[...c.querySelectorAll('.card-cost,.ad-atk,.ad-def')].map(s=>s.getBoundingClientRect().width));}));assert(ratios.every(r=>r>1.2));
  await page.screenshot({path:out+'board-desktop.png'});checks.push('actual GameView, both sides, all field/spell counters, black durability, size ratios');
+ await page.evaluate(()=>counterLiveQA.patch(g=>{g.players[0].enchants[0].cnt=16;}));
+ const guild=page.locator('[data-uid="guild-0"] .card-counter');assert.equal(await guild.getAttribute('data-counter-value'),'16');await page.waitForTimeout(600);assert.equal(await guild.getAttribute('data-counter-position'),'16');
+ await page.screenshot({path:out+'permanent-counters.png'});
+ await page.evaluate(()=>counterLiveQA.patch(g=>{delete g.players[0].enchants[0].cnt;}));await page.waitForTimeout(600);assert.equal(await guild.getAttribute('data-counter-position'),'0');checks.push('permanent Guild +4 uses same slot animation and remains visible at zero');
  await page.evaluate(()=>counterLiveQA.act({type:'play',idx:3}));
  assert.equal(await page.evaluate(()=>counterLiveQA.state.players[0].field.find(m=>m.id==='CASTLE').gcount),8);
  const castle=page.locator('[data-uid="castle-0"] .card-counter');assert.equal(await castle.getAttribute('data-counter-value'),'8');await page.waitForTimeout(150);await page.screenshot({path:out+'castle-gain-moving.png'});await page.waitForTimeout(450);assert.equal(await castle.getAttribute('data-counter-position'),'8');
