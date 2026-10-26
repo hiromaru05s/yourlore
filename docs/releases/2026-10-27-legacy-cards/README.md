@@ -25,14 +25,14 @@
 
 ## 実装と検証
 
-実装 `746d4b0c`（元実装を最新採用main `c6abd89e` に統合）。`client/src/shared/legacyCardRework.ts`、`engine.ts`、`cardEffectText.ts`、カード参照・用語情報を更新。バランス表示v68。ブレード・ヘアの破壊時ダメージをチュートリアルの結果説明に反映。
+実装 `2678619c`（最新採用main `e717a8e4` に統合。初回表示確認は `c6abd89e` を土台に実施）。`client/src/shared/legacyCardRework.ts`、`engine.ts`、`cardEffectText.ts`、カード参照・用語情報を更新。バランス表示v68。ブレード・ヘアの破壊時ダメージをチュートリアルの結果説明に反映。
 
 - `tests/legacy-card-rework.mjs`: 16シナリオ群。ダイス全目・19/20境界、対象条件、元の呪術師効果との併存、同名コピー、両陣営、卵、気合、回復倍率、選択キューのJSON復元。
 - `tests/legacy-card-rework-server.mjs`: GameRoomの実処理。雫の移動、呪い生成、複数休憩場、誤所有者・無効対象の拒否、休止復元、両クライアントの一致。
 - 型チェック、三言語381枚×3のテキスト監査、1143詳細表示と参照リンク、36チュートリアル・66場面、対象選択18シナリオとカタログ26件の互換性を確認。
 - `tests/legacy-card-rework-browser.mjs`: 実Appのカード一覧・詳細で19枚を1280px/390px検証。`browser-local/report.json`。長い上級呪術師の追加効果までスクロール到達できることを確認。
 - `tests/legacy-card-rework-worker-browser.mjs`: ビルド済みの実BOT WorkerでHard/Hellの休憩場対象選択と除印師下の呪い回復を確認。`worker-local/production-bot-worker.json`（検証先はローカル）。
-- 全体スイート初回は230/235。旧仕様を期待した5件は修正し、該当するカード説明・参照、チュートリアル、対象確認UIのテストを個別再実行して通過。最終の統合スイートは本番デプロイガードで再実行する。
+- 最新mainとの統合後、本番デプロイガードで全体スイート237/237が通過。`release-suite.json`。旧仕様を期待したチュートリアル・対象確認UIの期待値も、新仕様と実説明に合わせて更新。
 
 表示の参照元は最新mainの `client/src/ui/cardView.ts`、`cardInspection.ts`、`cardFrame.ts`、既存カードアート。新規アート・VFX・UIデザインの変更はなし。プレビュー起動元は `/Users/hiromaru05s/.codex/worktrees/legacy-card-rework/LORE_TCG`、`http://127.0.0.1:5334`。
 
@@ -40,4 +40,12 @@
 
 ## 公開
 
-本番デプロイの結果は完了後に追記する。
+2026-10-27 00:25 JST/KST、本番 https://yourlore.xyz へ公開完了。共有デプロイガードによる統合リリースを確認。
+
+- ソース: `c6fdc343799c67abd5dce3cc2ed2c81dd0304112`（v68）。
+- Worker: `9b93c38f-fa5a-4dee-affc-cb474f3877ab`、100%。`production-deployment.json` でソース注記・配信率を確認。
+- 本番のエントリ、カードルール、BOT Workerの3バンドルがローカルビルドとSHA-256一致。`production-assets.json`。
+- 本番で19枚を1280px/390px表示、追加効果末尾へのスクロールとJSエラーなしを確認。`browser-production/report.json`。
+- 本番配信の実BOT WorkerでHard/Hell×2シナリオが通過。`production-worker/production-bot-worker.json`。
+
+公開後のブラウザー確認もAPIは検証データを使用。認証付き実PvPや実アカウントの報酬・課金処理は未検証。
