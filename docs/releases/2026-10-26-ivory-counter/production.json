@@ -1,0 +1,33 @@
+{
+  "source": "b2373586558e515ec238ee0a88a0ec5bbfd52569",
+  "deploymentId": "65852d77-d0e1-4612-b7f3-654a17be0863",
+  "version": "01cc277d-d6d2-4333-97c4-e1c183202238",
+  "percentage": 100,
+  "verifiedAt": "2026-10-26T09:19:07.943646+00:00",
+  "origin": "https://yourlore.xyz",
+  "files": [
+    {
+      "url": "/index.html",
+      "sha256": "bb9322cde0e56b28d58efb3371ee69aa50a7e27a4a5c71254798ccbf785e6db0",
+      "bytes": 21253,
+      "status": 200,
+      "matched": true
+    },
+    {
+      "url": "/assets/social-UVb0WUSB.js",
+      "sha256": "7e225857b7186aef2f2fcf2a61cfe53bf151a6591b85d276df37acfd90971fa6",
+      "bytes": 1034581,
+      "status": 200,
+      "matched": true
+    },
+    {
+      "url": "/assets/social-DOSqITUz.css",
+      "sha256": "13d612fa6e16a7c1ef6be6c16200e843f6803c35198fecccc2a02b616d5dee45",
+      "bytes": 266892,
+      "status": 200,
+      "matched": true
+    }
+  ],
+  "productionSuite": "222/222 passed",
+  "scope": "Public production asset verification. Authenticated online match not performed."
+}

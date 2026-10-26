@@ -28,6 +28,8 @@ import { initCardTilt } from "./ui/tilt";
 import "./styles/popupSilver.css";
 import "./styles/defaultUI.css";
 import "./styles/defaultButtons.css";
+import "./styles/deckLayout.css";
+import "./styles/deckActions.css";
 
 /** Capture acquisition params (invite ref + UTM) before any navigation strips them. */
 function captureAcquisition(): void {

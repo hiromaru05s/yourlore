@@ -1,0 +1,76 @@
+/* Three explicitly requested deck-only exceptions to the shared button system.
+   Keep these overrides local; all other controls use defaultButtons.css. */
+:root body .lounge-deck .deck-screen button.deck-action {
+ border-image:none!important;text-decoration:none!important;text-shadow:none!important;
+ color:#e7f4ff!important;filter:none!important;clip-path:none!important;
+ transition:box-shadow 140ms ease,transform 140ms ease;
+}
+:root body .lounge-deck .deck-screen button.card-action {
+ display:grid;place-items:center;padding:0;
+ width:28px;height:28px;border-radius:50%!important;
+ border:1px solid #a4c1cd!important;
+ background:linear-gradient(155deg,#365c72,#132e44 58%,#0a1c2f)!important;
+ box-shadow:0 2px 4px #020c18a8,inset 0 0 0 2px #0c2035,inset 0 3px 5px #9dd5ec30!important;
+}
+.deck-action.card-action svg{display:block;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+:root body .lounge-deck .deck-screen button.card-action[data-action=remove] {
+ width:30px;height:24px;right:calc(50% - 15px);bottom:-9px;
+ border-radius:9px!important;border-color:#899ba9!important;
+ background:linear-gradient(#263b4c,#101d2d)!important;
+ box-shadow:0 2px 4px #020c18a8,inset 0 1px #d9e6ee29,inset 0 -2px #020e1d!important;
+}
+:root body .lounge-deck .deck-screen button.card-action:hover:not(:disabled) {
+ background:linear-gradient(155deg,#4a748a,#25485d 60%,#132b40)!important;
+ border-color:#e0f3ff!important;box-shadow:0 3px 6px #020c18a8,inset 0 0 0 2px #163349!important;
+ transform:translateY(-1px);
+}
+:root body .lounge-deck .deck-screen button.card-action:active:not(:disabled) {
+ background:#10283b!important;box-shadow:inset 0 2px 4px #0009!important;transform:translateY(1px);
+}
+/* A single blue face with a restrained silver rim and an inset confirmation seal. */
+:root body .lounge-deck .deck-screen button.confirm {
+ position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;gap:10px;
+ height:34px;min-width:154px;padding:0 17px 0 10px;
+ background:#18354b!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+ clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 9px,100% calc(100% - 9px),calc(100% - 9px) 100%,9px 100%,0 calc(100% - 9px),0 9px)!important;
+ font-size:11px;font-weight:500;letter-spacing:.08em;
+}
+:root body .lounge-deck .deck-screen .editor-actions .confirm::before,:root body .lounge-deck .deck-screen .editor-actions .confirm::after {
+ content:''!important;position:absolute;pointer-events:none;z-index:0;width:auto;height:auto;transform:none;
+ clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 9px,100% calc(100% - 9px),calc(100% - 9px) 100%,9px 100%,0 calc(100% - 9px),0 9px);
+}
+.lounge-deck .editor-actions .confirm::before{inset:0;background:linear-gradient(115deg,#adc5cf,#647e94 45%,#a9bfca 70%,#48657b)}
+.lounge-deck .editor-actions .confirm::after{inset:1px;background:linear-gradient(110deg,#142b40,#31546b 50%,#1c354d);box-shadow:inset 0 1px #deefff26,inset 0 -3px #081b3070}
+.lounge-deck .editor-actions .confirm .confirm-label{position:relative;z-index:1;font:inherit;margin:0;white-space:nowrap}
+.confirm-seal{position:relative;z-index:1;width:24px;height:24px;flex:none;overflow:visible;pointer-events:none}
+.confirm-seal .seal-edge{fill:#0c2039;stroke:#a2bdcd;stroke-width:.8}
+.confirm-seal .seal-check{fill:none;stroke:#d9f1ff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.lounge-deck .editor-actions .confirm.dirty::before{background:linear-gradient(110deg,#d8f2ff,#7aaec9 45%,#d8f2ff)}
+.lounge-deck .editor-actions .confirm.dirty .seal-edge{fill:#264c65;stroke:#d4ecfa}
+.lounge-deck .editor-actions .confirm:hover:not(:disabled)::after{background:linear-gradient(110deg,#1b3b52,#416e86 50%,#284e65)}
+:root body .lounge-deck .deck-screen button.confirm:active:not(:disabled){transform:translateY(1px)}
+.lounge-deck .editor-actions .confirm:active:not(:disabled)::after{background:linear-gradient(110deg,#0d2133,#223f55);box-shadow:inset 0 2px 5px #0007}
+:root body .lounge-deck .deck-screen button.deck-action:disabled {
+ color:#91a1af!important;opacity:.48!important;filter:saturate(.25)!important;cursor:not-allowed!important;transform:none;
+}
+:root body .lounge-deck .deck-screen button.deck-action:focus-visible{outline:2px solid #d5efff!important;outline-offset:3px!important}
+@media(max-width:760px){
+ :root body .lounge-deck .deck-screen button.confirm{min-width:0;height:29px;gap:4px;padding:0 7px 0 5px;font-size:8px;letter-spacing:0}
+ .confirm-seal{position:relative;z-index:1;width:18px;height:18px}
+ :root body .lounge-deck .deck-screen button.card-action{width:29px;height:29px}
+ :root body .lounge-deck .deck-screen button.card-action[data-action=remove]{width:30px;height:25px}
+}
+@media(prefers-reduced-motion:reduce){:root body .lounge-deck .deck-screen button.deck-action{transition:none}}
+
+/* The face stays opaque in every press frame. Only its light changes. */
+.lounge-deck .editor-actions .confirm.ready::after{animation:deck-confirm-breathe 2.8s ease-in-out infinite}
+@keyframes deck-confirm-breathe{
+ 0%,100%{filter:brightness(1);box-shadow:inset 0 1px #deefff26,inset 0 -3px #081b3070}
+ 50%{filter:brightness(1.3);box-shadow:inset 0 1px #e2f6ffa8,inset 0 0 14px #a4ddff35}
+}
+.lounge-deck .editor-actions .confirm:is(:hover,:active)::after{animation:none}
+.lounge-deck .idle-paused .confirm.ready::after{animation-play-state:paused}
+.lounge-deck #deckPool .deck-owned{bottom:26px}
+:root body .lounge-deck .deck-screen button.confirm:focus-visible::before{background:#ecfaff}
+@media(max-width:760px){.lounge-deck #deckPool .deck-owned{bottom:25px}}
+@media(prefers-reduced-motion:reduce){.lounge-deck .editor-actions .confirm.ready::after{animation:none;filter:brightness(1.2)}}
