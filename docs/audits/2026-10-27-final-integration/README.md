@@ -47,6 +47,25 @@
 - BOT workerのテストは、制限時間内の結果なら全探索と一致、期限到達なら最後の完了済み合法手を検証する現在の契約へ修正。Worker禁止時の安全な貪欲手も確認。再実行36ケース成功、timeout0。失敗時もworker/timerを閉じる。
 - ビルド済みコードでauth500ms/main2000msの遅延を与え、authがmain取得中に完了、authリクエスト1回、admin chunk未取得を確認。`startup-overlap/report.json`参照。
 
+## 現在の検証結果（2026-10-26 17:44 UTC頃）
+
+- 統合commit `5c6451e5`で243/243 production tests成功。型check・buildも成功。`suite-integrated.json`参照。
+- 本番依存packageのnpm auditは既知の指摘0（この時点のregistry結果。アプリ全体の無欠陥を保証するものではない）。
+- 直接HTTP・5 Mbps・40 ms・1280x900の同条件比較。最適化前は758画像URL/15,776,100 bytes/27,556 ms、最適化後は165画像URL/2,382,082 bytes/5,417 ms。可視40枚の欠落なし。サービスワーカーを無効化した比較で、本番実測値ではない。`gallery-comparison/report.json`参照。
+- built previewの6メニュー往復（1280/700px）成功、page error/HTTP失敗/可視画像欠落なし。`menu-integrated/report.json`参照。
+- 本番`b5295ad0`の匿名ブラウザ起動・API認証境界も確認。これは今回のBE最適化の公開後検証ではなくbaseline。
+- 元checkoutのtracked変更88件をread-only照合。25件はmainと同一、63件は異なり保全。異なる内容には旧版・試作が含まれるため、未採用案の一括mergeはしていない。BEのtracked変更は元checkoutにない。`original-checkout-inventory.json`参照。
+- HOME開始ボタンとロード演出の2セッションは完了、本番反映済み。採用実装と公開記録は取り込み済み。BOT強化セッションは稼働中。
+
+## 継続手順
+
+1. 10分heartbeat `lore-be-db`でBOT `01a13092-ff36-7fa3-8488-52b169b874ea`と新規active LOREチャットを確認。完了済み2チャットの再稼働もlist_threadsで確認する。チャットへメッセージは送らない。
+2. 自分が最後になったらfetch/merge最新gh/main。BOTのDB migration、NPC構築数とHOME説明、失敗時の再試行、BOT負荷とworkerテストを再点検。0028 migration名が衝突した場合は追加索引を別番号に整理する（索引はステージングへ適用済み）。
+3. 元checkoutは変更しない。現在の管理worktree/branchを継続する。最終code検証後、fast-forwardでgh/mainへpushし、guardを使ってstagingへ公開。新しいDB追加migrationがあれば事前にレビューし適用。
+4. `LORE_BACKEND_STAGING_OUT=docs/audits/2026-10-27-final-integration/staging-live.json node scripts/run-staging-audit.mjs`で本物のstaging API/D1/認証WebSocketを検証。runnerが一時accountを作成し、失敗時も削除・残存0確認する。今の時点ではlive QA accountはまだ作っていない。cleanup失敗時だけ表示されるprivate recovery fileでcleanupを再実行する。
+5. 本番の3索引は未適用。最新schema・deployed SHAの祖先関係・activeチャット・shared deploy lockを再確認し、追加migrationを適用後、`npm run deploy`（guard）で公開。guardの迂回や他セッションのlock削除は禁止。
+6. 本番source/version/静的assets/API境界を確認し、`tests/release-readonly-browser.mjs`で匿名実配信を再検証。QA証拠と公開SHAをreportへ記録。本番の実アカウント対戦や実機FPSを確認済みとは扱わない。完了してからheartbeatを停止する。
+
 ## 残作業
 
 他チャットの採用済みmainを統合 → 全suite/型/ビルドを最終commitで検証 → ステージングの追加migration → 認証済みQAアカウントによるAPI/WS/購入/報酬/再接続検証と後片付け → 本番schema/version/ロック再照合 → guardで本番公開 → 静的配信・匿名境界・DB確認 → 監視停止。

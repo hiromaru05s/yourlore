@@ -1,0 +1,365 @@
+{
+  "at": "2026-10-26T17:33:42.922094+00:00",
+  "originalHead": "8d7cdbe02c056b84fe1c0bb86502a72907c6ede3",
+  "adoptedMain": "271d09b66763110686850c46a795d4f7daa52909",
+  "policy": "Read-only inventory. Different content may be old or ongoing; not authorization to merge drafts. Original checkout is preserved.",
+  "counts": {
+    "matches-main": 25,
+    "different-preserved": 63,
+    "not-in-main": 0
+  },
+  "trackedChanges": [
+    {
+      "path": ".gitignore",
+      "status": "different-preserved"
+    },
+    {
+      "path": "AGENTS.md",
+      "status": "different-preserved"
+    },
+    {
+      "path": "README.md",
+      "status": "matches-main"
+    },
+    {
+      "path": "art/.cache/cards.en.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "art/.cache/cards.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "art/.cache/cosmetics.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/dev/animation-review/main.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/dev/cosmeticStudio/board.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/dev/cosmeticStudio/index.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/cosmeticStudio/inspection.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/mimic-family/board.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/dev/mimic-family/catalog.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/dev/mimic-family/ornaments.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/dev/mimic-family/shell.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/dev/mimic-family/style.css",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/dev/series-vfx-a/choreography.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/catalog.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/revision2/board.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/revision2/preview.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/revision3/effect-fixtures.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-b/revision3/transfer-player.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-c/catalog.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-c/revision3/board.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-c/revision3/military.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/revision2/board.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/revision2/studio.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/revision3/endpoints.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/studio.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/series-vfx-d/timeline.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/dev/shelfReturnLab.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/game/controller.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/i18n.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/router.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/screens/deck.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/screens/home.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/screens/lazyGame.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/screens/lobby.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/screens/shop.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/shared/bot.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/shared/cardText.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/shared/cards.en.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/shared/cards.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/shared/cosmetics.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/shared/engine.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/shared/logEn.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/styles/card.css",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/styles/game-overlays.css",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/styles/game.css",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/styles/menuWorkspace.css",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/anim.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/assetReadiness.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/cardArt.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/cardSurface.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/cardView.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/cosmeticPreviewBridge.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/deckAppearance.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/diceScene.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/duelOpeningDirector.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/duelReadiness.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/duelScene.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/duelTable.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/libraryAssets.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/ui/lounge.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/monster/catalogBase.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/ui/monster/renderer.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/monster/rendererBase.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/ui/pileModels.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/ui/readingBoardWidgets.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/riftRecordCount.css",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/riftRecordCount.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/sound.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/spellFrame/runtime.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/stateArtwork.ts",
+      "status": "different-preserved"
+    },
+    {
+      "path": "client/src/ui/summon/renderer.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "client/src/ui/tilt.ts",
+      "status": "matches-main"
+    },
+    {
+      "path": "docs/card-text-rules-2026-08.md",
+      "status": "different-preserved"
+    },
+    {
+      "path": "docs/card-text-style.md",
+      "status": "different-preserved"
+    },
+    {
+      "path": "docs/menu-design-insights.md",
+      "status": "different-preserved"
+    },
+    {
+      "path": "docs/world-bible.md",
+      "status": "different-preserved"
+    },
+    {
+      "path": "ml/README.md",
+      "status": "matches-main"
+    },
+    {
+      "path": "scripts/card-art-lib.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "scripts/check-card-text.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "tests/deck-hand-editor.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "tests/duel-ui.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "tests/health-cosmetics-v53.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "tests/menu-selected.mjs",
+      "status": "different-preserved"
+    },
+    {
+      "path": "tests/production-suite.json",
+      "status": "different-preserved"
+    },
+    {
+      "path": "tests/spell-frame.mjs",
+      "status": "different-preserved"
+    }
+  ]
+}

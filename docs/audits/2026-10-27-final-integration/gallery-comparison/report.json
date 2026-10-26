@@ -1,0 +1,43 @@
+{
+  "reference": "b5295ad0",
+  "changedModules": [
+    "assetHints",
+    "assetReadiness",
+    "cardView"
+  ],
+  "conditions": {
+    "viewport": "1280x900",
+    "bandwidthMbps": 5,
+    "latencyMs": 40,
+    "cache": "fresh context per case; service workers blocked to measure direct HTTP",
+    "api": "fixture",
+    "code": "Same current worktree; only three gallery admission modules substituted for baseline",
+    "cpu": "unthrottled shared host"
+  },
+  "samples": [
+    {
+      "label": "before",
+      "origin": "http://127.0.0.1:5489",
+      "readyMs": 27556,
+      "total": 381,
+      "lazy": 0,
+      "visible": 40,
+      "broken": [],
+      "cardRequests": 758,
+      "uniqueCardUrls": 758,
+      "cardTransferBytes": 15776100
+    },
+    {
+      "label": "after",
+      "origin": "http://127.0.0.1:5488",
+      "readyMs": 5417,
+      "total": 381,
+      "lazy": 336,
+      "visible": 40,
+      "broken": [],
+      "cardRequests": 165,
+      "uniqueCardUrls": 165,
+      "cardTransferBytes": 2382082
+    }
+  ]
+}
