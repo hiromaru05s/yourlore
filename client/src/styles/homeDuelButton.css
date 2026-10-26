@@ -74,5 +74,5 @@
 @media (prefers-reduced-motion:reduce) {
   :root body .lounge-shell.selected-menu.lounge-home #ranked.home-duel-button,
   :root body .lounge-shell.selected-menu.lounge-home #ranked.home-duel-button>.home-duel-frame { transition: none; }
-  :root body .lounge-shell.selected-menu.lounge-home #ranked.home-duel-button:is(:hover,:focus-visible,:active) { transform: none; }
+  :root body .lounge-shell.selected-menu.lounge-home #ranked.home-duel-button:is(:hover,:focus-visible,:active) { transform: none !important; }
 }
