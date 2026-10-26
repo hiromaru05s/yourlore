@@ -1,0 +1,63 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-10-26T17:26:36.036Z",
+  "authentication": "anonymous fresh browser",
+  "samples": [
+    {
+      "cache": "cold",
+      "readyMs": 1738,
+      "requests": 27,
+      "bytes": 1958649,
+      "scripts": [
+        "https://yourlore.xyz/assets/main-CLJgFanD.js",
+        "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+        "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+        "https://yourlore.xyz/assets/main-DEJ_4aCv.js",
+        "https://yourlore.xyz/assets/social-4b0swKm-.js",
+        "https://yourlore.xyz/assets/assetQueue-cBNsDc1d.js",
+        "https://yourlore.xyz/assets/rankPresentation-TMr7vNf-.js",
+        "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js"
+      ],
+      "tbt": 0,
+      "broken": []
+    },
+    {
+      "cache": "warm",
+      "readyMs": 827,
+      "requests": 26,
+      "bytes": 3398451,
+      "scripts": [
+        "https://yourlore.xyz/assets/main-CLJgFanD.js",
+        "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+        "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+        "https://yourlore.xyz/assets/main-DEJ_4aCv.js",
+        "https://yourlore.xyz/assets/social-4b0swKm-.js",
+        "https://yourlore.xyz/assets/assetQueue-cBNsDc1d.js",
+        "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+        "https://yourlore.xyz/assets/rankPresentation-TMr7vNf-.js"
+      ],
+      "tbt": 0,
+      "broken": []
+    }
+  ],
+  "boundaries": [
+    {
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "path": "/api/collection",
+      "status": 401
+    },
+    {
+      "path": "/api/social/profile",
+      "status": 401
+    },
+    {
+      "path": "/ws/queue",
+      "status": 401
+    }
+  ],
+  "errors": [],
+  "failed": []
+}
