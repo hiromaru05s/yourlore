@@ -463,7 +463,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     if (!isEgg) node.appendChild(numericSeal("ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), a));
     if (!isEgg) {
       node.appendChild(numericSeal("ad-def" + (hurt ? " ad-def--hurt" : "") + (String(d).length >= 3 ? " ad-num--3d" : ""), d));
-    } else {
+    } else if (opt.field) {
       const durability=Math.max(0,fm.dur??c.hatchDur??4),seal=numericSeal('ad-def ad-def--durability',durability);
       const lang=getLang();seal.title=`${lang==='ja'?'耐久':lang==='en'?'Durability':'내구'} ${durability}`;
       seal.setAttribute('role','img');seal.setAttribute('aria-label',seal.title);node.append(seal);

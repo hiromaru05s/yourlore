@@ -14,6 +14,7 @@ let sequence=0,raf=0,listening=false;
 const count=(n:number)=>Number.isFinite(n)?Math.max(0,Math.floor(n)):0;
 export function counterPosition(from:number,to:number,progress:number){const p=Math.max(0,Math.min(1,progress));return from+(to-from)*p*p*(3-2*p);}
 export function fieldCounters(card:CardInst,onField=false):CounterValue[]{
+ if(!onField)return [];
  const m=card as FieldMon,result:CounterValue[]=[];
  if(card.hatchTurns!=null)result.push({kind:'hatch',value:count(m.hatch??card.hatchTurns)});
  if((m.guts??0)>0||(m.guts!=null&&((card.passive??[]).includes('guts')||m.passivesG?.includes('guts')||m.conditionalPassives?.includes('guts'))))result.push({kind:'guts',value:count(m.guts??0)});

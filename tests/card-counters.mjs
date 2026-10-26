@@ -31,6 +31,13 @@ try{
  reduced=true;data={...data,guts:8};render();assert.equal(pos('guts'),8);reduced=false;
  data={...data,guts:4};render();step(100);Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new dom.window.Event('visibilitychange'));assert.equal(pos('guts'),4);Object.defineProperty(document,'hidden',{configurable:true,value:false});
  for(const id of ['DRAGON_EGG','BEAST_EGG']){const egg=cardEl({...DB[id],uid:id,hatch:4,dur:2},{field:true});assert.equal(egg.querySelector('[data-counter-kind="hatch"]').dataset.counterValue,'4');assert.equal(egg.querySelector('.ad-def--durability .seal-value').textContent,'2');assert(!egg.querySelector('.ad-atk'));assert(!egg.querySelector('.ec-h,.ec-d'));}
+ for(const id of ['DRAGON_EGG','BEAST_EGG']){
+  for(const data of [{...DB[id],uid:id},{...DB[id],uid:id,hatch:3,dur:2}]){
+   for(const opt of [{size:'mkt'},{size:'hand'},{fullArt:true}]){const card=cardEl(data,opt);assert.equal(card.querySelectorAll('.card-counter').length,0,'egg counter appears only on the field');assert.equal(card.querySelectorAll('.ad-def--durability').length,0,'durability counter is field-only too');}
+   assert.deepEqual(fieldCounters(data,false),[]);
+  }
+ }
+ assert.deepEqual(fieldCounters({...DB.CASTLE,uid:'non-field',gcount:8,guts:2,decayCnt:1},false),[],'off-field cards do not carry live counters');
  assert(!fieldCounters({...DB.M4,uid:'silenced',guts:0,passive:[],passivesG:[]},true).some(c=>c.kind==='guts'),'silenced cards do not acquire a false zero Guts resource');
  assert.deepEqual(fieldCounters({...DB.CASTLE,uid:'castle',gcount:6},true),[{kind:'charge',value:6}]);assert(fieldCounters({...DB.GUILD_HALL,uid:'guild'},true).some(c=>c.kind==='charge'&&c.value===0));
  for(const lang of ['ja','en','ko']){setLang(lang);assert(createCardCounter('private-uid','private-card','decay',2).getAttribute('aria-label').includes('2/3'));}
