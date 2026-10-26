@@ -297,8 +297,8 @@ export function playCost(c: CardInst, p?: PlayerState): number {
   let base = c.play ?? c.cost;
   if (p && c.id === 'FIRE_METEOR' && p.expansion?.firePlayed.some(id => id !== c.id)) base = 1;
   if (p && isFire(c)) base = Math.max(0, base - (p.expansion?.fireDiscount ?? 0) - 2 * p.field.filter(m => m.id === 'FIRE_MASTER').length);
-  // 대현자(v36 sageDiscount): 덱 구성에 마법이 13장 이상이면 마법 시전 코스트 -1
-  if (p && c.t === "spell" && p.field.some((m) => m.aura === "sageDiscount") && deckComp(p).filter((x) => x.t === "spell").length >= 13) base = Math.max(0, base - 1);
+  // Sage cannot make a positive-cost spell free; existing zero costs stay zero.
+  if (p && c.t === "spell" && base > 0 && p.field.some((m) => m.aura === "sageDiscount") && deckComp(p).filter((x) => x.t === "spell").length >= 13) base = Math.max(1, base - 1);
   if (p && c.t === "spell") base = Math.max(0, base - (p.spellDiscountCharges?.length ?? p.spellDiscountTurn ?? 0));
   return base * (p?.manaCostMult ?? 1); // 마족 4종: 소모 마나 3배
 }
@@ -1737,6 +1737,17 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (attackEvent) ctx.ev.splice(ctx.ev.indexOf(attackEvent),1);
     offerEffectChoice(g,ctx,o,'WORLD_TREE_DEFEND','雫1で被攻撃モンスターの体力+3（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
+  }
+  // Charge once after any World Tree continuations, before evasion or traps.
+  // Choosing/cancelling a target does not enter this committed attack path.
+  if (att.attackFx === 'goblinDirect' && targetUid !== null && o.field.some(m => m.uid === targetUid)) {
+    monsterActivation(g, ctx.ev, p, att, attackEvent ? ctx.ev.indexOf(attackEvent) : ctx.ev.length);
+    ctx.dealDamage(p, 1, cn(att), cn(att), side(g, p));
+    if (g.over) {
+      att.attacksUsed = (att.attacksUsed || 0) + 1;
+      if (att.attacksUsed >= (att.mult || 1)) att.exhausted = true;
+      return;
+    }
   }
   // ---- 回避: a defender's 4+ roll cancels the attack ----
   if (targetUid !== null) {

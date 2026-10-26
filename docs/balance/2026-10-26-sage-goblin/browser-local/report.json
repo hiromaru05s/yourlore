@@ -1,0 +1,45 @@
+{
+  "base": "http://127.0.0.1:5321",
+  "scope": "shipped static assets, actual App/menu/card renderer; isolated API fixtures; no authenticated account or online duel",
+  "checks": [
+    "ゴブリン current effect text on desktop and 390px",
+    "大賢者 current effect text on desktop and 390px",
+    "Both card inspections rendered without JS errors"
+  ],
+  "assets": [
+    {
+      "url": "http://127.0.0.1:5321/art/cards/GOBLIN.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "http://127.0.0.1:5321/art/cards/GOBLIN_RAIDER.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "http://127.0.0.1:5321/art/cards/GOBLIN_SETTLEMENT.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "http://127.0.0.1:5321/art/cards/GOBLIN_LEADER.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "http://127.0.0.1:5321/art/cards/GOBLIN_KING.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "http://127.0.0.1:5321/art/cards/NMD6.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    }
+  ],
+  "errors": [],
+  "sourceBaseCommit": "0302f76d19fcad662b9c76dd8134ae44910849f3",
+  "sourceState": "v65 rule changes on the stated base, before commit",
+  "previewRoot": "/Users/hiromaru05s/.codex/worktrees/bot-strength/LORE_TCG"
+}

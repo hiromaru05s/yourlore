@@ -223,6 +223,8 @@
     "tests/rift-ores-server.mjs",
     "tests/balance-caps.mjs",
     "tests/balance-caps-server.mjs",
+    "tests/sage-goblin-balance.mjs",
+    "tests/sage-goblin-server.mjs",
     "tests/card-counters.mjs",
     "tests/deck-drag.mjs",
     "tests/enchant-time-ui.mjs"

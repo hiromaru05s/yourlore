@@ -863,25 +863,29 @@
     },
     "NMD6": {
       "nameJa": "大賢者",
-      "status": "reworded",
+      "status": "rebalanced",
       "changedLocales": [
-        "ja"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "5e981f8079f8d06094ce9d04936049e1f727f16012c9e29ec1eef172bf4943b3",
-      "textSha256": "c157f6b413fb9d9e71aa52cb70e484f21d8e5783f5983d82f4f1a13562992d46",
+      "textSha256": "c4ff0dc37a8205b152e01c758fa4c297c3e1c7d9739a2427fad917a8084d4e1e",
       "hooks": {
         "aura": "sageDiscount"
       },
       "before": {
-        "ja": "【場にいる間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低0）。",
+        "ja": "【場にある間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低0）。",
         "ko": "【필드에 있는 동안】자신의 덱 구성에 마법이 13장 이상이면 자신의 마법 시전 코스트 -1(최저 0).",
         "en": "【While on the Field】If your deck composition contains at least 13 spells, your spells cost 1 less to cast, to a minimum of 0."
       },
       "after": {
-        "ja": "【場にある間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低0）。",
-        "ko": "【필드에 있는 동안】자신의 덱 구성에 마법이 13장 이상이면 자신의 마법 시전 코스트 -1(최저 0).",
-        "en": "【While on the Field】If your deck composition contains at least 13 spells, your spells cost 1 less to cast, to a minimum of 0."
-      }
+        "ja": "【場にある間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低1）。元から発動コスト0の魔法は0のまま。",
+        "ko": "【필드에 있는 동안】자신의 덱 구성에 마법이 13장 이상이면 자신의 마법 시전 코스트 -1(최저 1). 원래 시전 코스트가 0인 마법은 0을 유지한다.",
+        "en": "【While on the Field】If your deck composition contains at least 13 spells, your spells cost 1 less to cast, to a minimum of 1. Spells that already cost 0 to cast remain at 0."
+      },
+      "reviewDate": "2026-10-26",
+      "reviewEvidence": "docs/balance/2026-10-26-sage-goblin/README.md"
     },
     "NGA3": {
       "nameJa": "戦士ゴーレム",
@@ -8218,29 +8222,29 @@
     },
     "GOBLIN": {
       "nameJa": "ゴブリン",
-      "status": "reworked",
+      "status": "rebalanced",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "ad8c3d38ad1872e9b2fd33392edb984d0c55a98b23611f1477fb91b79c62e7d6",
-      "textSha256": "fbb3da095d04fe4ee7c05215e963f8afa16fc0085af707158aec578fe020310f",
+      "textSha256": "16390dd66cc75be6f86cc6c232c9de9ee670ea96c57f596373166bbf8f15609a",
       "hooks": {
         "attackFx": "goblinDirect"
       },
       "before": {
-        "ja": "—",
-        "ko": "—",
-        "en": "—"
-      },
-      "after": {
         "ja": "【攻撃時】相手プレイヤーに直接攻撃した場合、追加で1ダメージを与える。",
         "ko": "【공격 시】상대 플레이어를 직접 공격하면 추가로 1 데미지를 준다.",
         "en": "【On Attack】When this monster directly attacks the opponent, deal 1 additional damage to them."
       },
+      "after": {
+        "ja": "【攻撃時】相手プレイヤーに直接攻撃した場合、追加で1ダメージを与える。相手モンスターを攻撃する場合、自分に1ダメージを与える。",
+        "ko": "【공격 시】상대 플레이어를 직접 공격하면 추가로 1 데미지를 준다. 상대 몬스터를 공격하면 자신에게 1 데미지를 준다.",
+        "en": "【On Attack】When this monster directly attacks the opponent, deal 1 additional damage to them. When it attacks an enemy monster, deal 1 damage to yourself."
+      },
       "reviewDate": "2026-10-26",
-      "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md"
+      "reviewEvidence": "docs/balance/2026-10-26-sage-goblin/README.md"
     },
     "GOBLIN_RAIDER": {
       "nameJa": "特攻ゴブリン",

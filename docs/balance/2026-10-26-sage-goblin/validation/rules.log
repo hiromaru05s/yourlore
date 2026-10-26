@@ -1,0 +1,12 @@
+PASS Sage: 12/13 spell threshold, positive floor, original zero, monsters and no stacking
+PASS Sage no longer allows zero-mana Archive/Foresight; BOT legal actions agree after JSON restore
+PASS Sage plus Grimoire: only five free casts, then a real mana payment
+PASS Sage + Erosion + draw has a finite mana bound without Grimoire
+PASS Goblin target selection, cancellation and invalid targets do not damage the player
+PASS Goblin pays one player damage per committed monster attack, on either side
+PASS Direct attack retains bonus damage, and Raider has no Goblin penalty
+PASS Self damage uses Shield and lethal self damage ends before combat damage
+PASS World Tree attack/defence continuations charge once, including restored state
+PASS Evasion and trap cancellation still pay the committed attack penalty
+PASS Multiple attacks pay each time; repeated exhausted attack does not
+PASS 11 Sage/Goblin scenario groups

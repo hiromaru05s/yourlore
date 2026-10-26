@@ -200,9 +200,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】You may choose 1 card from the shared offer-market history over the last 10 turns, counting both players, including refreshes, and pay mana to buy it."
   },
   "NMD6": {
-    "ja": "【場にある間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低0）。",
-    "ko": "【필드에 있는 동안】자신의 덱 구성에 마법이 13장 이상이면 자신의 마법 시전 코스트 -1(최저 0).",
-    "en": "【While on the Field】If your deck composition contains at least 13 spells, your spells cost 1 less to cast, to a minimum of 0."
+    "ja": "【場にある間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低1）。元から発動コスト0の魔法は0のまま。",
+    "ko": "【필드에 있는 동안】자신의 덱 구성에 마법이 13장 이상이면 자신의 마법 시전 코스트 -1(최저 1). 원래 시전 코스트가 0인 마법은 0을 유지한다.",
+    "en": "【While on the Field】If your deck composition contains at least 13 spells, your spells cost 1 less to cast, to a minimum of 1. Spells that already cost 0 to cast remain at 0."
   },
   "NGA3": {
     "ja": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいれば、このモンスターにカウンター1個を付与する（気合用）。",
