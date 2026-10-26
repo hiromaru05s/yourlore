@@ -1,6 +1,6 @@
 import {homeIcon} from './homeIcons';
 import {GACHA_COSMETICS} from '../shared/cosmetics';
-import {mountRewardGallery,mountRewardStage} from './gachaRewardStage';
+import {mountRewardGallery} from './gachaRewardStage';
 import {loungeText as l} from './loungeText';
 import {openGachaCinematic,prepareGachaCinematic} from './gachaCinematic';
 import {COLLECTIBLE_STARTERS,GACHA_PRICE,type CollectionResult,type CollectionReceipt} from '../shared/collection';
@@ -21,29 +21,48 @@ const rateDetails=()=>`<table><tbody><tr><th>${l('スターター','Starter','�
 export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;credits:number;draw?:(count:number)=>Promise<CollectionResult>}):()=>void {
  const warmTimer=setTimeout(()=>{if(host.isConnected)void prepareGachaCinematic().catch(()=>{});},350);
  let visualCleanups:Array<()=>void>=[],stopSamples=()=>{};
+ let closeConfirmation:(()=>void)|undefined;
  let dead=false,busy=false,balance=options.credits,dialog:HTMLDialogElement|undefined,stopCinematic:(()=>void)|undefined,focus:HTMLElement|null=null;
- const close=()=>{visualCleanups.splice(0).forEach(f=>f());stopCinematic?.();stopCinematic=undefined;dialog?.close();dialog?.remove();dialog=undefined;const restore=focus?.isConnected?focus:focus?.dataset.pull?host.querySelector<HTMLButtonElement>(`[data-pull="${focus.dataset.pull}"]`):null;restore?.focus();};
+ const close=()=>{closeConfirmation?.();visualCleanups.splice(0).forEach(f=>f());stopCinematic?.();stopCinematic=undefined;dialog?.close();dialog?.remove();dialog=undefined;const restore=focus?.isConnected?focus:focus?.dataset.pull?host.querySelector<HTMLButtonElement>(`[data-pull="${focus.dataset.pull}"]`):null;restore?.focus();};
  function show(title:string,body:string,receipts:CollectionReceipt[]=[]){
-  const opener=dialog?.contains(document.activeElement)?focus:document.activeElement as HTMLElement;close();focus=opener;dialog=document.createElement('dialog');dialog.className='gacha-dialog';dialog.setAttribute('aria-labelledby','gacha-dialog-title');
+  const opener=(stopCinematic||dialog?.contains(document.activeElement))?focus:document.activeElement as HTMLElement;close();focus=opener;dialog=document.createElement('dialog');dialog.className='gacha-dialog';dialog.setAttribute('aria-labelledby','gacha-dialog-title');
   dialog.innerHTML=`<header><small>BIBLION / GACHA</small><button data-close aria-label="${l('閉じる','Close','닫기')}">×</button><h2 id="gacha-dialog-title">${title}</h2></header><div class="gacha-dialog-body">${body}</div><footer><button data-close>${l('閉じる','Close','닫기')}</button></footer>`;
   document.body.append(dialog);dialog.querySelectorAll<HTMLButtonElement>('[data-close]').forEach(b=>b.onclick=close);dialog.addEventListener('cancel',e=>{e.preventDefault();close();});dialog.showModal();hydrate(receipts);
  }
  function hydrate(receipts:CollectionReceipt[]){
-  for(const host of dialog?.querySelectorAll<HTMLElement>('[data-receipt]')??[]){const receipt=receipts.find(r=>r.requestId===host.dataset.receipt);if(!receipt)continue;dialog!.classList.add('reward-results-dialog');visualCleanups.push(mountRewardGallery(host,receipt.rewards,index=>{
-   show(l('獲得アイテム','Acquired item','획득 아이템'),`<button class="btn" data-overview>← ${l('結果一覧','All results','결과 목록')}</button><div class="reward-detail-host"></div>`);dialog!.classList.add('reward-results-dialog');visualCleanups.push(mountRewardStage(dialog!.querySelector('.reward-detail-host')!,receipt.rewards,{index}));dialog!.querySelector<HTMLButtonElement>('[data-overview]')!.onclick=()=>showResults(receipt);
-  }));}
+  for(const host of dialog?.querySelectorAll<HTMLElement>('[data-receipt]')??[]){const receipt=receipts.find(r=>r.requestId===host.dataset.receipt);if(!receipt)continue;dialog!.classList.add('reward-results-dialog');visualCleanups.push(mountRewardGallery(host,receipt.rewards));}
  }
- function showResults(receipt:CollectionReceipt){show(l('獲得結果','Draw results','획득 결과'),rewardList(receipt),[receipt]);}
+ function confirmRedraw(count:number){
+  if(dead||busy||closeConfirmation)return;
+  const previous=document.activeElement as HTMLElement|null,confirm=document.createElement('dialog');confirm.className='starter-purchase-dialog gacha-redraw-confirm';confirm.setAttribute('aria-labelledby','gacha-redraw-title');
+  const cost=count*GACHA_PRICE;
+  confirm.innerHTML=`<h2 id="gacha-redraw-title">${l(count===10?'もう一度10連ガチャを引きますか？':'もう一度ガチャを引きますか？',`Draw ${count} again?`,count===10?'10회 뽑기를 다시 하시겠습니까?':'다시 뽑으시겠습니까?')}</h2><p>${l('消費','Cost','소모')} <strong>${cost.toLocaleString()} ${l('シャード','Shards','샤드')}</strong></p><div class="modal-row"><button class="btn btn-ghost" data-redraw-no>NO</button><button class="btn btn-gold" data-redraw-yes ${balance<cost?'disabled':''}>YES</button></div>`;
+  let closed=false;const dismiss=()=>{if(closed)return;closed=true;confirm.close();confirm.remove();closeConfirmation=undefined;if(previous?.isConnected)previous.focus({preventScroll:true});};closeConfirmation=dismiss;
+  confirm.querySelector<HTMLButtonElement>('[data-redraw-no]')!.onclick=dismiss;
+  confirm.querySelector<HTMLButtonElement>('[data-redraw-yes]')!.onclick=()=>{if(closed||busy)return;dismiss();void draw(count);};
+  confirm.addEventListener('cancel',e=>{e.preventDefault();dismiss();});document.body.append(confirm);confirm.showModal();confirm.querySelector<HTMLButtonElement>('[data-redraw-no]')!.focus();
+ }
+ function showResults(receipt:CollectionReceipt){
+  show(l('獲得結果','Draw results','획득 결과'),rewardList(receipt),[receipt]);
+  const count=receipt.rewards.length===10?10:1;
+  dialog!.querySelector('footer')!.innerHTML=`<button class="lore-button-primary" data-redraw="${count}">${l('もう一度引く','Draw again','다시 뽑기')}</button>`;
+  dialog!.querySelector<HTMLButtonElement>('[data-redraw]')!.onclick=()=>confirmRedraw(count);updateControls();
+ }
+ function updateControls(){
+  host.querySelectorAll<HTMLButtonElement>('[data-pull]').forEach(button=>{button.disabled=busy||!options.draw||balance<Number(button.dataset.pull)*GACHA_PRICE;});
+  const status=host.querySelector<HTMLElement>('.gacha-table-status p');if(status)status.textContent=busy?l('抽選結果を確認しています…','Confirming your draw…','추첨 결과를 확인하고 있습니다…'):!options.draw?l('残高を確認しています…','Checking your balance…','잔액을 확인하고 있습니다…'):balance<GACHA_PRICE?l('シャードが不足しています','Not enough Shards','샤드가 부족합니다'):'';
+  const redraw=dialog?.querySelector<HTMLButtonElement>('[data-redraw]');if(redraw){redraw.disabled=busy||!options.draw||balance<Number(redraw.dataset.redraw)*GACHA_PRICE;redraw.title=balance<Number(redraw.dataset.redraw)*GACHA_PRICE?l('シャードが不足しています','Not enough Shards','샤드가 부족합니다'):'';}
+ }
  function rates(){show(l('提供割合','Drop rates','제공 확률'),rateDetails());}
  async function draw(count:number){
-  if(busy||!options.draw)return;void prepareGachaCinematic().catch(()=>{});busy=true;render();
+  if(dead||busy||!options.draw||balance<count*GACHA_PRICE)return;void prepareGachaCinematic().catch(()=>{});busy=true;updateControls();
   try{
    const result=await options.draw(count);if(dead)return;balance=result.credits;
    close();focus=host.querySelector(`[data-pull="${count}"]`);
    const showResult=()=>showResults(result.receipt);
    stopCinematic=openGachaCinematic({count,edition:'ivory',rewards:result.receipt.rewards,onClose:showResult});
   }catch(e){if(!dead)show(l('購入結果を確認してください','Check purchase result','구매 결과를 확인해 주세요'),`<p>${esc((e as Error).message)}</p>`);}
-  finally{busy=false;if(!dead)render();}
+  finally{busy=false;if(!dead)updateControls();}
  }
  function render(){
   stopSamples();

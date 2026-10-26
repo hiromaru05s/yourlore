@@ -1,0 +1,183 @@
+{
+  "origin": "http://127.0.0.1:5193",
+  "checks": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "index": 0,
+      "edge": "bottom",
+      "point": {
+        "x": 403.9083709716797,
+        "y": 338.88958740234375
+      },
+      "changes": 0,
+      "before": {
+        "row": {
+          "x": 339.11236572265625,
+          "y": 142.49363708496094,
+          "width": 124.8670654296875,
+          "height": 190.5769805908203
+        },
+        "button": {
+          "x": 388.5863037109375,
+          "y": 315.1128234863281,
+          "width": 30.644134521484375,
+          "height": 25.776763916015625
+        },
+        "card": {
+          "x": 339.11236572265625,
+          "y": 142.49363708496094,
+          "width": 124.8670654296875,
+          "height": 190.5769805908203
+        }
+      },
+      "after": {
+        "row": {
+          "x": 344,
+          "y": 130,
+          "width": 120,
+          "height": 187.5
+        },
+        "button": {
+          "x": 389,
+          "y": 301.5,
+          "width": 30,
+          "height": 25
+        },
+        "card": {
+          "x": 344,
+          "y": 130,
+          "width": 120,
+          "height": 187.5
+        }
+      },
+      "samples": [
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        },
+        {
+          "hover": true,
+          "rowY": 130,
+          "buttonY": 301.5
+        }
+      ]
+    }
+  ],
+  "errors": [
+    "Cannot read properties of undefined (reading 'filter')"
+  ]
+}

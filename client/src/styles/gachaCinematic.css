@@ -16,3 +16,7 @@
 @media(max-width:600px){.gacha-cinematic>header{left:16px;right:16px}.gacha-cinematic>footer{left:16px;right:16px;flex-direction:column-reverse}.gacha-cinematic-result{bottom:116px}.gacha-cinematic>footer p{font-size:9px}}
 
 .gacha-cinematic>header,.gacha-cinematic>footer{z-index:2}
+
+.gacha-cinematic>footer{right:40px;bottom:max(34px,env(safe-area-inset-bottom))}
+.gacha-cinematic [data-skip]{min-width:152px;min-height:56px;padding:14px 28px;font-size:18px}
+@media(max-width:600px){.gacha-cinematic>footer{left:16px;right:28px;align-items:flex-end}.gacha-cinematic [data-skip]{min-width:142px;min-height:52px}}
