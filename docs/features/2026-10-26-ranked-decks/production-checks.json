@@ -1,0 +1,27 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-10-26T07:51:53.554Z",
+  "season": "2026-10",
+  "publicEntries": 3,
+  "results": [
+    {
+      "rank": 1,
+      "decks": 0
+    },
+    {
+      "rank": 2,
+      "decks": 0
+    },
+    {
+      "rank": 3,
+      "decks": 0
+    }
+  ],
+  "invalidUser": 404,
+  "missingUser": 400,
+  "unsupportedMethod": 405,
+  "cache": "no-store",
+  "browser": true,
+  "errors": [],
+  "boundary": "All ranking/deck API calls and client assets are production. Browser startup identity alone is a local fixture; no authenticated account or real PvP was exercised."
+}
