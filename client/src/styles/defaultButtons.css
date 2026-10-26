@@ -150,6 +150,31 @@
 }
 /* Remove legacy tab separators; each tab now has its own corner marks. */
 :root body .lounge-mode-tabs button+button::before {content:none!important;}
+/* HOME has three equally weighted choices; let each corner frame breathe. */
+:root body .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs {
+  gap:12px!important;
+  border:0;
+  background:none;
+}
+:root body .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button {
+  min-width:0;
+  padding-inline:8px;
+}
+:root body .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button[aria-pressed=true]::after {
+  content:none;
+}
+@media(max-width:400px) {
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs {gap:8px!important;}
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button {font-size:12px;}
+}
+@media(max-width:400px) and (max-height:700px) {
+  :root body .lounge-home:has(#dailyReward) .lounge-mode-tabs {grid-column:1/-1;grid-row:1;}
+  :root body .lounge-home:has(#dailyReward) .mode-reward {grid-column:1;grid-row:2;}
+  :root body .lounge-home:has(#dailyReward) .lounge-play-button {
+    grid-column:2;grid-row:2;width:68px;height:68px;justify-self:end;
+  }
+  :root body .lounge-home:has(#dailyReward) .lounge-rank-info {grid-column:1/-1;grid-row:3;}
+}
 /* Close controls remain icon-sized; text links need room around corner marks. */
 :root body :is(.gacha-links button,.cards-filter-heading button) {padding-inline:12px;}
 :root body :is(.deck-confirm,.challenge-start)::after {content:none!important;}
