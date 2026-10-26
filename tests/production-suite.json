@@ -61,6 +61,7 @@
     "tests/dice-source.mjs",
     "tests/duel-ui.mjs",
     "tests/outcome-finale.mjs",
+    "tests/mana-rupture.mjs",
     "tests/expansion-v50.mjs",
     "tests/dominion-rework.mjs",
     "tests/fate-wheel.mjs",

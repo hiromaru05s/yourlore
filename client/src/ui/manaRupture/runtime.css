@@ -1,0 +1,11 @@
+.portrait[data-mana-ruined] :is(.pt-ring,.pt-vitals,.pt-resources,.pt-name) {
+  visibility: hidden !important;
+}
+.mana-rupture {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  pointer-events: none;
+  overflow: hidden;
+}
+.mana-rupture canvas { width:100%; height:100%; position:absolute; inset:0; }
