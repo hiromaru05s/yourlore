@@ -299,8 +299,21 @@ export function playCost(c: CardInst, p?: PlayerState): number {
   if (p && isFire(c)) base = Math.max(0, base - (p.expansion?.fireDiscount ?? 0) - 2 * p.field.filter(m => m.id === 'FIRE_MASTER').length);
   // 대현자(v36 sageDiscount): 덱 구성에 마법이 13장 이상이면 마법 시전 코스트 -1
   if (p && c.t === "spell" && p.field.some((m) => m.aura === "sageDiscount") && deckComp(p).filter((x) => x.t === "spell").length >= 13) base = Math.max(0, base - 1);
-  if (p && c.t === "spell") base = Math.max(0, base - (p.spellDiscountTurn ?? 0));
+  if (p && c.t === "spell") base = Math.max(0, base - (p.spellDiscountCharges?.length ?? p.spellDiscountTurn ?? 0));
   return base * (p?.manaCostMult ?? 1); // 마족 4종: 소모 마나 3배
+}
+/** Each purchase owns five charges; a zero-cost or negated hand spell also uses one. */
+function grimoireCharges(p: PlayerState): number[] {
+  return p.spellDiscountCharges ?? Array.from({ length: p.spellDiscountTurn ?? 0 }, () => 5);
+}
+function consumeGrimoire(p: PlayerState): void {
+  if (!(p.spellDiscountCharges?.length ?? p.spellDiscountTurn ?? 0)) return;
+  p.spellDiscountCharges = grimoireCharges(p).map(n => n - 1).filter(n => n > 0);
+  p.spellDiscountTurn = p.spellDiscountCharges.length;
+}
+/** Field uniqueness also applies to effect summons and changes of control. */
+function fieldAccepts(p: PlayerState, card: CardDef, leavingUid?: string): boolean {
+  return card.id !== 'GOBLIN_RAIDER' || !p.field.some(m => m.id === card.id && m.uid !== leavingUid);
 }
 function spellCostActivations(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
   if (card.t !== 'spell') return;
@@ -705,8 +718,8 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       let shroomRift = false;
       if (dead.id === 'RUST_SHROOM' && !g.over) {
         monsterActivation(g, ev, owner, dead);
-        const result = diceRoll(g, ev, side(g, owner), {id:dead.id, player:side(g,owner)}, 1, 5);
-        shroomRift = result.rolls[0] >= 5;
+        const result = diceRoll(g, ev, side(g, owner), {id:dead.id, player:side(g,owner)}, 1, 4);
+        shroomRift = result.rolls[0] >= 4;
         if (shroomRift) dealDamage(owner, 3, cn(dead), cn(dead), side(g,owner));
       }
       if (shroomRift || dead.token || hasPassive(dead, "void")) rmz(owner).push(resetInst(dead));
@@ -760,6 +773,7 @@ function reserveTurnSkip(p: PlayerState, source: "TIMEWARP" | "BLACK_NOVA" | "DO
   const count = p.skipTurns ?? 0;
   const sources = (p.skipTurnSources ?? []).slice(0, count);
   while (sources.length < count) sources.push(null);
+  if (source === 'DOMINION' && sources.includes('DOMINION')) return;
   sources.push(source); p.skipTurnSources = sources; p.skipTurns = count + 1;
 }
 function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
@@ -815,6 +829,7 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   p.refreshBlockTurn = !!p.refreshBlockNext; p.refreshBlockNext = false; // 마켓 크래시: 제시 갱신 봉쇄
   p.spellsCastTurn = 0; // 마나 역류: 이번 턴 마법 사용 수
   p.spellDiscountTurn = 0;
+  p.spellDiscountCharges = [];
   p.noDirectTurn = false; // 천궁의 폐문 (방어적 리셋 — endTurn에서도 해제)
   p.noHighAtkTurn = false; // 폐문(v37)
   p.manaPenalty = p.nextPenalty || 0; p.nextPenalty = 0;
@@ -1206,6 +1221,7 @@ function spawnVampire(g: GameState, ctx: Ctx, p: PlayerState, id: string): void 
   if (!DB[id] || !effectSummonAllowed(g, p, DB[id])) { ctx.log("  └ 소환 제한으로 소환 실패", "  └ 召喚制限により召喚できない"); return; }
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: true };
   applyFieldGlobals(g, m);
+  if (m.id === 'GOBLIN_RAIDER') m.expireOpponentOf = side(g, p);
   p.field.push(m);
   if (m.id === 'SOLDIER2') townEvent(g, 'soldier');
   if (m.id === 'CASINO') townEvent(g, 'casino');
@@ -1573,6 +1589,7 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
   }
   p.field.forEach((m) => { m.exhausted = false; m.tempAtk = 0; m.attacksUsed = 0; });
   p.spellDiscountTurn = 0;
+  p.spellDiscountCharges = [];
   p.noDirectTurn = false; // 천궁의 폐문: 턴 종료로 해제
   p.noHighAtkTurn = false; // 폐문(v37): 턴 종료로 해제
   // Turn-end objectives pay out before the next player's turn-start effects.
@@ -1962,7 +1979,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     }
   }
   // 영혼 교환(soulSwap): 자신 필드에 몬스터가 있을 때만 — 공격 몬스터 탈취 + 최저 코스트 몬스터 반납
-  if (o.field.length > 0
+  const swapGive = [...o.field].sort((a, b) => (a.cost ?? 0) - (b.cost ?? 0))[0];
+  if (swapGive && fieldAccepts(p, swapGive, att.uid) && fieldAccepts(o, att, swapGive.uid)
     && o.traps.some((t) => t.card.react === "soulSwap") && (tc = takeTrap(g, ctx, o, "soulSwap"))) {
     const give = [...o.field].sort((a2, b2) => (a2.cost ?? 0) - (b2.cost ?? 0))[0];
     const gi = o.field.findIndex((x) => x.uid === give.uid);
@@ -2182,7 +2200,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     return;
   }
   if ((tc = takeTrap(g, ctx, o, "slaughterRaise"))) { // GT5_3: destroy attacker + val% steal to own field
-    const canRaise = o.field.length < FIELD_MAX;
+    const canRaise = o.field.length < FIELD_MAX && fieldAccepts(o, att);
     if (canRaise && diceChance(g, ctx, o, { id: tc.id, player: side(g, o) }, tc.val || 30)) {
       const i2 = p.field.findIndex((x) => x.uid === att.uid);
       if (i2 >= 0) { const stolen = p.field.splice(i2, 1)[0]; ctx.ev.push({ type: "destroy", player: side(g, p), uid: stolen.uid, id: stolen.id }); stolen.exhausted = true; stolen.attacksUsed = 0; o.field.push(stolen); ctx.ev.push({ type: "summon", player: side(g, o), uid: stolen.uid, id: stolen.id }); }
@@ -3186,6 +3204,7 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck
   m.onSummon = undefined; m.turnFx = undefined; // tokens don't re-trigger summon effects
   if (m.hatchTurns) { m.hatch = m.hatchTurns; m.dur = m.hatchDur ?? 4; } // 덱에서 소환된 알도 카운터 시작
   applyFieldGlobals(g, m);
+  if (m.id === 'GOBLIN_RAIDER') m.expireOpponentOf = side(g, p);
   p.field.push(m);
   if (m.id === 'SOLDIER2') townEvent(g, 'soldier');
   if (m.id === 'CASINO') townEvent(g, 'casino');
@@ -4348,6 +4367,7 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   const m: FieldMon = { ...card, exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
   if (card.hatchTurns) { m.hatch = card.hatchTurns; m.dur = card.hatchDur ?? 4; } // 알: 부화/카운터 시작
   applyFieldGlobals(g, m); // 약화술식/트릭룸 반영
+  if (m.id === 'GOBLIN_RAIDER') m.expireOpponentOf = side(g, p);
   p.field.push(m);
   if (m.id === "SOLDIER2") townEvent(g, "soldier");
   if (m.id === "CASINO") townEvent(g, "casino");
@@ -4509,6 +4529,8 @@ function treeKeeperTrigger(g: GameState, ctx: Ctx, p: PlayerState, card: CardIns
 }
 /** Summon precondition check (암살자 상급/특급). */
 export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): boolean {
+  if (!fieldAccepts(p, card)) return false;
+  if (card.summonReq === 'uniqueRaider') return true;
   if (!card.summonReq) return true;
   if (/^dew\d+$/.test(card.summonReq)) return (p.dew ?? 0) >= Number(card.summonReq.slice(3));
   if (card.summonReq === 'shield20') return (p.previousOpponentShieldPeak ?? 0) >= 20;
@@ -4638,6 +4660,8 @@ export function playBlockReason(g:GameState, who:Side, card:CardInst):{ko:string
     if (p.field.length >= FIELD_MAX) { return reason(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); }
   }
   if(card.t==='spell'){
+    const gameCap = DB[card.id]?.maxUsesPerGame ?? card.maxUsesPerGame;
+    if (gameCap != null && (p.uses[card.id] ?? 0) >= gameCap) return reason(`동명 카드는 플레이어마다 이 게임에서 합계 ${gameCap}회까지 사용할 수 있습니다`, `同名カードは各プレイヤーがこのゲーム中に合計${gameCap}回まで使用できます`);
     if (card.id === 'FARMER_PRAYER') return reason('농민의 효과로만 전개할 수 있습니다', '農民の効果でのみ展開できます');
     if (card.maxUsesPerTurn != null && (p.usesTurn[card.id] ?? 0) >= card.maxUsesPerTurn) {
       return reason(`동명 카드는 자신의 턴마다 합계 ${card.maxUsesPerTurn}회까지 사용할 수 있습니다`, `同名カードは自分の各ターン合計${card.maxUsesPerTurn}回まで使用できます`);
@@ -4726,8 +4750,9 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     spellCostActivations(g, ctx, p, card);
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); p.discard.push(card);
     if (!card.ench && !hasPassive(card,"void")) graveyardArrival(g,ctx,p,card);
-    // Ember Debt counts committed uses, including casts negated by reactions.
-    if (card.id === "FLAME") p.uses.FLAME = (p.uses.FLAME ?? 0) + 1;
+    // Game caps and Ember Debt count committed casts, even when negated.
+    const countBeforeReactions = card.id === "FLAME" || (DB[card.id]?.maxUsesPerGame ?? card.maxUsesPerGame) != null;
+    if (countBeforeReactions) p.uses[card.id] = (p.uses[card.id] ?? 0) + 1;
     // A negated cast still consumes the same-name limit; count before reactions.
     if (card.maxUsesPerTurn != null) p.usesTurn[card.id] = (p.usesTurn[card.id] ?? 0) + 1;
     afterPlay(g, ctx, p, card);
@@ -4736,17 +4761,17 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     treeKeeperTrigger(g, ctx, p, card); // 세계수의 파수꾼: '사용'에 반응 (무효화 여부와 무관)
     tryBrandMagic(g, ctx); // 낙인: 마법 "사용" 자체에 반응 — 무효화 여부와 무관
     tryHexCurseOnSpell(g, ctx); // 상급 주술사(v39): 상대 마법 "사용"마다 상대 묘지에 저주 1장 — 무효화 여부와 무관
-    if (tryNullSpell(g, ctx, card)) { if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; }
-    if (trySpellSteal(g, ctx, card)) { if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; } // 주문 파쇄: 무효 + 복제 강탈
-    if (trySecondNull(g, ctx, card)) { if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; }
-    if (tryAttuneJam(g, ctx, card)) { if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; } // 어튠 무효 장치(v37): 어튠 - 흑/진/마
-    if (tryHexBossNull(g, ctx, card)) { if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; } // 특급 주술사 켈로이드(v39): 주사위 3+면 상대 마법 무효
+    // Resolve cost-sensitive reactions using the paid cost, before spending the final discount charge.
+    const negated = tryNullSpell(g, ctx, card) || trySpellSteal(g, ctx, card)
+      || trySecondNull(g, ctx, card) || tryAttuneJam(g, ctx, card) || tryHexBossNull(g, ctx, card);
+    consumeGrimoire(p);
+    if (negated) { if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; }
     // 공허(void) 마법 토큰(와인/암상인): 사용 후 묘지 대신 게임에서 제외 — 영구마법(선견지명류)은 제외
     if (!card.ench && hasPassive(card, "void")) {
       const vi = p.discard.lastIndexOf(card);
       if (vi >= 0) { p.discard.splice(vi, 1); rmz(p).push(card); }
     }
-    if (card.id !== "FLAME") p.uses[card.id] = (p.uses[card.id] || 0) + 1; // game-long usage count
+    if (!countBeforeReactions) p.uses[card.id] = (p.uses[card.id] || 0) + 1; // game-long usage count
     if (card.maxUsesPerTurn == null) p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;
     if (card.ench) {
       // Cast reactions may append curses (HEXER3) after this card. Move the
@@ -5428,7 +5453,7 @@ function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: strin
 }
 function effectSummonAllowed(g: GameState, p: PlayerState, def: CardDef, leaving = 0): boolean {
   const occupied = p.field.length - leaving;
-  return !g.over && occupied < FIELD_MAX && !spaceLocked(g, p)
+  return !g.over && fieldAccepts(p, def) && occupied < FIELD_MAX && !spaceLocked(g, p)
     && (p.summonLockUntil ?? 0) <= g.turn && (p.summonCap == null || occupied < p.summonCap)
     && !summonBlockedLow(g, p, { ...def, uid: def.id }) && !(p.lowSummonBanTurn && def.cost <= 3)
     && !(castleOf(p) && def.cost >= 5);
@@ -5544,7 +5569,7 @@ function resolveQuick(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
     }
     case 'QUICK_MUSTER': for (let i = 0; i < 3 && !g.over; i++) effectSummon(g, ctx, p, 'SOLDIER2'); break;
     case 'QUICK_ATTUNE': addMaxMana(p, 1); addHealth(ctx, p, 2); break;
-    case 'QUICK_GRIMOIRE': p.spellDiscountTurn = (p.spellDiscountTurn ?? 0) + 1; break;
+    case 'QUICK_GRIMOIRE': p.spellDiscountCharges = [...grimoireCharges(p), 5]; p.spellDiscountTurn = p.spellDiscountCharges.length; break;
     case 'QUICK_POISON': offerEffectChoice(g, ctx, p, card.id, '腐敗カウンターを2個付与する相手モンスターを選択'); break;
     case 'QUICK_REBIRTH': offerEffectChoice(g, ctx, p, card.id, '墓地のモンスターを選択（コスト7以下なら虚無を付与して召喚）'); break;
     case 'QUICK_ASSAULT': offerEffectChoice(g, ctx, p, card.id, '攻撃力を+2する1体目を選択'); break;
@@ -6061,7 +6086,7 @@ function expansionEnd(g: GameState, ctx: Ctx, p: PlayerState): void {
     finish();
   }
   for (const e of [...p.enchants]) if (!g.over && e.card.ench === 'mimicHideout' && p.field.some(m => MIMIC_IDS.has(m.id))) { enchantFx(g, ctx.ev, p, e.card); effectSummon(g, ctx, p, 'MIMIC2'); }
-  for (const pl of g.players) for (const m of [...pl.field]) if (m.expireOpponentOf != null && m.expireOpponentOf !== g.cur) ctx.destroyMonster(pl, m);
+  for (const pl of g.players) for (const m of [...pl.field]) if ((m.expireOpponentOf != null || m.id === 'GOBLIN_RAIDER') && (m.expireOpponentOf ?? side(g, pl)) !== g.cur && (m.id !== 'GOBLIN_RAIDER' || m.summonedTurn < g.turn)) ctx.destroyMonster(pl, m);
   const victim = g.players[1 - g.cur], x = xstate(victim);
   x.lastDirectHits = x.directHitTurn === g.turn ? new Set(x.directHits).size : 0;
   x.lastDirectTurn = g.turn;

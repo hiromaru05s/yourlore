@@ -59,13 +59,16 @@ try {
   test('different samples produce different unknown outcomes',()=>{const g=fresh();g.players[0].deck=[card('SOLDIER2'),card('S1')];assert.notEqual(C.observationSample(g,0,17).rng,C.observationSample(g,0,18).rng);});
   test('search is pure and takes a visible immediate lethal',()=>{for(const diff of ['hard','hell']){const g=fresh();g.players[0].field=[mon('SOLDIER2',6,5)];g.players[1].hp=5;const before=structuredClone(g);const a=C.botDecide(g,diff);assert.equal(a.type,'attack');assert.equal(C.reduce(g,a).state.winner,0);assert.deepEqual(g,before);}});
   test('defender-owned choices use defender perspective',()=>{const g=fresh();g.players[1].field=[mon('WORLD_TREE',4,4)];g.players[1].dew=3;g.pending={kind:'cardChoice',owner:1,reason:'WORLD_TREE_DEFEND',hint:'',hintJa:'',allowCancel:false,data:{targetUid:g.players[1].field[0].uid}};assert.equal(C.actingSide(g),1);assert.equal(C.greedyDecide(g,false).uid,'grow');});
-  const drawLoop=JSON.parse(await readFile('tests/fixtures/bot-draw-loop.json','utf8'));
+  // Preserve the no-resource-change regression under v64: the old Grimoire
+  // fixture now has five consumable charges, so model a genuinely free spell.
+  const unboundedFixture=fixture=>{const p=fixture.g.players[fixture.g.cur];p.spellDiscountTurn=0;delete p.spellDiscountCharges;for(const zone of ['hand','deck','discard'])for(const c of p[zone])if(c.id==='S10')c.play=0;return fixture;};
+  const drawLoop=unboundedFixture(JSON.parse(await readFile('tests/fixtures/bot-draw-loop.json','utf8')));
   test('free self-redraw telemetry loop is not counted as useful progress',()=>{
     const {g,a}=drawLoop;assert.equal(g.players[g.cur].hand[a.idx].id,'S10');
     assert.equal(C.actionChangesState(g,C.reduce(g,a).state),false);
     for(const diff of ['hard','hell'])assert.notDeepEqual(C.botDecide(g,diff),a);
   });
-  const drawOrderLoop=JSON.parse(await readFile('tests/fixtures/bot-draw-order-loop.json','utf8'));
+  const drawOrderLoop=unboundedFixture(JSON.parse(await readFile('tests/fixtures/bot-draw-order-loop.json','utf8')));
   test('hand reorder during free self-redraw is not strategic progress',()=>{
     const {g,a}=drawOrderLoop;assert.equal(C.actionChangesState(g,C.reduce(g,a).state),false);
     for(const diff of ['hard','hell'])assert.notDeepEqual(C.botDecide(g,diff),a);

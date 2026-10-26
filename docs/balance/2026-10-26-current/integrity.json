@@ -1,0 +1,179 @@
+{
+  "sourceCommit": "85e0c1a5c3478a53b231475b7cac52cd1c4f96b7",
+  "rulesRelease": "e97bc14ccd90466cfba0797163df8835dd781231",
+  "balanceVersion": "v62",
+  "analysisDate": "2026-10-26",
+  "coreSha256": "69d1152d7eefefe0d8bf728125d4037c75d3018949436d68751e793f71ab7577",
+  "definitionsSha256": "dc19ce6463a842c7772c53c5c470763857e4d64e225bb90a6c81cc7a0dd41f48",
+  "cards": 378,
+  "selectableStarters": 44,
+  "buyable": 303,
+  "specialAndFixed": 31,
+  "completedGames": 51501,
+  "attemptedGames": 51504,
+  "unfinishedComboCases": 3,
+  "rejectedActions": 0,
+  "ruleChecks": 13,
+  "witnessCases": 7,
+  "deterministicReplays": 21,
+  "files": {
+    "README.md": {
+      "bytes": 14315,
+      "sha256": "d9b3b750804e2bf385033ad3f1222b047e60c867f98ab5e5681bc4a08d05bc25"
+    },
+    "all-ranking.csv": {
+      "bytes": 106396,
+      "sha256": "5cc1e8149c8dde589aa6098b2bdf24be5eb8f7217b780943c66054838d146bef"
+    },
+    "all-ranking.md": {
+      "bytes": 93594,
+      "sha256": "2f5f45787f8ad5c8856cd86a5186eebb92978fad82e19cb4bd490e54690016c2"
+    },
+    "cards.json": {
+      "bytes": 296271,
+      "sha256": "dc19ce6463a842c7772c53c5c470763857e4d64e225bb90a6c81cc7a0dd41f48"
+    },
+    "combo-raw.jsonl.gz": {
+      "bytes": 47491,
+      "sha256": "49f13ac6e5673f6237c1fe6e270a86a9a4460c129e08fb0a1534d5f48d59300e"
+    },
+    "core.cjs.gz": {
+      "bytes": 306318,
+      "sha256": "01ad4d8073bb7ccc6f0a2648f8e2dd8c1b5acf21a81ba925139e4ee93df6a49a"
+    },
+    "counter-raw.jsonl.gz": {
+      "bytes": 17264,
+      "sha256": "c917ea1bd7fc7b9c302a8016cd7de8c63f9d92927e730c9cfa27595f73946e58"
+    },
+    "deck-raw.jsonl.gz": {
+      "bytes": 32672,
+      "sha256": "d217a156898cf697dd92ff53af70f70196c113563e9c9fe5bc0a47353430ae8f"
+    },
+    "harness/analyze.py": {
+      "bytes": 4607,
+      "sha256": "5e496f36e06b81545b35033618eb0b6e460ef498d816d86f7eeb4ca32920ed54"
+    },
+    "harness/check.cjs": {
+      "bytes": 3083,
+      "sha256": "5ada4cc21df7ad22a87265e105fdd1b4aac51807c1261c9a273651d879760155"
+    },
+    "harness/combo.cjs": {
+      "bytes": 3897,
+      "sha256": "a327533925a7226cc023403059a8f2dcab4f34fa66d264e4230884ddd07040e1"
+    },
+    "harness/holdout.cjs": {
+      "bytes": 1161,
+      "sha256": "739db2f7a68ed4e591aa7cb5434e09d12a5064e0402ebd114cac77b9b7655307"
+    },
+    "harness/pairs.cjs": {
+      "bytes": 619,
+      "sha256": "366d6f23e52133d555d165e79fdab3c8d2b3d7ff311366d81900d99435349ce3"
+    },
+    "harness/plan.cjs": {
+      "bytes": 1611,
+      "sha256": "60363d45bfe8c265d2b4608e3888fd702899ba2813227d360c037fab8fb80b17"
+    },
+    "harness/ratings.cjs": {
+      "bytes": 12167,
+      "sha256": "a3717643bc738e6f96522233b6c1196d4914fefe4d577db904201884c2f150dc"
+    },
+    "harness/render.cjs": {
+      "bytes": 8314,
+      "sha256": "bbf06e0c0b8d93827a045d9a41e29889d7fac4613dfc65fd07609dda3e5562ea"
+    },
+    "harness/sim.cjs": {
+      "bytes": 6145,
+      "sha256": "970a1384d99d3003ccdc5e197ee8b5880fc303ef73e5167dfedee3c3ba42a9b3"
+    },
+    "harness/witness.cjs": {
+      "bytes": 5953,
+      "sha256": "b23f955b256bcb22f4e3318dc2403ed9fcbe03df3a81718f94fe040ef945a672"
+    },
+    "holdout-raw.jsonl.gz": {
+      "bytes": 87622,
+      "sha256": "b80257df96826d4d23cb84bf6000e8fd32dc38751afbd3075e3ab418e24a93d8"
+    },
+    "live-check.json": {
+      "bytes": 2518,
+      "sha256": "1ff19f3766066301552c1c8b7ea99d6767a7ff362ea3564bd0a32080ac9e4ce8"
+    },
+    "market-ranking.md": {
+      "bytes": 19038,
+      "sha256": "68112b6f0fcf754f9e0baf087c71b78f12fcb058941b64653cac369854ff8868"
+    },
+    "market-raw.jsonl.gz": {
+      "bytes": 1018556,
+      "sha256": "d6c8e358b0d523320ee2962513a519432057d4da31206c8fddf41e6b77656d03"
+    },
+    "pair-raw.jsonl.gz": {
+      "bytes": 145598,
+      "sha256": "733a38bbd899ae401d4b61825210771d04c40eedcf5e92bd30eff39701fef885"
+    },
+    "plans/counter-plan.json.gz": {
+      "bytes": 4253,
+      "sha256": "cfbdb7809a4d5d04c04eb22cd57e44c4065e1af13384ef2c2e8f5d5a0be5ac19"
+    },
+    "plans/deck-plan.json.gz": {
+      "bytes": 9120,
+      "sha256": "b153658f2247885b2767cee6a3dc53354d894bf1e2dfe5c4e5c288171d2899f5"
+    },
+    "plans/holdout-plan.json.gz": {
+      "bytes": 24040,
+      "sha256": "e756818e1b2782cefac03c37f691a346deb0ca4bf7b688e8c903d70485b84255"
+    },
+    "plans/market-plan.json.gz": {
+      "bytes": 179646,
+      "sha256": "8aed0e387c85b658c9820e3221ef461495ddb017e30f8bb98d35241218300a24"
+    },
+    "plans/pair-plan.json.gz": {
+      "bytes": 58969,
+      "sha256": "33c2959c79af221f4965ee2824d544b62e1bc235cd7ee932c96230c15c243970"
+    },
+    "plans/pure-plan.json.gz": {
+      "bytes": 7648,
+      "sha256": "bf4df2ffa1688654910036452bd2a1d18ba8edfd186f2ec44e831f8de99d6d26"
+    },
+    "plans/starter-plan.json.gz": {
+      "bytes": 48981,
+      "sha256": "600f86daa0344bf20a8f7a4b3f0cfb3083832e4761e5fc193725565828fa3e32"
+    },
+    "plans/thin-plan.json.gz": {
+      "bytes": 2489,
+      "sha256": "acb198b93ca543f64c99864cc1ca568b4a20ed82a90dffc823eefcda92836fb2"
+    },
+    "pure-raw.jsonl.gz": {
+      "bytes": 18272,
+      "sha256": "a1a073c406230a0ff2d105beb074335889bd3e96e5fc9d489cc97490d3b2d32d"
+    },
+    "rankings.json": {
+      "bytes": 381594,
+      "sha256": "934587ebf654accfb8902b13fd27dbed2cfb9cefb66d342721676be0a5d3e073"
+    },
+    "replay-check.json": {
+      "bytes": 101,
+      "sha256": "4bd9a6a43c623494c9faddc24b0154b088459163b03ed383c15caf2a41ba5103"
+    },
+    "results.json": {
+      "bytes": 136279,
+      "sha256": "7508764b63ac332904648b1bb65ce358ea9974ba887a4a8ce6c627e60e7b2176"
+    },
+    "starter-ranking.md": {
+      "bytes": 23470,
+      "sha256": "e163f28d0a60f517320d84273b2e1fec67ed8fea41b90f6a46e0a97f58246abb"
+    },
+    "starter-raw.jsonl.gz": {
+      "bytes": 144288,
+      "sha256": "402f7cc931908edd6814e1ad311638cf245f1cba43dfd68b1ee008b8aa21d690"
+    },
+    "thin-raw.jsonl.gz": {
+      "bytes": 9926,
+      "sha256": "8b08e9f6d9ff3ce7bab60ad6ae6ca84f19ecde3b24b79ad40e072807e025e19e"
+    },
+    "witnesses.json": {
+      "bytes": 40964,
+      "sha256": "f39874e7421fe8d0e262287df9f16676997bed6715a68074451fc1c21f9b83a1"
+    }
+  },
+  "latestMainChecked": "a679258097f2f09f6633e6a62ba7a55e8dd5e3b0",
+  "sharedRulesUnchangedSinceAuditSource": false
+}

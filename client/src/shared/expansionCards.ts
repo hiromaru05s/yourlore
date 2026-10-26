@@ -220,13 +220,14 @@ export const EXPANSION_CARDS: CardDef[] = [
   },
   {
     "id": "DOMINION",
+    "maxUsesPerGame": 3,
     "nameJa": "支配",
     "name": "지배",
     "nameEn": "Dominion",
     "cost": 0,
-    "textJa": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。",
-    "text": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다.",
-    "textEn": "【On Cast】Draw 2 cards. Also, skip the opponent's next turn.",
+    "textJa": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。「支配」による未消化のスキップ予約は1回まで。\n\n【回数制限】各プレイヤーは同名カード合計でこのゲーム中に3回まで使用できる。無効になった使用も回数に含む。",
+    "text": "【발동 시】카드를 2장 뽑는다. 또한, 다음 상대의 턴을 건너뛴다. 지배로 예약한 미소비 턴 스킵은 1회까지.\n\n【횟수 제한】각 플레이어는 같은 이름의 카드 합계로 이 게임에서 3회까지 사용할 수 있다. 무효화된 사용도 횟수에 포함한다.",
+    "textEn": "【On Cast】Draw 2 cards. Also, skip the opponent’s next turn. Only 1 unconsumed turn skip from Dominion may be queued.\n\n【Use Limit】Each player may play cards with this name only 3 times in total this game. Negated plays also count.",
     "t": "spell",
     "act": "expansion",
     "noShop": true

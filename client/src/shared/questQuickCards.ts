@@ -25,7 +25,7 @@ export const QUEST_QUICK_CARDS: CardDef[] = [
   quick('QUICK_SORT', 3, '選別の掟', '自分のリフトにカルが10枚以上ある場合のみ購入可能。相手の場のカード1枚を選び破壊する'),
   quick('QUICK_REBIRTH', 3, '強制輪廻', '自分の墓地にモンスターがある場合のみ購入可能。そのうち1体を選び、コスト7以下なら虚無を付与して自分の場に召喚する'),
   quick('QUICK_ATTUNE', 4, 'アチューン・瞬', '自分の最大マナ+1、体力+2'),
-  quick('QUICK_GRIMOIRE', 2, '呪術魔法書', 'このターン、自分が手札からプレイする魔法カードのコスト-1'),
+  quick('QUICK_GRIMOIRE', 2, '呪術魔法書', 'このターン、次に手札から使う魔法5回のコスト-1'),
   quick('QUICK_ASSAULT', 2, '総攻撃', '自分の場の異なるモンスター2体を選び、このターンのみ攻撃力+2'),
 ];
 
@@ -48,7 +48,7 @@ const LOCALIZED: Record<string, [string, string, string, string]> = {
   QUICK_SORT: ['선별의 법칙', '【구매시】자신 리프트에 컬 10장 이상일 때만 구매 가능. 상대 필드 카드 1장 선택 파괴.', 'Law of Selection', 'On purchase: Buy only with at least 10 Culls in your Rift. Destroy 1 chosen enemy field card.'],
   QUICK_REBIRTH: ['강제 윤회', '【구매시】자신 묘지에 몬스터가 있어야 구매 가능. 1체 선택, 코스트 7 이하면 공허를 부여해 자신 필드에 소환.', 'Forced Rebirth', 'On purchase: Needs a graveyard monster. Choose 1; if cost ≤7, summon it to your field with Void.'],
   QUICK_ATTUNE: ['어튠 - 순', '【구매시】자신 최대 마나 +1, 체력 +2.', 'Attune - Flash', 'On purchase: Your max mana +1 and HP +2.'],
-  QUICK_GRIMOIRE: ['주술 마법서', '【구매시】이번 턴 자신이 패에서 사용하는 모든 마법 카드의 코스트 -1.', 'Sorcery Grimoire', 'On purchase: Your spells played from hand cost 1 less this turn.'],
+  QUICK_GRIMOIRE: ['주술 마법서', '【구매시】이번 턴 다음에 자신이 패에서 사용하는 마법 5회의 코스트 -1.', 'Sorcery Grimoire', 'On purchase: Your next 5 spells played from hand cost 1 less this turn.'],
   QUICK_ASSAULT: ['총공격', '【구매시】자신 필드의 서로 다른 몬스터 2체 선택, 이번 턴 공격력 +2.', 'All-Out Assault', 'On purchase: Give 2 different monsters on your field +2 ATK this turn.'],
 };
 for (const card of QUEST_QUICK_CARDS) {
