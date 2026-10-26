@@ -184,6 +184,13 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   ov.oncontextmenu = (e) => { e.preventDefault(); closeZoom(); };
   document.body.appendChild(ov);
   if(c.t==='spell'&&c.quick)quickFrames.set(ov,mountQuickSpellFrame(cardStage.firstElementChild as HTMLElement,cardTypeLabel(c,getLang())));
+  if(c.t==='quest'){
+    const card=cardStage.firstElementChild as HTMLElement;
+    const badge=document.createElement('div');badge.className='card-type-badge quest-card-badge';
+    badge.textContent=cardTypeLabel(c,getLang());
+    card.append(badge);
+    card.querySelector<HTMLElement>('.card-status .kw')?.setAttribute('hidden','');
+  }
   closePreviews.set(ov,bindCardReferences(ov,c,openRelatedCard));
   ov.onkeydown = e => {
     if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); if(!closeCurrentPreview(true))zoomHistory.length ? backToPreviousCard() : closeZoom(); }

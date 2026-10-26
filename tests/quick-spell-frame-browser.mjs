@@ -23,7 +23,7 @@ await page.addInitScript(()=>localStorage.setItem('lore_lang','ja'));
 
 
 async function ready(){await page.locator('.screen-loader').waitFor({state:'detached',timeout:180000});}
-async function open(id,search){await page.locator('.cards-search').fill(search);await page.locator(`#grid [data-card-id="${id}"]`).click();await page.locator('#zoomOverlay').waitFor();}
+async function open(id,search){await page.locator('.cards-search').fill(search);await page.locator(`#grid [data-card-id="${id}"]`).first().click();await page.locator('#zoomOverlay').waitFor();}
 async function close(){await page.locator('.inspect-close').click();await page.locator('#zoomOverlay').waitFor({state:'detached'});assert.equal(await page.locator('.quick-spell-frame-canvas').count(),0);}
 const snapshot=()=>page.locator('#zoomOverlay .quick-spell-frame-canvas').evaluate(n=>n.toDataURL());
 try {
@@ -40,6 +40,17 @@ try {
    const first=await snapshot();await page.waitForTimeout(250);assert.notEqual(await snapshot(),first,'veil keeps moving');
    await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(150);const still=await snapshot();await page.waitForTimeout(150);assert.equal(await snapshot(),still,'reduced motion is static');await page.emulateMedia({reducedMotion:'no-preference'});
    await page.screenshot({path:`${out}/quick-${lang}-${width}.png`});checks.push({lang,width,...size});await close();
+   await open('Q_RIFT','リフト研究');
+   assert.equal(await page.locator('#zoomOverlay .quick-spell-frame-canvas').count(),0);
+   const quest=await page.locator('#zoomOverlay .quest-card-badge').evaluate(n=>{
+    const r=n.getBoundingClientRect(),c=n.parentElement.getBoundingClientRect();
+    return{text:n.textContent,font:parseFloat(getComputedStyle(n).fontSize),widthRatio:r.width/c.width,heightRatio:r.height/c.height,left:r.left,right:r.right,screen:innerWidth,overflow:n.scrollWidth>n.clientWidth+1};
+   });
+   assert.equal(quest.text,{ja:'クエスト',en:'Quest',ko:'퀘스트'}[lang]);
+   assert.equal(quest.widthRatio,size.widthRatio);assert.equal(quest.heightRatio,size.heightRatio);
+   assert(quest.font>=11&&!quest.overflow&&quest.left>=0&&quest.right<=quest.screen,JSON.stringify(quest));
+   assert.equal(await page.locator('#zoomOverlay .card--quest .card-status .kw:visible').count(),0);
+   await page.screenshot({path:`${out}/quest-${lang}-${width}.png`});checks.push({lang,width,quest});await close();
    await open('S13','星墓の落下');assert.equal(await page.locator('.quick-spell-frame-canvas').count(),0);await close();
   }
  }
