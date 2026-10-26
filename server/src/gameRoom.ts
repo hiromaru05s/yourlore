@@ -31,6 +31,7 @@ import { createGame, reduce, actingSide } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { settleRanked, type RankOutcome } from "./rank";
+import { recordRankedDecks } from "./rankedDecks";
 import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS, OPENING_VERSION } from "../../client/src/shared/opening";
 import { isClientMessage, resolveTurnTimeout } from "./gameInput";
 import { matchBot, matchBotActions, matchBotsEnabled, MATCH_BOT_ACTION_MS } from './matchBots';
@@ -740,6 +741,7 @@ export class GameRoom {
       }
       if (room.ranked) {
         const outcome = await settleRanked(this.env,matchId,room.players[0].id,room.players[1].id,winner,room.resultAt);
+        await recordRankedDecks(this.env,room.players,room.resultAt);
         room.rankOutcome=outcome;
         for (const side of [0,1] as Side[]) {
           const ws=this.sockFor(side), change=outcome[room.players[side].id];

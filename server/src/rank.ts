@@ -114,7 +114,7 @@ export async function rankPosition(env: Env, userId: string, season: string): Pr
 
 // ---- REST: /api/rank/* ----
 function json(env: Env, body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
+  return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...corsHeaders(env) } });
 }
 
 export async function handleRank(env: Env, req: Request, path: string, user: SessionUser | null): Promise<Response> {
@@ -133,6 +133,25 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
     return json(env, { result: row ? outcomeOf(row)[user.id] : null });
   }
 
+  // Public starting decks are restricted to the CURRENT top 100, regardless of
+  // profile privacy. One query checks eligibility and reads decks consistently.
+  if (path === "/rank/decks") {
+    if (req.method !== "GET") return json(env, { error: "method not allowed" }, 405);
+    const userId = new URL(req.url).searchParams.get("userId");
+    if (!userId || userId.length > 128) return json(env, { error: "invalid user" }, 400);
+    const rows = await env.DB.prepare(`WITH leaders AS (
+      SELECT r.user_id,u.display,ROW_NUMBER() OVER (ORDER BY r.mmr DESC,r.updated_at ASC,r.user_id ASC) AS position
+      FROM ratings r JOIN users u ON u.id=r.user_id WHERE r.season=? AND ${rankedEligibilitySql}
+    ) SELECT l.display,l.position,d.cards,d.last_used_at FROM leaders l
+      LEFT JOIN ranked_recent_decks d ON d.user_id=l.user_id
+      WHERE l.user_id=? AND l.position<=100 ORDER BY d.last_used_at DESC,d.cards ASC LIMIT 3`)
+      .bind(seasonKey(),userId).all<{display:string;position:number;cards:string|null;last_used_at:number|null}>();
+    const leader = rows.results?.[0];
+    if (!leader) return json(env, { error: "not found" }, 404);
+    return json(env, { display:leader.display, rank:leader.position, decks:(rows.results ?? [])
+      .filter(r=>r.cards!==null).map(r=>({cards:["STARTER_MANA",...JSON.parse(r.cards!) as string[]],lastUsedAt:r.last_used_at})) });
+  }
+
   // 시즌 리더보드 (기본: 현재 시즌; 과거 시즌은 최종 스냅샷)
   if (path === "/rank/leaderboard") {
     const url = new URL(req.url);
@@ -142,13 +161,13 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
     const limit = Math.min(Math.max(Number.isFinite(rawLimit) ? rawLimit : LB_DEFAULT_LIMIT, 1), LB_MAX_LIMIT);
     const offset = Math.max(Number.isFinite(rawOffset) ? rawOffset : 0, 0);
     const rows = await env.DB.prepare(
-      `SELECT r.mmr, r.wins, r.losses, u.display FROM ratings r JOIN users u ON u.id = r.user_id
+      `SELECT r.user_id, r.mmr, r.wins, r.losses, u.display FROM ratings r JOIN users u ON u.id = r.user_id
        WHERE r.season = ? AND ${rankedEligibilitySql} ORDER BY r.mmr DESC, r.updated_at ASC, r.user_id ASC LIMIT ? OFFSET ?`
-    ).bind(season, limit, offset).all<{ mmr: number; wins: number; losses: number; display: string }>();
+    ).bind(season, limit, offset).all<{ user_id: string; mmr: number; wins: number; losses: number; display: string }>();
     const totalRow = await env.DB.prepare(`SELECT COUNT(*) AS total FROM ratings r JOIN users u ON u.id=r.user_id WHERE r.season = ? AND ${rankedEligibilitySql}`)
       .bind(season).first<{ total: number }>();
     const entries = (rows.results ?? []).map((r, i) => ({
-      rank: offset + i + 1, display: r.display, mmr: r.mmr, wins: r.wins, losses: r.losses,
+      userId: r.user_id, rank: offset + i + 1, display: r.display, mmr: r.mmr, wins: r.wins, losses: r.losses,
       tier: tierWithGm(r.mmr, offset + i + 1),
     }));
     return json(env, { season, total: totalRow?.total ?? 0, entries });

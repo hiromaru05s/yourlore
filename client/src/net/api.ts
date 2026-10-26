@@ -72,7 +72,9 @@ export interface RankInfo {
   season: string; mmr: number; wins: number; losses: number; peak_mmr: number;
   rank: number | null; tier: string; // null until the first completed ranked match
 }
+export interface RankedDeck { cards: string[]; lastUsedAt: number }
 export interface LbEntry {
+  userId: string;
   rank: number;
   display: string;
   mmr: number;
@@ -141,6 +143,7 @@ export const api = {
     const suffix = query.size ? `?${query}` : "";
     return call<{ season: string; total: number; entries: LbEntry[] }>(`/rank/leaderboard${suffix}`, undefined, "GET");
   },
+  rankedDecks: (userId:string,signal?:AbortSignal) => call<{display:string;rank:number;decks:RankedDeck[]}>("/rank/decks?userId="+encodeURIComponent(userId),undefined,"GET",signal),
   rankHistory: () => call<{ seasons: (RankInfo & { season: string })[] }>("/rank/history", undefined, "GET").then((r) => r.seasons).catch(() => []),
   // credit rewards (server-authoritative amounts; key e.g. "tut:1")
   tutorialStatus: () => call<{ keys:string[]; credits:number; offered:boolean; awarded:number; legacyPaid:number; amounts:Record<string,number> }>("/rewards/tutorial", undefined, "GET"),
