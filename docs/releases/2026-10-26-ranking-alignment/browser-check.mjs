@@ -17,6 +17,7 @@ if(path==='/api/rewards/progression')return {credits:100,resetsAt:Date.now()+864
 return {ok:true,keys:[],items:[],friends:[],incoming:[],outgoing:[],challenges:[]};});
 try {
 await p.goto(origin);await p.locator('#startup').waitFor({state:'hidden',timeout:90000});await p.waitForFunction(()=>!document.querySelector('.lounge-entry-overlay'));await p.locator('[data-nav=leaderboard]').evaluate(el=>el.click());await p.locator('.lb-deck-trigger').first().waitFor();await p.waitForFunction(()=>![...document.querySelectorAll('.game-loading')].some(el=>el.getBoundingClientRect().width>0),{},{timeout:90000});
+await p.evaluate(async()=>{const image=new Image();image.src='/art/ui/lore-panel-azure-cut.png';await image.decode();await document.fonts.ready;});await p.waitForTimeout(500);
 const checks=[];
 for(const width of [1440,1070,820,390,320]){
  await p.setViewportSize({width,height:900});await p.waitForTimeout(200);
