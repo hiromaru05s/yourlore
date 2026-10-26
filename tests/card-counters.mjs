@@ -12,7 +12,10 @@ function step(ms){now+=ms;const queue=[...frames];frames.clear();queue.forEach((
 const dir=await mkdtemp(path.join(tmpdir(),'lore-card-counters-'));
 try{
  await build({stdin:{contents:"export * from './client/src/ui/cardCounter';export {cardEl} from './client/src/ui/cardView';export {DB} from './client/src/shared/cards';export {setLang} from './client/src/i18n';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',loader:{'.css':'empty'},outfile:dir+'/counters.mjs'});
- const {createBoardCardCounters,createCardCounter,setCardCounter,cardEl,DB,setLang,fieldCounters}=await import(dir+'/counters.mjs');setLang('ja');
+ const {createBoardCardCounters,createCardCounter,setCardCounter,cardEl,DB,setLang,fieldCounters,enchantCounterValue}=await import(dir+'/counters.mjs');setLang('ja');
+ assert.equal(enchantCounterValue({card:DB.GUILD_CO,turns:99}),0,'new Guild shows zero before its first upkeep');
+ assert.equal(enchantCounterValue({card:DB.BREWING,turns:6}),0,'new Brewing shows zero before its first ingredients');
+ assert.equal(enchantCounterValue({card:DB.BLOOD_RITE,turns:99}),null,'time-only spell has no resource counter');
  const root=document.getElementById('root'),zone=root.querySelector('#meRow .zone-mon'),controller=createBoardCardCounters(root);
  let data={...DB.GOLEM1,uid:'same-mon',guts:3};
  const badge=kind=>zone.querySelector(`[data-counter-kind="${kind}"]`),pos=kind=>Number(badge(kind).dataset.counterPosition);

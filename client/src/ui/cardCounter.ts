@@ -1,4 +1,4 @@
-import type {CardInst,FieldMon} from '../shared/types';
+import type {CardInst,FieldMon,Enchant} from '../shared/types';
 import {getLang} from '../i18n';
 import {decayStateDescription} from '../shared/cardPresentation';
 import './cardCounter.css';
@@ -20,6 +20,9 @@ export function fieldCounters(card:CardInst,onField=false):CounterValue[]{
  if(m.gcount!=null||(onField&&(['casino','assassinGuild','vampButler'].includes(card.aura??'')||card.id==='CASTLE')))result.push({kind:'charge',value:count(m.gcount??0)});
  if((m.decayCnt??0)>0)result.push({kind:'decay',value:count(m.decayCnt!)});
  return result;
+}
+export function enchantCounterValue(e:Enchant):number|null {
+ return e.cnt!=null||e.card.ench==='guild'||e.card.ench==='brewing'?count(e.cnt??0):null;
 }
 function description(kind:CounterKind,value:number){
  const lang=getLang();

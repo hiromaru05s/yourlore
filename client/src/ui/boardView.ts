@@ -1,4 +1,4 @@
-import {createBoardCardCounters,createCardCounter} from './cardCounter';
+import {createBoardCardCounters,createCardCounter,enchantCounterValue} from './cardCounter';
 import {syncCardEffects,disposeCardEffects} from './cardFinish';
 import {medalHtml} from './medal';
 import {MarketCrashPresentation} from './marketCrash/runtime';
@@ -614,7 +614,8 @@ export class GameView {
         ? `<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">`
         : `<span class="buff-duration" aria-label="${stateText}"><span>${bits.join(' ')}</span></span>`;
       const card = enchantmentTile(e.card,durationUi);
-      if(e.cnt!=null)card.append(createCardCounter(e.card.uid,e.card.id,'charge',e.cnt));
+      const counterValue=enchantCounterValue(e);
+      if(counterValue!=null)card.append(createCardCounter(e.card.uid,e.card.id,'charge',counterValue));
       card.tabIndex = 0;
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', `${cardName(e.card)} ${stateText}`);
