@@ -1,3 +1,4 @@
+import {withDeadline} from '../net/deadline';
 import {prepareDuelFonts} from './duelFonts';
 import {warmSounds} from './sound';
 import {loadingScreen} from './loadingScreen';
@@ -52,8 +53,8 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
 /** Warm public furniture and the opening portraits while the player is still in the lobby. */
 let warming:Promise<void>|undefined;
 export function warmDuel():Promise<void>{
-  return warming??=(async()=>{
+  return warming??=withDeadline((async()=>{
     void warmSounds();
     await Promise.allSettled([prepareDuelFonts(),warmReadingAssets(),warmImages([logo,...duelImageUrls()]),warmOpening(),import('./duelScene'),import('./ceremonyScene'),import('./paperDraw'),import('./spellFrame/scene')]);
-  })().finally(()=>{warming=undefined;});
+  })(),120000).finally(()=>{warming=undefined;});
 }

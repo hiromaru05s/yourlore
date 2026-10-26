@@ -6,7 +6,7 @@ import {menuCacheManifest} from '../scripts/menu-cache-manifest.mjs';
 const source=await fs.readFile('client/public/menu-cache-sw.js','utf8');
 const stores=new Map(),live=new Set(['a','b']);let fetched=0;
 const caches={async open(name){if(!stores.has(name))stores.set(name,new Map());const store=stores.get(name),key=r=>typeof r==='string'?r:r.url;return {async put(r,v){store.set(key(r),v.clone());},async match(r){return store.get(key(r))?.clone();},async delete(r){return store.delete(key(r));},async keys(){return [...store.keys()].map(k=>new Request(k));}};}};
-function worker(){const events={};const context={Map,Set,URL,Response,Error,Array,JSON,Uint8Array,crypto:webcrypto,caches,fetch:async()=>{fetched++;return new Response('network');},self:{location:{origin:'https://lore.test'},clients:{claim:async()=>{},matchAll:async()=>[...live].map(id=>({id}))},skipWaiting:async()=>{},addEventListener:(type,fn)=>events[type]=fn}};vm.runInNewContext(source,context);return events;}
+function worker(shortDeadline=false){const events={};const context={setTimeout:(fn,ms)=>setTimeout(fn,shortDeadline?5:ms),clearTimeout,Map,Set,URL,Response,Error,Array,JSON,Uint8Array,crypto:webcrypto,caches,fetch:async()=>{fetched++;return new Response('network');},self:{location:{origin:'https://lore.test'},clients:{claim:async()=>{},matchAll:async()=>[...live].map(id=>({id}))},skipWaiting:async()=>{},addEventListener:(type,fn)=>events[type]=fn}};vm.runInNewContext(source,context);return events;}
 let events=worker();
 async function bind(id,entries){let wait,reply;events.message({source:{id},data:{type:'LORE_MENU_BIND',entries},ports:[{postMessage:r=>reply=r}],waitUntil:p=>wait=p});await wait;return reply;}
 async function read(url,id='a',headers={}){let result;const writes=[];events.fetch({clientId:id,request:new Request('https://lore.test'+url,{headers}),respondWith:p=>result=p,waitUntil:p=>writes.push(p)});const body=result?await (await result).text():null;await Promise.all(writes);return body;}
@@ -31,6 +31,12 @@ assert.equal(await read('/art/on-demand.webp'),'network');assert.equal(fetched-b
 await cache.delete(key(a));await read('/art/stale.webp');assert.equal(await cache.match(key(a)),undefined,'Stale CDN bytes must not poison a new release');
 assert.equal(await read('/art/on-demand.webp','a',{Range:'bytes=0-1'}),'network','Cached complete media also satisfies range requests');
 assert.equal(fetched-beforeFetch,2,'Cached media must not repeat its download');
+// Cache Storage can stop resolving while ordinary network transfers still work.
+const open=caches.open;caches.open=async name=>{const c=await open(name);return name==='lore-menu-content-v1'?{...c,match:()=>new Promise(()=>{})}:c;};
+events=worker(true);const beforeStall=fetched;
+assert.equal(await read('/art/on-demand.webp'),'network','A stalled cache read must fall back to network');
+assert.equal(await read('/art/on-demand.webp'),'network','Later reads bypass storage after its timeout');
+assert.equal(fetched-beforeStall,2);caches.open=open;
 const m=await menuCacheManifest(process.cwd()+'/client');assert(m.entries.length>500);assert(m.entries.every(e=>e.bytes>0&&e.hash.length===64));
 const duel=m.entries.filter(e=>e.scope==='duel'&&e.media!=='narrow');
 assert(duel.reduce((n,e)=>n+e.bytes,0)<60*1024*1024,'Do not restore the full master/gallery archive to duel admission');

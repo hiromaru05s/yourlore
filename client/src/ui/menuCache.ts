@@ -13,7 +13,7 @@ const hex=(bytes:ArrayBuffer)=>Array.from(new Uint8Array(bytes),b=>b.toString(16
 async function connect():Promise<boolean> {
  if(!('serviceWorker' in navigator)||!('caches' in window)||!crypto.subtle||typeof __LORE_MENU_MANIFEST__==='undefined')return false;
  try {
-  const script=new URL('/menu-cache-sw.js?v=4',location.origin).href;
+  const script=new URL('/menu-cache-sw.js?v=5',location.origin).href;
   await withDeadline(navigator.serviceWorker.register(script,{scope:'/',updateViaCache:'none'}),60000);
   await withDeadline(navigator.serviceWorker.ready,60000);
   const current=()=>!!navigator.serviceWorker.controller&&(!navigator.serviceWorker.controller.scriptURL||navigator.serviceWorker.controller.scriptURL===script);
@@ -22,8 +22,10 @@ async function connect():Promise<boolean> {
    const timer=setTimeout(()=>{navigator.serviceWorker.removeEventListener('controllerchange',done);reject(new DOMException('Artwork cache activation timed out','TimeoutError'));},60000);
    navigator.serviceWorker.addEventListener('controllerchange',done);if(current())done();
   });
-  const cache=await caches.open(CONTENT),probe=key('storage-probe');
-  await cache.put(probe,new Response('ok'));await cache.delete(probe);return true;
+  try {
+   await withDeadline((async()=>{const cache=await caches.open(CONTENT),probe=key('storage-probe');await cache.put(probe,new Response('ok'));await cache.delete(probe);})(),10000);
+   return true;
+  }catch{return false;}
  }catch(error){if((error as Error)?.name==='TimeoutError')throw error;return false;}
 }
 async function bind(entries:Entry[]):Promise<void> {
@@ -43,23 +45,29 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
  const enabled=await(registration??=connect().catch(error=>{registration=undefined;throw error;}));
  if(signal.aborted)return;
  if(!enabled&&typeof __LORE_MENU_MANIFEST__==='undefined'){registration=undefined;await prepareWithoutStorage(progress,signal,scope);return;}
- const inventory:Manifest=await(manifest??=fetch(__LORE_MENU_MANIFEST__,{cache:'force-cache'}).then(r=>{if(!r.ok)throw Error('Artwork manifest unavailable');return r.json();}).catch(e=>{manifest=undefined;throw e;}));
+ const inventory:Manifest=await(manifest??=fetch(__LORE_MENU_MANIFEST__,{cache:'force-cache',signal:AbortSignal.timeout(60000)}).then(r=>{if(!r.ok)throw Error('Artwork manifest unavailable');return r.json();}).catch(e=>{manifest=undefined;throw e;}));
  const {packs=[]}=inventory,narrow=matchMedia('(max-width:700px)').matches;
  const compatible=inventory.entries.filter(e=>!e.media||e.media===(narrow?'narrow':'wide'));
  const wanted=Array.isArray(scope)?new Set(scope.map(url=>new URL(url,location.href).pathname)):undefined;
  const entries=compatible.filter(e=>scope==='duel'?(e.scope??assetScope(e.url))==='duel':!wanted||wanted.has(e.url));
  if(!enabled){registration=undefined;await prepareWithoutStorage(progress,signal,scope,entries);return;}
  // Persist this client's binding before loading, including across worker restarts.
- await bind(inventory.entries); // Protect every phase and viewport already prepared by this tab.
- const cache=await caches.open(CONTENT);
- // One metadata scan instead of opening 1,200 response bodies on every launch.
- const present=new Set((await cache.keys()).map(r=>r.url));
+ let cache:Cache,present:Set<string>;
+ try {
+  await bind(inventory.entries); // Protect every phase and viewport already prepared by this tab.
+  cache=await withDeadline(caches.open(CONTENT),10000);
+  // One metadata scan instead of opening 1,200 response bodies on every launch.
+  present=new Set((await withDeadline(cache.keys(),10000)).map(r=>r.url));
+ }catch{
+  registration=undefined;
+  await prepareWithoutStorage(progress,signal,scope,entries);return;
+ }
  const missing=entries.filter(e=>!present.has(key(e.hash)));
  let done=entries.length-missing.length,failed=false;
  progress(done,entries.length);
  const store=async(entry:Entry,bytes:ArrayBuffer,type=entry.type)=>{
   if(bytes.byteLength!==entry.bytes||hex(await crypto.subtle.digest('SHA-256',bytes))!==entry.hash)throw Error(`Artwork version mismatch: ${entry.url}`);
-  await cache.put(key(entry.hash),new Response(bytes,{headers:{'Content-Type':type||'application/octet-stream'}}));
+  await withDeadline(cache.put(key(entry.hash),new Response(bytes,{headers:{'Content-Type':type||'application/octet-stream'}})),10000);
  };
  const single=async(entry:Entry)=>{
   let task=downloaded.get(entry.hash);
@@ -99,7 +107,7 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
  }));
  const failure=results.find((r):r is PromiseRejectedResult=>r.status==='rejected');
  if(failure){
-  if(failure.reason?.name==='QuotaExceededError'||failure.reason?.name==='SecurityError'){await prepareWithoutStorage(progress,signal,scope,entries);return;}
+  if(failure.reason?.name==='QuotaExceededError'||failure.reason?.name==='SecurityError'||failure.reason?.name==='TimeoutError'){await prepareWithoutStorage(progress,signal,scope,entries);return;}
   throw failure.reason;
  }
  if(!signal.aborted){document.documentElement.dataset.menuCache='ready';navigator.serviceWorker.controller?.postMessage({type:'LORE_MENU_PRUNE'});}

@@ -10,5 +10,12 @@ globalThis.document={fonts:{load:async(font,text)=>{calls.push({font,text});if(o
 try{
  await build({entryPoints:['client/src/ui/duelFonts.ts'],bundle:true,platform:'node',format:'esm',outfile:dir+'/fonts.mjs',plugins:[{name:'locale',setup(b){b.onResolve({filter:/i18n$/},()=>({path:'locale',namespace:'fixture'}));b.onLoad({filter:/.*/,namespace:'fixture'},()=>({contents:'export const getLang=()=>globalThis.__fontLanguage();export const localizedInterfaceText=()=>"対戦";'}));}}]});
  const {prepareDuelFonts}=await import(dir+'/fonts.mjs');await assert.rejects(prepareDuelFonts(),/font offline/);offline=false;await prepareDuelFonts();const count=calls.length;await prepareDuelFonts();assert.equal(calls.length,count,'Successful preparation is reusable');assert(calls.some(c=>c.font.includes('Shippori')&&c.text.length>100));language='en';await prepareDuelFonts();assert(calls.slice(count).some(c=>c.font.includes('Alegreya')));assert(!calls.slice(count).some(c=>c.font.includes('Shippori')),'Only the selected language is prepared');
- console.log('PASS locale glyph selection, retry after font failure, completed reuse, language changes');
+ // A browser FontFaceSet can stay pending forever after a stalled transfer.
+ const nativeTimeout=globalThis.setTimeout;let deadline;
+ document.fonts.load=()=>new Promise(()=>{});
+ globalThis.setTimeout=(fn,ms,...args)=>ms===60000?(deadline=fn,nativeTimeout(()=>{},1000)):nativeTimeout(fn,ms,...args);
+ language='ja';const stalled=prepareDuelFonts();assert(deadline,'Font admission needs a deadline');deadline();
+ await assert.rejects(stalled,{name:'TimeoutError'});globalThis.setTimeout=nativeTimeout;
+ document.fonts.load=async()=>[];await prepareDuelFonts();
+ console.log('PASS stalled-font deadline and retry; locale glyph selection, retry after font failure, completed reuse, language changes');
 }finally{delete globalThis.__fontLanguage;delete globalThis.document;await rm(dir,{recursive:true,force:true});}

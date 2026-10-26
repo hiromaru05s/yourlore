@@ -23,5 +23,10 @@ try{
  let activate; navigator.serviceWorker.ready=new Promise(r=>activate=r);
  const retryWorker=await import(dir+'/module.mjs?slow-worker');
  try {await assert.rejects(retryWorker.prepareMenuCache(()=>{},new AbortController().signal),error=>error.name==='TimeoutError','A worker activation timeout must not fall back to bulk image decode');activate();await retryWorker.prepareMenuCache(()=>{},new AbortController().signal);assert.equal(document.documentElement.dataset.menuCache,'ready');}finally{globalThis.setTimeout=nativeTimeout;}
- console.log('PASS: stale-byte rejection, retry recovery, persistent cache hit without transfer, cancellation, and recovery after slow worker activation');
+ // Reproduce the 0% admission stall: Cache.keys never resolves after HOME.
+ const keys=cache.keys;cache.keys=()=>new Promise(()=>{});
+ const originalTimer=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>originalTimer(fn,ms===10000?5:ms,...args);
+ const stuckStorage=await import(dir+'/module.mjs?stuck-storage'),fallbackProgress=[];
+ try{await stuckStorage.prepareMenuCache((a,b)=>fallbackProgress.push([a,b]),new AbortController().signal);assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(fallbackProgress.at(-1),[1,1]);}finally{cache.keys=keys;globalThis.setTimeout=originalTimer;}
+ console.log('PASS: stalled cache scan falls back to original network assets; stale-byte rejection, retry recovery, persistent cache hit without transfer, cancellation, and recovery after slow worker activation');
 }finally{await fs.rm(dir,{recursive:true,force:true});}

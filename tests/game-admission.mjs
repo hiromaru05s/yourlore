@@ -10,10 +10,10 @@ globalThis.matchMedia=()=>({matches:false});
 const dir=await mkdtemp(path.join(tmpdir(),'lore-admission-'));
 let resolveCache,rejectCache,cacheCalls=0,modelCalls=0,starts=0,images=0;
 const cache=()=>{cacheCalls++;return new Promise((resolve,reject)=>{resolveCache=resolve;rejectCache=reject;});};
-globalThis.__admission={cache,warm:async()=>{modelCalls++;},images:async()=>{images++;}};
+globalThis.__admission={cache,warm:async()=>{modelCalls++;},images:async()=>{images++;},modules:async()=>{}};
 const stubs={
  '../ui/menuCache':`export const prepareMenuCache=(progress,signal,scope)=>{if(scope!=='duel')throw Error('wrong scope');progress(0,10);return globalThis.__admission.cache();};`,
- '../ui/duelModulePreload':'export const prepareDuelModules=async()=>{};',
+ '../ui/duelModulePreload':'export const prepareDuelModules=()=>globalThis.__admission.modules();',
  '../ui/duelFonts':'export const prepareDuelFonts=async()=>{};',
  '../ui/duelReadiness':'export const warmDuel=()=>globalThis.__admission.warm();',
  '../ui/imageAssets':'export const warmImages=()=>globalThis.__admission.images();',
@@ -32,6 +32,13 @@ try{
  globalThis.matchMedia=()=>({matches:true});const cancel=m.mountGamePreparation(app,async()=>{starts++;});await tick();assert.equal(cacheCalls,2);cancel.destroy();resolveCache();await tick();await tick();assert.equal(starts,1);assert.equal(app.root.querySelector('.duel-loader'),null);
  // Failed cold preparation stays on cover and can retry without stale success.
  const fresh=await import(dir+'/module.mjs?retry');const failed=fresh.mountGamePreparation(app,async()=>{starts++;});await tick();rejectCache(Error('offline'));await tick();await tick();assert.equal(starts,1);const retry=[...app.root.querySelectorAll('button')].find(b=>b.textContent==='準備を再試行');assert(retry);retry.click();await tick();resolveCache();await tick();await tick();assert.equal(starts,2);failed.destroy();
+ // A failed code transfer must expose Retry even if a parallel pack never settles.
+ const broken=await import(dir+'/module.mjs?module-failure');
+ globalThis.__admission.modules=async()=>{throw Error('code offline');};
+ const brokenGate=broken.mountGamePreparation(app,async()=>{starts++;});await tick();await tick();
+ assert(app.root.querySelector('[role=alert]'),'Failure should be explained on the cover');
+ const codeRetry=[...app.root.querySelectorAll('button')].find(b=>b.textContent==='準備を再試行');assert(codeRetry,'Parallel pending packs must not suppress Retry');
+ globalThis.__admission.modules=async()=>{};codeRetry.click();await tick();resolveCache();await tick();await tick();assert.equal(starts,3);brokenGate.destroy();
  // Real lobby route: matchmaking sockets must not exist until admission succeeds.
  const lobbyStubs={
   '../ui/homeIcons':'export const homeIcon=()=>"";',

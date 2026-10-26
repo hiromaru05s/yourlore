@@ -36,7 +36,7 @@ export function mountHome(app: App): Screen {
         <div class="lounge-mode-tabs" role="group" aria-label="${esc(loungeText('対戦モード','Duel mode','대전 모드'))}">
           <button id="rankedMode" aria-pressed="true">${loungeText('ランク','Ranked','랭크')}</button>
           <button id="online" aria-pressed="false">${loungeText('ノーマル','Casual','일반')}</button>
-          <button id="bot" aria-pressed="false">BOT</button>
+          <button id="bot" aria-pressed="false">${t("home.bot.title")}</button>
         </div>
         <p class="mode-reward" id="modeReward"></p>
         <button class="lounge-play-button" id="ranked"><small aria-hidden="true">DUEL</small><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")} →</span></button>
@@ -93,7 +93,7 @@ function showBotNpcModal(app: App): void {
   ov.innerHTML = `
     <div class="modal support-dialog bot-diff bot-challenge bot-npcs" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
       <header class="support-dialog-heading">
-        <span class="menu-eyebrow">BOT DUEL</span>
+        <span class="menu-eyebrow">SINGLE</span>
         <h2 id="challengeTitle">${loungeText("対戦相手を選ぶ","Choose your opponent","대전 상대 선택")}</h2>
         <button class="challenge-back" id="diffCancel">← ${t('common.back')}</button>
       </header>

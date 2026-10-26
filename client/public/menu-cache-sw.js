@@ -2,6 +2,15 @@
  * always use the network. A tab keeps the manifest of its own application build. */
 const CONTENT='lore-menu-content-v1', META='lore-menu-clients-v1';
 const bindings=new Map(), transfers=new Map();
+// Cache Storage may stop settling (restricted profiles / browser storage faults).
+// It is an optimization: a stalled read must still serve the original network asset.
+let storageUnavailable=false;
+async function storageRead(work){
+ if(storageUnavailable)throw Error('Artwork cache unavailable');
+ let timer;
+ try{return await Promise.race([work(),new Promise((_,reject)=>{timer=setTimeout(()=>{storageUnavailable=true;reject(Error('Artwork cache read timed out'));},10000);})]);}
+ finally{clearTimeout(timer);}
+}
 let maintenance=Promise.resolve();
 const key=hash=>new URL('/__lore_menu_content__/'+hash,self.location.origin).href;
 const metaKey=id=>new URL('/__lore_menu_client__/'+id,self.location.origin).href;
@@ -44,9 +53,9 @@ self.addEventListener('fetch',event=>{
  if(request.method!=='GET'||url.origin!==self.location.origin||!/^\/(art|ui|frames|cosmetics|vfx|models|fonts|music|sfx|bg|icons)\//.test(url.pathname)||request.headers.has('X-Lore-Asset-Preload'))return;
  event.respondWith((async()=>{
   try {
-   const hash=(await binding(event.clientId))?.get(url.pathname);
+   const hash=(await storageRead(()=>binding(event.clientId)))?.get(url.pathname);
    if(hash){
-    const cache=await caches.open(CONTENT),cached=await cache.match(key(hash));if(cached)return cached;
+    const {cache,cached}=await storageRead(async()=>{const cache=await caches.open(CONTENT);return {cache,cached:await cache.match(key(hash))};});if(cached)return cached;
     // A complete cached body may satisfy Range with 200. Partial network bodies
     // must never be shared with a consumer expecting a complete image/model.
     if(request.headers.has('Range'))return fetch(request);

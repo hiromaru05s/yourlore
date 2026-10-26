@@ -1,0 +1,33 @@
+{
+  "origin": "http://127.0.0.1:5186",
+  "api": "guest fixture; real built assets",
+  "checks": [
+    {
+      "width": 1280,
+      "stalledCache": false,
+      "cacheMode": "ready",
+      "readyMs": 17066,
+      "hand": 3,
+      "sceneReady": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "stalledCache": false,
+      "cacheMode": "ready",
+      "readyMs": 12050,
+      "hand": 3,
+      "sceneReady": true,
+      "errors": []
+    },
+    {
+      "width": 1280,
+      "stalledCache": true,
+      "cacheMode": "http-fallback",
+      "readyMs": 26632,
+      "hand": 3,
+      "sceneReady": true,
+      "errors": []
+    }
+  ]
+}
