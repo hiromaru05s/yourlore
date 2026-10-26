@@ -1,7 +1,7 @@
 /* Approved 2026-10-26 deck scene. Shared HOME/nav, frame and common buttons remain owned by the lounge. */
 :root body .lounge-deck .lounge-content{inset:64px 12px 82px;padding:0;overflow:visible}
 :root body .lounge-deck .lounge-content>.deck-screen{padding:0;width:100%;height:100%;overflow:visible}
-:root body .lounge-deck .deck-panel{display:grid;grid-template-columns:106px minmax(0,1fr);grid-template-rows:263px minmax(0,1fr);gap:8px 12px;width:100%;max-width:none;height:100%;padding:0!important;margin:0;border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important;overflow:visible}
+:root body .lounge-deck .deck-panel{display:grid;grid-template-columns:106px minmax(0,1fr);grid-template-rows:263px minmax(0,1fr);gap:8px 12px;width:100%;max-width:none;height:100%;padding:0!important;margin:0;border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important;backdrop-filter:none;overflow:visible}
 .lounge-deck .deck-panel>h2,.lounge-deck .deck-controls>#back{display:none}
 .lounge-deck .deck-panel>.deck-tabs{grid-column:1;grid-row:1;display:flex;flex-direction:column;gap:5px;min-height:0;margin:0;padding:5px;border:0;overflow:visible}
 .lounge-deck .deck-tab-row{position:relative;flex:1;min-height:28px;padding:0;border:0;background:none}
