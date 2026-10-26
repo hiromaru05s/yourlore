@@ -1,6 +1,7 @@
 {
   "checks": [
     "actual GameView, both sides, all field/spell counters, black durability, size ratios",
+    "permanent Guild +4 uses same slot animation and remains visible at zero",
     "real shared-engine Expansion +5 and turn-start hatch decrement",
     "actual lethal combat consumes one Guts and animates down",
     "coexisting Guts/Decay, landscape/portrait, reduced-motion direct update, teardown"
