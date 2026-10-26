@@ -23,3 +23,11 @@
 - プレビュー起動元：`/Users/hiromaru05s/.codex/worktrees/outcome-flow-preview/LORE_TCG`。専用Vite `http://127.0.0.1:5586/?devLogin=1`。5196番は別作業ツリーの既存previewが使用していたため、修正の確認には使用しない。
 
 公開は `scripts/deploy-guard.mjs production` による最新main照合・コミット済みクリーンスナップショットの型チェック／production suite／ビルドを通して実施し、配信されたCSSとエントリーの一致を別途記録する。
+
+## 本番公開
+
+ソース `d749fef442564abf91c49bc92c34378be943bf74`、Worker version `b19e2c9c-8f75-4b5b-b795-9a6e6f44e80c` を100%配信。型チェック・全228件・ビルドをクリーンなコミットスナップショットで通過した。[公開記録](production.json)。
+
+公開CSSは11/11ファイルのSHA-256がビルドと一致し、HTMLのエントリーも同じビルドを参照している。[照合結果](public-css.json)。
+
+追加確認：編集／マーケット通知／外観はPC・390px幅の両方でナビとの間隔を維持。ローカル確定操作は成功メッセージのあとHOMEへ戻り、デッキ画面へ再入場できる。

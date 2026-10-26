@@ -1,0 +1,26 @@
+{
+  "sourceCommit": "d749fef442564abf91c49bc92c34378be943bf74",
+  "implementationCommit": "88a087e2",
+  "url": "https://yourlore.xyz/",
+  "deploymentId": "890c09d8-39cf-4f27-97d2-0f5aec222480",
+  "versionId": "b19e2c9c-8f75-4b5b-b795-9a6e6f44e80c",
+  "trafficPercent": 100,
+  "deployedAt": "2026-10-26T11:45:40.976777Z",
+  "validation": {
+    "typecheck": "passed",
+    "productionSuite": {
+      "passed": 228,
+      "total": 228
+    },
+    "build": "passed",
+    "publicCSS": {
+      "matched": 11,
+      "checked": 11
+    },
+    "htmlEntrypointsMatch": true,
+    "viewportChecks": "1911x893, 1280x720, 390x844, 320x568, 844x390, 667x375",
+    "localGuestSave": "confirmed success and HOME navigation",
+    "secondaryTabs": "edit/watch/appearance clear navigation at 1911x893 and 390x844"
+  },
+  "scope": "Layout and confirmation appearance only; authenticated production deck mutation was not performed."
+}
