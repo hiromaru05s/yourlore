@@ -47,6 +47,11 @@ deleted_classes = ["Matchmaker", "GameRoom"]
 tag = "v4-production-reset-20261027"
 new_sqlite_classes = ["MatchmakerFresh20261027", "GameRoomFresh20261027"]
 
+# Phase B: old bindings were removed in the preceding successful release.
+[[migrations]]
+tag = "v5-production-retire-20261027"
+deleted_classes = ["MatchmakerLive", "GameRoomLive"]
+
 # --- D1: users / sessions / match records ---
 [[d1_databases]]
 binding = "DB"

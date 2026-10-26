@@ -116,3 +116,10 @@
 - 次はproduction Phase Aのmaintenance＋新namespace切替。ユーザーデータはまだ消去していない。
 
 - stagingで全4難易度の認証開始・BOT実応答・降参決済と一時account/対戦記録の削除を確認（`staging-bot/authenticated-npc.json`、cleanup=true）。
+
+
+## 本番reset Phase A完了
+
+- `7f3ebeb1`をguard公開。246/246・型・build成功。version `560998c2-846c-4d98-abc1-7f41412193d9`、deployment `03f3e2a3-57a4-4728-b94b-f4bcd1a216df`。
+- 3originの`/api/auth/me`が503/maintenance=true/no-storeを返すことを確認（`phase-a.json`）。新namespaceへbinding切替、旧クラスはDB決済を持たない退役実装。
+- 続いてPhase Bで旧2namespaceを削除する。D1ユーザーデータはまだ消去していない。

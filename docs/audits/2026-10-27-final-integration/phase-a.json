@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-26T23:24:18.446Z",
+  "deployment": {
+    "id": "03f3e2a3-57a4-4728-b94b-f4bcd1a216df",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "maruru836818@gmail.com",
+    "annotations": {
+      "workers/message": "7f3ebeb1619f4abe299656166c692a7975414bc8 guarde...",
+      "workers/triggered_by": "upload"
+    },
+    "versions": [
+      {
+        "version_id": "560998c2-846c-4d98-abc1-7f41412193d9",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-10-26T23:23:34.122837Z"
+  },
+  "checks": [
+    {
+      "origin": "https://yourlore.xyz",
+      "status": 503,
+      "maintenance": true,
+      "cacheControl": "no-store"
+    },
+    {
+      "origin": "https://www.yourlore.xyz",
+      "status": 503,
+      "maintenance": true,
+      "cacheControl": "no-store"
+    },
+    {
+      "origin": "https://admin.yourlore.xyz",
+      "status": 503,
+      "maintenance": true,
+      "cacheControl": "no-store"
+    }
+  ]
+}
