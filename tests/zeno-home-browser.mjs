@@ -14,6 +14,7 @@ const user={id:'zeno-visual-qa',display:'SEEKER',email:'qa@example.invalid',cred
 await apiFixture(page,req=>{
  const p=new URL(req.url).pathname;
  if(p==='/api/auth/me')return {user};if(p==='/api/geo')return {country:'JP'};
+ if(p==='/api/gifts')return {items:[],pendingCount:0,pendingAmount:0,unreadCount:0,now:Date.now()};
  if(p==='/api/rank/me')return {rating:{season:'2026-10',mmr:1018,wins:20,losses:10,peak_mmr:1018,rank:1,tier:'iron'}};
  if(p==='/api/rewards/tutorial')return {keys:[],credits:user.credits,offered:true};
  if(p==='/api/rewards/progression')return {credits:user.credits,resetsAt:Date.now()+86400000,daily:{quest:{kind:'heal',reward:300,target:40},progress:0,claimed:false},bot:{},online:0,ranked:0};

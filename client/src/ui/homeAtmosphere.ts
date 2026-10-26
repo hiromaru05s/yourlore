@@ -5,11 +5,11 @@ import * as THREE from 'three';
 import {createDistantBirds} from './homeDistantBirds';
 
 /** Approved 2026-10-26 cel background, mounted only on HOME.
- * Outlined architecture, smaller drifting clouds, swaying ivy and distant birds.
+ * Fine colored architecture contours, natural smaller drifting clouds, swaying ivy and distant birds.
  * The CSS plate remains underneath until the first complete rendered frame.
  * All motion shares one clock; no menu re-render owns a second renderer. */
 export function mountHomeAtmosphere(host:HTMLElement):()=>void {
- const BASE='/art/lounge/toon-outline-20261026/';
+ const BASE='/art/lounge/toon-soft-20261026/';
  const W=1672,H=941;
  host.dataset.atmosphere='loading';
  if(typeof WebGL2RenderingContext==='undefined'){host.dataset.atmosphere='fallback';return()=>{};}
@@ -140,21 +140,8 @@ async function init(){try{
   const span=W+layer.w;
   for(let i=0;i<2;i++){const mesh=plane(layer.w,layer.h,0,layer.y,-3+(layer.rate>4?1:0),new THREE.MeshBasicMaterial({map:cloud,transparent:true,opacity:layer.opacity,depthWrite:false}));mesh.renderOrder=layer.rate>4?2:1;clouds.push({mesh,start:layer.start+i*span/2,rate:layer.rate,width:layer.w,height:layer.h,y:layer.y,opacity:layer.opacity});}
  }
- // Mild, alpha-aware reconstruction keeps stone edges crisp on dense displays.
- // This improves sampling; it does not claim new source-image detail.
+ // The softened artwork is sampled directly, without re-darkening its thin contours.
  const plate=new THREE.MeshBasicMaterial({map:fg,transparent:true,depthWrite:false});
- plate.onBeforeCompile=shader=>{
-  shader.uniforms.plateTexel={value:new THREE.Vector2(1/fg.image.width,1/fg.image.height)};
-  shader.fragmentShader='uniform vec2 plateTexel;\n'+shader.fragmentShader;
-  shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
-  #ifdef USE_MAP
-   vec4 c=texture2D(map,vMapUv),l=texture2D(map,vMapUv-vec2(plateTexel.x,0.)),r=texture2D(map,vMapUv+vec2(plateTexel.x,0.)),u=texture2D(map,vMapUv+vec2(0.,plateTexel.y)),d=texture2D(map,vMapUv-vec2(0.,plateTexel.y));
-   float solid=step(.99,min(c.a,min(min(l.a,r.a),min(u.a,d.a))));
-   vec3 detail=c.rgb-(l.rgb+r.rgb+u.rgb+d.rgb)*.25;
-   diffuseColor*=vec4(clamp(c.rgb+detail*.24*solid,0.,1.),c.a);
-  #endif
-  `);
- };
  const front=plane(W,H,W/2,H/2,0,plate);front.renderOrder=3;
  // Independent foliage plates retain the marble under them; no ghost copies.
  addVine(ivy,752,424,164,646,.4);

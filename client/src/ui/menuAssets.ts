@@ -21,7 +21,7 @@ export function menuAssetUrls():string[]{
   ...HOME_ICONS.map(k=>`/art/lounge/icons/v2/${k}.png`),
   '/art/lounge/icons/shard-simple-v1.png',
   '/art/brand/lore-logo-transparent.webp',
-  '/art/lounge/toon-outline-20261026/library-wide.webp', '/art/lounge/toon-outline-20261026/ivy.webp', '/art/lounge/toon-outline-20261026/clouds.webp',
+  '/art/lounge/toon-soft-20261026/library-wide.webp', '/art/lounge/toon-soft-20261026/ivy.webp', '/art/lounge/toon-soft-20261026/clouds.webp',
   '/art/lounge/stage-v1/sigil.webp', '/art/lounge/duel-ink-v1/disc.png',
   '/art/seekers/faceless-v2/portrait.webp', '/art/seekers/faceless-v2/poses.webp',
   ...BOT_NPCS.map(n=>n.portrait),
