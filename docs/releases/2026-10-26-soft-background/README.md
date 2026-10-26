@@ -32,4 +32,12 @@
 
 ## 公開結果
 
-公開後に配信バージョンと照合結果を記録する。
+背景変更コミット `63e0fdd6e9c2246e9f18fb2a8c3dfdae2b6d7921` を含む `394e7b6e75058a5b3e5b1e3e4c8a57bc1e14bfe2` が共有のguarded releaseで公開済み。2026-10-26 18:59（Asia/Seoul）。最初の単独デプロイは他リリースのロックで停止したため、同じ変更を含む共有リリースの完了を追跡した。
+
+- client/server typecheck、全体テスト **228/228**、design guard、production build成功。[検証ログ](validation.log)。
+- 有効Worker版 `e6b70717-470b-4a9f-8231-d1a5223b32ea`、100%。Deployment `638a951c-0d22-4253-882a-4b550575cdd9`。[配信状態](deployment.json)。
+- 隔離されたguardビルドからハッシュを採取し、https://yourlore.xyz のHTML/JS/CSS/JSONと新背景3素材 **152/152** のSHA-256一致を確認。[配信照合](asset-parity.json)。
+- 公開先の実アセット＋APIフィクスチャでHOME表示、5サイズ、プレゼント・フレンド操作、3言語の回帰が成功。ブラウザー例外0件。PCとスマホの画像を目視確認。実アカウントでの操作は実施していない。
+
+![公開先PC・アカウントは検証データ](qa/production/home-desktop.png)
+![公開先スマートフォン・アカウントは検証データ](qa/production/home-mobile.png)
