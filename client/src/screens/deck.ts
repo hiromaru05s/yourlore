@@ -160,7 +160,7 @@ export function mountDeck(app: App): Screen {
         else{const action=document.createElement('button');action.className='deck-hand-action card-action deck-action';surface.append(action);}
         const shadow=document.createElement('span');shadow.className='deck-card-shadow';shadow.setAttribute('aria-hidden','true');row.append(shadow,surface);handRows.set(key,row);
       }
-      row.dataset.index=String(index);row.style.setProperty('--hand-turn',`${(index-4)*1.15}deg`);row.style.setProperty('--hand-lift',`${Math.abs(index-4)*3-7}px`);
+      row.dataset.index=String(index);row.style.setProperty('--hand-turn',`${(index-4)*.5}deg`);row.style.setProperty('--hand-lift',`${Math.abs(index-4)*3-7}px`);
       if(!row.dataset.motionEpoch)row.dataset.motionEpoch=String(performance.now()/1000);
       row.style.setProperty('--idle-delay',`${-((Number(row.dataset.motionEpoch)-index*.35)%6.8+6.8)%6.8}s`);
       const action=row.querySelector<HTMLButtonElement>('.deck-hand-action');
@@ -216,7 +216,8 @@ export function mountDeck(app: App): Screen {
     for (const id of watching?candidates.slice(watchPage*24,(watchPage+1)*24):[]) {
       const on = watch().includes(id);
       const c = inst(id, "w_" + id);
-      const el = cardEl(c, { size: "mkt", playable: true, dim: !on && watch().length >= WATCH_MAX, lazyArt: watchIdx++ });
+      const el = cardEl(c, { size: "mkt", fullArt: true, playable: true, dim: !on && watch().length >= WATCH_MAX, lazyArt: watchIdx++ });
+      prepareDeckCard(el,id);
       if (on) {
         el.classList.add("is-watch-pick");
         const bell = document.createElement("div");
