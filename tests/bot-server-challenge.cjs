@@ -3,7 +3,7 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
  const temp=fs.mkdtempSync('/tmp/lore-bot-server-challenge-'), nativeWebSocket=globalThis.WebSocket;let db;
  try {
  const {build}=require(process.cwd()+'/node_modules/esbuild');
- await build({stdin:{contents:"export {GameRoom} from './server/src/gameRoom';export {handleRewards} from './server/src/rewards';export {botNpc} from './client/src/shared/botNpcs';export {DB} from './client/src/shared/cards';export {reduce} from './client/src/shared/engine';export {botDecide} from './client/src/shared/bot';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:temp+'/server-core.mjs'});
+ await build({stdin:{contents:"export {GameRoom,npcThinkingDifficulty} from './server/src/gameRoom';export {handleRewards} from './server/src/rewards';export {botNpc} from './client/src/shared/botNpcs';export {DB} from './client/src/shared/cards';export {reduce} from './client/src/shared/engine';export {botDecide} from './client/src/shared/bot';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:temp+'/server-core.mjs'});
  const E=await import(temp+'/server-core.mjs');db=new DatabaseSync(':memory:');db.exec(fs.readFileSync('server/schema.sql','utf8'));
  class Stmt{constructor(sql,args=[]){this.sql=sql;this.args=args}bind(...args){return new Stmt(this.sql,args)}async first(){return db.prepare(this.sql).get(...this.args)??null}async all(){return {results:db.prepare(this.sql).all(...this.args)}}async run(){return {meta:{changes:Number(db.prepare(this.sql).run(...this.args).changes)}}}}
  const env={DB:{prepare:sql=>new Stmt(sql),batch:async ss=>{db.exec('BEGIN');try{const rows=[];for(const s of ss)rows.push(await s.run());db.exec('COMMIT');return rows}catch(e){db.exec('ROLLBACK');throw e}}}};
@@ -24,7 +24,19 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
   room=new E.GameRoom(state,env);await room.restore();const start=performance.now();await room.runBot();const ms=performance.now()-start;
   assert.deepEqual(room.room.game,E.reduce(g,expected).state);assert.deepEqual(saved.game,room.room.game);assert.equal(saved.challengeDifficulty,tier);assert(typeof alarm==='number'&&alarm>=room.room.turnStartAt);
   results.push({tier,roster:E.botNpc(tier).decks.length,setup:true,restoredDifficulty:saved.challengeDifficulty,action:expected,reducerParity:true,persisted:true,alarmRearmed:true,ms});
+  assert.equal(E.npcThinkingDifficulty(tier,45000),tier);
+  assert.equal(E.npcThinkingDifficulty(tier,44999),'normal');
+  // Recorded long-turn position: full search plays idx 1, but shallow search
+  // buys market slot 1. Exercise the actual server route near its turn deadline.
+  const heavy=JSON.parse(require('node:zlib').gunzipSync(fs.readFileSync('docs/bot-strength/2026-10-27/evidence/cpu-heavy-state.json.gz')));
+  const quick=E.botDecide(heavy,'normal');assert.deepEqual(quick,{type:'buyMarket',i:1});
+  Object.assign(room.room,{game:heavy,turnStartAt:Date.now()-60000,turnBonusMs:0});room.room.bot.side=0;
+  const quickStart=performance.now();await room.runBot();
+  assert.deepEqual(room.room.game,E.reduce(heavy,quick).state,'remaining clock selects the shallow policy');
+  assert.equal(room.room.challengeDifficulty,tier,'clock pressure does not lower the challenge or rewards');
+  results.push({tier,clockPressure:true,remainingMs:30000,thinking:'normal',action:quick,reducerParity:true,ms:performance.now()-quickStart});
  }
+ for(const tier of ['easy','normal'])assert.equal(E.npcThinkingDifficulty(tier,1000),tier);
  // Exercise the authenticated HTTP start path, including its separate roster
  // object and the selected index reaching the authoritative room unchanged.
  const userId='rotation-http';db.prepare('INSERT INTO users(id,email,password,display,created_at) VALUES(?,?,?,?,?)').run(userId,userId+'@test.invalid','disabled',userId,Date.now());

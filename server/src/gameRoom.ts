@@ -90,6 +90,11 @@ interface RoomData {
 const TURN_MS_RANKED = 50000; // ranked: tighter clock
 const TURN_MS_CASUAL = 90000; // everything else: 90s per turn
 const turnMsFor = (ranked: boolean): number => (ranked ? TURN_MS_RANKED : TURN_MS_CASUAL);
+/** Reserve time to execute the rest of a long NPC turn. This changes only
+ * thinking effort, never the challenge roster, market bias or rewards. */
+export function npcThinkingDifficulty(difficulty: BotDifficulty, remainingMs: number): BotDifficulty {
+  return (difficulty === 'hard' || difficulty === 'hell') && remainingMs < 45000 ? 'normal' : difficulty;
+}
 const HAND_CAP_BONUS_MS = 10000; // v42: end-turn hand-discard choice grants +10s
 /** Server-side slack past the client's clock before the room force-ends a turn.
  *  Honest clients auto-end themselves at 0 — this only catches stalled/modified
@@ -558,7 +563,9 @@ export class GameRoom {
     const room = this.room!, bot = room.bot!;
     bot.nextAt = null;
     if (actingSide(room.game) !== bot.side || room.forfeitAt[1-bot.side] != null || Date.now() < room.turnStartAt) return;
-    const choices=room.challengeDifficulty?[botDecide(room.game,room.challengeDifficulty),...matchBotActions(room.game,bot.side)]:matchBotActions(room.game,bot.side);
+    const remainingMs=room.turnStartAt+turnMsFor(room.ranked)+(room.turnBonusMs||0)-Date.now();
+    const thinking=room.challengeDifficulty ? npcThinkingDifficulty(room.challengeDifficulty,remainingMs) : undefined;
+    const choices=thinking?[botDecide(room.game,thinking),...matchBotActions(room.game,bot.side)]:matchBotActions(room.game,bot.side);
     for (const action of choices) {
       // Engine validation uses the authoritative state, never the strategy's redacted copy.
       const result = reduce(room.game, action);
