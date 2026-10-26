@@ -1,0 +1,85 @@
+{
+  "base": "http://127.0.0.1:5487",
+  "api": "fixture",
+  "cases": [
+    {
+      "width": 1280,
+      "routes": [
+        {
+          "round": 1,
+          "key": "deck",
+          "ms": 109276,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "cards",
+          "ms": 136038,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "leaderboard",
+          "ms": 261,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "friends",
+          "ms": 72,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "shop",
+          "ms": 334,
+          "broken": []
+        },
+        {
+          "round": 1,
+          "key": "home",
+          "ms": 463,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "deck",
+          "ms": 1803,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "cards",
+          "ms": 3943,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "leaderboard",
+          "ms": 188,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "friends",
+          "ms": 69,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "shop",
+          "ms": 159,
+          "broken": []
+        },
+        {
+          "round": 2,
+          "key": "home",
+          "ms": 450,
+          "broken": []
+        }
+      ],
+      "errors": [],
+      "http": []
+    }
+  ]
+}

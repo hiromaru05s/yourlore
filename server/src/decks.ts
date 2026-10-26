@@ -1,9 +1,16 @@
 import {starterCollection,ownsDeck} from '../../client/src/shared/collection';
-import {deckStoreForUser,sanitizeDeck,sanitizeDecks} from '../../client/src/shared/cards';
+import {deckStoreForUser,sanitizeDeck,sanitizeDecks,DECK_SIZE,DECK_SLOTS,DECK_POOL} from '../../client/src/shared/cards';
 import {ownedCosmetics} from '../../client/src/shared/cosmetics';
 import type {Env,SessionUser} from './env';
 /** All five presets and the compatibility cache change in one atomic UPDATE. */
 export async function saveUserDecks(env:Env,user:SessionUser,body:{deck?:unknown;decks?:unknown}){
+ // Sanitizers repair legacy stored data; they must not turn malformed writes
+ // into valid replacement decks. Validate the entire payload before any write.
+ const validCards=(value:unknown):value is string[]=>Array.isArray(value)&&value.length===DECK_SIZE&&value.every(id=>typeof id==='string'&&DECK_POOL.includes(id));
+ if(body.decks!==undefined){
+  const value=body.decks as {sel?:unknown;list?:unknown}|null;
+  if(!value||typeof value!=='object'||Array.isArray(value)||!Number.isInteger(value.sel)||Number(value.sel)<0||Number(value.sel)>=DECK_SLOTS||!Array.isArray(value.list)||value.list.length!==DECK_SLOTS||!value.list.every(slot=>slot&&typeof slot==='object'&&!Array.isArray(slot)&&validCards(slot.cards)))return null;
+ }else if(!validCards(body.deck))return null;
  const previous=deckStoreForUser(user);
  const store=body.decks!==undefined?sanitizeDecks(body.decks):previous;
  if(body.decks!==undefined){

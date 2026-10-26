@@ -1,0 +1,575 @@
+{
+  "label": "after",
+  "boundary": "Local Chromium, deterministic production sleeve modules and real board fixture. No Windows GPU or authenticated server measurement.",
+  "surface": {
+    "steady": {
+      "scans": 0,
+      "copies": 420,
+      "retained": true,
+      "hashes": [
+        "efdfe1c366b990b1d3e14de0d72fe6c7f8b84c92d174da04a6c732f6dbc2f9ab",
+        "3f62f18dc04f388cee5e5c4890c1a835b62ac940e138f8a0b6ed0a9f0d962764",
+        "eea387bf173605f9740e1c3303a5c041d1dd8b2701ad72e18ba6096e6d2cd753",
+        "852710fc35d715e03cacfdfe2597e0cccc1d5ff7ac1ae6524e04b92b7f7c0255",
+        "bfb6763d2442eabbb236dd086fbe541787c25d39f3a837b50f3863e57e0434d2",
+        "1e7b4264a2e910ba664b55e9835ef793f8d81b6caa9809c70180a8275cffa19a",
+        "628cb802e2fcb08a0f5ec1d49b2e3b32940717fb09346ebe7fd3d8427efa71af",
+        "a00ba9692986149c5a30f1c4cee0c8623a45330d952d04bf28aac1959746de04",
+        "2b190e5a90c4e899658a3b68d5c95194f6315d68e741255e727428d9398c2457",
+        "e3bce730d758542c4e107ad8663aacffe7bb4b153f8676dc695349e6c1c6db3a",
+        "d887754d9c4231a896f29e802d6c1bac7a36aa0e0e0279645e53016ff9d26a97",
+        "b49a18de20e7d5a06e9a1ae0c76e4845414180374eccc1c348e708e665a9e759"
+      ]
+    },
+    "clonePainted": true,
+    "newcomerPainted": true,
+    "removedClean": true,
+    "unequippedClean": true,
+    "reequippedPainted": true,
+    "stillCopies": 0,
+    "remaining": 0
+  },
+  "board": {
+    "updates": 60,
+    "added": 0,
+    "removed": 0,
+    "sleeveCopies": 288,
+    "retained": true,
+    "p50": 66.5,
+    "p95": 116.59999999999854,
+    "frames": 125,
+    "metrics": {
+      "TaskDuration": 7.720108000000001,
+      "ScriptDuration": 3.736541,
+      "LayoutDuration": 0.43619,
+      "RecalcStyleDuration": 1.994175,
+      "LayoutCount": 528,
+      "RecalcStyleCount": 969
+    }
+  },
+  "hand": [
+    {
+      "width": 1280,
+      "count": 0,
+      "uids": [],
+      "badge": null,
+      "styles": []
+    },
+    {
+      "width": 1280,
+      "count": 1,
+      "uids": [
+        "hidden-hand-0"
+      ],
+      "badge": "1",
+      "styles": [
+        [
+          "72.576px",
+          "113.4px",
+          "0px",
+          "0px",
+          "rotate(0deg)",
+          "1"
+        ]
+      ]
+    },
+    {
+      "width": 1280,
+      "count": 7,
+      "uids": [
+        "hidden-hand-0",
+        "hidden-hand-1",
+        "hidden-hand-2",
+        "hidden-hand-3",
+        "hidden-hand-4",
+        "hidden-hand-5",
+        "hidden-hand-6"
+      ],
+      "badge": "7",
+      "styles": [
+        [
+          "72.576px",
+          "113.4px",
+          "-7.10543e-15px",
+          "12.8151px",
+          "rotate(-12deg)",
+          "7"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "40.311px",
+          "5.70719px",
+          "rotate(-8deg)",
+          "6"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "81.0197px",
+          "1.42854px",
+          "rotate(-4deg)",
+          "5"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "121.928px",
+          "0px",
+          "rotate(0deg)",
+          "4"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "162.836px",
+          "1.42854px",
+          "rotate(4deg)",
+          "3"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "203.544px",
+          "5.70719px",
+          "rotate(8deg)",
+          "2"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "243.855px",
+          "12.8151px",
+          "rotate(12deg)",
+          "1"
+        ]
+      ]
+    },
+    {
+      "width": 1280,
+      "count": 12,
+      "uids": [
+        "hidden-hand-0",
+        "hidden-hand-1",
+        "hidden-hand-2",
+        "hidden-hand-3",
+        "hidden-hand-4",
+        "hidden-hand-5",
+        "hidden-hand-6",
+        "hidden-hand-7",
+        "hidden-hand-8",
+        "hidden-hand-9",
+        "hidden-hand-10",
+        "hidden-hand-11"
+      ],
+      "badge": "12",
+      "styles": [
+        [
+          "72.576px",
+          "113.4px",
+          "2.13163e-14px",
+          "12.9677px",
+          "rotate(-12deg)",
+          "12"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "22.1877px",
+          "8.69134px",
+          "rotate(-9.81818deg)",
+          "11"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "44.5222px",
+          "5.26281px",
+          "rotate(-7.63636deg)",
+          "10"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "66.9709px",
+          "2.68706px",
+          "rotate(-5.45455deg)",
+          "9"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "89.5015px",
+          "0.967808px",
+          "rotate(-3.27273deg)",
+          "8"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "112.081px",
+          "0.10756px",
+          "rotate(-1.09091deg)",
+          "7"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "134.677px",
+          "0.10756px",
+          "rotate(1.09091deg)",
+          "6"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "157.257px",
+          "0.967808px",
+          "rotate(3.27273deg)",
+          "5"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "179.787px",
+          "2.68706px",
+          "rotate(5.45455deg)",
+          "4"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "202.236px",
+          "5.26281px",
+          "rotate(7.63636deg)",
+          "3"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "224.571px",
+          "8.69134px",
+          "rotate(9.81818deg)",
+          "2"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "246.758px",
+          "12.9677px",
+          "rotate(12deg)",
+          "1"
+        ]
+      ]
+    },
+    {
+      "width": 1280,
+      "count": 4,
+      "uids": [
+        "hidden-hand-0",
+        "hidden-hand-1",
+        "hidden-hand-2",
+        "hidden-hand-3"
+      ],
+      "badge": "4",
+      "styles": [
+        [
+          "72.576px",
+          "113.4px",
+          "0px",
+          "3.59523px",
+          "rotate(-6.75deg)",
+          "4"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "40.6007px",
+          "0.39988px",
+          "rotate(-2.25deg)",
+          "3"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "81.327px",
+          "0.39988px",
+          "rotate(2.25deg)",
+          "2"
+        ],
+        [
+          "72.576px",
+          "113.4px",
+          "121.928px",
+          "3.59523px",
+          "rotate(6.75deg)",
+          "1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "count": 0,
+      "uids": [],
+      "badge": null,
+      "styles": []
+    },
+    {
+      "width": 390,
+      "count": 1,
+      "uids": [
+        "hidden-hand-0"
+      ],
+      "badge": "1",
+      "styles": [
+        [
+          "24.9419px",
+          "38.9717px",
+          "0px",
+          "0px",
+          "rotate(0deg)",
+          "1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "count": 7,
+      "uids": [
+        "hidden-hand-0",
+        "hidden-hand-1",
+        "hidden-hand-2",
+        "hidden-hand-3",
+        "hidden-hand-4",
+        "hidden-hand-5",
+        "hidden-hand-6"
+      ],
+      "badge": "7",
+      "styles": [
+        [
+          "24.9419px",
+          "38.9717px",
+          "-1.77636e-15px",
+          "4.40411px",
+          "rotate(-12deg)",
+          "7"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "13.8535px",
+          "1.96136px",
+          "rotate(-8deg)",
+          "6"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "27.8437px",
+          "0.490939px",
+          "rotate(-4deg)",
+          "5"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "41.9023px",
+          "0px",
+          "rotate(0deg)",
+          "4"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "55.961px",
+          "0.490939px",
+          "rotate(4deg)",
+          "3"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "69.9511px",
+          "1.96136px",
+          "rotate(8deg)",
+          "2"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "83.8047px",
+          "4.40411px",
+          "rotate(12deg)",
+          "1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "count": 12,
+      "uids": [
+        "hidden-hand-0",
+        "hidden-hand-1",
+        "hidden-hand-2",
+        "hidden-hand-3",
+        "hidden-hand-4",
+        "hidden-hand-5",
+        "hidden-hand-6",
+        "hidden-hand-7",
+        "hidden-hand-8",
+        "hidden-hand-9",
+        "hidden-hand-10",
+        "hidden-hand-11"
+      ],
+      "badge": "12",
+      "styles": [
+        [
+          "24.9419px",
+          "38.9717px",
+          "-1.77636e-15px",
+          "4.45654px",
+          "rotate(-12deg)",
+          "12"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "7.62515px",
+          "2.98691px",
+          "rotate(-9.81818deg)",
+          "11"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "15.3007px",
+          "1.80865px",
+          "rotate(-7.63636deg)",
+          "10"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "23.0156px",
+          "0.923449px",
+          "rotate(-5.45455deg)",
+          "9"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "30.7586px",
+          "0.332602px",
+          "rotate(-3.27273deg)",
+          "8"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "38.5184px",
+          "0.0369647px",
+          "rotate(-1.09091deg)",
+          "7"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "46.2839px",
+          "0.0369647px",
+          "rotate(1.09091deg)",
+          "6"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "54.0438px",
+          "0.332602px",
+          "rotate(3.27273deg)",
+          "5"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "61.7867px",
+          "0.923449px",
+          "rotate(5.45455deg)",
+          "4"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "69.5016px",
+          "1.80865px",
+          "rotate(7.63636deg)",
+          "3"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "77.1772px",
+          "2.98691px",
+          "rotate(9.81818deg)",
+          "2"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "84.8023px",
+          "4.45654px",
+          "rotate(12deg)",
+          "1"
+        ]
+      ]
+    },
+    {
+      "width": 390,
+      "count": 4,
+      "uids": [
+        "hidden-hand-0",
+        "hidden-hand-1",
+        "hidden-hand-2",
+        "hidden-hand-3"
+      ],
+      "badge": "4",
+      "styles": [
+        [
+          "24.9419px",
+          "38.9717px",
+          "-1.77636e-15px",
+          "1.23555px",
+          "rotate(-6.75deg)",
+          "4"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "13.9531px",
+          "0.137425px",
+          "rotate(-2.25deg)",
+          "3"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "27.9493px",
+          "0.137425px",
+          "rotate(2.25deg)",
+          "2"
+        ],
+        [
+          "24.9419px",
+          "38.9717px",
+          "41.9023px",
+          "1.23555px",
+          "rotate(6.75deg)",
+          "1"
+        ]
+      ]
+    }
+  ],
+  "errors": [],
+  "parity": {
+    "rgbaSamples": 12,
+    "handLayouts": 10
+  }
+}

@@ -66,7 +66,10 @@ const rankedEligibilitySql = `(EXISTS (
     AND played.season<=r.season AND played.wins+played.losses>0
 ) OR EXISTS (
   SELECT 1 FROM ranked_results result WHERE result.applied=1 AND result.season<=r.season
-    AND (result.a_id=r.user_id OR result.b_id=r.user_id)
+    AND result.a_id=r.user_id
+) OR EXISTS (
+  SELECT 1 FROM ranked_results result WHERE result.applied=1 AND result.season<=r.season
+    AND result.b_id=r.user_id
 ))`;
 // Run inside the settlement transaction, before/after BOTH players are updated.
 const standingSql = `(SELECT position FROM (SELECT r.user_id, ROW_NUMBER() OVER (ORDER BY r.mmr DESC, r.updated_at ASC, r.user_id ASC) AS position FROM ratings r JOIN users u ON u.id=r.user_id WHERE r.season=? AND ${rankedEligibilitySql}) WHERE user_id=?)`;

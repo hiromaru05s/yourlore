@@ -35,6 +35,9 @@ await test('queue account reservation, repeated messages and setup failure',asyn
  assert.equal((await mm.fetch(new Request('https://do?uid=a',{headers:{Upgrade:'websocket'}}))).status,409);
  mm.onMsg(a,{data:'{"type":"queue"}'});mm.onMsg(b,{data:'{"type":"queue"}'});mm.onMsg(a,{data:'{"type":"queue"}'});mm.onMsg(b,{data:'{"type":"queue"}'});assert.equal(calls,1);assert.equal(mm.casual,null);
  release(new Response('failure',{status:503}));await new Promise(r=>setTimeout(r,0));assert(!a.ws.messages.some(m=>m.type==='matched'));assert(a.ws.messages.some(m=>m.type==='error'));
+ assert.equal(a.ws.readyState,3);assert.equal(b.ws.readyState,3);assert.equal(mm.connections.size,0);
+ // The shipped lobby reconnects with fresh sockets after the server closes 1013.
+ a.ws=socket();b.ws=socket();mm.connections.set('a',a);mm.connections.set('b',b);
  mm.onMsg(a,{data:'{"type":"queue"}'});mm.onMsg(b,{data:'{"type":"queue"}'});release(new Response('ok'));await new Promise(r=>setTimeout(r,0));assert.equal(a.ws.messages.filter(m=>m.type==='matched').length,1);
  mm.onMsg(a,{data:'{"type":"queue"}'});assert.equal(calls,2);
  for(let i=0;i<65;i++)mm.onMsg(a,{data:'{"type":"ping"}'});assert.equal(a.ws.readyState,3);

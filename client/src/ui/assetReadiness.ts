@@ -1,4 +1,4 @@
-import {assetHints} from './assetHints';
+import {assetHints,galleryCards} from './assetHints';
 import {withDeadline} from '../net/deadline';
 import {playHomeEntrance,homeEntranceChrome} from './homeEntrance';
 import {loadingCardUrl} from './loadingSigil';
@@ -12,8 +12,22 @@ let menuReady=false;
 export const isMenuReady=()=>menuReady;
 export function imageUrls(root:HTMLElement):string[]{
  const urls=new Set<string>(),pending:Element[]=[root];
+ const clipping=new Map<Element,{rect:DOMRect;style:CSSStyleDeclaration}>();
+ const outsideGalleryViewport=(el:Element)=>{
+  const rect=el.getBoundingClientRect();
+  if(!rect.width||!rect.height)return false;
+  let left=0,top=0,right=window.innerWidth,bottom=window.innerHeight;
+  for(let parent=el.parentElement;parent;parent=parent.parentElement){
+   let entry=clipping.get(parent);if(!entry){entry={rect:parent.getBoundingClientRect(),style:getComputedStyle(parent)};clipping.set(parent,entry);}
+   if(/auto|scroll|hidden|clip/.test(entry.style.overflowX)){left=Math.max(left,entry.rect.left);right=Math.min(right,entry.rect.right);}
+   if(/auto|scroll|hidden|clip/.test(entry.style.overflowY)){top=Math.max(top,entry.rect.top);bottom=Math.min(bottom,entry.rect.bottom);}
+  }
+  return rect.bottom<=top||rect.top>=bottom||rect.right<=left||rect.left>=right;
+ };
  while(pending.length){
-  const el=pending.pop()!,base=getComputedStyle(el);
+  const el=pending.pop()!;
+  if(galleryCards.has(el)&&outsideGalleryViewport(el))continue;
+  const base=getComputedStyle(el);
   // Visibility/opacity may hide prepared entrance actors; display:none is absent.
   if(base.display==='none')continue;
   const declared=assetHints.get(el);
@@ -87,10 +101,18 @@ export async function revealCards(grid:HTMLElement,nodes:Node[],current:()=>bool
  cancelRevealCards(grid);
  const abort=new AbortController();reveals.set(grid,abort);
  const tray=document.createElement('div');tray.className='asset-tray';tray.append(...nodes);grid.append(tray);grid.setAttribute('aria-busy','true');
+ // Measure the pending cards in the same columns as the eventual grid, so the
+ // admission gate includes every first-screen card and excludes later rows.
+ const layout=getComputedStyle(grid);
+ if(layout.display==='grid'){
+  tray.style.display='grid';tray.style.gridTemplateColumns=layout.gridTemplateColumns;
+  tray.style.gap=layout.gap;tray.style.padding=layout.padding;tray.style.alignContent=layout.alignContent;
+  grid.scrollTop=0;
+ }
  try {
   await waitAssets(imageUrls(tray),grid,undefined,abort.signal);
   if(abort.signal.aborted)return;
-  await Promise.all([...tray.querySelectorAll('img')].map(i=>withDeadline(i.decode(),20000,abort.signal).catch(()=>{})));
+  await Promise.all([...tray.querySelectorAll('img')].filter(i=>i.loading!=='lazy').map(i=>withDeadline(i.decode(),20000,abort.signal).catch(()=>{})));
   if(!abort.signal.aborted&&current()&&grid.isConnected){grid.replaceChildren(...Array.from(tray.childNodes));grid.scrollTop=0;}
  } finally {
   tray.remove();

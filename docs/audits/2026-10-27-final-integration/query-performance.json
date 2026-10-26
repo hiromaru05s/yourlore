@@ -1,0 +1,62 @@
+{
+  "kind": "synthetic local SQLite; baseline f9f05fe5 query and indexes versus optimized query/indexes",
+  "players": 1000,
+  "results": 12000,
+  "before": {
+    "samplesMs": [
+      1896.8536249999997,
+      2198.7865840000004,
+      2362.0441250000003,
+      1924.6008330000004,
+      2336.7912080000006
+    ],
+    "medianMs": 2198.7865840000004,
+    "value": {
+      "position": 501
+    },
+    "plan": [
+      "SCAN CONSTANT ROW",
+      "SCALAR SUBQUERY 4",
+      "CO-ROUTINE (subquery-3)",
+      "CO-ROUTINE (subquery-6)",
+      "SEARCH r USING COVERING INDEX idx_ratings_order (season=?)",
+      "CORRELATED SCALAR SUBQUERY 1",
+      "SEARCH played USING INDEX sqlite_autoindex_ratings_1 (user_id=? AND season<?)",
+      "CORRELATED SCALAR SUBQUERY 2",
+      "SCAN result",
+      "SEARCH u USING COVERING INDEX sqlite_autoindex_users_1 (id=?)",
+      "SCAN (subquery-6)",
+      "SCAN (subquery-3)"
+    ]
+  },
+  "after": {
+    "samplesMs": [
+      1.9967500000002474,
+      2.7656669999996666,
+      1.6019579999992857,
+      1.5453749999996944,
+      1.5270409999993717
+    ],
+    "medianMs": 1.6019579999992857,
+    "value": {
+      "position": 501
+    },
+    "plan": [
+      "SCAN CONSTANT ROW",
+      "SCALAR SUBQUERY 5",
+      "CO-ROUTINE (subquery-4)",
+      "CO-ROUTINE (subquery-7)",
+      "SEARCH r USING COVERING INDEX idx_ratings_order (season=?)",
+      "CORRELATED SCALAR SUBQUERY 1",
+      "SEARCH played USING INDEX sqlite_autoindex_ratings_1 (user_id=? AND season<?)",
+      "CORRELATED SCALAR SUBQUERY 2",
+      "SEARCH result USING COVERING INDEX idx_ranked_results_applied_a (a_id=? AND season<?)",
+      "CORRELATED SCALAR SUBQUERY 3",
+      "SEARCH result USING COVERING INDEX idx_ranked_results_applied_b (b_id=? AND season<?)",
+      "SEARCH u USING COVERING INDEX sqlite_autoindex_users_1 (id=?)",
+      "SCAN (subquery-7)",
+      "SCAN (subquery-4)"
+    ]
+  },
+  "speedup": 1372.5619423236944
+}

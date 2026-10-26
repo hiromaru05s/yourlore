@@ -404,33 +404,33 @@ export class GameView {
   private renderOpponentHand(opp:PlayerState):void{
     // opponent hand (face-down): straight upright stack held to the right of their
     // portrait. Overlap tightens as the count grows so the RIGHT edge stays put.
-    const oh = this.q("oppHand"); oh.innerHTML = "";
+    const oh = this.q("oppHand");
+    // Online UIDs are opaque hand-slot IDs, not hidden card identities. Reuse
+    // their native backs (and animated sleeve canvases) across snapshots.
+    const old = new Map([...oh.querySelectorAll<HTMLElement>(':scope > .card--back')].map(el => [el.dataset.uid, el]));
+    const keep = new Set(opp.hand.map(c => c.uid));
+    for (const [uid, node] of old) if (!keep.has(uid!)) node.remove();
     const n = opp.hand.length;
-    // back size follows the solved portrait size (--pt) so it scales with the viewport
-    const handWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--card-w-hand")) || 100;
-    const obw = handWidth * .42; // back width (px)
-    const spread = obw * 4.4;
-    const ostep = n <= 1 ? 0 : Math.min(obw * 0.62, Math.max(6, (spread - obw) / (n - 1)));
     for (let i = 0; i < n; i++) {
-      const cb = document.createElement("div");
-      cb.className = "card--back";
-      cb.dataset.uid = opp.hand[i].uid;
-      cb.style.width = `${obw}px`;
-      cb.style.height = `${obw / .64}px`;
-      cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
-      cb.style.left = `${i * ostep}px`;
-      cb.style.zIndex = String(n-i);
-      oh.appendChild(cb);
+      const uid = opp.hand[i].uid;
+      const cb = old.get(uid) ?? document.createElement("div");
+      if (!old.has(uid)) { cb.className = "card--back"; cb.dataset.uid = uid; }
+      if (cb.dataset.handSleeve !== OPP_SLEEVE) {
+        cb.style.backgroundImage = `url(${OPP_SLEEVE})`;
+        cb.dataset.handSleeve = OPP_SLEEVE;
+      }
+      // A completed play/exile can leave its old slot hidden until this render.
+      // Restoring it is essential when a redacted slot now holds another card.
+      if (cb.style.visibility) cb.style.visibility = '';
+      const z = String(n-i);
+      if (cb.style.zIndex !== z) cb.style.zIndex = z;
+      if (oh.children[i] !== cb) oh.insertBefore(cb, oh.children[i] ?? null);
     }
-    oh.style.width = `${n ? obw + (n - 1) * ostep : 0}px`;
+    let cnt = oh.querySelector<HTMLElement>(':scope > .opp-hand-count');
     if (n > 0) {
-      const cnt = document.createElement("div");
-      cnt.className = "opp-hand-count";
-      cnt.textContent = String(n);
-      oh.appendChild(cnt);
-    }
-
-
+      if (!cnt) { cnt = document.createElement("div"); cnt.className = "opp-hand-count"; oh.appendChild(cnt); }
+      if (cnt.textContent !== String(n)) cnt.textContent = String(n);
+    } else cnt?.remove();
     this.layoutOpponentHand();
   }
 

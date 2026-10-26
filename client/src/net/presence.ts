@@ -1,32 +1,44 @@
-// ============================================================
-// LORE — presence heartbeat. Posts the player's current state
-// (menu / queue / online / bot) every ~20s so the admin dashboard
-// can count live players in real time. Bot games have no server
-// connection at all, so this client heartbeat is the only way to
-// see "in a bot game" — same path covers online games and lobby.
-// ============================================================
+// One heartbeat per 20 seconds; state changes are sent as soon as the active
+// request finishes. Menu-to-menu navigation does not create extra DB writes.
 export type PresenceState = "menu" | "queue" | "online" | "bot";
-
 let current: PresenceState = "menu";
 let timer: ReturnType<typeof setInterval> | null = null;
+let flight: AbortController | null = null;
 
 async function beat(): Promise<void> {
+  if (flight || !timer) return;
+  const state = current, controller = new AbortController();
+  flight = controller;
+  const timeout = setTimeout(() => controller.abort(), 10000);
   try {
     await fetch("/api/presence", {
-      method: "POST", credentials: "include", keepalive: true,
+      method: "POST", credentials: "include", signal: controller.signal,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ state: current }),
+      body: JSON.stringify({ state }),
     });
-  } catch { /* offline / logged out — ignore */ }
+  } catch { /* Next heartbeat retries transient failures. */ }
+  finally {
+    clearTimeout(timeout);
+    if (flight === controller) {
+      flight = null;
+      if (timer && state !== current) void beat();
+    }
+  }
 }
 
-/** Update the state and beat immediately (called on every screen change). */
 export function setPresence(state: PresenceState): void {
+  const changed = current !== state;
   current = state;
-  void beat();
-  if (!timer) timer = setInterval(() => void beat(), 20_000);
+  if (!timer) {
+    timer = setInterval(() => void beat(), 20000);
+    void beat();
+  } else if (changed) void beat();
 }
 
 export function stopPresence(): void {
-  if (timer) { clearInterval(timer); timer = null; }
+  if (timer) clearInterval(timer);
+  timer = null;
+  const pending = flight;
+  flight = null;
+  pending?.abort();
 }

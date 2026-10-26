@@ -1,3 +1,4 @@
+import {ReadRequests} from './readRequests';
 import type {GiftInbox,GiftClaim} from '../shared/gifts';
 import type { ClearDifficulty, ExperienceReceipt } from '../shared/progression';
 import type {CollectionState,CollectionResult,CollectionReceipt} from '../shared/collection';
@@ -44,7 +45,7 @@ export interface ClaimResult {
 
 export interface ApiError extends Error { needVerify?: boolean; status?:number }
 
-async function call<T>(path: string, body?: unknown, method = "POST", signal?: AbortSignal): Promise<T> {
+async function performCall<T>(path: string, body?: unknown, method = "POST", signal?: AbortSignal): Promise<T> {
   const controller=new AbortController();
   const abort=()=>controller.abort();signal?.addEventListener('abort',abort,{once:true});if(signal?.aborted)abort();
   const timeout=setTimeout(abort,20000);
@@ -68,6 +69,18 @@ async function call<T>(path: string, body?: unknown, method = "POST", signal?: A
     if(controller.signal.aborted&&!signal?.aborted)throw new Error(localizeServerMsg('request timed out'));
     throw error;
   } finally {clearTimeout(timeout);signal?.removeEventListener('abort',abort);}
+}
+
+const readRequests = new ReadRequests();
+async function call<T>(path: string, body?: unknown, method = "POST", signal?: AbortSignal): Promise<T> {
+  if (method === 'GET') {
+    // A screen's AbortSignal must never cancel another screen's request.
+    return signal ? performCall<T>(path, body, method, signal)
+      : readRequests.get(path, () => performCall<T>(path, body, method));
+  }
+  readRequests.clear();
+  try { return await performCall<T>(path, body, method, signal); }
+  finally { readRequests.clear(); }
 }
 
 export interface RankInfo {

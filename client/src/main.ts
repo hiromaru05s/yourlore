@@ -21,6 +21,7 @@ import "./styles/cardsWorkspace.css";
 import "./styles/menuApproved.css";
 import "./styles/menuWorkspace.css";
 import { App } from "./router";
+import type {User} from "./net/api";
 import { initLang } from "./i18n";
 import { initAnalytics } from "./net/analytics";
 import { initSound, sfx } from "./ui/sound";
@@ -51,7 +52,7 @@ function bindUiSounds(): void {
   }, { capture: true });
 }
 
-export async function start(language: "ja" | "ko" | "en"): Promise<void> {
+export async function start(language: "ja" | "ko" | "en", session?: User | null): Promise<void> {
   captureAcquisition();
   initSound();
   bindUiSounds();
@@ -60,5 +61,5 @@ export async function start(language: "ja" | "ko" | "en"): Promise<void> {
   initLang(language);
   const root = document.getElementById("app");
   if (!root) throw new Error("Missing application root");
-  await new App(root).start();
+  await new App(root).start(session);
 }

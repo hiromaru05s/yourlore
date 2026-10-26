@@ -6,7 +6,7 @@ import { BOT_FIRST_CLEAR_EXP } from '../../client/src/shared/progression';
 // ============================================================
 import {guardRequest} from "./requestGuard";
 import type { Env } from "./env";
-import { corsHeaders, getUser, handleAuth } from "./auth";
+import { corsHeaders, getUser, getSessionIdentity, handleAuth } from "./auth";
 import {handleCollection} from "./collection";
 import {saveUserDecks} from "./decks";
 import { getRating, handleRank } from "./rank";
@@ -101,7 +101,7 @@ export default {
     }
     // ---- presence heartbeat (real-time online counts; covers bot games too) ----
     if (path === "/api/presence" && req.method === "POST") {
-      const user = await getUser(env, req);
+      const user = await getSessionIdentity(env, req);
       if (!user) return new Response(JSON.stringify({ ok: false }), { status: 401, headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
       const body = (await req.json().catch(() => ({}))) as { state?: string };
       const state = ["menu", "queue", "online", "bot"].includes(body.state || "") ? body.state! : "menu";
@@ -117,7 +117,7 @@ export default {
       if (!user) return new Response(JSON.stringify({ error: "로그인이 필요합니다" }), { status: 401, headers: hdrs });
       const body = (await req.json().catch(() => ({}))) as { deck?: unknown; decks?: unknown };
       const result=await saveUserDecks(env,user,body);
-      if(!result)return new Response(JSON.stringify({error:"unowned deck contents"}),{status:400,headers:hdrs});
+      if(!result)return new Response(JSON.stringify({error:"invalid or unowned deck contents"}),{status:400,headers:hdrs});
       return new Response(JSON.stringify(result),{headers:hdrs});
     }
 

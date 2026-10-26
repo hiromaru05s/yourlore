@@ -1,0 +1,13 @@
+{
+  "before": {
+    "raw": 790516,
+    "gzip": 250000,
+    "brotli": 40501
+  },
+  "after": {
+    "raw": 789891,
+    "gzip": 181679,
+    "brotli": 41389
+  },
+  "scope": "Same 888 declarations and 619 font files; per-family/style/weight cascade unchanged"
+}

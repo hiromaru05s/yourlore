@@ -1,0 +1,28 @@
+{
+  "origin": "http://127.0.0.1:5488",
+  "api": "fixture",
+  "report": [
+    {
+      "width": 1280,
+      "readyMs": 2292,
+      "total": 381,
+      "lazy": 336,
+      "visible": 40,
+      "broken": [],
+      "cardRequests": 168,
+      "scrollAndFilter": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "readyMs": 1294,
+      "total": 381,
+      "lazy": 341,
+      "visible": 15,
+      "broken": [],
+      "cardRequests": 59,
+      "scrollAndFilter": true,
+      "errors": []
+    }
+  ]
+}

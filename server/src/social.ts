@@ -214,7 +214,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     // 나에게 온 대전 신청 (유효 시간 내)
     const ch = await env.DB.prepare(
       `SELECT c.id, c.challenger, c.created_at, u.display FROM challenges c JOIN users u ON u.id = c.challenger
-       WHERE c.target = ? AND c.status = 'pending' AND c.created_at > ?`
+       WHERE c.target = ? AND c.status IN ('pending','provisioning') AND c.created_at > ?`
     ).bind(user.id, now - CHALLENGE_TTL_MS).all<{ id: string; challenger: string; created_at: number; display: string }>();
     return json(env, { friends, incoming, outgoing, challenges: (ch.results ?? []).map((c) => ({ id: c.id, from: c.display, fromId: c.challenger, at: c.created_at })) });
   }
@@ -280,7 +280,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     ).bind(user.id, body.user_id).first();
     if (!isFriend) return json(env, { error: "친구에게만 대전을 신청할 수 있습니다." }, 403);
     // 이전 pending 신청은 자동 취소
-    await env.DB.prepare(`UPDATE challenges SET status = 'cancelled' WHERE challenger = ? AND status = 'pending'`).bind(user.id).run();
+    await env.DB.prepare(`UPDATE challenges SET status = 'cancelled' WHERE challenger = ? AND status IN ('pending','provisioning')`).bind(user.id).run();
     const id = crypto.randomUUID();
     await env.DB.prepare(`INSERT INTO challenges (id, challenger, target, status, created_at) VALUES (?,?,?,?,?)`)
       .bind(id, user.id, body.user_id, "pending", now).run();
@@ -289,7 +289,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
 
   if (path === "/social/challenge/cancel" && req.method === "POST") {
     const body = (await req.json().catch(() => ({}))) as { id?: string };
-    await env.DB.prepare(`UPDATE challenges SET status = 'cancelled' WHERE id = ? AND challenger = ? AND status = 'pending'`)
+    await env.DB.prepare(`UPDATE challenges SET status = 'cancelled' WHERE id = ? AND challenger = ? AND status IN ('pending','provisioning')`)
       .bind(body.id || "", user.id).run();
     return json(env, { ok: true });
   }
@@ -305,7 +305,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     }
     if (!['pending','provisioning'].includes(ch.status) || now - ch.created_at > CHALLENGE_TTL_MS) return json(env, { error: "이미 만료된 신청입니다." }, 410);
     if (!body.accept) {
-      await env.DB.prepare(`UPDATE challenges SET status = 'declined' WHERE id = ? AND status = 'pending'`).bind(ch.id).run();
+      await env.DB.prepare(`UPDATE challenges SET status = 'declined' WHERE id = ? AND status IN ('pending','provisioning')`).bind(ch.id).run();
       return json(env, { ok: true });
     }
     const challenger = await env.DB.prepare(`SELECT id, display, sleeve, furniture, deck, decks, starter_cards, sleeves FROM users WHERE id = ?`).bind(ch.challenger).first<{ id: string; display: string; sleeve: string | null; furniture:string|null; deck: string | null; decks:string|null;starter_cards:string|null;sleeves:string|null }>();
@@ -322,9 +322,15 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const setup = await stub.fetch("https://do/setup", {
       method: "POST",
       body: JSON.stringify({ players: [{ id: challenger.id, name: challenger.display, sleeve: equipped.sleeve, furniture:equipped.furniture, effect:ownedCosmetics(challenger.sleeves).includes(equipped.effect??'default')?equipped.effect:'default', frame:ownedCosmetics(challenger.sleeves).includes(equipped.frame??'default')?equipped.frame:'default', deck: equipped.cards.join(",") }, { id: user.id, name: user.display, sleeve: user.sleeve, furniture:user.furniture, effect:user.effect, frame:user.frame, deck: (user.deck ?? []).join(",") || null }], seed, ranked: false }),
-    });
-    if(!setup.ok&&setup.status!==409)return json(env,{error:'room setup failed; retry'},503);
-    await env.DB.prepare(`UPDATE challenges SET status = 'accepted', room_id = ? WHERE id = ? AND status='provisioning'`).bind(roomId, ch.id).run();
+    }).catch(()=>null);
+    // Keep the deterministic provisioning reservation visible/retryable. A
+    // timeout may have created the room; a retry recovers its existing 409.
+    if(!setup||(!setup.ok&&setup.status!==409))return json(env,{error:'room setup failed; retry'},503);
+    const accepted=await env.DB.prepare(`UPDATE challenges SET status = 'accepted', room_id = ? WHERE id = ? AND status='provisioning'`).bind(roomId, ch.id).run();
+    if(!accepted.meta.changes){
+      const latest=await env.DB.prepare('SELECT status,room_id FROM challenges WHERE id=?').bind(ch.id).first<{status:string;room_id:string|null}>();
+      if(latest?.status!=='accepted'||latest.room_id!==roomId)return json(env,{error:'challenge changed; retry'},409);
+    }
     return json(env, { ok: true, roomId, you: 1, oppName: challenger.display });
   }
 
@@ -334,7 +340,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     const ch = await env.DB.prepare(`SELECT id, challenger, target, room_id, status, created_at FROM challenges WHERE id = ?`)
       .bind(id).first<{ id: string; challenger: string; target: string; room_id: string | null; status: string; created_at: number }>();
     if (!ch || ch.challenger !== user.id) return json(env, { error: "not found" }, 404);
-    const expired = ch.status === "pending" && now - ch.created_at > CHALLENGE_TTL_MS;
+    const expired = ["pending","provisioning"].includes(ch.status) && now - ch.created_at > CHALLENGE_TTL_MS;
     if (ch.status === "accepted" && ch.room_id) {
       const opp = await env.DB.prepare(`SELECT display FROM users WHERE id = ?`).bind(ch.target).first<{ display: string }>();
       return json(env, { status: "accepted", roomId: ch.room_id, you: 0, oppName: opp?.display ?? "?" });

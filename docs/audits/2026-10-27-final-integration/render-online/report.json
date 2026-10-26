@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "viewer 0: authoritative no-op update retains backs and surfaces",
+    "viewer 0: opponent play with redacted hand slots",
+    "viewer 0: animated opponent draw, continuity and cleanup",
+    "viewer 1: authoritative no-op update retains backs and surfaces",
+    "viewer 1: opponent play with redacted hand slots",
+    "viewer 1: animated opponent draw, continuity and cleanup"
+  ],
+  "errors": [],
+  "cpuThrottle": 1,
+  "boundary": "Real OnlineController and browser WebSocket with deterministic server fixtures; both viewer sides. CPU throttling does not simulate a Windows GPU. No live account or Windows hardware."
+}

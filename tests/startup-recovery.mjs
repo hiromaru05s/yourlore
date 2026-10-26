@@ -31,8 +31,8 @@ try {
  globalThis.fetch=(_url,{signal})=>new Promise((resolve,reject)=>{signal.addEventListener('abort',()=>reject(Error('aborted')),{once:true});});
  const session=new AbortController(),pendingSession=api.me({strict:true,signal:session.signal});session.abort();await assert.rejects(pendingSession,/aborted/);
  // Run the actual tiny entry, substituting only the large application dependency.
- globalThis.fetch=async()=>({ok:true,json:async()=>({country:'JP'})});
- let starts=0;globalThis.startStub=async language=>{starts++;assert.equal(language,'ja');};
+ globalThis.fetch=async url=>({ok:true,json:async()=>url==='/api/auth/me'?{user:null}:{country:'JP'}});
+ let starts=0;globalThis.startStub=async (language,session)=>{starts++;assert.equal(language,'ja');assert.equal(session,null);};
  for(const fail of [false,true]){
   document.body.innerHTML='<section id="startup"><p id="startup-status"></p><a id="startup-reload" href=""></a></section><div id="app"></div>';
   const output=path.join(temp,`boot-${fail}.mjs`);

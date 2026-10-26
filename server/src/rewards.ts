@@ -44,7 +44,7 @@ function isTutorialTranscriptAction(action:unknown):boolean {
 function json(env: Env, body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { "Content-Type": "application/json", ...corsHeaders(env) },
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store", ...corsHeaders(env) },
   });
 }
 

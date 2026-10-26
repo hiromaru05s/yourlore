@@ -69,7 +69,7 @@ function clearCookie(): string {
 }
 function readCookie(req: Request): string | null {
   const raw = req.headers.get("Cookie") || "";
-  const m = raw.match(new RegExp(`${COOKIE}=([^;]+)`));
+  const m = raw.match(new RegExp(`(?:^|;\\s*)${COOKIE}=([^;]+)`));
   return m ? m[1] : null;
 }
 
@@ -81,11 +81,19 @@ export function temporaryDisplay(): string {
 import {ownedCosmetics} from '../../client/src/shared/cosmetics';
 import {isCardEffect} from '../../client/src/shared/cardEffects';
 // ---- session lookup ----
+/** Heartbeats only need an authenticated identity, not deck/inventory/EXP hydration. */
+export async function getSessionIdentity(env: Env, req: Request): Promise<{id:string} | null> {
+  const token=readCookie(req);
+  if(!token)return null;
+  return env.DB.prepare(`SELECT u.id FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=? AND s.expires_at>=?`)
+    .bind(token,Date.now()).first<{id:string}>();
+}
+
 export async function getUser(env: Env, req: Request): Promise<SessionUser | null> {
   const token = readCookie(req);
   if (!token) return null;
   const row = await env.DB.prepare(
-    `SELECT u.id, u.email, u.display, u.username_set, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.furniture, u.deck, u.decks, u.starter_cards, u.sleeves, COALESCE(x.exp,0) AS exp, (SELECT json_group_array(substr(key,5)) FROM experience_events WHERE user_id=u.id AND key LIKE 'bot:%') AS bot_clears, s.expires_at
+    `SELECT u.id, u.email, u.display, u.username_set, u.wins, u.losses, u.credits, u.avatar, u.badge, u.sleeve, u.furniture, u.deck, u.decks, u.starter_cards, u.sleeves, COALESCE(x.exp,0) AS exp, (SELECT json_group_array(substr(key,5)) FROM experience_events WHERE user_id=u.id AND key IN ('bot:easy','bot:normal','bot:hard','bot:hell')) AS bot_clears, s.expires_at
      FROM sessions s JOIN users u ON u.id = s.user_id LEFT JOIN player_experience x ON x.user_id=u.id WHERE s.token = ?`
   ).bind(token).first<{ id: string; email: string; display: string; username_set: number; wins: number; losses: number; credits: number; avatar: string | null; badge: string | null; sleeve: string | null; furniture:string|null; deck: string | null; decks: string | null; starter_cards:string|null; sleeves:string|null; exp:number; bot_clears:string; expires_at: number }>();
   if (!row || row.expires_at < Date.now()) return null;

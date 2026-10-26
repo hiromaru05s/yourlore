@@ -25,7 +25,6 @@ import { mountGame, mountGamePreparation } from "./screens/lazyGame";
 import { mountTutorial } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
-import { mountAdmin } from "./screens/admin";
 import { mountProfile, type ProfileTab } from "./screens/profile";
 import { mountFriends } from "./screens/friends";
 import { mountShop } from "./screens/shop";
@@ -75,15 +74,15 @@ export class App {
     this.home();
   }
 
-  async start(): Promise<void> {
+  async start(session?: User | null): Promise<void> {
     // Bind the current release without downloading the catalogue. Normal visible
     // requests populate the verified content cache and survive screen/reload changes.
     void prepareMenuCache(()=>{},new AbortController().signal,[]).catch(()=>{});
     // Isolated admin origin (admin.yourlore.xyz) → dashboard only, nothing else.
-    if (location.hostname.startsWith("admin.")) { this.swap(() => mountAdmin(this)); return; }
+    if (location.hostname.startsWith("admin.")) { const {mountAdmin}=await import("./screens/admin"); this.swap(() => mountAdmin(this)); return; }
     // On the game origin, /admin just bounces to the isolated admin host.
     if (location.pathname === "/admin") { location.href = `${location.protocol}//admin.${location.host.replace(/^www\./, "")}/`; return; }
-    this.user = await api.me({ signal: AbortSignal.timeout(10000), strict: true });
+    this.user = session !== undefined ? session : await api.me({ signal: AbortSignal.timeout(10000), strict: true });
     if (!this.user && canUseLocalGuest()) {
       const params = new URLSearchParams(location.search);
       const devLogin = params.get("devLogin");

@@ -1,5 +1,9 @@
 {
   "current": [
+    "tests/db-schema-contract.mjs",
+    "tests/final-backend-audit.mjs",
+    "tests/network-efficiency.mjs",
+    "tests/startup-session.mjs",
     "tests/legacy-card-rework.mjs",
     "tests/legacy-card-rework-server.mjs",
     "tests/cull-support-rework.mjs",

@@ -21,7 +21,7 @@ try{for(const width of (process.env.LORE_TEST_WIDTHS||'1280,700').split(',').map
  const routes=[];
  for(const round of [1,2])for(const key of ['deck','cards','leaderboard','friends','shop','home']){
   const start=Date.now();await p.locator(`[data-nav="${key}"]`).click();await p.waitForSelector(`[data-nav="${key}"][aria-current="page"]`);await p.waitForSelector('.screen-loader,.asset-tray',{state:'detached'});
-  await p.waitForTimeout(100);const broken=await p.evaluate(()=>[...document.images].filter(i=>i.getClientRects().length&&getComputedStyle(i).visibility!=='hidden'&&i.loading!=='lazy'&&(!i.complete||!i.naturalWidth)).map(i=>i.src));
+  await p.waitForFunction(()=>[...document.images].filter(i=>i.getClientRects().length&&getComputedStyle(i).visibility!=='hidden'&&i.loading!=='lazy').every(i=>i.complete&&i.naturalWidth),{},{timeout:20000});const broken=await p.evaluate(()=>[...document.images].filter(i=>i.getClientRects().length&&getComputedStyle(i).visibility!=='hidden'&&i.loading!=='lazy'&&(!i.complete||!i.naturalWidth)).map(i=>i.src));
   routes.push({round,key,ms:Date.now()-start,broken});assert.deepEqual(broken,[]);if(round===1)await p.screenshot({path:`${out}/${key}-${width}.png`});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(http,[]);report.cases.push({width,routes,errors,http});console.log(JSON.stringify({width,routes}));await context.close();

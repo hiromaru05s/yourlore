@@ -71,6 +71,7 @@ export class Matchmaker {
   }
 
   private onMsg(me: Waiter, e: MessageEvent): void {
+    if(me.ws.readyState!==WebSocket.OPEN)return;
     const now=Date.now();me.messages=(me.messages??[]).filter(t=>now-t<10000);me.messages.push(now);
     if(me.messages.length>60){me.ws.close(1008,'rate limit');this.remove(me.ws);return;}
     let msg: QueueClientMsg;
@@ -190,10 +191,19 @@ export class Matchmaker {
       console.error('matchmaker_bot_setup_failed');
       if (human.ws.readyState === WebSocket.OPEN) {
         try { this.send(human.ws, {type:'error',message:'BOTとの対戦を準備できませんでした。再度お試しください。'}); } catch { /* dropped */ }
+        this.retryConnection(human);
       }
     } finally {
       if (human.ws.readyState !== WebSocket.OPEN) { human.phase = undefined; this.remove(human.ws); }
     }
+  }
+
+  /** The client reconnects closed queues with backoff; an open, unqueued
+   * socket would keep showing the spinner forever after a setup outage. */
+  private retryConnection(w: Waiter): void {
+    w.phase = undefined;
+    try { w.ws.close(1013, 'room setup failed; retry'); } catch { /* dropped */ }
+    this.remove(w.ws);
   }
 
   /** Put a still-connected waiter back in the queue (used when a pairing aborts). */
@@ -233,6 +243,7 @@ export class Matchmaker {
       console.error('matchmaker_setup_failed');
       if (a.ws.readyState === WebSocket.OPEN) try { this.send(a.ws, { type: "error", message: "방 생성 실패" }); } catch { /* dropped */ }
       if (b.ws.readyState === WebSocket.OPEN) try { this.send(b.ws, { type: "error", message: "방 생성 실패" }); } catch { /* dropped */ }
+      this.retryConnection(a); this.retryConnection(b);
       return;
     }
     a.phase=b.phase='matched';

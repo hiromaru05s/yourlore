@@ -1,5 +1,6 @@
 /** Small entry module: recovery stays available even if the application graph fails. */
 import { startupLanguage } from './startupLanguage';
+import {startupSession} from './startupSession';
 
 const shell = document.getElementById('startup');
 const message = document.getElementById('startup-status');
@@ -14,9 +15,9 @@ if (message) message.textContent = copy[0];
 if (reload) reload.textContent = copy[1];
 const slow = setTimeout(() => { if (message) message.textContent = copy[2]; }, 12000);
 // Geography is optional and bounded, and overlaps downloading the application.
-void Promise.all([import('./main'), startupLanguage()])
-  .then(async ([{ start }, language]) => {
-    await start(language);
+void Promise.all([import('./main'), startupLanguage(), startupSession()])
+  .then(async ([{ start }, language, session]) => {
+    await start(language, session);
     // Preserve the existing ritual's clock when the app takes over its loader.
     const next = document.querySelector('.screen-loader.game-loading');
     if (shell && next) {

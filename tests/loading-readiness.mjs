@@ -15,11 +15,14 @@ globalThis.Image=class {naturalWidth=64;naturalHeight=64;constructor(){created++
 const host=()=>{const el=document.createElement('div');document.body.append(el);return el;};
 const until=async condition=>{for(let i=0;i<100&&!condition();i++)await new Promise(r=>timer(r,2));assert(condition());};
 try {
- await build({stdin:{contents:`export {waitAssets,imageUrls,coverScreen} from './client/src/ui/assetReadiness';export {prepareDuel,waitForDuel} from './client/src/ui/duelReadiness';`,resolveDir:process.cwd()},bundle:true,loader:{'.css':'empty'},platform:'node',format:'esm',outfile:path.join(temp,'ready.mjs')});
- const {waitAssets,imageUrls,coverScreen,prepareDuel,waitForDuel}=await import(path.join(temp,'ready.mjs'));
+ await build({stdin:{contents:`export {waitAssets,imageUrls,coverScreen} from './client/src/ui/assetReadiness';export {galleryCards} from './client/src/ui/assetHints';export {prepareDuel,waitForDuel} from './client/src/ui/duelReadiness';`,resolveDir:process.cwd()},bundle:true,loader:{'.css':'empty'},platform:'node',format:'esm',outfile:path.join(temp,'ready.mjs')});
+ const {waitAssets,imageUrls,coverScreen,galleryCards,prepareDuel,waitForDuel}=await import(path.join(temp,'ready.mjs'));
  globalThis.getComputedStyle=(el,pseudo)=>pseudo?{display:'none',content:'none'}:dom.window.getComputedStyle(el);
  const visibility=host();visibility.innerHTML='<div style="display:none;background-image:url(/hidden.webp)"><div style="background-image:url(/hidden-child.webp)"></div></div><div style="visibility:hidden;background-image:url(/opening.webp)"></div><div style="opacity:0;background-image:url(/transparent.webp)"></div>';
  const visibleUrls=imageUrls(visibility);assert(!visibleUrls.some(url=>url.includes('hidden')));assert(visibleUrls.some(url=>url.includes('opening')));assert(visibleUrls.some(url=>url.includes('transparent')));visibility.remove();
+ const gallery=host();gallery.style.overflowY='auto';gallery.getBoundingClientRect=()=>({left:0,top:100,right:500,bottom:400,width:500,height:300});
+ for(const [name,top] of [['first',110],['later',500]]){const card=document.createElement('div'),img=document.createElement('img');img.src='/'+name+'.webp';img.loading='lazy';card.append(img);card.getBoundingClientRect=()=>({left:10,top,right:110,bottom:top+120,width:100,height:120});galleryCards.add(card);gallery.append(card);}
+ const admitted=imageUrls(gallery);assert(admitted.some(u=>u.endsWith('/first.webp')));assert(!admitted.some(u=>u.endsWith('/later.webp')),'Gallery rows outside the scrollport must not block admission');assert.equal(gallery.lastChild.firstChild.loading,'lazy');gallery.remove();
  let attempts=0;behavior=()=>++attempts===1?Promise.reject(Error('transient')):Promise.resolve();
  const a=host();await waitAssets(['/retry.webp'],a);assert.equal(attempts,2);assert.equal(a.querySelector('.asset-retry'),null);a.remove();
  const before=created;let complete;behavior=()=>new Promise(r=>complete=r);const b=host();const slow=waitAssets(['/slow.webp'],b);

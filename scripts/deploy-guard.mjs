@@ -23,6 +23,7 @@ try{
  if(!process.argv.includes('--check')){
   snapshot=await fs.mkdtemp(path.join(os.tmpdir(),'lore-release-'));git('worktree','add','--detach',snapshot,sha);
   await run('npm',['ci','--no-fund'],snapshot);
+  await run(process.execPath,['scripts/check-db-schema.mjs',env],snapshot);
   const status=()=>JSON.parse(execFileSync('npm',['exec','--','wrangler','deployments','status','-c','server/wrangler.toml',...(env==='staging'?['--env','staging']:[]),'--json'],{cwd:snapshot,encoding:'utf8'}));
   const before=status();
   const message=before.annotations?.['workers/message']??'';
