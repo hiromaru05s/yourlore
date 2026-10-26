@@ -1,0 +1,7030 @@
+{
+  "experiments": {
+    "starter": {
+      "games": 8448,
+      "invalid": 0,
+      "turnCap": 81,
+      "draws": 0
+    },
+    "deck": {
+      "games": 1152,
+      "invalid": 0,
+      "turnCap": 120,
+      "draws": 3
+    },
+    "market": {
+      "games": 29088,
+      "invalid": 0,
+      "turnCap": 1015,
+      "draws": 0
+    },
+    "pair": {
+      "games": 7920,
+      "invalid": 0,
+      "turnCap": 492,
+      "draws": 3
+    },
+    "holdout": {
+      "games": 2688,
+      "invalid": 0,
+      "turnCap": 60,
+      "draws": 0
+    },
+    "counter": {
+      "games": 576,
+      "invalid": 0,
+      "turnCap": 49,
+      "draws": 1
+    },
+    "pure": {
+      "games": 960,
+      "invalid": 0,
+      "turnCap": 135,
+      "draws": 0
+    },
+    "thin": {
+      "games": 288,
+      "invalid": 0,
+      "turnCap": 12,
+      "draws": 0
+    },
+    "combo": {
+      "games": 384,
+      "invalid": 0,
+      "unfinished": 3
+    }
+  },
+  "starters": [
+    {
+      "id": "GOBLIN",
+      "n": 192,
+      "delta": 8.333333333333332,
+      "ci": [
+        3.6458333333333335,
+        13.541666666666666
+      ],
+      "win": 56.25,
+      "use": 97.39583333333334,
+      "lowUsage": false
+    },
+    {
+      "id": "RUST_SHROOM",
+      "n": 192,
+      "delta": 8.333333333333332,
+      "ci": [
+        4.166666666666666,
+        13.020833333333334
+      ],
+      "win": 56.25,
+      "use": 97.91666666666666,
+      "lowUsage": false
+    },
+    {
+      "id": "GOBLIN_RAIDER",
+      "n": 192,
+      "delta": 7.8125,
+      "ci": [
+        3.125,
+        12.5
+      ],
+      "win": 55.729166666666664,
+      "use": 93.75,
+      "lowUsage": false
+    },
+    {
+      "id": "COUNTERCALC",
+      "n": 192,
+      "delta": 2.083333333333333,
+      "ci": [
+        -0.5208333333333333,
+        5.729166666666666
+      ],
+      "win": 50.0,
+      "use": 54.166666666666664,
+      "lowUsage": false
+    },
+    {
+      "id": "ACID_RAIN",
+      "n": 192,
+      "delta": 1.0416666666666665,
+      "ci": [
+        0,
+        2.604166666666667
+      ],
+      "win": 48.95833333333333,
+      "use": 25.520833333333332,
+      "lowUsage": false
+    },
+    {
+      "id": "ANCIENT_CIV",
+      "n": 192,
+      "delta": 1.0416666666666665,
+      "ci": [
+        0,
+        3.125
+      ],
+      "win": 48.95833333333333,
+      "use": 38.02083333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "ELF_HAVEN",
+      "n": 192,
+      "delta": 0.5208333333333333,
+      "ci": [
+        -1.0416666666666665,
+        2.604166666666667
+      ],
+      "win": 48.4375,
+      "use": 38.02083333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "FATE_WHEEL",
+      "n": 192,
+      "delta": 0.5208333333333333,
+      "ci": [
+        -1.0416666666666665,
+        2.604166666666667
+      ],
+      "win": 48.4375,
+      "use": 38.02083333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "GAMBLER",
+      "n": 192,
+      "delta": 0.5208333333333333,
+      "ci": [
+        -3.6458333333333335,
+        4.166666666666666
+      ],
+      "win": 48.4375,
+      "use": 95.83333333333334,
+      "lowUsage": false
+    },
+    {
+      "id": "GUILD_CO",
+      "n": 192,
+      "delta": 0.5208333333333333,
+      "ci": [
+        -2.083333333333333,
+        3.125
+      ],
+      "win": 48.4375,
+      "use": 59.375,
+      "lowUsage": false
+    },
+    {
+      "id": "WEAKEN_ALL",
+      "n": 192,
+      "delta": 0.5208333333333333,
+      "ci": [
+        -2.083333333333333,
+        3.125
+      ],
+      "win": 48.4375,
+      "use": 52.083333333333336,
+      "lowUsage": false
+    },
+    {
+      "id": "BATTLEFIELD",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        -3.125,
+        3.125
+      ],
+      "win": 47.91666666666667,
+      "use": 64.58333333333334,
+      "lowUsage": false
+    },
+    {
+      "id": "CASTLE",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        -4.166666666666666,
+        4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "use": 96.35416666666666,
+      "lowUsage": false
+    },
+    {
+      "id": "FLAME",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        -3.125,
+        3.125
+      ],
+      "win": 47.91666666666667,
+      "use": 92.70833333333334,
+      "lowUsage": false
+    },
+    {
+      "id": "FORESIGHT",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        -2.604166666666667,
+        2.604166666666667
+      ],
+      "win": 47.91666666666667,
+      "use": 41.66666666666667,
+      "lowUsage": false
+    },
+    {
+      "id": "NOURISHING_RAIN",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        -1.5625,
+        1.5625
+      ],
+      "win": 47.91666666666667,
+      "use": 45.83333333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "REFRESH_HAND",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        -2.604166666666667,
+        3.125
+      ],
+      "win": 47.91666666666667,
+      "use": 41.14583333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "STARTER_CHEST",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        -4.166666666666666,
+        4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "use": 59.375,
+      "lowUsage": false
+    },
+    {
+      "id": "STARTER_TRASH",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 47.91666666666667,
+      "use": 100.0,
+      "lowUsage": false
+    },
+    {
+      "id": "BLOOD_RITE",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -4.166666666666666,
+        2.604166666666667
+      ],
+      "win": 47.39583333333333,
+      "use": 66.14583333333334,
+      "lowUsage": false
+    },
+    {
+      "id": "GHOST",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -3.125,
+        2.083333333333333
+      ],
+      "win": 47.39583333333333,
+      "use": 75.52083333333334,
+      "lowUsage": false
+    },
+    {
+      "id": "GRAPE",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -2.083333333333333,
+        1.0416666666666665
+      ],
+      "win": 47.39583333333333,
+      "use": 42.70833333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "TRIBE_PACT",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -3.125,
+        2.083333333333333
+      ],
+      "win": 47.39583333333333,
+      "use": 59.375,
+      "lowUsage": false
+    },
+    {
+      "id": "AMBUSH",
+      "n": 192,
+      "delta": -1.0416666666666665,
+      "ci": [
+        -3.6458333333333335,
+        1.5625
+      ],
+      "win": 46.875,
+      "use": 41.14583333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "BREWING",
+      "n": 192,
+      "delta": -1.0416666666666665,
+      "ci": [
+        -3.125,
+        1.0416666666666665
+      ],
+      "win": 46.875,
+      "use": 41.66666666666667,
+      "lowUsage": false
+    },
+    {
+      "id": "RIFT",
+      "n": 192,
+      "delta": -1.0416666666666665,
+      "ci": [
+        -3.6458333333333335,
+        1.5625
+      ],
+      "win": 46.875,
+      "use": 42.1875,
+      "lowUsage": false
+    },
+    {
+      "id": "TRUMPET",
+      "n": 192,
+      "delta": -1.0416666666666665,
+      "ci": [
+        -3.6458333333333335,
+        1.5625
+      ],
+      "win": 46.875,
+      "use": 42.1875,
+      "lowUsage": false
+    },
+    {
+      "id": "FOCUS",
+      "n": 192,
+      "delta": -1.5625,
+      "ci": [
+        -4.6875,
+        1.0416666666666665
+      ],
+      "win": 46.35416666666667,
+      "use": 42.70833333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "GUILD_HALL",
+      "n": 192,
+      "delta": -1.5625,
+      "ci": [
+        -4.6875,
+        1.5625
+      ],
+      "win": 46.35416666666667,
+      "use": 95.3125,
+      "lowUsage": false
+    },
+    {
+      "id": "RELIC_BOUNTY",
+      "n": 192,
+      "delta": -1.5625,
+      "ci": [
+        -4.166666666666666,
+        0.5208333333333333
+      ],
+      "win": 46.35416666666667,
+      "use": 41.66666666666667,
+      "lowUsage": false
+    },
+    {
+      "id": "SELECTED_SHIELD",
+      "n": 192,
+      "delta": -1.5625,
+      "ci": [
+        -4.166666666666666,
+        1.0416666666666665
+      ],
+      "win": 46.35416666666667,
+      "use": 89.58333333333334,
+      "lowUsage": false
+    },
+    {
+      "id": "NIGHT_CASTLE_GIFT",
+      "n": 192,
+      "delta": -2.083333333333333,
+      "ci": [
+        -4.166666666666666,
+        -0.5208333333333333
+      ],
+      "win": 45.83333333333333,
+      "use": 38.02083333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "TRIAL_AREA",
+      "n": 192,
+      "delta": -2.604166666666667,
+      "ci": [
+        -5.208333333333334,
+        0.0
+      ],
+      "win": 45.3125,
+      "use": 42.70833333333333,
+      "lowUsage": false
+    },
+    {
+      "id": "CASINO",
+      "n": 192,
+      "delta": -3.125,
+      "ci": [
+        -6.770833333333333,
+        -0.5208333333333333
+      ],
+      "win": 44.79166666666667,
+      "use": 68.75,
+      "lowUsage": false
+    },
+    {
+      "id": "HALF_ELF",
+      "n": 192,
+      "delta": -3.125,
+      "ci": [
+        -6.25,
+        -0.5208333333333333
+      ],
+      "win": 44.79166666666667,
+      "use": 84.375,
+      "lowUsage": false
+    },
+    {
+      "id": "CHOSEN_AREA",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 47.91666666666667,
+      "use": 0.0,
+      "lowUsage": true
+    },
+    {
+      "id": "INCUBATOR_S",
+      "n": 192,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 47.91666666666667,
+      "use": 0.0,
+      "lowUsage": true
+    },
+    {
+      "id": "DUNGEON_FLOOR",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -1.5625,
+        0
+      ],
+      "win": 47.39583333333333,
+      "use": 0.0,
+      "lowUsage": true
+    },
+    {
+      "id": "GOBLIN_SETTLEMENT",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -1.5625,
+        0
+      ],
+      "win": 47.39583333333333,
+      "use": 1.0416666666666665,
+      "lowUsage": true
+    },
+    {
+      "id": "MANA_BACKFLOW",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -1.5625,
+        0
+      ],
+      "win": 47.39583333333333,
+      "use": 0.0,
+      "lowUsage": true
+    },
+    {
+      "id": "RELIC_PROTECTION",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -1.5625,
+        0
+      ],
+      "win": 47.39583333333333,
+      "use": 4.6875,
+      "lowUsage": true
+    },
+    {
+      "id": "SELECTED_SWORD",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -1.5625,
+        0
+      ],
+      "win": 47.39583333333333,
+      "use": 0.0,
+      "lowUsage": true
+    },
+    {
+      "id": "SLUM",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -1.5625,
+        0
+      ],
+      "win": 47.39583333333333,
+      "use": 0.0,
+      "lowUsage": true
+    },
+    {
+      "id": "TRICKROOM",
+      "n": 192,
+      "delta": -0.5208333333333333,
+      "ci": [
+        -1.5625,
+        0
+      ],
+      "win": 47.39583333333333,
+      "use": 0.0,
+      "lowUsage": true
+    }
+  ],
+  "deck": [
+    {
+      "name": "mixed",
+      "noBuy": false,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 48,
+      "score": 41,
+      "win": 85.41666666666666,
+      "ci": [
+        75.0,
+        93.75
+      ],
+      "medianTurn": 12.0,
+      "groups": {
+        "natural": 83.33333333333334,
+        "wall": 83.33333333333334,
+        "recovery": 91.66666666666666,
+        "suppression": 83.33333333333334
+      }
+    },
+    {
+      "name": "mixed",
+      "noBuy": true,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 48,
+      "score": 41,
+      "win": 85.41666666666666,
+      "ci": [
+        75.0,
+        93.75
+      ],
+      "medianTurn": 12.0,
+      "groups": {
+        "natural": 83.33333333333334,
+        "wall": 83.33333333333334,
+        "recovery": 91.66666666666666,
+        "suppression": 83.33333333333334
+      }
+    },
+    {
+      "name": "rally",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "n": 48,
+      "score": 40,
+      "win": 83.33333333333334,
+      "ci": [
+        70.83333333333334,
+        93.75
+      ],
+      "medianTurn": 12.0,
+      "groups": {
+        "natural": 83.33333333333334,
+        "wall": 75.0,
+        "recovery": 83.33333333333334,
+        "suppression": 91.66666666666666
+      }
+    },
+    {
+      "name": "rally",
+      "noBuy": true,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "n": 48,
+      "score": 40,
+      "win": 83.33333333333334,
+      "ci": [
+        70.83333333333334,
+        93.75
+      ],
+      "medianTurn": 12.0,
+      "groups": {
+        "natural": 83.33333333333334,
+        "wall": 75.0,
+        "recovery": 83.33333333333334,
+        "suppression": 91.66666666666666
+      }
+    },
+    {
+      "name": "decay",
+      "noBuy": false,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "COUNTERCALC",
+        "COUNTERCALC",
+        "BLOOD_RITE",
+        "TRUMPET"
+      ],
+      "n": 48,
+      "score": 32,
+      "win": 66.66666666666666,
+      "ci": [
+        45.83333333333333,
+        83.33333333333334
+      ],
+      "medianTurn": 17.5,
+      "groups": {
+        "natural": 66.66666666666666,
+        "wall": 66.66666666666666,
+        "recovery": 66.66666666666666,
+        "suppression": 66.66666666666666
+      }
+    },
+    {
+      "name": "decay",
+      "noBuy": true,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "COUNTERCALC",
+        "COUNTERCALC",
+        "BLOOD_RITE",
+        "TRUMPET"
+      ],
+      "n": 48,
+      "score": 32,
+      "win": 66.66666666666666,
+      "ci": [
+        45.83333333333333,
+        83.33333333333334
+      ],
+      "medianTurn": 19.0,
+      "groups": {
+        "natural": 66.66666666666666,
+        "wall": 66.66666666666666,
+        "recovery": 66.66666666666666,
+        "suppression": 66.66666666666666
+      }
+    },
+    {
+      "name": "control",
+      "noBuy": false,
+      "deck": [
+        "WEAKEN_ALL",
+        "WEAKEN_ALL",
+        "GAMBLER",
+        "GAMBLER",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 48,
+      "score": 27,
+      "win": 56.25,
+      "ci": [
+        39.58333333333333,
+        72.91666666666666
+      ],
+      "medianTurn": 20.0,
+      "groups": {
+        "natural": 50.0,
+        "wall": 66.66666666666666,
+        "recovery": 50.0,
+        "suppression": 58.333333333333336
+      }
+    },
+    {
+      "name": "ghost",
+      "noBuy": true,
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "FLAME",
+        "FLAME",
+        "BLOOD_RITE",
+        "COUNTERCALC"
+      ],
+      "n": 48,
+      "score": 27,
+      "win": 56.25,
+      "ci": [
+        37.5,
+        72.91666666666666
+      ],
+      "medianTurn": 9.0,
+      "groups": {
+        "natural": 58.333333333333336,
+        "wall": 50.0,
+        "recovery": 66.66666666666666,
+        "suppression": 50.0
+      }
+    },
+    {
+      "name": "fire",
+      "noBuy": true,
+      "deck": [
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "COUNTERCALC",
+        "GHOST",
+        "GHOST"
+      ],
+      "n": 48,
+      "score": 24,
+      "win": 50.0,
+      "ci": [
+        29.166666666666668,
+        70.83333333333334
+      ],
+      "medianTurn": 9.0,
+      "groups": {
+        "natural": 66.66666666666666,
+        "wall": 33.33333333333333,
+        "recovery": 66.66666666666666,
+        "suppression": 33.33333333333333
+      }
+    },
+    {
+      "name": "ghostfield",
+      "noBuy": true,
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "BATTLEFIELD",
+        "BATTLEFIELD",
+        "BLOOD_RITE",
+        "COUNTERCALC"
+      ],
+      "n": 48,
+      "score": 23,
+      "win": 47.91666666666667,
+      "ci": [
+        29.166666666666668,
+        66.66666666666666
+      ],
+      "medianTurn": 10.0,
+      "groups": {
+        "natural": 50.0,
+        "wall": 41.66666666666667,
+        "recovery": 50.0,
+        "suppression": 50.0
+      }
+    },
+    {
+      "name": "fire",
+      "noBuy": false,
+      "deck": [
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "COUNTERCALC",
+        "GHOST",
+        "GHOST"
+      ],
+      "n": 48,
+      "score": 23,
+      "win": 47.91666666666667,
+      "ci": [
+        27.083333333333332,
+        68.75
+      ],
+      "medianTurn": 9.0,
+      "groups": {
+        "natural": 58.333333333333336,
+        "wall": 33.33333333333333,
+        "recovery": 66.66666666666666,
+        "suppression": 33.33333333333333
+      }
+    },
+    {
+      "name": "ghost",
+      "noBuy": false,
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "FLAME",
+        "FLAME",
+        "BLOOD_RITE",
+        "COUNTERCALC"
+      ],
+      "n": 48,
+      "score": 19,
+      "win": 39.58333333333333,
+      "ci": [
+        22.916666666666664,
+        56.25
+      ],
+      "medianTurn": 9.0,
+      "groups": {
+        "natural": 25.0,
+        "wall": 50.0,
+        "recovery": 33.33333333333333,
+        "suppression": 50.0
+      }
+    },
+    {
+      "name": "elf",
+      "noBuy": true,
+      "deck": [
+        "ELF_HAVEN",
+        "HALF_ELF",
+        "HALF_ELF",
+        "NOURISHING_RAIN",
+        "GAMBLER",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "STARTER_TRASH"
+      ],
+      "n": 48,
+      "score": 19,
+      "win": 39.58333333333333,
+      "ci": [
+        22.916666666666664,
+        56.25
+      ],
+      "medianTurn": 22.5,
+      "groups": {
+        "natural": 50.0,
+        "wall": 33.33333333333333,
+        "recovery": 41.66666666666667,
+        "suppression": 33.33333333333333
+      }
+    },
+    {
+      "name": "ghostfield",
+      "noBuy": false,
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "BATTLEFIELD",
+        "BATTLEFIELD",
+        "BLOOD_RITE",
+        "COUNTERCALC"
+      ],
+      "n": 48,
+      "score": 17,
+      "win": 35.41666666666667,
+      "ci": [
+        18.75,
+        52.083333333333336
+      ],
+      "medianTurn": 10.0,
+      "groups": {
+        "natural": 33.33333333333333,
+        "wall": 41.66666666666667,
+        "recovery": 16.666666666666664,
+        "suppression": 50.0
+      }
+    },
+    {
+      "name": "casino",
+      "noBuy": true,
+      "deck": [
+        "CASINO",
+        "GAMBLER",
+        "GAMBLER",
+        "GAMBLER",
+        "FATE_WHEEL",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "WEAKEN_ALL"
+      ],
+      "n": 48,
+      "score": 16,
+      "win": 33.33333333333333,
+      "ci": [
+        18.75,
+        50.0
+      ],
+      "medianTurn": 12.0,
+      "groups": {
+        "natural": 50.0,
+        "wall": 16.666666666666664,
+        "recovery": 25.0,
+        "suppression": 41.66666666666667
+      }
+    },
+    {
+      "name": "control",
+      "noBuy": true,
+      "deck": [
+        "WEAKEN_ALL",
+        "WEAKEN_ALL",
+        "GAMBLER",
+        "GAMBLER",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 48,
+      "score": 14,
+      "win": 29.166666666666668,
+      "ci": [
+        14.583333333333334,
+        45.83333333333333
+      ],
+      "medianTurn": 26.5,
+      "groups": {
+        "natural": 25.0,
+        "wall": 33.33333333333333,
+        "recovery": 16.666666666666664,
+        "suppression": 41.66666666666667
+      }
+    },
+    {
+      "name": "casino",
+      "noBuy": false,
+      "deck": [
+        "CASINO",
+        "GAMBLER",
+        "GAMBLER",
+        "GAMBLER",
+        "FATE_WHEEL",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "WEAKEN_ALL"
+      ],
+      "n": 48,
+      "score": 12,
+      "win": 25.0,
+      "ci": [
+        12.5,
+        37.5
+      ],
+      "medianTurn": 14.0,
+      "groups": {
+        "natural": 33.33333333333333,
+        "wall": 25.0,
+        "recovery": 16.666666666666664,
+        "suppression": 25.0
+      }
+    },
+    {
+      "name": "castle",
+      "noBuy": false,
+      "deck": [
+        "CASTLE",
+        "CASTLE",
+        "WEAKEN_ALL",
+        "GAMBLER",
+        "GAMBLER",
+        "BLOOD_RITE",
+        "COUNTERCALC",
+        "STARTER_TRASH"
+      ],
+      "n": 48,
+      "score": 12,
+      "win": 25.0,
+      "ci": [
+        10.416666666666668,
+        41.66666666666667
+      ],
+      "medianTurn": 21.5,
+      "groups": {
+        "natural": 0,
+        "wall": 33.33333333333333,
+        "recovery": 33.33333333333333,
+        "suppression": 33.33333333333333
+      }
+    },
+    {
+      "name": "cull",
+      "noBuy": false,
+      "deck": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH"
+      ],
+      "n": 48,
+      "score": 12,
+      "win": 25.0,
+      "ci": [
+        10.416666666666668,
+        41.66666666666667
+      ],
+      "medianTurn": 24.0,
+      "groups": {
+        "natural": 25.0,
+        "wall": 33.33333333333333,
+        "recovery": 0,
+        "suppression": 41.66666666666667
+      }
+    },
+    {
+      "name": "elf",
+      "noBuy": false,
+      "deck": [
+        "ELF_HAVEN",
+        "HALF_ELF",
+        "HALF_ELF",
+        "NOURISHING_RAIN",
+        "GAMBLER",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "STARTER_TRASH"
+      ],
+      "n": 48,
+      "score": 11,
+      "win": 22.916666666666664,
+      "ci": [
+        10.416666666666668,
+        35.41666666666667
+      ],
+      "medianTurn": 19.0,
+      "groups": {
+        "natural": 16.666666666666664,
+        "wall": 33.33333333333333,
+        "recovery": 16.666666666666664,
+        "suppression": 25.0
+      }
+    },
+    {
+      "name": "rift",
+      "noBuy": false,
+      "deck": [
+        "RIFT",
+        "TRIAL_AREA",
+        "TRIAL_AREA",
+        "CHOSEN_AREA",
+        "WEAKEN_ALL",
+        "BLOOD_RITE",
+        "FOCUS",
+        "STARTER_TRASH"
+      ],
+      "n": 48,
+      "score": 8,
+      "win": 16.666666666666664,
+      "ci": [
+        8.333333333333332,
+        27.083333333333332
+      ],
+      "medianTurn": 23.5,
+      "groups": {
+        "natural": 16.666666666666664,
+        "wall": 33.33333333333333,
+        "recovery": 0,
+        "suppression": 16.666666666666664
+      }
+    },
+    {
+      "name": "castle",
+      "noBuy": true,
+      "deck": [
+        "CASTLE",
+        "CASTLE",
+        "WEAKEN_ALL",
+        "GAMBLER",
+        "GAMBLER",
+        "BLOOD_RITE",
+        "COUNTERCALC",
+        "STARTER_TRASH"
+      ],
+      "n": 48,
+      "score": 6.5,
+      "win": 13.541666666666666,
+      "ci": [
+        4.166666666666666,
+        26.041666666666668
+      ],
+      "medianTurn": 43.5,
+      "groups": {
+        "natural": 0,
+        "wall": 29.166666666666668,
+        "recovery": 0,
+        "suppression": 25.0
+      }
+    },
+    {
+      "name": "rift",
+      "noBuy": true,
+      "deck": [
+        "RIFT",
+        "TRIAL_AREA",
+        "TRIAL_AREA",
+        "CHOSEN_AREA",
+        "WEAKEN_ALL",
+        "BLOOD_RITE",
+        "FOCUS",
+        "STARTER_TRASH"
+      ],
+      "n": 48,
+      "score": 6,
+      "win": 12.5,
+      "ci": [
+        4.166666666666666,
+        20.833333333333336
+      ],
+      "medianTurn": 19.5,
+      "groups": {
+        "natural": 8.333333333333332,
+        "wall": 16.666666666666664,
+        "recovery": 8.333333333333332,
+        "suppression": 16.666666666666664
+      }
+    },
+    {
+      "name": "cull",
+      "noBuy": true,
+      "deck": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH"
+      ],
+      "n": 48,
+      "score": 2.0,
+      "win": 4.166666666666666,
+      "ci": [
+        0,
+        12.5
+      ],
+      "medianTurn": 27.5,
+      "groups": {
+        "natural": 0,
+        "wall": 16.666666666666664,
+        "recovery": 0,
+        "suppression": 0
+      }
+    }
+  ],
+  "market": [
+    {
+      "id": "TPO2",
+      "n": 48,
+      "delta": 18.75,
+      "ci": [
+        2.083333333333333,
+        35.41666666666667
+      ],
+      "win": 79.16666666666666,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "QUICK_ATTUNE",
+      "n": 48,
+      "delta": 12.5,
+      "ci": [
+        0.0,
+        27.083333333333332
+      ],
+      "win": 77.08333333333334,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "QUICK_MIMIC",
+      "n": 48,
+      "delta": 12.5,
+      "ci": [
+        4.166666666666666,
+        25.0
+      ],
+      "win": 77.08333333333334,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TPO3",
+      "n": 48,
+      "delta": 8.333333333333332,
+      "ci": [
+        -6.25,
+        25.0
+      ],
+      "win": 70.83333333333334,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "QUICK_ASSAULT",
+      "n": 48,
+      "delta": 6.25,
+      "ci": [
+        0,
+        12.5
+      ],
+      "win": 68.75,
+      "bought": 34,
+      "used": 34,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 34
+    },
+    {
+      "id": "QUICK_REBIRTH",
+      "n": 48,
+      "delta": 6.25,
+      "ci": [
+        -4.166666666666666,
+        18.75
+      ],
+      "win": 70.83333333333334,
+      "bought": 24,
+      "used": 24,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 24
+    },
+    {
+      "id": "TAR5",
+      "n": 48,
+      "delta": 6.25,
+      "ci": [
+        -8.333333333333332,
+        20.833333333333336
+      ],
+      "win": 68.75,
+      "bought": 48,
+      "used": 41,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GOBLIN_LEADER",
+      "n": 48,
+      "delta": 4.166666666666666,
+      "ci": [
+        -6.25,
+        14.583333333333334
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "M7",
+      "n": 48,
+      "delta": 4.166666666666666,
+      "ci": [
+        -10.416666666666668,
+        20.833333333333336
+      ],
+      "win": 70.83333333333334,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NT_SEAL3",
+      "n": 48,
+      "delta": 4.166666666666666,
+      "ci": [
+        -6.25,
+        16.666666666666664
+      ],
+      "win": 68.75,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S13",
+      "n": 48,
+      "delta": 4.166666666666666,
+      "ci": [
+        -4.166666666666666,
+        14.583333333333334
+      ],
+      "win": 68.75,
+      "bought": 48,
+      "used": 34,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TGE1",
+      "n": 48,
+      "delta": 4.166666666666666,
+      "ci": [
+        -4.166666666666666,
+        12.5
+      ],
+      "win": 70.83333333333334,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VAMP_BUTLER",
+      "n": 48,
+      "delta": 4.166666666666666,
+      "ci": [
+        -10.416666666666668,
+        20.833333333333336
+      ],
+      "win": 66.66666666666666,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BEAST_EGG",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        -4.166666666666666,
+        8.333333333333332
+      ],
+      "win": 64.58333333333334,
+      "bought": 19,
+      "used": 16,
+      "lowUsage": false,
+      "offered": 21,
+      "priorityFired": 19
+    },
+    {
+      "id": "M1",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        -6.25,
+        12.5
+      ],
+      "win": 66.66666666666666,
+      "bought": 48,
+      "used": 41,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "M6",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        -10.416666666666668,
+        16.666666666666664
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MERCENARY",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        -8.333333333333332,
+        14.583333333333334
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 43,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "PRIEST",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        -8.333333333333332,
+        12.5
+      ],
+      "win": 68.75,
+      "bought": 48,
+      "used": 41,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "QUICK_AID",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        0,
+        6.25
+      ],
+      "win": 62.5,
+      "bought": 14,
+      "used": 14,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 14
+    },
+    {
+      "id": "QUICK_HELLFIRE",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        0,
+        6.25
+      ],
+      "win": 66.66666666666666,
+      "bought": 24,
+      "used": 24,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "RUST_SLUG",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        -12.5,
+        16.666666666666664
+      ],
+      "win": 66.66666666666666,
+      "bought": 48,
+      "used": 43,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SALLY_WEAPONMASTER",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        0,
+        6.25
+      ],
+      "win": 66.66666666666666,
+      "bought": 19,
+      "used": 14,
+      "lowUsage": false,
+      "offered": 21,
+      "priorityFired": 19
+    },
+    {
+      "id": "TGE7",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        0,
+        6.25
+      ],
+      "win": 66.66666666666666,
+      "bought": 24,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "TPO5",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        -10.416666666666668,
+        18.75
+      ],
+      "win": 68.75,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DRAGON_EGG",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -10.416666666666668,
+        8.333333333333332
+      ],
+      "win": 62.5,
+      "bought": 29,
+      "used": 23,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "ELITE",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -16.666666666666664,
+        16.666666666666664
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GM6_7",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -8.333333333333332,
+        8.333333333333332
+      ],
+      "win": 64.58333333333334,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "GOLEM2",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -16.666666666666664,
+        18.75
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GS5_4",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -10.416666666666668,
+        12.5
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 22,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 68.75,
+      "bought": 24,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "M8",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -14.583333333333334,
+        18.75
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MERC_MASTER",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -6.25,
+        6.25
+      ],
+      "win": 64.58333333333334,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "NGA4",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -10.416666666666668,
+        10.416666666666668
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S3",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -14.583333333333334,
+        14.583333333333334
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 29,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TSO5",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -16.666666666666664,
+        18.75
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 16,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VETERAN_ARMORER",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -12.5,
+        12.5
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ADVANCE",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -12.5,
+        8.333333333333332
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ASSASSIN1",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -12.5,
+        10.416666666666668
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "EGG_MASTER",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -14.583333333333334,
+        12.5
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FIRE_ARROW",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -10.416666666666668,
+        6.25
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GM5_0",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -14.583333333333334,
+        6.25
+      ],
+      "win": 64.58333333333334,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "GM6_8",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -8.333333333333332,
+        4.166666666666666
+      ],
+      "win": 62.5,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "GOLEM1",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -8.333333333333332,
+        4.166666666666666
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 39,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GREED_PRICE",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -18.75,
+        14.583333333333334
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 24,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HIGH_PRIEST",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -8.333333333333332,
+        4.166666666666666
+      ],
+      "win": 62.5,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "M2",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -8.333333333333332,
+        4.166666666666666
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 29,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "M9",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -16.666666666666664,
+        10.416666666666668
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MERCH1",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -10.416666666666668,
+        6.25
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 44,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MIMIC_KING2",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -6.25,
+        0
+      ],
+      "win": 62.5,
+      "bought": 24,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "ND3",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -14.583333333333334,
+        10.416666666666668
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 24,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NGA3",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -18.75,
+        12.5
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ORIGIN_MIMIC",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -6.25,
+        0
+      ],
+      "win": 62.5,
+      "bought": 19,
+      "used": 14,
+      "lowUsage": false,
+      "offered": 21,
+      "priorityFired": 19
+    },
+    {
+      "id": "QUICK_POISON",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -14.583333333333334,
+        8.333333333333332
+      ],
+      "win": 58.333333333333336,
+      "bought": 37,
+      "used": 37,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 37
+    },
+    {
+      "id": "QUICK_SURVIVAL",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -8.333333333333332,
+        4.166666666666666
+      ],
+      "win": 62.5,
+      "bought": 22,
+      "used": 22,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 22
+    },
+    {
+      "id": "REINFORCE",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -16.666666666666664,
+        12.5
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 24,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TGE2",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -12.5,
+        8.333333333333332
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TRAINING_GROUND",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -8.333333333333332,
+        4.166666666666666
+      ],
+      "win": 62.5,
+      "bought": 29,
+      "used": 14,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "WALLBREAK1",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -14.583333333333334,
+        10.416666666666668
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 39,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "AHEUK",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -14.583333333333334,
+        6.25
+      ],
+      "win": 60.416666666666664,
+      "bought": 30,
+      "used": 15,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "ASSASSIN2",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -18.75,
+        8.333333333333332
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLACK_ELSA",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -10.416666666666668,
+        0
+      ],
+      "win": 64.58333333333334,
+      "bought": 24,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        4.166666666666666
+      ],
+      "win": 60.416666666666664,
+      "bought": 24,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "DISARM1",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -18.75,
+        10.416666666666668
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 34,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DISARM2",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        8.333333333333332
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 34,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DISCOVERY_LARGE",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        8.333333333333332
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FARM",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -14.583333333333334,
+        4.166666666666666
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FARMER",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        2.083333333333333
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 40,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FARM_KEEPER",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        8.333333333333332
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 41,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FIRE_METEOR",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        10.416666666666668
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GM6_0",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        2.083333333333333
+      ],
+      "win": 60.416666666666664,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "GM6_1",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        4.166666666666666
+      ],
+      "win": 60.416666666666664,
+      "bought": 30,
+      "used": 15,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "M3",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        4.166666666666666
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 41,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "M4",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -14.583333333333334,
+        6.25
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MIMIC_HUNTER",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        8.333333333333332
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NMD6",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        2.083333333333333
+      ],
+      "win": 60.416666666666664,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "NT_SEAL5",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        8.333333333333332
+      ],
+      "win": 58.333333333333336,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "Q_TOWN",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -18.75,
+        10.416666666666668
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S7",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -14.583333333333334,
+        6.25
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 25,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SNIPE1",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        10.416666666666668
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 34,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TAR2",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        10.416666666666668
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TDE1",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        8.333333333333332
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TDE3",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -27.083333333333332,
+        16.666666666666664
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 46,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TPO1",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -16.666666666666664,
+        8.333333333333332
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 26,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VITAL2",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -20.833333333333336,
+        12.5
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "AJIN",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -18.75,
+        8.333333333333332
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 33,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "AWAKENED_MIMIC",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -16.666666666666664,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "BLACK_ALICE",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -20.833333333333336,
+        6.25
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 41,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DEFENSIVE_STANCE",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FIRE_MASTER",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -12.5,
+        0
+      ],
+      "win": 58.333333333333336,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "GEM_RAIN",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HARVEST",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 29,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "M11",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -18.75,
+        6.25
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MERC_LEADER",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -16.666666666666664,
+        4.166666666666666
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MIMIC_KING",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "NHEAL",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -16.666666666666664,
+        6.25
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 27,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "POISON_MASTER",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 30,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "QUICK_CURSE",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        0
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "QUICK_GRIMOIRE",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        0
+      ],
+      "win": 60.416666666666664,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "RICH_HABIT",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -16.666666666666664,
+        6.25
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "RUNE3",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 24,
+      "used": 15,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "STRONG_ACID",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -18.75,
+        8.333333333333332
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 19,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TAR1",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -16.666666666666664,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 41,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TGE6",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "TSO1",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -16.666666666666664,
+        4.166666666666666
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "WORLD_BLESS",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 60.416666666666664,
+      "bought": 30,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "APPLE",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -16.666666666666664,
+        0.0
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 27,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ASSASSIN_SQUAD",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        2.083333333333333
+      ],
+      "win": 54.166666666666664,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "CHOSEN_MAGE",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -16.666666666666664,
+        0.0
+      ],
+      "win": 56.25,
+      "bought": 24,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "EGG_HUNTER",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        4.166666666666666
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "EROSION",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        2.083333333333333
+      ],
+      "win": 56.25,
+      "bought": 30,
+      "used": 15,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "FIRE_BALL",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        2.083333333333333
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GM5_3",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "GOBLIN_KING",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        4.166666666666666
+      ],
+      "win": 56.25,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "GROWTH",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        2.083333333333333
+      ],
+      "win": 56.25,
+      "bought": 30,
+      "used": 15,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "HPS_SOIL",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        4.166666666666666
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 33,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "IRON_WALL",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -22.916666666666664,
+        6.25
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "LUCKY_ECHO",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -16.666666666666664,
+        -2.083333333333333
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "M10",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MIMIC_LORD",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        6.25
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ND2",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -22.916666666666664,
+        6.25
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 36,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NMD2",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_WINTER",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -22.916666666666664,
+        6.25
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TSO3",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -18.75,
+        2.083333333333333
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VITAL3",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -18.75,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "WORLD_SEED",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -18.75,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 19,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "APPRENTICE_ARMORER",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -25.0,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 36,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "CHOSEN_ROGUE",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -18.75,
+        -2.083333333333333
+      ],
+      "win": 54.166666666666664,
+      "bought": 24,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "COLOSSEUM",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -20.833333333333336,
+        -2.083333333333333
+      ],
+      "win": 54.166666666666664,
+      "bought": 30,
+      "used": 18,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "DISCOVERY_SMALL",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -22.916666666666664,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 47,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GAMBLE",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -27.083333333333332,
+        6.25
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 30,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GM5_2",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -25.0,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "HEXER1",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -20.833333333333336,
+        0.0
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HPS_SCALE",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -20.833333333333336,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "INTERCEPT",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -22.916666666666664,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "LIFE_SANCTUM",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -22.916666666666664,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 26,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NHEX",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -25.0,
+        4.166666666666666
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_CHEAT",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -25.0,
+        4.166666666666666
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S5",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -25.0,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 30,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S6",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -27.083333333333332,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 37,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TAR3",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -20.833333333333336,
+        0.0
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 30,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TGE5",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -25.0,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "CHOSEN_KNIGHT",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -22.916666666666664,
+        -4.166666666666666
+      ],
+      "win": 52.083333333333336,
+      "bought": 24,
+      "used": 17,
+      "lowUsage": false,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "DOUBLE_EXEC",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -20.833333333333336,
+        -4.166666666666666
+      ],
+      "win": 52.083333333333336,
+      "bought": 30,
+      "used": 19,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "E1",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "E2",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "E3",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "EARTHQUAKE",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 13,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GLASS_BAN",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 27,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GS8_0",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 20,
+      "used": 14,
+      "lowUsage": false,
+      "offered": 21,
+      "priorityFired": 20
+    },
+    {
+      "id": "LAWLESS",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        -2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 19,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "LIFE_CYCLE",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 27,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "LUCKY_CHEST",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 27,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "M12",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "M5",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -27.083333333333332,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 36,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_BRAND",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        2.083333333333333
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_MANA",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -29.166666666666668,
+        4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 47,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_RIFT",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_TORI",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 48,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_TRIBE",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -29.166666666666668,
+        4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 47,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ROTTEN_GROUND",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -27.083333333333332,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S1",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -22.916666666666664,
+        -2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "WORLD_HEART",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 56.25,
+      "bought": 37,
+      "used": 18,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "BLOOD_FEST",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLOOD_SHIELD",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "CATALYST",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "COLOSSEUM_REST",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "CULL_FARM",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DEMON_REALM",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DOUBLE_UP",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FIRE_ART",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HEXER3",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 37,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "HPS_BOULDER",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        0.0
+      ],
+      "win": 47.91666666666667,
+      "bought": 37,
+      "used": 25,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "HPS_GRAFT",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 33,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "KIN_CALL",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MERCH2",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -25.0,
+        -4.166666666666666
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NO_PAIN",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "PREPARATION",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 29,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_CASTLE",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -31.25,
+        0.0
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 47,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_DECAY",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -33.33333333333333,
+        2.083333333333333
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 47,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TDE2",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 27,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TSO2",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -31.25,
+        4.166666666666666
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 36,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VAMP_PACT",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VOID_FRUIT",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "WINE_COLLECTOR",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 36,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLACKSMITH",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        0.0
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DISARM3",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -29.166666666666668,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 34,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DISCOVERY",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 47,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DUNGEON",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -35.41666666666667,
+        4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 37,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FREE_REWARD",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        0.0
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FURNACE",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        0.0
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HEXER2",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -29.166666666666668,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HORDE",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -29.166666666666668,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HOURGLASS",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 30,
+      "used": 15,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "INFERNO",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 37,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "MARKET_CRISIS",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 27,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NWL3",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -33.33333333333333,
+        0.0
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "PAIN_HARVEST",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 26,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S10",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -33.33333333333333,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 32,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SORTER",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TGE4",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "UNBRANDER",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -27.083333333333332,
+        -8.333333333333332
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 34,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VAMP_WARD",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        0.0
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MANA_GIANT",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -29.166666666666668,
+        -8.333333333333332
+      ],
+      "win": 47.91666666666667,
+      "bought": 37,
+      "used": 30,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "MEDITATE",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -33.33333333333333,
+        -2.083333333333333
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 14,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MERC_ART",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -35.41666666666667,
+        -2.083333333333333
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 29,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "Q_ASSASSIN",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -37.5,
+        0.0
+      ],
+      "win": 43.75,
+      "bought": 48,
+      "used": 47,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S15",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -35.41666666666667,
+        0.0
+      ],
+      "win": 43.75,
+      "bought": 48,
+      "used": 43,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLOOD1",
+      "n": 48,
+      "delta": -20.833333333333336,
+      "ci": [
+        -37.5,
+        -4.166666666666666
+      ],
+      "win": 43.75,
+      "bought": 48,
+      "used": 29,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FIRE_ZONE",
+      "n": 48,
+      "delta": -20.833333333333336,
+      "ci": [
+        -37.5,
+        -4.166666666666666
+      ],
+      "win": 43.75,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GUILD_HQ",
+      "n": 48,
+      "delta": -20.833333333333336,
+      "ci": [
+        -33.33333333333333,
+        -8.333333333333332
+      ],
+      "win": 41.66666666666667,
+      "bought": 29,
+      "used": 20,
+      "lowUsage": false,
+      "offered": 33,
+      "priorityFired": 29
+    },
+    {
+      "id": "S4",
+      "n": 48,
+      "delta": -20.833333333333336,
+      "ci": [
+        -35.41666666666667,
+        -6.25
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 37,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLACK_REVERSE",
+      "n": 48,
+      "delta": -22.916666666666664,
+      "ci": [
+        -39.58333333333333,
+        -6.25
+      ],
+      "win": 41.66666666666667,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GUILD_CHEST",
+      "n": 48,
+      "delta": -22.916666666666664,
+      "ci": [
+        -39.58333333333333,
+        -8.333333333333332
+      ],
+      "win": 41.66666666666667,
+      "bought": 37,
+      "used": 19,
+      "lowUsage": false,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "HANDRESET",
+      "n": 48,
+      "delta": -22.916666666666664,
+      "ci": [
+        -37.5,
+        -8.333333333333332
+      ],
+      "win": 41.66666666666667,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HPS_OATH",
+      "n": 48,
+      "delta": -22.916666666666664,
+      "ci": [
+        -37.5,
+        -6.25
+      ],
+      "win": 41.66666666666667,
+      "bought": 48,
+      "used": 23,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S8",
+      "n": 48,
+      "delta": -22.916666666666664,
+      "ci": [
+        -39.58333333333333,
+        -6.25
+      ],
+      "win": 41.66666666666667,
+      "bought": 48,
+      "used": 31,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TGE3",
+      "n": 48,
+      "delta": -22.916666666666664,
+      "ci": [
+        -37.5,
+        -8.333333333333332
+      ],
+      "win": 41.66666666666667,
+      "bought": 48,
+      "used": 45,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "WALLBREAK2",
+      "n": 48,
+      "delta": -22.916666666666664,
+      "ci": [
+        -39.58333333333333,
+        -4.166666666666666
+      ],
+      "win": 41.66666666666667,
+      "bought": 48,
+      "used": 40,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ROGUE_ART",
+      "n": 48,
+      "delta": -25.0,
+      "ci": [
+        -41.66666666666667,
+        -6.25
+      ],
+      "win": 39.58333333333333,
+      "bought": 48,
+      "used": 21,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SNIPE2",
+      "n": 48,
+      "delta": -25.0,
+      "ci": [
+        -41.66666666666667,
+        -6.25
+      ],
+      "win": 39.58333333333333,
+      "bought": 48,
+      "used": 42,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SOUL_HARVEST",
+      "n": 48,
+      "delta": -25.0,
+      "ci": [
+        -41.66666666666667,
+        -8.333333333333332
+      ],
+      "win": 39.58333333333333,
+      "bought": 48,
+      "used": 23,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VITAL4",
+      "n": 48,
+      "delta": -25.0,
+      "ci": [
+        -37.5,
+        -14.583333333333334
+      ],
+      "win": 39.58333333333333,
+      "bought": 48,
+      "used": 40,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NMD4",
+      "n": 48,
+      "delta": -27.083333333333332,
+      "ci": [
+        -39.58333333333333,
+        -16.666666666666664
+      ],
+      "win": 37.5,
+      "bought": 48,
+      "used": 40,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SLAY_ART",
+      "n": 48,
+      "delta": -27.083333333333332,
+      "ci": [
+        -45.83333333333333,
+        -8.333333333333332
+      ],
+      "win": 37.5,
+      "bought": 48,
+      "used": 28,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VOID_APOSTLE",
+      "n": 48,
+      "delta": -35.41666666666667,
+      "ci": [
+        -52.083333333333336,
+        -16.666666666666664
+      ],
+      "win": 29.166666666666668,
+      "bought": 48,
+      "used": 34,
+      "lowUsage": false,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ELDER_ELF_KING",
+      "n": 48,
+      "delta": 2.083333333333333,
+      "ci": [
+        -6.25,
+        12.5
+      ],
+      "win": 66.66666666666666,
+      "bought": 24,
+      "used": 4,
+      "lowUsage": true,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "AMA",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -8.333333333333332,
+        8.333333333333332
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BEGINNER_MIND",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -6.25,
+        6.25
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLACK_CURSE",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 64.58333333333334,
+      "bought": 0,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 0
+    },
+    {
+      "id": "BUYOUT",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -8.333333333333332,
+        8.333333333333332
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "CROSSROADS",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -8.333333333333332,
+        8.333333333333332
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "EMPTY_MIND",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 64.58333333333334,
+      "bought": 0,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 0
+    },
+    {
+      "id": "MASSACRE",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -6.25,
+        6.25
+      ],
+      "win": 64.58333333333334,
+      "bought": 24,
+      "used": 7,
+      "lowUsage": true,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "ORIGIN_QUEST",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -8.333333333333332,
+        8.333333333333332
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "QUICK_MUSTER",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 64.58333333333334,
+      "bought": 0,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 0
+    },
+    {
+      "id": "QUICK_SORT",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 64.58333333333334,
+      "bought": 0,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 0
+    },
+    {
+      "id": "QUICK_WORLD",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 68.75,
+      "bought": 8,
+      "used": 8,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 8
+    },
+    {
+      "id": "SHIELD_TITAN",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -8.333333333333332,
+        10.416666666666668
+      ],
+      "win": 64.58333333333334,
+      "bought": 24,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 25,
+      "priorityFired": 24
+    },
+    {
+      "id": "STABLE",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -6.25,
+        6.25
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 2,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "TREASON",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -6.25,
+        6.25
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "UNBRAND",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        -8.333333333333332,
+        8.333333333333332
+      ],
+      "win": 64.58333333333334,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "WORLD_TREE",
+      "n": 48,
+      "delta": 0,
+      "ci": [
+        0,
+        0
+      ],
+      "win": 66.66666666666666,
+      "bought": 13,
+      "used": 5,
+      "lowUsage": true,
+      "offered": 16,
+      "priorityFired": 13
+    },
+    {
+      "id": "TIMEWARP",
+      "n": 48,
+      "delta": -2.083333333333333,
+      "ci": [
+        -6.25,
+        0
+      ],
+      "win": 58.333333333333336,
+      "bought": 10,
+      "used": 6,
+      "lowUsage": true,
+      "offered": 13,
+      "priorityFired": 10
+    },
+    {
+      "id": "ASSASSIN3",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        4.166666666666666
+      ],
+      "win": 60.416666666666664,
+      "bought": 30,
+      "used": 3,
+      "lowUsage": true,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "DARK_ELF",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -14.583333333333334,
+        6.25
+      ],
+      "win": 62.5,
+      "bought": 48,
+      "used": 4,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "EXILE_NUKE1",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        4.166666666666666
+      ],
+      "win": 60.416666666666664,
+      "bought": 30,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "EXILE_NUKE2",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        4.166666666666666
+      ],
+      "win": 60.416666666666664,
+      "bought": 19,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 21,
+      "priorityFired": 19
+    },
+    {
+      "id": "HERMIT",
+      "n": 48,
+      "delta": -4.166666666666666,
+      "ci": [
+        -12.5,
+        4.166666666666666
+      ],
+      "win": 60.416666666666664,
+      "bought": 19,
+      "used": 1,
+      "lowUsage": true,
+      "offered": 21,
+      "priorityFired": 19
+    },
+    {
+      "id": "ELF",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -18.75,
+        8.333333333333332
+      ],
+      "win": 58.333333333333336,
+      "bought": 48,
+      "used": 8,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "HEXER4",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 30,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "HIGH_ELF",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 60.416666666666664,
+      "bought": 30,
+      "used": 2,
+      "lowUsage": true,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "LEVY",
+      "n": 48,
+      "delta": -6.25,
+      "ci": [
+        -14.583333333333334,
+        2.083333333333333
+      ],
+      "win": 58.333333333333336,
+      "bought": 30,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 33,
+      "priorityFired": 30
+    },
+    {
+      "id": "TDE4",
+      "n": 48,
+      "delta": -8.333333333333332,
+      "ci": [
+        -20.833333333333336,
+        4.166666666666666
+      ],
+      "win": 56.25,
+      "bought": 48,
+      "used": 1,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ASSASSIN4",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -22.916666666666664,
+        0.0
+      ],
+      "win": 54.166666666666664,
+      "bought": 20,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 21,
+      "priorityFired": 20
+    },
+    {
+      "id": "BLOOD_PLEASURE",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -22.916666666666664,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MAGMA_RAIN",
+      "n": 48,
+      "delta": -10.416666666666668,
+      "ci": [
+        -22.916666666666664,
+        4.166666666666666
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 9,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MAJESTY_RITE",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "S14",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -25.0,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SPACE_RITE",
+      "n": 48,
+      "delta": -12.5,
+      "ci": [
+        -27.083333333333332,
+        2.083333333333333
+      ],
+      "win": 52.083333333333336,
+      "bought": 48,
+      "used": 5,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ANESTHESIA",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ARMOR_BREAK",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 2,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLOOD_JOY",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLOOD_SECRET",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DESERTIFICATION",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        -2.083333333333333
+      ],
+      "win": 54.166666666666664,
+      "bought": 48,
+      "used": 9,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GOLEM3",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 37,
+      "used": 3,
+      "lowUsage": true,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "GOLIATH_HUNT",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 4,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GS5_3",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 37,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "GS6_4",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 37,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "KNIGHT_TEACH",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "LAND_GRANT",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MIND_BURST",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "MULTI_CULTURE",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "ND5",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 37,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "PACK_INSTINCT",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "PENANCE",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "PURGE_ALL",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 37,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "RIFT_MATTER",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 37,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "RUNE1",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 5,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "RUNE2",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 37,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "S12",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -27.083333333333332,
+        0.0
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SPEAR_AND_SHIELD",
+      "n": 48,
+      "delta": -14.583333333333334,
+      "ci": [
+        -29.166666666666668,
+        2.083333333333333
+      ],
+      "win": 50.0,
+      "bought": 48,
+      "used": 2,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "AEM",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLACK_INFINITY",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 1,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLOOD_ANGER",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BUDGET",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "DECAY_CRAFT",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "EXPANSION",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "FORBIDDEN",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -29.166666666666668,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 4,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GENESIS_MAGIC",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -4.166666666666666
+      ],
+      "win": 47.91666666666667,
+      "bought": 37,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 38,
+      "priorityFired": 37
+    },
+    {
+      "id": "GENESIS_SONG",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "INCUBATOR",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "INQUISITION",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "NL_SECRET",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SCRAPPER",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SHATTER",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VAMP_PACT2",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "VOID_RITE",
+      "n": 48,
+      "delta": -16.666666666666664,
+      "ci": [
+        -31.25,
+        -2.083333333333333
+      ],
+      "win": 47.91666666666667,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLACK_NOVA",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -33.33333333333333,
+        -6.25
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "BLOOD_SORROW",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -33.33333333333333,
+        -6.25
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "CULL_FLOOD",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -33.33333333333333,
+        -6.25
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "GRAPE2",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -33.33333333333333,
+        -6.25
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "PURGE_TOUCH",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -33.33333333333333,
+        -6.25
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    },
+    {
+      "id": "SCARECROW",
+      "n": 48,
+      "delta": -18.75,
+      "ci": [
+        -33.33333333333333,
+        -6.25
+      ],
+      "win": 45.83333333333333,
+      "bought": 48,
+      "used": 0,
+      "lowUsage": true,
+      "offered": 48,
+      "priorityFired": 48
+    }
+  ],
+  "holdout": [
+    {
+      "name": "GOBLIN+GOBLIN",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 92,
+      "win": 95.83333333333334,
+      "ci": [
+        91.66666666666666,
+        98.95833333333334
+      ],
+      "medianTurn": 13.0,
+      "groups": {
+        "natural": 91.66666666666666,
+        "wall": 100,
+        "suppression": 91.66666666666666,
+        "recovery": 100
+      }
+    },
+    {
+      "name": "GOBLIN+GOBLIN_RAIDER",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER"
+      ],
+      "n": 96,
+      "score": 90,
+      "win": 93.75,
+      "ci": [
+        88.54166666666666,
+        97.91666666666666
+      ],
+      "medianTurn": 12.0,
+      "groups": {
+        "natural": 95.83333333333334,
+        "wall": 87.5,
+        "suppression": 95.83333333333334,
+        "recovery": 95.83333333333334
+      }
+    },
+    {
+      "name": "RUST_SHROOM+GOBLIN",
+      "noBuy": false,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 87,
+      "win": 90.625,
+      "ci": [
+        83.33333333333334,
+        96.875
+      ],
+      "medianTurn": 15.0,
+      "groups": {
+        "natural": 79.16666666666666,
+        "wall": 100,
+        "suppression": 91.66666666666666,
+        "recovery": 91.66666666666666
+      }
+    },
+    {
+      "name": "rally",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "n": 96,
+      "score": 81,
+      "win": 84.375,
+      "ci": [
+        77.08333333333334,
+        90.625
+      ],
+      "medianTurn": 12.0,
+      "groups": {
+        "natural": 83.33333333333334,
+        "wall": 79.16666666666666,
+        "suppression": 87.5,
+        "recovery": 87.5
+      }
+    },
+    {
+      "name": "mixed",
+      "noBuy": false,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 96,
+      "score": 81,
+      "win": 84.375,
+      "ci": [
+        77.08333333333334,
+        90.625
+      ],
+      "medianTurn": 14.0,
+      "groups": {
+        "natural": 83.33333333333334,
+        "wall": 79.16666666666666,
+        "suppression": 87.5,
+        "recovery": 87.5
+      }
+    },
+    {
+      "name": "GOBLIN+RELIC_BOUNTY",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "RELIC_BOUNTY",
+        "RELIC_BOUNTY",
+        "RELIC_BOUNTY",
+        "RELIC_BOUNTY"
+      ],
+      "n": 96,
+      "score": 80,
+      "win": 83.33333333333334,
+      "ci": [
+        76.04166666666666,
+        89.58333333333334
+      ],
+      "medianTurn": 24.0,
+      "groups": {
+        "natural": 79.16666666666666,
+        "wall": 83.33333333333334,
+        "suppression": 75.0,
+        "recovery": 95.83333333333334
+      }
+    },
+    {
+      "name": "ANCIENT_CIV+GOBLIN",
+      "noBuy": false,
+      "deck": [
+        "ANCIENT_CIV",
+        "ANCIENT_CIV",
+        "ANCIENT_CIV",
+        "ANCIENT_CIV",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 74,
+      "win": 77.08333333333334,
+      "ci": [
+        66.66666666666666,
+        86.45833333333334
+      ],
+      "medianTurn": 21.0,
+      "groups": {
+        "natural": 79.16666666666666,
+        "wall": 70.83333333333334,
+        "suppression": 87.5,
+        "recovery": 70.83333333333334
+      }
+    },
+    {
+      "name": "GHOST+GOBLIN",
+      "noBuy": false,
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 72,
+      "win": 75.0,
+      "ci": [
+        64.58333333333334,
+        85.41666666666666
+      ],
+      "medianTurn": 15.0,
+      "groups": {
+        "natural": 66.66666666666666,
+        "wall": 70.83333333333334,
+        "suppression": 79.16666666666666,
+        "recovery": 83.33333333333334
+      }
+    },
+    {
+      "name": "NOURISHING_RAIN+GOBLIN",
+      "noBuy": false,
+      "deck": [
+        "NOURISHING_RAIN",
+        "NOURISHING_RAIN",
+        "NOURISHING_RAIN",
+        "NOURISHING_RAIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 71,
+      "win": 73.95833333333334,
+      "ci": [
+        63.541666666666664,
+        83.33333333333334
+      ],
+      "medianTurn": 22.0,
+      "groups": {
+        "natural": 75.0,
+        "wall": 62.5,
+        "suppression": 87.5,
+        "recovery": 70.83333333333334
+      }
+    },
+    {
+      "name": "COUNTERCALC+GOBLIN",
+      "noBuy": false,
+      "deck": [
+        "COUNTERCALC",
+        "COUNTERCALC",
+        "COUNTERCALC",
+        "COUNTERCALC",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 71,
+      "win": 73.95833333333334,
+      "ci": [
+        63.541666666666664,
+        83.33333333333334
+      ],
+      "medianTurn": 18.0,
+      "groups": {
+        "natural": 75.0,
+        "wall": 70.83333333333334,
+        "suppression": 79.16666666666666,
+        "recovery": 70.83333333333334
+      }
+    },
+    {
+      "name": "GOBLIN+GOBLIN_SETTLEMENT",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_SETTLEMENT",
+        "GOBLIN_SETTLEMENT",
+        "GOBLIN_SETTLEMENT",
+        "GOBLIN_SETTLEMENT"
+      ],
+      "n": 96,
+      "score": 71,
+      "win": 73.95833333333334,
+      "ci": [
+        63.541666666666664,
+        83.33333333333334
+      ],
+      "medianTurn": 19.0,
+      "groups": {
+        "natural": 70.83333333333334,
+        "wall": 66.66666666666666,
+        "suppression": 87.5,
+        "recovery": 70.83333333333334
+      }
+    },
+    {
+      "name": "AMBUSH+GOBLIN",
+      "noBuy": false,
+      "deck": [
+        "AMBUSH",
+        "AMBUSH",
+        "AMBUSH",
+        "AMBUSH",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 68,
+      "win": 70.83333333333334,
+      "ci": [
+        59.375,
+        81.25
+      ],
+      "medianTurn": 15.0,
+      "groups": {
+        "natural": 66.66666666666666,
+        "wall": 66.66666666666666,
+        "suppression": 75.0,
+        "recovery": 75.0
+      }
+    },
+    {
+      "name": "STARTER_CHEST+GOBLIN_RAIDER",
+      "noBuy": false,
+      "deck": [
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER"
+      ],
+      "n": 96,
+      "score": 56,
+      "win": 58.333333333333336,
+      "ci": [
+        44.79166666666667,
+        70.83333333333334
+      ],
+      "medianTurn": 13.0,
+      "groups": {
+        "natural": 54.166666666666664,
+        "wall": 54.166666666666664,
+        "suppression": 58.333333333333336,
+        "recovery": 66.66666666666666
+      }
+    },
+    {
+      "name": "decay",
+      "noBuy": false,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "COUNTERCALC",
+        "COUNTERCALC",
+        "BLOOD_RITE",
+        "TRUMPET"
+      ],
+      "n": 96,
+      "score": 50,
+      "win": 52.083333333333336,
+      "ci": [
+        40.625,
+        63.541666666666664
+      ],
+      "medianTurn": 19.0,
+      "groups": {
+        "natural": 45.83333333333333,
+        "wall": 58.333333333333336,
+        "suppression": 50.0,
+        "recovery": 54.166666666666664
+      }
+    },
+    {
+      "name": "STARTER_TRASH+GOBLIN_RAIDER",
+      "noBuy": false,
+      "deck": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER"
+      ],
+      "n": 96,
+      "score": 48,
+      "win": 50.0,
+      "ci": [
+        36.45833333333333,
+        63.541666666666664
+      ],
+      "medianTurn": 13.0,
+      "groups": {
+        "natural": 54.166666666666664,
+        "wall": 62.5,
+        "suppression": 45.83333333333333,
+        "recovery": 37.5
+      }
+    },
+    {
+      "name": "control",
+      "noBuy": false,
+      "deck": [
+        "WEAKEN_ALL",
+        "WEAKEN_ALL",
+        "GAMBLER",
+        "GAMBLER",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 96,
+      "score": 43,
+      "win": 44.79166666666667,
+      "ci": [
+        33.33333333333333,
+        57.291666666666664
+      ],
+      "medianTurn": 19.0,
+      "groups": {
+        "natural": 45.83333333333333,
+        "wall": 41.66666666666667,
+        "suppression": 45.83333333333333,
+        "recovery": 45.83333333333333
+      }
+    },
+    {
+      "name": "fire",
+      "noBuy": false,
+      "deck": [
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "COUNTERCALC",
+        "GHOST",
+        "GHOST"
+      ],
+      "n": 96,
+      "score": 36,
+      "win": 37.5,
+      "ci": [
+        26.041666666666668,
+        50.0
+      ],
+      "medianTurn": 10.0,
+      "groups": {
+        "natural": 33.33333333333333,
+        "wall": 37.5,
+        "suppression": 45.83333333333333,
+        "recovery": 33.33333333333333
+      }
+    },
+    {
+      "name": "FLAME+TRICKROOM",
+      "noBuy": false,
+      "deck": [
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "TRICKROOM",
+        "TRICKROOM",
+        "TRICKROOM",
+        "TRICKROOM"
+      ],
+      "n": 96,
+      "score": 25,
+      "win": 26.041666666666668,
+      "ci": [
+        14.583333333333334,
+        37.5
+      ],
+      "medianTurn": 15.0,
+      "groups": {
+        "natural": 20.833333333333336,
+        "wall": 29.166666666666668,
+        "suppression": 37.5,
+        "recovery": 16.666666666666664
+      }
+    },
+    {
+      "name": "FLAME+INCUBATOR_S",
+      "noBuy": false,
+      "deck": [
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "INCUBATOR_S",
+        "INCUBATOR_S",
+        "INCUBATOR_S",
+        "INCUBATOR_S"
+      ],
+      "n": 96,
+      "score": 25,
+      "win": 26.041666666666668,
+      "ci": [
+        14.583333333333334,
+        37.5
+      ],
+      "medianTurn": 15.0,
+      "groups": {
+        "natural": 20.833333333333336,
+        "wall": 29.166666666666668,
+        "suppression": 37.5,
+        "recovery": 16.666666666666664
+      }
+    },
+    {
+      "name": "FLAME+CHOSEN_AREA",
+      "noBuy": false,
+      "deck": [
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "CHOSEN_AREA",
+        "CHOSEN_AREA",
+        "CHOSEN_AREA",
+        "CHOSEN_AREA"
+      ],
+      "n": 96,
+      "score": 25,
+      "win": 26.041666666666668,
+      "ci": [
+        14.583333333333334,
+        37.5
+      ],
+      "medianTurn": 15.0,
+      "groups": {
+        "natural": 20.833333333333336,
+        "wall": 29.166666666666668,
+        "suppression": 37.5,
+        "recovery": 16.666666666666664
+      }
+    },
+    {
+      "name": "FLAME+SLUM",
+      "noBuy": false,
+      "deck": [
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "FLAME",
+        "SLUM",
+        "SLUM",
+        "SLUM",
+        "SLUM"
+      ],
+      "n": 96,
+      "score": 25,
+      "win": 26.041666666666668,
+      "ci": [
+        14.583333333333334,
+        37.5
+      ],
+      "medianTurn": 15.0,
+      "groups": {
+        "natural": 20.833333333333336,
+        "wall": 29.166666666666668,
+        "suppression": 37.5,
+        "recovery": 16.666666666666664
+      }
+    },
+    {
+      "name": "ghost",
+      "noBuy": false,
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "FLAME",
+        "FLAME",
+        "BLOOD_RITE",
+        "COUNTERCALC"
+      ],
+      "n": 96,
+      "score": 22,
+      "win": 22.916666666666664,
+      "ci": [
+        13.541666666666666,
+        33.33333333333333
+      ],
+      "medianTurn": 10.0,
+      "groups": {
+        "natural": 25.0,
+        "wall": 16.666666666666664,
+        "suppression": 25.0,
+        "recovery": 25.0
+      }
+    },
+    {
+      "name": "cull",
+      "noBuy": false,
+      "deck": [
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH"
+      ],
+      "n": 96,
+      "score": 22,
+      "win": 22.916666666666664,
+      "ci": [
+        12.5,
+        34.375
+      ],
+      "medianTurn": 22.0,
+      "groups": {
+        "natural": 33.33333333333333,
+        "wall": 37.5,
+        "suppression": 20.833333333333336,
+        "recovery": 0
+      }
+    },
+    {
+      "name": "casino",
+      "noBuy": false,
+      "deck": [
+        "CASINO",
+        "GAMBLER",
+        "GAMBLER",
+        "GAMBLER",
+        "FATE_WHEEL",
+        "STARTER_CHEST",
+        "STARTER_CHEST",
+        "WEAKEN_ALL"
+      ],
+      "n": 96,
+      "score": 21,
+      "win": 21.875,
+      "ci": [
+        13.541666666666666,
+        32.29166666666667
+      ],
+      "medianTurn": 14.5,
+      "groups": {
+        "natural": 25.0,
+        "wall": 25.0,
+        "suppression": 12.5,
+        "recovery": 25.0
+      }
+    },
+    {
+      "name": "castle",
+      "noBuy": false,
+      "deck": [
+        "CASTLE",
+        "CASTLE",
+        "WEAKEN_ALL",
+        "GAMBLER",
+        "GAMBLER",
+        "BLOOD_RITE",
+        "COUNTERCALC",
+        "STARTER_TRASH"
+      ],
+      "n": 96,
+      "score": 19,
+      "win": 19.791666666666664,
+      "ci": [
+        10.416666666666668,
+        31.25
+      ],
+      "medianTurn": 21.0,
+      "groups": {
+        "natural": 16.666666666666664,
+        "wall": 16.666666666666664,
+        "suppression": 29.166666666666668,
+        "recovery": 16.666666666666664
+      }
+    },
+    {
+      "name": "ghostfield",
+      "noBuy": false,
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "BATTLEFIELD",
+        "BATTLEFIELD",
+        "BLOOD_RITE",
+        "COUNTERCALC"
+      ],
+      "n": 96,
+      "score": 17,
+      "win": 17.708333333333336,
+      "ci": [
+        9.375,
+        27.083333333333332
+      ],
+      "medianTurn": 11.0,
+      "groups": {
+        "natural": 16.666666666666664,
+        "wall": 12.5,
+        "suppression": 20.833333333333336,
+        "recovery": 20.833333333333336
+      }
+    },
+    {
+      "name": "elf",
+      "noBuy": false,
+      "deck": [
+        "ELF_HAVEN",
+        "HALF_ELF",
+        "HALF_ELF",
+        "NOURISHING_RAIN",
+        "GAMBLER",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "STARTER_TRASH"
+      ],
+      "n": 96,
+      "score": 10,
+      "win": 10.416666666666668,
+      "ci": [
+        5.208333333333334,
+        16.666666666666664
+      ],
+      "medianTurn": 18.0,
+      "groups": {
+        "natural": 12.5,
+        "wall": 8.333333333333332,
+        "suppression": 12.5,
+        "recovery": 8.333333333333332
+      }
+    },
+    {
+      "name": "rift",
+      "noBuy": false,
+      "deck": [
+        "RIFT",
+        "TRIAL_AREA",
+        "TRIAL_AREA",
+        "CHOSEN_AREA",
+        "WEAKEN_ALL",
+        "BLOOD_RITE",
+        "FOCUS",
+        "STARTER_TRASH"
+      ],
+      "n": 96,
+      "score": 4,
+      "win": 4.166666666666666,
+      "ci": [
+        1.0416666666666665,
+        8.333333333333332
+      ],
+      "medianTurn": 15.5,
+      "groups": {
+        "natural": 12.5,
+        "wall": 4.166666666666666,
+        "suppression": 0,
+        "recovery": 0
+      }
+    }
+  ],
+  "counter": [
+    {
+      "name": "mixed",
+      "noBuy": false,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 96,
+      "score": 96,
+      "win": 100,
+      "ci": [
+        100,
+        100
+      ],
+      "medianTurn": 20.5,
+      "groups": {
+        "suppress": 100,
+        "wall": 100,
+        "sweep": 100
+      }
+    },
+    {
+      "name": "rally",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "n": 96,
+      "score": 94,
+      "win": 97.91666666666666,
+      "ci": [
+        94.79166666666666,
+        100
+      ],
+      "medianTurn": 17.5,
+      "groups": {
+        "suppress": 100,
+        "wall": 100,
+        "sweep": 93.75
+      }
+    },
+    {
+      "name": "pureRally",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER"
+      ],
+      "n": 96,
+      "score": 90,
+      "win": 93.75,
+      "ci": [
+        88.54166666666666,
+        97.91666666666666
+      ],
+      "medianTurn": 18.0,
+      "groups": {
+        "suppress": 93.75,
+        "wall": 96.875,
+        "sweep": 90.625
+      }
+    },
+    {
+      "name": "decay",
+      "noBuy": false,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "COUNTERCALC",
+        "COUNTERCALC",
+        "BLOOD_RITE",
+        "TRUMPET"
+      ],
+      "n": 96,
+      "score": 86,
+      "win": 89.58333333333334,
+      "ci": [
+        82.29166666666666,
+        95.83333333333334
+      ],
+      "medianTurn": 37.5,
+      "groups": {
+        "suppress": 90.625,
+        "wall": 90.625,
+        "sweep": 87.5
+      }
+    },
+    {
+      "name": "goblin",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 58,
+      "win": 60.416666666666664,
+      "ci": [
+        50.0,
+        69.79166666666666
+      ],
+      "medianTurn": 29.0,
+      "groups": {
+        "suppress": 59.375,
+        "wall": 62.5,
+        "sweep": 59.375
+      }
+    },
+    {
+      "name": "ghost",
+      "noBuy": false,
+      "deck": [
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "GHOST",
+        "FLAME",
+        "FLAME",
+        "BLOOD_RITE",
+        "COUNTERCALC"
+      ],
+      "n": 96,
+      "score": 37.5,
+      "win": 39.0625,
+      "ci": [
+        27.604166666666668,
+        51.041666666666664
+      ],
+      "medianTurn": 21.0,
+      "groups": {
+        "suppress": 37.5,
+        "wall": 51.5625,
+        "sweep": 28.125
+      }
+    }
+  ],
+  "pure": [
+    {
+      "name": "pureRally",
+      "noBuy": true,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER"
+      ],
+      "n": 192,
+      "score": 166,
+      "win": 86.45833333333334,
+      "ci": [
+        81.77083333333334,
+        91.14583333333334
+      ],
+      "medianTurn": 12.0,
+      "groups": {
+        "natural": 86.45833333333334
+      }
+    },
+    {
+      "name": "mixed",
+      "noBuy": true,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 192,
+      "score": 161,
+      "win": 83.85416666666666,
+      "ci": [
+        78.64583333333334,
+        89.0625
+      ],
+      "medianTurn": 13.0,
+      "groups": {
+        "natural": 83.85416666666666
+      }
+    },
+    {
+      "name": "rally",
+      "noBuy": true,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "TRUMPET"
+      ],
+      "n": 192,
+      "score": 159,
+      "win": 82.8125,
+      "ci": [
+        77.60416666666666,
+        88.02083333333334
+      ],
+      "medianTurn": 12.5,
+      "groups": {
+        "natural": 82.8125
+      }
+    },
+    {
+      "name": "goblin",
+      "noBuy": true,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 192,
+      "score": 150,
+      "win": 78.125,
+      "ci": [
+        70.3125,
+        85.41666666666666
+      ],
+      "medianTurn": 15.0,
+      "groups": {
+        "natural": 78.125
+      }
+    },
+    {
+      "name": "rustGob",
+      "noBuy": true,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "RUST_SHROOM"
+      ],
+      "n": 192,
+      "score": 138,
+      "win": 71.875,
+      "ci": [
+        64.0625,
+        79.16666666666666
+      ],
+      "medianTurn": 19.0,
+      "groups": {
+        "natural": 71.875
+      }
+    }
+  ],
+  "thin": [
+    {
+      "name": "pureRally",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER"
+      ],
+      "n": 96,
+      "score": 87,
+      "win": 90.625,
+      "ci": [
+        83.33333333333334,
+        96.875
+      ],
+      "medianTurn": 17.0,
+      "groups": {
+        "wall": 90.625
+      }
+    },
+    {
+      "name": "mixed",
+      "noBuy": false,
+      "deck": [
+        "RUST_SHROOM",
+        "RUST_SHROOM",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "COUNTERCALC",
+        "BLOOD_RITE"
+      ],
+      "n": 96,
+      "score": 81,
+      "win": 84.375,
+      "ci": [
+        76.04166666666666,
+        91.66666666666666
+      ],
+      "medianTurn": 18.0,
+      "groups": {
+        "wall": 84.375
+      }
+    },
+    {
+      "name": "goblin",
+      "noBuy": false,
+      "deck": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN"
+      ],
+      "n": 96,
+      "score": 53,
+      "win": 55.208333333333336,
+      "ci": [
+        43.75,
+        66.66666666666666
+      ],
+      "medianTurn": 29.0,
+      "groups": {
+        "wall": 55.208333333333336
+      }
+    }
+  ],
+  "combo": [
+    {
+      "name": "cull",
+      "counter": false,
+      "n": 48,
+      "completed": 47,
+      "win": 8.51063829787234,
+      "loopGames": 5
+    },
+    {
+      "name": "cull",
+      "counter": true,
+      "n": 48,
+      "completed": 48,
+      "win": 52.083333333333336,
+      "loopGames": 24
+    },
+    {
+      "name": "weak",
+      "counter": false,
+      "n": 48,
+      "completed": 48,
+      "win": 2.083333333333333,
+      "loopGames": 1
+    },
+    {
+      "name": "weak",
+      "counter": true,
+      "n": 48,
+      "completed": 48,
+      "win": 34.375,
+      "loopGames": 5
+    },
+    {
+      "name": "ramp",
+      "counter": false,
+      "n": 48,
+      "completed": 46,
+      "win": 15.217391304347828,
+      "loopGames": 4
+    },
+    {
+      "name": "ramp",
+      "counter": true,
+      "n": 48,
+      "completed": 48,
+      "win": 28.125,
+      "loopGames": 0
+    },
+    {
+      "name": "refresh",
+      "counter": false,
+      "n": 48,
+      "completed": 48,
+      "win": 2.083333333333333,
+      "loopGames": 1
+    },
+    {
+      "name": "refresh",
+      "counter": true,
+      "n": 48,
+      "completed": 48,
+      "win": 34.375,
+      "loopGames": 5
+    }
+  ],
+  "totalGames": 51504,
+  "completedGames": 51501
+}

@@ -1,0 +1,2425 @@
+[
+  {
+    "type": "legal-opening-passive-opponent",
+    "draw": "S10",
+    "market": [
+      "EROSION",
+      "S10",
+      "QUICK_GRIMOIRE",
+      "S15",
+      "DISARM1",
+      "NWL3",
+      "PRIEST"
+    ],
+    "deck": [
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "seed": 6275001,
+    "turn": 15,
+    "casts": 45,
+    "manaAfter": 4,
+    "hp": [
+      40,
+      0
+    ],
+    "actions": [
+      {
+        "turn": 1,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 1,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 1,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 1,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 2,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 3,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 3,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 3,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 3,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 4,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 5,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 5,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 5,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_MANA",
+        "mana": 1,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 5,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 1,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 6,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 1,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 6,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 5,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 7,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_MANA",
+        "mana": 2,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 7,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 2,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 8,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 2,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 8,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 6,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 9,
+        "side": 0,
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "EROSION",
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 9,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 10,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 10,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 6,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 11,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "EROSION",
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 11,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 12,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 12,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 6,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 13,
+        "side": 0,
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "S10",
+        "mana": 5,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 13,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 5,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 14,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 5,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 14,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 6,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "buyMarket",
+          "i": 2
+        },
+        "id": "QUICK_GRIMOIRE",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          44
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          43
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          42
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          41
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          40
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          39
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          38
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          37
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          36
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          35
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          34
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          33
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          32
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          31
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          30
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          29
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          28
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          27
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          26
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          25
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          24
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          23
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          22
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          21
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          20
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          19
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          18
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          17
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          16
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          15
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          14
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          13
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          12
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          11
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          10
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          9
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          8
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          7
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          6
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          5
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          4
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          3
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          2
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          1
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "S10",
+        "mana": 4,
+        "hp": [
+          40,
+          0
+        ],
+        "drawInHand": true
+      }
+    ]
+  },
+  {
+    "type": "legal-opening-passive-opponent",
+    "draw": "ND2",
+    "market": [
+      "EROSION",
+      "ND2",
+      "QUICK_GRIMOIRE",
+      "S15",
+      "DISARM1",
+      "NWL3",
+      "PRIEST"
+    ],
+    "deck": [
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "seed": 6275001,
+    "turn": 15,
+    "casts": 45,
+    "manaAfter": 4,
+    "hp": [
+      175,
+      0
+    ],
+    "actions": [
+      {
+        "turn": 1,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 1,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 1,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 1,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 2,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 3,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 3,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 3,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 3,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 4,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 5,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 5,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "STARTER_TRASH",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 5,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_MANA",
+        "mana": 1,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 5,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 1,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 6,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 1,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 6,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 5,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 7,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 0
+        },
+        "id": "STARTER_MANA",
+        "mana": 2,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 7,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 2,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 8,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 2,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 8,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 6,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 9,
+        "side": 0,
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "EROSION",
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 9,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 10,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 10,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 6,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 11,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "EROSION",
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 11,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 12,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 0,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 12,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 6,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 13,
+        "side": 0,
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 13,
+        "side": 0,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 14,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": false
+      },
+      {
+        "turn": 14,
+        "side": 1,
+        "action": {
+          "type": "endTurn"
+        },
+        "id": null,
+        "mana": 6,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "buyMarket",
+          "i": 2
+        },
+        "id": "QUICK_GRIMOIRE",
+        "mana": 4,
+        "hp": [
+          40,
+          45
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          43,
+          44
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          46,
+          43
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          49,
+          42
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          52,
+          41
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          55,
+          40
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          58,
+          39
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          61,
+          38
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          64,
+          37
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          67,
+          36
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          70,
+          35
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          73,
+          34
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          76,
+          33
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          79,
+          32
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          82,
+          31
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          85,
+          30
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          88,
+          29
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          91,
+          28
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          94,
+          27
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          97,
+          26
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          100,
+          25
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          103,
+          24
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          106,
+          23
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          109,
+          22
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          112,
+          21
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          115,
+          20
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          118,
+          19
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          121,
+          18
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          124,
+          17
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          127,
+          16
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          130,
+          15
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          133,
+          14
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          136,
+          13
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          139,
+          12
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          142,
+          11
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          145,
+          10
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          148,
+          9
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          151,
+          8
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          154,
+          7
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          157,
+          6
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          160,
+          5
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          163,
+          4
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          166,
+          3
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          169,
+          2
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          172,
+          1
+        ],
+        "drawInHand": true
+      },
+      {
+        "turn": 15,
+        "side": 0,
+        "action": {
+          "type": "play",
+          "idx": 1
+        },
+        "id": "ND2",
+        "mana": 4,
+        "hp": [
+          175,
+          0
+        ],
+        "drawInHand": true
+      }
+    ]
+  },
+  {
+    "type": "post-acquisition-fixture",
+    "name": "DOMINION self-redraw",
+    "casts": 70,
+    "skips": 70,
+    "mana": 6,
+    "turn": 11
+  },
+  {
+    "type": "fixture",
+    "name": "silence stops zero-cost draw",
+    "blocked": true
+  },
+  {
+    "type": "fixture",
+    "name": "starter rally attack",
+    "atk": [
+      4,
+      4,
+      4,
+      5,
+      5,
+      5
+    ],
+    "doubleWeaken": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      1
+    ],
+    "directUnblocked": 30
+  },
+  {
+    "type": "fixture",
+    "name": "Ghost + Blood Rite + Fire x3",
+    "atk": [
+      5,
+      5,
+      5
+    ],
+    "hp": [
+      43,
+      46
+    ],
+    "mana": 1
+  },
+  {
+    "type": "fixture",
+    "name": "Farm + Farmer + purchased Apple",
+    "setupAndPurchaseMana": 5,
+    "dew": 8,
+    "turn": 13
+  }
+]

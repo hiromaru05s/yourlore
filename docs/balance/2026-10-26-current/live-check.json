@@ -1,0 +1,72 @@
+{
+  "checkedAt": "2026-10-26T07:27:19.440Z",
+  "url": "https://yourlore.xyz",
+  "htmlHash": "6450152b57bec280e387b955fdea0be9735002851866ca4334561f242b613b90",
+  "scripts": [
+    {
+      "url": "https://yourlore.xyz/assets/main-DeweClbi.js",
+      "hash": "30793ed159fb6a046bccda5f6a1578c2aa8115a075f3fb6423f38f03ae29ea76",
+      "hasRift": false,
+      "hasGoblinDirect": false,
+      "hasDominion": false,
+      "hasVersion": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "hash": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "hasRift": false,
+      "hasGoblinDirect": false,
+      "hasDominion": false,
+      "hasVersion": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+      "hash": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "hasRift": false,
+      "hasGoblinDirect": false,
+      "hasDominion": false,
+      "hasVersion": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/main-avfIjLPr.js",
+      "hash": "e24d08498bc10eab34f85339e9f2b9ee5363e651916a5f639cfd7511287ea5ca",
+      "hasRift": false,
+      "hasGoblinDirect": false,
+      "hasDominion": false,
+      "hasVersion": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/game-DPJbBQ3p.js",
+      "hash": "d3f3bfe63a1cb5d59bdd88b0427ee40443a73830c333c8e16500adc88c10c9ed",
+      "hasRift": false,
+      "hasGoblinDirect": false,
+      "hasDominion": false,
+      "hasVersion": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/controller-CAo4t4aM.js",
+      "hash": "4b1cf30ea316513f70ec49cddbf62d9e97562301ede043e0f893c234fa393a13",
+      "hasRift": false,
+      "hasGoblinDirect": false,
+      "hasDominion": true,
+      "hasVersion": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/layout-CFuxJqG3.js",
+      "hash": "82f69902e04fbf82617fa47e745c9381a96ad61684fbf0c7267b19aadda399cd",
+      "hasRift": false,
+      "hasGoblinDirect": false,
+      "hasDominion": false,
+      "hasVersion": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/social-C1yDrIJ6.js",
+      "hash": "99bc82ad64ab82a951b4a4681f12df7e7222dafffdda55f1754c532e1b610dff",
+      "hasRift": true,
+      "hasGoblinDirect": true,
+      "hasDominion": true,
+      "hasVersion": false
+    }
+  ],
+  "note": "Public entrypoint -> main -> game -> controller references read; symbol presence verifies current rework family, not full source equivalence or authenticated play."
+}

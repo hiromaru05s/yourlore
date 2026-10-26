@@ -1,0 +1,15 @@
+const fs=require('fs'),path=require('path'),zlib=require('zlib'),assert=require('node:assert/strict'),crypto=require('crypto');
+const dir=path.resolve(__dirname,'..'),read=n=>JSON.parse(fs.readFileSync(dir+'/'+n)),r=read('results.json'),rank=read('rankings.json'),cards=read('cards.json');
+assert.equal(r.totalGames,51504);assert.equal(r.completedGames,51501);assert.equal(rank.overall.length,347);assert.equal(rank.special.length,31);assert.equal(rank.starters.length,44);assert.equal(rank.market.length,303);assert.equal(rank.starterPower.length,44);assert.deepEqual(rank.starterPower.map(x=>x.id).sort(),rank.starters.map(x=>x.id).sort());
+assert.deepEqual([...rank.overall,...rank.special].map(x=>x.id).sort(),Object.keys(cards).sort());assert.equal(new Set(rank.overall.map(x=>x.rank)).size,347);
+for(const[exp,stats]of Object.entries(r.experiments)){
+ const rows=zlib.gunzipSync(fs.readFileSync(dir+'/'+exp+'-raw.jsonl.gz')).toString().trim().split('\n').map(JSON.parse);assert.equal(rows.length,stats.games);assert.equal(rows.filter(x=>x.result==null).length,stats.unfinished||0);assert(rows.every(x=>!x.invalid&&!x.bad));
+ if(exp!=='combo'){const plans=JSON.parse(zlib.gunzipSync(fs.readFileSync(dir+'/plans/'+(exp==='pair'?'pair':exp)+'-plan.json.gz')));assert.equal(plans.length,rows.length);const by=new Map(rows.map(x=>[x.job,x]));assert.equal(by.size,rows.length);for(const p of plans){const x=by.get(p.job);for(const[k,v]of Object.entries(p))assert.deepEqual(x[k],v,exp+' '+p.job+' '+k);}}
+ if(exp==='pure')assert(rows.every(x=>Object.keys(x.buys).length===0));
+}
+const held=new Map(r.holdout.map(x=>[x.name,x]));assert.equal(held.get('GOBLIN+GOBLIN').score,92);assert.equal(held.get('GOBLIN+GOBLIN_RAIDER').score,90);assert.equal(held.get('RUST_SHROOM+GOBLIN').score,87);
+const pure=new Map(r.pure.map(x=>[x.name,x]));assert.equal(pure.get('pureRally').score,166);assert.equal(pure.get('goblin').score,150);
+const w=read('witnesses.json');assert.equal(w.length,7);assert(w.slice(0,2).every(x=>x.turn===15&&x.casts===45&&x.manaAfter===4&&x.hp[1]===0));assert.equal(w[2].skips,70);assert.equal(w[6].dew,8);
+for(const n of ['README.md','all-ranking.md','starter-ranking.md','market-ranking.md']){const s=fs.readFileSync(dir+'/'+n,'utf8');assert(!/[ \t]+$/m.test(s),n+' trailing whitespace');for(const m of s.matchAll(/\]\(([^)]+)\)/g))if(!/^(http|#)/.test(m[1]))assert(fs.existsSync(path.resolve(dir,m[1])),n+' missing link '+m[1]);}
+if(!process.argv.includes('--no-hash')){const m=read('integrity.json');for(const[n,v]of Object.entries(m.files)){const b=fs.readFileSync(dir+'/'+n);assert.equal(b.length,v.bytes,n);assert.equal(crypto.createHash('sha256').update(b).digest('hex'),v.sha256,n);}assert.equal(crypto.createHash('sha256').update(zlib.gunzipSync(fs.readFileSync(dir+'/core.cjs.gz'))).digest('hex'),m.coreSha256);}
+console.log('PASS: 378 card coverage, 51,504 cases / 51,501 completed, exact plans, zero rejected actions, 3 explicit unfinished loops, pure purchase prohibition, report claims, links'+(process.argv.includes('--no-hash')?'':', archive hashes'));
