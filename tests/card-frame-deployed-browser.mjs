@@ -4,7 +4,7 @@ const origin=process.env.LORE_TEST_ORIGIN,out=process.env.LORE_TEST_OUT;if(!orig
 const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
 try{for(const width of [1280,390]){
  const ctx=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width<500?2:1}),page=await ctx.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(/Native capture fallback|could not be prepared|Shader Error|GL_INVALID/.test(m.text()))errors.push(m.text());});
- await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));
+ await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]')&&!document.querySelector('.screen-loader'),null,{timeout:45000}).catch(async error=>{console.error({errors,boot:await page.evaluate(()=>({url:location.href,title:document.title,text:document.body.innerText.slice(0,2500),tempo:!!window.combatTempo,scene:document.querySelector('[data-scene-ready]')?.getAttribute('data-scene-ready')}))});await page.screenshot({path:out+'/boot-failure.png'});throw error;});
  for(const frame of ['frame:mirror-silver','frame:flowing-gold','frame:obsidian-ember','frame:nacre-prism','frame:verdigris-runes']){
   const result=await page.evaluate(async frame=>{
    document.querySelector('.tempo-controls').style.display='none';const c=combatTempo.controller;await c.queue;const f=combatTempo.fixture('summon',0);f.prev.frames=f.res.state.frames=[frame,frame];c.show(f.prev);await new Promise(r=>setTimeout(r,600));

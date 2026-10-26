@@ -1,0 +1,14 @@
+{
+  "id": "a692f7c6-26bd-4a6d-b966-b0b453649b11",
+  "annotations": {
+    "workers/message": "ed86e67c94336abd165c4fc4bb55d41260bc8e31 guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "c0eb0e1a-8919-4531-900a-40578a59528f",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-10-26T15:01:59.055646Z"
+}

@@ -24,3 +24,11 @@ One shared WebGL context produces masked frame and seal material canvases, cache
 - Screenshots and JSON in qa; continuous browser recordings retained under /tmp/lore-frame-* during this run. Visual review checked the glossy black direction, type-color readability, original silhouette and responsive shop/appearance layout separately from functional assertions.
 
 These are local/deployed fixtures and browser-emulated viewports, not authenticated human PvP or physical-device FPS evidence. Release identifiers and deployed verification are appended after publication.
+
+## Production release — 2026-10-27 JST
+
+Implementation merged to main and published from `ed86e67c94336abd165c4fc4bb55d41260bc8e31`. The priority continuity work and its verified release records are included. Guarded install, typecheck, **234/234** production-suite cases and build succeeded. Worker `c0eb0e1a-8919-4531-900a-40578a59528f`, deployment `a692f7c6-26bd-4a6d-b966-b0b453649b11`, 100% traffic.
+
+At `https://yourlore.xyz`, **150 file SHA-256 comparisons** matched a clean committed-source build. The shipped shop/appearance UI passed all five prices, purchases, ownership, independent presets, save/reopen, desktop/mobile and reduced motion with API-only fixtures. The unmodified shipped board/reducer/controller passed five materials at each of 1280/390 px (10 cases): animated hand frames, summon, market purchase flight and graveyard frame retention. One initial cold fixture navigation timed out; a fresh run with explicit loading-cover dismissal completed all 10 cases without runtime errors. No live player currency was spent, and authenticated human PvP remains outside this verification.
+
+Production reports and screenshots are retained in `production/`. Later main descendants may include unrelated releases; the source SHA and deployment above identify this verified release precisely.
