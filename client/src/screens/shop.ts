@@ -51,6 +51,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     wrap.dataset.shopCategory=category;
     wrap.innerHTML = `
       <div class="tut">
+        ${category==='gacha'?'<span class="shop-table-frame" aria-hidden="true"></span>':''}
         <div class="tut-head">
           <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
           <div><small class="menu-eyebrow">BIBLION / SHOP</small><h2>${t("shop.title")}</h2><p class="menu-subtitle">${loungeText("あなたのデッキに、しるしを。","Make your deck your own.","나의 덱에, 나만의 표식을.")}</p></div>

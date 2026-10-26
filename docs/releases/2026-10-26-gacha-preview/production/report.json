@@ -1,0 +1,181 @@
+{
+  "origin": "https://yourlore.xyz",
+  "geometry": [
+    {
+      "width": 1440,
+      "height": 900,
+      "panel": {
+        "x": 43.1875,
+        "y": 92,
+        "width": 1353.625,
+        "height": 682,
+        "bottom": 774
+      },
+      "draw": {
+        "x": 745.90625,
+        "y": 633,
+        "width": 304.953125,
+        "height": 112,
+        "bottom": 745
+      },
+      "tile": {
+        "x": 72.1875,
+        "y": 633,
+        "width": 201.96875,
+        "height": 112,
+        "bottom": 745
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1440,
+        "height": 716,
+        "bottom": 796
+      },
+      "image": "linear-gradient(rgba(12, 37, 64, 0.9), rgba(0, 0, 0, 0) 24%), linear-gradient(0deg, rgba(3, 11, 24, 0.91), rgba(0, 0, 0, 0) 65%), url(\"https://yourlore.xyz/art/shop/biblion-draw-table-v1.webp\")",
+      "clip": "polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0px calc(100% - 20px), 0px 20px)"
+    },
+    {
+      "width": 1024,
+      "height": 600,
+      "panel": {
+        "x": 30.71875,
+        "y": 92,
+        "width": 962.5625,
+        "height": 382,
+        "bottom": 474
+      },
+      "draw": {
+        "x": 530.078125,
+        "y": 333,
+        "width": 211.09375,
+        "height": 112,
+        "bottom": 445
+      },
+      "tile": {
+        "x": 59.71875,
+        "y": 333,
+        "width": 139.390625,
+        "height": 112,
+        "bottom": 445
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1024,
+        "height": 416,
+        "bottom": 496
+      },
+      "image": "linear-gradient(rgba(12, 37, 64, 0.9), rgba(0, 0, 0, 0) 24%), linear-gradient(0deg, rgba(3, 11, 24, 0.91), rgba(0, 0, 0, 0) 65%), url(\"https://yourlore.xyz/art/shop/biblion-draw-table-v1.webp\")",
+      "clip": "polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0px calc(100% - 20px), 0px 20px)"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "panel": {
+        "x": 16,
+        "y": 70,
+        "width": 358,
+        "height": 662,
+        "bottom": 732
+      },
+      "draw": {
+        "x": 29,
+        "y": 653,
+        "width": 162,
+        "height": 64,
+        "bottom": 717
+      },
+      "tile": {
+        "x": 29,
+        "y": 516,
+        "width": 106.65625,
+        "height": 94,
+        "bottom": 610
+      },
+      "content": {
+        "x": 0,
+        "y": 64,
+        "width": 390,
+        "height": 688,
+        "bottom": 752
+      },
+      "image": "linear-gradient(rgba(12, 37, 64, 0.9), rgba(0, 0, 0, 0) 24%), linear-gradient(0deg, rgba(3, 11, 24, 0.91), rgba(0, 0, 0, 0) 65%), url(\"https://yourlore.xyz/art/shop/biblion-draw-table-v1.webp\")",
+      "clip": "polygon(15px 0px, calc(100% - 15px) 0px, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0px calc(100% - 15px), 0px 15px)"
+    },
+    {
+      "width": 320,
+      "height": 640,
+      "panel": {
+        "x": 10,
+        "y": 66,
+        "width": 300,
+        "height": 474,
+        "bottom": 540
+      },
+      "draw": {
+        "x": 23,
+        "y": 461,
+        "width": 133,
+        "height": 64,
+        "bottom": 525
+      },
+      "tile": {
+        "x": 23,
+        "y": 345,
+        "width": 87.328125,
+        "height": 78,
+        "bottom": 423
+      },
+      "content": {
+        "x": 0,
+        "y": 60,
+        "width": 320,
+        "height": 500,
+        "bottom": 560
+      },
+      "image": "linear-gradient(rgba(12, 37, 64, 0.9), rgba(0, 0, 0, 0) 24%), linear-gradient(0deg, rgba(3, 11, 24, 0.91), rgba(0, 0, 0, 0) 65%), url(\"https://yourlore.xyz/art/shop/biblion-draw-table-v1.webp\")",
+      "clip": "polygon(15px 0px, calc(100% - 15px) 0px, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0px calc(100% - 15px), 0px 15px)"
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "panel": {
+        "x": 25.3125,
+        "y": 64,
+        "width": 793.375,
+        "height": 236,
+        "bottom": 300
+      },
+      "draw": {
+        "x": 452.375,
+        "y": 237,
+        "width": 170.65625,
+        "height": 46,
+        "bottom": 283
+      },
+      "tile": {
+        "x": 452.375,
+        "y": 145,
+        "width": 113.09375,
+        "height": 64,
+        "bottom": 209
+      },
+      "content": {
+        "x": 0,
+        "y": 52,
+        "width": 844,
+        "height": 270,
+        "bottom": 322
+      },
+      "image": "linear-gradient(rgba(12, 37, 64, 0.9), rgba(0, 0, 0, 0) 24%), linear-gradient(0deg, rgba(3, 11, 24, 0.91), rgba(0, 0, 0, 0) 65%), url(\"https://yourlore.xyz/art/shop/biblion-draw-table-v1.webp\")",
+      "clip": "polygon(20px 0px, calc(100% - 20px) 0px, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0px calc(100% - 20px), 0px 20px)"
+    }
+  ],
+  "allThreeSleevesAnimate": true,
+  "effectAnimatesOnAttune": true,
+  "categoryFiltering": true,
+  "closeAndFocus": true,
+  "reducedMotion": true,
+  "errors": []
+}
