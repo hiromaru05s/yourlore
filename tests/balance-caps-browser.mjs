@@ -37,7 +37,10 @@ try {
   await page.locator('.zoom-overlay').waitFor();const text=await page.locator('.zoom-overlay').innerText();for(const rule of rules)assert(text.includes(rule),id+': '+rule+' / '+text);
   await page.locator('.zoom-overlay img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode().catch(()=>{}))));
   assets.push(...await page.locator('.zoom-overlay img').evaluateAll(imgs=>imgs.filter(img=>img.src.includes('/art/cards/')).map(img=>({url:img.currentSrc,width:img.naturalWidth,height:img.naturalHeight}))));
-  await page.screenshot({path:out+'/'+id+'.png'});await page.setViewportSize({width:390,height:844});await page.screenshot({path:out+'/'+id+'-390.png'});await page.locator('.zoom-overlay .inspect-close').click();await page.locator('.zoom-overlay').waitFor({state:'detached'});await page.setViewportSize({width:1280,height:900});checks.push(name+' current effect text on desktop and 390px');
+  await page.screenshot({path:out+'/'+id+'.png'});await page.setViewportSize({width:390,height:844});await page.screenshot({path:out+'/'+id+'-390.png'});
+  // Verify that the lower rule text can actually be reached in the mobile scroller.
+  for(const rule of rules)await page.locator('.zoom-details').getByText(rule,{exact:false}).first().scrollIntoViewIfNeeded();
+  await page.screenshot({path:out+'/'+id+'-390-rules.png'});await page.locator('.zoom-overlay .inspect-close').click();await page.locator('.zoom-overlay').waitFor({state:'detached'});await page.setViewportSize({width:1280,height:900});checks.push(name+' current effect text on desktop and 390px');
  }
  assert.deepEqual(errors,[]);checks.push('All four card inspections rendered without JS errors');
  await fs.writeFile(out+'/report.json',JSON.stringify({base,scope:'shipped static assets, actual App/menu/card renderer; isolated API fixtures; no authenticated account or online duel',checks,assets,errors},null,2));console.log('PASS',checks);

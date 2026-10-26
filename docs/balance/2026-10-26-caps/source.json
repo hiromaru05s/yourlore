@@ -1,0 +1,13 @@
+{
+  "commit": "876ac24bde69a8d704ca41c8a95b2382115377ea",
+  "coreSha256": "b383e9aac2972093d19ae8e84b881ec383ecb08791fdef5a5db1bc169533da7e",
+  "files": {
+    "client/src/shared/engine.ts": "c4f9130e2c015c565ce60b5c47d0031ba06de53904f4b0df3532e32855d38cb1",
+    "client/src/shared/types.ts": "3956880410c38d8f80aeee4ca6a046efdeb07c7dcfa22f27fb64e1a41c52722d",
+    "client/src/shared/cards.ts": "54b1f8b97d55a7584877e929add6286344585bc3ba075d7687d25c6634d36f3a",
+    "client/src/shared/goblinCards.ts": "21ff8b683152cf5b84b02aeb8db3bf8bf51cad599a96dbcc2c01eafc41ffec85",
+    "client/src/shared/expansionCards.ts": "9dabf92d6852fee94dcea80fc5377896ab64379204bb42f910962bd539bc51db",
+    "client/src/shared/questQuickCards.ts": "a0049257e5fcdf09a971233b8fbd6f636e6a6b81cbba10c41cbc839b350f72e3",
+    "client/src/shared/cardEffectText.ts": "c5c6d27da68ca7726ff6a94d4afc17c64743d9fe242f010e2b6fa08410acc408"
+  }
+}

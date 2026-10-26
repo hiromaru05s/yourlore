@@ -1,0 +1,62 @@
+[
+  {
+    "version": "before",
+    "plan": "pure",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "before",
+    "plan": "thin",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "before",
+    "plan": "holdout",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "before",
+    "plan": "starter",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "before",
+    "plan": "pair",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "after",
+    "plan": "pure",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "after",
+    "plan": "thin",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "after",
+    "plan": "holdout",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "after",
+    "plan": "starter",
+    "job": 0,
+    "exactReplay": true
+  },
+  {
+    "version": "after",
+    "plan": "pair",
+    "job": 0,
+    "exactReplay": true
+  }
+]

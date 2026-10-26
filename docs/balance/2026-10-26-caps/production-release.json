@@ -1,0 +1,21 @@
+{
+  "id": "65852d77-d0e1-4612-b7f3-654a17be0863",
+  "strategy": "percentage",
+  "annotations": {
+    "workers/message": "b2373586558e515ec238ee0a88a0ec5bbfd52569 guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "01cc277d-d6d2-4333-97c4-e1c183202238",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-10-26T09:17:42.194765Z",
+  "ruleCommit": "876ac24bde69a8d704ca41c8a95b2382115377ea",
+  "releaseCommit": "b2373586558e515ec238ee0a88a0ec5bbfd52569",
+  "guardTestsPassed": 222,
+  "guardTestsTotal": 222,
+  "guardSourceWorktree": "/Users/hiromaru05s/.codex/worktrees/single-loading-fix/LORE_TCG",
+  "scope": "Combined guarded production release includes card caps; verified independently by deployment status, public asset byte parity, card inspection and actual hard/hell worker checks. No authenticated online duel."
+}

@@ -40,7 +40,7 @@ try {
    if(!existing){const copy=g.players[1].field.find(m=>m.id==='GOBLIN_RAIDER');assert.equal(copy.expireOpponentOf,1);g=end(g);assert(g.players[1].field.some(m=>m.uid===copy.uid));g=end(end(g));assert(!g.players[1].field.some(m=>m.uid===copy.uid));}
   }assert(seen);}
  });
- test('Legacy steal trap cannot put a second Raider on the receiving field',()=>{let g=play(fresh(),'GOBLIN_RAIDER');g.players[1].field=[mon('GOBLIN_RAIDER')];g.players[1].traps=[{card:{...card('COUNTERCALC'),t:'trap',react:'slaughterRaise',val:100}}];const uid=g.players[0].field[0].uid;g=step(g,{type:'attack',uid});g=step(g,{type:'chooseTarget',uid:null});assert.equal(g.players[1].field.filter(m=>m.id==='GOBLIN_RAIDER').length,1);});
+ test('Legacy steal trap cannot put a second Raider on the receiving field',()=>{let g=play(fresh(),'GOBLIN_RAIDER');g.players[1].field=[mon('GOBLIN_RAIDER')];g.players[1].traps=[{card:{...card('COUNTERCALC'),t:'trap',react:'slaughterRaise',val:100}}];const uid=g.players[0].field[0].uid;g=step(g,{type:'attack',uid});g=step(g,{type:'chooseTarget',uid:g.players[1].field[0].uid});assert.equal(g.players[1].traps.length,0);assert(!g.players[0].field.some(m=>m.uid===uid));assert.equal(g.players[1].field.filter(m=>m.id==='GOBLIN_RAIDER').length,1);});
  test('Grimoire has exactly five discounts; sixth draw costs mana and zero-cost spells consume a charge',()=>{
   let g=buy(fresh());g.players[0].hand=[card('S10')];g.players[0].deck=[];g.players[0].discard=[];const mana=g.players[0].mana;
   for(let i=0;i<5;i++){assert.equal(playCost(g.players[0].hand[0],g.players[0]),0);g=step(g,{type:'play',idx:0});assert.equal(g.players[0].mana,mana);}
