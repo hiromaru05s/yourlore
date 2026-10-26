@@ -1,0 +1,52 @@
+/* HOME is the shared frame for every menu. Page styles own only their content;
+   viewport changes, never the active route, determine header and dock geometry. */
+.lounge-shell.horizon-nav.selected-menu {
+  --bar:80px;
+  --menu-rail-height:72px;
+  --menu-rail-bottom:max(16px,env(safe-area-inset-bottom));
+  --dock:calc(var(--menu-rail-height) + var(--menu-rail-bottom) + 16px);
+}
+.lounge-shell.horizon-nav.selected-menu .lounge-rail {
+  height:var(--menu-rail-height);
+  bottom:var(--menu-rail-bottom);
+}
+.lounge-shell.selected-menu .lounge-topbar .lounge-seeker .lounge-user {
+  max-width:100%;
+}
+@media(max-width:850px) {
+  .lounge-shell.horizon-nav.selected-menu {
+    --bar:64px;
+    --menu-rail-height:68px;
+    --menu-rail-bottom:max(12px,env(safe-area-inset-bottom));
+    --dock:calc(var(--menu-rail-height) + var(--menu-rail-bottom) + 12px);
+  }
+}
+@media(max-height:700px) and (max-width:850px) {
+  .lounge-shell.horizon-nav.selected-menu {
+    --bar:60px;
+    --menu-rail-height:60px;
+    --menu-rail-bottom:max(8px,env(safe-area-inset-bottom));
+  }
+}
+@media(max-height:500px) {
+  .lounge-shell.horizon-nav.selected-menu {
+    --bar:52px;
+    --menu-rail-height:54px;
+    --menu-rail-bottom:max(6px,env(safe-area-inset-bottom));
+    --dock:calc(var(--menu-rail-height) + var(--menu-rail-bottom) + 8px);
+  }
+  .lounge-shell.selected-menu .lounge-topbar { padding-top:4px; padding-bottom:4px; }
+  .lounge-shell.selected-menu .lounge-topbar .lounge-brand { height:44px; }
+}
+@media(max-width:360px) {
+  /* Leave the centered logo clear even with a seven-digit shard balance. */
+  .lounge-shell.selected-menu .lounge-balance b { font-size:11px; }
+}
+
+@media(max-width:600px) {
+  .lounge-shell.selected-menu .lounge-topbar { gap:6px; }
+  .lounge-shell.selected-menu .lounge-topbar .lounge-brand {
+    position:static; transform:none; order:1; width:56px; height:42px; flex:none; margin:0 auto;
+  }
+  .lounge-shell.selected-menu .lounge-seeker { max-width:calc(100% - 220px); margin-right:0; }
+}

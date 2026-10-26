@@ -1,0 +1,9 @@
+# Shared menu frame — 2026-10-26
+
+User request: slightly reduce HOME's top/bottom UI footprint, use it for HOME, deck, cards, leaderboard, friends, shop and tutorial, and deploy to production.
+
+`loungeLayout.css` owns viewport-dependent header and dock geometry. Desktop uses an 80px header (previous HOME: 92px) and 104px dock reservation (previous HOME: 124px), including a 72px navigation rail. Mobile and landscape use the same responsive dimensions on all routes, with bottom safe-area clearance. Removed route-specific header, logo and navigation overrides. Every page now uses the same profile container; sound and quests remain HOME content. The concurrent HOME gift-letter change is retained. The right-hand action group and gift slot are shared on every route (the slot is invisible and inaccessible outside HOME), so mobile logo placement and shard alignment remain stable. At 320px, smaller shard numerals keep a seven-digit balance clear of the logo and gift.
+
+Validation uses the production build and API fixtures, with actual static assets. `tests/menu-layout-browser.mjs` compares bounding rectangles for the header, profile, logo, shard balance, menu button and all seven navigation targets; checks selected routes, horizontal overflow, header overlap, and utility menu open/Escape behavior. Japanese: 1440×900, 1280×720, 390×844, 320×568 and 844×390; Korean: 390×844 and 320×568. This is browser layout validation, not authenticated account or physical-device testing. Screenshots and coordinate reports are saved through `LORE_TEST_OUTPUT` (default `/tmp/lore-menu-layout-qa`).
+
+Build and existing menu behavior checks passed. Production deployment uses the repository's committed-snapshot guard, which independently runs type checking, the production suite, and a fresh build before publishing.

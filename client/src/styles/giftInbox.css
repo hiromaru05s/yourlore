@@ -8,9 +8,6 @@
 .selected-menu .lounge-topbar .gift-mail:focus-visible{outline:2px solid #bcdfea;outline-offset:2px}
 @media(max-width:850px){.selected-menu .lounge-header-actions{gap:8px}}
 @media(max-width:600px){
- .selected-menu.lounge-home .lounge-topbar{gap:6px}
- .selected-menu.lounge-home .lounge-topbar .lounge-brand{position:static;transform:none;order:1;width:56px;height:42px;flex:none;margin:0 auto}
- .selected-menu.lounge-home .lounge-seeker{max-width:calc(100% - 220px);margin-right:0}
  .selected-menu .lounge-header-actions{gap:4px}
  .selected-menu .lounge-topbar .gift-mail{width:40px;padding:2px}
  .gift-mail-art{width:32px;height:26px}

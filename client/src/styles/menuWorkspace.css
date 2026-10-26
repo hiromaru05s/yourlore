@@ -47,9 +47,6 @@
 .lounge-cards .collection-pager{grid-column:1/-1;grid-row:3;min-height:32px}
 .lounge-cards .cards-count{margin:0;font-size:11px;white-space:nowrap;color:#b6cddd}
 /* Friends: one open roster with a quiet side area for requests. */
-.lounge-shell.horizon-nav.lounge-friends{--bar:64px;--dock:80px}
-.lounge-shell.horizon-nav.lounge-friends .lounge-rail{height:62px;bottom:8px}
-.lounge-shell.selected-menu.lounge-friends .lounge-brand{width:115px;height:52px}
 .lounge-friends .lounge-content>.friends-screen{padding:8px 3vw 10px;height:100%;min-height:0}
 .lounge-friends .friends-screen .tut{width:100%;max-width:1500px;height:100%;padding:24px 28px;border:0;border-radius:0;box-shadow:none;background:linear-gradient(120deg,#071525d6,#07152599);color:#d6e5ee;overflow:hidden}
 .lounge-friends .friends-screen .tut-head{display:none}
@@ -110,9 +107,6 @@
 @media(max-width:650px){.lounge-friends .fr-roster .fr-row{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px 12px;padding:14px 0}.lounge-friends .fr-roster .fr-actions{grid-column:1/-1;justify-content:flex-end;width:100%}.lounge-friends .fr-info{min-width:0}.lounge-friends .fr-name{white-space:normal}}
 /* Short viewports keep two candidate rows instead of clipping the second row. */
 @media(max-height:700px){
- .lounge-shell.horizon-nav:is(.lounge-deck,.lounge-cards,.lounge-friends){--bar:52px;--dock:64px}
- .lounge-shell.horizon-nav:is(.lounge-deck,.lounge-cards,.lounge-friends) .lounge-rail{height:50px;bottom:4px}
- .lounge-shell.selected-menu:is(.lounge-deck,.lounge-cards,.lounge-friends) .lounge-brand{height:44px}
  .lounge-deck #deckCur{--hand-card:50px}
  .lounge-deck .deck-hand-help{min-height:20px}
  .lounge-deck #deckUndo{min-height:20px}

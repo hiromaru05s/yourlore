@@ -8,6 +8,7 @@ import '../styles/homeAtmosphere.css';
 import '../styles/menuReadability.css';
 import '../styles/homeViewport.css';
 import '../styles/homeFiligree.css';
+import '../styles/loungeLayout.css';
 import {loungeNavGlyph,loungeUtilityGlyph} from './loungeNavGlyphs';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';
@@ -52,19 +53,22 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     const top=document.createElement('header'); top.className='lounge-topbar';
     top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile title="${esc(t('home.levelRule'))}">${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small class="lounge-experience" aria-label="${esc(t('home.seekerLevel'))}">Lv.${experience.level}${experience.max?" MAX":` · ${experience.progress}/100 EXP`}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
     shell.prepend(rail,top);
-    if(page==='home'){
+    // Keep the same profile container on every route; HOME adds sound and quests.
+    {
       const profile=top.querySelector<HTMLButtonElement>('[data-profile]')!;
       const seeker=document.createElement('div');seeker.className='lounge-seeker';
       profile.replaceWith(seeker);seeker.append(profile);
-      stopHomeSound=mountHomeSound(seeker);
-      if(dailyReward)seeker.append(dailyReward);
-      // Move the existing inbox button so claims, refreshes and focus keep their owner.
-      if(gifts){
-        const actions=document.createElement('div');actions.className='lounge-header-actions';
-        actions.append(gifts,top.querySelector('[data-shop]')!,top.querySelector('.lounge-menu')!);
-        top.append(actions);
+      if(page==='home'){
+        stopHomeSound=mountHomeSound(seeker);
+        if(dailyReward)seeker.append(dailyReward);
       }
     }
+    // Reserve the same gift slot on other pages so the logo and balance stay put.
+    const actions=document.createElement('div');actions.className='lounge-header-actions';
+    const giftSlot=gifts??document.createElement('span');
+    if(!gifts){giftSlot.className='gift-mail';giftSlot.style.visibility='hidden';giftSlot.setAttribute('aria-hidden','true');}
+    actions.append(giftSlot,top.querySelector('[data-shop]')!,top.querySelector('.lounge-menu')!);
+    top.append(actions);
     stopNavMotion=mountLoungeNavMotion(rail.querySelector('nav')!,lastLoungePage.get(app));
     lastLoungePage.set(app,page);
     top.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();

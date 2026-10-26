@@ -1,0 +1,25 @@
+[
+  {
+    "source": "/tmp/lore-menu-layout-qa/report.json",
+    "origin": "http://127.0.0.1:5546",
+    "cases": 40,
+    "viewports": [
+      "1280x720",
+      "1440x900",
+      "320x568",
+      "390x844",
+      "844x390"
+    ],
+    "errors": []
+  },
+  {
+    "source": "/tmp/lore-menu-layout-ko/report.json",
+    "origin": "http://127.0.0.1:5546",
+    "cases": 16,
+    "viewports": [
+      "320x568",
+      "390x844"
+    ],
+    "errors": []
+  }
+]

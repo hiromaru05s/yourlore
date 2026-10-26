@@ -1,8 +1,4 @@
 /* Approved 2026-10-02: hand first / silver-blue engraving / wide collection. */
-.lounge-shell.horizon-nav:is(.lounge-deck,.lounge-cards){--bar:64px;--dock:80px}
-.lounge-shell.horizon-nav:is(.lounge-deck,.lounge-cards) .lounge-rail{height:62px;bottom:8px}
-.lounge-shell.horizon-nav:is(.lounge-deck,.lounge-cards) .lounge-rail nav .lounge-nav-icon{width:26px;height:26px}
-.lounge-shell.selected-menu:is(.lounge-deck,.lounge-cards) .lounge-brand{width:115px;height:52px}
 .bot-diff-ov:has(.bot-diff.bot-challenge){padding:24px;background:#030d1bd9;backdrop-filter:blur(7px);overflow:auto}
 body.lounge-active .modal.bot-diff.bot-challenge{width:min(1040px,96vw);max-width:1040px;padding:28px 36px;border:0;border-radius:0;background:linear-gradient(#071625ed,#0a1c2df5);box-shadow:0 20px 90px #0006;max-height:calc(100dvh - 48px);overflow:auto}
 .bot-diff.bot-challenge .support-dialog-heading{position:relative;margin:0;padding:0 0 12px;border:0}

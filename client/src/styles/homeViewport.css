@@ -37,14 +37,11 @@
  .lounge-shell.selected-menu.lounge-home .lounge-deck-preview img{width:28px;height:40px}
 }
 @media(max-width:850px) and (max-height:700px){
- .lounge-shell.selected-menu.lounge-home{--bar:64px;--dock:84px}
- .lounge-shell.selected-menu.lounge-home .lounge-rail{height:64px;bottom:10px}
  .lounge-shell.selected-menu.lounge-home .lounge-play-button>small,.lounge-shell.selected-menu.lounge-home .lounge-play-button>span{display:none}
  .lounge-shell.selected-menu.lounge-home .lounge-rank-info{min-height:24px;font-size:10px}
  .lounge-shell.selected-menu.lounge-home .home-rank-copy .rank-target{display:none}
 }
 @media(max-height:500px) and (min-width:601px){
- .lounge-shell.selected-menu.lounge-home{--bar:58px;--dock:78px}
  .lounge-shell.selected-menu.lounge-home .lounge-content{top:var(--bar)}
  .lounge-shell.selected-menu.lounge-home .lounge-content>.lounge-home-screen{grid-template-columns:minmax(0,1fr) minmax(0,52%);padding:4px 20px 4px;gap:20px}
  .lounge-shell.selected-menu.lounge-home .lounge-home-main{padding:4px 12px}
