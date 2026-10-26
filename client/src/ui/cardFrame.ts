@@ -39,7 +39,7 @@ function install(){if(mutation)return;renderer=new CardFrameMaterial();
   for(const record of records)for(const added of record.addedNodes){if(!(added instanceof HTMLElement))continue;
    for(const node of [ ...(added.matches('[data-card-frame]')?[added]:[]),...added.querySelectorAll<HTMLElement>('[data-card-frame]')]){
     if(node.dataset.cardFrameBorrowed==='true')continue;
-    if(!entries.has(node)){node.querySelectorAll('.card-frame-material').forEach(c=>c.remove());attachCardFrame(node,node.dataset.uid??'',node.dataset.cardFrame);}
+    if(!entries.has(node)){attachCardFrame(node,node.dataset.uid??'',node.dataset.cardFrame);}
     else if(node.isConnected&&!entries.get(node)!.connected){entries.get(node)!.connected=true;}
    }
   }

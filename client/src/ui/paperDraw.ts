@@ -1,3 +1,4 @@
+import {ensureCardFrameReady} from './cardFrame';
 import {borrowCardPrint} from './cardContinuity';
 import {cloneCardNode} from './cardClone';
 import {decorateDrawBack,themeFromUrl} from './cosmetics/sleeve';
@@ -33,6 +34,7 @@ function mixMatrix(a:DOMMatrix,b:DOMMatrix,t:number){return new DOMMatrix([mix(a
 /** Rigid beveled stock underneath the exact native front/back. No rasterized text
  * swap, paper bending, or flattening filter on the 3D parent. */
 export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,previousHand,durationScale=1}:PaperDrawOptions):Promise<void>{
+ if(reveal)await Promise.all(cards.map(node=>ensureCardFrameReady(node)));
  if(signal.aborted||!cards.length||cards.some(n=>!n.isConnected))return;
  const speed=Math.max(.5,Math.min(5,durationScale)),overlay=document.createElement('div');overlay.className='native-draw-layer';overlay.setAttribute('aria-hidden','true');overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:126;perspective:1200px;perspective-origin:50% 50%;transform-style:preserve-3d';document.body.append(overlay);
  const flights=cards.map(node=>{

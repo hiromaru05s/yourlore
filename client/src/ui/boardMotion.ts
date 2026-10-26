@@ -1,3 +1,4 @@
+import {ensureCardFrameReady} from './cardFrame';
 /** Commands contain presentation data only; hidden card identities never enter a motion. */
 export type BoardMotion =
   | {kind:'arrival'; durationScale?:number; target:HTMLElement; card:HTMLElement; signal:AbortSignal; onFrame?:(rect:DOMRect)=>void}
@@ -6,4 +7,4 @@ export type BoardMotion =
   | {kind:'opening'; signal:AbortSignal};
 let run:((request:BoardMotion)=>Promise<boolean>)|undefined;
 export function bindBoardMotion(handler:NonNullable<typeof run>):()=>void {run=handler;return()=>{if(run===handler)run=undefined;};}
-export function moveOnBoard(request:BoardMotion):Promise<boolean> {return run?.(request)??Promise.resolve(false);}
+export async function moveOnBoard(request:BoardMotion):Promise<boolean> {if('card' in request)await ensureCardFrameReady(request.card);return run?.(request)??false;}

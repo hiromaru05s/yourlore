@@ -64,7 +64,7 @@ export async function foldQuestIntoSlot(reveal:HTMLElement,target:HTMLElement,fa
   });
   if(completed){face.style.opacity='1';place();}return completed;
  }catch(error){console.warn('[quest-pact] Native fallback',error);return false;}finally{
-  cancelAnimationFrame(frame);material?.dispose();host.querySelector('canvas')?.remove();reveal.style.visibility=visible;reveal.style.opacity=opacity;
+  cancelAnimationFrame(frame);material?.dispose();host.querySelector('.quest-fold-canvas')?.remove();reveal.style.visibility=visible;reveal.style.opacity=opacity;
   if(!completed)host.remove();
  }
 }

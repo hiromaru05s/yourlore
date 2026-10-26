@@ -31,10 +31,10 @@ cancelledStart.click();assert.equal(calls.length,beforeCancel,'Closed dialog can
 assert.equal(document.activeElement,root.querySelector('#ranked'),'Closing restores the launch control focus');
 home.destroy();assert.equal(giftDisposals,1,'Leaving HOME disposes the gift inbox');assert.equal(cancelledWarmups,1,'Leaving HOME cancels the scheduled warmup');root.innerHTML='';
 let resolveCollection;
-const {mountShop}=await load('shop',{...base,starterCollection:()=>({}),renderShopStarters:host=>{host.textContent='daily starters';},pendingPurchase:()=>null,purchaseCollection:async()=>({}),mountShopGacha:host=>{host.textContent='gacha scene';return()=>host.replaceChildren();},api:{collection:()=>new Promise(r=>resolveCollection=r)}});
+const {mountShop}=await load('shop',{...base,starterCollection:()=>({}),renderShopStarters:host=>{host.textContent='daily starters';},pendingPurchase:()=>null,purchaseCollection:async()=>({}),isCardFrame:()=>false,mountShopFrames:host=>{host.textContent='frame accessories';return {update(){},dispose(){host.replaceChildren();}};},mountShopGacha:host=>{host.textContent='gacha scene';return()=>host.replaceChildren();},api:{collection:()=>new Promise(r=>resolveCollection=r)}});
 const shop=mountShop(app);
 assert.deepEqual([...root.querySelectorAll('[data-category]')].map(b=>b.dataset.category),['gacha','starter','accessories']);
 root.querySelector('[data-category="starter"]').click();assert.equal(root.querySelector('#shopStarters').textContent,'daily starters');assert(root.querySelector('.shop-gacha-active'));assert(root.querySelector('#shopGacha').hasAttribute('inert'));
-root.querySelector('[data-category="accessories"]').click();assert(root.querySelector('.shop-coming-soon').textContent.includes('準備中'));assert.equal(root.querySelector('[data-buy],#grid,[data-board-preview]'),null);
+root.querySelector('[data-category="accessories"]').click();assert.equal(root.querySelector('#shopFrames').textContent,'frame accessories');assert.equal(root.querySelector('[data-buy],#grid,[data-board-preview]'),null);
 root.querySelector('[data-category="gacha"]').click();assert(!root.querySelector('#shopGacha').hasAttribute('inert'));
 shop.destroy();root.innerHTML='';resolveCollection({credits:10,starterCards:{}});await Promise.resolve();await Promise.resolve();assert.equal(root.innerHTML,'','Late collection must not repaint a destroyed screen');dom.window.close();console.log('PASS: mode selection/launch, BOT difficulty, three shop tabs, inert hidden gacha, and late-response teardown');

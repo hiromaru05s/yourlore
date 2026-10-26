@@ -108,6 +108,13 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   if(restingShadow)node.style.setProperty('--rest-shadow',restingShadow);
   const frameInk=frameFilter||'none';
   layers.push(async () => {const image=await matte(frameUrl);ctx.save();ctx.filter=frameInk;ctx.drawImage(image,pad,pad,w,h);ctx.restore();});
+  const paintMaterial=(layer:HTMLCanvasElement)=>{
+    const index=[...node.querySelectorAll('.card-frame-material')].indexOf(layer),pixels=liveSource.querySelectorAll<HTMLCanvasElement>('.card-frame-material')[index]??layer;
+    if(!pixels.width||!pixels.height)return;
+    const snapshot=canvas(pixels.width,pixels.height);snapshot.getContext('2d')!.drawImage(pixels,0,0);const b=box(layer);
+    layers.push(async()=>{ctx.drawImage(snapshot,b.x,b.y,b.w,b.h);});
+  };
+  frame.querySelectorAll<HTMLCanvasElement>('.card-frame-material').forEach(paintMaterial);
   const art = node.querySelector<HTMLImageElement>('.card-art img');
   if (art) {
     const b = box(art), fallback = art.srcset?(art.currentSrc||art.src):art.src;
@@ -161,6 +168,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
       const url = urlOf(plate), b = box(plate);
       if (url) layers.push(async () => {ctx.drawImage(await matte(url),b.x,b.y,b.w,b.h);});
     }
+    plate?.querySelectorAll<HTMLCanvasElement>('.card-frame-material').forEach(paintMaterial);
     if (value) layers.push(drawText(value));
   }
   for (const label of node.querySelectorAll<HTMLElement>('.card-status .ec,.card-status .kw,.badge')) {

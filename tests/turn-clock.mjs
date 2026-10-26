@@ -11,7 +11,7 @@ const cls=tree.statements.find(n=>ts.isClassDeclaration(n)&&n.name.text==='BaseC
 const names=['LOCAL_TURN_SECS','HAND_CAP_BONUS_SECS','applyResult','syncTimer','tickTimer','stopTimer'];
 const methods=names.map(name=>cls.members.find(m=>m.name?.getText(tree)===name).getText(tree)).join('\n');
 let now=1_000_000,id=0;const intervals=new Map(),banners=[],sounds=[];
-const context=vm.createContext({console,Date:{now:()=>now},syncCardEffects(){},closeOverlay(){},paintTurnUrgency(){},
+const context=vm.createContext({console,Date:{now:()=>now},syncCardEffects(){},syncCardFrames(){},closeOverlay(){},paintTurnUrgency(){},
  document:{querySelector:()=>null,getElementById:()=>null},sfx:name=>sounds.push(name),A:{turnBanner:(...args)=>banners.push(args)},
  clearInterval:key=>intervals.delete(key),window:{setInterval:fn=>{intervals.set(++id,fn);return id;}}});
 vm.runInContext(ts.transpileModule(`class BaseController {${methods}};globalThis.Controller=BaseController;`,{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText,context);

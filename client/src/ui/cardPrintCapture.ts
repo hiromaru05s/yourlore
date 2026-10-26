@@ -1,3 +1,4 @@
+import {ensureCardFrameReady} from './cardFrame';
 /** Capture the browser's actual card print, including every badge and CSS clip.
  * The previous hand-written Canvas painter was a second card renderer: it omitted
  * counters and guessed text alignment/shadows, so its result could never land
@@ -46,6 +47,7 @@ async function printFonts(source:HTMLElement):Promise<string>{
  return (await Promise.all(needed.map(async r=>'@font-face{'+await inlineValue(r.style.cssText)+'}'))).join('');
 }
 export async function captureNativePrint(source:HTMLElement,width:number,padding:number,liveSource=source):Promise<HTMLCanvasElement>{
+ await Promise.all([ensureCardFrameReady(source),...(liveSource===source?[]:[ensureCardFrameReady(liveSource)])]);
  const rootStyle=getComputedStyle(source),w=parseFloat(rootStyle.width)||source.offsetWidth,h=parseFloat(rootStyle.height)||source.offsetHeight;if(!w||!h)throw Error('Card print has no layout');
  const scale=width/w,pad=width*padding,height=width*h/w;
  const scaled=(key:string,value:string)=>{

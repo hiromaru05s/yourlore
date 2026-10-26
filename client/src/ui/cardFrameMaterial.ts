@@ -121,8 +121,11 @@ export class CardFrameMaterial {
  async attach(node:HTMLElement,kind:number,valid:()=>boolean){
   for(const part of node.querySelectorAll<HTMLElement>('.card-frame,.seal-face,.buff-frame,.buff-cost')){
    const style=getComputedStyle(part),url=(style.backgroundImage||part.style.backgroundImage).match(/url\(["']?(.*?)["']?\)/)?.[1]??(part.matches('.buff-cost')?getComputedStyle(part,'::before').backgroundImage.match(/url\(["']?(.*?)["']?\)/)?.[1]:undefined);
-   if(!url)continue;const surface=await this.surface(url,kind);if(this.dead||!valid())return;
-   const canvas=document.createElement('canvas');canvas.className='card-frame-material';canvas.width=surface.width;canvas.height=surface.height;canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';part.append(canvas);
+   const seal=part.matches('.buff-cost')||part.parentElement?.matches('.card-cost')?'cost':part.parentElement?.matches('.ad-atk')?'attack':part.parentElement?.matches('.ad-def')?'health':null;
+   const source=url??(seal?`/art/biblion/modular/${seal}-print.webp`:undefined);
+   if(!source)continue;const surface=await this.surface(source,kind);if(this.dead||!valid())return;
+   if([...this.bindings].some(b=>b.part===part))continue;
+   const canvas=part.querySelector<HTMLCanvasElement>(':scope > .card-frame-material')??document.createElement('canvas');canvas.className='card-frame-material';canvas.width=surface.width;canvas.height=surface.height;canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';part.append(canvas);
    const b={part,canvas,ctx:canvas.getContext('2d')!,surface,visible:true};this.bindings.add(b);this.observer.observe(part);
   }
   this.draw(performance.now()/1000,true);
