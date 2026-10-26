@@ -1,3 +1,4 @@
+import {createCardCounter,fieldCounters} from './cardCounter';
 import {attachCardEffect} from './cardFinish';
 import {assetHints} from './assetHints';
 import {passiveIcon} from './passiveIcon';
@@ -14,7 +15,7 @@ import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable, effectSections } from "../shared/cardText";
 import { CARD_RULE_GROUP_LABELS, effectRuleGroup, type EffectRuleGroup } from "../shared/cardEffectHeadings";
 import { cardEffectNotes } from "../shared/cardEffectNotes";
-import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, passiveSearchKeys, decayStateDescription } from '../shared/cardPresentation';
+import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, passiveSearchKeys } from '../shared/cardPresentation';
 
 /** Shared resting/flight face: switching from a cast to its spell slot must not
  * replace the artwork or frame at touchdown. Interaction is bound by GameView. */
@@ -393,7 +394,7 @@ export function ensureCardCompositing(): void {
   const baseWindow = 'M .082 .221 Q .082 .177 .134 .202 L .486 .202 L .5 .214 L .514 .202 L .868 .202 Q .925 .177 .922 .221 L .922 .89 Q .928 .932 .878 .94 Q .58 .966 .50 .934 Q .445 .965 .13 .94 Q .077 .933 .082 .887 Z';
   const fieldWindow = 'M .09 .158 Q .085 .088 .47 .054 L .50 .075 L .53 .054 Q .916 .088 .91 .158 L .91 .88 Q .916 .935 .87 .941 Q .59 .968 .50 .941 Q .42 .967 .13 .941 Q .087 .935 .09 .88 Z';
   svg.innerHTML = `<defs>
-    <filter id="celestial-matte" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 10 10 10 0 -0.65" result="matte"/><feComposite in="SourceGraphic" in2="matte" operator="in"/></filter>
+    <filter id="lore-counter-black-health" color-interpolation-filters="sRGB"><feColorMatrix values="0 1.05 0 0 0  0 1.05 0 0 0  0 1.05 0 0 0  0 0 0 1 0"/></filter><filter id="celestial-matte" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 10 10 10 0 -0.65" result="matte"/><feComposite in="SourceGraphic" in2="matte" operator="in"/></filter>
     <clipPath id="celestial-base-spell" clipPathUnits="objectBoundingBox"><path d="${baseWindow}"/></clipPath>
     <clipPath id="celestial-field-spell" clipPathUnits="objectBoundingBox"><path d="${fieldWindow}"/></clipPath>
   </defs>`;
@@ -448,7 +449,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     // 체력은 몬스터 칩에 표시하지 않는다 (숫자 하나 + 손상 시 빨간색만).
     const fm = c as FieldMon;
     const onField = !!(opt.field && opt.owner);
-    const isEgg = fm.hatch != null;
+    const isEgg = c.hatchTurns != null;
     let d: number, hurt = false;
     if (onField) {
       d = isEgg ? effDef(opt.owner!, fm) : curHp(opt.owner!, fm);
@@ -459,9 +460,13 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     } else d = c.def!;
     // 알은 공격도 체력도 하지 않는다 — 부화/내구도 배지가 그 자리의 실질 정보다.
     // (0/0 칩이 남아 있으면 "약한 몬스터"로 잘못 읽힌다)
-    if (!(onField && isEgg)) node.appendChild(numericSeal("ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), a));
-    if (!(onField && isEgg)) {
+    if (!isEgg) node.appendChild(numericSeal("ad-atk" + (String(a).length >= 3 ? " ad-num--3d" : ""), a));
+    if (!isEgg) {
       node.appendChild(numericSeal("ad-def" + (hurt ? " ad-def--hurt" : "") + (String(d).length >= 3 ? " ad-num--3d" : ""), d));
+    } else {
+      const durability=Math.max(0,fm.dur??c.hatchDur??4),seal=numericSeal('ad-def ad-def--durability',durability);
+      const lang=getLang();seal.title=`${lang==='ja'?'耐久':lang==='en'?'Durability':'내구'} ${durability}`;
+      seal.setAttribute('role','img');seal.setAttribute('aria-label',seal.title);node.append(seal);
     }
   }
   // ---- 상태 띠 (필드 타일 / 알) ------------------------------------------
@@ -489,27 +494,11 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
         band.insertAdjacentHTML('beforeend',passiveIcon(k,{count,granted:granted.includes(k)}));
       }
     }
-    // 2) 카운터
-    if (opt.field && c.aura === "assassinGuild") {
-      band.appendChild(el("span", "ec ec-d", `${label('カウント','Count','카운트')} ${(c as { gcount?: number }).gcount ?? 0}/3`));
-    }
-    if (c.hatchTurns != null) {
-      // 알: 필드에서는 실시간 값, 손패/마켓에서는 초기값
-      const eggH = (c as { hatch?: number }).hatch ?? c.hatchTurns;
-      const eggD = (c as { dur?: number }).dur ?? c.hatchDur ?? 4;
-      band.appendChild(el("span", "ec ec-h", `${label('孵化','Hatch','부화')} ${eggH}`));
-      band.appendChild(el("span", "ec ec-d", `${label('耐久','Durability','내구')} ${Math.max(0, eggD)}`));
-    }
-    if ((fm.decayCnt ?? 0) > 0) {
-      const status = el('span', 'ec ec-decay-state');
-      status.dataset.status = 'decay';
-      status.textContent = `${label('腐敗', 'Decay', '부패')} ${fm.decayCnt}/3`;
-      status.title = decayStateDescription(fm.decayCnt!, lang0);
-      status.setAttribute('aria-label', status.title);
-      band.append(status);
-    }
+    // Resource counts use the upper-right ivory register. Ability icons stay in this band.
+    if(fieldCounters(c,!!opt.field).some(value=>value.kind==='guts'))band.querySelector('[data-psv="guts"] b')?.remove();
     if (band.childElementCount) node.appendChild(band);
   }
+  fieldCounters(c,!!opt.field).forEach((counter,index)=>node.append(createCardCounter(c.uid,c.id,counter.kind,counter.value,index)));
   // Keep long names inside their frame using a stable card-local scale.
   if (!opt.compactField) nameEl2.style.fontSize = `calc(var(--cw) * ${cardNameScale(nm).toFixed(5)})`;
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));

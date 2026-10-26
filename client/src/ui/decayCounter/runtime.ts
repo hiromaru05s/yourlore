@@ -1,3 +1,4 @@
+import {createCardCounter,setCardCounter} from '../cardCounter';
 import {SPECIAL_FX} from '../animationTempo';
 import {getLang} from '../../i18n';
 import {decayStateDescription} from '../../shared/cardPresentation';
@@ -8,7 +9,8 @@ export const DECAY_COUNTER_DURATION=2100,DECAY_COUNTER_CONTACT=1680;
 type Job={node:HTMLElement;canvas:HTMLCanvasElement;face:HTMLCanvasElement|null;badge:HTMLElement;start:number;before:number;after:number;count:number;finish:(ok:boolean)=>void};
 const jobs=new Map<HTMLElement,Job>();
 let material:Material|null=null,raf=0,idle:ReturnType<typeof setTimeout>|undefined;
-function setCount(badge:HTMLElement,count:number){
+function setCount(badge:HTMLElement,count:number,animate=true){
+ if(badge.classList.contains('card-counter')){setCardCounter(badge,count,{animate});badge.style.visibility=count?'visible':'hidden';return;}
  const lang=getLang();badge.textContent=`${lang==='ja'?'腐敗':lang==='en'?'Decay':'부패'} ${count}/3`;
  badge.title=decayStateDescription(count,lang);badge.setAttribute('aria-label',badge.title);badge.style.visibility=count?'visible':'hidden';
 }
@@ -48,17 +50,17 @@ export function playDecayCounter(node:HTMLElement,before:number,after:number,opt
  return new Promise(resolve=>{
   const capture=new AbortController();
   const canvas=document.createElement('canvas');canvas.width=TILE_W;canvas.height=TILE_H;canvas.className='decay-counter-surface';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none';
-  let band=node.querySelector<HTMLElement>('.card-status');if(!band){band=document.createElement('div');band.className='card-status';node.append(band);}
-  let badge=band.querySelector<HTMLElement>('.ec-decay-state');if(!badge){badge=document.createElement('span');badge.className='ec ec-decay-state';badge.dataset.status='decay';band.append(badge);}
+  let badge=node.querySelector<HTMLElement>('.card-counter[data-counter-kind="decay"]');
+  if(!badge){badge=createCardCounter(node.dataset.uid??'',node.dataset.cardId??'','decay',before,node.querySelectorAll('.card-counter').length);node.append(badge);}
   const priorBadge=badge.style.cssText;
-  const labels=Array.from(node.querySelectorAll<HTMLElement>('.card-name,.card-status,.card-cost,.ad-atk,.ad-def,.badge')).map(el=>({el,z:el.style.zIndex}));
-  labels.forEach(({el})=>el.style.zIndex='9');node.append(canvas);setCount(badge,before);
+  const labels=Array.from(node.querySelectorAll<HTMLElement>('.card-name,.card-status,.card-cost,.ad-atk,.ad-def,.badge,.card-counter')).map(el=>({el,z:el.style.zIndex}));
+  labels.forEach(({el})=>el.style.zIndex='9');node.append(canvas);setCount(badge,before,false);
   let done=false,timer:ReturnType<typeof setTimeout>;
   const cancel=()=>finish(false);
   const finish=(ok:boolean)=>{
    if(done)return;done=true;clearTimeout(timer);capture.abort();opt.signal?.removeEventListener('abort',cancel);
    window.removeEventListener('resize',cancel);window.removeEventListener('pagehide',cancel);document.removeEventListener('visibilitychange',cancel);
-   canvas.remove();labels.forEach(({el,z})=>el.style.zIndex=z);badge!.style.cssText=priorBadge;setCount(badge!,after);
+   canvas.remove();labels.forEach(({el,z})=>el.style.zIndex=z);badge!.style.cssText=priorBadge;setCount(badge!,after,ok);
    jobs.delete(node);resolve(ok);
    if(!jobs.size){if(raf)cancelAnimationFrame(raf);raf=0;idle=setTimeout(stopRenderer,15000);}
   };

@@ -1,3 +1,4 @@
+import {createBoardCardCounters,createCardCounter} from './cardCounter';
 import {syncCardEffects,disposeCardEffects} from './cardFinish';
 import {medalHtml} from './medal';
 import {MarketCrashPresentation} from './marketCrash/runtime';
@@ -103,6 +104,7 @@ export class GameView {
   /** battlefield art for THIS match — rolled once at construction (see pickBattlefieldBg) */
   private disposed = false;
   private marketCrash: MarketCrashPresentation;
+  private cardCounters:ReturnType<typeof createBoardCardCounters>;
   private statRise: ReturnType<typeof createBoardStatRise>;
   private trickRoom:TrickRoomPresentation;
   private anesthesia:AnesthesiaPresentation;
@@ -113,6 +115,7 @@ export class GameView {
     this.root = root;
     this.you = you;
     this.h = h;
+    this.cardCounters = createBoardCardCounters(root);
     this.statRise = createBoardStatRise(root);
     this.marketCrash = new MarketCrashPresentation(root);
     this.trickRoom = new TrickRoomPresentation(root);
@@ -313,6 +316,7 @@ export class GameView {
     this.disposeScene?.();
     this.trickRoom.dispose();
     this.anesthesia.dispose();
+    this.cardCounters.dispose();
     this.statRise.dispose();
     this.marketCrash.dispose();
     this.handConditions.dispose();
@@ -478,6 +482,7 @@ export class GameView {
       });
     }
     for(const id of readyPiles)this.root.querySelector(`#${id}`)?.classList.add('pile--3d-ready');
+    this.cardCounters.sync(!!g.over);
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
     this.anesthesia.sync(g);
@@ -534,10 +539,7 @@ export class GameView {
         && !(pending!.kind === "myMon" && pending!.reason === "worldTree" && (m.id !== "WORLD_TREE" || (m.gcount || 0) <= 0)) // 세계수: 카운터 있는 세계수만
         && !(pending!.kind === "myMon" && (((pending!.data?.excl as string[] | undefined) ?? []).includes(m.uid))); // 지원 나팔: 이미 고른 몬스터는 중복 선택 불가
       const canAttack = isMe && myTurn && !pending && monsterCanAttack(g,p,m);
-      // 카지노(v34): 카운터 배지 (12개마다 카지노 주사위)
-      const countLabel = getLang() === 'ja' ? 'カウント' : getLang() === 'en' ? 'Count' : '카운트';
-      const casinoBadge = m.aura === "casino" ? { badge: `${countLabel} ${m.gcount || 0}/12` } : m.id === "CASTLE" ? { badge: `${countLabel} ${m.gcount || 0}` } : {};
-      const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: isMe && myTurn && m.exhausted, ...casinoBadge });
+      const card = cardEl(m, { field: true, owner: p, game: g, attacker: canAttack, targetable: targetableMon, exhausted: isMe && myTurn && m.exhausted });
       if (dualReadyActive(m, canAttack)) card.dataset.monsterDualReady = '04';
       if (pending?.reason === "attack" && isMe && myTurn && pending.data?.attackerUid === m.uid) card.onclick = () => this.h.onChooseTarget(null);
       else if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
@@ -579,10 +581,7 @@ export class GameView {
       // v30 카운터 배지 — 카운트다운(⏳남은 턴) / 정보상(×남은 사용 횟수).
       // 자신의 함정은 항상, 상대 함정은 발동으로 정체가 공개된 정보상만 (카운트다운은 비공개 유지)
       if (t.cnt != null && (isMe || t.card.react === "infoDealer")) {
-        const b = document.createElement("span");
-        b.className = "badge trap-cnt";
-        b.textContent = t.card.react === "doomsday" ? `⏳${t.cnt}` : `×${t.cnt}`;
-        tile.appendChild(b);
+        tile.append(createCardCounter(t.card.uid,t.card.id,'charge',t.cnt));
       }
       sz.appendChild(tile);
     });
@@ -591,7 +590,7 @@ export class GameView {
       const elapsed = lim != null ? Math.max(0, g.turn - (e.bornTurn ?? 0)) : null;
       const rem = lim != null ? Math.max(0, lim - elapsed!) : enchantHasTurnCountdown(e.card) ? Math.max(0, e.turns) : null;
       const bits = [elapsed != null ? `${Math.min(elapsed,lim!)}/${lim}` : rem != null ? `${getLang() === 'ja' ? '残り' : getLang() === 'en' ? '' : '남은 '}${rem}` : ''];
-      if (e.cnt != null && e.cnt > 0) bits.push(`×${e.cnt}`);
+
       const lang = getLang();
       const state = elapsed != null
         ? (lang === 'ja' ? `経過 ${elapsed}/${lim}ターン · 残り ${rem}ターン` : lang === 'en' ? `Elapsed ${elapsed}/${lim} turns · ${rem} remaining` : `경과 ${elapsed}/${lim}턴 · 남은 ${rem}턴`)
@@ -599,9 +598,10 @@ export class GameView {
         : (lang === 'ja' ? '永続魔法' : lang === 'en' ? 'Permanent spell' : '지속 마법');
       const stateText = state + (e.cnt ? ` · ×${e.cnt}` : '');
       const durationUi = rem == null
-        ? `<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">${e.cnt ? `<span class="buff-counter">×${e.cnt}</span>` : ''}`
+        ? `<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">`
         : `<span class="buff-duration" aria-label="${stateText}"><span>${bits.join(' ')}</span></span>`;
       const card = enchantmentTile(e.card,durationUi);
+      if(e.cnt!=null)card.append(createCardCounter(e.card.uid,e.card.id,'charge',e.cnt));
       card.tabIndex = 0;
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', `${cardName(e.card)} ${stateText}`);
