@@ -46,3 +46,14 @@ built-in imagegen使用。元の制作場所は `/Users/hiromaru05s/Desktop/LORE
 追加ブラウザ確認: WebGLをボタンだけ無効にしたfixtureで `motion=static`・canvasなし・同一静止素材の表示を確認。390×844と320×640のiframeを目視し、短い画面の既存コンパクト枠は86pxの円とモード名だけで可読性を保った。ホバーの実測は `brightness(1.055)`、`drop-shadow(... 0.24 ... 5px)`、`motion=fluid`、再入場回数の更新を確認。console errorなし。保存画像はローカルfixtureで、本番ログイン済みHOMEの証跡ではない。
 
 公開ガードで既存 `quick-playback` のNode用バンドルが新しいloadingScreen.css内の公開画像URLを解決しようとして失敗したため、他のNode用描画テストと同様に `.css` を空ローダーにした。検証対象のゲームイベント・順序のアサーションは変更せず、対象テストの成功を確認。
+
+## 本番反映結果
+
+- 公開ソース: `b5295ad0fbb91ad4296f5a7ad31bb48278616c31`。公開直前の最新mainを統合し、HOMEのSVG素材読込を待つローダー修正も含む。
+- 公開先: https://yourlore.xyz
+- Worker version: `0e3685d8-9fca-4057-b785-e696a26a178c`、配信100%。
+- deployment: `ba90ddc2-8c60-4163-bd56-197c80047cb0`。
+- ガードの型検査、production suite **238/238**、ビルド、競合検査が成功。
+- 本番HTMLから起動モジュールと遅延読込先を辿り、採用01のコード、`brightness(1.055)`のCSS、全4画像のHTTP 200とSHA-256一致を確認。詳細は `production.json`。
+- ログイン済み実アカウントの本番HOMEと実PvPは未確認。保存画像はローカル実HOME fixtureの確認記録。
+- ローカル確認サーバーは検証後に停止。記録追記だけのコミットは再デプロイしない。

@@ -1,0 +1,102 @@
+{
+  "verifiedAt": "2026-10-26T17:24:44.867Z",
+  "source": "b5295ad0fbb91ad4296f5a7ad31bb48278616c31",
+  "deploymentId": "ba90ddc2-8c60-4163-bd56-197c80047cb0",
+  "versions": [
+    {
+      "version_id": "0e3685d8-9fca-4057-b785-e696a26a178c",
+      "percentage": 100
+    }
+  ],
+  "annotations": {
+    "workers/message": "b5295ad0fbb91ad4296f5a7ad31bb48278616c31 guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "origin": "https://yourlore.xyz",
+  "htmlStatus": 200,
+  "code": [
+    {
+      "url": "https://yourlore.xyz/assets/main-CLJgFanD.js",
+      "status": 200,
+      "includesFrame01": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/main-DEJ_4aCv.js",
+      "status": 200,
+      "includesFrame01": true
+    }
+  ],
+  "styles": [
+    {
+      "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+      "status": 200,
+      "frameStyle": false,
+      "highlight": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/social-B07N6Pfz.css",
+      "status": 200,
+      "frameStyle": false,
+      "highlight": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/main-AkYvG33F.css",
+      "status": 200,
+      "frameStyle": true,
+      "highlight": true
+    },
+    {
+      "url": "https://yourlore.xyz/assets/layout-CdbqZM8A.css",
+      "status": 200,
+      "frameStyle": false,
+      "highlight": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/controller-bboUdfYs.css",
+      "status": 200,
+      "frameStyle": false,
+      "highlight": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/game-CeZ0_T_p.css",
+      "status": 200,
+      "frameStyle": false,
+      "highlight": false
+    }
+  ],
+  "assets": [
+    {
+      "name": "frame-pair.png",
+      "bytes": 848348,
+      "sha256": "072f61421a06c8adb02bba6f081fe27ae3b6158ea3d8db1316c46f59094420fb",
+      "status": 200,
+      "servedSha256": "072f61421a06c8adb02bba6f081fe27ae3b6158ea3d8db1316c46f59094420fb",
+      "matches": true
+    },
+    {
+      "name": "normal.png",
+      "bytes": 1736100,
+      "sha256": "b0959e578828f31a13b768672eb53348502d41bceaac9142e5be25d06655e6f3",
+      "status": 200,
+      "servedSha256": "b0959e578828f31a13b768672eb53348502d41bceaac9142e5be25d06655e6f3",
+      "matches": true
+    },
+    {
+      "name": "ranked.png",
+      "bytes": 1965883,
+      "sha256": "b6eb705e9ddc06907d7a7c954cafe6b9cf2e7a62e4766d0c24b21d6c1a684ced",
+      "status": 200,
+      "servedSha256": "b6eb705e9ddc06907d7a7c954cafe6b9cf2e7a62e4766d0c24b21d6c1a684ced",
+      "matches": true
+    },
+    {
+      "name": "single.png",
+      "bytes": 2009204,
+      "sha256": "e0e8fe7cd85d6247311b36296be3d1e542f9fc446d341c2622f78a433ffd299d",
+      "status": 200,
+      "servedSha256": "e0e8fe7cd85d6247311b36296be3d1e542f9fc446d341c2622f78a433ffd299d",
+      "matches": true
+    }
+  ],
+  "browserScope": "Local actual HOME fixture verified on PC, 390x844 and 320x640; production browser is unauthenticated, so live account HOME and real PvP are not claimed."
+}
