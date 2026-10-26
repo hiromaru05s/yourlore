@@ -23,3 +23,5 @@ Source baseline: `546846da` (`gh/main`). The production deployment inspected bef
 Preview served from `/Users/hiromaru05s/.codex/worktrees/single-loading-fix/LORE_TCG/client/dist` at `http://127.0.0.1:5186`. HOME reads `client/src/screens/home.ts`, current Zeno/background, and adopted `defaultUI.css`/`defaultButtons.css`; live board reads `screens/game.ts` and `ui/boardView.ts`. Screenshots were inspected against those current components.
 
 Production release and post-deploy checks are recorded separately after deployment.
+
+Integration: remote main advanced to `876ac24b` during validation. Merged it in `00cb03a2`, preserving its shared-engine/card changes; the integrated build passed. Browser validation explicitly pins the Japanese locale rather than relying on the asynchronous IP default.

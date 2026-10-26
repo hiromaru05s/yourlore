@@ -9,6 +9,7 @@ try{
  for(const [width,stalledCache] of [[1280,false],[390,false],[1280,true]]){
   const context=await browser.newContext({viewport:{width,height:900}}),page=await context.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.stack));
   await apiFixture(page,r=>{const p=new URL(r.url).pathname;return p==='/api/auth/me'?{user:{id:'local-guest-user',display:'SEEKER',credits:100,avatar:'SEEKER_BLUE',wins:0,losses:0}}:p==='/api/rewards/tutorial'?{offered:true,keys:[],credits:100}:p==='/api/geo'?{country:'JP'}:p==='/api/rank/me'?{rating:{season:'2026-10',mmr:1000,tier:'bronze',wins:0,losses:0}}:{ok:true,friends:[],incoming:[],outgoing:[],challenges:[],keys:[],rows:[]};});
+  await page.addInitScript(()=>localStorage.setItem('lore_lang','ja'));
   await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForSelector('.lounge-home-main');await page.waitForSelector('.screen-loader',{state:'detached'});
   assert.equal(await page.locator('#bot').innerText(),'シングル');await page.locator('#bot').click();assert((await page.locator('#ranked').innerText()).includes('シングル'));
   await page.screenshot({path:`${out}/home-${width}.png`});if(stalledCache)await page.evaluate(()=>{Cache.prototype.keys=function(){return new Promise(()=>{});};});await page.locator('#ranked').click();assert.equal(await page.locator('.bot-npcs .menu-eyebrow').innerText(),'SINGLE');await page.screenshot({path:`${out}/opponents-${width}.png`});
