@@ -15,14 +15,14 @@ page.setDefaultTimeout(45000);
 page.on('pageerror',e=>errors.push(e.message));
 page.on('console',m=>{if(m.type()==='warning'&&/Native card fallback/.test(m.text()))errors.push(m.text());});
 try{
- await page.route('**/hand-layer-qa',r=>r.fulfill({contentType:'text/html',body:'<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="app"></div></body></html>'}));
+ await page.route('**/hand-layer-qa',r=>r.fulfill({contentType:'text/html',body:'<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="app"><div id="gameScreen"></div></div></body></html>'}));
  await page.goto(`http://127.0.0.1:${server.httpServer.address().port}/hand-layer-qa`);
  await page.evaluate(async css=>{
   for(const name of css)await import('/src/styles/'+name+'.css');
   const E=await import('/src/shared/engine.ts'),C=await import('/src/shared/cards.ts'),A=await import('/src/ui/anim.ts');
   const {BaseController}=await import('/src/game/controller.ts');
   class Controller extends BaseController{submit(action){qa.actions.push(action);} }
-  const ctl=new Controller(document.getElementById('app'),0,{onHome(){},onRematch(){}});
+  const ctl=new Controller(document.getElementById('gameScreen'),0,{onHome(){},onRematch(){}});
   (await import('/src/ui/layout.ts')).startBoardLayout();
   (await import('/src/i18n.ts')).setLang('ja');
   const reset=(id='M2',owner=0)=>{
@@ -33,7 +33,7 @@ try{
     p.openingDrawReady=false;p.field=[];p.enchants=[];p.quests=[];p.traps=[];p.mana=p.maxMana=30;p.dew=4;
     p.hand=[id,'M2','ND2','M2','ND2'].map((c,i)=>({...C.DB[c],uid:`hand-${s}-${i}`}));
    }
-   ctl.state=g;ctl.introShown=true;ctl.view.render(g);document.getElementById('app').classList.remove('opening-pending');
+   ctl.state=g;ctl.introShown=true;ctl.view.render(g);document.getElementById('gameScreen').classList.remove('opening-pending');
    return g;
   };
   window.qa={ctl,A,C,E,reset,g:reset(),done:false,actions:[]};
@@ -63,6 +63,7 @@ try{
    await page.waitForFunction(cls=>Number(document.querySelector('.'+cls)?.dataset.time)>=350,layerName);
    const order=await page.evaluate(cls=>qa.order(document.querySelector('.'+cls)),layerName);
    assert(order.hand>=0&&order.effect>order.hand,'Expanded hand must paint above summon: '+JSON.stringify(order));
+   assert.equal(order.app,'auto','The outer application must release its stacking context while the hand is open');
    assert.equal(order.stage,'6','Board contents must retain their stacking context above the table');
    assert.equal(await page.locator('.game.hand-open').count(),1);
    await page.evaluate(()=>{qa.ctl.view.setHandOpen(false);qa.ctl.view.setHandOpen(true);});

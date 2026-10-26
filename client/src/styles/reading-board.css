@@ -5,7 +5,7 @@
 :is(#app,.reading-board).reading-board .stage{position:absolute;inset:0;display:block;padding:0;margin:0;transform:none;}
 /* Expanded hand is docked directly under .game, outside the board's stage (6).
    Share the body-mounted summon stack (135/136), below modal overlays (150). */
-#app.reading-board:has(.game.hand-open){z-index:auto;}
+#app:has(>.reading-board .game.hand-open){z-index:auto;}
 :is(#app,.reading-board).reading-board .game.hand-open #hand{z-index:145;}
 :is(#app,.reading-board).reading-board .board-col,:is(#app,.reading-board).reading-board .pcluster,:is(#app,.reading-board).reading-board .pc-side,:is(#app,.reading-board).reading-board .prow,:is(#app,.reading-board).reading-board .field-block,:is(#app,.reading-board).reading-board .zones,:is(#app,.reading-board).reading-board .pile-col,:is(#app,.reading-board).reading-board .mid-row,:is(#app,.reading-board).reading-board .market,:is(#app,.reading-board).reading-board .hand-area,:is(#app,.reading-board).reading-board .portrait{display:contents!important;position:static!important;transform:none!important;filter:none!important;}
 :is(#app,.reading-board).reading-board .zone-row,:is(#app,.reading-board).reading-board .pile,:is(#app,.reading-board).reading-board .rift-button,:is(#app,.reading-board).reading-board .mid-aside,:is(#app,.reading-board).reading-board .market-counter,:is(#app,.reading-board).reading-board .portrait .pt-ring,:is(#app,.reading-board).reading-board .portrait .pt-vitals,:is(#app,.reading-board).reading-board .portrait .pt-mana,:is(#app,.reading-board).reading-board .portrait .pt-name{position:absolute;right:auto;bottom:auto;margin:0;padding:0;box-sizing:border-box;}
