@@ -45,6 +45,47 @@ try {
  }
  assert(favored>uniform+300,'biased sampler improves NPC-specific offer quality');
  console.log('mean market value',{favored:favored/300,uniform:uniform/300});
+ // A damage-taking quest is not a free early-game upgrade for an aggro deck.
+ // Its engine counter ignores shields; real recovery can make it viable.
+ const questGame=C.createGame({...opts,starting:0}).state,quest={...C.DB.Q_BRAND,uid:'quest-check'},buyer=questGame.players[0];
+ Object.assign(buyer,{hand:Array.from({length:4},(_,i)=>({...C.DB.GOBLIN,uid:'quest-goblin-'+i})),deck:[],discard:[],field:[],enchants:[],quests:[],exile:[],hp:45,mana:4,maxMana:4,dew:0,shield:100});
+ questGame.market=[quest];questGame.marketStock=[3];buyer.supply=[];
+ assert(C.purchaseEvaluator(questGame,buyer)(quest).margin<=0,'shield cannot fund a damage-taking quest');
+ assert.notDeepEqual(C.botDecide(questGame,'hard'),{type:'buyMarket',i:0},'develop attackers instead of an unsupported damage quest');
+ buyer.dew=5;
+ assert(C.purchaseEvaluator(questGame,buyer)(quest).margin>0,'sustained recovery keeps the quest available');
+ for(const [questId,supportId] of [['Q_CASTLE','CASTLE'],['Q_ASSASSIN','ASSASSIN1'],['Q_TRIBE','TSO2']]){
+  const q={...C.DB[questId],uid:'support-quest'},unsupported=C.purchaseEvaluator(questGame,buyer)(q).margin;
+  buyer.deck=Array.from({length:3},(_,i)=>({...C.DB[supportId],uid:'support-'+i}));
+  assert(C.purchaseEvaluator(questGame,buyer)(q).margin>unsupported+5,questId+' must prefer a deck that can progress it');buyer.deck=[];
+ }
+ // Two Rain cards can prepare one Dark Elf, not an unlimited set of copies.
+ const dewGame=C.createGame({...opts,starting:0}).state,dewBuyer=dewGame.players[0];let serial=0;
+ const dewCard=id=>({...C.DB[id],uid:'dew-budget-'+serial++});
+ dewGame.pending=null;dewGame.turn=6;
+ Object.assign(dewBuyer,{hand:[],deck:['NOURISHING_RAIN','NOURISHING_RAIN','CASTLE','WEAKEN_ALL'].map(dewCard),discard:[],field:[],enchants:[],quests:[],exile:[],dew:0,mana:4,maxMana:4,supply:[]});
+ dewGame.market=[dewCard('DARK_ELF')];dewGame.marketStock=[3];
+ assert(C.purchaseEvaluator(dewGame,dewBuyer)(dewGame.market[0]).margin>0,'one supported finisher remains a valid purchase');
+ dewBuyer.deck.push(dewCard('DARK_ELF'));
+ assert(C.purchaseEvaluator(dewGame,dewBuyer)(dewGame.market[0]).margin<0,'reserve the same forecast Dew for the owned consumer');
+ assert.notDeepEqual(C.botDecide(dewGame,'hard'),{type:'buyMarket',i:0},'do not hoard uncastable finishers');
+ dewBuyer.deck[dewBuyer.deck.length-1]=dewCard('ELF');
+ assert(C.purchaseEvaluator(dewGame,dewBuyer)(dewGame.market[0]).margin>0,'a different finisher may replace the old plan');
+ dewBuyer.dew=8;
+ assert(C.purchaseEvaluator(dewGame,dewBuyer)(dewGame.market[0]).margin>0,'enough Dew permits another copy');
+ // Mercenary Arts is neither a generic upgrade nor a stacking engine.
+ const mercGame=C.createGame({...opts,starting:0}).state,mercBuyer=mercGame.players[0];
+ Object.assign(mercBuyer,{hand:[],deck:[],discard:[],field:[],enchants:[],quests:[],exile:[],mana:4,maxMana:4,supply:[]});
+ mercGame.pending=null;mercGame.market=[dewCard('MERC_ART')];mercGame.marketStock=[3];
+ const mercOffer=mercGame.market[0];
+ assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'no Mercenary means no Arts payoff');
+ assert.notDeepEqual(C.botDecide(mercGame,'hard'),{type:'buyMarket',i:0},'skip unsupported Mercenary Arts');
+ mercBuyer.deck.push(dewCard('MERCENARY'));
+ assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin>0,'an owned Mercenary enables the first Arts');
+ mercBuyer.deck.push(dewCard('MERC_ART'));
+ assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'an unplayed copy already covers the nonstacking effect');
+ mercBuyer.deck.pop();mercBuyer.enchants=[{card:dewCard('MERC_ART'),turns:99,bornTurn:0}];
+ assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'an active Arts also covers the effect');
  // The real reservation handler: persistence, idempotence, separate roster size.
  let data;const storage={transaction:async fn=>fn({get:async()=>structuredClone(data),put:async(_,v)=>{data=structuredClone(v);}})};
  for(let cycle=0;cycle<2;cycle++){const seen=new Set();for(let i=0;i<7;i++){const req=()=>new Request('https://internal/npc-deck',{method:'POST',body:JSON.stringify({difficulty:'hell',requestId:`test-${cycle}-${i}`})});const first=await (await C.reserveNpcDeck(storage,req())).json();const repeat=await (await C.reserveNpcDeck(storage,req())).json();assert.deepEqual(first,repeat);seen.add(first.index);}assert.equal(seen.size,7);}

@@ -26,7 +26,9 @@ export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress
 function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void): Action {
   // All policies, including tactical checks, see sampled hidden information.
   const view = observationSample(g, g.pending?.owner ?? g.cur, 0);
-  let best = diff !== "easy" ? searchDecide(view, diff, true, onProgress ? a => onProgress(legalBotAction(g, a, view)) : undefined) : safeGreedy(view);
+  // Both upper tiers use the full ensemble. Challenge-market probabilities
+  // distinguish them; Hard no longer throws away most finalist samples.
+  let best = diff !== "easy" ? searchDecide(view, diff === 'normal' ? 'normal' : 'hell', true, onProgress ? a => onProgress(legalBotAction(g, a, view)) : undefined) : safeGreedy(view);
   if (BLUNDER[diff] > 0 && Math.random() < BLUNDER[diff]) {
     const alternatives = botActions(view).filter(a => JSON.stringify(a) !== JSON.stringify(best))
       .filter(a => actionChangesState(view, reduce(view, a).state));

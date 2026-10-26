@@ -5,7 +5,7 @@ import {mkdtemp,rm,readFile} from 'node:fs/promises';
 const dir=await mkdtemp('/tmp/lore-npc-rotation-');let mf;
 try{
  await build({stdin:{contents:`import {reserveNpcDeck} from './server/src/botRotation';export class Rotation {constructor(state){this.state=state;}fetch(req){return reserveNpcDeck(this.state.storage,req)}}export default{fetch(req,env){return env.ROSTER.get(env.ROSTER.idFromName(req.headers.get('x-player')||'a')).fetch(req)}};`,resolveDir:process.cwd(),loader:'ts'},bundle:true,format:'esm',platform:'browser',outfile:dir+'/worker.mjs'});
- const options={name:'lore-npc-rotation-proof',resourcePersistencePath:dir+'/state',modules:true,script:await readFile(dir+'/worker.mjs','utf8'),compatibilityDate:'2026-10-01',compatibilityFlags:['nodejs_compat'],durableObjects:{ROSTER:{className:'Rotation',useSQLite:true}}};
+ const options={name:'lore-npc-rotation-proof',resourcePersistencePath:dir+'/state',modules:true,script:await readFile(dir+'/worker.mjs','utf8'),compatibilityDate:'2024-11-01',compatibilityFlags:['nodejs_compat'],durableObjects:{ROSTER:{className:'Rotation',useSQLite:true}}};
  mf=new Miniflare(convertV4MiniflareOptions(options));
  const request=(id,player='a')=>mf.dispatchFetch('https://test/npc-deck',{method:'POST',headers:{'x-player':player},body:JSON.stringify({difficulty:'hell',requestId:id})}).then(async r=>{assert.equal(r.status,200);return(await r.json()).index;});
  const first=await Promise.all(Array.from({length:7},(_,i)=>request('game-'+i)));assert.equal(new Set(first).size,7,'concurrent starts consume each deck once');

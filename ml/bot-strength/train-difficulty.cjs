@@ -86,8 +86,12 @@ else {
   fs.writeFileSync(out,JSON.stringify({balance:C.BALANCE_VERSION,families,scores,games:completed,seconds:(Date.now()-begin)/1000},null,2));
  }else if(command==='market'){
   const profiles=JSON.parse(fs.readFileSync(lab+'/roster.json')),names=Object.keys(profiles),foes=Object.entries(opponents),jobs=[];
-  for(const [pi,name] of names.entries())for(const [oi,[opponent,other]] of foes.entries())for(let r=0;r<80;r++)for(const seat of [0,1])jobs.push({profile:pi,opponent:oi,deck:profiles[name],other,seat,seed:35100000+pi*100000+oi*1000+r});
   const rows=[];
+  const reuse=process.env.MARKET_REUSE_DIR;
+  if(reuse){const old=JSON.parse(fs.readFileSync(reuse+'/market.json')),oldNames=Object.keys(old.profiles);for(const r of fs.readFileSync(reuse+'/market-games.jsonl','utf8').trim().split('\n').map(JSON.parse))if(JSON.stringify(old.profiles[oldNames[r.profile]])===JSON.stringify(profiles[names[r.profile]]))rows.push(r);}
+  const reusedGames=rows.length,reusedProfiles=new Set(rows.map(r=>r.profile));
+  if(rows.length)fs.writeFileSync(lab+'/market-games.jsonl',rows.map(r=>JSON.stringify(r)).join('\n')+'\n');
+  for(const [pi,name] of names.entries())if(!reusedProfiles.has(pi))for(const [oi,[opponent,other]] of foes.entries())for(let r=0;r<80;r++)for(const seat of [0,1])jobs.push({profile:pi,opponent:oi,deck:profiles[name],other,seat,seed:35100000+pi*100000+oi*1000+r});
   for(let start=0;start<jobs.length;start+=128){const batch=(await runJobs(jobs.slice(start,start+128))).map((r,i)=>({...r,profile:jobs[start+i].profile,opponent:jobs[start+i].opponent,states:undefined}));rows.push(...batch);fs.appendFileSync(lab+'/market-games.jsonl',batch.map(r=>JSON.stringify(r)).join('\n')+'\n');if(completed%512===0)console.log(JSON.stringify({games:completed,seconds:(Date.now()-begin)/1000}));}
   if(rows.some(r=>r.result==null))throw Error('Incomplete market training games');
   const cards=[...new Set(rows.flatMap(r=>r.market))].sort(),offset=1+names.length+foes.length+1,dim=offset+cards.length*(names.length+1),index=new Map(cards.map((id,i)=>[id,i]));
@@ -96,7 +100,7 @@ else {
   function fit(withCards,penalty){const w=Array(dim).fill(0),v=Array(dim).fill(.1);for(let epoch=0;epoch<35;epoch++){for(let i=ids.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]];}for(const i of ids){const s=samples[i],x=withCards?[...s.base,...s.extra]:s.base,z=x.reduce((n,j)=>n+w[j],0),e=1/(1+Math.exp(-z))-s.y;for(const j of x){const grad=e+w[j]*(j<offset?.002:penalty);v[j]+=grad*grad;w[j]-=.08*grad/Math.sqrt(v[j]);}}}let loss=0,brier=0,n=0;for(const s of samples)if(s.validation){const x=withCards?[...s.base,...s.extra]:s.base,p=1/(1+Math.exp(-x.reduce((z,j)=>z+w[j],0)));loss-=s.y*Math.log(Math.max(1e-9,p))+(1-s.y)*Math.log(Math.max(1e-9,1-p));brier+=(p-s.y)**2;n++;}return{w,validation:{n,loss:loss/n,brier:brier/n},penalty};}
   const baseline=fit(false,0),fits=[.05,.2,.8].map(p=>fit(true,p));fits.sort((a,b)=>a.validation.loss-b.validation.loss);const best=fits[0],weights={};
   for(const [pi,name] of names.entries())weights[name]=Object.fromEntries(cards.map((id,i)=>[id,+((best.w[offset+i]+best.w[offset+cards.length*(pi+1)+i])*20).toFixed(4)]));
-  const result={balance:C.BALANCE_VERSION,games:rows.length,profiles,baseline:baseline.validation,validation:best.validation,penalty:best.penalty,grid:fits.map(({w,...v})=>v),weights,seconds:(Date.now()-begin)/1000};fs.writeFileSync(out,JSON.stringify(result,null,2));console.log(JSON.stringify({...result,weights:undefined,profiles:undefined}));
+  const result={balance:C.BALANCE_VERSION,games:rows.length,reusedGames,profiles,baseline:baseline.validation,validation:best.validation,penalty:best.penalty,grid:fits.map(({w,...v})=>v),weights,seconds:(Date.now()-begin)/1000};fs.writeFileSync(out,JSON.stringify(result,null,2));console.log(JSON.stringify({...result,weights:undefined,profiles:undefined}));
  }else if(command==='train'){
   const selected=JSON.parse(fs.readFileSync(lab+'/select.json')).scores.map(s=>s.selected.deck),decks=[...selected,...Object.values(opponents),...C.BOT_DECKS.map(d=>d.cards)];const random=rng(281027),X=[],Y=[],V=[];let invalid=0;
   const games=+(process.env.GAMES||8000);

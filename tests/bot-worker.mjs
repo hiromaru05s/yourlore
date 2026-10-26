@@ -10,19 +10,19 @@ let live=0,constructed=0;
 try{
  await build({entryPoints:['client/src/game/bot.worker.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'worker.mjs')});
  await writeFile(path.join(dir,'bridge.mjs'),`import {parentPort} from 'node:worker_threads';globalThis.self=globalThis;globalThis.postMessage=data=>parentPort.postMessage(data);await import('./worker.mjs');parentPort.on('message',data=>{(${seedRandom.toString()})();globalThis.onmessage({data});});`);
- await build({stdin:{contents:`export {BotPlanner} from './client/src/game/botPlanner';export {botDecide} from './client/src/shared/bot';export {createGame,reduce} from './client/src/shared/engine';export {BOT_NPCS} from './client/src/shared/botNpcs';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs')});
+ await build({stdin:{contents:`export {BotPlanner} from './client/src/game/botPlanner';export {botDecide,safeGreedy,legalBotAction} from './client/src/shared/bot';export {observationSample} from './client/src/shared/botObservation';export {createGame,reduce} from './client/src/shared/engine';export {BOT_NPCS} from './client/src/shared/botNpcs';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'test.mjs')});
  class BrowserWorker{
   constructor(){live++;constructed++;this.thread=new Thread(path.join(dir,'bridge.mjs'));this.thread.on('message',data=>this.onmessage?.({data}));this.thread.on('error',()=>this.onerror?.({preventDefault(){}}));}
   postMessage(data){this.thread.postMessage(data);}
   terminate(){if(this.thread){live--;void this.thread.terminate();this.thread=null;}}
  }
  globalThis.Worker=BrowserWorker;
- const {BotPlanner,botDecide,createGame,reduce,BOT_NPCS}=await import(path.join(dir,'test.mjs'));
+ const {BotPlanner,botDecide,safeGreedy,legalBotAction,observationSample,createGame,reduce,BOT_NPCS}=await import(path.join(dir,'test.mjs'));
  const planner=new BotPlanner();let cases=0,heartbeats=0,maxMainMs=0,maxWorkerMs=0;
  const pulse=setInterval(()=>heartbeats++,10);
  let fixture;
  for(const npc of BOT_NPCS)for(const deck of npc.decks){
-  let g=createGame({mode:'bot',seed:71,starting:1,p0:{id:'me',name:'YOU'},p1:{id:'bot',name:'BOT',isBot:true,deck:deck.cards}}).state;
+  let g=createGame({mode:'bot',seed:71,starting:1,challenge:{difficulty:npc.difficulty,side:1},p0:{id:'me',name:'YOU'},p1:{id:'bot',name:'BOT',isBot:true,deck:deck.cards}}).state;
   g.players[1].botTune={...deck.tune};fixture=g;
   // Compare both the opening decision and its successor with identical randomness.
   for(let i=0;i<2;i++){
@@ -37,6 +37,9 @@ try{
  const cancelled=planner.decide(fixture,'hell');planner.dispose();assert.equal(await cancelled,undefined);assert.equal(live,0);assert.equal(await planner.decide(fixture,'hell'),undefined);
  const superseded=new BotPlanner();const old=superseded.decide(fixture,'hell');const next=superseded.decide(fixture,'normal');assert.equal(await old,undefined);assert(await next);superseded.dispose();assert.equal(live,0);
  globalThis.Worker=class{constructor(){throw Error('Workers blocked');}};
- seedRandom();const expected=botDecide(fixture,'normal');seedRandom();const fallback=new BotPlanner();assert.deepEqual(await fallback.decide(fixture,'normal'),expected);fallback.dispose();
+ // Normal now searches too. A blocked Worker must still use the fast,
+ // public-observation fallback, rather than running search on the UI thread.
+ const expected=legalBotAction(fixture,safeGreedy(observationSample(fixture,fixture.pending?.owner??fixture.cur,0)));
+ const fallback=new BotPlanner();assert.deepEqual(await fallback.decide(fixture,'normal'),expected);fallback.dispose();
  console.log(JSON.stringify({cases,heartbeats,maxMainMs,maxWorkerMs,cancellation:true,supersession:true,fallback:true}));
 }finally{await rm(dir,{recursive:true,force:true});}

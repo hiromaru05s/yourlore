@@ -30,20 +30,17 @@ export function botMarketIndex(g: GameState, ids: string[], random: () => number
     const publicGame = publicRival(g,setting.side), opponentValue = purchaseEvaluator(publicGame,publicGame.players[1-setting.side]);
     // A fresh random candidate subset makes the whole legal pool reachable.
     // Recency penalties prevent endlessly feeding the same engine/combination.
-    const candidates = ids.map((id, i) => ({id, i, roll: random()})).sort((a,b) => a.roll-b.roll).slice(0,96);
+    const candidates = ids.map((id, i) => ({id, i, roll: random()})).sort((a,b) => a.roll-b.roll).slice(0,32);
     const recent = setting.recent;
     const owned = [...p.hand,...p.deck,...p.discard,...p.field,...p.enchants.map(e=>e.card)];
-    // Attack-heavy decks especially suffer when a "good" generic offer gives
-    // the opponent a wall/recovery engine. Defensive decks can use those same
-    // generic cards to reach their own long-game payoff.
-    const pressure = owned.filter(c=>c.t==='mon'&&(c.atk??0)>0).length / Math.max(1,owned.length);
-    const rivalWeight = pressure >= .4 ? .85 : .2;
+    // Favor an advantage in the shared market, not merely an expensive card
+    // either player could exploit. Owned enablers make the difference.
     const ranked = candidates.map(c => {
       const value = evaluate({...DB[c.id], uid:'market-candidate'});
       const rival = opponentValue({...DB[c.id], uid:'market-candidate'});
       const repeats = recent.filter(id => id===c.id).length;
       const copies = owned.filter(x=>x.id===c.id).length;
-      return {...c, score: value.value - rival.value*rivalWeight + value.synergy*.5 + value.matchup*.5 - repeats*22 - Math.max(0,copies-1)*7};
+      return {...c, score: value.value - rival.value + value.synergy*2 + value.matchup*.5 - repeats*22 - Math.max(0,copies-1)*7};
     }).sort((a,b)=>b.score-a.score).slice(0,8);
     // Eight alternatives, not a scripted fixed combo. Retain exploration even
     // when one card has an unusually large heuristic score.

@@ -118,7 +118,8 @@ function showBotNpcModal(app: App): void {
   const update = () => {
     const npc = botNpc(selected), name = npc.name[getLang()];
     ov.querySelectorAll<HTMLButtonElement>('[data-diff]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.diff === selected)));
-    ov.querySelector('#challengeDescription')!.textContent = `${t(`bot.diff.${selected}.desc`)} ${loungeText('3種類のデッキを使い分けます。','Uses three different decks.','세 가지 덱을 사용합니다.')}`;
+    const count=npc.decks.length;
+    ov.querySelector('#challengeDescription')!.textContent = `${t(`bot.diff.${selected}.desc`)} ${loungeText(`${count}種類のデッキを使用します。`,`Uses ${count} ${count===1?'deck':'different decks'}.`,`${count}종류의 덱을 사용합니다.`)}`;
     ov.querySelector('#diffStart')!.textContent = loungeText(`${name}と対戦 →`, `Duel ${name} →`, `${name}와 대전 →`);
   };
   let closed = false;

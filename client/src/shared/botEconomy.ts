@@ -2,7 +2,7 @@ import type { CardDef, CardInst, GameState, PlayerState } from './types';
 import { ALL_IDS, DB, hasPassive } from './cards';
 import { MAX_TURNS, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet } from './engine';
 import { cardPower } from './cardEval';
-import { strategicPowerEvaluator } from './botStrategy';
+import { recoveryEngine, strategicPowerEvaluator } from './botStrategy';
 import { enteringAttack, matchupPlan, removalHits } from './botMatchup';
 
 /** Components are policy estimates in cardPower units, not card-balance tiers. */
@@ -22,6 +22,7 @@ export function publicInventory(p: PlayerState): CardDef[] {
   return [...cards.values()];
 }
 const dewSource = (c: CardDef): number => c.act === 'dew' ? c.val ?? 1 : c.ench === 'worldCare' ? 1 : c.turnFx === 'worldTree' ? 3 : c.aura === 'shieldDew' ? 2 : c.ench === 'elfHaven' ? 1 : 0;
+const dewSummonCost = (c: CardDef): number => c.onSummon==='darkElfDew'||c.onSummon==='elfDew' ? 4 : c.onSummon==='highElfDew' ? 10 : c.onSummon==='elderDew' ? 12 : c.onSummon==='worldTreeDew' ? 8 : 0;
 const decay = (c: CardDef): boolean => hasPassive(c, 'decay') || ['DECAY_CRAFT','STRONG_ACID','ROTTEN_GROUND'].includes(c.id);
 const enchantAnswer = (c: CardDef): boolean => c.act === 'destroyEnch' || ['DISARM3','COUNTERCALC','BLOOD2'].includes(c.id);
 
@@ -37,6 +38,12 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
   const accessible = offers.filter(c => buyCost(p,c) <= effMaxMana(p) + 2);
   const power = strategicPowerEvaluator(g,p);
   const mana = effMaxMana(p), sources = own.reduce((n,c) => n + (!c.summonReq || summonReqMet(p,c,o) ? dewSource(c) : 0),0);
+  // Taking damage is not free quest progress: without recovery, the required
+  // damage can kill the buyer before the delayed reward matters. Shields do
+  // not count because the engine advances opponentDamage after absorption.
+  const recoveryBudget = (p.dew ?? 0)*4 + own.reduce((n,c) => n
+    + (c.act==='heal' ? c.val??0 : c.star==='chest' ? 5 : 0)
+    + recoveryEngine(c)*3 + dewSource(c)*4,0);
   const decayers = own.filter(decay).length, assassins = own.filter(isAssassinCard).length;
   const usableAnswer = (c: CardDef): boolean => enchantAnswer(c) && (c.id !== 'COUNTERCALC' || o.maxMana <= 7) && (c.id !== 'BLOOD2' || p.hp > 16);
   const answerCoverage = own.filter(usableAnswer).length;
@@ -87,6 +94,12 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
       if(p.enchants.some(e=>e.card.ench==='farmerPrayer'))synergy+=28;
     }
     if (c.id === 'EMPTY_MIND' && spells<9) readiness -= base*.8;
+    // Mercenary Arts only repeats the three mercenary effects; it has no
+    // standalone payoff and multiple copies do not stack in mercEffect.
+    if (c.ench === 'mercArt') {
+      if (!own.some(x=>['MERCENARY','MERC_LEADER','MERC_MASTER'].includes(x.id))) readiness -= base;
+      if (copies) redundancy -= base*.9;
+    }
     if (c.id === 'RUNE2' || c.id === 'RUNE3' || c.ench === 'runeEcho') synergy += spells * 2 >= own.length ? Math.min(8,spells) : -10;
     if (c.act?.startsWith('buff') || c.id === 'TRUMPET') synergy += monsters ? Math.min(6,monsters*1.5) : -8;
     // Market support is an option, discounted heavily compared with owned support.
@@ -107,6 +120,17 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
       else if (c.summonReq === 'mm5') factor = mana >= 4 ? .85 : .5;
       readiness -= base * (1-Math.min(1,factor));
     }
+    // A consumable summon resource cannot support every copy independently.
+    // Repeated copies share a forecast budget. Different finishers can replace
+    // the old plan; do not force the buyer to fund every sunk purchase first.
+    // Monsters already on the field have paid their summon cost.
+    const dewCost = dewSummonCost(c);
+    if (dewCost) {
+      const committed = cycle.filter(x=>x.id===c.id).length*dewCost;
+      const available = Math.max(0,(p.dew??0)+sources*2-committed);
+      // The first copy already has its summon requirement evaluated above.
+      if (committed) readiness -= base*.85*(1-Math.min(1,available/dewCost));
+    }
     readiness -= Math.min(base*.6,Math.max(0,playCost(c,p)-mana)*4);
     // Attack-dependent bodies cannot deliver their payoff at zero ATK.
     // Account for the public global stat swap and suppression on entry.
@@ -126,6 +150,20 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     }
     if (p.field.some(m=>m.id==='CASTLE') && c.t==='mon' && c.cost>=5) readiness -= base*.7;
     if (c.quest && copies) redundancy -= base + 30;
+    if (c.quest?.event==='opponentDamage' && p.hp+recoveryBudget<=c.quest.target+10)
+      readiness -= base*.8;
+    // A quest's printed reward has little value without a route to its counter.
+    // Do not offer/buy castle, tribe or assassin payoffs as generic good cards.
+    if (c.quest) {
+      const support = c.quest.event==='castleTurn' ? Math.min(1,count('CASTLE'))
+        : c.quest.event==='tribeSummon' ? Math.min(1,own.filter(x=>x.t==='mon'&&x.tribe).length/3)
+        : c.quest.event==='assassinHit' ? Math.min(1,assassins/2)
+        : c.quest.event==='decayKill' ? Math.min(1,decayers/2)
+        : c.quest.event==='healthGain' ? Math.min(1,recoveryBudget/c.quest.target)
+        : c.quest.event==='emptyTurn' ? Math.max(0,1-monsters/4)
+        : 1;
+      readiness -= base*.85*(1-support);
+    }
     // Singular permanents and narrow answers lose value sharply after coverage.
     if (c.ench && ['worldCare','foresight','guild'].includes(c.ench) && copies) redundancy -= base*.8;
     if (enchantAnswer(c)) {

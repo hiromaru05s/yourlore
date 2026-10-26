@@ -48,14 +48,17 @@ export const BOT_HELL_DECKS: BotDeck[] = [
   { name: "BOT · GOBLIN", cards: ["GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN", "GOBLIN", "WEAKEN_ALL", "COUNTERCALC", "GOBLIN"], tune: {} },
   { name: "BOT · DECAY", cards: ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "STARTER_TRASH", "COUNTERCALC", "COUNTERCALC"], tune: {} },
   { name: "BOT · FORTRESS", cards: ["CASTLE", "WEAKEN_ALL", "WEAKEN_ALL", "NOURISHING_RAIN", "NOURISHING_RAIN", "GAMBLER", "CASTLE", "BLOOD_RITE"], tune: {} },
-  { name: "BOT · MIMIC", cards: ["WEAKEN_ALL", "DUNGEON_FLOOR", "WEAKEN_ALL", "DUNGEON_FLOOR", "STARTER_TRASH", "DUNGEON_FLOOR", "STARTER_CHEST", "DUNGEON_FLOOR"], tune: {} },
-  { name: "BOT · ATTRITION", cards: ["BATTLEFIELD", "STARTER_CHEST", "CASTLE", "NOURISHING_RAIN", "WEAKEN_ALL", "BLOOD_RITE", "COUNTERCALC", "WEAKEN_ALL"], tune: {} },
+  { name: "BOT · DEW_CONTROL", cards: ["ELF_HAVEN", "WEAKEN_ALL", "HALF_ELF", "COUNTERCALC", "ELF_HAVEN", "STARTER_CHEST", "WEAKEN_ALL", "STARTER_TRASH"], tune: {} },
+  { name: "BOT · FIRE_CONTROL", cards: ["FLAME", "FLAME", "FLAME", "WEAKEN_ALL", "STARTER_TRASH", "CASTLE", "FLAME", "REFRESH_HAND"], tune: {} },
   { name: "BOT · RIFT", cards: ["RIFT", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "FOCUS", "STARTER_CHEST", "STARTER_CHEST"], tune: {} },
-  { name: "BOT · RAMP", cards: ["GAMBLER", "GAMBLER", "GAMBLER", "CASINO", "NOURISHING_RAIN", "STARTER_TRASH", "WEAKEN_ALL", "STARTER_TRASH"], tune: {} },
+  { name: "BOT · MIXED_RALLY", cards: ["RUST_SHROOM", "RUST_SHROOM", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], tune: {} },
 ];
 export const BOT_ELITE_DECKS: BotDeck[] = BOT_HELL_DECKS.map(d=>({...d,cards:[...d.cards],tune:{...d.tune}}));
 export const BOT_EASY_DECKS: BotDeck[] = [{name:'BOT · FUNDAMENTALS',cards:['HALF_ELF','HALF_ELF','FLAME','FLAME','STARTER_TRASH','STARTER_TRASH','STARTER_CHEST','STARTER_CHEST'],tune:{minBuyEarly:6,minBuy:9,chestTurn:4}}];
-export const BOT_NORMAL_DECKS: BotDeck[] = [0,1,2,6].map(i=>BOT_HELL_DECKS[i]);
+export const BOT_NORMAL_DECKS: BotDeck[] = [
+  ...[0,1,2].map(i=>BOT_HELL_DECKS[i]),
+  { name: "BOT · RAMP", cards: ["GAMBLER", "GAMBLER", "GAMBLER", "CASINO", "NOURISHING_RAIN", "STARTER_TRASH", "WEAKEN_ALL", "STARTER_TRASH"], tune: {} },
+];
 export function pickBotDeck(rnd: number = Math.random(), difficulty: BotDifficulty = 'normal'): BotDeck {
   const roster = difficulty === 'hell' ? BOT_HELL_DECKS : difficulty === 'hard' ? BOT_ELITE_DECKS : difficulty==='easy'?BOT_EASY_DECKS:BOT_NORMAL_DECKS;
   const roll = Number.isFinite(rnd) ? rnd : 0;
