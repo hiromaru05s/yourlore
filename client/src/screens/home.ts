@@ -40,7 +40,7 @@ export function mountHome(app: App): Screen {
         </div>
         <p class="mode-reward" id="modeReward"></p>
         <button class="lounge-play-button" id="ranked"><small aria-hidden="true">DUEL</small><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")} →</span></button>
-        <button id="myTier" class="lounge-rank-info" aria-live="polite" aria-label="${t("lb.title")}">${t("lb.season")} —</button>
+        <button id="myTier" class="lounge-rank-info" aria-live="polite" aria-label="${t("lb.title")}">${t("lb.title")}</button>
       </section>
       <button class="lounge-active-deck" id="deck" aria-label="${esc(t("home.deck.title"))}">
         <span class="lounge-deck-preview" aria-hidden="true">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,3).map(id=>`<img src="${artUrl.sm(id)}" alt="" loading="lazy">`).join("")}</span>

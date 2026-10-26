@@ -5,7 +5,6 @@ import { TIER_META, tierLabel, rankProgress } from './tier';
 import { rankEmblem } from './rankEmblem';
 import { applyEmblemPose, assembledPose, arrivingPose, departingPose, RANK_REVEAL_START, RANK_PROMOTION_END } from './rankEmblemMotion';
 import { loungeText as tr } from './loungeText';
-import { esc } from '../i18n';
 import { sfx, warmSounds } from './sound';
 
 export function progressLabel(mmr: number, tier: string): string {
@@ -17,7 +16,7 @@ export function progressLabel(mmr: number, tier: string): string {
 export function homeRankHtml(r: RankInfo): string {
   const tier = TIER_META[r.tier] ? r.tier : tierOf(r.mmr);
   return `<div class="home-rank" style="--rank-metal:${TIER_META[tier].color}">
-    ${rankEmblem(tier)}<div class="home-rank-copy"><span class="rank-season">${esc(r.season)}${r.rank == null ? "" : ` · #${r.rank}`}</span>
+    ${rankEmblem(tier)}<div class="home-rank-copy">
     <strong>${tierLabel(tier)} <b>${r.mmr}<small> MMR</small></b></strong>
     <div class="rank-track" role="meter" aria-label="MMR" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(rankProgress(r.mmr).fraction*100)}" aria-valuetext="${r.mmr} MMR · ${progressLabel(r.mmr,tier)}"><i style="width:${rankProgress(r.mmr).fraction*100}%"></i></div>
     <span class="rank-target">${progressLabel(r.mmr,tier)}</span></div><span class="rank-link" aria-hidden="true">›</span></div>`;

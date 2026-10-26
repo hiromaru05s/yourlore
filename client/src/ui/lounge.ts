@@ -7,6 +7,7 @@ import '../styles/homeDuelInk.css';
 import '../styles/homeAtmosphere.css';
 import '../styles/menuReadability.css';
 import '../styles/homeViewport.css';
+import '../styles/homeFiligree.css';
 import {loungeNavGlyph,loungeUtilityGlyph} from './loungeNavGlyphs';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';

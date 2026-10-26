@@ -28,6 +28,12 @@ try {
  await page.waitForSelector('#dailyReward .dq-meter');
  await page.waitForFunction(()=>!document.querySelector('.lounge-entry-overlay,.screen-loader'));
  await page.waitForTimeout(500);
+ assert.equal(await page.locator('.rank-season').count(),0,'HOME omits season and ladder position');
+ assert(!(await page.locator('#myTier').innerText()).includes('2026-10'));
+ await page.locator('#online').click();assert.equal(await page.locator('#online').getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('.lounge-home').count(),1,'selecting a mode does not launch');
+ await page.locator('#bot').click();await page.locator('#ranked').click();await page.locator('.bot-diff').waitFor();
+ await page.keyboard.press('Escape');await page.locator('#rankedMode').click();
  const layouts=[];
  const capture=async name=>{if(process.env.LORE_CAPTURE!=='0')await page.screenshot({path:`${out}/${name}.png`,timeout:60000,animations:'disabled'});};
  const refresh=async()=>{await page.evaluate(()=>document.dispatchEvent(new Event('lore:rewards')));await page.waitForTimeout(100);};
