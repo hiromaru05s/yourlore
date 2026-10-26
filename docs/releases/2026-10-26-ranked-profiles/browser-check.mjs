@@ -12,7 +12,7 @@ const profile=()=>({id:'a',display:'PYAP',avatar:null,badge:null,created_at:Date
 await apiFixture(p,async req=>{const path=new URL(req.url).pathname;
 if(path==='/api/auth/me')return {user:{id:'qa',display:'SEEKER',credits:100,wins:1,losses:2}};
 if(path==='/api/geo')return {country:'JP'};
-if(path==='/api/rank/leaderboard')return {season:'2026-10',entries:[{rank:1,userId:'a',display:'PYAP',tier:'bronze',mmr:1036,wins:6,losses:3,purchases},{rank:2,userId:'qa',display:'hiromaru',tier:'iron',mmr:986,wins:1,losses:2,purchases:{sampleGames:0,cards:[]}}]};
+if(path==='/api/rank/leaderboard')return {season:'2026-10',entries:[{rank:1,userId:'a',display:'PYAP',tier:'bronze',mmr:1036,wins:6,losses:3,purchases},{rank:2,userId:'qa',display:'hiromaru',tier:'iron',mmr:986,wins:1,losses:2,purchases:{sampleGames:0,cards:[]}},{rank:3,userId:'third',display:'신 무',tier:'iron',mmr:984,wins:0,losses:1,purchases}]};
 if(path==='/api/rank/me')return {rating:{rank:2,tier:'iron',mmr:986,wins:1,losses:2}};
 if(path==='/api/social/profile'){if(delay)await new Promise(r=>setTimeout(r,delay));return {profile:profile()};}
 if(path==='/api/social/friends')return {friends:[{id:'a',display:'PYAP',avatar:null,badge:null,online:true,state:'menu'}],incoming:[],outgoing:[],challenges:[]};
@@ -35,7 +35,20 @@ assert.equal(await p.locator('.lb-row .purchase-card-icon.is-empty').count(),5);
 for(const width of [1440,1070,820,390,320]){
  await p.setViewportSize({width,height:1000});await p.waitForTimeout(400);
  const layout=await p.evaluate(()=>{const head=document.querySelector('.lb-columns'),row=document.querySelector('#lbList .lb-row');const rect=e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return{x:r.x,width:r.width,display:s.display}};return{head:[...head.children].map(rect),row:[...row.children].map(rect),overflow:document.documentElement.scrollWidth>innerWidth};});
- const standing=await p.locator('#lbMe').evaluate(e=>({rank:parseFloat(getComputedStyle(e.querySelector('.lb-me-heading strong')).fontSize),mmr:parseFloat(getComputedStyle(e.querySelector('.lb-me-score b')).fontSize),emblem:e.querySelector('.rank-emblem').getBoundingClientRect().width,overflow:e.scrollWidth>e.clientWidth}));assert(standing.rank>=48&&standing.mmr>=32&&standing.emblem>=112,`prominent own standing at ${width}`);assert.equal(standing.overflow,false);for(let i=0;i<6;i++){if(layout.head[i].display==='none')continue;assert(Math.abs(layout.head[i].x-layout.row[i].x)<1,`aligned column ${i} at ${width}: ${JSON.stringify(layout)}`);}assert.equal(layout.overflow,false);if(width>650){const gap=await p.locator('#lbList .lb-row').first().evaluate(row=>row.querySelector('.purchase-card-icon').getBoundingClientRect().left-row.querySelector('.lb-wl').getBoundingClientRect().right);assert(gap>=28,`purchase column gap at ${width}: ${gap}`);}await p.screenshot({path:`${out}/ranking-${width}.png`});
+ const standing=await p.locator('#lbMe').evaluate(e=>({rank:parseFloat(getComputedStyle(e.querySelector('.lb-me-heading strong')).fontSize),mmr:parseFloat(getComputedStyle(e.querySelector('.lb-me-score b')).fontSize),emblem:e.querySelector('.rank-emblem').getBoundingClientRect().width,overflow:e.scrollWidth>e.clientWidth}));assert(standing.rank>=40&&standing.mmr>=32&&standing.emblem>=112,`prominent own standing at ${width}`);assert.equal(standing.overflow,false);for(let i=0;i<6;i++){if(layout.head[i].display==='none')continue;assert(Math.abs(layout.head[i].x-layout.row[i].x)<1,`aligned column ${i} at ${width}: ${JSON.stringify(layout)}`);}assert.equal(layout.overflow,false);if(width>650){const gap=await p.locator('#lbList .lb-row').first().evaluate(row=>row.querySelector('.purchase-card-icon').getBoundingClientRect().left-row.querySelector('.lb-wl').getBoundingClientRect().right);assert(gap>=28,`purchase column gap at ${width}: ${gap}`);}await p.screenshot({path:`${out}/ranking-${width}.png`});
+}
+const firstViews=[];
+for(const viewport of [{width:1470,height:745},{width:1280,height:720},{width:1070,height:700}]){
+ await p.setViewportSize(viewport);await p.waitForTimeout(400);
+ const fit=await p.evaluate(()=>{
+  const rect=s=>document.querySelector(s).getBoundingClientRect();
+  const content=document.querySelector('.lounge-content');
+  return {panelBottom:rect('.panel.lb').bottom,contentBottom:rect('.lounge-content').bottom,dockTop:rect('.lounge-rail').top,scrollHeight:content.scrollHeight,clientHeight:content.clientHeight,emblem:rect('#lbMe>.rank-emblem').width};
+ });
+ assert.equal(fit.emblem,184,'preserve approved desktop emblem size');
+ assert(fit.panelBottom<=Math.min(fit.contentBottom,fit.dockTop),`panel fits first view: ${JSON.stringify({viewport,fit})}`);
+ assert(fit.scrollHeight<=fit.clientHeight+1,`no vertical scroll for three ranked players: ${JSON.stringify({viewport,fit})}`);
+ firstViews.push({viewport,...fit});await p.screenshot({path:`${out}/ranking-${viewport.width}x${viewport.height}.png`});
 }
 await p.setViewportSize({width:1440,height:1000});const trigger=p.locator('.lb-profile-trigger').first();assert.equal(await trigger.evaluate(e=>getComputedStyle(e).borderImageSource),'none');await trigger.hover();assert.equal(await trigger.evaluate(e=>getComputedStyle(e).textDecorationLine),'underline');
 const icon=p.locator('.lb-purchases .purchase-card-icon').first();await icon.hover();await p.waitForTimeout(180);assert.equal(await icon.locator('[role=tooltip]').evaluate(e=>getComputedStyle(e).opacity),'1');await p.screenshot({path:out+'/tooltip.png'});await icon.focus();assert.equal(await icon.locator('[role=tooltip]').evaluate(e=>getComputedStyle(e).visibility),'visible');
@@ -80,5 +93,5 @@ for(const width of [1440,390,320]){
  await p.screenshot({path:`${out}/profile-page-${width}.png`});await btn.click();await p.locator('.lounge-home').waitFor();
 }
 assert.deepEqual(errors,[]);
-await fs.writeFile(out+'/checks.json',JSON.stringify({origin,api:'synthetic fixtures',widths:[1440,1070,820,390,320],checks:['aligned columns','prominent own ranking without overflow','purchase column spacing','missing deck dates hidden','mixed deck contents aligned','plain name hover','tooltip hover and keyboard','ranked stats include draws','three repeated decks','card inspection','shared friends profile','empty and private data','mobile modal overflow','focus restore','closed modal late response','large rank and MMR right of identity','fixed close after scroll','profile page close returns home'],errors},null,2));console.log('PASS ranking/profile browser checks');
+await fs.writeFile(out+'/checks.json',JSON.stringify({origin,api:'synthetic fixtures',firstViews,widths:[1440,1070,820,390,320],checks:['aligned columns','prominent own ranking without overflow','purchase column spacing','missing deck dates hidden','mixed deck contents aligned','plain name hover','tooltip hover and keyboard','ranked stats include draws','three repeated decks','card inspection','shared friends profile','empty and private data','mobile modal overflow','focus restore','closed modal late response','large rank and MMR right of identity','fixed close after scroll','profile page close returns home'],errors},null,2));console.log('PASS ranking/profile browser checks');
 }catch(e){await p.screenshot({path:out+'/failure.png'});console.log(errors);throw e;}finally{await b.close()}
