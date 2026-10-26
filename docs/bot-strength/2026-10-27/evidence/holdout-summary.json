@@ -1,0 +1,133 @@
+{
+  "games": 2688,
+  "seedBase": 46100000,
+  "scope": "unseen seed public greedy proxy on both sides, not full difficulty policy",
+  "groups": {
+    "goblin/none": {
+      "games": 128,
+      "points": 92,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "goblin/hard": {
+      "games": 128,
+      "points": 103,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "goblin/hell": {
+      "games": 128,
+      "points": 102,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "decay/none": {
+      "games": 128,
+      "points": 84,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "decay/hard": {
+      "games": 128,
+      "points": 96,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "decay/hell": {
+      "games": 128,
+      "points": 79,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "fortress/none": {
+      "games": 128,
+      "points": 75,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "fortress/hard": {
+      "games": 128,
+      "points": 77,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "fortress/hell": {
+      "games": 128,
+      "points": 67,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "dew_control/none": {
+      "games": 128,
+      "points": 56.5,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "dew_control/hard": {
+      "games": 128,
+      "points": 70,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "dew_control/hell": {
+      "games": 128,
+      "points": 90,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "fire_control/none": {
+      "games": 128,
+      "points": 76,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "fire_control/hard": {
+      "games": 128,
+      "points": 77,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "fire_control/hell": {
+      "games": 128,
+      "points": 69,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "rift/none": {
+      "games": 128,
+      "points": 57,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "rift/hard": {
+      "games": 128,
+      "points": 64,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "rift/hell": {
+      "games": 128,
+      "points": 68,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "mixed_rally/none": {
+      "games": 128,
+      "points": 69,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "mixed_rally/hard": {
+      "games": 128,
+      "points": 84,
+      "invalid": 0,
+      "maxMs": 0
+    },
+    "mixed_rally/hell": {
+      "games": 128,
+      "points": 79,
+      "invalid": 0,
+      "maxMs": 0
+    }
+  }
+}

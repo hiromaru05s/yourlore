@@ -1,0 +1,28 @@
+{
+  "groups": {
+    "hard/before": {
+      "games": 14,
+      "points": 6,
+      "invalid": 0,
+      "maxMs": 6769.741667000111
+    },
+    "hell/before": {
+      "games": 14,
+      "points": 7,
+      "invalid": 0,
+      "maxMs": 10460.742708000005
+    },
+    "hard/after": {
+      "games": 14,
+      "points": 13,
+      "invalid": 0,
+      "maxMs": 28925.11049999995
+    },
+    "hell/after": {
+      "games": 14,
+      "points": 11,
+      "invalid": 0,
+      "maxMs": 7587.328458000207
+    }
+  }
+}

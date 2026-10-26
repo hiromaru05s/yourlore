@@ -1,0 +1,13 @@
+{
+  "runtime": "workerd",
+  "compatibilityDate": "2024-11-01",
+  "hostWallMs": 16553.515042,
+  "status": 200,
+  "body": {
+    "action": {
+      "type": "play",
+      "idx": 1
+    }
+  },
+  "scope": "local workerd at captured heavy turn-17 state; host wall time, not production CPU billing"
+}

@@ -1,0 +1,34 @@
+{
+  "seedBase": 43100000,
+  "scope": "same seed public greedy comparison; not human win rates",
+  "groups": {
+    "diverse-control": {
+      "none": {
+        "games": 896,
+        "points": 525
+      },
+      "hard": {
+        "games": 896,
+        "points": 560
+      },
+      "hell": {
+        "games": 896,
+        "points": 549
+      }
+    },
+    "dew-budget-matched": {
+      "none": {
+        "games": 896,
+        "points": 522
+      },
+      "hard": {
+        "games": 896,
+        "points": 559
+      },
+      "hell": {
+        "games": 896,
+        "points": 560
+      }
+    }
+  }
+}

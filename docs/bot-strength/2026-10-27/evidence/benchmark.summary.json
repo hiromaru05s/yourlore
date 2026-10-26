@@ -1,0 +1,52 @@
+{
+  "groups": {
+    "easy/before": {
+      "games": 14,
+      "points": 1,
+      "invalid": 0,
+      "maxMs": 29.633290999999645
+    },
+    "normal/before": {
+      "games": 14,
+      "points": 2,
+      "invalid": 0,
+      "maxMs": 23.916417000000365
+    },
+    "hard/before": {
+      "games": 14,
+      "points": 12,
+      "invalid": 0,
+      "maxMs": 1804.6097500000033
+    },
+    "hell/before": {
+      "games": 14,
+      "points": 13,
+      "invalid": 0,
+      "maxMs": 8205.406125000096
+    },
+    "easy/after": {
+      "games": 14,
+      "points": 1,
+      "invalid": 0,
+      "maxMs": 10.21941600000001
+    },
+    "normal/after": {
+      "games": 14,
+      "points": 8,
+      "invalid": 0,
+      "maxMs": 833.4695000000029
+    },
+    "hard/after": {
+      "games": 14,
+      "points": 13,
+      "invalid": 0,
+      "maxMs": 11271.745291
+    },
+    "hell/after": {
+      "games": 14,
+      "points": 12,
+      "invalid": 0,
+      "maxMs": 7536.7650419999845
+    }
+  }
+}

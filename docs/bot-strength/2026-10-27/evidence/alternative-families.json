@@ -1,0 +1,67 @@
+{
+  "ramp": {
+    "core": [
+      "GAMBLER",
+      "GAMBLER",
+      "GAMBLER"
+    ],
+    "pool": [
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "NOURISHING_RAIN",
+      "BLOOD_RITE"
+    ]
+  },
+  "mimic": {
+    "core": [
+      "DUNGEON_FLOOR",
+      "DUNGEON_FLOOR",
+      "WEAKEN_ALL"
+    ],
+    "pool": [
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "GAMBLER",
+      "COUNTERCALC",
+      "NOURISHING_RAIN",
+      "BLOOD_RITE",
+      "TRUMPET",
+      "DUNGEON_FLOOR"
+    ]
+  },
+  "attrition": {
+    "core": [
+      "BATTLEFIELD",
+      "NOURISHING_RAIN",
+      "CASTLE"
+    ],
+    "pool": [
+      "BATTLEFIELD",
+      "NOURISHING_RAIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "BLOOD_RITE",
+      "STARTER_CHEST",
+      "STARTER_TRASH"
+    ]
+  },
+  "shield": {
+    "core": [
+      "RELIC_BOUNTY",
+      "RELIC_PROTECTION",
+      "SELECTED_SHIELD"
+    ],
+    "pool": [
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "CASTLE",
+      "BLOOD_RITE"
+    ]
+  }
+}

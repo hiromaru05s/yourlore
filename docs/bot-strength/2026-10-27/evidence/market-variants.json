@@ -1,0 +1,120 @@
+{
+  "scope": "development public greedy comparison, old roster; full relative rival weight / synergy coefficient / top candidate count variants",
+  "variants": {
+    "release-validation": {
+      "games": 2688,
+      "groups": {
+        "none": {
+          "games": 896,
+          "points": 541,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hard": {
+          "games": 896,
+          "points": 553,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hell": {
+          "games": 896,
+          "points": 506.0,
+          "invalid": 0,
+          "maxMs": 0
+        }
+      }
+    },
+    "quest-relative": {
+      "games": 2688,
+      "groups": {
+        "none": {
+          "games": 896,
+          "points": 541,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hard": {
+          "games": 896,
+          "points": 540.5,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hell": {
+          "games": 896,
+          "points": 530.5,
+          "invalid": 0,
+          "maxMs": 0
+        }
+      }
+    },
+    "quest-synergy": {
+      "games": 2688,
+      "groups": {
+        "none": {
+          "games": 896,
+          "points": 541,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hard": {
+          "games": 896,
+          "points": 545,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hell": {
+          "games": 896,
+          "points": 534.5,
+          "invalid": 0,
+          "maxMs": 0
+        }
+      }
+    },
+    "quest-top3": {
+      "games": 2688,
+      "groups": {
+        "none": {
+          "games": 896,
+          "points": 541,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hard": {
+          "games": 896,
+          "points": 545,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hell": {
+          "games": 896,
+          "points": 534.5,
+          "invalid": 0,
+          "maxMs": 0
+        }
+      }
+    },
+    "quest-top1": {
+      "games": 2688,
+      "groups": {
+        "none": {
+          "games": 896,
+          "points": 541,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hard": {
+          "games": 896,
+          "points": 529,
+          "invalid": 0,
+          "maxMs": 0
+        },
+        "hell": {
+          "games": 896,
+          "points": 507,
+          "invalid": 0,
+          "maxMs": 0
+        }
+      }
+    }
+  }
+}

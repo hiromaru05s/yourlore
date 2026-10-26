@@ -1,0 +1,5 @@
+{
+  "cases": 20,
+  "identical": true,
+  "scope": "first consumer purchases retain previous evaluation; only extra unplayed same-card consumers change"
+}

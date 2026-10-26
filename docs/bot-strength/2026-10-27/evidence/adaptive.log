@@ -1,0 +1,29 @@
+PASS Elf purchase changes with real Dew support, without changing the card
+PASS decay engine becomes a buy for a decay build
+PASS visible enchantments justify a first answer, not redundant answer flooding
+PASS an expensive strong deck can still buy its missing engine answer
+PASS expired Countercalculation does not count as a usable answer or attract another buy
+PASS acquired enchantment removal is actually played and resolves legally
+PASS actual Hard and Hell acquire the missing answer within their purchase turn
+PASS Soul Harvest needs a public curse plan
+PASS public build, hidden inventory and removed physical cards have separate roles
+PASS temporary exile remains a future public threat, permanent removal does not
+PASS last-copy denial uses public evidence and available stock
+PASS late slow buys lose value while immediate Quick cards keep their horizon
+PASS World Care projects one Dew per turn, not two
+PASS unmet special conditions and active Castle discount unusable bombs
+PASS attack-dependent buys lose value under global suppression and recover under Trick Room
+PASS Blood Rite prevents false burn lethal and harmful opponent healing
+PASS random Spark retains its disruption branches under Blood Rite
+PASS reflection plus Blood Rite can turn a burn spell into useful self-healing
+PASS reflected face attacks and lethal reflected overflow are avoided
+PASS public damage conversion changes purchase value and Fireball targeting
+PASS self-damage respects shields and spell amplification instead of a fixed HP cutoff
+PASS low-HP Catalyst remains usable when Blood Rite converts its self-damage
+PASS Void Apostle is not summoned when its actual self-damage would lose the game
+PASS Poison Master removes the large threat instead of wasting decay on the weakest body
+PASS suppression reserves mana before developing another small body
+PASS Rift is established before spending its mana on a small summon
+PASS offer refresh expectation ignores hidden RNG and respects affordability/blocking
+PASS multiple World Trees do not compound the current-rule recovery multiplier
+PASS 28 adaptive strategy suites

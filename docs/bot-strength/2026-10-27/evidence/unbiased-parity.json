@@ -1,0 +1,11 @@
+{
+  "seedBase": 57300000,
+  "seedCount": 20,
+  "maxActionsPerSeed": 120,
+  "actions": 1958,
+  "cards": 378,
+  "starters": 3,
+  "catalogSha256": "a5e3d3344a27d59c21901fc10ddd2bbc663319a9018c588c1ccfa5b9e50cf98e",
+  "sourceMatchesBenchmark": true,
+  "parity": true
+}

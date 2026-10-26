@@ -1,0 +1,85 @@
+{
+  "anytimeResult": {
+    "type": "endTurn"
+  },
+  "anytimeTerminated": true,
+  "supersededResult": null,
+  "newResult": {
+    "type": "buyMarket",
+    "i": 5
+  },
+  "stats": [
+    {
+      "difficulty": "easy",
+      "ms": 116.39999999850988,
+      "action": {
+        "type": "buyMarket",
+        "i": 6
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "normal",
+      "ms": 160.10000000149012,
+      "action": {
+        "type": "buyMarket",
+        "i": 5
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hard",
+      "ms": 900.5,
+      "action": {
+        "type": "buyMarket",
+        "i": 5
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hell",
+      "ms": 914.1999999955297,
+      "action": {
+        "type": "buyMarket",
+        "i": 5
+      },
+      "advanced": true,
+      "pure": true
+    }
+  ],
+  "stress": {
+    "ms": 9614.10000000149,
+    "ticks": 1921,
+    "action": {
+      "type": "play",
+      "idx": 1
+    },
+    "advanced": true
+  },
+  "heavy": {
+    "ms": 9400,
+    "ticks": 1881,
+    "action": {
+      "type": "chooseTarget",
+      "uid": "u206"
+    },
+    "advanced": true
+  },
+  "ticks": 4987,
+  "budgetAdvanced": true,
+  "fallbackAdvanced": true,
+  "timeoutResult": null,
+  "timeoutTerminated": true,
+  "canceledResult": null,
+  "staleApplied": 0,
+  "disposedApplied": 0,
+  "activeApplied": 1,
+  "defense": {
+    "type": "pick",
+    "uid": "grow"
+  },
+  "errors": []
+}

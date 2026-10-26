@@ -1,0 +1,14 @@
+PASS available Guardian changes investment before it is played; sold-out cards do not
+PASS actual Hard/Hell reserve a suppression answer instead of filling seven blocked slots
+PASS Guardian is removable with a first answer despite a high printed deck average
+PASS existing removal coverage reduces duplicate purchases
+PASS persistent buff restores attacks under suppression and is executed before more blocked bodies
+PASS finite Guts and Decay progress change position value
+PASS public matchup cannot peek at private cards or live random state
+PASS targeted removal is saved against Aura and automatic removal never kills our larger wall
+PASS Apple is usable and Farm support is valued only with its prerequisites and time
+PASS suppression is not played merely to disable our own decay board
+PASS maintenance removal does not indefinitely starve mana growth
+PASS entering Goblin Raider includes its own aura in suppression calculations
+PASS new Goblin King needs support; training engine benefits from Castle
+PASS 13 rework scenario groups

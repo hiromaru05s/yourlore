@@ -1,0 +1,72 @@
+{
+  "goblin": [
+    "GOBLIN",
+    "GOBLIN",
+    "GOBLIN_RAIDER",
+    "GOBLIN",
+    "GOBLIN",
+    "COUNTERCALC",
+    "COUNTERCALC",
+    "GOBLIN"
+  ],
+  "decay": [
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "ACID_RAIN",
+    "RUST_SHROOM",
+    "RUST_SHROOM",
+    "STARTER_TRASH",
+    "COUNTERCALC",
+    "COUNTERCALC"
+  ],
+  "fortress": [
+    "CASTLE",
+    "WEAKEN_ALL",
+    "WEAKEN_ALL",
+    "STARTER_CHEST",
+    "NOURISHING_RAIN",
+    "GAMBLER",
+    "CASTLE",
+    "BLOOD_RITE"
+  ],
+  "mimic": [
+    "DUNGEON_FLOOR",
+    "DUNGEON_FLOOR",
+    "WEAKEN_ALL",
+    "DUNGEON_FLOOR",
+    "STARTER_TRASH",
+    "DUNGEON_FLOOR",
+    "STARTER_CHEST",
+    "DUNGEON_FLOOR"
+  ],
+  "attrition": [
+    "BATTLEFIELD",
+    "NOURISHING_RAIN",
+    "CASTLE",
+    "NOURISHING_RAIN",
+    "WEAKEN_ALL",
+    "BLOOD_RITE",
+    "COUNTERCALC",
+    "WEAKEN_ALL"
+  ],
+  "rift": [
+    "RIFT",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "FOCUS",
+    "STARTER_CHEST",
+    "STARTER_CHEST"
+  ],
+  "ramp": [
+    "GAMBLER",
+    "GAMBLER",
+    "GAMBLER",
+    "STARTER_TRASH",
+    "NOURISHING_RAIN",
+    "STARTER_TRASH",
+    "WEAKEN_ALL",
+    "STARTER_TRASH"
+  ]
+}

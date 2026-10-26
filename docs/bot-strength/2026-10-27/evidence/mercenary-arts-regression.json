@@ -1,0 +1,63 @@
+{
+  "scope": "Observed failure before the final targeted purchase correction; not a final-policy result",
+  "row": {
+    "tier": "hell",
+    "version": "after",
+    "pair": 3,
+    "seat": 0,
+    "deck": "BOT · DEW_CONTROL",
+    "cards": [
+      "ELF_HAVEN",
+      "WEAKEN_ALL",
+      "HALF_ELF",
+      "COUNTERCALC",
+      "ELF_HAVEN",
+      "STARTER_CHEST",
+      "WEAKEN_ALL",
+      "STARTER_TRASH"
+    ],
+    "opponent": "recovery",
+    "seed": 41200003,
+    "result": 0,
+    "turn": 18,
+    "steps": 67,
+    "invalid": null,
+    "opening": [
+      "LIFE_CYCLE",
+      "HEXER4",
+      "MERC_ART",
+      "TRAINING_GROUND",
+      "E3",
+      "Q_WINTER",
+      "BLOOD_SHIELD"
+    ],
+    "buys": [
+      "MERC_ART",
+      "MERC_ART",
+      "MERC_ART",
+      "GM5_0"
+    ],
+    "plays": [
+      "WEAKEN_ALL",
+      "STARTER_TRASH",
+      "WEAKEN_ALL",
+      "HALF_ELF",
+      "MERC_ART",
+      "STARTER_MANA",
+      "STARTER_MANA",
+      "COUNTERCALC",
+      "COUNTERCALC",
+      "ELF_HAVEN",
+      "STARTER_MANA",
+      "HALF_ELF",
+      "STARTER_CHEST"
+    ],
+    "ms": {
+      "p50": 888.7807080000639,
+      "p95": 2851.719792000018,
+      "max": 3139.818916000193
+    }
+  },
+  "correction": "Require an owned MERCENARY/MERC_LEADER/MERC_MASTER and discount extra copies of the nonstacking Arts effect",
+  "regressionTests": "tests/bot-difficulty.mjs: unsupported, supported first copy, unplayed owned Arts, active Arts"
+}

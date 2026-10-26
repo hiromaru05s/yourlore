@@ -1,0 +1,4 @@
+hard distinct rows 180 cards 278
+hell distinct rows 180 cards 271
+mean market value { favored: 8.250543333333338, uniform: 4.897333333333333 }
+PASS difficulty market scope, deterministic RNG, broad diversity, hidden information, immutable transitions, shuffled rotation, idempotent persisted reservation

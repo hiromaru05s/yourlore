@@ -1,75 +1,235 @@
-# NPC difficulty training — 2026-10-27
+# NPC再学習・難易度調整 — 2026-10-27
 
-Work in progress. Release and final benchmark results are added after validation.
+カードバランス **v68** を維持して、構築の探索、局面評価の再学習、
+先読み、NPC戦専用のマーケット分布、デッキの巡回を更新した。
+比較元は `b8f9e1b3f25f0e25d85b1ab9fcb49f13461dce4a`。
 
-## Scope
+## 難易度の設定と対人目標
 
-Card balance is v68, from source `b8f9e1b3f25f0e25d85b1ab9fcb49f13461dce4a`.
-Card definitions/effects are unchanged. Only explicitly created NPC challenges
-receive the new market distribution. Ranked/PvP and unbiased games retain the
-original random sequence and transitions.
-
-| Difficulty | Decks | Target human win rate for NPC | Favorable market branch |
+| 難易度 | 使用デッキ数 | NPCの対人勝率の目標 | 有利なマーケットを選ぶ分岐 |
 | --- | ---: | ---: | ---: |
-| Easy | 1 | Usually loses to humans | 0% |
-| Normal | 4 | 50% | 0% |
-| Hard | 7 | 80% | 50% |
-| Hell | 7 | 99% | 90% |
+| 簡単 | 1 | 普通のプレイヤーが勝ちやすい | 0% |
+| 普通 | 4 | 50% | 0% |
+| 難しい | 7 | 80% | 50% |
+| ヘル | 7 | 99% | 90% |
 
-These human win rates are **targets, not measured results**. Existing completed
-production NPC matches were too few and cannot establish representative human
-performance. Scripted opponents, self-play, training accuracy, and public worker
-fixtures do not establish human win rates or professional playing strength.
+**対人勝率は未検証。** 本番に記録されていたv68のNPC対戦は1件で、
+代表性のある人間との検証には足りない。以下の自動対戦、予測精度、
+ブラウザ・サーバー検証から、対人80%・99%やプロ相当を主張しない。
+学習済みモデルを配信する方式で、稼働中に勝手にモデルを書き換える機能ではない。
 
-## Market and deck variety
+## 採用した変更
 
-Every generated fixed/presented offer in an explicit Hard/Hell NPC challenge
-first draws the configured probability. The favored branch samples 32 legal
-candidates, evaluates NPC inventory and public opposing evidence, penalizes recent
-offers and redundant ownership, and samples from eight top alternatives. The
-other branch remains uniform. Fixed-market depletion and Market Crisis use the
-same director. Both players still see and buy from the same market; card effects,
-prices, die outcomes, and human draws are not separately manipulated.
+- 普通にも先読みを導入し、18%の意図的な悪手を廃止した。
+  簡単の45%の悪手設定は維持した。
+- 難しい・ヘルは勝ち切る手順の探索量を増やし、最終候補では従来の
+  4半ターンに加えて、両難易度とも6半ターン先まで軽量に展開する。
+  時間に余裕がある場合は、難しいもヘルと同じ候補数・仮想局面数を使う。
+  上位2段階の違いはマーケット補正とする。
+  近い局面35%・遠い局面65%で評価し、将来の不確実なマーケットだけに依存しない。
+- 本番のNPC手番は90秒制限を維持し、残り45秒未満では上位2段階も短い先読みへ切り替える。
+  長期戦で毎手の深い探索に時間を使い切り、実行できる行動を残す問題を抑える。
+  難易度・市場補正・報酬は変えず、次の手番では時間に応じて深い探索へ戻る。
+  記録した重い局面で、実際のGameRoom経路が約0.24秒で短い探索の合法手を採用することを検証した。
+- 8,000試合・136,054局面から27特徴の勝敗評価モデルを学習した。
+  試合単位で分離した13,818検証局面で、log lossは **0.499924 → 0.486732**、
+  Brier scoreは **0.167321 → 0.161940** に改善した。いずれも小さい方がよい。
+- 条件付きクエストの購入・マーケット評価に、達成に必要な構築を反映した。
+  40ダメージを受けるクエストでは体力と回復手段を見て、シールドは達成余力に数えない。
+  城・種族・アサシン・腐敗・回復・モンスター不在のクエストも、対応する構築で評価する。
+- 雫を消費する召喚は、既に持つ同名の未召喚カードに必要な雫も予約して評価する。
+  同じ雫を各カードで重複して見込み、使えないダークエルフ等を買い込む問題を修正した。
+  場のモンスターは既に支払い済みとして扱い、十分な供給があれば追加購入を許す。
+  最初の1枚は従来の条件評価と二重に減点せず、別のフィニッシャーへの切り替えも許す。
+  最初の1枚の評価一致は5種×4資源量の20条件で検証した。
+- 傭兵術は対応する傭兵を持つ場合に評価し、重複しない効果の買い増しを抑える。
+  傭兵がいないのに3枚を買い込んだ開発対戦ログを受け、未所持・所持・展開済みを検証した。
+- 未知の相手の構築を予測するモデルをNPCの採用デッキ一覧から独立させた。
+  1構築の差し替えで他のNPCの判断まで変わる結合を解消した。
+  検証済みの予測内容との一致は1,950観測状態で確認した。
+- 本番のデッキ巡回はユーザー・難易度ごとにDurable Objectへ保存する。
+  全構築を一巡してから再抽選し、一巡の境界でも同じ構築を連続させない。
+  ローカル対戦ではアプリの現在のセッション内で巡回する。
 
-The probabilities describe a **sampling branch per generated card**, not the
-fraction of all cards guaranteed to benefit the NPC, and not a win probability.
-The preferred choices depend on the current inventory, public board and history.
-Random sampling and recent-offer penalties avoid a scripted repeating combo.
-Cards may still recur naturally. A shuffled deck bag uses every strategy once
-before repeating and prevents a repeat across cycle boundaries. Server bags are
-persisted per user/difficulty, with idempotent request receipts. Offline bags last
-for the current application session.
+### 採用構築
 
-## Reproduction
+| 難易度 | 構築 |
+| --- | --- |
+| 簡単 | 基礎エルフ |
+| 普通 | ゴブリン、腐食、城・回復、マナ加速 |
+| 難しい・ヘル | ゴブリン、腐食、城・回復、世界樹・エルフ制圧、魔法制圧、リフト、腐食＋ゴブリン混成 |
 
-`ml/bot-strength/train-difficulty.cjs` supports `select`, `train`, and `holdout`.
-`BOT_LAB` selects the artifact directory; `JOBS` controls worker threads.
-`FAMILIES_FILE` supplies an optional alternative family search space. Every output
-requires a fresh directory/file, so prior evidence is not silently replaced.
-The engine/policy module is frozen before a run. Selection seeds, finalist seeds,
-value-training seeds, and holdout seeds occupy distinct ranges. Each game uses the
-actual reducer, legal actions, and public-information observations. The value
-model's validation split is by whole game, never randomly separated positions
-from the same game. Human target rates are not training labels.
+具体的なカード枚数は `client/src/shared/botDecks.ts` と
+[evidence/final-roster.json](evidence/final-roster.json) に保存した。
+構築候補の初回探索4,032試合、別系統2,304試合、リフト576試合、
+1枚交換・極端な配分を含む再探索6,048試合、制圧系の追加探索1,152試合、
+計 **14,112試合** を実行した。
+選定は軽量な公開情報ポリシーで行い、その後に実際の難易度ポリシーで比較した。
+構築探索の勝率を製品の難易度勝率とは扱わない。
 
-`ml/bot-strength/benchmark-difficulty.cjs` compares actual before/after policies
-against public-information scripted opponents on paired seats. Both versions use
-the same current engine. The before version has its original deck roster and
-unbiased markets; the after version has its complete difficulty configuration.
-This is a product comparison, not an isolated attribution of improvement to the
-value model. `PAIRS=49` covers the complete seven-deck/seven-opponent grid for the
-seven-deck rosters. Smaller runs have the coverage shown in their raw records.
+## マーケットの仕様
 
-## Verification boundaries
+明示的に開始した難しい・ヘルのNPC戦にのみ適用する。
+固定マーケット、提示マーケットの補充・更新、固定在庫の売り切れ補充、
+経済危機による更新が対象。
 
-- Card catalog equality and 20 games / 2,400 unbiased actions matched the frozen
-  pre-change engine exactly. The catalog contained 378 definitions including
-  non-collectible/generated cards.
-- Local market tests cover branch probabilities, determinism, legal pools,
-  diversity, shared offers, immutable reducer transitions, and hidden-information
-  independence.
-- The real workerd SQLite Durable Object test covers concurrent reservations,
-  idempotent retries, restart persistence, and user isolation.
-- Local GameRoom and authenticated HTTP-handler fixtures cover deck reservation,
-  provisioning, difficulty persistence, restoration, and authoritative BOT moves.
-  Local fixtures are not authenticated production play.
+1枚を生成するごとに、難しい50%・ヘル90%で有利な候補を選ぶ分岐へ入る。
+合法な候補からランダムに32枚を抽出し、NPCの構築との相性、
+相手に与える利益、直近36枚の重複、所有済み枚数を評価する。
+その上位8候補から重み付きで抽選する。残りの分岐は従来の一様抽選。
+
+この50%・90%は**分岐確率**であり、勝率や、出たカードが必ず有利になる確率ではない。
+構築・公開盤面・履歴に応じて候補が変わり、固定コンボを毎回供給する方式ではない。
+カードの自然な再登場は許容する。両プレイヤーは同じマーケットを共有し、
+人間も提示されたカードを購入できる。
+
+相手の手札・山札の実データは評価に使わず、公開された情報だけを使う。
+カードの効果・数値・価格、ダイスの分布、人間のドローに個別の優遇・不利は加えていない。
+PvP・ランク戦などNPC補正のないゲームは元の乱数列と状態遷移を維持する。
+
+180シードの検証では、固定マーケットの組み合わせは両難易度とも180種類。
+登場カードは難しい278種類、ヘル271種類だった（ゴブリン構築で測定）。
+設定の50/90分岐、合法プール、共有提示枠、決定性、非公開情報への非依存も検証した。
+
+### 先読み量の切り分け
+
+途中候補の構築・マーケット・評価モデルを固定し、難しいが呼ぶ探索だけを
+フル設定へ変更した14試合では、**9/14 → 12/14** に改善した。
+凍結した2モジュールの差分はこの呼び分け1行のみ。
+`hard-depth-control-*` と `hard-depth-ablation-*` に保存した。
+最終候補の構築全体の成績とは別の開発比較である。
+
+### 消費資源の途中案の比較
+
+途中案（別種類も含めた雫の全予約）を、7構築・同じシード43100000帯で比較した。
+補正なし525→522、難しい560→559、ヘル549→560勝相当（各896試合）。
+この途中案は最終採用していない。別カードへの転換を妨げるため、
+最終版は同名の追加購入だけに限定した。上記の数値を最終版の改善量とは扱わない。
+`evidence/dew-budget-matched.json` と前後の試合記録・ポリシーを保存した。
+
+## 不採用にした案
+
+- 候補抽出を32枚から96枚へ広げる案は、開発中の難しい比較で
+  20/28勝から18/28勝へ下がったため不採用。
+- 固定マーケットのカード別係数を追加学習する案は、
+  8,960試合の初回学習後、混成構築を含む最終構成で再検証した。
+  後者は7,680試合を再利用し1,280試合を追加した。
+  検証log lossが **0.591160 → 0.592736** と悪化したため不採用。
+- 難しい・ヘルのマナ加速構築は実際の先読み対戦で弱かったため、
+  実績のある腐食＋ゴブリン混成へ置き換えた。普通には残している。
+- ダンジョン最下層中心の構築は、相手が最大マナを6以下に保つと主力を出せない。
+  この依存を避け、追加探索で選んだ世界樹・エルフ型と魔法制圧型を採用した。
+- 共有マーケットの相手側評価を弱める案、抽選を上位1枚に絞る案は不採用。
+  相手の利益を同じ重みで引き、所有カードとの相性を加点し、上位8枚から抽選する。
+  比較値は `evidence/market-variants.json` に保存した。
+- 開発中の途中で停止した比較や、相手予測モデルが構築一覧に結合していた
+  比較は、最終結果の集計に含めない。
+
+## 機能・性能の検証
+
+- 時間制限への調整前に、本番向け回帰検査は **240/240項目通過**。
+  調整後のサーバー検査と型検査も通過し、リリースガード内で最終コミットの240項目を再検査する。
+
+- 378カード定義は比較元と一致。補正なし20シード（各最大120アクション）で
+  元エンジンと状態が完全一致した。実行数は `evidence/unbiased-parity.json` に記録した。
+- 計19枠すべてが合法で、各難易度内の構築はすべて異なる。38局面でWorkerと同期版の判断が一致。
+- 実際のworkerd＋SQLite Durable Objectで並行予約、リトライの冪等性、
+  再起動後の巡回・予約保存、ユーザー間の分離を確認。
+  本番と同じcompatibility date `2024-11-01` を使用した。
+- GameRoomと認証済みHTTPハンドラーのローカル検証で、19構築の予約・開始・
+  難易度の保存・復元・BOTの合法な応答を確認。
+- Chromeで全難易度の応答、重い2局面、キャンセル、再要求、古い応答の破棄、
+  Workerが使えない場合、15秒期限時の処理を確認。
+  重い局面は約9.61秒・9.40秒。処理中も画面側のタイマーが動き、ブラウザ例外は0件。
+  開発マシンの測定であり、全端末や本番サーバーの最大時間を保証するものではない。
+
+長期戦のターン17を再現した追加測定では、Nodeの1手にCPU約23.47秒・経過約22.06秒を要した。
+同じ局面を本番と同じcompatibility dateのローカルworkerdで動かすと、
+経過約16.55秒で同じ合法手を返した。計測環境は他の対戦試験も並行実行中。
+本番CPUの課金値・上限や、全局面の最大時間を測ったものではない。
+局面と結果は `evidence/cpu-heavy-state.json.gz`、`workerd-heavy.json` に保存した。
+
+NPC選択画面の説明文は現行の表示に合わせて更新した。5画面サイズで全4枚の
+説明が欠けず、開始ボタン・キーボード操作が使えることを確認した。
+アカウント・APIを置き換えたローカルUI検証で、実際の認証済み対戦ではない。
+参照UIは `271d09b6` の `client/src/screens/home.ts`、`client/src/styles/menuApproved.css`。
+起動元は本タスクの `bot-strength/LORE_TCG`、URLは `http://127.0.0.1:5279`。
+
+## 再現方法と記録
+
+`ml/bot-strength/train-difficulty.cjs` は `select`、`refine`、`train`、`holdout`、
+不採用案の `market` に対応する。`BOT_LAB`で実験用フォルダを指定し、
+`JOBS`で並列数を指定する。`FAMILIES_FILE`は探索する系統の定義。
+出力済みの結果を上書きしないよう、新しい出力フォルダを使う。
+
+`evidence/training-policy.cjs.gz` は実際の学習時ポリシー、
+`before.cjs.gz` は今回の比較元、`final-policy.cjs.gz` は最終候補。
+`ml/bot-strength/build.mjs` が生成する旧 `baseline.cjs` は2026-10-13の資料であり、
+今回の比較元ではない。
+
+学習を再現する場合は、training-policyを `candidate.cjs` に展開し、
+`selection-initial.json` を `select.json` として同じフォルダに置く。
+`GAMES=8000 node ml/bot-strength/train-difficulty.cjs train` を実行する。
+勝敗ラベルの試合記録と学習設定・モデル・検証指標はevidenceに保存した。
+
+最終比較は `benchmark-difficulty.cjs` を使用し、両版で同じv68エンジンを使う。
+beforeは元の構築・一様マーケット、afterは新しい難易度設定全体。
+相手のポリシーはbeforeに固定し、afterの構築変更でテスト相手まで変わらないようにした。
+自動対戦は計算を完了するまで待つため、本番の90秒ターンクロックや
+ブラウザの15秒探索期限を勝敗計算に再現していない。実運用では時間制限により
+探索途中の判断やターン終了が使われる場合があり、この成績を実運用勝率とも扱わない。
+1組につき先後を入れ替える。`PAIRS=7` は各構築に1系統の相手を割り当てる小規模比較。
+`PAIRS=49` で7構築×7相手の全組み合わせになる。
+学習と構築選定のシードは比較試験から分離した。
+41100000帯・41200000帯は調整の判断にも使った開発比較であり、独立検証とは呼ばない。
+構築選定・消費資源修正後の広い検証には新しい46100000帯を使用した。
+
+## 最終候補の開発比較と独立シード検証
+
+**難易度アルゴリズムを時間無制限で動かした比較。対人勝率ではない。**
+
+| 難易度 | 更新前 | 更新後 |
+| --- | ---: | ---: |
+| 簡単 | 1/14（7.1%） | 1/14（7.1%） |
+| 普通 | 2/14（14.3%） | 8/14（57.1%） |
+| 難しい | 12/14（85.7%） | 13/14（92.9%） |
+| ヘル | 13/14（92.9%） | 12/14（85.7%） |
+
+相手は固定した公開情報ベースの軽量ポリシー。各難易度14試合ずつで、
+7系統の相手と先後を入れ替えた。シード41100000〜41100006は調整にも使った。
+構築・購入・マーケット・時間無制限の探索を組み合わせた比較であり、
+モデル単独の改善量ではない。小標本と限定した組み合わせから一般の勝率を断定しない。
+
+**先読みする強敵への追加比較**
+
+| 難易度 | 更新前 | 更新後 |
+| --- | ---: | ---: |
+| 難しい | 6/14（42.9%） | 13/14（92.9%） |
+| ヘル | 7/14（50.0%） | 11/14（78.6%） |
+
+相手側は更新前の難しいポリシーを凍結して使用。シード41200000〜41200006。
+通常の軽量相手との試験と混ぜずに評価する。相性の弱点や負ける試合は残り、
+すべての対戦で更新前より強い、または人間がほぼ勝てないとは証明できていない。
+
+**構築の広い検証**
+
+7構築×8相手×8シード×先後×補正なし／難しい／ヘル = 2,688試合。
+これは両側を軽量ポリシーで動かした構築・マーケットの検証で、実製品の難易度勝率ではない。
+構築選定後の未使用シード46100000帯。引き分けは0.5勝相当とする。
+
+| 構築 | 補正なし | 難しい補正 | ヘル補正 |
+| --- | ---: | ---: | ---: |
+| goblin | 92/128（71.9%） | 103/128（80.5%） | 102/128（79.7%） |
+| decay | 84/128（65.6%） | 96/128（75.0%） | 79/128（61.7%） |
+| fortress | 75/128（58.6%） | 77/128（60.2%） | 67/128（52.3%） |
+| dew_control | 56.5/128（44.1%） | 70/128（54.7%） | 90/128（70.3%） |
+| fire_control | 76/128（59.4%） | 77/128（60.2%） | 69/128（53.9%） |
+| rift | 57/128（44.5%） | 64/128（50.0%） | 68/128（53.1%） |
+| mixed_rally | 69/128（53.9%） | 84/128（65.6%） | 79/128（61.7%） |
+
+全体の集計は `holdout-summary.json` に保存した。各補正はカード候補の評価に基づく確率であり、
+全構築で勝率が改善することや、90%補正が50%補正より高い勝率になることは保証しない。
+
+上記2,856試合はすべて終局し、無効手による停止は0件。
+beforeの84試合は同じエンジン動作を確認した先行比較から再利用し、afterの84試合は最終候補で全て再実行した。
+開発途中の比較は `development-*` として別保存した。
