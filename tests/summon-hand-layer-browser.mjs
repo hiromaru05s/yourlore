@@ -21,7 +21,7 @@ try{
   for(const name of css)await import('/src/styles/'+name+'.css');
   const E=await import('/src/shared/engine.ts'),C=await import('/src/shared/cards.ts'),A=await import('/src/ui/anim.ts');
   const {BaseController}=await import('/src/game/controller.ts');
-  class Controller extends BaseController{submit(){} }
+  class Controller extends BaseController{submit(action){qa.actions.push(action);} }
   const ctl=new Controller(document.getElementById('app'),0,{onHome(){},onRematch(){}});
   (await import('/src/ui/layout.ts')).startBoardLayout();
   (await import('/src/i18n.ts')).setLang('ja');
@@ -30,13 +30,13 @@ try{
    const g=E.createGame({mode:'bot',seed:77,starting:owner,p0:{id:'a',name:'YOU'},p1:{id:'b',name:'OPP'}}).state;
    g.turn=3;g.cur=owner;g.pending=null;
    for(const [s,p]of g.players.entries()){
-    p.openingDrawReady=false;p.field=[];p.enchants=[];p.quests=[];p.traps=[];p.mana=p.maxMana=30;p.hp=80;
+    p.openingDrawReady=false;p.field=[];p.enchants=[];p.quests=[];p.traps=[];p.mana=p.maxMana=30;p.dew=4;
     p.hand=[id,'M2','ND2','M2','ND2'].map((c,i)=>({...C.DB[c],uid:`hand-${s}-${i}`}));
    }
    ctl.state=g;ctl.introShown=true;ctl.view.render(g);document.getElementById('app').classList.remove('opening-pending');
    return g;
   };
-  window.qa={ctl,A,C,E,reset,g:reset(),done:false};
+  window.qa={ctl,A,C,E,reset,g:reset(),done:false,actions:[]};
   // Ask the browser for paint order at an actual hand card. Temporarily enable
   // hit testing on a fullscreen effect so pointer-events:none cannot hide it
   // from elementsFromPoint. Restore the original style immediately.
@@ -65,6 +65,9 @@ try{
    assert(order.hand>=0&&order.effect>order.hand,'Expanded hand must paint above summon: '+JSON.stringify(order));
    assert.equal(order.stage,'6','Board contents must retain their stacking context above the table');
    assert.equal(await page.locator('.game.hand-open').count(),1);
+   await page.evaluate(()=>{qa.ctl.view.setHandOpen(false);qa.ctl.view.setHandOpen(true);});
+   const reopened=await page.evaluate(cls=>qa.order(document.querySelector('.'+cls)),layerName);
+   assert(reopened.hand>=0&&reopened.effect>reopened.hand,'Reopened hand must stay above active summon');
    await page.screenshot({path:path.join(out,`${viewport.width}-${owner}-${id}-summon.png`)});
    // Opening a modal during the same summon must still cover the hand.
    await page.evaluate(async()=>{
@@ -84,6 +87,23 @@ try{
    await page.evaluate(()=>qa.ctl.view.setHandOpen(true));
    assert.equal(await page.locator('#hand .card').count(),owner===0?4:5);
    checks.push({viewport,id,owner,order,modalOrder,complete:true});
+  }
+  // Reparenting must preserve pointer capture and the existing drag-to-play
+  // handler, including one gesture that expands the compact hand and plays.
+  for(const open of [false,true]){
+   await page.evaluate(open=>{qa.g=qa.reset();qa.actions=[];qa.ctl.view.setHandOpen(open);},open);
+   await page.waitForTimeout(250);
+   const card=page.locator('#hand .card').first(),box=await card.boundingBox();
+   await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();
+   await page.mouse.move(viewport.width/2,viewport.height*.55,{steps:12});
+   await page.waitForSelector('.drag-ghost--hand');
+   const dragZ=await page.locator('.drag-ghost--hand').evaluate(n=>getComputedStyle(n).zIndex);
+   assert(Number(dragZ)>145);
+   await page.mouse.up();await page.waitForFunction(()=>qa.actions.length>0);
+   assert.equal(await page.evaluate(()=>qa.actions[0].type),'play');
+   assert.equal(await page.evaluate(()=>qa.actions[0].sourceUid),'hand-0-0');
+   assert.equal(await page.locator('.drag-ghost--hand').count(),0);
+   checks.push({viewport,dragFromOpen:open,submitted:true});
   }
  }
  assert.deepEqual(errors,[]);
