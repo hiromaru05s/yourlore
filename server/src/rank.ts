@@ -1,3 +1,4 @@
+import {rankedPurchases} from './rankedProfile';
 // ============================================================
 // LORE server — ranked ladder.
 //   · Monthly seasons keyed "YYYY-MM" (UTC). Rollover is LAZY:
@@ -161,14 +162,16 @@ export async function handleRank(env: Env, req: Request, path: string, user: Ses
     const limit = Math.min(Math.max(Number.isFinite(rawLimit) ? rawLimit : LB_DEFAULT_LIMIT, 1), LB_MAX_LIMIT);
     const offset = Math.max(Number.isFinite(rawOffset) ? rawOffset : 0, 0);
     const rows = await env.DB.prepare(
-      `SELECT r.user_id, r.mmr, r.wins, r.losses, u.display FROM ratings r JOIN users u ON u.id = r.user_id
+      `SELECT r.user_id, r.mmr, r.wins, r.losses, u.display,u.stats_public FROM ratings r JOIN users u ON u.id = r.user_id
        WHERE r.season = ? AND ${rankedEligibilitySql} ORDER BY r.mmr DESC, r.updated_at ASC, r.user_id ASC LIMIT ? OFFSET ?`
-    ).bind(season, limit, offset).all<{ user_id: string; mmr: number; wins: number; losses: number; display: string }>();
+    ).bind(season, limit, offset).all<{ user_id: string; mmr: number; wins: number; losses: number; display: string; stats_public:number }>();
     const totalRow = await env.DB.prepare(`SELECT COUNT(*) AS total FROM ratings r JOIN users u ON u.id=r.user_id WHERE r.season = ? AND ${rankedEligibilitySql}`)
       .bind(season).first<{ total: number }>();
+    const purchases=await rankedPurchases(env,(rows.results??[]).filter(r=>r.stats_public).map(r=>r.user_id));
     const entries = (rows.results ?? []).map((r, i) => ({
       userId: r.user_id, rank: offset + i + 1, display: r.display, mmr: r.mmr, wins: r.wins, losses: r.losses,
       tier: tierWithGm(r.mmr, offset + i + 1),
+      purchases:purchases.get(r.user_id)??{sampleGames:0,cards:[]},
     }));
     return json(env, { season, total: totalRow?.total ?? 0, entries });
   }

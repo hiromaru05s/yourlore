@@ -741,7 +741,7 @@ export class GameRoom {
       }
       if (room.ranked) {
         const outcome = await settleRanked(this.env,matchId,room.players[0].id,room.players[1].id,winner,room.resultAt);
-        await recordRankedDecks(this.env,room.players,room.resultAt);
+        await recordRankedDecks(this.env,room.players,room.resultAt,matchId);
         room.rankOutcome=outcome;
         for (const side of [0,1] as Side[]) {
           const ws=this.sockFor(side), change=outcome[room.players[side].id];

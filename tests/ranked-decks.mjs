@@ -45,6 +45,7 @@ try {
   const count=()=>roomEnv.DB.prepare('SELECT COUNT(*) AS n FROM ranked_recent_decks').first();
   const expected=ranked&&ready.every(Boolean)?2:0;
   assert.equal((await count()).n,expected);
+  assert.equal((await roomEnv.DB.prepare('SELECT COUNT(*) AS n FROM ranked_match_decks').first()).n,expected,'completed ranked room records per-match starting decks');
   await room.settleResult();assert.equal((await count()).n,expected,'retry never duplicates');
  }
  await completedRoom(true);await completedRoom(false);await completedRoom(true,[true,false]);

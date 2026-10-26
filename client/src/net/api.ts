@@ -74,6 +74,7 @@ export interface RankInfo {
 }
 export interface RankedDeck { cards: string[]; lastUsedAt: number }
 export interface LbEntry {
+  purchases?:import('../shared/rankedProfile').PurchaseStats;
   userId: string;
   rank: number;
   display: string;
@@ -181,6 +182,7 @@ export const api = {
 };
 
 export interface Profile {
+  ranked?:import('../shared/rankedProfile').RankedProfile;
   id: string; display: string; avatar: string | null; badge: string | null; created_at: number; self: boolean;
   private?: boolean;
   stats_public?: boolean;

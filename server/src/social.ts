@@ -1,3 +1,4 @@
+import {rankedProfile} from './rankedProfile';
 import {parseUsername} from '../../client/src/shared/username';
 import {medalState} from './medals';
 import {starterCollection,constrainDeckStore} from '../../client/src/shared/collection';
@@ -72,6 +73,7 @@ async function profileOf(env: Env, targetId: string, viewer: SessionUser | null)
     rank,
     recent,
     byMode: await byModeOf(env, u.id),
+    ranked: await rankedProfile(env,u.id),
     ...(self ? {
       medals: await medalState(env, u.id, Date.now(), true),
       credits: u.credits,

@@ -219,6 +219,7 @@
     "tests/starter-rift-rework.mjs",
     "tests/starter-rift-server.mjs",
     "tests/ranked-decks.mjs",
+    "tests/ranked-profile.mjs",
     "tests/rift-ores.mjs",
     "tests/rift-ores-server.mjs",
     "tests/balance-caps.mjs",

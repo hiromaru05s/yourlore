@@ -1,0 +1,25 @@
+{
+  "origin": "http://127.0.0.1:5568",
+  "api": "synthetic fixtures",
+  "widths": [
+    1440,
+    1070,
+    820,
+    390,
+    320
+  ],
+  "checks": [
+    "aligned columns",
+    "plain name hover",
+    "tooltip hover and keyboard",
+    "ranked stats include draws",
+    "three repeated decks",
+    "card inspection",
+    "shared friends profile",
+    "empty and private data",
+    "mobile modal overflow",
+    "focus restore",
+    "closed modal late response"
+  ],
+  "errors": []
+}
