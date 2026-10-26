@@ -1,0 +1,12 @@
+{
+  "scope": "15 unique preloaded modular print assets plus the four old base lossless frames; excludes card illustrations and browser compositor surfaces",
+  "before": {
+    "transferBytes": 7572102,
+    "decodedRgbaBytes": 38273024
+  },
+  "after": {
+    "transferBytes": 2652924,
+    "decodedRgbaBytes": 41396224
+  },
+  "physicalDeviceFps": "not measured"
+}
