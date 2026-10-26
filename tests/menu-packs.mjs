@@ -25,7 +25,7 @@ try{
  entries[0].scope='duel';for(const e of entries.slice(1))e.scope='menu';entries[3].media='narrow';
  const scoped=await import(dir+'/module.mjs?scoped');
  await scoped.prepareMenuCache(()=>{},new AbortController().signal,'duel');
- assert.deepEqual(calls,[entries[0].url],'Duel admission must not fetch an unrelated menu pack');
+ assert.deepEqual(calls,[],'Duel admission binds the manifest without fetching the card archive');
  assert.equal(binding.length,entries.length,'Binding and pruning still protect every scope and viewport variant');
  calls.length=0;await scoped.prepareMenuCache(()=>{},new AbortController().signal,[entries[1].url+'?v=current']);
  assert.deepEqual(calls,[entries[1].url],'Selected page fetches only its requested originals');

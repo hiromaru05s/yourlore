@@ -36,6 +36,6 @@ try{
  cache.keys=()=>new Promise(()=>{});
  const duelTimer=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>duelTimer(fn,ms<=5000?5:ms,...args);
  const stalledDuelScan=await import(dir+'/module.mjs?stalled-duel-scan'),duelProgress=[];
- try{const before=downloads;await stalledDuelScan.prepareMenuCache((a,b)=>duelProgress.push([a,b]),new AbortController().signal,'duel');assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(duelProgress,[[0,1],[1,1]]);assert.equal(downloads,before);}finally{cache.keys=keys;globalThis.setTimeout=duelTimer;}
+ try{const before=downloads;await stalledDuelScan.prepareMenuCache((a,b)=>duelProgress.push([a,b]),new AbortController().signal,'duel');assert.equal(document.documentElement.dataset.menuCache,'ready');assert.deepEqual(duelProgress,[[1,1]]);assert.equal(downloads,before,'Duel admission must not scan or prefetch the archive');}finally{cache.keys=keys;globalThis.setTimeout=duelTimer;}
  console.log('PASS: stalled cache scan falls back to original network assets; stale-byte rejection, retry recovery, persistent cache hit without transfer, cancellation, and recovery after slow worker activation');
 }finally{await fs.rm(dir,{recursive:true,force:true});}

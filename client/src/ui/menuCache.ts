@@ -1,7 +1,6 @@
 import {fetchAssetPack} from './assetTransfer';
 import {withDeadline} from '../net/deadline';
 import {decodeAsset} from './imageAssets';
-import {assetScope} from './menuAssetScope';
 declare const __LORE_MENU_MANIFEST__: string;
 type Entry={scope?:'menu'|'duel'|'font';url:string;hash:string;bytes:number;type?:string;media?:'narrow'|'wide';pack?:number;offset?:number};
 type Manifest={entries:Entry[];packs?:{url:string;bytes:number}[]};
@@ -40,8 +39,8 @@ async function bind(entries:Entry[]):Promise<void> {
   navigator.serviceWorker.controller?.postMessage({type:'LORE_MENU_BIND',entries},[channel.port2]);
  });
 }
-/** Preload original compressed files, not hundreds of decoded full-size bitmaps.
- * Content hashes reuse unchanged files across deploys and reject stale CDN data. */
+/** Bind the current build before a duel. Bulk preloading is reserved for explicit
+ * menu scopes; the duel gate separately prepares code, visible board and deck. */
 export async function prepareMenuCache(progress:(done:number,total:number)=>void,signal:AbortSignal,scope?:'duel'|readonly string[]):Promise<void> {
  const cacheCheckEnds=performance.now()+DUEL_CACHE_CHECK_MS;
  const inspect=<T>(task:Promise<T>,regularLimit?:number):Promise<T>=>scope==='duel'
@@ -62,10 +61,23 @@ export async function prepareMenuCache(progress:(done:number,total:number)=>void
  let inventory:Manifest;
  try {inventory=await inspect(inventoryRequest);}
  catch(error){if(scope!=='duel')throw error;await prepareWithoutStorage(progress,signal,scope);return;}
+ if(scope==='duel'){
+  if(enabled){
+   try{
+    await inspect(bind(inventory.entries));
+    if(signal.aborted)return;
+    document.documentElement.dataset.menuCache='ready';
+    progress(1,1);
+    return;
+   }catch{registration=undefined;}
+  }
+  await prepareWithoutStorage(progress,signal,scope);
+  return;
+ }
  const {packs=[]}=inventory,narrow=matchMedia('(max-width:700px)').matches;
  const compatible=inventory.entries.filter(e=>!e.media||e.media===(narrow?'narrow':'wide'));
  const wanted=Array.isArray(scope)?new Set(scope.map(url=>new URL(url,location.href).pathname)):undefined;
- const entries=compatible.filter(e=>scope==='duel'?(e.scope??assetScope(e.url))==='duel':!wanted||wanted.has(e.url));
+ const entries=compatible.filter(e=>!wanted||wanted.has(e.url));
  if(!enabled){registration=undefined;await prepareWithoutStorage(progress,signal,scope,entries);return;}
  // Persist this client's binding before loading, including across worker restarts.
  let cache:Cache,present:Set<string>;
