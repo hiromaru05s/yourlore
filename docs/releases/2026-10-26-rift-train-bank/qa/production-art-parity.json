@@ -1,0 +1,36 @@
+{
+  "origin": "https://yourlore.xyz",
+  "checkedAt": "2026-10-26T15:02:27.721Z",
+  "assets": [
+    {
+      "file": "art/cards/MAGIC_TRAIN.webp",
+      "bytes": 683830,
+      "sha256": "a79cf9035ff8183c2e93ad8b39e9a1904edbb9a6d1822239d2bdfbc097654325"
+    },
+    {
+      "file": "art/cards/MAGIC_BANK.webp",
+      "bytes": 534146,
+      "sha256": "c856802edc08927693f338c7f35912fcb3c890b6c5ed35cd98c041ee5149b0e4"
+    },
+    {
+      "file": "art/cards-sm/MAGIC_TRAIN.webp",
+      "bytes": 42766,
+      "sha256": "9793183fc14f1d1be7dca9337a2eca6f11d264adc063fa848615095371c7675f"
+    },
+    {
+      "file": "art/cards-sm/MAGIC_BANK.webp",
+      "bytes": 34396,
+      "sha256": "653cd410bccc70365fdac5d61165a29d41b50325053bff73b3bcf50aa615283e"
+    },
+    {
+      "file": "art/cards-xs/MAGIC_TRAIN.webp",
+      "bytes": 12226,
+      "sha256": "48d7f5fce427a2ea9fd16efb63eefc4454c6793bcb0dde8f5a250652bfedac19"
+    },
+    {
+      "file": "art/cards-xs/MAGIC_BANK.webp",
+      "bytes": 9450,
+      "sha256": "ed86f0e6ce20fd9f32d8c949e31e78bb4c4f60d391d6c3d11a8c5bab753e842a"
+    }
+  ]
+}

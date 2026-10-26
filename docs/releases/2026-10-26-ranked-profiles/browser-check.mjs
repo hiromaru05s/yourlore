@@ -20,6 +20,14 @@ if(path==='/api/rewards/tutorial')return {keys:[],offered:true};
 if(path==='/api/rewards/progression')return {credits:100,resetsAt:Date.now()+86400000,online:0,ranked:0,daily:{quest:{kind:'heal',reward:300,target:40},progress:0,claimed:false},bot:{}};
 return {ok:true,keys:[],items:[],friends:[],incoming:[],outgoing:[],challenges:[]};});
 const ready=async()=>{await p.waitForFunction(()=>![...document.querySelectorAll('.game-loading')].some(e=>e.getBoundingClientRect().width>0),{},{timeout:90000});await p.evaluate(async()=>{const i=new Image();i.src='/art/ui/lore-panel-azure-cut.png';await i.decode();await document.fonts.ready;});};
+const checkHero=async()=>{
+ const bounds=await p.locator('.pf-rank-header').evaluate(el=>{
+  const identity=el.querySelector('.pf-identity').getBoundingClientRect(),rank=el.querySelector('.rp-rank').getBoundingClientRect();
+  return {identityRight:identity.right,rankLeft:rank.left,overflow:el.scrollWidth>el.clientWidth,emblem:el.querySelector('.rank-emblem').getBoundingClientRect().width,score:parseFloat(getComputedStyle(el.querySelector('.rp-rating strong')).fontSize)};
+ });
+ assert(bounds.rankLeft>=bounds.identityRight,'rank to right of identity');assert.equal(bounds.overflow,false);assert(bounds.emblem>=100&&bounds.score>=38,'prominent emblem and MMR');
+ assert.equal(await p.locator('.rp-rank').count(),1,'rank only appears in header');
+};
 try{
 await p.goto(origin);await p.locator('#startup').waitFor({state:'hidden',timeout:90000});await ready();await p.locator('[data-nav=leaderboard]').evaluate(e=>e.click());await p.locator('.lb-profile-trigger').first().waitFor();await ready();
 assert.equal(await p.locator('.lb-deck-trigger,.ranked-deck-note').count(),0);assert(!(await p.locator('.menu-records').innerText()).includes('TOP 100の使用デッキ'));
@@ -32,7 +40,7 @@ for(const width of [1440,1070,820,390,320]){
 await p.setViewportSize({width:1440,height:1000});const trigger=p.locator('.lb-profile-trigger').first();assert.equal(await trigger.evaluate(e=>getComputedStyle(e).borderImageSource),'none');await trigger.hover();assert.equal(await trigger.evaluate(e=>getComputedStyle(e).textDecorationLine),'underline');
 const icon=p.locator('.lb-purchases .purchase-card-icon').first();await icon.hover();await p.waitForTimeout(180);assert.equal(await icon.locator('[role=tooltip]').evaluate(e=>getComputedStyle(e).opacity),'1');await p.screenshot({path:out+'/tooltip.png'});await icon.focus();assert.equal(await icon.locator('[role=tooltip]').evaluate(e=>getComputedStyle(e).visibility),'visible');
 await trigger.click();await p.locator('.ranked-profile .rp-deck-cards').first().waitFor();assert.equal(await p.locator('.rp-deck').count(),3);assert.equal(await p.locator('.rp-deck-cards .card').count(),27);assert.equal(await p.locator('.rp-stats').innerText(),'10\nランク試合数\n6\nランク勝利数\n3\nランク敗北数\n60%\n勝率');
-assert((await p.locator('.rp-rank').innerText()).includes('1036'));await p.evaluate(async()=>{
+assert((await p.locator('.rp-rank').innerText()).includes('1036'));await checkHero();await p.evaluate(async()=>{
  const urls=new Set();for(const el of document.querySelectorAll('.ranked-profile-modal,.ranked-profile-modal *')){
   if(el instanceof HTMLImageElement&&el.src)urls.add(el.src);
   for(const pseudo of [null,'::before','::after']){const style=getComputedStyle(el,pseudo);for(const prop of ['backgroundImage','borderImageSource','maskImage'])for(const match of style[prop].matchAll(/url\(["']?([^"')]+)["']?\)/g))urls.add(match[1]);}
@@ -56,7 +64,7 @@ for(const mode of ['empty','private']){profileMode=mode;await p.locator('[data-p
 profileMode='full';await p.locator('[data-pf=a]').click();await p.locator('.rp-deck-cards').first().waitFor();
 for(const width of [1440,390,320]){
  await p.setViewportSize({width,height:844});await p.waitForTimeout(400);assert.equal(await p.locator('.ranked-profile-modal').evaluate(e=>e.scrollWidth>e.clientWidth),false);
- assert.equal(await p.locator('#pfClose').evaluate(e=>getComputedStyle(e).fontSize),'26px');const before=await p.locator('#pfClose').boundingBox();assert(before.width>=44&&before.height>=44);
+ assert.equal(await p.locator('#pfClose').evaluate(e=>getComputedStyle(e).fontSize),'26px');await checkHero();await p.screenshot({path:`${out}/profile-header-${width}.png`});const before=await p.locator('#pfClose').boundingBox();assert(before.width>=44&&before.height>=44);
  await p.locator('.profile-content').evaluate(e=>e.scrollTop=e.scrollHeight);await p.waitForTimeout(100);
  const after=await p.locator('#pfClose').boundingBox();assert(Math.abs(after.y-before.y)<1,'close stays fixed while profile scrolls');
  const x=after.x+after.width/2,y=after.y+after.height/2;
@@ -67,10 +75,10 @@ for(const width of [1440,390,320]){
 delay=500;await p.locator('[data-pf=a]').click();await p.locator('#pfClose').click();await p.waitForTimeout(650);assert.equal(await p.locator('.ranked-profile-modal').count(),0,'late response cannot resurrect modal');profileMode='self';delay=0;
 for(const width of [1440,390,320]){
  await p.setViewportSize({width,height:1000});await p.locator('.lounge-user').click();await p.locator('.profile-page-close').waitFor();await ready();await p.waitForTimeout(700);
- const btn=p.locator('.profile-page-close'),rect=await btn.boundingBox(),panel=await p.locator('.lounge-profile .tut').boundingBox();
+ await checkHero();const btn=p.locator('.profile-page-close'),rect=await btn.boundingBox(),panel=await p.locator('.lounge-profile .tut').boundingBox();
  assert(rect.width>=44&&rect.height>=44);assert(rect.x>panel.x+panel.width/2&&rect.y<panel.y+70,'page close in upper right');
  await p.screenshot({path:`${out}/profile-page-${width}.png`});await btn.click();await p.locator('.lounge-home').waitFor();
 }
 assert.deepEqual(errors,[]);
-await fs.writeFile(out+'/checks.json',JSON.stringify({origin,api:'synthetic fixtures',widths:[1440,1070,820,390,320],checks:['aligned columns','purchase column spacing','missing deck dates hidden','mixed deck contents aligned','plain name hover','tooltip hover and keyboard','ranked stats include draws','three repeated decks','card inspection','shared friends profile','empty and private data','mobile modal overflow','focus restore','closed modal late response','fixed close after scroll','profile page close returns home'],errors},null,2));console.log('PASS ranking/profile browser checks');
+await fs.writeFile(out+'/checks.json',JSON.stringify({origin,api:'synthetic fixtures',widths:[1440,1070,820,390,320],checks:['aligned columns','purchase column spacing','missing deck dates hidden','mixed deck contents aligned','plain name hover','tooltip hover and keyboard','ranked stats include draws','three repeated decks','card inspection','shared friends profile','empty and private data','mobile modal overflow','focus restore','closed modal late response','large rank and MMR right of identity','fixed close after scroll','profile page close returns home'],errors},null,2));console.log('PASS ranking/profile browser checks');
 }catch(e){await p.screenshot({path:out+'/failure.png'});console.log(errors);throw e;}finally{await b.close()}

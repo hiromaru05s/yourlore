@@ -1,4 +1,5 @@
 import {createWebGLRenderer} from './webglRenderer';
+import {recoverDuelScene} from './duelSceneRecovery';
 import {changesDuelFurniture} from './duelSceneChanges';
 import {createEquippedCosmetics} from './cosmetics/runtime';
 import {applyFurnitureSkin} from './cosmetics/baseFurniture';
@@ -21,6 +22,9 @@ import {boardLens,cardUnit,layoutRect,projectBoardDOM,clearBoardProjection,scree
 type Item={group:T.Group;key:string;element:HTMLElement;market:boolean;supply:boolean;pile?:PileModel;count?:number;entered?:number;surface?:T.Texture;disposeCosmetic?:()=>void};
 const clamp=(n:number)=>Math.min(1,Math.max(0,n));
 export function mountDuelScene(root:HTMLElement):()=>void {
+  return recoverDuelScene(root,lost=>createDuelScene(root,lost));
+}
+function createDuelScene(root:HTMLElement,onContextLost:()=>void):()=>void {
   const cosmeticPreview=getCosmeticPreview(root)??createEquippedCosmetics(root);
   const rasterRatio=()=>cosmeticPreview?.pixelRatio??boardPixelRatio(innerWidth,innerHeight);
   let renderer:T.WebGLRenderer;
@@ -234,11 +238,14 @@ export function mountDuelScene(root:HTMLElement):()=>void {
       root.dataset.sceneReady='true';
     }
   }
-  const lost=(event:Event)=>{event.preventDefault();dispose();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
+  // Disposing permanently here stranded the still-running match on an empty
+  // reading-board layout. Rebuild both renderers and GPU-owned targets instead.
+  const lost=(event:Event)=>{event.preventDefault();cancelAnimationFrame(frame);onContextLost();};canvas.addEventListener('webglcontextlost',lost);flightCanvas.addEventListener('webglcontextlost',lost);
   function dispose(){
     if(dead)return;dead=true;disposeOpening();root.dataset.tableState='fallback';motion.dispose();disposeObject(flightPrograms);flightPlaceholder?.dispose();cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('lore:layout',onLayout);window.removeEventListener('lore:render-density',onDensity);window.removeEventListener('lore:summon-dust',onDust);window.removeEventListener('lore:buff-flow',onFlow);canvas.removeEventListener('webglcontextlost',lost);flightCanvas.removeEventListener('webglcontextlost',lost);
     items.forEach(item=>removeItem(item));releaseRetired();cosmeticPreview?.dispose();textures.forEach(t=>t.dispose());table.dispose();furniture.dispose();widgets.dispose();disposeFormationBloom();keyLight.shadow.dispose();disposeObject(dustScene);dustMap.dispose();environment.dispose();flightEnvironment.dispose();cachedBoard.dispose();presentQuad.geometry.dispose();presentMaterial.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();flightRenderer.dispose();flightRenderer.forceContextLoss();flightCanvas.remove();
     root.querySelectorAll<HTMLElement>('.pile').forEach(el=>{el.classList.remove('pile--3d-ready');delete el.dataset.furniture;el.querySelector('.pile-draw-anchor')?.remove();});clearBoardProjection(root);root.classList.remove('duel-webgl','market-model-ready','supply-model-ready');
+    delete root.dataset.sceneReady;root.dataset.tableState='fallback';root.dataset.widgetsReady='fallback';
   }
   frame=requestAnimationFrame(render);return dispose;
 }

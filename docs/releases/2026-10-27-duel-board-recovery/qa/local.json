@@ -1,0 +1,106 @@
+{
+  "origin": "http://127.0.0.1:5589",
+  "results": [
+    {
+      "width": 1902,
+      "recoveries": [
+        {
+          "selector": ".duel-objects-3d",
+          "sameState": true,
+          "root": {
+            "readingTurn": "player",
+            "boardRendered": "true",
+            "atelierSet": "default",
+            "atelierSide": "self",
+            "thickness": "1",
+            "preloadedImages": "72",
+            "tableState": "ready",
+            "widgetsReady": "true",
+            "sceneRecoveries": "1",
+            "turnlight": "porcelain",
+            "sceneReady": "true"
+          },
+          "boards": 1,
+          "flights": 1,
+          "deck": true,
+          "mana": "20"
+        },
+        {
+          "selector": ".board-flight-canvas",
+          "sameState": true,
+          "root": {
+            "readingTurn": "player",
+            "boardRendered": "true",
+            "atelierSet": "default",
+            "atelierSide": "self",
+            "thickness": "1",
+            "preloadedImages": "72",
+            "sceneRecoveries": "2",
+            "tableState": "ready",
+            "widgetsReady": "true",
+            "turnlight": "porcelain",
+            "sceneReady": "true"
+          },
+          "boards": 1,
+          "flights": 1,
+          "deck": true,
+          "mana": "20"
+        }
+      ],
+      "postRecoveryCombat": true,
+      "destroyCancelsRetry": true,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "recoveries": [
+        {
+          "selector": ".duel-objects-3d",
+          "sameState": true,
+          "root": {
+            "readingTurn": "player",
+            "boardRendered": "true",
+            "atelierSet": "default",
+            "atelierSide": "self",
+            "thickness": "1",
+            "preloadedImages": "72",
+            "tableState": "ready-low",
+            "widgetsReady": "true",
+            "sceneRecoveries": "1",
+            "turnlight": "porcelain",
+            "sceneReady": "true"
+          },
+          "boards": 1,
+          "flights": 1,
+          "deck": true,
+          "mana": "20"
+        },
+        {
+          "selector": ".board-flight-canvas",
+          "sameState": true,
+          "root": {
+            "readingTurn": "player",
+            "boardRendered": "true",
+            "atelierSet": "default",
+            "atelierSide": "self",
+            "thickness": "1",
+            "preloadedImages": "72",
+            "sceneRecoveries": "2",
+            "tableState": "ready-low",
+            "widgetsReady": "true",
+            "turnlight": "porcelain",
+            "sceneReady": "true"
+          },
+          "boards": 1,
+          "flights": 1,
+          "deck": true,
+          "mana": "20"
+        }
+      ],
+      "postRecoveryCombat": true,
+      "destroyCancelsRetry": true,
+      "errors": []
+    }
+  ],
+  "boundary": "Real board/controller fixture, synthetic GPU loss; no authenticated match or physical-device verification."
+}

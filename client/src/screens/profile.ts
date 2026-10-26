@@ -111,8 +111,8 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     const experience=seekerLevel(app.user?.exp??0);
     body().innerHTML = `
       <section class="tut-sec pf-card">
-        <div class="pf-head">
-          <div class="pf-ava">${avatarHtml(p.avatar, p.display, 72)}</div>
+        <div class="pf-head pf-rank-header">
+          <div class="pf-identity"><div class="pf-ava">${avatarHtml(p.avatar, p.display, 72)}</div>
           <div class="pf-id">
             <div class="pf-name-row">
               <span class="pf-name" id="pfName">${esc(p.display)}</span>
@@ -120,13 +120,13 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
             </div>
             ${medalHtml(p.medals?.equipped ?? p.badge)}
             <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${t("mode.ranked")}`} · ${fmtDate(p.created_at)}~</div>
-          </div>
+          </div></div>
         </div>
       </section>
       ${p.self ? `<details class="tut-sec pf-experience"><summary>${t('home.seekerLevel')} ${experience.level} · ${experience.max?'MAX':`${experience.progress}/100 EXP`}</summary><p>${t('home.levelRule')}</p></details>` : ''}
       <div class="pf-ranked-content" data-ranked-profile></div>
     `;
-    renderRankedProfile(body().querySelector<HTMLElement>('[data-ranked-profile]')!,p);
+    renderRankedProfile(body().querySelector<HTMLElement>('[data-ranked-profile]')!,p,body().querySelector<HTMLElement>('.pf-rank-header')!);
 
     if (!p.self) return;
 
@@ -315,8 +315,8 @@ export async function showProfileModal(userId: string): Promise<void> {
   const load=async()=>{
     try{
       const p=await api.profile(userId);if(!ov.isConnected)return;
-      content.innerHTML=`<div class="pf-head">${avatarHtml(p.avatar,p.display,64)}<div class="pf-id"><div class="pf-name">${esc(p.display)}</div>${medalHtml(p.badge)}</div></div><div data-ranked-profile></div>`;
-      renderRankedProfile(content.querySelector<HTMLElement>('[data-ranked-profile]')!,p);
+      content.innerHTML=`<div class="pf-head pf-rank-header"><div class="pf-identity">${avatarHtml(p.avatar,p.display,64)}<div class="pf-id"><div class="pf-name">${esc(p.display)}</div>${medalHtml(p.badge)}</div></div></div><div data-ranked-profile></div>`;
+      renderRankedProfile(content.querySelector<HTMLElement>('[data-ranked-profile]')!,p,content.querySelector<HTMLElement>('.pf-rank-header')!);
     }catch{
       if(!ov.isConnected)return;
       content.textContent=loungeText('プロフィールを読み込めませんでした。','Could not load the profile.','프로필을 불러오지 못했습니다.');

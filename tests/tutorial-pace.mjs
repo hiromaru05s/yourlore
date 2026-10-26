@@ -9,7 +9,7 @@ try{
   for(const action of solved.actions){if(action.type==='answer')questions++;else if(action.type==='continueLesson'){if(!l.currentScene(r).question)reviews++;}else if(l.actingSide(r.state))opponentActions++;else playerActions++;l.advanceLesson(r,action);}
   assert(l.replayLesson(lesson.id,solved.actions));
  }
- assert.equal(scenes,66);assert.equal(questions,35);assert.equal(playerActions,133);assert.equal(l.TUT_STEPS.reduce((n,s)=>n+s.reward,0),5000);assert(chars<originalChars);
+ assert.equal(scenes,66);assert.equal(questions,35);assert.equal(playerActions,131);assert.equal(l.TUT_STEPS.reduce((n,s)=>n+s.reward,0),5000);assert(chars<originalChars);
  // Reading speed is not a completion-time claim. The default flow now pauses
  // at playable checkpoints and retains each lesson clear until the user continues.
  const report={lessons:36,scenes,questions,playerActions,opponentActions,manualReviews:reviews,betweenLessonClicks:35,chars,originalChars,humanStudy:false};

@@ -11,7 +11,7 @@
 .shop-gacha-active .shop-categories{flex-shrink:0}
 .shop-gacha-active .shop-content{flex:1;min-height:0}
 .shop-gacha-active #shopGacha{height:100%}
-.gacha-page.gacha-table{position:relative;isolation:isolate;height:100%;overflow:hidden;background:transparent;color:#e5eaf0;container-type:size}
+.gacha-page.gacha-table{position:relative;isolation:isolate;height:100%;overflow:visible;background:transparent;color:#e5eaf0;container-type:size}
 .gacha-table-heading{position:absolute;top:15px;left:10px;right:10px;z-index:12;pointer-events:none}
 .lounge-content .gacha-table-heading h2{display:inline-block;max-width:100%;box-sizing:border-box;color:#f2ecdf;font:clamp(23px,2.8cqw,38px)/1.4 var(--serif,serif);letter-spacing:.08em;margin:0;padding:10px 40px 12px 16px;background:linear-gradient(90deg,#061525d9,#081729a6 70%,#08172900);text-shadow:0 2px 5px #020813}
 .gacha-table-fan{position:absolute;inset:70px 5% 145px 0;pointer-events:none}
@@ -77,3 +77,10 @@
  var(--lore-corner-cut) 0,calc(100% - var(--lore-corner-cut)) 0,100% var(--lore-corner-cut),100% calc(100% - var(--lore-corner-cut)),calc(100% - var(--lore-corner-cut)) 100%,var(--lore-corner-cut) 100%,0 calc(100% - var(--lore-corner-cut)),0 var(--lore-corner-cut),var(--lore-corner-cut) 0,
  calc(var(--lore-corner-cut) + 2px) 6px,calc(100% - var(--lore-corner-cut) - 2px) 6px,calc(100% - 6px) calc(var(--lore-corner-cut) + 2px),calc(100% - 6px) calc(100% - var(--lore-corner-cut) - 2px),calc(100% - var(--lore-corner-cut) - 2px) calc(100% - 6px),calc(var(--lore-corner-cut) + 2px) calc(100% - 6px),6px calc(100% - var(--lore-corner-cut) - 2px),6px calc(var(--lore-corner-cut) + 2px),calc(var(--lore-corner-cut) + 2px) 6px)}
 .shop-lineup-dialog header{position:sticky;top:6px;margin:6px 6px 0;z-index:10;background:#10243df2}
+
+/* The shared chamfer is the only crop for the illustration and card fan. */
+.selected-menu.lounge-shop .shop-gacha-active[data-shop-category=gacha] .tut-body,
+.selected-menu.lounge-shop .shop-gacha-active[data-shop-category=gacha] .tut-sec{overflow:visible}
+.shop-gacha-active[data-shop-category=gacha] .tut-sec{position:relative}
+.shop-gacha-active[data-shop-category=gacha] #collectionNotice{position:absolute;top:48px;right:0;z-index:16;max-width:70%;margin:0;padding:4px 8px;background:#071321e8;pointer-events:none}
+.shop-gacha-active[data-shop-category=gacha] #collectionRecovery{position:absolute;top:48px;left:0;z-index:17}
