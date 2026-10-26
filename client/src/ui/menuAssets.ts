@@ -26,7 +26,7 @@ export function menuAssetUrls():string[]{
   ...BOT_NPCS.map(n=>n.portrait),
   ...Object.keys({...DB,...STARTERS}).flatMap(id=>[artUrl.sm(id),artUrl.xs(id),artUrl.full(id)]),
   ...(['mon','spell','trap','quest','starter'] as const).flatMap(t=>[frameFor(t),frameFor(t,true),fieldFrameFor(t)]),
-  ...['attack','health','cost','plaque'].map(k=>`/art/biblion/modular/${k}-ui.webp`),
+  ...['attack','health','cost','plaque'].map(k=>`/art/biblion/modular/${k}-print.webp`),
   ...['mon','spell','starter','trap'].map(k=>`/ui/cost-${k}.webp?v=2`),
   ...Object.keys(PASSIVES).map(k=>`/ui/passives/v2/${k}.svg`),
   '/art/shop/biblion-draw-table-v1.webp',

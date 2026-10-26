@@ -99,3 +99,14 @@ export function createBoardCardCounters(root:HTMLElement){
   dispose(){disposed=true;for(const badge of previous.values())active.delete(badge);root.querySelectorAll<HTMLElement>('.card-counter').forEach(n=>active.delete(n));previous.clear();seen.clear();if(!active.size){if(raf)cancelAnimationFrame(raf);raf=0;unlisten();}}
  };
 }
+
+/** Presentation clones keep the sampled counter and its identity. WeakMap state
+ * is not copied by cloneNode, but survival/status events still update that face. */
+export function copyCardCounters(source:HTMLElement,copy:HTMLElement):void {
+ const originals=[...source.querySelectorAll<HTMLElement>('.card-counter')];
+ copy.querySelectorAll<HTMLElement>('.card-counter').forEach((badge,i)=>{
+  const old=originals[i],meta=old&&identities.get(old);if(!meta)return;
+  identities.set(badge,{...meta,transient:true});const sampled=position(old);
+  motions.set(badge,{from:sampled,to:sampled,start:0,duration:1});
+ });
+}

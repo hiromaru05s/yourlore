@@ -2,7 +2,7 @@ export type Family = 'shield' | 'dew' | 'brand';
 export type Study = {id:string;family:Family;name:string;en:string;description:string;duration:number;mode:number};
 export const families:Family[]=['shield','dew','brand'];
 export const names:Record<Family,string>={shield:'シールド',dew:'雫',brand:'烙印'};
-export const art:Record<Family,string>={shield:'/art/biblion/modular/shield-ui.webp',dew:'/art/biblion/modular/dew-ui.webp',brand:'/art/biblion/modular/brand-seal-ui.webp'};
+export const art:Record<Family,string>={shield:'/art/biblion/modular/shield-print.webp',dew:'/art/biblion/modular/dew-print.webp',brand:'/art/biblion/modular/brand-seal-ui.webp'};
 export const studies:Study[]=[
  {id:'S1',family:'shield',name:'霜鋼の破断',en:'Brittle release',description:'亀裂が走り、厚い破片が一度だけ弾ける。断面から細く消える。',duration:940,mode:0},
  {id:'D2',family:'dew',name:'水膜の破裂',en:'Ruptured meniscus',description:'水膜に開いた穴が広がり、三日月状の液縁がちぎれて縮む。',duration:880,mode:5},

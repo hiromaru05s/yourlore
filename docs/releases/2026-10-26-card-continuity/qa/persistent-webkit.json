@@ -1,0 +1,171 @@
+{
+  "results": [
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "id": "E3",
+      "side": 0,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "E3",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "id": "WORLD_SEED",
+      "side": 0,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "WORLD_SEED",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "id": "Q_RIFT",
+      "side": 0,
+      "seen": true,
+      "max": 1881,
+      "painted": true,
+      "idAtRest": "Q_RIFT",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "id": "E3",
+      "side": 1,
+      "seen": true,
+      "max": 1111,
+      "painted": true,
+      "idAtRest": "E3",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "id": "WORLD_SEED",
+      "side": 1,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "WORLD_SEED",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "id": "Q_RIFT",
+      "side": 1,
+      "seen": true,
+      "max": 1881,
+      "painted": true,
+      "idAtRest": "Q_RIFT",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "finish": {
+        "id": "E3",
+        "effect": "effect:stardust-foil",
+        "canvases": 1,
+        "artWidth": 55,
+        "tileWidth": 27
+      }
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "finish": {
+        "id": "Q_RIFT",
+        "effect": "effect:crystal-facets",
+        "canvases": 2,
+        "artWidth": 55,
+        "tileWidth": 27
+      }
+    },
+    {
+      "engine": "webkit",
+      "width": 1280,
+      "finish": {
+        "id": "Q_RIFT",
+        "effect": "effect:prism-veil",
+        "canvases": 1,
+        "artWidth": 55,
+        "tileWidth": 27
+      }
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "id": "E3",
+      "side": 0,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "E3",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "id": "WORLD_SEED",
+      "side": 0,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "WORLD_SEED",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "id": "Q_RIFT",
+      "side": 0,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "Q_RIFT",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "id": "E3",
+      "side": 1,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "E3",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "id": "WORLD_SEED",
+      "side": 1,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "WORLD_SEED",
+      "left": 0
+    },
+    {
+      "engine": "webkit",
+      "width": 390,
+      "id": "Q_RIFT",
+      "side": 1,
+      "seen": true,
+      "max": 2048,
+      "painted": true,
+      "idAtRest": "Q_RIFT",
+      "left": 0
+    }
+  ],
+  "errors": [],
+  "boundary": "Real local reducer/controller and normal clock; emulated viewport, not authenticated PvP or physical device."
+}

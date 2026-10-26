@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {SPECIAL_FX} from '../animationTempo';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
@@ -25,7 +26,7 @@ export function playDecayDissolve(source:HTMLElement,options:{signal?:AbortSigna
    if(matchMedia('(prefers-reduced-motion:reduce)').matches){finish(true);return;}
    captureHost=document.createElement('div');captureHost.className='game decay-capture';
    captureHost.style.cssText='position:fixed;left:-4000px;top:0;width:180px;pointer-events:none';
-   const copy=source.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');
+   const copy=cloneCardNode(source);copy.removeAttribute('id');copy.removeAttribute('data-uid');
    copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
    copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';
    captureHost.append(copy);document.body.append(captureHost);

@@ -1,3 +1,5 @@
+import {borrowCardPrint} from './cardContinuity';
+import {cloneCardNode} from './cardClone';
 import {decorateDrawBack,themeFromUrl} from './cosmetics/sleeve';
 import {DRAW_THICKNESS_RATIO} from './cardThickness';
 import {drawMotion,drawSmooth,DRAW_DURATION,DRAW_STAGGER} from './drawMotion';
@@ -7,7 +9,7 @@ import {sfx} from './sound';
 export {handCardMatrix} from './handGeometry';
 export interface PaperDrawOptions {cards:HTMLElement[];origin:DOMRect;sleeve:string;reveal:boolean;signal:AbortSignal;onLand:(node:HTMLElement)=>void;previousHand?:HandLayout;durationScale?:number;}
 function nativeCopy(node:HTMLElement,arriving=false){
- const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.setAttribute('aria-hidden','true');
+ const copy=cloneCardNode(node);delete copy.dataset.cardEffect;delete copy.dataset.cardFrame;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.setAttribute('aria-hidden','true');
  const cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight;copy.classList.remove('is-picked','is-armed','is-played');copy.style.cssText+=`;position:absolute;inset:0;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px;margin:0;transform:none;transition:none;animation:none;visibility:visible;pointer-events:none;`;
  if(arriving){
   // Payment/condition cues belong to the hand, after the card has landed.
@@ -36,20 +38,22 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
  const flights=cards.map(node=>{
   const cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight,root=document.createElement('div');
   root.className='native-draw-card';root.style.cssText=`position:absolute;left:0;top:0;width:${w}px;height:${h}px;transform-origin:50% 50%;transform-style:preserve-3d;will-change:transform;display:none`;
-  if(reveal){const front=nativeCopy(node,true);front.style.backfaceVisibility='hidden';front.style.transform='translateZ(.015px)';root.append(front);}
+  let returnPrint=()=>{};
+  if(reveal){const front=nativeCopy(node,true);returnPrint=borrowCardPrint(node,front);front.style.backfaceVisibility='hidden';front.style.transform='translateZ(.015px)';root.append(front);}
   const back=document.createElement('div');back.className='draw-stock-back';back.style.cssText=`position:absolute;inset:0;border-radius:5.2%;background-image:url("${sleeve}");background-size:100% 100%;backface-visibility:hidden;transform:translateZ(${-w*DRAW_THICKNESS_RATIO}px) rotateY(180deg);box-shadow:inset 0 0 0 1px #b1c3d155`;root.append(back);
   // A narrow, short-lived mana edge follows the same rigid surface.
-  const light=document.createElement('div');light.style.cssText=`position:absolute;inset:1%;border-radius:5%;border:1px solid #98ddff;box-shadow:0 0 5px #64bdff66,inset 0 0 3px #64bdff44;transform:translateZ(${-w*(DRAW_THICKNESS_RATIO+.001)}px);opacity:0;pointer-events:none`;root.append(light);
-  const finish=decorateDrawBack(back,sleeve);overlay.append(root);return {finish,node,w,h,root,light,landed:false,sounded:false,stock:null as ReturnType<NonNullable<ReturnType<typeof acquireDrawStage>>['add']>|null};
+  const light=document.createElement('div');light.style.cssText=`position:absolute;inset:1%;border-radius:5%;background:#98ddff;mask-image:url(/art/biblion/modular/base-mon-print.webp);mask-size:100% 100%;transform:translateZ(${-w*(DRAW_THICKNESS_RATIO+.001)}px);opacity:0;pointer-events:none`;root.append(light);
+  const finish=decorateDrawBack(back,sleeve);overlay.append(root);return {finish,returnPrint,node,w,h,root,light,landed:false,sounded:false,stock:null as ReturnType<NonNullable<ReturnType<typeof acquireDrawStage>>['add']>|null};
  });
  // Foreground cards open a gap from their pre-render poses. Copies stay above
  // the arriving card only in its last approach, so it is actually inserted.
- const grips:Array<{node:HTMLElement;copy:HTMLElement;visibility:string;from:DOMMatrix;width:number;height:number;settled:boolean}>=[];
+ const grips:Array<{node:HTMLElement;copy:HTMLElement;visibility:string;from:DOMMatrix;width:number;height:number;settled:boolean;returnPrint:()=>void}>=[];
  const grip=(node:HTMLElement,index:number,settled=false)=>{
   if(grips.some(g=>g.node===node))return;
   const copy=nativeCopy(node),cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight;
   const old=previousHand?.get(node.dataset.uid||'#'+index),from=old&&!settled?old.matrix.scale(old.width/w,old.height/h):handCardMatrix(node);
-  copy.style.transformOrigin='0 0';copy.style.transform=from.toString();copy.style.zIndex=String(20+(parseFloat(cs.zIndex)||0));overlay.append(copy);grips.push({node,copy,visibility:node.style.visibility,from,width:w,height:h,settled});node.style.visibility='hidden';
+  const returnPrint=borrowCardPrint(node,copy);
+  copy.style.transformOrigin='0 0';copy.style.transform=from.toString();copy.style.zIndex=String(20+(parseFloat(cs.zIndex)||0));overlay.append(copy);grips.push({node,copy,visibility:node.style.visibility,from,width:w,height:h,settled,returnPrint});node.style.visibility='hidden';
  };
  const all=[...cards[0].parentElement!.querySelectorAll<HTMLElement>(':scope > .card,:scope > .card--back')];
  // Setup remains cancellation-safe even when image decoding or module loading stalls.
@@ -71,7 +75,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
      const t=Math.max(0,Math.min(1,(elapsed-i*DRAW_STAGGER)/DRAW_DURATION)),started=elapsed>=i*DRAW_STAGGER;
      f.root.style.display=started&&!f.landed?'block':'none';if(t<1)running=true;if(!started||f.landed)return;
      if(!f.sounded){f.sounded=true;sfx('draw');}
-     if(t===1){f.root.style.display='none';f.stock?.remove();f.stock=null;f.landed=true;onLand(f.node);grip(f.node,all.indexOf(f.node),true);return;}
+     if(t===1){f.root.style.display='none';f.stock?.remove();f.stock=null;f.landed=true;f.returnPrint();onLand(f.node);grip(f.node,all.indexOf(f.node),true);return;}
      const target=targets.get(f.node)!,end=target.transformPoint(new DOMPoint(f.w/2,f.h/2)),p=drawMotion(t,reveal);
      const ox=origin.left+origin.width/2,oy=origin.top+origin.height/2,side=reveal?-1:1;
      const targetScale=Math.hypot(target.a,target.b),startScale=origin.width/f.w,angle=Math.atan2(target.b,target.a)*180/Math.PI;
@@ -80,11 +84,11 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
      // Projection enlarges by depth naturally. No extra scale pulse is layered on.
      f.root.style.left=(pose.x-f.w/2)+'px';f.root.style.top=(pose.y-f.h/2)+'px';f.root.style.transform=`translateZ(${pose.z}px) rotateZ(${pose.bank}deg) rotateY(${pose.yaw}deg) rotateX(${pose.pitch}deg) scale(${pose.scale})`;
      f.finish(now,pose.bank+pose.pitch);f.root.style.zIndex=p.travel<.78?'80':'0';f.light.style.opacity=String(p.glow*.7);
-     if(!stage)f.root.style.boxShadow=`0 ${3+pose.z*.12}px ${4+pose.z*.12}px #050d2040`;
+     if(!stage)f.root.style.boxShadow='none';
      f.stock?.update(pose,true,p.glow);f.root.dataset.progress=t.toFixed(3);f.root.dataset.phase=t<.18?'separate':t<.58?'turn':t<.84?'carry':'seat';f.root.dataset.thickness=(f.w*DRAW_THICKNESS_RATIO).toFixed(2);
     });
     stage?.render();if(running)frame=requestAnimationFrame(tick);else finish();
    };frame=requestAnimationFrame(tick);
   });
- }finally{clearTimeout(decodeTimer);cancelAnimationFrame(frame);signal.removeEventListener('abort',cancel);flights.forEach(f=>f.stock?.remove());stage?.release();for(const g of grips)g.node.style.visibility=g.visibility;overlay.remove();}
+ }finally{clearTimeout(decodeTimer);cancelAnimationFrame(frame);signal.removeEventListener('abort',cancel);flights.forEach(f=>{f.stock?.remove();f.returnPrint();});stage?.release();for(const g of grips){g.returnPrint();g.node.style.visibility=g.visibility;}overlay.remove();}
 }

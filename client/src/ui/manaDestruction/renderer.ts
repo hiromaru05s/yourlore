@@ -1,3 +1,4 @@
+import {illuminatedPrint} from './illumination';
 import {pressurePoint,pressureState} from './pressure';
 import {at,clamp,lerp,smooth,variants,type P,type Quad} from './catalog';
 import type {Material,Piece} from './material';
@@ -55,8 +56,8 @@ function render(c:C,m:Material,index:number,ms:number,source:Quad,target:Quad,re
   const t=clamp(ms/v.breakAt),state=pressureState(index,t),skin=m.skins[index],fn=(x:number,y:number)=>charge(source,w,index,t,x,y);
   // Every frame changes the light's shape and location on the original card surface.
   const phase=t*(skin.frames.length-1),lo=Math.floor(phase),hi=Math.min(lo+1,skin.frames.length-1);
-  mapped(c,skin.frames[lo],fn,8);
-  if(hi!==lo){c.save();c.globalAlpha=phase-lo;mapped(c,skin.frames[hi],fn,8);c.restore();}
+  mapped(c,illuminatedPrint(m.face,skin,lo),fn,8);
+  if(hi!==lo){c.save();c.globalAlpha=phase-lo;mapped(c,illuminatedPrint(m.face,skin,hi),fn,8);c.restore();}
   // Tension concentrates along the two shoulders of the same bulging card surface.
   if(state.release>.1){c.save();c.globalAlpha=state.release*.43;c.strokeStyle='#dcecf2';c.lineWidth=Math.max(.5,w*.003);
    for(const edge of [.103,.897]){c.beginPath();for(let j=0;j<=24;j++){const yy=.14+j/24*.70,pp=fn(edge,yy);j?c.lineTo(pp.x,pp.y):c.moveTo(pp.x,pp.y);}c.stroke();}c.restore();}

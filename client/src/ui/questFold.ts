@@ -36,10 +36,11 @@ export async function foldQuestIntoSlot(reveal:HTMLElement,target:HTMLElement,fa
   const surfaces=await Promise.race([capture,new Promise<null>(resolve=>{cancel=()=>resolve(null);signal.addEventListener('abort',cancel,{once:true});})]).finally(()=>signal.removeEventListener('abort',cancel));
   if(!surfaces||signal.aborted||document.hidden||!target.isConnected||!reveal.isConnected)return false;
   const [source,module]=surfaces;if(!source.face)return false;
-  material=new module.QuestPactRenderer(source.face,true);material.resize(640,520);material.draw(0,DURATION);
+  material=new module.QuestPactRenderer(source.face,true);material.renderer.setPixelRatio(1);material.resize(640,520);material.draw(0,DURATION);
   const canvas=material.canvas,b=material.cardBounds();
   // Capture padding is transparent. Match the visible card, not the canvas bounds.
   const cw=from.width*(1+CARD_PADDING*2)/b.width,ch=from.height*(1+CARD_PADDING*2*from.width/from.height)/b.height;
+  const pixels=Math.min(2048/Math.max(cw,ch),Math.max(1,devicePixelRatio));material.resize(Math.min(2048,Math.ceil(cw*pixels)),Math.min(2048,Math.ceil(ch*pixels)));
   canvas.className='quest-fold-canvas';canvas.dataset.cardUid=face.dataset.uid;canvas.setAttribute('aria-hidden','true');
   canvas.style.cssText=`position:fixed;left:0;top:0;width:${cw}px;height:${ch}px;transform-origin:0 0;pointer-events:none`;
   host.append(canvas);
@@ -63,7 +64,7 @@ export async function foldQuestIntoSlot(reveal:HTMLElement,target:HTMLElement,fa
   });
   if(completed){face.style.opacity='1';place();}return completed;
  }catch(error){console.warn('[quest-pact] Native fallback',error);return false;}finally{
-  cancelAnimationFrame(frame);material?.dispose();host.querySelector('canvas')?.remove();reveal.style.visibility=visible;reveal.style.opacity=opacity;
+  cancelAnimationFrame(frame);material?.dispose();host.querySelector('.quest-fold-canvas')?.remove();reveal.style.visibility=visible;reveal.style.opacity=opacity;
   if(!completed)host.remove();
  }
 }

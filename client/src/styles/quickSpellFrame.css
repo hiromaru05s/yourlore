@@ -1,6 +1,6 @@
 /* Quick spell inspection only — selected Edge Veil, with the enlarged type plaque. */
 .quick-spell-frame { isolation:isolate; }
-.quick-spell-frame-sheen { z-index:2!important; pointer-events:none; filter:url(#celestial-matte) brightness(2) drop-shadow(0 0 2px #c4b1ff)!important; mix-blend-mode:screen; }
+.quick-spell-frame-sheen { z-index:2!important; pointer-events:none; filter:brightness(1) brightness(2) drop-shadow(0 0 2px #c4b1ff)!important; mix-blend-mode:screen; }
 .card-type-badge {
  position:absolute; z-index:4; bottom:-1.8%; left:18%; width:64%; height:7.2%;
  display:flex; justify-content:center; align-items:center; gap:.25em; pointer-events:none;

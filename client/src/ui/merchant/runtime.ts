@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {SPECIAL_FX} from '../animationTempo';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface} from '../cardSurface';
@@ -24,7 +25,7 @@ export function playDarkMerchant(card:HTMLElement,signal?:AbortSignal):Promise<b
   void(async()=>{
    const from=card.getBoundingClientRect();
    capture=document.createElement('div');capture.className='game';capture.style.cssText='position:fixed;left:-4000px;top:0;width:180px;pointer-events:none';
-   const copy=card.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-card-flight','cast-reveal');copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';capture.append(copy);document.body.append(capture);
+   const copy=cloneCardNode(card);copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-card-flight','cast-reveal');copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';capture.append(copy);document.body.append(capture);
    const [surface,art,visual,audio]=await Promise.all([captureCardSurface(copy,FRAME_BACK,true,false),loadArt(),import('./darkRenderer'),import('./sound')]);
    capture.remove();capture=undefined;if(done)return;if(!surface.face||!card.isConnected||signal?.aborted){finish();return;}
    const face=document.createElement('canvas');face.width=540;face.height=Math.round(540*1.74/1.24);face.getContext('2d')!.drawImage(surface.face,0,0,face.width,face.height);

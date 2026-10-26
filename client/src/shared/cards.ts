@@ -2524,12 +2524,12 @@ export function isChestCard(c: { id: string; star?: string }): boolean {
   return c.star === "chest" || CHEST_CARD_IDS.has(c.id);
 }
 
-export function frameFor(t: CardType, full = false): string {
-  return `/art/biblion/modular/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : t === "quest" ? "quest" : "spell"}${full ? "-lossless.webp" : "-ui.webp"}`;
+export function frameFor(t: CardType, _full = false): string {
+  return `/art/biblion/modular/base-${t === "mon" ? "mon" : t === "trap" ? "trap" : t === "quest" ? "quest" : "spell"}-print.webp`;
 }
 /** Compact complete face, shared by field tiles and market thumbnails. */
 export function fieldFrameFor(t: CardType): string {
-  return `/art/biblion/modular/field-${t === "mon" ? "mon" : t === "trap" ? "trap" : t === "quest" ? "quest" : "spell"}-ui.webp`;
+  return `/art/biblion/modular/field-${t === "mon" ? "mon" : t === "trap" ? "trap" : t === "quest" ? "quest" : "spell"}-print.webp`;
 }
 export const FRAME_BACK = "/frames/sleeve_default.webp";
 
