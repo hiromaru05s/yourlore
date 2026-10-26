@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-26T07:51:52.444Z",
+  "base": "https://yourlore.xyz",
+  "entryScripts": [
+    "/assets/main-DS1NC4Mu.js"
+  ],
+  "manifest": "/assets/menu-manifest-493a0e8fbfd3071f4bcd.json",
+  "assets": [
+    {
+      "path": "/art/cards/RIFT_MATTER.webp",
+      "bytes": 638458,
+      "sha256": "aea708fab2bf46b37cdefb63c5848aba96710357e02cfc92384d100cb2d4b326",
+      "matches": true
+    },
+    {
+      "path": "/art/cards-sm/RIFT_MATTER.webp",
+      "bytes": 38892,
+      "sha256": "6d03e04bfe9fb946ad306059ebf3d4b527b54c97e6e204ecf3a256772176af9f",
+      "matches": true
+    },
+    {
+      "path": "/art/cards-xs/RIFT_MATTER.webp",
+      "bytes": 10636,
+      "sha256": "6cc0bc3a55d7c21910e3a27934339e18f5a73e8bf70a859b632e0a7302539e96",
+      "matches": true
+    },
+    {
+      "path": "/art/cards/RIFT_METALIGHT.webp",
+      "bytes": 609682,
+      "sha256": "fdd119edafa3c1e1632375c0472615124c76140ff6ad2f74a45ba52bc52f9866",
+      "matches": true
+    },
+    {
+      "path": "/art/cards-sm/RIFT_METALIGHT.webp",
+      "bytes": 35086,
+      "sha256": "accbef94e5c82b6949957248d59a1f7b4959922b88c860b721049ffcc02fb87e",
+      "matches": true
+    },
+    {
+      "path": "/art/cards-xs/RIFT_METALIGHT.webp",
+      "bytes": 9680,
+      "sha256": "33c4f731a5a464095cdecdce46cb35dcd363b5b6e26fae7710949e3345edbe30",
+      "matches": true
+    }
+  ],
+  "bundles": [
+    {
+      "path": "/assets/bot.worker-XDb8Dpru.js",
+      "sha256": "626ad0593aec93b607398eb11092d26dccfb939758b6bf2031384cea4a836e1c",
+      "matches": true
+    },
+    {
+      "path": "/assets/social-BIaer8Yv.js",
+      "sha256": "1e59a6fe45c43b963da3c2719626f33a3116741841cf7baff492c5839b2ef748",
+      "matches": true
+    }
+  ],
+  "scope": "published HTML entry, compiled catalog/engine bundles, content manifest and six artwork files; no authenticated online duel"
+}

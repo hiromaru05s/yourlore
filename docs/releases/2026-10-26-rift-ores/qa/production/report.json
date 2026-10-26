@@ -1,0 +1,23 @@
+{
+  "base": "https://yourlore.xyz",
+  "scope": "shipped static assets, actual App/menu/card renderer; isolated API fixtures; no authenticated account or online duel",
+  "checks": [
+    "Actual App navigation and gallery search return both ores",
+    "リフト鉱石 - スターライト name, cost, requirement and effect display",
+    "リフト鉱石 - メタライト name, cost, requirement and effect display",
+    "390px gallery and Metalight inspection render"
+  ],
+  "assets": [
+    {
+      "url": "https://yourlore.xyz/art/cards/RIFT_MATTER.webp?v=20261026-rift-ores-v1",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/RIFT_METALIGHT.webp?v=20261026-rift-ores-v1",
+      "width": 1472,
+      "height": 1344
+    }
+  ],
+  "errors": []
+}
