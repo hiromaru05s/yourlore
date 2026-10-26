@@ -1,0 +1,12 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 120000ms exceeded.
+    at openDeck (/Users/hiromaru05s/.codex/worktrees/deck-hover-fix/LORE_TCG/tests/deck-hover-browser.mjs:28:14)
+    at async file:///Users/hiromaru05s/.codex/worktrees/deck-hover-fix/LORE_TCG/tests/deck-hover-browser.mjs:86:14 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.22.3

@@ -23,4 +23,11 @@ Keep the entry's position and rotation fixed across hover/focus and keep removal
 - `tests/deck-hand-editor.mjs` and `tests/deck-drag.mjs` passed. The full build and design guard passed.
 - Visual inspection checks the preserved art/layout and card lift separately from automated assertions. Browser viewport/touch emulation is not physical-device verification. Fixture interaction does not modify real account decks.
 
-Production identifiers and final verification are appended after deployment.
+## Production
+
+- Fix commits: `07e9a807`, `05238782`; included in integrated release `c6fdc343799c67abd5dce3cc2ed2c81dd0304112`. The three owning deck files have no further diff between the tested fix and this integration. The integrated build also passed locally from the same preview root.
+- Published at **2026-10-27 00:25:20 JST/KST** to `https://yourlore.xyz` by the concurrent guarded production deployment. Our initial attempts stopped safely on the shared lock / advancing main; no duplicate release was issued.
+- Worker version: `9b93c38f-fa5a-4dee-affc-cb474f3877ab`, at 100%; deployment `12c6c9e9-75c2-4237-9d3e-6e555e4076f8`.
+- `production-deployment.json` records the source annotation. `production-assets.json` confirms the production HTML, entry JavaScript, and both applicable CSS assets exactly match the verified integrated build.
+- On the deployed application, all 64 boundaries at 1440×900 and 390×844 passed, followed by successful keyboard removal/undo and replacement at both widths; no page errors were recorded. `production-browser.json` and `production-*.png` preserve that evidence.
+- The subsequent fresh mobile touch context timed out after 120 seconds while waiting for the screen loader to disappear, before the tap assertion. A separate touch-only retry also timed out in that loading stage; `production-touch.log` records the limit. Production touch interaction is therefore **unverified**, while local Chromium/WebKit touch and reduced-motion checks passed. The cause of that production loading delay was not established by this scoped hover fix. No real account deck was modified.

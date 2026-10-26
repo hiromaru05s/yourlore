@@ -1,0 +1,22 @@
+{
+  "source": "c6fdc343799c67abd5dce3cc2ed2c81dd0304112",
+  "origin": "https://yourlore.xyz",
+  "indexMatches": true,
+  "checks": [
+    {
+      "asset": "/assets/main-BEPkqDvd.js",
+      "sha256": "66295b2fd2fb7f2b1b2afec4dfc9c2a08783052ce4e247b81e864d90e2e1759a",
+      "bytes": 2585
+    },
+    {
+      "asset": "/assets/main-uRdXmzsi.css",
+      "sha256": "e0c1a42a15b16136669a90acf7ba38637e5054d80d325fd857886f0a8741d0b3",
+      "bytes": 1034238
+    },
+    {
+      "asset": "/assets/social-Bc94E6pQ.css",
+      "sha256": "044ee841fd391309f7572ff38fc66a8ab38155472d512b11c82c7264660bd74a",
+      "bytes": 266599
+    }
+  ]
+}
