@@ -1,0 +1,14 @@
+{
+  "source": "8a6921f3388548c5d43d36904b0912a1f5d7e186",
+  "deploymentId": "e5b9f0a2-476d-4029-b0e0-e4f0e2274623",
+  "versions": [
+    {
+      "version_id": "11e212e5-c80b-4702-8f0f-f2377ff1acea",
+      "percentage": 100
+    }
+  ],
+  "createdOn": "2026-10-26T15:41:00.966108Z",
+  "productionTests": "237/237",
+  "url": "https://yourlore.xyz",
+  "validation": "Production assets with fixture API; no real purchase."
+}

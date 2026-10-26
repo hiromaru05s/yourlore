@@ -16,4 +16,10 @@
 - 1440×900、390×844、844×390の実画面を目視。回数と価格、銀青/金の区別、枠の欠け、確認画面の残高を確認。見た目は今回の指示に対する実装判断であり、追加のユーザーによる見た目の承認とは区別する。
 - 実購入と物理端末での確認は行っていない。
 
-本番反映のsource/versionは完了後に追記。
+## 本番反映
+
+2026-10-27 00:41（Asia/Seoul）、source `8a6921f3388548c5d43d36904b0912a1f5d7e186` を本番100%公開。Version `11e212e5-c80b-4702-8f0f-f2377ff1acea`。`deployment.json` に配信状態を記録。
+
+既存のguarded deploymentで型チェック・237/237の必須テスト・ビルドに成功。本番URLで `tests/gacha-rewards-browser.mjs` も成功。公開された実JS/CSS/素材とfixture APIで残高のbefore/after、通知非表示、1回/10連、確認のNO/Esc/YES、連打抑止、残高不足、5サイズを確認。実アカウントの購入は行っていない。
+
+本番配信のショップ画像と残高確認を目視し、銀青/古金の専用ボタン、共通枠、現行背景とカードを確認。`production-browser-report.json` と `production-confirmation.png`。
