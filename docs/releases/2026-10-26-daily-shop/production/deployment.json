@@ -1,0 +1,18 @@
+{
+  "source": "0462dfead53818e311514cfdf3a5a90b12ad932f",
+  "deploymentId": "b61ddbd8-d6a5-475e-8f98-0bf71153a6a1",
+  "versions": [
+    {
+      "version_id": "a6f54b09-b9e4-49de-bd38-d867fc76dc7b",
+      "percentage": 100
+    }
+  ],
+  "annotations": {
+    "workers/message": "0462dfead53818e311514cfdf3a5a90b12ad932f guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "origin": "https://yourlore.xyz",
+  "regressionPassed": 228,
+  "bundleFilesMatched": 135,
+  "boundary": "Production deployment and byte parity. Browser interactions use synthetic API fixtures, not real-account charges."
+}
