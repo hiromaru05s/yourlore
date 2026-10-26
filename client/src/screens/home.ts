@@ -19,6 +19,7 @@ import { mountHomeSpirit } from '../ui/homeSpirit';
 import '../styles/homeTutorial.css';
 import { homeIcon } from "../ui/homeIcons";
 import {scheduleGameWarmup,warmGame} from './lazyGame';
+import {mountHomeDuelButton} from '../ui/homeDuelButton';
 
 
 export function mountHome(app: App): Screen {
@@ -53,12 +54,13 @@ export function mountHome(app: App): Screen {
   const stopDaily=mountDailyRewards(app,wrap.querySelector<HTMLButtonElement>('#dailyReward')!);
   const stopSpirit=mountHomeSpirit(app,wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
+  const duelButton=mountHomeDuelButton(q('ranked'));
   let mode: 'ranked'|'online'|'bot'='ranked';
   const selectMode=(next:typeof mode)=>{
     mode=next;
     wrap.querySelector('#modeReward')!.textContent=mode==='bot'?loungeText('各難易度の初回クリアでシャード獲得','Earn Shards for each first clear','난이도별 첫 클리어 샤드 보상'):mode==='ranked'?loungeText('勝利20 / 敗北10シャード · 1日300まで','Win 20 / Loss 10 Shards · 300/day','승리 20 / 패배 10 샤드 · 하루 300까지'):loungeText('勝利10 / 敗北5シャード · 1日100まで','Win 10 / Loss 5 Shards · 100/day','승리 10 / 패배 5 샤드 · 하루 100까지');
     for(const [id,key] of [['rankedMode','ranked'],['online','online'],['bot','bot']])q(id).setAttribute('aria-pressed',String(mode===key));
-    q('ranked').querySelector('strong')!.textContent=t(`home.${mode}.title`);
+    duelButton.setMode(mode);
     wrap.querySelector('.lounge-play')!.setAttribute('aria-label',t(`home.${mode}.title`));
   };
   selectMode('ranked');
@@ -78,7 +80,7 @@ export function mountHome(app: App): Screen {
   const stopWarmup=scheduleGameWarmup(wrap,store.list[store.sel].cards);
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;stopWarmup();unsub();stopSpirit();stopDaily();stopGifts();}};
+  return {destroy:()=>{disposed=true;duelButton.destroy();stopWarmup();unsub();stopSpirit();stopDaily();stopGifts();}};
 }
 
 /** Select an NPC, then start centrally or double-click its card. */
