@@ -1,0 +1,86 @@
+{
+  "origin": "https://yourlore.xyz",
+  "worker": "bot.worker-DOJTHzON.js",
+  "scope": "Actual public BOT worker, hard and hell, controlled states; no authenticated server duel",
+  "results": [
+    {
+      "name": "Sage zero mana",
+      "difficulty": "hard",
+      "expected": "endTurn",
+      "action": {
+        "type": "endTurn"
+      },
+      "ms": 358.3999999985099
+    },
+    {
+      "name": "Sage one mana",
+      "difficulty": "hard",
+      "expected": "play",
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "ms": 87.30000000074506
+    },
+    {
+      "name": "Goblin starts attack",
+      "difficulty": "hard",
+      "expected": "attack",
+      "action": {
+        "type": "attack",
+        "uid": "worker-15"
+      },
+      "ms": 69.59999999776483
+    },
+    {
+      "name": "Goblin attacks monster",
+      "difficulty": "hard",
+      "expected": "chooseTarget",
+      "action": {
+        "type": "chooseTarget",
+        "uid": "worker-16"
+      },
+      "ms": 1.6000000014901161
+    },
+    {
+      "name": "Sage zero mana",
+      "difficulty": "hell",
+      "expected": "endTurn",
+      "action": {
+        "type": "endTurn"
+      },
+      "ms": 4.699999999254942
+    },
+    {
+      "name": "Sage one mana",
+      "difficulty": "hell",
+      "expected": "play",
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "ms": 283.5
+    },
+    {
+      "name": "Goblin starts attack",
+      "difficulty": "hell",
+      "expected": "attack",
+      "action": {
+        "type": "attack",
+        "uid": "worker-15"
+      },
+      "ms": 246.19999999925494
+    },
+    {
+      "name": "Goblin attacks monster",
+      "difficulty": "hell",
+      "expected": "chooseTarget",
+      "action": {
+        "type": "chooseTarget",
+        "uid": "worker-16"
+      },
+      "ms": 1
+    }
+  ],
+  "errors": []
+}

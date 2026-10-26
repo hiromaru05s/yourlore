@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-26T09:59:27.980Z",
+  "base": "https://yourlore.xyz",
+  "sourceCommit": "394e7b6e75058a5b3e5b1e3e4c8a57bc1e14bfe2",
+  "entryScripts": [
+    "/assets/main-REWZ_e37.js"
+  ],
+  "bundles": [
+    {
+      "path": "/assets/bot.worker-DOJTHzON.js",
+      "bytes": 895625,
+      "sha256": "8ce78e3f545970c13c45bc77d280c12778684dae4b6c4f33e27f79501e69f8f7",
+      "matches": true
+    },
+    {
+      "path": "/assets/main-REWZ_e37.js",
+      "bytes": 2842,
+      "sha256": "ad736d963a205714ead2c08211e1059a12b34463f534b903c65ccc4a07ed0f3d",
+      "matches": true
+    },
+    {
+      "path": "/assets/social-DHzbuxDr.js",
+      "bytes": 1035212,
+      "sha256": "9a50bdc1082fc643a9db094b94a983743cb7ee88edbd3f203c1d42ad5f1a21f3",
+      "matches": true
+    }
+  ],
+  "scope": "Public entry and compiled client/card-rule/BOT-worker byte parity with local build. Server source is verified separately by guarded release annotation and authoritative room tests. No authenticated online duel."
+}
