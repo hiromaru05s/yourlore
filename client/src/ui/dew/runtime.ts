@@ -7,7 +7,7 @@ const clamp=(v:number)=>Math.max(0,Math.min(1,v));
 const smooth=(a:number,b:number,v:number)=>{const q=clamp((v-a)/(b-a));return q*q*(3-2*q)};
 const jobs=new Map<string,()=>void>();
 let image:Promise<HTMLImageElement>|undefined;
-function icon(){return image??=new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>{image=undefined;reject(Error('Dew icon unavailable'))};im.src='/art/biblion/modular/dew-ui.webp'});}
+function icon(){return image??=new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>{image=undefined;reject(Error('Dew icon unavailable'))};im.src='/art/biblion/modular/dew-print.webp'});}
 export function warmDewGrant(){void icon().catch(()=>{});}
 export function cancelDewGrants(){for(const finish of [...jobs.values()])finish();}
 

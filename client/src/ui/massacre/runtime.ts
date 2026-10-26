@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {SPECIAL_FX} from '../animationTempo';
 import { FRAME_BACK } from "../../shared/cards";
 import { captureCardSurface, CARD_PADDING } from "../cardSurface";
@@ -37,7 +38,7 @@ function pose(node: HTMLElement, id: string): Pose {
   };
 }
 async function face(node: HTMLElement, source: boolean, host: HTMLElement) {
-  const copy = node.cloneNode(true) as HTMLElement;
+  const copy = cloneCardNode(node);
   copy.removeAttribute("id");
   copy.removeAttribute("data-uid");
   copy.classList.remove(

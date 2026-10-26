@@ -1,6 +1,6 @@
 import {isMimic} from '../mimic/selection';
 import {STANDARD_FX,SPECIAL_FX} from '../animationTempo';
-import {settleSummonFace,sizeSummonPlane} from './quality';
+import {sizeSummonPlane} from './quality';
 import {isCastle} from '../castleSummon/catalog';
 import {playCastleSummon,cancelCastleSummon,cancelCastleSummons} from '../castleSummon/runtime';
 import {isPoisonSummon} from '../poisonSummon/selection';
@@ -28,11 +28,9 @@ import {isHexer} from '../hexerSummon/selection';
 import {playHexerSummon,cancelHexerSummon,cancelHexerSummons} from '../hexerSummon/runtime';
 import {isChosenHero} from '../chosenSummon/selection';
 import {chosenPlacement,playChosenSummon,cancelChosenSummon,cancelChosenSummons} from '../chosenSummon/runtime';
-import {FRAME_BACK} from '../../shared/cards';
-import {captureCardSurface} from '../cardSurface';
 import {boardMatrix,layoutRect,projectedPlacement} from '../boardProjection';
 import {Renderer} from './renderer';
-import {DURATION,motion} from './catalog';
+import {DURATION,motion,ease} from './catalog';
 import {isVerdant} from '../verdant/selection';
 import {playVerdant,cancelVerdant,cancelVerdants} from '../verdant/runtime';
 
@@ -79,55 +77,58 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
  const clock=coinsCount||isMimic(source.dataset.cardId??'')?SPECIAL_FX:STANDARD_FX;
  if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted)return Promise.resolve(false);
  return new Promise(resolve=>{
-  const visibility=source.style.visibility;
+  const visibility=source.style.visibility,originalTransform=source.style.transform,originalOrigin=source.style.transformOrigin;
   let coins:Coins|undefined,coinSound:ContactSound|undefined;
+  const reflections:HTMLElement[]=[];
   let ended=false,frame=0,renderer:Renderer|undefined,host:HTMLElement|undefined,captureHost:HTMLElement|undefined;
   const finish=(complete=false)=>{
    if(ended)return;ended=true;clearTimeout(timeout);cancelAnimationFrame(frame);
    options.signal?.removeEventListener('abort',abort);host?.remove();captureHost?.remove();renderer?.dispose();coins?.dispose();coinSound?.dispose();
-   source.style.visibility=visibility;jobs.delete(source);resolve(complete);
+   reflections.forEach(n=>n.remove());source.style.visibility=visibility;source.style.transform=originalTransform;source.style.transformOrigin=originalOrigin;jobs.delete(source);resolve(complete);
   };
   const abort=()=>finish(false),timeout=setTimeout(abort,6000);
   jobs.set(source,{anchor,cancel:abort});options.signal?.addEventListener('abort',abort,{once:true});
   void (async()=>{
    const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
    if(reduced){options.onImpact?.();finish(true);return;}
-   // Capture only this already-public face, unprojected, so text/frame geometry is preserved.
-   captureHost=document.createElement('div');captureHost.className='game';
-   captureHost.style.cssText='position:fixed;left:-4000px;top:0;width:180px;pointer-events:none';
-   const copy=source.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');
-   copy.classList.remove('fx-field-ghost','fx-card-flight','cast-reveal');
-   copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';
-   captureHost.append(copy);document.body.append(captureHost);
-   const surface=await captureCardSurface(copy,FRAME_BACK,true,false,source);
-   captureHost.remove();captureHost=undefined;
-   if(ended)return;
-   if(!source.isConnected||!anchor.isConnected||options.signal?.aborted||!surface.face){finish();return;}
-   const face=surface.face;
+   // The live card is the only printed face. No captured/downsampled replacement.
+   const face=document.createElement('canvas');face.width=face.height=1;
+   // Preserve the authored surface sweep on the native art and frame. Its mask
+   // is the existing print, so reflection cannot create a rectangular backing.
+   for(const layer of source.querySelectorAll<HTMLElement>(':scope > .card-art,:scope > .card-frame')){
+    const sheen=document.createElement('div');sheen.className='native-summon-reflection';sheen.style.cssText='position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background:linear-gradient(20deg,transparent 43%,#ccbaa0 49%,#fff9de 50%,#ccbaa0 51%,transparent 57%);background-size:100% 300%;opacity:0';
+    if(layer.classList.contains('card-frame')){sheen.style.maskImage=getComputedStyle(layer).backgroundImage;sheen.style.maskSize='100% 100%';}
+    layer.append(sheen);reflections.push(sheen);
+   }
    if(coinsCount){const [visual,audio]=await Promise.all([import('../merchant/coins'),import('../merchant/sound')]);if(ended)return;coins=new visual.Coins();coinSound=new audio.ContactSound(coinsCount);}
    renderer=new Renderer();
    host=document.createElement('div');host.className='slate-summon';host.setAttribute('aria-hidden','true');
    host.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:136;isolation:isolate';
-   const planes=['ground','card'].map(pass=>{
+   const planes=['ground'].map(pass=>{
     const el=document.createElement('div');el.dataset.summonPass=pass;
     el.style.cssText='position:absolute;left:0;top:0;width:180px;height:270px;transform-origin:0 0';
     const canvas=document.createElement('canvas');sizeSummonPlane(canvas,684);
     canvas.style.cssText='position:absolute;left:-252px;top:-207px;width:684px;height:684px';
     el.append(canvas);host!.append(el);return {el,c:canvas.getContext('2d')!,pass:pass as 'ground'|'card'};
    });
-   document.body.append(host);source.style.visibility='hidden';
+   document.body.append(host);source.style.visibility='visible';
    const ground=projectedPlacement(anchor,180,270).toString(),start=clock.now();let impacted=false;
    const tick=(now:number)=>{
     if(ended)return;
     if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const ms=Math.max(0,Math.min(total,now-start));
+    const hit=motion(SUMMON_VARIANT,ms).hit,charge=ease(70,hit*.75,ms)*(1-ease(hit+45,hit+350,ms));for(const sheen of reflections){sheen.style.opacity=String(charge*.075);sheen.style.backgroundPosition=`50% ${100-ease(0,hit+180,ms)*100}%`;}
     host!.dataset.time=String(Math.round(ms));host!.dataset.variant=coinsCount?'merchant-03':'slate';if(coinsCount)host!.dataset.coinCount=String(coinsCount);coinSound?.advance(ms);
     if(!impacted&&ms>=790){impacted=true;options.onImpact?.();if(ended)return;}
     for(const {el,c,pass} of planes){
      el.style.transform=pass==='ground'?ground:summonPlacement(anchor,180,270,ms).toString();
      c.clearRect(0,0,684,684);renderer!.draw(c,face,SUMMON_VARIANT,Math.min(DURATION,ms),342,342,180,false,pass,false);if(pass==='ground')coins?.draw(c,MERCHANT_VARIANT,coinsCount,ms,342,342,180,false);
     }
-    settleSummonFace(source,host!,ms,total);
+    const w=source.offsetWidth,h=source.offsetHeight;source.style.transformOrigin='0 0';
+    let pose=summonPlacement(anchor,w,h,ms);
+    const arrival=source.dataset.summonRest==='blocked'?ease(DURATION-180,DURATION,ms):0,scale=motion(SUMMON_VARIANT,Math.min(DURATION,ms)).scale*(1-.018*arrival);
+    pose=pose.translate(w/2,h/2+w*.035*arrival).scale(scale).translate(-w/2,-h/2);
+    source.style.transform=(source.classList.contains('fx-field-ghost')?pose:projectedPlacement(source,w,h).inverse().multiply(pose)).toString();
     if(ms===total){finish(true);return;}frame=clock.requestFrame(tick);
    };tick(start);
   })().catch(error=>{if(!ended){console.warn('[summon] Native card fallback',error);options.onImpact?.();finish();}});

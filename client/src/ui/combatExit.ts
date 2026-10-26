@@ -11,6 +11,6 @@ export function startCombatExit(source:HTMLElement,side:'me'|'opp',signal:AbortS
  const destination=document.createElement('div');
  const w=target.offsetWidth,h=target.offsetHeight,m=projectedPlacement(target,w,h);
  destination.style.cssText=`position:fixed;left:0;top:0;width:${w}px;height:${h}px;transform:${m.toString()};transform-origin:0 0;pointer-events:none;opacity:0`;
- destination.dataset.combatExit='true';destination.setAttribute('aria-hidden','true');document.body.append(destination);
+ destination.dataset.combatExit='true';destination.dataset.shelfId=pile!.id;destination.setAttribute('aria-hidden','true');document.body.append(destination);
  return playManaDestruction(copy,destination,signal).then(()=>{}).finally(()=>{copy.remove();destination.remove();});
 }

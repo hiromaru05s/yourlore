@@ -40,6 +40,7 @@ export async function foldQuestIntoSlot(reveal:HTMLElement,target:HTMLElement,fa
   const canvas=material.canvas,b=material.cardBounds();
   // Capture padding is transparent. Match the visible card, not the canvas bounds.
   const cw=from.width*(1+CARD_PADDING*2)/b.width,ch=from.height*(1+CARD_PADDING*2*from.width/from.height)/b.height;
+  const pixels=Math.min(2048/Math.max(cw,ch),Math.max(1,devicePixelRatio));material.resize(Math.ceil(cw*pixels),Math.ceil(ch*pixels));
   canvas.className='quest-fold-canvas';canvas.dataset.cardUid=face.dataset.uid;canvas.setAttribute('aria-hidden','true');
   canvas.style.cssText=`position:fixed;left:0;top:0;width:${cw}px;height:${ch}px;transform-origin:0 0;pointer-events:none`;
   host.append(canvas);

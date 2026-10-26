@@ -21,9 +21,9 @@ async function capture(node:HTMLElement,dimensions:HTMLElement,signal:AbortSigna
  clone.dataset.rebirthCapture='';document.body.append(clone);
  const remove=()=>clone.remove();signal.addEventListener('abort',remove,{once:true});
  try{
-  const shot=await captureCardSurface(clone,FRAME_BACK,true,false);if(!shot.face||signal.aborted)return null;
+  const shot=await captureCardSurface(clone,FRAME_BACK,true,false,node);if(!shot.face||signal.aborted)return null;
   const width=shot.face.width/(1+CARD_PADDING*2),pad=width*CARD_PADDING,height=shot.face.height-pad*2;
-  const out=document.createElement('canvas');out.width=384;out.height=Math.round(384*height/width);
+  const out=document.createElement('canvas');out.width=Math.round(width);out.height=Math.round(height);
   out.getContext('2d')!.drawImage(shot.face,pad,pad,width,height,0,0,out.width,out.height);return out;
  }finally{remove();signal.removeEventListener('abort',remove);}
 }

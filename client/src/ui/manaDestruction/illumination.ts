@@ -1,5 +1,5 @@
 import {clamp,smooth} from './catalog';
-export type Skin={frames:HTMLCanvasElement[];lit:HTMLCanvasElement};
+export type Skin={frames:HTMLCanvasElement[];lit:HTMLCanvasElement;masks:HTMLCanvasElement[];lights:HTMLCanvasElement[]};
 // Selected 01 only. Spatial terms are independent of the card and animation clock.
 // Cache them without changing the approved pixel equations or palette.
 const fields=new Map<number,Float64Array>();
@@ -19,10 +19,12 @@ function field(w:number,h:number){
 export function makeSkin(face:HTMLCanvasElement,_mode:number,finalOnly=false):Skin{
  const w=192,h=Math.round(w*face.height/face.width),input=document.createElement('canvas');input.width=w;input.height=h;
  const ctx=input.getContext('2d',{willReadFrequently:true})!;ctx.drawImage(face,0,0,w,h);
- const art=ctx.getImageData(0,0,w,h).data,spatial=field(w,h),frames:HTMLCanvasElement[]=[];
+ const art=ctx.getImageData(0,0,w,h).data,spatial=field(w,h),frames:HTMLCanvasElement[]=[],masks:HTMLCanvasElement[]=[],lights:HTMLCanvasElement[]=[];
  for(let frame=finalOnly?28:0;frame<=28;frame++){
   const t=frame/28,arrive=smooth(.04,.80,t),release=smooth(.68,1,t),charge=smooth(.05,.28,t),final=smooth(.72,1,t);
   const out=document.createElement('canvas');out.width=w;out.height=h;
+  const maskCanvas=document.createElement('canvas'),lightCanvas=document.createElement('canvas');maskCanvas.width=lightCanvas.width=w;maskCanvas.height=lightCanvas.height=h;
+  const mc=maskCanvas.getContext('2d')!,lc=lightCanvas.getContext('2d')!,maskPixels=mc.createImageData(w,h),lightPixels=lc.createImageData(w,h);
   const c=out.getContext('2d',{willReadFrequently:true})!,pixels=c.createImageData(w,h),data=pixels.data;
   for(let p=0;p<w*h;p++){
    const k=p*4,q=p*6,mask=spatial[q],lum=(art[k]*.2126+art[k+1]*.7152+art[k+2]*.0722)/255;
@@ -33,8 +35,21 @@ export function makeSkin(face:HTMLCanvasElement,_mode:number,finalOnly=false):Sk
    data[k+1]=(art[k+1]*(1-coverage)+(57+shade*118)*coverage)*(1-light)+249*light;
    data[k+2]=(art[k+2]*(1-coverage)+(100+shade*129)*coverage)*(1-light)+255*light;
    data[k+3]=art[k+3]*(1-final)+mask*255*final;
+   const retain=(1-coverage)*(1-light),alpha=data[k+3]/255,add=Math.max(0,alpha-art[k+3]/255*retain);
+   maskPixels.data[k+3]=Math.round(retain*255);
+   lightPixels.data[k+3]=Math.round(add*255);
+   if(add>0)for(let channel=0;channel<3;channel++)lightPixels.data[k+channel]=Math.max(0,Math.min(255,(data[k+channel]*alpha-art[k+channel]*art[k+3]/255*retain)/add));
   }
-  c.putImageData(pixels,0,0);frames.push(out);
+  c.putImageData(pixels,0,0);frames.push(out);mc.putImageData(maskPixels,0,0);lc.putImageData(lightPixels,0,0);masks.push(maskCanvas);lights.push(lightCanvas);
  }
- return{frames,lit:frames[frames.length-1]};
+ return{frames,lit:frames[frames.length-1],masks,lights};
+}
+
+const composites=new WeakMap<Skin,HTMLCanvasElement>();
+/** One scratch surface per active material; the 29 light maps remain small. */
+export function illuminatedPrint(face:HTMLCanvasElement,skin:Skin,index:number):HTMLCanvasElement{
+ let out=composites.get(skin);if(!out){out=document.createElement('canvas');out.width=face.width;out.height=face.height;composites.set(skin,out);}
+ const c=out.getContext('2d')!;c.globalCompositeOperation='source-over';c.clearRect(0,0,out.width,out.height);c.drawImage(face,0,0);
+ c.globalCompositeOperation='destination-in';c.drawImage(skin.masks[index],0,0,out.width,out.height);
+ c.globalCompositeOperation='source-over';c.drawImage(skin.lights[index],0,0,out.width,out.height);return out;
 }

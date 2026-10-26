@@ -1,10 +1,11 @@
+import {renderSummonBoard} from '../summon/boardRender';
 import {createWebGLRenderer} from '../webglRenderer';
 import * as T from 'three';
 import {DURATION,designs,ease,weight} from './catalog';import type {Id} from './catalog';
 import {cells,rock,mineralTexture,noise} from './mineral';
 const H=1.5625;
 type Stone={mesh:T.Mesh;home:T.Vector3;index:number;birth:{value:number};decay:{value:number};core:{value:number}};
-type Rig={scene:T.Scene;body:T.Group;face:T.Mesh;faceMat:T.MeshBasicMaterial;pieces:Stone[];table:T.Group;shadow:T.Mesh;key:T.DirectionalLight;v:number};
+type Rig={scene:T.Scene;body:T.Group;face:T.Mesh;faceMat:T.MeshBasicMaterial;pieces:Stone[];table:T.Group;shadow:T.Mesh;thickness:T.Mesh;catcher:T.Mesh;key:T.DirectionalLight;v:number};
 /** Shared context, preallocated geometry; physical shadows land on both card and tabletop. */
 export class GolemRenderer{
  readonly renderer:T.WebGLRenderer;private rigs:Rig[]=[];private textures=new Map<Id,T.CanvasTexture>();private geometries:T.BufferGeometry[]=[];private materials:T.Material[]=[];private maps:T.Texture[]=[];
@@ -39,7 +40,7 @@ export class GolemRenderer{
    material.onBeforeCompile=s=>patch(s);const depth=this.mat(new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking}));depth.onBeforeCompile=s=>patch(s,true);
    const mesh=new T.Mesh(g,material);mesh.customDepthMaterial=depth;mesh.castShadow=true;mesh.receiveShadow=true;mesh.position.set(cx,cy,.025);scene.add(mesh);pieces.push({mesh,home:mesh.position.clone(),index:i,birth,decay,core});
   });
-  return {scene,body,face,faceMat,pieces,table,shadow,key,v};
+  return {scene,body,face,faceMat,pieces,table,shadow,thickness,catcher,key,v};
  }
  setFace(id:Id,canvas:HTMLCanvasElement){if(!this.textures.has(id)){const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=4;this.textures.set(id,texture);}this.current=id;for(const r of this.rigs){r.faceMat.map=this.textures.get(id)!;r.faceMat.needsUpdate=true;}}
  private update(v:number,t:number,reduced:boolean){const r=this.rigs[v],hit=designs[v].hit,mass=weight(this.current);if(reduced)t=DURATION;
@@ -63,7 +64,7 @@ export class GolemRenderer{
   return r;
  }
  draw(canvas:HTMLCanvasElement,v:number,t:number,reduced=false){const w=canvas.width,h=canvas.height;if(this.renderer.domElement.width!==w||this.renderer.domElement.height!==h)this.renderer.setSize(w,h,false);const r=this.update(v,t,reduced);r.table.visible=true;r.shadow.visible=false;const aspect=w/h;this.camera.left=-1.08*aspect;this.camera.right=1.08*aspect;this.camera.top=1.08;this.camera.bottom=-1.08;this.camera.position.set(.38,-3.65,3.9);this.camera.up.set(0,0,1);this.camera.lookAt(0,0,.04);this.camera.updateProjectionMatrix();this.renderer.render(r.scene,this.camera);const c=canvas.getContext('2d')!;c.clearRect(0,0,w,h);c.drawImage(this.renderer.domElement,0,0);}
- drawBoard(canvas:HTMLCanvasElement,v:number,t:number,matrix:DOMMatrix,reduced=false){const w=innerWidth,h=innerHeight;if(this.renderer.domElement.width!==canvas.width||this.renderer.domElement.height!==canvas.height)this.renderer.setSize(canvas.width,canvas.height,false);const ndc=new T.Matrix4().set(2/w,0,0,-1,0,-2/h,0,1,0,0,-.0001,0,0,0,0,1);this.boardCamera.projectionMatrix.copy(ndc.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))));this.boardCamera.projectionMatrixInverse.copy(this.boardCamera.projectionMatrix).invert();const r=this.update(v,t,reduced);r.table.visible=false;r.shadow.visible=true;this.renderer.render(r.scene,this.boardCamera);canvas.getContext('2d')!.drawImage(this.renderer.domElement,0,0);}
+ drawBoard(canvas:HTMLCanvasElement,v:number,t:number,matrix:DOMMatrix,reduced=false){const w=innerWidth,h=innerHeight;if(this.renderer.domElement.width!==canvas.width||this.renderer.domElement.height!==canvas.height)this.renderer.setSize(canvas.width,canvas.height,false);const ndc=new T.Matrix4().set(2/w,0,0,-1,0,-2/h,0,1,0,0,-.0001,0,0,0,0,1);this.boardCamera.projectionMatrix.copy(ndc.multiply(new T.Matrix4().fromArray(Array.from(matrix.toFloat64Array()))));this.boardCamera.projectionMatrixInverse.copy(this.boardCamera.projectionMatrix).invert();const r=this.update(v,t,reduced);r.table.visible=false;r.shadow.visible=true;renderSummonBoard(this.renderer,r.scene,this.boardCamera,[r.thickness,r.catcher,r.shadow]);canvas.getContext('2d')!.drawImage(this.renderer.domElement,0,0);}
  get stats(){return {contexts:1,geometries:this.renderer.info.memory.geometries,textures:this.renderer.info.memory.textures,drawCalls:this.renderer.info.render.calls};}
  dispose(){this.geometries.forEach(g=>g.dispose());this.materials.forEach(m=>m.dispose());this.maps.forEach(t=>t.dispose());this.textures.forEach(t=>t.dispose());this.textures.clear();for(const r of this.rigs)r.key.shadow.map?.dispose();this.renderer.dispose();this.renderer.forceContextLoss();}
 }

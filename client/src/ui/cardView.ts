@@ -509,7 +509,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   if(opt.lazyArt!==undefined)assetHints.set(node,()=>[
     opt.compactField?fieldFrameFor(c.t):frameFor(c.t,opt.fullArt || opt.lazyArt === undefined),
     artUrl.sm(c.id),
-    ...['attack','health','cost','plaque'].map(k=>`/art/biblion/modular/${k}-ui.webp`),
+    ...['attack','health','cost','plaque'].map(k=>`/art/biblion/modular/${k}-print.webp`),
     `/ui/cost-${c.t==='quest'?'spell':c.t}.webp?v=2`,
     ...Array.from(node.querySelectorAll('img'),image=>{
       image.loading='eager';image.fetchPriority='high';return image.currentSrc||image.src;

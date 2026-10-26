@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {SPECIAL_FX} from '../animationTempo';
 import {paintRestingAppearance} from '../summon/appearance';
 import {isCastle} from '../castleSummon/catalog';
@@ -71,16 +72,16 @@ function paintHit(source:HTMLElement,actor:Actor,now:number){
 /** Freeze the currently visible pose before a destruction takes ownership. */
 export function detachMonsterFace(source:HTMLElement):HTMLElement{
  const visible=jobs.get(source)?.actor.el??states.get(source)?.actor.el;
- const copy=(visible??source).cloneNode(true) as HTMLElement;
- if(!visible){const w=source.offsetWidth,h=source.offsetHeight,m=projectedPlacement(source,w,h);copy.style.cssText=`position:fixed!important;left:0!important;top:0!important;width:${w}px!important;height:${h}px!important;--cw:${w}px;--ch:${h}px;transform:${m.toString()}!important;transform-origin:0 0!important;margin:0!important`;}
+ const copy=cloneCardNode(visible??source);
+ if(!visible||visible===source){const w=source.offsetWidth,h=source.offsetHeight,m=states.get(source)?.actor.matrix??projectedPlacement(source,w,h);copy.style.cssText=`position:fixed!important;left:0!important;top:0!important;width:${w}px!important;height:${h}px!important;--cw:${w}px;--ch:${h}px;transform:${m.toString()}!important;transform-origin:0 0!important;margin:0!important`;}
  copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
  copy.classList.remove('is-attacker','is-targetable','is-atk-target');
  copy.style.setProperty('position','fixed','important');copy.style.setProperty('opacity','1','important');copy.style.setProperty('visibility','visible','important');copy.style.setProperty('display','block');copy.style.pointerEvents='none';copy.style.zIndex='136';
- copy.dataset.combatExit='true';copy.setAttribute('aria-hidden','true');document.body.append(copy);
+ copy.dataset.combatExit='true';copy.dataset.exitUid=source.dataset.uid??source.dataset.exitUid??'';copy.setAttribute('aria-hidden','true');document.body.append(copy);
  jobs.get(source)?.finish(false);removeState(source);hits.delete(source);source.style.visibility='hidden';release();return copy;
 }
 
-export function monsterRect(n:HTMLElement):Rect{const r=n.getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height,matrix:projectedPlacement(n,r.width,r.height)};}
+export function monsterRect(n:HTMLElement):Rect{const w=n.offsetWidth,h=n.offsetHeight,matrix=projectedPlacement(n,w,h),p=matrix.transformPoint(new DOMPoint(w/2,h/2));return{x:p.x/p.w,y:p.y/p.w,w,h,matrix};}
 function ensure(){if(!layers){layers=mountAnimationLayers(document.body,true);layers.root.setAttribute('aria-hidden','true');}return layers;}
 function ensureField(root:HTMLElement){
  let layer=fieldLayers.get(root);
@@ -100,7 +101,7 @@ function observeField(root:HTMLElement){
  for(const [n,s] of states)if(s.root===root)observer.observe(n,{attributes:true,attributeFilter:['class','style','data-monster-aura','data-monster-blocked','data-monster-dual-ready']});
  for(const zone of root.querySelectorAll('.zone-mon'))observer.observe(zone,{childList:true,subtree:true,attributes:true,attributeFilter:['data-reserved-uid']});
 }
-function removeState(n:HTMLElement){const s=states.get(n);if(!s)return;s.actor.dispose();n.style.opacity=s.opacity;states.delete(n);}
+function removeState(n:HTMLElement){const s=states.get(n);if(!s)return;s.dual?.canvas.remove();s.actor.dispose();n.style.opacity=s.opacity;states.delete(n);}
 /** Live presentation owners for attached UI effects, including persistent field actors. */
 export function monsterPresentationNodes(source:HTMLElement):HTMLElement[]{
  return [source,states.get(source)?.actor.el,jobs.get(source)?.actor.el,gutsJobs.get(source)?.actor.el].filter((n):n is HTMLElement=>!!n&&n.isConnected);
@@ -110,7 +111,7 @@ export function syncMonsterStates(root:HTMLElement){
  if(!root.isConnected){release();return;}
  for(const n of root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')){
   if(!n.classList.contains('is-attacker')&&!n.dataset.monsterAura&&!n.dataset.monsterBlocked)continue;
-  const layer=ensureField(root),actor=new Actor(n,layer.cards,2);states.set(n,{actor,root,layer,opacity:n.style.opacity,dirty:true});
+  const layer=ensureField(root),actor=new Actor(n,layer.cards,1,true);states.set(n,{actor,root,layer,opacity:n.style.opacity,dirty:true});
   // Keep the source visible until the replacement actor has painted its first pose.
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
@@ -124,6 +125,9 @@ function release(){
 }
 function tick(now:number){
  frame=0;if(document.hidden)return;
+ // Native actors mutate their own styles. Observe external changes only, not
+ // our paint pass, or static exhausted cards schedule an endless layout loop.
+ for(const observer of observers.values())observer.disconnect();
  for(const [node,start] of hits)if(!node.isConnected||now-start>=300){hits.delete(node);const state=states.get(node);if(state)state.dirty=true;}
  const active=layers;active?.begin(innerWidth,innerHeight);
  // Measure all dirty sources before touching clone styles. Idle geometry stays cached
@@ -142,9 +146,9 @@ function tick(now:number){
   s.dirty=false;
   const side=n.closest('#oppRow')?-1:1;
   const k=ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
-  s.actor.paint(k,v,t,r,r,reduced(),true,side);if(n.style.opacity!=='0')n.style.opacity='0';s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':v;
-  if(dual){s.dual??=new DualReadySurface(s.actor,2);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
-  paintRestingAppearance(s.actor.el,ready?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,2,reduced());
+  s.actor.paint(k,v,t,r,r,reduced(),true,side);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':v;
+  if(dual){s.dual??=new DualReadySurface(s.actor,1);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
+  paintRestingAppearance(s.actor.el,ready?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,1,reduced(),r.w);
   for(const cls of ['is-aiming','is-atk-target','is-targetable'])s.actor.el.classList.toggle(cls,n.classList.contains(cls));
   if(n.classList.contains('is-atk-target')||n.classList.contains('is-targetable'))s.actor.el.style.setProperty('filter','drop-shadow(0 0 5px #ff7955)','important');
   s.actor.el.style.removeProperty('translate');delete s.actor.el.dataset.hitReaction;paintHit(n,s.actor,now);
@@ -182,7 +186,7 @@ function tick(now:number){
   if(age>=j.ms){j.finish(true);continue;}
   j.surface.render(age,reduced(),j.r.w);j.actor.el.dataset.gutsTime=String(Math.round(age));
  }
- release();if(jobs.size||gutsJobs.size||animated)schedule();
+ release();for(const root of observers.keys())observeField(root);if(jobs.size||gutsJobs.size||animated)schedule();
 }
 /** The same foreground owner as attacks, so a contact clone cannot cover the membrane. */
 export function playGutsEndurance(source:HTMLElement,result:GutsSurvival,signal?:AbortSignal,direction=source.closest('#oppRow')?-1:1):Promise<boolean>{
