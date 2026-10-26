@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-26T17:23:53.083Z",
+  "origin": "https://yourlore.xyz",
+  "results": [
+    {
+      "url": "/",
+      "status": 200,
+      "bytes": 8630,
+      "sha256": "baced8f65d83040fdc5cc7ecfe0fa7db282cfd0a53133a85567875daf86212db"
+    },
+    {
+      "url": "/art/ui/loading/azure-card-v1.webp",
+      "status": 200,
+      "bytes": 94474,
+      "sha256": "c8edc164c945787867646438720720c121136696a30c0e807017a16c21c682f8",
+      "matchesSourceBytes": true
+    },
+    {
+      "url": "/assets/social-4b0swKm-.js",
+      "status": 200,
+      "bytes": 404278,
+      "sha256": "8056adf02d5aba2d568b33ff5fb86b02e66bf552d84b2fd51485ebaeaee0ab20",
+      "containsSelectedEntrance": true
+    }
+  ]
+}
