@@ -1,4 +1,5 @@
 import { GOBLIN_CARDS } from './goblinCards';
+import { RIFT_MATTER } from './riftMatter';
 // Canonical player-facing effects. Explicit paragraphs define rule boundaries.
 // Edit all three languages together; see docs/card-text-style.md.
 export type EffectLocale = "ja" | "ko" | "en";
@@ -844,9 +845,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 10 times this duel, including this use, deal 5 to the opponent instead."
   },
   "GHOST": {
-    "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（持続）。\n\n【行動の終了後】1回の行動で相手の最大マナが増えた場合、自分に2ダメージを与える。その行動で相手が回復した場合も、自分に2ダメージ（それぞれ行動ごとに1回）。",
-    "ko": "【상대 회복 시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(지속).\n\n【행동 처리 후】1회 행동 중 상대의 최대 마나가 증가하면 자신에게 2 데미지를 준다. 그 행동에서 상대가 회복한 경우에도 자신에게 2 데미지를 준다(각각 행동당 1회).",
-    "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (lasting).\n\n【After an Action】If the opponent's max mana increases during an action, you take 2 damage. If they restore HP during that action, you also take 2 damage; each condition triggers once per action."
+    "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（持続）。\n\n【行動の終了後】相手が最大マナを増やすたびに、自分に2ダメージを与える。",
+    "ko": "【상대 회복 시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(지속).\n\n【행동 처리 후】상대가 최대 마나를 늘릴 때마다 자신에게 2 데미지를 준다.",
+    "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (lasting).\n\n【After an Action】Whenever the opponent increases their max mana, deal 2 damage to yourself."
   },
   "BLOOD_RITE": {
     "ja": "【場にある間】両プレイヤーへの魔法ダメージを無効にし、受けるはずだった量だけそのプレイヤーの体力を回復する。\n\n【期間】双方のターンが合計10ターン経過したターン開始時にこの魔法を破壊する。\n\n【破壊時】破壊されたこの魔法は墓地の代わりに自分のリフトへ送る。",
@@ -1841,3 +1842,4 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
 };
 
 for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
+CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};

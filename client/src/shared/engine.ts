@@ -2447,6 +2447,10 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     }
   }
   if (counterTarget && counterAmount > 0) counterHit(g, ctx, o, counterTarget, p, att, counterAmount);
+  if (att.attackFx === 'goblinDirect' && targetUid === null && !g.over) {
+    monsterActivation(g, ctx.ev, p, att);
+    ctx.dealDamage(o, 1, cn(att), cn(att), side(g, p));
+  }
   if (faceDmg && isAssassinCard(att)) advanceQuest(p, "assassinHit");
   // per-attack effect (e.g. GM8_0: lose attack permanently) + multi-attack accounting
   if (att.attackFx === "atkDownOnAttack") { if (att.val) monsterActivation(g, ctx.ev, p, att); att.atkMod = (att.atkMod || 0) - (att.val || 0); ctx.log(`  └ ${cn(att)} 공격력 -${att.val}(지속)`, `  └ ${cn(att)} 攻撃力-${att.val}(持続)`); }
@@ -4542,6 +4546,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   const p=g.players[who],o0=g.players[1-who];
   let applicable=false;
   const reason=(ko:string,ja:string)=>({applicable:true,blocked:{ko,ja}});
+  if (card.id === 'RIFT_MATTER') return reason('이 카드는 플레이할 수 없습니다', 'このカードはプレイできません');
   if (card.id === "GOBLIN_SETTLEMENT") { applicable=true; if (!p.field.some(isBasicGoblin)) return reason("고블린 또는 돌격 고블린이 필요합니다","自分の場にゴブリンか特攻ゴブリンが必要です"); }
   if (card.id === "BEGINNER_MIND") { applicable=true; if (p.hand.length !== 1) { return reason("  └ 패가 0장일 때만 발동 가능", "  └ 手札が0枚の時のみ発動可能"); } }
   if (card.id === "SPACE_RITE") { applicable=true; if (o0.field.length + o0.traps.length + o0.enchants.length < 6) { return reason("  └ 상대 필드의 카드가 6장 미만이라 사용 불가", "  └ 相手の場のカードが6枚未満のため使用不可"); } }
@@ -5359,6 +5364,7 @@ function addMaxMana(p: PlayerState, amount: number): number {
   if (amount <= 0 || maxManaGrowthBlocked(p)) return 0;
   const before = p.maxMana;
   p.maxMana += amount;
+  if (Math.min(MAX_MANA, p.maxMana) > Math.min(MAX_MANA, before)) p.maxManaIncreases = (p.maxManaIncreases ?? 0) + 1;
   return p.maxMana - before;
 }
 function addHealth(ctx: Ctx, p: PlayerState, amount: number): void {
@@ -5407,12 +5413,14 @@ export function effectChoices(g: GameState): CardInst[] {
     }
     case "QUICK_SORT":
     case "Q_ASSASSIN": return [...o.field.filter(m => !hasPassive(m, "aura")), ...o.enchants.map(e => e.card), ...(o.quests ?? []).map(q => q.card)];
+    case "RIFT_MATTER": return [...o.field.filter(m => !hasPassive(m, "aura")), ...o.enchants.map(e => e.card), ...o.traps.map(t => t.card), ...(o.quests ?? []).map(q => q.card)].filter(c => !hasPassive(c, 'relic'));
     default: return [];
   }
 }
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
   g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: reason === "SELECTED_SWORD", data };
   if (reason === 'NIGHT_CASTLE_GIFT') g.pending.hint = '패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택';
+  if (reason === 'RIFT_MATTER') g.pending.hint = data?.left === 1 ? '리프트로 보낼 상대 필드의 두 번째 카드를 선택' : '리프트 물질 — 리프트로 보낼 상대 필드의 카드 2장을 선택';
   if (!effectChoices(g).length) { g.pending = null; ctx.log("対象がないため効果は不発", "対象がないため効果は不発"); return; }
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
@@ -5470,8 +5478,9 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
     }
     case "Q_TRIBE": effectSummon(g, ctx, p, card.id); break;
     case "QUICK_SORT":
+    case "RIFT_MATTER":
     case "Q_ASSASSIN": {
-      const exile = pending.reason === "Q_ASSASSIN";
+      const exile = pending.reason === "Q_ASSASSIN" || pending.reason === "RIFT_MATTER";
       const m = o.field.find(m => m.uid === uid);
       if (m) {
         if (exile) {
@@ -5490,7 +5499,12 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
             const q = o.quests!.splice(qi, 1)[0];
             if (exile) rmz(o).push(q.card); else fieldToGrave(g,ctx,o,q.card);
           }
+          const ti = o.traps.findIndex(t => t.card.uid === uid);
+          if (pending.reason === 'RIFT_MATTER' && ti >= 0) rmz(o).push(o.traps.splice(ti, 1)[0].card);
         }
+      }
+      if (pending.reason === 'RIFT_MATTER' && Number(pending.data?.left ?? 2) > 1 && !g.over) {
+        offerEffectChoice(g, ctx, p, 'RIFT_MATTER', 'リフトに送る相手の場の2枚目を選択', {left: 1});
       }
       break;
     }
@@ -5657,8 +5671,8 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
 }
 
 function reduceEffects(prev: GameState, action: Action): ReduceResult {
-  // 유령(GHOST) 트리거용: 액션 전 양측 최대 마나/체력 기록 → 액션 후 diff 검사
-  const pre = prev.players.map((pl) => ({ mm: pl.maxMana, mh: pl.hp, rm: (pl.removed ?? []).length, cull: cullExiled(pl) }));
+  // Count actual mana-growth events, not the amount gained or healing events.
+  const pre = prev.players.map(pl => pl.maxManaIncreases ?? 0);
   const res = reduceCore(prev, action);
   const g2 = res.state;
   const questCtx = makeCtx(g2, res.events as GameEvent[]);
@@ -5679,6 +5693,11 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
         }
         const added = fresh();
         added.forEach(c => exileSeen[sx].add(c.uid));
+        for (const card of added) if (card.id === 'RIFT_MATTER') {
+          // This unplayable card has no self-exile path: entry comes from another card.
+          queueExpansionChoice(g2, pl, card.id, 'リフト物質 — リフトに送る相手の場のカードを2枚選択', {left: 2});
+          questCtx.log(`${cn(card)}: 상대 필드 카드 2장을 리프트로 보낸다`, `${cn(card)}: 相手の場のカード2枚をリフトに送る`);
+        }
         if (added.length) {
           advanceQuest(pl, "exile", added.length);
           const rifts = pl.enchants.filter(e => e.card.ench === "rift").length;
@@ -5707,12 +5726,10 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
       const owner = g2.players[s];
       const ghosts = owner.field.filter((m) => m.id === "GHOST").length;
       if (!ghosts || g2.over) continue;
-      let hits = 0;
-      if (g2.players[1 - s].maxMana > pre[1 - s].mm) hits++;
-      if (res.events.some(e=>e.type==='heal'&&e.player===1-s&&e.amount>0)) hits++;
+      const hits = (g2.players[1 - s].maxManaIncreases ?? 0) - pre[1 - s];
       if (hits > 0) {
         for (const m of owner.field) if (m.id === "GHOST") monsterActivation(g2, res.events, owner, m);
-        const dmg = 2 * hits * ghosts; // v19: 3 → 2
+        const dmg = 2 * hits * ghosts;
         ctx2.log(`  └ <span class="dmg">유령의 원한</span>: 상대의 성장에 ${owner.name} 이(가) ${dmg} 데미지`, `  └ <span class="dmg">幽霊の怨念</span>: 相手の成長に ${owner.name} が ${dmg} ダメージ`);
         ctx2.dealDamage(owner, dmg, "유령", "幽霊", s);
       }
@@ -5897,7 +5914,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
 }
 
 // ---------- v50 expansion: shared rules for server, client and deterministic bots ----------
-const FIRE_IDS = new Set(['FIRE_BALL', 'FIRE_ARROW', 'FIRE_ZONE', 'FIRE_METEOR']);
+const FIRE_IDS = new Set(['FLAME', 'FIRE_BALL', 'FIRE_ARROW', 'FIRE_ZONE', 'FIRE_METEOR']);
 const MERC_IDS = new Set(['MERCENARY', 'MERC_LEADER', 'MERC_MASTER']);
 const isFire = (c: CardDef): boolean => FIRE_IDS.has(c.id);
 const isBlack = (c: CardDef): boolean => c.t === 'spell' && c.id.startsWith('BLACK_');

@@ -24,7 +24,7 @@ export const FLAVOR_CARD_NAMES: Record<string, LocalizedCardName> = {
   SX6: { ko: "매복망 대붕락", ja: "伏兵網大崩落", en: "Grand Collapse of the Ambush Web" },
   HANDRESET: { ko: "망각의 새 패", ja: "忘却の新札", en: "New Hand of Oblivion" },
   GAMBLE: { ko: "육면의 변덕", ja: "六面の気まぐれ", en: "Six-Faced Whim" },
-  FLAME: { ko: "불씨의 채무", ja: "火種の負債", en: "Ember Debt" },
+  FLAME: { ko: "파이어", ja: "ファイアー", en: "Fire" },
   NEGOTIATE: { ko: "검은 봉인의 거래", ja: "黒封印の取引", en: "Bargain of the Black Seal" },
   DISARM1: { ko: "첫 나사 뽑기", ja: "最初の螺子抜き", en: "The First Loose Screw" },
   DISARM2: { ko: "청동 해부도", ja: "青銅解剖図", en: "Brass Dissection" },

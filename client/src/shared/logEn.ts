@@ -7,6 +7,10 @@
 
 const R: [RegExp, string][] = [
   // ---- full/long phrases first (order matters) ----
+  [/리프트 물질 — 리프트로 보낼 상대 필드의 카드 2장을 선택/g, 'Rift Matter — choose 2 cards on the opponent’s field to send to their Rift'],
+  [/리프트로 보낼 상대 필드의 두 번째 카드를 선택/g, 'Choose the second card on the opponent’s field to send to their Rift'],
+  [/상대 필드 카드 2장을 리프트로 보낸다/g, 'send 2 cards on the opponent’s field to their Rift'],
+  [/이 카드는 플레이할 수 없습니다/g, 'This card cannot be played'],
   [/실드 획득 선택/g, "chose Shield"],
   [/아군 강화 선택/g, "chose ally enhancement"],
   [/확인 종료/g, "finished hand inspection"],

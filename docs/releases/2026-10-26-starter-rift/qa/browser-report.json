@@ -1,0 +1,32 @@
+{
+  "origin": "http://127.0.0.1:5307",
+  "evidence": "local fixture, production renderer/controller, no authenticated online match",
+  "checks": [
+    "Four card images decode",
+    "Full rules rendered through production card renderer",
+    "Production controller and actual picker clicks resolve Rift Matter twice"
+  ],
+  "assets": [
+    {
+      "id": "GOBLIN",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "GHOST",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "id": "FLAME",
+      "width": 832,
+      "height": 760
+    },
+    {
+      "id": "RIFT_MATTER",
+      "width": 1472,
+      "height": 1344
+    }
+  ],
+  "errors": []
+}

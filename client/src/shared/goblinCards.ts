@@ -10,12 +10,13 @@ export const GOBLIN_CARDS: CardDef[] = [
     "nameJa": "ゴブリン",
     "nameEn": "Goblin",
     "cost": 1,
-    "text": "—",
-    "textJa": "—",
-    "textEn": "—",
+    "text": "【공격 시】상대 플레이어를 직접 공격하면 추가로 1 데미지를 준다.",
+    "textJa": "【攻撃時】相手プレイヤーに直接攻撃した場合、追加で1ダメージを与える。",
+    "textEn": "【On Attack】When this monster directly attacks the opponent, deal 1 additional damage to them.",
     "t": "mon",
     "noShop": true,
-    "atk": 2,
+    "atk": 1,
+    "attackFx": "goblinDirect",
     "def": 1
   },
   {

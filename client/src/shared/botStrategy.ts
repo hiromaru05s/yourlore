@@ -79,9 +79,8 @@ function adjustmentEvaluator(g: GameState, p: PlayerState): (c: CardDef) => numb
     if (grantsShield) bonus += Math.min(24, shieldDew * 5);
     bonus /= 1 + copies * 2;
     if (c.id === 'FLAME' || c.id === 'AMBUSH' || (c.act === 'dmg' && (c.val ?? 0) <= 4)) bonus -= threat * .7;
-    // Ghost gains ATK on healing, but each healing action also deals 2 self damage.
-    // Do not count that growth as free scaling in a persistent recovery matchup.
-    if (c.id === 'GHOST') bonus -= Math.min(8, threat) + (activeRecovery ? 2 : 0);
+    // Opponent recovery now grows Ghost without causing self damage.
+    if (c.id === 'GHOST' && activeRecovery) bonus += 2;
     return bonus;
   };
 }
@@ -106,7 +105,7 @@ export function lastingValue(g: GameState, p: PlayerState): number {
   const recovery = recoveryPerTurn(g, p);
   return Math.min(60, recovery * 4) + p.field.reduce((n, c) => n + recoveryEngine(c), 0)
     + p.enchants.reduce((n, e) => n + recoveryEngine(e.card), 0)
-    - p.field.filter(m => m.id === 'GHOST').length * (recoveryPerTurn(g, o) > 0 ? 6 : 0);
+    + p.field.filter(m => m.id === 'GHOST').length * (recoveryPerTurn(g, o) > 0 ? 2 : 0);
 }
 
 /** Exclude a pure burn that only heals the foe from the heuristic search.

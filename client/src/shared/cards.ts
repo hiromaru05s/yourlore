@@ -1,4 +1,5 @@
 import { GOBLIN_CARDS, GOBLIN_STARTERS } from './goblinCards';
+import { RIFT_MATTER } from './riftMatter';
 import { applyBalance60 } from './balance60';
 import {cardEffectId} from './cardEffects';
 import { DEW_SHIELD_CARDS, DEW_SHIELD_STARTERS, applyDewShieldRework, localizeDewShieldCards } from './dewShieldCards';
@@ -2355,6 +2356,7 @@ DB.NIGHT_CASTLE_GIFT = NIGHT_CASTLE_GIFT;
 DECK_POOL.push(NIGHT_CASTLE_GIFT.id);
 applyBalance60(DB);
 for (const c of GOBLIN_CARDS) DB[c.id] = c;
+DB.RIFT_MATTER = RIFT_MATTER;
 DECK_POOL.push(...GOBLIN_STARTERS);
 applyKeywordText(PASSIVES);
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
@@ -2379,8 +2381,8 @@ export const RELATED_MANUAL: Record<string, string[]> = {
   EMPTY_MIND: ["CREATION"],
   MIMIC_KING2: ["MIMIC_HIDEOUT"],
   MIMIC_HIDEOUT: ["MIMIC2"],
-  FIRE_ART: ["FIRE_BALL", "FIRE_ARROW", "FIRE_ZONE", "FIRE_METEOR"],
-  FIRE_MASTER: ["FIRE_BALL", "FIRE_ARROW", "FIRE_ZONE", "FIRE_METEOR"],
+  FIRE_ART: ["FLAME", "FIRE_BALL", "FIRE_ARROW", "FIRE_ZONE", "FIRE_METEOR"],
+  FIRE_MASTER: ["FLAME", "FIRE_BALL", "FIRE_ARROW", "FIRE_ZONE", "FIRE_METEOR"],
   ASSASSIN_SQUAD: ["ASSASSIN2"],
   ASSASSIN3: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN4", "GUILD_HALL", "GUILD_HQ"], // 상급(v36): 덱 구성에 다른 암살자 카드
   ASSASSIN4: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "GUILD_HALL", "GUILD_HQ"], // 특급(v36): 서로 다른 암살자 3종

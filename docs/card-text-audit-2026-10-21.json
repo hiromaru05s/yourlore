@@ -6,8 +6,8 @@
     "ko",
     "en"
   ],
-  "count": 377,
-  "engineSha256": "067fc3637bc7ce607723b8988d6fd6715d7ae641579dbcf631602beaad28d898",
+  "count": 378,
+  "engineSha256": "58f7a9d90438197ab4719bb5ba9152b8ab2d38f7fea14ed4702ba55cd86cddfd",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -3674,46 +3674,52 @@
       }
     },
     "FLAME": {
-      "nameJa": "火種の負債",
-      "status": "balance-v60-reworked",
+      "nameJa": "ファイアー",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "36db3d8a1d24406f8bf595cba6bbe036dd427c8f2dd1c914aabfc61c0eb96c11",
+      "definitionSha256": "d1d855946a2f836db8d036290398eeb0ff31958bc8d4f523ba3a8ac3f1d811c5",
       "textSha256": "1a54e693d692295f7317b196edb3bae21b6b7f45675aaf1ea0864ae6f09df55c",
       "hooks": {},
       "before": {
-        "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。",
-        "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다.",
-        "en": "【On Cast】Deal 2 damage to the opponent, you take 1 damage."
+        "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて10回以上なら、相手へのダメージは代わりに5になる。",
+        "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다. 이번 사용을 포함해 이 대전에서 자신이 동명 카드를 사용한 횟수가 10회 이상이면 상대에게 주는 데미지는 대신 5가 된다.",
+        "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 10 times this duel, including this use, deal 5 to the opponent instead."
       },
       "after": {
         "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて10回以上なら、相手へのダメージは代わりに5になる。",
         "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다. 이번 사용을 포함해 이 대전에서 자신이 동명 카드를 사용한 횟수가 10회 이상이면 상대에게 주는 데미지는 대신 5가 된다.",
         "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 10 times this duel, including this use, deal 5 to the opponent instead."
-      }
+      },
+      "reviewDate": "2026-10-26",
+      "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md"
     },
     "GHOST": {
       "nameJa": "幽霊",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "f25dc80d2143f8ffee32707b9ad798a7bc91d5d3d91e15d21185ae8d5c944e28",
-      "textSha256": "f24a1a4dcc0fd9fbf085b807bc7a372311a2a6197358d9c4d51b8cf31fb07a98",
+      "textSha256": "bcb2b3177051d074c5220d2815e21d2ba509307b67b85ef736ca798237a6e1a6",
       "hooks": {},
       "before": {
         "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（持続）。\n\n【行動の終了後】1回の行動で相手の最大マナが増えた場合、自分に2ダメージを与える。その行動で相手が回復した場合も、自分に2ダメージ（それぞれ行動ごとに1回）。",
-        "ko": "【상대 회복시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(지속).\n\n【행동 처리 후】1회 행동 중 상대의 최대 마나가 증가하면 자신에게 2 데미지를 준다. 그 행동에서 상대가 회복한 경우에도 자신에게 2 데미지를 준다(각각 행동당 1회).",
+        "ko": "【상대 회복 시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(지속).\n\n【행동 처리 후】1회 행동 중 상대의 최대 마나가 증가하면 자신에게 2 데미지를 준다. 그 행동에서 상대가 회복한 경우에도 자신에게 2 데미지를 준다(각각 행동당 1회).",
         "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (lasting).\n\n【After an Action】If the opponent's max mana increases during an action, you take 2 damage. If they restore HP during that action, you also take 2 damage; each condition triggers once per action."
       },
       "after": {
-        "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（持続）。\n\n【行動の終了後】1回の行動で相手の最大マナが増えた場合、自分に2ダメージを与える。その行動で相手が回復した場合も、自分に2ダメージ（それぞれ行動ごとに1回）。",
-        "ko": "【상대 회복 시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(지속).\n\n【행동 처리 후】1회 행동 중 상대의 최대 마나가 증가하면 자신에게 2 데미지를 준다. 그 행동에서 상대가 회복한 경우에도 자신에게 2 데미지를 준다(각각 행동당 1회).",
-        "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (lasting).\n\n【After an Action】If the opponent's max mana increases during an action, you take 2 damage. If they restore HP during that action, you also take 2 damage; each condition triggers once per action."
-      }
+        "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（持続）。\n\n【行動の終了後】相手が最大マナを増やすたびに、自分に2ダメージを与える。",
+        "ko": "【상대 회복 시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(지속).\n\n【행동 처리 후】상대가 최대 마나를 늘릴 때마다 자신에게 2 데미지를 준다.",
+        "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (lasting).\n\n【After an Action】Whenever the opponent increases their max mana, deal 2 damage to yourself."
+      },
+      "reviewDate": "2026-10-26",
+      "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md"
     },
     "BLOOD_RITE": {
       "nameJa": "血鬼術",
@@ -8209,21 +8215,29 @@
     },
     "GOBLIN": {
       "nameJa": "ゴブリン",
-      "status": "added-reviewed-2026-10-23",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "a179546ea13c5749743f00061847c3aede20733a248e41fac4cab536176b8165",
-      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
-      "hooks": {},
-      "before": null,
-      "after": {
+      "definitionSha256": "ad8c3d38ad1872e9b2fd33392edb984d0c55a98b23611f1477fb91b79c62e7d6",
+      "textSha256": "fbb3da095d04fe4ee7c05215e963f8afa16fc0085af707158aec578fe020310f",
+      "hooks": {
+        "attackFx": "goblinDirect"
+      },
+      "before": {
         "ja": "—",
         "ko": "—",
         "en": "—"
-      }
+      },
+      "after": {
+        "ja": "【攻撃時】相手プレイヤーに直接攻撃した場合、追加で1ダメージを与える。",
+        "ko": "【공격 시】상대 플레이어를 직접 공격하면 추가로 1 데미지를 준다.",
+        "en": "【On Attack】When this monster directly attacks the opponent, deal 1 additional damage to them."
+      },
+      "reviewDate": "2026-10-26",
+      "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md"
     },
     "GOBLIN_RAIDER": {
       "nameJa": "特攻ゴブリン",
@@ -8403,6 +8417,26 @@
         "ja": "【召喚時】ダイスを1回振る。\n1～2：自分のデッキ・手札・墓地・場に「ゴブリン」関連カードが2種類未満なら、このカード以外の自分の場のカードを全て破壊する。その場合、このターン終了時にこのカードを自分のリフトへ送る。\n3～6：自分の場の「ゴブリン」系モンスター全てを+2/+2（持続）。",
         "ko": "【소환 시】주사위를 1회 굴린다.\n1~2: 자신의 덱·패·묘지·필드에 고블린 계열 카드가 2종류 미만이면 이 카드 외 자신의 필드 카드를 전부 파괴한다. 그 경우 이번 턴 종료 시 이 카드를 자신의 리프트로 보낸다.\n3~6: 자신의 필드에 있는 고블린 계열 몬스터 전부 +2/+2(지속).",
         "en": "【On Summon】Roll 1 die.\n1–2: If your deck, hand, graveyard and field contain fewer than 2 distinct Goblin-related cards, destroy all other cards on your field. If so, send this card to your Rift at the end of this turn.\n3–6: Give all Goblin monsters on your field +2/+2 (lasting)."
+      }
+    },
+    "RIFT_MATTER": {
+      "nameJa": "リフト物質",
+      "status": "new-reviewed",
+      "reviewDate": "2026-10-26",
+      "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "7988eedff41a8260e1a9c76c296b3ee91898114ebaace378b09d0f8e15cb7a81",
+      "textSha256": "ab10533d975ccd3bcfa254d2559b583f59f41673f04d428801699b8bb83b3bd4",
+      "hooks": {},
+      "before": null,
+      "after": {
+        "ja": "【発動条件】このカードはプレイできない。\n\n【自分のリフト追加時】他のカードの効果で自分のリフトに送られた場合のみ発動する。相手の場のカード2枚を選び、相手のリフトに送る（1枚しかなければその1枚）。",
+        "ko": "【발동 조건】이 카드는 플레이할 수 없다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 자신의 리프트로 보내졌을 때만 발동한다. 상대 필드의 카드 2장을 선택해 상대의 리프트로 보낸다(1장만 있으면 그 1장).",
+        "en": "【Play Requirement】This card cannot be played.\n\n【Card Added to Your Rift】Activate only when another card’s effect sends this card to your Rift. Choose 2 cards on the opponent’s field and send them to their Rift; if only 1 exists, send that card."
       }
     }
   },

@@ -20,6 +20,9 @@ try{
   const id=mode==='blood-rite'?'BLOOD_RITE':mode==='reverse'?'BLACK_REVERSE':mode==='rune'?'RUNE3':null;
   if(id)g.players[mode==='rune'?owner:1-owner].enchants=[{card:card(id,'reaction'),turns:6,bornTurn:0}];
   const a={type:'play',idx:0},before=old.reduce(g,a),after=current.reduce(g,a);
+  // Fire-family membership is an intentional rule change; damage/VFX parity remains.
+  assert.deepEqual(after.state.players[owner].expansion.firePlayed,['FLAME']);
+  before.state.players[owner].expansion.firePlayed=['FLAME'];
   assert.deepEqual(after.state,before.state,mode+' state/RNG');assert.deepEqual(gameplay(after.events),gameplay(before.events),mode+' gameplay events');
   const groups=after.events.filter(e=>e.type==='elementalStart'&&e.id==='FLAME');assert.equal(groups.length,mode==='rune'?2:1);
   for(const group of groups){const impacts=after.events.filter(e=>e.type==='elementalImpact'&&e.group===group.group);assert.equal(impacts.length,group.targets.length);assert(after.events.some(e=>e.type==='elementalEnd'&&e.group===group.group));assert.equal(group.targets.length,mode==='lethal'?1:2);assert.equal(group.targets[0].player,1-owner);if(group.targets[1])assert.equal(group.targets[1].player,owner);}

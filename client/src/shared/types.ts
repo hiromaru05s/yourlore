@@ -126,6 +126,8 @@ export interface PlayerState {
   previousOpponentShieldPeak?: number; // most recent completed opponent turn
 
   mana: number;
+  /** Successful max-mana growth events; Ghost settles their delta after each action. */
+  maxManaIncreases?: number;
   maxMana: number;
   manaPenalty: number;
   nextPenalty: number;

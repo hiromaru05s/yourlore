@@ -22,7 +22,7 @@ export const CARD_SERIES: Record<string,Series> = {
   knight:series('騎士','기사','Knight',['INFKNIGHT']),
   blood:series('血の魔法','피의 마법','Blood Magic',ids(c=>c.name.startsWith('피의 마법'))),
   black:series('黒魔法','흑마법','Black Magic',ids(c=>c.t==='spell'&&c.id.startsWith('BLACK_'))),
-  fire:series('ファイアー魔法','파이어 마법','Fire Magic',['FIRE_BALL','FIRE_ARROW','FIRE_ZONE','FIRE_METEOR']),
+  fire:series('ファイアー魔法','파이어 마법','Fire Magic',['FLAME','FIRE_BALL','FIRE_ARROW','FIRE_ZONE','FIRE_METEOR']),
   chosen:series('選ばれし','선택받은','Chosen',ids(c=>c.id.startsWith('CHOSEN_')&&c.t==='mon')),
   armorer:series('装備職人','장비 장인','Armorer',['APPRENTICE_ARMORER','VETERAN_ARMORER','SALLY_WEAPONMASTER']),
   militarySoldier:series('兵士','병사','Soldier',ids(c=>c.t==='mon'&&/병사|兵士/.test(c.name+(c.nameJa??'')))),
