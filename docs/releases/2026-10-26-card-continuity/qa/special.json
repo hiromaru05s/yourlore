@@ -1,0 +1,260 @@
+{
+  "results": [
+    {
+      "kind": "CASINO",
+      "owner": 0,
+      "families": [
+        "game casino-summon"
+      ],
+      "tones": [
+        "blocked"
+      ],
+      "bad": [],
+      "arrivals": [
+        "CASINO"
+      ],
+      "field": [
+        "CASINO"
+      ]
+    },
+    {
+      "kind": "CASTLE",
+      "owner": 0,
+      "families": [
+        "castle-summon"
+      ],
+      "tones": [
+        "blocked"
+      ],
+      "bad": [],
+      "arrivals": [
+        "CASTLE"
+      ],
+      "field": [
+        "CASTLE"
+      ]
+    },
+    {
+      "kind": "hatch",
+      "owner": 0,
+      "families": [
+        "game hatch-summon"
+      ],
+      "tones": [
+        "plain"
+      ],
+      "bad": [],
+      "arrivals": [
+        "DIVINE"
+      ],
+      "field": [
+        "DIVINE"
+      ]
+    },
+    {
+      "kind": "fusion",
+      "owner": 0,
+      "families": [
+        "dragon-fusion-summon"
+      ],
+      "tones": [
+        "ready"
+      ],
+      "bad": [],
+      "arrivals": [
+        "GM6_0",
+        "DRAGON_RIDER"
+      ],
+      "field": [
+        "DRAGON_RIDER"
+      ]
+    },
+    {
+      "kind": "rebirth",
+      "owner": 0,
+      "families": [
+        "rebirth"
+      ],
+      "tones": [
+        "ready"
+      ],
+      "bad": [],
+      "arrivals": [
+        "VOID_APOSTLE"
+      ],
+      "field": [
+        "VOID_APOSTLE"
+      ]
+    },
+    {
+      "kind": "ritual",
+      "owner": 0,
+      "families": [
+        "forbidden-ritual"
+      ],
+      "tones": [
+        "ready"
+      ],
+      "bad": [],
+      "arrivals": [
+        "TDE2",
+        "TDE3",
+        "TDE4"
+      ],
+      "field": [
+        "TDE1",
+        "TDE2",
+        "TDE3",
+        "TDE4"
+      ]
+    },
+    {
+      "kind": "floor",
+      "owner": 0,
+      "families": [
+        "dungeon-floor-overlay"
+      ],
+      "tones": [
+        "ready"
+      ],
+      "bad": [],
+      "arrivals": [
+        "MIMIC",
+        "MIMIC"
+      ],
+      "field": [
+        "MIMIC",
+        "MIMIC"
+      ]
+    },
+    {
+      "kind": "CASINO",
+      "owner": 1,
+      "families": [
+        "game casino-summon"
+      ],
+      "tones": [
+        "blocked"
+      ],
+      "bad": [],
+      "arrivals": [
+        "CASINO"
+      ],
+      "field": [
+        "CASINO"
+      ]
+    },
+    {
+      "kind": "CASTLE",
+      "owner": 1,
+      "families": [
+        "castle-summon"
+      ],
+      "tones": [
+        "blocked"
+      ],
+      "bad": [],
+      "arrivals": [
+        "CASTLE"
+      ],
+      "field": [
+        "CASTLE"
+      ]
+    },
+    {
+      "kind": "hatch",
+      "owner": 1,
+      "families": [
+        "game hatch-summon"
+      ],
+      "tones": [
+        "plain"
+      ],
+      "bad": [],
+      "arrivals": [
+        "DIVINE"
+      ],
+      "field": [
+        "DIVINE"
+      ]
+    },
+    {
+      "kind": "fusion",
+      "owner": 1,
+      "families": [
+        "dragon-fusion-summon"
+      ],
+      "tones": [
+        "plain"
+      ],
+      "bad": [],
+      "arrivals": [
+        "GM6_0",
+        "DRAGON_RIDER"
+      ],
+      "field": [
+        "DRAGON_RIDER"
+      ]
+    },
+    {
+      "kind": "rebirth",
+      "owner": 1,
+      "families": [
+        "rebirth"
+      ],
+      "tones": [
+        "plain"
+      ],
+      "bad": [],
+      "arrivals": [
+        "VOID_APOSTLE"
+      ],
+      "field": [
+        "VOID_APOSTLE"
+      ]
+    },
+    {
+      "kind": "ritual",
+      "owner": 1,
+      "families": [
+        "forbidden-ritual"
+      ],
+      "tones": [
+        "plain"
+      ],
+      "bad": [],
+      "arrivals": [
+        "TDE2",
+        "TDE3",
+        "TDE4"
+      ],
+      "field": [
+        "TDE1",
+        "TDE2",
+        "TDE3",
+        "TDE4"
+      ]
+    },
+    {
+      "kind": "floor",
+      "owner": 1,
+      "families": [
+        "dungeon-floor-overlay"
+      ],
+      "tones": [
+        "plain"
+      ],
+      "bad": [],
+      "arrivals": [
+        "MIMIC",
+        "MIMIC"
+      ],
+      "field": [
+        "MIMIC",
+        "MIMIC"
+      ]
+    }
+  ],
+  "errors": [],
+  "boundary": "Real reducer and controller in a local actual-board fixture; not authenticated multiplayer."
+}

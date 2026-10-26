@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "checks": [
+    "Actual reducer/controller play 0 Q_RIFT, occupied 0; UID and projected landing within 2 px, cleanup",
+    "Actual reducer/controller play 1 Q_WINTER, occupied 3; UID and projected landing within 2 px, cleanup",
+    "Actual reducer/controller play 0 Q_MANA, occupied 8; UID and projected landing within 2 px, cleanup",
+    "Midflight fast-forward restores native tile and removes resources",
+    "Viewport change cancels safely",
+    "390 px opponent play, no overflow",
+    "Reduced motion places native quest without folding",
+    "WebGL unavailable: native tile and cleanup"
+  ],
+  "errors": [],
+  "clock": "Controlled browser clock; production renderer, actual reducer/controller and GameView"
+}
