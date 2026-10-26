@@ -4,7 +4,7 @@ export const RECORD_VARIANTS=['original'] as const;
 export type RecordVariant=typeof RECORD_VARIANTS[number];
 export function recordVariant(_value?:string):RecordVariant{return 'original';}
 /** Shared meter-space placement for the live board and its close-up. */
-export const RIFT_RECORD_PLACEMENT={me:{x:.712,z:.279},opp:{x:.715,z:.308},width:.044,depth:-.012} as const;
+export const RIFT_RECORD_PLACEMENT={me:{x:.718,z:.279},opp:{x:.718,z:.305},width:.044,depth:-.012} as const;
 let serial=0;
 /** Only the public count is drawn. The local typeface supplies all ten glyphs. */
 export function createRiftRecordCount(count:number,_previous?:number,_variant:RecordVariant='original'):HTMLSpanElement{

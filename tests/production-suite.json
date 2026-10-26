@@ -97,6 +97,7 @@
     "tests/rank-emblem.mjs",
     "tests/rank-sound.mjs",
     "tests/release-furniture-model.mjs",
+    "tests/rift-frame-highlight.mjs",
     "tests/rift-fold.mjs",
     "tests/rift-transmute.mjs",
     "tests/solid-draw.mjs",
