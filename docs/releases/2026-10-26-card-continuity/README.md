@@ -28,3 +28,9 @@ For the separate frame-material work, attach `canvas.card-frame-material` inside
 ## Verification / release
 
 Final verification and deployment identifiers are appended after completion. Local fixtures exercise real reducer/controller/GameView and continuous rendered animation, but do not establish authenticated PvP or physical-device results.
+
+### Integration follow-up (after e6e795b4)
+
+The shared capture normalizes the native `200% / scale(.5)` art/frame layers when laying out in output pixels. It avoids a 4800px filtered intermediate in WebKit and redundant 4x raster work. Embedded WebP is converted losslessly to cached PNG pixels for SVG-image decode stability. Inner SVG viewBox lengths are not scaled twice. Quest runtime sets renderer pixelRatio=1 before applying its explicit DPR budget (otherwise the supposed 2048 bound doubled again). Persistent cleanup now targets only `.persistent-flight-canvas,.persistent-flight-trail` and `.quest-fold-canvas`, preserving nested material canvases. Frame owners retain their cost/attack/health seals as well as the frame. Frame-skin integration must include these follow-up changes before investigating duplicate symptoms.
+
+Cloned public counters now copy their WeakMap presentation identity/sample. This prevents a Guts result on a transient actor from updating an unregistered badge. Native presentation-node lists are deduplicated. The counter material is painted before replacing its native face, including asynchronous preparation.

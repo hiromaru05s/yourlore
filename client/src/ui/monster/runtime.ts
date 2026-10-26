@@ -104,7 +104,7 @@ function observeField(root:HTMLElement){
 function removeState(n:HTMLElement){const s=states.get(n);if(!s)return;s.dual?.canvas.remove();s.actor.dispose();n.style.opacity=s.opacity;states.delete(n);}
 /** Live presentation owners for attached UI effects, including persistent field actors. */
 export function monsterPresentationNodes(source:HTMLElement):HTMLElement[]{
- return [source,states.get(source)?.actor.el,jobs.get(source)?.actor.el,gutsJobs.get(source)?.actor.el].filter((n):n is HTMLElement=>!!n&&n.isConnected);
+ return [...new Set([source,states.get(source)?.actor.el,jobs.get(source)?.actor.el,gutsJobs.get(source)?.actor.el])].filter((n):n is HTMLElement=>!!n&&n.isConnected);
 }
 export function syncMonsterStates(root:HTMLElement){
  for(const [n,s] of states)if(s.root===root||!n.isConnected)removeState(n);

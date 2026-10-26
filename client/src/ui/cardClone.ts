@@ -1,3 +1,4 @@
+import {copyCardCounters} from './cardCounter';
 /** cloneNode does not copy canvas pixels. Keep the live finish when a public
  * card becomes a flying face or a native summon layer. */
 export function cloneCardNode(source:HTMLElement):HTMLElement {
@@ -7,5 +8,5 @@ export function cloneCardNode(source:HTMLElement):HTMLElement {
   const original=originals[index];
   if(original?.width&&original.height)canvas.getContext('2d')!.drawImage(original,0,0);
  });
- return copy;
+ copyCardCounters(source,copy);return copy;
 }

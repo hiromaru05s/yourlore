@@ -23,7 +23,7 @@ import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, pas
 export function enchantmentTile(c:CardInst,durationUi:string):HTMLDivElement {
   const tile=document.createElement('div');tile.className='buff-icon buff-icon--spell';tile.dataset.uid=c.uid;tile.dataset.cardId=c.id;
   tile.innerHTML=`<span class="buff-frame" style="background-image:url(${fieldFrameFor('spell')})"></span><span class="buff-art" style="background-image:url(${artUrl.full(c.id)})"></span><span class="buff-cost" aria-hidden="true"><span>${c.cost}</span></span>${durationUi}`;
-  const art=tile.querySelector<HTMLElement>('.buff-art')!;art.classList.add('card-art','has-thumb','art-done');art.style.inset='0';art.style.width='100%';art.style.height='100%';art.style.backgroundSize='cover';
+  const art=tile.querySelector<HTMLElement>('.buff-art')!;art.classList.add('card-art','has-thumb','art-done');art.style.inset='0';art.style.backgroundSize='cover';
   art.style.overflow='hidden';
   attachCardEffect(tile,c.uid);
   void attachCardFrame(tile,c.uid);
@@ -35,7 +35,7 @@ export function questTile(c:CardInst,progress=0):HTMLDivElement {
   const tile=enchantmentTile(c,'');tile.className='buff-icon buff-icon--quest';
   tile.querySelector<HTMLElement>('.buff-frame')!.style.backgroundImage=`url(${fieldFrameFor('quest')})`;
   const label=document.createElement('span');label.className='quest-progress';label.textContent=`${progress}/${c.quest?.target??0}`;tile.append(label);
-  const art=tile.querySelector<HTMLElement>('.buff-art')!;art.classList.add('card-art','has-thumb','art-done');art.style.inset='0';art.style.width='100%';art.style.height='100%';art.style.backgroundSize='cover';
+  const art=tile.querySelector<HTMLElement>('.buff-art')!;art.classList.add('card-art','has-thumb','art-done');art.style.inset='0';art.style.backgroundSize='cover';
   art.style.overflow='hidden';
   attachCardEffect(tile,c.uid);
   void attachCardFrame(tile,c.uid);
