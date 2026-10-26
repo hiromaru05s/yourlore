@@ -84,14 +84,14 @@ try {
     assert(!chips.some(el => /罠|함정|Trap/.test(el.textContent)));
     const definitions = [...Object.values(DB), ...Object.values(STARTERS)];
     const rendered = () => [...root.querySelectorAll('#grid > .card')];
-    const allPages=async()=>{const ids=[];for(let n=0;n<20;n++){await tick();ids.push(...rendered().map(el=>el.dataset.cardId));if(root.querySelector('#nextPage').disabled)break;root.querySelector('#nextPage').click();}return ids.sort();};
-    assert.deepEqual(await allPages(),definitions.map(c=>c.id).sort());
+    const visibleIds=()=>rendered().map(el=>el.dataset.cardId).sort();
+    assert.deepEqual(visibleIds(),definitions.map(c=>c.id).sort());
     assert(rendered().every(el => el.dataset.cardType !== 'trap'));
     for (const [index, type] of ['all', 'mon', 'spell', 'quick', 'quest', 'starter'].entries()) {
       chips[index].click();
       await tick();
       const expected = definitions.filter(c => type === 'all' || (type === 'quick' ? c.quick : type === 'starter' ? c.id === 'STARTER_MANA' || DECK_POOL.includes(c.id) : c.t === type));
-      assert.deepEqual(await allPages(), expected.map(c=>c.id).sort(), `${lang}: ${type} filter retains all paginated cards`);
+      assert.deepEqual(visibleIds(), expected.map(c=>c.id).sort(), `${lang}: ${type} filter retains all matching cards on one page`);
     }
     gallery.destroy(); root.innerHTML = '';
   }

@@ -50,7 +50,7 @@ try{for(const width of widths){
  async function action(name,run,ready){const reads=await p.evaluate(()=>window.__styleReads);const start=Date.now(),count=networkImages.length;await run();if(ready)await ready();await p.waitForSelector('.screen-loader',{state:'detached'});await p.waitForFunction(()=>![...document.querySelectorAll('#app img')].some(i=>i.getClientRects().length&&getComputedStyle(i).visibility!=='hidden'&&(!i.complete||i.naturalWidth===0)));const data={name,ms:Date.now()-start,styleReads:await p.evaluate(reads=>window.__styleReads-reads,reads),imageNetworkResponses:networkImages.slice(count)};actions.push(data);console.log('action',width,name,data.ms,data.imageNetworkResponses.length);}
  await action('bot opponents',async()=>{await p.locator('#bot').click();await p.locator('#ranked').click();},()=>p.waitForFunction(()=>[...document.querySelectorAll('.diff-card img')].every(i=>i.complete&&i.naturalWidth>0)));await p.locator('#diffCancel').click();
  await action('cards',()=>p.locator('[data-nav=cards]').click(),()=>p.waitForSelector('#grid:not([aria-busy]) .card'));
- await action('cards page 2',()=>p.locator('#nextPage').click(),()=>p.waitForSelector('#grid:not([aria-busy]) .card'));
+ await action('cards bottom',()=>p.locator('#grid').evaluate(e=>e.scrollTop=e.scrollHeight));
  await p.screenshot({path:`${out}/cards-${width}.png`});
  await action('card zoom',()=>p.locator('#grid .card').first().click(),()=>p.waitForFunction(()=>document.querySelector('.zoom-overlay img')?.complete));await p.locator('.inspect-close').click();
  await action('deck',()=>p.locator('[data-nav=deck]').click(),()=>p.waitForSelector('.deck-screen'));

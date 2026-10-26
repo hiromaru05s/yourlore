@@ -18,13 +18,12 @@ await apiFixture(page,r=>new URL(r.url).pathname==='/api/auth/me'?{user:{id:'sta
 const errors=[],checks=[];page.on('pageerror',e=>errors.push(e.message));
 async function ready(){await page.waitForFunction(()=>document.querySelector('#grid > .card')&&!document.querySelector('.screen-loader')&&document.querySelector('#grid').getAttribute('aria-busy')!=='true');}
 async function ids(){return page.locator('#grid > .card').evaluateAll(nodes=>nodes.map(n=>n.dataset.cardId).sort());}
-async function allPages(){const result=await ids();while(await page.locator('#nextPage').isEnabled()){const label=await page.locator('#pageLabel').textContent();await page.locator('#nextPage').click();await page.waitForFunction(previous=>document.querySelector('#pageLabel').textContent!==previous,label);await ready();result.push(...await ids());}return result.sort();}
 try{
  await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('[data-nav=cards]').click();await ready();
  for(const lang of ['ja','en','ko']){
   if(lang!=='ja'){await page.locator('.cards-lang select').selectOption(lang);await ready();}
   await page.locator('#typeRow .chip').last().click();await ready();
-  assert.deepEqual(await allPages(),expected,`${lang}: visible starters match deck pool plus Attune`);
+  assert.deepEqual(await ids(),expected,`${lang}: visible starters match deck pool plus Attune`);
   checks.push({lang,count:expected.length});
  }
  await page.locator('.cards-lang select').selectOption('ja');await ready();
@@ -38,7 +37,7 @@ try{
   await page.locator('#typeRow .chip').last().click();
   await page.waitForFunction(id=>document.querySelector('#grid').getAttribute('aria-busy')!=='true'&&![...document.querySelectorAll('#grid > .card')].some(n=>n.dataset.cardId===id),c.id);
  }
- await page.locator('#search').fill('');await ready();assert.deepEqual(await allPages(),expected);
+ await page.locator('#search').fill('');await ready();assert.deepEqual(await ids(),expected);
  assert.deepEqual(errors,[]);
  await fs.writeFile(out+'/report.json',JSON.stringify({origin,api:'fixture; real deployed/local assets',checks,excluded:excluded.map(c=>c.id),errors},null,2)+'\n');
  console.log(`PASS ${origin}: ${expected.length} starters; ${excluded.length} excluded cards still searchable; ja/en/ko; desktop/mobile`);

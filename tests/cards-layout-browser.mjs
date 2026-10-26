@@ -43,7 +43,10 @@ try{
  }
  await page.locator('#grid > .card').first().focus();await page.keyboard.press('Enter');await page.locator('#zoomOverlay').waitFor();await page.locator('.inspect-close').click();
  await page.locator('#grid').evaluate(e=>e.scrollTop=e.scrollHeight);assert(await page.locator('#grid').evaluate(e=>e.scrollTop>0));
- await measure('bottom');await page.locator('#nextPage').click();await ready();assert.equal(await page.locator('#pageLabel').textContent(),'2 / 4');await measure('page 2');
+ await measure('bottom');
+ assert.equal(await page.locator('#prevPage,#nextPage,#pageLabel').count(),0);
+ assert.equal(await page.locator('#grid > .card').count(),parseInt(await page.locator('#count').textContent(),10),'Every matching card is present on one page');
+ assert(await page.locator('#grid > .card').last().evaluate(e=>{const r=e.getBoundingClientRect(),g=e.parentElement.getBoundingClientRect();return r.bottom<=g.bottom+1&&r.bottom>g.top;}),'Last card is reachable by scrolling');
  await page.locator('#typeRow .chip').last().click();await ready();await measure('starters');
  await page.locator('#search').fill('zzzz-no-card');await page.locator('.cards-empty').waitFor();
  await page.locator('#search').fill('');await ready();
@@ -51,5 +54,5 @@ try{
  await page.locator('.cards-lang select').selectOption('en');await ready();await measure('English');
  await page.locator('.cards-lang select').selectOption('ko');await ready();await measure('Korean');
  assert.deepEqual(errors,[]);await fs.writeFile(`${out}/report.json`,JSON.stringify({origin,api:'fixture',checks,errors},null,2)+'\n');
- console.log('PASS cards layout, scrolling, paging, filter, empty search, keyboard zoom, languages');
+ console.log('PASS cards layout, single-page scrolling, filter, empty search, keyboard zoom, languages');
 } catch(error){await page.screenshot({path:`${out}/failure.png`}).catch(()=>{});throw error;}finally{await browser.close();}

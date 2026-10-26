@@ -33,18 +33,18 @@ try{
   const root=document.querySelector('#app');return {root,screen:exports.mountCards({root,home(){},cards(){}})};
  }
  const {root,screen}=mount();
+ assert.equal(root.querySelector('#prevPage,#nextPage,#pageLabel'),null,'Catalog has no pagination controls');
  const clickType=key=>[...root.querySelectorAll('#typeRow .chip')].find(b=>b.textContent===`cards.f.${key}`).click();
  const ids=()=>[...root.querySelectorAll('#grid > .card')].map(e=>e.dataset.cardId).sort();
- const allPages=()=>{const result=[...ids()];while(!root.querySelector('#nextPage').disabled){root.querySelector('#nextPage').click();result.push(...ids());}return result.sort();};
- clickType('starter');assert.deepEqual(allPages(),expected,'Starter category equals editable deck pool plus fixed Attune');
+ clickType('starter');assert.deepEqual(ids(),expected,'Starter category equals editable deck pool plus fixed Attune');
  const search=root.querySelector('#search');
  for(const c of excluded){
   search.value=c.nameJa||c.name;search.dispatchEvent(new window.Event('input'));
   assert(!ids().includes(c.id),`${c.id} cannot leak into starters via search`);
  }
  search.value='';search.dispatchEvent(new window.Event('input'));
- clickType('all');assert.deepEqual(allPages(),[...Object.keys(DB),...Object.keys(STARTERS)].sort(),'Generated cards remain browsable in All');
- clickType('spell');const spells=allPages();
+ clickType('all');assert.deepEqual(ids(),[...Object.keys(DB),...Object.keys(STARTERS)].sort(),'Generated cards remain browsable in All');
+ clickType('spell');const spells=ids();
  for(const c of excluded.filter(c=>c.t==='spell'))assert(spells.includes(c.id),`${c.id} remains in its normal type`);
  screen.destroy();
  console.log(`PASS: ${expected.length-1} catalog starters plus a future eligible fixture match deck eligibility; ${excluded.length} non-deck noShop cards excluded; All/type/search and future-card regressions covered`);

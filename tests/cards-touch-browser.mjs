@@ -12,19 +12,20 @@ async function tap(selector){let b;for(let i=0;i<50&&!b;i++){b=await page.evalua
 async function idle(){await page.waitForFunction(()=>document.querySelector('#grid')?.getAttribute('aria-busy')!=='true'&&document.querySelectorAll('#grid>.card').length>0);}
 try{
  await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('[data-nav=cards]').waitFor();await page.locator('.screen-loader').waitFor({state:'detached'});if(await page.locator('.graphics-notice').count())await page.locator('[data-continue]').click();
- await page.waitForTimeout(1000);await page.locator('[data-nav=cards]').waitFor({state:'visible'});await tap('[data-nav=cards]');await page.locator('#pageLabel').waitFor();await page.locator('.screen-loader').waitFor({state:'detached'});await idle();
+ await page.waitForTimeout(1000);await page.locator('[data-nav=cards]').waitFor({state:'visible'});await tap('[data-nav=cards]');await page.locator('#count').waitFor();await page.locator('.screen-loader').waitFor({state:'detached'});await idle();
  for(const size of [{width:1194,height:834},{width:834,height:1194},{width:1024,height:768},{width:768,height:1024}]){
   await page.setViewportSize(size);
   for(const dropped of [false,true]){
    await page.evaluate(v=>window.dropCompatibilityClick=v,dropped);
    await tap('#typeRow .chip:nth-child(2)');assert.equal(await page.locator('#typeRow .chip:nth-child(2)').getAttribute('aria-pressed'),'true');
-   await tap('#typeRow .chip:first-child');await idle();assert.match(await page.locator('#pageLabel').innerText(),/^1 \/ /);
+   await tap('#typeRow .chip:first-child');await idle();assert.equal(await page.locator('#grid>.card').count(),parseInt(await page.locator('#count').textContent(),10));
    await tap('summary');assert(await page.locator('details').evaluate(e=>e.open));
-   await tap('#nextPage');assert.match(await page.locator('#pageLabel').innerText(),/^2 \/ /,'One tap advances exactly one page');assert.equal(await page.locator('details').evaluate(e=>e.open),false);
-   await tap('#prevPage');assert.match(await page.locator('#pageLabel').innerText(),/^1 \/ /);await idle();
+   await tap('summary');assert.equal(await page.locator('details').evaluate(e=>e.open),false);
+   await page.locator('#grid').evaluate(e=>e.scrollTop=e.scrollHeight);
+   assert(await page.locator('#grid>.card').last().evaluate(e=>{const r=e.getBoundingClientRect(),g=e.parentElement.getBoundingClientRect();return r.bottom<=g.bottom+1&&r.bottom>g.top;}));
    checks.push({size,droppedCompatibilityClick:dropped,passed:true});
   }
-  const heights=await page.locator('#nextPage,#typeRow .chip').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().height));assert(heights.every(h=>h>=44));
+  const heights=await page.locator('#typeRow .chip').evaluateAll(es=>es.map(e=>e.getBoundingClientRect().height));assert(heights.every(h=>h>=44));
  }
  await page.evaluate(()=>window.dropCompatibilityClick=false);await page.screenshot({path:out+'/'+engine+'.png',animations:'disabled'});assert.deepEqual(errors,[]);
  await fs.writeFile(out+'/'+engine+'.json',JSON.stringify({origin,engine,checks,errors,scope:'API fixture with real assets; no physical iPad confirmation'},null,2));console.log(JSON.stringify({engine,checks:checks.length,errors}));

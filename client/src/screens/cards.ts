@@ -35,7 +35,7 @@ export function mountCards(app: App): Screen {
   let q = "";
   const passiveFilters=new Set<string>();
   let passiveScope: PassiveSearchScope = 'owned';
-  let page=0,revision=0;const pageSize=96;
+  let revision=0;
 
   const wrap = document.createElement("div");
   wrap.className = "screen cards-screen";
@@ -65,7 +65,7 @@ export function mountCards(app: App): Screen {
           </div>
         </details>
       </div>
-      <div class="cards-grid" id="grid"></div><div class="collection-pager"><span class="cards-count" id="count"></span><span class="cards-hint">${t("cards.hint")}</span><button id="prevPage" aria-label="${loungeText("前のページ","Previous page","이전 페이지")}">‹</button><span id="pageLabel" aria-live="polite"></span><button id="nextPage" aria-label="${loungeText("次のページ","Next page","다음 페이지")}">›</button></div>
+      <div class="cards-grid" id="grid"></div><div class="collection-pager"><span class="cards-count" id="count"></span><span class="cards-hint">${t("cards.hint")}</span></div>
     </div>`;
   app.root.appendChild(wrap);
   wrap.querySelector(".cards-lang")!.appendChild(langSelectEl());
@@ -82,7 +82,7 @@ export function mountCards(app: App): Screen {
     if(event.key==='Escape'&&advanced.open){advanced.open=false;advanced.querySelector('summary')!.focus();}
   };
   document.addEventListener('click',closeFilters);
-  const stopTouch=bindTouchActivation(wrap,'.cards-toolbar button, .cards-advanced summary, .collection-pager button');
+  const stopTouch=bindTouchActivation(wrap,'.cards-toolbar button, .cards-advanced summary');
   wrap.addEventListener('keydown',escapeFilters);
 
   // ---- type chips ----
@@ -96,7 +96,7 @@ export function mountCards(app: App): Screen {
   const typeChips = typeDefs.map(([key, label]) => {
     const b = document.createElement("button");
     b.className = "chip"; b.textContent = label;
-    b.onclick = () => { typeF = key; page=0; render(); };
+    b.onclick = () => { typeF = key; render(); };
     typeRow.appendChild(b);
     return { key, el: b };
   });
@@ -107,7 +107,7 @@ export function mountCards(app: App): Screen {
   const addCost = (val: number, label: string) => {
     const b = document.createElement("button");
     b.className = "chip"; b.textContent = label;
-    b.onclick = () => { costF = val; page=0; render(); };
+    b.onclick = () => { costF = val; render(); };
     costRow.appendChild(b);
     costChips.push({ val, el: b });
   };
@@ -117,17 +117,15 @@ export function mountCards(app: App): Screen {
   const passiveButtons=Object.keys(PASSIVES).map(key=>{
     const b=document.createElement('button');b.type='button';b.dataset.passive=key;b.setAttribute('aria-pressed','false');
     b.innerHTML=passiveIcon(key)+`<span>${PASSIVES[key][getLang()].name}</span>`;
-    b.onclick=()=>{passiveFilters.has(key)?passiveFilters.delete(key):passiveFilters.add(key);page=0;render();};
+    b.onclick=()=>{passiveFilters.has(key)?passiveFilters.delete(key):passiveFilters.add(key);render();};
     wrap.querySelector('#passiveFilters')!.append(b);return b;
   });
   const scopeSelect=wrap.querySelector<HTMLSelectElement>('#passiveScope')!;
-  scopeSelect.onchange=()=>{passiveScope=scopeSelect.value as PassiveSearchScope;page=0;render();};
+  scopeSelect.onchange=()=>{passiveScope=scopeSelect.value as PassiveSearchScope;render();};
   const search = wrap.querySelector("#search") as HTMLInputElement;
-  search.oninput = () => { q = search.value.trim().normalize('NFKC').toLocaleLowerCase(); page=0; render(); };
+  search.oninput = () => { q = search.value.trim().normalize('NFKC').toLocaleLowerCase(); render(); };
 
-  (wrap.querySelector('#prevPage') as HTMLButtonElement).onclick=()=>{page--;render();};
-  (wrap.querySelector('#nextPage') as HTMLButtonElement).onclick=()=>{page++;render();};
-  (wrap.querySelector('#resetFilters') as HTMLButtonElement).onclick=()=>{typeF='all';costF=-1;q='';page=0;passiveScope='owned';scopeSelect.value='owned';passiveFilters.clear();search.value='';render();};
+  (wrap.querySelector('#resetFilters') as HTMLButtonElement).onclick=()=>{typeF='all';costF=-1;q='';passiveScope='owned';scopeSelect.value='owned';passiveFilters.clear();search.value='';render();};
   function render(): void {
     const version=++revision;
     passiveButtons.forEach(b=>b.setAttribute("aria-pressed",String(passiveFilters.has(b.dataset.passive!))));
@@ -150,10 +148,6 @@ export function mountCards(app: App): Screen {
     });
 
     count.textContent = `${list.length}${t("cards.count")}`;
-    const pages=Math.max(1,Math.ceil(list.length/pageSize));page=Math.max(0,Math.min(page,pages-1));
-    (wrap.querySelector('#prevPage') as HTMLButtonElement).disabled=page===0;
-    (wrap.querySelector('#nextPage') as HTMLButtonElement).disabled=page===pages-1;
-    wrap.querySelector('#pageLabel')!.textContent=`${page+1} / ${pages}`;
     if (!list.length) {
       cancelRevealCards(grid);
       grid.innerHTML = `<div class="cards-empty">${t("cards.empty")}</div>`;
@@ -162,7 +156,7 @@ export function mountCards(app: App): Screen {
     const frag = document.createDocumentFragment();
     // lazyArt takes the index: the first screenful loads immediately (it is what
     // the player is looking at the moment they switch tabs), the rest defer.
-    list.slice(page*pageSize,(page+1)*pageSize).forEach((c, i) => {
+    list.forEach((c, i) => {
       const node = cardEl(c, { size: "mkt", lazyArt: i });
       node.style.cursor = "pointer";
       node.onclick = () => zoomCard(c);
