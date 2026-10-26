@@ -14,3 +14,9 @@ Use case: stylized-concept. Asset type: small game UI inbox icon for LORE, a han
 - `tests/gift-inbox-browser.mjs`: API fixtures cover five viewport sizes, header position and hit testing, opening/closing/focus, individual and bulk claims, count/balance refresh, history, retry and Japanese/English/Korean.
 - Visual review covers desktop, portrait and landscape. Browser fixtures do not establish real-account gift receipt or physical-device behavior.
 - Production release uses `npm run deploy`, which checks source ancestry and current deployment, then runs the production suite and build before publishing.
+
+## Production
+
+Published in the integrated release `1c72c550d17b23f945e23a94cbbdc399d9e078bf`, version `9753142a-c05e-46c6-ab04-1716e6b77f9a` at 100%. The initial release correctly stopped when concurrent HOME/menu changes advanced main. The updated source retains this letter change and passed the full 211/211 production suite before deployment.
+
+Post-deployment `tests/gift-inbox-browser.mjs` passed against `https://yourlore.xyz` across five viewports and all three languages using fixture account/gift API responses and the actual deployed static assets. The letter URL returns HTTP 200, image/webp, 9,006 bytes and the same SHA-256 as the workspace asset. See `browser-checks.json` and `deployment.json`. Visual inspection confirmed the integrated desktop and mobile layout; real-account gift receipt and physical devices were not exercised.

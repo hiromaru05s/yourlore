@@ -1,0 +1,18 @@
+{
+  "source": "1c72c550d17b23f945e23a94cbbdc399d9e078bf",
+  "giftCommit": "b02f02c4",
+  "deploymentId": "ea4ffd9b-6e32-4554-bac7-d7cbeee12613",
+  "versions": [
+    {
+      "version_id": "9753142a-c05e-46c6-ab04-1716e6b77f9a",
+      "percentage": 100
+    }
+  ],
+  "asset": {
+    "status": 200,
+    "bytes": 9006,
+    "sha256MatchesLocal": true
+  },
+  "suite": "211/211",
+  "browserScope": "Production static assets with fixture account and gift API; five viewports, claims, history, retry, focus and ja/en/ko. No real account gift receipt performed."
+}
