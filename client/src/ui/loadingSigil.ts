@@ -22,6 +22,12 @@ export function loadingSigil():string {
 }
 
 export function loadingRitual():string {
-  const face=loadingSigil();
-  return `<div class="loading-ritual" aria-hidden="true"><div class="loading-plinth"></div><div class="loading-deck"><div class="loading-card loading-card--under">${face}</div><div class="loading-card loading-card--middle">${face}</div><div class="loading-card loading-card--hero">${face}<div class="loading-inscription">${face}</div><div class="loading-sheen"></div></div></div><div class="loading-contact"></div></div>`;
+  const face=loadingCardFace();
+  return `<div class="loading-ritual" aria-hidden="true"><div class="loading-plinth"></div><div class="loading-deck"><div class="loading-card loading-card--under">${face}</div><div class="loading-card loading-card--middle">${face}</div><div class="loading-card loading-card--hero">${face}</div></div></div>`;
+}
+
+export const loadingCardUrl='/art/ui/loading/azure-card-v1.webp';
+/** One painted surface across first paint, readiness and the HOME entrance. */
+export function loadingCardFace():string {
+  return `<img class="loading-card-art" src="${loadingCardUrl}" alt="" decoding="async" fetchpriority="high"><div class="loading-sheen"></div>`;
 }

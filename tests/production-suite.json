@@ -76,6 +76,7 @@
     "tests/hand-condition-rules.mjs",
     "tests/health-cosmetics-v53.mjs",
     "tests/home-entrance-parity.mjs",
+    "tests/home-entrance-lifecycle.mjs",
     "tests/library-furniture-model.mjs",
     "tests/lounge-horizon.mjs",
     "tests/lounge-rank.mjs",
