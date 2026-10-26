@@ -32,7 +32,13 @@ for(const width of [1440,1070,820,390,320]){
 await p.setViewportSize({width:1440,height:1000});const trigger=p.locator('.lb-profile-trigger').first();assert.equal(await trigger.evaluate(e=>getComputedStyle(e).borderImageSource),'none');await trigger.hover();assert.equal(await trigger.evaluate(e=>getComputedStyle(e).textDecorationLine),'underline');
 const icon=p.locator('.lb-purchases .purchase-card-icon').first();await icon.hover();await p.waitForTimeout(180);assert.equal(await icon.locator('[role=tooltip]').evaluate(e=>getComputedStyle(e).opacity),'1');await p.screenshot({path:out+'/tooltip.png'});await icon.focus();assert.equal(await icon.locator('[role=tooltip]').evaluate(e=>getComputedStyle(e).visibility),'visible');
 await trigger.click();await p.locator('.ranked-profile .rp-deck-cards').first().waitFor();assert.equal(await p.locator('.rp-deck').count(),3);assert.equal(await p.locator('.rp-deck-cards .card').count(),27);assert.equal(await p.locator('.rp-stats').innerText(),'10\nランク試合数\n6\nランク勝利数\n3\nランク敗北数\n60%\n勝率');
-assert((await p.locator('.rp-rank').innerText()).includes('1036'));await p.waitForTimeout(700);await p.screenshot({path:out+'/profile-full.png'});
+assert((await p.locator('.rp-rank').innerText()).includes('1036'));await p.evaluate(async()=>{
+ const urls=new Set();for(const el of document.querySelectorAll('.ranked-profile-modal,.ranked-profile-modal *')){
+  if(el instanceof HTMLImageElement&&el.src)urls.add(el.src);
+  for(const pseudo of [null,'::before','::after']){const style=getComputedStyle(el,pseudo);for(const prop of ['backgroundImage','borderImageSource','maskImage'])for(const match of style[prop].matchAll(/url\(["']?([^"')]+)["']?\)/g))urls.add(match[1]);}
+ }
+ await Promise.all([...urls].map(async url=>{const img=new Image();img.src=url;await img.decode();}));
+});await p.waitForTimeout(400);await p.screenshot({path:out+'/profile-full.png'});
 await p.locator('.rp-deck-cards .card').first().click();await p.locator('.zoom-wrap').waitFor();await p.keyboard.press('Escape');
 await p.locator('#pfClose').click();assert.equal(await trigger.evaluate(e=>e===document.activeElement),true);
 await p.locator('[data-nav=friends]').evaluate(e=>e.click());await p.locator('[data-pf=a]').waitFor();await ready();await p.locator('[data-pf=a]').click();await p.locator('.rp-deck-cards').first().waitFor();assert.equal(await p.locator('.rp-deck-cards .card').count(),27,'friends opens same profile');await p.locator('#pfClose').click();
