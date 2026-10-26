@@ -20,7 +20,7 @@ export function confirmStarterPurchase(id:string,count:number,buy:()=>void):()=>
 }
 
 export function renderShopStarters(host:HTMLElement,owned:StarterCollection,credits:number,busy:boolean,buy:(id:string,count:number)=>void,daily?:DailyStarterShop){
- host.innerHTML=`<p class="set-desc">${l('毎日00:00 KST更新・全ユーザー共通の5種類。各2枚まで、1枚100シャード。','Five cards shared by everyone, refreshed daily at 00:00 KST. Up to 2 each, 100 Shards per card.','매일 00:00 KST 갱신 · 모든 유저에게 동일한 5종. 각 2장까지, 1장 100샤드.')}</p><p class="starter-shop-date">${daily?`${daily.day} · ${l('本日のラインナップ','Today’s lineup','오늘의 라인업')}`:l('商品を読み込み中…','Loading today’s cards…','상품 불러오는 중…')}</p><div class="starter-shop-grid"></div>`;
+ host.innerHTML=`<p class="starter-shop-date">${daily?`${daily.day} · ${l('本日のラインナップ','Today’s lineup','오늘의 라인업')}`:l('商品を読み込み中…','Loading today’s cards…','상품 불러오는 중…')}</p><div class="starter-shop-grid"></div>`;
  const grid=host.querySelector('.starter-shop-grid')!;
  for(const id of daily?.cards??[]){
   const c={...(STARTERS[id]??DB[id]),uid:'shop-'+id},tile=document.createElement('article');tile.className='starter-shop-item';

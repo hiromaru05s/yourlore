@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {build} from 'esbuild';
 import {apiFixture} from './helpers/api-fixture.mjs';
-const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-collapse-tools/node_modules/playwright/index.mjs');
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
 const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5491',out=process.env.LORE_TEST_OUTPUT||'/tmp/lore-starter-browser';await fs.mkdir(out,{recursive:true});
 await build({stdin:{contents:"export * from './client/src/shared/collection';export * from './client/src/shared/dailyStarterShop';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:out+'/collection.mjs'});
 const {starterCollection,COLLECTIBLE_STARTERS,dailyStarterShop}=await import(out+'/collection.mjs');
@@ -35,6 +35,17 @@ await apiFixture(page,req=>{
  if(p==='/api/deck'){user.decks=req.body.decks;return {ok:true,decks:user.decks,deck:user.decks.list[user.decks.sel].cards};}
  return {ok:true,keys:[],friends:[],incoming:[],outgoing:[],challenges:[]};
 });
+async function assertCatalog(category,width,height){
+ const layout=await page.locator('.shop-other').evaluate(host=>{
+  const outer=host.getBoundingClientRect(),rect=e=>e.getBoundingClientRect().toJSON();
+  return {outer:outer.toJSON(),scrollHeight:host.scrollHeight,height:host.clientHeight,scrollWidth:host.scrollWidth,width:host.clientWidth,items:[...host.querySelectorAll('article')].map(rect),controls:[...host.querySelectorAll('[data-buy-starter],[data-buy-frame],select,.starter-shop-face')].map(rect),text:host.innerText};
+ });
+ assert(!layout.text.includes('デッキの全カードに、動く質感を。'));assert(!layout.text.includes('毎日00:00 KST更新'));
+ assert(layout.scrollHeight<=layout.height+1,`${category} vertical overflow ${width}x${height}: ${JSON.stringify(layout)}`);
+ assert(layout.scrollWidth<=layout.width+1,`${category} horizontal overflow ${width}`);
+ for(const r of [...layout.items,...layout.controls])assert(r.top>=layout.outer.top-1&&r.bottom<=layout.outer.bottom+1&&r.left>=layout.outer.left-1&&r.right<=layout.outer.right+1,`${category} cropped ${width}x${height}: ${JSON.stringify(r)}`);
+ geometry.push({category,width,height,...layout});
+}
 try{
  await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!document.querySelector('.lounge-entry-overlay'));await page.locator('[data-nav="shop"]').click();await page.waitForSelector('[data-pull="1"]:enabled');
  assert.equal(await page.locator('.gacha-editions,#shopCredits,.shop-credits').count(),0);
@@ -51,7 +62,7 @@ try{
 
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`shop overflow ${w}`);
   const ratio=await page.locator('.starter-shop-face .card').first().evaluate(el=>{const r=el.getBoundingClientRect();return r.width/r.height;});assert(Math.abs(ratio-.64)<.002,`card ratio ${w}: ${ratio}`);await page.screenshot({path:`${out}/starters-${w}.png`});
-  await page.locator('[data-category="accessories"]').click();assert((await page.locator('.shop-coming-soon').innerText()).includes('準備中'));
+  await assertCatalog('starter',w,h);await page.locator('[data-category="accessories"]').click();assert.equal(await page.locator('[data-buy-frame]').count(),5);await assertCatalog('accessories',w,h);await page.screenshot({path:`${out}/accessories-${w}.png`});
   const accessoryFrame=await page.locator('.shop-gacha-active>.tut').boundingBox();assert.equal(accessoryFrame.width,frame.width);assert.equal(accessoryFrame.height,frame.height);geometry.push({width:w,height:h,gacha:frame,starter:starterFrame,accessories:accessoryFrame});
   assert.equal(await page.locator('[data-category]').count(),3);
   await page.locator('[data-category="gacha"]').click();
@@ -69,7 +80,7 @@ try{
   await page.locator('[data-nav="shop"]').click();
  }else await page.locator('[data-category="gacha"]').click();
  await page.waitForSelector('[data-pull="1"]:enabled');await page.locator('[data-pull="1"]').click();await page.waitForSelector('.gacha-cinematic');await page.waitForSelector('.gacha-cinematic[data-ready="true"]');
- if(await page.locator('.gacha-cinematic [data-skip]').isVisible())await page.locator('.gacha-cinematic [data-skip]').click();await page.waitForSelector('.gacha-cinematic[data-phase="result"]');await page.screenshot({path:out+'/draw-result-animation.png'});await page.locator('.gacha-cinematic [data-done]').click();assert((await page.locator('.gacha-dialog').innerText()).includes('獲得結果'));await page.screenshot({path:out+'/draw-result.png'});await page.locator('.gacha-dialog [data-close]').first().click();
+ if(await page.locator('.gacha-cinematic [data-skip]').isVisible())await page.locator('.gacha-cinematic [data-skip]').click();await page.waitForSelector('.reward-gallery');assert((await page.locator('.gacha-dialog').innerText()).includes('獲得結果'));await page.screenshot({path:out+'/draw-result.png'});await page.locator('.gacha-dialog [data-close]').first().click();
  await page.emulateMedia({reducedMotion:'reduce'});await page.locator('[data-pull="10"]').click();await page.waitForSelector('.gacha-dialog .reward-tile');assert.equal(await page.locator('.gacha-dialog .reward-tile').count(),10);await page.locator('.gacha-dialog [data-close]').first().click();
  await page.locator('[data-info="history"]').click();await page.waitForFunction(()=>document.querySelector('.gacha-dialog-body')?.textContent?.includes('購入'));assert.equal(receipts.length,4);await page.screenshot({path:out+'/history.png'});
  await page.locator('.gacha-dialog [data-close]').first().click();

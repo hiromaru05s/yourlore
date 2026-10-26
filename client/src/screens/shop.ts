@@ -4,6 +4,7 @@ import {starterCollection,type CollectionResult,type DailyStarterShop} from '../
 import {renderShopStarters,confirmStarterPurchase} from '../ui/shopStarters';
 import {pendingPurchase,purchaseCollection,type PendingPurchase} from '../ui/collectionPurchase';
 import '../styles/shopStarters.css';
+import '../styles/shopCatalog.css';
 import {mountShopGacha, type GachaVariant} from '../ui/shopGacha';
 import '../styles/shopPreview.css';
 import { loungeText } from "../ui/loungeText";

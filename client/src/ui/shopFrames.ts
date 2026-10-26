@@ -14,7 +14,7 @@ export function confirmFramePurchase(id:string,buy:()=>void){
  dialog.querySelector<HTMLButtonElement>('[data-frame-no]')!.onclick=close;dialog.querySelector<HTMLButtonElement>('[data-frame-yes]')!.onclick=()=>{if(closed)return;close();buy();};dialog.addEventListener('cancel',e=>{e.preventDefault();close();});document.body.append(dialog);dialog.showModal();dialog.querySelector<HTMLButtonElement>('[data-frame-no]')!.focus();return close;
 }
 export function mountShopFrames(host:HTMLElement,buy:(id:string)=>void){
- host.innerHTML=`<div class="frame-shop-heading"><h3>${l('カードフレーム','Card frames','카드 프레임')}</h3><p>${l('デッキの全カードに、動く質感を。スターターも、対戦中に購入したカードも、プレイ後まで同じフレームに。','Animated materials for your whole deck, including starters and cards bought during a duel. The frame stays when you play them.','덱의 모든 카드에 움직이는 질감을. 스타터와 대전 중 구매한 카드 모두 플레이 후에도 같은 프레임을 유지합니다.')}</p><small>${l('表示モデル：アチューン · 購入したフレームはデッキ編成の「外観」で設定','Model: Attune · Equip purchased frames in Deck → Appearance','표시 모델: 어튠 · 구매한 프레임은 덱 편성의 외형에서 설정')}</small></div><div class="frame-shop-grid"></div>`;
+ host.innerHTML=`<div class="frame-shop-heading"><h3>${l('カードフレーム','Card frames','카드 프레임')}</h3><small>${l('表示モデル：アチューン · 購入したフレームはデッキ編成の「外観」で設定','Model: Attune · Equip purchased frames in Deck → Appearance','표시 모델: 어튠 · 구매한 프레임은 덱 편성의 외형에서 설정')}</small></div><div class="frame-shop-grid"></div>`;
  const grid=host.querySelector('.frame-shop-grid')!;
  for(const item of CARD_FRAMES){
   const tile=document.createElement('article');tile.className='frame-shop-item';tile.dataset.frameItem=item.id;
