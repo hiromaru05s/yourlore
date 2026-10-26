@@ -454,6 +454,7 @@ export abstract class BaseController implements BoardHandlers {
     const gutsHits=new Set<string>();
     const counterGuts=new Set<GameEvent>();
     const motionFinishes:Promise<void>[]=[];
+    const goblinDirectFinishes=new Map<string,Promise<void>>();
     let voidShotFinish:Promise<void>|undefined;
     const counterFinishes=new Map<string,Promise<void>>();
     const grantFinishes:Promise<void>[]=[];
@@ -766,6 +767,7 @@ export abstract class BaseController implements BoardHandlers {
           const contact=()=>{eventSound.contact(e.targetUid,targetPlayer,e.contactDamage!==0);if(e.guts&&!survival)survival=A.gutsSurvive(e.guts,sideOf(e.guts.player));};
           const playback=contactPlayback(impact=>attacker?.id==='NGA4'?A.berserkStrike(e.uid,e.targetUid,e.player,this.you,targetPlayer,impact,exhaust,e.contactDamage):A.attackStrike(e.uid,e.targetUid,defender,impact,exhaust,e.contactDamage),contact);
           motionFinishes.push(playback.finished);await playback.contact;
+          if(attacker?.id==='GOBLIN'&&e.targetUid===null)goblinDirectFinishes.set(e.uid,playback.finished);
           if(survival)motionFinishes.push(survival);
           // The dedicated material already owns this target's recoil at contact.
           if(e.guts)gutsHits.add(e.guts.uid);
@@ -785,6 +787,11 @@ export abstract class BaseController implements BoardHandlers {
           while (events[i + 1]?.type === 'monsterActivate') {
             const next = events[++i];
             if (next.type === 'monsterActivate') uids.add(next.uid);
+          }
+          const goblinReturns=[...uids].flatMap(uid=>{const finish=goblinDirectFinishes.get(uid);goblinDirectFinishes.delete(uid);return finish?[finish]:[];});
+          if(goblinReturns.length&&!A.isFxSkipped()){
+            await Promise.all(goblinReturns);
+            await wait(500); // Let Goblin's attack settle before its extra direct-hit effect.
           }
           await Promise.all([...uids].map(uid => A.monsterActivation(uid)));
           break;
