@@ -33,4 +33,11 @@
 
 プレビュー起動元は `/Users/hiromaru05s/.codex/worktrees/rift-ores/LORE_TCG`、URLは `http://127.0.0.1:5318`。`qa/cards-ja.png` / `rules-ja.png` / `rift-choice.png` / `board-after.png` / `board-390.png` に実表示を記録。ブラウザーはローカルfixtureであり、認証済み本番PvPの検証ではない。
 
-本番のリリース結果は検証後 `production-verification.json` に記録する。
+## 本番反映
+
+- 実装コミット `0798ea87`。最新mainを含む公開スナップショットは `a679258097f2f09f6633e6a62ba7a55e8dd5e3b0`。
+- 既存ガードでコミット済みスナップショットをビルドし、全218件の本番テスト、型検査、ビルド成功後に公開。`production-suite.json` / `deploy.log`。
+- 2026-10-26 16:51 KST、`https://yourlore.xyz`。Worker version `c59c5bc4-656b-40ac-a261-196715e5f9fd` に100%配信。`production-deployment.json`。
+- `scripts/verify-rift-ores-release.mjs` で本番HTMLが今回のエントリーJSを参照することを確認。カタログ／エンジンを含むJS 2ファイル、配信マニフェスト、鉱石アート6ファイルがローカルのビルド／原本とSHA-256一致。`production-verification.json`。
+- `tests/rift-ores-deployed-browser.mjs` をビルド済みローカル画面と本番URLで実行。両方の一覧検索、名称・コスト・プレイ不可・効果文、390pxの一覧／詳細表示が通過。`qa/built/` / `qa/production/`。本番に実際に配信された素材を使用し、スクリーンショットを目視確認。
+- ブラウザーのアカウントAPIはfixture。実在アカウントやDBを書き換えていない。本番での認証済みPvPは未実施。見た目の承認と機能／配信の検証は別の証拠として扱う。
