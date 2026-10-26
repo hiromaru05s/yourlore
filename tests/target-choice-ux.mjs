@@ -66,7 +66,7 @@ try {
   let g=fresh();g.players[0].removed=culls(4);g.players[0].field=[mon('M1')];g.players[0].enchants=[{card:card('RUNE3'),turns:99,bornTurn:0}];const c=card('SELECTED_SWORD');g.players[0].hand=[c];const uid=g.players[0].field[0].uid;
   g=reviewed(g,c,[uid]).state;assert.equal(g.players[0].field[0].tempAtk,8);assert.equal(g.pending.reason,'SELECTED_SWORD');g=step(g,{type:'pick',uid});assert.equal(g.players[0].field[0].tempAtk,16);assert.equal(g.players[0].mana,27);
  });
- check('Zero shield and risky summon/chest/global effects are reviewed',()=>{const g=fresh();for(const id of ['SELECTED_SHIELD','M5','TGE3','VOID_APOSTLE','STARTER_CHEST','MAGMA_RAIN','HANDRESET','BLOOD_JOY','TRIAL_AREA'])assert(E.needsCastReview(g,0,card(id)),id);assert(!E.needsCastReview(g,0,card('STARTER_TRASH')));});
+ check('Zero shield and risky summon/chest/global effects are reviewed',()=>{const g=fresh();for(const id of ['SELECTED_SHIELD','TGE3','VOID_APOSTLE','STARTER_CHEST','MAGMA_RAIN','HANDRESET','BLOOD_JOY','TRIAL_AREA'])assert(E.needsCastReview(g,0,card(id)),id);assert(!E.needsCastReview(g,0,card('M5')),'Shield-only summon no longer requires self-damage review');assert(!E.needsCastReview(g,0,card('STARTER_TRASH')));});
  // Every metadata-driven preselection must resolve exactly like the original
  // engine's explicit choices. This catches custom IDs overriding legacy act keys.
  let plans=0;

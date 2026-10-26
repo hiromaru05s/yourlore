@@ -40,19 +40,19 @@
 
 ### M2 — ストーン・パップ
 
-構造監査：既存表記を維持。実装キー：`{}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> —
+> 【召喚時】自分の墓地から購入コスト1のモンスターカード1枚をランダムに選び、自分の手札に加える。
 
 **ko**
 
-> —
+> 【소환 시】자신의 묘지에서 구매 코스트 1인 몬스터 카드 1장을 무작위로 골라 자신의 패에 넣는다.
 
 **en**
 
-> —
+> 【On Summon】Return 1 random monster card with purchase cost 1 from your graveyard to your hand.
 
 
 ### M3 — ダスト・スカウト
@@ -74,36 +74,36 @@
 
 ### M4 — ブレード・ヘア
 
-構造監査：既存表記を維持。実装キー：`{}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> —
+> 【相手のモンスター破壊時】このモンスターが攻撃・反撃・自身に付与された腐敗で相手モンスターを破壊するたび、相手に2ダメージを与える。
 
 **ko**
 
-> —
+> 【상대의 몬스터 파괴 시】이 몬스터가 공격·반격·자신에게 부여된 부패로 상대 몬스터를 파괴할 때마다 상대에게 2 데미지를 준다.
 
 **en**
 
-> —
+> 【When an Enemy Monster Is Destroyed】Whenever this monster destroys an enemy monster with its attack, counterattack, or Decay granted to it, deal 2 damage to the opponent.
 
 
 ### M5 — アイアン・シェル
 
-構造監査：表記改定（ko）。実装キー：`{"onSummon":"selfBurn"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【召喚時】自分に2ダメージを与える。
+> 【召喚時】自分はシールド2を得る。
 
 **ko**
 
-> 【소환 시】자신에게 2 데미지를 준다.
+> 【소환 시】자신은 실드 2를 얻는다.
 
 **en**
 
-> 【On Summon】You take 2 damage.
+> 【On Summon】Gain 2 Shield.
 
 
 ### M6 — ツイン・ファング
@@ -148,19 +148,19 @@
 
 ### M8 — グローブ・ウォーデン
 
-構造監査：表記改定（ko）。実装キー：`{"onSummon":"heal"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【召喚時】自分の体力を1回復する。
+> 【召喚時】相手に雫が1以上あれば、相手の雫を1減らし、自分は雫1を得る。
 
 **ko**
 
-> 【소환 시】자신의 체력을 1 회복한다.
+> 【소환 시】상대의 이슬이 1 이상이면 상대의 이슬을 1 줄이고 자신은 이슬 1을 얻는다.
 
 **en**
 
-> 【On Summon】Restore 1 of your HP.
+> 【On Summon】If the opponent has at least 1 Dew, remove 1 of their Dew and gain 1 Dew.
 
 
 ### M9 — レリック・ハンター
@@ -222,19 +222,19 @@
 
 ### M12 — タイタン・ゲート
 
-構造監査：表記改定（ko）。実装キー：`{"onSummon":"atkDown"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【召喚時】相手モンスター1体を選び、その攻撃力-1（持続）。
+> 【召喚時】相手モンスター1体を選び、その攻撃力-2（持続）。
 
 **ko**
 
-> 【소환 시】상대 몬스터 1체를 선택해 그 공격력 -1(지속).
+> 【소환 시】상대 몬스터 1체를 선택해 그 공격력 -2(지속).
 
 **en**
 
-> 【On Summon】Choose 1 enemy monster; it gets -1 ATK (lasting).
+> 【On Summon】Choose 1 enemy monster; it gets -2 ATK (lasting).
 
 
 ### S1 — 三撃の火種
@@ -381,19 +381,19 @@
 
 ### S12 — 鋼脈刻印
 
-構造監査：表記改定（ko）。実装キー：`{}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【発動時】ダイス1個を振る。5以上なら、相手に烙印カウンター1個を付与する。
+> 【発動時】ダイス5個を振る。出目の合計が20以上なら、相手に烙印カウンター1個を付与する。
 
 **ko**
 
-> 【발동 시】주사위 1개를 굴린다. 5 이상이면 상대에게 낙인 카운터 1개를 부여한다.
+> 【발동 시】주사위 5개를 굴린다. 합계가 20 이상이면 상대에게 낙인 카운터 1개를 부여한다.
 
 **en**
 
-> 【On Cast】Roll 1 die. On 5 or more, give the opponent 1 Brand counter.
+> 【On Cast】Roll 5 dice. If their sum is at least 20, give the opponent 1 Brand counter.
 
 
 ### S13 — 星墓の落下
@@ -415,19 +415,19 @@
 
 ### S14 — 大地の祝福
 
-構造監査：表記改定（ko）。実装キー：`{}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。自分の体力を5回復する。
+> 【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。両方の場の「気合」を持つ全モンスターに、気合用カウンター1個を付与する。
 
 **ko**
 
-> 【발동 시】양쪽 필드의 알 이외 모든 몬스터의 누적 데미지를 제거한다. 자신의 체력을 5 회복한다.
+> 【발동 시】양쪽 필드의 알 이외의 모든 몬스터에게 쌓인 데미지를 제거한다. 양쪽 필드의 「기합」을 가진 모든 몬스터에게 기합용 카운터 1개를 부여한다.
 
 **en**
 
-> 【On Cast】Remove all accumulated damage from every non-Egg monster on both fields. Restore 5 of your HP.
+> 【On Cast】Remove all accumulated damage from every non-Egg monster on both fields. Give each monster with Guts on both fields 1 Guts counter.
 
 
 ### S15 — ルーン爆裂
@@ -790,36 +790,36 @@
 
 ### NHEX — 見習い呪術師
 
-構造監査：表記改定（ja / ko / en）。実装キー：`{"turnFx":"hexCurse"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【自分のターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。
+> 【自分のターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。さらに、魔法の枚数や出目に関係なく、自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。
 
 **ko**
 
-> 【자신의 턴 시작 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.
+> 【자신의 턴 시작 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다. 또한 마법의 수와 주사위 결과에 관계없이 자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.
 
 **en**
 
-> 【At the Start of Your Turn】If your deck composition contains at least 10 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard.
+> 【At the Start of Your Turn】If your deck composition contains at least 10 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard. Independently of the spell count and die result, add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count.
 
 
 ### AHEUK — アチューン・黒
 
-構造監査：表記改定（ko）。実装キー：`{"act":"manaDown"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【発動時】相手の最大マナ-1。自分の場にモンスターがいなければ、相手の最大マナをさらに1減らす。
+> 【発動時】相手の最大マナ-1。相手の場にモンスターが2体以上いて、自分の場にモンスターがいなければ、相手の最大マナをさらに1減らす。
 
 **ko**
 
-> 【발동 시】상대의 최대 마나 -1. 자신의 필드에 몬스터가 없으면 상대의 최대 마나를 추가로 1 감소.
+> 【발동 시】상대의 최대 마나 -1. 상대 필드에 몬스터가 2체 이상이고 자신의 필드에 몬스터가 없으면 상대의 최대 마나를 추가로 1 줄인다.
 
 **en**
 
-> 【On Cast】The opponent's max mana -1. If you control no monsters, reduce their max mana by 1 more.
+> 【On Cast】Reduce the opponent’s max mana by 1. If they control at least 2 monsters and you control none, reduce it by 1 more.
 
 
 ### AJIN — アチューン・真
@@ -909,19 +909,19 @@
 
 ### GM5_3 — 業火のドレイク
 
-構造監査：表記改定（ja / ko / en）。実装キー：`{"turnFx":"turnBurn"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【自分のターン開始時】相手に3ダメージを与える。
+> 【自分のターン開始時】相手に4ダメージを与える。
 
 **ko**
 
-> 【자신의 턴 시작 시】상대에게 3 데미지를 준다.
+> 【자신의 턴 시작 시】상대에게 4 데미지를 준다.
 
 **en**
 
-> 【At the Start of Your Turn】Deal 3 damage to the opponent.
+> 【At the Start of Your Turn】Deal 4 damage to the opponent.
 
 
 ### GS5_3 — 呪文書の解読
@@ -1060,7 +1060,7 @@
 
 ### GS8_0 — 銀月砲
 
-構造監査：表記改定（ko）。実装キー：`{"act":"dmg"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
@@ -1336,7 +1336,7 @@
 
 ### TIMEWARP — 時空間操作
 
-構造監査：表記改定（ko）。実装キー：`{"act":"dmg"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
@@ -4664,19 +4664,25 @@
 
 ### BUDGET — 運営予算
 
-構造監査：表記改定（ko）。実装キー：`{}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【発動時】ダイス1個を振り2以上なら兵士(2/2)1体を自分の場に召喚する。
+> 【発動時】ダイス1個を振る。
+> 1～2：自分の場に「城」があれば「兵士」1体を自分の場に召喚する。なければ何も起こらない。
+> 3～6：「兵士」1体を自分の場に召喚する。自分の場に「城」があれば、さらに「兵士」1体を召喚する。
 
 **ko**
 
-> 【발동 시】주사위 1개를 굴려 2 이상이면 병사(2/2) 1체를 자신의 필드에 소환한다.
+> 【발동 시】주사위 1개를 굴린다.
+> 1~2: 자신의 필드에 「성」이 있으면 「병사」 1체를 자신의 필드에 소환한다. 없으면 아무 일도 일어나지 않는다.
+> 3~6: 「병사」 1체를 자신의 필드에 소환한다. 자신의 필드에 「성」이 있으면 「병사」 1체를 추가로 소환한다.
 
 **en**
 
-> 【On Cast】Roll 1 die: on 2 or more, summon a Soldier (2/2) to your field.
+> 【On Cast】Roll 1 die.
+> 1–2: If you control Castle, summon 1 Soldier to your field. Otherwise, nothing happens.
+> 3–6: Summon 1 Soldier to your field. If you control Castle, summon 1 additional Soldier.
 
 
 ### EXPANSION — 増設
@@ -4910,59 +4916,77 @@
 
 ### HEXER1 — 初級呪術師
 
-構造監査：表記改定（ko）。実装キー：`{"onSummon":"hexSummon"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
 > 【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。
+>
+> 【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。
 
 **ko**
 
 > 【소환 시】자신의 덱 구성에 마법이 8장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.
+>
+> 【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.
 
 **en**
 
 > 【On Summon】If your deck composition contains at least 8 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard.
+>
+> 【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count.
 
 
 ### HEXER2 — 中級呪術師
 
-構造監査：表記改定（ko）。実装キー：`{"onSummon":"hexSummon"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
 > 【召喚時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。4以上なら、新しい「呪い」4枚を相手の墓地に追加する。
+>
+> 【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。
 
 **ko**
 
 > 【소환 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 4 이상이면 새로운 저주 4장을 상대의 묘지에 추가한다.
+>
+> 【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.
 
 **en**
 
 > 【On Summon】If your deck composition contains at least 10 spells, roll 1 die. On 4 or more, create 4 new Curses in the opponent's graveyard.
+>
+> 【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count.
 
 
 ### HEXER3 — 上級呪術師
 
-構造監査：表記改定（ja / ko）。実装キー：`{"onSummon":"hexSummon","aura":"hexCurseOnSpell"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
 > 【召喚時】自分のデッキ構成に魔法が13枚以上あれば、ダイス1個を振る。3以上なら、新しい「呪い」5枚を相手の墓地に追加する。
 >
 > 【相手の魔法使用時】相手が魔法を使用するたび、新しい「呪い」1枚を相手の墓地に追加する。
+>
+> 【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。
 
 **ko**
 
 > 【소환 시】자신의 덱 구성에 마법이 13장 이상이면 주사위 1개를 굴린다. 3 이상이면 새로운 저주 5장을 상대의 묘지에 추가한다.
 >
 > 【상대 마법 사용 시】상대가 마법을 사용할 때마다 새로운 저주 1장을 상대의 묘지에 추가한다.
+>
+> 【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.
 
 **en**
 
 > 【On Summon】If your deck composition contains at least 13 spells, roll 1 die. On 3 or more, create 5 new Curses in the opponent's graveyard.
 >
 > 【Opponent Plays a Spell】Whenever the opponent plays a spell, create 1 new Curse in their graveyard.
+>
+> 【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count.
 
 
 ### HEXER4 — 特級呪術師 - ケロイド
@@ -5019,19 +5043,19 @@
 
 ### COLOSSEUM_REST — コロシアムの休憩場
 
-構造監査：表記改定（ja / ko / en）。実装キー：`{"ench":"colosseumRest"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
-> 【自分のターン開始時】自分のリフトの「カル」1枚につき、自分の体力を1回復する。
+> 【自分のターン開始時】自分の体力を2回復する。自分のリフトに「カル」が10枚以上あれば、自分の場の卵以外のモンスター1体を選び、その蓄積ダメージを全て取り除く。
 
 **ko**
 
-> 【자신의 턴 시작 시】자신의 리프트의 컬 1장당 자신의 체력을 1 회복한다.
+> 【자신의 턴 시작 시】자신의 체력을 2 회복한다. 자신의 리프트에 「컬」이 10장 이상이면 자신의 필드의 알 이외의 몬스터 1체를 선택해 쌓인 데미지를 모두 제거한다.
 
 **en**
 
-> 【At the Start of Your Turn】Restore 1 of your HP for each Cull in your Rift.
+> 【At the Start of Your Turn】Restore 2 of your HP. If your Rift contains at least 10 Culls, choose 1 non-Egg monster on your field and remove all its accumulated damage.
 
 
 ### COLOSSEUM — コロシアム
@@ -5053,19 +5077,25 @@
 
 ### UNBRANDER — 除印師
 
-構造監査：表記改定（ko）。実装キー：`{"onSummon":"unbrand"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 
 > 【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く。
+>
+> 【場にある間】自分が使用する「呪い」の効果を「自分の体力を3回復する」に変更する（同名は重複しない）。
 
 **ko**
 
-> 【소환 시】자신에게 낙인 카운터가 있으면 자신의 낙인 카운터 1개를 제거한다.
+> 【소환 시】자신에게 낙인 카운터가 있으면 1개 제거한다.
+>
+> 【필드에 있는 동안】자신이 사용하는 「저주」의 효과를 「자신의 체력을 3 회복한다」로 변경한다(동명 중복 없음).
 
 **en**
 
-> 【On Summon】If you have a Brand counter, remove 1 of your Brand counters.
+> 【On Summon】Remove 1 of your Brand counters if you have any.
+>
+> 【While on the Field】Replace the effect of each Curse you use with “Restore 3 of your HP” (does not stack).
 
 
 ### LAWLESS — 不法地帯
@@ -7020,7 +7050,7 @@
 
 ### NIGHT_CASTLE_GIFT — 夜城からの贈り物
 
-構造監査：表記改定（ja / ko / en）。実装キー：`{"ench":"nightCastleGift"}`。
+2026-10-27：承認済み旧カード改修。機能検証は `tests/legacy-card-rework.mjs`。
 
 **ja**
 

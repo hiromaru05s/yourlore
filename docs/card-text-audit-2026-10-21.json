@@ -7,7 +7,7 @@
     "en"
   ],
   "count": 381,
-  "engineSha256": "a1ed8687b9e62ba102f724b91469ec64e52359a155eb4860dbc9d1cbcd6e701a",
+  "engineSha256": "7cd23c2466250b291e04ee56b8356a0e1559bd32c1a6f7012826b7f723ca2065",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -29,21 +29,28 @@
     },
     "M2": {
       "nameJa": "ストーン・パップ",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "563c5ae8fe25a7fda8a4ed8f18dc5b30ff8bad40a95e91927898c3987655c371",
-      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
-      "hooks": {},
+      "status": "reviewed-legacy-rework",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "685fc99d4c82755e31cbb9396609c82753c088204930b9ff4ae20e985063e006",
+      "textSha256": "3ba0b060ddd560c84410b8e8e0c0ffe17649dd934be94f081362812ed7874e32",
+      "hooks": {
+        "onSummon": "recoverCostOneMonster"
+      },
       "before": {
         "ja": "—",
         "ko": "—",
         "en": "—"
       },
       "after": {
-        "ja": "—",
-        "ko": "—",
-        "en": "—"
-      }
+        "ja": "【召喚時】自分の墓地から購入コスト1のモンスターカード1枚をランダムに選び、自分の手札に加える。",
+        "ko": "【소환 시】자신의 묘지에서 구매 코스트 1인 몬스터 카드 1장을 무작위로 골라 자신의 패에 넣는다.",
+        "en": "【On Summon】Return 1 random monster card with purchase cost 1 from your graveyard to your hand."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "M3": {
       "nameJa": "ダスト・スカウト",
@@ -69,43 +76,53 @@
     },
     "M4": {
       "nameJa": "ブレード・ヘア",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "45cc2f1b6a428e14aab42334d7656d1257ae7eaca057659f953c79e57ae2aeac",
-      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
-      "hooks": {},
+      "status": "reviewed-legacy-rework",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "6a55a5940c32910443f842aed595fb12a338b972efa595774608b94f98b53a52",
+      "textSha256": "3a4b77b05ae3b6f82bdbb0ffe88172db19b722652e36c74f0c25013d46c11cb9",
+      "hooks": {
+        "aura": "killBurn"
+      },
       "before": {
         "ja": "—",
         "ko": "—",
         "en": "—"
       },
       "after": {
-        "ja": "—",
-        "ko": "—",
-        "en": "—"
-      }
+        "ja": "【相手のモンスター破壊時】このモンスターが攻撃・反撃・自身に付与された腐敗で相手モンスターを破壊するたび、相手に2ダメージを与える。",
+        "ko": "【상대의 몬스터 파괴 시】이 몬스터가 공격·반격·자신에게 부여된 부패로 상대 몬스터를 파괴할 때마다 상대에게 2 데미지를 준다.",
+        "en": "【When an Enemy Monster Is Destroyed】Whenever this monster destroys an enemy monster with its attack, counterattack, or Decay granted to it, deal 2 damage to the opponent."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "M5": {
       "nameJa": "アイアン・シェル",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "b7f2e36bdd3e6e8494c9cd1498efdce2b0b9d7eaaacde9c0c20d474fa2e2f674",
-      "textSha256": "45d905f52f797a9a6ad9df06b76410dccebc71694593b5facf80500467dbb453",
+      "definitionSha256": "ac84c925d38efc3636bbf27f2f89489270fedfb0281225db4bfa6c785269fa02",
+      "textSha256": "ce28d5923a7f9ec01661376d7ef0efc328845bb969c0ed0433eacaeca6e923c1",
       "hooks": {
-        "onSummon": "selfBurn"
+        "onSummon": "shield"
       },
       "before": {
         "ja": "【召喚時】自分に2ダメージを与える。",
-        "ko": "【소환시】자신에게 2 데미지를 준다.",
+        "ko": "【소환 시】자신에게 2 데미지를 준다.",
         "en": "【On Summon】You take 2 damage."
       },
       "after": {
-        "ja": "【召喚時】自分に2ダメージを与える。",
-        "ko": "【소환 시】자신에게 2 데미지를 준다.",
-        "en": "【On Summon】You take 2 damage."
-      }
+        "ja": "【召喚時】自分はシールド2を得る。",
+        "ko": "【소환 시】자신은 실드 2를 얻는다.",
+        "en": "【On Summon】Gain 2 Shield."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "M6": {
       "nameJa": "ツイン・ファング",
@@ -156,25 +173,28 @@
     },
     "M8": {
       "nameJa": "グローブ・ウォーデン",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "e3ab0f6944c3cf8a5385316d586693f602670ad98bc8c484189ee621ed3b1de3",
-      "textSha256": "682dc289232ec6a83755327cda4e0c587fe33834cad203bdd0cfc80ea4a3085e",
+      "definitionSha256": "9657f5915bfec6d1414aebab86897944a454ba24fa670d987dc198921c55666d",
+      "textSha256": "fd57d199790d81f8e573b0d7d1ad3250ee853f79c71a69667f09a0f2b58ed036",
       "hooks": {
-        "onSummon": "heal"
+        "onSummon": "stealDew"
       },
       "before": {
         "ja": "【召喚時】自分の体力を1回復する。",
-        "ko": "【소환시】자신의 체력을 1 회복한다.",
+        "ko": "【소환 시】자신의 체력을 1 회복한다.",
         "en": "【On Summon】Restore 1 of your HP."
       },
       "after": {
-        "ja": "【召喚時】自分の体力を1回復する。",
-        "ko": "【소환 시】자신의 체력을 1 회복한다.",
-        "en": "【On Summon】Restore 1 of your HP."
-      }
+        "ja": "【召喚時】相手に雫が1以上あれば、相手の雫を1減らし、自分は雫1を得る。",
+        "ko": "【소환 시】상대의 이슬이 1 이상이면 상대의 이슬을 1 줄이고 자신은 이슬 1을 얻는다.",
+        "en": "【On Summon】If the opponent has at least 1 Dew, remove 1 of their Dew and gain 1 Dew."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "M9": {
       "nameJa": "レリック・ハンター",
@@ -244,25 +264,28 @@
     },
     "M12": {
       "nameJa": "タイタン・ゲート",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "85bc93bd695804c792df9c218ea1e9af994438f3bad03fb5234502b6a2942c3c",
-      "textSha256": "d9262e9f8e30255758d30cd7de094b8f0f74bf10a6178acad97d635de5cb9a19",
+      "definitionSha256": "05bc3c73faf8e38a9e846be947f18936b16352a0c9108d733a8bfae001c96349",
+      "textSha256": "db06c5da58204f3a8bebe3e77c907606f6b317b9ae9576ebfadd15df898c05a5",
       "hooks": {
         "onSummon": "atkDown"
       },
       "before": {
         "ja": "【召喚時】相手モンスター1体を選び、その攻撃力-1（持続）。",
-        "ko": "【소환시】상대 몬스터 1체를 선택해 그 공격력 -1(지속).",
+        "ko": "【소환 시】상대 몬스터 1체를 선택해 그 공격력 -1(지속).",
         "en": "【On Summon】Choose 1 enemy monster; it gets -1 ATK (lasting)."
       },
       "after": {
-        "ja": "【召喚時】相手モンスター1体を選び、その攻撃力-1（持続）。",
-        "ko": "【소환 시】상대 몬스터 1체를 선택해 그 공격력 -1(지속).",
-        "en": "【On Summon】Choose 1 enemy monster; it gets -1 ATK (lasting)."
-      }
+        "ja": "【召喚時】相手モンスター1体を選び、その攻撃力-2（持続）。",
+        "ko": "【소환 시】상대 몬스터 1체를 선택해 그 공격력 -2(지속).",
+        "en": "【On Summon】Choose 1 enemy monster; it gets -2 ATK (lasting)."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "S1": {
       "nameJa": "三撃の火種",
@@ -445,23 +468,26 @@
     },
     "S12": {
       "nameJa": "鋼脈刻印",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "308539a2b165a77a183c0b135ae75e6d9d6dffca6c1e3fe9e04234a536dd5abb",
-      "textSha256": "70586bbcfa7a1ea8f234831cc03135ff6a20c4c1428205e9e31584c98ef325ff",
+      "textSha256": "546ecf2ff0f7f4dbff4ad0209dddc150624ef43c108f645e515473b351ff9de2",
       "hooks": {},
       "before": {
         "ja": "【発動時】ダイス1個を振る。5以上なら、相手に烙印カウンター1個を付与する。",
-        "ko": "【발동시】주사위 1개를 굴린다. 5 이상이면 상대에게 낙인 카운터 1개를 부여한다.",
+        "ko": "【발동 시】주사위 1개를 굴린다. 5 이상이면 상대에게 낙인 카운터 1개를 부여한다.",
         "en": "【On Cast】Roll 1 die. On 5 or more, give the opponent 1 Brand counter."
       },
       "after": {
-        "ja": "【発動時】ダイス1個を振る。5以上なら、相手に烙印カウンター1個を付与する。",
-        "ko": "【발동 시】주사위 1개를 굴린다. 5 이상이면 상대에게 낙인 카운터 1개를 부여한다.",
-        "en": "【On Cast】Roll 1 die. On 5 or more, give the opponent 1 Brand counter."
-      }
+        "ja": "【発動時】ダイス5個を振る。出目の合計が20以上なら、相手に烙印カウンター1個を付与する。",
+        "ko": "【발동 시】주사위 5개를 굴린다. 합계가 20 이상이면 상대에게 낙인 카운터 1개를 부여한다.",
+        "en": "【On Cast】Roll 5 dice. If their sum is at least 20, give the opponent 1 Brand counter."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "S13": {
       "nameJa": "星墓の落下",
@@ -487,23 +513,26 @@
     },
     "S14": {
       "nameJa": "大地の祝福",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "35734453cd172eaa6c334ff13e2f29f8d036083931ed265bd554b29dffe09196",
-      "textSha256": "89837b45eb848b2a0cebc021a7e64df3e7d8cd501fd3932a5f6c49c805284ddd",
+      "definitionSha256": "6dbbafd4ac3434cfd2a41f6ad6728a08b5a7c5b09c6f534f4969ba56e5151fb4",
+      "textSha256": "e6cd2e28924c8be865b31b020f458350f99075dc8d9866427287dddf4cede0f2",
       "hooks": {},
       "before": {
         "ja": "【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。自分の体力を5回復する。",
-        "ko": "【발동시】양쪽 필드의 알 이외 모든 몬스터의 누적 데미지를 제거한다. 자신의 체력을 5 회복한다.",
+        "ko": "【발동 시】양쪽 필드의 알 이외 모든 몬스터의 누적 데미지를 제거한다. 자신의 체력을 5 회복한다.",
         "en": "【On Cast】Remove all accumulated damage from every non-Egg monster on both fields. Restore 5 of your HP."
       },
       "after": {
-        "ja": "【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。自分の体力を5回復する。",
-        "ko": "【발동 시】양쪽 필드의 알 이외 모든 몬스터의 누적 데미지를 제거한다. 자신의 체력을 5 회복한다.",
-        "en": "【On Cast】Remove all accumulated damage from every non-Egg monster on both fields. Restore 5 of your HP."
-      }
+        "ja": "【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。両方の場の「気合」を持つ全モンスターに、気合用カウンター1個を付与する。",
+        "ko": "【발동 시】양쪽 필드의 알 이외의 모든 몬스터에게 쌓인 데미지를 제거한다. 양쪽 필드의 「기합」을 가진 모든 몬스터에게 기합용 카운터 1개를 부여한다.",
+        "en": "【On Cast】Remove all accumulated damage from every non-Egg monster on both fields. Give each monster with Guts on both fields 1 Guts counter."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "S15": {
       "nameJa": "ルーン爆裂",
@@ -958,49 +987,53 @@
     },
     "NHEX": {
       "nameJa": "見習い呪術師",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "1f26d406bb33c0168c11a730854ff6ac92fad9c74f68a6abb53e357c985bfab0",
-      "textSha256": "8631d8d3cec6d1758d12407cb3ca9bfd5327173e826dc3ef2ebd5da4e281a638",
+      "textSha256": "5250e0b85b368535d24cf7fc7ace67e905efa83e955e5193b27f350cd8f4f8a1",
       "hooks": {
         "turnFx": "hexCurse"
       },
       "before": {
-        "ja": "【自分ターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。",
-        "ko": "【자신 턴 시작시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.",
-        "en": "【Your Turn Start】If your deck composition contains at least 10 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard."
-      },
-      "after": {
         "ja": "【自分のターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。",
         "ko": "【자신의 턴 시작 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.",
         "en": "【At the Start of Your Turn】If your deck composition contains at least 10 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard."
-      }
+      },
+      "after": {
+        "ja": "【自分のターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。さらに、魔法の枚数や出目に関係なく、自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
+        "ko": "【자신의 턴 시작 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다. 또한 마법의 수와 주사위 결과에 관계없이 자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
+        "en": "【At the Start of Your Turn】If your deck composition contains at least 10 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard. Independently of the spell count and die result, add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "AHEUK": {
       "nameJa": "アチューン・黒",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "10e88352633e16edb892cf2b30639dd311d293b8ef183b41dc774b37ccd76c57",
-      "textSha256": "ff14248a09d8261ea426dfd32dc11243ec7c66a838e4757f4a8bb5b643d3a777",
+      "definitionSha256": "0e9ad1d5db87ee21f86a29a8da0ec121646beb69881df25a97b4529582f9cb96",
+      "textSha256": "5a6157e86fd6b09264ae15ea1c58cc98e5bb3043083b5261ee295852dd2aff4d",
       "hooks": {
         "act": "manaDown"
       },
       "before": {
         "ja": "【発動時】相手の最大マナ-1。自分の場にモンスターがいなければ、相手の最大マナをさらに1減らす。",
-        "ko": "【발동시】상대의 최대 마나 -1. 자신의 필드에 몬스터가 없으면 상대의 최대 마나를 추가로 1 감소.",
+        "ko": "【발동 시】상대의 최대 마나 -1. 자신의 필드에 몬스터가 없으면 상대의 최대 마나를 추가로 1 감소.",
         "en": "【On Cast】The opponent's max mana -1. If you control no monsters, reduce their max mana by 1 more."
       },
       "after": {
-        "ja": "【発動時】相手の最大マナ-1。自分の場にモンスターがいなければ、相手の最大マナをさらに1減らす。",
-        "ko": "【발동 시】상대의 최대 마나 -1. 자신의 필드에 몬스터가 없으면 상대의 최대 마나를 추가로 1 감소.",
-        "en": "【On Cast】The opponent's max mana -1. If you control no monsters, reduce their max mana by 1 more."
-      }
+        "ja": "【発動時】相手の最大マナ-1。相手の場にモンスターが2体以上いて、自分の場にモンスターがいなければ、相手の最大マナをさらに1減らす。",
+        "ko": "【발동 시】상대의 최대 마나 -1. 상대 필드에 몬스터가 2체 이상이고 자신의 필드에 몬스터가 없으면 상대의 최대 마나를 추가로 1 줄인다.",
+        "en": "【On Cast】Reduce the opponent’s max mana by 1. If they control at least 2 monsters and you control none, reduce it by 1 more."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "AJIN": {
       "nameJa": "アチューン・真",
@@ -1120,27 +1153,28 @@
     },
     "GM5_3": {
       "nameJa": "業火のドレイク",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "e82ae75efe102a9d4273d40ad2fe32261b66228c4c2f4853a2cc957e827f0de4",
-      "textSha256": "fa650f3ce5594895de2233c416ed5379435c04d8aac0bc75a22fb1a738d2f344",
+      "definitionSha256": "0f042a0c0cc45822818f95183756f053a6ffbe7285fa5c4ca52e41a827884dfa",
+      "textSha256": "2a6babc253d1776ec17abf9f3a996a9b2dd9cafdd48c0b500ae0ec27e2693246",
       "hooks": {
         "turnFx": "turnBurn"
       },
       "before": {
-        "ja": "【自分ターン開始時】相手に3ダメージを与える。",
-        "ko": "【자신 턴 시작시】상대에게 3 데미지를 준다.",
-        "en": "【Your Turn Start】Deal 3 damage to the opponent."
-      },
-      "after": {
         "ja": "【自分のターン開始時】相手に3ダメージを与える。",
         "ko": "【자신의 턴 시작 시】상대에게 3 데미지를 준다.",
         "en": "【At the Start of Your Turn】Deal 3 damage to the opponent."
-      }
+      },
+      "after": {
+        "ja": "【自分のターン開始時】相手に4ダメージを与える。",
+        "ko": "【자신의 턴 시작 시】상대에게 4 데미지를 준다.",
+        "en": "【At the Start of Your Turn】Deal 4 damage to the opponent."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "GS5_3": {
       "nameJa": "呪文書の解読",
@@ -1301,25 +1335,24 @@
     },
     "GS8_0": {
       "nameJa": "銀月砲",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "82003746252d53fc9fdaa3b62961561208dfc87950fced6b97d64b295da817e0",
+      "status": "reviewed-legacy-rework",
+      "changedLocales": [],
+      "definitionSha256": "8d55a5f314b15e74f80adcc7ede30418886bc7f5d252b41ca5a42b0441674b97",
       "textSha256": "601d4d60f97199ae93213f99cc2df1689ee400e30e177938ae45980b9eb7dbdf",
       "hooks": {
         "act": "dmg"
       },
       "before": {
         "ja": "【発動時】相手のデッキからカード1枚を選び、相手のリフトへ送ってよい。",
-        "ko": "【발동시】상대의 덱에서 카드 1장을 선택해 상대의 리프트로 보낼 수 있다.",
+        "ko": "【발동 시】상대의 덱에서 카드 1장을 선택해 상대의 리프트로 보낼 수 있다.",
         "en": "【On Cast】You may choose 1 card in the opponent's deck and send it to their Rift."
       },
       "after": {
         "ja": "【発動時】相手のデッキからカード1枚を選び、相手のリフトへ送ってよい。",
         "ko": "【발동 시】상대의 덱에서 카드 1장을 선택해 상대의 리프트로 보낼 수 있다.",
         "en": "【On Cast】You may choose 1 card in the opponent's deck and send it to their Rift."
-      }
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "INFKNIGHT": {
       "nameJa": "騎士",
@@ -1627,25 +1660,24 @@
     },
     "TIMEWARP": {
       "nameJa": "時空間操作",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "20b8392693e70c5d72018f74e3db6c0fa4993de708abca8ad13396edf193d0cf",
+      "status": "reviewed-legacy-rework",
+      "changedLocales": [],
+      "definitionSha256": "d7e017804cd525ad8fcadb559e61129de0106d9601666dbb7804828ae310ae9f",
       "textSha256": "66c36673c23b1bf499432d2a05761f5a07f43c97f4978836875a5e152135017b",
       "hooks": {
         "act": "dmg"
       },
       "before": {
         "ja": "【発動時】ダイス1個を振り4以上なら次の相手のターンをスキップする。",
-        "ko": "【발동시】주사위 1개를 굴려 4 이상이면 다음 상대 턴을 건너뛴다.",
+        "ko": "【발동 시】주사위 1개를 굴려 4 이상이면 다음 상대 턴을 건너뛴다.",
         "en": "【On Cast】Roll 1 die: on 4 or more, skip the opponent’s next turn."
       },
       "after": {
         "ja": "【発動時】ダイス1個を振り4以上なら次の相手のターンをスキップする。",
         "ko": "【발동 시】주사위 1개를 굴려 4 이상이면 다음 상대 턴을 건너뛴다.",
         "en": "【On Cast】Roll 1 die: on 4 or more, skip the opponent’s next turn."
-      }
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "INFERNO": {
       "nameJa": "地獄",
@@ -5333,23 +5365,26 @@
     },
     "BUDGET": {
       "nameJa": "運営予算",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "debbc5296950a31fd623be1a8098250801e1d5e5c22fa0d4f495a45adeb5aa19",
-      "textSha256": "169419160f76190d1785c42ea73631f443b15d0556b9434ad498452d2cd97e4f",
+      "textSha256": "4c8b47cd4f25d5d86e75ba0ce9c31265d9a35bf2700b66ba79f31b73158dcaac",
       "hooks": {},
       "before": {
         "ja": "【発動時】ダイス1個を振り2以上なら兵士(2/2)1体を自分の場に召喚する。",
-        "ko": "【발동시】주사위 1개를 굴려 2 이상이면 병사(2/2) 1체를 자신의 필드에 소환한다.",
+        "ko": "【발동 시】주사위 1개를 굴려 2 이상이면 병사(2/2) 1체를 자신의 필드에 소환한다.",
         "en": "【On Cast】Roll 1 die: on 2 or more, summon a Soldier (2/2) to your field."
       },
       "after": {
-        "ja": "【発動時】ダイス1個を振り2以上なら兵士(2/2)1体を自分の場に召喚する。",
-        "ko": "【발동 시】주사위 1개를 굴려 2 이상이면 병사(2/2) 1체를 자신의 필드에 소환한다.",
-        "en": "【On Cast】Roll 1 die: on 2 or more, summon a Soldier (2/2) to your field."
-      }
+        "ja": "【発動時】ダイス1個を振る。\n1～2：自分の場に「城」があれば「兵士」1体を自分の場に召喚する。なければ何も起こらない。\n3～6：「兵士」1体を自分の場に召喚する。自分の場に「城」があれば、さらに「兵士」1体を召喚する。",
+        "ko": "【발동 시】주사위 1개를 굴린다.\n1~2: 자신의 필드에 「성」이 있으면 「병사」 1체를 자신의 필드에 소환한다. 없으면 아무 일도 일어나지 않는다.\n3~6: 「병사」 1체를 자신의 필드에 소환한다. 자신의 필드에 「성」이 있으면 「병사」 1체를 추가로 소환한다.",
+        "en": "【On Cast】Roll 1 die.\n1–2: If you control Castle, summon 1 Soldier to your field. Otherwise, nothing happens.\n3–6: Summon 1 Soldier to your field. If you control Castle, summon 1 additional Soldier."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "EXPANSION": {
       "nameJa": "増設",
@@ -5588,71 +5623,79 @@
     },
     "HEXER1": {
       "nameJa": "初級呪術師",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "794092b9baa7cfc14e2a597d6a8eb779bf74e75af87cdd2b36223249e7845f5c",
-      "textSha256": "511fda337158e28c6d3f0eb3bf234df8ff3337ff114efc99bf052569cb0007f5",
+      "textSha256": "124dac5dfc507d97422ef314135ee482d8c058a911dc4d3e6b0ad94797215e42",
       "hooks": {
         "onSummon": "hexSummon"
       },
       "before": {
-        "ja": "【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。",
-        "ko": "【소환시】자신의 덱 구성에 마법이 8장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.",
-        "en": "【On Summon】If your deck composition contains at least 8 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard."
-      },
-      "after": {
         "ja": "【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。",
         "ko": "【소환 시】자신의 덱 구성에 마법이 8장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.",
         "en": "【On Summon】If your deck composition contains at least 8 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
+        "ko": "【소환 시】자신의 덱 구성에 마법이 8장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
+        "en": "【On Summon】If your deck composition contains at least 8 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "HEXER2": {
       "nameJa": "中級呪術師",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "90f1eb530b9459080a5d263d247a725a9503ac753a010734adc6a83807729078",
-      "textSha256": "9e8645772111518061c08c50919e2a2f26a0c143a1b53f10338e61574510f0db",
+      "textSha256": "05b5981cb6b9edc96b7444e81809b527353897c96f0102ea2daf962cb359b1d8",
       "hooks": {
         "onSummon": "hexSummon"
       },
       "before": {
         "ja": "【召喚時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。4以上なら、新しい「呪い」4枚を相手の墓地に追加する。",
-        "ko": "【소환시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 4 이상이면 새로운 저주 4장을 상대의 묘지에 추가한다.",
+        "ko": "【소환 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 4 이상이면 새로운 저주 4장을 상대의 묘지에 추가한다.",
         "en": "【On Summon】If your deck composition contains at least 10 spells, roll 1 die. On 4 or more, create 4 new Curses in the opponent's graveyard."
       },
       "after": {
-        "ja": "【召喚時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。4以上なら、新しい「呪い」4枚を相手の墓地に追加する。",
-        "ko": "【소환 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 4 이상이면 새로운 저주 4장을 상대의 묘지에 추가한다.",
-        "en": "【On Summon】If your deck composition contains at least 10 spells, roll 1 die. On 4 or more, create 4 new Curses in the opponent's graveyard."
-      }
+        "ja": "【召喚時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。4以上なら、新しい「呪い」4枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
+        "ko": "【소환 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 4 이상이면 새로운 저주 4장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
+        "en": "【On Summon】If your deck composition contains at least 10 spells, roll 1 die. On 4 or more, create 4 new Curses in the opponent's graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "HEXER3": {
       "nameJa": "上級呪術師",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
         "ja",
-        "ko"
+        "ko",
+        "en"
       ],
       "definitionSha256": "2ecc066d6751d1e69f02adbec60e82d56824dad1a7c9586add161c8703808511",
-      "textSha256": "bc190a02519a400698656fe92fab345cc8432025e28e6a7fc500902e25251dfb",
+      "textSha256": "49fbd912b259aa5356b0814fd2b05429836676aa50ce8647249b12a35a8303b2",
       "hooks": {
         "onSummon": "hexSummon",
         "aura": "hexCurseOnSpell"
       },
       "before": {
-        "ja": "【召喚時】自分のデッキ構成に魔法が13枚以上あれば、ダイス1個を振る。3以上なら、新しい「呪い」5枚を相手の墓地に追加する。\n\n【相手の魔法使用時】相手が魔法をプレイするたび、新しい「呪い」1枚を相手の墓地に追加する。",
-        "ko": "【소환시】자신의 덱 구성에 마법이 13장 이상이면 주사위 1개를 굴린다. 3 이상이면 새로운 저주 5장을 상대의 묘지에 추가한다.\n\n【상대 마법 사용시】상대가 마법을 사용할 때마다 새로운 저주 1장을 상대의 묘지에 추가한다.",
-        "en": "【On Summon】If your deck composition contains at least 13 spells, roll 1 die. On 3 or more, create 5 new Curses in the opponent's graveyard.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, create 1 new Curse in their graveyard."
-      },
-      "after": {
         "ja": "【召喚時】自分のデッキ構成に魔法が13枚以上あれば、ダイス1個を振る。3以上なら、新しい「呪い」5枚を相手の墓地に追加する。\n\n【相手の魔法使用時】相手が魔法を使用するたび、新しい「呪い」1枚を相手の墓地に追加する。",
         "ko": "【소환 시】자신의 덱 구성에 마법이 13장 이상이면 주사위 1개를 굴린다. 3 이상이면 새로운 저주 5장을 상대의 묘지에 추가한다.\n\n【상대 마법 사용 시】상대가 마법을 사용할 때마다 새로운 저주 1장을 상대의 묘지에 추가한다.",
         "en": "【On Summon】If your deck composition contains at least 13 spells, roll 1 die. On 3 or more, create 5 new Curses in the opponent's graveyard.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, create 1 new Curse in their graveyard."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】自分のデッキ構成に魔法が13枚以上あれば、ダイス1個を振る。3以上なら、新しい「呪い」5枚を相手の墓地に追加する。\n\n【相手の魔法使用時】相手が魔法を使用するたび、新しい「呪い」1枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
+        "ko": "【소환 시】자신의 덱 구성에 마법이 13장 이상이면 주사위 1개를 굴린다. 3 이상이면 새로운 저주 5장을 상대의 묘지에 추가한다.\n\n【상대 마법 사용 시】상대가 마법을 사용할 때마다 새로운 저주 1장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
+        "en": "【On Summon】If your deck composition contains at least 13 spells, roll 1 die. On 3 or more, create 5 new Curses in the opponent's graveyard.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, create 1 new Curse in their graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "HEXER4": {
       "nameJa": "特級呪術師 - ケロイド",
@@ -5706,27 +5749,28 @@
     },
     "COLOSSEUM_REST": {
       "nameJa": "コロシアムの休憩場",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "a14fb1d9dce76d35d2f6c4939f717e4c8cf1f6a22cc45286aa34fe6950cc35d3",
-      "textSha256": "35d8481e2696e32bc14729737d0f923c8fd6f978d960cab64e4cb045175a9ae2",
+      "textSha256": "8372a38f6893726e68be940539c90ca686fbf4554da3343015eb8dde9bb6fedf",
       "hooks": {
         "ench": "colosseumRest"
       },
       "before": {
-        "ja": "【自分ターン開始時】自分のリフトの「カル」1枚につき、自分の体力を1回復する。",
-        "ko": "【자신 턴 시작시】자신의 리프트의 컬 1장당 자신의 체력을 1 회복한다.",
-        "en": "【Your Turn Start】Restore 1 of your HP for each Cull in your Rift."
-      },
-      "after": {
         "ja": "【自分のターン開始時】自分のリフトの「カル」1枚につき、自分の体力を1回復する。",
         "ko": "【자신의 턴 시작 시】자신의 리프트의 컬 1장당 자신의 체력을 1 회복한다.",
         "en": "【At the Start of Your Turn】Restore 1 of your HP for each Cull in your Rift."
-      }
+      },
+      "after": {
+        "ja": "【自分のターン開始時】自分の体力を2回復する。自分のリフトに「カル」が10枚以上あれば、自分の場の卵以外のモンスター1体を選び、その蓄積ダメージを全て取り除く。",
+        "ko": "【자신의 턴 시작 시】자신의 체력을 2 회복한다. 자신의 리프트에 「컬」이 10장 이상이면 자신의 필드의 알 이외의 몬스터 1체를 선택해 쌓인 데미지를 모두 제거한다.",
+        "en": "【At the Start of Your Turn】Restore 2 of your HP. If your Rift contains at least 10 Culls, choose 1 non-Egg monster on your field and remove all its accumulated damage."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "COLOSSEUM": {
       "nameJa": "コロシアム",
@@ -5754,25 +5798,29 @@
     },
     "UNBRANDER": {
       "nameJa": "除印師",
-      "status": "reworded",
+      "status": "reviewed-legacy-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "4206b5eb76c579231398bb4bbae74c9a3d04a6c7baa7dad38c72e132459dd8c3",
-      "textSha256": "da58f1d309df076ffa7afd429f7e46d530d4110ae2562c84403b290665f281f1",
+      "definitionSha256": "a9edff36954295eaa0506ad9fcf93e62a482b21b5b3b3a89c284f1214886cb2d",
+      "textSha256": "41a1a4ddaa4180974b501edf64284f4bdc449f932a518cbe4bd63fac0ee315e8",
       "hooks": {
-        "onSummon": "unbrand"
+        "onSummon": "unbrand",
+        "aura": "curseHeal"
       },
       "before": {
         "ja": "【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く。",
-        "ko": "【소환시】자신에게 낙인 카운터가 있으면 자신의 낙인 카운터 1개를 제거한다.",
+        "ko": "【소환 시】자신에게 낙인 카운터가 있으면 자신의 낙인 카운터 1개를 제거한다.",
         "en": "【On Summon】If you have a Brand counter, remove 1 of your Brand counters."
       },
       "after": {
-        "ja": "【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く。",
-        "ko": "【소환 시】자신에게 낙인 카운터가 있으면 자신의 낙인 카운터 1개를 제거한다.",
-        "en": "【On Summon】If you have a Brand counter, remove 1 of your Brand counters."
-      }
+        "ja": "【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く。\n\n【場にある間】自分が使用する「呪い」の効果を「自分の体力を3回復する」に変更する（同名は重複しない）。",
+        "ko": "【소환 시】자신에게 낙인 카운터가 있으면 1개 제거한다.\n\n【필드에 있는 동안】자신이 사용하는 「저주」의 효과를 「자신의 체력을 3 회복한다」로 변경한다(동명 중복 없음).",
+        "en": "【On Summon】Remove 1 of your Brand counters if you have any.\n\n【While on the Field】Replace the effect of each Curse you use with “Restore 3 of your HP” (does not stack)."
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "LAWLESS": {
       "nameJa": "不法地帯",
@@ -8044,27 +8092,24 @@
     },
     "NIGHT_CASTLE_GIFT": {
       "nameJa": "夜城からの贈り物",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "2fea937b4a1b760de5b7aef78570f1f791fb954672bb2bbff552a2e974e9447d",
+      "status": "reviewed-legacy-rework",
+      "changedLocales": [],
+      "definitionSha256": "13e5e439e92ce04e968fa909595e7e9ed2f581a1272d948240e9ff2721495df7",
       "textSha256": "3877d30583b16998e37a89c49d3df869d4d378787611b2e1bf713cc3cf310771",
       "hooks": {
         "ench": "nightCastleGift"
       },
       "before": {
-        "ja": "【自分ターン開始時】発動後、4回目の自分のターン開始時に「吸血契約」「吸血の極意」から1枚を選び、その新しいカードを自分の手札に加える。その後、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。",
-        "ko": "【자신 턴 시작시】발동 후 자신의 4번째 턴 시작에 흡혈 계약 또는 흡혈의 극의 중 1장을 선택해 새 카드를 자신의 패에 넣는다. 그 후 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다.",
-        "en": "【Your Turn Start】At your 4th turn start after casting this spell, choose Vampiric Pact or Vampiric Secret Art and add a new copy to your hand. Then send this spell to your graveyard. Do not count the turn it was cast or the opponent’s turns."
+        "ja": "【自分のターン開始時】発動後、4回目の自分のターン開始時に「吸血契約」「吸血の極意」から1枚を選び、その新しいカードを自分の手札に加える。その後、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。",
+        "ko": "【자신의 턴 시작 시】발동 후 자신의 4번째 턴 시작에 흡혈 계약 또는 흡혈의 극의 중 1장을 선택해 새 카드를 자신의 패에 넣는다. 그 후 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다.",
+        "en": "【At the Start of Your Turn】At your 4th turn start after casting this spell, choose Vampiric Pact or Vampiric Secret Art and add a new copy to your hand. Then send this spell to your graveyard. Do not count the turn it was cast or the opponent’s turns."
       },
       "after": {
         "ja": "【自分のターン開始時】発動後、4回目の自分のターン開始時に「吸血契約」「吸血の極意」から1枚を選び、その新しいカードを自分の手札に加える。その後、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。",
         "ko": "【자신의 턴 시작 시】발동 후 자신의 4번째 턴 시작에 흡혈 계약 또는 흡혈의 극의 중 1장을 선택해 새 카드를 자신의 패에 넣는다. 그 후 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다.",
         "en": "【At the Start of Your Turn】At your 4th turn start after casting this spell, choose Vampiric Pact or Vampiric Secret Art and add a new copy to your hand. Then send this spell to your graveyard. Do not count the turn it was cast or the opponent’s turns."
-      }
+      },
+      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "STARTER_TRASH": {
       "nameJa": "カル",

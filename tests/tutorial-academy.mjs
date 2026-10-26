@@ -26,7 +26,7 @@ try{
  assert.equal(scenes,66);
  const state=(id,scene=0)=>observations.get(`${id}:${scene}`),me=(id,scene=0)=>state(id,scene).players[0],opp=(id,scene=0)=>state(id,scene).players[1];
  // Independent rule outcomes: successful navigation alone is not coverage.
- assert.equal(opp('attack').hp,36);assert.equal(opp('combat').field[0].dmg,1);assert.equal(opp('combat',1).hp,37);
+ assert.equal(opp('attack').hp,36);assert.equal(opp('combat').field[0].dmg,1);assert.equal(opp('combat',1).hp,35); // 3 overflow plus Blade Hare’s 2-damage kill trigger
  assert.equal(me('mana').mana,5);assert(me('cycle').hand.some(c=>c.id==='M4'));assert.equal(me('market').mana,1);
  assert.equal(me('rift',2).removed.length,0);assert.equal(opp('rift',2).hp,32);
  assert(me('quick').removed.some(c=>c.id==='QUICK_ATTUNE'));assert.equal(me('quick').maxMana,5);assert.equal(me('quick').hp,42);

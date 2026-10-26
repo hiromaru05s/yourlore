@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/legacy-card-rework.mjs",
+    "tests/legacy-card-rework-server.mjs",
     "tests/cull-support-rework.mjs",
     "tests/cull-support-server.mjs",
     "tests/background-music.mjs",

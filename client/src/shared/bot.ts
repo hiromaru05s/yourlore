@@ -139,6 +139,7 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
     if (g.pending.reason === 'HIGH_ELF_HAND') return {type:'pick',uid:[...pool].filter(c=>c.uid!=='done' && !hasPassive(c,'relic')).sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid ?? 'done'};
     if (g.pending.reason === 'ARMORER_MODE') {const ally=g.players[owner];return {type:'pick',uid:ally.hp+(ally.shield ?? 0)<25||!pool.some(c=>c.uid==='buff')?'shield':'buff'};}
     if (g.pending.reason === 'FIRE_BALL') { const reversed = g.players.some(p => p.enchants.some(e => e.card.ench === 'blackReverse')), heals = g.players.some(p => p.enchants.some(e => e.card.ench === 'spellHeal')); return { type: 'pick', uid: `player-${reversed !== heals ? owner : 1-owner}` }; }
+    if (g.pending.reason === 'COLOSSEUM_REST') return {type:'pick',uid:[...pool].sort((a,b)=>((b as FieldMon).dmg??0)-((a as FieldMon).dmg??0))[0]?.uid??null};
     if (g.pending.reason === 'SELECTED_SWORD') return {type:'pick',uid:[...g.players[owner].field].sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid??null};
     if (g.pending.reason === 'FIRE_ZONE') return { type: 'pick', uid: [...pool].sort((a,b) => cardPower(a)-cardPower(b))[0]?.uid ?? null };
     const best = [...pool].sort((a, b) => cardPower(b) - cardPower(a))[0] ?? effectChoices(g)[0];

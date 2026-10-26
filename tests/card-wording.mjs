@@ -14,7 +14,7 @@ try {
   // actual engine outcomes, not a regex against the same text implementation.
   {let g=fresh();g.players[1].maxMana=4;g=play(g,'AMBUSH');assert.equal(g.players[1].hp,87);assert.equal(g.players[0].hp,92);}
   {let g=fresh();g.players[0].field=[mon('TGE3')];g=play(g,'GENESIS_MAGIC');assert.equal(g.players[0].field[0].atkMod,4);assert.equal(g.players[0].field[0].defMod,4);}
-  {for(const empty of [true,false]){let g=fresh();g.players[1].maxMana=10;if(!empty)g.players[0].field=[mon('M1')];g=play(g,'AHEUK');assert.equal(g.players[1].maxMana,empty?8:9);}}
+  {for(const empty of [true,false]){let g=fresh();g.players[1].maxMana=10;g.players[1].field=[mon('M1'),mon('M1')];if(!empty)g.players[0].field=[mon('M1')];g=play(g,'AHEUK');assert.equal(g.players[1].maxMana,empty?8:9);}}
   {let g=fresh();const own=mon('M1'),enemy=mon('M1');own.atk=1;own.def=30;enemy.atk=2;enemy.def=2;g.players[0].field=[own];g.players[1].field=[enemy];g=play(g,'WALLBREAK1');assert(!g.players[0].field.some(m=>m.uid===own.uid),'highest stat sum on either field is automatic');assert(g.players[1].field.some(m=>m.uid===enemy.uid));assert.equal(g.pending,null);}
   {let g=fresh();g.players[0].field=[mon('M1')];g.players[1].field=[mon('M1'),mon('M4')];g=play(g,'DOUBLE_EXEC');assert.equal(g.pending.allowCancel,true);assert.equal(g.pending.data.anySide,true);}
   {let g=fresh();g.players[0].field=[mon('M1')];g.players[0].deck=[card('S1')];g.players[0].discard=[card('S10')];g.players[0].removed=[card('S13')];assert.equal(E.deckComp(g.players[0]).length,3);assert.equal(E.spellDeckHalf(g.players[0]),true);}

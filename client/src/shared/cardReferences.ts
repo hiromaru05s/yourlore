@@ -102,7 +102,7 @@ export function effectReferenceParts(text:string,lang:EffectLocale,sourceId:stri
       if(lang==='en'&&(/[A-Za-z]$/.test(before)||/^[A-Za-z]/.test(after)&&!/^s\b/.test(after)))return false;
       if(lang==='ja'&&c.reference.kind==='card'&&!/^($|[」\s0-9０-９(（、。・：:]|は|を|が|に|の|で|と|から|へ)/.test(after))return false;
       if(lang==='ja'&&c.text.length===1&&!(before.endsWith('「')&&after.startsWith('」')))return false;
-      if(lang==='ko'&&c.text.length===1&&(!/(^|\s|['·])$/.test(before)||!/^($|[\s'·]|[이을를의에은와과])/u.test(after)))return false;
+      if(lang==='ko'&&c.text.length===1&&(!/(^|\s|['·「])$/.test(before)||!/^($|[\s'·」]|[이을를의에은와과])/u.test(after)))return false;
       if(c.reference.kind==='series') {
         const id=c.reference.id;
         if(id.startsWith('tribe:')||['blood','black','fire','chosen','armorer'].includes(id))return true;
