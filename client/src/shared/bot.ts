@@ -17,7 +17,7 @@ export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
 const SELF_HARM_SPELLS = new Set(['CATALYST','BLOOD1','BLOOD2','BLOOD_JOY','BLOOD_ANGER','BLOOD_SORROW','BLOOD_PLEASURE','VAMP_PACT','SHATTER','GREED_PRICE','MASSACRE','FLAME','AMBUSH','FORBIDDEN']);
 
-const BLUNDER: Record<BotDifficulty, number> = { easy: 0.45, normal: 0.18, hard: 0, hell: 0 };
+const BLUNDER: Record<BotDifficulty, number> = { easy: 0.45, normal: 0, hard: 0, hell: 0 };
 
 export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress?: (action: Action) => void): Action {
   return withoutMonsterPresentation(() => decideFromObservation(g, diff, onProgress));
@@ -26,7 +26,7 @@ export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress
 function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void): Action {
   // All policies, including tactical checks, see sampled hidden information.
   const view = observationSample(g, g.pending?.owner ?? g.cur, 0);
-  let best = diff === "hard" || diff === "hell" ? searchDecide(view, diff, true, onProgress ? a => onProgress(legalBotAction(g, a, view)) : undefined) : safeGreedy(view);
+  let best = diff !== "easy" ? searchDecide(view, diff, true, onProgress ? a => onProgress(legalBotAction(g, a, view)) : undefined) : safeGreedy(view);
   if (BLUNDER[diff] > 0 && Math.random() < BLUNDER[diff]) {
     const alternatives = botActions(view).filter(a => JSON.stringify(a) !== JSON.stringify(best))
       .filter(a => actionChangesState(view, reduce(view, a).state));

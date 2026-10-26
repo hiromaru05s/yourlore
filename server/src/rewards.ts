@@ -71,10 +71,13 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     if(typeof body.difficulty!=='string'||!Object.hasOwn(BOT_REWARDS,body.difficulty))return json(env,{error:'invalid difficulty'},400);
     const difficulty=body.difficulty as keyof typeof BOT_REWARDS,npc=botNpc(difficulty);
     const roomId=crypto.randomUUID(),botId='lore-challenge-bot-'+difficulty;
+    const rotation=await env.GAME_ROOM.get(env.GAME_ROOM.idFromName(`npc-roster:${user.id}:${difficulty}`)).fetch(new Request('https://room/npc-deck',{method:'POST',body:JSON.stringify({difficulty,requestId:roomId})}));
+    if(!rotation.ok)return json(env,{error:'could not select opponent'},503);
+    const {index:challengeDeckIndex}=await rotation.json() as {index:number};
     const lang=body.lang==='en'?'en':body.lang==='ko'?'ko':'ja';
     const response=await env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId)).fetch(new Request('https://room/setup',{method:'POST',body:JSON.stringify({
       players:[{id:user.id,name:user.display,deck:user.deck?.join(','),sleeve:user.sleeve,furniture:user.furniture,effect:user.effect,frame:user.frame},{id:botId,name:npc.name[lang]}],
-      seed:crypto.getRandomValues(new Uint32Array(1))[0],challengeDifficulty:difficulty,
+      seed:crypto.getRandomValues(new Uint32Array(1))[0],challengeDifficulty:difficulty,challengeDeckIndex,
     })}));
     if(!response.ok)return json(env,{error:'could not start duel'},503);
     return json(env,{roomId,you:0,oppName:npc.name[lang],oppAvatar:npc.avatar,difficulty});

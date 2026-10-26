@@ -42,22 +42,22 @@ export const BOT_DECKS: BotDeck[] = [
 // v20 A/B (greedy, 기존 3덱 필드 상대): GAMBLER 70% 채택 · ELF 46% 채택(아키타입 다양성)
 // 탈락: TRUMPET 더블 템포 30%(나팔 스타터 승률은 상관관계였음) · MIMIC 41% · 순정 컬덱 45%
 /** Roll a random archetype for a new bot game (caller supplies the RNG roll in [0,1)). */
-// v62: counter-market selection on current rules, including double suppression,
-// Guardian, recovery and stronger Goblin/mixed opponents. Ordinary starters;
-// deck selection is independent of the opponent's private cards and market RNG.
-// Evidence: docs/bot-strength/2026-10-23-rework.
+// v68: seven independently selected strategies, one per shuffled roster cycle.
+// Selection and independent validation: docs/bot-strength/2026-10-27.
 export const BOT_HELL_DECKS: BotDeck[] = [
-  {"name": "BOT · MIXED_RALLY", "cards": ["RUST_SHROOM", "RUST_SHROOM", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], "tune": {}},
-  {"name": "BOT · GOBLIN_SWARM", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], "tune": {}},
-  {"name": "BOT · GOBLIN_RALLY", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
-  {"name": "BOT · SWARM_BLOOD", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
-  {"name": "BOT · RALLY_COUNTER", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "COUNTERCALC"], "tune": {}},
-  {"name": "BOT · RALLY_TRUMPET", "cards": ["GOBLIN", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], "tune": {}},
-  {"name": "BOT · MIXED_BLOOD", "cards": ["RUST_SHROOM", "RUST_SHROOM", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "BLOOD_RITE"], "tune": {}},
+  { name: "BOT · GOBLIN", cards: ["GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN", "GOBLIN", "WEAKEN_ALL", "COUNTERCALC", "GOBLIN"], tune: {} },
+  { name: "BOT · DECAY", cards: ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "STARTER_TRASH", "COUNTERCALC", "COUNTERCALC"], tune: {} },
+  { name: "BOT · FORTRESS", cards: ["CASTLE", "WEAKEN_ALL", "WEAKEN_ALL", "NOURISHING_RAIN", "NOURISHING_RAIN", "GAMBLER", "CASTLE", "BLOOD_RITE"], tune: {} },
+  { name: "BOT · MIMIC", cards: ["WEAKEN_ALL", "DUNGEON_FLOOR", "WEAKEN_ALL", "DUNGEON_FLOOR", "STARTER_TRASH", "DUNGEON_FLOOR", "STARTER_CHEST", "DUNGEON_FLOOR"], tune: {} },
+  { name: "BOT · ATTRITION", cards: ["BATTLEFIELD", "STARTER_CHEST", "CASTLE", "NOURISHING_RAIN", "WEAKEN_ALL", "BLOOD_RITE", "COUNTERCALC", "WEAKEN_ALL"], tune: {} },
+  { name: "BOT · RIFT", cards: ["RIFT", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "FOCUS", "STARTER_CHEST", "STARTER_CHEST"], tune: {} },
+  { name: "BOT · RAMP", cards: ["GAMBLER", "GAMBLER", "GAMBLER", "CASINO", "NOURISHING_RAIN", "STARTER_TRASH", "WEAKEN_ALL", "STARTER_TRASH"], tune: {} },
 ];
-export const BOT_ELITE_DECKS: BotDeck[] = [0, 1, 2, 5, 6].map(i => BOT_HELL_DECKS[i]);
+export const BOT_ELITE_DECKS: BotDeck[] = BOT_HELL_DECKS.map(d=>({...d,cards:[...d.cards],tune:{...d.tune}}));
+export const BOT_EASY_DECKS: BotDeck[] = [{name:'BOT · FUNDAMENTALS',cards:['HALF_ELF','HALF_ELF','FLAME','FLAME','STARTER_TRASH','STARTER_TRASH','STARTER_CHEST','STARTER_CHEST'],tune:{minBuyEarly:6,minBuy:9,chestTurn:4}}];
+export const BOT_NORMAL_DECKS: BotDeck[] = [0,1,2,6].map(i=>BOT_HELL_DECKS[i]);
 export function pickBotDeck(rnd: number = Math.random(), difficulty: BotDifficulty = 'normal'): BotDeck {
-  const roster = difficulty === 'hell' ? BOT_HELL_DECKS : difficulty === 'hard' ? BOT_ELITE_DECKS : BOT_DECKS;
+  const roster = difficulty === 'hell' ? BOT_HELL_DECKS : difficulty === 'hard' ? BOT_ELITE_DECKS : difficulty==='easy'?BOT_EASY_DECKS:BOT_NORMAL_DECKS;
   const roll = Number.isFinite(rnd) ? rnd : 0;
   return roster[Math.min(roster.length - 1, Math.max(0, Math.floor(roll * roster.length)))];
 }

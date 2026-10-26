@@ -1,3 +1,4 @@
+import { reserveNpcDeck } from './botRotation';
 import {publicNameEvents} from './publicNames';
 import {newMedalDuel} from '../../client/src/shared/medalTracking';
 import {equippedMedal,settleMedals} from './medals';
@@ -208,6 +209,7 @@ export class GameRoom {
 
   async fetch(req: Request): Promise<Response> {
     const url = new URL(req.url);
+    if (url.pathname === "/npc-deck") return reserveNpcDeck(this.state.storage, req);
     await this.restore();
 
     // provisioning call from the matchmaker
@@ -215,18 +217,19 @@ export class GameRoom {
       if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
       if (this.provisioning) return new Response("room provisioning; retry", { status: 503 });
       if (this.room) return new Response("already provisioned", { status: 409 });
-      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string; challengeDifficulty?: BotDifficulty };
+      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string; challengeDifficulty?: BotDifficulty; challengeDeckIndex?: number };
       // Reading the request body yields; a concurrent setup may have won meanwhile.
       if (this.provisioning) return new Response("room provisioning; retry", { status: 503 });
       if (this.room) return new Response("already provisioned", { status: 409 });
       if(body.challengeDifficulty && (!Object.hasOwn(BOT_REWARDS,body.challengeDifficulty)||body.ranked||body.botId))return new Response('invalid difficulty',{status:400});
       const npc=body.challengeDifficulty?botNpc(body.challengeDifficulty):undefined;
-      const challenge=npc?{id:'lore-challenge-bot-'+npc.difficulty,name:body.players[1].name,deck:pickNpcDeck(npc).deck}:undefined;
+      const challenge=npc?{id:'lore-challenge-bot-'+npc.difficulty,name:body.players[1].name,deck:Number.isInteger(body.challengeDeckIndex)&&npc.decks[body.challengeDeckIndex!] ? npc.decks[body.challengeDeckIndex!] : pickNpcDeck(npc).deck}:undefined;
       const bot = challenge ?? (body.botId ? matchBot(body.botId) : undefined);
       if (body.botId && (!matchBotsEnabled(this.env) || !bot || body.players[1]?.id !== bot.id || body.players[0]?.id === bot.id)) return new Response('invalid test bot', {status:403});
       if (bot) body.players[1] = {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')};
       const res = createGame({
         mode: "online",
+        challenge: body.challengeDifficulty ? {difficulty: body.challengeDifficulty, side: 1} : undefined,
         seed: body.seed,
         p0: { id: body.players[0].id, name: body.players[0].name, deck: body.players[0].deck ? body.players[0].deck.split(",") : undefined },
         p1: { id: body.players[1].id, name: body.players[1].name, deck: body.players[1].deck ? body.players[1].deck.split(",") : undefined },

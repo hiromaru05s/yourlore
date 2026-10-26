@@ -17,8 +17,8 @@ try{
  for(const file of assets){const response=await fetch(origin+'/assets/'+file);assert(response.ok,file+' '+response.status);const remote=Buffer.from(await response.arrayBuffer()),local=await fs.readFile(path.join(dist,'assets',file));assert.equal(digest(remote),digest(local),file);parity.push({file,sha256:digest(remote)});}
  const worker=assets.find(n=>/^bot\.worker-.*\.js$/.test(n));assert(worker,'Deployed dedicated thinker worker');
  const cases=[];
- for(const tier of ['hard','hell'])for(const [index,deck] of C.botNpc(tier).decks.entries()){
-  let g=C.createGame({mode:'bot',seed:131000+index,starting:1,p0:{id:'qa-human',name:'QA'},p1:{id:'qa-bot',name:'QA BOT',isBot:true,deck:deck.cards}}).state;g.players[1].botTune=deck.tune;
+ for(const tier of ['normal','hard','hell'])for(const [index,deck] of C.botNpc(tier).decks.entries()){
+  let g=C.createGame({mode:'bot',seed:131000+index,starting:1,challenge:{difficulty:tier,side:1},p0:{id:'qa-human',name:'QA'},p1:{id:'qa-bot',name:'QA BOT',isBot:true,deck:deck.cards}}).state;g.players[1].botTune=deck.tune;
   for(let step=0;step<2;step++){const action=C.botDecide(g,tier);cases.push({tier,deck:deck.name,state:g,expected:action});g=C.reduce(g,action).state;}
  }
  let serial=0;const card=id=>({...C.DB[id],uid:'staging-market-'+serial++});

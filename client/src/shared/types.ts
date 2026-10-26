@@ -216,6 +216,8 @@ export interface GameState {
   /** Server-authoritative achievement counters; never sent to the opponent. */
   medalDuel?: import("./medalTracking").MedalDuel;
   botDifficulty?: import("./bot").BotDifficulty;
+  /** Only explicitly provisioned NPC challenges may bias market generation. */
+  botMarket?: { side: Side; recent: string[] };
   /** Resume a requested turn end after a mandatory attack's optional choices. */
   endingTurn?: { turn: number; force: boolean };
   spellDamageTurn?: number;
