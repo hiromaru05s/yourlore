@@ -1,6 +1,6 @@
 # ゲーム中のカード外側に出る灰色の下地
 
-2026-10-26、ローカル作業ツリーに修正。ステージング・本番へのデプロイは未実施。
+2026-10-26、本番へ反映済み。初回ローカル修正後、公開指示により最新mainへ統合して公開した。
 
 召喚rendererがカードの画像とは別に灰色の角丸長方形を描いていた。モンスターの旧／現行rendererにも、召喚・攻撃・効果発動・強化時にカードの外側へ見える矩形の影が残っていた。これらの追加下地を削除した。召喚時の表面反射はキャプチャしたカード面のalphaで切り抜き、透明部分へ四角い光が乗らないようにした。カード本来のラスターフレーム、数値、接触時の砂塵は保持する。
 
@@ -24,7 +24,7 @@ CSSではカードの背景・外枠を最初から透明にし、後半の上�
 - 1280×900／390×844、両陣営のcontroller召喚、両陣営の魔法プレイ、同時召喚、スキップ、低減モーション、resize、完了後の演出要素回収を確認。
 - 修正前は、接触前の召喚ground passで外側のalpha=65を検出して失敗。修正後は同じ領域のalpha=0。
 - `tests/slate-summon.mjs`、`tests/spell-frame.mjs`、`tests/monster-animation-rules.mjs` 合格。
-- 製品エントリから到達するソースのTypeScript検査は合格。クライアント全体の `npm --workspace client run typecheck` は、未変更の `src/dev/card-finish-three` 等の試作エラーで不合格。
+- 初回の古い作業元では製品エントリの型チェックは合格、全体検査は未変更の試作エラーで不合格だった。最新mainへ統合した公開用スナップショットではフロント・サーバー全体の型チェックが合格。
 - デザインガードと製品Viteビルドは合格。出力先は作業用の一時ディレクトリとし、既存のdistや公開環境を更新していない。
 
 再実行例（PlaywrightとChromeが必要）:
@@ -47,4 +47,11 @@ PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs node tests/card-frame-contour-br
 - [最新採用エルフの召喚](main-elf-summon.png)
 - [最新採用通常モンスターの召喚](main-generic-summon.png)
 
-公開状況はデプロイ後の `deployment.json` で記録する。
+## 本番反映
+
+- 公開URL: https://yourlore.xyz
+- 配信ソース: `01a8129f98800d8b18d981870e369af1d5af7242`
+- Worker version: `9e508ccf-c08a-49c1-b091-6c7d040311f2`、100%。[deployment.json](deployment.json)
+- 通常の `npm run deploy` を使用。共有ロック・最新main／配信済みソースの包含確認・コミット済みスナップショット・型チェック・製品テスト **219/219**・ビルドを通過。[公開ログ](deploy.log)
+- 本番HTMLのエントリ、JS／CSS **123ファイル**、対戦プリロードmanifestが同じコミットからのビルドと一致。公開APIがHTTP 200、PC／390pxのログイン画面でJavaScriptエラーなし。[確認記録](production-verification.json)
+- 召喚の見た目はローカルの実盤面fixtureで確認。本番の認証済みPvP対戦は未検証。
