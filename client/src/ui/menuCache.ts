@@ -42,10 +42,19 @@ async function bind(entries:Entry[]):Promise<void> {
 export async function prepareMenuCache(progress:(done:number,total:number)=>void,signal:AbortSignal,scope?:'duel'|readonly string[]):Promise<void> {
  // A slow worker is not an unsupported worker. Retry activation instead of
  // permanently selecting thousands of individual image downloads for this tab.
- const enabled=await(registration??=connect().catch(error=>{registration=undefined;throw error;}));
+ const connection=registration??=connect().catch(error=>{registration=undefined;throw error;});
+ let enabled=false;
+ try {
+  // A duel must remain playable when a browser never activates its worker.
+  // HOME's speculative registration can continue while this attempt uses HTTP.
+  enabled=await(scope==='duel'?withDeadline(connection,10000):connection);
+ }catch(error){if(scope!=='duel'||(error as Error)?.name!=='TimeoutError')throw error;}
  if(signal.aborted)return;
  if(!enabled&&typeof __LORE_MENU_MANIFEST__==='undefined'){registration=undefined;await prepareWithoutStorage(progress,signal,scope);return;}
- const inventory:Manifest=await(manifest??=fetch(__LORE_MENU_MANIFEST__,{cache:'force-cache',signal:AbortSignal.timeout(60000)}).then(r=>{if(!r.ok)throw Error('Artwork manifest unavailable');return r.json();}).catch(e=>{manifest=undefined;throw e;}));
+ const inventoryRequest=manifest??=fetch(__LORE_MENU_MANIFEST__,{cache:'force-cache',signal:AbortSignal.timeout(60000)}).then(r=>{if(!r.ok)throw Error('Artwork manifest unavailable');return r.json() as Promise<Manifest>;}).catch(e=>{manifest=undefined;throw e;});
+ let inventory:Manifest;
+ try {inventory=await(scope==='duel'?withDeadline(inventoryRequest,10000):inventoryRequest);}
+ catch(error){if(scope!=='duel')throw error;await prepareWithoutStorage(progress,signal,scope);return;}
  const {packs=[]}=inventory,narrow=matchMedia('(max-width:700px)').matches;
  const compatible=inventory.entries.filter(e=>!e.media||e.media===(narrow?'narrow':'wide'));
  const wanted=Array.isArray(scope)?new Set(scope.map(url=>new URL(url,location.href).pathname)):undefined;

@@ -6,7 +6,7 @@ import os from 'node:os';
 import {webcrypto} from 'node:crypto';
 const dir=await fs.mkdtemp(path.join(os.tmpdir(),'lore-menu-preparation-'));
 const data=new TextEncoder().encode('original artwork'),hash=Buffer.from(await webcrypto.subtle.digest('SHA-256',data)).toString('hex');
-const entries=[{url:'/art/test.webp',hash,bytes:data.length}],stored=new Map();let wrong=true,downloads=0;
+const entries=[{url:'/art/test.webp',scope:'duel',hash,bytes:data.length}],stored=new Map();let wrong=true,downloads=0;
 const cache={async keys(){return [...stored.keys()].map(url=>({url}));},async match(key){return stored.get(key)?.clone();},async put(key,response){stored.set(key,response.clone());},async delete(key){stored.delete(key);}};
 Object.assign(globalThis,{matchMedia:()=>({matches:false}),window:{caches:{}},document:{documentElement:{dataset:{}}},location:new URL('https://lore.test'),caches:{open:async()=>cache}});
 Object.defineProperty(globalThis,'navigator',{configurable:true,value:{serviceWorker:{register:async()=>({}),ready:Promise.resolve(),controller:{postMessage(message,ports){if(message.type==='LORE_MENU_BIND')ports[0].postMessage({ok:true});}}}}});
@@ -23,6 +23,11 @@ try{
  let activate; navigator.serviceWorker.ready=new Promise(r=>activate=r);
  const retryWorker=await import(dir+'/module.mjs?slow-worker');
  try {await assert.rejects(retryWorker.prepareMenuCache(()=>{},new AbortController().signal),error=>error.name==='TimeoutError','A worker activation timeout must not fall back to bulk image decode');activate();await retryWorker.prepareMenuCache(()=>{},new AbortController().signal);assert.equal(document.documentElement.dataset.menuCache,'ready');}finally{globalThis.setTimeout=nativeTimeout;}
+ // Match admission cannot wait indefinitely for HOME's speculative worker activation.
+ let releaseWorker; navigator.serviceWorker.ready=new Promise(resolve=>releaseWorker=resolve);
+ const workerTimer=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>workerTimer(fn,ms===10000?5:ms,...args);
+ const stalledWorker=await import(dir+'/module.mjs?stalled-worker'),workerFallbackProgress=[];
+ try{await stalledWorker.prepareMenuCache((a,b)=>workerFallbackProgress.push([a,b]),new AbortController().signal,'duel');assert.equal(document.documentElement.dataset.menuCache,'http-fallback');assert.deepEqual(workerFallbackProgress.at(-1),[1,1]);}finally{globalThis.setTimeout=workerTimer;releaseWorker();navigator.serviceWorker.ready=Promise.resolve();}
  // Reproduce the 0% admission stall: Cache.keys never resolves after HOME.
  const keys=cache.keys;cache.keys=()=>new Promise(()=>{});
  const originalTimer=globalThis.setTimeout;globalThis.setTimeout=(fn,ms,...args)=>originalTimer(fn,ms===10000?5:ms,...args);

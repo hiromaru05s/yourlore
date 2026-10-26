@@ -6,7 +6,7 @@ Source baseline: `546846da` (`gh/main`). The production deployment inspected bef
 
 ## Change
 
-- Bound Cache Storage probe/open/scan/write waits. A stalled cache or worker handshake falls back to ordinary original-asset loading. The service worker also bounds its cache reads and serves network assets when storage stops responding.
+- Bound Cache Storage probe/open/scan/write waits. Single admission switches to ordinary original-asset loading if worker activation or the manifest does not complete within 10 seconds. A stalled cache or worker handshake also falls back to the network. The service worker bounds its cache reads and serves network assets when storage stops responding.
 - Bound manifest, game-module, font and model-preparation waits. An independent failed preparation now exposes Retry immediately, even if another parallel operation never resolves. Cancelled/failed transfers cannot publish progress into a retry.
 - Show the cache, asset, code, model, deck/font and start phases separately. Public room creation remains after resource admission.
 - Rename the player-facing mode across HOME, opponent picker, match-history filters, rewards, ranking rules and tutorial guidance in Japanese/English/Korean. Internal mode identifiers, gameplay and rewards remain compatible.
@@ -14,7 +14,7 @@ Source baseline: `546846da` (`gh/main`). The production deployment inspected bef
 ## Validation
 
 - `menu-cache.mjs`: cache-hit integrity/reuse plus stalled service-worker cache-read network fallback.
-- `menu-preparation.mjs`: a never-resolving cache scan (0% route) falls back and completes; corrupt bytes remain rejected; normal caching/retry/cancellation unchanged.
+- `menu-preparation.mjs`: never-resolving worker activation and cache scan (0% routes) fall back and complete; corrupt bytes remain rejected; normal caching/retry/cancellation unchanged.
 - `game-admission.mjs`: a failed code transfer exposes Retry while a simultaneous cache task never settles; retry succeeds; room admission/cancellation preserved.
 - `duel-fonts.mjs`: a never-resolving font task times out and can be retried.
 - `asset-readiness-retry.mjs`, `loading-cache.mjs`, `menu-selected.mjs`, typecheck and build passed.
