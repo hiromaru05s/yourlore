@@ -213,7 +213,7 @@ body.lounge-active .zoom-details { background:linear-gradient(115deg,#e1d6be,#f8
 }
 @media(prefers-reduced-motion:reduce) { .lounge-shell * { animation:none!important; transition:none!important; } }
 .lounge-content .sl-current-tag .lore-icon { width:19px; height:19px; }
-body.lounge-active .inspect-close { font-size:0; background:#102d43 url('/art/lounge/icons/v2/close.png') center/22px no-repeat; border:1px solid #bfa36b; }
+body.lounge-active .inspect-close { font-size:26px; line-height:1; background:#102d43; border:1px solid #bfa36b; }
 .lounge-content .lb-rank { position:relative; display:flex; align-items:center; justify-content:center; }
 .lounge-content .lb-rank .lore-icon { width:30px; height:34px; }
 .lounge-content .lb-rank:has(.lore-icon) b { position:absolute; bottom:-3px; right:-3px; font-size:11px; color:#fff4d0; background:#19394b; min-width:14px; border:1px solid #baa16c; }

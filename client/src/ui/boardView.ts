@@ -1,3 +1,4 @@
+import {createBoardEnchantTimes,createEnchantTime,enchantTimeState,enchantTimeDescription} from './enchantTime';
 import {createBoardCardCounters,createCardCounter,enchantCounterValue} from './cardCounter';
 import {syncCardEffects,disposeCardEffects} from './cardFinish';
 import {medalHtml} from './medal';
@@ -25,8 +26,7 @@ import {prepareDuel} from './duelReadiness';
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isVampFamily, isGolem, marketStockOf } from "../shared/engine";
-import { enchantHasTurnCountdown, fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
-import { ENCH_TURN_LIMITS } from "../shared/cardText";
+import { fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
 import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
@@ -105,6 +105,7 @@ export class GameView {
   private disposed = false;
   private marketCrash: MarketCrashPresentation;
   private cardCounters:ReturnType<typeof createBoardCardCounters>;
+  private enchantTimes:ReturnType<typeof createBoardEnchantTimes>;
   private statRise: ReturnType<typeof createBoardStatRise>;
   private trickRoom:TrickRoomPresentation;
   private anesthesia:AnesthesiaPresentation;
@@ -116,6 +117,7 @@ export class GameView {
     this.you = you;
     this.h = h;
     this.cardCounters = createBoardCardCounters(root);
+    this.enchantTimes = createBoardEnchantTimes(root);
     this.statRise = createBoardStatRise(root);
     this.marketCrash = new MarketCrashPresentation(root);
     this.trickRoom = new TrickRoomPresentation(root);
@@ -317,6 +319,7 @@ export class GameView {
     this.trickRoom.dispose();
     this.anesthesia.dispose();
     this.cardCounters.dispose();
+    this.enchantTimes.dispose();
     this.statRise.dispose();
     this.marketCrash.dispose();
     this.handConditions.dispose();
@@ -496,6 +499,7 @@ export class GameView {
     }
     for(const id of readyPiles)this.root.querySelector(`#${id}`)?.classList.add('pile--3d-ready');
     this.cardCounters.sync(!!g.over);
+    this.enchantTimes.sync(!!g.over);
     projectBoardDOM(this.root);
     this.root.dataset.boardRendered="true";
     this.anesthesia.sync(g);
@@ -599,22 +603,13 @@ export class GameView {
       sz.appendChild(tile);
     });
     p.enchants.forEach((e) => {
-      const lim = e.card.ench ? ENCH_TURN_LIMITS[e.card.ench] : undefined;
-      const elapsed = lim != null ? Math.max(0, g.turn - (e.bornTurn ?? 0)) : null;
-      const rem = lim != null ? Math.max(0, lim - elapsed!) : enchantHasTurnCountdown(e.card) ? Math.max(0, e.turns) : null;
-      const bits = [elapsed != null ? `${Math.min(elapsed,lim!)}/${lim}` : rem != null ? `${getLang() === 'ja' ? '残り' : getLang() === 'en' ? '' : '남은 '}${rem}` : ''];
-
-      const lang = getLang();
-      const state = elapsed != null
-        ? (lang === 'ja' ? `経過 ${elapsed}/${lim}ターン · 残り ${rem}ターン` : lang === 'en' ? `Elapsed ${elapsed}/${lim} turns · ${rem} remaining` : `경과 ${elapsed}/${lim}턴 · 남은 ${rem}턴`)
-        : rem != null ? (lang === 'ja' ? `残り ${rem}ターン` : lang === 'en' ? `${rem} turns remaining` : `남은 ${rem}턴`)
-        : (lang === 'ja' ? '永続魔法' : lang === 'en' ? 'Permanent spell' : '지속 마법');
-      const stateText = state + (e.cnt ? ` · ×${e.cnt}` : '');
-      const durationUi = rem == null
-        ? `<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="${lang === 'ja' ? '無期限' : lang === 'en' ? 'Permanent' : '무기한'}">`
-        : `<span class="buff-duration" aria-label="${stateText}"><span>${bits.join(' ')}</span></span>`;
-      const card = enchantmentTile(e.card,durationUi);
+      const time=enchantTimeState(e,g,p),rem=time?.remaining??null,lang=getLang();
+      const state=time?enchantTimeDescription(time):(lang==='ja'?'永続魔法':lang==='en'?'Permanent spell':'지속 마법');
       const counterValue=enchantCounterValue(e);
+      const stateText=state+(counterValue!=null?` · ${lang==='ja'?'カウンター':lang==='en'?'Counter':'카운터'} ${counterValue}`:'');
+      const durationUi=time?'':`<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="${lang==='ja'?'無期限':lang==='en'?'Permanent':'무기한'}">`;
+      const card=enchantmentTile(e.card,durationUi);
+      if(time)card.append(createEnchantTime(time));
       if(counterValue!=null)card.append(createCardCounter(e.card.uid,e.card.id,'charge',counterValue));
       card.tabIndex = 0;
       card.setAttribute('role', 'button');
