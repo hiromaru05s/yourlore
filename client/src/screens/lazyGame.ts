@@ -30,9 +30,10 @@ export async function warmGame(cards:readonly string[]=[],onProgress?:Progress):
    const abort=new AbortController();
    preparation=Promise.all([
    prepareMenuCache((done,total)=>{if(!abort.signal.aborted)reportProgress(done,total,done===total?'modules':'assets');},abort.signal,'duel'),
-   // Full VFX module archives load on demand; only the game entry is required here.
+   // Optional VFX and model warmups must not hold the player before a BOT match.
+   // The mounted duel checks the artwork it actually displays.
    loadGame(),
-  ]).then(async()=>{reportProgress(0,0,'models');await withDeadline(import('../ui/duelReadiness').then(module=>module.warmDuel()),125000);}).catch(error=>{abort.abort();preparations.delete(narrow);throw error;});preparations.set(narrow,preparation);}
+  ]).then(()=>{}).catch(error=>{abort.abort();preparations.delete(narrow);throw error;});preparations.set(narrow,preparation);}
   await preparation;
   reportProgress(0,0,'deck');
   // Language and selected deck can change after the first prepared match.
