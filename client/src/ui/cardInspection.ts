@@ -61,12 +61,12 @@ function backToPreviousCard(): void {
 }
 
 // Public entry starts a new inspection; only related-card navigation keeps history.
-export function zoomCard(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string): void {
+export function zoomCard(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string): void {
   closeZoom();
   zoomOpener = document.activeElement as HTMLElement | null;
-  renderZoom(c, hp, stateText, effect);
+  renderZoom(c, hp, stateText, effect, frame);
 }
-function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string): void {
+function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string): void {
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
@@ -115,7 +115,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   details.onclick = e => e.stopPropagation();
   // Reserve space for the cost/ATK/HP seals outside the card face.
   const cardStage = document.createElement('div'); cardStage.className = 'zoom-card-stage';
-  cardStage.appendChild(cardEl(c, { fullArt: true, effect, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
+  cardStage.appendChild(cardEl(c, { fullArt: true, effect, frame, ...(hp ? { hpNow: hp.now, hpMax: hp.max } : {}) }));
   wrap.appendChild(cardStage);
   // 패시브 키워드 패널: 카드가 가진 패시브(부여분 포함)의 이름+설명을 우측에 표시.
   // The rules header links each keyword's name and icon to its own explanation.
@@ -225,8 +225,8 @@ export function bindInspectContext(el: HTMLElement, inspect: () => void): void {
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
-export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string): void {
-  bindInspectContext(el, () => zoomCard(card, hp, stateText, effect??el.dataset.cardEffect));
+export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string): void {
+  bindInspectContext(el, () => zoomCard(card, hp, stateText, effect??el.dataset.cardEffect,frame??el.dataset.cardFrame));
   // Intent, not speculation: by the time a pointer is resting on a card, a
   // right-click or a 380ms long-press is at most a few hundred ms away. Start
   // the full-resolution art then, so the overlay has it by the time it opens.
@@ -240,7 +240,7 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
     fired = false;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
     clearTimeout(timer);
-    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp, stateText, effect??el.dataset.cardEffect); }, 380);
+    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp, stateText, effect??el.dataset.cardEffect,frame??el.dataset.cardFrame); }, 380);
   }, { passive: true });
   const cancel = () => clearTimeout(timer);
   el.addEventListener("touchmove", (e) => {

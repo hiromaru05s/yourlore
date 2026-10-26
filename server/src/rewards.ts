@@ -73,7 +73,7 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     const roomId=crypto.randomUUID(),botId='lore-challenge-bot-'+difficulty;
     const lang=body.lang==='en'?'en':body.lang==='ko'?'ko':'ja';
     const response=await env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId)).fetch(new Request('https://room/setup',{method:'POST',body:JSON.stringify({
-      players:[{id:user.id,name:user.display,deck:user.deck?.join(','),sleeve:user.sleeve,furniture:user.furniture,effect:user.effect},{id:botId,name:npc.name[lang]}],
+      players:[{id:user.id,name:user.display,deck:user.deck?.join(','),sleeve:user.sleeve,furniture:user.furniture,effect:user.effect,frame:user.frame},{id:botId,name:npc.name[lang]}],
       seed:crypto.getRandomValues(new Uint32Array(1))[0],challengeDifficulty:difficulty,
     })}));
     if(!response.ok)return json(env,{error:'could not start duel'},503);

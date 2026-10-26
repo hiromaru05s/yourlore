@@ -36,7 +36,7 @@ import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS, OPENING_VERSION }
 import { isClientMessage, resolveTurnTimeout } from "./gameInput";
 import { matchBot, matchBotActions, matchBotsEnabled, MATCH_BOT_ACTION_MS } from './matchBots';
 
-interface PlayerRef { id: string; name: string; sleeve?: string | null; furniture?:string|null; effect?:string|null; deck?: string | null; }
+interface PlayerRef { id: string; name: string; sleeve?: string | null; furniture?:string|null; effect?:string|null; frame?:string|null; deck?: string | null; }
 
 /** Everything the room needs — persisted so deploys/evictions/hibernation can't kill a live game. */
 interface RoomData {
@@ -628,6 +628,7 @@ export class GameRoom {
     }
     const pl = this.room!.players;
     s.sleeves = [this.room!.players[0].sleeve||"default",this.room!.players[1].sleeve||"default"];
+    s.frames = [this.room!.players[0].frame||"default",this.room!.players[1].frame||"default"];
     s.effects = [this.room!.players[0].effect||"default",this.room!.players[1].effect||"default"];
     s.furnitures = [this.room!.players[0].furniture||"default",this.room!.players[1].furniture||"default"];
     return s;

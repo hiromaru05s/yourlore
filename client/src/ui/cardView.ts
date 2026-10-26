@@ -1,3 +1,4 @@
+import {attachCardFrame} from './cardFrame';
 import {createCardCounter,fieldCounters} from './cardCounter';
 import {attachCardEffect} from './cardFinish';
 import {assetHints} from './assetHints';
@@ -25,6 +26,7 @@ export function enchantmentTile(c:CardInst,durationUi:string):HTMLDivElement {
   const art=tile.querySelector<HTMLElement>('.buff-art')!;art.classList.add('card-art','has-thumb','art-done');art.style.inset='0';art.style.width='100%';art.style.height='100%';art.style.backgroundSize='cover';
   art.style.overflow='hidden';
   attachCardEffect(tile,c.uid);
+  void attachCardFrame(tile,c.uid);
   return tile;
 }
 
@@ -36,6 +38,7 @@ export function questTile(c:CardInst,progress=0):HTMLDivElement {
   const art=tile.querySelector<HTMLElement>('.buff-art')!;art.classList.add('card-art','has-thumb','art-done');art.style.inset='0';art.style.width='100%';art.style.height='100%';art.style.backgroundSize='cover';
   art.style.overflow='hidden';
   attachCardEffect(tile,c.uid);
+  void attachCardFrame(tile,c.uid);
   return tile;
 }
 
@@ -65,6 +68,7 @@ export function decoratePassives(c: CardInst, txt: string): string {
 
 export interface CardOpts {
   effect?:string;
+  frame?:string;
   game?: GameState; // live field conditions, including the opponent
 
   size?: "board" | "mkt" | "hand";
@@ -514,6 +518,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   // tribe info is shown BESIDE the card in the zoom view (see anim.zoomCard),
   // so no on-art tribe button here (keeps the art clean).
   attachCardEffect(node,c.uid,opt.effect);
+  void attachCardFrame(node,c.uid,opt.frame);
   return node;
 }
 

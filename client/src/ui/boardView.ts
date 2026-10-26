@@ -1,3 +1,4 @@
+import {syncCardFrames,disposeCardFrames} from './cardFrame';
 import {createBoardEnchantTimes,enchantTimeState,enchantTimeDescription} from './enchantTime';
 import {activeEnchantmentTile} from './enchantmentView';
 import {createBoardCardCounters,createCardCounter,enchantCounterValue} from './cardCounter';
@@ -314,7 +315,7 @@ export class GameView {
   /** Detach the window/document-level listeners this view installed. */
   destroy(): void {
     this.disposed = true;
-    disposeCardEffects(this.root);
+    disposeCardEffects(this.root);disposeCardFrames(this.root);
     disposeSeekers(this.root);
     this.cancelHandDrag?.();
     this.disposeScene?.();
@@ -433,7 +434,7 @@ export class GameView {
   }
 
   render(g: GameState): Promise<void> {
-    syncCardEffects(g,this.you);
+    syncCardEffects(g,this.you);syncCardFrames(g,this.you);
     this.trickRoom.finish();
     const fieldBefore=fieldPositions(this.root);
     const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));

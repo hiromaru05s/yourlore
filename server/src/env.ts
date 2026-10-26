@@ -32,7 +32,9 @@ export interface SessionUser {
   botClears?: string[];
   credits: number;
   starterCards?: Record<string,number>;
+  frames?:string[];
   effects?:string[];
+  frame?:string;
   effect?:string;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key

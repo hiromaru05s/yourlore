@@ -7,14 +7,14 @@ export async function saveUserDecks(env:Env,user:SessionUser,body:{deck?:unknown
  const previous=deckStoreForUser(user);
  const store=body.decks!==undefined?sanitizeDecks(body.decks):previous;
  if(body.decks!==undefined){
-  const raw=body.decks as {list?:Array<{sleeve?:unknown;furniture?:unknown;effect?:unknown}>}|null;
+  const raw=body.decks as {list?:Array<{sleeve?:unknown;furniture?:unknown;effect?:unknown;frame?:unknown}>}|null;
   // Old clients can still edit cards/names without resetting per-deck equipment.
-  store.list.forEach((slot,i)=>{for(const key of ['sleeve','furniture','effect'] as const)if(raw?.list?.[i]?.[key]===undefined)slot[key]=previous.list[i][key]??'default';});
+  store.list.forEach((slot,i)=>{for(const key of ['sleeve','furniture','effect','frame'] as const)if(raw?.list?.[i]?.[key]===undefined)slot[key]=previous.list[i][key]??'default';});
  }else store.list[store.sel]={...store.list[store.sel],cards:sanitizeDeck(body.deck)};
  const row=await env.DB.prepare('SELECT sleeves, starter_cards FROM users WHERE id = ?').bind(user.id).first<{sleeves:string|null;starter_cards:string|null}>();
  if(!row||store.list.some(slot=>!ownsDeck(slot.cards,starterCollection(row.starter_cards))))return null;
  const owned=new Set(ownedCosmetics(row?.sleeves));
- if(store.list.some(slot=>!owned.has(slot.sleeve)||!owned.has(slot.furniture)||!owned.has(slot.effect??'default')))return null;
+ if(store.list.some(slot=>!owned.has(slot.sleeve)||!owned.has(slot.furniture)||!owned.has(slot.effect??'default')||!owned.has(slot.frame??'default')))return null;
  const active=store.list[store.sel];
  await env.DB.prepare('UPDATE users SET decks = ?, deck = ?, sleeve = ?, furniture = ? WHERE id = ?')
   .bind(JSON.stringify(store),active.cards.join(','),active.sleeve,active.furniture,user.id).run();

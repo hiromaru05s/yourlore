@@ -1,3 +1,4 @@
+import {CARD_FRAMES} from './cardFrames';
 import {COFFER_SLEEVE,COFFER_FURNITURE,COFFER_ART,COFFER_FURNITURE_ART} from './mimicCofferCosmetics';
 import {ELFWEAVE_SLEEVE,ELFWEAVE_FURNITURE,ELFWEAVE_ART,ELFWEAVE_FURNITURE_ART} from './elfweaveCosmetics';
 import {QUIET_LUXURY_THEMES,quietLuxuryId,quietLuxuryArt} from './quietLuxuryCosmetics';
@@ -5,7 +6,7 @@ import {AMETHYST_SLEEVE,AMETHYST_FURNITURE,AMETHYST_ART,AMETHYST_FURNITURE_ART} 
 import {GOLDFAULT_SLEEVE,GOLDFAULT_FURNITURE,GOLDFAULT_ART,GOLDFAULT_FURNITURE_ART} from './goldfaultCosmetics';
 import {isCardEffect} from './cardEffects';
 import {GACHA_THEMES,gachaArt} from './gachaCosmetics';
-export interface Cosmetic {id:string;kind:'sleeve'|'furniture';url:string;ko:string;ja:string;en:string;price:number;gachaOnly?:boolean;}
+export interface Cosmetic {id:string;kind:'sleeve'|'furniture'|'frame';url:string;ko:string;ja:string;en:string;price:number;gachaOnly?:boolean;}
 export const GACHA_COSMETICS:Cosmetic[]=GACHA_THEMES.flatMap(t=>[
  {id:'sleeve:gacha-'+t.key,kind:'sleeve' as const,url:gachaArt(t.variant),ja:t.ja+'のスリーブ',en:t.en+' Sleeve',ko:t.ko+' 슬리브',price:1000,gachaOnly:true},
  {id:'furniture:gacha-'+t.key,kind:'furniture' as const,url:gachaArt(t.variant),ja:t.ja+'のデッキ置き場＆墓地',en:t.en+' Deck Holder & Graveyard',ko:t.ko+' 덱 받침 & 묘지',price:1000,gachaOnly:true}
@@ -27,9 +28,9 @@ GACHA_COSMETICS.push(
  {id:COFFER_SLEEVE,kind:'sleeve',url:COFFER_ART,ja:'貪欲な宝箱のスリーブ',en:'The Hungry Coffer Sleeve',ko:'탐욕의 보물상자 슬리브',price:1000,gachaOnly:true},
  {id:COFFER_FURNITURE,kind:'furniture',url:COFFER_FURNITURE_ART,ja:'貪欲な宝箱のデッキ置き場＆墓地',en:'The Hungry Coffer Deck Holder & Graveyard',ko:'탐욕의 보물상자 덱 받침 & 묘지',price:1000,gachaOnly:true}
 );
-// Only gacha cosmetics remain in the active catalog. Unknown legacy equipment
+// Gacha cosmetics and directly sold frame materials. Unknown legacy equipment
 // resolves to the standard appearance through equipmentId/sleeveUrl.
-export const COSMETICS:Cosmetic[] = [...GACHA_COSMETICS];
+export const COSMETICS:Cosmetic[] = [...GACHA_COSMETICS,...CARD_FRAMES];
 export const FURNITURE_LIST=COSMETICS.filter(c=>c.kind==='furniture');
 export const cosmetic=(id:string)=>COSMETICS.find(c=>c.id===id);
 export const furnitureUrl=(id:string|null|undefined)=>FURNITURE_LIST.find(c=>c.id===id)?.url;

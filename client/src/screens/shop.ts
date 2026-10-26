@@ -1,3 +1,5 @@
+import {mountShopFrames,confirmFramePurchase} from '../ui/shopFrames';
+import {isCardFrame} from '../shared/cardFrames';
 import {starterCollection,type CollectionResult,type DailyStarterShop} from '../shared/collection';
 import {renderShopStarters,confirmStarterPurchase} from '../ui/shopStarters';
 import {pendingPurchase,purchaseCollection,type PendingPurchase} from '../ui/collectionPurchase';
@@ -18,6 +20,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
 
   let dead = false;
   let destroyGacha:(()=>void)|undefined;
+  let frames:ReturnType<typeof mountShopFrames>|undefined,ownedFrames=new Set(app.user?.frames??[]);
   let category: 'gacha'|'starter'|'accessories'='gacha';
   let closePurchase:(()=>void)|undefined;
   let dailyShop:DailyStarterShop|undefined;
@@ -31,6 +34,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     const recovery=wrap.querySelector<HTMLElement>('#collectionRecovery');
     if(recovery){recovery.hidden=!pendingPurchase(uid);const b=recovery.querySelector('button');if(b)b.disabled=collectionBusy;}
     const msg=wrap.querySelector<HTMLElement>('#collectionNotice');if(msg)msg.textContent=notice;
+    frames?.update(ownedFrames,credits,!collectionReady||collectionBusy);
     if(category==='starter')renderShopStarters(wrap.querySelector('#shopStarters')!,starterCards,credits,!collectionReady||collectionBusy,(id,count)=>{closePurchase?.();closePurchase=confirmStarterPurchase(id,count,()=>{if(!dead)void transact({kind:'buy',id,count,shopDay:dailyShop?.day}).catch(()=>{});});},dailyShop);
   };
   const transact=async(op:Omit<PendingPurchase,'requestId'>):Promise<CollectionResult>=>{
@@ -44,9 +48,17 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     }catch(error){notice=(error as Error).message;void refreshCollection();throw error;}
     finally{collectionBusy=false;if(!dead)refreshCollectionUi();}
   };
+  const buyFrame=async(id:string)=>{
+    if(collectionBusy||!collectionReady)return;collectionBusy=true;stateRevision++;notice='';refreshCollectionUi();
+    try{const result=await api.buyFrame(id);credits=result.credits;ownedFrames=new Set(result.frames);
+      if(app.user?.id===uid){app.user.credits=credits;app.user.frames=result.frames;document.dispatchEvent(new Event('lore:user'));}
+      notice=loungeText('購入しました。デッキ編成の「外観」で設定できます。','Purchased. Equip it in Deck → Appearance.','구매했습니다. 덱 편성의 외형에서 설정할 수 있습니다.');
+    }catch(error){notice=(error as Error).message==='not enough shards'?loungeText('シャードが不足しています。','Not enough Shards.','샤드가 부족합니다.'):(error as Error).message;void refreshCollection();}
+    finally{collectionBusy=false;if(!dead)refreshCollectionUi();}
+  };
   const build = (): void => {
     closePurchase?.();closePurchase=undefined;
-    destroyGacha?.();destroyGacha=undefined;
+    destroyGacha?.();destroyGacha=undefined;frames?.dispose();frames=undefined;
     wrap.classList.add('shop-gacha-active');
     wrap.dataset.shopCategory=category;
     wrap.innerHTML = `
@@ -61,7 +73,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
             <div id="collectionRecovery" hidden><button class="btn" id="collectionRetry">${loungeText('購入結果を確認','Check purchase result','구매 결과 확인')}</button></div><p id="collectionNotice" role="status"></p>
             <div class="shop-content">
               <div id="shopGacha" ${category!=='gacha'?'inert aria-hidden="true"':''}></div>
-              ${category==='starter'?'<div class="shop-other" id="shopStarters"></div>':category==='accessories'?`<div class="shop-other shop-coming-soon"><h3>${loungeText('アクセサリー','Accessories','액세서리')}</h3><p>${loungeText('準備中','Coming soon','준비 중')}</p></div>`:''}
+              ${category==='starter'?'<div class="shop-other" id="shopStarters"></div>':category==='accessories'?'<div class="shop-other" id="shopFrames"></div>':''}
             </div>
           </section>
         </div>
@@ -74,6 +86,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     });
     destroyGacha=mountShopGacha(wrap.querySelector('#shopGacha')!,{variant:options.gachaVariant,credits,draw:collectionReady?(count)=>transact({kind:'draw',count}):undefined});
     wrap.querySelector<HTMLButtonElement>('#collectionRetry')!.onclick=()=>{const p=pendingPurchase(uid);if(p)void transact(p).then(()=>{if(!dead){build();notice=loungeText('確定済みの結果は履歴から確認できます。','View the confirmed result in History.','확정 결과는 기록에서 확인할 수 있습니다.');refreshCollectionUi();}}).catch(()=>{});};
+    if(category==='accessories')frames=mountShopFrames(wrap.querySelector('#shopFrames')!,id=>{closePurchase?.();closePurchase=confirmFramePurchase(id,()=>{if(!dead)void buyFrame(id);});});
     refreshCollectionUi();
   };
 
@@ -85,9 +98,9 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     try{
       const firstLoad=!collectionReady,revision=stateRevision;
       const collection=await api.collection();if(dead||revision!==stateRevision)return;
-      credits=collection.credits;starterCards=collection.starterCards;dailyShop=collection.dailyShop;collectionReady=true;
+      ownedFrames=new Set((collection.cosmetics??[]).filter(isCardFrame));credits=collection.credits;starterCards=collection.starterCards;dailyShop=collection.dailyShop;collectionReady=true;
       serverDeadline=dailyShop?performance.now()+Math.max(0,dailyShop.resetsAt-dailyShop.serverNow):Infinity;
-      if(app.user){app.user.credits=credits;app.user.starterCards=starterCards;app.user.effects=collection.effects;}
+      if(app.user){app.user.credits=credits;app.user.starterCards=starterCards;app.user.effects=collection.effects;app.user.frames=[...ownedFrames];}
       if(category==='gacha'&&firstLoad)build();else {closePurchase?.();refreshCollectionUi();}
     }catch(e){serverDeadline=performance.now()+30_000;if(!dead){notice=(e as Error).message;refreshCollectionUi();}}
     finally{refreshing=false;}
@@ -100,5 +113,5 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
 
   build();
   const unsub = onLangChange(() => build());
-  return { destroy: () => { dead = true; window.clearInterval(timer);document.removeEventListener('visibilitychange',wake);window.removeEventListener('focus',wake);closePurchase?.(); destroyGacha?.(); unsub(); } };
+  return { destroy: () => { dead = true; window.clearInterval(timer);document.removeEventListener('visibilitychange',wake);window.removeEventListener('focus',wake);closePurchase?.(); destroyGacha?.(); frames?.dispose(); unsub(); } };
 }

@@ -258,6 +258,7 @@ export interface GameState {
   sleeves?: [string | null, string | null];
   furnitures?: [string | null, string | null];
   effects?: [string | null, string | null];
+  frames?: [string | null, string | null];
 }
 
 // --- Actions: the only way to mutate a GameState ---

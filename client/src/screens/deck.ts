@@ -144,17 +144,17 @@ export function mountDeck(app: App): Screen {
     const ordered=['STARTER_MANA',...deck()];
     ordered.forEach((id,index)=>{
       const occurrence=occurrences.get(id)??0;occurrences.set(id,occurrence+1);
-      const key=`${cur}:${id}:${occurrence}:${store.list[cur].effect??'default'}`;handKeys.add(key);
+      const key=`${cur}:${id}:${occurrence}:${store.list[cur].effect??'default'}:${store.list[cur].frame??'default'}`;handKeys.add(key);
       let row=handRows.get(key);const fixed=index===0,c=inst(id,`dk${index}`);
       if(!row){
         row=document.createElement('div');row.className='deck-entry'+(fixed?' is-fixed':'');row.dataset.card=id;
         const surface=document.createElement('div');surface.className='deck-card-float';
-        const card=cardEl(c,{size:'mkt',fullArt:true,effect:store.list[cur].effect});prepareDeckCard(card,id);
+        const card=cardEl(c,{size:'mkt',fullArt:true,effect:store.list[cur].effect,frame:store.list[cur].frame});prepareDeckCard(card,id);
         if(fixed)card.classList.add('deck-fixed');
         card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
-        bindZoom(card,c,undefined,undefined,store.list[cur].effect);
-        card.onclick=()=>zoomCard(c,undefined,undefined,store.list[cur].effect);
-        card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c,undefined,undefined,store.list[cur].effect);}};
+        bindZoom(card,c,undefined,undefined,store.list[cur].effect,store.list[cur].frame);
+        card.onclick=()=>zoomCard(c,undefined,undefined,store.list[cur].effect,store.list[cur].frame);
+        card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c,undefined,undefined,store.list[cur].effect,store.list[cur].frame);}};
         surface.append(card);
         if(fixed){const lock=document.createElement('span');lock.className='deck-attune-lock';lock.title=t('deck.fixed');lock.innerHTML='<svg viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 12V8a6 6 0 0 1 12 0v4M4 12h16v13H4z"/><path d="M12 17v4"/></svg>';surface.append(lock);}
         else{const action=document.createElement('button');action.className='deck-hand-action card-action deck-action';surface.append(action);}
@@ -262,7 +262,7 @@ export function mountDeck(app: App): Screen {
       if (dead) return;
       Object.assign(store, r.decks);store.list.forEach(d=>sortCards(d.cards));
       saved = JSON.stringify(store);
-      if (app.user) { app.user.decks = r.decks; app.user.deck = r.deck; const active=r.decks.list[r.decks.sel];app.user.sleeve=active.sleeve;app.user.furniture=active.furniture;app.user.effect=active.effect; }
+      if (app.user) { app.user.decks = r.decks; app.user.deck = r.deck; const active=r.decks.list[r.decks.sel];app.user.sleeve=active.sleeve;app.user.furniture=active.furniture;app.user.effect=active.effect;app.user.frame=active.frame; }
       msgEl.textContent = t("deck.saved");
     } catch (e) {
       msgEl.textContent = (e as Error).message || t("api.fail");
@@ -279,7 +279,7 @@ export function mountDeck(app: App): Screen {
 
   const loadOwned=async()=>{
     cosmeticError=false;
-    try {const profile=isLocalDevAccount()?loadLocalGuestProfile():await api.profile();if(dead)return;owned=new Set(['default',...(profile.sleeves??[]),...('furnitures' in profile?profile.furnitures??[]:[]),...('effects' in profile?profile.effects??[]:[])]);}
+    try {const profile=isLocalDevAccount()?loadLocalGuestProfile():await api.profile();if(dead)return;owned=new Set(['default',...(profile.sleeves??[]),...('furnitures' in profile?profile.furnitures??[]:[]),...('effects' in profile?profile.effects??[]:[]),...('frames' in profile?profile.frames??[]:[])]);}
     catch {if(dead)return;cosmeticError=true;}
     render();
   };

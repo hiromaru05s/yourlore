@@ -1,3 +1,4 @@
+import {isCardFrame} from '../../client/src/shared/cardFrames';
 import {starterCollection,constrainDeckStore} from '../../client/src/shared/collection';
 import {deckStoreForUser} from '../../client/src/shared/cards';
 // ============================================================
@@ -92,10 +93,13 @@ export async function getUser(env: Env, req: Request): Promise<SessionUser | nul
   try { decks = row.decks ? JSON.parse(row.decks) : null; } catch { decks = null; }
   const starterCards=starterCollection(row.starter_cards);
   const store=constrainDeckStore(deckStoreForUser({decks,deck:row.deck?row.deck.split(','):null,sleeve:row.sleeve,furniture:row.furniture}),starterCards);
-  const effects=ownedCosmetics(row.sleeves).filter(isCardEffect);
+  const inventory=ownedCosmetics(row.sleeves);
+  const frames=inventory.filter(isCardFrame);
+  const effects=inventory.filter(isCardEffect);
+  for(const slot of store.list)if(!frames.includes(slot.frame as typeof frames[number]))slot.frame='default';
   for(const slot of store.list)if(!effects.includes(slot.effect as typeof effects[number]))slot.effect='default';
   const active=store.list[store.sel];
-  return { id: row.id, email: row.email, display: row.display, needsUsername: row.username_set !== 1, wins: row.wins, losses: row.losses, credits: row.credits, exp: row.exp, botClears: JSON.parse(row.bot_clears), starterCards, effects, effect:active.effect, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
+  return { id: row.id, email: row.email, display: row.display, needsUsername: row.username_set !== 1, wins: row.wins, losses: row.losses, credits: row.credits, exp: row.exp, botClears: JSON.parse(row.bot_clears), starterCards, frames, frame:active.frame, effects, effect:active.effect, avatar: row.avatar, badge: row.badge, sleeve: active.sleeve, furniture:active.furniture, deck:active.cards, decks:store };
 }
 
 export async function createSession(env: Env, userId: string): Promise<string> {

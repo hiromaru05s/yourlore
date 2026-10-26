@@ -24,7 +24,9 @@ export interface User {
   botClears?: string[];
   credits: number;
   starterCards?: Record<string,number>;
+  frames?:string[];
   effects?:string[];
+  frame?:string;
   effect?:string;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
@@ -165,6 +167,10 @@ export const api = {
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
   updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string; furniture?: string }) =>
     call<{ ok: true; display: string; needsUsername: boolean; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string; furniture: string }>("/social/me", patch),
+  buyFrame: (id:string) => {
+    if(isLocalDevAccount()){const result=buyLocalGuestSleeve(id);return Promise.resolve({...result,frames:result.sleeves.filter(id=>id.startsWith('frame:'))});}
+    return call<{ok:true;credits:number;frames:string[]}>('/social/buy-cosmetic',{id});
+  },
   buySleeve: (id: string) => {
     if (isLocalDevAccount()) return Promise.resolve({ ok: true as const, ...buyLocalGuestSleeve(id) });
     return call<{ ok: true; credits: number; sleeves: string[]; furnitures:string[] }>("/social/buy-sleeve", { id });
@@ -195,6 +201,7 @@ export interface Profile {
   sleeve?: string;   // equipped sleeve id (self only)
   furniture?: string;
   furnitures?: string[];
+  frames?:string[];
   effects?:string[];
   sleeves?: string[]; // owned sleeve ids incl. 'default' (self only)
   // per-mode W/L aggregates for the record filter (self only)

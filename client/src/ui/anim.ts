@@ -483,7 +483,7 @@ export async function trapRevealAnim(card: CardInst, side: ViewSide, hold = 2000
 }
 
 /** Purchases fly to the shelf; quick spells return a revealed face for effect-first playback. */
-export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null, source?:HTMLElement|null, remaining=0,paidMana=card.cost,effect?:string): Promise<HTMLElement|null> {
+export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | null, source?:HTMLElement|null, remaining=0,paidMana=card.cost,effect?:string,frame?:string): Promise<HTMLElement|null> {
   if(fxSkip)return null;
   const destination = card.quick ? (side === "me" ? "rift-me" : "rift-opp") : discId(side);
   const to = rectOf("#" + destination);
@@ -498,13 +498,13 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
     if(remaining<=0){source.style.visibility='hidden';source.style.pointerEvents='none';source.setAttribute('aria-hidden','true');}
     else {const stock=source.querySelector('.mkt-stock');if(stock)stock.textContent=`×${remaining}`;}
     if(!card.quick){
-      const target=document.getElementById(destination),print=cardEl(card,{effect,size:'mkt'});
+      const target=document.getElementById(destination),print=cardEl(card,{effect,frame,size:'mkt'});
       try {if(target&&await boardMotionScope(signal=>moveOnBoard({kind:'purchase',source,target,card:print,signal}),3500))return null;}
       catch { /* The projected fallback keeps the purchase pipeline alive. */ }
       if(fxSkip)return null;
     }
   }
-  const node = floatAt(cardEl(card, {effect, size: "mkt" }), src);
+  const node = floatAt(cardEl(card, {effect,frame, size: "mkt" }), src);
   const pose=source?fieldPlacement(source,node.offsetWidth,node.offsetHeight):new DOMMatrix().translate(src.left,src.top);
   node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=pose.toString();
   let held=false;
