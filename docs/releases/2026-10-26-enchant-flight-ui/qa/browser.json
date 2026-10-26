@@ -1,0 +1,78 @@
+{
+  "checks": [
+    {
+      "side": 0,
+      "id": "BREWING",
+      "frames": 245,
+      "printedBadges": 2,
+      "remaining": "6",
+      "legacyFlashes": 0,
+      "infinity": false
+    },
+    {
+      "side": 0,
+      "id": "BLOOD_RITE",
+      "frames": 234,
+      "printedBadges": 1,
+      "remaining": "10",
+      "legacyFlashes": 0,
+      "infinity": false
+    },
+    {
+      "side": 0,
+      "id": "ANCIENT_CIV",
+      "frames": 234,
+      "printedBadges": 1,
+      "remaining": "9",
+      "legacyFlashes": 0,
+      "infinity": false
+    },
+    {
+      "side": 0,
+      "id": "GUILD_CO",
+      "frames": 234,
+      "printedBadges": 1,
+      "remaining": null,
+      "legacyFlashes": 0,
+      "infinity": true
+    },
+    {
+      "side": 1,
+      "id": "BREWING",
+      "frames": 236,
+      "printedBadges": 2,
+      "remaining": "6",
+      "legacyFlashes": 0,
+      "infinity": false
+    },
+    {
+      "side": 1,
+      "id": "BLOOD_RITE",
+      "frames": 233,
+      "printedBadges": 1,
+      "remaining": "10",
+      "legacyFlashes": 0,
+      "infinity": false
+    },
+    {
+      "side": 1,
+      "id": "ANCIENT_CIV",
+      "frames": 233,
+      "printedBadges": 1,
+      "remaining": "9",
+      "legacyFlashes": 0,
+      "infinity": false
+    },
+    {
+      "side": 1,
+      "id": "GUILD_CO",
+      "frames": 232,
+      "printedBadges": 1,
+      "remaining": null,
+      "legacyFlashes": 0,
+      "infinity": true
+    }
+  ],
+  "errors": [],
+  "scope": "Real reducer -> BaseController -> GameView -> persistent flight rasterizer in a local fixture; continuous MutationObserver plus 8ms sampling. No authenticated online match."
+}

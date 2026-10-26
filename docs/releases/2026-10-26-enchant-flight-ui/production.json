@@ -1,0 +1,34 @@
+{
+  "source": "3993a8094217ad95d8600c4892732db1c42c41c7",
+  "fix": "2905ed56596341fb54bf6b4a3af36eb662c6ed3f",
+  "deploymentId": "f336661b-1294-4496-896b-d5133ca0ef3f",
+  "version": "227c7370-c95f-4ed1-9a84-9e82d648388f",
+  "percentage": 100,
+  "verifiedAt": "2026-10-26T11:01:03.127076+00:00",
+  "origin": "https://yourlore.xyz",
+  "files": [
+    {
+      "url": "/index.html",
+      "sha256": "25fcd2664904f153ccf1190e27064f0993089024c9825bafa7184c734aac8702",
+      "bytes": 21254,
+      "status": 200,
+      "matched": true
+    },
+    {
+      "url": "/assets/social-CEn8Vbdv.js",
+      "sha256": "57cc3c816b5dd625d072a4bb1a57293ad178ec61c89852167ecdaba985d38061",
+      "bytes": 1035837,
+      "status": 200,
+      "matched": true
+    },
+    {
+      "url": "/assets/social-Bg84rOIv.css",
+      "sha256": "529f543f0e8222200488b01305272ac08ffd9aa2fb7e3631d46de0808d896691",
+      "bytes": 267087,
+      "status": 200,
+      "matched": true
+    }
+  ],
+  "productionSuiteCount": 228,
+  "scope": "Local real reducer/controller/GameView cast sequences for both sides, continuous legacy/infinity checks and flight SVG rasterization. Public production asset hashes verified; no authenticated online match."
+}
