@@ -13,7 +13,7 @@ const nativeFetch=window.fetch.bind(window);
 window.fetch=async(input,init)=>{
  const url=new URL(input instanceof Request?input.url:String(input),location.href);
  if(url.pathname.startsWith('/api/')){
-  let data:unknown={ok:true,credits:user.credits,starterCards:{},effects:[],cosmetics:[],keys:[],entries:[],friends:[],incoming:[],outgoing:[],challenges:[],gifts:[]};
+  let data:unknown={ok:true,credits:user.credits,starterCards:{},effects:[],cosmetics:[],keys:[],entries:[],friends:[],incoming:[],outgoing:[],challenges:[],gifts:[],items:[],pendingCount:0,pendingAmount:0,unreadCount:0};
   if(url.pathname==='/api/auth/me')data={user};
   if(url.pathname==='/api/geo')data={country:'JP'};
   if(url.pathname==='/api/rank/me')data={rating:{season:'2026-10',mmr:1018,rank:1,tier:'iron',wins:20,losses:10}};

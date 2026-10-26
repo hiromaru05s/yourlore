@@ -1,0 +1,13 @@
+{
+  "commit": "d909a95666a3155feca14f794d718bc8cf5e37ad",
+  "version": "109584b5-c3f8-4618-8370-b4e2efb5b403",
+  "css": [
+    {
+      "url": "https://yourlore.xyz/assets/main-DySoUkzl.css",
+      "containsFrame": true,
+      "containsCornerCut": true
+    }
+  ],
+  "assetMatch": true,
+  "sha256": "49643cab309191bdc7b33a7368e10825ff6f35b311daf50c667d60322af737e2"
+}

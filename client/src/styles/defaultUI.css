@@ -36,7 +36,7 @@
   .welcome-sheet,
   .overlay > .modal,
   dialog:not(.gacha-cinematic),
-  .zoom-details,
+  .zoom-wrap,
   .card-reference-preview,
   .cards-filter-panel,
   .lounge-shell.is-menu-open .lounge-rail-bottom,
@@ -144,3 +144,17 @@
 :root body .overlay > .modal:not(.outcome-result) :is(.btn-gold,.btn-primary) {
   background:var(--lore-action);border-color:#b4c5d279;color:var(--lore-text);box-shadow:none;
 }
+
+/* Card inspection has one outer frame; the art and readable rules sit inside it. */
+:root body .zoom-wrap .zoom-details {
+  background:#10243d33;border:0;border-left:1px solid var(--lore-line);
+  border-image:none;outline:none;box-shadow:none;clip-path:none;color:var(--lore-text);scrollbar-color:#829fb8 #13243b;
+}
+:root body .zoom-wrap .inspect-heading {
+  background:transparent;border-color:var(--lore-line);color:var(--lore-text);
+}
+:root body .zoom-wrap :is(.inspect-heading h1,.inspect-type,.inspect-close,.inspect-back,.inspect-return-rules) {
+  color:var(--lore-text);border-color:#b4c5d279;
+}
+:root body .zoom-wrap .zoom-details :is(.zoom-tribe,.zoom-related) {background:transparent;}
+:root body .zoom-wrap .zoom-details :is(.fx-tag,.kw,.dr-roll,.card-cast,.card-keys,.zoom-tribe h3) {color:var(--lore-accent);}
