@@ -266,8 +266,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     // Live decisions receive a public-information hypothesis. Hidden starter
     // identities are guesses; the final acceptance guard handles a false target.
     if (c.id === "INQUISITION" && ![...o.field, ...o.discard, ...o.hand, ...o.deck, ...o.traps.map((tr) => tr.card)].some((m) => m.t === "mon" && m.tribe)) return false;
-    if (c.id === "PURGE_ALL" && p.deck.length + p.discard.length === 0) return false;
-    if (c.id === "SCRAPPER" && [...p.deck, ...p.discard].filter((x) => x.cost <= 1).length < 2) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "BLOOD2" && o.traps.length + o.enchants.length === 0) return false;
     if (c.id === "BLOOD_SORROW" && p.discard.length === 0) return false;
@@ -764,7 +762,7 @@ function autoTarget(g: GameState): Action {
   if (pending.kind === "purge") { // 덱·묘지(또는 패)에서 제외: 저가치부터, 살릴 가치가 있으면 종료
     const discOnly = pending.data?.zone === "discard"; // 시련의 영역: 묘지에서만 — 컬 우선 제외 (선택받은 시리즈 연료)
     const pool = purgeChoices(p, pending).sort((a, b) => usable(a) - usable(b));
-    if (pending.reason === "handCap") { // v42: 턴 종료 손패 이월 — 반드시 val장 버린다: 가장 가치 낮은 카드부터
+    if (pending.reason === "handCap" || pending.reason === "scrapper") { // mandatory choice: 턴 종료 손패 이월 — 반드시 val장 버린다: 가장 가치 낮은 카드부터
       const worst0 = pool[0] ?? p.hand[p.hand.length - 1];
       return { type: "pick", uid: worst0 ? worst0.uid : null };
     }

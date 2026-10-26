@@ -1266,11 +1266,12 @@ export abstract class BaseController implements BoardHandlers {
       }
       if (multiKind) {
         const handCap = g.pending.reason === "handCap"; // v42: 턴 종료 손패 이월 — 취소 불가, 정확히 n장
+        const exact = handCap || g.pending.reason === "scrapper";
         if (this.purgePicks) {
           const next = this.purgePicks.shift();
           if (next !== undefined) { setTimeout(() => this.submit({ type: "pick", uid: next }), 0); return; }
           this.purgePicks = null;
-          if (!handCap) { setTimeout(() => this.submit({ type: "pick", uid: null }), 0); return; } // 남은 pending 닫기
+          if (!exact) { setTimeout(() => this.submit({ type: "pick", uid: null }), 0); return; } // 남은 pending 닫기
           // handCap: 아직 남은 장수가 있으면 아래로 진행해 다시 고르게 한다
         }
         const me = g.players[this.you];
@@ -1303,10 +1304,10 @@ export abstract class BaseController implements BoardHandlers {
         this.multiPickerOpen = true;
         cardPickerMulti(hint, pool, max, (uids) => {
           this.multiPickerOpen = false;
-          if (!uids.length) { if (!handCap) this.submit({ type: "pick", uid: null }); else this.afterApply({ state: this.state, events: [] }); return; } // 아무것도 안 고름 = 취소 (handCap은 다시 묻는다)
+          if (!uids.length) { if (!exact) this.submit({ type: "pick", uid: null }); else this.afterApply({ state: this.state, events: [] }); return; } // 아무것도 안 고름 = 취소 (handCap은 다시 묻는다)
           this.purgePicks = uids.slice(1);
           this.submit({ type: "pick", uid: uids[0] });
-        }, { exact: handCap, label:uid=>this.choiceOwner(g,uid) });
+        }, { exact, label:uid=>this.choiceOwner(g,uid) });
         return;
       }
       if (g.pending.kind === "giantShop") {
