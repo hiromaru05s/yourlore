@@ -1,0 +1,337 @@
+{
+  "at": "2026-10-26T23:37:03.637Z",
+  "source": "9de2063f596960d14cb727b17fd95ea10691e525",
+  "deployment": "9d7d0261-ff60-40e7-b25c-ddbfb75e18c7",
+  "productionDatabase": "lore-db",
+  "before": [
+    {
+      "name": "challenges",
+      "count": 0
+    },
+    {
+      "name": "collection_transactions",
+      "count": 96
+    },
+    {
+      "name": "coupon_claims",
+      "count": 4
+    },
+    {
+      "name": "daily_challenges",
+      "count": 19
+    },
+    {
+      "name": "duel_reward_receipts",
+      "count": 31
+    },
+    {
+      "name": "earned_medals",
+      "count": 9
+    },
+    {
+      "name": "email_tokens",
+      "count": 1
+    },
+    {
+      "name": "experience_events",
+      "count": 8
+    },
+    {
+      "name": "friends",
+      "count": 1
+    },
+    {
+      "name": "gift_deliveries",
+      "count": 0
+    },
+    {
+      "name": "gift_messages",
+      "count": 0
+    },
+    {
+      "name": "inquiries",
+      "count": 0
+    },
+    {
+      "name": "invite_rewards",
+      "count": 0
+    },
+    {
+      "name": "matches",
+      "count": 27
+    },
+    {
+      "name": "medal_duel_receipts",
+      "count": 8
+    },
+    {
+      "name": "medal_progress",
+      "count": 7
+    },
+    {
+      "name": "player_experience",
+      "count": 3
+    },
+    {
+      "name": "presence",
+      "count": 6
+    },
+    {
+      "name": "ranked_match_decks",
+      "count": 0
+    },
+    {
+      "name": "ranked_recent_decks",
+      "count": 0
+    },
+    {
+      "name": "ranked_results",
+      "count": 3
+    },
+    {
+      "name": "ratings",
+      "count": 6
+    },
+    {
+      "name": "rewards",
+      "count": 45
+    },
+    {
+      "name": "sessions",
+      "count": 9
+    },
+    {
+      "name": "tutorial_accounts",
+      "count": 6
+    },
+    {
+      "name": "user_days",
+      "count": 19
+    },
+    {
+      "name": "users",
+      "count": 7
+    }
+  ],
+  "executed": true,
+  "after": [
+    {
+      "name": "challenges",
+      "count": 0
+    },
+    {
+      "name": "collection_transactions",
+      "count": 0
+    },
+    {
+      "name": "coupon_claims",
+      "count": 0
+    },
+    {
+      "name": "daily_challenges",
+      "count": 0
+    },
+    {
+      "name": "duel_reward_receipts",
+      "count": 0
+    },
+    {
+      "name": "earned_medals",
+      "count": 0
+    },
+    {
+      "name": "email_tokens",
+      "count": 0
+    },
+    {
+      "name": "experience_events",
+      "count": 0
+    },
+    {
+      "name": "friends",
+      "count": 0
+    },
+    {
+      "name": "gift_deliveries",
+      "count": 0
+    },
+    {
+      "name": "gift_messages",
+      "count": 0
+    },
+    {
+      "name": "inquiries",
+      "count": 0
+    },
+    {
+      "name": "invite_rewards",
+      "count": 0
+    },
+    {
+      "name": "matches",
+      "count": 0
+    },
+    {
+      "name": "medal_duel_receipts",
+      "count": 0
+    },
+    {
+      "name": "medal_progress",
+      "count": 0
+    },
+    {
+      "name": "player_experience",
+      "count": 0
+    },
+    {
+      "name": "presence",
+      "count": 0
+    },
+    {
+      "name": "ranked_match_decks",
+      "count": 0
+    },
+    {
+      "name": "ranked_recent_decks",
+      "count": 0
+    },
+    {
+      "name": "ranked_results",
+      "count": 0
+    },
+    {
+      "name": "ratings",
+      "count": 0
+    },
+    {
+      "name": "rewards",
+      "count": 0
+    },
+    {
+      "name": "sessions",
+      "count": 0
+    },
+    {
+      "name": "tutorial_accounts",
+      "count": 0
+    },
+    {
+      "name": "user_days",
+      "count": 0
+    },
+    {
+      "name": "users",
+      "count": 0
+    }
+  ],
+  "afterQuietPeriod": [
+    {
+      "name": "challenges",
+      "count": 0
+    },
+    {
+      "name": "collection_transactions",
+      "count": 0
+    },
+    {
+      "name": "coupon_claims",
+      "count": 0
+    },
+    {
+      "name": "daily_challenges",
+      "count": 0
+    },
+    {
+      "name": "duel_reward_receipts",
+      "count": 0
+    },
+    {
+      "name": "earned_medals",
+      "count": 0
+    },
+    {
+      "name": "email_tokens",
+      "count": 0
+    },
+    {
+      "name": "experience_events",
+      "count": 0
+    },
+    {
+      "name": "friends",
+      "count": 0
+    },
+    {
+      "name": "gift_deliveries",
+      "count": 0
+    },
+    {
+      "name": "gift_messages",
+      "count": 0
+    },
+    {
+      "name": "inquiries",
+      "count": 0
+    },
+    {
+      "name": "invite_rewards",
+      "count": 0
+    },
+    {
+      "name": "matches",
+      "count": 0
+    },
+    {
+      "name": "medal_duel_receipts",
+      "count": 0
+    },
+    {
+      "name": "medal_progress",
+      "count": 0
+    },
+    {
+      "name": "player_experience",
+      "count": 0
+    },
+    {
+      "name": "presence",
+      "count": 0
+    },
+    {
+      "name": "ranked_match_decks",
+      "count": 0
+    },
+    {
+      "name": "ranked_recent_decks",
+      "count": 0
+    },
+    {
+      "name": "ranked_results",
+      "count": 0
+    },
+    {
+      "name": "ratings",
+      "count": 0
+    },
+    {
+      "name": "rewards",
+      "count": 0
+    },
+    {
+      "name": "sessions",
+      "count": 0
+    },
+    {
+      "name": "tutorial_accounts",
+      "count": 0
+    },
+    {
+      "name": "user_days",
+      "count": 0
+    },
+    {
+      "name": "users",
+      "count": 0
+    }
+  ]
+}

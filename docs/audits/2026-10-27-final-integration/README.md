@@ -123,3 +123,11 @@
 - `7f3ebeb1`をguard公開。246/246・型・build成功。version `560998c2-846c-4d98-abc1-7f41412193d9`、deployment `03f3e2a3-57a4-4728-b94b-f4bcd1a216df`。
 - 3originの`/api/auth/me`が503/maintenance=true/no-storeを返すことを確認（`phase-a.json`）。新namespaceへbinding切替、旧クラスはDB決済を持たない退役実装。
 - 続いてPhase Bで旧2namespaceを削除する。D1ユーザーデータはまだ消去していない。
+
+
+## 本番Phase B・全ユーザー消去完了（2026-10-26 23:37 UTC）
+
+- Phase B `4c3c110f` / version `05efaba1-affe-4e8e-87c6-e8c2927fc2ff`でv5 migration成功。旧MatchmakerLive/GameRoomLive namespaceを削除。
+- deployment statusのannotationがCLIで省略されるため、消去前検証が安全停止した（この時点では消去未実行）。完全なversion metadataで公開SHAとguard stampを照合するよう`9de2063f`で修正し、guardで再公開。version `d4e14cde-3702-43e1-be63-ea7c9b940a11`、246/246成功。
+- 3originのmaintenance、実DB全table、現在main/公開source/100%traffic/lockを照合後、承認済みSQLを実行。7アカウントを含む全27ユーザーテーブルが0件。5秒後も全27tableが0、coupon使用数も0。例外アカウントなし。`production-reset.json`に件数のみ記録。新規データexportなし。
+- 旧DO削除後にD1を消去しており、古い対戦から書き戻せない。次のPhase Cでmaintenanceを解除する。再開後の新規登録は再消去しない。
