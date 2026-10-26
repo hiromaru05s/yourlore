@@ -208,10 +208,14 @@ export async function captureQuestTile(node:HTMLElement):Promise<HTMLCanvasEleme
   const frame=node.querySelector<HTMLElement>('.buff-frame')!,art=node.querySelector<HTMLElement>('.buff-art')!;
   const cost=node.querySelector<HTMLElement>('.buff-cost')!,label=node.querySelector<HTMLElement>('.quest-progress');
   const cb=box(cost),cs=getComputedStyle(cost);
-  const duration=node.querySelector<HTMLElement>('.buff-duration');
   const infinity=node.querySelector<HTMLImageElement>('.buff-infinity');
-  const db=duration?box(duration):null,ds=duration?getComputedStyle(duration):null;
   const ib=infinity?box(infinity):null;
+  // Print the very same self-contained SVG badges used by the native landing.
+  const badges=[...node.querySelectorAll<SVGSVGElement>('.enchant-time > svg,.card-counter > svg')].map(svg=>{
+    const copy=svg.cloneNode(true) as SVGSVGElement;
+    copy.setAttribute('xmlns','http://www.w3.org/2000/svg');copy.setAttribute('width','64');copy.setAttribute('height','64');
+    return {box:box(svg),src:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(copy))};
+  });
   const lb=label?box(label):null,ls=label?getComputedStyle(label):null;
   const text=(value:string,b:ReturnType<typeof box>,style:CSSStyleDeclaration)=>{
     c.save();c.font=`${style.fontWeight} ${parseFloat(style.fontSize)*w/r.width}px ${style.fontFamily}`;
@@ -226,12 +230,9 @@ export async function captureQuestTile(node:HTMLElement):Promise<HTMLCanvasEleme
   c.drawImage(ar,(ar.naturalWidth-sw)/2,(ar.naturalHeight-sh)/2,sw,sh,pad,pad,w,h);c.restore();
   for(const layer of node.querySelectorAll<HTMLCanvasElement>('.card-effect-surface')){if(!layer.width)continue;c.save();if(path){c.translate(pad,pad);c.scale(w,h);c.clip(new Path2D(path));c.scale(1/w,1/h);c.translate(-pad,-pad);}c.globalCompositeOperation=getComputedStyle(layer).mixBlendMode==='screen'?'screen':'source-over';const b=box(layer);c.drawImage(layer,b.x,b.y,b.w,b.h);c.restore();}
   c.drawImage(seal,cb.x,cb.y,cb.w,cb.h);text(cost.textContent||'',cb,cs);
+  for(const badge of badges){const b=badge.box;c.drawImage(await image(badge.src),b.x,b.y,b.w,b.h);}
   if(!label||!lb||!ls){
     if(infinity&&ib)c.drawImage(await matte(infinity.src),ib.x,ib.y,ib.w,ib.h);
-    if(duration&&db&&ds){
-      c.drawImage(await matte('/art/biblion/modular/plaque-ui.webp'),db.x,db.y-db.h*.15,db.w,db.h*1.3);
-      text(duration.textContent||'',db,ds);
-    }
     return out;
   }
   const gradient=c.createLinearGradient(lb.x,0,lb.x+lb.w,0);gradient.addColorStop(0,'#231330dd');gradient.addColorStop(.5,'#38214bef');gradient.addColorStop(1,'#231330dd');

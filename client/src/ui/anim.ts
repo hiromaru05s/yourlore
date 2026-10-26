@@ -1,3 +1,4 @@
+import {activeEnchantmentTile,type EnchantmentContext} from './enchantmentView';
 import {cancelManaRuptures} from './manaRupture/runtime';
 import {cancelTribePactDefeat} from './tribePactDefeat/runtime';
 import {STANDARD_FX,SPECIAL_FX} from './animationTempo';
@@ -95,8 +96,8 @@ import {waitForDuel} from './duelReadiness';
 // touch game state, only the DOM.
 // ============================================================
 import type { CardInst, GutsSurvival } from "../shared/types";
-import { frameFor, FRAME_BACK, DB, enchantHasTurnCountdown } from "../shared/cards";
-import { cardEl, enchantmentTile, questTile } from "./cardView";
+import { frameFor, FRAME_BACK, DB } from "../shared/cards";
+import { cardEl, questTile } from "./cardView";
 import { t, getLang, cardName } from "../i18n";
 
 import { sfx } from "./sound";
@@ -356,7 +357,7 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   if(!fxSkip)summonDust(face.getBoundingClientRect());
   return face;
 }
-export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast,effect?:(node:HTMLElement)=>Promise<void>): Promise<HTMLElement|null> {
+export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast,effect?:(node:HTMLElement)=>Promise<void>,enchantment?:EnchantmentContext): Promise<HTMLElement|null> {
   const from = fromRect(side, takeOrigin(side)); if (!from) return null;
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
@@ -381,7 +382,6 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
       const zone=document.querySelector(side==='me'?'#meRow .zone-st':'#oppRow .zone-st');
       const target=(slotIndex==null?zone?.querySelector('.slot'):zone?.children[Math.min(slotIndex,zone.children.length-1)]) as HTMLElement|null;
       if(target){
-        const duration=enchantHasTurnCountdown(card)?`<span class="buff-duration"><span>${getLang()==='ja'?'残り':''}${card.val??1}</span></span>`:'<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="">';
         if(card.t==='quest'){
           const face=questTile(card);
           if(!fxSkip&&await boardMotionScope(signal=>foldQuestIntoSlot(node,target,face,signal),8500))return face.parentElement;
@@ -389,7 +389,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
           if(!target.isConnected)return null;
           return nativeQuestGhost(target,face);
         }
-        const face=enchantmentTile(card,duration);
+        const face=activeEnchantmentTile(enchantment??{enchant:{card,turns:card.val??1,bornTurn:0},game:{turn:0},owner:{tribesFired:[]}});
         if(!fxSkip&&await boardMotionScope(signal=>flyPersistentIntoSlot(node,target,face,signal),6500))return face.parentElement;
         if(!target.isConnected)return null;
         return nativeQuestGhost(target,face);

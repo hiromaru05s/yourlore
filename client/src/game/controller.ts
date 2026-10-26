@@ -959,7 +959,9 @@ export abstract class BaseController implements BoardHandlers {
               const face=await A.revealSpell({uid:'status-source',...def},sideOf(e.player),e.dest,undefined,true);
               if(face){if(this.dead)face.remove();else{statusSource=face;this.elementalFaces.push({card:{uid:'status-source',...def},side:sideOf(e.player),node:face});}}
             }else{
-              const face=await A.revealSpell(placed??{ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0));
+              const owner=res.state.players[e.player];
+              const enchant=def.ench?owner.enchants.find(x=>x.card.uid===placed?.uid)??{card:placed??{uid:'fx',...def},turns:def.val??1,bornTurn:res.state.turn}:undefined;
+              const face=await A.revealSpell(placed??{ uid: "fx", ...def }, sideOf(e.player), e.dest,buffCount[e.player]+(def.t==='quest'?questCount[e.player]:0),false,undefined,undefined,enchant?{enchant,game:res.state,owner}:undefined);
               if(face){spellGhosts.push(face);if(def.t==='quest')questCount[e.player]++;else buffCount[e.player]++;}
             }
           }

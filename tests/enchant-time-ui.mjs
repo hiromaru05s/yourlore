@@ -6,14 +6,27 @@ let now=0,reduced=false,seq=0;const frames=new Map();globalThis.performance={now
 function step(ms){now+=ms;const q=[...frames.values()];frames.clear();q.forEach(cb=>cb(now));}
 const dir=await mkdtemp(path.join(tmpdir(),'lore-enchant-time-'));
 try{
- await build({stdin:{contents:"export * from './client/src/ui/enchantTime';export {DB} from './client/src/shared/cards';export {setLang} from './client/src/i18n';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',loader:{'.css':'empty'},outfile:dir+'/time.mjs'});
- const {enchantTimeState:state,enchantTimeDescription:describe,createEnchantTime:create,createBoardEnchantTimes:board,DB,setLang}=await import(dir+'/time.mjs');setLang('ja');
+ await build({stdin:{contents:"export * from './client/src/ui/enchantTime';export {activeEnchantmentTile} from './client/src/ui/enchantmentView';export {DB} from './client/src/shared/cards';export {setLang} from './client/src/i18n';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',loader:{'.css':'empty'},outfile:dir+'/time.mjs'});
+ const {enchantTimeState:state,enchantTimeDescription:describe,createEnchantTime:create,createBoardEnchantTimes:board,activeEnchantmentTile:tile,DB,setLang}=await import(dir+'/time.mjs');setLang('ja');
  const owner={tribesFired:[]},g={turn:8},e=(id,turns=3,bornTurn=1)=>({card:{...DB[id],uid:id},turns,bornTurn}),s=(id,turns=3)=>state(e(id,turns),g,owner);
  assert.deepEqual([s('BLOOD_RITE').remaining,s('BLOOD_RITE').mode,s('BLOOD_RITE').fill],[3,'drain',.3]);
  assert.deepEqual([s('ANCIENT_CIV').remaining,s('ANCIENT_CIV').mode,s('ANCIENT_CIV').fill],[2,'fill',7/9]);assert.equal(s('ANCIENT_CIV').timing,'delayed-own');
  for(const id of ['BREWING','FARM','NIGHT_CASTLE_GIFT']){assert.equal(s(id).mode,'fill');assert.equal(s(id).timing,'own-start');}
  assert.equal(s('BREWING').fill,.5);assert.equal(s('BREWING').remaining,3);assert.equal(state(e('BREWING'),{turn:90},owner).remaining,3,'owner upkeeps do not come from global turn');
  assert.equal(s('E2').timing,'both-start');assert.equal(s('MANA_BACKFLOW').timing,'own-start');assert.equal(s('GUILD_CO'),null);assert.equal(s('TRIBE_PACT').remaining,37);assert.equal(state(e('TRIBE_PACT'),g,{tribesFired:['x']}),null);
+ // These are also the source faces printed into the cast/landing mesh, before board render.
+ for(const [id,remaining] of [['BLOOD_RITE','3'],['ANCIENT_CIV','2'],['BREWING','3'],['E3','3'],['TRIBE_PACT','37']]){
+  const face=tile({enchant:e(id),game:g,owner});
+  assert.equal(face.querySelector('.enchant-time text').textContent,remaining,id+' flight reads live clock');
+  assert.equal(face.querySelectorAll('.buff-duration,.buff-infinity').length,0,id+' never creates legacy/infinity surface');
+  assert(face.classList.contains('ench-timed'));
+ }
+ for(const [id,tribesFired]of [['GUILD_CO',[]],['TRIBE_PACT',['x']]]){
+  const face=tile({enchant:e(id),game:g,owner:{tribesFired}});
+  assert.equal(face.querySelectorAll('.buff-infinity').length,1);assert.equal(face.querySelectorAll('.enchant-time,.buff-duration').length,0);
+ }
+ const charged=tile({enchant:{...e('BREWING'),cnt:12},game:g,owner});assert.equal(charged.querySelector('.card-counter').dataset.counterValue,'12');
+ const newborn=tile({enchant:e('BLOOD_RITE',99,8),game:g,owner});assert.equal(newborn.querySelector('.enchant-time text').textContent,'10');
  const mature=state(e('ANCIENT_CIV'),{turn:40},owner);assert.equal(mature.remaining,0);assert.equal(mature.fill,1);const full=create(mature);assert.equal(full.querySelector('text').textContent,'0');assert.equal(full.querySelector('.enchant-time-level').getAttribute('height'),'46');assert.equal(full.querySelector('.enchant-time-level').getAttribute('y'),'8');assert.equal(full.querySelector('.enchant-time-surface').getAttribute('opacity'),'0','full circle has no residual surface mark');assert.equal(full.querySelectorAll('text').length,1);assert.equal(full.querySelectorAll('path').length,1,'only the liquid surface, without an icon');assert(!/[✦∞⏳]/.test(full.textContent));
  for(const lang of ['ja','en','ko']){setLang(lang);assert(describe(s('BREWING')).includes('3'));assert(describe(s('MANA_BACKFLOW')).length>10);}setLang('ja');
  const root=document.getElementById('root'),zone=root.querySelector('#meRow .zone-st'),controller=board(root);let data=s('BREWING',4);

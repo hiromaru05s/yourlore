@@ -1,4 +1,5 @@
-import {createBoardEnchantTimes,createEnchantTime,enchantTimeState,enchantTimeDescription} from './enchantTime';
+import {createBoardEnchantTimes,enchantTimeState,enchantTimeDescription} from './enchantTime';
+import {activeEnchantmentTile} from './enchantmentView';
 import {createBoardCardCounters,createCardCounter,enchantCounterValue} from './cardCounter';
 import {syncCardEffects,disposeCardEffects} from './cardFinish';
 import {medalHtml} from './medal';
@@ -28,7 +29,7 @@ import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet 
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isVampFamily, isGolem, marketStockOf } from "../shared/engine";
 import { fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
-import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, enchantmentTile, questTile } from "./cardView";
+import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, questTile } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { bindInspectContext } from "./cardInspection";
 import { t, getLang, esc, cardName } from "../i18n";
@@ -604,22 +605,17 @@ export class GameView {
       sz.appendChild(tile);
     });
     p.enchants.forEach((e) => {
-      const time=enchantTimeState(e,g,p),rem=time?.remaining??null,lang=getLang();
+      const time=enchantTimeState(e,g,p),lang=getLang();
       const state=time?enchantTimeDescription(time):(lang==='ja'?'永続魔法':lang==='en'?'Permanent spell':'지속 마법');
       const counterValue=enchantCounterValue(e);
       const stateText=state+(counterValue!=null?` · ${lang==='ja'?'カウンター':lang==='en'?'Counter':'카운터'} ${counterValue}`:'');
-      const durationUi=time?'':`<img class="buff-infinity" src="/art/biblion/modular/infinity-ui.webp" alt="${lang==='ja'?'無期限':lang==='en'?'Permanent':'무기한'}">`;
-      const card=enchantmentTile(e.card,durationUi);
-      if(time)card.append(createEnchantTime(time));
-      if(counterValue!=null)card.append(createCardCounter(e.card.uid,e.card.id,'charge',counterValue));
+      const card=activeEnchantmentTile({enchant:e,game:g,owner:p});
       card.tabIndex = 0;
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', `${cardName(e.card)} ${stateText}`);
       card.title = `${cardName(e.card)} · ${stateText}`;
       card.onclick = () => zoomCard(e.card, undefined, stateText);
       card.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); zoomCard(e.card, undefined, stateText); } };
-      if (rem != null) { card.classList.add("ench-timed"); if (rem <= 1) card.classList.add("ench-expiring"); }
-      else card.classList.add("ench-perm");
       bindZoom(card, e.card, undefined, stateText);
       sz.appendChild(card);
     });
