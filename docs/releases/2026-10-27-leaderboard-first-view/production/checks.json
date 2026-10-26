@@ -1,0 +1,70 @@
+{
+  "origin": "https://yourlore.xyz",
+  "api": "synthetic fixtures",
+  "firstViews": [
+    {
+      "viewport": {
+        "width": 1470,
+        "height": 745
+      },
+      "panelBottom": 582.375,
+      "contentBottom": 641,
+      "dockTop": 657,
+      "scrollHeight": 561,
+      "clientHeight": 561,
+      "emblem": 184
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "panelBottom": 582.375,
+      "contentBottom": 616,
+      "dockTop": 632,
+      "scrollHeight": 536,
+      "clientHeight": 536,
+      "emblem": 184
+    },
+    {
+      "viewport": {
+        "width": 1070,
+        "height": 700
+      },
+      "panelBottom": 582.375,
+      "contentBottom": 596,
+      "dockTop": 612,
+      "scrollHeight": 516,
+      "clientHeight": 516,
+      "emblem": 184
+    }
+  ],
+  "widths": [
+    1440,
+    1070,
+    820,
+    390,
+    320
+  ],
+  "checks": [
+    "aligned columns",
+    "prominent own ranking without overflow",
+    "purchase column spacing",
+    "missing deck dates hidden",
+    "mixed deck contents aligned",
+    "plain name hover",
+    "tooltip hover and keyboard",
+    "ranked stats include draws",
+    "three repeated decks",
+    "card inspection",
+    "shared friends profile",
+    "empty and private data",
+    "mobile modal overflow",
+    "focus restore",
+    "closed modal late response",
+    "large rank and MMR right of identity",
+    "fixed close after scroll",
+    "profile page close returns home"
+  ],
+  "errors": []
+}
