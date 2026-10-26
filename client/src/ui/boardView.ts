@@ -326,11 +326,24 @@ export class GameView {
   }
 
   private handOpen = false;
+  private handDock: { parent: Node; next: Node | null } | null = null;
   private cancelHandDrag: (() => void) | null = null;
   setHandOpen(open: boolean): void {
     if (this.handOpen === open) return;
     this.handOpen = open;
-    (this.root.querySelector(".game") as HTMLElement | null)?.classList.toggle("hand-open", open);
+    const game = this.root.querySelector<HTMLElement>(".game");
+    const hand = this.root.querySelector<HTMLElement>("#hand");
+    // Keep the expanded hand outside the stage stacking context, so summon
+    // prints mounted on body cannot cover it. Preserve the live card nodes and
+    // their pointer handlers; compact mode returns to the original layout.
+    if (open && game && hand?.parentNode && this.root.classList.contains('reading-board')) {
+      this.handDock = { parent: hand.parentNode, next: hand.nextSibling };
+      game.append(hand);
+    } else if (!open && hand && this.handDock) {
+      this.handDock.parent.insertBefore(hand, this.handDock.next);
+      this.handDock = null;
+    }
+    game?.classList.toggle("hand-open", open);
     this.layoutHand();
   }
 
