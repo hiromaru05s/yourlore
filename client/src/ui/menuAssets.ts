@@ -2,7 +2,6 @@ export {duelFileAssets} from './duelFileAssets';
 import {DB, STARTERS, PASSIVES, SLEEVE_LIST, frameFor, fieldFrameFor} from '../shared/cards';
 import {COSMETICS} from '../shared/cosmetics';
 import {CARD_EFFECTS} from '../shared/cardEffects';
-import {THEMES, asset} from '../shared/atelierThemes';
 import {BOT_NPCS} from '../shared/botNpcs';
 import {artUrl} from './cardArt';
 import {duelImageUrls} from './duelAssets';
@@ -30,10 +29,9 @@ export function menuAssetUrls():string[]{
   ...['attack','health','cost','plaque'].map(k=>`/art/biblion/modular/${k}-ui.webp`),
   ...['mon','spell','starter','trap'].map(k=>`/ui/cost-${k}.webp?v=2`),
   ...Object.keys(PASSIVES).map(k=>`/ui/passives/v2/${k}.svg`),
+  '/art/shop/biblion-draw-table-v1.webp',
   ...SLEEVE_LIST.map(s=>s.url), ...COSMETICS.map(c=>c.url),
   ...CARD_EFFECTS.map(e=>e.url), '/cosmetics/effect-empty.svg',
-  ...THEMES.flatMap(t=>['body.webp','lining.webp','inlay-mask.webp','finish-mask.svg','surface-normal.webp','surface-roughness.webp'].map(f=>asset(t,f))),
-  ...['astral','ivory','crimson','verdant'].map(k=>`/cosmetics/v2/sleeve-${k}.webp`),
   ...['compass','prism'].map(k=>`/frames/sleeve_${k}.webp`),
   '/art/key-visuals/concepts/lore-kv-02-midnight-astral-observatory.png',
   '/art/key-visuals/concepts/lore-kv-03-crimson-eclipse-duel-arena.png',

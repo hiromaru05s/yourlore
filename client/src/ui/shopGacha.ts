@@ -1,14 +1,16 @@
+import {homeIcon} from './homeIcons';
 import {GACHA_COSMETICS} from '../shared/cosmetics';
 import {mountRewardGallery,mountRewardStage} from './gachaRewardStage';
 import {CARD_EFFECTS} from '../shared/cardEffects';
 import {loungeText as l} from './loungeText';
 import {openGachaCinematic,prepareGachaCinematic} from './gachaCinematic';
 import {COLLECTIBLE_STARTERS,GACHA_PRICE,type CollectionResult,type CollectionReceipt} from '../shared/collection';
-import {DB,STARTERS} from '../shared/cards';
+import {DB,STARTERS,FRAME_BACK} from '../shared/cards';
 import {cardName,esc,getLang} from '../i18n';
 import {artUrl} from './cardArt';
 import {api} from '../net/api';
 import '../styles/shopGacha.css';
+import '../styles/shopGachaTable.css';
 export type GachaVariant=1|2|3;
 const name=(id:string)=>cardName({...(STARTERS[id]??DB[id]),uid:id});
 const label=()=>l('ビブリオンのコレクション','Biblion Collection','비블리온 컬렉션');
@@ -45,12 +47,22 @@ export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;c
   finally{busy=false;if(!dead)render();}
  }
  function render(){
-  host.innerHTML=`<section class="gacha-page gacha-v2 gacha-entry" data-edition="ivory" aria-label="${l('ガチャ','Gacha','뽑기')}">
-   <section class="gacha-purchase" aria-label="${l('ガチャを回す','Draw from the collection','뽑기')}"><div class="gacha-purchase-heading"><h3>${l('ガチャを回す','Draw from the collection','뽑기')}</h3><p class="gacha-balance">${l('所持','Balance','보유')} <strong>${balance.toLocaleString()}</strong> ${l('シャード','Shards','샤드')}</p></div><div class="gacha-actions">${[1,10].map(n=>`<button data-pull="${n}" class="gacha-draw ${n===10?'gacha-draw-ten':''}" ${busy||!options.draw||balance<n*GACHA_PRICE?'disabled':''}><span>${busy?l('処理中…','Processing…','처리 중…'):l(n+'回ガチャを回す','Draw '+n,n+'회 뽑기')}</span><b>${(n*GACHA_PRICE).toLocaleString()} <small>${l('シャード','Shards','샤드')}</small></b></button>`).join('')}</div><p class="gacha-purchase-status" role="status">${busy?l('抽選結果を確認しています…','Confirming your draw…','추첨 결과를 확인하고 있습니다…'):!options.draw?l('残高を確認しています…','Checking your balance…','잔액을 확인하고 있습니다…'):balance<GACHA_PRICE?l('シャードが不足しています','Not enough Shards','샤드가 부족합니다'):l('提供割合を確認のうえプレイしてください','Review the drop rates before drawing','제공 확률을 확인한 후 뽑아 주세요')}</p></section>
-   <div class="gacha-stage"><div class="gacha-stage-art" aria-hidden="true"></div><div class="gacha-copy"><div class="gacha-kicker"><span>${l('常設ガチャ','STANDARD GACHA','상시 뽑기')}</span></div><p class="gacha-english">STARTER COLLECTION</p><h2>${label()}</h2><p class="gacha-poem">${l('新しい一枚で、デッキを広げよう。','Discover new cards for your deck.','새로운 한 장으로 덱을 넓혀 보세요.')}</p><div class="gacha-feature"><span>92.5% / 7% / 0.5%</span><strong>${l('スターター / スリーブ・家具 / エフェクト','Starters / Sleeves & furniture / Effects','스타터 / 슬리브·가구 / 이펙트')}</strong></div></div>
-   <button class="gacha-artwork" data-info="items" aria-label="${l('排出カード一覧','Card lineup','카드 목록')}"><span class="gacha-halo"></span>${[COLLECTIBLE_STARTERS[1],COLLECTIBLE_STARTERS[2],COLLECTIBLE_STARTERS[0]].map((id,i)=>`<img class="gacha-card gacha-card-${['left','right','main'][i]}" src="${artUrl.sm(id)}" alt="${esc(name(id))}">`).join('')}<span class="gacha-art-caption">${label()}<i>↗</i></span></button>
-   <div class="gacha-guarantee"><b>${l('同じカードを8枚所持済みなら50シャード還元','50 Shards refunded when you already own 8 copies','동일 카드 8장 보유 시 50샤드 환급')}</b></div></div>
-   <footer class="gacha-footer"><div class="gacha-meta"><div class="gacha-links"><button data-info="rates">${l('提供割合','Drop rates','제공 확률')}</button><button data-info="items">${l('一覧','Lineup','목록')}</button><button data-info="history">${l('履歴','History','기록')}</button></div><small>${l('10回も1回ずつ同じ確率で抽選します','Ten draws use the same independent odds','10회도 매회 동일한 확률로 추첨합니다')}</small></div></footer></section>`;
+  host.innerHTML=`<section class="gacha-page gacha-table" aria-label="${l('ガチャ','Gacha','뽑기')}">
+   <header class="gacha-table-heading"><small>${l('常設ガチャ','STANDARD GACHA','상시 뽑기')}</small><h2>${label()}</h2><p>${l('次の一枚が、デッキの可能性をひらく。','The next card opens new possibilities.','다음 한 장이 덱의 가능성을 열어 줍니다.')}</p></header>
+   <div class="gacha-table-fan" aria-hidden="true">${Array.from({length:9},(_,i)=>`<img class="gacha-table-card" src="${FRAME_BACK}" alt="" draggable="false" style="--card-x:${9+i*8.1}%;--card-y:${44-Math.sin(i/8*Math.PI)*19}%;--card-angle:${-24+i*4.5}deg;z-index:${i}">`).join('')}<div class="gacha-table-featured"><img src="${artUrl.full('STARTER_CHEST')}" alt="" draggable="false"></div></div>
+   <div class="gacha-table-bottom">
+    <section class="gacha-table-prizes" aria-label="${l('主な獲得アイテム','Featured rewards','주요 획득 아이템')}"><small>${l('主な獲得アイテム','Featured rewards','주요 획득 아이템')}</small><div class="gacha-table-prize-list">
+     <button data-info="items"><span class="gacha-prize-art"><img src="${FRAME_BACK}" alt=""><img src="${artUrl.sm('STARTER_CHEST')}" alt=""></span><span>${l('スターター','Starters','스타터')}</span></button>
+     <button data-info="items"><span class="gacha-prize-art"><img src="/cosmetics/mimic-coffer-v1/sleeve.png" alt=""><img src="/cosmetics/mimic-coffer-v1/furniture.png" alt=""></span><span>${l('スリーブ・家具','Sleeves & furniture','슬리브·가구')}</span></button>
+     <button data-info="items"><span class="gacha-prize-art gacha-prize-effect"><img src="${CARD_EFFECTS[0].url}" alt=""></span><span>${l('エフェクト','Effects','이펙트')}</span></button>
+    </div></section>
+    <section class="gacha-table-controls" aria-label="${l('ガチャを回す','Draw from the collection','뽑기')}">
+     <div class="gacha-table-links"><button class="lore-button-quiet" data-info="rates">${l('提供割合','Drop rates','제공 확률')} ›</button><button class="lore-button-quiet" data-info="items">${l('ラインナップ','Lineup','라인업')} ›</button><button class="lore-button-quiet" data-info="history">${l('履歴','History','기록')} ›</button></div>
+     <div class="gacha-actions">${[1,10].map(n=>`<button data-pull="${n}" class="gacha-draw ${n===10?'gacha-draw-ten':''}" ${busy||!options.draw||balance<n*GACHA_PRICE?'disabled':''}><span>${busy?l('処理中…','Processing…','처리 중…'):l(n+'回引く','Draw '+n,n+'회 뽑기')}</span><b>${homeIcon('shard')}${(n*GACHA_PRICE).toLocaleString()} <small>${l('シャード','Shards','샤드')}</small></b></button>`).join('')}</div>
+     <div class="gacha-table-balance"><span>${l('所持','Balance','보유')} ${homeIcon('shard')} <strong>${balance.toLocaleString()}</strong></span><p role="status">${busy?l('抽選結果を確認しています…','Confirming your draw…','추첨 결과를 확인하고 있습니다…'):!options.draw?l('残高を確認しています…','Checking your balance…','잔액을 확인하고 있습니다…'):balance<GACHA_PRICE?l('シャードが不足しています','Not enough Shards','샤드가 부족합니다'):''}</p></div>
+    </section>
+   </div>
+  </section>`;
   host.querySelector<HTMLButtonElement>('[data-info="rates"]')!.onclick=rates;
   host.querySelectorAll<HTMLButtonElement>('[data-info="items"]').forEach(b=>b.onclick=()=>show(l('排出カード一覧','Card lineup','카드 목록'),`<div class="gacha-lineup">${GACHA_COSMETICS.map(e=>`<article><img src="${e.url}" alt=""><strong>${esc(e[getLang()])}</strong><small>${(7/GACHA_COSMETICS.length).toFixed(4)}%</small></article>`).join('')}${CARD_EFFECTS.map(e=>`<article><img src="${e.url}" alt=""><strong>${esc(e[getLang()])}</strong><small>1/600 ≈ 0.1667%</small></article>`).join('')}${COLLECTIBLE_STARTERS.map(id=>`<article><img src="${artUrl.sm(id)}" alt=""><strong>${esc(name(id))}</strong><small>${(92.5/COLLECTIBLE_STARTERS.length).toFixed(4)}%</small></article>`).join('')}</div>`));
   host.querySelector<HTMLButtonElement>('[data-info="history"]')!.onclick=()=>{

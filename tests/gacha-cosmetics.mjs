@@ -7,6 +7,11 @@ try{
  const {GACHA_COSMETICS,COSMETICS,SLEEVE_LIST,FURNITURE_LIST,ownedCosmetics,equipmentId,sanitizeDecks,gachaFromUrl,isGoldfaultSleeve,isGoldfaultFurniture,isAmethystSleeve,isAmethystFurniture,quietLuxuryFromUrl,isElfweaveSleeve,isElfweaveFurniture,isCofferSleeve,isCofferFurniture}=await import(dir+'/module.mjs');
  assert(GACHA_COSMETICS.some(c=>c.id==='sleeve:gacha-elfweave'));assert(GACHA_COSMETICS.some(c=>c.id==='furniture:gacha-elfweave'));assert(GACHA_COSMETICS.some(c=>c.id==='sleeve:gacha-amethyst-cleft'));assert(GACHA_COSMETICS.some(c=>c.id==='furniture:gacha-amethyst-cleft'));assert.equal(new Set(COSMETICS.map(c=>c.id)).size,COSMETICS.length);
  for(const c of GACHA_COSMETICS){assert(c.gachaOnly);assert(c.price>0);assert(c.ja&&c.en&&c.ko);await access('client/public'+c.url);assert(gachaFromUrl(c.url)||isGoldfaultSleeve(c.url)||isGoldfaultFurniture(c.url)||isAmethystSleeve(c.url)||isAmethystFurniture(c.url)||quietLuxuryFromUrl(c.url,c.kind)||isElfweaveSleeve(c.url)||isElfweaveFurniture(c.url)||isCofferSleeve(c.url)||isCofferFurniture(c.url),c.id+' must resolve to its runtime family');assert((c.kind==='sleeve'?SLEEVE_LIST:FURNITURE_LIST).some(x=>x.id===c.id));assert(ownedCosmetics(JSON.stringify([c.id])).includes(c.id));assert.equal(equipmentId(c.id,c.kind),c.id);assert.equal(equipmentId(c.id,c.kind==='sleeve'?'furniture':'sleeve'),'default');}
+ assert.deepEqual(COSMETICS,GACHA_COSMETICS);
+ for(const legacy of ['astral','furniture:astral','nocturne','furniture:nocturne','azure-plume','furniture:azure-plume']){
+  assert(!ownedCosmetics(JSON.stringify([legacy])).includes(legacy));assert.equal(equipmentId(legacy,'sleeve'),'default');assert.equal(equipmentId(legacy,'furniture'),'default');
+  const slot=sanitizeDecks({list:[{sleeve:legacy,furniture:legacy}]}).list[0];assert.equal(slot.sleeve,'default');assert.equal(slot.furniture,'default');
+ }
  // Cross-theme combinations survive the same serializer used by actual decks.
  for(const sleeve of GACHA_COSMETICS.filter(c=>c.kind==='sleeve'))for(const furniture of GACHA_COSMETICS.filter(c=>c.kind==='furniture')){
   const decks=sanitizeDecks({active:0,list:[{cards:[],watch:[],sleeve:sleeve.id,furniture:furniture.id}]});

@@ -5,22 +5,7 @@ import {AMETHYST_SLEEVE,AMETHYST_FURNITURE,AMETHYST_ART,AMETHYST_FURNITURE_ART} 
 import {GOLDFAULT_SLEEVE,GOLDFAULT_FURNITURE,GOLDFAULT_ART,GOLDFAULT_FURNITURE_ART} from './goldfaultCosmetics';
 import {isCardEffect} from './cardEffects';
 import {GACHA_THEMES,gachaArt} from './gachaCosmetics';
-import {LIVING_THEMES,livingArt} from './livingCosmetics';
-import {THEMES,asset} from './atelierThemes';
 export interface Cosmetic {id:string;kind:'sleeve'|'furniture';url:string;ko:string;ja:string;en:string;price:number;gachaOnly?:boolean;}
-const themes=[['astral','星図','Star Atlas','성도'],['verdant','翠葉','Verdant','녹엽'],['crimson','緋印','Crimson Seal','홍인'],['ivory','白銀','Ivory Moon','백은']] as const;
-export const COSMETICS:Cosmetic[]=themes.flatMap(([key,ja,en,ko])=>[
- {id:key,kind:'sleeve' as const,url:`/cosmetics/v2/sleeve-${key}.webp`,ja:`${ja}のスリーブ`,en:`${en} Sleeve`,ko:`${ko} 슬리브`,price:0},
- {id:`furniture:${key}`,kind:'furniture' as const,url:`/cosmetics/v2/material-${key}.webp`,ja:`${ja}のデッキ置き場＆墓地`,en:`${en} Deck Holder & Graveyard`,ko:`${ko} 덱 받침 & 묘지`,price:0}
-]);
-COSMETICS.push(...THEMES.flatMap(t=>[
- {id:t.id,kind:'sleeve' as const,url:asset(t,'back.webp'),ja:t.name+'のスリーブ',en:t.en+' Sleeve',ko:t.name,price:0},
- {id:'furniture:'+t.id,kind:'furniture' as const,url:asset(t,'body.webp'),ja:t.name+'のデッキ置き場＆墓地',en:t.en+' Deck Holder & Graveyard',ko:t.name,price:0}
-]));
-COSMETICS.push(...LIVING_THEMES.flatMap(t=>[
- {id:t.id,kind:'sleeve' as const,url:livingArt(t.id),ja:t.ja+'のスリーブ',en:t.en+' Sleeve',ko:t.ko+' 슬리브',price:0},
- {id:'furniture:'+t.id,kind:'furniture' as const,url:livingArt(t.id),ja:t.ja+'のデッキ置き場＆墓地',en:t.en+' Deck Holder & Graveyard',ko:t.ko+' 덱 받침 & 묘지',price:0}
-]));
 export const GACHA_COSMETICS:Cosmetic[]=GACHA_THEMES.flatMap(t=>[
  {id:'sleeve:gacha-'+t.key,kind:'sleeve' as const,url:gachaArt(t.variant),ja:t.ja+'のスリーブ',en:t.en+' Sleeve',ko:t.ko+' 슬리브',price:1000,gachaOnly:true},
  {id:'furniture:gacha-'+t.key,kind:'furniture' as const,url:gachaArt(t.variant),ja:t.ja+'のデッキ置き場＆墓地',en:t.en+' Deck Holder & Graveyard',ko:t.ko+' 덱 받침 & 묘지',price:1000,gachaOnly:true}
@@ -42,7 +27,9 @@ GACHA_COSMETICS.push(
  {id:COFFER_SLEEVE,kind:'sleeve',url:COFFER_ART,ja:'貪欲な宝箱のスリーブ',en:'The Hungry Coffer Sleeve',ko:'탐욕의 보물상자 슬리브',price:1000,gachaOnly:true},
  {id:COFFER_FURNITURE,kind:'furniture',url:COFFER_FURNITURE_ART,ja:'貪欲な宝箱のデッキ置き場＆墓地',en:'The Hungry Coffer Deck Holder & Graveyard',ko:'탐욕의 보물상자 덱 받침 & 묘지',price:1000,gachaOnly:true}
 );
-COSMETICS.push(...GACHA_COSMETICS);
+// Only gacha cosmetics remain in the active catalog. Unknown legacy equipment
+// resolves to the standard appearance through equipmentId/sleeveUrl.
+export const COSMETICS:Cosmetic[] = [...GACHA_COSMETICS];
 export const FURNITURE_LIST=COSMETICS.filter(c=>c.kind==='furniture');
 export const cosmetic=(id:string)=>COSMETICS.find(c=>c.id===id);
 export const furnitureUrl=(id:string|null|undefined)=>FURNITURE_LIST.find(c=>c.id===id)?.url;

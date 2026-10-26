@@ -1,7 +1,7 @@
 import type {CardEffectId} from './cardEffects';
 import {DECK_POOL, DECK_MAX_COPIES, sanitizeDeck, type DeckStore} from './cards';
 export type StarterCollection = Record<string, number>;
-export const STARTER_PRICE = 200;
+export const STARTER_PRICE = 100;
 export const GACHA_PRICE = 100;
 export const DUPLICATE_REFUNDS = {starter:50, cosmetic:100, effect:500} as const;
 // Each category is selected first; its items then use equal unbiased odds.
@@ -32,5 +32,6 @@ export interface EmptyReward {kind:'empty';id:'cosmetic-pending';refund:0;owned:
 export interface CosmeticReward {kind:'cosmetic';id:string;refund:number;owned:number}
 export type CollectionReward=StarterReward|EffectReward|EmptyReward|CosmeticReward;
 export interface CollectionReceipt {requestId:string;kind:'buy'|'draw';cost:number;refund:number;rewards:CollectionReward[];createdAt:number}
-export interface CollectionState {credits:number;starterCards:StarterCollection;effects?:string[];cosmetics?:string[]}
+export interface DailyStarterShop {day:string;resetsAt:number;serverNow:number;cards:string[];remaining:Record<string,number>}
+export interface CollectionState {dailyShop?:DailyStarterShop;credits:number;starterCards:StarterCollection;effects?:string[];cosmetics?:string[]}
 export interface CollectionResult extends CollectionState {receipt:CollectionReceipt}

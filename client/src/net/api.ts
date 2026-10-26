@@ -99,7 +99,7 @@ export const api = {
   claimGifts: (id?:string) => call<GiftClaim>('/gifts/claim',id?{id}:{all:true}),
   collection: () => call<CollectionState>("/collection",undefined,"GET"),
   collectionHistory: () => call<{receipts:CollectionReceipt[]}>("/collection/history",undefined,"GET"),
-  buyStarter: (id:string,requestId:string,count=1) => call<CollectionResult>("/collection/buy",{id,requestId,count}),
+  buyStarter: (id:string,requestId:string,count=1,shopDay?:string) => call<CollectionResult>("/collection/buy",{id,requestId,count,shopDay}),
   drawStarters: (count:number,requestId:string) => call<CollectionResult>("/collection/draw",{count,requestId}),
   duelRewardResult: (roomId:string) => call<{settled:boolean;amount:number}>('/rewards/result?roomId='+encodeURIComponent(roomId),undefined,'GET'),
   progression: () => call<import('../shared/progression').ProgressionState>('/rewards/progression',undefined,'GET'),

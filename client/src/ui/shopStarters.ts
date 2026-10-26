@@ -1,4 +1,4 @@
-import {COLLECTIBLE_STARTERS,STARTER_PRICE,type StarterCollection} from '../shared/collection';
+import {STARTER_PRICE,type StarterCollection,type DailyStarterShop} from '../shared/collection';
 import {DB,STARTERS} from '../shared/cards';
 import {cardEl} from './cardView';
 import {bindZoom,zoomCard} from './cardInspection';
@@ -19,20 +19,22 @@ export function confirmStarterPurchase(id:string,count:number,buy:()=>void):()=>
  document.body.append(dialog);dialog.showModal();dialog.querySelector<HTMLButtonElement>('[data-purchase-no]')!.focus();return close;
 }
 
-export function renderShopStarters(host:HTMLElement,owned:StarterCollection,credits:number,busy:boolean,buy:(id:string,count:number)=>void){
- host.innerHTML=`<p class="set-desc">${l('初期所持：カル8枚・アチューン1枚・宝箱2枚。その他のスターターは購入またはガチャで集められます。','Initially owned: 8 Cull, 1 Attune and 2 Treasure Chests. Collect other starters through purchases or gacha.','초기 보유: 컬 8장·어튠 1장·보물상자 2장. 나머지 스타터는 구매 또는 뽑기로 수집합니다.')}</p><div class="starter-shop-grid"></div>`;
+export function renderShopStarters(host:HTMLElement,owned:StarterCollection,credits:number,busy:boolean,buy:(id:string,count:number)=>void,daily?:DailyStarterShop){
+ host.innerHTML=`<p class="set-desc">${l('毎日00:00 KST更新・全ユーザー共通の5種類。各2枚まで、1枚100シャード。','Five cards shared by everyone, refreshed daily at 00:00 KST. Up to 2 each, 100 Shards per card.','매일 00:00 KST 갱신 · 모든 유저에게 동일한 5종. 각 2장까지, 1장 100샤드.')}</p><p class="starter-shop-date">${daily?`${daily.day} · ${l('本日のラインナップ','Today’s lineup','오늘의 라인업')}`:l('商品を読み込み中…','Loading today’s cards…','상품 불러오는 중…')}</p><div class="starter-shop-grid"></div>`;
  const grid=host.querySelector('.starter-shop-grid')!;
- for(const id of COLLECTIBLE_STARTERS){
+ for(const id of daily?.cards??[]){
   const c={...(STARTERS[id]??DB[id]),uid:'shop-'+id},tile=document.createElement('article');tile.className='starter-shop-item';
   const face=document.createElement('button');face.className='starter-shop-face';face.setAttribute('aria-label',cardName(c));face.append(cardEl(c,{size:'mkt'}));face.onclick=()=>zoomCard(c);bindZoom(face,c);
   const count=document.createElement('span');count.textContent=l('所持','Owned','보유')+` ${owned[id]??0}/8`;
-  const max=Math.max(0,Math.min(8-(owned[id]??0),Math.floor(credits/STARTER_PRICE)));
+  const remaining=daily?.remaining[id]??0;
+  const stock=document.createElement('span');stock.textContent=l('本日の残り','Remaining today','오늘 남은 수량')+` ${remaining}/2`;
+  const max=Math.max(0,Math.min(remaining,8-(owned[id]??0),Math.floor(credits/STARTER_PRICE)));
   const quantity=document.createElement('label');quantity.className='starter-shop-quantity';quantity.textContent=l('数量','Quantity','수량');
   const select=document.createElement('select');select.dataset.starterQuantity=id;select.setAttribute('aria-label',cardName(c)+' '+l('購入数量','quantity','구매 수량'));select.disabled=busy||max===0;
   for(let n=1;n<=Math.max(1,max);n++){const option=document.createElement('option');option.value=String(n);option.textContent=String(n);select.append(option);}quantity.append(select);
   const button=document.createElement('button');button.className='btn btn-gold';button.dataset.buyStarter=id;button.disabled=busy||max===0;
-  const update=()=>{button.textContent=(owned[id]??0)>=8?l('8枚所持済み','8 owned','8장 보유'):l('購入','Buy','구매')+` · ${(STARTER_PRICE*Number(select.value)).toLocaleString()} `+l('シャード','Shards','샤드');};
+  const update=()=>{button.textContent=remaining===0?l('本日分は売り切れ','Sold out today','오늘 품절'):(owned[id]??0)>=8?l('8枚所持済み','8 owned','8장 보유'):l('購入','Buy','구매')+` · ${(STARTER_PRICE*Number(select.value)).toLocaleString()} `+l('シャード','Shards','샤드');};
   select.onchange=update;update();button.onclick=()=>buy(id,Number(select.value));
-  tile.append(face,count,quantity,button);grid.append(tile);
+  tile.append(face,count,stock,quantity,button);grid.append(tile);
  }
 }

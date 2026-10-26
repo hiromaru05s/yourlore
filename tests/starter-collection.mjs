@@ -3,32 +3,51 @@ import {DatabaseSync} from 'node:sqlite';
 import {build} from 'esbuild';
 import fs from 'node:fs/promises';
 const dir=await fs.mkdtemp('/tmp/lore-starter-test-');
+const originalNow=Date.now;const frozenNow=Date.now();Date.now=()=>frozenNow;
 try{
- await build({stdin:{contents:`export {default as worker} from './server/src/index';export * from './client/src/shared/collection';export * from './client/src/shared/cardEffects';export {GACHA_COSMETICS} from './client/src/shared/cosmetics';export {deckStoreForUser} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
- const {worker,starterCollection,COLLECTIBLE_STARTERS,deckStoreForUser,PLANNED_GACHA_RATES,DUPLICATE_REFUNDS,gachaCategory,CARD_EFFECTS,GACHA_COSMETICS}=await import(dir+'/module.mjs');
+ await build({stdin:{contents:`export {default as worker} from './server/src/index';export * from './client/src/shared/collection';export * from './client/src/shared/dailyStarterShop';export * from './client/src/shared/cardEffects';export {GACHA_COSMETICS} from './client/src/shared/cosmetics';export {deckStoreForUser} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
+ const {worker,dailyStarterShop,starterCollection,COLLECTIBLE_STARTERS,deckStoreForUser,PLANNED_GACHA_RATES,DUPLICATE_REFUNDS,gachaCategory,CARD_EFFECTS,GACHA_COSMETICS}=await import(dir+'/module.mjs');
  const db=new DatabaseSync(':memory:');db.exec(await fs.readFile('server/schema.sql','utf8'));
- for(const id of ['a','b']){db.prepare('INSERT INTO users(id,email,password,display,created_at,credits) VALUES(?,?,?,?,?,?)').run(id,id+'@test.invalid','fixture',id,Date.now(),10000);db.prepare('INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES(?,?,?,?)').run(id,id,Date.now(),Date.now()+600000);}
+ for(const id of ['a','b']){db.prepare('INSERT INTO users(id,email,password,display,created_at,credits) VALUES(?,?,?,?,?,?)').run(id,id+'@test.invalid','fixture',id,Date.now(),10000);db.prepare('INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES(?,?,?,?)').run(id,id,Date.now(),Date.now()+172800000);}
  let failLedger=false,queued;
  const exec=(sql,args)=>{if(failLedger&&sql.startsWith('INSERT INTO collection_transactions'))throw Error('injected failure');const q=db.prepare(sql);if(/^\s*SELECT/i.test(sql))return {results:q.all(...args)};return {meta:{changes:Number(q.run(...args).changes)}};};
  const env={APP_ORIGIN:'*',DB:{prepare(sql){let args=[];return {bind(...a){args=a;return this;},first:async()=>exec(sql,args).results?.[0]??null,all:async()=>exec(sql,args),run:async()=>exec(sql,args),execute:()=>exec(sql,args)};},async batch(stmts){db.exec('BEGIN');try{const res=stmts.map(s=>s.execute());db.exec('COMMIT');return res;}catch(e){db.exec('ROLLBACK');throw e;}}},MATCHMAKER:{idFromName:x=>x,get:()=>({fetch:req=>{queued=new URL(req.url);return new Response('queued');}})}};
  const call=(path,body,who='a')=>worker.fetch(new Request('https://test.yourlore.xyz/api'+path,{method:body?'POST':'GET',headers:{Cookie:`lore_session=${who}`,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})}),env);
- const buy=(id,requestId=crypto.randomUUID(),who='a')=>call('/collection/buy',{id,requestId},who);
+ const buy=(id,requestId=crypto.randomUUID(),who='a')=>call('/collection/buy',{id,requestId,shopDay:dailyStarterShop(Date.now()).day},who);
  const draw=(count=1,requestId=crypto.randomUUID())=>call('/collection/draw',{count,requestId});
  const state=async()=>await (await call('/collection')).json();
  const fresh=await state();assert.equal(fresh.starterCards.STARTER_TRASH,8);assert.equal(fresh.starterCards.STARTER_MANA,1);assert.equal(fresh.starterCards.STARTER_CHEST,2);assert.equal(Object.values(fresh.starterCards).reduce((a,b)=>a+b,0),11);
  assert(!COLLECTIBLE_STARTERS.includes('STARTER_TRASH'));assert(!COLLECTIBLE_STARTERS.includes('STARTER_MANA'));assert(COLLECTIBLE_STARTERS.includes('STARTER_CHEST'));
  assert.equal(Object.values(PLANNED_GACHA_RATES).reduce((a,b)=>a+b,0),100);assert.deepEqual(DUPLICATE_REFUNDS,{starter:50,cosmetic:100,effect:500});
- const first=COLLECTIBLE_STARTERS.find(x=>x!=='STARTER_CHEST'),key=crypto.randomUUID();
- const responses=await Promise.all([buy(first,key),buy(first,key),buy(first,key)]);assert(responses.every(r=>r.status===200));assert.equal((await state()).credits,9800);assert.equal((await state()).starterCards[first],1);assert.equal(db.prepare('SELECT COUNT(*) AS n FROM collection_transactions').get().n,1);
- const replay=await (await buy(first,key)).json();assert.equal(replay.receipt.requestId,key);assert.equal(replay.credits,9800);assert.equal((await draw(1,key)).status,409);
+ assert.equal(fresh.dailyShop.cards.length,5);assert.equal(new Set(fresh.dailyShop.cards).size,5);
+ assert.deepEqual(fresh.dailyShop,(await (await call('/collection',undefined,'b')).json()).dailyShop);
+ const boundary=Date.parse('2026-10-26T15:00:00Z');
+ assert.equal(dailyStarterShop(boundary-1).day,'2026-10-26');assert.equal(dailyStarterShop(boundary).day,'2026-10-27');
+ assert.notDeepEqual(dailyStarterShop(boundary-1).cards,dailyStarterShop(boundary).cards);
+ assert.equal(dailyStarterShop(boundary-1).resetsAt,boundary);
+ const first=fresh.dailyShop.cards.find(x=>x!=='STARTER_CHEST'),key=crypto.randomUUID();
+ const unavailable=COLLECTIBLE_STARTERS.find(x=>!fresh.dailyShop.cards.includes(x));
+ assert.equal((await buy(unavailable)).status,400);
+ assert.equal((await call('/collection/buy',{id:first,count:1,shopDay:'1999-01-01',requestId:crypto.randomUUID()})).status,400);
+ assert.equal((await call('/collection/buy',{id:first,count:1,requestId:crypto.randomUUID()})).status,400);
+ const responses=await Promise.all([buy(first,key),buy(first,key),buy(first,key)]);assert(responses.every(r=>r.status===200));assert.equal((await state()).credits,9900);assert.equal((await state()).starterCards[first],1);assert.equal(db.prepare('SELECT COUNT(*) AS n FROM collection_transactions').get().n,1);
+ const replay=await (await buy(first,key)).json();assert.equal(replay.receipt.requestId,key);assert.equal(replay.credits,9900);assert.equal((await draw(1,key)).status,409);
  for(const id of ['STARTER_TRASH','STARTER_MANA','M1','__proto__'])assert.equal((await buy(id)).status,400);
- db.prepare("UPDATE users SET credits=200 WHERE id='a'").run();
- const exactKey=crypto.randomUUID();const exact=await Promise.all([buy('STARTER_CHEST',exactKey),buy('STARTER_CHEST',exactKey)]);assert(exact.every(r=>r.status===200));assert.equal((await state()).credits,0);assert.equal((await state()).starterCards.STARTER_CHEST,3);
- db.prepare("UPDATE users SET credits=9800 WHERE id='a'").run();
+ db.prepare("UPDATE users SET credits=100 WHERE id='a'").run();
+ const second=fresh.dailyShop.cards.find(x=>x!==first&&x!=='STARTER_CHEST');
+ const exactKey=crypto.randomUUID();const exact=await Promise.all([buy(second,exactKey),buy(second,exactKey)]);assert(exact.every(r=>r.status===200));assert.equal((await state()).credits,0);assert.equal((await state()).starterCards[second],1);
+ db.prepare("UPDATE users SET credits=9900 WHERE id='a'").run();
  const before=await state();failLedger=true;await assert.rejects(buy(first),/injected/);failLedger=false;assert.deepEqual(await state(),before);
- await Promise.all(Array.from({length:6},()=>buy(first)));assert.equal((await state()).starterCards[first],7);
- const last=await Promise.all([buy(first),buy(first)]);assert.deepEqual(last.map(r=>r.status).sort(),[200,400]);assert.equal((await state()).starterCards[first],8);
- assert.equal((await buy(first)).status,400);
+ const last=await Promise.all(Array.from({length:6},()=>buy(first)));assert.equal(last.filter(r=>r.status===200).length,1);assert.equal((await state()).starterCards[first],2);
+ assert.equal((await state()).dailyShop.remaining[first],0);assert.equal((await buy(first)).status,400);
+ // A lost response replay after KST midnight returns its original receipt; it
+ // neither spends again nor consumes the new day's stock.
+ const realNow=Date.now;Date.now=()=>fresh.dailyShop.resetsAt+1;
+ const replayNext=await (await call('/collection/buy',{id:first,count:1,requestId:key,shopDay:fresh.dailyShop.day})).json();
+ assert.equal(replayNext.receipt.requestId,key);assert.equal(replayNext.credits,9800);assert.notEqual(replayNext.dailyShop.day,fresh.dailyShop.day);
+ assert(Object.values(replayNext.dailyShop.remaining).every(n=>n===2));
+ assert.equal((await call('/collection/buy',{id:first,count:1,requestId:crypto.randomUUID(),shopDay:fresh.dailyShop.day})).status,400);
+ Date.now=realNow;
  const all=starterCollection(Object.fromEntries(COLLECTIBLE_STARTERS.map(id=>[id,8])));db.prepare('UPDATE users SET starter_cards=?,credits=2000 WHERE id=?').run(JSON.stringify(all),'a');
  const random=crypto.getRandomValues.bind(crypto);crypto.getRandomValues=a=>{a[0]=0;return a;};
  const ten=await (await draw(10)).json();crypto.getRandomValues=random;assert.equal(ten.receipt.rewards.length,10);assert.equal(ten.receipt.cost,1000);assert.equal(ten.receipt.refund,500);assert.equal(ten.credits,1500);assert(ten.receipt.rewards.every(r=>r.refund===50&&r.owned===8));
@@ -120,19 +139,20 @@ try{
  await worker.fetch(new Request('https://test.yourlore.xyz/ws/queue?deck='+first,{headers:{Cookie:'lore_session=b'}}),env);assert(!queued.searchParams.get('deck').includes(first));
  await buy(first,crypto.randomUUID(),'b');assert.equal((await call('/deck',{decks:store},'b')).status,200);
  store.list[0].cards[1]=first;assert.equal((await call('/deck',{decks:store},'b')).status,400);
- // Bulk purchase is a single idempotent transaction with an all-or-nothing cap.
+ // Bulk purchases remain atomic, idempotent and capped at two per KST day.
+ db.prepare("DELETE FROM collection_transactions WHERE user_id='b'").run();
  db.prepare("UPDATE users SET starter_cards='{}',credits=2000 WHERE id='b'").run();
- const bulkKey=crypto.randomUUID(),bulk=()=>call('/collection/buy',{id:first,count:3,requestId:bulkKey},'b');
+ const bulkKey=crypto.randomUUID(),bulk=()=>call('/collection/buy',{id:first,count:2,shopDay:fresh.dailyShop.day,requestId:bulkKey},'b');
  const bulkResults=await Promise.all([bulk(),bulk(),bulk()]);assert(bulkResults.every(r=>r.status===200));
- const bulkReceipt=await bulkResults[0].json();assert.equal(bulkReceipt.credits,1400);assert.equal(bulkReceipt.starterCards[first],3);assert.equal(bulkReceipt.receipt.cost,600);assert.equal(bulkReceipt.receipt.rewards.length,3);
- assert.equal((await call('/collection/buy',{id:first,count:2,requestId:bulkKey},'b')).status,409);
+ const bulkReceipt=await bulkResults[0].json();assert.equal(bulkReceipt.credits,1800);assert.equal(bulkReceipt.starterCards[first],2);assert.equal(bulkReceipt.receipt.cost,200);assert.equal(bulkReceipt.receipt.rewards.length,2);
+ assert.equal((await call('/collection/buy',{id:first,count:1,shopDay:fresh.dailyShop.day,requestId:bulkKey},'b')).status,409);
  const bulkBefore=await (await call('/collection',undefined,'b')).json();
- for(const count of [0,-1,9,1.5,'2',null,6])assert.equal((await call('/collection/buy',{id:first,count,requestId:crypto.randomUUID()},'b')).status,400);
+ for(const count of [0,-1,9,1.5,'2',null,3,1])assert.equal((await call('/collection/buy',{id:first,count,shopDay:fresh.dailyShop.day,requestId:crypto.randomUUID()},'b')).status,400);
  assert.deepEqual(await (await call('/collection',undefined,'b')).json(),bulkBefore);
- db.prepare("UPDATE users SET credits=399 WHERE id='b'").run();assert.equal((await call('/collection/buy',{id:first,count:2,requestId:crypto.randomUUID()},'b')).status,400);
- db.prepare("UPDATE users SET credits=2000 WHERE id='b'").run();failLedger=true;await assert.rejects(call('/collection/buy',{id:first,count:3,requestId:crypto.randomUUID()},'b'),/injected/);failLedger=false;
- const bulkLast=await Promise.all([3,3].map(count=>call('/collection/buy',{id:first,count,requestId:crypto.randomUUID()},'b')));assert.deepEqual(bulkLast.map(r=>r.status).sort(),[200,400]);
- assert.equal((await (await call('/collection',undefined,'b')).json()).starterCards[first],6);
+ db.prepare("UPDATE users SET credits=199 WHERE id='b'").run();assert.equal((await call('/collection/buy',{id:second,count:2,shopDay:fresh.dailyShop.day,requestId:crypto.randomUUID()},'b')).status,400);
+ db.prepare("UPDATE users SET credits=2000 WHERE id='b'").run();failLedger=true;await assert.rejects(call('/collection/buy',{id:second,count:2,shopDay:fresh.dailyShop.day,requestId:crypto.randomUUID()},'b'),/injected/);failLedger=false;
+ const bulkLast=await Promise.all([2,2].map(count=>call('/collection/buy',{id:second,count,shopDay:fresh.dailyShop.day,requestId:crypto.randomUUID()},'b')));assert.deepEqual(bulkLast.map(r=>r.status).sort(),[200,400]);
+ assert.equal((await (await call('/collection',undefined,'b')).json()).starterCards[second],2);
  const hist=await (await call('/collection/history')).json();assert.deepEqual(hist.receipts.map(r=>r.requestId),db.prepare("SELECT request_id FROM collection_transactions WHERE user_id='a' ORDER BY created_at DESC,request_id DESC LIMIT 50").all().map(r=>r.request_id));assert(hist.receipts.every(r=>r.rewards.length===1||r.rewards.length===10));
  db.close();console.log('PASS starter collection: defaults, full catalog, atomic purchase, rollback, concurrent/idempotent spend, caps, 10-draw refunds, insufficient funds, validation, ownership, queue, history');
-}finally{await fs.rm(dir,{recursive:true,force:true});}
+}finally{Date.now=originalNow;await fs.rm(dir,{recursive:true,force:true});}
