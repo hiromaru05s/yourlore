@@ -70,7 +70,9 @@ export async function playCounter(source:HTMLElement,target:HTMLElement,options:
   fx=document.createElement('canvas');fx.className='counter-impact';fx.setAttribute('aria-hidden','true');
   fx.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:181;width:100%;height:100%';
   const dpr=Math.min(devicePixelRatio||1,1.5);fx.width=Math.round(innerWidth*dpr);fx.height=Math.round(innerHeight*dpr);const impact=fx.getContext('2d')!;
+  let currentMs=0;
   const paint=(ms:number)=>{
+   currentMs=ms;
    const pose=counterPose(plan,ms,reduced);
    rig!.style.transform=new DOMMatrix().translate(pose.x-plan.origin.x,pose.y-plan.origin.y).multiply(base).translate(90,140.625).rotate(pose.turn).scale(pose.scale).translate(-90,-140.625).toString();
    rig!.dataset.counterMs=String(Math.round(ms));
@@ -91,7 +93,7 @@ export async function playCounter(source:HTMLElement,target:HTMLElement,options:
     if(signal.aborted||!rig?.isConnected){texture.width=texture.height=1;return;}
     face=texture;const canvas=document.createElement('canvas');canvas.width=540;canvas.height=810;
     canvas.style.cssText='position:absolute;left:-45px;top:-61.875px;width:270px;height:405px';
-    card=canvas.getContext('2d');renderer=new CounterRenderer();rig.append(canvas);copy.remove();
+    card=canvas.getContext('2d');renderer=new CounterRenderer();paint(currentMs);rig.append(canvas);copy.remove();
    }).catch(()=>{}).finally(()=>pendingCopy.remove());
   }
   return await runCounterTimeline({signal,reduced,compact:options.compact,isAlive:()=>source.isConnected&&target.isConnected&&!document.hidden,paint,onLaunch:options.onLaunch,onImpact:options.onImpact});
