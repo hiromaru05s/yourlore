@@ -4546,7 +4546,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   const p=g.players[who],o0=g.players[1-who];
   let applicable=false;
   const reason=(ko:string,ja:string)=>({applicable:true,blocked:{ko,ja}});
-  if (card.id === 'RIFT_MATTER') return reason('이 카드는 플레이할 수 없습니다', 'このカードはプレイできません');
+  if (card.id === 'RIFT_MATTER' || card.id === 'RIFT_METALIGHT') return reason('이 카드는 플레이할 수 없습니다', 'このカードはプレイできません');
   if (card.id === "GOBLIN_SETTLEMENT") { applicable=true; if (!p.field.some(isBasicGoblin)) return reason("고블린 또는 돌격 고블린이 필요합니다","自分の場にゴブリンか特攻ゴブリンが必要です"); }
   if (card.id === "BEGINNER_MIND") { applicable=true; if (p.hand.length !== 1) { return reason("  └ 패가 0장일 때만 발동 가능", "  └ 手札が0枚の時のみ発動可能"); } }
   if (card.id === "SPACE_RITE") { applicable=true; if (o0.field.length + o0.traps.length + o0.enchants.length < 6) { return reason("  └ 상대 필드의 카드가 6장 미만이라 사용 불가", "  └ 相手の場のカードが6枚未満のため使用不可"); } }
@@ -5414,13 +5414,15 @@ export function effectChoices(g: GameState): CardInst[] {
     case "QUICK_SORT":
     case "Q_ASSASSIN": return [...o.field.filter(m => !hasPassive(m, "aura")), ...o.enchants.map(e => e.card), ...(o.quests ?? []).map(q => q.card)];
     case "RIFT_MATTER": return [...o.field.filter(m => !hasPassive(m, "aura")), ...o.enchants.map(e => e.card), ...o.traps.map(t => t.card), ...(o.quests ?? []).map(q => q.card)].filter(c => !hasPassive(c, 'relic'));
+    case "RIFT_METALIGHT": return o.discard.filter(c => !hasPassive(c, 'relic'));
     default: return [];
   }
 }
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
   g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: reason === "SELECTED_SWORD", data };
   if (reason === 'NIGHT_CASTLE_GIFT') g.pending.hint = '패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택';
-  if (reason === 'RIFT_MATTER') g.pending.hint = data?.left === 1 ? '리프트로 보낼 상대 필드의 두 번째 카드를 선택' : '리프트 물질 — 리프트로 보낼 상대 필드의 카드 2장을 선택';
+  if (reason === 'RIFT_MATTER') g.pending.hint = data?.left === 1 ? '리프트로 보낼 상대 필드의 두 번째 카드를 선택' : '리프트 광석 - 스타라이트 — 리프트로 보낼 상대 필드의 카드 2장을 선택';
+  if (reason === 'RIFT_METALIGHT') g.pending.hint = '리프트 광석 - 메타라이트 — 리프트로 보낼 상대 묘지의 카드 1장을 선택';
   if (!effectChoices(g).length) { g.pending = null; ctx.log("対象がないため効果は不発", "対象がないため効果は不発"); return; }
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
@@ -5477,6 +5479,11 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
       break;
     }
     case "Q_TRIBE": effectSummon(g, ctx, p, card.id); break;
+    case "RIFT_METALIGHT": {
+      const i = o.discard.findIndex(c => c.uid === card.uid);
+      if (i >= 0) rmz(o).push(o.discard.splice(i, 1)[0]);
+      break;
+    }
     case "QUICK_SORT":
     case "RIFT_MATTER":
     case "Q_ASSASSIN": {
@@ -5695,8 +5702,12 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
         added.forEach(c => exileSeen[sx].add(c.uid));
         for (const card of added) if (card.id === 'RIFT_MATTER') {
           // This unplayable card has no self-exile path: entry comes from another card.
-          queueExpansionChoice(g2, pl, card.id, 'リフト物質 — リフトに送る相手の場のカードを2枚選択', {left: 2});
+          queueExpansionChoice(g2, pl, card.id, 'リフト鉱石 - スターライト — リフトに送る相手の場のカードを2枚選択', {left: 2});
           questCtx.log(`${cn(card)}: 상대 필드 카드 2장을 리프트로 보낸다`, `${cn(card)}: 相手の場のカード2枚をリフトに送る`);
+        }
+        for (const card of added) if (card.id === 'RIFT_METALIGHT') {
+          queueExpansionChoice(g2, pl, card.id, 'リフト鉱石 - メタライト — リフトに送る相手の墓地のカードを1枚選択');
+          questCtx.log(`${cn(card)}: 상대 묘지 카드 1장을 리프트로 보낸다`, `${cn(card)}: 相手の墓地のカード1枚をリフトに送る`);
         }
         if (added.length) {
           advanceQuest(pl, "exile", added.length);

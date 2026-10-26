@@ -1,5 +1,5 @@
 import { GOBLIN_CARDS } from './goblinCards';
-import { RIFT_MATTER } from './riftMatter';
+import { RIFT_MATTER, RIFT_METALIGHT } from './riftMatter';
 // Canonical player-facing effects. Explicit paragraphs define rule boundaries.
 // Edit all three languages together; see docs/card-text-style.md.
 export type EffectLocale = "ja" | "ko" | "en";
@@ -1843,3 +1843,4 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
 
 for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
 CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};
+CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};

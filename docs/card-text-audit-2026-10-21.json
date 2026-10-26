@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 378,
+  "count": 379,
   "engineSha256": "58f7a9d90438197ab4719bb5ba9152b8ab2d38f7fea14ed4702ba55cd86cddfd",
   "cards": {
     "M1": {
@@ -8420,23 +8420,43 @@
       }
     },
     "RIFT_MATTER": {
-      "nameJa": "リフト物質",
+      "nameJa": "リフト鉱石 - スターライト",
+      "status": "renamed-reviewed",
+      "reviewDate": "2026-10-26",
+      "reviewEvidence": "docs/releases/2026-10-26-rift-ores/README.md",
+      "changedLocales": [],
+      "definitionSha256": "73eca4f40ed794b43b14c19eff55b91aabb772fae36ec998d06c0d3c03d514f9",
+      "textSha256": "ab10533d975ccd3bcfa254d2559b583f59f41673f04d428801699b8bb83b3bd4",
+      "hooks": {},
+      "before": {
+        "ja": "【発動条件】このカードはプレイできない。\n\n【自分のリフト追加時】他のカードの効果で自分のリフトに送られた場合のみ発動する。相手の場のカード2枚を選び、相手のリフトに送る（1枚しかなければその1枚）。",
+        "ko": "【발동 조건】이 카드는 플레이할 수 없다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 자신의 리프트로 보내졌을 때만 발동한다. 상대 필드의 카드 2장을 선택해 상대의 리프트로 보낸다(1장만 있으면 그 1장).",
+        "en": "【Play Requirement】This card cannot be played.\n\n【Card Added to Your Rift】Activate only when another card’s effect sends this card to your Rift. Choose 2 cards on the opponent’s field and send them to their Rift; if only 1 exists, send that card."
+      },
+      "after": {
+        "ja": "【発動条件】このカードはプレイできない。\n\n【自分のリフト追加時】他のカードの効果で自分のリフトに送られた場合のみ発動する。相手の場のカード2枚を選び、相手のリフトに送る（1枚しかなければその1枚）。",
+        "ko": "【발동 조건】이 카드는 플레이할 수 없다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 자신의 리프트로 보내졌을 때만 발동한다. 상대 필드의 카드 2장을 선택해 상대의 리프트로 보낸다(1장만 있으면 그 1장).",
+        "en": "【Play Requirement】This card cannot be played.\n\n【Card Added to Your Rift】Activate only when another card’s effect sends this card to your Rift. Choose 2 cards on the opponent’s field and send them to their Rift; if only 1 exists, send that card."
+      }
+    },
+    "RIFT_METALIGHT": {
+      "nameJa": "リフト鉱石 - メタライト",
       "status": "new-reviewed",
       "reviewDate": "2026-10-26",
-      "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md",
+      "reviewEvidence": "docs/releases/2026-10-26-rift-ores/README.md",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "7988eedff41a8260e1a9c76c296b3ee91898114ebaace378b09d0f8e15cb7a81",
-      "textSha256": "ab10533d975ccd3bcfa254d2559b583f59f41673f04d428801699b8bb83b3bd4",
+      "definitionSha256": "ede5966a1d89ce147bf9c77ba44400e4cf8fa11d36afaf81f21ef11fa7a9af71",
+      "textSha256": "dbe33298b7c9f63482c885cbfee1a315a0b9752bf46f5a856c845130b77a2dfc",
       "hooks": {},
       "before": null,
       "after": {
-        "ja": "【発動条件】このカードはプレイできない。\n\n【自分のリフト追加時】他のカードの効果で自分のリフトに送られた場合のみ発動する。相手の場のカード2枚を選び、相手のリフトに送る（1枚しかなければその1枚）。",
-        "ko": "【발동 조건】이 카드는 플레이할 수 없다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 자신의 리프트로 보내졌을 때만 발동한다. 상대 필드의 카드 2장을 선택해 상대의 리프트로 보낸다(1장만 있으면 그 1장).",
-        "en": "【Play Requirement】This card cannot be played.\n\n【Card Added to Your Rift】Activate only when another card’s effect sends this card to your Rift. Choose 2 cards on the opponent’s field and send them to their Rift; if only 1 exists, send that card."
+        "ja": "【発動条件】このカードはプレイできない。\n\n【自分のリフト追加時】他のカードの効果で自分のリフトに送られた場合のみ発動する。相手の墓地のカード1枚を選び、相手のリフトに送る。",
+        "ko": "【발동 조건】이 카드는 플레이할 수 없다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 자신의 리프트로 보내졌을 때만 발동한다. 상대 묘지의 카드 1장을 선택해 상대의 리프트로 보낸다.",
+        "en": "【Play Requirement】This card cannot be played.\n\n【Card Added to Your Rift】Activate only when another card’s effect sends this card to your Rift. Choose 1 card in the opponent’s graveyard and send it to their Rift."
       }
     }
   },

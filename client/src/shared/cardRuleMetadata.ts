@@ -4,6 +4,7 @@ export type RuleTerm = 'composition' | 'graveyard' | 'rift' | 'lasting' | 'count
 export interface CardRuleMetadata { terms?: RuleTerm[]; mentions?: string[]; grants?: string[]; }
 export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   RIFT_MATTER: {terms:['rift']},
+  RIFT_METALIGHT: {terms:['graveyard','rift']},
   GOBLIN_SETTLEMENT: {terms:['lasting']},
   RELIC_BOUNTY: {terms:['graveyard']},
   GOBLIN_KING: {terms:['graveyard','rift','lasting']},

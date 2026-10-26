@@ -1,0 +1,22 @@
+{
+  "origin": "http://127.0.0.1:5318",
+  "evidence": "local fixture, production renderer/controller, no authenticated online match",
+  "checks": [
+    "Both ore images decode",
+    "Full rules rendered through production card renderer",
+    "Production controller and actual picker click move only the selected opponent graveyard card"
+  ],
+  "assets": [
+    {
+      "id": "RIFT_MATTER",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "id": "RIFT_METALIGHT",
+      "width": 1472,
+      "height": 1344
+    }
+  ],
+  "errors": []
+}

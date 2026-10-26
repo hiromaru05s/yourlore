@@ -1,0 +1,44 @@
+[
+  {
+    "path": "client/public/art/cards/RIFT_MATTER.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 638458,
+    "sha256": "aea708fab2bf46b37cdefb63c5848aba96710357e02cfc92384d100cb2d4b326"
+  },
+  {
+    "path": "client/public/art/cards-sm/RIFT_MATTER.webp",
+    "width": 384,
+    "height": 351,
+    "bytes": 38892,
+    "sha256": "6d03e04bfe9fb946ad306059ebf3d4b527b54c97e6e204ecf3a256772176af9f"
+  },
+  {
+    "path": "client/public/art/cards-xs/RIFT_MATTER.webp",
+    "width": 192,
+    "height": 175,
+    "bytes": 10636,
+    "sha256": "6cc0bc3a55d7c21910e3a27934339e18f5a73e8bf70a859b632e0a7302539e96"
+  },
+  {
+    "path": "client/public/art/cards/RIFT_METALIGHT.webp",
+    "width": 1472,
+    "height": 1344,
+    "bytes": 609682,
+    "sha256": "fdd119edafa3c1e1632375c0472615124c76140ff6ad2f74a45ba52bc52f9866"
+  },
+  {
+    "path": "client/public/art/cards-sm/RIFT_METALIGHT.webp",
+    "width": 384,
+    "height": 351,
+    "bytes": 35086,
+    "sha256": "accbef94e5c82b6949957248d59a1f7b4959922b88c860b721049ffcc02fb87e"
+  },
+  {
+    "path": "client/public/art/cards-xs/RIFT_METALIGHT.webp",
+    "width": 192,
+    "height": 175,
+    "bytes": 9680,
+    "sha256": "33c4f731a5a464095cdecdce46cb35dcd363b5b6e26fae7710949e3345edbe30"
+  }
+]
