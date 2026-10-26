@@ -27,7 +27,7 @@
   --lore-button-text:#d8e5f3;
   background:transparent!important;
   border:1px solid transparent!important;
-  border-image:var(--lore-button-art) 10 fill / 10px / 0 stretch!important;
+  border-image:var(--lore-button-art) 14 fill / 14px / 0 stretch!important;
   border-radius:0!important;
   box-shadow:none!important;
   text-shadow:none!important;
