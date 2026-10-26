@@ -15,7 +15,7 @@ The user selected revision II, variant 01, requested a simpler LORE card face, r
 - Client/server typecheck and production build passed.
 - Readiness regression checks: image retries, shared transfers, cancellation, hidden lazy images, first HOME atmosphere frame, original companion styles restored on cancel.
 - New lifecycle test: completion, abort, pre-abort, reduced motion and preference change; cleanup of RAF/stage and preservation of HOME renderer transforms.
-- Actual production `coverScreen` / `playHomeEntrance` on actual HOME components with synthetic API responses: 1280 × 720 and 390 × 844 browser layouts, repeated completion, mid-entrance cancellation, seven-card fan, cleanup and menu/Zeno visibility. Screenshots are in `qa/`. These are browser fixtures, not authenticated production accounts or physical-device tests.
+- Actual production `coverScreen` / `playHomeEntrance` on actual HOME components with synthetic API responses: 1280 × 720, 390 × 844 and 844 × 390 browser layouts, repeated completion, mid-entrance cancellation, seven-card fan, cleanup and menu/Zeno visibility. Screenshots are in `qa/`. These are browser fixtures, not authenticated production accounts or physical-device tests.
 - Local fixture: `/loading-azure.html`, mobile wrapper `/loading-azure-mobile.html`. Not part of production Vite entry points. All `/api/` calls in the fixture are synthetic.
 
 ## Release
@@ -23,3 +23,7 @@ The user selected revision II, variant 01, requested a simpler LORE card face, r
 Production is deployed only through `scripts/deploy-guard.mjs production`: common deployment lock, current-main/source ancestry checks, clean committed snapshot, typecheck, full production suite, build, final main/version recheck.
 
 Deployment result and served-asset verification are recorded separately after release.
+
+The initial guarded run exposed absolute public-art URLs in three Node-only UI test bundles. Those bundles now treat `/art/*` as external static-server resources; assertions are unchanged. The 1,143-inspection card-effect UI test also receives the same 300-second host-load allowance as the existing card-reference test. All three corrected tests passed individually before rerunning the complete deployment guard.
+
+Integration with the concurrently approved HOME duel frame adds external SVG `<image>` artwork to the existing readiness gate. This prevents the new frame/pigment from appearing only after HOME is admitted on a slow connection; local fragment references are excluded. The readiness regression test covers this alongside HTML images and CSS backgrounds.
