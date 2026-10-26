@@ -12,7 +12,7 @@ const user={id:'gacha-entry-qa',email:'qa@example.invalid',display:'シーカー
 await page.addInitScript(()=>localStorage.setItem('lore_lang','ja'));
 page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
 await apiFixture(page,async req=>{const p=new URL(req.url).pathname;
- if(p==='/api/auth/me')return {user};if(p==='/api/geo')return {country:'JP'};if(p==='/api/rank/me')return {rating:null};if(p==='/api/rewards/tutorial')return {keys:['tuto:1','tuto:10'],credits:user.credits,offered:true};
+ if(p==='/api/gifts')return {items:[],unreadCount:0,pendingCount:0,pendingAmount:0};if(p==='/api/rewards/progression')return {credits:user.credits,resetsAt:Date.now()+86400000,daily:{quest:{kind:'starterWin',card:'STARTER_CHEST',reward:500,target:3},progress:1,claimed:false},bot:{},online:0,ranked:0};if(p==='/api/auth/me')return {user};if(p==='/api/geo')return {country:'JP'};if(p==='/api/rank/me')return {rating:null};if(p==='/api/rewards/tutorial')return {keys:['tuto:1','tuto:10'],credits:user.credits,offered:true};
  if(p==='/api/social/profile'){await (baseline?new Promise(r=>setTimeout(r,3500)):profileGate);return {profile:{...user,created_at:0,self:true,sleeves:['default'],furnitures:[]}};}
  if(p==='/api/collection')return {credits:user.credits,starterCards:{},cosmetics:[],effects:[]};
  if(p==='/api/collection/draw'){calls++;await new Promise(r=>setTimeout(r,250));return {credits:2300,starterCards:{},cosmetics:[],effects:[],receipt:{kind:'draw',cost:100,refund:0,rewards:[{id:'STARTER_CHEST',owned:1,refund:0}],requestId:req.body.requestId,createdAt:Date.now()}};}
@@ -27,8 +27,8 @@ try{
  const drawStart=Date.now();await page.locator('[data-pull="1"]').click();await page.waitForSelector('.gacha-cinematic[data-phase="animation"]');const loadMs=Date.now()-drawStart;
  releaseProfile();await page.waitForTimeout(300);assert.equal(await page.locator('.gacha-cinematic').count(),1,'Late profile must not tear down the draw');
  await page.waitForTimeout(1000);await page.screenshot({path:out+'/intro.png'});
- await page.waitForSelector('.gacha-cinematic[data-phase="result"]');await page.waitForSelector('.reward-stage[data-ready="true"]');await page.screenshot({path:out+'/result.png'});
- await page.keyboard.press('Escape');await page.locator('.gacha-dialog [data-close]').first().click();assert.equal(calls,1);
+ await page.waitForSelector('.reward-gallery');await page.screenshot({path:out+'/result.png'});
+ await page.locator('.gacha-dialog [data-close]').first().click();assert.equal(calls,1);
  const obsolete=requests.filter(u=>/avatar-(red|blue).*\.png|\/models\/reading-board\/v1\/(deck-place|shelf)\.glb/.test(u));if(!baseline)assert.deepEqual(obsolete,[]);
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({origin,baseline,entryMs,loadMs,checks,calls,obsolete,errors},null,2));console.log(JSON.stringify({entryMs,loadMs,obsolete,checks,calls,errors}));
 }finally{releaseProfile();await context.close();await browser.close();}
