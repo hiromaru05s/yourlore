@@ -1,0 +1,151 @@
+/* Approved 02 「隅のしるし」, 2026-10-26.
+ * Nine-slice SVG retains 7px chamfers and 1px corner brackets at every size.
+ * No pseudo-elements, wrappers, or positioning overrides: existing icons,
+ * absolute close buttons, text, click targets and layout retain their behavior.
+ */
+:root {
+  --lore-button-secondary:url('/art/ui/buttons/secondary.svg');
+  --lore-button-primary:url('/art/ui/buttons/primary.svg');
+  --lore-button-danger:url('/art/ui/buttons/danger.svg');
+  --lore-button-selected:url('/art/ui/buttons/selected.svg');
+  --lore-button-disabled:url('/art/ui/buttons/disabled.svg');
+}
+
+:root body :where(
+  .btn, .lore-button,
+  .lounge-content button, .overlay button, dialog button,
+  .preview-modal button, .zoom-wrap button, .card-reference-preview button,
+  .welcome-sheet button, .academy-coach button, .tutorial-goal button,
+  .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
+  .duel-spirit-panel button, .gacha-cinematic-result button
+):not(:where(
+  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
+  .home-daily-reward, .lounge-play-button, .lounge-active-deck
+)) {
+  --lore-button-art:var(--lore-button-secondary);
+  --lore-button-text:#d8e5f3;
+  background:transparent!important;
+  border:1px solid transparent!important;
+  border-image:var(--lore-button-art) 10 fill / 10px / 0 stretch!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+  color:var(--lore-button-text)!important;
+  clip-path:none!important;
+}
+/* Existing semantic action classes and purpose-built primary controls. */
+:root body :is(
+  .btn-primary, .btn-gold, .lore-button-primary,
+  .deck-confirm, .challenge-start, .gacha-draw, .academy-lesson-start,
+  .tutorial-primary, .gift-inbox [data-claim], .gift-inbox [data-all],
+  .graphics-notice [data-continue]
+) {
+  --lore-button-art:var(--lore-button-primary);
+  --lore-button-text:#f0f7ff;
+}
+:root body :is(.btn-danger,.lore-button-danger) {
+  --lore-button-art:var(--lore-button-danger);
+  --lore-button-text:#e2beca;
+}
+/* Quiet exit/navigation controls, matching the preview's undecorated Back/X. */
+:root body :is(
+  .lore-button-quiet, .challenge-back, .inspect-close,
+  dialog header [data-close], .gift-heading [data-close],
+  .tutorial-basics [data-exit], .tutorial-icon-button
+) {
+  --lore-button-art:none;
+  --lore-button-text:#aebfd2;
+}
+/* Each screen already supplies its selected-state class/ARIA attribute. */
+
+:root body :where(
+  .btn, .lore-button,
+  .lounge-content button, .overlay button, dialog button,
+  .preview-modal button, .zoom-wrap button, .card-reference-preview button,
+  .welcome-sheet button, .academy-coach button, .tutorial-goal button,
+  .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
+  .duel-spirit-panel button, .gacha-cinematic-result button
+):not(:where(
+  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
+  .home-daily-reward, .lounge-play-button, .lounge-active-deck
+)):is([aria-pressed=true],[aria-selected=true],.on,.is-on,.is-active,.active,.selected) {
+  --lore-button-art:var(--lore-button-selected);
+  --lore-button-text:#eff8ff;
+  text-decoration:underline!important;
+  text-decoration-color:#bad8ec!important;
+  text-underline-offset:5px;
+}
+
+:root body :where(
+  .btn, .lore-button,
+  .lounge-content button, .overlay button, dialog button,
+  .preview-modal button, .zoom-wrap button, .card-reference-preview button,
+  .welcome-sheet button, .academy-coach button, .tutorial-goal button,
+  .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
+  .duel-spirit-panel button, .gacha-cinematic-result button
+):not(:where(
+  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
+  .home-daily-reward, .lounge-play-button, .lounge-active-deck
+)):hover:not(:disabled):not([aria-disabled=true]) {
+  filter:brightness(1.13)!important;
+}
+
+:root body :where(
+  .btn, .lore-button,
+  .lounge-content button, .overlay button, dialog button,
+  .preview-modal button, .zoom-wrap button, .card-reference-preview button,
+  .welcome-sheet button, .academy-coach button, .tutorial-goal button,
+  .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
+  .duel-spirit-panel button, .gacha-cinematic-result button
+):not(:where(
+  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
+  .home-daily-reward, .lounge-play-button, .lounge-active-deck
+)):active:not(:disabled):not([aria-disabled=true]) {
+  filter:brightness(.86)!important;
+}
+
+:root body :where(
+  .btn, .lore-button,
+  .lounge-content button, .overlay button, dialog button,
+  .preview-modal button, .zoom-wrap button, .card-reference-preview button,
+  .welcome-sheet button, .academy-coach button, .tutorial-goal button,
+  .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
+  .duel-spirit-panel button, .gacha-cinematic-result button
+):not(:where(
+  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
+  .home-daily-reward, .lounge-play-button, .lounge-active-deck
+)):focus-visible {
+  outline:2px solid #cbe5ff!important;
+  outline-offset:3px!important;
+}
+
+:root body :where(
+  .btn, .lore-button,
+  .lounge-content button, .overlay button, dialog button,
+  .preview-modal button, .zoom-wrap button, .card-reference-preview button,
+  .welcome-sheet button, .academy-coach button, .tutorial-goal button,
+  .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
+  .duel-spirit-panel button, .gacha-cinematic-result button
+):not(:where(
+  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
+  .home-daily-reward, .lounge-play-button, .lounge-active-deck
+)):is(:disabled,[aria-disabled=true]) {
+  --lore-button-art:var(--lore-button-disabled)!important;
+  --lore-button-text:#8190a4!important;
+  opacity:.6!important;
+  filter:none!important;
+  cursor:not-allowed!important;
+}
+/* Remove legacy tab separators; each tab now has its own corner marks. */
+:root body .lounge-mode-tabs button+button::before {content:none!important;}
+/* Close controls remain icon-sized; text links need room around corner marks. */
+:root body :is(.gacha-links button,.cards-filter-heading button) {padding-inline:12px;}
+:root body :is(.deck-confirm,.challenge-start)::after {content:none!important;}
+/* Former underline-only tabs need text clearance for their new corner marks. */
+:root body :is(.pf-tab,.shop-categories button,.gift-tabs button) {padding-inline:10px!important;}

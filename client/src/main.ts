@@ -27,6 +27,7 @@ import { initSound, sfx } from "./ui/sound";
 import { initCardTilt } from "./ui/tilt";
 import "./styles/popupSilver.css";
 import "./styles/defaultUI.css";
+import "./styles/defaultButtons.css";
 
 /** Capture acquisition params (invite ref + UTM) before any navigation strips them. */
 function captureAcquisition(): void {

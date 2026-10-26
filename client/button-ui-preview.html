@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LORE — ボタンデザイン</title>
+<link rel="stylesheet" href="/src/styles/fonts.css"><link rel="stylesheet" href="/src/styles/defaultUI.css"><link rel="stylesheet" href="/src/dev/buttonPreview.css"></head>
+<body data-style="2">
+<main>
+<header class="masthead"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"><div><p class="eyebrow">INTERFACE STUDY / 02</p><h1>LOREのボタン</h1><p class="intro">蒼銀のフレームに合わせる、ボタンのかたち。</p></div><span class="preview-label">BUTTON PREVIEW</span></header>
+<nav class="variants" aria-label="ボタンデザインの比較">
+<button data-style="1" aria-pressed="false"><small>01</small><span>銀縁</span><em>面と細い輪郭</em></button>
+<button data-style="2" aria-pressed="true"><small>02</small><span>隅のしるし<span class="recommend">採用</span></span><em>輪郭を減らして軽く</em></button>
+<button data-style="3" aria-pressed="false"><small>03</small><span>小さな刻印</span><em>決定だけに菱形</em></button>
+</nav>
+<div class="workspace">
+<section class="lore-surface confirmation"><div class="section-heading"><span class="eyebrow">01 / CONFIRMATION</span><button class="lore-button icon quiet" aria-label="閉じる" data-feedback="閉じるボタンを選びました"><span>×</span></button></div>
+<div class="dialog-content"><span class="tiny-sigil" aria-hidden="true">◇</span><h2>このデッキを使用しますか？</h2><p>次のデュエルから、このデッキを使用します。</p><div class="deck-summary"><span class="deck-glyph" aria-hidden="true">◈</span><div><strong>星を読む者</strong><small>スターターデッキ · 8 / 8</small></div><span class="deck-status">準備完了</span></div></div>
+<div class="decision"><button class="lore-button secondary" data-feedback="NO — キャンセルしました"><span>NO</span><small>キャンセル</small></button><button class="lore-button primary" data-feedback="YES — デッキを選択しました"><span>YES</span><small>このデッキを使う</small></button></div>
+</section>
+<section class="lore-surface controls"><div class="section-heading"><span class="eyebrow">02 / EVERYDAY ACTIONS</span><span class="subtle">通常の操作</span></div>
+<div class="button-group"><div class="group-label"><strong>主要ボタン</strong><small>その画面で一番進めたい操作</small></div><div class="button-row"><button class="lore-button primary" data-feedback="デッキを保存しました"><span>デッキを保存</span></button><button class="lore-button primary" data-feedback="チュートリアルを開始します"><span>はじめる <b aria-hidden="true">›</b></span></button></div></div>
+<div class="button-group"><div class="group-label"><strong>通常ボタン</strong><small>一覧・詳細・編集へ</small></div><div class="button-row"><button class="lore-button secondary" data-feedback="カード一覧を選びました"><span>カード一覧</span></button><button class="lore-button secondary" data-feedback="編集を選びました"><span>編集する</span></button><button class="lore-button icon secondary" aria-label="次へ" data-feedback="次のページを選びました"><span>›</span></button></div></div>
+<div class="button-group last"><div class="group-label"><strong>戻る・削除</strong><small>戻る操作は静かに、削除はくすんだ赤で</small></div><div class="button-row"><button class="lore-button quiet" data-feedback="前の画面に戻りました"><span>‹　戻る</span></button><button class="lore-button danger" data-feedback="削除の確認を選びました"><span>デッキを削除</span></button></div></div>
+</section>
+</div>
+<section class="lore-surface states"><div class="section-heading"><span class="eyebrow">03 / INTERACTION</span><span class="subtle">マウスを重ねる・押す・Tabで移動</span></div><div class="state-grid">
+<div><small>通常</small><button class="lore-button primary" data-feedback="通常ボタンを押しました"><span>保存する</span></button></div>
+<div><small>ホバー</small><button class="lore-button primary demo-hover" data-feedback="ホバー状態を選びました"><span>保存する</span></button></div>
+<div><small>押している間</small><button class="lore-button primary demo-active" data-feedback="押下状態を選びました"><span>保存する</span></button></div>
+<div><small>選択中</small><button class="lore-button secondary" aria-pressed="true" data-toggle><span>✓　選択中</span></button></div>
+<div><small>無効</small><button class="lore-button primary" disabled><span>保存する</span></button></div>
+</div></section>
+<footer><span id="design-note">02 隅のしるし — 輪郭を省き、対角の短い線でボタンを示す。</span><span class="feedback" role="status" aria-live="polite">ボタンをクリックして試せます</span></footer>
+</main><script type="module" src="/src/dev/buttonPreview.ts"></script></body></html>
