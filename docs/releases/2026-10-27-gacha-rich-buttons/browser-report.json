@@ -1,0 +1,62 @@
+{
+  "origin": "http://127.0.0.1:5548",
+  "calls": 5,
+  "counts": [
+    10,
+    10,
+    10,
+    1,
+    1
+  ],
+  "geometries": [
+    {
+      "width": 1158,
+      "height": 900,
+      "scroll": 1158,
+      "bottom": 815.890625,
+      "footer": 814.890625,
+      "viewport": 900
+    },
+    {
+      "width": 1158,
+      "height": 720,
+      "scroll": 1158,
+      "bottom": 693.484375,
+      "footer": 692.484375,
+      "viewport": 720
+    },
+    {
+      "width": 369,
+      "height": 844,
+      "scroll": 369,
+      "bottom": 818.671875,
+      "footer": 817.671875,
+      "viewport": 844
+    },
+    {
+      "width": 302,
+      "height": 740,
+      "scroll": 302,
+      "bottom": 717.796875,
+      "footer": 716.796875,
+      "viewport": 740
+    },
+    {
+      "width": 800,
+      "height": 390,
+      "scroll": 800,
+      "bottom": 378.296875,
+      "footer": 377.296875,
+      "viewport": 390
+    }
+  ],
+  "stablePendingLayout": true,
+  "readOnlyResults": true,
+  "confirmNoAndEscape": true,
+  "doubleYesSinglePurchase": true,
+  "singleAndTen": true,
+  "insufficientBalance": true,
+  "balanceBeforeAndAfter": true,
+  "successNoticeRemoved": true,
+  "errors": []
+}

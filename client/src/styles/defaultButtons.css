@@ -19,7 +19,7 @@
   .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
   .duel-spirit-panel button, .gacha-cinematic-result button
 ):not(:where(
-  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
   .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
@@ -68,7 +68,7 @@
   .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
   .duel-spirit-panel button, .gacha-cinematic-result button
 ):not(:where(
-  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
   .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
@@ -88,7 +88,7 @@
   .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
   .duel-spirit-panel button, .gacha-cinematic-result button
 ):not(:where(
-  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
   .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
@@ -104,7 +104,7 @@
   .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
   .duel-spirit-panel button, .gacha-cinematic-result button
 ):not(:where(
-  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
   .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
@@ -120,7 +120,7 @@
   .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
   .duel-spirit-panel button, .gacha-cinematic-result button
 ):not(:where(
-  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
   .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
@@ -137,7 +137,7 @@
   .tutorial-tool-buttons button, .tutorial-game-button, .tutorial-icon-button,
   .duel-spirit-panel button, .gacha-cinematic-result button
 ):not(:where(
-  .card, .starter-shop-face, .gacha-artwork, .reward-tile, .deck-cosmetic,
+  .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
   .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger

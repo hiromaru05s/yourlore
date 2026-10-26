@@ -43,7 +43,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant} = {})
     try{
       const result=await purchaseCollection(uid,op);credits=result.credits;starterCards=result.starterCards;dailyShop=result.dailyShop;
       if(app.user?.id===uid){app.user.credits=credits;app.user.starterCards=starterCards;app.user.effects=result.effects;document.dispatchEvent(new Event('lore:user'));}
-      notice=loungeText('購入が完了しました。','Purchase complete.','구매가 완료되었습니다.');
+      notice=op.kind==='draw'?'':loungeText('購入が完了しました。','Purchase complete.','구매가 완료되었습니다.');
       return result;
     }catch(error){notice=(error as Error).message;void refreshCollection();throw error;}
     finally{collectionBusy=false;if(!dead)refreshCollectionUi();}
