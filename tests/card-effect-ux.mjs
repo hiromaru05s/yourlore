@@ -38,8 +38,9 @@ try {
    E.closeZoom();rendered++;
   }
   const received=mon('M4',{decayCnt:2});
-  const face=E.cardEl(received,{fullArt:true});assert(face.querySelector('[data-status="decay"]'));assert(!face.querySelector('.passive-icon[data-psv="decay"]'));
-  const source=E.cardEl(mon('RUST_SHROOM',{decayCnt:2}),{fullArt:true});assert(source.querySelector('.passive-icon[data-psv="decay"]'));assert(source.querySelector('[data-status="decay"]'));
+  assert(!E.cardEl(received,{fullArt:true}).querySelector('[data-status="decay"]'),'off-field faces do not show live counters');
+  const face=E.cardEl(received,{fullArt:true,field:true});assert(face.querySelector('[data-status="decay"]'));assert(!face.querySelector('.passive-icon[data-psv="decay"]'));
+  const source=E.cardEl(mon('RUST_SHROOM',{decayCnt:2}),{fullArt:true,field:true});assert(source.querySelector('.passive-icon[data-psv="decay"]'));assert(source.querySelector('[data-status="decay"]'));
   E.zoomCard(mon('M4',{passivesG:['evade'],decayCnt:2}),{now:1,max:2});
   assert(document.querySelector('button[data-psv="evade"]'));assert(document.querySelector('.inspect-current-state').textContent.includes('2/3'));
   assert(document.querySelector('.inspect-current-state').textContent.includes('1 / 2'));

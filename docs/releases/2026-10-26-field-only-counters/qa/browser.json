@@ -1,0 +1,8 @@
+{
+  "checks": [
+    "Both eggs: fixed market, supply and hand have no counters; both player fields retain live hatch and durability",
+    "Same hand egg gains hatch/durability only when rendered in the field"
+  ],
+  "errors": [],
+  "scope": "Real GameView local snapshot verification. Hand-to-field patch is a fixture transition; no authenticated online match."
+}
