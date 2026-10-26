@@ -1,0 +1,38 @@
+/* The viewer's standing uses the full side column, rather than a compact row. */
+.selected-menu.lounge-leaderboard .lb-me {
+  display:flex;flex-direction:column;align-items:center;gap:0;
+  padding:24px 0 28px 24px;text-align:center;min-width:0;
+}
+.selected-menu.lounge-leaderboard .lb-me:empty {display:none}
+.selected-menu.lounge-leaderboard .lb-me>.lb-me-heading {align-items:center;gap:8px}
+.selected-menu.lounge-leaderboard .lb-me-heading>small {font-size:13px;letter-spacing:.12em}
+.selected-menu.lounge-leaderboard .lb-me-heading>strong {font:72px/1.1 Georgia,serif;letter-spacing:-.045em;color:#f0f6fc}
+.selected-menu.lounge-leaderboard .lb-me>.rank-emblem {width:184px;height:184px;margin:2px 0 4px}
+.selected-menu.lounge-leaderboard .lb-me>.lb-me-rating {align-items:center;gap:8px}
+.selected-menu.lounge-leaderboard .lb-me .lb-me-tier {font-size:18px;letter-spacing:.06em;color:#d8e7f2}
+.selected-menu.lounge-leaderboard .lb-me-score {display:flex;align-items:baseline;justify-content:center;gap:8px}
+.selected-menu.lounge-leaderboard .lb-me-score>b {font:42px/1.1 Georgia,serif;color:#edf5fc;font-variant-numeric:tabular-nums}
+.selected-menu.lounge-leaderboard .lb-me-score>span {font-size:12px;letter-spacing:.08em}
+.selected-menu.lounge-leaderboard .lb-me>.lb-me-record {display:flex;flex-direction:row;justify-content:center;gap:24px;margin-top:24px;padding-top:18px;width:100%;border-top:1px solid #c2d9e62c}
+.selected-menu.lounge-leaderboard .lb-me-record>span {display:flex;align-items:baseline;gap:7px}
+.selected-menu.lounge-leaderboard .lb-me-record b {font:26px/1.2 Georgia,serif;color:#d8e7f2}
+.selected-menu.lounge-leaderboard .lb-me-record small {font-size:12px}
+@media(max-width:850px) {
+  .selected-menu.lounge-leaderboard .lb-me {display:grid;grid-template-columns:124px minmax(0,1fr);gap:10px 20px;padding:8px 0 24px}
+  .selected-menu.lounge-leaderboard .lb-me>.rank-emblem {grid-column:1;grid-row:1/4;width:124px;height:148px;margin:0;justify-self:center}
+  .selected-menu.lounge-leaderboard .lb-me>.lb-me-heading {grid-column:2;grid-row:1;gap:4px}
+  .selected-menu.lounge-leaderboard .lb-me-heading>strong {font-size:52px}
+  .selected-menu.lounge-leaderboard .lb-me>.lb-me-rating {grid-column:2;grid-row:2;gap:4px}
+  .selected-menu.lounge-leaderboard .lb-me .lb-me-tier {font-size:15px}
+  .selected-menu.lounge-leaderboard .lb-me-score>b {font-size:34px}
+  .selected-menu.lounge-leaderboard .lb-me>.lb-me-record {grid-column:2;grid-row:3;margin:0;padding:8px 0 0;gap:24px}
+  .selected-menu.lounge-leaderboard .lb-me-record b {font-size:24px}
+}
+@media(max-width:480px) {
+  .selected-menu.lounge-leaderboard .lb-me {grid-template-columns:96px minmax(0,1fr);column-gap:12px}
+  .selected-menu.lounge-leaderboard .lb-me>.rank-emblem {width:112px;height:132px}
+  .selected-menu.lounge-leaderboard .lb-me-heading>strong {font-size:48px}
+  .selected-menu.lounge-leaderboard .lb-me-heading>small {font-size:12px;letter-spacing:.04em}
+  .selected-menu.lounge-leaderboard .lb-me-score>b {font-size:32px}
+  .selected-menu.lounge-leaderboard .lb-me>.lb-me-record {gap:18px}
+}

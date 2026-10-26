@@ -1,4 +1,5 @@
 import "../styles/rankedProfile.css";
+import "../styles/leaderboardStanding.css";
 import {showProfileModal} from "./profile";
 import {purchaseCards} from "../ui/purchaseCards";
 import { homeIcon } from "../ui/homeIcons";
@@ -63,7 +64,7 @@ export function mountLeaderboard(app: App): Screen {
       const me = await api.rankMe();
       if(destroyed)return;
       if (me?.rank != null) {
-        meEl.innerHTML = `${rankEmblem(me.tier)}<div><small>${t("lb.myrank")}</small><strong>#${me.rank}</strong><span>${tierLabel(me.tier)} · ${me.mmr} MMR</span><small>${me.wins}${t("home.win")} ${me.losses}${t("home.loss")}</small></div>`;
+        meEl.innerHTML = `<div class="lb-me-heading"><small>${t("lb.myrank")}</small><strong>#${me.rank}</strong></div>${rankEmblem(me.tier)}<div class="lb-me-rating"><span class="lb-me-tier">${tierLabel(me.tier)}</span><div class="lb-me-score"><b>${me.mmr}</b><span>MMR</span></div></div><div class="lb-me-record"><span><b>${me.wins}</b><small>${t("home.win")}</small></span><span><b>${me.losses}</b><small>${t("home.loss")}</small></span></div>`;
       }
     } catch {
       if(destroyed)return;
