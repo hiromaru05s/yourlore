@@ -22,6 +22,12 @@ Source baseline: `546846da` (`gh/main`). The production deployment inspected bef
 
 Preview served from `/Users/hiromaru05s/.codex/worktrees/single-loading-fix/LORE_TCG/client/dist` at `http://127.0.0.1:5186`. HOME reads `client/src/screens/home.ts`, current Zeno/background, and adopted `defaultUI.css`/`defaultButtons.css`; live board reads `screens/game.ts` and `ui/boardView.ts`. Screenshots were inspected against those current components.
 
-Production release and post-deploy checks are recorded separately after deployment.
-
 Integration: remote main advanced to `876ac24b` during validation. Merged it in `00cb03a2`, preserving its shared-engine/card changes; the integrated build passed. Browser validation explicitly pins the Japanese locale rather than relying on the asynchronous IP default.
+
+## Production release
+
+Released committed source `b2373586` to `yourlore.xyz` on 2026-10-26 (Worker version `01cc277d-d6d2-4333-97c4-e1c183202238`, 100% traffic). The guarded release passed client/server typecheck, 222/222 current production tests, build and source/version checks before deployment. The implementation remains in `client/src/screens/lazyGame.ts`, `client/src/ui/menuCache.ts`, `client/public/menu-cache-sw.js`, and the player-facing labels in `client/src/screens/home.ts` and related i18n/menu screens.
+
+In the existing signed-in Chrome session, a fresh reload showed シングル on HOME. Selecting Noel then starting a match advanced through the visible asset progress (14% to 98%), opened the authoritative game board and displayed three hand cards. This confirms that session and browser path; it does not reproduce the original device's exact failure.
+
+The post-deploy fixture run used `https://yourlore.xyz` as its origin and real production assets, with a guest API fixture. `production-browser-report.json` records desktop 20.0s, phone 21.6s, and an induced never-resolving `Cache.keys()` desktop case 67.9s. Each reached a ready board with three hand cards and no page errors; the stalled case selected `http-fallback`. `production-home-390.png` and `production-game-stalled-cache.png` record those production-asset visuals. The forced-cache case was not run in the authenticated account.
