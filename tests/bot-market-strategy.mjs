@@ -47,6 +47,19 @@ try {
  }
  const shield=fresh([]);shield.players[1].shield=12;shield.players[0].hand=[card('FLAME'),card('ARMOR_BREAK')];
  const cracked=C.greedyStep(shield);assert.equal(cracked.state.players[1].shield,3);
+ // Preserve the last 3 mana for an owned wall answer. Vary public UIDs too:
+ // they seed hidden-world samples and exposed a refresh-before-removal bug.
+ for(const difficulty of ['hard','hell'])for(const salt of [0,59,127,901]){
+  let n=salt;const fixture=id=>({...C.DB[id],uid:'staging-market-'+n++});
+  const wall=fresh([]);wall.turn=11;
+  for(const p of wall.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],traps:[],enchants:[],quests:[],supply:[],removed:[],exile:[],revealedCards:[],hp:40,mana:3,maxMana:8});
+  const body=id=>({...fixture(id),dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0,guts:C.hasPassive(C.DB[id],'guts')?1:0});
+  wall.players[1].field=[body('NWL3')];wall.players[0].field=[body('RUST_SHROOM'),body('RUST_SHROOM')];wall.players[0].hand=[fixture('S15')];
+  const a=C.botDecide(wall,difficulty);assert.deepEqual(a,{type:'play',idx:0},'use the owned Guardian answer before spending its casting mana');
+  const choice=C.reduce(wall,a).state;const resolved=C.reduce(choice,C.botDecide(choice,difficulty)).state;
+  assert(!resolved.players[1].field.some(c=>c.id==='NWL3'),'actually remove the Guardian');
+  assert.equal(resolved.players[0].field.length,2,'preserve the allied attackers');
+ }
  const sustain=fresh([]);sustain.players[0].hand=[card('NOURISHING_RAIN')];assert.equal(C.greedyStep(sustain).state.players[0].dew,1);
  // The engine, not the estimate, establishes that Dew persists and heals again.
  let cycle=fresh([]);cycle.players[0].deck=[];cycle.players[1].deck=[];cycle.players[0].dew=3;

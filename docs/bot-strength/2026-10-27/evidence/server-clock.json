@@ -13,7 +13,7 @@
       "reducerParity": true,
       "persisted": true,
       "alarmRearmed": true,
-      "ms": 2.924541999999988
+      "ms": 2.3372090000000014
     },
     {
       "tier": "hard",
@@ -22,10 +22,10 @@
       "thinking": "normal",
       "action": {
         "type": "buyMarket",
-        "i": 1
+        "i": 5
       },
       "reducerParity": true,
-      "ms": 221.23125
+      "ms": 104.728917
     },
     {
       "tier": "hell",
@@ -39,7 +39,7 @@
       "reducerParity": true,
       "persisted": true,
       "alarmRearmed": true,
-      "ms": 0.6392499999999472
+      "ms": 0.42849999999998545
     },
     {
       "tier": "hell",
@@ -48,10 +48,10 @@
       "thinking": "normal",
       "action": {
         "type": "buyMarket",
-        "i": 1
+        "i": 5
       },
       "reducerParity": true,
-      "ms": 236.77629100000001
+      "ms": 97.08829200000002
     }
   ]
 }
