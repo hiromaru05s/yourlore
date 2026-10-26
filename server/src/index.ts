@@ -23,11 +23,16 @@ export { Matchmaker, GameRoom };
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
+    const url = new URL(req.url);
+    const path = url.pathname;
+    // Block auth callbacks, new accounts and room upgrades before any database
+    // access while the operator retires old rooms and clears user records.
+    if(env.USER_DATA_RESET==='1'&&/^\/(api|ws)(\/|$)/.test(path)){
+      return Response.json({error:'maintenance',maintenance:true},{status:503,headers:{'Cache-Control':'no-store','Retry-After':'60'}});
+    }
     const guarded = await guardRequest(req,env);
     if (guarded instanceof Response) return guarded;
     req=guarded;
-    const url = new URL(req.url);
-    const path = url.pathname;
     const onAdminHost = url.hostname.startsWith("admin."); // isolated admin origin
 
     // Admin API is ONLY reachable on the admin origin. On the game origin it

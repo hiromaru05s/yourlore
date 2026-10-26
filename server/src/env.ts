@@ -2,6 +2,8 @@
 // LORE server — environment bindings (see wrangler.toml)
 // ============================================================
 export interface Env {
+  /** Operator-controlled write barrier for the authorized production reset. */
+  USER_DATA_RESET?: string;
   AUTH_RATE_LIMITER?: {limit(input:{key:string}):Promise<{success:boolean}>};
   INQUIRY_RATE_LIMITER?: {limit(input:{key:string}):Promise<{success:boolean}>};
   DB: D1Database;

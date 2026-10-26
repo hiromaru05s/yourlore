@@ -2,6 +2,7 @@
   "current": [
     "tests/db-schema-contract.mjs",
     "tests/staging-audit-fixtures.mjs",
+    "tests/user-data-reset.mjs",
     "tests/final-backend-audit.mjs",
     "tests/network-efficiency.mjs",
     "tests/startup-session.mjs",

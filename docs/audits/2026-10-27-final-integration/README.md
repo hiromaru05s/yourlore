@@ -69,3 +69,25 @@
 ## 残作業
 
 他チャットの採用済みmainを統合 → 全suite/型/ビルドを最終commitで検証 → ステージングの追加migration → 認証済みQAアカウントによるAPI/WS/購入/報酬/再接続検証と後片付け → 本番schema/version/ロック再照合 → guardで本番公開 → 静的配信・匿名境界・DB確認 → 監視停止。
+
+
+## 追加依頼：本番ユーザーデータ全消去（2026-10-27）
+
+ユーザーが「最後にユーザーデータを全てWIPE」「まっさらな状態」「本番にあげて」と明示。元の統合・監視・最終監査・公開の依頼に追加する。**本番の全アカウントを対象とし、過去のGoogleアカウント保持例外は適用しない。** 2026-10-26 17:50 UTC時点では準備のみで、ユーザーデータは未消去。
+
+- 対象は本番ゲームのusers、sessions、メール認証token、所持品、購入・報酬・EXP・tutorial・medal、rank、対戦履歴・保存deck、friend/challenge、presence、問い合わせ、gift、coupon使用記録、追加されるBOT進行データ。旧production Durable Object namespaceの対戦・alarm・queueも削除する。
+- カード／商品定義・アセット・DBスキーマ・coupon定義・運用設定は残す。coupon使用数は0へ戻す。古いwipe SQLの新規coupon作成処理を流用しない。
+- 新規のユーザーデータexportは作らず、監査記録にはtable別件数とrelease情報だけを残す。Cloudflare側の自動バックアップ保持まで消去したという報告はしない。
+- `USER_DATA_RESET=1`を設定したWorkerはDB/auth処理前に全API・WSを503/no-storeで停止する。通常時はDB照会を増やさない。`server/src/retiredUserData.ts`は旧DOのsocketを閉じalarm/storageを消去し、DBへの決済処理を持たない。いずれも今は本番で有効化していない。
+- `scripts/sql/production-user-wipe-20261027.sql`は現時点の全ユーザーテーブルを列挙。`tests/user-data-reset.mjs`がschemaと完全照合し、テーブル追加時に消去漏れを失敗にする。BOT変更をmerge後、必要なDELETEをFK順に追加する。
+
+### 最終本番リセットの実行順
+
+1. 他セッション完了・最新main統合・最終回帰・認証付きstaging QAを完了する。production用の追加索引を適用し、公開前schema検査を通す。以後も他チャットの新規稼働を確認する。
+2. **Phase A：新領域へ切替＋maintenance。** production bindingを`MatchmakerFresh20261027`/`GameRoomFresh20261027`へ変更、`v4-production-reset-20261027` migrationで2つのnew_sqlite_classesを追加する。production.tsは新クラスを元実装からre-exportし、旧`MatchmakerLive`/`GameRoomLive`はそれぞれ`RetiredUserData`を継承するクラスとして一時exportする。production varsに`USER_DATA_RESET = "1"`を設定する。stagingのbinding/vars/migrationsは変更しない。commit→gh/mainへpush→guardによる本番公開。各本番originのAPIが503 maintenanceになることを確認する。
+3. **Phase B：旧領域を完全削除。** production.tsから旧2クラスのexportを外し、root migrationに`tag = "v5-production-retire-20261027"` / `deleted_classes = ["MatchmakerLive", "GameRoomLive"]`を追加する。maintenanceは継続。commit/push/guardで公開する。旧bindingを外してから旧namespaceを削除する。[Cloudflare仕様](https://developers.cloudflare.com/durable-objects/reference/durable-object-class-migrations-legacy/)に沿った2段階。
+4. **DB消去。** `LORE_RESET_REPORT=docs/audits/2026-10-27-final-integration/production-reset.json node scripts/production-user-reset.mjs --execute-authorized-reset`を実行する。このscriptはshared production deploy lock、clean HEAD/current gh/main、deployed SHA/100% traffic、phase B設定、3originのmaintenance、実DBの未知table不在、全tableのSQL対象を確認してから実行する。消去後と5秒後の全件数0、coupon使用数0を確認する。事前確認だけなら同scriptのflagなしを使う。
+5. **Phase C：再開。** production varsのUSER_DATA_RESETを削除（または0）し、commit/push/guardで最終公開。新namespaceとv4/v5のmigration履歴は保持する。公開後は匿名実ブラウザ/API境界/静的asset・code/versionを確認する。消去後の本番にQAアカウントを残さない。再開後の正規の新規登録を再消去しない（空であることは再開直前の境界で保証する）。
+6. この追加依頼も含めて完了するまでheartbeatを停止しない。今回のwipe依頼に対する再確認は不要。旧namespaceが削除できない、未知のDB tableがある、maintenanceが確認できない場合はDB消去へ進まず原因を解決する。
+
+検証：`tests/user-data-reset.mjs`（maintenanceがDB/認証へ到達しない、旧DOのsocket/alarm/storage終了、FK順の消去、全table網羅、schema/coupon定義保持）が成功。既存BE監査・server型checkも実行。
