@@ -1,0 +1,18 @@
+{
+  "environment": "production",
+  "origin": "https://yourlore.xyz",
+  "commit": "1c72c550d17b23f945e23a94cbbdc399d9e078bf",
+  "version": "9753142a-c05e-46c6-ab04-1716e6b77f9a",
+  "deployedAt": "2026-10-26T04:51:33.537667Z",
+  "productionSuite": "211/211 passed",
+  "browserCases": 40,
+  "viewports": [
+    "1280x720",
+    "1440x900",
+    "320x568",
+    "390x844",
+    "844x390"
+  ],
+  "errors": [],
+  "scope": "Production static assets with API fixtures; no authenticated-account or physical-device claims."
+}
