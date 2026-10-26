@@ -595,9 +595,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Give each Soldier and Knight on your field that lacks Guts the Guts ability and 1 counter for Guts (lasting).\n\n【When You Summon a Monster】Apply the same effect to Soldiers and Knights you summon later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
   },
   "CULL_FLOOD": {
-    "ja": "【発動時】新しい「カル」4枚を自分の墓地に追加する。自分のデッキ・墓地からカードを合計3枚まで選んで自分のリフトへ送る。",
-    "ko": "【발동 시】새로운 컬 4장을 자신의 묘지에 추가한다. 자신의 덱·묘지에서 카드 합계 최대 3장을 선택해 자신의 리프트로 보낸다.",
-    "en": "【On Cast】Create 4 new Culls in your graveyard. Choose up to 3 cards total from your deck and graveyard and send them to your Rift."
+    "ja": "【発動時】新しい「カル」4枚を自分の墓地に追加する。",
+    "ko": "【발동 시】새로운 컬 4장을 자신의 묘지에 추가한다.",
+    "en": "【On Cast】Create 4 new Culls in your graveyard."
   },
   "PAIN_HARVEST": {
     "ja": "【相手がダメージを受けた時】相手プレイヤーがダメージを受けるたび、新しい「カル」2枚を自分のリフトに追加する。",
@@ -610,9 +610,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Create 1 new Cull in your hand."
   },
   "PURGE_ALL": {
-    "ja": "【発動時】自分のデッキ・墓地からカードを好きな枚数選び、自分のリフトへ送る（0枚でもよい）。",
-    "ko": "【발동 시】자신의 덱·묘지에서 원하는 수만큼 카드를 선택해 자신의 리프트로 보낸다(0장도 가능).",
-    "en": "【On Cast】Choose any number of cards from your deck and graveyard and send them to your Rift, including 0."
+    "ja": "【発動時】自分のデッキ・墓地・場・手札からカードを好きな枚数選び、自分のリフトへ送る（0枚でもよい）。",
+    "ko": "【발동 시】자신의 덱·묘지·필드·패에서 원하는 수의 카드를 선택해 자신의 리프트로 보낸다(0장도 가능).",
+    "en": "【On Cast】Choose any number of cards from your deck, graveyard, field and hand and send them to your Rift (you may choose 0)."
   },
   "EXILE_NUKE1": {
     "ja": "【発動時】自分のリフトにあるカード枚数×1ダメージを相手に与える。",
@@ -670,9 +670,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Card Rules】This monster is a Token. When destroyed, it goes to your Rift instead of your graveyard."
   },
   "FURNACE": {
-    "ja": "【自分のターン開始時】自分の墓地で購入コストが最も低いカード1枚を、自動で自分のリフトへ送る（同値なら墓地の先頭を優先）。",
-    "ko": "【자신의 턴 시작 시】자신의 묘지에서 구매 코스트가 가장 낮은 카드 1장을 자동으로 자신의 리프트로 보낸다(동률이면 묘지 앞쪽 우선).",
-    "en": "【At the Start of Your Turn】Automatically send 1 card with the lowest purchase cost in your graveyard to your Rift; ties use graveyard order."
+    "ja": "【場にある間】両プレイヤーは、シールドが合計7を超える分を得られない（既に持っているシールドは減らない）。",
+    "ko": "【필드에 있는 동안】양 플레이어는 실드 합계가 7을 넘는 만큼은 얻을 수 없다(이미 가진 실드는 줄어들지 않는다).",
+    "en": "【While on the Field】Neither player can gain Shield beyond a total of 7 (existing Shield is not reduced)."
   },
   "PURGE_TOUCH": {
     "ja": "【発動条件】自分の墓地にカードがある。\n\n【発動時】自分の烙印カウンターを全て取り除く。自分の墓地からカードを1枚まで選び、自分のリフトへ送る。送った場合、カードを1枚引く。",
@@ -680,9 +680,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】Your graveyard is not empty.\n\n【On Cast】Remove all your Brand counters. Choose up to 1 card in your graveyard and send it to your Rift. If you do, draw 1 card."
   },
   "SCRAPPER": {
-    "ja": "【発動条件】自分のデッキ・墓地に購入コスト1以下のカードが合計2枚以上ある。\n\n【発動時】そのうち2枚を自動で自分のリフトへ送る（墓地、デッキの順）。自分の最大マナ+1。",
-    "ko": "【발동 조건】자신의 덱·묘지에 구매 코스트 1 이하 카드가 합계 2장 이상.\n\n【발동 시】그중 2장을 자동으로 자신의 리프트로 보낸다(묘지, 덱 순서). 자신의 최대 마나 +1.",
-    "en": "【Play Requirement】Your deck and graveyard contain at least 2 cards of purchase cost 1 or less.\n\n【On Cast】Automatically send 2 of them to your Rift, taking from the graveyard before the deck. Your max mana +1."
+    "ja": "【発動条件】自分の手札に、このカード以外の購入コスト1のカードが2枚以上ある（リフトへ送れないカードを除く）。\n\n【発動時】そのうち2枚を選び、自分のリフトへ送る。2枚とも送った場合、自分の最大マナ+1。",
+    "ko": "【발동 조건】자신의 패에 이 카드 외에 구매 비용이 1인 카드가 2장 이상 있다(리프트로 보낼 수 없는 카드는 제외).\n\n【발동 시】그중 2장을 선택해 자신의 리프트로 보낸다. 2장 모두 보냈다면 자신의 최대 마나+1.",
+    "en": "【Play Requirement】Your hand contains at least 2 other cards with purchase cost exactly 1 that can be sent to the Rift.\n\n【On Cast】Choose 2 of those cards and send them to your Rift. If both are sent, gain 1 max mana."
   },
   "HORDE": {
     "ja": "【召喚時】自分の場の全ての「兵士」「騎士」の攻撃力+4（持続）。",
@@ -970,9 +970,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】Your Rift contains at least 25 Culls.\n\n【On Cast】You win the game immediately."
   },
   "TRIAL_AREA": {
-    "ja": "【発動時】自分に6ダメージを与える。\n\n【自分のターン開始時】新しい「カル」1枚を自分の墓地に追加する。その後、自分の墓地からカードを2枚まで選び、自分のリフトへ送る。",
-    "ko": "【발동 시】자신에게 6 데미지를 준다.\n\n【자신의 턴 시작 시】새로운 컬 1장을 자신의 묘지에 추가한다. 그 후 자신의 묘지에서 카드를 2장까지 선택해 자신의 리프트로 보낸다.",
-    "en": "【On Cast】You take 6 damage.\n\n【At the Start of Your Turn】Create 1 new Cull in your graveyard. Then choose up to 2 cards from your graveyard and send them to your Rift."
+    "ja": "【発動時】自分に5ダメージを与える。\n\n【自分のターン開始時】新しい「カル」1枚を自分の墓地に追加する。",
+    "ko": "【발동 시】자신에게 5 데미지를 준다.\n\n【자신의 턴 시작 시】새로운 컬 1장을 자신의 묘지에 추가한다.",
+    "en": "【On Cast】You take 5 damage.\n\n【At the Start of Your Turn】Create 1 new Cull in your graveyard."
   },
   "ANCIENT_CIV": {
     "ja": "【自分のターン開始時】発動後、双方通算で9ターン以上経過していれば、次の全てを行う。\n自分の最大マナを1減らす。新しい「ドラゴンの卵」か「神獣の卵」1枚を選んで自分の手札に加える。この魔法を破壊する。",
@@ -1155,14 +1155,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When Dice Are Rolled】Whenever either player rolls 1 die, put 1 counter on this monster, except for Casino dice.\n\n【When Counters Accumulate】For every 12 counters, spend 12 to roll 1 Casino die — 1-2: You take 35 damage / 3-4: Deal 35 damage to the opponent / 5: Deal 50 damage to the opponent / 6: Remove all of the opponent's Shield and Dew, then set their HP to 1."
   },
   "REFRESH_HAND": {
-    "ja": "【発動時】カードを1枚引く。その後、自分の手札・墓地からカードを2枚まで選び、自分のリフトへ送る。",
-    "ko": "【발동 시】카드를 1장 뽑는다. 그 후 자신의 패·묘지에서 카드를 최대 2장 선택해 자신의 리프트로 보낸다.",
-    "en": "【On Cast】Draw 1 card. Then choose up to 2 cards from your hand and graveyard and send them to your Rift."
+    "ja": "【発動時】カードを1枚引く。引いたカードが魔法カードなら、自分の体力を2回復する。",
+    "ko": "【발동 시】카드를 1장 뽑는다. 뽑은 카드가 마법 카드라면 자신의 체력을 2 회복한다.",
+    "en": "【On Cast】Draw 1 card. If the drawn card is a spell, restore 2 of your HP."
   },
   "FOCUS": {
-    "ja": "【発動時】自分のデッキ・墓地・場からカードを合計3枚まで選び、自分のリフトへ送る。",
-    "ko": "【발동 시】자신의 덱·묘지·필드에서 카드를 합계 최대 3장 선택해 자신의 리프트로 보낸다.",
-    "en": "【On Cast】Choose up to 3 cards total from your deck, graveyard and field and send them to your Rift."
+    "ja": "【発動時】自分のデッキ・墓地・場からカードを1枚まで選び、自分のリフトへ送る。",
+    "ko": "【발동 시】자신의 덱·묘지·필드에서 카드를 1장까지 선택해 자신의 리프트로 보낸다.",
+    "en": "【On Cast】Choose up to 1 card from your deck, graveyard and field and send it to your Rift."
   },
   "GUILD_HQ": {
     "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターか「アサシンギルド支部」の攻撃で相手プレイヤーにダメージを与えるたび、相手に烙印カウンター1個を付与する。\n\n【自分のターン開始時】ナイトマーケットから「アサシン」系カード1枚を選び、マナを払って購入できる。",

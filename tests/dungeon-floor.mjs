@@ -25,7 +25,8 @@ try {
  assert.deepEqual(E.dungeonFloorSummons([dice,{...own,source:undefined},{...own,player:1},own,{type:'playSpell'},own],0),[own]);
  const dom=new JSDOM('<div id="portraitMe"><i class="pt-ring"></i></div><div id="portraitOpp"><i class="pt-ring"></i></div><div id="meRow"><div class="zone-mon"></div></div><div id="oppRow"><div class="zone-mon"></div></div>',{pretendToBeVisual:true});
  for(const k of ['window','document','HTMLElement','Event'])globalThis[k]=dom.window[k];
- globalThis.getComputedStyle=dom.window.getComputedStyle;globalThis.innerWidth=1440;globalThis.innerHeight=1040;
+ globalThis.getComputedStyle=dom.window.getComputedStyle.bind(dom.window);
+ globalThis.innerWidth=1440;globalThis.innerHeight=1040;
  HTMLElement.prototype.getBoundingClientRect=()=>({x:200,y:500,width:80,height:110});
  let frames=new Map(),id=0,clock=0,reduced=false,alloc=0,disposed=0,draws=[],failed=false;
  globalThis.matchMedia=()=>({matches:reduced});globalThis.requestAnimationFrame=f=>{frames.set(++id,f);return id;};globalThis.cancelAnimationFrame=i=>frames.delete(i);

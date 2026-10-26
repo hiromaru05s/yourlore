@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/cull-support-rework.mjs",
+    "tests/cull-support-server.mjs",
     "tests/background-music.mjs",
     "tests/goblin-expansion.mjs",
     "tests/goblin-expansion-server.mjs",

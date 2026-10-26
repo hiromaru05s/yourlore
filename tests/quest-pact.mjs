@@ -11,7 +11,7 @@ globalThis.DOMMatrix=Matrix;
 dom.window.HTMLCanvasElement.prototype.getContext=()=>({setTransform(){},clearRect(){}});
 Object.defineProperties(HTMLElement.prototype,{offsetWidth:{get:()=>100},offsetHeight:{get:()=>100}});HTMLElement.prototype.getBoundingClientRect=()=>({left:0,top:0,width:100,height:150});
 globalThis.__capture=()=>capture??Promise.resolve({face:document.createElement('canvas')});
-globalThis.__renderer=class{constructor(){allocated++;this.canvas=document.createElement('canvas');}resize(){}cardBounds(){return{width:.3,height:.6,cx:.5,cy:.5};}draw(_variant,ms){if(fail)throw Error('render failure');draws.push(ms);}dispose(){disposed++;}};
+globalThis.__renderer=class{constructor(){allocated++;this.canvas=document.createElement('canvas');this.renderer={setPixelRatio(value){assert.equal(value,1);}};}resize(){}cardBounds(){return{width:.3,height:.6,cx:.5,cy:.5};}draw(_variant,ms){if(fail)throw Error('render failure');draws.push(ms);}dispose(){disposed++;}};
 const dir=await mkdtemp(path.join(tmpdir(),'quest-pact-'));const flush=()=>new Promise(r=>setTimeout(r,0));const advance=ms=>{clock+=ms;for(const [key,f]of [...frames]){frames.delete(key);f(clock);}};
 const modules={
  '../shared/cards':'export const FRAME_BACK="";',

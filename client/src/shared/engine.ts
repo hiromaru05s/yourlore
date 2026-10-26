@@ -502,6 +502,9 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   for (const m of p.field) if (m.aura === 'doubleShieldOther' && m.uid !== source?.uid) monsterActivation(g, ctx.ev, p, m);
   amount *= 2 ** doubles;
   const before = p.shield ?? 0;
+  // Furnace limits gains after multipliers; it never destroys existing Shield.
+  if (g.players.some(pl => pl.enchants.some(e => e.card.ench === 'furnace'))) amount = Math.min(amount, Math.max(0, 7 - before));
+  if (amount <= 0) return;
   p.shield = before + amount;
   trackActivity(p, 'shield', amount);
   ctx.ev.push({type:"statusGrant",player:side(g,p),resource:"shield",before,after:p.shield});
@@ -1400,14 +1403,6 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         pl.hand.push(starter(g, "STARTER_TRASH"));
         ctx.log(`<span class="t">${cn(e.card)}</span> 패에 컬 1장 추가`, `<span class="t">${cn(e.card)}</span> 手札にカル1枚追加`);
       }
-      // 용광로: 자신의 턴 시작마다 묘지의 최저 코스트 카드 1장을 게임에서 제외 (자동 덱 압축)
-      if (e.card.ench === "furnace" && ownerTurn && !g.over && pl.discard.length > 0) {
-        let mi = 0;
-        for (let i = 1; i < pl.discard.length; i++) if (pl.discard[i].cost < pl.discard[mi].cost) mi = i;
-        const fc = pl.discard.splice(mi, 1)[0];
-        rmz(pl).push(fc);
-        ctx.log(`<span class="t">${cn(e.card)}</span> ${cn(fc)} 게임에서 제외`, `<span class="t">${cn(e.card)}</span> ${cn(fc)} をゲームから除外`);
-      }
       // 생명의 성소 / 세계수의 심장: 자신의 턴마다 체력 +val2 (회복 포함 → 생명의 순환과 시너지)
       if ((e.card.ench === "growHp" || e.card.ench === "growHpMana") && ownerTurn && !g.over) {
         const amt = e.card.val2 || 0;
@@ -1434,14 +1429,10 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         binEnch(g, ctx, pl, e.card);
         return false;
       }
-      // 시련의 영역: 자신의 턴 시작마다 묘지에 컬 1장 → 묘지에서 2장까지 게임에서 제외
+      // Trial Area adds one Cull each owner turn without an exile choice.
       if (e.card.ench === "trialArea" && ownerTurn && !g.over) {
         pl.discard.push(starter(g, "STARTER_TRASH"));
         ctx.log(`<span class="t">${cn(e.card)}</span> 묘지에 컬 1장 추가`, `<span class="t">${cn(e.card)}</span> 墓地にカル1枚追加`);
-        if (!g.pending && pl.discard.length > 0) {
-          g.pending = { kind: "purge", hint: "시련의 영역 — 묘지에서 게임에서 제외할 카드 선택 (2장까지)", hintJa: "試練の領域 — 墓地からゲームから除外するカードを選択 (2枚まで)", reason: "trialExile", allowCancel: true, data: { val: 2, zone: "discard" } };
-          ctx.ev.push({ type: "needTarget", pending: g.pending });
-        }
       }
       // 고대 문명: 발동 9턴 후 (자신의 턴에) 최대 마나 -1 → 알 선택 → 자괴
       if (e.card.ench === "ancientCiv" && ownerTurn && !g.over && g.turn >= (e.bornTurn ?? 0) + 9 && !g.pending) {
@@ -3913,18 +3904,17 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} 🎲 ${df[0]} → 미믹 ${dn}마리 소환`, `${tag(p, card)} 🎲 ${df[0]} → ミミック${dn}体召喚`);
       break;
     }
-    case "REFRESH_HAND": { // 리프레시(v35): 1드로우 → 패에서 2장까지 제외 (선택)
+    case "REFRESH_HAND": {
+      const before = new Set(p.hand.map(c => c.uid));
       const rn = ctx.drawN(p, 1);
+      const drawn = p.hand.find(c => !before.has(c.uid));
       ctx.log(`${tag(p, card)} ${rn}장 드로우`, `${tag(p, card)} ${rn}枚ドロー`);
-      if (p.hand.length || p.discard.length) {
-        g.pending = { kind: "purge", hint: "리프레시 — 패·묘지에서 게임에서 제외할 카드 선택 (2장까지)", hintJa: "リフレッシュ — 手札・墓地からゲームから除外するカードを選択 (2枚まで)", reason: "purge", allowCancel: true, data: { val: 2, zone: "handDiscard" } };
-        ctx.ev.push({ type: "needTarget", pending: g.pending });
-      }
+      if (rn > 0 && drawn?.t === 'spell' && !g.over) ctx.heal(p, 2);
       break;
     }
-    case "FOCUS": { // 선택과 집중(v35): 덱·묘지에서 3장까지 제외 (선택)
+    case "FOCUS": { // One optional exile from deck, graveyard or field.
       ctx.log(`${tag(p, card)} 발동`, `${tag(p, card)} 発動`);
-      g.pending = { kind: "purge", hint: "선택과 집중 — 게임에서 제외할 카드 선택 (3장까지)", hintJa: "選択と集中 — ゲームから除外するカードを選択 (3枚まで)", reason: "purge", allowCancel: true, data: { val: 3, zone: "deckDiscardField" } };
+      g.pending = { kind: "purge", hint: "선택과 집중 — 리프트로 보낼 카드 선택 (1장까지)", hintJa: "選択と集中 — リフトへ送るカードを選択 (1枚まで)", reason: "purge", allowCancel: true, data: { val: 1, zone: "deckDiscardField" } };
       ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
@@ -4063,16 +4053,14 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} 병사(2/2) 3체 소환`, `${tag(p, card)} 兵士(2/2)3体召喚`);
       break;
     }
-    case "CULL_FLOOD": { // 컬 세례: 묘지에 컬 4장 추가 → 3장 골라 제외
+    case "CULL_FLOOD": { // Create four Culls in the graveyard.
       for (let i2 = 0; i2 < 4; i2++) p.discard.push(starter(g, "STARTER_TRASH"));
       ctx.log(`${tag(p, card)} 묘지에 컬 4장 추가`, `${tag(p, card)} 墓地にカル4枚追加`);
-      g.pending = { kind: "purge", hint: "게임에서 제외할 카드 선택 (3장)", hintJa: "ゲームから除外するカードを選択 (3枚)", reason: "purge", allowCancel: true, data: { val: 3 } };
-      ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
     case "PURGE_ALL": { // 대숙청: 원하는 만큼 제외
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 발동`, `<span class="t">${p.name}</span> ${cn(card)} 発動`);
-      g.pending = { kind: "purge", hint: "게임에서 제외할 카드 선택 (원하는 만큼)", hintJa: "ゲームから除外するカードを選択 (何枚でも)", reason: "purge", allowCancel: true, data: { val: 99 } };
+      g.pending = { kind: "purge", hint: "게임에서 제외할 카드 선택 (원하는 만큼)", hintJa: "ゲームから除外するカードを選択 (何枚でも)", reason: "purge", allowCancel: true, data: { val: 99, zone: "allOwn" } };
       ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
@@ -4137,17 +4125,11 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`${tag(p, card)} ${isAtk ? "공격력" : "체력"} ${lim} 이하 몬스터 ${k}체 파괴`, `${tag(p, card)} ${isAtk ? "攻撃力" : "体力"}${lim}以下のモンスター${k}体を破壊`);
       break;
     }
-    case "SCRAPPER": { // 고철 수집상: 코스트 1 이하 2장 제외 → 최대 마나 +1
-      let removed = 0;
-      for (const pool of [p.discard, p.deck]) {
-        while (removed < 2) {
-          const i = pool.findIndex((c) => c.cost <= 1);
-          if (i < 0) break;
-          rmz(p).push(pool.splice(i, 1)[0]); removed++;
-        }
-      }
-      addMaxMana(p, 1);
-      ctx.log(`${tag(p, card)} 저코스트 카드 ${removed}장 제외 → 최대 마나 +1 (${p.maxMana})`, `${tag(p, card)} 低コストカード${removed}枚を除外 → 最大マナ +1 (${p.maxMana})`);
+    case "SCRAPPER": {
+      // A copied/replayed effect may no longer have two materials after the first cast.
+      if (p.hand.filter(c => c.uid !== card.uid && c.cost === 1 && !hasPassive(c, "relic")).length < 2) break;
+      g.pending = { kind: "purge", hint: "고철 수집상 — 패에서 구매 비용 1인 카드 2장을 리프트로 보낸다", hintJa: "スクラップ収集家 — 手札から購入コスト1のカード2枚をリフトへ送る", reason: "scrapper", allowCancel: false, data: { val: 2, zone: "hand", exclude: card.uid } };
+      ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
     case "LUCKY_CHEST": luckyChest(g, ctx, p, card); break; // 행운의 보물상자 복권
@@ -4628,10 +4610,9 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "SNIPE1") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => (owner===p || !hasPassive(m,'aura')) && curHp(owner,m) <= 3))) { return reason("  └ 체력 3 이하 몬스터가 없습니다", "  └ 体力3以下のモンスターがいません"); } }
   if (card.id === "SNIPE2") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => curHp(owner,m) <= 2))) { return reason("  └ 체력 2 이하 몬스터가 없습니다", "  └ 体力2以下のモンスターがいません"); } }
   if (card.id === "INQUISITION") { applicable=true; if (!o0.deck.some(c=>c.id==="HIDDEN") && ![...o0.deck, ...o0.discard, ...o0.field].some((m) => m.t === "mon" && m.tribe)) { return reason("  └ 상대에게 종족 몬스터가 없습니다", "  └ 相手に種族モンスターがいません"); } }
-  if (card.id === "PURGE_ALL") { applicable=true; if (p.deck.length + p.discard.length === 0) { return reason("  └ 덱과 묘지가 비어 있습니다", "  └ デッキと墓地が空です"); } }
   if (card.id === "GOLIATH_HUNT") { applicable=true; if (!o0.field.some((m) => curHp(o0, m) >= 10)) { return reason("  └ 체력 10 이상 적 몬스터가 없습니다", "  └ 体力10以上の敵モンスターがいません"); } }
   if (card.id === "MASSACRE") { applicable=true; if (o0.field.length === 0) { return reason("  └ 파괴할 적 몬스터가 없습니다", "  └ 破壊する敵モンスターがいません"); } }
-  if (card.id === "SCRAPPER") { applicable=true; if ([...p.deck, ...p.discard].filter((c) => c.cost <= 1).length < 2) { return reason("  └ 덱·묘지에 코스트 1 이하 카드가 2장 없습니다", "  └ デッキ・墓地にコスト1以下のカードが2枚ありません"); } }
+  if (card.id === "SCRAPPER") { applicable=true; if (p.hand.filter(c => c.uid !== card.uid && c.cost === 1 && !hasPassive(c, "relic")).length < 2) { return reason("  └ 패에 이 카드 외에 리프트로 보낼 수 있는 구매 비용 1 카드가 2장 필요합니다", "  └ 手札にこのカード以外の、リフトへ送れる購入コスト1のカードが2枚必要です"); } }
   return {applicable,blocked:null};
 }
 
@@ -4819,11 +4800,11 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
         ctx.log(`  └ 양 필드의 모든 몬스터 공격력 -2`, `  └ 両方の場の全モンスター攻撃力-2`);
       }
       // 운명의 수레바퀴 — v25: 시전 대가 없음 (최대 마나 -1 삭제, cost 4→5)
-      // 시련의 영역: 시전 대가 (자신 6뎀 — 마법 데미지로 취급)
+      // 시련의 영역: 시전 대가 (자신 5뎀 — 마법 데미지로 취급)
       if (card.ench === "trialArea") {
-        ctx.log(`  └ 대가: 자신에게 6 데미지`, `  └ 代価: 自分に6ダメージ`);
+        ctx.log(`  └ 대가: 자신에게 5 데미지`, `  └ 代価: 自分に5ダメージ`);
         spellDepth++;
-        try { ctx.dealDamage(p, 6, cn(card), cn(card)); } finally { spellDepth--; }
+        try { ctx.dealDamage(p, 5, cn(card), cn(card)); } finally { spellDepth--; }
       }
       return;
     }
@@ -4946,10 +4927,10 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
 export function purgeChoices(p: PlayerState, pending: NonNullable<GameState['pending']>): CardInst[] {
   const zone = pending.data?.zone;
   const cards = zone === 'hand' ? [...p.hand] : zone === 'discard' ? [...p.discard] : zone === 'handDiscard' ? [...p.hand, ...p.discard] : [
-    ...p.deck, ...p.discard,
-    ...(zone === 'deckDiscardField' ? [...p.field, ...p.enchants.map(e => e.card), ...p.traps.map(t => t.card), ...(p.quests ?? []).map(q => q.card)] : []),
+    ...p.deck, ...p.discard, ...(zone === 'allOwn' ? p.hand : []),
+    ...(zone === 'deckDiscardField' || zone === 'allOwn' ? [...p.field, ...p.enchants.map(e => e.card), ...p.traps.map(t => t.card), ...(p.quests ?? []).map(q => q.card)] : []),
   ];
-  return pending.reason === 'handCap' ? cards : cards.filter(c => !hasPassive(c, 'relic'));
+  return pending.reason === 'handCap' ? cards : cards.filter(c => !hasPassive(c, 'relic') && (pending.reason !== 'scrapper' || (c.cost === 1 && c.uid !== pending.data?.exclude)));
 }
 
 function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
@@ -5190,6 +5171,9 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (remaining > 0 && poolLeft > 0) {
         g.pending = { kind: "purge", hint: pending.hint, hintJa: pending.hintJa, reason: pending.reason, allowCancel: pending.allowCancel, data: { ...d, val: remaining } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
+      } else if (pending.reason === "scrapper" && remaining === 0) {
+        addMaxMana(p, 1);
+        ctx.log(`${p.name}: 최대 마나 +1 (${p.maxMana})`, `${p.name}: 最大マナ+1 (${p.maxMana})`);
       } else if (pending.reason === "trialExile") {
         offerChosenMage(g, ctx); // 시련 제외가 소진되면 같은 턴의 마법사 발동 기회 제공
       } else if (toDiscard) {

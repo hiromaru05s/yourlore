@@ -7,6 +7,9 @@
 
 const R: [RegExp, string][] = [
   // ---- full/long phrases first (order matters) ----
+  [/고철 수집상 — 패에서 구매 비용 1인 카드 2장을 리프트로 보낸다/g, "Scrap Collector — send 2 cards with purchase cost 1 from your hand to the Rift"],
+  [/선택과 집중 — 리프트로 보낼 카드 선택 \(1장까지\)/g, "Focus — choose up to 1 card to send to the Rift"],
+  [/패에 이 카드 외에 리프트로 보낼 수 있는 구매 비용 1 카드가 2장 필요합니다/g, "You need 2 other cards with purchase cost exactly 1 in hand that can be sent to the Rift"],
   [/리프트 물질 — 리프트로 보낼 상대 필드의 카드 2장을 선택/g, 'Rift Matter — choose 2 cards on the opponent’s field to send to their Rift'],
   [/리프트로 보낼 상대 필드의 두 번째 카드를 선택/g, 'Choose the second card on the opponent’s field to send to their Rift'],
   [/상대 필드 카드 2장을 리프트로 보낸다/g, 'send 2 cards on the opponent’s field to their Rift'],
@@ -105,7 +108,7 @@ const R: [RegExp, string][] = [
   [/ 을\(를\) 패에 넣는다/g, " added to hand"],
   [/ 은\(는\) 파괴된다/g, " is destroyed"],
   [/계약이 다했다 — 파괴된다/g, "the pact has run its course — destroyed"],
-  [/대가: 자신에게 6 데미지/g, "price: take 6 damage"],
+  [/대가: 자신에게 (\d+) 데미지/g, "price: take $1 damage"],
   [/자신에게 7 데미지, 최대 마나 -1/g, "take 7 damage, max mana -1"],
   [/자신 필드에 이미 '선견지명'이 있습니다/g, "you already have 'Foresight' on your field"],
   [/통하지 않음/g, "no effect"],

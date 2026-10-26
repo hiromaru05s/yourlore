@@ -813,7 +813,7 @@ const NEW_CARDS7: CardDef[] = [
     text: "영구: 상대가 데미지를 입을 때마다 자신의 패에 컬 1장을 얻는다 (시전 2)", textJa: "永続: 相手がダメージを受けるたび手札にカル1枚を得る (発動2)" },
   { id: "CULL_FARM", t: "spell", cost: 3, play: 2, ench: "cullTurn", val: 99, name: "컬 재배", nameJa: "カル栽培",
     text: "영구: 자신의 턴 시작마다 패에 컬 1장을 얻는다 (시전 2)", textJa: "永続: 自分のターン開始時に手札にカル1枚を得る (発動2)" },
-  { id: "PURGE_ALL", t: "spell", cost: 5, name: "대숙청", nameJa: "大粛清",
+  { id: "PURGE_ALL", t: "spell", cost: 4, name: "대숙청", nameJa: "大粛清",
     text: "자신의 덱·묘지에서 원하는 카드를 원하는 만큼 게임에서 제외한다", textJa: "自分のデッキ・墓地から好きなカードを好きなだけゲームから除外する" },
   { id: "EXILE_NUKE1", t: "spell", cost: 6, play: 10, name: "공허 사격", nameJa: "虚空射撃",
     text: "게임에서 제외된 자신의 카드 1장당 상대에게 2 데미지 (시전 10)", textJa: "ゲームから除外された自分のカード1枚につき相手に2ダメージ (発動10)" },
@@ -851,7 +851,7 @@ const NEW_CARDS6: CardDef[] = [
     text: "영구: 자신의 턴 시작마다 묘지에서 가장 코스트가 낮은 카드 1장을 게임에서 제외", textJa: "永続: 自分のターン開始時、墓地から最もコストの低いカード1枚をゲームから除外" },
   { id: "PURGE_TOUCH", t: "spell", cost: 2, play: 1, act: "exilePick", name: "정화의 손길", nameJa: "浄化の手",
     text: "묘지에서 카드 1장을 골라 게임에서 제외 + 1장 드로우 (시전 1)", textJa: "墓地からカード1枚を選びゲームから除外 + 1枚ドロー (発動1)" },
-  { id: "SCRAPPER", t: "spell", cost: 3, play: 2, name: "고철 수집상", nameJa: "スクラップ収集家",
+  { id: "SCRAPPER", t: "spell", cost: 1, play: 2, name: "고철 수집상", nameJa: "スクラップ収集家",
     text: "덱·묘지의 코스트 1 이하 카드 2장을 게임에서 제외 → 최대 마나 +1 (시전 2)", textJa: "デッキ・墓地のコスト1以下のカード2枚をゲームから除外 → 最大マナ+1 (発動2)" },
   { id: "HORDE", t: "mon", cost: 4, atk: 3, def: 3, onSummon: "hordeBuff", name: "군단의 기수", nameJa: "軍団の旗手",
     text: "소환시: 자신의 덱+묘지가 20장 이상이면 +3/+3", textJa: "召喚時: 自分のデッキ+墓地が20枚以上なら+3/+3" },
@@ -1774,7 +1774,7 @@ const PATCH34: Record<string, Partial<CardDef>> = {
   // ---- 단순 코스트/수치 버프 ----
   AMA: { cost: 1 },
   KIN_CALL: { cost: 2 },
-  FURNACE: { cost: 2 },
+  FURNACE: { cost: 3 },
   CULL_FARM: { play: 1, text: "영구: 자신의 턴 시작마다 패에 컬 1장을 얻는다 (시전 1)", textJa: "永続: 自分のターン開始時に手札にカル1枚を得る (発動1)" },
   DISARM2: { play: 1, text: "영구마법 2장 파괴(양측) (시전 1)", textJa: "永続魔法2枚を破壊(両方の場) (発動1)" },
   DISARM3: { play: 1, text: "상대 영구마법 1장 파괴 후 게임에서 제외 (시전 1)", textJa: "相手の永続魔法1枚を破壊しゲームから除外 (発動1)" },
@@ -2470,7 +2470,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v65"; // Sage discount floor and Goblin monster-attack self damage
+export const BALANCE_VERSION = "v66"; // Cull support rework: shield cap, hand recycling and focused exile
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관
