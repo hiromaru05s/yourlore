@@ -1,0 +1,204 @@
+{
+  "origin": "https://yourlore.xyz",
+  "report": [
+    {
+      "width": 1280,
+      "samples": [
+        {
+          "id": "GOBLIN_SETTLEMENT",
+          "classes": "card card--spell card--hand",
+          "filter": "none",
+          "condition": false,
+          "tones": [
+            {
+              "filter": "none",
+              "opacity": "1"
+            },
+            {
+              "filter": "url(\"#celestial-matte\") drop-shadow(rgb(211, 195, 160) 0px 1px 0px) drop-shadow(rgb(101, 88, 70) 0px 1px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.91595px 6.41509px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "none",
+              "opacity": "1"
+            }
+          ]
+        },
+        {
+          "id": "GOBLIN_SETTLEMENT",
+          "classes": "card card--spell card--hand",
+          "filter": "none",
+          "condition": false,
+          "tones": [
+            {
+              "filter": "none",
+              "opacity": "1"
+            },
+            {
+              "filter": "url(\"#celestial-matte\") drop-shadow(rgb(211, 195, 160) 0px 1px 0px) drop-shadow(rgb(101, 88, 70) 0px 1px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.91595px 6.41509px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "none",
+              "opacity": "1"
+            }
+          ]
+        },
+        {
+          "id": "GOBLIN_SETTLEMENT",
+          "classes": "card card--spell card--hand",
+          "filter": "none",
+          "condition": false,
+          "tones": [
+            {
+              "filter": "none",
+              "opacity": "1"
+            },
+            {
+              "filter": "url(\"#celestial-matte\") drop-shadow(rgb(211, 195, 160) 0px 1px 0px) drop-shadow(rgb(101, 88, 70) 0px 1px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.91595px 6.41509px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "none",
+              "opacity": "1"
+            }
+          ]
+        }
+      ],
+      "landed": [
+        {
+          "classes": "card card--spell card--hand is-dim",
+          "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+          "visibility": "visible",
+          "reason": "今はあなたのターンではありません"
+        },
+        {
+          "classes": "card card--spell card--hand is-dim",
+          "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+          "visibility": "visible",
+          "reason": "今はあなたのターンではありません"
+        },
+        {
+          "classes": "card card--spell card--hand is-dim",
+          "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+          "visibility": "visible",
+          "reason": "今はあなたのターンではありません"
+        }
+      ],
+      "drawAsset": "https://yourlore.xyz/assets/paperDraw-DJHvGGPH.js",
+      "errors": []
+    },
+    {
+      "width": 390,
+      "samples": [
+        {
+          "id": "GOBLIN_SETTLEMENT",
+          "classes": "card card--spell card--hand",
+          "filter": "none",
+          "condition": false,
+          "tones": [
+            {
+              "filter": "none",
+              "opacity": "1"
+            },
+            {
+              "filter": "url(\"#celestial-matte\") drop-shadow(rgb(211, 195, 160) 0px 1px 0px) drop-shadow(rgb(101, 88, 70) 0px 1px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00195px 2.2043px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "none",
+              "opacity": "1"
+            }
+          ]
+        },
+        {
+          "id": "GOBLIN_SETTLEMENT",
+          "classes": "card card--spell card--hand",
+          "filter": "none",
+          "condition": false,
+          "tones": [
+            {
+              "filter": "none",
+              "opacity": "1"
+            },
+            {
+              "filter": "url(\"#celestial-matte\") drop-shadow(rgb(211, 195, 160) 0px 1px 0px) drop-shadow(rgb(101, 88, 70) 0px 1px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00195px 2.2043px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "none",
+              "opacity": "1"
+            }
+          ]
+        },
+        {
+          "id": "GOBLIN_SETTLEMENT",
+          "classes": "card card--spell card--hand",
+          "filter": "none",
+          "condition": false,
+          "tones": [
+            {
+              "filter": "none",
+              "opacity": "1"
+            },
+            {
+              "filter": "url(\"#celestial-matte\") drop-shadow(rgb(211, 195, 160) 0px 1px 0px) drop-shadow(rgb(101, 88, 70) 0px 1px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 2px 4px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00195px 2.2043px)",
+              "opacity": "1"
+            },
+            {
+              "filter": "none",
+              "opacity": "1"
+            }
+          ]
+        }
+      ],
+      "landed": [
+        {
+          "classes": "card card--spell card--hand is-dim",
+          "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+          "visibility": "visible",
+          "reason": "今はあなたのターンではありません"
+        },
+        {
+          "classes": "card card--spell card--hand is-dim",
+          "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+          "visibility": "visible",
+          "reason": "今はあなたのターンではありません"
+        },
+        {
+          "classes": "card card--spell card--hand is-dim",
+          "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+          "visibility": "visible",
+          "reason": "今はあなたのターンではありません"
+        }
+      ],
+      "drawAsset": "https://yourlore.xyz/assets/paperDraw-DJHvGGPH.js",
+      "errors": []
+    }
+  ],
+  "boundary": "Real production bundles/assets and normal local BOT startup/draw; account API fixture with a starter deck. No real account/DB writes or authenticated PvP."
+}
