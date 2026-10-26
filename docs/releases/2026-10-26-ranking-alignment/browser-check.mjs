@@ -16,7 +16,7 @@ if(path==='/api/rewards/tutorial')return {keys:[],offered:true};
 if(path==='/api/rewards/progression')return {credits:100,resetsAt:Date.now()+86400000,online:0,ranked:0,daily:{quest:{kind:'heal',reward:300,target:40},progress:0,claimed:false},bot:{}};
 return {ok:true,keys:[],items:[],friends:[],incoming:[],outgoing:[],challenges:[]};});
 try {
-await p.goto(origin);await p.waitForFunction(()=>!document.querySelector('.lounge-entry-overlay'));await p.locator('[data-nav=leaderboard]').evaluate(el=>el.click());await p.locator('.lb-deck-trigger').first().waitFor();
+await p.goto(origin);await p.locator('#startup').waitFor({state:'hidden',timeout:90000});await p.waitForFunction(()=>!document.querySelector('.lounge-entry-overlay'));await p.locator('[data-nav=leaderboard]').evaluate(el=>el.click());await p.locator('.lb-deck-trigger').first().waitFor();
 const checks=[];
 for(const width of [1440,1070,820,390,320]){
  await p.setViewportSize({width,height:900});await p.waitForTimeout(200);
