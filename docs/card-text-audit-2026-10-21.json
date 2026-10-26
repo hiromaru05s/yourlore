@@ -6,8 +6,8 @@
     "ko",
     "en"
   ],
-  "count": 379,
-  "engineSha256": "cbdf972ce43e4681fa1ef967aee6952dccd466eaa26b4b431342e4d7d76f1de5",
+  "count": 381,
+  "engineSha256": "a1ed8687b9e62ba102f724b91469ec64e52359a155eb4860dbc9d1cbcd6e701a",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -1208,25 +1208,28 @@
     },
     "GM6_1": {
       "nameJa": "次元幽閉者",
-      "status": "reworded",
+      "status": "reviewed-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "4828cf76b48ec55f21d4b75cd58ee9cb00484d327cc27ca994b99fd1d9330774",
-      "textSha256": "1dddc44752fc086491c6904045c2c5e53b90f7e5e8f1c25181194b9249ff09e0",
+      "textSha256": "13fd0c8e6a9b264debb297e339c083711eeb467a58736b43c107728c40fb6d31",
       "hooks": {
         "onSummon": "jailer"
       },
       "before": {
         "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。",
-        "ko": "【소환시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.",
+        "ko": "【소환 시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.",
         "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift."
       },
       "after": {
-        "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。",
-        "ko": "【소환 시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.",
-        "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift."
-      }
+        "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、このカードの召喚時効果を発動し、その後このカードをリフトから自分の墓地に戻す。",
+        "ko": "【소환 시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 이 카드의 소환 시 효과를 발동하고, 그 후 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+        "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, activate its On Summon effect, then return this card from your Rift to your graveyard."
+      },
+      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
     },
     "GM6_7": {
       "nameJa": "将軍",
@@ -1255,23 +1258,26 @@
     },
     "GM6_8": {
       "nameJa": "虚空の攻城兵",
-      "status": "reworded",
+      "status": "reviewed-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "b4fba4ada17c6fac0a0f7ab18b2edcba56abb8c238ec5907a6740261cffe6b5d",
-      "textSha256": "fd0886f96370882483a3733195f2a304d6c3dd0ca24b887b661d8661660a0773",
+      "textSha256": "ba21936b4246bf5df1c3c02d708d46d8ead9ec97dea24febff9850912beb2a12",
       "hooks": {},
       "before": {
         "ja": "【破壊時】「兵士」1体を自分の場に召喚する。",
-        "ko": "【파괴시】병사 1체를 자신의 필드에 소환한다.",
+        "ko": "【파괴 시】병사 1체를 자신의 필드에 소환한다.",
         "en": "【On Destruction】Summon 1 Soldier to your field."
       },
       "after": {
-        "ja": "【破壊時】「兵士」1体を自分の場に召喚する。",
-        "ko": "【파괴 시】병사 1체를 자신의 필드에 소환한다.",
-        "en": "【On Destruction】Summon 1 Soldier to your field."
-      }
+        "ja": "【破壊時】「兵士」1体を自分の場に召喚する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、可能な限り「大砲兵」を自分の場に召喚する。",
+        "ko": "【파괴 시】병사 1체를 자신의 필드에 소환한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 가능한 한 많은 대포병을 자신의 필드에 소환한다.",
+        "en": "【On Destruction】Summon 1 Soldier to your field.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, summon as many Heavy Gunners as possible to your field."
+      },
+      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
     },
     "GS6_4": {
       "nameJa": "火脈点火",
@@ -5051,28 +5057,29 @@
     },
     "VOID_APOSTLE": {
       "nameJa": "虚無空間の使徒",
-      "status": "reworded",
+      "status": "reviewed-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "a10c265d136da87a1cdaf8cfef8628ad5067c1374823f037e06b637a9c753a56",
-      "textSha256": "3997bf94cbc124590ed2faaf8738eb810d2068496c43e729a1e7526898db8823",
+      "textSha256": "966e6cd4c7af16aac59b9ff9b4e9ec6009b1ed69c36e0a2e8d9909394dbe5d08",
       "hooks": {
         "onSummon": "voidApostle",
         "turnFx": "voidRoll"
       },
       "before": {
-        "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（持続）。\n\n【自分ターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。",
-        "ko": "【소환시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(지속).\n\n【자신 턴 시작시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.",
-        "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (lasting).\n\n【Your Turn Start】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster."
-      },
-      "after": {
         "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（持続）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。",
         "ko": "【소환 시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(지속).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.",
         "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (lasting).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（持続）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
+        "ko": "【소환 시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(지속).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+        "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (lasting).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
+      },
+      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
     },
     "CASINO": {
       "nameJa": "カジノ",
@@ -5673,26 +5680,29 @@
     },
     "SORTER": {
       "nameJa": "選別者",
-      "status": "reworded",
+      "status": "reviewed-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "c4421af602be93939a103c0eab34e9dfd3d60e604fb60b09ae20f0324d62bfad",
-      "textSha256": "93f19ef8bde9beffe41557f48989ce73cddc8b63288526374180a7d46ca86f12",
+      "definitionSha256": "4dea2c11c1a4faf21951be5acff7ab3650547f7c4e15bed1f5fb852445b18c19",
+      "textSha256": "0db894e4c12455335ec2bf86b89eb000c62898aba71cc1ff80be56509ecdffcb",
       "hooks": {
         "onSummon": "sorterSummon",
         "aura": "sorter"
       },
       "before": {
         "ja": "【召喚時】自分の「カル」3枚を自動でリフトへ送る（墓地、デッキ、手札の順）。\n\n【自分のリフト追加時】自分のリフトに「カル」が追加されるたび、自分の「カル」1枚を同じ順で追加で送る（この追加分では再発動しない）。",
-        "ko": "【소환시】자신의 컬 3장을 자동으로 리프트로 보낸다(묘지, 덱, 패 순서).\n\n【자신의 리프트에 추가시】자신의 리프트에 컬이 추가될 때마다 자신의 컬 1장을 같은 순서로 추가로 보낸다(이 추가분으로 재발동하지 않음).",
+        "ko": "【소환 시】자신의 컬 3장을 자동으로 리프트로 보낸다(묘지, 덱, 패 순서).\n\n【자신의 리프트에 추가 시】자신의 리프트에 컬이 추가될 때마다 자신의 컬 1장을 같은 순서로 추가로 보낸다(이 추가분으로 재발동하지 않음).",
         "en": "【On Summon】Automatically send 3 of your Culls to your Rift, taking from graveyard, deck, then hand.\n\n【Card Added to Your Rift】Whenever a Cull is added to your Rift, send 1 additional Cull in the same order; this extra Cull does not trigger this effect again."
       },
       "after": {
-        "ja": "【召喚時】自分の「カル」3枚を自動でリフトへ送る（墓地、デッキ、手札の順）。\n\n【自分のリフト追加時】自分のリフトに「カル」が追加されるたび、自分の「カル」1枚を同じ順で追加で送る（この追加分では再発動しない）。",
-        "ko": "【소환 시】자신의 컬 3장을 자동으로 리프트로 보낸다(묘지, 덱, 패 순서).\n\n【자신의 리프트에 추가 시】자신의 리프트에 컬이 추가될 때마다 자신의 컬 1장을 같은 순서로 추가로 보낸다(이 추가분으로 재발동하지 않음).",
-        "en": "【On Summon】Automatically send 3 of your Culls to your Rift, taking from graveyard, deck, then hand.\n\n【Card Added to Your Rift】Whenever a Cull is added to your Rift, send 1 additional Cull in the same order; this extra Cull does not trigger this effect again."
-      }
+        "ja": "【召喚時】新しい「カル」1枚を自分のリフトに追加する。\n\n【自分のリフト追加時】自分のリフトに「カル」が追加されるたび、自分の「カル」1枚を墓地、デッキ、手札の順で追加で送る（この追加分では再発動しない）。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、「選ばれし」モンスター4種からランダムに1体を自分の場に召喚し、このカードをリフトから自分の墓地に戻す。",
+        "ko": "【소환 시】새로운 컬 1장을 자신의 리프트에 추가한다.\n\n【자신의 리프트에 추가 시】자신의 리프트에 컬이 추가될 때마다 자신의 컬 1장을 묘지, 덱, 패 순서로 추가로 보낸다(이 추가분으로 재발동하지 않음).\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 선택받은 몬스터 4종 중 무작위 1체를 자신의 필드에 소환하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+        "en": "【On Summon】Add 1 new Cull to your Rift.\n\n【Card Added to Your Rift】Whenever a Cull is added to your Rift, send 1 additional Cull from your graveyard, deck, then hand; this extra Cull does not trigger this effect again.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, randomly summon 1 of the 4 Chosen monsters to your field, then return this card from your Rift to your graveyard."
+      },
+      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
     },
     "COLOSSEUM_REST": {
       "nameJa": "コロシアムの休憩場",
@@ -6432,25 +6442,28 @@
     },
     "QUICK_SORT": {
       "nameJa": "選別の掟",
-      "status": "reworded",
+      "status": "reviewed-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "5f8d175a6eccae8dadc3e84a6aaa52b671fada724c6bacb9ece1d51b1c3e60f9",
+      "definitionSha256": "b8bb582d9f77b85d453aaac54788d20eed3c6d804706e550c53ec745204945d0",
       "textSha256": "d5bd9ff65bfc674529c91fa15df9d84920e1ba7983bd869fe28cd03341a41bea",
       "hooks": {
         "quick": true
       },
       "before": {
         "ja": "【購入条件】自分のリフトに「カル」が10枚以上ある。\n\n【購入時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選んで破壊する。",
-        "ko": "【구매 조건】자신의 리프트에 컬 10장 이상.\n\n【구매시】상대의 필드의 아우라가 없는 몬스터·영구마법·퀘스트 중 1장을 선택해 파괴한다.",
+        "ko": "【구매 조건】자신의 리프트에 컬 10장 이상.\n\n【구매 시】상대의 필드의 아우라가 없는 몬스터·영구마법·퀘스트 중 1장을 선택해 파괴한다.",
         "en": "【Purchase Requirement】Your Rift contains at least 10 Culls.\n\n【On Purchase】Choose and destroy 1 enemy monster without Aura, persistent spell, or quest."
       },
       "after": {
         "ja": "【購入条件】自分のリフトに「カル」が10枚以上ある。\n\n【購入時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選んで破壊する。",
         "ko": "【구매 조건】자신의 리프트에 컬 10장 이상.\n\n【구매 시】상대의 필드의 아우라가 없는 몬스터·영구마법·퀘스트 중 1장을 선택해 파괴한다.",
         "en": "【Purchase Requirement】Your Rift contains at least 10 Culls.\n\n【On Purchase】Choose and destroy 1 enemy monster without Aura, persistent spell, or quest."
-      }
+      },
+      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
     },
     "QUICK_REBIRTH": {
       "nameJa": "強制輪廻",
@@ -8483,6 +8496,46 @@
         "ko": "【발동 조건】이 카드는 플레이할 수 없다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 자신의 리프트로 보내졌을 때만 발동한다. 상대 묘지의 카드 1장을 선택해 상대의 리프트로 보낸다.",
         "en": "【Play Requirement】This card cannot be played.\n\n【Card Added to Your Rift】Activate only when another card’s effect sends this card to your Rift. Choose 1 card in the opponent’s graveyard and send it to their Rift."
       }
+    },
+    "MAGIC_TRAIN": {
+      "nameJa": "魔道列車",
+      "status": "reviewed-rework",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "66d4be912012ee4a4cbf95109426de886670a49f51badb24c30b62d6615c8c28",
+      "textSha256": "6739df04fd57bc3da596767ac40a103fa716eb605b2030cfad23891a3d4da492",
+      "hooks": {},
+      "before": {},
+      "after": {
+        "ja": "【発動時】次の自分のターン開始直前に、双方通算6ターン分、ターン数と残り期間を進める。その間のドロー・回復などのターン開始・終了効果は発動しない。",
+        "ko": "【발동 시】다음 자신의 턴 시작 직전에 양쪽 합계 6턴만큼 턴 수와 남은 기간을 진행한다. 그동안 드로우·회복 등 턴 시작·종료 효과는 발동하지 않는다.",
+        "en": "【On Cast】Immediately before your next turn starts, advance the turn number and remaining durations by 6 turns total, counting both players. Do not trigger draws, healing, or other start/end-of-turn effects during those turns."
+      },
+      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
+    },
+    "MAGIC_BANK": {
+      "nameJa": "魔道銀行",
+      "status": "reviewed-rework",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "49ec3a4b8fc7f68772f26a79c1d307acde811b67f3b1e6eaec0fb68a5a88a62c",
+      "textSha256": "a0301b243d17ae3bdea57b235232de8f7ace258d4ca00e3263e3326fb6003a45",
+      "hooks": {
+        "ench": "magicBank"
+      },
+      "before": {},
+      "after": {
+        "ja": "【発動時】自分の最大マナ-1。\n\n【場にある間】このターンを含む自分の2ターンの間、自分の最大マナが増えるたび、追加で最大マナ+1。この追加分では「魔道銀行」は再発動しない。",
+        "ko": "【발동 시】자신의 최대 마나 -1.\n\n【필드에 있는 동안】이 턴을 포함해 자신의 2턴 동안, 자신의 최대 마나가 증가할 때마다 추가로 최대 마나 +1. 이 추가분으로 마도 은행은 재발동하지 않는다.",
+        "en": "【On Cast】Your max mana -1.\n\n【While on the Field】For 2 of your turns, including this turn, whenever your max mana increases, gain 1 additional max mana. This extra gain does not trigger Arcane Bank again."
+      },
+      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
     }
   },
   "keywords": {

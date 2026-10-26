@@ -32,3 +32,14 @@
 - 全体回帰テスト: 231/231成功（`local-suite.json`）。デプロイ結果は公開後の記録を参照。
 
 fixture検証は認証付きオンラインPvP・実機検証を証明しない。カード絵やVFXの新規制作は行っていない。
+
+## 本番反映
+
+- ソース: `ffe29c6697642af9772b047b70f44b6f4532673f`。
+- Worker version: `36ccfc96-0a6c-4d99-bf3e-10918df2a3cf`、配信100%。
+- 公開: 2026-10-26 23:50 KST/JST、`https://yourlore.xyz`。
+- `npm run deploy` のロック・ソース整合チェック・確定コミットからの再検証を使用。最終型チェック、231/231回帰テスト、ビルド成功。
+- 初回の統合検証では描画更新に追随していないquest-pactテストfixtureを検出して公開を中止。mainのfixture修正を取り込み、全検証を再実行して成功してから公開した。
+- 本番HTMLの参照先と関連6ファイルのSHA-256がローカルの最終ビルドと一致（`production-assets.json`）。
+- 詳細: `production.json`、`release-suite.json`。
+- 本番配信の実カード詳細で7枚の新しい文面をPC幅・390px幅で確認（`cards-production/`）。旧除外文面が残っていないこととJavaScriptエラー0件を確認。APIのみfixtureで、認証付きPvPは未実施。
