@@ -97,6 +97,7 @@
     "tests/rank-emblem.mjs",
     "tests/rank-sound.mjs",
     "tests/release-furniture-model.mjs",
+    "tests/rift-frame-highlight.mjs",
     "tests/rift-fold.mjs",
     "tests/rift-transmute.mjs",
     "tests/solid-draw.mjs",
@@ -221,7 +222,8 @@
     "tests/rift-ores-server.mjs",
     "tests/balance-caps.mjs",
     "tests/balance-caps-server.mjs",
-    "tests/card-counters.mjs"
+    "tests/card-counters.mjs",
+    "tests/deck-drag.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

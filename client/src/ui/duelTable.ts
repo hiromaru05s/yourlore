@@ -2,9 +2,11 @@
 import * as T from 'three';
 import {readingBoardUrl} from './readingAssetCache';
 import {loadReadingModel} from './readingModel';
+import {createRiftFrameHighlight} from './riftFrameHighlight';
 
 export function createDuelTable(root: HTMLElement, scene: T.Scene) {
   let model: T.Group | undefined;
+  let riftFrame: ReturnType<typeof createRiftFrameHighlight> | undefined;
   let dead = false;
   const low = matchMedia('(max-width: 700px)').matches;
   // Versioned URLs prevent a cached model from silently disagreeing with its renderer.
@@ -45,12 +47,14 @@ export function createDuelTable(root: HTMLElement, scene: T.Scene) {
       }
     });
     scene.add(model);
+    riftFrame=createRiftFrameHighlight(root,model);
   }).catch(() => {
     if (!dead) root.dataset.tableState = 'fallback';
     // Existing raster fallback and all game controls remain usable on load failure.
   });
 
   return {
+    tickRiftFrame(now:number):boolean {return riftFrame?.tick(now)??false;},
     resize(_width:number,_height:number,unit:number):void {
       if(dead||!model)return;
       model.scale.setScalar(unit/.110);
@@ -58,6 +62,7 @@ export function createDuelTable(root: HTMLElement, scene: T.Scene) {
     },
     dispose(): void {
       dead = true;
+      riftFrame?.dispose();riftFrame=undefined;
       if (model) { scene.remove(model); release(model); model = undefined; }
       root.classList.remove('duel-table-ready');
       delete root.dataset.tableState;

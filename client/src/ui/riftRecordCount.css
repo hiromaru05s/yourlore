@@ -6,3 +6,8 @@
 .rift-record-window{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:4}
 .rift-button .rift-record-count{position:absolute;left:var(--record-position-x);top:var(--record-position-y);--record-size:calc(var(--board-meter,650px)*var(--record-world-width));transform:translate(-50%,-50%);z-index:4}
 .rift-button:focus-visible{outline:1px solid #cdb9d5;outline-offset:3px}
+
+/* Enlarge the glyph about its own center, without moving the aperture anchor. */
+.rift-record-count .record-number{transform-box:fill-box;transform-origin:center;transform:scale(1);transition:transform var(--rift-count-duration,180ms) cubic-bezier(.2,.7,.25,1)}
+.rift-button:is(:hover,:focus-visible) .record-number{transform:scale(1.25)}
+@media(prefers-reduced-motion:reduce){.rift-record-count .record-number{transition:none}}
