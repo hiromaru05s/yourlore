@@ -15,3 +15,5 @@ Regression: `node tests/rift-frame-highlight.mjs` verifies independent sides, ea
 Visual comparison approval is distinct from runtime/browser verification; no authenticated PvP or device-performance claim is made here.
 
 Local render-only verification: production modules on port 5267 rendered both sides without console errors. Keyboard focus (same effect state as hover) enlarged only the focused glyph to CSS matrix(1.25,0,0,1.25,0,0); the other remained identity. Screenshots in `qa/render-me.png` and `qa/render-opp.png`. The standard fixture remained under its 92% effect-preparation cover; a separately labeled, unshipped render-only page exposed the already-rendered scene. This does not establish completion of the normal admission flow or authenticated PvP.
+
+Release validation: the exhaustive card-reference test hit the default 120-second process timeout under concurrent local load. Its isolated rerun passed all 1,137 localized renderings and interaction assertions. Its suite budget is now 300 seconds; no assertions are skipped. Integrated updated remote main `04397201` before retrying the guarded release.
