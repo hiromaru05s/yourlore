@@ -1,3 +1,4 @@
+import {cloneCardNode} from './cardClone';
 import {captureNativePrint,cardPrintWidth} from './cardPrintCapture';
 import {rasterMatte} from './spellFrame/matteRaster';
 import {frameMaskOffThread} from './spellFrame/rasterClient';
@@ -192,8 +193,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
 export async function capturePileSurface(node:HTMLElement,sleeve:string,preserveDim=false):Promise<CardSurface> {
   const host=document.createElement('div');host.className='pile-print';
   host.style.cssText='position:fixed;left:-1000px;top:0;width:128px;height:200px;visibility:hidden;pointer-events:none';
-  const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('style');
-  const originalLayers=node.querySelectorAll<HTMLCanvasElement>('.card-effect-surface');copy.querySelectorAll<HTMLCanvasElement>('.card-effect-surface').forEach((layer,i)=>{const original=originalLayers[i];if(original?.width)layer.getContext('2d')!.drawImage(original,0,0);});
+  const copy=cloneCardNode(node);copy.removeAttribute('style');
   copy.classList.remove('fx-card-flight','cast-reveal','is-picked','is-armed','card--dim','is-dim','is-exhausted','is-playable','is-buyable');
   copy.style.cssText='--cw:128px;--ch:200px;width:128px;height:200px;transform:none';
   const originalWidth=node.offsetWidth||parseFloat(getComputedStyle(node).width)||128;
@@ -201,7 +201,7 @@ export async function capturePileSurface(node:HTMLElement,sleeve:string,preserve
   const art=copy.querySelector<HTMLImageElement>('.card-art img');
   if(art){const original=art.currentSrc||art.src;art.removeAttribute('srcset');art.removeAttribute('sizes');const full=art.src.replace(/\/art\/cards-(sm|xs)\//,'/art/cards/');try{await image(full);art.src=full;}catch{art.src=original;}try{await art.decode();}catch{}}
   host.append(copy);document.body.append(host);
-  try{const result=await captureCardSurface(copy,sleeve,true);
+  try{const result=await captureCardSurface(copy,sleeve,true,true,node);
     if(preserveDim&&node.classList.contains('is-dim')&&result.face){const c=canvas(result.face.width,result.face.height),ctx=c.getContext('2d')!;ctx.filter='grayscale(1) brightness(.55) contrast(.9)';ctx.drawImage(result.face,0,0);result.face=c;}
     return result;
   }finally{host.remove();}

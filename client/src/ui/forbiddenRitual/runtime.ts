@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {SPECIAL_FX} from '../animationTempo';
 import {FRAME_BACK} from '../../shared/cards';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
@@ -27,11 +28,11 @@ export function playForbiddenRitual(source:HTMLElement,targets:HTMLElement[],sid
    const faces:HTMLCanvasElement[]=[];
    for(const node of [source,...targets]){
     if(ended)return;
-    const copy=node.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-card-flight','fx-field-ghost','cast-reveal');
+    const copy=cloneCardNode(node);copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.classList.remove('fx-card-flight','fx-field-ghost','cast-reveal');
     const originalWidth=node.offsetWidth||180;
     copy.querySelectorAll<HTMLElement>('[style]').forEach(el=>{if(el.style.fontSize.endsWith('px'))el.style.fontSize=`${parseFloat(el.style.fontSize)*180/originalWidth}px`;});
     copy.style.cssText='position:relative;width:180px;height:270px;--cw:180px;--ch:270px;transform:none;opacity:1;visibility:visible';captureHost.append(copy);
-    const surface=await captureCardSurface(copy,FRAME_BACK,true,false);copy.remove();if(ended)return;if(!surface.face)throw Error('Missing public ritual card face');
+    const surface=await captureCardSurface(copy,FRAME_BACK,true,false,node);copy.remove();if(ended)return;if(!surface.face)throw Error('Missing public ritual card face');
     const c=document.createElement('canvas');c.width=Math.round(surface.face.width/(1+CARD_PADDING*2));c.height=Math.round(c.width*1.5);const pad=surface.face.width*CARD_PADDING/(1+CARD_PADDING*2);
     c.getContext('2d')!.drawImage(surface.face,pad,pad,surface.face.width-2*pad,surface.face.height-2*pad,0,0,c.width,c.height);faces.push(c);
    }

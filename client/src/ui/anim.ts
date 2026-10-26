@@ -1067,7 +1067,7 @@ async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
   if(!moved&&!fxSkip){
     const r=(target.querySelector('.pile-card')||target).getBoundingClientRect();await landCard(node,r);
     // Fallback stays visible until the authoritative board replaces it.
-    const copy=node.cloneNode(true) as HTMLElement;copy.classList.add('pile-arrival-fallback');document.body.append(copy);
+    const copy=cloneCardNode(node);copy.classList.add('pile-arrival-fallback');document.body.append(copy);
     const observer=new MutationObserver(()=>{if(!target.isConnected){copy.remove();observer.disconnect();}});
     observer.observe(document.body,{subtree:true,childList:true});setTimeout(()=>{copy.remove();observer.disconnect();},5000);
   }
@@ -1097,7 +1097,7 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
 }
 export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
   const r=source?.getBoundingClientRect()||rectOf('#'+discId(side));if(!r)return;
-  const node=floatAt(source?source.cloneNode(true) as HTMLElement:cardEl(card,{size:'hand'}),r);node.classList.remove('is-played');node.style.visibility='visible';if(source){node.style.width=`${source.offsetWidth}px`;node.style.height=`${source.offsetHeight}px`;node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=fieldPlacement(source,source.offsetWidth,source.offsetHeight).toString();source.style.visibility='hidden';}
+  const node=floatAt(source?cloneCardNode(source):cardEl(card,{size:'hand'}),r);node.classList.remove('is-played');node.style.visibility='visible';if(source){node.style.width=`${source.offsetWidth}px`;node.style.height=`${source.offsetHeight}px`;node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=fieldPlacement(source,source.offsetWidth,source.offsetHeight).toString();source.style.visibility='hidden';}
   try{await absorbIntoRift(node,side);}finally{node.remove();} // The old source stays hidden until the authoritative board render.
 }
 /** Explicit public Culls resolve beside their cause, from the actual zone.

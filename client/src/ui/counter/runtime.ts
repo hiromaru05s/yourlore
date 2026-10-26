@@ -1,3 +1,4 @@
+import {cloneCardNode} from '../cardClone';
 import {captureCardSurface,CARD_PADDING} from '../cardSurface';
 import {FRAME_BACK} from '../../shared/cards';
 import {combatRect} from '../combatAnchor';
@@ -11,7 +12,7 @@ type Options={compact?:boolean;signal:AbortSignal;onLaunch:()=>void;onImpact:()=
 
 /** Clone the live public face so buffs, health and passive badges stay intact. */
 function copyFace(source:HTMLElement){
- const copy=source.cloneNode(true) as HTMLElement,width=source.offsetWidth||180;
+ const copy=cloneCardNode(source),width=source.offsetWidth||180;
  copy.removeAttribute('id');copy.removeAttribute('data-uid');
  copy.classList.remove('is-attacker','is-aiming','is-atk-target','is-targetable','mhit','is-dim','is-exhausted');
  copy.querySelectorAll<HTMLElement>('[style]').forEach(el=>{if(el.style.fontSize.endsWith('px'))el.style.fontSize=`${parseFloat(el.style.fontSize)*180/width}px`;});

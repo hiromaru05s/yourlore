@@ -1,3 +1,4 @@
+import {cloneCardNode} from './cardClone';
 import {SPECIAL_FX} from './animationTempo';
 import {playSilverRift} from './riftInkScene';
 import {FRAME_BACK} from '../shared/cards';
@@ -27,7 +28,7 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
  const width=innerWidth,height=innerHeight,w=node.offsetWidth,h=node.offsetHeight;
  if(signal.aborted||!w||!h)return;
  const canvas=document.createElement('canvas'),c=canvas.getContext('2d');if(!c)throw new Error('Canvas unavailable');
- const host=node.cloneNode(true) as HTMLElement;
+ const host=cloneCardNode(node);
  host.removeAttribute('id');host.classList.remove('fx-card-flight','cast-reveal','drag-ghost--hand');
  host.style.cssText=`position:fixed;left:-10000px;top:0;visibility:hidden;pointer-events:none;transform:none;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px`;
  document.body.append(host);
@@ -37,7 +38,7 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
  // If texture capture fails, the DOM card still collapses locally under the same card-local vortex.
  let cancelCapture=()=>{};
  try{
-  const surface=await Promise.race([captureCardSurface(host,sleeve,!node.classList.contains('card--back')),new Promise<null>(resolve=>{cancelCapture=()=>resolve(null);signal.addEventListener('abort',cancelCapture,{once:true});})]);
+  const surface=await Promise.race([captureCardSurface(host,sleeve,!node.classList.contains('card--back'),true,node),new Promise<null>(resolve=>{cancelCapture=()=>resolve(null);signal.addEventListener('abort',cancelCapture,{once:true});})]);
   if(!surface)return;face=surface.face||surface.back;
  }catch{/* Use the live card below. */}finally{signal.removeEventListener('abort',cancelCapture);host.remove();}
  if(signal.aborted||!node.isConnected)return;
@@ -45,7 +46,7 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
  const source=project(w/2,h/2),r=target.getBoundingClientRect(),sink=target.id==='rift-me'||target.id==='rift-opp'?boardPoint(innerWidth/2+RIFT_MOUNT.x*readingScale(),innerHeight/2+(target.id==='rift-me'?1:-1)*RIFT_MOUNT.z*readingScale(),RIFT_MOUNT.height*readingScale()):{x:r.left+r.width/2,y:r.top+r.height/2};
  const sourceWidth=Math.hypot(project(w,h/2).x-project(0,h/2).x,project(w,h/2).y-project(0,h/2).y);
  // Rasterizing a 1536px capture per triangle wastes work for a 30–180px board card.
- if(face){const small=document.createElement('canvas');small.width=Math.max(192,Math.min(384,Math.ceil(sourceWidth*3)));small.height=Math.round(small.width*face.height/face.width);const raster=small.getContext('2d');if(raster){raster.drawImage(face,0,0,small.width,small.height);face=small;}}
+ if(face){const small=document.createElement('canvas');small.width=Math.max(192,Math.min(768,Math.ceil(sourceWidth*(devicePixelRatio||1)*(1+2*CARD_PADDING))));small.height=Math.round(small.width*face.height/face.width);const raster=small.getContext('2d');if(raster){raster.drawImage(face,0,0,small.width,small.height);face=small;}}
  let notified=false;const started=()=>{if(!notified){notified=true;onStart();}};
  if(face&&await playSilverRift(node,target,face,start,sink,signal,started))return;
  if(signal.aborted||!node.isConnected||!target.isConnected)return;
