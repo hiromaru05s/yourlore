@@ -1,0 +1,28 @@
+{
+  "origin": "https://yourlore.xyz",
+  "api": "synthetic fixtures",
+  "widths": [
+    1440,
+    1070,
+    820,
+    390,
+    320
+  ],
+  "checks": [
+    "aligned columns",
+    "purchase column spacing",
+    "missing deck dates hidden",
+    "mixed deck contents aligned",
+    "plain name hover",
+    "tooltip hover and keyboard",
+    "ranked stats include draws",
+    "three repeated decks",
+    "card inspection",
+    "shared friends profile",
+    "empty and private data",
+    "mobile modal overflow",
+    "focus restore",
+    "closed modal late response"
+  ],
+  "errors": []
+}

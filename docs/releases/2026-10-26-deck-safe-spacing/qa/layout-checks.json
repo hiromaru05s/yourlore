@@ -1,0 +1,356 @@
+[
+  {
+    "clientHeight": 691,
+    "confirm": {
+      "bottom": 124,
+      "height": 34,
+      "left": 1727,
+      "right": 1881,
+      "top": 90
+    },
+    "content": {
+      "bottom": 779,
+      "height": 691,
+      "left": 12,
+      "right": 1899,
+      "top": 88
+    },
+    "filters": {
+      "bottom": 562,
+      "height": 203,
+      "left": 12,
+      "right": 118,
+      "top": 359
+    },
+    "nav": {
+      "bottom": 877,
+      "height": 72,
+      "left": 133.765625,
+      "right": 1777.234375,
+      "top": 805
+    },
+    "pageOverflow": false,
+    "pool": {
+      "bottom": 779,
+      "height": 420,
+      "left": 130,
+      "right": 1899,
+      "top": 359
+    },
+    "profile": {
+      "bottom": 59,
+      "height": 38,
+      "left": 32,
+      "right": 225.625,
+      "top": 21
+    },
+    "screenOverflow": "visible",
+    "scrollHeight": 691,
+    "size": [
+      1911,
+      893
+    ],
+    "tabs": {
+      "bottom": 351,
+      "height": 263,
+      "left": 12,
+      "right": 118,
+      "top": 88
+    }
+  },
+  {
+    "clientHeight": 518,
+    "confirm": {
+      "bottom": 124,
+      "height": 34,
+      "left": 1096,
+      "right": 1250,
+      "top": 90
+    },
+    "content": {
+      "bottom": 606,
+      "height": 518,
+      "left": 12,
+      "right": 1268,
+      "top": 88
+    },
+    "filters": {
+      "bottom": 562,
+      "height": 203,
+      "left": 12,
+      "right": 118,
+      "top": 359
+    },
+    "nav": {
+      "bottom": 704,
+      "height": 72,
+      "left": 89.59375,
+      "right": 1190.40625,
+      "top": 632
+    },
+    "pageOverflow": false,
+    "pool": {
+      "bottom": 606,
+      "height": 247,
+      "left": 130,
+      "right": 1268,
+      "top": 359
+    },
+    "profile": {
+      "bottom": 59,
+      "height": 38,
+      "left": 32,
+      "right": 225.625,
+      "top": 21
+    },
+    "screenOverflow": "visible",
+    "scrollHeight": 518,
+    "size": [
+      1280,
+      720
+    ],
+    "tabs": {
+      "bottom": 351,
+      "height": 263,
+      "left": 12,
+      "right": 118,
+      "top": 88
+    }
+  },
+  {
+    "clientHeight": 670,
+    "confirm": {
+      "bottom": 150.5,
+      "height": 29,
+      "left": 296,
+      "right": 378,
+      "top": 121.5
+    },
+    "content": {
+      "bottom": 742,
+      "height": 670,
+      "left": 8,
+      "right": 382,
+      "top": 72
+    },
+    "filters": {
+      "bottom": 508,
+      "height": 184,
+      "left": 8,
+      "right": 73,
+      "top": 324
+    },
+    "nav": {
+      "bottom": 832,
+      "height": 68,
+      "left": 16,
+      "right": 374,
+      "top": 764
+    },
+    "pageOverflow": false,
+    "pool": {
+      "bottom": 742,
+      "height": 418,
+      "left": 80,
+      "right": 382,
+      "top": 324
+    },
+    "profile": {
+      "bottom": 48,
+      "height": 32,
+      "left": 18,
+      "right": 100,
+      "top": 16
+    },
+    "screenOverflow": "visible",
+    "scrollHeight": 670,
+    "size": [
+      390,
+      844
+    ],
+    "tabs": {
+      "bottom": 111,
+      "height": 39,
+      "left": 8,
+      "right": 382,
+      "top": 72
+    }
+  },
+  {
+    "clientHeight": 410,
+    "confirm": {
+      "bottom": 149.5,
+      "height": 29,
+      "left": 208.6875,
+      "right": 290,
+      "top": 120.5
+    },
+    "content": {
+      "bottom": 478,
+      "height": 410,
+      "left": 8,
+      "right": 312,
+      "top": 68
+    },
+    "filters": {
+      "bottom": 507,
+      "height": 184,
+      "left": 11,
+      "right": 76,
+      "top": 323
+    },
+    "nav": {
+      "bottom": 560,
+      "height": 60,
+      "left": 5,
+      "right": 315,
+      "top": 500
+    },
+    "pageOverflow": false,
+    "pool": {
+      "bottom": 513,
+      "height": 190,
+      "left": 83,
+      "right": 294,
+      "top": 323
+    },
+    "profile": {
+      "bottom": 53,
+      "height": 46,
+      "left": 13,
+      "right": 87,
+      "top": 7
+    },
+    "screenOverflow": "auto",
+    "scrollHeight": 448,
+    "size": [
+      320,
+      568
+    ],
+    "tabs": {
+      "bottom": 110,
+      "height": 39,
+      "left": 11,
+      "right": 294,
+      "top": 71
+    }
+  },
+  {
+    "clientHeight": 252,
+    "confirm": {
+      "bottom": 99,
+      "height": 34,
+      "left": 642,
+      "right": 796,
+      "top": 65
+    },
+    "content": {
+      "bottom": 312,
+      "height": 252,
+      "left": 12,
+      "right": 832,
+      "top": 60
+    },
+    "filters": {
+      "bottom": 464,
+      "height": 203,
+      "left": 15,
+      "right": 121,
+      "top": 261
+    },
+    "nav": {
+      "bottom": 384,
+      "height": 54,
+      "left": 16,
+      "right": 828,
+      "top": 330
+    },
+    "pageOverflow": false,
+    "pool": {
+      "bottom": 451,
+      "height": 190,
+      "left": 133,
+      "right": 814,
+      "top": 261
+    },
+    "profile": {
+      "bottom": 42,
+      "height": 32,
+      "left": 18,
+      "right": 133,
+      "top": 10
+    },
+    "screenOverflow": "auto",
+    "scrollHeight": 404,
+    "size": [
+      844,
+      390
+    ],
+    "tabs": {
+      "bottom": 253,
+      "height": 190,
+      "left": 15,
+      "right": 121,
+      "top": 63
+    }
+  },
+  {
+    "clientHeight": 237,
+    "confirm": {
+      "bottom": 141.5,
+      "height": 29,
+      "left": 555,
+      "right": 637,
+      "top": 112.5
+    },
+    "content": {
+      "bottom": 297,
+      "height": 237,
+      "left": 8,
+      "right": 659,
+      "top": 60
+    },
+    "filters": {
+      "bottom": 499,
+      "height": 184,
+      "left": 11,
+      "right": 76,
+      "top": 315
+    },
+    "nav": {
+      "bottom": 369,
+      "height": 54,
+      "left": 16,
+      "right": 651,
+      "top": 315
+    },
+    "pageOverflow": false,
+    "pool": {
+      "bottom": 505,
+      "height": 190,
+      "left": 83,
+      "right": 641,
+      "top": 315
+    },
+    "profile": {
+      "bottom": 42,
+      "height": 32,
+      "left": 18,
+      "right": 133,
+      "top": 10
+    },
+    "screenOverflow": "auto",
+    "scrollHeight": 448,
+    "size": [
+      667,
+      375
+    ],
+    "tabs": {
+      "bottom": 102,
+      "height": 39,
+      "left": 11,
+      "right": 641,
+      "top": 63
+    }
+  }
+]

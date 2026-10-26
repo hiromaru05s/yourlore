@@ -31,3 +31,15 @@
 .selected-menu .shop-grid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
 .selected-menu .shop-item .sl-preview{cursor:default}
 @media(max-width:600px){.starter-shop-face .card{--cw:min(154px,calc((100vw - 116px)/2));width:var(--cw)}.selected-menu .shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* The original gacha content sizes the shared frame on every tab. Other tabs
+ * scroll inside that exact space, so neither width nor height jumps. */
+.shop-content{position:relative;min-width:0}
+[data-shop-category]:not([data-shop-category="gacha"]) #shopGacha{visibility:hidden;pointer-events:none}
+.shop-other{position:absolute;inset:0;overflow:auto;overscroll-behavior:contain;padding:0 8px 18px;scrollbar-gutter:stable}
+.shop-coming-soon{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--lore-muted)}
+.shop-coming-soon h3{color:var(--lore-text)}
+.starter-shop-date{font-size:12px;color:var(--lore-muted);margin:0 0 20px}
+.starter-shop-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:20px 16px}
+@media(max-width:1000px){.starter-shop-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.starter-shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

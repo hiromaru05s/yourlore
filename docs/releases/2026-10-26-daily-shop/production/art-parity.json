@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-26T12:23:01.763Z",
+  "assets": [
+    {
+      "path": "/art/shop/biblion-draw-table-v1.webp",
+      "sha256": "c871620a933ed5a0926205432eda05f44fbc129a18783d5e13ba67cd06b598fd",
+      "bytes": 253778
+    },
+    {
+      "path": "/art/ui/lore-panel-azure-cut.png",
+      "sha256": "49643cab309191bdc7b33a7368e10825ff6f35b311daf50c667d60322af737e2",
+      "bytes": 1439532
+    },
+    {
+      "path": "/frames/sleeve_default.webp",
+      "sha256": "4a64147f435f3d89cfb7cbdd26d7380fd999e304b00735dd430486c1b08b6bff",
+      "bytes": 99362
+    },
+    {
+      "path": "/art/cards/STARTER_CHEST.webp",
+      "sha256": "a415330c722cedb6b05c41a32cda7f21c2c17327925cb082a0174735cfa4d823",
+      "bytes": 148034
+    }
+  ],
+  "unauthenticatedCollectionStatus": 401
+}

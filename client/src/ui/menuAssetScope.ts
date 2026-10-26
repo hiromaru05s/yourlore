@@ -6,6 +6,6 @@ export function assetScope(url:string):'menu'|'duel'|'font'{
  if(url.startsWith('/art/cards/')||url.startsWith('/cosmetics/')||url==='/art/biblion/duel-table.png')return 'menu';
  if(url.startsWith('/art/lounge/icons/'))return 'duel';
  if(url.startsWith('/fonts/web/'))return 'font';
- if(/^\/(art\/(lounge|key-visuals)|bg)\//.test(url)||url==='/music/yohaku-to-zankyo.mp3')return 'menu';
+ if(/^\/(art\/(lounge|key-visuals|shop)|bg)\//.test(url)||url==='/music/yohaku-to-zankyo.mp3')return 'menu';
  return 'duel';
 }

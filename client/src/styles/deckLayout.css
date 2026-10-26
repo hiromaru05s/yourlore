@@ -1,5 +1,5 @@
 /* Approved 2026-10-26 deck scene. Shared HOME/nav, frame and common buttons remain owned by the lounge. */
-:root body .lounge-deck .lounge-content{inset:64px 12px 82px;padding:0;overflow:visible}
+:root body .lounge-deck .lounge-content{inset:calc(var(--bar) + 8px) 12px calc(var(--dock) + 10px);padding:0;overflow:visible}
 :root body .lounge-deck .lounge-content>.deck-screen{padding:0;width:100%;height:100%;overflow:visible}
 :root body .lounge-deck .deck-panel{display:grid;grid-template-columns:106px minmax(0,1fr);grid-template-rows:263px minmax(0,1fr);gap:8px 12px;width:100%;max-width:none;height:100%;padding:0!important;margin:0;border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important;backdrop-filter:none;overflow:visible}
 .lounge-deck .deck-panel>h2,.lounge-deck .deck-controls>#back{display:none}
@@ -45,7 +45,7 @@
 :root body .lounge-deck #poolSearch{width:100%;min-width:0;height:100%;padding:0;font-size:11px;border:0;background:none;outline:none;box-shadow:none}
 .lounge-deck .deck-pool-search:focus-within{width:min(280px,calc(100vw - 48px));box-shadow:0 6px 18px #0009;outline:1px solid #b9c6d250}
 .lounge-deck .deck-panel>#deckCandidates{grid-column:2;grid-row:2;display:block;min-width:0;min-height:0;overflow:hidden;padding:0;container-type:normal}
-.lounge-deck #deckPool{display:grid;grid-template-columns:repeat(auto-fill,88px);grid-auto-rows:max-content;justify-content:space-between;align-content:start;justify-items:stretch;gap:24px 20px;width:100%;height:100%;padding:14px 26px 24px;overflow:auto;--collection-card-width:88px}
+.lounge-deck #deckPool{position:relative;z-index:0;isolation:isolate;clip-path:polygon(calc(var(--deck-cut) - 1px) 1px,calc(100% - var(--deck-cut) + 1px) 1px,calc(100% - 1px) calc(var(--deck-cut) - 1px),calc(100% - 1px) calc(100% - var(--deck-cut) + 1px),calc(100% - var(--deck-cut) + 1px) calc(100% - 1px),calc(var(--deck-cut) - 1px) calc(100% - 1px),1px calc(100% - var(--deck-cut) + 1px),1px calc(var(--deck-cut) - 1px));display:grid;grid-template-columns:repeat(auto-fill,88px);grid-auto-rows:max-content;justify-content:space-between;align-content:start;justify-items:stretch;gap:24px 20px;width:100%;height:100%;padding:14px 26px 24px;overflow:auto;--collection-card-width:88px}
 .lounge-deck .deck-pool-tile{position:relative;width:88px;height:137.5px;container-type:inline-size}
 .lounge-deck .deck-pool-face{position:relative;width:100%;height:100%}
 .lounge-deck #deckCur .deck-entry .card,.lounge-deck #deckPool .card{--cw:100cqw;--ch:calc(100cqw / .64);width:100%;height:auto;aspect-ratio:.64;font-size:13.5cqw;filter:none;transform:none;margin:0;transition:none;opacity:1}
@@ -67,7 +67,10 @@
 .lounge-deck :is(.deck-frame,.deck-tabs)::before,.lounge-deck #deckCandidates::after{content:'';position:absolute;inset:-3px;z-index:-1;border:1px solid transparent;border-image:var(--lore-panel-image) 100 fill / var(--deck-frame) / 0 stretch;clip-path:polygon(var(--deck-cut) 0,calc(100% - var(--deck-cut)) 0,100% var(--deck-cut),100% calc(100% - var(--deck-cut)),calc(100% - var(--deck-cut)) 100%,var(--deck-cut) 100%,0 calc(100% - var(--deck-cut)),0 var(--deck-cut));opacity:.96;pointer-events:none}
 .lounge-deck :is(.deck-filters,.deck-tabs){--deck-cut:12px;--deck-frame:24px}
 .lounge-deck #deckCandidates::before{opacity:.78}
-.lounge-deck #deckCandidates::after{border-image:var(--lore-panel-image) 100 / var(--deck-frame) / 0 stretch;opacity:.82}
+/* Keep the decorative rim above every card layer, without its wide translucent inset covering the cards. */
+.lounge-deck #deckCandidates::after{z-index:1;border-image:var(--lore-panel-image) 100 / var(--deck-frame) / 0 stretch;opacity:.82;clip-path:polygon(evenodd,
+ var(--deck-cut) 0,calc(100% - var(--deck-cut)) 0,100% var(--deck-cut),100% calc(100% - var(--deck-cut)),calc(100% - var(--deck-cut)) 100%,var(--deck-cut) 100%,0 calc(100% - var(--deck-cut)),0 var(--deck-cut),var(--deck-cut) 0,
+ calc(var(--deck-cut) + 2px) 4px,calc(100% - var(--deck-cut) - 2px) 4px,calc(100% - 4px) calc(var(--deck-cut) + 2px),calc(100% - 4px) calc(100% - var(--deck-cut) - 2px),calc(100% - var(--deck-cut) - 2px) calc(100% - 4px),calc(var(--deck-cut) + 2px) calc(100% - 4px),4px calc(100% - var(--deck-cut) - 2px),4px calc(var(--deck-cut) + 2px),calc(var(--deck-cut) + 2px) 4px)}
 .lounge-deck .deck-msg{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);z-index:20;background:#10243df5;padding:7px 14px;font-size:12px;border-bottom:1px solid #b8d6ed;max-width:90%;pointer-events:none}
 .lounge-deck .deck-msg:empty{display:none}
 .lounge-deck .deck-screen:not([data-tab=edit]) .deck-panel{grid-template-rows:38px minmax(0,1fr)}
@@ -87,7 +90,7 @@
 .lounge-deck .deck-drag-guide:empty{display:none}
 .lounge-deck .deck-drag-over .deck-stage-depth{box-shadow:inset 0 -2px #9bd2eb}
 @media(max-width:760px){
- :root body .lounge-deck .lounge-content{inset:62px 8px 76px}
+ :root body .lounge-deck .lounge-content{inset:calc(var(--bar) + 8px) 8px calc(var(--dock) + 10px)}
  :root body .lounge-deck .deck-panel{grid-template-columns:65px minmax(0,1fr);grid-template-rows:39px 199px minmax(0,1fr);gap:7px}
  .lounge-deck .deck-panel>.deck-tabs{grid-column:1/-1;grid-row:1;flex-direction:row;gap:2px;padding:2px}
  .lounge-deck .deck-tab-row .deck-tab{font-size:9px;padding:0 3px;min-height:28px}
@@ -133,3 +136,15 @@
 /* defaultUI's grouped selector has dialog-level specificity; opt out only this layout container. */
 :root body .lounge-deck .deck-panel#deckWorkspace{border:0!important;border-image:none!important;clip-path:none!important;background:none!important;box-shadow:none!important}
 .lounge-deck #deckCur{box-shadow:none;border-radius:0}
+
+/* Short landscape screens scroll the workspace inside the same header/nav safe area. */
+@media(max-height:500px){
+ :root body .lounge-deck .lounge-content>.deck-screen{overflow:auto;padding:3px}
+ :root body .lounge-deck .deck-panel{height:auto;min-height:100%;grid-template-rows:190px 190px}
+ .lounge-deck .deck-screen:not([data-tab=edit]) .deck-panel{grid-template-rows:38px 190px}
+}
+@media(max-height:650px) and (max-width:760px){
+ :root body .lounge-deck .lounge-content>.deck-screen{overflow:auto;padding:3px}
+ :root body .lounge-deck .deck-panel{height:auto;min-height:100%;grid-template-rows:39px 199px 190px}
+ .lounge-deck .deck-screen:not([data-tab=edit]) .deck-panel{grid-template-rows:39px 36px 190px}
+}

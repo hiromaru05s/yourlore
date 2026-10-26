@@ -1,3 +1,4 @@
+import {renderRankedProfile} from '../ui/rankedProfile';
 import {mountUsernameForm} from '../ui/usernameForm';
 import {mountProfileMedals} from '../ui/profileMedals';
 import {medalHtml} from '../ui/medal';
@@ -16,7 +17,6 @@ import { confirmDialog } from "../ui/modal";
 import type { App, Screen } from "../router";
 import { api, type Profile } from "../net/api";
 import { t, onLangChange, getLang, setLang, type Lang } from "../i18n";
-import { tierChipHtml } from "../ui/tier";
 import { avatarHtml } from "../ui/social";
 import { getSfxVolume, setSfxVolume, sfx } from "../ui/sound";
 
@@ -29,7 +29,6 @@ function fmtDate(ts: number): string {
 
 export type ProfileTab = "overview" | "owned" | "progress" | "h2h" | "settings";
 type Tab = ProfileTab;
-type RecFilter = "ranked" | "online" | "bot";
 
 export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab): Screen {
   const wrap = document.createElement("div");
@@ -43,7 +42,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   let disposeMedals: (()=>void)|undefined;
   let cached: Profile | null = null;
   let tab: Tab = initialTab ?? "overview";
-  let recFilter: RecFilter = "ranked";
 
   const isSelf = (): boolean => !!cached?.self;
 
@@ -53,6 +51,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     wrap.dataset.profileTab = tab;
     wrap.innerHTML = `
       <div class="tut">
+        <button type="button" class="btn btn-ghost lore-button-quiet profile-page-close" aria-label="${loungeText('閉じる','Close','닫기')}">×</button>
         <div class="tut-head">
           <button class="btn btn-ghost" id="back">← ${t("common.back")}</button>
           <div class="support-heading"><span class="menu-eyebrow">${tab === "settings" ? "PREFERENCES" : "SEEKER PROFILE"}</span><h2>${t(tab === "settings" ? "home.settings" : "profile.title")}</h2><p class="menu-subtitle">${tab === "settings" ? loungeText("音・言語・公開範囲を、あなたに合わせて。", "Make LORE your own.", "소리, 언어, 공개 범위를 설정하세요.") : loungeText("デュエルの記録と、シーカーの現在地。", "Your duels, your progress.", "듀얼 기록과 시커의 현재 위치.")}</p></div>
@@ -68,6 +67,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <div class="tut-body" id="pbody"><div class="pf-loading">…</div></div>
       </div>`;
     (wrap.querySelector("#back") as HTMLElement).onclick = () => app.home();
+    wrap.querySelector<HTMLButtonElement>('.profile-page-close')!.onclick = () => app.home();
     wrap.querySelectorAll(".pf-tab").forEach((b) => {
       (b as HTMLElement).onclick = () => {
         const next = (b as HTMLElement).dataset.tab as Tab;
@@ -109,16 +109,6 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   // ============================================================
   const renderOverview = (p: Profile): void => {
     const experience=seekerLevel(app.user?.exp??0);
-    const modeLabel = (m: string) => m === "ranked" ? t("mode.ranked") : m === "bot" ? t("mode.bot") : t("mode.online");
-    const resLabel = (r: string) => r === "win" ? t("modal.win") : r === "draw" ? t("modal.draw") : t("modal.lose");
-    // Never substitute mixed lifetime totals for a selected match mode.
-    const cur = p.byMode?.[recFilter] ?? {w:0,l:0};
-    const totalG = cur.w + cur.l;
-    const rate = totalG ? Math.round((cur.w / totalG) * 100) : 0;
-    const showTier = recFilter === "ranked";
-    const recent = (p.recent ?? []).filter((m) => m.mode === recFilter);
-    const filterOpts: RecFilter[] = ["ranked", "online", "bot"];
-
     body().innerHTML = `
       <section class="tut-sec pf-card">
         <div class="pf-head">
@@ -129,45 +119,14 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
               ${p.self ? `<button class="btn btn-ghost btn-mini" id="renameBtn">${homeIcon("edit")} ${t("profile.rename")}</button>` : ""}
             </div>
             ${medalHtml(p.medals?.equipped ?? p.badge)}
-            <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${modeLabel(recFilter)} · ${cur.w}${t("home.win")} ${cur.l}${t("home.loss")}`} · ${fmtDate(p.created_at)}~</div>
+            <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${t("mode.ranked")}`} · ${fmtDate(p.created_at)}~</div>
           </div>
         </div>
       </section>
       ${p.self ? `<details class="tut-sec pf-experience"><summary>${t('home.seekerLevel')} ${experience.level} · ${experience.max?'MAX':`${experience.progress}/100 EXP`}</summary><p>${t('home.levelRule')}</p></details>` : ''}
-      ${p.private ? `<section class="tut-sec"><p>${t("profile.private")}</p></section>` : `
-      <section class="tut-sec">
-        <div class="pf-stats-head">
-          <h3><span class="tut-ico">${homeIcon("trophy")}</span>${t("profile.stats")}</h3>
-          <div class="lang-select pf-filter"><select id="modeFilter" aria-label="${t("profile.stats")}">
-            ${filterOpts.map((f) => `<option value="${f}"${recFilter === f ? " selected" : ""}>${t(`profile.filter.${f}`)}</option>`).join("")}
-          </select></div>
-        </div>
-        <div class="pf-stats">
-          <div class="pf-stat"><b>${cur.w}</b><span>${t("home.win")}</span></div>
-          <div class="pf-stat"><b>${cur.l}</b><span>${t("home.loss")}</span></div>
-          <div class="pf-stat"><b>${rate}%</b><span>${t("profile.winrate")}</span></div>
-          <div class="pf-stat pf-stat-tier">${showTier && p.tier ? tierChipHtml(p.tier, p.mmr ?? undefined) : "—"}</div>
-        </div>
-      </section>
-      <section class="tut-sec">
-        <h3><span class="tut-ico">${homeIcon("history")}</span>${t("profile.recent")}</h3>
-        ${!recent.length ? `<p>${t("profile.recent.empty")}</p>` : `
-        <div class="pf-matches">
-          ${recent.map((m) => `
-            <div class="pf-match pf-${m.result}">
-              <span class="pf-m-res">${resLabel(m.result)}</span>
-              <span class="pf-m-opp">vs ${esc(m.opp)}</span>
-              <span class="pf-m-meta">${modeLabel(m.mode)}${m.turns ? ` · ${m.turns}${t("profile.turns")}` : ""} · ${fmtDate(m.at)}</span>
-            </div>`).join("")}
-        </div>`}
-      </section>`}
+      <div class="pf-ranked-content" data-ranked-profile></div>
     `;
-
-    // Mode filter: re-render the overview with the chosen mode
-    (body().querySelector("#modeFilter") as HTMLSelectElement | null)?.addEventListener("change", (e) => {
-      recFilter = (e.target as HTMLSelectElement).value as RecFilter;
-      renderOverview(p);
-    });
+    renderRankedProfile(body().querySelector<HTMLElement>('[data-ranked-profile]')!,p);
 
     if (!p.self) return;
 
@@ -342,34 +301,27 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   return { destroy: () => { dead = true; closeRename?.(); disposeMedals?.(); unsub(); } };
 }
 
-/** Read-only profile popup (used from the friends list). */
+/** One ranked profile shared by the leaderboard and friends list. */
 export async function showProfileModal(userId: string): Promise<void> {
-  let p: Profile;
-  try { p = await api.profile(userId); } catch { return; }
-  const record = p.byMode?.ranked ?? {w:0,l:0};
-  const total = record.w + record.l;
-  const rate = total ? Math.round((record.w / total) * 100) : 0;
-  const ov = document.createElement("div");
-  ov.className = "overlay";
-  ov.innerHTML = `
-    <div class="modal pf-mini-modal">
-      <div class="pf-head">
-        ${avatarHtml(p.avatar, p.display, 64)}
-        <div class="pf-id">
-          <div class="pf-name">${esc(p.display)}</div>${medalHtml(p.badge)}
-        </div>
-      </div>
-      ${p.private
-        ? `<p style="margin-top:10px">${t("profile.private")}</p>`
-        : `<p>${t("mode.ranked")}</p><div class="pf-stats" style="margin-top:12px">
-            <div class="pf-stat"><b>${record.w}</b><span>${t("home.win")}</span></div>
-            <div class="pf-stat"><b>${record.l}</b><span>${t("home.loss")}</span></div>
-            <div class="pf-stat"><b>${rate}%</b><span>${t("profile.winrate")}</span></div>
-            <div class="pf-stat pf-stat-tier">${p.tier ? tierChipHtml(p.tier, p.mmr ?? undefined) : "—"}</div>
-          </div>`}
-      <div class="modal-row"><button class="btn btn-ghost btn-block" id="pfClose">${t("common.confirm")}</button></div>
-    </div>`;
-  document.body.appendChild(ov);
-  ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
-  (ov.querySelector("#pfClose") as HTMLElement).onclick = () => ov.remove();
+  const previous=document.activeElement as HTMLElement|null;
+  const ov=document.createElement('div');ov.className='overlay';
+  ov.innerHTML=`<div class="modal ranked-profile-modal" role="dialog" aria-modal="true" aria-label="${t('profile.title')}"><button type="button" class="btn btn-ghost lore-button-quiet profile-close" id="pfClose" aria-label="${loungeText('閉じる','Close','닫기')}">×</button><div class="profile-content" aria-live="polite">${loungeText('読み込み中…','Loading…','불러오는 중…')}</div></div>`;
+  const close=()=>{ov.remove();if(previous?.isConnected)previous.focus();};
+  ov.querySelector<HTMLButtonElement>('#pfClose')!.onclick=close;
+  ov.onclick=e=>{if(e.target===ov)close();};
+  ov.addEventListener('keydown',e=>{if(e.key==='Escape'){e.stopPropagation();close();}});
+  document.body.append(ov);ov.querySelector<HTMLButtonElement>('#pfClose')!.focus();
+  const content=ov.querySelector<HTMLElement>('.profile-content')!;
+  const load=async()=>{
+    try{
+      const p=await api.profile(userId);if(!ov.isConnected)return;
+      content.innerHTML=`<div class="pf-head">${avatarHtml(p.avatar,p.display,64)}<div class="pf-id"><div class="pf-name">${esc(p.display)}</div>${medalHtml(p.badge)}</div></div><div data-ranked-profile></div>`;
+      renderRankedProfile(content.querySelector<HTMLElement>('[data-ranked-profile]')!,p);
+    }catch{
+      if(!ov.isConnected)return;
+      content.textContent=loungeText('プロフィールを読み込めませんでした。','Could not load the profile.','프로필을 불러오지 못했습니다.');
+      const retry=document.createElement('button');retry.className='btn btn-ghost';retry.textContent=loungeText('再試行','Retry','재시도');retry.onclick=()=>{content.textContent='…';void load();};content.append(retry);
+    }
+  };
+  await load();
 }
