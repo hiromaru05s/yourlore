@@ -30,8 +30,8 @@ try {
   ['M4',['相手に2ダメージ']],['M2',['墓地から購入コスト1','ランダム']],
   ['COLOSSEUM_REST',['自分のターン開始時','体力を2回復','10枚以上','1体を選び']],
   ['BUDGET',['1～2','3～6','さらに「兵士」1体']],['S12',['ダイス5個','20以上']],
-  ['NIGHT_CASTLE_GIFT',[]],['AHEUK',['2体以上','追加で-1']],['GS8_0',[]],['TIMEWARP',[]],
-  ['S14',['両陣営','気合','カウンター1個']],['GM5_3',['4ダメージ']],
+  ['NIGHT_CASTLE_GIFT',[]],['AHEUK',['2体以上','さらに1減らす']],['GS8_0',[]],['TIMEWARP',[]],
+  ['S14',['両方の場','気合','カウンター1個']],['GM5_3',['4ダメージ']],
   ...['NHEX','HEXER1','HEXER2','HEXER3'].map(id=>[id,['自分のターン開始時','同名でない','種類数','呪い']])]){
   const name=catalog.find(c=>c.id===id).nameJa;
   await page.locator('.cards-search').fill(name);await page.locator(`#grid [data-card-id="${id}"]`).first().click();

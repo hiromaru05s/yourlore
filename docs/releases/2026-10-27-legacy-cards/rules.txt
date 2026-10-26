@@ -1,0 +1,17 @@
+PASS all changed costs apply to buying and playing; unrequested stats/rain remain
+PASS Warden transfers one existing Dew on either side; empty opponent grants nothing
+PASS Stone Pup recovers the actual eligible graveyard instance, never spells/cost2/enemy cards
+PASS Iron Shell grants shield without self damage and uses existing shield multipliers/triggers
+PASS Titan permanently reduces only the selected enemy by two
+PASS Blade Hare adds two only on its own successful destruction, including Egg and granted counter
+PASS Blade Hare granted Decay triggers once; normal direct attacks do not gain a kill bonus
+PASS Unbrander keeps summon removal and replaces Curse effect without stacking or changing Void
+PASS Budget checks all die faces with and without Castle; summons feed Castle counters
+PASS Steel Brand rolls exactly five dice, threshold 19/20, and counts all five for Casino
+PASS Black Attune bonus needs no own monsters AND two opponent monsters; mana floor remains three
+PASS Earth Blessing heals both fields, grants only Guts counters, never player HP
+PASS Inferno Drake owner-turn burn is four
+PASS Hexer bonus counts other unique names, each instance, owner starts only, including Keloid
+PASS Hexer existing summon rolls, apprentice roll, and High Hexer spell response remain
+PASS Rest heals player by two; 9/10 Cull threshold, own starts, actual choices and restored queue
+PASS 16 legacy-card scenario groups
