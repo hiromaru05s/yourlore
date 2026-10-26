@@ -5,7 +5,7 @@ const browser=await (engine==='webkit'?webkit:chromium).launch(engine==='webkit'
 try{for(const width of (process.env.LORE_QA_WIDTHS||'1280,390').split(',').map(Number)){
  const ctx=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:width<500?2:1,recordVideo:{dir:out+'/video',size:{width,height:900}}}),page=await ctx.newPage(),errors=[];page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(/Native capture fallback|could not be prepared|Shader Error|GL_INVALID/.test(m.text()))errors.push(m.text());});
  await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));
- for(const frame of ['frame:mirror-silver','frame:flowing-gold','frame:obsidian-ember','frame:nacre-prism','frame:verdigris-runes']){
+ for(const frame of (process.env.LORE_QA_FRAMES?.split(',')??['frame:mirror-silver','frame:flowing-gold','frame:obsidian-ember','frame:nacre-prism','frame:verdigris-runes'])){
  const result=await page.evaluate(async(frame)=>{
   const {DB,FRAME_BACK}=await import('/src/shared/cards.ts'),{redactFor}=await import('/src/shared/protocol.ts'),{reduce}=await import('/src/shared/engine.ts'),F=await import('/src/ui/cardFrame.ts'),A=await import('/src/ui/anim.ts'),c=combatTempo.controller;await c.queue;
   const g=combatTempo.fixture('summon',0).prev;g.opening=undefined;g.frames=[frame,frame];g.effects=['effect:prism-veil','default'];

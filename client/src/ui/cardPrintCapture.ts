@@ -67,7 +67,7 @@ export async function captureNativePrint(source:HTMLElement,width:number,padding
   style.cssText=declarations.join(';')+';animation:none!important;transition:none!important;visibility:visible!important';
   if(i===0)target.removeAttribute('id');target.removeAttribute('data-uid');
   if(node instanceof HTMLImageElement){(target as HTMLImageElement).removeAttribute('srcset');(target as HTMLImageElement).removeAttribute('sizes');(target as HTMLImageElement).src=await dataUrl(node.currentSrc||node.src);}
-  if(node instanceof HTMLCanvasElement){const original=liveCanvases[sourceCanvases.indexOf(node)]??node;if(original.width&&original.height){const img=document.createElement('img');img.style.cssText=style.cssText;img.src=original.toDataURL();target.replaceWith(img);target=img;}}
+  if(node instanceof HTMLCanvasElement){const original=liveCanvases[sourceCanvases.indexOf(node)]??node;if(original.width&&original.height){const img=document.createElement('img');img.style.cssText=style.cssText;img.src=original.toDataURL();await img.decode();target.replaceWith(img);target=img;}}
   // Pseudo-elements (quest labels, badge plates) are part of the print too.
   for(const pseudo of ['::before','::after']){const ps=getComputedStyle(node,pseudo);if(ps.content==='none'||ps.content==='normal'||ps.display==='none')continue;const el=document.createElement('span');const ds=[];for(const key of ps){if(!visualProperty.test(key))continue;const value=ps.getPropertyValue(key);ds.push(`${key}:${scaled(key,value.includes('url(')?await inlineValue(value):value)}`);}el.style.cssText=ds.join(';');el.textContent=ps.content.replace(/^["']|["']$/g,'');pseudo==='::before'?target.prepend(el):target.append(el);}
  }));

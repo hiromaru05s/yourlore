@@ -36,7 +36,7 @@ export async function foldQuestIntoSlot(reveal:HTMLElement,target:HTMLElement,fa
   const surfaces=await Promise.race([capture,new Promise<null>(resolve=>{cancel=()=>resolve(null);signal.addEventListener('abort',cancel,{once:true});})]).finally(()=>signal.removeEventListener('abort',cancel));
   if(!surfaces||signal.aborted||document.hidden||!target.isConnected||!reveal.isConnected)return false;
   const [source,module]=surfaces;if(!source.face)return false;
-  material=new module.QuestPactRenderer(source.face,true);material.resize(640,520);material.draw(0,DURATION);
+  material=new module.QuestPactRenderer(source.face,true);material.renderer.setPixelRatio(1);material.resize(640,520);material.draw(0,DURATION);
   const canvas=material.canvas,b=material.cardBounds();
   // Capture padding is transparent. Match the visible card, not the canvas bounds.
   const cw=from.width*(1+CARD_PADDING*2)/b.width,ch=from.height*(1+CARD_PADDING*2*from.width/from.height)/b.height;
