@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "actual GameView: both sides, selected round fill, shared resource counters and infinity, no legacy text plaque",
+    "real engine: global clocks advance; owner-start Brewing advances and Farm resolves; Mana uses the actual owner-start clock",
+    "actual threshold resolves Ancient Civilization and expires Blood Rite without UI icons",
+    "zero/full stays numeric with no secondary glyph; desktop/landscape/mobile; reduced motion; teardown"
+  ],
+  "errors": [],
+  "limits": "Local actual GameView and shared-engine checks; no authenticated online match."
+}
