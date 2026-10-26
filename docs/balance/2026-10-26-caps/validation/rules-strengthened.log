@@ -1,0 +1,16 @@
+PASS Raider rejects duplicate before payment; enemy may control one; BOT follows the same rule
+PASS Raider expires after opponent end, even with Guts/Aura; own turn does not expire it
+PASS Raider expires across a skipped opponent turn
+PASS Revival cannot bypass uniqueness or consume the graveyard monster; successful revival receives the deadline
+PASS Scavenger copies respect uniqueness; an opponent-turn summon survives that turn and expires next opponent end
+PASS Legacy steal trap cannot put a second Raider on the receiving field
+PASS Grimoire has exactly five discounts; sixth draw costs mana and zero-cost spells consume a charge
+PASS Multiple purchases have independent five-use lifetimes and reset at end of turn
+PASS Rejected actions and non-spells do not consume discounts; JSON and legacy saves remain bounded
+PASS Legacy reaction: fifth discounted spell is countered at its paid cost and consumes its charge
+PASS Dominion self-redraw stops at three, queue stays one, fourth use changes nothing
+PASS Dominion limit is per player across turns and JSON saves, including negations and legacy copies
+PASS Dominion preserves other skip sources and can reserve again after consumption
+PASS Rune echo does not duplicate the Dominion skip reservation
+PASS Rust rolls 1–3 to grave, 4–6 to Rift plus 3 self damage (all six boundaries)
+PASS 15 balance cap scenario groups

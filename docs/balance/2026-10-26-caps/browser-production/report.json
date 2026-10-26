@@ -1,0 +1,61 @@
+{
+  "base": "https://yourlore.xyz",
+  "scope": "shipped static assets, actual App/menu/card renderer; isolated API fixtures; no authenticated account or online duel",
+  "checks": [
+    "特攻ゴブリン current effect text on desktop and 390px",
+    "呪術魔法書 current effect text on desktop and 390px",
+    "支配 current effect text on desktop and 390px",
+    "ラストマッシュルーム current effect text on desktop and 390px",
+    "All four card inspections rendered without JS errors"
+  ],
+  "assets": [
+    {
+      "url": "https://yourlore.xyz/art/cards/GOBLIN_RAIDER.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/GOBLIN.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/GOBLIN_SETTLEMENT.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/GOBLIN_LEADER.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/GOBLIN_KING.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/QUICK_GRIMOIRE.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 759
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/DOMINION.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/Q_TOWN.webp?v=20260910-theme-identity-v3",
+      "width": 1472,
+      "height": 1344
+    },
+    {
+      "url": "https://yourlore.xyz/art/cards/RUST_SHROOM.webp?v=20260910-theme-identity-v3",
+      "width": 832,
+      "height": 760
+    }
+  ],
+  "errors": [],
+  "sourceCommit": "b2373586558e515ec238ee0a88a0ec5bbfd52569",
+  "verifiedBy": "production-assets.json"
+}

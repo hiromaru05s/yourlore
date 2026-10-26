@@ -1,0 +1,662 @@
+{
+  "completed": 1920,
+  "invalid": 0,
+  "unfinished": 0,
+  "method": "10 candidate decks x 6 fixed opponents x 16 seeds x 2 seats. Four market types, half with starter-spell coverage policy. Paired-seat cluster bootstrap 95%, exploratory, no multiplicity correction. All players use v64. Thin opponent uses defender policy. BOT results are not human optimal-play win rates.",
+  "decks": {
+    "goblin8": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN"
+    ],
+    "goblin7raider1": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER"
+    ],
+    "goblin6raiderCounter": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC"
+    ],
+    "goblin5support": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC",
+      "BLOOD_RITE"
+    ],
+    "pureRally": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER"
+    ],
+    "rustGob": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN"
+    ],
+    "control": [
+      "WEAKEN_ALL",
+      "WEAKEN_ALL",
+      "GAMBLER",
+      "GAMBLER",
+      "RUST_SHROOM",
+      "GOBLIN",
+      "COUNTERCALC",
+      "BLOOD_RITE"
+    ],
+    "thin": [
+      "WEAKEN_ALL",
+      "WEAKEN_ALL",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH"
+    ],
+    "mixed": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC",
+      "BLOOD_RITE"
+    ],
+    "ghost": [
+      "GHOST",
+      "GHOST",
+      "GHOST",
+      "GHOST",
+      "FLAME",
+      "FLAME",
+      "BLOOD_RITE",
+      "COUNTERCALC"
+    ]
+  },
+  "overall": {
+    "goblin8": {
+      "n": 192,
+      "wins": 116,
+      "draws": 0,
+      "winEquivalent": 116,
+      "rate": 0.6041666666666666,
+      "pairedSeatBootstrap95": [
+        0.53125,
+        0.6770833333333334
+      ]
+    },
+    "goblin7raider1": {
+      "n": 192,
+      "wins": 139,
+      "draws": 0,
+      "winEquivalent": 139,
+      "rate": 0.7239583333333334,
+      "pairedSeatBootstrap95": [
+        0.65625,
+        0.796875
+      ]
+    },
+    "goblin6raiderCounter": {
+      "n": 192,
+      "wins": 138,
+      "draws": 0,
+      "winEquivalent": 138,
+      "rate": 0.71875,
+      "pairedSeatBootstrap95": [
+        0.6458333333333334,
+        0.7916666666666666
+      ]
+    },
+    "goblin5support": {
+      "n": 192,
+      "wins": 110,
+      "draws": 0,
+      "winEquivalent": 110,
+      "rate": 0.5729166666666666,
+      "pairedSeatBootstrap95": [
+        0.484375,
+        0.65625
+      ]
+    },
+    "pureRally": {
+      "n": 192,
+      "wins": 87,
+      "draws": 0,
+      "winEquivalent": 87,
+      "rate": 0.453125,
+      "pairedSeatBootstrap95": [
+        0.3697916666666667,
+        0.5364583333333334
+      ]
+    },
+    "rustGob": {
+      "n": 192,
+      "wins": 118,
+      "draws": 0,
+      "winEquivalent": 118,
+      "rate": 0.6145833333333334,
+      "pairedSeatBootstrap95": [
+        0.53125,
+        0.6979166666666666
+      ]
+    },
+    "control": {
+      "n": 192,
+      "wins": 83,
+      "draws": 0,
+      "winEquivalent": 83,
+      "rate": 0.4322916666666667,
+      "pairedSeatBootstrap95": [
+        0.3489583333333333,
+        0.5208333333333334
+      ]
+    },
+    "thin": {
+      "n": 192,
+      "wins": 58,
+      "draws": 0,
+      "winEquivalent": 58,
+      "rate": 0.3020833333333333,
+      "pairedSeatBootstrap95": [
+        0.22395833333333334,
+        0.375
+      ]
+    },
+    "mixed": {
+      "n": 192,
+      "wins": 90,
+      "draws": 0,
+      "winEquivalent": 90,
+      "rate": 0.46875,
+      "pairedSeatBootstrap95": [
+        0.3802083333333333,
+        0.5572916666666666
+      ]
+    },
+    "ghost": {
+      "n": 192,
+      "wins": 47,
+      "draws": 0,
+      "winEquivalent": 47,
+      "rate": 0.24479166666666666,
+      "pairedSeatBootstrap95": [
+        0.171875,
+        0.328125
+      ]
+    }
+  },
+  "matrix": {
+    "goblin8": {
+      "goblin8": {
+        "n": 32,
+        "wins": 16,
+        "draws": 0,
+        "winEquivalent": 16,
+        "rate": 0.5
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 8,
+        "draws": 0,
+        "winEquivalent": 8,
+        "rate": 0.25
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 21,
+        "draws": 0,
+        "winEquivalent": 21,
+        "rate": 0.65625
+      },
+      "control": {
+        "n": 32,
+        "wins": 24,
+        "draws": 0,
+        "winEquivalent": 24,
+        "rate": 0.75
+      },
+      "thin": {
+        "n": 32,
+        "wins": 16,
+        "draws": 0,
+        "winEquivalent": 16,
+        "rate": 0.5
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 31,
+        "draws": 0,
+        "winEquivalent": 31,
+        "rate": 0.96875
+      }
+    },
+    "goblin7raider1": {
+      "goblin8": {
+        "n": 32,
+        "wins": 23,
+        "draws": 0,
+        "winEquivalent": 23,
+        "rate": 0.71875
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 16,
+        "draws": 0,
+        "winEquivalent": 16,
+        "rate": 0.5
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 27,
+        "draws": 0,
+        "winEquivalent": 27,
+        "rate": 0.84375
+      },
+      "control": {
+        "n": 32,
+        "wins": 25,
+        "draws": 0,
+        "winEquivalent": 25,
+        "rate": 0.78125
+      },
+      "thin": {
+        "n": 32,
+        "wins": 16,
+        "draws": 0,
+        "winEquivalent": 16,
+        "rate": 0.5
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 32,
+        "draws": 0,
+        "winEquivalent": 32,
+        "rate": 1.0
+      }
+    },
+    "goblin6raiderCounter": {
+      "goblin8": {
+        "n": 32,
+        "wins": 22,
+        "draws": 0,
+        "winEquivalent": 22,
+        "rate": 0.6875
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 9,
+        "draws": 0,
+        "winEquivalent": 9,
+        "rate": 0.28125
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 23,
+        "draws": 0,
+        "winEquivalent": 23,
+        "rate": 0.71875
+      },
+      "control": {
+        "n": 32,
+        "wins": 31,
+        "draws": 0,
+        "winEquivalent": 31,
+        "rate": 0.96875
+      },
+      "thin": {
+        "n": 32,
+        "wins": 21,
+        "draws": 0,
+        "winEquivalent": 21,
+        "rate": 0.65625
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 32,
+        "draws": 0,
+        "winEquivalent": 32,
+        "rate": 1.0
+      }
+    },
+    "goblin5support": {
+      "goblin8": {
+        "n": 32,
+        "wins": 10,
+        "draws": 0,
+        "winEquivalent": 10,
+        "rate": 0.3125
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 4,
+        "draws": 0,
+        "winEquivalent": 4,
+        "rate": 0.125
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 16,
+        "draws": 0,
+        "winEquivalent": 16,
+        "rate": 0.5
+      },
+      "control": {
+        "n": 32,
+        "wins": 31,
+        "draws": 0,
+        "winEquivalent": 31,
+        "rate": 0.96875
+      },
+      "thin": {
+        "n": 32,
+        "wins": 17,
+        "draws": 0,
+        "winEquivalent": 17,
+        "rate": 0.53125
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 32,
+        "draws": 0,
+        "winEquivalent": 32,
+        "rate": 1.0
+      }
+    },
+    "pureRally": {
+      "goblin8": {
+        "n": 32,
+        "wins": 5,
+        "draws": 0,
+        "winEquivalent": 5,
+        "rate": 0.15625
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 3,
+        "draws": 0,
+        "winEquivalent": 3,
+        "rate": 0.09375
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 8,
+        "draws": 0,
+        "winEquivalent": 8,
+        "rate": 0.25
+      },
+      "control": {
+        "n": 32,
+        "wins": 24,
+        "draws": 0,
+        "winEquivalent": 24,
+        "rate": 0.75
+      },
+      "thin": {
+        "n": 32,
+        "wins": 15,
+        "draws": 0,
+        "winEquivalent": 15,
+        "rate": 0.46875
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 32,
+        "draws": 0,
+        "winEquivalent": 32,
+        "rate": 1.0
+      }
+    },
+    "rustGob": {
+      "goblin8": {
+        "n": 32,
+        "wins": 17,
+        "draws": 0,
+        "winEquivalent": 17,
+        "rate": 0.53125
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 6,
+        "draws": 0,
+        "winEquivalent": 6,
+        "rate": 0.1875
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 20,
+        "draws": 0,
+        "winEquivalent": 20,
+        "rate": 0.625
+      },
+      "control": {
+        "n": 32,
+        "wins": 25,
+        "draws": 0,
+        "winEquivalent": 25,
+        "rate": 0.78125
+      },
+      "thin": {
+        "n": 32,
+        "wins": 19,
+        "draws": 0,
+        "winEquivalent": 19,
+        "rate": 0.59375
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 31,
+        "draws": 0,
+        "winEquivalent": 31,
+        "rate": 0.96875
+      }
+    },
+    "control": {
+      "goblin8": {
+        "n": 32,
+        "wins": 5,
+        "draws": 0,
+        "winEquivalent": 5,
+        "rate": 0.15625
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 6,
+        "draws": 0,
+        "winEquivalent": 6,
+        "rate": 0.1875
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 2,
+        "draws": 0,
+        "winEquivalent": 2,
+        "rate": 0.0625
+      },
+      "control": {
+        "n": 32,
+        "wins": 16,
+        "draws": 0,
+        "winEquivalent": 16,
+        "rate": 0.5
+      },
+      "thin": {
+        "n": 32,
+        "wins": 25,
+        "draws": 0,
+        "winEquivalent": 25,
+        "rate": 0.78125
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 29,
+        "draws": 0,
+        "winEquivalent": 29,
+        "rate": 0.90625
+      }
+    },
+    "thin": {
+      "goblin8": {
+        "n": 32,
+        "wins": 9,
+        "draws": 0,
+        "winEquivalent": 9,
+        "rate": 0.28125
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 10,
+        "draws": 0,
+        "winEquivalent": 10,
+        "rate": 0.3125
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 7,
+        "draws": 0,
+        "winEquivalent": 7,
+        "rate": 0.21875
+      },
+      "control": {
+        "n": 32,
+        "wins": 6,
+        "draws": 0,
+        "winEquivalent": 6,
+        "rate": 0.1875
+      },
+      "thin": {
+        "n": 32,
+        "wins": 23,
+        "draws": 0,
+        "winEquivalent": 23,
+        "rate": 0.71875
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 3,
+        "draws": 0,
+        "winEquivalent": 3,
+        "rate": 0.09375
+      }
+    },
+    "mixed": {
+      "goblin8": {
+        "n": 32,
+        "wins": 4,
+        "draws": 0,
+        "winEquivalent": 4,
+        "rate": 0.125
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 1,
+        "draws": 0,
+        "winEquivalent": 1,
+        "rate": 0.03125
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 8,
+        "draws": 0,
+        "winEquivalent": 8,
+        "rate": 0.25
+      },
+      "control": {
+        "n": 32,
+        "wins": 29,
+        "draws": 0,
+        "winEquivalent": 29,
+        "rate": 0.90625
+      },
+      "thin": {
+        "n": 32,
+        "wins": 17,
+        "draws": 0,
+        "winEquivalent": 17,
+        "rate": 0.53125
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 31,
+        "draws": 0,
+        "winEquivalent": 31,
+        "rate": 0.96875
+      }
+    },
+    "ghost": {
+      "goblin8": {
+        "n": 32,
+        "wins": 0,
+        "draws": 0,
+        "winEquivalent": 0,
+        "rate": 0.0
+      },
+      "goblin7raider1": {
+        "n": 32,
+        "wins": 0,
+        "draws": 0,
+        "winEquivalent": 0,
+        "rate": 0.0
+      },
+      "goblin5support": {
+        "n": 32,
+        "wins": 0,
+        "draws": 0,
+        "winEquivalent": 0,
+        "rate": 0.0
+      },
+      "control": {
+        "n": 32,
+        "wins": 1,
+        "draws": 0,
+        "winEquivalent": 1,
+        "rate": 0.03125
+      },
+      "thin": {
+        "n": 32,
+        "wins": 30,
+        "draws": 0,
+        "winEquivalent": 30,
+        "rate": 0.9375
+      },
+      "ghost": {
+        "n": 32,
+        "wins": 16,
+        "draws": 0,
+        "winEquivalent": 16,
+        "rate": 0.5
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "before-0": {
+    "complete": true,
+    "done": 10152,
+    "bad": 0,
+    "seconds": 1180.212
+  },
+  "before-1": {
+    "complete": true,
+    "done": 10152,
+    "bad": 0,
+    "seconds": 1236.109
+  },
+  "after-final-0": {
+    "complete": true,
+    "done": 5076,
+    "bad": 0,
+    "seconds": 2933.998
+  },
+  "after-final-1": {
+    "complete": true,
+    "done": 5076,
+    "bad": 0,
+    "seconds": 2926.082
+  },
+  "after-final-2": {
+    "complete": true,
+    "done": 5076,
+    "bad": 0,
+    "seconds": 3330.746
+  },
+  "after-final-3": {
+    "complete": true,
+    "done": 5076,
+    "bad": 0,
+    "seconds": 3338.525
+  },
+  "adapted-0": {
+    "complete": true,
+    "done": 960,
+    "bad": 0,
+    "seconds": 292.279
+  },
+  "adapted-1": {
+    "complete": true,
+    "done": 960,
+    "bad": 0,
+    "seconds": 304.385
+  }
+}

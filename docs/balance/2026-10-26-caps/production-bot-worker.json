@@ -1,0 +1,82 @@
+{
+  "origin": "https://yourlore.xyz",
+  "worker": "bot.worker-ORlzm0PM.js",
+  "scope": "Actual public BOT worker, hard and hell, controlled states; no authenticated server duel",
+  "results": [
+    {
+      "name": "raider duplicate",
+      "difficulty": "hard",
+      "expected": "endTurn",
+      "action": {
+        "type": "endTurn"
+      },
+      "ms": 796.8000000007451
+    },
+    {
+      "name": "Dominion fourth use",
+      "difficulty": "hard",
+      "expected": "endTurn",
+      "action": {
+        "type": "endTurn"
+      },
+      "ms": 6.800000000745058
+    },
+    {
+      "name": "Grimoire exhausted",
+      "difficulty": "hard",
+      "expected": "endTurn",
+      "action": {
+        "type": "endTurn"
+      },
+      "ms": 17.800000000745058
+    },
+    {
+      "name": "Grimoire final charge",
+      "difficulty": "hard",
+      "expected": "play",
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "ms": 157.39999999850988
+    },
+    {
+      "name": "raider duplicate",
+      "difficulty": "hell",
+      "expected": "endTurn",
+      "action": {
+        "type": "endTurn"
+      },
+      "ms": 2.800000000745058
+    },
+    {
+      "name": "Dominion fourth use",
+      "difficulty": "hell",
+      "expected": "endTurn",
+      "action": {
+        "type": "endTurn"
+      },
+      "ms": 4
+    },
+    {
+      "name": "Grimoire exhausted",
+      "difficulty": "hell",
+      "expected": "endTurn",
+      "action": {
+        "type": "endTurn"
+      },
+      "ms": 1.800000000745058
+    },
+    {
+      "name": "Grimoire final charge",
+      "difficulty": "hell",
+      "expected": "play",
+      "action": {
+        "type": "play",
+        "idx": 0
+      },
+      "ms": 447.5
+    }
+  ],
+  "errors": []
+}
