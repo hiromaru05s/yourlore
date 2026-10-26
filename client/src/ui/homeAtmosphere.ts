@@ -2,13 +2,14 @@ import {homeIsCovered} from './screenCovered';
 import {createWebGLRenderer} from './webglRenderer';
 import {homeDaylight,announceHomeDaylightReady} from './homeDaylight';
 import * as THREE from 'three';
+import {createDistantBirds} from './homeDistantBirds';
 
-/** Approved 2026-10-15 cloud / aperture / sunlight study, mounted only on HOME.
- * v2: approved wide architecture, independently moving ivy and shared mascot lighting.
+/** Approved 2026-10-26 cel background, mounted only on HOME.
+ * Outlined architecture, smaller drifting clouds, swaying ivy and distant birds.
  * The CSS plate remains underneath until the first complete rendered frame.
  * All motion shares one clock; no menu re-render owns a second renderer. */
 export function mountHomeAtmosphere(host:HTMLElement):()=>void {
- const BASE='/art/lounge/atmosphere-v2/';
+ const BASE='/art/lounge/toon-outline-20261026/';
  const W=1672,H=941;
  host.dataset.atmosphere='loading';
  if(typeof WebGL2RenderingContext==='undefined'){host.dataset.atmosphere='fallback';return()=>{};}
@@ -27,7 +28,7 @@ const camera=new THREE.OrthographicCamera(0,W,H,0,.1,100);
 camera.position.z=20;
 const loader=new THREE.TextureLoader();
 const owned:THREE.Texture[]=[];
-async function texture(name:string){const t=await loader.loadAsync(name==='clouds.webp'?'/art/lounge/atmosphere-v1/clouds.webp':BASE+name);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();if(disposed)t.dispose();else owned.push(t);return t;}
+async function texture(name:string){const t=await loader.loadAsync(BASE+name);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=renderer.capabilities.getMaxAnisotropy();if(disposed)t.dispose();else owned.push(t);return t;}
 function plane(width:number,height:number,x:number,y:number,z:number,material:THREE.Material){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),material);mesh.position.set(x,H-y,z);scene.add(mesh);return mesh;}
 const skyMat=new THREE.ShaderMaterial({vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`varying vec2 vUv;void main(){vec3 low=vec3(.76,.85,.91);vec3 high=vec3(.27,.52,.76);vec3 c=mix(low,high,smoothstep(0.,1.,vUv.y));float sun=exp(-length((vUv-vec2(.12,.84))*vec2(1.,.8))*4.);gl_FragColor=vec4(c+vec3(.14,.12,.07)*sun,1.);#include <colorspace_fragment>\n}`.replace(';#include',';\n#include')});
 plane(W,H,W/2,H/2,-5,skyMat);
@@ -82,6 +83,7 @@ const observer=new ResizeObserver(resize);observer.observe(host);
 function render(){if(!disposed)renderer.render(scene,camera);}
 const leafUniforms={time:{value:0},sun:{value:.75},wind:{value:1}};
 const vines:THREE.Mesh[]=[];
+const birds=createDistantBirds(scene);
 function addVine(map:THREE.Texture,x:number,y:number,w:number,h:number,phase:number,flip=1){
  const material=new THREE.ShaderMaterial({uniforms:{...leafUniforms,map:{value:map},phase:{value:phase},flip:{value:flip}},transparent:true,depthWrite:false,side:THREE.DoubleSide,
  vertexShader:`uniform float time,wind,phase;varying vec2 vUv;void main(){vUv=uv;vec3 p=position;float loose=pow(1.-uv.y,1.6);float twig=sin(uv.y*28.+time*1.45+phase)*sin(uv.x*12.+phase);p.x+=wind*(sin(time*.52+phase+(1.-uv.y)*2.)*11.*loose+twig*1.8*(.15+loose)*smoothstep(0.,.12,1.-uv.y));p.y+=wind*sin(time*.81+phase+uv.y*15.)*1.15*loose;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
@@ -89,6 +91,7 @@ function addVine(map:THREE.Texture,x:number,y:number,w:number,h:number,phase:num
  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(w,h,12,64),material);mesh.position.set(x,H-y,1);mesh.renderOrder=3.5;scene.add(mesh);vines.push(mesh);
 }
 function update(){
+ birds.update(cloudTime);
  for(const c of clouds){let x=((c.start+cloudTime*c.rate+c.width/2)%(W+c.width)+W+c.width)%(W+c.width)-c.width/2;c.mesh.position.x=x;}
  // Visible cloud coverage determines each aperture's transmission independently.
  // Keep the aperture anchored: only the illuminated part of its footprint drifts.
@@ -132,6 +135,7 @@ async function init(){try{
  const ctx=sampler.getContext('2d',{willReadFrequently:true});
  if(ctx){ctx.drawImage(cloud.image,0,0,alphaW,alphaH);cloudAlpha=ctx.getImageData(0,0,alphaW,alphaH).data;}
  for(const layer of [{y:170,w:1290,h:645,rate:3.8,opacity:.74,start:50},{y:350,w:1490,h:745,rate:7.8,opacity:.95,start:760}]){
+  layer.w*=.65;layer.h*=.65;
   // Two copies share a period wider than the visible frame, so loops never pop.
   const span=W+layer.w;
   for(let i=0;i<2;i++){const mesh=plane(layer.w,layer.h,0,layer.y,-3+(layer.rate>4?1:0),new THREE.MeshBasicMaterial({map:cloud,transparent:true,opacity:layer.opacity,depthWrite:false}));mesh.renderOrder=layer.rate>4?2:1;clouds.push({mesh,start:layer.start+i*span/2,rate:layer.rate,width:layer.w,height:layer.h,y:layer.y,opacity:layer.opacity});}
@@ -163,7 +167,9 @@ function destroy(){
  if(disposed)return;disposed=true;cancelAnimationFrame(raf);observer.disconnect();
  document.removeEventListener('visibilitychange',visibility);reduce.removeEventListener('change',reduced);
  renderer.domElement.removeEventListener('webglcontextlost',contextLost);
- scene.traverse(obj=>{if(obj instanceof THREE.Mesh||obj instanceof THREE.Points){obj.geometry.dispose();const mats=Array.isArray(obj.material)?obj.material:[obj.material];mats.forEach(m=>m.dispose());}});
+ const geometries=new Set<THREE.BufferGeometry>(),materials=new Set<THREE.Material>();
+ scene.traverse(obj=>{if(obj instanceof THREE.Mesh||obj instanceof THREE.Points){geometries.add(obj.geometry);const mats=Array.isArray(obj.material)?obj.material:[obj.material];mats.forEach(m=>materials.add(m));}});
+ geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());
  owned.forEach(t=>t.dispose());cloudAlpha=undefined;renderer.dispose();renderer.forceContextLoss();renderer.domElement.remove();
 }
 void init();

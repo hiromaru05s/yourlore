@@ -41,7 +41,7 @@ try {
    });
    assert(result.controls.every(r=>r.hit),JSON.stringify({route,width,controls:result.controls}));
    assert(!result.overflow,`${route} ${width}: viewport overflow`);
-   assert(result.bg.includes('atmosphere-v2/library-wide.png'),`${route}: ${result.bg}`);
+   assert(result.bg.includes('toon-outline-20261026/library-wide.webp'),`${route}: ${result.bg}`);
    assert(result.fonts.every(f=>f.size>=12),JSON.stringify(result.fonts));
    assert(result.controls.every(r=>r.x>=-1&&r.right<=width+1&&r.y>=-1&&r.bottom<=height+1),JSON.stringify({route,width,result}));
    checks.push({route,width,height,...result});
@@ -51,7 +51,7 @@ try {
  }
  await page.setViewportSize({width:1440,height:900});await page.locator('[data-nav=home]').click();
  await page.locator('[data-profile]').click();await page.locator('.lounge-profile').waitFor();
- assert((await page.locator('.lounge-shell').evaluate(e=>getComputedStyle(e).backgroundImage)).includes('atmosphere-v2/library-wide.png'));
+ assert((await page.locator('.lounge-shell').evaluate(e=>getComputedStyle(e).backgroundImage)).includes('toon-outline-20261026/library-wide.webp'));
  await page.screenshot({path:`${out}/profile.png`});
  assert.deepEqual(requested,[],'No old library artwork may be fetched');assert.deepEqual(errors,[]);
  await fs.writeFile(out+'/checks.json',JSON.stringify({checks,errors,oldBackgroundRequests:requested,boundary:'Normal App/router with fixture API responses; real artwork and menu components.'},null,2));

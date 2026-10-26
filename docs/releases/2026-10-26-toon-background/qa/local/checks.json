@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "Normal HOME displays approved moving background; profile repaint retains the same canvas",
+    "Desktop/mobile/landscape background sizing and menu pointer hit tests",
+    "Shared daylight sample changes with clouds; duel label centered; guide CSS shadow removed",
+    "Reduced motion freezes the background",
+    "Hidden document freezes background rendering",
+    "Repeated HOME/tutorial navigation destroys and restores exactly one background renderer",
+    "Context loss disposes renderer and reveals static plate",
+    "No-WebGL fallback retains generated background",
+    "Leaving HOME while textures are loading cannot append a late canvas",
+    "Initially reduced-motion guide redraws once when late-loaded background establishes daylight"
+  ],
+  "errors": []
+}

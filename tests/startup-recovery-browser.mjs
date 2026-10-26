@@ -26,6 +26,6 @@ try{
  }
  await run('stalled-background',1280,async p=>{
  await apiFixture(p,r=>{const n=new URL(r.url).pathname;if(n==='/api/auth/me')return{user:{id:'local-guest-user',display:'SEEKER',credits:100,avatar:'SEEKER_BLUE',wins:0,losses:0}};if(n==='/api/rewards/tutorial')return{offered:true};return{ok:true,country:'JP',gifts:[],unread:0,entries:[],friends:[],incoming:[],outgoing:[],challenges:[],keys:[],rows:[]};});
- await p.route(/\/atmosphere-v2\/ivy\.(png|webp)(\?|$)/,()=>{});
+ await p.route(/\/toon-outline-20261026\/ivy\.(png|webp)(\?|$)/,()=>{});
  },async p=>{await p.waitForSelector('.lounge-home-main');if(old){await p.waitForTimeout(20000);assert(await p.locator('.screen-loader').isVisible());assert.equal(await p.locator('[data-atmosphere]').getAttribute('data-atmosphere'),'loading');}else{await p.waitForSelector('.screen-loader',{state:'detached'});assert.equal(await p.locator('[data-atmosphere]').getAttribute('data-atmosphere'),'fallback');assert.equal(await p.locator('.home-atmosphere-canvas').count(),0);assert.equal(await p.locator('#app').evaluate(e=>e.inert),false);}});
 }finally{await fs.writeFile(out+'/report.json',JSON.stringify({base,old,normalApi:process.env.LORE_TEST_ORIGIN?'real deployed API, unauthenticated':'local unauthenticated fixture',failureTests:'explicit request failure injection; background test uses account fixture',results},null,2));await browser.close();await new Promise(r=>server.close(r));}
