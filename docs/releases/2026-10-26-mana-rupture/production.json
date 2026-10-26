@@ -1,0 +1,29 @@
+{
+  "sourceCommit": "394e7b6e75058a5b3e5b1e3e4c8a57bc1e14bfe2",
+  "implementationCommit": "42c994fa",
+  "lifecycleHardeningCommit": "d5d900e5",
+  "deploymentId": "638a951c-0d22-4253-882a-4b550575cdd9",
+  "versionId": "e6b70717-470b-4a9f-8231-d1a5223b32ea",
+  "trafficPercent": 100,
+  "deployedAt": "2026-10-26T09:59:05.186108Z",
+  "url": "https://yourlore.xyz/",
+  "checks": {
+    "typecheck": "passed in committed snapshot",
+    "productionSuite": {
+      "passed": 226,
+      "total": 226
+    },
+    "build": "passed in committed snapshot",
+    "publicStaticAssets": {
+      "matched": 135,
+      "checked": 135
+    },
+    "htmlEntrypointsMatch": true,
+    "browser": "Production login screen loaded; no console errors"
+  },
+  "scopeLimits": [
+    "Attack-to-VICTORY and attack-to-DEFEAT verified with real reducer/controller in local native-board fixtures.",
+    "Authenticated two-player PvP and physical mobile-device performance were not tested."
+  ],
+  "releasePath": "scripts/deploy-guard.mjs production; shared main release included the complete mana rupture change; duplicate release was unnecessary."
+}
