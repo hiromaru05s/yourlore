@@ -16,4 +16,15 @@ Visual review: desktop, 390/320 portrait and 844 landscape, translucent title, f
 
 Release status and exact production evidence are recorded after guarded deployment below.
 
-The final browser pass also covers temporary page-navigation inertness: surface preparation must not wait for interaction to be enabled, since IntersectionObserver may not fire again when inertness clears. Playback still pauses while inert. The initial guarded attempt was stopped during tests before publishing to correct this timing case. Final visual/interaction and purchase suites passed after the correction; see `qa/`.
+The final browser pass also covers temporary page-navigation inertness: surface preparation must not wait for interaction to be enabled, since IntersectionObserver may not fire again when inertness clears. Playback still pauses while inert. The initial guarded attempt was stopped during tests before publishing to correct this timing case. The final visual/interaction suite passed after the correction; the purchase regression suite also passed. See `qa/`.
+
+## Production
+
+Released source `64902739c23c1d3884ee83ed44eadda9d16ac68e` via `npm run deploy` and the committed-snapshot guard. Worker version `b4a44389-2233-41ed-a391-46827a4abbb0`, deployment `52cfaca1-3546-4189-8efc-a3cd7c1fe3e2`, 100% traffic at https://yourlore.xyz.
+
+- Client/server typecheck, all 229 production regression tests, and production build passed.
+- All 135 built HTML/JS/CSS/JSON files match published bytes. An initial comparison used the build from before a final explanatory source comment; `clientSourceRevision` hashes raw source text, so the manifest name differed. Rebuilding the exact released source resolved the mismatch without changing production.
+- The published app passed the five-viewport preview test with synthetic API data: all three sleeves animate, effect playback uses Attune, categories are isolated, close/focus survives scrolling, reduced motion remains static, desktop edges align, and tab dimensions remain equal. Zero page errors.
+- Production desktop and cosmetic gallery screenshots were inspected against the local result. No real-account purchase or physical-device test was performed.
+
+Evidence: `production/deployment.json`, `production/suite.json`, `production/bundle-parity.json`, `production/report.json`, and the screenshots alongside them.
