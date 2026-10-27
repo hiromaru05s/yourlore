@@ -8,7 +8,7 @@ import { BOT_FIRST_CLEAR_EXP, ONLINE_WIN_EXP, ONLINE_LOSS_EXP, type ExperienceRe
 import { botDecide, type BotDifficulty } from '../../client/src/shared/bot';
 import { botNpc, pickNpcDeck } from '../../client/src/shared/botNpcs';
 import { BOT_REWARDS, type QuestState } from '../../client/src/shared/progression';
-import { ensureDaily, settleProgression } from './progression';
+import { ensureDailies, settleProgression } from './progression';
 // ============================================================
 // LORE server — GameRoom Durable Object: the AUTHORITATIVE game.
 // Holds the real GameState, validates every action, and pushes
@@ -54,7 +54,7 @@ interface RoomData {
   experienceOutcome?: Record<string, ExperienceReceipt>;
   /** Ranked match — result also updates the seasonal Elo ladder. */
   ranked: boolean;
-  daily?: [QuestState | null, QuestState | null];
+  daily?: [QuestState | QuestState[] | null, QuestState | QuestState[] | null];
   rewardDecks?: [string[], string[]];
   challengeDifficulty?: BotDifficulty;
   /** Connection generation per side — a close from an older gen is a replaced socket, not a disconnect. */
@@ -270,7 +270,7 @@ export class GameRoom {
         room.game.medals=await Promise.all(room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):equippedMedal(this.env,p.id))) as [string|null,string|null];
         room.rewardDecks=room.game.players.map(p=>[...p.hand,...p.deck,...p.discard].map(c=>c.id)) as [string[],string[]];
         room.game.players.forEach(p=>{p.activity={};});
-        room.daily=await Promise.all(room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):ensureDaily(this.env,p.id))) as [QuestState|null,QuestState|null];
+        room.daily=await Promise.all(room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):ensureDailies(this.env,p.id))) as [QuestState[]|null,QuestState[]|null];
         // Do not expose partially initialized rooms to retries or sockets. Arm the
         // deadline first: a failed room write may leave a harmless empty alarm,
         // but a persisted room must never be left without its cleanup deadline.

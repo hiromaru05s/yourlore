@@ -54,6 +54,6 @@ export function questProgress(q: DailyQuest, p: PlayerState, won: boolean, deck:
  }
  return p.activity?.[q.kind]??0;
 }
-export interface QuestState { day:string; revision:number; quest:DailyQuest; progress:number; claimed:boolean; rerollsLeft:number }
-export interface ProgressionState { daily:QuestState; bot:Partial<Record<keyof typeof BOT_REWARDS,boolean>>; online:number; ranked:number; credits:number; resetsAt:number }
+export interface QuestState { slot?:number; day:string; revision:number; quest:DailyQuest; progress:number; claimed:boolean; rerollsLeft:number }
+export interface ProgressionState { daily:QuestState; dailies?:QuestState[]; bot:Partial<Record<keyof typeof BOT_REWARDS,boolean>>; online:number; ranked:number; credits:number; resetsAt:number }
 export const rewardDay=(now=Date.now()):string=>new Date(now+9*3600_000).toISOString().slice(0,10);

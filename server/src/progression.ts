@@ -27,11 +27,11 @@ import type { PlayerState } from '../../client/src/shared/types';
 import { DECK_POOL, BUYABLE_POOL } from '../../client/src/shared/cards';
 import { BOT_REWARDS, MATCH_REWARDS, QUESTS, questProgress, rewardDay, type DailyQuest, type QuestState, type ProgressionState } from '../../client/src/shared/progression';
 export { rewardDay } from '../../client/src/shared/progression';
-interface Row { day:string; revision:number; quest:string; progress:number; claimed:number }
+interface Row { slot:number; day:string; revision:number; quest:string; progress:number; claimed:number }
 const isHuman=(id:string)=>!id.startsWith('lore-test-bot-')&&!id.startsWith('lore-challenge-bot-');
-const decode=(r:Row):QuestState=>({day:r.day,revision:r.revision,quest:JSON.parse(r.quest),progress:r.progress,claimed:!!r.claimed,rerollsLeft:Math.max(0,3-r.revision)});
-function choose(starters:string[],previous?:DailyQuest):DailyQuest {
- const pool=QUESTS.filter(q=>q.kind!==previous?.kind),roll=crypto.getRandomValues(new Uint32Array(2));
+const decode=(r:Row):QuestState=>({slot:r.slot??0,day:r.day,revision:r.revision,quest:JSON.parse(r.quest),progress:r.progress,claimed:!!r.claimed,rerollsLeft:Math.max(0,3-r.revision)});
+function choose(starters:string[],excluded:DailyQuest[]=[]):DailyQuest {
+ const pool=QUESTS.filter(q=>!excluded.some(old=>old.kind===q.kind)),roll=crypto.getRandomValues(new Uint32Array(2));
  const quest={...pool[roll[0]%pool.length]};
  // Use the real playable catalogs; never assign retired cards or token-only cards.
  if(quest.kind==='starterWin')quest.card=starters[roll[1]%starters.length];
@@ -43,15 +43,31 @@ async function eligibleStarters(env:Env,id:string):Promise<string[]> {
  const owned=starterCollection(user?.starter_cards);
  return DECK_POOL.filter(id=>(owned[id]??0)>0);
 }
+// Slot 0 retains its original table and reward key, including in-flight legacy rooms.
+const dailyRows = `SELECT 0 AS slot,day,revision,quest,progress,claimed FROM daily_challenges WHERE user_id=? AND day=?
+ UNION ALL SELECT slot,day,revision,quest,progress,claimed FROM daily_challenge_extras WHERE user_id=? AND day=? ORDER BY slot`;
+export async function ensureDailies(env:Env,id:string,now=Date.now()):Promise<QuestState[]> {
+ const day=rewardDay(now);
+ const select=async()=> (await env.DB.prepare(dailyRows).bind(id,day,id,day).all<Row>()).results??[];
+ let rows=await select();
+ if(rows.length<3){
+  const starters=await eligibleStarters(env,id),chosen=rows.map(r=>JSON.parse(r.quest) as DailyQuest),inserts:D1PreparedStatement[]=[];
+  for(let slot=0;slot<3;slot++)if(!rows.some(r=>r.slot===slot)){
+   const quest=choose(starters,chosen);chosen.push(quest);
+   inserts.push(slot===0?env.DB.prepare('INSERT OR IGNORE INTO daily_challenges (user_id,day,quest) VALUES (?,?,?)').bind(id,day,JSON.stringify(quest)):
+    env.DB.prepare('INSERT OR IGNORE INTO daily_challenge_extras (user_id,day,slot,quest) VALUES (?,?,?,?)').bind(id,day,slot,JSON.stringify(quest)));
+  }
+  await env.DB.batch(inserts);rows=await select();
+ }
+ if(rows.length!==3)throw Error('daily quests unavailable');
+ const rerollsLeft=Math.max(0,3-rows.reduce((total,r)=>total+r.revision,0));
+ return rows.map(r=>({...decode(r),rerollsLeft}));
+}
 export async function ensureDaily(env:Env,id:string,now=Date.now()):Promise<QuestState> {
- const day=rewardDay(now),select=()=>env.DB.prepare('SELECT * FROM daily_challenges WHERE user_id=? AND day=?').bind(id,day).first<Row>();
- const existing=await select();if(existing)return decode(existing);
- const starters=await eligibleStarters(env,id);
- await env.DB.prepare('INSERT OR IGNORE INTO daily_challenges (user_id,day,quest) VALUES (?,?,?)').bind(id,day,JSON.stringify(choose(starters))).run();
- const row=await select();if(!row)throw Error('daily quest unavailable');return decode(row);
+ return (await ensureDailies(env,id,now))[0];
 }
 export async function progressionState(env:Env,id:string,now=Date.now()):Promise<ProgressionState> {
- const daily=await ensureDaily(env,id,now);
+ const dailies=await ensureDailies(env,id,now),daily=dailies[0];
  const [rows,bots,user]=await Promise.all([
  env.DB.prepare('SELECT mode,SUM(amount) amount FROM duel_reward_receipts WHERE user_id=? AND day=? GROUP BY mode').bind(id,daily.day).all<{mode:string;amount:number}>(),
  env.DB.prepare("SELECT key FROM rewards WHERE user_id=? AND key LIKE 'bot:first:%'").bind(id).all<{key:string}>(),
@@ -59,31 +75,39 @@ export async function progressionState(env:Env,id:string,now=Date.now()):Promise
  ]);
  const bot:ProgressionState['bot']={};for(const r of bots.results??[])bot[r.key.slice(10) as keyof typeof BOT_REWARDS]=true;
  const spent=(mode:string)=>(rows.results??[]).find(r=>r.mode===mode)?.amount??0;
- return {daily,bot,online:spent('online'),ranked:spent('ranked'),credits:user?.credits??0,resetsAt:Date.parse(daily.day+'T00:00:00+09:00')+86400_000};
+ return {daily,dailies,bot,online:spent('online'),ranked:spent('ranked'),credits:user?.credits??0,resetsAt:Date.parse(daily.day+'T00:00:00+09:00')+86400_000};
 }
-export async function rerollDaily(env:Env,id:string,day:unknown,revision:unknown,now=Date.now()):Promise<boolean> {
- const current=await ensureDaily(env,id,now);
+export async function rerollDaily(env:Env,id:string,day:unknown,revision:unknown,now=Date.now(),slot:unknown=0):Promise<boolean> {
+ if(!Number.isInteger(slot)||Number(slot)<0||Number(slot)>2)return false;
+ const dailies=await ensureDailies(env,id,now),current=dailies[Number(slot)];
  if(day!==current.day||revision!==current.revision||current.claimed||current.progress>=current.quest.target||current.rerollsLeft===0)return false;
- const starters=await eligibleStarters(env,id);
- const result=await env.DB.prepare('UPDATE daily_challenges SET quest=?,progress=0,revision=revision+1 WHERE user_id=? AND day=? AND revision=? AND claimed=0 AND progress<?')
- .bind(JSON.stringify(choose(starters,current.quest)),id,current.day,current.revision,current.quest.target).run();
+ const starters=await eligibleStarters(env,id),quest=choose(starters,dailies.map(q=>q.quest));
+ const table=slot===0?'daily_challenges':'daily_challenge_extras',slotFilter=slot===0?'':` AND slot=${Number(slot)}`;
+ // The shared daily budget is checked inside the same write, including different slots.
+ const result=await env.DB.prepare(`UPDATE ${table} SET quest=?,progress=0,revision=revision+1 WHERE user_id=? AND day=?${slotFilter} AND revision=? AND claimed=0 AND progress<?
+ AND (SELECT COALESCE(SUM(revision),0) FROM (${dailyRows}))<3
+ AND NOT EXISTS (SELECT 1 FROM (${dailyRows}) WHERE json_extract(quest,'$.kind')=?)`)
+ .bind(JSON.stringify(quest),id,current.day,current.revision,current.quest.target,id,current.day,id,current.day,id,current.day,id,current.day,quest.kind).run();
  return (result.meta.changes??0)>0;
 }
-export interface Settlement { matchId:string; userId:string; mode:'online'|'ranked'|'bot'; difficulty?:keyof typeof BOT_REWARDS; won:boolean|null; player:PlayerState; deck:string[]; daily?:QuestState; endedAt:number }
+export interface Settlement { matchId:string; userId:string; mode:'online'|'ranked'|'bot'; difficulty?:keyof typeof BOT_REWARDS; won:boolean|null; player:PlayerState; deck:string[]; daily?:QuestState|QuestState[]; endedAt:number }
 /** Receipt, progress, cap and currency changes share one D1 transaction. Retries are harmless. */
 export async function settleProgression(env:Env,s:Settlement):Promise<void> {
  if(!isHuman(s.userId))return;
- const {DB:db}=env,day=rewardDay(s.endedAt),q=s.daily;
+ const {DB:db}=env,day=rewardDay(s.endedAt),quests=Array.isArray(s.daily)?s.daily:s.daily?[s.daily]:[];
  const statements:D1PreparedStatement[]=[];
  const add=(sql:string,...args:(string|number|null)[])=>statements.push(db.prepare(sql).bind(...args));
  const absent='NOT EXISTS (SELECT 1 FROM duel_reward_receipts WHERE user_id=? AND match_id=?)';
- if(q && q.day===day){
+ for(const q of quests){
+  if(q.day!==day)continue;
+  const slot=q.slot??0,table=slot===0?'daily_challenges':'daily_challenge_extras',slotFilter=slot===0?'':` AND slot=${slot}`;
+  const rewardKey='daily:'+day+(slot===0?'':':'+slot);
   const increment=questProgress(q.quest,s.player,s.won===true,s.deck);
-  add(`UPDATE daily_challenges SET progress=MIN(?,progress+?) WHERE user_id=? AND day=? AND revision=? AND claimed=0 AND ${absent}`,q.quest.target,increment,s.userId,day,q.revision,s.userId,s.matchId);
+  add(`UPDATE ${table} SET progress=MIN(?,progress+?) WHERE user_id=? AND day=?${slotFilter} AND revision=? AND claimed=0 AND ${absent}`,q.quest.target,increment,s.userId,day,q.revision,s.userId,s.matchId);
   // A unique reward key and changes() make crediting atomic even across simultaneous matches.
-  add(`INSERT OR IGNORE INTO rewards (user_id,key,amount,created_at) SELECT user_id,?,?,? FROM daily_challenges WHERE user_id=? AND day=? AND revision=? AND progress>=? AND claimed=0`, 'daily:'+day,q.quest.reward,s.endedAt,s.userId,day,q.revision,q.quest.target);
+  add(`INSERT OR IGNORE INTO rewards (user_id,key,amount,created_at) SELECT user_id,?,?,? FROM ${table} WHERE user_id=? AND day=?${slotFilter} AND revision=? AND progress>=? AND claimed=0`, rewardKey,q.quest.reward,s.endedAt,s.userId,day,q.revision,q.quest.target);
   add('UPDATE users SET credits=credits+? WHERE id=? AND changes()=1',q.quest.reward,s.userId);
-  add(`UPDATE daily_challenges SET claimed=1 WHERE user_id=? AND day=? AND EXISTS (SELECT 1 FROM rewards WHERE user_id=? AND key=?)`,s.userId,day,s.userId,'daily:'+day);
+  add(`UPDATE ${table} SET claimed=1 WHERE user_id=? AND day=?${slotFilter} AND EXISTS (SELECT 1 FROM rewards WHERE user_id=? AND key=?)`,s.userId,day,s.userId,rewardKey);
  }
  if(s.mode==='bot'&&s.difficulty&&s.won===true){
   const amount=BOT_REWARDS[s.difficulty];

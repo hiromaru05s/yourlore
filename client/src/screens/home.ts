@@ -1,7 +1,7 @@
 import {mountGiftInbox} from '../ui/giftInbox';
 import { BOT_FIRST_CLEAR_EXP } from '../shared/progression';
-import { mountDailyRewards, firstClearLabel } from '../ui/dailyRewards';
-import { BOT_REWARDS } from '../shared/progression';
+import { mountDailyRewards, firstClearLabel, rewardProgressHtml } from '../ui/dailyRewards';
+import { BOT_REWARDS, type ProgressionState } from '../shared/progression';
 // ============================================================
 // LORE — post-login HOME. Choose Random Online or Bot match.
 // ============================================================
@@ -39,7 +39,7 @@ export function mountHome(app: App): Screen {
           <button id="online" aria-pressed="false">${loungeText('ノーマル','Casual','일반')}</button>
           <button id="bot" aria-pressed="false">${t("home.bot.title")}</button>
         </div>
-        <p class="mode-reward" id="modeReward"></p>
+        <div class="mode-reward" id="modeReward"></div>
         <button class="lounge-play-button" id="ranked"><small aria-hidden="true">DUEL</small><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")} →</span></button>
         <button id="myTier" class="lounge-rank-info" aria-live="polite" aria-label="${t("lb.title")}">${t("lb.title")}</button>
       </section>
@@ -47,18 +47,19 @@ export function mountHome(app: App): Screen {
         <span class="lounge-deck-preview" aria-hidden="true">${["STARTER_MANA",...store.list[store.sel].cards].slice(0,3).map(id=>`<img src="${artUrl.sm(id)}" alt="" loading="lazy">`).join("")}</span>
         <span class="lounge-deck-label"><small>${t("deck.inuse")}</small><strong>${esc(store.list[store.sel].name || t("deck.slot").replace("{n}",String(store.sel+1)))}</strong><span>${t("home.deck.title")}</span></span>${homeIcon("arrow")}
       </button>
-      <button class="home-daily-reward" id="dailyReward"></button>
+      <section class="home-daily-reward" id="dailyReward"></section>
     </section>`;
   app.root.appendChild(wrap);
   const stopGifts=mountGiftInbox(app,wrap.querySelector<HTMLButtonElement>('#homeGifts')!);
-  const stopDaily=mountDailyRewards(app,wrap.querySelector<HTMLButtonElement>('#dailyReward')!);
   const stopSpirit=mountHomeSpirit(app,wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   const duelButton=mountHomeDuelButton(q('ranked'));
   let mode: 'ranked'|'online'|'bot'='ranked';
+  let rewards:ProgressionState|undefined;
+  const stopDaily=mountDailyRewards(app,wrap.querySelector<HTMLElement>('#dailyReward')!,state=>{rewards=state;wrap.querySelector('#modeReward')!.innerHTML=rewardProgressHtml(rewards,mode);});
   const selectMode=(next:typeof mode)=>{
     mode=next;
-    wrap.querySelector('#modeReward')!.textContent=mode==='bot'?loungeText('各難易度の初回クリアでシャード獲得','Earn Shards for each first clear','난이도별 첫 클리어 샤드 보상'):mode==='ranked'?loungeText('勝利20 / 敗北10シャード · 1日300まで','Win 20 / Loss 10 Shards · 300/day','승리 20 / 패배 10 샤드 · 하루 300까지'):loungeText('勝利10 / 敗北5シャード · 1日100まで','Win 10 / Loss 5 Shards · 100/day','승리 10 / 패배 5 샤드 · 하루 100까지');
+    wrap.querySelector('#modeReward')!.innerHTML=rewardProgressHtml(rewards,mode);
     for(const [id,key] of [['rankedMode','ranked'],['online','online'],['bot','bot']])q(id).setAttribute('aria-pressed',String(mode===key));
     duelButton.setMode(mode);
     wrap.querySelector('.lounge-play')!.setAttribute('aria-label',t(`home.${mode}.title`));

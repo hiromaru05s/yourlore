@@ -119,7 +119,7 @@ export const api = {
   drawStarters: (count:number,requestId:string) => call<CollectionResult>("/collection/draw",{count,requestId}),
   duelRewardResult: (roomId:string) => call<{settled:boolean;amount:number}>('/rewards/result?roomId='+encodeURIComponent(roomId),undefined,'GET'),
   progression: () => call<import('../shared/progression').ProgressionState>('/rewards/progression',undefined,'GET'),
-  rerollDaily: (day:string,revision:number) => call<import('../shared/progression').ProgressionState>('/rewards/daily/reroll',{day,revision}),
+  rerollDaily: (day:string,revision:number,slot=0) => call<import('../shared/progression').ProgressionState>('/rewards/daily/reroll',{day,revision,slot}),
   startBot: (difficulty:import('../shared/bot').BotDifficulty,lang:string) => call<{roomId:string;you:0;oppName:string;oppAvatar:string}>('/rewards/bot/start',{difficulty,lang}),
   // register: {user} (즉시 입장) 또는 {needVerify:true} (인증 메일 발송됨)
   register: (email: string, password: string) => call<{ user?: User; needVerify?: boolean }>("/auth/register", { email, password, ...acquisition() }),

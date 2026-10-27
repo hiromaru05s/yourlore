@@ -12,6 +12,7 @@ DELETE FROM tutorial_accounts;
 DELETE FROM gift_deliveries;
 DELETE FROM gift_messages;
 DELETE FROM duel_reward_receipts;
+DELETE FROM daily_challenge_extras;
 DELETE FROM daily_challenges;
 DELETE FROM experience_events;
 DELETE FROM player_experience;

@@ -62,8 +62,8 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   }
   if (path === '/rewards/progression' && req.method === 'GET') return json(env, await progressionState(env,user.id));
   if (path === '/rewards/daily/reroll' && req.method === 'POST') {
-    const body=await req.json() as {day?:unknown;revision?:unknown};
-    const changed=await rerollDaily(env,user.id,body.day,body.revision);
+    const body=await req.json() as {day?:unknown;revision?:unknown;slot?:unknown};
+    const changed=await rerollDaily(env,user.id,body.day,body.revision,Date.now(),body.slot===undefined?0:body.slot);
     return json(env,{...await progressionState(env,user.id),changed},changed?200:409);
   }
   if (path === '/rewards/bot/start' && req.method === 'POST') {

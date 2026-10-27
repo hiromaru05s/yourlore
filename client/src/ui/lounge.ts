@@ -38,7 +38,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     ['friends','friends','friends.title',()=>app.friends()],['shop','shop','shop.title',()=>app.shop()],
     ['tutorial','book','home.nav.guide',()=>app.tutorial()],
   ];
-  const dailyReward=content.querySelector<HTMLButtonElement>('#dailyReward');
+  const dailyReward=content.querySelector<HTMLElement>('#dailyReward');
   const gifts=content.querySelector<HTMLButtonElement>('#homeGifts');
   const friendBadge=mountFriendBadge(app,shell,page!=='friends'&&page!=='login');
   let stopNavMotion: (()=>void)|undefined;
