@@ -100,7 +100,7 @@ try {
   setLang('ja');let decisions=[],home=0,opened=0;
   api.tutorialDecision=async d=>{decisions.push(d);return {ok:true};};
   let welcome=mountTutorialWelcome({root,home:()=>home++,tutorial:()=>opened++});
-  root.querySelector('[data-no]').click();assert(root.textContent.includes('あとからいつでも開けます'));assert.equal(decisions.length,0);
+  root.querySelector('[data-no]').click();assert(root.textContent.includes('ぼくの案内はあとからでも大丈夫'));assert.equal(decisions.length,0);
   root.querySelector('[data-back]').click();root.querySelector('[data-no]').click();root.querySelector('[data-no]').click();await tick();assert.deepEqual(decisions,['skip']);assert.equal(home,1);welcome.destroy();root.innerHTML='';
   welcome=mountTutorialWelcome({root,home:()=>home++,tutorial:()=>opened++});root.querySelector('[data-yes]').click();await tick();assert.deepEqual(decisions,['skip','start']);assert.equal(opened,1);welcome.destroy();root.innerHTML='';
   class TestTutorial extends TutorialController {

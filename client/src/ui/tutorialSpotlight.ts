@@ -4,6 +4,7 @@ import {copy as c,type Copy} from '../shared/tutorialSteps';
 import type {TourPlacement,TutorialTourStep} from '../shared/tutorialParts';
 import type {GameState} from '../shared/types';
 import '../styles/tutorialAcademy.css';
+import '../styles/zenoSpeech.css';
 
 interface SpotlightOptions {
  label:Copy;
@@ -46,7 +47,7 @@ export class TutorialSpotlight {
  private unsub:()=>void;
  constructor(private root:HTMLElement,private steps:TutorialTourStep[],private options:SpotlightOptions){
   this.layer=document.createElement('div');this.layer.className='tutorial-tour-layer tutorial-part-tour';
-  this.layer.innerHTML='<div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-ring" aria-hidden="true"></div><aside class="tutorial-tour-coach"><div class="tutorial-tour-spirit"></div><div class="tutorial-tour-bubble lore-surface" aria-live="polite"></div></aside>';
+  this.layer.innerHTML='<div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-ring" aria-hidden="true"></div><aside class="tutorial-tour-coach"><div class="tutorial-tour-spirit"></div><div class="tutorial-tour-bubble zeno-speech" aria-live="polite"></div></aside>';
   document.body.append(this.layer);
   this.shades=[...this.layer.querySelectorAll<HTMLElement>('.tutorial-tour-shade')];this.rings=[this.layer.querySelector('.tutorial-tour-ring')!];
   this.pointer=document.createElement('div');this.pointer.className='tutorial-tour-pointer';this.pointer.setAttribute('aria-hidden','true');this.pointer.textContent='☟';this.layer.append(this.pointer);
@@ -158,10 +159,10 @@ export class TutorialSpotlight {
   if(this.disposed)return;const step=this.step(),lang=getLang();
   this.unlockCleanup();this.unlockCleanup=()=>{};this.unlocked=!step.enableOn;
   const last=this.index===this.steps.length-1,kind=step.action??'next';
-  const next=last?c('パート完了','Complete part','파트 완료'):c('次へ','Next','다음');
-  const hint=kind==='click'?c('光っている場所を押そう','Press the highlighted control','빛나는 곳을 직접 누르세요'):kind==='play'?c('盤面で実際に操作しよう','Make the move on the board','필드에서 직접 조작하세요'):null;
+  const next=last?c('次へ進もう','Let’s keep going','다음으로 가자'):c('うん、次へ','Got it, next','응, 다음');
+  const hint=kind==='click'?c('光ってるところを押してみて。','Try the glowing spot.','빛나는 곳을 눌러 봐.'):kind==='play'?c('やってみよう。ぼくはここで見てるよ。','Give it a try. I’m right here.','직접 해 봐. 난 여기 있을게.'):null;
   const canBack=this.index>0&&this.backTarget()>=0;
-  this.bubble.innerHTML=`<header><span class="tutorial-eyebrow">ZENO · ${this.options.label[lang]} · ${this.index+1}/${this.steps.length}</span><button class="lore-button lore-button-quiet tutorial-tour-skip" aria-label="${c('終了','Exit','나가기')[lang]}">×</button></header><h2>${step.title[lang]}</h2><p>${step.body[lang]}</p>${step.prompt?`<strong>${step.prompt[lang]}</strong>`:''}<footer class="tutorial-tour-actions"><button class="lore-button lore-button-quiet tutorial-tour-back" ${canBack?'':'disabled'}>← ${c('戻る','Back','이전')[lang]}</button>${kind==='next'?`<button class="lore-button lore-button-primary tutorial-tour-next" ${this.unlocked?'':'disabled'}>${next[lang]} →</button>`:`<span class="tutorial-tour-hint">${hint![lang]}</span>`}</footer>`;
+  this.bubble.innerHTML=`<div class="zeno-speech-content"><header><span class="zeno-speaker">${c('ゼノ','Zeno','제노')[lang]}</span><span class="tutorial-eyebrow" aria-label="${this.options.label[lang]}">${this.index+1} / ${this.steps.length}</span><button class="lore-button lore-button-quiet tutorial-tour-skip" aria-label="${c('終了','Exit','나가기')[lang]}">×</button></header><h2 class="zeno-speech-topic">${step.title[lang]}</h2><p>${step.body[lang]}</p>${step.prompt?`<strong>${step.prompt[lang]}</strong>`:''}<footer class="tutorial-tour-actions"><button class="lore-button lore-button-quiet tutorial-tour-back" ${canBack?'':'disabled'}>← ${c('戻る','Back','이전')[lang]}</button>${kind==='next'?`<button class="lore-button lore-button-primary tutorial-tour-next" ${this.unlocked?'':'disabled'}>${next[lang]} →</button>`:`<span class="tutorial-tour-hint">${hint![lang]}</span>`}</footer></div>`;
   this.bubble.querySelector('.tutorial-tour-next')?.addEventListener('click',()=>{if(this.unlocked&&!this.advancing)this.go(this.index+1);});
   this.bubble.querySelector('.tutorial-tour-back')?.addEventListener('click',()=>this.back());
   this.bubble.querySelector('.tutorial-tour-skip')?.addEventListener('click',()=>{this.destroy();this.options.onExit();});

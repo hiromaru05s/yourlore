@@ -12,6 +12,7 @@ import {TUTORIAL_PARTS,tutorialPartKey} from '../shared/tutorialParts';
 import '../styles/tutorialAcademy.css';
 import '../styles/homeTutorial.css';
 import '../styles/tutorialParts.css';
+import '../styles/zenoSpeech.css';
 const esc=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export function openRuleNotebook(chapter=0,onClose?:()=>void,onLesson?:(i:number)=>void):()=>void {
  const lang=getLang(),secs=tutorialRuleSections(lang),dialog=document.createElement('dialog');dialog.className='rule-notebook';
@@ -70,7 +71,7 @@ export function mountTutorial(app:App):Screen {
  const done=completed.filter(Boolean).length,first=completed.findIndex(value=>!value),next=first<0?0:first;
  const lang=getLang();
  wrap.innerHTML=`<main class="tutorial-parts-shell lore-surface">
-  <header class="tutorial-parts-hero"><div class="tutorial-parts-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST DUEL</span><h1>${text('13パート・チュートリアル','13-part tutorial','13파트 튜토리얼')}</h1><p>${text('画面の操作からデッキ設定まで、実際の画面で一つずつ操作します。報酬はありません。','Practice one action at a time, from board controls through deck setup. There are no rewards.','화면 조작부터 덱 설정까지 실제 화면에서 하나씩 직접 조작해요. 보상은 없습니다.')}</p></div></header>
+  <header class="tutorial-parts-hero"><div class="tutorial-parts-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST DUEL</span><h1>${text('13パート・チュートリアル','13-part tutorial','13파트 튜토리얼')}</h1><div class="zeno-speech tutorial-welcome-speech"><div class="zeno-speech-content"><span class="zeno-speaker">${text('ゼノ','Zeno','제노')}</span><p>${text('やあ、ぼくはゼノ！ カードを使って、一緒に覚えていこう。気になるところから始めていいよ。','Hey, I’m Zeno! Let’s learn by playing some cards. Pick any part you’re curious about.','안녕, 난 제노야! 카드를 써 보면서 같이 익혀 보자. 궁금한 곳부터 시작해도 좋아.')}</p></div></div></div></header>
   <section class="tutorial-parts-progress lore-surface"><div><span>${text('進行状況','Progress','진행 상황')}</span><strong>${done} / ${TUTORIAL_PARTS.length}</strong></div><progress max="${TUTORIAL_PARTS.length}" value="${done}"></progress><button class="lore-button lore-button-primary" id="continuePart">${first<0?text('最初から復習','Review from the start','처음부터 복습'):done?text('続きから','Continue','이어서 하기'):text('始める','Start','시작하기')} →</button></section>
   <ol class="tutorial-parts-list">${TUTORIAL_PARTS.map((part,i)=>`<li class="${completed[i]?'is-complete':''}${i===first?' is-next':''}"><button data-part="${i}"><span class="tutorial-part-number">${String(i+1).padStart(2,'0')}</span><span class="tutorial-part-copy"><b>${esc(part.title[lang])}</b><small>${esc(part.intro[lang])}</small></span><span class="tutorial-part-state">${completed[i]?homeIcon('check'):(i===first?text('次','NEXT','다음'):'→')}</span></button></li>`).join('')}</ol>
   <footer class="tutorial-parts-footer"><button class="lore-button lore-button-quiet" id="rules">${homeIcon('book')} ${text('ルールノート','Rule notebook','규칙 노트')}</button><button class="lore-button lore-button-quiet" id="back">← ${text('ホーム','Home','홈')}</button></footer>

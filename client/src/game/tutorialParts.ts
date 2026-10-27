@@ -7,6 +7,7 @@ import {getLang,onLangChange} from '../i18n';
 import {mountManaSpirit} from '../ui/manaSpirit';
 import {TutorialSpotlight} from '../ui/tutorialSpotlight';
 import '../styles/tutorialParts.css';
+import '../styles/zenoSpeech.css';
 
 export class TutorialPartController extends BaseController {
  private run:LessonRun;
@@ -37,7 +38,7 @@ export class TutorialPartController extends BaseController {
   this.mountCoach();
  }
  private mountCoach():void{
-  this.host=document.createElement('aside');this.host.className='part-coach is-intro';this.host.innerHTML='<div class="part-zeno" aria-hidden="true"></div><div class="part-speech lore-surface"></div>';this.root.append(this.host);this.speech=this.host.querySelector('.part-speech')!;this.spirit=mountManaSpirit(this.host.querySelector('.part-zeno')!);
+  this.host=document.createElement('aside');this.host.className='part-coach is-intro';this.host.innerHTML='<div class="part-zeno" aria-hidden="true"></div><div class="part-speech zeno-speech"></div>';this.root.append(this.host);this.speech=this.host.querySelector('.part-speech')!;this.spirit=mountManaSpirit(this.host.querySelector('.part-zeno')!);
   this.unsub=onLangChange(()=>this.render());this.render();this.glowTimer=window.setInterval(()=>{const open=!!this.root.querySelector('.game.hand-open');if(open!==this.handOpen){this.handOpen=open;this.render();}else this.glow();},350);
  }
  private canAct():boolean{return !document.querySelector('.game-loading')&&!this.intro&&!this.busy&&!this.finished&&this.run.phase==='play'&&(!this.tour||this.tour.allowsGame());}
@@ -74,20 +75,21 @@ export class TutorialPartController extends BaseController {
  private render():void{
   if(!this.host||!this.speech)return;const meta=TUTORIAL_PARTS[this.part],lang=getLang(),review=!this.intro&&this.run.phase==='review';
   const cue=!this.intro&&!this.finished&&!review?tutorialCue(this.run,!!this.root.querySelector('.game.hand-open')):null;
-  if(cue?.action==='attack'&&this.run.state.players[1].field.length)cue.instruction={ja:'指が示す味方を、相手モンスターへドラッグしよう。',en:'Drag the indicated ally onto an enemy monster.',ko:'손가락이 가리키는 아군을 상대 몬스터로 드래그해요.'};
-  const title=this.finished?['パート完了','Part complete','파트 완료'][lang==='ja'?0:lang==='en'?1:2]:this.intro?meta.title[lang]:review?['今起きたこと','What happened','방금 일어난 일'][lang==='ja'?0:lang==='en'?1:2]:cue!.instruction[lang];
+  if(cue?.action==='attack'&&this.run.state.players[1].field.length)cue.instruction={ja:'指が示す味方を、相手モンスターへドラッグしよう。',en:'Drag the indicated ally onto an enemy monster.',ko:'손가락이 가리키는 아군을 상대 몬스터로 드래그해.'};
+  const title=this.finished?['いいね、できた！','You did it!','좋아, 해냈어!'][lang==='ja'?0:lang==='en'?1:2]:this.intro?['一緒にやってみよう！','Let’s try it together!','같이 해 보자!'][lang==='ja'?0:lang==='en'?1:2]:review?['ほら、変わったね。','See what changed?','봐, 달라졌지?'][lang==='ja'?0:lang==='en'?1:2]:cue!.instruction[lang];
   let body=this.intro?meta.intro[lang]:this.finished||review?currentScene(this.run).result[lang]:(cue?.reason??currentScene(this.run).intro)[lang];
-  if(this.redirected)body=(lang==='ja'?'今は光っている対象で案内された操作を試そう。 ':lang==='en'?'Use the glowing target for the instructed action first. ':'지금은 빛나는 대상에 안내된 행동을 먼저 해 보세요. ')+body;
-  if(this.busy)body=lang==='ja'?'カードと数字の変化を見よう。':lang==='en'?'Watch the cards and values change.':'카드와 숫자가 바뀌는 과정을 보세요.';
-  else if(!this.intro&&!this.finished&&this.run.phase==='play'&&this.run.state.cur===1&&!this.run.state.pending)body=lang==='ja'?'Zenoのターンが終わるまで盤面を見よう。':lang==='en'?"Watch the board until Zeno's turn ends.":'제노의 턴이 끝날 때까지 필드를 보세요.';
+  if(this.redirected)body=(lang==='ja'?'まずは光ってるところでやってみよう。ぼくがついてるよ。 ':lang==='en'?'Use the glowing target for the instructed action first. ':'지금은 빛나는 대상에 안내된 행동을 먼저 해 봐. ')+body;
+  if(this.busy)body=lang==='ja'?'カードと数字の変化を見よう。':lang==='en'?'Watch the cards and values change.':'카드와 숫자가 바뀌는 과정을 봐.';
+  else if(!this.intro&&!this.finished&&this.run.phase==='play'&&this.run.state.cur===1&&!this.run.state.pending)body=lang==='ja'?'今はぼくの番だよ。ちょっと見ててね。':lang==='en'?"It’s my turn now. Watch what happens.":'지금은 내 차례야. 잠깐 지켜봐 줘.';
   this.host.classList.toggle('is-intro',this.intro||this.finished||review);this.host.classList.toggle('is-playing',!this.intro&&!this.finished&&!review);
   const canNext=this.intro||review||this.finished;this.speech.replaceChildren();
-  const eyebrow=document.createElement('span');eyebrow.className='part-eyebrow';eyebrow.textContent=`ZENO · PART ${String(this.part+1).padStart(2,'0')} / ${TUTORIAL_PARTS.length}`;
+  const eyebrow=document.createElement('span');eyebrow.className='part-eyebrow';eyebrow.textContent=`${this.part+1} / ${TUTORIAL_PARTS.length}`;eyebrow.setAttribute('aria-label',meta.title[lang]);
+  const speaker=document.createElement('span');speaker.className='zeno-speaker';speaker.textContent=lang==='ja'?'ゼノ':lang==='en'?'Zeno':'제노';const header=document.createElement('header');header.append(speaker,eyebrow);
   const heading=document.createElement('h2');heading.textContent=title;const paragraph=document.createElement('p');paragraph.textContent=body;paragraph.setAttribute('aria-live','polite');const footer=document.createElement('footer');
   const exit=document.createElement('button');exit.className='lore-button lore-button-quiet';exit.textContent=lang==='ja'?'パート一覧':lang==='en'?'Part list':'파트 목록';exit.onclick=()=>this.exits.onHome();footer.append(exit);
   if(canNext){const button=document.createElement('button');button.className='lore-button lore-button-primary';button.textContent=this.finished?(this.part<TUTORIAL_PARTS.length-1?(lang==='ja'?'次のパート →':lang==='en'?'Next part →':'다음 파트 →'):(lang==='ja'?'一覧へ':lang==='en'?'Part list':'목록으로')):review?(this.run.scene===this.run.scenes.length-1?(lang==='ja'?'パートを終える':lang==='en'?'Finish part':'파트 마치기'):(lang==='ja'?'次の場面':lang==='en'?'Next scene':'다음 장면')):(lang==='ja'?'始める':lang==='en'?'Start':'시작');button.disabled=this.busy;button.onclick=()=>this.proceed();footer.append(button);}
-  else{const hint=document.createElement('span');hint.textContent=this.busy?(lang==='ja'?'進行中…':lang==='en'?'Resolving…':'진행 중…'):(lang==='ja'?'光っている対象で操作':lang==='en'?'Use the glowing target':'빛나는 대상을 직접 조작하세요');footer.append(hint);}
-  this.speech.append(eyebrow,heading,paragraph,footer);this.glow();
+  else{const hint=document.createElement('span');hint.textContent=this.busy?(lang==='ja'?'進行中…':lang==='en'?'Resolving…':'진행 중…'):(lang==='ja'?'やってみよう！':lang==='en'?'Give it a try!':'직접 해 봐!');footer.append(hint);}
+  const content=document.createElement('div');content.className='zeno-speech-content';content.append(header,heading,paragraph,footer);this.speech.append(content);this.glow();
  }
  private glow():void{
   document.querySelectorAll('.part-highlight').forEach(e=>e.classList.remove('part-highlight','part-pointed'));if(this.intro||this.finished||this.busy||this.run.phase!=='play')return;

@@ -1,0 +1,57 @@
+/* Zeno's dialogue is a speech bubble, per the 2026-10-27 user request.
+   The page's normal azure panels remain unchanged. */
+body .zeno-speech{
+ --zeno-paper:#edf5f6;--zeno-ink:#213c50;
+ position:relative;isolation:isolate;min-width:0;flex:1;
+ padding:0;overflow:visible;max-height:none;
+ color:var(--zeno-ink);background:var(--zeno-paper);
+ border:1px solid #c3d8df;border-radius:24px 26px 24px 12px;
+ box-shadow:0 5px 20px #091c3840;
+}
+body .zeno-speech::before{
+ content:"";position:absolute;z-index:-1;left:-19px;bottom:48px;
+ width:24px;height:27px;background:var(--zeno-paper);
+ clip-path:polygon(100% 0,100% 100%,0 78%);
+}
+body .zeno-speech .zeno-speech-content{padding:17px 22px;max-height:calc(100dvh - 48px);overflow:auto;overscroll-behavior:contain;scrollbar-color:#9aafb9 transparent;border-radius:inherit}
+body .zeno-speech header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+body .zeno-speech .zeno-speaker{font-size:12px;font-weight:700;letter-spacing:.06em;color:#446a7e}
+body .zeno-speech :is(.tutorial-eyebrow,.part-eyebrow){margin-left:auto;color:#627d8d;font:10px/1.5 system-ui;letter-spacing:.04em}
+body .zeno-speech h2{margin:6px 0 8px;font-size:16px;line-height:1.65;font-weight:600;color:var(--zeno-ink)}
+body .zeno-speech .zeno-speech-topic{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+body .zeno-speech p,body .zeno-speech>strong{margin:0;font-size:15px;line-height:1.8;color:var(--zeno-ink);overflow-wrap:anywhere}
+body .zeno-speech footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:15px;flex-wrap:wrap}
+body .zeno-speech :is(.tutorial-tour-hint,footer>span){font-size:11px;line-height:1.6;color:#526f80;flex:1;min-width:100px;text-align:right}
+body .zeno-speech button{min-height:34px;font-size:11px}
+body .zeno-speech .tutorial-tour-skip{flex:none;width:26px;height:26px;min-height:26px;color:#526f80}
+body .tutorial-tour-coach::after{content:none}
+body .tutorial-tour-coach,body .part-coach{gap:12px;width:min(570px,calc(100vw - 36px));align-items:flex-end}
+body .tutorial-tour-spirit,body .part-zeno{flex:0 0 112px;width:112px;height:148px;margin:0}
+.tutorial-parts-hero{align-items:center}
+.tutorial-welcome-speech{margin:22px 0 8px;max-width:620px}
+.tutorial-welcome-speech::before{bottom:42px}
+.tutorial-welcome-speech .zeno-speaker{display:block;margin-bottom:7px}
+.tutorial-parts-hero .tutorial-welcome-speech p{color:var(--zeno-ink);font-size:15px;line-height:1.8}
+@media(max-width:700px){
+ body .tutorial-tour-coach,body .part-coach{width:calc(100vw - 20px);gap:8px}
+ body .tutorial-tour-coach[data-placement]{left:10px;right:auto}
+ body .part-coach{right:10px;top:10px}
+ body .tutorial-tour-spirit,body .part-zeno{flex-basis:72px;width:72px;height:100px}
+ body .zeno-speech{border-radius:20px 22px 20px 10px}
+ body .zeno-speech::before{left:-15px;width:19px;height:22px;bottom:30px}
+ body .zeno-speech .zeno-speech-content{padding:13px 15px;max-height:calc(100dvh - 32px)}
+ body .zeno-speech p,.tutorial-parts-hero .tutorial-welcome-speech p{font-size:13px;line-height:1.75}
+ body .zeno-speech h2{font-size:14px}body .zeno-speech footer{gap:8px;margin-top:11px}
+ body .zeno-speech .tutorial-tour-actions .lore-button{padding:7px 10px;min-height:34px}
+ .tutorial-welcome-speech{margin-top:14px}
+}
+
+.welcome-conversation{display:flex;align-items:flex-end;gap:18px;width:min(850px,100%);margin:auto}
+.welcome-conversation .welcome-spirit{flex:0 0 180px;width:180px;height:240px}
+.welcome-conversation .zeno-speech::before{bottom:96px}
+body .zeno-speech h1{font-size:22px;line-height:1.6;margin:8px 0 14px;color:var(--zeno-ink)}
+body .zeno-speech .welcome-reward{padding:12px 0;margin-top:10px;font-size:11px;color:#627d8d;border:0}
+body .zeno-speech .welcome-note{font-size:13px;color:#526f80}
+@media(max-width:700px){.welcome-conversation{gap:8px}.welcome-conversation .welcome-spirit{flex-basis:64px;width:64px;height:100px}.welcome-conversation .zeno-speech::before{bottom:32px}body .zeno-speech h1{font-size:18px}}
+/* Quiet replies need dark ink on the pale speech paper. */
+body .zeno-speech .lore-button-quiet{color:#426174!important}
