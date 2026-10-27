@@ -14,6 +14,7 @@ import type { App, Screen } from "../router";
 import { LocalController, type ControllerExits } from "../game/controller";
 import { TutorialController } from "../game/tutorial";
 import { TutorialPartController } from "../game/tutorialParts";
+import { TUTORIAL_PARTS } from '../shared/tutorialParts';
 import { OnlineController } from "../game/online";
 import { setMarketWatch, setMyAvatar, setMySleeve, setMyFurniture, setOppAvatar } from "../ui/boardView";
 import { startBoardLayout } from "../ui/layout";
@@ -74,7 +75,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     opts.mode === "bot"
       ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard")
       : opts.mode === "tutorial" && opts.part!==undefined
-        ? new TutorialPartController(root,exits,opts.part,next=>next<13?app.tutorialPart(next):app.tutorial(),app.user?.id)
+        ? new TutorialPartController(root,exits,opts.part,next=>next<TUTORIAL_PARTS.length?app.tutorialPart(next):app.tutorial(),app.user?.id)
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
             lesson: opts.lesson,
