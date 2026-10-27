@@ -33,4 +33,13 @@
 - パネルの画素一致は `panel-pixels.json`。HOMEの採用フレーム・原画・背景・共通UIを前後の実画面で比較。連続描画のシェーダーと時間軸は変更していない。
 - 検証起動元: `/Users/hiromaru05s/.codex/worktrees/startup-load-optimization/LORE_TCG`。同ディレクトリの `client/dist` と、基準ビルド `/tmp/lore-first-boot-before-dist` をテスト内HTTPサーバーで配信。
 
-型チェック・ビルド・回帰テスト **249/249** 成功。既存の `startup-navigation-browser.mjs` でPC／狭い画面のモード切替・カード／デッキ移動・コンテキスト再利用・全画面ロード0回を確認。`startup-failure-browser.mjs` で画像遅延中の離脱、デッキ操作、GPU喪失・非対応時の静止画を確認した。本番公開結果は公開後に追記する。
+型チェック・ビルド・回帰テスト **249/249** 成功。既存の `startup-navigation-browser.mjs` でPC／狭い画面のモード切替・カード／デッキ移動・コンテキスト再利用・全画面ロード0回を確認。`startup-failure-browser.mjs` で画像遅延中の離脱、デッキ操作、GPU喪失・非対応時の静止画を確認した。
+
+
+## 本番公開
+
+- ソース `cbfefea1a1947cff101bb32e5c6881ee84048c5b`、2026-10-27 20:59 KST。
+- Cloudflare Version `5cc5fbc7-f58c-4a08-bbbc-813868e8b89a`、Deployment `3a5017e2-9b5c-4fd5-bfb4-0425e72eb610`。既存の本番ガードでmain一致、既存リリース包含、DB整合、型チェック、249件のテスト、ビルドを再確認して公開。
+- 起動用画像11枚と起動JSのSHA-256が検証済みビルドと一致し、immutableキャッシュヘッダーを確認。実APIで未ログイン状態・ログイン画面・Googleボタン表示を確認し、ブラウザエラーなし。
+- 公開素材＋API fixture、Service Worker有効でもPC／狭い画面の初回・再起動・3モード切替が成功。再起動時の起動用画像再転送なし。公開版の測定は配信遅延・Service Worker・並行確認の影響があり、上の比較表とは別条件。
+- ページ移動の自動検証では、最初の狭い画面と次のPC確認で、デッキの可視画像を待つ条件が各1回120秒でタイムアウトした。その時点でもページは操作可能で全画面ロードは出ていない。原因は未確定。独立したブラウザで狭い画面を再確認すると成功し、さらに同じ画像完了条件に診断出力と20秒の期限を加えたPC／狭い画面の通し確認でも成功した（`production-mobile-recheck.json`, `production-navigation.json`）。後者ではカード・デッキ移動、3モード切替、全画面ロード0回、コンテキスト1個、ブラウザ／HTTP／requestfailedエラーなしを確認。タイムアウトの原因が修正済みだとは扱わない。

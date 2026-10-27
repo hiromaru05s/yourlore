@@ -1,0 +1,133 @@
+{
+  "base": "https://yourlore.xyz",
+  "baseline": false,
+  "api": "fixture; real static assets",
+  "conditions": {
+    "bandwidthMbps": 10,
+    "latencyMs": 40,
+    "cpu": 2,
+    "serviceWorkers": "allow"
+  },
+  "cases": [
+    {
+      "width": 390,
+      "homeMs": 14645,
+      "modes": [
+        {
+          "mode": "single",
+          "ms": 103
+        },
+        {
+          "mode": "normal",
+          "ms": 63
+        },
+        {
+          "mode": "ranked",
+          "ms": 70
+        },
+        {
+          "mode": "single",
+          "ms": 71
+        },
+        {
+          "mode": "ranked",
+          "ms": 79
+        }
+      ],
+      "contexts": 1,
+      "covers": 0,
+      "routes": [
+        {
+          "key": "cards",
+          "interactiveMs": 323,
+          "readyMs": 4177,
+          "inert": false
+        },
+        {
+          "key": "deck",
+          "interactiveMs": 160,
+          "readyMs": 1524,
+          "inert": false
+        },
+        {
+          "key": "home",
+          "interactiveMs": 154,
+          "readyMs": 333,
+          "inert": false
+        },
+        {
+          "key": "cards",
+          "interactiveMs": 392,
+          "readyMs": 442,
+          "inert": false
+        },
+        {
+          "key": "deck",
+          "interactiveMs": 153,
+          "readyMs": 157,
+          "inert": false
+        }
+      ],
+      "stats": {
+        "requests": 228,
+        "bytes": 35179954,
+        "longTasks": [
+          {
+            "start": 4114.800000011921,
+            "duration": 129
+          },
+          {
+            "start": 8319.10000000894,
+            "duration": 163
+          },
+          {
+            "start": 15332.20000000298,
+            "duration": 231
+          },
+          {
+            "start": 19040.80000001192,
+            "duration": 72
+          },
+          {
+            "start": 19606.60000000894,
+            "duration": 92
+          },
+          {
+            "start": 21213.70000000298,
+            "duration": 63
+          },
+          {
+            "start": 21348.90000000596,
+            "duration": 158
+          },
+          {
+            "start": 21548,
+            "duration": 189
+          },
+          {
+            "start": 21749.80000001192,
+            "duration": 72
+          },
+          {
+            "start": 22008.40000000596,
+            "duration": 76
+          },
+          {
+            "start": 22146.80000001192,
+            "duration": 60
+          },
+          {
+            "start": 22223.60000000894,
+            "duration": 138
+          },
+          {
+            "start": 22368.70000000298,
+            "duration": 101
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    }
+  ]
+}

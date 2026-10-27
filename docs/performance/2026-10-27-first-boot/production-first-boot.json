@@ -1,0 +1,3101 @@
+{
+  "base": "https://yourlore.xyz",
+  "baseline": false,
+  "api": "fixture; real static assets",
+  "conditions": {
+    "bandwidthMbps": 10,
+    "latencyMs": 40,
+    "cpu": 2,
+    "serviceWorkers": "allow"
+  },
+  "cases": [
+    {
+      "width": 1280,
+      "signedIn": true,
+      "temperature": "cold",
+      "readyMs": 12400,
+      "transferredBytes": 7499451,
+      "stats": {
+        "resources": [
+          {
+            "url": "https://yourlore.xyz/assets/main-D_89czQd.js",
+            "start": 519.0999999940395,
+            "end": 738.5,
+            "bytes": 1747,
+            "transfer": 2047,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+            "start": 519.0999999940395,
+            "end": 949.9000000059605,
+            "bytes": 32540,
+            "transfer": 32840,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 519.0999999940395,
+            "end": 1395.2000000029802,
+            "bytes": 94474,
+            "transfer": 94774,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+            "start": 519.0999999940395,
+            "end": 2327.2000000029802,
+            "bytes": 507676,
+            "transfer": 507976,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+            "start": 519.2999999970198,
+            "end": 745.4000000059605,
+            "bytes": 668,
+            "transfer": 968,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 519.2999999970198,
+            "end": 747.9000000059605,
+            "bytes": 404,
+            "transfer": 704,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+            "start": 519.4000000059605,
+            "end": 739.7000000029802,
+            "bytes": 235,
+            "transfer": 535,
+            "type": "other"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+            "start": 519.5,
+            "end": 612.9000000059605,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 533.2999999970198,
+            "end": 1395.2000000029802,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-BxzRz4XD.js",
+            "start": 749.5,
+            "end": 1921.5999999940395,
+            "bytes": 139212,
+            "transfer": 139512,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-CkjVGUY7.js",
+            "start": 749.5999999940395,
+            "end": 1908.9000000059605,
+            "bytes": 139126,
+            "transfer": 139426,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-DuPbAPo-.js",
+            "start": 749.5999999940395,
+            "end": 2221.2999999970198,
+            "bytes": 345220,
+            "transfer": 345520,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+            "start": 749.7999999970198,
+            "end": 1034.5,
+            "bytes": 440,
+            "transfer": 740,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/rankPresentation-CfzLP-ug.js",
+            "start": 749.7999999970198,
+            "end": 1126.5999999940395,
+            "bytes": 9448,
+            "transfer": 9748,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-d18XrDA3.css",
+            "start": 749.7999999970198,
+            "end": 1601.2000000029802,
+            "bytes": 62810,
+            "transfer": 63110,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "start": 749.9000000059605,
+            "end": 1042.7000000029802,
+            "bytes": 286,
+            "transfer": 586,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-53qoBEdS.css",
+            "start": 750.0999999940395,
+            "end": 1906.5999999940395,
+            "bytes": 135852,
+            "transfer": 136152,
+            "type": "link"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 2250,
+            "end": 3789.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp",
+            "start": 2328.4000000059605,
+            "end": 6258.4000000059605,
+            "bytes": 732638,
+            "transfer": 732938,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "start": 2329.2999999970198,
+            "end": 2869.5,
+            "bytes": 31520,
+            "transfer": 31820,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "start": 2336.2999999970198,
+            "end": 2858.2000000029802,
+            "bytes": 28724,
+            "transfer": 29024,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/homeAtmosphere-CYaKhqUk.js",
+            "start": 2359.5,
+            "end": 2736.7999999970198,
+            "bytes": 6561,
+            "transfer": 6861,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-clouds-9c0b00f0fd0a8270ab0a.webp",
+            "start": 2367.5999999940395,
+            "end": 4652.29999999702,
+            "bytes": 290916,
+            "transfer": 291216,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/selected.svg",
+            "start": 2375.5,
+            "end": 2581.5,
+            "bytes": 206,
+            "transfer": 506,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/secondary.svg",
+            "start": 2375.5,
+            "end": 2584.7000000029802,
+            "bytes": 207,
+            "transfer": 507,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 2385,
+            "end": 2708.2000000029802,
+            "bytes": 13166,
+            "transfer": 13466,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 2385,
+            "end": 2768.2000000029802,
+            "bytes": 21540,
+            "transfer": 21840,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 2385.0999999940395,
+            "end": 2385.7999999970198,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/gifts/letter-v1.webp",
+            "start": 2385.0999999940395,
+            "end": 2666,
+            "bytes": 9006,
+            "transfer": 9306,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/shard-simple-v1.png",
+            "start": 2385.0999999940395,
+            "end": 2770.2000000029802,
+            "bytes": 8689,
+            "transfer": 8989,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/seekers/faceless-v2/portrait.webp",
+            "start": 2385.0999999940395,
+            "end": 2988.9000000059605,
+            "bytes": 44960,
+            "transfer": 45260,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/arrow.png",
+            "start": 2385.0999999940395,
+            "end": 3082.5,
+            "bytes": 58142,
+            "transfer": 58442,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-frame-pair-lossless-81cca2bd9f27eb7d8364.webp",
+            "start": 2385.0999999940395,
+            "end": 5823.70000000298,
+            "bytes": 520274,
+            "transfer": 520574,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-ranked-lossless-48e0f8ecf5d1492d9334.webp",
+            "start": 2385.0999999940395,
+            "end": 8243.40000000596,
+            "bytes": 1351956,
+            "transfer": 1352256,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-normal-lossless-b38a2715461dc883616d.webp",
+            "start": 2458,
+            "end": 7678.20000000298,
+            "bytes": 1091326,
+            "transfer": 1091626,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-single-lossless-420374dc8d58a770d32b.webp",
+            "start": 2458.5,
+            "end": 8211.90000000596,
+            "bytes": 1322620,
+            "transfer": 1322920,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "start": 2467.0999999940395,
+            "end": 2694,
+            "bytes": 32068,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/menu-manifest-4df0e039897d65c0a1dc.json",
+            "start": 2478.2000000029802,
+            "end": 3590.5,
+            "bytes": 108249,
+            "transfer": 108549,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 2666.7999999970198,
+            "end": 2825.0999999940395,
+            "bytes": 21540,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-ivy-d89660aa7f92857fafbf.webp",
+            "start": 2770.7999999970198,
+            "end": 5356.70000000298,
+            "bytes": 377804,
+            "transfer": 378104,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 2826.9000000059605,
+            "end": 3102.2999999970198,
+            "bytes": 13166,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/arrow.png",
+            "start": 2992.2999999970198,
+            "end": 3194.4000000059605,
+            "bytes": 58142,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 3103.5999999940395,
+            "end": 3103.9000000059605,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 3823.7000000029802,
+            "end": 4520.79999999702,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "start": 3838.7999999970198,
+            "end": 4416.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 4522.79999999702,
+            "end": 4805.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/cdn-cgi/rum?",
+            "start": 8453.59999999404,
+            "end": 8614.20000000298,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "xmlhttprequest"
+          },
+          {
+            "url": "https://yourlore.xyz/favicon.ico",
+            "start": 8453.79999999702,
+            "end": 8704.09999999404,
+            "bytes": 9,
+            "transfer": 309,
+            "type": "other"
+          }
+        ],
+        "phases": [
+          {
+            "at": 525.2000000029802,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 2384.5999999940395,
+            "phase": "準備を始めています | 画像の準備 0 / 15"
+          },
+          {
+            "at": 2390,
+            "phase": "画像の準備 0 / 15"
+          },
+          {
+            "at": 2390.5999999940395,
+            "phase": "画像の準備 1 / 15"
+          },
+          {
+            "at": 2458,
+            "phase": "画像の準備 2 / 15"
+          },
+          {
+            "at": 2458.4000000059605,
+            "phase": "画像の準備 3 / 15"
+          },
+          {
+            "at": 2666.7999999970198,
+            "phase": "画像の準備 4 / 15"
+          },
+          {
+            "at": 2770.7999999970198,
+            "phase": "画像の準備 5 / 15"
+          },
+          {
+            "at": 2827.0999999940395,
+            "phase": "画像の準備 6 / 15"
+          },
+          {
+            "at": 2992.2999999970198,
+            "phase": "画像の準備 7 / 15"
+          },
+          {
+            "at": 3103.5999999940395,
+            "phase": "画像の準備 8 / 15"
+          },
+          {
+            "at": 3108.5,
+            "phase": "画像の準備 9 / 15"
+          },
+          {
+            "at": 3194.9000000059605,
+            "phase": "画像の準備 10 / 15"
+          },
+          {
+            "at": 4654.5,
+            "phase": "画像の準備 11 / 15"
+          },
+          {
+            "at": 5832.4000000059605,
+            "phase": "画像の準備 12 / 15"
+          },
+          {
+            "at": 7693.20000000298,
+            "phase": "画像の準備 13 / 15"
+          },
+          {
+            "at": 8228.59999999404,
+            "phase": "画像の準備 14 / 15"
+          },
+          {
+            "at": 8302.09999999404,
+            "phase": "画像の準備 15 / 15"
+          },
+          {
+            "at": 8305.09999999404,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 8329.5,
+            "phase": "準備完了"
+          },
+          {
+            "at": 12349.09999999404,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 1280,
+      "signedIn": true,
+      "temperature": "warm",
+      "readyMs": 4976,
+      "transferredBytes": 300,
+      "stats": {
+        "resources": [
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+            "start": 193.70000000298023,
+            "end": 194.59999999403954,
+            "bytes": 32540,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 194.20000000298023,
+            "end": 194.79999999701977,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+            "start": 194.20000000298023,
+            "end": 199,
+            "bytes": 507676,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-D_89czQd.js",
+            "start": 194.20000000298023,
+            "end": 194.90000000596046,
+            "bytes": 1747,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 194.20000000298023,
+            "end": 195.09999999403954,
+            "bytes": 404,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+            "start": 194.20000000298023,
+            "end": 195.09999999403954,
+            "bytes": 668,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+            "start": 194.20000000298023,
+            "end": 195.20000000298023,
+            "bytes": 235,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+            "start": 194.29999999701977,
+            "end": 195.29999999701977,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-BxzRz4XD.js",
+            "start": 202.5,
+            "end": 203.90000000596046,
+            "bytes": 139212,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+            "start": 202.90000000596046,
+            "end": 207.09999999403954,
+            "bytes": 440,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-CkjVGUY7.js",
+            "start": 202.90000000596046,
+            "end": 204,
+            "bytes": 139126,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-DuPbAPo-.js",
+            "start": 202.90000000596046,
+            "end": 206.5,
+            "bytes": 345220,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-d18XrDA3.css",
+            "start": 203,
+            "end": 207.90000000596046,
+            "bytes": 62810,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/rankPresentation-CfzLP-ug.js",
+            "start": 203,
+            "end": 208.20000000298023,
+            "bytes": 9448,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "start": 203,
+            "end": 208.5,
+            "bytes": 286,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-53qoBEdS.css",
+            "start": 203.09999999403954,
+            "end": 209.59999999403954,
+            "bytes": 135852,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 204.09999999403954,
+            "end": 210,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/cdn-cgi/rum?",
+            "start": 257.20000000298023,
+            "end": 485.79999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "xmlhttprequest"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 271.5,
+            "end": 273.20000000298023,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp",
+            "start": 311.90000000596046,
+            "end": 312.40000000596046,
+            "bytes": 732638,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "start": 312.59999999403954,
+            "end": 313.09999999403954,
+            "bytes": 31520,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "start": 313.59999999403954,
+            "end": 314.20000000298023,
+            "bytes": 28724,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-ranked-lossless-48e0f8ecf5d1492d9334.webp",
+            "start": 316.70000000298023,
+            "end": 316.70000000298023,
+            "bytes": 1351956,
+            "transfer": 0,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-frame-pair-lossless-81cca2bd9f27eb7d8364.webp",
+            "start": 316.70000000298023,
+            "end": 316.70000000298023,
+            "bytes": 520274,
+            "transfer": 0,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/homeAtmosphere-CYaKhqUk.js",
+            "start": 331.70000000298023,
+            "end": 332.20000000298023,
+            "bytes": 6561,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-clouds-9c0b00f0fd0a8270ab0a.webp",
+            "start": 335.5,
+            "end": 335.79999999701977,
+            "bytes": 290916,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/selected.svg",
+            "start": 337.29999999701977,
+            "end": 515.2000000029802,
+            "bytes": 297,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/secondary.svg",
+            "start": 337.40000000596046,
+            "end": 517.2000000029802,
+            "bytes": 300,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/gifts/letter-v1.webp",
+            "start": 341.29999999701977,
+            "end": 520.2000000029802,
+            "bytes": 9006,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/arrow.png",
+            "start": 341.29999999701977,
+            "end": 520.2999999970198,
+            "bytes": 58142,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 341.29999999701977,
+            "end": 520.0999999940395,
+            "bytes": 21540,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 341.29999999701977,
+            "end": 520.2000000029802,
+            "bytes": 13166,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/seekers/faceless-v2/portrait.webp",
+            "start": 341.40000000596046,
+            "end": 523.7999999970198,
+            "bytes": 44960,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 341.5,
+            "end": 341.79999999701977,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/shard-simple-v1.png",
+            "start": 341.5,
+            "end": 521.5999999940395,
+            "bytes": 8689,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-normal-lossless-b38a2715461dc883616d.webp",
+            "start": 393.40000000596046,
+            "end": 393.40000000596046,
+            "bytes": 1091326,
+            "transfer": 0,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-single-lossless-420374dc8d58a770d32b.webp",
+            "start": 393.79999999701977,
+            "end": 393.79999999701977,
+            "bytes": 1322620,
+            "transfer": 0,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "start": 439.70000000298023,
+            "end": 440.5,
+            "bytes": 32068,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-ivy-d89660aa7f92857fafbf.webp",
+            "start": 451.79999999701977,
+            "end": 451.79999999701977,
+            "bytes": 377804,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/menu-manifest-4df0e039897d65c0a1dc.json",
+            "start": 467.40000000596046,
+            "end": 468.40000000596046,
+            "bytes": 108249,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 689,
+            "end": 689,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 695,
+            "end": 695,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "start": 698.2000000029802,
+            "end": 890.2000000029802,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-1.mp3",
+            "start": 4725.5999999940395,
+            "end": 4726.5,
+            "bytes": 2339,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-2.mp3",
+            "start": 4725.70000000298,
+            "end": 4726.5,
+            "bytes": 2548,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-3.mp3",
+            "start": 4735.5,
+            "end": 4736.20000000298,
+            "bytes": 2653,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/pop.mp3",
+            "start": 4736,
+            "end": 4736.5,
+            "bytes": 2129,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/error.mp3",
+            "start": 4736.79999999702,
+            "end": 4737.0999999940395,
+            "bytes": 2312,
+            "transfer": 0,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 199.20000000298023,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 341,
+            "phase": "準備を始めています | 画像の準備 0 / 15"
+          },
+          {
+            "at": 344.90000000596046,
+            "phase": "画像の準備 0 / 15"
+          },
+          {
+            "at": 345.09999999403954,
+            "phase": "画像の準備 1 / 15"
+          },
+          {
+            "at": 393.5,
+            "phase": "画像の準備 2 / 15"
+          },
+          {
+            "at": 393.79999999701977,
+            "phase": "画像の準備 3 / 15"
+          },
+          {
+            "at": 394.40000000596046,
+            "phase": "画像の準備 4 / 15"
+          },
+          {
+            "at": 434.20000000298023,
+            "phase": "画像の準備 5 / 15"
+          },
+          {
+            "at": 434.5,
+            "phase": "画像の準備 6 / 15"
+          },
+          {
+            "at": 441.29999999701977,
+            "phase": "画像の準備 7 / 15"
+          },
+          {
+            "at": 441.29999999701977,
+            "phase": "画像の準備 8 / 15"
+          },
+          {
+            "at": 452.5,
+            "phase": "画像の準備 9 / 15"
+          },
+          {
+            "at": 666.7999999970198,
+            "phase": "画像の準備 10 / 15"
+          },
+          {
+            "at": 666.7999999970198,
+            "phase": "画像の準備 11 / 15"
+          },
+          {
+            "at": 666.7999999970198,
+            "phase": "画像の準備 12 / 15"
+          },
+          {
+            "at": 666.7999999970198,
+            "phase": "画像の準備 13 / 15"
+          },
+          {
+            "at": 666.9000000059605,
+            "phase": "画像の準備 14 / 15"
+          },
+          {
+            "at": 670.5999999940395,
+            "phase": "画像の準備 15 / 15"
+          },
+          {
+            "at": 672.7000000029802,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 709.4000000059605,
+            "phase": "準備完了"
+          },
+          {
+            "at": 4725.79999999702,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 1280,
+      "signedIn": false,
+      "temperature": "cold",
+      "readyMs": 5517,
+      "transferredBytes": 1820404,
+      "stats": {
+        "resources": [
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+            "start": 510.70000000298023,
+            "end": 765.7000000029802,
+            "bytes": 32540,
+            "transfer": 32840,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 511,
+            "end": 1002.3999999910593,
+            "bytes": 94474,
+            "transfer": 94774,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 511.09999999403954,
+            "end": 713,
+            "bytes": 404,
+            "transfer": 704,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-D_89czQd.js",
+            "start": 511.09999999403954,
+            "end": 720.0999999940395,
+            "bytes": 1747,
+            "transfer": 2047,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+            "start": 511.09999999403954,
+            "end": 1349.2000000029802,
+            "bytes": 507676,
+            "transfer": 507976,
+            "type": "link"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+            "start": 511.20000000298023,
+            "end": 599.7999999970198,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+            "start": 511.20000000298023,
+            "end": 714.2000000029802,
+            "bytes": 668,
+            "transfer": 968,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+            "start": 511.20000000298023,
+            "end": 904.2999999970198,
+            "bytes": 235,
+            "transfer": 535,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 516.2000000029802,
+            "end": 1002.3999999910593,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-CkjVGUY7.js",
+            "start": 906,
+            "end": 3140.5,
+            "bytes": 139127,
+            "transfer": 139427,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-BxzRz4XD.js",
+            "start": 906,
+            "end": 3348.7999999970198,
+            "bytes": 139212,
+            "transfer": 139512,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-DuPbAPo-.js",
+            "start": 906,
+            "end": 3660.2999999970198,
+            "bytes": 345220,
+            "transfer": 345520,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+            "start": 906.0999999940395,
+            "end": 1492,
+            "bytes": 440,
+            "transfer": 740,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/rankPresentation-CfzLP-ug.js",
+            "start": 906.0999999940395,
+            "end": 1613.2000000029802,
+            "bytes": 9448,
+            "transfer": 9748,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-d18XrDA3.css",
+            "start": 906.0999999940395,
+            "end": 2842,
+            "bytes": 62817,
+            "transfer": 63117,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "start": 906.3999999910593,
+            "end": 1764.3999999910593,
+            "bytes": 286,
+            "transfer": 586,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-53qoBEdS.css",
+            "start": 906.5,
+            "end": 3496.5,
+            "bytes": 135808,
+            "transfer": 136108,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/cdn-cgi/rum?",
+            "start": 3522.7000000029802,
+            "end": 3765.2000000029802,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "xmlhttprequest"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 3688.2999999970198,
+            "end": 5062.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/selected.svg",
+            "start": 3693.3999999910593,
+            "end": 3942.7999999970198,
+            "bytes": 206,
+            "transfer": 506,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/secondary.svg",
+            "start": 3693.3999999910593,
+            "end": 3950.2999999970198,
+            "bytes": 207,
+            "transfer": 507,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/primary.svg",
+            "start": 3693.7000000029802,
+            "end": 3949.2000000029802,
+            "bytes": 205,
+            "transfer": 505,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/settings.png",
+            "start": 3709,
+            "end": 5447,
+            "bytes": 122797,
+            "transfer": 123097,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 3709.2000000029802,
+            "end": 3709.5,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/mail.png",
+            "start": 3709.2000000029802,
+            "end": 5297.29999999702,
+            "bytes": 112047,
+            "transfer": 112347,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/menu-manifest-4df0e039897d65c0a1dc.json",
+            "start": 3952.8999999910593,
+            "end": 5292.5,
+            "bytes": 108240,
+            "transfer": 108540,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 5095,
+            "end": 5453.899999991059,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          }
+        ],
+        "phases": [
+          {
+            "at": 515.3999999910593,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 3708.8999999910593,
+            "phase": "準備を始めています | 画像の準備 0 / 3"
+          },
+          {
+            "at": 3711.5,
+            "phase": "画像の準備 0 / 3"
+          },
+          {
+            "at": 3716.5,
+            "phase": "画像の準備 1 / 3"
+          },
+          {
+            "at": 3716.5,
+            "phase": "画像の準備 2 / 3"
+          },
+          {
+            "at": 3718.5,
+            "phase": "画像の準備 3 / 3"
+          },
+          {
+            "at": 3719.3999999910593,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 5477.899999991059,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 1280,
+      "signedIn": false,
+      "temperature": "warm",
+      "readyMs": 1150,
+      "transferredBytes": 300,
+      "stats": {
+        "resources": [
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+            "start": 770.2999999970198,
+            "end": 771.3999999910593,
+            "bytes": 32540,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 770.5999999940395,
+            "end": 771.5,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+            "start": 770.7000000029802,
+            "end": 775,
+            "bytes": 507676,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-D_89czQd.js",
+            "start": 770.7000000029802,
+            "end": 771.7000000029802,
+            "bytes": 1747,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+            "start": 770.7000000029802,
+            "end": 772.3999999910593,
+            "bytes": 235,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 770.7000000029802,
+            "end": 772,
+            "bytes": 404,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+            "start": 770.7000000029802,
+            "end": 772.2000000029802,
+            "bytes": 668,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+            "start": 771,
+            "end": 772.7999999970198,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-BxzRz4XD.js",
+            "start": 777.7999999970198,
+            "end": 779,
+            "bytes": 139212,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+            "start": 778,
+            "end": 780.0999999940395,
+            "bytes": 440,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-CkjVGUY7.js",
+            "start": 778,
+            "end": 779,
+            "bytes": 139127,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-DuPbAPo-.js",
+            "start": 778,
+            "end": 780.0999999940395,
+            "bytes": 345220,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-d18XrDA3.css",
+            "start": 778.2999999970198,
+            "end": 780.3999999910593,
+            "bytes": 62817,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/rankPresentation-CfzLP-ug.js",
+            "start": 778.2999999970198,
+            "end": 780.5,
+            "bytes": 9448,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-53qoBEdS.css",
+            "start": 778.3999999910593,
+            "end": 781.2999999970198,
+            "bytes": 135808,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "start": 778.3999999910593,
+            "end": 780.5999999940395,
+            "bytes": 286,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 779.2999999970198,
+            "end": 781.3999999910593,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/cdn-cgi/rum?",
+            "start": 811.3999999910593,
+            "end": 1053.2999999970198,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "xmlhttprequest"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 823.2000000029802,
+            "end": 824.2999999970198,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp",
+            "start": 825.3999999910593,
+            "end": 825.8999999910593,
+            "bytes": 732638,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/selected.svg",
+            "start": 825.5999999940395,
+            "end": 1062.7000000029802,
+            "bytes": 297,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/secondary.svg",
+            "start": 825.5999999940395,
+            "end": 1065.7999999970198,
+            "bytes": 300,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/primary.svg",
+            "start": 826.0999999940395,
+            "end": 1093.0999999940395,
+            "bytes": 300,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/settings.png",
+            "start": 828,
+            "end": 1070.3999999910593,
+            "bytes": 122797,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 828.0999999940395,
+            "end": 828.3999999910593,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/mail.png",
+            "start": 828.0999999940395,
+            "end": 1065.7999999970198,
+            "bytes": 112047,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 852.5,
+            "end": 852.5,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 857.7000000029802,
+            "end": 857.7000000029802,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/menu-manifest-4df0e039897d65c0a1dc.json",
+            "start": 858.2999999970198,
+            "end": 859,
+            "bytes": 108240,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-1.mp3",
+            "start": 1094.5,
+            "end": 1095,
+            "bytes": 2339,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-2.mp3",
+            "start": 1094.5999999940395,
+            "end": 1095.0999999940395,
+            "bytes": 2548,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-3.mp3",
+            "start": 1100.7000000029802,
+            "end": 1101.2000000029802,
+            "bytes": 2653,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/pop.mp3",
+            "start": 1100.8999999910593,
+            "end": 1101.5,
+            "bytes": 2129,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/error.mp3",
+            "start": 1101.5,
+            "end": 1101.8999999910593,
+            "bytes": 2312,
+            "transfer": 0,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 775.2999999970198,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 827.8999999910593,
+            "phase": "準備を始めています | 画像の準備 0 / 3"
+          },
+          {
+            "at": 830.2999999970198,
+            "phase": "画像の準備 0 / 3"
+          },
+          {
+            "at": 839.8999999910593,
+            "phase": "画像の準備 1 / 3"
+          },
+          {
+            "at": 840,
+            "phase": "画像の準備 2 / 3"
+          },
+          {
+            "at": 841.8999999910593,
+            "phase": "画像の準備 3 / 3"
+          },
+          {
+            "at": 843,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 1094.5999999940395,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "signedIn": true,
+      "temperature": "cold",
+      "readyMs": 13522,
+      "transferredBytes": 7531440,
+      "stats": {
+        "resources": [
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+            "start": 458.09999999403954,
+            "end": 986.2000000029802,
+            "bytes": 32540,
+            "transfer": 32840,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 458.5,
+            "end": 986.0999999940395,
+            "bytes": 94474,
+            "transfer": 94774,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-D_89czQd.js",
+            "start": 458.59999999403954,
+            "end": 615.2999999970198,
+            "bytes": 1747,
+            "transfer": 2047,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+            "start": 458.59999999403954,
+            "end": 631.8999999910593,
+            "bytes": 668,
+            "transfer": 968,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+            "start": 458.59999999403954,
+            "end": 636.2999999970198,
+            "bytes": 235,
+            "transfer": 535,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 458.59999999403954,
+            "end": 636.8999999910593,
+            "bytes": 404,
+            "transfer": 704,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+            "start": 458.59999999403954,
+            "end": 1902.2999999970198,
+            "bytes": 507676,
+            "transfer": 507976,
+            "type": "link"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+            "start": 458.70000000298023,
+            "end": 540.7000000029802,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 464.5,
+            "end": 986.2000000029802,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-BxzRz4XD.js",
+            "start": 637.8999999910593,
+            "end": 1371.5999999940395,
+            "bytes": 139212,
+            "transfer": 139512,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-CkjVGUY7.js",
+            "start": 638.2999999970198,
+            "end": 1539.7999999970198,
+            "bytes": 139126,
+            "transfer": 139426,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-DuPbAPo-.js",
+            "start": 638.2999999970198,
+            "end": 1889.5999999940395,
+            "bytes": 345220,
+            "transfer": 345520,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+            "start": 638.3999999910593,
+            "end": 950.8999999910593,
+            "bytes": 440,
+            "transfer": 740,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-d18XrDA3.css",
+            "start": 638.5,
+            "end": 959.7000000029802,
+            "bytes": 62831,
+            "transfer": 63131,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "start": 638.5,
+            "end": 1311,
+            "bytes": 286,
+            "transfer": 586,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/rankPresentation-CfzLP-ug.js",
+            "start": 638.5,
+            "end": 1315.5,
+            "bytes": 9366,
+            "transfer": 9666,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-53qoBEdS.css",
+            "start": 638.8999999910593,
+            "end": 1076.3999999910593,
+            "bytes": 135852,
+            "transfer": 136152,
+            "type": "link"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 1915.5999999940395,
+            "end": 3112.7000000029802,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp",
+            "start": 1968.5999999940395,
+            "end": 7136,
+            "bytes": 732638,
+            "transfer": 732938,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "start": 1969.3999999910593,
+            "end": 3664.0999999940395,
+            "bytes": 31520,
+            "transfer": 31820,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "start": 1975,
+            "end": 3780.7999999970198,
+            "bytes": 28724,
+            "transfer": 29024,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/homeAtmosphere-CYaKhqUk.js",
+            "start": 1993.3999999910593,
+            "end": 2750.8999999910593,
+            "bytes": 6561,
+            "transfer": 6861,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-clouds-9c0b00f0fd0a8270ab0a.webp",
+            "start": 2000.7000000029802,
+            "end": 5427,
+            "bytes": 290916,
+            "transfer": 291216,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/selected.svg",
+            "start": 2006.7000000029802,
+            "end": 3008.5,
+            "bytes": 206,
+            "transfer": 506,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/secondary.svg",
+            "start": 2006.7999999970198,
+            "end": 2485.8999999910593,
+            "bytes": 207,
+            "transfer": 507,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 2014.3999999910593,
+            "end": 3400.7999999970198,
+            "bytes": 13166,
+            "transfer": 13466,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 2014.3999999910593,
+            "end": 3724.7000000029802,
+            "bytes": 21540,
+            "transfer": 21840,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/gifts/letter-v1.webp",
+            "start": 2014.7000000029802,
+            "end": 2861.3999999910593,
+            "bytes": 9006,
+            "transfer": 9306,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/arrow.png",
+            "start": 2014.7000000029802,
+            "end": 3776,
+            "bytes": 58142,
+            "transfer": 58442,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-frame-pair-lossless-81cca2bd9f27eb7d8364.webp",
+            "start": 2014.7999999970198,
+            "end": 6114.5999999940395,
+            "bytes": 520274,
+            "transfer": 520574,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-ranked-lossless-48e0f8ecf5d1492d9334.webp",
+            "start": 2014.7999999970198,
+            "end": 8916.09999999404,
+            "bytes": 1351956,
+            "transfer": 1352256,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 2014.8999999910593,
+            "end": 2015.2000000029802,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/shard-simple-v1.png",
+            "start": 2014.8999999910593,
+            "end": 2803.8999999910593,
+            "bytes": 8689,
+            "transfer": 8989,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/seekers/faceless-v2/portrait.webp",
+            "start": 2014.8999999910593,
+            "end": 3773.7999999970198,
+            "bytes": 44960,
+            "transfer": 45260,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-normal-lossless-b38a2715461dc883616d.webp",
+            "start": 2018.5,
+            "end": 8091.0999999940395,
+            "bytes": 1091326,
+            "transfer": 1091626,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-single-lossless-420374dc8d58a770d32b.webp",
+            "start": 2070.5,
+            "end": 8856.70000000298,
+            "bytes": 1322620,
+            "transfer": 1322920,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "start": 2077.7999999970198,
+            "end": 3676.7999999970198,
+            "bytes": 32068,
+            "transfer": 32368,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/menu-manifest-4df0e039897d65c0a1dc.json",
+            "start": 2209.5999999940395,
+            "end": 4041.5999999940395,
+            "bytes": 108240,
+            "transfer": 108540,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-ivy-d89660aa7f92857fafbf.webp",
+            "start": 2805,
+            "end": 6299.899999991059,
+            "bytes": 377804,
+            "transfer": 378104,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 2862.5999999940395,
+            "end": 3400.8999999910593,
+            "bytes": 13166,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 3145.7999999970198,
+            "end": 3521.2999999970198,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "start": 3159.7000000029802,
+            "end": 3765.8999999910593,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/arrow.png",
+            "start": 3402.3999999910593,
+            "end": 3776.0999999940395,
+            "bytes": 58142,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 3523.5,
+            "end": 3883.3999999910593,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 3726.2999999970198,
+            "end": 3726.7000000029802,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/cdn-cgi/rum?",
+            "start": 9026.89999999106,
+            "end": 10097.59999999404,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "xmlhttprequest"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-1.mp3",
+            "start": 13025.20000000298,
+            "end": 13273,
+            "bytes": 2339,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-2.mp3",
+            "start": 13025.29999999702,
+            "end": 13274,
+            "bytes": 2548,
+            "transfer": 0,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 462.79999999701977,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 2014.2999999970198,
+            "phase": "準備を始めています | 画像の準備 0 / 14"
+          },
+          {
+            "at": 2018.3999999910593,
+            "phase": "画像の準備 0 / 14"
+          },
+          {
+            "at": 2018.5,
+            "phase": "画像の準備 1 / 14"
+          },
+          {
+            "at": 2070.5,
+            "phase": "画像の準備 2 / 14"
+          },
+          {
+            "at": 2071,
+            "phase": "画像の準備 3 / 14"
+          },
+          {
+            "at": 2805.0999999940395,
+            "phase": "画像の準備 4 / 14"
+          },
+          {
+            "at": 2862.5999999940395,
+            "phase": "画像の準備 5 / 14"
+          },
+          {
+            "at": 3402.3999999910593,
+            "phase": "画像の準備 6 / 14"
+          },
+          {
+            "at": 3726.3999999910593,
+            "phase": "画像の準備 7 / 14"
+          },
+          {
+            "at": 3731.7000000029802,
+            "phase": "画像の準備 8 / 14"
+          },
+          {
+            "at": 3776.5999999940395,
+            "phase": "画像の準備 9 / 14"
+          },
+          {
+            "at": 5439.79999999702,
+            "phase": "画像の準備 10 / 14"
+          },
+          {
+            "at": 6122.70000000298,
+            "phase": "画像の準備 11 / 14"
+          },
+          {
+            "at": 8106.399999991059,
+            "phase": "画像の準備 12 / 14"
+          },
+          {
+            "at": 8874.20000000298,
+            "phase": "画像の準備 13 / 14"
+          },
+          {
+            "at": 8973.89999999106,
+            "phase": "画像の準備 14 / 14"
+          },
+          {
+            "at": 8976.39999999106,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 9007.5,
+            "phase": "準備完了"
+          },
+          {
+            "at": 13025.29999999702,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "signedIn": true,
+      "temperature": "warm",
+      "readyMs": 5897,
+      "transferredBytes": 300,
+      "stats": {
+        "resources": [
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+            "start": 636.7000000029802,
+            "end": 637.5,
+            "bytes": 32540,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 636.8999999910593,
+            "end": 637.5,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+            "start": 636.8999999910593,
+            "end": 641,
+            "bytes": 507676,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-D_89czQd.js",
+            "start": 636.8999999910593,
+            "end": 637.5999999940395,
+            "bytes": 1747,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 636.8999999910593,
+            "end": 637.7000000029802,
+            "bytes": 404,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+            "start": 636.8999999910593,
+            "end": 637.7000000029802,
+            "bytes": 668,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+            "start": 637.2000000029802,
+            "end": 637.8999999910593,
+            "bytes": 235,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+            "start": 637.2999999970198,
+            "end": 638,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 643.5,
+            "end": 643.7000000029802,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-BxzRz4XD.js",
+            "start": 645.3999999910593,
+            "end": 646.7999999970198,
+            "bytes": 139212,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-CkjVGUY7.js",
+            "start": 645.3999999910593,
+            "end": 646.7999999970198,
+            "bytes": 139126,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-DuPbAPo-.js",
+            "start": 645.3999999910593,
+            "end": 648.8999999910593,
+            "bytes": 345220,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+            "start": 645.5,
+            "end": 649.2999999970198,
+            "bytes": 440,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-d18XrDA3.css",
+            "start": 645.5,
+            "end": 649.7999999970198,
+            "bytes": 62831,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/rankPresentation-CfzLP-ug.js",
+            "start": 645.5,
+            "end": 650.2000000029802,
+            "bytes": 9366,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "start": 645.7000000029802,
+            "end": 651,
+            "bytes": 286,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-53qoBEdS.css",
+            "start": 645.7999999970198,
+            "end": 652.2000000029802,
+            "bytes": 135852,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/cdn-cgi/rum?",
+            "start": 682.7999999970198,
+            "end": 915.7000000029802,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "xmlhttprequest"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 698.3999999910593,
+            "end": 699.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp",
+            "start": 735.5999999940395,
+            "end": 736.0999999940395,
+            "bytes": 732638,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "start": 736.2999999970198,
+            "end": 736.8999999910593,
+            "bytes": 31520,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "start": 737,
+            "end": 737.5,
+            "bytes": 28724,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-ranked-lossless-48e0f8ecf5d1492d9334.webp",
+            "start": 740,
+            "end": 740,
+            "bytes": 1351956,
+            "transfer": 0,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-frame-pair-lossless-81cca2bd9f27eb7d8364.webp",
+            "start": 740,
+            "end": 740,
+            "bytes": 520274,
+            "transfer": 0,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/homeAtmosphere-CYaKhqUk.js",
+            "start": 753.7999999970198,
+            "end": 754.2000000029802,
+            "bytes": 6561,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-clouds-9c0b00f0fd0a8270ab0a.webp",
+            "start": 757.5,
+            "end": 757.7000000029802,
+            "bytes": 290916,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/selected.svg",
+            "start": 759.2000000029802,
+            "end": 1009.0999999940395,
+            "bytes": 297,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/secondary.svg",
+            "start": 759.2999999970198,
+            "end": 1011.8999999910593,
+            "bytes": 300,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 762.7000000029802,
+            "end": 1273.3999999910593,
+            "bytes": 13166,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 762.7000000029802,
+            "end": 1275.2999999970198,
+            "bytes": 21540,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/arrow.png",
+            "start": 762.7999999970198,
+            "end": 1017.5,
+            "bytes": 58142,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 762.8999999910593,
+            "end": 763.5999999940395,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/shard-simple-v1.png",
+            "start": 762.8999999910593,
+            "end": 1747.7000000029802,
+            "bytes": 8689,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/seekers/faceless-v2/portrait.webp",
+            "start": 762.8999999910593,
+            "end": 1776.0999999940395,
+            "bytes": 44960,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/gifts/letter-v1.webp",
+            "start": 762.8999999910593,
+            "end": 1778.5999999940395,
+            "bytes": 9006,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-normal-lossless-b38a2715461dc883616d.webp",
+            "start": 766.0999999940395,
+            "end": 766.0999999940395,
+            "bytes": 1091326,
+            "transfer": 0,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-single-lossless-420374dc8d58a770d32b.webp",
+            "start": 816.7999999970198,
+            "end": 816.7999999970198,
+            "bytes": 1322620,
+            "transfer": 0,
+            "type": "image"
+          },
+          {
+            "url": "https://yourlore.xyz/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "start": 861.5,
+            "end": 862.2999999970198,
+            "bytes": 32068,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-ivy-d89660aa7f92857fafbf.webp",
+            "start": 871.7000000029802,
+            "end": 871.7000000029802,
+            "bytes": 377804,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 896,
+            "end": 896,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/menu-manifest-4df0e039897d65c0a1dc.json",
+            "start": 1085.7000000029802,
+            "end": 1086.7000000029802,
+            "bytes": 108240,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 1099.5999999940395,
+            "end": 1099.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "start": 1109.8999999910593,
+            "end": 1359.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-1.mp3",
+            "start": 5836.5999999940395,
+            "end": 5837.20000000298,
+            "bytes": 2339,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-2.mp3",
+            "start": 5836.899999991059,
+            "end": 5837.5,
+            "bytes": 2548,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-3.mp3",
+            "start": 5845.20000000298,
+            "end": 5846.20000000298,
+            "bytes": 2653,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/pop.mp3",
+            "start": 5845.20000000298,
+            "end": 5846.29999999702,
+            "bytes": 2129,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/error.mp3",
+            "start": 5846.20000000298,
+            "end": 5846.70000000298,
+            "bytes": 2312,
+            "transfer": 0,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 641.0999999940395,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 762.3999999910593,
+            "phase": "準備を始めています | 画像の準備 0 / 14"
+          },
+          {
+            "at": 766,
+            "phase": "画像の準備 0 / 14"
+          },
+          {
+            "at": 766.3999999910593,
+            "phase": "画像の準備 1 / 14"
+          },
+          {
+            "at": 857.0999999940395,
+            "phase": "画像の準備 2 / 14"
+          },
+          {
+            "at": 857.5,
+            "phase": "画像の準備 3 / 14"
+          },
+          {
+            "at": 857.5999999940395,
+            "phase": "画像の準備 4 / 14"
+          },
+          {
+            "at": 857.7999999970198,
+            "phase": "画像の準備 5 / 14"
+          },
+          {
+            "at": 857.7999999970198,
+            "phase": "画像の準備 6 / 14"
+          },
+          {
+            "at": 858.2999999970198,
+            "phase": "画像の準備 7 / 14"
+          },
+          {
+            "at": 864,
+            "phase": "画像の準備 8 / 14"
+          },
+          {
+            "at": 871.8999999910593,
+            "phase": "画像の準備 9 / 14"
+          },
+          {
+            "at": 1090,
+            "phase": "画像の準備 10 / 14"
+          },
+          {
+            "at": 1274.7000000029802,
+            "phase": "画像の準備 11 / 14"
+          },
+          {
+            "at": 1276.8999999910593,
+            "phase": "画像の準備 12 / 14"
+          },
+          {
+            "at": 1748.0999999940395,
+            "phase": "画像の準備 13 / 14"
+          },
+          {
+            "at": 1779.2999999970198,
+            "phase": "画像の準備 14 / 14"
+          },
+          {
+            "at": 1782.3999999910593,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 1819,
+            "phase": "準備完了"
+          },
+          {
+            "at": 5836.899999991059,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "signedIn": false,
+      "temperature": "cold",
+      "readyMs": 4167,
+      "transferredBytes": 2553263,
+      "stats": {
+        "resources": [
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+            "start": 544.3000000119209,
+            "end": 1083.9000000059605,
+            "bytes": 32540,
+            "transfer": 32840,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 544.3000000119209,
+            "end": 1404.4000000059605,
+            "bytes": 94474,
+            "transfer": 94774,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+            "start": 544.3000000119209,
+            "end": 1824,
+            "bytes": 507676,
+            "transfer": 507976,
+            "type": "link"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+            "start": 544.4000000059605,
+            "end": 627.6000000089407,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+            "start": 544.4000000059605,
+            "end": 783.1000000089407,
+            "bytes": 235,
+            "transfer": 535,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+            "start": 544.4000000059605,
+            "end": 1067.1000000089407,
+            "bytes": 668,
+            "transfer": 968,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 544.4000000059605,
+            "end": 1067.7000000029802,
+            "bytes": 404,
+            "transfer": 704,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-D_89czQd.js",
+            "start": 544.4000000059605,
+            "end": 1070.1000000089407,
+            "bytes": 1747,
+            "transfer": 2047,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 550.2000000029802,
+            "end": 1404.4000000059605,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-BxzRz4XD.js",
+            "start": 1071.2000000029802,
+            "end": 2359.800000011921,
+            "bytes": 139212,
+            "transfer": 139512,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-CkjVGUY7.js",
+            "start": 1071.300000011921,
+            "end": 2316.2000000029802,
+            "bytes": 139127,
+            "transfer": 139427,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-DuPbAPo-.js",
+            "start": 1071.6000000089407,
+            "end": 2515.2000000029802,
+            "bytes": 345220,
+            "transfer": 345520,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/rankPresentation-CfzLP-ug.js",
+            "start": 1071.7000000029802,
+            "end": 1360.9000000059605,
+            "bytes": 9366,
+            "transfer": 9666,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+            "start": 1071.7000000029802,
+            "end": 1588.5,
+            "bytes": 440,
+            "transfer": 740,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "start": 1071.7000000029802,
+            "end": 1589.7000000029802,
+            "bytes": 286,
+            "transfer": 586,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-d18XrDA3.css",
+            "start": 1071.7000000029802,
+            "end": 1919.2000000029802,
+            "bytes": 62817,
+            "transfer": 63117,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-53qoBEdS.css",
+            "start": 1071.800000011921,
+            "end": 2326.7000000029802,
+            "bytes": 135811,
+            "transfer": 136111,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/cdn-cgi/rum?",
+            "start": 2348.6000000089407,
+            "end": 2637.6000000089407,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "xmlhttprequest"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 2545.300000011921,
+            "end": 3796.6000000089407,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp",
+            "start": 2550.300000011921,
+            "end": 4066.6000000089407,
+            "bytes": 732638,
+            "transfer": 732938,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/selected.svg",
+            "start": 2550.9000000059605,
+            "end": 2801.2000000029802,
+            "bytes": 206,
+            "transfer": 506,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/secondary.svg",
+            "start": 2551,
+            "end": 3040,
+            "bytes": 207,
+            "transfer": 507,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/primary.svg",
+            "start": 2551.2000000029802,
+            "end": 2799.800000011921,
+            "bytes": 205,
+            "transfer": 505,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/settings.png",
+            "start": 2564,
+            "end": 3740.2000000029802,
+            "bytes": 122797,
+            "transfer": 123097,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 2564.4000000059605,
+            "end": 2564.800000011921,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/mail.png",
+            "start": 2564.4000000059605,
+            "end": 3702.6000000089407,
+            "bytes": 112047,
+            "transfer": 112347,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/menu-manifest-4df0e039897d65c0a1dc.json",
+            "start": 3044.6000000089407,
+            "end": 3770.300000011921,
+            "bytes": 108240,
+            "transfer": 108540,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-2.mp3",
+            "start": 3771.1000000089407,
+            "end": 4024.5,
+            "bytes": 2548,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 3830.5,
+            "end": 4136.300000011921,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          }
+        ],
+        "phases": [
+          {
+            "at": 548.7000000029802,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 2563.9000000059605,
+            "phase": "準備を始めています | 画像の準備 0 / 3"
+          },
+          {
+            "at": 2567,
+            "phase": "画像の準備 0 / 3"
+          },
+          {
+            "at": 2571.2000000029802,
+            "phase": "画像の準備 1 / 3"
+          },
+          {
+            "at": 2571.2000000029802,
+            "phase": "画像の準備 2 / 3"
+          },
+          {
+            "at": 2574.2000000029802,
+            "phase": "画像の準備 3 / 3"
+          },
+          {
+            "at": 2575.5,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 3771.1000000089407,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "signedIn": false,
+      "temperature": "warm",
+      "readyMs": 1150,
+      "transferredBytes": 300,
+      "stats": {
+        "resources": [
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+            "start": 251.70000000298023,
+            "end": 252.20000000298023,
+            "bytes": 32540,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 251.79999999701977,
+            "end": 252.29999999701977,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+            "start": 251.90000000596046,
+            "end": 255.70000000298023,
+            "bytes": 507676,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-D_89czQd.js",
+            "start": 252.09999999403954,
+            "end": 252.29999999701977,
+            "bytes": 1747,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 252.09999999403954,
+            "end": 252.70000000298023,
+            "bytes": 404,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+            "start": 252.09999999403954,
+            "end": 252.90000000596046,
+            "bytes": 235,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+            "start": 252.09999999403954,
+            "end": 252.79999999701977,
+            "bytes": 668,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+            "start": 252.09999999403954,
+            "end": 253,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-BxzRz4XD.js",
+            "start": 258.09999999403954,
+            "end": 258.59999999403954,
+            "bytes": 139212,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+            "start": 258.29999999701977,
+            "end": 260.79999999701977,
+            "bytes": 440,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-CkjVGUY7.js",
+            "start": 258.29999999701977,
+            "end": 259.59999999403954,
+            "bytes": 139127,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/assetQueue-DuPbAPo-.js",
+            "start": 258.29999999701977,
+            "end": 260.5,
+            "bytes": 345220,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/social-d18XrDA3.css",
+            "start": 258.40000000596046,
+            "end": 261,
+            "bytes": 62817,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/rankPresentation-CfzLP-ug.js",
+            "start": 258.40000000596046,
+            "end": 261.20000000298023,
+            "bytes": 9366,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/main-53qoBEdS.css",
+            "start": 258.59999999403954,
+            "end": 262.70000000298023,
+            "bytes": 135811,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+            "start": 258.59999999403954,
+            "end": 261.29999999701977,
+            "bytes": 286,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 260.40000000596046,
+            "end": 263.09999999403954,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/cdn-cgi/rum?",
+            "start": 299.40000000596046,
+            "end": 552.5,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "xmlhttprequest"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 315.70000000298023,
+            "end": 317.09999999403954,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp",
+            "start": 317.90000000596046,
+            "end": 318.29999999701977,
+            "bytes": 732638,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/ui/buttons/secondary.svg",
+            "start": 318.40000000596046,
+            "end": 568.9000000059605,
+            "bytes": 300,
+            "transfer": 0,
+            "type": "css"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/settings.png",
+            "start": 322.5,
+            "end": 576.4000000059605,
+            "bytes": 122797,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/art/lounge/icons/v2/mail.png",
+            "start": 322.5,
+            "end": 833.0999999940395,
+            "bytes": 112047,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+            "start": 322.59999999403954,
+            "end": 323,
+            "bytes": 94474,
+            "transfer": 0,
+            "type": "img"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 346.59999999403954,
+            "end": 346.59999999403954,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/assets/menu-manifest-4df0e039897d65c0a1dc.json",
+            "start": 358.70000000298023,
+            "end": 359.40000000596046,
+            "bytes": 108240,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 363.40000000596046,
+            "end": 363.40000000596046,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-1.mp3",
+            "start": 854.5,
+            "end": 1095.5999999940395,
+            "bytes": 2339,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-2.mp3",
+            "start": 854.5,
+            "end": 1098.2999999970198,
+            "bytes": 2548,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/click-3.mp3",
+            "start": 1096.2000000029802,
+            "end": 1096.5999999940395,
+            "bytes": 2653,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/pop.mp3",
+            "start": 1096.7999999970198,
+            "end": 1097.2000000029802,
+            "bytes": 2129,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://yourlore.xyz/sfx/lore-v3/error.mp3",
+            "start": 1097.4000000059605,
+            "end": 1097.7999999970198,
+            "bytes": 2312,
+            "transfer": 0,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 256,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 322.09999999403954,
+            "phase": "準備を始めています | 画像の準備 0 / 3"
+          },
+          {
+            "at": 325,
+            "phase": "画像の準備 0 / 3"
+          },
+          {
+            "at": 331.59999999403954,
+            "phase": "画像の準備 1 / 3"
+          },
+          {
+            "at": 331.70000000298023,
+            "phase": "画像の準備 2 / 3"
+          },
+          {
+            "at": 334.29999999701977,
+            "phase": "画像の準備 3 / 3"
+          },
+          {
+            "at": 335.5,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 854.7000000029802,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "at": "2026-10-27T11:59:51.724Z",
+  "source": "cbfefea1",
+  "records": [
+    {
+      "url": "/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+      "status": 200,
+      "bytes": 32540,
+      "sha256": "1f17f895cc940150240511250aca03274c5b4e61c740eac2ba0fb8002d8eeb8d",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+      "status": 200,
+      "bytes": 94474,
+      "sha256": "c8edc164c945787867646438720720c121136696a30c0e807017a16c21c682f8",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+      "status": 200,
+      "bytes": 507676,
+      "sha256": "888ec274d6a7e913cd69e5408372ec33588a76a947b0c80b80f9c785009edc5a",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-ivy-d89660aa7f92857fafbf.webp",
+      "status": 200,
+      "bytes": 377804,
+      "sha256": "d89660aa7f92857fafbf2f62ff0d9083ffbfcd5e54d192d6db8be4666ad47752",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-clouds-9c0b00f0fd0a8270ab0a.webp",
+      "status": 200,
+      "bytes": 290916,
+      "sha256": "9c0b00f0fd0a8270ab0a4c8eb64d892732263c9b7d7305e944a95cd1dae165b5",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp",
+      "status": 200,
+      "bytes": 732638,
+      "sha256": "6b47bb56ee8a50df7e2226fe9ef98e977c8b6e7d3fcf8508fc860d8223780319",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-portrait-1c47aeca9c8d88436147.webp",
+      "status": 200,
+      "bytes": 44960,
+      "sha256": "1c47aeca9c8d88436147f7195f4b56f67f51c8c17a8909a7bc59a65a8551eb78",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-single-lossless-420374dc8d58a770d32b.webp",
+      "status": 200,
+      "bytes": 1322620,
+      "sha256": "420374dc8d58a770d32b10117202669ebd34629b4734dbffa9e171ac35249156",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-normal-lossless-b38a2715461dc883616d.webp",
+      "status": 200,
+      "bytes": 1091326,
+      "sha256": "b38a2715461dc883616d7363c7f511116eb72b00ee59bad25e1f55ab3ee53638",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-ranked-lossless-48e0f8ecf5d1492d9334.webp",
+      "status": 200,
+      "bytes": 1351956,
+      "sha256": "48e0f8ecf5d1492d933438a13dda2fd8e4d4766e208fd5e69d9b3d542342cb9b",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/startup-frame-pair-lossless-81cca2bd9f27eb7d8364.webp",
+      "status": 200,
+      "bytes": 520274,
+      "sha256": "81cca2bd9f27eb7d83647a404cd2c129851d426eab54470d8bb0d9bd650c8206",
+      "cacheControl": "public, max-age=31536000, immutable"
+    },
+    {
+      "url": "/assets/main-D_89czQd.js",
+      "status": 200,
+      "bytes": 3133,
+      "sha256": "7d6aa8846824477b92e024b069e3ec2f687f469a02628a90d895534854ce944c",
+      "cacheControl": "public, max-age=31536000, immutable"
+    }
+  ],
+  "anonymous": {
+    "url": "https://yourlore.xyz/",
+    "realApi": true,
+    "loginVisible": true,
+    "errors": []
+  }
+}
