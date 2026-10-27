@@ -16,3 +16,10 @@
 - 目視: 修正前は裏面全面が水色、該当planeのみ非表示および修正後は元の濃い裏面。新しいVFXデザインへの変更ではなく、色の不具合を除去した。ローカルfixtureの描画確認であり、認証済み本番対戦の証拠とはしない。
 
 本番公開・公開後確認は下記に追記する。
+
+## 本番公開完了（2026-10-27 11:03 KST）
+
+- Guard公開source `99a13930d8dc5644f7aac3afde848ce1e966ed47`、version `610fbc94-cd6b-48fa-92b1-4423d8b90822`、100% traffic。
+- 初回のD1 read-only確認はCloudflare 7403認証エラーで公開前停止。OAuth状態確認後の再試行でschema検査成功。guardを迂回せず、型・246/246回帰・buildと最新main/公開祖先確認を経て公開。
+- 公開HTMLのmain entryがguard buildと一致。本番の`paperDraw-BWHzZOtw.js`を取得し、draw-stock-backが存在、水色の全面planeが不在、stock edge glowが保持されていることを確認。version metadataのsource stampも完全一致。`production.json`参照。
+- 本番の匿名実ブラウザでcold/warm表示、auth/me・collection・social・queueの認証境界が成功。page error/HTTP失敗/可視画像欠落0。`production-browser/report.json`参照。

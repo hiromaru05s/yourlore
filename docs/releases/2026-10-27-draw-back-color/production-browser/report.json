@@ -1,0 +1,65 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-10-27T02:03:17.931Z",
+  "authentication": "anonymous fresh browser",
+  "samples": [
+    {
+      "cache": "cold",
+      "readyMs": 1615,
+      "requests": 27,
+      "bytes": 1855816,
+      "scripts": [
+        "https://yourlore.xyz/assets/main-DGlXEEo0.js",
+        "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+        "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+        "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+        "https://yourlore.xyz/assets/main-DU1zCNgF.js",
+        "https://yourlore.xyz/assets/social-DLx655P-.js",
+        "https://yourlore.xyz/assets/assetQueue-B47s4qgf.js",
+        "https://yourlore.xyz/assets/rankPresentation-CnA3cUfi.js",
+        "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js"
+      ],
+      "tbt": 0,
+      "broken": []
+    },
+    {
+      "cache": "warm",
+      "readyMs": 1221,
+      "requests": 33,
+      "bytes": 3413206,
+      "scripts": [
+        "https://yourlore.xyz/assets/main-DGlXEEo0.js",
+        "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+        "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+        "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+        "https://yourlore.xyz/assets/main-DU1zCNgF.js",
+        "https://yourlore.xyz/assets/social-DLx655P-.js",
+        "https://yourlore.xyz/assets/assetQueue-B47s4qgf.js",
+        "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+        "https://yourlore.xyz/assets/rankPresentation-CnA3cUfi.js"
+      ],
+      "tbt": 0,
+      "broken": []
+    }
+  ],
+  "boundaries": [
+    {
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "path": "/api/collection",
+      "status": 401
+    },
+    {
+      "path": "/api/social/profile",
+      "status": 401
+    },
+    {
+      "path": "/ws/queue",
+      "status": 401
+    }
+  ],
+  "errors": [],
+  "failed": []
+}

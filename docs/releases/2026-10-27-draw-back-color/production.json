@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-27T02:03:33.489Z",
+  "source": "99a13930d8dc5644f7aac3afde848ce1e966ed47",
+  "version": "610fbc94-cd6b-48fa-92b1-4423d8b90822",
+  "deployment": "78d91477-7d9a-457b-a0e4-9222aa350096",
+  "traffic": 100,
+  "entry": "/assets/main-DGlXEEo0.js",
+  "drawChunk": "assets/paperDraw-BWHzZOtw.js",
+  "sha256": "6cfc980e43701708e0a23443a4da5170ca18e96cfbfa97be73b609d22cb47d6f",
+  "fullFaceTint": false,
+  "stockEdgeRetained": true,
+  "tests": 246
+}
