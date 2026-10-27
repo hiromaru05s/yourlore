@@ -43,9 +43,9 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
   let returnPrint=()=>{};
   if(reveal){const front=nativeCopy(node,true);returnPrint=borrowCardPrint(node,front);front.style.backfaceVisibility='hidden';front.style.transform='translateZ(.015px)';root.append(front);}
   const back=document.createElement('div');back.className='draw-stock-back';back.style.cssText=`position:absolute;inset:0;border-radius:5.2%;background-image:url("${sleeve}");background-size:100% 100%;backface-visibility:hidden;transform:translateZ(${-w*DRAW_THICKNESS_RATIO}px) rotateY(180deg);box-shadow:inset 0 0 0 1px #b1c3d155`;root.append(back);
-  // A narrow, short-lived mana edge follows the same rigid surface.
-  const light=document.createElement('div');light.style.cssText=`position:absolute;inset:1%;border-radius:5%;background:#98ddff;mask-image:url(/art/biblion/modular/base-mon-print.webp);mask-size:100% 100%;transform:translateZ(${-w*(DRAW_THICKNESS_RATIO+.001)}px);opacity:0;pointer-events:none`;root.append(light);
-  const finish=decorateDrawBack(back,sleeve);overlay.append(root);return {finish,returnPrint,node,w,h,root,light,landed:false,sounded:false,stock:null as ReturnType<NonNullable<ReturnType<typeof acquireDrawStage>>['add']>|null};
+  // Keep the sleeve's native colors. The stock renderer supplies the narrow
+  // edge light; a filled DOM plane would tint the entire back during lift.
+  const finish=decorateDrawBack(back,sleeve);overlay.append(root);return {finish,returnPrint,node,w,h,root,landed:false,sounded:false,stock:null as ReturnType<NonNullable<ReturnType<typeof acquireDrawStage>>['add']>|null};
  });
  // Foreground cards open a gap from their pre-render poses. Copies stay above
  // the arriving card only in its last approach, so it is actually inserted.
@@ -85,7 +85,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
       z:Math.min(origin.width*.72,65)*p.lift,pitch:p.pitch,yaw:180*(1-p.reveal),bank:angle*p.travel+side*10*p.bank,scale:mix(startScale,targetScale,p.travel)};
      // Projection enlarges by depth naturally. No extra scale pulse is layered on.
      f.root.style.left=(pose.x-f.w/2)+'px';f.root.style.top=(pose.y-f.h/2)+'px';f.root.style.transform=`translateZ(${pose.z}px) rotateZ(${pose.bank}deg) rotateY(${pose.yaw}deg) rotateX(${pose.pitch}deg) scale(${pose.scale})`;
-     f.finish(now,pose.bank+pose.pitch);f.root.style.zIndex=p.travel<.78?'80':'0';f.light.style.opacity=String(p.glow*.7);
+     f.finish(now,pose.bank+pose.pitch);f.root.style.zIndex=p.travel<.78?'80':'0';
      if(!stage)f.root.style.boxShadow='none';
      f.stock?.update(pose,true,p.glow);f.root.dataset.progress=t.toFixed(3);f.root.dataset.phase=t<.18?'separate':t<.58?'turn':t<.84?'carry':'seat';f.root.dataset.thickness=(f.w*DRAW_THICKNESS_RATIO).toFixed(2);
     });
