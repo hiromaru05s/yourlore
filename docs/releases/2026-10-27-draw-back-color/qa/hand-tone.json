@@ -1,0 +1,611 @@
+{
+  "checks": [
+    {
+      "label": "condition-blocked",
+      "width": 1280,
+      "before": {
+        "dim": true,
+        "condition": false,
+        "tone": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ]
+      },
+      "during": {
+        "classes": "card card--spell card--hand",
+        "effects": 0,
+        "filter": "none",
+        "tones": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.91595px 6.41509px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ],
+        "grip": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ]
+      },
+      "after": {
+        "visible": "visible",
+        "dim": true,
+        "condition": false,
+        "tone": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ],
+        "copies": 0
+      }
+    },
+    {
+      "label": "condition-blocked",
+      "width": 390,
+      "before": {
+        "dim": true,
+        "condition": false,
+        "tone": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ]
+      },
+      "during": {
+        "classes": "card card--spell card--hand",
+        "effects": 0,
+        "filter": "none",
+        "tones": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00195px 2.2043px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ],
+        "grip": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ]
+      },
+      "after": {
+        "visible": "visible",
+        "dim": true,
+        "condition": false,
+        "tone": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ],
+        "copies": 0
+      }
+    },
+    {
+      "label": "mana-blocked-condition-met",
+      "width": 1280,
+      "before": {
+        "dim": true,
+        "condition": true,
+        "tone": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ]
+      },
+      "during": {
+        "classes": "card card--spell card--hand",
+        "effects": 0,
+        "filter": "none",
+        "tones": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.91595px 6.41509px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ],
+        "grip": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ]
+      },
+      "after": {
+        "visible": "visible",
+        "dim": true,
+        "condition": true,
+        "tone": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ],
+        "copies": 0
+      }
+    },
+    {
+      "label": "mana-blocked-condition-met",
+      "width": 390,
+      "before": {
+        "dim": true,
+        "condition": true,
+        "tone": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ]
+      },
+      "during": {
+        "classes": "card card--spell card--hand",
+        "effects": 0,
+        "filter": "none",
+        "tones": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00195px 2.2043px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ],
+        "grip": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ]
+      },
+      "after": {
+        "visible": "visible",
+        "dim": true,
+        "condition": true,
+        "tone": [
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "0.55"
+          },
+          {
+            "filter": "grayscale(1) brightness(0.55) contrast(0.9)",
+            "opacity": "1"
+          }
+        ],
+        "copies": 0
+      }
+    },
+    {
+      "label": "playable-condition-met",
+      "width": 1280,
+      "before": {
+        "dim": false,
+        "condition": true,
+        "tone": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.916px 6.4152px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ]
+      },
+      "during": {
+        "classes": "card card--spell card--hand",
+        "effects": 0,
+        "filter": "none",
+        "tones": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.91595px 6.41509px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ],
+        "grip": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.916px 6.4152px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ]
+      },
+      "after": {
+        "visible": "visible",
+        "dim": false,
+        "condition": true,
+        "tone": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 2.916px 6.4152px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ],
+        "copies": 0
+      }
+    },
+    {
+      "label": "playable-condition-met",
+      "width": 390,
+      "before": {
+        "dim": false,
+        "condition": true,
+        "tone": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00213px 2.20468px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ]
+      },
+      "during": {
+        "classes": "card card--spell card--hand",
+        "effects": 0,
+        "filter": "none",
+        "tones": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00195px 2.2043px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ],
+        "grip": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00213px 2.20468px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ]
+      },
+      "after": {
+        "visible": "visible",
+        "dim": false,
+        "condition": true,
+        "tone": [
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "drop-shadow(rgba(0, 0, 0, 0.733) 0px 1.00213px 2.20468px)",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          },
+          {
+            "filter": "none",
+            "opacity": "1"
+          }
+        ],
+        "copies": 0
+      }
+    },
+    {
+      "multi": {
+        "landed": "grayscale(1) brightness(0.55) contrast(0.9)",
+        "flying": "none"
+      }
+    },
+    "abort",
+    "resize",
+    "skip",
+    "reduce",
+    "opponent"
+  ],
+  "errors": [],
+  "boundary": "Local Chrome, real board/controller and normal draw timing; game-state fixture, not authenticated multiplayer or user visual approval."
+}

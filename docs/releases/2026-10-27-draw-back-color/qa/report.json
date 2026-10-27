@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "side": "me",
+      "progress": "0.225",
+      "backImage": "url(\"http://127.0.0.1:5598/frames/sleeve_default.webp\")",
+      "backFilter": "none",
+      "paintedPlanes": [],
+      "privateFaces": 2
+    },
+    {
+      "width": 1280,
+      "side": "opp",
+      "progress": "0.223",
+      "backImage": "url(\"http://127.0.0.1:5598/frames/sleeve_default.webp\")",
+      "backFilter": "none",
+      "paintedPlanes": [],
+      "privateFaces": 0
+    },
+    {
+      "width": 390,
+      "side": "me",
+      "progress": "0.225",
+      "backImage": "url(\"http://127.0.0.1:5598/frames/sleeve_default.webp\")",
+      "backFilter": "none",
+      "paintedPlanes": [],
+      "privateFaces": 2
+    },
+    {
+      "width": 390,
+      "side": "opp",
+      "progress": "0.223",
+      "backImage": "url(\"http://127.0.0.1:5598/frames/sleeve_default.webp\")",
+      "backFilter": "none",
+      "paintedPlanes": [],
+      "privateFaces": 0
+    }
+  ],
+  "errors": [],
+  "scope": "Real board/controller with fixture state; default sleeve, both sides, desktop/mobile, frozen turn plus normal-speed draw. Not authenticated multiplayer."
+}

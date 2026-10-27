@@ -1,0 +1,70 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "side": "me",
+      "progress": "0.221",
+      "backImage": "url(\"http://127.0.0.1:5598/frames/sleeve_default.webp\")",
+      "backFilter": "none",
+      "paintedPlanes": [
+        {
+          "background": "rgb(152, 221, 255)",
+          "opacity": "0.7",
+          "mask": "url(\"http://127.0.0.1:5598/art/biblion/modular/base-mon-print.webp\")",
+          "backface": "visible"
+        }
+      ],
+      "privateFaces": 2
+    },
+    {
+      "width": 1280,
+      "side": "opp",
+      "progress": "0.222",
+      "backImage": "url(\"http://127.0.0.1:5598/frames/sleeve_default.webp\")",
+      "backFilter": "none",
+      "paintedPlanes": [
+        {
+          "background": "rgb(152, 221, 255)",
+          "opacity": "0.7",
+          "mask": "url(\"http://127.0.0.1:5598/art/biblion/modular/base-mon-print.webp\")",
+          "backface": "visible"
+        }
+      ],
+      "privateFaces": 0
+    },
+    {
+      "width": 390,
+      "side": "me",
+      "progress": "0.220",
+      "backImage": "url(\"http://127.0.0.1:5598/frames/sleeve_default.webp\")",
+      "backFilter": "none",
+      "paintedPlanes": [
+        {
+          "background": "rgb(152, 221, 255)",
+          "opacity": "0.7",
+          "mask": "url(\"http://127.0.0.1:5598/art/biblion/modular/base-mon-print.webp\")",
+          "backface": "visible"
+        }
+      ],
+      "privateFaces": 2
+    },
+    {
+      "width": 390,
+      "side": "opp",
+      "progress": "0.223",
+      "backImage": "url(\"http://127.0.0.1:5598/frames/sleeve_default.webp\")",
+      "backFilter": "none",
+      "paintedPlanes": [
+        {
+          "background": "rgb(152, 221, 255)",
+          "opacity": "0.7",
+          "mask": "url(\"http://127.0.0.1:5598/art/biblion/modular/base-mon-print.webp\")",
+          "backface": "visible"
+        }
+      ],
+      "privateFaces": 0
+    }
+  ],
+  "errors": [],
+  "scope": "Real board/controller with fixture state; default sleeve, both sides, desktop/mobile, frozen turn plus normal-speed draw. Not authenticated multiplayer."
+}
