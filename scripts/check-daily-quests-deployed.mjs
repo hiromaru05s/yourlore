@@ -11,14 +11,14 @@ const temp=await fs.mkdtemp(path.join(os.tmpdir(),'lore-daily-smoke-'));
 const uid='qa-daily-'+randomUUID(),token=randomUUID()+randomUUID(),now=Date.now();
 const sql=async contents=>{
  const file=path.join(temp,'operation.sql');await fs.writeFile(file,contents,{mode:0o600});
- try{return JSON.parse(execFileSync('npm',['exec','--','wrangler','d1','execute','lore-db','--remote','-c','server/wrangler.toml','--file',file,'--json'],{stdio:'pipe',timeout:120000}));}
+ try{execFileSync('npm',['exec','--','wrangler','d1','execute','lore-db','--remote','-c','server/wrangler.toml','--file',file,'--json'],{stdio:'pipe',timeout:120000});}
  catch{throw Error('D1 smoke operation failed; SQL and credentials withheld');}
 };
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
 let browser,context,created=false;const errors=[];
 try{
  created=true;
- await sql(`INSERT INTO users(id,email,password,display,created_at,verified,credits) VALUES('${uid}','${uid}@example.invalid','disabled','Daily QA',${now},1,0);
+ await sql(`INSERT INTO users(id,email,password,display,created_at,verified,credits,username_set) VALUES('${uid}','${uid}@example.invalid','disabled','Daily QA',${now},1,0,1);
  INSERT INTO rewards(user_id,key,amount,created_at) VALUES('${uid}','tutorial:v3:intro:skip',0,${now});
  INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES('${token}','${uid}',${now},${now+1800000});`);
  browser=await chromium.launch({channel:'chrome',headless:true});context=await browser.newContext({viewport:{width:1440,height:900}});
@@ -30,7 +30,7 @@ try{
  assert.deepEqual((await read()).dailies,initial.dailies);
  await p.goto(origin,{waitUntil:'domcontentloaded'});await p.locator('.dq-task').first().waitFor();await p.waitForFunction(()=>!document.querySelector('.lounge-entry-overlay,.screen-loader'));
  assert.equal(await p.locator('.dq-task').count(),3);assert.equal(await p.locator('#modeReward progress').getAttribute('max'),'300');
- await p.screenshot({path:out+'/home-desktop.png'});
+ await p.waitForTimeout(700);await p.screenshot({path:out+'/home-desktop.png'});
  await p.locator('[data-quest="1"]').click();await p.locator('[data-no]').click();assert.deepEqual((await read()).dailies,initial.dailies);
  for(const slot of [1,2,0]){
   const before=await read();await p.locator(`[data-quest="${slot}"]`).click();await p.locator('[data-yes]').click();
@@ -43,7 +43,7 @@ try{
  await p.waitForFunction(()=>document.querySelectorAll('.dq-task:disabled').length===3);
  const fourth=await context.request.post(origin+'/api/rewards/daily/reroll',{data:{day:final.daily.day,revision:final.daily.revision,slot:0},headers:{Origin:origin}});assert.equal(fourth.status(),409);
  await p.locator('#online').click();assert.equal(await p.locator('#modeReward progress').getAttribute('max'),'100');
- await p.setViewportSize({width:390,height:844});await p.screenshot({path:out+'/home-mobile.png'});
+ await p.setViewportSize({width:390,height:844});await p.waitForTimeout(700);await p.screenshot({path:out+'/home-mobile.png'});
  await p.reload({waitUntil:'domcontentloaded'});await p.locator('.dq-task:disabled').first().waitFor();assert.equal(await p.locator('.dq-task:disabled').count(),3);
  assert.deepEqual(errors,[]);
  await fs.writeFile(out+'/report.json',JSON.stringify({origin,source:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),checks:['three distinct persisted quests','NO preserves all assignments','YES replaces the selected slot only','three changes shared across slots','fourth change rejected','replacement state survives reload','ranked/casual cap bars','desktop/mobile screenshots'],scope:'Real production API and browser using a disposable preverified QA account; live match settlement and OAuth are not exercised.',errors},null,2));

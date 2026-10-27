@@ -1,0 +1,22 @@
+(node:4645) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS 13 quest definitions and exact rewards
+PASS each BOT first win pays once forever; losses and draws do not pay
+PASS normal and ranked caps are independent; losses, draws, clipping, reset, duplicate receipts
+PASS legacy slot; only three replacements; stale concurrent requests cannot consume extra rolls
+PASS three distinct daily quests preserve legacy progress and claims; rollover grants three fresh slots
+PASS cross-slot concurrent rerolls share exactly three changes and reject invalid slots
+PASS three quest settlements are atomic, independent, capped and idempotent
+PASS replacing one slot invalidates only its old match snapshot
+PASS daily completion pays once, remains the daily task, cannot be rerolled
+PASS reroll resets progress and rejects the previous match assignment; midnight does not revive old task
+PASS failed credit transaction rolls back progress and receipt; retry recovers once
+PASS starter wins use starting deck, purchases and plays use actual counters
+PASS actual engine: shield, heal, damage, Rift, paid spell/monster purchases, printed cost plays
+PASS actual engine: extra draw excludes ordinary turn draw; prevented damage does not count
+PASS actual engine: counter counts destruction, not survival; decay credits opposing owner
+PASS server BOT room uses difficulty, persists metrics, excludes no-contest and repeats settlement safely
+PASS HTTP rejects unauthenticated/forged first-clear claims and invalid BOT difficulty
+PASS a full server-controlled BOT duel settles from real actions and resumes the same receipt
+PASS new daily starter targets come only from the owned starter collection
+19 reward scenario groups passed

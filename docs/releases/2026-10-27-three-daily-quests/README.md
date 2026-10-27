@@ -9,3 +9,7 @@ Source reference: `b7bdb6bb`, then current main including `99a13930` draw-sleeve
 Preview origin: `/Users/hiromaru05s/.codex/worktrees/daily-quests-simple/LORE_TCG/client`, `http://127.0.0.1:5331`. Browser fixtures exercise the real HOME/assets with controlled account/API values at 1440×900, 1280×720, 1024×600, 390×844, 320×640, 844×390 and three languages. Reward tests cover existing assignments, day rollover, cross-slot concurrent changes, stale snapshots, legacy rooms, atomic rollback and idempotent three-reward settlement. Functional checks do not constitute user visual approval or authenticated live PvP verification.
 
 Production verification: `scripts/check-daily-quests-deployed.mjs` uses a disposable preverified account to check real assignments, NO/YES changes, shared budget, rejection of a fourth change, reload persistence and HOME progress bars; it removes the account afterward.
+
+## Production result
+
+Deployed source: `29adb1cecaa538ca1c1e501bfe5dac83f4d13370`; Worker version `7b260807-5330-4dc5-83c5-a4feb515178d`. Guarded committed-snapshot release passed typechecking, all 246 production-suite checks and the production build. Live browser/API smoke passed all assignment/replacement/persistence checks. The disposable account was removed afterward. See `suite.json`, `production-deployment.json`, `production/report.json`, `production/cleanup.json` and the desktop/mobile screenshots.

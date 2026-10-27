@@ -1,0 +1,16 @@
+{
+  "origin": "https://yourlore.xyz",
+  "source": "29adb1cecaa538ca1c1e501bfe5dac83f4d13370",
+  "checks": [
+    "three distinct persisted quests",
+    "NO preserves all assignments",
+    "YES replaces the selected slot only",
+    "three changes shared across slots",
+    "fourth change rejected",
+    "replacement state survives reload",
+    "ranked/casual cap bars",
+    "desktop/mobile screenshots"
+  ],
+  "scope": "Real production API and browser using a disposable preverified QA account; live match settlement and OAuth are not exercised.",
+  "errors": []
+}
