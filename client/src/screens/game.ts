@@ -13,6 +13,7 @@ import type { BotDifficulty } from "../shared/bot";
 import type { App, Screen } from "../router";
 import { LocalController, type ControllerExits } from "../game/controller";
 import { TutorialController } from "../game/tutorial";
+import { TutorialPartController } from "../game/tutorialParts";
 import { OnlineController } from "../game/online";
 import { setMarketWatch, setMyAvatar, setMySleeve, setMyFurniture, setOppAvatar } from "../ui/boardView";
 import { startBoardLayout } from "../ui/layout";
@@ -21,7 +22,7 @@ import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
 
 export type GameOpts =
   | { mode: "bot"; difficulty?: BotDifficulty }
-  | { mode: "tutorial"; lesson?: number }
+  | { mode: "tutorial"; lesson?: number; part?: number }
   | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean; difficulty?:BotDifficulty };
 
 export function mountGame(app: App, opts: GameOpts): Screen {
@@ -65,13 +66,15 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
-    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? app.tutorialGame(opts.lesson) : (opts.difficulty??ctrl.botDifficulty) ? app.botGame(opts.difficulty??ctrl.botDifficulty) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
+    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? (opts.part===undefined?app.tutorialGame(opts.lesson):app.tutorialPart(opts.part)) : (opts.difficulty??ctrl.botDifficulty) ? app.botGame(opts.difficulty??ctrl.botDifficulty) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
   };
 
   const tutorialUserId = app.user?.id;
   const ctrl =
     opts.mode === "bot"
       ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard")
+      : opts.mode === "tutorial" && opts.part!==undefined
+        ? new TutorialPartController(root,exits,opts.part,next=>next<13?app.tutorialPart(next):app.tutorial())
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
             lesson: opts.lesson,

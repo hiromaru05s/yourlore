@@ -8,8 +8,10 @@ import {mountManaSpirit} from '../ui/manaSpirit';
 import {artUrl} from '../ui/cardArt';
 import {TUT_STEPS,TUTORIAL_CHAPTERS,TUTORIAL_TOTAL} from '../shared/tutorialSteps';
 import {tutorialRuleSections} from '../shared/tutorialNotes';
+import {TUTORIAL_PARTS,tutorialPartKey} from '../shared/tutorialParts';
 import '../styles/tutorialAcademy.css';
 import '../styles/homeTutorial.css';
+import '../styles/tutorialParts.css';
 const esc=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export function openRuleNotebook(chapter=0,onClose?:()=>void,onLesson?:(i:number)=>void):()=>void {
  const lang=getLang(),secs=tutorialRuleSections(lang),dialog=document.createElement('dialog');dialog.className='rule-notebook';
@@ -26,7 +28,7 @@ export function openRuleNotebook(chapter=0,onClose?:()=>void,onLesson?:(i:number
  if(chapter>0)dialog.querySelector(`#note-${chapter}`)?.scrollIntoView({block:'start'});
  return close;
 }
-export function mountTutorial(app:App):Screen {
+export function mountLegacyTutorial(app:App):Screen {
  const wrap=document.createElement('div');wrap.className='screen tut-screen academy';const lang=getLang();let disposed=false,closeNote:(()=>void)|undefined,selected=0;
  const guest=!app.user||app.user.id==='local-guest-user';
  wrap.innerHTML=`<div class="topright-lang"></div><main class="academy-content">
@@ -58,4 +60,26 @@ export function mountTutorial(app:App):Screen {
  };
  const load=async()=>{try{if(guest){let keys:string[]=[];try{keys=JSON.parse(localStorage.getItem('lore:tutorial:v3:guest')??'[]');if(!Array.isArray(keys))keys=[];}catch{}paint(keys);}else{const s=await api.tutorialStatus();if(disposed)return;if(app.user){app.user.credits=s.credits;document.dispatchEvent(new Event('lore:user'));}paint(s.keys,s.awarded,s.legacyPaid,s.amounts);}}catch{if(disposed)return;const el=wrap.querySelector('.academy-earned')!;el.textContent=text('進捗を読み込めませんでした。','Could not load progress.','진행 상황을 불러오지 못했어요.');const b=document.createElement('button');b.className='btn btn-ghost';b.textContent=text('再試行','Retry','재시도');b.onclick=()=>{b.remove();void load();};el.append(b);}};
  void load();const unsub=onLangChange(()=>app.tutorial());return{destroy(){disposed=true;unsub();spirit.destroy();closeNote?.();}};
+}
+
+/** The current local-only curriculum. Completion is browser-local and has no reward path. */
+export function mountTutorial(app:App):Screen {
+ const wrap=document.createElement('div');wrap.className='screen tut-screen tutorial-parts-screen';
+ let closeNote:(()=>void)|undefined;
+ const completed=TUTORIAL_PARTS.map((_,i)=>{try{return localStorage.getItem(tutorialPartKey(i))==='1';}catch{return false;}});
+ const done=completed.filter(Boolean).length,first=completed.findIndex(value=>!value),next=first<0?0:first;
+ const lang=getLang();
+ wrap.innerHTML=`<main class="tutorial-parts-shell">
+  <header class="tutorial-parts-hero"><div class="tutorial-parts-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST DUEL</span><h1>${text('13パート・チュートリアル','13-part tutorial','13파트 튜토리얼')}</h1><p>${text('勝利条件からデッキ設定まで、実際の画面で一つずつ操作します。報酬はありません。','Practice one action at a time, from the win condition through deck setup. There are no rewards.','승리 조건부터 덱 설정까지 실제 화면에서 하나씩 직접 조작해요. 보상은 없습니다.')}</p></div></header>
+  <section class="tutorial-parts-progress lore-surface"><div><span>${text('進行状況','Progress','진행 상황')}</span><strong>${done} / ${TUTORIAL_PARTS.length}</strong></div><progress max="${TUTORIAL_PARTS.length}" value="${done}"></progress><button class="lore-button lore-button-primary" id="continuePart">${first<0?text('最初から復習','Review from the start','처음부터 복습'):done?text('続きから','Continue','이어서 하기'):text('始める','Start','시작하기')} →</button></section>
+  <ol class="tutorial-parts-list">${TUTORIAL_PARTS.map((part,i)=>`<li class="${completed[i]?'is-complete':''}${i===first?' is-next':''}"><button data-part="${i}" class="lore-surface"><span class="tutorial-part-number">${String(i+1).padStart(2,'0')}</span><span class="tutorial-part-copy"><b>${esc(part.title[lang])}</b><small>${esc(part.intro[lang])}</small></span><span class="tutorial-part-state">${completed[i]?homeIcon('check'):(i===first?text('次','NEXT','다음'):'→')}</span></button></li>`).join('')}</ol>
+  <footer class="tutorial-parts-footer"><button class="lore-button lore-button-quiet" id="rules">${homeIcon('book')} ${text('ルールノート','Rule notebook','규칙 노트')}</button><button class="lore-button lore-button-quiet" id="back">← ${text('ホーム','Home','홈')}</button></footer>
+ </main>`;
+ app.root.append(wrap);const spirit=mountManaSpirit(wrap.querySelector('.tutorial-parts-spirit')!);
+ wrap.querySelector<HTMLButtonElement>('#continuePart')!.onclick=()=>app.tutorialPart(next);
+ wrap.querySelectorAll<HTMLButtonElement>('[data-part]').forEach(button=>button.onclick=()=>app.tutorialPart(Number(button.dataset.part)));
+ wrap.querySelector<HTMLButtonElement>('#rules')!.onclick=()=>{closeNote?.();closeNote=openRuleNotebook(0);};
+ wrap.querySelector<HTMLButtonElement>('#back')!.onclick=()=>app.home();
+ const unsub=onLangChange(()=>app.tutorial());
+ return{destroy(){unsub();spirit.destroy();closeNote?.();wrap.remove();}};
 }

@@ -72,3 +72,22 @@
 @media(max-height:500px){.tutorial-dialog{padding:14px 24px;max-height:calc(100dvh - 16px)}.tutorial-dialog .coach-spirit{width:55px;height:70px;margin-top:14px}.tutorial-dialog h2{font-size:22px;margin-bottom:10px}.tutorial-message{font-size:14px;margin-bottom:12px}.tutorial-next-action{margin:12px 0;padding:10px 14px}.tutorial-goal{top:6px;padding:7px 12px}.tutorial-goal strong{font-size:12px}}
 /* Keep the opponent's portrait and Spirit readable while the player acts. */
 @media(min-width:701px){.tutorial-goal{left:auto;right:16px;transform:none;width:min(360px,calc(50vw - 100px));max-width:none;gap:9px;padding:10px 12px}.tutorial-goal strong{font-size:13px}}
+
+/* Guided board tour: the taught area stays sharp, everything outside it is dimmed
+   and blurred by four shades, and a ring sits just outside the exact control.
+   Zeno stays beside a tailed speech bubble placed away from the taught area. */
+.tutorial-tour-layer{position:fixed;inset:0;z-index:152;pointer-events:none}
+.tutorial-tour-shade{position:fixed;z-index:0;outline:1px solid #020914a6;background:#020914a6;-webkit-backdrop-filter:blur(3px) saturate(.8);backdrop-filter:blur(3px) saturate(.8);pointer-events:none}
+.tutorial-tour-ring{position:fixed;z-index:1;box-sizing:border-box;border:2px solid #d4efff;border-radius:9px;box-shadow:0 0 0 1px #0b1a2c,0 0 10px #8fdcff,inset 0 0 8px #8fdcff55;pointer-events:none;animation:tutorialTourPulse 1.3s ease-in-out infinite}
+@keyframes tutorialTourPulse{0%,100%{box-shadow:0 0 0 1px #0b1a2c,0 0 7px #8fdcffaa,inset 0 0 6px #8fdcff44}50%{box-shadow:0 0 0 1px #0b1a2c,0 0 16px #a9e6ff,inset 0 0 10px #8fdcff77}}
+.tutorial-tour-target{filter:brightness(1.12)!important}
+.tutorial-tour-coach{position:fixed;z-index:2;display:flex;align-items:flex-end;gap:0;width:min(560px,calc(100vw - 28px));pointer-events:none}
+.tutorial-tour-coach[data-placement="bottom-left"]{left:18px;bottom:18px}.tutorial-tour-coach[data-placement="bottom-right"]{right:18px;bottom:18px}.tutorial-tour-coach[data-placement="top-left"]{left:18px;top:18px}.tutorial-tour-coach[data-placement="top-right"]{right:18px;top:18px}
+.tutorial-tour-spirit{position:relative;z-index:2;flex:0 0 104px;width:104px;height:132px;margin-right:-5px;filter:drop-shadow(0 10px 12px #0008)}
+.tutorial-tour-bubble{position:relative;min-width:0;flex:1;padding:17px 22px 16px 26px;pointer-events:auto}
+.tutorial-tour-coach::after{content:"";position:absolute;z-index:3;left:96px;bottom:31px;width:22px;height:22px;background:#14243d;clip-path:polygon(100% 0,100% 100%,0 56%);filter:drop-shadow(-1px 0 #b8d6ed);pointer-events:none}
+.tutorial-tour-bubble header{display:flex;align-items:center;justify-content:space-between;gap:14px}.tutorial-tour-bubble h2{margin:6px 0 7px;font-size:19px;font-weight:600;color:#f1f6f8}.tutorial-tour-bubble p{margin:0 0 8px;font-size:13px;line-height:1.7;color:#c9d8e2}.tutorial-tour-bubble>strong{display:block;font-size:13px;line-height:1.6;color:#f0ddb0}
+.tutorial-tour-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}.tutorial-tour-actions .lore-button{min-height:38px;padding:8px 16px}.tutorial-tour-back[disabled],.tutorial-tour-next[disabled]{opacity:.4;cursor:not-allowed}.tutorial-tour-hint{font-size:11px;color:#a9c4d2}
+.tutorial-tour-skip{width:30px;height:30px;padding:0!important;font-size:20px!important;pointer-events:auto}
+@media(max-width:700px){.tutorial-tour-coach{width:calc(100vw - 14px)}.tutorial-tour-coach[data-placement]{left:7px;right:auto}.tutorial-tour-coach[data-placement^="top"]{top:7px;bottom:auto}.tutorial-tour-coach[data-placement^="bottom"]{bottom:7px;top:auto}.tutorial-tour-spirit{flex-basis:68px;width:68px;height:90px}.tutorial-tour-bubble{padding:12px 15px 12px 18px}.tutorial-tour-bubble h2{font-size:15px}.tutorial-tour-bubble p,.tutorial-tour-bubble>strong{font-size:11px}.tutorial-tour-coach::after{left:61px;bottom:22px;width:17px;height:17px}}
+@media(prefers-reduced-motion:reduce){.tutorial-tour-ring{animation:none!important}}
