@@ -13,10 +13,11 @@ const npcBundle=await build({stdin:{contents:"export * from './client/src/shared
 const npcModule={exports:{}};new Function('module','exports',npcBundle.outputFiles[0].text)(npcModule,npcModule.exports);const npcs=npcModule.exports;
 let warmups=0,cancelledWarmups=0,giftMounts=0,giftDisposals=0;
 const inkInstances=[];
-class HomeDuelInk {constructor(button,mode){this.button=button;this.mode=mode;this.disposed=false;inkInstances.push(this);}destroy(){this.disposed=true;}}
+class HomeDuelInk {constructor(button,mode){this.button=button;this.canvas=document.createElement('canvas');this.mode=mode;this.disposed=false;inkInstances.push(this);}setMode(mode){this.mode=mode;}destroy(){this.disposed=true;}}
 const buttonSource=(await fs.readFile(new URL('../client/src/ui/homeDuelButton.ts',import.meta.url),'utf8')).replace(/^import .*;\s*$/gm,'');
 const buttonJS=ts.transpileModule(buttonSource,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
-const buttonModule={};new Function('exports','HomeDuelInk','esc','loungeText',buttonJS)(buttonModule,HomeDuelInk,base.esc,base.loungeText);
+const buttonDeps={HomeDuelInk,esc:base.esc,loungeText:base.loungeText,assetHints:new WeakMap(),homeDuelFrame:'/frame.webp',homeDuelImage:mode=>'/'+mode+'.webp',loadHomeDuelImage:async()=>{}};
+const buttonModule={};new Function('exports',...Object.keys(buttonDeps),buttonJS)(buttonModule,...Object.values(buttonDeps));
 const {mountHomeDuelButton}=buttonModule;
 const {mountHome}=await load('home',{...base,mountHomeDuelButton,BOT_FIRST_CLEAR_EXP:{easy:20,normal:35,hard:60,hell:120},mountDailyRewards:()=>()=>{},rewardProgressHtml:()=>'',mountGiftInbox:(receivedApp,button)=>{assert.equal(receivedApp,app);assert.equal(button.id,'homeGifts');assert.equal(button.parentElement,root.querySelector('#rankedMode').parentElement.parentElement,'Courier shares the mode controls column');giftMounts++;return()=>{giftDisposals++;}},firstClearLabel:n=>String(n),BOT_REWARDS:{easy:300,normal:500,hard:1000,hell:2000},scheduleGameWarmup:()=>{warmups++;return()=>{cancelledWarmups++;}},warmGame:async()=>{warmups++;},mountHomeSpirit:()=>()=>{},...npcs,getLang:()=> 'ja',api:{rankMe:async()=>null},homeRankHtml:()=>'',sanitizeDecks:()=>({sel:0,list:[{name:'Deck',cards:[]}]}),artUrl:{sm:id=>id}});
 const home=mountHome(app);
@@ -24,7 +25,7 @@ const startButton=root.querySelector('#ranked');
 assert.equal(startButton.dataset.mode,'ranked');
 const rankedFrame=startButton.querySelector('.home-duel-frame').getAttribute('viewBox');
 root.querySelector('#online').click();const normalFrame=startButton.querySelector('.home-duel-frame').outerHTML;
-assert.equal(inkInstances[0].disposed,true,'Mode changes dispose the previous ink renderer');
+assert.equal(inkInstances[0].disposed,false,'Mode changes preserve the ink renderer');assert.equal(inkInstances.length,1);assert.equal(inkInstances[0].mode,'normal');
 root.querySelector('#bot').click();assert.equal(startButton.querySelector('.home-duel-frame').outerHTML,normalFrame,'Single and normal reuse the same frame asset and geometry');
 assert.notEqual(startButton.querySelector('.home-duel-frame').getAttribute('viewBox'),rankedFrame,'Ranked uses its distinct crimson inlay');
 assert.equal(startButton.querySelectorAll('.home-duel-fallback').length,1,'Static pigment is available before WebGL and on unsupported devices');

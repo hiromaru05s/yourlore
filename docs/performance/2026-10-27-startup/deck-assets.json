@@ -1,0 +1,259 @@
+{
+  "cards": [
+    {
+      "name": "ACID_RAIN.webp",
+      "sourceBytes": 2518560,
+      "displayBytes": 385452,
+      "width": 512
+    },
+    {
+      "name": "AMBUSH.webp",
+      "sourceBytes": 1866566,
+      "displayBytes": 297514,
+      "width": 512
+    },
+    {
+      "name": "ANCIENT_CIV.webp",
+      "sourceBytes": 2086018,
+      "displayBytes": 322138,
+      "width": 512
+    },
+    {
+      "name": "BLOOD_RITE.webp",
+      "sourceBytes": 2084776,
+      "displayBytes": 379414,
+      "width": 512
+    },
+    {
+      "name": "BREWING.webp",
+      "sourceBytes": 1909060,
+      "displayBytes": 293238,
+      "width": 512
+    },
+    {
+      "name": "CASINO.webp",
+      "sourceBytes": 1928494,
+      "displayBytes": 288118,
+      "width": 512
+    },
+    {
+      "name": "CASTLE.webp",
+      "sourceBytes": 1839712,
+      "displayBytes": 316890,
+      "width": 512
+    },
+    {
+      "name": "CHOSEN_AREA.webp",
+      "sourceBytes": 1919912,
+      "displayBytes": 285568,
+      "width": 512
+    },
+    {
+      "name": "COUNTERCALC.webp",
+      "sourceBytes": 1756120,
+      "displayBytes": 263050,
+      "width": 512
+    },
+    {
+      "name": "DUNGEON_FLOOR.webp",
+      "sourceBytes": 2317588,
+      "displayBytes": 358848,
+      "width": 512
+    },
+    {
+      "name": "ELF_HAVEN.webp",
+      "sourceBytes": 2480400,
+      "displayBytes": 392286,
+      "width": 512
+    },
+    {
+      "name": "FATE_WHEEL.webp",
+      "sourceBytes": 1905910,
+      "displayBytes": 312384,
+      "width": 512
+    },
+    {
+      "name": "FLAME.webp",
+      "sourceBytes": 1917452,
+      "displayBytes": 344008,
+      "width": 512
+    },
+    {
+      "name": "FOCUS.webp",
+      "sourceBytes": 1764514,
+      "displayBytes": 266522,
+      "width": 512
+    },
+    {
+      "name": "FORESIGHT.webp",
+      "sourceBytes": 1938950,
+      "displayBytes": 320446,
+      "width": 512
+    },
+    {
+      "name": "GAMBLER.webp",
+      "sourceBytes": 1823086,
+      "displayBytes": 293368,
+      "width": 512
+    },
+    {
+      "name": "GHOST.webp",
+      "sourceBytes": 1960858,
+      "displayBytes": 341956,
+      "width": 512
+    },
+    {
+      "name": "GRAPE.webp",
+      "sourceBytes": 2019076,
+      "displayBytes": 320574,
+      "width": 512
+    },
+    {
+      "name": "GUILD_CO.webp",
+      "sourceBytes": 1981608,
+      "displayBytes": 309548,
+      "width": 512
+    },
+    {
+      "name": "GUILD_HALL.webp",
+      "sourceBytes": 1947864,
+      "displayBytes": 333768,
+      "width": 512
+    },
+    {
+      "name": "HALF_ELF.webp",
+      "sourceBytes": 2482658,
+      "displayBytes": 394480,
+      "width": 512
+    },
+    {
+      "name": "INCUBATOR_S.webp",
+      "sourceBytes": 1861410,
+      "displayBytes": 301730,
+      "width": 512
+    },
+    {
+      "name": "REFRESH_HAND.webp",
+      "sourceBytes": 1847982,
+      "displayBytes": 303146,
+      "width": 512
+    },
+    {
+      "name": "RIFT.webp",
+      "sourceBytes": 1739680,
+      "displayBytes": 273226,
+      "width": 512
+    },
+    {
+      "name": "RUST_SHROOM.webp",
+      "sourceBytes": 2236422,
+      "displayBytes": 380238,
+      "width": 512
+    },
+    {
+      "name": "SLUM.webp",
+      "sourceBytes": 2134744,
+      "displayBytes": 321502,
+      "width": 512
+    },
+    {
+      "name": "STARTER_CHEST.webp",
+      "sourceBytes": 1727974,
+      "displayBytes": 292646,
+      "width": 512
+    },
+    {
+      "name": "STARTER_MANA.webp",
+      "sourceBytes": 1439672,
+      "displayBytes": 271454,
+      "width": 512
+    },
+    {
+      "name": "STARTER_TRASH.webp",
+      "sourceBytes": 1448566,
+      "displayBytes": 238526,
+      "width": 512
+    },
+    {
+      "name": "TRIAL_AREA.webp",
+      "sourceBytes": 1712408,
+      "displayBytes": 271666,
+      "width": 512
+    },
+    {
+      "name": "TRIBE_PACT.webp",
+      "sourceBytes": 2087348,
+      "displayBytes": 343008,
+      "width": 512
+    },
+    {
+      "name": "TRICKROOM.webp",
+      "sourceBytes": 1849060,
+      "displayBytes": 297658,
+      "width": 512
+    },
+    {
+      "name": "TRUMPET.webp",
+      "sourceBytes": 1862136,
+      "displayBytes": 300492,
+      "width": 512
+    },
+    {
+      "name": "WEAKEN_ALL.webp",
+      "sourceBytes": 2266880,
+      "displayBytes": 355390,
+      "width": 512
+    }
+  ],
+  "mattes": [
+    {
+      "file": "base-mon-print.webp",
+      "sourceBytes": 193496,
+      "displayBytes": 259300,
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "file": "base-spell-print.webp",
+      "sourceBytes": 194162,
+      "displayBytes": 222794,
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "file": "base-trap-print.webp",
+      "sourceBytes": 171518,
+      "displayBytes": 243844,
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "file": "base-quest-print.webp",
+      "sourceBytes": 302066,
+      "displayBytes": 344316,
+      "width": 1024,
+      "height": 1536
+    },
+    {
+      "file": "cost.png",
+      "sourceBytes": 1801208,
+      "displayBytes": 205380,
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "file": "attack.png",
+      "sourceBytes": 1841095,
+      "displayBytes": 229540,
+      "width": 1254,
+      "height": 1254
+    },
+    {
+      "file": "health.png",
+      "sourceBytes": 1781819,
+      "displayBytes": 211108,
+      "width": 1254,
+      "height": 1254
+    }
+  ]
+}

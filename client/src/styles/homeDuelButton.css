@@ -22,6 +22,7 @@
   clip-path: circle(33.45% at 50% 50%); transform: scale(1.181);
 }
 :root body .lounge-shell.selected-menu.lounge-home #ranked.home-duel-button[data-ready=true] .home-duel-fallback { opacity: 0; }
+:root body .lounge-shell.selected-menu.lounge-home #ranked.home-duel-button:not([data-ready=true]) .home-duel-ink { opacity: 0; }
 :root body .lounge-shell.selected-menu.lounge-home #ranked.home-duel-button[data-motion=static] .home-duel-ink { opacity: 0; }
 :root body .lounge-shell.selected-menu.lounge-home #ranked.home-duel-button>svg.home-duel-frame {
   display: block; position: absolute; inset: auto; left: 6%; top: 6%; width: 88%; height: 88%;

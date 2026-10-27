@@ -1,0 +1,17 @@
+[
+  {
+    "mode": "single",
+    "animated": true
+  },
+  {
+    "mode": "normal",
+    "animated": true
+  },
+  {
+    "mode": "ranked",
+    "animated": true
+  },
+  {
+    "settled": true
+  }
+]

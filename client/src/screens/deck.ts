@@ -1,4 +1,5 @@
 import {installDeckDrag} from '../ui/deckDrag';
+import {deckDisplayArt} from '../ui/deckMasterArt';
 import {prepareDeckCard} from '../ui/deckCardQuality';
 import {disposeCardEffects} from '../ui/cardFinish';
 import {starterCollection,constrainDeckStore} from '../shared/collection';
@@ -149,7 +150,7 @@ export function mountDeck(app: App): Screen {
       if(!row){
         row=document.createElement('div');row.className='deck-entry'+(fixed?' is-fixed':'');row.dataset.card=id;
         const surface=document.createElement('div');surface.className='deck-card-float';
-        const card=cardEl(c,{size:'mkt',fullArt:true,effect:store.list[cur].effect,frame:store.list[cur].frame});prepareDeckCard(card,id);
+        const card=cardEl(c,{size:'mkt',fullArt:true,artSource:deckDisplayArt[id],effect:store.list[cur].effect,frame:store.list[cur].frame});prepareDeckCard(card,id);
         if(fixed)card.classList.add('deck-fixed');
         card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
         bindZoom(card,c,undefined,undefined,store.list[cur].effect,store.list[cur].frame);
@@ -186,7 +187,7 @@ export function mountDeck(app: App): Screen {
       if(!tile){
         tile=document.createElement('div');tile.className='deck-pool-tile';tile.dataset.deckCard=id;
         const face=document.createElement('div');face.className='deck-pool-face';
-        const card=cardEl(c,{size:'mkt',fullArt:true,lazyArt:poolIndex});prepareDeckCard(card,id);
+        const card=cardEl(c,{size:'mkt',fullArt:true,artSource:deckDisplayArt[id],lazyArt:true});prepareDeckCard(card,id);
         card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
         bindZoom(card,c);card.onclick=()=>zoomCard(c);card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c);}};
         const cnt=document.createElement('div');cnt.className='deck-owned';cnt.title=loungeText('デッキ内 / 所持枚数','In deck / Owned','덱 구성 / 보유 수');card.append(cnt);
@@ -216,7 +217,7 @@ export function mountDeck(app: App): Screen {
     for (const id of watching?candidates.slice(watchPage*24,(watchPage+1)*24):[]) {
       const on = watch().includes(id);
       const c = inst(id, "w_" + id);
-      const el = cardEl(c, { size: "mkt", fullArt: true, playable: true, dim: !on && watch().length >= WATCH_MAX, lazyArt: watchIdx++ });
+      const el = cardEl(c, { size: "mkt", fullArt: true, artSource:deckDisplayArt[id], playable: true, dim: !on && watch().length >= WATCH_MAX, lazyArt: watchIdx++ });
       prepareDeckCard(el,id);
       if (on) {
         el.classList.add("is-watch-pick");

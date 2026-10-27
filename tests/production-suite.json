@@ -246,7 +246,8 @@
     "tests/duel-scene-recovery.mjs",
     "tests/bot-difficulty.mjs",
     "tests/bot-rotation-runtime.mjs",
-    "tests/tutorial-parts.mjs"
+    "tests/tutorial-parts.mjs",
+    "tests/home-duel-ink-lifecycle.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

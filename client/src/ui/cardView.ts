@@ -72,6 +72,7 @@ export interface CardOpts {
   game?: GameState; // live field conditions, including the opponent
 
   size?: "board" | "mkt" | "hand";
+  artSource?: string; // Optional display derivative of an explicitly adopted master.
   fullArt?: boolean; // Explicit master art; bounded live views also use the master.
   /** Gallery grids (card list / deck pool / pickers) render hundreds of cards —
    *  those defer their art. Screens with a bounded, all-visible set (board,
@@ -204,18 +205,18 @@ function lazyFor(v: boolean | number | undefined): boolean {
   return typeof v === "number" ? v >= EAGER_HEAD : !!v;
 }
 
-function artEl(cardId: string, full = false, lazy = false, gallery = false): HTMLElement {
+function artEl(cardId: string, full = false, lazy = false, gallery = false, sourceOverride?: string): HTMLElement {
   full ||= !gallery;
   const art = el("div", "card-art");
   const variant = full ? "full" : gallery ? "gal" : "sm";
-  const key = `${cardId}:${variant}`;
+  const key = `${cardId}:${variant}:${sourceOverride ?? ""}`;
   const known = artStatus(key);
   if (known === "fail") {
     // no <img> at all — the ◆ placeholder is the final answer for this card
     art.classList.add("art-done");
     return art;
   }
-  const src = full ? artUrl.full(cardId) : artUrl.sm(cardId);
+  const src = sourceOverride ?? (full ? artUrl.full(cardId) : artUrl.sm(cardId));
   const img = document.createElement("img");
   img.alt = "";
   img.className = "card-art-img";
@@ -258,7 +259,7 @@ function artEl(cardId: string, full = false, lazy = false, gallery = false): HTM
   let tries = 0;
   img.onerror = () => {
     if (tries++ === 0) {
-      setTimeout(() => { img.removeAttribute("srcset"); img.src = `${src}?retry=1`; }, 150);
+      setTimeout(() => { img.removeAttribute("srcset"); img.src = sourceOverride ? artUrl.full(cardId) : `${src}${src.includes("?") ? "&" : "?"}retry=1`; }, 150);
       return;
     }
     artFail.set(key, Date.now());
@@ -418,7 +419,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   if (opt.compactField) node.classList.add("card--field");
   // Complete raster face underneath the illustration and live typography.
   // The frame has its name plaque; cost and combat seals are separate raster layers.
-  node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined));
+  node.appendChild(artEl(c.id, opt.fullArt, lazyFor(opt.lazyArt), opt.lazyArt !== undefined, opt.artSource));
   const frameEl = el("div", "card-frame");
   frameEl.style.backgroundImage = `url(${opt.compactField ? fieldFrameFor(c.t) : frameFor(c.t,opt.fullArt || opt.lazyArt === undefined)})`;
   node.appendChild(frameEl);

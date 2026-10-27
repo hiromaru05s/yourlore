@@ -1,5 +1,6 @@
 // Approved living pigment surface; frame art is composed separately by homeDuelButton.
-export type Mode = 'single' | 'normal' | 'ranked';
+import {loadHomeDuelImage, type Mode} from './homeDuelAssets';
+export type {Mode} from './homeDuelAssets';
 const toonGeometry = { "ranked": { "size": [1254, 1254], "bounds": [60, 57, 1194, 1163], "center": [0.5, 0.5135566188197767], "radii": [0.45215311004784686, 0.4409888357256778] }, "normal": { "size": [1254, 1254], "bounds": [74, 80, 1179, 1169], "center": [0.4996012759170654, 0.5019936204146731], "radii": [0.4405901116427432, 0.4342105263157895] }, "single": { "size": [1254, 1254], "bounds": [56, 62, 1195, 1191], "center": [0.4988038277511962, 0.5003987240829346], "radii": [0.4541467304625199, 0.45015948963317387] } };
 const vertex = `#version 300 es
 in vec2 p;out vec2 uv;void main(){uv=p*.5+.5;gl_Position=vec4(p,0,1);}`;
@@ -56,6 +57,8 @@ export class HomeDuelInk {
         number
     ] = [.5, .62];
     private programs: Record<string, WebGLProgram> = {};
+    private uniforms: Record<string, Record<string, WebGLUniformLocation | null>> = {};
+    private attributes: Record<string, number> = {};
     private targets: Target[] = [];
     private buffers: WebGLBuffer[] = [];
     private textures: WebGLTexture[] = [];
@@ -68,6 +71,7 @@ export class HomeDuelInk {
     private observer: ResizeObserver;
     private abort = new AbortController();
     private disposed = false;
+    private modeRevision = 0;
     private reduced = matchMedia('(prefers-reduced-motion: reduce)');
     private lastTime = 0;
     constructor(host: HTMLButtonElement, mode: Mode) {
@@ -112,20 +116,21 @@ export class HomeDuelInk {
         throw new Error('Framebuffer unavailable'); const t = { texture, fbo }; this.targets.push(t); return t; }
     private async init() {
         const gl = this.canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: false, antialias: false, preserveDrawingBuffer: false, powerPreference: 'low-power' });
+        this.gl = gl;
         if (!gl || !gl.getExtension('EXT_color_buffer_float'))
             throw new Error('Fluid WebGL unavailable');
-        this.gl = gl;
         gl.getExtension('OES_texture_float_linear');
-        for (const [key, fragment] of Object.entries(fragments))
+        for (const [key, fragment] of Object.entries(fragments)) {
             this.programs[key] = this.compile(fragment);
+            this.uniforms[key] = {};
+            this.attributes[key] = gl.getAttribLocation(this.programs[key], 'p');
+        }
         const buffer = gl.createBuffer()!;
         this.buffers.push(buffer);
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-        const img = new Image();
-        img.decoding = 'async';
-        img.src = '/art/ui/home-duel-frame-01/' + this.mode + '.png';
-        await img.decode();
+        const revision = this.modeRevision;
+        const img = await loadHomeDuelImage(this.mode);
         if (this.disposed)
             return;
         const tex = gl.createTexture()!;
@@ -144,13 +149,37 @@ export class HomeDuelInk {
         this.p = [this.target(true), this.target(true)];
         this.map = [this.target(true), this.target(true)];
         this.div = this.target(true);
+        // A rapid selection can supersede the image awaited during initialization.
+        if (revision !== this.modeRevision) return;
         this.reset();
         this.resize();
         this.host.dataset.motion = this.reduced.matches ? 'reduced' : 'fluid';
         this.host.dataset.ready = 'true';
         this.host.dataset.diameter = '0.88';
     }
-    private pass(name: string, target: Target | null, fields: Record<string, WebGLTexture> = {}, dt = 0, force = 0) { const gl = this.gl!, program = this.programs[name]; gl.useProgram(program); gl.bindFramebuffer(gl.FRAMEBUFFER, target?.fbo ?? null); gl.viewport(0, 0, target ? 256 : this.canvas.width, target ? 256 : this.canvas.height); const loc = (n: string) => gl.getUniformLocation(program, n); gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[0]); const attr = gl.getAttribLocation(program, 'p'); gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0); gl.uniform2f(loc('texel'), 1 / 256, 1 / 256); gl.uniform2f(loc('origin'), ...this.pointer); const geo = toonGeometry[this.mode]; gl.uniform2f(loc('sourceCenter'), ...geo.center as [
+    /** Reuse programs, targets and the canvas; only the source texture changes. */
+    setMode(mode: Mode) {
+        this.mode = mode;
+        const revision = ++this.modeRevision;
+        this.reset();
+        delete this.host.dataset.ready;
+        this.ready = Promise.all([this.ready, loadHomeDuelImage(mode)]).then(([, image]) => {
+            if (this.disposed || revision !== this.modeRevision || !this.gl || !this.original) return;
+            const gl = this.gl;
+            if (gl.isContextLost()) return;
+            gl.bindTexture(gl.TEXTURE_2D, this.original);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+            gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+            this.reset(); this.resize();
+            this.host.dataset.motion = this.reduced.matches ? 'reduced' : 'fluid';
+            this.host.dataset.ready = 'true';
+        }).catch(() => {
+            if (this.disposed || revision !== this.modeRevision) return;
+            this.host.dataset.motion = 'static'; delete this.host.dataset.ready;
+        });
+    }
+    private pass(name: string, target: Target | null, fields: Record<string, WebGLTexture> = {}, dt = 0, force = 0) { const gl = this.gl!, program = this.programs[name]; gl.useProgram(program); gl.bindFramebuffer(gl.FRAMEBUFFER, target?.fbo ?? null); gl.viewport(0, 0, target ? 256 : this.canvas.width, target ? 256 : this.canvas.height); const uniforms = this.uniforms[name]; const loc = (n: string) => n in uniforms ? uniforms[n] : (uniforms[n] = gl.getUniformLocation(program, n)); gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[0]); const attr = this.attributes[name]; gl.enableVertexAttribArray(attr); gl.vertexAttribPointer(attr, 2, gl.FLOAT, false, 0, 0); gl.uniform2f(loc('texel'), 1 / 256, 1 / 256); gl.uniform2f(loc('origin'), ...this.pointer); const geo = toonGeometry[this.mode]; gl.uniform2f(loc('sourceCenter'), ...geo.center as [
         number,
         number
     ]); gl.uniform2f(loc('sourceRadii'), ...geo.radii as [
@@ -217,6 +246,6 @@ export class HomeDuelInk {
         gl.deleteFramebuffer(t.fbo); for (const t of this.textures)
         gl.deleteTexture(t); for (const b of this.buffers)
         gl.deleteBuffer(b); for (const p of Object.values(this.programs))
-        gl.deleteProgram(p); this.targets = []; this.textures = []; this.buffers = []; this.programs = {}; gl.getExtension('WEBGL_lose_context')?.loseContext(); this.gl = null; }
+        gl.deleteProgram(p); this.targets = []; this.textures = []; this.buffers = []; this.programs = {}; this.uniforms = {}; this.attributes = {}; gl.getExtension('WEBGL_lose_context')?.loseContext(); this.gl = null; }
     destroy() { this.disposed = true; cancelAnimationFrame(this.raf); this.observer.disconnect(); this.abort.abort(); this.releaseGPU(); this.canvas.remove(); }
 }

@@ -1,0 +1,241 @@
+{
+  "base": "http://127.0.0.1:57806",
+  "baseline": true,
+  "api": "fixture; real static assets",
+  "conditions": {
+    "bandwidthMbps": 10,
+    "latencyMs": 40,
+    "cpu": 2,
+    "serviceWorkers": "block"
+  },
+  "cases": [
+    {
+      "width": 1280,
+      "homeMs": 14957,
+      "modes": [
+        {
+          "mode": "single",
+          "ms": 2876
+        },
+        {
+          "mode": "normal",
+          "ms": 1841
+        },
+        {
+          "mode": "ranked",
+          "ms": 77
+        },
+        {
+          "mode": "single",
+          "ms": 81
+        },
+        {
+          "mode": "ranked",
+          "ms": 83
+        }
+      ],
+      "contexts": 6,
+      "covers": 3,
+      "routes": [
+        {
+          "key": "cards",
+          "interactiveMs": 630,
+          "readyMs": 2722,
+          "inert": true
+        },
+        {
+          "key": "deck",
+          "interactiveMs": 311,
+          "readyMs": 65450,
+          "inert": true
+        },
+        {
+          "key": "home",
+          "interactiveMs": 253,
+          "readyMs": 258,
+          "inert": false
+        },
+        {
+          "key": "cards",
+          "interactiveMs": 726,
+          "readyMs": 819,
+          "inert": false
+        },
+        {
+          "key": "deck",
+          "interactiveMs": 204,
+          "readyMs": 46154,
+          "inert": false
+        }
+      ],
+      "stats": {
+        "requests": 440,
+        "bytes": 169384157,
+        "longTasks": [
+          {
+            "start": 1335,
+            "duration": 163
+          },
+          {
+            "start": 1499.5,
+            "duration": 52
+          },
+          {
+            "start": 10070.09999999404,
+            "duration": 184
+          },
+          {
+            "start": 20543.89999999106,
+            "duration": 326
+          },
+          {
+            "start": 22293.39999999106,
+            "duration": 81
+          },
+          {
+            "start": 22618.79999999702,
+            "duration": 63
+          },
+          {
+            "start": 23570.39999999106,
+            "duration": 115
+          },
+          {
+            "start": 89459.29999999702,
+            "duration": 264
+          },
+          {
+            "start": 89861.59999999404,
+            "duration": 72
+          },
+          {
+            "start": 90098,
+            "duration": 59
+          },
+          {
+            "start": 90301.20000000298,
+            "duration": 101
+          },
+          {
+            "start": 135652.20000000298,
+            "duration": 56
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "homeMs": 14902,
+      "modes": [
+        {
+          "mode": "single",
+          "ms": 2868
+        },
+        {
+          "mode": "normal",
+          "ms": 1824
+        },
+        {
+          "mode": "ranked",
+          "ms": 76
+        },
+        {
+          "mode": "single",
+          "ms": 1824
+        },
+        {
+          "mode": "ranked",
+          "ms": 74
+        }
+      ],
+      "contexts": 6,
+      "covers": 3,
+      "routes": [
+        {
+          "key": "cards",
+          "interactiveMs": 640,
+          "readyMs": 1701,
+          "inert": true
+        },
+        {
+          "key": "deck",
+          "interactiveMs": 274,
+          "readyMs": 46286,
+          "inert": true
+        },
+        {
+          "key": "home",
+          "interactiveMs": 116,
+          "readyMs": 118,
+          "inert": false
+        },
+        {
+          "key": "cards",
+          "interactiveMs": 559,
+          "readyMs": 726,
+          "inert": false
+        },
+        {
+          "key": "deck",
+          "interactiveMs": 173,
+          "readyMs": 180,
+          "inert": false
+        }
+      ],
+      "stats": {
+        "requests": 240,
+        "bytes": 75548946,
+        "longTasks": [
+          {
+            "start": 1329.5,
+            "duration": 132
+          },
+          {
+            "start": 1463,
+            "duration": 52
+          },
+          {
+            "start": 9970.90000000596,
+            "duration": 170
+          },
+          {
+            "start": 21856.70000000298,
+            "duration": 315
+          },
+          {
+            "start": 23292.30000001192,
+            "duration": 76
+          },
+          {
+            "start": 23406.20000000298,
+            "duration": 61
+          },
+          {
+            "start": 23665.90000000596,
+            "duration": 115
+          },
+          {
+            "start": 70137.80000001192,
+            "duration": 274
+          },
+          {
+            "start": 70482.90000000596,
+            "duration": 75
+          },
+          {
+            "start": 70668.10000000894,
+            "duration": 62
+          },
+          {
+            "start": 70880.70000000298,
+            "duration": 91
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    }
+  ]
+}

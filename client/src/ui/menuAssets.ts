@@ -5,11 +5,16 @@ import {CARD_EFFECTS} from '../shared/cardEffects';
 import {BOT_NPCS} from '../shared/botNpcs';
 import {artUrl} from './cardArt';
 import {duelImageUrls} from './duelAssets';
+import {deckDisplayArt} from './deckMasterArt';
+import {homeDuelFrame,homeDuelImage} from './homeDuelAssets';
 import {HOME_ICONS} from './homeIcons';
 /** Every image reachable from the lounge, including filters, zoom and dialogs.
  * Compressed bytes are stored on disk; only visible images need decoded pixels. */
 export function menuAssetUrls():string[]{
  return [...new Set([
+  ...Object.values(deckDisplayArt),
+  ...['base-mon-print','base-spell-print','base-trap-print','base-quest-print','cost','attack','health'].map(name=>`/art/deck-mattes-v1/${name}.webp`),
+  homeDuelFrame, ...(['single','normal','ranked'] as const).map(homeDuelImage),
   ...duelImageUrls(),'/art/biblion/duel-table.png',
   '/vfx/purchase-air/crystal-72.webp','/vfx/chosen-victory/crown.webp','/vfx/merchant/balance.webp',
   ...['knight','mage','archer','rogue'].map(k=>`/vfx/chosen-heroes/${k}.webp`),

@@ -35,3 +35,7 @@ export const deckMasterArt:Record<string,string>={
   "ACID_RAIN": "/art/deck-masters-v1/ACID_RAIN.webp",
   "RIFT": "/art/deck-masters-v1/RIFT.webp"
 };
+
+// Deck faces are at most 120 CSS px (plus a small hover lift). 512px retains
+// ample density for those faces; inspection continues to use full artwork.
+export const deckDisplayArt:Record<string,string>=Object.fromEntries(Object.keys(deckMasterArt).map(id=>[id,`/art/deck-display-v1/${id}.webp`]));

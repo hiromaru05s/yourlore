@@ -1,0 +1,26 @@
+[
+  {
+    "name": "single",
+    "pngBytes": 2009204,
+    "webpBytes": 1322620,
+    "visiblePixelDifferences": 0
+  },
+  {
+    "name": "normal",
+    "pngBytes": 1736100,
+    "webpBytes": 1091326,
+    "visiblePixelDifferences": 0
+  },
+  {
+    "name": "ranked",
+    "pngBytes": 1965883,
+    "webpBytes": 1351956,
+    "visiblePixelDifferences": 0
+  },
+  {
+    "name": "frame-pair",
+    "pngBytes": 848348,
+    "webpBytes": 520274,
+    "visiblePixelDifferences": 0
+  }
+]

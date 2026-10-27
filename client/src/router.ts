@@ -4,7 +4,7 @@ import { getLang } from './i18n';
 import {releaseHomeSpirit} from './ui/homeSpirit';
 import { loungeText } from './ui/loungeText';
 import { mountTutorialWelcome } from './screens/tutorialWelcome';
-import {coverScreen,isMenuReady,imageUrls,hasUnloadedAssets} from './ui/assetReadiness';
+import {coverScreen,isMenuReady,imageUrls} from './ui/assetReadiness';
 import {showGraphicsNotice} from './ui/graphicsNotice';
 import { mountLounge, type LoungePage } from "./ui/lounge";
 import { startHomeMusic } from "./ui/homeMusic";
@@ -132,8 +132,10 @@ export class App {
         };
         this.leaveLounge = mountLounge(this, page);
         const entrance=page==='home'&&!this.homeEntranceShown;
-        const assets=imageUrls(this.root);
-        if(page==='login'||!isMenuReady()||entrance||hasUnloadedAssets(assets)){
+        // Admission belongs to startup. Later pages keep navigation usable while
+        // their visible art loads; card galleries already own a local reveal gate.
+        if(page==='login'||!isMenuReady()||entrance){
+          const assets=imageUrls(this.root);
           const cover=coverScreen(this.root,page!=='login'&&!isMenuReady(),entrance,assets);this.cancelCover=cover.cancel;
           void cover.ready().then(ready=>{if(revision!==this.screenRevision)return;if(ready&&entrance)this.homeEntranceShown=true;if(ready)onReady();});
         } else onReady();
