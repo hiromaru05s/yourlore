@@ -1,0 +1,10 @@
+{
+  "base": "http://127.0.0.1:5793",
+  "checks": [
+    "deck removal/undo, search and full-art inspection remain functional",
+    "slow gallery assets do not lock navigation; leaving cancels the pending reveal",
+    "context loss retains static pigment through a mode change",
+    "no WebGL still shows all three modes and opens opponent selection"
+  ],
+  "errors": []
+}

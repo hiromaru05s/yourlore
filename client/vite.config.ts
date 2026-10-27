@@ -2,8 +2,10 @@ import {readFileSync} from "node:fs";
 import {loadingRitual} from "./src/ui/loadingSigil";
 import {clientSourceRevision} from "../scripts/client-source-revision.mjs";
 import { defineConfig } from "vite";
+import {startupAssets} from "../scripts/startup-assets.mjs";
 import {menuCacheManifest} from "../scripts/menu-cache-manifest.mjs";
 import {furnitureCacheRevision} from "../scripts/furniture-cache-revision.mjs";
+const startup=await startupAssets(new URL(".",import.meta.url).pathname);
 const menuManifest=await menuCacheManifest(new URL(".",import.meta.url).pathname);
 
 const duelPreloadName=`assets/duel-preload-${await clientSourceRevision(new URL(".",import.meta.url).pathname,menuManifest.fileName)}.json`;
@@ -11,16 +13,24 @@ const duelPreloadName=`assets/duel-preload-${await clientSourceRevision(new URL(
 // Frontend deploys to Cloudflare Pages (static). API + WebSocket calls go to the
 // Worker; in dev we proxy /api and /ws to the local wrangler dev server (8787).
 export default defineConfig({
-  define: {__LORE_DUEL_PRELOAD__:JSON.stringify("/"+duelPreloadName),__LORE_FURNITURE_REVISION__:JSON.stringify(await furnitureCacheRevision(new URL(".",import.meta.url).pathname,menuManifest.fileName)),__LORE_MENU_MANIFEST__: JSON.stringify("/"+menuManifest.fileName)},
+  define: {__LORE_STARTUP_ASSETS__:JSON.stringify(startup.urls),__LORE_DUEL_PRELOAD__:JSON.stringify("/"+duelPreloadName),__LORE_FURNITURE_REVISION__:JSON.stringify(await furnitureCacheRevision(new URL(".",import.meta.url).pathname,menuManifest.fileName)),__LORE_MENU_MANIFEST__: JSON.stringify("/"+menuManifest.fileName)},
   plugins: [{
+    name:"immutable-startup-art",
+    apply:"build",
+    enforce:"pre",
+    transform(code,id){
+      if(/\.(css|ts)$/.test(id)&&id.includes('/src/'))return startup.rewrite(code);
+    },
+    generateBundle(){for(const asset of startup.assets)this.emitFile({type:"asset",...asset});},
+  }, {
     name:"startup-loading-screen",
     transformIndexHtml: {
       order:"pre",
       handler(html) {
         if (!html.includes('<!-- LORE_LOADING_RITUAL -->')) return html;
-        return html
+        return startup.rewrite(html
           .replace('/* LORE_LOADING_CSS */', () => readFileSync(new URL('./src/styles/loadingScreen.css', import.meta.url), 'utf8'))
-          .replace('<!-- LORE_LOADING_RITUAL -->', () => loadingRitual());
+          .replace('<!-- LORE_LOADING_RITUAL -->', () => loadingRitual()));
       },
     },
   }, {name:"menu-cache-manifest",generateBundle(_options,bundle){
@@ -29,7 +39,7 @@ export default defineConfig({
     for(const [name,item] of Object.entries(bundle))if(item.type==="chunk"&&Object.keys(item.modules).some(id=>id.endsWith("/screens/game.ts")))visit(name);
     for(const name of Object.keys(bundle))if(/\.worker-[^/]+\.js$/.test(name))assets.add("/"+name);
     this.emitFile({type:"asset",fileName:duelPreloadName,source:JSON.stringify({modules,assets:[...assets]})});
-    this.emitFile({type:"asset",fileName:menuManifest.fileName,source:menuManifest.json});for(const asset of menuManifest.assets)this.emitFile({type:"asset",...asset});},configureServer(server){for(const asset of menuManifest.assets)server.middlewares.use("/"+asset.fileName,(_req,res)=>{res.setHeader("Content-Type","application/octet-stream");res.end(asset.source);});server.middlewares.use("/"+menuManifest.fileName,(_req,res)=>{res.setHeader("Content-Type","application/json");res.end(menuManifest.json);});}}],
+    this.emitFile({type:"asset",fileName:menuManifest.fileName,source:menuManifest.json});for(const asset of menuManifest.assets)this.emitFile({type:"asset",...asset});},configureServer(server){for(const asset of [...menuManifest.assets,...startup.assets])server.middlewares.use("/"+asset.fileName,(_req,res)=>{res.setHeader("Content-Type",asset.fileName.endsWith(".webp")?"image/webp":"application/octet-stream");res.end(asset.source);});server.middlewares.use("/"+menuManifest.fileName,(_req,res)=>{res.setHeader("Content-Type","application/json");res.end(menuManifest.json);});}}],
   server: {
     port: 5173,
     proxy: {

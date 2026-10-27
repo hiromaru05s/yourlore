@@ -6,7 +6,7 @@
   border-radius:50%;background:none;box-shadow:none;filter:none;
   transition:transform 130ms ease;
 }
-.selected-menu.lounge-home .lounge-play-button::before {
+.selected-menu.lounge-home .lounge-play-button:not(.home-duel-button)::before {
   content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
   background:url('/art/lounge/duel-ink-v1/disc.png') center/114.1% 115.5% no-repeat;
   border:0;border-radius:50%;box-shadow:none;opacity:1;

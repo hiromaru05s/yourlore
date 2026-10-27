@@ -4,7 +4,7 @@
  * Clip the filled bitmap too: an angled line on a square backing is not sufficient.
  */
 :root {
-  --lore-panel-image:url('/art/ui/lore-panel-azure-cut.png');
+  --lore-panel-image:url('/art/ui/lore-panel-azure-cut-lossless.webp');
   --lore-surface:#14243d;
   --lore-text:#e8eef4;
   --lore-muted:#a6b7c7;

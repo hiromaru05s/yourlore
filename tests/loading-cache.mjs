@@ -6,8 +6,8 @@ import path from 'node:path';
 const temp=await mkdtemp(path.join(tmpdir(),'lore-loading-'));
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 try {
- await build({stdin:{contents:`export {OPENING_PORTRAIT_URL} from './client/src/ui/opening/assets';export {createAssetQueue} from './client/src/ui/assetQueue';export {decodeAsset,warmImages} from './client/src/ui/imageAssets';export {readingAssetBytes,readingAssetUrls,readingBoardUrl} from './client/src/ui/readingAssetCache';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(temp,'cache.mjs')});
- const {OPENING_PORTRAIT_URL,createAssetQueue,decodeAsset,warmImages,readingAssetBytes,readingAssetUrls,readingBoardUrl}=await import(path.join(temp,'cache.mjs'));
+ await build({stdin:{contents:`export {OPENING_PORTRAIT_URL} from './client/src/ui/opening/assets';export {createAssetQueue} from './client/src/ui/assetQueue';export {decodeAsset,loadAssetImage,warmImages} from './client/src/ui/imageAssets';export {readingAssetBytes,readingAssetUrls,readingBoardUrl} from './client/src/ui/readingAssetCache';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(temp,'cache.mjs')});
+ const {OPENING_PORTRAIT_URL,createAssetQueue,decodeAsset,loadAssetImage,warmImages,readingAssetBytes,readingAssetUrls,readingBoardUrl}=await import(path.join(temp,'cache.mjs'));
  // Every speculative URL must refer to an asset included in the release.
  for(const url of [OPENING_PORTRAIT_URL,...readingAssetUrls(false),...readingAssetUrls(true)])await access(path.join('client/public',url.split('?')[0]));
  const queue=createAssetQueue(3,1),started=[],release=new Map();
@@ -22,7 +22,7 @@ try {
  const images=[];
  globalThis.Image=class {naturalWidth=64;naturalHeight=64;constructor(){images.push(this);}decode(){return new Promise((resolve,reject)=>{this.resolve=resolve;this.reject=reject;});}};
  const a=decodeAsset('/same.webp','low'),b=decodeAsset('http://localhost/same.webp');assert.equal(a,b);await flush();assert.equal(images.length,1);assert.equal(images[0].fetchPriority,'high');images[0].resolve();await a;
- await decodeAsset('/same.webp');assert.equal(images.length,1);
+ await decodeAsset('/same.webp');assert.equal(images.length,1);assert.equal(await loadAssetImage('/same.webp'),images[0],'GPU uploads share the exact decoded image');assert.equal(images.length,1);
  const failed=decodeAsset('/retry.webp');await flush();images.at(-1).reject(Error('transient'));await assert.rejects(failed);
  const retried=decodeAsset('/retry.webp');await flush();images.at(-1).resolve();await retried;
  const start=images.length,warm=warmImages(Array.from({length:10},(_,i)=>`/warm-${i}.webp`));await flush();assert.equal(images.length-start,2);

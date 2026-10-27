@@ -200,6 +200,7 @@
     "tests/curse.mjs",
     "tests/soul-harvest.mjs",
     "tests/loading-cache.mjs",
+    "tests/startup-assets.mjs",
     "tests/loading-readiness.mjs",
     "tests/pile-geometry-cache.mjs",
     "tests/origin-rite.mjs",

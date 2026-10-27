@@ -40,7 +40,7 @@ export function mountHome(app: App): Screen {
           <button id="bot" aria-pressed="false">${t("home.bot.title")}</button>
         </div>
         <div class="mode-reward" id="modeReward"></div>
-        <button class="lounge-play-button" id="ranked"><small aria-hidden="true">DUEL</small><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")} →</span></button>
+        <button class="lounge-play-button home-duel-button" id="ranked"><small aria-hidden="true">DUEL</small><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")} →</span></button>
         <button id="myTier" class="lounge-rank-info" aria-live="polite" aria-label="${t("lb.title")}">${t("lb.title")}</button>
       </section>
       <button class="lounge-active-deck" id="deck" aria-label="${esc(t("home.deck.title"))}">

@@ -1,0 +1,2901 @@
+{
+  "base": "http://127.0.0.1:58576",
+  "baseline": true,
+  "api": "fixture; real static assets",
+  "conditions": {
+    "bandwidthMbps": 10,
+    "latencyMs": 40,
+    "cpu": 2,
+    "serviceWorkers": "block"
+  },
+  "cases": [
+    {
+      "width": 1280,
+      "signedIn": true,
+      "temperature": "cold",
+      "readyMs": 14332,
+      "transferredBytes": 12035571,
+      "stats": {
+        "resources": [
+          {
+            "url": "http://127.0.0.1:58576/art/brand/lore-logo-transparent.webp",
+            "start": 55.3999999910593,
+            "end": 156.29999999701977,
+            "bytes": 32540,
+            "transfer": 32840,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-KkPsG9uZ.js",
+            "start": 55.599999994039536,
+            "end": 105.79999999701977,
+            "bytes": 1684,
+            "transfer": 1984,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 55.599999994039536,
+            "end": 432,
+            "bytes": 94474,
+            "transfer": 94774,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 55.599999994039536,
+            "end": 1311.8999999910593,
+            "bytes": 507676,
+            "transfer": 507976,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 55.70000000298023,
+            "end": 100.3999999910593,
+            "bytes": 399,
+            "transfer": 699,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/preload-helper-BXl3LOEh.js",
+            "start": 55.70000000298023,
+            "end": 101.3999999910593,
+            "bytes": 650,
+            "transfer": 950,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/deadline-RP-FvawS.js",
+            "start": 55.70000000298023,
+            "end": 102.20000000298023,
+            "bytes": 244,
+            "transfer": 544,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 63.29999999701977,
+            "end": 432,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-C7CNZ2hz.js",
+            "start": 107.09999999403954,
+            "end": 710.8999999910593,
+            "bytes": 139756,
+            "transfer": 140056,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-CNZBDA90.css",
+            "start": 107.20000000298023,
+            "end": 191.70000000298023,
+            "bytes": 431,
+            "transfer": 731,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-Du9uO0ar.js",
+            "start": 107.20000000298023,
+            "end": 712.5,
+            "bytes": 140067,
+            "transfer": 140367,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-DuPbAPo-.js",
+            "start": 107.20000000298023,
+            "end": 1250,
+            "bytes": 344497,
+            "transfer": 344797,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-B07N6Pfz.css",
+            "start": 107.5,
+            "end": 446.79999999701977,
+            "bytes": 56464,
+            "transfer": 56764,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/rankPresentation-CE_vAl8Q.js",
+            "start": 107.5,
+            "end": 535,
+            "bytes": 8973,
+            "transfer": 9273,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/renderDensity-eCqR3GeM.js",
+            "start": 107.5,
+            "end": 581.7000000029802,
+            "bytes": 284,
+            "transfer": 584,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-BiXx8hjh.css",
+            "start": 107.70000000298023,
+            "end": 1018.8999999910593,
+            "bytes": 249260,
+            "transfer": 249560,
+            "type": "link"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 1276.7000000029802,
+            "end": 2716.7000000029802,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/lore-panel-azure-cut.png",
+            "start": 1335.3999999910593,
+            "end": 7850.899999991059,
+            "bytes": 1439532,
+            "transfer": 1439832,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/stage-v1/sigil.png",
+            "start": 1335.8999999910593,
+            "end": 9890.59999999404,
+            "bytes": 1996219,
+            "transfer": 1996519,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "start": 1336.0999999940395,
+            "end": 1602.2999999970198,
+            "bytes": 31520,
+            "transfer": 31820,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "start": 1342.5999999940395,
+            "end": 1595.5999999940395,
+            "bytes": 28724,
+            "transfer": 29024,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/homeAtmosphere-BE6oiz7U.js",
+            "start": 1363.7999999970198,
+            "end": 1422.3999999910593,
+            "bytes": 6212,
+            "transfer": 6512,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-soft-20261026/clouds.webp",
+            "start": 1371.2999999970198,
+            "end": 2691.5999999940395,
+            "bytes": 290916,
+            "transfer": 291216,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/selected.svg",
+            "start": 1378.3999999910593,
+            "end": 1423.7000000029802,
+            "bytes": 216,
+            "transfer": 516,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/secondary.svg",
+            "start": 1378.5,
+            "end": 1424.7999999970198,
+            "bytes": 218,
+            "transfer": 518,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/duel-ink-v1/disc.png",
+            "start": 1378.7000000029802,
+            "end": 10104.5,
+            "bytes": 1787283,
+            "transfer": 1787583,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 1386.2000000029802,
+            "end": 1568.2000000029802,
+            "bytes": 21540,
+            "transfer": 21840,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 1386.2999999970198,
+            "end": 1694.8999999910593,
+            "bytes": 13166,
+            "transfer": 13466,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/gifts/letter-v1.webp",
+            "start": 1386.2999999970198,
+            "end": 1775.2000000029802,
+            "bytes": 9006,
+            "transfer": 9306,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/arrow.png",
+            "start": 1386.2999999970198,
+            "end": 1880.3999999910593,
+            "bytes": 58142,
+            "transfer": 58442,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/shard-simple-v1.png",
+            "start": 1386.5,
+            "end": 1856.2999999970198,
+            "bytes": 8689,
+            "transfer": 8989,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 1386.5,
+            "end": 1902.2999999970198,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/seekers/faceless-v2/portrait.webp",
+            "start": 1386.5,
+            "end": 1955.7999999970198,
+            "bytes": 44960,
+            "transfer": 45260,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/frame-pair-lossless.webp",
+            "start": 1386.5,
+            "end": 4399.5,
+            "bytes": 520274,
+            "transfer": 520574,
+            "type": "image"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/ranked-lossless.webp",
+            "start": 1386.5,
+            "end": 10001.39999999106,
+            "bytes": 1351956,
+            "transfer": 1352256,
+            "type": "image"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/normal-lossless.webp",
+            "start": 1454.8999999910593,
+            "end": 7022.70000000298,
+            "bytes": 1091326,
+            "transfer": 1091626,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/single-lossless.webp",
+            "start": 1455.0999999940395,
+            "end": 8104.899999991059,
+            "bytes": 1322620,
+            "transfer": 1322920,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "start": 1465.0999999940395,
+            "end": 1734.8999999910593,
+            "bytes": 32068,
+            "transfer": 32368,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 1480.5999999940395,
+            "end": 7897.899999991059,
+            "bytes": 507676,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-soft-20261026/clouds.webp",
+            "start": 1480.5999999940395,
+            "end": 7944.70000000298,
+            "bytes": 290916,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/ivy.webp",
+            "start": 1480.7999999970198,
+            "end": 9452.39999999106,
+            "bytes": 377804,
+            "transfer": 378104,
+            "type": "img"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 2748.7000000029802,
+            "end": 3083.7999999970198,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "start": 2762.3999999910593,
+            "end": 3383.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 3085.8999999910593,
+            "end": 4340.79999999702,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/favicon.ico",
+            "start": 10105.70000000298,
+            "end": 10147.89999999106,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-1.mp3",
+            "start": 14083.89999999106,
+            "end": 14137,
+            "bytes": 2339,
+            "transfer": 2639,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-2.mp3",
+            "start": 14084,
+            "end": 14138.5,
+            "bytes": 2548,
+            "transfer": 2848,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-3.mp3",
+            "start": 14137.29999999702,
+            "end": 14188.5,
+            "bytes": 2653,
+            "transfer": 2953,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/pop.mp3",
+            "start": 14138.79999999702,
+            "end": 14189.59999999404,
+            "bytes": 2129,
+            "transfer": 2429,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/error.mp3",
+            "start": 14188.89999999106,
+            "end": 14240,
+            "bytes": 2312,
+            "transfer": 2612,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 59.70000000298023,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 1386.0999999940395,
+            "phase": "準備を始めています | 画像の準備 0 / 15"
+          },
+          {
+            "at": 1390,
+            "phase": "画像の準備 0 / 15"
+          },
+          {
+            "at": 1390.0999999940395,
+            "phase": "画像の準備 1 / 15"
+          },
+          {
+            "at": 1454.8999999910593,
+            "phase": "画像の準備 2 / 15"
+          },
+          {
+            "at": 1455.0999999940395,
+            "phase": "画像の準備 3 / 15"
+          },
+          {
+            "at": 1776,
+            "phase": "画像の準備 4 / 15"
+          },
+          {
+            "at": 1777.2000000029802,
+            "phase": "画像の準備 5 / 15"
+          },
+          {
+            "at": 1778.2999999970198,
+            "phase": "画像の準備 6 / 15"
+          },
+          {
+            "at": 1856.7999999970198,
+            "phase": "画像の準備 7 / 15"
+          },
+          {
+            "at": 1881.0999999940395,
+            "phase": "画像の準備 8 / 15"
+          },
+          {
+            "at": 1907.3999999910593,
+            "phase": "画像の準備 9 / 15"
+          },
+          {
+            "at": 1958.2999999970198,
+            "phase": "画像の準備 10 / 15"
+          },
+          {
+            "at": 2696.5,
+            "phase": "画像の準備 11 / 15"
+          },
+          {
+            "at": 4407.5,
+            "phase": "画像の準備 12 / 15"
+          },
+          {
+            "at": 7037.5,
+            "phase": "画像の準備 13 / 15"
+          },
+          {
+            "at": 8122.5999999940395,
+            "phase": "画像の準備 14 / 15"
+          },
+          {
+            "at": 10018.09999999404,
+            "phase": "画像の準備 15 / 15"
+          },
+          {
+            "at": 10021.09999999404,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 10064.59999999404,
+            "phase": "準備完了"
+          },
+          {
+            "at": 14084.29999999702,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 1280,
+      "signedIn": true,
+      "temperature": "warm",
+      "readyMs": 4775,
+      "transferredBytes": 9600,
+      "stats": {
+        "resources": [
+          {
+            "url": "http://127.0.0.1:58576/art/brand/lore-logo-transparent.webp",
+            "start": 58.599999994039536,
+            "end": 107.8999999910593,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 58.599999994039536,
+            "end": 109,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 58.69999998807907,
+            "end": 109.8999999910593,
+            "bytes": 507676,
+            "transfer": 300,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-KkPsG9uZ.js",
+            "start": 58.8999999910593,
+            "end": 58.8999999910593,
+            "bytes": 1684,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 58.8999999910593,
+            "end": 58.8999999910593,
+            "bytes": 399,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/preload-helper-BXl3LOEh.js",
+            "start": 58.8999999910593,
+            "end": 58.8999999910593,
+            "bytes": 650,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/deadline-RP-FvawS.js",
+            "start": 58.8999999910593,
+            "end": 58.8999999910593,
+            "bytes": 244,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-C7CNZ2hz.js",
+            "start": 63.19999998807907,
+            "end": 63.19999998807907,
+            "bytes": 139756,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-Du9uO0ar.js",
+            "start": 63.19999998807907,
+            "end": 63.19999998807907,
+            "bytes": 140067,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-DuPbAPo-.js",
+            "start": 63.29999999701977,
+            "end": 63.29999999701977,
+            "bytes": 344497,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-CNZBDA90.css",
+            "start": 63.3999999910593,
+            "end": 63.3999999910593,
+            "bytes": 431,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-B07N6Pfz.css",
+            "start": 65.19999998807907,
+            "end": 65.19999998807907,
+            "bytes": 56464,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/rankPresentation-CE_vAl8Q.js",
+            "start": 65.29999999701977,
+            "end": 65.29999999701977,
+            "bytes": 8973,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/renderDensity-eCqR3GeM.js",
+            "start": 65.29999999701977,
+            "end": 65.29999999701977,
+            "bytes": 284,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-BiXx8hjh.css",
+            "start": 72,
+            "end": 72,
+            "bytes": 249260,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 82.09999999403954,
+            "end": 152.5,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 107.09999999403954,
+            "end": 107.09999999403954,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/arrow.png",
+            "start": 108.09999999403954,
+            "end": 151.09999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/gifts/letter-v1.webp",
+            "start": 108.59999999403954,
+            "end": 153.29999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/lore-panel-azure-cut.png",
+            "start": 141.3999999910593,
+            "end": 191.59999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/stage-v1/sigil.png",
+            "start": 141.79999999701977,
+            "end": 192.29999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "start": 142,
+            "end": 193.59999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "start": 142.69999998807907,
+            "end": 194.59999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/ranked-lossless.webp",
+            "start": 145.69999998807907,
+            "end": 196,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "image"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/frame-pair-lossless.webp",
+            "start": 145.69999998807907,
+            "end": 197,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "image"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/homeAtmosphere-BE6oiz7U.js",
+            "start": 158.8999999910593,
+            "end": 158.8999999910593,
+            "bytes": 6212,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/shard-simple-v1.png",
+            "start": 159.5,
+            "end": 238.29999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/seekers/faceless-v2/portrait.webp",
+            "start": 159.5,
+            "end": 241.5,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-soft-20261026/clouds.webp",
+            "start": 161.8999999910593,
+            "end": 237,
+            "bytes": 290916,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/selected.svg",
+            "start": 163.09999999403954,
+            "end": 240.19999998807907,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/secondary.svg",
+            "start": 163.19999998807907,
+            "end": 239.29999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/duel-ink-v1/disc.png",
+            "start": 163.3999999910593,
+            "end": 289.59999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 166.5,
+            "end": 242.69999998807907,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 166.59999999403954,
+            "end": 285,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 166.59999999403954,
+            "end": 286.09999999403954,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/normal-lossless.webp",
+            "start": 222.59999999403954,
+            "end": 326.5,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/single-lossless.webp",
+            "start": 223,
+            "end": 287.3999999910593,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 235.79999999701977,
+            "end": 328.59999999403954,
+            "bytes": 507676,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-soft-20261026/clouds.webp",
+            "start": 235.79999999701977,
+            "end": 331.19999998807907,
+            "bytes": 290916,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/ivy.webp",
+            "start": 235.8999999910593,
+            "end": 332,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "start": 239.29999999701977,
+            "end": 288.3999999910593,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 318.29999999701977,
+            "end": 318.29999999701977,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "start": 503.09999999403954,
+            "end": 707.5999999940395,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 504.29999999701977,
+            "end": 504.29999999701977,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-1.mp3",
+            "start": 4535.5999999940395,
+            "end": 4585.5,
+            "bytes": 2339,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-2.mp3",
+            "start": 4535.5999999940395,
+            "end": 4586.699999988079,
+            "bytes": 2548,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-3.mp3",
+            "start": 4586.29999999702,
+            "end": 4635.699999988079,
+            "bytes": 2653,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/pop.mp3",
+            "start": 4587,
+            "end": 4636.79999999702,
+            "bytes": 2129,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/error.mp3",
+            "start": 4636.399999991059,
+            "end": 4684.899999991059,
+            "bytes": 2312,
+            "transfer": 300,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 62.3999999910593,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 166.3999999910593,
+            "phase": "準備を始めています | 画像の準備 0 / 15"
+          },
+          {
+            "at": 169.3999999910593,
+            "phase": "画像の準備 0 / 15"
+          },
+          {
+            "at": 169.5,
+            "phase": "画像の準備 1 / 15"
+          },
+          {
+            "at": 222.79999999701977,
+            "phase": "画像の準備 2 / 15"
+          },
+          {
+            "at": 223,
+            "phase": "画像の準備 3 / 15"
+          },
+          {
+            "at": 223.19999998807907,
+            "phase": "画像の準備 4 / 15"
+          },
+          {
+            "at": 236.3999999910593,
+            "phase": "画像の準備 5 / 15"
+          },
+          {
+            "at": 250.5,
+            "phase": "画像の準備 6 / 15"
+          },
+          {
+            "at": 293.19999998807907,
+            "phase": "画像の準備 7 / 15"
+          },
+          {
+            "at": 293.5,
+            "phase": "画像の準備 8 / 15"
+          },
+          {
+            "at": 293.5,
+            "phase": "画像の準備 9 / 15"
+          },
+          {
+            "at": 293.5,
+            "phase": "画像の準備 10 / 15"
+          },
+          {
+            "at": 293.5,
+            "phase": "画像の準備 11 / 15"
+          },
+          {
+            "at": 293.69999998807907,
+            "phase": "画像の準備 12 / 15"
+          },
+          {
+            "at": 309.69999998807907,
+            "phase": "画像の準備 13 / 15"
+          },
+          {
+            "at": 325.09999999403954,
+            "phase": "画像の準備 14 / 15"
+          },
+          {
+            "at": 494.59999999403954,
+            "phase": "画像の準備 15 / 15"
+          },
+          {
+            "at": 497.5,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 516.5,
+            "phase": "準備完了"
+          },
+          {
+            "at": 4535.899999991059,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 1280,
+      "signedIn": false,
+      "temperature": "cold",
+      "readyMs": 1690,
+      "transferredBytes": 1819493,
+      "stats": {
+        "resources": [
+          {
+            "url": "http://127.0.0.1:58576/art/brand/lore-logo-transparent.webp",
+            "start": 45.69999998807907,
+            "end": 159.09999999403954,
+            "bytes": 32540,
+            "transfer": 32840,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 45.69999998807907,
+            "end": 428.19999998807907,
+            "bytes": 94474,
+            "transfer": 94774,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 46,
+            "end": 1310.199999988079,
+            "bytes": 507676,
+            "transfer": 507976,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 46.099999994039536,
+            "end": 98.59999999403954,
+            "bytes": 399,
+            "transfer": 699,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-KkPsG9uZ.js",
+            "start": 46.099999994039536,
+            "end": 104,
+            "bytes": 1684,
+            "transfer": 1984,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/preload-helper-BXl3LOEh.js",
+            "start": 46.19999998807907,
+            "end": 99.5,
+            "bytes": 650,
+            "transfer": 950,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/deadline-RP-FvawS.js",
+            "start": 46.19999998807907,
+            "end": 100.8999999910593,
+            "bytes": 244,
+            "transfer": 544,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 51.599999994039536,
+            "end": 428.29999999701977,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-CNZBDA90.css",
+            "start": 105.29999999701977,
+            "end": 187.79999999701977,
+            "bytes": 431,
+            "transfer": 731,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-C7CNZ2hz.js",
+            "start": 105.29999999701977,
+            "end": 709.5,
+            "bytes": 139756,
+            "transfer": 140056,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-Du9uO0ar.js",
+            "start": 105.29999999701977,
+            "end": 710.8999999910593,
+            "bytes": 140067,
+            "transfer": 140367,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-DuPbAPo-.js",
+            "start": 105.29999999701977,
+            "end": 1247.2999999970198,
+            "bytes": 344497,
+            "transfer": 344797,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-B07N6Pfz.css",
+            "start": 105.3999999910593,
+            "end": 449.8999999910593,
+            "bytes": 56464,
+            "transfer": 56764,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/rankPresentation-CE_vAl8Q.js",
+            "start": 105.3999999910593,
+            "end": 537.7999999970198,
+            "bytes": 8973,
+            "transfer": 9273,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/renderDensity-eCqR3GeM.js",
+            "start": 105.3999999910593,
+            "end": 584.5999999940395,
+            "bytes": 284,
+            "transfer": 584,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-BiXx8hjh.css",
+            "start": 105.69999998807907,
+            "end": 1018.3999999910593,
+            "bytes": 249260,
+            "transfer": 249560,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/selected.svg",
+            "start": 1278.2999999970198,
+            "end": 1323.0999999940395,
+            "bytes": 216,
+            "transfer": 516,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/secondary.svg",
+            "start": 1278.3999999910593,
+            "end": 1323.7999999970198,
+            "bytes": 218,
+            "transfer": 518,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/primary.svg",
+            "start": 1278.7999999970198,
+            "end": 1324.8999999910593,
+            "bytes": 216,
+            "transfer": 516,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/settings.png",
+            "start": 1289.8999999910593,
+            "end": 1598.3999999910593,
+            "bytes": 122797,
+            "transfer": 123097,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 1290,
+            "end": 1353.8999999910593,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/mail.png",
+            "start": 1290,
+            "end": 1613.5,
+            "bytes": 112047,
+            "transfer": 112347,
+            "type": "img"
+          }
+        ],
+        "phases": [
+          {
+            "at": 50.19999998807907,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 1289.8999999910593,
+            "phase": "準備を始めています | 画像の準備 0 / 3"
+          },
+          {
+            "at": 1292.3999999910593,
+            "phase": "画像の準備 0 / 3"
+          },
+          {
+            "at": 1295.5,
+            "phase": "画像の準備 1 / 3"
+          },
+          {
+            "at": 1318.699999988079,
+            "phase": "画像の準備 2 / 3"
+          },
+          {
+            "at": 1358.5999999940395,
+            "phase": "画像の準備 3 / 3"
+          },
+          {
+            "at": 1360.2999999970198,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 1646.2999999970198,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 1280,
+      "signedIn": false,
+      "temperature": "warm",
+      "readyMs": 311,
+      "transferredBytes": 3600,
+      "stats": {
+        "resources": [
+          {
+            "url": "http://127.0.0.1:58576/art/brand/lore-logo-transparent.webp",
+            "start": 45.900000005960464,
+            "end": 96.09999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 46,
+            "end": 97.5,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-KkPsG9uZ.js",
+            "start": 46.20000000298023,
+            "end": 46.20000000298023,
+            "bytes": 1684,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 46.20000000298023,
+            "end": 98.09999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 46.29999999701977,
+            "end": 46.29999999701977,
+            "bytes": 399,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/preload-helper-BXl3LOEh.js",
+            "start": 46.29999999701977,
+            "end": 46.29999999701977,
+            "bytes": 650,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/deadline-RP-FvawS.js",
+            "start": 46.29999999701977,
+            "end": 46.29999999701977,
+            "bytes": 244,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-C7CNZ2hz.js",
+            "start": 50.099999994039536,
+            "end": 50.099999994039536,
+            "bytes": 139756,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-Du9uO0ar.js",
+            "start": 50.20000000298023,
+            "end": 50.20000000298023,
+            "bytes": 140067,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-DuPbAPo-.js",
+            "start": 50.20000000298023,
+            "end": 50.20000000298023,
+            "bytes": 344497,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-CNZBDA90.css",
+            "start": 50.599999994039536,
+            "end": 50.599999994039536,
+            "bytes": 431,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-B07N6Pfz.css",
+            "start": 52.400000005960464,
+            "end": 52.400000005960464,
+            "bytes": 56464,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/rankPresentation-CE_vAl8Q.js",
+            "start": 52.5,
+            "end": 52.5,
+            "bytes": 8973,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/renderDensity-eCqR3GeM.js",
+            "start": 52.5,
+            "end": 52.5,
+            "bytes": 284,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-BiXx8hjh.css",
+            "start": 59.20000000298023,
+            "end": 59.20000000298023,
+            "bytes": 249260,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 70.09999999403954,
+            "end": 149,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/settings.png",
+            "start": 106.79999999701977,
+            "end": 149.70000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/mail.png",
+            "start": 106.90000000596046,
+            "end": 151.20000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/selected.svg",
+            "start": 108.59999999403954,
+            "end": 153.20000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/secondary.svg",
+            "start": 108.70000000298023,
+            "end": 154.5,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/primary.svg",
+            "start": 108.79999999701977,
+            "end": 190.79999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 110.59999999403954,
+            "end": 193.09999999403954,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-1.mp3",
+            "start": 227.79999999701977,
+            "end": 270.29999999701977,
+            "bytes": 2339,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-2.mp3",
+            "start": 228.09999999403954,
+            "end": 271,
+            "bytes": 2548,
+            "transfer": 300,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 49.5,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 110.5,
+            "phase": "準備を始めています | 画像の準備 0 / 3"
+          },
+          {
+            "at": 112.90000000596046,
+            "phase": "画像の準備 0 / 3"
+          },
+          {
+            "at": 125.59999999403954,
+            "phase": "画像の準備 1 / 3"
+          },
+          {
+            "at": 125.59999999403954,
+            "phase": "画像の準備 2 / 3"
+          },
+          {
+            "at": 197.79999999701977,
+            "phase": "画像の準備 3 / 3"
+          },
+          {
+            "at": 199,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 228.09999999403954,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "signedIn": true,
+      "temperature": "cold",
+      "readyMs": 13793,
+      "transferredBytes": 12035271,
+      "stats": {
+        "resources": [
+          {
+            "url": "http://127.0.0.1:58576/art/brand/lore-logo-transparent.webp",
+            "start": 45.900000005960464,
+            "end": 160.30000001192093,
+            "bytes": 32540,
+            "transfer": 32840,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 46,
+            "end": 427.6000000089407,
+            "bytes": 94474,
+            "transfer": 94774,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 46.1000000089407,
+            "end": 97.30000001192093,
+            "bytes": 399,
+            "transfer": 699,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/preload-helper-BXl3LOEh.js",
+            "start": 46.1000000089407,
+            "end": 98.20000000298023,
+            "bytes": 650,
+            "transfer": 950,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/deadline-RP-FvawS.js",
+            "start": 46.1000000089407,
+            "end": 99.30000001192093,
+            "bytes": 244,
+            "transfer": 544,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-KkPsG9uZ.js",
+            "start": 46.1000000089407,
+            "end": 103.20000000298023,
+            "bytes": 1684,
+            "transfer": 1984,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 46.1000000089407,
+            "end": 1309.7000000029802,
+            "bytes": 507676,
+            "transfer": 507976,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 51.70000000298023,
+            "end": 427.6000000089407,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-C7CNZ2hz.js",
+            "start": 104.40000000596046,
+            "end": 711.5,
+            "bytes": 139756,
+            "transfer": 140056,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-Du9uO0ar.js",
+            "start": 104.40000000596046,
+            "end": 712.8000000119209,
+            "bytes": 140067,
+            "transfer": 140367,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-DuPbAPo-.js",
+            "start": 104.5,
+            "end": 1247.9000000059605,
+            "bytes": 344497,
+            "transfer": 344797,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-CNZBDA90.css",
+            "start": 104.6000000089407,
+            "end": 190,
+            "bytes": 431,
+            "transfer": 731,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-B07N6Pfz.css",
+            "start": 104.6000000089407,
+            "end": 450.80000001192093,
+            "bytes": 56464,
+            "transfer": 56764,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/rankPresentation-CE_vAl8Q.js",
+            "start": 104.6000000089407,
+            "end": 537.8000000119209,
+            "bytes": 8973,
+            "transfer": 9273,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/renderDensity-eCqR3GeM.js",
+            "start": 104.70000000298023,
+            "end": 584.8000000119209,
+            "bytes": 284,
+            "transfer": 584,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-BiXx8hjh.css",
+            "start": 104.90000000596046,
+            "end": 1019.4000000059605,
+            "bytes": 249260,
+            "transfer": 249560,
+            "type": "link"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 1275.2000000029802,
+            "end": 2605,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/lore-panel-azure-cut.png",
+            "start": 1329.800000011921,
+            "end": 7853.800000011921,
+            "bytes": 1439532,
+            "transfer": 1439832,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/stage-v1/sigil.png",
+            "start": 1330,
+            "end": 9620,
+            "bytes": 1996219,
+            "transfer": 1996519,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "start": 1330.5,
+            "end": 1593.300000011921,
+            "bytes": 31520,
+            "transfer": 31820,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "start": 1335.9000000059605,
+            "end": 1585.4000000059605,
+            "bytes": 28724,
+            "transfer": 29024,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/homeAtmosphere-BE6oiz7U.js",
+            "start": 1353.7000000029802,
+            "end": 1415.2000000029802,
+            "bytes": 6212,
+            "transfer": 6512,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-soft-20261026/clouds.webp",
+            "start": 1360.9000000059605,
+            "end": 2691.800000011921,
+            "bytes": 290916,
+            "transfer": 291216,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/selected.svg",
+            "start": 1366.800000011921,
+            "end": 1413.1000000089407,
+            "bytes": 216,
+            "transfer": 516,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/secondary.svg",
+            "start": 1367,
+            "end": 1413.7000000029802,
+            "bytes": 218,
+            "transfer": 518,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/duel-ink-v1/disc.png",
+            "start": 1367.1000000089407,
+            "end": 10331.10000000894,
+            "bytes": 1787283,
+            "transfer": 1787583,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 1374.5,
+            "end": 1558.2000000029802,
+            "bytes": 21540,
+            "transfer": 21840,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 1374.7000000029802,
+            "end": 1683.800000011921,
+            "bytes": 13166,
+            "transfer": 13466,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/gifts/letter-v1.webp",
+            "start": 1374.800000011921,
+            "end": 1765.4000000059605,
+            "bytes": 9006,
+            "transfer": 9306,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/arrow.png",
+            "start": 1374.800000011921,
+            "end": 1855.2000000029802,
+            "bytes": 58142,
+            "transfer": 58442,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/shard-simple-v1.png",
+            "start": 1374.9000000059605,
+            "end": 1799.300000011921,
+            "bytes": 8689,
+            "transfer": 8989,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 1374.9000000059605,
+            "end": 1811.1000000089407,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/frame-pair-lossless.webp",
+            "start": 1374.9000000059605,
+            "end": 4332.100000008941,
+            "bytes": 520274,
+            "transfer": 520574,
+            "type": "image"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/seekers/faceless-v2/portrait.webp",
+            "start": 1374.9000000059605,
+            "end": 7238.20000000298,
+            "bytes": 44960,
+            "transfer": 45260,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/ranked-lossless.webp",
+            "start": 1374.9000000059605,
+            "end": 8073,
+            "bytes": 1351956,
+            "transfer": 1352256,
+            "type": "image"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/normal-lossless.webp",
+            "start": 1378.6000000089407,
+            "end": 6985.300000011921,
+            "bytes": 1091326,
+            "transfer": 1091626,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/single-lossless.webp",
+            "start": 1431.300000011921,
+            "end": 8654.40000000596,
+            "bytes": 1322620,
+            "transfer": 1322920,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "start": 1441.300000011921,
+            "end": 1725.2000000029802,
+            "bytes": 32068,
+            "transfer": 32368,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 1455,
+            "end": 7900.70000000298,
+            "bytes": 507676,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-soft-20261026/clouds.webp",
+            "start": 1455,
+            "end": 7947.300000011921,
+            "bytes": 290916,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/ivy.webp",
+            "start": 1455.300000011921,
+            "end": 9290.40000000596,
+            "bytes": 377804,
+            "transfer": 378104,
+            "type": "img"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 2636.4000000059605,
+            "end": 2734.4000000059605,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "start": 2650,
+            "end": 3328.800000011921,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 2736.7000000029802,
+            "end": 2976.7000000029802,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-1.mp3",
+            "start": 13532.20000000298,
+            "end": 13583.70000000298,
+            "bytes": 2339,
+            "transfer": 2639,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-2.mp3",
+            "start": 13532.5,
+            "end": 13584.60000000894,
+            "bytes": 2548,
+            "transfer": 2848,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-3.mp3",
+            "start": 13584.20000000298,
+            "end": 13636.5,
+            "bytes": 2653,
+            "transfer": 2953,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/pop.mp3",
+            "start": 13584.800000011921,
+            "end": 13637.40000000596,
+            "bytes": 2129,
+            "transfer": 2429,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/error.mp3",
+            "start": 13636.90000000596,
+            "end": 13687,
+            "bytes": 2312,
+            "transfer": 2612,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 50.20000000298023,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 1374.300000011921,
+            "phase": "準備を始めています | 画像の準備 0 / 14"
+          },
+          {
+            "at": 1378.4000000059605,
+            "phase": "画像の準備 0 / 14"
+          },
+          {
+            "at": 1378.6000000089407,
+            "phase": "画像の準備 1 / 14"
+          },
+          {
+            "at": 1431.4000000059605,
+            "phase": "画像の準備 2 / 14"
+          },
+          {
+            "at": 1431.6000000089407,
+            "phase": "画像の準備 3 / 14"
+          },
+          {
+            "at": 1559.800000011921,
+            "phase": "画像の準備 4 / 14"
+          },
+          {
+            "at": 1685.2000000029802,
+            "phase": "画像の準備 5 / 14"
+          },
+          {
+            "at": 1766.4000000059605,
+            "phase": "画像の準備 6 / 14"
+          },
+          {
+            "at": 1799.9000000059605,
+            "phase": "画像の準備 7 / 14"
+          },
+          {
+            "at": 1816,
+            "phase": "画像の準備 8 / 14"
+          },
+          {
+            "at": 1856.2000000029802,
+            "phase": "画像の準備 9 / 14"
+          },
+          {
+            "at": 2697.4000000059605,
+            "phase": "画像の準備 10 / 14"
+          },
+          {
+            "at": 4340.600000008941,
+            "phase": "画像の準備 11 / 14"
+          },
+          {
+            "at": 7000.100000008941,
+            "phase": "画像の準備 12 / 14"
+          },
+          {
+            "at": 8090.100000008941,
+            "phase": "画像の準備 13 / 14"
+          },
+          {
+            "at": 8671.40000000596,
+            "phase": "画像の準備 14 / 14"
+          },
+          {
+            "at": 8674.300000011921,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 9460.20000000298,
+            "phase": "準備完了"
+          },
+          {
+            "at": 13532.5,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "signedIn": true,
+      "temperature": "warm",
+      "readyMs": 4777,
+      "transferredBytes": 9600,
+      "stats": {
+        "resources": [
+          {
+            "url": "http://127.0.0.1:58576/art/brand/lore-logo-transparent.webp",
+            "start": 55.79999999701977,
+            "end": 104.40000000596046,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 55.900000005960464,
+            "end": 105.70000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-KkPsG9uZ.js",
+            "start": 56.099999994039536,
+            "end": 56.099999994039536,
+            "bytes": 1684,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 56.099999994039536,
+            "end": 106.5,
+            "bytes": 507676,
+            "transfer": 300,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 56.29999999701977,
+            "end": 56.29999999701977,
+            "bytes": 399,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/preload-helper-BXl3LOEh.js",
+            "start": 56.29999999701977,
+            "end": 56.29999999701977,
+            "bytes": 650,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/deadline-RP-FvawS.js",
+            "start": 56.29999999701977,
+            "end": 56.29999999701977,
+            "bytes": 244,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-C7CNZ2hz.js",
+            "start": 60.099999994039536,
+            "end": 60.099999994039536,
+            "bytes": 139756,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-Du9uO0ar.js",
+            "start": 60.20000000298023,
+            "end": 60.20000000298023,
+            "bytes": 140067,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-DuPbAPo-.js",
+            "start": 60.400000005960464,
+            "end": 60.400000005960464,
+            "bytes": 344497,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-CNZBDA90.css",
+            "start": 60.5,
+            "end": 60.5,
+            "bytes": 431,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-B07N6Pfz.css",
+            "start": 62,
+            "end": 62,
+            "bytes": 56464,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/rankPresentation-CE_vAl8Q.js",
+            "start": 62,
+            "end": 62,
+            "bytes": 8973,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/renderDensity-eCqR3GeM.js",
+            "start": 62.400000005960464,
+            "end": 62.400000005960464,
+            "bytes": 284,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-BiXx8hjh.css",
+            "start": 68.70000000298023,
+            "end": 68.70000000298023,
+            "bytes": 249260,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 79.5,
+            "end": 148.90000000596046,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "https://us.i.posthog.com/static/array.js",
+            "start": 104.79999999701977,
+            "end": 104.79999999701977,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/arrow.png",
+            "start": 105.79999999701977,
+            "end": 150.09999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/gifts/letter-v1.webp",
+            "start": 106.20000000298023,
+            "end": 150.90000000596046,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/lore-panel-azure-cut.png",
+            "start": 139.70000000298023,
+            "end": 189.20000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/stage-v1/sigil.png",
+            "start": 140.09999999403954,
+            "end": 190,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/33ae31ea2d28b49dd213cf20741a92d9334fad2e9cb78b3626a03a053e65aa7d.woff2",
+            "start": 140.29999999701977,
+            "end": 191.29999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/7e2b2f7dffbc18bebdd739c1d580243b892447465cd33627d7510f8ef50ae962.woff2",
+            "start": 141,
+            "end": 192.40000000596046,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/ranked-lossless.webp",
+            "start": 143.90000000596046,
+            "end": 193.40000000596046,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "image"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/frame-pair-lossless.webp",
+            "start": 144,
+            "end": 194.70000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "image"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/homeAtmosphere-BE6oiz7U.js",
+            "start": 157.40000000596046,
+            "end": 157.40000000596046,
+            "bytes": 6212,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/seekers/faceless-v2/portrait.webp",
+            "start": 158.09999999403954,
+            "end": 289.40000000596046,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/shard-simple-v1.png",
+            "start": 158.40000000596046,
+            "end": 241.29999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-soft-20261026/clouds.webp",
+            "start": 160.5,
+            "end": 238.29999999701977,
+            "bytes": 290916,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/secondary.svg",
+            "start": 161.70000000298023,
+            "end": 239.20000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/selected.svg",
+            "start": 161.70000000298023,
+            "end": 240.40000000596046,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/duel-ink-v1/disc.png",
+            "start": 162,
+            "end": 290.70000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/cards-sm/STARTER_MANA.webp?v=20260910-theme-identity-v3",
+            "start": 164.70000000298023,
+            "end": 242.79999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/cards-sm/STARTER_TRASH.webp?v=20260910-theme-identity-v3",
+            "start": 164.70000000298023,
+            "end": 243.59999999403954,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 164.79999999701977,
+            "end": 288.5,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/normal-lossless.webp",
+            "start": 167.79999999701977,
+            "end": 292.79999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/home-duel-frame-01/single-lossless.webp",
+            "start": 224.70000000298023,
+            "end": 330.90000000596046,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 237.20000000298023,
+            "end": 333.09999999403954,
+            "bytes": 507676,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-soft-20261026/clouds.webp",
+            "start": 237.20000000298023,
+            "end": 334.40000000596046,
+            "bytes": 290916,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/ivy.webp",
+            "start": 237.5,
+            "end": 335.5,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/fonts/web/files/d68088be9c734c13060996f721e11ce343d5fd4182b37282e8af946fa9773dc9.woff2",
+            "start": 240.79999999701977,
+            "end": 291.79999999701977,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+            "start": 320.40000000596046,
+            "end": 320.40000000596046,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+            "start": 333,
+            "end": 333,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "https://us.i.posthog.com/flags/?v=2",
+            "start": 505.09999999403954,
+            "end": 792.9000000059605,
+            "bytes": 0,
+            "transfer": 0,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-1.mp3",
+            "start": 4540.0999999940395,
+            "end": 4591.20000000298,
+            "bytes": 2339,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-2.mp3",
+            "start": 4540.4000000059605,
+            "end": 4592.0999999940395,
+            "bytes": 2548,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-3.mp3",
+            "start": 4591.5999999940395,
+            "end": 4639.5,
+            "bytes": 2653,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/pop.mp3",
+            "start": 4592.20000000298,
+            "end": 4640.0999999940395,
+            "bytes": 2129,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/error.mp3",
+            "start": 4639.9000000059605,
+            "end": 4688.20000000298,
+            "bytes": 2312,
+            "transfer": 300,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 59.5,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 164.70000000298023,
+            "phase": "準備を始めています | 画像の準備 0 / 14"
+          },
+          {
+            "at": 167.70000000298023,
+            "phase": "画像の準備 0 / 14"
+          },
+          {
+            "at": 167.79999999701977,
+            "phase": "画像の準備 1 / 14"
+          },
+          {
+            "at": 224.79999999701977,
+            "phase": "画像の準備 2 / 14"
+          },
+          {
+            "at": 225.40000000596046,
+            "phase": "画像の準備 3 / 14"
+          },
+          {
+            "at": 225.40000000596046,
+            "phase": "画像の準備 4 / 14"
+          },
+          {
+            "at": 237.79999999701977,
+            "phase": "画像の準備 5 / 14"
+          },
+          {
+            "at": 242.90000000596046,
+            "phase": "画像の準備 6 / 14"
+          },
+          {
+            "at": 289,
+            "phase": "画像の準備 7 / 14"
+          },
+          {
+            "at": 293.40000000596046,
+            "phase": "画像の準備 8 / 14"
+          },
+          {
+            "at": 293.40000000596046,
+            "phase": "画像の準備 9 / 14"
+          },
+          {
+            "at": 293.59999999403954,
+            "phase": "画像の準備 10 / 14"
+          },
+          {
+            "at": 293.59999999403954,
+            "phase": "画像の準備 11 / 14"
+          },
+          {
+            "at": 299.90000000596046,
+            "phase": "画像の準備 12 / 14"
+          },
+          {
+            "at": 311.59999999403954,
+            "phase": "画像の準備 13 / 14"
+          },
+          {
+            "at": 494.5,
+            "phase": "画像の準備 14 / 14"
+          },
+          {
+            "at": 497.40000000596046,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 521.5,
+            "phase": "準備完了"
+          },
+          {
+            "at": 4540.5,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "signedIn": false,
+      "temperature": "cold",
+      "readyMs": 1696,
+      "transferredBytes": 1819493,
+      "stats": {
+        "resources": [
+          {
+            "url": "http://127.0.0.1:58576/art/brand/lore-logo-transparent.webp",
+            "start": 54.900000005960464,
+            "end": 168.09999999403954,
+            "bytes": 32540,
+            "transfer": 32840,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 54.900000005960464,
+            "end": 436.70000000298023,
+            "bytes": 94474,
+            "transfer": 94774,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 55.20000000298023,
+            "end": 106.40000000596046,
+            "bytes": 399,
+            "transfer": 699,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/preload-helper-BXl3LOEh.js",
+            "start": 55.20000000298023,
+            "end": 107.20000000298023,
+            "bytes": 650,
+            "transfer": 950,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/deadline-RP-FvawS.js",
+            "start": 55.20000000298023,
+            "end": 108.90000000596046,
+            "bytes": 244,
+            "transfer": 544,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-KkPsG9uZ.js",
+            "start": 55.20000000298023,
+            "end": 112.09999999403954,
+            "bytes": 1684,
+            "transfer": 1984,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 55.20000000298023,
+            "end": 1319.0999999940395,
+            "bytes": 507676,
+            "transfer": 507976,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 60.79999999701977,
+            "end": 436.70000000298023,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-C7CNZ2hz.js",
+            "start": 113.09999999403954,
+            "end": 718.2000000029802,
+            "bytes": 139756,
+            "transfer": 140056,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-Du9uO0ar.js",
+            "start": 113.20000000298023,
+            "end": 720.5999999940395,
+            "bytes": 140067,
+            "transfer": 140367,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-DuPbAPo-.js",
+            "start": 113.20000000298023,
+            "end": 1256.0999999940395,
+            "bytes": 344497,
+            "transfer": 344797,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-CNZBDA90.css",
+            "start": 113.40000000596046,
+            "end": 199.20000000298023,
+            "bytes": 431,
+            "transfer": 731,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-B07N6Pfz.css",
+            "start": 113.5,
+            "end": 457.29999999701977,
+            "bytes": 56464,
+            "transfer": 56764,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/rankPresentation-CE_vAl8Q.js",
+            "start": 113.5,
+            "end": 544.2000000029802,
+            "bytes": 8973,
+            "transfer": 9273,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/renderDensity-eCqR3GeM.js",
+            "start": 113.59999999403954,
+            "end": 590.2000000029802,
+            "bytes": 284,
+            "transfer": 584,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-BiXx8hjh.css",
+            "start": 113.79999999701977,
+            "end": 1028.2000000029802,
+            "bytes": 249260,
+            "transfer": 249560,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/selected.svg",
+            "start": 1287.0999999940395,
+            "end": 1331.9000000059605,
+            "bytes": 216,
+            "transfer": 516,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/secondary.svg",
+            "start": 1287.0999999940395,
+            "end": 1332.4000000059605,
+            "bytes": 218,
+            "transfer": 518,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/primary.svg",
+            "start": 1287.2999999970198,
+            "end": 1334.0999999940395,
+            "bytes": 216,
+            "transfer": 516,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 1298.2999999970198,
+            "end": 1362.5999999940395,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/settings.png",
+            "start": 1298.2999999970198,
+            "end": 1607,
+            "bytes": 122797,
+            "transfer": 123097,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/mail.png",
+            "start": 1298.2999999970198,
+            "end": 1622.0999999940395,
+            "bytes": 112047,
+            "transfer": 112347,
+            "type": "img"
+          }
+        ],
+        "phases": [
+          {
+            "at": 59.20000000298023,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 1298.0999999940395,
+            "phase": "準備を始めています | 画像の準備 0 / 3"
+          },
+          {
+            "at": 1300.9000000059605,
+            "phase": "画像の準備 0 / 3"
+          },
+          {
+            "at": 1304.0999999940395,
+            "phase": "画像の準備 1 / 3"
+          },
+          {
+            "at": 1327.2000000029802,
+            "phase": "画像の準備 2 / 3"
+          },
+          {
+            "at": 1368,
+            "phase": "画像の準備 3 / 3"
+          },
+          {
+            "at": 1369.4000000059605,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 1649.5999999940395,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    },
+    {
+      "width": 390,
+      "signedIn": false,
+      "temperature": "warm",
+      "readyMs": 301,
+      "transferredBytes": 3600,
+      "stats": {
+        "resources": [
+          {
+            "url": "http://127.0.0.1:58576/art/brand/lore-logo-transparent.webp",
+            "start": 45.70000000298023,
+            "end": 89,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-KkPsG9uZ.js",
+            "start": 45.900000005960464,
+            "end": 45.900000005960464,
+            "bytes": 1684,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 45.900000005960464,
+            "end": 90,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/toon-balanced-20261026/library-wide.webp",
+            "start": 45.900000005960464,
+            "end": 91.20000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/modulepreload-polyfill-B5Qt9EMX.js",
+            "start": 46,
+            "end": 46,
+            "bytes": 399,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/preload-helper-BXl3LOEh.js",
+            "start": 46,
+            "end": 46,
+            "bytes": 650,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/deadline-RP-FvawS.js",
+            "start": 46,
+            "end": 46,
+            "bytes": 244,
+            "transfer": 0,
+            "type": "other"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-C7CNZ2hz.js",
+            "start": 50,
+            "end": 50,
+            "bytes": 139756,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-Du9uO0ar.js",
+            "start": 50.20000000298023,
+            "end": 50.20000000298023,
+            "bytes": 140067,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-DuPbAPo-.js",
+            "start": 50.20000000298023,
+            "end": 50.20000000298023,
+            "bytes": 344497,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/assetQueue-CNZBDA90.css",
+            "start": 50.20000000298023,
+            "end": 50.20000000298023,
+            "bytes": 431,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/social-B07N6Pfz.css",
+            "start": 52.1000000089407,
+            "end": 52.1000000089407,
+            "bytes": 56464,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/rankPresentation-CE_vAl8Q.js",
+            "start": 52.20000000298023,
+            "end": 52.20000000298023,
+            "bytes": 8973,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/renderDensity-eCqR3GeM.js",
+            "start": 52.20000000298023,
+            "end": 52.20000000298023,
+            "bytes": 284,
+            "transfer": 0,
+            "type": "script"
+          },
+          {
+            "url": "http://127.0.0.1:58576/assets/main-BiXx8hjh.css",
+            "start": 58.900000005960464,
+            "end": 58.900000005960464,
+            "bytes": 249260,
+            "transfer": 0,
+            "type": "link"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 69.40000000596046,
+            "end": 138.30000001192093,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/settings.png",
+            "start": 93,
+            "end": 139.40000000596046,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/lounge/icons/v2/mail.png",
+            "start": 93,
+            "end": 140.5,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/selected.svg",
+            "start": 94.90000000596046,
+            "end": 142.70000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/secondary.svg",
+            "start": 94.90000000596046,
+            "end": 143.80000001192093,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/buttons/primary.svg",
+            "start": 95.40000000596046,
+            "end": 180.70000000298023,
+            "bytes": 0,
+            "transfer": 300,
+            "type": "css"
+          },
+          {
+            "url": "http://127.0.0.1:58576/art/ui/loading/azure-card-v1.webp",
+            "start": 97.5,
+            "end": 182.1000000089407,
+            "bytes": 94474,
+            "transfer": 300,
+            "type": "img"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-1.mp3",
+            "start": 218.80000001192093,
+            "end": 260.5,
+            "bytes": 2339,
+            "transfer": 300,
+            "type": "fetch"
+          },
+          {
+            "url": "http://127.0.0.1:58576/sfx/lore-v3/click-2.mp3",
+            "start": 219.1000000089407,
+            "end": 261.70000000298023,
+            "bytes": 2548,
+            "transfer": 300,
+            "type": "fetch"
+          }
+        ],
+        "phases": [
+          {
+            "at": 49.30000001192093,
+            "phase": "準備を始めています"
+          },
+          {
+            "at": 97.5,
+            "phase": "準備を始めています | 画像の準備 0 / 3"
+          },
+          {
+            "at": 99.6000000089407,
+            "phase": "画像の準備 0 / 3"
+          },
+          {
+            "at": 111.80000001192093,
+            "phase": "画像の準備 1 / 3"
+          },
+          {
+            "at": 111.80000001192093,
+            "phase": "画像の準備 2 / 3"
+          },
+          {
+            "at": 187.1000000089407,
+            "phase": "画像の準備 3 / 3"
+          },
+          {
+            "at": 188.40000000596046,
+            "phase": "画面を仕上げています"
+          },
+          {
+            "at": 219.1000000089407,
+            "phase": ""
+          }
+        ]
+      },
+      "errors": [],
+      "http": []
+    }
+  ]
+}

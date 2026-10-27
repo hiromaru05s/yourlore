@@ -1,0 +1,20 @@
+{
+  "files": [
+    "client/public/art/ui/lore-panel-azure-cut.png",
+    "client/public/art/ui/lore-panel-azure-cut-lossless.webp"
+  ],
+  "dimensions": {
+    "format": "raw",
+    "width": 1536,
+    "height": 1024,
+    "channels": 4,
+    "depth": "uchar",
+    "premultiplied": false,
+    "size": 6291456
+  },
+  "differingVisiblePixels": 0,
+  "bytes": [
+    1439532,
+    732638
+  ]
+}

@@ -45,6 +45,20 @@ export function decodeAsset(url: string, priority: AssetPriority = 'high'): Prom
   return task.promise;
 }
 
+/** Reuse the decoded pixels for GPU upload as well as DOM readiness. A texture
+ * loader must not create a separate CORS-mode request for the same local art. */
+export async function loadAssetImage(url: string, priority: AssetPriority = 'high'): Promise<HTMLImageElement> {
+  url = canonical(url);
+  await decodeAsset(url, priority);
+  const cached = retained.get(url);
+  if (cached) return cached.image;
+  // The pixel budget may have evicted this image. Keep this caller-owned copy
+  // outside the completion records so it can be collected with its texture.
+  const image = new Image(); image.decoding = 'async'; image.fetchPriority = priority; image.src = url;
+  await withDeadline(image.decode(), 60000);
+  return image;
+}
+
 export const hasUnloadedAssets = (urls: string[]) => urls.some(url => !loaded.has(canonical(url)));
 export async function warmImages(urls: readonly string[]): Promise<void> {
   if (typeof Image === 'undefined' || typeof Image.prototype.decode !== 'function') return;
