@@ -1,0 +1,1339 @@
+{
+  "source": "88070176",
+  "method": "Rendered production UI",
+  "boundaries": [
+    "13 -> 14",
+    "23 victory -> 24 Home -> 25 deck -> catalog -> 25/25 menu"
+  ],
+  "states": [
+    {
+      "at": "2026-10-27T19:23:12.527Z",
+      "buttons": [],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": true,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "",
+      "target": "logTab",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:13.310Z",
+      "buttons": [
+        "×"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n1 / 18\n×\n対戦ログ\n\n何が起きたか気になったら、ここを押してみて。ぼくとログを見てみよう。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "logTab",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:13.610Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n2 / 18\n×\nログを読む・閉じる\n\n買ったカード、使ったカード、攻撃が順番に並んでるね。「次へ」を押したら、ぼくが閉じるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "logPanel",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:13.903Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n3 / 18\n×\n効果音\n\n音の大きさを変えたい？ ここを押してみて。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "muteBtn",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:14.204Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n4 / 18\n×\n音量調節\n\nこのつまみを動かして、好きな音量にしてみて。いちばん左なら音が消えるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:17.967Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n4 / 18\n×\n音量調節\n\nこのつまみを動かして、好きな音量にしてみて。いちばん左なら音が消えるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:18.263Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n5 / 18\n×\n操作方法\n\n操作を忘れても大丈夫。ここからいつでも見直せるよ。開いてみよう。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "helpBtn",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:18.563Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [
+        {
+          "buttons": [
+            {
+              "disabled": false,
+              "t": "閉じる"
+            }
+          ],
+          "choices": [],
+          "text": "操作方法\nカード\n\nカードを右クリックすると、詳しい効果を確認できます。\n\n墓地・デッキ・リフトを右クリックで一覧表示。一覧のカードを右クリックで拡大できます。\n\n画面下の手札をクリックすると広がります。広げた手札のカードはクリックでも拡大できます。\n\nプレイ\n\n手札のカードを上にドラッグで使用。手札に戻せばキャンセル。\n\n攻撃\n\n自分のモンスターを相手モンスターにドラッグで攻撃、相手の顔アイコンにドラッグで直接攻撃。相手フィールドにモンスターがいない時だけ、クリックでも直接攻撃できます。対象外で離すと攻撃をキャンセルします。\n\n自分のモンスターを自分の場の中で左右にドラッグすると並び替え。\n\nマーケット\n\n購入できるマーケットのカードをクリックで選択。再クリック、または購入ボタンで購入します。右クリックで拡大。\n\n閉じる"
+        }
+      ],
+      "source": null,
+      "speech": "ゼノ\n6 / 18\n×\n操作を確認\n\nカードは手札から場へドラッグすると使えるよ。覚えたら、次へいこう！\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:18.864Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n7 / 18\n×\n自分のデッキ\n\nきみのデッキを押して、中を見てみよう。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "pile-myDeck",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:19.162Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [
+        {
+          "buttons": [
+            {
+              "disabled": false,
+              "t": "全体構成 16"
+            },
+            {
+              "disabled": false,
+              "t": "デッキに残り 12"
+            },
+            {
+              "disabled": false,
+              "t": "確認"
+            }
+          ],
+          "choices": [],
+          "text": "SEEKER — デッキ構成\n全体構成 16\nデッキに残り 12\nこのデッキの全カード (手札・場・墓地含む)\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n0\nカル\n1\nストーン・パップ\n1\n3\n2\nブレード・ヘア\n4\n2\n2\nブレード・ヘア\n4\n2\n3\n知識の泉\n確認"
+        }
+      ],
+      "source": null,
+      "speech": "ゼノ\n8 / 18\n×\nデッキ情報\n\nデッキに何が入ってるか見られるよ。どの順番で引くかは選べないから、そこだけ覚えておこう。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:19.463Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n9 / 18\n×\n相手のデッキ\n\n相手のデッキを押し、公開される情報を確認してみよう。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "pile-oppDeck",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:19.762Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [
+        {
+          "buttons": [
+            {
+              "disabled": false,
+              "t": "確認"
+            }
+          ],
+          "choices": [],
+          "text": "Zeno — デッキ構成\nこのゲーム中に公開された相手カード\n0\nカル\n1\nストーン・パップ\n1\n3\n1\nスパーク・インプ\n3\n1\n確認"
+        }
+      ],
+      "source": null,
+      "speech": "ゼノ\n10 / 18\n×\n相手の公開情報\n\n相手のデッキも、公開されてる情報は見られるんだ。でも、相手の手札までは見えないよ。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:20.063Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n11 / 18\n×\n自分の墓地\n\n使用・破壊・通常購入したカードの行き先だよ。押して確認してみよう。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "pile-myDisc",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:20.363Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [
+        {
+          "buttons": [
+            {
+              "disabled": false,
+              "t": "キャンセル"
+            }
+          ],
+          "choices": [],
+          "text": "SEEKER — 墓地 (2)\n2\nブレード・ヘア\n4\n2\n2\nブレード・ヘア\n4\n2\nキャンセル"
+        }
+      ],
+      "source": null,
+      "speech": "ゼノ\n12 / 18\n×\n墓地からデッキへ\n\nカードを引く時にデッキが空なら、墓地を混ぜてデッキに戻すんだ。また引けるようになるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:20.666Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n13 / 18\n×\n相手の墓地\n\n相手の墓地も押して中身を確認できるよ。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "pile-oppDisc",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:20.963Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [
+        {
+          "buttons": [
+            {
+              "disabled": false,
+              "t": "キャンセル"
+            }
+          ],
+          "choices": [],
+          "text": "Zeno — 墓地 (1)\n1\nスパーク・インプ\n3\n1\nキャンセル"
+        }
+      ],
+      "source": null,
+      "speech": "ゼノ\n14 / 18\n×\n相手が使ったカード\n\n使われたカードを確認し、次に戻るカードを予想できるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:21.262Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n15 / 18\n×\n自分のリフト\n\nここが「リフト」。ここにあるカードは、デッキが空になっても戻らないよ。押して見てみよう。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "rift-me",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:21.563Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 204,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          114
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [
+        {
+          "buttons": [
+            {
+              "disabled": false,
+              "t": "キャンセル"
+            }
+          ],
+          "choices": [],
+          "text": "SEEKER — リフト (1)\n0\nカル\nキャンセル"
+        }
+      ],
+      "source": null,
+      "speech": "ゼノ\n16 / 18\n×\n墓地との違い\n\nカードを引く時にデッキが空なら、墓地を混ぜて戻すよ。リフトのカードは戻さないんだ。カードの効果で戻す場合だけは例外だよ。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:21.863Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 12,
+        "xy": [
+          297,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n17 / 18\n×\n相手のリフト\n\n相手のリフトも同じように確認できるよ。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "rift-opp",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:23:22.161Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "次へ進もう →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [
+        {
+          "buttons": [
+            {
+              "disabled": false,
+              "t": "キャンセル"
+            }
+          ],
+          "choices": [],
+          "text": "Zeno — リフト (1)\n0\nカル\nキャンセル"
+        }
+      ],
+      "source": null,
+      "speech": "ゼノ\n18 / 18\n×\n相手のリフトを確認\n\nここは相手のリフトだよ。ここのカードも、デッキが空になった時には戻らないんだ。\n\n← 戻る\n次へ進もう →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:22.549Z",
+      "buttons": [],
+      "coach": {
+        "h": 171.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          97.59375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": true,
+      "menu": false,
+      "modal": [],
+      "part": "14 / 25",
+      "source": null,
+      "speech": ""
+    },
+    {
+      "at": "2026-10-27T19:23:22.862Z",
+      "buttons": [
+        "パート一覧",
+        "始める"
+      ],
+      "coach": {
+        "h": 171.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          97.59375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "part": "14 / 25",
+      "source": null,
+      "speech": "ゼノ\n14 / 25\n一緒にやってみよう！\n\n一時的に守るシールドと、雫による回復を体験しよう。\n\nパート一覧\n始める"
+    },
+    {
+      "at": "2026-10-27T19:23:23.164Z",
+      "buttons": [
+        "パート一覧"
+      ],
+      "coach": {
+        "h": 198.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          111.09375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "part": "14 / 25",
+      "source": {
+        "box": {
+          "h": 121.390625,
+          "w": 80.65625,
+          "x": 830.53125,
+          "xy": [
+            870.859375,
+            694.2890625
+          ],
+          "y": 633.59375
+        },
+        "card": "SELECTED_SHIELD",
+        "hand": true,
+        "id": "",
+        "market": false,
+        "uid": "practice-54"
+      },
+      "speech": "ゼノ\n14 / 25\n下の手札をクリックして、手札を広げよう。\n\nカル5枚をリフトに用意したよ。選りすぐりの盾でシールド5を得て、相手の攻撃力4を受けよう。\n\nパート一覧\nやってみよう！"
+    },
+    {
+      "at": "2026-10-27T19:23:30.298Z",
+      "buttons": [],
+      "coach": {
+        "h": 198.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          111.09375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": true,
+      "menu": false,
+      "modal": [],
+      "part": "23 / 25",
+      "source": null,
+      "speech": ""
+    },
+    {
+      "at": "2026-10-27T19:23:30.632Z",
+      "buttons": [
+        "パート一覧",
+        "始める"
+      ],
+      "coach": {
+        "h": 198.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          111.09375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "part": "23 / 25",
+      "source": null,
+      "speech": "ゼノ\n23 / 25\n一緒にやってみよう！\n\nぼくの精神力は10。攻撃しないから、学んだ操作を好きな順序で使って勝ってみよう。\n\nパート一覧\n始める"
+    },
+    {
+      "at": "2026-10-27T19:23:30.925Z",
+      "buttons": [
+        "パート一覧"
+      ],
+      "coach": {
+        "h": 198.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          111.09375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "part": "23 / 25",
+      "source": null,
+      "speech": "ゼノ\n23 / 25\nここは自分で行動を選んでみよう。\n\nモンスターを召喚して攻撃し、相手の精神力を0にしてみよう。\n\nパート一覧\nやってみよう！"
+    },
+    {
+      "at": "2026-10-27T19:23:49.826Z",
+      "buttons": [
+        "パート一覧"
+      ],
+      "coach": {
+        "h": 171.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          97.59375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "part": "23 / 25",
+      "source": null,
+      "speech": "ゼノ\n23 / 25\nほら、変わったね。\n\nカードと数字の変化を見よう。\n\nパート一覧\nパートを終える"
+    },
+    {
+      "at": "2026-10-27T19:23:52.862Z",
+      "buttons": [
+        "パート一覧"
+      ],
+      "coach": {
+        "h": 171.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          97.59375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "part": "23 / 25",
+      "source": null,
+      "speech": "ゼノ\n23 / 25\nほら、変わったね。\n\nカードと数字の変化を見よう。\n\nパート一覧\nパートを終える"
+    },
+    {
+      "at": "2026-10-27T19:23:53.616Z",
+      "buttons": [
+        "パート一覧",
+        "次のパート →"
+      ],
+      "coach": {
+        "h": 198.1875,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          111.09375
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "part": "23 / 25",
+      "source": null,
+      "speech": "ゼノ\n23 / 25\nいいね、できた！\n\nやった、きみの勝ち！ ここまでできたらばっちりだね。一緒にホームへ戻って、デッキとカードも見てみよう。\n\nパート一覧\n次のパート →"
+    },
+    {
+      "at": "2026-10-27T19:23:53.957Z",
+      "buttons": [
+        "×",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n1 / 5\n×\nホームへようこそ\n\nおかえり！ よくできたね。ここがホームだよ。次の対戦もデッキ作りも、ここから始めよう。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:54.253Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n2 / 5\n×\n対戦モード\n\nシングル、ノーマル、ランク。遊びたいモードはここで選べるよ。今はぼくと場所だけ見ておこう。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:54.553Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n3 / 5\n×\n対戦開始\n\nモードを選んだら中央のボタンから始められるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "ranked",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:54.856Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n4 / 5\n×\nランク\n\n現在のランクを確認できるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "myTier",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:55.157Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "次へ進もう →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n5 / 5\n×\n使用するデッキ\n\n次の対戦に持ち込むデッキだよ。次は編集画面を見てみよう。\n\n← 戻る\n次へ進もう →",
+      "target": "deck",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:55.451Z",
+      "buttons": [
+        "×",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n1 / 6\n×\nデッキの保存枠\n\n5つの枠に別々の構成を保存できるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "deckTabs",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:55.743Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n2 / 6\n×\n持参デッキ\n\n自由8枚と固定アチューン1枚の9枚だよ。\n\n← 戻る\nうん、次へ →",
+      "target": "deckCur",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:56.043Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n3 / 6\n×\n固定アチューン\n\nこの1枚は外せないんだ。残りの8枚を組み替えてみよう。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:56.345Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 204,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          114
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n4 / 6\n×\nスターター候補\n\n持ってるスターターを選ぶと、追加したり入れ替えたりできるよ。今はぼくと見て回ろう。あとで自由に組んでみてね。\n\n← 戻る\nうん、次へ →",
+      "target": "deckPool",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:56.645Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n5 / 6\n×\n使用デッキ\n\nチェック付きの枠が使用中だよ。別の枠を選ぶと「使用する」操作が出てくるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:56.947Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "次へ進もう →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          100.5
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n6 / 6\n×\nデッキを確定\n\n編集後は確定して保存しよう。次はカード一覧の見方だよ。\n\n← 戻る\n次へ進もう →",
+      "target": "save",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:57.286Z",
+      "buttons": [
+        "×",
+        "次へ進もう →"
+      ],
+      "coach": {
+        "h": 204,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          114
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n1 / 1\n×\nカード一覧\n\n気になるカードは、ここで探して読んでみてね。マーケットで出会うカードも載ってるよ。ぼくの案内はここまで。また一緒に遊ぼう！\n\n← 戻る\n次へ進もう →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:23:57.653Z",
+      "buttons": [],
+      "coach": null,
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": true,
+      "modal": [],
+      "progress": "25 / 25",
+      "source": null
+    },
+    {
+      "at": "2026-10-27T19:24:14.675Z",
+      "buttons": [],
+      "coach": {
+        "h": 204,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          114
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": true,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "",
+      "target": "portraitOpp",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:24:15.038Z",
+      "buttons": [
+        "×",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 204,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          114
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n1 / 12\n×\n勝利条件\n\nやあ、ゼノだよ！ 相手の「精神力」を0にしたら勝ち。精神力はプレイヤーのHPだよ。上が相手、下がきみ。ぼくと攻撃までやってみよう！\n\n← 戻る\nうん、次へ →",
+      "target": "portraitOpp",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:24:15.343Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 204,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          114
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n2 / 12\n×\n最初の精神力\n\n先攻は精神力40、後攻は45で始まるよ。この練習はきみが先攻。あとから出てくる練習は、説明に合った盤面を用意してあるよ。\n\n← 戻る\nうん、次へ →",
+      "target": "portraitMe",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:24:15.646Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 828,
+        "xy": [
+          1113,
+          87
+        ],
+        "y": 12
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n3 / 12\n×\n手札を開く\n\n下の手札を押してみて。カードが広がるよ。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "hand",
+      "tour": "click"
+    },
+    {
+      "at": "2026-10-27T19:24:41.732Z",
+      "buttons": [
+        "×",
+        "← 戻る",
+        "うん、次へ →"
+      ],
+      "coach": {
+        "h": 177,
+        "w": 570,
+        "x": 12,
+        "xy": [
+          297,
+          633.5
+        ],
+        "y": 545
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n6 / 12\n×\nマナ\n\n今はマナ4。カードを買う時も使う時も、ここから支払うよ。ヘアを召喚したら2残るね。\n\n← 戻る\nうん、次へ →",
+      "target": "",
+      "tour": "next"
+    },
+    {
+      "at": "2026-10-27T19:24:42.037Z",
+      "buttons": [
+        "×",
+        "← 戻る"
+      ],
+      "coach": {
+        "h": 150,
+        "w": 570,
+        "x": 12,
+        "xy": [
+          297,
+          620
+        ],
+        "y": 545
+      },
+      "drop": null,
+      "handOpen": false,
+      "loading": false,
+      "menu": false,
+      "modal": [],
+      "source": null,
+      "speech": "ゼノ\n7 / 12\n×\n手札を開く\n\n下の手札を押してみて。カードが広がるよ。\n\n← 戻る\n光ってるところを押してみて。",
+      "target": "hand",
+      "tour": "click"
+    }
+  ]
+}

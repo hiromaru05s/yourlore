@@ -1,0 +1,22 @@
+{
+  "scripts": [
+    "https://us.i.posthog.com/static/array.js",
+    "https://yourlore.xyz/assets/main-C_YRTQGC.js",
+    "https://us-assets.i.posthog.com/static/1.438.23/surveys.js",
+    "https://us-assets.i.posthog.com/array/phc_w5UaAizdMM55CAY6rXdJTN6JD9DUCXGL9XYquuh5TpKo/config.js",
+    "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092"
+  ],
+  "styles": [
+    "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+    "https://yourlore.xyz/assets/social-d18XrDA3.css",
+    "https://yourlore.xyz/assets/main-C1d0ZIIM.css",
+    "https://yourlore.xyz/assets/layout-CdbqZM8A.css",
+    "https://yourlore.xyz/assets/controller-bboUdfYs.css",
+    "https://yourlore.xyz/assets/game-CeZ0_T_p.css",
+    "https://yourlore.xyz/assets/domSleeves-Dru0ykCE.css"
+  ],
+  "url": "https://yourlore.xyz/",
+  "source": "88070176",
+  "progress": "25 / 25",
+  "consoleErrors": []
+}

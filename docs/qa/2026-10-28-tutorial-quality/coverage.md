@@ -44,6 +44,8 @@ Basic actions precede settings and advanced rules. The menu separates first-duel
 - Purging Touch copy now explains its graveyard target selection and draw as well as Brand removal.
 - Switching prepared scenes can rewind the turn number. A tutorial-only reset clears the view's old turn watermark after pending presentation completes; stale-turn protection remains enabled for ordinary duels.
 
+- The real production game-screen callback retained the old 13-part limit (the local fixture did not). Replaced it with the current curriculum length and replayed the affected production transitions after release.
+
 ## Evidence boundaries
 
 The full reducer curriculum is exercised by `tests/tutorial-parts.mjs`. UI validation uses actual clicks, right-clicks, drags and visible choices via the browser; no controller action injection is used in this audit. Local browser checks use the real UI and engine with a disposable fixture account. Production checks and exact deployment evidence are recorded separately in the release report.
