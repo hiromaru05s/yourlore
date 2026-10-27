@@ -1,0 +1,37 @@
+[
+  {
+    "pathname": "/assets/main-KkPsG9uZ.js",
+    "bytes": 3133,
+    "sha256": "e1c76eed3f0fc8db63b7aa84d3fd48093e970f5902968dfb3fb2f6cf69adf0fa"
+  },
+  {
+    "pathname": "/assets/modulepreload-polyfill-B5Qt9EMX.js",
+    "bytes": 711,
+    "sha256": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0"
+  },
+  {
+    "pathname": "/assets/preload-helper-BXl3LOEh.js",
+    "bytes": 1110,
+    "sha256": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6"
+  },
+  {
+    "pathname": "/assets/deadline-RP-FvawS.js",
+    "bytes": 371,
+    "sha256": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a"
+  },
+  {
+    "pathname": "/art/ui/home-duel-frame-01/single-lossless.webp",
+    "bytes": 1322620,
+    "sha256": "420374dc8d58a770d32b10117202669ebd34629b4734dbffa9e171ac35249156"
+  },
+  {
+    "pathname": "/art/deck-display-v1/STARTER_MANA.webp",
+    "bytes": 271454,
+    "sha256": "ad7b4586a40be9f5a7c45cae35bdb27bed07d91c7d212f96439ff308ed8dfe20"
+  },
+  {
+    "pathname": "/art/deck-mattes-v1/cost.webp",
+    "bytes": 205380,
+    "sha256": "288777c3a23823f2f162efe22792067c25debb38947514dcb90efef4fad20370"
+  }
+]
