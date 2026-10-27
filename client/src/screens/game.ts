@@ -74,7 +74,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     opts.mode === "bot"
       ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard")
       : opts.mode === "tutorial" && opts.part!==undefined
-        ? new TutorialPartController(root,exits,opts.part,next=>next<13?app.tutorialPart(next):app.tutorial())
+        ? new TutorialPartController(root,exits,opts.part,next=>next<13?app.tutorialPart(next):app.tutorial(),app.user?.id)
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
             lesson: opts.lesson,

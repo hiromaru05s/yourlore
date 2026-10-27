@@ -37,7 +37,7 @@ try {
   await build({
     stdin: { resolveDir: process.cwd(), contents: `
       export { TutorialController, TUT_STEPS } from './client/src/game/tutorial';
-      export { mountTutorial } from './client/src/screens/tutorial';
+      export { mountLegacyTutorial as mountTutorial } from './client/src/screens/tutorial';
       export { mountTutorialWelcome } from './client/src/screens/tutorialWelcome';
       export { mountCards } from './client/src/screens/cards';
       export { DB, STARTERS, DECK_POOL } from './client/src/shared/cards';
@@ -100,7 +100,7 @@ try {
   setLang('ja');let decisions=[],home=0,opened=0;
   api.tutorialDecision=async d=>{decisions.push(d);return {ok:true};};
   let welcome=mountTutorialWelcome({root,home:()=>home++,tutorial:()=>opened++});
-  root.querySelector('[data-no]').click();assert(root.textContent.includes('受け取れません'));assert.equal(decisions.length,0);
+  root.querySelector('[data-no]').click();assert(root.textContent.includes('あとからいつでも開けます'));assert.equal(decisions.length,0);
   root.querySelector('[data-back]').click();root.querySelector('[data-no]').click();root.querySelector('[data-no]').click();await tick();assert.deepEqual(decisions,['skip']);assert.equal(home,1);welcome.destroy();root.innerHTML='';
   welcome=mountTutorialWelcome({root,home:()=>home++,tutorial:()=>opened++});root.querySelector('[data-yes]').click();await tick();assert.deepEqual(decisions,['skip','start']);assert.equal(opened,1);welcome.destroy();root.innerHTML='';
   class TestTutorial extends TutorialController {

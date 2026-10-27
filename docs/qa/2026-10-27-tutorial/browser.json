@@ -1,0 +1,68 @@
+{
+  "passed": true,
+  "fullRun": true,
+  "startPart": 0,
+  "findings": [
+    {
+      "lang": "ja",
+      "width": 1280,
+      "shade": {
+        "bg": "rgba(0, 0, 0, 0.5)",
+        "blur": "none",
+        "clip": "path(evenodd, \"M 0 0 H 1280 V 800 H 0 Z M 579 609 H 701 V 786 H 579 Z M 216 654 H 517 V 736 H 216 Z\")"
+      },
+      "manaAfter": 2
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "shade": {
+        "bg": "rgba(0, 0, 0, 0.5)",
+        "blur": "none",
+        "clip": "path(evenodd, \"M 0 0 H 390 V 844 H 0 Z M 167 756 H 223 V 830 H 167 Z M 64 489 H 166 V 527 H 64 Z\")"
+      },
+      "manaAfter": 2
+    },
+    {
+      "lang": "en",
+      "width": 1280,
+      "shade": {
+        "bg": "rgba(0, 0, 0, 0.5)",
+        "blur": "none",
+        "clip": "path(evenodd, \"M 0 0 H 1280 V 800 H 0 Z M 579 609 H 701 V 786 H 579 Z M 216 654 H 517 V 736 H 216 Z\")"
+      },
+      "manaAfter": 2
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "shade": {
+        "bg": "rgba(0, 0, 0, 0.5)",
+        "blur": "none",
+        "clip": "path(evenodd, \"M 0 0 H 390 V 844 H 0 Z M 167 756 H 223 V 830 H 167 Z M 64 489 H 166 V 527 H 64 Z\")"
+      },
+      "manaAfter": 2
+    },
+    {
+      "lang": "ko",
+      "width": 1280,
+      "shade": {
+        "bg": "rgba(0, 0, 0, 0.5)",
+        "blur": "none",
+        "clip": "path(evenodd, \"M 0 0 H 1280 V 800 H 0 Z M 579 609 H 701 V 786 H 579 Z M 216 654 H 517 V 736 H 216 Z\")"
+      },
+      "manaAfter": 2
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "shade": {
+        "bg": "rgba(0, 0, 0, 0.5)",
+        "blur": "none",
+        "clip": "path(evenodd, \"M 0 0 H 390 V 844 H 0 Z M 167 756 H 223 V 830 H 167 Z M 64 489 H 166 V 527 H 64 Z\")"
+      },
+      "manaAfter": 2
+    }
+  ],
+  "errors": []
+}

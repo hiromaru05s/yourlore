@@ -2,31 +2,22 @@ import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-
 const dir=await mkdtemp(tmpdir()+'/lore-tutorial-parts-');
 try{
- await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/tutorialParts';export * from './client/src/shared/tutorialLesson';export * from './client/src/shared/tutorialGuide';export * from './client/src/shared/engine';export * from './client/src/shared/botActions';`},bundle:true,format:'esm',platform:'node',outfile:dir+'/parts.mjs',logLevel:'silent'});
+ await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/tutorialParts';export * from './client/src/shared/tutorialLesson';export * from './client/src/shared/engine';export * from './client/src/shared/botActions';`},bundle:true,format:'esm',platform:'node',outfile:dir+'/parts.mjs',logLevel:'silent'});
  const lib=await import(dir+'/parts.mjs');
  assert.equal(lib.TUTORIAL_PARTS.length,13);
- assert.deepEqual(lib.TUTORIAL_PARTS.map(p=>p.kind),['board','board','board','practice','practice','practice','practice','practice','practice','practice','practice','home','deck']);
- assert.equal(lib.PART_TOURS[0].length,25,'the first board tour exposes each essential control separately');
- assert(lib.PART_TOURS[0].every((step,i,all)=>i===0||all.slice(0,i).some(prev=>!prev.skipOnBack)),'every step can be reached again with Back');
- {
-  const {run,history}=lib.createPartStart(0),[me,opp]=run.state.players;
-  assert.equal(opp.hp,10,'the first duel starts at opposing Spirit 10');
-  assert(me.field.some(c=>c.id==='DRAGON_RIDER')&&me.enchants.some(e=>e.card.id==='E3')&&opp.field.some(c=>c.id==='M1'),'monster, effect card and enemy target are on the board');
-  assert(history.filter(e=>e.type==='turnHeader').length>=4&&history.some(e=>e.type==='log'&&/14/.test(e.html)),'the battle log holds the real opening history');
-  lib.advanceLesson(run,{type:'play',idx:me.hand.findIndex(c=>c.id==='STARTER_MANA')});
-  assert.deepEqual([run.state.players[0].mana,run.state.players[0].maxMana],[2,6],'Attune spends mana and raises the maximum');
-  lib.advanceLesson(run,{type:'attack',uid:run.state.players[0].field[0].uid});
-  lib.advanceLesson(run,{type:'chooseTarget',uid:run.state.players[1].field[0].uid});
-  assert.equal(run.state.winner,0,'Dragon Rider pierces through Spark Imp for the win');
+ for(const tour of [...Object.values(lib.PART_TOURS),lib.HOME_TOUR,lib.DECK_TOUR,lib.CARDS_TOUR])for(const s of tour){
+  for(const k of ['title','body']){assert(s[k].ja&&s[k].en&&s[k].ko);assert(!/[가-힣]/.test(s[k].ja),'Japanese copy is translated');assert(!/[가-힣]/.test(s[k].en),'English copy is translated');}
  }
- assert.equal(lib.PART_TOURS[3].length,3,'both markets and reroll are introduced before buying');
- for(const part of [0,1,2])assert.equal(lib.partScenes(part).length,1);
+ assert.notEqual(lib.tutorialPartKey(0,'alice'),lib.tutorialPartKey(0,'bob'),'progress is account scoped');
+ assert(!lib.PART_TOURS[0].some(s=>s.action==='play'),'UI tour has no premature combat or mana exercise');
+ assert.equal(lib.PART_TOURS[0].filter(s=>s.selector?.includes('log')).length,2,'log is open/read-and-close');
  const solved=[];
- for(let part=3;part<=10;part++){
+ for(let part=1;part<=10;part++){
   const run=lib.createPartRun(part);
+  if(part===1)assert.deepEqual(run.state.players[0].hand.map(c=>c.id),['STARTER_MANA']);
+  if(part===4)assert(run.state.players[0].deck.length&&run.state.players[0].discard.length);
   for(let n=0;n<240&&!run.done;n++){
    let action;
    if(run.phase==='review')action={type:'continueLesson'};
@@ -35,12 +26,17 @@ try{
    assert(action,`part ${part+1}, scene ${run.scene}, step ${run.step}: no legal action`);
    lib.advanceLesson(run,action);
   }
-  assert(run.done,`part ${part+1} completes`);solved.push(run);
+  assert(run.done,`part ${part+1} completes`);solved[part]=run;
  }
- assert(solved[1].actions.some(a=>a.type==='buySupply'||a.type==='buyMarket')&&solved[1].actions.some(a=>a.type==='endTurn'),'purchase cycle is physically performed');
- assert(solved[2].state.players[0].field.some(c=>c.id==='M2'),'drawn monster is summoned');
- assert(solved[3].state.players[1].discard.some(c=>c.id==='M1'),'destroyed monster reaches graveyard');
- assert.equal(solved.at(-1).state.winner,0,'passive HP10 practice AI can be defeated');
- assert(solved.every(run=>run.scenes.every(scene=>!scene.question)),'the outline has no detached quizzes');
- console.log('PASS 13-part tutorial outline; board tours and 8 playable parts complete through the production reducer');
+ assert.deepEqual([solved[1].state.players[0].mana,solved[1].state.players[0].maxMana],[2,6]);
+ assert(solved[2].state.players[0].removed.some(c=>c.id==='STARTER_TRASH'));
+ assert(solved[2].actions.filter(a=>a.type==='play').length===3,'Stone Pup, Cull and Chest are played');
+ assert.deepEqual(solved[3].actions.map(a=>a.type),['buyMarket','buySupply','refresh','continueLesson']);
+ assert.equal(solved[3].state.players[0].mana,3);
+ assert(solved[4].state.players[0].hand.some(c=>c.id==='M4'),'purchased Hare is actually drawn after shuffle');
+ assert.equal(solved[6].state.players[1].hp,35,'overflow 3 plus Hare kill effect 2 are explained');
+ assert.equal(solved[7].state.players[1].field[0].dmg,1);
+ assert.equal(solved[10].state.winner,0);
+ assert(solved.filter(Boolean).every(run=>run.scenes.every(scene=>!scene.question)));
+ console.log('PASS new tutorial: all ten practices, real purchases/refresh/shuffle, starters/dice, attacks/victory, translations and account isolation');
 }finally{await rm(dir,{recursive:true,force:true});}

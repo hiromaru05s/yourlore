@@ -9,6 +9,7 @@ for(const key of ['window','document','location','localStorage'])globalThis[key]
 let requests=0,resolveLogout,rejectLogout,reset=0,cleared=0,stopped=0;
 globalThis.__logout={api:{logout:()=>{requests++;return new Promise((resolve,reject)=>{resolveLogout=resolve;rejectLogout=reject;});}},reset:()=>reset++,clear:()=>cleared++,stop:()=>stopped++};
 const stubs={
+ './screens/tutorialSurface':'export const mountTutorialHomePart=()=>({});export const mountTutorialDeckPart=()=>({});export const mountTutorialCardsPart=()=>({});',
  './i18n':'export const getLang=()=>"ja";',
  './ui/homeSpirit':'export const releaseHomeSpirit=()=>{};',
  './ui/loungeText':'export const loungeText=x=>x;',

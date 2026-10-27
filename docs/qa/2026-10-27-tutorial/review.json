@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-27",
+  "pullRequest": "https://github.com/hiromaru05s/yourlore/pull/6",
+  "originalHead": "6327ebac9820066ceac7ae58e87d651c71788b57",
+  "baseMain": "042c7a1e01e0536eac2465e7b5a1099548c3365f",
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-pr-integration/LORE_TCG",
+  "browserUrl": "http://127.0.0.1:5299/parts-qa",
+  "adoptedSources": [
+    "client/src/ui/boardView.ts",
+    "client/src/ui/cardView.ts",
+    "client/src/ui/manaSpirit.ts",
+    "client/src/screens/home.ts",
+    "client/src/screens/deck.ts",
+    "client/src/screens/cards.ts",
+    "client/src/styles/defaultUI.css",
+    "client/src/styles/defaultButtons.css",
+    "client/src/styles/loungeLayout.css"
+  ],
+  "assessment": {
+    "original": "実盤面で操作を学ばせる方向は良いが、そのままでは完成品と判断できない。",
+    "findings": [
+      "韓国語が日本語・英語にもそのまま入っていた",
+      "画面案内の途中でアチューン使用と勝利が入り、依頼の順序と違っていた",
+      "提示購入・リロール・カル・宝箱の実習が不足していた",
+      "強調CSSがpositionとz-indexを上書きし、手札を崩していた",
+      "相手モンスターへの攻撃をクリックと案内していたが、通常盤面ではドラッグする",
+      "暗幕が50%ではなく、ぼかしも付いていた",
+      "進捗キーがアカウント間で共有されていた",
+      "現行では隠れる使用デッキボタンを案内先にしていた",
+      "盤面の準備中にも案内が進められた"
+    ],
+    "remaining": "画面説明は28ステップで長め。初見ユーザーの理解度や離脱率は未測定。応用パートは一覧から飛ばせるが、最短導線の最適化は今後の評価対象。"
+  },
+  "integration": [
+    "既存のチュートリアル一覧を13パートの新しい構成へ置換",
+    "ログを開く→読む・次へで閉じるの2段階",
+    "プロフィール範囲の強調、敵味方のデッキ・墓地・リフト案内",
+    "アチューン1枚の手札、マナとカードの別々の強調穴、処理中と結果では暗幕を外す",
+    "ストーン・パップ召喚後に攻撃力と体力を順番に説明、カル・宝箱を実使用",
+    "固定・提示両方の購入とリロールを実使用",
+    "デッキと墓地を残した準備盤面から購入カードを実際に引く",
+    "最後に精神力10の相手へ勝利し、現行のホーム・デッキ・カード一覧を案内",
+    "報酬なし、アカウント別のブラウザー内進捗",
+    "案内中のホーム対戦開始やデッキ保存を阻止",
+    "現行の非表示ボタンを案内しないよう使用中チェックへ追従し、読み込み中の案内進行も抑止"
+  ],
+  "isolation": "ゲームエンジン、サーバー、カードデータ、通常対戦の入力処理、既存のHOME/デッキ/カード画面実装は変更なし。ルーターとゲーム画面にチュートリアル専用分岐を追加。過去の報酬検証用コードは保持し、新メニューには露出しない。",
+  "testEvidence": {
+    "suite": "suite-final.json",
+    "initialSuite": "suite.json",
+    "rechecks": "rechecked.json",
+    "browser": "browser.json",
+    "fixtureLimits": "実ブラウザー・実盤面・実ルールだがローカルの検証用アカウント/API。認証付きPvPと実機性能は対象外。",
+    "suiteStrategy": "246件の回帰テストを実行。追加の画面境界モックと旧チュートリアル用参照を直した3件を再実行し、新規1件を追加。計247件成功。",
+    "browserFocused": "browser-focused.json",
+    "build": "npm run build: success; client/server typecheck: success",
+    "browserSummary": "全13パートをPCで実操作完了。日本語・英語・韓国語それぞれ1280×800と390×844で表示・マナ実使用・終了時掃除を確認。通常のHOME対戦開始を案内から誤操作できないことも確認。"
+  },
+  "deployment": "mainへの統合のみ。本番デプロイはこの作業に含まない。"
+}

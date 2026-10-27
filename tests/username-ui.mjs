@@ -10,6 +10,7 @@ const covers=[];const tick=()=>new Promise(r=>setTimeout(r,0));
 const api={updateMe:()=>{calls++;return new Promise((resolve,reject)=>{resolveSave=resolve;rejectSave=reject;});},tutorialStatus:async()=>{tutorialCalls++;return {offered};},logout:async()=>({ok:true})};
 globalThis.__names={api,active:()=>active,home:()=>homeMounts++,graphics:()=>graphics++,cover:()=>{let resolve;const promise=new Promise(r=>resolve=r);const cover={cancel:()=>resolve(false),ready:()=>promise,finish:()=>resolve(true)};covers.push(cover);return cover;}};
 const stubs={
+ './screens/tutorialSurface':'export const mountTutorialHomePart=()=>({});export const mountTutorialDeckPart=()=>({});export const mountTutorialCardsPart=()=>({});',
  './i18n':'export const getLang=()=>"ja";',
  '../i18n':'export const getLang=()=>"ja";export const onLangChange=()=>()=>{};',
  './ui/homeSpirit':'export const releaseHomeSpirit=()=>{};',

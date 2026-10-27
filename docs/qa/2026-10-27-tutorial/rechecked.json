@@ -1,0 +1,22 @@
+[
+  {
+    "file": "tests/username-ui.mjs",
+    "passed": true,
+    "ms": 314
+  },
+  {
+    "file": "tests/logout-recovery.mjs",
+    "passed": true,
+    "ms": 347
+  },
+  {
+    "file": "tests/trap-removal-tutorial.mjs",
+    "passed": true,
+    "ms": 2263
+  },
+  {
+    "file": "tests/tutorial-parts.mjs",
+    "passed": true,
+    "ms": 101
+  }
+]

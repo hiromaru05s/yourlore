@@ -23,15 +23,15 @@ export class TutorialPartController extends BaseController {
  private handOpen=false;
  private unsub:()=>void=()=>{};
  protected get useTurnClock():boolean{return false;}
- constructor(private root:HTMLElement,exits:ControllerExits,private part:number,private next:(part:number)=>void){
-  super(root,0,exits);this.introShown=true;const start=createPartStart(part);this.run=start.run;this.run.state.players[1].name='Zeno';this.applyResult({state:this.run.state,events:[]},false);
+ constructor(private root:HTMLElement,exits:ControllerExits,private part:number,private next:(part:number)=>void,private accountId?:string){
+  super(root,0,exits);root.classList.add('tutorial-board');this.introShown=true;const start=createPartStart(part);this.run=start.run;this.run.state.players[1].name='Zeno';this.applyResult({state:this.run.state,events:[]},false);
   if(start.history.length)this.restoreLog(start.history,true);
   // Each guided part starts from a closed log so the learner opens it as instructed.
   if(this.root.querySelector('.game.log-open'))this.root.querySelector<HTMLElement>('#logClose')?.click();
   const guided=PART_TOURS[part];
   if(guided){
    this.intro=false;
-   this.tour=new TutorialSpotlight(root,guided,{label:TUTORIAL_PARTS[part].title,state:()=>this.busy?null:this.run.state,onComplete:()=>{this.tour=undefined;if(part===3){this.intro=true;this.mountCoach();}else{this.markComplete();this.next(part+1);}},onExit:()=>this.exits.onHome()});
+   this.tour=new TutorialSpotlight(root,guided,{label:TUTORIAL_PARTS[part].title,state:()=>this.busy?null:this.run.state,onComplete:()=>{this.tour=undefined;this.markComplete();this.next(part+1);},onExit:()=>this.exits.onHome()});
    return;
   }
   this.mountCoach();
@@ -40,7 +40,7 @@ export class TutorialPartController extends BaseController {
   this.host=document.createElement('aside');this.host.className='part-coach is-intro';this.host.innerHTML='<div class="part-zeno" aria-hidden="true"></div><div class="part-speech lore-surface"></div>';this.root.append(this.host);this.speech=this.host.querySelector('.part-speech')!;this.spirit=mountManaSpirit(this.host.querySelector('.part-zeno')!);
   this.unsub=onLangChange(()=>this.render());this.render();this.glowTimer=window.setInterval(()=>{const open=!!this.root.querySelector('.game.hand-open');if(open!==this.handOpen){this.handOpen=open;this.render();}else this.glow();},350);
  }
- private canAct():boolean{return !this.intro&&!this.busy&&!this.finished&&this.run.phase==='play'&&(!this.tour||this.tour.allowsGame());}
+ private canAct():boolean{return !document.querySelector('.game-loading')&&!this.intro&&!this.busy&&!this.finished&&this.run.phase==='play'&&(!this.tour||this.tour.allowsGame());}
  override onEndTurn():void{if(!this.canAct())return;if(!isTutorialActionAllowed(this.run,{type:'endTurn'})){this.redirected=true;this.render();return;}super.onEndTurn();}
  override async onPlay(uid:string):Promise<void>{if(this.canAct())await super.onPlay(uid);}
  override onBuyMarket(i:number):void{if(this.canAct())super.onBuyMarket(i);}
@@ -55,7 +55,7 @@ export class TutorialPartController extends BaseController {
  }
  private apply(action:Action):void{
   this.busy=true;const res=advanceLesson(this.run,action);this.applyResult(res);this.render();
-  this.afterPresentation(()=>{if(this.dead)return;this.busy=false;this.view.render(this.run.state);if(this.run.phase==='review'&&this.run.scene===this.run.scenes.length-1){advanceLesson(this.run,{type:'continueLesson'});this.finish();}this.render();this.maybeBot();});
+  this.afterPresentation(()=>{if(this.dead)return;this.busy=false;this.view.render(this.run.state);if(!this.tour&&this.run.phase==='review'&&this.run.scene===this.run.scenes.length-1){advanceLesson(this.run,{type:'continueLesson'});this.finish();}this.render();this.maybeBot();});
  }
  protected maybeBot():void{
   if(!this.run||this.intro||this.busy||this.finished)return;const action=tutorialOpponentAction(this.run);if(!action)return;
@@ -69,13 +69,14 @@ export class TutorialPartController extends BaseController {
   if(this.run.phase!=='review')return;
   const res=advanceLesson(this.run,{type:'continueLesson'});if(this.run.done)this.finish();else{this.applyResult(res,false);this.maybeBot();}this.render();
  }
- private markComplete():void{try{localStorage.setItem(tutorialPartKey(this.part),'1');}catch{}}
+ private markComplete():void{try{localStorage.setItem(tutorialPartKey(this.part,this.accountId),'1');}catch{}}
  private finish():void{this.finished=true;this.markComplete();this.spirit?.celebrate();}
  private render():void{
   if(!this.host||!this.speech)return;const meta=TUTORIAL_PARTS[this.part],lang=getLang(),review=!this.intro&&this.run.phase==='review';
   const cue=!this.intro&&!this.finished&&!review?tutorialCue(this.run,!!this.root.querySelector('.game.hand-open')):null;
+  if(cue?.action==='attack'&&this.run.state.players[1].field.length)cue.instruction={ja:'指が示す味方を、相手モンスターへドラッグしよう。',en:'Drag the indicated ally onto an enemy monster.',ko:'손가락이 가리키는 아군을 상대 몬스터로 드래그해요.'};
   const title=this.finished?['パート完了','Part complete','파트 완료'][lang==='ja'?0:lang==='en'?1:2]:this.intro?meta.title[lang]:review?['今起きたこと','What happened','방금 일어난 일'][lang==='ja'?0:lang==='en'?1:2]:cue!.instruction[lang];
-  let body=this.intro?meta.intro[lang]:this.finished||review?currentScene(this.run).result[lang]:currentScene(this.run).intro[lang];
+  let body=this.intro?meta.intro[lang]:this.finished||review?currentScene(this.run).result[lang]:(cue?.reason??currentScene(this.run).intro)[lang];
   if(this.redirected)body=(lang==='ja'?'今は光っている対象で案内された操作を試そう。 ':lang==='en'?'Use the glowing target for the instructed action first. ':'지금은 빛나는 대상에 안내된 행동을 먼저 해 보세요. ')+body;
   if(this.busy)body=lang==='ja'?'カードと数字の変化を見よう。':lang==='en'?'Watch the cards and values change.':'카드와 숫자가 바뀌는 과정을 보세요.';
   else if(!this.intro&&!this.finished&&this.run.phase==='play'&&this.run.state.cur===1&&!this.run.state.pending)body=lang==='ja'?'Zenoのターンが終わるまで盤面を見よう。':lang==='en'?"Watch the board until Zeno's turn ends.":'제노의 턴이 끝날 때까지 필드를 보세요.';
@@ -89,9 +90,9 @@ export class TutorialPartController extends BaseController {
   this.speech.append(eyebrow,heading,paragraph,footer);this.glow();
  }
  private glow():void{
-  this.root.querySelectorAll('.part-highlight').forEach(e=>e.classList.remove('part-highlight'));if(this.intro||this.finished||this.busy||this.run.phase!=='play')return;
+  document.querySelectorAll('.part-highlight').forEach(e=>e.classList.remove('part-highlight','part-pointed'));if(this.intro||this.finished||this.busy||this.run.phase!=='play')return;
   const cue=tutorialCue(this.run,this.handOpen);let selector=cue.action==='buyMarket'?`#fixedMarket .card[data-card-id="${cue.cardId}"]`:cue.action==='buySupply'?`#supplyMarket .card[data-card-id="${cue.cardId}"]`:cue.action==='refresh'?'#refreshBtn':cue.action==='play'?(this.handOpen?`#hand .card[data-card-id="${cue.cardId}"]`:'#hand'):cue.action==='attack'?`#meRow .zone-mon .card${cue.cardId?`[data-card-id="${cue.cardId}"]`:''}`:cue.action==='target'?'#oppRow .zone-mon .card':cue.action==='endTurn'?'#endBtn':'';
-  if(selector)this.root.querySelectorAll(selector).forEach(e=>e.classList.add('part-highlight'));
+  if(selector)document.querySelectorAll(selector).forEach(e=>{e.classList.add('part-highlight');if(cue.action==='attack'||cue.action==='play'&&this.handOpen)e.classList.add('part-pointed');});
  }
- destroy():void{clearTimeout(this.timer);clearInterval(this.glowTimer);this.unsub();this.tour?.destroy();this.root.querySelectorAll('.part-highlight').forEach(e=>e.classList.remove('part-highlight'));this.spirit?.destroy();this.host?.remove();super.destroy();}
+ destroy():void{clearTimeout(this.timer);clearInterval(this.glowTimer);this.unsub();this.tour?.destroy();document.querySelectorAll('.part-highlight').forEach(e=>e.classList.remove('part-highlight','part-pointed'));this.spirit?.destroy();this.host?.remove();super.destroy();}
 }

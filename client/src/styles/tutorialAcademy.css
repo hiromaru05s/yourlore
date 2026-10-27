@@ -77,7 +77,7 @@
    and blurred by four shades, and a ring sits just outside the exact control.
    Zeno stays beside a tailed speech bubble placed away from the taught area. */
 .tutorial-tour-layer{position:fixed;inset:0;z-index:152;pointer-events:none}
-.tutorial-tour-shade{position:fixed;z-index:0;outline:1px solid #020914a6;background:#020914a6;-webkit-backdrop-filter:blur(3px) saturate(.8);backdrop-filter:blur(3px) saturate(.8);pointer-events:none}
+.tutorial-tour-shade{position:fixed;z-index:0;outline:0;background:rgba(0,0,0,.5);-webkit-backdrop-filter:none;backdrop-filter:none;pointer-events:none}
 .tutorial-tour-ring{position:fixed;z-index:1;box-sizing:border-box;border:2px solid #d4efff;border-radius:9px;box-shadow:0 0 0 1px #0b1a2c,0 0 10px #8fdcff,inset 0 0 8px #8fdcff55;pointer-events:none;animation:tutorialTourPulse 1.3s ease-in-out infinite}
 @keyframes tutorialTourPulse{0%,100%{box-shadow:0 0 0 1px #0b1a2c,0 0 7px #8fdcffaa,inset 0 0 6px #8fdcff44}50%{box-shadow:0 0 0 1px #0b1a2c,0 0 16px #a9e6ff,inset 0 0 10px #8fdcff77}}
 .tutorial-tour-target{filter:brightness(1.12)!important}
@@ -91,3 +91,9 @@
 .tutorial-tour-skip{width:30px;height:30px;padding:0!important;font-size:20px!important;pointer-events:auto}
 @media(max-width:700px){.tutorial-tour-coach{width:calc(100vw - 14px)}.tutorial-tour-coach[data-placement]{left:7px;right:auto}.tutorial-tour-coach[data-placement^="top"]{top:7px;bottom:auto}.tutorial-tour-coach[data-placement^="bottom"]{bottom:7px;top:auto}.tutorial-tour-spirit{flex-basis:68px;width:68px;height:90px}.tutorial-tour-bubble{padding:12px 15px 12px 18px}.tutorial-tour-bubble h2{font-size:15px}.tutorial-tour-bubble p,.tutorial-tour-bubble>strong{font-size:11px}.tutorial-tour-coach::after{left:61px;bottom:22px;width:17px;height:17px}}
 @media(prefers-reduced-motion:reduce){.tutorial-tour-ring{animation:none!important}}
+
+.tutorial-tour-pointer{position:fixed;z-index:2;font:40px/1 sans-serif;color:#fff0b5;text-shadow:0 2px 4px #000;pointer-events:none}.tutorial-tour-bubble{max-height:calc(100dvh - 32px);overflow:auto}
+
+body:has(.tutorial-part-tour) .duel-overlay{backdrop-filter:none;-webkit-backdrop-filter:none}
+
+body:has(.game-loading) :is(.tutorial-part-tour,.part-coach){visibility:hidden}
