@@ -1,0 +1,359 @@
+{
+  "origin": "https://yourlore.xyz/",
+  "at": "2026-10-27T11:01:38.888Z",
+  "authenticated": true,
+  "method": "Production Chrome tab; actual UI clicks, drags and confirmations; no fixture or state mutation",
+  "completedParts": 13,
+  "observations": [
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 3/28",
+      "next": true,
+      "step": "2",
+      "target": "logPanel",
+      "title": "ログを読む・閉じる"
+    },
+    {
+      "action": "click",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 4/28",
+      "next": false,
+      "step": "3",
+      "target": "muteBtn",
+      "title": "効果音"
+    },
+    {
+      "action": "next",
+      "enabled": false,
+      "label": "ZENO · デュエル画面の機能 · 5/28",
+      "next": true,
+      "step": "4",
+      "target": "vol-pop open tutorial-tour-target",
+      "title": "音量調節"
+    },
+    {
+      "action": "click",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 6/28",
+      "next": false,
+      "step": "5",
+      "target": "helpBtn",
+      "title": "操作方法"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 7/28",
+      "next": true,
+      "step": "6",
+      "target": "modal help-modal duel-dialog tutorial-tour-target",
+      "title": "操作を確認"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 8/28",
+      "next": true,
+      "step": "7",
+      "target": "portraitOpp",
+      "title": "相手のプロフィール"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 9/28",
+      "next": true,
+      "step": "8",
+      "target": "portraitMe",
+      "title": "自分のプロフィール"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 10/28",
+      "next": true,
+      "step": "9",
+      "target": "pt-mana pips tutorial-tour-target",
+      "title": "マナ"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 11/28",
+      "next": true,
+      "step": "10",
+      "target": "zone zone-mon tutorial-tour-target",
+      "title": "相手のモンスター"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 12/28",
+      "next": true,
+      "step": "11",
+      "target": "zone zone-mon tutorial-tour-target",
+      "title": "自分のモンスター"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 13/28",
+      "next": true,
+      "step": "12",
+      "target": "zone zone-st tutorial-tour-target",
+      "title": "効果カードの列"
+    },
+    {
+      "action": "click",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 14/28",
+      "next": false,
+      "step": "13",
+      "target": "pile-myDeck",
+      "title": "自分のデッキ"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 15/28",
+      "next": true,
+      "step": "14",
+      "target": "modal duel-dialog tutorial-tour-target",
+      "title": "デッキ情報"
+    },
+    {
+      "action": "click",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 16/28",
+      "next": false,
+      "step": "15",
+      "target": "pile-oppDeck",
+      "title": "相手のデッキ"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 17/28",
+      "next": true,
+      "step": "16",
+      "target": "modal duel-dialog tutorial-tour-target",
+      "title": "相手の公開情報"
+    },
+    {
+      "action": "click",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 18/28",
+      "next": false,
+      "step": "17",
+      "target": "pile-myDisc",
+      "title": "自分の墓地"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 19/28",
+      "next": true,
+      "step": "18",
+      "target": "modal picker-modal duel-dialog tutorial-tour-target",
+      "title": "墓地の循環"
+    },
+    {
+      "action": "click",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 20/28",
+      "next": false,
+      "step": "19",
+      "target": "pile-oppDisc",
+      "title": "相手の墓地"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 21/28",
+      "next": true,
+      "step": "20",
+      "target": "modal picker-modal duel-dialog tutorial-tour-target",
+      "title": "相手が使ったカード"
+    },
+    {
+      "action": "click",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 22/28",
+      "next": false,
+      "step": "21",
+      "target": "rift-me",
+      "title": "自分のリフト"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 23/28",
+      "next": true,
+      "step": "22",
+      "target": "modal picker-modal duel-dialog tutorial-tour-target",
+      "title": "墓地との違い"
+    },
+    {
+      "action": "click",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 24/28",
+      "next": false,
+      "step": "23",
+      "target": "rift-opp",
+      "title": "相手のリフト"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 25/28",
+      "next": true,
+      "step": "24",
+      "target": "modal picker-modal duel-dialog tutorial-tour-target",
+      "title": "相手のリフトを確認"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 26/28",
+      "next": true,
+      "step": "25",
+      "target": "fixedMarket",
+      "title": "固定マーケット"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 27/28",
+      "next": true,
+      "step": "26",
+      "target": "supplyMarket",
+      "title": "提示マーケット"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · デュエル画面の機能 · 28/28",
+      "next": true,
+      "step": "27",
+      "target": "refreshBtn",
+      "title": "提示の更新"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · 手札・召喚・スターター · 4/7",
+      "next": true,
+      "step": "3",
+      "target": "ad-def tutorial-tour-target",
+      "title": "モンスターの体力"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · マーケットと購入 · 4/4",
+      "next": true,
+      "step": "3",
+      "title": "購入は墓地へ"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · 勝利後のホーム · 1/5",
+      "next": true,
+      "step": "0",
+      "target": "home-companion tutorial-tour-target",
+      "title": "ホームへようこそ"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · 勝利後のホーム · 2/5",
+      "next": true,
+      "step": "1",
+      "target": "lounge-mode-tabs tutorial-tour-target",
+      "title": "対戦モード"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · 勝利後のホーム · 3/5",
+      "next": true,
+      "step": "2",
+      "target": "ranked",
+      "title": "対戦開始"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · 勝利後のホーム · 4/5",
+      "next": true,
+      "step": "3",
+      "target": "myTier",
+      "title": "ランク"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · 勝利後のホーム · 5/5",
+      "next": true,
+      "step": "4",
+      "target": "deck",
+      "title": "使用するデッキ"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · スターターデッキ設定 · 1/6",
+      "next": true,
+      "step": "0",
+      "target": "deckTabs",
+      "title": "デッキの保存枠"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · スターターデッキ設定 · 2/6",
+      "next": true,
+      "step": "1",
+      "target": "deckCur",
+      "title": "持参デッキ"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · スターターデッキ設定 · 3/6",
+      "next": true,
+      "step": "2",
+      "target": "deck-attune-lock tutorial-tour-target",
+      "title": "固定アチューン"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · スターターデッキ設定 · 4/6",
+      "next": true,
+      "step": "3",
+      "target": "deckPool",
+      "title": "スターター候補"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · スターターデッキ設定 · 5/6",
+      "next": true,
+      "step": "4",
+      "target": "deck-star tutorial-tour-target",
+      "title": "使用デッキ"
+    },
+    {
+      "action": "next",
+      "enabled": true,
+      "label": "ZENO · スターターデッキ設定 · 6/6",
+      "next": true,
+      "step": "5",
+      "target": "save",
+      "title": "デッキを確定"
+    }
+  ]
+}
