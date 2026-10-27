@@ -7,7 +7,7 @@ const fixture=`
 import '/src/main.ts';
 import {App} from '/src/router.ts';
 import {TutorialPartController} from '/src/game/tutorialParts.ts';
-import {PART_TOURS,tutorialPartKey} from '/src/shared/tutorialParts.ts';
+import {PART_TOURS,HOME_PART,DECK_PART,tutorialPartKey} from '/src/shared/tutorialParts.ts';
 import {mountTutorial} from '/src/screens/tutorial.ts';
 import {mountTutorialHomePart,mountTutorialDeckPart,mountTutorialCardsPart} from '/src/screens/tutorialSurface.ts';
 import {startBoardLayout} from '/src/ui/layout.ts';
@@ -23,7 +23,7 @@ const root=document.querySelector('#app'),app=new App(root);app.user={id:'local-
 let ctrl,screen,layout,lounge,part=-1;
 const clear=()=>{screen?.destroy?.();screen=null;layout?.();layout=null;ctrl?.destroy();ctrl=null;lounge?.();lounge=null;root.replaceChildren();root.className='';};
 app.tutorial=()=>{clear();part=-1;screen=mountTutorial(app);lounge=mountLounge(app,'tutorial');};
-app.tutorialPart=i=>{clear();part=i;if(i<11){const host=document.createElement('div');root.append(host);ctrl=new TutorialPartController(host,{onHome:()=>app.tutorial(),onRematch:()=>app.tutorialPart(i)},i,n=>app.tutorialPart(n),app.user.id);layout=startBoardLayout();}else{screen=i===11?mountTutorialHomePart(app):mountTutorialDeckPart(app);lounge=mountLounge(app,i===11?'home':'deck');}};
+app.tutorialPart=i=>{clear();part=i;if(i<HOME_PART){const host=document.createElement('div');root.append(host);ctrl=new TutorialPartController(host,{onHome:()=>app.tutorial(),onRematch:()=>app.tutorialPart(i)},i,n=>app.tutorialPart(n),app.user.id);layout=startBoardLayout();}else{screen=i===HOME_PART?mountTutorialHomePart(app):mountTutorialDeckPart(app);lounge=mountLounge(app,i===HOME_PART?'home':'deck');}};
 app.tutorialCards=()=>{clear();part=13;screen=mountTutorialCardsPart(app);lounge=mountLounge(app,'cards');};
 window.partsQA={app,get ctrl(){return ctrl;},get part(){return part;},clear,language:setLang,key:i=>tutorialPartKey(i,app.user.id),info(){const tour=ctrl?.tour;return{part,step:tour?.index,tour:!!tour,selector:tour?.steps[tour.index]?.selector,action:tour?.steps[tour.index]?.action??'next',enable:tour?.steps[tour.index]?.enableOn,satisfied:tour?.steps[tour.index]?.until?.(ctrl.run.state),busy:ctrl?.busy,presenting:ctrl?.presenting,intro:ctrl?.intro,finished:ctrl?.finished,phase:ctrl?.run.phase,scene:ctrl?.run.scene,runStep:ctrl?.run.step,pending:ctrl?.run.state.pending?.reason,hand:ctrl?.run.state.players[0].hand.map(c=>c.id),n:ctrl?.run.actions.length};},action(){const run=ctrl.run;return botActions(run.state).filter(a=>tutorialActionAllowed(run,a)).find(a=>{const next=reduce(run.state,a);return next.state.rng!==run.state.rng||actionChangesState(run.state,next.state);});}};
 app.tutorial();
@@ -59,13 +59,14 @@ const findings=[];
 try{
  await p.goto('http://127.0.0.1:5299/parts-qa');await p.waitForSelector('[data-part="0"]');await p.screenshot({path:out+'/menu-ja-desktop.png',fullPage:true});
  await p.locator('[data-part="'+(process.env.TUTORIAL_START??0)+'"]').click();await ready();
- for(let n=0;n<350;n++){
-  await ready();if(await p.locator('.cast-review .btn-gold').count()){if(await p.locator('.cast-review .btn-gold').isDisabled())await p.locator('.cast-review [data-choice]').first().click();await p.locator('.cast-review .btn-gold').click();await p.waitForTimeout(700);continue;}const s=await p.evaluate(()=>partsQA.info());if(s.part>=11)break;
+ for(let n=0;n<900;n++){
+  await ready();if(await p.locator('.cast-review .btn-gold').count()){if(await p.locator('.cast-review .btn-gold').isDisabled())await p.locator('.cast-review [data-choice]').first().click();await p.locator('.cast-review .btn-gold').click();await p.waitForTimeout(700);continue;}const s=await p.evaluate(()=>partsQA.info());if(s.part>=23)break;
   console.log(JSON.stringify(s));
   if(s.tour){
-   if(s.part===0&&s.step===2){assert(await p.locator('.game.log-open').count());await p.screenshot({path:out+'/log-whole-panel.png'});}
-   if(s.part===1&&s.step===2&&s.phase==='play')await p.screenshot({path:out+'/mana-separate-highlights.png'});
-   if(s.action==='click')await clickVisible(s.selector);
+   if(s.part===12&&s.step===1){assert(await p.locator('.game.log-open').count());await p.screenshot({path:out+'/log-whole-panel.png'});}
+   if(s.part===2&&s.step===2&&s.phase==='play')await p.screenshot({path:out+'/mana-separate-highlights.png'});
+   if(s.action==='inspect')await p.locator(s.selector).click({button:'right'});
+   else if(s.action==='click')await clickVisible(s.selector);
    else if(s.action==='play'){
     if(!s.satisfied){const action=await p.evaluate(()=>partsQA.action());console.log('ACTION',action);if(action)await act(action);}
    }else{
@@ -79,19 +80,19 @@ try{
    await p.waitForTimeout(400);
   }
  }
- assert.equal(await p.evaluate(()=>partsQA.part),11,'all board parts finished');
+ assert.equal(await p.evaluate(()=>partsQA.part),23,'all board parts finished');
  await p.screenshot({path:out+'/home-tour.png'});
  // Tours do not let a keyboard/programmatic click start a real duel or save a deck.
- await p.locator('#ranked').evaluate(el=>el.click());assert.equal(await p.evaluate(()=>partsQA.part),11);
+ await p.locator('#ranked').evaluate(el=>el.click());assert.equal(await p.evaluate(()=>partsQA.part),23);
  for(let n=0;n<20&&await p.locator('.tutorial-tour-next').count();n++){
   console.log('MENU',await p.locator('.tutorial-tour-bubble h2').textContent());await p.locator('.tutorial-tour-next').click();await p.waitForTimeout(350);
  }
  assert.equal(await p.evaluate(()=>partsQA.part),-1);
- if(!process.env.TUTORIAL_START)assert.equal(await p.evaluate(()=>Array.from({length:13},(_,i)=>localStorage.getItem(partsQA.key(i))).filter(Boolean).length),13);
+ if(!process.env.TUTORIAL_START)assert.equal(await p.evaluate(()=>Array.from({length:25},(_,i)=>localStorage.getItem(partsQA.key(i))).filter(Boolean).length),25);
  for(const lang of ['ja','en','ko'])for(const viewport of [{width:1280,height:800},{width:390,height:844}]){
   await p.setViewportSize(viewport);await p.evaluate(lang=>partsQA.language(lang),lang);await p.evaluate(()=>partsQA.app.tutorial());
   await p.screenshot({path:out+'/menu-'+lang+'-'+viewport.width+'.png',fullPage:true});
-  await p.evaluate(()=>partsQA.app.tutorialPart(1));await ready();
+  await p.evaluate(()=>partsQA.app.tutorialPart(2));await ready();
   await p.locator('.tutorial-tour-next').click();await clickVisible('#hand');await p.waitForTimeout(500);
   await p.screenshot({path:out+'/mana-'+lang+'-'+viewport.width+'.png'});
   const shade=await p.locator('.tutorial-tour-shade').first().evaluate(el=>({bg:getComputedStyle(el).backgroundColor,blur:getComputedStyle(el).backdropFilter,clip:getComputedStyle(el).clipPath}));

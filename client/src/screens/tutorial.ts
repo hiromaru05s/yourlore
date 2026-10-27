@@ -8,7 +8,7 @@ import {mountManaSpirit} from '../ui/manaSpirit';
 import {artUrl} from '../ui/cardArt';
 import {TUT_STEPS,TUTORIAL_CHAPTERS,TUTORIAL_TOTAL} from '../shared/tutorialSteps';
 import {tutorialRuleSections} from '../shared/tutorialNotes';
-import {TUTORIAL_PARTS,tutorialPartKey} from '../shared/tutorialParts';
+import {TUTORIAL_PARTS,TUTORIAL_CHAPTERS as PART_CHAPTERS,tutorialPartKey} from '../shared/tutorialParts';
 import '../styles/tutorialAcademy.css';
 import '../styles/homeTutorial.css';
 import '../styles/tutorialParts.css';
@@ -70,13 +70,15 @@ export function mountTutorial(app:App):Screen {
  const completed=TUTORIAL_PARTS.map((_,i)=>{try{return localStorage.getItem(tutorialPartKey(i,app.user?.id))==='1';}catch{return false;}});
  const done=completed.filter(Boolean).length,first=completed.findIndex(value=>!value),next=first<0?0:first;
  const lang=getLang();
- wrap.innerHTML=`<main class="tutorial-parts-shell lore-surface">
-  <header class="tutorial-parts-hero"><div class="tutorial-parts-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST DUEL</span><h1>${text('13パート・チュートリアル','13-part tutorial','13파트 튜토리얼')}</h1><div class="zeno-speech tutorial-welcome-speech"><div class="zeno-speech-content"><span class="zeno-speaker">${text('ゼノ','Zeno','제노')}</span><p>${text('やあ、ぼくはゼノ！ カードを使って、一緒に覚えていこう。気になるところから始めていいよ。','Hey, I’m Zeno! Let’s learn by playing some cards. Pick any part you’re curious about.','안녕, 난 제노야! 카드를 써 보면서 같이 익혀 보자. 궁금한 곳부터 시작해도 좋아.')}</p></div></div></div></header>
+ wrap.innerHTML=`<main class="tutorial-parts-shell">
+  <header class="tutorial-parts-hero"><div class="tutorial-parts-spirit"></div><div><span class="menu-eyebrow">BIBLION / FIRST DUEL</span><h1>${text('ゼノと、はじめてのデュエル','Your first duel with Zeno','제노와 첫 듀얼')}</h1><div class="zeno-speech tutorial-welcome-speech"><div class="zeno-speech-content"><span class="zeno-speaker">${text('ゼノ','Zeno','제노')}</span><p>${text('やあ、ぼくはゼノ！ カードを使って、一緒に覚えていこう。気になるところから始めていいよ。','Hey, I’m Zeno! Let’s learn by playing some cards. Pick any part you’re curious about.','안녕, 난 제노야! 카드를 써 보면서 같이 익혀 보자. 궁금한 곳부터 시작해도 좋아.')}</p></div></div></div></header>
   <section class="tutorial-parts-progress lore-surface"><div><span>${text('進行状況','Progress','진행 상황')}</span><strong>${done} / ${TUTORIAL_PARTS.length}</strong></div><progress max="${TUTORIAL_PARTS.length}" value="${done}"></progress><button class="lore-button lore-button-primary" id="continuePart">${first<0?text('最初から復習','Review from the start','처음부터 복습'):done?text('続きから','Continue','이어서 하기'):text('始める','Start','시작하기')} →</button></section>
-  <ol class="tutorial-parts-list">${TUTORIAL_PARTS.map((part,i)=>`<li class="${completed[i]?'is-complete':''}${i===first?' is-next':''}"><button data-part="${i}"><span class="tutorial-part-number">${String(i+1).padStart(2,'0')}</span><span class="tutorial-part-copy"><b>${esc(part.title[lang])}</b><small>${esc(part.intro[lang])}</small></span><span class="tutorial-part-state">${completed[i]?homeIcon('check'):(i===first?text('次','NEXT','다음'):'→')}</span></button></li>`).join('')}</ol>
+  <nav class="tutorial-chapters" aria-label="${text('学ぶ内容','Chapters','학습 내용')}">${PART_CHAPTERS.map((chapter,i)=>`<button class="lore-surface" data-chapter="${i}"><span class="tutorial-chapter-roman">${['I','II','III'][i]}</span><b>${chapter.title[lang]}</b><small>${chapter.end-chapter.start} ${text('レッスン','lessons','레슨')}</small><span>↓</span></button>`).join('')}</nav>
+  ${PART_CHAPTERS.map((chapter,n)=>`<section class="tutorial-chapter" id="tutorialChapter${n}"><header class="tutorial-chapter-heading"><span>${['I','II','III'][n]}</span><div><h2>${chapter.title[lang]}</h2><p>${chapter.intro[lang]}</p></div><small>${completed.slice(chapter.start,chapter.end).filter(Boolean).length} / ${chapter.end-chapter.start}</small></header><ol class="tutorial-parts-list" start="${chapter.start+1}">${TUTORIAL_PARTS.slice(chapter.start,chapter.end).map((part,j)=>{const i=chapter.start+j;return `<li class="${completed[i]?'is-complete':''}${i===first?' is-next':''}"><button data-part="${i}"><span class="tutorial-part-number">${String(i+1).padStart(2,'0')}</span><span class="tutorial-part-copy"><b>${esc(part.title[lang])}</b><small>${esc(part.intro[lang])}</small></span><span class="tutorial-part-state">${completed[i]?homeIcon('check'):(i===first?text('次','NEXT','다음'):'→')}</span></button></li>`;}).join('')}</ol></section>`).join('')}
   <footer class="tutorial-parts-footer"><button class="lore-button lore-button-quiet" id="rules">${homeIcon('book')} ${text('ルールノート','Rule notebook','규칙 노트')}</button><button class="lore-button lore-button-quiet" id="back">← ${text('ホーム','Home','홈')}</button></footer>
  </main>`;
  app.root.append(wrap);const spirit=mountManaSpirit(wrap.querySelector('.tutorial-parts-spirit')!);
+ wrap.querySelectorAll<HTMLButtonElement>('[data-chapter]').forEach(b=>b.onclick=()=>wrap.querySelector(`#tutorialChapter${b.dataset.chapter}`)?.scrollIntoView({behavior:'smooth',block:'start'}));
  wrap.querySelector<HTMLButtonElement>('#continuePart')!.onclick=()=>app.tutorialPart(next);
  wrap.querySelectorAll<HTMLButtonElement>('[data-part]').forEach(button=>button.onclick=()=>app.tutorialPart(Number(button.dataset.part)));
  wrap.querySelector<HTMLButtonElement>('#rules')!.onclick=()=>{closeNote?.();closeNote=openRuleNotebook(0);};

@@ -1,3 +1,5 @@
+import {TutorialActionGuide,placeTutorialCoach,guideElement} from '../ui/tutorialActionGuide';
+import {monsterCanAttack} from '../shared/engine';
 import {BaseController,type ControllerExits} from './controller';
 import {advanceLesson,currentScene,tutorialOpponentAction,type LessonRun} from '../shared/tutorialLesson';
 import {tutorialCue,isTutorialActionAllowed} from '../shared/tutorialGuide';
@@ -19,7 +21,8 @@ export class TutorialPartController extends BaseController {
  private busy=false;
  private finished=false;
  private timer=0;
- private glowTimer=0;
+ private guide?:TutorialActionGuide;
+ private guideFrame=0;
  private redirected=false;
  private handOpen=false;
  private unsub:()=>void=()=>{};
@@ -35,11 +38,12 @@ export class TutorialPartController extends BaseController {
    this.tour=new TutorialSpotlight(root,guided,{label:TUTORIAL_PARTS[part].title,state:()=>this.busy?null:this.run.state,onComplete:()=>{this.tour=undefined;this.markComplete();this.next(part+1);},onExit:()=>this.exits.onHome()});
    return;
   }
-  this.mountCoach();
+  this.guide=new TutorialActionGuide();this.mountCoach();
+  const track=()=>{if(this.dead)return;const open=!!this.root.querySelector('.game.hand-open');if(open!==this.handOpen){this.handOpen=open;this.render();}else this.glow();this.guideFrame=requestAnimationFrame(track);};this.guideFrame=requestAnimationFrame(track);
  }
  private mountCoach():void{
   this.host=document.createElement('aside');this.host.className='part-coach is-intro';this.host.innerHTML='<div class="part-zeno" aria-hidden="true"></div><div class="part-speech zeno-speech"></div>';this.root.append(this.host);this.speech=this.host.querySelector('.part-speech')!;this.spirit=mountManaSpirit(this.host.querySelector('.part-zeno')!);
-  this.unsub=onLangChange(()=>this.render());this.render();this.glowTimer=window.setInterval(()=>{const open=!!this.root.querySelector('.game.hand-open');if(open!==this.handOpen){this.handOpen=open;this.render();}else this.glow();},350);
+  this.unsub=onLangChange(()=>this.render());this.render();
  }
  private canAct():boolean{return !document.querySelector('.game-loading')&&!this.intro&&!this.busy&&!this.finished&&this.run.phase==='play'&&(!this.tour||this.tour.allowsGame());}
  override onEndTurn():void{if(!this.canAct())return;if(!isTutorialActionAllowed(this.run,{type:'endTurn'})){this.redirected=true;this.render();return;}super.onEndTurn();}
@@ -68,14 +72,15 @@ export class TutorialPartController extends BaseController {
   if(this.finished){this.next(this.part+1);return;}
   if(this.intro){this.intro=false;this.render();this.maybeBot();return;}
   if(this.run.phase!=='review')return;
-  const res=advanceLesson(this.run,{type:'continueLesson'});if(this.run.done)this.finish();else{this.applyResult(res,false);this.maybeBot();}this.render();
+  const res=advanceLesson(this.run,{type:'continueLesson'});if(this.run.done)this.finish();else{this.busy=true;this.view.syncTurn(res.state,true);this.applyResult(res,false);this.afterPresentation(()=>{if(this.dead)return;this.view.syncTurn(this.run.state,true);this.view.render(this.run.state);this.busy=false;this.render();this.maybeBot();});}this.render();
  }
  private markComplete():void{try{localStorage.setItem(tutorialPartKey(this.part,this.accountId),'1');}catch{}}
  private finish():void{this.finished=true;this.markComplete();this.spirit?.celebrate();}
  private render():void{
   if(!this.host||!this.speech)return;const meta=TUTORIAL_PARTS[this.part],lang=getLang(),review=!this.intro&&this.run.phase==='review';
   const cue=!this.intro&&!this.finished&&!review?tutorialCue(this.run,!!this.root.querySelector('.game.hand-open')):null;
-  if(cue?.action==='attack'&&this.run.state.players[1].field.length)cue.instruction={ja:'指が示す味方を、相手モンスターへドラッグしよう。',en:'Drag the indicated ally onto an enemy monster.',ko:'손가락이 가리키는 아군을 상대 몬스터로 드래그해.'};
+  if(cue?.action==='attack'&&this.run.state.players[1].field.length&&!this.attacker()?.directOnly)cue.instruction={ja:'光っている味方を、矢印の先の相手へドラッグしよう。',en:'Drag the indicated ally onto an enemy monster.',ko:'빛나는 아군을 화살표 끝의 상대에게 드래그해.'};
+  if(cue?.action==='attack'&&this.run.state.players[1].field.length&&this.attacker()?.directOnly)cue.instruction={ja:'光っている味方を、上の相手プロフィールへドラッグしよう。',en:'Drag the glowing ally onto the opponent’s portrait above.',ko:'빛나는 아군을 위쪽 상대 프로필로 드래그해.'};
   const title=this.finished?['いいね、できた！','You did it!','좋아, 해냈어!'][lang==='ja'?0:lang==='en'?1:2]:this.intro?['一緒にやってみよう！','Let’s try it together!','같이 해 보자!'][lang==='ja'?0:lang==='en'?1:2]:review?['ほら、変わったね。','See what changed?','봐, 달라졌지?'][lang==='ja'?0:lang==='en'?1:2]:cue!.instruction[lang];
   let body=this.intro?meta.intro[lang]:this.finished||review?currentScene(this.run).result[lang]:(cue?.reason??currentScene(this.run).intro)[lang];
   if(this.redirected)body=(lang==='ja'?'まずは光ってるところでやってみよう。ぼくがついてるよ。 ':lang==='en'?'Use the glowing target for the instructed action first. ':'지금은 빛나는 대상에 안내된 행동을 먼저 해 봐. ')+body;
@@ -91,10 +96,18 @@ export class TutorialPartController extends BaseController {
   else{const hint=document.createElement('span');hint.textContent=this.busy?(lang==='ja'?'進行中…':lang==='en'?'Resolving…':'진행 중…'):(lang==='ja'?'やってみよう！':lang==='en'?'Give it a try!':'직접 해 봐!');footer.append(hint);}
   const content=document.createElement('div');content.className='zeno-speech-content';content.append(header,heading,paragraph,footer);this.speech.append(content);this.glow();
  }
+ private attacker(){const cue=tutorialCue(this.run,this.handOpen);return this.run.state.players[0].field.find(m=>(!cue.cardId||m.id===cue.cardId)&&monsterCanAttack(this.run.state,this.run.state.players[0],m));}
  private glow():void{
-  document.querySelectorAll('.part-highlight').forEach(e=>e.classList.remove('part-highlight','part-pointed'));if(this.intro||this.finished||this.busy||this.run.phase!=='play')return;
-  const cue=tutorialCue(this.run,this.handOpen);let selector=cue.action==='buyMarket'?`#fixedMarket .card[data-card-id="${cue.cardId}"]`:cue.action==='buySupply'?`#supplyMarket .card[data-card-id="${cue.cardId}"]`:cue.action==='refresh'?'#refreshBtn':cue.action==='play'?(this.handOpen?`#hand .card[data-card-id="${cue.cardId}"]`:'#hand'):cue.action==='attack'?`#meRow .zone-mon .card${cue.cardId?`[data-card-id="${cue.cardId}"]`:''}`:cue.action==='target'?'#oppRow .zone-mon .card':cue.action==='endTurn'?'#endBtn':'';
-  if(selector)document.querySelectorAll(selector).forEach(e=>{e.classList.add('part-highlight');if(cue.action==='attack'||cue.action==='play'&&this.handOpen)e.classList.add('part-pointed');});
+  if(!this.host||!this.guide)return;
+  const modal=guideElement('#zoomOverlay .zoom-wrap')??guideElement('.duel-overlay .modal');
+  this.host.hidden=!!modal;
+  if(this.intro||this.finished||this.busy||this.run.phase!=='play'||modal){this.guide.hide();placeTutorialCoach(this.host,modal?[modal.getBoundingClientRect()]:[]);return;}
+  const cue=tutorialCue(this.run,this.handOpen),attacker=cue.action==='attack'?this.attacker():null;
+  const selector=cue.action==='buyMarket'?`#fixedMarket .card[data-card-id="${cue.cardId}"]`:cue.action==='buySupply'?`#supplyMarket .card[data-card-id="${cue.cardId}"]`:cue.action==='refresh'?'#refreshBtn':cue.action==='play'?(this.handOpen?`#hand .card[data-card-id="${cue.cardId}"]`:'#hand'):cue.action==='attack'&&attacker?`#meRow .card[data-uid="${attacker.uid}"]`:cue.action==='target'?'#oppRow .zone-mon .card':cue.action==='endTurn'?'#endBtn':'';
+  const targetId=currentScene(this.run).steps[this.run.step]?.targetId;
+  const dest=cue.action==='play'&&this.handOpen?'#meRow .zone-mon':cue.action==='attack'&&attacker&&this.run.state.players[1].field.length?(attacker.directOnly?'#portraitOpp .pt-ring':`#oppRow .zone-mon .card${targetId?`[data-card-id="${targetId}"]`:''}`):undefined;
+  const avoid=this.guide.update(guideElement(selector),guideElement(dest));
+  placeTutorialCoach(this.host,avoid);
  }
- destroy():void{clearTimeout(this.timer);clearInterval(this.glowTimer);this.unsub();this.tour?.destroy();document.querySelectorAll('.part-highlight').forEach(e=>e.classList.remove('part-highlight','part-pointed'));this.spirit?.destroy();this.host?.remove();super.destroy();}
+ destroy():void{cancelAnimationFrame(this.guideFrame);this.guide?.destroy();clearTimeout(this.timer);this.unsub();this.tour?.destroy();document.querySelectorAll('.part-highlight').forEach(e=>e.classList.remove('part-highlight','part-pointed'));this.spirit?.destroy();this.host?.remove();super.destroy();}
 }

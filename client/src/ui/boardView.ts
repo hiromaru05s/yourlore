@@ -387,7 +387,9 @@ export class GameView {
     (this.q('endBtn') as HTMLButtonElement).disabled = true;
   }
   /** Logical ownership changes immediately, independently of visual playback. */
-  syncTurn(g: GameState): void {
+  syncTurn(g: GameState, newPracticeScene = false): void {
+    // A new tutorial exercise is a different local game, not a stale duel snapshot.
+    if(newPracticeScene){this.turnSnapshot=-1;this.endingTurn=false;}
     if(g.turn < this.turnSnapshot)return;
     this.turnSnapshot=g.turn;
     this.anesthesia.advanceTurn(g.turn);

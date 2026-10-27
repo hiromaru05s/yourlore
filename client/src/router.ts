@@ -1,3 +1,4 @@
+import {TUTORIAL_PARTS} from './shared/tutorialParts';
 import {showUsernameSetup} from './ui/usernameSetup';
 import {prepareMenuCache} from './ui/menuCache';
 import { getLang } from './i18n';
@@ -176,9 +177,9 @@ export class App {
   tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this), "tutorial"); }
   tutorialGame(lesson = 0): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial", lesson })); }
   tutorialPart(part = 0): void {
-    const index=Number.isFinite(part)?Math.max(0,Math.min(12,Math.floor(part))):0;
-    if(index===11){setPresence('menu');this.swap(()=>mountTutorialHomePart(this),'home');return;}
-    if(index===12){setPresence('menu');this.swap(()=>mountTutorialDeckPart(this),'deck');return;}
+    const index=Number.isFinite(part)?Math.max(0,Math.min(TUTORIAL_PARTS.length-1,Math.floor(part))):0;
+    if(TUTORIAL_PARTS[index].kind==='home'){setPresence('menu');this.swap(()=>mountTutorialHomePart(this),'home');return;}
+    if(TUTORIAL_PARTS[index].kind==='deck'){setPresence('menu');this.swap(()=>mountTutorialDeckPart(this),'deck');return;}
     setPresence('bot');aCapture('game_start',{mode:'tutorial_part',part:index+1});this.swap(()=>mountGame(this,{mode:'tutorial',part:index}));
   }
   tutorialCards(): void { setPresence("menu"); this.swap(()=>mountTutorialCardsPart(this),"cards"); }
