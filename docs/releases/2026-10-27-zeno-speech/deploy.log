@@ -1,0 +1,687 @@
+
+> lore-tcg@0.1.0 deploy
+> node scripts/deploy-guard.mjs production
+
+Preparing worktree (detached HEAD be393a19)
+Updating files:  11% (1624/13560)
+Updating files:  12% (1628/13560)
+Updating files:  13% (1763/13560)
+Updating files:  14% (1899/13560)
+Updating files:  15% (2034/13560)
+Updating files:  16% (2170/13560)
+Updating files:  17% (2306/13560)
+Updating files:  18% (2441/13560)
+Updating files:  19% (2577/13560)
+Updating files:  19% (2654/13560)
+Updating files:  20% (2712/13560)
+Updating files:  21% (2848/13560)
+Updating files:  22% (2984/13560)
+Updating files:  23% (3119/13560)
+Updating files:  24% (3255/13560)
+Updating files:  25% (3390/13560)
+Updating files:  26% (3526/13560)
+Updating files:  27% (3662/13560)
+Updating files:  28% (3797/13560)
+Updating files:  29% (3933/13560)
+Updating files:  30% (4068/13560)
+Updating files:  31% (4204/13560)
+Updating files:  32% (4340/13560)
+Updating files:  33% (4475/13560)
+Updating files:  34% (4611/13560)
+Updating files:  35% (4746/13560)
+Updating files:  36% (4882/13560)
+Updating files:  37% (5018/13560)
+Updating files:  37% (5089/13560)
+Updating files:  38% (5153/13560)
+Updating files:  39% (5289/13560)
+Updating files:  40% (5424/13560)
+Updating files:  41% (5560/13560)
+Updating files:  42% (5696/13560)
+Updating files:  43% (5831/13560)
+Updating files:  44% (5967/13560)
+Updating files:  44% (6025/13560)
+Updating files:  45% (6102/13560)
+Updating files:  46% (6238/13560)
+Updating files:  47% (6374/13560)
+Updating files:  48% (6509/13560)
+Updating files:  48% (6607/13560)
+Updating files:  49% (6645/13560)
+Updating files:  50% (6780/13560)
+Updating files:  51% (6916/13560)
+Updating files:  52% (7052/13560)
+Updating files:  53% (7187/13560)
+Updating files:  54% (7323/13560)
+Updating files:  54% (7451/13560)
+Updating files:  55% (7458/13560)
+Updating files:  56% (7594/13560)
+Updating files:  57% (7730/13560)
+Updating files:  58% (7865/13560)
+Updating files:  59% (8001/13560)
+Updating files:  60% (8136/13560)
+Updating files:  60% (8151/13560)
+Updating files:  61% (8272/13560)
+Updating files:  62% (8408/13560)
+Updating files:  63% (8543/13560)
+Updating files:  64% (8679/13560)
+Updating files:  65% (8814/13560)
+Updating files:  65% (8870/13560)
+Updating files:  66% (8950/13560)
+Updating files:  67% (9086/13560)
+Updating files:  68% (9221/13560)
+Updating files:  69% (9357/13560)
+Updating files:  70% (9492/13560)
+Updating files:  70% (9553/13560)
+Updating files:  71% (9628/13560)
+Updating files:  72% (9764/13560)
+Updating files:  73% (9899/13560)
+Updating files:  74% (10035/13560)
+Updating files:  74% (10133/13560)
+Updating files:  75% (10170/13560)
+Updating files:  76% (10306/13560)
+Updating files:  77% (10442/13560)
+Updating files:  78% (10577/13560)
+Updating files:  79% (10713/13560)
+Updating files:  79% (10814/13560)
+Updating files:  80% (10848/13560)
+Updating files:  81% (10984/13560)
+Updating files:  82% (11120/13560)
+Updating files:  83% (11255/13560)
+Updating files:  84% (11391/13560)
+Updating files:  84% (11521/13560)
+Updating files:  85% (11526/13560)
+Updating files:  86% (11662/13560)
+Updating files:  87% (11798/13560)
+Updating files:  87% (11903/13560)
+Updating files:  88% (11933/13560)
+Updating files:  89% (12069/13560)
+Updating files:  90% (12204/13560)
+Updating files:  91% (12340/13560)
+Updating files:  92% (12476/13560)
+Updating files:  92% (12584/13560)
+Updating files:  93% (12611/13560)
+Updating files:  94% (12747/13560)
+Updating files:  95% (12882/13560)
+Updating files:  96% (13018/13560)
+Updating files:  97% (13154/13560)
+Updating files:  98% (13289/13560)
+Updating files:  99% (13425/13560)
+Updating files: 100% (13560/13560)
+Updating files: 100% (13560/13560), done.
+
+added 102 packages, and audited 105 packages in 4s
+
+4 vulnerabilities (2 moderate, 2 high)
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+PASS production database tables, columns, types and required indexes
+(node:68543) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+> lore-tcg@0.1.0 typecheck
+> npm --workspace client run typecheck && npm --workspace server run typecheck
+
+
+> lore-client@0.1.0 typecheck
+> tsc --noEmit
+
+
+> lore-server@0.1.0 typecheck
+> tsc --noEmit
+
+
+> lore-tcg@0.1.0 test:production
+> node scripts/test-production.mjs
+
+PASS tests/db-schema-contract.mjs
+PASS tests/staging-audit-fixtures.mjs
+PASS tests/user-data-reset.mjs
+PASS tests/final-backend-audit.mjs
+PASS tests/network-efficiency.mjs
+PASS tests/startup-session.mjs
+PASS tests/legacy-card-rework.mjs
+PASS tests/legacy-card-rework-server.mjs
+PASS tests/cull-support-rework.mjs
+PASS tests/cull-support-server.mjs
+PASS tests/background-music.mjs
+PASS tests/goblin-expansion.mjs
+PASS tests/goblin-expansion-server.mjs
+PASS tests/tribe-pact-defeat.mjs
+PASS tests/balance-v60-server.mjs
+PASS tests/balance-v60.mjs
+PASS tests/username-ui.mjs
+PASS tests/private-usernames.mjs
+PASS tests/auth-lifecycle.mjs
+PASS tests/logout-recovery.mjs
+PASS tests/backend-audit-oct16.mjs
+PASS tests/cull-exile-events.mjs
+PASS tests/supply-persistence.mjs
+PASS tests/startup-recovery.mjs
+PASS tests/web-fonts.mjs
+PASS tests/webgl-renderer.mjs
+PASS tests/duel-scene-changes.mjs
+PASS tests/menu-packs.mjs
+PASS tests/castle-summon.mjs
+PASS tests/duel-rewards.mjs
+PASS tests/poison-summon.mjs
+PASS tests/erosion.mjs
+PASS tests/menu-cache.mjs
+PASS tests/asset-transfer.mjs
+PASS tests/menu-preparation.mjs
+PASS tests/game-admission.mjs
+PASS tests/gambler-geometry-performance.mjs
+PASS tests/duel-fonts.mjs
+PASS tests/home-spirit-cache.mjs
+PASS tests/reverse-pitch.mjs
+PASS tests/rune-replay.mjs
+PASS tests/timewarp.mjs
+PASS tests/timewarp-lifecycle.mjs
+PASS tests/forbidden-ritual.mjs
+PASS tests/dragon-fusion.mjs
+PASS tests/hatch-summon.mjs
+PASS tests/hooded-seekers.mjs
+PASS tests/chosen-victory.mjs
+PASS tests/attack-vfx.mjs
+PASS tests/assassin-attack.mjs
+PASS tests/counter-animation.mjs
+PASS tests/combat-tempo.mjs
+PASS tests/audio-contact-rules.mjs
+PASS tests/audio-v3.mjs
+PASS tests/balance-v52.mjs
+PASS tests/balance-v57.mjs
+PASS tests/balance-v58.mjs
+PASS tests/balance-v58-server.mjs
+PASS scripts/check-card-text.mjs
+PASS tests/card-wording.mjs
+PASS tests/card-wording-render.mjs
+PASS tests/passive-explanations.mjs
+PASS tests/card-effect-ux.mjs
+PASS tests/card-references.mjs
+PASS tests/biblion-vfx.mjs
+PASS tests/connected-return-motion.mjs
+PASS tests/dew-shield-v54.mjs
+PASS tests/dice-model.mjs
+PASS tests/dice-source.mjs
+PASS tests/duel-ui.mjs
+PASS tests/outcome-finale.mjs
+PASS tests/mana-rupture.mjs
+PASS tests/expansion-v50.mjs
+PASS tests/dominion-rework.mjs
+PASS tests/fate-wheel.mjs
+PASS tests/fate-wheel-ui.mjs
+PASS tests/graphics-capability.mjs
+PASS tests/grounded-motion.mjs
+PASS tests/half-elf-v48.mjs
+PASS tests/hand-condition-rules.mjs
+PASS tests/health-cosmetics-v53.mjs
+PASS tests/home-entrance-parity.mjs
+PASS tests/home-entrance-lifecycle.mjs
+PASS tests/library-furniture-model.mjs
+PASS tests/lounge-horizon.mjs
+PASS tests/lounge-rank.mjs
+PASS tests/lounge-settlement.mjs
+PASS tests/menu-records.mjs
+PASS tests/menu-selected.mjs
+PASS tests/mana-spirit-motion.mjs
+PASS tests/moon-rabbit-preview.mjs
+PASS tests/zeno-interaction.mjs
+PASS tests/zeno-toon.mjs
+PASS tests/monster-animation-rules.mjs
+PASS tests/dual-ready.mjs
+PASS tests/monster-effect-activation.mjs
+PASS tests/motion-v2.mjs
+PASS tests/opening-hands.mjs
+PASS tests/paper-card.mjs
+PASS tests/pile-stock.mjs
+PASS tests/portal-return-motion.mjs
+PASS tests/purchase-air.mjs
+PASS tests/purchase-vfx.mjs
+PASS tests/quest-quick.mjs
+PASS tests/quest-pact.mjs
+PASS tests/quick-playback.mjs
+PASS tests/rank-emblem.mjs
+PASS tests/rank-sound.mjs
+PASS tests/release-furniture-model.mjs
+PASS tests/rift-frame-highlight.mjs
+PASS tests/rift-fold.mjs
+PASS tests/rift-transmute.mjs
+PASS tests/solid-draw.mjs
+PASS tests/stagecraft-models.mjs
+PASS tests/stat-rise.mjs
+PASS tests/multi-target-buff.mjs
+PASS tests/trap-related-rework.mjs
+PASS tests/trap-removal.mjs
+PASS tests/ceremony-audio-aim.mjs
+PASS tests/trap-removal-tutorial.mjs
+PASS tests/tutorial-academy.mjs
+PASS tests/tutorial-pace.mjs
+PASS tests/production-security.mjs
+PASS tests/production-bc.mjs
+PASS tests/match-bots.mjs
+PASS tests/bot-worker.mjs
+PASS tests/asset-readiness-retry.mjs
+PASS tests/purchase-air-worker.mjs
+PASS tests/duel-opening-server.mjs
+PASS tests/dew-shield-server.mjs
+PASS tests/deck-hand-editor.mjs
+PASS tests/turn-banner.mjs
+PASS tests/opening-approved.mjs
+PASS tests/mimic-approved.mjs
+PASS tests/slate-summon.mjs
+PASS tests/summon-card-contour.mjs
+PASS tests/dungeon-summon.mjs
+PASS tests/casino-summon.mjs
+PASS tests/spell-frame.mjs
+PASS tests/mana-destruction.mjs
+PASS tests/decay-dissolve.mjs
+PASS tests/decay-counter-grant.mjs
+PASS tests/elemental-adoption.mjs
+PASS tests/persistent-flight.mjs
+PASS tests/tribe-synergy-rules.mjs
+PASS tests/tribe-presentation.mjs
+PASS tests/golem-guts.mjs
+PASS tests/guts-endurance.mjs
+PASS tests/zero-attack-rule.mjs
+PASS tests/zero-attack-balance.mjs
+PASS tests/verdant-summon.mjs
+PASS tests/critical-trigger-chains.mjs
+PASS tests/status-grant.mjs
+PASS tests/status-extinction.mjs
+PASS tests/target-choice-ux.mjs
+PASS tests/target-choice-ui.mjs
+PASS tests/target-choice-server.mjs
+PASS tests/dew-grant.mjs
+PASS tests/duel-bugfix-oct08.mjs
+PASS tests/cross-system-oct08.mjs
+PASS tests/combat-anchor.mjs
+PASS tests/chosen-heroes-summon.mjs
+PASS tests/golem-shell.mjs
+PASS tests/gambler-summon.mjs
+PASS tests/mercenary-summon.mjs
+PASS tests/mage-summon.mjs
+PASS tests/assassin-summon.mjs
+PASS tests/merchant-runtime.mjs
+PASS tests/evade-refraction.mjs
+PASS tests/vampire-summon.mjs
+PASS tests/vampire-geometry.mjs
+PASS tests/taunt-shield.mjs
+PASS tests/void-summon.mjs
+PASS tests/silence-summon.mjs
+PASS tests/bot-strength.mjs
+PASS tests/bot-tactics.mjs
+PASS tests/bot-market-strategy.mjs
+PASS tests/bot-adaptive.mjs
+PASS tests/bot-rework.mjs
+PASS tests/bot-npcs.mjs
+PASS tests/bot-server-challenge.cjs
+PASS tests/bot-simulation.mjs
+PASS tests/gacha-azure-motion.mjs
+PASS tests/weaponmaster-summon.mjs
+PASS tests/shield-titan-summon.mjs
+PASS tests/blood-rite.mjs
+PASS tests/massacre.mjs
+PASS tests/treason.mjs
+PASS tests/infinity-cull.mjs
+PASS tests/nova.mjs
+PASS tests/void-shot.mjs
+PASS tests/creation.mjs
+PASS tests/void-crystal-rules.mjs
+PASS tests/dimension-void.mjs
+PASS tests/rebirth.mjs
+PASS tests/dungeon-floor.mjs
+PASS tests/trick-room.mjs
+PASS tests/curse.mjs
+PASS tests/soul-harvest.mjs
+PASS tests/loading-cache.mjs
+PASS tests/startup-assets.mjs
+PASS tests/loading-readiness.mjs
+PASS tests/pile-geometry-cache.mjs
+PASS tests/origin-rite.mjs
+PASS tests/anesthesia.mjs
+PASS tests/anesthesia-runtime.mjs
+PASS tests/growth.mjs
+PASS tests/ember-debt.mjs
+PASS tests/market-crisis.mjs
+PASS tests/market-crash.mjs
+PASS tests/starter-collection.mjs
+PASS tests/player-experience.mjs
+PASS tests/invite-rewards.mjs
+PASS tests/gift-inbox.mjs
+PASS tests/gacha-cosmetics.mjs
+PASS tests/deck-appearance.mjs
+PASS tests/audit-reward-authority.mjs
+PASS tests/resume-account.mjs
+PASS tests/medals.mjs
+PASS tests/bot-opening-profile.mjs
+PASS tests/battle-action-log.mjs
+PASS tests/battle-log-ui.mjs
+PASS tests/turn-clock.mjs
+PASS tests/cards-starter-category.mjs
+PASS tests/quick-spell-frame.mjs
+PASS tests/touch-activation.mjs
+PASS tests/home-distant-birds.mjs
+PASS tests/notification-badges.mjs
+PASS tests/starter-rift-rework.mjs
+PASS tests/starter-rift-server.mjs
+PASS tests/ranked-decks.mjs
+PASS tests/ranked-profile.mjs
+PASS tests/rift-ores.mjs
+PASS tests/rift-ores-server.mjs
+PASS tests/balance-caps.mjs
+PASS tests/balance-caps-server.mjs
+PASS tests/sage-goblin-balance.mjs
+PASS tests/sage-goblin-server.mjs
+PASS tests/card-counters.mjs
+PASS tests/deck-drag.mjs
+PASS tests/enchant-time-ui.mjs
+PASS tests/card-frames.mjs
+PASS tests/rift-train-bank.mjs
+PASS tests/rift-train-bank-server.mjs
+PASS tests/duel-scene-recovery.mjs
+PASS tests/bot-difficulty.mjs
+PASS tests/bot-rotation-runtime.mjs
+PASS tests/tutorial-parts.mjs
+PASS tests/home-duel-ink-lifecycle.mjs
+249/249 passed; historical/browser scopes are explicit in production-suite.json
+
+> lore-tcg@0.1.0 build
+> node scripts/guard-design.mjs && npm --workspace client run build
+
+✓ guard-design: ok
+
+> lore-client@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+
+/assets/startup-library-wide-888ec274d6a7e913cd69.webp referenced in /assets/startup-library-wide-888ec274d6a7e913cd69.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/startup-azure-card-v1-c8edc164c94578786764.webp referenced in /assets/startup-azure-card-v1-c8edc164c94578786764.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp referenced in /assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp referenced in /assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/startup-portrait-1c47aeca9c8d88436147.webp referenced in /assets/startup-portrait-1c47aeca9c8d88436147.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/assets/startup-clouds-9c0b00f0fd0a8270ab0a.webp referenced in /assets/startup-clouds-9c0b00f0fd0a8270ab0a.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 807 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/gacha-minimal-three.html                                                    0.52 kB │ gzip:   0.36 kB
+dist/cosmetic-studio.html                                                        0.71 kB │ gzip:   0.44 kB
+dist/assets/purchaseAir.worker-BK14oJEX.js                                       1.33 kB
+dist/shield-titan-runtime.html                                                   1.34 kB │ gzip:   0.53 kB
+dist/assets/raster.worker-Dbjti9vv.js                                            2.46 kB
+dist/assets/duel-preload-ac14e7d2f64044e8fe7553fd.json                           4.07 kB │ gzip:   1.57 kB
+dist/index.html                                                                  8.87 kB │ gzip:   3.24 kB
+dist/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp             32.54 kB
+dist/assets/startup-portrait-1c47aeca9c8d88436147.webp                          44.96 kB
+dist/assets/startup-azure-card-v1-c8edc164c94578786764.webp                     94.47 kB
+dist/assets/startup-clouds-9c0b00f0fd0a8270ab0a.webp                           290.92 kB
+dist/assets/startup-ivy-d89660aa7f92857fafbf.webp                              377.80 kB
+dist/assets/menu-manifest-4df0e039897d65c0a1dc.json                            423.03 kB │ gzip: 114.01 kB
+dist/assets/startup-library-wide-888ec274d6a7e913cd69.webp                     507.68 kB
+dist/assets/coiling-fire-BXM1fmiB.webp                                         510.31 kB
+dist/assets/startup-frame-pair-lossless-81cca2bd9f27eb7d8364.webp              520.27 kB
+dist/assets/startup-lore-panel-azure-cut-lossless-6b47bb56ee8a50df7e22.webp    732.64 kB
+dist/assets/bot.worker-BY_X1MOU.js                                             911.92 kB
+dist/assets/startup-normal-lossless-b38a2715461dc883616d.webp                1,091.33 kB
+dist/assets/startup-single-lossless-420374dc8d58a770d32b.webp                1,322.62 kB
+dist/assets/art-pack-a83a28b600a65fb176e2d6a6.bin                            1,350.32 kB
+dist/assets/startup-ranked-lossless-48e0f8ecf5d1492d9334.webp                1,351.96 kB
+dist/assets/art-pack-6778e8bd02aaa60d5cfe5b6d.bin                            1,531.60 kB
+dist/assets/art-pack-ce14a65b8797ae028148e10c.bin                            1,570.17 kB
+dist/assets/art-pack-6cf9d35a868aca4038fe3631.bin                            1,766.61 kB
+dist/assets/skull-apparition-jaxyBytm.png                                    1,783.19 kB
+dist/assets/avatar-blue-Dgu4sbnI.png                                         2,148.69 kB
+dist/assets/art-pack-76674adaa5941dd060da22fd.bin                            2,224.36 kB
+dist/assets/avatar-red-CyF_7AzU.png                                          2,247.66 kB
+dist/assets/art-pack-759990cce666b6097f9ce067.bin                            2,473.92 kB
+dist/assets/art-pack-9875c78a7c13c462fcc963f1.bin                            2,677.67 kB
+dist/assets/art-pack-f3348ce12873cd7b9e8dda03.bin                            2,790.65 kB
+dist/assets/art-pack-56ac678ffca82e1e8b073235.bin                            2,929.55 kB
+dist/assets/art-pack-f226887835c8ac43430e3ed5.bin                            3,064.03 kB
+dist/assets/art-pack-1ba15524d67e90399fd9b898.bin                            3,138.08 kB
+dist/assets/art-pack-1712045c2b7f14c0d5e1b916.bin                            3,284.50 kB
+dist/assets/art-pack-ef50d95819b045b0e39d527a.bin                            3,297.89 kB
+dist/assets/art-pack-9740ead224f2871020b0a63c.bin                            3,306.65 kB
+dist/assets/art-pack-c96639950e5b6d889713bfce.bin                            3,321.74 kB
+dist/assets/art-pack-178cda064bdce0d208271ca5.bin                            3,599.90 kB
+dist/assets/art-pack-70ff3b4546c3019cb33f4e03.bin                            3,609.37 kB
+dist/assets/art-pack-1d438be64cbd866847b3f4c3.bin                            3,621.80 kB
+dist/assets/art-pack-805918c2d00c45c97466b85f.bin                            3,636.89 kB
+dist/assets/art-pack-4f12b3d39a8c76951d066932.bin                            3,650.65 kB
+dist/assets/art-pack-73382bd9dfdcafefdeaf64c3.bin                            3,715.44 kB
+dist/assets/art-pack-895f2661de9bed100744f022.bin                            3,724.60 kB
+dist/assets/cover-1-Ca1f6w1Z.png                                             3,780.89 kB
+dist/assets/art-pack-546f8b02abc4c02e5219f616.bin                            3,814.92 kB
+dist/assets/art-pack-02e57efebf37288802d4fb5f.bin                            3,860.38 kB
+dist/assets/art-pack-3d72e34fa6bc2dd4da024712.bin                            3,860.51 kB
+dist/assets/art-pack-5218f074815130f17eafc87d.bin                            3,863.70 kB
+dist/assets/art-pack-82da3f6834a88e363cc955b0.bin                            3,961.28 kB
+dist/assets/art-pack-b1517524776596ab0fbfbb07.bin                            4,024.10 kB
+dist/assets/art-pack-b88cae3937fc43dc3774d3b0.bin                            4,040.53 kB
+dist/assets/art-pack-c32c8a803b3ff82bc69b4df4.bin                            4,041.88 kB
+dist/assets/art-pack-ebe95066c865fbebe5aee47e.bin                            4,050.42 kB
+dist/assets/art-pack-040a32f46e30a30f4e471b9d.bin                            4,061.09 kB
+dist/assets/art-pack-aab1e5e66efd3b5b4f6574df.bin                            4,070.66 kB
+dist/assets/art-pack-e286271524cfcfa9aa6f7f95.bin                            4,077.92 kB
+dist/assets/art-pack-2c6d5203640f26eb778f1f01.bin                            4,078.44 kB
+dist/assets/art-pack-ebb652ede878ecb2cff7bb4b.bin                            4,081.53 kB
+dist/assets/art-pack-944f0fa5884bf4c7cc48d90a.bin                            4,082.79 kB
+dist/assets/art-pack-ecef2d4ed92a5a7e4294b4a7.bin                            4,083.67 kB
+dist/assets/art-pack-1e7ba6f980e74295a59c670a.bin                            4,094.22 kB
+dist/assets/art-pack-19a44c4ce4ed5ffa0bf491fd.bin                            4,095.53 kB
+dist/assets/art-pack-eaf92f9e8d94cacfe5b2c646.bin                            4,102.10 kB
+dist/assets/art-pack-bb46f6caf43c47cbaf3a26e6.bin                            4,102.74 kB
+dist/assets/art-pack-88a4bec655aad86827bc5676.bin                            4,104.02 kB
+dist/assets/art-pack-22f6b43aa45bce05ebd898a8.bin                            4,109.04 kB
+dist/assets/art-pack-8cb759a8f7aa1fa4b975ae08.bin                            4,114.14 kB
+dist/assets/art-pack-ad2b8c936c1cba0074abdab1.bin                            4,117.33 kB
+dist/assets/art-pack-612865d5113eb92d4b9abf22.bin                            4,118.92 kB
+dist/assets/art-pack-d5396763fdb7e93cac113eeb.bin                            4,130.13 kB
+dist/assets/art-pack-000f243732807316e70878d3.bin                            4,143.17 kB
+dist/assets/art-pack-d2b5fa48d2c8d1a2c10040b4.bin                            4,145.36 kB
+dist/assets/art-pack-1224c18246d6e8f492772a17.bin                            4,150.93 kB
+dist/assets/art-pack-d2ab1e4535627bba6729fb4a.bin                            4,158.19 kB
+dist/assets/art-pack-05dc51402ba2ea0bdbe06126.bin                            4,165.94 kB
+dist/assets/art-pack-18c87ae47cd1dd93c929aaf7.bin                            4,166.69 kB
+dist/assets/art-pack-fb23c09ed4de7e060395edc7.bin                            4,168.92 kB
+dist/assets/art-pack-f91d29386dcabe779609af53.bin                            4,169.46 kB
+dist/assets/art-pack-159c9e14a4bfb2cd420e782b.bin                            4,179.64 kB
+dist/assets/art-pack-2411e2dee4f753028e611c60.bin                            4,180.86 kB
+dist/assets/art-pack-0225bea9998c02765e3e35c0.bin                            4,191.02 kB
+dist/assets/art-pack-b8fab76fb837a90075aac0c2.bin                            4,192.77 kB
+dist/assets/art-pack-24aa35984b294d5a475d2774.bin                            4,193.09 kB
+dist/assets/art-pack-8c899944c04171f678552149.bin                            4,193.97 kB
+dist/assets/art-pack-1f5855ccd4adcb2bc2c4315b.bin                            5,118.92 kB
+dist/assets/runtime-Ch9eydv_.css                                                 0.21 kB │ gzip:   0.14 kB
+dist/assets/domSleeves-Dru0ykCE.css                                              0.29 kB │ gzip:   0.21 kB
+dist/assets/assetQueue-CNZBDA90.css                                              0.84 kB │ gzip:   0.43 kB
+dist/assets/style-BmSCny8F.css                                                   1.00 kB │ gzip:   0.54 kB
+dist/assets/passives-UDApamK7.css                                                2.17 kB │ gzip:   0.89 kB
+dist/assets/opponent-fbJVnZdc.css                                                2.79 kB │ gzip:   0.97 kB
+dist/assets/game-CeZ0_T_p.css                                                    3.60 kB │ gzip:   1.19 kB
+dist/assets/controller-bboUdfYs.css                                              3.73 kB │ gzip:   1.29 kB
+dist/assets/layout-CdbqZM8A.css                                                  7.47 kB │ gzip:   2.57 kB
+dist/assets/studio-CmgKc6nL.css                                                  8.77 kB │ gzip:   2.61 kB
+dist/assets/social-d18XrDA3.css                                                263.61 kB │ gzip:  56.51 kB
+dist/assets/main-CaZACBcM.css                                                1,063.25 kB │ gzip: 250.12 kB
+dist/assets/cosmeticPreviewBridge-Dp0XOZ5G.js                                    0.13 kB │ gzip:   0.12 kB
+dist/assets/deadline-RP-FvawS.js                                                 0.37 kB │ gzip:   0.24 kB
+dist/assets/selection-BZuIRH5R.js                                                0.44 kB │ gzip:   0.32 kB
+dist/assets/renderDensity-eCqR3GeM.js                                            0.55 kB │ gzip:   0.28 kB
+dist/assets/modulepreload-polyfill-B5Qt9EMX.js                                   0.71 kB │ gzip:   0.40 kB
+dist/assets/duelAssets-ZRPL7hp8.js                                               0.73 kB │ gzip:   0.39 kB
+dist/assets/catalog-CJmaorNf.js                                                  0.84 kB │ gzip:   0.58 kB
+dist/assets/sound-BK6p0hIb.js                                                    0.86 kB │ gzip:   0.53 kB
+dist/assets/assets-CbC96pFL.js                                                   1.10 kB │ gzip:   0.71 kB
+dist/assets/preload-helper-BXl3LOEh.js                                           1.11 kB │ gzip:   0.65 kB
+dist/assets/readingAssetCache-CX1gj3n5.js                                        1.18 kB │ gzip:   0.69 kB
+dist/assets/snapshot-BXSmW0kB.js                                                 1.59 kB │ gzip:   0.86 kB
+dist/assets/domSleeves-C1ZbK9Oz.js                                               1.62 kB │ gzip:   0.93 kB
+dist/assets/RoundedBoxGeometry-B10yqJEG.js                                       1.72 kB │ gzip:   0.81 kB
+dist/assets/domSleeve-D41zAxDt.js                                                1.83 kB │ gzip:   0.95 kB
+dist/assets/atelierThemes-C9ZNrm6d.js                                            1.93 kB │ gzip:   1.15 kB
+dist/assets/quietLuxury-CkXmh0Qh.js                                              1.98 kB │ gzip:   0.96 kB
+dist/assets/fateWheelRewind-DcJzDSnn.js                                          2.17 kB │ gzip:   1.19 kB
+dist/assets/gachaRewardSleeve-lURFAnos.js                                        2.51 kB │ gzip:   0.98 kB
+dist/assets/readingBoardLayout-C3T5YqXG.js                                       2.65 kB │ gzip:   1.22 kB
+dist/assets/shieldTitanRuntime-DrOstNzz.js                                       2.90 kB │ gzip:   1.70 kB
+dist/assets/furniture-BvmyDvdf.js                                                2.97 kB │ gzip:   1.51 kB
+dist/assets/materials-CkBqotTG.js                                                3.03 kB │ gzip:   1.44 kB
+dist/assets/materials-Cn__qwWU.js                                                3.10 kB │ gzip:   1.67 kB
+dist/assets/main-CzwkF0BU.js                                                     3.13 kB │ gzip:   1.68 kB
+dist/assets/sleeve-C5MxLzjC.js                                                   3.17 kB │ gzip:   1.65 kB
+dist/assets/runtime-CYV4ecC5.js                                                  3.34 kB │ gzip:   1.79 kB
+dist/assets/sleeve-1iIDjvq0.js                                                   3.37 kB │ gzip:   1.76 kB
+dist/assets/objects-BOipxpCX.js                                                  3.46 kB │ gzip:   1.65 kB
+dist/assets/readingCrystalOptics-BY1pN1Xa.js                                     3.68 kB │ gzip:   1.36 kB
+dist/assets/furniture-CwiQwFg6.js                                                3.82 kB │ gzip:   1.93 kB
+dist/assets/furniture-I0XzcNMR.js                                                3.86 kB │ gzip:   1.91 kB
+dist/assets/ornaments-BNsr6Igg.js                                                3.92 kB │ gzip:   1.98 kB
+dist/assets/pileModels-ZoxZ7vhx.js                                               3.93 kB │ gzip:   1.82 kB
+dist/assets/combatTempo-DIrsCH5A.js                                              4.08 kB │ gzip:   2.27 kB
+dist/assets/master-tongues-JaGCs-QV.js                                           4.22 kB │ gzip:   2.14 kB
+dist/assets/sleeve-C3gJrYz8.js                                                   4.30 kB │ gzip:   1.92 kB
+dist/assets/gachaRewardFurniture-AOHCK8kr.js                                     4.45 kB │ gzip:   1.96 kB
+dist/assets/sleeve-CF-uYpTS.js                                                   4.49 kB │ gzip:   2.27 kB
+dist/assets/runtime-BA7VV9jI.js                                                  4.51 kB │ gzip:   2.15 kB
+dist/assets/family-matter-CXetJIj6.js                                            4.56 kB │ gzip:   2.29 kB
+dist/assets/drawStock-uLKPgf1Z.js                                                4.66 kB │ gzip:   2.32 kB
+dist/assets/catalog-DyogvRcW.js                                                  4.78 kB │ gzip:   2.22 kB
+dist/assets/persistentFlightRenderer-BKpwkG02.js                                 4.80 kB │ gzip:   2.28 kB
+dist/assets/BufferGeometryUtils--blk-yqk.js                                      4.86 kB │ gzip:   1.46 kB
+dist/assets/sleeve-CxJt9NFh.js                                                   4.91 kB │ gzip:   2.66 kB
+dist/assets/coins-QTVrRc53.js                                                    5.25 kB │ gzip:   2.41 kB
+dist/assets/furniture-DOD6O0qj.js                                                5.27 kB │ gzip:   2.44 kB
+dist/assets/renderer-BDRtWfqa.js                                                 5.31 kB │ gzip:   2.40 kB
+dist/assets/renderer-N2T7U0VV.js                                                 5.34 kB │ gzip:   2.44 kB
+dist/assets/runtime-BMgeeAH6.js                                                  5.37 kB │ gzip:   2.64 kB
+dist/assets/audit-CfxFjhEy.js                                                    5.45 kB │ gzip:   2.88 kB
+dist/assets/darkRenderer-BadQpALC.js                                             5.91 kB │ gzip:   2.77 kB
+dist/assets/opponent-NdiHkXXp.js                                                 6.17 kB │ gzip:   2.57 kB
+dist/assets/royal-matter-CKxg3MZf.js                                             6.53 kB │ gzip:   3.10 kB
+dist/assets/renderer-DQM4-ZP8.js                                                 6.67 kB │ gzip:   3.07 kB
+dist/assets/board-DOAgghYC.js                                                    6.78 kB │ gzip:   3.06 kB
+dist/assets/renderer-D0BXuqu5.js                                                 6.80 kB │ gzip:   3.03 kB
+dist/assets/paperDraw-CKiiw2Ku.js                                                7.07 kB │ gzip:   3.29 kB
+dist/assets/runtime-CILG2ykI.js                                                  7.29 kB │ gzip:   3.34 kB
+dist/assets/diceScene-D8cYgJDU.js                                                7.42 kB │ gzip:   3.56 kB
+dist/assets/runtime-BUwl5R5R.js                                                  7.73 kB │ gzip:   3.51 kB
+dist/assets/runtime-DiU_Yf0Y.js                                                  7.77 kB │ gzip:   3.50 kB
+dist/assets/board-ClfmZVdp.js                                                    7.79 kB │ gzip:   3.37 kB
+dist/assets/sleeve-BP2ZviEf.js                                                   7.90 kB │ gzip:   3.67 kB
+dist/assets/scene-DdbAm7na.js                                                    8.42 kB │ gzip:   3.49 kB
+dist/assets/scene-BZt9jwCU.js                                                    8.44 kB │ gzip:   3.44 kB
+dist/assets/visual-BzW_5GNw.js                                                   8.50 kB │ gzip:   3.76 kB
+dist/assets/furniture-Dq2NQ5OR.js                                                8.60 kB │ gzip:   3.79 kB
+dist/assets/ceremonyScene-BCMPBQyQ.js                                            9.03 kB │ gzip:   4.02 kB
+dist/assets/materials-Bf1Ndw1N.js                                                9.06 kB │ gzip:   4.12 kB
+dist/assets/renderer-OK0pK9l4.js                                                 9.36 kB │ gzip:   4.49 kB
+dist/assets/renderer-CWj2MBQn.js                                                 9.71 kB │ gzip:   4.11 kB
+dist/assets/UnrealBloomPass-C58S42_s.js                                         10.27 kB │ gzip:   2.68 kB
+dist/assets/runtime-D47esY83.js                                                 10.51 kB │ gzip:   4.55 kB
+dist/assets/renderer-BZrvult3.js                                                10.56 kB │ gzip:   5.18 kB
+dist/assets/runtime-C8sdbWJ7.js                                                 10.82 kB │ gzip:   4.54 kB
+dist/assets/renderer-DPx3CIOs.js                                                10.90 kB │ gzip:   4.91 kB
+dist/assets/renderer-COlDda-t.js                                                11.20 kB │ gzip:   4.58 kB
+dist/assets/renderer-DJ1XsEYH.js                                                11.20 kB │ gzip:   4.74 kB
+dist/assets/renderer-CFlpPAIq.js                                                11.64 kB │ gzip:   4.79 kB
+dist/assets/cosmeticStudio-CiagVlXc.js                                          11.70 kB │ gzip:   4.83 kB
+dist/assets/spacetime-BPZ1ovcy.js                                               12.34 kB │ gzip:   5.08 kB
+dist/assets/renderer-GfgrRYLG.js                                                12.45 kB │ gzip:   5.56 kB
+dist/assets/renderer-Y57tFEv0.js                                                12.51 kB │ gzip:   4.98 kB
+dist/assets/runtime-DlyhU_CD.js                                                 12.52 kB │ gzip:   5.54 kB
+dist/assets/renderer-Cv5rbqBR.js                                                12.62 kB │ gzip:   5.22 kB
+dist/assets/runtime-Mi_oVdWj.js                                                 12.66 kB │ gzip:   5.46 kB
+dist/assets/renderer-Di-v-yx5.js                                                13.50 kB │ gzip:   5.51 kB
+dist/assets/runtime-DRwBPKBR.js                                                 14.12 kB │ gzip:   6.39 kB
+dist/assets/renderer-yRBd4LL0.js                                                14.35 kB │ gzip:   5.29 kB
+dist/assets/homeAtmosphere-fxsMpZdF.js                                          14.46 kB │ gzip:   6.24 kB
+dist/assets/renderer-BrpByryQ.js                                                14.86 kB │ gzip:   6.37 kB
+dist/assets/scene-EINH86bW.js                                                   15.74 kB │ gzip:   7.13 kB
+dist/assets/renderer-CHcyPoJj.js                                                16.95 kB │ gzip:   6.92 kB
+dist/assets/renderer-BMvpXxmg.js                                                17.63 kB │ gzip:   6.94 kB
+dist/assets/runtime-Mq6DLof7.js                                                 17.67 kB │ gzip:   7.33 kB
+dist/assets/renderer-D6glc6l4.js                                                17.86 kB │ gzip:   7.23 kB
+dist/assets/renderer-Bv3giU2l.js                                                18.63 kB │ gzip:   7.84 kB
+dist/assets/cardSurface-Bj8fiIpX.js                                             19.10 kB │ gzip:   7.48 kB
+dist/assets/visual-F-DbFnVF.js                                                  19.29 kB │ gzip:   7.82 kB
+dist/assets/runtime-BFsvO-1f.js                                                 19.91 kB │ gzip:   8.75 kB
+dist/assets/rankPresentation-CfzLP-ug.js                                        21.22 kB │ gzip:   8.98 kB
+dist/assets/renderer-Guk_W5x_.js                                                21.30 kB │ gzip:   9.48 kB
+dist/assets/admin-Dh-nFb3a.js                                                   24.23 kB │ gzip:   9.05 kB
+dist/assets/inspection-BWV3laBv.js                                              25.32 kB │ gzip:   7.17 kB
+dist/assets/runtime-C3D9eFGE.js                                                 25.75 kB │ gzip:  11.13 kB
+dist/assets/riftScene-Cx3muOhO.js                                               27.67 kB │ gzip:  11.44 kB
+dist/assets/stage-CQufjiJg.js                                                   30.25 kB │ gzip:  11.54 kB
+dist/assets/runtime-BSqVWWOO.js                                                 36.52 kB │ gzip:   9.04 kB
+dist/assets/GLTFLoader-BqqU5Z5c.js                                              43.81 kB │ gzip:  13.21 kB
+dist/assets/menuAssets-2IpL0dX1.js                                              59.07 kB │ gzip:  24.93 kB
+dist/assets/duelScene-BHPGjGJT.js                                               61.70 kB │ gzip:  24.33 kB
+dist/assets/game-T524Z__p.js                                                    65.39 kB │ gzip:  23.72 kB
+dist/assets/scene-BsFBf_x8.js                                                   86.32 kB │ gzip:  30.10 kB
+dist/assets/controller-CSfngxFh.js                                             126.93 kB │ gzip:  43.13 kB
+dist/assets/main-BJBoi7tM.js                                                   384.40 kB │ gzip: 140.92 kB
+dist/assets/social-CkjVGUY7.js                                                 428.34 kB │ gzip: 140.17 kB
+dist/assets/layout-DHAqrrW7.js                                                 910.82 kB │ gzip: 333.27 kB
+dist/assets/assetQueue-DuPbAPo-.js                                           1,278.74 kB │ gzip: 344.50 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.98s
+
+ ⛅️ wrangler 4.144.0 (update available 4.153.0)
+───────────────────────────────────────────────
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mMultiple environments are defined in the Wrangler configuration file, but no target environment was specified for the deploy command.[0m
+
+  To avoid unintentional changes to the wrong environment, it is recommended to explicitly specify the target environment using the `-e|--env` flag or CLOUDFLARE_ENV env variable.
+  If your intention is to use the top-level environment of your configuration simply pass an empty string to the flag to target such environment. For example `--env=""`.
+
+
+🌀 Building list of assets...
+✨ Read 3372 files from the assets directory /private/var/folders/tt/p79qbyt14t14jwlfh80_l0v40000gn/T/lore-release-YFJaXk/client/dist
+🌀 Starting asset upload...
+🌀 Found 9 new or modified static assets to upload. Proceeding with upload...
++ /assets/main-CzwkF0BU.js
++ /assets/homeAtmosphere-fxsMpZdF.js
++ /assets/scene-BsFBf_x8.js
++ /assets/duel-preload-ac14e7d2f64044e8fe7553fd.json
++ /assets/menuAssets-2IpL0dX1.js
++ /assets/main-BJBoi7tM.js
++ /index.html
++ /assets/game-T524Z__p.js
++ /assets/main-CaZACBcM.css
+Uploaded 3 of 9 assets
+Uploaded 6 of 9 assets
+Uploaded 9 of 9 assets
+✨ Success! Uploaded 9 files (3237 already uploaded) (3.09 sec)
+
+Total Upload: 1903.40 KiB / gzip: 414.32 KiB
+Worker Startup Time: 28 ms
+Your Worker has access to the following bindings:
+Binding                                                                    Resource                  
+env.MATCHMAKER (MatchmakerFresh20261027)                                   Durable Object            
+env.GAME_ROOM (GameRoomFresh20261027)                                      Durable Object            
+env.DB (lore-db)                                                           D1 Database               
+env.AUTH_RATE_LIMITER (30 requests/60s)                                    Rate Limit                
+env.INQUIRY_RATE_LIMITER (5 requests/60s)                                  Rate Limit                
+env.ASSETS                                                                 Assets                    
+env.APP_ORIGIN ("*")                                                       Environment Variable      
+env.GOOGLE_CLIENT_ID [redacted from public release evidence]
+env.ADMIN_EMAILS [redacted from public release evidence]
+
+Uploaded lore-server (11.46 sec)
+Deployed lore-server triggers (2.21 sec)
+  yourlore.xyz (custom domain)
+  www.yourlore.xyz (custom domain)
+  admin.yourlore.xyz (custom domain)
+Current Version ID: 95271f2d-f5f8-4331-9d05-82405dc6ad7d
+Deployed committed snapshot be393a1959c1e6dfee2d92acee54c32cd4fee4ee production

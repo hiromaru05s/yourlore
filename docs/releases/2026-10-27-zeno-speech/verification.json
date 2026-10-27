@@ -1,0 +1,87 @@
+{
+  "origin": "https://yourlore.xyz",
+  "sourceCommit": "be393a1959c1e6dfee2d92acee54c32cd4fee4ee",
+  "baseline": "1a013752 (code cbfefea1)",
+  "scope": [
+    "Zeno speech during first-login welcome/skip confirmation",
+    "Tutorial menu greeting",
+    "All guided board and HOME/deck/cards dialogue",
+    "Practice introduction, prompts, waiting and completion"
+  ],
+  "changes": [
+    "Replaced azure framed explanation panels with pale speech bubbles, visible tails directed at the existing Zeno character, dark readable text",
+    "Small speaker/progress labels; removed large UI topic headings from guided dialogue",
+    "Friendly authored Japanese dialogue with first-person boku; friendly English greetings and Korean informal dialogue",
+    "Existing highlights, controls, completion storage and game action validation retained"
+  ],
+  "localChecks": {
+    "typecheck": "passed",
+    "build": "passed",
+    "tutorialProgression": "all ten practice scenarios passed in tests/tutorial-parts.mjs",
+    "tutorialDOM": "three-language progress, onboarding confirmation, retry and lifecycle tests passed",
+    "actualBrowser": [
+      "Initial welcome and skip/back confirmation",
+      "Japanese 28-step-tour opening",
+      "Japanese practice purchase, turn, shuffle/draw and completion speech",
+      "Actual Attune drag: mana 5 to 2, max mana 6, shade removed, result dialogue",
+      "HOME/deck/cards tours completed through UI (12 steps)",
+      "English and Korean 900x600 bubble layout",
+      "Japanese 390x844 bubble bounds x90..380 y7..159.5, no panel border image, visible tail"
+    ],
+    "consoleErrors": 0
+  },
+  "limits": [
+    "Local first-login welcome and three-language small-window QA uses an isolated fixture; authenticated live checks cover the tutorial menu and actual practice flows.",
+    "This is a dialogue/presentation update; it does not establish novice usability or authenticated PvP coverage."
+  ],
+  "deployment": {
+    "id": "283ee8e2-4ea3-486f-bf1b-65fb668ef2d8",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "annotations": {
+      "workers/message": "be393a1959c1e6dfee2d92acee54c32cd4fee4ee guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "95271f2d-f5f8-4331-9d05-82405dc6ad7d",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-10-27T12:22:50.723792Z"
+  },
+  "releaseChecks": {
+    "productionSuite": "249/249 passed",
+    "typecheck": "client/server passed",
+    "build": "passed",
+    "script": "/assets/main-CzwkF0BU.js matches build"
+  },
+  "productionChecks": {
+    "origin": "https://yourlore.xyz/",
+    "method": "Authenticated Chrome tab, real UI clicks/drags; no mocks or state injection",
+    "checks": [
+      "New bundle main-CzwkF0BU.js",
+      "Menu greeting and guided opening use speech bubbles",
+      "Log opened and closed through dialogue",
+      "Attune played: mana 2/6 and shade removed",
+      "Purchase, end turn, shuffle/draw and completion speech",
+      "HOME/deck/cards 12-step tour completed"
+    ],
+    "progress": "進行状況\n13 / 13\n最初から復習 →",
+    "errors": [],
+    "menuTourSpeech": [
+      "ゼノ\n1 / 5\n×\nホームへようこそ\n\nおかえり！ よくできたね。ここがホームだよ。次の対戦もデッキ作りも、ここから始めよう。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n2 / 5\n×\n対戦モード\n\nシングル、ノーマル、ランク。遊びたいモードはここで選べるよ。今はぼくと場所だけ見ておこう。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n3 / 5\n×\n対戦開始\n\nモードを選んだら中央のボタンから始められるよ。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n4 / 5\n×\nランク\n\n現在のランクを確認できるよ。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n5 / 5\n×\n使用するデッキ\n\n次の対戦に持ち込むデッキだよ。次は編集画面を見てみよう。\n\n← 戻る\n次へ進もう →",
+      "ゼノ\n1 / 6\n×\nデッキの保存枠\n\n5つの枠に別々の構成を保存できるよ。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n2 / 6\n×\n持参デッキ\n\n自由8枚と固定アチューン1枚の9枚だよ。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n3 / 6\n×\n固定アチューン\n\nこの1枚は外せないんだ。残りの8枚を組み替えてみよう。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n4 / 6\n×\nスターター候補\n\n持ってるスターターを選ぶと、追加したり入れ替えたりできるよ。今はぼくと見て回ろう。あとで自由に組んでみてね。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n5 / 6\n×\n使用デッキ\n\nチェック付きの枠が使用中だよ。別の枠を選ぶと「使用する」操作が出てくるよ。\n\n← 戻る\nうん、次へ →",
+      "ゼノ\n6 / 6\n×\nデッキを確定\n\n編集後は確定して保存しよう。次はカード一覧の見方だよ。\n\n← 戻る\n次へ進もう →",
+      "ゼノ\n1 / 1\n×\nカード一覧\n\n気になるカードは、ここで探して読んでみてね。マーケットで出会うカードも載ってるよ。ぼくの案内はここまで。また一緒に遊ぼう！\n\n← 戻る\n次へ進もう →"
+    ]
+  }
+}
