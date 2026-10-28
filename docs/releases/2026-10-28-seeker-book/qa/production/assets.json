@@ -1,0 +1,44 @@
+[
+  {
+    "path": "/index.html",
+    "sha256": "9b42b927d6f86460be6148e309aa6bbb2b1bc294c974e13be525a92edbf360ff",
+    "status": 200,
+    "actual": "9b42b927d6f86460be6148e309aa6bbb2b1bc294c974e13be525a92edbf360ff",
+    "match": true
+  },
+  {
+    "path": "/assets/main-BIx-zDAd.js",
+    "sha256": "22e8bb50b6dcf40650cc28d368372015ff144bada73b913d3d5e5c2844f6f711",
+    "status": 200,
+    "actual": "22e8bb50b6dcf40650cc28d368372015ff144bada73b913d3d5e5c2844f6f711",
+    "match": true
+  },
+  {
+    "path": "/assets/modulepreload-polyfill-B5Qt9EMX.js",
+    "sha256": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+    "status": 200,
+    "actual": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+    "match": true
+  },
+  {
+    "path": "/assets/preload-helper-BXl3LOEh.js",
+    "sha256": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+    "status": 200,
+    "actual": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+    "match": true
+  },
+  {
+    "path": "/assets/deadline-RP-FvawS.js",
+    "sha256": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a",
+    "status": 200,
+    "actual": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a",
+    "match": true
+  },
+  {
+    "path": "/assets/main-Du7uZb0y.css",
+    "sha256": "680204371923712e7d76e70209ee664e3cff78d4b959ef7c6aded887afd06e18",
+    "status": 200,
+    "actual": "680204371923712e7d76e70209ee664e3cff78d4b959ef7c6aded887afd06e18",
+    "match": true
+  }
+]

@@ -53,6 +53,8 @@ try{
     else if(action==='inspect')await target.click({button:'right'});
     else if(action==='click')await target.click();
     else{
+     // Inspection is optional during play; close it through the normal control before dragging.
+     if(await page.locator('#zoomOverlay').isVisible()){await page.keyboard.press('Escape');await page.locator('#zoomOverlay').waitFor({state:'hidden'});}
      const source=page.locator('.tutorial-action-guide:not([hidden]) .tutorial-action-ring');await source.waitFor({state:'visible'}).catch(async e=>{await page.screenshot({path:out+'/walkthrough-failure.png'});throw new Error(`Step ${index}, action ${action}: ${e.message}`);});
      const a=await source.boundingBox(),drop=page.locator('.tutorial-action-guide:not([hidden]) .tutorial-drop-ring:not([hidden])');
      if(await drop.count()){
