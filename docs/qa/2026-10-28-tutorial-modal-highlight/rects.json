@@ -1,0 +1,41 @@
+[
+  {
+    "rect": {
+      "bottom": 644.125,
+      "height": 568.265625,
+      "left": 80,
+      "right": 1200,
+      "top": 75.859375,
+      "width": 1120,
+      "x": 80,
+      "y": 75.859375
+    },
+    "selector": "#zoomOverlay .zoom-wrap"
+  },
+  {
+    "rect": {
+      "bottom": 649,
+      "height": 578,
+      "left": 76,
+      "right": 1204,
+      "top": 71,
+      "width": 1128,
+      "x": 76,
+      "y": 71
+    },
+    "selector": ".tutorial-tour-ring"
+  },
+  {
+    "rect": {
+      "bottom": 702.134765625,
+      "height": 163.9805908203125,
+      "left": 521.5770263671875,
+      "right": 633.7769165039062,
+      "top": 538.1541748046875,
+      "width": 112.19989013671876,
+      "x": 521.5770263671875,
+      "y": 538.1541748046875
+    },
+    "selector": "#hand .card[data-card-id=\"M2\"]"
+  }
+]

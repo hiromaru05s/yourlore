@@ -35,6 +35,7 @@ try{
   const context=await browser.newContext({viewport:{width,height:800}}),p=await context.newPage(),errors=[];
   p.on('pageerror',e=>errors.push(e.message));await p.goto('http://127.0.0.1:5299/parts-qa');
   await p.locator('#continuePart').click();await p.locator('.game-loading').waitFor({state:'hidden'});
+  let inspectedDuringPlay=false;
   for(let moves=0;moves<100&&!await p.locator('.tutorial-basics-clear').count();moves++){
    const layer=p.locator('.tutorial-part-tour'),index=await layer.getAttribute('data-step'),action=await layer.getAttribute('data-action');
    const target=p.locator('.tutorial-tour-target');
@@ -42,6 +43,17 @@ try{
    else if(action==='inspect')await target.click({button:'right'});
    else if(action==='click')await target.click();
    else{
+    if(!inspectedDuringPlay&&await target.evaluate(e=>!!e.closest('#hand'))){
+     await target.click({button:'right'});
+     const modal=p.locator('#zoomOverlay .zoom-wrap'),ring=p.locator('.tutorial-tour-ring');
+     await modal.waitFor({state:'visible'});
+     await p.waitForFunction(()=>{
+      const modal=document.querySelector('#zoomOverlay .zoom-wrap')?.getBoundingClientRect(),ring=document.querySelector('.tutorial-tour-ring')?.getBoundingClientRect();
+      return modal&&ring&&['left','top','right','bottom'].every(side=>Math.abs(modal[side]-ring[side])<=6);
+     });
+     await p.screenshot({path:out+'/inspection-during-play-'+width+'.png'});
+     await p.locator('#zoomOverlay .inspect-close').click();inspectedDuringPlay=true;
+    }
     const source=p.locator('.tutorial-action-guide:not([hidden]) .tutorial-action-ring');await source.waitFor({state:'visible'});
     const a=await source.boundingBox(),drop=p.locator('.tutorial-action-guide:not([hidden]) .tutorial-drop-ring:not([hidden])');
     if(await drop.count()){

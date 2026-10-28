@@ -109,8 +109,9 @@ export class TutorialSpotlight {
   const target=modal??(step.selector?this.find(step.selector):null);
   if(target!==this.target){this.target?.classList.remove('tutorial-tour-target');this.target=target;target?.classList.add('tutorial-tour-target');}
   const parts=!modal&&step.region?step.region.map(sel=>this.box(this.find(sel))).filter((b):b is Box=>!!b):[];
-  const pointBox=step.pointer?this.box(this.find(step.pointer)):null;
-  const handBoxes=step.selector==='#hand'?[...document.querySelectorAll<HTMLElement>('#hand .card')].map(e=>e.getBoundingClientRect()).filter(visible):[];
+  // A modal replaces the board target; covered hand cards must not expand its ring.
+  const pointBox=!modal&&step.pointer?this.box(this.find(step.pointer)):null;
+  const handBoxes=!modal&&step.selector==='#hand'?[...document.querySelectorAll<HTMLElement>('#hand .card')].map(e=>e.getBoundingClientRect()).filter(visible):[];
   const marked=union([...parts,...(this.box(target)?[this.box(target)!]:[]),...handBoxes,...(pointBox?[pointBox]:[])]);
   const focus=modal?this.box(modal):step.focus?this.box(this.find(step.focus)):null;
   const ring=marked?clamp(grow(marked,RING_PAD)):null;
