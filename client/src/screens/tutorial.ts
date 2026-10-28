@@ -9,6 +9,8 @@ import {artUrl} from '../ui/cardArt';
 import {TUT_STEPS,TUTORIAL_CHAPTERS,TUTORIAL_TOTAL} from '../shared/tutorialSteps';
 import {tutorialRuleSections} from '../shared/tutorialNotes';
 import {tutorialPartKey} from '../shared/tutorialParts';
+import {mountSeekerBook} from '../ui/seekerBook';
+export interface TutorialOptions {tab?:'basics'|'book';justCompleted?:boolean;}
 import '../styles/tutorialAcademy.css';
 import '../styles/homeTutorial.css';
 import '../styles/tutorialParts.css';
@@ -64,24 +66,34 @@ export function mountLegacyTutorial(app:App):Screen {
 }
 
 /** One short, continuous first duel. Advanced rules remain available on demand. */
-export function mountTutorial(app:App):Screen {
+export function mountTutorial(app:App,options:TutorialOptions={}):Screen {
  const wrap=document.createElement('div');wrap.className='screen tut-screen tutorial-parts-screen';
- let closeNote:(()=>void)|undefined,completed=false;
+ let completed=false,book:ReturnType<typeof mountSeekerBook>|undefined,bookSpirit:ReturnType<typeof mountManaSpirit>|undefined;
+ let selected=options.tab??'basics';
  try{completed=localStorage.getItem(tutorialPartKey(0,app.user?.id))==='1';}catch{}
  wrap.innerHTML=`<main class="tutorial-parts-shell tutorial-basics-shell">
+  <div class="tutorial-learning-tabs" role="tablist" aria-label="${text('学び方を選ぶ','Choose how to learn','학습 방법 선택')}"><button class="lore-button" role="tab" id="tutorial-tab-basics" aria-controls="tutorial-panel-basics" data-learning="basics">${text('デュエルの基本','Duel basics','듀얼의 기본')}</button><button class="lore-button" role="tab" id="tutorial-tab-book" aria-controls="tutorial-panel-book" data-learning="book">${text('シーカー修練書','Seeker’s Companion','시커 수련서')}</button></div>
+  ${options.justCompleted?`<aside class="seeker-invitation"><p><strong>${text('基本チュートリアル、完了。','Basic tutorial complete.','기본 튜토리얼 완료.')}</strong>${text('もう対戦を始められるよ。修練書は任意。気になる章を読むか、そのままシングルへ進もう。','You are ready to play. This book is optional: read a chapter or go straight to Single.','이제 대전할 수 있어. 수련서는 선택이야. 궁금한 장을 읽거나 바로 싱글로 가자.')}</p><button class="lore-button lore-button-primary" id="bookPlaySingle">${text('シングルで遊ぶ','Play Single','싱글 플레이')} →</button></aside>`:''}
+  <div id="tutorial-panel-basics" class="tutorial-learning-panel" role="tabpanel" aria-labelledby="tutorial-tab-basics">
   <header class="tutorial-parts-hero"><div class="tutorial-parts-spirit"></div><div class="tutorial-parts-heading"><h1>${text('チュートリアル','Tutorial','튜토리얼')}</h1></div><div class="zeno-speech tutorial-welcome-speech"><div class="zeno-speech-content"><span class="zeno-speaker">${text('ゼノ','Zeno','제노')}</span><p>${completed?text('基本は覚えたね。次はシングルで、自分の好きな順番にカードを使ってみよう。','You know the basics. Try using cards in your own order in Single mode.','기본을 익혔네. 이제 싱글에서 원하는 순서대로 카드를 써 보자.'):text('やあ、ゼノだよ。一緒にカードを使いながら、デュエルの基本を覚えよう。','Hi, I’m Zeno. Let’s learn the basics by playing cards together.','안녕, 난 제노야. 같이 카드를 쓰면서 듀얼의 기본을 익혀 보자.')}</p></div></div></header>
   <section class="tutorial-basics-card lore-surface" aria-label="${text('基本チュートリアル','Basic tutorial','기본 튜토리얼')}">
    <div class="tutorial-basics-heading"><div><span class="menu-eyebrow">${text('目安 3〜5分','ABOUT 3–5 MINUTES','약 3~5분')}</span><h2>${text('デュエルの基本','Duel basics','듀얼의 기본')}</h2></div>${completed?`<span class="tutorial-basics-clear">${homeIcon('check')} ${text('完了','Complete','완료')}</span>`:''}</div>
    <ol class="tutorial-basics-flow"><li><span>01</span><b>${text('カードを使って攻撃','Play and attack','카드 사용과 공격')}</b><small>${text('マナ・召喚・体力','Mana, summoning and health','마나·소환·체력')}</small></li><li><span>02</span><b>${text('買って、次のターンへ','Buy, then take your next turn','구매하고 다음 턴으로')}</b><small>${text('マーケット・ドロー・墓地','Markets, draws and graveyard','마켓·드로우·묘지')}</small></li><li><span>03</span><b>${text('魔法で強くして戦う','Cast a spell and battle','마법으로 강화하고 전투')}</b><small>${text('効果・モンスター攻撃・リフト','Effects, monster combat and Rift','효과·몬스터 전투·리프트')}</small></li></ol>
    <div class="tutorial-basics-actions"><button class="lore-button ${completed?'':'lore-button-primary'}" id="continuePart">${completed?text('もう一度練習する','Practice again','다시 연습'):text('チュートリアルを始める','Start tutorial','튜토리얼 시작')} →</button>${completed?`<button class="lore-button lore-button-primary" id="single">${text('シングルで遊ぶ','Play Single','싱글 플레이')} →</button>`:''}</div>
   </section>
-  <footer class="tutorial-parts-footer"><button class="lore-button lore-button-quiet" id="rules">${homeIcon('book')} ${text('ルールノート','Rule notebook','규칙 노트')}</button><button class="lore-button lore-button-quiet" id="back">← ${text('ホーム','Home','홈')}</button></footer>
+  ${completed?`<aside class="seeker-invitation"><p><strong>${text('次の知識を、修練書で。','Continue with the Companion.','다음 지식은 수련서에서.')}</strong>${text('デッキ作りから、魔法・種族・詳しいルールまで。好きな章から読める、任意の読みもの。','Deck building, spells, tribes and detailed rules. Optional reading, in any order.','덱 구성부터 마법·종족·상세 규칙까지. 원하는 장부터 읽는 선택 안내.')}</p><button class="lore-button" id="openBook">${text('修練書を開く','Open the book','수련서 열기')} →</button></aside>`:''}
+  </div><div id="tutorial-panel-book" class="tutorial-learning-panel" role="tabpanel" aria-labelledby="tutorial-tab-book" hidden></div>
+  <footer class="tutorial-parts-footer"><button class="lore-button lore-button-quiet" id="rules">${homeIcon('book')} ${text('ルール総覧','Full reference','규칙 총람')}</button><button class="lore-button lore-button-quiet" id="back">← ${text('ホーム','Home','홈')}</button></footer>
  </main>`;
- app.root.append(wrap);const spirit=mountManaSpirit(wrap.querySelector('.tutorial-parts-spirit')!);
+ app.root.append(wrap);
+ const selectTab=(tab:'basics'|'book')=>{selected=tab;if(tab==='basics'&&!bookSpirit)bookSpirit=mountManaSpirit(wrap.querySelector('.tutorial-parts-spirit')!);else if(tab==='book'){bookSpirit?.destroy();bookSpirit=undefined;}wrap.querySelectorAll<HTMLButtonElement>('[data-learning]').forEach(b=>{const on=b.dataset.learning===tab;b.setAttribute('aria-selected',String(on));b.tabIndex=on?0:-1;});wrap.querySelector<HTMLElement>('#tutorial-panel-basics')!.hidden=tab!=='basics';wrap.querySelector<HTMLElement>('#tutorial-panel-book')!.hidden=tab!=='book';if(tab==='book'&&!book)book=mountSeekerBook(wrap.querySelector('#tutorial-panel-book')!,app);};
+ wrap.querySelectorAll<HTMLButtonElement>('[data-learning]').forEach(b=>{b.onclick=()=>selectTab(b.dataset.learning as 'basics'|'book');b.onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const tab=e.key==='Home'?'basics':e.key==='End'?'book':selected==='basics'?'book':'basics';selectTab(tab);wrap.querySelector<HTMLButtonElement>(`[data-learning="${tab}"]`)!.focus();}};});
+ wrap.querySelector<HTMLButtonElement>('#openBook')?.addEventListener('click',()=>{selectTab('book');wrap.querySelector<HTMLButtonElement>('#tutorial-tab-book')!.focus();});
+ wrap.querySelector<HTMLButtonElement>('#bookPlaySingle')?.addEventListener('click',()=>app.botGame('easy'));selectTab(selected);
  wrap.querySelector<HTMLButtonElement>('#continuePart')!.onclick=()=>app.tutorialPart(0);
  wrap.querySelector<HTMLButtonElement>('#single')?.addEventListener('click',()=>app.botGame('easy'));
- wrap.querySelector<HTMLButtonElement>('#rules')!.onclick=()=>{closeNote?.();closeNote=openRuleNotebook(0);};
+ wrap.querySelector<HTMLButtonElement>('#rules')!.onclick=()=>{selectTab('book');book?.openReference();};
  wrap.querySelector<HTMLButtonElement>('#back')!.onclick=()=>app.home();
- const unsub=onLangChange(()=>app.tutorial());
- return{destroy(){unsub();spirit.destroy();closeNote?.();wrap.remove();}};
+ const unsub=onLangChange(()=>app.tutorial({...options,tab:selected}));
+ return{destroy(){unsub();bookSpirit?.destroy();book?.destroy();wrap.remove();}};
 }

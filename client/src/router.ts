@@ -23,7 +23,7 @@ import { mountLogin } from "./screens/login";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
 import { mountGame, mountGamePreparation } from "./screens/lazyGame";
-import { mountTutorial } from "./screens/tutorial";
+import { mountTutorial, type TutorialOptions } from "./screens/tutorial";
 import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
 import { mountProfile, type ProfileTab } from "./screens/profile";
@@ -173,7 +173,7 @@ export class App {
       retry.onclick=()=>this.afterLogin();this.root.append(retry);
     });
   }
-  tutorial(): void { setPresence("menu"); this.swap(() => mountTutorial(this), "tutorial"); }
+  tutorial(options:TutorialOptions = {}): void { setPresence("menu"); this.swap(() => mountTutorial(this,options), "tutorial"); }
   tutorialGame(lesson = 0): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial", lesson })); }
   tutorialPart(part = 0): void {
     const index=Number.isFinite(part)?Math.max(0,Math.min(TUTORIAL_PARTS.length-1,Math.floor(part))):0;
