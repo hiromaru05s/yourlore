@@ -4,15 +4,39 @@ import {BaseController,type ControllerExits} from './controller';
 import {advanceLesson,currentScene,tutorialOpponentAction,type LessonRun} from '../shared/tutorialLesson';
 import {tutorialCue,isTutorialActionAllowed} from '../shared/tutorialGuide';
 import {PART_TOURS,TUTORIAL_PARTS,createPartStart,tutorialPartKey} from '../shared/tutorialParts';
-import type {Action} from '../shared/types';
+import type {Action,GameEvent} from '../shared/types';
+import {TutorialCheckpoints,type TutorialCheckpoint,type TutorialPresentation} from '../shared/tutorialCheckpoints';
+import {closeOverlay} from '../ui/modal';
+import {zoomCard} from '../ui/cardInspection';
 import {getLang,onLangChange} from '../i18n';
 import {mountManaSpirit} from '../ui/manaSpirit';
 import {TutorialSpotlight} from '../ui/tutorialSpotlight';
 import '../styles/tutorialParts.css';
 import '../styles/zenoSpeech.css';
 
-export class TutorialPartController extends BaseController {
+/** Owns one live runtime. A rewind retires all old input/presentation callbacks. */
+export class TutorialPartController {
+ private runtime:TutorialPartRuntime;
+ private checkpoints=new TutorialCheckpoints();
+ private dead=false;
+ constructor(root:HTMLElement,exits:ControllerExits,part:number,next:(part:number)=>void,accountId?:string){
+  const mount=(index=0,checkpoint?:TutorialCheckpoint):TutorialPartRuntime=>new TutorialPartRuntime(root,exits,part,next,accountId,this.checkpoints,index,checkpoint,to=>{
+   if(this.dead)return;
+   const saved=this.checkpoints.rewind(to);
+   this.runtime.destroy();closeOverlay();
+   this.runtime=mount(to,saved);
+  });
+  this.runtime=mount();
+ }
+ get botDifficulty(){return this.runtime.botDifficulty;}
+ guideContext(){return this.runtime.guideContext();}
+ destroy():void{if(this.dead)return;this.dead=true;this.runtime.destroy();}
+}
+
+class TutorialPartRuntime extends BaseController {
  private run:LessonRun;
+ private history:GameEvent[]=[];
+ private rewinding=false;
  private host?:HTMLElement;
  private speech?:HTMLElement;
  private spirit?:ReturnType<typeof mountManaSpirit>;
@@ -27,17 +51,25 @@ export class TutorialPartController extends BaseController {
  private handOpen=false;
  private unsub:()=>void=()=>{};
  protected get useTurnClock():boolean{return false;}
- constructor(private root:HTMLElement,exits:ControllerExits,private part:number,private next:(part:number)=>void,private accountId?:string){
-  super(root,0,exits);root.classList.add('tutorial-board');this.introShown=true;const start=createPartStart(part);this.run=start.run;this.run.state.players[1].name='Zeno';this.applyResult({state:this.run.state,events:[]},false);
-  if(start.history.length)this.restoreLog(start.history,true);
+ constructor(private root:HTMLElement,exits:ControllerExits,private part:number,private next:(part:number)=>void,private accountId:string|undefined,private checkpoints:TutorialCheckpoints,startIndex:number,checkpoint:TutorialCheckpoint|undefined,restart:(index:number)=>void){
+  super(root,0,exits);root.classList.add('tutorial-board');this.introShown=true;const start=createPartStart(part);this.run=checkpoint?{...checkpoint.run,scenes:start.run.scenes}:start.run;this.history=checkpoint?.history??start.history;this.run.state.players[1].name='Zeno';this.busy=true;this.applyResult({state:this.run.state,events:[]},false);
+  if(this.history.length)this.restoreLog(this.history,true);
   // Each guided part starts from a closed log so the learner opens it as instructed.
   if(this.root.querySelector('.game.log-open'))this.root.querySelector<HTMLElement>('#logClose')?.click();
   const guided=PART_TOURS[part];
   if(guided){
    this.intro=false;
-   this.tour=new TutorialSpotlight(root,guided,{label:TUTORIAL_PARTS[part].title,state:()=>this.busy?null:this.run.state,onComplete:()=>{this.tour=undefined;this.markComplete();this.next(part+1);},onExit:()=>this.exits.onHome()});
+   this.afterPresentation(()=>{
+    this.busy=false;
+    if(checkpoint)this.restorePresentation(checkpoint.presentation);
+    this.tour=new TutorialSpotlight(root,guided,{label:TUTORIAL_PARTS[part].title,startIndex,state:()=>this.busy?null:this.run.state,
+     onStep:index=>this.checkpoints.save(index,this.run,this.history,this.presentation()),previousStep:index=>this.checkpoints.previous(index),
+     rewind:index=>{this.rewinding=true;this.busy=true;clearTimeout(this.timer);this.fastForward();this.afterPresentation(()=>restart(index));},
+     onComplete:()=>{this.tour=undefined;this.markComplete();this.next(part+1);},onExit:()=>this.exits.onHome()});
+   });
    return;
   }
+  this.afterPresentation(()=>{this.busy=false;this.render();});
   this.guide=new TutorialActionGuide();this.mountCoach();
   const track=()=>{if(this.dead)return;const open=!!this.root.querySelector('.game.hand-open');if(open!==this.handOpen){this.handOpen=open;this.render();}else this.glow();this.guideFrame=requestAnimationFrame(track);};this.guideFrame=requestAnimationFrame(track);
  }
@@ -45,7 +77,20 @@ export class TutorialPartController extends BaseController {
   this.host=document.createElement('aside');this.host.className='part-coach is-intro';this.host.innerHTML='<div class="part-zeno" aria-hidden="true"></div><div class="part-speech zeno-speech"></div>';this.root.append(this.host);this.speech=this.host.querySelector('.part-speech')!;this.spirit=mountManaSpirit(this.host.querySelector('.part-zeno')!);
   this.unsub=onLangChange(()=>this.render());this.render();
  }
- private canAct():boolean{return !document.querySelector('.game-loading')&&!this.intro&&!this.busy&&!this.finished&&this.run.phase==='play'&&(!this.tour||this.tour.allowsGame());}
+ private presentation():TutorialPresentation {
+  const card=document.querySelector<HTMLElement>('#zoomOverlay .zoom-card-stage > .card');
+  return{handOpen:!!this.root.querySelector('.game.hand-open'),logOpen:!!this.root.querySelector('.game.log-open'),...(card?.dataset.uid?{inspection:{uid:card.dataset.uid,scroll:document.querySelector('.zoom-details')?.scrollTop??0}}:{})};
+ }
+ private restorePresentation(saved:TutorialPresentation):void {
+  this.view.setHandOpen(saved.handOpen);
+  if(saved.logOpen)this.root.querySelector<HTMLElement>('#logTab')?.click();
+  if(saved.inspection){
+   const cards=[...this.run.state.market,...this.run.state.players.flatMap(p=>[...p.hand,...p.deck,...p.discard,...p.field,...p.supply,...(p.removed??[])])];
+   const card=cards.find(c=>c?.uid===saved.inspection!.uid);
+   if(card){zoomCard(card);const details=document.querySelector('.zoom-details');if(details)details.scrollTop=saved.inspection.scroll;}
+  }
+ }
+ private canAct():boolean{return !this.dead&&!this.rewinding&&!document.querySelector('.game-loading')&&!this.intro&&!this.busy&&!this.finished&&this.run.phase==='play'&&(!this.tour||this.tour.allowsGame());}
  override onEndTurn():void{if(!this.canAct())return;if(!isTutorialActionAllowed(this.run,{type:'endTurn'})){this.redirected=true;this.render();return;}super.onEndTurn();}
  override async onPlay(uid:string):Promise<void>{if(this.canAct())await super.onPlay(uid);}
  override onBuyMarket(i:number):void{if(this.canAct())super.onBuyMarket(i);}
@@ -59,11 +104,12 @@ export class TutorialPartController extends BaseController {
   this.redirected=false;this.apply(action);
  }
  private apply(action:Action):void{
-  this.busy=true;const res=advanceLesson(this.run,action);this.applyResult(res);this.render();
-  this.afterPresentation(()=>{if(this.dead)return;this.busy=false;this.view.render(this.run.state);if(!this.tour&&this.run.phase==='review'&&this.run.scene===this.run.scenes.length-1){advanceLesson(this.run,{type:'continueLesson'});this.finish();}this.render();this.maybeBot();});
+  if(this.dead||this.rewinding)return;
+  this.busy=true;const res=advanceLesson(this.run,action);this.history.push(...res.events);this.applyResult(res);this.render();
+  this.afterPresentation(()=>{if(this.dead||this.rewinding)return;this.busy=false;this.view.render(this.run.state);if(!this.tour&&this.run.phase==='review'&&this.run.scene===this.run.scenes.length-1){advanceLesson(this.run,{type:'continueLesson'});this.finish();}this.render();this.maybeBot();});
  }
  protected maybeBot():void{
-  if(!this.run||this.intro||this.busy||this.finished)return;const action=tutorialOpponentAction(this.run);if(!action)return;
+  if(this.dead||this.rewinding||!this.run||this.intro||this.busy||this.finished)return;const action=tutorialOpponentAction(this.run);if(!action)return;
   clearTimeout(this.timer);this.timer=window.setTimeout(()=>{if(!this.dead&&!this.busy)this.apply(action);},420);
  }
  protected showWin():void{/* The part completion speech replaces the normal outcome modal. */}

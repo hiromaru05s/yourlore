@@ -13,6 +13,10 @@ interface SpotlightOptions {
  onExit():void;
  /** Settled game state for action:'play' steps; null while the board is still animating. */
  state?():GameState|null;
+ startIndex?:number;
+ onStep(index:number):void;
+ previousStep(index:number):number;
+ rewind(index:number):void;
 }
 
 type Box={left:number;top:number;right:number;bottom:number};
@@ -30,7 +34,6 @@ const union=(boxes:Box[]):Box|null=>boxes.length?{left:Math.min(...boxes.map(b=>
  */
 export class TutorialSpotlight {
  private index=0;
- private furthest=0;
  private guide=new TutorialActionGuide();
  private layer:HTMLElement;
  private shades:HTMLElement[];
@@ -48,6 +51,7 @@ export class TutorialSpotlight {
  private unlockCleanup:()=>void=()=>{};
  private unsub:()=>void;
  constructor(private root:HTMLElement,private steps:TutorialTourStep[],private options:SpotlightOptions){
+  this.index=options.startIndex??0;
   this.layer=document.createElement('div');this.layer.className='tutorial-tour-layer tutorial-part-tour';
   this.layer.innerHTML='<div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-shade"></div><div class="tutorial-tour-ring" aria-hidden="true"></div><aside class="tutorial-tour-coach"><div class="tutorial-tour-spirit"></div><div class="tutorial-tour-bubble zeno-speech" aria-live="polite"></div></aside>';
   document.body.append(this.layer);
@@ -144,26 +148,22 @@ export class TutorialSpotlight {
   this.rings.forEach((r,i)=>{const b=boxes[i];r.style.display=b?'block':'none';if(b)Object.assign(r.style,{left:`${b.left}px`,top:`${b.top}px`,width:`${b.right-b.left}px`,height:`${b.bottom-b.top}px`});});
  }
  private backTarget():number{
-  let i=this.index-1;const g=this.options.state?.();
-  while(i>=0){const s=this.steps[i];if(s.skipOnBack||s.selector?.startsWith('#zoomOverlay')&&!this.find('#zoomOverlay')||s.action==='play'&&(!g||s.until?.(g)))i--;else break;}
-  return i;
+  return this.options.previousStep(this.index);
  }
  private back():void{
   if(this.disposed||this.advancing)return;const to=this.backTarget();if(to<0)return;
-  const undo=this.step().undo??(this.find('#zoomOverlay')&&!this.steps[to].selector?.startsWith('#zoomOverlay')?'#zoomOverlay .inspect-close':undefined);const el=undo?this.find(undo):null;
-  if(el){this.undoing=true;try{el.click();}finally{this.undoing=false;}}
-  this.go(to);
+  this.advancing=true;this.options.rewind(to);
  }
  private go(index:number):void{
   if(this.disposed)return;
   if(index>=this.steps.length){this.destroy();this.options.onComplete();return;}
   const close=this.step().close;if(index>this.index&&close){this.undoing=true;try{this.find(close)?.click();}finally{this.undoing=false;}}
-  // Completed actions are history, even if their old predicate is no longer true.
-  while(index<this.furthest&&(this.steps[index].action==='play'||this.steps[index].skipOnBack&&!['click','inspect'].includes(this.steps[index].action??'next')))index++;
-  this.index=Math.max(0,index);this.furthest=Math.max(this.furthest,this.index);this.render();
+  this.index=Math.max(0,index);this.render();
  }
  private render():void{
   if(this.disposed)return;const step=this.step(),lang=getLang();
+  // Already-open hand steps advance automatically and are not useful Back destinations.
+  if(!(step.opened&&document.querySelector(step.opened)))this.options.onStep(this.index);
   this.unlockCleanup();this.unlockCleanup=()=>{};this.unlocked=!step.enableOn;
   const last=this.index===this.steps.length-1,kind=step.action??'next';
   const next=last?c('完了','Finish','완료'):c('うん、次へ','Got it, next','응, 다음');
