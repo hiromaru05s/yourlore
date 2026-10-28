@@ -56,7 +56,20 @@ export function placeReadingBoard(root:HTMLElement):void {
   if(resources){resources.style.left=`${cx-size*.5}px`;resources.style.top=`${portraitTop}px`;resources.style.width=resources.style.height=`${size}px`;}
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.
- const hand=root.querySelector<HTMLElement>('#hand'),opp=root.querySelector<HTMLElement>('#oppHand');
- if(hand&&!root.querySelector('.game.hand-open')){hand.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;const css=getComputedStyle(hand),height=parseFloat(css.getPropertyValue('--card-h-hand'))*.42||0,edge=parseFloat(css.getPropertyValue('--fan-overhang'))||0;hand.style.top=`${Math.min(cy+.365*s,innerHeight-height-edge-10)}px`;hand.style.bottom='auto';}
+ placeReadingHand(root);
+ const opp=root.querySelector<HTMLElement>('#oppHand');
  if(opp){opp.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;opp.style.top=`${cy-.452*s}px`;}
+}
+
+/** Recompute after closing/resizing the expanded hand; its anchor is viewport based. */
+export function placeReadingHand(root:HTMLElement):void {
+ const hand=root.querySelector<HTMLElement>('#hand');
+ if(!hand||root.querySelector('.game.hand-open'))return;
+ const s=readingScale(),cx=innerWidth/2,cy=innerHeight/2;
+ const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.195);
+ const css=getComputedStyle(hand),height=parseFloat(css.getPropertyValue('--card-h-hand'))*.42||0,edge=parseFloat(css.getPropertyValue('--fan-overhang'))||0;
+ const width=(parseFloat(css.getPropertyValue('--fan-width'))||0)*.42;
+ hand.style.left=`${Math.min(innerWidth-width-12,Math.max(cx+.16*s,cx+portraitSize*.5+8))}px`;
+ hand.style.top=`${Math.min(cy+.365*s,innerHeight-height-edge-10)}px`;
+ hand.style.bottom='auto';
 }

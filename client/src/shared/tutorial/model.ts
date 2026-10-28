@@ -8,7 +8,7 @@ export interface PracticeStep {action:PracticeAction;id?:string;targetId?:string
 export interface Question {prompt:Copy;options:Copy[];correct:number;explanation:Copy;}
 export interface PracticeScene {
  setup:(b:Board)=>void; steps:PracticeStep[]; intro:Copy; result:Copy; question?:Question;
- opponent?:'pass'|'attack'|'duel'; seed?:number;
+ opponent?:'pass'|'attack'|'duel'|'summon'; seed?:number;
 }
 export interface Board {g:GameState;me:GameState['players'][0];opp:GameState['players'][0];card:(id:string)=>CardInst;mon:(id:string,side?:Side,extra?:Partial<FieldMon>)=>FieldMon;hand:(...ids:string[])=>void;mana:(n:number)=>void;removed:(n:number,id?:string)=>void;}
 export function practiceBoard(scene:PracticeScene):GameState {

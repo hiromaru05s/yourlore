@@ -14,7 +14,7 @@ export const TUTORIAL_CHAPTERS=[
 ] as const;
 const rows=[
  ['summon',0,'M4',copy('カードを読み、召喚する','Read and summon','읽고 소환하기'),copy('カードの数字を見て、最初の1体を出そう。','Read a card’s numbers and play your first monster.','카드 숫자를 읽고 첫 몬스터를 내 봐요.')],
- ['attack',0,'M4',copy('相手を直接攻撃する','Attack directly','직접 공격하기'),copy('相手の場が空なら、精神力を攻撃できるよ。','An empty enemy field lets you attack their Spirit.','상대 필드가 비면 정신력을 공격할 수 있어요.')],
+ ['attack',0,'M4',copy('相手を直接攻撃する','Attack directly','직접 공격하기'),copy('相手の場が空なら、体力を攻撃できるよ。','An empty enemy field lets you attack their Spirit.','상대 필드가 비면 체력을 공격할 수 있어요.')],
  ['combat',0,'M1',copy('戦闘と貫通','Combat and overflow','전투와 관통'),copy('傷は残るよ。倒すのに必要な量を超えたダメージも見てみよう。','Damage stays. See where damage beyond a monster’s remaining HP goes.','피해는 남아요. 남은 체력을 넘는 피해가 어디로 가는지 봐요.')],
  ['hand',0,'S4',copy('ターンと手札','Turns and your hand','턴과 손패'),copy('手札を7枚まで残して、次の自分の番を迎えよう。','Keep up to seven cards and begin your next turn.','손패 7장을 남기고 다음 차례를 맞아요.')],
  ['mana',1,'STARTER_MANA',copy('マナを育てる','Grow your mana','마나 키우기'),copy('今使えるマナと、毎ターン回復する最大マナを分けて考えよう。','Separate mana available now from your maximum refill.','지금 쓸 마나와 매 턴 회복할 최대 마나를 구분해요.')],
@@ -26,9 +26,9 @@ const rows=[
  ['quick',2,'QUICK_ATTUNE',copy('クイック魔法','Quick spells','퀵 마법'),copy('手札に引くのを待たず、購入した時に働く魔法だよ。','These spells work when purchased, without waiting to draw them.','손패로 뽑지 않고 구매하는 순간 발동하는 마법이에요.')],
  ['enchant',2,'E3',copy('場に残る魔法','Persistent spells','필드에 남는 마법'),copy('場にある間の効果と、発動する時点・終了する時点を確かめよう。','Check ongoing effects, triggers and expiration.','지속 효과와 발동·종료 시점을 확인해요.')],
  ['quest',2,'Q_RIFT',copy('クエストを達成する','Complete a quest','퀘스트 달성하기'),copy('設置してから条件を進めよう。累計と連続維持は違うよ。','Progress starts after deployment. Totals and consecutive upkeep differ.','설치 후 조건을 진행해요. 누적과 연속 유지는 달라요.')],
- ['health',3,'S1',copy('精神力と回復','Spirit and healing','정신력과 회복'),copy('精神力、モンスターの体力、強化を区別しよう。','Distinguish Spirit, monster HP and stat bonuses.','정신력, 몬스터 체력, 능력치 강화를 구분해요.')],
+ ['health',3,'S1',copy('体力と回復','Spirit and healing','체력과 회복'),copy('体力、モンスターの体力、強化を区別しよう。','Distinguish Spirit, monster HP and stat bonuses.','체력, 몬스터 체력, 능력치 강화를 구분해요.')],
  ['dew',3,'ELF',copy('雫を蓄え、使う','Store and spend Dew','이슬 모으고 쓰기'),copy('雫は毎自分ターンの回復量。条件や支払いにも使うよ。','Dew heals at your turn start and can also be a requirement or payment.','이슬은 내 턴 시작의 회복량이며 조건·비용에도 쓰여요.')],
- ['shield',3,'SELECTED_SHIELD',copy('シールドで受ける','Absorb with Shield','실드로 막기'),copy('精神力より先に減る防護。相手ターン終了時の失効まで見よう。','A buffer before Spirit. Watch it expire at the end of the opponent’s turn.','정신력보다 먼저 줄어드는 보호막. 상대 턴 종료 때 소멸해요.')],
+ ['shield',3,'SELECTED_SHIELD',copy('シールドで受ける','Absorb with Shield','실드로 막기'),copy('体力より先に減る防護。相手ターン終了時の失効まで見よう。','A buffer before Spirit. Watch it expire at the end of the opponent’s turn.','체력보다 먼저 줄어드는 보호막. 상대 턴 종료 때 소멸해요.')],
  ['status',3,'CURSE',copy('烙印・出血・呪い','Brand, Bleed and Curse','낙인·출혈·저주'),copy('カウンターとカードは別物。受ける効果と対処を確かめよう。','Counters and cards are different. See their effects and how to respond.','카운터와 카드는 달라요. 효과와 대처를 알아봐요.')],
  ['timing',4,'GM5_0',copy('いつ効果が働く？','When does an effect trigger?','언제 발동할까요?'),copy('召喚時、攻撃時、ターン開始・終了、場にいる間を読み分けよう。','Read summon, attack, turn-start/end and continuous effects.','소환·공격·턴 시작/종료·지속 효과를 구분해요.')],
  ['requirements',4,'ELF',copy('条件が足りない理由','Why requirements matter','조건이 부족한 이유'),copy('購入条件・召喚条件・発動条件は、それぞれ別に確認するよ。','Check purchase, summon and cast requirements separately.','구매·소환·발동 조건은 각각 확인해요.')],

@@ -42,9 +42,9 @@ export function createEnchantTime(s:EnchantTime):HTMLElement {
  const badge=document.createElement('span'),id='enchant-time-clip-'+(++sequence),color=s.mode==='fill'?'#bcd6bc':'#d4bdab';
  badge.className='enchant-time';badge.dataset.timeFill=String(s.fill);badge.dataset.timeMode=s.mode;badge.dataset.timeRemaining=String(s.remaining);badge.dataset.timeLimit=String(s.limit);
  badge.setAttribute('role','img');badge.setAttribute('aria-label',enchantTimeDescription(s));
- const digits=String(s.remaining).length,size=digits===1?24:digits===2?22:digits===3?18:54/digits;
+ const digits=String(s.remaining).length,size=digits===1?32:digits===2?28:digits===3?22:66/digits;
  // Numerals stay numerals at zero/full. No glyph under the number or completion substitute.
- badge.innerHTML=`<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><clipPath id="${id}"><circle cx="32" cy="31" r="23"/></clipPath></defs><circle cx="32" cy="31" r="27" fill="#192a2e" stroke="#9baaa0"/><g clip-path="url(#${id})"><rect class="enchant-time-level" x="8" width="48" fill="${color}" opacity=".42"/><path class="enchant-time-surface" stroke="${color}" fill="none"/></g><text x="32" y="31" text-anchor="middle" dominant-baseline="central" font-family="Georgia,serif" font-weight="700" font-size="${size}" fill="#f5ecd6">${s.remaining}</text></svg>`;
+ badge.innerHTML=`<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><clipPath id="${id}"><circle cx="32" cy="31" r="23"/></clipPath></defs><circle cx="32" cy="31" r="27" fill="#192a2e" stroke="#9baaa0"/><g clip-path="url(#${id})"><rect class="enchant-time-level" x="8" width="48" fill="${color}" opacity=".42"/><path class="enchant-time-surface" stroke="${color}" fill="none"/></g><text x="32" y="31" text-anchor="middle" dominant-baseline="central" font-family="system-ui,sans-serif" font-weight="700" font-size="${size}" fill="#f5ecd6">${s.remaining}</text></svg>`;
  paint(badge,s.fill);return badge;
 }
 

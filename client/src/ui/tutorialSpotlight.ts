@@ -30,6 +30,7 @@ const union=(boxes:Box[]):Box|null=>boxes.length?{left:Math.min(...boxes.map(b=>
  */
 export class TutorialSpotlight {
  private index=0;
+ private furthest=0;
  private guide=new TutorialActionGuide();
  private layer:HTMLElement;
  private shades:HTMLElement[];
@@ -135,7 +136,7 @@ export class TutorialSpotlight {
   this.pointer.style.display='none';
   const avoid=!resolving&&!modal?this.guide.update(step.pointer?this.find(step.pointer):step.action==='play'&&step.selector?this.find(step.selector):null,dest):[];
   if(resolving||modal)this.guide.hide();
-  placeTutorialCoach(this.coach,[...(cut?[cut]:[]),...avoid,...(inspection?[inspection.getBoundingClientRect()]:[])],step.placement);
+  placeTutorialCoach(this.coach,[...(inspection?ring?[ring]:[]:cut?[cut]:[]),...avoid],step.placement);
  }
  private paintRings(boxes:Box[]):void{
   while(this.rings.length<boxes.length){const r=document.createElement('div');r.className='tutorial-tour-ring';r.setAttribute('aria-hidden','true');this.rings[0].after(r);this.rings.push(r);}
@@ -143,12 +144,12 @@ export class TutorialSpotlight {
  }
  private backTarget():number{
   let i=this.index-1;const g=this.options.state?.();
-  while(i>=0){const s=this.steps[i];if(s.skipOnBack||s.action==='play'&&(!g||s.until?.(g)))i--;else break;}
+  while(i>=0){const s=this.steps[i];if(s.skipOnBack||s.selector?.startsWith('#zoomOverlay')&&!this.find('#zoomOverlay')||s.action==='play'&&(!g||s.until?.(g)))i--;else break;}
   return i;
  }
  private back():void{
   if(this.disposed||this.advancing)return;const to=this.backTarget();if(to<0)return;
-  const undo=this.step().undo;const el=undo?this.find(undo):null;
+  const undo=this.step().undo??(this.find('#zoomOverlay')&&!this.steps[to].selector?.startsWith('#zoomOverlay')?'#zoomOverlay .inspect-close':undefined);const el=undo?this.find(undo):null;
   if(el){this.undoing=true;try{el.click();}finally{this.undoing=false;}}
   this.go(to);
  }
@@ -156,13 +157,15 @@ export class TutorialSpotlight {
   if(this.disposed)return;
   if(index>=this.steps.length){this.destroy();this.options.onComplete();return;}
   const close=this.step().close;if(index>this.index&&close){this.undoing=true;try{this.find(close)?.click();}finally{this.undoing=false;}}
-  this.index=Math.max(0,index);this.render();
+  // Completed actions are history, even if their old predicate is no longer true.
+  while(index<this.furthest&&(this.steps[index].action==='play'||this.steps[index].skipOnBack&&!['click','inspect'].includes(this.steps[index].action??'next')))index++;
+  this.index=Math.max(0,index);this.furthest=Math.max(this.furthest,this.index);this.render();
  }
  private render():void{
   if(this.disposed)return;const step=this.step(),lang=getLang();
   this.unlockCleanup();this.unlockCleanup=()=>{};this.unlocked=!step.enableOn;
   const last=this.index===this.steps.length-1,kind=step.action??'next';
-  const next=last?c('次へ進もう','Let’s keep going','다음으로 가자'):c('うん、次へ','Got it, next','응, 다음');
+  const next=last?c('完了','Finish','완료'):c('うん、次へ','Got it, next','응, 다음');
   const hint=kind==='click'?c('光ってるところを押してみて。','Try the glowing spot.','빛나는 곳을 눌러 봐.'):kind==='inspect'?c('カードを右クリックしてみて。','Right-click the card.','카드를 우클릭해 봐.'):kind==='play'?c('やってみよう。ぼくはここで見てるよ。','Give it a try. I’m right here.','직접 해 봐. 난 여기 있을게.'):null;
   const canBack=this.index>0&&this.backTarget()>=0;
   this.bubble.innerHTML=`<div class="zeno-speech-content"><header><span class="zeno-speaker">${c('ゼノ','Zeno','제노')[lang]}</span><span class="tutorial-eyebrow" aria-label="${this.options.label[lang]}">${this.index+1} / ${this.steps.length}</span><button class="lore-button lore-button-quiet tutorial-tour-skip" aria-label="${c('終了','Exit','나가기')[lang]}">×</button></header><h2 class="zeno-speech-topic">${step.title[lang]}</h2><p>${step.body[lang]}</p>${step.prompt?`<strong>${step.prompt[lang]}</strong>`:''}<footer class="tutorial-tour-actions"><button class="lore-button lore-button-quiet tutorial-tour-back" ${canBack?'':'disabled'}>← ${c('戻る','Back','이전')[lang]}</button>${kind==='next'?`<button class="lore-button lore-button-primary tutorial-tour-next" ${this.unlocked?'':'disabled'}>${next[lang]} →</button>`:`<span class="tutorial-tour-hint">${hint![lang]}</span>`}</footer></div>`;

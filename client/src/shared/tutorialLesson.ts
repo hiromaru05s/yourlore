@@ -16,7 +16,7 @@ export function currentScene(run:LessonRun):PracticeScene{return run.scenes[run.
 export function tutorialOpponentAction(run:LessonRun):Action|null {
  const g=run.state;if(run.done||run.phase!=='play'||g.over||actingSide(g)!==1)return null;
  const mode=currentScene(run).opponent;
- const candidates=botActions(g).filter(a=>g.pending||mode==='duel'?true:mode==='attack'?a.type==='attack'||a.type==='endTurn':a.type==='endTurn');
+ const candidates=botActions(g).filter(a=>g.pending||mode==='duel'?true:mode==='attack'?a.type==='attack'||a.type==='endTurn':mode==='summon'?a.type==='endTurn'||a.type==='play'&&g.players[1].hand[a.idx]?.t==='mon':a.type==='endTurn');
  // Stable ordering: resolve choices, play the prepared hand, attack, then pass.
  for(const a of candidates){const next=reduce(g,a);if(next.state.rng!==g.rng||actionChangesState(g,next.state))return a;}
  return {type:'endTurn'};

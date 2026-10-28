@@ -1,3 +1,4 @@
+import {placeReadingHand} from './readingBoardLayout';
 import {syncCardFrames,disposeCardFrames} from './cardFrame';
 import {retainCardPrint} from './cardContinuity';
 import {createBoardEnchantTimes,enchantTimeState,enchantTimeDescription} from './enchantTime';
@@ -280,7 +281,7 @@ export class GameView {
       if (!document.body.contains(this.root)) return;      // screen was swapped
       if (!this.handOpen || this.root.classList.contains('choosing-discard')) return;
       const el = e.target as HTMLElement | null;
-      if (el?.closest("#hand") || el?.closest(".zoom-overlay")) return; // zoom close ≠ hand close
+      if (el?.closest("#hand") || el?.closest(".zoom-overlay") || el?.closest(".tutorial-tour-coach")) return; // zoom close ≠ hand close
       this.setHandOpen(false);
     };
     document.addEventListener("pointerdown", collapse, { capture: true });
@@ -352,6 +353,8 @@ export class GameView {
     }
     game?.classList.toggle("hand-open", open);
     this.layoutHand();
+    const board=this.root.closest<HTMLElement>('.reading-board');
+    if(board)placeReadingHand(board);
   }
 
   private q(id: string): HTMLElement { return this.root.querySelector("#" + id) as HTMLElement; }

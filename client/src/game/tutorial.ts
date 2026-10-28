@@ -61,7 +61,7 @@ export class TutorialController extends BaseController {
  }
  private compare(before:GameState,after:GameState):void {
   this.changes=[];
-  const labels:Record<string,Copy>={hp:{ja:'精神力',en:'Spirit',ko:'정신력'},mana:{ja:'マナ',en:'Mana',ko:'마나'},maxMana:{ja:'最大マナ',en:'Max mana',ko:'최대 마나'},dew:{ja:'雫',en:'Dew',ko:'이슬'},shield:{ja:'シールド',en:'Shield',ko:'실드'},hand:{ja:'手札',en:'Hand',ko:'손패'},deck:{ja:'デッキ',en:'Deck',ko:'덱'},discard:{ja:'墓地',en:'Graveyard',ko:'묘지'},removed:{ja:'リフト',en:'Rift',ko:'리프트'},field:{ja:'場',en:'Field',ko:'필드'}};
+  const labels:Record<string,Copy>={hp:{ja:'体力',en:'Spirit',ko:'체력'},mana:{ja:'マナ',en:'Mana',ko:'마나'},maxMana:{ja:'最大マナ',en:'Max mana',ko:'최대 마나'},dew:{ja:'雫',en:'Dew',ko:'이슬'},shield:{ja:'シールド',en:'Shield',ko:'실드'},hand:{ja:'手札',en:'Hand',ko:'손패'},deck:{ja:'デッキ',en:'Deck',ko:'덱'},discard:{ja:'墓地',en:'Graveyard',ko:'묘지'},removed:{ja:'リフト',en:'Rift',ko:'리프트'},field:{ja:'場',en:'Field',ko:'필드'}};
   for(const side of [0,1] as const)for(const [key,label]of Object.entries(labels)){
    const read=(g:GameState)=>{const value=g.players[side][key as keyof GameState['players'][0]];return Array.isArray(value)?value.length:typeof value==='number'?(key==='hp'?Math.max(0,value):value):0;};
    const a=read(before),b=read(after);if(a===b)continue;
