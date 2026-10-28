@@ -1,0 +1,2 @@
+PASS ja: 40 pages, reference/search/inspection, keyboard tabs, saved position, 1440/390/320 widths
+PASS real basic-tutorial controls → optional book invitation → Single board

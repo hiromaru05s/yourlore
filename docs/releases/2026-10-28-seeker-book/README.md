@@ -13,7 +13,7 @@
 
 ## 採用デザインと起動元
 
-制作開始の参照: `2e2f85ef275e26e91b9aaf79155970a4de5c4804`。リリース前に最新mainを取り込み、チュートリアル見出しの簡素化も保持。
+制作開始の参照: `2e2f85ef275e26e91b9aaf79155970a4de5c4804`。リリース前に `78ab18d350307dfa6d2753c7e8716a646ea191a5` のmainを取り込み、チュートリアル見出しの簡素化も保持。
 
 採用元: `client/src/ui/lounge.ts` の図書館背景、`client/src/ui/cardArt.ts` の現行原画、`client/src/styles/defaultUI.css` のazure-silver chamfer。方針は `docs/default-ui-design.md`、`docs/menu-design-insights.md`、`docs/world-bible.md`。既存の青銀面・細い銀線・切欠き角を用いた見開きと目次。スマホは縦読みと章選択。
 
