@@ -45,14 +45,14 @@ try{
    else{
     if(!inspectedDuringPlay&&await target.evaluate(e=>!!e.closest('#hand'))){
      await target.click({button:'right'});
-     const modal=p.locator('#zoomOverlay .zoom-wrap'),ring=p.locator('.tutorial-tour-ring');
+     const modal=p.locator('#zoomOverlay .zoom-wrap');
      await modal.waitFor({state:'visible'});
      await p.waitForFunction(()=>{
       const modal=document.querySelector('#zoomOverlay .zoom-wrap')?.getBoundingClientRect(),ring=document.querySelector('.tutorial-tour-ring')?.getBoundingClientRect();
       return modal&&ring&&['left','top','right','bottom'].every(side=>Math.abs(modal[side]-ring[side])<=6);
      });
      await p.screenshot({path:out+'/inspection-during-play-'+width+'.png'});
-     await p.locator('#zoomOverlay .inspect-close').click();inspectedDuringPlay=true;
+     await p.locator('#zoomOverlay .inspect-close').press('Escape');inspectedDuringPlay=true;
     }
     const source=p.locator('.tutorial-action-guide:not([hidden]) .tutorial-action-ring');await source.waitFor({state:'visible'});
     const a=await source.boundingBox(),drop=p.locator('.tutorial-action-guide:not([hidden]) .tutorial-drop-ring:not([hidden])');
