@@ -48,7 +48,7 @@ export const TUTORIAL_PARTS:TutorialPartMeta[]=[{kind:'board',title:c('デュエ
 export const PART_TOURS:Partial<Record<number,TutorialTourStep[]>>={0:[
  step('#portraitOpp .pt-hp',c('勝利条件','Goal','승리 조건'),c('やあ、ゼノだよ。上にいる相手の体力を0にしたら勝ちだよ。','Hi, I’m Zeno. Reduce the opponent’s health above to zero to win.','안녕, 난 제노야. 위쪽 상대의 체력을 0으로 만들면 이겨.')),
  step('#portraitMe .pt-hp',c('自分の体力','Your health','내 체력'),c('下がきみ。先攻は体力40、後攻は45で始まるよ。','You are below. The first player starts at 40 health, the second at 45.','아래가 너야. 선공은 체력 40, 후공은 45로 시작해.')),
- step('#endBtn',c('ターンの流れ','Turns','턴의 흐름'),c('交互に自分のターンを進めるよ。手札を使って、モンスターで攻撃しよう。','Players take turns. On your turn, play cards and attack with monsters.','번갈아 자기 턴을 진행해. 손패를 사용하고 몬스터로 공격해.')),
+ step('#endBtn',c('ターンの流れ','Turns','턴의 흐름'),c('お互い交互にターンを進めるよ。この「END TURN」を押すと、自分のターンを終了できるよ。ボタンの周りの光で、残り時間も確認できるよ。','Players take turns. Press this END TURN button to finish your turn. The light around the button shows how much time you have left.','서로 번갈아 턴을 진행해. 이 END TURN 버튼을 누르면 내 턴을 끝낼 수 있어. 버튼 둘레의 빛으로 남은 시간도 확인할 수 있어.')),
  step('.market-counter',c('マーケット','Markets','마켓'),c('中央はカードを買うマーケット。買い足すことで、対戦中のデッキを強くできるよ。','Buy cards from the markets in the middle to strengthen your deck during the duel.','가운데 마켓에서 카드를 사서 대전 중 덱을 강화할 수 있어.')),
  step('#portraitMe .pt-mana',c('マナ','Mana','마나'),c('カードの購入にも使用にも、マナを使うよ。今は4マナあるね。','Buying and playing cards both spend mana. You have 4 mana now.','카드를 사거나 쓸 때 마나를 지불해. 지금은 마나가 4야.')),
  openHand(),
