@@ -41,6 +41,10 @@ try{
  assert(inspect>=0&&summon>inspect);
  for(const selector of ['.card-cost','.ad-atk','.ad-def'])assert(tour.some(s=>s.selector==='#zoomOverlay '+selector),'each card statistic has its own inspected highlight');
  assert(tour.filter(s=>s.selector?.endsWith('.mkt-stock')).length>=2,'stock, including its change, is highlighted directly');
+ const fixedIntro=tour.findIndex(s=>s.selector==='#fixedMarket'),changingIntro=tour.findIndex(s=>s.selector==='#supplyMarket'),shared=tour.findIndex(s=>s.title.en==='Shared markets');
+ assert(fixedIntro>=0&&changingIntro>fixedIntro&&shared>changingIntro,'identify each market on the board before explaining shared ownership');
+ assert.deepEqual(tour[shared].region,['#fixedMarket','#supplyMarket']);assert(tour[shared].ringEach,'shared explanation marks both markets separately');
+ assert(shared<tour.findIndex(s=>s.title.en==='Buy a card'),'market introductions precede purchase instructions');
  const text=tour.map(s=>s.body.ja).join('');
  assert(text.indexOf('マーケット')<text.indexOf('ダブルクリック'));
  assert(text.indexOf('カードを3枚引く')<text.indexOf('ターン終了を押そう'));
