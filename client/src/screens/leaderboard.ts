@@ -25,7 +25,7 @@ export function mountLeaderboard(app: App): Screen {
     <div class="panel lb">
       <div class="lb-head">
         <button class="btn btn-ghost" id="lbBack">← ${t("common.back")}</button>
-        <div><small class="menu-eyebrow">BIBLION / LEADERBOARD</small><h2>${t("home.nav.ranking")}</h2><p class="menu-subtitle">${loungeText("シーカーたちの、現在地。","Where Seekers stand.","시커들의 현재 위치.")}</p></div>
+        <div><small class="menu-eyebrow">BIBLION / LEADERBOARD</small><h2>${t("home.nav.ranking")}</h2></div>
         <span class="lb-season" id="lbSeason"></span>
       </div>
       <div class="menu-records"><details class="lounge-rank-rules"><summary>${loungeText("MMRとシーズンについて", "MMR & seasons", "MMR과 시즌 안내")}</summary><p>${loungeText("初期MMRは1000。ランク対戦の結果と相手のMMRで増減します。同じMMR同士なら勝利 +18、敗北 −16、引き分け ±0。ノーマル・シングル・フレンド対戦では変動しません。毎月UTCの月初に、前月のMMRを1000へ半分戻して開始します。", "Start at 1000 MMR. Ranked results adjust your rating based on your opponent: equal ratings yield +18 for a win, −16 for a loss, 0 for a draw. Casual, Single and friend matches do not change MMR. Each UTC month resets the previous month's MMR halfway toward 1000.", "초기 MMR은 1000입니다. 상대 MMR과 랭크 결과에 따라 변동하며, 동일 MMR 기준 승리 +18, 패배 −16, 무승부 0입니다. 일반·싱글·친선전은 MMR에 영향을 주지 않습니다. 매월 UTC 기준 지난달 MMR을 1000 방향으로 절반 초기화합니다.")}</p><div class="rank-tier-guide">${[...TIERS,{key:"gm",min:1550}].map(tier=>`<div style="--rank-metal:${TIER_META[tier.key].color}">${rankEmblem(tier.key)}<b>${tierLabel(tier.key)}</b><span>${tier.min}+ MMR${tier.key==="gm"?" · TOP 25":""}</span></div>`).join("")}</div></details>
