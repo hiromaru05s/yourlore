@@ -1,0 +1,20 @@
+{
+  "source": "13a16712db9c16244da817d0a9a72c6c05aefb6c",
+  "version": "1f92e254-3577-43d2-a433-658e031670b1",
+  "entry": "/assets/main-BINLt2XL.js",
+  "checkedAt": "2026-10-28T07:33:00.916Z",
+  "automationElapsedMs": 186401,
+  "humanTimingStudy": false,
+  "ui": {
+    "buttons": [],
+    "coach": null,
+    "drop": null,
+    "handOpen": false,
+    "loading": false,
+    "menu": true,
+    "modal": [],
+    "progress": " 完了",
+    "source": null
+  },
+  "errors": []
+}

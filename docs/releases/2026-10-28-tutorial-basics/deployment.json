@@ -1,0 +1,16 @@
+{
+  "id": "e6c42a2f-257c-4c98-b0c1-3af9d17046e7",
+  "source": "wrangler",
+  "strategy": "percentage",
+  "annotations": {
+    "workers/message": "13a16712db9c16244da817d0a9a72c6c05aefb6c guarded release",
+    "workers/triggered_by": "deployment"
+  },
+  "versions": [
+    {
+      "version_id": "1f92e254-3577-43d2-a433-658e031670b1",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-10-28T07:29:01.106181Z"
+}
