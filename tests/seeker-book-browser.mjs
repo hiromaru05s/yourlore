@@ -66,7 +66,7 @@ try{
    }
    await page.locator('#bookPlaySingle').waitFor({state:'visible'});assert.equal(await page.locator('#tutorial-tab-book').getAttribute('aria-selected'),'true');
    await page.screenshot({path:out+'/completed-invitation.png'});
-   await page.locator('#tutorial-tab-basics').click();assert(await page.locator('.tutorial-basics-clear').isVisible());await page.locator('#openBook').click();
+   await page.locator('#tutorial-tab-basics').click();assert(await page.locator('.tutorial-basics-clear').isVisible());assert.equal(await page.locator('#openBook').count(),0);await page.locator('#tutorial-tab-book').click();
    await page.locator('#bookPlaySingle').click();await page.locator('#endBtn').waitFor({state:'visible',timeout:90000});
    assert.deepEqual(errors,[],'walkthrough has no runtime errors');console.log('PASS real basic-tutorial controls → optional book invitation → Single board');
   }
