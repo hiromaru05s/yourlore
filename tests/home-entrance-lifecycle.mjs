@@ -20,12 +20,18 @@ try{
   document.body.innerHTML='<main><div class="lounge-home"><div class="lounge-topbar" style="opacity:.7;transform:translateX(4px)"></div><div class="home-companion" style="transform:scale(.8)"></div></div></main><div class="screen-loader"><div class="loading-ritual"><div class="loading-card--hero"></div></div><span class="loading-title">Ready</span></div>';
   const root=document.querySelector('main'),cover=document.querySelector('.screen-loader');
   cover.getAnimations=()=>[{pause(){},cancel(){}}];
-  return {root,cover,controller:new AbortController(),chrome:[...root.querySelectorAll('.lounge-topbar,.home-companion')].map(el=>({el,opacity:el.style.opacity,transform:el.style.transform}))};
+  return {root,cover,controller:new AbortController(),chrome:[...root.querySelectorAll('.lounge-home,.lounge-topbar,.home-companion')].map(el=>({el,opacity:el.style.opacity,transform:el.style.transform}))};
  };
  for(const mode of ['complete','abort','reduced','pre-abort','motion-change']){
   const {root,cover,controller,chrome}=setup();motion.matches=mode==='reduced';
   if(mode==='pre-abort')controller.abort();
   const run=playHomeEntrance(root,cover,controller.signal);
+  if(mode==='complete'){
+   const shell=root.querySelector('.lounge-home');
+   assert.equal(shell.style.opacity,'0','the entire HOME starts hidden');
+   root.querySelector('.lounge-topbar').replaceWith(Object.assign(document.createElement('header'),{className:'lounge-topbar',textContent:'Refreshed profile, volume and quests'}));
+   assert.equal(shell.style.opacity,'0','a rebuilt header stays behind the same visibility gate');
+  }
   step();step();
   if(mode==='abort')controller.abort();
   if(mode==='motion-change')motion.dispatchEvent(new Event('change'));

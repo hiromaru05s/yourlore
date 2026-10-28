@@ -2,10 +2,13 @@ import {loadingCardFace} from './loadingSigil';
 import {entranceEase as ease,azureFanPose} from './homeEntranceMotion';
 import '../styles/homeEntrance.css';
 
-export const homeEntranceChrome='.lounge-topbar,.lounge-rail,.lounge-home-main,.home-companion';
+// Gate the stable HOME shell, including its background. User refreshes rebuild
+// the header and responsive layout moves the companion during loading; fading
+// captured child nodes lets their replacements appear before the entrance.
+export const homeEntranceChrome='.lounge-home';
 
 /** Transfer the three loaded cards into the selected seven-card fan, in front of
- * the real HOME. Only opacity is changed on HOME actors: their renderer/layout
+ * the real HOME. Only opacity is changed on the HOME shell: renderer/layout
  * transforms must survive both completion and navigation cancellation. */
 export function playHomeEntrance(root:HTMLElement,cover:HTMLElement,signal:AbortSignal):Promise<void>{
  if(signal.aborted||!root.querySelector('.lounge-home'))return Promise.resolve();
