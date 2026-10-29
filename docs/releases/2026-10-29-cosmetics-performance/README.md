@@ -57,4 +57,8 @@ Chrome headless、1440×1000、同じマシン・同じAPI fixture。各操作�
 
 ## 本番
 
-ガード付きデプロイと配信後検証の結果を追記する。
+本番ビルド（5297）でもフレーム5種・エフェクト3種の選択でlong task 0、最大RAF間隔16.8msを確認。`qa/after-build.json`を参照。
+
+本番未反映。`git push gh HEAD:main`がGitHubのInvalid username or tokenで失敗し、ガード付きデプロイは開始されていない。資格情報を含まないHTTPS経路にも利用可能なcredentialはなく、SSHもpublickey認証に失敗。認証復旧が必要。
+
+復旧後は最新`gh/main`を取得して統合し、`npm run deploy`のデプロイロック・スキーマ照合・型検証・本番スイート・ビルドを通し、配信アセットと外観操作を検証する。現時点で本番反映済みとは報告しない。
