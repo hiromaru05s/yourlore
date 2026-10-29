@@ -18,13 +18,23 @@ export function syncCardFrames(g:GameState,you=0){
 export function rememberCardFrame(uid:string,id?:string){ownership.set(uid,cardFrameId(id));}
 interface Entry {node:HTMLElement;id:string;ready:Promise<void>;connected:boolean;created:number;cancelled:boolean;layers:HTMLCanvasElement[];}
 const entries=new Map<HTMLElement,Entry>();
-let renderer:CardFrameMaterial|undefined,mutation:MutationObserver|undefined,raf=0,last=0;
+let renderer:CardFrameMaterial|undefined,mutation:MutationObserver|undefined,raf=0,last=0,cleanup=0;
 const motion=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):null;
 const now=()=>motion?.matches?1.5:performance.now()/1000;
 function stop(){cancelAnimationFrame(raf);raf=0;}
-function wake(){stop();if(entries.size&&!document.hidden)raf=requestAnimationFrame(tick);}
-function release(){if(entries.size)return;stop();mutation?.disconnect();mutation=undefined;renderer?.dispose();renderer=undefined;document.removeEventListener('visibilitychange',wake);motion?.removeEventListener('change',wake);}
+function wake(){if(document.hidden){stop();return;}if(!raf&&entries.size)raf=requestAnimationFrame(tick);}
+function release(){if(entries.size)return;stop();clearTimeout(cleanup);cleanup=0;mutation?.disconnect();mutation=undefined;renderer?.dispose();renderer=undefined;document.removeEventListener('visibilitychange',wake);motion?.removeEventListener('change',wake);}
 function detach(e:Entry){e.cancelled=true;for(const layer of e.layers){const part=layer.parentElement;if(part)renderer?.detach(part);}entries.delete(e.node);release();}
+// Offscreen cards sleep instead of polling at display refresh rate. Retain the
+// original grace period for faces prepared for a flight but never inserted.
+function scheduleCleanup(){
+ if(cleanup)return;
+ cleanup=window.setTimeout(()=>{
+  cleanup=0;const t=performance.now();
+  for(const e of entries.values())if(!e.node.isConnected&&!e.layers.some(c=>c.isConnected)&&t-e.created>10000)detach(e);
+  if([...entries.values()].some(e=>!e.connected))scheduleCleanup();
+ },10050);
+}
 function tick(t:number){raf=0;if(document.hidden)return;
  for(const e of entries.values()){
   if(e.node.isConnected)e.connected=true;
@@ -32,9 +42,9 @@ function tick(t:number){raf=0;if(document.hidden)return;
   if(!e.node.isConnected&&!e.layers.some(c=>c.isConnected)&&(e.connected||t-e.created>10000))detach(e);
  }
  if(t-last>=1000/24||motion?.matches){renderer?.draw(now());last=t;}
- if(entries.size&&!motion?.matches)raf=requestAnimationFrame(tick);
+ if(renderer?.visible&&!motion?.matches)raf=requestAnimationFrame(tick);
 }
-function install(){if(mutation)return;renderer=new CardFrameMaterial();
+function install(){if(mutation)return;renderer=new CardFrameMaterial(wake);
  mutation=new MutationObserver(records=>{
   for(const record of records)for(const added of record.addedNodes){if(!(added instanceof HTMLElement))continue;
    for(const node of [ ...(added.matches('[data-card-frame]')?[added]:[]),...added.querySelectorAll<HTMLElement>('[data-card-frame]')]){
@@ -52,11 +62,11 @@ export function attachCardFrame(node:HTMLElement,uid:string,explicit?:string):Pr
  if(previous?.id===id)return previous.ready;
  if(previous)detach(previous);
  if(!isCardFrame(id)){delete node.dataset.cardFrame;return Promise.resolve();}
- node.dataset.cardFrame=id;install();
- const e:Entry={node,id,ready:Promise.resolve(),connected:node.isConnected,created:performance.now(),cancelled:false,layers:[]};entries.set(node,e);
+ node.dataset.cardFrame=id;install();const material=renderer!;
+ const e:Entry={node,id,ready:Promise.resolve(),connected:node.isConnected,created:performance.now(),cancelled:false,layers:[]};entries.set(node,e);scheduleCleanup();
  // Wait one microtask for the builder to append/finish spell and quest frame styles.
- e.ready=Promise.resolve().then(()=>renderer?.attach(node,frameMaterial(id)!,()=>!e.cancelled)).then(()=>{
-  if(e.cancelled)return;e.layers=[...node.querySelectorAll<HTMLCanvasElement>('.card-frame-material')];renderer?.draw(now(),true);wake();
+ e.ready=Promise.resolve().then(()=>e.cancelled?undefined:material.attach(node,frameMaterial(id)!,()=>!e.cancelled)).then(()=>{
+  if(e.cancelled)return;e.layers=[...node.querySelectorAll<HTMLCanvasElement>('.card-frame-material')];wake();
  }).catch(error=>{if(!e.cancelled)console.warn('Card frame could not be prepared',error);});
  wake();return e.ready;
 }
