@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-29",
+  "implementationCommit": "83c1fac2d031284f4c6e63e387013928b5dc5145",
+  "typecheck": "passed",
+  "build": "passed",
+  "productionSuite": {
+    "passed": 251,
+    "failed": 0
+  },
+  "browser": "passed; real GameRoom + two browser controllers, fixture transport/storage",
+  "deployment": "blocked before main integration: GitHub HTTPS Invalid username or token; SSH publickey rejected",
+  "deployedSourceUnchanged": "5839a8bd39128f80f1453a82e8ccc1ffbafdf7bc",
+  "workerVersionUnchanged": "efab21c0-2b79-4700-8143-c8294bbc5a21",
+  "resume": "Restore GitHub push authentication; push this branch to main without force, then run npm run deploy and verify the deployed version."
+}
