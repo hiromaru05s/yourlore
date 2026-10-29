@@ -4962,13 +4962,17 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       }
       return;
     }
-    ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard", ...(card.id === "EXILE_NUKE2" ? {riftCount: rmz(p).length} : {}) }); // capture the public Rift before damage triggers add records
+    const castEvent: Extract<GameEvent, {type: "playSpell"}> = { type: "playSpell", player: side(g, p), id: card.id, dest: "discard", ...(card.id === "EXILE_NUKE2" ? {riftCount: rmz(p).length} : {}) }; // capture the public Rift before damage triggers add records
+    ctx.ev.push(castEvent);
     const blood = isBloodMagic(card);
     // 룬 학문 - 상급(runeEcho, v34): 즉발 마법을 마나 없이 1번 더 발동 (선택형/펜딩 생성 마법은 제외)
     const echo = card.t === "spell" && runeEchoDepth === 0 && p.enchants.some((e) => e.card.ench === "runeEcho");
     if (CUSTOM_SPELLS.has(card.id)) {
       spellDepth++; if (blood) bloodDepth++;
       try { customSpell(g, ctx, card); } finally { spellDepth--; if (blood) bloodDepth--; }
+      // Ambush may end the game before self-exile. Report its actual destination
+      // so playback never invents a graveyard stop before the Rift transfer.
+      if (card.id === "AMBUSH" && rmz(p).some(c => c.uid === card.uid)) castEvent.dest = "vanish";
       if (blood) bloodTriggers(g, ctx, p);
       if (echo && !g.pending && !g.over) {enchantKindFx(g,ctx.ev,"runeEcho",p);
         ctx.log(`  └ <span class="good">룬 학문 - 상급</span>: ${cn(card)} 재발동!`, `  └ <span class="good">ルーン学問 - 上級</span>: ${cn(card)} 再発動！`);
