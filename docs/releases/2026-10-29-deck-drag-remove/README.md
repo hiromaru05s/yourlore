@@ -13,8 +13,14 @@ Deck cards can be dragged back into the card-list panel to remove one copy. Fixe
 ## Validation
 
 - Client/server typecheck and production build passed.
+- Full production suite: **250/250 passed**; see `production-suite.log`. Test-generated historical reports were restored after inspection.
 - `tests/deck-drag.mjs`: add/replace/remove, fixed card, outside/Escape/pointercancel/blur/render cancellation, save gate, click suppression, native touch scrolling, teardown.
 - `tests/deck-hand-editor.mjs`: removal integration, pending replacement reset, incomplete deck save gate, undo and existing editor regression checks.
 - `tests/deck-drag-browser.mjs`: actual mouse gestures at 1280 and 390 CSS pixels, remove/undo/outside/Escape/fixed card/add/replace and fixture save. No browser errors. See `browser.json`.
 - Browser API responses are fixtures; this does not establish real-account persistence or physical touchscreen validation.
+- Production database tables, columns, types and required indexes passed `node scripts/check-db-schema.mjs production`.
 - Production release uses `npm run deploy` (committed main snapshot, deployment lock/source/schema guards, full production suite, typecheck and build). Final deployed version is reported after release.
+
+## Deployment status
+
+Implementation commit: `620c7761`. Production is **not updated**: HTTPS push to `gh` and the credential-helper URL were rejected by GitHub authentication; SSH was rejected with `Permission denied (publickey)`. The guarded deployment stopped at its remote-main equality check, before any production mutation. Restore GitHub write authentication, fetch and integrate current main, push, then rerun `npm run deploy` and verify the deployed source/assets. The branch and worktree remain available for continuation.
