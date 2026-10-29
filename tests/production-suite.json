@@ -60,6 +60,7 @@
     "tests/balance-v58-server.mjs",
     "scripts/check-card-text.mjs",
     "tests/card-wording.mjs",
+    "tests/card-effect-completeness.mjs",
     "tests/card-wording-render.mjs",
     "tests/passive-explanations.mjs",
     "tests/card-effect-ux.mjs",
