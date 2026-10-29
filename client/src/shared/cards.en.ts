@@ -658,7 +658,7 @@ Object.assign(TEXTS, {
   ND5: "Grant Aura to all your monsters (Cast 4)",
   GS5_3: "16 damage per Demonkin monster in the enemy deck, graveyard and field (Cast 2)",
   GS6_4: "If the opponent has a Brand counter, put 3 more Brand counters on them (Cast 3)",
-  RUNE2: "Only if half your deck or more is spells · Max mana +8",
+  RUNE2: "Only if half your deck or more is spells · Max mana +2",
   RUNE3: "Permanent: only if half your deck or more is spells · Your spells fire one extra time for free",
   WORLD_BLESS: "Permanent: both players gain max mana +1 at turn start · +4 on your turns if your deck holds Elf cards (Cast 4)",
   GS8_0: "Exile any 1 card of your choice from the enemy deck",
