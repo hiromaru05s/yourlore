@@ -1848,23 +1848,26 @@
     },
     "RUNE2": {
       "nameJa": "ルーン学問 - 中級",
-      "status": "reworded",
+      "status": "balance-updated",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "ca754b0781ff4a5a4b13ca57ce5e37a952361b51e79f587c457c26a3568afd29",
-      "textSha256": "7059917a2569d0f42803e3fa1a5c5c90d5c4d7489d4d001e9b4549423971a873",
+      "textSha256": "4ad7f9954ece2fb6412061fe6dd2c711ac8e79e6e589c4a8cecfd83c103825e7",
       "hooks": {},
       "before": {
         "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+8。",
-        "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동시】자신의 최대 마나 +8.",
+        "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동 시】자신의 최대 마나 +8.",
         "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【On Cast】Your max mana +8."
       },
       "after": {
-        "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+8。",
-        "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동 시】자신의 최대 마나 +8.",
-        "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【On Cast】Your max mana +8."
-      }
+        "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+2。",
+        "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동 시】자신의 최대 마나 +2.",
+        "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【On Cast】Your max mana +2."
+      },
+      "reviewNote": "2026-10-29: max mana gain reduced from 8 to 2; play requirement and cost unchanged."
     },
     "RUNE3": {
       "nameJa": "ルーン学問 - 上級",

@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/rune-intermediate.mjs",
     "tests/db-schema-contract.mjs",
     "tests/staging-audit-fixtures.mjs",
     "tests/user-data-reset.mjs",
