@@ -62,8 +62,11 @@ interface RoomData {
   /** Pending forfeit deadlines (ms epoch) per side; enforced by alarm(). */
   forfeitAt: [number | null, number | null];
   /** ms epoch when the CURRENT turn began — server-authoritative turn clock, so a
-      reconnecting/reopened client resumes with the correct remaining time (not a fresh 50s). */
+      reconnecting/reopened client resumes with the correct remaining time (not a fresh turn). */
   turnStartAt: number;
+  turnReadyCapable?: [boolean, boolean];
+  /** Bounded playback wait, persisted across reconnects and hibernation. */
+  turnReadyBy?: number | null;
   /** v42: extra ms granted to the CURRENT turn once the end-turn hand-discard choice (pending
       handCap) appears — the player gets +10s to pick; on expiry the engine discards from the right. */
   turnBonusMs: number;
@@ -87,7 +90,7 @@ interface RoomData {
   bot?: { id: string; side: Side; nextAt: number | null };
 }
 
-const TURN_MS_RANKED = 50000; // ranked: tighter clock
+const TURN_MS_RANKED = 65000; // ranked: tighter clock
 const TURN_MS_CASUAL = 90000; // everything else: 90s per turn
 const turnMsFor = (ranked: boolean): number => (ranked ? TURN_MS_RANKED : TURN_MS_CASUAL);
 /** Reserve time to execute the rest of a long NPC turn. This changes only
@@ -95,6 +98,7 @@ const turnMsFor = (ranked: boolean): number => (ranked ? TURN_MS_RANKED : TURN_M
 export function npcThinkingDifficulty(difficulty: BotDifficulty, remainingMs: number): BotDifficulty {
   return (difficulty === 'hard' || difficulty === 'hell') && remainingMs < 45000 ? 'normal' : difficulty;
 }
+const TURN_READY_MAX_MS = 45000; // stalled clients must not hold the opponent forever
 const HAND_CAP_BONUS_MS = 10000; // v42: end-turn hand-discard choice grants +10s
 /** Server-side slack past the client's clock before the room force-ends a turn.
  *  Honest clients auto-end themselves at 0 — this only catches stalled/modified
@@ -198,6 +202,8 @@ export class GameRoom {
         gen: r.gen ?? [0, 0],
         forfeitAt: r.forfeitAt ?? [null, null],
         turnStartAt: r.turnStartAt ?? Date.now(),
+        turnReadyCapable: r.turnReadyCapable,
+        turnReadyBy: r.turnReadyBy,
         turnBonusMs: r.turnBonusMs ?? 0,
         previewUntil: r.previewUntil ?? null,
         previewDone: r.previewDone ?? true, // pre-existing rooms are already in-game → no preview
@@ -368,6 +374,10 @@ export class GameRoom {
 
     if (msg.type === "ping") { try { this.send(ws, { type: "pong" }); } catch { /* dropped */ } return; } // autoResponse fallback
     if (att.gen !== room.gen[att.side]) return;
+    if (msg.type === "turnReady") {
+      if (msg.turn === room.game.turn && msg.cur === room.game.cur && att.side === room.game.cur) await this.startTurnClock();
+      return;
+    }
     if (msg.type === "openingReady") {
       if (!room.game.over && room.opening && room.previewDone) {
         room.opening.ready[att.side] = true;
@@ -377,6 +387,7 @@ export class GameRoom {
       return;
     }
     if (msg.type === "ready") {
+      (room.turnReadyCapable ??= [false, false])[att.side] = msg.turnReadyVersion === 1;
       (room.battleLogReady ??= [false,false])[att.side] = msg.battleLogVersion === 1;
       if (room.opening && room.opening.startsAt == null) room.opening.capable[att.side] = msg.openingVersion === OPENING_VERSION;
       room.readied[att.side] = true;
@@ -465,7 +476,7 @@ export class GameRoom {
     }
     // authoritative turn clock: arm the force-end deadline for the running turn
     if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1] && (!room.opening || room.opening.startsAt != null)) {
-      times.push(room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS);
+      times.push(room.turnReadyBy ?? (room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS));
     }
     if (times.length) await this.state.storage.setAlarm(Math.min(...times));
     else await this.state.storage.deleteAlarm();
@@ -534,14 +545,15 @@ export class GameRoom {
     // The clock was previously display-only — a stalled or modified client on its
     // turn could freeze the opponent forever (no action → no forfeit, no end).
     if (!room.game.over && room.previewDone && bothJoined && (!room.opening || room.opening.startsAt != null)) {
+      if (room.turnReadyBy != null && room.turnReadyBy <= now) await this.startTurnClock();
       const dl = room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS;
-      if (dl <= now + 250) {
+      if (room.turnReadyBy == null && dl <= now + 250) {
         const prevTurn = room.game.turn, prevCur = room.game.cur;
         const { state: st, events: evs } = resolveTurnTimeout(room.game);
         room.game = st;
         this.recordLog(evs);
         if (st.turn !== prevTurn || st.cur !== prevCur || st.over) {
-          room.turnStartAt = Date.now(); room.turnBonusMs = 0;
+          this.prepareTurnClock();
           await this.persist();
           await this.syncAlarm();
           this.broadcast(evs);
@@ -592,6 +604,8 @@ export class GameRoom {
     } else if (actingSide(g) !== side) {
       return; // not this player's turn
     }
+    // A valid gameplay action also proves readiness (older/reconnected clients).
+    if (room.turnReadyBy != null && side === g.cur && action.type !== "surrender") await this.startTurnClock();
     const prevCur = g.cur;
     const prevTurn = g.turn;
     const res = reduce(g, action);
@@ -602,7 +616,7 @@ export class GameRoom {
     // cur) is essential: a skip (e.g. TIMEWARP) runs endTurn twice, so cur returns to the same
     // player while turn advances by 2 — checking cur alone would leave a stale turnStartAt,
     // making the resumed turn's clock read ~0 and instantly auto-end (cascading turn skips).
-    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) { room.turnStartAt = Date.now(); room.turnBonusMs = 0; await this.syncAlarm(); } // re-arm the turn-timeout alarm
+    if (res.state.turn !== prevTurn || res.state.cur !== prevCur) { this.prepareTurnClock(); await this.syncAlarm(); } // re-arm the turn-timeout alarm
     else if (res.state.pending?.reason === "handCap" && !room.turnBonusMs) { room.turnBonusMs = HAND_CAP_BONUS_MS; await this.syncAlarm(); } // v42: +10s to choose the discards
 
     await this.persist();
@@ -624,13 +638,39 @@ export class GameRoom {
     if (room.bot) await this.syncAlarm();
   }
 
+  private prepareTurnClock(earliest = Date.now()): void {
+    const room = this.room!;
+    room.turnStartAt = earliest;
+    room.turnBonusMs = 0;
+    room.turnReadyBy = !room.game.over && room.bot?.side !== room.game.cur && room.turnReadyCapable?.[room.game.cur]
+      ? earliest + TURN_READY_MAX_MS : null;
+  }
+
+  private async startTurnClock(): Promise<void> {
+    const room = this.room!;
+    if (room.turnReadyBy == null || room.game.over || !room.previewDone || !room.readied.every(Boolean)
+      || (room.opening && (room.opening.startsAt == null || Date.now() < room.turnStartAt))) return;
+    room.turnReadyBy = null;
+    room.turnStartAt = Date.now();
+    await this.persist();
+    await this.syncAlarm();
+    // Clock-only messages never enqueue playback or unlock an outstanding action.
+    for (const side of [0, 1] as Side[]) {
+      const ws = this.sockFor(side);
+      if (ws) { try { this.send(ws, {type:'turnClock', turn:room.game.turn, cur:room.game.cur,
+        turnTotalMs:turnMsFor(room.ranked)+(room.turnBonusMs||0),
+        turnLeftMs:Math.max(0,turnMsFor(room.ranked)+(room.turnBonusMs||0)-(Date.now()-room.turnStartAt))}); } catch { /* dropped */ } }
+    }
+  }
+
   /** Redacted state for `side`, stamped with the turn's remaining/total ms (server-authoritative clock). */
   private redact(side: Side): GameState {
     const s = redactFor(this.room!.game, side) as GameState & { turnLeftMs?: number; turnTotalMs?: number; sleeves?: [string | null, string | null] };
     const total = turnMsFor(this.room!.ranked) + (this.room!.turnBonusMs || 0);
     s.ranked = this.room!.ranked;
     s.turnTotalMs = total;
-    s.turnLeftMs = Math.min(total, Math.max(0, total - (Date.now() - this.room!.turnStartAt)));
+    s.turnClockWaiting = this.room!.turnReadyBy != null;
+    s.turnLeftMs = s.turnClockWaiting ? total : Math.min(total, Math.max(0, total - (Date.now() - this.room!.turnStartAt)));
     if (this.room!.opening && s.turn === 1) {
       const startsAt=this.room!.opening.startsAt;
       s.opening={startsAt,playableAt:startsAt==null?null:this.room!.turnStartAt,serverNow:Date.now()};
@@ -695,7 +735,7 @@ export class GameRoom {
     if(!opening||opening.startsAt!=null||!room.readied.every(Boolean)||!room.previewDone)return;
     if(opening.version!==OPENING_VERSION||!opening.capable.every(Boolean)) {
       // Mixed/older clients keep the legacy immediate-start path; never use a mismatched cinematic clock.
-      delete room.opening;room.turnStartAt=Date.now();
+      delete room.opening;this.prepareTurnClock();
     } else if(opening.prepareBy==null) opening.prepareBy=Date.now()+OPENING_PREPARE_MS;
     await this.persist();
     await this.syncAlarm();
@@ -708,7 +748,7 @@ export class GameRoom {
     if(!opening||opening.startsAt!=null||!room.readied.every(Boolean)||!room.previewDone||room.game.over)return;
     opening.startsAt=Date.now()+OPENING_LEAD_MS;opening.prepareBy=null;
     // Pending pre-release rooms may still have v1 clients and an already-armed alarm.
-    room.turnStartAt=opening.startsAt+(opening.version===OPENING_VERSION?DUEL_OPENING_MS:10450);room.turnBonusMs=0;
+    this.prepareTurnClock(opening.startsAt+(opening.version===OPENING_VERSION?DUEL_OPENING_MS:10450));
     await this.persist();
     await this.syncAlarm();
     for(const side of [0,1] as Side[])await this.sendInit(side);

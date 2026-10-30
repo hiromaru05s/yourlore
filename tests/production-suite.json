@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/rune-intermediate.mjs",
     "tests/db-schema-contract.mjs",
     "tests/staging-audit-fixtures.mjs",
     "tests/user-data-reset.mjs",
@@ -223,6 +224,7 @@
     "tests/battle-action-log.mjs",
     "tests/battle-log-ui.mjs",
     "tests/turn-clock.mjs",
+    "tests/turn-ready-server.mjs",
     "tests/cards-starter-category.mjs",
     "tests/quick-spell-frame.mjs",
     "tests/touch-activation.mjs",

@@ -411,9 +411,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】An enemy monster has purchase cost 5 or more.\n\n【On Cast】Automatically destroy the eligible monster with the highest ATK plus printed HP; ties use field order."
   },
   "RUNE2": {
-    "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+8。",
-    "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동 시】자신의 최대 마나 +8.",
-    "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【On Cast】Your max mana +8."
+    "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+2。",
+    "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동 시】자신의 최대 마나 +2.",
+    "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【On Cast】Your max mana +2."
   },
   "RUNE3": {
     "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【場にある間】自分が手札から使った単発魔法の処理後、選択待ちがなければ、同じ魔法の効果をマナなしでもう1回処理する（重複しない）。",

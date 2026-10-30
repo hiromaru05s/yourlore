@@ -50,7 +50,7 @@ export class OnlineController extends BaseController {
 
   private connect(): void {
     this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:OPENING_VERSION, battleLogVersion:1 }); this.startHb(); },
+      onOpen: () => { this.turnReadySentKey = ""; this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:OPENING_VERSION, battleLogVersion:1, turnReadyVersion:1 }); this.startHb(); },
       onMessage: (msg) => { this.lastMsgAt = Date.now(); this.onServer(msg); },
       onClose: () => this.onSockClose(),
     });
@@ -88,6 +88,7 @@ export class OnlineController extends BaseController {
     }})();
   }
   private onServer(msg: GameServerMsg): void {
+    if (msg.type === "turnClock") { this.receiveTurnClock(msg); return; }
     if (msg.type === 'logHistory') { this.restoreLog(msg.events, msg.reset); return; }
     if(msg.type==='rewardsSettled'){this.exits.onExperience?.();document.dispatchEvent(new Event('lore:rewards'));return;}
     if (msg.type === "init" || msg.type === "update") {
@@ -169,6 +170,13 @@ export class OnlineController extends BaseController {
   // the second played/bought whichever card slid into that slot. Cleared on every
   // init/update; the 2.5s failsafe covers a lost echo.
   protected openingPrepared():void { this.sock.send({type:"openingReady"}); }
+  private turnReadySentKey = "";
+  protected turnPlayable():void {
+    const key = `${this.state.turn}:${this.state.cur}`;
+    if (this.turnReadySentKey === key) return;
+    this.turnReadySentKey = key;
+    this.sock.send({type:"turnReady",turn:this.state.turn,cur:this.state.cur});
+  }
   private echoLockAt = 0;
   protected submit(action: Action): void {
     if (!this.started || this.state?.over || action.type!=="surrender"&&this.openingLocked) return;
