@@ -216,7 +216,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean}={}): Screen {
         const cnt=document.createElement('div');cnt.className='deck-owned';cnt.title=loungeText('追加できる枚数 / 所持枚数','Available to add / Owned','추가 가능 수 / 보유 수');
         const add=document.createElement('button');add.className='deck-card-action card-action deck-action';add.dataset.action='add';add.innerHTML=controlIcon(false,true);add.setAttribute('aria-label',`${cardName(c)} · ${loungeText('追加・入れ替え','Add or replace','추가 또는 교체')}`);
         add.onclick=()=>{if(!canAdd(id))return;if(deck().length<DECK_SIZE){undo=[...deck()];deck().push(id);sortCards(deck());pending=null;}else pending=pending===id?null:id;render();};
-        face.append(card,cnt,add);tile.append(face);poolRows.set(id,tile);
+        face.append(card,add,cnt);tile.append(face);poolRows.set(id,tile);
       }
       const available=isLocalDevAccount()?DECK_MAX_COPIES:Math.min(DECK_MAX_COPIES,starterCards[id]??0);
       const count=tile.querySelector<HTMLElement>('.deck-owned')!;const remaining=Math.max(0,available-countOf(id));count.textContent=`${remaining}/${available}`;count.classList.toggle('has',available>0);count.setAttribute('aria-label',loungeText(`追加できる枚数 ${remaining}枚 / 所持 ${available}枚`,`Available to add: ${remaining} / Owned: ${available}`,`추가 가능 ${remaining}장 / 보유 ${available}장`));tile.classList.toggle('is-unowned',available===0);
