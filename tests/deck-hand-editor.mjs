@@ -6,8 +6,8 @@ const dom=new JSDOM('<body><div id="app"></div></body>',{url:'http://localhost',
 Object.assign(globalThis,{window:dom.window,document:dom.window.document,HTMLElement:dom.window.HTMLElement,AbortController:dom.window.AbortController});
 const make=id=>({id,name:id,t:'spell',cost:1}),DB={A:make('A'),B:make('B')},STARTERS={STARTER_MANA:make('STARTER_MANA')};
 const fresh=()=>({sel:0,list:Array.from({length:5},()=>({cards:['A','A','A','A','B','B','B','B'],watch:[]}))});
-const store=fresh(),zooms=[],saves=[];let rejectSave=false,disposedEffects=0;
-const deps={deckDisplayArt:{},prepareDeckCard:()=>{},installDeckDrag:()=>{},cardText:()=>'',disposeCardEffects:root=>{if(root.querySelector('#deckCur'))disposedEffects++;},starterCollection:()=>({A:8,B:8}),constrainDeckStore:s=>s,DB,STARTERS,DECK_POOL:['A','B'],BUYABLE_POOL:['A','B'],DECK_SIZE:8,DECK_MAX_COPIES:8,DECK_SLOTS:5,WATCH_MAX:8,
+const store=fresh(),zooms=[],saves=[];let rejectSave=false,disposedEffects=0,dragOptions;
+const deps={deckDisplayArt:{},prepareDeckCard:()=>{},installDeckDrag:options=>{dragOptions=options;return ()=>{};},cardText:()=>'',disposeCardEffects:root=>{if(root.querySelector('#deckCur'))disposedEffects++;},starterCollection:()=>({A:8,B:8}),constrainDeckStore:s=>s,DB,STARTERS,DECK_POOL:['A','B'],BUYABLE_POOL:['A','B'],DECK_SIZE:8,DECK_MAX_COPIES:8,DECK_SLOTS:5,WATCH_MAX:8,
  deckStoreForUser:()=>store,sanitizeDeckName:s=>s.trim(),t:k=>k,cardName:c=>c.name,esc:s=>s,onLangChange:()=>()=>{},loungeText:ja=>ja,homeIcon:()=>'',
  cardEl:c=>{const el=document.createElement('div');el.className='card';el.dataset.card=c.id;return el;},bindZoom:()=>{},zoomCard:c=>zooms.push(c.id),
  revealCards:async(el,nodes)=>el.replaceChildren(...nodes),renderDeckAppearance:()=>{},isLocalDevAccount:()=>false,loadLocalGuestProfile:()=>({}),confirmDialog:async()=>true,
@@ -25,6 +25,13 @@ click('#deckPool [data-card="B"]');click('#deckCur .deck-entry:nth-child(2) .car
 assert.deepEqual(zooms.slice(-2),['B','A']);assert.equal(JSON.stringify(store),unchanged,'Card faces only enlarge');
 for(const key of ['Enter',' '])root.querySelector('#deckPool [data-card="A"]').dispatchEvent(new window.KeyboardEvent('keydown',{key,bubbles:true,cancelable:true}));
 assert.deepEqual(zooms.slice(-2),['A','A']);assert.equal(JSON.stringify(store),unchanged,'Keyboard enlargement never edits');
+
+assert(!dragOptions.canRemove('STARTER_MANA',-1));
+const beforeDrag=[...store.list[0].cards];
+click('#deckPool [data-card="B"] + .deck-card-action');
+assert(dragOptions.canRemove('A',0));dragOptions.remove('A',0);
+assert.equal(store.list[0].cards.length,7);assert(!hand().classList.contains('is-replacing'));assert(root.querySelector('#save').disabled);
+click('#deckUndo');assert.deepEqual(store.list[0].cards,beforeDrag,'Undo restores a dragged-out card');
 
 const retainedPlus=root.querySelector('#deckPool [data-card="B"] + .deck-card-action');const retainedRemove=root.querySelector('#deckCur .deck-entry:nth-child(3) .deck-hand-action');
 const zoomCount=zooms.length;click('#deckPool [data-card="B"] + .deck-card-action');assert.equal(zooms.length,zoomCount,'Plus must not open zoom');assert(hand().classList.contains('is-replacing'));click('#deckCur .deck-entry:nth-child(2) .card');assert(hand().classList.contains('is-replacing'),'Zoom preserves replacement choice');click('#deckCur .is-fixed .card');assert(hand().classList.contains('is-replacing'),'Attune cannot be replaced');

@@ -1,0 +1,98 @@
+[
+  {
+    "kind": "crystal",
+    "size": "mkt",
+    "t": 1.5,
+    "max": 0,
+    "total": 0,
+    "layers": 2
+  },
+  {
+    "kind": "crystal",
+    "size": "mkt",
+    "t": 2.75,
+    "max": 0,
+    "total": 0,
+    "layers": 2
+  },
+  {
+    "kind": "crystal",
+    "size": "mkt",
+    "t": 4,
+    "max": 0,
+    "total": 0,
+    "layers": 2
+  },
+  {
+    "kind": "crystal",
+    "size": "field",
+    "t": 1.5,
+    "max": 0,
+    "total": 0,
+    "layers": 2
+  },
+  {
+    "kind": "crystal",
+    "size": "field",
+    "t": 2.75,
+    "max": 0,
+    "total": 0,
+    "layers": 2
+  },
+  {
+    "kind": "crystal",
+    "size": "field",
+    "t": 4,
+    "max": 0,
+    "total": 0,
+    "layers": 2
+  },
+  {
+    "kind": "prism",
+    "size": "mkt",
+    "t": 1.5,
+    "max": 0,
+    "total": 0,
+    "layers": 1
+  },
+  {
+    "kind": "prism",
+    "size": "mkt",
+    "t": 2.75,
+    "max": 0,
+    "total": 0,
+    "layers": 1
+  },
+  {
+    "kind": "prism",
+    "size": "mkt",
+    "t": 4,
+    "max": 0,
+    "total": 0,
+    "layers": 1
+  },
+  {
+    "kind": "prism",
+    "size": "field",
+    "t": 1.5,
+    "max": 0,
+    "total": 0,
+    "layers": 1
+  },
+  {
+    "kind": "prism",
+    "size": "field",
+    "t": 2.75,
+    "max": 0,
+    "total": 0,
+    "layers": 1
+  },
+  {
+    "kind": "prism",
+    "size": "field",
+    "t": 4,
+    "max": 0,
+    "total": 0,
+    "layers": 1
+  }
+]

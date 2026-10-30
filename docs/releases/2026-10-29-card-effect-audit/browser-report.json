@@ -1,0 +1,148 @@
+{
+  "origin": "http://127.0.0.1:5187",
+  "cwd": "/Users/hiromaru05s/.codex/worktrees/card-effect-text-audit/LORE_TCG",
+  "fixture": "API responses only; production app styles, art and zoom inspector",
+  "count": 1143,
+  "mismatches": [],
+  "viewports": [
+    {
+      "lang": "ja",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "sections": 3,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 1186,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "sections": 3,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 1873,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 1420,
+          "scrollHeight": 1420,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "lang": "ko",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "sections": 3,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 1123,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "sections": 3,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 1843,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 1390,
+          "scrollHeight": 1390,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "sections": 3,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 1227,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "sections": 3,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 1943,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 1490,
+          "scrollHeight": 1490,
+          "overflowY": "visible"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

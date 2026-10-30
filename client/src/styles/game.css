@@ -58,7 +58,6 @@
 .zone-row::before { content:attr(data-label); position:absolute; top:-14px; left:0; color:#26364e; font-size:9px; font-weight:600; text-shadow:0 1px #fff8; letter-spacing:.04em; }
 .zone { display:flex; gap:var(--slot-gap); position:relative; transform:perspective(1100px) rotateX(9deg); transform-origin:center; }
 .zone-st .card,.zone-st .slot { --ch:calc(var(--field-card-size) * .7); }
-.zone-st .card-art { height:89%; }
 .zone-st .card-cost { width:25%; }
 .zone-st .slot { border-bottom:2px solid #536f9640; background:#1d335012; }
 .zone-mon .slot { border-bottom:2px solid #b5976a50; }
@@ -939,5 +938,7 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
   50% { filter:drop-shadow(0 4px 8px #0009) drop-shadow(0 0 18px #ff7a4d); }
 }
 
-/* Permanent spell/quest plates share the bounded native print sampling. */
+/* Permanent spell/quest plates share the bounded native print sampling.
+   Both layers must stay full-height: a lane-level .card-art height override
+   would be halved again by scale and expose the dark lower frame interior. */
 .buff-frame,.buff-art {width:200%;height:200%;right:auto;bottom:auto;scale:.5;transform-origin:0 0;}

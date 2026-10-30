@@ -1,0 +1,452 @@
+[
+  {
+    "kind": 0,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 0,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 0,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 0,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 0,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 0,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 0,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 0,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 0,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 4,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 1,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 4,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 2,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 4,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 3,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 4,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "STARTER_MANA",
+    "size": "mkt",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 1.5,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 2.75,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "STARTER_TRASH",
+    "size": "field",
+    "t": 4,
+    "layers": 2,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 1.5,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 2.75,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  },
+  {
+    "kind": 4,
+    "card": "ELF",
+    "size": "mkt",
+    "t": 4,
+    "layers": 4,
+    "max": 0,
+    "total": 0,
+    "different": 0
+  }
+]
