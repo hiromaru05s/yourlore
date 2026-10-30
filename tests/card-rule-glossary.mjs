@@ -12,7 +12,7 @@ dom.window.HTMLElement.prototype.scrollIntoView=function(){this.dataset.scrolled
 
 const dir=await mkdtemp('/tmp/lore-card-glossary-');
 try {
- await build({stdin:{contents:`export * from './client/src/shared/cardRuleGlossary';export * from './client/src/shared/cardReferences';export {DB,STARTERS,PASSIVES} from './client/src/shared/cards';export {zoomCard,closeZoom} from './client/src/ui/cardInspection';export {setLang} from './client/src/i18n';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',define:{'import.meta.env.DEV':'false'},outfile:dir+'/ui.mjs',logLevel:'silent'});
+ await build({stdin:{contents:`export * from './client/src/shared/cardRuleGlossary';export * from './client/src/shared/cardReferences';export {DB,STARTERS,PASSIVES,cardPassives} from './client/src/shared/cards';export {zoomCard,closeZoom} from './client/src/ui/cardInspection';export {setLang} from './client/src/i18n';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',define:{'import.meta.env.DEV':'false'},outfile:dir+'/ui.mjs',logLevel:'silent'});
  const E=await import(dir+'/ui.mjs');let texts=0,tooltips=0;
  for(const c of Object.values(E.REFERENCE_CARDS)){
   const coverage=[];
@@ -40,6 +40,11 @@ try {
    button.click();assert(overlay.querySelector('.card-rule-tooltip'),'tap opens');assert.equal(overlay.querySelectorAll('button button').length,0);
    assert.deepEqual([...overlay.querySelectorAll('.card-effect-body')].map(x=>x.textContent),before);E.closeZoom();assert(!document.querySelector('.zoom-overlay'));tooltips++;
   }
+  const voidMon=Object.values(E.REFERENCE_CARDS).find(c=>c.t==='mon'&&E.cardPassives(c).includes('void'));assert(voidMon);
+  E.zoomCard({...voidMon,uid:'void-owner'});const voidChip=document.querySelector('.card-key-label[data-psv=void][data-ability-group=owned]');assert(voidChip);voidChip.focus();const voidPopup=document.querySelector('.card-rule-tooltip');
+  for(const r of E.glossaryParagraphs('passive:void',lang,voidMon))assert(voidPopup.textContent.includes(r.text));
+  for(const r of E.glossaryParagraphs('passive:void',lang).filter(r=>!E.glossaryParagraphs('passive:void',lang,voidMon).some(x=>x.text===r.text)))assert(!voidPopup.textContent.includes(r.text),'owned monster only shows monster Void');
+  E.closeZoom();
   E.zoomCard({...E.REFERENCE_CARDS.QUICK_WORLD,uid:'quick'});const typeTerm=document.querySelector('.inspect-type .card-rule-term[data-rule-term=quick]');assert(typeTerm);typeTerm.focus();assert(document.querySelector('.card-rule-tooltip'));E.closeZoom();
   E.zoomCard({...E.REFERENCE_CARDS.DUNGEON,uid:'dungeon'});const chip=document.querySelector('.card-key-label[data-psv="guts"]');assert(chip);chip.focus();assert(document.querySelector('.card-rule-tooltip'));E.closeZoom();
  }

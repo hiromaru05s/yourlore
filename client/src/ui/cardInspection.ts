@@ -193,7 +193,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
     card.querySelector<HTMLElement>('.card-status .kw')?.setAttribute('hidden','');
   }
   const closeReferences=bindCardReferences(ov,c,openRelatedCard);
-  const closeTerms=bindCardRuleTerms(ov);
+  const closeTerms=bindCardRuleTerms(ov,c);
   closePreviews.set(ov,(restoreFocus=false)=>{const terms=closeTerms(restoreFocus);const refs=closeReferences(restoreFocus);return terms||refs;});
   ov.onkeydown = e => {
     if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); if(!closeCurrentPreview(true))zoomHistory.length ? backToPreviousCard() : closeZoom(); }

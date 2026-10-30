@@ -1,8 +1,9 @@
+import type {CardDef} from '../shared/types';
 import {CARD_RULE_GLOSSARY,glossaryParagraphs,ruleTermParts} from '../shared/cardRuleGlossary';
 import {getLang} from '../i18n';
 
 /** Inline, focusable definitions. Card-name links remain independent and never nest. */
-export function bindCardRuleTerms(overlay:HTMLElement):(restoreFocus?:boolean)=>boolean {
+export function bindCardRuleTerms(overlay:HTMLElement,source?:CardDef):(restoreFocus?:boolean)=>boolean {
   const lang=getLang();
   let popup:HTMLElement|null=null,anchor:HTMLElement|null=null,timer:ReturnType<typeof setTimeout>|undefined,restoring=false;
   const close=(restoreFocus=false):boolean=>{
@@ -44,7 +45,7 @@ export function bindCardRuleTerms(overlay:HTMLElement):(restoreFocus?:boolean)=>
     dismiss.setAttribute('aria-label',{ja:'説明を閉じる',ko:'설명 닫기',en:'Close explanation'}[lang]);
     dismiss.onclick=e=>{e.stopPropagation();close(true);};header.append(title,dismiss);popup.append(header);
     const content=document.createElement('div');content.className='rule-tooltip-content';
-    for(const row of glossaryParagraphs(id,lang)){
+    for(const row of glossaryParagraphs(id,lang,button.dataset.abilityGroup==='owned'?source:undefined)){
       const p=document.createElement('p');if(row.label){const label=document.createElement('strong');label.textContent=row.label;label.className='rule-tooltip-label';p.append(label);}
       p.append(document.createTextNode(row.text));content.append(p);
     }

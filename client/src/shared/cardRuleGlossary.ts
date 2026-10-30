@@ -1,3 +1,4 @@
+import type {CardDef} from './types';
 import {PASSIVES} from './cards';
 import {keywordRules} from './cardKeywordText';
 import {RULE_TERM_NOTES,QUEST_RULE} from './cardEffectNotes';
@@ -98,8 +99,8 @@ for(const [key,p] of Object.entries(PASSIVES)) CARD_RULE_GLOSSARY.push({id:'pass
 
 CARD_RULE_GLOSSARY.find(e=>e.id==='passive:counter')!.aliases={en:['counterattack','counterattacking','counterattacks']};
 
-export function glossaryParagraphs(id:string,lang:EffectLocale):{label:string;text:string}[] {
-  if(id.startsWith('passive:'))return keywordRules(id.slice(8),lang);
+export function glossaryParagraphs(id:string,lang:EffectLocale,owner?:Pick<CardDef,'t'|'ench'>):{label:string;text:string}[] {
+  if(id.startsWith('passive:'))return keywordRules(id.slice(8),lang,owner);
   const e=CARD_RULE_GLOSSARY.find(e=>e.id===id);return e?[{label:'',text:e.descriptions[lang]}]:[];
 }
 export function ruleTermParts(text:string,lang:EffectLocale):{text:string;term?:string}[] {
