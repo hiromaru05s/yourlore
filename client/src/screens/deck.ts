@@ -99,7 +99,9 @@ export function mountDeck(app: App): Screen {
   // 알림이 후보 = 마켓/제시에 나올 수 있는 카드 전부 (코스트순)
   const WATCHABLE = [...BUYABLE_POOL].sort((a, b) => DB[a].cost - DB[b].cost || DB[a].name.localeCompare(DB[b].name));
 
+  let cancelDrag=()=>{};
   const render = (): void => {
+    cancelDrag();
     wrap.dataset.tab=activeTab;
     // 슬롯 탭
     q("deckEditSection").inert = saving; q("deckWatchSection").inert = saving; q("deckAppearanceSection").inert = saving; tabsEl.inert = saving;q('deckCandidates').inert=saving;q('deckFilters').inert=saving;
@@ -287,7 +289,9 @@ export function mountDeck(app: App): Screen {
     catch {if(dead)return;cosmeticError=true;}
     render();
   };
-  installDeckDrag({pool:poolEl,hand:curEl,editor:q('deckEditSection'),signal:lifecycle.signal,canAdd,full:()=>deck().length>=DECK_SIZE,
+  cancelDrag=installDeckDrag({pool:poolEl,hand:curEl,removeArea:q('deckCandidates'),
+    canRemove:(id,index)=>!saving&&activeTab==='edit'&&index>=0&&deck()[index]===id,
+    remove:(_id,index)=>{undo=[...deck()];deck().splice(index,1);pending=null;render();},editor:q('deckEditSection'),signal:lifecycle.signal,canAdd,full:()=>deck().length>=DECK_SIZE,
     notice:message=>{msgEl.textContent=message;},drop:(id,index)=>{if(!canAdd(id))return;undo=[...deck()];if(deck().length<DECK_SIZE)deck().push(id);else if(index!==null)deck()[index]=id;else{pending=id;render();return;}sortCards(deck());pending=null;render();}});
   const syncVisibility=()=>wrap.classList.toggle('idle-paused',document.hidden);
   document.addEventListener('visibilitychange',syncVisibility,{signal:lifecycle.signal});syncVisibility();

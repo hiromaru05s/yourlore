@@ -1,0 +1,961 @@
+{
+  "origin": "http://127.0.0.1:5476",
+  "checks": [
+    {
+      "width": 1280,
+      "phase": "initial",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 27.89190673828125,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.89190673828125,
+          "frameHeight": 31.541656494140625,
+          "time": "3",
+          "counter": "12",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 27.731109619140625,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.731109619140625,
+          "frameHeight": 31.541656494140625,
+          "time": "3",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 27.5703125,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.5703125,
+          "frameHeight": 31.541656494140625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 27.424560546875,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.424560546875,
+          "frameHeight": 31.541656494140625,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 27.2486572265625,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.2486572265625,
+          "frameHeight": 31.541656494140625,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 30.21600341796875,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 30.21600341796875,
+          "frameHeight": 36.7000732421875,
+          "time": "3",
+          "counter": "12",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 30.028900146484375,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 30.028900146484375,
+          "frameHeight": 36.7000732421875,
+          "time": "3",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 29.841827392578125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.841827392578125,
+          "frameHeight": 36.7000732421875,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 29.670928955078125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.670928955078125,
+          "frameHeight": 36.7000732421875,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 29.467559814453125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.467559814453125,
+          "frameHeight": 36.7000732421875,
+          "infinity": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "phase": "updated",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 27.89190673828125,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.89190673828125,
+          "frameHeight": 31.541656494140625,
+          "time": "2",
+          "counter": "16",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 27.731109619140625,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.731109619140625,
+          "frameHeight": 31.541656494140625,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 27.5703125,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.5703125,
+          "frameHeight": 31.541656494140625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 27.424560546875,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.424560546875,
+          "frameHeight": 31.541656494140625,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 27.2486572265625,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.2486572265625,
+          "frameHeight": 31.541656494140625,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 30.21600341796875,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 30.21600341796875,
+          "frameHeight": 36.7000732421875,
+          "time": "2",
+          "counter": "16",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 30.028900146484375,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 30.028900146484375,
+          "frameHeight": 36.7000732421875,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 29.841827392578125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.841827392578125,
+          "frameHeight": 36.7000732421875,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 29.670928955078125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.670928955078125,
+          "frameHeight": 36.7000732421875,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 29.467559814453125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.467559814453125,
+          "frameHeight": 36.7000732421875,
+          "infinity": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "phase": "reduced",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 27.89190673828125,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.89190673828125,
+          "frameHeight": 31.541656494140625,
+          "time": "1",
+          "counter": "20",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 27.731109619140625,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.731109619140625,
+          "frameHeight": 31.541656494140625,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 27.5703125,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.5703125,
+          "frameHeight": 31.541656494140625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 27.424560546875,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.424560546875,
+          "frameHeight": 31.541656494140625,
+          "time": "0",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 27.2486572265625,
+          "artHeight": 31.541656494140625,
+          "frameWidth": 27.2486572265625,
+          "frameHeight": 31.541656494140625,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 30.21600341796875,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 30.21600341796875,
+          "frameHeight": 36.7000732421875,
+          "time": "1",
+          "counter": "20",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 30.028900146484375,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 30.028900146484375,
+          "frameHeight": 36.7000732421875,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 29.841827392578125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.841827392578125,
+          "frameHeight": 36.7000732421875,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 29.670928955078125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.670928955078125,
+          "frameHeight": 36.7000732421875,
+          "time": "0",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 29.467559814453125,
+          "artHeight": 36.7000732421875,
+          "frameWidth": 29.467559814453125,
+          "frameHeight": 36.7000732421875,
+          "infinity": false
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "phase": "initial",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 17.15887451171875,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 17.15887451171875,
+          "frameHeight": 17.21664047241211,
+          "time": "3",
+          "counter": "12",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 17.05029296875,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 17.05029296875,
+          "frameHeight": 17.21664047241211,
+          "time": "3",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 16.9267578125,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.9267578125,
+          "frameHeight": 17.21664047241211,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 16.788360595703125,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.788360595703125,
+          "frameHeight": 17.21664047241211,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 16.67974853515625,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.67974853515625,
+          "frameHeight": 17.21664047241211,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 19.032882690429688,
+          "artHeight": 20.916015625,
+          "frameWidth": 19.032882690429688,
+          "frameHeight": 20.916015625,
+          "time": "3",
+          "counter": "12",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 18.899261474609375,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.899261474609375,
+          "frameHeight": 20.916015625,
+          "time": "3",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 18.749176025390625,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.749176025390625,
+          "frameHeight": 20.916015625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 18.58270263671875,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.58270263671875,
+          "frameHeight": 20.916015625,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 18.4490966796875,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.4490966796875,
+          "frameHeight": 20.916015625,
+          "infinity": false
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "phase": "updated",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 17.15887451171875,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 17.15887451171875,
+          "frameHeight": 17.21664047241211,
+          "time": "2",
+          "counter": "16",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 17.05029296875,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 17.05029296875,
+          "frameHeight": 17.21664047241211,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 16.9267578125,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.9267578125,
+          "frameHeight": 17.21664047241211,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 16.788360595703125,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.788360595703125,
+          "frameHeight": 17.21664047241211,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 16.67974853515625,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.67974853515625,
+          "frameHeight": 17.21664047241211,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 19.032882690429688,
+          "artHeight": 20.916015625,
+          "frameWidth": 19.032882690429688,
+          "frameHeight": 20.916015625,
+          "time": "2",
+          "counter": "16",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 18.899261474609375,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.899261474609375,
+          "frameHeight": 20.916015625,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 18.749176025390625,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.749176025390625,
+          "frameHeight": 20.916015625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 18.58270263671875,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.58270263671875,
+          "frameHeight": 20.916015625,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 18.4490966796875,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.4490966796875,
+          "frameHeight": 20.916015625,
+          "infinity": false
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "phase": "reduced",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 17.15887451171875,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 17.15887451171875,
+          "frameHeight": 17.21664047241211,
+          "time": "1",
+          "counter": "20",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 17.05029296875,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 17.05029296875,
+          "frameHeight": 17.21664047241211,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 16.9267578125,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.9267578125,
+          "frameHeight": 17.21664047241211,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 16.788360595703125,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.788360595703125,
+          "frameHeight": 17.21664047241211,
+          "time": "0",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 16.67974853515625,
+          "artHeight": 17.21664047241211,
+          "frameWidth": 16.67974853515625,
+          "frameHeight": 17.21664047241211,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 19.032882690429688,
+          "artHeight": 20.916015625,
+          "frameWidth": 19.032882690429688,
+          "frameHeight": 20.916015625,
+          "time": "1",
+          "counter": "20",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 18.899261474609375,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.899261474609375,
+          "frameHeight": 20.916015625,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 18.749176025390625,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.749176025390625,
+          "frameHeight": 20.916015625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 18.58270263671875,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.58270263671875,
+          "frameHeight": 20.916015625,
+          "time": "0",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 18.4490966796875,
+          "artHeight": 20.916015625,
+          "frameWidth": 18.4490966796875,
+          "frameHeight": 20.916015625,
+          "infinity": false
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "phase": "initial",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 4.68475341796875,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.68475341796875,
+          "frameHeight": 10.094085693359375,
+          "time": "3",
+          "counter": "12",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 4.6901092529296875,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.6901092529296875,
+          "frameHeight": 10.094085693359375,
+          "time": "3",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 4.6800079345703125,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.6800079345703125,
+          "frameHeight": 10.094085693359375,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 4.669898986816406,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.669898986816406,
+          "frameHeight": 10.094085693359375,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 4.659797668457031,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.659797668457031,
+          "frameHeight": 10.094085693359375,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 4.804893493652344,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.804893493652344,
+          "frameHeight": 10.600250244140625,
+          "time": "3",
+          "counter": "12",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 4.81011962890625,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.81011962890625,
+          "frameHeight": 10.600250244140625,
+          "time": "3",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 4.7995147705078125,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.7995147705078125,
+          "frameHeight": 10.600250244140625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 4.788909912109375,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.788909912109375,
+          "frameHeight": 10.600250244140625,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 4.7783050537109375,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.7783050537109375,
+          "frameHeight": 10.600250244140625,
+          "infinity": false
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "phase": "updated",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 4.68475341796875,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.68475341796875,
+          "frameHeight": 10.094085693359375,
+          "time": "2",
+          "counter": "16",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 4.6901092529296875,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.6901092529296875,
+          "frameHeight": 10.094085693359375,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 4.6800079345703125,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.6800079345703125,
+          "frameHeight": 10.094085693359375,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 4.669898986816406,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.669898986816406,
+          "frameHeight": 10.094085693359375,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 4.659797668457031,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.659797668457031,
+          "frameHeight": 10.094085693359375,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 4.804893493652344,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.804893493652344,
+          "frameHeight": 10.600250244140625,
+          "time": "2",
+          "counter": "16",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 4.81011962890625,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.81011962890625,
+          "frameHeight": 10.600250244140625,
+          "time": "2",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 4.7995147705078125,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.7995147705078125,
+          "frameHeight": 10.600250244140625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 4.788909912109375,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.788909912109375,
+          "frameHeight": 10.600250244140625,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 4.7783050537109375,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.7783050537109375,
+          "frameHeight": 10.600250244140625,
+          "infinity": false
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "phase": "reduced",
+      "tiles": [
+        {
+          "side": "opp",
+          "id": "BREWING",
+          "artWidth": 4.68475341796875,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.68475341796875,
+          "frameHeight": 10.094085693359375,
+          "time": "1",
+          "counter": "20",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "BLOOD_RITE",
+          "artWidth": 4.6901092529296875,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.6901092529296875,
+          "frameHeight": 10.094085693359375,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "GUILD_CO",
+          "artWidth": 4.6800079345703125,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.6800079345703125,
+          "frameHeight": 10.094085693359375,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "opp",
+          "id": "ANCIENT_CIV",
+          "artWidth": 4.669898986816406,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.669898986816406,
+          "frameHeight": 10.094085693359375,
+          "time": "0",
+          "infinity": false
+        },
+        {
+          "side": "opp",
+          "id": "Q_RIFT",
+          "artWidth": 4.659797668457031,
+          "artHeight": 10.094085693359375,
+          "frameWidth": 4.659797668457031,
+          "frameHeight": 10.094085693359375,
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BREWING",
+          "artWidth": 4.804893493652344,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.804893493652344,
+          "frameHeight": 10.600250244140625,
+          "time": "1",
+          "counter": "20",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "BLOOD_RITE",
+          "artWidth": 4.81011962890625,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.81011962890625,
+          "frameHeight": 10.600250244140625,
+          "time": "1",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "GUILD_CO",
+          "artWidth": 4.7995147705078125,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.7995147705078125,
+          "frameHeight": 10.600250244140625,
+          "counter": "0",
+          "infinity": true
+        },
+        {
+          "side": "me",
+          "id": "ANCIENT_CIV",
+          "artWidth": 4.788909912109375,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.788909912109375,
+          "frameHeight": 10.600250244140625,
+          "time": "0",
+          "infinity": false
+        },
+        {
+          "side": "me",
+          "id": "Q_RIFT",
+          "artWidth": 4.7783050537109375,
+          "artHeight": 10.600250244140625,
+          "frameWidth": 4.7783050537109375,
+          "frameHeight": 10.600250244140625,
+          "infinity": false
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "boundary": "Real GameView and card renderer with local game-state fixtures; not an authenticated PvP match."
+}
