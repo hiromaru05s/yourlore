@@ -13,4 +13,6 @@ Preview launch directory: `/Users/hiromaru05s/.codex/worktrees/home-tier-large/L
 
 Validation: `tests/home-tier-browser.mjs` passed nine viewports (320×568 through 1440×900, including landscape), Japanese/English/Korean, all three quests, circle geometry, rank/deck separation, quest reachability, preserved node on profile refresh/orientation, keyboard rank navigation, mode/BOT/deck navigation, and rank failure/retry. Client/server typechecks passed. The existing whole-HOME fade browser test also passed on desktop/mobile and reduced motion after integrating main `9e490308`; profile refresh retains the synchronized reveal. Browser report and representative screenshots are included.
 
-Deployment status will be recorded after the guarded production release.
+Production deployed at 2026-10-30 12:22 JST/KST from integrated main `e6d2e5b3d9a4cbe3e389b9bd38b5a28a2048b822` through `npm run deploy`. The guard checked database schema, client/server types, all 254 regression test files, design rules and the production build. Version `4f5419bf-4fc2-4c3a-94d6-11ac2b25dc28` serves 100% of traffic.
+
+Post-deploy: the same nine-viewport/three-language browser checks passed at `https://yourlore.xyz` using fixture API responses and actual production static assets. Production mobile screenshot was visually checked; icon size, rank text, duel circle, deck and following quests match the verified layout. Actual authenticated accounts and physical devices were not exercised. See `deployment.json` and `production-browser-report.json`.
