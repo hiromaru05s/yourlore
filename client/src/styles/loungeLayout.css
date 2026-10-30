@@ -1,5 +1,21 @@
 /* HOME is the shared frame for every menu. Page styles own only their content;
    viewport changes, never the active route, determine header and dock geometry. */
+/* Match the adopted card collection's gutters and uncapped content width.
+   Keep vertical spacing and the reference cards/friends pages unchanged. */
+.lounge-shell.selected-menu:is(.lounge-leaderboard,.lounge-shop,.lounge-tutorial) .lounge-content > .screen {
+  padding-inline:3vw;
+}
+.lounge-shell.selected-menu.lounge-leaderboard .panel.lb,
+.lounge-shell.selected-menu.lounge-shop .shop-gacha-active > .tut,
+.lounge-shell.selected-menu.lounge-tutorial .tutorial-parts-shell {
+  width:100%;
+  max-width:none;
+}
+@media(max-width:650px) {
+  .lounge-shell.selected-menu:is(.lounge-leaderboard,.lounge-shop,.lounge-tutorial) .lounge-content > .screen {
+    padding-inline:12px;
+  }
+}
 .lounge-shell.horizon-nav.selected-menu {
   --bar:80px;
   --menu-rail-height:72px;
