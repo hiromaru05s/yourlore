@@ -1,0 +1,67 @@
+/* Give the adopted crest its own readable area without scaling the HOME UI. */
+:root body .lounge-shell.selected-menu.lounge-home #myTier {
+  position:relative; padding:0; min-width:0; max-width:none;
+}
+:root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank {
+  min-height:108px; padding:2px 8px 2px 0; gap:12px;
+}
+:root body .lounge-shell.selected-menu.lounge-home #myTier .rank-emblem {
+  width:104px; height:104px;
+}
+:root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy>strong {
+  flex-wrap:wrap; gap:4px 12px; font-size:14px; line-height:1.4;
+}
+:root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy>strong b {font-size:18px;}
+:root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy small {font-size:10px;}
+:root body .lounge-shell.selected-menu.lounge-home #myTier .rank-target {font-size:10px;}
+/* Short viewports put the crest beside the duel, reclaiming the former rank row. */
+@media (max-height:650px), (max-width:850px) and (max-height:750px) {
+  :root body .lounge-shell.selected-menu.lounge-home:has(#dailyReward) .lounge-play {
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    grid-template-rows:38px auto minmax(0,1fr); gap:4px 12px; container-type:size;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs {grid-column:1/-1;grid-row:1;}
+  :root body .lounge-shell.selected-menu.lounge-home .mode-reward {grid-column:1/-1;grid-row:2;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier {
+    grid-column:1;grid-row:3;align-self:center;min-height:0;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank {
+    flex-direction:column; min-height:0; padding:0 4px; gap:2px;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .rank-emblem {width:88px;height:88px;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy {width:100%;gap:2px;text-align:center;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy>strong {
+    flex-direction:column;align-items:center;gap:0;font-size:12px;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy>strong b {font-size:16px;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .rank-track {margin:2px 0;height:3px;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .rank-target {display:none;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .rank-link {position:absolute;right:0;bottom:12px;font-size:18px;}
+  :root body .lounge-shell.selected-menu.lounge-home:has(#dailyReward) #ranked.home-duel-button {
+    grid-column:2;grid-row:3;width:min(100%,calc(100cqh - 74px));height:auto;min-width:0;min-height:0;max-height:none;aspect-ratio:1;
+  }
+}
+@media (min-width:601px) and (max-height:500px) {
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .rank-emblem {width:64px;height:64px;}
+  :root body .lounge-shell.selected-menu.lounge-home:has(#dailyReward) .lounge-play {gap:2px 10px;}
+}
+
+/* Keep useful controls full-sized on phones; quests follow in normal flow. */
+@media (max-width:850px) and (min-height:501px) {
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-content {overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;}
+  :root body .lounge-shell.selected-menu.lounge-home:has(#dailyReward) .lounge-content>.lounge-home-screen {
+    display:flex;flex-direction:column;height:auto;min-height:100%;padding:66px 18px 20px;gap:12px;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-home-main {
+    height:clamp(340px,calc(100cqh - 76px),480px);min-height:340px;flex:none;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-home-screen>#dailyReward {
+    position:relative;inset:auto;width:min(100%,390px);margin:0 auto;flex:none;
+  }
+}
+@media (min-width:601px) and (max-height:500px) {
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank {flex-direction:row;gap:6px;padding:0;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy {width:auto;text-align:left;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy>strong {align-items:flex-start;}
+  :root body .lounge-shell.selected-menu.lounge-home #myTier .rank-link {display:none;}
+}

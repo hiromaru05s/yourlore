@@ -17,6 +17,7 @@ import { sanitizeDecks } from "../shared/cards";
 import { artUrl } from "../ui/cardArt";
 import { mountHomeSpirit } from '../ui/homeSpirit';
 import '../styles/homeTutorial.css';
+import '../styles/homeTier.css';
 import { homeIcon } from "../ui/homeIcons";
 import {scheduleGameWarmup,warmGame} from './lazyGame';
 import {mountHomeDuelButton} from '../ui/homeDuelButton';

@@ -62,7 +62,10 @@ export function mountLounge(app: App, page: LoungePage): () => void {
       profile.replaceWith(seeker);seeker.append(profile);
       if(page==='home'){
         stopHomeSound=mountHomeSound(seeker);
-        if(dailyReward)seeker.append(dailyReward);
+        if(dailyReward){
+          const host=matchMedia('(max-width:850px) and (min-height:501px)').matches?content.querySelector('.lounge-home-screen'):seeker;
+          host?.append(dailyReward);
+        }
       }
     }
     // Reserve the same gift slot on other pages so the logo and balance stay put.
@@ -88,14 +91,13 @@ export function mountLounge(app: App, page: LoungePage): () => void {
   shell.append(content); app.root.append(shell); paint();
   const companion=content.querySelector<HTMLElement>('.home-companion');
   const homeScreen=content.querySelector('.lounge-home-screen');
-  // Quest names and translations can wrap differently. Reserve their measured
-  // height on portrait HOME without shrinking the text or overlapping play.
+  // Portrait HOME keeps quests after the play panel in the scrolling content.
+  // Reparent the existing node so progress, handlers and refreshes stay intact.
   const dailyLayout=dailyReward?new ResizeObserver(()=>{
     // Keep Zeno visible beside the sound row when the quest spans a phone.
     if(companion&&homeScreen){const host=matchMedia('(max-width:850px) and (min-height:501px)').matches?shell:homeScreen;if(companion.parentElement!==host)host.prepend(companion);}
-    const clearance=Math.ceil(dailyReward.getBoundingClientRect().bottom-content.getBoundingClientRect().top+12);
-    const value=`${Math.max(0,clearance)}px`;
-    if(shell.style.getPropertyValue('--home-quest-clearance')!==value)shell.style.setProperty('--home-quest-clearance',value);
+    const host=matchMedia('(max-width:850px) and (min-height:501px)').matches?homeScreen:shell.querySelector('.lounge-seeker');
+    if(host&&dailyReward.parentElement!==host)host.append(dailyReward);
   }):null;
   if(dailyReward){dailyLayout?.observe(dailyReward);dailyLayout?.observe(shell);}
   const off=onLangChange(paint);
