@@ -1231,9 +1231,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Put 2 counters on each non-Egg enemy monster, applying Decay rules.\n\n【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, deal 7 damage to the opponent and give them 1 Brand counter."
   },
   "ROTTEN_GROUND": {
-    "ja": "【いずれかのモンスター召喚時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
-    "ko": "【어느 쪽이든 몬스터 소환 시】누구든 알 이외 몬스터를 소환할 때마다 그 몬스터에 카운터 2개 부여한다(부패 처리).",
-    "en": "【When Either Player Summons a Monster】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
+    "ja": "【設置上限】このカードはお互いのフィールド全体で1枚しか存在できない。\n\n【いずれかのモンスター召喚時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
+    "ko": "【설치 제한】이 카드는 양쪽 필드 전체에 1장만 존재할 수 있다.\n\n【어느 쪽이든 몬스터 소환 시】누구든 알 이외 몬스터를 소환할 때마다 그 몬스터에 카운터 2개 부여한다(부패 처리).",
+    "en": "【Field Limit】Only 1 copy of this card can exist across both players' fields.\n\n【When Either Player Summons a Monster】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
   },
   "UNBRAND": {
     "ja": "【発動時】相手と自分の烙印カウンターを全て取り除く。",

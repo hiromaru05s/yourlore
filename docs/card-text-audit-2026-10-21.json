@@ -5483,7 +5483,7 @@
         "en"
       ],
       "definitionSha256": "4b73526a9bdf14bc18ed1cb3efef8d83a5aa2074e50c67b3210a97a5aa536999",
-      "textSha256": "d57f830f42b9ca9f5324412215f0a3313cceb68a5eccdbaf055542de4e69006d",
+      "textSha256": "3b814edc3198a20e815c33468a19a00d0e98d1e9d2c4770b8725121aabdd743e",
       "hooks": {
         "ench": "rottenGround"
       },
@@ -5493,9 +5493,9 @@
         "en": "【When Either Player Summons】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
       },
       "after": {
-        "ja": "【いずれかのモンスター召喚時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
-        "ko": "【어느 쪽이든 몬스터 소환 시】누구든 알 이외 몬스터를 소환할 때마다 그 몬스터에 카운터 2개 부여한다(부패 처리).",
-        "en": "【When Either Player Summons a Monster】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
+        "ja": "【設置上限】このカードはお互いのフィールド全体で1枚しか存在できない。\n\n【いずれかのモンスター召喚時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
+        "ko": "【설치 제한】이 카드는 양쪽 필드 전체에 1장만 존재할 수 있다.\n\n【어느 쪽이든 몬스터 소환 시】누구든 알 이외 몬스터를 소환할 때마다 그 몬스터에 카운터 2개 부여한다(부패 처리).",
+        "en": "【Field Limit】Only 1 copy of this card can exist across both players' fields.\n\n【When Either Player Summons a Monster】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
       }
     },
     "UNBRAND": {
