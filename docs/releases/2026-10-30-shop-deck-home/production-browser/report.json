@@ -1,0 +1,176 @@
+{
+  "origin": "https://yourlore.xyz",
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+  "reports": [
+    {
+      "width": 1461,
+      "height": 790,
+      "mode": "rankedMode",
+      "box": {
+        "x": 1060.0625,
+        "y": 206,
+        "width": 258,
+        "height": 258
+      }
+    },
+    {
+      "width": 1461,
+      "height": 790,
+      "mode": "online",
+      "box": {
+        "x": 1060.0625,
+        "y": 206,
+        "width": 258,
+        "height": 258
+      }
+    },
+    {
+      "width": 1461,
+      "height": 790,
+      "mode": "bot",
+      "box": {
+        "x": 1060.0625,
+        "y": 206,
+        "width": 258,
+        "height": 258
+      }
+    },
+    {
+      "width": 1461,
+      "height": 790,
+      "mode": "rankedMode",
+      "box": {
+        "x": 1060.0625,
+        "y": 206,
+        "width": 258,
+        "height": 258
+      }
+    },
+    {
+      "width": 1461,
+      "height": 790,
+      "mode": "bot",
+      "box": {
+        "x": 1060.0625,
+        "y": 206,
+        "width": 258,
+        "height": 258
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "mode": "rankedMode",
+      "box": {
+        "x": 905.8125,
+        "y": 188,
+        "width": 219,
+        "height": 219
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "mode": "online",
+      "box": {
+        "x": 905.8125,
+        "y": 188,
+        "width": 219,
+        "height": 219
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "mode": "bot",
+      "box": {
+        "x": 905.8125,
+        "y": 188,
+        "width": 219,
+        "height": 219
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "mode": "rankedMode",
+      "box": {
+        "x": 905.8125,
+        "y": 188,
+        "width": 219,
+        "height": 219
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "mode": "bot",
+      "box": {
+        "x": 905.8125,
+        "y": 188,
+        "width": 219,
+        "height": 219
+      }
+    },
+    {
+      "width": 1024,
+      "height": 600,
+      "mode": "rankedMode",
+      "box": {
+        "x": 775.546875,
+        "y": 199.75,
+        "width": 190.5,
+        "height": 190.5
+      }
+    },
+    {
+      "width": 1024,
+      "height": 600,
+      "mode": "online",
+      "box": {
+        "x": 775.546875,
+        "y": 199.75,
+        "width": 190.5,
+        "height": 190.5
+      }
+    },
+    {
+      "width": 1024,
+      "height": 600,
+      "mode": "bot",
+      "box": {
+        "x": 775.546875,
+        "y": 199.75,
+        "width": 190.5,
+        "height": 190.5
+      }
+    },
+    {
+      "width": 1024,
+      "height": 600,
+      "mode": "rankedMode",
+      "box": {
+        "x": 775.546875,
+        "y": 199.75,
+        "width": 190.5,
+        "height": 190.5
+      }
+    },
+    {
+      "width": 1024,
+      "height": 600,
+      "mode": "bot",
+      "box": {
+        "x": 775.546875,
+        "y": 199.75,
+        "width": 190.5,
+        "height": 190.5
+      }
+    }
+  ],
+  "unownedDimmed": true,
+  "fullyUsedOwnedNotDimmed": true,
+  "remainingCountUpdates": true,
+  "normalSkipWorks": true,
+  "errors": []
+}

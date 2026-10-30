@@ -15,3 +15,11 @@ Reference: fetched main `4df820ff` (including runtime `feed223a7ada72438f05ab39f
 - `tests/onboarding-browser.mjs`: valid basic-completion fixture starts the post-duel journey. Tutorial skip/close/Escape guards, hover message, automatic cinematic completion, highlighted next action, free purchase, remove/add/save and mid-edit reload, Companion and Single recommendation. 1280px uses the highlighted button; 1024px uses the result X to verify continuation. It stops at the easy-Single start request.
 - Typechecks and existing deck-drag regression passed; the guarded release runs the complete production suite.
 - Screenshots were inspected separately from behavior assertions. Browser API traffic is isolated fixture data; this UI verification does not alter real accounts or prove live multiplayer or physical-device performance.
+
+## Production release
+
+- Runtime `7dea0f2a1a35123d0d1378c844837a3f7d260c1f` released at 2026-10-30 08:09 UTC. Version `8d10810a-d5c9-422e-9d8d-bb77f8bc3049` receives 100%; deployment `ba129cec-a3ca-47b9-8d06-93ea8893099a`.
+- Both TypeScript projects and 256/256 production checks passed. An earlier gate caught the existing deck test's adjacent card/plus-button contract; the count badge now follows the action in the DOM, preserving that contract while staying outside the dimmed face. The superseded failed run was stopped and did not deploy.
+- Production-served UI checks passed: fixed HOME geometry at all three desktop viewports, 0/0 gray versus 0/8 full-color, live remove/add count changes, normal gacha skip, and the guided ten-draw journey through the highlighted next action, free starter purchase, saved deck, Companion and Single recommendation. Page errors were empty. These used isolated API fixtures, not real-user balances.
+- Production screenshots/reports: `production-browser/` and `production-onboarding/`. Result-button and deck screenshots were visually inspected after release. `production-assets.json` verifies the public entry, application module and stylesheet by URL/hash and checks the requested copy/behavior markers in the fetched module. `production.json` and `production-suite.json` record version and gate evidence.
+- Follow-up evidence-only commits do not change the deployed runtime.
