@@ -22,7 +22,8 @@ export function isClientMessage(v: unknown): v is GameClientMsg {
   if (!object(v)) return false;
   switch (v.type) {
     case 'action': return isAction(v.action);
-    case 'ready': return (v.openingVersion === undefined || v.openingVersion === 1 || v.openingVersion === 2) && (v.battleLogVersion === undefined || v.battleLogVersion === 1);
+    case 'turnReady': return index(v.turn) && (v.cur === 0 || v.cur === 1);
+    case 'ready': return (v.turnReadyVersion === undefined || v.turnReadyVersion === 1) && (v.openingVersion === undefined || v.openingVersion === 1 || v.openingVersion === 2) && (v.battleLogVersion === undefined || v.battleLogVersion === 1);
     case 'openingReady': case 'startReady': case 'ping': return true;
     default: return false;
   }

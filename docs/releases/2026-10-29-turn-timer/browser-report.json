@@ -1,0 +1,57 @@
+{
+  "origin": "http://127.0.0.1:5537",
+  "source": "/Users/hiromaru05s/.codex/worktrees/turn-timer-ready/LORE_TCG",
+  "playable": {
+    "done": 1793281081994,
+    "playing": false,
+    "draw": 0,
+    "hand": 3,
+    "left": 65
+  },
+  "first": {
+    "inert": false,
+    "draw": 0,
+    "left": 65,
+    "timer": null
+  },
+  "ready": {
+    "side": 0,
+    "msg": {
+      "type": "turnReady",
+      "turn": 4,
+      "cur": 0
+    },
+    "at": 1793281081995
+  },
+  "assetCount": 55,
+  "assets": [
+    "http://127.0.0.1:5537/art/ui/loading/azure-card-v1.webp",
+    "http://127.0.0.1:5537/art/biblion/modular/attack-ui.webp",
+    "http://127.0.0.1:5537/art/brand/lore-logo-transparent.webp",
+    "http://127.0.0.1:5537/art/biblion/refined/button-idle.png",
+    "http://127.0.0.1:5537/art/lounge/toon-balanced-20261026/library-wide.webp",
+    "http://127.0.0.1:5537/art/biblion/modular/health-ui.webp",
+    "http://127.0.0.1:5537/art/biblion/modular/health-print.webp",
+    "http://127.0.0.1:5537/art/biblion/refined/portrait-opp.png",
+    "http://127.0.0.1:5537/art/biblion/refined/portrait-self.png",
+    "http://127.0.0.1:5537/art/biblion/refined/stat-cost.png",
+    "http://127.0.0.1:5537/art/cards-sm/M2.webp?v=20260910-theme-identity-v3",
+    "http://127.0.0.1:5537/art/biblion/modular/base-mon-print.webp",
+    "http://127.0.0.1:5537/art/biblion/modular/cost-print.webp",
+    "http://127.0.0.1:5537/art/biblion/modular/attack-print.webp",
+    "http://127.0.0.1:5537/art/cards-sm/M12.webp?v=20260910-theme-identity-v3",
+    "http://127.0.0.1:5537/art/cards-sm/INCUBATOR.webp?v=20260910-theme-identity-v3",
+    "http://127.0.0.1:5537/art/biblion/modular/base-spell-print.webp",
+    "http://127.0.0.1:5537/art/cards-sm/TSO1.webp?v=20260910-theme-identity-v3",
+    "http://127.0.0.1:5537/art/cards-sm/TGE2.webp?v=20260910-theme-identity-v3",
+    "http://127.0.0.1:5537/art/cards-sm/INTERCEPT.webp?v=20260910-theme-identity-v3"
+  ],
+  "errors": [],
+  "checks": [
+    "real server + two online controllers",
+    "delayed turn-start playback preserves all 65 seconds",
+    "native draw completes before ready acknowledgement",
+    "both sides receive authoritative clock",
+    "first opening deal/inert release before acknowledgement"
+  ]
+}
