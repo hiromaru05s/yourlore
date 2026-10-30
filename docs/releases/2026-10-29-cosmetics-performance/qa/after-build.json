@@ -1,0 +1,155 @@
+{
+  "origin": "http://127.0.0.1:5297",
+  "results": [
+    {
+      "name": "open-appearance",
+      "elapsed": 2328,
+      "draws": 380,
+      "readPixels": 1720320,
+      "resizes": 46,
+      "longTasks": [
+        75
+      ],
+      "p50": 16.699999999999818,
+      "p95": 16.799999999999272,
+      "max": 66.69999999999982,
+      "canvases": 10,
+      "materials": 10
+    },
+    {
+      "name": "frame:mirror-silver",
+      "elapsed": 2050,
+      "draws": 410,
+      "readPixels": 0,
+      "resizes": 0,
+      "longTasks": [],
+      "p50": 16.699999999999818,
+      "p95": 16.700000000000728,
+      "max": 16.800000000000182,
+      "canvases": 10,
+      "materials": 10
+    },
+    {
+      "name": "frame:flowing-gold",
+      "elapsed": 2046,
+      "draws": 410,
+      "readPixels": 0,
+      "resizes": 0,
+      "longTasks": [],
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "max": 16.80000000000109,
+      "canvases": 10,
+      "materials": 10
+    },
+    {
+      "name": "frame:obsidian-ember",
+      "elapsed": 2043,
+      "draws": 400,
+      "readPixels": 0,
+      "resizes": 0,
+      "longTasks": [],
+      "p50": 16.69999999999891,
+      "p95": 16.700000000000728,
+      "max": 16.799999999999272,
+      "canvases": 10,
+      "materials": 10
+    },
+    {
+      "name": "frame:nacre-prism",
+      "elapsed": 2047,
+      "draws": 400,
+      "readPixels": 0,
+      "resizes": 0,
+      "longTasks": [],
+      "p50": 16.69999999999891,
+      "p95": 16.700000000000728,
+      "max": 16.80000000000109,
+      "canvases": 10,
+      "materials": 10
+    },
+    {
+      "name": "frame:verdigris-runes",
+      "elapsed": 2046,
+      "draws": 400,
+      "readPixels": 0,
+      "resizes": 0,
+      "longTasks": [],
+      "p50": 16.69999999999891,
+      "p95": 16.700000000000728,
+      "max": 16.799999999999272,
+      "canvases": 10,
+      "materials": 10
+    },
+    {
+      "name": "effect:crystal-facets",
+      "elapsed": 2077,
+      "draws": 420,
+      "readPixels": 196608,
+      "resizes": 10,
+      "longTasks": [],
+      "p50": 16.700000000000728,
+      "p95": 16.700000000000728,
+      "max": 16.80000000000291,
+      "canvases": 12,
+      "materials": 10
+    },
+    {
+      "name": "effect:stardust-foil",
+      "elapsed": 2041,
+      "draws": 410,
+      "readPixels": 0,
+      "resizes": 5,
+      "longTasks": [],
+      "p50": 16.69999999999709,
+      "p95": 16.799999999999272,
+      "max": 16.799999999999272,
+      "canvases": 11,
+      "materials": 10
+    },
+    {
+      "name": "effect:prism-veil",
+      "elapsed": 2060,
+      "draws": 410,
+      "readPixels": 160000,
+      "resizes": 5,
+      "longTasks": [],
+      "p50": 16.700000000000728,
+      "p95": 16.700000000000728,
+      "max": 16.80000000000291,
+      "canvases": 11,
+      "materials": 10
+    },
+    {
+      "name": "edit-equipped",
+      "elapsed": 2139,
+      "draws": 94,
+      "readPixels": 1135360,
+      "resizes": 68,
+      "longTasks": [
+        55
+      ],
+      "p50": 16.69999999999709,
+      "p95": 16.799999999999272,
+      "max": 66.70000000000073,
+      "canvases": 38,
+      "materials": 28
+    },
+    {
+      "name": "return-home",
+      "elapsed": 2093,
+      "draws": 2,
+      "readPixels": 32768,
+      "resizes": 67,
+      "longTasks": [
+        87
+      ],
+      "p50": 16.700000000000728,
+      "p95": 16.80000000000291,
+      "max": 66.70000000000073,
+      "canvases": 3,
+      "materials": 0
+    }
+  ],
+  "errors": []
+}

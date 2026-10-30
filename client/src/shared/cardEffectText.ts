@@ -121,9 +121,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Remove all accumulated damage from every non-Egg monster on both fields. Give each monster with Guts on both fields 1 Guts counter."
   },
   "S15": {
-    "ja": "【発動時】両方の場から購入コスト8以下のモンスターを1体まで選んで破壊する。",
-    "ko": "【발동 시】양쪽 필드에서 구매 코스트 8 이하 몬스터를 최대 1체 선택해 파괴한다.",
-    "en": "【On Cast】Choose up to 1 monster on either field with purchase cost 8 or less and destroy it."
+    "ja": "【発動条件】どちらかの場に購入コスト8以下のモンスターがいる。\n\n【発動時】両方の場から購入コスト8以下のモンスターを1体まで選んで破壊する。",
+    "ko": "【발동 조건】어느 쪽이든 필드에 구매 코스트 8 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드에서 구매 코스트 8 이하 몬스터를 최대 1체 선택해 파괴한다.",
+    "en": "【Play Requirement】There is a monster with purchase cost 8 or less on either field.\n\n【On Cast】Choose up to 1 monster on either field with purchase cost 8 or less and destroy it."
   },
   "MIMIC": {
     "ja": "【カードの扱い】宝箱のハズレで相手の場に召喚される。",
@@ -161,9 +161,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When an Enemy Monster Is Destroyed】Whenever this monster destroys an enemy monster by attacking or counterattacking, increase this monster's ATK and HP by that monster's purchase cost (lasting)."
   },
   "TPO5": {
-    "ja": "【召喚時】相手の購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
-    "ko": "【소환 시】상대의 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
-    "en": "【On Summon】Automatically destroy the enemy monster of purchase cost 3–4 with the highest ATK plus printed HP; ties use field order. If destroyed, your max mana +1."
+    "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
+    "ko": "【소환 시】상대의 오라가 없는 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
+    "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and printed HP (ties use field order). If it is destroyed, your max mana +1."
   },
   "TAR2": {
     "ja": "【場にある間】相手の場の購入コスト2以下のモンスターは攻撃できない。",
@@ -291,9 +291,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Destruction】Summon 1 Soldier to your field.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, summon as many Heavy Gunners as possible to your field."
   },
   "GS6_4": {
-    "ja": "【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
-    "ko": "【발동 시】상대에게 낙인 카운터가 1개 이상 있으면 상대에게 낙인 카운터 3개 추가한다.",
-    "en": "【On Cast】If the opponent has at least 1 Brand counter, give them 3 additional Brand counters."
+    "ja": "【発動条件】相手に烙印カウンターが1個以上ある。\n\n【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
+    "ko": "【발동 조건】상대에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】상대에게 낙인 카운터가 1개 이상 있으면 상대에게 낙인 카운터 3개 추가한다.",
+    "en": "【Play Requirement】The opponent has at least 1 Brand counter.\n\n【On Cast】If the opponent has at least 1 Brand counter, give them 3 additional Brand counters."
   },
   "GS8_0": {
     "ja": "【発動時】相手のデッキからカード1枚を選び、相手のリフトへ送ってよい。",
@@ -561,9 +561,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Summon three 2/2 Soldiers to your field."
   },
   "INQUISITION": {
-    "ja": "【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
-    "ko": "【발동 시】상대의 덱·묘지·필드의 종족을 가진 몬스터 1장당 상대 플레이어에게 6 데미지를 준다.",
-    "en": "【On Cast】Deal 6 damage to the opponent for each tribal monster in their deck, graveyard, and field combined."
+    "ja": "【発動条件】相手のデッキ・墓地・場に、種族を持つモンスターがいる。\n\n【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
+    "ko": "【발동 조건】상대의 덱·묘지·필드에 종족이 있는 몬스터가 있다.\n\n【발동 시】상대의 덱·묘지·필드의 종족을 가진 몬스터 1장당 상대 플레이어에게 6 데미지를 준다.",
+    "en": "【Play Requirement】The opponent has a monster with a tribe in their deck, graveyard, or field.\n\n【On Cast】Deal 6 damage to the opponent for each tribal monster in their deck, graveyard, and field combined."
   },
   "MIMIC_LORD": {
     "ja": "【召喚時】両方の場の、このモンスター以外の「ミミック」系モンスター1体につき、このモンスターの攻撃力+3・体力+3（持続）。",
@@ -636,9 +636,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Choose and destroy up to 2 monsters from either field combined."
   },
   "MASSACRE": {
-    "ja": "【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
-    "ko": "【발동 시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
-    "en": "【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
+    "ja": "【発動条件】相手の場にモンスターがいる。\n\n【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
+    "ko": "【발동 조건】상대의 필드에 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
+    "en": "【Play Requirement】The opponent controls a monster.\n\n【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
   },
   "MIMIC_KING2": {
     "ja": "【召喚時】自分のリフトに「ミミック」系カードが6枚以上あれば、「ミミックの隠れ家」を自分の場に展開する。",
@@ -646,9 +646,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】If your Rift contains at least 6 Mimic-family cards, deploy Mimic Hideout to your field."
   },
   "ORIGIN_MIMIC": {
-    "ja": "【召喚時】自分の場・墓地・リフトにある「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続、自身を含む）。",
-    "ko": "【소환 시】자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2, 체력 +2(지속, 자신 포함).",
-    "en": "【On Summon】This monster gets +2 ATK and +2 HP per Mimic-family monster on your field or in your graveyard or Rift, including itself (lasting)."
+    "ja": "【召喚時】この個体を除く、自分の場・墓地・リフトの「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続）。同名の別個体は数える。",
+    "ko": "【소환 시】이 개체를 제외한 자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2·체력 +2(지속). 같은 이름의 다른 개체는 센다.",
+    "en": "【On Summon】This monster gains +2 ATK and +2 HP (lasting) for each other Mimic-family monster in your field, graveyard, and Rift. Exclude this individual; count other copies with the same name."
   },
   "GREED_PRICE": {
     "ja": "【発動時】「ミミック」2体を自分の場に召喚する。新しい「ミミック」5枚を自分のリフトに追加する。",
@@ -696,24 +696,24 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】If your deck composition contains 9 cards or fewer, summon 2 Soldiers (2 ATK, 2 HP) to your field."
   },
   "WALLBREAK1": {
-    "ja": "【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
-    "ko": "【발동 시】양쪽 필드의 공격력 2 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
-    "en": "【On Cast】Automatically destroy the monster on either field with ATK 2 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
+    "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
+    "ko": "【발동 조건】어느 쪽이든 필드에 공격력 2 이하의 몬스터가 있다(상대의 오라 보유 몬스터는 제외).\n\n【발동 시】양쪽 필드의 공격력 2 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
+    "en": "【Play Requirement】There is a monster with ATK 2 or less on either field (excluding enemy monsters with Aura).\n\n【On Cast】Automatically destroy the monster on either field with ATK 2 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
   },
   "WALLBREAK2": {
-    "ja": "【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
-    "ko": "【발동 시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
-    "en": "【On Cast】Destroy all monsters on either field with ATK 2 or less."
+    "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる。\n\n【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
+    "ko": "【발동 조건】어느 쪽이든 필드에 공격력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
+    "en": "【Play Requirement】There is a monster with ATK 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with ATK 2 or less."
   },
   "SNIPE1": {
-    "ja": "【発動時】両方の場の現在体力3以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
-    "ko": "【발동 시】양쪽 필드의 현재 체력 3 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
-    "en": "【On Cast】Automatically destroy the monster on either field with current HP 3 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
+    "ja": "【発動条件】どちらかの場に現在体力3以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の現在体力3以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
+    "ko": "【발동 조건】어느 쪽이든 필드에 현재 체력 3 이하의 몬스터가 있다(상대의 오라 보유 몬스터는 제외).\n\n【발동 시】양쪽 필드의 현재 체력 3 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
+    "en": "【Play Requirement】There is a monster with current HP 3 or less on either field (excluding enemy monsters with Aura).\n\n【On Cast】Automatically destroy the monster on either field with current HP 3 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
   },
   "SNIPE2": {
-    "ja": "【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
-    "ko": "【발동 시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
-    "en": "【On Cast】Destroy all monsters on either field with current HP 2 or less."
+    "ja": "【発動条件】どちらかの場に現在体力2以下のモンスターがいる。\n\n【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
+    "ko": "【발동 조건】어느 쪽이든 필드에 현재 체력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
+    "en": "【Play Requirement】There is a monster with current HP 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with current HP 2 or less."
   },
   "DRAGON_EGG": {
     "ja": "【攻撃条件】攻撃できない。\n\n【耐久】カウンター6個で登場し、攻撃・ダメージを受けるたび1個失う（0個で破壊）。\n\n【孵化条件】双方のターン開始を8回数え、残り0の自分のターン開始時に孵化する。\n\n【孵化時】孵化時、この卵を自分のリフトへ送り、「黒竜」「赤竜」「青竜」からランダムに1体を自分の場に召喚する。",
@@ -751,9 +751,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Attack】When this monster attacks an Egg, remove 6 counters from that Egg instead of the usual 1."
   },
   "INCUBATOR": {
-    "ja": "【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを5減らす（最低0）。0になれば直ちに孵化する。",
-    "ko": "【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 5 감소(최저 0). 0이 되면 즉시 부화한다.",
-    "en": "【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 5, to a minimum of 0. If it reaches 0, hatch it immediately."
+    "ja": "【発動条件】自分の場に、孵化までの残りターンが1以上ある卵がいる。\n\n【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを5減らす（最低0）。0になれば直ちに孵化する。",
+    "ko": "【발동 조건】자신의 필드에 부화까지 남은 턴이 1 이상인 알이 있다.\n\n【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 5 감소(최저 0). 0이 되면 즉시 부화한다.",
+    "en": "【Play Requirement】You control an Egg with at least 1 turn remaining until hatching.\n\n【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 5, to a minimum of 0. If it reaches 0, hatch it immediately."
   },
   "EGG_MASTER": {
     "ja": "【召喚時】自分の場の全ての卵にカウンターを5個ずつ追加する（孵化までの残りターンは変わらない）。",
@@ -781,9 +781,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】You take 14 damage. Your max mana +1."
   },
   "VAMP_PACT": {
-    "ja": "【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
-    "ko": "【발동 시】자신에게 6 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
-    "en": "【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
+    "ja": "【発動条件】自分の場のモンスターが7体未満。\n\n【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
+    "ko": "【발동 조건】자신의 필드의 몬스터가 7체 미만이다.\n\n【발동 시】자신에게 6 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
+    "en": "【Play Requirement】You control fewer than 7 monsters.\n\n【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
   },
   "BLOOD_FEST": {
     "ja": "【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分の最大マナ+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
@@ -866,9 +866,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster damages the opponent with an attack, put 1 counter on this monster. At 3 or more, remove them all and deal 14 damage to the opponent.\n\n【While on the Field】This monster cannot attack under any circumstances."
   },
   "FATE_WHEEL": {
-    "ja": "【出目を確認した後】自分のダイス結果を確認後、その行動のダイス1個を振り直せる（自分の各ターン1回）。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
-    "ko": "【눈을 확인한 후】자신의 주사위 결과를 확인한 뒤 그 행동의 주사위를 다시 굴릴 수 있다(자신의 턴마다 1회).\n\n【파괴 시】이 마법을 묘지 대신 자신의 리프트로 보낸다.",
-    "en": "【After Seeing the Roll】After seeing your dice results, you may reroll the dice for that action, once during each of your turns.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
+    "ja": "【出目を確認した後】自分のターン中、カードの使用・攻撃・効果の選択によって自分が振ったダイスの結果を確認した後、その行動を巻き戻してダイスを振り直せる（自分の各ターン1回）。その行動で複数のダイスを振った場合は、全て振り直す。振り直さず結果を確定した場合、この回数を消費しない。ターン開始・終了時の自動処理は対象外。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
+    "ko": "【눈을 확인한 후】자신의 턴 중 카드 사용·공격·효과 선택으로 자신이 굴린 주사위의 결과를 확인한 뒤, 그 행동을 되돌리고 주사위를 다시 굴릴 수 있다(자신의 턴마다 1회). 그 행동에서 여러 주사위를 굴렸다면 전부 다시 굴린다. 다시 굴리지 않고 결과를 확정하면 횟수를 소비하지 않는다. 턴 시작·종료 시 자동 처리는 대상이 아니다.\n\n【파괴 시】이 마법을 묘지 대신 자신의 리프트로 보낸다.",
+    "en": "【After Seeing the Roll】During your turn, after seeing your dice from playing a card, attacking, or resolving an effect choice, you may rewind that action and reroll its dice (1 time during each of your turns). If that action rolled multiple dice, reroll all of them. Keeping the result does not spend this allowance. Automatic turn-start and turn-end effects are excluded.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
   },
   "COUNTERCALC": {
     "ja": "【発動条件】相手の最大マナが7以下で、相手の場に永続魔法がある。 同名カード合計で自分の各ターン1回まで使用できる。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。",
@@ -881,9 +881,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】The opponent’s max mana is exactly 4.\n\n【On Cast】Deal 13 damage to the opponent. Then you take 8 damage and send this spell to your Rift."
   },
   "TRUMPET": {
-    "ja": "【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。",
-    "ko": "【발동 시】자신의 필드에서 서로 다른 개체를 최대 3체 선택해 이번 턴 종료까지 각각 공격력 +1(동명 가능).",
-    "en": "【On Cast】Choose up to 3 different monsters on your field, allowing the same name; each gets +1 ATK until this turn ends."
+    "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。",
+    "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】자신의 필드에서 서로 다른 개체를 최대 3체 선택해 이번 턴 종료까지 각각 공격력 +1(동명 가능).",
+    "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose up to 3 different monsters on your field, allowing the same name; each gets +1 ATK until this turn ends."
   },
   "FORESIGHT": {
     "ja": "【発動条件】自分の場に「先見の明」がない。\n\n【各ターン開始時】自分の最大マナが10以上なら、自分の最大マナ+2、この魔法を自分のリフトへ送る。\n\n【破壊時】墓地の代わりに自分のリフトへ送る。",
@@ -896,9 +896,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Swap ATK and current HP of all monsters on both fields. Swap back after 2 subsequent turn starts, counting both players; monsters entering during the effect are also affected. Buffs gained during the effect remain on the opposite stat afterward."
   },
   "INCUBATOR_S": {
-    "ja": "【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを2減らす（最低0）。0になれば直ちに孵化する。",
-    "ko": "【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 2 감소(최저 0). 0이 되면 즉시 부화한다.",
-    "en": "【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 2, to a minimum of 0. If it reaches 0, hatch it immediately."
+    "ja": "【発動条件】自分の場に、孵化までの残りターンが1以上ある卵がいる。\n\n【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを2減らす（最低0）。0になれば直ちに孵化する。",
+    "ko": "【발동 조건】자신의 필드에 부화까지 남은 턴이 1 이상인 알이 있다.\n\n【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 2 감소(최저 0). 0이 되면 즉시 부화한다.",
+    "en": "【Play Requirement】You control an Egg with at least 1 turn remaining until hatching.\n\n【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 2, to a minimum of 0. If it reaches 0, hatch it immediately."
   },
   "TRIBE_PACT": {
     "ja": "【場にある間】自分の種族モンスターの購入コスト-1（最低1）。\n\n【自分のターン開始時】ゲームの通算45ターン目以降の自分のターン開始時、まだ自分が種族シナジーを1回も発動していなければ敗北する。",
@@ -921,9 +921,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Summon Requirement】Your deck composition contains a Golem-family monster with a different name from this card."
   },
   "DECAY_CRAFT": {
-    "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
-    "ko": "【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
-    "en": "【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
+    "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
+    "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
+    "en": "【Play Requirement】You control a monster.\n\n【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
   },
   "RUST_SLUG": {
     "ja": "【召喚時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。\n\n【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1、自分の体力を5回復する（同名は重複しない）。",
@@ -931,9 +931,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Put 1 counter on each non-Egg enemy monster, applying Decay rules.\n\n【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1 and restore 5 of your HP; multiple copies do not stack."
   },
   "MAJESTY_RITE": {
-    "ja": "【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（持続）。",
-    "ko": "【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(지속).",
-    "en": "【On Cast】Your max mana -1. Choose 1 monster on your field and give it Majesty (lasting)."
+    "ja": "【発動条件】自分の場に「威厳」を持たないモンスターがいる。\n\n【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（持続）。",
+    "ko": "【발동 조건】자신의 필드에 위엄이 없는 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(지속).",
+    "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Your max mana -1. Choose 1 monster on your field and give it Majesty (lasting)."
   },
   "CROSSROADS": {
     "ja": "【発動時】新しい「カル」2枚を自分の墓地に追加する。",
@@ -1051,9 +1051,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Choose 1 monster on your field; it gets +12 HP (lasting). Give that monster Taunt (lasting)."
   },
   "GUILD_CO": {
-    "ja": "【発動条件】自分の場に「商会」がない。\n\n【自分のターン開始時】この魔法にカウンター1個を付与する。この魔法のカウンター20個ごとに20個を取り除き、新しい「闇商人」1枚を自分の手札に加える。",
-    "ko": "【발동 조건】자신의 필드에 상회가 없다.\n\n【자신의 턴 시작 시】이 마법에 카운터 1개를 놓는다. 이 마법의 카운터 20개마다 20개를 제거하고 새로운 암상인 1장을 자신의 패에 추가한다.",
-    "en": "【Play Requirement】You control no Trade Guild.\n\n【At the Start of Your Turn】Put 1 counter on this spell. For every 20 counters on it, remove 20 and create 1 Black Market Dealer in your hand."
+    "ja": "【発動条件】自分の場に「商会」がない。\n\n【自分のターン開始時】この魔法が場にある間、自分のターンが始まるたび、この魔法にカウンター1個を付与する。発動した時点や相手のターン開始時には増えない。\n\n【カウンター蓄積時】この魔法のカウンターが20個以上になったら、直ちに20個を取り除き、新しい「闇商人」1枚を自分の手札に加える。他のカードの効果で増えた場合も発動し、20個以上ある限り繰り返す。余ったカウンターは残る。",
+    "ko": "【발동 조건】자신의 필드에 상회가 없다.\n\n【자신의 턴 시작 시】이 마법이 필드에 있는 동안 자신의 턴이 시작될 때마다 이 마법에 카운터 1개를 놓는다. 발동한 순간이나 상대의 턴 시작에는 증가하지 않는다.\n\n【카운터 축적 시】이 마법의 카운터가 20개 이상이 되면 즉시 20개를 제거하고 새로운 암상인 1장을 자신의 패에 추가한다. 다른 카드의 효과로 증가한 경우에도 발동하며, 20개 이상인 동안 반복한다. 남은 카운터는 유지된다.",
+    "en": "【Play Requirement】You control no Trade Guild.\n\n【At the Start of Your Turn】While this spell is on your field, put 1 counter on it whenever your turn starts. Casting it and the start of the opponent’s turn do not add counters.\n\n【When Counters Accumulate】Whenever this spell has at least 20 counters, immediately remove 20 and create 1 Black Market Dealer in your hand. This also applies to counters added by other cards. Repeat while at least 20 remain; keep any leftover counters."
   },
   "SLUM": {
     "ja": "【発動条件】自分の場に「商会」がある。\n\n【発動時】ダイス1個を振り、その出目と同じ数のカウンターを自分の「商会」に付与する。",
@@ -1231,9 +1231,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Put 2 counters on each non-Egg enemy monster, applying Decay rules.\n\n【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, deal 7 damage to the opponent and give them 1 Brand counter."
   },
   "ROTTEN_GROUND": {
-    "ja": "【いずれかのモンスター召喚時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
-    "ko": "【어느 쪽이든 몬스터 소환 시】누구든 알 이외 몬스터를 소환할 때마다 그 몬스터에 카운터 2개 부여한다(부패 처리).",
-    "en": "【When Either Player Summons a Monster】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
+    "ja": "【設置上限】このカードはお互いのフィールド全体で1枚しか存在できない。\n\n【いずれかのモンスター召喚時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
+    "ko": "【설치 제한】이 카드는 양쪽 필드 전체에 1장만 존재할 수 있다.\n\n【어느 쪽이든 몬스터 소환 시】누구든 알 이외 몬스터를 소환할 때마다 그 몬스터에 카운터 2개 부여한다(부패 처리).",
+    "en": "【Field Limit】Only 1 copy of this card can exist across both players' fields.\n\n【When Either Player Summons a Monster】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
   },
   "UNBRAND": {
     "ja": "【発動時】相手と自分の烙印カウンターを全て取り除く。",
@@ -1251,9 +1251,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】Your deck composition has at least 2 distinct Golem-family monster names and you control a Golem.\n\n【On Cast】Choose 2 Golem-family monsters on your field; each gets +7 ATK (lasting); if only 1 exists, affect that 1."
   },
   "KNIGHT_TEACH": {
-    "ja": "【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
-    "ko": "【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(지속).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
-    "en": "【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
+    "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
+    "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(지속).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
+    "en": "【Play Requirement】You control a monster.\n\n【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
   },
   "DUNGEON": {
     "ja": "【場にある間】両方の場の「気合」「回避」をどちらも持たないモンスターが攻撃する時、その攻撃の攻撃力を最大1にする。",
@@ -1261,9 +1261,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【While on the Field】When a monster on either field without Guts or Evade attacks, cap its ATK for that attack at 1."
   },
   "NL_SECRET": {
-    "ja": "【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（持続）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（持続、1体しかいなければその1体）。",
-    "ko": "【발동 시】자신의 필드의 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(지속). 자신의 필드의 암살자 계열 몬스터 2체를 선택해 각각 공격력 +3(지속, 1체뿐이면 그 1체).",
-    "en": "【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (lasting). Choose 2 Assassin-family monsters on your field; each gets +3 ATK (lasting); if only 1 exists, affect that 1."
+    "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（持続）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（持続、1体しかいなければその1体）。",
+    "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】자신의 필드의 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(지속). 자신의 필드의 암살자 계열 몬스터 2체를 선택해 각각 공격력 +3(지속, 1체뿐이면 그 1체).",
+    "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (lasting). Choose 2 Assassin-family monsters on your field; each gets +3 ATK (lasting); if only 1 exists, affect that 1."
   },
   "HEXER1": {
     "ja": "【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
@@ -1356,9 +1356,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】You bought at least 2 cards with the same name this turn.\n\n【On Cast】Your max mana +1."
   },
   "PENANCE": {
-    "ja": "【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。",
-    "ko": "【발동 시】자신의 낙인 카운터 1개당 자신의 최대 마나 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
-    "en": "【On Cast】For each of your Brand counters, your max mana +2 and restore 10 of your HP; do not spend the counters."
+    "ja": "【発動条件】自分に烙印カウンターが1個以上ある。\n\n【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。",
+    "ko": "【발동 조건】자신에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】자신의 낙인 카운터 1개당 자신의 최대 마나 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
+    "en": "【Play Requirement】You have at least 1 Brand counter.\n\n【On Cast】For each of your Brand counters, your max mana +2 and restore 10 of your HP; do not spend the counters."
   },
   "PACK_INSTINCT": {
     "ja": "【発動条件】自分の場に同名モンスターが2体以上いる。\n\n【発動時】自分の場で同名が2体以上いるモンスター全ての攻撃力+2・体力+2（持続）。",
@@ -1366,9 +1366,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】You control at least 2 monsters with the same name.\n\n【On Cast】Every monster on your field that shares its name with another ally gets +2 ATK and +2 HP (lasting)."
   },
   "MIND_BURST": {
-    "ja": "【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
-    "ko": "【발동 시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×4 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
-    "en": "【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
+    "ja": "【発動条件】自分の場に気合用カウンターを1個以上持つモンスターがいる。\n\n【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
+    "ko": "【발동 조건】자신의 필드에 기합용 카운터를 1개 이상 가진 몬스터가 있다.\n\n【발동 시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×4 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
+    "en": "【Play Requirement】You control a monster with at least 1 Guts counter.\n\n【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
   },
   "RICH_HABIT": {
     "ja": "【自分のターン開始時】開始時ドロー後、自分の手札が4枚以上なら自分の体力を6回復する。手札が6枚以上なら、さらに自分の最大マナ+1。",
@@ -1506,9 +1506,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Purchase】Give the opponent 1 Brand counter if they have none, or 2 if they already have at least 1."
   },
   "STABLE": {
-    "ja": "【発動条件】自分の場に「騎士」系モンスターがいる。\n\n【発動時】自分の「騎士」系モンスター1体を選んで破壊する。破壊できたら「騎馬兵」1体を自分の場に召喚する。",
-    "ko": "【발동 조건】자신의 필드에 기사 계열 몬스터가 있다.\n\n【발동 시】자신의 기사 계열 몬스터 1체를 선택해 파괴한다. 파괴했다면 기마병 1체를 자신의 필드에 소환한다.",
-    "en": "【Play Requirement】You control a Knight-family monster.\n\n【On Cast】Choose and destroy 1 Knight-family monster you control. If destroyed, summon 1 Cavalry to your field."
+    "ja": "【発動条件】自分の場に「騎士」がいる。\n\n【発動時】自分の「騎士」1体を選んで破壊する。破壊できたら「騎馬兵」1体を自分の場に召喚する。",
+    "ko": "【발동 조건】자신의 필드에 기사가 있다.\n\n【발동 시】자신의 기사 1체를 선택해 파괴한다. 파괴했다면 기마병 1체를 자신의 필드에 소환한다.",
+    "en": "【Play Requirement】You control a Knight.\n\n【On Cast】Choose and destroy 1 of your Knights. If it is destroyed, summon 1 Cavalry to your field."
   },
   "CAVALRY": {
     "ja": "【場にある間】このモンスターが受ける反撃を無効化する。",
@@ -1576,9 +1576,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Choose 1 random spell, excluding generated-only cards, starters, and Quick spells, and add a new copy to your hand."
   },
   "ROGUE_ART": {
-    "ja": "【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。",
-    "ko": "【코스트】자신의 필드에 암살자 계열 몬스터가 있으면 이 카드의 구매·시전 코스트는 0.\n\n【발동 시】자신의 필드에 암살자 계열 몬스터가 있으면 자신의 필드의 모든 몬스터에 회피를 부여한다(지속). 없으면 자신의 필드의 몬스터 1체를 선택해 회피를 부여한다(지속).",
-    "en": "【Cost】If you control an Assassin-family monster, this card costs 0 to buy and cast.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (lasting). Otherwise, choose 1 monster on your field and give it Evade (lasting)."
+    "ja": "【発動条件】自分の場にモンスターがいる。\n\n【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。",
+    "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【코스트】자신의 필드에 암살자 계열 몬스터가 있으면 이 카드의 구매·시전 코스트는 0.\n\n【발동 시】자신의 필드에 암살자 계열 몬스터가 있으면 자신의 필드의 모든 몬스터에 회피를 부여한다(지속). 없으면 자신의 필드의 몬스터 1체를 선택해 회피를 부여한다(지속).",
+    "en": "【Play Requirement】You control a monster.\n\n【Cost】If you control an Assassin-family monster, this card costs 0 to buy and cast.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (lasting). Otherwise, choose 1 monster on your field and give it Evade (lasting)."
   },
   "MIMIC_HIDEOUT": {
     "ja": "【自分のターン終了時】自分の場に「ミミック」系モンスターがいれば、「マスターミミック」1体を自分の場に召喚する。",

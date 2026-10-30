@@ -80,13 +80,33 @@ void main(){
 interface Surface {canvas:HTMLCanvasElement;ctx:CanvasRenderingContext2D;width:number;height:number;texture:WebGLTexture|null;kind:number;time:number;}
 interface Binding {part:HTMLElement;canvas:HTMLCanvasElement;ctx:CanvasRenderingContext2D;surface:Surface;visible:boolean;}
 const smooth=(a:number,b:number,x:number)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
+// The protected print mask depends on the artwork, never on the selected metal.
+// Keep a bounded cache across picker rebuilds; GPU textures still belong to a renderer.
+const masks=new Map<string,Promise<HTMLCanvasElement>>();
+function frameMask(url:string):Promise<HTMLCanvasElement>{
+ const cached=masks.get(url);if(cached)return cached;
+ const pending=(async()=>{
+  const img=new Image();img.src=url;await img.decode();
+  const source=document.createElement('canvas');source.width=img.width;source.height=img.height;
+  const sc=source.getContext('2d')!;sc.drawImage(img,0,0);
+  const data=sc.getImageData(0,0,source.width,source.height),w=source.width,h=source.height;
+  for(let p=0;p<data.data.length;p+=4){const r=data.data[p]/255,g=data.data[p+1]/255,b=data.data[p+2]/255,max=Math.max(r,g,b),min=Math.min(r,g,b),sat=max?(max-min)/max:1;
+   const neutral=1-smooth(.17,.32,sat),warm=r>=g&&g>=b&&g/Math.max(r,.001)>.67?1-smooth(.42,.64,sat):0;
+   const x=(p/4)%w,y=Math.floor(p/4/w),title=url.includes('/base-')&&x>w*.16&&x<w*.84&&y>h*.083&&y<h*.186;
+   data.data[p+3]=title?0:Math.round(data.data[p+3]*Math.max(neutral,warm)*smooth(.14,.32,max)*Math.min(1,Math.max(0,(r+g+b)*10-.65)));
+  }
+  sc.putImageData(data,0,0);return source;
+ })();masks.set(url,pending);
+ if(masks.size>24)masks.delete(masks.keys().next().value!);
+ void pending.catch(()=>{if(masks.get(url)===pending)masks.delete(url);});return pending;
+}
 /** One context and cached material prints for all cards. No layout, clips or filters are replaced. */
 export class CardFrameMaterial {
  private output=document.createElement('canvas');
  private gl:WebGLRenderingContext|null;private program:WebGLProgram|null=null;
- private surfaces=new Map<string,Promise<Surface>>();private bindings=new Set<Binding>();
+ private surfaces=new Map<string,Promise<Surface>>();private textures=new Map<string,WebGLTexture>();private bindings=new Set<Binding>();
  private observer:IntersectionObserver;private dead=false;
- constructor(){
+ constructor(onVisibility:()=>void=()=>{}){
   this.gl=this.output.getContext('webgl',{alpha:true,premultipliedAlpha:false,antialias:false,preserveDrawingBuffer:true});
   const gl=this.gl;
   if(gl){try{
@@ -94,47 +114,70 @@ export class CardFrameMaterial {
    const v=compile(gl.VERTEX_SHADER,vertex),f=compile(gl.FRAGMENT_SHADER,fragment),p=gl.createProgram()!;gl.attachShader(p,v);gl.attachShader(p,f);gl.linkProgram(p);gl.deleteShader(v);gl.deleteShader(f);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error('Frame material link');this.program=p;gl.useProgram(p);
    const b=gl.createBuffer()!;gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);const a=gl.getAttribLocation(p,'a');gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);gl.disable(gl.BLEND);
   }catch{this.gl=null;}}
-  this.observer=new IntersectionObserver(entries=>{for(const e of entries)for(const b of this.bindings)if(b.part===e.target)b.visible=e.isIntersecting;},{rootMargin:'80px'});
+  this.observer=new IntersectionObserver(entries=>{for(const e of entries)for(const b of this.bindings)if(b.part===e.target)b.visible=e.isIntersecting;onVisibility();},{rootMargin:'80px'});
  }
  private surface(url:string,kind:number){
   const key=url+'|'+kind;let pending=this.surfaces.get(key);if(pending)return pending;
   pending=(async()=>{
-   const img=new Image();img.src=url;await img.decode();if(this.dead)throw Error('Frame renderer disposed');
-   const width=img.width===img.height?192:512,height=Math.round(width*img.height/img.width),source=document.createElement('canvas');source.width=img.width;source.height=img.height;const sc=source.getContext('2d')!;sc.drawImage(img,0,0);const data=sc.getImageData(0,0,source.width,source.height),w=source.width,h=source.height;
-   for(let p=0;p<data.data.length;p+=4){const r=data.data[p]/255,g=data.data[p+1]/255,b=data.data[p+2]/255,max=Math.max(r,g,b),min=Math.min(r,g,b),sat=max?(max-min)/max:1;
-    const neutral=1-smooth(.17,.32,sat),warm=r>=g&&g>=b&&g/Math.max(r,.001)>.67?1-smooth(.42,.64,sat):0;
-    const x=(p/4)%w,y=Math.floor(p/4/w),title=url.includes('/base-')&&x>w*.16&&x<w*.84&&y>h*.083&&y<h*.186;
-    data.data[p+3]=title?0:Math.round(data.data[p+3]*Math.max(neutral,warm)*smooth(.14,.32,max)*Math.min(1,Math.max(0,(r+g+b)*10-.65)));
-   }
-   sc.putImageData(data,0,0);const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d')!;
+   const source=await frameMask(url);if(this.dead)throw Error('Frame renderer disposed');
+   const width=source.width===source.height?192:512,height=Math.round(width*source.height/source.width);
+   const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d')!;
    const gl=this.gl?.isContextLost()?null:this.gl;let texture:WebGLTexture|null=null;
-   if(gl){texture=gl.createTexture()!;gl.bindTexture(gl.TEXTURE_2D,texture);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,source);}
+   if(gl){texture=this.textures.get(url)??null;if(!texture){texture=gl.createTexture()!;this.textures.set(url,texture);gl.bindTexture(gl.TEXTURE_2D,texture);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,source);}}
    else{
     // Static material fallback preserves ownership and the same protected pixels.
     const tint=[[.91,.93,.96],[1.,.72,.23],[.08,.09,.11],[.87,.81,.95],[.24,.62,.43]][kind];
+    const sc=source.getContext('2d')!,data=sc.getImageData(0,0,source.width,source.height);
     for(let p=0;p<data.data.length;p+=4){const l=(data.data[p]+data.data[p+1]+data.data[p+2])/765;for(let k=0;k<3;k++)data.data[p+k]=Math.round(255*tint[k]*l);}
-    sc.putImageData(data,0,0);ctx.drawImage(source,0,0,width,height);
+    const tinted=document.createElement('canvas');tinted.width=source.width;tinted.height=source.height;tinted.getContext('2d')!.putImageData(data,0,0);ctx.drawImage(tinted,0,0,width,height);tinted.width=0;
    }
-   source.width=0;return {canvas,ctx,width,height,texture,kind,time:NaN};
+   return {canvas,ctx,width,height,texture,kind,time:NaN};
   })();this.surfaces.set(key,pending);return pending;
  }
  async attach(node:HTMLElement,kind:number,valid:()=>boolean){
-  for(const part of node.querySelectorAll<HTMLElement>('.card-frame,.seal-face,.buff-frame,.buff-cost')){
+  const added:Binding[]=[];
+  // Read styles before appending any canvas, avoiding read/write layout thrashing.
+  const parts=[...node.querySelectorAll<HTMLElement>('.card-frame,.seal-face,.buff-frame,.buff-cost')].map(part=>{
    const style=getComputedStyle(part),url=(style.backgroundImage||part.style.backgroundImage).match(/url\(["']?(.*?)["']?\)/)?.[1]??(part.matches('.buff-cost')?getComputedStyle(part,'::before').backgroundImage.match(/url\(["']?(.*?)["']?\)/)?.[1]:undefined);
    const seal=part.matches('.buff-cost')||part.parentElement?.matches('.card-cost')?'cost':part.parentElement?.matches('.ad-atk')?'attack':part.parentElement?.matches('.ad-def')?'health':null;
    const source=url??(seal?`/art/biblion/modular/${seal}-print.webp`:undefined);
-   if(!source)continue;const surface=await this.surface(source,kind);if(this.dead||!valid())return;
+   return {part,source};
+  });
+  const prepared=await Promise.all(parts.map(async({part,source})=>({part,surface:source?await this.surface(source,kind):null})));
+  if(this.dead||!valid())return;
+  for(const {part,surface} of prepared){
+   if(!surface)continue;
    if([...this.bindings].some(b=>b.part===part))continue;
    const canvas=part.querySelector<HTMLCanvasElement>(':scope > .card-frame-material')??document.createElement('canvas');canvas.className='card-frame-material';canvas.width=surface.width;canvas.height=surface.height;canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';part.append(canvas);
-   const b={part,canvas,ctx:canvas.getContext('2d')!,surface,visible:true};this.bindings.add(b);this.observer.observe(part);
+   const b={part,canvas,ctx:canvas.getContext('2d')!,surface,visible:true};this.bindings.add(b);added.push(b);this.observer.observe(part);
   }
-  this.draw(performance.now()/1000,true);
+  this.draw(matchMedia('(prefers-reduced-motion: reduce)').matches?1.5:performance.now()/1000,added);
  }
- draw(time:number,force=false){
-  if(this.dead)return;const active=new Set<Surface>();for(const b of this.bindings)if(force||(b.visible&&b.part.isConnected))active.add(b.surface);
-  const gl=this.gl,p=this.program;if(gl&&p&&!gl.isContextLost()){gl.useProgram(p);for(const s of active){if(s.time===time)continue;s.time=time;this.output.width=s.width;this.output.height=s.height;gl.viewport(0,0,s.width,s.height);gl.bindTexture(gl.TEXTURE_2D,s.texture);gl.uniform1i(gl.getUniformLocation(p,'art'),0);gl.uniform1f(gl.getUniformLocation(p,'time'),time);gl.uniform1f(gl.getUniformLocation(p,'kind'),s.kind);gl.uniform2f(gl.getUniformLocation(p,'resolution'),s.width,s.height);gl.drawArrays(gl.TRIANGLES,0,6);s.ctx.clearRect(0,0,s.width,s.height);s.ctx.drawImage(this.output,0,0);}}
-  for(const b of this.bindings)if(force||(b.visible&&b.part.isConnected)){b.ctx.clearRect(0,0,b.canvas.width,b.canvas.height);b.ctx.drawImage(b.surface.canvas,0,0);}
+ get visible(){return [...this.bindings].some(b=>b.visible&&b.part.isConnected);}
+ draw(time:number,initial?:Binding[]|boolean){
+  if(this.dead)return;
+  // Initial preparation paints only the newly attached card. Repeated cards share
+  // the same material print and clock sample, including in a single microtask batch.
+  time=Math.floor(time*24)/24;
+  const bindings=Array.isArray(initial)?initial:[...this.bindings].filter(b=>initial===true||(b.visible&&b.part.isConnected));
+  const active=new Set(bindings.map(b=>b.surface));
+  const gl=this.gl,p=this.program;
+  if(gl&&p&&!gl.isContextLost()){
+   let width=this.output.width,height=this.output.height;
+   for(const s of active){width=Math.max(width,s.width);height=Math.max(height,s.height);}
+   // Resizing clears/reallocates the drawing buffer. Grow once; never resize per print.
+   if(this.output.width!==width)this.output.width=width;
+   if(this.output.height!==height)this.output.height=height;
+   gl.useProgram(p);
+   for(const s of active){
+    if(s.time===time)continue;s.time=time;
+    gl.viewport(0,0,s.width,s.height);gl.bindTexture(gl.TEXTURE_2D,s.texture);
+    gl.uniform1i(gl.getUniformLocation(p,'art'),0);gl.uniform1f(gl.getUniformLocation(p,'time'),time);gl.uniform1f(gl.getUniformLocation(p,'kind'),s.kind);gl.uniform2f(gl.getUniformLocation(p,'resolution'),s.width,s.height);gl.drawArrays(gl.TRIANGLES,0,6);
+    s.ctx.clearRect(0,0,s.width,s.height);s.ctx.drawImage(this.output,0,this.output.height-s.height,s.width,s.height,0,0,s.width,s.height);
+   }
+  }
+  for(const b of bindings){b.ctx.clearRect(0,0,b.canvas.width,b.canvas.height);b.ctx.drawImage(b.surface.canvas,0,0);}
  }
  detach(node:HTMLElement){for(const b of this.bindings)if(node.contains(b.part)){this.observer.unobserve(b.part);b.canvas.remove();b.canvas.width=0;this.bindings.delete(b);}}
- dispose(){this.dead=true;this.observer.disconnect();for(const b of this.bindings){b.canvas.remove();b.canvas.width=0;}this.bindings.clear();for(const pending of this.surfaces.values())void pending.then(s=>{if(s.texture)this.gl?.deleteTexture(s.texture);s.canvas.width=0;}).catch(()=>{});this.surfaces.clear();this.gl?.getExtension('WEBGL_lose_context')?.loseContext();this.output.width=0;}
+ dispose(){this.dead=true;this.observer.disconnect();for(const b of this.bindings){b.canvas.remove();b.canvas.width=0;}this.bindings.clear();for(const pending of this.surfaces.values())void pending.then(s=>{s.canvas.width=0;}).catch(()=>{});this.surfaces.clear();for(const texture of this.textures.values())this.gl?.deleteTexture(texture);this.textures.clear();this.gl?.getExtension('WEBGL_lose_context')?.loseContext();this.output.width=0;}
 }

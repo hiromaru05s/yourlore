@@ -13,20 +13,28 @@ function star(c:CanvasRenderingContext2D,x:number,y:number,r:number,a:number,col
  if(a<.01)return;c.save();c.translate(x,y);c.fillStyle=color;c.globalAlpha=a;c.beginPath();c.moveTo(0,-r);c.quadraticCurveTo(r*.14,-r*.14,r,0);c.quadraticCurveTo(r*.14,r*.14,0,r);c.quadraticCurveTo(-r*.14,r*.14,-r,0);c.quadraticCurveTo(-r*.14,-r*.14,0,-r);c.fill();c.restore();
 }
 /** Three distinct surface geometries share a clock; glints never leave the card. */
+const facets=(()=>{
+ const cell=24,points:Array<Array<[number,number]>>=[];
+ for(let y=0;y<18;y++){points[y]=[];for(let x=0;x<13;x++)points[y][x]=[x*cell-20+(hash(x+y*23)-.5)*17,y*cell-16+(hash(x+y*17+40)-.5)*17];}
+ const out:Array<{path:Path2D;p:[number,number];half:number;phase:number;star:boolean;radius:number}>=[];
+ for(let y=0;y<17;y++)for(let x=0;x<12;x++)for(let half=0;half<2;half++){
+  const p=half?[points[y][x],points[y+1][x+1],points[y+1][x]]:[points[y][x],points[y][x+1],points[y+1][x+1]],seed=x+y*12+half*207;
+  const path=new Path2D();p.forEach(([px,py],i)=>i?path.lineTo(px,py):path.moveTo(px,py));path.closePath();
+  out.push({path,p:p[0],half,phase:hash(seed+71)*TAU+(x+y)*.18,star:hash(seed+73)>.86,radius:1.7+hash(seed)*2.8});
+ }return out;
+});
+let cachedFacets:ReturnType<typeof facets>|undefined;
 function texture(v:Finish,t:number){
  const out=textures[v]??(textures[v]=canvas()),c=out.getContext('2d')!;c.clearRect(0,0,W,H);
  {
   // Cut crystal foil: fixed tessellated planes catch light independently.
   // 03 revision: twice the playback speed and glint repetition frequency.
   const crystalTime=t*2;
-  const cell=24,points:Array<Array<[number,number]>>=[];
-  for(let y=0;y<18;y++){points[y]=[];for(let x=0;x<13;x++)points[y][x]=[x*cell-20+(hash(x+y*23)-.5)*17,y*cell-16+(hash(x+y*17+40)-.5)*17];}
-  for(let y=0;y<17;y++)for(let x=0;x<12;x++)for(let half=0;half<2;half++){
-   const p=half?[points[y][x],points[y+1][x+1],points[y+1][x]]:[points[y][x],points[y][x+1],points[y+1][x+1]];
-   const seed=x+y*12+half*207,phase=crystalTime*.72+hash(seed+71)*TAU+(x+y)*.18,a=Math.pow(Math.max(0,Math.sin(phase)),13);
-   c.beginPath();p.forEach(([px,py],i)=>i?c.lineTo(px,py):c.moveTo(px,py));c.closePath();c.fillStyle=`rgba(${half?'203,226,251':'250,221,178'},${.012+a*.18})`;c.fill();
-   if(a>.3){c.strokeStyle=`rgba(255,240,215,${a*.24})`;c.lineWidth=.45;c.stroke();}
-   if(hash(seed+73)>.86)star(c,p[0][0],p[0][1],1.7+hash(seed)*2.8,Math.pow(a,2)*.95,'#fff2d8');
+  for(const {path,p,half,phase,star:glints,radius} of cachedFacets??(cachedFacets=facets())){
+   const a=Math.pow(Math.max(0,Math.sin(crystalTime*.72+phase)),13);
+   c.fillStyle=`rgba(${half?'203,226,251':'250,221,178'},${.012+a*.18})`;c.fill(path);
+   if(a>.3){c.strokeStyle=`rgba(255,240,215,${a*.24})`;c.lineWidth=.45;c.stroke(path);}
+   if(glints)star(c,p[0],p[1],radius,Math.pow(a,2)*.95,'#fff2d8');
   }
  }
  return out;
@@ -51,7 +59,7 @@ export class CrystalRenderer {
    const p=c.getImageData(0,0,W,H);for(let i=0;i<p.data.length;i+=4){const lum=(p.data[i]*.2126+p.data[i+1]*.7152+p.data[i+2]*.0722)/255;const next=(p.data[Math.min(p.data.length-4,i+4)]+p.data[Math.min(p.data.length-3,i+5)]+p.data[Math.min(p.data.length-2,i+6)])/765;const relief=Math.min(1,Math.abs(lum-next)*5);p.data[i+3]=Math.round(255*(.38+lum*.35+relief*.27));}c.putImageData(p,0,0);entry.detail=mask;
   }).catch(()=>{});
  }
- detach(node:HTMLElement){const e=this.entries.get(node);if(!e)return;e.disposed=true;e.art.remove();e.rim.remove();this.observer.unobserve(node);this.entries.delete(node);}
+ detach(node:HTMLElement){const e=this.entries.get(node);if(!e)return;e.disposed=true;e.art.remove();e.rim.remove();e.art.width=e.rim.width=0;if(e.detail)e.detail.width=0;this.observer.unobserve(node);this.entries.delete(node);}
  draw(t:number,enabled=true){if(this.disposed)return;texture(2,t);for(const e of this.entries.values()){
   if(!e.visible)continue;for(const c of [e.art,e.rim]){c.style.visibility=enabled?'visible':'hidden';}if(!enabled)continue;
   const c=e.art.getContext('2d')!;c.clearRect(0,0,W,H);c.globalCompositeOperation='source-over';c.drawImage(textures[e.variant],0,0);if(e.detail){c.globalCompositeOperation='destination-in';c.drawImage(e.detail,0,0);c.globalCompositeOperation='source-over';}

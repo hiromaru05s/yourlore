@@ -1,0 +1,3982 @@
+{
+  "date": "2026-10-29",
+  "baseline": "5839a8bd39128f80f1453a82e8ccc1ffbafdf7bc",
+  "count": 381,
+  "locales": [
+    "ja",
+    "ko",
+    "en"
+  ],
+  "changedCards": 24,
+  "engineSha256": "bab2de0bf6870e64c779c1037b3b7fbf56b9e5f831cac74e5adb67f5e350629a",
+  "scope": "All catalog effect texts reviewed against declared hooks and engine dispatch/requirements. Full-text rendering checked for all 1143 locale entries; 30 targeted engine behavior cases. Hashes detect drift and do not prove semantic completeness.",
+  "cards": [
+    {
+      "id": "M1",
+      "nameJa": "スパーク・インプ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
+      "hooks": {}
+    },
+    {
+      "id": "M2",
+      "nameJa": "ストーン・パップ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "3ba0b060ddd560c84410b8e8e0c0ffe17649dd934be94f081362812ed7874e32",
+      "hooks": {
+        "onSummon": "recoverCostOneMonster"
+      }
+    },
+    {
+      "id": "M3",
+      "nameJa": "ダスト・スカウト",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "10c6086b1c12c9d496efb4f96c15d471c310033b44de6cb921b9fe6ee64bb029",
+      "hooks": {
+        "onSummon": "draw"
+      }
+    },
+    {
+      "id": "M4",
+      "nameJa": "ブレード・ヘア",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "3a4b77b05ae3b6f82bdbb0ffe88172db19b722652e36c74f0c25013d46c11cb9",
+      "hooks": {
+        "aura": "killBurn"
+      }
+    },
+    {
+      "id": "M5",
+      "nameJa": "アイアン・シェル",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ce28d5923a7f9ec01661376d7ef0efc328845bb969c0ed0433eacaeca6e923c1",
+      "hooks": {
+        "onSummon": "shield"
+      }
+    },
+    {
+      "id": "M6",
+      "nameJa": "ツイン・ファング",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1f49855762271664976fae250ff6548cb67d150677987c41a0da92e3f12c37cd",
+      "hooks": {
+        "onSummon": "defDown"
+      }
+    },
+    {
+      "id": "M7",
+      "nameJa": "エンバー・ドレイク",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "510150d35de3e702070118b303b8e8ac6b1fd3510febe91ae2fff2234bc47fbe",
+      "hooks": {
+        "turnFx": "emberRecoil",
+        "attackFx": "chainKill"
+      }
+    },
+    {
+      "id": "M8",
+      "nameJa": "グローブ・ウォーデン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "fd57d199790d81f8e573b0d7d1ad3250ee853f79c71a69667f09a0f2b58ed036",
+      "hooks": {
+        "onSummon": "stealDew"
+      }
+    },
+    {
+      "id": "M9",
+      "nameJa": "レリック・ハンター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "46cdf70a927001dd996ae56735e50aab5e96fa39f8e8d49187706e13351dbbc6",
+      "hooks": {
+        "onSummon": "refreshToken"
+      }
+    },
+    {
+      "id": "M10",
+      "nameJa": "マナ・ゴーレム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "cf14275f4b98ec454366cd3b54b6255dca4d57d675a52dd0eb300f4583bef5f7",
+      "hooks": {
+        "aura": "manaGolem"
+      }
+    },
+    {
+      "id": "M11",
+      "nameJa": "ウォーロード",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0766c8c40511ba8f6630ac2616f46945937696451dd683d308957c74d15dbba8",
+      "hooks": {
+        "onSummon": "warlordKnight"
+      }
+    },
+    {
+      "id": "M12",
+      "nameJa": "タイタン・ゲート",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "db06c5da58204f3a8bebe3e77c907606f6b317b9ae9576ebfadd15df898c05a5",
+      "hooks": {
+        "onSummon": "atkDown"
+      }
+    },
+    {
+      "id": "S1",
+      "nameJa": "三撃の火種",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "eb8f5522ec07c654093009cf0cc4bcb89303029495b44383ad51726e3024c350",
+      "hooks": {
+        "act": "dmg"
+      }
+    },
+    {
+      "id": "S10",
+      "nameJa": "青藍の書庫",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b1d966e8bc1b943e6ade534c760bba05861002b20e3c708f3f2cb6c6701e6724",
+      "hooks": {
+        "act": "draw"
+      }
+    },
+    {
+      "id": "S3",
+      "nameJa": "刃の囁き",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "94a4b83e5799c843b8c450e3f8f37004b58cf179e564671f3fad90f3eb2f98f5",
+      "hooks": {
+        "act": "buffPerm"
+      }
+    },
+    {
+      "id": "S4",
+      "nameJa": "双月の啓示",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9fb13629a813fe295bb991f7c693fa34dcb32c4525bcc6c084d43b002c8b170b",
+      "hooks": {
+        "act": "draw"
+      }
+    },
+    {
+      "id": "S5",
+      "nameJa": "マーケット・クラッシュ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ea8dbf13216da626ff9802a55b776d9619dc79eaf97838b1d7d8bd9958d5dd4d",
+      "hooks": {
+        "act": "crash"
+      }
+    },
+    {
+      "id": "S8",
+      "nameJa": "リコール",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "bc4dcfc900f5826badbba4ada58a4a41ae19617758907a69cedcf51f22f7cb3d",
+      "hooks": {
+        "act": "recall"
+      }
+    },
+    {
+      "id": "S6",
+      "nameJa": "運命の糸",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5ec9e57060ed1e03a950ec31f01e4b7c16890c65327304f25940e6b8391c42d8",
+      "hooks": {
+        "act": "seek"
+      }
+    },
+    {
+      "id": "S7",
+      "nameJa": "戦場の脈動",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1d08f99d066d06fd0dfd7559eba7d030998dfbfc170c798c18dd4a60c9fcc29c",
+      "hooks": {
+        "act": "buffAllTurn"
+      }
+    },
+    {
+      "id": "S12",
+      "nameJa": "鋼脈刻印",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "546ecf2ff0f7f4dbff4ad0209dddc150624ef43c108f645e515473b351ff9de2",
+      "hooks": {}
+    },
+    {
+      "id": "S13",
+      "nameJa": "星墓の落下",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0a985349378509b9ed9fd95999a329adc61bcdcaa1bbdb4f72504863f28e0065",
+      "hooks": {
+        "act": "dmg"
+      }
+    },
+    {
+      "id": "S14",
+      "nameJa": "大地の祝福",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e6cd2e28924c8be865b31b020f458350f99075dc8d9866427287dddf4cede0f2",
+      "hooks": {}
+    },
+    {
+      "id": "S15",
+      "nameJa": "ルーン爆裂",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "7782c33e0eac370d7c5fe5d0cb40cb93b278fc37f718b86ebb9cd3c5a5cdcfd9",
+      "hooks": {
+        "act": "destroyMon"
+      },
+      "before": {
+        "ja": "【発動時】両方の場から購入コスト8以下のモンスターを1体まで選んで破壊する。",
+        "ko": "【발동 시】양쪽 필드에서 구매 코스트 8 이하 몬스터를 최대 1체 선택해 파괴한다.",
+        "en": "【On Cast】Choose up to 1 monster on either field with purchase cost 8 or less and destroy it."
+      },
+      "after": {
+        "ja": "【発動条件】どちらかの場に購入コスト8以下のモンスターがいる。\n\n【発動時】両方の場から購入コスト8以下のモンスターを1体まで選んで破壊する。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 구매 코스트 8 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드에서 구매 코스트 8 이하 몬스터를 최대 1체 선택해 파괴한다.",
+        "en": "【Play Requirement】There is a monster with purchase cost 8 or less on either field.\n\n【On Cast】Choose up to 1 monster on either field with purchase cost 8 or less and destroy it."
+      }
+    },
+    {
+      "id": "MIMIC",
+      "nameJa": "ミミック",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "840afd19effeb5e91f53eb5c896f5233bfd5ec7c28e97022415c19b2e89cdbc5",
+      "hooks": {}
+    },
+    {
+      "id": "E1",
+      "nameJa": "封鎖令",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "902e51612af3c1fdfaa55df70b1937a15a8965dfa845970ad6c4c7f694a6b81e",
+      "hooks": {
+        "ench": "noSummonLow"
+      }
+    },
+    {
+      "id": "E2",
+      "nameJa": "平和協定",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ecf7af063b39d8b4638067be5ad0302fca117404006742aa0c1b6710c20ef853",
+      "hooks": {
+        "ench": "noAttack"
+      }
+    },
+    {
+      "id": "E3",
+      "nameJa": "知識の泉",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "18ecf1b673375253c5129a117f2b2a6a22aa8c88d4f6a25bfa019d0da336819a",
+      "hooks": {
+        "ench": "bonusDraw"
+      }
+    },
+    {
+      "id": "TSO2",
+      "nameJa": "孤独な狼",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d1576b24620848e943cc2ab34c1ca71406486b665d468a6d1c64d89e763d0c06",
+      "hooks": {
+        "onSummon": "hermitBuff"
+      }
+    },
+    {
+      "id": "TSO5",
+      "nameJa": "孤独な放浪者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a4dc114ced7858e69b9ab2ad3cdaddaf6f1b50c4de627e505a25d1f4d92e17f1",
+      "hooks": {
+        "summonReq": "soloOnly"
+      }
+    },
+    {
+      "id": "TPO2",
+      "nameJa": "飢えた獣",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0ec468571e81aa131b8c659ea8ce84765e8885d26d8b9b5a444d49b8317655d4",
+      "hooks": {
+        "aura": "devourGrow"
+      }
+    },
+    {
+      "id": "TPO5",
+      "nameJa": "捕食者",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "2956bde463b127707e4aad5646a5e39926851617e8ddae14061085b6bd644726",
+      "hooks": {
+        "onSummon": "preyExec"
+      },
+      "before": {
+        "ja": "【召喚時】相手の購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
+        "ko": "【소환 시】상대의 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
+        "en": "【On Summon】Automatically destroy the enemy monster of purchase cost 3–4 with the highest ATK plus printed HP; ties use field order. If destroyed, your max mana +1."
+      },
+      "after": {
+        "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
+        "ko": "【소환 시】상대의 오라가 없는 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
+        "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and printed HP (ties use field order). If it is destroyed, your max mana +1."
+      }
+    },
+    {
+      "id": "TAR2",
+      "nameJa": "没落貴族",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "aa9364e82ede6ae747df95a428fd8d3a85663257c5c4d194b8ec43faa799f07c",
+      "hooks": {
+        "aura": "lowAtkBan"
+      }
+    },
+    {
+      "id": "TAR5",
+      "nameJa": "貴族領主",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f02aa997e078a39e65f241cc91ce05bf138b64decac7bf3d12ad5788779b31bb",
+      "hooks": {
+        "aura": "eliteGuard"
+      }
+    },
+    {
+      "id": "ND2",
+      "nameJa": "予知のルーン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0b605b5698db403a7e022a7a285544e241b270beb6b51d7a61dd7a59d9e87ba6",
+      "hooks": {
+        "act": "draw"
+      }
+    },
+    {
+      "id": "ND3",
+      "nameJa": "賢者の予言",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "95970716c7199b46abdbcc3e8b607e71628ffc0b5c333e51ca10752a0c6a82a6",
+      "hooks": {
+        "act": "draw"
+      }
+    },
+    {
+      "id": "ND5",
+      "nameJa": "古代の知識",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "70ba3e665e3c4af074160386813b62658dcc02965723a6ab177978858cfeb97e",
+      "hooks": {}
+    },
+    {
+      "id": "NMD2",
+      "nameJa": "探書の精霊",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d950559093e02d5f36c3c7a7ddd1836e5dd3087c9dd513934f19088b9f163b76",
+      "hooks": {
+        "onSummon": "draw"
+      }
+    },
+    {
+      "id": "NMD4",
+      "nameJa": "記録者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b6d9b6478ef2c2f986da8903877efdadf4788f0aab3ea9e42e84330f52c17e87",
+      "hooks": {
+        "onSummon": "chronicler"
+      }
+    },
+    {
+      "id": "NMD6",
+      "nameJa": "大賢者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c4ff0dc37a8205b152e01c758fa4c297c3e1c7d9739a2427fad917a8084d4e1e",
+      "hooks": {
+        "aura": "sageDiscount"
+      }
+    },
+    {
+      "id": "NGA3",
+      "nameJa": "戦士ゴーレム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d86542300c240c9b2e5f339beb876645e4e882d558fe91e50bda3fb10ac8a4cd",
+      "hooks": {
+        "onSummon": "golemSquad"
+      }
+    },
+    {
+      "id": "NGA4",
+      "nameJa": "剣鬼",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6cc557a20506a67c5095c18c6bb6188e887f19eb72ea9f18ab9a4d119d315ed9",
+      "hooks": {
+        "attackFx": "berserk"
+      }
+    },
+    {
+      "id": "NWL3",
+      "nameJa": "ガーディアンゴーレム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5440093112a1b5146ceea957175f06f158676936033385274bae79f168e5f926",
+      "hooks": {
+        "aura": "gutsOnHit"
+      }
+    },
+    {
+      "id": "NHEX",
+      "nameJa": "見習い呪術師",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5250e0b85b368535d24cf7fc7ace67e905efa83e955e5193b27f350cd8f4f8a1",
+      "hooks": {
+        "turnFx": "hexCurse"
+      }
+    },
+    {
+      "id": "AHEUK",
+      "nameJa": "アチューン・黒",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5a6157e86fd6b09264ae15ea1c58cc98e5bb3043083b5261ee295852dd2aff4d",
+      "hooks": {
+        "act": "manaDown"
+      }
+    },
+    {
+      "id": "AJIN",
+      "nameJa": "アチューン・真",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f2a98079307192b6e84d8bf7cf05562a8f15f48a3599ac3a147382b7d94b76d6",
+      "hooks": {
+        "act": "manaUpGain"
+      }
+    },
+    {
+      "id": "AMA",
+      "nameJa": "アチューン・魔",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "532d5756aee07de02eef307b32014f9347268058f05d6e620992714539b62d51",
+      "hooks": {
+        "act": "chestToMana"
+      }
+    },
+    {
+      "id": "NHEAL",
+      "nameJa": "生命の加護",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8362c3f99af94d0301277ad6aec377e62aca2aa2a9e3fe1e8900cee8600c1135",
+      "hooks": {
+        "ench": "healSummon"
+      }
+    },
+    {
+      "id": "GM5_0",
+      "nameJa": "古代の狂戦士",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "df4a09b0e06ddbd80db51be1b2bdd8ea7d705ed0c2e1b20920af155f7e60b94b",
+      "hooks": {
+        "turnFx": "growAtk"
+      }
+    },
+    {
+      "id": "GM5_2",
+      "nameJa": "鋼鉄の戦士",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "715f42ae3510f10c8ae28f63f4f299812f3ee1834126048dd2da1116dfaf2d05",
+      "hooks": {
+        "aura": "summonBuff"
+      }
+    },
+    {
+      "id": "GM5_3",
+      "nameJa": "業火のドレイク",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "2a6babc253d1776ec17abf9f3a996a9b2dd9cafdd48c0b500ae0ec27e2693246",
+      "hooks": {
+        "turnFx": "turnBurn"
+      }
+    },
+    {
+      "id": "GS5_3",
+      "nameJa": "呪文書の解読",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "cadbd00b455956013cd2e8d718483dfbc7a2c96c0509604cd55d57087267bdc1",
+      "hooks": {}
+    },
+    {
+      "id": "GS5_4",
+      "nameJa": "聖剣の一閃",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "446ccf9cc38d44998bf24f26d21ac748c38efd5a8228d9d931a978aa602529b6",
+      "hooks": {
+        "act": "buffTurn"
+      }
+    },
+    {
+      "id": "GM6_0",
+      "nameJa": "ドラゴン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1185a4d6f07da488e6a7df129e8df968d4f7658f96b6ae4c69f8162e206bb117",
+      "hooks": {
+        "onSummon": "dragonFuse"
+      }
+    },
+    {
+      "id": "GM6_1",
+      "nameJa": "次元幽閉者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "13fd0c8e6a9b264debb297e339c083711eeb467a58736b43c107728c40fb6d31",
+      "hooks": {
+        "onSummon": "jailer"
+      }
+    },
+    {
+      "id": "GM6_7",
+      "nameJa": "将軍",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "cbfce7988dffc3efce3261a7b5568c9073715517cdbc8cd075e6e88230c93c76",
+      "hooks": {
+        "onSummon": "generalKnight",
+        "aura": "general"
+      }
+    },
+    {
+      "id": "GM6_8",
+      "nameJa": "虚空の攻城兵",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ba21936b4246bf5df1c3c02d708d46d8ead9ec97dea24febff9850912beb2a12",
+      "hooks": {}
+    },
+    {
+      "id": "GS6_4",
+      "nameJa": "火脈点火",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "b5a05d754abf2aa5e527664c9fce1620a96fe6f10c3aa1c83a6296591ce4726c",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
+        "ko": "【발동 시】상대에게 낙인 카운터가 1개 이상 있으면 상대에게 낙인 카운터 3개 추가한다.",
+        "en": "【On Cast】If the opponent has at least 1 Brand counter, give them 3 additional Brand counters."
+      },
+      "after": {
+        "ja": "【発動条件】相手に烙印カウンターが1個以上ある。\n\n【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
+        "ko": "【발동 조건】상대에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】상대에게 낙인 카운터가 1개 이상 있으면 상대에게 낙인 카운터 3개 추가한다.",
+        "en": "【Play Requirement】The opponent has at least 1 Brand counter.\n\n【On Cast】If the opponent has at least 1 Brand counter, give them 3 additional Brand counters."
+      }
+    },
+    {
+      "id": "GS8_0",
+      "nameJa": "銀月砲",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "601d4d60f97199ae93213f99cc2df1689ee400e30e177938ae45980b9eb7dbdf",
+      "hooks": {
+        "act": "dmg"
+      }
+    },
+    {
+      "id": "INFKNIGHT",
+      "nameJa": "騎士",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
+      "hooks": {}
+    },
+    {
+      "id": "NT_SEAL3",
+      "nameJa": "沈黙の番人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "72fdbfd41ecdced9bfff30c5c4bea10446d64011102aa51cb4fea41bd2fcfa5e",
+      "hooks": {
+        "aura": "sealLow"
+      }
+    },
+    {
+      "id": "NT_SEAL5",
+      "nameJa": "沈黙の巨神",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c682820649847d5b1d39d2a892a62e0f06fa1dca29f6912851e188ccdb5b594d",
+      "hooks": {
+        "aura": "sealLow"
+      }
+    },
+    {
+      "id": "TSO3",
+      "nameJa": "孤独な狩人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6b7a83e04472a9f6e2e2ecfa8bb846ed293c0f5339b5b766dd87142b88cf3093",
+      "hooks": {
+        "onSummon": "gravePure"
+      }
+    },
+    {
+      "id": "TPO3",
+      "nameJa": "飢えた追跡者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a1261f6f65328425f458b5ee41a34d54a50a02e119fb1d6744956c3b1ddf57f0",
+      "hooks": {
+        "aura": "scavenger"
+      }
+    },
+    {
+      "id": "TAR3",
+      "nameJa": "没落した騎士",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
+      "hooks": {}
+    },
+    {
+      "id": "TGE1",
+      "nameJa": "始原の卵",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "4d7f86865c1b2dfad28fcc088fc4dc5d5235ee3136dfddd8332233091b535bdd",
+      "hooks": {
+        "hatchTurns": 4
+      }
+    },
+    {
+      "id": "TGE2",
+      "nameJa": "始原の火種",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "82aaf175d4f8c826c878971bc6ba5523d7487d0cb1d06f2947e6497ed7fb684a",
+      "hooks": {
+        "onSummon": "originEmber"
+      }
+    },
+    {
+      "id": "TGE3",
+      "nameJa": "始原の守護者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "28b3c672f62004b3493c84102e5c2a50a28a6a8b5f794265f94f8d763ff61946",
+      "hooks": {
+        "onSummon": "selfBurn"
+      }
+    },
+    {
+      "id": "TGE4",
+      "nameJa": "始原の裁判官",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "725ccfa309459e487314db8ba61fbe221cc34d1bf53f1b0dc644c6046663dc11",
+      "hooks": {
+        "onSummon": "originArbiter"
+      }
+    },
+    {
+      "id": "TGE5",
+      "nameJa": "始原の精霊",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8fff1e86d5a9cea70226709d59aa6336bee1ea13aab31d9c4e572cf3e23a3ca6",
+      "hooks": {
+        "onSummon": "originRite"
+      }
+    },
+    {
+      "id": "TGE6",
+      "nameJa": "始原の巨人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1f47b344fa3e4abf08a955baa33d03e12bb8d8fea6ad63fa5b21c6c485b8d3ec",
+      "hooks": {
+        "onSummon": "giantDraw"
+      }
+    },
+    {
+      "id": "TGE7",
+      "nameJa": "始原の君主",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "cf3fad1a989f9ea47ba1a2182747966ba85fa3f48e5d5bc567ff91ec7f08520b",
+      "hooks": {
+        "aura": "originLord"
+      }
+    },
+    {
+      "id": "HANDRESET",
+      "nameJa": "忘却の新札",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6f96bbebdefc98a869d6392027d7303926256105ba2099f7071ed27e559b53c1",
+      "hooks": {
+        "act": "draw"
+      }
+    },
+    {
+      "id": "TIMEWARP",
+      "nameJa": "時空間操作",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "66c36673c23b1bf499432d2a05761f5a07f43c97f4978836875a5e152135017b",
+      "hooks": {
+        "act": "dmg"
+      }
+    },
+    {
+      "id": "INFERNO",
+      "nameJa": "地獄",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "05f6607b93b882e37c78be60890e031e3cf348dd69b462744bce57802e5bf62e",
+      "hooks": {
+        "ench": "inferno"
+      }
+    },
+    {
+      "id": "GAMBLE",
+      "nameJa": "六面の気まぐれ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "da57c499ad052c4d1bd37d2396ece7b1f512441729264dd9dfd31ed9af6645a8",
+      "hooks": {
+        "act": "dmg"
+      }
+    },
+    {
+      "id": "ASSASSIN1",
+      "nameJa": "初級アサシン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a57bf7a34f2e47f00d87abdd18e09dd8228ed1656e60c423dc55fb6511bb0ff3",
+      "hooks": {}
+    },
+    {
+      "id": "ASSASSIN2",
+      "nameJa": "中級アサシン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a57bf7a34f2e47f00d87abdd18e09dd8228ed1656e60c423dc55fb6511bb0ff3",
+      "hooks": {}
+    },
+    {
+      "id": "ASSASSIN3",
+      "nameJa": "上級アサシン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "80126a81406202d21568cc6dc4498e8f029def48650a8c94263e005d208b8759",
+      "hooks": {
+        "summonReq": "assassinKin"
+      }
+    },
+    {
+      "id": "ASSASSIN4",
+      "nameJa": "特級アサシン - ナイトロード",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "436b4d8d3b9538860642c5c7cfd18cba0e4da41dc2b2b2013c3725e18f408ef5",
+      "hooks": {
+        "onSummon": "nightlord",
+        "summonReq": "assassinTrio"
+      }
+    },
+    {
+      "id": "RUNE1",
+      "nameJa": "ルーン学問 - 初級",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d1c48ced39148218cc8ed7899641242c67c60c8b594b1541ec703cc2515848cc",
+      "hooks": {
+        "act": "destroyMon"
+      }
+    },
+    {
+      "id": "RUNE2",
+      "nameJa": "ルーン学問 - 中級",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "7059917a2569d0f42803e3fa1a5c5c90d5c4d7489d4d001e9b4549423971a873",
+      "hooks": {}
+    },
+    {
+      "id": "RUNE3",
+      "nameJa": "ルーン学問 - 上級",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "594984d5c7d196518718bfbcc6a724c2f6e27d7acc7bb937ec3fc4d74e776977",
+      "hooks": {
+        "ench": "runeEcho"
+      }
+    },
+    {
+      "id": "GENESIS_SONG",
+      "nameJa": "始原の歌",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6a7a74bb8987811bc79019701414a09dc5d94fc2e1218bf23823e70934fdd233",
+      "hooks": {}
+    },
+    {
+      "id": "GENESIS_MAGIC",
+      "nameJa": "始原の魔法",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8af7cfef918ca9fe2c52fb34d489af5c202de9ab47f6fb3582de151595f43b92",
+      "hooks": {}
+    },
+    {
+      "id": "KIN_CALL",
+      "nameJa": "同族の呼び声",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8f00a004cfadebeb01e72b33c709bbae03a735d11ac80a0611b2b96a9b92877a",
+      "hooks": {
+        "ench": "kinDiscount"
+      }
+    },
+    {
+      "id": "MULTI_CULTURE",
+      "nameJa": "多様な文化",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "eaad28daee19d1166eb2c546a7c17000d6a7387d63383389eda47808a6b3a91f",
+      "hooks": {}
+    },
+    {
+      "id": "SLAY_ART",
+      "nameJa": "殺生の極意",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "adf00d008e14bc6d7df1609cb83a153db918fc1de602a98199a5e6f07a287e49",
+      "hooks": {
+        "ench": "slayArt"
+      }
+    },
+    {
+      "id": "BLOOD1",
+      "nameJa": "血の魔法 - ブラッドドロー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "10175ddcf09a14bac825e8ea6110b0abeeb76808d938e6ec95b72ba734834d49",
+      "hooks": {
+        "act": "draw"
+      }
+    },
+    {
+      "id": "DISARM1",
+      "nameJa": "最初の螺子抜き",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "88f78b6ecdbf366118255f322102b1b60b814ac72d6567b69420920956a222ec",
+      "hooks": {
+        "act": "destroyEnch"
+      }
+    },
+    {
+      "id": "DISARM2",
+      "nameJa": "青銅解剖図",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "7f7135f1fff94aed2cd62271e17fd6140920dd77bda2643a400599352475c762",
+      "hooks": {
+        "act": "destroyEnch"
+      }
+    },
+    {
+      "id": "DISARM3",
+      "nameJa": "魔法研究機関",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "fc98462306548be5b0f49ab20aa07b31968750c78315c5f3f258a7a5ae11c16c",
+      "hooks": {}
+    },
+    {
+      "id": "FORBIDDEN",
+      "nameJa": "禁断の術式",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "bb24faae46bc174809031bc733bc0c72c2d15ec7454be1810750a5ca612bb394",
+      "hooks": {}
+    },
+    {
+      "id": "LUCKY_CHEST",
+      "nameJa": "幸運の宝箱",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "117358fc6a027b9cc1531be0beaf0645c205ec671c5b9831c70254e600ee2572",
+      "hooks": {}
+    },
+    {
+      "id": "MIMIC2",
+      "nameJa": "マスターミミック",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9e50870c9ca4de89208cb27a0dabb251112d4b30ebdaf65e9b4224ef6579b9e3",
+      "hooks": {
+        "aura": "chestLock"
+      }
+    },
+    {
+      "id": "GUILD_CHEST",
+      "nameJa": "アサシンギルドの宝箱",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "43456042f9f140416a4f5a0b3dcf4de76fd36aeba59af0a073426038466ffbc8",
+      "hooks": {}
+    },
+    {
+      "id": "GUILD_EYE",
+      "nameJa": "ギルドの情報網",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "08e2dfee48b4085b8a9cf484e6410428e8387f4b3668789da591b0d69d3ec99d",
+      "hooks": {
+        "ench": "bonusDraw"
+      }
+    },
+    {
+      "id": "CATALYST",
+      "nameJa": "亀裂の触媒",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "35db4588b248ae3339551f93f526321c47436f8bdaa3c9a62103f3af8eccb59c",
+      "hooks": {}
+    },
+    {
+      "id": "WORLD_SEED",
+      "nameJa": "世界樹の種",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "2f34fc9d9a505c28e670323d6834193d41508694ca1377d8df63b060eafffdd5",
+      "hooks": {
+        "ench": "seedMana"
+      }
+    },
+    {
+      "id": "MANA_GIANT",
+      "nameJa": "ジャイアントゴーレム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "075d5eceea3fa8d4b02d7d2429fb4579ae695bc7774c6f3ec58112cc21a57e38",
+      "hooks": {
+        "turnFx": "giantGolem"
+      }
+    },
+    {
+      "id": "HOURGLASS",
+      "nameJa": "時の砂時計",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "19785e5e77aae24763fa411941285108f9ee7d2c13da9f0acc839cdf54443db4",
+      "hooks": {
+        "act": "manaUp"
+      }
+    },
+    {
+      "id": "LIFE_CYCLE",
+      "nameJa": "生命の循環",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e1ae82e910c88f1cab7f5c50848ddc006accd4f4f3ed06a94b59ef0aae8dac55",
+      "hooks": {
+        "ench": "healMana"
+      }
+    },
+    {
+      "id": "LIFE_SANCTUM",
+      "nameJa": "生命の聖域",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ab12c53611675a588524f5d6b727f598590b908cc005a786069e06e8ca7aeb88",
+      "hooks": {
+        "ench": "sanctumField"
+      }
+    },
+    {
+      "id": "WORLD_HEART",
+      "nameJa": "世界樹の心臓",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "10a1e7b1345738ba84aa21d3df617b73d11ef6d4fcb4e9c2895eb6a5cc5ef33d",
+      "hooks": {
+        "ench": "worldHeart"
+      }
+    },
+    {
+      "id": "MEDITATE",
+      "nameJa": "瞑想",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "becbaccf038c0b6a36966f3b8040e8ebea4ae7d8c5bfacdc8e9c00b6effb9f05",
+      "hooks": {
+        "act": "heal"
+      }
+    },
+    {
+      "id": "HERMIT",
+      "nameJa": "隠遁の安息",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "96529fe9b8a07d01de80d6cfe5f859b6c66c758597fd2df16eaaebc78926dc7a",
+      "hooks": {
+        "act": "heal"
+      }
+    },
+    {
+      "id": "WORLD_BLESS",
+      "nameJa": "世界樹の祝福",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "077a072570bf43accecaeb3c0625433a001f97df3aa457ff9d8de8001fcf4c33",
+      "hooks": {
+        "ench": "worldBless"
+      }
+    },
+    {
+      "id": "GLASS_BAN",
+      "nameJa": "戦略変更",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "29049d5a3b0bebd01c0a1765bfdd454ae3af85ceab829126cf3fc439d3337fed",
+      "hooks": {
+        "ench": "glassBan"
+      }
+    },
+    {
+      "id": "SHATTER",
+      "nameJa": "崩壊振動",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "91ecb9e37e092e5047eeb142e71634081ad20fccb488ba88d56905c0d7ed4347",
+      "hooks": {}
+    },
+    {
+      "id": "SCARECROW",
+      "nameJa": "かかし召集",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "80ee5c67bebfc69fdc225f3a3044e7528c9f701374b4ba2430f306c61158fcdb",
+      "hooks": {}
+    },
+    {
+      "id": "LEVY",
+      "nameJa": "召集",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1e9c0211cc2a8f5298dfa5dd8baee656f3b634ea69b5a0fbf150678b6780a5ac",
+      "hooks": {}
+    },
+    {
+      "id": "INQUISITION",
+      "nameJa": "異端審問",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "18e52eda0359f0142c671164ae599396f6e4f0e244704afc680ba0da31ea6704",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
+        "ko": "【발동 시】상대의 덱·묘지·필드의 종족을 가진 몬스터 1장당 상대 플레이어에게 6 데미지를 준다.",
+        "en": "【On Cast】Deal 6 damage to the opponent for each tribal monster in their deck, graveyard, and field combined."
+      },
+      "after": {
+        "ja": "【発動条件】相手のデッキ・墓地・場に、種族を持つモンスターがいる。\n\n【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
+        "ko": "【발동 조건】상대의 덱·묘지·필드에 종족이 있는 몬스터가 있다.\n\n【발동 시】상대의 덱·묘지·필드의 종족을 가진 몬스터 1장당 상대 플레이어에게 6 데미지를 준다.",
+        "en": "【Play Requirement】The opponent has a monster with a tribe in their deck, graveyard, or field.\n\n【On Cast】Deal 6 damage to the opponent for each tribal monster in their deck, graveyard, and field combined."
+      }
+    },
+    {
+      "id": "MIMIC_LORD",
+      "nameJa": "ミミックリーダー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c971d7e6d732dca151deea889e2ccdd73c5eb551723400ddb9ca3396275db333",
+      "hooks": {
+        "onSummon": "mimicLord"
+      }
+    },
+    {
+      "id": "AWAKENED_MIMIC",
+      "nameJa": "覚醒ミミック",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "34aacd92bd24b1b09cc025fe524aceea448cf38d7e255010d311b66baf8c243d",
+      "hooks": {
+        "onSummon": "awakenMimic"
+      }
+    },
+    {
+      "id": "MIMIC_KING",
+      "nameJa": "ミミックキング",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c71e07aeb48624f7bb5c4936d3b4147ee793867339e2c0584909a02dcef1f24d",
+      "hooks": {
+        "onSummon": "mimicKing"
+      }
+    },
+    {
+      "id": "VITAL2",
+      "nameJa": "世界樹の信徒",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "086879d2e94de599f1130338aea60b8391960c83e1290db2debbae00214811c6",
+      "hooks": {
+        "onSummon": "dewBeliever"
+      }
+    },
+    {
+      "id": "VITAL3",
+      "nameJa": "世界樹の守り人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "66fbf20bdd1a382135c376dbe14683c7380937d518a4288d514784c6a5b370dc",
+      "hooks": {
+        "aura": "treeKeeper"
+      }
+    },
+    {
+      "id": "VITAL4",
+      "nameJa": "鼓舞王",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "55877f6dcead35f6cbc0a81e793be3de1be09eca1a09bd0da9fca6ec8611a396",
+      "hooks": {
+        "aura": "rallyGuts"
+      }
+    },
+    {
+      "id": "CULL_FLOOD",
+      "nameJa": "カルの洗礼",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6464b7f65d5d7163b843e5dc8872a3a25b241b1ea0180e5cd356dc59eca9913e",
+      "hooks": {}
+    },
+    {
+      "id": "PAIN_HARVEST",
+      "nameJa": "苦痛の収穫",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "2df7cba8f74e1bdf2963cba94f4947379e184e62a112a02e0a90277edf474310",
+      "hooks": {
+        "ench": "cullOnHit"
+      }
+    },
+    {
+      "id": "CULL_FARM",
+      "nameJa": "カル栽培",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9ba01c945fada9bef1662d7f5fa4ab93b600c2e35c118fefd33b9a773e41f4ca",
+      "hooks": {
+        "ench": "cullTurn"
+      }
+    },
+    {
+      "id": "PURGE_ALL",
+      "nameJa": "大粛清",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a6fa9828581a1b7e1f81c4508e10195fe72276baf6065ce7a8bb016709482ed0",
+      "hooks": {}
+    },
+    {
+      "id": "EXILE_NUKE1",
+      "nameJa": "虚空射撃",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9ba78879c46cdf9162b8a44c9e6931e06ce75997d4c3aae3a5a33a7d9d1fa24b",
+      "hooks": {}
+    },
+    {
+      "id": "EXILE_NUKE2",
+      "nameJa": "虚空の水晶魔術",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "7b62def5db19a6a0802ecd27c7fa928acfdfb7d39d7cf5c37369633352bc6053",
+      "hooks": {}
+    },
+    {
+      "id": "GOLIATH_HUNT",
+      "nameJa": "ジャイアントキリング",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e7c9b1f1048ce102c7f731e9c05c6eb684b3c37b5ba9ae0e7c4ffd79e4a0e74d",
+      "hooks": {}
+    },
+    {
+      "id": "DOUBLE_EXEC",
+      "nameJa": "二重処刑",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "45832fca62768cb93b0c800ef693db17d632d2f1ee75c60af79d3ac87abac053",
+      "hooks": {
+        "act": "destroyMon"
+      }
+    },
+    {
+      "id": "MASSACRE",
+      "nameJa": "大虐殺",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "70c138d1f55f37ebd7d34966974be8fcf24821b4cd873f95ed40120ca7d48887",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
+        "ko": "【발동 시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
+        "en": "【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
+      },
+      "after": {
+        "ja": "【発動条件】相手の場にモンスターがいる。\n\n【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
+        "ko": "【발동 조건】상대의 필드에 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
+        "en": "【Play Requirement】The opponent controls a monster.\n\n【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
+      }
+    },
+    {
+      "id": "MIMIC_KING2",
+      "nameJa": "ミミックキング2世",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "223f5ec32875994e479c2751b41ca364e226d36bc684b09aafc1c76f2e7636af",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "ORIGIN_MIMIC",
+      "nameJa": "始原のミミック",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "b41f8c4d127f65f978181c0e5e5f21fd6a5f2f2aca45e3e817f2d04e5c289f28",
+      "hooks": {
+        "onSummon": "originMimic"
+      },
+      "before": {
+        "ja": "【召喚時】自分の場・墓地・リフトにある「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続、自身を含む）。",
+        "ko": "【소환 시】자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2, 체력 +2(지속, 자신 포함).",
+        "en": "【On Summon】This monster gets +2 ATK and +2 HP per Mimic-family monster on your field or in your graveyard or Rift, including itself (lasting)."
+      },
+      "after": {
+        "ja": "【召喚時】この個体を除く、自分の場・墓地・リフトの「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続）。同名の別個体は数える。",
+        "ko": "【소환 시】이 개체를 제외한 자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2·체력 +2(지속). 같은 이름의 다른 개체는 센다.",
+        "en": "【On Summon】This monster gains +2 ATK and +2 HP (lasting) for each other Mimic-family monster in your field, graveyard, and Rift. Exclude this individual; count other copies with the same name."
+      }
+    },
+    {
+      "id": "GREED_PRICE",
+      "nameJa": "強欲の代価",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0520283edf4ed88ea265a554d2f1007f63b173b79ddce1ddbc8b201cfb407627",
+      "hooks": {}
+    },
+    {
+      "id": "MARKET_CRISIS",
+      "nameJa": "経済危機",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5547a7eb3e25870bd055a168e5be096a3252c8687e440f3bf83966bcaaa452b2",
+      "hooks": {}
+    },
+    {
+      "id": "TOKEN00",
+      "nameJa": "かかし",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0f1cb7c4dad519e2b0cc31bcc723f3d562a10226fb7687ad9acb6c80152db74e",
+      "hooks": {}
+    },
+    {
+      "id": "SOLDIER2",
+      "nameJa": "兵士",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0f1cb7c4dad519e2b0cc31bcc723f3d562a10226fb7687ad9acb6c80152db74e",
+      "hooks": {}
+    },
+    {
+      "id": "FURNACE",
+      "nameJa": "溶鉱炉",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8a26fa8b159ef4c3d631f04ffa595ea4944261b44e5e29e448265c511db1f380",
+      "hooks": {
+        "ench": "furnace"
+      }
+    },
+    {
+      "id": "PURGE_TOUCH",
+      "nameJa": "浄化の手",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ae6f9c5c47270aff5426efa1e9cdd3562d41160aeac837a5d67b3f6a3927a0cf",
+      "hooks": {
+        "act": "exilePick"
+      }
+    },
+    {
+      "id": "SCRAPPER",
+      "nameJa": "スクラップ収集家",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "33462b8ccb9142264bc72f8d68a3c17ecbc85f50b33237934b5d17c897d3d0e4",
+      "hooks": {}
+    },
+    {
+      "id": "HORDE",
+      "nameJa": "軍団の旗手",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5067e05c43ecdac57b39ee9b63a1ed828ef3a3c6564d24f30668317ede996ae2",
+      "hooks": {
+        "onSummon": "hordeRally"
+      }
+    },
+    {
+      "id": "ELITE",
+      "nameJa": "精鋭騎士団長",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0fb2d8ab752e1996104b095aaf4caf676f5f94dada028a5608109f6c802c0e61",
+      "hooks": {
+        "onSummon": "eliteSoldiers"
+      }
+    },
+    {
+      "id": "WALLBREAK1",
+      "nameJa": "城壁破砕",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "eebf4906502098309e74bbd2819e85e781290ce13870644088d3982251195c51",
+      "hooks": {
+        "act": "destroyMon"
+      },
+      "before": {
+        "ja": "【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
+        "ko": "【발동 시】양쪽 필드의 공격력 2 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
+        "en": "【On Cast】Automatically destroy the monster on either field with ATK 2 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
+      },
+      "after": {
+        "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 공격력 2 이하의 몬스터가 있다(상대의 오라 보유 몬스터는 제외).\n\n【발동 시】양쪽 필드의 공격력 2 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
+        "en": "【Play Requirement】There is a monster with ATK 2 or less on either field (excluding enemy monsters with Aura).\n\n【On Cast】Automatically destroy the monster on either field with ATK 2 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
+      }
+    },
+    {
+      "id": "WALLBREAK2",
+      "nameJa": "攻城崩壊",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "5eb81e51d1497f193c0ee5182557c109e1a9b95a6faf39b88a2edd7bac9290b1",
+      "hooks": {
+        "act": "destroyMon"
+      },
+      "before": {
+        "ja": "【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
+        "ko": "【발동 시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
+        "en": "【On Cast】Destroy all monsters on either field with ATK 2 or less."
+      },
+      "after": {
+        "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる。\n\n【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 공격력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
+        "en": "【Play Requirement】There is a monster with ATK 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with ATK 2 or less."
+      }
+    },
+    {
+      "id": "SNIPE1",
+      "nameJa": "狙撃",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "548f7ffe630419f199097114355f8c1da3a5b1425f4738375d09bfc811cac009",
+      "hooks": {
+        "act": "destroyMon"
+      },
+      "before": {
+        "ja": "【発動時】両方の場の現在体力3以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
+        "ko": "【발동 시】양쪽 필드의 현재 체력 3 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
+        "en": "【On Cast】Automatically destroy the monster on either field with current HP 3 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
+      },
+      "after": {
+        "ja": "【発動条件】どちらかの場に現在体力3以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の現在体力3以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 현재 체력 3 이하의 몬스터가 있다(상대의 오라 보유 몬스터는 제외).\n\n【발동 시】양쪽 필드의 현재 체력 3 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
+        "en": "【Play Requirement】There is a monster with current HP 3 or less on either field (excluding enemy monsters with Aura).\n\n【On Cast】Automatically destroy the monster on either field with current HP 3 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
+      }
+    },
+    {
+      "id": "SNIPE2",
+      "nameJa": "一斉射撃",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "a739baede9edd69f43aea6d98f525302a76cc2c23c8610b765727fb37f71bb09",
+      "hooks": {
+        "act": "destroyMon"
+      },
+      "before": {
+        "ja": "【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
+        "ko": "【발동 시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
+        "en": "【On Cast】Destroy all monsters on either field with current HP 2 or less."
+      },
+      "after": {
+        "ja": "【発動条件】どちらかの場に現在体力2以下のモンスターがいる。\n\n【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 현재 체력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
+        "en": "【Play Requirement】There is a monster with current HP 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with current HP 2 or less."
+      }
+    },
+    {
+      "id": "DRAGON_EGG",
+      "nameJa": "ドラゴンの卵",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e5e8d08204cbfc1a1ff90c09451777d303ce3e9e9c1d61fec50068de60b55d57",
+      "hooks": {
+        "aura": "ward",
+        "hatchTurns": 8
+      }
+    },
+    {
+      "id": "BEAST_EGG",
+      "nameJa": "神獣の卵",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "7076c6bc9af693effe8fdfdf52929dc096bf3f4577241624fd50d282e1b8e179",
+      "hooks": {
+        "aura": "ward",
+        "hatchTurns": 10
+      }
+    },
+    {
+      "id": "D_BLACK",
+      "nameJa": "黒竜",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "fb1bd382ccb1c2e7b22750aa655427698263b797af33657ff163fd6134ea8e9a",
+      "hooks": {
+        "onSummon": "blackDragon"
+      }
+    },
+    {
+      "id": "D_RED",
+      "nameJa": "赤竜",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "31cdabea9b47849404b92e12887c0d50ec92be617f76affb007eaa34db7137b0",
+      "hooks": {
+        "onSummon": "burn",
+        "aura": "spellAmp"
+      }
+    },
+    {
+      "id": "D_BLUE",
+      "nameJa": "青竜",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8bca73f007ff5494c2e9647fff288c72867640e44764cec6e5e1f5e8e1be8a3c",
+      "hooks": {
+        "onSummon": "blueDragon",
+        "turnFx": "growMaxHp"
+      }
+    },
+    {
+      "id": "DIVINE",
+      "nameJa": "神獣",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "218ca64bef23e09402106a6bd9245b5cc7eb77a2b40f652fc671330f3c8f9bd4",
+      "hooks": {
+        "onSummon": "divine",
+        "aura": "ward"
+      }
+    },
+    {
+      "id": "EGG_HUNTER",
+      "nameJa": "エッグハンター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "362beb591c44741b2a474bea8b16f2a0a5a9dff32a877db16abddfc3f859f40a",
+      "hooks": {
+        "aura": "eggHunter"
+      }
+    },
+    {
+      "id": "INCUBATOR",
+      "nameJa": "高級孵化器",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "0c76a757bafa165131d0a77f0e915831af31bbe3f24403c5e5fd4ad5b79379a9",
+      "hooks": {
+        "act": "incubate"
+      },
+      "before": {
+        "ja": "【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを5減らす（最低0）。0になれば直ちに孵化する。",
+        "ko": "【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 5 감소(최저 0). 0이 되면 즉시 부화한다.",
+        "en": "【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 5, to a minimum of 0. If it reaches 0, hatch it immediately."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場に、孵化までの残りターンが1以上ある卵がいる。\n\n【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを5減らす（最低0）。0になれば直ちに孵化する。",
+        "ko": "【발동 조건】자신의 필드에 부화까지 남은 턴이 1 이상인 알이 있다.\n\n【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 5 감소(최저 0). 0이 되면 즉시 부화한다.",
+        "en": "【Play Requirement】You control an Egg with at least 1 turn remaining until hatching.\n\n【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 5, to a minimum of 0. If it reaches 0, hatch it immediately."
+      }
+    },
+    {
+      "id": "EGG_MASTER",
+      "nameJa": "孵化マスター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f2a617bb512cc6ca7dbc93b93b1805d3dd12fb5dc3128063077a51aafe3b0fd2",
+      "hooks": {
+        "onSummon": "eggMaster"
+      }
+    },
+    {
+      "id": "BLOOD_JOY",
+      "nameJa": "血の魔法 - 喜",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "3985d7111d4817c4f59596ffd6294f93870011e82462a7be7bf2362e90a79581",
+      "hooks": {}
+    },
+    {
+      "id": "BLOOD_ANGER",
+      "nameJa": "血の魔法 - 怒",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "244d10e992bd8d6fd35aa2dfc8cb59182f601a3959dad6fa24245b037767cb8c",
+      "hooks": {}
+    },
+    {
+      "id": "BLOOD_SORROW",
+      "nameJa": "血の魔法 - 哀",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "85b074c5da5de757164a4f2d8ad8c0b1b53f34668d4fe07b46fe06f33819e5e0",
+      "hooks": {}
+    },
+    {
+      "id": "BLOOD_PLEASURE",
+      "nameJa": "血の魔法 - 楽",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0b0c5e6511a49f101d48d360de1ed52d66151c52d64f3123e572aa3c93b12444",
+      "hooks": {}
+    },
+    {
+      "id": "VAMP_PACT",
+      "nameJa": "吸血契約",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "1ebd18d24bd759d05101f32132d87336108debc02119cf5d027e7514296e66f7",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
+        "ko": "【발동 시】자신에게 6 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
+        "en": "【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場のモンスターが7体未満。\n\n【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
+        "ko": "【발동 조건】자신의 필드의 몬스터가 7체 미만이다.\n\n【발동 시】자신에게 6 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
+        "en": "【Play Requirement】You control fewer than 7 monsters.\n\n【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
+      }
+    },
+    {
+      "id": "BLOOD_FEST",
+      "nameJa": "血の祝祭",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "268712c76841d200baafdbae7c08ada6497b951028cb2cbc37135ec5f4fe9017",
+      "hooks": {
+        "ench": "bloodFest"
+      }
+    },
+    {
+      "id": "BLOOD_SHIELD",
+      "nameJa": "吸血術式",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "abae9cc514b114c66451df6d8e7bb19ce9935f8cbb84f2951416379b3fa8f467",
+      "hooks": {
+        "ench": "bloodShield"
+      }
+    },
+    {
+      "id": "VAMP_WARD",
+      "nameJa": "吸血の極意",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d371e06d4ff0ef1f47558ab0c2210645326259a806b16b4d523df0aca2cddf5f",
+      "hooks": {
+        "ench": "vampWard"
+      }
+    },
+    {
+      "id": "VAMP_PACT2",
+      "nameJa": "吸血刻印契約",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "db942077dd795dd3a4e8b273092229cd5a0e73e08be5d0a364d507456a1deb62",
+      "hooks": {}
+    },
+    {
+      "id": "VAMP_BUTLER",
+      "nameJa": "ヴァンパイア執事",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "7b67e77f49b5d133fd65b4e8e107863556c6cfe75818965e0a314a4e50de8332",
+      "hooks": {
+        "aura": "vampButler"
+      }
+    },
+    {
+      "id": "BLOOD_SECRET",
+      "nameJa": "血の魔法 - 秘術",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "51914008b5700930f1c0de1557d84bbb8b7fe6dedfeab8add8bf83afcaff8923",
+      "hooks": {}
+    },
+    {
+      "id": "VAMP1",
+      "nameJa": "見習い吸血鬼",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8160915e487c141135b9acfe762bf7928549e7fef16070b463dc623bbbd8fbaf",
+      "hooks": {}
+    },
+    {
+      "id": "VAMP2",
+      "nameJa": "初級吸血鬼",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "95dabfb6dbb6a75d2506a99d17fae107eaf44260d21507cd0d4a07d96cb372c1",
+      "hooks": {}
+    },
+    {
+      "id": "VAMP3",
+      "nameJa": "中級吸血鬼",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "60238abbab776a9e46da42ae377a04eb59bfe0f2e9e67d44344701467a1fc44a",
+      "hooks": {}
+    },
+    {
+      "id": "VAMP4",
+      "nameJa": "上級吸血鬼",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c8294fca7c7835640925fc10088c453e02971171243388458132d3b64f43cd09",
+      "hooks": {
+        "attackFx": "vampDrain"
+      }
+    },
+    {
+      "id": "VAMP5",
+      "nameJa": "特級吸血鬼",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "af6c47371b485a284b8be19beab1cf766273bce0e07d63602b3a30061b86d99e",
+      "hooks": {
+        "onSummon": "vampLord",
+        "attackFx": "vampDrain"
+      }
+    },
+    {
+      "id": "FLAME",
+      "nameJa": "ファイアー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1a54e693d692295f7317b196edb3bae21b6b7f45675aaf1ea0864ae6f09df55c",
+      "hooks": {}
+    },
+    {
+      "id": "GHOST",
+      "nameJa": "幽霊",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "bcb2b3177051d074c5220d2815e21d2ba509307b67b85ef736ca798237a6e1a6",
+      "hooks": {}
+    },
+    {
+      "id": "BLOOD_RITE",
+      "nameJa": "血鬼術",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6373c75811867486bad6020b2b6a909b7519b96565639ff1ea0da040f73fc3ec",
+      "hooks": {
+        "ench": "spellHeal"
+      }
+    },
+    {
+      "id": "WEAKEN_ALL",
+      "nameJa": "弱化術式",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "442fe5f9be3958bdc756e8f58333fe1af65d4e50a1ef6342bf560077f86c0b6d",
+      "hooks": {
+        "ench": "weakenAll"
+      }
+    },
+    {
+      "id": "GUILD_HALL",
+      "nameJa": "アサシンギルド支部",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "95e3471794c52269d4487371cf49c440a29d9d4bfb29b4b54c7001fd4e75a6f1",
+      "hooks": {
+        "aura": "assassinGuild"
+      }
+    },
+    {
+      "id": "FATE_WHEEL",
+      "nameJa": "運命の輪",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "bfaa94c292c011e04283fa6a6f13021c34ebb33ab49617be1389d042f42ffdf6",
+      "hooks": {
+        "ench": "fateWheel"
+      },
+      "before": {
+        "ja": "【出目を確認した後】自分のダイス結果を確認後、その行動のダイス1個を振り直せる（自分の各ターン1回）。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
+        "ko": "【눈을 확인한 후】자신의 주사위 결과를 확인한 뒤 그 행동의 주사위를 다시 굴릴 수 있다(자신의 턴마다 1회).\n\n【파괴 시】이 마법을 묘지 대신 자신의 리프트로 보낸다.",
+        "en": "【After Seeing the Roll】After seeing your dice results, you may reroll the dice for that action, once during each of your turns.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
+      },
+      "after": {
+        "ja": "【出目を確認した後】自分のターン中、カードの使用・攻撃・効果の選択によって自分が振ったダイスの結果を確認した後、その行動を巻き戻してダイスを振り直せる（自分の各ターン1回）。その行動で複数のダイスを振った場合は、全て振り直す。振り直さず結果を確定した場合、この回数を消費しない。ターン開始・終了時の自動処理は対象外。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
+        "ko": "【눈을 확인한 후】자신의 턴 중 카드 사용·공격·효과 선택으로 자신이 굴린 주사위의 결과를 확인한 뒤, 그 행동을 되돌리고 주사위를 다시 굴릴 수 있다(자신의 턴마다 1회). 그 행동에서 여러 주사위를 굴렸다면 전부 다시 굴린다. 다시 굴리지 않고 결과를 확정하면 횟수를 소비하지 않는다. 턴 시작·종료 시 자동 처리는 대상이 아니다.\n\n【파괴 시】이 마법을 묘지 대신 자신의 리프트로 보낸다.",
+        "en": "【After Seeing the Roll】During your turn, after seeing your dice from playing a card, attacking, or resolving an effect choice, you may rewind that action and reroll its dice (1 time during each of your turns). If that action rolled multiple dice, reroll all of them. Keeping the result does not spend this allowance. Automatic turn-start and turn-end effects are excluded.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
+      }
+    },
+    {
+      "id": "COUNTERCALC",
+      "nameJa": "逆算",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "71daf81268b7d173bd4e146cacbcd18475393ed84a2d1a9b154b836a65be5a3e",
+      "hooks": {}
+    },
+    {
+      "id": "AMBUSH",
+      "nameJa": "奇襲",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b4d92b6d293e188d97507d9514ffa26ca63d2a7747d169043cac050672d41f33",
+      "hooks": {}
+    },
+    {
+      "id": "TRUMPET",
+      "nameJa": "支援ラッパ",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "5e3a0229be70095b2185841c701c77f6ce61f3f1a5ff71b57bf4b7bba137bed8",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。",
+        "ko": "【발동 시】자신의 필드에서 서로 다른 개체를 최대 3체 선택해 이번 턴 종료까지 각각 공격력 +1(동명 가능).",
+        "en": "【On Cast】Choose up to 3 different monsters on your field, allowing the same name; each gets +1 ATK until this turn ends."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】자신의 필드에서 서로 다른 개체를 최대 3체 선택해 이번 턴 종료까지 각각 공격력 +1(동명 가능).",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose up to 3 different monsters on your field, allowing the same name; each gets +1 ATK until this turn ends."
+      }
+    },
+    {
+      "id": "FORESIGHT",
+      "nameJa": "先見の明",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b0d4db0a97ebb38d75ebf80cac69f46b24ec7c239ee44379dc18bbce4ba4e956",
+      "hooks": {
+        "ench": "foresight"
+      }
+    },
+    {
+      "id": "TRICKROOM",
+      "nameJa": "トリックルーム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "871a0eb329786c221fe3fc1b352240a2ece2a99dfc9902e141392aa7dff67fae",
+      "hooks": {}
+    },
+    {
+      "id": "INCUBATOR_S",
+      "nameJa": "孵化器",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "9582215cc4b7d847a7aa91bbb517b3e98b9326337daf2df6115f281c6f7f9110",
+      "hooks": {
+        "act": "incubate"
+      },
+      "before": {
+        "ja": "【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを2減らす（最低0）。0になれば直ちに孵化する。",
+        "ko": "【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 2 감소(최저 0). 0이 되면 즉시 부화한다.",
+        "en": "【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 2, to a minimum of 0. If it reaches 0, hatch it immediately."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場に、孵化までの残りターンが1以上ある卵がいる。\n\n【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを2減らす（最低0）。0になれば直ちに孵化する。",
+        "ko": "【발동 조건】자신의 필드에 부화까지 남은 턴이 1 이상인 알이 있다.\n\n【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 2 감소(최저 0). 0이 되면 즉시 부화한다.",
+        "en": "【Play Requirement】You control an Egg with at least 1 turn remaining until hatching.\n\n【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 2, to a minimum of 0. If it reaches 0, hatch it immediately."
+      }
+    },
+    {
+      "id": "TRIBE_PACT",
+      "nameJa": "多種族契約",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f7f190f76d195a04e255fb8c1f057b5ebbeae5b1eaebb71e8d92ad01df61f403",
+      "hooks": {
+        "ench": "tribeContract"
+      }
+    },
+    {
+      "id": "GOLEM1",
+      "nameJa": "兵士ゴーレム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a57bf7a34f2e47f00d87abdd18e09dd8228ed1656e60c423dc55fb6511bb0ff3",
+      "hooks": {}
+    },
+    {
+      "id": "GOLEM2",
+      "nameJa": "リーダーゴーレム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1ffdf2af171aa2032c76caffa030e1750ce53a89521253aa1b6d0141a8cab6a7",
+      "hooks": {
+        "aura": "leaderGolem"
+      }
+    },
+    {
+      "id": "GOLEM3",
+      "nameJa": "ゴーレムキング",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0601ddab24cd9e1622b3b452548ce660dae4a7ee68572d393dfa5cf342b58d73",
+      "hooks": {
+        "summonReq": "golemKin"
+      }
+    },
+    {
+      "id": "DECAY_CRAFT",
+      "nameJa": "暗器製造",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "a5ad6446b82c658ea35b0135200e5f505c466b5bbdc94af2173ccd711d84639b",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
+        "ko": "【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
+        "en": "【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
+      }
+    },
+    {
+      "id": "RUST_SLUG",
+      "nameJa": "ラストキャップ・スラッグ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "55611ffae4067575f9e99bfb12012994adee0c923049ae07a53c29dc1795f815",
+      "hooks": {
+        "onSummon": "decayAll"
+      }
+    },
+    {
+      "id": "MAJESTY_RITE",
+      "nameJa": "刻印秘術",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "07b70691318c09226dc0338caffdafd77f1dae01432ba0bd9ee69252b4953786",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（持続）。",
+        "ko": "【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(지속).",
+        "en": "【On Cast】Your max mana -1. Choose 1 monster on your field and give it Majesty (lasting)."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場に「威厳」を持たないモンスターがいる。\n\n【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（持続）。",
+        "ko": "【발동 조건】자신의 필드에 위엄이 없는 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(지속).",
+        "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Your max mana -1. Choose 1 monster on your field and give it Majesty (lasting)."
+      }
+    },
+    {
+      "id": "CROSSROADS",
+      "nameJa": "選択の岐路",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8038cb18de398350e9709288985c161f5ea6660087dedd9e2589f4c1eac88333",
+      "hooks": {}
+    },
+    {
+      "id": "CHOSEN_KNIGHT",
+      "nameJa": "選ばれし剣士",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "25c618f4ea8b32b7ff724f2375955362add7d6e4f2b8e494ccf2c49cdad05f8d",
+      "hooks": {
+        "attackFx": "cullExile2"
+      }
+    },
+    {
+      "id": "CHOSEN_MAGE",
+      "nameJa": "選ばれし魔法使い",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e77791c28258670ecae6cc625139f501c3baa1e864ae9322f3090c59445bbbe1",
+      "hooks": {}
+    },
+    {
+      "id": "CHOSEN_ARCHER",
+      "nameJa": "選ばれし弓手",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "bb4d1702e11b2c548e5272d0e97dabb0c1764afd93adacd5614de098d99f32e6",
+      "hooks": {
+        "attackFx": "giantSlayer"
+      }
+    },
+    {
+      "id": "CHOSEN_ROGUE",
+      "nameJa": "選ばれし盗賊",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "cf84fa367355e53e3dea3a2620f0d134eb486d88d7f52f0959a38a00d7b42088",
+      "hooks": {}
+    },
+    {
+      "id": "RUST_SHROOM",
+      "nameJa": "ラストマッシュルーム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9beeb8537d9d4335b0ff5635a9bff1ace30a48072d19c6ea402b34cec6fab42c",
+      "hooks": {}
+    },
+    {
+      "id": "CHOSEN_AREA",
+      "nameJa": "選ばれし領域",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "4d9d7ad6b434ab1829c3e142ddf356685c87628376541f0c49b886d92e3b8cc3",
+      "hooks": {}
+    },
+    {
+      "id": "TRIAL_AREA",
+      "nameJa": "試練の領域",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e4f4c470115c39160b66f00ad86d217fcd2182da8d69072952b0617c9d2d99af",
+      "hooks": {
+        "ench": "trialArea"
+      }
+    },
+    {
+      "id": "ANCIENT_CIV",
+      "nameJa": "古代文明",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "08fca27a88edded597dfedc67d8cdfb439038499e54c6bb6b5d3fbb20a075a75",
+      "hooks": {
+        "ench": "ancientCiv"
+      }
+    },
+    {
+      "id": "GAMBLER",
+      "nameJa": "ギャンブラー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "985b8d65159ee88bb386ef795a282cc616a26bdb4a9e8a95735e8b4c31f4a522",
+      "hooks": {
+        "turnFx": "gambler"
+      }
+    },
+    {
+      "id": "ELF_HAVEN",
+      "nameJa": "エルフの憩い場",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "73be43c017e87174b93fd195c6868914aa99829f0812b5eded29d2fbcd331be3",
+      "hooks": {
+        "ench": "elfHaven"
+      }
+    },
+    {
+      "id": "HALF_ELF",
+      "nameJa": "ハーフエルフ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "354c1e6e7fca08f51671b50d4ed2f453cc17c700acc279d03bd8d25554cc0443",
+      "hooks": {
+        "onSummon": "halfElf"
+      }
+    },
+    {
+      "id": "LEGEND_GAMBLER",
+      "nameJa": "伝説のギャンブラー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f9d32f2c3d34ae8eb656505035a6c579d020e9e63942ced47c4aa781bce86586",
+      "hooks": {
+        "turnFx": "legendGambler"
+      }
+    },
+    {
+      "id": "ELF",
+      "nameJa": "エルフ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f7f0704ac0af8f10b43ea561f3bd4276857e57524c4f3959a7834d0c47be48a5",
+      "hooks": {
+        "onSummon": "elfDew",
+        "summonReq": "dew4"
+      }
+    },
+    {
+      "id": "DARK_ELF",
+      "nameJa": "ダークエルフ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f9747ff7c67bd8d2999833f4f8cae9a6bb39598eb81fd9b1136e650de3bc8be5",
+      "hooks": {
+        "onSummon": "darkElfDew",
+        "summonReq": "darkElf"
+      }
+    },
+    {
+      "id": "HIGH_ELF",
+      "nameJa": "ハイエルフ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d18098db3be744aa78d6488aed36a2d95648c338857eb21433a8053a838ee47c",
+      "hooks": {
+        "onSummon": "highElfDew",
+        "summonReq": "dew10"
+      }
+    },
+    {
+      "id": "ELDER_ELF_KING",
+      "nameJa": "エルダーハイエルフキング",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0a5d0da8ca9540f8515a6f81fed7d5a4699255f446016b814d7860eacfa01730",
+      "hooks": {
+        "onSummon": "elderDew",
+        "summonReq": "dew12"
+      }
+    },
+    {
+      "id": "WORLD_CARE",
+      "nameJa": "世界樹の慈しみ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "455f1c25050d6f2fd77042723dc0ca5cacc7ca826b39a86db1688cebc741abad",
+      "hooks": {
+        "ench": "worldCare"
+      }
+    },
+    {
+      "id": "HPS_SCALE",
+      "nameJa": "鋼の鱗",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "91cccf37d7c0ad3c9455bb72fb2a776c12f8d084adc5c96dc7060ccc05b66c9c",
+      "hooks": {
+        "act": "buffPerm"
+      }
+    },
+    {
+      "id": "HPS_GRAFT",
+      "nameJa": "生命の接ぎ木",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "012286f4ae1aaca288d9da90c665b1c02ee91c29e3e4f046a1cfbe3f8570da26",
+      "hooks": {
+        "act": "buffPerm"
+      }
+    },
+    {
+      "id": "HPS_OATH",
+      "nameJa": "守護の誓い",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "fe067420b60656ac43b4ba1128c758b3e0a153d80576fbda23aecc31091439f9",
+      "hooks": {
+        "act": "buffAllDef"
+      }
+    },
+    {
+      "id": "HPS_SOIL",
+      "nameJa": "生命の土壌",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9657625b079d0a8a269ba36075303bdf940413977b397bdfeb64459ab7203fa1",
+      "hooks": {
+        "ench": "soilHp"
+      }
+    },
+    {
+      "id": "HPS_BOULDER",
+      "nameJa": "巨岩の加護",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ec8b7fe33051a716b78a3c5f4a9ac6fb7272ec8fc6d0b48affe9dc65bee28dba",
+      "hooks": {
+        "act": "buffPerm"
+      }
+    },
+    {
+      "id": "GUILD_CO",
+      "nameJa": "商会",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "1089f538c0c43ad73eee632d3fbd3004b7d3aacdbf8b98ad41ab1b6190a72205",
+      "hooks": {
+        "ench": "guild"
+      },
+      "before": {
+        "ja": "【発動条件】自分の場に「商会」がない。\n\n【自分のターン開始時】この魔法にカウンター1個を付与する。この魔法のカウンター20個ごとに20個を取り除き、新しい「闇商人」1枚を自分の手札に加える。",
+        "ko": "【발동 조건】자신의 필드에 상회가 없다.\n\n【자신의 턴 시작 시】이 마법에 카운터 1개를 놓는다. 이 마법의 카운터 20개마다 20개를 제거하고 새로운 암상인 1장을 자신의 패에 추가한다.",
+        "en": "【Play Requirement】You control no Trade Guild.\n\n【At the Start of Your Turn】Put 1 counter on this spell. For every 20 counters on it, remove 20 and create 1 Black Market Dealer in your hand."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場に「商会」がない。\n\n【自分のターン開始時】この魔法が場にある間、自分のターンが始まるたび、この魔法にカウンター1個を付与する。発動した時点や相手のターン開始時には増えない。\n\n【カウンター蓄積時】この魔法のカウンターが20個以上になったら、直ちに20個を取り除き、新しい「闇商人」1枚を自分の手札に加える。他のカードの効果で増えた場合も発動し、20個以上ある限り繰り返す。余ったカウンターは残る。",
+        "ko": "【발동 조건】자신의 필드에 상회가 없다.\n\n【자신의 턴 시작 시】이 마법이 필드에 있는 동안 자신의 턴이 시작될 때마다 이 마법에 카운터 1개를 놓는다. 발동한 순간이나 상대의 턴 시작에는 증가하지 않는다.\n\n【카운터 축적 시】이 마법의 카운터가 20개 이상이 되면 즉시 20개를 제거하고 새로운 암상인 1장을 자신의 패에 추가한다. 다른 카드의 효과로 증가한 경우에도 발동하며, 20개 이상인 동안 반복한다. 남은 카운터는 유지된다.",
+        "en": "【Play Requirement】You control no Trade Guild.\n\n【At the Start of Your Turn】While this spell is on your field, put 1 counter on it whenever your turn starts. Casting it and the start of the opponent’s turn do not add counters.\n\n【When Counters Accumulate】Whenever this spell has at least 20 counters, immediately remove 20 and create 1 Black Market Dealer in your hand. This also applies to counters added by other cards. Repeat while at least 20 remain; keep any leftover counters."
+      }
+    },
+    {
+      "id": "SLUM",
+      "nameJa": "スラム街",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a1bb4d402afe8f065e24d896f6253fd298a4f7911106c2d5c07d733ace15cdb9",
+      "hooks": {}
+    },
+    {
+      "id": "GRAPE",
+      "nameJa": "ぶどう",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "011e1c3245bf703209874d53bc98b71d10d33370fcd18c593ce70a25be4679a8",
+      "hooks": {
+        "act": "hpUp"
+      }
+    },
+    {
+      "id": "BREWING",
+      "nameJa": "醸造",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "edee78391af4f3c85ab75064d1c3d5c875d626e4a11fa01974c8f7c38c65d91a",
+      "hooks": {
+        "ench": "brewing"
+      }
+    },
+    {
+      "id": "MERCH1",
+      "nameJa": "見習い商人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "56647da3eafbc1cdb908907ccf44875c6df5a7ad6a473c8f37323d0c69c4181b",
+      "hooks": {
+        "onSummon": "guildCnt"
+      }
+    },
+    {
+      "id": "MERCH2",
+      "nameJa": "王都の商売人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ff19089f71ae3b887f397f69b900cb9eb4a6a6fc70aef9441d4691fb884566bc",
+      "hooks": {
+        "onSummon": "guildCnt"
+      }
+    },
+    {
+      "id": "GRAPE2",
+      "nameJa": "高品質ぶどう",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9e8b510cf964ba7bc962c8e12c75824e7034b7083abb2a564bb13865410b383d",
+      "hooks": {
+        "act": "hpUp"
+      }
+    },
+    {
+      "id": "WINE",
+      "nameJa": "ワイン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "86f468280f0b14743262def9241380268fb838014057f1e9bfbab0072a6cc66d",
+      "hooks": {
+        "act": "hpUp"
+      }
+    },
+    {
+      "id": "DARK_MERCHANT",
+      "nameJa": "闇商人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a143850ae2dcf06a820281a259295b09f6edcb703f4b811e2bc0cce08e946bf7",
+      "hooks": {}
+    },
+    {
+      "id": "TPO1",
+      "nameJa": "飢えた仔獣",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b20ff209465b8d3c1430037f727a2cc31a69e80831447c54597542a0d553b9da",
+      "hooks": {
+        "onSummon": "preyBounce",
+        "summonReq": "preyLow2"
+      }
+    },
+    {
+      "id": "TSO1",
+      "nameJa": "隠遁者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0a8e200e43061721bcd48c379edf8ed7b7173a4170cc18b91ca3accacd221187",
+      "hooks": {
+        "onSummon": "soloLock"
+      }
+    },
+    {
+      "id": "TAR1",
+      "nameJa": "貴族の執事",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e2992b5fbd06ec5bbb0d7f13b6752c61ac85408194dd9748e0c9525bd3bab71f",
+      "hooks": {
+        "aura": "pageDraw"
+      }
+    },
+    {
+      "id": "TDE1",
+      "nameJa": "魔族の斥候",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "cd1169aa0b2989f813ab7833f124768aa7e8ed2b862908bad748bd3ae217913a",
+      "hooks": {
+        "onSummon": "manaDebt5",
+        "summonReq": "mm5"
+      }
+    },
+    {
+      "id": "TDE2",
+      "nameJa": "魔族の戦士",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "4debed6fbb7deb8547799db9c51034f96dfa8e44eb287f2f605fafb2df690a83",
+      "hooks": {
+        "aura": "demonTax2",
+        "summonReq": "mm5"
+      }
+    },
+    {
+      "id": "TDE3",
+      "nameJa": "魔族の狂戦士",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1f86b60f89891be1b43faf1785bfc41a2ec588e86664c7aba7e4972677f982fb",
+      "hooks": {
+        "turnFx": "demonRoll"
+      }
+    },
+    {
+      "id": "TDE4",
+      "nameJa": "魔王",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0008a76a670294f6ce1ab837d5dacacb3b2f01ce63ad0314ef24507c76fe2ab6",
+      "hooks": {
+        "onSummon": "manaSet3",
+        "aura": "manaGrowthLock",
+        "summonReq": "demonKing"
+      }
+    },
+    {
+      "id": "DUNGEON_FLOOR",
+      "nameJa": "ダンジョン最下層",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ce8ec5dfc5c7a1efc36709f04bd98ee5d3542d7f3982ed031ea0d3f04c7af4f9",
+      "hooks": {}
+    },
+    {
+      "id": "GEM_RAIN",
+      "nameJa": "宝石の雨",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ae7dcd3578b79228a7f54fafe53650118eeb53c42a7e6d814833d09274c692b4",
+      "hooks": {
+        "ench": "gemRain"
+      }
+    },
+    {
+      "id": "VOID_FRUIT",
+      "nameJa": "虚無の果実",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b9419acfbf740a944e24c6ce839489f20222a00f6d2dfa42913cad2c6ddb8096",
+      "hooks": {
+        "ench": "voidFruit"
+      }
+    },
+    {
+      "id": "VOID_APOSTLE",
+      "nameJa": "虚無空間の使徒",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "966e6cd4c7af16aac59b9ff9b4e9ec6009b1ed69c36e0a2e8d9909394dbe5d08",
+      "hooks": {
+        "onSummon": "voidApostle",
+        "turnFx": "voidRoll"
+      }
+    },
+    {
+      "id": "CASINO",
+      "nameJa": "カジノ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ed9f85998661a25f64e5ceec7d6ce6aa1268f0f921510d423667fe76f7689575",
+      "hooks": {
+        "aura": "casino"
+      }
+    },
+    {
+      "id": "REFRESH_HAND",
+      "nameJa": "リフレッシュ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6be8199c32dadb643f53f1e7f71fe80b196fe094f5a877a68647afb594563eec",
+      "hooks": {}
+    },
+    {
+      "id": "FOCUS",
+      "nameJa": "選択と集中",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d952797946bc97ffde174c78d903abdc1ba25f1a823b463a6f952e9f8df9fcb2",
+      "hooks": {}
+    },
+    {
+      "id": "GUILD_HQ",
+      "nameJa": "アサシンギルド本部",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "eecffe050a1f2222c723a75ab304de6d0be3c704452b9787a135edc43d84540b",
+      "hooks": {
+        "turnFx": "nightMarket",
+        "aura": "assassinHQ"
+      }
+    },
+    {
+      "id": "WORLD_TREE",
+      "nameJa": "世界樹",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d73bd82b0e02c3c9685d1d7bc9807cd4393b4659f8d652821580f4c2266a6afe",
+      "hooks": {
+        "onSummon": "worldTreeDew",
+        "turnFx": "worldTree",
+        "summonReq": "dew8"
+      }
+    },
+    {
+      "id": "CURSE",
+      "nameJa": "呪い",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e1dcea8704b9f8c702e08d28700a709f506541d4b5b7560b8cd898b3a0f6f162",
+      "hooks": {}
+    },
+    {
+      "id": "ORIGIN_RITE",
+      "nameJa": "始原の術式",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "990b8273771f5375b1b0c40cfbab56b61812d4087f8c9bd2c05a4317702105fa",
+      "hooks": {
+        "ench": "originRite"
+      }
+    },
+    {
+      "id": "DRAGON_RIDER",
+      "nameJa": "ドラゴンライダー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "89e903cc35e86d21ac7a1e883b981d21ac99c5b7e073bab48ee87420f3d634ef",
+      "hooks": {
+        "attackFx": "halfSecond"
+      }
+    },
+    {
+      "id": "ANTIQUE_DK",
+      "nameJa": "アンティークドラゴンナイト",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
+      "hooks": {}
+    },
+    {
+      "id": "CASTLE",
+      "nameJa": "城",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e6330637d979664b3a04dae0288bda189dc3742aefa7ddad595666e03c3deb53",
+      "hooks": {
+        "onSummon": "castleInit",
+        "aura": "castle"
+      }
+    },
+    {
+      "id": "ACID_RAIN",
+      "nameJa": "酸性雨",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "88796c06754ba2f775c0423b050ddef48375ac5f645f873f4dd16122a50cdc62",
+      "hooks": {
+        "ench": "acidRain"
+      }
+    },
+    {
+      "id": "BUDGET",
+      "nameJa": "運営予算",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "4c8b47cd4f25d5d86e75ba0ce9c31265d9a35bf2700b66ba79f31b73158dcaac",
+      "hooks": {}
+    },
+    {
+      "id": "EXPANSION",
+      "nameJa": "増設",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d5b1f51c338ce280284159b6fbf88a8d1b5988967be6dcd42c4a1049a1a3c5fc",
+      "hooks": {}
+    },
+    {
+      "id": "LAND_GRANT",
+      "nameJa": "領土付与",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8c5a79514abaaeb595376e525f29442d1a8de416ff1bc9f5d880bf6fc8a86ffb",
+      "hooks": {}
+    },
+    {
+      "id": "TREASON",
+      "nameJa": "反逆罪",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c812b60ab72ee5da91b1b7e820933c911e51677c6d8a774e40c838cf1d0cb1fd",
+      "hooks": {}
+    },
+    {
+      "id": "STRONG_ACID",
+      "nameJa": "強酸性雨",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "eaa16b03ef6503f49007fb632b07a865e299e6bccc5b381a0f8298341fd49f58",
+      "hooks": {
+        "ench": "strongAcid"
+      }
+    },
+    {
+      "id": "ROTTEN_GROUND",
+      "nameJa": "腐敗した土地",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d57f830f42b9ca9f5324412215f0a3313cceb68a5eccdbaf055542de4e69006d",
+      "hooks": {
+        "ench": "rottenGround"
+      }
+    },
+    {
+      "id": "UNBRAND",
+      "nameJa": "徐印",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e9f3949afaed7555a6b6d86cb544d1560fb3a4dd8df294fbaaacd7fbcdf5356b",
+      "hooks": {}
+    },
+    {
+      "id": "DEMON_REALM",
+      "nameJa": "魔界",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "33cb09008297c388283e704ef86d046c20d0be11cd1406f1bfed50ab41de419b",
+      "hooks": {
+        "ench": "demonRealm"
+      }
+    },
+    {
+      "id": "AEM",
+      "nameJa": "アンティークエンハンスマジック",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c155bb7b61936a19a3b0be876a6319abd1728e8edf10cafec7709213666d8bc9",
+      "hooks": {}
+    },
+    {
+      "id": "KNIGHT_TEACH",
+      "nameJa": "ゴーレムキングの教え",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "5d0aee4363ad5f5840cff05185b8622a24959cfb504b72df847dbcf93be28b25",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
+        "ko": "【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(지속).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
+        "en": "【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(지속).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
+      }
+    },
+    {
+      "id": "DUNGEON",
+      "nameJa": "生きているダンジョン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ed03430282f1d9d66dc72e71eb5e5af5b201a3ee6126728901ccf23ba4167242",
+      "hooks": {
+        "aura": "dungeon"
+      }
+    },
+    {
+      "id": "NL_SECRET",
+      "nameJa": "ナイトロードの秘技",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "a59030f89dbb52e1e394123683d5c4e783afa7a47b37f736db5944de18227afd",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（持続）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（持続、1体しかいなければその1体）。",
+        "ko": "【발동 시】자신의 필드의 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(지속). 자신의 필드의 암살자 계열 몬스터 2체를 선택해 각각 공격력 +3(지속, 1체뿐이면 그 1체).",
+        "en": "【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (lasting). Choose 2 Assassin-family monsters on your field; each gets +3 ATK (lasting); if only 1 exists, affect that 1."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（持続）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（持続、1体しかいなければその1体）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】자신의 필드의 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(지속). 자신의 필드의 암살자 계열 몬스터 2체를 선택해 각각 공격력 +3(지속, 1체뿐이면 그 1체).",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (lasting). Choose 2 Assassin-family monsters on your field; each gets +3 ATK (lasting); if only 1 exists, affect that 1."
+      }
+    },
+    {
+      "id": "HEXER1",
+      "nameJa": "初級呪術師",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "124dac5dfc507d97422ef314135ee482d8c058a911dc4d3e6b0ad94797215e42",
+      "hooks": {
+        "onSummon": "hexSummon"
+      }
+    },
+    {
+      "id": "HEXER2",
+      "nameJa": "中級呪術師",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "05b5981cb6b9edc96b7444e81809b527353897c96f0102ea2daf962cb359b1d8",
+      "hooks": {
+        "onSummon": "hexSummon"
+      }
+    },
+    {
+      "id": "HEXER3",
+      "nameJa": "上級呪術師",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "49fbd912b259aa5356b0814fd2b05429836676aa50ce8647249b12a35a8303b2",
+      "hooks": {
+        "onSummon": "hexSummon",
+        "aura": "hexCurseOnSpell"
+      }
+    },
+    {
+      "id": "HEXER4",
+      "nameJa": "特級呪術師 - ケロイド",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8cd69fa611cca5599fdd0defe16b672cf4ce78c3d2e3b569942d53f89d6724e7",
+      "hooks": {
+        "aura": "hexBoss",
+        "summonReq": "hexBoss"
+      }
+    },
+    {
+      "id": "SORTER",
+      "nameJa": "選別者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0db894e4c12455335ec2bf86b89eb000c62898aba71cc1ff80be56509ecdffcb",
+      "hooks": {
+        "onSummon": "sorterSummon",
+        "aura": "sorter"
+      }
+    },
+    {
+      "id": "COLOSSEUM_REST",
+      "nameJa": "コロシアムの休憩場",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8372a38f6893726e68be940539c90ca686fbf4554da3343015eb8dde9bb6fedf",
+      "hooks": {
+        "ench": "colosseumRest"
+      }
+    },
+    {
+      "id": "COLOSSEUM",
+      "nameJa": "コロシアム",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "531b937ade5ddfa1cf99c5b1e921993077d967f854f1eb9652c6e9683e4b2fe6",
+      "hooks": {
+        "ench": "colosseum"
+      }
+    },
+    {
+      "id": "UNBRANDER",
+      "nameJa": "除印師",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "41a1a4ddaa4180974b501edf64284f4bdc449f932a518cbe4bd63fac0ee315e8",
+      "hooks": {
+        "onSummon": "unbrand",
+        "aura": "curseHeal"
+      }
+    },
+    {
+      "id": "LAWLESS",
+      "nameJa": "不法地帯",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5eaa539ec64f69c914058741254ac46f774fcae6d24ecfc3a1d0be5e53ff6d56",
+      "hooks": {
+        "ench": "lawless"
+      }
+    },
+    {
+      "id": "RIFT",
+      "nameJa": "次元の裂け目",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "42d8593f8f75b75e6a0ad4ab30f96ed3b5844848919c430a98ee75e8403871a7",
+      "hooks": {
+        "ench": "rift"
+      }
+    },
+    {
+      "id": "FREE_REWARD",
+      "nameJa": "無償の対価",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "35c0e2f74e180b68a6ae2bebe503c5d9b347493a4e0817a59560e13197b01448",
+      "hooks": {
+        "ench": "freeReward"
+      }
+    },
+    {
+      "id": "NO_PAIN",
+      "nameJa": "ノーペインノーゲイン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "59d11c3c2b83e574f21afe2768418f10e6ed4bcfc16c4c9cdaa42e400e06193b",
+      "hooks": {
+        "ench": "painGain"
+      }
+    },
+    {
+      "id": "ORIGIN_QUEST",
+      "nameJa": "起源の探究",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c92171c6a9012c9d5bf9c38bc9f4a8e6c94a0ec6026ac90de19a519834cce5ff",
+      "hooks": {
+        "act": "originQuest"
+      }
+    },
+    {
+      "id": "BEGINNER_MIND",
+      "nameJa": "初心",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b73eb64ce26394766be232b4d4024a4e1c4e05ab25fadcb22725ade29f80af4c",
+      "hooks": {
+        "act": "beginnerMind"
+      }
+    },
+    {
+      "id": "VOID_RITE",
+      "nameJa": "次元術式",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e42479e5f6e4a6533b94fde6fa738234cd0dcdb49e6efa66fe97112b4ed98492",
+      "hooks": {
+        "act": "voidAll"
+      }
+    },
+    {
+      "id": "SPACE_RITE",
+      "nameJa": "空間術式",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a39e4fbd11acd13e85da01304c5cb59715112f7b81e7ec9036cc288ac073c50b",
+      "hooks": {
+        "ench": "spaceLock"
+      }
+    },
+    {
+      "id": "LUCKY_ECHO",
+      "nameJa": "幸運の残響",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5bef0c98fac33fd701ce8eaf568db4f54e38af79c1daadae595c9780ef09aec2",
+      "hooks": {
+        "ench": "luckyEcho"
+      }
+    },
+    {
+      "id": "BUYOUT",
+      "nameJa": "買い占め",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9a1f4a9be4fa4212618c5392a81cd824907ec45aa5d6efe104f56f2bfe3bb3d4",
+      "hooks": {
+        "act": "buyout"
+      }
+    },
+    {
+      "id": "PENANCE",
+      "nameJa": "苦行の対価",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "b9d9f601d1d882ec37c1efdeb2b41b441d5d0bc278c2cb864b6c2fb0790a4a18",
+      "hooks": {
+        "act": "penance"
+      },
+      "before": {
+        "ja": "【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。",
+        "ko": "【발동 시】자신의 낙인 카운터 1개당 자신의 최대 마나 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
+        "en": "【On Cast】For each of your Brand counters, your max mana +2 and restore 10 of your HP; do not spend the counters."
+      },
+      "after": {
+        "ja": "【発動条件】自分に烙印カウンターが1個以上ある。\n\n【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。",
+        "ko": "【발동 조건】자신에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】자신의 낙인 카운터 1개당 자신의 최대 마나 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
+        "en": "【Play Requirement】You have at least 1 Brand counter.\n\n【On Cast】For each of your Brand counters, your max mana +2 and restore 10 of your HP; do not spend the counters."
+      }
+    },
+    {
+      "id": "PACK_INSTINCT",
+      "nameJa": "群れの本能",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6430e41105b5a4058320bda46c01587777ef5fd21399c0d7fa56b19634c9b768",
+      "hooks": {
+        "act": "packInstinct"
+      }
+    },
+    {
+      "id": "MIND_BURST",
+      "nameJa": "精神放出術",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "aa3b95e9e1e5cf0248f69201262d0dbffa9d96c0741fa0741f7f6c6021cb8ee0",
+      "hooks": {
+        "act": "mindBurst"
+      },
+      "before": {
+        "ja": "【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
+        "ko": "【발동 시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×4 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
+        "en": "【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場に気合用カウンターを1個以上持つモンスターがいる。\n\n【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
+        "ko": "【발동 조건】자신의 필드에 기합용 카운터를 1개 이상 가진 몬스터가 있다.\n\n【발동 시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×4 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
+        "en": "【Play Requirement】You control a monster with at least 1 Guts counter.\n\n【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
+      }
+    },
+    {
+      "id": "RICH_HABIT",
+      "nameJa": "富豪の習慣",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "94e7a5b978c7cd4beda180c5dc405732dca8ab58e72fd25d6b89973afa5f3480",
+      "hooks": {
+        "ench": "richHabit"
+      }
+    },
+    {
+      "id": "Q_RIFT",
+      "nameJa": "リフト研究",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "fb71f71a488560f4ab503462729b23dc24181d7bf324f7c743c746f099c4170f",
+      "hooks": {
+        "quest": {
+          "event": "exile",
+          "target": 10
+        }
+      }
+    },
+    {
+      "id": "Q_BRAND",
+      "nameJa": "反撃の狼煙",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5892cdc5a99b7a626c28399321bb7447e34693a94158863888e5a59ffd38cd63",
+      "hooks": {
+        "quest": {
+          "event": "opponentDamage",
+          "target": 40
+        }
+      }
+    },
+    {
+      "id": "Q_TORI",
+      "nameJa": "精霊 - トリ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "27979686d2e572ab30daa43af154aa22ca2634883371c40c2155a29ed9da4259",
+      "hooks": {
+        "quest": {
+          "event": "emptyTurn",
+          "target": 5
+        }
+      }
+    },
+    {
+      "id": "Q_WINTER",
+      "nameJa": "精霊 - ウィンター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "dbfdefe531d1cfb53e871ed75d928d6cb05dbc3ed90f781114d68b728f1f4009",
+      "hooks": {
+        "quest": {
+          "event": "healthGain",
+          "target": 30
+        }
+      }
+    },
+    {
+      "id": "Q_TRIBE",
+      "nameJa": "一族の誓い",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "cbf4767a8043fef37a72ef4ff1fa37b4ae59ddf29da85a8646cfa7866e1e53df",
+      "hooks": {
+        "quest": {
+          "event": "tribeSummon",
+          "target": 6
+        }
+      }
+    },
+    {
+      "id": "Q_CASTLE",
+      "nameJa": "対攻城作戦",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "46154bae80f6a3115127a64db7e528a07760dd39a3215cbc08ba80da1cc765a3",
+      "hooks": {
+        "quest": {
+          "event": "castleTurn",
+          "target": 9
+        }
+      }
+    },
+    {
+      "id": "Q_DECAY",
+      "nameJa": "どくびし",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e904b2cd324c27811dc6ce78962f3cc327a684e7f6e702dfd80361a68ea9f1a5",
+      "hooks": {
+        "quest": {
+          "event": "decayKill",
+          "target": 4
+        }
+      }
+    },
+    {
+      "id": "Q_ASSASSIN",
+      "nameJa": "アサシンギルドの伝達",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "10cafafe5cbd0b8a6a16ed07f0e5de03d847c4d73bc4ad1fd7374eabe0cf6115",
+      "hooks": {
+        "quest": {
+          "event": "assassinHit",
+          "target": 6
+        }
+      }
+    },
+    {
+      "id": "Q_MANA",
+      "nameJa": "マナ順応",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "38e0f0e14507250b0912ad8955aac35a69944681c91ac47c5b00317856c3ac7f",
+      "hooks": {
+        "quest": {
+          "event": "spellPlay",
+          "target": 25
+        }
+      }
+    },
+    {
+      "id": "QUICK_MIMIC",
+      "nameJa": "ミミックパーティー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b61b25c8e7a3c2102b909ea5f862862d11cb86e79266749f141c7eb91c022277",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_SURVIVAL",
+      "nameJa": "生存をかけた戦い",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e30683583287dd9ec33dbac972dea3ad40b762fe68537af0b33bd76a5d7f80b9",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_POISON",
+      "nameJa": "ポイズン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "81bb0f7ac1bccae9f283f5be96f20f3546ffce51a90811292beb3396b9670afd",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_WORLD",
+      "nameJa": "世界樹の恵み",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "fe7ab7f6d185e4526b5400c099e517546d00c2b88cb370e71bd7c39ed4934074",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_MUSTER",
+      "nameJa": "緊急召集",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e983f279b8dacf48988534dc3b244fa45bdd108f7e74826a069128f4c0b837e2",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_SORT",
+      "nameJa": "選別の掟",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d5bd9ff65bfc674529c91fa15df9d84920e1ba7983bd869fe28cd03341a41bea",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_REBIRTH",
+      "nameJa": "強制輪廻",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "8311019c2beedfe32ab4126d0cc2713d6ade4050222bf86b8c66570ee1f77b6f",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_ATTUNE",
+      "nameJa": "アチューン・瞬",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "3b0c806f9d1625961b70c04b7d853313f0291fcdafcfa39b1502afe510eb88f7",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_GRIMOIRE",
+      "nameJa": "呪術魔法書",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "218c48c9e42f908537bfa0eb5c16481ee154407ff40eb10b5f7c58fbaa9dc2d8",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "QUICK_ASSAULT",
+      "nameJa": "総攻撃",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "99b38a46eed8bcd0ec2aa7aaf4d504a1f6cbf26214908b5ecc3cf1b4754f20b1",
+      "hooks": {
+        "quick": true
+      }
+    },
+    {
+      "id": "INTERCEPT",
+      "nameJa": "迎撃準備",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0593b4bbe3bcf93b32677b37477ca0e92584d164d5170fcbaac8915ef91743aa",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "REINFORCE",
+      "nameJa": "緊急応援",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "45f3e8c5145edb2aa73578c0ed92f7e2c4ab324d475969ef51cce64feb44e22a",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "GUNNER",
+      "nameJa": "砲撃兵",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d5dbc226bd616b63f2127f94cb4b78eedcf65357dc5148b545c411012f3a4f9d",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "HEAVY_GUNNER",
+      "nameJa": "大砲兵",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "2a855149b11a8af0f43f7d28abcde7a9b956147be32a639850252b8e105e5782",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "FARM_KEEPER",
+      "nameJa": "農場管理者",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e2b0b801f621477a601e73b7b83795c4ed9bc00c50731cfbea41cb34ed0982ce",
+      "hooks": {
+        "onSummon": "expansion",
+        "aura": "farmerHealth"
+      }
+    },
+    {
+      "id": "MIMIC_HUNTER",
+      "nameJa": "ミミックハンター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "12594be7496c7ba2a08b866d0b5d85fb89178d9f81cbc412dde0d77c786d6edd",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "QUICK_HELLFIRE",
+      "nameJa": "獄炎",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ec8159422662c64ee2f0ab0e3392bed01335ea16ff936ed7300562c53ab4a417",
+      "hooks": {
+        "act": "expansion",
+        "quick": true
+      }
+    },
+    {
+      "id": "STABLE",
+      "nameJa": "馬小屋",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "14c4b83ada460c3931bddea6b897b3892ea605dd6e5e3b08d7b525871366ed08",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": {
+        "ja": "【発動条件】自分の場に「騎士」系モンスターがいる。\n\n【発動時】自分の「騎士」系モンスター1体を選んで破壊する。破壊できたら「騎馬兵」1体を自分の場に召喚する。",
+        "ko": "【발동 조건】자신의 필드에 기사 계열 몬스터가 있다.\n\n【발동 시】자신의 기사 계열 몬스터 1체를 선택해 파괴한다. 파괴했다면 기마병 1체를 자신의 필드에 소환한다.",
+        "en": "【Play Requirement】You control a Knight-family monster.\n\n【On Cast】Choose and destroy 1 Knight-family monster you control. If destroyed, summon 1 Cavalry to your field."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場に「騎士」がいる。\n\n【発動時】自分の「騎士」1体を選んで破壊する。破壊できたら「騎馬兵」1体を自分の場に召喚する。",
+        "ko": "【발동 조건】자신의 필드에 기사가 있다.\n\n【발동 시】자신의 기사 1체를 선택해 파괴한다. 파괴했다면 기마병 1체를 자신의 필드에 소환한다.",
+        "en": "【Play Requirement】You control a Knight.\n\n【On Cast】Choose and destroy 1 of your Knights. If it is destroyed, summon 1 Cavalry to your field."
+      }
+    },
+    {
+      "id": "CAVALRY",
+      "nameJa": "騎馬兵",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1b8401ca391b905a27be291cace25b91a2ac712e100eb49f60dd0aa4d5c0bb0e",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "MERCENARY",
+      "nameJa": "傭兵",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "909692d4a36bb9fe81ff5fdf4be4a93466e7635b981e477ba63bc2bff6913fa7",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "MERC_LEADER",
+      "nameJa": "傭兵リーダー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "fb10837b58453379fffea0b04a90ee5f9b64526e4d8dada3bde8cf125a737bb3",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "MERC_MASTER",
+      "nameJa": "傭兵ギルドマスター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a279a4964dabcbcaceb75f365d906df084a5bffcf5b16da301e2ddef92e448dd",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "MERC_ART",
+      "nameJa": "傭兵術",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "28bb23b85c95f71b8c7ea52996d8da261e3d1336513dcd475a59d07b0aea8ab9",
+      "hooks": {
+        "act": "expansion",
+        "ench": "mercArt"
+      }
+    },
+    {
+      "id": "Q_CHEAT",
+      "nameJa": "イカサマ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c9ad52f4d12b651655dd8317269fa1205428d8d8047e4b4431e4e0daf2f8f2cd",
+      "hooks": {
+        "act": "expansion",
+        "quest": {
+          "event": "dice",
+          "target": 20
+        }
+      }
+    },
+    {
+      "id": "Q_TOWN",
+      "nameJa": "城下町",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c94e6c41b16389512625e9a1ff21467fa106652d75a0c6b57309c19c110743dc",
+      "hooks": {
+        "act": "expansion",
+        "quest": {
+          "event": "town",
+          "target": 3
+        }
+      }
+    },
+    {
+      "id": "DOMINION",
+      "nameJa": "支配",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "98d5384eca0198236f40978b312c0d85ed756cce3dc09003d7965596fa3c7673",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "POISON_MASTER",
+      "nameJa": "ポイズンマスター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "4e3b2e9edbe271bde6a8e2353ac35617c180e039f70dad3b71570c7193773783",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "ADVANCE",
+      "nameJa": "快進撃",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d71b757edbd223c2e226cd7a8837eca7fed3256c993a5eed5ca5e59f03e0917b",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "QUICK_AID",
+      "nameJa": "応急手当て",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "161eb4623a0fdc053bb94c9c2f8ce4cd74a0f79232a92249fea8576aac2ce087",
+      "hooks": {
+        "act": "expansion",
+        "quick": true
+      }
+    },
+    {
+      "id": "EMPTY_MIND",
+      "nameJa": "無の境地",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5ffd6eb4d53079c957221fc2e8bce16f3e5defae66009c99ace0f20b90240e53",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "CREATION",
+      "nameJa": "創造",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e4696fdfb6940943506229f5520cf686868e887da02610feb7e12cd18a8031b0",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "ROGUE_ART",
+      "nameJa": "盗賊の心得",
+      "changed": true,
+      "definitionUnchanged": true,
+      "textSha256": "de9dead6f340520127683179e390b9867c4ef2a80a64985a5b10a1a0a177ac69",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": {
+        "ja": "【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。",
+        "ko": "【코스트】자신의 필드에 암살자 계열 몬스터가 있으면 이 카드의 구매·시전 코스트는 0.\n\n【발동 시】자신의 필드에 암살자 계열 몬스터가 있으면 자신의 필드의 모든 몬스터에 회피를 부여한다(지속). 없으면 자신의 필드의 몬스터 1체를 선택해 회피를 부여한다(지속).",
+        "en": "【Cost】If you control an Assassin-family monster, this card costs 0 to buy and cast.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (lasting). Otherwise, choose 1 monster on your field and give it Evade (lasting)."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【코스트】자신의 필드에 암살자 계열 몬스터가 있으면 이 카드의 구매·시전 코스트는 0.\n\n【발동 시】자신의 필드에 암살자 계열 몬스터가 있으면 자신의 필드의 모든 몬스터에 회피를 부여한다(지속). 없으면 자신의 필드의 몬스터 1체를 선택해 회피를 부여한다(지속).",
+        "en": "【Play Requirement】You control a monster.\n\n【Cost】If you control an Assassin-family monster, this card costs 0 to buy and cast.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (lasting). Otherwise, choose 1 monster on your field and give it Evade (lasting)."
+      }
+    },
+    {
+      "id": "MIMIC_HIDEOUT",
+      "nameJa": "ミミックの隠れ家",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "77c2ffd601d0bab98feafa778a60c60a11879605562525bbb34ddf370019cc92",
+      "hooks": {
+        "act": "expansion",
+        "ench": "mimicHideout"
+      }
+    },
+    {
+      "id": "BLACK_REVERSE",
+      "nameJa": "黒魔法：リバース",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c94ab844463a9785a15211a9f077f3ed03cbe2c8d7ddce4ce640251802ca2cd8",
+      "hooks": {
+        "act": "expansion",
+        "ench": "blackReverse"
+      }
+    },
+    {
+      "id": "BLACK_INFINITY",
+      "nameJa": "黒魔法：インフィニティ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "12e51ba36b6c8e1b43668722148bae3d272d2d8418e1ce1fabbe9ff012b5613f",
+      "hooks": {
+        "act": "expansion",
+        "ench": "blackInfinity"
+      }
+    },
+    {
+      "id": "BLACK_NOVA",
+      "nameJa": "黒魔法：ノヴァ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "195a4e643f101c53e472aea22147d72f22b5e914f6a2e56aaa73125cf40fbfa2",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "BLACK_CURSE",
+      "nameJa": "黒魔法：カース",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "26e1af30d6d9077b7387107b375cf7feb7f796c5031c3d50faeaf772e8324129",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "BLACK_ELSA",
+      "nameJa": "黒魔術師 - エルサ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c537a3651085cd71184fd1db2043c7c281b50092835bb9d781c290b4c416446f",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "BLACK_ALICE",
+      "nameJa": "黒魔術師 - アリス",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "c55c005fdcefb50e58b174903e2a28fd355eac913da7fcd6ded42d7ce30191b4",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "QUICK_CURSE",
+      "nameJa": "消えない呪い",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ba305758ba201981db733efa9e9c255782ae20c1686dc4f20e76409c7feef7f8",
+      "hooks": {
+        "act": "expansion",
+        "quick": true
+      }
+    },
+    {
+      "id": "SOUL_HARVEST",
+      "nameJa": "魂の収穫",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "588250b13d0d4d7c3d748312199b277f27d8e9610660b713ca18596cca2b288b",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "ANESTHESIA",
+      "nameJa": "麻酔",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "88926430b8e1dfba02bfcc5b545946c711bf8f4eb7b53416b792495d3975c1df",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "EARTHQUAKE",
+      "nameJa": "地震",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9a86db890cec584605fcb4519ec08e590f95761f041e2fc6ef96b0984b1349e8",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "MAGMA_RAIN",
+      "nameJa": "マグマの雨",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0fb71f277dee9e3218568d055a5383df426e44a5bb0d064767cd48e3145a57e0",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "FIRE_BALL",
+      "nameJa": "ファイアーボール",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ac77c39a538273d7644552936431b7b3d4911af04fc9d815aebe7bd54f2f52ff",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "FIRE_ARROW",
+      "nameJa": "ファイアーアロー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "853442c43a2edab02ff7a7b4829698b4e97332d49b03f864c139e9b9ad9ccfcb",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "FIRE_ZONE",
+      "nameJa": "ファイアーゾーン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "7798e30350bca3498a15de6ab618e0964609ebb09d8324c35a7c96edd89d0b16",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "FIRE_METEOR",
+      "nameJa": "ファイアーメテオ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "5d1414b01fb01987e047141bd289a3bdb98a639fa6a60bc3462bdd35513bbcee",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "FIRE_ART",
+      "nameJa": "炎術の極意",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "3258f85d1f5ba0a0ce863e94401fb45efebd0efdec605984eede04d82fdb9c7c",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "FIRE_MASTER",
+      "nameJa": "ファイアーマスター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1319b9c7f99d06e7257a6eae65a369a993936774b21c04d184508e1c16c7259b",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "DOUBLE_UP",
+      "nameJa": "ダブルアップ",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e3c07f580fc694666b9a49e3aeceac9db4d3bf62c8af449e33c289c1a68f5e6b",
+      "hooks": {
+        "act": "expansion",
+        "ench": "doubleUp"
+      }
+    },
+    {
+      "id": "ASSASSIN_SQUAD",
+      "nameJa": "アサシンスカッド",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9666dd00e692d33600910271433346f652df6d0e2e4d5b3a563d8f7648f5e311",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "DISCOVERY_SMALL",
+      "nameJa": "小さな発見",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "b082b3f6d60027c426ae544e95937ffb28ea6061b8460a29a58294f20c0a42e3",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "DISCOVERY",
+      "nameJa": "発見",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "d0e46dd1549fbcdd37988a9118535c31d9842d1ec35e8a71915ac87432624bc9",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "DISCOVERY_LARGE",
+      "nameJa": "大きな発見",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f80ea3cc7f706a92bd26964e749a6cfb356dae81d20a80a60221b7f5e4c1af8e",
+      "hooks": {
+        "act": "expansion"
+      }
+    },
+    {
+      "id": "PREPARATION",
+      "nameJa": "仕込み",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "399cc8d70f01829ea86f4b9b514e11cca32ec352643b1c98853b17f47cc8b9be",
+      "hooks": {
+        "act": "expansion",
+        "ench": "bonusDraw"
+      }
+    },
+    {
+      "id": "EROSION",
+      "nameJa": "摩耗",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "fb6a98bc8fe937e8296b9b0d4b121aee643270fd8e38e7b194f6359518da2723",
+      "hooks": {
+        "act": "expansion",
+        "ench": "erosion"
+      }
+    },
+    {
+      "id": "GROWTH",
+      "nameJa": "成長",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "786b97d0ea92163173b70bf712579e0c86c5db5be0d572b0a2a11a8e2d85490c",
+      "hooks": {
+        "act": "expansion",
+        "ench": "growth"
+      }
+    },
+    {
+      "id": "APPRENTICE_ARMORER",
+      "nameJa": "見習い装備職人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "12f24fb3fd0dbf4b62ad18e4fb849bdea5bc8d1723d4a2c77e6327b92ca096dc",
+      "hooks": {
+        "onSummon": "armorer"
+      }
+    },
+    {
+      "id": "VETERAN_ARMORER",
+      "nameJa": "熟練した装備職人",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "0bc69b4c833641778fbf3ea5e84e0340416b8c80128a35a76df0efc8c14eef51",
+      "hooks": {
+        "onSummon": "armorer"
+      }
+    },
+    {
+      "id": "SALLY_WEAPONMASTER",
+      "nameJa": "サリィ - ウェポンマスター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e94aefa31fd790f1c29bad282c482bf6fb6ef56944347adfe3e957736e297907",
+      "hooks": {
+        "onSummon": "armorer",
+        "turnFx": "weaponmaster"
+      }
+    },
+    {
+      "id": "PRIEST",
+      "nameJa": "神官",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1dd86947270b0b23f18d20b2c11107c4ff030fbc97b838cff5e614a55323d077",
+      "hooks": {
+        "onSummon": "shield",
+        "aura": "shieldDew"
+      }
+    },
+    {
+      "id": "HIGH_PRIEST",
+      "nameJa": "高等神官",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1702428bddd557a440a0d37b10655686a0a9b8d3ad32d899f39b3ea5cf7ca435",
+      "hooks": {
+        "onSummon": "shield",
+        "aura": "shieldDew"
+      }
+    },
+    {
+      "id": "BLACKSMITH",
+      "nameJa": "鍛冶屋",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "558ba62e20adc54e59574081fa13f1d4e583250f4fa2071407936f63857914b3",
+      "hooks": {
+        "ench": "doubleShield"
+      }
+    },
+    {
+      "id": "SHIELD_TITAN",
+      "nameJa": "盾の巨神",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "48a4c2df08e0d409b313ae8b3fb3651fd8924d5f3018cd3638b807231d683e1e",
+      "hooks": {
+        "aura": "doubleShieldOther",
+        "summonReq": "shield20"
+      }
+    },
+    {
+      "id": "ARMOR_BREAK",
+      "nameJa": "アーマーブレイク",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6ea42fc4d5ea27a972ac556562dd25452b1e3c4170a55dcb97e0e4d427d61723",
+      "hooks": {
+        "act": "armorBreak"
+      }
+    },
+    {
+      "id": "SPEAR_AND_SHIELD",
+      "nameJa": "矛と盾",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "33c5a58fe7b620bdce2effcb18fcaa9e8523c7e0127ae532ab551f72ca9902e6",
+      "hooks": {
+        "act": "spearShield"
+      }
+    },
+    {
+      "id": "SELECTED_SWORD",
+      "nameJa": "選りすぐりの剣",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "83db4cd8ebaf062116f48a8eb62ca834bc006ef37a3f567006ca3108d7c4bee6",
+      "hooks": {
+        "act": "cullSword"
+      }
+    },
+    {
+      "id": "SELECTED_SHIELD",
+      "nameJa": "選りすぐりの盾",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "169d3a275343ffb840d58ca78ded03e5dc2215b7737850a89a323a8520257f86",
+      "hooks": {
+        "act": "cullShield"
+      }
+    },
+    {
+      "id": "WINE_COLLECTOR",
+      "nameJa": "ワインコレクター",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "e6418972f554f73b63e011923d07f6877233dc369a6f508dec305d53f57665e4",
+      "hooks": {
+        "onSummon": "wineCollector"
+      }
+    },
+    {
+      "id": "DEFENSIVE_STANCE",
+      "nameJa": "防御の姿勢",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "08a5aeeca23cd83cd409c9daba2af708eebc5106ebdcd108cb04b829693d7556",
+      "hooks": {
+        "act": "golemShield"
+      }
+    },
+    {
+      "id": "IRON_WALL",
+      "nameJa": "鉄壁",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "084d7e97e26016875c33c7d9b525bf034bd56565029c00d7c3152e44c2575580",
+      "hooks": {
+        "act": "golemShield"
+      }
+    },
+    {
+      "id": "DESERTIFICATION",
+      "nameJa": "砂漠化",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "bff6f93f6a378fe993803cadc9b57d9bb5c1f5f59f5a792118d503ad30c3f1c6",
+      "hooks": {
+        "act": "desertification"
+      }
+    },
+    {
+      "id": "NOURISHING_RAIN",
+      "nameJa": "潤う雨",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "3c1afb8004fe71598daaa4cd58628948bb597498ac74f97c55229ccadf4b1462",
+      "hooks": {
+        "act": "dew"
+      }
+    },
+    {
+      "id": "NIGHT_CASTLE_GIFT",
+      "nameJa": "夜城からの贈り物",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "3877d30583b16998e37a89c49d3df869d4d378787611b2e1bf713cc3cf310771",
+      "hooks": {
+        "ench": "nightCastleGift"
+      }
+    },
+    {
+      "id": "FARM",
+      "nameJa": "農場",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "16bf856518cf510af80553c459d5840d44d1bf4159c8b5c2f4f5cfafe304610e",
+      "hooks": {
+        "ench": "farm"
+      }
+    },
+    {
+      "id": "FARMER",
+      "nameJa": "農民",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "039be9e3bca6ea794c2624a16b8746cabd937fdc5902a169656562cdde7df538",
+      "hooks": {
+        "onSummon": "expansion"
+      }
+    },
+    {
+      "id": "HARVEST",
+      "nameJa": "収穫",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "2151c47dae19d0a96a4ff7215bfb4a44cde702c33b9cf9e2b807fea9c750441d",
+      "hooks": {
+        "ench": "harvest"
+      }
+    },
+    {
+      "id": "APPLE",
+      "nameJa": "りんご",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "f79a838a84e6397b4535d23b306a2e4ef5a70dc63bf109e7f572bea8d31ff494",
+      "hooks": {
+        "act": "apple"
+      }
+    },
+    {
+      "id": "GOLDEN_APPLE",
+      "nameJa": "黄金のりんご",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "7d58e3e58b0930ad7de037b7e29ac9b634cd8e141e473286ab2ee194f0d14eb5",
+      "hooks": {
+        "act": "dew"
+      }
+    },
+    {
+      "id": "FARMER_PRAYER",
+      "nameJa": "農民の祈り",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "36187777c9feb2ba82537c8f03df7eca9332ff1b4c27dff6f8a86d72e1ee7047",
+      "hooks": {
+        "ench": "farmerPrayer"
+      }
+    },
+    {
+      "id": "GOBLIN",
+      "nameJa": "ゴブリン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "16390dd66cc75be6f86cc6c232c9de9ee670ea96c57f596373166bbf8f15609a",
+      "hooks": {
+        "attackFx": "goblinDirect"
+      }
+    },
+    {
+      "id": "GOBLIN_RAIDER",
+      "nameJa": "特攻ゴブリン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "9e8acba0ed4ed367801bd4b47118981e1cea0a9cc59367b7d23be17b8f7cb58a",
+      "hooks": {
+        "aura": "goblinAttack",
+        "summonReq": "uniqueRaider"
+      }
+    },
+    {
+      "id": "GOBLIN_SETTLEMENT",
+      "nameJa": "ゴブリン集落",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "1b04486e6a864c5f0de950e5aec3064cba1db31e2c49f84c364d2deb911d78f9",
+      "hooks": {
+        "ench": "goblinSettlement"
+      }
+    },
+    {
+      "id": "RELIC_PROTECTION",
+      "nameJa": "神器の加護",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "96b9d3c0e14355130690d6aa98d0569aef4bf58be89629767e29deb37869ac69",
+      "hooks": {
+        "act": "relicProtection"
+      }
+    },
+    {
+      "id": "RELIC_BOUNTY",
+      "nameJa": "神器の恵み",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "7da5d6b9b21ecbd64c2240778ea8bad171818d72a649d69288a1950e9098a232",
+      "hooks": {
+        "ench": "relicBounty"
+      }
+    },
+    {
+      "id": "MANA_BACKFLOW",
+      "nameJa": "マナ逆流装置",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a0eca622d677a97c296d7e1a4318b13d7ec6b04833b912e9675bb8e2ba3a7f39",
+      "hooks": {
+        "ench": "manaBackflow"
+      }
+    },
+    {
+      "id": "BATTLEFIELD",
+      "nameJa": "戦場",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "22f813e386d273fdb7117fb1f8bccb1c32fcca4e8dce92a3df43c99a01a90df6",
+      "hooks": {
+        "ench": "battlefield"
+      }
+    },
+    {
+      "id": "TRAINING_GROUND",
+      "nameJa": "訓練所",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "949a0a37ed2dfb0ab17571339ad336e96bf280de5aae9cd99c67ef8eefcd64f8",
+      "hooks": {
+        "ench": "trainingGround"
+      }
+    },
+    {
+      "id": "GOBLIN_LEADER",
+      "nameJa": "ゴブリンリーダー",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "2cf404dba12a79ba221485b4c86cd4d9e8ece7d87ba7fc9190edddee635914c0",
+      "hooks": {
+        "onSummon": "goblinLeader"
+      }
+    },
+    {
+      "id": "GOBLIN_KING",
+      "nameJa": "ゴブリンキング",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a1b37d7d9a59b5527afbaec417222611949cb7ec473f3916303384c62dacbf84",
+      "hooks": {
+        "onSummon": "goblinKing"
+      }
+    },
+    {
+      "id": "MAGIC_TRAIN",
+      "nameJa": "魔道列車",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "6739df04fd57bc3da596767ac40a103fa716eb605b2030cfad23891a3d4da492",
+      "hooks": {}
+    },
+    {
+      "id": "MAGIC_BANK",
+      "nameJa": "魔道銀行",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "a0301b243d17ae3bdea57b235232de8f7ace258d4ca00e3263e3326fb6003a45",
+      "hooks": {
+        "ench": "magicBank"
+      }
+    },
+    {
+      "id": "RIFT_MATTER",
+      "nameJa": "リフト鉱石 - スターライト",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "ab10533d975ccd3bcfa254d2559b583f59f41673f04d428801699b8bb83b3bd4",
+      "hooks": {}
+    },
+    {
+      "id": "RIFT_METALIGHT",
+      "nameJa": "リフト鉱石 - メタライト",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "dbe33298b7c9f63482c885cbfee1a315a0b9752bf46f5a856c845130b77a2dfc",
+      "hooks": {}
+    },
+    {
+      "id": "STARTER_TRASH",
+      "nameJa": "カル",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "837c6d2a9083b030805f8c2fd3dac895bd884af107c0f7a71835f8d7de869293",
+      "hooks": {}
+    },
+    {
+      "id": "STARTER_CHEST",
+      "nameJa": "宝箱",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "3fea870203390404bc416013301332434f55426be96245280cab813f9ba610e9",
+      "hooks": {}
+    },
+    {
+      "id": "STARTER_MANA",
+      "nameJa": "アチューン",
+      "changed": false,
+      "definitionUnchanged": true,
+      "textSha256": "db4f0e6dae2f6c3ae31f19c806a8f26039f964dea4a6101aff4636f097eb2e76",
+      "hooks": {}
+    }
+  ]
+}

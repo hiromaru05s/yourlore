@@ -1,0 +1,18 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: 1280/initial/opp/BREWING: artwork must cover the frame height (13.990509033203125/31.541656494140625)
+    at file:///Users/hiromaru05s/.codex/worktrees/enchant-blackout-fix/LORE_TCG/tests/enchant-art-browser.mjs:41:5
+    at runNextTicks (node:internal/process/task_queues:64:5)
+    at process.processImmediate (node:internal/timers:452:9)
+    at process.callbackTrampoline (node:internal/async_hooks:130:17) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.22.3

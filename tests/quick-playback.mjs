@@ -5,9 +5,11 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 const dir=await mkdtemp(path.join(tmpdir(),'lore-quick-playback-'));
 const trace=[];
+const spellDestinations=[];
 let pendingMana=null,pendingDecay=null;
 const node=()=>({dataset:{},isConnected:true,remove(){this.isConnected=false;trace.push('remove');},getBoundingClientRect(){return {left:20,top:20,width:60,height:90};},querySelector(){return null;},classList:{add(){},remove(){}}});
 globalThis.__fx=(name,...args)=>{
+ if(name==='revealSpell')spellDestinations.push({id:args[0].id,uid:args[0].uid,dest:args[2],held:args[4]});
  if(name==='soulHarvest'){trace.push('soul:'+args[1]+':'+args[2]);args[3]();return;}
  if(name==='reverseDamage'){trace.push('reverse:'+args[0]+':'+args[1]);args[3]();return;}
  if(name==='hpBarSet'||name==='hpFeedback'){trace.push(name+':'+args.join(':'));return;}
@@ -68,6 +70,33 @@ try{
   assert(log.includes('generated:1'));assert(!log.some(x=>x.startsWith('infinity:')));
   log=await play(controller(),state,{state:structuredClone(state),events:[{type:'infinityRelease',player:1,sourceUid:'infinity',amount:5}]});
   assert.deepEqual(log.filter(x=>x.startsWith('infinity:')),['infinity:infinity:opp:5']);assert(!log.some(x=>x.startsWith('generated:')));
+ }
+ // Actual reducer events must keep Ambush on one face until both damage effects finish.
+ for(const owner of [0,1])for(const mode of ['normal','shield','lethal','self-lethal','blocked']){
+  const g=fresh();g.cur=owner;g.turn=5;g.phase='main';g.opening=undefined;
+  const source=card('AMBUSH','ambush-source');g.players[owner].hand=[source];
+  g.players[1-owner].maxMana=mode==='blocked'?5:4;
+  if(mode==='shield')g.players[1-owner].shield=20;
+  g.players[owner].removed=[card('AMBUSH','previous-ambush')];
+  if(mode==='lethal')g.players[1-owner].hp=13;
+  if(mode==='self-lethal')g.players[owner].hp=8;
+  const res=reduce(g,{type:'play',idx:0});spellDestinations.length=0;
+  const c=controller(),log=await play(c,g,res),cast=res.events.find(e=>e.type==='playSpell'&&e.id==='AMBUSH');
+  if(mode==='blocked'){assert(!cast);assert.equal(spellDestinations.length,0);assert(!res.state.players[owner].removed.some(x=>x.uid===source.uid));continue;}
+  const exiled=['normal','shield'].includes(mode);
+  assert.equal(cast.dest,exiled?'vanish':'discard',mode);
+  assert.equal(res.state.players[owner].removed.filter(x=>x.uid===source.uid).length,exiled?1:0);
+  assert.equal(res.state.players[owner].discard.some(x=>x.uid===source.uid),!exiled);
+  assert.equal(spellDestinations.length,1,'reveal exactly once');
+  assert.equal(spellDestinations[0].dest,exiled?'vanish':'discard');
+  assert.equal(log.filter(x=>x==='finish').length,exiled?1:0,'one deferred Rift exit');
+  assert(!log.some(x=>x.startsWith('exile:')),'no second state-diff exile');
+  if(exiled){
+   assert.equal(spellDestinations[0].uid,source.uid);assert.equal(spellDestinations[0].held,true);
+   const hp=log.map((x,i)=>x.startsWith('hpBarSet:')?i:-1).filter(i=>i>=0);
+   assert(hp.length>0&&hp.every(i=>i<log.indexOf('finish')),'damage before source exits');
+  }
+  assert.equal(c.quickFaces.length,0);
  }
  for(const owner of [0,1])for(const mode of ['normal','shield','reverse','zero']){
   const g=fresh();g.cur=owner;g.turn=3;g.opening=undefined;

@@ -4733,6 +4733,12 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if ((card.id === "DECAY_CRAFT" || card.id === "MAJESTY_RITE")) { applicable=true; if (p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); } }
   if (card.id === "MAJESTY_RITE") { applicable=true; if (!p.field.some((m) => !hasPassive(m, "majesty"))) { return reason("  └ '위엄'을 부여할 수 있는 몬스터가 없습니다", "  └ 「威厳」を与えられるモンスターがいません"); } }
   if (card.ench === "weakenAll") { applicable=true; if (weakenAllCount(g) >= 2) return reason("약화술식은 양 필드 합계 최대 2장까지 존재할 수 있습니다", "弱化術式は両方の場を合わせて最大2枚まで存在できます"); }
+  if (card.ench === "rottenGround") {
+    applicable=true;
+    if (g.players.some(pl => pl.enchants.some(e => e.card.ench === "rottenGround"))) {
+      return reason("부패한 땅은 양쪽 필드 전체에 1장만 존재할 수 있습니다", "腐敗した土地はお互いのフィールド全体で1枚しか存在できません");
+    }
+  }
   if (card.ench === "foresight") { applicable=true; if (p.enchants.some((e) => e.card.ench === "foresight")) { return reason("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); } }
   if (card.ench === "guild") { applicable=true; if (p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 이미 '상회'가 있습니다", "  └ 自分の場に既に「商会」があります"); } }
   if (card.id === "SLUM") { applicable=true; if (!p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 '상회'가 없습니다", "  └ 自分の場に「商会」がありません"); } }
@@ -4962,13 +4968,17 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       }
       return;
     }
-    ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: "discard", ...(card.id === "EXILE_NUKE2" ? {riftCount: rmz(p).length} : {}) }); // capture the public Rift before damage triggers add records
+    const castEvent: Extract<GameEvent, {type: "playSpell"}> = { type: "playSpell", player: side(g, p), id: card.id, dest: "discard", ...(card.id === "EXILE_NUKE2" ? {riftCount: rmz(p).length} : {}) }; // capture the public Rift before damage triggers add records
+    ctx.ev.push(castEvent);
     const blood = isBloodMagic(card);
     // 룬 학문 - 상급(runeEcho, v34): 즉발 마법을 마나 없이 1번 더 발동 (선택형/펜딩 생성 마법은 제외)
     const echo = card.t === "spell" && runeEchoDepth === 0 && p.enchants.some((e) => e.card.ench === "runeEcho");
     if (CUSTOM_SPELLS.has(card.id)) {
       spellDepth++; if (blood) bloodDepth++;
       try { customSpell(g, ctx, card); } finally { spellDepth--; if (blood) bloodDepth--; }
+      // Ambush may end the game before self-exile. Report its actual destination
+      // so playback never invents a graveyard stop before the Rift transfer.
+      if (card.id === "AMBUSH" && rmz(p).some(c => c.uid === card.uid)) castEvent.dest = "vanish";
       if (blood) bloodTriggers(g, ctx, p);
       if (echo && !g.pending && !g.over) {enchantKindFx(g,ctx.ev,"runeEcho",p);
         ctx.log(`  └ <span class="good">룬 학문 - 상급</span>: ${cn(card)} 재발동!`, `  └ <span class="good">ルーン学問 - 上級</span>: ${cn(card)} 再発動！`);

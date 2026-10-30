@@ -959,8 +959,9 @@ export abstract class BaseController implements BoardHandlers {
               const card=prev.players[e.player].hand.find(c=>c.id===e.id)??{...def,uid:`elemental-${e.id}`};
               const node=await A.revealSpell(card,sideOf(e.player),e.dest,undefined,true);
               if(node){if(this.dead)node.remove();else this.elementalFaces.push({card,side:sideOf(e.player),node});}
-            }else if(def.quick){
-              // A purchase and playSpell describe the same card: reveal it once and defer its exit.
+            }else if(def.quick||(def.t==='spell'&&e.dest==='vanish')){
+              // Quick purchases and self-exiling casts keep the same face through
+              // their effects, then exit directly to the authoritative Rift destination.
               if(!this.quickFaces.some(x=>x.card.id===e.id&&x.side===sideOf(e.player))){
                 const card=res.state.players[e.player].removed?.find(c=>c.id===e.id&&!(prev.players[e.player].removed??[]).some(old=>old.uid===c.uid))??{uid:'fx',...def};
                 const node=await A.revealSpell(card,sideOf(e.player),'vanish',undefined,true);

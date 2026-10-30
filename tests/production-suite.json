@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/rotten-ground-singleton.mjs",
     "tests/rune-intermediate.mjs",
     "tests/db-schema-contract.mjs",
     "tests/staging-audit-fixtures.mjs",
@@ -61,6 +62,7 @@
     "tests/balance-v58-server.mjs",
     "scripts/check-card-text.mjs",
     "tests/card-wording.mjs",
+    "tests/card-effect-completeness.mjs",
     "tests/card-wording-render.mjs",
     "tests/passive-explanations.mjs",
     "tests/card-effect-ux.mjs",

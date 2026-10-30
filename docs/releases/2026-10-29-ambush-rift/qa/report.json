@@ -1,0 +1,103 @@
+{
+  "origin": "http://127.0.0.1:5589",
+  "results": [
+    {
+      "width": 1280,
+      "owner": 0,
+      "graveSeen": false,
+      "phases": [
+        "resolving",
+        "exile"
+      ],
+      "riftPhases": [
+        "浮上",
+        "カード発光",
+        "銀紋の流墨",
+        "リフトへの軌跡",
+        "到着"
+      ],
+      "riftSessions": 1,
+      "sameFace": true,
+      "sourceUid": "ambush-source",
+      "done": true,
+      "left": 0,
+      "removed": [
+        "ambush-source"
+      ]
+    },
+    {
+      "width": 1280,
+      "owner": 1,
+      "graveSeen": false,
+      "phases": [
+        "resolving",
+        "exile"
+      ],
+      "riftPhases": [
+        "浮上",
+        "カード発光",
+        "銀紋の流墨",
+        "リフトへの軌跡",
+        "到着"
+      ],
+      "riftSessions": 1,
+      "sameFace": true,
+      "sourceUid": "ambush-source",
+      "done": true,
+      "left": 0,
+      "removed": [
+        "ambush-source"
+      ]
+    },
+    {
+      "width": 390,
+      "owner": 0,
+      "graveSeen": false,
+      "phases": [
+        "resolving",
+        "exile"
+      ],
+      "riftPhases": [
+        "浮上",
+        "カード発光",
+        "銀紋の流墨",
+        "リフトへの軌跡",
+        "到着"
+      ],
+      "riftSessions": 1,
+      "sameFace": true,
+      "sourceUid": "ambush-source",
+      "done": true,
+      "left": 0,
+      "removed": [
+        "ambush-source"
+      ]
+    },
+    {
+      "width": 390,
+      "owner": 1,
+      "graveSeen": false,
+      "phases": [
+        "resolving",
+        "exile"
+      ],
+      "riftPhases": [
+        "浮上",
+        "カード発光",
+        "銀紋の流墨",
+        "リフトへの軌跡",
+        "到着"
+      ],
+      "riftSessions": 1,
+      "sameFace": true,
+      "sourceUid": "ambush-source",
+      "done": true,
+      "left": 0,
+      "removed": [
+        "ambush-source"
+      ]
+    }
+  ],
+  "errors": [],
+  "boundary": "Actual adopted board/controller/animations with reducer-produced fixtures; no authenticated PvP or physical device test."
+}
