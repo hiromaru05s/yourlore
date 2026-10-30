@@ -1,0 +1,255 @@
+{
+  "results": [
+    {
+      "viewport": 1440,
+      "name": "cards",
+      "x": 43.1875,
+      "width": 1353.625,
+      "right": 1396.8125,
+      "scroll": 1352,
+      "client": 1352,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1440,
+      "name": "friends",
+      "x": 43.1875,
+      "width": 1353.625,
+      "right": 1396.8125,
+      "scroll": 1352,
+      "client": 1352,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1440,
+      "name": "leaderboard",
+      "x": 43.1875,
+      "width": 1353.625,
+      "right": 1396.8125,
+      "scroll": 1352,
+      "client": 1352,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1440,
+      "name": "shop",
+      "x": 43.1875,
+      "width": 1353.625,
+      "right": 1396.8125,
+      "scroll": 1353,
+      "client": 1352,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1440,
+      "name": "tutorial",
+      "x": 43.1875,
+      "width": 1353.625,
+      "right": 1396.8125,
+      "scroll": 1354,
+      "client": 1354,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1920,
+      "name": "cards",
+      "x": 57.59375,
+      "width": 1804.8125,
+      "right": 1862.40625,
+      "scroll": 1803,
+      "client": 1803,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 1920,
+      "name": "friends",
+      "x": 210,
+      "width": 1500,
+      "right": 1710,
+      "scroll": 1498,
+      "client": 1498,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 1920,
+      "name": "leaderboard",
+      "x": 57.59375,
+      "width": 1804.8125,
+      "right": 1862.40625,
+      "scroll": 1803,
+      "client": 1803,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 1920,
+      "name": "shop",
+      "x": 57.59375,
+      "width": 1804.8125,
+      "right": 1862.40625,
+      "scroll": 1804,
+      "client": 1803,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 1920,
+      "name": "tutorial",
+      "x": 57.59375,
+      "width": 1804.8125,
+      "right": 1862.40625,
+      "scroll": 1805,
+      "client": 1805,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 390,
+      "name": "cards",
+      "x": 12,
+      "width": 366,
+      "right": 378,
+      "scroll": 364,
+      "client": 364,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 390,
+      "name": "friends",
+      "x": 11.6875,
+      "width": 366.625,
+      "right": 378.3125,
+      "scroll": 365,
+      "client": 365,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 390,
+      "name": "leaderboard",
+      "x": 12,
+      "width": 366,
+      "right": 378,
+      "scroll": 364,
+      "client": 364,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 390,
+      "name": "shop",
+      "x": 12,
+      "width": 366,
+      "right": 378,
+      "scroll": 365,
+      "client": 364,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 390,
+      "name": "tutorial",
+      "x": 12,
+      "width": 366,
+      "right": 378,
+      "scroll": 366,
+      "client": 366,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 320,
+      "name": "cards",
+      "x": 12,
+      "width": 296,
+      "right": 308,
+      "scroll": 294,
+      "client": 294,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 320,
+      "name": "friends",
+      "x": 9.59375,
+      "width": 300.8125,
+      "right": 310.40625,
+      "scroll": 299,
+      "client": 299,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 320,
+      "name": "leaderboard",
+      "x": 12,
+      "width": 296,
+      "right": 308,
+      "scroll": 294,
+      "client": 294,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 320,
+      "name": "shop",
+      "x": 12,
+      "width": 296,
+      "right": 308,
+      "scroll": 295,
+      "client": 294,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 320,
+      "name": "tutorial",
+      "x": 12,
+      "width": 296,
+      "right": 308,
+      "scroll": 296,
+      "client": 296,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 844,
+      "name": "cards",
+      "x": 25.3125,
+      "width": 793.375,
+      "right": 818.6875,
+      "scroll": 791,
+      "client": 791,
+      "documentWidth": 844
+    },
+    {
+      "viewport": 844,
+      "name": "friends",
+      "x": 25.3125,
+      "width": 793.375,
+      "right": 818.6875,
+      "scroll": 791,
+      "client": 791,
+      "documentWidth": 844
+    },
+    {
+      "viewport": 844,
+      "name": "leaderboard",
+      "x": 25.3125,
+      "width": 793.375,
+      "right": 818.6875,
+      "scroll": 791,
+      "client": 791,
+      "documentWidth": 844
+    },
+    {
+      "viewport": 844,
+      "name": "shop",
+      "x": 25.3125,
+      "width": 793.375,
+      "right": 818.6875,
+      "scroll": 792,
+      "client": 791,
+      "documentWidth": 844
+    },
+    {
+      "viewport": 844,
+      "name": "tutorial",
+      "x": 25.3125,
+      "width": 793.375,
+      "right": 818.6875,
+      "scroll": 793,
+      "client": 793,
+      "documentWidth": 844
+    }
+  ],
+  "errors": []
+}

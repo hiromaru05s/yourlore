@@ -1,5 +1,7 @@
 # Deck drag removal — 2026-10-29
 
+**Production released and verified on 2026-10-30.** Source `e6d2e5b3d9a4cbe3e389b9bd38b5a28a2048b822`, Worker version `4f5419bf-4fc2-4c3a-94d6-11ac2b25dc28`, 100% traffic.
+
 Deck cards can be dragged back into the card-list panel to remove one copy. Fixed Attune remains protected. Removal clears a pending replacement, supports Undo and uses the existing deck confirmation/save flow. Outside drops, Escape, pointer cancellation, blur, render/slot changes and screen teardown cancel the gesture. Mouse/pen behavior matches existing drag addition; touch retains native scrolling and the existing +/− controls.
 
 ## Source and preview
@@ -28,3 +30,11 @@ Implementation commit: `620c7761`. The initial release was blocked: HTTPS push t
 ## Release resumed — 2026-10-30
 
 GitHub write authentication recovered (working branch push succeeded). Integrated remote main `89e4e752fc671415baea52466d5759cf39d32bad` including Rune Adept balance, appearance preview and turn readiness changes; merge commit `e525bfaa`. Drag/editor regression tests, built preview and actual mouse gestures at 1280/390 CSS pixels passed again with no browser errors; see `browser-2026-10-30.json`. Preview root and port remain as above. Production deployment waits for the existing cross-worktree deployment lock, then uses the standard guarded main snapshot release.
+
+## Production verification — 2026-10-30
+
+The shared guarded release deployed integrated main `e6d2e5b3d9a4cbe3e389b9bd38b5a28a2048b822`, which contains implementation `620c7761`. The deployment lock and source guard were respected while parallel releases integrated their changes. DB checks, client/server typecheck, **254/254 production tests** and build passed. Deployment `2d0cbb39-821d-4e8d-9334-80b25db36aff` serves Worker version `4f5419bf-4fc2-4c3a-94d6-11ac2b25dc28` at 100%.
+
+The browser regression ran against **https://yourlore.xyz** after deployment at 1280 and 390 CSS pixels: remove one card into the card list, Undo, outside drop cancellation, Escape, fixed Attune, adding, replacement and fixture save all passed. No browser errors. Screenshots were visually inspected against the adopted layout. See `production-browser.json`, `production-drag-desktop.png`, `production-mobile.png` and `deployment.json`.
+
+The test used production static assets with API fixtures; real-account persistence and physical touchscreen gestures were not exercised. The implementation retains the existing mouse/pen drag behavior and touch +/− controls. Current production implementation paths remain `client/src/screens/deck.ts`, `client/src/ui/deckDrag.ts` and `client/src/styles/deckLayout.css`. Local preview origin was the worktree/URL recorded above; final verification used the production origin.
