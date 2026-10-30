@@ -18,3 +18,11 @@ The basic tutorial's real Start/Replay, Single and account-backed journey-resume
 - Existing tutorial DOM and Companion checks and TypeScript checks passed. The guarded release also runs the complete production suite.
 - This change has no server, currency, database schema, or asset changes. These fixture checks do not claim real-account rewards, a completed live match, or physical-device performance.
 - QA screenshots, report, and repeatable verification script: `docs/qa/2026-10-30-tutorial-first-view/`. Production version and verification are recorded alongside this document after release.
+
+## Production result
+
+- Released runtime: `feed223a7ada72438f05ab39fa06575a57630d41` at 2026-10-30 07:49 UTC. Version `d3e268a7-4395-48dd-ad83-7ab6805015fc` receives 100% traffic; deployment `2d768858-a3e8-46c7-a219-58a564a6ab36`.
+- Both TypeScript projects and 256/256 guarded production checks passed (`production-suite.json`).
+- Deployed frontend verification passed all six locale/viewport combinations above. Welcome and Later confirmation each have exactly two computed text sizes. The first-view Start button remained visible, unobstructed and above the dock at scrollTop 0. Companion tab hides the start actions; returning to basics restores them. The actual button opens the basic duel. No page errors occurred.
+- Production screenshots and geometry: `production-browser/report.json`; successful production-loaded script/style/image URLs: `production-browser/loaded-assets.json`. Screenshots were visually inspected at the user's Korean screenshot dimensions and at 1024×600 locally; the production Korean pair was separately inspected after deployment.
+- Browser APIs use isolated fixtures; production frontend, styles and art come from the public site. No production accounts or balances were changed for this UI verification. The following evidence-only commit does not alter the deployed runtime.
