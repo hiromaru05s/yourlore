@@ -40,3 +40,15 @@ body .tutorial-basics-shell>.tutorial-parts-hero .tutorial-welcome-speech{grid-r
 
 /* The guided Companion introduction owns Zeno’s speech during onboarding. */
 .onboarding-book .tutorial-parts-hero{display:none}
+
+/* Put the action in Zeno's greeting, before the optional lesson outline. */
+.tutorial-basics-shell>.tutorial-parts-hero{grid-template-columns:130px minmax(0,1fr);padding:12px 20px;margin-bottom:12px}
+.tutorial-basics-shell>.tutorial-parts-hero .tutorial-parts-spirit{width:130px;height:160px}
+body .tutorial-basics-shell .tutorial-welcome-speech{max-width:720px}
+body .tutorial-welcome-speech .tutorial-basics-actions{justify-content:flex-start;margin-top:16px;gap:10px}
+body .tutorial-welcome-speech .tutorial-basics-actions button{font-size:14px;min-height:44px;padding:12px 20px}
+@media(max-width:800px){
+ .tutorial-basics-shell>.tutorial-parts-hero{grid-template-columns:90px minmax(0,1fr);padding:10px 0}
+ .tutorial-basics-shell>.tutorial-parts-hero .tutorial-parts-spirit{width:90px;height:130px}
+ body .tutorial-welcome-speech .tutorial-basics-actions button{width:auto}
+}

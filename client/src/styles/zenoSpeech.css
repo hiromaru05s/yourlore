@@ -47,13 +47,23 @@ body .tutorial-tour-spirit,body .part-zeno{flex:0 0 112px;width:112px;height:148
  .tutorial-welcome-speech{margin-top:14px}
 }
 
-.welcome-conversation{display:flex;align-items:flex-end;gap:18px;width:min(850px,100%);margin:auto}
+/* The introduction is one spoken conversation: body 18px, speaker/actions 14px. */
+.welcome-conversation{display:flex;align-items:center;gap:24px;width:min(850px,100%);margin:auto}
 .welcome-conversation .welcome-spirit{flex:0 0 180px;width:180px;height:240px}
-.welcome-conversation .zeno-speech{--zeno-tail-reach:54px;--zeno-tail-bottom:106px}
-body .zeno-speech h1{font-size:22px;line-height:1.6;margin:8px 0 14px;color:var(--zeno-ink)}
-body .zeno-speech .welcome-reward{padding:12px 0;margin-top:10px;font-size:11px;color:#627d8d;border:0}
-body .zeno-speech .welcome-note{font-size:13px;color:#526f80}
-@media(max-width:700px){.welcome-conversation{gap:8px}.welcome-conversation .welcome-spirit{flex-basis:64px;width:64px;height:100px}.welcome-conversation .zeno-speech{--zeno-tail-reach:24px;--zeno-tail-bottom:38px}body .zeno-speech h1{font-size:18px}}
+.welcome-conversation .zeno-speech{--zeno-tail-reach:54px;--zeno-tail-bottom:calc(50% - 15px)}
+body .welcome-copy.zeno-speech .zeno-speech-content{padding:28px 30px}
+body .welcome-copy.zeno-speech :is(h1,p){font-family:inherit;font-size:18px;line-height:1.85;letter-spacing:normal;font-weight:400;color:var(--zeno-ink);margin:14px 0 0}
+body .welcome-copy.zeno-speech .zeno-speaker{font-size:14px;line-height:1.5}
+body .welcome-conversation .welcome-copy.zeno-speech button{font-size:14px;line-height:1.5;min-height:44px;padding:12px 18px}
+.welcome-copy .welcome-actions{margin-top:24px}
+@media(max-width:700px){
+ .welcome-conversation{gap:12px}
+ .welcome-conversation .welcome-spirit{flex-basis:90px;width:90px;height:140px}
+ .welcome-conversation .zeno-speech{--zeno-tail-reach:30px}
+ body .welcome-copy.zeno-speech .zeno-speech-content{padding:20px}
+ body .welcome-copy.zeno-speech :is(h1,p){font-size:16px}
+}
+
 /* Quiet replies need dark ink on the pale speech paper. */
 body .zeno-speech .lore-button-quiet{color:#426174!important}
 

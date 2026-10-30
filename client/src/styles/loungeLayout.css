@@ -66,3 +66,11 @@
   }
   .lounge-shell.selected-menu .lounge-seeker { max-width:calc(100% - 220px); margin-right:0; }
 }
+
+/* First-run welcome must center within the shared header/dock's usable area. */
+.lounge-shell.selected-menu.lounge-tutorial .lounge-content > .academy-welcome {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding-block:24px;
+}

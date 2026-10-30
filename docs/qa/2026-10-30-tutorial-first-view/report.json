@@ -1,0 +1,338 @@
+[
+  {
+    "lang": "ko",
+    "width": 1461,
+    "height": 790,
+    "origin": "http://127.0.0.1:5173/",
+    "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+    "welcome": {
+      "conversation": {
+        "x": 305.5,
+        "y": 237.046875,
+        "width": 850,
+        "height": 291.890625,
+        "bottom": 528.9375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1461,
+        "height": 606,
+        "bottom": 686
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "skip": {
+      "conversation": {
+        "x": 305.5,
+        "y": 260.703125,
+        "width": 850,
+        "height": 244.59375,
+        "bottom": 505.296875
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1461,
+        "height": 606,
+        "bottom": 686
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "tutorial": {
+      "top": 377.890625,
+      "bottom": 421.890625,
+      "navTop": 702,
+      "scroll": 0,
+      "hit": true
+    },
+    "errors": [],
+    "startedDuel": true
+  },
+  {
+    "lang": "ja",
+    "width": 1461,
+    "height": 790,
+    "origin": "http://127.0.0.1:5173/",
+    "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+    "welcome": {
+      "conversation": {
+        "x": 305.5,
+        "y": 220.40625,
+        "width": 850,
+        "height": 325.1875,
+        "bottom": 545.59375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1461,
+        "height": 606,
+        "bottom": 686
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "skip": {
+      "conversation": {
+        "x": 305.5,
+        "y": 244.046875,
+        "width": 850,
+        "height": 277.890625,
+        "bottom": 521.9375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1461,
+        "height": 606,
+        "bottom": 686
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "tutorial": {
+      "top": 376.390625,
+      "bottom": 423.390625,
+      "navTop": 702,
+      "scroll": 0,
+      "hit": true
+    },
+    "errors": [],
+    "startedDuel": true
+  },
+  {
+    "lang": "en",
+    "width": 1280,
+    "height": 720,
+    "origin": "http://127.0.0.1:5173/",
+    "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+    "welcome": {
+      "conversation": {
+        "x": 215,
+        "y": 185.40625,
+        "width": 850,
+        "height": 325.1875,
+        "bottom": 510.59375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1280,
+        "height": 536,
+        "bottom": 616
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "skip": {
+      "conversation": {
+        "x": 215,
+        "y": 209.046875,
+        "width": 850,
+        "height": 277.890625,
+        "bottom": 486.9375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1280,
+        "height": 536,
+        "bottom": 616
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "tutorial": {
+      "top": 377.890625,
+      "bottom": 421.890625,
+      "navTop": 632,
+      "scroll": 0,
+      "hit": true
+    },
+    "errors": [],
+    "startedDuel": true
+  },
+  {
+    "lang": "ko",
+    "width": 1024,
+    "height": 600,
+    "origin": "http://127.0.0.1:5173/",
+    "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+    "welcome": {
+      "conversation": {
+        "x": 87,
+        "y": 142.046875,
+        "width": 850,
+        "height": 291.890625,
+        "bottom": 433.9375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1024,
+        "height": 416,
+        "bottom": 496
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "skip": {
+      "conversation": {
+        "x": 87,
+        "y": 165.703125,
+        "width": 850,
+        "height": 244.59375,
+        "bottom": 410.296875
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1024,
+        "height": 416,
+        "bottom": 496
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "tutorial": {
+      "top": 368.46875,
+      "bottom": 412.46875,
+      "navTop": 512,
+      "scroll": 0,
+      "hit": true
+    },
+    "errors": [],
+    "startedDuel": true
+  },
+  {
+    "lang": "ja",
+    "width": 1024,
+    "height": 600,
+    "origin": "http://127.0.0.1:5173/",
+    "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+    "welcome": {
+      "conversation": {
+        "x": 87,
+        "y": 125.40625,
+        "width": 850,
+        "height": 325.1875,
+        "bottom": 450.59375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1024,
+        "height": 416,
+        "bottom": 496
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "skip": {
+      "conversation": {
+        "x": 87,
+        "y": 149.046875,
+        "width": 850,
+        "height": 277.890625,
+        "bottom": 426.9375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1024,
+        "height": 416,
+        "bottom": 496
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "tutorial": {
+      "top": 366.96875,
+      "bottom": 413.96875,
+      "navTop": 512,
+      "scroll": 0,
+      "hit": true
+    },
+    "errors": [],
+    "startedDuel": true
+  },
+  {
+    "lang": "en",
+    "width": 1024,
+    "height": 600,
+    "origin": "http://127.0.0.1:5173/",
+    "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+    "welcome": {
+      "conversation": {
+        "x": 87,
+        "y": 125.40625,
+        "width": 850,
+        "height": 325.1875,
+        "bottom": 450.59375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1024,
+        "height": 416,
+        "bottom": 496
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "skip": {
+      "conversation": {
+        "x": 87,
+        "y": 149.046875,
+        "width": 850,
+        "height": 277.890625,
+        "bottom": 426.9375
+      },
+      "content": {
+        "x": 0,
+        "y": 80,
+        "width": 1024,
+        "height": 416,
+        "bottom": 496
+      },
+      "fonts": [
+        "14px",
+        "18px"
+      ]
+    },
+    "tutorial": {
+      "top": 368.46875,
+      "bottom": 412.46875,
+      "navTop": 512,
+      "scroll": 0,
+      "hit": true
+    },
+    "errors": [],
+    "startedDuel": true
+  }
+]
