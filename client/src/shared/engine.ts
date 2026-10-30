@@ -3928,9 +3928,9 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (targets[0]) { ctx.log(`${tag(p, card)} ${cn(targets[0])} 파괴`, `${tag(p, card)} ${cn(targets[0])} 破壊`); ctx.destroyMonster(o, targets[0]); }
       break;
     }
-    case "RUNE2": { // 룬 학문 - 중급(v34): 덱 절반 이상 마법이면 최대 마나 +8 (조건은 시전 전 검사)
-      addMaxMana(p, 8);
-      ctx.log(`${tag(p, card)} 최대 마나 +8 (${p.maxMana})`, `${tag(p, card)} 最大マナ+8 (${p.maxMana})`);
+    case "RUNE2": { // 룬 학문 - 중급(v34): 덱 절반 이상 마법이면 최대 마나 +2 (조건은 시전 전 검사)
+      addMaxMana(p, 2);
+      ctx.log(`${tag(p, card)} 최대 마나 +2 (${p.maxMana})`, `${tag(p, card)} 最大マナ+2 (${p.maxMana})`);
       break;
     }
 
