@@ -1,0 +1,257 @@
+{
+  "results": [
+    {
+      "viewport": 1440,
+      "name": "cards",
+      "x": 43.1875,
+      "width": 1353.625,
+      "right": 1396.8125,
+      "scroll": 1352,
+      "client": 1352,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1440,
+      "name": "friends",
+      "x": 43.1875,
+      "width": 1353.625,
+      "right": 1396.8125,
+      "scroll": 1352,
+      "client": 1352,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1440,
+      "name": "leaderboard",
+      "x": 80,
+      "width": 1280,
+      "right": 1360,
+      "scroll": 1278,
+      "client": 1278,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1440,
+      "name": "shop",
+      "x": 43.1875,
+      "width": 1353.625,
+      "right": 1396.8125,
+      "scroll": 1353,
+      "client": 1352,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1440,
+      "name": "tutorial",
+      "x": 160,
+      "width": 1120,
+      "right": 1280,
+      "scroll": 1120,
+      "client": 1120,
+      "documentWidth": 1440
+    },
+    {
+      "viewport": 1920,
+      "name": "cards",
+      "x": 57.59375,
+      "width": 1804.8125,
+      "right": 1862.40625,
+      "scroll": 1803,
+      "client": 1803,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 1920,
+      "name": "friends",
+      "x": 210,
+      "width": 1500,
+      "right": 1710,
+      "scroll": 1498,
+      "client": 1498,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 1920,
+      "name": "leaderboard",
+      "x": 320,
+      "width": 1280,
+      "right": 1600,
+      "scroll": 1278,
+      "client": 1278,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 1920,
+      "name": "shop",
+      "x": 280,
+      "width": 1360,
+      "right": 1640,
+      "scroll": 1359,
+      "client": 1358,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 1920,
+      "name": "tutorial",
+      "x": 400,
+      "width": 1120,
+      "right": 1520,
+      "scroll": 1120,
+      "client": 1120,
+      "documentWidth": 1920
+    },
+    {
+      "viewport": 390,
+      "name": "cards",
+      "x": 12,
+      "width": 366,
+      "right": 378,
+      "scroll": 364,
+      "client": 364,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 390,
+      "name": "friends",
+      "x": 11.6875,
+      "width": 366.625,
+      "right": 378.3125,
+      "scroll": 365,
+      "client": 365,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 390,
+      "name": "leaderboard",
+      "x": 20,
+      "width": 350,
+      "right": 370,
+      "scroll": 348,
+      "client": 348,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 390,
+      "name": "shop",
+      "x": 16,
+      "width": 358,
+      "right": 374,
+      "scroll": 357,
+      "client": 356,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 390,
+      "name": "tutorial",
+      "x": 26,
+      "width": 338,
+      "right": 364,
+      "scroll": 338,
+      "client": 338,
+      "documentWidth": 390
+    },
+    {
+      "viewport": 320,
+      "name": "cards",
+      "x": 12,
+      "width": 296,
+      "right": 308,
+      "scroll": 294,
+      "client": 294,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 320,
+      "name": "friends",
+      "x": 9.59375,
+      "width": 300.8125,
+      "right": 310.40625,
+      "scroll": 299,
+      "client": 299,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 320,
+      "name": "leaderboard",
+      "x": 12,
+      "width": 296,
+      "right": 308,
+      "scroll": 294,
+      "client": 294,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 320,
+      "name": "shop",
+      "x": 10,
+      "width": 300,
+      "right": 310,
+      "scroll": 299,
+      "client": 298,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 320,
+      "name": "tutorial",
+      "x": 26,
+      "width": 268,
+      "right": 294,
+      "scroll": 268,
+      "client": 268,
+      "documentWidth": 320
+    },
+    {
+      "viewport": 844,
+      "name": "cards",
+      "x": 25.3125,
+      "width": 793.375,
+      "right": 818.6875,
+      "scroll": 791,
+      "client": 791,
+      "documentWidth": 844
+    },
+    {
+      "viewport": 844,
+      "name": "friends",
+      "x": 25.3125,
+      "width": 793.375,
+      "right": 818.6875,
+      "scroll": 791,
+      "client": 791,
+      "documentWidth": 844
+    },
+    {
+      "viewport": 844,
+      "name": "leaderboard",
+      "x": 20,
+      "width": 804,
+      "right": 824,
+      "scroll": 802,
+      "client": 802,
+      "documentWidth": 844
+    },
+    {
+      "viewport": 844,
+      "name": "shop",
+      "x": 25.3125,
+      "width": 793.375,
+      "right": 818.6875,
+      "scroll": 792,
+      "client": 791,
+      "documentWidth": 844
+    },
+    {
+      "viewport": 844,
+      "name": "tutorial",
+      "x": 50,
+      "width": 744,
+      "right": 794,
+      "scroll": 744,
+      "client": 744,
+      "documentWidth": 844
+    }
+  ],
+  "errors": [
+    "Cannot read properties of undefined (reading 'filter')"
+  ]
+}

@@ -9,9 +9,17 @@ function geometry(node:HTMLElement){const scale=200/parseFloat(getComputedStyle(
  const layers:Layer[]=[];
  for(const el of node.querySelectorAll<HTMLElement>(':scope > .card-frame, :scope > .card-cost > .seal-face, :scope > .ad-atk > .seal-face, :scope > .ad-def > .seal-face')){
  const cs=getComputedStyle(el),url=cs.backgroundImage.match(/url\(["']?(.*?)["']?\)/)?.[1];if(!url)continue;
- let x=0,y=0,current:HTMLElement|null=el;
- while(current&&current!==node){const s=getComputedStyle(current);x+=parseFloat(s.left)||0;y+=parseFloat(s.top)||0;current=current.offsetParent as HTMLElement|null;}
- layers.push({url,x:x*scale,y:y*scale,w:parseFloat(cs.width)*scale,h:parseFloat(cs.height)*scale});
+ let x=0,y=0,w=parseFloat(cs.width),h=parseFloat(cs.height),current:HTMLElement|null=el;
+ // The frame is rasterized at 200% and displayed with scale:.5. Trace its
+ // displayed footprint in card-local coordinates, not its rasterization box.
+ // Keep the card's own fan rotation/scale out: the child SVG already inherits it.
+ while(current&&current!==node){
+   const s=getComputedStyle(current),factors=s.scale==='none'?[1]:s.scale.split(/\s+/).map(Number);
+   const sx=factors[0],sy=factors[1]??sx,[ox,oy]=s.transformOrigin.split(/\s+/).map(parseFloat);
+   x=(parseFloat(s.left)||0)+ox+(x-ox)*sx;y=(parseFloat(s.top)||0)+oy+(y-oy)*sy;
+   w*=sx;h*=sy;current=current.offsetParent as HTMLElement|null;
+ }
+ layers.push({url,x:x*scale,y:y*scale,w:w*scale,h:h*scale});
  }
  return {layers,height};
 }
