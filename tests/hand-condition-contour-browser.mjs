@@ -35,7 +35,7 @@ async function contours(label){
  const values=await page.locator('#hand .has-play-condition').evaluateAll(nodes=>nodes.map(card=>{
   const svg=card.querySelector('.hand-condition-effect svg'),b=svg.querySelector('.hcond-core').getBBox(),vb=svg.viewBox.baseVal;
   const frame=card.querySelector('.card-frame'),s=getComputedStyle(frame),c=getComputedStyle(card);
-  return{id:card.dataset.cardId,layers:card.querySelector('.hand-condition-effect').dataset.layers,bounds:{x:b.x,y:b.y,right:b.x+b.width,bottom:b.y+b.height},width:vb.width,height:vb.height,frameWidth:parseFloat(s.width),cardWidth:parseFloat(c.width),scale:s.scale,svgWidth:svg.getBoundingClientRect().width,cardScreenWidth:card.getBoundingClientRect().width};
+  return{id:card.dataset.cardId,frame:card.dataset.cardFrame,frameURL:s.backgroundImage,layers:card.querySelector('.hand-condition-effect').dataset.layers,bounds:{x:b.x,y:b.y,right:b.x+b.width,bottom:b.y+b.height},width:vb.width,height:vb.height,frameWidth:parseFloat(s.width),cardWidth:parseFloat(c.width),scale:s.scale,svgWidth:svg.getBoundingClientRect().width,cardScreenWidth:card.getBoundingClientRect().width};
  }));
  await page.screenshot({path:out+'/'+label+'.png'});
  for(const v of values){
@@ -62,6 +62,12 @@ try{
  await page.waitForTimeout(400);assert.notEqual(await page.locator('.hcond-stream').first().evaluate(e=>getComputedStyle(e).strokeDashoffset),before);
  // Every highlighted family takes the exposed rightmost position in turn.
  for(const card of cards){state.players[0].hand=[...fixtureHand.filter(c=>c.uid!==card.uid),card];await update();await contours('rightmost-'+card.id);}
+ for(const frame of ['mirror-silver','flowing-gold','obsidian-ember','nacre-prism','verdigris-runes']){
+  state.frames=['frame:'+frame,'frame:'+frame];
+  state.players[0].hand=fixtureHand.map(c=>({...c,uid:c.uid+'-'+frame}));
+  await update();await contours(frame);
+  assert.equal(await page.locator('#hand .card').last().getAttribute('data-card-frame'),'frame:'+frame);
+ }
  for(const [width,height] of [[390,844],[844,390]]){await page.setViewportSize({width,height});await page.mouse.move(0,0);await page.waitForTimeout(600);await contours('viewport-'+width);}
  state.players[0].mana=0;await update();assert.equal(await page.locator('#hand .is-playable').count(),0);await contours('mana-empty');
  await page.emulateMedia({reducedMotion:'reduce'});await page.waitForFunction(()=>getComputedStyle(document.querySelector('.hcond-stream')).visibility==='hidden');
