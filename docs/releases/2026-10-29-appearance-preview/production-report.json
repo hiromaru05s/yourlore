@@ -1,0 +1,52 @@
+{
+  "origin": "https://yourlore.xyz",
+  "results": [
+    {
+      "width": 1440,
+      "layout": {
+        "top": 259.59375,
+        "bottom": 459.59375,
+        "groupTop": 483.59375,
+        "centerDelta": 0,
+        "inside": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 1280,
+      "layout": {
+        "top": 259.59375,
+        "bottom": 459.59375,
+        "groupTop": 483.59375,
+        "centerDelta": 0,
+        "inside": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 390,
+      "layout": {
+        "top": 279.1875,
+        "bottom": 479.1875,
+        "groupTop": 503.1875,
+        "centerDelta": 0,
+        "inside": true,
+        "overflow": false
+      }
+    },
+    {
+      "width": 320,
+      "layout": {
+        "top": 294.578125,
+        "bottom": 494.578125,
+        "groupTop": 518.578125,
+        "centerDelta": 0,
+        "inside": true,
+        "overflow": false
+      }
+    }
+  ],
+  "saves": 1,
+  "errors": [],
+  "boundary": "Real browser and assets; API fixtures for ownership and saves, no live account changes."
+}
