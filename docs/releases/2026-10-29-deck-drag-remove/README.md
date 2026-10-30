@@ -21,6 +21,10 @@ Deck cards can be dragged back into the card-list panel to remove one copy. Fixe
 - Production database tables, columns, types and required indexes passed `node scripts/check-db-schema.mjs production`.
 - Production release uses `npm run deploy` (committed main snapshot, deployment lock/source/schema guards, full production suite, typecheck and build). Final deployed version is reported after release.
 
-## Deployment status
+## Initial deployment blocker (2026-10-29)
 
-Implementation commit: `620c7761`. Production is **not updated**: HTTPS push to `gh` and the credential-helper URL were rejected by GitHub authentication; SSH was rejected with `Permission denied (publickey)`. The guarded deployment stopped at its remote-main equality check, before any production mutation. Restore GitHub write authentication, fetch and integrate current main, push, then rerun `npm run deploy` and verify the deployed source/assets. The branch and worktree remain available for continuation.
+Implementation commit: `620c7761`. The initial release was blocked: HTTPS push to `gh` and the credential-helper URL were rejected by GitHub authentication; SSH was rejected with `Permission denied (publickey)`. The guarded deployment stopped at its remote-main equality check, before any production mutation. Restore GitHub write authentication, fetch and integrate current main, push, then rerun `npm run deploy` and verify the deployed source/assets. The branch and worktree remain available for continuation.
+
+## Release resumed — 2026-10-30
+
+GitHub write authentication recovered (working branch push succeeded). Integrated remote main `89e4e752fc671415baea52466d5759cf39d32bad` including Rune Adept balance, appearance preview and turn readiness changes; merge commit `e525bfaa`. Drag/editor regression tests, built preview and actual mouse gestures at 1280/390 CSS pixels passed again with no browser errors; see `browser-2026-10-30.json`. Preview root and port remain as above. Production deployment waits for the existing cross-worktree deployment lock, then uses the standard guarded main snapshot release.
