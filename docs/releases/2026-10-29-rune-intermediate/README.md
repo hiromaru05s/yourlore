@@ -9,10 +9,16 @@
 - 三言語381枚のテキスト検査に合格。実プレイヤー同士のPvP検証ではない。
 - 本番公開は標準 `npm run deploy` のソース照合・DBスキーマ検査・型検査・production suite・ビルド・競合検知を経由する。
 
-## 検証結果と公開状態
+## 2026-10-29 検証結果と公開待機
 
 - 実装コミット：`81ea648a`。
 - `npm run typecheck`、`npm run text:check`、`npm run test:production`（251/251）、`npm run build`、本番DBの読み取り専用スキーマ検査に合格。
 - 公開は未実施。GitHubが既存認証情報を `Invalid username or token` として拒否し、mainへの反映に進めない。
 - 既存のOSキーチェーン経由でも同じ認証エラー。認証情報を更新後、最新 `gh/main` を取得・必要な統合・mainへのpushを行い、標準 `npm run deploy` を再開する。
 - 本番バージョン・配信アセットの事後検証は未実施。対人PvP検証は未実施。
+
+## 2026-10-30 公開再開
+
+- ユーザーによるGitHub CLIログイン完了後、アカウントと認証を確認。
+- リモートURLに埋め込まれていた旧認証情報を取り除き、OSキーチェーンのGitHub CLI認証へ移行。
+- 最新 `gh/main` は引き続き `5839a8bd`。既存の変更コミットを含めてmainへ反映し、標準ガード経由で公開する。
