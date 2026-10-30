@@ -59,6 +59,8 @@
 .lounge-deck :is(#deckCur,#deckPool) .card-art-img{transition:none}
 .lounge-deck .native-matte,.deck-drag-ghost .native-matte{filter:none}
 .lounge-deck #deckPool .card{cursor:grab;touch-action:pan-y}
+.lounge-deck #deckCur .deck-entry:not(.is-fixed) .card{cursor:grab}
+.lounge-deck #deckCandidates.deck-remove-over{filter:brightness(1.2)}
 .lounge-deck .deck-owned{position:absolute;right:0;bottom:26px;top:auto;z-index:8;padding:3px 5px;color:#ecf6ff;font:12px/1.4 system-ui,sans-serif;background:#091725ed;border:0;border-radius:0;pointer-events:none}
 .lounge-deck .deck-owned.has{color:#ecf6ff;background:#16354bef}
 .lounge-deck .card-action{position:absolute;left:auto;bottom:-12px;right:calc(50% - 14px);z-index:8}
