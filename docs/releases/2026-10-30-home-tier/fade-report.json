@@ -1,0 +1,30 @@
+{
+  "origin": "http://127.0.0.1:5508",
+  "api": "fixture account and quests; real current artwork",
+  "cases": [
+    {
+      "width": 1280,
+      "height": 720,
+      "reduced": false,
+      "samples": 250,
+      "repaints": 2,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "reduced": false,
+      "samples": 256,
+      "repaints": 2,
+      "errors": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "reduced": true,
+      "samples": 46,
+      "repaints": 2,
+      "errors": []
+    }
+  ]
+}

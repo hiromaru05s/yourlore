@@ -11,6 +11,6 @@ Source: started from remote main `89e4e752fc671415baea52466d5759cf39d32bad`, whi
 
 Preview launch directory: `/Users/hiromaru05s/.codex/worktrees/home-tier-large/LORE_TCG`; Vite URL: `http://127.0.0.1:5508`. Screenshots use real current art with fixture account/rank/quest API responses. They are not authenticated-account or physical-device tests and do not imply user visual approval.
 
-Validation: `tests/home-tier-browser.mjs` passed nine viewports (320×568 through 1440×900, including landscape), Japanese/English/Korean, all three quests, circle geometry, rank/deck separation, quest reachability, preserved node on profile refresh/orientation, keyboard rank navigation, mode/BOT/deck navigation, and rank failure/retry. Client/server typechecks passed. Browser report and representative screenshots are included.
+Validation: `tests/home-tier-browser.mjs` passed nine viewports (320×568 through 1440×900, including landscape), Japanese/English/Korean, all three quests, circle geometry, rank/deck separation, quest reachability, preserved node on profile refresh/orientation, keyboard rank navigation, mode/BOT/deck navigation, and rank failure/retry. Client/server typechecks passed. The existing whole-HOME fade browser test also passed on desktop/mobile and reduced motion after integrating main `9e490308`; profile refresh retains the synchronized reveal. Browser report and representative screenshots are included.
 
 Deployment status will be recorded after the guarded production release.

@@ -8,7 +8,7 @@ await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage();
 const errors=[],cases=[];page.on('pageerror',e=>errors.push(e.message));
 let tier='gm',mmr=1580,failed=false;
-await page.addInitScript(()=>localStorage.setItem('lore_lang','ja'));
+await page.addInitScript(()=>{if(!localStorage.getItem('lore_lang'))localStorage.setItem('lore_lang','ja');});
 await apiFixture(page,r=>{
  const p=new URL(r.url).pathname;
  if(p==='/api/auth/me')return {user:{id:'tier-qa',display:'シーカー',credits:1200,avatar:'SEEKER_BLUE'}};
@@ -48,6 +48,6 @@ try{
  tier='bronze';mmr=1000;await page.locator('[data-nav=home]').click();await ready();assert(await page.locator('#myTier').innerText().then(s=>s.includes('1000')));
  await page.locator('#deck').click();await page.waitForSelector('.lounge-deck');await page.locator('[data-nav=home]').click();await ready();
  failed=true;await page.reload();await page.waitForSelector('.screen-loader',{state:'detached'});await page.waitForFunction(()=>document.querySelector('#myTier')?.textContent.includes('再読み込み'));failed=false;await page.locator('#myTier').click();await page.waitForSelector('.home-rank');
- for(const lang of ['en','ko']){await page.evaluate(l=>localStorage.setItem('lore_lang',l),lang);await page.reload();await ready();assert(await page.locator('#myTier').innerText().then(s=>s.includes('1000')));await page.screenshot({path:`${out}/home-${lang}.png`});}
+ for(const lang of ['en','ko']){await page.evaluate(l=>localStorage.setItem('lore_lang',l),lang);await page.reload();await ready();assert(await page.locator('#myTier').innerText().then(s=>s.includes('1000')&&s.includes(lang==='en'?'Bronze':'브론즈')));await page.screenshot({path:`${out}/home-${lang}.png`});}
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({origin,api:'fixtures; real adopted assets',cases,errors},null,2));console.log('PASS: nine viewports, three languages, full quests, refresh/orientation, keyboard ranking, mode/BOT/deck navigation and rank retry');
 }finally{await browser.close();}
