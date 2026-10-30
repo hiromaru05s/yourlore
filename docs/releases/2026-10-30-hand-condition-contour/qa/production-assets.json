@@ -1,0 +1,36 @@
+{
+  "source": "e6d2e5b3d9a4cbe3e389b9bd38b5a28a2048b822",
+  "checkedAt": "2026-10-30T03:23:44.415Z",
+  "assets": [
+    {
+      "url": "https://yourlore.xyz/assets/main-DByB0MLn.js",
+      "local": "d19c632f1607ece7db0c8aa68476281742905f98f6044677a076cc25a7ded775",
+      "remote": "d19c632f1607ece7db0c8aa68476281742905f98f6044677a076cc25a7ded775",
+      "bytes": 3133
+    },
+    {
+      "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "local": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "remote": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "bytes": 711
+    },
+    {
+      "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+      "local": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "remote": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "bytes": 1110
+    },
+    {
+      "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+      "local": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a",
+      "remote": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a",
+      "bytes": 371
+    },
+    {
+      "url": "https://yourlore.xyz/assets/layout-BEP3ujtS.js",
+      "local": "89a619a7eaa8a10b7e41b4c2b0abf9e70aee7dc504a64ecdfbbc0a738d7e8d85",
+      "remote": "89a619a7eaa8a10b7e41b4c2b0abf9e70aee7dc504a64ecdfbbc0a738d7e8d85",
+      "bytes": 911288
+    }
+  ]
+}

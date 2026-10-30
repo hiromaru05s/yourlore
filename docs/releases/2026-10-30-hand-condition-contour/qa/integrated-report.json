@@ -1,0 +1,919 @@
+{
+  "origin": "http://127.0.0.1:5299",
+  "checks": [
+    {
+      "label": "desktop-compact",
+      "values": [
+        {
+          "id": "TDE1",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 94.56591796875,
+          "cardScreenWidth": 94.56591796875
+        },
+        {
+          "id": "TDE2",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 72.57470703125,
+          "cardScreenWidth": 72.57470703125
+        },
+        {
+          "id": "BUYOUT",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 94.56591796875,
+          "cardScreenWidth": 94.56591796875
+        }
+      ]
+    },
+    {
+      "label": "desktop-open",
+      "values": [
+        {
+          "id": "TDE1",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "TDE2",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 100.22216796875,
+          "cardScreenWidth": 100.22216796875
+        },
+        {
+          "id": "BUYOUT",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48590087890625,
+          "cardScreenWidth": 123.48590087890625
+        }
+      ]
+    },
+    {
+      "label": "desktop-hover",
+      "values": [
+        {
+          "id": "TDE1",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "TDE2",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 100.22216796875,
+          "cardScreenWidth": 100.22216796875
+        },
+        {
+          "id": "BUYOUT",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 140.51849365234375,
+          "cardScreenWidth": 140.51849365234375
+        }
+      ]
+    },
+    {
+      "label": "rightmost-TDE1",
+      "values": [
+        {
+          "id": "TDE2",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 106.29302978515625,
+          "cardScreenWidth": 106.29302978515625
+        },
+        {
+          "id": "BUYOUT",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 119.151123046875,
+          "cardScreenWidth": 119.151123046875
+        },
+        {
+          "id": "TDE1",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 139.24383544921875,
+          "cardScreenWidth": 139.24383544921875
+        }
+      ]
+    },
+    {
+      "label": "rightmost-TDE2",
+      "values": [
+        {
+          "id": "TDE1",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "BUYOUT",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 117.933837890625,
+          "cardScreenWidth": 117.933837890625
+        },
+        {
+          "id": "TDE2",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 140.51849365234375,
+          "cardScreenWidth": 140.51849365234375
+        }
+      ]
+    },
+    {
+      "label": "rightmost-BUYOUT",
+      "values": [
+        {
+          "id": "TDE1",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "TDE2",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 100.22216796875,
+          "cardScreenWidth": 100.22216796875
+        },
+        {
+          "id": "BUYOUT",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 140.51849365234375,
+          "cardScreenWidth": 140.51849365234375
+        }
+      ]
+    },
+    {
+      "label": "mirror-silver",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:mirror-silver",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:mirror-silver",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 100.22216796875,
+          "cardScreenWidth": 100.22216796875
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:mirror-silver",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 140.51849365234375,
+          "cardScreenWidth": 140.51849365234375
+        }
+      ]
+    },
+    {
+      "label": "flowing-gold",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:flowing-gold",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:flowing-gold",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 100.22216796875,
+          "cardScreenWidth": 100.22216796875
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:flowing-gold",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 140.51849365234375,
+          "cardScreenWidth": 140.51849365234375
+        }
+      ]
+    },
+    {
+      "label": "obsidian-ember",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:obsidian-ember",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:obsidian-ember",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 100.22216796875,
+          "cardScreenWidth": 100.22216796875
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:obsidian-ember",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 140.51849365234375,
+          "cardScreenWidth": 140.51849365234375
+        }
+      ]
+    },
+    {
+      "label": "nacre-prism",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:nacre-prism",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:nacre-prism",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 100.22216796875,
+          "cardScreenWidth": 100.22216796875
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:nacre-prism",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 140.51849365234375,
+          "cardScreenWidth": 140.51849365234375
+        }
+      ]
+    },
+    {
+      "label": "verdigris-runes",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 123.48593139648438,
+          "cardScreenWidth": 123.48593139648438
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 100.22216796875,
+          "cardScreenWidth": 100.22216796875
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 345.594,
+          "cardWidth": 172.797,
+          "scale": "0.5",
+          "svgWidth": 140.51849365234375,
+          "cardScreenWidth": 140.51849365234375
+        }
+      ]
+    },
+    {
+      "label": "viewport-390",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 118.75,
+          "cardWidth": 59.375,
+          "scale": "0.5",
+          "svgWidth": 42.43174743652344,
+          "cardScreenWidth": 42.43174743652344
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 118.75,
+          "cardWidth": 59.375,
+          "scale": "0.5",
+          "svgWidth": 34.4375,
+          "cardScreenWidth": 34.4375
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 118.75,
+          "cardWidth": 59.375,
+          "scale": "0.5",
+          "svgWidth": 42.43174743652344,
+          "cardScreenWidth": 42.43174743652344
+        }
+      ]
+    },
+    {
+      "label": "viewport-844",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 77.64933776855469,
+          "cardScreenWidth": 77.64933776855469
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 63.0206298828125,
+          "cardScreenWidth": 63.0206298828125
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 77.64935302734375,
+          "cardScreenWidth": 77.64935302734375
+        }
+      ]
+    },
+    {
+      "label": "mana-empty",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 77.64933776855469,
+          "cardScreenWidth": 77.64933776855469
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 63.0206298828125,
+          "cardScreenWidth": 63.0206298828125
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 77.64935302734375,
+          "cardScreenWidth": 77.64935302734375
+        }
+      ]
+    },
+    {
+      "label": "restored",
+      "values": [
+        {
+          "id": "TDE1",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 77.64933776855469,
+          "cardScreenWidth": 77.64933776855469
+        },
+        {
+          "id": "TDE2",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-mon-print.webp\")",
+          "layers": "4",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 203,
+            "bottom": 317.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 63.0206298828125,
+          "cardScreenWidth": 63.0206298828125
+        },
+        {
+          "id": "BUYOUT",
+          "frame": "frame:verdigris-runes",
+          "frameURL": "url(\"http://127.0.0.1:5299/art/biblion/modular/base-spell-print.webp\")",
+          "layers": "2",
+          "bounds": {
+            "x": -16,
+            "y": -2.5,
+            "right": 199,
+            "bottom": 310.5
+          },
+          "width": 200,
+          "height": 312.50543212890625,
+          "frameWidth": 217.312,
+          "cardWidth": 108.656,
+          "scale": "0.5",
+          "svgWidth": 77.64935302734375,
+          "cardScreenWidth": 77.64935302734375
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "boundary": "Product router, controller, CSS and artwork; fixture authentication and WebSocket state. No authenticated PvP or physical device test."
+}
