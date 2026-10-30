@@ -16,7 +16,7 @@ export async function tutorialStatus(env:Env,userId:string,credits:number){
  ]);
  const rows=claims.results??[],keys=rows.map(r=>r.key),legacyPaid=account?.legacy_paid??0;
  const awarded=rows.filter(r=>legacyKeys.includes(r.key)||TUT_STEPS.some(s=>s.key===r.key)).reduce((n,r)=>n+r.amount,0);
- return {keys,credits,legacyPaid,awarded,offered:keys.some(k=>k.startsWith('tutorial:v2:')||k.startsWith('tutorial:v3:')),amounts:Object.fromEntries(TUT_STEPS.map(s=>[s.id,tutorialAward(s.id,legacyPaid)]))};
+ return {keys,credits,legacyPaid,awarded,offered:keys.some(k=>k.startsWith('tutorial:v2:')||k.startsWith('tutorial:v3:')||k.startsWith('tutorial:onboarding:')),amounts:Object.fromEntries(TUT_STEPS.map(s=>[s.id,tutorialAward(s.id,legacyPaid)]))};
 }
 export async function grantTutorial(env:Env,userId:string,id:LessonId){
  const index=TUT_STEPS.findIndex(s=>s.id===id),lesson=TUT_STEPS[index];

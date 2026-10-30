@@ -1,3 +1,4 @@
+import {ONBOARDING_BASICS,ONBOARDING_DRAW,ONBOARDING_BUY} from '../../client/src/shared/onboarding';
 import {dailyStarterShop,DAILY_STARTER_LIMIT} from '../../client/src/shared/dailyStarterShop';
 import {GACHA_COSMETICS,cosmetic} from '../../client/src/shared/cosmetics';
 import {CARD_EFFECTS,isCardEffect,type CardEffectId} from '../../client/src/shared/cardEffects';
@@ -22,7 +23,7 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
  const shop=async()=>{
   const daily=dailyStarterShop(Date.now());
   const rows=await env.DB.prepare(`SELECT operation, receipt FROM collection_transactions WHERE user_id = ? AND created_at >= ? AND created_at < ?`).bind(user.id,daily.resetsAt-86_400_000,daily.resetsAt).all<{operation:string;receipt:string}>();
-  for(const row of rows.results){const op=JSON.parse(row.operation);if(op.kind==='buy'&&daily.cards.includes(op.id))daily.remaining[op.id]=Math.max(0,daily.remaining[op.id]-JSON.parse(row.receipt).rewards.length);}
+  for(const row of rows.results){const op=JSON.parse(row.operation);if(op.kind==='buy'&&!op.tutorial&&daily.cards.includes(op.id))daily.remaining[op.id]=Math.max(0,daily.remaining[op.id]-JSON.parse(row.receipt).rewards.length);}
   return daily;
  };
  const respond=async(receipt:CollectionReceipt)=>{const s=await state();return json(env,{dailyShop:await shop(),credits:s.credits,starterCards:s.starterCards,effects:s.inventory.filter(isCardEffect),cosmetics:s.inventory.filter(id=>!!cosmetic(id)),receipt});};
@@ -33,13 +34,23 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
  }
  const kind=path==='/api/collection/buy'?'buy':path==='/api/collection/draw'?'draw':null;
  if(!kind||req.method!=='POST')return json(env,{error:'not found'},404);
- const body=await req.json().catch(()=>null) as {requestId?:unknown;id?:unknown;count?:unknown;shopDay?:unknown}|null;
+ const body=await req.json().catch(()=>null) as {requestId?:unknown;id?:unknown;count?:unknown;shopDay?:unknown;tutorial?:unknown}|null;
  if(!body||typeof body.requestId!=='string'||!/^[a-zA-Z0-9_-]{16,80}$/.test(body.requestId))return json(env,{error:'invalid request'},400);
  const id=body.id,count=kind==='buy'&&body.count===undefined?1:body.count;
  if(kind==='buy'&&(typeof id!=='string'||!COLLECTIBLE_STARTERS.includes(id)))return json(env,{error:'잘못된 상품입니다.'},400);
  if(typeof count!=='number'||!Number.isInteger(count)||(kind==='buy'?(count<1||count>8):(count!==1&&count!==10)))return json(env,{error:'invalid request'},400);
- const operation=JSON.stringify({kind,id:kind==='buy'?id:null,count,...(kind==='buy'&&typeof body.shopDay==='string'?{shopDay:body.shopDay}:{})});
- const cost=(kind==='buy'?STARTER_PRICE:GACHA_PRICE)*count;
+ const tutorial=body.tutorial===true;
+ if(tutorial && (body.requestId!==(kind==='draw'?ONBOARDING_DRAW:ONBOARDING_BUY)||count!==(kind==='draw'?10:1)))return json(env,{error:'invalid tutorial purchase'},400);
+ if(!tutorial && [ONBOARDING_DRAW,ONBOARDING_BUY].includes(body.requestId))return json(env,{error:'reserved request'},400);
+ if(tutorial){
+  const ready=await env.DB.prepare('SELECT key FROM rewards WHERE user_id=? AND key=?').bind(user.id,ONBOARDING_BASICS).first();
+  const drawn=kind==='draw'||await env.DB.prepare('SELECT request_id FROM collection_transactions WHERE user_id=? AND request_id=?').bind(user.id,ONBOARDING_DRAW).first();
+  if(!ready||!drawn)return json(env,{error:'complete the preceding tutorial first'},409);
+ }
+ // Tutorial purchase retries use one canonical operation even across midnight.
+ const operation=JSON.stringify(tutorial?{kind,tutorial:true,count}:{kind,id:kind==='buy'?id:null,count,...(kind==='buy'&&typeof body.shopDay==='string'?{shopDay:body.shopDay}:{})});
+ const free=tutorial&&kind==='buy';
+ const cost=free?0:(kind==='buy'?STARTER_PRICE:GACHA_PRICE)*count;
  // Draw once per request. A CAS retry never rerolls the request's selection.
  let picks:Array<{kind:'starter'|'empty'|'effect'|'cosmetic';id:string}>|undefined;
  for(let attempt=0;attempt<6;attempt++){
@@ -47,8 +58,8 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
   if(previous)return previous.operation===operation?respond(JSON.parse(previous.receipt)):json(env,{error:'collection request conflict'},409);
   const s=await state();
   const daily=await shop();
-  const shopRejection=kind==='buy'?(body.shopDay!==daily.day?'shop refreshed':!daily.cards.includes(id as string)?'starter not offered today':count>daily.remaining[id as string]?'daily starter limit reached':null):null;
-  const rejection=shopRejection??(s.credits<cost?'not enough shards':kind==='buy'&&s.starterCards[id as string]+count>8?'starter limit reached':null);
+  const shopRejection=kind==='buy'?(body.shopDay!==daily.day?'shop refreshed':!daily.cards.includes(id as string)||free&&daily.cards[0]!==id?'starter not offered today':!free&&count>daily.remaining[id as string]?'daily starter limit reached':null):null;
+  const rejection=shopRejection??(s.credits<cost?'not enough shards':kind==='buy'&&!free&&s.starterCards[id as string]+count>8?'starter limit reached':null);
   if(rejection){
    // Another copy of this same request may have committed between the ledger
    // read and this balance read (including spending the last available Shards).
@@ -65,7 +76,7 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
    if(pick.kind==='empty')return {kind:'empty',id:'cosmetic-pending',refund:0,owned:0};
    if(pick.kind==='cosmetic'){const duplicate=s.inventory.includes(pick.id);if(!duplicate)s.inventory.push(pick.id);return {kind:'cosmetic',id:pick.id,refund:duplicate?DUPLICATE_REFUNDS.cosmetic:0,owned:1};}
    if(pick.kind==='effect'){const effect=pick.id as CardEffectId,duplicate=s.inventory.includes(effect);if(!duplicate)s.inventory.push(effect);return {kind:'effect',id:effect,refund:duplicate?DUPLICATE_REFUNDS.effect:0,owned:1};}
-   const card=pick.id,duplicate=s.starterCards[card]>=8;if(!duplicate)s.starterCards[card]++;return {kind:'starter',id:card,refund:duplicate?DUPLICATE_REFUNDS.starter:0,owned:s.starterCards[card]};
+   const card=pick.id,duplicate=s.starterCards[card]>=8;if(!duplicate)s.starterCards[card]++;return {kind:'starter',id:card,refund:duplicate&&!free?DUPLICATE_REFUNDS.starter:0,owned:s.starterCards[card]};
   });
   const committedAt=Date.now();
   if(dailyStarterShop(committedAt).day!==daily.day)continue;
@@ -76,7 +87,7 @@ export async function handleCollection(env:Env,req:Request,path:string,user:Sess
   const result=await env.DB.batch([
    env.DB.prepare(`UPDATE users SET credits = credits - ? + ?, starter_cards = ?, sleeves = ? WHERE id = ? AND credits = ? AND starter_cards IS ? AND sleeves IS ? AND NOT EXISTS (SELECT 1 FROM collection_transactions WHERE user_id = ? AND request_id = ?)
     AND (? = 'draw' OR (SELECT COALESCE(SUM(json_array_length(json_extract(receipt,'$.rewards'))),0) FROM collection_transactions WHERE user_id = ? AND created_at >= ? AND created_at < ? AND json_extract(operation,'$.kind') = 'buy' AND json_extract(operation,'$.id') = ?) + ? <= ?)` )
-    .bind(cost,refund,JSON.stringify(s.starterCards),JSON.stringify(s.inventory),user.id,s.credits,s.starter_cards,s.sleeves,user.id,body.requestId,kind,user.id,daily.resetsAt-86_400_000,daily.resetsAt,kind==='buy'?id:null,count,DAILY_STARTER_LIMIT),
+    .bind(cost,refund,JSON.stringify(s.starterCards),JSON.stringify(s.inventory),user.id,s.credits,s.starter_cards,s.sleeves,user.id,body.requestId,free?'draw':kind,user.id,daily.resetsAt-86_400_000,daily.resetsAt,kind==='buy'?id:null,count,DAILY_STARTER_LIMIT),
    env.DB.prepare(`INSERT INTO collection_transactions(user_id,request_id,operation,receipt,created_at) SELECT ?,?,?,?,? WHERE changes() = 1`)
     .bind(user.id,body.requestId,operation,JSON.stringify(receipt),receipt.createdAt)
   ]);

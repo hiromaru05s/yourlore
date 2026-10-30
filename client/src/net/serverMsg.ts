@@ -20,6 +20,10 @@ const M: Record<string, { ja: string; en: string; ko?:string }> = {
   "collection busy; retry": {ja:"処理が混み合っています。再試行してください。",en:"Collection busy. Please retry.",ko:"처리가 혼잡합니다. 다시 시도해 주세요."},
   "collection request conflict": {ja:"前の購入結果を確認してから再試行してください。",en:"Check your previous purchase before retrying.",ko:"이전 구매 결과를 확인한 후 다시 시도해 주세요."},
   "invalid username": {ja:"ユーザー名は2〜24文字で、文字・数字・スペース・._-を使ってください。メールアドレスは使えません。",en:"Use 2–24 letters, numbers, spaces, or ._-. Email addresses are not allowed.",ko:"사용자 이름은 2~24자의 문자, 숫자, 공백 또는 ._-를 사용하세요. 이메일 주소는 사용할 수 없어요."},
+  "shop refreshed": {ja:"本日の商品が更新されました。ラインナップを確認してください。",en:"The daily shop has refreshed. Check the new lineup.",ko:"오늘의 상품이 갱신되었습니다. 라인업을 확인해 주세요."},
+  "complete the preceding tutorial first": {ja:"前のチュートリアルから順番に進めてください。",en:"Complete the preceding tutorial step first.",ko:"앞의 튜토리얼부터 순서대로 진행해 주세요."},
+  "basics not completed": {ja:"デュエルの基本の完了を確認できませんでした。もう一度練習してください。",en:"Could not confirm completion of Duel basics. Please replay it.",ko:"듀얼의 기본 완료를 확인하지 못했습니다. 다시 실습해 주세요."},
+  "finish the starter deck first": {ja:"先にスターターデッキを確定してください。",en:"Confirm your starter deck first.",ko:"먼저 스타터 덱을 확정해 주세요."},
   // auth
   "올바른 이메일이 아닙니다.": { ja: "正しいメールアドレスではありません。", en: "That's not a valid email." },
   "비밀번호는 6자 이상이어야 합니다.": { ja: "パスワードは6文字以上にしてください。", en: "Password must be at least 6 characters." },

@@ -1,7 +1,7 @@
 import {TutorialActionGuide,placeTutorialCoach,guideElement} from '../ui/tutorialActionGuide';
 import {monsterCanAttack} from '../shared/engine';
 import {BaseController,type ControllerExits} from './controller';
-import {advanceLesson,currentScene,tutorialOpponentAction,type LessonRun} from '../shared/tutorialLesson';
+import {advanceLesson,currentScene,tutorialOpponentAction,type LessonRun,type TutorialAction} from '../shared/tutorialLesson';
 import {tutorialCue,isTutorialActionAllowed} from '../shared/tutorialGuide';
 import {PART_TOURS,TUTORIAL_PARTS,createPartStart,tutorialPartKey} from '../shared/tutorialParts';
 import type {Action,GameEvent} from '../shared/types';
@@ -19,7 +19,7 @@ export class TutorialPartController {
  private runtime:TutorialPartRuntime;
  private checkpoints=new TutorialCheckpoints();
  private dead=false;
- constructor(root:HTMLElement,exits:ControllerExits,part:number,next:(part:number)=>void,accountId?:string){
+ constructor(root:HTMLElement,exits:ControllerExits,part:number,next:(part:number,actions:TutorialAction[])=>void,accountId?:string){
   const mount=(index=0,checkpoint?:TutorialCheckpoint):TutorialPartRuntime=>new TutorialPartRuntime(root,exits,part,next,accountId,this.checkpoints,index,checkpoint,to=>{
    if(this.dead)return;
    const saved=this.checkpoints.rewind(to);
@@ -51,7 +51,7 @@ class TutorialPartRuntime extends BaseController {
  private handOpen=false;
  private unsub:()=>void=()=>{};
  protected get useTurnClock():boolean{return false;}
- constructor(private root:HTMLElement,exits:ControllerExits,private part:number,private next:(part:number)=>void,private accountId:string|undefined,private checkpoints:TutorialCheckpoints,startIndex:number,checkpoint:TutorialCheckpoint|undefined,restart:(index:number)=>void){
+ constructor(private root:HTMLElement,exits:ControllerExits,private part:number,private next:(part:number,actions:TutorialAction[])=>void,private accountId:string|undefined,private checkpoints:TutorialCheckpoints,startIndex:number,checkpoint:TutorialCheckpoint|undefined,restart:(index:number)=>void){
   super(root,0,exits);root.classList.add('tutorial-board');this.introShown=true;const start=createPartStart(part);this.run=checkpoint?{...checkpoint.run,scenes:start.run.scenes}:start.run;this.history=checkpoint?.history??start.history;this.run.state.players[1].name='Zeno';this.busy=true;this.applyResult({state:this.run.state,events:[]},false);
   if(this.history.length)this.restoreLog(this.history,true);
   // Each guided part starts from a closed log so the learner opens it as instructed.
@@ -65,7 +65,7 @@ class TutorialPartRuntime extends BaseController {
     this.tour=new TutorialSpotlight(root,guided,{label:TUTORIAL_PARTS[part].title,startIndex,state:()=>this.busy?null:this.run.state,
      onStep:index=>this.checkpoints.save(index,this.run,this.history,this.presentation()),previousStep:index=>this.checkpoints.previous(index),
      rewind:index=>{this.rewinding=true;this.busy=true;clearTimeout(this.timer);this.fastForward();this.afterPresentation(()=>restart(index));},
-     onComplete:()=>{this.tour=undefined;this.markComplete();this.next(part+1);},onExit:()=>this.exits.onHome()});
+     onComplete:()=>{this.tour=undefined;this.markComplete();this.next(part+1,this.run.actions);},onExit:()=>this.exits.onHome()});
    });
    return;
   }
@@ -115,7 +115,7 @@ class TutorialPartRuntime extends BaseController {
  protected showWin():void{/* The part completion speech replaces the normal outcome modal. */}
  private proceed():void{
   if(this.busy)return;
-  if(this.finished){this.next(this.part+1);return;}
+  if(this.finished){this.next(this.part+1,this.run.actions);return;}
   if(this.intro){this.intro=false;this.render();this.maybeBot();return;}
   if(this.run.phase!=='review')return;
   const res=advanceLesson(this.run,{type:'continueLesson'});if(this.run.done)this.finish();else{this.busy=true;this.view.syncTurn(res.state,true);this.applyResult(res,false);this.afterPresentation(()=>{if(this.dead)return;this.view.syncTurn(this.run.state,true);this.view.render(this.run.state);this.busy=false;this.render();this.maybeBot();});}this.render();

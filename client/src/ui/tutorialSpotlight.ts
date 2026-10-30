@@ -82,6 +82,8 @@ export class TutorialSpotlight {
   const origin=event.target instanceof Element?event.target:null;
   if(!origin||this.layer.contains(origin))return;
   const step=this.step();
+  if(step.suspendForDialog&&origin.closest('dialog[open]'))return;
+  if(step.allow&&origin.closest(step.allow))return;
   if(step.action==='play')return; // The controller validates every game action.
   if((step.action==='click'||step.action==='inspect')&&step.selector&&origin.closest(step.selector))return;
   if(step.enableOn&&origin.closest(step.enableOn.selector))return;
@@ -95,18 +97,20 @@ export class TutorialSpotlight {
   this.guard(event);if(event.defaultPrevented)return;
   if(this.undoing||this.advancing)return;
   const step=this.step(),origin=event.target instanceof Element?event.target:null;
-  if(step.opened)return;
+  if(step.opened||step.waitFor)return;
   if(step.action!=='click'||!step.selector||!origin?.closest(step.selector))return;
   this.advancing=true;window.setTimeout(()=>{this.advancing=false;if(!this.disposed)this.go(this.index+1);},160);
  };
  private checkMove():void{
   if(document.querySelector('.game-loading'))return;
-  const step=this.step();if(step.opened){if(document.querySelector(step.opened)&&!this.advancing)this.go(this.index+1);return;}if(step.action!=='play'||!step.until||this.advancing)return;
+  const step=this.step();if(step.waitFor){if(step.waitFor()&&!this.advancing)this.go(this.index+1);return;}if(step.opened){if(document.querySelector(step.opened)&&!this.advancing)this.go(this.index+1);return;}if(step.action!=='play'||!step.until||this.advancing)return;
   const g=this.options.state?.();if(!g||!step.until(g))return;
   this.advancing=true;window.setTimeout(()=>{this.advancing=false;if(!this.disposed)this.go(this.index+1);},500);
  }
  private position():void{
   const step=this.step();
+  const suspended=!!step.suspendForDialog&&!!document.querySelector('dialog[open]');
+  this.layer.hidden=suspended;if(suspended){this.guide.hide();return;}
   const inspection=this.find('#zoomOverlay .zoom-wrap');
   this.layer.style.zIndex=inspection?'260':'';
   const modal=step.action==='play'?inspection??this.find('.duel-overlay .modal'):null;
@@ -166,7 +170,7 @@ export class TutorialSpotlight {
   if(!(step.opened&&document.querySelector(step.opened)))this.options.onStep(this.index);
   this.unlockCleanup();this.unlockCleanup=()=>{};this.unlocked=!step.enableOn;
   const last=this.index===this.steps.length-1,kind=step.action??'next';
-  const next=last?c('完了','Finish','완료'):c('うん、次へ','Got it, next','응, 다음');
+  const next=step.nextLabel??(last?c('完了','Finish','완료'):c('うん、次へ','Got it, next','응, 다음'));
   const hint=kind==='click'?c('光ってるところを押してみて。','Try the glowing spot.','빛나는 곳을 눌러 봐.'):kind==='inspect'?c('カードを右クリックしてみて。','Right-click the card.','카드를 우클릭해 봐.'):kind==='play'?c('やってみよう。ぼくはここで見てるよ。','Give it a try. I’m right here.','직접 해 봐. 난 여기 있을게.'):null;
   const canBack=this.index>0&&this.backTarget()>=0;
   this.bubble.innerHTML=`<div class="zeno-speech-content"><header><span class="zeno-speaker">${c('ゼノ','Zeno','제노')[lang]}</span><span class="tutorial-eyebrow" aria-label="${this.options.label[lang]}">${this.index+1} / ${this.steps.length}</span><button class="lore-button lore-button-quiet tutorial-tour-skip" aria-label="${c('終了','Exit','나가기')[lang]}">×</button></header><h2 class="zeno-speech-topic">${step.title[lang]}</h2><p>${step.body[lang]}</p>${step.prompt?`<strong>${step.prompt[lang]}</strong>`:''}<footer class="tutorial-tour-actions"><button class="lore-button lore-button-quiet tutorial-tour-back" ${canBack?'':'disabled'}>← ${c('戻る','Back','이전')[lang]}</button>${kind==='next'?`<button class="lore-button lore-button-primary tutorial-tour-next" ${this.unlocked?'':'disabled'}>${next[lang]} →</button>`:`<span class="tutorial-tour-hint">${hint![lang]}</span>`}</footer></div>`;

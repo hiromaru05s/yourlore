@@ -56,3 +56,6 @@ body .zeno-speech .welcome-note{font-size:13px;color:#526f80}
 @media(max-width:700px){.welcome-conversation{gap:8px}.welcome-conversation .welcome-spirit{flex-basis:64px;width:64px;height:100px}.welcome-conversation .zeno-speech{--zeno-tail-reach:24px;--zeno-tail-bottom:38px}body .zeno-speech h1{font-size:18px}}
 /* Quiet replies need dark ink on the pale speech paper. */
 body .zeno-speech .lore-button-quiet{color:#426174!important}
+
+body .zeno-speech p{white-space:pre-line}
+.tutorial-tour-layer[hidden]{display:none!important}

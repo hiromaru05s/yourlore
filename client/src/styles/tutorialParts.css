@@ -37,3 +37,6 @@ body .tutorial-parts-hero .tutorial-welcome-speech{grid-column:2;grid-row:2;alig
 .tutorial-basics-shell>.tutorial-parts-hero .tutorial-parts-spirit,
 body .tutorial-basics-shell>.tutorial-parts-hero .tutorial-welcome-speech{grid-row:1}
 @media(max-width:800px){.tutorial-page-heading h1{font-size:23px;margin-bottom:14px}}
+
+/* The guided Companion introduction owns Zeno’s speech during onboarding. */
+.onboarding-book .tutorial-parts-hero{display:none}

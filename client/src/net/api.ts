@@ -1,3 +1,4 @@
+import type {OnboardingStatus} from '../shared/onboarding';
 import {ReadRequests} from './readRequests';
 import type {GiftInbox,GiftClaim} from '../shared/gifts';
 import type { ClearDifficulty, ExperienceReceipt } from '../shared/progression';
@@ -110,13 +111,16 @@ function acquisition(): { ref?: string; source?: string } {
 }
 
 export const api = {
+  onboarding: () => call<OnboardingStatus>('/onboarding',undefined,'GET'),
+  completeBasics: (actions:TutorialAction[]) => call<OnboardingStatus & ClaimResult>('/onboarding/basics',{actions}),
+  finishOnboarding: () => call<OnboardingStatus>('/onboarding/finish',{}),
   gifts: (signal?:AbortSignal) => call<GiftInbox>('/gifts',undefined,'GET',signal),
   readGift: (id:string) => call<{ok:true}>('/gifts/read',{id}),
   claimGifts: (id?:string) => call<GiftClaim>('/gifts/claim',id?{id}:{all:true}),
   collection: () => call<CollectionState>("/collection",undefined,"GET"),
   collectionHistory: () => call<{receipts:CollectionReceipt[]}>("/collection/history",undefined,"GET"),
-  buyStarter: (id:string,requestId:string,count=1,shopDay?:string) => call<CollectionResult>("/collection/buy",{id,requestId,count,shopDay}),
-  drawStarters: (count:number,requestId:string) => call<CollectionResult>("/collection/draw",{count,requestId}),
+  buyStarter: (id:string,requestId:string,count=1,shopDay?:string,tutorial=false) => call<CollectionResult>("/collection/buy",{id,requestId,count,shopDay,...(tutorial?{tutorial:true}:{})}),
+  drawStarters: (count:number,requestId:string,tutorial=false) => call<CollectionResult>("/collection/draw",{count,requestId,...(tutorial?{tutorial:true}:{})}),
   duelRewardResult: (roomId:string) => call<{settled:boolean;amount:number}>('/rewards/result?roomId='+encodeURIComponent(roomId),undefined,'GET'),
   progression: () => call<import('../shared/progression').ProgressionState>('/rewards/progression',undefined,'GET'),
   rerollDaily: (day:string,revision:number,slot=0) => call<import('../shared/progression').ProgressionState>('/rewards/daily/reroll',{day,revision,slot}),
@@ -169,12 +173,12 @@ export const api = {
   claimedRewards: () => call<{ keys: string[]; credits: number }>("/rewards/claimed", undefined, "GET").catch(() => ({ keys: [] as string[], credits: 0 })),
   redeemCoupon: (code: string) => call<ClaimResult>("/rewards/coupon", { code }),
   // 덱 프리셋 저장 (덱 빌더: 5슬롯 + 마켓 알림이)
-  saveDecks: async (decks: DeckStore) => {
+  saveDecks: async (decks: DeckStore, tutorial=false) => {
     if (isLocalDevAccount()) {
       const saved = saveLocalDevDecks(decks);
       return { ok: true as const, decks: saved, deck: saved.list[saved.sel].cards };
     }
-    return call<{ ok: true; decks: DeckStore; deck: string[] }>("/deck", { decks });
+    return call<{ ok: true; decks: DeckStore; deck: string[] }>("/deck", { decks, ...(tutorial?{tutorial:true}:{}) });
   },
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),

@@ -1,9 +1,10 @@
+import {ONBOARDING_BUY,ONBOARDING_DECK,isOnboardingDeck} from '../../client/src/shared/onboarding';
 import {starterCollection,ownsDeck} from '../../client/src/shared/collection';
 import {deckStoreForUser,sanitizeDeck,sanitizeDecks,DECK_SIZE,DECK_SLOTS,DECK_POOL} from '../../client/src/shared/cards';
 import {ownedCosmetics} from '../../client/src/shared/cosmetics';
 import type {Env,SessionUser} from './env';
 /** All five presets and the compatibility cache change in one atomic UPDATE. */
-export async function saveUserDecks(env:Env,user:SessionUser,body:{deck?:unknown;decks?:unknown}){
+export async function saveUserDecks(env:Env,user:SessionUser,body:{deck?:unknown;decks?:unknown;tutorial?:unknown}){
  // Sanitizers repair legacy stored data; they must not turn malformed writes
  // into valid replacement decks. Validate the entire payload before any write.
  const validCards=(value:unknown):value is string[]=>Array.isArray(value)&&value.length===DECK_SIZE&&value.every(id=>typeof id==='string'&&DECK_POOL.includes(id));
@@ -23,7 +24,13 @@ export async function saveUserDecks(env:Env,user:SessionUser,body:{deck?:unknown
  const owned=new Set(ownedCosmetics(row?.sleeves));
  if(store.list.some(slot=>!owned.has(slot.sleeve)||!owned.has(slot.furniture)||!owned.has(slot.effect??'default')||!owned.has(slot.frame??'default')))return null;
  const active=store.list[store.sel];
- await env.DB.prepare('UPDATE users SET decks = ?, deck = ?, sleeve = ?, furniture = ? WHERE id = ?')
-  .bind(JSON.stringify(store),active.cards.join(','),active.sleeve,active.furniture,user.id).run();
+ const update=env.DB.prepare('UPDATE users SET decks = ?, deck = ?, sleeve = ?, furniture = ? WHERE id = ?')
+  .bind(JSON.stringify(store),active.cards.join(','),active.sleeve,active.furniture,user.id);
+ if(body.tutorial===true){
+  if(!isOnboardingDeck(active.cards))return null;
+  const ready=await env.DB.prepare('SELECT request_id FROM collection_transactions WHERE user_id=? AND request_id=?').bind(user.id,ONBOARDING_BUY).first();
+  if(!ready)return null;
+  await env.DB.batch([update,env.DB.prepare('INSERT OR IGNORE INTO rewards(user_id,key,amount,created_at) VALUES(?,?,0,?)').bind(user.id,ONBOARDING_DECK,Date.now())]);
+ }else await update.run();
  return {ok:true as const,decks:store,deck:active.cards,sleeve:active.sleeve,furniture:active.furniture};
 }

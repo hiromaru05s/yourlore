@@ -1,3 +1,7 @@
+import {TutorialSpotlight} from '../ui/tutorialSpotlight';
+import {copy as c} from '../shared/tutorialSteps';
+import {onboardingDeck,isOnboardingDeck} from '../shared/onboarding';
+import {ownsDeck} from '../shared/collection';
 import {installDeckDrag} from '../ui/deckDrag';
 import {deckDisplayArt} from '../ui/deckMasterArt';
 import {prepareDeckCard} from '../ui/deckCardQuality';
@@ -24,7 +28,7 @@ import { t, cardName, cardText, onLangChange, esc } from "../i18n";
 
 const def = (id: string): CardDef => STARTERS[id] ?? DB[id];
 
-export function mountDeck(app: App): Screen {
+export function mountDeck(app: App, options:{tutorial?:boolean}={}): Screen {
   const wrap = document.createElement("div");
   wrap.className = "screen deck-screen";
   wrap.innerHTML = `
@@ -63,6 +67,19 @@ export function mountDeck(app: App): Screen {
   let watching=false,watchPage=0,watchRevision=0;
   let owned:Set<string>|null=null,cosmeticError=false;
   let saved = JSON.stringify(store);
+  let guide:TutorialSpotlight|undefined,lessonIndex=0,deckSaved=false;
+  const draftKey='lore:onboarding:deck:'+app.user?.id;
+  if(options.tutorial){
+    store.list[cur].cards=sortCards(onboardingDeck());
+    try{
+      const draft=JSON.parse(sessionStorage.getItem(draftKey)??'null');
+      if(draft&&Array.isArray(draft.cards)&&ownsDeck(draft.cards,starterCards)&&
+       (isOnboardingDeck(draft.cards)||draft.cards.length===7&&draft.cards.filter((id:string)=>id==='STARTER_TRASH').length===5&&draft.cards.filter((id:string)=>id==='STARTER_CHEST').length===2)){
+        store.list[cur].cards=sortCards(draft.cards);lessonIndex=draft.cards.length===7?3:4;
+      }
+    }catch{}
+  }
+  const saveDraft=()=>{if(options.tutorial&&!deckSaved)try{sessionStorage.setItem(draftKey,JSON.stringify({cards:store.list[cur].cards}));}catch{}};
   let saving = false;
   let dead = false;
   let pending: string | null = null;
@@ -95,12 +112,13 @@ export function mountDeck(app: App): Screen {
   const watch = (): string[] => store.list[cur].watch;
   const countOf = (id: string): number => deck().filter((x) => x === id).length;
 
-  const canAdd=(id:string)=>!saving&&(DECK_POOL.includes(id))&&countOf(id)<Math.min(DECK_MAX_COPIES,isLocalDevAccount()?DECK_MAX_COPIES:starterCards[id]??0);
+  const canAdd=(id:string)=>!saving&&(!options.tutorial||id!=='STARTER_TRASH'&&deck().length===7)&&(DECK_POOL.includes(id))&&countOf(id)<Math.min(DECK_MAX_COPIES,isLocalDevAccount()?DECK_MAX_COPIES:starterCards[id]??0);
   // 알림이 후보 = 마켓/제시에 나올 수 있는 카드 전부 (코스트순)
   const WATCHABLE = [...BUYABLE_POOL].sort((a, b) => DB[a].cost - DB[b].cost || DB[a].name.localeCompare(DB[b].name));
 
   let cancelDrag=()=>{};
   const render = (): void => {
+    saveDraft();
     cancelDrag();
     wrap.dataset.tab=activeTab;
     // 슬롯 탭
@@ -171,7 +189,7 @@ export function mountDeck(app: App): Screen {
       const action=row.querySelector<HTMLButtonElement>('.deck-hand-action');
       if(action){action.dataset.action=pending?'swap':'remove';action.innerHTML=controlIcon(!!pending);action.disabled=saving;
         action.setAttribute('aria-label',`${cardName(c)} · ${pending?loungeText('入れ替え','Replace','교체'):t('deck.remove')}`);
-        action.onclick=()=>{if(saving)return;undo=[...deck()];if(pending){if(!canAdd(pending))return;deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);sortCards(deck());render();};}
+        action.onclick=()=>{if(saving||options.tutorial&&(id!=='STARTER_TRASH'||deck().length!==8||lessonIndex!==2))return;undo=[...deck()];if(pending){if(!canAdd(pending))return;deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);sortCards(deck());render();};}
       if(curEl.children[index]!==row)curEl.insertBefore(row,curEl.children[index]??null);
     });
     for(const [key,row] of handRows)if(!handKeys.has(key)){disposeCardEffects(row);row.remove();handRows.delete(key);}
@@ -260,16 +278,17 @@ export function mountDeck(app: App): Screen {
   useBtn.onclick = () => { void doSave(cur); };
 
   const doSave = async (selected = store.sel): Promise<void> => {
-    if (saving || store.list.some(d => d.cards.length !== DECK_SIZE)) return;
+    if (saving || store.list.some(d => d.cards.length !== DECK_SIZE)||options.tutorial&&!isOnboardingDeck(deck())) return;
     pending = null;saving = true; render();
     msgEl.textContent = "…";
     try {
-      const r = await api.saveDecks({ ...store, sel: selected });
+      const r = await api.saveDecks({ ...store, sel: selected },!!options.tutorial);
       if (dead) return;
       Object.assign(store, r.decks);store.list.forEach(d=>sortCards(d.cards));
       saved = JSON.stringify(store);
       if (app.user) { app.user.decks = r.decks; app.user.deck = r.deck; const active=r.decks.list[r.decks.sel];app.user.sleeve=active.sleeve;app.user.furniture=active.furniture;app.user.effect=active.effect;app.user.frame=active.frame; }
       msgEl.textContent = t("deck.saved");
+      if(options.tutorial){deckSaved=true;try{sessionStorage.removeItem(draftKey);}catch{}}
     } catch (e) {
       msgEl.textContent = (e as Error).message || t("api.fail");
     }
@@ -281,7 +300,7 @@ export function mountDeck(app: App): Screen {
   const dirty = () => JSON.stringify(store) !== saved;
   const beforeUnload = (e: BeforeUnloadEvent) => { if (dirty()) { e.preventDefault(); e.returnValue = ""; } };
   window.addEventListener("beforeunload", beforeUnload);
-  const off = onLangChange(() => app.deck());
+  const off = onLangChange(() => app.deck(options));
 
   const loadOwned=async()=>{
     cosmeticError=false;
@@ -290,18 +309,29 @@ export function mountDeck(app: App): Screen {
     render();
   };
   cancelDrag=installDeckDrag({pool:poolEl,hand:curEl,removeArea:q('deckCandidates'),
-    canRemove:(id,index)=>!saving&&activeTab==='edit'&&index>=0&&deck()[index]===id,
+    canRemove:(id,index)=>!options.tutorial&&!saving&&activeTab==='edit'&&index>=0&&deck()[index]===id,
     remove:(_id,index)=>{undo=[...deck()];deck().splice(index,1);pending=null;render();},editor:q('deckEditSection'),signal:lifecycle.signal,canAdd,full:()=>deck().length>=DECK_SIZE,
     notice:message=>{msgEl.textContent=message;},drop:(id,index)=>{if(!canAdd(id))return;undo=[...deck()];if(deck().length<DECK_SIZE)deck().push(id);else if(index!==null)deck()[index]=id;else{pending=id;render();return;}sortCards(deck());pending=null;render();}});
   const syncVisibility=()=>wrap.classList.toggle('idle-paused',document.hidden);
   document.addEventListener('visibilitychange',syncVisibility,{signal:lifecycle.signal});syncVisibility();
   render();void loadOwned();
+  if(options.tutorial){
+    guide=new TutorialSpotlight(wrap,[
+      {selector:'#deckCur',title:c('初期デッキを作ろう','Build a starting deck','시작 덱을 만들자'),body:c('初期デッキは、デュエルに持っていく最初のカードだよ。自由に選ぶ8枚と、固定のアチューン1枚で合計9枚。この実習では、使用中の枠をカル6枚・宝箱2枚から編集するよ。保存するまでは元のデッキは変わらないよ。','Your starting deck is the cards you bring into a duel: eight chosen cards plus one fixed Attune. For this exercise, edit the active slot from six Culls and two Chests. Your saved deck stays unchanged until you confirm.','시작 덱은 듀얼에 가져가는 첫 카드야. 자유롭게 고르는 8장과 고정 어튠 1장으로 총 9장이지. 이번 실습에서는 사용 중인 슬롯을 컬 6장·보물상자 2장부터 편집해. 확정 전까지 저장된 덱은 바뀌지 않아.')},
+      {selector:'#deckCur .is-fixed',title:c('アチューンは固定の1枚','Attune is fixed','어튠은 고정 1장'),body:c('左端のアチューンは外せないよ。残り8枚を、所持しているスターターから選ぶんだ。対戦中にマーケットで買うカードとは別だよ。','The leftmost Attune cannot be removed. Choose the other eight from your owned starters. These are separate from cards bought in a duel’s market.','맨 왼쪽 어튠은 뺄 수 없어. 나머지 8장은 보유한 스타터에서 골라. 듀얼 중 마켓에서 사는 카드와는 달라.')},
+      {selector:'#deckCur [data-card="STARTER_TRASH"] .deck-hand-action',action:'click',waitFor:()=>deck().length===7,title:c('カルを1枚外そう','Remove one Cull','컬 1장을 빼 보자'),body:c('カルの下の「−」を押して、1枚外してみよう。デッキから外しても、所持カードはなくならないよ。','Press − under one Cull. Removing it from your deck does not remove it from your collection.','컬 아래 −를 눌러 1장을 빼 봐. 덱에서 빼도 보유 카드는 없어지지 않아.')},
+      {selector:'#deckPool .deck-pool-tile:not([data-deck-card="STARTER_TRASH"]) .deck-card-action:not(:disabled)',focus:'#deckCandidates',action:'click',waitFor:()=>isOnboardingDeck(deck()),title:c('別のカードを加えよう','Add another card','다른 카드를 넣자'),body:c('候補から、カル以外の所持カードを1枚選んで「＋」を押そう。ガチャやショップで手に入れたカードも、ここから組み込めるよ。','Choose one owned card other than Cull and press +. Cards obtained from gacha and the shop can be added here.','후보에서 컬 이외의 보유 카드 1장을 골라 +를 눌러. 뽑기나 상점에서 얻은 카드도 여기서 넣을 수 있어.')},
+      {selector:'#save',action:'click',waitFor:()=>deckSaved,title:c('デッキを確定しよう','Confirm your deck','덱을 확정하자'),body:c('9枚そろったね。「デッキを確定」を押して保存しよう。このデッキで次のデュエルを始められるよ。','All nine cards are ready. Press Confirm deck to save and use it in your next duel.','9장이 모였네. 덱 확정을 눌러 저장하자. 다음 듀얼에서 이 덱을 쓸 수 있어.')},
+      {title:c('きみだけのスターターデッキが完成！','Your own starter deck is ready!','너만의 스타터 덱 완성!'),body:c('きみだけのスターターデッキが完成したよ！ カードが増えたら、またここで自由に組み替えてみてね。','Your own starter deck is complete! Return here to customize it as your collection grows.','너만의 스타터 덱이 완성됐어! 카드가 늘어나면 여기서 자유롭게 바꿔 봐.')},
+    ],{label:c('初期デッキの編成','Starting deck','시작 덱 편성'),startIndex:lessonIndex,onStep:i=>{lessonIndex=i;},previousStep:()=>-1,rewind:()=>{},onComplete:()=>app.onboarding(),onExit:()=>app.home()});
+  }
   return {
     beforeLeave: async () => {
       if (saving) return false;
+      if(options.tutorial){saveDraft();return true;}
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { lifecycle.abort();disposeCardEffects(wrap); dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { guide?.destroy();lifecycle.abort();disposeCardEffects(wrap); dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

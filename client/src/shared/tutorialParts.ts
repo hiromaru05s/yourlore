@@ -8,6 +8,10 @@ export type TourPlacement='bottom-left'|'bottom-right'|'top-left'|'top-right';
 export interface TutorialTourStep {
  /** Element that receives the tight highlight ring (and the click target for action:'click'). */
  selector?:string;
+ /** Menu tutorials wait for a confirmed mutation, not merely a button press. */
+ waitFor?:()=>boolean;
+ allow?:string;
+ suspendForDialog?:boolean;
  /** Several elements whose combined bounds form one highlight (e.g. a whole side of the board). */
  region?:string[];
  /** A larger area kept sharp and undimmed around the target, typically an open popup. */
@@ -29,7 +33,7 @@ export interface TutorialTourStep {
  enableOn?:{selector:string;event:string};
  /** Draw a separate ring around each region element instead of one around them all. */
  ringEach?:boolean;
- title:Copy;body:Copy;prompt?:Copy;placement?:TourPlacement;
+ title:Copy;body:Copy;prompt?:Copy;nextLabel?:Copy;placement?:TourPlacement;
 }
 
 
@@ -42,7 +46,7 @@ const openHand=()=>step('#hand',c('手札','Hand','손패'),c('下の手札を�
 const playCard=(id:string,body:Copy,until:(g:GameState)=>boolean):TutorialTourStep=>step(hand(id),c('カードを使う','Play a card','카드 사용'),body,{pointer:hand(id),dragTo:'#meRow .zone-mon',action:'play',until});
 export const TUTORIAL_PARTS:TutorialPartMeta[]=[{kind:'board',title:c('デュエルの基本','Duel basics','듀얼의 기본'),intro:c('召喚・攻撃・購入・ターンの流れを、自分で操作して覚えよう。','Learn summoning, attacking, buying and turns by playing.','직접 소환하고 공격하고 구매하며 턴의 흐름을 익혀 봐.')}];
 export const PART_TOURS:Partial<Record<number,TutorialTourStep[]>>={0:[
- step('#portraitOpp .pt-hp',c('勝利条件','Goal','승리 조건'),c('やあ、ゼノだよ。上にいる相手の体力を0にしたら勝ちだよ。','Hi, I’m Zeno. Reduce the opponent’s health above to zero to win.','안녕, 난 제노야. 위쪽 상대의 체력을 0으로 만들면 이겨.')),
+ step('#portraitOpp .pt-hp',c('勝利条件','Goal','승리 조건'),c('やあゼノだよ。\nLOREのデュエルでは、上にいる相手の体力を０にすると勝ちだよ。','Hi, I’m Zeno. In a LORE duel, reduce the opponent’s health above to zero to win.','안녕, 난 제노야. LORE 듀얼에서는 위쪽 상대의 체력을 0으로 만들면 이겨.')),
  step('#portraitMe .pt-hp',c('自分の体力','Your health','내 체력'),c('下がきみ。先攻は体力40、後攻は45で始まるよ。','You are below. The first player starts at 40 health, the second at 45.','아래가 너야. 선공은 체력 40, 후공은 45로 시작해.')),
  step('#endBtn',c('ターンの流れ','Turns','턴의 흐름'),c('お互い交互にターンを進めるよ。この「END TURN」を押すと、自分のターンを終了できるよ。ボタンの周りの光で、残り時間も確認できるよ。','Players take turns. Press this END TURN button to finish your turn. The light around the button shows how much time you have left.','서로 번갈아 턴을 진행해. 이 END TURN 버튼을 누르면 내 턴을 끝낼 수 있어. 버튼 둘레의 빛으로 남은 시간도 확인할 수 있어.')),
  step('.market-counter',c('マーケット','Markets','마켓'),c('中央はカードを買うマーケット。買い足すことで、対戦中のデッキを強くできるよ。','Buy cards from the markets in the middle to strengthen your deck during the duel.','가운데 마켓에서 카드를 사서 대전 중 덱을 강화할 수 있어.')),

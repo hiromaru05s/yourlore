@@ -7,6 +7,7 @@ import { BOT_FIRST_CLEAR_EXP } from '../../client/src/shared/progression';
 import {guardRequest} from "./requestGuard";
 import type { Env } from "./env";
 import { corsHeaders, getUser, getSessionIdentity, handleAuth } from "./auth";
+import {handleOnboarding} from './onboarding';
 import {handleCollection} from "./collection";
 import {saveUserDecks} from "./decks";
 import { getRating, handleRank } from "./rank";
@@ -56,6 +57,7 @@ export default {
       const user = await getUser(env, req);
       return handleRank(env, req, path.slice(4), user); // strip "/api"
     }
+    if(path==='/api/onboarding'||path.startsWith('/api/onboarding/'))return handleOnboarding(env,req,path,await getUser(env,req));
     if(path === "/api/collection" || path.startsWith("/api/collection/")) return handleCollection(env,req,path,await getUser(env,req));
     if (path === '/api/gifts' || path.startsWith('/api/gifts/')) return handleGifts(env,req,path.slice(4));
     // ---- credit rewards ----

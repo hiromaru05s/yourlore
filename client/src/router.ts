@@ -28,6 +28,8 @@ import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
 import { mountProfile, type ProfileTab } from "./screens/profile";
 import { mountFriends } from "./screens/friends";
+import {mountOnboarding,basicsPendingKey} from './screens/onboarding';
+import type {TutorialAction} from './shared/tutorialLesson';
 import { mountShop } from "./screens/shop";
 import { mountDeck } from "./screens/deck";
 import { LOCAL_GUEST_KEY, canUseLocalGuest, loadLocalDevDecks, loadLocalGuestProfile } from "./dev/localAccount";
@@ -162,8 +164,10 @@ export class App {
     if(!homeReady)this.home();
     if(!this.user || this.user.id==='local-guest-user')return;
     const id=this.user.id,revision=this.screenRevision;
-    void api.tutorialStatus().then(status=>{
+    void Promise.all([api.tutorialStatus(),api.onboarding()]).then(([status,journey])=>{
       if(this.user?.id!==id || this.screenRevision!==revision)return;
+      let pending=false;try{pending=!!localStorage.getItem(basicsPendingKey(id));}catch{}
+      if(pending||journey.stage!=='basics'&&journey.stage!=='complete'){this.onboarding();return;}
       if(!status.offered)this.swap(()=>mountTutorialWelcome(this), 'tutorial');
       else if(homeReady)this.checkGraphics('home',revision);
     }).catch(()=>{
@@ -201,8 +205,9 @@ export class App {
   profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab), "profile"); }
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this), "friends"); }
   settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
-  shop(): void { setPresence("menu"); this.swap(() => mountShop(this), "shop"); }
-  deck(): void { setPresence("menu"); this.swap(() => mountDeck(this), "deck"); }
+  onboarding(actions?:TutorialAction[]):void {setPresence("menu");this.swap(()=>mountOnboarding(this,actions),"tutorial");}
+  shop(options:Parameters<typeof mountShop>[1]={}): void { setPresence("menu"); this.swap(() => mountShop(this,options), "shop"); }
+  deck(options:Parameters<typeof mountDeck>[1]={}): void { setPresence("menu"); this.swap(() => mountDeck(this,options), "deck"); }
   onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false, difficulty?: BotDifficulty): void {
     setPresence("online");
     aCapture("game_start", { mode: "online" });

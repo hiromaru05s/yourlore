@@ -1,3 +1,5 @@
+import {TutorialSpotlight} from '../ui/tutorialSpotlight';
+import {copy as c} from '../shared/tutorialSteps';
 import type {App,Screen} from '../router';
 import {api} from '../net/api';
 import {getLang,onLangChange} from '../i18n';
@@ -10,7 +12,7 @@ import {TUT_STEPS,TUTORIAL_CHAPTERS,TUTORIAL_TOTAL} from '../shared/tutorialStep
 import {tutorialRuleSections} from '../shared/tutorialNotes';
 import {tutorialPartKey} from '../shared/tutorialParts';
 import {mountSeekerBook} from '../ui/seekerBook';
-export interface TutorialOptions {tab?:'basics'|'book';justCompleted?:boolean;}
+export interface TutorialOptions {tab?:'basics'|'book';justCompleted?:boolean;onboarding?:boolean;}
 import '../styles/tutorialAcademy.css';
 import '../styles/homeTutorial.css';
 import '../styles/tutorialParts.css';
@@ -67,7 +69,8 @@ export function mountLegacyTutorial(app:App):Screen {
 
 /** One short, continuous first duel. Advanced rules remain available on demand. */
 export function mountTutorial(app:App,options:TutorialOptions={}):Screen {
- const wrap=document.createElement('div');wrap.className='screen tut-screen tutorial-parts-screen';
+ const wrap=document.createElement('div');wrap.className='screen tut-screen tutorial-parts-screen'+(options.onboarding?' onboarding-book':'');
+ let disposed=false,guide:TutorialSpotlight|undefined;
  let completed=false,book:ReturnType<typeof mountSeekerBook>|undefined;
  let selected=options.tab??'basics';
  try{completed=localStorage.getItem(tutorialPartKey(0,app.user?.id))==='1';}catch{}
@@ -95,6 +98,18 @@ export function mountTutorial(app:App,options:TutorialOptions={}):Screen {
  wrap.querySelector<HTMLButtonElement>('#single')?.addEventListener('click',()=>app.botGame('easy'));
  wrap.querySelector<HTMLButtonElement>('#rules')!.onclick=()=>{selectTab('book');book?.openReference();};
  wrap.querySelector<HTMLButtonElement>('#back')!.onclick=()=>app.home();
+ if(options.onboarding){
+  const finish=async()=>{try{await api.finishOnboarding();if(!disposed)app.botGame('easy');}catch(error){if(disposed)return;greeting.textContent=(error as Error).message;const retry=document.createElement('button');retry.className='lore-button';retry.textContent=text('再試行','Retry','재시도');retry.onclick=()=>{retry.disabled=true;void finish();};greeting.append(retry);}};
+  guide=new TutorialSpotlight(wrap,[
+   {selector:'#tutorial-tab-book',title:c('シーカー修練書','Seeker’s Companion','시커 수련서'),body:c('シーカー修練書に細かいルールなどがあるよ。','The Seeker’s Companion has detailed rules and more.','시커 수련서에 자세한 규칙 등이 있어.')},
+   {title:c('シングルモードで遊ぼう','Try Single mode','싱글 모드를 해 보자'),body:c('どんどん対戦しながらデュエルについての理解を深めよう！','Keep playing to deepen your understanding of duels!','계속 대전하면서 듀얼에 대한 이해를 넓혀 보자!'),prompt:c('まずはシングルモードで遊んでみよう。','Start with a Single-mode duel.','먼저 싱글 모드를 해 보자.'),nextLabel:c('シングルで遊ぶ','Play Single','싱글 플레이')},
+  ],{label:c('次のデュエルへ','Your next duel','다음 듀얼로'),onStep:()=>{},previousStep:()=>-1,rewind:()=>{},onComplete:()=>void finish(),onExit:()=>app.home()});
+ }
+ // Resume is account-backed; this browser’s local completion flag is only a display hint.
+ if(!options.onboarding&&app.user&&app.user.id!=='local-guest-user')void api.onboarding().then(status=>{
+  if(disposed||status.stage==='basics'||status.stage==='complete')return;
+  const resume=document.createElement('button');resume.className='lore-button lore-button-primary';resume.id='continueJourney';resume.textContent=text('ガチャ・デッキ作りの続きを進める','Continue shop & deck tutorial','뽑기·덱 만들기 이어서');resume.onclick=()=>app.onboarding();wrap.querySelector('.tutorial-basics-actions')!.prepend(resume);
+ }).catch(()=>{});
  const unsub=onLangChange(()=>app.tutorial({...options,tab:selected}));
- return{destroy(){unsub();spirit.destroy();book?.destroy();wrap.remove();}};
+ return{destroy(){disposed=true;guide?.destroy();unsub();spirit.destroy();book?.destroy();wrap.remove();}};
 }
