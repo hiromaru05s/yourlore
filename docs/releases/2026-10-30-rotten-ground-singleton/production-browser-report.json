@@ -1,0 +1,10 @@
+{
+  "origin": "https://yourlore.xyz",
+  "checks": [
+    "ROTTEN_GROUND/ja",
+    "ROTTEN_GROUND/ko",
+    "ROTTEN_GROUND/en"
+  ],
+  "errors": [],
+  "fixture": "API responses only; real built app navigation, search and detail views"
+}
