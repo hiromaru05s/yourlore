@@ -80,7 +80,7 @@ await test('coupon cap remains one under concurrent redemption',async()=>{
 await test('repeatable coupon pays 30000 each time and preserves ordinary single-use codes',async()=>{
  const f=await creditFixture();try{
   f.sqlite.exec("INSERT INTO coupons(code,amount,repeatable) VALUES('QA_REPEATABLE',30000,1),('ONCE',100,0)");
-  for(let i=0;i<2;i++){const r=await claim(f,'/rewards/coupon',{code:' lore30000 '});assert.equal(r.status,200);assert.equal((await r.json()).amount,30000);}
+  for(let i=0;i<2;i++){const r=await claim(f,'/rewards/coupon',{code:' qa_repeatable '});assert.equal(r.status,200);assert.equal((await r.json()).amount,30000);}
   const concurrent=await Promise.all(Array.from({length:3},()=>claim(f,'/rewards/coupon',{code:'QA_REPEATABLE'})));assert(concurrent.every(r=>r.status===200));
   assert.equal(f.sqlite.prepare("SELECT credits FROM users WHERE id='qa-a'").get().credits,150000);
   assert.equal(f.sqlite.prepare("SELECT claim_count FROM coupon_claims WHERE code='QA_REPEATABLE'").get().claim_count,5);
