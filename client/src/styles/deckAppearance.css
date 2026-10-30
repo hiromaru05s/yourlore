@@ -1,0 +1,5 @@
+/* One combined sample above the options, with a stable centered card surface. */
+.deck-appearance-preview{display:flex;flex-direction:column;align-items:center;gap:10px;margin:16px 0 24px;min-width:0}
+.deck-appearance-preview figcaption{font-size:12px;color:var(--lore-text-muted,#adc3d3)}
+.deck-appearance-preview>.card{display:block;flex:none;position:relative;width:128px;height:200px;--cw:128px;--ch:200px;margin:0;cursor:zoom-in}
+.deck-appearance-preview>.card:focus-visible{outline:2px solid #b8deee;outline-offset:5px}
