@@ -1,0 +1,28 @@
+{
+  "origin": "https://yourlore.xyz",
+  "checks": [
+    {
+      "width": 1280,
+      "remove": true,
+      "undo": true,
+      "outside": true,
+      "escape": true,
+      "fixed": true,
+      "add": true,
+      "replace": true,
+      "fixtureSave": true
+    },
+    {
+      "width": 390,
+      "remove": true,
+      "undo": true,
+      "outside": true,
+      "escape": true,
+      "fixed": true,
+      "add": true,
+      "replace": true,
+      "fixtureSave": true
+    }
+  ],
+  "errors": []
+}

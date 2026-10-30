@@ -1,0 +1,148 @@
+{
+  "origin": "http://127.0.0.1:5198",
+  "cwd": "/Users/hiromaru05s/.codex/worktrees/rotten-ground-singleton/LORE_TCG",
+  "fixture": "API responses only; production app styles, art and zoom inspector",
+  "count": 3,
+  "mismatches": [],
+  "viewports": [
+    {
+      "lang": "ja",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "sections": 2,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 942,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "sections": 2,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 1595,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 1142,
+          "scrollHeight": 1142,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "lang": "ko",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "sections": 2,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 942,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "sections": 2,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 1479,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 1026,
+          "scrollHeight": 1026,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "sections": 2,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 942,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "sections": 2,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 1589,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 1136,
+          "scrollHeight": 1136,
+          "overflowY": "visible"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}
