@@ -1,0 +1,43 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-10-30T09:35:56.672Z",
+  "day": "2026-10-30",
+  "giftId": "daily-login-2026-10-30",
+  "amount": 10000,
+  "expiresAt": 253402300799999,
+  "resetsAt": 1793372400000,
+  "concurrentClaimAmounts": [
+    0,
+    10000
+  ],
+  "credits": 10000,
+  "coupons": [
+    {
+      "code": "LORE30000",
+      "status": 410
+    },
+    {
+      "code": "LORE10",
+      "status": 410
+    },
+    {
+      "code": "WELCOME100",
+      "status": 410
+    }
+  ],
+  "records": {
+    "deliveries": 1,
+    "receipts": 1,
+    "credits": 10000
+  },
+  "activeCoupons": 0,
+  "scope": "Actual production Worker, D1 and HTTP session; one temporary QA account, no real player account.",
+  "cleanup": {
+    "users": 0,
+    "sessions": 0,
+    "rewards": 0,
+    "deliveries": 0,
+    "days": 0,
+    "coupons": 0
+  }
+}
