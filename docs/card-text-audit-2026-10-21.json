@@ -541,7 +541,7 @@
         "ko"
       ],
       "definitionSha256": "16ec52a28f82e41e9c7184dfe1133c63e7b03f14ac75465fa95d8c43e240468d",
-      "textSha256": "6e2849c73a359c8743b3d6e392438d07b13445ab3735a3496eb35378d6d5c36f",
+      "textSha256": "7782c33e0eac370d7c5fe5d0cb40cb93b278fc37f718b86ebb9cd3c5a5cdcfd9",
       "hooks": {
         "act": "destroyMon"
       },
@@ -551,6 +551,12 @@
         "en": "【On Cast】Choose up to 1 monster on either field with purchase cost 8 or less and destroy it."
       },
       "after": {
+        "ja": "【発動条件】どちらかの場に購入コスト8以下のモンスターがいる。\n\n【発動時】両方の場から購入コスト8以下のモンスターを1体まで選んで破壊する。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 구매 코스트 8 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드에서 구매 코스트 8 이하 몬스터를 최대 1체 선택해 파괴한다.",
+        "en": "【Play Requirement】There is a monster with purchase cost 8 or less on either field.\n\n【On Cast】Choose up to 1 monster on either field with purchase cost 8 or less and destroy it."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】両方の場から購入コスト8以下のモンスターを1体まで選んで破壊する。",
         "ko": "【발동 시】양쪽 필드에서 구매 코스트 8 이하 몬스터를 최대 1체 선택해 파괴한다.",
         "en": "【On Cast】Choose up to 1 monster on either field with purchase cost 8 or less and destroy it."
@@ -723,7 +729,7 @@
         "ko"
       ],
       "definitionSha256": "326804c07c8696bd1f4440832a2daf4f5174d22d29d2afc8cbe06368cdc9c3ce",
-      "textSha256": "0ce43f2cad88496f3d5f4e37866712ac9cd6cc5b9aeeca39d0449e41e80bf321",
+      "textSha256": "2956bde463b127707e4aad5646a5e39926851617e8ddae14061085b6bd644726",
       "hooks": {
         "onSummon": "preyExec"
       },
@@ -733,6 +739,12 @@
         "en": "【On Summon】Automatically destroy the enemy monster of purchase cost 3–4 with the highest ATK plus printed HP; ties use field order. If destroyed, your max mana +1."
       },
       "after": {
+        "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
+        "ko": "【소환 시】상대의 오라가 없는 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
+        "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and printed HP (ties use field order). If it is destroyed, your max mana +1."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【召喚時】相手の購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
         "ko": "【소환 시】상대의 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
         "en": "【On Summon】Automatically destroy the enemy monster of purchase cost 3–4 with the highest ATK plus printed HP; ties use field order. If destroyed, your max mana +1."
@@ -1320,7 +1332,7 @@
         "ko"
       ],
       "definitionSha256": "d221c4a0dcca51d4303326c3ed7306009d82fbdf46e4b34ddc75f764041d069a",
-      "textSha256": "a1b676b80941d1ce8a4a7a6155f741f1b79b548259691d11629565688a4c92a3",
+      "textSha256": "b5a05d754abf2aa5e527664c9fce1620a96fe6f10c3aa1c83a6296591ce4726c",
       "hooks": {},
       "before": {
         "ja": "【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
@@ -1328,6 +1340,12 @@
         "en": "【On Cast】If the opponent has at least 1 Brand counter, give them 3 additional Brand counters."
       },
       "after": {
+        "ja": "【発動条件】相手に烙印カウンターが1個以上ある。\n\n【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
+        "ko": "【발동 조건】상대에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】상대에게 낙인 카운터가 1개 이상 있으면 상대에게 낙인 카운터 3개 추가한다.",
+        "en": "【Play Requirement】The opponent has at least 1 Brand counter.\n\n【On Cast】If the opponent has at least 1 Brand counter, give them 3 additional Brand counters."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
         "ko": "【발동 시】상대에게 낙인 카운터가 1개 이상 있으면 상대에게 낙인 카운터 3개 추가한다.",
         "en": "【On Cast】If the opponent has at least 1 Brand counter, give them 3 additional Brand counters."
@@ -2492,7 +2510,7 @@
         "ko"
       ],
       "definitionSha256": "3bad95ee6963cb1a684007c75826c1fe6ea5b941317ab46ee417b9026f18a5ad",
-      "textSha256": "e1ab0cc5355da35e867daaf6870c5cf98547fcb785f1b016ce579418018ad2b6",
+      "textSha256": "18e52eda0359f0142c671164ae599396f6e4f0e244704afc680ba0da31ea6704",
       "hooks": {},
       "before": {
         "ja": "【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
@@ -2500,6 +2518,12 @@
         "en": "【On Cast】Deal 6 damage to the opponent for each tribal monster in their deck, graveyard, and field combined."
       },
       "after": {
+        "ja": "【発動条件】相手のデッキ・墓地・場に、種族を持つモンスターがいる。\n\n【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
+        "ko": "【발동 조건】상대의 덱·묘지·필드에 종족이 있는 몬스터가 있다.\n\n【발동 시】상대의 덱·묘지·필드의 종족을 가진 몬스터 1장당 상대 플레이어에게 6 데미지를 준다.",
+        "en": "【Play Requirement】The opponent has a monster with a tribe in their deck, graveyard, or field.\n\n【On Cast】Deal 6 damage to the opponent for each tribal monster in their deck, graveyard, and field combined."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
         "ko": "【발동 시】상대의 덱·묘지·필드의 종족을 가진 몬스터 1장당 상대 플레이어에게 6 데미지를 준다.",
         "en": "【On Cast】Deal 6 damage to the opponent for each tribal monster in their deck, graveyard, and field combined."
@@ -2820,7 +2844,7 @@
         "ko"
       ],
       "definitionSha256": "c774b35eba03119905e2a23fa7555d12448aab4f9e091049db1d19d53f479c22",
-      "textSha256": "9b53e39ad952fcab35fd2d6191e7e715e31f43b7bd1764eddd4e1cc4f23cd138",
+      "textSha256": "70c138d1f55f37ebd7d34966974be8fcf24821b4cd873f95ed40120ca7d48887",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
@@ -2828,6 +2852,12 @@
         "en": "【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
       },
       "after": {
+        "ja": "【発動条件】相手の場にモンスターがいる。\n\n【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
+        "ko": "【발동 조건】상대의 필드에 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
+        "en": "【Play Requirement】The opponent controls a monster.\n\n【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
         "ko": "【발동 시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
         "en": "【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
@@ -2864,7 +2894,7 @@
         "ko"
       ],
       "definitionSha256": "6aa3abbe1d6df32c850a6a9ca1dc37fb8713b4a7c8eb379804255527ebadda5e",
-      "textSha256": "268429f9133479be300592661e0f35bc724d130bc87fcc3a7faeeea72a94bf05",
+      "textSha256": "b41f8c4d127f65f978181c0e5e5f21fd6a5f2f2aca45e3e817f2d04e5c289f28",
       "hooks": {
         "onSummon": "originMimic"
       },
@@ -2874,6 +2904,12 @@
         "en": "【On Summon】This monster gets +2 ATK and +2 HP per Mimic-family monster on your field or in your graveyard or Rift, including itself (lasting)."
       },
       "after": {
+        "ja": "【召喚時】この個体を除く、自分の場・墓地・リフトの「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続）。同名の別個体は数える。",
+        "ko": "【소환 시】이 개체를 제외한 자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2·체력 +2(지속). 같은 이름의 다른 개체는 센다.",
+        "en": "【On Summon】This monster gains +2 ATK and +2 HP (lasting) for each other Mimic-family monster in your field, graveyard, and Rift. Exclude this individual; count other copies with the same name."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【召喚時】自分の場・墓地・リフトにある「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続、自身を含む）。",
         "ko": "【소환 시】자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2, 체력 +2(지속, 자신 포함).",
         "en": "【On Summon】This monster gets +2 ATK and +2 HP per Mimic-family monster on your field or in your graveyard or Rift, including itself (lasting)."
@@ -3087,7 +3123,7 @@
         "ko"
       ],
       "definitionSha256": "4d691560efff96717b67469cf5f7526d68f8845ad1873c8928dd8c1c0001b2ca",
-      "textSha256": "42d914aa9fe983a40094c5d814dc1a0bf285252a1f6b35c2a3230b7665e0d217",
+      "textSha256": "eebf4906502098309e74bbd2819e85e781290ce13870644088d3982251195c51",
       "hooks": {
         "act": "destroyMon"
       },
@@ -3097,6 +3133,12 @@
         "en": "【On Cast】Automatically destroy the monster on either field with ATK 2 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
       },
       "after": {
+        "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 공격력 2 이하의 몬스터가 있다(상대의 오라 보유 몬스터는 제외).\n\n【발동 시】양쪽 필드의 공격력 2 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
+        "en": "【Play Requirement】There is a monster with ATK 2 or less on either field (excluding enemy monsters with Aura).\n\n【On Cast】Automatically destroy the monster on either field with ATK 2 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
         "ko": "【발동 시】양쪽 필드의 공격력 2 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
         "en": "【On Cast】Automatically destroy the monster on either field with ATK 2 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
@@ -3109,7 +3151,7 @@
         "ko"
       ],
       "definitionSha256": "777893a188a8ad3b83396011f62111d49bc60326ca9f4cc1a40c3b7ec30bba0c",
-      "textSha256": "93ce6d653ea98a6cb43ce2486d6a1379fc88fbee7054c372833b86d59bc46edb",
+      "textSha256": "5eb81e51d1497f193c0ee5182557c109e1a9b95a6faf39b88a2edd7bac9290b1",
       "hooks": {
         "act": "destroyMon"
       },
@@ -3119,6 +3161,12 @@
         "en": "【On Cast】Destroy all monsters on either field with ATK 2 or less."
       },
       "after": {
+        "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる。\n\n【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 공격력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
+        "en": "【Play Requirement】There is a monster with ATK 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with ATK 2 or less."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
         "ko": "【발동 시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
         "en": "【On Cast】Destroy all monsters on either field with ATK 2 or less."
@@ -3131,7 +3179,7 @@
         "ko"
       ],
       "definitionSha256": "ede844bc4a12d4392fe3698e578734dc78bd2598cec0bbaf9ba7b514a301a757",
-      "textSha256": "6fc171580aa10cd648ed55d48401d45b30c7a1e367c1b2a95e9e3751b11bdb19",
+      "textSha256": "548f7ffe630419f199097114355f8c1da3a5b1425f4738375d09bfc811cac009",
       "hooks": {
         "act": "destroyMon"
       },
@@ -3141,6 +3189,12 @@
         "en": "【On Cast】Automatically destroy the monster on either field with current HP 3 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
       },
       "after": {
+        "ja": "【発動条件】どちらかの場に現在体力3以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の現在体力3以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 현재 체력 3 이하의 몬스터가 있다(상대의 오라 보유 몬스터는 제외).\n\n【발동 시】양쪽 필드의 현재 체력 3 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
+        "en": "【Play Requirement】There is a monster with current HP 3 or less on either field (excluding enemy monsters with Aura).\n\n【On Cast】Automatically destroy the monster on either field with current HP 3 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】両方の場の現在体力3以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
         "ko": "【발동 시】양쪽 필드의 현재 체력 3 이하 몬스터 중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(상대 아우라 보유 제외, 동률은 상대 우선·필드 순서).",
         "en": "【On Cast】Automatically destroy the monster on either field with current HP 3 or less and the highest ATK plus max HP, excluding enemy Aura monsters; ties favor the enemy field, then field order."
@@ -3153,7 +3207,7 @@
         "ko"
       ],
       "definitionSha256": "dc8b08975d2a685b8c9117063383cd3c0716afec1db5a3ff2c64b8a0d58d4899",
-      "textSha256": "7508117bf5325ad40e7d0b8b6d0abf31c55e50eadce5c1ff7d6c59781c8bf46b",
+      "textSha256": "a739baede9edd69f43aea6d98f525302a76cc2c23c8610b765727fb37f71bb09",
       "hooks": {
         "act": "destroyMon"
       },
@@ -3163,6 +3217,12 @@
         "en": "【On Cast】Destroy all monsters on either field with current HP 2 or less."
       },
       "after": {
+        "ja": "【発動条件】どちらかの場に現在体力2以下のモンスターがいる。\n\n【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 현재 체력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
+        "en": "【Play Requirement】There is a monster with current HP 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with current HP 2 or less."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
         "ko": "【발동 시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
         "en": "【On Cast】Destroy all monsters on either field with current HP 2 or less."
@@ -3343,7 +3403,7 @@
         "ko"
       ],
       "definitionSha256": "cf725f6688e774c393e023dc364e083bb4e82c27736aa9a5b390fdc38970c28f",
-      "textSha256": "3fc3308c52bff5e21a6daf2630c5023e53e25e6894176b400177ed8e3a569815",
+      "textSha256": "0c76a757bafa165131d0a77f0e915831af31bbe3f24403c5e5fd4ad5b79379a9",
       "hooks": {
         "act": "incubate"
       },
@@ -3353,6 +3413,12 @@
         "en": "【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 5, to a minimum of 0. If it reaches 0, hatch it immediately."
       },
       "after": {
+        "ja": "【発動条件】自分の場に、孵化までの残りターンが1以上ある卵がいる。\n\n【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを5減らす（最低0）。0になれば直ちに孵化する。",
+        "ko": "【발동 조건】자신의 필드에 부화까지 남은 턴이 1 이상인 알이 있다.\n\n【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 5 감소(최저 0). 0이 되면 즉시 부화한다.",
+        "en": "【Play Requirement】You control an Egg with at least 1 turn remaining until hatching.\n\n【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 5, to a minimum of 0. If it reaches 0, hatch it immediately."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを5減らす（最低0）。0になれば直ちに孵化する。",
         "ko": "【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 5 감소(최저 0). 0이 되면 즉시 부화한다.",
         "en": "【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 5, to a minimum of 0. If it reaches 0, hatch it immediately."
@@ -3468,7 +3534,7 @@
         "ko"
       ],
       "definitionSha256": "12fa33bfd819becad4ebc3e78635e839c5874723e957883a2a0ab2835dcbc167",
-      "textSha256": "e9efc0d57a0ddf9630bbd7cd8baa417111f746827b4a6c5d0d25c01ea939ed01",
+      "textSha256": "1ebd18d24bd759d05101f32132d87336108debc02119cf5d027e7514296e66f7",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
@@ -3476,6 +3542,12 @@
         "en": "【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
       },
       "after": {
+        "ja": "【発動条件】自分の場のモンスターが7体未満。\n\n【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
+        "ko": "【발동 조건】자신의 필드의 몬스터가 7체 미만이다.\n\n【발동 시】자신에게 6 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
+        "en": "【Play Requirement】You control fewer than 7 monsters.\n\n【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
         "ko": "【발동 시】자신에게 6 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
         "en": "【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
@@ -3852,7 +3924,7 @@
       "status": "balance-v60-reworked",
       "changedLocales": [],
       "definitionSha256": "88a9a8a988eaf6026a18dcca39e39b2d6a73fbed6a7b2be0a98ab0895c4fe373",
-      "textSha256": "aafa2764ddf398a3635fab7e142715c1fc9b61b984ed8296b038dc0ef5bb6d4c",
+      "textSha256": "bfaa94c292c011e04283fa6a6f13021c34ebb33ab49617be1389d042f42ffdf6",
       "hooks": {
         "ench": "fateWheel"
       },
@@ -3862,6 +3934,12 @@
         "en": "【After Seeing the Roll】After seeing your dice results, you may reroll the dice for that action, once during each of your turns.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
       },
       "after": {
+        "ja": "【出目を確認した後】自分のターン中、カードの使用・攻撃・効果の選択によって自分が振ったダイスの結果を確認した後、その行動を巻き戻してダイスを振り直せる（自分の各ターン1回）。その行動で複数のダイスを振った場合は、全て振り直す。振り直さず結果を確定した場合、この回数を消費しない。ターン開始・終了時の自動処理は対象外。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
+        "ko": "【눈을 확인한 후】자신의 턴 중 카드 사용·공격·효과 선택으로 자신이 굴린 주사위의 결과를 확인한 뒤, 그 행동을 되돌리고 주사위를 다시 굴릴 수 있다(자신의 턴마다 1회). 그 행동에서 여러 주사위를 굴렸다면 전부 다시 굴린다. 다시 굴리지 않고 결과를 확정하면 횟수를 소비하지 않는다. 턴 시작·종료 시 자동 처리는 대상이 아니다.\n\n【파괴 시】이 마법을 묘지 대신 자신의 리프트로 보낸다.",
+        "en": "【After Seeing the Roll】During your turn, after seeing your dice from playing a card, attacking, or resolving an effect choice, you may rewind that action and reroll its dice (1 time during each of your turns). If that action rolled multiple dice, reroll all of them. Keeping the result does not spend this allowance. Automatic turn-start and turn-end effects are excluded.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【出目を確認した後】自分のダイス結果を確認後、その行動のダイス1個を振り直せる（自分の各ターン1回）。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
         "ko": "【눈을 확인한 후】자신의 주사위 결과를 확인한 뒤 그 행동의 주사위를 다시 굴릴 수 있다(자신의 턴마다 1회).\n\n【파괴 시】이 마법을 묘지 대신 자신의 리프트로 보낸다.",
         "en": "【After Seeing the Roll】After seeing your dice results, you may reroll the dice for that action, once during each of your turns.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
@@ -3918,7 +3996,7 @@
         "ko"
       ],
       "definitionSha256": "d70f12614d64e24de9fc38ef35b4913c80a4532f5f7a345943c4d5bcb159c3a0",
-      "textSha256": "3ad61b05e8a3600526103ce1d7966376403924da13be9b69778b6b586225ff79",
+      "textSha256": "5e3a0229be70095b2185841c701c77f6ce61f3f1a5ff71b57bf4b7bba137bed8",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。",
@@ -3926,6 +4004,12 @@
         "en": "【On Cast】Choose up to 3 different monsters on your field, allowing the same name; each gets +1 ATK until this turn ends."
       },
       "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】자신의 필드에서 서로 다른 개체를 최대 3체 선택해 이번 턴 종료까지 각각 공격력 +1(동명 가능).",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose up to 3 different monsters on your field, allowing the same name; each gets +1 ATK until this turn ends."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分の場から異なる個体を3体まで選び、このターン終了までそれぞれの攻撃力+1（同名可）。",
         "ko": "【발동 시】자신의 필드에서 서로 다른 개체를 최대 3체 선택해 이번 턴 종료까지 각각 공격력 +1(동명 가능).",
         "en": "【On Cast】Choose up to 3 different monsters on your field, allowing the same name; each gets +1 ATK until this turn ends."
@@ -3982,7 +4066,7 @@
         "ko"
       ],
       "definitionSha256": "b173b9d622213fe08c83fea0dc7d1d1b2c2d80b37b55fb66910189d18731b67f",
-      "textSha256": "191b1d18300bd6409b2cd6f91dfd5d86a667d01495f8c122c3046ebc384412bc",
+      "textSha256": "9582215cc4b7d847a7aa91bbb517b3e98b9326337daf2df6115f281c6f7f9110",
       "hooks": {
         "act": "incubate"
       },
@@ -3992,6 +4076,12 @@
         "en": "【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 2, to a minimum of 0. If it reaches 0, hatch it immediately."
       },
       "after": {
+        "ja": "【発動条件】自分の場に、孵化までの残りターンが1以上ある卵がいる。\n\n【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを2減らす（最低0）。0になれば直ちに孵化する。",
+        "ko": "【발동 조건】자신의 필드에 부화까지 남은 턴이 1 이상인 알이 있다.\n\n【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 2 감소(최저 0). 0이 되면 즉시 부화한다.",
+        "en": "【Play Requirement】You control an Egg with at least 1 turn remaining until hatching.\n\n【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 2, to a minimum of 0. If it reaches 0, hatch it immediately."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分の場の卵を1体まで選び、孵化までの残りターンを2減らす（最低0）。0になれば直ちに孵化する。",
         "ko": "【발동 시】자신의 필드의 알을 1체까지 선택해 부화까지 남은 턴을 2 감소(최저 0). 0이 되면 즉시 부화한다.",
         "en": "【On Cast】Choose up to 1 Egg on your field and reduce its remaining hatch turns by 2, to a minimum of 0. If it reaches 0, hatch it immediately."
@@ -4094,7 +4184,7 @@
         "ko"
       ],
       "definitionSha256": "bacf9814bda537e59bda6cea583ba951a42cb3fe0f547e0203a179c1f6339a7f",
-      "textSha256": "18dda419eb316198247a1ea3073b35f3f00222a607cc56553695b9a3e3141a7d",
+      "textSha256": "a5ad6446b82c658ea35b0135200e5f505c466b5bbdc94af2173ccd711d84639b",
       "hooks": {},
       "before": {
         "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
@@ -4102,6 +4192,12 @@
         "en": "【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
       },
       "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
         "ko": "【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
         "en": "【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
@@ -4138,7 +4234,7 @@
         "ko"
       ],
       "definitionSha256": "ec6336a3e97a3a7f93504eb343d0881544e647a09f9c159bdce4859e0d1befcf",
-      "textSha256": "6cb79fb9cabde4eba4d1f518cf0ce29787236b465c85ec946cd20d85d0e91d65",
+      "textSha256": "07b70691318c09226dc0338caffdafd77f1dae01432ba0bd9ee69252b4953786",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（持続）。",
@@ -4146,6 +4242,12 @@
         "en": "【On Cast】Your max mana -1. Choose 1 monster on your field and give it Majesty (lasting)."
       },
       "after": {
+        "ja": "【発動条件】自分の場に「威厳」を持たないモンスターがいる。\n\n【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（持続）。",
+        "ko": "【발동 조건】자신의 필드에 위엄이 없는 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(지속).",
+        "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Your max mana -1. Choose 1 monster on your field and give it Majesty (lasting)."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（持続）。",
         "ko": "【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(지속).",
         "en": "【On Cast】Your max mana -1. Choose 1 monster on your field and give it Majesty (lasting)."
@@ -4681,7 +4783,7 @@
         "en"
       ],
       "definitionSha256": "a4c645d472afeb654244902cc58c6f03f735b735f92e8438bf64ab1d68182a72",
-      "textSha256": "9b3f18a0750b164a8345b8e3b25ecff5b238242f40e54be495ded6e06850b0b2",
+      "textSha256": "1089f538c0c43ad73eee632d3fbd3004b7d3aacdbf8b98ad41ab1b6190a72205",
       "hooks": {
         "ench": "guild"
       },
@@ -4691,6 +4793,12 @@
         "en": "【Play Requirement】You control no Trade Guild.\n\n【Your Turn Start】Put 1 counter on this spell. For every 20 counters on it, remove 20 and create 1 Black Market Dealer in your hand."
       },
       "after": {
+        "ja": "【発動条件】自分の場に「商会」がない。\n\n【自分のターン開始時】この魔法が場にある間、自分のターンが始まるたび、この魔法にカウンター1個を付与する。発動した時点や相手のターン開始時には増えない。\n\n【カウンター蓄積時】この魔法のカウンターが20個以上になったら、直ちに20個を取り除き、新しい「闇商人」1枚を自分の手札に加える。他のカードの効果で増えた場合も発動し、20個以上ある限り繰り返す。余ったカウンターは残る。",
+        "ko": "【발동 조건】자신의 필드에 상회가 없다.\n\n【자신의 턴 시작 시】이 마법이 필드에 있는 동안 자신의 턴이 시작될 때마다 이 마법에 카운터 1개를 놓는다. 발동한 순간이나 상대의 턴 시작에는 증가하지 않는다.\n\n【카운터 축적 시】이 마법의 카운터가 20개 이상이 되면 즉시 20개를 제거하고 새로운 암상인 1장을 자신의 패에 추가한다. 다른 카드의 효과로 증가한 경우에도 발동하며, 20개 이상인 동안 반복한다. 남은 카운터는 유지된다.",
+        "en": "【Play Requirement】You control no Trade Guild.\n\n【At the Start of Your Turn】While this spell is on your field, put 1 counter on it whenever your turn starts. Casting it and the start of the opponent’s turn do not add counters.\n\n【When Counters Accumulate】Whenever this spell has at least 20 counters, immediately remove 20 and create 1 Black Market Dealer in your hand. This also applies to counters added by other cards. Repeat while at least 20 remain; keep any leftover counters."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動条件】自分の場に「商会」がない。\n\n【自分のターン開始時】この魔法にカウンター1個を付与する。この魔法のカウンター20個ごとに20個を取り除き、新しい「闇商人」1枚を自分の手札に加える。",
         "ko": "【발동 조건】자신의 필드에 상회가 없다.\n\n【자신의 턴 시작 시】이 마법에 카운터 1개를 놓는다. 이 마법의 카운터 20개마다 20개를 제거하고 새로운 암상인 1장을 자신의 패에 추가한다.",
         "en": "【Play Requirement】You control no Trade Guild.\n\n【At the Start of Your Turn】Put 1 counter on this spell. For every 20 counters on it, remove 20 and create 1 Black Market Dealer in your hand."
@@ -5569,7 +5677,7 @@
         "ko"
       ],
       "definitionSha256": "6da5a2446b831302729e31e64c23eaa1a9dcab49ca6bd8a56f0f06e98142d47d",
-      "textSha256": "a1a61e17ef145e7fed932e6b91f6b06a2047bafafe881b7a16bc456091ac7865",
+      "textSha256": "5d0aee4363ad5f5840cff05185b8622a24959cfb504b72df847dbcf93be28b25",
       "hooks": {},
       "before": {
         "ja": "【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
@@ -5577,6 +5685,12 @@
         "en": "【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
       },
       "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(지속).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
         "ko": "【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(지속).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
         "en": "【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
@@ -5611,7 +5725,7 @@
         "ko"
       ],
       "definitionSha256": "2714120d321330f70f059197ce8d12a40203cd0460843985a94170c82a9402f3",
-      "textSha256": "09dd823dd19f563d11a90207bd7b1176c43c60142f41b44e5b024f3dd60f1b50",
+      "textSha256": "a59030f89dbb52e1e394123683d5c4e783afa7a47b37f736db5944de18227afd",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（持続）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（持続、1体しかいなければその1体）。",
@@ -5619,6 +5733,12 @@
         "en": "【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (lasting). Choose 2 Assassin-family monsters on your field; each gets +3 ATK (lasting); if only 1 exists, affect that 1."
       },
       "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（持続）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（持続、1体しかいなければその1体）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】자신의 필드의 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(지속). 자신의 필드의 암살자 계열 몬스터 2체를 선택해 각각 공격력 +3(지속, 1체뿐이면 그 1체).",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (lasting). Choose 2 Assassin-family monsters on your field; each gets +3 ATK (lasting); if only 1 exists, affect that 1."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（持続）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（持続、1体しかいなければその1体）。",
         "ko": "【발동 시】자신의 필드의 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(지속). 자신의 필드의 암살자 계열 몬스터 2체를 선택해 각각 공격력 +3(지속, 1체뿐이면 그 1체).",
         "en": "【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (lasting). Choose 2 Assassin-family monsters on your field; each gets +3 ATK (lasting); if only 1 exists, affect that 1."
@@ -6055,7 +6175,7 @@
         "ko"
       ],
       "definitionSha256": "f958c56ac8e3098dd5891b18b2ca80118cbe6983a9e438ec594c24f9c25b4c11",
-      "textSha256": "4d4ed9c7f98ede585825c748341cfe621212cf8ac1f5ffa7aea77855b1794bee",
+      "textSha256": "b9d9f601d1d882ec37c1efdeb2b41b441d5d0bc278c2cb864b6c2fb0790a4a18",
       "hooks": {
         "act": "penance"
       },
@@ -6065,6 +6185,12 @@
         "en": "【On Cast】For each of your Brand counters, your max mana +2 and restore 10 of your HP; do not spend the counters."
       },
       "after": {
+        "ja": "【発動条件】自分に烙印カウンターが1個以上ある。\n\n【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。",
+        "ko": "【발동 조건】자신에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】자신의 낙인 카운터 1개당 자신의 최대 마나 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
+        "en": "【Play Requirement】You have at least 1 Brand counter.\n\n【On Cast】For each of your Brand counters, your max mana +2 and restore 10 of your HP; do not spend the counters."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。",
         "ko": "【발동 시】자신의 낙인 카운터 1개당 자신의 최대 마나 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
         "en": "【On Cast】For each of your Brand counters, your max mana +2 and restore 10 of your HP; do not spend the counters."
@@ -6099,7 +6225,7 @@
         "ko"
       ],
       "definitionSha256": "c121fa0bb91b6db8d718892326898825dde4956f2d8633e93e258d016bdbc3e7",
-      "textSha256": "2368f1583bd2ed3cd1c3d04025853756d42dceafe8cd2140bff1cb2af40d9e8e",
+      "textSha256": "aa3b95e9e1e5cf0248f69201262d0dbffa9d96c0741fa0741f7f6c6021cb8ee0",
       "hooks": {
         "act": "mindBurst"
       },
@@ -6109,6 +6235,12 @@
         "en": "【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
       },
       "after": {
+        "ja": "【発動条件】自分の場に気合用カウンターを1個以上持つモンスターがいる。\n\n【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
+        "ko": "【발동 조건】자신의 필드에 기합용 카운터를 1개 이상 가진 몬스터가 있다.\n\n【발동 시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×4 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
+        "en": "【Play Requirement】You control a monster with at least 1 Guts counter.\n\n【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
         "ko": "【발동 시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×4 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
         "en": "【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
@@ -6778,7 +6910,7 @@
         "ko"
       ],
       "definitionSha256": "ae21470389fa5baff0655a114393ee35eb1d83bd7e2f41d0f1c6e137fd04547b",
-      "textSha256": "f22c7da3223d8bdcb1dfd6b7531161c90c105a9486f7efbe2a552e8a3dbd3884",
+      "textSha256": "14c4b83ada460c3931bddea6b897b3892ea605dd6e5e3b08d7b525871366ed08",
       "hooks": {
         "act": "expansion"
       },
@@ -6788,6 +6920,12 @@
         "en": "【Play Requirement】You control a Knight-family monster.\n\n【On Cast】Choose and destroy 1 Knight-family monster you control. If destroyed, summon 1 Cavalry to your field."
       },
       "after": {
+        "ja": "【発動条件】自分の場に「騎士」がいる。\n\n【発動時】自分の「騎士」1体を選んで破壊する。破壊できたら「騎馬兵」1体を自分の場に召喚する。",
+        "ko": "【발동 조건】자신의 필드에 기사가 있다.\n\n【발동 시】자신의 기사 1체를 선택해 파괴한다. 파괴했다면 기마병 1체를 자신의 필드에 소환한다.",
+        "en": "【Play Requirement】You control a Knight.\n\n【On Cast】Choose and destroy 1 of your Knights. If it is destroyed, summon 1 Cavalry to your field."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【発動条件】自分の場に「騎士」系モンスターがいる。\n\n【発動時】自分の「騎士」系モンスター1体を選んで破壊する。破壊できたら「騎馬兵」1体を自分の場に召喚する。",
         "ko": "【발동 조건】자신의 필드에 기사 계열 몬스터가 있다.\n\n【발동 시】자신의 기사 계열 몬스터 1체를 선택해 파괴한다. 파괴했다면 기마병 1체를 자신의 필드에 소환한다.",
         "en": "【Play Requirement】You control a Knight-family monster.\n\n【On Cast】Choose and destroy 1 Knight-family monster you control. If destroyed, summon 1 Cavalry to your field."
@@ -7107,7 +7245,7 @@
         "ko"
       ],
       "definitionSha256": "733d0c2fd40f66fb950db829582cfa4b5b7c16fe93d212a4931d2fe4590a954f",
-      "textSha256": "b9a464bf77a4d83d20f6668430b46b15b4c41d0b337e471acbf2a7d23a08844c",
+      "textSha256": "de9dead6f340520127683179e390b9867c4ef2a80a64985a5b10a1a0a177ac69",
       "hooks": {
         "act": "expansion"
       },
@@ -7117,6 +7255,12 @@
         "en": "【Cost】If you control an Assassin-family monster, this card costs 0 to buy and cast.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (lasting). Otherwise, choose 1 monster on your field and give it Evade (lasting)."
       },
       "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【코스트】자신의 필드에 암살자 계열 몬스터가 있으면 이 카드의 구매·시전 코스트는 0.\n\n【발동 시】자신의 필드에 암살자 계열 몬스터가 있으면 자신의 필드의 모든 몬스터에 회피를 부여한다(지속). 없으면 자신의 필드의 몬스터 1체를 선택해 회피를 부여한다(지속).",
+        "en": "【Play Requirement】You control a monster.\n\n【Cost】If you control an Assassin-family monster, this card costs 0 to buy and cast.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (lasting). Otherwise, choose 1 monster on your field and give it Evade (lasting)."
+      },
+      "amendment": "2026-10-29: effect and requirement audit",
+      "amendmentBefore": {
         "ja": "【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。",
         "ko": "【코스트】자신의 필드에 암살자 계열 몬스터가 있으면 이 카드의 구매·시전 코스트는 0.\n\n【발동 시】자신의 필드에 암살자 계열 몬스터가 있으면 자신의 필드의 모든 몬스터에 회피를 부여한다(지속). 없으면 자신의 필드의 몬스터 1체를 선택해 회피를 부여한다(지속).",
         "en": "【Cost】If you control an Assassin-family monster, this card costs 0 to buy and cast.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (lasting). Otherwise, choose 1 monster on your field and give it Evade (lasting)."
@@ -8792,5 +8936,37 @@
     "TRAINING_GROUND",
     "GOBLIN_LEADER",
     "GOBLIN_KING"
+  ],
+  "amendments": [
+    {
+      "date": "2026-10-29",
+      "cards": [
+        "S15",
+        "TPO5",
+        "GS6_4",
+        "INQUISITION",
+        "MASSACRE",
+        "ORIGIN_MIMIC",
+        "WALLBREAK1",
+        "WALLBREAK2",
+        "SNIPE1",
+        "SNIPE2",
+        "INCUBATOR",
+        "VAMP_PACT",
+        "FATE_WHEEL",
+        "TRUMPET",
+        "INCUBATOR_S",
+        "DECAY_CRAFT",
+        "MAJESTY_RITE",
+        "GUILD_CO",
+        "KNIGHT_TEACH",
+        "NL_SECRET",
+        "PENANCE",
+        "MIND_BURST",
+        "STABLE",
+        "ROGUE_ART"
+      ],
+      "record": "docs/releases/2026-10-29-card-effect-audit/README.md"
+    }
   ]
 }

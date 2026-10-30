@@ -19,6 +19,7 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   S8: {"terms":["graveyard"]},
   S12: {"terms":["counters"]},
   TSO2: {"terms":["lasting"]},
+  TPO5: {mentions:["aura"]},
   TPO2: {"terms":["lasting"],"mentions":["counter"]},
   ND5: {"terms":["lasting"],"mentions":["aura"],"grants":["aura"]},
   NMD6: {"terms":["composition"]},
