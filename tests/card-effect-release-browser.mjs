@@ -11,8 +11,8 @@ try{
  for(const lang of ['ja','ko','en']){
  await page.addInitScript(lang=>localStorage.setItem('lore_lang',lang),lang);
  await page.goto(origin);await page.waitForSelector('.lounge-home',{timeout:120000});await page.waitForSelector('.screen-loader',{state:'detached',timeout:240000});
- await page.locator('[data-nav=cards]').click();await page.locator('.cards-search').waitFor();
- for(const c of changed){await page.locator('.cards-search').fill(c.nameJa);await page.locator(`.cards-screen [data-card-id="${c.id}"]`).click();await page.locator('#zoomOverlay').waitFor();
+ await page.locator('[data-nav=cards]').click();await page.locator('.cards-search').waitFor();await page.waitForFunction(()=>document.querySelectorAll('.cards-screen').length===1);
+ for(const c of changed){await page.locator('.cards-search').fill(c.nameJa);await page.waitForFunction(id=>document.querySelectorAll(`.cards-screen [data-card-id="${id}"]`).length===1,c.id);await page.locator(`.cards-screen [data-card-id="${c.id}"]`).click();await page.locator('#zoomOverlay').waitFor();
  const rendered=await page.locator('#zoomOverlay').evaluate(el=>[...el.querySelectorAll('.card-effect-section')].map(b=>b.querySelector('h3').textContent+[...b.querySelectorAll('.card-effect-body')].map(p=>p.textContent).join('')+[...b.querySelectorAll('.dr')].map(r=>r.querySelector('.dr-roll').textContent+':'+r.querySelector('.dr-fx').textContent).join('')).join(''));
  const norm=s=>s.replace(/[【】]/g,'').replace(/\s+/g,'').replaceAll('—','').replaceAll('/','');assert.equal(norm(rendered),norm(c.after[lang]),c.id+'/'+lang);checks.push(c.id+'/'+lang);
  if(c.id==='GUILD_CO')await page.screenshot({path:out+`/release-guild-${lang}.png`});await page.keyboard.press('Escape');}
