@@ -62,3 +62,11 @@ Chrome headless、1440×1000、同じマシン・同じAPI fixture。各操作�
 本番未反映。`git push gh HEAD:main`がGitHubのInvalid username or tokenで失敗し、ガード付きデプロイは開始されていない。資格情報を含まないHTTPS経路にも利用可能なcredentialはなく、SSHもpublickey認証に失敗。認証復旧が必要。
 
 復旧後は最新`gh/main`を取得して統合し、`npm run deploy`のデプロイロック・スキーマ照合・型検証・本番スイート・ビルドを通し、配信アセットと外観操作を検証する。現時点で本番反映済みとは報告しない。
+
+## 2026-10-30 再開・統合
+
+GitHubログイン復旧を確認し、作業ブランチのpushに成功。最新mainの見本カード（アチューンを上部配置、選択フレームとエフェクトを併用）を取り込み、一覧は保持したまま見本カードだけを更新するよう競合を解消した。
+
+`deck-appearance-preview-browser.mjs`で5フレーム、エフェクト併用、拡大、保存・再表示、defaultへの解除、1440/1280/390/320幅の配置が成功。統合後性能の記録は`qa/integrated-performance.json`、外観の現在の見た目は`qa/integrated-1440.png`と`qa/integrated-390.png`。前日の画像は変更前の比較記録として保持する。
+
+他の本番デプロイのロック解放を待ち、最新版mainを維持してガード付きリリースを実行する。
