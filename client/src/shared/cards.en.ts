@@ -789,7 +789,7 @@ Object.assign(TEXTS, {
   LAND_GRANT: "Only with a Castle on your field · Summon 1 cost 3- Aristocrat-tribe card to your field",
   TREASON: "Only if the enemy has a Castle · Destroy all cards on the enemy field, they get 3 Brand counters",
   STRONG_ACID: "Permanent: 2 counters on every enemy monster · Enemy dies to Decay: 7 damage + 1 Brand counter",
-  ROTTEN_GROUND: "Permanent: every monster summoned gets 2 counters",
+  ROTTEN_GROUND: "Only 1 copy across both fields · Permanent: every monster summoned gets 2 counters",
   UNBRAND: "Remove all Brand counters from both players",
   WAR_DECL: "【When Attacked】When your Castle is attacked · Summon three Knights (4/4) to your field",
 });

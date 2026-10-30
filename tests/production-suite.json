@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/rotten-ground-singleton.mjs",
     "tests/rune-intermediate.mjs",
     "tests/db-schema-contract.mjs",
     "tests/staging-audit-fixtures.mjs",

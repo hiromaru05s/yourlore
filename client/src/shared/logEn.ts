@@ -7,6 +7,7 @@
 
 const R: [RegExp, string][] = [
   // ---- full/long phrases first (order matters) ----
+  [/부패한 땅은 양쪽 필드 전체에 1장만 존재할 수 있습니다/g, "Only 1 Rotten Ground can exist across both players' fields"],
   [/고철 수집상 — 패에서 구매 비용 1인 카드 2장을 리프트로 보낸다/g, "Scrap Collector — send 2 cards with purchase cost 1 from your hand to the Rift"],
   [/선택과 집중 — 리프트로 보낼 카드 선택 \(1장까지\)/g, "Focus — choose up to 1 card to send to the Rift"],
   [/패에 이 카드 외에 리프트로 보낼 수 있는 구매 비용 1 카드가 2장 필요합니다/g, "You need 2 other cards with purchase cost exactly 1 in hand that can be sent to the Rift"],
