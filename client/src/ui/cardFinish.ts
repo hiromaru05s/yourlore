@@ -38,7 +38,7 @@ function frame(now:number){
   }
   if(visibleCrystal)crystal?.draw(t);
  }
- if(!reduced())schedule();
+ if(!reduced()&&[...entries.values()].some(e=>e.visible&&e.node.isConnected))schedule();
 }
 function initialize(){
  if(installed)return;installed=true;
@@ -60,12 +60,13 @@ export function attachCardEffect(node:HTMLElement,uid:string,explicit?:string){
  else{
   const canvas=document.createElement('canvas');canvas.className='card-effect-surface';canvas.width=256;canvas.height=node.matches('.card--field,.buff-icon')?256:400;canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2';art.append(canvas);
   const ctx=canvas.getContext('2d')!,seed=hashUid(uid),h=canvas.height;
+  let clip:Path2D|undefined;
   draw=t=>{
    ctx.clearRect(0,0,256,h);ctx.save();
-   const path=document.querySelector(node.matches('.card--field,.buff-icon')?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d');
-   if(path){ctx.scale(256,h);ctx.clip(new Path2D(path));ctx.scale(1/256,1/h);}
+   if(!clip){const path=document.querySelector(node.matches('.card--field,.buff-icon')?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d');if(path)clip=new Path2D(path);}
+   if(clip){ctx.scale(256,h);ctx.clip(clip);ctx.scale(1/256,1/h);}
    drawStardustFinish(ctx,256,h,t,seed);
-   if(path){ctx.save();ctx.scale(256,h);ctx.globalAlpha=.58;ctx.strokeStyle=STARDUST_FINISH_EDGE;ctx.lineWidth=1.6/256;ctx.stroke(new Path2D(path));ctx.restore();}
+   if(clip){ctx.save();ctx.scale(256,h);ctx.globalAlpha=.58;ctx.strokeStyle=STARDUST_FINISH_EDGE;ctx.lineWidth=1.6/256;ctx.stroke(clip);ctx.restore();}
    ctx.restore();
   };dispose=()=>{canvas.remove();canvas.width=0;};
  }

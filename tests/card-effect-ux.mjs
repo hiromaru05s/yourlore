@@ -23,6 +23,12 @@ try {
   for(const c of all) {
    E.zoomCard({...c,uid:c.id});
    assert.equal(document.querySelector('.inspect-type').textContent,E.cardTypeLabel(c,lang));
+   // Check the final inspector after reference-link enhancement, not just cardRulesEl.
+   const expected=c[{ja:'textJa',ko:'text',en:'textEn'}[lang]];
+   const normalize=s=>s.replace(/[【】]/g,'').replace(/\s+/g,'').replaceAll('—','').replaceAll('/','');
+   const renderedText=[...document.querySelectorAll('#zoomOverlay .card-effect-section')].map(b=>b.querySelector('h3').textContent+[...b.querySelectorAll('.card-effect-body')].map(p=>p.textContent).join('')+[...b.querySelectorAll('.dr')].map(r=>r.querySelector('.dr-roll').textContent+':'+r.querySelector('.dr-fx').textContent).join('')).join('');
+   assert.equal(normalize(renderedText),normalize(expected),`${c.id}/${lang}: final inspector retains every condition and effect`);
+
    for(const key of new Set([...E.displayPassives(c),...E.referencedPassives(c)])) {
     const chip=document.querySelector(`button.card-key-label[data-psv="${key}"]`),target=document.querySelector(`.psv-item[data-psv="${key}"]`);
     assert(chip && target,`${c.id}/${lang}/${key}: readable term and linked definition`);

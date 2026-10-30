@@ -1,0 +1,13 @@
+{
+  "purchases": 5,
+  "saves": 1,
+  "credits": 420000,
+  "frames": [
+    "frame:mirror-silver",
+    "frame:flowing-gold",
+    "frame:obsidian-ember",
+    "frame:nacre-prism",
+    "frame:verdigris-runes"
+  ],
+  "errors": []
+}
