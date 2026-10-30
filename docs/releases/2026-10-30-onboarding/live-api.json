@@ -1,0 +1,40 @@
+{
+  "origin": "https://yourlore.xyz",
+  "source": "b959aa1c6a5e3c846c1edeafa41fc3e9f7c2c916",
+  "qaAccount": "qa-onboarding-2ac56780-ea06-4210-a8dc-d665560a5e8f",
+  "startedAt": "2026-10-30T04:04:13.762Z",
+  "basicReward": 3000,
+  "draw": {
+    "count": 10,
+    "cost": 1000,
+    "refund": 0
+  },
+  "freeStarter": {
+    "id": "SELECTED_SWORD",
+    "cost": 0
+  },
+  "deck": [
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_TRASH",
+    "STARTER_CHEST",
+    "STARTER_CHEST",
+    "SELECTED_SWORD"
+  ],
+  "finalStatus": {
+    "stage": "complete",
+    "credits": 2000
+  },
+  "retriesDidNotSpendOrGrant": true,
+  "passed": true,
+  "cleanup": {
+    "users": 0,
+    "sessions": 0,
+    "rewards": 0,
+    "transactions": 0
+  },
+  "cleanupVerified": true,
+  "finishedAt": "2026-10-30T04:04:28.649Z"
+}

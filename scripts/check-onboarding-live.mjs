@@ -10,7 +10,14 @@ const uid='qa-onboarding-'+crypto.randomUUID(),token=crypto.randomUUID()+crypto.
 const quote=s=>"'"+String(s).replaceAll("'","''")+"'";
 async function sql(text){
  const file=dir+'/query.sql';await fs.writeFile(file,text,{mode:0o600});
- try{return JSON.parse(execFileSync('npm',['exec','--','wrangler','d1','execute','lore-db','--remote','-c','server/wrangler.toml','--file',file,'--json'],{encoding:'utf8',stdio:['ignore','pipe','pipe']}));}
+ try{
+  // File imports print progress even with --json; SELECT needs the query endpoint
+  // to return rows. Only read-only, non-secret cleanup counts use command args.
+  const input=text.startsWith('SELECT ')?['--command',text]:['--file',file];
+  const output=execFileSync('npm',['exec','--','wrangler','d1','execute','lore-db','--remote','-c','server/wrangler.toml',...input,'--json'],{encoding:'utf8',stdio:['ignore','pipe','pipe']});
+  const start=output.search(/^\s*\[/m);if(start<0)throw Error('Missing query result');
+  const result=JSON.parse(output.slice(start));if(result.some(r=>r.success===false))throw Error('Query failed');return result;
+ }
  catch{throw Error('Live QA database operation failed; cleanup account '+uid);}
 }
 const f=await onboardingFixture();let created=false,cleanupVerified=false;

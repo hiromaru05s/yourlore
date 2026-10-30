@@ -1,0 +1,63 @@
+{
+  "checkedAt": "2026-10-30T04:06:15.608Z",
+  "origin": "https://yourlore.xyz",
+  "source": "b959aa1c6a5e3c846c1edeafa41fc3e9f7c2c916",
+  "assets": [
+    {
+      "url": "https://yourlore.xyz/assets/main-hvHxfyGd.js",
+      "status": 200,
+      "sha256": "42a127473f04ba9318e8e934d1ddfefcb6806d0d925d6fa90bcc4c9078cf60b3",
+      "bytes": 3133,
+      "requestedGreeting": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "status": 200,
+      "sha256": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "bytes": 711,
+      "requestedGreeting": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+      "status": 200,
+      "sha256": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "bytes": 1110,
+      "requestedGreeting": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+      "status": 200,
+      "sha256": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a",
+      "bytes": 371,
+      "requestedGreeting": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/main-m5FaSbjr.js",
+      "status": 200,
+      "sha256": "5c83ec4bab5e55d3a8e0ee13aec202136b9a8ca42def5e9225a18967599f54a2",
+      "bytes": 385946,
+      "requestedGreeting": true
+    },
+    {
+      "url": "https://yourlore.xyz/assets/main-BUHweAAz.css",
+      "status": 200,
+      "sha256": "1db068856613fd246d1d410e6579d317153a9b491bc7c1677eebc407c3b0e8e3",
+      "bytes": 1085188,
+      "requestedGreeting": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/game-AaH0_LU-.js",
+      "status": 200,
+      "sha256": "34f3f27942da88019dcd219810ab4e3528407f4d3ce2a5152ff5dd3fbab58312",
+      "bytes": 146156,
+      "requestedGreeting": false
+    },
+    {
+      "url": "https://yourlore.xyz/assets/board-C38eAonB.js",
+      "status": 200,
+      "sha256": "a1dd34aa347574e97d3e652a6123ff3c9cabd92732fc626d68ebdb4ab93a620d",
+      "bytes": 6784,
+      "requestedGreeting": false
+    }
+  ]
+}
