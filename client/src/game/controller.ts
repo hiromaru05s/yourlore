@@ -120,11 +120,12 @@ export abstract class BaseController implements BoardHandlers {
   private skipGen = 0; // batches up to this gen fast-forward
   // ---- turn timer ----
   private timerKey = "";
+  private playableTimerKey = "";
   private announcedTimerKey = "";
   private timerLeft = 0;
   private timerInt: number | null = null;
   // bot/tutorial (and casual online fallback) use a 90s turn; online games get the
-  // authoritative length from the server via g.turnTotalMs (ranked 50s / casual 90s).
+  // authoritative length from the server via g.turnTotalMs (ranked 65s / casual 90s).
   private static readonly LOCAL_TURN_SECS = 90;
   private static readonly HAND_CAP_BONUS_SECS = 10; // v42: end-turn hand-discard choice
   private turnTotal = 90; // full length of the CURRENT turn (for the ring's full-scale)
@@ -146,6 +147,15 @@ export abstract class BaseController implements BoardHandlers {
   private serverOffset=0;
   protected get openingLocked():boolean { return this.openingActive || (!!this.state?.opening && (this.state.opening.playableAt==null || Date.now()-this.serverOffset<this.state.opening.playableAt)); }
   protected openingPrepared():void {}
+  protected turnPlayable():void {}
+
+  protected receiveTurnClock(clock: {turn:number;cur:Side;turnLeftMs:number;turnTotalMs:number}):void {
+    if (!this.state || this.state.turn !== clock.turn || this.state.cur !== clock.cur || this.state.over) return;
+    this.state.turnClockWaiting = false;
+    this.state.turnLeftMs = clock.turnLeftMs;
+    this.state.turnTotalMs = clock.turnTotalMs;
+    this.syncTimer(false);
+  }
   protected introShown = false; // coin-toss reveal plays once at game start
 
   constructor(root: HTMLElement, you: Side, exits: ControllerExits) {
@@ -291,8 +301,7 @@ export abstract class BaseController implements BoardHandlers {
     if(res.state.over||res.state.turn>1)this.openingAbort.abort();
     if(!animate||!res.events.some(e=>e.type==='turnSkipped'&&e.source==='TIMEWARP'))this.view.syncTurn(res.state);
     this.state = res.state; // logical state advances immediately (input guards etc.)
-    // An already-running clock must follow logical state, not the animation queue.
-    // Keep initial clock/announcement startup behind the opening cinematic.
+    // Invalidate the old turn immediately, but start the new clock only after playback.
     if (this.timerKey) this.syncTimer(false);
     if(this.castReviewState && this.castReviewState!==this.state && document.querySelector(".cast-review"))closeOverlay();
     const gen = ++this.fxGen;
@@ -1214,6 +1223,7 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   private afterApply(res: ReduceResult): void {
+    if (res.state !== this.state) return; // only the latest completed batch can unlock its turn
     if(this.state.over)this.releaseOpening();
     if (!this.introShown && this.state && this.state.turn === 1 && !this.state.over) {
       const opening=this.state.opening;
@@ -1233,8 +1243,9 @@ export abstract class BaseController implements BoardHandlers {
     if(this.openingActive&&!this.state.over)return;
     this.releaseOpening();
     if(!this.state.over)this.exits.onBattleReady?.();
+    this.playableTimerKey = `${this.state.turn}:${this.state.cur}`;
     this.syncTimer();
-    if (res.state !== this.state) return; // a newer batch is queued — let it drive follow-ups
+    if (!this.state.over && this.state.cur === this.you && this.state.turnClockWaiting) this.turnPlayable();
     this.timewarp.sync(this.state);
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
     const g = this.state;
@@ -1362,7 +1373,7 @@ export abstract class BaseController implements BoardHandlers {
   }
 
   // ============================================================
-  // turn timer — 50s/turn. Popups at 25s (1.5s) and a countdown from
+  // turn timer — ranked 65s / casual and local 90s. Popups at 25s (1.5s) and a countdown from
   // 5s; the timer chip shakes at ≤5s; on 0 the active player's turn
   // auto-ends (online: only my own client submits, server validates).
   // ============================================================
@@ -1374,7 +1385,7 @@ export abstract class BaseController implements BoardHandlers {
     const key = `${g.turn}:${g.cur}`;
     if (key !== this.timerKey) {
       this.timerKey = key;
-      // full turn length for THIS turn: server-authoritative online (ranked 50 / casual 90),
+      // full turn length for THIS turn: server-authoritative online (ranked 65 / casual 90),
       // else the local 90s default (bot / tutorial).
       this.turnTotal = g.turnTotalMs != null ? Math.round(g.turnTotalMs / 1000) : BaseController.LOCAL_TURN_SECS;
       // Online: trust the server's remaining-ms so a reconnecting client resumes the
@@ -1387,7 +1398,7 @@ export abstract class BaseController implements BoardHandlers {
       this.handCapBonusKey = g.pending?.reason === "handCap" ? key : "";
       if (this.timerInt) clearInterval(this.timerInt);
       this.renderTimer();
-      this.timerInt = window.setInterval(() => this.tickTimer(key), 1000);
+      this.timerInt = null;
     } else if (g.pending?.reason === "handCap" && this.handCapBonusKey !== key) {
       // v42: the end-turn hand-discard choice appeared → +10s to pick (server adds the same bonus online)
       this.handCapBonusKey = key;
@@ -1407,6 +1418,12 @@ export abstract class BaseController implements BoardHandlers {
         this.renderTimer();
       }
     }
+    const playable = this.playableTimerKey === key && !g.turnClockWaiting;
+    if (!playable && this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
+    if (playable && !this.timerInt && this.timerLeft > 0) {
+      this.turnStartedWall = Date.now();
+      this.timerInt = window.setInterval(() => this.tickTimer(key), 1000);
+    }
     // Presentation still follows playback; synchronizing the clock on receipt must
     // not announce a new turn over the preceding action or the opening coin.
     if (announce && this.announcedTimerKey !== key) {
@@ -1422,6 +1439,7 @@ export abstract class BaseController implements BoardHandlers {
     // A callback already queued before clearInterval belongs to its original turn.
     if (key !== this.timerKey) return;
     if (key !== `${this.state.turn}:${this.state.cur}`) { this.syncTimer(false); return; }
+    if (this.playableTimerKey !== key || this.state.turnClockWaiting) return;
     this.timerLeft--;
     this.renderTimer();
     const s = this.timerLeft;
@@ -1500,7 +1518,7 @@ export abstract class BaseController implements BoardHandlers {
           await Promise.all([A.animateDraw(document.getElementById('hand'),3,'me',{signal}),A.animateDraw(document.getElementById('oppHand'),3,'opp',{signal})]);
         },
       });
-      if(opening?.playableAt!=null){this.state.turnLeftMs=Math.max(0,(this.state.turnTotalMs??90000)-Math.max(0,Date.now()-this.serverOffset-opening.playableAt));}
+      if(opening?.playableAt!=null && !this.state.turnClockWaiting){this.state.turnLeftMs=Math.max(0,(this.state.turnTotalMs??90000)-Math.max(0,Date.now()-this.serverOffset-opening.playableAt));}
     }catch(error){
       console.error('[duel opening]',error);
       // A failed renderer cannot move the authoritative first-turn deadline.
@@ -1534,6 +1552,7 @@ export abstract class BaseController implements BoardHandlers {
     paintTurnUrgency(0,false);
     if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
     this.timerKey = "";
+    this.playableTimerKey = "";
     this.announcedTimerKey = "";
     for (const id of ["clock-me", "clock-opp"]) {
       const el = document.getElementById(id);
