@@ -1,0 +1,38 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-10-30T03:25:12.009Z",
+  "assets": [
+    {
+      "file": "assets/cardSurface-BPGw2J75.js",
+      "sha256": "561d154a50306e11806a99e99529ee7d53ddc25477094cf10a013401a9d00cb5"
+    },
+    {
+      "file": "index.html",
+      "sha256": "1984d528326d3c6d8d131ebf92acbb369607679942765da25c850b02a3ff841b"
+    },
+    {
+      "file": "assets/assetQueue-BtEuY1w8.js",
+      "sha256": "3bfbc00b7565bd7f044e5b44766820269ac21e05d0f34a1c117111252c289531"
+    },
+    {
+      "file": "cosmetic-studio.html",
+      "sha256": "f3bbaf6423c4776bc741e6a4466ab0ae52ddfc6bd2afb54522cc7f5f7d0bc5b3"
+    },
+    {
+      "file": "assets/main-DByB0MLn.js",
+      "sha256": "d19c632f1607ece7db0c8aa68476281742905f98f6044677a076cc25a7ded775"
+    },
+    {
+      "file": "assets/main-D14NZlNb.css",
+      "sha256": "4a7e9bd80722066a4929159e8ea31c3793b417b68207604898ced6455c73376d"
+    },
+    {
+      "file": "assets/main-FxFctPjD.js",
+      "sha256": "51380d7067ececd01d27ce58fd7151d1857a9ddccc9079f487588e20d9ebfa4d"
+    },
+    {
+      "file": "assets/social-CqfvaJHK.js",
+      "sha256": "3958456d1c7d1c7c270bad292d17d39a53b88f4ceaa03abcc670dd4465000ab1"
+    }
+  ]
+}
