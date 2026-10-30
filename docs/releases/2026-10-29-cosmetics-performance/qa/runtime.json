@@ -1,0 +1,19 @@
+{
+  "live": {
+    "gpu": 44,
+    "paint": 48
+  },
+  "hidden": {
+    "gpu": 0,
+    "paint": 0
+  },
+  "resumed": {
+    "gpu": 40,
+    "paint": 48
+  },
+  "disposed": {
+    "gpu": 0,
+    "paint": 0,
+    "remaining": 0
+  }
+}
