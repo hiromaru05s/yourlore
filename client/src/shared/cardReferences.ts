@@ -1,3 +1,4 @@
+import {GOBLIN_IDS} from './goblinCards';
 import {DB, STARTERS, TRIBES, RELATED_MANUAL} from './cards';
 import type {CardDef} from './types';
 import type {EffectLocale} from './cardEffectText';
@@ -11,6 +12,8 @@ const ids = (test:(c:CardDef)=>boolean) => all.filter(test).map(c=>c.id);
 const series = (ja:string,ko:string,en:string,members:string[]):Series => ({names:{ja,ko,en},ids:members});
 // Membership mirrors rule predicates, not similarity of translated display names.
 export const CARD_SERIES: Record<string,Series> = {
+  goblin:series('ゴブリン','고블린','Goblin',ids(c=>GOBLIN_IDS.has(c.id))),
+  eggs:series('卵','알','Egg',ids(c=>c.hatchTurns!=null)),
   golem:series('ゴーレム','골렘','Golem',ids(c=>/골램|골렘/.test(c.name))),
   assassin:series('アサシン','암살자','Assassin',ids(c=>c.name.includes('암살자'))),
   hexer:series('呪術師','주술사','Hexer',ids(c=>c.name.includes('주술사'))),
@@ -29,6 +32,8 @@ export const CARD_SERIES: Record<string,Series> = {
   militaryKnight:series('騎士','기사','Knight',ids(c=>c.t==='mon'&&/기사|騎士/.test(c.name+(c.nameJa??'')))),
   militaryGunner:series('砲撃兵','포격병','Gunner',ids(c=>c.t==='mon'&&/포격병|砲撃兵/.test(c.name+(c.nameJa??'')))),
 };
+CARD_SERIES.goblin.aliases={ja:['「ゴブリン」関連'],ko:['고블린 계열'],en:['Goblin-related']};
+CARD_SERIES.eggs.aliases={en:['egg']};
 CARD_SERIES.golem.aliases={ko:['골램']};
 CARD_SERIES.fire.aliases={en:['Fire spell']};
 CARD_SERIES.elf.aliases={en:['Elves']};
@@ -101,11 +106,12 @@ export function effectReferenceParts(text:string,lang:EffectLocale,sourceId:stri
       const before=text.slice(0,i),after=text.slice(i+c.text.length);
       if(lang==='en'&&(/[A-Za-z]$/.test(before)||/^[A-Za-z]/.test(after)&&!/^s\b/.test(after)))return false;
       if(lang==='ja'&&c.reference.kind==='card'&&!/^($|[」\s0-9０-９(（、。・：:]|は|を|が|に|の|で|と|から|へ)/.test(after))return false;
-      if(lang==='ja'&&c.text.length===1&&!(before.endsWith('「')&&after.startsWith('」')))return false;
+      if(lang==='ja'&&c.reference.kind==='card'&&c.text.length===1&&!(before.endsWith('「')&&after.startsWith('」')))return false;
       if(lang==='ko'&&c.text.length===1&&(!/(^|\s|['·「])$/.test(before)||!/^($|[\s'·」]|[이을를의에은와과])/u.test(after)))return false;
       if(c.reference.kind==='series') {
         const id=c.reference.id;
-        if(id.startsWith('tribe:')||['blood','black','fire','chosen','armorer'].includes(id))return true;
+        if(id==='goblin'&&/関連|계열|-related/.test(c.text))return true;
+        if(id.startsWith('tribe:')||['eggs','blood','black','fire','chosen','armorer'].includes(id))return true;
         if(lang!=='ja'&&familyNames.has(CARD_SERIES[id].names.ja))return true;
         if(lang==='ja')return /^」(?:「[^」]+」)*系/.test(after)||sourceId==='VITAL3';
         if(lang==='ko')return /^(?:['’]?\s*|·[가-힣]+\s*)계열/.test(after)||!all.some(x=>x.name===c.text);

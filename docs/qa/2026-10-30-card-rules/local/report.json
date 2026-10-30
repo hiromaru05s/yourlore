@@ -1,0 +1,434 @@
+{
+  "origin": "http://127.0.0.1:5173/",
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+  "reports": [
+    {
+      "lang": "ja",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 784.453125,
+        "y": 295.5625,
+        "width": 440,
+        "height": 368
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ja",
+      "id": "DUNGEON",
+      "term": "passive:evade",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 847.453125,
+        "y": 295.5625,
+        "width": 440,
+        "height": 312
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ja",
+      "id": "PURGE_TOUCH",
+      "term": "brand",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 820.453125,
+        "y": 486.0625,
+        "width": 440,
+        "height": 232
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ja",
+      "id": "FURNACE",
+      "term": "shield",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 855.921875,
+        "y": 295.5625,
+        "width": 440,
+        "height": 260
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ja",
+      "id": "HIGH_ELF",
+      "term": "dew",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 712.453125,
+        "y": 295.5625,
+        "width": 440,
+        "height": 232
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ja",
+      "id": "M6",
+      "term": "lasting",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 508.34375,
+        "y": 382.5625,
+        "width": 440,
+        "height": 176
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ja",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "rect": {
+        "x": 12,
+        "y": 88.296875,
+        "width": 366,
+        "height": 452
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ja",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "rect": {
+        "x": 12,
+        "y": 14.796875,
+        "width": 296,
+        "height": 480
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ja",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "rect": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 695.6875
+      },
+      "font": "32px"
+    },
+    {
+      "lang": "ko",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 758.921875,
+        "y": 295.5625,
+        "width": 440,
+        "height": 368
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ko",
+      "id": "DUNGEON",
+      "term": "passive:evade",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 795.53125,
+        "y": 295.5625,
+        "width": 440,
+        "height": 312
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ko",
+      "id": "PURGE_TOUCH",
+      "term": "brand",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 774.5,
+        "y": 486.0625,
+        "width": 440,
+        "height": 204
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ko",
+      "id": "FURNACE",
+      "term": "shield",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 774.484375,
+        "y": 295.5625,
+        "width": 440,
+        "height": 232
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ko",
+      "id": "HIGH_ELF",
+      "term": "dew",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 723.046875,
+        "y": 295.5625,
+        "width": 440,
+        "height": 204
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ko",
+      "id": "M6",
+      "term": "lasting",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 436.234375,
+        "y": 382.5625,
+        "width": 440,
+        "height": 176
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ko",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "rect": {
+        "x": 12,
+        "y": 172.296875,
+        "width": 366,
+        "height": 368
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ko",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "rect": {
+        "x": 12,
+        "y": 42.796875,
+        "width": 296,
+        "height": 452
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "ko",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "rect": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 634.09375
+      },
+      "font": "32px"
+    },
+    {
+      "lang": "en",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 525.8125,
+        "y": 295.5625,
+        "width": 440,
+        "height": 424
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "en",
+      "id": "DUNGEON",
+      "term": "passive:evade",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 599.265625,
+        "y": 295.5625,
+        "width": 440,
+        "height": 340
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "en",
+      "id": "PURGE_TOUCH",
+      "term": "brand",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 894.5625,
+        "y": 486.0625,
+        "width": 440,
+        "height": 232
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "en",
+      "id": "FURNACE",
+      "term": "shield",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 878.890625,
+        "y": 295.5625,
+        "width": 440,
+        "height": 288
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "en",
+      "id": "HIGH_ELF",
+      "term": "dew",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 839.5,
+        "y": 295.5625,
+        "width": 440,
+        "height": 260
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "en",
+      "id": "M6",
+      "term": "lasting",
+      "width": 1461,
+      "height": 790,
+      "scale": 1,
+      "rect": {
+        "x": 972.03125,
+        "y": 414.0625,
+        "width": 440,
+        "height": 231
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "en",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 390,
+      "height": 844,
+      "scale": 1,
+      "rect": {
+        "x": 12,
+        "y": 90.046875,
+        "width": 366,
+        "height": 480
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "en",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 320,
+      "height": 568,
+      "scale": 1,
+      "rect": {
+        "x": 12,
+        "y": 12,
+        "width": 296,
+        "height": 503.546875
+      },
+      "font": "16px"
+    },
+    {
+      "lang": "en",
+      "id": "DUNGEON",
+      "term": "passive:guts",
+      "width": 390,
+      "height": 844,
+      "scale": 2,
+      "rect": {
+        "x": 12,
+        "y": 12,
+        "width": 366,
+        "height": 749.09375
+      },
+      "font": "32px"
+    }
+  ],
+  "assets": [
+    "http://127.0.0.1:5173/art/brand/lore-logo-transparent.webp",
+    "http://127.0.0.1:5173/art/seekers/faceless-v2/portrait.webp",
+    "http://127.0.0.1:5173/art/lounge/icons/shard-simple-v1.png",
+    "http://127.0.0.1:5173/art/lounge/icons/v2/search.png",
+    "http://127.0.0.1:5173/ui/passives/v2/counter.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/dual.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/ambush.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/aura.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/void.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/guts.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/decay.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/majesty.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/taunt.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/evade.svg",
+    "http://127.0.0.1:5173/ui/passives/v2/relic.svg",
+    "http://127.0.0.1:5173/art/cards-xs/REFRESH_HAND.webp?v=20260910-theme-identity-v3",
+    "http://127.0.0.1:5173/art/cards-xs/M9.webp?v=20260910-theme-identity-v3",
+    "http://127.0.0.1:5173/art/cards-xs/NMD4.webp?v=20260910-theme-identity-v3",
+    "http://127.0.0.1:5173/art/cards-xs/MARKET_CRISIS.webp?v=20260910-theme-identity-v3"
+  ],
+  "errors": [],
+  "scope": "Real app UI and shipped code with isolated API fixture; no real purchases/accounts/PvP."
+}

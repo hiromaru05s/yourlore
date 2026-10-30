@@ -4058,7 +4058,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       const rn = ctx.drawN(p, 1);
       const drawn = p.hand.find(c => !before.has(c.uid));
       ctx.log(`${tag(p, card)} ${rn}장 드로우`, `${tag(p, card)} ${rn}枚ドロー`);
-      if (rn > 0 && drawn?.t === 'spell' && !g.over) ctx.heal(p, 2);
+      if (rn > 0 && drawn?.t === 'spell' && !g.over) ctx.heal(p, 3);
       break;
     }
     case "FOCUS": { // One optional exile from deck, graveyard or field.

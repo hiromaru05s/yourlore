@@ -17,7 +17,7 @@ export function bindCardReferences(overlay:HTMLElement, source:CardInst, openCar
   const onResize=()=>{close();};
   const deferClose=()=>{clearTimeout(timer);timer=setTimeout(()=>{if(!popup?.matches(':hover')&&!popup?.contains(document.activeElement)&&document.activeElement!==anchor)close();},180);};
   const show=(button:HTMLButtonElement,ref:CardReference)=>{
-    clearTimeout(timer);if(anchor===button&&popup)return;close();anchor=button;
+    clearTimeout(timer);if(anchor===button&&popup)return;close();overlay.dispatchEvent(new CustomEvent('card-reference-preview-open'));anchor=button;
     popup=document.createElement('section');popup.className='card-reference-preview';popup.id='card-reference-preview';
     popup.setAttribute('role','dialog');popup.setAttribute('aria-label',referenceTitle(ref,lang));
     popup.dataset.referenceKind=ref.kind;popup.dataset.referenceId=ref.id;
@@ -69,5 +69,6 @@ export function bindCardReferences(overlay:HTMLElement, source:CardInst, openCar
   }
   overlay.addEventListener('pointerdown',e=>{if(popup&&!popup.contains(e.target as Node)&&!(e.target as Element).closest('.card-reference-link'))close();});
   overlay.addEventListener('scroll',e=>{if(popup&&!popup.contains(e.target as Node))close();},true);
+  overlay.addEventListener('card-rule-preview-open',()=>close());
   return close;
 }

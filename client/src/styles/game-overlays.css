@@ -896,3 +896,13 @@
 .zoom-details .psv-rule + .psv-rule { margin-top:12px; }
 .zoom-details .psv-rule dt { font-size:1rem; font-weight:700; }
 .zoom-details .psv-rule dd { margin:3px 0 0; font-size:1rem; line-height:1.75; }
+
+/* Full-size inline rules: hover, focus, or tap; no effect text is shortened. */
+.zoom-overlay .card-rule-term{display:inline;padding:0;border:0;border-radius:0;background:none;box-shadow:none;font:inherit;line-height:inherit;color:#c5e7fb;text-decoration:underline dotted;text-underline-offset:4px;cursor:help;white-space:normal;text-align:inherit}
+.zoom-overlay .card-rule-term:hover,.zoom-overlay .card-rule-term[aria-expanded=true]{color:#fff;text-decoration-style:solid}
+.zoom-overlay .card-rule-term:focus-visible{outline:2px solid #b9d9f3;outline-offset:3px}
+.card-rule-tooltip{position:fixed;z-index:4;width:min(440px,calc(100vw - 24px));max-height:calc(100dvh - 24px);box-sizing:border-box;display:flex;flex-direction:column;padding:22px;color:#e8eef4;cursor:default;font:400 1rem/1.75 var(--gothic-ui,var(--ui));box-shadow:0 12px 36px #0009}
+.card-rule-tooltip>header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:none;margin-bottom:10px;font-size:1.125rem}
+.card-rule-tooltip .rule-tooltip-close{flex:none;width:36px;height:36px;padding:0;border:1px solid #879fb6;background:#152a40;color:#eff8ff;font-size:24px;cursor:pointer}
+.rule-tooltip-content{min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-color:#a4b6c8 #101d2e;overflow-wrap:anywhere}
+.rule-tooltip-content p{margin:0 0 12px}.rule-tooltip-content p:last-child{margin-bottom:0}.rule-tooltip-label{display:block;color:#c5e7fb}

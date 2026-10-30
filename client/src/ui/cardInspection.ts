@@ -1,3 +1,4 @@
+import {bindCardRuleTerms} from './cardRuleTooltip';
 import {mountQuickSpellFrame,type QuickSpellFrame} from './quickSpellFrame';
 import {cardRelations,REFERENCE_CARDS} from '../shared/cardReferences';
 import {bindCardReferences} from './cardReferencePreview';
@@ -191,7 +192,9 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
     card.append(badge);
     card.querySelector<HTMLElement>('.card-status .kw')?.setAttribute('hidden','');
   }
-  closePreviews.set(ov,bindCardReferences(ov,c,openRelatedCard));
+  const closeReferences=bindCardReferences(ov,c,openRelatedCard);
+  const closeTerms=bindCardRuleTerms(ov);
+  closePreviews.set(ov,(restoreFocus=false)=>{const terms=closeTerms(restoreFocus);const refs=closeReferences(restoreFocus);return terms||refs;});
   ov.onkeydown = e => {
     if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); if(!closeCurrentPreview(true))zoomHistory.length ? backToPreviousCard() : closeZoom(); }
     if (e.key === 'Tab') {

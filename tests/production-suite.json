@@ -68,6 +68,7 @@
     "tests/passive-explanations.mjs",
     "tests/card-effect-ux.mjs",
     "tests/card-references.mjs",
+    "tests/card-rule-glossary.mjs",
     "tests/biblion-vfx.mjs",
     "tests/connected-return-motion.mjs",
     "tests/dew-shield-v54.mjs",

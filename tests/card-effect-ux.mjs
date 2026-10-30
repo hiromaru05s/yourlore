@@ -40,7 +40,7 @@ try {
    assert(E.cardSearchText(c).includes(c[{ja:'textJa',ko:'text',en:'textEn'}[lang]].normalize('NFKC').toLocaleLowerCase()),`${c.id}/${lang}: full effect searchable`);
    const notes=['ja','ko','en'].map(l=>E.cardEffectNotes(c,l).length);assert.equal(new Set(notes).size,1,`${c.id}: same glossary in all locales`);
    for(const [k,p] of Object.entries(E.PASSIVES)) if(c.textJa.includes(p.ja.name))assert(E.referencedPassives(c).includes(k),`${c.id}: new keyword reference needs metadata`);
-   for(const [pattern,term] of [['持続','lasting'],['デッキ構成','composition'],['リフト','rift'],['カウンター','counters'],['墓地','graveyard']])if(c.textJa.includes(pattern))assert(E.CARD_RULE_METADATA[c.id]?.terms?.includes(term),`${c.id}: missing ${term}`);
+   for(const [pattern,term] of [['持続','lasting'],['対象が場を離れるまで','lasting'],['デッキ構成','composition'],['リフト','rift'],['カウンター','counters'],['墓地','graveyard']])if(c.textJa.includes(pattern))assert(E.CARD_RULE_METADATA[c.id]?.terms?.includes(term),`${c.id}: missing ${term}`);
    E.closeZoom();rendered++;
   }
   const received=mon('M4',{decayCnt:2});

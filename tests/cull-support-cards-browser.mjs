@@ -31,7 +31,7 @@ try {
   ['FOCUS','選択と集中',['1枚まで'],['合計3枚']],
   ['CULL_FLOOD','カルの洗礼',['カル','4枚','墓地に追加'],['合計3枚']],
   ['TRIAL_AREA','試練の領域',['自分に5ダメージ','自分のターン開始時','墓地に追加'],['2枚まで']],
-  ['REFRESH_HAND','リフレッシュ',['カードを1枚引く','魔法カードなら','2回復'],['2枚まで']]]){
+  ['REFRESH_HAND','リフレッシュ',['カードを1枚引く','魔法カードなら','3回復'],['2枚まで']]]){
   await page.locator('.cards-search').fill(name);const face=page.locator(`#grid [data-card-id="${id}"]`).first();await face.click();
   await page.locator('.zoom-overlay').waitFor();const text=await page.locator('.zoom-overlay').innerText();for(const phrase of removed)assert(!text.includes(phrase),id+': obsolete text '+phrase);for(const rule of rules)assert(text.includes(rule),id+': '+rule+' / '+text);
   await page.locator('.zoom-overlay img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode().catch(()=>{}))));
