@@ -45,7 +45,7 @@ export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;c
  }
  function showResults(receipt:CollectionReceipt){
   show(l('獲得結果','Draw results','획득 결과'),rewardList(receipt),[receipt]);
-  if(options.tutorial){resultOpen=true;dialog!.querySelector('footer')!.innerHTML=`<button class="lore-button-primary" data-tutorial-result-next>${l('スターターショップへ','Continue to Starter Shop','스타터 상점으로')}</button>`;dialog!.querySelector<HTMLButtonElement>('[data-tutorial-result-next]')!.onclick=close;return;}
+  if(options.tutorial){resultOpen=true;dialog!.querySelector('footer')!.innerHTML=`<button class="lore-button-primary" data-tutorial-result-next>${l('スターターショップへ','Continue to Starter Shop','스타터 상점으로')}</button>`;const next=dialog!.querySelector<HTMLButtonElement>('[data-tutorial-result-next]')!;next.onclick=close;next.focus({preventScroll:true});return;}
   const count=receipt.rewards.length===10?10:1;
   dialog!.querySelector('footer')!.innerHTML=`<button class="lore-button-primary" data-redraw="${count}">${l('もう一度引く','Draw again','다시 뽑기')}</button>`;
   dialog!.querySelector<HTMLButtonElement>('[data-redraw]')!.onclick=()=>confirmRedraw(count);updateControls();
@@ -62,7 +62,7 @@ export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;c
    const result=await options.draw(count);if(dead)return;balance=result.credits;
    close();focus=host.querySelector(`[data-pull="${count}"]`);
    const showResult=()=>showResults(result.receipt);
-   stopCinematic=openGachaCinematic({count,edition:'ivory',rewards:result.receipt.rewards,onClose:showResult});
+   stopCinematic=openGachaCinematic({count,tutorial:options.tutorial,edition:'ivory',rewards:result.receipt.rewards,onClose:showResult});
   }catch(e){if(!dead)show(l('購入結果を確認してください','Check purchase result','구매 결과를 확인해 주세요'),`<p>${esc((e as Error).message)}</p>`);}
   finally{busy=false;if(!dead)updateControls();}
  }

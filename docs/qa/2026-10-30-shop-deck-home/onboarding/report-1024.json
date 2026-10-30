@@ -1,0 +1,12 @@
+{
+  "width": 1024,
+  "origin": "http://127.0.0.1:5173/",
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+  "errors": [],
+  "apiErrors": [],
+  "singleStarted": true,
+  "status": {
+    "stage": "complete",
+    "credits": 2000
+  }
+}

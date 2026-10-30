@@ -20,3 +20,10 @@
 .gacha-cinematic>footer{right:40px;bottom:max(34px,env(safe-area-inset-bottom))}
 .gacha-cinematic [data-skip]{min-width:152px;min-height:56px;padding:14px 28px;font-size:18px}
 @media(max-width:600px){.gacha-cinematic>footer{left:16px;right:28px;align-items:flex-end}.gacha-cinematic [data-skip]{min-width:142px;min-height:52px}}
+
+.gacha-cinematic button[aria-disabled=true]{position:relative;cursor:not-allowed;color:#aab8c4}
+.gacha-lock-tip{--lore-frame-width:20px;--lore-corner-cut:10px;position:absolute;z-index:4;right:0;bottom:calc(100% + 12px);width:max-content;max-width:min(300px,80vw);padding:12px 18px;color:#edf5ff;font:14px/1.6 system-ui,sans-serif;text-align:left;visibility:hidden;pointer-events:none;box-shadow:0 6px 18px #0007}
+.gacha-cinematic header .gacha-lock-tip{top:calc(100% + 12px);bottom:auto}
+.gacha-cinematic button:is(:hover,:focus-visible) .gacha-lock-tip{visibility:visible}
+
+:root body .gacha-cinematic button[aria-disabled=true]{opacity:1!important}

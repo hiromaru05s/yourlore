@@ -154,3 +154,9 @@
  :root body .lounge-deck .deck-panel{height:auto;min-height:100%;grid-template-rows:39px 199px 190px}
  .lounge-deck .deck-screen:not([data-tab=edit]) .deck-panel{grid-template-rows:39px 36px 190px}
 }
+
+/* Ownership, not remaining deck capacity, determines whether a face is dimmed. */
+.lounge-deck #deckPool .deck-pool-tile.is-unowned .card{filter:grayscale(1) brightness(.55);opacity:.65}
+.lounge-deck #deckPool .deck-owned{font-size:14px;font-weight:700;line-height:1.4;font-variant-numeric:tabular-nums;padding:3px 6px;background:#071321f5;border:1px solid #a6cbd05c;pointer-events:auto}
+.lounge-deck #deckPool .deck-owned.has{color:#fff;background:#183e57f5;border-color:#b6e0ef}
+@media(max-width:760px){.lounge-deck #deckPool .deck-owned{font-size:12px;padding:2px 4px}}

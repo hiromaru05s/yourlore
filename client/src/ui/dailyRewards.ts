@@ -29,10 +29,10 @@ export const shardLabel=(n:number)=>L(`${n} シャード`,`${n} Shards`,`${n} �
 export const firstClearLabel=(n:number)=>L(`初回クリア ${shardLabel(n)}`,`First clear: ${shardLabel(n)}`,`첫 클리어 ${shardLabel(n)}`);
 export function syncCredits(app:App,state:ProgressionState):void {if(app.user){app.user.credits=state.credits;document.dispatchEvent(new Event('lore:user'));}}
 export function rewardProgressHtml(data:ProgressionState|undefined,mode:'ranked'|'online'|'bot'):string {
- if(mode==='bot')return '';
- const cap=MATCH_REWARDS[mode].cap,value=data?Math.min(cap,Math.max(0,data[mode])):0;
+ const hidden=mode==='bot';
+ const rewardMode=hidden?'ranked':mode,cap=MATCH_REWARDS[rewardMode].cap,value=data?Math.min(cap,Math.max(0,data[rewardMode])):0;
  const label=L('本日のシャード','Shards today','오늘의 샤드');
- return `<span class="mode-reward-label"><span>${label}</span><b>${data?value:'—'} / ${cap}</b></span><progress value="${value}" max="${cap}" aria-label="${esc(label)}"></progress>`;
+ return `<div class="mode-reward-content"${hidden?' aria-hidden="true" style="visibility:hidden"':''}><span class="mode-reward-label"><span>${label}</span><b>${data?value:'—'} / ${cap}</b></span><progress value="${value}" max="${cap}" aria-label="${esc(label)}"></progress></div>`;
 }
 export function mountDailyRewards(app:App,host:HTMLElement,onState?:(state:ProgressionState)=>void):()=>void {
  let request=0,dead=false,data:ProgressionState|undefined,timer:ReturnType<typeof setTimeout>|undefined;

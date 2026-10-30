@@ -213,13 +213,13 @@ export function mountDeck(app: App, options:{tutorial?:boolean}={}): Screen {
         const card=cardEl(c,{size:'mkt',fullArt:true,artSource:deckDisplayArt[id],lazyArt:true});prepareDeckCard(card,id);
         card.tabIndex=0;card.setAttribute('role','button');card.setAttribute('aria-label',`${cardName(c)} · ${loungeText('拡大表示','Enlarge card','카드 확대')}`);
         bindZoom(card,c);card.onclick=()=>zoomCard(c);card.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();zoomCard(c);}};
-        const cnt=document.createElement('div');cnt.className='deck-owned';cnt.title=loungeText('デッキ内 / 所持枚数','In deck / Owned','덱 구성 / 보유 수');card.append(cnt);
+        const cnt=document.createElement('div');cnt.className='deck-owned';cnt.title=loungeText('追加できる枚数 / 所持枚数','Available to add / Owned','추가 가능 수 / 보유 수');
         const add=document.createElement('button');add.className='deck-card-action card-action deck-action';add.dataset.action='add';add.innerHTML=controlIcon(false,true);add.setAttribute('aria-label',`${cardName(c)} · ${loungeText('追加・入れ替え','Add or replace','추가 또는 교체')}`);
         add.onclick=()=>{if(!canAdd(id))return;if(deck().length<DECK_SIZE){undo=[...deck()];deck().push(id);sortCards(deck());pending=null;}else pending=pending===id?null:id;render();};
-        face.append(card,add);tile.append(face);poolRows.set(id,tile);
+        face.append(card,cnt,add);tile.append(face);poolRows.set(id,tile);
       }
       const available=isLocalDevAccount()?DECK_MAX_COPIES:Math.min(DECK_MAX_COPIES,starterCards[id]??0);
-      const count=tile.querySelector<HTMLElement>('.deck-owned')!;count.textContent=`${countOf(id)}/${available}`;count.classList.toggle('has',countOf(id)>0);
+      const count=tile.querySelector<HTMLElement>('.deck-owned')!;const remaining=Math.max(0,available-countOf(id));count.textContent=`${remaining}/${available}`;count.classList.toggle('has',available>0);count.setAttribute('aria-label',loungeText(`追加できる枚数 ${remaining}枚 / 所持 ${available}枚`,`Available to add: ${remaining} / Owned: ${available}`,`추가 가능 ${remaining}장 / 보유 ${available}장`));tile.classList.toggle('is-unowned',available===0);
       const add=tile.querySelector<HTMLButtonElement>('.deck-card-action')!;add.disabled=!canAdd(id);add.setAttribute('aria-pressed',String(pending===id));
       tile.querySelector('.card')!.classList.toggle('is-candidate',pending===id);
       if(poolEl.children[poolIndex]!==tile)poolEl.insertBefore(tile,poolEl.children[poolIndex]??null);poolIndex++;

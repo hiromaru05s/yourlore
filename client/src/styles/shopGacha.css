@@ -201,3 +201,6 @@
  .gacha-page p.gacha-purchase-status{grid-column:1/-1;margin-top:4px}
 }
 @media(max-width:360px){.gacha-entry .gacha-draw>span{font-size:13px}.gacha-purchase h3{font-size:18px}.gacha-balance strong{font-size:16px}}
+
+/* Keep the next teaching action anchored to the result dialog's real button. */
+:root body .reward-results-dialog [data-tutorial-result-next]{outline:2px solid #c9efff;outline-offset:4px;filter:brightness(1.2)}

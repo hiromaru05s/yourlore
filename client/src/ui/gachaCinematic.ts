@@ -10,7 +10,7 @@ export function prepareGachaCinematic():Promise<void>{
  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return Promise.resolve();
  return preparation??=Promise.all([import('./gachaAzure/scene'),import('./gachaAzure/materials').then(m=>m.prepareCover())]).then(()=>{}).catch(error=>{preparation=undefined;throw error;});
 }
-export interface GachaCinematicOptions {count:number;rewards?:CollectionReward[];edition:'astral'|'ivory'|'crimson';onClose:()=>void}
+export interface GachaCinematicOptions {count:number;tutorial?:boolean;rewards?:CollectionReward[];edition:'astral'|'ivory'|'crimson';onClose:()=>void}
 /** Selected Azure Wake presentation. Receives server-confirmed rewards; never draws, spends or grants items. */
 export function openGachaCinematic(options:GachaCinematicOptions):()=>void{
  for(const reward of options.rewards??[])void prepareRewardCard(reward).catch(()=>{});
@@ -19,6 +19,11 @@ export function openGachaCinematic(options:GachaCinematicOptions):()=>void{
  document.body.append(dialog);dialog.showModal();
  const canvas=dialog.querySelector('canvas')!,loading=dialog.querySelector<HTMLElement>('.gacha-cinematic-loading')!,result=dialog.querySelector<HTMLElement>('.gacha-cinematic-result')!;
  const skip=dialog.querySelector<HTMLButtonElement>('[data-skip]')!,done=dialog.querySelector<HTMLButtonElement>('[data-done]')!;
+ const closeButton=dialog.querySelector<HTMLButtonElement>('[data-close]')!;
+ if(options.tutorial)for(const [button,key] of [[skip,'skip'],[closeButton,'close']] as const){
+  button.setAttribute('aria-disabled','true');button.setAttribute('aria-describedby',`gacha-lock-${key}`);
+  const tip=document.createElement('span');tip.className='gacha-lock-tip lore-surface';tip.id=`gacha-lock-${key}`;tip.setAttribute('role','tooltip');tip.textContent=l('チュートリアル中はスキップできません','You can’t skip during the tutorial','튜토리얼 중에는 건너뛸 수 없습니다');button.append(tip);
+ }
  const events=new AbortController(),media=matchMedia('(prefers-reduced-motion: reduce)');
  let scene:LibraryScene|undefined,dead=false,ready=false,raf=0,seconds=0,last=performance.now(),ended=false;
  const finishUI=()=>{if(ended)return;ended=true;cancelAnimationFrame(raf);if(options.rewards?.length){queueMicrotask(()=>{if(!dead)options.onClose();});return;}loading.hidden=true;result.hidden=false;skip.hidden=true;done.hidden=false;dialog.dataset.phase='result';dialog.dataset.ready='true';};
@@ -27,15 +32,18 @@ export function openGachaCinematic(options:GachaCinematicOptions):()=>void{
  const observer=new ResizeObserver(resize);observer.observe(dialog);
  function frame(now:number){if(dead||!ready||ended)return;const delta=Math.min(.08,(now-last)/1000);last=now;if(!document.hidden){seconds=Math.min(DURATION,seconds+delta);render();}if(!ended)raf=requestAnimationFrame(frame);}
  const start=()=>{if(!ready||dead)return;cancelAnimationFrame(raf);seconds=media.matches?DURATION:0;ended=false;result.hidden=true;skip.hidden=false;done.hidden=true;dialog.dataset.phase='animation';last=performance.now();render();if(!ended)raf=requestAnimationFrame(frame);};
- skip.disabled=false;skip.onclick=()=>{cancelAnimationFrame(raf);finishUI();};done.onclick=options.onClose;dialog.querySelector<HTMLButtonElement>('[data-close]')!.onclick=options.onClose;
- dialog.addEventListener('cancel',e=>{e.preventDefault();options.onClose();},{signal:events.signal});
+ skip.disabled=false;skip.onclick=()=>{if(options.tutorial)return;cancelAnimationFrame(raf);finishUI();};done.onclick=options.onClose;
+ const requestClose=()=>{if(!options.tutorial||ended||dialog.dataset.phase==='error')options.onClose();};closeButton.onclick=requestClose;
+ dialog.addEventListener('cancel',e=>{e.preventDefault();requestClose();},{signal:events.signal});
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);finishUI();},{signal:events.signal});
  document.addEventListener('visibilitychange',()=>{last=performance.now();},{signal:events.signal});
  media.addEventListener('change',()=>{if(ready&&media.matches){cancelAnimationFrame(raf);seconds=DURATION;render();}},{signal:events.signal});
+ // A slow/unavailable presentation must never trap already-saved rewards.
+ const loadingDeadline=setTimeout(()=>{if(options.tutorial&&!dead&&!ready&&!ended)finishUI();},20000);
  if(media.matches&&options.rewards){finishUI();}
  else void import('./gachaAzure/scene').then(async ({LibraryScene})=>{
   if(dead||ended)return;scene=new LibraryScene(canvas,{hideRewardModels:!!options.rewards});scene.count=options.count===10?10:1;scene.featuredSleeve=options.edition;resize();await scene.ready;if(dead||ended)return;
   scene.hideRewardModels=!!options.rewards;scene.setVariant(0);scene.count=options.count===10?10:1;scene.rewardKind='sleeve';resize();ready=true;loading.hidden=true;skip.disabled=false;dialog.dataset.ready='true';start();
- }).catch(error=>{scene?.dispose();if(dead||ended)return;loading.textContent=l('演出を読み込めませんでした。閉じて再度お試しください。','The animation could not load. Close and try again.','연출을 불러오지 못했습니다. 닫고 다시 시도해 주세요.');done.hidden=false;done.textContent=l('獲得結果を見る','View results','획득 결과 보기');dialog.dataset.phase='error';console.error('Gacha animation failed',error);});
- return ()=>{if(dead)return;dead=true;cancelAnimationFrame(raf);events.abort();observer.disconnect();scene?.dispose();dialog.close();dialog.remove();};
+ }).catch(error=>{scene?.dispose();if(dead||ended)return;loading.textContent=l('演出を読み込めませんでした。閉じて再度お試しください。','The animation could not load. Close and try again.','연출을 불러오지 못했습니다. 닫고 다시 시도해 주세요.');done.hidden=false;done.textContent=l('獲得結果を見る','View results','획득 결과 보기');dialog.dataset.phase='error';closeButton.removeAttribute('aria-disabled');closeButton.removeAttribute('aria-describedby');closeButton.querySelector('.gacha-lock-tip')?.remove();console.error('Gacha animation failed',error);});
+ return ()=>{if(dead)return;dead=true;clearTimeout(loadingDeadline);cancelAnimationFrame(raf);events.abort();observer.disconnect();scene?.dispose();dialog.close();dialog.remove();};
 }

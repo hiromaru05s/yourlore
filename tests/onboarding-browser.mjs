@@ -52,8 +52,11 @@ try{
    await page.locator('[data-pull="10"]').waitFor({timeout:90000});
    await page.locator('.tutorial-tour-next').click();await page.screenshot({path:out+'/gacha-'+width+'.png'});
    await page.locator('[data-pull="10"]').click();await page.locator('.gacha-cinematic').waitFor({timeout:30000});
-   // Existing selected cinematic is used; close moves to the actual receipt gallery.
-   await page.locator('.gacha-cinematic [data-close]').click();await page.locator('[data-tutorial-result-next]').click();
+   // Tutorial cannot skip the selected cinematic; normal playback reveals the receipt.
+   const skip=page.locator('.gacha-cinematic [data-skip]');assert.equal(await skip.getAttribute('aria-disabled'),'true');await skip.hover();
+   assert.equal(await skip.locator('[role=tooltip]').innerText(),'チュートリアル中はスキップできません');await page.screenshot({path:out+'/skip-locked-'+width+'.png'});
+   await skip.evaluate(e=>e.click());await page.locator('.gacha-cinematic [data-close]').evaluate(e=>e.click());await page.keyboard.press('Escape');assert.equal(await page.locator('.gacha-cinematic').count(),1);
+   await page.locator('[data-tutorial-result-next]').waitFor({timeout:90000});assert.equal(await page.locator('[data-tutorial-result-next]').evaluate(e=>getComputedStyle(e).outlineStyle),'solid');await page.screenshot({path:out+'/result-next-'+width+'.png'});await page.locator(process.env.ONBOARDING_RESULT_CLOSE==='1'?'.reward-results-dialog header [data-close]':'[data-tutorial-result-next]').click();
    await page.locator('[data-category="starter"]').click();await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='1');
    const free=page.locator('.starter-shop-item:first-child [data-buy-starter]');await free.waitFor();assert.match(await free.innerText(),/0 シャード/);
    await page.screenshot({path:out+'/free-starter-'+width+'.png'});await free.click();assert.match(await page.locator('.starter-purchase-dialog').innerText(),/0 シャード/);await page.locator('[data-purchase-yes]').click();
