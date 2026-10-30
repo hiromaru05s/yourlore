@@ -3924,7 +3924,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case "RUNE1": { // 룬 학문 - 초급: 코스트5 이상 상대 몬스터 1체 파괴 (강한 것부터)
-      const targets = o.field.filter((m) => (m.cost ?? 0) >= 5).sort((a, b) => (effAtk(o, b, g) + b.def!) - (effAtk(o, a, g) + a.def!));
+      const targets = o.field.filter((m) => (m.cost ?? 0) >= 5).sort((a, b) => (effAtk(o, b, g) + curHp(o, b)) - (effAtk(o, a, g) + curHp(o, a)));
       if (targets[0]) { ctx.log(`${tag(p, card)} ${cn(targets[0])} 파괴`, `${tag(p, card)} ${cn(targets[0])} 破壊`); ctx.destroyMonster(o, targets[0]); }
       break;
     }
@@ -4351,11 +4351,11 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
   }
 }
 
-/** 룬 학문(v34): 순환 덱(덱+묘지+패)의 절반 이상이 마법(스타터 포함)인가. */
+/** Runecraft requirement: at least half the shared deck composition is spell cards. */
 export function spellDeckHalf(p: PlayerState): boolean {
-  const pool = [...p.deck, ...p.discard, ...p.hand];
+  const pool = deckComp(p);
   if (!pool.length) return false;
-  const magic = pool.filter((c) => c.t === "spell" || c.t === "starter").length;
+  const magic = pool.filter((c) => c.t === "spell").length;
   return magic * 2 >= pool.length;
 }
 
@@ -4724,7 +4724,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "GS9_0") { applicable=true; if (o0.hp <= 21) { return reason("  └ 상대 체력 21 이하라 사용 불가", "  └ 相手の体力が21以下のため使用不可"); } }
   if (card.id === "GS10_0") { applicable=true; if (p.field.length > 1) { return reason("  └ 자신 필드 몬스터 2체 이상이라 사용 불가", "  └ 自分の場のモンスターが2体以上のため使用不可"); } }
   if (card.id === "RUNE1") { applicable=true; if (!o0.field.some((m) => (m.cost ?? 0) >= 5)) { return reason("  └ 코스트 5 이상 상대 몬스터가 없습니다", "  └ コスト5以上の敵モンスターがいません"); } }
-  if ((card.id === "RUNE2" || card.id === "RUNE3")) { applicable=true; if (!spellDeckHalf(p)) { return reason("  └ 덱의 절반 이상이 마법이어야 발동 가능", "  └ デッキの半分以上が魔法でなければ発動不可"); } }
+  if ((card.id === "RUNE2" || card.id === "RUNE3")) { applicable=true; if (!spellDeckHalf(p)) { return reason("  └ 덱 구성의 절반 이상이 마법 카드여야 발동 가능", "  └ デッキ構成の半分以上が魔法カードでなければ発動不可"); } }
   if ((card.id === "DISARM1" || card.id === "DISARM2" || card.id === "DISARM3")) { applicable=true; if (o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); } }
   if (card.id === "BLOOD_SECRET") { applicable=true; if (!p.field.some((m) => isVampFamily(m))) { return reason("  └ 자신 필드에 '흡혈귀' 계열 몬스터가 없습니다", "  └ 自分の場に「吸血鬼」系列モンスターがいません"); } }
   if (card.id === "BLOOD2") { applicable=true; if (o0.traps.length + o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법·세트 함정이 없습니다", "  └ 破壊する相手の永続魔法・セットトラップがありません"); } }

@@ -1,6 +1,6 @@
 import type { CardDef, CardInst, GameState, PlayerState } from './types';
 import { ALL_IDS, DB, hasPassive } from './cards';
-import { MAX_TURNS, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet } from './engine';
+import { MAX_TURNS, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet, spellDeckHalf } from './engine';
 import { cardPower } from './cardEval';
 import { recoveryEngine, strategicPowerEvaluator } from './botStrategy';
 import { enteringAttack, matchupPlan, removalHits } from './botMatchup';
@@ -100,7 +100,7 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
       if (!own.some(x=>['MERCENARY','MERC_LEADER','MERC_MASTER'].includes(x.id))) readiness -= base;
       if (copies) redundancy -= base*.9;
     }
-    if (c.id === 'RUNE2' || c.id === 'RUNE3' || c.ench === 'runeEcho') synergy += spells * 2 >= own.length ? Math.min(8,spells) : -10;
+    if (c.id === 'RUNE2' || c.id === 'RUNE3' || c.ench === 'runeEcho') synergy += spellDeckHalf(p) ? Math.min(8,spells) : -10;
     if (c.act?.startsWith('buff') || c.id === 'TRUMPET') synergy += monsters ? Math.min(6,monsters*1.5) : -8;
     // Market support is an option, discounted heavily compared with owned support.
     if (c.id !== 'STRONG_ACID' && decay(c) && !decayers && accessible.some(x=>x.id==='STRONG_ACID')) synergy += 2;

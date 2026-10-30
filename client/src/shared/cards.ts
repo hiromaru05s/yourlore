@@ -1840,9 +1840,9 @@ const PATCH34: Record<string, Partial<CardDef>> = {
     textJa: "相手のデッキ・墓地・場の「魔族」モンスター1体につき相手に16ダメージ (発動2)" },
   GS6_4: { play: 3, act: undefined, val: undefined, text: "상대에게 낙인 카운터가 있으면 낙인 카운터 3개를 부여 (시전 3)",
     textJa: "相手に烙印カウンターがあれば烙印カウンターを3個付与 (発動3)" },
-  RUNE2: { play: undefined, act: undefined, text: "자신 덱의 절반 이상이 마법일 때만 발동 · 최대 마나 +2", textJa: "自分のデッキの半分以上が魔法の時のみ発動 · 最大マナ+2" },
-  RUNE3: { play: undefined, act: undefined, ench: "runeEcho", val: 99, text: "영구: 자신 덱의 절반 이상이 마법일 때만 발동 · 자신의 마법을 사용하면 마나 없이 1번 더 발동한다",
-    textJa: "永続: 自分のデッキの半分以上が魔法の時のみ発動 · 自分の魔法を使うとマナなしでもう1回発動する" },
+  RUNE2: { play: undefined, act: undefined, text: "자신의 덱 구성의 절반 이상이 마법 카드일 때만 발동 · 최대 마나 +2", textJa: "自分のデッキ構成の半分以上が魔法カードの時のみ発動 · 最大マナ+2" },
+  RUNE3: { play: undefined, act: undefined, ench: "runeEcho", val: 99, text: "영구: 자신의 덱 구성의 절반 이상이 마법 카드일 때만 발동 · 자신의 마법을 사용하면 마나 없이 1번 더 발동한다",
+    textJa: "永続: 自分のデッキ構成の半分以上が魔法カードの時のみ発動 · 自分の魔法を使うとマナなしでもう1回発動する" },
   WORLD_BLESS: { cost: 6, play: 4, text: "영구: 양 플레이어 턴 시작마다 최대 마나 +1 · 덱에 '엘프' 계열이 있으면 자신의 턴은 +4 (시전 4)",
     textJa: "永続: 両プレイヤーのターン開始時に最大マナ+1 · デッキに「エルフ」系がいれば自分のターンは+4 (発動4)" },
   GS8_0: { text: "상대 덱에서 원하는 카드 1장을 게임에서 제외", textJa: "相手のデッキから好きなカード1枚をゲームから除外" },
@@ -2478,7 +2478,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v69"; // Runecraft - Adept: max mana +8 -> +2
+export const BALANCE_VERSION = "v70"; // Runecraft: spell-only deck composition and current-HP target selection
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

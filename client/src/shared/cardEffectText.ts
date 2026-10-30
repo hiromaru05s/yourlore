@@ -406,19 +406,19 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Summon Requirement】Your deck composition contains at least 3 distinct Assassin-family card names other than this card’s name.\n\n【On Summon】Give the opponent 3 Brand counters."
   },
   "RUNE1": {
-    "ja": "【発動条件】相手の場に購入コスト5以上のモンスターがいる。\n\n【発動時】その中で攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。",
-    "ko": "【발동 조건】상대의 필드에 구매 코스트 5 이상 몬스터가 있다.\n\n【발동 시】그중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
-    "en": "【Play Requirement】An enemy monster has purchase cost 5 or more.\n\n【On Cast】Automatically destroy the eligible monster with the highest ATK plus printed HP; ties use field order."
+    "ja": "【発動条件】相手の場に購入コスト5以上のモンスターがいる。\n\n【発動時】その中で攻撃力と体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。",
+    "ko": "【발동 조건】상대의 필드에 구매 코스트 5 이상 몬스터가 있다.\n\n【발동 시】그중 공격력과 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
+    "en": "【Play Requirement】An enemy monster has purchase cost 5 or more.\n\n【On Cast】Automatically destroy the eligible monster with the highest ATK plus HP; ties use field order."
   },
   "RUNE2": {
-    "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+2。",
-    "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동 시】자신의 최대 마나 +2.",
-    "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【On Cast】Your max mana +2."
+    "ja": "【発動条件】自分のデッキ構成の半分以上が魔法カード。\n\n【発動時】自分の最大マナ+2。",
+    "ko": "【발동 조건】자신의 덱 구성의 절반 이상이 마법 카드.\n\n【발동 시】자신의 최대 마나 +2.",
+    "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【On Cast】Your max mana +2."
   },
   "RUNE3": {
-    "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【場にある間】自分が手札から使った単発魔法の処理後、選択待ちがなければ、同じ魔法の効果をマナなしでもう1回処理する（重複しない）。",
-    "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【필드에 있는 동안】자신이 패에서 사용한 일회성 마법 처리 후 선택 대기가 없으면 같은 마법 효과를 마나 없이 1회 더 처리한다(중첩 불가).",
-    "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【While on the Field】After resolving a non-persistent spell played from your hand, repeat its effect once without paying mana if no choice is pending; multiple copies do not stack."
+    "ja": "【発動条件】自分のデッキ構成の半分以上が魔法カード。\n\n【場にある間】自分が手札から単発魔法を使うたび、追加マナなしでその効果をもう1回発動する。\nただし、最初の効果で対象やカードなどの選択が必要になった場合は再発動しない。この効果は重複しない。",
+    "ko": "【발동 조건】자신의 덱 구성의 절반 이상이 마법 카드.\n\n【필드에 있는 동안】자신이 패에서 일회성 마법을 사용할 때마다 추가 마나 없이 그 효과를 1회 더 발동한다.\n단, 첫 효과에서 대상이나 카드 등의 선택이 필요해지면 재발동하지 않는다. 이 효과는 중첩되지 않는다.",
+    "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【While on the Field】Whenever you play a non-persistent spell from your hand, activate its effect 1 more time at no extra mana cost.\nIf its first effect requires you to choose a target, card, or other option, it does not activate again. This effect does not stack."
   },
   "GENESIS_SONG": {
     "ja": "【発動時】自分のデッキ・墓地から「始原」モンスターをランダムに2体、自分の場に召喚する。",

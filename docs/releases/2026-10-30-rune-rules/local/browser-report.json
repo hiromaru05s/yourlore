@@ -1,0 +1,440 @@
+{
+  "origin": "http://127.0.0.1:5193",
+  "cwd": "/Users/hiromaru05s/.codex/worktrees/rune-intermediate-nerf/LORE_TCG",
+  "checks": [
+    {
+      "id": "RUNE1",
+      "lang": "ja",
+      "width": 1440,
+      "height": 1000,
+      "text": "発動条件相手の場に購入コスト5以上のモンスターがいる。発動時その中で攻撃力と体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE2",
+      "lang": "ja",
+      "width": 1440,
+      "height": 1000,
+      "text": "発動条件自分のデッキ構成の半分以上が魔法カード。発動時自分の最大マナ+2。",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE3",
+      "lang": "ja",
+      "width": 1440,
+      "height": 1000,
+      "text": "発動条件自分のデッキ構成の半分以上が魔法カード。場にある間自分が手札から単発魔法を使うたび、追加マナなしでその効果をもう1回発動する。ただし、最初の効果で対象やカードなどの選択が必要になった場合は再発動しない。この効果は重複しない。",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE1",
+      "lang": "ja",
+      "width": 390,
+      "height": 844,
+      "text": "発動条件相手の場に購入コスト5以上のモンスターがいる。発動時その中で攻撃力と体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 870,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 417,
+          "scrollHeight": 417,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "id": "RUNE2",
+      "lang": "ja",
+      "width": 390,
+      "height": 844,
+      "text": "発動条件自分のデッキ構成の半分以上が魔法カード。発動時自分の最大マナ+2。",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 863,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 409,
+          "scrollHeight": 409,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "id": "RUNE3",
+      "lang": "ja",
+      "width": 390,
+      "height": 844,
+      "text": "発動条件自分のデッキ構成の半分以上が魔法カード。場にある間自分が手札から単発魔法を使うたび、追加マナなしでその効果をもう1回発動する。ただし、最初の効果で対象やカードなどの選択が必要になった場合は再発動しない。この効果は重複しない。",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 1049,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 596,
+          "scrollHeight": 596,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "id": "RUNE1",
+      "lang": "ko",
+      "width": 1440,
+      "height": 1000,
+      "text": "발동 조건상대의 필드에 구매 코스트 5 이상 몬스터가 있다.발동 시그중 공격력과 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE2",
+      "lang": "ko",
+      "width": 1440,
+      "height": 1000,
+      "text": "발동 조건자신의 덱 구성의 절반 이상이 마법 카드.발동 시자신의 최대 마나 +2.",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE3",
+      "lang": "ko",
+      "width": 1440,
+      "height": 1000,
+      "text": "발동 조건자신의 덱 구성의 절반 이상이 마법 카드.필드에 있는 동안자신이 패에서 일회성 마법을 사용할 때마다 추가 마나 없이 그 효과를 1회 더 발동한다.단, 첫 효과에서 대상이나 카드 등의 선택이 필요해지면 재발동하지 않는다. 이 효과는 중첩되지 않는다.",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE1",
+      "lang": "ko",
+      "width": 390,
+      "height": 844,
+      "text": "발동 조건상대의 필드에 구매 코스트 5 이상 몬스터가 있다.발동 시그중 공격력과 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 840,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 387,
+          "scrollHeight": 387,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "id": "RUNE2",
+      "lang": "ko",
+      "width": 390,
+      "height": 844,
+      "text": "발동 조건자신의 덱 구성의 절반 이상이 마법 카드.발동 시자신의 최대 마나 +2.",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 833,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 380,
+          "scrollHeight": 380,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "id": "RUNE3",
+      "lang": "ko",
+      "width": 390,
+      "height": 844,
+      "text": "발동 조건자신의 덱 구성의 절반 이상이 마법 카드.필드에 있는 동안자신이 패에서 일회성 마법을 사용할 때마다 추가 마나 없이 그 효과를 1회 더 발동한다.단, 첫 효과에서 대상이나 카드 등의 선택이 필요해지면 재발동하지 않는다. 이 효과는 중첩되지 않는다.",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 990,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 536,
+          "scrollHeight": 536,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "id": "RUNE1",
+      "lang": "en",
+      "width": 1440,
+      "height": 1000,
+      "text": "Play RequirementAn enemy monster has purchase cost 5 or more.On CastAutomatically destroy the eligible monster with the highest ATK plus HP; ties use field order.",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE2",
+      "lang": "en",
+      "width": 1440,
+      "height": 1000,
+      "text": "Play RequirementAt least half the cards in your deck composition are spell cards.On CastYour max mana +2.",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE3",
+      "lang": "en",
+      "width": 1440,
+      "height": 1000,
+      "text": "Play RequirementAt least half the cards in your deck composition are spell cards.While on the FieldWhenever you play a non-persistent spell from your hand, activate its effect 1 more time at no extra mana cost.If its first effect requires you to choose a target, card, or other option, it does not activate again. This effect does not stack.",
+      "scrollWidth": 1440,
+      "panels": [
+        {
+          "width": 1118,
+          "scrollWidth": 1118,
+          "height": 745,
+          "scrollHeight": 745,
+          "overflowY": "visible"
+        },
+        {
+          "width": 596,
+          "scrollWidth": 596,
+          "height": 624,
+          "scrollHeight": 624,
+          "overflowY": "auto"
+        }
+      ]
+    },
+    {
+      "id": "RUNE1",
+      "lang": "en",
+      "width": 390,
+      "height": 844,
+      "text": "Play RequirementAn enemy monster has purchase cost 5 or more.On CastAutomatically destroy the eligible monster with the highest ATK plus HP; ties use field order.",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 870,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 417,
+          "scrollHeight": 417,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "id": "RUNE2",
+      "lang": "en",
+      "width": 390,
+      "height": 844,
+      "text": "Play RequirementAt least half the cards in your deck composition are spell cards.On CastYour max mana +2.",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 863,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 409,
+          "scrollHeight": 409,
+          "overflowY": "visible"
+        }
+      ]
+    },
+    {
+      "id": "RUNE3",
+      "lang": "en",
+      "width": 390,
+      "height": 844,
+      "text": "Play RequirementAt least half the cards in your deck composition are spell cards.While on the FieldWhenever you play a non-persistent spell from your hand, activate its effect 1 more time at no extra mana cost.If its first effect requires you to choose a target, card, or other option, it does not activate again. This effect does not stack.",
+      "scrollWidth": 390,
+      "panels": [
+        {
+          "width": 360,
+          "scrollWidth": 360,
+          "height": 814,
+          "scrollHeight": 1079,
+          "overflowY": "auto"
+        },
+        {
+          "width": 331,
+          "scrollWidth": 331,
+          "height": 626,
+          "scrollHeight": 626,
+          "overflowY": "visible"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "scope": "API fixtures; actual served app, card search/detail, three languages and two viewport sizes. No authenticated duel."
+}

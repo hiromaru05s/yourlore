@@ -1826,25 +1826,28 @@
     },
     "RUNE1": {
       "nameJa": "ルーン学問 - 初級",
-      "status": "reworded",
+      "status": "balance-updated",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "f19171dff3044ba331ffa26e4890212d053c331829afce104e8683214902e5fd",
-      "textSha256": "d1c48ced39148218cc8ed7899641242c67c60c8b594b1541ec703cc2515848cc",
+      "textSha256": "46fe66467779a65a3a4b53e350ca70f0329fd35e16349ce062724c213b9f572f",
       "hooks": {
         "act": "destroyMon"
       },
       "before": {
         "ja": "【発動条件】相手の場に購入コスト5以上のモンスターがいる。\n\n【発動時】その中で攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。",
-        "ko": "【발동 조건】상대의 필드에 구매 코스트 5 이상 몬스터가 있다.\n\n【발동시】그중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
+        "ko": "【발동 조건】상대의 필드에 구매 코스트 5 이상 몬스터가 있다.\n\n【발동 시】그중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
         "en": "【Play Requirement】An enemy monster has purchase cost 5 or more.\n\n【On Cast】Automatically destroy the eligible monster with the highest ATK plus printed HP; ties use field order."
       },
       "after": {
-        "ja": "【発動条件】相手の場に購入コスト5以上のモンスターがいる。\n\n【発動時】その中で攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。",
-        "ko": "【발동 조건】상대의 필드에 구매 코스트 5 이상 몬스터가 있다.\n\n【발동 시】그중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
-        "en": "【Play Requirement】An enemy monster has purchase cost 5 or more.\n\n【On Cast】Automatically destroy the eligible monster with the highest ATK plus printed HP; ties use field order."
-      }
+        "ja": "【発動条件】相手の場に購入コスト5以上のモンスターがいる。\n\n【発動時】その中で攻撃力と体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。",
+        "ko": "【발동 조건】상대의 필드에 구매 코스트 5 이상 몬스터가 있다.\n\n【발동 시】그중 공격력과 체력의 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
+        "en": "【Play Requirement】An enemy monster has purchase cost 5 or more.\n\n【On Cast】Automatically destroy the eligible monster with the highest ATK plus HP; ties use field order."
+      },
+      "reviewNote": "2026-10-30: Runecraft Novice uses current HP; Adept/Master require at least half spell cards in shared deck composition; clarify Master echo, choice exception and non-stacking."
     },
     "RUNE2": {
       "nameJa": "ルーン学問 - 中級",
@@ -1855,42 +1858,44 @@
         "en"
       ],
       "definitionSha256": "ca754b0781ff4a5a4b13ca57ce5e37a952361b51e79f587c457c26a3568afd29",
-      "textSha256": "4ad7f9954ece2fb6412061fe6dd2c711ac8e79e6e589c4a8cecfd83c103825e7",
+      "textSha256": "0e4143124fe59df32610e8e5883858ab929ba46193bac4c6391bb5f52547bdfc",
       "hooks": {},
       "before": {
-        "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+8。",
-        "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동 시】자신의 최대 마나 +8.",
-        "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【On Cast】Your max mana +8."
-      },
-      "after": {
         "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【発動時】自分の最大マナ+2。",
         "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【발동 시】자신의 최대 마나 +2.",
         "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【On Cast】Your max mana +2."
       },
-      "reviewNote": "2026-10-29: max mana gain reduced from 8 to 2; play requirement and cost unchanged."
+      "after": {
+        "ja": "【発動条件】自分のデッキ構成の半分以上が魔法カード。\n\n【発動時】自分の最大マナ+2。",
+        "ko": "【발동 조건】자신의 덱 구성의 절반 이상이 마법 카드.\n\n【발동 시】자신의 최대 마나 +2.",
+        "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【On Cast】Your max mana +2."
+      },
+      "reviewNote": "2026-10-30: Runecraft Novice uses current HP; Adept/Master require at least half spell cards in shared deck composition; clarify Master echo, choice exception and non-stacking."
     },
     "RUNE3": {
       "nameJa": "ルーン学問 - 上級",
-      "status": "reworded",
+      "status": "balance-updated",
       "changedLocales": [
+        "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "6c978c46c666da382ee8b422807be61d2c69fbbff29d1c62374851f073768efb",
-      "textSha256": "594984d5c7d196518718bfbcc6a724c2f6e27d7acc7bb937ec3fc4d74e776977",
+      "textSha256": "458426ef0d495f9fb1118d3026f66ea166de0da79e32ddc9e1b81bfe2c5ba5d7",
       "hooks": {
         "ench": "runeEcho"
       },
       "before": {
         "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【場にある間】自分が手札から使った単発魔法の処理後、選択待ちがなければ、同じ魔法の効果をマナなしでもう1回処理する（重複しない）。",
-        "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【필드에 놓인 동안】자신이 패에서 사용한 일회성 마법 처리 후 선택 대기가 없으면 같은 마법 효과를 마나 없이 1회 더 처리한다(중첩 불가).",
-        "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【While Deployed】After resolving a non-persistent spell played from your hand, repeat its effect once without paying mana if no choice is pending; multiple copies do not stack."
-      },
-      "after": {
-        "ja": "【発動条件】自分のデッキ・手札・墓地の合計枚数の半分以上が魔法またはスターター。\n\n【場にある間】自分が手札から使った単発魔法の処理後、選択待ちがなければ、同じ魔法の効果をマナなしでもう1回処理する（重複しない）。",
         "ko": "【발동 조건】자신의 덱·패·묘지의 합계 절반 이상이 마법 또는 스타터.\n\n【필드에 있는 동안】자신이 패에서 사용한 일회성 마법 처리 후 선택 대기가 없으면 같은 마법 효과를 마나 없이 1회 더 처리한다(중첩 불가).",
         "en": "【Play Requirement】At least half the cards in your deck, hand, and graveyard combined are spells or starters.\n\n【While on the Field】After resolving a non-persistent spell played from your hand, repeat its effect once without paying mana if no choice is pending; multiple copies do not stack."
-      }
+      },
+      "after": {
+        "ja": "【発動条件】自分のデッキ構成の半分以上が魔法カード。\n\n【場にある間】自分が手札から単発魔法を使うたび、追加マナなしでその効果をもう1回発動する。\nただし、最初の効果で対象やカードなどの選択が必要になった場合は再発動しない。この効果は重複しない。",
+        "ko": "【발동 조건】자신의 덱 구성의 절반 이상이 마법 카드.\n\n【필드에 있는 동안】자신이 패에서 일회성 마법을 사용할 때마다 추가 마나 없이 그 효과를 1회 더 발동한다.\n단, 첫 효과에서 대상이나 카드 등의 선택이 필요해지면 재발동하지 않는다. 이 효과는 중첩되지 않는다.",
+        "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【While on the Field】Whenever you play a non-persistent spell from your hand, activate its effect 1 more time at no extra mana cost.\nIf its first effect requires you to choose a target, card, or other option, it does not activate again. This effect does not stack."
+      },
+      "reviewNote": "2026-10-30: Runecraft Novice uses current HP; Adept/Master require at least half spell cards in shared deck composition; clarify Master echo, choice exception and non-stacking."
     },
     "GENESIS_SONG": {
       "nameJa": "始原の歌",

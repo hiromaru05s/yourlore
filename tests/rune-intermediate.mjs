@@ -20,9 +20,9 @@ try {
   for(const text of [DB.RUNE2.text,DB.RUNE2.textJa,DB.RUNE2.textEn]){assert.match(text,/\+2/);assert.doesNotMatch(text,/\+8/);}
   for(const side of [0,1]) {
     const g=fresh();g.cur=side;g.players[0].hand=[];
-    const p=g.players[side];p.hand=[card('RUNE2')];p.deck=[card('M1'),card('M2')];p.discard=[card('STARTER_TRASH')];
+    const p=g.players[side];p.hand=[card('RUNE2')];p.deck=[card('M1'),card('M2')];p.discard=[card('S13')];
     const r=reduce(g,{type:'play',idx:0});
-    assert.equal(r.state.players[side].maxMana,12,'exactly half qualifies, including starters in graveyard');
+    assert.equal(r.state.players[side].maxMana,12,'exactly half qualifies, including spells in graveyard');
     assert.equal(r.state.players[side].mana,5,'maximum mana gain does not refill current mana');
     assert.equal(r.state.players[1-side].maxMana,10);
     assert(r.state.players[side].discard.some(c=>c.id==='RUNE2'));
