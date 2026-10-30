@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-30T03:39:19.375Z",
+  "base": "https://yourlore.xyz",
+  "sourceCommit": "095bac497b96f9f5446f7d0c6a65f69a68988386",
+  "entryScripts": [
+    "/assets/main-DASLDd6t.js"
+  ],
+  "bundles": [
+    {
+      "path": "/assets/assetQueue-wNTiGBFH.js",
+      "sha256": "948e8eb5d2cb421cb633340cea1256afd599e503ed2ae1d25fb368de3069f994",
+      "bytes": 1287193
+    },
+    {
+      "path": "/assets/bot.worker-Cx-8HwY1.js",
+      "sha256": "f5690507e0196310506ff783db427b61181b6a050e1c146addc0c68dcfb19760",
+      "bytes": 919396
+    },
+    {
+      "path": "/assets/controller-BPCXeU4J.js",
+      "sha256": "4b0df1da29dc8d58bcdc96174cd4040d78f673e362b3148aeef536543724e2b3",
+      "bytes": 127716
+    },
+    {
+      "path": "/assets/main-DASLDd6t.js",
+      "sha256": "5225565a0970b71a4b7de202725ce2c61a77bbf939e0f17e0e262413e21b48db",
+      "bytes": 3133
+    },
+    {
+      "path": "/assets/social-CNYpd4Kn.js",
+      "sha256": "c39446cd238f8e3894df7bd8d31e8199074e083b1e6201aa7a688d7d797ba86c",
+      "bytes": 429088
+    }
+  ],
+  "scope": "Public entry and byte parity for all RUNE2-containing JS bundles, entry and BOT worker. Authoritative server behavior covered by regression tests and deployment source annotation; no authenticated human PvP."
+}
