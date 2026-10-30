@@ -1,14 +1,16 @@
+import {ensureDailyLoginGift} from './dailyLoginGift';
+import {DAILY_LOGIN_ISSUER,DAILY_LOGIN_PREFIX,dailyLoginPeriod} from '../../client/src/shared/dailyLoginGift';
 import type {Env} from './env';
 import {corsHeaders,getUser} from './auth';
 import type {GiftInbox,GiftItem,GiftClaim} from '../../client/src/shared/gifts';
 const json=(env:Env,data:unknown,status=200)=>Response.json(data,{status,headers:{...corsHeaders(env),'Cache-Control':'no-store'}});
 const idOK=(id:unknown):id is string=>typeof id==='string'&&/^[A-Za-z0-9_-]{1,80}$/.test(id);
 export async function giftInbox(env:Env,userId:string,now=Date.now()):Promise<GiftInbox>{
- const rows=await env.DB.prepare(`SELECT m.id,m.title,m.body,m.amount,m.created_at AS createdAt,m.expires_at AS expiresAt,d.read_at AS readAt,d.claimed_at AS claimedAt
+ const rows=await env.DB.prepare(`SELECT m.id,m.title,m.body,m.amount,m.created_at AS createdAt,m.expires_at AS expiresAt,d.read_at AS readAt,d.claimed_at AS claimedAt,CASE WHEN m.created_by=? THEN 'daily-login' END AS kind,CASE WHEN m.created_by=? THEN substr(m.id,13) END AS day
  FROM gift_deliveries d JOIN gift_messages m ON m.id=d.gift_id WHERE d.user_id=?
- ORDER BY CASE WHEN d.claimed_at IS NULL AND m.expires_at>? THEN 0 ELSE 1 END,m.created_at DESC,m.id LIMIT 300`).bind(userId,now).all<GiftItem>();
+ ORDER BY CASE WHEN d.claimed_at IS NULL AND m.expires_at>? THEN 0 ELSE 1 END,m.created_at DESC,m.id LIMIT 300`).bind(DAILY_LOGIN_ISSUER,DAILY_LOGIN_ISSUER,userId,now).all<GiftItem>();
  const summary=await env.DB.prepare(`SELECT COUNT(*) AS n,COALESCE(SUM(CASE WHEN d.read_at IS NULL THEN 1 ELSE 0 END),0) AS unread,COALESCE(SUM(m.amount),0) AS amount FROM gift_deliveries d JOIN gift_messages m ON m.id=d.gift_id WHERE d.user_id=? AND d.claimed_at IS NULL AND m.expires_at>?`).bind(userId,now).first<{n:number;unread:number;amount:number}>();
- return {items:rows.results??[],pendingCount:summary?.n??0,unreadCount:summary?.unread??0,pendingAmount:summary?.amount??0,now};
+ return {items:rows.results??[],pendingCount:summary?.n??0,unreadCount:summary?.unread??0,pendingAmount:summary?.amount??0,now,resetsAt:dailyLoginPeriod(now).resetsAt};
 }
 export async function claimGifts(env:Env,userId:string,id:string|null,now=Date.now()):Promise<GiftClaim>{
  const token=crypto.randomUUID();
@@ -25,7 +27,10 @@ export async function claimGifts(env:Env,userId:string,id:string|null,now=Date.n
 export async function handleGifts(env:Env,req:Request,path:string):Promise<Response>{
  if(req.method==='OPTIONS')return new Response(null,{headers:corsHeaders(env)});
  const user=await getUser(env,req);if(!user)return json(env,{error:'unauthorized'},401);
- if(path==='/gifts'&&req.method==='GET')return json(env,await giftInbox(env,user.id));
+ if(path==='/gifts'&&req.method==='GET'){
+  const now=Date.now();await ensureDailyLoginGift(env,user.id,now);
+  return json(env,await giftInbox(env,user.id,now));
+ }
  if(req.method==='POST'&&(path==='/gifts/read'||path==='/gifts/claim')){
   const body=await req.json().catch(()=>null) as {id?:unknown;all?:unknown}|null;
   if(path==='/gifts/read'){
@@ -42,7 +47,7 @@ export async function handleGifts(env:Env,req:Request,path:string):Promise<Respo
 export async function issueGift(env:Env,req:Request,operator:string):Promise<Response>{
  const b=await req.json().catch(()=>null) as {id?:unknown;title?:unknown;body?:unknown;amount?:unknown;expiresAt?:unknown;userId?:unknown;all?:unknown}|null;
  const now=Date.now();
- if(!b||!idOK(b.id)||typeof b.title!=='string'||!b.title.trim()||b.title.length>100||typeof b.body!=='string'||!b.body.trim()||b.body.length>2000||!Number.isSafeInteger(b.amount)||Number(b.amount)<1||Number(b.amount)>100000||!Number.isSafeInteger(b.expiresAt)||Number(b.expiresAt)<=now||Number(b.expiresAt)>now+366*86400000||(b.all===true?b.userId!==undefined:!idOK(b.userId)))return json(env,{error:'invalid gift'},400);
+ if(!b||!idOK(b.id)||b.id.startsWith(DAILY_LOGIN_PREFIX)||typeof b.title!=='string'||!b.title.trim()||b.title.length>100||typeof b.body!=='string'||!b.body.trim()||b.body.length>2000||!Number.isSafeInteger(b.amount)||Number(b.amount)<1||Number(b.amount)>100000||!Number.isSafeInteger(b.expiresAt)||Number(b.expiresAt)<=now||Number(b.expiresAt)>now+366*86400000||(b.all===true?b.userId!==undefined:!idOK(b.userId)))return json(env,{error:'invalid gift'},400);
  const audience=b.all===true?'all':b.userId as string;
  if(audience!=='all'&&!await env.DB.prepare('SELECT id FROM users WHERE id=?').bind(audience).first())return json(env,{error:'unknown recipient'},404);
  // Immutable IDs are the operator's idempotency key. Retrying never adds new

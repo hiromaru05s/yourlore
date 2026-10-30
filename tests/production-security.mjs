@@ -79,18 +79,18 @@ await test('coupon cap remains one under concurrent redemption',async()=>{
 });
 await test('repeatable coupon pays 30000 each time and preserves ordinary single-use codes',async()=>{
  const f=await creditFixture();try{
-  f.sqlite.exec("INSERT INTO coupons(code,amount,repeatable) VALUES('LORE30000',30000,1),('ONCE',100,0)");
+  f.sqlite.exec("INSERT INTO coupons(code,amount,repeatable) VALUES('QA_REPEATABLE',30000,1),('ONCE',100,0)");
   for(let i=0;i<2;i++){const r=await claim(f,'/rewards/coupon',{code:' lore30000 '});assert.equal(r.status,200);assert.equal((await r.json()).amount,30000);}
-  const concurrent=await Promise.all(Array.from({length:3},()=>claim(f,'/rewards/coupon',{code:'LORE30000'})));assert(concurrent.every(r=>r.status===200));
+  const concurrent=await Promise.all(Array.from({length:3},()=>claim(f,'/rewards/coupon',{code:'QA_REPEATABLE'})));assert(concurrent.every(r=>r.status===200));
   assert.equal(f.sqlite.prepare("SELECT credits FROM users WHERE id='qa-a'").get().credits,150000);
-  assert.equal(f.sqlite.prepare("SELECT claim_count FROM coupon_claims WHERE code='LORE30000'").get().claim_count,5);
-  assert.equal(f.sqlite.prepare("SELECT uses FROM coupons WHERE code='LORE30000'").get().uses,5);
-  f.fail(true);await assert.rejects(claim(f,'/rewards/coupon',{code:'LORE30000'}));f.fail(false);
-  assert.equal(f.sqlite.prepare("SELECT claim_count FROM coupon_claims WHERE code='LORE30000'").get().claim_count,5);
+  assert.equal(f.sqlite.prepare("SELECT claim_count FROM coupon_claims WHERE code='QA_REPEATABLE'").get().claim_count,5);
+  assert.equal(f.sqlite.prepare("SELECT uses FROM coupons WHERE code='QA_REPEATABLE'").get().uses,5);
+  f.fail(true);await assert.rejects(claim(f,'/rewards/coupon',{code:'QA_REPEATABLE'}));f.fail(false);
+  assert.equal(f.sqlite.prepare("SELECT claim_count FROM coupon_claims WHERE code='QA_REPEATABLE'").get().claim_count,5);
   assert.equal((await claim(f,'/rewards/coupon',{code:'ONCE'})).status,200);assert.equal((await claim(f,'/rewards/coupon',{code:'ONCE'})).status,409);
-  f.sqlite.exec("UPDATE coupons SET max_uses=6 WHERE code='LORE30000'");
-  const capped=await Promise.all([1,2].map(()=>claim(f,'/rewards/coupon',{code:'LORE30000'})));assert.deepEqual(capped.map(r=>r.status).sort(),[200,410]);
-  f.sqlite.exec("UPDATE coupons SET max_uses=NULL,expires_at=1 WHERE code='LORE30000'");assert.equal((await claim(f,'/rewards/coupon',{code:'LORE30000'})).status,410);
+  f.sqlite.exec("UPDATE coupons SET max_uses=6 WHERE code='QA_REPEATABLE'");
+  const capped=await Promise.all([1,2].map(()=>claim(f,'/rewards/coupon',{code:'QA_REPEATABLE'})));assert.deepEqual(capped.map(r=>r.status).sort(),[200,410]);
+  f.sqlite.exec("UPDATE coupons SET max_uses=NULL,expires_at=1 WHERE code='QA_REPEATABLE'");assert.equal((await claim(f,'/rewards/coupon',{code:'QA_REPEATABLE'})).status,410);
  }finally{f.sqlite.close();}
 });
 await test('coupon write failure rolls back redemption',async()=>{

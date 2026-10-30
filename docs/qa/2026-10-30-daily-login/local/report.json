@@ -1,0 +1,98 @@
+{
+  "origin": "http://127.0.0.1:5173/",
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/tutorial-onboarding/LORE_TCG",
+  "sourceBase": "1b984ccf",
+  "reports": [
+    {
+      "lang": "ja",
+      "width": 1461,
+      "height": 790,
+      "dimensions": {
+        "width": 858,
+        "scroll": 858
+      }
+    },
+    {
+      "lang": "ja",
+      "width": 390,
+      "height": 844,
+      "dimensions": {
+        "width": 364,
+        "scroll": 364
+      }
+    },
+    {
+      "lang": "ja",
+      "width": 320,
+      "height": 568,
+      "dimensions": {
+        "width": 294,
+        "scroll": 294
+      }
+    },
+    {
+      "lang": "ko",
+      "width": 1461,
+      "height": 790,
+      "dimensions": {
+        "width": 858,
+        "scroll": 858
+      }
+    },
+    {
+      "lang": "ko",
+      "width": 390,
+      "height": 844,
+      "dimensions": {
+        "width": 364,
+        "scroll": 364
+      }
+    },
+    {
+      "lang": "ko",
+      "width": 320,
+      "height": 568,
+      "dimensions": {
+        "width": 294,
+        "scroll": 294
+      }
+    },
+    {
+      "lang": "en",
+      "width": 1461,
+      "height": 790,
+      "dimensions": {
+        "width": 858,
+        "scroll": 858
+      }
+    },
+    {
+      "lang": "en",
+      "width": 390,
+      "height": 844,
+      "dimensions": {
+        "width": 364,
+        "scroll": 364
+      }
+    },
+    {
+      "lang": "en",
+      "width": 320,
+      "height": 568,
+      "dimensions": {
+        "width": 294,
+        "scroll": 294
+      }
+    }
+  ],
+  "errors": [],
+  "checks": [
+    "three-language bonus, amount and no expiry",
+    "US device timezone does not change JST/KST day",
+    "single/bulk receipt",
+    "automatic open-dialog midnight refresh, including a claim response spanning the reset timer",
+    "reload cannot pay twice",
+    "retired coupons reject redemption"
+  ],
+  "scope": "Real app UI with isolated Worker/SQLite API and simulated server time."
+}

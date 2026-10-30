@@ -1,3 +1,4 @@
+import {ensureDailyLoginGift} from './dailyLoginGift';
 import {isCardFrame} from '../../client/src/shared/cardFrames';
 import {starterCollection,constrainDeckStore} from '../../client/src/shared/collection';
 import {deckStoreForUser} from '../../client/src/shared/cards';
@@ -127,6 +128,7 @@ export async function handleAuth(env: Env, req: Request, path: string): Promise<
     // daily activity mark (retention analytics) — one row per user per KST day
     // (operator's calendar; admin dashboard groups all days in KST too)
     if (user) {
+      await ensureDailyLoginGift(env,user.id);
       const day = new Date(Date.now() + 9 * 3600_000).toISOString().slice(0, 10);
       await env.DB.prepare(`INSERT OR IGNORE INTO user_days (user_id, day) VALUES (?,?)`).bind(user.id, day).run().catch(() => { /* best effort */ });
     }

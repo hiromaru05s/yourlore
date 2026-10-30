@@ -219,6 +219,7 @@
     "tests/player-experience.mjs",
     "tests/invite-rewards.mjs",
     "tests/gift-inbox.mjs",
+    "tests/daily-login-gifts.mjs",
     "tests/gacha-cosmetics.mjs",
     "tests/deck-appearance.mjs",
     "tests/audit-reward-authority.mjs",

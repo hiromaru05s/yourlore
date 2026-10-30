@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';import {pathToFileURL} from 'node:url';
+const root=process.cwd(),{createServer}=await import(pathToFileURL(root+'/node_modules/vite/dist/node/index.js')),{onboardingFixture}=await import(pathToFileURL(root+'/tests/fixtures/onboardingEnv.mjs'));
+const {chromium}=await import('/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
+const originalNow=Date.now,base=Date.parse('2026-10-30T14:59:58Z');let now=base;Date.now=()=>now;
+const f=await onboardingFixture();f.db.exec("INSERT INTO coupons(code,amount,repeatable) VALUES('LORE30000',30000,1),('LORE10',10,0),('WELCOME100',100,0)");f.db.exec(await fs.readFile(root+'/server/migrations/0030_retire_existing_coupons.sql','utf8'));
+const out=process.env.QA_OUT||'docs/qa/2026-10-30-daily-login/local';await fs.mkdir(out,{recursive:true});
+const server=await createServer({root:root+'/client',configFile:root+'/client/vite.config.ts',logLevel:'error',server:{host:'127.0.0.1',port:0,hmr:false}});await server.listen();const origin=process.env.QA_ORIGIN||server.resolvedUrls.local[0];
+const browser=await chromium.launch({channel:'chrome',headless:true}),reports=[],errors=[];
+try{
+ for(const lang of ['ja','ko','en']){
+  now=base;const uid='daily-browser-'+lang;f.addUser(uid,0);f.db.prepare('UPDATE users SET username_set=1 WHERE id=?').run(uid);
+  const context=await browser.newContext({viewport:{width:1461,height:790},timezoneId:'America/Los_Angeles'}),page=await context.newPage();page.setDefaultTimeout(30000);page.on('pageerror',e=>errors.push(e.message));
+  await page.addInitScript(lang=>localStorage.setItem('lore_lang',lang),lang);
+  let delayFirstClaim=true;
+  await page.route('**/api/**',async route=>{const r=route.request(),u=new URL(r.url()),res=await f.call(u.pathname.replace(/^\/api/,'')+u.search,r.method()==='GET'?undefined:r.postDataJSON(),uid);if(u.pathname==='/api/gifts/claim'&&delayFirstClaim){delayFirstClaim=false;await new Promise(resolve=>setTimeout(resolve,2300));}await route.fulfill({status:res.status,headers:Object.fromEntries(res.headers),body:await res.text()});});
+  await page.addLocatorHandler(page.locator('.graphics-notice [data-continue]'),async()=>page.locator('.graphics-notice [data-continue]').click());
+  await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('#homeGifts').waitFor({timeout:90000});await page.locator('.screen-loader').waitFor({state:'hidden',timeout:90000});await page.locator('#homeGifts .gift-mail-count').waitFor();
+  assert.equal(f.db.prepare('SELECT credits FROM users WHERE id=?').get(uid).credits,0);await page.locator('#homeGifts').click();await page.locator('[data-letter="daily-login-2026-10-30"]').waitFor();
+  const bodyText=await page.locator('.gift-detail').innerText();assert(bodyText.includes('10,000'));assert(bodyText.includes('JST')&&bodyText.includes('KST'));assert(bodyText.includes({ja:'毎日のログインボーナス',ko:'일일 로그인 보너스',en:'Daily login bonus'}[lang]));assert((await page.locator('.gift-expiry').innerText()).includes({ja:'なし',ko:'없음',en:'No expiry'}[lang]));assert(!bodyText.includes('9999'));
+  for(const [width,height]of [[1461,790],[390,844],[320,568]]){await page.setViewportSize({width,height});await page.waitForTimeout(100);const dimensions=await page.locator('.gift-inbox').evaluate(e=>({width:e.clientWidth,scroll:e.scrollWidth}));assert(dimensions.scroll<=dimensions.width+1);await page.locator('[data-claim]').scrollIntoViewIfNeeded();assert(await page.locator('[data-claim]').isEnabled());const box=await page.locator('[data-close]').boundingBox();assert(box.x>=0&&box.y>=0&&box.x+box.width<=width&&box.y+box.height<=height);await page.screenshot({path:`${out}/${lang}-${width}.png`});reports.push({lang,width,height,dimensions});}
+  await page.locator('[data-claim]').click();await page.locator('.gift-empty').waitFor();assert.equal(f.db.prepare('SELECT credits FROM users WHERE id=?').get(uid).credits,10000);assert.equal(await page.locator('#homeGifts .gift-mail-count').count(),0);
+  // Keep the dialog open: the server reset timestamp must request the new day's gift.
+  now=base+2000;await page.locator('[data-letter="daily-login-2026-10-31"]').waitFor({timeout:10000});assert.equal(f.db.prepare('SELECT credits FROM users WHERE id=?').get(uid).credits,10000);await page.locator('[data-all]').click();await page.locator('.gift-empty').waitFor();assert.equal(f.db.prepare('SELECT credits FROM users WHERE id=?').get(uid).credits,20000);
+  await page.locator('[data-tab=history]').click();assert.equal(await page.locator('[data-letter]').count(),2);await page.keyboard.press('Escape');assert.equal(await page.locator('#homeGifts').evaluate(e=>e===document.activeElement),true);
+  await page.reload();await page.locator('.screen-loader').waitFor({state:'hidden',timeout:90000});await page.locator('#homeGifts').click();await page.locator('.gift-empty').waitFor();assert.equal(f.db.prepare('SELECT credits FROM users WHERE id=?').get(uid).credits,20000);
+  for(const code of ['LORE30000','LORE10','WELCOME100'])assert.equal(await page.evaluate(async code=>(await fetch('/api/rewards/coupon',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code})})).status,code),410);
+  await context.close();
+ }
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({origin,sourceRoot:root,sourceBase:'1b984ccf',reports,errors,checks:['three-language bonus, amount and no expiry','US device timezone does not change JST/KST day','single/bulk receipt','automatic open-dialog midnight refresh, including a claim response spanning the reset timer','reload cannot pay twice','retired coupons reject redemption'],scope:'Real app UI with isolated Worker/SQLite API and simulated server time.'},null,2)+'\n');console.log('PASS 3 languages × 3 viewports; 10000 gifts, automatic midnight reset, claim once, no expiry, coupons 410');
+}finally{Date.now=originalNow;await browser.close();await server.close();await f.close();}
