@@ -7,8 +7,9 @@ const temp=await fs.mkdtemp(path.join(os.tmpdir(),'lore-daily-live-'));await fs.
 const id='qa-daily-'+randomUUID(),token=randomBytes(24).toString('hex');let sequence=0,emptySlot=false,proof;
 const quote=s=>"'"+s.replaceAll("'","''")+"'";
 async function sql(text){const file=path.join(temp,`${++sequence}.sql`);await fs.writeFile(file,text,{mode:0o600});let raw;
- try{raw=execFileSync('npm',['exec','--','wrangler','d1','execute','lore-db','--remote','-c','server/wrangler.toml','--file',file,'--yes','--json'],{cwd:root,encoding:'utf8',maxBuffer:4*1024*1024,stdio:['ignore','pipe','pipe']});}catch{throw Error('Production QA database operation failed; statement '+sequence);}
- const result=JSON.parse(raw);assert(result.every(r=>r.success));return result.map(r=>r.results);
+ const readOnly=text.split(';').filter(s=>s.trim()).every(s=>/^\s*SELECT\b/i.test(s));
+ try{raw=execFileSync('npm',['exec','--','wrangler','d1','execute','lore-db','--remote','-c','server/wrangler.toml',...(readOnly?['--command',text]:['--file',file]),'--yes','--json'],{cwd:root,encoding:'utf8',maxBuffer:4*1024*1024,stdio:['ignore','pipe','pipe']});}catch{throw Error('Production QA database operation failed; statement '+sequence);}
+ const result=JSON.parse(raw.slice(raw.indexOf('[\n')));assert(result.every(r=>r.success));return result.map(r=>r.results);
 }
 async function call(route,body){const r=await fetch('https://yourlore.xyz/api'+route,{method:body===undefined?'GET':'POST',headers:{Origin:'https://yourlore.xyz',Cookie:'lore_session='+token,'Content-Type':'application/json'},...(body===undefined?{}:{body:JSON.stringify(body)})});return {status:r.status,data:await r.json()};}
 try{

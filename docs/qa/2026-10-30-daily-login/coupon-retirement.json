@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-30T09:27:30.951593+00:00",
+  "database": "lore-db (production)",
+  "migration": "server/migrations/0030_retire_existing_coupons.sql",
+  "before": [
+    {
+      "code": "LORE10",
+      "amount": 10,
+      "max_uses": null,
+      "uses": 0,
+      "expires_at": null,
+      "repeatable": 0
+    },
+    {
+      "code": "LORE30000",
+      "amount": 30000,
+      "max_uses": null,
+      "uses": 83,
+      "expires_at": null,
+      "repeatable": 1
+    },
+    {
+      "code": "WELCOME100",
+      "amount": 100,
+      "max_uses": 5,
+      "uses": 0,
+      "expires_at": null,
+      "repeatable": 0
+    }
+  ],
+  "after": [
+    {
+      "code": "LORE10",
+      "amount": 10,
+      "max_uses": null,
+      "uses": 0,
+      "expires_at": 1,
+      "repeatable": 0
+    },
+    {
+      "code": "LORE30000",
+      "amount": 30000,
+      "max_uses": null,
+      "uses": 83,
+      "expires_at": 1,
+      "repeatable": 1
+    },
+    {
+      "code": "WELCOME100",
+      "amount": 100,
+      "max_uses": 5,
+      "uses": 0,
+      "expires_at": 1,
+      "repeatable": 0
+    }
+  ],
+  "activeCoupons": 0,
+  "dailyGiftIdCollisions": 0
+}
