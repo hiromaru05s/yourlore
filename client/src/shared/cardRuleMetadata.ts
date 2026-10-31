@@ -199,6 +199,6 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   ARMOR_BREAK: {"terms":["counters"]},
   SELECTED_SWORD: {"terms":["rift"]},
   SELECTED_SHIELD: {"terms":["rift"]},
-  WINE_COLLECTOR: {"terms":["rift"]},
+  WINE_COLLECTOR: {"terms":["graveyard"]},
   STARTER_TRASH: {"terms":["rift"]},
 };

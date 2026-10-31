@@ -215,6 +215,14 @@ function spaceLocked(g: GameState, p: PlayerState): boolean {
 /** 카드를 플레이(패에서 사용)할 때마다 — 무상의 대가(v41b freeReward): 코스트 0 카드면 장당 1드로우. */
 function afterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
   expansionAfterPlay(g, ctx, p, card);
+  if (card.id === 'GRAPE' && !g.over) {
+    for (const owner of g.players) for (const collector of owner.field) {
+      if (collector.aura !== 'wineCollector') continue;
+      monsterActivation(g, ctx.ev, owner, collector);
+      p.discard.push(inst(g, 'GRAPE2'));
+      ctx.log(`  └ ${cn(collector)}: ${p.name}의 묘지에 고급 포도 1장 추가`, `  └ ${cn(collector)}: ${p.name}の墓地に高品質ぶどう1枚を追加`, `  └ ${cn(collector)}: add 1 Fine Grape to ${p.name}’s graveyard`);
+    }
+  }
   if ((card.cost ?? 0) !== 0 || g.over) return;
   for (const e of p.enchants) {
     if (e.card.ench !== "freeReward") continue;
@@ -2774,16 +2782,6 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else queueExpansionChoice(g, p, 'ARMORER_MODE', 'シールド獲得または他のモンスター強化を選択', data);
       break;
     }
-    case 'wineCollector': {
-      const wines = p.hand.filter(c => c.id === 'WINE').slice(0,2);
-      if (wines.length === 2) {
-        p.hand = p.hand.filter(c => !wines.some(w => w.uid === c.uid)); rmz(p).push(...wines);
-        p.hand.push(inst(g, 'DARK_MERCHANT'));
-        p.field = p.field.filter(x => x.uid !== m.uid); rmz(p).push(resetInst(m));
-        ctx.log('와인 2장과 수집가를 리프트로, 암상인을 패로', 'ワイン2枚とコレクターをリフトへ、闇商人を手札へ', `Send 2 Wines and the Collector to your Rift; add a Black Market Dealer to your hand`);
-      }
-      break;
-    }
     case 'dewBeliever': {
       ctx.heal(p,3);
       const {rolls} = diceRoll(g,ctx.ev,side(g,p),{id:m.id,player:side(g,p)},1,5);
@@ -2859,7 +2857,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
     case "preyExec": { // 포식자: 상대 3~4코 몬스터 1체 파괴 → 성공 시 최대 마나 +1
       const cand = o.field.filter((x) => ((x.cost ?? 0) === 3 || (x.cost ?? 0) === 4) && !hasPassive(x, "aura"));
       if (cand.length) {
-        const tgt = cand.sort((a2, b2) => (effAtk(o, b2, g) + (b2.def ?? 0)) - (effAtk(o, a2, g) + (a2.def ?? 0)))[0];
+        const tgt = cand.sort((a2, b2) => (effAtk(o, b2, g) + curHp(o, b2)) - (effAtk(o, a2, g) + curHp(o, a2)))[0];
         ctx.log(`  └ ${cn(tgt)} 을(를) 포식한다`, `  └ ${cn(tgt)} を捕食する`, `  └ Devour ${cn(tgt)}`);
         ctx.destroyMonster(o, tgt);
         if (!o.field.some((x) => x.uid === tgt.uid)) {
@@ -2869,9 +2867,9 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else ctx.log("  └ 코스트 3~4 대상 없음", "  └ コスト3~4の対象なし", `  └ No eligible target with purchase cost 3–4`);
       break;
     }
-    case "soloLock": { // 은둔자: 자신의 3턴 동안 다른 몬스터 소환 불가
-      p.summonLockUntil = g.turn + 6;
-      ctx.log("  └ 은둔: 자신의 3턴 동안 다른 몬스터 소환 불가", "  └ 隠遁: 自分の3ターンの間 他のモンスター召喚不可", `  └ Seclusion: cannot summon other monsters for 3 of your turns`);
+    case "soloLock": { // 은둔자: 양쪽 합계 4턴 동안 다른 몬스터 소환 불가
+      p.summonLockUntil = g.turn + 4;
+      ctx.log("  └ 은둔: 양쪽 합계 4턴 동안 다른 몬스터 소환 불가", "  └ 隠遁: 双方合計4ターンの間 他のモンスター召喚不可", `  └ Seclusion: cannot summon other monsters for 4 total turns, counting both players`);
       break;
     }
     case "hermitBuff": { // 외로운 늑대: 이 카드 외 자신 필드 카드 1장 이하면 +3/+3
@@ -3216,9 +3214,9 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(`  └ 카운터 +${v || 2} (${m.gcount})`, `  └ カウンター+${v || 2} (${m.gcount})`, `  └ Gain ${v || 2} counters (${m.gcount} total)`);
       break;
     }
-    case "eliteSoldiers": { // 정예 기사단장: 덱 구성 9장 이하면 병사 2체 (v37: 덱 구성 = 덱·패·묘지·필드)
+    case "eliteSoldiers": { // 정예 기사단장: 덱 구성 9장 이하면 병사 1체 (v37: 덱 구성 = 덱·패·묘지·필드)
       const en2 = deckComp(p).length;
-      if (en2 <= 9) { spawnToken(g, ctx, p, "SOLDIER2"); spawnToken(g, ctx, p, "SOLDIER2"); ctx.log(`  └ 정예(${en2}장) 편성: 병사(2/2) 2체 소환`, `  └ 精鋭(${en2}枚)編成: 兵士(2/2)2体召喚`); }
+      if (en2 <= 9) { spawnToken(g, ctx, p, "SOLDIER2"); ctx.log(`  └ 정예(${en2}장) 편성: 병사(2/2) 1체 소환`, `  └ 精鋭(${en2}枚)編成: 兵士(2/2)1体召喚`, `  └ Elite formation (${en2} cards): summon 1 Soldier (2 ATK / 2 HP)`); }
       else ctx.log(`  └ 덱 구성 ${en2}장 — 정예 초과(9장)`, `  └ デッキ構成${en2}枚 — 精鋭超過(9枚)`, `  └ Deck composition has ${en2} cards — exceeds the limit of 9`);
       break;
     }

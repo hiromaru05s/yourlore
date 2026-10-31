@@ -44,10 +44,6 @@ export const CARD_RULE_GLOSSARY:GlossaryEntry[] = [
     'A player loses at 0 HP or less. Player healing has no normal cap. Monsters retain accumulated damage when their HP stat changes. A monster’s maximum HP is at least 1; current HP is maximum HP minus accumulated damage.'),
 ];
 CARD_RULE_GLOSSARY.push(
-  entry('printedHp','印刷体力','인쇄 체력','Printed HP',
-    'カードに最初から書かれている体力。場での強化・弱体化や受けたダメージを含まない。現在体力や補正後の最大体力とは別の値。',
-    '카드에 원래 적힌 체력. 필드에서 받은 강화·약화나 데미지는 포함하지 않는다. 현재 체력이나 보정 후 최대 체력과는 다른 값이다.',
-    'The HP originally printed on the card. Ignores buffs, debuffs, and damage taken on the field. Separate from current HP and modified maximum HP.'),
   entry('tribeSynergy','種族シナジー','종족 시너지','Tribe synergy',
     '自分の場に同じ種族のモンスターを異なるカード名で指定の種類数そろえると発動するボーナス。同名を複数並べても1種類。必要な種類数と効果は種族ごとに異なり、各段階は自分につきゲーム中1回だけ発動する。',
     '자신의 필드에 같은 종족의 몬스터를 서로 다른 카드명으로 정해진 종류 수만큼 모으면 발동하는 보너스. 같은 이름은 여러 체여도 1종류로 센다. 필요한 종류 수와 효과는 종족마다 다르며, 각 단계는 자신을 기준으로 게임 중 1회만 발동한다.',

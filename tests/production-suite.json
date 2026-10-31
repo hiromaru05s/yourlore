@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/balance-v73.mjs",
+    "tests/balance-v73-server.mjs",
     "tests/rune-rules.mjs",
     "tests/rotten-ground-singleton.mjs",
     "tests/rune-intermediate.mjs",

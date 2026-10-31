@@ -161,9 +161,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When an Enemy Monster Is Destroyed】Whenever this monster destroys an enemy monster by attacking or counterattacking, increase this monster's ATK and HP by that monster's purchase cost (until the affected monster leaves the field)."
   },
   "TPO5": {
-    "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
-    "ko": "【소환 시】상대의 아우라가 없는 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
-    "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and printed HP (ties use field order). If it is destroyed, increase your max mana by 1."
+    "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と現在体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
+    "ko": "【소환 시】상대의 아우라가 없는 구매 코스트 3~4 몬스터 중 공격력과 현재 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
+    "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and current HP (ties use field order). If it is destroyed, increase your max mana by 1."
   },
   "TAR2": {
     "ja": "【場にある間】相手の場の購入コスト2以下のモンスターは攻撃できない。",
@@ -691,9 +691,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】All other Soldiers and Knights on your field gain +4 ATK (until the affected monster leaves the field)."
   },
   "ELITE": {
-    "ja": "【召喚時】自分のデッキ構成が9枚以下なら、「兵士」（攻撃力2・体力2）2体を自分の場に召喚する。",
-    "ko": "【소환 시】자신의 덱 구성이 9장 이하이면 병사(공격력 2·체력 2) 2체를 자신의 필드에 소환한다.",
-    "en": "【On Summon】If your deck composition contains 9 cards or fewer, summon 2 Soldiers (2 ATK, 2 HP) to your field."
+    "ja": "【召喚時】自分のデッキ構成が9枚以下なら、「兵士」（攻撃力2・体力2）1体を自分の場に召喚する。",
+    "ko": "【소환 시】자신의 덱 구성이 9장 이하이면 병사(공격력 2·체력 2) 1체를 자신의 필드에 소환한다.",
+    "en": "【On Summon】If your deck composition contains 9 cards or fewer, summon 1 Soldier (2 ATK, 2 HP) to your field."
   },
   "WALLBREAK1": {
     "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
@@ -1101,9 +1101,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Summon Requirement】The opponent controls a monster with purchase cost 2 or less.\n\n【On Summon】Choose 1 such enemy monster without Aura and return it to the opponent's hand."
   },
   "TSO1": {
-    "ja": "【召喚時】このターンを含め、双方通算6ターン後まで自分はモンスターを召喚できない（通常は自分の3ターン後の開始時に解除）。",
-    "ko": "【소환 시】이번 턴부터 양쪽 합계 6턴 후까지 자신은 몬스터 소환 불가(통상 자신의 3턴 후 시작시 해제).",
-    "en": "【On Summon】You cannot summon monsters from now until 6 total turns later, counting both players; normally this ends at the start of your 3rd subsequent turn."
+    "ja": "【召喚時】このターンを含め、双方通算4ターン後まで自分はモンスターを召喚できない（通常は自分の2ターン後の開始時に解除）。",
+    "ko": "【소환 시】이번 턴부터 양쪽 합계 4턴 후까지 자신은 몬스터 소환 불가(통상 자신의 2턴 후 시작시 해제).",
+    "en": "【On Summon】You cannot summon monsters from now until 4 total turns later, counting both players; normally this ends at the start of your 2nd subsequent turn."
   },
   "TAR1": {
     "ja": "【自分のターン開始時】自分のターン開始時のドロー+1（このモンスターが場にいる間）。",
@@ -1766,9 +1766,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Gain Shield equal to the number of Culls in your Rift."
   },
   "WINE_COLLECTOR": {
-    "ja": "【召喚時】自分の手札に「ワイン」が2枚以上あれば、次の全てを行う。\nそのうち2枚を自動で自分のリフトへ送る。新しい「闇商人」1枚を自分の手札に加える。このモンスターも自分のリフトへ送る。",
-    "ko": "【소환 시】자신의 패에 와인이 2장 이상 있으면 다음을 모두 처리한다.\n그중 2장을 자동으로 자신의 리프트로 보낸다. 새로운 암상인 1장을 자신의 패에 넣는다. 이 몬스터도 자신의 리프트로 보낸다.",
-    "en": "【On Summon】If your hand contains at least 2 Wines, do all of the following.\nAutomatically send 2 of them to your Rift. Create 1 Black Market Dealer in your hand. Send this monster to your Rift."
+    "ja": "【場にある間】どちらかのプレイヤーが「ぶどう」を使用するたび、その使用者の墓地に新しい「高品質ぶどう」1枚を加える。",
+    "ko": "【필드에 있는 동안】어느 플레이어든 '포도'를 사용할 때마다 그 사용자의 묘지에 새로운 '고급 포도' 1장을 추가한다.",
+    "en": "【While on the Field】Whenever either player plays a Grape, create 1 Fine Grape in that player's graveyard."
   },
   "DEFENSIVE_STANCE": {
     "ja": "【発動時】自分はシールドを3＋（自分の場の「ゴーレム」系モンスターの種類数×2）得る（合計を1回で獲得）。",

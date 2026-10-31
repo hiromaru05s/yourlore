@@ -791,7 +791,7 @@ const NEW_CARDS7: CardDef[] = [
     text: "영구: 양측 필드의 체력 1 이하 몬스터는 공격할 수 없다 (시전 2)", textJa: "永続: 両方の場の体力1以下のモンスターは攻撃できない (発動2)" },
   { id: "SHATTER", t: "spell", cost: 3, play: 2, name: "붕괴 진동", nameJa: "崩壊振動",
     text: "자신에게 5 데미지. 양 필드의 모든 몬스터의 체력이 1이 된다(지속) (시전 2)", textJa: "自分に5ダメージ。両方の場の全モンスターの体力が1になる(持続) (発動2)" },
-  { id: "SCARECROW", t: "spell", cost: 2, name: "허수아비 소집", nameJa: "かかし召集",
+  { id: "SCARECROW", t: "spell", cost: 1, name: "허수아비 소집", nameJa: "かかし召集",
     text: "허수아비(0/1) 3체를 자신 필드에 소환", textJa: "かかし(0/1)3体を自分の場に召喚" },
   { id: "LEVY", t: "spell", cost: 7, play: 4, name: "병력 소집", nameJa: "兵力召集",
     text: "병사(2/2) 3체를 자신 필드에 소환 (시전 4)", textJa: "兵士(2/2)3体を自分の場に召喚 (発動4)" },
@@ -2478,7 +2478,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v72"; // Habit of the Rich: opposing card destruction sets owner max mana to 3
+export const BALANCE_VERSION = "v73"; // Scarecrow, Recluse, Mercenary, Wine Collector, Elite Commander and current-HP Predator
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

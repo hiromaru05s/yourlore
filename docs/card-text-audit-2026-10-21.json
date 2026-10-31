@@ -7,7 +7,7 @@
     "en"
   ],
   "count": 381,
-  "engineSha256": "74244485a0736dee90a581f423639bed74abe55ca6796f20b200c206590551be",
+  "engineSha256": "91779588973adefdf1f318b09592c3c14e9ed7255b269f8955491fc8af20c530",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -740,24 +740,26 @@
     },
     "TPO5": {
       "nameJa": "捕食者",
-      "status": "reworded",
+      "status": "reviewed-v73-rework",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "326804c07c8696bd1f4440832a2daf4f5174d22d29d2afc8cbe06368cdc9c3ce",
-      "textSha256": "6377e85dff8f93b88acea8dc78f549907a2d4bb270b9e0aff1f4f36bf78c6de2",
+      "textSha256": "4c00883f8e87935aa721698e5deace1c636f2b864ab6e0ccdae558e814216740",
       "hooks": {
         "onSummon": "preyExec"
       },
       "before": {
         "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
         "ko": "【소환 시】상대의 아우라가 없는 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
-        "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and printed HP (ties use field order). If it is destroyed, your max mana +1."
+        "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and printed HP (ties use field order). If it is destroyed, increase your max mana by 1."
       },
       "after": {
-        "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
-        "ko": "【소환 시】상대의 아우라가 없는 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
-        "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and printed HP (ties use field order). If it is destroyed, increase your max mana by 1."
+        "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と現在体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
+        "ko": "【소환 시】상대의 아우라가 없는 구매 코스트 3~4 몬스터 중 공격력과 현재 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
+        "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and current HP (ties use field order). If it is destroyed, increase your max mana by 1."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -766,7 +768,7 @@
         "en": "【On Summon】Automatically destroy the enemy monster of purchase cost 3–4 with the highest ATK plus printed HP; ties use field order. If destroyed, your max mana +1."
       },
       "reviewedAt": "2026-10-31",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "reviewNote": "Automatic target ranking uses effective attack plus current HP, including buffs and damage; printed-HP term retired."
     },
     "TAR2": {
       "nameJa": "没落貴族",
@@ -2527,27 +2529,23 @@
     },
     "SCARECROW": {
       "nameJa": "かかし召集",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "3a092059a6c7c7a742fa37fee1e8d82b8ce6e9e629400774865dbf24a3d58568",
+      "status": "reviewed-v73-rework",
+      "changedLocales": [],
+      "definitionSha256": "96a267ea15df505047f42a148269fc239b49cb15284f4868ebcb3b105484c0cf",
       "textSha256": "94607773a57919768748ba4040f37d0577e66c369f73de6693b4c5d08522ab41",
       "hooks": {},
       "before": {
-        "ja": "【発動時】かかし(0/1)3体を自分の場に召喚する。",
-        "ko": "【발동 시】허수아비(0/1) 3체를 자신의 필드에 소환한다.",
-        "en": "【On Cast】Summon three 0/1 Scarecrows to your field."
+        "ja": "【発動時】かかし（攻撃力0・体力1）3体を自分の場に召喚する。",
+        "ko": "【발동 시】허수아비(공격력 0·체력 1) 3체를 자신의 필드에 소환한다.",
+        "en": "【On Cast】Summon 3 Scarecrows (0 ATK, 1 HP) to your field."
       },
       "after": {
         "ja": "【発動時】かかし（攻撃力0・体力1）3体を自分の場に召喚する。",
         "ko": "【발동 시】허수아비(공격력 0·체력 1) 3체를 자신의 필드에 소환한다.",
         "en": "【On Cast】Summon 3 Scarecrows (0 ATK, 1 HP) to your field."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "reviewedAt": "2026-10-31",
+      "reviewNote": "Purchase cost reduced to 1; summon effect unchanged."
     },
     "LEVY": {
       "nameJa": "召集",
@@ -3186,27 +3184,29 @@
     },
     "ELITE": {
       "nameJa": "精鋭騎士団長",
-      "status": "reworded",
+      "status": "reviewed-v73-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "5be01967f5626d6f8afec9e3b81883233bd8a16ea2906afc10e5b875f17303a1",
-      "textSha256": "0fb2d8ab752e1996104b095aaf4caf676f5f94dada028a5608109f6c802c0e61",
+      "textSha256": "af9c30d2f8a84af84397b89eb6382a73d0cf97a57f4200fabc1c02926aa4ac67",
       "hooks": {
         "onSummon": "eliteSoldiers"
       },
       "before": {
-        "ja": "【召喚時】デッキ構成が9枚以下なら兵士(2/2)2体を召喚する。",
-        "ko": "【소환시】덱 구성이 9장 이하면 병사(2/2) 2체를 소환한다.",
-        "en": "【On Summon】With 9 or fewer cards in your deck composition, summon two 2/2 Soldiers."
-      },
-      "after": {
         "ja": "【召喚時】自分のデッキ構成が9枚以下なら、「兵士」（攻撃力2・体力2）2体を自分の場に召喚する。",
         "ko": "【소환 시】자신의 덱 구성이 9장 이하이면 병사(공격력 2·체력 2) 2체를 자신의 필드에 소환한다.",
         "en": "【On Summon】If your deck composition contains 9 cards or fewer, summon 2 Soldiers (2 ATK, 2 HP) to your field."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】自分のデッキ構成が9枚以下なら、「兵士」（攻撃力2・体力2）1体を自分の場に召喚する。",
+        "ko": "【소환 시】자신의 덱 구성이 9장 이하이면 병사(공격력 2·체력 2) 1체를 자신의 필드에 소환한다.",
+        "en": "【On Summon】If your deck composition contains 9 cards or fewer, summon 1 Soldier (2 ATK, 2 HP) to your field."
+      },
+      "reviewedAt": "2026-10-31",
+      "reviewNote": "Summon 1 Soldier instead of 2; existing deck-composition condition retained."
     },
     "WALLBREAK1": {
       "nameJa": "城壁破砕",
@@ -5126,25 +5126,29 @@
     },
     "TSO1": {
       "nameJa": "隠遁者",
-      "status": "reworded",
+      "status": "reviewed-v73-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "1a3d43309dca209bed3d209769ea74aa20338e3a51b1acc3f2a9ea1dfb10700d",
-      "textSha256": "0a8e200e43061721bcd48c379edf8ed7b7173a4170cc18b91ca3accacd221187",
+      "textSha256": "819a61a1138deeaffaf2a72f51f32386224cfd976d565f45d2710164a2f35d75",
       "hooks": {
         "onSummon": "soloLock"
       },
       "before": {
         "ja": "【召喚時】このターンを含め、双方通算6ターン後まで自分はモンスターを召喚できない（通常は自分の3ターン後の開始時に解除）。",
-        "ko": "【소환시】이번 턴부터 양쪽 합계 6턴 후까지 자신은 몬스터 소환 불가(통상 자신의 3턴 후 시작시 해제).",
+        "ko": "【소환 시】이번 턴부터 양쪽 합계 6턴 후까지 자신은 몬스터 소환 불가(통상 자신의 3턴 후 시작시 해제).",
         "en": "【On Summon】You cannot summon monsters from now until 6 total turns later, counting both players; normally this ends at the start of your 3rd subsequent turn."
       },
       "after": {
-        "ja": "【召喚時】このターンを含め、双方通算6ターン後まで自分はモンスターを召喚できない（通常は自分の3ターン後の開始時に解除）。",
-        "ko": "【소환 시】이번 턴부터 양쪽 합계 6턴 후까지 자신은 몬스터 소환 불가(통상 자신의 3턴 후 시작시 해제).",
-        "en": "【On Summon】You cannot summon monsters from now until 6 total turns later, counting both players; normally this ends at the start of your 3rd subsequent turn."
-      }
+        "ja": "【召喚時】このターンを含め、双方通算4ターン後まで自分はモンスターを召喚できない（通常は自分の2ターン後の開始時に解除）。",
+        "ko": "【소환 시】이번 턴부터 양쪽 합계 4턴 후까지 자신은 몬스터 소환 불가(통상 자신의 2턴 후 시작시 해제).",
+        "en": "【On Summon】You cannot summon monsters from now until 4 total turns later, counting both players; normally this ends at the start of your 2nd subsequent turn."
+      },
+      "reviewedAt": "2026-10-31",
+      "reviewNote": "Summon lock shortened from 6 to 4 total turns; engine and all languages agree."
     },
     "TAR1": {
       "nameJa": "貴族の執事",
@@ -7123,25 +7127,25 @@
     },
     "MERCENARY": {
       "nameJa": "傭兵",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "32142fac722dc699e568cd2e32f26b9f34024029ff5447eaae36d4d2d0e348b8",
+      "status": "reviewed-v73-rework",
+      "changedLocales": [],
+      "definitionSha256": "7e3d205c699f66898a2ae032645cd54e8bf2760e3552df5b0ecf17ebcf991065",
       "textSha256": "909692d4a36bb9fe81ff5fdf4be4a93466e7635b981e477ba63bc2bff6913fa7",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
         "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス3個を振る。",
-        "ko": "【소환시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 3개를 굴린다.",
+        "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 3개를 굴린다.",
         "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 3 dice."
       },
       "after": {
         "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス3個を振る。",
         "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 3개를 굴린다.",
         "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 3 dice."
-      }
+      },
+      "reviewedAt": "2026-10-31",
+      "reviewNote": "Base attack and health are 1/1; summon effect unchanged."
     },
     "MERC_LEADER": {
       "nameJa": "傭兵リーダー",
@@ -8322,25 +8326,29 @@
     },
     "WINE_COLLECTOR": {
       "nameJa": "ワインコレクター",
-      "status": "reworded",
+      "status": "reviewed-v73-rework",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "b3d08dd4561b9e049e344c00243456143012d2faa6acc09908658e1c18cf23f5",
-      "textSha256": "e6418972f554f73b63e011923d07f6877233dc369a6f508dec305d53f57665e4",
+      "definitionSha256": "48b1a05514b6dc1ec9c540bc8568682b9b8d3d91ff744ee35a2affe53d41e183",
+      "textSha256": "2b12fe65282f4c5c6b2839c8af460e477e58a4b96791a5b51cfca1a82179eeac",
       "hooks": {
-        "onSummon": "wineCollector"
+        "aura": "wineCollector"
       },
       "before": {
         "ja": "【召喚時】自分の手札に「ワイン」が2枚以上あれば、次の全てを行う。\nそのうち2枚を自動で自分のリフトへ送る。新しい「闇商人」1枚を自分の手札に加える。このモンスターも自分のリフトへ送る。",
-        "ko": "【소환시】자신의 패에 와인이 2장 이상 있으면 다음을 모두 처리한다.\n그중 2장을 자동으로 자신의 리프트로 보낸다. 새로운 암상인 1장을 자신의 패에 넣는다. 이 몬스터도 자신의 리프트로 보낸다.",
+        "ko": "【소환 시】자신의 패에 와인이 2장 이상 있으면 다음을 모두 처리한다.\n그중 2장을 자동으로 자신의 리프트로 보낸다. 새로운 암상인 1장을 자신의 패에 넣는다. 이 몬스터도 자신의 리프트로 보낸다.",
         "en": "【On Summon】If your hand contains at least 2 Wines, do all of the following.\nAutomatically send 2 of them to your Rift. Create 1 Black Market Dealer in your hand. Send this monster to your Rift."
       },
       "after": {
-        "ja": "【召喚時】自分の手札に「ワイン」が2枚以上あれば、次の全てを行う。\nそのうち2枚を自動で自分のリフトへ送る。新しい「闇商人」1枚を自分の手札に加える。このモンスターも自分のリフトへ送る。",
-        "ko": "【소환 시】자신의 패에 와인이 2장 이상 있으면 다음을 모두 처리한다.\n그중 2장을 자동으로 자신의 리프트로 보낸다. 새로운 암상인 1장을 자신의 패에 넣는다. 이 몬스터도 자신의 리프트로 보낸다.",
-        "en": "【On Summon】If your hand contains at least 2 Wines, do all of the following.\nAutomatically send 2 of them to your Rift. Create 1 Black Market Dealer in your hand. Send this monster to your Rift."
-      }
+        "ja": "【場にある間】どちらかのプレイヤーが「ぶどう」を使用するたび、その使用者の墓地に新しい「高品質ぶどう」1枚を加える。",
+        "ko": "【필드에 있는 동안】어느 플레이어든 '포도'를 사용할 때마다 그 사용자의 묘지에 새로운 '고급 포도' 1장을 추가한다.",
+        "en": "【While on the Field】Whenever either player plays a Grape, create 1 Fine Grape in that player's graveyard."
+      },
+      "reviewedAt": "2026-10-31",
+      "reviewNote": "Purchase cost 1; replace Wine exchange with either player’s Grape-use trigger creating 1 Fine Grape in that user’s graveyard per active Collector."
     },
     "DEFENSIVE_STANCE": {
       "nameJa": "防御の姿勢",
