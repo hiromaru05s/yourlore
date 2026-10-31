@@ -1,5 +1,5 @@
 import {tutorialStatus,grantTutorial} from './tutorialRewards';
-import { progressionState, rerollDaily } from './progression';
+import { progressionState, rerollDaily, claimDaily } from './progression';
 import { BOT_REWARDS } from '../../client/src/shared/progression';
 import { botNpc } from '../../client/src/shared/botNpcs';
 import { TUT_STEPS } from '../../client/src/shared/tutorialSteps';
@@ -61,6 +61,12 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     return json(env,{settled:!!receipt,amount:receipt?.amount??0});
   }
   if (path === '/rewards/progression' && req.method === 'GET') return json(env, await progressionState(env,user.id));
+  if (path === '/rewards/daily/claim' && req.method === 'POST') {
+    const body=await req.json().catch(()=>null) as {day?:unknown;revision?:unknown;slot?:unknown}|null;
+    const amount=await claimDaily(env,user.id,body?.day,body?.revision,body?.slot);
+    if(amount===null)return json(env,{error:'daily quest is not ready to claim'},409);
+    return json(env,{...await progressionState(env,user.id),amount});
+  }
   if (path === '/rewards/daily/reroll' && req.method === 'POST') {
     const body=await req.json() as {day?:unknown;revision?:unknown;slot?:unknown};
     const changed=await rerollDaily(env,user.id,body.day,body.revision,Date.now(),body.slot===undefined?0:body.slot);

@@ -91,6 +91,28 @@ export async function rerollDaily(env:Env,id:string,day:unknown,revision:unknown
  return (result.meta.changes??0)>0;
 }
 export interface Settlement { matchId:string; userId:string; mode:'online'|'ranked'|'bot'; difficulty?:keyof typeof BOT_REWARDS; won:boolean|null; player:PlayerState; deck:string[]; daily?:QuestState|QuestState[]; endedAt:number }
+/** Only a completed, current assignment can be claimed. The existing reward key
+ * also protects legacy automatic payouts. Receipt, balance and flag commit together. */
+export async function claimDaily(env:Env,id:string,day:unknown,revision:unknown,slot:unknown,now=Date.now()):Promise<number|null> {
+ if(day!==rewardDay(now)||!Number.isInteger(revision)||Number(revision)<0||!Number.isInteger(slot)||Number(slot)<0||Number(slot)>2)return null;
+ const table=slot===0?'daily_challenges':'daily_challenge_extras',slotFilter=slot===0?'':` AND slot=${Number(slot)}`;
+ const current=await env.DB.prepare(`SELECT quest,progress,claimed FROM ${table} WHERE user_id=? AND day=?${slotFilter} AND revision=?`)
+  .bind(id,day,revision).first<Pick<Row,'quest'|'progress'|'claimed'>>();
+ if(!current)return null;
+ const quest=JSON.parse(current.quest) as DailyQuest;
+ if(current.progress<quest.target)return null;
+ const key='daily:'+day+(slot===0?'':':'+slot);
+ const results=await env.DB.batch([
+  env.DB.prepare(`INSERT OR IGNORE INTO rewards(user_id,key,amount,created_at)
+   SELECT user_id,?,json_extract(quest,'$.reward'),? FROM ${table}
+   WHERE user_id=? AND day=?${slotFilter} AND revision=? AND claimed=0 AND progress>=json_extract(quest,'$.target')`)
+   .bind(key,now,id,day,revision),
+  env.DB.prepare('UPDATE users SET credits=credits+(SELECT amount FROM rewards WHERE user_id=? AND key=?) WHERE id=? AND changes()=1').bind(id,key,id),
+  env.DB.prepare(`UPDATE ${table} SET claimed=1 WHERE user_id=? AND day=?${slotFilter} AND revision=? AND EXISTS (SELECT 1 FROM rewards WHERE user_id=? AND key=?)`)
+   .bind(id,day,revision,id,key),
+ ]);
+ return results[0].meta.changes?quest.reward:0;
+}
 /** Receipt, progress, cap and currency changes share one D1 transaction. Retries are harmless. */
 export async function settleProgression(env:Env,s:Settlement):Promise<void> {
  if(!isHuman(s.userId))return;
@@ -101,13 +123,9 @@ export async function settleProgression(env:Env,s:Settlement):Promise<void> {
  for(const q of quests){
   if(q.day!==day)continue;
   const slot=q.slot??0,table=slot===0?'daily_challenges':'daily_challenge_extras',slotFilter=slot===0?'':` AND slot=${slot}`;
-  const rewardKey='daily:'+day+(slot===0?'':':'+slot);
   const increment=questProgress(q.quest,s.player,s.won===true,s.deck);
   add(`UPDATE ${table} SET progress=MIN(?,progress+?) WHERE user_id=? AND day=?${slotFilter} AND revision=? AND claimed=0 AND ${absent}`,q.quest.target,increment,s.userId,day,q.revision,s.userId,s.matchId);
-  // A unique reward key and changes() make crediting atomic even across simultaneous matches.
-  add(`INSERT OR IGNORE INTO rewards (user_id,key,amount,created_at) SELECT user_id,?,?,? FROM ${table} WHERE user_id=? AND day=?${slotFilter} AND revision=? AND progress>=? AND claimed=0`, rewardKey,q.quest.reward,s.endedAt,s.userId,day,q.revision,q.quest.target);
-  add('UPDATE users SET credits=credits+? WHERE id=? AND changes()=1',q.quest.reward,s.userId);
-  add(`UPDATE ${table} SET claimed=1 WHERE user_id=? AND day=?${slotFilter} AND EXISTS (SELECT 1 FROM rewards WHERE user_id=? AND key=?)`,s.userId,day,s.userId,rewardKey);
+  // Completion leaves the reward pending until the player explicitly claims it.
  }
  if(s.mode==='bot'&&s.difficulty&&s.won===true){
   const amount=BOT_REWARDS[s.difficulty];

@@ -21,7 +21,7 @@
 ):not(:where(
   .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
-  .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
+  .home-daily-reward, .dq-task, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
 )) {
   --lore-button-art:var(--lore-button-secondary);
@@ -70,7 +70,7 @@
 ):not(:where(
   .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
-  .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
+  .home-daily-reward, .dq-task, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
 )):is([aria-pressed=true],[aria-selected=true],.on,.is-on,.is-active,.active,.selected) {
   --lore-button-art:var(--lore-button-selected);
@@ -90,7 +90,7 @@
 ):not(:where(
   .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
-  .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
+  .home-daily-reward, .dq-task, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
 )):hover:not(:disabled):not([aria-disabled=true]) {
   filter:brightness(1.13)!important;
@@ -106,7 +106,7 @@
 ):not(:where(
   .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
-  .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
+  .home-daily-reward, .dq-task, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
 )):active:not(:disabled):not([aria-disabled=true]) {
   filter:brightness(.86)!important;
@@ -122,7 +122,7 @@
 ):not(:where(
   .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
-  .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
+  .home-daily-reward, .dq-task, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
 )):focus-visible {
   outline:2px solid #cbe5ff!important;
@@ -139,7 +139,7 @@
 ):not(:where(
   .card, .starter-shop-face, .gacha-artwork, .gacha-draw-rich, .reward-tile, .deck-cosmetic,
   .hooded-option, .diff-card, .home-spirit-touch, .gift-mail,
-  .home-daily-reward, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
+  .home-daily-reward, .dq-task, .lounge-play-button, .lounge-active-deck, .card-reference-link, .card-rule-term,
   #endBtn, .outcome-result button, .lb-deck-trigger, .lb-profile-trigger
 )):is(:disabled,[aria-disabled=true]) {
   --lore-button-art:var(--lore-button-disabled)!important;

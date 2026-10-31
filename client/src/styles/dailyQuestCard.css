@@ -10,11 +10,29 @@
 :root body #dailyReward .dq-task:focus-visible{outline:2px solid #c1e3ff;outline-offset:2px;}
 :root body #dailyReward .dq-title{display:block;font-size:12px;line-height:1.45;font-weight:500;overflow-wrap:anywhere;}
 .dq-meta{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:3px;font-size:10px;line-height:1.4;}
-.dq-reward{color:#d5eaff;}.dq-progress{color:#b7cde0;font-variant-numeric:tabular-nums;}
+.dq-reward{color:#d5eaff;}.dq-progress{white-space:nowrap;color:#b7cde0;font-variant-numeric:tabular-nums;}
 .dq-meter,.mode-reward progress{display:block;appearance:none;border:0;width:100%;height:4px;margin:4px 0 0;background:#a9c9ee26;color:#a8d4ff;}
 .dq-meter::-webkit-progress-bar,.mode-reward progress::-webkit-progress-bar{background:#a9c9ee26;}
 .dq-meter::-webkit-progress-value,.mode-reward progress::-webkit-progress-value{background:#a8d4ff;}
 .dq-meter::-moz-progress-bar,.mode-reward progress::-moz-progress-bar{background:#a8d4ff;}
+/* State is conveyed by a label, surface and meter, including when no changes remain. */
+.dq-list{display:grid;gap:4px;}
+.dq-entry{min-width:0;padding:0 8px;border-left:2px solid transparent;}
+.dq-entry.is-active{background:#78baff14;border-left-color:#88c9ff;}
+.dq-entry.is-ready{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;background:#9ed8ff24;border-left-color:#d3edff;}
+.dq-entry.is-complete{background:#858e9810;border-left-color:#697581;}
+:root body .lounge-home #dailyReward .dq-entry .dq-task{border-top:0;}
+.dq-status{color:#bfe0ff;font-weight:600;white-space:nowrap;}
+.dq-entry.is-ready .dq-status{color:#e4f4ff;}
+:root body #dailyReward .is-complete .dq-title{color:#8995a1;}
+:root body #dailyReward .dq-entry.is-complete :is(.dq-status,.dq-progress,.dq-reward){color:#9ca6b1;}
+.dq-entry.is-complete .dq-meter{color:#65717c;background:#65717c26;}
+.dq-entry.is-complete .dq-meter::-webkit-progress-value{background:#65717c;}
+.dq-entry.is-complete .dq-meter::-moz-progress-bar{background:#65717c;}
+:root body #dailyReward .dq-claim{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;min-height:44px;min-width:86px;width:86px;padding:7px 9px;text-align:center;line-height:1.4;cursor:pointer;}
+:root body #dailyReward .dq-claim strong{display:block;font-size:12px;}
+.dq-claim>span{display:block;font-size:10px;white-space:nowrap;}
+:root body #dailyReward .dq-notice{color:#d5efff;}
 :root body .mode-reward{width:100%;max-width:320px;justify-self:center;margin:0 auto;}
 .mode-reward-label{display:flex;justify-content:space-between;gap:8px;font-size:10px;line-height:1.5;}.mode-reward-label b{font-weight:500;font-variant-numeric:tabular-nums;}
 .mode-reward progress{height:6px;margin-top:4px;}
@@ -69,4 +87,8 @@
 @media(max-width:400px) and (min-height:501px) and (max-height:700px){
  :root body .lounge-shell.selected-menu.lounge-home .lounge-home-main{min-height:208px;padding:6px 14px;}
  :root body .lounge-home:has(#dailyReward) .lounge-rank-info{min-height:36px;}
+}
+
+@media(max-height:500px) and (min-width:601px){
+ :root body .lounge-home #dailyReward{max-height:calc(100dvh - 188px);overflow-y:auto;overscroll-behavior:contain;}
 }

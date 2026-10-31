@@ -1,0 +1,27 @@
+{
+  "origin": "https://yourlore.xyz",
+  "source": "6cfb2246dabe662d3bf316d3a4762ceba74d05f0",
+  "balances": [
+    2480,
+    2780,
+    3130
+  ],
+  "concurrentAmounts": [
+    350,
+    0,
+    0
+  ],
+  "checks": [
+    "incomplete claim rejected",
+    "three distinct visual states",
+    "explicit button awards stored 300 shards",
+    "header balance updates",
+    "duplicate and legacy claims pay zero",
+    "three concurrent claims award exactly 350 total",
+    "received state survives reload",
+    "stale day rejected",
+    "desktop/mobile screenshots"
+  ],
+  "scope": "Real production API and browser using one disposable preverified account with seeded quest progress. Live match completion, OAuth and physical devices are not exercised.",
+  "errors": []
+}
