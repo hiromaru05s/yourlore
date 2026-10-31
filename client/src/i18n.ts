@@ -35,6 +35,13 @@ function applyDocLang(): void {
 
 type Entry = { ko: string; ja: string; en: string };
 const D: Record<string, Entry> = {
+  "settings.volume": {ja:"音量",ko:"음량",en:"Volume"},
+  "duel.endLabel": {ja:"ターン\n終了",ko:"턴\n종료",en:"END\nTURN"},
+  "duel.enemyLabel": {ja:"相手の\nターン",ko:"상대\n턴",en:"ENEMY\nTURN"},
+  "duel.complete": {ja:"デュエル終了",ko:"듀얼 종료",en:"DUEL COMPLETE"},
+  "duel.previewPlace": {ja:"ビブリオン · デュエル",ko:"비블리온 · 듀얼",en:"BIBLION · DUEL"},
+  "duel.dice": {ja:"ダイス",ko:"주사위",en:"Dice"},
+
   "lang.label": { ko: "언어", ja: "言語", en: "Language" },
   // login
   "login.tab.login": { ko: "로그인", ja: "ログイン", en: "Log in" },

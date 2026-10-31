@@ -27,7 +27,7 @@ export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;c
  const close=()=>{const finished=resultOpen;resultOpen=false;closeConfirmation?.();visualCleanups.splice(0).forEach(f=>f());stopCinematic?.();stopCinematic=undefined;dialog?.close();dialog?.remove();dialog=undefined;const restore=focus?.isConnected?focus:focus?.dataset.pull?host.querySelector<HTMLButtonElement>(`[data-pull="${focus.dataset.pull}"]`):null;restore?.focus();if(finished&&!dead)options.onResultsClosed?.();};
  function show(title:string,body:string,receipts:CollectionReceipt[]=[]){
   const opener=(stopCinematic||dialog?.contains(document.activeElement))?focus:document.activeElement as HTMLElement;close();focus=opener;dialog=document.createElement('dialog');dialog.className='gacha-dialog';dialog.setAttribute('aria-labelledby','gacha-dialog-title');
-  dialog.innerHTML=`<header><small>BIBLION / GACHA</small><button data-close aria-label="${l('閉じる','Close','닫기')}">×</button><h2 id="gacha-dialog-title">${title}</h2></header><div class="gacha-dialog-body">${body}</div><footer><button data-close>${l('閉じる','Close','닫기')}</button></footer>`;
+  dialog.innerHTML=`<header><small>${l('ビブリオン / ガチャ','BIBLION / GACHA','비블리온 / 뽑기')}</small><button data-close aria-label="${l('閉じる','Close','닫기')}">×</button><h2 id="gacha-dialog-title">${title}</h2></header><div class="gacha-dialog-body">${body}</div><footer><button data-close>${l('閉じる','Close','닫기')}</button></footer>`;
   document.body.append(dialog);dialog.querySelectorAll<HTMLButtonElement>('[data-close]').forEach(b=>b.onclick=close);dialog.addEventListener('cancel',e=>{e.preventDefault();close();});dialog.showModal();hydrate(receipts);
  }
  function hydrate(receipts:CollectionReceipt[]){

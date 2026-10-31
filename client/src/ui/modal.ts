@@ -92,8 +92,8 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   m.className = "modal";
   const title = won == null ? t("modal.draw") : won ? t("modal.win") : t("modal.lose");
   m.className='modal outcome-result outcome-finale '+(won==null?'is-draw':won?'is-victory':'is-defeat');
-  const verdict = won == null ? 'DRAW' : won ? 'VICTORY' : 'DEFEAT';
-  m.innerHTML = `<header class="finale-banner"><div class="finale-eyebrow">DUEL COMPLETE</div><div class="finale-title"><h2 aria-label="${title}">${verdict}</h2>${getLang()==='en'?'':`<span class="finale-local-title" aria-hidden="true">${title}</span>`}</div></header><section class="finale-progress"><div class="win-rank" id="winRankDelta" style="display:none"></div><div id="winDetail" class="finale-detail">${detail}</div></section><div class="modal-row finale-actions"></div>`;
+  const verdict = title;
+  m.innerHTML = `<header class="finale-banner"><div class="finale-eyebrow">${t("duel.complete")}</div><div class="finale-title"><h2 aria-label="${title}">${verdict}</h2></div></header><section class="finale-progress"><div class="win-rank" id="winRankDelta" style="display:none"></div><div id="winDetail" class="finale-detail">${detail}</div></section><div class="modal-row finale-actions"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost finale-home"; home.textContent = t("modal.home");
   home.onclick = () => { closeOverlay(); onHome(); };
@@ -116,7 +116,7 @@ export function marketPreview(market: CardInst[], onReady: () => void): { setUnt
   m.className = "preview-modal";
   m.style.setProperty('--pv-table', "url('/art/biblion/duel-table.png')");
   m.style.setProperty('--pv-cards', String(Math.max(1, market.length)));
-  m.innerHTML = `<header class="pv-heading"><span class="pv-eyebrow">BIBLION · DUEL</span><h2>${t("game.std")}</h2><p>${t("preview.sub")}</p></header>`
+  m.innerHTML = `<header class="pv-heading"><span class="pv-eyebrow">${t("duel.previewPlace")}</span><h2>${t("game.std")}</h2><p>${t("preview.sub")}</p></header>`
     + `<div class="pv-stage"><div class="pv-cards"></div><p class="pv-hint"><span class="pv-swipe">${t("preview.swipe")} · </span>${t("preview.inspect")}</p></div>`
     + `<footer class="pv-foot"><div class="pv-count" id="pvCount" role="status"></div><button class="btn btn-gold" id="pvReady">${t("preview.ready")}</button></footer>`;
   const grid = m.querySelector(".pv-cards") as HTMLElement;

@@ -1,0 +1,166 @@
+{
+  "origin": "http://127.0.0.1:5251",
+  "css": [
+    "/src/styles/fonts.css",
+    "/src/styles/reading-board.css",
+    "/src/styles/tokens.css",
+    "/src/styles/base.css",
+    "/src/styles/card.css",
+    "/src/styles/game-overlays.css",
+    "/src/styles/game.css",
+    "/src/styles/dice.css",
+    "/src/styles/screens.css",
+    "/src/styles/mobile.css",
+    "/src/styles/duel-opening.css",
+    "/src/styles/lounge.css",
+    "/src/styles/loungeGame.css",
+    "/src/styles/loungeStage.css",
+    "/src/styles/presentation.css",
+    "/src/styles/deckWorkspace.css",
+    "/src/styles/cardsWorkspace.css",
+    "/src/styles/menuApproved.css",
+    "/src/styles/menuWorkspace.css",
+    "/src/styles/popupSilver.css",
+    "/src/styles/defaultUI.css",
+    "/src/styles/defaultButtons.css",
+    "/src/styles/deckLayout.css",
+    "/src/styles/deckActions.css"
+  ],
+  "checks": [
+    {
+      "lang": "en",
+      "turn": true,
+      "label": "END\nTURN"
+    },
+    {
+      "lang": "en",
+      "turn": false,
+      "label": "ENEMY\nTURN"
+    },
+    {
+      "lang": "en",
+      "side": 0,
+      "result": "🎲 Six-Faced Whim\nA Six-Faced Whim → 🎲 [4,3,3,1,3,4,5,1,5,3] = 32 → failed (less than 40)"
+    },
+    {
+      "lang": "en",
+      "side": 1,
+      "result": "🎲 Opponent · Six-Faced Whim\nB Six-Faced Whim → 🎲 [4,3,3,1,3,4,5,1,5,3] = 32 → failed (less than 40)"
+    },
+    {
+      "lang": "en",
+      "won": true,
+      "text": "DUEL COMPLETE\nVICTORY\nHome\nReview Log\nPlay Again"
+    },
+    {
+      "lang": "en",
+      "won": false,
+      "text": "DUEL COMPLETE\nDEFEAT\nHome\nReview Log\nPlay Again"
+    },
+    {
+      "lang": "en",
+      "won": null,
+      "text": "DUEL COMPLETE\nDRAW\nHome\nReview Log\nPlay Again"
+    },
+    {
+      "lang": "en",
+      "banner": "YOUR TURN Turn · 09"
+    },
+    {
+      "lang": "ja",
+      "turn": true,
+      "label": "ターン\n終了"
+    },
+    {
+      "lang": "ja",
+      "turn": false,
+      "label": "相手の\nターン"
+    },
+    {
+      "lang": "ja",
+      "side": 0,
+      "result": "🎲 六面の気まぐれ\nA 六面の気まぐれ → 🎲 [4,3,3,1,3,4,5,1,5,3] = 32 → 失敗 (40未満)"
+    },
+    {
+      "lang": "ja",
+      "side": 1,
+      "result": "🎲 相手 · 六面の気まぐれ\nB 六面の気まぐれ → 🎲 [4,3,3,1,3,4,5,1,5,3] = 32 → 失敗 (40未満)"
+    },
+    {
+      "lang": "ja",
+      "won": true,
+      "text": "デュエル終了\n勝利\nホームへ\nログを見る (振り返り)\nもう一度"
+    },
+    {
+      "lang": "ja",
+      "won": false,
+      "text": "デュエル終了\n敗北\nホームへ\nログを見る (振り返り)\nもう一度"
+    },
+    {
+      "lang": "ja",
+      "won": null,
+      "text": "デュエル終了\n引き分け\nホームへ\nログを見る (振り返り)\nもう一度"
+    },
+    {
+      "lang": "ja",
+      "banner": "あなたのターンです ターン · 09"
+    },
+    {
+      "lang": "ko",
+      "turn": true,
+      "label": "턴\n종료"
+    },
+    {
+      "lang": "ko",
+      "turn": false,
+      "label": "상대\n턴"
+    },
+    {
+      "lang": "ko",
+      "side": 0,
+      "result": "🎲 육면의 변덕\nA 육면의 변덕 → 🎲 [4,3,3,1,3,4,5,1,5,3] = 32 → 실패 (40 미만)"
+    },
+    {
+      "lang": "ko",
+      "side": 1,
+      "result": "🎲 상대 · 육면의 변덕\nB 육면의 변덕 → 🎲 [4,3,3,1,3,4,5,1,5,3] = 32 → 실패 (40 미만)"
+    },
+    {
+      "lang": "ko",
+      "won": true,
+      "text": "듀얼 종료\n승리\n홈으로\n로그 보기 (복기)\n다시 하기"
+    },
+    {
+      "lang": "ko",
+      "won": false,
+      "text": "듀얼 종료\n패배\n홈으로\n로그 보기 (복기)\n다시 하기"
+    },
+    {
+      "lang": "ko",
+      "won": null,
+      "text": "듀얼 종료\n무승부\n홈으로\n로그 보기 (복기)\n다시 하기"
+    },
+    {
+      "lang": "ko",
+      "banner": "내 턴 턴 · 09"
+    },
+    {
+      "switchTo": "ja",
+      "dice": "相手の効果\n烙印\n相手のダイス\n4\n4+ · 成功"
+    },
+    {
+      "switchTo": "ko",
+      "dice": "상대의 효과\n낙인\n상대의 주사위\n4\n4+ · 성공"
+    },
+    {
+      "switchTo": "en",
+      "dice": "Opponent effect\nBrand\nOPPONENT DICE\n4\n4+ · Success"
+    },
+    {
+      "switchResult": "🎲 주사위\n내 턴\n<player-name>",
+      "literalName": true
+    }
+  ],
+  "errors": [],
+  "scope": "Actual BaseController.applyResult, engine events, VFX and popups; isolated fixture, no live account"
+}

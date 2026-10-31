@@ -23,11 +23,11 @@ try {
  globalThis.fetch=async()=>({ok:false});assert.equal(await startupLanguage(),'ja');
  globalThis.fetch=async()=>{throw Error('offline');};assert.equal(await startupLanguage(),'ja');
  // Startup must distinguish an unavailable session service from a logged-out user.
- await build({entryPoints:['client/src/net/api.ts'],bundle:true,platform:'node',format:'esm',outfile:path.join(temp,'api.mjs')});
- const {api}=await import(path.join(temp,'api.mjs'));
+ await build({stdin:{contents:"export {api} from './client/src/net/api';export {t} from './client/src/i18n';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(temp,'api.mjs')});
+ const {api,t}=await import(path.join(temp,'api.mjs'));
  globalThis.fetch=async()=>new Response('{"user":null}',{status:200});assert.equal(await api.me({strict:true}),null);
  globalThis.fetch=async()=>new Response('{"error":"unavailable"}',{status:503});await assert.rejects(api.me({strict:true}));assert.equal(await api.me(),null);
- globalThis.fetch=async()=>new Response('{}',{status:200});await assert.rejects(api.me({strict:true}),/Invalid session/);
+ globalThis.fetch=async()=>new Response('{}',{status:200});await assert.rejects(api.me({strict:true}),e=>e.message===t('login.err.generic'));
  globalThis.fetch=(_url,{signal})=>new Promise((resolve,reject)=>{signal.addEventListener('abort',()=>reject(Error('aborted')),{once:true});});
  const session=new AbortController(),pendingSession=api.me({strict:true,signal:session.signal});session.abort();await assert.rejects(pendingSession,/aborted/);
  // Run the actual tiny entry, substituting only the large application dependency.

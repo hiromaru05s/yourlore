@@ -1,13 +1,50 @@
 // ============================================================
 // LORE — server error message localizer. The Worker returns error
-// strings in Korean only; screens display them verbatim (alerts,
-// inline form messages). This maps each known Korean message to
+// error codes or legacy sentences; screens display them in alerts and
+// inline forms. This maps each known message to
 // ja/en at the API boundary so every screen stays language-pure.
-// Unknown messages pass through unchanged (ko fallback).
+// Unknown errors use localized recovery copy, never foreign server text.
 // ============================================================
 import { getLang } from "../i18n";
 
 const M: Record<string, { ja: string; en: string; ko?:string }> = {
+  "daily quest is not ready to claim": {ja:"このデイリークエストは、まだ報酬を受け取れる状態ではありません。",en:"This daily quest is not ready to claim yet.",ko:"아직 이 일일 퀘스트의 보상을 받을 수 없습니다."},
+  "unauthorized": {"ja": "アクセス権限がありません。", "en": "You do not have permission to access this.", "ko": "접근 권한이 없습니다."},
+  "not found": {"ja": "対象が見つかりません。", "en": "The requested item was not found.", "ko": "요청한 항목을 찾을 수 없습니다."},
+  "invalid tutorial purchase": {"ja": "チュートリアルの案内に沿って購入してください。", "en": "Follow the tutorial instructions for this purchase.", "ko": "튜토리얼 안내에 따라 구매해 주세요."},
+  "reserved request": {"ja": "チュートリアル専用の操作です。案内から進めてください。", "en": "This action is reserved for the tutorial. Follow its instructions.", "ko": "튜토리얼 전용 작업입니다. 안내에 따라 진행해 주세요."},
+  "invalid gift": {"ja": "このプレゼントは受け取れません。", "en": "This gift cannot be claimed.", "ko": "이 선물은 받을 수 없습니다."},
+  "unknown recipient": {"ja": "受取人が見つかりません。", "en": "The recipient was not found.", "ko": "받는 사람을 찾을 수 없습니다."},
+  "gift id already used with different content": {"ja": "同じIDのプレゼントが別の内容で登録済みです。", "en": "A gift with this ID already exists with different contents.", "ko": "같은 ID의 선물이 다른 내용으로 등록되어 있습니다."},
+  "maintenance": {"ja": "メンテナンス中です。しばらくしてから再試行してください。", "en": "Maintenance is in progress. Please try again later.", "ko": "점검 중입니다. 잠시 후 다시 시도해 주세요."},
+  "invalid difficulty": {"ja": "難易度を選び直してください。", "en": "Please select a valid difficulty.", "ko": "난이도를 다시 선택해 주세요."},
+  "제목과 내용을 입력해주세요": {"ja": "件名と内容を入力してください。", "en": "Enter a subject and message.", "ko": "제목과 내용을 입력해 주세요."},
+  "잠시 후 다시 시도해주세요": {"ja": "しばらくしてから再試行してください。", "en": "Please try again later.", "ko": "잠시 후 다시 시도해 주세요."},
+  "invalid or unowned deck contents": {"ja": "デッキに使用できないカードや未所持のカードが含まれています。", "en": "The deck contains invalid cards or cards you do not own.", "ko": "덱에 사용할 수 없거나 보유하지 않은 카드가 포함되어 있습니다."},
+  "transcript too large": {"ja": "対戦記録が長すぎます。", "en": "The duel record is too long.", "ko": "듀얼 기록이 너무 깁니다."},
+  "invalid transcript": {"ja": "対戦記録を確認できませんでした。", "en": "The duel record could not be verified.", "ko": "듀얼 기록을 확인할 수 없습니다."},
+  "invalid match": {"ja": "対戦情報を確認できませんでした。", "en": "The match could not be verified.", "ko": "대전 정보를 확인할 수 없습니다."},
+  "method not allowed": {"ja": "この操作には対応していません。", "en": "This operation is not supported.", "ko": "지원하지 않는 작업입니다."},
+  "invalid user": {"ja": "ユーザー情報を確認できませんでした。", "en": "The user could not be verified.", "ko": "사용자 정보를 확인할 수 없습니다."},
+  "진행 중인 시즌은 확정할 수 없습니다.": {"ja": "開催中のシーズンは確定できません。", "en": "An ongoing season cannot be finalized.", "ko": "진행 중인 시즌은 확정할 수 없습니다."},
+  "invalid room": {"ja": "対戦ルームが無効です。", "en": "This duel room is invalid.", "ko": "유효하지 않은 대전 방입니다."},
+  "could not select opponent": {"ja": "対戦相手を選べませんでした。再試行してください。", "en": "Could not select an opponent. Please retry.", "ko": "상대를 선택하지 못했습니다. 다시 시도해 주세요."},
+  "could not start duel": {"ja": "デュエルを開始できませんでした。再試行してください。", "en": "Could not start the duel. Please retry.", "ko": "듀얼을 시작하지 못했습니다. 다시 시도해 주세요."},
+  "invalid decision": {"ja": "その選択は無効です。選び直してください。", "en": "That choice is invalid. Please choose again.", "ko": "유효하지 않은 선택입니다. 다시 선택해 주세요."},
+  "tutorial transcript too large": {"ja": "チュートリアルの操作記録が長すぎます。最初からやり直してください。", "en": "The tutorial action record is too long. Please restart the lesson.", "ko": "튜토리얼 작업 기록이 너무 깁니다. 수업을 다시 시작해 주세요."},
+  "lesson not completed": {"ja": "このレッスンはまだ完了していません。", "en": "This lesson is not complete yet.", "ko": "아직 이 수업을 완료하지 않았습니다."},
+  "unknown reward": {"ja": "報酬が見つかりません。", "en": "The reward was not found.", "ko": "보상을 찾을 수 없습니다."},
+  "legacy reward retired; complete the current tutorial": {"ja": "以前の報酬は終了しました。現在のチュートリアルを完了してください。", "en": "This older reward has ended. Complete the current tutorial.", "ko": "이전 보상은 종료되었습니다. 현재 튜토리얼을 완료해 주세요."},
+  "未獲得の勲章は装着できません。": {"ja": "未獲得の勲章は装着できません。", "en": "You cannot equip an honor you have not earned.", "ko": "획득하지 않은 훈장은 장착할 수 없습니다."},
+  "未所持の商品です": {"ja": "未所持の商品です。", "en": "You do not own this item.", "ko": "보유하지 않은 상품입니다."},
+  "no changes": {"ja": "変更はありません。", "en": "There are no changes.", "ko": "변경 사항이 없습니다."},
+  "販売中の商品ではありません": {"ja": "販売中の商品ではありません。", "en": "This item is not for sale.", "ko": "판매 중인 상품이 아닙니다."},
+  "bad request": {"ja": "入力内容を確認してください。", "en": "Check your input.", "ko": "입력 내용을 확인해 주세요."},
+  "starter not offered today": {"ja": "このカードは本日の商品に含まれていません。", "en": "This card is not offered in today’s shop.", "ko": "오늘 판매하는 카드가 아닙니다."},
+  "daily starter limit reached": {"ja": "このカードの本日の購入上限に達しました。", "en": "You have reached today’s purchase limit for this card.", "ko": "이 카드의 오늘 구매 한도에 도달했습니다."},
+  "소진되었거나 만료된 쿠폰입니다.": {"ja": "使用上限に達したか、期限切れのクーポンです。", "en": "This coupon is used up or expired.", "ko": "소진되었거나 만료된 쿠폰입니다."},
+  "network unavailable": {"ja": "接続できませんでした。通信環境を確認して再試行してください。", "en": "Could not connect. Check your connection and retry.", "ko": "연결할 수 없습니다. 네트워크를 확인하고 다시 시도해 주세요."},
+  "unknown error": {"ja": "操作に失敗しました。しばらくしてから再試行してください。", "en": "The operation failed. Please try again later.", "ko": "작업에 실패했습니다. 잠시 후 다시 시도해 주세요."},
   "rate limited": {"ja": "操作が多すぎます。1分ほど待って再試行してください。", "en": "Too many requests. Try again in a minute.", "ko": "요청이 너무 많습니다. 잠시 후 다시 시도해주세요."},
   "invalid request": {"ja": "入力内容を確認してください。", "en": "Check your input.", "ko": "입력 내용을 확인해주세요."},
   "request too large": {"ja": "入力が長すぎます。", "en": "Input is too long.", "ko": "입력 내용이 너무 깁니다."},
@@ -61,10 +98,12 @@ const M: Record<string, { ja: string; en: string; ko?:string }> = {
   "상대가 참가하지 않아 매칭이 취소되었습니다 (점수 변동 없음)": { ja: "相手が参加しなかったため、マッチングは中止されました（レート変動なし）", en: "Your opponent never joined, so the match was canceled (no rating change)" },
 };
 
-/** Translate a known Korean server message to the current UI language. */
-export function localizeServerMsg(ko: string): string {
-  const lang = getLang();
-  if (lang === "ko") return M[ko.trim()]?.ko ?? ko;
-  const e = M[ko.trim()];
-  return e ? e[lang] : ko;
+/** Resolve both legacy sentence errors and newer protocol codes in the UI locale. */
+export function localizeServerMsg(message: string): string {
+  const key = message.trim();
+  const alias: Record<string,string> = {'로그인이 필요합니다':'로그인이 필요합니다.', 'login required':'로그인이 필요합니다.'};
+  const canonical = alias[key] ?? key;
+  const entry = M[canonical];
+  if (!entry) return M['unknown error'][getLang()]!;
+  return entry[getLang()] ?? canonical;
 }

@@ -115,7 +115,7 @@ try {
   controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,0,'Instruction popup blocks card play');
   root.querySelector('[data-start]').click();
   assert.equal(document.querySelector('.tutorial-basics'),null);
-  controller.onEndTurn();assert.equal(controller.snapshot().cur,0);assert.equal(root.querySelector('#endBtn').textContent.replace(/\s+/g,' '),'END TURN','Rejected pass must not lock the turn button');
+  controller.onEndTurn();assert.equal(controller.snapshot().cur,0);assert.equal(root.querySelector('#endBtn').textContent.replace(/\s+/g,' '),'ターン 終了','Rejected pass must not lock the turn button');
   assert(document.querySelector('.tutorial-dialog[open]'),'Wrong action reopens the current instruction');
   root.querySelector('[data-start]').click();controller.act({type:'play',idx:0});assert.equal(controller.snapshot().players[0].field.length,1);
   await tick();assert(root.querySelector('[data-answer]'),'Summoning ends with a comprehension check');

@@ -18,7 +18,7 @@ try{
  const {winModal,closeOverlay,RankPresentation,setLang}=await import(join(tmp,'ui.mjs'));
  setLang('ja');const calls=[];const open=won=>winModal(won,'<span id="winExperience">EXP +20</span>',()=>calls.push('again'),()=>calls.push('home'),()=>calls.push('review'));
  const tick=t=>{now=t;const pending=[...frames.values()];frames.clear();pending.forEach(fn=>fn(t));};
- for(const [won,title,after] of [[true,'VICTORY',1198],[false,'DEFEAT',1164],[null,'DRAW',1180]]){
+ for(const [won,title,after] of [[true,'勝利',1198],[false,'敗北',1164],[null,'引き分け',1180]]){
   now=0;document.querySelector('#origin').focus();open(won);
   const dialog=document.querySelector('[role=dialog]');assert.equal(dialog.querySelector('h2').textContent,title);
   assert.equal(dialog.getAttribute('aria-labelledby'),dialog.querySelector('h2').id);

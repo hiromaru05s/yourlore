@@ -8,14 +8,12 @@ export function cancelTurnBanner(): void { active?.(); }
 export function mountTurnBanner(mine: boolean, turn?: number): void {
   cancelTurnBanner();
   if (document.hidden) return;
-  const title = t(mine ? 'fx.yourturn' : 'fx.oppturn');
-  const subtitle = (mine ? 'YOUR TURN' : 'OPPONENT’S TURN') +
-    (turn == null ? '' : `  ·  ${String(turn).padStart(2, '0')}`);
   const host = document.createElement('div');
   host.className = 'fx-turn-sigil';
   host.setAttribute('role', 'status');
   host.setAttribute('aria-live', 'polite');
-  host.setAttribute('aria-label', `${title}${turn == null ? '' : ` TURN ${turn}`}`);
+  const labels = () => ({title:t(mine ? 'fx.yourturn' : 'fx.oppturn'), subtitle:turn == null ? '' : `${t('game.turn')} · ${String(turn).padStart(2, '0')}`});
+  const initial = labels();host.setAttribute('aria-label', `${initial.title} ${initial.subtitle}`.trim());
   host.style.cssText = 'position:fixed;inset:0;z-index:175;pointer-events:none';
   const canvas = document.createElement('canvas');
   canvas.setAttribute('aria-hidden', 'true');
@@ -41,6 +39,8 @@ export function mountTurnBanner(mine: boolean, turn?: number): void {
   const frame = (now: number): void => {
     if (disposed) return;
     if (!host.isConnected || now - start >= TURN_BANNER_MS) { cleanup(); return; }
+    const {title, subtitle} = labels();
+    host.setAttribute('aria-label', `${title} ${subtitle}`.trim());
     drawTurnSigil(canvas, mine ? 'me' : 'opp', now - start, {title, subtitle}, motion.matches);
     raf = requestAnimationFrame(frame);
   };

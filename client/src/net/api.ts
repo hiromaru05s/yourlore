@@ -68,6 +68,7 @@ async function performCall<T>(path: string, body?: unknown, method = "POST", sig
   return data;
   } catch(error) {
     if(controller.signal.aborted&&!signal?.aborted)throw new Error(localizeServerMsg('request timed out'));
+    if(error instanceof TypeError)throw new Error(localizeServerMsg('network unavailable'));
     throw error;
   } finally {clearTimeout(timeout);signal?.removeEventListener('abort',abort);}
 }
@@ -137,7 +138,7 @@ export const api = {
   forgot: (email: string) => call<{ ok: true }>("/auth/forgot", { email }),
   resetPassword: (token: string, password: string) => call<{ ok: true }>("/auth/reset", { token, password }),
   me: (options?: { signal?: AbortSignal; strict?: boolean }) => call<{ user: User | null }>("/auth/me", undefined, "GET", options?.signal).then((r) => {
-    if (!Object.hasOwn(r, "user")) throw new Error("Invalid session response");
+    if (!Object.hasOwn(r, "user")) throw new Error(t("login.err.generic"));
     return r.user;
   }).catch(error => { if (options?.strict) throw error; return null; }),
   rankResult: (matchId: string) => call<{ result: RankChange | null }>("/rank/result?matchId=" + encodeURIComponent(matchId), undefined, "GET", AbortSignal.timeout(8000)).then(r => r.result),
