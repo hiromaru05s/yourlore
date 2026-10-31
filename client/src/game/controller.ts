@@ -994,7 +994,10 @@ export abstract class BaseController implements BoardHandlers {
             if (lines.length) {
               const mine = e.player === this.you;
               const title = (mine ? "" : `${t("fx.opp")} · `) + cardName({ uid: "fx", ...def });
-              await A.resultPopup(title, lines, mine);
+              await A.resultPopup(title, lines, mine, 1100, () => ({
+                title: (mine ? "" : `${t("fx.opp")} · `) + cardName({uid:"fx", ...def}),
+                lines: this.effectLines(events, i),
+              }));
             }
           }
           break;

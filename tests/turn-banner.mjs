@@ -30,11 +30,11 @@ try{
  const tick=delta=>{const callbacks=[...frames.values()];frames.clear();callbacks.forEach(f=>f(performance.now()+delta));};
  const clean=()=>{assert.equal(count(),0);assert.equal(frames.size,0);assert.equal(timers.size,0);};
  setLang('ja');mountTurnBanner(true,6);const first=document.querySelector('canvas');
- assert.match(document.querySelector('[role=status]').getAttribute('aria-label'),/あなたのターンです TURN 6/);
+ assert.match(document.querySelector('[role=status]').getAttribute('aria-label'),/あなたのターンです ターン · 06/);
  tick(420);assert(text.includes('あなたのターンです'));assert.equal(first.width,2336);
  dimensions={width:350,height:600};tick(800);assert.equal(first.width,700);
  mountTurnBanner(false,17);assert.equal(count(),1);assert.equal(first.width,0);
- assert.match(document.querySelector('[role=status]').getAttribute('aria-label'),/相手のターンです TURN 17/);
+ assert.match(document.querySelector('[role=status]').getAttribute('aria-label'),/相手のターンです ターン · 17/);
  tick(1900);tick(2330);clean();
  reduced=true;mountTurnBanner(true);tick(1000);assert.equal(count(),1);cancelTurnBanner();cancelTurnBanner();clean();
  mountTurnBanner(true);document.querySelector('.fx-turn-sigil').remove();tick(10);clean();

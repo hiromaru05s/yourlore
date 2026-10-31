@@ -1,3 +1,4 @@
+import {t as translate} from '../i18n';
 import {turnUrgency} from './turnUrgency';
 import {readingAssetBytes} from './readingAssetCache';
 import {createTurnLights} from './turnLight';
@@ -138,7 +139,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   if(rerollCap){rerollCap.position.y=-.0045*Math.max(rerollPress,pressed==='refreshBtn'?.7:0);if(refresh){data(refresh,'physicalPhase',now-rerollTime<120?'press':now-rerollTime<620?'spin':'rest');css(refresh,'--cap-press',`${rerollCap.position.y*scale}px`);}}
   const t=Math.min(1,Math.max(0,(now-rerollTime-120)/500)),target=2*Math.PI*(1-(1-t)**3);if(arrows)arrows.rotation.y=target;
   if(turnPress||rerollPress||pressed)shadowDirty=true;
-  if(end){data(end,'physicalPhase',turnAge<120?'press':turnAge<710?'spin':'rest');const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){if(label.style.opacity!=='1')label.style.opacity='1';const text=displayEnemy?'ENEMY\nTURN':'END\nTURN';if(label.textContent!==text)label.textContent=text;}}
+  if(end){data(end,'physicalPhase',turnAge<120?'press':turnAge<710?'spin':'rest');const label=end.querySelector<HTMLElement>('.end-turn-label');if(label){if(label.style.opacity!=='1')label.style.opacity='1';const text=translate(displayEnemy?'duel.enemyLabel':'duel.endLabel');if(label.textContent!==text)label.textContent=text;}}
   if(end)data(end,'turnColor',displayEnemy?'red':'blue');
   if(!turnLights&&turn){
    const preview=import.meta.env.DEV?getTurnLightPreview():undefined;

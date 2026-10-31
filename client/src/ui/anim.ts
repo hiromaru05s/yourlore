@@ -98,7 +98,7 @@ import {waitForDuel} from './duelReadiness';
 import type { CardInst, GutsSurvival } from "../shared/types";
 import { frameFor, FRAME_BACK, DB } from "../shared/cards";
 import { cardEl, questTile } from "./cardView";
-import { t, getLang, cardName } from "../i18n";
+import { t, getLang, cardName, onLangChange } from "../i18n";
 
 import { sfx } from "./sound";
 import { moveOnBoard } from "./boardMotion";
@@ -928,15 +928,22 @@ export async function destroyAnim(uid:string,side:ViewSide,voided=false,mana=tru
 }
 
 /** Random-card outcome popup. Big center card for your plays, compact upper popup for the opponent's. */
-export async function resultPopup(title: string, lines: string[], mine: boolean, ms = 1100): Promise<void> {
+export async function resultPopup(title: string, lines: string[], mine: boolean, ms = 1100, content?: () => {title: string; lines: string[]}): Promise<void> {
   const p = document.createElement("div");
   p.className = "fx-result" + (mine ? "" : " opp");
-  p.innerHTML = `<div class="fx-result-title">🎲 ${title}</div>` + lines.map((l) => `<div class="fx-result-line">${l}</div>`).join("");
+  const paint = (): void => {
+    const value = content?.() ?? {title, lines};
+    const heading = document.createElement('div');heading.className='fx-result-title';heading.textContent=`🎲 ${value.title}`;
+    p.replaceChildren(heading, ...value.lines.map(text => {const line=document.createElement('div');line.className='fx-result-line';line.textContent=text;return line;}));
+  };
+  paint();
+  const unsubscribe = content ? onLangChange(paint) : () => {};
   document.body.appendChild(p);
-  await Promise.race([wait(ms), new Promise<void>((r) => (p.onclick = () => r()))]); // click to skip
-  p.classList.add("out");
-  await wait(280);
-  p.remove();
+  try {
+    await Promise.race([wait(ms), new Promise<void>((r) => (p.onclick = () => r()))]);
+    p.classList.add("out");
+    await wait(280);
+  } finally { unsubscribe(); p.remove(); }
 }
 
 /** Live HP readout update during sequential playback (board re-renders later). */

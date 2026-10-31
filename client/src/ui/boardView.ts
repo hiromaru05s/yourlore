@@ -202,7 +202,7 @@ export class GameView {
     const paintMute = () => { const m = getSfxVolume() <= 0; muteBtn.innerHTML = `${duelUtilityGlyph('sound')}<span class="sound-label">${t("settings.sound")}</span><i class="mute-mark" aria-hidden="true">×</i>`; muteBtn.classList.toggle("muted", m);muteBtn.setAttribute('aria-label',t('settings.sound.volume'));muteBtn.title=t('settings.sound.volume'); };
     const volPop = document.createElement("div");
     volPop.className = "vol-pop";
-    volPop.innerHTML = `<input type="range" min="0" max="100" step="5" aria-label="volume">`;
+    volPop.innerHTML = `<input type="range" min="0" max="100" step="5" aria-label="${t('settings.volume')}">`;
     muteBtn.insertAdjacentElement("afterend", volPop);
     const volRange = volPop.querySelector("input") as HTMLInputElement;
     volRange.value = String(Math.round(getSfxVolume() * 100));
@@ -386,7 +386,7 @@ export class GameView {
   beginEndTurn(): void {
     this.endingTurn = true;
     this.root.dataset.readingTurn = 'opponent';
-    this.q('endBtn').querySelector('.end-turn-label')!.textContent = 'ENEMY\nTURN';
+    this.q('endBtn').querySelector('.end-turn-label')!.textContent = t("duel.enemyLabel");
     (this.q('endBtn') as HTMLButtonElement).disabled = true;
   }
   /** Logical ownership changes immediately, independently of visual playback. */
@@ -458,7 +458,7 @@ export class GameView {
 
     this.q("turnInfo").innerHTML = `<span class="turn-badge"><span class="tb-label">${t("game.turn")}</span><span class="tb-num">${g.turn}</span></span><span class="turn-cur"><b>${t(myTurn ? "fx.yourturn" : "fx.oppturn")}</b></span>`;
     // refresh static labels (so a live language switch updates them)
-    this.q("endBtn").innerHTML = `<span class="end-turn-label">${this.root.dataset.readingTurn==='player' ? "END\nTURN" : "ENEMY\nTURN"}</span>`;
+    this.q("endBtn").innerHTML = `<span class="end-turn-label">${t(this.root.dataset.readingTurn==='player' ? "duel.endLabel" : "duel.enemyLabel")}</span>`;
     const gvl = this.q("giveupBtn").querySelector(".gv-label"); if (gvl) gvl.textContent = t("game.surrender");
     this.q("logTitle").textContent = t("game.log");
     for(const [id,key] of [['logTab','game.log'],['giveupBtn','game.surrender'],['helpBtn','help.open'],['muteBtn','settings.sound']] as const){
