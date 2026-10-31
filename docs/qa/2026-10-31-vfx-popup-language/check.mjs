@@ -6,7 +6,7 @@ const browser=await chromium.launch({channel:'chrome',headless:true}),page=await
 const foreign=(lang,text)=> (lang==='en'?/[가-힣ぁ-んァ-ヶ一-龯]/:lang==='ko'?/[ぁ-んァ-ヶ一-龯]/:/[가-힣]/).test(text);
 const pure=async(lang,selector)=>{const text=await page.locator(selector).innerText();assert(!foreign(lang,text),`${lang}: ${text}`);return text;};
 try{
- await page.route('**/popup-language-fixture.html',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="app"></div></body></html>'}));
+ await page.route('**/popup-language-fixture.html',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="app"></div></body></html>'}));
  await page.goto(origin+'/popup-language-fixture.html');
  await page.evaluate(async(css)=>{
   for(const url of css)await import(url);
