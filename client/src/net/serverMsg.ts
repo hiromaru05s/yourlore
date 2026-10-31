@@ -8,6 +8,7 @@
 import { getLang } from "../i18n";
 
 const M: Record<string, { ja: string; en: string; ko?:string }> = {
+  "daily quest is not ready to claim": {ja:"このデイリークエストは、まだ報酬を受け取れる状態ではありません。",en:"This daily quest is not ready to claim yet.",ko:"아직 이 일일 퀘스트의 보상을 받을 수 없습니다."},
   "unauthorized": {"ja": "アクセス権限がありません。", "en": "You do not have permission to access this.", "ko": "접근 권한이 없습니다."},
   "not found": {"ja": "対象が見つかりません。", "en": "The requested item was not found.", "ko": "요청한 항목을 찾을 수 없습니다."},
   "invalid tutorial purchase": {"ja": "チュートリアルの案内に沿って購入してください。", "en": "Follow the tutorial instructions for this purchase.", "ko": "튜토리얼 안내에 따라 구매해 주세요."},
