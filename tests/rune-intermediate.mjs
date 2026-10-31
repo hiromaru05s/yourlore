@@ -17,7 +17,7 @@ try {
     g.players[0].hand=[card('RUNE2')];return g;
   };
   assert.equal(DB.RUNE2.cost,5);
-  for(const text of [DB.RUNE2.text,DB.RUNE2.textJa,DB.RUNE2.textEn]){assert.match(text,/\+2/);assert.doesNotMatch(text,/\+8/);}
+  for(const text of [DB.RUNE2.text,DB.RUNE2.textJa,DB.RUNE2.textEn]){assert.match(text,/\+2|Increase your max mana by 2/);assert.doesNotMatch(text,/\+8|by 8/);}
   for(const side of [0,1]) {
     const g=fresh();g.cur=side;g.players[0].hand=[];
     const p=g.players[side];p.hand=[card('RUNE2')];p.deck=[card('M1'),card('M2')];p.discard=[card('S13')];

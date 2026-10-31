@@ -7,7 +7,7 @@
     "en"
   ],
   "count": 381,
-  "engineSha256": "9a590f726c02483ad42383b4e4016aee9482a5895c3b7553dd2ea6951f71ec3a",
+  "engineSha256": "74244485a0736dee90a581f423639bed74abe55ca6796f20b200c206590551be",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -3450,12 +3450,10 @@
       "nameJa": "神獣",
       "status": "reworded",
       "changedLocales": [
-        "ja",
-        "ko",
         "en"
       ],
       "definitionSha256": "a88fddd9297f6a21de8e8d897d6801b0986adc5a716135a9f3444b96815079d5",
-      "textSha256": "56745e434756216457d3a9de5514b588abaca1d8584f62caa2c4cdffe71773e5",
+      "textSha256": "0d88a0b2483ecfcf11e395cdac7377c38a9b3ceb7267dc9f0365e7a210d51bd0",
       "hooks": {
         "onSummon": "divine",
         "aura": "ward"
@@ -3466,9 +3464,9 @@
         "en": "【On Summon】Your max mana +15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
       },
       "after": {
-        "ja": "【召喚時】自分の最大マナ+15。以後、自分のターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・セットトラップ・永続魔法から合計3枚まで選んで破壊する。",
-        "ko": "【소환 시】자신의 최대 마나 +15. 이후 자신 턴 시작 드로우 +1(이 몬스터가 필드를 떠나도 지속). 양쪽 필드의 몬스터·세트 함정·영구 마법 중 합계 3장까지 선택해 파괴한다.",
-        "en": "【On Summon】Increase your max mana by 15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters, set traps or enchantments from either field combined."
+        "ja": "【召喚時】自分の最大マナ+15。以後、自分のターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・永続魔法から合計3枚まで選んで破壊する。",
+        "ko": "【소환 시】자신의 최대 마나 +15. 이후 자신 턴 시작 드로우 +1(이 몬스터가 필드를 떠나도 지속). 양쪽 필드의 몬스터·영구 마법 중 합계 3장까지 선택해 파괴한다.",
+        "en": "【On Summon】Increase your max mana by 15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
       },
       "reviewedAt": "2026-10-31",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."

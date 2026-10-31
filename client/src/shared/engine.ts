@@ -2303,7 +2303,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (p.traps.length && trySnare(g, ctx, p)) { /* 덫 속의 덫: 함정 파괴만 무효 — 영구마법은 그대로 */ }
     else for (let i = 0; i < lim && p.traps.length; i++) { const t2 = p.traps.splice(randInt(g, p.traps.length), 1)[0]; fieldToGrave(g,ctx,p,t2.card); k++; }
     for (let i = k; i < lim && p.enchants.length; i++) { const e2 = p.enchants.splice(randInt(g, p.enchants.length), 1)[0]; binEnch(g, ctx, p, e2.card, false, 'other', side(g,o)); k++; }
-    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 상대 함정·마법 ${k}장 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 相手の罠・魔法${k}枚破壊`, `  └ <span class="dmg">Trap ${cn(tc)}!</span> Negate the attack and destroy ${k} opposing traps/enchantments`);
+    ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 상대 함정·마법 ${k}장 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 相手の罠・魔法${k}枚破壊`, `  └ <span class="dmg">Trap ${cn(tc)}!</span> Negate the attack and destroy ${k} opposing traps/persistent spells`);
     return;
   }
   if ((tc = takeTrap(g, ctx, o, "guardPurge"))) { // GT6_0: negate + (-1 max mana) destroy up to 3 attacker monsters
@@ -3606,7 +3606,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "destroyEnch": { // 장치해제 / 장치분석: 상대 영구마법 파괴
       const n = v || 1; let k = 0;
       for (let i = 0; i < n && o.enchants.length; i++) { const e = o.enchants.splice(randInt(g, o.enchants.length), 1)[0]; binEnch(g, ctx, o, e.card, false, undefined, side(g,p)); k++; }
-      ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 영구마법 ${k}장 파괴`, `<span class="t">${p.name}</span> ${cn(card)} → 相手の永続魔法 ${k}枚破壊`, `<span class="t">${p.name}</span>: ${cn(card)} destroys ${k} opposing enchantments`);
+      ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 영구마법 ${k}장 파괴`, `<span class="t">${p.name}</span> ${cn(card)} → 相手の永続魔法 ${k}枚破壊`, `<span class="t">${p.name}</span>: ${cn(card)} destroys ${k} opposing persistent spells`);
       break;
     }
     case "wipeBack": {
@@ -3615,7 +3615,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (!snared) { o.traps.forEach((t) => fieldToGrave(g,ctx,o,t.card)); o.traps = []; }
       const wipedEnch = o.enchants.splice(0);
       wipedEnch.forEach((e) => binEnch(g, ctx, o, e.card, false, undefined, side(g,p)));
-      ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 함정·마법 ${n}장 파괴`, `<span class="t">${p.name}</span> ${cn(card)} → 相手のトラップ・魔法 ${n}枚破壊`, `<span class="t">${p.name}</span>: ${cn(card)} destroys ${n} opposing traps/enchantments`);
+      ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 함정·마법 ${n}장 파괴`, `<span class="t">${p.name}</span> ${cn(card)} → 相手のトラップ・魔法 ${n}枚破壊`, `<span class="t">${p.name}</span>: ${cn(card)} destroys ${n} opposing traps/persistent spells`);
       ctx.dealDamage(p, card.val ?? 6, cn(card), cn(card));
       break;
     }
@@ -4041,7 +4041,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "COUNTERCALC": { // 역산: 상대 영구마법 1장 파괴 — v25: '사용 후 제외' 삭제 (묘지로)
       if (o.enchants.length) {
         const e = o.enchants.splice(randInt(g, o.enchants.length), 1)[0];
-        ctx.log(`${tag(p, card)} 상대의 영구마법 ${cn(e.card)} 파괴`, `${tag(p, card)} 相手の永続魔法 ${cn(e.card)} 破壊`, `${tag(p, card)}: destroy the opponent’s enchantment ${cn(e.card)}`);
+        ctx.log(`${tag(p, card)} 상대의 영구마법 ${cn(e.card)} 파괴`, `${tag(p, card)} 相手の永続魔法 ${cn(e.card)} 破壊`, `${tag(p, card)}: destroy the opponent’s persistent spell ${cn(e.card)}`);
         binEnch(g, ctx, o, e.card, false, undefined, side(g,p));
       }
       break;

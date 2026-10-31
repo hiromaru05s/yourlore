@@ -228,8 +228,6 @@
   {
     "id": "DIVINE",
     "changedLocales": [
-      "ja",
-      "ko",
       "en"
     ],
     "before": {
@@ -238,9 +236,9 @@
       "en": "【On Summon】Your max mana +15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
     },
     "after": {
-      "ja": "【召喚時】自分の最大マナ+15。以後、自分のターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・セットトラップ・永続魔法から合計3枚まで選んで破壊する。",
-      "ko": "【소환 시】자신의 최대 마나 +15. 이후 자신 턴 시작 드로우 +1(이 몬스터가 필드를 떠나도 지속). 양쪽 필드의 몬스터·세트 함정·영구 마법 중 합계 3장까지 선택해 파괴한다.",
-      "en": "【On Summon】Increase your max mana by 15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters, set traps or enchantments from either field combined."
+      "ja": "【召喚時】自分の最大マナ+15。以後、自分のターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・永続魔法から合計3枚まで選んで破壊する。",
+      "ko": "【소환 시】자신의 최대 마나 +15. 이후 자신 턴 시작 드로우 +1(이 몬스터가 필드를 떠나도 지속). 양쪽 필드의 몬스터·영구 마법 중 합계 3장까지 선택해 파괴한다.",
+      "en": "【On Summon】Increase your max mana by 15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
     }
   },
   {
