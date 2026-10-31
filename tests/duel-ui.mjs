@@ -281,11 +281,11 @@ assert(!document.querySelector('.fx-turn-sigil'),'opening banner must not be obs
 assert(!document.querySelector('.mp-clock[data-remaining]'),'first turn clock must wait for opening');
 assert.equal(document.querySelector('.opening-skip'),null);
 for(let i=0;i<130&&!document.querySelector('.fx-turn-sigil');i++)await new Promise(r=>setTimeout(r,100));
-assert.equal(document.querySelector('.fx-turn-sigil')?.getAttribute('aria-label'),'あなたのターンです TURN 1');
+assert.equal(document.querySelector('.fx-turn-sigil')?.getAttribute('aria-label'),'あなたのターンです ターン · 01');
 const next=structuredClone(opening.state);next.cur=1;next.turn=2;next.pending=null;
 control.feed({state:next,events:[]});
 await new Promise(r=>setTimeout(r,20));
-assert.equal(document.querySelector('.fx-turn-sigil')?.getAttribute('aria-label'),'相手のターンです TURN 2');
+assert.equal(document.querySelector('.fx-turn-sigil')?.getAttribute('aria-label'),'相手のターンです ターン · 02');
 const banner=document.querySelector('.fx-turn-sigil');
 control.feed({state:structuredClone(next),events:[]});
 await new Promise(r=>setTimeout(r,20));
