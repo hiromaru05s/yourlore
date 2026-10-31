@@ -23,7 +23,8 @@ try{
  function fresh(seed,owner){const g=current.createGame({mode:'online',seed,starting:owner,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.cur=owner;g.turn=3;g.phase='main';g.pending=null;for(const p of g.players)Object.assign(p,{hand:[],field:[],deck:[],discard:[],removed:[],traps:[],enchants:[],quests:[],hp:50,maxHp:50,mana:30,maxMana:30,openingDrawReady:false});return g;}
  // v64 adds bounded Grimoire charges. These visual fixtures never buy one; only
  // omit an empty charge list when comparing with the historical engine snapshot.
- const clean=x=>JSON.parse(JSON.stringify(x,(k,v)=>k==='spellDiscountCharges'&&Array.isArray(v)&&v.length===0?undefined:k==='sourceUid'||k==='data'&&v&&Object.keys(v).every(k=>k==='sourceUid')?undefined:v));
+ // Choice wording is independently tested by duel-language-*; retain reason/owner/data for rule parity.
+ const clean=x=>JSON.parse(JSON.stringify(x,(k,v)=>k==='hint'||k==='hintJa'?undefined:k==='spellDiscountCharges'&&Array.isArray(v)&&v.length===0?undefined:k==='sourceUid'||k==='data'&&v&&Object.keys(v).every(k=>k==='sourceUid')?undefined:v));
  // Source activation conditions are covered by monster-effect-activation.mjs.
  // Compare gameplay independently of presentation metadata; validate reversal links before stripping them.
  const gameplayEvents=events=>{

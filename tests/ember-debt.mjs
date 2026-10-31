@@ -4,9 +4,10 @@ try{
  const bundle=async(contents,name,resolveDir=process.cwd())=>{const outfile=path.join(dir,name+'.mjs');await build({stdin:{contents,resolveDir,loader:'ts'},bundle:true,platform:'node',format:'esm',outfile});return import(outfile);};
  const current=await bundle("export * from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",'now');
  const old=await bundle(execFileSync('git',['show','74483458:client/src/shared/engine.ts'],{encoding:'utf8'}),'before',path.resolve('client/src/shared'));
+ // Authored English is additive presentation data, covered by duel-language tests.
  const gameplay=events=>{
   for(const e of events.filter(e=>e.type==='reverseDamage')){const d=events.filter(d=>d.type==='damage'&&d.reverseId===e.id);assert.equal(d.length,1);assert.equal(d[0].player,e.to);}
-  return events.filter(e=>!e.type.startsWith('elemental')).map(e=>{if(e.type==='reverseDamage'){const {id,...rest}=e;return rest;}if(e.type==='damage'){const {reverseId,...rest}=e;return rest;}return e;});
+  return events.filter(e=>!e.type.startsWith('elemental')).map(e=>{if(e.type==='log'){const {htmlEn,...legacy}=e;return legacy;}if(e.type==='reverseDamage'){const {id,...rest}=e;return rest;}if(e.type==='damage'){const {reverseId,...rest}=e;return rest;}return e;});
  };
  let cases=0;
  for(const owner of [0,1])for(const seed of [1,7,17,58])for(const mode of ['normal','lethal','self-lethal','shield','blood-rite','reverse','rune']){
