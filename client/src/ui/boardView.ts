@@ -1,3 +1,4 @@
+import {pendingText} from '../shared/pendingText';
 import {placeReadingHand} from './readingBoardLayout';
 import {syncCardFrames,disposeCardFrames} from './cardFrame';
 import {retainCardPrint} from './cardContinuity';
@@ -36,7 +37,6 @@ import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, questTile } fro
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { bindInspectContext } from "./cardInspection";
 import { t, getLang, esc, cardName } from "../i18n";
-import { logToEn } from "../shared/logEn";
 import { getSfxVolume, setSfxVolume } from "./sound";
 import { duelUtilityGlyph } from "./loungeNavGlyphs";
 import { deckBucket, refinedArt } from "./duelMaterials";
@@ -492,7 +492,7 @@ export class GameView {
     const hint = this.q("targetHint");
     if (pending && pending.reason !== 'attack' && myTurn && (pending.kind === "oppMon" || pending.kind === "myMon")) {
       hint.style.display = "block";
-      hint.innerHTML = `▸ ${getLang() === "ja" ? pending.hintJa : getLang() === "en" ? logToEn(pending.hint) : pending.hint}` + (pending.allowCancel ? ` &nbsp; <a id="cancelTarget" style="cursor:pointer">[${t("common.cancel")}]</a>` : "");
+      hint.innerHTML = `▸ ${pendingText(pending,getLang())}` + (pending.allowCancel ? ` &nbsp; <a id="cancelTarget" style="cursor:pointer">[${t("common.cancel")}]</a>` : "");
       const c = hint.querySelector("#cancelTarget") as HTMLElement | null;
       if (c) c.onclick = () => this.h.onChooseTarget(null);
     } else {

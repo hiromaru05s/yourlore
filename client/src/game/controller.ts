@@ -1,3 +1,4 @@
+import {pendingText} from '../shared/pendingText';
 import { nextNpcDeck, type BotRotation } from '../shared/botRotation';
 import {syncCardFrames,localCardFrame} from '../ui/cardFrame';
 import {playTribePactDefeat,tribePactVerdict} from '../ui/tribePactDefeat/runtime';
@@ -388,12 +389,12 @@ export abstract class BaseController implements BoardHandlers {
         // blocked attempts (cur !== you).
         if (e.rejected) {
           if (this.state.cur === this.you) {
-            const reason = this.stripHtml(getLang() === "ja" ? e.htmlJa : getLang() === "en" ? logToEn(e.html) : e.html).replace(/^\s*[└·\-]\s*/, "").trim();
+            const reason = this.stripHtml(getLang() === "ja" ? e.htmlJa : getLang() === "en" ? (e.htmlEn ?? logToEn(e.html)) : e.html).replace(/^\s*[└·\-]\s*/, "").trim();
             this.cantPlayToast(reason || t("play.block.cond"));
           }
           continue;
         }
-        this.log.line(e.html, e.htmlJa);
+        this.log.line(e.html, e.htmlJa, e.htmlEn);
       }
     }
   }
@@ -1177,7 +1178,7 @@ export abstract class BaseController implements BoardHandlers {
     for (let j = idx + 1; j < events.length && lines.length < 5; j++) {
       const e = events[j];
       if (e.type === "log") {
-        const html = getLang() === "ja" ? e.htmlJa : getLang() === "en" ? logToEn(e.html) : e.html;
+        const html = getLang() === "ja" ? e.htmlJa : getLang() === "en" ? (e.htmlEn ?? logToEn(e.html)) : e.html;
         const txt = this.stripHtml(html).replace(/^\s*└\s*/, "").trim();
         if (txt) lines.push(txt);
       } else if (e.type === "playSpell" || e.type === "trapSet" || e.type === "trapReveal" || e.type === "buy" || e.type === "turnHeader" || e.type === "win") {
@@ -1273,7 +1274,7 @@ export abstract class BaseController implements BoardHandlers {
       if (g.pending.kind === "cardChoice") {
         const pending=g.pending;
         const rebirth=pending.reason==='QUICK_REBIRTH',lang=getLang();
-        const title=rebirth?(lang==='ja'?'墓地からモンスターを選択':lang==='en'?'Choose a monster from your graveyard':'묘지에서 몬스터 선택'):(lang==='ja'?pending.hintJa:lang==='en'?logToEn(pending.hint):pending.hint);
+        const title=rebirth?(lang==='ja'?'墓地からモンスターを選択':lang==='en'?'Choose a monster from your graveyard':'묘지에서 몬스터 선택'):pendingText(pending,lang);
         const description=rebirth?(lang==='ja'?'購入コスト7以下なら、虚無を付与して召喚します。コスト8以上は効果がありません。':lang==='en'?'A monster costing 7 or less is summoned with Void. Cost 8 or more has no effect.':'구매 비용이 7 이하면 허무를 부여하여 소환합니다. 비용이 8 이상이면 효과가 없습니다.'):undefined;
         cardPicker(title,effectChoices(g),uid=>{if(this.state===g)this.submit({type:'pick',uid});},!!pending.allowCancel,{confirm:true,description,label:rebirth?undefined:uid=>this.choiceOwner(g,uid)});
         return;
@@ -1313,7 +1314,7 @@ export abstract class BaseController implements BoardHandlers {
             ] : []),
           ];
         }
-        const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
+        const hint = pendingText(g.pending,getLang());
         const max = Math.min((g.pending.data?.val as number) || 1, pool.length);
         this.multiPickerOpen = true;
         cardPickerMulti(hint, pool, max, (uids) => {
@@ -1335,7 +1336,7 @@ export abstract class BaseController implements BoardHandlers {
         const pool = opts
           ? opts.map((op) => ({ uid: op.id, id: "OPT", t: "spell", cost: 0, name: getLang() === "ja" ? op.ja : getLang() === "en" ? op.en : op.ko, text: "" } as CardInst))
           : ids.filter((id) => defOf(id) && (free || (defOf(id).cost <= me.mana && purchaseAllowed(g, me, { ...defOf(id), uid: id })))).map((id) => ({ uid: id, ...defOf(id) }));
-        const hint = getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint;
+        const hint = pendingText(g.pending,getLang());
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
         cardPicker(hint, pool, (uid) => {if(this.state===g)this.submit({ type: "pick", uid });},g.pending.allowCancel,{confirm:true});
         return;
@@ -1360,7 +1361,7 @@ export abstract class BaseController implements BoardHandlers {
         // 리콜: 방금 사용한 리콜 카드 자신은 이미 묘지에 들어가 있다 → 선택지에서 제외
         const ex = (g.pending.data as { exclude?: string } | undefined)?.exclude;
         const pool = g.pending.kind === "seek" ? me.deck : me.discard.filter((c) => c.uid !== ex);
-        cardPicker(getLang() === "ja" ? g.pending.hintJa : getLang() === "en" ? logToEn(g.pending.hint) : g.pending.hint, pool, (uid) => this.submit({ type: "pick", uid }));
+        cardPicker(pendingText(g.pending,getLang()), pool, (uid) => this.submit({ type: "pick", uid }));
       }
       return; // oppMon/myMon resolved by board clicks
     }

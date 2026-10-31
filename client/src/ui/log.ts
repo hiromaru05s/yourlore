@@ -1,7 +1,7 @@
 // ============================================================
 // LORE — battle log panel. Groups lines under turn headers,
-// newest at the bottom, auto-scrolls. Bilingual: each line keeps
-// both KO/JA HTML and re-renders when the language changes; card
+// newest at the bottom, auto-scrolls. Multilingual: each line keeps
+// KO/JA and optional authored EN HTML and re-renders when the language changes; card
 // names inside lines are localized by their card id.
 // ============================================================
 import { DB, STARTERS } from "../shared/cards";
@@ -12,7 +12,7 @@ import { logToEn } from "../shared/logEn";
 
 type Entry =
   | { kind: "header"; turn: number; name: string; isBot: boolean; mine?: boolean }
-  | { kind: "line"; ko: string; ja: string; mine?: boolean };
+  | { kind: "line"; ko: string; ja: string; en?: string; mine?: boolean };
 
 /** Replace every <b class="log-card" data-card="ID"> in a log fragment with the
  *  card's name in the CURRENT language. The engine emits Korean names inside
@@ -66,8 +66,8 @@ export class GameLog {
     this.scroll();
   }
 
-  line(ko: string, ja?: string): void {
-    const entry: Entry = { kind: "line", ko, ja: ja ?? ko, mine: this.curMine };
+  line(ko: string, ja?: string, en?: string): void {
+    const entry: Entry = { kind: "line", ko, ja: ja ?? ko, en, mine: this.curMine };
     this.entries.push(entry);
     this.el.appendChild(this.build(entry));
     this.scroll();
@@ -87,7 +87,7 @@ export class GameLog {
     const d = document.createElement("div");
     d.className = "ln" + side;
     const lang = getLang();
-    d.innerHTML = lang === "ja" ? entry.ja : lang === "en" ? logToEn(entry.ko) : entry.ko;
+    d.innerHTML = lang === "ja" ? entry.ja : lang === "en" ? (entry.en ?? logToEn(entry.ko)) : entry.ko;
     this.localizeCards(d);
     return d;
   }

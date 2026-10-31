@@ -2201,7 +2201,7 @@ const NEW_CARDS41B: CardDef[] = [
   { id: "MIND_BURST", t: "spell", cost: 2, act: "mindBurst", name: "정신 방출술", nameJa: "精神放出術",
     text: "자신 필드의 카운터를 모두 제거 · 그 수 ×4 데미지를 상대에게", textJa: "自分の場のカウンターを全て取り除く · その数×4ダメージを相手に" },
   { id: "RICH_HABIT", t: "spell", cost: 3, ench: "richHabit", val: 99, name: "부호의 습관", nameJa: "富豪の習慣",
-    text: "영구: 자신의 턴 시작시 패가 4장 이상이면 체력 +6 · 6장 이상이면 최대 마나 +1도", textJa: "永続: 自分のターン開始時に手札が4枚以上なら体力+6 · 6枚以上なら最大マナ+1も" },
+    text: "【파괴 시】이 카드가 상대 카드의 효과로 파괴되었다면 자신의 최대 마나를 3으로 만든다.", textJa: "【破壊時】このカードが相手のカードの効果で破壊された場合、自分の最大マナを3にする。" },
 ];
 for (const c of NEW_CARDS41B) { DB[c.id] = c; }
 RANDOM_CARDS.add("NO_PAIN");
@@ -2478,7 +2478,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v71"; // Refresh: draw a spell to restore 3 HP
+export const BALANCE_VERSION = "v72"; // Habit of the Rich: opposing card destruction sets owner max mana to 3
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

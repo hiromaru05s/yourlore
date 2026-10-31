@@ -841,7 +841,7 @@ Object.assign(TEXTS, {
   PENANCE: "Per Brand counter you have: max mana +2, HP +10",
   PACK_INSTINCT: "Only with 2+ monsters of the same name on your field · Those monsters get +2/+2 (lasting)",
   MIND_BURST: "Remove all counters from your field · The opponent takes 4 damage per counter",
-  RICH_HABIT: "Permanent: at your turn start with 4+ cards in hand, HP +6 · with 6+, also max mana +1",
+  RICH_HABIT: "【On Destruction】If this card is destroyed by an opponent’s card effect, set your maximum mana to 3.",
 });
 
 // ---- v44: approved reworks after trap retirement ----

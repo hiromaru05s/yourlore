@@ -1,0 +1,15 @@
+{
+  "origin": "http://127.0.0.1:5249",
+  "checks": [
+    "en/1280: Armorer localized dialog, shield applied",
+    "en/390: Armorer localized dialog, shield applied",
+    "en: destruction vs recall and English log event rendered",
+    "ja/1280: Armorer localized dialog, shield applied",
+    "ja/390: Armorer localized dialog, shield applied",
+    "ja: destruction vs recall and English log event rendered",
+    "ko/1280: Armorer localized dialog, shield applied",
+    "ko/390: Armorer localized dialog, shield applied",
+    "ko: destruction vs recall and English log event rendered"
+  ],
+  "errors": []
+}
