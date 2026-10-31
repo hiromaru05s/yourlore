@@ -1,0 +1,1249 @@
+{
+  "source": "5111ea856d9f270ca9e2b9731a597a9fb91297ac",
+  "origin": "https://yourlore.xyz",
+  "checkedAt": "2026-10-31T13:36:32.581Z",
+  "results": [
+    {
+      "path": "/assets/UnrealBloomPass-B9Y2KvK5.js",
+      "sha256": "9a5481af8baae05508101722b8c8a25b5559c5a87a535cb1d348610ebcbaecf1",
+      "bytes": 10275,
+      "url": "https://yourlore.xyz/assets/UnrealBloomPass-B9Y2KvK5.js",
+      "status": 200,
+      "actualSha256": "9a5481af8baae05508101722b8c8a25b5559c5a87a535cb1d348610ebcbaecf1",
+      "match": true
+    },
+    {
+      "path": "/assets/GLTFLoader-VOALR8Eg.js",
+      "sha256": "f14f1614b9eb31fd6f7bda685a1e8a62d88786d589f07078f90bf8655c9b9e1e",
+      "bytes": 43811,
+      "url": "https://yourlore.xyz/assets/GLTFLoader-VOALR8Eg.js",
+      "status": 200,
+      "actualSha256": "f14f1614b9eb31fd6f7bda685a1e8a62d88786d589f07078f90bf8655c9b9e1e",
+      "match": true
+    },
+    {
+      "path": "/assets/assets-y2pPev2A.js",
+      "sha256": "9299b02206d089aaf1ead0c11ebcbb0a248b8a2cbaf8ec487bfdfa0753cefd16",
+      "bytes": 1101,
+      "url": "https://yourlore.xyz/assets/assets-y2pPev2A.js",
+      "status": 200,
+      "actualSha256": "9299b02206d089aaf1ead0c11ebcbb0a248b8a2cbaf8ec487bfdfa0753cefd16",
+      "match": true
+    },
+    {
+      "path": "/assets/assetQueue-CNZBDA90.css",
+      "sha256": "48d561e7c5ef3a4359166c0b2a351ee84acfaea64f0f99695e7c8c68145ece6d",
+      "bytes": 839,
+      "url": "https://yourlore.xyz/assets/assetQueue-CNZBDA90.css",
+      "status": 200,
+      "actualSha256": "48d561e7c5ef3a4359166c0b2a351ee84acfaea64f0f99695e7c8c68145ece6d",
+      "match": true
+    },
+    {
+      "path": "/assets/admin-DrkCGE2O.js",
+      "sha256": "f92f040b8c3960115a378de988d9f17f524f2f631eb48f6903c7a1f175f57e24",
+      "bytes": 24228,
+      "url": "https://yourlore.xyz/assets/admin-DrkCGE2O.js",
+      "status": 200,
+      "actualSha256": "f92f040b8c3960115a378de988d9f17f524f2f631eb48f6903c7a1f175f57e24",
+      "match": true
+    },
+    {
+      "path": "/assets/audit-CfxFjhEy.js",
+      "sha256": "060310048ba4893638cb5fd66dbbd5ef4d91d89c33fba926e3e44bc33f89fcc3",
+      "bytes": 5451,
+      "url": "https://yourlore.xyz/assets/audit-CfxFjhEy.js",
+      "status": 200,
+      "actualSha256": "060310048ba4893638cb5fd66dbbd5ef4d91d89c33fba926e3e44bc33f89fcc3",
+      "match": true
+    },
+    {
+      "path": "/assets/atelierThemes-C9ZNrm6d.js",
+      "sha256": "ba61a5df721ea0960354e7bb9b42fb2558d5c0ea0010466b68f2cc6ab10fe914",
+      "bytes": 1934,
+      "url": "https://yourlore.xyz/assets/atelierThemes-C9ZNrm6d.js",
+      "status": 200,
+      "actualSha256": "ba61a5df721ea0960354e7bb9b42fb2558d5c0ea0010466b68f2cc6ab10fe914",
+      "match": true
+    },
+    {
+      "path": "/assets/board-CZhV2HqQ.js",
+      "sha256": "66a1d3403f77d7c7a9afc9d16e6a2a2bbd2cbdfb9e57e4264c0cd7ce9acc16f5",
+      "bytes": 7787,
+      "url": "https://yourlore.xyz/assets/board-CZhV2HqQ.js",
+      "status": 200,
+      "actualSha256": "66a1d3403f77d7c7a9afc9d16e6a2a2bbd2cbdfb9e57e4264c0cd7ce9acc16f5",
+      "match": true
+    },
+    {
+      "path": "/assets/catalog-CJmaorNf.js",
+      "sha256": "86dcc903067f848ba0969e4406b2389095571faeeea94edef20dedeb2ded511b",
+      "bytes": 841,
+      "url": "https://yourlore.xyz/assets/catalog-CJmaorNf.js",
+      "status": 200,
+      "actualSha256": "86dcc903067f848ba0969e4406b2389095571faeeea94edef20dedeb2ded511b",
+      "match": true
+    },
+    {
+      "path": "/assets/cardSurface-BSNDMY1V.js",
+      "sha256": "25a011c0bbc43cf56ded527ff0b46b026df563aa9d2e52b89d7add2a6b34539a",
+      "bytes": 19099,
+      "url": "https://yourlore.xyz/assets/cardSurface-BSNDMY1V.js",
+      "status": 200,
+      "actualSha256": "25a011c0bbc43cf56ded527ff0b46b026df563aa9d2e52b89d7add2a6b34539a",
+      "match": true
+    },
+    {
+      "path": "/assets/catalog-sx9jbz9x.js",
+      "sha256": "676785bb956eca737177fef15487ebb38bf88091c5790d5ad9426d59a613ee6a",
+      "bytes": 4777,
+      "url": "https://yourlore.xyz/assets/catalog-sx9jbz9x.js",
+      "status": 200,
+      "actualSha256": "676785bb956eca737177fef15487ebb38bf88091c5790d5ad9426d59a613ee6a",
+      "match": true
+    },
+    {
+      "path": "/assets/ceremonyScene-4icqaa8C.js",
+      "sha256": "109a962e84bcc908a21adfc74de617a545797916b11f15aa5709406c89e351c3",
+      "bytes": 9027,
+      "url": "https://yourlore.xyz/assets/ceremonyScene-4icqaa8C.js",
+      "status": 200,
+      "actualSha256": "109a962e84bcc908a21adfc74de617a545797916b11f15aa5709406c89e351c3",
+      "match": true
+    },
+    {
+      "path": "/assets/coins-BmlNai1T.js",
+      "sha256": "c8d268adff92f9bc11ac2381f1119abe962c90d46ccee5ec077c13128f0a2cfa",
+      "bytes": 5252,
+      "url": "https://yourlore.xyz/assets/coins-BmlNai1T.js",
+      "status": 200,
+      "actualSha256": "c8d268adff92f9bc11ac2381f1119abe962c90d46ccee5ec077c13128f0a2cfa",
+      "match": true
+    },
+    {
+      "path": "/assets/combatTempo-BqUPTEfP.js",
+      "sha256": "5ab803dab430e6d7e3a744a1b05508cb853fdccdd62d5a2ae1c5437f95dbe8de",
+      "bytes": 4078,
+      "url": "https://yourlore.xyz/assets/combatTempo-BqUPTEfP.js",
+      "status": 200,
+      "actualSha256": "5ab803dab430e6d7e3a744a1b05508cb853fdccdd62d5a2ae1c5437f95dbe8de",
+      "match": true
+    },
+    {
+      "path": "/assets/controller-bboUdfYs.css",
+      "sha256": "ecd20d2c291671bbc93a98a201b1a6e1ac9f67f0dc1bbcd8faa2c1e651a53e00",
+      "bytes": 3733,
+      "url": "https://yourlore.xyz/assets/controller-bboUdfYs.css",
+      "status": 200,
+      "actualSha256": "ecd20d2c291671bbc93a98a201b1a6e1ac9f67f0dc1bbcd8faa2c1e651a53e00",
+      "match": true
+    },
+    {
+      "path": "/assets/BufferGeometryUtils-C0Y2JaSA.js",
+      "sha256": "ac062493004196b81b4f5a277cb1c5d0b64d6e67cf69c412ce15403b68305e26",
+      "bytes": 4855,
+      "url": "https://yourlore.xyz/assets/BufferGeometryUtils-C0Y2JaSA.js",
+      "status": 200,
+      "actualSha256": "ac062493004196b81b4f5a277cb1c5d0b64d6e67cf69c412ce15403b68305e26",
+      "match": true
+    },
+    {
+      "path": "/assets/controller-AFAOMWNT.js",
+      "sha256": "96cbbd0852227d9b35bd1551ff61b94ce9a2fc0e8a82425a766d4e1eb0fa6e86",
+      "bytes": 130469,
+      "url": "https://yourlore.xyz/assets/controller-AFAOMWNT.js",
+      "status": 200,
+      "actualSha256": "96cbbd0852227d9b35bd1551ff61b94ce9a2fc0e8a82425a766d4e1eb0fa6e86",
+      "match": true
+    },
+    {
+      "path": "/assets/RoundedBoxGeometry-CEfF40yK.js",
+      "sha256": "673a789cc6650d93454699d4fc725c99dee0fb3eb08d62a42997c8a65c7733e7",
+      "bytes": 1720,
+      "url": "https://yourlore.xyz/assets/RoundedBoxGeometry-CEfF40yK.js",
+      "status": 200,
+      "actualSha256": "673a789cc6650d93454699d4fc725c99dee0fb3eb08d62a42997c8a65c7733e7",
+      "match": true
+    },
+    {
+      "path": "/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "bytes": 125,
+      "url": "https://yourlore.xyz/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "status": 200,
+      "actualSha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700",
+      "match": true
+    },
+    {
+      "path": "/assets/cosmeticStudio-Ci5dgdRk.js",
+      "sha256": "bcb64ac9099932bb5dc7f6f9221729e32399d2fec2f08b4a991557a2ec8dfc51",
+      "bytes": 11695,
+      "url": "https://yourlore.xyz/assets/cosmeticStudio-Ci5dgdRk.js",
+      "status": 200,
+      "actualSha256": "bcb64ac9099932bb5dc7f6f9221729e32399d2fec2f08b4a991557a2ec8dfc51",
+      "match": true
+    },
+    {
+      "path": "/assets/deadline-RP-FvawS.js",
+      "sha256": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a",
+      "bytes": 371,
+      "url": "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+      "status": 200,
+      "actualSha256": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a",
+      "match": true
+    },
+    {
+      "path": "/assets/domSleeve-BtRQHocI.js",
+      "sha256": "8b8350a75e25662d7a24e0dfca2a89f46e4c658b14df7e9874fb38490cef872d",
+      "bytes": 1833,
+      "url": "https://yourlore.xyz/assets/domSleeve-BtRQHocI.js",
+      "status": 200,
+      "actualSha256": "8b8350a75e25662d7a24e0dfca2a89f46e4c658b14df7e9874fb38490cef872d",
+      "match": true
+    },
+    {
+      "path": "/assets/domSleeves-Dru0ykCE.css",
+      "sha256": "a63fb32e7762741252e721880aece1f04a96cdf596b627156c6fbab0584e9ff7",
+      "bytes": 287,
+      "url": "https://yourlore.xyz/assets/domSleeves-Dru0ykCE.css",
+      "status": 200,
+      "actualSha256": "a63fb32e7762741252e721880aece1f04a96cdf596b627156c6fbab0584e9ff7",
+      "match": true
+    },
+    {
+      "path": "/assets/darkRenderer-UjOHAWbb.js",
+      "sha256": "825db3ee73f6312969dca55af63ef555f61ac78d1042f22f305dc84206bdb7e1",
+      "bytes": 5914,
+      "url": "https://yourlore.xyz/assets/darkRenderer-UjOHAWbb.js",
+      "status": 200,
+      "actualSha256": "825db3ee73f6312969dca55af63ef555f61ac78d1042f22f305dc84206bdb7e1",
+      "match": true
+    },
+    {
+      "path": "/assets/domSleeves-Gky6VBGz.js",
+      "sha256": "c04771ac80fe4ef44feee368fb34bab44f5b0cb9a0b6271696925bf595ca1fc3",
+      "bytes": 1616,
+      "url": "https://yourlore.xyz/assets/domSleeves-Gky6VBGz.js",
+      "status": 200,
+      "actualSha256": "c04771ac80fe4ef44feee368fb34bab44f5b0cb9a0b6271696925bf595ca1fc3",
+      "match": true
+    },
+    {
+      "path": "/assets/board-EPO96UEy.js",
+      "sha256": "84a40a0cf9031a3c93c51cdf7088b3f927947a1e227aec34d00aa542a3807f42",
+      "bytes": 6784,
+      "url": "https://yourlore.xyz/assets/board-EPO96UEy.js",
+      "status": 200,
+      "actualSha256": "84a40a0cf9031a3c93c51cdf7088b3f927947a1e227aec34d00aa542a3807f42",
+      "match": true
+    },
+    {
+      "path": "/assets/duel-preload-b5d31d747bf9dbfc86f90423.json",
+      "sha256": "2f8a26f4b116b477a9746fda2eb4a525fb98451d3358b850c4c336bfd982efa5",
+      "bytes": 4071,
+      "url": "https://yourlore.xyz/assets/duel-preload-b5d31d747bf9dbfc86f90423.json",
+      "status": 200,
+      "actualSha256": "2f8a26f4b116b477a9746fda2eb4a525fb98451d3358b850c4c336bfd982efa5",
+      "match": true
+    },
+    {
+      "path": "/assets/drawStock-DaGFzeQC.js",
+      "sha256": "e9c2c97ad3ba94e21ba94ca449a307ebd83ab5e1d351e84a7acf727c7bd29d1f",
+      "bytes": 4669,
+      "url": "https://yourlore.xyz/assets/drawStock-DaGFzeQC.js",
+      "status": 200,
+      "actualSha256": "e9c2c97ad3ba94e21ba94ca449a307ebd83ab5e1d351e84a7acf727c7bd29d1f",
+      "match": true
+    },
+    {
+      "path": "/assets/family-matter-DNnEjOkt.js",
+      "sha256": "bd2eeb02fa04e5ad7db585148a9d4f17fafa31981fca903547b12d7395681bdb",
+      "bytes": 4555,
+      "url": "https://yourlore.xyz/assets/family-matter-DNnEjOkt.js",
+      "status": 200,
+      "actualSha256": "bd2eeb02fa04e5ad7db585148a9d4f17fafa31981fca903547b12d7395681bdb",
+      "match": true
+    },
+    {
+      "path": "/assets/bot.worker-D3w93aR7.js",
+      "sha256": "c342d520d8c21e5cc54a7eec9e358a90bb92735db8c12028bc429704f34df729",
+      "bytes": 1006964,
+      "url": "https://yourlore.xyz/assets/bot.worker-D3w93aR7.js",
+      "status": 200,
+      "actualSha256": "c342d520d8c21e5cc54a7eec9e358a90bb92735db8c12028bc429704f34df729",
+      "match": true
+    },
+    {
+      "path": "/assets/duelAssets-e5DyPczA.js",
+      "sha256": "0cb50b99a6fed418a295ec1b703ae27ed0d5d5e3008898d93cfc0a93711899c9",
+      "bytes": 729,
+      "url": "https://yourlore.xyz/assets/duelAssets-e5DyPczA.js",
+      "status": 200,
+      "actualSha256": "0cb50b99a6fed418a295ec1b703ae27ed0d5d5e3008898d93cfc0a93711899c9",
+      "match": true
+    },
+    {
+      "path": "/assets/duelScene-CibTlv-d.js",
+      "sha256": "159ac1d20b6884eeda1f252ce7818c9ee8e06c79447f4f920208a798a712a1bc",
+      "bytes": 61726,
+      "url": "https://yourlore.xyz/assets/duelScene-CibTlv-d.js",
+      "status": 200,
+      "actualSha256": "159ac1d20b6884eeda1f252ce7818c9ee8e06c79447f4f920208a798a712a1bc",
+      "match": true
+    },
+    {
+      "path": "/assets/furniture-CDmhysyf.js",
+      "sha256": "d6d39c73231d1c9509570a2da9522407c11582f64c89106a17a21385bb19bd7e",
+      "bytes": 5271,
+      "url": "https://yourlore.xyz/assets/furniture-CDmhysyf.js",
+      "status": 200,
+      "actualSha256": "d6d39c73231d1c9509570a2da9522407c11582f64c89106a17a21385bb19bd7e",
+      "match": true
+    },
+    {
+      "path": "/assets/fateWheelRewind-ZwcwQ6A3.js",
+      "sha256": "7f9de471e7a2d678d0ded08e09ee930d8c60cfaa7c67f44b3cf95da03bf03bfb",
+      "bytes": 2172,
+      "url": "https://yourlore.xyz/assets/fateWheelRewind-ZwcwQ6A3.js",
+      "status": 200,
+      "actualSha256": "7f9de471e7a2d678d0ded08e09ee930d8c60cfaa7c67f44b3cf95da03bf03bfb",
+      "match": true
+    },
+    {
+      "path": "/assets/assetQueue-B7wNG95O.js",
+      "sha256": "9a69929d440368b1c2b4885985db27db1b643be6f8b8ef0e144e428485712112",
+      "bytes": 1296714,
+      "url": "https://yourlore.xyz/assets/assetQueue-B7wNG95O.js",
+      "status": 200,
+      "actualSha256": "9a69929d440368b1c2b4885985db27db1b643be6f8b8ef0e144e428485712112",
+      "match": true
+    },
+    {
+      "path": "/assets/furniture-CEvSa5cB.js",
+      "sha256": "87497277ada8e5afabab1f6fad1263d5c7d37c43965e38e0c4dc1047ec56adc6",
+      "bytes": 2975,
+      "url": "https://yourlore.xyz/assets/furniture-CEvSa5cB.js",
+      "status": 200,
+      "actualSha256": "87497277ada8e5afabab1f6fad1263d5c7d37c43965e38e0c4dc1047ec56adc6",
+      "match": true
+    },
+    {
+      "path": "/assets/furniture-DgcaLeXy.js",
+      "sha256": "d6ff52243ac945170b5d01151dc76dcc1978a3e37148d35086f62292ca79e48a",
+      "bytes": 3817,
+      "url": "https://yourlore.xyz/assets/furniture-DgcaLeXy.js",
+      "status": 200,
+      "actualSha256": "d6ff52243ac945170b5d01151dc76dcc1978a3e37148d35086f62292ca79e48a",
+      "match": true
+    },
+    {
+      "path": "/assets/furniture-D7cEP5xS.js",
+      "sha256": "09a751805273a9db6fc82030d3feec83840b1d1b9c1f95d0782b3970c7406976",
+      "bytes": 8598,
+      "url": "https://yourlore.xyz/assets/furniture-D7cEP5xS.js",
+      "status": 200,
+      "actualSha256": "09a751805273a9db6fc82030d3feec83840b1d1b9c1f95d0782b3970c7406976",
+      "match": true
+    },
+    {
+      "path": "/assets/game-CeZ0_T_p.css",
+      "sha256": "c3a917c33744ff03edb04c76979bf8fb070230e7358a5da1272b96b7bac52062",
+      "bytes": 3600,
+      "url": "https://yourlore.xyz/assets/game-CeZ0_T_p.css",
+      "status": 200,
+      "actualSha256": "c3a917c33744ff03edb04c76979bf8fb070230e7358a5da1272b96b7bac52062",
+      "match": true
+    },
+    {
+      "path": "/assets/gachaRewardFurniture-CApA9td_.js",
+      "sha256": "0c03e21f75619d09f0c3bac7d6f9685931f4fd542dabd3d901983a9a14d49fd0",
+      "bytes": 4453,
+      "url": "https://yourlore.xyz/assets/gachaRewardFurniture-CApA9td_.js",
+      "status": 200,
+      "actualSha256": "0c03e21f75619d09f0c3bac7d6f9685931f4fd542dabd3d901983a9a14d49fd0",
+      "match": true
+    },
+    {
+      "path": "/assets/gachaRewardSleeve-TbfgE2mA.js",
+      "sha256": "86d084f9d47b897d828721d5831698d7c3d99547a6eb493740dad0ecb0304e8a",
+      "bytes": 2512,
+      "url": "https://yourlore.xyz/assets/gachaRewardSleeve-TbfgE2mA.js",
+      "status": 200,
+      "actualSha256": "86d084f9d47b897d828721d5831698d7c3d99547a6eb493740dad0ecb0304e8a",
+      "match": true
+    },
+    {
+      "path": "/assets/layout-D8MAivLN.css",
+      "sha256": "c0821747d014af86c98b17ddf3b1f8c94281ad442dd99e4fc8c2b6ea634f0584",
+      "bytes": 7547,
+      "url": "https://yourlore.xyz/assets/layout-D8MAivLN.css",
+      "status": 200,
+      "actualSha256": "c0821747d014af86c98b17ddf3b1f8c94281ad442dd99e4fc8c2b6ea634f0584",
+      "match": true
+    },
+    {
+      "path": "/assets/main-CZ4BkNr7.css",
+      "sha256": "feb7b56a727902d55e6d5668b9564051c59112db25d6bba79b6dbf56223bfedf",
+      "bytes": 1089361,
+      "url": "https://yourlore.xyz/assets/main-CZ4BkNr7.css",
+      "status": 200,
+      "actualSha256": "feb7b56a727902d55e6d5668b9564051c59112db25d6bba79b6dbf56223bfedf",
+      "match": true
+    },
+    {
+      "path": "/assets/homeAtmosphere-BO7i_sVf.js",
+      "sha256": "cb0b6b3f18282d8f170470e254cbecaebf528f4b0a4aa3a8f851c6776abadf67",
+      "bytes": 14456,
+      "url": "https://yourlore.xyz/assets/homeAtmosphere-BO7i_sVf.js",
+      "status": 200,
+      "actualSha256": "cb0b6b3f18282d8f170470e254cbecaebf528f4b0a4aa3a8f851c6776abadf67",
+      "match": true
+    },
+    {
+      "path": "/assets/diceScene-BkacaPv8.js",
+      "sha256": "a71804d01d36cdb791d009af334a63870bc8388ea059b3f2ca3db95276f6f1e9",
+      "bytes": 7419,
+      "url": "https://yourlore.xyz/assets/diceScene-BkacaPv8.js",
+      "status": 200,
+      "actualSha256": "a71804d01d36cdb791d009af334a63870bc8388ea059b3f2ca3db95276f6f1e9",
+      "match": true
+    },
+    {
+      "path": "/assets/main-CjMOwsG6.js",
+      "sha256": "a4e31f14606909b22842cf2bc4f9ed4c3e0720b3a25fa2573fb6ae744117e435",
+      "bytes": 389444,
+      "url": "https://yourlore.xyz/assets/main-CjMOwsG6.js",
+      "status": 200,
+      "actualSha256": "a4e31f14606909b22842cf2bc4f9ed4c3e0720b3a25fa2573fb6ae744117e435",
+      "match": true
+    },
+    {
+      "path": "/assets/main-Dg8C_ucD.js",
+      "sha256": "8a8230a2b4bfa65fa04c7b62094a2809cff8bda8387b6bf17e0f3c5f8e0b8d5e",
+      "bytes": 3133,
+      "url": "https://yourlore.xyz/assets/main-Dg8C_ucD.js",
+      "status": 200,
+      "actualSha256": "8a8230a2b4bfa65fa04c7b62094a2809cff8bda8387b6bf17e0f3c5f8e0b8d5e",
+      "match": true
+    },
+    {
+      "path": "/assets/furniture-rcXzEFO1.js",
+      "sha256": "c2f1cb272ab02e65f21ab2f80e6d5a1b30c67ac585a90985d45fd8803f57ffdc",
+      "bytes": 3860,
+      "url": "https://yourlore.xyz/assets/furniture-rcXzEFO1.js",
+      "status": 200,
+      "actualSha256": "c2f1cb272ab02e65f21ab2f80e6d5a1b30c67ac585a90985d45fd8803f57ffdc",
+      "match": true
+    },
+    {
+      "path": "/assets/layout-DjTTaA9S.js",
+      "sha256": "d12bf420693282f1e1511244987237eb8ee86c2af9b65f9a21d5d530812ce444",
+      "bytes": 881317,
+      "url": "https://yourlore.xyz/assets/layout-DjTTaA9S.js",
+      "status": 200,
+      "actualSha256": "d12bf420693282f1e1511244987237eb8ee86c2af9b65f9a21d5d530812ce444",
+      "match": true
+    },
+    {
+      "path": "/assets/master-tongues-CJqQum5O.js",
+      "sha256": "7051500cd95e378e796645dd1df3fd8276ff75e0a1bba10d16d145fa05ff39d2",
+      "bytes": 4219,
+      "url": "https://yourlore.xyz/assets/master-tongues-CJqQum5O.js",
+      "status": 200,
+      "actualSha256": "7051500cd95e378e796645dd1df3fd8276ff75e0a1bba10d16d145fa05ff39d2",
+      "match": true
+    },
+    {
+      "path": "/assets/materials-C_pAwgEZ.js",
+      "sha256": "ce5d282d60c8d73993bf97a7b73ab5e9a385df8b18e40ff031732f5fceb2e1ef",
+      "bytes": 3098,
+      "url": "https://yourlore.xyz/assets/materials-C_pAwgEZ.js",
+      "status": 200,
+      "actualSha256": "ce5d282d60c8d73993bf97a7b73ab5e9a385df8b18e40ff031732f5fceb2e1ef",
+      "match": true
+    },
+    {
+      "path": "/assets/materials-BNbyql74.js",
+      "sha256": "45e21afcdd18ef0f33b5602dfdeeda8346332ef2be9355b722ac620165717559",
+      "bytes": 9062,
+      "url": "https://yourlore.xyz/assets/materials-BNbyql74.js",
+      "status": 200,
+      "actualSha256": "45e21afcdd18ef0f33b5602dfdeeda8346332ef2be9355b722ac620165717559",
+      "match": true
+    },
+    {
+      "path": "/assets/inspection-CW0jv60l.js",
+      "sha256": "e84551e605f58d5186525437b58259b1159e2dd7167c09d202692a661dc141d1",
+      "bytes": 25323,
+      "url": "https://yourlore.xyz/assets/inspection-CW0jv60l.js",
+      "status": 200,
+      "actualSha256": "e84551e605f58d5186525437b58259b1159e2dd7167c09d202692a661dc141d1",
+      "match": true
+    },
+    {
+      "path": "/assets/materials-CquBPLAY.js",
+      "sha256": "7f040c13767b1a09cdc9a7bc20720ca81a96e3258151ce1f6a6d5abad4e087bb",
+      "bytes": 3027,
+      "url": "https://yourlore.xyz/assets/materials-CquBPLAY.js",
+      "status": 200,
+      "actualSha256": "7f040c13767b1a09cdc9a7bc20720ca81a96e3258151ce1f6a6d5abad4e087bb",
+      "match": true
+    },
+    {
+      "path": "/assets/menuAssets-BM6VpOu5.js",
+      "sha256": "fe840d016ba113e322e8cdd8401f26d5758abc698019abfecad0830f9d786328",
+      "bytes": 59073,
+      "url": "https://yourlore.xyz/assets/menuAssets-BM6VpOu5.js",
+      "status": 200,
+      "actualSha256": "fe840d016ba113e322e8cdd8401f26d5758abc698019abfecad0830f9d786328",
+      "match": true
+    },
+    {
+      "path": "/assets/objects-BmdJdrhk.js",
+      "sha256": "cb24d9a2b92ae9a035023c3e9ac4adeec091da157a72b9eea01a714003b28bf6",
+      "bytes": 3461,
+      "url": "https://yourlore.xyz/assets/objects-BmdJdrhk.js",
+      "status": 200,
+      "actualSha256": "cb24d9a2b92ae9a035023c3e9ac4adeec091da157a72b9eea01a714003b28bf6",
+      "match": true
+    },
+    {
+      "path": "/assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "sha256": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "bytes": 711,
+      "url": "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+      "status": 200,
+      "actualSha256": "d2a32840421496e872ade591618d2fa5c33797605d1aec04301717e5a90757d0",
+      "match": true
+    },
+    {
+      "path": "/assets/ornaments-Uut_iZ1E.js",
+      "sha256": "4e8e054ce518d95ad825b84d07f4d7ebbe6079074bb95f740d93ab1cd3a97486",
+      "bytes": 3920,
+      "url": "https://yourlore.xyz/assets/ornaments-Uut_iZ1E.js",
+      "status": 200,
+      "actualSha256": "4e8e054ce518d95ad825b84d07f4d7ebbe6079074bb95f740d93ab1cd3a97486",
+      "match": true
+    },
+    {
+      "path": "/assets/opponent-fbJVnZdc.css",
+      "sha256": "7dd76b6f4ca07f829ab69088c3b5d1c5391bba6639018f8bd85a846599a3c945",
+      "bytes": 2790,
+      "url": "https://yourlore.xyz/assets/opponent-fbJVnZdc.css",
+      "status": 200,
+      "actualSha256": "7dd76b6f4ca07f829ab69088c3b5d1c5391bba6639018f8bd85a846599a3c945",
+      "match": true
+    },
+    {
+      "path": "/assets/opponent-NdiHkXXp.js",
+      "sha256": "bba4e51c95346515ea222f14d4cb522ffbfd28254d40d887d3a503a76b824883",
+      "bytes": 6172,
+      "url": "https://yourlore.xyz/assets/opponent-NdiHkXXp.js",
+      "status": 200,
+      "actualSha256": "bba4e51c95346515ea222f14d4cb522ffbfd28254d40d887d3a503a76b824883",
+      "match": true
+    },
+    {
+      "path": "/assets/paperDraw-sgEK01Rv.js",
+      "sha256": "2283d66bcae9c1c1c16cb990ff3a7affb2b4ae55956a0910f7fffdc41dabc5f2",
+      "bytes": 7074,
+      "url": "https://yourlore.xyz/assets/paperDraw-sgEK01Rv.js",
+      "status": 200,
+      "actualSha256": "2283d66bcae9c1c1c16cb990ff3a7affb2b4ae55956a0910f7fffdc41dabc5f2",
+      "match": true
+    },
+    {
+      "path": "/assets/passives-UDApamK7.css",
+      "sha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "bytes": 2167,
+      "url": "https://yourlore.xyz/assets/passives-UDApamK7.css",
+      "status": 200,
+      "actualSha256": "1d77028a9d61ea432adb25ad2731a883fcf8baaac17af718abd1780bb84caa22",
+      "match": true
+    },
+    {
+      "path": "/assets/pileModels-u5fiiTov.js",
+      "sha256": "2f7f7ea3bf5ab1685f8dfaa4dbf24142f154fee08ed59b923b21eafcc9ee7141",
+      "bytes": 3929,
+      "url": "https://yourlore.xyz/assets/pileModels-u5fiiTov.js",
+      "status": 200,
+      "actualSha256": "2f7f7ea3bf5ab1685f8dfaa4dbf24142f154fee08ed59b923b21eafcc9ee7141",
+      "match": true
+    },
+    {
+      "path": "/assets/persistentFlightRenderer-DBRKVa8e.js",
+      "sha256": "82c0d3e93a527ec5c6e9019ed3b056951f61d408f74d4570121e6f11cd20dba7",
+      "bytes": 4798,
+      "url": "https://yourlore.xyz/assets/persistentFlightRenderer-DBRKVa8e.js",
+      "status": 200,
+      "actualSha256": "82c0d3e93a527ec5c6e9019ed3b056951f61d408f74d4570121e6f11cd20dba7",
+      "match": true
+    },
+    {
+      "path": "/assets/preload-helper-BXl3LOEh.js",
+      "sha256": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "bytes": 1110,
+      "url": "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+      "status": 200,
+      "actualSha256": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6",
+      "match": true
+    },
+    {
+      "path": "/assets/purchaseAir.worker-BK14oJEX.js",
+      "sha256": "f46b05531c87c4fb81cb1fbcbe8f685a977952e84fa4bea3c51b9deb52918164",
+      "bytes": 1328,
+      "url": "https://yourlore.xyz/assets/purchaseAir.worker-BK14oJEX.js",
+      "status": 200,
+      "actualSha256": "f46b05531c87c4fb81cb1fbcbe8f685a977952e84fa4bea3c51b9deb52918164",
+      "match": true
+    },
+    {
+      "path": "/assets/rankPresentation-cp6vRdl-.js",
+      "sha256": "567118349ccddb68a26afbefa9c3eaaaf3bb560395011ddfb1204d612889a11a",
+      "bytes": 29867,
+      "url": "https://yourlore.xyz/assets/rankPresentation-cp6vRdl-.js",
+      "status": 200,
+      "actualSha256": "567118349ccddb68a26afbefa9c3eaaaf3bb560395011ddfb1204d612889a11a",
+      "match": true
+    },
+    {
+      "path": "/assets/quietLuxury-CnfUXLeB.js",
+      "sha256": "ed61e511fc398f0420e4436b70b29b4d8427dc4c93310248e4f6888a81751476",
+      "bytes": 1980,
+      "url": "https://yourlore.xyz/assets/quietLuxury-CnfUXLeB.js",
+      "status": 200,
+      "actualSha256": "ed61e511fc398f0420e4436b70b29b4d8427dc4c93310248e4f6888a81751476",
+      "match": true
+    },
+    {
+      "path": "/assets/renderDensity-eCqR3GeM.js",
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "bytes": 545,
+      "url": "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+      "status": 200,
+      "actualSha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699",
+      "match": true
+    },
+    {
+      "path": "/assets/readingAssetCache-CtQJFrNa.js",
+      "sha256": "aaa26038bffc3b857e9cd51c2cc3a05e2efd5a670c6807e053f0d1271fb7e096",
+      "bytes": 1181,
+      "url": "https://yourlore.xyz/assets/readingAssetCache-CtQJFrNa.js",
+      "status": 200,
+      "actualSha256": "aaa26038bffc3b857e9cd51c2cc3a05e2efd5a670c6807e053f0d1271fb7e096",
+      "match": true
+    },
+    {
+      "path": "/assets/raster.worker-Dbjti9vv.js",
+      "sha256": "51ec8e21ec72b22893fbaf21a9ef10c1551ed86bc6a281a6a9823e9d88b60fe8",
+      "bytes": 2459,
+      "url": "https://yourlore.xyz/assets/raster.worker-Dbjti9vv.js",
+      "status": 200,
+      "actualSha256": "51ec8e21ec72b22893fbaf21a9ef10c1551ed86bc6a281a6a9823e9d88b60fe8",
+      "match": true
+    },
+    {
+      "path": "/assets/readingBoardLayout-DhIDCB5S.js",
+      "sha256": "3e5206f856a1cda58160aab776541dd859ab2abc94f3e1040b16af5d50726351",
+      "bytes": 2866,
+      "url": "https://yourlore.xyz/assets/readingBoardLayout-DhIDCB5S.js",
+      "status": 200,
+      "actualSha256": "3e5206f856a1cda58160aab776541dd859ab2abc94f3e1040b16af5d50726351",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-BO2ekl4C.js",
+      "sha256": "4ddd19593a773242e88bbc736b1de701aad600f98d468d3074b3fc2d8ff7ef35",
+      "bytes": 10562,
+      "url": "https://yourlore.xyz/assets/renderer-BO2ekl4C.js",
+      "status": 200,
+      "actualSha256": "4ddd19593a773242e88bbc736b1de701aad600f98d468d3074b3fc2d8ff7ef35",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-BYpXNGj6.js",
+      "sha256": "9e2ce1fa03562fdec21fe5276daad05d4492afa4982ed13b79c2e9df6dbd7b66",
+      "bytes": 17629,
+      "url": "https://yourlore.xyz/assets/renderer-BYpXNGj6.js",
+      "status": 200,
+      "actualSha256": "9e2ce1fa03562fdec21fe5276daad05d4492afa4982ed13b79c2e9df6dbd7b66",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-Bnugvmv6.js",
+      "sha256": "4389d15b2b783549514f40ecdb555ed1eff5cc3f611a752e7828262a713b2085",
+      "bytes": 18626,
+      "url": "https://yourlore.xyz/assets/renderer-Bnugvmv6.js",
+      "status": 200,
+      "actualSha256": "4389d15b2b783549514f40ecdb555ed1eff5cc3f611a752e7828262a713b2085",
+      "match": true
+    },
+    {
+      "path": "/assets/menu-manifest-2448f5e02ecd6ce666c2.json",
+      "sha256": "2448f5e02ecd6ce666c211f38c740522d3b336caa648b2d3387229221ae27096",
+      "bytes": 422474,
+      "url": "https://yourlore.xyz/assets/menu-manifest-2448f5e02ecd6ce666c2.json",
+      "status": 200,
+      "actualSha256": "2448f5e02ecd6ce666c211f38c740522d3b336caa648b2d3387229221ae27096",
+      "match": true
+    },
+    {
+      "path": "/assets/game-C61dGkts.js",
+      "sha256": "8843b591487561e490277f2a2a463439518b3c418e24ecbf36299e08f0aca5ed",
+      "bytes": 146156,
+      "url": "https://yourlore.xyz/assets/game-C61dGkts.js",
+      "status": 200,
+      "actualSha256": "8843b591487561e490277f2a2a463439518b3c418e24ecbf36299e08f0aca5ed",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-BzUqzD71.js",
+      "sha256": "401279b13c1d3762d5906f61573d0b50dc47ad22a98ee3406a97236dec0626d8",
+      "bytes": 5313,
+      "url": "https://yourlore.xyz/assets/renderer-BzUqzD71.js",
+      "status": 200,
+      "actualSha256": "401279b13c1d3762d5906f61573d0b50dc47ad22a98ee3406a97236dec0626d8",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-BtjoZF-T.js",
+      "sha256": "a24c6293f21b2ff8d199a901d8eb720719c94f3ef3dc8572bbfe843962dbfb1f",
+      "bytes": 12624,
+      "url": "https://yourlore.xyz/assets/renderer-BtjoZF-T.js",
+      "status": 200,
+      "actualSha256": "a24c6293f21b2ff8d199a901d8eb720719c94f3ef3dc8572bbfe843962dbfb1f",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-CiUAToEE.js",
+      "sha256": "e76ef1e1eb9dffb78ef8bc706c78520a5ebb6626030dddcf16d238ce13b842a1",
+      "bytes": 9707,
+      "url": "https://yourlore.xyz/assets/renderer-CiUAToEE.js",
+      "status": 200,
+      "actualSha256": "e76ef1e1eb9dffb78ef8bc706c78520a5ebb6626030dddcf16d238ce13b842a1",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-Ce01U241.js",
+      "sha256": "b048a5e4cbe740472050545231c4ccc6472cc517e2133dacb799e76b11dd4cb0",
+      "bytes": 11196,
+      "url": "https://yourlore.xyz/assets/renderer-Ce01U241.js",
+      "status": 200,
+      "actualSha256": "b048a5e4cbe740472050545231c4ccc6472cc517e2133dacb799e76b11dd4cb0",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-D0BXuqu5.js",
+      "sha256": "5d3492104202a0d0e8a1f651aa7465bc4cb760652c946320c016076d1b0d2523",
+      "bytes": 6804,
+      "url": "https://yourlore.xyz/assets/renderer-D0BXuqu5.js",
+      "status": 200,
+      "actualSha256": "5d3492104202a0d0e8a1f651aa7465bc4cb760652c946320c016076d1b0d2523",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-CpYyF68a.js",
+      "sha256": "5a4f96975b7fd7527faeb561afd64ea34ae5f4878ae118a0343fcb9772dc7d8f",
+      "bytes": 17863,
+      "url": "https://yourlore.xyz/assets/renderer-CpYyF68a.js",
+      "status": 200,
+      "actualSha256": "5a4f96975b7fd7527faeb561afd64ea34ae5f4878ae118a0343fcb9772dc7d8f",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-CtUinVWi.js",
+      "sha256": "68f6891cd7eff6f15f0c576fbde14f8f543e1708ab2280fa4c1ae924c56438aa",
+      "bytes": 16955,
+      "url": "https://yourlore.xyz/assets/renderer-CtUinVWi.js",
+      "status": 200,
+      "actualSha256": "68f6891cd7eff6f15f0c576fbde14f8f543e1708ab2280fa4c1ae924c56438aa",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-BrK7uQVz.js",
+      "sha256": "48ad5adc7d81a0c82f13339c7c35c455f6ce10471962559c323ed4a6c9207398",
+      "bytes": 6667,
+      "url": "https://yourlore.xyz/assets/renderer-BrK7uQVz.js",
+      "status": 200,
+      "actualSha256": "48ad5adc7d81a0c82f13339c7c35c455f6ce10471962559c323ed4a6c9207398",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-Dat-FBOg.js",
+      "sha256": "f6f05f044ebf8aac693273a1f14e0cf21ab143aa559bf91cacd6dbe9228ad291",
+      "bytes": 12511,
+      "url": "https://yourlore.xyz/assets/renderer-Dat-FBOg.js",
+      "status": 200,
+      "actualSha256": "f6f05f044ebf8aac693273a1f14e0cf21ab143aa559bf91cacd6dbe9228ad291",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-DxNIVdiW.js",
+      "sha256": "5d0991d79205c433b173130718a2e2234d780294afafbb45a8a9d02b9606a085",
+      "bytes": 10898,
+      "url": "https://yourlore.xyz/assets/renderer-DxNIVdiW.js",
+      "status": 200,
+      "actualSha256": "5d0991d79205c433b173130718a2e2234d780294afafbb45a8a9d02b9606a085",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-F_Qxu_B2.js",
+      "sha256": "6e41fee8071ae3a050a41842dfc4aa434237d5d75d3c2865701fb6bafef70a66",
+      "bytes": 11197,
+      "url": "https://yourlore.xyz/assets/renderer-F_Qxu_B2.js",
+      "status": 200,
+      "actualSha256": "6e41fee8071ae3a050a41842dfc4aa434237d5d75d3c2865701fb6bafef70a66",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-D3BniZTO.js",
+      "sha256": "5377c3b829d840edf9e93edcd6c29f9556ddd6f5a9d897667fed8571e5dc4e5c",
+      "bytes": 14355,
+      "url": "https://yourlore.xyz/assets/renderer-D3BniZTO.js",
+      "status": 200,
+      "actualSha256": "5377c3b829d840edf9e93edcd6c29f9556ddd6f5a9d897667fed8571e5dc4e5c",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-fzZEUSnw.js",
+      "sha256": "d11c3e0a071928e8a26138d401146406bff9383291af2dd0716d275654e8de35",
+      "bytes": 14858,
+      "url": "https://yourlore.xyz/assets/renderer-fzZEUSnw.js",
+      "status": 200,
+      "actualSha256": "d11c3e0a071928e8a26138d401146406bff9383291af2dd0716d275654e8de35",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-bsMZQWfr.js",
+      "sha256": "68af5cb48d410e7715818cf1f3946b5f029e0c131e249ec3aa04445891aa8095",
+      "bytes": 12454,
+      "url": "https://yourlore.xyz/assets/renderer-bsMZQWfr.js",
+      "status": 200,
+      "actualSha256": "68af5cb48d410e7715818cf1f3946b5f029e0c131e249ec3aa04445891aa8095",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-MTvOIsuZ.js",
+      "sha256": "6d3db3d518c1794bd59c5f5daec1609f8c7ad97d260a9fd355521cc6e8f6dd2b",
+      "bytes": 13495,
+      "url": "https://yourlore.xyz/assets/renderer-MTvOIsuZ.js",
+      "status": 200,
+      "actualSha256": "6d3db3d518c1794bd59c5f5daec1609f8c7ad97d260a9fd355521cc6e8f6dd2b",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-gv1MVd5Z.js",
+      "sha256": "dec95681fee16e896b1bca0a842ce378c703649f6779ea23aa5f6f41671501d2",
+      "bytes": 21301,
+      "url": "https://yourlore.xyz/assets/renderer-gv1MVd5Z.js",
+      "status": 200,
+      "actualSha256": "dec95681fee16e896b1bca0a842ce378c703649f6779ea23aa5f6f41671501d2",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-XH5Vuwcx.js",
+      "sha256": "cbf67b7a4a2e19f224c888ee7d3b504f8a15cf9c244ab25125e50cbf88d07a64",
+      "bytes": 5340,
+      "url": "https://yourlore.xyz/assets/renderer-XH5Vuwcx.js",
+      "status": 200,
+      "actualSha256": "cbf67b7a4a2e19f224c888ee7d3b504f8a15cf9c244ab25125e50cbf88d07a64",
+      "match": true
+    },
+    {
+      "path": "/assets/riftScene-DBGmUApl.js",
+      "sha256": "2c3b3f3006be618c848644e9ee81f129772d9c57911e1698ff7dc273a6351085",
+      "bytes": 27668,
+      "url": "https://yourlore.xyz/assets/riftScene-DBGmUApl.js",
+      "status": 200,
+      "actualSha256": "2c3b3f3006be618c848644e9ee81f129772d9c57911e1698ff7dc273a6351085",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-B6Izo1aH.js",
+      "sha256": "54f34fc2801a49cbbe0972f04c244817045e38f0a09f9f4639ed13d7aa0d6dc9",
+      "bytes": 7771,
+      "url": "https://yourlore.xyz/assets/runtime-B6Izo1aH.js",
+      "status": 200,
+      "actualSha256": "54f34fc2801a49cbbe0972f04c244817045e38f0a09f9f4639ed13d7aa0d6dc9",
+      "match": true
+    },
+    {
+      "path": "/assets/royal-matter-DiXie0Ve.js",
+      "sha256": "a45b21de2380184bc77d26f00667a839c5f74e9c294124f854c3ed0a96f1806c",
+      "bytes": 6535,
+      "url": "https://yourlore.xyz/assets/royal-matter-DiXie0Ve.js",
+      "status": 200,
+      "actualSha256": "a45b21de2380184bc77d26f00667a839c5f74e9c294124f854c3ed0a96f1806c",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-83KoCD26.js",
+      "sha256": "8cb17bbc498462018888e944bcde32cfdbb5ce9d5a0f7774c6f2d5f987d22eea",
+      "bytes": 12521,
+      "url": "https://yourlore.xyz/assets/runtime-83KoCD26.js",
+      "status": 200,
+      "actualSha256": "8cb17bbc498462018888e944bcde32cfdbb5ce9d5a0f7774c6f2d5f987d22eea",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-BDq6RKKe.js",
+      "sha256": "d008c3bdf54747d563aaa91ebed6a49575af4a11fabb7e5f3248f83026c7b47c",
+      "bytes": 17666,
+      "url": "https://yourlore.xyz/assets/runtime-BDq6RKKe.js",
+      "status": 200,
+      "actualSha256": "d008c3bdf54747d563aaa91ebed6a49575af4a11fabb7e5f3248f83026c7b47c",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-BJ_XjC67.js",
+      "sha256": "d459328a8238a7d1fe056316c2452a738be3234dde93ab1e31b2fa731a79e171",
+      "bytes": 10513,
+      "url": "https://yourlore.xyz/assets/runtime-BJ_XjC67.js",
+      "status": 200,
+      "actualSha256": "d459328a8238a7d1fe056316c2452a738be3234dde93ab1e31b2fa731a79e171",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-PmbYpucC.js",
+      "sha256": "a25931d3d38146685fdded081a50ae0135a3e14785d975c64599b138cd22378c",
+      "bytes": 9359,
+      "url": "https://yourlore.xyz/assets/renderer-PmbYpucC.js",
+      "status": 200,
+      "actualSha256": "a25931d3d38146685fdded081a50ae0135a3e14785d975c64599b138cd22378c",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-Bh5z4Zet.js",
+      "sha256": "261a008b7e34861de2583881dcc5762d935e74e1384a2ecdb5f198f62ec7ede0",
+      "bytes": 4509,
+      "url": "https://yourlore.xyz/assets/runtime-Bh5z4Zet.js",
+      "status": 200,
+      "actualSha256": "261a008b7e34861de2583881dcc5762d935e74e1384a2ecdb5f198f62ec7ede0",
+      "match": true
+    },
+    {
+      "path": "/assets/readingCrystalOptics-DZ9n4QXn.js",
+      "sha256": "8f361f5ad62222c0357728d0de5303011ea448592baa7523bbcf22736f8bad29",
+      "bytes": 3680,
+      "url": "https://yourlore.xyz/assets/readingCrystalOptics-DZ9n4QXn.js",
+      "status": 200,
+      "actualSha256": "8f361f5ad62222c0357728d0de5303011ea448592baa7523bbcf22736f8bad29",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-Bn4JJNTb.js",
+      "sha256": "33cc538665a96268d6030053e31ec5660a9cd56136c2672e3b0a1f8ecafcb862",
+      "bytes": 12661,
+      "url": "https://yourlore.xyz/assets/runtime-Bn4JJNTb.js",
+      "status": 200,
+      "actualSha256": "33cc538665a96268d6030053e31ec5660a9cd56136c2672e3b0a1f8ecafcb862",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-BqbI7fjc.js",
+      "sha256": "992dc268546b13fd28bd756b6d60cde80eb1b0b4445d4e52ab0866c6724fba09",
+      "bytes": 3337,
+      "url": "https://yourlore.xyz/assets/runtime-BqbI7fjc.js",
+      "status": 200,
+      "actualSha256": "992dc268546b13fd28bd756b6d60cde80eb1b0b4445d4e52ab0866c6724fba09",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-CbCj9UiZ.js",
+      "sha256": "4abd7fbad091181a3dd3b70a8d5dec2f3d2fde1f82f7b633f428daaa4b5f8c2f",
+      "bytes": 36522,
+      "url": "https://yourlore.xyz/assets/runtime-CbCj9UiZ.js",
+      "status": 200,
+      "actualSha256": "4abd7fbad091181a3dd3b70a8d5dec2f3d2fde1f82f7b633f428daaa4b5f8c2f",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-Ch9eydv_.css",
+      "sha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "bytes": 214,
+      "url": "https://yourlore.xyz/assets/runtime-Ch9eydv_.css",
+      "status": 200,
+      "actualSha256": "09264cdd78485bba6de13f55be4fe1a4168aad32b31d4d08c6e36c345c79e13c",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-B9zgk3DM.js",
+      "sha256": "cde9263732ad784120b4ac3d3a67adc9d2049a485fa92b695cf317ad8849106c",
+      "bytes": 14118,
+      "url": "https://yourlore.xyz/assets/runtime-B9zgk3DM.js",
+      "status": 200,
+      "actualSha256": "cde9263732ad784120b4ac3d3a67adc9d2049a485fa92b695cf317ad8849106c",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-DOm-Vvyy.js",
+      "sha256": "36c4a250c6b8cff8fc88dd37782c826c915e3e6a45b51fe0abfcf76b3b69d030",
+      "bytes": 10819,
+      "url": "https://yourlore.xyz/assets/runtime-DOm-Vvyy.js",
+      "status": 200,
+      "actualSha256": "36c4a250c6b8cff8fc88dd37782c826c915e3e6a45b51fe0abfcf76b3b69d030",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-BiGdT87P.js",
+      "sha256": "7c419132f0760cd06df6d032a3f1382d09fd24de6077d80deaddcbb5901a5c36",
+      "bytes": 25750,
+      "url": "https://yourlore.xyz/assets/runtime-BiGdT87P.js",
+      "status": 200,
+      "actualSha256": "7c419132f0760cd06df6d032a3f1382d09fd24de6077d80deaddcbb5901a5c36",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-CLPt0bRb.js",
+      "sha256": "79961f21fcb1043ecdc2fbe03d4bbd9eb5f0160fd88295af4c02b7199e639987",
+      "bytes": 7733,
+      "url": "https://yourlore.xyz/assets/runtime-CLPt0bRb.js",
+      "status": 200,
+      "actualSha256": "79961f21fcb1043ecdc2fbe03d4bbd9eb5f0160fd88295af4c02b7199e639987",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-Tj3YNFRc.js",
+      "sha256": "ac4011f628eaa80f8af2a4b28c3df2d5bafee5c3f0f5bcd41f124211e80c0b21",
+      "bytes": 7290,
+      "url": "https://yourlore.xyz/assets/runtime-Tj3YNFRc.js",
+      "status": 200,
+      "actualSha256": "ac4011f628eaa80f8af2a4b28c3df2d5bafee5c3f0f5bcd41f124211e80c0b21",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-DU9JbRud.js",
+      "sha256": "32789c7b3d03f01e865a8ddb29fd4a12cdb30428d272d133aa8dc6f92d329411",
+      "bytes": 5368,
+      "url": "https://yourlore.xyz/assets/runtime-DU9JbRud.js",
+      "status": 200,
+      "actualSha256": "32789c7b3d03f01e865a8ddb29fd4a12cdb30428d272d133aa8dc6f92d329411",
+      "match": true
+    },
+    {
+      "path": "/assets/selection-BZuIRH5R.js",
+      "sha256": "dfe2619dd833c70a02edea2dc8fb5fc485caf369085440f353c733532824aacd",
+      "bytes": 441,
+      "url": "https://yourlore.xyz/assets/selection-BZuIRH5R.js",
+      "status": 200,
+      "actualSha256": "dfe2619dd833c70a02edea2dc8fb5fc485caf369085440f353c733532824aacd",
+      "match": true
+    },
+    {
+      "path": "/assets/shieldTitanRuntime-DC4aSvCX.js",
+      "sha256": "4a5c2a60e854a8b3eb87dbcd9a06a61a88e541ad1342174fe151fc4e2f9566bf",
+      "bytes": 2901,
+      "url": "https://yourlore.xyz/assets/shieldTitanRuntime-DC4aSvCX.js",
+      "status": 200,
+      "actualSha256": "4a5c2a60e854a8b3eb87dbcd9a06a61a88e541ad1342174fe151fc4e2f9566bf",
+      "match": true
+    },
+    {
+      "path": "/assets/sleeve-BwTGmUa4.js",
+      "sha256": "4a1d1871902869425794d84bbc71a774ed4ca97a6dac2fa4128dab29d806401c",
+      "bytes": 4485,
+      "url": "https://yourlore.xyz/assets/sleeve-BwTGmUa4.js",
+      "status": 200,
+      "actualSha256": "4a1d1871902869425794d84bbc71a774ed4ca97a6dac2fa4128dab29d806401c",
+      "match": true
+    },
+    {
+      "path": "/assets/runtime-CDyvIjd1.js",
+      "sha256": "01607a97dcfbbd109c0286bbf1781751804d06b140f95a2a35dd007884723ca4",
+      "bytes": 19914,
+      "url": "https://yourlore.xyz/assets/runtime-CDyvIjd1.js",
+      "status": 200,
+      "actualSha256": "01607a97dcfbbd109c0286bbf1781751804d06b140f95a2a35dd007884723ca4",
+      "match": true
+    },
+    {
+      "path": "/assets/sleeve-CIT3CqUj.js",
+      "sha256": "93c827bf3f79245b5eff63e4a677a91227f32dffbbdd58cb59c072ba85c6dfbc",
+      "bytes": 7904,
+      "url": "https://yourlore.xyz/assets/sleeve-CIT3CqUj.js",
+      "status": 200,
+      "actualSha256": "93c827bf3f79245b5eff63e4a677a91227f32dffbbdd58cb59c072ba85c6dfbc",
+      "match": true
+    },
+    {
+      "path": "/assets/scene-glmJKDyo.js",
+      "sha256": "419a2843ac75b67f224e812fdb06fcd3c54f16f2c5fc17e4e26ce4f95d47dcf7",
+      "bytes": 8442,
+      "url": "https://yourlore.xyz/assets/scene-glmJKDyo.js",
+      "status": 200,
+      "actualSha256": "419a2843ac75b67f224e812fdb06fcd3c54f16f2c5fc17e4e26ce4f95d47dcf7",
+      "match": true
+    },
+    {
+      "path": "/assets/sleeve-CpFl-ESi.js",
+      "sha256": "9bf606990eb98c71a473c2f1a3abb940b463a0c0704cda20d0a443b18f0775aa",
+      "bytes": 4298,
+      "url": "https://yourlore.xyz/assets/sleeve-CpFl-ESi.js",
+      "status": 200,
+      "actualSha256": "9bf606990eb98c71a473c2f1a3abb940b463a0c0704cda20d0a443b18f0775aa",
+      "match": true
+    },
+    {
+      "path": "/assets/sleeve-IS2HDUkg.js",
+      "sha256": "7e44a20934710660de73e2adf5b46f0741c1b32723b2ca8582e606bc9645a9b5",
+      "bytes": 3372,
+      "url": "https://yourlore.xyz/assets/sleeve-IS2HDUkg.js",
+      "status": 200,
+      "actualSha256": "7e44a20934710660de73e2adf5b46f0741c1b32723b2ca8582e606bc9645a9b5",
+      "match": true
+    },
+    {
+      "path": "/assets/snapshot-DQ15Z_B5.js",
+      "sha256": "78fa42a971f44e8d238d0fc920c81a7f6122ae4f9655c60d39c86618788af306",
+      "bytes": 1587,
+      "url": "https://yourlore.xyz/assets/snapshot-DQ15Z_B5.js",
+      "status": 200,
+      "actualSha256": "78fa42a971f44e8d238d0fc920c81a7f6122ae4f9655c60d39c86618788af306",
+      "match": true
+    },
+    {
+      "path": "/assets/sleeve-IVAjgFrk.js",
+      "sha256": "565277b9c55bb008520ac4ca6548ad9039faeb02920de7134530d0c5496e8069",
+      "bytes": 3168,
+      "url": "https://yourlore.xyz/assets/sleeve-IVAjgFrk.js",
+      "status": 200,
+      "actualSha256": "565277b9c55bb008520ac4ca6548ad9039faeb02920de7134530d0c5496e8069",
+      "match": true
+    },
+    {
+      "path": "/assets/social-Ch7n2Gp_.css",
+      "sha256": "363a92915fb140981480a4db298ce7f53f62489208045961e16dde4433b233c2",
+      "bytes": 264929,
+      "url": "https://yourlore.xyz/assets/social-Ch7n2Gp_.css",
+      "status": 200,
+      "actualSha256": "363a92915fb140981480a4db298ce7f53f62489208045961e16dde4433b233c2",
+      "match": true
+    },
+    {
+      "path": "/assets/renderer-yE1rbJP1.js",
+      "sha256": "0794ac2e7aa55164786ee0f38edaee7afeaebc7c993d3c07c0b9dffb8f06b514",
+      "bytes": 11645,
+      "url": "https://yourlore.xyz/assets/renderer-yE1rbJP1.js",
+      "status": 200,
+      "actualSha256": "0794ac2e7aa55164786ee0f38edaee7afeaebc7c993d3c07c0b9dffb8f06b514",
+      "match": true
+    },
+    {
+      "path": "/assets/spacetime-CRflQxGr.js",
+      "sha256": "7a74447787b2229659c481044f924a5fb0c64f0eacfbeef4170b946fa8f961e3",
+      "bytes": 12348,
+      "url": "https://yourlore.xyz/assets/spacetime-CRflQxGr.js",
+      "status": 200,
+      "actualSha256": "7a74447787b2229659c481044f924a5fb0c64f0eacfbeef4170b946fa8f961e3",
+      "match": true
+    },
+    {
+      "path": "/assets/social-DHuFQO1t.js",
+      "sha256": "a708efd7dc84fad114b1be1046be5b7da3535959b1bc9e09b9351fbd5f072ab6",
+      "bytes": 526275,
+      "url": "https://yourlore.xyz/assets/social-DHuFQO1t.js",
+      "status": 200,
+      "actualSha256": "a708efd7dc84fad114b1be1046be5b7da3535959b1bc9e09b9351fbd5f072ab6",
+      "match": true
+    },
+    {
+      "path": "/assets/sound-DptHNtqW.js",
+      "sha256": "2f353c32b66c5c063d1eca3c68a402e6b6d1b67f7efbc1673f691003355658ac",
+      "bytes": 863,
+      "url": "https://yourlore.xyz/assets/sound-DptHNtqW.js",
+      "status": 200,
+      "actualSha256": "2f353c32b66c5c063d1eca3c68a402e6b6d1b67f7efbc1673f691003355658ac",
+      "match": true
+    },
+    {
+      "path": "/assets/studio-CmgKc6nL.css",
+      "sha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "bytes": 8771,
+      "url": "https://yourlore.xyz/assets/studio-CmgKc6nL.css",
+      "status": 200,
+      "actualSha256": "3c90a10e82d82a4480493b60a7bb1627a313ef8447427b18ab65912cb9fc0e4e",
+      "match": true
+    },
+    {
+      "path": "/assets/scene-CVQxgCXI.js",
+      "sha256": "778d8548244cbb325630fb1a5d5b1e31ffbd428e310751223846b375fa88d122",
+      "bytes": 8422,
+      "url": "https://yourlore.xyz/assets/scene-CVQxgCXI.js",
+      "status": 200,
+      "actualSha256": "778d8548244cbb325630fb1a5d5b1e31ffbd428e310751223846b375fa88d122",
+      "match": true
+    },
+    {
+      "path": "/assets/style-BmSCny8F.css",
+      "sha256": "4ae8815bad476a60b375bf79b787616c2c3a4119580433ab696fbcbed41ec7e6",
+      "bytes": 1004,
+      "url": "https://yourlore.xyz/assets/style-BmSCny8F.css",
+      "status": 200,
+      "actualSha256": "4ae8815bad476a60b375bf79b787616c2c3a4119580433ab696fbcbed41ec7e6",
+      "match": true
+    },
+    {
+      "path": "/assets/visual-BhkNzfYc.js",
+      "sha256": "005af1a8445607da0f595d7a9c72950aa1f54f42b682e89b25690e93e0d295dc",
+      "bytes": 8501,
+      "url": "https://yourlore.xyz/assets/visual-BhkNzfYc.js",
+      "status": 200,
+      "actualSha256": "005af1a8445607da0f595d7a9c72950aa1f54f42b682e89b25690e93e0d295dc",
+      "match": true
+    },
+    {
+      "path": "/index.html",
+      "sha256": "f009b6d1321ccaad316f613ff07fed72c8c9368f7b23a173944d460ba2073b1d",
+      "bytes": 8870,
+      "url": "https://yourlore.xyz/",
+      "status": 200,
+      "actualSha256": "f009b6d1321ccaad316f613ff07fed72c8c9368f7b23a173944d460ba2073b1d",
+      "match": true
+    },
+    {
+      "path": "/assets/scene-CSqrYVEp.js",
+      "sha256": "d51cc3cb102d3ce578a769fc95e3807bfc953c1d49d30472fe57afbf7df523e5",
+      "bytes": 15739,
+      "url": "https://yourlore.xyz/assets/scene-CSqrYVEp.js",
+      "status": 200,
+      "actualSha256": "d51cc3cb102d3ce578a769fc95e3807bfc953c1d49d30472fe57afbf7df523e5",
+      "match": true
+    },
+    {
+      "path": "/assets/visual-zX_UPkkI.js",
+      "sha256": "4751d3066c48783ce0fedae9993e13397037e3661c5d3eaffe2cbc380799039c",
+      "bytes": 19291,
+      "url": "https://yourlore.xyz/assets/visual-zX_UPkkI.js",
+      "status": 200,
+      "actualSha256": "4751d3066c48783ce0fedae9993e13397037e3661c5d3eaffe2cbc380799039c",
+      "match": true
+    },
+    {
+      "path": "/assets/sleeve-DE74-eQR.js",
+      "sha256": "9de088989cded22dfc1db9cfb916f2cf58e3e5b29c1b7630cfa27e3e8cf166f3",
+      "bytes": 4906,
+      "url": "https://yourlore.xyz/assets/sleeve-DE74-eQR.js",
+      "status": 200,
+      "actualSha256": "9de088989cded22dfc1db9cfb916f2cf58e3e5b29c1b7630cfa27e3e8cf166f3",
+      "match": true
+    },
+    {
+      "path": "/assets/stage-3ZlqUVBm.js",
+      "sha256": "142a553c6c2c1064fe2d71bd14bc1316a66bf39003b221f703852c31dabf943b",
+      "bytes": 30248,
+      "url": "https://yourlore.xyz/assets/stage-3ZlqUVBm.js",
+      "status": 200,
+      "actualSha256": "142a553c6c2c1064fe2d71bd14bc1316a66bf39003b221f703852c31dabf943b",
+      "match": true
+    },
+    {
+      "path": "/assets/scene-DfQLlwJ4.js",
+      "sha256": "fe65669bf24619c1d9b576b8c0dcb3920529e0f372da246ace2e105cef82715f",
+      "bytes": 86318,
+      "url": "https://yourlore.xyz/assets/scene-DfQLlwJ4.js",
+      "status": 200,
+      "actualSha256": "fe65669bf24619c1d9b576b8c0dcb3920529e0f372da246ace2e105cef82715f",
+      "match": true
+    }
+  ]
+}

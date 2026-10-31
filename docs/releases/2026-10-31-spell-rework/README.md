@@ -29,4 +29,24 @@
 - ローカル実画面で変更14枚×3言語=42件のカード詳細本文を正本と照合。砂漠化の回復半減をBOTの公開情報による評価にも適用。
 - ブラウザーはAPI応答のみのfixtureを使用。実アカウント・実PvPでの検証とは区別する。
 
-作業元: `/Users/hiromaru05s/.codex/worktrees/spell-rework-20261031/LORE_TCG`。ローカル確認URL: `http://127.0.0.1:5187`。最新mainのUI・翻訳変更（`144edce1`まで）を統合。公開時は `scripts/deploy-guard.mjs` により、main一致・既存本番の包含・DBスキーマ・全production suite・型検査・ビルドを再検証したコミットスナップショットを使用する。公開結果は検証後追記する。
+作業元: `/Users/hiromaru05s/.codex/worktrees/spell-rework-20261031/LORE_TCG`。ローカル確認URL: `http://127.0.0.1:5187`。最新mainのUI・翻訳変更（`144edce1`まで）を統合。公開時は `scripts/deploy-guard.mjs` により、main一致・既存本番の包含・DBスキーマ・全production suite・型検査・ビルドを再検証したコミットスナップショットを使用する。公開結果は以下の通り。
+
+## 本番公開結果
+
+- 公開先: https://yourlore.xyz （wwwも同じWorker）。
+- 実行コード: `5111ea856d9f270ca9e2b9731a597a9fb91297ac`。
+- Worker version: `6a1c30e6-6abb-42b9-a226-a6c554519152`、100%。
+- Deployment: `1875e050-7b61-4611-bb53-f3c1e7e1312a`、2026-10-31 13:36:06 UTC。
+- ガード付き公開でDBスキーマ、client/server型検査、**267/267 production suite**、design guard、ビルドに合格。
+- 本番配信のentry HTMLおよびJS/CSS/JSON **138ファイル**が、公開用コミットスナップショットのSHA-256と一致。
+- 本番のカード一覧から検索・詳細表示した **14枚×3言語=42件**の本文が正本と一致。成長が一覧にないことも検証。
+- 本番の実際の対戦controllerで、血の魔法―哀の全選択候補・必須1枚・確定送信、時空間操作のリフト選択・確定送信・辞退を日韓英すべて確認。API/WebSocketは隔離fixtureであり、実対戦やアカウントを書き換えていない。
+
+ブラウザー検証には現行カードのみを使い、ソース確定後および本番公開後の両方で実行した。対戦素材の準備完了を待って選択画面を撮影した。実アカウントによるPvP・実機性能は検証範囲に含まない。
+
+- [Production suite](production-suite.json)
+- [Served artifact hashes](served-assets.json)
+- [Deployment metadata](deployment.json)
+- [Production card text report](production/card-text-report.json)
+- [Production choice report](production/choice-report.json)
+- [Production choice reproduction](check-production-choices.mjs)

@@ -1,0 +1,74 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-10-31T13:40:41.340Z",
+  "main": "/assets/main-Dg8C_ucD.js",
+  "appEntry": "/assets/main-CjMOwsG6.js",
+  "game": "/assets/game-C61dGkts.js",
+  "checks": [
+    {
+      "lang": "ja",
+      "kind": "sorrow",
+      "choices": [
+        "M2",
+        "M3",
+        "BLOOD_SORROW",
+        "M1",
+        "M4",
+        "RICH_HABIT",
+        "Q_RIFT"
+      ],
+      "text": "1797秒\n自分の墓地・デッキ・場・手札から、自分のリフトへ送るカード1枚を選んでください。\n自分\n1\nストーン・パップ\n1\n3\n自分\n1\nダスト・スカウト\n2\n1\n自分\n1\nスパーク・インプ\n3\n1\n自分\n2\n血の魔法 - 哀\n自分\n2\nブレード・ヘア\n4\n2\n2\nリフト研究\nクエスト\n自分\n3\n富豪の習慣\n0枚選択中 / 1\n確定",
+      "action": "choose own deck card; mandatory exactly 1"
+    },
+    {
+      "lang": "ja",
+      "kind": "timewarp",
+      "text": "1796秒\n自分のリフトから墓地に戻すカードを1枚まで選んでください。 選ばずに終了できます。\n自分\n1\nスパーク・インプ\n3\n1\n自分\n1\nストーン・パップ\n1\n3\n確定\nキャンセル",
+      "action": "choose own Rift card"
+    },
+    {
+      "lang": "ko",
+      "kind": "sorrow",
+      "choices": [
+        "M2",
+        "M3",
+        "BLOOD_SORROW",
+        "M1",
+        "M4",
+        "RICH_HABIT",
+        "Q_RIFT"
+      ],
+      "text": "1795초\n자신의 묘지·덱·필드·패에서 자신의 리프트로 보낼 카드 1장을 선택하세요.\n자신\n1\n스톤 펍\n1\n3\n자신\n1\n더스트 스카우트\n2\n1\n자신\n1\n스파크 임프\n3\n1\n자신\n2\n피의 마법 - 애\n자신\n2\n블레이드 헤어\n4\n2\n2\n리프트 연구\n퀘스트\n자신\n3\n부호의 습관\n0장 선택됨 / 1\n확정",
+      "action": "choose own deck card; mandatory exactly 1"
+    },
+    {
+      "lang": "ko",
+      "kind": "timewarp",
+      "text": "1794초\n자신의 리프트에서 묘지로 되돌릴 카드를 최대 1장 선택하세요. 선택하지 않고 마칠 수 있습니다.\n자신\n1\n스파크 임프\n3\n1\n자신\n1\n스톤 펍\n1\n3\n확정\n취소",
+      "action": "choose own Rift card"
+    },
+    {
+      "lang": "en",
+      "kind": "sorrow",
+      "choices": [
+        "M2",
+        "M3",
+        "BLOOD_SORROW",
+        "M1",
+        "M4",
+        "RICH_HABIT",
+        "Q_RIFT"
+      ],
+      "text": "1797s\nChoose 1 card from your graveyard, deck, field or hand to send to your Rift.\nYou\n1\nStone Pup\n1\n3\nYou\n1\nDust Scout\n2\n1\nYou\n1\nSpark Imp\n3\n1\nYou\n2\nBlood Magic - Sorrow\nYou\n2\nBlade Hare\n4\n2\n2\nRift Research\nQuest\nYou\n3\nHabit of the Rich\n0 selected / 1\nConfirm",
+      "action": "choose own deck card; mandatory exactly 1"
+    },
+    {
+      "lang": "en",
+      "kind": "timewarp",
+      "text": "1796s\nChoose up to 1 card from your Rift to return to your graveyard. You may finish without choosing another card.\nYou\n1\nSpark Imp\n3\n1\nYou\n1\nStone Pup\n1\n3\nConfirm\nCancel",
+      "action": "choose own Rift card"
+    }
+  ],
+  "errors": [],
+  "scope": "Actual shipped controller and pickers with API/WebSocket fixtures; no real match or account modified."
+}
