@@ -24,7 +24,7 @@ export interface ExperienceReceipt {
 
 import { DB, STARTERS } from './cards';
 import type { PlayerState } from './types';
-export const BOT_REWARDS = { easy: 300, normal: 500, hard: 1000, hell: 2000 } as const;
+export const BOT_REWARDS = { easy: 1500, normal: 3000, hard: 5000, hell: 15000 } as const;
 export const MATCH_REWARDS = { online: { win: 10, loss: 5, cap: 100 }, ranked: { win: 20, loss: 10, cap: 300 } } as const;
 export type Activity = 'shield'|'heal'|'damage'|'decay'|'rift'|'draw'|'counter';
 export type QuestKind = Activity|'starterWin'|'buySpell'|'buyMonster'|'playSpell'|'playExpensive'|'playCard';
