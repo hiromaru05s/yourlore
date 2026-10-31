@@ -1,0 +1,225 @@
+{
+  "source": "b0ce51c253132265cd363debabd7ef4041f8e421",
+  "verified": [
+    {
+      "path": "/index.html",
+      "sha256": "a943cf9f6a3d048f1a41435458ca94655dbdfeb803801c6637a07105324f3c0b"
+    },
+    {
+      "path": "/assets/game-CeZ0_T_p.css",
+      "sha256": "c3a917c33744ff03edb04c76979bf8fb070230e7358a5da1272b96b7bac52062"
+    },
+    {
+      "path": "/assets/assetQueue-CNZBDA90.css",
+      "sha256": "48d561e7c5ef3a4359166c0b2a351ee84acfaea64f0f99695e7c8c68145ece6d"
+    },
+    {
+      "path": "/assets/layout-D8MAivLN.css",
+      "sha256": "c0821747d014af86c98b17ddf3b1f8c94281ad442dd99e4fc8c2b6ea634f0584"
+    },
+    {
+      "path": "/assets/controller-bboUdfYs.css",
+      "sha256": "ecd20d2c291671bbc93a98a201b1a6e1ac9f67f0dc1bbcd8faa2c1e651a53e00"
+    },
+    {
+      "path": "/assets/social-Ch7n2Gp_.css",
+      "sha256": "363a92915fb140981480a4db298ce7f53f62489208045961e16dde4433b233c2"
+    },
+    {
+      "path": "/assets/main-CgAFjdbN.css",
+      "sha256": "cf66183b3cb8516e89e34e4d87ee08d8f9cc04fd562b3ba418bf9268875b053a"
+    },
+    {
+      "path": "/assets/assetQueue-COkMkVct.js",
+      "sha256": "2455758bbb1599b51cce1eb26e460e41ddf42f2ab16b132203372474b8efa3a1"
+    },
+    {
+      "path": "/assets/game-0Alz2q5w.js",
+      "sha256": "66f2f0223ac9aefcae5d720f2bffd9071833b1ed043153e535987c40471e4152"
+    },
+    {
+      "path": "/assets/renderDensity-eCqR3GeM.js",
+      "sha256": "090a3f13bb602c79db69af79fdbf2da6c81f7899d02d089f307b046b80b61699"
+    },
+    {
+      "path": "/assets/selection-BZuIRH5R.js",
+      "sha256": "dfe2619dd833c70a02edea2dc8fb5fc485caf369085440f353c733532824aacd"
+    },
+    {
+      "path": "/assets/preload-helper-BXl3LOEh.js",
+      "sha256": "d887044e7c17fd90344fc4f74f53cac686584daf2a458ab2136d36f1946e9ab6"
+    },
+    {
+      "path": "/assets/deadline-RP-FvawS.js",
+      "sha256": "aec01495e91e8d02b638bd31d63b095536177e08fd2003e120455ad0e5f4460a"
+    },
+    {
+      "path": "/assets/readingBoardLayout-DhIDCB5S.js",
+      "sha256": "3e5206f856a1cda58160aab776541dd859ab2abc94f3e1040b16af5d50726351"
+    },
+    {
+      "path": "/assets/duelAssets-COhvJyhQ.js",
+      "sha256": "de3046d07a02646979672d29ef702ef87e03fe53b36962ef6d179030fed00cf5"
+    },
+    {
+      "path": "/assets/UnrealBloomPass-DJORLz-V.js",
+      "sha256": "d42f5570ab4111a111bd570694c0ac797470261b93198d250a860d1f2c9633e8"
+    },
+    {
+      "path": "/assets/cardSurface-VcUl9M3T.js",
+      "sha256": "11a103c08173d3f93b9477480241bcda75d2fa93dcd3576019698510883b5359"
+    },
+    {
+      "path": "/assets/rankPresentation-vWNsXBN7.js",
+      "sha256": "b366d7fe77d293efe48643dc860bab0a4c55ba05b141f733bff4c621154cfe46"
+    },
+    {
+      "path": "/assets/controller-DONKfIwM.js",
+      "sha256": "0069d45261d53e55ef7f886c36a96217b45bef8b1f15a74bef09760b5759c3ef"
+    },
+    {
+      "path": "/assets/social-CHdQTwX2.js",
+      "sha256": "313abb4ac984ebc84f3d7c38b48d4af27fbcd34840f02dbef09b88f6ce55c434"
+    },
+    {
+      "path": "/assets/main-BWE4Hmxi.js",
+      "sha256": "e739abd4b8ec56d85d278502d8020282161df770db3564bec785b8a9f676f612"
+    },
+    {
+      "path": "/assets/layout-BcvwrZpb.js",
+      "sha256": "624cd7832492381e144ab843b2899ecca7f09cffa12b0edcf9f234298cc7b7f3"
+    },
+    {
+      "path": "/assets/atelierThemes-C9ZNrm6d.js",
+      "sha256": "ba61a5df721ea0960354e7bb9b42fb2558d5c0ea0010466b68f2cc6ab10fe914"
+    },
+    {
+      "path": "/assets/GLTFLoader-DrHLZwxL.js",
+      "sha256": "c769036b5f68eb4eee28965029eb265f76dfad5836c9bbc0cb528cbb4a7ba737"
+    },
+    {
+      "path": "/assets/pileModels-SygE305B.js",
+      "sha256": "dd834985d15cdb826c8fcd0b1d0aa2d180bc052ba97d4abe4b284c7bed4b3119"
+    },
+    {
+      "path": "/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+      "sha256": "c4b11443c97c672caeb2781eb5de3a5d67a2a8588d41e9ffa5759f0a00d33700"
+    },
+    {
+      "path": "/assets/drawStock-BkIoqjZW.js",
+      "sha256": "c62fd8499186a7cf7ad92de84b776001c5fa43c604ed13de70e4f9526df62dd6"
+    },
+    {
+      "path": "/assets/domSleeves-Dru0ykCE.css",
+      "sha256": "a63fb32e7762741252e721880aece1f04a96cdf596b627156c6fbab0584e9ff7"
+    },
+    {
+      "path": "/assets/BufferGeometryUtils-DwVYcvSw.js",
+      "sha256": "09f949f357c110d981a3a47c8a93a371c2f083a4df43dab9311d9e16da26927f"
+    },
+    {
+      "path": "/assets/furniture-HvlbYHFD.js",
+      "sha256": "798944e9735273b3d11cd645bc95fe9acaead0fe46b07b6ecca8f482b24f5220"
+    },
+    {
+      "path": "/assets/domSleeves-De05zgEi.js",
+      "sha256": "debf497ae70632d1d7b8f60e29c44aecb44c1cf82a2b8a800a97033bb2c8d1c0"
+    },
+    {
+      "path": "/assets/materials-BN9kD9xo.js",
+      "sha256": "009abcb2ebc0cde9cebc6c8e53c1db6e4bbe9688e4b585b52e050432f1821d1c"
+    },
+    {
+      "path": "/assets/readingAssetCache-CXtc8NHR.js",
+      "sha256": "5ea67a00f695ea0460686b1b3bba5608cdeb2163683ea69bb3d8e2cd90de7cc0"
+    },
+    {
+      "path": "/assets/readingCrystalOptics-CI8zacPS.js",
+      "sha256": "da724ebc5d35b041d78f40a0e23693ce175a85a56331e647e89138c7f1db5e8f"
+    },
+    {
+      "path": "/assets/catalog-CJmaorNf.js",
+      "sha256": "86dcc903067f848ba0969e4406b2389095571faeeea94edef20dedeb2ded511b"
+    },
+    {
+      "path": "/assets/sleeve-CfpYrerE.js",
+      "sha256": "5e0406a7b81cdb945659324e032d591c187869fd4c2a9f349a14e61917847a4f"
+    },
+    {
+      "path": "/assets/objects-5P97uUMo.js",
+      "sha256": "02233ed95cfa97a3c4085604d6fe7945cec78df831293493a54bab5efbf7940a"
+    },
+    {
+      "path": "/assets/sleeve-Bgkh58To.js",
+      "sha256": "f203cedee2de062f5db37c3373117799f30071b8920a3816fd428e0f39daf3de"
+    },
+    {
+      "path": "/assets/sleeve-DwZ_6g85.js",
+      "sha256": "2469a4294f30f0db56f1a43e4a2be618de1c50542f0dc3cdc6d41b649f427506"
+    },
+    {
+      "path": "/assets/raster.worker-Dbjti9vv.js",
+      "sha256": "51ec8e21ec72b22893fbaf21a9ef10c1551ed86bc6a281a6a9823e9d88b60fe8"
+    },
+    {
+      "path": "/assets/sleeve-B9vvkeAc.js",
+      "sha256": "6d19b7f1441ed20624a5ba1c303a084d0dd9836fb9ab2a6bf89ebde5488d629f"
+    },
+    {
+      "path": "/assets/materials-3nyyg9Wi.js",
+      "sha256": "03ce598fef5e7788bc9761f1c9c4d904a6da6e8e0b298efdc48ee6aa3ef06dd7"
+    },
+    {
+      "path": "/assets/paperDraw-1Jmm5WIh.js",
+      "sha256": "a260b941e4d5b4b5ed5e1f1570ef61934a5a2be503eabc5a1cd60451140da34f"
+    },
+    {
+      "path": "/assets/ceremonyScene-BifN7v7m.js",
+      "sha256": "a4d9c56c03804c84a8698c26414f98622f48e8c9e59654d9db6ae0511b7ca254"
+    },
+    {
+      "path": "/assets/sleeve-nOXHrgmr.js",
+      "sha256": "9e1b13cfa37bbc112bea53cce1add1b1f0a3a6aece7872b2fa72d1bc1c8e2494"
+    },
+    {
+      "path": "/assets/domSleeve-BQWr6Ldh.js",
+      "sha256": "86481c9c56f20bc1c017d21a2c6d0c1b7a35d5acab6fef1d4545db45754ab7a4"
+    },
+    {
+      "path": "/assets/runtime-Bk2Sz98Q.js",
+      "sha256": "415df04f14df0c782d7bad45deb048d4080312aa838286f48d742e2bb1caff60"
+    },
+    {
+      "path": "/assets/sleeve-1JGqOTsz.js",
+      "sha256": "87ad13f79b98fe8a18468b4f35ac8cf1a9ca07af451a5a6dd694377b4c56a42e"
+    },
+    {
+      "path": "/assets/furniture-BZwg8lLD.js",
+      "sha256": "7d91ad192f253e029b933b26d335f0ba06c268c59554fef708ca1cc0ee7fba4c"
+    },
+    {
+      "path": "/assets/furniture-BcYy-6yU.js",
+      "sha256": "27ce6b0c0423352deb914f7f515bc527e4c8b1bb16fffc351731b90d54cc7075"
+    },
+    {
+      "path": "/assets/furniture-D-sZPp--.js",
+      "sha256": "9a66c0ba02e8ca1c614aa1c9df81e147fcf0e736fe1b7a26c58c4fa4a4675bc4"
+    },
+    {
+      "path": "/assets/furniture-DW23aiis.js",
+      "sha256": "5e7a70ff9e20a52dbba5f1d0ed9bbfb4a777e08d6efe6f2e66a7705d8ec41c03"
+    },
+    {
+      "path": "/assets/duelScene-CTPP7DWP.js",
+      "sha256": "56e6cc013c201fe5ee62b1de79f8ea82e896d1887122f6ec5f4f8cb51a717505"
+    },
+    {
+      "path": "/assets/scene-DvVuYp2S.js",
+      "sha256": "cb211b9d7da5771625937ba9866992ac1ada457ad7aedbcb49da9c668c8b45ab"
+    },
+    {
+      "path": "/assets/persistentFlightRenderer-CW0x1-w7.js",
+      "sha256": "74ec76c19726ce065aca30af3738ed2551577ed77a3ac088ba0233281cca1c83"
+    }
+  ]
+}
