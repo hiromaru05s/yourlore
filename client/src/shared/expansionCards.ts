@@ -644,20 +644,6 @@ export const EXPANSION_CARDS: CardDef[] = [
     "act": "expansion",
     "ench": "erosion",
     "val": 99
-  },
-  {
-    "id": "GROWTH",
-    "nameJa": "成長",
-    "name": "성장",
-    "nameEn": "Growth",
-    "cost": 6,
-    "textJa": "【永続】自分のターンの追加ドロー1枚につき、自分の体力+1",
-    "text": "【영구】자신 턴 추가 드로우 카드 1장당 자신 체력 +1",
-    "textEn": "【Permanent】Each extra card drawn on your turn: your HP +1",
-    "t": "spell",
-    "act": "expansion",
-    "ench": "growth",
-    "val": 99
   }
 ];
 

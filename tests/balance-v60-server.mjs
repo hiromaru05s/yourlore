@@ -23,8 +23,8 @@ try {
     assert.equal(room.room.game.players[1-owner].hp,95);assert.equal(room.room.game.players[owner].uses.FLAME,10);checks++;
     for(let i=0;i<6;i++)await send(room,room.room.game.cur,{type:'endTurn'});
     const restored=new GameRoom(journalState(state),rewardTestEnv());await restored.webSocketMessage(sockets[owner],JSON.stringify({type:'ready'}));
-    assert.equal(restored.room.game.players[owner].enchants.find(e=>e.card.id==='FARM').turns,4);assert.equal(restored.room.game.players[owner].uses.FLAME,10);checks++;
-    for(let i=0;i<8;i++)await send(restored,restored.room.game.cur,{type:'endTurn'});
+    assert.equal(restored.room.game.players[owner].enchants.find(e=>e.card.id==='FARM').turns,1);assert.equal(restored.room.game.players[owner].uses.FLAME,10);checks++;
+    for(let i=0;i<2;i++)await send(restored,restored.room.game.cur,{type:'endTurn'});
     assert.equal(restored.room.game.players[owner].hand.filter(c=>c.id==='GOLDEN_APPLE').length,2);
     assert.deepEqual(restored.room.game.players[owner].enchants.map(e=>e.card.id),['FARMER_PRAYER']);
     assert(sockets[owner].messages.at(-1).state.players[owner].hand.some(c=>c.id==='GOLDEN_APPLE'));

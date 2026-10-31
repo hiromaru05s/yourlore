@@ -15,7 +15,7 @@ try {
  const ench=id=>({card:card(id),turns:99,bornTurn:0});
  const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
  test('all changed costs apply to buying and playing; unrequested stats/rain remain',()=>{
-  for(const [id,buy,use] of [['NIGHT_CASTLE_GIFT',3,3],['AHEUK',4,4],['GS8_0',7,7],['TIMEWARP',12,8],['S14',3,3]]){assert.equal(DB[id].cost,buy);assert.equal(playCost(card(id)),use);}
+  for(const [id,buy,use] of [['NIGHT_CASTLE_GIFT',3,3],['AHEUK',4,4],['GS8_0',7,6],['TIMEWARP',12,7],['S14',3,3]]){assert.equal(DB[id].cost,buy);assert.equal(playCost(card(id)),use);}
   for(const [id,a,d] of [['M2',1,3],['M4',4,2],['M5',2,5],['M8',3,5],['M12',3,4]])assert.deepEqual([DB[id].atk,DB[id].def],[a,d]);
   assert.equal(DB.NOURISHING_RAIN.cost,4);assert.equal(DB.NOURISHING_RAIN.val,1);
  });

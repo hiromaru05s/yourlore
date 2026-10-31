@@ -9,7 +9,7 @@ import { observationSample } from './botObservation';
 import { botActions, actionChangesState } from './botActions';
 import { purchaseEvaluator, publicInventory } from './botEconomy';
 import { forcedWin, forcedWinPlan } from './botTactics';
-import { lastingValue, unproductiveOpponentHeal } from './botStrategy';
+import { lastingValue, recoveryEngine, recoveryPerTurn, unproductiveOpponentHeal } from './botStrategy';
 export const TACTICS = { proof: true, targets: true, horizon: 4, replyNodes: 64 };
 
 export const SEARCH = {
@@ -69,6 +69,12 @@ export function searchDecide(g: GameState, level: 'normal' | 'hard' | 'hell', pr
     // answer needs its purchase mana. Speculative refreshes must not spend it.
     const card = policy.type === 'play' ? owner.hand[policy.idx] : policy.type === 'buyMarket' ? g.market[policy.i] : owner.supply[policy.i];
     const plan = matchupPlan(g, owner, publicInventory(opponent));
+    // Reserve an available Dew wipe against a large public recovery engine.
+    // Desertification is now permanent and symmetric: this shortcut applies
+    // only when our side has no active recovery engine to suppress.
+    if (policy.type === 'play' && card?.act === 'desertification'
+        && recoveryPerTurn(g, opponent) >= 4 && recoveryPerTurn(g, owner) === 0
+        && ![...owner.field, ...owner.enchants.map(e => e.card)].some(c => recoveryEngine(c) > 0)) return policy;
     if (card && ((plan.blocked && (card.act === 'destroyEnch' || card.id === 'DISARM3' || card.id === 'ADVANCE'))
         || plan.walls.some(m => removalHits(g, opponent, card, m)))) return policy;
   }

@@ -17,8 +17,9 @@ export function recoveryEngine(c: CardDef): number {
 export function recoveryPerTurn(g: GameState, p: PlayerState): number {
   const o = g.players[p === g.players[0] ? 1 : 0];
   const multiplier = 2 ** (g.players.reduce((n, q) => n + q.field.filter(m => m.id === 'ELF').length, 0)
-    - o.field.filter(m => m.id === 'HIGH_ELF').length);
-  return (p.dew ?? 0) * (p.field.some(m => m.id === 'WORLD_TREE') ? 2 : 1) * multiplier;
+    - o.field.filter(m => m.id === 'HIGH_ELF').length
+    - g.players.reduce((n, q) => n + q.enchants.filter(e => e.card.ench === 'desertification').length, 0));
+  return Math.floor((p.dew ?? 0) * (p.field.some(m => m.id === 'WORLD_TREE') ? 2 : 1) * multiplier);
 }
 
 /** Read only the opponent's public zones/history and the shared market.

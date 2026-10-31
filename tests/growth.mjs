@@ -1,8 +1,10 @@
+import {readFileSync} from 'node:fs';
+const retiredGrowth=JSON.parse(readFileSync(new URL('./fixtures/retired-growth.json',import.meta.url),'utf8'));
 import assert from 'node:assert/strict';import {build} from 'esbuild';import {mkdtemp,rm} from 'node:fs/promises';import {tmpdir} from 'node:os';
 const dir=await mkdtemp(tmpdir()+'/growth-');
 try{
  await build({stdin:{contents:"export * from './client/src/shared/engine';export {DB} from './client/src/shared/cards';export * from './client/src/ui/growth/plan';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/test.mjs'});
- const {createGame,reduce,DB,growthGroups,growthDrawHands}=await import(dir+'/test.mjs');let uid=0;const card=id=>({...structuredClone(DB[id]),uid:'growth-test-'+ ++uid});
+ const {createGame,reduce,DB,growthGroups,growthDrawHands}=await import(dir+'/test.mjs');let uid=0;const card=id=>({...structuredClone((id==='GROWTH'?retiredGrowth:DB[id])),uid:'growth-test-'+ ++uid});
  function fixture(side=0,copies=1,mods=0){const g=createGame({mode:'online',seed:42,starting:side,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.cur=side;g.pending=null;g.phase='main';for(const p of g.players)Object.assign(p,{field:[],enchants:[],quests:[],traps:[],hand:[],deck:[],discard:[],removed:[],hp:28,mana:20,maxMana:20,shield:0,dew:0,brand:0,openingDrawReady:false});g.players[side].enchants=Array.from({length:copies},()=>({card:card('GROWTH'),turns:99,bornTurn:0}));g.players[side].deck=Array.from({length:8},()=>card('M4'));if(mods){g.players[mods>0?side:1-side].field=[{...card(mods>0?'ELF':'HIGH_ELF'),dmg:0,exhausted:true,atkMod:0,defMod:0,tempAtk:0,summonedTurn:0}];}return g;}
  let cases=0;
  for(const side of [0,1])for(const copies of [1,2])for(const count of [1,3])for(const mods of [-1,0,1]){

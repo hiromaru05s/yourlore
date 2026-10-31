@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/spell-rework-v74.mjs",
+    "tests/spell-rework-v74-server.mjs",
     "tests/balance-v73.mjs",
     "tests/balance-v73-server.mjs",
     "tests/rune-rules.mjs",

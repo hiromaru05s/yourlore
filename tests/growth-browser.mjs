@@ -5,11 +5,11 @@ const browser=await chromium.launch({channel:'chrome',headless:true});const cont
 try{
  await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));console.log('Ready');
  await page.evaluate(async()=>{
-  const {createGame,reduce}=await import('/src/shared/engine.ts'),{DB}=await import('/src/shared/cards.ts');window.growthAnim=await import('/src/ui/anim.ts');document.querySelector('.tempo-controls')?.remove();
+  const {createGame,reduce}=await import('/src/shared/engine.ts'),{DB}=await import('/src/shared/cards.ts'),{RETIRED_GROWTH}=await import('/src/shared/retiredCards.ts');window.growthAnim=await import('/src/ui/anim.ts');document.querySelector('.tempo-controls')?.remove();
   window.growthFixture=async(side=0,count=1,copies=1,erosion=false)=>{
    const c=window.combatTempo.controller;c.fastForward();await c.queue;c.stopTimer();const g=createGame({mode:'bot',seed:42,starting:side,p0:{id:'self',name:'YOU'},p1:{id:'opponent',name:'OPPONENT'}}).state;g.turn=3;g.cur=side;g.phase='main';g.pending=null;
    for(const p of g.players)Object.assign(p,{field:[],enchants:[],traps:[],quests:[],hand:[],deck:[],discard:[],removed:[],hp:28,mana:20,maxMana:20,shield:0,dew:0,brand:0,openingDrawReady:false});
-   g.players[side].enchants=Array.from({length:copies},(_,i)=>({card:{...DB.GROWTH,uid:'growth-source-'+i},turns:99,bornTurn:1}));g.players[side].enchants.push({card:{...DB.KIN_CALL,uid:'unrelated-source'},turns:99,bornTurn:1});
+   g.players[side].enchants=Array.from({length:copies},(_,i)=>({card:{...RETIRED_GROWTH,uid:'growth-source-'+i},turns:99,bornTurn:1}));g.players[side].enchants.push({card:{...DB.KIN_CALL,uid:'unrelated-source'},turns:99,bornTurn:1});
    if(erosion)g.players[side].enchants.push({card:{...DB.EROSION,uid:'erosion-source'},turns:99});
    g.players[side].deck=Array.from({length:count},(_,i)=>({...DB.M4,uid:'growth-draw-'+i}));g.players[side].hand=[{...DB[count===1?'M3':'DISCOVERY'],uid:'growth-play'}];const res=reduce(g,{type:'play',idx:0});c.show(g);c.view.setHandOpen(false);await new Promise(r=>setTimeout(r,250));growthAnim.setFxSkip(false);return{c,g,res};
   };

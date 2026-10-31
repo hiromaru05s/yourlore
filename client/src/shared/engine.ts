@@ -548,7 +548,8 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   const doubles = p.enchants.filter(e => e.card.ench === 'doubleShield').length
     + p.field.filter(m => m.aura === 'doubleShieldOther' && m.uid !== source?.uid).length;
   for (const m of p.field) if (m.aura === 'doubleShieldOther' && m.uid !== source?.uid) monsterActivation(g, ctx.ev, p, m);
-  amount *= 2 ** doubles;
+  const halves = g.players.reduce((n, pl) => n + pl.enchants.filter(e => e.card.ench === 'desertification').length, 0);
+  amount = Math.floor(amount * 2 ** (doubles - halves));
   const before = p.shield ?? 0;
   // Furnace limits gains after multipliers; it never destroys existing Shield.
   if (g.players.some(pl => pl.enchants.some(e => e.card.ench === 'furnace'))) amount = Math.min(amount, Math.max(0, 7 - before));
@@ -640,7 +641,8 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     if (amt <= 0) return;
     const foe = g.players[1 - side(g, p)];
     const doubles = g.players.reduce((n, pl) => n + pl.field.filter(m => m.id === 'ELF').length, 0);
-    const halves = foe.field.filter(m => m.id === 'HIGH_ELF').length;
+    const halves = foe.field.filter(m => m.id === 'HIGH_ELF').length
+      + g.players.reduce((n, pl) => n + pl.enchants.filter(e => e.card.ench === 'desertification').length, 0);
     amt = Math.floor(amt * 2 ** (doubles - halves));
     if (amt <= 0) {
       // Conversion still activates even when recovery modifiers round it to zero.
@@ -953,6 +955,8 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   if (p.manaGainNext) { addMaxMana(p, p.manaGainNext); p.manaGainNext = 0; } // E3 delayed mana
   const expansion = xstate(p);
   expansion.turn = g.turn; expansion.extraDraw = 0; expansion.firePlayed = []; expansion.fireDiscount = 0; expansion.dominion = 0;
+  if ((p.usesTurn.AMBUSH ?? 0) > 0) p.ambushUsedPreviousOwnTurn = true;
+  else delete p.ambushUsedPreviousOwnTurn;
   p.usesTurn = {};
   p.buysTurn = {}; // v41b 매점
   p.playsTurn = 0;
@@ -1530,6 +1534,11 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       if (e.card.ench === "voidFruit" && ownerTurn && !g.over) {
         const nv = rmz(pl).length;
         if (nv > 0) { addHealth(ctx, pl, nv); ctx.log(`<span class="t">${cn(e.card)}</span> 체력 +${nv} (${pl.hp})`, `<span class="t">${cn(e.card)}</span> 体力+${nv} (${pl.hp})`); }
+      }
+      if (e.card.ench === "richHabit" && ownerTurn && !g.over) {
+        const count = pl.hand.length;
+        if (count >= 4) addHealth(ctx, pl, 6);
+        if (count >= 6) addMaxMana(pl, 1);
       }
       if (e.card.ench === "colosseumRest" && ownerTurn && !g.over) {
         ctx.heal(pl, 2);
@@ -3505,7 +3514,10 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'cullShield': gainShield(g,ctx,p,cullExiled(p)); break;
     case 'golemShield': gainShield(g,ctx,p,v+v2*new Set(p.field.filter(isGolem).map(m=>m.id)).size); break;
     case 'armorBreak': { const branded=(o.shield ?? 0)>=10; breakShield(ctx,o,9); if(branded)gainBrand(g, ctx, o, 1); break; }
-    case 'spearShield': if ((o.shield ?? 0)<p.field.reduce((n,m)=>n+effAtk(p,m,g),0))breakShield(ctx,o); break;
+    case 'spearShield':
+      if ((o.shield ?? 0) < p.field.reduce((n,m)=>n+effAtk(p,m,g),0)) breakShield(ctx,o);
+      if (o.field.length >= 3 && p.field.length <= 1) gainShield(g,ctx,p,12);
+      break;
     case 'cullSword': queueExpansionChoice(g,p,'SELECTED_SWORD','このターン攻撃力を上げる自分のモンスターを選択（キャンセル可）',{amount:cullExiled(p) * 2}); break;
     case "dmg": ctx.dealDamage(o, v, cn(card), cn(card)); break;
     case "originQuest": { // 기원의 탐구(v41b): 필드의 코스트 0 카드(양측 몬스터·영구마법 + 자신 세트 함정) 1장당 1드로우
@@ -3802,13 +3814,20 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "GS6_3": { let n = ctx.drawN(p, v || 4); if (p.hp >= 55) n += ctx.drawN(p, 2); ctx.log(`${tag(p, card)} ${n}장 드로우`, `${tag(p, card)} ${n}枚ドロー`); break; }
     case "GS7_0": ctx.dealDamage(o, 16, cn(card), cn(card)); if (diceChance(g, ctx, p, { id: card.id, player: side(g, p) }, 20)) { p.maxMana = Math.max(1, p.maxMana - 1); ctx.log(`  └ 자신 최대 마나 -1`, `  └ 自分の最大マナ-1`); } break;
     case "GS7_2": ctx.heal(p, 13); ctx.log(`${tag(p, card)} 체력 13 회복`, `${tag(p, card)} 体力13回復`); if ((p.uses["GS7_2"] || 0) === 3) { p.defendHeal += 5; ctx.log(`  └ 3회째! 이후 피격 시마다 체력 +5`, `  └ 3回目! 以降 被攻撃ごとに体力+5`); } break;
-    case "GS8_0": { // 은월포(v34): 상대 덱에서 원하는 카드 1장을 게임에서 제외
-      const def8 = (id: string): CardDef => DB[id] ?? (STARTERS as Record<string, CardDef>)[id];
-      const ids8 = [...new Set(o.deck.map((c) => c.id))].sort((a, b) => (def8(a)?.cost ?? 0) - (def8(b)?.cost ?? 0) || a.localeCompare(b));
-      if (ids8.length) {
-        g.pending = { kind: "giantShop", hint: "은월포 — 상대 덱에서 제외할 카드 선택", hintJa: "銀月砲 — 相手のデッキから除外するカードを選択", reason: "exileOppDeck", allowCancel: true, data: { ids: ids8 } };
-        ctx.ev.push({ type: "needTarget", pending: g.pending });
-      } else ctx.log(`${tag(p, card)} 상대 덱이 비어 있음`, `${tag(p, card)} 相手のデッキが空`, `${tag(p, card)}: the opponent’s deck is empty`);
+    case "GS8_0": {
+      // Sample physical cards without replacement from the combined two zones.
+      const pool = [...o.deck, ...o.discard].filter(c => !hasPassive(c, 'relic'));
+      let damage = 0;
+      for (let i = 0; i < 2 && pool.length; i++) {
+        const chosen = pool.splice(randInt(g, pool.length), 1)[0];
+        for (const zone of [o.deck, o.discard]) {
+          const index = zone.findIndex(c => c.uid === chosen.uid);
+          if (index >= 0) { zone.splice(index, 1); break; }
+        }
+        sendToRift(g, o, chosen, card.uid);
+        damage += chosen.cost;
+      }
+      if (damage > 0 && !g.over) ctx.dealDamage(o, damage, cn(card), cn(card));
       break;
     }
     case "GS10_3": { const n = ctx.drawN(p, v || 6); addHealth(ctx, p, v2 || 3); ctx.log(`${tag(p, card)} ${n}장 드로우, 체력 +${v2 || 3} (${p.hp})`, `${tag(p, card)} ${n}枚ドロー, 体力+${v2 || 3} (${p.hp})`); break; }
@@ -3839,6 +3858,9 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       const { rolls: twr } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1, 4);
       if (twr[0] >= 4) { reserveTurnSkip(o,"TIMEWARP"); o.skipNext = false; ctx.ev.push({type:"timewarp",player:side(g,p),sourceUid:card.uid}); ctx.log(`${tag(p, card)} 🎲 ${twr[0]} <span class="good">성공!</span> 다음 상대 턴 스킵 예약 (${o.skipTurns}회)`, `${tag(p, card)} 🎲 ${twr[0]} <span class="good">成功!</span> 次の相手ターンスキップ予約 (${o.skipTurns}回)`, `${tag(p, card)} 🎲 ${twr[0]} <span class="good">Success!</span> Queue ${o.skipTurns} skips of the opponent’s next turn`); }
       else ctx.log(`${tag(p, card)} 🎲 ${twr[0]} 실패…`, `${tag(p, card)} 🎲 ${twr[0]} 失敗…`, `${tag(p, card)} 🎲 ${twr[0]} → failed`);
+      // Choose after the roll on either outcome. A pending choice also prevents
+      // Rune Echo from replaying an effect whose result now needs a decision.
+      if (!g.over) offerEffectChoice(g, ctx, p, 'TIMEWARP', '', {sourceUid: card.uid});
       break;
     }
     case "GAMBLE": { // 육면의 변덕(v37): 주사위 10개 합계 40 이상이면 최대 마나 +3
@@ -3980,21 +4002,21 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (!g.over) g.players.forEach((pl) => pl.field.forEach((mm) => (mm.atkMod = (mm.atkMod || 0) + 3)));
       break;
     }
-    case "BLOOD_SORROW": { // 애: 자신 12뎀, 묘지 최고 코스트 카드 1장 게임에서 제외
-      ctx.log(`${tag(p, card)} 자신에게 12 데미지`, `${tag(p, card)} 自分に12ダメージ`);
-      ctx.dealDamage(p, 12, cn(card), cn(card));
-      if (!g.over && p.discard.length) {
-        const top = [...p.discard].sort((a, b) => b.cost - a.cost)[0];
-        const i = p.discard.findIndex((c2) => c2.uid === top.uid);
-        sendToRift(g, p, p.discard.splice(i, 1)[0], card.uid);
-        ctx.log(`  └ ${cn(top)} 게임에서 제외`, `  └ ${cn(top)} をゲームから除外`);
+    case "BLOOD_SORROW": {
+      ctx.dealDamage(p, 7, cn(card), cn(card));
+      if (!g.over) {
+        const choice: NonNullable<GameState['pending']> = { kind: 'purge', reason: 'bloodSorrow', allowCancel: false,
+          hint: '', hintJa: '', data: {val: 1, zone: 'allOwn'} };
+        if (purgeChoices(p, choice).length) {
+          choice.hint = pendingText(choice, 'ko'); choice.hintJa = pendingText(choice, 'ja');
+          g.pending = choice; ctx.ev.push({type: 'needTarget', pending: choice});
+        }
       }
       break;
     }
-    case "BLOOD_PLEASURE": { // 락: 자신 14뎀, 최대 마나 +1
-      ctx.log(`${tag(p, card)} 자신에게 14 데미지`, `${tag(p, card)} 自分に14ダメージ`);
-      ctx.dealDamage(p, 14, cn(card), cn(card));
-      if (!g.over) { addMaxMana(p, 1); ctx.log(`  └ 최대 마나 +1 (${p.maxMana})`, `  └ 最大マナ+1 (${p.maxMana})`); }
+    case "BLOOD_PLEASURE": {
+      ctx.dealDamage(p, 7, cn(card), cn(card));
+      if (!g.over) addMaxMana(p, 1);
       break;
     }
     case "VAMP_PACT": { // 흡혈 계약: 자신 6뎀 + 견습 흡혈귀 소환
@@ -4091,7 +4113,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "TRUMPET": { // 지원 나팔: 자신 몬스터 2체 공격력 +1 (이번 턴)
       ctx.log(`${tag(p, card)} 발동`, `${tag(p, card)} 発動`);
-      g.pending = { kind: "myMon", hint: "공격력 +1 할 자신 몬스터 선택 (최대 3체)", hintJa: "攻撃力+1する自分のモンスターを選択 (最大3体)", reason: "buffTurn", allowCancel: true, data: { val: 1, count: 3, excl: [] } };
+      g.pending = { kind: "myMon", hint: "공격력 +1 할 자신 몬스터 선택 (최대 4체)", hintJa: "攻撃力+1する自分のモンスターを選択 (最大4体)", reason: "buffTurn", allowCancel: true, data: { val: 1, count: 4, excl: [] } };
       ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
@@ -4331,6 +4353,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       const paid = p.hp - 1;
       if (paid > 0) { p.hp = 1; ctx.ev.push({ type: "damage", player: side(g, p), amount: paid, srcKo: cn(card), srcJa: cn(card) }); }
       ctx.log(`${tag(p, card)} 자신의 체력이 1이 된다`, `${tag(p, card)} 自分の体力が1になる`, `${tag(p, card)}: set your HP to 1`);
+      gainShield(g, ctx, p, 30);
       const { rolls: fbr } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1, 5);
       const r = fbr[0];
       ctx.log(`  └ 🎲 ${r} (5+ ${r >= 5 ? `<span class="good">성공</span>` : "실패"})`, `  └ 🎲 ${r} (5+ ${r >= 5 ? `<span class="good">成功</span>` : "失敗"})`);
@@ -4758,7 +4781,11 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "AEM") { applicable=true; if ((new Set(deckComp(p).filter((c) => c.t === "mon" && isGolem(c)).map((c) => c.id)).size < 2 || !p.field.some((m) => isGolem(m)))) { return reason("  └ 덱 구성에 서로 다른 골램 2장과 필드의 골램이 필요합니다", "  └ デッキ構成に異なるゴーレム2枚と場のゴーレムが必要です", `  └ You need 2 distinct Golem names in your deck composition and a Golem on your field`); } }
   if ((card.id === "KNIGHT_TEACH" || card.id === "NL_SECRET")) { applicable=true; if (p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); } }
   if (card.id === "COUNTERCALC") { applicable=true; if (o0.enchants.length === 0) { return reason("  └ 파괴할 상대 영구마법이 없습니다", "  └ 破壊する相手の永続魔法がありません"); } }
-  if (card.id === "AMBUSH") { applicable=true; if (o0.maxMana !== 4) { return reason("  └ 상대 최대 마나가 4가 아니라 사용 불가", "  └ 相手の最大マナが4ではないため使用不可"); } }
+  if (card.id === "AMBUSH") {
+    applicable = true;
+    if (![4, 5].includes(o0.maxMana)) return reason('상대의 최대 마나가 4 또는 5여야 합니다', '相手の最大マナが4か5である必要があります', 'The opponent’s max mana must be 4 or 5');
+    if (p.ambushUsedPreviousOwnTurn) return reason('직전 자신의 턴에 기습을 사용했습니다', '直前の自分のターンに奇襲を使用しています', 'You played Ambush during your previous turn');
+  }
   if (card.id === "TRUMPET") { applicable=true; if (p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); } }
   if (card.id === "WALLBREAK1") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => (owner===p || !hasPassive(m,'aura')) && effAtk(owner,m,g) <= 2))) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません", `  └ No eligible monster with ATK 2 or less`); } }
   if (card.id === "WALLBREAK2") { applicable=true; if (![p,o0].some(owner => owner.field.some(m => effAtk(owner,m,g) <= 2))) { return reason("  └ 공격력 2 이하 몬스터가 없습니다", "  └ 攻撃力2以下のモンスターがいません", `  └ No eligible monster with ATK 2 or less`); } }
@@ -4897,6 +4924,9 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     spellCostActivations(g, ctx, p, card);
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); p.discard.push(card);
     if (!card.ench && !hasPassive(card,"void")) graveyardArrival(g,ctx,p,card);
+    if (card.id === 'AMBUSH') p.usesTurn.AMBUSH = (p.usesTurn.AMBUSH ?? 0) + 1;
+    // Synchronize old saved Reverse counters before recording this committed cast.
+    if (card.id === 'BLACK_REVERSE') p.uses.BLACK_REVERSE = Math.max(p.uses.BLACK_REVERSE ?? 0, p.expansion?.reversePlays ?? 0);
     // Game caps and Ember Debt count committed casts, even when negated.
     const countBeforeReactions = card.id === "FLAME" || (DB[card.id]?.maxUsesPerGame ?? card.maxUsesPerGame) != null;
     if (countBeforeReactions) p.uses[card.id] = (p.uses[card.id] ?? 0) + 1;
@@ -4919,13 +4949,14 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       if (vi >= 0) { p.discard.splice(vi, 1); rmz(p).push(card); }
     }
     if (!countBeforeReactions) p.uses[card.id] = (p.uses[card.id] || 0) + 1; // game-long usage count
-    if (card.maxUsesPerTurn == null) p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;
+    if (card.maxUsesPerTurn == null && card.id !== "AMBUSH") p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;
     if (card.ench) {
       // Cast reactions may append curses (HEXER3) after this card. Move the
       // actual spell, never the last discard, or one UID occupies two zones.
       const discarded = p.discard.findIndex(c => c.uid === card.uid);
       if (discarded >= 0) p.discard.splice(discarded, 1);
       p.enchants.push({ card, turns: card.val || 1, bornTurn: g.turn });
+      if (card.ench === 'desertification') loseStatus(ctx, g.players[1 - g.cur], 'dew');
       if (card.ench === 'magicBank') {
         p.maxMana = Math.max(MIN_MANA, p.maxMana - 1);
         ctx.log('  └ 마도 은행: 자신의 최대 마나 -1', '  └ 魔道銀行: 自分の最大マナ-1', `  └ Arcane Bank: lose 1 max mana`);
@@ -5611,7 +5642,7 @@ export function effectChoices(g: GameState): CardInst[] {
   }
 }
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
-  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: reason === "SELECTED_SWORD" || reason === "RIFT_JAILER", data };
+  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: reason === "SELECTED_SWORD" || reason === "RIFT_JAILER" || reason === "TIMEWARP", data };
   if (reason === 'COLOSSEUM_REST') g.pending.hint = '체력을 전부 회복할 자신의 몬스터 1체 선택';
   if (reason === 'NIGHT_CASTLE_GIFT') g.pending.hint = '패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택';
   if (reason === 'RIFT_JAILER') g.pending.hint = '차원 유폐자 — 자신의 리프트로 옮길 상대 리프트 카드 최대 8장 선택';
@@ -5642,6 +5673,7 @@ function effectSummon(g: GameState, ctx: Ctx, p: PlayerState, id: string, card?:
 function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
   const pending = g.pending!;
   const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
+  if (pending.reason === 'TIMEWARP' && uid === null && pending.allowCancel) { g.pending = null; return; }
   if (resolveDewShieldChoice(g,ctx,uid)) return;
   const choices = effectChoices(g);
   if (pending.reason === 'RIFT_JAILER' && (uid === null || !choices.length)) { g.pending = null; returnRiftCard(ctx, p, pending.data?.returnUid); return; }
@@ -6307,7 +6339,7 @@ function expansionBlock(g: GameState, p: PlayerState, c: CardInst): {ko:string;j
   const x = p.expansion;
   if (c.id === 'STABLE' && !p.field.some(isKnight)) return {"ko": "자신의 필드에 기사가 필요합니다", "ja": "自分の場に騎士が必要です", "en": "You need a Knight on your field"};
   if (c.id === 'EMPTY_MIND' && (p.spellsCastTurn ?? 0) < 4) return {"ko": "이번 턴에 마법을 4장 이상 사용해야 합니다", "ja": "このターン魔法を4枚以上プレイする必要があります", "en": "You must have played at least 4 spells this turn"};
-  if (c.id === 'BLACK_REVERSE' && (x?.reversePlays ?? 0) >= 2) return {"ko": "리버스는 게임 중 2회까지 사용할 수 있습니다", "ja": "リバースはゲーム中2回までです", "en": "Reverse may be played at most 2 times this game"};
+  if (c.id === 'BLACK_REVERSE' && Math.max(p.uses.BLACK_REVERSE ?? 0, x?.reversePlays ?? 0) >= 2) return {"ko": "리버스는 게임 중 2회까지 사용할 수 있습니다", "ja": "リバースはゲーム中2回までです", "en": "Reverse may be played at most 2 times this game"};
   if (c.id === 'BLACK_INFINITY' && (g.spellDamageTurn !== g.turn || (g.spellDamageAmount ?? 0) < 5)) return {"ko": "이번 턴 마법 데미지가 누적 5 이상이어야 합니다", "ja": "このターン魔法ダメージが累計5以上必要です", "en": "Spells must have dealt at least 5 total damage this turn"};
   if (c.id === 'BLACK_NOVA' && p.field.length) return {"ko": "자신의 필드에 몬스터가 없을 때만 사용할 수 있습니다", "ja": "自分の場にモンスターがいない時のみ発動できます", "en": "You must control no monsters"};
   if (c.id === 'FIRE_ZONE' && !p.hand.some(h => h.uid !== c.uid && !hasPassive(h, 'relic'))) return {"ko": "리프트로 보낼 수 있는 다른 패가 필요합니다", "ja": "除外できる他の手札が必要です", "en": "You need another card in hand that can be sent to the Rift"};
@@ -6353,6 +6385,7 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
 function expansionChoices(g: GameState): CardInst[] | null {
   const q = g.pending!; const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
   switch (q.reason) {
+    case 'TIMEWARP': return rmz(p);
     case 'STABLE': return p.field.filter(isKnight);
     case 'Q_CHEAT': return o.deck.filter(c => !hasPassive(c, 'relic'));
     case 'CREATION': return o.deck;
@@ -6366,6 +6399,7 @@ function expansionChoices(g: GameState): CardInst[] | null {
 function expansionChoiceResolve(g: GameState, ctx: Ctx, q: NonNullable<GameState['pending']>, p: PlayerState, card: CardInst): boolean {
   const o = g.players[1 - side(g, p)];
   switch (q.reason) {
+    case 'TIMEWARP': returnRiftCard(ctx, p, card.uid); return true;
     case 'STABLE': ctx.destroyMonster(p, card as FieldMon); if (!p.field.some(m => m.uid === card.uid)) effectSummon(g, ctx, p, 'CAVALRY'); return true;
     case 'Q_CHEAT': o.deck.splice(o.deck.findIndex(c => c.uid === card.uid), 1); sendToRift(g, o, card); return true;
     case 'CREATION': {

@@ -1,3 +1,5 @@
+import {readFileSync} from 'node:fs';
+const retiredGrowth=JSON.parse(readFileSync(new URL('./fixtures/retired-growth.json',import.meta.url),'utf8'));
 import assert from 'node:assert/strict';
 import { build } from 'esbuild';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -10,7 +12,7 @@ await build({stdin:{contents:`export * from './client/src/shared/engine'; export
 const E=await import(path.join(dir,'game.mjs'));
 const {DB,STARTERS,reduce,createGame,hasPassive,effAtk,effDef,curHp,playCost,buyCost,purchaseAllowed,effectChoices,redactFor,candidates,greedyDecide}=E;
 let seq=0;
-const card=id=>({...structuredClone(DB[id]??STARTERS[id]),uid:`v50-${++seq}`});
+const card=id=>({...structuredClone((id==='GROWTH'?retiredGrowth:DB[id])??STARTERS[id]),uid:`v50-${++seq}`});
 const mon=(id,mods={})=>({...card(id),exhausted:false,tempAtk:0,atkMod:0,defMod:0,dmg:0,summonedTurn:0,...mods});
 const fresh=()=>{const g=createGame({mode:'online',seed:17,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],removed:[],field:[],enchants:[],traps:[],quests:[],hp:200,maxHp:200,mana:30,maxMana:30,uses:{},usesTurn:{},expansion:undefined});g.phase='main';g.pending=null;g.turn=3;return g;};
 const step=(g,a)=>reduce(g,a).state;
@@ -18,11 +20,11 @@ const play=(g,id)=>{g.players[g.cur].hand.push(card(id));return step(g,{type:'pl
 const buy=(g,id)=>{g.market[0]=card(id);return step(g,{type:'buyMarket',i:0});};
 const pick=(g,uid)=>step(g,{type:'pick',uid});
 const end=g=>step(g,{type:'endTurn'});
-const enchant=(g,id,s=0)=>{g.players[s].enchants.push({card:card(id),turns:DB[id].val??99,bornTurn:0});return g;};
+const enchant=(g,id,s=0)=>{g.players[s].enchants.push({card:card(id),turns:(id==='GROWTH'?retiredGrowth:DB[id]).val??99,bornTurn:0});return g;};
 const deck=(g,n=30,s=0)=>{g.players[s].deck=Array.from({length:n},()=>card('STARTER_TRASH'));return g;};
 const attack=(g,att,tgt)=>{g=step(g,{type:'attack',uid:att});if(g.pending?.reason==='attack')g=step(g,{type:'chooseTarget',uid:tgt});return g;};
 const test=(name,fn)=>{try{fn();passed++;console.log('PASS',name);}catch(e){console.error('FAIL',name);throw e;}};
-test('catalog: all requested counter recipients, localized 48 additions, no token market',()=>{assert(Number(E.BALANCE_VERSION.slice(1))>=50);assert.equal(E.EXPANSION_CARDS.length,48);for(const id of E.COUNTER_IDS)assert(hasPassive(DB[id],'counter'),id);for(const c of E.EXPANSION_CARDS){assert(DB[c.id]);assert(c.textEn&&c.text&&c.textJa);if(c.cost===0)assert(!E.BUYABLE_POOL.includes(c.id));}assert(!hasPassive(DB.DRAGON_EGG,'counter'));});
+test('catalog: all requested counter recipients, 47 active additions after Growth retirement, no token market',()=>{assert(Number(E.BALANCE_VERSION.slice(1))>=50);assert.equal(E.EXPANSION_CARDS.length,47);for(const id of E.COUNTER_IDS)assert(hasPassive((id==='GROWTH'?retiredGrowth:DB[id]),'counter'),id);for(const c of E.EXPANSION_CARDS){assert(DB[c.id]);assert(c.textEn&&c.text&&c.textJa);if(c.cost===0)assert(!E.BUYABLE_POOL.includes(c.id));}assert(!hasPassive(DB.DRAGON_EGG,'counter'));});
 test('lethal counter, half rounding, no recursion or piercing',()=>{let g=fresh();const a=mon('M6',{atk:8,def:20}),d=mon('MIMIC',{atk:5,def:2});g.players[0].field=[a];g.players[1].field=[d];g=attack(g,a.uid,d.uid);assert.equal(g.players[0].field[0].dmg,3);assert.equal(g.players[1].field.length,0);assert.equal(g.players[0].hp,200);assert.equal(g.players[1].hp,194);});
 test('cavalry suppresses counter',()=>{let g=fresh();const a=mon('CAVALRY'),d=mon('MIMIC');g.players[0].field=[a];g.players[1].field=[d];g=attack(g,a.uid,d.uid);assert.equal(g.players[0].field[0].dmg,0);});
 test('counter respects guts and capture is immutable',()=>{let g=fresh();const a=mon('GOLEM1',{guts:1}),d=mon('M6',{atk:8,def:20});g.players[0].field=[a];g.players[1].field=[d];const before=structuredClone(g);g=attack(g,a.uid,d.uid);assert.equal(g.players[0].field[0].guts,0);assert.equal(curHp(g.players[0],g.players[0].field[0]),1);assert.equal(before.players[0].field[0].guts,1);});

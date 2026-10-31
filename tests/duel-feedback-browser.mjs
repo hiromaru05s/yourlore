@@ -22,7 +22,7 @@ try{
   for(const [s,p] of g.players.entries())Object.assign(p,{openingDrawReady:false,field:[],hand:[C.STARTERS.STARTER_TRASH,C.DB.GUNNER,C.STARTERS.STARTER_MANA].map((c,i)=>({...c,uid:`hand-${s}-${i}`})),discard:[],mana:4,maxMana:4});
   c.state=g;c.view.render(g);
   const stop=(await import('/src/ui/layout.ts')).startBoardLayout();
-  window.qa={c,stop,E,C,card,P:await import('/src/ui/boardProjection.ts'),L:await import('/src/ui/readingBoardLayout.ts'),dense(){for(const [s,p]of g.players.entries()){p.field=['INFKNIGHT','GUNNER','MERC_MASTER','MIMIC','FIRE_MASTER','CAVALRY','MIMIC2'].map((id,i)=>({...card(id,`mon-${s}-${i}`),exhausted:false,tempAtk:0,atkMod:0,defMod:0,dmg:0,summonedTurn:0}));p.enchants=Array.from({length:14},(_,i)=>({card:card('GROWTH',`ench-${s}-${i}`),turns:99}));}c.view.render(g);}};
+  window.qa={c,stop,E,C,card,P:await import('/src/ui/boardProjection.ts'),L:await import('/src/ui/readingBoardLayout.ts'),dense(){for(const [s,p]of g.players.entries()){p.field=['INFKNIGHT','GUNNER','MERC_MASTER','MIMIC','FIRE_MASTER','CAVALRY','MIMIC2'].map((id,i)=>({...card(id,`mon-${s}-${i}`),exhausted:false,tempAtk:0,atkMod:0,defMod:0,dmg:0,summonedTurn:0}));p.enchants=Array.from({length:14},(_,i)=>({card:card('EROSION',`ench-${s}-${i}`),turns:99}));}c.view.render(g);}};
  });
  await page.waitForFunction(()=>document.getElementById('app').dataset.sceneReady==='true',{timeout:120000});
 

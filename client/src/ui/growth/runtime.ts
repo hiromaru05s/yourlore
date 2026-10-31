@@ -1,10 +1,10 @@
+import {RETIRED_GROWTH} from '../../shared/retiredCards';
 import {SPECIAL_FX} from '../animationTempo';
 import {drawGrowth,GROWTH_START,GROWTH_HEAL,GROWTH_DURATION} from './visual';
 import type {Anchor} from './visual';
 import type {GrowthPulse} from './plan';
 import {handCardMatrix} from '../handGeometry';
 import {cardName} from '../../i18n';
-import {DB} from '../../shared/cards';
 function anchor(node:HTMLElement,project=false):Anchor{
  const r=node.getBoundingClientRect();if(!project)return{x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height};
  const m=handCardMatrix(node),w=node.offsetWidth,h=node.offsetHeight;
@@ -34,7 +34,7 @@ export async function playGrowth(side:'me'|'opp',pulses:readonly GrowthPulse[],o
    pulses.forEach((p,i)=>{
     const t=age-p.delay;if(t<0)return;
     if(t>=GROWTH_HEAL&&!applied.has(i)){applied.add(i);onHeal(i);}
-    const source=anchors[i];if(source)drawGrowth(c,{source,hp,dark:false,reduced,sourceName:cardName({...DB.GROWTH,uid:p.uid})},t+GROWTH_START,p.amount>0);
+    const source=anchors[i];if(source)drawGrowth(c,{source,hp,dark:false,reduced,sourceName:cardName({...RETIRED_GROWTH,uid:p.uid})},t+GROWTH_START,p.amount>0);
    });
    if(age>=end){finish(true);return;}raf=SPECIAL_FX.requestFrame(frame);
   };raf=SPECIAL_FX.requestFrame(frame);

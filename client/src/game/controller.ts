@@ -1281,7 +1281,7 @@ export abstract class BaseController implements BoardHandlers {
       }
       if (multiKind) {
         const handCap = g.pending.reason === "handCap"; // v42: 턴 종료 손패 이월 — 취소 불가, 정확히 n장
-        const exact = handCap || g.pending.reason === "scrapper";
+        const exact = handCap || g.pending.reason === "scrapper" || g.pending.reason === "bloodSorrow";
         if (this.purgePicks) {
           const next = this.purgePicks.shift();
           if (next !== undefined) { setTimeout(() => this.submit({ type: "pick", uid: next }), 0); return; }

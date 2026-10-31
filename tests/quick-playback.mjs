@@ -75,7 +75,7 @@ try{
  for(const owner of [0,1])for(const mode of ['normal','shield','lethal','self-lethal','blocked']){
   const g=fresh();g.cur=owner;g.turn=5;g.phase='main';g.opening=undefined;
   const source=card('AMBUSH','ambush-source');g.players[owner].hand=[source];
-  g.players[1-owner].maxMana=mode==='blocked'?5:4;
+  g.players[1-owner].maxMana=mode==='blocked'?6:4;
   if(mode==='shield')g.players[1-owner].shield=20;
   g.players[owner].removed=[card('AMBUSH','previous-ambush')];
   if(mode==='lethal')g.players[1-owner].hp=13;

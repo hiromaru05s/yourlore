@@ -45,6 +45,11 @@ try {
   const lethal=fresh();lethal.players[0].field=[mon('GHOST')];lethal.players[1].hp=1;
   a=C.botDecide(lethal,difficulty);assert.equal(C.reduce(lethal,a).state.winner,0,'take the win instead of a slow counter plan');
  }
+ const dry=fresh([]);dry.players[0].dew=7;
+ dry.players[1].enchants=[{card:card('DESERTIFICATION'),turns:99,bornTurn:0}];
+ assert.equal(C.recoveryPerTurn(dry,dry.players[0]),3,'public recovery estimate floors the persistent half');
+ dry.players[0].enchants=[{card:card('DESERTIFICATION'),turns:99,bornTurn:0}];
+ assert.equal(C.recoveryPerTurn(dry,dry.players[0]),1,'both players’ copies stack');
  const shield=fresh([]);shield.players[1].shield=12;shield.players[0].hand=[card('FLAME'),card('ARMOR_BREAK')];
  const cracked=C.greedyStep(shield);assert.equal(cracked.state.players[1].shield,3);
  // Preserve the last 3 mana for an owned wall answer. Vary public UIDs too:

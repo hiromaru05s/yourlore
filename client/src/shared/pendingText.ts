@@ -4,6 +4,8 @@ type Copy=Record<Locale,string>;
 const c=(ja:string,ko:string,en:string):Copy=>({ja,ko,en});
 /** Choice instructions are authored by effect, never translated from a battle log. */
 export const CHOICE_TEXT:Record<string,Copy>={
+ TIMEWARP:c('自分のリフトから墓地に戻すカードを1枚まで選んでください。','자신의 리프트에서 묘지로 되돌릴 카드를 최대 1장 선택하세요.','Choose up to 1 card from your Rift to return to your graveyard.'),
+ bloodSorrow:c('自分の墓地・デッキ・場・手札から、自分のリフトへ送るカード1枚を選んでください。','자신의 묘지·덱·필드·패에서 자신의 리프트로 보낼 카드 1장을 선택하세요.','Choose 1 card from your graveyard, deck, field or hand to send to your Rift.'),
  ARMORER_MODE:c('自分のシールド獲得か、自分の他のモンスター1体の強化を選んでください。','자신이 실드를 얻거나 자신의 다른 몬스터 1체를 강화하는 효과를 선택하세요.','Choose between gaining Shield and strengthening 1 of your other monsters.'),
  ARMORER_TARGET:c('強化する自分の他のモンスター1体を選んでください。','강화할 자신의 다른 몬스터 1체를 선택하세요.','Choose 1 of your other monsters to strengthen.'),
  ELF_DESTROY:c('破壊する、攻撃力9以上の相手モンスター1体を選んでください。','파괴할 공격력 9 이상의 상대 몬스터 1체를 선택하세요.','Choose 1 opposing monster with at least 9 ATK to destroy.'),

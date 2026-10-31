@@ -34,9 +34,9 @@ try{
  test('a defending opponent’s trap triggers Rich Habit during its owner’s turn',()=>{
   let g=fresh();const a=mon('M1');g.players[0].field=[a];g.players[0].enchants=[ench('RICH_HABIT')];g.players[1].traps=[{card:{...card('S1'),t:'trap',react:'guardWipe',val:2}}];g=step(g,{type:'attack',uid:a.uid});assert.equal(g.players[0].maxMana,3);assert.equal(g.players[1].maxMana,30);
  });
- test('old turn-start healing/mana gains are removed',()=>{
+ test('original turn-start healing is restored alongside the destruction drawback',()=>{
   let g=fresh();g.players[0].enchants=[ench('RICH_HABIT')];g.players[0].deck=Array.from({length:12},()=>card('M1'));const control=structuredClone(g);control.players[0].enchants=[];
-  const advance=s=>step(step(s,{type:'endTurn'}),{type:'endTurn'});g=advance(g);const other=advance(control);assert.equal(g.players[0].hp,other.players[0].hp);assert.equal(g.players[0].maxMana,other.players[0].maxMana);
+  const advance=s=>step(step(s,{type:'endTurn'}),{type:'endTurn'});g=advance(g);const other=advance(control);assert.equal(g.players[0].hp,other.players[0].hp+(g.players[0].hand.length>=4?6:0));assert.equal(g.players[0].maxMana,other.players[0].maxMana+(g.players[0].hand.length>=6?1:0));
  });
  test('every card and common rejection stays in its selected language',()=>{
   for(const c of Object.values({...E.DB,...E.STARTERS}))for(const lang of ['ja','ko','en'])assert(!foreign(c[{ja:'textJa',ko:'text',en:'textEn'}[lang]]??'',lang),c.id+lang);

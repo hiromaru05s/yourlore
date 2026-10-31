@@ -1,3 +1,5 @@
+import {readFileSync} from 'node:fs';
+const retiredGrowth=JSON.parse(readFileSync(new URL('./fixtures/retired-growth.json',import.meta.url),'utf8'));
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdtemp,rm} from 'node:fs/promises';
@@ -8,7 +10,7 @@ try {
  await build({stdin:{contents:`export * from './client/src/shared/cards'; export * from './client/src/shared/engine'; export {candidates,greedyDecide} from './client/src/shared/bot';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'game.mjs')});
  const {DB,STARTERS,createGame,reduce,playBlockReason,playCost,buyCost,hasPassive,candidates,greedyDecide,maxManaGrowthBlocked,BALANCE_VERSION}=await import(path.join(dir,'game.mjs'));
  let seq=0,passed=0;
- const card=id=>({...structuredClone(DB[id]??STARTERS[id]),uid:`v52-${++seq}`});
+ const card=id=>({...structuredClone((id==='GROWTH'?retiredGrowth:DB[id])??STARTERS[id]),uid:`v52-${++seq}`});
  const mon=id=>({...card(id),exhausted:false,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0});
  const fresh=()=>{const g=createGame({mode:'online',seed:17,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],removed:[],field:[],enchants:[],traps:[],quests:[],hp:40,maxHp:100,mana:20,maxMana:20,uses:{},usesTurn:{}});g.phase='main';g.turn=3;g.pending=null;return g;};
  const play=(g,id)=>{g.players[g.cur].hand.push(card(id));return reduce(g,{type:'play',idx:g.players[g.cur].hand.length-1}).state;};
@@ -30,6 +32,6 @@ try {
  test('Lucky Chest dud outcomes 4 and 5 summon only ordinary Mimic',()=>{const sums=new Set();for(let seed=1;seed<120;seed++){let g=fresh();g.rng=seed;g.players[0].hand=[card('LUCKY_CHEST')];const out=reduce(g,{type:'play',idx:0});const sum=out.events.find(e=>e.type==='dice')?.rolls.reduce((a,b)=>a+b,0);if(sum===4||sum===5){sums.add(sum);assert.equal(out.state.players[1].field[0]?.id,'MIMIC');assert(!out.state.players[1].field.some(m=>m.aura==='chestLock'));}}assert.equal(sums.size,2);});
  test('Realm suppresses base/granted keywords on entry and existing allies only',()=>{for(const existing of [false,true]){let g=fresh();g.players[0].deck=[card('TDE1')];g.players[1].field=[mon('TDE4')];if(existing){const m=mon('TDE4');m.passivesG=['counter','guts'];m.guts=1;m.mult=2;m.directOnly=true;m.exileOnDestroy=true;g.players[0].field=[m,mon('TDE3'),mon('M11')];g=play(g,'DEMON_REALM');}else{g=play(g,'DEMON_REALM');g=play(g,'TDE4');g=play(g,'TDE3');}for(const m of g.players[0].field.filter(m=>m.tribe==='마족')){for(const k of ['majesty','aura','counter','guts','dual','ambush','void'])assert(!hasPassive(m,k));assert(!m.aura&&!m.onSummon&&!m.turnFx);}assert(!maxManaGrowthBlocked(g.players[0]));assert(hasPassive(g.players[1].field[0],'majesty'));if(existing)assert(hasPassive(g.players[0].field.find(m=>m.id==='M11'),'counter'));}assert(hasPassive(DB.TDE4,'majesty'));assert(hasPassive(DB.TDE3,'counter'));});
  test('v54 Haven grants Dew from either market',()=>{for(const [id,type,gain] of [['WORLD_HEART','buySupply',1],['M2','buySupply',0],['WORLD_HEART','buyMarket',1]]){let g=fresh();g.players[0].enchants=[{card:card('ELF_HAVEN'),turns:99}];g.players[0].supply[0]=card(id);g.market[0]=card(id);g.marketStock[0]=3;const out=reduce(g,{type,i:0});assert(out.events.some(e=>e.type==='buy'));assert.equal(out.state.players[0].hp,40);assert.equal(out.state.players[0].dew??0,gain);}});
- test('all three language descriptions agree',()=>{for(const id of ['DISCOVERY_SMALL','DISCOVERY','DISCOVERY_LARGE'])for(const key of ['text','textJa','textEn'])assert(DB[id][key].includes(String(DB[id].maxUsesPerTurn)));for(const key of ['text','textJa','textEn']){assert(DB.SOUL_HARVEST[key].includes('4'));assert(DB.ELF_HAVEN[key].includes('1'));assert(!DB.LUCKY_CHEST[key].includes('12/6'));}});
+ test('all three language descriptions agree',()=>{for(const id of ['DISCOVERY_SMALL','DISCOVERY','DISCOVERY_LARGE'])for(const key of ['text','textJa','textEn'])assert((id==='GROWTH'?retiredGrowth:DB[id])[key].includes(String((id==='GROWTH'?retiredGrowth:DB[id]).maxUsesPerTurn)));for(const key of ['text','textJa','textEn']){assert(DB.SOUL_HARVEST[key].includes('4'));assert(DB.ELF_HAVEN[key].includes('1'));assert(!DB.LUCKY_CHEST[key].includes('12/6'));}});
  console.log(`PASS ${passed} v52 rework suites`);
 }finally{await rm(dir,{recursive:true,force:true});}

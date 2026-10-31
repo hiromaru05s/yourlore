@@ -107,7 +107,7 @@ function tuneFor(p: PlayerState): typeof TUNE {
 // castable() already gates self-damage and the opposing max-mana requirement.
 function burnDmg(c: CardInst, p: PlayerState, o: PlayerState): number {
   if (c.id === "FLAME") return (p.uses.FLAME ?? 0) >= 9 ? 5 : 2;
-  if (c.id === "AMBUSH") return o.maxMana === 4 ? 13 : 0;
+  if (c.id === "AMBUSH") return [4, 5].includes(o.maxMana) ? 13 : 0;
   return 0;
 }
 
@@ -275,7 +275,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "VAMP_PACT" && p.field.length >= 7) return false;
     if (c.id === "INCUBATOR" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
     if (c.id === "INCUBATOR_S" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
-    if (c.id === "AMBUSH" && o.maxMana !== 4) return false;
+    if (c.id === "AMBUSH" && ![4, 5].includes(o.maxMana)) return false;
     if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length === 0)) return false;
     if ((c.id === "EXPANSION" || c.id === "LAND_GRANT") && !p.field.some((m) => m.id === "CASTLE")) return false; // 성 필요
     if (c.id === "TREASON" && !o.field.some((m) => m.id === "CASTLE")) return false;
