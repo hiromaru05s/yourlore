@@ -21,4 +21,9 @@
 - Browser tests were updated to the adopted portrait layout and onboarding route; these fixtures do not prove live match completion, real authentication providers or physical-device performance.
 
 ## Production
-Pending guarded deployment and disposable-account smoke. The verification script seeds only its own QA quest progress and removes that account afterward.
+- Guarded deployment completed: source `6cfb2246dabe662d3bf316d3a4762ceba74d05f0`, Worker version `cf753f11-a09f-4d95-8b71-d18a5c2792f2`, 100% traffic. `https://yourlore.xyz`.
+- All 263 required production regression files passed in the committed release snapshot; schema check, typecheck and build passed.
+- Real production browser/API smoke passed. The disposable QA account balance changed 2480 → 2780 on the UI claim, then 2780 → 3130 for three simultaneous requests whose awards were exactly 350/0/0. Header balance, gray received state and reload persistence confirmed.
+- Incomplete and stale claims were rejected. Existing/duplicate reward claims paid zero. The QA account and associated rows were deleted successfully.
+- Production screenshots inspected in `production/`. Live-match completion was covered by local server/engine tests, not by a real-user production duel. OAuth and physical devices were not tested.
+- Production evidence is committed afterward as documentation only; deployed application source remains the commit above.
