@@ -18,9 +18,29 @@ const balance=id=>db.prepare('SELECT credits FROM users WHERE id=?').get(id).cre
 const assign=async(id,kind,card)=>{await ensureDaily(env,id,now);const quest={...QUESTS.find(q=>q.kind===kind),...(card?{card}:{})};db.prepare('UPDATE daily_challenges SET quest=? WHERE user_id=?').run(JSON.stringify(quest),id);return(await progressionState(env,id,now)).daily;};
 const test=async(name,fn)=>{await fn();checks++;console.log('PASS',name);};
 try {
-await test('13 quest definitions and exact rewards',()=>{assert.equal(QUESTS.length,13);assert.deepEqual(QUESTS.map(q=>q.reward),[300,350,300,350,400,300,400,350,400,350,350,350,350]);assert.deepEqual(BOT_REWARDS,{easy:1500,normal:3000,hard:5000,hell:15000});});
+await test('13 quest definitions and exact rewards',()=>{assert.equal(QUESTS.length,13);assert.deepEqual(QUESTS.map(q=>q.reward),[900,1050,900,1050,1200,900,1200,1050,1200,1050,1050,1050,1050]);assert.deepEqual(BOT_REWARDS,{easy:1500,normal:3000,hard:5000,hell:15000});});
 await test('each BOT first win pays once forever; losses and draws do not pay',async()=>{const id=user();for(const difficulty of Object.keys(BOT_REWARDS)){await settle(id,{mode:'bot',difficulty,won:false});await settle(id,{mode:'bot',difficulty,won:null});assert.equal(balance(id),Object.entries(BOT_REWARDS).slice(0,Object.keys(BOT_REWARDS).indexOf(difficulty)).reduce((n,[,v])=>n+v,0));await settle(id,{mode:'bot',difficulty});await settle(id,{mode:'bot',difficulty,endedAt:now+86400_000});}assert.equal(balance(id),24500);const s=await progressionState(env,id,now);assert.equal(Object.keys(s.bot).length,4);assert.equal(s.online,0);assert.equal(s.ranked,0);});
-await test('normal and ranked caps are independent; losses, draws, clipping, reset, duplicate receipts',async()=>{const id=user();await settle(id,{won:false});await settle(id,{won:null});assert.equal(balance(id),5);for(let i=0;i<12;i++)await settle(id);assert.equal(balance(id),100);for(let i=0;i<29;i++)await settle(id,{mode:'ranked',won:false});await settle(id,{mode:'ranked',won:true});assert.equal(balance(id),400);await settle(id,{mode:'ranked',matchId:'retry',endedAt:now+86400_000});await settle(id,{mode:'ranked',matchId:'retry',endedAt:now+86400_000});assert.equal(balance(id),420);});
+await test('normal and ranked caps are independent; losses, draws, clipping, reset, duplicate receipts',async()=>{const id=user();await settle(id,{won:false});await settle(id,{won:null});assert.equal(balance(id),10);for(let i=0;i<12;i++)await settle(id);assert.equal(balance(id),200);for(let i=0;i<29;i++)await settle(id,{mode:'ranked',won:false});await settle(id,{mode:'ranked',won:true});assert.equal(balance(id),800);await settle(id,{mode:'ranked',matchId:'retry',endedAt:now+86400_000});await settle(id,{mode:'ranked',matchId:'retry',endedAt:now+86400_000});assert.equal(balance(id),840);});
+await test('reward migration triples only unpaid old assignments, preserves progress and pays the new amount once',async()=>{
+ const migration=await fs.readFile('server/migrations/0031_triple_daily_quest_rewards.sql','utf8');
+ const id=user();await ensureDailies(env,id,now);
+ for(const [slot,reward] of [300,350,400].entries()){
+  const table=slot?'daily_challenge_extras':'daily_challenges';
+  db.prepare(`UPDATE ${table} SET quest=?,progress=40,revision=2 WHERE user_id=?${slot?' AND slot='+slot:''}`).run(JSON.stringify({kind:'heal',target:40,reward}),id);
+ }
+ const paid=user();await ensureDailies(env,paid,now);
+ db.prepare('UPDATE daily_challenges SET quest=?,claimed=1 WHERE user_id=?').run(JSON.stringify({kind:'heal',target:40,reward:300}),paid);
+ db.prepare('UPDATE daily_challenge_extras SET quest=?,progress=40 WHERE user_id=? AND slot=1').run(JSON.stringify({kind:'heal',target:40,reward:350}),paid);
+ db.prepare('INSERT INTO rewards(user_id,key,amount,created_at) VALUES(?,?,?,?)').run(paid,'daily:2026-10-15:1',350,now);
+ db.exec(migration);db.exec(migration);
+ const qs=await ensureDailies(env,id,now);
+ assert.deepEqual(qs.map(q=>q.quest.reward),[900,1050,1200]);assert(qs.every(q=>q.progress===40&&q.revision===2&&!q.claimed));
+ assert.equal(balance(id),0);assert.equal(balance(paid),0);
+ const paidQuests=await ensureDailies(env,paid,now);assert.equal(paidQuests[0].quest.reward,300);assert.equal(paidQuests[1].quest.reward,350);
+ for(const q of qs){assert.equal(await claimDaily(env,id,q.day,q.revision,q.slot,now),q.quest.reward);assert.equal(await claimDaily(env,id,q.day,q.revision,q.slot,now),0);}
+ assert.equal(balance(id),3150);
+ assert.equal(await claimDaily(env,paid,'2026-10-15',0,1,now),0);
+});
 await test('legacy slot; only three replacements; stale concurrent requests cannot consume extra rolls',async()=>{const id=user();const first=await ensureDaily(env,id,now);assert.deepEqual(await ensureDaily(env,id,now),first);for(let revision=0;revision<3;revision++){const r=await Promise.all([rerollDaily(env,id,first.day,revision,now),rerollDaily(env,id,first.day,revision,now)]);assert.equal(r.filter(Boolean).length,1);}assert.equal(await rerollDaily(env,id,first.day,3,now),false);assert.equal((await ensureDaily(env,id,now+86400_000)).revision,0);assert.equal(await rerollDaily(env,id,first.day,0,now+86400_000),false);});
 await test('three distinct daily quests preserve legacy progress and claims; rollover grants three fresh slots',async()=>{
  const id=user(),q={kind:'heal',target:40,reward:300};
@@ -48,7 +68,7 @@ await test('three quest settlements are atomic, independent, capped and idempote
  assert((await ensureDailies(env,id,now)).every(q=>q.progress===0));assert.equal(balance(id),0);
  await settle(id,options);await settle(id,options);assert.equal(balance(id),0);assert((await ensureDailies(env,id,now)).every(q=>!q.claimed&&q.progress===q.quest.target));
  for(const q of daily){assert.equal(await claimDaily(env,id,q.day,q.revision,q.slot,now),q.quest.reward);assert.equal(await claimDaily(env,id,q.day,q.revision,q.slot,now),0);}
- assert.equal(balance(id),1050);assert((await ensureDailies(env,id,now)).every(q=>q.claimed));
+ assert.equal(balance(id),3150);assert((await ensureDailies(env,id,now)).every(q=>q.claimed));
  assert.equal(db.prepare("SELECT count(*) AS n FROM rewards WHERE user_id=? AND key LIKE 'daily:%'").get(id).n,3);
 });
 await test('replacing one slot invalidates only its old match snapshot',async()=>{
@@ -58,9 +78,9 @@ await test('replacing one slot invalidates only its old match snapshot',async()=
  await settle(id,{daily,mode:'bot',won:false,player:{...player(),activity:{heal:100}}});
  const after=await ensureDailies(env,id,now);assert.equal(after[1].progress,0);assert(!after[1].claimed);
 });
-await test('daily completion waits for explicit claim and cannot be rerolled',async()=>{const id=user(),daily=await assign(id,'heal');delete daily.slot;const p={...player(),activity:{heal:25}};await settle(id,{daily,player:p,mode:'bot',won:false});await settle(id,{daily,player:p,mode:'bot',won:false,matchId:'daily-retry'});await settle(id,{daily,player:p,mode:'bot',won:false,matchId:'daily-retry'});assert.equal(balance(id),0);const s=await progressionState(env,id,now);assert.equal(s.daily.progress,40);assert(!s.daily.claimed);assert.equal(await rerollDaily(env,id,daily.day,0,now),false);assert.equal(await claimDaily(env,id,daily.day,0,0,now),300);assert.equal(balance(id),300);});
+await test('daily completion waits for explicit claim and cannot be rerolled',async()=>{const id=user(),daily=await assign(id,'heal');delete daily.slot;const p={...player(),activity:{heal:25}};await settle(id,{daily,player:p,mode:'bot',won:false});await settle(id,{daily,player:p,mode:'bot',won:false,matchId:'daily-retry'});await settle(id,{daily,player:p,mode:'bot',won:false,matchId:'daily-retry'});assert.equal(balance(id),0);const s=await progressionState(env,id,now);assert.equal(s.daily.progress,40);assert(!s.daily.claimed);assert.equal(await rerollDaily(env,id,daily.day,0,now),false);assert.equal(await claimDaily(env,id,daily.day,0,0,now),900);assert.equal(balance(id),900);});
 await test('reroll resets progress and rejects the previous match assignment; midnight does not revive old task',async()=>{const id=user(),daily=await assign(id,'shield');await settle(id,{daily,player:{...player(),activity:{shield:5}},mode:'bot',won:false});assert(await rerollDaily(env,id,daily.day,0,now));await settle(id,{daily,player:{...player(),activity:{shield:100}},mode:'bot',won:false});assert.equal((await progressionState(env,id,now)).daily.progress,0);await settle(id,{daily,player:{...player(),activity:{shield:100}},mode:'bot',won:false,endedAt:now+86400_000});assert.equal(balance(id),0);});
-await test('failed credit transaction rolls back progress and receipt; retry recovers once',async()=>{const id=user(),daily=await assign(id,'draw'),s={daily,player:{...player(),activity:{draw:10}},matchId:'fail'};failCredits=true;await assert.rejects(settle(id,s));failCredits=false;assert.equal(balance(id),0);assert.equal((await progressionState(env,id,now)).daily.progress,0);await settle(id,s);await settle(id,s);assert.equal(balance(id),10);assert.equal(await claimDaily(env,id,daily.day,daily.revision,0,now),400);assert.equal(balance(id),410);});
+await test('failed credit transaction rolls back progress and receipt; retry recovers once',async()=>{const id=user(),daily=await assign(id,'draw'),s={daily,player:{...player(),activity:{draw:10}},matchId:'fail'};failCredits=true;await assert.rejects(settle(id,s));failCredits=false;assert.equal(balance(id),0);assert.equal((await progressionState(env,id,now)).daily.progress,0);await settle(id,s);await settle(id,s);assert.equal(balance(id),20);assert.equal(await claimDaily(env,id,daily.day,daily.revision,0,now),1200);assert.equal(balance(id),1220);});
 await test('claim rejects incomplete, foreign, stale and malformed assignments; ignores forged amounts',async()=>{
  const id=user(),q=await assign(id,'heal'),other=user();
  assert.equal(await claimDaily(env,id,q.day,0,0,now),null);
@@ -71,17 +91,17 @@ await test('claim rejects incomplete, foreign, stale and malformed assignments; 
  assert.equal(await claimDaily(env,id,q.day,0,0,now+86400000),null);
  assert.equal(balance(id),0);
  const results=await Promise.all(Array.from({length:8},()=>claimDaily(env,id,q.day,0,0,now)));
- assert.equal(results.filter(x=>x===300).length,1);assert.equal(results.filter(x=>x===0).length,7);assert.equal(balance(id),300);
+ assert.equal(results.filter(x=>x===900).length,1);assert.equal(results.filter(x=>x===0).length,7);assert.equal(balance(id),900);
 });
 await test('claim failure rolls back receipt and flag; legacy auto-paid receipt cannot pay again',async()=>{
  const id=user(),q=await assign(id,'heal');db.prepare('UPDATE daily_challenges SET progress=40 WHERE user_id=?').run(id);
  failCredits=true;await assert.rejects(claimDaily(env,id,q.day,0,0,now));failCredits=false;
  assert.equal(balance(id),0);assert(!(await ensureDaily(env,id,now)).claimed);
  assert.equal(db.prepare('SELECT count(*) n FROM rewards WHERE user_id=?').get(id).n,0);
- assert.equal(await claimDaily(env,id,q.day,0,0,now),300);assert.equal(balance(id),300);
+ assert.equal(await claimDaily(env,id,q.day,0,0,now),900);assert.equal(balance(id),900);
  // Legacy payout receipt, including a stale claimed flag, must never duplicate currency.
  db.prepare('UPDATE daily_challenges SET claimed=0 WHERE user_id=?').run(id);
- assert.equal(await claimDaily(env,id,q.day,0,0,now),0);assert.equal(balance(id),300);assert((await ensureDaily(env,id,now)).claimed);
+ assert.equal(await claimDaily(env,id,q.day,0,0,now),0);assert.equal(balance(id),900);assert((await ensureDaily(env,id,now)).claimed);
 });
 await test('claim HTTP uses authenticated identity and stored amount, and supports harmless retries',async()=>{
  const id=user(),time=Date.now(),q=await ensureDaily(env,id,time);

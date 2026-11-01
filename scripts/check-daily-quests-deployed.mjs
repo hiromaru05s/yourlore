@@ -29,7 +29,7 @@ try{
  const initial=await read();assert.equal(initial.dailies.length,3);assert.equal(new Set(initial.dailies.map(q=>q.quest.kind)).size,3);assert(initial.dailies.every(q=>q.rerollsLeft===3));
  assert.deepEqual((await read()).dailies,initial.dailies);
  await p.goto(origin,{waitUntil:'domcontentloaded'});await p.locator('.dq-task').first().waitFor();await p.waitForFunction(()=>!document.querySelector('.lounge-entry-overlay,.screen-loader'));
- assert.equal(await p.locator('.dq-task').count(),3);assert.equal(await p.locator('#modeReward progress').getAttribute('max'),'300');
+ assert.equal(await p.locator('.dq-task').count(),3);assert.equal(await p.locator('#modeReward progress').getAttribute('max'),'600');
  await p.waitForTimeout(700);await p.screenshot({path:out+'/home-desktop.png'});
  await p.locator('[data-quest="1"]').click();await p.locator('[data-no]').click();assert.deepEqual((await read()).dailies,initial.dailies);
  for(const slot of [1,2,0]){
@@ -42,7 +42,7 @@ try{
  const final=await read();assert(final.dailies.every(q=>q.rerollsLeft===0));assert.equal(final.credits,0);
  await p.waitForFunction(()=>document.querySelectorAll('.dq-task:disabled').length===3);
  const fourth=await context.request.post(origin+'/api/rewards/daily/reroll',{data:{day:final.daily.day,revision:final.daily.revision,slot:0},headers:{Origin:origin}});assert.equal(fourth.status(),409);
- await p.locator('#online').click();assert.equal(await p.locator('#modeReward progress').getAttribute('max'),'100');
+ await p.locator('#online').click();assert.equal(await p.locator('#modeReward progress').getAttribute('max'),'200');
  await p.setViewportSize({width:390,height:844});await p.waitForTimeout(700);await p.screenshot({path:out+'/home-mobile.png'});
  await p.reload({waitUntil:'domcontentloaded'});await p.locator('.dq-task:disabled').first().waitFor();assert.equal(await p.locator('.dq-task:disabled').count(),3);
  assert.deepEqual(errors,[]);

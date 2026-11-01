@@ -25,18 +25,18 @@ export interface ExperienceReceipt {
 import { DB, STARTERS } from './cards';
 import type { PlayerState } from './types';
 export const BOT_REWARDS = { easy: 1500, normal: 3000, hard: 5000, hell: 15000 } as const;
-export const MATCH_REWARDS = { online: { win: 10, loss: 5, cap: 100 }, ranked: { win: 20, loss: 10, cap: 300 } } as const;
+export const MATCH_REWARDS = { online: { win: 20, loss: 10, cap: 200 }, ranked: { win: 40, loss: 20, cap: 600 } } as const;
 export type Activity = 'shield'|'heal'|'damage'|'decay'|'rift'|'draw'|'counter';
 export type QuestKind = Activity|'starterWin'|'buySpell'|'buyMonster'|'playSpell'|'playExpensive'|'playCard';
 export interface DailyQuest { kind: QuestKind; target: number; reward: number; card?: string }
 export const QUESTS: DailyQuest[] = [
- {kind:'starterWin',target:3,reward:300}, {kind:'shield',target:20,reward:350},
- {kind:'heal',target:40,reward:300}, {kind:'damage',target:150,reward:350},
- {kind:'buySpell',target:30,reward:400}, {kind:'buyMonster',target:20,reward:300},
- {kind:'decay',target:3,reward:400}, {kind:'rift',target:30,reward:350},
- {kind:'draw',target:10,reward:400}, {kind:'counter',target:3,reward:350},
- {kind:'playSpell',target:50,reward:350}, {kind:'playExpensive',target:20,reward:350},
- {kind:'playCard',target:1,reward:350},
+ {kind:'starterWin',target:3,reward:900}, {kind:'shield',target:20,reward:1050},
+ {kind:'heal',target:40,reward:900}, {kind:'damage',target:150,reward:1050},
+ {kind:'buySpell',target:30,reward:1200}, {kind:'buyMonster',target:20,reward:900},
+ {kind:'decay',target:3,reward:1200}, {kind:'rift',target:30,reward:1050},
+ {kind:'draw',target:10,reward:1200}, {kind:'counter',target:3,reward:1050},
+ {kind:'playSpell',target:50,reward:1050}, {kind:'playExpensive',target:20,reward:1050},
+ {kind:'playCard',target:1,reward:1050},
 ];
 export function trackActivity(p: PlayerState, key: Activity, amount = 1): void {
  if (p.activity && amount > 0) p.activity[key] = (p.activity[key] ?? 0) + amount;
