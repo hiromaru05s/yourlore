@@ -266,7 +266,8 @@
     "tests/duel-language-source.mjs",
     "tests/duel-language-server.mjs",
     "tests/vfx-popup-language.mjs",
-    "tests/server-popup-language.mjs"
+    "tests/server-popup-language.mjs",
+    "tests/mana-crystal-glow.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

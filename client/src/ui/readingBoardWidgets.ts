@@ -10,12 +10,14 @@ import * as T from 'three';
 import {loadReadingModel} from './readingModel';
 import {READING_ASSETS,readingScale} from './readingBoardLayout';
 import {addCrystalOptics} from './readingCrystalOptics';
+import {createManaCrystalGlow} from './manaCrystalGlow';
 /** Geometry-only UI; the original native buttons retain keyboard/game authority. */
 export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const group=new T.Group();group.name='Reading board 02 05 06';scene.add(group);
+ const manaGlow=createManaCrystalGlow();
  const apertures=mountRiftApertures(group);let shadowDirty=true;
  const templates:T.Group[]=[];const owned:T.Material[]=[];const geometries:T.BufferGeometry[]=[];
- const manas:Array<{root:T.Group;batches:Record<'ready'|'spent',T.InstancedMesh[]>;key:string;side:string;maximum:number;current:number;formation?:{key:string;handles:FormationHandle[]}}>=[];
+ const manas:Array<{root:T.Group;batches:Record<'ready'|'spent',T.InstancedMesh[]>;glow:ReturnType<typeof manaGlow.addTray>;key:string;side:string;maximum:number;current:number;formation?:{key:string;handles:FormationHandle[]}}>=[];
  let dead=false,ready=false,turn:T.Group|undefined,reroll:T.Group|undefined,turnCap:T.Object3D|undefined,rerollCap:T.Object3D|undefined,arrows:T.Object3D|undefined,enamel:T.MeshStandardMaterial|undefined;
  let hover='',pressed='',last=performance.now(),rerollTime=-10000,turnTime=-10000,animateUntil=0,lastState='',displayEnemy=false;
  const segments:T.Mesh[]=[];const rerollMaterials:Array<{material:T.MeshStandardMaterial;color:T.Color}>=[];
@@ -40,6 +42,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   if(dead)return;
   jewel.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial){o.material.color.set('#378bea');o.material.attenuationColor.set('#2373c9');}});
   for(const gem of [jewel,spent])gem.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial&&o.material.transmission>0){addCrystalOptics(o.material,cut);o.material.userData.authoredAttenuation=o.material.attenuationDistance;opticalMaterials.push(o.material);}});
+  jewel.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial&&o.material.transmission>0)manaGlow.applyMaterial(o.material);});
   for(const [side,z] of [['Me',.397],['Opp',-.397]] as const){
    const mana=new T.Group();mana.position.set(-.345,.012,z);group.add(mana);
    const a=tray.clone(true),b=counter.clone(true);a.position.x=.0415;b.position.x=-.132;mana.add(a,b);
@@ -52,7 +55,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
      mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mana.add(mesh);batches[state].push(mesh);
     });
    }
-   manas.push({root:mana,batches,key:'',side,maximum:0,current:0});
+   manas.push({root:mana,batches,glow:manaGlow.addTray(mana),key:'',side,maximum:0,current:0});
   }
   turn=button;turn.position.set(.7,.015,0);timer.position.copy(turn.position);group.add(turn,timer);
   turnCap=turn.getObjectByName('PRESS_CAP');turn.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshStandardMaterial&&o.material.name.startsWith('Turn enamel'))enamel=o.material;});
@@ -104,6 +107,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
     // Restore inspection counts without rebuilding identical crystal geometry.
     data(el,'crystalsReady',String(mana.batches.ready[0]?.count??0));
     data(el,'crystalsSpent',String(mana.batches.spent[0]?.count??0));
+    data(el,'glowingCrystals',String(mana.batches.ready[0]?.count??0));
     continue;
    }changed=true;if(animating)shadowDirty=true;
    const counts={ready:0,spent:0},matrix=new T.Matrix4(),q=new T.Quaternion();
@@ -117,8 +121,11 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
     const state=i<current?'ready':'spent',index=counts[state]++;mana.batches[state].forEach(m=>m.setMatrixAt(index,matrix));
    }
    for(const state of ['ready','spent'] as const)for(const mesh of mana.batches[state]){mesh.count=counts[state];mesh.visible=mesh.count>0;mesh.instanceMatrix.needsUpdate=true;if(mesh.count){mesh.computeBoundingSphere();mesh.computeBoundingBox();}}
+   if(mana.batches.ready[0])mana.glow.sync(mana.batches.ready[0]);
+   data(el,'glowingCrystals',String(counts.ready));
    el.dataset.crystalsReady=String(counts.ready+(forming&&!before?Math.max(0,Math.min(targetMaximum,Number(el.dataset.mana))-gainFrom):0));el.dataset.crystalsSpent=String(counts.spent+(forming&&!before?Math.max(0,targetMaximum-Math.max(gainFrom,Number(el.dataset.mana))):0));
   }
+  changed=manaGlow.tick(now,scale,reducedTurnLight.matches)||changed;
   const end=root.querySelector<HTMLButtonElement>('#endBtn'),refresh=root.querySelector<HTMLButtonElement>('#refreshBtn'),enemy=root.dataset.readingTurn!=='player';
   for(const m of rerollMaterials){color.copy(m.color);if(refresh?.disabled){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(gray.setRGB(l,l,l),.8).multiplyScalar(.5);}else if(hover==='refreshBtn')color.multiplyScalar(1.12);m.material.color.lerp(color,1-Math.exp(-dt*18));}
   const clock=root.querySelector<HTMLElement>('.mp-clock.show'),remaining=clock?Math.min(1,Number(clock.dataset.remaining)/Math.max(1,Number(clock.dataset.total))):1;
@@ -163,5 +170,5 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   group.visible=true;if(reroll)reroll.visible=true;
   for(const {mesh,count} of saved){if(!count){mesh.setMatrixAt(0,new T.Matrix4());mesh.instanceMatrix.needsUpdate=true;mesh.count=1;}mesh.visible=true;}
   try{render();}finally{group.visible=wasVisible;if(reroll)reroll.visible=rerollVisible??true;for(const {mesh,count,visible} of saved){mesh.count=count;mesh.visible=visible;}}
- },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>{m.formation?.handles.forEach(h=>h.dispose());Object.values(m.batches).flat().forEach(b=>b.dispose());});geometries.forEach(g=>g.dispose());turnLights?.dispose();apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;delete root.dataset.turnlight;}};
+ },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;manaGlow.dispose();root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>{m.formation?.handles.forEach(h=>h.dispose());Object.values(m.batches).flat().forEach(b=>b.dispose());});geometries.forEach(g=>g.dispose());turnLights?.dispose();apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;delete root.dataset.turnlight;}};
 }

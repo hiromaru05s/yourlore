@@ -1,0 +1,15 @@
+{
+  "origin": "http://127.0.0.1:5295",
+  "checks": [
+    "2/6 both sides",
+    "0/6 both sides",
+    "6/6 both sides",
+    "2/30 both sides",
+    "30/30 both sides",
+    "0/3 both sides",
+    "side 0 no future-slot halo during formation, settled 5/8",
+    "side 1 no future-slot halo during formation, settled 5/8",
+    "reduced motion settling"
+  ],
+  "errors": []
+}
