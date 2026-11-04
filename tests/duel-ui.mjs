@@ -149,6 +149,12 @@ g.players[0].mana=savedMana;
 for(const lang of ['ko','ja','en']) {
  setLang(lang);v.render(g);
  assert.equal(document.querySelector('#endBtn').textContent,'END\nTURN',lang+' uses the fixed English turn label');
+ const opponentTurn=structuredClone(g);opponentTurn.cur=1;v.render(opponentTurn);
+ assert.equal(document.querySelector('#endBtn').textContent,'ENEMY\nTURN',lang+' uses the fixed English opponent label');
+ assert.equal(document.querySelector('#endBtn').disabled,true);
+ v.render(g);v.beginEndTurn();
+ assert.equal(document.querySelector('#endBtn').textContent,'ENEMY\nTURN',lang+' uses the same label while ending the turn');
+ v.syncTurn(g,true);
 }
 setLang('ja');v.render(g);
 

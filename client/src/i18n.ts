@@ -47,7 +47,7 @@ const D: Record<string, Entry> = {
   "picker.noResults": {ja:"条件に合うカードがありません",ko:"조건에 맞는 카드가 없습니다",en:"No cards match your filters"},
   "settings.volume": {ja:"音量",ko:"음량",en:"Volume"},
   "duel.endLabel": {ja:"END\nTURN",ko:"END\nTURN",en:"END\nTURN"},
-  "duel.enemyLabel": {ja:"相手の\nターン",ko:"상대\n턴",en:"ENEMY\nTURN"},
+  "duel.enemyLabel": {ja:"ENEMY\nTURN",ko:"ENEMY\nTURN",en:"ENEMY\nTURN"},
   "duel.complete": {ja:"デュエル終了",ko:"듀얼 종료",en:"DUEL COMPLETE"},
   "duel.previewPlace": {ja:"ビブリオン · デュエル",ko:"비블리온 · 듀얼",en:"BIBLION · DUEL"},
   "duel.dice": {ja:"ダイス",ko:"주사위",en:"Dice"},
