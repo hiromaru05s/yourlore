@@ -1,0 +1,27 @@
+{
+  "origin": "http://127.0.0.1:5207",
+  "mode": "real application and assets, fixture local guest API; no real account or PvP",
+  "cases": [
+    {
+      "lang": "ko",
+      "primaryClick": "no zoom",
+      "secondaryClick": "zoom",
+      "label": "END TURN",
+      "errors": []
+    },
+    {
+      "lang": "ja",
+      "primaryClick": "no zoom",
+      "secondaryClick": "zoom",
+      "label": "END TURN",
+      "errors": []
+    },
+    {
+      "lang": "en",
+      "primaryClick": "no zoom",
+      "secondaryClick": "zoom",
+      "label": "END TURN",
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+267/267 passed; historical/browser scopes are explicit in production-suite.json
+✓ guard-design: ok
+✓ built in 4.14s
+Current Version ID: f2c30037-af0d-40cc-89e2-c675529226ae
+Deployed committed snapshot a40f87b6b1189d7ce4661ee877b3381f775330dc production
