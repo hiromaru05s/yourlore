@@ -9,7 +9,7 @@ Requested 2026-11-04; production deployment explicitly authorized in the request
 
 ## Source and presentation
 
-Initial baseline: remote main `b09eaef2758e3716fabcf97b1315515a3d108cc3`. Concurrent main updates are incorporated before deployment.
+Initial baseline: remote main `b09eaef2758e3716fabcf97b1315515a3d108cc3`. Integrated baseline: `76f0e1f365b5a1797a15fccb747edf3cbe0c44d7` (including the new mana-crystal terminology). Implementation commit: `ecd60669`; browser Enter extension: `55212b22`.
 
 Owning implementation: `client/src/ui/tutorialSpotlight.ts`, `tutorialCompanionFlight.ts`, `manaSpirit.ts`, `zenoRig.ts`, `zenoToonSurface.ts`, `client/src/styles/zenoSpeech.css`, `client/src/screens/deck.ts`, `tutorialWelcome.ts`.
 
@@ -19,9 +19,9 @@ The frozen silver-inscription reference was inspected as a time-sampled sequence
 
 ## Validation
 
-- Typecheck and production build passed before integration.
+- Typecheck passed; the production build also passed again after integration.
 - `tests/tutorial-enter-browser.mjs`: repeat/IME/modifier/input/dialog guards, required action, focused Back, cleanup, measured fast departure/deceleration and reduced motion; ja/en/ko at 1280/1024/390.
 - `tests/onboarding-browser.mjs`: real Worker handlers against isolated SQLite; shop, new explanation, remove/add, reload mid-edit, confirmation and completion at 1280/1024.
-- `tests/tutorial-parts.mjs` and `tests/onboarding.mjs` passed.
+- `tests/tutorial-parts.mjs` and `tests/onboarding.mjs` passed. The full rendered 49-step tutorial completed at 1280 and 1024 using Enter for message steps.
 - Visual evidence includes the actual board at 1280/1024/390/320 and the deck explanation. Motion capture and sampled geometry are separate from functional results. This is an implementation review, not new user visual approval or a physical-device test.
 - Production guard and post-deployment evidence are recorded below after release.
