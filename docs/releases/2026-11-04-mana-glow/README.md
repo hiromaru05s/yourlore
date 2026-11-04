@@ -17,6 +17,18 @@
 - `tests/mana-crystal-glow-browser.mjs`: 両陣営2/6・0/6・6/6・2/30・30/30・0/3、両陣営の生成前後、低減モーション、1440×900／390×844／844×390。ブラウザーエラーなし。
 - 初回の検証入力0/0はゲームの最低水晶数3に丸められるため、実ゲームの0/3へ修正。renderer単体の水晶0は別途確認。
 - 通常DPRの実盤面画像を目視確認。承認済み③の内部光／青い漏光と、空水晶の灰色を維持。生成中は既存の結晶面の組み立てに連続する。
-- 型検査・全必須suite・本番ビルドはguarded releaseで記録。本番後の配信検証を追記する。
+- 型検査・全268必須suite・デザインガード・本番ビルド成功。結果は `production/validation.txt` と `production/suite.json`。
 
 実アカウント対戦・認証PvP・物理スマホ性能は未検証。機能検証と見た目の承認は区別し、見た目の承認はユーザーの③選択による。
+
+
+## 本番反映
+
+- 2026-11-04 19:13 KST、`https://yourlore.xyz` へ公開。
+- source: `00ff5e000bdea7acd9ff84bb507d3947dacd238e`。
+- Worker version: `9122742a-5ea1-4b17-918f-003bf79b05be`、100% traffic。`production/deployment.json`。
+- GitHubの通常pushがInternal Server Errorで失敗したため、Git Data APIで各blobとツリーをローカルと照合し、force=falseでmainを更新。検証済みローカルと同一ツリー `ed0ac5a7ac6609a248f0a9a72469ec5bd8031194`。`production/git-publish.json`。
+- 初回guardの267/268時は、sparse checkoutに既存CPU負荷検証のgzip fixtureが含まれず停止し、本番には未送信。fixtureを復元した同一ソースで再実行し268/268成功。テストの緩和・スキップは行っていない。
+- 本番配信アプリでHOME→シングルプレイを開き、開幕・ターン演出終了後の1440×900／390×844を確認。初期状態と、見た目検証用に設定した両陣営2/6・0/6・6/6で点灯数を照合。`production/browser-report.json` と画像。
+- 本番の `assets/duelScene-tQqd-vC-.js` に採用したshader識別子を確認。ブラウザー／WebGLエラーなし。2/6画像を目視し、青い２個と空の４個が区別できることを確認。
+- 本番smokeは配信コード・素材を使い、APIだけをローカルguest fixtureへ差し替えた検証。実アカウント・サーバー対戦履歴を作成せず、認証PvP・実機性能は検証していない。
