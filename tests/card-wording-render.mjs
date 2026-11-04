@@ -6,8 +6,8 @@ const dom=new JSDOM('<!doctype html><html><body></body></html>',{url:'https://lo
 for(const key of ['window','document','localStorage','HTMLElement','HTMLImageElement','CustomEvent']) globalThis[key]=dom.window[key];
 const dir=await fs.mkdtemp('/tmp/lore-wording-render-');
 try {
- await build({stdin:{contents:`export { DB, STARTERS } from './client/src/shared/cards'; export { cardRulesEl } from './client/src/ui/cardView'; export { CARD_RULE_GROUP_LABELS, effectRuleGroup } from './client/src/shared/cardEffectHeadings'; export { displayPassives } from './client/src/shared/cardPresentation'; export { setLang } from './client/src/i18n';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/render.mjs'});
- const {DB,STARTERS,cardRulesEl,setLang,CARD_RULE_GROUP_LABELS,effectRuleGroup,displayPassives}=await import(dir+'/render.mjs');
+ await build({stdin:{contents:`export { DB, STARTERS } from './client/src/shared/cards'; export { cardRulesEl } from './client/src/ui/cardView'; export { CARD_RULE_GROUP_LABELS, effectRuleGroup } from './client/src/shared/cardEffectHeadings'; export { displayPassives } from './client/src/shared/cardPresentation'; export { setLang } from './client/src/i18n'; export {ruleTermParts} from './client/src/shared/cardRuleGlossary';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/render.mjs'});
+ const {DB,STARTERS,cardRulesEl,setLang,CARD_RULE_GROUP_LABELS,effectRuleGroup,displayPassives,ruleTermParts}=await import(dir+'/render.mjs');
  let count=0;
  for(const lang of ['ja','ko','en']) {
   setLang(lang);
@@ -43,6 +43,11 @@ try {
    assert(!/シェルフ|셸프|\bshelf\b/i.test(e.textContent));
    count++;
   }
+ }
+ for(const [lang,key,old,term] of [['ja','textJa','最大マナ+1','マナ水晶'],['ko','text','최대 마나 +1','마나 수정'],['en','textEn','Increase your max mana by 1.','mana crystals']]) {
+  setLang(lang);const legacy=cardRulesEl({...STARTERS.STARTER_MANA,uid:'legacy-mana', [key]:old});
+  assert(legacy.textContent.includes(term));assert.doesNotMatch(legacy.textContent,/最大マナ|최대\s*마나|max(?:imum)?[ -]mana/i);
+  assert(ruleTermParts(legacy.querySelector('.card-effect-body').textContent,lang).some(p=>p.term==='maxMana'),'saved text still links to the crystal glossary');
  }
  setLang('ja');
  for(const text of ['旧セーブの見出しなし本文。','【旧条件】旧セーブの本文。']) {

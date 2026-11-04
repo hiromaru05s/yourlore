@@ -1,6 +1,8 @@
 // Optional rendered-UI regression. API responses are fixtures; no account or purchase is used.
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import {loadCards} from '../scripts/card-art-lib.mjs';
+const cardCount=(await loadCards({includeStarters:true})).length;
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
 const origin=process.env.BOOK_ORIGIN||'http://127.0.0.1:5186',out=process.env.BOOK_QA_DIR||'docs/releases/2026-10-28-seeker-book/qa';
 await fs.mkdir(out,{recursive:true});
@@ -23,12 +25,12 @@ try{
   const total=Number((await page.locator('.seeker-page-status').innerText()).split('/')[1]);
   for(let i=1;i<total;i++){assert.equal(await page.locator('.seeker-page-status').innerText(),`${i} / ${total}`);await page.locator('[data-next]').click();}
   assert(await page.locator('.seeker-reference').isVisible());
-  await page.locator('[data-kind]').selectOption('cards');assert.match(await page.locator('.seeker-result-count').innerText(),/^381/);
+  await page.locator('[data-kind]').selectOption('cards');assert.equal(parseInt(await page.locator('.seeker-result-count').innerText(),10),cardCount);
   await page.locator('[data-results-next]').click();assert.match(await page.locator('.seeker-result-count').innerText(),/2/);
   await page.locator('.seeker-reference input').fill('xyz-no-such-rule-009');assert(await page.locator('.seeker-empty').isVisible());
-  await page.locator('.seeker-reference input').fill(lang==='ja'?'最大マナ':lang==='en'?'mana':'마나');assert(await page.locator('.seeker-reference-entry').count()>0,'effect full text searchable');
+  await page.locator('.seeker-reference input').fill(lang==='ja'?'マナ水晶':lang==='en'?'mana crystal':'마나 수정');assert(await page.locator('.seeker-reference-entry').count()>0,'effect full text searchable');
   await page.locator('.seeker-reference-entry summary').first().click();await page.locator('[data-inspect]').first().click();
-  await page.locator('#zoomOverlay .zoom-wrap').waitFor({state:'visible'});await page.keyboard.press('Escape');await page.locator('#zoomOverlay').waitFor({state:'hidden'});
+  await page.locator('#zoomOverlay .zoom-wrap').waitFor({state:'visible'});assert.match(await page.locator('#zoomOverlay').innerText(),lang==='ja'?/マナ水晶/:lang==='en'?/mana crystal/i:/마나 수정/);assert.doesNotMatch(await page.locator('#zoomOverlay').innerText(),/最大マナ|최대\s*마나|max(?:imum)?[ -]mana/i);if(lang==='ja')await page.screenshot({path:out+'/mana-crystal-card.png'});await page.keyboard.press('Escape');await page.locator('#zoomOverlay').waitFor({state:'hidden'});
   await page.locator('.seeker-reference input').fill('');await page.locator('[data-kind]').selectOption('all');
   if(lang==='ja'){await page.locator('.seeker-volume').evaluate(e=>e.scrollIntoView({block:'start'}));await page.screenshot({path:out+'/reference-desktop.png'});}
   await page.locator('[data-chapter="deck"]').click();await page.locator('[data-next]').click();

@@ -18,7 +18,7 @@ try{
  for(const owner of [0,1]){g=fresh();g.cur=1-owner;const rich=card('RICH_HABIT');g.players[owner].enchants=[{card:rich,turns:99,bornTurn:0}];g.players[1-owner].hand=[card('DISARM1')];room.room.game=g;
   await send(1-owner,{type:'play',idx:0});await send(owner,{type:'pick',uid:rich.uid});assert(room.room.game.pending,'opponent cannot resolve someone else’s choice');
   await send(1-owner,{type:'pick',uid:rich.uid});assert.equal(room.room.game.players[owner].maxMana,3);
-  for(const socket of sockets){const message=socket.messages.at(-1);assert.equal(message.state.players[owner].maxMana,3);assert(message.events.some(e=>e.type==='log'&&e.htmlEn?.includes('set your max mana to 3')),'authored English survives server broadcast');}
+  for(const socket of sockets){const message=socket.messages.at(-1);assert.equal(message.state.players[owner].maxMana,3);assert(message.events.some(e=>e.type==='log'&&e.htmlEn?.includes('set your mana crystals to 3')),'authored English survives server broadcast');}
   room=new GameRoom(journalState(state),rewardTestEnv());await room.webSocketMessage(sockets[owner],JSON.stringify({type:'ready'}));assert.equal(room.room.game.players[owner].maxMana,3,'mana persists through hibernation');
  }
  console.log('PASS GameRoom: authoritative choices, Armorer reconnect, Rich Habit both owners, 3-language logs, persisted mana');

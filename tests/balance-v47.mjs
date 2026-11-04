@@ -64,7 +64,7 @@ try {
   const r=reduce(g,{type:'endTurn'}),dice=r.events.find(e=>e.type==='dice');assert(dice);const roll=dice.rolls[0];assert.equal(r.state.players[0].hp,roll>=5?37:40);assert.equal(r.state.players[0].field[0].dmg,0);if(roll>=5)hits++;else misses++;
  }
  assert(hits>0&&misses>0);
- // Guard against future un-gated max-mana/max-HP increments outside their helpers.
+ // Guard against future un-gated mana crystals/max-HP increments outside their helpers.
  const source=await readFile('client/src/shared/engine.ts','utf8');assert.equal((source.match(/\.maxMana\s*\+=/g)||[]).length,1);assert.equal((source.match(/\.maxHp\s*\+=/g)||[]).length,1);
  console.log('PASS: v47 stats/cost, summon gates, mana lock/suppression, growth healing/triggers, Ember limit and recoil');
 }finally{await rm(dir,{recursive:true,force:true});}

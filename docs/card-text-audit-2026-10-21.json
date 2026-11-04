@@ -7,7 +7,7 @@
     "en"
   ],
   "count": 380,
-  "engineSha256": "97cc8c8eebb35a2232248403b46ad6ab60f95004ecbea038ffa397a2d25a9c3a",
+  "engineSha256": "d9d1cc7e5f88b8d4b357cbe9cc54acc0fcb18080b07a255e8a6eaa15b1c56a89",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -226,22 +226,24 @@
       "nameJa": "マナ・ゴーレム",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "5be03e6bfb091e153f40ff49649502fb3a8adda06427036181ce19a2832b27dc",
-      "textSha256": "9637fd645283f56d3dad1d6af444a41c0162fc459bfba765da7edb80feb0212e",
+      "textSha256": "85d611f5daff640fd1d6c431572aabf1d7d006fb4bec6e590f4e28f4f48246b8",
       "hooks": {
         "aura": "manaGolem"
       },
       "before": {
         "ja": "【場にある間】自分の場の、このモンスター以外の「ゴーレム」系モンスター1体につき、自分の最大マナ+1。",
         "ko": "【필드에 있는 동안】자신의 필드의 이 몬스터 외 골렘 계열 몬스터 1체당 자신의 최대 마나 +1.",
-        "en": "【While on the Field】Your max mana +1 for each other Golem-family monster on your field."
+        "en": "【While on the Field】Your max mana is increased by 1 for each other Golem-family monster on your field."
       },
       "after": {
-        "ja": "【場にある間】自分の場の、このモンスター以外の「ゴーレム」系モンスター1体につき、自分の最大マナ+1。",
-        "ko": "【필드에 있는 동안】자신의 필드의 이 몬스터 외 골렘 계열 몬스터 1체당 자신의 최대 마나 +1.",
-        "en": "【While on the Field】Your max mana is increased by 1 for each other Golem-family monster on your field."
+        "ja": "【場にある間】自分の場の、このモンスター以外の「ゴーレム」系モンスター1体につき、自分のマナ水晶+1。",
+        "ko": "【필드에 있는 동안】자신의 필드의 이 몬스터 외 골렘 계열 몬스터 1체당 자신의 마나 수정 +1.",
+        "en": "【While on the Field】Your mana crystals are increased by 1 for each other Golem-family monster on your field."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -645,22 +647,24 @@
       "nameJa": "知識の泉",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "10c054d7ddf84ab2443c57e9f6a5d94f1c8a6abfe9e3c6d15bae90a46cb394b6",
-      "textSha256": "3435c62d73025e9f4b06fbbea21fce10ba69ef0cd745d3c19b5060a1a2b58404",
+      "textSha256": "d6377f17e00eb1e4602db0ba96ce2e75a0ecb7351f90b99f7ce6b6e4ce570631",
       "hooks": {
         "ench": "bonusDraw"
       },
       "before": {
         "ja": "【自分のターン開始時】追加でカードを1枚引く（4回）。4回目の処理後にこの魔法は終了する。その次の自分のターン開始時、自分の最大マナ+1。",
         "ko": "【자신의 턴 시작 시】카드를 1장 추가로 뽑는다(4회). 4회째 처리 후 이 마법 종료한다. 그 다음 자신의 턴 시작시 자신의 최대 마나 +1.",
-        "en": "【At the Start of Your Turn】Draw 1 extra card, for 4 turns. This spell expires after the 4th draw. At the start of your following turn, your max mana +1."
+        "en": "【At the Start of Your Turn】Draw 1 extra card, for 4 turns. This spell expires after the 4th draw. At the start of your following turn, increase your max mana by 1."
       },
       "after": {
-        "ja": "【自分のターン開始時】追加でカードを1枚引く（4回）。4回目の処理後にこの魔法は終了する。その次の自分のターン開始時、自分の最大マナ+1。",
-        "ko": "【자신의 턴 시작 시】카드를 1장 추가로 뽑는다(4회). 4회째 처리 후 이 마법 종료한다. 그 다음 자신의 턴 시작시 자신의 최대 마나 +1.",
-        "en": "【At the Start of Your Turn】Draw 1 extra card, for 4 turns. This spell expires after the 4th draw. At the start of your following turn, increase your max mana by 1."
+        "ja": "【自分のターン開始時】追加でカードを1枚引く（4回）。4回目の処理後にこの魔法は終了する。その次の自分のターン開始時、自分のマナ水晶+1。",
+        "ko": "【자신의 턴 시작 시】카드를 1장 추가로 뽑는다(4회). 4회째 처리 후 이 마법 종료한다. 그 다음 자신의 턴 시작시 자신의 마나 수정 +1.",
+        "en": "【At the Start of Your Turn】Draw 1 extra card, for 4 turns. This spell expires after the 4th draw. At the start of your following turn, increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -740,26 +744,26 @@
     },
     "TPO5": {
       "nameJa": "捕食者",
-      "status": "reviewed-v73-rework",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "326804c07c8696bd1f4440832a2daf4f5174d22d29d2afc8cbe06368cdc9c3ce",
-      "textSha256": "4c00883f8e87935aa721698e5deace1c636f2b864ab6e0ccdae558e814216740",
+      "textSha256": "a8c151576ff26a3e410b8936c3d5d909fa10fedc5faf85444823a46490fd1120",
       "hooks": {
         "onSummon": "preyExec"
       },
       "before": {
-        "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と印刷体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
-        "ko": "【소환 시】상대의 아우라가 없는 구매 코스트 3~4 몬스터 중 공격력과 인쇄 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
-        "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and printed HP (ties use field order). If it is destroyed, increase your max mana by 1."
-      },
-      "after": {
         "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と現在体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分の最大マナ+1。",
         "ko": "【소환 시】상대의 아우라가 없는 구매 코스트 3~4 몬스터 중 공격력과 현재 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 최대 마나 +1.",
         "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and current HP (ties use field order). If it is destroyed, increase your max mana by 1."
+      },
+      "after": {
+        "ja": "【召喚時】相手のオーラを持たない購入コスト3～4のモンスターのうち、攻撃力と現在体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。破壊できたら自分のマナ水晶+1。",
+        "ko": "【소환 시】상대의 아우라가 없는 구매 코스트 3~4 몬스터 중 공격력과 현재 체력의 합이 가장 큰 1체를 자동으로 파괴한다(동률이면 필드 순서). 파괴했다면 자신의 마나 수정 +1.",
+        "en": "【On Summon】Automatically destroy the enemy monster without Aura with purchase cost 3–4 and the highest combined ATK and current HP (ties use field order). If it is destroyed, increase your mana crystals by 1."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -840,22 +844,24 @@
       "nameJa": "賢者の予言",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "78fab2c85dcb00e8d1fe1cbbb8c2020717d6263b8bc40e9a84b38d0d8bc5988f",
-      "textSha256": "5678e45ed763f51316920a8b1ed4acc70923a5255c050d8a3bcafd8631f8c6bd",
+      "textSha256": "e28c1fb841cec201d8454b4cafa7fcbf3b100c18e8c9e093817dc0e20221c0f8",
       "hooks": {
         "act": "draw"
       },
       "before": {
         "ja": "【発動時】相手がダイス1個を振り予測値を決める。自分がダイス2個を振り、両方の出目が予測値と異なれば自分の最大マナ+4。",
         "ko": "【발동 시】상대가 주사위 1개를 굴려 예측값 결정한다. 자신이 주사위 2개를 굴려 두 눈 모두 예측값과 다르면 자신의 최대 마나 +4.",
-        "en": "【On Cast】The opponent rolls 1 die to set the prediction. Roll 2 dice; if neither result matches it, your max mana +4."
+        "en": "【On Cast】The opponent rolls 1 die to set the prediction. Roll 2 dice; if neither result matches it, increase your max mana by 4."
       },
       "after": {
-        "ja": "【発動時】相手がダイス1個を振り予測値を決める。自分がダイス2個を振り、両方の出目が予測値と異なれば自分の最大マナ+4。",
-        "ko": "【발동 시】상대가 주사위 1개를 굴려 예측값 결정한다. 자신이 주사위 2개를 굴려 두 눈 모두 예측값과 다르면 자신의 최대 마나 +4.",
-        "en": "【On Cast】The opponent rolls 1 die to set the prediction. Roll 2 dice; if neither result matches it, increase your max mana by 4."
+        "ja": "【発動時】相手がダイス1個を振り予測値を決める。自分がダイス2個を振り、両方の出目が予測値と異なれば自分のマナ水晶+4。",
+        "ko": "【발동 시】상대가 주사위 1개를 굴려 예측값 결정한다. 자신이 주사위 2개를 굴려 두 눈 모두 예측값과 다르면 자신의 마나 수정 +4.",
+        "en": "【On Cast】The opponent rolls 1 die to set the prediction. Roll 2 dice; if neither result matches it, increase your mana crystals by 4."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -1050,26 +1056,26 @@
     },
     "AHEUK": {
       "nameJa": "アチューン・黒",
-      "status": "reviewed-legacy-rework",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "0e9ad1d5db87ee21f86a29a8da0ec121646beb69881df25a97b4529582f9cb96",
-      "textSha256": "5a6157e86fd6b09264ae15ea1c58cc98e5bb3043083b5261ee295852dd2aff4d",
+      "textSha256": "162b8a3a7127ddc2accc28dccfa9e30c26a5242bd538cd51df112f074d49de02",
       "hooks": {
         "act": "manaDown"
       },
       "before": {
-        "ja": "【発動時】相手の最大マナ-1。自分の場にモンスターがいなければ、相手の最大マナをさらに1減らす。",
-        "ko": "【발동 시】상대의 최대 마나 -1. 자신의 필드에 몬스터가 없으면 상대의 최대 마나를 추가로 1 감소.",
-        "en": "【On Cast】The opponent's max mana -1. If you control no monsters, reduce their max mana by 1 more."
-      },
-      "after": {
         "ja": "【発動時】相手の最大マナ-1。相手の場にモンスターが2体以上いて、自分の場にモンスターがいなければ、相手の最大マナをさらに1減らす。",
         "ko": "【발동 시】상대의 최대 마나 -1. 상대 필드에 몬스터가 2체 이상이고 자신의 필드에 몬스터가 없으면 상대의 최대 마나를 추가로 1 줄인다.",
         "en": "【On Cast】Reduce the opponent’s max mana by 1. If they control at least 2 monsters and you control none, reduce it by 1 more."
+      },
+      "after": {
+        "ja": "【発動時】相手のマナ水晶-1。相手の場にモンスターが2体以上いて、自分の場にモンスターがいなければ、相手のマナ水晶をさらに1減らす。",
+        "ko": "【발동 시】상대의 마나 수정 -1. 상대 필드에 몬스터가 2체 이상이고 자신의 필드에 몬스터가 없으면 상대의 마나 수정을 추가로 1 줄인다.",
+        "en": "【On Cast】Reduce the opponent’s mana crystals by 1. If they control at least 2 monsters and you control none, reduce them by 1 more."
       },
       "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
@@ -1077,22 +1083,24 @@
       "nameJa": "アチューン・真",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "71115d0f499d05a4be751422cf322cb0b1d697df53e1cc9ff51514914c9a32cb",
-      "textSha256": "9d715b7df460f46bad979b89aafe591eaf0294db11fd8b89b452f4e32fa21491",
+      "textSha256": "0b8ba418875b132036a90ada4c55c05b717e3de3a68cd80aa0d15586d3030afa",
       "hooks": {
         "act": "manaUpGain"
       },
       "before": {
         "ja": "【発動時】自分の最大マナ+1。ダイス1個を振り、4以上なら新しい「アチューン」1枚を自分の墓地に追加する。",
         "ko": "【발동 시】자신의 최대 마나 +1. 주사위 1개를 굴려 4 이상이면 새로운 어튠 1장을 자신의 묘지에 추가한다.",
-        "en": "【On Cast】Your max mana +1. Roll 1 die; on 4 or more, create 1 new Attune in your graveyard."
+        "en": "【On Cast】Increase your max mana by 1. Roll 1 die; on 4 or more, create 1 new Attune in your graveyard."
       },
       "after": {
-        "ja": "【発動時】自分の最大マナ+1。ダイス1個を振り、4以上なら新しい「アチューン」1枚を自分の墓地に追加する。",
-        "ko": "【발동 시】자신의 최대 마나 +1. 주사위 1개를 굴려 4 이상이면 새로운 어튠 1장을 자신의 묘지에 추가한다.",
-        "en": "【On Cast】Increase your max mana by 1. Roll 1 die; on 4 or more, create 1 new Attune in your graveyard."
+        "ja": "【発動時】自分のマナ水晶+1。ダイス1個を振り、4以上なら新しい「アチューン」1枚を自分の墓地に追加する。",
+        "ko": "【발동 시】자신의 마나 수정 +1. 주사위 1개를 굴려 4 이상이면 새로운 어튠 1장을 자신의 묘지에 추가한다.",
+        "en": "【On Cast】Increase your mana crystals by 1. Roll 1 die; on 4 or more, create 1 new Attune in your graveyard."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -1100,22 +1108,24 @@
       "nameJa": "アチューン・魔",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "d726552499cabc67dae04e2b4c7a067f141e3bbcae55fd2b9789fcf263bddf2b",
-      "textSha256": "790da68aba9624504b9e5470d56011e1dd7fbce611b254259fe1456ceac44319",
+      "textSha256": "064923bf06c7f27e194ddd6e69134e1093b24ebfc78a4ce0c7fffb5674f64e44",
       "hooks": {
         "act": "chestToMana"
       },
       "before": {
         "ja": "【発動時】自分の手札の「宝箱」1枚を自動で自分の墓地へ送る。送った場合、自分の最大マナ+1。",
         "ko": "【발동 시】자신의 패의 보물상자 1장을 자동으로 자신의 묘지로 보낸다. 보냈다면 자신의 최대 마나 +1.",
-        "en": "【On Cast】Automatically send 1 Treasure Chest from your hand to your graveyard. If you did, your max mana +1."
+        "en": "【On Cast】Automatically send 1 Treasure Chest from your hand to your graveyard. If you did, increase your max mana by 1."
       },
       "after": {
-        "ja": "【発動時】自分の手札の「宝箱」1枚を自動で自分の墓地へ送る。送った場合、自分の最大マナ+1。",
-        "ko": "【발동 시】자신의 패의 보물상자 1장을 자동으로 자신의 묘지로 보낸다. 보냈다면 자신의 최대 마나 +1.",
-        "en": "【On Cast】Automatically send 1 Treasure Chest from your hand to your graveyard. If you did, increase your max mana by 1."
+        "ja": "【発動時】自分の手札の「宝箱」1枚を自動で自分の墓地へ送る。送った場合、自分のマナ水晶+1。",
+        "ko": "【발동 시】자신의 패의 보물상자 1장을 자동으로 자신의 묘지로 보낸다. 보냈다면 자신의 마나 수정 +1.",
+        "en": "【On Cast】Automatically send 1 Treasure Chest from your hand to your graveyard. If you did, increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -1776,22 +1786,24 @@
       "nameJa": "六面の気まぐれ",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "ee98a9b6749a69c2ff2a529462ec5ddcac2fa92e375f0cb4e70a534b2b2c2afb",
-      "textSha256": "da57c499ad052c4d1bd37d2396ece7b1f512441729264dd9dfd31ed9af6645a8",
+      "textSha256": "12ceeaa27e4df9f76acb5daa1bf0a02d8e55b05e453d3f21881a7706373436de",
       "hooks": {
         "act": "dmg"
       },
       "before": {
         "ja": "【発動時】ダイス1個を10回振る。出目の合計が40以上なら、自分の最大マナ+3。",
-        "ko": "【발동시】주사위 1개를 10회 굴린다. 눈의 합이 40 이상이면 자신의 최대 마나 +3.",
+        "ko": "【발동 시】주사위 1개를 10회 굴린다. 눈의 합이 40 이상이면 자신의 최대 마나 +3.",
         "en": "【On Cast】Roll 1 die 10 times. If the sum is at least 40, increase your max mana by 3."
       },
       "after": {
-        "ja": "【発動時】ダイス1個を10回振る。出目の合計が40以上なら、自分の最大マナ+3。",
-        "ko": "【발동 시】주사위 1개를 10회 굴린다. 눈의 합이 40 이상이면 자신의 최대 마나 +3.",
-        "en": "【On Cast】Roll 1 die 10 times. If the sum is at least 40, increase your max mana by 3."
+        "ja": "【発動時】ダイス1個を10回振る。出目の合計が40以上なら、自分のマナ水晶+3。",
+        "ko": "【발동 시】주사위 1개를 10회 굴린다. 눈의 합이 40 이상이면 자신의 마나 수정 +3.",
+        "en": "【On Cast】Roll 1 die 10 times. If the sum is at least 40, increase your mana crystals by 3."
       }
     },
     "ASSASSIN1": {
@@ -1904,20 +1916,22 @@
       "nameJa": "ルーン学問 - 中級",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "ca754b0781ff4a5a4b13ca57ce5e37a952361b51e79f587c457c26a3568afd29",
-      "textSha256": "2d368dc1e94867a4a017e5869556b231149d30817f9a33408e8be66da8e02895",
+      "textSha256": "bffb1b8b38811f4a1c1a5f891f3830a214fcaf1602a4ab418b23ffa814ef882a",
       "hooks": {},
       "before": {
         "ja": "【発動条件】自分のデッキ構成の半分以上が魔法カード。\n\n【発動時】自分の最大マナ+2。",
         "ko": "【발동 조건】자신의 덱 구성의 절반 이상이 마법 카드.\n\n【발동 시】자신의 최대 마나 +2.",
-        "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【On Cast】Your max mana +2."
+        "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【On Cast】Increase your max mana by 2."
       },
       "after": {
-        "ja": "【発動条件】自分のデッキ構成の半分以上が魔法カード。\n\n【発動時】自分の最大マナ+2。",
-        "ko": "【발동 조건】자신의 덱 구성의 절반 이상이 마법 카드.\n\n【발동 시】자신의 최대 마나 +2.",
-        "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【On Cast】Increase your max mana by 2."
+        "ja": "【発動条件】自分のデッキ構成の半分以上が魔法カード。\n\n【発動時】自分のマナ水晶+2。",
+        "ko": "【발동 조건】자신의 덱 구성의 절반 이상이 마법 카드.\n\n【발동 시】자신의 마나 수정 +2.",
+        "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【On Cast】Increase your mana crystals by 2."
       },
       "reviewNote": "2026-10-30: Runecraft Novice uses current HP; Adept/Master require at least half spell cards in shared deck composition; clarify Master echo, choice exception and non-stacking.",
       "reviewedAt": "2026-10-31"
@@ -2183,20 +2197,22 @@
       "nameJa": "幸運の宝箱",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "80ea62d1ed21d399d64deee3f98cda72474eac5123964042597d986f3fbbf8e7",
-      "textSha256": "472717df59c3a2fe56f9f634991736f7b1699091295504eb30da9aedc909c8ef",
+      "textSha256": "460bc8af8b8c3453551785ced7313757bd8ff89f2a557bd0d5d422d235eea699",
       "hooks": {},
       "before": {
         "ja": "【発動時】ダイス2個の合計 — 2-3: 自分の最大マナ+3、カードを2枚引く / 4-5: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 6-8: 自分の最大マナ+1 / 9-11: 自分の体力を8回復する / 12: 自分の体力を12回復する。",
         "ko": "【발동 시】주사위 2개 합계 — 2-3: 자신의 최대 마나 +3, 카드를 2장 뽑는다 / 4-5: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 6-8: 자신의 최대 마나 +1 / 9-11: 자신의 체력을 8 회복한다 / 12: 자신의 체력을 12 회복한다.",
-        "en": "【On Cast】Roll 2 dice and total them — 2-3: Your max mana +3, draw 2 cards / 4-5: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 6-8: Your max mana +1 / 9-11: Restore 8 of your HP / 12: Restore 12 of your HP."
+        "en": "【On Cast】Roll 2 dice and total them — 2-3: Increase your max mana by 3, draw 2 cards / 4-5: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 6-8: Increase your max mana by 1 / 9-11: Restore 8 of your HP / 12: Restore 12 of your HP."
       },
       "after": {
-        "ja": "【発動時】ダイス2個の合計 — 2-3: 自分の最大マナ+3、カードを2枚引く / 4-5: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 6-8: 自分の最大マナ+1 / 9-11: 自分の体力を8回復する / 12: 自分の体力を12回復する。",
-        "ko": "【발동 시】주사위 2개 합계 — 2-3: 자신의 최대 마나 +3, 카드를 2장 뽑는다 / 4-5: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 6-8: 자신의 최대 마나 +1 / 9-11: 자신의 체력을 8 회복한다 / 12: 자신의 체력을 12 회복한다.",
-        "en": "【On Cast】Roll 2 dice and total them — 2-3: Increase your max mana by 3, draw 2 cards / 4-5: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 6-8: Increase your max mana by 1 / 9-11: Restore 8 of your HP / 12: Restore 12 of your HP."
+        "ja": "【発動時】ダイス2個の合計 — 2-3: 自分のマナ水晶+3、カードを2枚引く / 4-5: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 6-8: 自分のマナ水晶+1 / 9-11: 自分の体力を8回復する / 12: 自分の体力を12回復する。",
+        "ko": "【발동 시】주사위 2개 합계 — 2-3: 자신의 마나 수정 +3, 카드를 2장 뽑는다 / 4-5: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 6-8: 자신의 마나 수정 +1 / 9-11: 자신의 체력을 8 회복한다 / 12: 자신의 체력을 12 회복한다.",
+        "en": "【On Cast】Roll 2 dice and total them — 2-3: Increase your mana crystals by 3, draw 2 cards / 4-5: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 6-8: Increase your mana crystals by 1 / 9-11: Restore 8 of your HP / 12: Restore 12 of your HP."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -2226,20 +2242,22 @@
       "nameJa": "アサシンギルドの宝箱",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "1470d801958a052ee7a9c1e40452d2812c5a058ed4d9efabb57f52d493043aa5",
-      "textSha256": "21a82cf9d2e90037b595d933af8a9656520d8d3c4b348e147273cf578a172927",
+      "textSha256": "a37197094b5772850114bdc1b8772c31049495f05029309cd8d45249f0855830",
       "hooks": {},
       "before": {
         "ja": "【発動時】ダイス2個の合計（自分の場に「アサシン」系カードがあれば、9-12は代わりにカードを4枚引く） — 2-3: 自分の最大マナ+3 / 4: 自分の場に「ギルドの情報網」を展開（自分のターン開始時に追加でカードを1枚引く） / 5-6: 自分の最大マナ+2 / 7: 自分の最大マナ+1 / 8: 自分の体力を10回復する / 9-10: 相手の場に「初級アサシン」「中級アサシン」を各1体召喚する / 11-12: 相手の場に「初級アサシン」「中級アサシン」「上級アサシン」を各1体召喚し、自分に10ダメージを与える。",
         "ko": "【발동 시】주사위 2개 합계(자신의 필드에 암살자 계열 카드가 있으면 9-12는 대신 카드를 4장 뽑는다) — 2-3: 자신의 최대 마나 +3 / 4: 자신의 필드에 길드 정보망 전개한다(자신 턴 시작에 카드를 1장 추가로 뽑는다) / 5-6: 자신의 최대 마나 +2 / 7: 자신의 최대 마나 +1 / 8: 자신의 체력을 10 회복한다 / 9-10: 상대의 필드에 초급·중급 암살자를 각각 1체 소환한다 / 11-12: 상대의 필드에 초급·중급·상급 암살자를 각각 1체 소환하고 자신에게 10 데미지를 준다.",
-        "en": "【On Cast】Roll 2 dice and total them; if you control an Assassin-family card, results 9-12 instead draw 4 cards — 2-3: Your max mana +3 / 4: Deploy Guild Network to your field (draw 1 extra card at your turn start) / 5-6: Your max mana +2 / 7: Your max mana +1 / 8: Restore 10 of your HP / 9-10: Summon 1 Novice and 1 Adept Assassin to the opponent's field / 11-12: Summon 1 Novice, 1 Adept, and 1 Elite Assassin to the opponent's field, then take 10 damage."
+        "en": "【On Cast】Roll 2 dice and total them; if you control an Assassin-family card, results 9-12 instead draw 4 cards — 2-3: Increase your max mana by 3 / 4: Deploy Guild Network to your field (draw 1 extra card at your turn start) / 5-6: Increase your max mana by 2 / 7: Increase your max mana by 1 / 8: Restore 10 of your HP / 9-10: Summon 1 Novice and 1 Adept Assassin to the opponent's field / 11-12: Summon 1 Novice, 1 Adept, and 1 Elite Assassin to the opponent's field, then take 10 damage."
       },
       "after": {
-        "ja": "【発動時】ダイス2個の合計（自分の場に「アサシン」系カードがあれば、9-12は代わりにカードを4枚引く） — 2-3: 自分の最大マナ+3 / 4: 自分の場に「ギルドの情報網」を展開（自分のターン開始時に追加でカードを1枚引く） / 5-6: 自分の最大マナ+2 / 7: 自分の最大マナ+1 / 8: 自分の体力を10回復する / 9-10: 相手の場に「初級アサシン」「中級アサシン」を各1体召喚する / 11-12: 相手の場に「初級アサシン」「中級アサシン」「上級アサシン」を各1体召喚し、自分に10ダメージを与える。",
-        "ko": "【발동 시】주사위 2개 합계(자신의 필드에 암살자 계열 카드가 있으면 9-12는 대신 카드를 4장 뽑는다) — 2-3: 자신의 최대 마나 +3 / 4: 자신의 필드에 길드 정보망 전개한다(자신 턴 시작에 카드를 1장 추가로 뽑는다) / 5-6: 자신의 최대 마나 +2 / 7: 자신의 최대 마나 +1 / 8: 자신의 체력을 10 회복한다 / 9-10: 상대의 필드에 초급·중급 암살자를 각각 1체 소환한다 / 11-12: 상대의 필드에 초급·중급·상급 암살자를 각각 1체 소환하고 자신에게 10 데미지를 준다.",
-        "en": "【On Cast】Roll 2 dice and total them; if you control an Assassin-family card, results 9-12 instead draw 4 cards — 2-3: Increase your max mana by 3 / 4: Deploy Guild Network to your field (draw 1 extra card at your turn start) / 5-6: Increase your max mana by 2 / 7: Increase your max mana by 1 / 8: Restore 10 of your HP / 9-10: Summon 1 Novice and 1 Adept Assassin to the opponent's field / 11-12: Summon 1 Novice, 1 Adept, and 1 Elite Assassin to the opponent's field, then take 10 damage."
+        "ja": "【発動時】ダイス2個の合計（自分の場に「アサシン」系カードがあれば、9-12は代わりにカードを4枚引く） — 2-3: 自分のマナ水晶+3 / 4: 自分の場に「ギルドの情報網」を展開（自分のターン開始時に追加でカードを1枚引く） / 5-6: 自分のマナ水晶+2 / 7: 自分のマナ水晶+1 / 8: 自分の体力を10回復する / 9-10: 相手の場に「初級アサシン」「中級アサシン」を各1体召喚する / 11-12: 相手の場に「初級アサシン」「中級アサシン」「上級アサシン」を各1体召喚し、自分に10ダメージを与える。",
+        "ko": "【발동 시】주사위 2개 합계(자신의 필드에 암살자 계열 카드가 있으면 9-12는 대신 카드를 4장 뽑는다) — 2-3: 자신의 마나 수정 +3 / 4: 자신의 필드에 길드 정보망 전개한다(자신 턴 시작에 카드를 1장 추가로 뽑는다) / 5-6: 자신의 마나 수정 +2 / 7: 자신의 마나 수정 +1 / 8: 자신의 체력을 10 회복한다 / 9-10: 상대의 필드에 초급·중급 암살자를 각각 1체 소환한다 / 11-12: 상대의 필드에 초급·중급·상급 암살자를 각각 1체 소환하고 자신에게 10 데미지를 준다.",
+        "en": "【On Cast】Roll 2 dice and total them; if you control an Assassin-family card, results 9-12 instead draw 4 cards — 2-3: Increase your mana crystals by 3 / 4: Deploy Guild Network to your field (draw 1 extra card at your turn start) / 5-6: Increase your mana crystals by 2 / 7: Increase your mana crystals by 1 / 8: Restore 10 of your HP / 9-10: Summon 1 Novice and 1 Adept Assassin to the opponent's field / 11-12: Summon 1 Novice, 1 Adept, and 1 Elite Assassin to the opponent's field, then take 10 damage."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -2271,42 +2289,46 @@
       "nameJa": "亀裂の触媒",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "2fad78b60dcf9aaaa9f68144e771cffa0c6570debffc7be80cbc07f6c0069c2c",
-      "textSha256": "35db4588b248ae3339551f93f526321c47436f8bdaa3c9a62103f3af8eccb59c",
+      "textSha256": "36daefc47124d8966c7195f0afddef0112610515c169136b13dedf5551c08e78",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分に4ダメージを与える。その後、自分の最大マナ+1。",
-        "ko": "【발동시】자신에게 4 데미지를 준다. 그 후 자신의 최대 마나 +1.",
+        "ko": "【발동 시】자신에게 4 데미지를 준다. 그 후 자신의 최대 마나 +1.",
         "en": "【On Cast】You take 4 damage. Then increase your max mana by 1."
       },
       "after": {
-        "ja": "【発動時】自分に4ダメージを与える。その後、自分の最大マナ+1。",
-        "ko": "【발동 시】자신에게 4 데미지를 준다. 그 후 자신의 최대 마나 +1.",
-        "en": "【On Cast】You take 4 damage. Then increase your max mana by 1."
+        "ja": "【発動時】自分に4ダメージを与える。その後、自分のマナ水晶+1。",
+        "ko": "【발동 시】자신에게 4 데미지를 준다. 그 후 자신의 마나 수정 +1.",
+        "en": "【On Cast】You take 4 damage. Then increase your mana crystals by 1."
       }
     },
     "WORLD_SEED": {
       "nameJa": "世界樹の種",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "1de9673e82c058fccf418bd18926d238011bdab5ffbb386f148c1e23084fa1be",
-      "textSha256": "6bca6a0a179911a7abfb963921ef44ed27009499e553f6de7cda52668434877c",
+      "textSha256": "414cedd084abb237fba2e72b7843daab2530cc49f0460c500ed4dde29f7e1102",
       "hooks": {
         "ench": "seedMana"
       },
       "before": {
         "ja": "【自分のターン開始時】ダイス1個を振り、5以上なら自分の最大マナ+1。",
         "ko": "【자신의 턴 시작 시】주사위 1개를 굴려 5 이상이면 자신의 최대 마나 +1.",
-        "en": "【At the Start of Your Turn】Roll 1 die; on 5 or more, your max mana +1."
+        "en": "【At the Start of Your Turn】Roll 1 die; on 5 or more, increase your max mana by 1."
       },
       "after": {
-        "ja": "【自分のターン開始時】ダイス1個を振り、5以上なら自分の最大マナ+1。",
-        "ko": "【자신의 턴 시작 시】주사위 1개를 굴려 5 이상이면 자신의 최대 마나 +1.",
-        "en": "【At the Start of Your Turn】Roll 1 die; on 5 or more, increase your max mana by 1."
+        "ja": "【自分のターン開始時】ダイス1個を振り、5以上なら自分のマナ水晶+1。",
+        "ko": "【자신의 턴 시작 시】주사위 1개를 굴려 5 이상이면 자신의 마나 수정 +1.",
+        "en": "【At the Start of Your Turn】Roll 1 die; on 5 or more, increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -2338,44 +2360,48 @@
       "nameJa": "時の砂時計",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "8dbe992aefb9fe357bd3571c2e5b0cdaedd0def691025be8797ec699a215082c",
-      "textSha256": "19785e5e77aae24763fa411941285108f9ee7d2c13da9f0acc839cdf54443db4",
+      "textSha256": "cf64375b17366881530159354606610949c5ac0f94a2b772e5e8e0952a20b963",
       "hooks": {
         "act": "manaUp"
       },
       "before": {
         "ja": "【発動時】自分の最大マナ+2。その後、カードを2枚引く。",
-        "ko": "【발동시】자신의 최대 마나 +2. 그 후 카드를 2장 뽑는다.",
+        "ko": "【발동 시】자신의 최대 마나 +2. 그 후 카드를 2장 뽑는다.",
         "en": "【On Cast】Increase your max mana by 2. Then draw 2 cards."
       },
       "after": {
-        "ja": "【発動時】自分の最大マナ+2。その後、カードを2枚引く。",
-        "ko": "【발동 시】자신의 최대 마나 +2. 그 후 카드를 2장 뽑는다.",
-        "en": "【On Cast】Increase your max mana by 2. Then draw 2 cards."
+        "ja": "【発動時】自分のマナ水晶+2。その後、カードを2枚引く。",
+        "ko": "【발동 시】자신의 마나 수정 +2. 그 후 카드를 2장 뽑는다.",
+        "en": "【On Cast】Increase your mana crystals by 2. Then draw 2 cards."
       }
     },
     "LIFE_CYCLE": {
       "nameJa": "生命の循環",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "3f208f3e0134b9b13bf84a409207f717797a39760c06cbfd8eef263cd0de1b72",
-      "textSha256": "e1ae82e910c88f1cab7f5c50848ddc006accd4f4f3ed06a94b59ef0aae8dac55",
+      "textSha256": "9071c71bf6955c64e9d89034014c7e23f1a3a36815e5086637a7df5aed221e45",
       "hooks": {
         "ench": "healMana"
       },
       "before": {
         "ja": "【自分の回復時】自分が体力を回復するか体力を得るたび、ダイス1個を振る。4以上なら、自分の最大マナ+1。",
-        "ko": "【자신 회복시】자신이 체력을 회복하거나 얻을 때마다 주사위 1개를 굴린다. 4 이상이면 자신의 최대 마나 +1.",
+        "ko": "【자신 회복 시】자신이 체력을 회복하거나 얻을 때마다 주사위 1개를 굴린다. 4 이상이면 자신의 최대 마나 +1.",
         "en": "【When You Heal】Whenever you restore or gain HP, roll 1 die. On 4 or more, increase your max mana by 1."
       },
       "after": {
-        "ja": "【自分の回復時】自分が体力を回復するか体力を得るたび、ダイス1個を振る。4以上なら、自分の最大マナ+1。",
-        "ko": "【자신 회복 시】자신이 체력을 회복하거나 얻을 때마다 주사위 1개를 굴린다. 4 이상이면 자신의 최대 마나 +1.",
-        "en": "【When You Heal】Whenever you restore or gain HP, roll 1 die. On 4 or more, increase your max mana by 1."
+        "ja": "【自分の回復時】自分が体力を回復するか体力を得るたび、ダイス1個を振る。4以上なら、自分のマナ水晶+1。",
+        "ko": "【자신 회복 시】자신이 체력을 회복하거나 얻을 때마다 주사위 1개를 굴린다. 4 이상이면 자신의 마나 수정 +1.",
+        "en": "【When You Heal】Whenever you restore or gain HP, roll 1 die. On 4 or more, increase your mana crystals by 1."
       }
     },
     "LIFE_SANCTUM": {
@@ -2432,22 +2458,24 @@
       "nameJa": "瞑想",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "6216c9bc7b9bf5dfae11dacebda17f6662d0a2675e5fb130457fdcc045c0c01b",
-      "textSha256": "becbaccf038c0b6a36966f3b8040e8ebea4ae7d8c5bfacdc8e9c00b6effb9f05",
+      "textSha256": "ab087cac91b91ed1a96e0cf2654940ec81ba7dbd03e8386dcb63798039aa0b1a",
       "hooks": {
         "act": "heal"
       },
       "before": {
         "ja": "【発動条件】自分の最大マナが11以下で、自分の体力が40未満。\n\n【発動時】自分の体力が40になる量だけ回復する。自分に烙印カウンター1個を付与する。",
-        "ko": "【발동 조건】자신의 최대 마나 11 이하, 자신의 체력 40 미만.\n\n【발동시】자신의 체력이 40이 되는 양만큼 회복한다. 자신에게 낙인 카운터 1개 부여한다.",
+        "ko": "【발동 조건】자신의 최대 마나 11 이하, 자신의 체력 40 미만.\n\n【발동 시】자신의 체력이 40이 되는 양만큼 회복한다. 자신에게 낙인 카운터 1개 부여한다.",
         "en": "【Play Requirement】Your max mana is at most 11 and your HP is below 40.\n\n【On Cast】Restore the amount of HP needed to reach 40. Give yourself 1 Brand counter."
       },
       "after": {
-        "ja": "【発動条件】自分の最大マナが11以下で、自分の体力が40未満。\n\n【発動時】自分の体力が40になる量だけ回復する。自分に烙印カウンター1個を付与する。",
-        "ko": "【발동 조건】자신의 최대 마나 11 이하, 자신의 체력 40 미만.\n\n【발동 시】자신의 체력이 40이 되는 양만큼 회복한다. 자신에게 낙인 카운터 1개 부여한다.",
-        "en": "【Play Requirement】Your max mana is at most 11 and your HP is below 40.\n\n【On Cast】Restore the amount of HP needed to reach 40. Give yourself 1 Brand counter."
+        "ja": "【発動条件】自分のマナ水晶が11以下で、自分の体力が40未満。\n\n【発動時】自分の体力が40になる量だけ回復する。自分に烙印カウンター1個を付与する。",
+        "ko": "【발동 조건】자신의 마나 수정 11 이하, 자신의 체력 40 미만.\n\n【발동 시】자신의 체력이 40이 되는 양만큼 회복한다. 자신에게 낙인 카운터 1개 부여한다.",
+        "en": "【Play Requirement】Your mana crystals are at most 11 and your HP is below 40.\n\n【On Cast】Restore the amount of HP needed to reach 40. Give yourself 1 Brand counter."
       }
     },
     "HERMIT": {
@@ -2476,22 +2504,24 @@
       "nameJa": "世界樹の祝福",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "f944b2576b364d8b51b49cba004a0903a4db7ce1db9c706f45444cdf4f52b609",
-      "textSha256": "bcbe63558fd3c955a28bf9cd4a8d235986dafe2d5c769cb27e8159a5dd774a68",
+      "textSha256": "377d3823c39ce03c1176845e6b4c9f4787165ccb3ca9adc0c94d136d89a62916",
       "hooks": {
         "ench": "worldBless"
       },
       "before": {
         "ja": "【各ターン開始時】そのターンのプレイヤーの最大マナ+1。自分のターンで、自分のデッキ・手札・墓地に「エルフ」系カードがあれば、+1の代わりに+4。",
         "ko": "【각 턴 시작 시】해당 턴 플레이어의 최대 마나 +1. 자신의 턴이고 자신의 덱·패·묘지에 엘프 계열 카드가 있으면 +1 대신 +4.",
-        "en": "【At the Start of Each Turn】The active player's max mana +1. On your turn, if an Elf-family card is in your deck, hand, or graveyard, gain +4 instead of +1."
+        "en": "【At the Start of Each Turn】Increase the active player’s max mana by 1. On your turn, if an Elf-family card is in your deck, hand, or graveyard, gain +4 instead of +1."
       },
       "after": {
-        "ja": "【各ターン開始時】そのターンのプレイヤーの最大マナ+1。自分のターンで、自分のデッキ・手札・墓地に「エルフ」系カードがあれば、+1の代わりに+4。",
-        "ko": "【각 턴 시작 시】해당 턴 플레이어의 최대 마나 +1. 자신의 턴이고 자신의 덱·패·묘지에 엘프 계열 카드가 있으면 +1 대신 +4.",
-        "en": "【At the Start of Each Turn】Increase the active player’s max mana by 1. On your turn, if an Elf-family card is in your deck, hand, or graveyard, gain +4 instead of +1."
+        "ja": "【各ターン開始時】そのターンのプレイヤーのマナ水晶+1。自分のターンで、自分のデッキ・手札・墓地に「エルフ」系カードがあれば、+1の代わりに+4。",
+        "ko": "【각 턴 시작 시】해당 턴 플레이어의 마나 수정 +1. 자신의 턴이고 자신의 덱·패·묘지에 엘프 계열 카드가 있으면 +1 대신 +4.",
+        "en": "【At the Start of Each Turn】Increase the active player’s mana crystals by 1. On your turn, if an Elf-family card is in your deck, hand, or graveyard, gain +4 instead of +1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -2939,20 +2969,22 @@
       "nameJa": "大虐殺",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "c774b35eba03119905e2a23fa7555d12448aab4f9e091049db1d19d53f479c22",
-      "textSha256": "165e0adff0ce25d4f837b683d3cb5a00e3ee4131b3c41f9c38cfe5674bb76b2b",
+      "textSha256": "cd1dd29aa682ea0991d93b576eed94745ed52a1c2fd3f0a149d416048aaad561",
       "hooks": {},
       "before": {
         "ja": "【発動条件】相手の場にモンスターがいる。\n\n【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
         "ko": "【발동 조건】상대의 필드에 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
-        "en": "【Play Requirement】The opponent controls a monster.\n\n【On Cast】Your max mana -1. Destroy all monsters on the enemy field."
+        "en": "【Play Requirement】The opponent controls a monster.\n\n【On Cast】Reduce your max mana by 1. Destroy all monsters on the enemy field."
       },
       "after": {
-        "ja": "【発動条件】相手の場にモンスターがいる。\n\n【発動時】自分の最大マナ-1。相手の場のモンスターを全て破壊する。",
-        "ko": "【발동 조건】상대의 필드에 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 상대 필드의 몬스터를 전부 파괴한다.",
-        "en": "【Play Requirement】The opponent controls a monster.\n\n【On Cast】Reduce your max mana by 1. Destroy all monsters on the enemy field."
+        "ja": "【発動条件】相手の場にモンスターがいる。\n\n【発動時】自分のマナ水晶-1。相手の場のモンスターを全て破壊する。",
+        "ko": "【발동 조건】상대의 필드에 몬스터가 있다.\n\n【발동 시】자신의 마나 수정 -1. 상대 필드의 몬스터를 전부 파괴한다.",
+        "en": "【Play Requirement】The opponent controls a monster.\n\n【On Cast】Reduce your mana crystals by 1. Destroy all monsters on the enemy field."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -3153,20 +3185,22 @@
       "nameJa": "スクラップ収集家",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "6e09c528148c6558c23c176bc86f9c438b2d7c8e585e0d035ae09b6478b64c7f",
-      "textSha256": "a20e046428d3b9c4f4712dcfa659364c1ed3fd9a6a313c6ebf01b3ca9a037e92",
+      "textSha256": "fdc58a03918c79a0f1538f5c1b6f6fbfaaf5d4d49bc67513dad1fce229e3d4c6",
       "hooks": {},
       "before": {
         "ja": "【発動条件】自分の手札に、このカード以外の購入コスト1のカードが2枚以上ある（リフトへ送れないカードを除く）。\n\n【発動時】そのうち2枚を選び、自分のリフトへ送る。2枚とも送った場合、自分の最大マナ+1。",
-        "ko": "【발동 조건】자신의 패에 이 카드 외에 구매 비용이 1인 카드가 2장 이상 있다(리프트로 보낼 수 없는 카드는 제외).\n\n【발동 시】그중 2장을 선택해 자신의 리프트로 보낸다. 2장 모두 보냈다면 자신의 최대 마나+1.",
+        "ko": "【발동 조건】자신의 패에 이 카드 외에 구매 코스트이 1인 카드가 2장 이상 있다(리프트로 보낼 수 없는 카드는 제외).\n\n【발동 시】그중 2장을 선택해 자신의 리프트로 보낸다. 2장 모두 보냈다면 자신의 최대 마나+1.",
         "en": "【Play Requirement】Your hand contains at least 2 other cards with purchase cost exactly 1 that can be sent to the Rift.\n\n【On Cast】Choose 2 of those cards and send them to your Rift. If both are sent, gain 1 max mana."
       },
       "after": {
-        "ja": "【発動条件】自分の手札に、このカード以外の購入コスト1のカードが2枚以上ある（リフトへ送れないカードを除く）。\n\n【発動時】そのうち2枚を選び、自分のリフトへ送る。2枚とも送った場合、自分の最大マナ+1。",
-        "ko": "【발동 조건】자신의 패에 이 카드 외에 구매 코스트이 1인 카드가 2장 이상 있다(리프트로 보낼 수 없는 카드는 제외).\n\n【발동 시】그중 2장을 선택해 자신의 리프트로 보낸다. 2장 모두 보냈다면 자신의 최대 마나+1.",
-        "en": "【Play Requirement】Your hand contains at least 2 other cards with purchase cost exactly 1 that can be sent to the Rift.\n\n【On Cast】Choose 2 of those cards and send them to your Rift. If both are sent, gain 1 max mana."
+        "ja": "【発動条件】自分の手札に、このカード以外の購入コスト1のカードが2枚以上ある（リフトへ送れないカードを除く）。\n\n【発動時】そのうち2枚を選び、自分のリフトへ送る。2枚とも送った場合、自分のマナ水晶+1。",
+        "ko": "【발동 조건】자신의 패에 이 카드 외에 구매 코스트이 1인 카드가 2장 이상 있다(리프트로 보낼 수 없는 카드는 제외).\n\n【발동 시】그중 2장을 선택해 자신의 리프트로 보낸다. 2장 모두 보냈다면 자신의 마나 수정+1.",
+        "en": "【Play Requirement】Your hand contains at least 2 other cards with purchase cost exactly 1 that can be sent to the Rift.\n\n【On Cast】Choose 2 of those cards and send them to your Rift. If both are sent, gain 1 mana crystal."
       },
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged.",
       "reviewedAt": "2026-10-30"
@@ -3465,10 +3499,12 @@
       "nameJa": "神獣",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "a88fddd9297f6a21de8e8d897d6801b0986adc5a716135a9f3444b96815079d5",
-      "textSha256": "0d88a0b2483ecfcf11e395cdac7377c38a9b3ceb7267dc9f0365e7a210d51bd0",
+      "textSha256": "bc24dd26bb05d1de88762925216eb93cc1a1248f36ac03126940ef0f394bcc4a",
       "hooks": {
         "onSummon": "divine",
         "aura": "ward"
@@ -3476,12 +3512,12 @@
       "before": {
         "ja": "【召喚時】自分の最大マナ+15。以後、自分のターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・永続魔法から合計3枚まで選んで破壊する。",
         "ko": "【소환 시】자신의 최대 마나 +15. 이후 자신 턴 시작 드로우 +1(이 몬스터가 필드를 떠나도 지속). 양쪽 필드의 몬스터·영구 마법 중 합계 3장까지 선택해 파괴한다.",
-        "en": "【On Summon】Your max mana +15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
+        "en": "【On Summon】Increase your max mana by 15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
       },
       "after": {
-        "ja": "【召喚時】自分の最大マナ+15。以後、自分のターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・永続魔法から合計3枚まで選んで破壊する。",
-        "ko": "【소환 시】자신의 최대 마나 +15. 이후 자신 턴 시작 드로우 +1(이 몬스터가 필드를 떠나도 지속). 양쪽 필드의 몬스터·영구 마법 중 합계 3장까지 선택해 파괴한다.",
-        "en": "【On Summon】Increase your max mana by 15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
+        "ja": "【召喚時】自分のマナ水晶+15。以後、自分のターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・永続魔法から合計3枚まで選んで破壊する。",
+        "ko": "【소환 시】자신의 마나 수정 +15. 이후 자신 턴 시작 드로우 +1(이 몬스터가 필드를 떠나도 지속). 양쪽 필드의 몬스터·영구 마법 중 합계 3장까지 선택해 파괴한다.",
+        "en": "【On Summon】Increase your mana crystals by 15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
       },
       "reviewedAt": "2026-10-31",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -3628,26 +3664,26 @@
     },
     "BLOOD_PLEASURE": {
       "nameJa": "血の魔法 - 楽",
-      "status": "reviewed-rework-v74",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "9624646ca3dafa0d470f260de60d8aad9aecc75797aa945e949b681098c53cdf",
-      "textSha256": "5630391330c955aae3200136797fdaec9772c8462a84ee1acc8ded8853955393",
+      "textSha256": "6b8fcc3d16827e1a929c8514fc65d73db6d6246ae27d0d552033bc035e9acfe8",
       "hooks": {
         "cost": 4
       },
       "before": {
-        "ja": "【発動時】自分に14ダメージを与える。自分の最大マナ+1。",
-        "ko": "【발동 시】자신에게 14 데미지를 준다. 자신의 최대 마나 +1.",
-        "en": "【On Cast】You take 14 damage. Increase your max mana by 1."
-      },
-      "after": {
         "ja": "【発動時】自分に7ダメージを与える。自分の最大マナ+1。",
         "ko": "【발동 시】자신에게 7 데미지를 준다. 자신의 최대 마나 +1.",
         "en": "【On Cast】You take 7 damage. Increase your max mana by 1."
+      },
+      "after": {
+        "ja": "【発動時】自分に7ダメージを与える。自分のマナ水晶+1。",
+        "ko": "【발동 시】자신에게 7 데미지를 준다. 자신의 마나 수정 +1.",
+        "en": "【On Cast】You take 7 damage. Increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -3681,22 +3717,24 @@
       "nameJa": "血の祝祭",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "66b2aed31b99b82301d84eba298e18fc6acc09d08c5161e95b34391dc1a67df5",
-      "textSha256": "e5e0427171b461995a29b6f5b34ef0e3f2681829ea83f02181769e331b89fe01",
+      "textSha256": "1573aac4e22337df1bf45d1c283ec90d02deedd481a7d4d13f65f68385b5b9e0",
       "hooks": {
         "ench": "bloodFest"
       },
       "before": {
         "ja": "【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分の最大マナ+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
         "ko": "【자신의 마법 발동 시】자신이 피의 마법을 사용할 때마다 자신의 최대 마나 +1. 피의 마법이 무효화되면 이 효과는 발동하지 않는다.",
-        "en": "【When Your Spell Takes Effect】Whenever you play Blood Magic, your max mana +1. This effect does not trigger if the Blood Magic spell is negated."
+        "en": "【When Your Spell Takes Effect】Whenever you play Blood Magic, increase your max mana by 1. This effect does not trigger if the Blood Magic spell is negated."
       },
       "after": {
-        "ja": "【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分の最大マナ+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
-        "ko": "【자신의 마법 발동 시】자신이 피의 마법을 사용할 때마다 자신의 최대 마나 +1. 피의 마법이 무효화되면 이 효과는 발동하지 않는다.",
-        "en": "【When Your Spell Takes Effect】Whenever you play Blood Magic, increase your max mana by 1. This effect does not trigger if the Blood Magic spell is negated."
+        "ja": "【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分のマナ水晶+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
+        "ko": "【자신의 마법 발동 시】자신이 피의 마법을 사용할 때마다 자신의 마나 수정 +1. 피의 마법이 무효화되면 이 효과는 발동하지 않는다.",
+        "en": "【When Your Spell Takes Effect】Whenever you play Blood Magic, increase your mana crystals by 1. This effect does not trigger if the Blood Magic spell is negated."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -3794,20 +3832,22 @@
       "nameJa": "血の魔法 - 秘術",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "5a3c9822cc117236313f50c5357602a52e4e878eec32e1119b0132a34add3efb",
-      "textSha256": "b36589742b96c167e340b21fab3248e348eb5e153413dca2ab633d50a8556a8b",
+      "textSha256": "c76c3ec90fed935ea12193ec03f3513e6216d5928dd709b28ffa846993f21fe6",
       "hooks": {},
       "before": {
         "ja": "【発動条件】自分の場に「吸血鬼」系モンスターがいる。\n\n【発動時】自分に9ダメージを与える。自分の場の「吸血鬼」系モンスター1体を選んで破壊する。破壊できたら自分の最大マナ+3、自分の体力を10回復する。",
         "ko": "【발동 조건】자신의 필드에 흡혈귀 계열 몬스터가 있다.\n\n【발동 시】자신에게 9 데미지를 준다. 자신의 필드의 흡혈귀 계열 몬스터 1체를 선택해 파괴한다. 파괴했다면 자신의 최대 마나 +3, 자신의 체력을 10 회복한다.",
-        "en": "【Play Requirement】You control a Vampire-family monster.\n\n【On Cast】You take 9 damage. Choose and destroy 1 Vampire-family monster on your field. If destroyed, your max mana +3 and restore 10 of your HP."
+        "en": "【Play Requirement】You control a Vampire-family monster.\n\n【On Cast】You take 9 damage. Choose and destroy 1 Vampire-family monster on your field. If destroyed, increase your max mana by 3 and restore 10 of your HP."
       },
       "after": {
-        "ja": "【発動条件】自分の場に「吸血鬼」系モンスターがいる。\n\n【発動時】自分に9ダメージを与える。自分の場の「吸血鬼」系モンスター1体を選んで破壊する。破壊できたら自分の最大マナ+3、自分の体力を10回復する。",
-        "ko": "【발동 조건】자신의 필드에 흡혈귀 계열 몬스터가 있다.\n\n【발동 시】자신에게 9 데미지를 준다. 자신의 필드의 흡혈귀 계열 몬스터 1체를 선택해 파괴한다. 파괴했다면 자신의 최대 마나 +3, 자신의 체력을 10 회복한다.",
-        "en": "【Play Requirement】You control a Vampire-family monster.\n\n【On Cast】You take 9 damage. Choose and destroy 1 Vampire-family monster on your field. If destroyed, increase your max mana by 3 and restore 10 of your HP."
+        "ja": "【発動条件】自分の場に「吸血鬼」系モンスターがいる。\n\n【発動時】自分に9ダメージを与える。自分の場の「吸血鬼」系モンスター1体を選んで破壊する。破壊できたら自分のマナ水晶+3、自分の体力を10回復する。",
+        "ko": "【발동 조건】자신의 필드에 흡혈귀 계열 몬스터가 있다.\n\n【발동 시】자신에게 9 데미지를 준다. 자신의 필드의 흡혈귀 계열 몬스터 1체를 선택해 파괴한다. 파괴했다면 자신의 마나 수정 +3, 자신의 체력을 10 회복한다.",
+        "en": "【Play Requirement】You control a Vampire-family monster.\n\n【On Cast】You take 9 damage. Choose and destroy 1 Vampire-family monster on your field. If destroyed, increase your mana crystals by 3 and restore 10 of your HP."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -3957,17 +3997,17 @@
         "en"
       ],
       "definitionSha256": "f25dc80d2143f8ffee32707b9ad798a7bc91d5d3d91e15d21185ae8d5c944e28",
-      "textSha256": "331b29426bc113c2a591b2dc92f9f49488bc28907f1a6f2a689df1a02824258e",
+      "textSha256": "596ea08c32dd52c75399d809656c2b209181a87c8918b92b7b58c0039e221e8f",
       "hooks": {},
       "before": {
-        "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（持続）。\n\n【行動の終了後】相手が最大マナを増やすたびに、自分に2ダメージを与える。",
-        "ko": "【상대 회복 시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(지속).\n\n【행동 처리 후】상대가 최대 마나를 늘릴 때마다 자신에게 2 데미지를 준다.",
-        "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (lasting).\n\n【After an Action】Whenever the opponent increases their max mana, deal 2 damage to yourself."
-      },
-      "after": {
         "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（対象が場を離れるまで）。\n\n【行動の終了後】相手が最大マナを増やすたびに、自分に2ダメージを与える。",
         "ko": "【상대 회복 시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【행동 처리 후】상대가 최대 마나를 늘릴 때마다 자신에게 2 데미지를 준다.",
         "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (until the affected monster leaves the field).\n\n【After an Action】Whenever the opponent increases their max mana, deal 2 damage to yourself."
+      },
+      "after": {
+        "ja": "【相手の回復時】相手が体力を回復するたび、このモンスターの攻撃力+1（対象が場を離れるまで）。\n\n【行動の終了後】相手がマナ水晶を増やすたびに、自分に2ダメージを与える。",
+        "ko": "【상대 회복 시】상대가 체력을 회복할 때마다 이 몬스터의 공격력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【행동 처리 후】상대가 마나 수정을 늘릴 때마다 자신에게 2 데미지를 준다.",
+        "en": "【When the Opponent Heals】Whenever the opponent restores HP, this monster gets +1 ATK (until the affected monster leaves the field).\n\n【After an Action】Whenever the opponent increases their mana crystals, deal 2 damage to yourself."
       },
       "reviewDate": "2026-10-26",
       "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md",
@@ -4075,46 +4115,48 @@
       "nameJa": "逆算",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "732180b9d442de05565ea0c2edc249effb7f2f5459e540cf8826450f7b9725e4",
-      "textSha256": "1456e2a24dc48e60b05bca50c8aa688cca6138d14443057bbec719cc4358075f",
+      "textSha256": "49db323b418ed027d8bf72ae292e913c2305fec435323458cf0ae9dd8c7786aa",
       "hooks": {},
       "before": {
         "ja": "【発動条件】相手の最大マナが7以下で、相手の場に永続魔法がある。 同名カード合計で自分の各ターン1回まで使用できる。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。",
-        "ko": "【발동 조건】상대의 최대 마나가 7 이하이고 상대의 필드에 영구마법이 있다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.\n\n【발동 시】상대 영구마법 1장을 무작위로 파괴한다.",
+        "ko": "【발동 조건】상대의 최대 마나가 7 이하이고 상대의 필드에 영구 마법이 있다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.\n\n【발동 시】상대 영구 마법 1장을 무작위로 파괴한다.",
         "en": "【Play Requirement】The opponent's max mana is at most 7 and they control a persistent spell. You may play cards with this name only 1 time during each of your turns in total.\n\n【On Cast】Destroy 1 random enemy persistent spell."
       },
       "after": {
-        "ja": "【発動条件】相手の最大マナが7以下で、相手の場に永続魔法がある。 同名カード合計で自分の各ターン1回まで使用できる。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。",
-        "ko": "【발동 조건】상대의 최대 마나가 7 이하이고 상대의 필드에 영구 마법이 있다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.\n\n【발동 시】상대 영구 마법 1장을 무작위로 파괴한다.",
-        "en": "【Play Requirement】The opponent's max mana is at most 7 and they control a persistent spell. You may play cards with this name only 1 time during each of your turns in total.\n\n【On Cast】Destroy 1 random enemy persistent spell."
+        "ja": "【発動条件】相手のマナ水晶が7以下で、相手の場に永続魔法がある。 同名カード合計で自分の各ターン1回まで使用できる。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。",
+        "ko": "【발동 조건】상대의 마나 수정이 7 이하이고 상대의 필드에 영구 마법이 있다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.\n\n【발동 시】상대 영구 마법 1장을 무작위로 파괴한다.",
+        "en": "【Play Requirement】The opponent's mana crystals are at most 7 and they control a persistent spell. You may play cards with this name only 1 time during each of your turns in total.\n\n【On Cast】Destroy 1 random enemy persistent spell."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
     },
     "AMBUSH": {
       "nameJa": "奇襲",
-      "status": "reviewed-rework-v74",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "a01490feab2c483edbe37e5622a1c84bef99d5bfd8fc8082727ff15a4e3ccded",
-      "textSha256": "36a7959eeb83ee765c075a224b7819a1acc0a3ceabda8291940b5b8869a82932",
+      "textSha256": "15cb1c0a1af33c11d4d519013713d5b57586487f76bce7b06e9b4a2de3063726",
       "hooks": {
         "cost": 3
       },
       "before": {
-        "ja": "【発動条件】相手の最大マナが4。\n\n【発動時】相手に13ダメージを与える。その後、自分に8ダメージを与え、この魔法を自分のリフトへ送る。",
-        "ko": "【발동 조건】상대의 최대 마나가 4.\n\n【발동 시】상대에게 13 데미지를 준다. 그 후 자신에게 8 데미지를 주고 이 마법을 자신의 리프트로 보낸다.",
-        "en": "【Play Requirement】The opponent’s max mana is exactly 4.\n\n【On Cast】Deal 13 damage to the opponent. Then you take 8 damage and send this spell to your Rift."
-      },
-      "after": {
         "ja": "【発動条件】相手の最大マナが4か5で、直前の自分のターンに同名カードを使用していない。スキップされたターンは数えない。無効になった使用も数える。\n\n【発動時】相手に13ダメージを与える。その後、自分に8ダメージを与え、この魔法を自分のリフトへ送る。",
         "ko": "【발동 조건】상대의 최대 마나가 4 또는 5이고, 직전 자신의 턴에 같은 이름의 카드를 사용하지 않았다. 건너뛴 턴은 세지 않는다. 무효화된 사용도 센다.\n\n【발동 시】상대에게 13 데미지를 준다. 그 후 자신에게 8 데미지를 주고 이 마법을 자신의 리프트로 보낸다.",
         "en": "【Play Requirement】The opponent’s max mana is 4 or 5, and you did not play a card with this name during your previous turn. Skipped turns do not count as a turn for this restriction. Negated plays still count.\n\n【On Cast】Deal 13 damage to the opponent. Then take 8 damage and send this spell to your Rift."
+      },
+      "after": {
+        "ja": "【発動条件】相手のマナ水晶が4か5で、直前の自分のターンに同名カードを使用していない。スキップされたターンは数えない。無効になった使用も数える。\n\n【発動時】相手に13ダメージを与える。その後、自分に8ダメージを与え、この魔法を自分のリフトへ送る。",
+        "ko": "【발동 조건】상대의 마나 수정이 4 또는 5이고, 직전 자신의 턴에 같은 이름의 카드를 사용하지 않았다. 건너뛴 턴은 세지 않는다. 무효화된 사용도 센다.\n\n【발동 시】상대에게 13 데미지를 준다. 그 후 자신에게 8 데미지를 주고 이 마법을 자신의 리프트로 보낸다.",
+        "en": "【Play Requirement】The opponent’s mana crystals are 4 or 5, and you did not play a card with this name during your previous turn. Skipped turns do not count as a turn for this restriction. Negated plays still count.\n\n【On Cast】Deal 13 damage to the opponent. Then take 8 damage and send this spell to your Rift."
       }
     },
     "TRUMPET": {
@@ -4151,22 +4193,24 @@
       "nameJa": "先見の明",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "998c910974957989302f0f093bda060515615c5d89531315dfcdbbac228dfd6d",
-      "textSha256": "bc75dd19bf2358ec0dce1e18bc42ac193b282b4993fea1737f80e2e6721f8387",
+      "textSha256": "4b82a5961460c42b7d94cd6ceb5c1a2a41773b3bf0b051790fb23718e2a39941",
       "hooks": {
         "ench": "foresight"
       },
       "before": {
         "ja": "【発動条件】自分の場に「先見の明」がない。\n\n【各ターン開始時】自分の最大マナが10以上なら、自分の最大マナ+2、この魔法を自分のリフトへ送る。\n\n【破壊時】墓地の代わりに自分のリフトへ送る。",
         "ko": "【발동 조건】자신의 필드에 선견지명이 없다.\n\n【각 턴 시작 시】자신의 최대 마나가 10 이상이면 자신의 최대 마나 +2, 이 마법을 자신의 리프트로 보낸다.\n\n【파괴 시】묘지 대신 자신의 리프트로 보낸다.",
-        "en": "【Play Requirement】You control no Foresight.\n\n【At the Start of Each Turn】If your max mana is at least 10, your max mana +2 and send this spell to your Rift.\n\n【On Destruction】Send it to your Rift instead of your graveyard."
+        "en": "【Play Requirement】You control no Foresight.\n\n【At the Start of Each Turn】If your max mana is at least 10, increase your max mana by 2 and send this spell to your Rift.\n\n【On Destruction】Send it to your Rift instead of your graveyard."
       },
       "after": {
-        "ja": "【発動条件】自分の場に「先見の明」がない。\n\n【各ターン開始時】自分の最大マナが10以上なら、自分の最大マナ+2、この魔法を自分のリフトへ送る。\n\n【破壊時】墓地の代わりに自分のリフトへ送る。",
-        "ko": "【발동 조건】자신의 필드에 선견지명이 없다.\n\n【각 턴 시작 시】자신의 최대 마나가 10 이상이면 자신의 최대 마나 +2, 이 마법을 자신의 리프트로 보낸다.\n\n【파괴 시】묘지 대신 자신의 리프트로 보낸다.",
-        "en": "【Play Requirement】You control no Foresight.\n\n【At the Start of Each Turn】If your max mana is at least 10, increase your max mana by 2 and send this spell to your Rift.\n\n【On Destruction】Send it to your Rift instead of your graveyard."
+        "ja": "【発動条件】自分の場に「先見の明」がない。\n\n【各ターン開始時】自分のマナ水晶が10以上なら、自分のマナ水晶+2、この魔法を自分のリフトへ送る。\n\n【破壊時】墓地の代わりに自分のリフトへ送る。",
+        "ko": "【발동 조건】자신의 필드에 선견지명이 없다.\n\n【각 턴 시작 시】자신의 마나 수정이 10 이상이면 자신의 마나 수정 +2, 이 마법을 자신의 리프트로 보낸다.\n\n【파괴 시】묘지 대신 자신의 리프트로 보낸다.",
+        "en": "【Play Requirement】You control no Foresight.\n\n【At the Start of Each Turn】If your mana crystals are at least 10, increase your mana crystals by 2 and send this spell to your Rift.\n\n【On Destruction】Send it to your Rift instead of your graveyard."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -4341,22 +4385,24 @@
       "nameJa": "ラストキャップ・スラッグ",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "0a65a32e7afd820ec6b17d80ede9e5744b0c86bccc875c7d97351605aae6ab5a",
-      "textSha256": "f1614d86b148e1f7d281e34dc7aaf901420aed48da723d54fb85b48450c0db4e",
+      "textSha256": "b9d1f6976b4e440e22a2eca31a5a1ff12a567d123d00997a6da2b7fde3c83271",
       "hooks": {
         "onSummon": "decayAll"
       },
       "before": {
         "ja": "【召喚時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。\n\n【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1、自分の体力を5回復する（同名は重複しない）。",
         "ko": "【소환 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리).\n\n【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1, 자신의 체력을 5 회복한다(동명 중첩 불가).",
-        "en": "【On Summon】Put 1 counter on each non-Egg enemy monster, applying Decay rules.\n\n【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1 and restore 5 of your HP; multiple copies do not stack."
+        "en": "【On Summon】Put 1 counter on each non-Egg enemy monster, applying Decay rules.\n\n【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your max mana by 1 and restore 5 of your HP; multiple copies do not stack."
       },
       "after": {
-        "ja": "【召喚時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。\n\n【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1、自分の体力を5回復する（同名は重複しない）。",
-        "ko": "【소환 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리).\n\n【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1, 자신의 체력을 5 회복한다(동명 중첩 불가).",
-        "en": "【On Summon】Put 1 counter on each non-Egg enemy monster, applying Decay rules.\n\n【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your max mana by 1 and restore 5 of your HP; multiple copies do not stack."
+        "ja": "【召喚時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。\n\n【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分のマナ水晶+1、自分の体力を5回復する（同名は重複しない）。",
+        "ko": "【소환 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리).\n\n【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 마나 수정 +1, 자신의 체력을 5 회복한다(동명 중첩 불가).",
+        "en": "【On Summon】Put 1 counter on each non-Egg enemy monster, applying Decay rules.\n\n【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your mana crystals by 1 and restore 5 of your HP; multiple copies do not stack."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -4364,20 +4410,22 @@
       "nameJa": "刻印秘術",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "ec6336a3e97a3a7f93504eb343d0881544e647a09f9c159bdce4859e0d1befcf",
-      "textSha256": "ee343063b1f6a6a3d8f38d4bba4d2805644f21ca61c196c43400285f197e808c",
+      "textSha256": "13d163ed2e53a102832b19ee0479897586b04b24758d0af87ad52ec80ec9f27e",
       "hooks": {},
       "before": {
         "ja": "【発動条件】自分の場に「威厳」を持たないモンスターがいる。\n\n【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（対象が場を離れるまで）。",
         "ko": "【발동 조건】자신의 필드에 위엄이 없는 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
-        "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Your max mana -1. Choose 1 monster on your field and give it Majesty (until the affected monster leaves the field)."
+        "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Reduce your max mana by 1. Choose 1 monster on your field and give it Majesty (until the affected monster leaves the field)."
       },
       "after": {
-        "ja": "【発動条件】自分の場に「威厳」を持たないモンスターがいる。\n\n【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（対象が場を離れるまで）。",
-        "ko": "【발동 조건】자신의 필드에 위엄이 없는 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
-        "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Reduce your max mana by 1. Choose 1 monster on your field and give it Majesty (until the affected monster leaves the field)."
+        "ja": "【発動条件】自分の場に「威厳」を持たないモンスターがいる。\n\n【発動時】自分のマナ水晶-1。自分の場のモンスター1体を選び、「威厳」を付与する（対象が場を離れるまで）。",
+        "ko": "【발동 조건】자신의 필드에 위엄이 없는 몬스터가 있다.\n\n【발동 시】자신의 마나 수정 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Reduce your mana crystals by 1. Choose 1 monster on your field and give it Majesty (until the affected monster leaves the field)."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -4499,20 +4547,22 @@
       "nameJa": "ラストマッシュルーム",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "1755c026db821742773b8bde42c9981d60f3decb0d6e71233467bfad42ba50f5",
-      "textSha256": "20a31bb77c52b2cdbfdd8a6b17c011fa37327f950aeb6d0dfa6fd06ace334595",
+      "textSha256": "1cd5bc699793120394aa1f59394ea2a816ad699b4ef73edfa21f8cd5468862df",
       "hooks": {},
       "before": {
         "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。4以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
         "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 4 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
-        "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, your max mana +1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 4 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
+        "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your max mana by 1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 4 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
       },
       "after": {
-        "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分の最大マナ+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。4以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
-        "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 최대 마나 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 4 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
-        "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your max mana by 1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 4 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
+        "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分のマナ水晶+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。4以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
+        "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 마나 수정 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 4 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
+        "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your mana crystals by 1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 4 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -4563,10 +4613,14 @@
     },
     "ANCIENT_CIV": {
       "nameJa": "古代文明",
-      "status": "reviewed-rework-v74",
-      "changedLocales": [],
+      "status": "reworded",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
       "definitionSha256": "7662d5200c36cdcb33b7fd3aa5f8a41f8a49072254a85d5ca8c6bb57c8ceee44",
-      "textSha256": "08fca27a88edded597dfedc67d8cdfb439038499e54c6bb6b5d3fbb20a075a75",
+      "textSha256": "591d6beb129b1e2f651641994e75b710ea24f261fd0a6348a8ad12fb447a1d3e",
       "hooks": {
         "ench": "ancientCiv",
         "val": 99,
@@ -4578,31 +4632,33 @@
         "en": "【At the Start of Your Turn】If at least 9 turns have elapsed since casting, counting both players, do all of the following.\nReduce your max mana by 1. Choose 1 new Dragon Egg or Divine Beast Egg to add to your hand. Destroy this spell."
       },
       "after": {
-        "ja": "【自分のターン開始時】発動後、双方通算で9ターン以上経過していれば、次の全てを行う。\n自分の最大マナを1減らす。新しい「ドラゴンの卵」か「神獣の卵」1枚を選んで自分の手札に加える。この魔法を破壊する。",
-        "ko": "【자신의 턴 시작 시】발동 후 양쪽 합계로 9턴 이상 지났으면 다음을 모두 처리한다.\n자신의 최대 마나를 1 줄인다. 새로운 드래곤의 알 또는 신수의 알 1장을 선택해 자신의 패에 넣는다. 이 마법을 파괴한다.",
-        "en": "【At the Start of Your Turn】If at least 9 turns have elapsed since casting, counting both players, do all of the following.\nReduce your max mana by 1. Choose 1 new Dragon Egg or Divine Beast Egg to add to your hand. Destroy this spell."
+        "ja": "【自分のターン開始時】発動後、双方通算で9ターン以上経過していれば、次の全てを行う。\n自分のマナ水晶を1減らす。新しい「ドラゴンの卵」か「神獣の卵」1枚を選んで自分の手札に加える。この魔法を破壊する。",
+        "ko": "【자신의 턴 시작 시】발동 후 양쪽 합계로 9턴 이상 지났으면 다음을 모두 처리한다.\n자신의 마나 수정을 1 줄인다. 새로운 드래곤의 알 또는 신수의 알 1장을 선택해 자신의 패에 넣는다. 이 마법을 파괴한다.",
+        "en": "【At the Start of Your Turn】If at least 9 turns have elapsed since casting, counting both players, do all of the following.\nReduce your mana crystals by 1. Choose 1 new Dragon Egg or Divine Beast Egg to add to your hand. Destroy this spell."
       }
     },
     "GAMBLER": {
       "nameJa": "ギャンブラー",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "665c58161b4859b170de0ab622ca8a66542f2cccb2300e3e9782d8387dc275b4",
-      "textSha256": "fe988fd2a48c44dd9b82de9dbfaaeded822dca683be45991889d5b0cf7d4359b",
+      "textSha256": "eaf2395524dad2998176d13d425fcc585d3c3379727012f7f4b8b1bad69978d7",
       "hooks": {
         "turnFx": "gambler"
       },
       "before": {
         "ja": "【自分のターン開始時】ダイス1個を振り、4以上なら自分の最大マナ+1。",
         "ko": "【자신의 턴 시작 시】주사위 1개를 굴려 4 이상이면 자신의 최대 마나 +1.",
-        "en": "【At the Start of Your Turn】Roll 1 die; on 4 or more, your max mana +1."
+        "en": "【At the Start of Your Turn】Roll 1 die; on 4 or more, increase your max mana by 1."
       },
       "after": {
-        "ja": "【自分のターン開始時】ダイス1個を振り、4以上なら自分の最大マナ+1。",
-        "ko": "【자신의 턴 시작 시】주사위 1개를 굴려 4 이상이면 자신의 최대 마나 +1.",
-        "en": "【At the Start of Your Turn】Roll 1 die; on 4 or more, increase your max mana by 1."
+        "ja": "【自分のターン開始時】ダイス1個を振り、4以上なら自分のマナ水晶+1。",
+        "ko": "【자신의 턴 시작 시】주사위 1개를 굴려 4 이상이면 자신의 마나 수정 +1.",
+        "en": "【At the Start of Your Turn】Roll 1 die; on 4 or more, increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -4659,22 +4715,24 @@
       "nameJa": "伝説のギャンブラー",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "a6690307cd573069fe713f27457d847fa645e06c0fdb3c362f873c99c21f786f",
-      "textSha256": "db62bad361683415b55c257fd6e8c1c4c0a6354f93cc6d9535d7a74b113acdb9",
+      "textSha256": "2c697f1f80bcf217369630c362e73e760c880ec58c800e70c2ef72827a3f8645",
       "hooks": {
         "turnFx": "legendGambler"
       },
       "before": {
         "ja": "【自分のターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。\n自分の最大マナ+4。\n自分の体力を35回復する。\n相手の場のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。\n的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。",
-        "ko": "【자신의 턴 시작 시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.\n자신의 최대 마나 +4.\n자신의 체력을 35 회복한다.\n상대 필드의 몬스터·영구마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.\n적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.",
+        "ko": "【자신의 턴 시작 시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.\n자신의 최대 마나 +4.\n자신의 체력을 35 회복한다.\n상대 필드의 몬스터·영구 마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.\n적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.",
         "en": "【At the Start of Your Turn】Predict a result from 1–6, then roll 3 dice. If at least 1 matches, choose one of the following.\nIncrease your max mana by 4.\nRestore 35 of your HP.\nDestroy 1 random monster or persistent spell on the enemy field, twice, choosing again each time.\nIf a die matches and your deck composition contains Gambler, apply all options in the order above instead of choosing."
       },
       "after": {
-        "ja": "【自分のターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。\n自分の最大マナ+4。\n自分の体力を35回復する。\n相手の場のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。\n的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。",
-        "ko": "【자신의 턴 시작 시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.\n자신의 최대 마나 +4.\n자신의 체력을 35 회복한다.\n상대 필드의 몬스터·영구 마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.\n적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.",
-        "en": "【At the Start of Your Turn】Predict a result from 1–6, then roll 3 dice. If at least 1 matches, choose one of the following.\nIncrease your max mana by 4.\nRestore 35 of your HP.\nDestroy 1 random monster or persistent spell on the enemy field, twice, choosing again each time.\nIf a die matches and your deck composition contains Gambler, apply all options in the order above instead of choosing."
+        "ja": "【自分のターン開始時】1～6から出目を1つ予測し、ダイス3個を振る。1個以上が的中した場合、次から一つを選んで行う。\n自分のマナ水晶+4。\n自分の体力を35回復する。\n相手の場のモンスター・永続魔法から毎回ランダムに1枚を選んで破壊する処理を2回行う。\n的中し、かつ自分のデッキ構成に「ギャンブラー」がある場合は、選ばず全てを上から順に行う。",
+        "ko": "【자신의 턴 시작 시】1~6 중 눈 1개를 예측하고 주사위 3개를 굴린다. 1개 이상 적중하면 다음 중 하나를 선택해 처리한다.\n자신의 마나 수정 +4.\n자신의 체력을 35 회복한다.\n상대 필드의 몬스터·영구 마법 중 매번 무작위로 1장을 선택해 파괴하는 처리를 2회 한다.\n적중했고 자신의 덱 구성에 도박꾼이 있으면 선택하지 않고 전부 위에서부터 순서대로 처리한다.",
+        "en": "【At the Start of Your Turn】Predict a result from 1–6, then roll 3 dice. If at least 1 matches, choose one of the following.\nIncrease your mana crystals by 4.\nRestore 35 of your HP.\nDestroy 1 random monster or persistent spell on the enemy field, twice, choosing again each time.\nIf a die matches and your deck composition contains Gambler, apply all options in the order above instead of choosing."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -5209,10 +5267,12 @@
       "nameJa": "魔族の斥候",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "4c7472acc8d9b0417a8ac2e1b96546dd0eccc83e585e70841ddedbd803382dab",
-      "textSha256": "4bc1a864a2499bc56020ac6ac76b80ac80a972cbc5d807cfe9200272d42c864e",
+      "textSha256": "eacde72d261db1e8bdbabcae92b95e4fdc475ac1f35cc01fcdc0b00beabaaf82",
       "hooks": {
         "onSummon": "manaDebt5",
         "summonReq": "mm5"
@@ -5220,12 +5280,12 @@
       "before": {
         "ja": "【召喚条件】自分の最大マナが5以上。\n\n【召喚時】自分の最大マナ-1。双方通算10ターン後のターン開始時に、自分の最大マナ+1（このモンスターが場を離れても戻る）。",
         "ko": "【소환 조건】자신의 최대 마나 5 이상.\n\n【소환 시】자신의 최대 마나 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 최대 마나 +1(이 몬스터가 필드를 떠나도 복구).",
-        "en": "【Summon Requirement】Your max mana is at least 5.\n\n【On Summon】Your max mana -1. At turn start 10 total turns later, counting both players, your max mana +1, even if this monster has left."
+        "en": "【Summon Requirement】Your max mana is at least 5.\n\n【On Summon】Reduce your max mana by 1. At turn start 10 total turns later, counting both players, increase your max mana by 1, even if this monster has left."
       },
       "after": {
-        "ja": "【召喚条件】自分の最大マナが5以上。\n\n【召喚時】自分の最大マナ-1。双方通算10ターン後のターン開始時に、自分の最大マナ+1（このモンスターが場を離れても戻る）。",
-        "ko": "【소환 조건】자신의 최대 마나 5 이상.\n\n【소환 시】자신의 최대 마나 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 최대 마나 +1(이 몬스터가 필드를 떠나도 복구).",
-        "en": "【Summon Requirement】Your max mana is at least 5.\n\n【On Summon】Reduce your max mana by 1. At turn start 10 total turns later, counting both players, increase your max mana by 1, even if this monster has left."
+        "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【召喚時】自分のマナ水晶-1。双方通算10ターン後のターン開始時に、自分のマナ水晶+1（このモンスターが場を離れても戻る）。",
+        "ko": "【소환 조건】자신의 마나 수정 5 이상.\n\n【소환 시】자신의 마나 수정 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 마나 수정 +1(이 몬스터가 필드를 떠나도 복구).",
+        "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【On Summon】Reduce your mana crystals by 1. At turn start 10 total turns later, counting both players, increase your mana crystals by 1, even if this monster has left."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -5233,10 +5293,12 @@
       "nameJa": "魔族の戦士",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "21829000170524dba4f03b556a5c8badecbdc31670274984284e1c13ad572e8b",
-      "textSha256": "2d145827406fb8f3ce1e7fadb41d339f5ab20cdec3df12b39a97e6c35fdda215",
+      "textSha256": "378d4452158e1bea305b0cc32cb6a1a98fd17ce39f14164c782a72e0b43f86a6",
       "hooks": {
         "aura": "demonTax2",
         "summonReq": "mm5"
@@ -5244,21 +5306,25 @@
       "before": {
         "ja": "【召喚条件】自分の最大マナが5以上。\n\n【場にある間】自分の最大マナ-2（最低3）。",
         "ko": "【소환 조건】자신의 최대 마나가 5 이상.\n\n【필드에 있는 동안】자신의 최대 마나 -2(최저 3).",
-        "en": "【Summon Requirement】Your max mana is at least 5.\n\n【While on the Field】Your max mana -2 (never below 3)."
+        "en": "【Summon Requirement】Your max mana is at least 5.\n\n【While on the Field】Your max mana is reduced by 2, to a minimum of 3."
       },
       "after": {
-        "ja": "【召喚条件】自分の最大マナが5以上。\n\n【場にある間】自分の最大マナ-2（最低3）。",
-        "ko": "【소환 조건】자신의 최대 마나가 5 이상.\n\n【필드에 있는 동안】자신의 최대 마나 -2(최저 3).",
-        "en": "【Summon Requirement】Your max mana is at least 5.\n\n【While on the Field】Your max mana is reduced by 2, to a minimum of 3."
+        "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【場にある間】自分のマナ水晶-2（最低3）。",
+        "ko": "【소환 조건】자신의 마나 수정이 5 이상.\n\n【필드에 있는 동안】자신의 마나 수정 -2(최저 3).",
+        "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【While on the Field】Your mana crystals are reduced by 2, to a minimum of 3."
       },
       "reviewedAt": "2026-10-31"
     },
     "TDE3": {
       "nameJa": "魔族の狂戦士",
-      "status": "balance-v60-reworked",
-      "changedLocales": [],
+      "status": "reworded",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
       "definitionSha256": "e3223b87e1bf1fda2940da27fbdb4b44a6642524bbda04c1278335569e525e44",
-      "textSha256": "1f86b60f89891be1b43faf1785bfc41a2ec588e86664c7aba7e4972677f982fb",
+      "textSha256": "a4107f9c165c065f5ab472f05e23192ddd7933ebeb35285a08f8e5635001e79c",
       "hooks": {
         "turnFx": "demonRoll"
       },
@@ -5268,17 +5334,21 @@
         "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your max mana by 1; on 4–6, reduce it by 2. This effect cannot reduce it below 3."
       },
       "after": {
-        "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分の最大マナを1減らし、4～6なら2減らす。この効果では3未満にならない。",
-        "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 최대 마나를 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.",
-        "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your max mana by 1; on 4–6, reduce it by 2. This effect cannot reduce it below 3."
+        "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分のマナ水晶を1減らし、4～6なら2減らす。この効果では3未満にならない。",
+        "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 마나 수정을 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.",
+        "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your mana crystals by 1; on 4–6, reduce them by 2. This effect cannot reduce them below 3."
       }
     },
     "TDE4": {
       "nameJa": "魔王",
-      "status": "balance-v60-reworked",
-      "changedLocales": [],
+      "status": "reworded",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
       "definitionSha256": "a15ceb23205821b9ef19353ce9678aad9b3bd182ee29874db43eae7770d0bcc8",
-      "textSha256": "0008a76a670294f6ce1ab837d5dacacb3b2f01ce63ad0314ef24507c76fe2ab6",
+      "textSha256": "e2f28bba042e7d7c6b52356e132bec425e9e79f629e2e089fce4acfe525365e6",
       "hooks": {
         "onSummon": "manaSet3",
         "aura": "manaGrowthLock",
@@ -5290,29 +5360,31 @@
         "en": "【Summon Requirement】Your max mana is at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your max mana to 3.\n\n【While on the Field】Your max mana cannot increase."
       },
       "after": {
-        "ja": "【召喚条件】自分の最大マナが5以上で、自分のデッキ構成に「魔王」以外の「魔族」モンスターがいる。\n\n【召喚時】自分の最大マナを3にする。\n\n【場にある間】自分の最大マナは増えない。",
-        "ko": "【소환 조건】자신의 최대 마나가 5 이상이고 자신의 덱 구성에 마왕 이외의 마족 몬스터가 있다.\n\n【소환 시】자신의 최대 마나를 3으로 만든다.\n\n【필드에 있는 동안】자신의 최대 마나는 증가하지 않는다.",
-        "en": "【Summon Requirement】Your max mana is at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your max mana to 3.\n\n【While on the Field】Your max mana cannot increase."
+        "ja": "【召喚条件】自分のマナ水晶が5以上で、自分のデッキ構成に「魔王」以外の「魔族」モンスターがいる。\n\n【召喚時】自分のマナ水晶を3にする。\n\n【場にある間】自分のマナ水晶は増えない。",
+        "ko": "【소환 조건】자신의 마나 수정이 5 이상이고 자신의 덱 구성에 마왕 이외의 마족 몬스터가 있다.\n\n【소환 시】자신의 마나 수정을 3으로 만든다.\n\n【필드에 있는 동안】자신의 마나 수정은 증가하지 않는다.",
+        "en": "【Summon Requirement】Your mana crystals are at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your mana crystals to 3.\n\n【While on the Field】Your mana crystals cannot increase."
       }
     },
     "DUNGEON_FLOOR": {
       "nameJa": "ダンジョン最下層",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "d13701b9e8d89590e9e69822df47420bdc36727e50013b50906cc7acdad7a356",
-      "textSha256": "400f854596c2b93eb986de1977fbac11020a729ab7e73543ece7793fb66265f3",
+      "textSha256": "17ad3039bae2644fab6c32838a0ecf7f81ef394e6be4676cdc70bea58529a496",
       "hooks": {},
       "before": {
         "ja": "【発動条件】相手の最大マナが7以上。\n\n【発動時】自分の最大マナ-1（この効果では3未満にならない）。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
         "ko": "【발동 조건】상대의 최대 마나 7 이상.\n\n【발동 시】자신의 최대 마나 -1(이 효과로 3 미만이 되지 않음). 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.",
-        "en": "【Play Requirement】The opponent has at least 7 max mana.\n\n【On Cast】Your max mana -1, without reducing it below 3. Roll 1 die and summon that many Mimics to your field."
+        "en": "【Play Requirement】The opponent has at least 7 max mana.\n\n【On Cast】Reduce your max mana by 1, without reducing it below 3. Roll 1 die and summon that many Mimics to your field."
       },
       "after": {
-        "ja": "【発動条件】相手の最大マナが7以上。\n\n【発動時】自分の最大マナ-1（この効果では3未満にならない）。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
-        "ko": "【발동 조건】상대의 최대 마나 7 이상.\n\n【발동 시】자신의 최대 마나 -1(이 효과로 3 미만이 되지 않음). 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.",
-        "en": "【Play Requirement】The opponent has at least 7 max mana.\n\n【On Cast】Reduce your max mana by 1, without reducing it below 3. Roll 1 die and summon that many Mimics to your field."
+        "ja": "【発動条件】相手のマナ水晶が7以上。\n\n【発動時】自分のマナ水晶-1（この効果では3未満にならない）。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
+        "ko": "【발동 조건】상대의 마나 수정 7 이상.\n\n【발동 시】자신의 마나 수정 -1(이 효과로 3 미만이 되지 않음). 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.",
+        "en": "【Play Requirement】The opponent has at least 7 mana crystals.\n\n【On Cast】Reduce your mana crystals by 1, without reducing them below 3. Roll 1 die and summon that many Mimics to your field."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -6207,10 +6279,14 @@
     },
     "NO_PAIN": {
       "nameJa": "ノーペインノーゲイン",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
+      "status": "reworded",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
       "definitionSha256": "ba4844b8c75a287de91fc6670fc772358cd169fd43e529d49df817cc3d44813e",
-      "textSha256": "59d11c3c2b83e574f21afe2768418f10e6ed4bcfc16c4c9cdaa42e400e06193b",
+      "textSha256": "3e1f466b5ecf1a45f0bae46fc00f3ee684b3c7575228e0bba5e20bdd7ef7d4ec",
       "hooks": {
         "ench": "painGain"
       },
@@ -6220,9 +6296,9 @@
         "en": "【When You Take Damage】Whenever you take damage, roll 1 die. On 6, increase your max mana by 1."
       },
       "after": {
-        "ja": "【自分がダメージを受けた時】自分がダメージを受けるたび、ダイス1個を振る。6なら、自分の最大マナ+1。",
-        "ko": "【자신이 데미지를 받을 때】자신이 데미지를 받을 때마다 주사위 1개를 굴린다. 6이면 자신의 최대 마나 +1.",
-        "en": "【When You Take Damage】Whenever you take damage, roll 1 die. On 6, increase your max mana by 1."
+        "ja": "【自分がダメージを受けた時】自分がダメージを受けるたび、ダイス1個を振る。6なら、自分のマナ水晶+1。",
+        "ko": "【자신이 데미지를 받을 때】자신이 데미지를 받을 때마다 주사위 1개를 굴린다. 6이면 자신의 마나 수정 +1.",
+        "en": "【When You Take Damage】Whenever you take damage, roll 1 die. On 6, increase your mana crystals by 1."
       }
     },
     "ORIGIN_QUEST": {
@@ -6345,22 +6421,24 @@
       "nameJa": "買い占め",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "477e10a3a9ba2837146ea450611d2eec7442bd7c3ac6bdbabb1e71f1a5828bb3",
-      "textSha256": "b5ab0bb42caa88e4602580c46b2967105d7fc125f9219b1ed242e2bce589dc6a",
+      "textSha256": "06f619206d1208e6e3312cb31e9273df1649b466a6aad1d9e9c0e2829e5c55b9",
       "hooks": {
         "act": "buyout"
       },
       "before": {
         "ja": "【発動条件】このターン、自分が同名カードを合計2枚以上購入している。\n\n【発動時】自分の最大マナ+1。",
         "ko": "【발동 조건】이번 턴 자신이 같은 이름의 카드를 합계 2장 이상 구매했다.\n\n【발동 시】자신의 최대 마나 +1.",
-        "en": "【Play Requirement】You bought at least 2 cards with the same name this turn.\n\n【On Cast】Your max mana +1."
+        "en": "【Play Requirement】You bought at least 2 cards with the same name this turn.\n\n【On Cast】Increase your max mana by 1."
       },
       "after": {
-        "ja": "【発動条件】このターン、自分が同名カードを合計2枚以上購入している。\n\n【発動時】自分の最大マナ+1。",
-        "ko": "【발동 조건】이번 턴 자신이 같은 이름의 카드를 합계 2장 이상 구매했다.\n\n【발동 시】자신의 최대 마나 +1.",
-        "en": "【Play Requirement】You bought at least 2 cards with the same name this turn.\n\n【On Cast】Increase your max mana by 1."
+        "ja": "【発動条件】このターン、自分が同名カードを合計2枚以上購入している。\n\n【発動時】自分のマナ水晶+1。",
+        "ko": "【발동 조건】이번 턴 자신이 같은 이름의 카드를 합계 2장 이상 구매했다.\n\n【발동 시】자신의 마나 수정 +1.",
+        "en": "【Play Requirement】You bought at least 2 cards with the same name this turn.\n\n【On Cast】Increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -6368,22 +6446,24 @@
       "nameJa": "苦行の対価",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "f958c56ac8e3098dd5891b18b2ca80118cbe6983a9e438ec594c24f9c25b4c11",
-      "textSha256": "ab41572ea06beb520180880bd4f70f528dc6dc41e28eb5ff9610735960994ed1",
+      "textSha256": "b8ca7a6d3a69a529f9b14aab925279446b7247a32937d59514c7587f9152f602",
       "hooks": {
         "act": "penance"
       },
       "before": {
         "ja": "【発動条件】自分に烙印カウンターが1個以上ある。\n\n【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。",
         "ko": "【발동 조건】자신에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】자신의 낙인 카운터 1개당 자신의 최대 마나 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
-        "en": "【Play Requirement】You have at least 1 Brand counter.\n\n【On Cast】For each of your Brand counters, your max mana +2 and restore 10 of your HP; do not spend the counters."
+        "en": "【Play Requirement】You have at least 1 Brand counter.\n\n【On Cast】For each of your Brand counters, increase your max mana by 2 and restore 10 of your HP; do not spend the counters."
       },
       "after": {
-        "ja": "【発動条件】自分に烙印カウンターが1個以上ある。\n\n【発動時】自分の烙印カウンター1個につき、自分の最大マナ+2、自分の体力を10回復する（カウンターは消費しない）。",
-        "ko": "【발동 조건】자신에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】자신의 낙인 카운터 1개당 자신의 최대 마나 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
-        "en": "【Play Requirement】You have at least 1 Brand counter.\n\n【On Cast】For each of your Brand counters, increase your max mana by 2 and restore 10 of your HP; do not spend the counters."
+        "ja": "【発動条件】自分に烙印カウンターが1個以上ある。\n\n【発動時】自分の烙印カウンター1個につき、自分のマナ水晶+2、自分の体力を10回復する（カウンターは消費しない）。",
+        "ko": "【발동 조건】자신에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】자신의 낙인 카운터 1개당 자신의 마나 수정 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
+        "en": "【Play Requirement】You have at least 1 Brand counter.\n\n【On Cast】For each of your Brand counters, increase your mana crystals by 2 and restore 10 of your HP; do not spend the counters."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -6449,28 +6529,28 @@
     },
     "RICH_HABIT": {
       "nameJa": "富豪の習慣",
-      "status": "reviewed-rework-v74",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "092747ac003981dd7881f1843e707aaa59794b4a63060a3a78c5d96b32ee103a",
-      "textSha256": "ba0ab98d6bdb6622b87500b4562d8a469a1252e1990c29db686db50ebcdf64a2",
+      "textSha256": "c212be6038cadb8be5f60d4fd3cbf23e56f53998d56ea7fd2622ae07f7565b17",
       "hooks": {
         "ench": "richHabit",
         "val": 99,
         "cost": 3
       },
       "before": {
-        "ja": "【破壊時】このカードが相手のカードの効果で破壊された場合、自分の最大マナを3にする。",
-        "ko": "【파괴 시】이 카드가 상대 카드의 효과로 파괴되었다면 자신의 최대 마나를 3으로 만든다.",
-        "en": "【On Destruction】If this card is destroyed by an opponent’s card effect, set your maximum mana to 3."
-      },
-      "after": {
         "ja": "【自分のターン開始時】自分の手札が4枚以上なら、自分の体力を6回復する。6枚以上なら、さらに自分の最大マナ+1。\n\n【破壊時】このカードが相手のカードの効果で破壊された場合、自分の最大マナを3にする。",
         "ko": "【자신의 턴 시작 시】자신의 패가 4장 이상이면 자신의 체력을 6 회복한다. 6장 이상이면 추가로 자신의 최대 마나 +1.\n\n【파괴 시】이 카드가 상대 카드의 효과로 파괴되었다면 자신의 최대 마나를 3으로 만든다.",
         "en": "【At the Start of Your Turn】If you have at least 4 cards in hand, restore 6 of your HP. If you have at least 6, also increase your max mana by 1.\n\n【On Destruction】If this card is destroyed by an opponent’s card effect, set your max mana to 3."
+      },
+      "after": {
+        "ja": "【自分のターン開始時】自分の手札が4枚以上なら、自分の体力を6回復する。6枚以上なら、さらに自分のマナ水晶+1。\n\n【破壊時】このカードが相手のカードの効果で破壊された場合、自分のマナ水晶を3にする。",
+        "ko": "【자신의 턴 시작 시】자신의 패가 4장 이상이면 자신의 체력을 6 회복한다. 6장 이상이면 추가로 자신의 마나 수정 +1.\n\n【파괴 시】이 카드가 상대 카드의 효과로 파괴되었다면 자신의 마나 수정을 3으로 만든다.",
+        "en": "【At the Start of Your Turn】If you have at least 4 cards in hand, restore 6 of your HP. If you have at least 6, also increase your mana crystals by 1.\n\n【On Destruction】If this card is destroyed by an opponent’s card effect, set your mana crystals to 3."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -6559,10 +6639,12 @@
       "nameJa": "精霊 - ウィンター",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "b3f673b486d0811e10319028ecc4f47353b54fd87d995d07d1153f79ceac376a",
-      "textSha256": "30d7827a23b3216ee2f76e521f6e0f4281145e822f30fee59e82a7a20f67e0f1",
+      "textSha256": "5a6652b38a7efe471168246833379d3c824bdad091e05e96aad27ca50d246a58",
       "hooks": {
         "quest": {
           "event": "healthGain",
@@ -6572,12 +6654,12 @@
       "before": {
         "ja": "【達成条件】設置後、自分の体力を累計30上昇させる。\n\n【達成時】自分の最大マナ+2。",
         "ko": "【달성 조건】설치 후 자신의 체력을 누적 30 올린다.\n\n【달성 시】자신의 최대 마나 +2.",
-        "en": "【Completion Requirement】After deployment, increase your HP by a total of 30.\n\n【On Completion】Your max mana +2."
+        "en": "【Completion Requirement】After deployment, increase your HP by a total of 30.\n\n【On Completion】Increase your max mana by 2."
       },
       "after": {
-        "ja": "【達成条件】設置後、自分の体力を累計30上昇させる。\n\n【達成時】自分の最大マナ+2。",
-        "ko": "【달성 조건】설치 후 자신의 체력을 누적 30 올린다.\n\n【달성 시】자신의 최대 마나 +2.",
-        "en": "【Completion Requirement】After deployment, increase your HP by a total of 30.\n\n【On Completion】Increase your max mana by 2."
+        "ja": "【達成条件】設置後、自分の体力を累計30上昇させる。\n\n【達成時】自分のマナ水晶+2。",
+        "ko": "【달성 조건】설치 후 자신의 체력을 누적 30 올린다.\n\n【달성 시】자신의 마나 수정 +2.",
+        "en": "【Completion Requirement】After deployment, increase your HP by a total of 30.\n\n【On Completion】Increase your mana crystals by 2."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -6693,10 +6775,12 @@
       "nameJa": "マナ順応",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "f964bf55c3b51af666567a69a576c8ff9fb87b419f8e47e959492e58ce5c4f63",
-      "textSha256": "8d05c56c5fd6e14f5fd8f8c9481a9530a648b0ef079a7c98d57f094a771cbf24",
+      "textSha256": "d871a2994c8e0fafdb444ee47d31e6b2473bc36dbe5f04ae5b05277cb312778d",
       "hooks": {
         "quest": {
           "event": "spellPlay",
@@ -6706,12 +6790,12 @@
       "before": {
         "ja": "【達成条件】設置後、魔法カードを25回使用する。\n\n【達成時】自分の最大マナ+4。",
         "ko": "【달성 조건】설치 후 마법 카드 25회 사용.\n\n【달성 시】자신의 최대 마나 +4.",
-        "en": "【Completion Requirement】After deployment, play 25 spell cards.\n\n【On Completion】Your max mana +4."
+        "en": "【Completion Requirement】After deployment, play 25 spell cards.\n\n【On Completion】Increase your max mana by 4."
       },
       "after": {
-        "ja": "【達成条件】設置後、魔法カードを25回使用する。\n\n【達成時】自分の最大マナ+4。",
-        "ko": "【달성 조건】설치 후 마법 카드 25회 사용.\n\n【달성 시】자신의 최대 마나 +4.",
-        "en": "【Completion Requirement】After deployment, play 25 spell cards.\n\n【On Completion】Increase your max mana by 4."
+        "ja": "【達成条件】設置後、魔法カードを25回使用する。\n\n【達成時】自分のマナ水晶+4。",
+        "ko": "【달성 조건】설치 후 마법 카드 25회 사용.\n\n【달성 시】자신의 마나 수정 +4.",
+        "en": "【Completion Requirement】After deployment, play 25 spell cards.\n\n【On Completion】Increase your mana crystals by 4."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -6878,22 +6962,24 @@
       "nameJa": "アチューン・瞬",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "b519647b1719d8129c39ed54da51ea70faa66f5b4d47df9b0da08e1b6fb18787",
-      "textSha256": "3b0c806f9d1625961b70c04b7d853313f0291fcdafcfa39b1502afe510eb88f7",
+      "textSha256": "45a203b09ca7ad1a721f60c54d5c05e75e8688a1bb1c0d92bd3b14112e918816",
       "hooks": {
         "quick": true
       },
       "before": {
         "ja": "【購入時】自分の最大マナ+1。自分は体力2を得る。",
-        "ko": "【구매시】자신의 최대 마나 +1. 자신은 체력을 2 얻는다.",
+        "ko": "【구매 시】자신의 최대 마나 +1. 자신은 체력을 2 얻는다.",
         "en": "【On Purchase】Increase your max mana by 1 and gain 2 HP."
       },
       "after": {
-        "ja": "【購入時】自分の最大マナ+1。自分は体力2を得る。",
-        "ko": "【구매 시】자신의 최대 마나 +1. 자신은 체력을 2 얻는다.",
-        "en": "【On Purchase】Increase your max mana by 1 and gain 2 HP."
+        "ja": "【購入時】自分のマナ水晶+1。自分は体力2を得る。",
+        "ko": "【구매 시】자신의 마나 수정 +1. 자신은 체력을 2 얻는다.",
+        "en": "【On Purchase】Increase your mana crystals by 1 and gain 2 HP."
       }
     },
     "QUICK_GRIMOIRE": {
@@ -7628,22 +7714,24 @@
       "nameJa": "黒魔術師 - アリス",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "2ec7a12e6e15a8b17a9a61bbddc440acdcdad1d9ab141bce2fb5a53d05e38fe0",
-      "textSha256": "6519494d11404846ea24b27aab765954523d879e2d56cef988c3947eda470405",
+      "textSha256": "04e031510164045f097bef29bf739d7e9d9aa45d4c6a715d4640457416105e17",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
         "ja": "【召喚時】新しい「呪い」2枚を相手の墓地に追加する。\n\n【自分の魔法使用時】自分が「黒魔法」を使用するたび、自分の最大マナ+1。 使用した「黒魔法」が無効化されても、この効果は発動する。",
         "ko": "【소환 시】새로운 저주 2장을 상대의 묘지에 추가한다.\n\n【자신의 마법 사용 시】자신이 흑마법을 사용할 때마다 자신의 최대 마나 +1. 사용한 흑마법이 무효화되어도 이 효과는 발동한다.",
-        "en": "【On Summon】Create 2 new Curses in the opponent's graveyard.\n\n【When You Play a Spell】Whenever you play Black Magic, your max mana +1. This effect triggers even if the Black Magic spell is negated."
+        "en": "【On Summon】Create 2 new Curses in the opponent's graveyard.\n\n【When You Play a Spell】Whenever you play Black Magic, increase your max mana by 1. This effect triggers even if the Black Magic spell is negated."
       },
       "after": {
-        "ja": "【召喚時】新しい「呪い」2枚を相手の墓地に追加する。\n\n【自分の魔法使用時】自分が「黒魔法」を使用するたび、自分の最大マナ+1。 使用した「黒魔法」が無効化されても、この効果は発動する。",
-        "ko": "【소환 시】새로운 저주 2장을 상대의 묘지에 추가한다.\n\n【자신의 마법 사용 시】자신이 흑마법을 사용할 때마다 자신의 최대 마나 +1. 사용한 흑마법이 무효화되어도 이 효과는 발동한다.",
-        "en": "【On Summon】Create 2 new Curses in the opponent's graveyard.\n\n【When You Play a Spell】Whenever you play Black Magic, increase your max mana by 1. This effect triggers even if the Black Magic spell is negated."
+        "ja": "【召喚時】新しい「呪い」2枚を相手の墓地に追加する。\n\n【自分の魔法使用時】自分が「黒魔法」を使用するたび、自分のマナ水晶+1。 使用した「黒魔法」が無効化されても、この効果は発動する。",
+        "ko": "【소환 시】새로운 저주 2장을 상대의 묘지에 추가한다.\n\n【자신의 마법 사용 시】자신이 흑마법을 사용할 때마다 자신의 마나 수정 +1. 사용한 흑마법이 무효화되어도 이 효과는 발동한다.",
+        "en": "【On Summon】Create 2 new Curses in the opponent's graveyard.\n\n【When You Play a Spell】Whenever you play Black Magic, increase your mana crystals by 1. This effect triggers even if the Black Magic spell is negated."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -7831,22 +7919,24 @@
       "nameJa": "ファイアーメテオ",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "993385c8e5638bd6396252129496fc9c0508f58d45ce3de10cfd93ada443fb73",
-      "textSha256": "20c83687ac18a5d3782c745aa535502efd4b0f1a318aaa42290087db0a6e8a0b",
+      "textSha256": "8198e726149704a05df9ff021004fb5ec415d502d1e1b7cd554c03a57c641f9b",
       "hooks": {
         "act": "expansion"
       },
       "before": {
         "ja": "【コスト】このターン既に他のファイアー魔法を使用していれば、発動コストを1にする。\n\n【発動時】自分の最大マナを1減らす。その後、相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、2ダメージを与える処理を8回行う。",
-        "ko": "【코스트】이번 턴에 이미 다른 파이어 마법을 사용했다면 시전 코스트를 1로 만든다.\n\n【발동 시】자신의 최대 마나를 1 줄인다. 그 후 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위로 대상 1개를 정해 2 데미지를 주는 처리를 8회 한다.",
+        "ko": "【코스트】이번 턴에 이미 다른 파이어 마법을 사용했다면 발동 코스트를 1로 만든다.\n\n【발동 시】자신의 최대 마나를 1 줄인다. 그 후 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위로 대상 1개를 정해 2 데미지를 주는 처리를 8회 한다.",
         "en": "【Cost】If you already played another Fire spell this turn, set this spell’s cast cost to 1.\n\n【On Cast】Reduce your max mana by 1. Then deal 2 damage to a random target among the opponent and their monsters, 8 times. Choose the random target again each time."
       },
       "after": {
-        "ja": "【コスト】このターン既に他のファイアー魔法を使用していれば、発動コストを1にする。\n\n【発動時】自分の最大マナを1減らす。その後、相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、2ダメージを与える処理を8回行う。",
-        "ko": "【코스트】이번 턴에 이미 다른 파이어 마법을 사용했다면 발동 코스트를 1로 만든다.\n\n【발동 시】자신의 최대 마나를 1 줄인다. 그 후 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위로 대상 1개를 정해 2 데미지를 주는 처리를 8회 한다.",
-        "en": "【Cost】If you already played another Fire spell this turn, set this spell’s cast cost to 1.\n\n【On Cast】Reduce your max mana by 1. Then deal 2 damage to a random target among the opponent and their monsters, 8 times. Choose the random target again each time."
+        "ja": "【コスト】このターン既に他のファイアー魔法を使用していれば、発動コストを1にする。\n\n【発動時】自分のマナ水晶を1減らす。その後、相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、2ダメージを与える処理を8回行う。",
+        "ko": "【코스트】이번 턴에 이미 다른 파이어 마법을 사용했다면 발동 코스트를 1로 만든다.\n\n【발동 시】자신의 마나 수정을 1 줄인다. 그 후 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위로 대상 1개를 정해 2 데미지를 주는 처리를 8회 한다.",
+        "en": "【Cost】If you already played another Fire spell this turn, set this spell’s cast cost to 1.\n\n【On Cast】Reduce your mana crystals by 1. Then deal 2 damage to a random target among the opponent and their monsters, 8 times. Choose the random target again each time."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -8502,20 +8592,22 @@
       "nameJa": "宝箱",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "d3fc7d6aa71e95aaf72ba64055715b27d281a856f78b3ae19cfc68b4dbd12e68",
-      "textSha256": "0785a9d8683e0823c9f03b5edbfcb46d2d33553065fd636f20b7c9ef4ac11e5b",
+      "textSha256": "c2bc97658bfad7df6d60ba6820629c4c63fc3ef3d3cd825f24625018f4585d66",
       "hooks": {},
       "before": {
         "ja": "【使用時】ダイス1個を振る — 1-2: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 3-4: 自分の体力を5回復する / 5-6: 自分の最大マナ+1。",
         "ko": "【사용 시】주사위 1개를 굴린다 — 1-2: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 3-4: 자신의 체력을 5 회복한다 / 5-6: 자신의 최대 마나 +1.",
-        "en": "【On Play】Roll 1 die — 1-2: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 3-4: Restore 5 of your HP / 5-6: Your max mana +1."
+        "en": "【On Play】Roll 1 die — 1-2: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 3-4: Restore 5 of your HP / 5-6: Increase your max mana by 1."
       },
       "after": {
-        "ja": "【使用時】ダイス1個を振る — 1-2: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 3-4: 自分の体力を5回復する / 5-6: 自分の最大マナ+1。",
-        "ko": "【사용 시】주사위 1개를 굴린다 — 1-2: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 3-4: 자신의 체력을 5 회복한다 / 5-6: 자신의 최대 마나 +1.",
-        "en": "【On Play】Roll 1 die — 1-2: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 3-4: Restore 5 of your HP / 5-6: Increase your max mana by 1."
+        "ja": "【使用時】ダイス1個を振る — 1-2: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 3-4: 自分の体力を5回復する / 5-6: 自分のマナ水晶+1。",
+        "ko": "【사용 시】주사위 1개를 굴린다 — 1-2: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 3-4: 자신의 체력을 5 회복한다 / 5-6: 자신의 마나 수정 +1.",
+        "en": "【On Play】Roll 1 die — 1-2: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 3-4: Restore 5 of your HP / 5-6: Increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -8523,20 +8615,22 @@
       "nameJa": "アチューン",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "4555e5c5eb9478e365a51ece23d5ed02d4c7096c0b2fc575db6d4d0bbaa884bf",
-      "textSha256": "fa2b5eaa53951d6f64ed79b928df890fe32f0b2cfcdaddad3c5e43691cbe1e8a",
+      "textSha256": "9a745843441a2cf0a0b700a27fe8d88c26f1840e422349c779fb696b6363248a",
       "hooks": {},
       "before": {
         "ja": "【使用時】自分の最大マナ+1。",
         "ko": "【사용 시】자신의 최대 마나 +1.",
-        "en": "【On Play】Your max mana +1."
+        "en": "【On Play】Increase your max mana by 1."
       },
       "after": {
-        "ja": "【使用時】自分の最大マナ+1。",
-        "ko": "【사용 시】자신의 최대 마나 +1.",
-        "en": "【On Play】Increase your max mana by 1."
+        "ja": "【使用時】自分のマナ水晶+1。",
+        "ko": "【사용 시】자신의 마나 수정 +1.",
+        "en": "【On Play】Increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -8785,22 +8879,26 @@
     },
     "MANA_BACKFLOW": {
       "nameJa": "マナ逆流装置",
-      "status": "added-reviewed-2026-10-23",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "1fdfc0b97f31ebe68b21b426875c95fec056aa2a77a961ce0c594327a3ab263a",
-      "textSha256": "a0eca622d677a97c296d7e1a4318b13d7ec6b04833b912e9675bb8e2ba3a7f39",
+      "textSha256": "5975c9138580ce333cca4ac40f9477d4621a0256a0275549e59b882715d294da",
       "hooks": {
         "ench": "manaBackflow"
       },
-      "before": null,
-      "after": {
+      "before": {
         "ja": "【自分のターン開始時】発動した後の自分の15回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分の最大マナを3にする。他のカードの効果で破壊された場合、相手の最大マナ-1。",
         "ko": "【자신의 턴 시작 시】발동 후 자신의 15번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 최대 마나를 3으로 만든다. 다른 카드의 효과로 파괴됐다면 상대의 최대 마나 -1.",
         "en": "【At the Start of Your Turn】At the start of your 15th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, set your max mana to 3. If destroyed by another card’s effect, the opponent loses 1 max mana."
+      },
+      "after": {
+        "ja": "【自分のターン開始時】発動した後の自分の15回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分のマナ水晶を3にする。他のカードの効果で破壊された場合、相手のマナ水晶-1。",
+        "ko": "【자신의 턴 시작 시】발동 후 자신의 15번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 마나 수정을 3으로 만든다. 다른 카드의 효과로 파괴됐다면 상대의 마나 수정 -1.",
+        "en": "【At the Start of Your Turn】At the start of your 15th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, set your mana crystals to 3. If destroyed by another card’s effect, the opponent loses 1 mana crystal."
       }
     },
     "BATTLEFIELD": {
@@ -8956,22 +9054,24 @@
       "nameJa": "魔道銀行",
       "status": "reworded",
       "changedLocales": [
+        "ja",
+        "ko",
         "en"
       ],
       "definitionSha256": "49ec3a4b8fc7f68772f26a79c1d307acde811b67f3b1e6eaec0fb68a5a88a62c",
-      "textSha256": "4a41bcf38fa1b4f9402ff5984259087303f0378fad01466bf2f5b6c5ea0094a7",
+      "textSha256": "e26fa795c26b324decf14c33cb9c3098a2d173281ebccbfc6ba9de9c79b8b5cf",
       "hooks": {
         "ench": "magicBank"
       },
       "before": {
         "ja": "【発動時】自分の最大マナ-1。\n\n【場にある間】このターンを含む自分の2ターンの間、自分の最大マナが増えるたび、追加で最大マナ+1。この追加分では「魔道銀行」は再発動しない。",
         "ko": "【발동 시】자신의 최대 마나 -1.\n\n【필드에 있는 동안】이 턴을 포함해 자신의 2턴 동안, 자신의 최대 마나가 증가할 때마다 추가로 최대 마나 +1. 이 추가분으로 마도 은행은 재발동하지 않는다.",
-        "en": "【On Cast】Your max mana -1.\n\n【While on the Field】For 2 of your turns, including this turn, whenever your max mana increases, gain 1 additional max mana. This extra gain does not trigger Arcane Bank again."
+        "en": "【On Cast】Reduce your max mana by 1.\n\n【While on the Field】For 2 of your turns, including this turn, whenever your max mana increases, gain 1 additional max mana. This extra gain does not trigger Arcane Bank again."
       },
       "after": {
-        "ja": "【発動時】自分の最大マナ-1。\n\n【場にある間】このターンを含む自分の2ターンの間、自分の最大マナが増えるたび、追加で最大マナ+1。この追加分では「魔道銀行」は再発動しない。",
-        "ko": "【발동 시】자신의 최대 마나 -1.\n\n【필드에 있는 동안】이 턴을 포함해 자신의 2턴 동안, 자신의 최대 마나가 증가할 때마다 추가로 최대 마나 +1. 이 추가분으로 마도 은행은 재발동하지 않는다.",
-        "en": "【On Cast】Reduce your max mana by 1.\n\n【While on the Field】For 2 of your turns, including this turn, whenever your max mana increases, gain 1 additional max mana. This extra gain does not trigger Arcane Bank again."
+        "ja": "【発動時】自分のマナ水晶-1。\n\n【場にある間】このターンを含む自分の2ターンの間、自分のマナ水晶が増えるたび、追加でマナ水晶+1。この追加分では「魔道銀行」は再発動しない。",
+        "ko": "【발동 시】자신의 마나 수정 -1.\n\n【필드에 있는 동안】이 턴을 포함해 자신의 2턴 동안, 자신의 마나 수정이 증가할 때마다 추가로 마나 수정 +1. 이 추가분으로 마도 은행은 재발동하지 않는다.",
+        "en": "【On Cast】Reduce your mana crystals by 1.\n\n【While on the Field】For 2 of your turns, including this turn, whenever your mana crystals increase, gain 1 additional mana crystal. This extra gain does not trigger Arcane Bank again."
       },
       "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md",
       "reviewedAt": "2026-10-31"
@@ -9217,5 +9317,14 @@
     }
   ],
   "inlineGlossaryRevision": "2026-10-30",
-  "lastSpellRework": "2026-10-31"
+  "lastSpellRework": "2026-10-31",
+  "terminologyReview": {
+    "date": "2026-11-04",
+    "changedCards": 51,
+    "term": {
+      "ja": "マナ水晶",
+      "en": "Mana Crystals",
+      "ko": "마나 수정"
+    }
+  }
 }

@@ -74,7 +74,7 @@ async function resolveEgg(token:number){
    if(event.id==='DIVINE'){
     const delta=after.players[owner].maxMana-state.players[owner].maxMana;
     state.players[owner].maxMana=after.players[owner].maxMana;state.players[owner].mana=after.players[owner].mana;
-    bridge.render(view,state);await stable();api.phase='神獣の降臨 · 現行値の最大マナ増加';if(delta>0)await manaSurge(owner===0?'me':'opp',delta);
+    bridge.render(view,state);await stable();api.phase='神獣の降臨 · 現行値のマナ水晶増加';if(delta>0)await manaSurge(owner===0?'me':'opp',delta);
    }
   }
  }

@@ -21,7 +21,7 @@ import { DB, cardPassives } from "./cards";
 // ---- exchange rates (points per unit) ----
 const DRAW = 3.0;    // a drawn card
 const HEAL = 0.55;   // 1 HP healed (worth less than 1 damage dealt)
-const MANA = 5.5;    // +1 max mana — compounds every later turn (top eval feature)
+const MANA = 5.5;    // +1 mana crystal — compounds every later turn (top eval feature)
 const MAXHP = 0.45;  // +1 HP
 const KILL = 10;     // destroying an average blocker
 const NEGATE = 7;    // negating one attack
@@ -153,7 +153,7 @@ function auraValue(c: CardDef): number {
     case "pageDraw": return DRAW * 2.2; // 매턴 +1 드로우
     case "lowAtkBan": return 4;
     case "eliteGuard": return 8;   // 직접 공격 봉쇄 + 6코 이하 도발 벽
-    case "demonTax2": return -MANA * 1.6; // 몸집 대가: 최대 마나 -2
+    case "demonTax2": return -MANA * 1.6; // 몸집 대가: 마나 수정 -2
     // ---- v36 몬스터 대개편 ----
     case "manaGolem": return MANA * 0.8;
     case "leaderGolem": return 4;
@@ -205,7 +205,7 @@ const REACT: Record<string, (c: CardDef) => number> = {
   guardBreakDraw: () => NEGATE + 4 + DRAW,
   guardEnemyDef: (c) => NEGATE + n(c.val) * 1.5,
   guardMana: (c) => NEGATE + MANA * n(c.val),
-  guardPurge: () => NEGATE + 12 - MANA,           // costs 1 max mana
+  guardPurge: () => NEGATE + 12 - MANA,           // costs 1 mana crystal
   guardWipe: () => NEGATE + 8,
   guardbuff: (c) => NEGATE + n(c.val) * 2,
   guarddraw: (c) => NEGATE + n(c.val) * DRAW,
@@ -289,7 +289,7 @@ function enchValue(c: CardDef): number {
     case "spellHeal": return 5;
     case "weakenAll": return 6;
     case "fateWheel": return 0.8 * ENCH_TURNS; // v25: no cast cost, rerolls only
-    case "foresight": return MANA * 2 * 0.5;       // only pays out at 10+ max mana
+    case "foresight": return MANA * 2 * 0.5;       // only pays out at 10+ mana crystals
     case "tribeContract": return 3;
     case "trialArea": return -6 * HEAL + 4;        // 6 self-damage up front
     case "ancientCiv": return 3;

@@ -1028,7 +1028,7 @@ export async function decayCounterGrant(node:HTMLElement,before:number,after:num
   },6000);
 }
 
-/** Small "-N" feedback on the mana pips when max mana DROPS. */
+/** Small "-N" feedback on the mana pips when mana crystals DROPS. */
 export function manaDrop(side: ViewSide, amount: number): void {
   const bar = document.getElementById("hpbar-" + side)?.closest(".pcluster") as HTMLElement | null;
   const anchor = (bar?.querySelector(".pips") as HTMLElement | null) ?? bar;

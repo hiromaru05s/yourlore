@@ -35,7 +35,7 @@ const CORE: Record<string, CardDef> = {
   M7: { id: "M7", t: "mon", cost: 3, name: "엠버 드레이크", atk: 7, def: 3, text: "소환시: 상대 체력에 3 데미지", onSummon: "burn", val: 3 },
   M8: { id: "M8", t: "mon", cost: 3, name: "그로브 워든", atk: 4, def: 6, text: "소환시: 자신 체력 5 회복", onSummon: "heal", val: 5 },
   M9: { id: "M9", t: "mon", cost: 3, name: "렐릭 헌터", atk: 5, def: 4, text: "소환시: 자신의 제시를 무료 갱신 + 1장 드로우", onSummon: "refresh" },
-  M10: { id: "M10", t: "mon", cost: 3, name: "마나 골렘", atk: 3, def: 5, text: "필드에 있는 동안 최대 마나 +1", aura: "mana1" },
+  M10: { id: "M10", t: "mon", cost: 3, name: "마나 골렘", atk: 3, def: 5, text: "필드에 있는 동안 마나 수정 +1", aura: "mana1" },
   M11: { id: "M11", t: "mon", cost: 4, name: "워로드", atk: 8, def: 4, text: "아군 몬스터 2체 이상이면 공격력 +2", condAtk: "twoPlus" },
   M12: { id: "M12", t: "mon", cost: 4, name: "타이탄 게이트", atk: 4, def: 8, text: "—" },
   M13: { id: "M13", t: "mon", cost: 4, name: "보이드 리버", atk: 7, def: 5, text: "소환시: 상대의 세트 함정 1장 파괴", onSummon: "breaktrap" },
@@ -107,11 +107,11 @@ const CORE: Record<string, CardDef> = {
   NWL4: { id: "NWL4", t: "mon", cost: 3, name: "철벽 수문장", atk: 0, def: 13, text: "—" }, // v25: 4코 0/10 → 3코 0/13
   // ---- fragile but strong effect monsters ----
   NHEX: { id: "NHEX", t: "mon", cost: 3, name: "꼬마 주술사", atk: 0, def: 1, text: "소환시: 상대 체력에 6 데미지", onSummon: "burn", val: 6 },
-  NSPR: { id: "NSPR", t: "mon", cost: 4, name: "수정 정령", atk: 0, def: 2, text: "필드에 있는 동안 최대 마나 +1, 소환시 2장 드로우", aura: "mana1", onSummon: "draw", val: 2 },
+  NSPR: { id: "NSPR", t: "mon", cost: 4, name: "수정 정령", atk: 0, def: 2, text: "필드에 있는 동안 마나 수정 +1, 소환시 2장 드로우", aura: "mana1", onSummon: "draw", val: 2 },
   // ---- Attune variants ----
-  AHEUK: { id: "AHEUK", t: "spell", cost: 6, name: "어튠 - 흑", text: "상대 최대 마나 -1. 자신 필드 몬스터 1 이하면 추가로 -1 (시전 4)", act: "manaDown", play: 4 },
-  AJIN: { id: "AJIN", t: "spell", cost: 4, name: "어튠 - 진", text: "최대 마나 +1, 묘지에 어튠 1장 추가", act: "manaUpGain" },
-  AMA: { id: "AMA", t: "spell", cost: 2, name: "어튠 - 마", text: "패의 보물상자 1장을 묘지로 → 최대 마나 +1, 1장 드로우", act: "chestToMana" },
+  AHEUK: { id: "AHEUK", t: "spell", cost: 6, name: "어튠 - 흑", text: "상대 마나 수정 -1. 자신 필드 몬스터 1 이하면 추가로 -1 (시전 4)", act: "manaDown", play: 4 },
+  AJIN: { id: "AJIN", t: "spell", cost: 4, name: "어튠 - 진", text: "마나 수정 +1, 묘지에 어튠 1장 추가", act: "manaUpGain" },
+  AMA: { id: "AMA", t: "spell", cost: 2, name: "어튠 - 마", text: "패의 보물상자 1장을 묘지로 → 마나 수정 +1, 1장 드로우", act: "chestToMana" },
   // ---- persistent / conditional ----
   NHEAL: { id: "NHEAL", t: "spell", cost: 3, name: "생명의 가호", text: "영구: 몬스터를 소환할 때마다 자신 체력 1 회복", ench: "healSummon", val: 99, val2: 1 },
   NWIPE: { id: "NWIPE", t: "spell", cost: 5, name: "정화의 폭발", text: "자신 필드에 몬스터가 없을 때만. 상대 함정·마법 전부 파괴 후 자신 6 데미지", act: "wipeBack" },
@@ -121,9 +121,9 @@ const CORE: Record<string, CardDef> = {
 interface TribeInfo { name: string; note: string; bonuses: string[]; }
 export const TRIBES: Record<string, { ko: TribeInfo; ja: TribeInfo; en: TribeInfo }> = {
   "고독": {
-    ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 (같은 카드 2장은 X) · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 체력 +25", "서로 다른 3종: 체력 +50, 최대 마나 +2"] },
-    ja: { name: "孤独", note: "※ 異なる種族カードが必要 (同じカード2枚は不可) · 各段階の報酬はゲーム中1回ずつ別々に発生", bonuses: ["異なる2種: 体力 +25", "異なる3種: 体力 +50, 最大マナ +2"] },
-    en: { name: "Solitary", note: "* Requires DIFFERENT cards of the tribe · each tier's reward fires once, separately", bonuses: ["2 different: HP +25", "3 different: HP +50, max mana +2"] },
+    ko: { name: "고독", note: "※ 서로 다른 종족 카드여야 발동 (같은 카드 2장은 X) · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 체력 +25", "서로 다른 3종: 체력 +50, 마나 수정 +2"] },
+    ja: { name: "孤独", note: "※ 異なる種族カードが必要 (同じカード2枚は不可) · 各段階の報酬はゲーム中1回ずつ別々に発生", bonuses: ["異なる2種: 体力 +25", "異なる3種: 体力 +50, マナ水晶 +2"] },
+    en: { name: "Solitary", note: "* Requires DIFFERENT cards of the tribe · each tier's reward fires once, separately", bonuses: ["2 different: HP +25", "3 different: HP +50, mana crystals +2"] },
   },
   "고귀": {
     ko: { name: "고귀", note: "※ 서로 다른 종족 카드여야 발동 · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 매 턴 드로우 +1(영구), 상대 세트 함정 2장 파괴", "서로 다른 3종: 매 턴 드로우 +4(영구), 상대 세트 함정 전부 파괴 후 그중 1장 게임에서 제외"] },
@@ -136,14 +136,14 @@ export const TRIBES: Record<string, { ko: TribeInfo; ja: TribeInfo; en: TribeInf
     en: { name: "Devour", note: "* Requires different cards of the tribe · each tier fires once, separately", bonuses: ["2 different: destroy 1 chosen enemy monster, then 12 damage", "3 different: destroy 2 chosen enemy monsters, then 20 damage"] },
   },
   "귀족": {
-    ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 최대 마나 +2", "서로 다른 3종: 최대 마나 +6"] },
-    ja: { name: "貴族", note: "※ 異なる種族カードが必要 · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: 最大マナ +2", "異なる3種: 最大マナ +6"] },
-    en: { name: "Aristocrat", note: "* Requires different cards of the tribe · each tier fires once, separately", bonuses: ["2 different: max mana +2", "3 different: max mana +6"] },
+    ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 마나 수정 +2", "서로 다른 3종: 마나 수정 +6"] },
+    ja: { name: "貴族", note: "※ 異なる種族カードが必要 · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: マナ水晶 +2", "異なる3種: マナ水晶 +6"] },
+    en: { name: "Aristocrat", note: "* Requires different cards of the tribe · each tier fires once, separately", bonuses: ["2 different: mana crystals +2", "3 different: mana crystals +6"] },
   },
   "시초": {
-    ko: { name: "시초", note: "※ 1~8코스트 각 1종(8코 '시초의 미믹' 포함) · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 체력 +10", "서로 다른 3종: 체력 +15, 상대 체력 -5", "서로 다른 4종: 최대 마나 +10, 체력 +25, 5장 드로우, 상대 필드의 모든 카드 파괴+게임에서 제외, 상대에게 10 데미지"] },
-    ja: { name: "始原", note: "※ 1~8コスト各1種(8コスト「始原のミミック」を含む) · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: 体力 +10", "異なる3種: 体力 +15, 相手の体力 -5", "異なる4種: 最大マナ +10, 体力 +25, 5枚ドロー, 相手の場の全カードを破壊+ゲームから除外, 相手に10ダメージ"] },
-    en: { name: "Origin", note: "* Collect different cards, one each of cost 1-8 (incl. cost-8 'Origin Mimic') · each tier fires once, separately", bonuses: ["2 different: HP +10", "3 different: HP +15, enemy HP -5", "4 different: max mana +10, HP +25, draw 5, destroy & exile every card on the enemy field, 10 damage"] },
+    ko: { name: "시초", note: "※ 1~8코스트 각 1종(8코 '시초의 미믹' 포함) · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 체력 +10", "서로 다른 3종: 체력 +15, 상대 체력 -5", "서로 다른 4종: 마나 수정 +10, 체력 +25, 5장 드로우, 상대 필드의 모든 카드 파괴+게임에서 제외, 상대에게 10 데미지"] },
+    ja: { name: "始原", note: "※ 1~8コスト各1種(8コスト「始原のミミック」を含む) · 各段階の報酬はゲーム中1回ずつ", bonuses: ["異なる2種: 体力 +10", "異なる3種: 体力 +15, 相手の体力 -5", "異なる4種: マナ水晶 +10, 体力 +25, 5枚ドロー, 相手の場の全カードを破壊+ゲームから除外, 相手に10ダメージ"] },
+    en: { name: "Origin", note: "* Collect different cards, one each of cost 1-8 (incl. cost-8 'Origin Mimic') · each tier fires once, separately", bonuses: ["2 different: HP +10", "3 different: HP +15, enemy HP -5", "4 different: mana crystals +10, HP +25, draw 5, destroy & exile every card on the enemy field, 10 damage"] },
   },
 };
 
@@ -190,7 +190,7 @@ const SPELL_TPL: FxTpl[] = [
   { nouns: ["파멸", "소멸", "붕괴"], nounsJa: ["破滅", "消滅", "崩壊"], mk: () => ({ act: "destroyMon", text: "적 몬스터 1체를 파괴", textJa: "敵モンスター1体を破壊" }) },
   { nouns: ["약화", "쇠약", "부식"], nounsJa: ["弱化", "衰弱", "腐食"], mk: (c) => ({ act: "weaken", val: R(c * 1.3), text: `적 몬스터 1체 체력 -${R(c * 1.3)}(지속)`, textJa: `敵モンスター1体の体力-${R(c * 1.3)}(持続)` }) },
   { nouns: ["생명 갈취", "착취", "흡수"], nounsJa: ["生命奪取", "搾取", "吸収"], mk: (c) => ({ act: "siphon", val: R(c * 1.4), val2: R(c * 1.1), text: `상대에게 ${R(c * 1.4)} 데미지 + 자신 체력 ${R(c * 1.1)} 회복`, textJa: `相手に${R(c * 1.4)}ダメージ + 自分の体力${R(c * 1.1)}回復` }) },
-  { nouns: ["마나 결정", "룬 충전"], nounsJa: ["マナ結晶", "ルーン充填"], mk: (c) => ({ act: "manaUp", val: c >= 10 ? 2 : 1, play: 1, text: `최대 마나 +${c >= 10 ? 2 : 1} (시전 1)`, textJa: `最大マナ+${c >= 10 ? 2 : 1} (発動1)` }) },
+  { nouns: ["마나 결정", "룬 충전"], nounsJa: ["マナ結晶", "ルーン充填"], mk: (c) => ({ act: "manaUp", val: c >= 10 ? 2 : 1, play: 1, text: `마나 수정 +${c >= 10 ? 2 : 1} (시전 1)`, textJa: `マナ水晶+${c >= 10 ? 2 : 1} (発動1)` }) },
   { nouns: ["시장 교란", "혼란"], nounsJa: ["市場攪乱", "混乱"], mk: (c) => ({ act: "crash", val2: R(c / 3), play: Math.max(1, c - 2), text: `상대 제시 강제 갱신 + ${R(c / 3)}장 드로우 (시전 ${Math.max(1, c - 2)})`, textJa: `相手の提示を強制更新 + ${R(c / 3)}枚ドロー (発動${Math.max(1, c - 2)})` }) },
 ];
 
@@ -245,7 +245,7 @@ export const DB: Record<string, CardDef> = { ...CORE, ...generate() };
 export const STARTERS: Record<string, CardDef> = {
   STARTER_TRASH: { id: "STARTER_TRASH", t: "starter", cost: 0, name: "컬", text: "이 카드를 게임에서 제외(덱 압축)", star: "trash" }, // v41: 시전 코스트 1 → 0
   STARTER_CHEST: { id: "STARTER_CHEST", t: "starter", cost: 1, name: "보물상자", text: "마나1: 보물상자를 연다", star: "chest" },
-  STARTER_MANA: { id: "STARTER_MANA", t: "starter", cost: 3, name: "어튠", text: "마나3: 최대 마나 +1", star: "mana", passive: ["relic"] }, // v40: 신기 — 어떤 경우에도 게임에서 제외되지 않는다
+  STARTER_MANA: { id: "STARTER_MANA", t: "starter", cost: 3, name: "어튠", text: "마나3: 마나 수정 +1", star: "mana", passive: ["relic"] }, // v40: 신기 — 어떤 경우에도 게임에서 제외되지 않는다
 };
 
 // ---- Japanese names/texts for the hand-written cards + starters ----
@@ -257,7 +257,7 @@ const CORE_JA: Record<string, { name: string; text?: string }> = {
   M7: { name: "エンバー・ドレイク", text: "召喚時: 相手の体力に3ダメージ" },
   M8: { name: "グローブ・ウォーデン", text: "召喚時: 自分の体力5回復" },
   M9: { name: "レリック・ハンター", text: "召喚時: 自分の提示を無料更新 + 1枚ドロー" },
-  M10: { name: "マナ・ゴーレム", text: "場にいる間 最大マナ+1" },
+  M10: { name: "マナ・ゴーレム", text: "場にいる間 マナ水晶+1" },
   M11: { name: "ウォーロード", text: "味方モンスター2体以上で攻撃力+2" },
   M12: { name: "タイタン・ゲート" },
   M13: { name: "ヴォイド・リーヴァー", text: "召喚時: 相手のセット罠1枚を破壊" },
@@ -308,15 +308,15 @@ const CORE_JA: Record<string, { name: string; text?: string }> = {
   NWL3: { name: "岩亀" },
   NWL4: { name: "鉄壁の門番" },
   NHEX: { name: "小さな呪術師", text: "召喚時: 相手の体力に6ダメージ" },
-  NSPR: { name: "水晶の精霊", text: "場にいる間 最大マナ+1, 召喚時2枚ドロー" },
-  AHEUK: { name: "アチューン・黒", text: "相手の最大マナ-1。自分の場のモンスターが1体以下なら追加で-1 (発動4)" },
-  AJIN: { name: "アチューン・真", text: "最大マナ+1、墓地にアチューンを1枚追加" },
-  AMA: { name: "アチューン・魔", text: "手札の宝箱1枚を墓地へ → 最大マナ+1、1枚ドロー" },
+  NSPR: { name: "水晶の精霊", text: "場にいる間 マナ水晶+1, 召喚時2枚ドロー" },
+  AHEUK: { name: "アチューン・黒", text: "相手のマナ水晶-1。自分の場のモンスターが1体以下なら追加で-1 (発動4)" },
+  AJIN: { name: "アチューン・真", text: "マナ水晶+1、墓地にアチューンを1枚追加" },
+  AMA: { name: "アチューン・魔", text: "手札の宝箱1枚を墓地へ → マナ水晶+1、1枚ドロー" },
   NHEAL: { name: "生命の加護", text: "永続: モンスターを召喚するたびに自分の体力1回復" },
   NWIPE: { name: "浄化の爆発", text: "自分の場にモンスターがいない時のみ。相手の罠・魔法を全て破壊し自分に6ダメージ" },
   STARTER_TRASH: { name: "カル", text: "このカードをゲームから除外(デッキ圧縮)" },
   STARTER_CHEST: { name: "宝箱", text: "マナ1: 宝箱を開く" },
-  STARTER_MANA: { name: "アチューン", text: "マナ3: 最大マナ+1" },
+  STARTER_MANA: { name: "アチューン", text: "マナ3: マナ水晶+1" },
 };
 for (const id of Object.keys(CORE_JA)) {
   const ja = CORE_JA[id];
@@ -352,7 +352,7 @@ const PATCH: Record<string, Partial<CardDef>> = {
   // cost 7
   GM7_0: { atk: 13, def: 5 },
   GM7_1: { def: 14 },
-  GM7_2: { onSummon: "hpMana", val: 4, val2: 1, text: "소환시: 자신 체력 +4, 최대 마나 +1", textJa: "召喚時: 自分の体力+4, 最大マナ+1" },
+  GM7_2: { onSummon: "hpMana", val: 4, val2: 1, text: "소환시: 자신 체력 +4, 마나 수정 +1", textJa: "召喚時: 自分の体力+4, マナ水晶+1" },
   GM7_3: { atk: 11 },
   GM7_5: { onSummon: "draw", val: 4, text: "소환시: 4장 드로우", textJa: "召喚時: 4枚ドロー" },
   // cost 8
@@ -367,7 +367,7 @@ const PATCH: Record<string, Partial<CardDef>> = {
   GM9_0: { atk: 13, def: 5, onSummon: "smite", val: 6, text: "소환시: 공격력 6 이하 상대 몬스터 전멸", textJa: "召喚時: 攻撃力6以下の敵モンスターを全滅" },
   GM9_1: { turnFx: "payDefHeal", val: 3, val2: 2, text: "매 턴 마나 1로 이 몬스터의 체력 +3, 자신 체력 +2 회복", textJa: "毎ターン マナ1でこのモンスターの体力+3, 自分の体力+2回復" },
   GM9_2: { mult: 2, text: "한 턴에 2번 공격할 수 있다", textJa: "1ターンに2回攻撃できる" },
-  GM9_3: { onSummon: "drakeRamp", val: 7, turnFx: "chestDraw", val2: 4, text: "소환시: 상대에 7 데미지 + 최대 마나 +1 · 매 턴 패의 보물상자를 묘지로 보내면 4장 드로우", textJa: "召喚時: 相手に7ダメージ + 最大マナ+1 · 毎ターン手札の宝箱を墓地へ送ると4枚ドロー" },
+  GM9_3: { onSummon: "drakeRamp", val: 7, turnFx: "chestDraw", val2: 4, text: "소환시: 상대에 7 데미지 + 마나 수정 +1 · 매 턴 패의 보물상자를 묘지로 보내면 4장 드로우", textJa: "召喚時: 相手に7ダメージ + マナ水晶+1 · 毎ターン手札の宝箱を墓地へ送ると4枚ドロー" },
   GM9_4: { onSummon: "heal", val: 15, text: "소환시: 자신 체력 15 회복", textJa: "召喚時: 自分の体力15回復" },
   // cost 10
   GM10_0: { atk: 24, def: 8 },
@@ -389,7 +389,7 @@ const PATCH: Record<string, Partial<CardDef>> = {
   GT5_1: { react: "guarddraw", val: 2, text: "공격 무효 + 2장 드로우", textJa: "攻撃無効 + 2枚ドロー" },
   GT5_2: { react: "slaughterHeal", text: "공격 몬스터 파괴 + 30%로 그 몬스터의 체력만큼 자신 체력 회복", textJa: "攻撃モンスターを破壊 + 30%でそのモンスターの体力分、自分の体力を回復" },
   GT5_3: { react: "slaughterRaise", text: "공격 몬스터 파괴 + 30%로 자신 필드에 소생(소유권 이동)", textJa: "攻撃モンスターを破壊 + 30%で自分の場に蘇生(所有権移動)" },
-  GT6_0: { react: "guardPurge", val: 3, text: "공격 무효 + 최대 마나 -1로 상대 몬스터 최대 3체 파괴", textJa: "攻撃無効 + 最大マナ-1で敵モンスター最大3体を破壊" },
+  GT6_0: { react: "guardPurge", val: 3, text: "공격 무효 + 마나 수정 -1로 상대 몬스터 최대 3체 파괴", textJa: "攻撃無効 + マナ水晶-1で敵モンスター最大3体を破壊" },
   GT6_1: { react: "guarddraw", val: 3, text: "공격 무효 + 3장 드로우", textJa: "攻撃無効 + 3枚ドロー" },
   GT6_2: { react: "slayWeakAll", val: 3, text: "공격 몬스터 파괴 + 상대 전체 공격력 -3(이번 턴)", textJa: "攻撃モンスターを破壊 + 敵全体の攻撃力-3(このターン)" },
   GT6_3: { react: "slayLowAll", val: 5, text: "공격 몬스터 파괴 + 공격력 5 이하 상대 몬스터 전멸", textJa: "攻撃モンスターを破壊 + 攻撃力5以下の敵モンスター全滅" },
@@ -397,7 +397,7 @@ const PATCH: Record<string, Partial<CardDef>> = {
   GT8_0: { play: 7, react: "guardbuff", val: 4, val2: 1, text: "공격 무효 + 자신 몬스터 전체의 체력 +4(지속) + 1장 드로우", textJa: "攻撃無効 + 自分のモンスター全体の体力+4(持続) + 1枚ドロー" },
   GT8_1: { react: "guardEnemyDef", val: 4, text: "공격 무효 + 상대 몬스터 전체의 체력 -4(지속)", textJa: "攻撃無効 + 敵モンスター全体の体力-4(持続)" },
   GT8_2: { react: "guardWipe", val: 2, text: "공격 무효 + 상대 함정·영구마법 2장 파괴", textJa: "攻撃無効 + 相手の罠・永続魔法2枚を破壊" },
-  GT8_3: { play: 4, react: "guardMana", text: "공격 무효 + 최대 마나 +1", textJa: "攻撃無効 + 最大マナ+1" },
+  GT8_3: { play: 4, react: "guardMana", text: "공격 무효 + 마나 수정 +1", textJa: "攻撃無効 + マナ水晶+1" },
 };
 
 const DELETE_IDS = [
@@ -437,28 +437,28 @@ const PATCH2: Record<string, Partial<CardDef>> = {
   S8: { text: "묘지에서 원하는 1장을 패로", textJa: "墓地から好きな1枚を手札へ" },
   S12: { val: 2, val2: 1, text: "자신 몬스터 1체에 공격력+2 / 체력+1(지속)", textJa: "自分のモンスター1体に攻撃力+2/体力+1(持続)" },
   S13: { val: 9, text: "상대 체력에 9 데미지", textJa: "相手の体力に9ダメージ" },
-  E3: { play: 4, text: "자신의 4턴 동안 턴 시작시 1장 추가 드로우 · 종료 다음 턴 최대 마나 +1 (시전 4)", textJa: "自分の4ターンの間ターン開始時に1枚追加ドロー · 終了の翌ターン最大マナ+1 (発動4)" },
+  E3: { play: 4, text: "자신의 4턴 동안 턴 시작시 1장 추가 드로우 · 종료 다음 턴 마나 수정 +1 (시전 4)", textJa: "自分の4ターンの間ターン開始時に1枚追加ドロー · 終了の翌ターンマナ水晶+1 (発動4)" },
   NHEAL: { play: 2, text: "영구: 몬스터를 소환할 때마다 자신 체력 1 회복 (시전 2)", textJa: "永続: モンスターを召喚するたびに自分の体力1回復 (発動2)" },
-  AMA: { text: "패의 보물상자 1장을 묘지로 → 최대 마나 +1", textJa: "手札の宝箱1枚を墓地へ → 最大マナ+1" },
-  AJIN: { text: "최대 마나 +1, 50% 확률로 묘지에 어튠 1장 추가", textJa: "最大マナ+1、50%で墓地にアチューンを1枚追加" },
-  AHEUK: { play: 5, text: "상대 최대 마나 -1. 자신 필드 몬스터가 없으면 추가로 -1 (시전 5)", textJa: "相手の最大マナ-1。自分の場のモンスターがいなければ追加で-1 (発動5)" },
+  AMA: { text: "패의 보물상자 1장을 묘지로 → 마나 수정 +1", textJa: "手札の宝箱1枚を墓地へ → マナ水晶+1" },
+  AJIN: { text: "마나 수정 +1, 50% 확률로 묘지에 어튠 1장 추가", textJa: "マナ水晶+1、50%で墓地にアチューンを1枚追加" },
+  AHEUK: { play: 5, text: "상대 마나 수정 -1. 자신 필드 몬스터가 없으면 추가로 -1 (시전 5)", textJa: "相手のマナ水晶-1。自分の場のモンスターがいなければ追加で-1 (発動5)" },
   NWIPE: { val: 5, text: "자신 필드에 몬스터가 없을 때만 발동 가능 · 상대 함정·마법 전부 파괴 후 자신 5 데미지", textJa: "自分の場にモンスターがいない時のみ発動可能 · 相手の罠・魔法を全て破壊し自分に5ダメージ" },
   ND2: { val: 2, val2: 2, play: 1, text: "카드 2장 드로우 + 자신 체력 2 회복 (시전 1)", textJa: "カード2枚ドロー + 自分の体力2回復 (発動1)" },
   ND3: { val: 3, play: 2, text: "카드 3장 드로우, 30% 확률로 2장 추가 (시전 2)", textJa: "カード3枚ドロー、30%で2枚追加 (発動2)" },
-  ND5: { val: 5, play: 3, text: "카드 5장 드로우, 20% 확률로 최대 마나 +1 (시전 3)", textJa: "カード5枚ドロー、20%で最大マナ+1 (発動3)" },
+  ND5: { val: 5, play: 3, text: "카드 5장 드로우, 20% 확률로 마나 수정 +1 (시전 3)", textJa: "カード5枚ドロー、20%でマナ水晶+1 (発動3)" },
   // generated spells
-  GS5_0: { val: 10, text: "상대 체력에 10 데미지, 10% 확률로 상대 최대 마나 -1", textJa: "相手の体力に10ダメージ、10%で相手の最大マナ-1" },
+  GS5_0: { val: 10, text: "상대 체력에 10 데미지, 10% 확률로 상대 마나 수정 -1", textJa: "相手の体力に10ダメージ、10%で相手のマナ水晶-1" },
   GS5_2: { text: "자신 체력 9 회복 · 자신 체력 20 이상이면 자신 체력 +4", textJa: "自分の体力9回復 · 自分の体力20以上なら自分の体力+4" },
   GS6_0: { text: "상대 체력에 12 데미지 + 자신 체력 2 회복", textJa: "相手の体力に12ダメージ + 自分の体力2回復" },
   GS6_2: { text: "자신 체력 13 회복, 20% 확률로 자신 체력 +5", textJa: "自分の体力13回復、20%で自分の体力+5" },
   GS6_3: { val: 4, play: 2, text: "카드 4장 드로우 · 자신 체력 55 이상이면 2장 추가 (시전 2)", textJa: "カード4枚ドロー · 自分の体力55以上なら2枚追加 (発動2)" },
   GS6_4: { val: 11, text: "자신 몬스터 1체 공격력 +11(이번 턴)", textJa: "自分のモンスター1体の攻撃力+11(このターン)" },
-  GS7_0: { text: "상대 체력에 16 데미지, 20% 확률로 자신 최대 마나 -1", textJa: "相手の体力に16ダメージ、20%で自分の最大マナ-1" },
+  GS7_0: { text: "상대 체력에 16 데미지, 20% 확률로 자신 마나 수정 -1", textJa: "相手の体力に16ダメージ、20%で自分のマナ水晶-1" },
   GS7_2: { text: "자신 체력 13 회복 · 이 마법 3번째 사용부터 피격 시마다 자신 체력 5 회복", textJa: "自分の体力13回復 · この魔法3回目使用から被攻撃ごとに自分の体力5回復" },
   GS7_4: { val: 13, text: "자신 몬스터 1체 공격력 +13(이번 턴)", textJa: "自分のモンスター1体の攻撃力+13(このターン)" },
   GS8_0: { text: "상대 체력에 11 데미지 · 사용 시 50%로 상대 덱 맨 위 1장 제외", textJa: "相手の体力に11ダメージ · 使用時50%で相手のデッキトップ1枚を除外" },
   GS8_1: { play: 5, text: "상대 체력에 13 데미지 (시전 5)", textJa: "相手の体力に13ダメージ (発動5)" },
-  GS8_2: { text: "자신 체력 14 회복 · 자신 최대 마나가 10 이하면 자신 체력 완전 회복", textJa: "自分の体力14回復 · 自分の最大マナが10以下なら自分の体力全回復" },
+  GS8_2: { text: "자신 체력 14 회복 · 자신 마나 수정이 10 이하면 자신 체력 완전 회복", textJa: "自分の体力14回復 · 自分のマナ水晶が10以下なら自分の体力全回復" },
   GS8_3: { val: 5, text: "카드 5장 드로우 · 60%로 상대 몬스터/함정/마법 1장 무작위 파괴", textJa: "カード5枚ドロー · 60%で相手のモンスター/罠/魔法1枚をランダム破壊" },
   GS8_4: { val: 13, text: "아군 전체 공격력 +13(이번 턴) · 이번 턴 종료 후 공격력 +2(지속)", textJa: "味方全体の攻撃力+13(このターン) · ターン終了後 攻撃力+2(持続)" },
   GS8_5: { val: 7, text: "아군 전체 공격력 +7 · 20%로 6코스트 이하 몬스터 무작위 소환", textJa: "味方全体の攻撃力+7 · 20%でコスト6以下のモンスターをランダム召喚" },
@@ -493,7 +493,7 @@ const NEW_CARDS2: CardDef[] = [
   { id: "TIMEWARP", t: "spell", cost: 13, act: "dmg", name: "시공간 조작", nameJa: "時空間操作", text: "60% 확률로 다음 상대 턴을 스킵", textJa: "60%で次の相手のターンをスキップ" },
   { id: "INFERNO", t: "spell", cost: 5, ench: "inferno", val: 99, name: "지옥", nameJa: "地獄", text: "영구마법: 자신의 턴마다 자신에게 6 데미지 · 상대에게 5 데미지", textJa: "永続魔法: 自分のターンごとに自分に6ダメージ · 相手に5ダメージ" },
   { id: "GAMBLE", t: "spell", cost: 4, act: "dmg", name: "갬블", nameJa: "ギャンブル", text: "주사위 — 1·2: 자신 8뎀 / 3·4: 상대 5뎀 / 5: 마나 골렘 / 6: 유리 대포 ×3", textJa: "ダイス — 1·2: 自分8 / 3·4: 相手5 / 5: マナゴーレム / 6: ガラスの大砲×3" },
-  { id: "DICE8", t: "spell", cost: 8, act: "dmg", name: "악마의 주사위", nameJa: "悪魔のダイス", text: "주사위 — 1·2: 자신 최대마나-4 / 3·4: 상대 마나-1·14뎀 / 5: 폭풍의 전사 / 6: 상대 마법함정 전멸·전사 2체·최대마나+2·자신 체력+10", textJa: "ダイス — 1·2: 自分の最大マナ-4 / 3·4: 相手のマナ-1·14 / 5: 嵐の戦士 / 6: 相手の魔法罠全滅·戦士2体·最大マナ+2·自分の体力+10" },
+  { id: "DICE8", t: "spell", cost: 8, act: "dmg", name: "악마의 주사위", nameJa: "悪魔のダイス", text: "주사위 — 1·2: 자신 마나 수정-4 / 3·4: 상대 마나-1·14뎀 / 5: 폭풍의 전사 / 6: 상대 마법함정 전멸·전사 2체·마나 수정+2·자신 체력+10", textJa: "ダイス — 1·2: 自分のマナ水晶-4 / 3·4: 相手のマナ-1·14 / 5: 嵐の戦士 / 6: 相手の魔法罠全滅·戦士2体·マナ水晶+2·自分の体力+10" },
 ];
 
 for (const id of Object.keys(PATCH2)) { if (DB[id]) Object.assign(DB[id], PATCH2[id]); }
@@ -516,20 +516,20 @@ const PATCH3: Record<string, Partial<CardDef>> = {
   GM6_0: { attackFx: "rampFace", text: "상대 플레이어에게 데미지를 입힐 때마다 +2/+2(지속)", textJa: "相手プレイヤーにダメージを与えるたび+2/+2(持続)" },
   // 은빛 성벽: 상시 아군 몬스터 전체 방어 +3
   GM6_1: { aura: "wallDef", val: 3, text: "상시: 자신 필드의 아군 몬스터 체력 +3", textJa: "常時: 自分の場の味方モンスターの体力+3" },
-  // 폭풍의 광전사: 필드에 있는 한 상대 최대 마나 -3
-  GM11_0: { aura: "drainMana", val: 3, text: "이 카드가 필드에 있는 한 상대 최대 마나 -3", textJa: "このカードが場にいる限り相手の最大マナ-3" },
+  // 폭풍의 광전사: 필드에 있는 한 상대 마나 수정 -3
+  GM11_0: { aura: "drainMana", val: 3, text: "이 카드가 필드에 있는 한 상대 마나 수정 -3", textJa: "このカードが場にいる限り相手のマナ水晶-3" },
   // 트윈 팽: 3/2로 너프
   M6: { atk: 3, def: 2 },
   // 5코스트 종족카드 → 4코스트 / 5·5 하향 (시초 제외)
   TSO5: { cost: 4, atk: 5, def: 5 }, TNO5: { cost: 4, atk: 5, def: 5 },
   TPO5: { cost: 4, atk: 5, def: 5 }, TAR5: { cost: 4, atk: 5, def: 5 },
   // 어튠 - 흑: 시전6 (구매코스트와 동일 → 시전 표기 삭제)
-  AHEUK: { play: 6, text: "상대 최대 마나 -1 · 자신 필드 몬스터가 없으면 추가로 -1", textJa: "相手の最大マナ-1 · 自分の場のモンスターがいなければ追加で-1" },
+  AHEUK: { play: 6, text: "상대 마나 수정 -1 · 자신 필드 몬스터가 없으면 추가로 -1", textJa: "相手のマナ水晶-1 · 自分の場のモンスターがいなければ追加で-1" },
   // 시공간 조작: 코스트14 / 시전12 / 70% 스킵
   TIMEWARP: { cost: 14, play: 12, text: "70% 확률로 다음 상대 턴을 스킵", textJa: "70%で次の相手のターンをスキップ" },
   // 갬블 / 악마의 주사위: 알기 쉬운 텍스트 + 소환 몬스터 명시
   GAMBLE: { text: "주사위 1~6 — ①② 자신에게 8 데미지 / ③④ 상대에게 5 데미지 / ⑤ 마나 골렘 소환 / ⑥ 유리 대포 3체 소환", textJa: "ダイス1~6 — ①② 自分に8ダメージ / ③④ 相手に5ダメージ / ⑤ マナゴーレム召喚 / ⑥ ガラス大砲3体召喚" },
-  DICE8: { text: "주사위 1~6 — ①② 자신 최대마나-4 / ③④ 상대 마나-1·14뎀 / ⑤ 폭풍의 전사(2회공격) 소환 / ⑥ 상대 마법·함정 전멸+폭풍의 전사 2체+최대마나+2+자신 체력+10", textJa: "ダイス1~6 — ①② 自分の最大マナ-4 / ③④ 相手マナ-1・14 / ⑤ 嵐の戦士(2回攻撃)召喚 / ⑥ 相手の魔法・罠全滅+嵐の戦士2体+最大マナ+2+自分の体力+10" },
+  DICE8: { text: "주사위 1~6 — ①② 자신 마나 수정-4 / ③④ 상대 마나-1·14뎀 / ⑤ 폭풍의 전사(2회공격) 소환 / ⑥ 상대 마법·함정 전멸+폭풍의 전사 2체+마나 수정+2+자신 체력+10", textJa: "ダイス1~6 — ①② 自分のマナ水晶-4 / ③④ 相手マナ-1・14 / ⑤ 嵐の戦士(2回攻撃)召喚 / ⑥ 相手の魔法・罠全滅+嵐の戦士2体+マナ水晶+2+自分の体力+10" },
 };
 
 const NEW_CARDS3: CardDef[] = [
@@ -541,14 +541,14 @@ const NEW_CARDS3: CardDef[] = [
   { id: "ASSASSIN4", t: "mon", cost: 8, name: "특급 암살자 - 나이트로드", nameJa: "特級アサシン - ナイトロード", atk: 23, def: 5, mult: 2, summonReq: "assassinAll", onSummon: "wipeTraps", text: "소환시: 상대의 세트 함정을 모두 파괴 · 1턴에 2번 공격 · 패 제외 필드·덱·묘지에 초급·중급·상급 암살자가 각 1장 이상일 때 소환 가능", textJa: "召喚時: 相手のセット罠を全て破壊 · 1ターンに2回攻撃 · 手札を除く場・デッキ・墓地に初級・中級・上級アサシンが各1枚以上で召喚可能" },
   // ---- spells: rune ----
   { id: "RUNE1", t: "spell", cost: 2, play: 3, act: "destroyMon", name: "룬 학문 - 초급", nameJa: "ルーン学問 - 初級", text: "코스트 5 이상 상대 몬스터 1체 파괴 (시전 3)", textJa: "コスト5以上の敵モンスター1体を破壊 (発動3)" },
-  { id: "RUNE2", t: "spell", cost: 5, act: "manaUp", name: "룬 학문 - 중급", nameJa: "ルーン学問 - 中級", text: "패의 '룬 학문 - 초급'을 버리면 최대 마나 +2", textJa: "手札の「ルーン学問 - 初級」を捨てると最大マナ+2" },
-  { id: "RUNE3", t: "spell", cost: 7, play: 8, act: "manaUp", name: "룬 학문 - 상급", nameJa: "ルーン学問 - 上級", text: "패의 초급·중급을 1장씩 버리면 최대 마나 +4 (시전 8)", textJa: "手札の初級・中級を1枚ずつ捨てると最大マナ+4 (発動8)" },
+  { id: "RUNE2", t: "spell", cost: 5, act: "manaUp", name: "룬 학문 - 중급", nameJa: "ルーン学問 - 中級", text: "패의 '룬 학문 - 초급'을 버리면 마나 수정 +2", textJa: "手札の「ルーン学問 - 初級」を捨てるとマナ水晶+2" },
+  { id: "RUNE3", t: "spell", cost: 7, play: 8, act: "manaUp", name: "룬 학문 - 상급", nameJa: "ルーン学問 - 上級", text: "패의 초급·중급을 1장씩 버리면 마나 수정 +4 (시전 8)", textJa: "手札の初級・中級を1枚ずつ捨てるとマナ水晶+4 (発動8)" },
   // ---- spells: genesis(시초) ----
   { id: "GENESIS_SONG", t: "spell", cost: 3, play: 2, name: "시초의 노래", nameJa: "始原の歌", text: "덱·묘지의 '시초' 몬스터 1체를 무작위 소환 (시전 2)", textJa: "デッキ・墓地の「始原」モンスター1体をランダム召喚 (発動2)" },
   { id: "GENESIS_MAGIC", t: "spell", cost: 5, play: 0, name: "시초의 마법", nameJa: "始原の魔法", text: "자신 필드의 '시초' 몬스터 모두 +4/+4", textJa: "自分の場の「始原」モンスター全てに+4/+4" },
   // ---- spells: enchant(영구마법) ----
   { id: "KIN_CALL", t: "spell", cost: 3, ench: "kinDiscount", val: 99, name: "동족의 부름", nameJa: "同族の呼び声", text: "영구: 자신 필드에 종족 몬스터가 있으면 마켓의 종족카드 구매코스트 -2(최소1)", textJa: "永続: 自分の場に種族モンスターがいれば、マーケットの種族カード購入コスト-2(最低1)" },
-  { id: "MULTI_CULTURE", t: "spell", cost: 3, play: 4, ench: "cultureMana", val: 99, name: "다양한 문화", nameJa: "多様な文化", text: "영구: '시초' 제외, 필드의 종족 몬스터 1체당 임시 최대 마나 +1 (시전 4)", textJa: "永続: 「始原」を除く、場の種族モンスター1体ごとに一時的に最大マナ+1 (発動4)" },
+  { id: "MULTI_CULTURE", t: "spell", cost: 3, play: 4, ench: "cultureMana", val: 99, name: "다양한 문화", nameJa: "多様な文化", text: "영구: '시초' 제외, 필드의 종족 몬스터 1체당 임시 마나 수정 +1 (시전 4)", textJa: "永続: 「始原」を除く、場の種族モンスター1体ごとに一時的にマナ水晶+1 (発動4)" },
   { id: "SLAY_ART", t: "spell", cost: 2, ench: "slayArt", val: 99, name: "살생의 극의", nameJa: "殺生の極意", text: "영구: 양 플레이어 중 누구든 데미지를 받을 때마다 추가 데미지 +2", textJa: "永続: どちらのプレイヤーがダメージを受けるたび追加ダメージ+2" },
   // ---- spells: blood magic ----
   { id: "BLOOD1", t: "spell", cost: 2, play: 1, act: "draw", name: "피의 마법 - 블러드 드로우", nameJa: "血の魔法 - ブラッドドロー", text: "자신에게 15 데미지, 카드 6장 드로우 (시전 1)", textJa: "自分に15ダメージ、カード6枚ドロー (発動1)" },
@@ -558,7 +558,7 @@ const NEW_CARDS3: CardDef[] = [
   { id: "DISARM2", t: "spell", cost: 3, play: 2, act: "destroyEnch", val: 2, name: "장치분석", nameJa: "装置分析", text: "상대 영구마법 2장 파괴 (시전 2)", textJa: "相手の永続魔法2枚を破壊 (発動2)" },
   { id: "DISARM3", t: "spell", cost: 4, play: 3, name: "마법연구기관", nameJa: "魔法研究機関", text: "상대 영구마법 1장 파괴 후 게임에서 제외 (시전 3)", textJa: "相手の永続魔法1枚を破壊しゲームから除外 (発動3)" },
   // ---- spells: forbidden ----
-  { id: "FORBIDDEN", t: "spell", cost: 3, name: "금단의 술식", nameJa: "禁断の術式", text: "자신 체력 -15, 최대 마나 -2 · 주사위 4~6이면 필드 한 종족(시초 제외)의 나머지 몬스터를 모두 소환", textJa: "自分の体力-15、最大マナ-2 · ダイス4~6なら場の一種族(始原除く)の残りモンスターを全て召喚" },
+  { id: "FORBIDDEN", t: "spell", cost: 3, name: "금단의 술식", nameJa: "禁断の術式", text: "자신 체력 -15, 마나 수정 -2 · 주사위 4~6이면 필드 한 종족(시초 제외)의 나머지 몬스터를 모두 소환", textJa: "自分の体力-15、マナ水晶-2 · ダイス4~6なら場の一種族(始原除く)の残りモンスターを全て召喚" },
 ];
 
 // 7코스트 종족 카드 삭제 (시초 제외 각 종족은 2·3·4코스트 3종으로 유지)
@@ -597,7 +597,7 @@ const PATCH4: Record<string, Partial<CardDef>> = {
   T1: { text: "공격 절반 + 공격측에 1 데미지 (시전 1)", textJa: "攻撃を半減 + 攻撃側に1ダメージ (発動1)" },
   T4: { text: "공격 몬스터 파괴 + 그 공격력만큼 상대에게 데미지 (시전 3)", textJa: "攻撃モンスターを破壊 + その攻撃力分を相手にダメージ (発動3)" },
   GT8_0: { text: "공격 무효 + 자신 몬스터 전체의 체력 +4(지속) + 1장 드로우 (시전 7)", textJa: "攻撃無効 + 自分のモンスター全体の体力+4(持続) + 1枚ドロー (発動7)" },
-  GT8_3: { text: "공격 무효 + 최대 마나 +1 (시전 4)", textJa: "攻撃無効 + 最大マナ+1 (発動4)" },
+  GT8_3: { text: "공격 무효 + 마나 수정 +1 (시전 4)", textJa: "攻撃無効 + マナ水晶+1 (発動4)" },
   GS8_3: { text: "카드 5장 드로우 · 60%로 상대 몬스터/함정/마법 1장 무작위 파괴 (시전 3)", textJa: "カード5枚ドロー · 60%で相手のモンスター/罠/魔法1枚をランダム破壊 (発動3)" },
   DISARM1: { text: "상대 영구마법 1장 파괴 (시전 0)", textJa: "相手の永続魔法1枚を破壊 (発動0)" },
   GENESIS_MAGIC: { text: "자신 필드의 '시초' 몬스터 모두 +4/+4 (시전 0)", textJa: "自分の場の「始原」モンスター全てに+4/+4 (発動0)" },
@@ -627,7 +627,7 @@ const PATCH5: Record<string, Partial<CardDef>> = {
   // 8코+ 시전비 대할인
   GT8_0: { play: 4, text: "공격 무효 + 자신 몬스터 전체의 체력 +4(지속) + 1장 드로우 (시전 4)", textJa: "攻撃無効 + 自分のモンスター全体の体力+4(持続) + 1枚ドロー (発動4)" },
   GT8_1: { play: 4 }, GT8_2: { play: 4 },
-  GT8_3: { play: 3, val: 2, text: "공격 무효 + 최대 마나 +2 (시전 3)", textJa: "攻撃無効 + 最大マナ+2 (発動3)" },
+  GT8_3: { play: 3, val: 2, text: "공격 무효 + 마나 수정 +2 (시전 3)", textJa: "攻撃無効 + マナ水晶+2 (発動3)" },
   GT8_5: { play: 4 },
   GT9_2: { play: 4 }, GT9_3: { play: 4 },
   GT10_0: { play: 4 }, GT10_1: { play: 4 }, GT10_2: { play: 4 }, GT10_3: { play: 4 },
@@ -662,13 +662,13 @@ for (const id of DRAW_BUFF) {
 // ============================================================
 const NEW_CARDS4: CardDef[] = [
   { id: "LUCKY_CHEST", t: "spell", cost: 3, name: "행운의 보물상자", nameJa: "幸運の宝箱",
-    text: "10%: 최대 마나+3·2장 드로우 / 40%: 최대 마나+1 / 30%: 자신 체력+8 / 5%: 자신 체력+12 / 15%: 꽝(상대 필드에 마스터 미믹 10/3)",
-    textJa: "10%: 最大マナ+3・2枚ドロー / 40%: 最大マナ+1 / 30%: 自分の体力+8 / 5%: 自分の体力+12 / 15%: ハズレ(相手の場にマスターミミック10/3)" },
+    text: "10%: 마나 수정+3·2장 드로우 / 40%: 마나 수정+1 / 30%: 자신 체력+8 / 5%: 자신 체력+12 / 15%: 꽝(상대 필드에 마스터 미믹 10/3)",
+    textJa: "10%: マナ水晶+3・2枚ドロー / 40%: マナ水晶+1 / 30%: 自分の体力+8 / 5%: 自分の体力+12 / 15%: ハズレ(相手の場にマスターミミック10/3)" },
   { id: "MIMIC2", t: "mon", cost: 0, aura: "chestLock", name: "마스터 미믹", nameJa: "マスターミミック", atk: 10, def: 3,
     text: "이 몬스터가 필드에 있는 한 양 플레이어는 보물상자를 사용할 수 없다 (어튠 - 마는 가능)", textJa: "このモンスターが場にいる限り両者は宝箱を使用できない (アチューン・魔は可能)" },
   { id: "GUILD_CHEST", t: "spell", cost: 5, play: 3, name: "암살자 길드의 보물상자", nameJa: "アサシンギルドの宝箱",
-    text: "10%: 최대 마나+3 / 10%: 턴 시작 드로우+1(영구) / 20%: 최대 마나+2 / 10%: 최대 마나+1 / 10%: 자신 체력+10 / 20%: 상대 필드에 초급·중급 암살자 소환 / 20%: 초급·중급·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
-    textJa: "10%: 最大マナ+3 / 10%: ターン開始ドロー+1(永続) / 20%: 最大マナ+2 / 10%: 最大マナ+1 / 10%: 自分の体力+10 / 20%: 相手の場に初級・中級アサシン召喚 / 20%: 初級・中級・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
+    text: "10%: 마나 수정+3 / 10%: 턴 시작 드로우+1(영구) / 20%: 마나 수정+2 / 10%: 마나 수정+1 / 10%: 자신 체력+10 / 20%: 상대 필드에 초급·중급 암살자 소환 / 20%: 초급·중급·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
+    textJa: "10%: マナ水晶+3 / 10%: ターン開始ドロー+1(永続) / 20%: マナ水晶+2 / 10%: マナ水晶+1 / 10%: 自分の体力+10 / 20%: 相手の場に初級・中級アサシン召喚 / 20%: 初級・中級・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
   { id: "GUILD_EYE", t: "spell", cost: 0, ench: "bonusDraw", val: 99, val2: 1, name: "길드의 정보망", nameJa: "ギルドの情報網",
     text: "영구: 자신의 턴 시작시 1장 추가 드로우", textJa: "永続: 自分のターン開始時に1枚追加ドロー" },
 ];
@@ -694,28 +694,28 @@ for (const id of Object.keys(PATCH7)) { if (DB[id]) Object.assign(DB[id], PATCH7
 // ============================================================
 const NEW_CARDS5: CardDef[] = [
   { id: "CATALYST", t: "spell", cost: 2, name: "균열의 촉매", nameJa: "亀裂の触媒",
-    text: "자신에게 4 데미지, 최대 마나 +1", textJa: "自分に4ダメージ、最大マナ+1" },
+    text: "자신에게 4 데미지, 마나 수정 +1", textJa: "自分に4ダメージ、マナ水晶+1" },
   { id: "WORLD_SEED", t: "spell", cost: 4, ench: "seedMana", val: 99, val2: 33, name: "세계수의 씨앗", nameJa: "世界樹の種",
-    text: "영구: 자신의 턴 시작마다 33% 확률로 최대 마나 +1", textJa: "永続: 自分のターン開始時、33%で最大マナ+1" },
+    text: "영구: 자신의 턴 시작마다 33% 확률로 마나 수정 +1", textJa: "永続: 自分のターン開始時、33%でマナ水晶+1" },
   { id: "MANA_GIANT", t: "mon", cost: 5, atk: 1, def: 10, aura: "mana2", name: "마나 수정 거인", nameJa: "マナ水晶の巨人", // v25: 7→10
-    text: "필드에 있는 동안 최대 마나 +2", textJa: "場にいる間、最大マナ+2" },
+    text: "필드에 있는 동안 마나 수정 +2", textJa: "場にいる間、マナ水晶+2" },
   { id: "HOURGLASS", t: "spell", cost: 6, act: "manaUp", val: 2, val2: 2, name: "시간의 모래시계", nameJa: "時の砂時計",
-    text: "최대 마나 +2, 카드 2장 드로우", textJa: "最大マナ+2、カード2枚ドロー" },
+    text: "마나 수정 +2, 카드 2장 드로우", textJa: "マナ水晶+2、カード2枚ドロー" },
   { id: "LIFE_CYCLE", t: "spell", cost: 3, play: 2, ench: "healMana", val: 99, name: "생명의 순환", nameJa: "生命の循環",
-    text: "영구: 자신이 체력을 회복할 때마다 15% 확률로 최대 마나 +1 (시전 2)", textJa: "永続: 自分が体力を回復するたび15%で最大マナ+1 (発動2)" },
+    text: "영구: 자신이 체력을 회복할 때마다 15% 확률로 마나 수정 +1 (시전 2)", textJa: "永続: 自分が体力を回復するたび15%でマナ水晶+1 (発動2)" },
   { id: "LIFE_SANCTUM", t: "spell", cost: 3, play: 2, ench: "growHp", val: 99, val2: 3, name: "생명의 성소", nameJa: "生命の聖域",
     text: "영구: 자신의 턴마다 자신 체력 +3 (시전 2)", textJa: "永続: 自分のターンごとに自分の体力+3 (発動2)" },
   { id: "WORLD_HEART", t: "spell", cost: 5, play: 4, ench: "growHpMana", val: 99, val2: 7, name: "세계수의 심장", nameJa: "世界樹の心臓",
-    text: "영구: 자신의 턴마다 자신 체력 +7 · 이 마법이 필드에 있는 한 자신의 최대 마나 -2 (시전 4)", textJa: "永続: 自分のターンごとに自分の体力+7 · この魔法が場にある限り自分の最大マナ-2 (発動4)" },
+    text: "영구: 자신의 턴마다 자신 체력 +7 · 이 마법이 필드에 있는 한 자신의 마나 수정 -2 (시전 4)", textJa: "永続: 自分のターンごとに自分の体力+7 · この魔法が場にある限り自分のマナ水晶-2 (発動4)" },
   { id: "MEDITATE", t: "spell", cost: 2, play: 3, act: "heal", val: 8, name: "명상", nameJa: "瞑想",
     text: "이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 자신 체력의 80%까지 자신 체력 회복 (시전 3)", textJa: "このターンに他のカードをプレイしていない場合のみ発動可能。自分の体力の80%まで回復 (発動3)" },
   { id: "PRAYER", t: "spell", cost: 4, play: 5, act: "heal", val: 8, name: "성역의 기도", nameJa: "聖域の祈り",
-    text: "최대 마나가 12 이하이고 이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 자신 체력의 80%까지 자신 체력 회복 (시전 5)", textJa: "最大マナが12以下で、このターンに他のカードをプレイしていない場合のみ発動可能。自分の体力の80%まで回復 (発動5)" },
+    text: "마나 수정이 12 이하이고 이번 턴에 다른 카드를 플레이하지 않았을 경우에만 발동 가능. 자신 체력의 80%까지 자신 체력 회복 (시전 5)", textJa: "マナ水晶が12以下で、このターンに他のカードをプレイしていない場合のみ発動可能。自分の体力の80%まで回復 (発動5)" },
   { id: "HERMIT", t: "spell", cost: 8, play: 7, act: "heal", val: 8, name: "은둔의 안식", nameJa: "隠遁の安息",
     text: "자신 필드에 몬스터가 없을 때만 발동 가능 · 자신 체력 완전 회복 + 자신 체력 +15 (시전 7)", textJa: "自分の場にモンスターがいない時のみ発動可能 · 自分の体力全回復 + 自分の体力+15 (発動7)" },
   { id: "WORLD_BLESS", t: "spell", cost: 7, play: 6, ench: "worldBless", val: 99, name: "세계수의 축복", nameJa: "世界樹の祝福",
-    text: "영구: 양 플레이어는 자신의 턴 시작마다 최대 마나 +1. 이 카드의 시전자는 매턴 40% 확률로 최대 마나 +2 추가 (시전 6)",
-    textJa: "永続: 両プレイヤーは自分のターン開始時に最大マナ+1。このカードの使用者は毎ターン40%で最大マナ+2追加 (発動6)" },
+    text: "영구: 양 플레이어는 자신의 턴 시작마다 마나 수정 +1. 이 카드의 시전자는 매턴 40% 확률로 마나 수정 +2 추가 (시전 6)",
+    textJa: "永続: 両プレイヤーは自分のターン開始時にマナ水晶+1。このカードの使用者は毎ターン40%でマナ水晶+2追加 (発動6)" },
 ];
 for (const c of NEW_CARDS5) { DB[c.id] = c; }
 
@@ -739,9 +739,9 @@ for (const id of Object.keys(PATCH9)) { if (DB[id]) Object.assign(DB[id], PATCH9
 
 // chest (golden treasure) outcome odds — shown when the chest card is enlarged
 export const CHEST_ODDS = {
-  ko: { title: "황금상자 확률 (각 25%)", rows: ["최대 마나 +1 — 25%", "체력 +3 — 25%", "체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
-  ja: { title: "宝箱の確率 (各25%)", rows: ["最大マナ +1 — 25%", "体力 +3 — 25%", "体力 +5 — 25%", "ハズレ: 相手の場にミミック(3/2) — 25%"] },
-  en: { title: "Golden chest odds (25% each)", rows: ["Max mana +1 — 25%", "HP +3 — 25%", "HP +5 — 25%", "Dud: Mimic (3/2) on enemy field — 25%"] },
+  ko: { title: "황금상자 확률 (각 25%)", rows: ["마나 수정 +1 — 25%", "체력 +3 — 25%", "체력 +5 — 25%", "꽝: 상대 필드에 미믹(3/2) — 25%"] },
+  ja: { title: "宝箱の確率 (各25%)", rows: ["マナ水晶 +1 — 25%", "体力 +3 — 25%", "体力 +5 — 25%", "ハズレ: 相手の場にミミック(3/2) — 25%"] },
+  en: { title: "Golden chest odds (25% each)", rows: ["Mana Crystals +1 — 25%", "HP +3 — 25%", "HP +5 — 25%", "Dud: Mimic (3/2) on enemy field — 25%"] },
 };
 
 // ============================================================
@@ -825,7 +825,7 @@ const NEW_CARDS7: CardDef[] = [
   { id: "CULL_TITAN", t: "mon", cost: 9, atk: 1, def: 1, onSummon: "cullTitan", name: "컬의 화신", nameJa: "カルの化身",
     text: "소환시: 게임에서 제외된 자신의 '컬' 1장당 +1/+1", textJa: "召喚時: ゲームから除外された自分の「カル」1枚につき+1/+1" },
   { id: "WORLD_GUARD", t: "mon", cost: 8, atk: 6, def: 5, onSummon: "worldGuard", name: "세계수의 수호자", nameJa: "世界樹の守護者",
-    text: "소환시: 자신의 체력이 90 이상이면 최대 마나 +1, 자신 체력 +15", textJa: "召喚時: 自分の体力が90以上なら最大マナ+1、自分の体力+15" },
+    text: "소환시: 자신의 체력이 90 이상이면 마나 수정 +1, 자신 체력 +15", textJa: "召喚時: 自分の体力が90以上ならマナ水晶+1、自分の体力+15" },
   { id: "GOLIATH_HUNT", t: "spell", cost: 3, name: "골리앗 사냥", nameJa: "ゴリアテ狩り",
     text: "체력 20 이상의 적 몬스터 1체를 파괴", textJa: "体力20以上の敵モンスター1体を破壊" },
   { id: "DOUBLE_EXEC", t: "spell", cost: 6, act: "destroyMon", val: 2, name: "이중 처형", nameJa: "二重処刑",
@@ -855,7 +855,7 @@ const NEW_CARDS6: CardDef[] = [
   { id: "PURGE_TOUCH", t: "spell", cost: 2, play: 1, act: "exilePick", name: "정화의 손길", nameJa: "浄化の手",
     text: "묘지에서 카드 1장을 골라 게임에서 제외 + 1장 드로우 (시전 1)", textJa: "墓地からカード1枚を選びゲームから除外 + 1枚ドロー (発動1)" },
   { id: "SCRAPPER", t: "spell", cost: 1, play: 2, name: "고철 수집상", nameJa: "スクラップ収集家",
-    text: "덱·묘지의 코스트 1 이하 카드 2장을 게임에서 제외 → 최대 마나 +1 (시전 2)", textJa: "デッキ・墓地のコスト1以下のカード2枚をゲームから除外 → 最大マナ+1 (発動2)" },
+    text: "덱·묘지의 코스트 1 이하 카드 2장을 게임에서 제외 → 마나 수정 +1 (시전 2)", textJa: "デッキ・墓地のコスト1以下のカード2枚をゲームから除外 → マナ水晶+1 (発動2)" },
   { id: "HORDE", t: "mon", cost: 4, atk: 3, def: 3, onSummon: "hordeBuff", name: "군단의 기수", nameJa: "軍団の旗手",
     text: "소환시: 자신의 덱+묘지가 20장 이상이면 +3/+3", textJa: "召喚時: 自分のデッキ+墓地が20枚以上なら+3/+3" },
   { id: "ELITE", t: "mon", cost: 4, atk: 2, def: 4, onSummon: "eliteBuff", name: "정예 기사단장", nameJa: "精鋭騎士団長",
@@ -899,8 +899,8 @@ const NEW_CARDS8: CardDef[] = [
     text: "소환시: 자신의 체력 +20 · 자신의 턴 시작마다 상대 필드 몬스터 수만큼 자신 체력 증가 · 죽으면 게임에서 제외",
     textJa: "召喚時: 自分の体力+20 · 自分のターン開始時、敵モンスターの数だけ自分の体力増加 · 死亡時ゲームから除外" },
   { id: "DIVINE", t: "mon", cost: 0, atk: 25, def: 25, onSummon: "divine", aura: "ward", name: "신수", nameJa: "神獣",
-    text: "소환시: 최대 마나 +15 · 매 턴 드로우 +1(영구) · 상대 필드의 카드 3장 선택 파괴(몬스터·세트 함정·영구마법) · 상시: 상대의 마법·몬스터 효과의 대상이 되지 않는다 · 죽으면 게임에서 제외",
-    textJa: "召喚時: 最大マナ+15 · 毎ターンドロー+1(永続) · 相手の場のカード3枚を選んで破壊(モンスター・セットトラップ・永続魔法) · 常時: 相手の魔法・モンスター効果の対象にならない · 死亡時ゲームから除外" },
+    text: "소환시: 마나 수정 +15 · 매 턴 드로우 +1(영구) · 상대 필드의 카드 3장 선택 파괴(몬스터·세트 함정·영구마법) · 상시: 상대의 마법·몬스터 효과의 대상이 되지 않는다 · 죽으면 게임에서 제외",
+    textJa: "召喚時: マナ水晶+15 · 毎ターンドロー+1(永続) · 相手の場のカード3枚を選んで破壊(モンスター・セットトラップ・永続魔法) · 常時: 相手の魔法・モンスター効果の対象にならない · 死亡時ゲームから除外" },
 ];
 for (const c of NEW_CARDS8) { DB[c.id] = c; }
 
@@ -925,12 +925,12 @@ const NEW_CARDS9: CardDef[] = [
   { id: "BLOOD_SORROW", t: "spell", cost: 2, name: "피의 마법 - 애", nameJa: "血の魔法 - 哀",
     text: "자신에게 12 데미지 · 자신의 묘지에서 가장 코스트가 높은 카드 1장을 게임에서 제외한다", textJa: "自分に12ダメージ · 自分の墓地から最もコストの高いカード1枚をゲームから除外する" },
   { id: "BLOOD_PLEASURE", t: "spell", cost: 4, name: "피의 마법 - 락", nameJa: "血の魔法 - 楽",
-    text: "자신에게 14 데미지 · 자신의 최대 마나 +1", textJa: "自分に14ダメージ · 自分の最大マナ+1" },
+    text: "자신에게 14 데미지 · 자신의 마나 수정 +1", textJa: "自分に14ダメージ · 自分のマナ水晶+1" },
   // ---- 흡혈 지원 ----
   { id: "VAMP_PACT", t: "spell", cost: 2, name: "흡혈 계약", nameJa: "吸血契約",
     text: "자신에게 6 데미지 · '견습 흡혈귀'를 자신 필드에 소환", textJa: "自分に6ダメージ · 「見習い吸血鬼」を自分の場に召喚" },
   { id: "BLOOD_FEST", t: "spell", cost: 3, ench: "bloodFest", val: 99, name: "피의 축제", nameJa: "血の祝祭",
-    text: "영구: '피의 마법' 카드를 사용할 때마다 최대 마나 +1", textJa: "永続: 「血の魔法」カードを使うたび最大マナ+1" },
+    text: "영구: '피의 마법' 카드를 사용할 때마다 마나 수정 +1", textJa: "永続: 「血の魔法」カードを使うたびマナ水晶+1" },
   { id: "BLOOD_SHIELD", t: "spell", cost: 1, ench: "bloodShield", val: 99, name: "흡혈 술식", nameJa: "吸血術式",
     text: "영구: 자신은 '피의 마법'으로 인한 데미지를 받지 않는다", textJa: "永続: 自分は「血の魔法」によるダメージを受けない" },
   { id: "VAMP_WARD", t: "spell", cost: 2, ench: "vampWard", val: 99, name: "흡혈의 극의", nameJa: "吸血の極意",
@@ -941,8 +941,8 @@ const NEW_CARDS9: CardDef[] = [
     text: "상시: 상대 몬스터 공격 시마다 카운트 +1 · 3카운트마다 '견습 흡혈귀' 소환 · '흡혈귀' 계열로 취급",
     textJa: "常時: 相手モンスターを攻撃するたびカウント+1 · 3カウントごとに「見習い吸血鬼」召喚 · 「吸血鬼」系列として扱う" },
   { id: "BLOOD_SECRET", t: "spell", cost: 2, name: "피의 마법 - 비술", nameJa: "血の魔法 - 秘術",
-    text: "자신에게 9 데미지 · 자신 필드 '흡혈귀' 계열 1체 파괴 · 성공 시 최대 마나 +3·자신 체력 +10",
-    textJa: "自分に9ダメージ · 自分の場の「吸血鬼」系列1体を破壊 · 成功時、最大マナ+3、自分の体力+10" },
+    text: "자신에게 9 데미지 · 자신 필드 '흡혈귀' 계열 1체 파괴 · 성공 시 마나 수정 +3·자신 체력 +10",
+    textJa: "自分に9ダメージ · 自分の場の「吸血鬼」系列1体を破壊 · 成功時、マナ水晶+3、自分の体力+10" },
   // ---- 흡혈귀 진화 체인 (cost 0, 구매 불가) ----
   { id: "VAMP1", t: "mon", cost: 0, atk: 2, def: 2, evolveTo: "VAMP2", name: "견습 흡혈귀", nameJa: "見習い吸血鬼",
     text: "'피의 마법' 발동 시: 초급 흡혈귀를 자신 필드에 소환 (1회) · 죽으면 게임에서 제외", textJa: "「血の魔法」発動時: 初級吸血鬼を自分の場に召喚 (1回) · 死亡時ゲームから除外" },
@@ -965,10 +965,10 @@ const NEW_CARDS10: CardDef[] = [
   { id: "FLAME", t: "spell", cost: 1, noShop: true, name: "불꽃", nameJa: "火花",
     text: "상대에게 2 데미지, 자신에게 1 데미지", textJa: "相手に2ダメージ、自分に1ダメージ" },
   { id: "GHOST", t: "mon", cost: 2, atk: 2, def: 1, directOnly: true, noShop: true, name: "유령", nameJa: "幽霊",
-    text: "상대에게만 직접 공격할 수 있다 (몬스터 공격 불가) · 상대가 최대 마나/체력을 늘릴 때마다 자신은 3 데미지를 입는다",
-    textJa: "相手にのみ直接攻撃できる (モンスター攻撃不可) · 相手が最大マナ/体力を増やすたび自分は3ダメージを受ける" },
+    text: "상대에게만 직접 공격할 수 있다 (몬스터 공격 불가) · 상대가 마나 수정/체력을 늘릴 때마다 자신은 3 데미지를 입는다",
+    textJa: "相手にのみ直接攻撃できる (モンスター攻撃不可) · 相手がマナ水晶/体力を増やすたび自分は3ダメージを受ける" },
   { id: "NEGOTIATE", t: "spell", cost: 1, noShop: true, name: "협상", nameJa: "交渉",
-    text: "상대의 최대 마나 +1 · 상대는 다음 턴에 함정을 설치할 수 없다", textJa: "相手の最大マナ+1 · 相手は次のターン罠を設置できない" },
+    text: "상대의 마나 수정 +1 · 상대는 다음 턴에 함정을 설치할 수 없다", textJa: "相手のマナ水晶+1 · 相手は次のターン罠を設置できない" },
   { id: "BLOOD_RITE", t: "spell", cost: 2, ench: "spellHeal", val: 99, exileOnDestroy: true, noShop: true, name: "혈귀술", nameJa: "血鬼術",
     text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 파괴되면 게임에서 제외", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 破壊されたらゲームから除外" },
   { id: "WEAKEN_ALL", t: "spell", cost: 2, ench: "weakenAll", val: 99, exileOnDestroy: true, noShop: true, name: "약화술식", nameJa: "弱化術式",
@@ -979,23 +979,23 @@ const NEW_CARDS10: CardDef[] = [
   { id: "MIMIC_PARTY", t: "trap", cost: 1, react: "mimicParty", noShop: true, name: "미믹 파티", nameJa: "ミミックパーティー",
     text: "함정: 상대가 보물상자를 사용하면 발동 — 상대 필드에 미믹 1마리, 자신 필드에 미믹 2마리 소환", textJa: "罠: 相手が宝箱を使うと発動 — 相手の場にミミック1体、自分の場にミミック2体召喚" },
   { id: "FATE_WHEEL", t: "spell", cost: 4, ench: "fateWheel", val: 99, exileOnDestroy: true, noShop: true, name: "운명의 수레바퀴", nameJa: "運命の輪",
-    text: "영구: 시전 시 자신의 최대 마나 -1, 자신에게 8 데미지 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 파괴되면 게임에서 제외",
-    textJa: "永続: 発動時に自分の最大マナ-1、自分に8ダメージ · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 破壊されたらゲームから除外" },
+    text: "영구: 시전 시 자신의 마나 수정 -1, 자신에게 8 데미지 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 파괴되면 게임에서 제외",
+    textJa: "永続: 発動時に自分のマナ水晶-1、自分に8ダメージ · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 破壊されたらゲームから除外" },
   { id: "COUNTERCALC", t: "spell", cost: 1, noShop: true, name: "역산", nameJa: "逆算",
-    text: "상대 최대 마나 6 이하일 때만 사용 가능 · 상대 영구마법 1장 파괴 · 사용 후 게임에서 제외", textJa: "相手の最大マナが6以下の時のみ使用可能 · 相手の永続魔法1枚を破壊 · 使用後ゲームから除外" },
+    text: "상대 마나 수정 6 이하일 때만 사용 가능 · 상대 영구마법 1장 파괴 · 사용 후 게임에서 제외", textJa: "相手のマナ水晶が6以下の時のみ使用可能 · 相手の永続魔法1枚を破壊 · 使用後ゲームから除外" },
   { id: "AMBUSH", t: "spell", cost: 2, noShop: true, name: "기습", nameJa: "奇襲",
-    text: "상대 최대 마나가 4일 때만 사용 가능 · 상대에게 7 데미지, 자신에게 3 데미지 · 사용 후 게임에서 제외", textJa: "相手の最大マナが4の時のみ使用可能 · 相手に7ダメージ、自分に3ダメージ · 使用後ゲームから除外" },
+    text: "상대 마나 수정이 4일 때만 사용 가능 · 상대에게 7 데미지, 자신에게 3 데미지 · 사용 후 게임에서 제외", textJa: "相手のマナ水晶が4の時のみ使用可能 · 相手に7ダメージ、自分に3ダメージ · 使用後ゲームから除外" },
   { id: "TRUMPET", t: "spell", cost: 2, noShop: true, name: "지원 나팔", nameJa: "支援ラッパ",
     text: "자신 몬스터 최대 3체 공격력 +1(이번 턴)", textJa: "自分のモンスター最大3体の攻撃力+1(このターン)" },
   { id: "FORESIGHT", t: "spell", cost: 1, ench: "foresight", val: 99, exileOnDestroy: true, noShop: true, name: "선견지명", nameJa: "先見の明",
-    text: "영구: 자신의 최대 마나가 9 이상이 되면 최대 마나 +2 후 이 카드를 파괴한다 · 필드를 떠나면 게임에서 제외", textJa: "永続: 自分の最大マナが9以上になると最大マナ+2してこのカードを破壊 · 場を離れるとゲームから除外" },
+    text: "영구: 자신의 마나 수정이 9 이상이 되면 마나 수정 +2 후 이 카드를 파괴한다 · 필드를 떠나면 게임에서 제외", textJa: "永続: 自分のマナ水晶が9以上になるとマナ水晶+2してこのカードを破壊 · 場を離れるとゲームから除外" },
   { id: "TRICKROOM", t: "spell", cost: 3, noShop: true, name: "트릭룸", nameJa: "トリックルーム",
     text: "2턴 동안 필드 위 모든 몬스터의 공격력과 체력이 반전된다 · 반전 중에는 체력이 오르는 효과가 공격력을, 공격력이 오르는 효과가 체력을 올린다 · 효과가 끝나면 반전 중에 오른 스탯은 계승된다",
     textJa: "2ターンの間、場の全モンスターの攻撃力と体力が反転する · 反転中は体力が上がる効果は攻撃力を、攻撃力が上がる効果は体力を上げる · 効果終了後、反転中に上がったステータスは継承される" },
   { id: "INCUBATOR_S", t: "spell", cost: 1, act: "incubate", val: 2, noShop: true, name: "부화기", nameJa: "孵化器",
     text: "자신의 '알' 1개의 카운터를 2턴 줄인다", textJa: "自分の「卵」1つのカウンターを2ターン減らす" },
   { id: "TRIBE_PACT", t: "spell", cost: 2, ench: "tribeContract", val: 99, noShop: true, name: "다종족 계약", nameJa: "多種族契約",
-    text: "영구: 종족 시너지 효과가 2배 · 턴 40까지 종족 시너지 미달성 시 최대 마나 -2, 자신에게 12 데미지", textJa: "永続: 種族シナジーの効果が2倍 · ターン40までに種族シナジー未達成で最大マナ-2、自分に12ダメージ" },
+    text: "영구: 종족 시너지 효과가 2배 · 턴 40까지 종족 시너지 미달성 시 마나 수정 -2, 자신에게 12 데미지", textJa: "永続: 種族シナジーの効果が2倍 · ターン40までに種族シナジー未達成でマナ水晶-2、自分に12ダメージ" },
 ];
 for (const c of NEW_CARDS10) { DB[c.id] = c; }
 
@@ -1092,7 +1092,7 @@ const PATCH13: Record<string, Partial<CardDef>> = {
   ASSASSIN2: { text: "암습", textJa: "暗襲" },
   ASSASSIN3: { text: "암습 · 자신 필드에 '암살자'가 있어야 소환 가능", textJa: "暗襲 · 自分の場に「アサシン」がいる時のみ召喚可能" },
   ASSASSIN4: { text: "소환시: 상대 세트 함정 전부 파괴 · 이도류 · 패 제외 필드/덱/묘지에 초급/중급/상급 암살자가 각 1장 이상일 때 소환 가능", textJa: "召喚時: 相手のセット罠を全て破壊 · 二刀流 · 手札を除く場・デッキ・墓地に初級・中級・上級アサシンが各1枚以上で召喚可能" },
-  GHOST: { text: "암습 · 상대가 최대 마나/체력을 늘릴 때마다 자신은 3 데미지를 입는다", textJa: "暗襲 · 相手が最大マナ/体力を増やすたび自分は3ダメージを受ける" },
+  GHOST: { text: "암습 · 상대가 마나 수정/체력을 늘릴 때마다 자신은 3 데미지를 입는다", textJa: "暗襲 · 相手がマナ水晶/体力を増やすたび自分は3ダメージを受ける" },
   MIMIC: { passive: ["void"], text: "보물상자 꽝으로 상대 필드에 소환된다 · 공허", textJa: "宝箱のハズレで相手の場に召喚される · 虚無" },
   TOKEN00: { passive: ["void"], text: "토큰 · 공허", textJa: "トークン · 虚無" },
   SOLDIER2: { passive: ["void"], text: "토큰 · 공허", textJa: "トークン · 虚無" },
@@ -1121,15 +1121,15 @@ const PATCH13: Record<string, Partial<CardDef>> = {
     text: "소환시: 자신의 체력 +20 · 자신의 턴 시작마다 상대 필드 몬스터 수만큼 자신 체력 증가 · 아우라 · 공허",
     textJa: "召喚時: 自分の体力+20 · 自分のターン開始時、敵モンスターの数だけ自分の体力増加 · オーラ · 虚無" },
   DIVINE: { passive: ["void"],
-    text: "소환시: 최대 마나 +15 · 매 턴 드로우 +1(영구) · 카드 3장 선택 파괴(양측: 몬스터, 영구마법) · 아우라 · 공허",
-    textJa: "召喚時: 最大マナ+15 · 毎ターンドロー+1(永続) · カード3枚を選んで破壊(両方の場: モンスター・永続魔法) · オーラ · 虚無" },
+    text: "소환시: 마나 수정 +15 · 매 턴 드로우 +1(영구) · 카드 3장 선택 파괴(양측: 몬스터, 영구마법) · 아우라 · 공허",
+    textJa: "召喚時: マナ水晶+15 · 毎ターンドロー+1(永続) · カード3枚を選んで破壊(両方の場: モンスター・永続魔法) · オーラ · 虚無" },
   EGG_MASTER: { def: 2, val: 3, text: "소환시: 자신 필드의 모든 '알'의 카운터 +3", textJa: "召喚時: 自分の場の全ての「卵」のカウンター+3" },
   EGG_HUNTER: { val: 4, text: "이 몬스터가 '알'을 공격하면 카운터를 4 소모시킨다", textJa: "このモンスターが「卵」を攻撃するとカウンターを4消費させる" },
   // ---- 영구마법 정리: 공허 표기 + 선견지명/혈귀술 너프 ----
   BLOOD_RITE: { text: "영구: 양 플레이어는 마법으로 인한 데미지를 받지 않고 그 수치만큼 회복한다 · 발동 14턴 후 이 카드는 파괴된다 · 공허", textJa: "永続: 両プレイヤーは魔法によるダメージを受けず、その数値だけ回復する · 発動14ターン後にこのカードは破壊される · 虚無" },
   WEAKEN_ALL: { text: "영구: 양 필드의 모든 몬스터 공격력 -2 · 양 필드 합계 최대 2장 존재 가능 · 공허", textJa: "永続: 両方の場の全モンスター攻撃力-2 · 存在できるのは両方の場を合わせて最大2枚 · 虚無" },
-  FATE_WHEEL: { text: "영구: 시전 시 자신의 최대 마나 -1 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 공허", textJa: "永続: 発動時に自分の最大マナ-1 · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" },
-  FORESIGHT: { cost: 3, text: "영구: 자신의 최대 마나가 9 이상이 되면 최대 마나 +2 후 이 카드를 파괴한다 · 자신 필드에 '선견지명'이 없을 때만 발동 가능 · 공허", textJa: "永続: 自分の最大マナが9以上になると最大マナ+2してこのカードを破壊 · 自分の場に「先見の明」がない時のみ発動可能 · 虚無" },
+  FATE_WHEEL: { text: "영구: 시전 시 자신의 마나 수정 -1 · 주사위·확률 카드의 결과를 보고 나서 다시 굴릴 수 있다 (매턴 1회) · 공허", textJa: "永続: 発動時に自分のマナ水晶-1 · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" },
+  FORESIGHT: { cost: 3, text: "영구: 자신의 마나 수정이 9 이상이 되면 마나 수정 +2 후 이 카드를 파괴한다 · 자신 필드에 '선견지명'이 없을 때만 발동 가능 · 공허", textJa: "永続: 自分のマナ水晶が9以上になるとマナ水晶+2してこのカードを破壊 · 自分の場に「先見の明」がない時のみ発動可能 · 虚無" },
   // ---- 공허 포격/대붕괴 너프: 시전비 인하 + 제외당 데미지 하향 ----
   EXILE_NUKE1: { play: 4, text: "게임에서 제외된 자신의 카드 1장당 상대에게 1 데미지 (시전 4)", textJa: "ゲームから除外された自分のカード1枚につき相手に1ダメージ (発動4)" },
   EXILE_NUKE2: { play: 10, text: "게임에서 제외된 자신의 카드 1장당 상대에게 2 데미지 (시전 10)", textJa: "ゲームから除外された自分のカード1枚につき相手に2ダメージ (発動10)" },
@@ -1147,7 +1147,7 @@ const NEW_CARDS11: CardDef[] = [
   { id: "RUST_SLUG", t: "mon", cost: 3, atk: 1, def: 3, passive: ["decay"], onSummon: "decayMark", name: "러스트캡 슬러그", nameJa: "ラストキャップ・スラッグ",
     text: "부패 · 소환시: 상대 몬스터 1체에 카운터 1개를 부여", textJa: "腐敗 · 召喚時: 相手モンスター1体にカウンターを1個与える" },
   { id: "MAJESTY_RITE", t: "spell", cost: 4, name: "각인 비술", nameJa: "刻印秘術",
-    text: "자신에게 7 데미지, 최대 마나 -1 · 자신 필드의 몬스터 1체에 '위엄'을 부여한다", textJa: "自分に7ダメージ、最大マナ-1 · 自分の場のモンスター1体に「威厳」を与える" },
+    text: "자신에게 7 데미지, 마나 수정 -1 · 자신 필드의 몬스터 1체에 '위엄'을 부여한다", textJa: "自分に7ダメージ、マナ水晶-1 · 自分の場のモンスター1体に「威厳」を与える" },
   { id: "CROSSROADS", t: "spell", cost: 1, name: "선택의 기로", nameJa: "選択の岐路",
     text: "자신의 묘지에 컬 2장을 추가한다", textJa: "自分の墓地にカル2枚を追加する" },
   { id: "CHOSEN_KNIGHT", t: "mon", cost: 7, atk: 0, def: 1, condAtk: "cullPlus", attackFx: "cullOnFace", name: "선택받은 검사", nameJa: "選ばれし剣士",
@@ -1173,8 +1173,8 @@ const NEW_STARTERS11: CardDef[] = [
     text: "영구: 시전 시 자신에게 6 데미지 · 매 턴 묘지에 컬 1장을 얻고, 그 후 묘지에서 카드 2장까지 제외할 수 있다",
     textJa: "永続: 発動時に自分に6ダメージ · 毎ターン墓地にカル1枚を得て、その後墓地からカード2枚まで除外できる" },
   { id: "ANCIENT_CIV", t: "spell", cost: 4, ench: "ancientCiv", val: 99, noShop: true, name: "고대 문명", nameJa: "古代文明",
-    text: "영구: 발동 13턴 후 자신 최대 마나 -1, '드래곤의 알'·'신수의 알' 중 하나를 패에 넣는다 · 이 마법 파괴",
-    textJa: "永続: 発動13ターン後に自分の最大マナ-1、「ドラゴンの卵」か「神獣の卵」を選んで手札に加える · この魔法は破壊される" },
+    text: "영구: 발동 13턴 후 자신 마나 수정 -1, '드래곤의 알'·'신수의 알' 중 하나를 패에 넣는다 · 이 마법 파괴",
+    textJa: "永続: 発動13ターン後に自分のマナ水晶-1、「ドラゴンの卵」か「神獣の卵」を選んで手札に加える · この魔法は破壊される" },
 ];
 for (const c of NEW_STARTERS11) { DB[c.id] = c; }
 
@@ -1184,7 +1184,7 @@ for (const c of NEW_STARTERS11) { DB[c.id] = c; }
 // ---- 신규 스타팅(noShop) 3종: 도박꾼 / 엘프의 쉼터 / 하프 엘프 ----
 const NEW_STARTERS15: CardDef[] = [
   { id: "GAMBLER", t: "mon", cost: 3, atk: 0, def: 1, turnFx: "gambler", noShop: true, name: "도박꾼", nameJa: "ギャンブラー",
-    text: "자신의 턴 시작시: 주사위를 굴려 4·5·6이면 최대 마나 +1", textJa: "自分のターン開始時: ダイスを振り4・5・6なら最大マナ+1" },
+    text: "자신의 턴 시작시: 주사위를 굴려 4·5·6이면 마나 수정 +1", textJa: "自分のターン開始時: ダイスを振り4・5・6ならマナ水晶+1" },
   { id: "ELF_HAVEN", t: "spell", cost: 3, ench: "elfHaven", val: 99, noShop: true, name: "엘프의 쉼터", nameJa: "エルフの憩い場",
     text: "영구: '세계수' 이름을 가진 카드의 구매/시전 코스트가 0이 된다 (0코스트 구매는 턴당 3장까지)", textJa: "永続: 「世界樹」の名を持つカードの購入/発動コストが0になる (0コスト購入は1ターン3枚まで)" },
   { id: "HALF_ELF", t: "mon", cost: 2, atk: 1, def: 1, onSummon: "halfElf", noShop: true, name: "하프 엘프", nameJa: "ハーフエルフ",
@@ -1195,8 +1195,8 @@ for (const c of NEW_STARTERS15) { DB[c.id] = c; }
 // ---- 신규 마켓 카드 5종: 전설의 도박꾼 + 엘프 4종 ----
 const NEW_CARDS15: CardDef[] = [
   { id: "LEGEND_GAMBLER", t: "mon", cost: 7, atk: 3, def: 4, passive: ["void"], turnFx: "legendGambler", name: "전설의 도박꾼", nameJa: "伝説のギャンブラー",
-    text: "자신의 턴 시작시: 주사위를 굴려 6이면 최대 마나 +10 · 자신의 덱/묘지에 '도박꾼'이 있으면 주사위를 총 3번 굴린다 · 공허",
-    textJa: "自分のターン開始時: ダイスを振り6なら最大マナ+10 · 自分のデッキ/墓地に「ギャンブラー」があればダイスを計3回振る · 虚無" },
+    text: "자신의 턴 시작시: 주사위를 굴려 6이면 마나 수정 +10 · 자신의 덱/묘지에 '도박꾼'이 있으면 주사위를 총 3번 굴린다 · 공허",
+    textJa: "自分のターン開始時: ダイスを振り6ならマナ水晶+10 · 自分のデッキ/墓地に「ギャンブラー」があればダイスを計3回振る · 虚無" },
   { id: "ELF", t: "mon", cost: 4, atk: 9, def: 9, summonReq: "hp65", name: "엘프", nameJa: "エルフ",
     text: "자신의 체력이 65 이상일 때만 소환 가능", textJa: "自分の体力が65以上の時のみ召喚可能" },
   { id: "DARK_ELF", t: "mon", cost: 4, atk: 14, def: 6, directOnly: true, summonReq: "darkElf", name: "다크 엘프", nameJa: "ダークエルフ",
@@ -1331,15 +1331,15 @@ for (const id18 of Object.keys(PATCH18)) { if (DB[id18]) Object.assign(DB[id18],
 // ============================================================
 const PATCH19: Record<string, Partial<CardDef>> = {
   // ---- 버프 (스타터 최하위) ----
-  FATE_WHEEL: { text: "영구: 시전 시 자신 최대 마나 -1 · 주사위 결과를 본 뒤 다시 굴릴 수 있다 (매턴 1회) · 공허",
-    textJa: "永続: 発動時に自分の最大マナ-1 · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" }, // v24: 자해 삭제
-  GHOST: { text: "암습 · 상대가 최대 마나/체력을 늘릴 때마다 자신은 2 데미지를 입는다",
-    textJa: "暗襲 · 相手が最大マナ/体力を増やすたび自分は2ダメージを受ける" }, // 3→2
+  FATE_WHEEL: { text: "영구: 시전 시 자신 마나 수정 -1 · 주사위 결과를 본 뒤 다시 굴릴 수 있다 (매턴 1회) · 공허",
+    textJa: "永続: 発動時に自分のマナ水晶-1 · ダイス・確率カードの結果を見てから振り直せる (毎ターン1回) · 虚無" }, // v24: 자해 삭제
+  GHOST: { text: "암습 · 상대가 마나 수정/체력을 늘릴 때마다 자신은 2 데미지를 입는다",
+    textJa: "暗襲 · 相手がマナ水晶/体力を増やすたび自分は2ダメージを受ける" }, // 3→2
   // ---- 너프 ----
   WORLD_CARE: { text: "영구: 자신의 턴 시작마다 자신 체력 +9", textJa: "永続: 自分のターン開始時に自分の体力+9" }, // v19 +15→+12, v26 +12→+9
   RUST_SHROOM: { atk: 0 }, // 1/0 → 0/1
-  FORESIGHT: { text: "영구: 자신 최대 마나 10 이상이면 최대 마나 +2 후 이 마법 파괴 · 필드에 '선견지명'이 없을 때만 발동 가능 · 공허",
-    textJa: "永続: 自分の最大マナ10以上で最大マナ+2後この魔法を破壊 · 場に「先見の明」がない時のみ発動可能 · 虚無" }, // 발현 9→10
+  FORESIGHT: { text: "영구: 자신 마나 수정 10 이상이면 마나 수정 +2 후 이 마법 파괴 · 필드에 '선견지명'이 없을 때만 발동 가능 · 공허",
+    textJa: "永続: 自分のマナ水晶10以上でマナ水晶+2後この魔法を破壊 · 場に「先見の明」がない時のみ発動可能 · 虚無" }, // 발현 9→10
   ASSASSIN2: { atk: 8 },                 // 9/0 → 8/0
   GM8_0: { atk: 16, def: 5 },            // 저주받은 광전사 18/6 → 16/5
   GM6_3: { def: 3, val: 4, text: "소환시: 상대 체력에 4 데미지", textJa: "召喚時: 相手の体力に4ダメージ" }, // 여명의 드레이크 9/4·5뎀 → 9/3·4뎀
@@ -1375,23 +1375,23 @@ const DICE_TEXTS: Record<string, { ko: string; ja: string }> = {
   GT5_2: { ko: "공격 몬스터 파괴 + 주사위 5 이상이면 그 몬스터의 체력만큼 자신 체력 회복", ja: "攻撃モンスターを破壊 + ダイス5以上でそのモンスターの体力分、自分の体力を回復" },
   GT5_3: { ko: "공격 몬스터 파괴 + 주사위 2개 합계 7 이상이면 자신 필드에 소생(소유권 이동)", ja: "攻撃モンスターを破壊 + ダイス2個の合計7以上で自分の場に蘇生(所有権移動)" },
   T4: { ko: "공격 몬스터 파괴 + 주사위 5 이상이면 그 공격력만큼 상대에게 데미지", ja: "攻撃モンスターを破壊 + ダイス5以上でその攻撃力分を相手にダメージ" },
-  AJIN: { ko: "최대 마나 +1, 주사위 4 이상이면 묘지에 어튠 1장 추가", ja: "最大マナ+1、ダイス4以上で墓地にアチューンを1枚追加" },
+  AJIN: { ko: "마나 수정 +1, 주사위 4 이상이면 묘지에 어튠 1장 추가", ja: "マナ水晶+1、ダイス4以上で墓地にアチューンを1枚追加" },
   ND3: { ko: "카드 3장 드로우, 주사위 5 이상이면 2장 추가 (시전 1)", ja: "カード3枚ドロー、ダイス5以上で2枚追加 (発動1)" },
-  ND5: { ko: "카드 5장 드로우, 주사위 6이면 최대 마나 +1 (시전 2)", ja: "カード5枚ドロー、ダイス6で最大マナ+1 (発動2)" },
-  GS5_0: { ko: "상대 체력에 10 데미지, 주사위 2개 합계 11 이상이면 상대 최대 마나 -1", ja: "相手の体力に10ダメージ、ダイス2個の合計11以上で相手の最大マナ-1" },
+  ND5: { ko: "카드 5장 드로우, 주사위 6이면 마나 수정 +1 (시전 2)", ja: "カード5枚ドロー、ダイス6でマナ水晶+1 (発動2)" },
+  GS5_0: { ko: "상대 체력에 10 데미지, 주사위 2개 합계 11 이상이면 상대 마나 수정 -1", ja: "相手の体力に10ダメージ、ダイス2個の合計11以上で相手のマナ水晶-1" },
   GS6_2: { ko: "자신 체력 13 회복, 주사위 6이면 자신 체력 +5", ja: "自分の体力13回復、ダイス6で自分の体力+5" },
-  GS7_0: { ko: "상대 체력에 16 데미지, 주사위 6이면 자신 최대 마나 -1", ja: "相手の体力に16ダメージ、ダイス6で自分の最大マナ-1" },
+  GS7_0: { ko: "상대 체력에 16 데미지, 주사위 6이면 자신 마나 수정 -1", ja: "相手の体力に16ダメージ、ダイス6で自分のマナ水晶-1" },
   GS8_0: { ko: "상대 체력에 14 데미지 · 주사위 4 이상이면 상대 덱 맨 위 1장 제외", ja: "相手の体力に14ダメージ · ダイス4以上で相手のデッキトップ1枚を除外" },
   GS8_3: { ko: "카드 5장 드로우 · 주사위 2개 합계 7 이상이면 상대 몬스터/함정/마법 1장 무작위 파괴 (시전 2)", ja: "カード5枚ドロー · ダイス2個の合計7以上で相手のモンスター/罠/魔法1枚をランダム破壊 (発動2)" },
   GS8_5: { ko: "아군 전체 공격력 +7(이번 턴) · 주사위 6이면 코스트 6 이하 몬스터 무작위 소환", ja: "味方全体の攻撃力+7(このターン) · ダイス6でコスト6以下のモンスターをランダム召喚" },
   TIMEWARP: { ko: "주사위 2개 합계 6 이상이면 다음 상대 턴을 스킵 (시전 12)", ja: "ダイス2個の合計6以上で次の相手のターンをスキップ (発動12)" },
-  LIFE_CYCLE: { ko: "영구: 자신이 체력을 회복할 때마다 주사위 6이면 최대 마나 +1 (시전 2)", ja: "永続: 自分が体力を回復するたびダイス6で最大マナ+1 (発動2)" },
-  WORLD_SEED: { ko: "영구: 자신의 턴 시작마다 주사위 5 이상이면 최대 마나 +1", ja: "永続: 自分のターン開始時にダイス5以上で最大マナ+1" },
-  WORLD_BLESS: { ko: "영구: 양 플레이어는 자신의 턴마다 최대 마나 +1 · 시전자는 주사위 2개 합계 8 이상이면 추가로 최대 마나 +2 (시전 6)", ja: "永続: 両プレイヤーは自分のターンごとに最大マナ+1 · 使用者はダイス2個の合計8以上で追加で最大マナ+2 (発動6)" },
-  LUCKY_CHEST: { ko: "주사위 2개 합계 — 2·3: 최대 마나+3·2장 드로우 / 4·5: 꽝(상대 필드에 마스터 미믹 10/3) / 6~8: 최대 마나+1 / 9~11: 자신 체력+8 / 12: 자신 체력+12",
-    ja: "ダイス2個の合計 — 2·3: 最大マナ+3・2枚ドロー / 4·5: ハズレ(相手の場にマスターミミック10/3) / 6~8: 最大マナ+1 / 9~11: 自分の体力+8 / 12: 自分の体力+12" },
-  GUILD_CHEST: { ko: "주사위 2개 합계 — 2·3: 최대 마나+3 / 4: 턴 시작 드로우+1(영구) / 5·6: 최대 마나+2 / 7: 최대 마나+1 / 8: 자신 체력+10 / 9·10: 상대 필드에 초급·중급 암살자 소환 / 11·12: 초·중·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
-    ja: "ダイス2個の合計 — 2·3: 最大マナ+3 / 4: ターン開始ドロー+1(永続) / 5·6: 最大マナ+2 / 7: 最大マナ+1 / 8: 自分の体力+10 / 9·10: 相手の場に初級・中級アサシン召喚 / 11·12: 初・中・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
+  LIFE_CYCLE: { ko: "영구: 자신이 체력을 회복할 때마다 주사위 6이면 마나 수정 +1 (시전 2)", ja: "永続: 自分が体力を回復するたびダイス6でマナ水晶+1 (発動2)" },
+  WORLD_SEED: { ko: "영구: 자신의 턴 시작마다 주사위 5 이상이면 마나 수정 +1", ja: "永続: 自分のターン開始時にダイス5以上でマナ水晶+1" },
+  WORLD_BLESS: { ko: "영구: 양 플레이어는 자신의 턴마다 마나 수정 +1 · 시전자는 주사위 2개 합계 8 이상이면 추가로 마나 수정 +2 (시전 6)", ja: "永続: 両プレイヤーは自分のターンごとにマナ水晶+1 · 使用者はダイス2個の合計8以上で追加でマナ水晶+2 (発動6)" },
+  LUCKY_CHEST: { ko: "주사위 2개 합계 — 2·3: 마나 수정+3·2장 드로우 / 4·5: 꽝(상대 필드에 마스터 미믹 10/3) / 6~8: 마나 수정+1 / 9~11: 자신 체력+8 / 12: 자신 체력+12",
+    ja: "ダイス2個の合計 — 2·3: マナ水晶+3・2枚ドロー / 4·5: ハズレ(相手の場にマスターミミック10/3) / 6~8: マナ水晶+1 / 9~11: 自分の体力+8 / 12: 自分の体力+12" },
+  GUILD_CHEST: { ko: "주사위 2개 합계 — 2·3: 마나 수정+3 / 4: 턴 시작 드로우+1(영구) / 5·6: 마나 수정+2 / 7: 마나 수정+1 / 8: 자신 체력+10 / 9·10: 상대 필드에 초급·중급 암살자 소환 / 11·12: 초·중·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
+    ja: "ダイス2個の合計 — 2·3: マナ水晶+3 / 4: ターン開始ドロー+1(永続) / 5·6: マナ水晶+2 / 7: マナ水晶+1 / 8: 自分の体力+10 / 9·10: 相手の場に初級・中級アサシン召喚 / 11·12: 初・中・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
 };
 for (const id of Object.keys(DICE_TEXTS)) { if (DB[id]) { DB[id].text = DICE_TEXTS[id].ko; DB[id].textJa = DICE_TEXTS[id].ja; } }
 // 운명의 수레바퀴: 이제 전 랜덤 카드가 주사위이므로 문구 단순화
@@ -1407,9 +1407,9 @@ PASSIVES.evade.ko.desc = "이 몬스터가 공격받을 때 주사위 4 이상�
 PASSIVES.evade.ja.desc = "このモンスターが攻撃される時、ダイス4以上でその攻撃を無効化する。";
 PASSIVES.evade.en.desc = "When this monster is attacked, roll a die — on 4+, the attack is negated.";
 // 황금상자: 1d6 표
-CHEST_ODDS.ko = { title: "황금상자 주사위", rows: ["5·6 — 최대 마나 +1", "3·4 — 자신 체력 +7", "1·2 — 꽝: 상대 필드에 미믹(3/2)"] };
-CHEST_ODDS.ja = { title: "宝箱のダイス", rows: ["5·6 — 最大マナ +1", "3·4 — 自分の体力 +7", "1·2 — ハズレ: 相手の場にミミック(3/2)"] };
-CHEST_ODDS.en = { title: "Golden chest die", rows: ["5·6 — Max mana +1", "3·4 — Your HP +7", "1·2 — Dud: Mimic (3/2) on enemy field"] };
+CHEST_ODDS.ko = { title: "황금상자 주사위", rows: ["5·6 — 마나 수정 +1", "3·4 — 자신 체력 +7", "1·2 — 꽝: 상대 필드에 미믹(3/2)"] };
+CHEST_ODDS.ja = { title: "宝箱のダイス", rows: ["5·6 — マナ水晶 +1", "3·4 — 自分の体力 +7", "1·2 — ハズレ: 相手の場にミミック(3/2)"] };
+CHEST_ODDS.en = { title: "Golden chest die", rows: ["5·6 — Mana Crystals +1", "3·4 — Your HP +7", "1·2 — Dud: Mimic (3/2) on enemy field"] };
 
 // ============================================================
 // BALANCE v29 — 표기 정합성 감사 반영 (텍스트↔엔진 드리프트 수정)
@@ -1426,13 +1426,13 @@ const PATCH29: Record<string, Partial<CardDef>> = {
   // 광휘검진: 지속 +2는 이번 턴부터 즉시 적용된다(=이번 턴 +15). "턴 종료 후" 문구 삭제
   GS8_4: { text: "아군 전체 공격력 +13(이번 턴) · 공격력 +2(지속)", textJa: "味方全体の攻撃力+13(このターン) · 攻撃力+2(持続)" },
   // 악마의 주사위 ③④: 상대 '최대' 마나 -1
-  DICE8: { text: "주사위 1~6 — ①② 자신 최대마나-4 / ③④ 상대 최대마나-1·14 데미지 / ⑤ 폭풍의 전사(2회공격) 소환 / ⑥ 상대 마법·함정 전멸+폭풍의 전사 2체+최대마나+2+자신 체력+10",
-    textJa: "ダイス1~6 — ①② 自分の最大マナ-4 / ③④ 相手の最大マナ-1・14ダメージ / ⑤ 嵐の戦士(2回攻撃)召喚 / ⑥ 相手の魔法・罠全滅+嵐の戦士2体+最大マナ+2+自分の体力+10" },
+  DICE8: { text: "주사위 1~6 — ①② 자신 마나 수정-4 / ③④ 상대 마나 수정-1·14 데미지 / ⑤ 폭풍의 전사(2회공격) 소환 / ⑥ 상대 마법·함정 전멸+폭풍의 전사 2체+마나 수정+2+자신 체력+10",
+    textJa: "ダイス1~6 — ①② 自分のマナ水晶-4 / ③④ 相手のマナ水晶-1・14ダメージ / ⑤ 嵐の戦士(2回攻撃)召喚 / ⑥ 相手の魔法・罠全滅+嵐の戦士2体+マナ水晶+2+自分の体力+10" },
   // 명상 / 성역의 기도: 엔진에 있는 "체력이 최대치의 80% 미만" 게이트가 문구에 없었음
   MEDITATE: { text: "【조건】자신 체력 최대치의 80% 미만, 이번 턴 타 카드 미사용 · 자신 체력을 최대치의 80%까지 회복",
     textJa: "【条件】自分の体力が最大の80%未満、このターン他カード未使用 · 自分の体力を最大の80%まで回復" },
-  PRAYER: { text: "【조건】자신 최대 마나 12 이하, 체력 최대치의 80% 미만, 이번 턴 타 카드 미사용 · 자신 체력 최대치의 80%로 회복 (시전 5)",
-    textJa: "【条件】自分の最大マナ12以下、自分の体力が最大の80%未満、このターン他カード未使用 · 自分の体力を最大の80%まで回復 (発動5)" },
+  PRAYER: { text: "【조건】자신 마나 수정 12 이하, 체력 최대치의 80% 미만, 이번 턴 타 카드 미사용 · 자신 체력 최대치의 80%로 회복 (시전 5)",
+    textJa: "【条件】自分のマナ水晶12以下、自分の体力が最大の80%未満、このターン他カード未使用 · 自分の体力を最大の80%まで回復 (発動5)" },
   // 붕괴 진동: 실제 동작은 "체력을 1로 + 누적 데미지 초기화 + 알 제외"
   SHATTER: { text: "자신에게 5 데미지 · 양 필드 전 몬스터의 체력이 1이 된다(지속, 누적 데미지 초기화, 알 제외) (시전 2)",
     textJa: "自分に5ダメージ · 両方の場の全モンスターの体力が1になる(持続、蓄積ダメージはリセット、卵を除く) (発動2)" },
@@ -1447,8 +1447,8 @@ const PATCH29: Record<string, Partial<CardDef>> = {
   NT_NULL4: { text: "시전 코스트 6 이하 마법 1장을 무효화", textJa: "発動コスト6以下の魔法1枚を無効化" },
   NT_SEAL3: { text: "이 카드가 필드에 있는 한 양 플레이어는 시전 코스트 5 이하 마법을 사용할 수 없다", textJa: "このカードが場にある限り、両プレイヤーは発動コスト5以下の魔法を使用できない" },
   // 길드의 보물상자: 11·12도 암살자는 '상대 필드'에 소환된다(9·10과 동일) + 4는 존이 가득 차면 실패
-  GUILD_CHEST: { text: "주사위 2개 합계 — 2·3: 최대 마나+3 / 4: 턴 시작 드로우+1(영구, 마법 존이 가득 차면 실패) / 5·6: 최대 마나+2 / 7: 최대 마나+1 / 8: 자신 체력+10 / 9·10: 상대 필드에 초급·중급 암살자 소환 / 11·12: 상대 필드에 초·중·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
-    textJa: "ダイス2個の合計 — 2·3: 最大マナ+3 / 4: ターン開始ドロー+1(永続、魔法ゾーンが満杯なら失敗) / 5·6: 最大マナ+2 / 7: 最大マナ+1 / 8: 自分の体力+10 / 9·10: 相手の場に初級・中級アサシン召喚 / 11·12: 相手の場に初・中・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
+  GUILD_CHEST: { text: "주사위 2개 합계 — 2·3: 마나 수정+3 / 4: 턴 시작 드로우+1(영구, 마법 존이 가득 차면 실패) / 5·6: 마나 수정+2 / 7: 마나 수정+1 / 8: 자신 체력+10 / 9·10: 상대 필드에 초급·중급 암살자 소환 / 11·12: 상대 필드에 초·중·상급 암살자 소환 + 자신에게 10 데미지 (시전 3)",
+    textJa: "ダイス2個の合計 — 2·3: マナ水晶+3 / 4: ターン開始ドロー+1(永続、魔法ゾーンが満杯なら失敗) / 5·6: マナ水晶+2 / 7: マナ水晶+1 / 8: 自分の体力+10 / 9·10: 相手の場に初級・中級アサシン召喚 / 11·12: 相手の場に初・中・上級アサシン召喚 + 自分に10ダメージ (発動3)" },
   // ---- val(데이터)이 인쇄 수치와 달라 봇이 리썰을 못 보던 것들 (텍스트/엔진은 이미 아래 값) ----
   GS6_2: { val: 13 }, GS7_0: { val: 16 }, GS9_0: { val: 21 }, GS10_0: { val: 23 }, GS10_1: { val: 17 }, GS10_2: { val: 19 },
   // ---- PATCH12의 너프가 카드 재선언(NEW_CARDS6)으로 되돌려져 있었음 ----
@@ -1497,10 +1497,10 @@ for (const id of Object.keys(PATCH24)) { if (DB[id]) Object.assign(DB[id], PATCH
 const PATCH25: Record<string, Partial<CardDef>> = {
   // 역산: '사용 후 제외' 삭제 → 묘지로 (압축 효과 제거)
   COUNTERCALC: {
-    text: "상대 최대 마나 6 이하일 때만 사용 가능 · 상대 영구마법 1장 파괴",
-    textJa: "相手の最大マナが6以下の時のみ使用可能 · 相手の永続魔法1枚を破壊",
+    text: "상대 마나 수정 6 이하일 때만 사용 가능 · 상대 영구마법 1장 파괴",
+    textJa: "相手のマナ水晶が6以下の時のみ使用可能 · 相手の永続魔法1枚を破壊",
   },
-  // 운명의 수레바퀴: 최대 마나 -1 삭제 · cost 4→5
+  // 운명의 수레바퀴: 마나 수정 -1 삭제 · cost 4→5
   FATE_WHEEL: {
     cost: 5,
     text: "영구: 주사위 결과를 본 뒤 다시 굴릴 수 있다 (매턴 1회) · 공허",
@@ -1515,14 +1515,14 @@ const PATCH25: Record<string, Partial<CardDef>> = {
   },
   // 유령: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격력 +1 (지속)
   GHOST: {
-    text: "암습 · 상대가 최대 마나/체력을 늘리면 자신에게 2 데미지 · 상대가 회복하면 '유령' 전체 공격력 +1(지속)",
-    textJa: "暗襲 · 相手が最大マナ/体力を増やすと自分に2ダメージ · 相手が回復すると「幽霊」全体の攻撃力+1(持続)",
+    text: "암습 · 상대가 마나 수정/체력을 늘리면 자신에게 2 데미지 · 상대가 회복하면 '유령' 전체 공격력 +1(지속)",
+    textJa: "暗襲 · 相手がマナ水晶/体力を増やすと自分に2ダメージ · 相手が回復すると「幽霊」全体の攻撃力+1(持続)",
   },
-  // 러스트 머쉬룸: 공격 0→1 · 부패로 상대 몬스터 파괴 시 최대 마나 +1
+  // 러스트 머쉬룸: 공격 0→1 · 부패로 상대 몬스터 파괴 시 마나 수정 +1
   RUST_SHROOM: {
     atk: 1,
-    text: "부패 · 이 몬스터가 필드에 있을 때 부패로 적 몬스터가 파괴되면 자신 최대 마나 +1",
-    textJa: "腐敗 · このモンスターが場にいる時、腐敗で敵モンスターが破壊されると自分の最大マナ+1",
+    text: "부패 · 이 몬스터가 필드에 있을 때 부패로 적 몬스터가 파괴되면 자신 마나 수정 +1",
+    textJa: "腐敗 · このモンスターが場にいる時、腐敗で敵モンスターが破壊されると自分のマナ水晶+1",
   },
 };
 for (const id of Object.keys(PATCH25)) { if (DB[id]) Object.assign(DB[id], PATCH25[id]); }
@@ -1562,14 +1562,14 @@ const PATCH30: Record<string, Partial<CardDef>> = {
     text: "【직접공격 반응】공격을 무효화한다 · 이번 턴 동안 상대는 직접 공격할 수 없다",
     textJa: "【直接攻撃に反応】攻撃を無効化する · このターン中、相手は直接攻撃できない" },
   GT12_1: { cost: 7, react: "doomsday", val: undefined,
-    text: "【카운트다운 3】세트 3턴 후 턴 시작시 자동 발동 · 자신에게 5 데미지, 상대 최대 마나 +1, 필드의 모든 카드 파괴",
-    textJa: "【カウントダウン3】セット3ターン後のターン開始時に自動発動 · 自分に5ダメージ、相手の最大マナ+1、場の全カードを破壊" },
+    text: "【카운트다운 3】세트 3턴 후 턴 시작시 자동 발동 · 자신에게 5 데미지, 상대 마나 수정 +1, 필드의 모든 카드 파괴",
+    textJa: "【カウントダウン3】セット3ターン後のターン開始時に自動発動 · 自分に5ダメージ、相手のマナ水晶+1、場の全カードを破壊" },
   GT11_0: { cost: 5, react: "infoDealer", val: undefined,
     text: "공격 무효 + 자신에게 1 데미지 · 첫 발동시 주사위를 굴려 나온 수만큼 카운터를 얻고 필드에 남는다",
     textJa: "攻撃無効 + 自分に1ダメージ · 初回発動時のダイスの目だけカウンターを得て場に残る" },
   NT_NULL6: { cost: 5, react: "secondNull", val: undefined, val2: undefined, name: "마나 역류", nameJa: "マナ逆流",
-    text: "【마법 반응】상대가 이번 턴 사용한 2번째 마법을 무효화하고 상대 최대 마나 -1",
-    textJa: "【魔法に反応】相手がこのターン使用した2番目の魔法を無効化し、相手の最大マナ-1" },
+    text: "【마법 반응】상대가 이번 턴 사용한 2번째 마법을 무효화하고 상대 마나 수정 -1",
+    textJa: "【魔法に反応】相手がこのターン使用した2番目の魔法を無効化し、相手のマナ水晶-1" },
 };
 for (const id of Object.keys(PATCH30)) { if (DB[id]) Object.assign(DB[id], PATCH30[id]); }
 
@@ -1667,8 +1667,8 @@ const NEW_TRIBES32: CardDef[] = [
     text: "상시: 상대 몬스터가 파괴될 때마다 주사위를 굴려 5 이상이면 그 복제를 자신 필드에 소환",
     textJa: "常時: 相手のモンスターが破壊されるたびダイスを振り5以上ならその複製を自分の場に召喚" },
   { id: "TPO5", t: "mon", cost: 4, atk: 5, def: 2, tribe: "포식", onSummon: "preyExec", name: "포식자", nameJa: "捕食者",
-    text: "소환시: 상대의 코스트 3~4 몬스터 1체를 파괴 · 파괴에 성공하면 최대 마나 +1",
-    textJa: "召喚時: 相手のコスト3~4のモンスター1体を破壊 · 破壊に成功すると最大マナ+1" },
+    text: "소환시: 상대의 코스트 3~4 몬스터 1체를 파괴 · 파괴에 성공하면 마나 수정 +1",
+    textJa: "召喚時: 相手のコスト3~4のモンスター1体を破壊 · 破壊に成功するとマナ水晶+1" },
   // ---- 고독 (1~4코) ----
   { id: "TSO1", t: "mon", cost: 1, atk: 2, def: 3, tribe: "고독", onSummon: "soloLock", name: "은둔자", nameJa: "隠遁者",
     text: "소환 후 자신의 3턴 동안 다른 몬스터를 소환할 수 없다",
@@ -1697,21 +1697,21 @@ const NEW_TRIBES32: CardDef[] = [
     textJa: "常時: コスト6以下の相手モンスターはこのモンスターを攻撃できず、このモンスターがいる限り直接攻撃も不可" },
   // ---- 마족 (신규, 1~4코) — 강한 몸집 + 마나 대가 ----
   { id: "TDE1", t: "mon", cost: 1, atk: 3, def: 6, tribe: "마족", summonReq: "mm5", onSummon: "manaDebt5", name: "마족 척후", nameJa: "魔族の斥候",
-    text: "자신의 5턴 동안 최대 마나 -1 · 최대 마나 5 이상일 때만 소환 가능",
-    textJa: "自分の5ターンの間 最大マナ-1 · 最大マナ5以上の時のみ召喚可能" },
+    text: "자신의 5턴 동안 마나 수정 -1 · 마나 수정 5 이상일 때만 소환 가능",
+    textJa: "自分の5ターンの間 マナ水晶-1 · マナ水晶5以上の時のみ召喚可能" },
   { id: "TDE2", t: "mon", cost: 2, atk: 6, def: 9, tribe: "마족", aura: "demonTax2", name: "마족 전사", nameJa: "魔族の戦士",
-    text: "상시: 자신의 최대 마나 -2(3 밑으로는 내려가지 않음)",
-    textJa: "常時: 自分の最大マナ-2(3未満にはならない)" },
+    text: "상시: 자신의 마나 수정 -2(3 밑으로는 내려가지 않음)",
+    textJa: "常時: 自分のマナ水晶-2(3未満にはならない)" },
   { id: "TDE3", t: "mon", cost: 3, atk: 9, def: 12, tribe: "마족", turnFx: "demonRoll", name: "마족 광전사", nameJa: "魔族の狂戦士",
-    text: "자신의 턴 시작시 주사위를 굴려 1~3이면 최대 마나 -1, 4~6이면 -2(3 밑 불가)",
-    textJa: "自分のターン開始時 ダイスを振り1~3なら最大マナ-1、4~6なら-2(3未満不可)" },
+    text: "자신의 턴 시작시 주사위를 굴려 1~3이면 마나 수정 -1, 4~6이면 -2(3 밑 불가)",
+    textJa: "自分のターン開始時 ダイスを振り1~3ならマナ水晶-1、4~6なら-2(3未満不可)" },
   { id: "TDE4", t: "mon", cost: 4, atk: 14, def: 15, tribe: "마족", onSummon: "manaSet4", name: "마왕", nameJa: "魔王",
-    text: "소환시: 자신의 최대 마나가 4가 된다",
-    textJa: "召喚時: 自分の最大マナが4になる" },
+    text: "소환시: 자신의 마나 수정이 4가 된다",
+    textJa: "召喚時: 自分のマナ水晶が4になる" },
   // ---- 종족 수호 함정 (스타터) ----
   { id: "COLLUSION", t: "trap", cost: 3, play: 1, react: "collusion", noShop: true, name: "담합", nameJa: "談合",
-    text: "종족 몬스터가 받는 공격 무효 + 공격 몬스터 파괴 · 최대 마나 -1로 그 종족의 다른 카드 1장 획득",
-    textJa: "種族モンスターへの攻撃を無効化 + 攻撃モンスターを破壊 · 最大マナ-1でその種族の別カード1枚を獲得" },
+    text: "종족 몬스터가 받는 공격 무효 + 공격 몬스터 파괴 · 마나 수정 -1로 그 종족의 다른 카드 1장 획득",
+    textJa: "種族モンスターへの攻撃を無効化 + 攻撃モンスターを破壊 · マナ水晶-1でその種族の別カード1枚を獲得" },
 ];
 for (const c of NEW_TRIBES32) { DB[c.id] = c; }
 DECK_POOL.push("COLLUSION");
@@ -1728,9 +1728,9 @@ TRIBES["포식"] = {
   en: { name: "Devour", note: "* Requires different cards of the tribe · once per game", bonuses: ["4 different: destroy every card on the enemy field and deal 30 damage"] },
 };
 TRIBES["귀족"] = {
-  ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 4종: 상대의 최대 마나가 5가 된다"] },
-  ja: { name: "貴族", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる4種: 相手の最大マナが5になる"] },
-  en: { name: "Aristocrat", note: "* Requires different cards of the tribe · once per game", bonuses: ["4 different: the opponent's max mana becomes 5"] },
+  ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 4종: 상대의 마나 수정이 5가 된다"] },
+  ja: { name: "貴族", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる4種: 相手のマナ水晶が5になる"] },
+  en: { name: "Aristocrat", note: "* Requires different cards of the tribe · once per game", bonuses: ["4 different: the opponent's mana crystals becomes 5"] },
 };
 TRIBES["마족"] = {
   ko: { name: "마족", note: "※ 서로 다른 종족 카드여야 발동 · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 이 게임 동안 상대는 자신의 턴에 마법을 2장까지만 사용할 수 있다", "서로 다른 3종: 이 게임 동안 상대는 자신의 턴에 마법을 사용할 수 없다", "서로 다른 4종: 이 게임 동안 상대가 소모하는 모든 마나가 3배가 된다"] },
@@ -1743,8 +1743,8 @@ TRIBES["마족"] = {
 // ============================================================
 const NEW_CARDS14: CardDef[] = [
   { id: "DUNGEON_FLOOR", t: "spell", cost: 4, noShop: true, name: "던전 최하층", nameJa: "ダンジョン最下層",
-    text: "최대 마나 -1(3 밑 불가) · 주사위 눈만큼 미믹을 자신 필드에 소환 · 상대 최대 마나 7 이상 필요",
-    textJa: "最大マナ-1(3未満不可) · ダイスの目だけミミックを自分の場に召喚 · 相手の最大マナ7以上が必要" },
+    text: "마나 수정 -1(3 밑 불가) · 주사위 눈만큼 미믹을 자신 필드에 소환 · 상대 마나 수정 7 이상 필요",
+    textJa: "マナ水晶-1(3未満不可) · ダイスの目だけミミックを自分の場に召喚 · 相手のマナ水晶7以上が必要" },
   { id: "GEM_RAIN", t: "spell", cost: 1, ench: "gemRain", val: 99, name: "보석의 비", nameJa: "宝石の雨",
     text: "영구: 필드 위 모든 '미믹' 계열 몬스터의 공격력 +3",
     textJa: "永続: 場の全ての「ミミック」系モンスターの攻撃力+3" },
@@ -1795,19 +1795,19 @@ const PATCH34: Record<string, Partial<CardDef>> = {
   HPS_BOULDER: { val2: 12, text: "자신 몬스터 1체의 체력 +12(지속) · '도발' 부여 (시전 4)", textJa: "自分のモンスター1体の体力+12(持続) · 「挑発」を付与 (発動4)" },
   GENESIS_MAGIC: { text: "자신 필드의 '시초' 몬스터 모두 +5/+5 (시전 0)", textJa: "自分の場の「始原」モンスター全てに+5/+5 (発動0)" },
   E1: { val: 4, text: "4턴 동안 상대는 코스트 3 이하 몬스터를 소환할 수 없다", textJa: "4ターンの間 相手はコスト3以下のモンスターを召喚できない" },
-  E3: { play: 3, text: "자신의 4턴 동안 턴 시작시 1장 추가 드로우 · 종료 다음 턴 최대 마나 +1", textJa: "自分の4ターンの間 ターン開始時に1枚追加ドロー · 終了の翌ターン最大マナ+1" },
-  AJIN: { textJa: "最大マナ+1、ダイス4以上なら墓地にアチューンを1枚追加" },
+  E3: { play: 3, text: "자신의 4턴 동안 턴 시작시 1장 추가 드로우 · 종료 다음 턴 마나 수정 +1", textJa: "自分の4ターンの間 ターン開始時に1枚追加ドロー · 終了の翌ターンマナ水晶+1" },
+  AJIN: { textJa: "マナ水晶+1、ダイス4以上なら墓地にアチューンを1枚追加" },
   GREED_PRICE: { text: "자신 필드에 '미믹'(3/2) 2마리 소환 · 추가로 '미믹' 5장을 게임에서 제외", textJa: "自分の場に「ミミック」(3/2)2体を召喚 · さらに「ミミック」5枚をゲームから除外" },
   MIMIC2: { atk: 12, def: 6 },
   INFERNO: { play: 1, text: "영구: 자신의 턴마다 자신에게 5 데미지, 상대에게 7 데미지 (시전 1)", textJa: "永続: 自分のターンごとに自分に5ダメージ、相手に7ダメージ (発動1)" },
-  AHEUK: { text: "상대 최대 마나 -1 · 자신 필드에 몬스터가 없으면 추가로 -2", textJa: "相手の最大マナ-1 · 自分の場にモンスターがいなければ追加で-2" },
+  AHEUK: { text: "상대 마나 수정 -1 · 자신 필드에 몬스터가 없으면 추가로 -2", textJa: "相手のマナ水晶-1 · 自分の場にモンスターがいなければ追加で-2" },
   NWIPE: { val: 0, text: "자신 필드에 몬스터가 없을 때만 · 상대 함정·마법 전부 파괴", textJa: "自分の場にモンスターがいない時のみ · 相手の罠・魔法を全て破壊" },
   SLAY_ART: { text: "영구: 양 플레이어 중 누구든 데미지를 받을 때마다 추가 데미지 +3", textJa: "永続: どちらのプレイヤーがダメージを受けるたび追加ダメージ+3" },
   SNIPE1: { text: "체력 3 이하의 몬스터 1체 파괴(양측) (시전 1)", textJa: "体力3以下のモンスター1体を破壊(両方の場) (発動1)" },
   WALLBREAK1: { text: "공격력 2 이하의 몬스터 1체 파괴(양측) (시전 1)", textJa: "攻撃力2以下のモンスター1体を破壊(両方の場) (発動1)" },
   INQUISITION: { text: "상대의 덱·묘지·필드의 종족 몬스터 1장당 상대에게 6 데미지 (시전 2)", textJa: "相手のデッキ・墓地・場の種族モンスター1枚につき相手に6ダメージ (発動2)" },
-  AMBUSH: { text: "상대 최대 마나가 4일 때만 사용 가능 · 상대에게 8 데미지, 자신에게 3 데미지 · 사용 후 게임에서 제외", textJa: "相手の最大マナが4の時のみ使用可能 · 相手に8ダメージ、自分に3ダメージ · 使用後ゲームから除外" },
-  NEGOTIATE: { text: "상대의 최대 마나 +1 · 상대는 2턴 동안 함정을 세트할 수 없다", textJa: "相手の最大マナ+1 · 相手は2ターンの間 罠をセットできない" },
+  AMBUSH: { text: "상대 마나 수정이 4일 때만 사용 가능 · 상대에게 8 데미지, 자신에게 3 데미지 · 사용 후 게임에서 제외", textJa: "相手のマナ水晶が4の時のみ使用可能 · 相手に8ダメージ、自分に3ダメージ · 使用後ゲームから除外" },
+  NEGOTIATE: { text: "상대의 마나 수정 +1 · 상대는 2턴 동안 함정을 세트할 수 없다", textJa: "相手のマナ水晶+1 · 相手は2ターンの間 罠をセットできない" },
   HERMIT: { text: "자신 필드에 몬스터가 없을 때만 · 자신 체력 완전 회복 + 체력 +15 · 게임당 5회 (시전 7)", textJa: "自分の場にモンスターがいない時のみ · 体力全回復 + 体力+15 · ゲーム中5回まで (発動7)" },
   GOLIATH_HUNT: { name: "자이언트 킬링", nameJa: "ジャイアントキリング", text: "체력 10 이상의 몬스터 1체를 파괴(양측)", textJa: "体力10以上のモンスター1体を破壊(両方の場)" },
   GLASS_BAN: { name: "전략 변경", nameJa: "戦略変更", text: "영구: 공격력과 체력의 차가 4 이상인 몬스터는 공격할 수 없다 (시전 2)", textJa: "永続: 攻撃力と体力の差が4以上のモンスターは攻撃できない (発動2)" },
@@ -1816,12 +1816,12 @@ const PATCH34: Record<string, Partial<CardDef>> = {
   PURGE_TOUCH: { text: "묘지에서 카드 1장을 골라 게임에서 제외 + 카드 1장 드로우 · 자신의 낙인 카운터를 모두 제거 (시전 1)", textJa: "墓地からカード1枚を選びゲームから除外 + カード1枚ドロー · 自分の烙印カウンターを全て取り除く (発動1)" },
   S3: { act: "buffPerm", val: 3, val2: 0, text: "종족이 아닌 자신 몬스터 1체의 공격력 +3(지속)", textJa: "種族ではない自分のモンスター1体の攻撃力+3(持続)" },
   S6: { play: 1, text: "덱에서 원하는 1장을 패로 (시전 1)", textJa: "デッキから好きな1枚を手札へ (発動1)" },
-  LIFE_CYCLE: { text: "영구: 자신이 체력을 회복하거나 체력을 얻으면 주사위를 굴려 4 이상이면 최대 마나 +1 (시전 2)", textJa: "永続: 自分が体力を回復するか体力を得るたびダイスを振り4以上なら最大マナ+1 (発動2)" },
+  LIFE_CYCLE: { text: "영구: 자신이 체력을 회복하거나 체력을 얻으면 주사위를 굴려 4 이상이면 마나 수정 +1 (시전 2)", textJa: "永続: 自分が体力を回復するか体力を得るたびダイスを振り4以上ならマナ水晶+1 (発動2)" },
   PAIN_HARVEST: { text: "영구: 상대가 데미지를 입을 때마다 제외된 컬 2장을 얻는다 (시전 2)", textJa: "永続: 相手がダメージを受けるたび除外されたカル2枚を得る (発動2)" },
   NHEAL: { text: "영구: 누구든 몬스터를 소환할 때마다 상대 체력 +4, 자신 체력 +8 (시전 2)", textJa: "永続: どちらかがモンスターを召喚するたび相手の体力+4、自分の体力+8 (発動2)" },
-  MAJESTY_RITE: { passive: ["majesty"], text: "자신의 최대 마나 -1 · 자신 몬스터 1체에 '위엄'을 부여한다", textJa: "自分の最大マナ-1 · 自分のモンスター1体に「威厳」を与える" },
-  MEDITATE: { text: "자신 최대 마나 11 이하일 때만 발동 · 자신의 체력을 모두 회복하고 자신에게 낙인 카운터 1개", textJa: "自分の最大マナ11以下の時のみ発動 · 自分の体力を全回復し自分に烙印カウンター1個" },
-  MASSACRE: { text: "자신의 최대 마나 -1 · 상대 몬스터를 전부 파괴", textJa: "自分の最大マナ-1 · 相手のモンスターを全て破壊" },
+  MAJESTY_RITE: { passive: ["majesty"], text: "자신의 마나 수정 -1 · 자신 몬스터 1체에 '위엄'을 부여한다", textJa: "自分のマナ水晶-1 · 自分のモンスター1体に「威厳」を与える" },
+  MEDITATE: { text: "자신 마나 수정 11 이하일 때만 발동 · 자신의 체력을 모두 회복하고 자신에게 낙인 카운터 1개", textJa: "自分のマナ水晶11以下の時のみ発動 · 自分の体力を全回復し自分に烙印カウンター1個" },
+  MASSACRE: { text: "자신의 마나 수정 -1 · 상대 몬스터를 전부 파괴", textJa: "自分のマナ水晶-1 · 相手のモンスターを全て破壊" },
   S12: { act: undefined, val: undefined, val2: undefined, text: "주사위를 굴려 5 이상이면 상대에게 낙인 카운터 1개 부여", textJa: "ダイスを振り5以上なら相手に烙印カウンター1個を付与" },
   S14: { act: undefined, val: undefined, val2: undefined, text: "필드의 모든 몬스터의 체력을 모두 회복 · 자신의 체력 5 회복", textJa: "場の全モンスターの体力を全回復 · 自分の体力5回復" },
   S1: { text: "주사위 1~6 — ①② 상대에게 3 데미지 / ③④ 상대의 다음 턴 마나 -1 / ⑤⑥ 상대는 다음 턴 코스트 3 이하 소환 불가",
@@ -1834,26 +1834,26 @@ const PATCH34: Record<string, Partial<CardDef>> = {
   GENESIS_SONG: { play: 1, text: "덱·묘지의 '시초' 몬스터 2체를 무작위 소환 (시전 1)", textJa: "デッキ・墓地の「始原」モンスター2体をランダム召喚 (発動1)" },
   MULTI_CULTURE: { ench: undefined, val: undefined, play: undefined, text: "자신 필드에 서로 다른 종족이 2종 이상일 때만 발동 · 자신의 모든 종족 몬스터 공격력 +6(지속)",
     textJa: "自分の場に異なる種族が2種以上いる時のみ発動 · 自分の全種族モンスターの攻撃力+6(持続)" },
-  ND3: { cost: 4, play: undefined, text: "주사위 2개를 굴리고 상대가 눈 하나를 예측 · 예측이 두 눈과 모두 다르면 최대 마나 +4",
-    textJa: "ダイスを2個振り、相手が目を1つ予測 · 予測が両方の目と違えば最大マナ+4" },
+  ND3: { cost: 4, play: undefined, text: "주사위 2개를 굴리고 상대가 눈 하나를 예측 · 예측이 두 눈과 모두 다르면 마나 수정 +4",
+    textJa: "ダイスを2個振り、相手が目を1つ予測 · 予測が両方の目と違えばマナ水晶+4" },
   ND5: { play: 4, act: undefined, val: undefined, val2: undefined, text: "자신 필드의 모든 몬스터에 '아우라'를 부여 (시전 4)", textJa: "自分の場の全モンスターに「オーラ」を付与 (発動4)" },
   GS5_3: { play: 2, act: undefined, val: undefined, text: "상대의 덱·묘지·필드의 '마족' 몬스터 1체당 상대에게 16 데미지 (시전 2)",
     textJa: "相手のデッキ・墓地・場の「魔族」モンスター1体につき相手に16ダメージ (発動2)" },
   GS6_4: { play: 3, act: undefined, val: undefined, text: "상대에게 낙인 카운터가 있으면 낙인 카운터 3개를 부여 (시전 3)",
     textJa: "相手に烙印カウンターがあれば烙印カウンターを3個付与 (発動3)" },
-  RUNE2: { play: undefined, act: undefined, text: "자신의 덱 구성의 절반 이상이 마법 카드일 때만 발동 · 최대 마나 +2", textJa: "自分のデッキ構成の半分以上が魔法カードの時のみ発動 · 最大マナ+2" },
+  RUNE2: { play: undefined, act: undefined, text: "자신의 덱 구성의 절반 이상이 마법 카드일 때만 발동 · 마나 수정 +2", textJa: "自分のデッキ構成の半分以上が魔法カードの時のみ発動 · マナ水晶+2" },
   RUNE3: { play: undefined, act: undefined, ench: "runeEcho", val: 99, text: "영구: 자신의 덱 구성의 절반 이상이 마법 카드일 때만 발동 · 자신의 마법을 사용하면 마나 없이 1번 더 발동한다",
     textJa: "永続: 自分のデッキ構成の半分以上が魔法カードの時のみ発動 · 自分の魔法を使うとマナなしでもう1回発動する" },
-  WORLD_BLESS: { cost: 6, play: 4, text: "영구: 양 플레이어 턴 시작마다 최대 마나 +1 · 덱에 '엘프' 계열이 있으면 자신의 턴은 +4 (시전 4)",
-    textJa: "永続: 両プレイヤーのターン開始時に最大マナ+1 · デッキに「エルフ」系がいれば自分のターンは+4 (発動4)" },
+  WORLD_BLESS: { cost: 6, play: 4, text: "영구: 양 플레이어 턴 시작마다 마나 수정 +1 · 덱에 '엘프' 계열이 있으면 자신의 턴은 +4 (시전 4)",
+    textJa: "永続: 両プレイヤーのターン開始時にマナ水晶+1 · デッキに「エルフ」系がいれば自分のターンは+4 (発動4)" },
   GS8_0: { text: "상대 덱에서 원하는 카드 1장을 게임에서 제외", textJa: "相手のデッキから好きなカード1枚をゲームから除外" },
   TIMEWARP: { play: 10, text: "주사위를 굴려 4 이상이면 다음 상대 턴을 스킵 (시전 10)", textJa: "ダイスを振り4以上なら次の相手のターンをスキップ (発動10)" },
   GAMBLE: { play: 3, text: "주사위 10회 — ①② 자신 8뎀 / ③④ 상대 5뎀 / ⑤ 마나 골렘 소환 / ⑥ 유리 대포 3체 소환",
     textJa: "ダイス10回 — ①② 自分8 / ③④ 相手5 / ⑤ マナゴーレム召喚 / ⑥ ガラス大砲3体召喚" },
   LIFE_SANCTUM: { ench: "sanctumField", text: "영구: 자신의 턴마다 자신 필드의 모든 몬스터 체력 +2(지속) (시전 2)",
     textJa: "永続: 自分のターンごとに自分の場の全モンスターの体力+2(持続) (発動2)" },
-  LUCKY_CHEST: { text: "주사위 2개 합계 — 2·3: 최대 마나+3·2장 드로우 / 4·5: 꽝(상대 필드에 마스터 미믹 12/6) / 6~8: 최대 마나+1 / 9~11: 체력+8 / 12: 체력+12",
-    textJa: "ダイス2個の合計 — 2·3: 最大マナ+3・2枚ドロー / 4·5: ハズレ(相手の場にマスターミミック12/6) / 6~8: 最大マナ+1 / 9~11: 体力+8 / 12: 体力+12" },
+  LUCKY_CHEST: { text: "주사위 2개 합계 — 2·3: 마나 수정+3·2장 드로우 / 4·5: 꽝(상대 필드에 마스터 미믹 12/6) / 6~8: 마나 수정+1 / 9~11: 체력+8 / 12: 체력+12",
+    textJa: "ダイス2個の合計 — 2·3: マナ水晶+3・2枚ドロー / 4·5: ハズレ(相手の場にマスターミミック12/6) / 6~8: マナ水晶+1 / 9~11: 体力+8 / 12: 体力+12" },
 };
 for (const id of Object.keys(PATCH34)) { if (DB[id]) Object.assign(DB[id], PATCH34[id]); }
 RANDOM_CARDS.add("S1"); RANDOM_CARDS.add("S12"); RANDOM_CARDS.add("SX2"); RANDOM_CARDS.add("GS6_4");
@@ -1861,8 +1861,8 @@ RANDOM_CARDS.add("S1"); RANDOM_CARDS.add("S12"); RANDOM_CARDS.add("SX2"); RANDOM
 // ---- 신규 스타터: 카지노 (카운터 → 카지노 주사위) ----
 const NEW_CARDS15B: CardDef[] = [
   { id: "CASINO", t: "mon", cost: 3, atk: 0, def: 6, aura: "casino", noShop: true, name: "카지노", nameJa: "カジノ",
-    text: "주사위를 굴릴 때마다 카운터 +1, 12개면 카지노 주사위 — ①② 자신 10뎀 / ③④ 상대 30뎀 / ⑤⑥ 상대 최대 마나 3",
-    textJa: "ダイスを振るたびカウンター+1、12個でカジノダイス — ①② 自分10 / ③④ 相手30 / ⑤⑥ 相手の最大マナ3" },
+    text: "주사위를 굴릴 때마다 카운터 +1, 12개면 카지노 주사위 — ①② 자신 10뎀 / ③④ 상대 30뎀 / ⑤⑥ 상대 마나 수정 3",
+    textJa: "ダイスを振るたびカウンター+1、12個でカジノダイス — ①② 自分10 / ③④ 相手30 / ⑤⑥ 相手のマナ水晶3" },
 ];
 for (const c of NEW_CARDS15B) { DB[c.id] = c; }
 DECK_POOL.push("CASINO");
@@ -1901,12 +1901,12 @@ const PATCH36: Record<string, Partial<CardDef>> = {
     textJa: "常時: このモンスターが攻撃するたびカウンター+1 · 3個ごとに「見習い吸血鬼」1体を召喚 · 「吸血鬼」系列として扱う" },
   VITAL2: { name: "세계수의 신도", nameJa: "世界樹の信徒", atk: 1, def: 4, val: 4, text: "소환시: 자신 체력 +4", textJa: "召喚時: 自分の体力+4" },
   CASINO: { def: 4,
-    text: "주사위를 굴릴 때마다 카운터 +1, 12개면 카지노 주사위 — ①② 자신 30뎀 / ③④ 상대 30뎀 / ⑤ 상대 40뎀 / ⑥ 상대 최대 마나 3",
-    textJa: "ダイスを振るたびカウンター+1、12個でカジノダイス — ①② 自分30 / ③④ 相手30 / ⑤ 相手40 / ⑥ 相手の最大マナ3" },
+    text: "주사위를 굴릴 때마다 카운터 +1, 12개면 카지노 주사위 — ①② 자신 30뎀 / ③④ 상대 30뎀 / ⑤ 상대 40뎀 / ⑥ 상대 마나 수정 3",
+    textJa: "ダイスを振るたびカウンター+1、12個でカジノダイス — ①② 自分30 / ③④ 相手30 / ⑤ 相手40 / ⑥ 相手のマナ水晶3" },
   EGG_HUNTER: { atk: 2, def: 3, val: 6, text: "상시: 이 몬스터가 '알'을 공격하면 카운터를 6 소모시킨다", textJa: "常時: このモンスターが「卵」を攻撃するとカウンターを6消費させる" },
   EGG_MASTER: { atk: 0, def: 6, val: 5, text: "소환시: 자신 필드의 모든 '알'의 카운터 +5", textJa: "召喚時: 自分の場の全ての「卵」のカウンター+5" },
   GOLEM2: { atk: 2, def: 6, aura: "leaderGolem", text: "상시: 자신 필드의 몬스터가 쓰러질 때마다 이 몬스터에 카운터 1개", textJa: "常時: 自分の場のモンスターが倒れるたびこのモンスターにカウンター1個" },
-  M10: { atk: 1, def: 4, aura: "manaGolem", passive: ["guts"], text: "상시: 자신 필드의 다른 '골램' 계열 몬스터 1체당 최대 마나 +1", textJa: "常時: 自分の場の他の「ゴーレム」系モンスター1体につき最大マナ+1" },
+  M10: { atk: 1, def: 4, aura: "manaGolem", passive: ["guts"], text: "상시: 자신 필드의 다른 '골램' 계열 몬스터 1체당 마나 수정 +1", textJa: "常時: 自分の場の他の「ゴーレム」系モンスター1体につきマナ水晶+1" },
   M7: { onSummon: undefined, val: undefined, attackFx: "chainKill", text: "이 몬스터의 공격으로 상대 몬스터가 파괴되면 그 턴에 1번 더 공격할 수 있다(최대 7회)", textJa: "このモンスターの攻撃で相手モンスターが破壊されたら、そのターンにもう1度攻撃できる(最大7回)" },
   M8: { atk: 3, def: 5 },
   M9: { onSummon: "refreshToken", text: "소환시: 카운터 1개 · 자신의 턴에 카운터를 소모해 마나 없이 제시를 갱신할 수 있다", textJa: "召喚時: カウンター1個 · 自分のターンにカウンターを消費しマナなしで提示を更新できる" },
@@ -1917,8 +1917,8 @@ const PATCH36: Record<string, Partial<CardDef>> = {
   NT_SEAL3: { atk: 1, def: 4, val: 4, text: "상시: 양 플레이어는 시전 코스트 4 이하 마법을 사용할 수 없다", textJa: "常時: 両プレイヤーは発動コスト4以下の魔法を使用できない" },
   NWL3: { name: "가디언 골램", nameJa: "ガーディアンゴーレム", atk: 1, def: 9, aura: "gutsOnHit", text: "상시: 이 몬스터가 공격으로 1 이상의 데미지를 받고 기합을 소모하지 않고 살아남으면 기합 카운터 1개를 얻는다", textJa: "常時: このモンスターが攻撃で1以上のダメージを受け、気合を消費せず生き残ると気合カウンター1個を得る" },
   TGE3: { name: "시초의 수호자", nameJa: "始原の守護者", atk: 1, def: 11, onSummon: "selfBurn", val: 3, text: "[시초] 소환시: 자신에게 3 데미지", textJa: "[始原] 召喚時: 自分に3ダメージ" },
-  RUST_SLUG: { atk: 1, def: 4, onSummon: "decayAll", text: "소환시: 상대 몬스터 전체에 카운터 1개 · 부패로 상대 몬스터를 파괴하면 최대 마나 +1, 자신 체력 +5",
-    textJa: "召喚時: 相手モンスター全体にカウンター1個 · 腐敗で相手モンスターを破壊すると最大マナ+1、自分の体力+5" },
+  RUST_SLUG: { atk: 1, def: 4, onSummon: "decayAll", text: "소환시: 상대 몬스터 전체에 카운터 1개 · 부패로 상대 몬스터를 파괴하면 마나 수정 +1, 자신 체력 +5",
+    textJa: "召喚時: 相手モンスター全体にカウンター1個 · 腐敗で相手モンスターを破壊するとマナ水晶+1、自分の体力+5" },
   TAR3: { passive: ["aura", "majesty"] },
   TAR2: { passive: ["aura"] },
   TSO3: { val: 6, text: "소환시: 자신의 묘지에 몬스터 카드가 없으면 카드 6장 드로우", textJa: "召喚時: 自分の墓地にモンスターカードがなければカード6枚ドロー" },
@@ -1980,8 +1980,8 @@ const PATCH36: Record<string, Partial<CardDef>> = {
     text: "【조건】덱에 엘프·하이엘프·다크 엘프 중 하나, 자신 체력 99 이상 · 【소환시】상대 필드의 카드 전부 파괴",
     textJa: "【条件】デッキにエルフ・ハイエルフ・ダークエルフのいずれか、自分の体力99以上 · 【召喚時】相手の場のカードを全て破壊" },
   LEGEND_GAMBLER: { atk: 3, def: 9, passive: ["void", "aura"],
-    text: "매 턴 시작 시 눈 예측 후 주사위 3개 · 맞히면 최대 마나 +4·체력 +35·상대 카드 2장 파괴 택1(도박꾼:전부)",
-    textJa: "毎ターン開始時 出目を予測しダイス3個 · 的中で最大マナ+4·体力+35·相手カード2枚破壊から1つ(ギャンブラー:全て)" },
+    text: "매 턴 시작 시 눈 예측 후 주사위 3개 · 맞히면 마나 수정 +4·체력 +35·상대 카드 2장 파괴 택1(도박꾼:전부)",
+    textJa: "毎ターン開始時 出目を予測しダイス3個 · 的中でマナ水晶+4·体力+35·相手カード2枚破壊から1つ(ギャンブラー:全て)" },
   TGE7: { atk: 5, def: 13, val: 4, text: "[시초] 상시: 자신 필드의 모든 '시초' 몬스터 +4/+4", textJa: "[始原] 常時: 自分の場の全ての「始原」モンスター+4/+4" },
   ASSASSIN4: { atk: 23, def: 20, passive: ["majesty", "aura"], summonReq: "assassinTrio", onSummon: "nightlord",
     text: "【조건】덱 구성에 이 몬스터 외 '암살자' 3종 이상 · 【소환시】상대에게 낙인 카운터 3개, 상대 세트 함정 전부 파괴",
@@ -2032,11 +2032,11 @@ const PATCH37: Record<string, Partial<CardDef>> = {
   GM6_0: { text: "소환시: 병사와 함께 묘지로 가면 '드래곤 라이더', 기사와 함께면 '앤티크 드래곤 나이트' 소환 · 둘 다 있으면 선택",
     textJa: "召喚時: 兵士と共に墓地へ行けば「ドラゴンライダー」、騎士と共になら「アンティークドラゴンナイト」召喚 · 両方いれば選択" },
   // ---- 마법 조정 ----
-  GAMBLE: { text: "주사위를 10번 굴려 합계가 40 이상이면 최대 마나 +3", textJa: "ダイスを10回振り合計が40以上なら最大マナ+3" },
+  GAMBLE: { text: "주사위를 10번 굴려 합계가 40 이상이면 마나 수정 +3", textJa: "ダイスを10回振り合計が40以上ならマナ水晶+3" },
   LEVY: { name: "소집", nameJa: "召集", cost: 6, play: 1, text: "병사(2/2) 3체를 자신 필드에 소환", textJa: "兵士(2/2)3体を自分の場に召喚" },
   GRAPE2: { val: 6, text: "자신 체력 +6", textJa: "自分の体力+6" },
   WINE: { val: 9, text: "자신 체력 +9 · 카드 2장 드로우", textJa: "自分の体力+9 · カード2枚ドロー" },
-  COUNTERCALC: { text: "상대 최대 마나 7 이하일 때만 사용 가능 · 상대 영구마법 1장 파괴", textJa: "相手の最大マナが7以下の時のみ使用可能 · 相手の永続魔法1枚を破壊" },
+  COUNTERCALC: { text: "상대 마나 수정 7 이하일 때만 사용 가능 · 상대 영구마법 1장 파괴", textJa: "相手のマナ水晶が7以下の時のみ使用可能 · 相手の永続魔法1枚を破壊" },
   TRIBE_PACT: { text: "영구: 종족 몬스터의 구매 코스트 -1(최소 1) · 45턴까지 종족 시너지를 발동하지 못하면 자신은 패배",
     textJa: "永続: 種族モンスターの購入コスト-1(最低1) · 45ターンまでに種族シナジーを発動できなければ自分は敗北" },
   // ---- 함정 리워크 ----
@@ -2178,7 +2178,7 @@ const NEW_CARDS41B: CardDef[] = [
   { id: "FREE_REWARD", t: "spell", cost: 2, ench: "freeReward", val: 99, name: "무상의 대가", nameJa: "無償の対価",
     text: "영구: 자신이 코스트 0 카드를 플레이할 때마다 카드 1장 드로우", textJa: "永続: 自分がコスト0のカードをプレイするたびカード1枚ドロー" },
   { id: "NO_PAIN", t: "spell", cost: 3, ench: "painGain", val: 99, name: "노 페인 노 게인", nameJa: "ノーペインノーゲイン",
-    text: "영구: 자신이 데미지를 받을 때마다 주사위를 굴려 6이면 최대 마나 +1", textJa: "永続: 自分がダメージを受けるたびダイスを振り6なら最大マナ+1" },
+    text: "영구: 자신이 데미지를 받을 때마다 주사위를 굴려 6이면 마나 수정 +1", textJa: "永続: 自分がダメージを受けるたびダイスを振り6ならマナ水晶+1" },
   { id: "ORIGIN_QUEST", t: "spell", cost: 1, act: "originQuest", name: "기원의 탐구", nameJa: "起源の探究",
     text: "필드의 코스트 0 카드 1장당 카드 1장 드로우", textJa: "場のコスト0カード1枚につきカード1枚ドロー" },
   { id: "BEGINNER_MIND", t: "spell", cost: 1, act: "beginnerMind", val: 4, name: "초심", nameJa: "初心",
@@ -2192,17 +2192,17 @@ const NEW_CARDS41B: CardDef[] = [
   { id: "SORTER_LAW", t: "trap", cost: 2, play: 1, react: "sorterLaw", name: "선별의 규율", nameJa: "選別の掟",
     text: "덱 구성이 8장 이하일 때만 · 공격 무효 · 상대 필드의 카드 2장 파괴", textJa: "デッキ構成が8枚以下の時のみ · 攻撃無効 · 相手の場のカード2枚を破壊" },
   { id: "BUYOUT", t: "spell", cost: 1, act: "buyout", name: "매점", nameJa: "買い占め",
-    text: "이번 턴 같은 카드를 2장 구매했을 때만 · 최대 마나 +1", textJa: "このターン同じカードを2枚購入した時のみ · 最大マナ+1" },
+    text: "이번 턴 같은 카드를 2장 구매했을 때만 · 마나 수정 +1", textJa: "このターン同じカードを2枚購入した時のみ · マナ水晶+1" },
   { id: "SAMSARA", t: "trap", cost: 2, play: 1, react: "samsara", name: "윤회", nameJa: "輪廻",
     text: "【턴 시작시】직전 턴에 자신의 몬스터가 파괴되었다면 그중 1체를 골라 자신 필드에 소환", textJa: "【ターン開始時】直前のターンに自分のモンスターが破壊されていればその中の1体を選んで自分の場に召喚" },
   { id: "PENANCE", t: "spell", cost: 2, act: "penance", name: "고행의 대가", nameJa: "苦行の対価",
-    text: "자신의 낙인 카운터 1개당 최대 마나 +2, 체력 +10", textJa: "自分の烙印カウンター1個につき最大マナ+2、体力+10" },
+    text: "자신의 낙인 카운터 1개당 마나 수정 +2, 체력 +10", textJa: "自分の烙印カウンター1個につきマナ水晶+2、体力+10" },
   { id: "PACK_INSTINCT", t: "spell", cost: 2, act: "packInstinct", name: "무리의 본능", nameJa: "群れの本能",
     text: "자신 필드에 같은 이름의 몬스터가 2체 이상일 때만 · 그 몬스터들에 +2/+2(지속)", textJa: "自分の場に同名モンスターが2体以上いる時のみ · そのモンスターに+2/+2(持続)" },
   { id: "MIND_BURST", t: "spell", cost: 2, act: "mindBurst", name: "정신 방출술", nameJa: "精神放出術",
     text: "자신 필드의 카운터를 모두 제거 · 그 수 ×4 데미지를 상대에게", textJa: "自分の場のカウンターを全て取り除く · その数×4ダメージを相手に" },
   { id: "RICH_HABIT", t: "spell", cost: 3, ench: "richHabit", val: 99, name: "부호의 습관", nameJa: "富豪の習慣",
-    text: "【파괴 시】이 카드가 상대 카드의 효과로 파괴되었다면 자신의 최대 마나를 3으로 만든다.", textJa: "【破壊時】このカードが相手のカードの効果で破壊された場合、自分の最大マナを3にする。" },
+    text: "【파괴 시】이 카드가 상대 카드의 효과로 파괴되었다면 자신의 마나 수정을 3으로 만든다.", textJa: "【破壊時】このカードが相手のカードの効果で破壊された場合、自分のマナ水晶を3にする。" },
 ];
 for (const c of NEW_CARDS41B) { DB[c.id] = c; }
 RANDOM_CARDS.add("NO_PAIN");
@@ -2218,9 +2218,9 @@ TRIBES["포식"] = {
   en: { name: "Devour", note: "* Requires different cards of the tribe · once per game", bonuses: ["2 different: 18 damage to the opponent"] },
 };
 TRIBES["귀족"] = {
-  ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 2종: 상대의 최대 마나 -2"] },
-  ja: { name: "貴族", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる2種: 相手の最大マナ-2"] },
-  en: { name: "Aristocrat", note: "* Requires different cards of the tribe · once per game", bonuses: ["2 different: the opponent's max mana -2"] },
+  ko: { name: "귀족", note: "※ 서로 다른 종족 카드여야 발동 · 게임당 1회", bonuses: ["서로 다른 2종: 상대의 마나 수정 -2"] },
+  ja: { name: "貴族", note: "※ 異なる種族カードが必要 · ゲーム中1回", bonuses: ["異なる2種: 相手のマナ水晶-2"] },
+  en: { name: "Aristocrat", note: "* Requires different cards of the tribe · once per game", bonuses: ["2 different: the opponent's mana crystals -2"] },
 };
 TRIBES["시초"] = {
   ko: { name: "시초", note: "※ 1~8코스트 각 1종(8코 '시초의 미믹' 포함) · 각 단계 보상은 게임당 1회씩 따로 지급", bonuses: ["서로 다른 2종: 체력 +15", "서로 다른 3종: 체력 +40", "서로 다른 4종: 체력 +70", "서로 다른 6종: 이 게임에서 승리"] },
@@ -2267,12 +2267,12 @@ for (const card of QUEST_QUICK_CARDS) {
 Object.assign(DB.NGA4, { atk: 8, def: 1 });
 Object.assign(DB.TDE1, { atk: 3, def: 5 });
 Object.assign(DB.TDE2, { atk: 5, def: 8, summonReq: "mm5",
-  text: "【조건】자신의 최대 마나가 5 이상 · 【상시】자신의 최대 마나 -2(최저 3)",
-  textJa: "【条件】自分の最大マナが5以上 · 【常時】自分の最大マナ-2(最低3)" });
+  text: "【조건】자신의 마나 수정이 5 이상 · 【상시】자신의 마나 수정 -2(최저 3)",
+  textJa: "【条件】自分のマナ水晶が5以上 · 【常時】自分のマナ水晶-2(最低3)" });
 Object.assign(DB.TDE3, { atk: 7, def: 11 });
 Object.assign(DB.TDE4, { atk: 12, def: 14, passive: ["majesty", "aura"], onSummon: "manaSet3", aura: "manaGrowthLock", summonReq: "demonKing",
-  text: "【조건】자신 최대 마나 5 이상＋덱 구성에 마왕 외 마족 몬스터 · 【소환시】자신 최대 마나 3 · 【상시】자신 최대 마나 증가 불가",
-  textJa: "【条件】自分の最大マナ5以上＋デッキ構成に魔王以外の魔族モンスター · 【召喚時】自分の最大マナを3に · 【常時】自分の最大マナ増加不可" });
+  text: "【조건】자신 마나 수정 5 이상＋덱 구성에 마왕 외 마족 몬스터 · 【소환시】자신 마나 수정 3 · 【상시】자신 마나 수정 증가 불가",
+  textJa: "【条件】自分のマナ水晶5以上＋デッキ構成に魔王以外の魔族モンスター · 【召喚時】自分のマナ水晶を3に · 【常時】自分のマナ水晶増加不可" });
 Object.assign(DB.M7, { atk: 3, def: 1, turnFx: "emberRecoil",
   text: "【상시】공격으로 상대 몬스터 파괴 시 턴당 1번 추가 공격 · 【매 턴】자신 턴 시작: 주사위 5+면 자신에게 3 데미지",
   textJa: "【常時】攻撃で相手モンスターを破壊したら、そのターンに1度だけ追加攻撃 · 【毎ターン】自分のターン開始にダイス5以上なら自分に3ダメージ" });
@@ -2297,8 +2297,8 @@ Object.assign(DB.WORLD_CARE, {
   text: "【상시】자신 필드에 최대 1장 · 【매턴】자신의 턴 시작: 자신 체력 +3",
   textJa: "【常時】自分の場に最大1枚 · 【毎ターン】自分のターン開始：自分の体力+3" });
 Object.assign(DB.ANCIENT_CIV, {
-  text: "영구: 발동 9턴 후 자신 최대 마나 -1, '드래곤의 알'·'신수의 알' 중 하나를 패에 넣는다 · 이 마법 파괴",
-  textJa: "永続: 発動9ターン後に自分の最大マナ-1、「ドラゴンの卵」か「神獣の卵」を選んで手札に加える · この魔法は破壊される" });
+  text: "영구: 발동 9턴 후 자신 마나 수정 -1, '드래곤의 알'·'신수의 알' 중 하나를 패에 넣는다 · 이 마법 파괴",
+  textJa: "永続: 発動9ターン後に自分のマナ水晶-1、「ドラゴンの卵」か「神獣の卵」を選んで手札に加える · この魔法は破壊される" });
 
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 for (const c of EXPANSION_CARDS) DB[c.id] = c;
@@ -2342,9 +2342,9 @@ Object.assign(DB.DEMON_REALM, {
   textEn: "Permanent: Negate all effects and keywords of your Demonkin in play and those you summon later." });
 // v53: health is unbounded; old percentage/full player heals use explicit targets.
 const HEALTH_RULES:Record<string,{text:string;textJa:string;textEn:string}>={
- MEDITATE:{text:'【조건】자신 최대 마나 11 이하, 체력 40 미만일 때만 · 자신 체력을 40까지 회복하고 낙인 카운터 1개',textJa:'【条件】自分の最大マナ11以下、体力40未満 · 自分の体力を40まで回復し、烙印カウンター1個',textEn:'【Requires】Max mana at most 11 and HP below 40. Restore your HP to 40; gain 1 Brand.'},
+ MEDITATE:{text:'【조건】자신 마나 수정 11 이하, 체력 40 미만일 때만 · 자신 체력을 40까지 회복하고 낙인 카운터 1개',textJa:'【条件】自分のマナ水晶11以下、体力40未満 · 自分の体力を40まで回復し、烙印カウンター1個',textEn:'【Requires】Mana Crystals at most 11 and HP below 40. Restore your HP to 40; gain 1 Brand.'},
  HERMIT:{text:'【조건】자신 필드에 몬스터가 없을 때만 · 자신 체력을 40까지 회복한 후 체력 +15 · 게임당 5회',textJa:'【条件】自分の場にモンスターがいない · 自分の体力を40まで回復後、体力+15 · ゲーム中5回まで',textEn:'【Requires】No monsters on your field. Restore your HP up to 40, then gain +15 HP. Up to 5 uses per game.'},
- GS8_2:{text:'자신 체력 +14 · 최대 마나 10 이하면 자신의 체력을 40까지 회복',textJa:'自分の体力+14 · 最大マナ10以下なら、さらに体力を40まで回復',textEn:'Gain 14 HP. If your max mana is at most 10, then restore your HP up to 40.'},
+ GS8_2:{text:'자신 체력 +14 · 마나 수정 10 이하면 자신의 체력을 40까지 회복',textJa:'自分の体力+14 · マナ水晶10以下なら、さらに体力を40まで回復',textEn:'Gain 14 HP. If your mana crystals are at most 10, then restore your HP up to 40.'},
  WORLD_TREE:{text:'자신 체력이 증가하면 카운터 1개 · 매턴 카운터 1개로 아군 몬스터의 받은 데미지를 제거하고 자신의 체력을 32까지 회복',textJa:'【常時】自分の体力が増えるとカウンター1個 · 【毎ターン】カウンター1個で味方モンスターの蓄積ダメージを取り除き、自分の体力を32まで回復',textEn:'Gain a counter when your HP increases. Each turn: spend 1 counter to remove damage from allied monsters and restore your HP up to 32.'}
 };
 for(const [id,text] of Object.entries(HEALTH_RULES))if(DB[id])Object.assign(DB[id],text);
@@ -2484,7 +2484,7 @@ export const BALANCE_VERSION = "v74"; // Approved spell rework; Growth retired; 
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관
-// v40; // v40: 룰 개정 — 선공 40/후공 45 · 첫 손패 3장 이후 매턴 1장 드로우 + 손패 유지(상한 8) · 최대 마나 하한 3 · 어튠에 신기(제외 불가) · 고정 마켓 슬롯 재고 3(매진 시 새 카드 교체)
+// v40; // v40: 룰 개정 — 선공 40/후공 45 · 첫 손패 3장 이후 매턴 1장 드로우 + 손패 유지(상한 8) · 마나 수정 하한 3 · 어튠에 신기(제외 불가) · 고정 마켓 슬롯 재고 3(매진 시 새 카드 교체)
 // v39: 주술사 계열 — 견습 주술사(구 꼬마, 2코) + 초급(3코 2/3 마법8장·5+·저주3)/중급(4코 3/5 마법10장·4+·저주4)/상급(5코 3/6 아우라 마법13장·3+·저주5 + 상대 마법마다 저주1)/특급 켈로이드(6코 4/10 아우라·위엄·회피 · 마법 반 이상&15장 · 상대 마법 3+ 무효 · 주술사 공격 +5)
 // v38c(구): // v38c: 와인 1드로우·체력+6, 포도 +2, 고급 포도 +4, 성 0/2·초기 카운터 2
 // v38: // v38: 종족 시너지 개정(귀족 2종 마나-2 · 포식 2종 18뎀 · 고독 2종 소환 상한 2 · 시초 2/3/4/6종 +15/+40/+70/승리) + 마계 + 앤티크 인핸스 매직/기사의 가르침/나이트로드의 비기 + 살아있는 던전 + 전사 골램 개명/가디언 기합/나이트로드 회피

@@ -28,5 +28,9 @@ try {
  // An older action queued ahead of reconnect must be replaced, then a new action appended.
  c.queue=c.queue.then(()=>c.consumeLogs(refreshed.events));c.restoreLog(history,true);c.restoreLog([{type:'log',html:'latest',htmlJa:'新しい行動'}],false);await c.queue;
  assert.equal(el.querySelectorAll('.log-card').length,refreshed.state.players[1].supply.filter(Boolean).length);assert(el.textContent.endsWith('新しい行動'));
+ // A reconnected pre-rename journal uses current terms while preserving player names.
+ log.clear();log.line('<span class="t">最大マナ</span> 최대 마나 +1','<span class="t">最大マナ</span> 最大マナ+1');
+ for(const [lang,term] of [['ja','マナ水晶'],['en','mana crystals'],['ko','마나 수정']]){setLang(lang);assert(el.textContent.includes(term));assert.equal(el.querySelector('.t').textContent,'最大マナ','player name remains verbatim');}
+ log.line('최대 마나 +1','最大マナ+1','max mana +1');setLang('en');assert(el.lastElementChild.textContent.includes('mana crystals'));
  log.dispose();console.log('PASS log UI: real controller filtering, opponent grouping, clickable localized cards, Japanese/English reroll text, queued reconnect replacement and later appends');
 } finally {await rm(dir,{recursive:true,force:true});dom.window.close();}

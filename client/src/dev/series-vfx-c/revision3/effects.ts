@@ -17,7 +17,7 @@ export function additional(b:Board,m:string,t:number){if(military(b,m,t)||golem(
   local(source,k=>attuneSurface(k,t,pulse(t,100,1100,2700),v));
   const negative=m==='A068'||id==='AHEUK',who=id==='AHEUK'||id==='CASINO'||m==='A070'?1-b.side:b.side,delta=negative?(id==='AHEUK'&&b.condition?-2:-1):1;
   if(id==='AJIN'){local(source,k=>{const a=pulse(t,350,850,1700);k.globalAlpha=a;polygon(k,[[38,63],[62,63],[62,87],[38,87]],'#c7d0b5','#304952');k.fillStyle='#304952';for(const [x,y] of (b.condition?[[44,69],[56,69],[44,81],[56,81]]:[[50,75]]))k.fillRect(x-1,y-1,2,2)})}
-  if(m==='A069'){mana(who,t<2700?Math.max(0,9-defs[id].cost):12,12,1300)}else if(m==='A070'){mana(who,11,12,2700);b.sceneLabel=t<2700?'ダイス3 → 次のターンのマナ-1':'相手の次ターン → 使用可能マナ11/12';}else if(id==='TDE1'){mana(who,9,t<3300?11:12,1600);b.sceneLabel=t<3300?'最大マナ-1を5ターン維持':'自分の5ターン経過 → 最大マナ復元';}else if(id==='CASINO'){if(b.condition)mana(who,3,3);b.sceneLabel=b.condition?'ダイス6 → 相手の最大マナ3':'ダイス2 → 最大マナ変化なし';}else if(id==='TDE4')mana(who,3,3);else if(id!=='M10'||b.condition)mana(who,9,12+delta);
+  if(m==='A069'){mana(who,t<2700?Math.max(0,9-defs[id].cost):12,12,1300)}else if(m==='A070'){mana(who,11,12,2700);b.sceneLabel=t<2700?'ダイス3 → 次のターンのマナ-1':'相手の次ターン → 使用可能マナ11/12';}else if(id==='TDE1'){mana(who,9,t<3300?11:12,1600);b.sceneLabel=t<3300?'マナ水晶-1を5ターン維持':'自分の5ターン経過 → マナ水晶復元';}else if(id==='CASINO'){if(b.condition)mana(who,3,3);b.sceneLabel=b.condition?'ダイス6 → 相手のマナ水晶3':'ダイス2 → マナ水晶変化なし';}else if(id==='TDE4')mana(who,3,3);else if(id!=='M10'||b.condition)mana(who,9,12+delta);
   if(id==='QUICK_ATTUNE'&&t>=1800){document.getElementById(b.side?'hp-opp':'hp-me')!.textContent='42'}
   return;
  }

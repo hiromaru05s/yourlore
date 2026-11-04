@@ -59,7 +59,7 @@ add("feat:enemyTurn",mt("結末は我が手に","An Ending of My Own","결말은
 add("feat:healing",mt("尽きぬ生命","Unending Life","끝없는 생명"),mt("1試合で精神力を合計50以上回復して勝利","Restore at least 50 HP in a duel and win","한 대전에서 정신력 50 이상 회복하고 승리"),"duel","healing",1);
 add("feat:decay",mt("静かに朽ちる軍勢","An Army in Decay","조용히 썩는 군세"),mt("1試合で腐敗により相手モンスターを5体以上破壊して勝利","Destroy 5 enemy monsters through Decay in a duel and win","한 대전에서 부패로 상대 몬스터 5체 이상 파괴하고 승리"),"duel","decay",1);
 add("feat:shopping",mt("マーケットの顔役","Market Regular","마켓의 큰손"),mt("1試合でカードを10枚以上購入して勝利","Buy at least 10 cards in a duel and win","한 대전에서 카드 10장 이상 구매하고 승리"),"duel","shopping",1);
-add("feat:mana",mt("溢れる魔力","Overflowing Mana","넘치는 마력"),mt("最大マナ20以上で勝利","Win with at least 20 maximum mana","최대 마나 20 이상으로 승리"),"duel","mana",1);
+add("feat:mana",mt("溢れる魔力","Overflowing Mana","넘치는 마력"),mt("マナ水晶20以上で勝利","Win with at least 20 mana crystals","마나 수정 20 이상으로 승리"),"duel","mana",1);
 add("feat:alliance",mt("異種の盟約","Alliance of Tribes","이종의 맹약"),mt("1試合で3種類以上の種族シナジーを発動して勝利","Trigger synergies of 3 different tribes and win","한 대전에서 3종족 이상의 시너지를 발동하고 승리"),"duel","alliance",1);
 add("wins:1",mt("勝利の第一歩","First Victory","승리의 첫걸음"),mt("対人戦で累計1勝","Win 1 PvP duels","대인전 누적 1승"),"record","wins",1);
 add("wins:10",mt("勝機をつかむ者","Seizing Victory","승기를 잡는 자"),mt("対人戦で累計10勝","Win 10 PvP duels","대인전 누적 10승"),"record","wins",10);

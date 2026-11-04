@@ -5,6 +5,8 @@
 // (<b class="log-card">) are protected and re-localized separately.
 // ============================================================
 
+import { resourceText } from "./resourceText";
+
 const R: [RegExp, string][] = [
   // ---- full/long phrases first (order matters) ----
   [/부패한 땅은 양쪽 필드 전체에 1장만 존재할 수 있습니다/g, "Only 1 Rotten Ground can exist across both players' fields"],
@@ -56,9 +58,9 @@ const R: [RegExp, string][] = [
   [/소환 반동: 자신에게 (\d+) 데미지/g, "summon recoil: $1 damage to self"],
   [/소환 효과: (\d+)장 드로우/g, "on summon: drew $1"],
   [/소환 강화:/g, "summon boost:"],
-  [/생명의 순환: 최대 마나/g, "Cycle of Life: max mana"],
-  [/발아! 최대 마나/g, "Sprouted! max mana"],
-  [/축복! 최대 마나 \+(\d+) 추가/g, "Blessing! max mana +$1 extra"],
+  [/생명의 순환: 마나 수정/g, "Cycle of Life: mana crystals"],
+  [/발아! 마나 수정/g, "Sprouted! mana crystals"],
+  [/축복! 마나 수정 \+(\d+) 추가/g, "Blessing! mana crystals +$1 extra"],
   [/길드의 정보망 획득 — 턴 시작시 드로우 \+1 \(영구\)/g, "gained Guild Network — +1 draw at turn start (permanent)"],
   [/마법·함정 존이 가득 차 정보망을 놓쳤다/g, "spell/trap zone full — the Network was lost"],
   [/경보! 상대 필드에 초급·중급 암살자 소환/g, "Alarm! Novice & Adept Assassins summoned to the enemy field"],
@@ -76,7 +78,7 @@ const R: [RegExp, string][] = [
   [/회피 실패 🎲 (\d+)/g, "Evade failed 🎲 $1"],
   [/\((\d+)\+ 성공\)/g, "($1+ success)"],
   [/\((\d+)\+ 실패\)/g, "($1+ fail)"],
-  [/🎰 잭팟! 최대 마나/g, "🎰 Jackpot! max mana"],
+  [/🎰 잭팟! 마나 수정/g, "🎰 Jackpot! mana crystals"],
   [/✨ 더블 6! 체력/g, "✨ Double sixes! HP"],
   [/성공! 다음 상대 턴 스킵 예약/g, "Success! opponent's next turn will be skipped"],
   [/성공 → 자신을 복제 소환/g, "success → cloned itself"],
@@ -110,7 +112,7 @@ const R: [RegExp, string][] = [
   [/ 은\(는\) 파괴된다/g, " is destroyed"],
   [/계약이 다했다 — 파괴된다/g, "the pact has run its course — destroyed"],
   [/대가: 자신에게 (\d+) 데미지/g, "price: take $1 damage"],
-  [/자신에게 7 데미지, 최대 마나 -1/g, "take 7 damage, max mana -1"],
+  [/자신에게 7 데미지, 마나 수정 -1/g, "take 7 damage, mana crystals -1"],
   [/자신 필드에 이미 '선견지명'이 있습니다/g, "you already have 'Foresight' on your field"],
   [/통하지 않음/g, "no effect"],
   [/몬스터 (\d+)체의 체력이 1이 되었다/g, "$1 monster(s) reduced to 1 HP"],
@@ -173,15 +175,15 @@ const R: [RegExp, string][] = [
   [/코스트 0 카드 플레이 → 1장 드로우/g, "played a cost-0 card → drew 1"],
   [/코스트 0 카드 (\d+)장 → (\d+)장 드로우/g, "$1 cost-0 card(s) → drew $2"],
   [/필드의 몬스터 (\d+)체에 '공허' 부여/g, "gave Void to $1 monster(s) on the field"],
-  [/낙인 (\d+)개 → 최대 마나 \+(\d+) \((\d+)\), 체력 \+(\d+)/g, "$1 Brand → max mana +$2 ($3), HP +$4"],
+  [/낙인 (\d+)개 → 마나 수정 \+(\d+) \((\d+)\), 체력 \+(\d+)/g, "$1 Brand → mana crystals +$2 ($3), HP +$4"],
   [/같은 이름의 몬스터 (\d+)체 \+2\/\+2/g, "$1 same-name monster(s) +2/+2"],
   [/카운터 (\d+)개 제거 → (\d+) 데미지/g, "removed $1 counter(s) → $2 damage"],
-  [/🎲 6! 최대 마나/g, "🎲 6! max mana"],
+  [/🎲 6! 마나 수정/g, "🎲 6! mana crystals"],
   [/행운의 잔향<\/span>: 🎲 6 ×(\d+) →/g, "Echo of Fortune</span>: 🎲 6 ×$1 →"],
   [/공격 무효 \+ 상대 필드의 카드 2장 파괴/g, "attack negated + destroyed 2 cards on the enemy field"],
   [/영구마법 (.+?) 파괴/g, "enchantment $1 destroyed"],
   [/패 (\d+)장 → 체력 \+6/g, "$1 cards in hand → HP +6"],
-  [/패 (\d+)장 → 최대 마나 \+1/g, "$1 cards in hand → max mana +1"],
+  [/패 (\d+)장 → 마나 수정 \+1/g, "$1 cards in hand → mana crystals +1"],
   [/직전 턴에 파괴된 몬스터 (\d+)종 중 1체를 소환/g, "summon 1 of the $1 monster type(s) destroyed last turn"],
   [/윤회 — 소환할 몬스터 선택/g, "Samsara — pick a monster to summon"],
   [/윤회 →/g, "Samsara →"],
@@ -262,7 +264,7 @@ const R: [RegExp, string][] = [
   [/상대 필드의 모든 카드 파괴 \+ 게임에서 제외/g, "every card on the enemy field destroyed + exiled"],
   // ---- 스타팅 카드 15종 ----
   [/유령의 원한: 상대의 성장에 (.+?) 이\(가\) (\d+) 데미지/g, "Ghost's grudge: $1 takes $2 damage from the opponent's growth"],
-  [/상대 최대 마나 \+1 \((\d+)\) · 상대는 다음 턴 함정 설치 불가/g, "opponent max mana +1 ($1) · they cannot set traps next turn"],
+  [/상대 마나 수정 \+1 \((\d+)\) · 상대는 다음 턴 함정 설치 불가/g, "opponent mana crystals +1 ($1) · they cannot set traps next turn"],
   [/협상: 이번 턴에는 함정을 설치할 수 없습니다/g, "Negotiation: you cannot set traps this turn"],
   [/혈귀술: (\d+) 데미지 → 회복으로 반전/g, "Blood Fiend Art: $1 damage inverted to healing"],
   [/약화술식 해제: 모든 몬스터 공격력? \+2 복구/g, "Enfeebling Ritual lifted: all monsters ATK +2 restored"],
@@ -270,14 +272,14 @@ const R: [RegExp, string][] = [
   [/카운트 (\d+)\/3/g, "count $1/3"],
   [/발동! 상대에게 14 데미지/g, "triggers! 14 damage to the opponent"],
   [/미믹 파티 개최 — (.+?) 필드에 1마리, (.+?) 필드에 2마리/g, "Mimic Party! 1 Mimic on $1's field, 2 on $2's"],
-  [/대가: 최대 마나 -1 \((\d+)\), 자신에게 (\d+) 데미지/g, "price: max mana -1 ($1), take $2 damage"],
+  [/대가: 마나 수정 -1 \((\d+)\), 자신에게 (\d+) 데미지/g, "price: mana crystals -1 ($1), take $2 damage"],
   [/운명의 수레바퀴 — (.+?) 의 결과를 다시 굴릴 수 있다/g, "Wheel of Fate — you may reroll $1's result"],
   [/결과를 되감고 다시 굴린다…/g, "rewinding the result and rerolling…"],
   [/ 은\(는\) 게임에서 제외된다/g, " is exiled from the game"],
-  [/상대 최대 마나가 6을 초과해 사용 불가/g, "unusable — opponent max mana above 6"],
-  [/상대 최대 마나가 4가 아니라 사용 불가/g, "unusable — opponent max mana is not 4"],
-  [/발현! 최대 마나 \+2 \((\d+)\) — 이 카드는 게임에서 제외/g, "manifests! max mana +2 ($1) — this card is exiled"],
-  [/계약 불이행! 최대 마나 -2 \((\d+)\), 자신에게 12 데미지/g, "pact broken! max mana -2 ($1), take 12 damage"],
+  [/상대 마나 수정이 6을 초과해 사용 불가/g, "unusable — opponent mana crystals above 6"],
+  [/상대 마나 수정이 4가 아니라 사용 불가/g, "unusable — opponent mana crystals are not 4"],
+  [/발현! 마나 수정 \+2 \((\d+)\) — 이 카드는 게임에서 제외/g, "manifests! mana crystals +2 ($1) — this card is exiled"],
+  [/계약 불이행! 마나 수정 -2 \((\d+)\), 자신에게 12 데미지/g, "pact broken! mana crystals -2 ($1), take 12 damage"],
   [/다종족 계약: 시너지 2배!/g, "Multi-Tribe Pact: synergy doubled!"],
   [/필드의 모든 몬스터 공\/체 반전! \(2턴\)/g, "all monsters' ATK/HP swapped! (2 turns)"],
   [/반전 지속 연장 \(2턴\)/g, "swap extended (2 turns)"],
@@ -370,8 +372,8 @@ const R: [RegExp, string][] = [
   [/상대 체력 홀수 → (\d+) 데미지/g, "enemy HP odd → $1 damage"],
   [/상대 체력 짝수 → (\d+)장 드로우/g, "enemy HP even → drew $1"],
   [/상대 덱 맨 위 (\d+)장 제외/g, "exiled top $1 of the enemy deck"],
-  [/(\d+)%: 자신 최대 마나 -(\d+)/g, "$1%: your max mana -$2"],
-  [/(\d+)% 성공: 상대 최대 마나 -(\d+)/g, "$1% success: enemy max mana -$2"],
+  [/(\d+)%: 자신 마나 수정 -(\d+)/g, "$1%: your mana crystals -$2"],
+  [/(\d+)% 성공: 상대 마나 수정 -(\d+)/g, "$1% success: enemy mana crystals -$2"],
   [/(\d+)% 성공: 체력 \+(\d+)/g, "$1% success: HP +$2"],
   [/(\d+)% 성공 → /g, "$1% success → "],
   [/(\d+)% 성공: /g, "$1% success: "],
@@ -389,7 +391,7 @@ const R: [RegExp, string][] = [
   [/체력 (\d+) 회복/g, "restored $1 HP"],
   [/체력 \+(\d+) 회복/g, "restored +$1 HP"],
   [/체력/g, "HP"],
-  [/최대 마나/g, "max mana"],
+  [/마나 수정/g, "mana crystals"],
   [/\(체력 (\d+)\)/g, "(HP $1)"],
   [/체력/g, "HP"],
   [/(\d+)장 드로우/g, "drew $1"],
@@ -433,6 +435,7 @@ export function logToEn(html: string): string {
   let s = html.replace(/<b class="log-card"[^>]*>.*?<\/b>|<span class="t">.*?<\/span>/g, (m) => {
     keep.push(m); return `\u0001${keep.length - 1}\u0002`;
   });
+  s = resourceText(s);
   // tribe synergy banner (needs name mapping)
   s = s.replace(/\[(고독|마족|포식|귀족|시초)\] 동족 (\d+)마리 시너지!/g, (_m, tr, n) => `[${TRIBE_EN[tr] ?? tr}] ${n}-piece tribe synergy!`);
   for (const [re, en] of R) {

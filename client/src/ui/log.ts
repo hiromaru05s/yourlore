@@ -8,6 +8,7 @@ import { DB, STARTERS } from "../shared/cards";
 import type { CardDef } from "../shared/types";
 import { zoomCard } from "./cardInspection";
 import { cardName, getLang, onLangChange, t } from "../i18n";
+import { resourceText } from "../shared/resourceText";
 import { logToEn } from "../shared/logEn";
 
 type Entry =
@@ -20,6 +21,11 @@ type Entry =
  *  turns log HTML into plain text MUST run this first, or Korean names leak
  *  into JA/EN (효과 결과 팝업·차단 토스트가 그랬다). */
 export function localizeLogCards(node: HTMLElement): void {
+  // Update old journal wording without changing player names, card names or HTML attributes.
+  const walker = document.createTreeWalker(node, 4 /* SHOW_TEXT */);
+  for (let text = walker.nextNode(); text; text = walker.nextNode()) {
+    if (!text.parentElement?.closest(".t, .log-card")) text.textContent = resourceText(text.textContent ?? "");
+  }
   node.querySelectorAll<HTMLElement>(".log-card").forEach((el) => {
     const id = el.dataset.card;
     const def = id ? (DB[id] ?? STARTERS[id]) : undefined;

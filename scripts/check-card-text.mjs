@@ -49,6 +49,7 @@ for (const c of cards) {
     if(s!==CARD_EFFECT_TEXT[c.id]?.[lang]) fail(c.id,lang,'canonical text mutated at runtime');
     if(!s && !cardPassives(c).length) fail(c.id,lang,'empty effect without keyword abilities');
     if(/シェルフ|셸프|선반|\bshelf\b/i.test(s)) fail(c.id,lang,'retired graveyard name');
+    if(/最大マナ|최대\s*마나|(?:max|maximum)[ -]mana/i.test(s)) fail(c.id,lang,'retired mana crystal name');
     if(lang!=='ko' && /[가-힣]/.test(s)) fail(c.id,lang,'Korean fallback');
     if(lang==='en' && /[ぁ-んァ-ヶ一-龯]/.test(s)) fail(c.id,lang,'untranslated Japanese');
     if(/【毎ターン】|【Each Turn】|【매턴】|cost \d+\s*-\b|\bmons\b|\.\.\.|…/.test(s)) fail(c.id,lang,'ambiguous timing or abbreviation');

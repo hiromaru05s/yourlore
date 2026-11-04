@@ -1100,7 +1100,7 @@ export abstract class BaseController implements BoardHandlers {
       await A.exileGeneratedCards(generated,sideOf(pl));
     }
 
-    // ---- state-diff celebrations: max mana / HP gains ----
+    // ---- state-diff celebrations: mana crystals / HP gains ----
     // Render authoritative targets first, then start the shared visual clock.
     // Only presentation waits; resource values in game state are already final.
     const effectFinishes:Promise<void>[]=[];

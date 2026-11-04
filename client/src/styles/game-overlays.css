@@ -303,7 +303,7 @@
 .fx-result.opp .fx-result-line { font-size: 12px; }
 @keyframes fxResultIn { from { opacity: 0; transform: translate(-50%, -50%) scale(.8) rotate(-1.5deg) } 60% { transform: translate(-50%, -50%) scale(1.06) } to { opacity: 1; transform: translate(-50%, -50%) scale(1) } }
 
-/* mana surge (max mana up) — gem-blue palette (#6fb9ff / #2f8cff) */
+/* mana surge (mana crystals up) — gem-blue palette (#6fb9ff / #2f8cff) */
 .fx-mana-aura {
   position: fixed; z-index: 149; pointer-events: none; width: 30px; height: 30px;
   transform: translate(-50%, -50%); border-radius: 50%;

@@ -2,6 +2,7 @@
 // LORE — i18n (Korean / Japanese / English). UI strings + card name/text helpers.
 // Language is persisted in localStorage; default decided by IP (JP→ja).
 // ============================================================
+import { resourceText } from "./shared/resourceText";
 import type { CardInst } from "./shared/types";
 
 export type Lang = "ko" | "ja" | "en";
@@ -236,7 +237,7 @@ const D: Record<string, Entry> = {
   // in-game FX / event playback
   "fx.trap": { ko: "함정 발동!", ja: "罠発動！", en: "Trap Activated!" },
   "fx.destroyed": { ko: "파괴!", ja: "破壊！", en: "Destroyed!" },
-  "fx.mana": { ko: "최대 마나", ja: "最大マナ", en: "Max Mana" },
+  "fx.mana": { ko: "마나 수정", ja: "マナ水晶", en: "Mana Crystals" },
   "fx.maxhp": { ko: "체력", ja: "体力", en: "HP" },
   "fx.opp": { ko: "상대", ja: "相手", en: "Opponent" },
   "fx.roll": { ko: "결과", ja: "結果", en: "Result" },
@@ -557,7 +558,7 @@ export function cardName(c: CardInst): string {
   return c.name;
 }
 export function cardText(c: CardInst): string {
-  if (current === "ja" && c.textJa) return c.textJa;
-  if (current === "en" && c.textEn) return c.textEn;
-  return c.text;
+  if (current === "ja" && c.textJa) return resourceText(c.textJa);
+  if (current === "en" && c.textEn) return resourceText(c.textEn);
+  return resourceText(c.text);
 }

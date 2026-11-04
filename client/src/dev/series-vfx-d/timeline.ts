@@ -24,7 +24,7 @@ export function scene(cfg:Config):Scene{
   break;
  case 'A041':case 'A042':
   counter('enemy1',1,300);counter('enemy1',2,1100);counter('enemy1',3,2000);add('collapse','enemy1','enemyHp',2900,1700,'ELF',3);mark(300,'蓄積1個');mark(1300,'蓄積2個');mark(2200,'3個到達');mark(3100,'対象破壊 → 持ち主に3ダメージ');s.result='3個到達: モンスター破壊 / 持ち主に3ダメージ';
-  if(key==='A042'){const label=cfg.card==='RUST_SLUG'?'最大マナ+1 / 体力+5':cfg.card==='ACID_RAIN'?'敵に烙印+1':cfg.card==='STRONG_ACID'?'敵に追加7ダメージ / 烙印+1':'最大マナ+1';reward(['ACID_RAIN','STRONG_ACID'].includes(cfg.card)?'enemyHp':'mana',label,4200);mark(4400,'腐敗撃破を受けて '+label);}
+  if(key==='A042'){const label=cfg.card==='RUST_SLUG'?'マナ水晶+1 / 体力+5':cfg.card==='ACID_RAIN'?'敵に烙印+1':cfg.card==='STRONG_ACID'?'敵に追加7ダメージ / 烙印+1':'マナ水晶+1';reward(['ACID_RAIN','STRONG_ACID'].includes(cfg.card)?'enemyHp':'mana',label,4200);mark(4400,'腐敗撃破を受けて '+label);}
   break;
  case 'ACID_RAIN':
   add('arrive','source','source',100,1500);add('counter','ally1','enemy1',1300,1600,'ELF',3,'攻撃で3個到達','S23');add('collapse','enemy1','enemyHp',2600,1400,'ELF',3);reward('enemyHp','腐敗撃破 → 烙印+1',4200);break;
@@ -33,7 +33,7 @@ export function scene(cfg:Config):Scene{
  case 'A011':add('open','source','enemy2',200,2400,'STARTER_CHEST');summon('enemy2',cfg.card==='GUILD_CHEST'?'ASSASSIN1':'MIMIC',2700);if(cfg.card==='GUILD_CHEST'){summon('enemy1','ASSASSIN2',3100);summon('enemy3','ASSASSIN3',3500);reward('hp','自分10ダメージ',4200);}mark(2500,cfg.card==='GUILD_CHEST'?'ギルド宝箱の合計11: 敵にアサシン3体':'宝箱の外れ → 相手の場にミミック');s.result=cfg.card==='GUILD_CHEST'?'敵側アサシン3体 / 自分10ダメージ':'敵側ミミック召喚';break;
  case 'A117':case 'AWAKENED_MIMIC':case 'QUICK_MIMIC':case 'DUNGEON_FLOOR':case 'GREED_PRICE':{
   const id=cfg.card;add('open','source','ally1',150,1500);const count=id==='QUICK_MIMIC'?1:id==='DUNGEON_FLOOR'?(cfg.outcome==='miss'?1:3):2;
-  if(id==='DUNGEON_FLOOR'){dice(1,0);mark(0,'相手最大マナ7以上 / 自分最大マナ-1（3未満不可）');}
+  if(id==='DUNGEON_FLOOR'){dice(1,0);mark(0,'相手マナ水晶7以上 / 自分マナ水晶-1（3未満不可）');}
   for(let i=0;i<count;i++)summon('ally'+(i+1),'MIMIC',1600+i*450);
   if(id==='QUICK_MIMIC'||id==='GREED_PRICE')for(let i=0;i<(id==='QUICK_MIMIC'?2:5);i++)add('arrive','rift','rift',3300+i*180,1400,'MIMIC',1,'新規生成','S15');
   mark(1600,`${count}体を召喚`);s.result=id==='QUICK_MIMIC'?'1体召喚 / 新規ミミック2枚をリフトへ':id==='GREED_PRICE'?'2体召喚 / 新規ミミック5枚をリフトへ':`${count}体召喚`;break;}
@@ -46,7 +46,7 @@ export function scene(cfg:Config):Scene{
  case 'A014':case 'A017':case 'STARTER_TRASH':exile(cfg.cue==='A017'?(cfg.origin==='field'?'ally1':cfg.origin==='hand'?'hand0':cfg.origin||'source'):'source',500,cfg.cue==='A017'&&cfg.origin==='field'?'ELF':cfg.cue==='A017'?'STARTER_TRASH':cfg.card);mark(1000,'カード絵と刻印が同じ物質として変化');mark(2700,'墓地を経由せずリフトへ');s.result='リフト到着';break;
  case 'FOCUS':for(let i=0;i<3;i++)exile(i%2?'deck':'shelf',500+i*500,'STARTER_TRASH');s.result='デッキ/墓地から最大3枚除外';break;
  case 'PURGE_TOUCH':exile('shelf',100,'STARTER_TRASH');add('transfer','deck','hand0',3300,1800,'ELF');reward('hp','自分の烙印を全て除去',3800);break;
- case 'SCRAPPER':exile('shelf',200,'STARTER_TRASH');exile('deck',800,'STARTER_TRASH');reward('mana','コスト1以下2枚を除外 → 最大マナ+1',3900);break;
+ case 'SCRAPPER':exile('shelf',200,'STARTER_TRASH');exile('deck',800,'STARTER_TRASH');reward('mana','コスト1以下2枚を除外 → マナ水晶+1',3900);break;
  case 'A018':case 'Q_RIFT':for(let i=0;i<(cfg.card==='Q_RIFT'?7:cfg.card==='GREED_PRICE'?5:2);i++)add('arrive','rift','rift',400+i*330,1800,cfg.card==='Q_RIFT'?'STARTER_TRASH':'MIMIC',1,'新規生成','S15');mark(400,'リフト内へ新規生成 — 場のカードを移動しない');s.result='リフトのカード数増加';break;
  case 'A019':for(let i=0;i<(cfg.card==='D_BLACK'?3:1);i++)add('transfer',cfg.card==='D_BLACK'?'enemyRift':'rift',cfg.card==='D_BLACK'?'enemyShelf':'shelf',300+i*400,3000,'STARTER_TRASH');mark(300,cfg.card==='D_BLACK'?'相手リフトから最大8枚を相手墓地へ（デモ3枚）':'自分のカル1枚を墓地へ');s.result='墓地へ帰還';break;
  case 'A020':for(let i=0;i<3;i++)add('transfer','enemyRift','rift',300+i*450,3000,'STARTER_TRASH');mark(300,'相手リフト → 自分リフトへ所有側を移送');s.result='自分リフトへ移送';break;
@@ -54,18 +54,18 @@ export function scene(cfg:Config):Scene{
  case 'A052':add('protect','source','source',500,2700,'STARTER_MANA');mark(1000,'除外要求を神器が受け止める');s.result='カードを保持・除外しない';break;
  case 'A080':add('protect','source','source',100,1400);for(let i=0;i<3;i++)add('arrive','rift','rift',1700+i*550,1800,'STARTER_TRASH',1,'カル新規生成');mark(1500,'魔法ダメージ3を無効化');s.result='同数のカル3枚をリフトへ生成';break;
  case 'A135':for(let i=0;i<3;i++)exile('hand'+i,300+i*500,'STARTER_TRASH');exile('shelf',2500,'STARTER_TRASH');mark(300,'カル3枚の連続除外');mark(2600,'条件成立 → 追加除外');s.result='順序を保って4枚除外';break;
- case 'A144':for(let i=0;i<(cfg.card==='AMA'?1:4);i++)add('transfer',cfg.card==='AMA'||i===3?'chest':'hand'+i,'shelf',300+i*350,2000,cfg.card==='AMA'||i===3?'STARTER_CHEST':'STARTER_TRASH');if(cfg.card==='AMA')reward('mana','最大マナ+1',3400);if(cfg.card==='HANDRESET')for(let i=0;i<5;i++)add('transfer','deck','hand0',3100+i*200,1300,'ELF');mark(300,'指定/余剰の手札を墓地へ整理');s.result='手札 → 墓地';break;
+ case 'A144':for(let i=0;i<(cfg.card==='AMA'?1:4);i++)add('transfer',cfg.card==='AMA'||i===3?'chest':'hand'+i,'shelf',300+i*350,2000,cfg.card==='AMA'||i===3?'STARTER_CHEST':'STARTER_TRASH');if(cfg.card==='AMA')reward('mana','マナ水晶+1',3400);if(cfg.card==='HANDRESET')for(let i=0;i<5;i++)add('transfer','deck','hand0',3100+i*200,1300,'ELF');mark(300,'指定/余剰の手札を墓地へ整理');s.result='手札 → 墓地';break;
  case 'A145':for(let i=0;i<4;i++)add('transfer','shelf','deck',300+i*280,2600,['ELF','STARTER_TRASH','MIMIC','STARTER_CHEST'][i],1,'再構築');mark(400,'墓地を束ねる → 交互に組み替える → デッキ');s.result='デッキ再構築';break;
  case 'A152':case 'STARTER_CHEST':case 'LUCKY_CHEST':case 'GUILD_CHEST':{
   add('open','source','source',100,1700);dice(cfg.card==='STARTER_CHEST'?1:2,1800);
   if(cfg.outcome==='miss'){summon('enemy2',cfg.card==='GUILD_CHEST'?'ASSASSIN1':'MIMIC',3500);if(cfg.card==='GUILD_CHEST'){summon('enemy1','ASSASSIN2',3900);summon('enemy3','ASSASSIN3',4300);reward('hp','自分10ダメージ',4300);}s.result=cfg.card==='GUILD_CHEST'?'合計11: 敵に初・中・上級アサシン / 自分10ダメージ':'通常1 / 幸運4: 敵にミミック';}
-  else {const lucky=cfg.card==='LUCKY_CHEST',guild=cfg.card==='GUILD_CHEST';const heal=lucky&&cfg.outcome==='hit'||cfg.outcome==='two';reward(heal?'hp':'mana',lucky?(cfg.outcome==='hit'?'合計12: 体力+12':'合計10: 体力+8'):guild?(cfg.outcome==='two'?'合計8: 体力+10':'合計7: 最大マナ+1'):cfg.outcome==='two'?'出目3: 体力+5':'出目6: 最大マナ+1',3800);}
+  else {const lucky=cfg.card==='LUCKY_CHEST',guild=cfg.card==='GUILD_CHEST';const heal=lucky&&cfg.outcome==='hit'||cfg.outcome==='two';reward(heal?'hp':'mana',lucky?(cfg.outcome==='hit'?'合計12: 体力+12':'合計10: 体力+8'):guild?(cfg.outcome==='two'?'合計8: 体力+10':'合計7: マナ水晶+1'):cfg.outcome==='two'?'出目3: 体力+5':'出目6: マナ水晶+1',3800);}
   mark(1800,'開封 → ダイス');mark(3800,s.result);break;}
  case 'A153':case 'GAMBLER':case 'GAMBLE':case 'S1':{
-  dice(cfg.card==='GAMBLE'?10:1);const label=cfg.card==='GAMBLER'?(cfg.outcome==='miss'?'出目1: 効果なし':'出目4以上: 最大マナ+1'):cfg.card==='GAMBLE'?(cfg.outcome==='hit'?'10回の合計60: 最大マナ+3':cfg.outcome==='two'?'10回の合計30: 失敗':'10回の合計10: 失敗'):cfg.outcome==='miss'?'出目1: 相手3ダメージ':cfg.outcome==='two'?'出目3: 相手の次ターンマナ-1':'出目6: 相手は次ターンコスト3以下を召喚不可';reward(cfg.card==='S1'?'enemyHp':'mana',label,3500);mark(700,'賽が減速して確定');break;}
+  dice(cfg.card==='GAMBLE'?10:1);const label=cfg.card==='GAMBLER'?(cfg.outcome==='miss'?'出目1: 効果なし':'出目4以上: マナ水晶+1'):cfg.card==='GAMBLE'?(cfg.outcome==='hit'?'10回の合計60: マナ水晶+3':cfg.outcome==='two'?'10回の合計30: 失敗':'10回の合計10: 失敗'):cfg.outcome==='miss'?'出目1: 相手3ダメージ':cfg.outcome==='two'?'出目3: 相手の次ターンマナ-1':'出目6: 相手は次ターンコスト3以下を召喚不可';reward(cfg.card==='S1'?'enemyHp':'mana',label,3500);mark(700,'賽が減速して確定');break;}
  case 'A154':case 'ND3':case 'LEGEND_GAMBLER':{
-  const legend=cfg.card==='LEGEND_GAMBLER';add('ability','source','source',0,800,cfg.card,1,legend?'予測3':'相手予測3');dice(legend?3:2,900);const label=legend?(cfg.outcome==='two'?(cfg.rewardChoice==='heal'?'予測的中: 体力+35を選択':cfg.rewardChoice==='destroy'?'予測的中: 敵カード2枚破壊を選択':'予測的中: 最大マナ+4を選択'):'予測不的中'):cfg.outcome==='two'?'相手の予測が出目に一致: 報酬なし':'両方の出目と相手予測が異なる: 最大マナ+4';if(legend&&cfg.outcome==='two'&&cfg.rewardChoice==='destroy'){exile('enemy1',3000,'ELF','enemyShelf');exile('enemy2',3300,'M4','enemyShelf');s.result=label;}else reward(cfg.rewardChoice==='heal'?'hp':'mana',label,3800);mark(100,legend?'自分が予測 → 3個の賽':'相手が予測 → 2個の賽');break;}
- case 'A155':case 'CASINO':add('counter','source','source',0,1400,cfg.card,12,'カジノ12','S24');dice(1,1400);reward(cfg.outcome==='miss'?'hp':'enemyHp',cfg.outcome==='hit'?'相手の最大マナを3に':cfg.outcome==='miss'?'自分30ダメージ':'相手30ダメージ',4200);mark(1400,'12カウンター消費 → カジノダイス');break;
+  const legend=cfg.card==='LEGEND_GAMBLER';add('ability','source','source',0,800,cfg.card,1,legend?'予測3':'相手予測3');dice(legend?3:2,900);const label=legend?(cfg.outcome==='two'?(cfg.rewardChoice==='heal'?'予測的中: 体力+35を選択':cfg.rewardChoice==='destroy'?'予測的中: 敵カード2枚破壊を選択':'予測的中: マナ水晶+4を選択'):'予測不的中'):cfg.outcome==='two'?'相手の予測が出目に一致: 報酬なし':'両方の出目と相手予測が異なる: マナ水晶+4';if(legend&&cfg.outcome==='two'&&cfg.rewardChoice==='destroy'){exile('enemy1',3000,'ELF','enemyShelf');exile('enemy2',3300,'M4','enemyShelf');s.result=label;}else reward(cfg.rewardChoice==='heal'?'hp':'mana',label,3800);mark(100,legend?'自分が予測 → 3個の賽':'相手が予測 → 2個の賽');break;}
+ case 'A155':case 'CASINO':add('counter','source','source',0,1400,cfg.card,12,'カジノ12','S24');dice(1,1400);reward(cfg.outcome==='miss'?'hp':'enemyHp',cfg.outcome==='hit'?'相手のマナ水晶を3に':cfg.outcome==='miss'?'自分30ダメージ':'相手30ダメージ',4200);mark(1400,'12カウンター消費 → カジノダイス');break;
  case 'A156':case 'FATE_WHEEL':dice();add('transfer','source','source',2300,800,cfg.card,1,'前結果を巻き戻す');dice(1,3100);mark(2300,'確定前の結果を巻き戻す');s.result='振り直した結果を採用';break;
  case 'A157':case 'LUCKY_ECHO':case 'Q_CHEAT':dice();if(cfg.card==='Q_CHEAT'||cfg.outcome==='hit')reward(cfg.card==='Q_CHEAT'?'spell':'enemyHp',cfg.card==='Q_CHEAT'?'出目を問わず1個分のクエスト進行':'6の出目 → 相手に6ダメージ',3500);mark(3000,cfg.card==='Q_CHEAT'?'振った個数がクエストを進める':'6の出目だけ連動');break;
  case 'EXILE_NUKE1':case 'EXILE_NUKE2':add('transfer','rift','source',0,2000,'STARTER_TRASH',6);reward('enemyHp',cfg.card==='EXILE_NUKE2'?'リフト6枚 × 2ダメージ':'リフト6枚 × 1ダメージ',2200);break;
@@ -87,7 +87,7 @@ export function scene(cfg:Config):Scene{
  case 'FREE_REWARD':add('ability','hand0','hand0',100,1200,'STARTER_TRASH',1,'コスト0プレイ');add('transfer','deck','hand1',1700,2300,'ELF');s.result='コスト0のプレイ → 1枚ドロー';break;
  case 'ORIGIN_QUEST':for(let i=0;i<2;i++)add('transfer','deck','hand'+i,800+i*700,2200,'ELF');s.result='場のコスト0カード2枚 → 2枚ドロー';break;
  case 'Q_DECAY':counter('enemy1',3,200);add('collapse','enemy1','enemyHp',2100,1500,'ELF',3);reward('enemyHp','腐敗撃破4回目: 相手30ダメージ',4000);break;
- case 'NO_PAIN':reward('hp','自分がダメージを受ける',0);dice(1,1700);if(cfg.outcome==='hit')reward('mana','出目6: 最大マナ+1',4200);break;
+ case 'NO_PAIN':reward('hp','自分がダメージを受ける',0);dice(1,1700);if(cfg.outcome==='hit')reward('mana','出目6: マナ水晶+1',4200);break;
  default:
   add('arrive','source','source',150,2400,cfg.card);mark(500,'カード固有の絵・枠を残して材質が目覚める');
   if(f==='S23'){add('ability','source','source',2500,1700,cfg.card,1,'腐敗');s.result='腐敗能力を持つ召喚';}

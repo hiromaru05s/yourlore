@@ -89,7 +89,7 @@ export interface FieldMon extends CardInst {
   conditionalPassives?: string[]; // recomputed from live field, never permanent
   passivesG?: string[]; // 게임 중 부여된 패시브 (암기 제작→부패, 각인 비술→위엄)
   guts?: number; // 기합: 남은 기합 토큰 (전투 파괴를 1회 무효화)
-  drained?: number; // drainMana 아우라가 실제로 깎은 상대 최대 마나 (사망 시 이만큼만 복원 — 바닥 클램프 비대칭 방지)
+  drained?: number; // drainMana 아우라가 실제로 깎은 상대 마나 수정 (사망 시 이만큼만 복원 — 바닥 클램프 비대칭 방지)
   decayCnt?: number; // 부패: 이 몬스터에 쌓인 부패 카운터 (3이면 파괴 + 주인 3뎀)
 }
 
@@ -127,7 +127,7 @@ export interface PlayerState {
   previousOpponentShieldPeak?: number; // most recent completed opponent turn
 
   mana: number;
-  /** Successful max-mana growth events; Ghost settles their delta after each action. */
+  /** Successful mana crystals growth events; Ghost settles their delta after each action. */
   maxManaIncreases?: number;
   maxMana: number;
   manaPenalty: number;
@@ -170,7 +170,7 @@ export interface PlayerState {
   manaCostMult?: number; // 마족 4종 시너지: 소모 마나 배수 (3)
   summonLockUntil?: number; // 고독1(은둔자): g.turn이 이 값 미만인 동안 몬스터 소환 불가
   summonCap?: number; // 고독 2종 시너지(v38): 필드 몬스터가 이 수 이상이면 더 소환할 수 없다
-  manaRegain?: { at: number; amt: number }[]; // 마족1: 임시 최대 마나 차감의 복구 예약 (g.turn 기준)
+  manaRegain?: { at: number; amt: number }[]; // 마족1: 임시 마나 수정 차감의 복구 예약 (g.turn 기준)
   trapBlockTurns?: number; // 협상(v34): 남은 함정 설치 금지 턴 수 (자신 턴 시작마다 -1)
   lowSummonBanNext?: boolean; // 삼격의 불씨 ⑤⑥: 다음 턴 코스트 3 이하 소환 불가 (예약)
   lowSummonBanTurn?: boolean; // 〃 (활성)
@@ -180,7 +180,7 @@ export interface PlayerState {
   defendHeal: number; // heal this much whenever this player is attacked
   magicTrainTurns?: number; // Quiet turns reserved for immediately before the next own turn.
   magicBankBonusTotal?: number; // Successful bank bonus gains, for action-level presentation.
-  manaGainNext: number; // max mana to gain at the start of this player's next turn
+  manaGainNext: number; // mana crystals to gain at the start of this player's next turn
   skipNext: boolean; // legacy: if true, this player's next turn is skipped
   skipTurnSources?: ("TIMEWARP" | "BLACK_NOVA" | "DOMINION" | null)[]; // FIFO provenance; old saves may omit it
   skipTurns?: number; // queued turn skips; stacks when 시공간 조작 succeeds more than once

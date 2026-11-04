@@ -30,10 +30,10 @@ export const CARD_RULE_GLOSSARY:GlossaryEntry[] = [
     'カードを引く山札。手札・墓地・場・リフトを含まない。「デッキ構成」とは数える範囲が異なる。',
     '카드를 뽑는 더미. 패·묘지·필드·리프트는 포함하지 않는다. 덱 구성과는 세는 범위가 다르다.',
     'Your draw pile. Does not include your hand, graveyard, field, or Rift. This is a narrower zone than deck composition.'),
-  entry('maxMana','最大マナ','최대 마나','Maximum mana',
-    '自分のターン開始時に補充されるマナの基準値。現在使えるマナとは別。最大マナが増えても、現在のマナはその場では増えない。',
-    '자신의 턴 시작 시 보충되는 마나의 기준치. 지금 쓸 수 있는 마나와는 별개다. 최대 마나가 증가해도 현재 마나가 즉시 늘지는 않는다.',
-    'The amount your mana refills to at the start of your turn. Separate from currently available mana. Increasing maximum mana does not immediately grant current mana.'),
+  entry('maxMana','マナ水晶','마나 수정','Mana Crystals',
+    '自分のターン開始時、マナ水晶の数までマナが回復する。現在使えるマナとは別。マナ水晶が増えても、現在のマナはその場では増えない。',
+    '자신의 턴 시작 시 마나 수정 수만큼 마나가 회복된다. 지금 쓸 수 있는 마나와는 별개다. 마나 수정이 증가해도 현재 마나가 즉시 늘지는 않는다.',
+    'At the start of your turn, mana refills to the number of mana crystals you have. Separate from currently available mana. Increasing mana crystals does not immediately grant current mana.'),
   entry('persistent','永続魔法','영구마법','Persistent spell',
     '発動後、場に残る種類の魔法。「永続」は無期限という意味ではない。効果の発動タイミング・終了条件・期間は各カードの本文に従う。',
     '발동 후 필드에 남는 종류의 마법. 영구라는 이름이 무기한을 뜻하지는 않는다. 효과의 발동 시점·종료 조건·기간은 각 카드의 본문을 따른다.',
@@ -87,7 +87,7 @@ CARD_RULE_GLOSSARY.find(e=>e.id==='quest')!.aliases={en:['quests']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='castCost')!.aliases={ko:['시전 코스트']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='pierce')!.aliases={en:['pierce','overflow damage']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='quick')!.aliases={ko:['퀵마법'],en:['quick spells']};
-CARD_RULE_GLOSSARY.find(e=>e.id==='maxMana')!.aliases={en:['max mana']};
+CARD_RULE_GLOSSARY.find(e=>e.id==='maxMana')!.aliases={en:['mana crystal']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='brand')!.aliases={ja:['烙印カウンター'],ko:['낙인 카운터'],en:['Brand counters','Brand counter']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='persistent')!.aliases={ko:['영구 마법','지속 마법'],en:['persistent spells']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='counters')!.aliases={en:['counters']};

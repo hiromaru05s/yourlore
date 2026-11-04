@@ -104,7 +104,7 @@ function tuneFor(p: PlayerState): typeof TUNE {
 }
 // FLAME/AMBUSH deal face damage but the engine resolves them by id (no `act`),
 // so the lethal planner and the burn branch look their damage up here.
-// castable() already gates self-damage and the opposing max-mana requirement.
+// castable() already gates self-damage and the opposing mana crystals requirement.
 function burnDmg(c: CardInst, p: PlayerState, o: PlayerState): number {
   if (c.id === "FLAME") return (p.uses.FLAME ?? 0) >= 9 ? 5 : 2;
   if (c.id === "AMBUSH") return [4, 5].includes(o.maxMana) ? 13 : 0;
@@ -219,7 +219,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return false;
     if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return false; // 상회 중복
     if (c.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) return false; // 슬럼가: 상회 필요
-    if (c.id === "DUNGEON_FLOOR" && o.maxMana < 7) return false; // 던전 최하층: 상대 최대 마나 7+ 필요
+    if (c.id === "DUNGEON_FLOOR" && o.maxMana < 7) return false; // 던전 최하층: 상대 마나 수정 7+ 필요
     if (c.ench && p.traps.length + p.enchants.length >= ST_MAX) return false;
     if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;
@@ -420,7 +420,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   if (shower) return { type: "play", idx: shower.i };
   const wipe = spells.find((x) => x.c.act === "wipeBack" && p.field.length === 0 && (o.traps.length + o.enchants.length) > 0);
   if (wipe) return { type: "play", idx: wipe.i };
-  // 역산: 상대 영구마법 파괴 (castable가 상대 최대 마나<=7 & 영구마법 존재를 보장)
+  // 역산: 상대 영구마법 파괴 (castable가 상대 마나 수정<=7 & 영구마법 존재를 보장)
   const disenchant = spells.find((x) => x.c.id === "COUNTERCALC");
   if (disenchant) return { type: "play", idx: disenchant.i };
   // 직접 데미지 마법 + 불꽃/기습 번 (castable가 자해 리스크를 게이트)
@@ -456,7 +456,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const trap = p.trapBlockTurn ? undefined : p.hand.map((c, i) => ({ c, i })).find((x) => x.c.t === "trap" && playCost(x.c, p) <= p.mana);
   if (trap && p.traps.length < 3 && !stFull) return { type: "play", idx: trap.i };
 
-  // 11) Attune (max mana +1) — always good
+  // 11) Attune (mana crystals +1) — always good
   const attune = p.hand.findIndex((c) => c.star === "mana" && playCost(c, p) <= p.mana && castable(c));
   if (attune >= 0) return { type: "play", idx: attune };
 
@@ -792,7 +792,7 @@ function autoTarget(g: GameState): Action {
       return { type: "pick", uid: ids0.includes("BEAST_EGG") ? "BEAST_EGG" : (ids0[0] ?? null) };
     }
     if (pending.reason === "gamblerGuess") return { type: "pick", uid: "3" }; // Any face is equiprobable; never read the live dice RNG.
-    if (pending.reason === "gamblerPick") { // 도박꾼 효과: 상대 카드 2장+ → ③, 최대 마나 12 미만 → ①, 그 외 ②
+    if (pending.reason === "gamblerPick") { // 도박꾼 효과: 상대 카드 2장+ → ③, 마나 수정 12 미만 → ①, 그 외 ②
       const oc = o.field.length + o.traps.length + o.enchants.length;
       return { type: "pick", uid: oc >= 2 ? "3" : p.maxMana < 12 ? "1" : "2" };
     }
