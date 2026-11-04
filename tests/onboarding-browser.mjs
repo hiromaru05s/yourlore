@@ -33,7 +33,7 @@ try{
      if(await page.locator('[data-pull="10"]').count())break;
      const {step,action}=await layer.evaluate(e=>({step:e.dataset.step,action:e.dataset.action})),target=page.locator('.tutorial-tour-target');
      console.log('basic',width,step,action);
-     if(action==='next')await page.locator('.tutorial-tour-next:not([disabled])').click();
+     if(action==='next')await page.locator('.tutorial-tour-next:not([disabled])').press('Enter');
      else if(action==='inspect')await target.click({button:'right'});
      else if(action==='click')await target.click();
      else{
