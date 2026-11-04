@@ -1,0 +1,243 @@
+{
+  "origin": "https://yourlore.xyz",
+  "mode": "real application and assets, fixture local guest API; no real account or PvP",
+  "cases": [
+    {
+      "lang": "ko",
+      "labels": [
+        {
+          "text": "END\nTURN",
+          "disabled": false
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        }
+      ],
+      "playerLabel": "END TURN",
+      "opponentLabel": "ENEMY TURN",
+      "errors": [],
+      "assets": [
+        "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+        "https://yourlore.xyz/assets/main-Di1aMrHN.js",
+        "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+        "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+        "https://yourlore.xyz/assets/rankPresentation-BfQ3E0OD.js",
+        "https://yourlore.xyz/assets/social-nnN3sNP7.js",
+        "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+        "https://yourlore.xyz/assets/main-BFi5nG3R.js",
+        "https://yourlore.xyz/assets/assetQueue-CZvs9fvb.js",
+        "https://yourlore.xyz/assets/homeAtmosphere-DZeymkC8.js",
+        "https://yourlore.xyz/assets/cardSurface-DX1MOtrT.js",
+        "https://yourlore.xyz/assets/selection-BZuIRH5R.js",
+        "https://yourlore.xyz/assets/duelAssets-CYRUddMd.js",
+        "https://yourlore.xyz/assets/readingBoardLayout-DhIDCB5S.js",
+        "https://yourlore.xyz/assets/controller-DHKJiUeZ.js",
+        "https://yourlore.xyz/assets/layout-Dgc1LDPT.js",
+        "https://yourlore.xyz/assets/UnrealBloomPass-Ciwqkr8z.js",
+        "https://yourlore.xyz/assets/game-ykiBes6i.js",
+        "https://yourlore.xyz/assets/furniture-Dz3kA2TE.js",
+        "https://yourlore.xyz/assets/catalog-CJmaorNf.js",
+        "https://yourlore.xyz/assets/runtime-D-uqk0Hk.js",
+        "https://yourlore.xyz/assets/sleeve-BngZmeyM.js",
+        "https://yourlore.xyz/assets/objects-B22A-6C1.js",
+        "https://yourlore.xyz/assets/sleeve-Br6tHgHP.js",
+        "https://yourlore.xyz/assets/sleeve-1abE43Rz.js",
+        "https://yourlore.xyz/assets/sleeve-BPiDCGGK.js",
+        "https://yourlore.xyz/assets/sleeve-DTMCKq6I.js",
+        "https://yourlore.xyz/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+        "https://yourlore.xyz/assets/sleeve-BnnpX1Yi.js",
+        "https://yourlore.xyz/assets/domSleeve-oUuUdW4i.js",
+        "https://yourlore.xyz/assets/furniture-go9uYaeU.js",
+        "https://yourlore.xyz/assets/furniture-3nM6rh0q.js",
+        "https://yourlore.xyz/assets/pileModels-DBi_E7se.js",
+        "https://yourlore.xyz/assets/domSleeves-BCp2MuXF.js",
+        "https://yourlore.xyz/assets/GLTFLoader-BvL26mnw.js",
+        "https://yourlore.xyz/assets/materials-CrzqqoCa.js",
+        "https://yourlore.xyz/assets/atelierThemes-C9ZNrm6d.js",
+        "https://yourlore.xyz/assets/ceremonyScene-Dh0sagL0.js",
+        "https://yourlore.xyz/assets/readingAssetCache-D--7v3-p.js",
+        "https://yourlore.xyz/assets/paperDraw-o48PIX1S.js",
+        "https://yourlore.xyz/assets/readingCrystalOptics-BBjmU8BT.js",
+        "https://yourlore.xyz/assets/bot.worker-Dt2sHNKo.js",
+        "https://yourlore.xyz/assets/BufferGeometryUtils-mfjco3-k.js",
+        "https://yourlore.xyz/assets/furniture-D1R_B6ie.js",
+        "https://yourlore.xyz/assets/furniture-BA30BxSX.js",
+        "https://yourlore.xyz/assets/renderer-BHhjw086.js",
+        "https://yourlore.xyz/assets/drawStock-CRBPX-Tb.js",
+        "https://yourlore.xyz/assets/raster.worker-Dbjti9vv.js",
+        "https://yourlore.xyz/assets/materials-CGzfb99b.js",
+        "https://yourlore.xyz/assets/duelScene-CXZhBym9.js"
+      ]
+    },
+    {
+      "lang": "ja",
+      "labels": [
+        {
+          "text": "END\nTURN",
+          "disabled": false
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        }
+      ],
+      "playerLabel": "END TURN",
+      "opponentLabel": "ENEMY TURN",
+      "errors": [],
+      "assets": [
+        "https://yourlore.xyz/assets/main-Di1aMrHN.js",
+        "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+        "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+        "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+        "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+        "https://yourlore.xyz/assets/social-nnN3sNP7.js",
+        "https://yourlore.xyz/assets/rankPresentation-BfQ3E0OD.js",
+        "https://yourlore.xyz/assets/assetQueue-CZvs9fvb.js",
+        "https://yourlore.xyz/assets/main-BFi5nG3R.js",
+        "https://yourlore.xyz/assets/homeAtmosphere-DZeymkC8.js",
+        "https://yourlore.xyz/assets/cardSurface-DX1MOtrT.js",
+        "https://yourlore.xyz/assets/readingBoardLayout-DhIDCB5S.js",
+        "https://yourlore.xyz/assets/UnrealBloomPass-Ciwqkr8z.js",
+        "https://yourlore.xyz/assets/game-ykiBes6i.js",
+        "https://yourlore.xyz/assets/selection-BZuIRH5R.js",
+        "https://yourlore.xyz/assets/duelAssets-CYRUddMd.js",
+        "https://yourlore.xyz/assets/controller-DHKJiUeZ.js",
+        "https://yourlore.xyz/assets/layout-Dgc1LDPT.js",
+        "https://yourlore.xyz/assets/sleeve-BngZmeyM.js",
+        "https://yourlore.xyz/assets/sleeve-Br6tHgHP.js",
+        "https://yourlore.xyz/assets/objects-B22A-6C1.js",
+        "https://yourlore.xyz/assets/furniture-Dz3kA2TE.js",
+        "https://yourlore.xyz/assets/BufferGeometryUtils-mfjco3-k.js",
+        "https://yourlore.xyz/assets/runtime-D-uqk0Hk.js",
+        "https://yourlore.xyz/assets/furniture-3nM6rh0q.js",
+        "https://yourlore.xyz/assets/domSleeves-BCp2MuXF.js",
+        "https://yourlore.xyz/assets/duelScene-CXZhBym9.js",
+        "https://yourlore.xyz/assets/furniture-BA30BxSX.js",
+        "https://yourlore.xyz/assets/catalog-CJmaorNf.js",
+        "https://yourlore.xyz/assets/furniture-D1R_B6ie.js",
+        "https://yourlore.xyz/assets/sleeve-BPiDCGGK.js",
+        "https://yourlore.xyz/assets/sleeve-DTMCKq6I.js",
+        "https://yourlore.xyz/assets/sleeve-1abE43Rz.js",
+        "https://yourlore.xyz/assets/domSleeve-oUuUdW4i.js",
+        "https://yourlore.xyz/assets/furniture-go9uYaeU.js",
+        "https://yourlore.xyz/assets/sleeve-BnnpX1Yi.js",
+        "https://yourlore.xyz/assets/GLTFLoader-BvL26mnw.js",
+        "https://yourlore.xyz/assets/readingCrystalOptics-BBjmU8BT.js",
+        "https://yourlore.xyz/assets/atelierThemes-C9ZNrm6d.js",
+        "https://yourlore.xyz/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+        "https://yourlore.xyz/assets/pileModels-DBi_E7se.js",
+        "https://yourlore.xyz/assets/materials-CGzfb99b.js",
+        "https://yourlore.xyz/assets/readingAssetCache-D--7v3-p.js",
+        "https://yourlore.xyz/assets/drawStock-CRBPX-Tb.js",
+        "https://yourlore.xyz/assets/paperDraw-o48PIX1S.js",
+        "https://yourlore.xyz/assets/materials-CrzqqoCa.js",
+        "https://yourlore.xyz/assets/ceremonyScene-Dh0sagL0.js",
+        "https://yourlore.xyz/assets/bot.worker-Dt2sHNKo.js",
+        "https://yourlore.xyz/assets/renderer-BHhjw086.js",
+        "https://yourlore.xyz/assets/raster.worker-Dbjti9vv.js",
+        "https://yourlore.xyz/assets/scene-D66j7yP7.js"
+      ]
+    },
+    {
+      "lang": "en",
+      "labels": [
+        {
+          "text": "END\nTURN",
+          "disabled": false
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        },
+        {
+          "text": "ENEMY\nTURN",
+          "disabled": true
+        }
+      ],
+      "playerLabel": "END TURN",
+      "opponentLabel": "ENEMY TURN",
+      "errors": [],
+      "assets": [
+        "https://yourlore.xyz/assets/main-Di1aMrHN.js",
+        "https://yourlore.xyz/assets/modulepreload-polyfill-B5Qt9EMX.js",
+        "https://yourlore.xyz/assets/deadline-RP-FvawS.js",
+        "https://yourlore.xyz/assets/preload-helper-BXl3LOEh.js",
+        "https://yourlore.xyz/assets/renderDensity-eCqR3GeM.js",
+        "https://yourlore.xyz/assets/rankPresentation-BfQ3E0OD.js",
+        "https://yourlore.xyz/assets/main-BFi5nG3R.js",
+        "https://yourlore.xyz/assets/social-nnN3sNP7.js",
+        "https://yourlore.xyz/assets/assetQueue-CZvs9fvb.js",
+        "https://yourlore.xyz/assets/homeAtmosphere-DZeymkC8.js",
+        "https://yourlore.xyz/assets/readingBoardLayout-DhIDCB5S.js",
+        "https://yourlore.xyz/assets/game-ykiBes6i.js",
+        "https://yourlore.xyz/assets/duelAssets-CYRUddMd.js",
+        "https://yourlore.xyz/assets/selection-BZuIRH5R.js",
+        "https://yourlore.xyz/assets/controller-DHKJiUeZ.js",
+        "https://yourlore.xyz/assets/UnrealBloomPass-Ciwqkr8z.js",
+        "https://yourlore.xyz/assets/cardSurface-DX1MOtrT.js",
+        "https://yourlore.xyz/assets/layout-Dgc1LDPT.js",
+        "https://yourlore.xyz/assets/sleeve-DTMCKq6I.js",
+        "https://yourlore.xyz/assets/BufferGeometryUtils-mfjco3-k.js",
+        "https://yourlore.xyz/assets/sleeve-Br6tHgHP.js",
+        "https://yourlore.xyz/assets/domSleeve-oUuUdW4i.js",
+        "https://yourlore.xyz/assets/runtime-D-uqk0Hk.js",
+        "https://yourlore.xyz/assets/sleeve-BngZmeyM.js",
+        "https://yourlore.xyz/assets/furniture-Dz3kA2TE.js",
+        "https://yourlore.xyz/assets/catalog-CJmaorNf.js",
+        "https://yourlore.xyz/assets/sleeve-BPiDCGGK.js",
+        "https://yourlore.xyz/assets/objects-B22A-6C1.js",
+        "https://yourlore.xyz/assets/furniture-3nM6rh0q.js",
+        "https://yourlore.xyz/assets/atelierThemes-C9ZNrm6d.js",
+        "https://yourlore.xyz/assets/sleeve-BnnpX1Yi.js",
+        "https://yourlore.xyz/assets/materials-CrzqqoCa.js",
+        "https://yourlore.xyz/assets/domSleeves-BCp2MuXF.js",
+        "https://yourlore.xyz/assets/furniture-BA30BxSX.js",
+        "https://yourlore.xyz/assets/materials-CGzfb99b.js",
+        "https://yourlore.xyz/assets/ceremonyScene-Dh0sagL0.js",
+        "https://yourlore.xyz/assets/furniture-D1R_B6ie.js",
+        "https://yourlore.xyz/assets/cosmeticPreviewBridge-Dp0XOZ5G.js",
+        "https://yourlore.xyz/assets/sleeve-1abE43Rz.js",
+        "https://yourlore.xyz/assets/drawStock-CRBPX-Tb.js",
+        "https://yourlore.xyz/assets/readingAssetCache-D--7v3-p.js",
+        "https://yourlore.xyz/assets/paperDraw-o48PIX1S.js",
+        "https://yourlore.xyz/assets/duelScene-CXZhBym9.js",
+        "https://yourlore.xyz/assets/GLTFLoader-BvL26mnw.js",
+        "https://yourlore.xyz/assets/readingCrystalOptics-BBjmU8BT.js",
+        "https://yourlore.xyz/assets/furniture-go9uYaeU.js",
+        "https://yourlore.xyz/assets/bot.worker-Dt2sHNKo.js",
+        "https://yourlore.xyz/assets/pileModels-DBi_E7se.js",
+        "https://yourlore.xyz/assets/renderer-BHhjw086.js",
+        "https://yourlore.xyz/assets/raster.worker-Dbjti9vv.js"
+      ]
+    }
+  ]
+}

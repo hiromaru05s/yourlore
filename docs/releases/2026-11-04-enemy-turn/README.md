@@ -19,5 +19,19 @@ Validation before deployment:
   `http://127.0.0.1:5207`, based on latest adopted main `0e459488` plus `f80c87d2`.
 - `local-ko-enemy.png` was visually inspected; existing board/assets were used.
 
-Production verification is recorded after deployment. Browser smoke uses a
-fixture local guest API with the real application/assets, not real accounts/PvP.
+Production verification:
+- Source `a41a503ab925d7a8152abd45ef18e6cf9e8ea589` deployed at
+  2026-11-04 18:50 KST, version `7e5e22ee-0086-47fe-b504-4a79454e7733`,
+  100% traffic. This includes the requested `f80c87d2` implementation.
+- All 267 required regression files, client/server typecheck, database schema
+  preflight, design guard, and production build passed.
+- Production browser smoke passed in Korean, Japanese, and English. Each run
+  started the actual app, entered local single-player, clicked END TURN, and
+  observed ENEMY TURN with the button disabled. No page errors.
+- `production-browser.json` records observed labels and loaded production bundle
+  URLs; `production-ko.png` was visually inspected.
+- Browser smoke uses a fixture local guest API with real production application/
+  assets. No real accounts, server game records, or authenticated PvP were used.
+- An initial task-local deploy attempt inherited sparse-checkout exclusions and
+  failed typecheck on a legacy prototype import. The task worktree was restored
+  to a full checkout; the successful integrated release used a complete snapshot.
