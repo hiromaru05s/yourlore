@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-11-04T09:50:59.951Z",
+  "origin": "https://yourlore.xyz",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/api/auth/me",
+      "status": 200
+    },
+    {
+      "path": "/api/collection",
+      "status": 401
+    },
+    {
+      "path": "/api/social/profile",
+      "status": 401
+    },
+    {
+      "path": "/ws/queue",
+      "status": 401
+    }
+  ],
+  "boundary": "Read-only anonymous HTTP requests, no accounts or purchases."
+}
