@@ -36,7 +36,7 @@ import { cardPicker, deckViewer , showControlsHelp } from "./modal";
 import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, questTile } from "./cardView";
 import { bindZoom, zoomCard, setPlayOrigin } from "./anim";
 import { bindInspectContext } from "./cardInspection";
-import { t, getLang, esc, cardName } from "../i18n";
+import { t, getLang, esc, cardName, cardText } from "../i18n";
 import { getSfxVolume, setSfxVolume } from "./sound";
 import { duelUtilityGlyph } from "./loungeNavGlyphs";
 import { deckBucket, refinedArt } from "./duelMaterials";
@@ -636,7 +636,7 @@ export class GameView {
       tile.tabIndex=0;tile.setAttribute("role","button");
       tile.dataset.uid = q.card.uid;
       const progress = questProgressText(q.progress, q.card.quest?.target ?? 0, getLang());
-      tile.title = `${cardName(q.card)} · ${progress} · ${getLang() === "ja" ? q.card.textJa : getLang() === "en" ? q.card.textEn : q.card.text}`;
+      tile.title = `${cardName(q.card)} · ${progress} · ${cardText(q.card)}`;
       tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
       bindZoom(tile, q.card, undefined, progress);
       tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();zoomCard(q.card, undefined, progress);}};
