@@ -75,7 +75,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean}={}): Screen {
       const draft=JSON.parse(sessionStorage.getItem(draftKey)??'null');
       if(draft&&Array.isArray(draft.cards)&&ownsDeck(draft.cards,starterCards)&&
        (isOnboardingDeck(draft.cards)||draft.cards.length===7&&draft.cards.filter((id:string)=>id==='STARTER_TRASH').length===5&&draft.cards.filter((id:string)=>id==='STARTER_CHEST').length===2)){
-        store.list[cur].cards=sortCards(draft.cards);lessonIndex=draft.cards.length===7?3:4;
+        store.list[cur].cards=sortCards(draft.cards);lessonIndex=draft.cards.length===7?4:5;
       }
     }catch{}
   }
@@ -189,7 +189,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean}={}): Screen {
       const action=row.querySelector<HTMLButtonElement>('.deck-hand-action');
       if(action){action.dataset.action=pending?'swap':'remove';action.innerHTML=controlIcon(!!pending);action.disabled=saving;
         action.setAttribute('aria-label',`${cardName(c)} · ${pending?loungeText('入れ替え','Replace','교체'):t('deck.remove')}`);
-        action.onclick=()=>{if(saving||options.tutorial&&(id!=='STARTER_TRASH'||deck().length!==8||lessonIndex!==2))return;undo=[...deck()];if(pending){if(!canAdd(pending))return;deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);sortCards(deck());render();};}
+        action.onclick=()=>{if(saving||options.tutorial&&(id!=='STARTER_TRASH'||deck().length!==8||lessonIndex!==3))return;undo=[...deck()];if(pending){if(!canAdd(pending))return;deck()[index-1]=pending;pending=null;}else deck().splice(index-1,1);sortCards(deck());render();};}
       if(curEl.children[index]!==row)curEl.insertBefore(row,curEl.children[index]??null);
     });
     for(const [key,row] of handRows)if(!handKeys.has(key)){disposeCardEffects(row);row.remove();handRows.delete(key);}
@@ -318,9 +318,10 @@ export function mountDeck(app: App, options:{tutorial?:boolean}={}): Screen {
   if(options.tutorial){
     guide=new TutorialSpotlight(wrap,[
       {selector:'#deckCur',title:c('初期デッキを作ろう','Build a starting deck','시작 덱을 만들자'),body:c('初期デッキは、デュエルに持っていく最初のカードだよ。自由に選ぶ8枚と、固定のアチューン1枚で合計9枚。この実習では、使用中の枠をカル6枚・宝箱2枚から編集するよ。保存するまでは元のデッキは変わらないよ。','Your starting deck is the cards you bring into a duel: eight chosen cards plus one fixed Attune. For this exercise, edit the active slot from six Culls and two Chests. Your saved deck stays unchanged until you confirm.','시작 덱은 듀얼에 가져가는 첫 카드야. 자유롭게 고르는 8장과 고정 어튠 1장으로 총 9장이지. 이번 실습에서는 사용 중인 슬롯을 컬 6장·보물상자 2장부터 편집해. 확정 전까지 저장된 덱은 바뀌지 않아.')},
+      {selector:'#deckCandidates',title:c('スターターと共有プール','Starters and the shared pool','스타터와 공유 풀'),body:c('スターターは、きみが所持して初期デッキに入れるカード。下の候補から選べるよ。\n共有プールは別のカード群で、対戦中にマーケットからマナで買うんだ。初期デッキには入れられず、対戦が終わっても所持カードにはならないよ。','Starters are cards you own and choose for your starting deck from the candidates below.\nThe shared pool is a separate set of cards you buy with mana from markets during a duel. They cannot go in your starting deck and do not become owned cards after the duel.','스타터는 네가 보유하고 시작 덱에 넣는 카드야. 아래 후보에서 고를 수 있어.\n공유 풀은 별도의 카드들이고, 듀얼 중 마켓에서 마나로 구매해. 시작 덱에는 넣을 수 없고, 듀얼이 끝나도 보유 카드가 되지는 않아.')},
       {selector:'#deckCur .is-fixed',title:c('アチューンは固定の1枚','Attune is fixed','어튠은 고정 1장'),body:c('左端のアチューンは外せないよ。残り8枚を、所持しているスターターから選ぶんだ。対戦中にマーケットで買うカードとは別だよ。','The leftmost Attune cannot be removed. Choose the other eight from your owned starters. These are separate from cards bought in a duel’s market.','맨 왼쪽 어튠은 뺄 수 없어. 나머지 8장은 보유한 스타터에서 골라. 듀얼 중 마켓에서 사는 카드와는 달라.')},
       {selector:'#deckCur [data-card="STARTER_TRASH"] .deck-hand-action',action:'click',waitFor:()=>deck().length===7,title:c('カルを1枚外そう','Remove one Cull','컬 1장을 빼 보자'),body:c('カルの下の「−」を押して、1枚外してみよう。デッキから外しても、所持カードはなくならないよ。','Press − under one Cull. Removing it from your deck does not remove it from your collection.','컬 아래 −를 눌러 1장을 빼 봐. 덱에서 빼도 보유 카드는 없어지지 않아.')},
-      {selector:'#deckPool .deck-pool-tile:not([data-deck-card="STARTER_TRASH"]) .deck-card-action:not(:disabled)',focus:'#deckCandidates',action:'click',waitFor:()=>isOnboardingDeck(deck()),title:c('別のカードを加えよう','Add another card','다른 카드를 넣자'),body:c('候補から、カル以外の所持カードを1枚選んで「＋」を押そう。ガチャやショップで手に入れたカードも、ここから組み込めるよ。','Choose one owned card other than Cull and press +. Cards obtained from gacha and the shop can be added here.','후보에서 컬 이외의 보유 카드 1장을 골라 +를 눌러. 뽑기나 상점에서 얻은 카드도 여기서 넣을 수 있어.')},
+      {selector:'#deckPool .deck-pool-tile:not([data-deck-card="STARTER_TRASH"]) .deck-card-action:not(:disabled)',focus:'#deckCandidates',action:'click',waitFor:()=>isOnboardingDeck(deck()),title:c('別のカードを加えよう','Add another card','다른 카드를 넣자'),body:c('候補から、カル以外の所持カードを1枚選んで「＋」を押そう。ガチャやショップで手に入れたスターターも、ここから組み込めるよ。','Choose one owned card other than Cull and press +. Starters obtained from gacha and the shop can be added here.','후보에서 컬 이외의 보유 카드 1장을 골라 +를 눌러. 뽑기나 상점에서 얻은 스타터도 여기서 넣을 수 있어.')},
       {selector:'#save',action:'click',waitFor:()=>deckSaved,title:c('デッキを確定しよう','Confirm your deck','덱을 확정하자'),body:c('9枚そろったね。「デッキを確定」を押して保存しよう。このデッキで次のデュエルを始められるよ。','All nine cards are ready. Press Confirm deck to save and use it in your next duel.','9장이 모였네. 덱 확정을 눌러 저장하자. 다음 듀얼에서 이 덱을 쓸 수 있어.')},
       {title:c('きみだけのスターターデッキが完成！','Your own starter deck is ready!','너만의 스타터 덱 완성!'),body:c('きみだけのスターターデッキが完成したよ！ カードが増えたら、またここで自由に組み替えてみてね。','Your own starter deck is complete! Return here to customize it as your collection grows.','너만의 스타터 덱이 완성됐어! 카드가 늘어나면 여기서 자유롭게 바꿔 봐.')},
     ],{label:c('初期デッキの編成','Starting deck','시작 덱 편성'),startIndex:lessonIndex,onStep:i=>{lessonIndex=i;},previousStep:()=>-1,rewind:()=>{},onComplete:()=>app.onboarding(),onExit:()=>app.home()});

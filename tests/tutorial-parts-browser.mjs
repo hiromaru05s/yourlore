@@ -28,21 +28,39 @@ const server=await createServer({root:'client',configFile:'client/vite.config.ts
 // Optional browser regression (not part of the fast production suite).
 // Every move goes through rendered controls; no controller/state injection.
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
-const out='docs/qa/tutorial-basics-browser';await fs.mkdir(out,{recursive:true});
+const out=process.env.TUTORIAL_QA_DIR||'docs/qa/tutorial-basics-browser';await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});
 try{
- for(const width of [1280,1024]){
+ for(const width of (process.env.TUTORIAL_WIDTHS||'1280,1024').split(',').map(Number)){
   const context=await browser.newContext({viewport:{width,height:800}}),p=await context.newPage(),errors=[];
   p.on('pageerror',e=>errors.push(e.message));await p.goto('http://127.0.0.1:5299/parts-qa');
   await p.locator('#continuePart').click();await p.locator('.game-loading').waitFor({state:'hidden'});
   let inspectedDuringPlay=false;
   for(let moves=0;moves<100&&!await p.locator('.tutorial-basics-clear').count();moves++){
-   const layer=p.locator('.tutorial-part-tour'),index=await layer.getAttribute('data-step'),action=await layer.getAttribute('data-action');
+   const layer=p.locator('.tutorial-part-tour'),{index,action}=await layer.evaluate(e=>({index:e.dataset.step,action:e.dataset.action}));
+   console.log(width,index,action);
    const target=p.locator('.tutorial-tour-target');
-   if(action==='next')await p.locator('.tutorial-tour-next:not([disabled])').click();
-   else if(action==='inspect')await target.click({button:'right'});
-   else if(action==='click')await target.click();
+   if(action==='next'){
+    await p.waitForFunction(i=>document.querySelector('.tutorial-part-tour')?.dataset.step!==i||!!document.querySelector('.tutorial-tour-next:not([disabled])'),index);
+    if(await layer.getAttribute('data-step')!==index)continue;
+    assert.match(await p.locator('.tutorial-enter-hint').innerText(),/Enter/);
+    if(index==='0'){
+     await p.waitForTimeout(800);await p.screenshot({path:out+'/goal-'+width+'.png'});
+     await p.keyboard.down('Enter');await p.keyboard.down('Enter');await p.keyboard.up('Enter');
+     assert.equal(await layer.getAttribute('data-step'),'1','held Enter advances exactly once');
+     await p.waitForTimeout(800);await p.screenshot({path:out+'/self-'+width+'.png'});
+    }else await p.keyboard.press('Enter');
+   }
+   else if(action==='inspect'){
+    await p.keyboard.press('Enter');assert.equal(await layer.getAttribute('data-step'),index,'Enter cannot skip inspection');
+    await target.click({button:'right'});
+   }
+   else if(action==='click'){
+    await p.keyboard.press('Enter');assert.equal(await layer.getAttribute('data-step'),index,'Enter cannot skip required click');
+    await target.click();
+   }
    else{
+    if(index==='11'){await p.keyboard.press('Enter');assert.equal(await layer.getAttribute('data-step'),index,'Enter cannot skip the summon');}
     if(!inspectedDuringPlay&&await target.evaluate(e=>!!e.closest('#hand'))){
      await target.click({button:'right'});
      const modal=p.locator('#zoomOverlay .zoom-wrap');
@@ -54,7 +72,9 @@ try{
      await p.screenshot({path:out+'/inspection-during-play-'+width+'.png'});
      await p.locator('#zoomOverlay .inspect-close').press('Escape');inspectedDuringPlay=true;
     }
-    const source=p.locator('.tutorial-action-guide:not([hidden]) .tutorial-action-ring');await source.waitFor({state:'visible'});
+    const source=p.locator('.tutorial-action-guide:not([hidden]) .tutorial-action-ring');
+    await p.waitForFunction(i=>document.querySelector('.tutorial-part-tour')?.dataset.step!==i||document.querySelector('.tutorial-action-guide:not([hidden]) .tutorial-action-ring')?.getBoundingClientRect().width>0,index);
+    if(await layer.getAttribute('data-step')!==index)continue;
     const a=await source.boundingBox(),drop=p.locator('.tutorial-action-guide:not([hidden]) .tutorial-drop-ring:not([hidden])');
     if(await drop.count()){
      const b=await drop.boundingBox();await p.mouse.move(a.x+a.width/2,a.y+a.height/2);await p.mouse.down();await p.mouse.move(b.x+b.width/2,b.y+b.height/2,{steps:16});await p.mouse.up();

@@ -61,18 +61,21 @@ try{
    const free=page.locator('.starter-shop-item:first-child [data-buy-starter]');await free.waitFor();assert.match(await free.innerText(),/0 シャード/);
    await page.screenshot({path:out+'/free-starter-'+width+'.png'});await free.click();assert.match(await page.locator('.starter-purchase-dialog').innerText(),/0 シャード/);await page.locator('[data-purchase-yes]').click();
    await page.locator('.tutorial-tour-next').click();
-   await page.locator('#deckCur').waitFor();await page.locator('.tutorial-tour-next').click();await page.locator('.tutorial-tour-next').click();
+   await page.locator('#deckCur').waitFor();await page.keyboard.press('Enter');
+   assert.match(await page.locator('.tutorial-tour-bubble p').innerText(),/スターター.*[\s\S]*共有プール/);
+   await page.waitForTimeout(800);await page.screenshot({path:out+'/starter-shared-pool-'+width+'.png'});
+   await page.keyboard.press('Enter');await page.keyboard.press('Enter');
    await page.locator('#deckCur [data-card="STARTER_TRASH"] .deck-hand-action').first().click();
-   await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='3');
+   await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='4');
    assert.equal(await page.locator('#deckCur [data-card="STARTER_TRASH"]').count(),5);
    // Reload in the middle of the exercise: keep the removed card and resume at Add.
    await page.reload({waitUntil:'domcontentloaded'});await page.locator('#deckCur').waitFor({timeout:90000});
-   await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='3');
+   await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='4');
    assert.equal(await page.locator('#deckCur [data-card="STARTER_TRASH"]').count(),5);
    await page.locator('.screen-loader').waitFor({state:'hidden',timeout:90000});await page.locator('#deckPool .deck-card-action:not(:disabled)').first().waitFor({state:'visible'});await page.waitForTimeout(500);await page.screenshot({path:out+'/deck-add-'+width+'.png'});
    await page.locator('#deckPool .deck-pool-tile:not([data-deck-card="STARTER_TRASH"]) .deck-card-action:not(:disabled)').first().click();
-   await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='4');
-   await page.locator('#save').click();await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='5');
+   await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='5');
+   await page.locator('#save').click();await page.waitForFunction(()=>document.querySelector('.tutorial-part-tour')?.dataset.step==='6');
    assert.match(await page.locator('.tutorial-tour-bubble p').innerText(),/きみだけのスターターデッキが完成/);
    await page.screenshot({path:out+'/deck-complete-'+width+'.png'});await page.locator('.tutorial-tour-next').click();
    await page.waitForFunction(()=>document.querySelector('.tutorial-tour-bubble p')?.textContent==='シーカー修練書に細かいルールなどがあるよ。');

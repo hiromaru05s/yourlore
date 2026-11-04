@@ -69,3 +69,7 @@ body .zeno-speech .lore-button-quiet{color:#426174!important}
 
 body .zeno-speech p{white-space:pre-line}
 .tutorial-tour-layer[hidden]{display:none!important}
+
+/* Keep the shortcut visible even when the user starts directly from the lesson list. */
+body .zeno-speech .tutorial-enter-hint{margin-top:9px;color:#526f80;font:11px/1.6 system-ui;text-align:right}
+.tutorial-enter-hint kbd{display:inline-block;padding:0 5px;border:1px solid #9eb5c1;border-bottom-width:2px;border-radius:4px;font:inherit;color:#213c50}

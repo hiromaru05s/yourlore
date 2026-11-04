@@ -1,4 +1,5 @@
-import {TutorialActionGuide,placeTutorialCoach,guideElement} from './tutorialActionGuide';
+import {TutorialActionGuide,guideElement} from './tutorialActionGuide';
+import {TutorialCompanionFlight} from './tutorialCompanionFlight';
 import {getLang,onLangChange} from '../i18n';
 import {mountManaSpirit} from './manaSpirit';
 import {copy as c,type Copy} from '../shared/tutorialSteps';
@@ -34,6 +35,7 @@ const union=(boxes:Box[]):Box|null=>boxes.length?{left:Math.min(...boxes.map(b=>
  */
 export class TutorialSpotlight {
  private index=0;
+ private flight=new TutorialCompanionFlight();
  private guide=new TutorialActionGuide();
  private layer:HTMLElement;
  private shades:HTMLElement[];
@@ -59,7 +61,7 @@ export class TutorialSpotlight {
   this.pointer=document.createElement('div');this.pointer.className='tutorial-tour-pointer';this.pointer.setAttribute('aria-hidden','true');this.pointer.textContent='☟';this.layer.append(this.pointer);
   document.addEventListener('pointerdown',this.guard,true);document.addEventListener('dblclick',this.guard,true);document.addEventListener('contextmenu',this.guard,true);document.addEventListener('keydown',this.keydown,true);
   this.coach=this.layer.querySelector('.tutorial-tour-coach')!;this.bubble=this.layer.querySelector('.tutorial-tour-bubble')!;
-  this.spirit=mountManaSpirit(this.layer.querySelector('.tutorial-tour-spirit')!);
+  this.spirit=mountManaSpirit(this.layer.querySelector('.tutorial-tour-spirit')!,{interactive:false});
   document.addEventListener('click',this.clicked,true);
   this.unsub=onLangChange(()=>this.render());this.render();
   const tick=()=>{if(this.disposed)return;this.position();this.checkMove();this.frame=requestAnimationFrame(tick);};this.frame=requestAnimationFrame(tick);
@@ -90,9 +92,28 @@ export class TutorialSpotlight {
   event.preventDefault();event.stopImmediatePropagation();
  };
  private keydown=(event:KeyboardEvent):void=>{
+  if(this.disposed||event.isComposing||event.keyCode===229)return;
+  const origin=event.target instanceof Element?event.target:null;
+  // Let the active dialog and editable controls own their keyboard input.
+  if(this.step().suspendForDialog&&document.querySelector('dialog[open]'))return;
+  if(origin?.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"])'))return;
+  if(event.key==='Enter'&&!event.altKey&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey){
+   if(event.repeat){event.preventDefault();event.stopImmediatePropagation();return;}
+   const control=origin?.closest('button,a,[role="button"]');
+   if(control&&this.layer.contains(control)&&!control.matches('.tutorial-tour-next'))return;
+   if((this.step().action??'next')==='next'){
+    event.preventDefault();event.stopImmediatePropagation();this.advanceMessage();return;
+   }
+  }
   if(event.key==='Tab'||this.layer.contains(event.target as Node))return;
   this.guard(event);
  };
+ private advanceMessage():void{
+  const next=this.bubble.querySelector<HTMLButtonElement>('.tutorial-tour-next');
+  if(!next||next.disabled||this.disposed||this.advancing||document.querySelector('.game-loading'))return;
+  if(this.step().suspendForDialog&&document.querySelector('dialog[open]'))return;
+  this.go(this.index+1);
+ }
  private clicked=(event:MouseEvent):void=>{
   this.guard(event);if(event.defaultPrevented)return;
   if(this.undoing||this.advancing)return;
@@ -145,7 +166,7 @@ export class TutorialSpotlight {
   this.pointer.style.display='none';
   const avoid=!resolving&&!modal?this.guide.update(step.pointer?this.find(step.pointer):step.action==='play'&&step.selector?this.find(step.selector):null,dest):[];
   if(resolving||modal)this.guide.hide();
-  placeTutorialCoach(this.coach,[...(inspection?ring?[ring]:[]:cut?[cut]:[]),...avoid],step.placement);
+  this.flight.place(this.coach,point??ring,[...(focus?[focus]:[]),...ringBoxes,...(dest?[dest.getBoundingClientRect()]:[]),...avoid],this.index,step.placement);
  }
  private paintRings(boxes:Box[]):void{
   while(this.rings.length<boxes.length){const r=document.createElement('div');r.className='tutorial-tour-ring';r.setAttribute('aria-hidden','true');this.rings[0].after(r);this.rings.push(r);}
@@ -173,8 +194,8 @@ export class TutorialSpotlight {
   const next=step.nextLabel??(last?c('完了','Finish','완료'):c('うん、次へ','Got it, next','응, 다음'));
   const hint=kind==='click'?c('光ってるところを押してみて。','Try the glowing spot.','빛나는 곳을 눌러 봐.'):kind==='inspect'?c('カードを右クリックしてみて。','Right-click the card.','카드를 우클릭해 봐.'):kind==='play'?c('やってみよう。ぼくはここで見てるよ。','Give it a try. I’m right here.','직접 해 봐. 난 여기 있을게.'):null;
   const canBack=this.index>0&&this.backTarget()>=0;
-  this.bubble.innerHTML=`<div class="zeno-speech-content"><header><span class="zeno-speaker">${c('ゼノ','Zeno','제노')[lang]}</span><span class="tutorial-eyebrow" aria-label="${this.options.label[lang]}">${this.index+1} / ${this.steps.length}</span><button class="lore-button lore-button-quiet tutorial-tour-skip" aria-label="${c('終了','Exit','나가기')[lang]}">×</button></header><h2 class="zeno-speech-topic">${step.title[lang]}</h2><p>${step.body[lang]}</p>${step.prompt?`<strong>${step.prompt[lang]}</strong>`:''}<footer class="tutorial-tour-actions"><button class="lore-button lore-button-quiet tutorial-tour-back" ${canBack?'':'disabled'}>← ${c('戻る','Back','이전')[lang]}</button>${kind==='next'?`<button class="lore-button lore-button-primary tutorial-tour-next" ${this.unlocked?'':'disabled'}>${next[lang]} →</button>`:`<span class="tutorial-tour-hint">${hint![lang]}</span>`}</footer></div>`;
-  this.bubble.querySelector('.tutorial-tour-next')?.addEventListener('click',()=>{if(this.unlocked&&!this.advancing)this.go(this.index+1);});
+  this.bubble.innerHTML=`<div class="zeno-speech-content"><header><span class="zeno-speaker">${c('ゼノ','Zeno','제노')[lang]}</span><span class="tutorial-eyebrow" aria-label="${this.options.label[lang]}">${this.index+1} / ${this.steps.length}</span><button class="lore-button lore-button-quiet tutorial-tour-skip" aria-label="${c('終了','Exit','나가기')[lang]}">×</button></header><h2 class="zeno-speech-topic">${step.title[lang]}</h2><p>${step.body[lang]}</p>${step.prompt?`<strong>${step.prompt[lang]}</strong>`:''}<footer class="tutorial-tour-actions"><button class="lore-button lore-button-quiet tutorial-tour-back" ${canBack?'':'disabled'}>← ${c('戻る','Back','이전')[lang]}</button>${kind==='next'?`<button aria-keyshortcuts="Enter" class="lore-button lore-button-primary tutorial-tour-next" ${this.unlocked?'':'disabled'}>${next[lang]} →</button>`:`<span class="tutorial-tour-hint">${hint![lang]}</span>`}</footer>${kind==='next'?`<div class="tutorial-enter-hint"><kbd>Enter</kbd> ${c('で次へ · ボタンでも進めるよ','to continue · or use the button','로 다음 · 버튼으로도 진행할 수 있어')[lang]}</div>`:''}</div>`;
+  this.bubble.querySelector('.tutorial-tour-next')?.addEventListener('click',event=>{if((event as MouseEvent).detail<2)this.advanceMessage();});
   this.bubble.querySelector('.tutorial-tour-back')?.addEventListener('click',()=>this.back());
   this.bubble.querySelector('.tutorial-tour-skip')?.addEventListener('click',()=>{this.destroy();this.options.onExit();});
   if(step.enableOn){
@@ -188,6 +209,6 @@ export class TutorialSpotlight {
  destroy():void{
   if(this.disposed)return;const close=this.step().close;if(close){this.undoing=true;try{this.find(close)?.click();}finally{this.undoing=false;}}this.disposed=true;cancelAnimationFrame(this.frame);this.unlockCleanup();this.target?.classList.remove('tutorial-tour-target');
   document.removeEventListener('pointerdown',this.guard,true);document.removeEventListener('dblclick',this.guard,true);document.removeEventListener('contextmenu',this.guard,true);document.removeEventListener('keydown',this.keydown,true);
-  document.removeEventListener('click',this.clicked,true);this.unsub();this.guide.destroy();this.spirit.destroy();this.layer.remove();
+  document.removeEventListener('click',this.clicked,true);this.unsub();this.flight.destroy();this.guide.destroy();this.spirit.destroy();this.layer.remove();
  }
 }
