@@ -1,0 +1,28 @@
+.picker-filters { display:grid; grid-template-columns:minmax(0,1fr) 160px; gap:12px; }
+.picker-search-label { display:flex; align-items:end; min-width:0; }
+.picker-cost-label { display:flex; align-items:center; gap:10px; min-width:0; color:var(--lore-muted); font-size:13px; }
+.picker-cost-label > span { flex-shrink:0; }
+.picker-types { grid-column:1 / -1; display:flex; gap:8px; flex-wrap:wrap; }
+:root body .overlay > .modal.picker-filterable .picker-types .btn { flex:1; padding:10px 12px; }
+.picker-filter-meta { grid-column:1 / -1; display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--lore-muted); font-size:12px; }
+:root body .overlay > .modal.picker-filterable .picker-filter-reset { min-height:32px; padding:5px 10px; font-size:12px; }
+:root body .overlay > .modal.picker-filterable { display:flex; flex-direction:column; overflow:hidden; }
+.picker-filterable > :is(.popup-heading,.picker-filters,.modal-row,.muted) { flex-shrink:0; }
+:root body .overlay > .modal.picker-filterable .picker-grid { min-height:0; flex:0 1 auto; }
+.picker-filterable .picker-grid > [hidden] { display:none!important; }
+.picker-empty { width:100%; padding:24px 0; text-align:center; }
+@media (max-width:540px) {
+  .picker-filters { grid-template-columns:minmax(0,1fr) 130px; gap:8px; }
+  .picker-cost-label { gap:6px; }
+}
+@media (max-height:560px) and (min-width:600px) {
+  .picker-filters { grid-template-columns:minmax(140px,1fr) 130px minmax(260px,1.2fr); gap:8px; }
+  .picker-types { grid-column:auto; }
+  :root body .overlay > .modal.picker-filterable { --popup-y:16px; }
+  :root body .overlay > .modal.picker-filterable > .popup-heading { margin-bottom:8px; padding-block:6px; }
+  :root body .overlay > .modal.picker-filterable h2 { font-size:20px!important; }
+  :root body .overlay > .modal.picker-filterable > .muted { margin:0 0 8px; font-size:12px; line-height:1.5; }
+  :root body .overlay > .modal.picker-filterable .picker-grid { margin:8px 0!important; padding:10px 14px!important; }
+  :root body .overlay > .modal.picker-filterable .modal-row { margin-top:0; padding-block:8px; }
+  :root body .overlay > .modal.picker-filterable .modal-row .btn { min-height:34px; padding-block:7px; }
+}

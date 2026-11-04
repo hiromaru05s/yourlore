@@ -1,0 +1,150 @@
+{
+  "origin": "http://127.0.0.1:5196",
+  "total": 294,
+  "layouts": [
+    {
+      "modal": {
+        "left": 180,
+        "right": 1100,
+        "top": 16,
+        "bottom": 704,
+        "height": 688
+      },
+      "grid": {
+        "left": 217,
+        "right": 1063,
+        "top": 331.890625,
+        "bottom": 570,
+        "height": 238.109375
+      },
+      "confirm": {
+        "left": 857.3125,
+        "right": 934.234375,
+        "top": 627,
+        "bottom": 673,
+        "height": 46
+      },
+      "search": {
+        "left": 217,
+        "right": 891,
+        "top": 165.890625,
+        "bottom": 211.890625,
+        "height": 46
+      },
+      "width": 1280,
+      "height": 720,
+      "overflow": false
+    },
+    {
+      "modal": {
+        "left": 12,
+        "right": 378,
+        "top": 12,
+        "bottom": 832,
+        "height": 820
+      },
+      "grid": {
+        "left": 29,
+        "right": 361,
+        "top": 326.28125,
+        "bottom": 704,
+        "height": 377.71875
+      },
+      "confirm": {
+        "left": 29,
+        "right": 190,
+        "top": 761,
+        "bottom": 807,
+        "height": 46
+      },
+      "search": {
+        "left": 29,
+        "right": 223,
+        "top": 168.28125,
+        "bottom": 214.28125,
+        "height": 46
+      },
+      "width": 390,
+      "height": 844,
+      "overflow": false
+    },
+    {
+      "modal": {
+        "left": 12,
+        "right": 308,
+        "top": 12,
+        "bottom": 628,
+        "height": 616
+      },
+      "grid": {
+        "left": 29,
+        "right": 291,
+        "top": 341.28125,
+        "bottom": 500,
+        "height": 158.71875
+      },
+      "confirm": {
+        "left": 29,
+        "right": 155,
+        "top": 557,
+        "bottom": 603,
+        "height": 46
+      },
+      "search": {
+        "left": 29,
+        "right": 153,
+        "top": 168.28125,
+        "bottom": 214.28125,
+        "height": 46
+      },
+      "width": 320,
+      "height": 640,
+      "overflow": false
+    },
+    {
+      "modal": {
+        "left": 16,
+        "right": 828,
+        "top": 16,
+        "bottom": 374,
+        "height": 358
+      },
+      "grid": {
+        "left": 53,
+        "right": 791,
+        "top": 194,
+        "bottom": 274.5,
+        "height": 80.5
+      },
+      "confirm": {
+        "left": 585.3125,
+        "right": 662.234375,
+        "top": 321.5,
+        "bottom": 357,
+        "height": 35.5
+      },
+      "search": {
+        "left": 53,
+        "right": 322.078125,
+        "top": 100,
+        "bottom": 146,
+        "height": 46
+      },
+      "width": 844,
+      "height": 390,
+      "overflow": false
+    }
+  ],
+  "checks": [
+    "name, cost and type combined",
+    "NFKC and case-insensitive names",
+    "hidden selection cleared",
+    "empty result and reset",
+    "real reducer purchase deducts 4 mana and adds ELF to graveyard",
+    "3-mana eligible pool excludes ELF",
+    "cancel keeps mana",
+    "4 window sizes",
+    "Japanese, English and Korean"
+  ],
+  "errors": []
+}

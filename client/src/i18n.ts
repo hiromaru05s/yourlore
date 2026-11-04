@@ -36,6 +36,15 @@ function applyDocLang(): void {
 
 type Entry = { ko: string; ja: string; en: string };
 const D: Record<string, Entry> = {
+  "picker.searchName": {ja:"カード名で検索",ko:"카드명 검색",en:"Search card names"},
+  "picker.cost": {ja:"コスト",ko:"비용",en:"Cost"},
+  "picker.type": {ja:"カード種別",ko:"카드 종류",en:"Card type"},
+  "picker.all": {ja:"すべて",ko:"전체",en:"All"},
+  "picker.monster": {ja:"モンスター",ko:"몬스터",en:"Monsters"},
+  "picker.spell": {ja:"魔法カード",ko:"마법 카드",en:"Spells"},
+  "picker.resetFilters": {ja:"絞り込みを解除",ko:"필터 초기화",en:"Clear filters"},
+  "picker.results": {ja:"{n} / {total}枚",ko:"{n} / {total}장",en:"{n} / {total} cards"},
+  "picker.noResults": {ja:"条件に合うカードがありません",ko:"조건에 맞는 카드가 없습니다",en:"No cards match your filters"},
   "settings.volume": {ja:"音量",ko:"음량",en:"Volume"},
   "duel.endLabel": {ja:"END\nTURN",ko:"END\nTURN",en:"END\nTURN"},
   "duel.enemyLabel": {ja:"相手の\nターン",ko:"상대\n턴",en:"ENEMY\nTURN"},

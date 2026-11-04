@@ -1341,7 +1341,10 @@ export abstract class BaseController implements BoardHandlers {
           : ids.filter((id) => defOf(id) && (free || (defOf(id).cost <= me.mana && purchaseAllowed(g, me, { ...defOf(id), uid: id })))).map((id) => ({ uid: id, ...defOf(id) }));
         const hint = pendingText(g.pending,getLang());
         if (!pool.length) { this.submit({ type: "pick", uid: null }); return; }
-        cardPicker(hint, pool, (uid) => {if(this.state===g)this.submit({ type: "pick", uid });},g.pending.allowCancel,{confirm:true});
+        const darkMarket = g.pending.reason === "darkMarket";
+        cardPicker(darkMarket ? cardName({uid:'DARK_MERCHANT',...DB.DARK_MERCHANT}) : hint, pool, (uid) => {if(this.state===g)this.submit({ type: "pick", uid });},g.pending.allowCancel,{
+          confirm:true,filters:darkMarket,description:darkMarket ? hint : undefined,
+        });
         return;
       }
       if (g.pending.kind === "reroll") {

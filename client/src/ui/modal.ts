@@ -1,3 +1,4 @@
+import { installCardPickerFilters } from './cardPickerFilters';
 import { targetOwner, type PlayIntent } from '../shared/playIntent';
 import '../styles/marketPreview.css';
 import '../styles/outcomeFinale.css';
@@ -206,7 +207,7 @@ export function showControlsHelp(): void {
 }
 
 /** Seek/Recall picker. Calls onPick with chosen uid (or null on cancel). */
-export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string; description?: string; browse?: boolean } = {}): void {
+export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string; description?: string; browse?: boolean; filters?: boolean } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML = `<h2 style="font-size:14px">${title}</h2><div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div><div class="modal-row"></div>`;
@@ -215,6 +216,7 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
   let selected: string | null = null;
   const ok = document.createElement('button'); ok.className='btn btn-gold'; ok.textContent=t('picker.confirm'); ok.disabled=true;
   ok.onclick=()=>{if(selected){closeOverlay();onPick(selected);}};
+  const entries: { card: CardInst; node: HTMLElement }[] = [];
   pool.forEach((c, i) => {
     const card = cardEl(c, { playable: !opts.browse, lazyArt: i });
     card.onclick = () => {
@@ -225,6 +227,13 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
     if(opts.label){const label=document.createElement('div');label.textContent=opts.label(c.uid);label.className='picker-owner';const wrap=document.createElement('div');wrap.append(label,card);grid.append(wrap);}
     bindZoom(card, c); // 우클릭 / 길게 누르면 확대
     if(!opts.label) grid.appendChild(card);
+    entries.push({card:c,node:opts.label ? card.parentElement! : card});
+  });
+  if(opts.filters) installCardPickerFilters(m, grid as HTMLElement, entries, visible => {
+    if(selected && !visible.has(selected)){
+      selected=null;ok.disabled=true;
+      grid.querySelectorAll('.is-picked').forEach(el=>el.classList.remove('is-picked'));
+    }
   });
   if (opts.browse && !pool.length) grid.textContent = t("deck.empty");
   if(opts.confirm) m.querySelector(".modal-row")!.appendChild(ok);
