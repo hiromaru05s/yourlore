@@ -1,0 +1,94 @@
+{
+  "checks": [
+    {
+      "width": 1280,
+      "height": 900,
+      "inHeader": true,
+      "gap": 18,
+      "centerDelta": 0,
+      "logoGap": 295.09375,
+      "hitElement": "<img src=\"/art/lounge/gifts/letter-v1.webp\" alt=\"\" draggable=\"false\">",
+      "hit": true,
+      "inBounds": true,
+      "overflow": false,
+      "badgeGeometry": {
+        "visible": true,
+        "color": "rgb(238, 78, 80)"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "inHeader": true,
+      "gap": 18,
+      "centerDelta": 0,
+      "logoGap": 295.09375,
+      "hitElement": "<img src=\"/art/lounge/gifts/letter-v1.webp\" alt=\"\" draggable=\"false\">",
+      "hit": true,
+      "inBounds": true,
+      "overflow": false,
+      "badgeGeometry": {
+        "visible": true,
+        "color": "rgb(238, 78, 80)"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "inHeader": true,
+      "gap": 4,
+      "centerDelta": 0,
+      "logoGap": 38.578125,
+      "hitElement": "<img src=\"/art/lounge/gifts/letter-v1.webp\" alt=\"\" draggable=\"false\">",
+      "hit": true,
+      "inBounds": true,
+      "overflow": false,
+      "badgeGeometry": {
+        "visible": true,
+        "color": "rgb(238, 78, 80)"
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "inHeader": true,
+      "gap": 4,
+      "centerDelta": 0,
+      "logoGap": 14.25,
+      "hitElement": "<img src=\"/art/lounge/gifts/letter-v1.webp\" alt=\"\" draggable=\"false\">",
+      "hit": true,
+      "inBounds": true,
+      "overflow": false,
+      "badgeGeometry": {
+        "visible": true,
+        "color": "rgb(238, 78, 80)"
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "inHeader": true,
+      "gap": 8,
+      "centerDelta": 0,
+      "logoGap": 201.125,
+      "hitElement": "<img src=\"/art/lounge/gifts/letter-v1.webp\" alt=\"\" draggable=\"false\">",
+      "hit": true,
+      "inBounds": true,
+      "overflow": false,
+      "badgeGeometry": {
+        "visible": true,
+        "color": "rgb(238, 78, 80)"
+      }
+    }
+  ],
+  "claims": 2,
+  "errors": [],
+  "other": [
+    "individual/bulk receipt",
+    "history",
+    "reload persistence",
+    "network failure and retry",
+    "ja/en/ko",
+    "Escape/focus"
+  ]
+}
