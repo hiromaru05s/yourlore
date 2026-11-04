@@ -64,6 +64,11 @@ try {
   assert.deepEqual((await page.evaluate(()=>qa.c.actions)).map(a=>a.type),['play']);
   checks.push(lang+': END TURN, primary/secondary clicks, cancelled hand drag and successful field play');
   await page.screenshot({path:output+'/'+lang+'.png'});
+  await page.evaluate(()=>{qa.c.state.cur=1;qa.c.view.render(qa.c.state);});await page.waitForTimeout(1000);
+  assert.equal(await page.locator('#endBtn').innerText(),'ENEMY\nTURN');
+  assert.equal(await page.locator('#endBtn').isDisabled(),true);
+  await page.screenshot({path:output+'/'+lang+'-enemy.png'});
+  checks.push(lang+': physical opponent-turn button stays ENEMY TURN and disabled');
  }
  assert.deepEqual(errors,[]);
  await fs.writeFile(output+'/checks.json',JSON.stringify({origin,checks,errors},null,2));
