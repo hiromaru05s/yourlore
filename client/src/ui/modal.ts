@@ -218,7 +218,7 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
   pool.forEach((c, i) => {
     const card = cardEl(c, { playable: !opts.browse, lazyArt: i });
     card.onclick = () => {
-      if (opts.browse) { zoomCard(c); return; }
+      if (opts.browse) return; // inspection uses right-click / touch long-press
       if(!opts.confirm){closeOverlay();onPick(c.uid);return;}
       selected=c.uid;grid.querySelectorAll('.is-picked').forEach(el=>el.classList.remove('is-picked'));card.classList.add('is-picked');ok.disabled=false;
     };

@@ -125,13 +125,33 @@ for(const id of ['pile-myDisc','pile-oppDisc','pile-myDeck','pile-oppDeck','rift
  assert(document.querySelector('#overlayRoot .modal'),id+' opens a list');
  assert(!document.getElementById('zoomOverlay'),id+' does not enlarge the top card');
  const card=document.querySelector('#overlayRoot .picker-grid .card');
- if(card){rightClick(card);assert(document.getElementById('zoomOverlay'));closeZoom();assert(card.isConnected,'list remains after zoom');}
+ if(card){card.click();assert(!document.getElementById('zoomOverlay'),id+' list primary click does not inspect');rightClick(card);assert(document.getElementById('zoomOverlay'));closeZoom();assert(card.isConnected,'list remains after zoom');}
  closeOverlay();
 }
 for(const selector of ['#hand .card','#meRow .zone-mon .card','#oppRow .zone-mon .card','#fixedMarket .card','#supplyMarket .card']) {
  rightClick(document.querySelector(selector));assert(document.getElementById('zoomOverlay'),selector);closeZoom();
 }
 assert.equal(JSON.stringify(g),beforeInspect);assert.equal(boughtFixed,-1);assert.equal(boughtSupply,-1);
+// Primary clicks never inspect in-game cards, including an already opened hand
+// and unaffordable market cards; secondary clicks still inspect the same cards.
+v.setHandOpen(true);
+for(const selector of ['#hand .card','#meRow .zone-mon .card','#oppRow .zone-mon .card','#meRow .zone-st .buff-icon:not(.buff-icon--trap)']) {
+ const card=document.querySelector(selector);assert(card,selector);card.click();
+ assert(!document.getElementById('zoomOverlay'),selector+' primary click does not inspect');
+ rightClick(card);assert(document.getElementById('zoomOverlay'),selector+' secondary click inspects');closeZoom();
+}
+const savedMana=g.players[0].mana;g.players[0].mana=0;v.render(g);
+for(const selector of ['#fixedMarket .card','#supplyMarket .card']) {
+ const card=document.querySelector(selector);card.click();assert(!document.getElementById('zoomOverlay'),selector+' unavailable primary click');
+ rightClick(card);assert(document.getElementById('zoomOverlay'));closeZoom();
+}
+g.players[0].mana=savedMana;
+for(const lang of ['ko','ja','en']) {
+ setLang(lang);v.render(g);
+ assert.equal(document.querySelector('#endBtn').textContent,'END\nTURN',lang+' uses the fixed English turn label');
+}
+setLang('ja');v.render(g);
+
 // Related-card context menus must not bubble to the enclosing zoom's close handler.
 zoomCard({...DB.TSO2,uid:'related-parent'});
 const related=document.querySelector('.ztc-grid .card');
@@ -196,7 +216,7 @@ const timedBuff=document.querySelector('[data-uid="elapsed-test"]');
 assert.equal(timedBuff.querySelector('.enchant-time text').textContent,'6');
 assert.equal(timedBuff.querySelector('.enchant-time').dataset.timeMode,'fill');
 assert(timedBuff.getAttribute('aria-label').includes('発動まで 6ターン'));
-click(timedBuff);assert(document.querySelector('.inspect-state').textContent.includes('経過 3/9ターン'));
+click(timedBuff);assert(!document.getElementById('zoomOverlay'));rightClick(timedBuff);assert(document.querySelector('.inspect-state').textContent.includes('経過 3/9ターン'));
 closeZoom();
 assert([...document.querySelectorAll('.buff-icon--trap .buff-cost')].every(e=>e.textContent==='?'));
 // UI classifies by definition, not a persisted 98/1-turn legacy value.
@@ -252,7 +272,7 @@ for(const lang of ['ja','ko','en']) {
  assert.equal(document.querySelectorAll('#oppHand .space-rite-locked').length,0);
  assert(document.querySelector('.space-rite-status').textContent.includes('3'));
  assert.equal(document.querySelector('.space-rite-status img').getAttribute('src'),'/art/cards/SPACE_RITE.webp');
- document.querySelector('#hand [data-uid="sp-mon"]').click();
+ const lockedCard=document.querySelector('#hand [data-uid="sp-mon"]');lockedCard.click();assert(!document.getElementById('zoomOverlay'));rightClick(lockedCard);
  assert(document.querySelector('.inspect-state').textContent.includes({ja:'召喚',ko:'소환',en:'summoning'}[lang]));closeZoom();
 }
 setLang('ja');

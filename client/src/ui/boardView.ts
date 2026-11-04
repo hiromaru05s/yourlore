@@ -627,7 +627,6 @@ export class GameView {
       card.setAttribute('role', 'button');
       card.setAttribute('aria-label', `${cardName(e.card)} ${stateText}`);
       card.title = `${cardName(e.card)} · ${stateText}`;
-      card.onclick = () => zoomCard(e.card, undefined, stateText);
       card.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); zoomCard(e.card, undefined, stateText); } };
       bindZoom(card, e.card, undefined, stateText);
       sz.appendChild(card);
@@ -639,9 +638,8 @@ export class GameView {
       const progress = questProgressText(q.progress, q.card.quest?.target ?? 0, getLang());
       tile.title = `${cardName(q.card)} · ${progress} · ${getLang() === "ja" ? q.card.textJa : getLang() === "en" ? q.card.textEn : q.card.text}`;
       tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
-      tile.onclick = () => zoomCard(q.card, undefined, progress);
       bindZoom(tile, q.card, undefined, progress);
-      tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();tile.click();}};
+      tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();zoomCard(q.card, undefined, progress);}};
       sz.appendChild(tile);
     }
     for (let i = p.traps.length + p.enchants.length + (p.quests?.length ?? 0); i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
@@ -944,8 +942,6 @@ export class GameView {
         armTimer = window.setTimeout(disarm, 2500);
       };
     };
-    // 살 수 없는 카드도 탭하면 확대는 된다(손패와 동일)
-    const zoomOnTap = (card: HTMLElement, inst: CardInst) => { card.onclick = (e) => { e.stopPropagation(); zoomCard(inst); }; };
     mk.onclick = () => disarm(); // 마켓 빈 곳 클릭 시 해제
 
     // 마켓 알림이: 덱 프리셋에 등록한 카드가 뜨면 은은한 링 + 🔔 점 표시
@@ -964,7 +960,7 @@ export class GameView {
       const aff = myTurn && !g.pending && me.mana >= bc && purchaseAllowed(g, me, c) && !freeBuyBlocked(me, c);
       const card = cardEl(c, { size: "mkt", buyable: aff, dim: !aff, costOverride: bc }); // same size as 제시
       if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<bc?t('play.block.mana'):t('play.block.cond');
-      if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i), c); else zoomOnTap(card, c);
+      if (aff) armBuy(card, "mkt" + i, () => this.h.onBuyMarket(i), c);
       // v40: 슬롯 재고 — 다 팔리면 새 카드로 교체되므로 남은 수를 보여준다
       const stock = marketStockOf(g, i);
       const st = document.createElement("div");
@@ -994,7 +990,7 @@ export class GameView {
       card.appendChild(stock);
       card.dataset.supIdx = String(i);  // ORIGINAL supply index (display is sorted) — buy anim finds it by this
       if(!aff)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<bc?t('play.block.mana'):t('play.block.cond');
-      if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i), c); else zoomOnTap(card, c);
+      if (aff) armBuy(card, "sup" + i, () => this.h.onBuySupply(i), c);
       if (myTurn) markWatch(card, c.id); // 제시는 내 턴의 내 제시만 (상대 제시엔 표시 무의미)
       bindZoom(card, c);
       sup.appendChild(card);
@@ -1264,7 +1260,7 @@ export class GameView {
         const gw = ghost ? ghost.offsetWidth : 0, gh = ghost ? ghost.offsetHeight : 0;
         const rel = ghost ? { left: ev.clientX - gw / 2, top: ev.clientY - gh * 0.58, width: gw, height: gh } : null;
         cleanup();
-        if (!dragged) return; // plain click → the click handler zooms
+        if (!dragged) return; // a plain primary click only opens/holds the hand
         swallowNextClick(card);
         // The highlight and submission use the same board bounds.
         if (inPlayArea) {
@@ -1286,7 +1282,6 @@ export class GameView {
     });
     card.onclick = (e) => {
       e.stopPropagation();
-      if (this.handOpen) zoomCard(c,undefined,[card.dataset.cardStateText, card.dataset.spaceRiteReason].filter(Boolean).join(' · ')); // tap = enlarge preview; playing is drag-only now
     };
   }
 

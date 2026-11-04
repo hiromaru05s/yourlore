@@ -37,7 +37,7 @@ function applyDocLang(): void {
 type Entry = { ko: string; ja: string; en: string };
 const D: Record<string, Entry> = {
   "settings.volume": {ja:"音量",ko:"음량",en:"Volume"},
-  "duel.endLabel": {ja:"ターン\n終了",ko:"턴\n종료",en:"END\nTURN"},
+  "duel.endLabel": {ja:"END\nTURN",ko:"END\nTURN",en:"END\nTURN"},
   "duel.enemyLabel": {ja:"相手の\nターン",ko:"상대\n턴",en:"ENEMY\nTURN"},
   "duel.complete": {ja:"デュエル終了",ko:"듀얼 종료",en:"DUEL COMPLETE"},
   "duel.previewPlace": {ja:"ビブリオン · デュエル",ko:"비블리온 · 듀얼",en:"BIBLION · DUEL"},
@@ -185,7 +185,7 @@ const D: Record<string, Entry> = {
   "game.std.meta": { ko: "매 게임 랜덤 · 1~6 마나", ja: "毎ゲームランダム · 1~6マナ", en: "Random each game · 1-6 mana" },
   "game.supply": { ko: "제시 마켓", ja: "提示マーケット", en: "Offer" },
   "game.refresh.suffix": { ko: "매 턴 갱신", ja: "毎ターン更新", en: "refreshes each turn" },
-  "game.endturn": { ko: "턴 종료", ja: "ターン終了", en: "End Turn" },
+  "game.endturn": { ko: "END TURN", ja: "END TURN", en: "END TURN" },
   "game.log": { ko: "로그", ja: "ログ", en: "Log" },
   "game.surrender": { ko: "기권", ja: "降参", en: "Surrender" },
   "game.myturn": { ko: "내 차례", ja: "自分のターン", en: "Your turn" },

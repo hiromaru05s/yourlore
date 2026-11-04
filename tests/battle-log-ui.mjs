@@ -6,7 +6,7 @@ const dom=new JSDOM('<body><div id="log"></div></body>',{url:'https://lore.test'
 for(const k of ['window','document','HTMLElement','Event','localStorage'])globalThis[k]=dom.window[k];
 const dir=await mkdtemp('/tmp/lore-log-ui-');
 try {
- await build({stdin:{contents:`export {GameLog} from './client/src/ui/log';export {setLang} from './client/src/i18n';export {createGame,reduce} from './client/src/shared/engine';export {battleLogEvents} from './client/src/shared/battleLog';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/ui.mjs',plugins:[{name:'inspection-boundary',setup(b){b.onResolve({filter:/cardInspection$/},()=>({path:'inspection',namespace:'test'}));b.onLoad({filter:/.*/,namespace:'test'},()=>({contents:'export const zoomCard=()=>{};'}));}}]});
+ await build({stdin:{contents:`export {GameLog} from './client/src/ui/log';export {setLang} from './client/src/i18n';export {createGame,reduce} from './client/src/shared/engine';export {battleLogEvents} from './client/src/shared/battleLog';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/ui.mjs',plugins:[{name:'inspection-boundary',setup(b){b.onResolve({filter:/cardInspection$/},()=>({path:'inspection',namespace:'test'}));b.onLoad({filter:/.*/,namespace:'test'},()=>({contents:'export const zoomCard=card=>{globalThis.__logInspections=(globalThis.__logInspections??[]).concat(card.id);};'}));}}]});
  const {GameLog,setLang,createGame,reduce,battleLogEvents}=await import(dir+'/ui.mjs');
  const el=document.querySelector('#log'),log=new GameLog(el);setLang('ja');
  const g=createGame({mode:'online',seed:42,starting:1,p0:{id:'a',name:'Alice'},p1:{id:'b',name:'Bob'}}).state;g.players[1].mana=5;
@@ -14,6 +14,8 @@ try {
  const append=events=>{for(const e of events)if(e.type==='turnHeader')log.turnHeader(e.turn,e.name,e.isBot,e.player===0);else if(e.type==='log'&&!e.rejected)log.line(e.html,e.htmlJa);};
  const history=[{type:'turnHeader',turn:3,name:'Bob',isBot:false,player:1},...battleLogEvents(refreshed.events),{type:'log',html:'몬스터 존이 가득 차 소환 실패',htmlJa:'モンスターゾーンが満杯で召喚できません'}];
  append(history);assert.match(el.textContent,/Bob.*マーケットをリロール/s);assert.equal(el.querySelectorAll('.log-card').length,refreshed.state.players[1].supply.filter(Boolean).length);assert.equal(el.querySelectorAll('.ln.opp').length,2);assert.match(el.textContent,/召喚できません/);
+ const logCard=el.querySelector('.log-card');logCard.click();assert.equal(globalThis.__logInspections,undefined,'primary click does not inspect');
+ logCard.dispatchEvent(new dom.window.MouseEvent('contextmenu',{bubbles:true,cancelable:true,button:2}));assert.deepEqual(globalThis.__logInspections,[logCard.dataset.card],'secondary click inspects');
  const text=el.textContent;log.clear();append(history);assert.equal(el.textContent,text,'replace after reconnect does not duplicate');
  setLang('en');assert.match(el.textContent,/rerolled the market/);setLang('ja');assert.equal(el.textContent,text,'language changes preserve history and localize card names');
  // Exercise the real controller methods without constructing the WebGL board.
@@ -32,5 +34,5 @@ try {
  log.clear();log.line('<span class="t">最大マナ</span> 최대 마나 +1','<span class="t">最大マナ</span> 最大マナ+1');
  for(const [lang,term] of [['ja','マナ水晶'],['en','mana crystals'],['ko','마나 수정']]){setLang(lang);assert(el.textContent.includes(term));assert.equal(el.querySelector('.t').textContent,'最大マナ','player name remains verbatim');}
  log.line('최대 마나 +1','最大マナ+1','max mana +1');setLang('en');assert(el.lastElementChild.textContent.includes('mana crystals'));
- log.dispose();console.log('PASS log UI: real controller filtering, opponent grouping, clickable localized cards, Japanese/English reroll text, queued reconnect replacement and later appends');
+ log.dispose();console.log('PASS log UI: real controller filtering, opponent grouping, right-click inspection of localized cards, Japanese/English reroll text, queued reconnect replacement and later appends');
 } finally {await rm(dir,{recursive:true,force:true});dom.window.close();}
