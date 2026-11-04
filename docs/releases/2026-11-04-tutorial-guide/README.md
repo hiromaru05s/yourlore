@@ -25,3 +25,13 @@ The frozen silver-inscription reference was inspected as a time-sampled sequence
 - `tests/tutorial-parts.mjs` and `tests/onboarding.mjs` passed. The full rendered 49-step tutorial completed at 1280 and 1024 using Enter for message steps.
 - Visual evidence includes the actual board at 1280/1024/390/320 and the deck explanation. Motion capture and sampled geometry are separate from functional results. This is an implementation review, not new user visual approval or a physical-device test.
 - Production guard and post-deployment evidence are recorded below after release.
+
+## Production result
+
+- Deployed source: `a40f87b6b1189d7ce4661ee877b3381f775330dc`.
+- Worker version: `f2c30037-af0d-40cc-89e2-c675529226ae`, 100% traffic; deployment `654dce95-a822-4ee0-8047-9c4370266b19`, 2026-11-04 18:28 KST.
+- Guarded clean-snapshot schema preflight, typecheck, all **267/267** required regression files and production build passed.
+- All **136** deployed HTML/JS/CSS assets matched the locally built bytes exactly at `https://yourlore.xyz`.
+- The deployed frontend completed all basic tutorial steps using Enter for explanations, then gacha, free starter, the new shared-pool explanation, deck edit, reload/resume, saved deck and completion. No page errors or fixture API errors.
+- This browser run used actual production assets with API requests routed to isolated local Worker/SQLite fixtures. It did not create or modify real accounts, perform real purchases, verify OAuth or run real PvP. Local 320/390/1024/1280 visual checks and motion capture cover the same deployed implementation; physical devices and new user visual approval remain outside this verification.
+- Post-release evidence commits do not change the deployed application.
