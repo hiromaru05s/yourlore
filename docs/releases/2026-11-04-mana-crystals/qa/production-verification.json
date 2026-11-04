@@ -1,0 +1,29 @@
+{
+  "origin": "https://yourlore.xyz",
+  "source": "a40f87b6b1189d7ce4661ee877b3381f775330dc",
+  "implementation": [
+    "50f01e4d",
+    "2488eff8"
+  ],
+  "deploymentId": "654dce95-a822-4ee0-8047-9c4370266b19",
+  "versions": [
+    {
+      "version_id": "f2c30037-af0d-40cc-89e2-c675529226ae",
+      "percentage": 100
+    }
+  ],
+  "deployedAt": "2026-11-04T09:28:20.103944Z",
+  "suite": {
+    "passed": 267,
+    "total": 267
+  },
+  "browser": {
+    "api": "fixtures only; production static assets",
+    "results": [
+      "PASS ja: 40 pages, reference/search/inspection, keyboard tabs, saved position, 1440/390/320 widths",
+      "PASS en: 40 pages, reference/search/inspection, keyboard tabs, saved position, 1440/390/320 widths",
+      "PASS ko: 40 pages, reference/search/inspection, keyboard tabs, saved position, 1440/390/320 widths"
+    ]
+  },
+  "limits": "No real-account authentication, live PvP, purchases or physical-device test"
+}
