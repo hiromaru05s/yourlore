@@ -188,6 +188,7 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   CREATION: {"terms":["graveyard","rift"]},
   ROGUE_ART: {"terms":["lasting"],"mentions":["evade"],"grants":["evade"]},
   BLACK_INFINITY: {"terms":["rift"]},
+  BLACK_NOVA: {terms:['rift'], mentions:['void']},
   BLACK_CURSE: {"terms":["composition","graveyard"]},
   BLACK_ELSA: {"terms":["graveyard","counters"]},
   BLACK_ALICE: {"terms":["graveyard"]},

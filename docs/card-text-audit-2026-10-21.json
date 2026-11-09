@@ -7648,8 +7648,8 @@
         "ja",
         "ko"
       ],
-      "definitionSha256": "29b2eed9a32cc9f8312d9e8051c6a3a4db343f98dd8b783063aa0e48afa3de8d",
-      "textSha256": "195a4e643f101c53e472aea22147d72f22b5e914f6a2e56aaa73125cf40fbfa2",
+      "definitionSha256": "5ca72cdaab269fdcb25d992c521cf5ffed3d79c6e217403ea91c7b1a464c17a5",
+      "textSha256": "b179cff2eaeedfe7246a8ea097a345fb917b43ca0f8db79ea4f5207a8146f9f0",
       "hooks": {
         "act": "expansion"
       },
@@ -7659,9 +7659,9 @@
         "en": "【Play Requirement】You control no monsters.\n\n【On Cast】Set your HP to 1. Then skip the opponent’s next turn once."
       },
       "after": {
-        "ja": "【発動条件】自分の場にモンスターがいない。\n\n【発動時】自分の体力を1にする。その後、次の相手のターンを1回スキップする。",
-        "ko": "【발동 조건】자신의 필드에 몬스터가 없다.\n\n【발동 시】자신의 체력을 1로 만든다. 그 후 다음 상대 턴을 1회 건너뛴다.",
-        "en": "【Play Requirement】You control no monsters.\n\n【On Cast】Set your HP to 1. Then skip the opponent’s next turn once."
+        "ja": "【発動条件】自分の場にモンスターがいない。\n\n【発動時】自分の体力を1にする。その後、次の相手のターンを1回スキップする。虚無により、効果が通るとこのカードは自分のリフトに移る。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 없다.\n\n【발동 시】자신의 체력을 1로 만든다. 그 후 다음 상대 턴을 1회 건너뛴다. 공허로 인해 효과가 무효화되지 않으면 이 카드는 자신의 리프트로 간다.",
+        "en": "【Play Requirement】You control no monsters.\n\n【On Cast】Set your HP to 1. Then skip the opponent’s next turn once. If the spell resolves, Void sends this card to your Rift."
       }
     },
     "BLACK_CURSE": {
