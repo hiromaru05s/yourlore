@@ -8795,7 +8795,7 @@
         "en"
       ],
       "definitionSha256": "84507442fc1df4b63f1f67e489da8b3cedab2530c2673d61c47cf04882cebc4a",
-      "textSha256": "9e8acba0ed4ed367801bd4b47118981e1cea0a9cc59367b7d23be17b8f7cb58a",
+      "textSha256": "7329fe14895f878dcd6804064825ee8afc392b994c89e63a6e86d993d858916f",
       "hooks": {
         "aura": "goblinAttack",
         "summonReq": "uniqueRaider"
@@ -8806,9 +8806,9 @@
         "en": "【While on the Field】Your Goblins and Goblin Raiders on the field have +1 ATK."
       },
       "after": {
-        "ja": "【設置上限】自分の場に最大1体。\n\n【場にある間】自分の場の「ゴブリン」「特攻ゴブリン」の攻撃力+1。\n\n【召喚時】召喚したプレイヤーの次の相手のターン終了時に、このモンスターを必ず破壊する。",
-        "ko": "【설치 제한】자신의 필드에 최대 1체.\n\n【필드에 있는 동안】자신의 필드에 있는 고블린과 돌격 고블린의 공격력 +1.\n\n【소환 시】소환한 플레이어의 다음 상대 턴 종료 시 이 몬스터를 반드시 파괴한다.",
-        "en": "【Field Limit】At most 1 on your field.\n\n【While on the Field】Your Goblins and Goblin Raiders on the field have +1 ATK.\n\n【On Summon】Destroy this monster at the end of the summoning player’s next opponent turn, without exception."
+        "ja": "【設置上限】自分の場に最大1体。\n\n【場にある間】自分の場のゴブリン系モンスターの攻撃力+1。\n\n【召喚時】召喚したプレイヤーの次の相手のターン終了時に、このモンスターを必ず破壊する。",
+        "ko": "【설치 제한】자신의 필드에 최대 1체.\n\n【필드에 있는 동안】자신의 필드에 있는 고블린 계열 몬스터의 공격력 +1.\n\n【소환 시】소환한 플레이어의 다음 상대 턴 종료 시 이 몬스터를 반드시 파괴한다.",
+        "en": "【Field Limit】At most 1 on your field.\n\n【While on the Field】Your Goblin-family monsters on the field have +1 ATK.\n\n【On Summon】Destroy this monster at the end of the summoning player’s next opponent turn, without exception."
       }
     },
     "GOBLIN_SETTLEMENT": {
@@ -9125,7 +9125,7 @@
       "status": "reviewed-unchanged",
       "changedLocales": [],
       "definitionSha256": "b7824bfcefe9b7aac6909bf3db6010a4e53ed938cc6478b42e2ba10497b6f491",
-      "textSha256": "cbfc22a0426d0480163cf76dd69a4d5cb7c80caf0f42fc014b06df8fdf621ad5",
+      "textSha256": "e577dd34559b5b544305320f72d88c8b24f2e6873672a4cc30e8a54f7f747413",
       "hooks": {
         "act": "goblinParty"
       },
@@ -9135,9 +9135,9 @@
         "en": "【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 and increase yours by 1."
       },
       "after": {
-        "ja": "【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】相手のマナ水晶を1減らし、自分のマナ水晶を1増やす。",
-        "ko": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】상대의 마나 수정을 1 감소시키고 자신의 마나 수정을 1 증가시킨다.",
-        "en": "【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 and increase yours by 1."
+        "ja": "【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】相手のマナ水晶を1減らし（最低3）、自分のマナ水晶を1増やす。",
+        "ko": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】상대의 마나 수정을 1 감소시키고(최소 3) 자신의 마나 수정을 1 증가시킨다.",
+        "en": "【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 (minimum 3) and increase yours by 1."
       }
     },
     "FORGE": {

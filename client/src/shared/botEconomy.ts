@@ -1,3 +1,4 @@
+import { GOBLIN_IDS } from './goblinCards';
 import type { CardDef, CardInst, GameState, PlayerState } from './types';
 import { ALL_IDS, DB, hasPassive } from './cards';
 import { MAX_TURNS, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet, spellDeckHalf } from './engine';
@@ -80,8 +81,8 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     }
     if (c.id === 'ADVANCE') synergy += Math.min(18,monsters*2 + plan.stopped*4);
     if (c.id === 'TRAINING_GROUND') synergy += count('CASTLE') ? 12 : 5;
-    if (c.id === 'GOBLIN_KING' && !own.some(x=>x.id.startsWith('GOBLIN')&&x.id!=='GOBLIN_KING')) readiness -= 20;
-    if (c.id==='GOBLIN_LEADER'||c.id==='GOBLIN_KING') synergy += Math.min(14,own.filter(x=>x.id.startsWith('GOBLIN')&&x.id!==c.id).length*2);
+    if (c.id === 'GOBLIN_KING' && !own.some(x=>GOBLIN_IDS.has(x.id)&&x.id!=='GOBLIN_KING')) readiness -= 20;
+    if (c.id==='GOBLIN_LEADER'||c.id==='GOBLIN_KING') synergy += Math.min(14,own.filter(x=>GOBLIN_IDS.has(x.id)&&x.id!==c.id).length*2);
     if (c.id==='FARMER') synergy += count('FARM') ? 20 : 0;
     if (c.id==='FARM_KEEPER') synergy += count('FARM')||count('BREWING') ? 15 : 0;
     if (c.id==='FARM') {

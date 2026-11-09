@@ -47,6 +47,9 @@ export function botNpc(difficulty: BotDifficulty): BotNpc {
   return BOT_NPCS.find(npc => npc.difficulty === difficulty)!;
 }
 export function npcPortrait(avatar: string | null | undefined): string | undefined {
+  if (avatar === 'STORY_SHION') return '/art/npcs/v2/shion.webp';
+  if (avatar === 'STORY_RENA') return '/art/npcs/v2/rena.webp';
+  if (avatar === 'STORY_ARIES') return '/art/npcs/v2/aries.webp';
   return BOT_NPCS.find(npc => npc.avatar === avatar)?.portrait;
 }
 

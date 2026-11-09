@@ -126,6 +126,7 @@ export const api = {
   progression: () => call<import('../shared/progression').ProgressionState>('/rewards/progression',undefined,'GET'),
   claimDaily: (day:string,revision:number,slot:number) => call<import('../shared/progression').ProgressionState & {amount:number}>('/rewards/daily/claim',{day,revision,slot}),
   rerollDaily: (day:string,revision:number,slot=0) => call<import('../shared/progression').ProgressionState>('/rewards/daily/reroll',{day,revision,slot}),
+  startStory: (lang:string, previous?:string) => call<{roomId:string;oppName:string;oppAvatar:string}>('/rewards/story/start',{lang,previous}),
   startBot: (difficulty:import('../shared/bot').BotDifficulty,lang:string) => call<{roomId:string;you:0;oppName:string;oppAvatar:string}>('/rewards/bot/start',{difficulty,lang}),
   // register: {user} (즉시 입장) 또는 {needVerify:true} (인증 메일 발송됨)
   register: (email: string, password: string) => call<{ user?: User; needVerify?: boolean }>("/auth/register", { email, password, ...acquisition() }),

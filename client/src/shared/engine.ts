@@ -1322,7 +1322,7 @@ function binEnch(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst, for
     const depth = spellDepth; spellDepth++;
     try { ctx.dealDamage(opponent,8,cn(card),cn(card),side(g,owner)); } finally { spellDepth=depth; }
   }
-  if (card.id === 'GOBLIN_ORIGIN' && cause === 'spell' && source != null && source !== side(g, owner) && opponent.field.length) {
+  if (card.id === 'GOBLIN_ORIGIN' && cause !== 'self' && source != null && source !== side(g, owner) && opponent.field.length) {
     const target = opponent.field[randInt(g, opponent.field.length)];
     ctx.log(`${cn(card)}: 상대 카드 효과로 파괴 → ${cn(target)} 무작위 파괴`, `${cn(card)}: 相手の効果で破壊 → ${cn(target)}をランダム破壊`, `${cn(card)} is destroyed by an enemy effect → randomly destroy ${cn(target)}`);
     ctx.destroyMonster(opponent, target);
@@ -3547,9 +3547,14 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'goblinParty': {
       const count = p.field.filter(isGoblinMonster).length;
       if (count < 3) break;
-      o.maxMana = Math.max(3, o.maxMana - 1); o.mana = Math.min(o.mana, o.maxMana);
+      const before = o.maxMana;
+      o.maxMana = Math.max(MIN_MANA, before - 1);
+      o.mana = Math.min(o.mana, effMaxMana(o));
+      const lost = Math.max(0, before - o.maxMana);
+      const previousOwn = p.maxMana;
       addMaxMana(p, 1);
-      ctx.log(`${cn(card)}: 고블린 ${count}체 · 상대 마나 수정 -1, 자신 +1`, `${cn(card)}: ゴブリン${count}体 · 相手のマナ水晶-1、自分+1`, `${cn(card)}: ${count} Goblins · enemy mana crystals -1, yours +1`);
+      const gained = Math.min(MAX_MANA, p.maxMana) - previousOwn;
+      ctx.log(`${cn(card)}: 고블린 ${count}체 · 상대 마나 수정 -${lost}, 자신 +${gained}`, `${cn(card)}: ゴブリン${count}体 · 相手のマナ水晶-${lost}、自分+${gained}`, `${cn(card)}: ${count} Goblins · enemy mana crystals -${lost}, yours +${gained}`);
       break;
     }
     case 'dew': gainDew(ctx,p,v); break;

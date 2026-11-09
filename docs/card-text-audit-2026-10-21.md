@@ -7162,19 +7162,19 @@
 
 > 【発動条件】自分の場にゴブリン系モンスターが3体以上いる。
 >
-> 【発動時】相手のマナ水晶を1減らし、自分のマナ水晶を1増やす。
+> 【発動時】相手のマナ水晶を1減らし（最低3）、自分のマナ水晶を1増やす。
 
 **ko**
 
 > 【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.
 >
-> 【발동 시】상대의 마나 수정을 1 감소시키고 자신의 마나 수정을 1 증가시킨다.
+> 【발동 시】상대의 마나 수정을 1 감소시키고(최소 3) 자신의 마나 수정을 1 증가시킨다.
 
 **en**
 
 > 【Play Requirement】You need at least 3 Goblin-family monsters on your field.
 >
-> 【On Cast】Reduce the opponent's mana crystals by 1 and increase yours by 1.
+> 【On Cast】Reduce the opponent's mana crystals by 1 (minimum 3) and increase yours by 1.
 
 
 ### FORGE — ゴブリン鍛冶屋

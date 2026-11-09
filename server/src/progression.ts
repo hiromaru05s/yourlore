@@ -70,12 +70,12 @@ export async function progressionState(env:Env,id:string,now=Date.now()):Promise
  const dailies=await ensureDailies(env,id,now),daily=dailies[0];
  const [rows,bots,user]=await Promise.all([
  env.DB.prepare('SELECT mode,SUM(amount) amount FROM duel_reward_receipts WHERE user_id=? AND day=? GROUP BY mode').bind(id,daily.day).all<{mode:string;amount:number}>(),
- env.DB.prepare("SELECT key FROM rewards WHERE user_id=? AND key LIKE 'bot:first:%'").bind(id).all<{key:string}>(),
+ env.DB.prepare("SELECT key FROM rewards WHERE user_id=? AND (key LIKE 'bot:first:%' OR key='story:aries:clear')").bind(id).all<{key:string}>(),
  env.DB.prepare('SELECT credits FROM users WHERE id=?').bind(id).first<{credits:number}>(),
  ]);
- const bot:ProgressionState['bot']={};for(const r of bots.results??[])bot[r.key.slice(10) as keyof typeof BOT_REWARDS]=true;
+ const bot:ProgressionState['bot']={};for(const r of bots.results??[])if(r.key.startsWith('bot:first:'))bot[r.key.slice(10) as keyof typeof BOT_REWARDS]=true;
  const spent=(mode:string)=>(rows.results??[]).find(r=>r.mode===mode)?.amount??0;
- return {daily,dailies,bot,online:spent('online'),ranked:spent('ranked'),credits:user?.credits??0,resetsAt:Date.parse(daily.day+'T00:00:00+09:00')+86400_000};
+ return {daily,dailies,bot,ariesCleared:bots.results.some(r=>r.key==='story:aries:clear'),online:spent('online'),ranked:spent('ranked'),credits:user?.credits??0,resetsAt:Date.parse(daily.day+'T00:00:00+09:00')+86400_000};
 }
 export async function rerollDaily(env:Env,id:string,day:unknown,revision:unknown,now=Date.now(),slot:unknown=0):Promise<boolean> {
  if(!Number.isInteger(slot)||Number(slot)<0||Number(slot)>2)return false;

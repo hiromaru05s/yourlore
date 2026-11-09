@@ -85,7 +85,7 @@ function typeDirection(card) {
 
 function subjectHint(card) {
   if (card.id === "ELITE_GOBLIN") return "a compact elite goblin scout in battered brass-reinforced leather, alert forward-leaning stance with a short cleaver and buckler, one vivid readable creature silhouette; visually belongs beside the existing GOBLIN and GOBLIN_RAIDER illustrations";
-  if (card.id === "GOBLIN_ORIGIN") return "object-only spell illustration: an ancient cracked green seed-stone on a blackened oak archive table, a single small goblin emerging as amber-green roots curl around it; no people or hands";
+  if (card.id === "GOBLIN_ORIGIN") return "a small green goblin with pointed ears emerging halfway from a cracked seed-stone, face and reaching arm clear at thumbnail size, warm amber light in a dark archive";
   if (card.id === "GOBLIN_PARTY") return "object-only spell illustration: three distinct goblin-sized drumsticks and a battered brass war-drum beating a sharp rally, three small green sparks converging on a blue mana crystal while an opposing crystal dims; no creatures or people";
   if (card.id === "FORGE") return "object-only spell illustration: a compact blacksmith anvil and ember-lit hammer striking a single goblin-sized blade, a clear blue-white pulse of power traveling into the weapon; no person, no hands, no writing";
   if (card.id === "ICARUS_SHOES") return "object-only spell illustration: a pair of worn winged bronze boots on a dark archive pedestal, two clean parallel afterimage trails showing swift repeated movement, warm amber highlights; no person or legs";

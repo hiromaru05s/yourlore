@@ -14,7 +14,7 @@ import { startHomeMusic } from "./ui/homeMusic";
 // ============================================================
 import type { Side } from "./shared/types";
 import type { BotDifficulty } from "./shared/bot";
-import { ARIES_OPPONENTS, type AriesStage } from "./shared/ariesStory";
+import { ARIES_OPPONENTS, ariesRoomStage, type AriesStage } from "./shared/ariesStory";
 import type { User } from "./net/api";
 import { api } from "./net/api";
 import { aIdentify, aReset, aCapture } from "./net/analytics";
@@ -199,7 +199,22 @@ export class App {
       } finally {this.startingBot=false;}
     },()=>{this.startingBot=false;}));
   }
-  storyGame(stage: AriesStage): void {
+  storyGame(stage: AriesStage, previous?: string): void {
+    if (this.user && this.user.id !== 'local-guest-user') {
+      const live = loadActiveGame(this.user.id);
+      if (live) return this.onlineGame(live.roomId,live.you,'?',null,!!live.ranked);
+      if (this.startingBot) return;
+      this.startingBot = true;
+      const owner = this.user.id;
+      this.swap(() => mountGamePreparation(this, async () => {
+        try {
+          const revision = this.screenRevision;
+          const room = await api.startStory(getLang(),previous);
+          if (this.user?.id === owner && this.screenRevision === revision) this.onlineGame(room.roomId,0,room.oppName,room.oppAvatar);
+        } finally { this.startingBot = false; }
+      }, () => { this.startingBot = false; }));
+      return;
+    }
     const opponent = ARIES_OPPONENTS[stage];
     setPresence('bot'); aCapture('game_start', { mode:'story', chapter:'aries', stage });
     this.swap(() => mountGame(this, { mode:'bot', difficulty:opponent.difficulty, story:opponent }));
@@ -218,7 +233,9 @@ export class App {
     setPresence("online");
     aCapture("game_start", { mode: "online" });
     saveActiveGame(roomId, you, ranked, this.user?.id); // remember it so a crash/close can rejoin this exact room
-    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName, oppAvatar, ranked, difficulty }));
+    const stage = ariesRoomStage(roomId);
+    const story = stage === undefined ? undefined : ARIES_OPPONENTS[stage];
+    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName:story?.name[getLang()] ?? oppName, oppAvatar:story?.avatar ?? oppAvatar, ranked, difficulty, story }));
   }
 
   async logout(): Promise<void> {

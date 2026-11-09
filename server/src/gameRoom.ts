@@ -1,3 +1,4 @@
+import { ARIES_OPPONENTS, type AriesStage } from '../../client/src/shared/ariesStory';
 import { reserveNpcDeck } from './botRotation';
 import {publicNameEvents} from './publicNames';
 import {newMedalDuel} from '../../client/src/shared/medalTracking';
@@ -57,6 +58,7 @@ interface RoomData {
   daily?: [QuestState | QuestState[] | null, QuestState | QuestState[] | null];
   rewardDecks?: [string[], string[]];
   challengeDifficulty?: BotDifficulty;
+  storyStage?: AriesStage;
   /** Connection generation per side — a close from an older gen is a replaced socket, not a disconnect. */
   gen: [number, number];
   /** Pending forfeit deadlines (ms epoch) per side; enforced by alarm(). */
@@ -211,7 +213,7 @@ export class GameRoom {
         initSent: r.initSent ?? [true, true],
         opening: r.opening,
         bot: r.bot,
-        daily:r.daily, rewardDecks:r.rewardDecks, challengeDifficulty:r.challengeDifficulty,
+        daily:r.daily, rewardDecks:r.rewardDecks, challengeDifficulty:r.challengeDifficulty, storyStage:r.storyStage,
         startedAt: r.startedAt ?? Date.now(), // old blobs: degrade to duration≈0 (excluded by admin query)
       };
     }
@@ -223,19 +225,28 @@ export class GameRoom {
     if (url.pathname === "/npc-deck") return reserveNpcDeck(this.state.storage, req);
     await this.restore();
 
+    if (url.pathname === '/story-win' && req.method === 'POST') {
+      const owner = await req.text();
+      const room = this.room;
+      const won = room?.storyStage !== undefined && room.players[0].id === owner && room.game.over && room.game.winner === 0 && room.readied.every(Boolean);
+      return new Response(null, {status: won ? 204 : 403});
+    }
     // provisioning call from the matchmaker
     if (url.pathname === "/setup") {
       if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
       if (this.provisioning) return new Response("room provisioning; retry", { status: 503 });
       if (this.room) return new Response("already provisioned", { status: 409 });
-      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string; challengeDifficulty?: BotDifficulty; challengeDeckIndex?: number };
+      const body = (await req.json()) as { players: [PlayerRef, PlayerRef]; seed: number; ranked?: boolean; botId?: string; challengeDifficulty?: BotDifficulty; challengeDeckIndex?: number; storyStage?: AriesStage };
       // Reading the request body yields; a concurrent setup may have won meanwhile.
       if (this.provisioning) return new Response("room provisioning; retry", { status: 503 });
       if (this.room) return new Response("already provisioned", { status: 409 });
       if(body.challengeDifficulty && (!Object.hasOwn(BOT_REWARDS,body.challengeDifficulty)||body.ranked||body.botId))return new Response('invalid difficulty',{status:400});
       const npc=body.challengeDifficulty?botNpc(body.challengeDifficulty):undefined;
       const challenge=npc?{id:'lore-challenge-bot-'+npc.difficulty,name:body.players[1].name,deck:Number.isInteger(body.challengeDeckIndex)&&npc.decks[body.challengeDeckIndex!] ? npc.decks[body.challengeDeckIndex!] : pickNpcDeck(npc).deck}:undefined;
-      const bot = challenge ?? (body.botId ? matchBot(body.botId) : undefined);
+      const story = body.storyStage === undefined ? undefined : ARIES_OPPONENTS[body.storyStage];
+      if (body.storyStage !== undefined && (!story || body.challengeDifficulty !== 'hell')) return new Response('invalid story', {status:400});
+      const storyBot = story && {id:story.avatar, name:body.players[1].name, deck:{cards:story.deck, tune:story.tune}};
+      const bot = storyBot ?? challenge ?? (body.botId ? matchBot(body.botId) : undefined);
       if (body.botId && (!matchBotsEnabled(this.env) || !bot || body.players[1]?.id !== bot.id || body.players[0]?.id === bot.id)) return new Response('invalid test bot', {status:403});
       if (bot) body.players[1] = {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')};
       const res = createGame({
@@ -243,7 +254,7 @@ export class GameRoom {
         challenge: body.challengeDifficulty ? {difficulty: body.challengeDifficulty, side: 1} : undefined,
         seed: body.seed,
         p0: { id: body.players[0].id, name: body.players[0].name, deck: body.players[0].deck ? body.players[0].deck.split(",") : undefined },
-        p1: { id: body.players[1].id, name: body.players[1].name, deck: body.players[1].deck ? body.players[1].deck.split(",") : undefined },
+        p1: { scriptedDeck:!!story, id: body.players[1].id, name: body.players[1].name, deck: body.players[1].deck ? body.players[1].deck.split(",") : undefined },
         starting: (body.seed & 1) as Side, // coin toss: seed parity decides who goes first (fair, server-authoritative)
       });
       this.provisioning = true;
@@ -256,7 +267,7 @@ export class GameRoom {
           joinBy: Date.now() + JOIN_GRACE_MS,
           recorded: false,
           ranked: body.ranked ?? false,
-          challengeDifficulty:body.challengeDifficulty,
+          challengeDifficulty:body.challengeDifficulty, storyStage:body.storyStage,
           gen: [0, 0],
           forfeitAt: [null, null],
           turnStartAt: Date.now(),
@@ -773,6 +784,17 @@ export class GameRoom {
     const usesOf = (s: Side) => JSON.stringify(room.game.players[s].uses ?? {});
     const buysOf = (s: Side) => JSON.stringify(room.game.players[s].buys ?? {});
     try {
+      if (room.storyStage !== undefined) {
+        if (room.storyStage === 2 && room.game.winner === 0) {
+          await this.env.DB.prepare('INSERT OR IGNORE INTO rewards (user_id,key,amount,created_at) VALUES (?,?,0,?)')
+            .bind(room.players[0].id,'story:aries:clear',room.resultAt).run();
+        }
+        room.recorded = true;
+        await this.persist();
+        const ws = this.sockFor(0);
+        if (ws) this.send(ws,{type:'rewardsSettled'});
+        return;
+      }
       // Gate totals on the same match row. Retrying telemetry never increments twice.
       await this.env.DB.batch([
         ...(winner && loser && !room.challengeDifficulty ? [...experienceStatements(this.env,winner,`match:${matchId}`,ONLINE_WIN_EXP,room.resultAt),...experienceStatements(this.env,loser,`match:${matchId}`,ONLINE_LOSS_EXP,room.resultAt)] : []),

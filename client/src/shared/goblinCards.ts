@@ -1,7 +1,7 @@
 import type { CardDef } from './types';
 
 export const GOBLIN_STARTERS = ["GOBLIN","GOBLIN_RAIDER","GOBLIN_SETTLEMENT","RELIC_PROTECTION","RELIC_BOUNTY","MANA_BACKFLOW","BATTLEFIELD"];
-export const GOBLIN_IDS = new Set(["GOBLIN","GOBLIN_RAIDER","GOBLIN_SETTLEMENT","GOBLIN_LEADER","GOBLIN_KING","ELITE_GOBLIN","GOBLIN_ORIGIN","GOBLIN_PARTY","FORGE","ICARUS_SHOES","ICARUS_WINGS"]);
+export const GOBLIN_IDS = new Set(["GOBLIN","GOBLIN_RAIDER","GOBLIN_SETTLEMENT","GOBLIN_LEADER","GOBLIN_KING","ELITE_GOBLIN","GOBLIN_ORIGIN","GOBLIN_PARTY"]);
 export const GOBLIN_MONSTER_IDS = new Set(["GOBLIN","GOBLIN_RAIDER","GOBLIN_LEADER","GOBLIN_KING","ELITE_GOBLIN"]);
 export const isBasicGoblin = (card: {id:string}): boolean => card.id === 'GOBLIN' || card.id === 'GOBLIN_RAIDER';
 export const isGoblinMonster = (card: {id:string}): boolean => GOBLIN_MONSTER_IDS.has(card.id);
@@ -28,9 +28,9 @@ export const GOBLIN_CARDS: CardDef[] = [
     "nameJa": "特攻ゴブリン",
     "nameEn": "Goblin Raider",
     "cost": 3,
-    "text": "【설치 제한】자신의 필드에 최대 1체.\n\n【필드에 있는 동안】자신의 필드에 있는 고블린과 돌격 고블린의 공격력 +1.\n\n【소환 시】소환한 플레이어의 다음 상대 턴 종료 시 이 몬스터를 반드시 파괴한다.",
-    "textJa": "【設置上限】自分の場に最大1体。\n\n【場にある間】自分の場の「ゴブリン」「特攻ゴブリン」の攻撃力+1。\n\n【召喚時】召喚したプレイヤーの次の相手のターン終了時に、このモンスターを必ず破壊する。",
-    "textEn": "【Field Limit】At most 1 on your field.\n\n【While on the Field】Your Goblins and Goblin Raiders on the field have +1 ATK.\n\n【On Summon】Destroy this monster at the end of the summoning player’s next opponent turn, without exception.",
+    "text": "【설치 제한】자신의 필드에 최대 1체.\n\n【필드에 있는 동안】자신의 필드에 있는 고블린 계열 몬스터의 공격력 +1.\n\n【소환 시】소환한 플레이어의 다음 상대 턴 종료 시 이 몬스터를 반드시 파괴한다.",
+    "textJa": "【設置上限】自分の場に最大1体。\n\n【場にある間】自分の場のゴブリン系モンスターの攻撃力+1。\n\n【召喚時】召喚したプレイヤーの次の相手のターン終了時に、このモンスターを必ず破壊する。",
+    "textEn": "【Field Limit】At most 1 on your field.\n\n【While on the Field】Your Goblin-family monsters on the field have +1 ATK.\n\n【On Summon】Destroy this monster at the end of the summoning player’s next opponent turn, without exception.",
     "t": "mon",
     "noShop": true,
     "atk": 2,
@@ -156,7 +156,7 @@ export const GOBLIN_CARDS: CardDef[] = [
   },
   { id:"ELITE_GOBLIN", name:"정예 고블린", nameJa:"精鋭ゴブリン", nameEn:"Elite Goblin", t:"mon", cost:1, atk:2, def:1, noShop:true, text:"【파괴 시】전투로 파괴될 때 주사위를 굴린다. 3 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다.", textJa:"【破壊時】戦闘で破壊される時、ダイスを振る。3以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする。", textEn:"【On Destruction】If battle would destroy this, roll a die. On 3+, you take 2 damage and prevent that battle destruction.", aura:"eliteGoblin" },
   { id:"GOBLIN_ORIGIN", name:"고블린의 기원", nameJa:"ゴブリンの起源", nameEn:"Goblin Origin", t:"spell", cost:2, noShop:true, ench:"goblinOrigin", val:99, text:"【자신의 턴 시작 시】자신의 필드에 '고블린' 1체를 소환한다.\n\n【파괴 시】상대 카드 효과로 파괴되면, 상대 필드의 몬스터 1체를 무작위로 파괴한다.", textJa:"【自分のターン開始時】自分のフィールドに「ゴブリン」1体を召喚する。\n\n【破壊時】相手のカード効果で破壊された場合、相手フィールドのモンスター1体をランダムに破壊する。", textEn:"【At the Start of Your Turn】Summon 1 Goblin to your field.\n\n【On Destruction】If an opponent's card effect destroys this, randomly destroy 1 monster on their field." },
-  { id:"GOBLIN_PARTY", name:"고블린 파티", nameJa:"ゴブリンパーティー", nameEn:"Goblin Party", t:"spell", cost:3, noShop:true, act:"goblinParty", text:"【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】상대의 마나 수정을 1 감소시키고 자신의 마나 수정을 1 증가시킨다.", textJa:"【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】相手のマナ水晶を1減らし、自分のマナ水晶を1増やす。", textEn:"【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 and increase yours by 1." },
+  { id:"GOBLIN_PARTY", name:"고블린 파티", nameJa:"ゴブリンパーティー", nameEn:"Goblin Party", t:"spell", cost:3, noShop:true, act:"goblinParty", text:"【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】상대의 마나 수정을 1 감소시키고(최소 3) 자신의 마나 수정을 1 증가시킨다.", textJa:"【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】相手のマナ水晶を1減らし（最低3）、自分のマナ水晶を1増やす。", textEn:"【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 (minimum 3) and increase yours by 1." },
   { id:"FORGE", name:"고블린 대장간", nameJa:"ゴブリン鍛冶屋", nameEn:"Goblin Forge", t:"spell", cost:2, noShop:true, act:"buffPerm", play:2, val:4, val2:2, text:"【발동 시】자신은 3 데미지를 받는다. 자신의 몬스터 1체를 선택해 공격력 +4, 체력 +2.", textJa:"【発動時】自分は3ダメージを受ける。自分のモンスター1体を選び、攻撃力+4・体力+2。", textEn:"【On Cast】Take 3 damage. Choose a friendly monster; it gets +4 ATK and +2 HP." },
   { id:"ICARUS_SHOES", name:"이카로스의 신발", nameJa:"イカロスの靴", nameEn:"Icarus's Shoes", t:"spell", cost:0, noShop:true, act:"buffPerm", val:0, val2:0, grantPassive:"dual", text:"【발동 시】자신의 몬스터 1체에 '이도류'를 부여한다.", textJa:"【発動時】自分のモンスター1体に「二刀流」を付与する。", textEn:"【On Cast】Give a friendly monster Dual Wield." },
   { id:"ICARUS_WINGS", name:"이카로스의 날개", nameJa:"イカロスの翼", nameEn:"Icarus's Wings", t:"spell", cost:0, noShop:true, act:"buffPerm", val:0, val2:0, grantPassive:"evade", text:"【발동 시】자신의 몬스터 1체에 '회피'를 부여한다.", textJa:"【発動時】自分のモンスター1体に「回避」を付与する。", textEn:"【On Cast】Give a friendly monster Evade." }

@@ -27,16 +27,16 @@ import { loungeText } from "../ui/loungeText";
 export type GameOpts =
   | { mode: "bot"; difficulty?: BotDifficulty; story?: StoryOpponent }
   | { mode: "tutorial"; lesson?: number; part?: number }
-  | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean; difficulty?:BotDifficulty };
+  | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean; difficulty?:BotDifficulty; story?:StoryOpponent };
 
 export function mountGame(app: App, opts: GameOpts): Screen {
   const root = document.createElement("div");
   root.dataset.duelMode = opts.mode;
   app.root.appendChild(root);
   const npc = opts.mode === "bot" ? botNpc(opts.difficulty ?? "hard") : null;
-  const story = opts.mode === 'bot' ? opts.story : undefined;
+  const story = opts.mode === 'tutorial' ? undefined : opts.story;
   setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait
-  setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : npc?.avatar ?? null);
+  setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : story?.avatar ?? npc?.avatar ?? null);
   const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
   clearCardEffectContext();setLocalCardEffect(opts.mode==='bot'?activeDeck.effect:undefined);
   clearCardFrameContext();setLocalCardFrame(opts.mode==='bot'?activeDeck.frame:undefined);
@@ -49,7 +49,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     { avatar: ownSeeker, name: app.user?.display ?? "YOU", medal:app.user?.badge },
     opts.mode === "online"
       ? { avatar: opts.oppAvatar ?? "SEEKER_RED", name: opts.oppName }
-      : { avatar: npc?.avatar ?? "SEEKER_RED", name: story?.name[getLang()] ?? npc?.name[getLang()] ?? "TUTOR" },
+      : { avatar: story?.avatar ?? npc?.avatar ?? "SEEKER_RED", name: story?.name[getLang()] ?? npc?.name[getLang()] ?? "TUTOR" },
   );
 
   let stopMusic: (() => void) | undefined;
@@ -72,11 +72,16 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
-    onStoryResult: won => { storyWon = won; if (story && story.stage === 2 && won) localStorage.setItem(ARIES_COMPLETED_KEY, '1'); },
+    onBattleResult: won => {
+      storyWon = won;
+      if (!won || opts.mode !== 'bot' || app.user?.id !== 'local-guest-user') return;
+      if (!story) localStorage.setItem('lore.guest.dojo.' + opts.difficulty, '1');
+      else if (story.stage === 2) localStorage.setItem(ARIES_COMPLETED_KEY + '.guest', '1');
+    },
     onStoryAgainLabel: won => !story ? undefined : won ? story.stage < 2 ? loungeText('次の試練へ →','Continue →','다음 시련으로 →') : loungeText('ストーリーを閉じる','Finish story','스토리 마치기') : loungeText('最初からやり直す →','Restart the sequence →','처음부터 다시 →'),
     onRematch: () => {
-      if (opts.mode === 'bot' && story) {
-        if (storyWon && story.stage < 2) app.storyGame((story.stage + 1) as AriesStage);
+      if (story) {
+        if (storyWon && story.stage < 2) app.storyGame((story.stage + 1) as AriesStage, opts.mode === 'online' ? opts.roomId : undefined);
         else if (storyWon && story.stage === 2) app.home();
         else app.storyGame(0);
       } else if (opts.mode === "bot") app.botGame(opts.difficulty);

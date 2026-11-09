@@ -50,6 +50,9 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
   }
   return rooms.get(id);
  }};
+ const request=(path,body)=>E.handleRewards(env,new Request('https://local/api'+path,{method:'POST',headers:{cookie:'lore_session=rotation-session'},body:JSON.stringify(body)}),path);
+ assert.equal((await request('/rewards/story/start',{})).status,403);
+ assert.equal((await request('/rewards/bot/start',{difficulty:'hell'})).status,403);
  for(const tier of ['easy','normal','hard','hell']){
   const npc=E.botNpc(tier),seen=new Set();
   for(let i=0;i<npc.decks.length;i++){
@@ -59,7 +62,19 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
    const signature=room.room.rewardDecks[1].filter(id=>id!=='STARTER_MANA').sort().join(',');seen.add(signature);
    assert.equal(!!room.room.game.botMarket,tier==='hard'||tier==='hell');
   }
+  db.prepare('INSERT INTO rewards (user_id,key,amount,created_at) VALUES (?,?,0,?)').run(userId,'bot:first:'+tier,Date.now());
   assert.equal(seen.size,npc.decks.length,'HTTP start preserves every reserved strategy');
+ }
+ let prior;
+ for(const stage of [0,1,2]){
+   const res=await request('/rewards/story/start',{previous:prior});assert.equal(res.status,200);
+   const {roomId}=await res.json();const room=rooms.get(roomId);assert.equal(room.room.storyStage,stage);
+   assert.equal(room.room.rewardDecks[1].filter(id=>id==='ELITE_GOBLIN').length,3);
+   if(stage<2)assert.equal((await request('/rewards/story/start',{previous:roomId})).status,403);
+   if(prior){const retry=await request('/rewards/story/start',{previous:prior});assert.equal((await retry.json()).roomId,roomId);}
+   Object.assign(room.room,{readied:[true,true]});Object.assign(room.room.game,{over:true,winner:0});await room.recordResult();
+   assert.equal(db.prepare("SELECT count(*) n FROM rewards WHERE user_id=? AND key='story:aries:clear'").get(userId).n,stage===2?1:0);
+   prior=roomId;
  }
  const report={scope:'local real GameRoom setup, in-memory D1/storage, restore and runBot; not authenticated staging',results};if(process.env.LORE_BOT_SERVER_REPORT)fs.writeFileSync(process.env.LORE_BOT_SERVER_REPORT,JSON.stringify(report,null,2));console.log('PASS server Hard/Hell roster selection, difficulty restoration, lethal target, authoritative reducer parity, persistence and alarm',results);
  } finally {db?.close();globalThis.WebSocket=nativeWebSocket;fs.rmSync(temp,{recursive:true,force:true});}

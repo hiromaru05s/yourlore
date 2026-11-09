@@ -15,7 +15,7 @@ import { purchaseEvaluator, refreshValue, publicInventory } from './botEconomy';
 
 export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
-const SELF_HARM_SPELLS = new Set(['CATALYST','BLOOD1','BLOOD2','BLOOD_JOY','BLOOD_ANGER','BLOOD_SORROW','BLOOD_PLEASURE','VAMP_PACT','SHATTER','GREED_PRICE','MASSACRE','FLAME','AMBUSH','FORBIDDEN']);
+const SELF_HARM_SPELLS = new Set(['CATALYST','BLOOD1','BLOOD2','BLOOD_JOY','BLOOD_ANGER','BLOOD_SORROW','BLOOD_PLEASURE','VAMP_PACT','SHATTER','GREED_PRICE','MASSACRE','FLAME','AMBUSH','FORBIDDEN','FORGE']);
 
 const BLUNDER: Record<BotDifficulty, number> = { easy: 0.45, normal: 0, hard: 0, hell: 0 };
 

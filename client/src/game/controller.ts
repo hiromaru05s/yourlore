@@ -82,7 +82,7 @@ export interface ControllerExits {
   onOpeningStart?(elapsedMs:number): void;
   onBattleReady?(): void;
   onExperience?(): void;
-  onStoryResult?(won: boolean): void;
+  onBattleResult?(won: boolean): void;
   onStoryAgainLabel?(won: boolean | null): string | undefined;
 }
 
@@ -1576,6 +1576,7 @@ export abstract class BaseController implements BoardHandlers {
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
     sfx(won===null ? "drawGame" : won ? "win" : "lose");
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
+    if (won !== null) this.exits.onBattleResult?.(won);
     if (this.state.mode === "bot") this.reportBotResult(won);
     aCapture("game_end", { mode: this.state.mode, won, turns: this.state.turn });
     this.openResult();
@@ -1699,7 +1700,7 @@ export class LocalController extends BaseController {
   }
 
   protected reportBotResult(won: boolean | null): void {
-    if (this.storyMatch) { if (won !== null) this.exits.onStoryResult?.(won); return; }
+    if (this.storyMatch) return;
     const report = async () => {
       for(let attempt=0;attempt<3;attempt++){
         try { const result=await api.trackBot(won,this.difficulty);if(result.experience)this.receiveExperience(result.experience);else this.exits.onExperience?.();return; }

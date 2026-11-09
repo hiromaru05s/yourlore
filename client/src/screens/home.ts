@@ -94,6 +94,9 @@ function showBotNpcModal(app: App): void {
   void warmGame(activeDeck.cards).catch(()=>{});
   const order:BotDifficulty[]=['easy','normal','hard','hell'];
   const cleared=new Set<BotDifficulty>((app.user?.botClears??[]).filter((d):d is BotDifficulty=>order.includes(d as BotDifficulty)) as BotDifficulty[]);
+  if (app.user?.id === 'local-guest-user') {
+    for (const difficulty of order) if (localStorage.getItem('lore.guest.dojo.' + difficulty)) cleared.add(difficulty);
+  }
   const isUnlocked=(d:BotDifficulty)=>order.slice(0,order.indexOf(d)).every(x=>cleared.has(x));
   const storyUnlocked=()=>order.every(x=>cleared.has(x));
   let selected:BotDifficulty=order.find(d=>!cleared.has(d))??'hell';
@@ -119,7 +122,7 @@ function showBotNpcModal(app: App): void {
             <span class="challenge-art" aria-hidden="true"><img src="${npc.portrait}" alt=""></span>
             <span class="diff-name">${esc(npc.name[getLang()])}</span>
             <span class="npc-difficulty">${t(`bot.diff.${npc.difficulty}`)}</span>
-            <span class="npc-first-reward" data-bot-reward="${npc.difficulty}">${app.user?.botClears?.includes(npc.difficulty)?loungeText('クリア済み','Cleared','클리어 완료'):`${firstClearLabel(BOT_REWARDS[npc.difficulty])} · ${BOT_FIRST_CLEAR_EXP[npc.difficulty]} EXP`}</span>
+            <span class="npc-first-reward" data-bot-reward="${npc.difficulty}">${cleared.has(npc.difficulty)?loungeText('クリア済み','Cleared','클리어 완료'):`${firstClearLabel(BOT_REWARDS[npc.difficulty])} · ${BOT_FIRST_CLEAR_EXP[npc.difficulty]} EXP`}</span>
           </button>`).join("")}
       </div>
       <section class="single-story" id="storyContent" role="tabpanel" hidden>
@@ -128,9 +131,9 @@ function showBotNpcModal(app: App): void {
         <p>${loungeText('短気で勝負を急ぐ。精鋭ゴブリンを軸に、序盤から攻め切る神速アグロ。','Impatient and decisive. A lightning aggro style built around Elite Goblins.','성급하고 승부를 서두른다. 정예 고블린 중심의 신속 어그로.')}</p>
         <div class="single-story-deck-label">${loungeText('Ariesのスターター','Aries Starter','Aries 스타터')}</div>
         <div class="single-story-deck">${ariesDeckNames.map(name=>`<span>${esc(name)}</span>`).join('')}</div>
-        <div class="single-story-progression"><span>01</span><i></i><span>02</span><i></i><span>ARIES</span></div>
+        <div class="single-story-progression"><span><img src="/art/npcs/v2/shion.webp" alt="">${loungeText('火走りのシオン','Shion','불걸음 시온')}</span><i></i><span><img src="/art/npcs/v2/rena.webp" alt="">${loungeText('紅刃のレナ','Rena','붉은 칼날 레나')}</span><i></i><span><img src="/art/npcs/v2/aries.webp" alt="">Aries</span></div>
         <p class="single-story-note">${loungeText('配下のシーカー2人に連勝してから挑戦。途中で敗れると最初からやり直し。','Defeat two of Aries’s seekers in a row. Any loss restarts the sequence.','부하 시커 2명을 연속으로 이긴 뒤 도전한다. 한 번이라도 지면 처음부터 다시 시작.')}</p>
-        <div class="single-story-character">${localStorage.getItem(ARIES_COMPLETED_KEY)?loungeText('Aries撃破済み','Aries defeated','Aries 격파 완료'):loungeText('NPC全員クリア · 挑戦可能','All NPCs cleared · Ready','모든 NPC 클리어 · 도전 가능')}</div>
+        <div class="single-story-character">${(app.user?.id === "local-guest-user" && localStorage.getItem(ARIES_COMPLETED_KEY + ".guest"))?loungeText('Aries撃破済み','Aries defeated','Aries 격파 완료'):loungeText('NPC全員クリア · 挑戦可能','All NPCs cleared · Ready','모든 NPC 클리어 · 도전 가능')}</div>
         <button type="button" class="challenge-start" id="storyStart">${loungeText('Ariesへの道を始める →','Begin the Aries challenge →','Aries 도전 시작 →')}</button>
       </section>
       <div class="challenge-footer">
@@ -139,7 +142,7 @@ function showBotNpcModal(app: App): void {
       </div>
     </div>`;
   document.body.appendChild(ov);
-  if(app.user&&app.user.id!=='local-guest-user')void api.progression().then(data=>{if(!ov.isConnected)return;for(const [diff,done] of Object.entries(data.bot)){const el=ov.querySelector(`[data-bot-reward="${diff}"]`);if(el&&done){el.textContent=loungeText('クリア済み','Cleared','클리어 완료');cleared.add(diff as BotDifficulty);}}for(const b of ov.querySelectorAll<HTMLButtonElement>('[data-diff]')){const d=b.dataset.diff as BotDifficulty;b.disabled=!isUnlocked(d);if(!b.disabled)b.querySelector('.bot-lock')?.remove();}const unlockedStory=storyUnlocked();const tab=ov.querySelector<HTMLButtonElement>('[data-single-tab="story"]')!;tab.disabled=!unlockedStory;if(unlockedStory)tab.querySelector('.bot-lock-mini')?.remove();const state=ov.querySelector('.single-story-character');if(unlockedStory&&state)state.textContent=localStorage.getItem(ARIES_COMPLETED_KEY)?loungeText('Aries撃破済み','Aries defeated','Aries 격파 완료'):loungeText('NPC全員クリア · 挑戦可能','All NPCs cleared · Ready','모든 NPC 클리어 · 도전 가능');}).catch(()=>{});
+  if(app.user&&app.user.id!=='local-guest-user')void api.progression().then(data=>{if(!ov.isConnected)return;for(const [diff,done] of Object.entries(data.bot)){const el=ov.querySelector(`[data-bot-reward="${diff}"]`);if(el&&done){el.textContent=loungeText('クリア済み','Cleared','클리어 완료');cleared.add(diff as BotDifficulty);}}for(const b of ov.querySelectorAll<HTMLButtonElement>('[data-diff]')){const d=b.dataset.diff as BotDifficulty;b.disabled=!isUnlocked(d);if(!b.disabled)b.querySelector('.bot-lock')?.remove();}const unlockedStory=storyUnlocked();const tab=ov.querySelector<HTMLButtonElement>('[data-single-tab="story"]')!;tab.disabled=!unlockedStory;if(unlockedStory)tab.querySelector('.bot-lock-mini')?.remove();const state=ov.querySelector('.single-story-character');if(unlockedStory&&state)state.textContent=data.ariesCleared?loungeText('Aries撃破済み','Aries defeated','Aries 격파 완료'):loungeText('NPC全員クリア · 挑戦可能','All NPCs cleared · Ready','모든 NPC 클리어 · 도전 가능');}).catch(()=>{});
   const update = () => {
     const npc = botNpc(selected), name = npc.name[getLang()];
     ov.querySelectorAll<HTMLButtonElement>('[data-diff]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.diff === selected)));

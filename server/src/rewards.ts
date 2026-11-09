@@ -1,3 +1,4 @@
+import { ARIES_OPPONENTS, ariesRoomStage, type AriesStage } from '../../client/src/shared/ariesStory';
 import {tutorialStatus,grantTutorial} from './tutorialRewards';
 import { progressionState, rerollDaily, claimDaily } from './progression';
 import { BOT_REWARDS } from '../../client/src/shared/progression';
@@ -72,10 +73,44 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     const changed=await rerollDaily(env,user.id,body.day,body.revision,Date.now(),body.slot===undefined?0:body.slot);
     return json(env,{...await progressionState(env,user.id),changed},changed?200:409);
   }
+  if (path === '/rewards/story/start' && req.method === 'POST') {
+    if (!['easy','normal','hard','hell'].every(d => user.botClears?.includes(d))) {
+      return json(env, {error:'Clear every dojo opponent first'}, 403);
+    }
+    const body = await req.json().catch(() => null) as {previous?:unknown; lang?:unknown} | null;
+    if (!body) return json(env, {error:'Invalid request'}, 400);
+    let roomId = 'aries-' + crypto.randomUUID() + '-0';
+    let stage: AriesStage = 0;
+    if (body.previous !== undefined) {
+      if (typeof body.previous !== 'string') return json(env, {error:'Invalid story room'}, 400);
+      const priorStage = ariesRoomStage(body.previous);
+      if (priorStage === undefined || priorStage === 2) return json(env, {error:'Invalid story room'}, 400);
+      const prior = env.GAME_ROOM.get(env.GAME_ROOM.idFromName(body.previous));
+      const proof = await prior.fetch(new Request('https://room/story-win', {method:'POST', body:user.id}));
+      if (!proof.ok) return json(env, {error:'Win the previous duel first'}, 403);
+      stage = (priorStage + 1) as AriesStage;
+      // Each win has exactly one successor, even across concurrent retries.
+      roomId = body.previous.slice(0,-1) + stage;
+    }
+    const opponent = ARIES_OPPONENTS[stage];
+    const lang = body.lang === 'en' || body.lang === 'ko' ? body.lang : 'ja';
+    const name = opponent.name[lang];
+    const room = env.GAME_ROOM.get(env.GAME_ROOM.idFromName(roomId));
+    const setup = await room.fetch(new Request('https://room/setup', {method:'POST', body:JSON.stringify({
+      players:[{id:user.id,name:user.display,deck:user.deck?.join(','),sleeve:user.sleeve,furniture:user.furniture,effect:user.effect,frame:user.frame},{id:opponent.avatar,name}],
+      seed:crypto.getRandomValues(new Uint32Array(1))[0], challengeDifficulty:'hell', storyStage:stage
+    })}));
+    if (!setup.ok && setup.status !== 409) return json(env, {error:'Could not start story duel'}, 503);
+    return json(env, {roomId,you:0,oppName:name,oppAvatar:opponent.avatar});
+  }
   if (path === '/rewards/bot/start' && req.method === 'POST') {
     const body=await req.json().catch(()=>null) as {difficulty?:unknown;lang?:unknown}|null;
     if(typeof body?.difficulty!=='string'||!Object.hasOwn(BOT_REWARDS,body.difficulty))return json(env,{error:'invalid difficulty'},400);
     const difficulty=body.difficulty as keyof typeof BOT_REWARDS,npc=botNpc(difficulty);
+    const order = ['easy','normal','hard','hell'];
+    if (!order.slice(0,order.indexOf(difficulty)).every(d => user.botClears?.includes(d))) {
+      return json(env, {error:'Clear the previous dojo opponents first'}, 403);
+    }
     const roomId=crypto.randomUUID(),botId='lore-challenge-bot-'+difficulty;
     try {
     const rotation=await env.GAME_ROOM.get(env.GAME_ROOM.idFromName(`npc-roster:${user.id}:${difficulty}`)).fetch(new Request('https://room/npc-deck',{method:'POST',body:JSON.stringify({difficulty,requestId:roomId})}));

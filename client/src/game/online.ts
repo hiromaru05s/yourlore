@@ -1,3 +1,4 @@
+import { ariesRoomStage } from '../shared/ariesStory';
 import { botNpc } from '../shared/botNpcs';
 import { setOppAvatar } from '../ui/boardView';
 import {OPENING_VERSION} from '../shared/opening';
@@ -79,7 +80,7 @@ export class OnlineController extends BaseController {
 
   private rewardsRequested=false;
   private retryRewards():void {
-    if(this.rewardsRequested)return;this.rewardsRequested=true;
+    if(ariesRoomStage(this.roomId) !== undefined || this.rewardsRequested)return;this.rewardsRequested=true;
     // Continue the bounded settlement check after leaving the result screen.
     // The account-checked exit callback refreshes balance even if HOME opened early.
     void (async()=>{for(let attempt=0;attempt<15;attempt++){
@@ -96,7 +97,7 @@ export class OnlineController extends BaseController {
       if (msg.state.ranked != null) this.ranked = msg.state.ranked;
     } // server echoed — next action may go
     if (msg.type === "init") {
-      if(msg.state.botDifficulty)setOppAvatar(botNpc(msg.state.botDifficulty).avatar);
+      if(msg.state.botDifficulty && ariesRoomStage(this.roomId) === undefined)setOppAvatar(botNpc(msg.state.botDifficulty).avatar);
       const firstInit = !this.started; // 이 클라이언트가 처음 받는 init (새로고침/크래시 복귀 포함)
       this.started = true;
       this.banner(null); // reconnected & resynced
