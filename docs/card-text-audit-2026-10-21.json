@@ -504,24 +504,26 @@
     },
     "S13": {
       "nameJa": "星墓の落下",
-      "status": "reworded",
+      "status": "reviewed-november-balance",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "78dab2150c19058b0a5464cf165dbfc7e5f54478de87c7304a7916d52e6374d0",
-      "textSha256": "0a985349378509b9ed9fd95999a329adc61bcdcaa1bbdb4f72504863f28e0065",
+      "definitionSha256": "41db7687674ae27e80d4d0b530e7777c741bf32017ec884df627cb202a7b7850",
+      "textSha256": "0cd8d902ac3ac3e1eefad84c84afe6a707af60cf13120f16f6aaea00eb483d5f",
       "hooks": {
         "act": "dmg"
       },
       "before": {
         "ja": "【発動時】相手に11ダメージを与える。",
-        "ko": "【발동시】상대에게 11 데미지를 준다.",
+        "ko": "【발동 시】상대에게 11 데미지를 준다.",
         "en": "【On Cast】Deal 11 damage to the opponent."
       },
       "after": {
-        "ja": "【発動時】相手に11ダメージを与える。",
-        "ko": "【발동 시】상대에게 11 데미지를 준다.",
-        "en": "【On Cast】Deal 11 damage to the opponent."
+        "ja": "【発動時】相手に10ダメージを与える。",
+        "ko": "【발동 시】상대에게 10 데미지를 준다.",
+        "en": "【On Cast】Deal 10 damage to the opponent."
       }
     },
     "S14": {
@@ -1826,9 +1828,9 @@
     },
     "ASSASSIN2": {
       "nameJa": "中級アサシン",
-      "status": "reviewed-unchanged",
+      "status": "reviewed-november-balance",
       "changedLocales": [],
-      "definitionSha256": "903fe8fd5aab978610d84b2016d2d517e7199bd8ad355d70df29ab7151ba67c1",
+      "definitionSha256": "08c87076ec3e0e591eaf29b4ea25f109e0e6bfe6fc987c731fe7c228386af562",
       "textSha256": "a57bf7a34f2e47f00d87abdd18e09dd8228ed1656e60c423dc55fb6511bb0ff3",
       "hooks": {},
       "before": {
@@ -2670,21 +2672,17 @@
     },
     "AWAKENED_MIMIC": {
       "nameJa": "覚醒ミミック",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "598ef9b32fd3ecf6b3d35986a01cb695e65349196857b8c936e66ce918d20c2b",
+      "status": "reviewed-november-balance",
+      "changedLocales": [],
+      "definitionSha256": "20152d196eb2f155deb3edc96be7c2dc161c37c4b920b93bdf54cef23b3f856d",
       "textSha256": "5a28a27b02db775158ba09ce7aaec5ef4d8a92164e3c31a87832208448b6074d",
       "hooks": {
         "onSummon": "awakenMimic"
       },
       "before": {
-        "ja": "【召喚時】自分の場に「ミミック」(3/2)2体を召喚する。",
-        "ko": "【소환 시】자신의 필드에 '미믹'(3/2) 2체를 소환한다.",
-        "en": "【On Summon】Summon two Mimics (3/2) to your field."
+        "ja": "【召喚時】自分の場に「ミミック」（攻撃力3・体力2）2体を召喚する。",
+        "ko": "【소환 시】자신의 필드에 '미믹'(공격력 3·체력 2) 2체를 소환한다.",
+        "en": "【On Summon】Summon 2 Mimics (3 ATK, 2 HP) to your field."
       },
       "after": {
         "ja": "【召喚時】自分の場に「ミミック」（攻撃力3・体力2）2体を召喚する。",
@@ -3233,26 +3231,26 @@
     },
     "ELITE": {
       "nameJa": "精鋭騎士団長",
-      "status": "reviewed-v73-rework",
+      "status": "reviewed-november-balance",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "5be01967f5626d6f8afec9e3b81883233bd8a16ea2906afc10e5b875f17303a1",
-      "textSha256": "af9c30d2f8a84af84397b89eb6382a73d0cf97a57f4200fabc1c02926aa4ac67",
+      "textSha256": "28296613f8744ff3118eadb060f684ce91a4ec306300eebcc6cace26f7a4517b",
       "hooks": {
         "onSummon": "eliteSoldiers"
       },
       "before": {
-        "ja": "【召喚時】自分のデッキ構成が9枚以下なら、「兵士」（攻撃力2・体力2）2体を自分の場に召喚する。",
-        "ko": "【소환 시】자신의 덱 구성이 9장 이하이면 병사(공격력 2·체력 2) 2체를 자신의 필드에 소환한다.",
-        "en": "【On Summon】If your deck composition contains 9 cards or fewer, summon 2 Soldiers (2 ATK, 2 HP) to your field."
-      },
-      "after": {
         "ja": "【召喚時】自分のデッキ構成が9枚以下なら、「兵士」（攻撃力2・体力2）1体を自分の場に召喚する。",
         "ko": "【소환 시】자신의 덱 구성이 9장 이하이면 병사(공격력 2·체력 2) 1체를 자신의 필드에 소환한다.",
         "en": "【On Summon】If your deck composition contains 9 cards or fewer, summon 1 Soldier (2 ATK, 2 HP) to your field."
+      },
+      "after": {
+        "ja": "【召喚時】自分のデッキ構成が7枚以下なら、「兵士」（攻撃力2・体力2）1体を自分の場に召喚する。",
+        "ko": "【소환 시】자신의 덱 구성이 7장 이하이면 병사(공격력 2·체력 2) 1체를 자신의 필드에 소환한다.",
+        "en": "【On Summon】If your deck composition contains 7 cards or fewer, summon 1 Soldier (2 ATK, 2 HP) to your field."
       },
       "reviewedAt": "2026-10-31",
       "reviewNote": "Summon 1 Soldier instead of 2; existing deck-composition condition retained."
@@ -4665,26 +4663,26 @@
     },
     "ELF_HAVEN": {
       "nameJa": "エルフの憩い場",
-      "status": "reworded",
+      "status": "reviewed-november-balance",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "442d4fe1c38609e897e28560a2d19f06a570f454760e04b64a1be5e124a710ce",
-      "textSha256": "f723e97e03e973ec5723ced819e3d71cbc397c9f622847a3a27348202565c093",
+      "textSha256": "55ede6de61c5725d5431e7e30fc866c247c53efb825e0b1927cf8d5453951f95",
       "hooks": {
         "ench": "elfHaven"
       },
       "before": {
-        "ja": "【場にある間】自分の「世界樹」系カードの購入・発動コストは0。\n\n【回数制限】自分が「世界樹」系カードを購入できるのは、自分の各ターンに合計3枚まで。\n\n【自分のカード購入時】自分が「世界樹」系または「エルフ」系カードを購入するたび、自分は雫1を得る。",
-        "ko": "【필드에 있는 동안】자신의 세계수 계열 카드의 구매·시전 코스트는 0.\n\n【횟수 제한】세계수 계열 카드는 자신의 각 턴에 합계 3장까지 구매할 수 있다.\n\n【자신의 카드 구매 시】자신이 세계수 또는 엘프 계열 카드를 구매할 때마다 자신은 이슬 1을 얻는다.",
-        "en": "【While on the Field】Your World Tree-family cards cost 0 to buy and cast.\n\n【Use Limit】You may buy at most 3 World Tree-family cards in total during each of your turns.\n\n【When You Buy a Card】Whenever you buy a World Tree-family or Elf-family card, gain 1 Dew."
-      },
-      "after": {
         "ja": "【場にある間】自分の「世界樹」系カードの購入コスト・召喚コスト・発動コストは0。\n\n【回数制限】自分が「世界樹」系カードを購入できるのは、自分の各ターンに合計3枚まで。\n\n【自分のカード購入時】自分が「世界樹」系または「エルフ」系カードを購入するたび、自分は雫1を得る。",
         "ko": "【필드에 있는 동안】자신의 세계수 계열 카드의 구매 코스트·소환 코스트·발동 코스트는 0.\n\n【횟수 제한】세계수 계열 카드는 자신의 각 턴에 합계 3장까지 구매할 수 있다.\n\n【자신의 카드 구매 시】자신이 세계수 또는 엘프 계열 카드를 구매할 때마다 자신은 이슬 1을 얻는다.",
         "en": "【While on the Field】The purchase cost, summon cost, and cast cost of your World Tree-family cards are 0.\n\n【Use Limit】You may buy at most 3 World Tree-family cards in total during each of your turns.\n\n【When You Buy a Card】Whenever you buy a World Tree-family or Elf-family card, gain 1 Dew."
+      },
+      "after": {
+        "ja": "【場にある間】自分の「世界樹」系カードの購入コストは1、召喚コスト・発動コストは0。\n\n【回数制限】自分が「世界樹」系カードを購入できるのは、自分の各ターンに合計3枚まで。\n\n【自分のカード購入時】自分が「世界樹」系または「エルフ」系カードを購入するたび、自分は雫1を得る。",
+        "ko": "【필드에 있는 동안】자신의 세계수 계열 카드의 구매 코스트는 1, 소환 코스트·발동 코스트는 0.\n\n【횟수 제한】세계수 계열 카드는 자신의 각 턴에 합계 3장까지 구매할 수 있다.\n\n【자신의 카드 구매 시】자신이 세계수 또는 엘프 계열 카드를 구매할 때마다 자신은 이슬 1을 얻는다.",
+        "en": "【While on the Field】Your World Tree-family cards cost 1 to buy and 0 to summon or cast.\n\n【Use Limit】You may buy at most 3 World Tree-family cards in total during each of your turns.\n\n【When You Buy a Card】Whenever you buy a World Tree-family or Elf-family card, gain 1 Dew."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -5055,26 +5053,26 @@
     },
     "BREWING": {
       "nameJa": "醸造",
-      "status": "balance-v60-reworked",
+      "status": "reviewed-november-balance",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "6ce27899d8e7f7d73533d00ac55f93b9c89d148cd0e59046f4eb47dcb9658a13",
-      "textSha256": "edee78391af4f3c85ab75064d1c3d5c875d626e4a11fa01974c8f7c38c65d91a",
+      "definitionSha256": "fff7a6963d6c04fa3975195bbc44d90412c1b3f48849283f1cb58406eb65b41d",
+      "textSha256": "2f5d7b3172a96159fa5cdadd0813f9f2a190478b06e3187bd2223b7eafd00607",
       "hooks": {
         "ench": "brewing"
       },
       "before": {
-        "ja": "【自分のターン開始時】自分の手札の「ぶどう」「高品質ぶどう」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、この魔法にカウンターを付与する。\n\n【期間】発動後、6回目の自分のターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。",
-        "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 6번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
-        "en": "【At the Start of Your Turn】Send all Grapes and Premium Grapes in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Premium Grape sent.\n\n【Duration】At your 6th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
-      },
-      "after": {
         "ja": "【自分のターン開始時】自分の手札の「ぶどう」「高品質ぶどう」「りんご」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、「りんご」1枚につき5個、この魔法にカウンターを付与する。\n\n【期間】発動後、6回目の自分のターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。",
         "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도·사과를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개, 사과 1장당 5개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 6번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
         "en": "【At the Start of Your Turn】Send all Grapes, Premium Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Premium Grape and 5 per Apple sent.\n\n【Duration】At your 6th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
+      },
+      "after": {
+        "ja": "【自分のターン開始時】自分の手札の「ぶどう」「高品質ぶどう」「りんご」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、「りんご」1枚につき5個、この魔法にカウンターを付与する。\n\n【期間】発動後、5回目の自分のターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。",
+        "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도·사과를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개, 사과 1장당 5개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 5번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
+        "en": "【At the Start of Your Turn】Send all Grapes, Premium Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Premium Grape and 5 per Apple sent.\n\n【Duration】At your 5th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
       }
     },
     "MERCH1": {
@@ -5438,27 +5436,27 @@
     },
     "VOID_APOSTLE": {
       "nameJa": "虚無空間の使徒",
-      "status": "reworded",
+      "status": "reviewed-november-balance",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "a10c265d136da87a1cdaf8cfef8628ad5067c1374823f037e06b637a9c753a56",
-      "textSha256": "3d543e748e525c3d494833472f139d59f1ed0d65d6008c1cb2ce73414e2591bd",
+      "textSha256": "728d59cd38908d093b02474434d17951d74191bccb8a83452799a01ca7f931aa",
       "hooks": {
         "onSummon": "voidApostle",
         "turnFx": "voidRoll"
       },
       "before": {
-        "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（持続）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
-        "ko": "【소환 시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(지속).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
-        "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (lasting).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
-      },
-      "after": {
         "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（対象が場を離れるまで）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
         "ko": "【소환 시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
         "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
+      },
+      "after": {
+        "ja": "【召喚時】自分に8ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（対象が場を離れるまで）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
+        "ko": "【소환 시】자신에게 8 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+        "en": "【On Summon】You take 8 damage. This monster gets +1 ATK and +1 HP per card in your Rift (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
       },
       "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md",
       "reviewedAt": "2026-10-30",
@@ -7269,18 +7267,16 @@
     },
     "MERC_LEADER": {
       "nameJa": "傭兵リーダー",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "5bb0aaa639c19abc25e6b11ed71334a436f111e2ec78f06619b0d890a80b53ce",
+      "status": "reviewed-november-balance",
+      "changedLocales": [],
+      "definitionSha256": "8ed50f968f61ff76224368ec27252a66a0d44a6c99fc8693c8fcdde33fd08eea",
       "textSha256": "fb10837b58453379fffea0b04a90ee5f9b64526e4d8dada3bde8cf125a737bb3",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
         "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
-        "ko": "【소환시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
+        "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
         "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 5 dice."
       },
       "after": {
