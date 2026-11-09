@@ -1,0 +1,26 @@
+.single-mode-tabs{display:flex;gap:22px;margin:0 0 14px;padding:0 2px;border-bottom:1px solid rgba(154,183,202,.22)}
+.single-mode-tabs [role=tab]{position:relative;min-height:42px;padding:0 3px;border:0;background:none;color:#9baab7;font:600 13px/1 inherit;letter-spacing:.08em;cursor:pointer}
+.single-mode-tabs [role=tab][aria-selected=true]{color:#edf4f8}
+.single-mode-tabs [role=tab][aria-selected=true]:after{position:absolute;right:0;bottom:-1px;left:0;height:2px;background:#9cc8df;content:""}
+.single-mode-tabs [role=tab]:disabled{opacity:.48;cursor:not-allowed}
+.bot-lock{position:absolute;z-index:2;top:12px;right:12px;display:grid;width:25px;height:25px;place-items:center;color:#aab9c5}
+.bot-lock svg{width:14px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.35}
+.diff-card.is-locked{filter:saturate(.4);opacity:.62}
+.single-story{padding:8px 3px 4px;color:#d6e0e6}
+.single-story-kicker{color:#8faabd;font-size:10px;letter-spacing:.17em;text-transform:uppercase}
+.bot-lock-mini{display:inline-flex;width:12px;height:14px;margin-left:5px;vertical-align:-2px;color:currentColor}
+.bot-lock-mini svg{width:100%;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
+.single-story-deck-label{margin:14px 0 7px;color:#95aebb;font-size:10px;letter-spacing:.1em}
+.single-story-deck{display:flex;flex-wrap:wrap;gap:6px}
+.single-story-deck span{padding:5px 8px;border-left:1px solid rgba(156,200,223,.42);background:rgba(116,150,171,.08);color:#cbd7df;font-size:10px;line-height:1.25}
+.single-story-deck small{color:#98b8c9;font-size:9px}
+.single-story h3{margin:7px 0 5px;color:#f1f5f7;font-size:25px;font-weight:650;letter-spacing:.02em}
+.single-story h3 small{margin-left:8px;color:#93a7b5;font-size:11px;font-weight:500}
+.single-story p{max-width:620px;margin:7px 0;color:#b2c1cb;font-size:13px;line-height:1.65}
+.single-story-progression{display:flex;align-items:center;gap:11px;margin:20px 0 12px;color:#d7e4eb;font-size:11px;letter-spacing:.12em}
+.single-story-progression i{width:42px;height:1px;background:rgba(156,200,223,.45)}
+.single-story-note{font-size:11px!important;color:#8fa2b0!important}
+.single-story-character{min-height:20px;margin:12px 0;color:#9ec3d8;font-size:11px}
+.single-story .challenge-start{min-height:46px}
+.single-story[hidden],.challenge-footer[hidden],.diff-grid[hidden]{display:none!important}
+@media(max-width:600px){.single-mode-tabs{margin-bottom:10px}.single-story h3{font-size:22px}.single-story p{font-size:12px}}

@@ -99,7 +99,7 @@ const D: Record<string, Entry> = {
   "home.online.title": { ko: "노말 대전", ja: "ノーマル対戦", en: "Normal Match" },
   "home.online.desc": { ko: "실시간으로 다른 플레이어와 매칭됩니다.", ja: "リアルタイムで他のプレイヤーとマッチングします。", en: "Get matched with another player in real time." },
   "home.bot.title": { ko: "싱글", ja: "シングル", en: "Single" },
-  "home.bot.desc": { ko: "AI 상대로 바로 연습합니다.", ja: "AI相手にすぐ練習できます。", en: "Practice against the AI right away." },
+  "home.bot.desc": { ko: "NPC 대전과 이야기 도전에 출전합니다.", ja: "NPC対戦とストーリーに挑戦します。", en: "Challenge NPCs and story opponents." },
   // bot difficulty picker
   "bot.diff.title": { ko: "난이도 선택", ja: "難易度を選択", en: "Choose Difficulty" },
   "bot.diff.sub": { ko: "상대할 AI의 강함을 고르세요.", ja: "対戦するAIの強さを選んでください。", en: "Pick how tough the AI should be." },
@@ -430,7 +430,7 @@ const D: Record<string, Entry> = {
   "arch.menu.invite": { ko: "친구초대", ja: "友達招待", en: "Invite" },
   "arch.head.ranked.desc": { ko: "랭크전은 온라인 유저들과 매칭될 수 있는 점수제 매칭입니다.<br>여러분만의 덱을 사용하여 타 유저들과의 결투에서 승리하고 등급을 올려보세요.", ja: "ランク戦はオンラインのユーザーとマッチングされるレート制マッチです。<br>自分だけのデッキで他のユーザーとの決闘に勝利し、ランクを上げましょう。", en: "Ranked pits you against online players in rated matches.<br>Bring your own deck, win duels, and climb the tiers." },
   "arch.head.online.desc": { ko: "일반전은 랭크 점수 부담 없이 온라인 유저들과 자유롭게 대전하는 모드입니다.<br>여러분만의 덱을 시험하고 다양한 전략을 펼쳐보세요.", ja: "ノーマル戦はレートを気にせずオンラインのユーザーと自由に対戦できるモードです。<br>自分のデッキを試し、様々な戦略を繰り広げましょう。", en: "Normal is free play against online players — no rating on the line.<br>Test your deck and try out new strategies." },
-  "arch.head.bot.desc": { ko: "싱글은 다양한 난이도의 상대와 자유롭게 전략을 시험할 수 있는 연습 모드입니다.<br>현재 덱을 선택한 뒤 원하는 난이도에 도전해보세요.", ja: "シングルは様々な難易度の相手を選んで気軽に戦略を試せる練習モードです。<br>現在のデッキを選んで好きな難易度に挑戦しましょう。", en: "Single matches are practice games against AI opponents of every difficulty.<br>Pick your deck and take on any challenge you like." },
+  "arch.head.bot.desc": { ko: "싱글은 NPC 대전과 세계관에 녹아든 이야기 도전을 즐기는 모드입니다.<br>NPC 대전을 순서대로 모두 클리어하면 마스터 시커 Aries에게 도전할 수 있습니다.", ja: "シングルはNPC対戦と世界観に溶け込んだストーリーを楽しむモードです。<br>NPC対戦を順にすべてクリアすると、マスターシーカーAriesに挑戦できます。", en: "Single Player combines NPC duels with story challenges rooted in LORE.<br>Clear every NPC difficulty in order to challenge Aries, the Master Seeker." },
   "arch.head.deck.desc": { ko: "보유한 카드로 자신만의 덱을 구성하고, 현재 사용할 덱을 선택하세요.", ja: "所持カードで自分だけのデッキを組み、使用するデッキを選びましょう。", en: "Build decks from your collection and choose the one to play with." },
   "arch.head.cards.title": { ko: "카드", ja: "カード", en: "Cards" },
   "arch.head.cards.desc": { ko: "수집한 모든 카드를 살펴보고, 유형과 코스트에 따라 원하는 카드를 찾아보세요.", ja: "収集したすべてのカードを眺め、タイプやコストで目当てのカードを探しましょう。", en: "Browse every card you've collected and filter by type or cost." },

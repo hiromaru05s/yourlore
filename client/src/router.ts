@@ -14,6 +14,7 @@ import { startHomeMusic } from "./ui/homeMusic";
 // ============================================================
 import type { Side } from "./shared/types";
 import type { BotDifficulty } from "./shared/bot";
+import { ARIES_OPPONENTS, type AriesStage } from "./shared/ariesStory";
 import type { User } from "./net/api";
 import { api } from "./net/api";
 import { aIdentify, aReset, aCapture } from "./net/analytics";
@@ -197,6 +198,11 @@ export class App {
         if(this.user?.id===account&&this.screenRevision===revision)this.onlineGame(r.roomId,r.you,r.oppName,r.oppAvatar,false,difficulty);
       } finally {this.startingBot=false;}
     },()=>{this.startingBot=false;}));
+  }
+  storyGame(stage: AriesStage): void {
+    const opponent = ARIES_OPPONENTS[stage];
+    setPresence('bot'); aCapture('game_start', { mode:'story', chapter:'aries', stage });
+    this.swap(() => mountGame(this, { mode:'bot', difficulty:opponent.difficulty, story:opponent }));
   }
   // entering a lobby with a live game still stored → rejoin it instead of re-queuing
   onlineLobby(): void { const g = loadActiveGame(this.user?.id); if (g) return this.onlineGame(g.roomId, g.you, "?", null, !!g.ranked); setPresence("queue"); this.swap(() => mountLobby(this), "lobby"); }

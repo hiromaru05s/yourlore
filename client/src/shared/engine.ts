@@ -2,7 +2,7 @@ import {logToEn} from './logEn';
 import {pendingText} from './pendingText';
 import { botMarketIndex, challengeMarket } from './botMarket';
 import { RIFT_REWORK_IDS } from './riftReworkCards';
-import { GOBLIN_IDS, isBasicGoblin } from './goblinCards';
+import { GOBLIN_IDS, isBasicGoblin, isGoblinMonster } from './goblinCards';
 import {trackMedalDuel} from './medalTracking';
 import { trackActivity } from "./progression";
 import { cloneGameState } from './cloneGameState';
@@ -278,7 +278,7 @@ export function monsterOngoingActive(g: GameState, p: PlayerState, m: FieldMon):
 /** Pass the live game for conditions that inspect both fields. */
 export function effAtk(p: PlayerState, m: FieldMon, g?: Pick<GameState, "players">): number {
   let a = m.atk! + (m.tempAtk || 0) + (m.atkMod || 0);
-  if (isBasicGoblin(m)) a += p.field.filter(x => x.aura === "goblinAttack").length;
+  if (isGoblinMonster(m)) a += p.field.filter(x => x.aura === "goblinAttack").length;
   if (m.condAtk === "worldTree" && (g?.players ?? [p]).some(hasWorldTreeOnField)) a += 3;
   if (m.condAtk === "twoPlus" && p.field.length >= 2) a += m.val ?? 2; // 보너스량 = val (기본 2)
   if (m.condAtk === "hp45" && p.hp >= 45) a += 1; // 혈기왕성: 체력 45+면 +1/+3
@@ -377,9 +377,15 @@ export function cardValue(c: CardInst): number {
 }
 
 // ---------- player / game construction ----------
-function mkPlayer(g: GameState, id: string, name: string, isBot: boolean, deckIds?: string[]): PlayerState {
+function mkPlayer(g: GameState, id: string, name: string, isBot: boolean, deckIds?: string[], scriptedDeck = false): PlayerState {
   // 초기 덱 9장 = 어튠 1장 고정 + 자유 8장 (미지정 시 기본덱: 컬6 + 보물상자2)
-  const ids = ["STARTER_MANA", ...sanitizeDeck(deckIds ?? DEFAULT_DECK_8)];
+  const scripted = scriptedDeck && Array.isArray(deckIds)
+    ? deckIds.filter((k): k is string => typeof k === 'string' && (!!STARTERS[k] || !!DB[k])).slice(0, 8)
+    : null;
+  const free = scripted
+    ? [...scripted, ...Array.from({length: Math.max(0, 8 - scripted.length)}, () => 'STARTER_TRASH')]
+    : sanitizeDeck(deckIds ?? DEFAULT_DECK_8);
+  const ids = ["STARTER_MANA", ...free];
   const deck = ids.map((k) => (STARTERS[k] ? starter(g, k) : inst(g, k)));
   shuffle(g, deck);
   return {
@@ -406,8 +412,8 @@ export interface CreateOpts {
   challenge?: { difficulty: import("./bot").BotDifficulty; side: Side };
   seed?: number;
   mode: "bot" | "online";
-  p0: { id: string; name: string; isBot?: boolean; deck?: string[] };
-  p1: { id: string; name: string; isBot?: boolean; deck?: string[] };
+  p0: { id: string; name: string; isBot?: boolean; deck?: string[]; scriptedDeck?: boolean };
+  p1: { id: string; name: string; isBot?: boolean; deck?: string[]; scriptedDeck?: boolean };
   starting?: Side;
 }
 
@@ -420,8 +426,8 @@ export function createGame(opts: CreateOpts): ReduceResult {
     rng: (opts.seed ?? Math.floor(Math.random() * 2 ** 31)) >>> 0,
     uidSeq: 0, mode: opts.mode,
   };
-  g.players[0] = mkPlayer(g, opts.p0.id, opts.p0.name, !!opts.p0.isBot, opts.p0.deck);
-  g.players[1] = mkPlayer(g, opts.p1.id, opts.p1.name, !!opts.p1.isBot, opts.p1.deck);
+  g.players[0] = mkPlayer(g, opts.p0.id, opts.p0.name, !!opts.p0.isBot, opts.p0.deck, !!opts.p0.scriptedDeck);
+  g.players[1] = mkPlayer(g, opts.p1.id, opts.p1.name, !!opts.p1.isBot, opts.p1.deck, !!opts.p1.scriptedDeck);
   if (opts.challenge) {
     g.botDifficulty = opts.challenge.difficulty;
     if (opts.challenge.difficulty === 'hard' || opts.challenge.difficulty === 'hell') g.botMarket = challengeMarket(opts.challenge.side);
@@ -1316,6 +1322,11 @@ function binEnch(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst, for
     const depth = spellDepth; spellDepth++;
     try { ctx.dealDamage(opponent,8,cn(card),cn(card),side(g,owner)); } finally { spellDepth=depth; }
   }
+  if (card.id === 'GOBLIN_ORIGIN' && cause === 'spell' && source != null && source !== side(g, owner) && opponent.field.length) {
+    const target = opponent.field[randInt(g, opponent.field.length)];
+    ctx.log(`${cn(card)}: 상대 카드 효과로 파괴 → ${cn(target)} 무작위 파괴`, `${cn(card)}: 相手の効果で破壊 → ${cn(target)}をランダム破壊`, `${cn(card)} is destroyed by an enemy effect → randomly destroy ${cn(target)}`);
+    ctx.destroyMonster(opponent, target);
+  }
   if (card.id === 'MANA_BACKFLOW') {
     enchantFx(g,ctx.ev,owner,card);
     if (cause === 'self') owner.maxMana = 3;
@@ -1459,6 +1470,10 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       const emitActivation=()=>{if(ctx.ev.length>activationStart)ctx.ev.splice(activationStart,0,{type:'enchantActivate',player:side(g,pl),uid:e.card.uid,id:e.card.id});};
       const ownerTurn = pl === cur;
       const everyTurn = e.card.ench === "noAttack";
+      if (e.card.ench === 'goblinOrigin' && ownerTurn && !g.over) {
+        enchantFx(g, ctx.ev, pl, e.card);
+        if (pl.field.length < FIELD_MAX) effectSummon(g, ctx, pl, 'GOBLIN');
+      }
       if (e.card.ench === 'farm') {
         if (!ownerTurn || g.over || (e.bornTurn ?? -1) >= g.turn) return true;
         e.turns--;
@@ -2578,8 +2593,20 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
         );
       } else if (atk >= before) {
         const over = atk - before;
+        let eliteSaved = false;
+        if (target.id === 'ELITE_GOBLIN') {
+          const { rolls } = diceRoll(g, ctx.ev, side(g, o), { id: target.id, player: side(g, o) }, 1);
+          if ((rolls[0] ?? 0) >= 3) {
+            target.dmg = Math.max(0, maxHp - 1);
+            ctx.dealDamage(o, 2, cn(target), cn(target), side(g, o));
+            ctx.log(`  └ ${cn(target)} 주사위 ${rolls[0]} · 3+ → 자신에게 2 데미지, 전투 파괴 무효`, `  └ ${cn(target)} ダイス${rolls[0]} · 3以上 → 自身に2ダメージ、戦闘破壊を無効`, `  └ ${cn(target)} rolls ${rolls[0]} · 3+ → takes 2 damage and prevents battle destruction`);
+            eliteSaved = true;
+          } else ctx.log(`  └ ${cn(target)} 주사위 ${rolls[0]} · 실패`, `  └ ${cn(target)} ダイス${rolls[0]} · 失敗`, `  └ ${cn(target)} rolls ${rolls[0]} · fails`);
+        }
         // 기합(guts): 치명타를 토큰 1개로 버티고 체력 1로 생존 (관통은 그대로)
-        if ((target.guts || 0) > 0) {
+        if (eliteSaved) {
+          // Elite Goblin's one-time battle save leaves it at 1 HP.
+        } else if ((target.guts || 0) > 0) {
           endureWithGuts(g, ctx, o, target, attackEvent);
           ctx.log(
             `<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀 (남은 기합 ${target.guts})`,
@@ -2602,7 +2629,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
             if (dc > 0) { monsterActivation(g, ctx.ev, p, att); att.atkMod = (att.atkMod || 0) + dc; att.defMod = (att.defMod || 0) + dc; ctx.log(`  └ ${cn(att)} 포식 성장 +${dc}/+${dc}`, `  └ ${cn(att)} 捕食成長+${dc}/+${dc}`, `  └ ${cn(att)} grows through Devour: +${dc} ATK and +${dc} HP`); }
           }
         }
-        if (over > 0) { const hpBefore = o.hp; ctx.dealDamage(o, over, "관통", "貫通", g.cur, "Pierce"); dealtFace = Math.max(0, hpBefore - o.hp); faceDmg = dealtFace > 0; }
+        if (over > 0 && !eliteSaved) { const hpBefore = o.hp; ctx.dealDamage(o, over, "관통", "貫通", g.cur, "Pierce"); dealtFace = Math.max(0, hpBefore - o.hp); faceDmg = dealtFace > 0; }
       } else {
         target.dmg = (target.dmg || 0) + atk;
         // Guardian earns a counter only after surviving positive attack damage without
@@ -3517,6 +3544,14 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
   const v = card.val || 0, v2 = card.val2 || 0;
   if (card.act === "expansion") { expansionSpell(g, ctx, card); return; }
   switch (card.act) {
+    case 'goblinParty': {
+      const count = p.field.filter(isGoblinMonster).length;
+      if (count < 3) break;
+      o.maxMana = Math.max(3, o.maxMana - 1); o.mana = Math.min(o.mana, o.maxMana);
+      addMaxMana(p, 1);
+      ctx.log(`${cn(card)}: 고블린 ${count}체 · 상대 마나 수정 -1, 자신 +1`, `${cn(card)}: ゴブリン${count}体 · 相手のマナ水晶-1、自分+1`, `${cn(card)}: ${count} Goblins · enemy mana crystals -1, yours +1`);
+      break;
+    }
     case 'dew': gainDew(ctx,p,v); break;
     case 'desertification': loseStatus(ctx, o, 'dew'); ctx.log('상대 이슬을 0으로', '相手の雫を0にする', `Set the opponent’s Dew to 0`); break;
     case 'cullShield': gainShield(g,ctx,p,cullExiled(p)); break;
@@ -4745,6 +4780,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   const reason=(ko:string,ja:string,en=logToEn(ko))=>({applicable:true,blocked:{ko,ja,en}});
   if (card.id === 'RIFT_MATTER' || card.id === 'RIFT_METALIGHT') return reason('이 카드는 플레이할 수 없습니다', 'このカードはプレイできません');
   if (card.id === "GOBLIN_SETTLEMENT") { applicable=true; if (!p.field.some(isBasicGoblin)) return reason("고블린 또는 돌격 고블린이 필요합니다","自分の場にゴブリンか特攻ゴブリンが必要です", `You need a Goblin or Goblin Raider on your field`); }
+  if (card.id === "GOBLIN_PARTY") { applicable=true; if (p.field.filter(isGoblinMonster).length < 3) return reason("고블린 계열 몬스터 3체가 필요합니다","ゴブリン系モンスターが3体必要です", "You need 3 Goblin-family monsters on your field"); }
   if (card.id === "BEGINNER_MIND") { applicable=true; if (p.hand.length !== 1) { return reason("  └ 패에 이 카드 외의 카드가 없어야 합니다", "  └ 手札にこのカード以外のカードがない時のみ使用可能", "Your hand must contain no card other than this one"); } }
   if (card.id === "SPACE_RITE") { applicable=true; if (o0.field.length + o0.traps.length + o0.enchants.length < 6) { return reason("  └ 상대 필드의 카드가 6장 미만이라 사용 불가", "  └ 相手の場のカードが6枚未満のため使用不可"); } }
   if (card.id === "BUYOUT") { applicable=true; if (!Object.values(p.buysTurn ?? {}).some((n2) => n2 >= 2)) { return reason("  └ 이번 턴 같은 카드를 2장 구매하지 않았다", "  └ このターン同じカードを2枚購入していない"); } }
@@ -5051,6 +5087,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "buffTurn" || a === "buffPerm") {
+      if (card.id === 'FORGE') { ctx.dealDamage(p, 3, cn(card), cn(card), g.cur); if (g.over) return; }
       // 칼날의 속삭임(v34): 종족 몬스터는 대상 불가
       if (card.id === "S3" && !p.field.some((m) => !m.tribe)) { ctx.log("  └ 종족이 아닌 몬스터가 없습니다", "  └ 種族でないモンスターがいません", `  └ No non-tribal monster on your field`); return; }
       if (!p.field.length) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
@@ -5255,6 +5292,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     else if (pending.reason === "buffPerm") {
       const bv = (d.val as number) || 0, bv2 = (d.val2 as number) || 0;
       tm.atkMod = (tm.atkMod || 0) + bv; tm.defMod = (tm.defMod || 0) + bv2;
+      if (d.sourceId === 'ICARUS_SHOES') tm.mult = Math.max(tm.mult || 1, 2);
       const sgn = (n: number): string => (n >= 0 ? `+${n}` : `${n}`);
       const partsKo: string[] = [], partsJa: string[] = [];
       if (bv) { partsKo.push(`공격${sgn(bv)}`); partsJa.push(`攻撃${sgn(bv)}`); }

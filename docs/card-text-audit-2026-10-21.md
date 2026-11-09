@@ -15,7 +15,7 @@
 
 ## 証拠の範囲
 
-非テキストのカード定義は基準カタログと同一。エンジンのゲーム処理は変更していない。台帳のハッシュは再編集の検知用で、意味の正しさや読者の理解度を自動証明しない。
+既存カードの非テキスト定義は維持し、追加カードは効果キーと文面を対応付けて記録する。台帳のハッシュは再編集の検知用で、意味の正しさや読者の理解度を自動証明しない。
 
 前版の読み取り設問は card-text-comprehension-2026-10-08.md、実行した検証と公開先は今回のリリース記録を参照する。実際の初見プレイヤー／母語話者のユーザーテストは実施していない。
 
@@ -7114,3 +7114,109 @@
 **en**
 
 > 【On Play】Your max mana +1.
+
+
+## Aries Story 専用カード
+
+追加カード6枚の日本語・韓国語・英語を、ゲーム内実装と照合。
+
+### ELITE_GOBLIN — 精鋭ゴブリン
+
+**ja**
+
+> 【破壊時】戦闘で破壊される時、ダイスを振る。3以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする。
+
+**ko**
+
+> 【파괴 시】전투로 파괴될 때 주사위를 굴린다. 3 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다.
+
+**en**
+
+> 【On Destruction】If battle would destroy this, roll a die. On 3+, you take 2 damage and prevent that battle destruction.
+
+
+### GOBLIN_ORIGIN — ゴブリンの起源
+
+**ja**
+
+> 【自分のターン開始時】自分のフィールドに「ゴブリン」1体を召喚する。
+>
+> 【破壊時】相手のカード効果で破壊された場合、相手フィールドのモンスター1体をランダムに破壊する。
+
+**ko**
+
+> 【자신의 턴 시작 시】자신의 필드에 '고블린' 1체를 소환한다.
+>
+> 【파괴 시】상대 카드 효과로 파괴되면, 상대 필드의 몬스터 1체를 무작위로 파괴한다.
+
+**en**
+
+> 【At the Start of Your Turn】Summon 1 Goblin to your field.
+>
+> 【On Destruction】If an opponent's card effect destroys this, randomly destroy 1 monster on their field.
+
+
+### GOBLIN_PARTY — ゴブリンパーティー
+
+**ja**
+
+> 【発動条件】自分の場にゴブリン系モンスターが3体以上いる。
+>
+> 【発動時】相手のマナ水晶を1減らし、自分のマナ水晶を1増やす。
+
+**ko**
+
+> 【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.
+>
+> 【발동 시】상대의 마나 수정을 1 감소시키고 자신의 마나 수정을 1 증가시킨다.
+
+**en**
+
+> 【Play Requirement】You need at least 3 Goblin-family monsters on your field.
+>
+> 【On Cast】Reduce the opponent's mana crystals by 1 and increase yours by 1.
+
+
+### FORGE — ゴブリン鍛冶屋
+
+**ja**
+
+> 【発動時】自分は3ダメージを受ける。自分のモンスター1体を選び、攻撃力+4・体力+2。
+
+**ko**
+
+> 【발동 시】자신은 3 데미지를 받는다. 자신의 몬스터 1체를 선택해 공격력 +4, 체력 +2.
+
+**en**
+
+> 【On Cast】Take 3 damage. Choose a friendly monster; it gets +4 ATK and +2 HP.
+
+
+### ICARUS_SHOES — イカロスの靴
+
+**ja**
+
+> 【発動時】自分のモンスター1体に「二刀流」を付与する。
+
+**ko**
+
+> 【발동 시】자신의 몬스터 1체에 '이도류'를 부여한다.
+
+**en**
+
+> 【On Cast】Give a friendly monster Dual Wield.
+
+
+### ICARUS_WINGS — イカロスの翼
+
+**ja**
+
+> 【発動時】自分のモンスター1体に「回避」を付与する。
+
+**ko**
+
+> 【발동 시】자신의 몬스터 1체에 '회피'를 부여한다.
+
+**en**
+
+> 【On Cast】Give a friendly monster Evade.

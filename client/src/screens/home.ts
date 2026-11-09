@@ -21,6 +21,8 @@ import '../styles/homeTier.css';
 import { homeIcon } from "../ui/homeIcons";
 import {scheduleGameWarmup,warmGame} from './lazyGame';
 import {mountHomeDuelButton} from '../ui/homeDuelButton';
+import { ARIES_COMPLETED_KEY, ARIES_STARTER_NAMES } from '../shared/ariesStory';
+import '../styles/singleStory.css';
 
 
 export function mountHome(app: App): Screen {
@@ -90,19 +92,29 @@ function showBotNpcModal(app: App): void {
   if(document.querySelector('.bot-diff-ov'))return;
   const store=sanitizeDecks(app.user?.decks ?? null),activeDeck=store.list[store.sel];
   void warmGame(activeDeck.cards).catch(()=>{});
-  let selected:BotDifficulty='normal';
+  const order:BotDifficulty[]=['easy','normal','hard','hell'];
+  const cleared=new Set<BotDifficulty>((app.user?.botClears??[]).filter((d):d is BotDifficulty=>order.includes(d as BotDifficulty)) as BotDifficulty[]);
+  const isUnlocked=(d:BotDifficulty)=>order.slice(0,order.indexOf(d)).every(x=>cleared.has(x));
+  const storyUnlocked=()=>order.every(x=>cleared.has(x));
+  let selected:BotDifficulty=order.find(d=>!cleared.has(d))??'hell';
+  const ariesDeckNames=ARIES_STARTER_NAMES[getLang()];
   const previousFocus=document.activeElement as HTMLElement|null;
   const ov = document.createElement("div");
   ov.className = "overlay bot-diff-ov";
   ov.innerHTML = `
     <div class="modal support-dialog bot-diff bot-challenge bot-npcs" role="dialog" aria-modal="true" aria-labelledby="challengeTitle">
       <header class="support-dialog-heading">
-        <h2 id="challengeTitle">${loungeText("対戦相手を選ぶ","Choose your opponent","대전 상대 선택")}</h2>
+        <h2 id="challengeTitle">${loungeText("シングル","Single Player","싱글")}</h2>
         <button class="challenge-back" id="diffCancel">← ${t('common.back')}</button>
       </header>
-      <div class="diff-grid" role="group" aria-label="${loungeText("対戦相手を選ぶ","Choose your opponent","대전 상대 선택")}">
+      <div class="single-mode-tabs" role="tablist" aria-label="${loungeText('シングルコンテンツ','Single player content','싱글 콘텐츠')}">
+        <button type="button" role="tab" aria-controls="npcContent" aria-selected="true" data-single-tab="npc">NPC</button>
+        <button type="button" role="tab" aria-controls="storyContent" aria-selected="false" data-single-tab="story" ${storyUnlocked()?'':'disabled'}>${loungeText('ストーリー','Story','스토리')}${storyUnlocked()?'':` <span class="bot-lock-mini" aria-hidden="true"><svg viewBox="0 0 16 18"><path d="M3 7V5a5 5 0 0 1 10 0v2M2 7h12v9H2z"/></svg></span>`}</button>
+      </div>
+      <div id="npcContent" class="diff-grid" role="tabpanel" aria-label="${loungeText("対戦相手を選ぶ","Choose your opponent","대전 상대 선택")}">
         ${BOT_NPCS.map(npc => `
-          <button type="button" class="diff-card diff-${npc.difficulty}" data-diff="${npc.difficulty}" aria-pressed="${npc.difficulty===selected}">
+          <button type="button" class="diff-card diff-${npc.difficulty}" data-diff="${npc.difficulty}" aria-pressed="${npc.difficulty===selected}" ${isUnlocked(npc.difficulty)?'':'disabled'}>
+            ${!isUnlocked(npc.difficulty)?`<span class="bot-lock" aria-label="${loungeText('ロック中','Locked','잠김')}"><svg viewBox="0 0 16 18" aria-hidden="true"><path d="M3 7V5a5 5 0 0 1 10 0v2M2 7h12v9H2z"/></svg></span>`:''}
             <span class="challenge-selected">${loungeText('選択中','SELECTED','선택됨')}</span>
             <span class="challenge-art" aria-hidden="true"><img src="${npc.portrait}" alt=""></span>
             <span class="diff-name">${esc(npc.name[getLang()])}</span>
@@ -110,13 +122,24 @@ function showBotNpcModal(app: App): void {
             <span class="npc-first-reward" data-bot-reward="${npc.difficulty}">${app.user?.botClears?.includes(npc.difficulty)?loungeText('クリア済み','Cleared','클리어 완료'):`${firstClearLabel(BOT_REWARDS[npc.difficulty])} · ${BOT_FIRST_CLEAR_EXP[npc.difficulty]} EXP`}</span>
           </button>`).join("")}
       </div>
+      <section class="single-story" id="storyContent" role="tabpanel" hidden>
+        <div class="single-story-kicker">${loungeText('マスターシーカーへの道','Path to the Master Seekers','마스터 시커의 길')}</div>
+        <h3>Aries <small>${loungeText('マスターシーカー','Master Seeker','마스터 시커')}</small></h3>
+        <p>${loungeText('短気で勝負を急ぐ。精鋭ゴブリンを軸に、序盤から攻め切る神速アグロ。','Impatient and decisive. A lightning aggro style built around Elite Goblins.','성급하고 승부를 서두른다. 정예 고블린 중심의 신속 어그로.')}</p>
+        <div class="single-story-deck-label">${loungeText('Ariesのスターター','Aries Starter','Aries 스타터')}</div>
+        <div class="single-story-deck">${ariesDeckNames.map(name=>`<span>${esc(name)}</span>`).join('')}</div>
+        <div class="single-story-progression"><span>01</span><i></i><span>02</span><i></i><span>ARIES</span></div>
+        <p class="single-story-note">${loungeText('配下のシーカー2人に連勝してから挑戦。途中で敗れると最初からやり直し。','Defeat two of Aries’s seekers in a row. Any loss restarts the sequence.','부하 시커 2명을 연속으로 이긴 뒤 도전한다. 한 번이라도 지면 처음부터 다시 시작.')}</p>
+        <div class="single-story-character">${localStorage.getItem(ARIES_COMPLETED_KEY)?loungeText('Aries撃破済み','Aries defeated','Aries 격파 완료'):loungeText('NPC全員クリア · 挑戦可能','All NPCs cleared · Ready','모든 NPC 클리어 · 도전 가능')}</div>
+        <button type="button" class="challenge-start" id="storyStart">${loungeText('Ariesへの道を始める →','Begin the Aries challenge →','Aries 도전 시작 →')}</button>
+      </section>
       <div class="challenge-footer">
         <button type="button" class="challenge-start" id="diffStart"></button>
         <div class="challenge-details"><div class="challenge-deck"><img src="${artUrl.sm('STARTER_MANA')}" alt=""><span><small>${t('deck.inuse')}</small><strong>${esc(activeDeck.name||t('deck.slot').replace('{n}',String(store.sel+1)))}</strong></span></div></div>
       </div>
     </div>`;
   document.body.appendChild(ov);
-  if(app.user&&app.user.id!=='local-guest-user')void api.progression().then(data=>{if(!ov.isConnected)return;for(const [diff,done] of Object.entries(data.bot)){const el=ov.querySelector(`[data-bot-reward="${diff}"]`);if(el&&done)el.textContent=loungeText('クリア済み','Cleared','클리어 완료');}}).catch(()=>{});
+  if(app.user&&app.user.id!=='local-guest-user')void api.progression().then(data=>{if(!ov.isConnected)return;for(const [diff,done] of Object.entries(data.bot)){const el=ov.querySelector(`[data-bot-reward="${diff}"]`);if(el&&done){el.textContent=loungeText('クリア済み','Cleared','클리어 완료');cleared.add(diff as BotDifficulty);}}for(const b of ov.querySelectorAll<HTMLButtonElement>('[data-diff]')){const d=b.dataset.diff as BotDifficulty;b.disabled=!isUnlocked(d);if(!b.disabled)b.querySelector('.bot-lock')?.remove();}const unlockedStory=storyUnlocked();const tab=ov.querySelector<HTMLButtonElement>('[data-single-tab="story"]')!;tab.disabled=!unlockedStory;if(unlockedStory)tab.querySelector('.bot-lock-mini')?.remove();const state=ov.querySelector('.single-story-character');if(unlockedStory&&state)state.textContent=localStorage.getItem(ARIES_COMPLETED_KEY)?loungeText('Aries撃破済み','Aries defeated','Aries 격파 완료'):loungeText('NPC全員クリア · 挑戦可能','All NPCs cleared · Ready','모든 NPC 클리어 · 도전 가능');}).catch(()=>{});
   const update = () => {
     const npc = botNpc(selected), name = npc.name[getLang()];
     ov.querySelectorAll<HTMLButtonElement>('[data-diff]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.diff === selected)));
@@ -124,8 +147,16 @@ function showBotNpcModal(app: App): void {
   };
   let closed = false;
   const close = () => {closed=true;ov.remove();previousFocus?.focus();};
+  const npcPanel=ov.querySelector('.diff-grid') as HTMLElement;
+  const storyPanel=ov.querySelector('#storyContent') as HTMLElement;
+  ov.querySelectorAll<HTMLButtonElement>('[data-single-tab]').forEach(tab=>tab.onclick=()=>{
+    const showStory=tab.dataset.singleTab==='story'&&storyUnlocked();
+    ov.querySelectorAll('[data-single-tab]').forEach(x=>x.setAttribute('aria-selected',String(x===tab)));
+    npcPanel.hidden=showStory;storyPanel.hidden=!showStory;ov.querySelector('.challenge-footer')!.toggleAttribute('hidden',showStory);
+  });
+  (ov.querySelector('#storyStart') as HTMLButtonElement).onclick=()=>{if(storyUnlocked()){close();app.storyGame(0);}};
   const start = (difficulty: BotDifficulty = selected) => {
-    if(closed || !ov.isConnected)return;
+    if(closed || !ov.isConnected || !isUnlocked(difficulty))return;
     close();
     app.botGame(difficulty);
   };
@@ -136,7 +167,7 @@ function showBotNpcModal(app: App): void {
     b.ondblclick = () => start(b.dataset.diff as BotDifficulty);
   });
   (ov.querySelector('#diffStart') as HTMLButtonElement).onclick=()=>start();
-  ov.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();close();}if(e.key==='Tab'){const buttons=[...ov.querySelectorAll<HTMLButtonElement>('button')],at=buttons.indexOf(document.activeElement as HTMLButtonElement);e.preventDefault();buttons[(at+(e.shiftKey?-1:1)+buttons.length)%buttons.length].focus();}};
+  ov.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();close();}if(e.key==='Tab'){const buttons=[...ov.querySelectorAll<HTMLButtonElement>('button')].filter(b=>!b.disabled&&!b.closest('[hidden]')),at=buttons.indexOf(document.activeElement as HTMLButtonElement);e.preventDefault();buttons[(at+(e.shiftKey?-1:1)+buttons.length)%buttons.length]?.focus();}};
   update();ov.querySelector<HTMLButtonElement>('[aria-pressed=true]')!.focus();
 }
 

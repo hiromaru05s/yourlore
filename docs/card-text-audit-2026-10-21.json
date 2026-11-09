@@ -6,8 +6,8 @@
     "ko",
     "en"
   ],
-  "count": 380,
-  "engineSha256": "d9d1cc7e5f88b8d4b357cbe9cc54acc0fcb18080b07a255e8a6eaa15b1c56a89",
+  "count": 386,
+  "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -9075,6 +9075,130 @@
       },
       "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md",
       "reviewedAt": "2026-10-31"
+    },
+    "ELITE_GOBLIN": {
+      "nameJa": "精鋭ゴブリン",
+      "status": "reworded",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "4acbb7ccc5ae210f3e1508277b790d600bf45222dabcbf0d6c4af5e4579bcb3a",
+      "textSha256": "7ef0c7d64176bedc27c5e75caf681deccbe20dadcbca2d23011fcf583d3eefab",
+      "hooks": {
+        "aura": "eliteGoblin"
+      },
+      "before": {
+        "ja": "【破壊時】戦闘で破壊される時、ダイスを振る。3以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする（カードごとに1回）。",
+        "ko": "【파괴 시】전투로 파괴될 때 주사위를 굴린다. 3 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다(카드당 1회).",
+        "en": "【On Destruction】If battle would destroy this, roll a die. On 3+, you take 2 damage and prevent that battle destruction once per card."
+      },
+      "after": {
+        "ja": "【破壊時】戦闘で破壊される時、ダイスを振る。3以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする。",
+        "ko": "【파괴 시】전투로 파괴될 때 주사위를 굴린다. 3 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다.",
+        "en": "【On Destruction】If battle would destroy this, roll a die. On 3+, you take 2 damage and prevent that battle destruction."
+      }
+    },
+    "GOBLIN_ORIGIN": {
+      "nameJa": "ゴブリンの起源",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "2d0217a07ce13ccd1e3851321e48d5c827e5b5d79bbf36e40b4047a71739ff1c",
+      "textSha256": "c8d3c526aa9ab170937dba9a371a9e8c9e9d364285cd68016e85f54a4ca51a4c",
+      "hooks": {
+        "ench": "goblinOrigin"
+      },
+      "before": {
+        "ja": "【自分のターン開始時】自分のフィールドに「ゴブリン」1体を召喚する。\n\n【破壊時】相手のカード効果で破壊された場合、相手フィールドのモンスター1体をランダムに破壊する。",
+        "ko": "【자신의 턴 시작 시】자신의 필드에 '고블린' 1체를 소환한다.\n\n【파괴 시】상대 카드 효과로 파괴되면, 상대 필드의 몬스터 1체를 무작위로 파괴한다.",
+        "en": "【At the Start of Your Turn】Summon 1 Goblin to your field.\n\n【On Destruction】If an opponent's card effect destroys this, randomly destroy 1 monster on their field."
+      },
+      "after": {
+        "ja": "【自分のターン開始時】自分のフィールドに「ゴブリン」1体を召喚する。\n\n【破壊時】相手のカード効果で破壊された場合、相手フィールドのモンスター1体をランダムに破壊する。",
+        "ko": "【자신의 턴 시작 시】자신의 필드에 '고블린' 1체를 소환한다.\n\n【파괴 시】상대 카드 효과로 파괴되면, 상대 필드의 몬스터 1체를 무작위로 파괴한다.",
+        "en": "【At the Start of Your Turn】Summon 1 Goblin to your field.\n\n【On Destruction】If an opponent's card effect destroys this, randomly destroy 1 monster on their field."
+      }
+    },
+    "GOBLIN_PARTY": {
+      "nameJa": "ゴブリンパーティー",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "b7824bfcefe9b7aac6909bf3db6010a4e53ed938cc6478b42e2ba10497b6f491",
+      "textSha256": "cbfc22a0426d0480163cf76dd69a4d5cb7c80caf0f42fc014b06df8fdf621ad5",
+      "hooks": {
+        "act": "goblinParty"
+      },
+      "before": {
+        "ja": "【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】相手のマナ水晶を1減らし、自分のマナ水晶を1増やす。",
+        "ko": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】상대의 마나 수정을 1 감소시키고 자신의 마나 수정을 1 증가시킨다.",
+        "en": "【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 and increase yours by 1."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】相手のマナ水晶を1減らし、自分のマナ水晶を1増やす。",
+        "ko": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】상대의 마나 수정을 1 감소시키고 자신의 마나 수정을 1 증가시킨다.",
+        "en": "【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 and increase yours by 1."
+      }
+    },
+    "FORGE": {
+      "nameJa": "ゴブリン鍛冶屋",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "b2a5ea96071163a3e80ddce4cfb7ff47cb1313efa882fc2633b4fd9046d27f21",
+      "textSha256": "768434d0ab67c59db5870b4916b090f4fb5d74f7e3144df106447ee3bb0a4551",
+      "hooks": {
+        "act": "buffPerm"
+      },
+      "before": {
+        "ja": "【発動時】自分は3ダメージを受ける。自分のモンスター1体を選び、攻撃力+4・体力+2。",
+        "ko": "【발동 시】자신은 3 데미지를 받는다. 자신의 몬스터 1체를 선택해 공격력 +4, 체력 +2.",
+        "en": "【On Cast】Take 3 damage. Choose a friendly monster; it gets +4 ATK and +2 HP."
+      },
+      "after": {
+        "ja": "【発動時】自分は3ダメージを受ける。自分のモンスター1体を選び、攻撃力+4・体力+2。",
+        "ko": "【발동 시】자신은 3 데미지를 받는다. 자신의 몬스터 1체를 선택해 공격력 +4, 체력 +2.",
+        "en": "【On Cast】Take 3 damage. Choose a friendly monster; it gets +4 ATK and +2 HP."
+      }
+    },
+    "ICARUS_SHOES": {
+      "nameJa": "イカロスの靴",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "7b8596c4c3a32f98b36c1398f18a8c6e0108e20682cdb7718ff1d22f920dab9a",
+      "textSha256": "e62192eee20910451cfca8acd4b45ca5fdf327ceb450fc156bf914c8267048d6",
+      "hooks": {
+        "act": "buffPerm"
+      },
+      "before": {
+        "ja": "【発動時】自分のモンスター1体に「二刀流」を付与する。",
+        "ko": "【발동 시】자신의 몬스터 1체에 '이도류'를 부여한다.",
+        "en": "【On Cast】Give a friendly monster Dual Wield."
+      },
+      "after": {
+        "ja": "【発動時】自分のモンスター1体に「二刀流」を付与する。",
+        "ko": "【발동 시】자신의 몬스터 1체에 '이도류'를 부여한다.",
+        "en": "【On Cast】Give a friendly monster Dual Wield."
+      }
+    },
+    "ICARUS_WINGS": {
+      "nameJa": "イカロスの翼",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "92853c61137f98b93a43d208c5e1ba65d7e3b3bfb69cfe4b56c475de3d57eafa",
+      "textSha256": "dbfea10abcba2575b90035f4066de0637edc4f97967229f1fba6bf14141ed8f4",
+      "hooks": {
+        "act": "buffPerm"
+      },
+      "before": {
+        "ja": "【発動時】自分のモンスター1体に「回避」を付与する。",
+        "ko": "【발동 시】자신의 몬스터 1체에 '회피'를 부여한다.",
+        "en": "【On Cast】Give a friendly monster Evade."
+      },
+      "after": {
+        "ja": "【発動時】自分のモンスター1体に「回避」を付与する。",
+        "ko": "【발동 시】자신의 몬스터 1체에 '회피'를 부여한다.",
+        "en": "【On Cast】Give a friendly monster Evade."
+      }
     }
   },
   "keywords": {

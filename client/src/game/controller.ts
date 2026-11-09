@@ -55,7 +55,7 @@ import { paintDuelClock } from '../ui/duelClock';
 // LocalController reduces locally and drives the bot.
 // (OnlineController lives in ./online and reuses BaseController.)
 // ============================================================
-import type { Action, CardInst, GameEvent, GameState, ReduceResult, Side } from "../shared/types";
+import type { Action, CardInst, GameEvent, GameState, PlayerState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
 import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef, curHp } from "../shared/engine";
 import { safeGreedy, legalBotAction, type BotDifficulty } from "../shared/bot";
@@ -82,6 +82,8 @@ export interface ControllerExits {
   onOpeningStart?(elapsedMs:number): void;
   onBattleReady?(): void;
   onExperience?(): void;
+  onStoryResult?(won: boolean): void;
+  onStoryAgainLabel?(won: boolean | null): string | undefined;
 }
 
 // ---- coin-toss profiles (set by the game screen at mount): the two coin faces ----
@@ -1605,6 +1607,8 @@ export abstract class BaseController implements BoardHandlers {
       () => { A.removeReviewFab(); this.exits.onHome(); },
       () => A.reviewFab(() => this.openResult()),
     );
+    const storyLabel=this.exits.onStoryAgainLabel?.(won);
+    if(storyLabel){const again=document.querySelector<HTMLButtonElement>('.finale-again');if(again)again.textContent=storyLabel;}
     this.renderRankDelta(); // fill the ranked MMR line if we already have the result
   }
 
@@ -1672,27 +1676,30 @@ export class LocalController extends BaseController {
   private botBusy = false;
   private botDisposed = false;
   private difficulty: BotDifficulty;
+  private storyMatch: boolean;
 
-  constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard") {
+  constructor(root: HTMLElement, exits: ControllerExits, playerName = "PLAYER 1", deck?: string[], difficulty: BotDifficulty = "hard", opponent?: { name: string; deck: string[]; tune?: PlayerState["botTune"] }) {
     super(root, 0, exits);
     this.difficulty = difficulty;
+    this.storyMatch = !!opponent;
     const npc = botNpc(difficulty);
     const { index, rotation } = nextNpcDeck(npc, lastNpcDecks.get(npc.id));
     const bot = npc.decks[index];
-    lastNpcDecks.set(npc.id, rotation);
+    if (!opponent) lastNpcDecks.set(npc.id, rotation);
     const res = createGame({
       mode: "bot",
       challenge: {difficulty, side: 1},
       p0: { id: "local", name: playerName, deck },
-      p1: { id: "bot", name: npc.name[getLang()], isBot: true, deck: bot.cards },
+      p1: { id: "bot", name: opponent?.name ?? npc.name[getLang()], isBot: true, deck: opponent?.deck ?? bot.cards, scriptedDeck: !!opponent },
       starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn
     });
     res.state.medals=[COIN_ME.medal??null,null];
-    res.state.players[1].botTune = bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
+    res.state.players[1].botTune = opponent?.tune ?? bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
     this.applyResult(res, false);
   }
 
   protected reportBotResult(won: boolean | null): void {
+    if (this.storyMatch) { if (won !== null) this.exits.onStoryResult?.(won); return; }
     const report = async () => {
       for(let attempt=0;attempt<3;attempt++){
         try { const result=await api.trackBot(won,this.difficulty);if(result.experience)this.receiveExperience(result.experience);else this.exits.onExperience?.();return; }

@@ -52,6 +52,9 @@ export function cardArtPrompt(card) {
   const effectText = card.textEn ?? card.text;
   const effect = effectText && effectText !== "-" && effectText !== "—" ? ` Gameplay idea to visualize: ${effectText}.` : "";
   const displayName = card.nameEn ?? card.name;
+  const ariesGoblinStyle = ["ELITE_GOBLIN","GOBLIN_ORIGIN","GOBLIN_PARTY","FORGE","ICARUS_SHOES","ICARUS_WINGS"].includes(card.id)
+    ? "Style continuity reference from the existing LORE card illustrations GOBLIN, GOBLIN_RAIDER, GOBLIN_LEADER, GOBLIN_KING, M1, M4, M7, TRUMPET, FLAME, and GHOST: use their hand-painted, brush-visible fantasy rendering, clear medium-close silhouettes, warm aged-world colors, and lively painted light. Keep the result illustrated and cohesive, with simplified controlled detail; avoid photorealistic skin, camera realism, glossy 3D, or a different anime look."
+    : "";
   return [
     `Create one finished LORE TCG inner-art illustration on an exact ${cardArtSize} pixel landscape canvas (aspect ratio 1.095:1).`,
     "This is the artwork inside the card frame, not a full card mockup.",
@@ -61,6 +64,7 @@ export function cardArtPrompt(card) {
     typeDirection(card),
     `Card identity: ${displayName} (${card.id}), ${type}, cost tier ${card.cost}.${stats}${effect}`,
     `Visual brief: ${subject}.`,
+    ariesGoblinStyle,
     "Composition: one dominant focal idea in the central 80% of the canvas, medium-close or close framing, controlled depth, strong value separation, and no essential detail in the outer 8% where the card frame overlaps.",
     "No card border, no frame, no UI, no mana gems, no stat badges, no written words, no letters, no numbers, no logo, no watermark.",
   ].join(" ");
@@ -80,6 +84,12 @@ function typeDirection(card) {
 }
 
 function subjectHint(card) {
+  if (card.id === "ELITE_GOBLIN") return "a compact elite goblin scout in battered brass-reinforced leather, alert forward-leaning stance with a short cleaver and buckler, one vivid readable creature silhouette; visually belongs beside the existing GOBLIN and GOBLIN_RAIDER illustrations";
+  if (card.id === "GOBLIN_ORIGIN") return "object-only spell illustration: an ancient cracked green seed-stone on a blackened oak archive table, a single small goblin emerging as amber-green roots curl around it; no people or hands";
+  if (card.id === "GOBLIN_PARTY") return "object-only spell illustration: three distinct goblin-sized drumsticks and a battered brass war-drum beating a sharp rally, three small green sparks converging on a blue mana crystal while an opposing crystal dims; no creatures or people";
+  if (card.id === "FORGE") return "object-only spell illustration: a compact blacksmith anvil and ember-lit hammer striking a single goblin-sized blade, a clear blue-white pulse of power traveling into the weapon; no person, no hands, no writing";
+  if (card.id === "ICARUS_SHOES") return "object-only spell illustration: a pair of worn winged bronze boots on a dark archive pedestal, two clean parallel afterimage trails showing swift repeated movement, warm amber highlights; no person or legs";
+  if (card.id === "ICARUS_WINGS") return "object-only spell illustration: a single pair of pale feathered wings folded around a small cobalt ward sigil, one translucent missed-strike trail passing harmlessly through the silhouette; no person or body";
   if (card.id === "MIMIC") return "a classic treasure chest mimic monster, open wooden chest with sharp teeth, long tongue, clawed legs, gold coins spilling out, mischievous dungeon ambush";
   if (card.id === "SX2") return "object-only abstract spell icon, one green trap sigil made of stone and chains cracking apart under a precise arcane beam, empty dungeon floor, no creatures";
   if (card.id === "SX4") return "object-only abstract spell icon, two ornate golden padlocks and trap seals breaking open in midair, blue-gold runes and fragments, empty magical chamber";

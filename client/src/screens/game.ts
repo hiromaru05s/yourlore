@@ -20,9 +20,12 @@ import { setMarketWatch, setMyAvatar, setMySleeve, setMyFurniture, setOppAvatar 
 import { startBoardLayout } from "../ui/layout";
 import { setCoinProfiles } from "../game/controller";
 import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
+import type { AriesStage, StoryOpponent } from "../shared/ariesStory";
+import { ARIES_COMPLETED_KEY } from "../shared/ariesStory";
+import { loungeText } from "../ui/loungeText";
 
 export type GameOpts =
-  | { mode: "bot"; difficulty?: BotDifficulty }
+  | { mode: "bot"; difficulty?: BotDifficulty; story?: StoryOpponent }
   | { mode: "tutorial"; lesson?: number; part?: number }
   | { mode: "online"; roomId: string; you: Side; oppName: string; oppAvatar?: string | null; ranked?: boolean; difficulty?:BotDifficulty };
 
@@ -31,6 +34,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   root.dataset.duelMode = opts.mode;
   app.root.appendChild(root);
   const npc = opts.mode === "bot" ? botNpc(opts.difficulty ?? "hard") : null;
+  const story = opts.mode === 'bot' ? opts.story : undefined;
   setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait
   setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : npc?.avatar ?? null);
   const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
@@ -45,7 +49,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     { avatar: ownSeeker, name: app.user?.display ?? "YOU", medal:app.user?.badge },
     opts.mode === "online"
       ? { avatar: opts.oppAvatar ?? "SEEKER_RED", name: opts.oppName }
-      : npc ? { avatar: npc.avatar, name: npc.name[getLang()] } : { avatar: "SEEKER_RED", name: "TUTOR" },
+      : { avatar: npc?.avatar ?? "SEEKER_RED", name: story?.name[getLang()] ?? npc?.name[getLang()] ?? "TUTOR" },
   );
 
   let stopMusic: (() => void) | undefined;
@@ -61,19 +65,30 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     });
   };
   const experienceUserId=app.user?.id;
+  let storyWon: boolean | null = null;
   const exits: ControllerExits = {
     onExperience: () => {if(experienceUserId && experienceUserId!=="local-guest-user")void api.me().then(fresh=>{if(fresh?.id===experienceUserId && app.user?.id===experienceUserId){app.user=fresh;document.dispatchEvent(new Event("lore:user"));}});},
     onOpeningStart: opts.mode === "tutorial" ? undefined : startMusic,
     onBattleReady: () => startMusic(),
     onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
-    onRematch: () => (opts.mode === "bot" ? app.botGame(opts.difficulty) : opts.mode === "tutorial" ? (opts.part===undefined?app.tutorialGame(opts.lesson):app.tutorialPart(opts.part)) : (opts.difficulty??ctrl.botDifficulty) ? app.botGame(opts.difficulty??ctrl.botDifficulty) : opts.ranked ? app.rankedLobby() : app.onlineLobby()),
+    onStoryResult: won => { storyWon = won; if (story && story.stage === 2 && won) localStorage.setItem(ARIES_COMPLETED_KEY, '1'); },
+    onStoryAgainLabel: won => !story ? undefined : won ? story.stage < 2 ? loungeText('次の試練へ →','Continue →','다음 시련으로 →') : loungeText('ストーリーを閉じる','Finish story','스토리 마치기') : loungeText('最初からやり直す →','Restart the sequence →','처음부터 다시 →'),
+    onRematch: () => {
+      if (opts.mode === 'bot' && story) {
+        if (storyWon && story.stage < 2) app.storyGame((story.stage + 1) as AriesStage);
+        else if (storyWon && story.stage === 2) app.home();
+        else app.storyGame(0);
+      } else if (opts.mode === "bot") app.botGame(opts.difficulty);
+      else if (opts.mode === "tutorial") opts.part===undefined?app.tutorialGame(opts.lesson):app.tutorialPart(opts.part);
+      else (opts.difficulty??ctrl.botDifficulty) ? app.botGame(opts.difficulty??ctrl.botDifficulty) : opts.ranked ? app.rankedLobby() : app.onlineLobby();
+    },
   };
 
   const tutorialUserId = app.user?.id;
   const ctrl =
     opts.mode === "bot"
-      ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard")
+      ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard", story ? {name:story.name[getLang()],deck:story.deck,tune:story.tune} : undefined)
       : opts.mode === "tutorial" && opts.part!==undefined
         ? new TutorialPartController(root,exits,opts.part,(next,actions)=>next<TUTORIAL_PARTS.length?app.tutorialPart(next):app.onboarding(actions),app.user?.id)
       : opts.mode === "tutorial"

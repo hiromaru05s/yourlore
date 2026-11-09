@@ -8,6 +8,8 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   GOBLIN_SETTLEMENT: {terms:['lasting']},
   RELIC_BOUNTY: {terms:['graveyard']},
   GOBLIN_KING: {terms:['graveyard','rift','lasting']},
+  ICARUS_SHOES: {mentions:['dual']},
+  ICARUS_WINGS: {mentions:['evade']},
   NIGHT_CASTLE_GIFT: {terms:['graveyard']},
   M2: {terms:["graveyard"]},
   M4: {mentions:["counter","decay"]},
