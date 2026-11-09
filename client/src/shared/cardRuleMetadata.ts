@@ -141,6 +141,7 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   AEM: {"terms":["composition","lasting"]},
   KNIGHT_TEACH: {"terms":["lasting","counters"],"mentions":["guts"],"grants":["guts"]},
   DUNGEON: {"mentions":["guts","evade"]},
+  DUNGEON_FLOOR: {terms:["counters"]},
   NL_SECRET: {"terms":["lasting"],"mentions":["ambush","evade"],"grants":["ambush","evade"]},
   HEXER1: {"terms":["composition","graveyard"]},
   HEXER2: {"terms":["composition","graveyard"]},
