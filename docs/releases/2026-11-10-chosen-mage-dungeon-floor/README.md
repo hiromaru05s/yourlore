@@ -4,6 +4,8 @@ The Chosen Mage's optional turn-start selection is now queued behind any turn-st
 
 Dungeon Depths now requires the opponent to have at least 9 mana crystals. Its activation gives its owner 1 Brand counter instead of reducing maximum mana; Mimic summoning remains unchanged.
 
+Follow-up after the user's screenshot: the card detail panel reads the canonical `CARD_EFFECT_TEXT` table, which the first release had not updated. The Japanese, Korean, and English detail text and the bot's cast threshold are now aligned with the rule implementation.
+
 Validation: focused regression tests, client/server typechecks, 269/269 production tests, and production build all passed.
 
 Production: source `98e5f6a49c4ca8486f94c1d4785878dc34e059fd`; Worker version `aba1bd2e-8835-4c22-bc24-0e547b60674f` at 100% traffic. Deployment status confirmed the source annotation and version; `https://yourlore.xyz` returned HTTP 200.

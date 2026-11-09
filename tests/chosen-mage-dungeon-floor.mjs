@@ -6,8 +6,8 @@ import path from 'node:path';
 
 const tmp=await fs.mkdtemp(path.join(os.tmpdir(),'lore-chosen-dungeon-'));
 try {
-  await build({stdin:{contents:"export * from './client/src/shared/engine';export {DB,STARTERS} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:tmp+'/engine.mjs',plugins:[{name:'test-hooks',setup(b){b.onLoad({filter:/shared\/engine\.ts$/},async({path:p})=>({contents:await fs.readFile(p,'utf8')+'\nexport {resolveOnSummon,applySpell,makeCtx};',loader:'ts'}));}}]});
-  const E=await import(tmp+'/engine.mjs'),{DB,STARTERS}=E;
+  await build({stdin:{contents:"export * from './client/src/shared/engine';export {DB,STARTERS} from './client/src/shared/cards';export {CARD_EFFECT_TEXT} from './client/src/shared/cardEffectText';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:tmp+'/engine.mjs',plugins:[{name:'test-hooks',setup(b){b.onLoad({filter:/shared\/engine\.ts$/},async({path:p})=>({contents:await fs.readFile(p,'utf8')+'\nexport {resolveOnSummon,applySpell,makeCtx};',loader:'ts'}));}}]});
+  const E=await import(tmp+'/engine.mjs'),{DB,STARTERS,CARD_EFFECT_TEXT}=E;
   let seq=0;
   const card=(id,extra={})=>({...structuredClone(DB[id]??STARTERS[id]),uid:'chosen-test-'+(++seq),...extra});
   const mon=(id,extra={})=>card(id,{dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0,...extra});
@@ -60,6 +60,11 @@ try {
     assert.equal(after.brand,1);
     assert.equal(after.maxMana,before);
     assert(played.events.some(e=>e.type==='log'&&e.html.includes('낙인 카운터 1개')));
+    for(const [locale,minimum] of [['ja','9以上'],['ko','9 이상'],['en','9 mana crystals']]){
+      assert(CARD_EFFECT_TEXT.DUNGEON_FLOOR[locale].includes(minimum),`${locale} condition text`);
+      assert(CARD_EFFECT_TEXT.DUNGEON_FLOOR[locale].includes(locale==='ja'?'烙印カウンター':locale==='ko'?'낙인 카운터':'Brand counter'),`${locale} Brand text`);
+      assert(!CARD_EFFECT_TEXT.DUNGEON_FLOOR[locale].includes(locale==='ja'?'マナ水晶-1':locale==='ko'?'마나 수정 -1':'Reduce your mana crystals'),`${locale} obsolete penalty removed`);
+    }
   }
   console.log('PASS chosen mage turn-start queue, Predator protection, and Dungeon Depths rules');
 } finally { await fs.rm(tmp,{recursive:true,force:true}); }

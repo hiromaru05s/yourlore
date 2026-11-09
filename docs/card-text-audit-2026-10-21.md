@@ -665,7 +665,7 @@
 
 ### ND5 — 古代の知識
 
-構造監査：表記改定（ko）。実装キー：`{}`。
+構造監査：表記改定（ja / ko / en、2026-11-10更新）。実装キー：`{}`。
 
 **ja**
 
@@ -4335,21 +4335,21 @@
 
 **ja**
 
-> 【発動条件】相手の最大マナが7以上。
+> 【発動条件】相手のマナ水晶が9以上。
 >
-> 【発動時】自分の最大マナ-1（この効果では3未満にならない）。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。
+> 【発動時】自身に烙印カウンターを1つ付与する。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。
 
 **ko**
 
-> 【발동 조건】상대의 최대 마나 7 이상.
+> 【발동 조건】상대의 마나 수정이 9 이상.
 >
-> 【발동 시】자신의 최대 마나 -1(이 효과로 3 미만이 되지 않음). 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.
+> 【발동 시】자신에게 낙인 카운터 1개를 부여한다. 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.
 
 **en**
 
-> 【Play Requirement】The opponent has at least 7 max mana.
+> 【Play Requirement】The opponent has at least 9 mana crystals.
 >
-> 【On Cast】Your max mana -1, without reducing it below 3. Roll 1 die and summon that many Mimics to your field.
+> 【On Cast】Give yourself 1 Brand counter. Roll 1 die and summon that many Mimics to your field.
 
 
 ### GEM_RAIN — 宝石の雨

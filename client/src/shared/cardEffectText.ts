@@ -1131,9 +1131,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Summon Requirement】Your mana crystals are at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your mana crystals to 3.\n\n【While on the Field】Your mana crystals cannot increase."
   },
   "DUNGEON_FLOOR": {
-    "ja": "【発動条件】相手のマナ水晶が7以上。\n\n【発動時】自分のマナ水晶-1（この効果では3未満にならない）。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
-    "ko": "【발동 조건】상대의 마나 수정 7 이상.\n\n【발동 시】자신의 마나 수정 -1(이 효과로 3 미만이 되지 않음). 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.",
-    "en": "【Play Requirement】The opponent has at least 7 mana crystals.\n\n【On Cast】Reduce your mana crystals by 1, without reducing them below 3. Roll 1 die and summon that many Mimics to your field."
+    "ja": "【発動条件】相手のマナ水晶が9以上。\n\n【発動時】自身に烙印カウンターを1つ付与する。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
+    "ko": "【발동 조건】상대의 마나 수정이 9 이상.\n\n【발동 시】자신에게 낙인 카운터 1개를 부여한다. 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.",
+    "en": "【Play Requirement】The opponent has at least 9 mana crystals.\n\n【On Cast】Give yourself 1 Brand counter. Roll 1 die and summon that many Mimics to your field."
   },
   "GEM_RAIN": {
     "ja": "【場にある間】場の全ての「ミミック」系モンスターの攻撃力+3。",

@@ -219,7 +219,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.ench === "foresight" && p.enchants.some((e) => e.card.ench === "foresight")) return false;
     if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return false; // 상회 중복
     if (c.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) return false; // 슬럼가: 상회 필요
-    if (c.id === "DUNGEON_FLOOR" && o.maxMana < 7) return false; // 던전 최하층: 상대 마나 수정 7+ 필요
+    if (c.id === "DUNGEON_FLOOR" && o.maxMana < 9) return false; // 던전 최하층: 상대 마나 수정 9+ 필요
     if (c.ench && p.traps.length + p.enchants.length >= ST_MAX) return false;
     if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;

@@ -5374,7 +5374,7 @@
         "en"
       ],
       "definitionSha256": "d13701b9e8d89590e9e69822df47420bdc36727e50013b50906cc7acdad7a356",
-      "textSha256": "17ad3039bae2644fab6c32838a0ecf7f81ef394e6be4676cdc70bea58529a496",
+      "textSha256": "dbb3f32e271a232b944febd86d40e7319b1e11ef4afeaa4aca6d5b74ca92dc14",
       "hooks": {},
       "before": {
         "ja": "【発動条件】相手の最大マナが7以上。\n\n【発動時】自分の最大マナ-1（この効果では3未満にならない）。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
@@ -5382,11 +5382,11 @@
         "en": "【Play Requirement】The opponent has at least 7 max mana.\n\n【On Cast】Reduce your max mana by 1, without reducing it below 3. Roll 1 die and summon that many Mimics to your field."
       },
       "after": {
-        "ja": "【発動条件】相手のマナ水晶が7以上。\n\n【発動時】自分のマナ水晶-1（この効果では3未満にならない）。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
-        "ko": "【발동 조건】상대의 마나 수정 7 이상.\n\n【발동 시】자신의 마나 수정 -1(이 효과로 3 미만이 되지 않음). 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.",
-        "en": "【Play Requirement】The opponent has at least 7 mana crystals.\n\n【On Cast】Reduce your mana crystals by 1, without reducing them below 3. Roll 1 die and summon that many Mimics to your field."
+        "ja": "【発動条件】相手のマナ水晶が9以上。\n\n【発動時】自身に烙印カウンターを1つ付与する。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
+        "ko": "【발동 조건】상대의 마나 수정이 9 이상.\n\n【발동 시】자신에게 낙인 카운터 1개를 부여한다. 주사위 1개를 굴려 나온 수만큼 미믹을 자신의 필드에 소환한다.",
+        "en": "【Play Requirement】The opponent has at least 9 mana crystals.\n\n【On Cast】Give yourself 1 Brand counter. Roll 1 die and summon that many Mimics to your field."
       },
-      "reviewedAt": "2026-10-31"
+      "reviewedAt": "2026-11-10"
     },
     "GEM_RAIN": {
       "nameJa": "宝石の雨",
