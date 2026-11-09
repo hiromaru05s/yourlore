@@ -1071,7 +1071,9 @@ export function cardPassives(c: Partial<CardDef> & {conditionalPassives?: string
   if (c.directOnly || has("ambush")) out.push("ambush");
   if (c.aura === "ward" || has("aura")) out.push("aura");
   for (const k of ["taunt", "evade", "guts", "decay", "majesty", "relic", "counter"]) if (has(k)) out.push(k);
-  if (c.exileOnDestroy || has("void")) out.push("void");
+  // In-progress matches can still hold Nova instances saved before it gained Void.
+  const novaVoid = c.id === "BLACK_NOVA" && DB.BLACK_NOVA.passive?.includes("void");
+  if (c.exileOnDestroy || has("void") || novaVoid) out.push("void");
   return out;
 }
 /** 런타임 패시브 판정 — 카드 자체 + 게임 중 부여된 패시브(passivesG)까지 포함. */

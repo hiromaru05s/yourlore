@@ -1596,9 +1596,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】Spells from both players have dealt at least 5 total damage to players or monsters this turn.\n\n【While on the Field】Prevent spell damage to you and create that many new Culls in your Rift.\n\n【Duration】Expires at your 6th subsequent turn start."
   },
   "BLACK_NOVA": {
-    "ja": "【発動条件】自分の場にモンスターがいない。\n\n【発動時】自分の体力を1にする。その後、次の相手のターンを1回スキップする。",
-    "ko": "【발동 조건】자신의 필드에 몬스터가 없다.\n\n【발동 시】자신의 체력을 1로 만든다. 그 후 다음 상대 턴을 1회 건너뛴다.",
-    "en": "【Play Requirement】You control no monsters.\n\n【On Cast】Set your HP to 1. Then skip the opponent’s next turn once."
+    "ja": "【発動条件】自分の場にモンスターがいない。\n\n【発動時】自分の体力を1にする。その後、次の相手のターンを1回スキップする。\n\n虚無により、効果が通るとこのカードは自分のリフトに移る。",
+    "ko": "【발동 조건】자신의 필드에 몬스터가 없다.\n\n【발동 시】자신의 체력을 1로 만든다. 그 후 다음 상대 턴을 1회 건너뛴다.\n\n공허로 인해 효과가 무효화되지 않으면 이 카드는 자신의 리프트로 간다.",
+    "en": "【Play Requirement】You control no monsters.\n\n【On Cast】Set your HP to 1. Then skip the opponent’s next turn once.\n\nIf the spell resolves, Void sends this card to your Rift."
   },
   "BLACK_CURSE": {
     "ja": "【購入条件】自分のデッキ構成に、同名以外の「黒魔法」がある。\n\n【発動時】新しい「呪い」5枚を相手の墓地に追加する。",

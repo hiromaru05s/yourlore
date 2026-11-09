@@ -4990,7 +4990,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     consumeGrimoire(p);
     if (negated) { if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; }
     // 공허(void) 마법 토큰(와인/암상인): 사용 후 묘지 대신 게임에서 제외 — 영구마법(선견지명류)은 제외
-    if (!card.ench && hasPassive(card, "void")) {
+    const voidSpell = !card.ench && hasPassive(card, "void");
+    if (voidSpell) {
       const vi = p.discard.lastIndexOf(card);
       if (vi >= 0) { p.discard.splice(vi, 1); rmz(p).push(card); }
     }
@@ -5044,7 +5045,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       }
       return;
     }
-    const castEvent: Extract<GameEvent, {type: "playSpell"}> = { type: "playSpell", player: side(g, p), id: card.id, dest: "discard", ...(card.id === "EXILE_NUKE2" ? {riftCount: rmz(p).length} : {}) }; // capture the public Rift before damage triggers add records
+    const castEvent: Extract<GameEvent, {type: "playSpell"}> = { type: "playSpell", player: side(g, p), id: card.id, dest: voidSpell && card.id === "BLACK_NOVA" ? "vanish" : "discard", ...(card.id === "EXILE_NUKE2" ? {riftCount: rmz(p).length} : {}) }; // capture the public Rift before damage triggers add records
     ctx.ev.push(castEvent);
     const blood = isBloodMagic(card);
     // 룬 학문 - 상급(runeEcho, v34): 즉발 마법을 마나 없이 1번 더 발동 (선택형/펜딩 생성 마법은 제외)

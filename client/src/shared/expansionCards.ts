@@ -368,6 +368,7 @@ export const EXPANSION_CARDS: CardDef[] = [
     "text": "【조건】자신 필드 몬스터 없음 · 자신의 체력을 1로, 상대 다음 턴 1회 스킵",
     "textEn": "【Requires】No allied monsters · Set your HP to 1 and skip the next enemy turn",
     "t": "spell",
+    "passive": ["void"],
     "act": "expansion"
   },
   {
