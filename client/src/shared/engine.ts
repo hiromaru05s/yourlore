@@ -4815,7 +4815,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.ench === "foresight") { applicable=true; if (p.enchants.some((e) => e.card.ench === "foresight")) { return reason("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); } }
   if (card.ench === "guild") { applicable=true; if (p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 이미 '상회'가 있습니다", "  └ 自分の場に既に「商会」があります", `  └ You already control a Trade Guild`); } }
   if (card.id === "SLUM") { applicable=true; if (!p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 '상회'가 없습니다", "  └ 自分の場に「商会」がありません", `  └ You do not control a Trade Guild`); } }
-  if (card.id === "DUNGEON_FLOOR") { applicable=true; if (o0.maxMana < 9) { return reason("  └ 상대 마나 수정이 9 미만이라 사용 불가", "  └ 相手のマナ水晶が9未満のため使用不可", `  └ The opponent must have at least 9 mana crystals`); } }
+  if (card.id === "DUNGEON_FLOOR") { applicable=true; if (effMaxMana(o0) < 9) { return reason("  └ 상대 마나 수정이 9 미만이라 사용 불가", "  └ 相手のマナ水晶が9未満のため使用不可", `  └ The opponent must have at least 9 mana crystals`); } }
   if (card.id === "MEDITATE") { applicable=true; if (p.maxMana > 11) { return reason("  └ 마나 수정이 11을 초과해 사용 불가", "  └ マナ水晶が11を超えているため使用不可", `  └ Your mana crystals must be 11 or less`); } }
   if (card.id === "MEDITATE") { applicable=true; if (p.hp >= 40) { return reason("  └ 체력이 40 미만이어야 합니다", "  └ 体力が40未満の時のみ使用可能", `  └ Your HP must be below 40`); } }
   if (card.id === "HERMIT") { applicable=true; if (p.field.length > 0) { return reason("  └ 필드에 몬스터가 있어 사용 불가", "  └ 場にモンスターがいるため使用不可", `  └ You must control no monsters to play this card`); } }
