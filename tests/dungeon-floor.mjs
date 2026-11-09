@@ -17,7 +17,7 @@ try {
    const r=E.reduce(g,{type:'play',idx:0}),index=r.events.findIndex(e=>e.type==='dice'&&e.source.id==='DUNGEON_FLOOR');assert(index>=0);
    const roll=r.events[index].rolls[0];if(seen.has(roll))continue;seen.add(roll);
    const events=E.dungeonFloorSummons(r.events,index);assert.equal(events.length,Math.min(slots,roll));assert(events.every(e=>e.player===side&&e.id==='MIMIC'&&e.source==='DUNGEON_FLOOR'));
-   assert.equal(r.state.players[side].maxMana,9);cases++;
+   assert.equal(r.state.players[side].maxMana,10);assert.equal(r.state.players[side].brand,1);cases++;
   }assert.equal(seen.size,6);
  }
  const dice={type:'dice',source:{id:'DUNGEON_FLOOR',player:0},player:0,rolls:[6]};

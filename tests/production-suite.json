@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/chosen-mage-dungeon-floor.mjs",
     "tests/spell-rework-v74.mjs",
     "tests/spell-rework-v74-server.mjs",
     "tests/balance-v73.mjs",

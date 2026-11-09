@@ -1031,10 +1031,17 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
 
 /** 선택받은 마법사(CHOSEN_MAGE): 턴 시작시 필드의 마법사를 클릭해 발동(취소 가능)하는 선택 pending 제공. */
 function offerChosenMage(g: GameState, ctx: Ctx): void {
-  if (g.over || g.pending) return;
+  if (g.over) return;
   const p = g.players[g.cur];
-  if (!p.field.some((m) => m.id === "CHOSEN_MAGE")) return;
-  if (!rmz(p).some((c) => c.star === "trash")) return;
+  if (!p.field.some((m) => m.id === "CHOSEN_MAGE") || !rmz(p).some((c) => c.star === "trash")) {
+    delete g.chosenMageQueued;
+    return;
+  }
+  if (g.pending) {
+    g.chosenMageQueued = true;
+    return;
+  }
+  delete g.chosenMageQueued;
   g.pending = {
     kind: "myMon", reason: "chosenMage", allowCancel: true, data: { fired: [] },
     hint: "선택받은 마법사 — 발동할 마법사 선택 (제외된 컬 1장 → 묘지, 상대에게 8 데미지 · 취소 가능)",
@@ -4068,8 +4075,9 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       }
       break;
     }
-    case "DUNGEON_FLOOR": { // 던전 최하층: 마나 수정 -1(바닥 3) + 🎲 눈만큼 미믹 소환
-      if (p.maxMana > 3) { p.maxMana -= 1; ctx.log(`  └ 대가: 마나 수정 -1 (${p.maxMana})`, `  └ 代価: マナ水晶-1 (${p.maxMana})`, `  └ Cost: mana crystals -1 (${p.maxMana})`); }
+    case "DUNGEON_FLOOR": { // 던전 최하층: 자신에게 낙인 1개 + 🎲 눈만큼 미믹 소환
+      gainBrand(g, ctx, p, 1);
+      ctx.log(`  └ 대가: 자신에게 낙인 카운터 1개 부여 (${p.brand})`, `  └ 代償: 自身に烙印カウンターを1つ付与 (${p.brand})`, `  └ Cost: gain 1 Brand counter (${p.brand})`);
       const { rolls: df } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1);
       let dn = 0;
       for (let i = 0; i < df[0] && p.field.length < FIELD_MAX; i++) { spawnToken(g, ctx, p, "MIMIC", false, undefined, "DUNGEON_FLOOR"); dn++; }
@@ -4766,7 +4774,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.ench === "foresight") { applicable=true; if (p.enchants.some((e) => e.card.ench === "foresight")) { return reason("  └ 자신 필드에 이미 '선견지명'이 있습니다", "  └ 自分の場に既に「先見の明」があります"); } }
   if (card.ench === "guild") { applicable=true; if (p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 이미 '상회'가 있습니다", "  └ 自分の場に既に「商会」があります", `  └ You already control a Trade Guild`); } }
   if (card.id === "SLUM") { applicable=true; if (!p.enchants.some((e) => e.card.ench === "guild")) { return reason("  └ 자신 필드에 '상회'가 없습니다", "  └ 自分の場に「商会」がありません", `  └ You do not control a Trade Guild`); } }
-  if (card.id === "DUNGEON_FLOOR") { applicable=true; if (o0.maxMana < 7) { return reason("  └ 상대 마나 수정이 7 미만이라 사용 불가", "  └ 相手のマナ水晶が7未満のため使用不可", `  └ The opponent must have at least 7 mana crystals`); } }
+  if (card.id === "DUNGEON_FLOOR") { applicable=true; if (o0.maxMana < 9) { return reason("  └ 상대 마나 수정이 9 미만이라 사용 불가", "  └ 相手のマナ水晶が9未満のため使用不可", `  └ The opponent must have at least 9 mana crystals`); } }
   if (card.id === "MEDITATE") { applicable=true; if (p.maxMana > 11) { return reason("  └ 마나 수정이 11을 초과해 사용 불가", "  └ マナ水晶が11を超えているため使用不可", `  └ Your mana crystals must be 11 or less`); } }
   if (card.id === "MEDITATE") { applicable=true; if (p.hp >= 40) { return reason("  └ 체력이 40 미만이어야 합니다", "  └ 体力が40未満の時のみ使用可能", `  └ Your HP must be below 40`); } }
   if (card.id === "HERMIT") { applicable=true; if (p.field.length > 0) { return reason("  └ 필드에 몬스터가 있어 사용 불가", "  └ 場にモンスターがいるため使用不可", `  └ You must control no monsters to play this card`); } }
@@ -6027,6 +6035,8 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
     settle();
     if (g2.pending || !g2.expansionChoices?.length) break;
   }
+  // Finish earlier turn-start choices before presenting the Chosen Mage offer.
+  if (!g2.over && !g2.pending && g2.chosenMageQueued) offerChosenMage(g2, questCtx);
   normalizeManaCaps(g2);
   refreshDewPassives(g2);
   recheckDeaths(g2, questCtx);

@@ -591,7 +591,7 @@ Object.assign(NAMES, {
   VOID_FRUIT: "Fruit of the Void", VOID_APOSTLE: "Apostle of the Void",
 });
 Object.assign(TEXTS, {
-  DUNGEON_FLOOR: "Mana Crystals -1 (floor 3) · Summon Mimics equal to a die roll · Needs enemy mana crystals 7+",
+  DUNGEON_FLOOR: "Requires enemy mana crystals 9+ · On activation, gain 1 Brand counter · Summon Mimics equal to a die roll",
   GEM_RAIN: "Permanent: All Mimic-family monsters on the field get ATK +3",
   MIMIC_LAIR: "【On Your Mimic's Death】2 damage per your exiled Mimic-family card",
   VOID_FRUIT: "Permanent: At the start of your turns, gain HP equal to your exiled card count",

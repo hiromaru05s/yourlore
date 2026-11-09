@@ -221,6 +221,8 @@ export interface GameState {
   botMarket?: { side: Side; recent: string[] };
   /** Resume a requested turn end after a mandatory attack's optional choices. */
   endingTurn?: { turn: number; force: boolean };
+  /** A turn-start Chosen Mage offer waiting for another turn-start choice to finish. */
+  chosenMageQueued?: boolean;
   spellDamageTurn?: number;
   spellDamageAmount?: number;
   expansionChoices?: { owner: Side; reason: string; hint: string; data?: Record<string, unknown> }[];
