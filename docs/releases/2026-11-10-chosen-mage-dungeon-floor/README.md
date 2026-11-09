@@ -8,4 +8,4 @@ Follow-up after the user's screenshot: the card detail panel reads the canonical
 
 Validation: focused regression tests, client/server typechecks, 269/269 production tests, and production build all passed.
 
-Production: source `98e5f6a49c4ca8486f94c1d4785878dc34e059fd`; Worker version `aba1bd2e-8835-4c22-bc24-0e547b60674f` at 100% traffic. Deployment status confirmed the source annotation and version; `https://yourlore.xyz` returned HTTP 200.
+Production: final source `0c677297f51bf55913757a776c4b43242596d8a7`; Worker version `0c6efd86-81f8-4d05-be99-5525d78dc0b4` at 100% traffic. The new version deployed after this screenshot follow-up. `https://yourlore.xyz` returned HTTP 200.
