@@ -154,7 +154,7 @@ export const EXPANSION_CARDS: CardDef[] = [
     "text": "소환시: 병사 2체 소환. 양쪽 필드에 카지노가 있으면 주사위 5개.",
     "textEn": "On summon: summon 2 Soldiers. If either player controls a Casino, roll 5 dice.",
     "t": "mon",
-    "atk": 4,
+    "atk": 3,
     "def": 3,
     "onSummon": "expansion"
   },

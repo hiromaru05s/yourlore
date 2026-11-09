@@ -31,8 +31,8 @@ try {
   g=end(end(g));assert.equal(g.turn,7);assert.equal(E.playBlockReason(g,0,card('M1')),null);
   g=play(g,'M1');assert(g.players[0].field.some(m=>m.id==='M1'));
  });
- test('Elite Commander summons one Soldier at nine cards, none at ten, respecting capacity',()=>{
-  for(const [size,expected] of [[9,1],[10,0]]){let g=fresh();g.players[0].deck=Array.from({length:size-1},()=>card('STARTER_TRASH'));g=play(g,'ELITE');assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,expected);}
+ test('Elite Commander summons one Soldier at seven cards, none at eight, respecting capacity',()=>{
+  for(const [size,expected] of [[7,1],[8,0]]){let g=fresh();g.players[0].deck=Array.from({length:size-1},()=>card('STARTER_TRASH'));g=play(g,'ELITE');assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,expected);}
   let g=fresh();g.players[0].field=Array.from({length:6},()=>mon('M1'));g=play(g,'ELITE');assert.equal(g.players[0].field.length,7);assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,0);
  });
  test('Wine Collector rewards the Grape user on either side, once per collector and use',()=>{

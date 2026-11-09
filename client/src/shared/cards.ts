@@ -1343,7 +1343,7 @@ const PATCH19: Record<string, Partial<CardDef>> = {
   RUST_SHROOM: { atk: 0 }, // 1/0 → 0/1
   FORESIGHT: { text: "영구: 자신 마나 수정 10 이상이면 마나 수정 +2 후 이 마법 파괴 · 필드에 '선견지명'이 없을 때만 발동 가능 · 공허",
     textJa: "永続: 自分のマナ水晶10以上でマナ水晶+2後この魔法を破壊 · 場に「先見の明」がない時のみ発動可能 · 虚無" }, // 발현 9→10
-  ASSASSIN2: { atk: 8 },                 // 9/0 → 8/0
+  ASSASSIN2: { atk: 7 },
   GM8_0: { atk: 16, def: 5 },            // 저주받은 광전사 18/6 → 16/5
   GM6_3: { def: 3, val: 4, text: "소환시: 상대 체력에 4 데미지", textJa: "召喚時: 相手の体力に4ダメージ" }, // 여명의 드레이크 9/4·5뎀 → 9/3·4뎀
   GM6_0: { atk: 10, def: 3 },            // 흑요석 광전사 11/4 → 10/3 (효과 유지)
@@ -1628,7 +1628,7 @@ const NEW_STARTERS31: CardDef[] = [
     textJa: "ダイスを振り、出た目だけ自分の「商会」にカウンターを付与" },
   { id: "GRAPE", t: "spell", cost: 1, act: "hpUp", val: 3, noShop: true, name: "포도", nameJa: "ぶどう",
     text: "자신 체력 +3", textJa: "自分の体力+3" },
-  { id: "BREWING", t: "spell", cost: 3, ench: "brewing", val: 6, noShop: true, name: "양조", nameJa: "醸造",
+  { id: "BREWING", t: "spell", cost: 3, ench: "brewing", val: 5, noShop: true, name: "양조", nameJa: "醸造",
     text: "자신의 6턴 동안 턴 시작시 패의 포도류가 카운터로(포도 1·고급 3) · 종료시 카운터만큼 '와인'을 패에 넣는다",
     textJa: "自分の6ターンの間 ターン開始時に手札のぶどうがカウンターに(ぶどう1·高級3) · 終了時カウンターの数だけ「ワイン」を手札に" },
 ];
@@ -1790,7 +1790,7 @@ const PATCH34: Record<string, Partial<CardDef>> = {
   LEVY: { play: 2, text: "병사(2/2) 3체를 자신 필드에 소환 (시전 2)", textJa: "兵士(2/2)3体を自分の場に召喚 (発動2)" },
   SNIPE2: { play: 2, text: "체력 2 이하의 몬스터를 모두 파괴(양측) (시전 2)", textJa: "体力2以下のモンスターを全て破壊(両方の場) (発動2)" },
   WALLBREAK2: { play: 2, text: "공격력 2 이하의 몬스터를 모두 파괴(양측) (시전 2)", textJa: "攻撃力2以下のモンスターを全て破壊(両方の場) (発動2)" },
-  S13: { val: 11, text: "상대에게 11 데미지", textJa: "相手に11ダメージ" },
+  S13: { val: 10, text: "상대에게 10 데미지", textJa: "相手に10ダメージ" },
   S4: { val: 4, text: "카드 4장 드로우 (시전 1) · 이번 턴 1회만", textJa: "カード4枚ドロー (発動1) · このターン1回のみ" },
   ND2: { val2: 3, text: "카드 2장 드로우 + 자신 체력 3 회복 (시전 1)", textJa: "カード2枚ドロー + 自分の体力3回復 (発動1)" },
   HPS_OATH: { val: 6, text: "자신 몬스터 전체의 체력 +6(지속)", textJa: "自分のモンスター全体の体力+6(持続)" },
@@ -1941,7 +1941,7 @@ const PATCH36: Record<string, Partial<CardDef>> = {
   TRAPSMITH: { aura: "trapDiscount", text: "소환시: 덱·묘지·세트한 함정 1장당 +2/+2 · 상시: 함정 카드의 구매 코스트 -1", textJa: "召喚時: デッキ・墓地・セットした罠1枚につき+2/+2 · 常時: 罠カードの購入コスト-1" },
   TSO5: { atk: 6, def: 7 },
   VITAL4: { name: "고무왕", nameJa: "鼓舞王", atk: 2, def: 3, condAtk: undefined, aura: "rallyGuts", text: "상시: 자신 필드의 '병사'·'기사'에 '기합'을 부여", textJa: "常時: 自分の場の「兵士」「騎士」に「気合」を付与" },
-  AWAKENED_MIMIC: { atk: 4, def: 4 },
+  AWAKENED_MIMIC: { atk: 3, def: 3 },
   GM5_2: { atk: 5, def: 6, val: 2, text: "상시: 몬스터 소환 시 그 몬스터의 체력 +2", textJa: "常時: モンスター召喚時、そのモンスターの体力+2" },
   GOLEM3: { atk: 7, def: 10, onSummon: undefined, summonReq: "golemKin", text: "자신의 필드·덱·패·묘지에 다른 '골램' 계열 몬스터가 있을 때만 소환 가능",
     textJa: "自分の場・デッキ・手札・墓地に他の「ゴーレム」系モンスターがいる時のみ召喚可能" },
@@ -2486,7 +2486,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v76"; // Dice monsters, starter additions and Fire rework
+export const BALANCE_VERSION = "v77"; // November card balance update
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

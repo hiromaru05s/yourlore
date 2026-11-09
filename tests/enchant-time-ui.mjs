@@ -12,7 +12,7 @@ try{
  assert.deepEqual([s('BLOOD_RITE').remaining,s('BLOOD_RITE').mode,s('BLOOD_RITE').fill],[3,'drain',.3]);
  assert.deepEqual([s('ANCIENT_CIV').remaining,s('ANCIENT_CIV').mode,s('ANCIENT_CIV').fill],[2,'fill',7/9]);assert.equal(s('ANCIENT_CIV').timing,'delayed-own');
  for(const id of ['BREWING','FARM','NIGHT_CASTLE_GIFT']){assert.equal(s(id).mode,'fill');assert.equal(s(id).timing,'own-start');}
- assert.equal(s('BREWING').fill,.5);assert.equal(s('BREWING').remaining,3);assert.equal(state(e('BREWING'),{turn:90},owner).remaining,3,'owner upkeeps do not come from global turn');
+ assert.equal(s('BREWING').fill,.4);assert.equal(s('BREWING').remaining,3);assert.equal(state(e('BREWING'),{turn:90},owner).remaining,3,'owner upkeeps do not come from global turn');
  assert.equal(s('MAGIC_BANK',2).timing,'own-end');assert(describe(s('MAGIC_BANK',2)).includes('自分のターン終了'));
  assert.equal(s('E2').timing,'both-start');assert.equal(s('MANA_BACKFLOW').timing,'own-start');assert.equal(s('GUILD_CO'),null);assert.equal(s('TRIBE_PACT').remaining,37);assert.equal(state(e('TRIBE_PACT'),g,{tribesFired:['x']}),null);
  // These are also the source faces printed into the cast/landing mesh, before board render.
@@ -33,9 +33,9 @@ try{
  const root=document.getElementById('root'),zone=root.querySelector('#meRow .zone-st'),controller=board(root);let data=s('BREWING',4);
  const render=()=>{const host=document.createElement('div');host.className='buff-icon';host.dataset.uid='same';host.dataset.cardId='BREWING';host.append(create(data));zone.replaceChildren(host);controller.sync();};
  const pos=()=>Number(zone.querySelector('.enchant-time').dataset.timePosition);
- render();const start=pos();data=s('BREWING',3);render();assert.equal(pos(),start);step(260);const halfway=pos();assert(halfway>start&&halfway<.5);render();assert.equal(pos(),halfway);step(260);assert.equal(pos(),.5,'rerender preserves original animation deadline');
- data=s('BREWING',1);render();step(100);const before=pos();data=s('BREWING',5);render();assert.equal(pos(),before,'reversal starts at current fill');step(520);assert.equal(pos(),1/6);
- reduced=true;data=s('BREWING',0);render();assert.equal(pos(),1);reduced=false;data=s('BREWING',3);render();Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new window.Event('visibilitychange'));assert.equal(pos(),.5);assert.equal(frames.size,0);Object.defineProperty(document,'hidden',{configurable:true,value:false});
+ render();const start=pos();data=s('BREWING',3);render();assert.equal(pos(),start);step(260);const halfway=pos();assert(halfway>start&&halfway<.4);render();assert.equal(pos(),halfway);step(260);assert.equal(pos(),.4,'rerender preserves original animation deadline');
+ data=s('BREWING',1);render();step(100);const before=pos();data=s('BREWING',5);render();assert.equal(pos(),before,'reversal starts at current fill');step(520);assert.equal(pos(),0);
+ reduced=true;data=s('BREWING',0);render();assert.equal(pos(),1);reduced=false;data=s('BREWING',3);render();Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new window.Event('visibilitychange'));assert.equal(pos(),.4);assert.equal(frames.size,0);Object.defineProperty(document,'hidden',{configurable:true,value:false});
  data=s('BREWING',0);render();controller.dispose();assert.equal(frames.size,0);zone.replaceChildren();controller.sync();assert.equal(zone.children.length,0);
  console.log('PASS enchant time: authoritative clocks, delay/expiry, deadline, zero/full without glyphs, fill continuity/reversal, rerender, reduced/hidden, disposal');
 }finally{dom.window.close();await rm(dir,{recursive:true,force:true});}

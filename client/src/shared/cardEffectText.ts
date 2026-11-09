@@ -112,9 +112,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Roll 5 dice. If their sum is at least 20, give the opponent 1 Brand counter."
   },
   "S13": {
-    "ja": "【発動時】相手に11ダメージを与える。",
-    "ko": "【발동 시】상대에게 11 데미지를 준다.",
-    "en": "【On Cast】Deal 11 damage to the opponent."
+    "ja": "【発動時】相手に10ダメージを与える。",
+    "ko": "【발동 시】상대에게 10 데미지를 준다.",
+    "en": "【On Cast】Deal 10 damage to the opponent."
   },
   "S14": {
     "ja": "【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。両方の場の「気合」を持つ全モンスターに、気合用カウンター1個を付与する。",
@@ -692,9 +692,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】All other Soldiers and Knights on your field gain +4 ATK (until the affected monster leaves the field)."
   },
   "ELITE": {
-    "ja": "【召喚時】自分のデッキ構成が9枚以下なら、「兵士」（攻撃力2・体力2）1体を自分の場に召喚する。",
-    "ko": "【소환 시】자신의 덱 구성이 9장 이하이면 병사(공격력 2·체력 2) 1체를 자신의 필드에 소환한다.",
-    "en": "【On Summon】If your deck composition contains 9 cards or fewer, summon 1 Soldier (2 ATK, 2 HP) to your field."
+    "ja": "【召喚時】自分のデッキ構成が7枚以下なら、「兵士」（攻撃力2・体力2）1体を自分の場に召喚する。",
+    "ko": "【소환 시】자신의 덱 구성이 7장 이하이면 병사(공격력 2·체력 2) 1체를 자신의 필드에 소환한다.",
+    "en": "【On Summon】If your deck composition contains 7 cards or fewer, summon 1 Soldier (2 ATK, 2 HP) to your field."
   },
   "WALLBREAK1": {
     "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
@@ -987,9 +987,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Roll 1 die; on 4 or more, increase your mana crystals by 1."
   },
   "ELF_HAVEN": {
-    "ja": "【場にある間】自分の「世界樹」系カードの購入コスト・召喚コスト・発動コストは0。\n\n【回数制限】自分が「世界樹」系カードを購入できるのは、自分の各ターンに合計3枚まで。\n\n【自分のカード購入時】自分が「世界樹」系または「エルフ」系カードを購入するたび、自分は雫1を得る。",
-    "ko": "【필드에 있는 동안】자신의 세계수 계열 카드의 구매 코스트·소환 코스트·발동 코스트는 0.\n\n【횟수 제한】세계수 계열 카드는 자신의 각 턴에 합계 3장까지 구매할 수 있다.\n\n【자신의 카드 구매 시】자신이 세계수 또는 엘프 계열 카드를 구매할 때마다 자신은 이슬 1을 얻는다.",
-    "en": "【While on the Field】The purchase cost, summon cost, and cast cost of your World Tree-family cards are 0.\n\n【Use Limit】You may buy at most 3 World Tree-family cards in total during each of your turns.\n\n【When You Buy a Card】Whenever you buy a World Tree-family or Elf-family card, gain 1 Dew."
+    "ja": "【場にある間】自分の「世界樹」系カードの購入コストは1、召喚コスト・発動コストは0。\n\n【回数制限】自分が「世界樹」系カードを購入できるのは、自分の各ターンに合計3枚まで。\n\n【自分のカード購入時】自分が「世界樹」系または「エルフ」系カードを購入するたび、自分は雫1を得る。",
+    "ko": "【필드에 있는 동안】자신의 세계수 계열 카드의 구매 코스트는 1, 소환 코스트·발동 코스트는 0.\n\n【횟수 제한】세계수 계열 카드는 자신의 각 턴에 합계 3장까지 구매할 수 있다.\n\n【자신의 카드 구매 시】자신이 세계수 또는 엘프 계열 카드를 구매할 때마다 자신은 이슬 1을 얻는다.",
+    "en": "【While on the Field】Your World Tree-family cards cost 1 to buy and 0 to summon or cast.\n\n【Use Limit】You may buy at most 3 World Tree-family cards in total during each of your turns.\n\n【When You Buy a Card】Whenever you buy a World Tree-family or Elf-family card, gain 1 Dew."
   },
   "HALF_ELF": {
     "ja": "【召喚時】自分の場に「世界樹」系カードがあれば、「世界樹の慈しみ」を自分の場に展開する。\n\n【場にある間】どちらかの場に「世界樹」系カードがあれば、このモンスターの攻撃力+3。",
@@ -1067,9 +1067,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Restore 2 of your HP."
   },
   "BREWING": {
-    "ja": "【自分のターン開始時】自分の手札の「ぶどう」「高品質ぶどう」「りんご」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、「りんご」1枚につき5個、この魔法にカウンターを付与する。\n\n【期間】発動後、6回目の自分のターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。",
-    "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도·사과를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개, 사과 1장당 5개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 6번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
-    "en": "【At the Start of Your Turn】Send all Grapes, Premium Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Premium Grape and 5 per Apple sent.\n\n【Duration】At your 6th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
+    "ja": "【自分のターン開始時】自分の手札の「ぶどう」「高品質ぶどう」「りんご」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、「りんご」1枚につき5個、この魔法にカウンターを付与する。\n\n【期間】発動後、5回目の自分のターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。",
+    "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도·사과를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개, 사과 1장당 5개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 5번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
+    "en": "【At the Start of Your Turn】Send all Grapes, Premium Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Premium Grape and 5 per Apple sent.\n\n【Duration】At your 5th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
   },
   "MERCH1": {
     "ja": "【召喚時】自分の場の「商会」にカウンター3個を付与する。",
@@ -1147,9 +1147,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Restore 1 of your HP for each card in your Rift."
   },
   "VOID_APOSTLE": {
-    "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（対象が場を離れるまで）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
-    "ko": "【소환 시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
-    "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
+    "ja": "【召喚時】自分に8ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（対象が場を離れるまで）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
+    "ko": "【소환 시】자신에게 8 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+    "en": "【On Summon】You take 8 damage. This monster gets +1 ATK and +1 HP per card in your Rift (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
   },
   "CASINO": {
     "ja": "【ダイスを振った時】どちらかがダイス1個を振るたび、このモンスターにカウンター1個を付与する（カジノダイスは除く）。\n\n【カウンター蓄積時】12個ごとに12個を消費してカジノダイス1個を振る — 1-2: 自分に35ダメージを与える / 3-4: 相手に35ダメージを与える / 5: 相手に50ダメージを与える / 6: 相手のシールドと雫を全て取り除き、相手の体力を1にする。",

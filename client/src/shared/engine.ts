@@ -305,11 +305,13 @@ export function effDef(p: PlayerState, m: FieldMon): number {
 export function curHp(p: PlayerState, m: FieldMon): number {
   return Math.max(0, effDef(p, m) - (m.dmg || 0));
 }
+function havenDiscount(p: PlayerState, c: CardInst): boolean {
+  return isWorldTreeCard(c) && p.enchants.some(e => e.card.ench === "elfHaven");
+}
 /** Cost to BUY a card, after 동족의 부름(kinDiscount): tribe cards cost -2 (min 1) while you control a tribe monster. */
 export function buyCost(p: PlayerState, c: CardInst): number {
   if (c.id === "ROGUE_ART" && p.field.some(isAssassinCard)) return 0;
-  // 엘프의 쉼터(elfHaven): '세계수' 이름 카드는 구매 코스트 0
-  if ((c.name || "").includes("세계수") && p.enchants.some((e) => e.card.ench === "elfHaven")) return 0;
+  if (havenDiscount(p, c)) return p.manaCostMult ?? 1;
   let cost = c.cost;
   if (c.tribe && p.field.some((m) => !!m.tribe) && p.enchants.some((e) => e.card.ench === "kinDiscount")) {
     cost = Math.max(1, cost - 2);
@@ -320,13 +322,13 @@ export function buyCost(p: PlayerState, c: CardInst): number {
   if (c.t === "trap" && p.field.some((m) => m.aura === "trapDiscount")) cost = Math.max(0, cost - 1);
   return cost * (p.manaCostMult ?? 1); // 마족 4종: 소모 마나 3배
 }
-/** 0코스트 구매는 턴당 이 장수까지. 고정 마켓은 재고가 줄지 않으므로 상한이 없으면
+/** 무료 및 쉼터 할인 구매는 턴당 이 장수까지. 고정 마켓은 재고가 줄지 않으므로 상한이 없으면
  *  엘프의 쉼터(구매 코스트 0)로 한 턴에 무한 구매가 성립한다.
  *  bot.ts 의 buyableByBot 은 봇 전용 가드였고, 사람 플레이어에겐 상한이 없었다. */
 export const FREE_BUY_MAX = 3;
 /** 이번 턴 0코스트 구매 한도를 이미 소진했는가 (구매가 0일 때만 적용). */
 export function freeBuyBlocked(p: PlayerState, c: CardInst): boolean {
-  return buyCost(p, c) === 0 && (p.freeBuysTurn ?? 0) >= FREE_BUY_MAX;
+  return (buyCost(p, c) === 0 || havenDiscount(p, c)) && (p.freeBuysTurn ?? 0) >= FREE_BUY_MAX;
 }
 /** 제시(supply) shows cards whose cost is in [1, maxMana]. */
 export function supplyRange(p: PlayerState): [number, number] {
@@ -336,7 +338,7 @@ export function supplyRange(p: PlayerState): [number, number] {
  *  p를 넘기면 플레이어 상태 의존 할인(엘프의 쉼터: '세계수' 카드 시전 0)을 반영한다. */
 export function playCost(c: CardInst, p?: PlayerState): number {
   if (p && c.id === "ROGUE_ART" && p.field.some(isAssassinCard)) return 0;
-  if (p && (c.name || "").includes("세계수") && p.enchants.some((e) => e.card.ench === "elfHaven")) return 0;
+  if (p && havenDiscount(p, c)) return 0;
   let base = c.play ?? c.cost;
   if (p && c.id === 'FIRE_METEOR' && p.expansion?.firePlayed.some(id => id !== c.id)) base = 1;
   if (p && isFire(c)) base = Math.max(0, base - (p.expansion?.fireDiscount ?? 0) - 2 * p.field.filter(m => m.id === 'FIRE_MASTER').length);
@@ -1544,7 +1546,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         ctx.log(`<span class="t">${cn(e.card)}</span> 카운터 +1 (${e.cnt}/20)`, `<span class="t">${cn(e.card)}</span> カウンター+1 (${e.cnt}/20)`, `<span class="t">${cn(e.card)}</span>: add 1 counter (${e.cnt}/20)`);
         guildPayout(g, ctx, pl, e);
       }
-      // 양조(brewing): 자신의 턴 시작시 패의 포도류 → 카운터 · 만료(6턴)시 카운터만큼 '와인' 지급 후 종료
+      // 양조(brewing): 자신의 턴 시작시 패의 포도류 → 카운터 · 만료(5턴)시 카운터만큼 '와인' 지급 후 종료
       if (e.card.ench === "brewing" && ownerTurn && !g.over) {
         let added = 0;
         for (let i = pl.hand.length - 1; i >= 0; i--) {
@@ -1558,7 +1560,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
           e.cnt = (e.cnt || 0) + added;
           ctx.log(`<span class="t">${cn(e.card)}</span> 패의 포도·사과를 담근다 — 카운터 +${added} (${e.cnt})`, `<span class="t">${cn(e.card)}</span> 手札のぶどう・りんごを仕込む — カウンター+${added} (${e.cnt})`, `<span class="t">${cn(e.card)}</span>: brew Grapes and Apples from hand — add ${added} counters (${e.cnt} total)`);
         }
-        // 만료(자신의 6턴째 = e.turns 마지막 틱)에 와인 지급 — 카드 정리는 아래 공용 만료 처리가 담당
+        // 만료(자신의 5턴째 = e.turns 마지막 틱)에 와인 지급 — 카드 정리는 아래 공용 만료 처리가 담당
         if (e.turns <= 1) {
           const nWine = e.cnt ?? 0;
           for (let i = 0; i < nWine; i++) pl.hand.push(inst(g, "WINE"));
@@ -2946,8 +2948,8 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(`  └ 대가: 자신의 5턴 동안 마나 수정 -1 (${p.maxMana})`, `  └ 代価: 自分の5ターンの間 マナ水晶-1 (${p.maxMana})`, `  └ Penalty: mana crystals -1 for 5 of your turns (${p.maxMana})`);
       break;
     }
-    case "voidApostle": { // 허무공간의 사도: 자해 13 + 제외 카드당 +1/+1
-      ctx.dealDamage(p, 13, cn(m), cn(m));
+    case "voidApostle": { // 허무공간의 사도: 자해 8 + 제외 카드당 +1/+1
+      ctx.dealDamage(p, 8, cn(m), cn(m));
       if (!g.over) {
         const nv = rmz(p).length;
         if (nv > 0) { m.atkMod = (m.atkMod || 0) + nv; m.defMod = (m.defMod || 0) + nv; ctx.log(`  └ 제외 카드 ${nv}장 → +${nv}/+${nv}`, `  └ 除外カード${nv}枚 → +${nv}/+${nv}`, `  └ ${nv} cards in the Rift → +${nv} ATK and +${nv} HP`); }
@@ -3273,7 +3275,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
     }
     case "eliteSoldiers": { // 정예 기사단장: 덱 구성 9장 이하면 병사 1체 (v37: 덱 구성 = 덱·패·묘지·필드)
       const en2 = deckComp(p).length;
-      if (en2 <= 9) { spawnToken(g, ctx, p, "SOLDIER2"); ctx.log(`  └ 정예(${en2}장) 편성: 병사(2/2) 1체 소환`, `  └ 精鋭(${en2}枚)編成: 兵士(2/2)1体召喚`, `  └ Elite formation (${en2} cards): summon 1 Soldier (2 ATK / 2 HP)`); }
+      if (en2 <= 7) { spawnToken(g, ctx, p, "SOLDIER2"); ctx.log(`  └ 정예(${en2}장) 편성: 병사(2/2) 1체 소환`, `  └ 精鋭(${en2}枚)編成: 兵士(2/2)1体召喚`, `  └ Elite formation (${en2} cards): summon 1 Soldier (2 ATK / 2 HP)`); }
       else ctx.log(`  └ 덱 구성 ${en2}장 — 정예 초과(9장)`, `  └ デッキ構成${en2}枚 — 精鋭超過(9枚)`, `  └ Deck composition has ${en2} cards — exceeds the limit of 9`);
       break;
     }
@@ -6165,11 +6167,11 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
       if (card && !purchaseAllowed(g, p, card)) break;
       const bc = card ? buyCost(p, card) : 0;
       if (card && freeBuyBlocked(p, card)) {
-        ctx.log(`  └ <span class="dmg">0코스트 구매는 턴당 ${FREE_BUY_MAX}장까지</span>`, `  └ <span class="dmg">0コスト購入は1ターン${FREE_BUY_MAX}枚まで</span>`, `  └ <span class="dmg">You may buy at most ${FREE_BUY_MAX} zero-cost cards per turn</span>`);
+        ctx.log(`  └ <span class="dmg">무료 및 쉼터 할인 구매는 턴당 ${FREE_BUY_MAX}장까지</span>`, `  └ <span class="dmg">無料購入と憩い場の割引購入は合計で1ターン${FREE_BUY_MAX}枚まで</span>`, `  └ <span class="dmg">You may buy at most ${FREE_BUY_MAX} free or Haven-discounted cards per turn</span>`);
         break;
       }
       if (card && p.mana >= bc) {
-        if (bc === 0) p.freeBuysTurn = (p.freeBuysTurn ?? 0) + 1;
+        if (bc === 0 || havenDiscount(p, card)) p.freeBuysTurn = (p.freeBuysTurn ?? 0) + 1;
         const bought = obtainedCard(g, ctx, p, inst(g, card.id));
         p.mana -= bc; if (!bought.quick) p.discard.push(bought); p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[${card.quick ? "게임에서 제외" : "묘지로"}]</span>`, `<span class="t">${p.name}</span> 固定マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[${card.quick ? "ゲームから除外" : "墓地へ"}]</span>`);
@@ -6186,11 +6188,11 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
       if (card && !purchaseAllowed(g, p, card)) break;
       const bc = card ? buyCost(p, card) : 0;
       if (card && freeBuyBlocked(p, card)) {
-        ctx.log(`  └ <span class="dmg">0코스트 구매는 턴당 ${FREE_BUY_MAX}장까지</span>`, `  └ <span class="dmg">0コスト購入は1ターン${FREE_BUY_MAX}枚まで</span>`, `  └ <span class="dmg">You may buy at most ${FREE_BUY_MAX} zero-cost cards per turn</span>`);
+        ctx.log(`  └ <span class="dmg">무료 및 쉼터 할인 구매는 턴당 ${FREE_BUY_MAX}장까지</span>`, `  └ <span class="dmg">無料購入と憩い場の割引購入は合計で1ターン${FREE_BUY_MAX}枚まで</span>`, `  └ <span class="dmg">You may buy at most ${FREE_BUY_MAX} free or Haven-discounted cards per turn</span>`);
         break;
       }
       if (card && p.mana >= bc) {
-        if (bc === 0) p.freeBuysTurn = (p.freeBuysTurn ?? 0) + 1;
+        if (bc === 0 || havenDiscount(p, card)) p.freeBuysTurn = (p.freeBuysTurn ?? 0) + 1;
         const bought = obtainedCard(g, ctx, p, inst(g, card.id));
         p.mana -= bc; if (!bought.quick) p.discard.push(bought); for (const player of g.players) player.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[${card.quick ? "게임에서 제외" : "묘지로"}]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[${card.quick ? "ゲームから除外" : "墓地へ"}]</span>`);
