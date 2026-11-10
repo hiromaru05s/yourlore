@@ -12,8 +12,11 @@ function load(url: string): Promise<HTMLImageElement> {
   const cached = images.get(url);
   if (cached) return cached;
   const img = new Image();
-  img.src = url;
-  const result = img.decode().then(() => img).catch(error => { images.delete(url); throw error; });
+  const result = new Promise<HTMLImageElement>((resolve, reject) => {
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  }).catch(error => { images.delete(url); throw error; });
   images.set(url, result);
   return result;
 }
