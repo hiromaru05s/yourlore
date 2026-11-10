@@ -30,7 +30,7 @@ try {
  test('Fire participates in discounts, Meteor condition, Zone bonus and retrieval',()=>{
    let g=fresh();g.players[0].field=[mon('FIRE_MASTER')];assert.equal(playCost(DB.FLAME,g.players[0]),0);g.players[0].field=[];g=play(g,'FIRE_ART');assert.equal(playCost(DB.FLAME,g.players[0]),0);
    g=play(g,'FLAME');assert(g.players[0].expansion.firePlayed.includes('FLAME'));assert.equal(playCost(DB.FIRE_METEOR,g.players[0]),0);
-   g.players[0].expansion.fireDiscount=0;assert.equal(playCost(DB.FIRE_METEOR,g.players[0]),1);g.players[0].hand=[card('M1')];g=play(g,'FIRE_ZONE');g=pick(g,g.players[0].hand[0].uid);assert.equal(g.players[1].hp,89);
+   assert.equal(playCost(DB.FIRE_METEOR,{...g.players[0],expansion:{...g.players[0].expansion,fireDiscount:0}}),1);g.players[0].hand=[card('M1')];g=play(g,'FIRE_ZONE');g=pick(g,g.players[0].hand[0].uid);assert.equal(g.players[1].hp,87);
    g=fresh();g.players[0].discard=[card('FLAME')];g.pending={kind:'cardChoice',owner:0,reason:'FIRE_MASTER',hint:'',hintJa:'',allowCancel:false,data:{left:2}};assert.equal(effectChoices(g)[0].id,'FLAME');g=pick(g,g.players[0].discard[0].uid);assert.equal(g.players[0].hand[0].id,'FLAME');
  });
  const banish=Object.values(DB).find(c=>c.act==='exilePick');assert(banish);

@@ -522,9 +522,9 @@ export const EXPANSION_CARDS: CardDef[] = [
   },
   {
     "id": "FIRE_ART",
-    "nameJa": "炎術の極意",
-    "name": "염술의 극의",
-    "nameEn": "Art of Flame",
+    "nameJa": "ファイアーの極意",
+    "name": "파이어의 극의",
+    "nameEn": "Fire Mastery",
     "cost": 1,
     "textJa": "このターン自分のファイアー魔法の発動コスト-2(最低0)",
     "text": "이번 턴 자신 파이어 마법 사용 코스트 -2(최소 0).",

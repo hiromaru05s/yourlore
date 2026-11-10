@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 386,
+  "count": 391,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -4063,26 +4063,27 @@
     },
     "GUILD_HALL": {
       "nameJa": "アサシンギルド支部",
-      "status": "balance-v60-reworked",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "64571c0a3b7a0914a4217bc17fcee13ddef199a9dc79b9fdac9b4a77d0e6f20c",
-      "textSha256": "95e3471794c52269d4487371cf49c440a29d9d4bfb29b4b54c7001fd4e75a6f1",
+      "definitionSha256": "589cf28170e55cd39266b18e22c4b77a278a3ca71023c67440665a35e75faee1",
+      "textSha256": "b3dbeacc0d5b7db48ff1cad6fd011989511dc1d9a295e98dc2db56e34ed291d1",
       "hooks": {
-        "aura": "assassinGuild"
+        "aura": "assassinGuild",
+        "summonReq": "uniqueField"
       },
       "before": {
-        "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターかこのモンスターの攻撃で相手プレイヤーにダメージを与えるたび、このモンスターにカウンター1個を付与する。3個以上になると全て取り除き、相手に14ダメージを与える。",
-        "ko": "【공격으로 상대에게 데미지를 줄 때】자신 암살자 계열 몬스터 또는 이 몬스터의 공격으로 상대 플레이어에게 데미지를 줄 때마다 이 몬스터에 카운터 1개를 놓는다. 3개 이상이면 전부 제거하고 상대에게 14 데미지를 준다.",
-        "en": "【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster or this monster damages the opponent with an attack, put 1 counter on this monster. At 3 or more, remove them all and deal 14 damage to the opponent."
-      },
-      "after": {
         "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターの攻撃で相手プレイヤーにダメージを与えるたび、このモンスターにカウンター1個を付与する。3個以上になると全て取り除き、相手に14ダメージを与える。\n\n【場にある間】このモンスターはいかなる状況でも攻撃できない。",
         "ko": "【공격으로 상대에게 데미지를 줄 때】자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 데미지를 줄 때마다 이 몬스터에 카운터 1개를 놓는다. 3개 이상이면 전부 제거하고 상대에게 14 데미지를 준다.\n\n【필드에 있는 동안】이 몬스터는 어떤 상황에서도 공격할 수 없다.",
         "en": "【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster damages the opponent with an attack, put 1 counter on this monster. At 3 or more, remove them all and deal 14 damage to the opponent.\n\n【While on the Field】This monster cannot attack under any circumstances."
+      },
+      "after": {
+        "ja": "【召喚条件】自分の場に「アサシンギルド支部」がいない。\n\n【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターの攻撃で相手プレイヤーにダメージを与えるたび、このモンスターにカウンター1個を付与する。3個以上になると全て取り除き、相手に14ダメージを与える。",
+        "ko": "【소환 조건】자신의 필드에 암살자 길드 지부가 없다.\n\n【공격으로 상대에게 데미지를 줄 때】자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 데미지를 줄 때마다 이 몬스터에 카운터 1개를 놓는다. 3개 이상이면 전부 제거하고 상대에게 14 데미지를 준다.",
+        "en": "【Summon Requirement】You control no Assassins' Guild Branch.\n\n【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster damages the opponent with an attack, put 1 counter on this monster. At 3 or more, remove them all and deal 14 damage to the opponent."
       }
     },
     "FATE_WHEEL": {
@@ -7848,48 +7849,50 @@
     },
     "FIRE_BALL": {
       "nameJa": "ファイアーボール",
-      "status": "balance-v60-reworked",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "ea626a8091372c8c9aca5461d48b2ccbe398489c017f2f3c9d34e844bd7c910b",
-      "textSha256": "ac77c39a538273d7644552936431b7b3d4911af04fc9d815aebe7bd54f2f52ff",
+      "textSha256": "fdb99cad2ca4b3e0efe771c444d67b78150426e8e19326db03c36108c25f3b39",
       "hooks": {
         "act": "expansion"
       },
       "before": {
-        "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、6ダメージを与える。",
-        "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 6 데미지를 준다.",
-        "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 6 damage to that target."
-      },
-      "after": {
         "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、7ダメージを与える。",
         "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 7 데미지를 준다.",
         "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 7 damage to that target."
+      },
+      "after": {
+        "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、7ダメージを与える。このターン既に自分が他のファイアー魔法を使用していれば、選んだ対象へのダメージは10になる。",
+        "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 7 데미지를 준다. 이번 턴에 이미 다른 파이어 마법을 사용했다면 선택한 대상에게 대신 10 데미지를 준다.",
+        "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 7 damage to that target. If you already played another Fire spell this turn, deal 10 damage to the chosen target instead."
       }
     },
     "FIRE_ARROW": {
       "nameJa": "ファイアーアロー",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "6a4da099246c8d66fe36aac93cb83cd3be16589dae483f56cbb60ae5918cc445",
-      "textSha256": "853442c43a2edab02ff7a7b4829698b4e97332d49b03f864c139e9b9ad9ccfcb",
+      "textSha256": "7ee2f391ed469149db427f0071fee5ff9a12060b507606ba526b0ba911acc7d9",
       "hooks": {
         "act": "expansion"
       },
       "before": {
         "ja": "【発動時】自分に1ダメージを与える。相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、1ダメージを与える処理を3回行う。",
-        "ko": "【발동시】자신에게 1 데미지를 준다. 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위 대상 1개를 정해 1 데미지를 주는 처리를 3회 반복한다.",
+        "ko": "【발동 시】자신에게 1 데미지를 준다. 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위 대상 1개를 정해 1 데미지를 주는 처리를 3회 반복한다.",
         "en": "【On Cast】You take 1 damage. Repeat 3 times: randomly select 1 target from the opponent and their monsters, then deal 1 damage to it."
       },
       "after": {
-        "ja": "【発動時】自分に1ダメージを与える。相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、1ダメージを与える処理を3回行う。",
-        "ko": "【발동 시】자신에게 1 데미지를 준다. 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위 대상 1개를 정해 1 데미지를 주는 처리를 3회 반복한다.",
-        "en": "【On Cast】You take 1 damage. Repeat 3 times: randomly select 1 target from the opponent and their monsters, then deal 1 damage to it."
+        "ja": "【発動時】自分に1ダメージを与える。相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、1ダメージを与える処理を3回行う。このターン既に自分が他のファイアー魔法を使用していれば、さらに2回行う。",
+        "ko": "【발동 시】자신에게 1 데미지를 준다. 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위 대상 1개를 정해 1 데미지를 주는 처리를 3회 반복한다. 이번 턴에 이미 다른 파이어 마법을 사용했다면 2회 더 반복한다.",
+        "en": "【On Cast】You take 1 damage. Repeat 3 times: randomly select 1 target from the opponent and their monsters, then deal 1 damage to it. If you already played another Fire spell this turn, repeat the hit 2 more times."
       }
     },
     "FIRE_ZONE": {
@@ -7942,29 +7945,28 @@
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
     },
     "FIRE_ART": {
-      "nameJa": "炎術の極意",
-      "status": "reworded",
+      "nameJa": "ファイアーの極意",
+      "status": "reworked",
       "changedLocales": [
+        "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "1056caac6ad5b142244213f09ab77aa379c218c37f151b38f08a917d9f19ed58",
-      "textSha256": "819441ca291bf5bf3c5873ba6964b1a22d506b1c6db378a1807dbb35d9402ea8",
+      "definitionSha256": "dea08b8f731a061162579af20dbbaf18a038e0e39ce6a39d95b5a25d3dfb9883",
+      "textSha256": "b3b058a6bb4351452aafa2b20d34ec7d0f27520a5af5c6e10b5fd92ede59be70",
       "hooks": {
         "act": "expansion"
       },
       "before": {
         "ja": "【発動時】このターン自分のファイアー魔法の発動コスト-2（最低0）。",
-        "ko": "【발동 시】이번 턴 자신 파이어 마법 사용 코스트 -2(최소 0).",
-        "en": "【On Cast】This turn your Fire spells cost 2 less to play (minimum 0)."
-      },
-      "after": {
-        "ja": "【発動時】このターン自分のファイアー魔法の発動コスト-2（最低0）。",
         "ko": "【발동 시】이번 턴 자신 파이어 마법 발동 코스트 -2(최소 0).",
         "en": "【On Cast】This turn, reduce the cast cost of your Fire spells by 2, to a minimum of 0."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【発動時】このターン自分のファイアー魔法の発動コスト-2（最低0）。このターン、自分のファイアー魔法が相手プレイヤーや相手モンスターに与えるダメージは、1回につき1増える。",
+        "ko": "【발동 시】이번 턴 자신 파이어 마법 발동 코스트 -2(최소 0). 이번 턴에 자신의 파이어 마법이 상대 플레이어나 상대 몬스터에게 주는 데미지가 매번 1 증가한다.",
+        "en": "【On Cast】This turn, reduce the cast cost of your Fire spells by 2, to a minimum of 0. Each time one of your Fire spells deals damage to the opponent or an enemy monster this turn, increase that damage by 1."
+      }
     },
     "FIRE_MASTER": {
       "nameJa": "ファイアーマスター",
@@ -9199,6 +9201,100 @@
         "ko": "【발동 시】자신의 몬스터 1체에 '회피'를 부여한다.",
         "en": "【On Cast】Give a friendly monster Evade."
       }
+    },
+    "MANA_CYCLE": {
+      "nameJa": "マナサイクル",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "41390fa367fd101d0458ebc8a4f3ced1f31590684a4f7bb7e64b4943442b69c4",
+      "textSha256": "33ae09916988b74fbf38fd0cd4e8b82a41408e0c2aa431e52c430d6f84cd175b",
+      "hooks": {
+        "act": "manaCycle"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動条件】自分の場にモンスターが2体以上いて、自分に空のマナ水晶が1個以上ある。\n\n【発動時】マナを1得る。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 2체 이상 있고 빈 마나 수정이 1개 이상 있다.\n\n【발동 시】마나 1을 얻는다.",
+        "en": "【Play Requirement】You control at least 2 monsters and have at least 1 empty mana crystal.\n\n【On Cast】Gain 1 mana."
+      }
+    },
+    "SLUM_ASSASSIN": {
+      "nameJa": "スラム街のアサシン",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "018f2c44c348cd5e2569c69e39abb50e0ad37429adc5ebdb89f7f044f77c6210",
+      "textSha256": "94ca536f7f1ea38d5a785a78601af33164ebe175f3fd41c38d2f96bb82131ed9",
+      "hooks": {
+        "summonReq": "emptyEnemyField"
+      },
+      "before": null,
+      "after": {
+        "ja": "【召喚条件】相手の場にモンスターがいない。",
+        "ko": "【소환 조건】상대의 필드에 몬스터가 없다.",
+        "en": "【Summon Requirement】The opponent controls no monsters."
+      }
+    },
+    "DICE_FIGHTER": {
+      "nameJa": "ダイスファイター",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "31b1a40530457b26ed0de6e5f891d75b3d7782dacead2e12973fcc5786adb37c",
+      "textSha256": "f716423d54bb915aea8125193b548c7357f1b8a161eb60dd9e635b6868c79bfe",
+      "hooks": {},
+      "before": null,
+      "after": {
+        "ja": "【ダイスを振った時】自分がダイスを1個振るたび、このモンスターは+1/+1を得る。\n\n【場にある間】自分の場に「回避」か「オーラ」を持つモンスターがいる間、このモンスターは「回避」と「オーラ」の両方を得る。",
+        "ko": "【주사위를 굴릴 때】자신이 주사위를 1개 굴릴 때마다 이 몬스터는 +1/+1을 얻는다.\n\n【필드에 있는 동안】자신의 필드에 회피 또는 아우라를 가진 몬스터가 있는 동안, 이 몬스터는 회피 및 아우라를 모두 얻는다.",
+        "en": "【When Dice Are Rolled】For each die you roll, this monster gains +1/+1.\n\n【While on the Field】While you control a monster with Evade or Aura, this monster gains both Evade and Aura."
+      }
+    },
+    "DICE_ARCHER": {
+      "nameJa": "ダイスアーチャー",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "a3eb6d7ff1da5a7fc493305ca3e6849b5f0087b9e45b586811574324a860d37a",
+      "textSha256": "e8a68573ea3a79a7136ebe8393e8234dc47777760ea6dca6e6627a0277ac15e1",
+      "hooks": {},
+      "before": null,
+      "after": {
+        "ja": "【ダイスを振った時】自分がダイスを1個振るたび、このモンスターは攻撃力+2を得る。\n\n【場にある間】自分の場に「反撃」か「オーラ」を持つモンスターがいる間、このモンスターは「反撃」と「オーラ」の両方を得る。",
+        "ko": "【주사위를 굴릴 때】자신이 주사위를 1개 굴릴 때마다 이 몬스터는 공격력 +2를 얻는다.\n\n【필드에 있는 동안】자신의 필드에 반격 또는 아우라를 가진 몬스터가 있는 동안, 이 몬스터는 반격 및 아우라를 모두 얻는다.",
+        "en": "【When Dice Are Rolled】For each die you roll, this monster gains +2 ATK.\n\n【While on the Field】While you control a monster with Counter or Aura, this monster gains both Counter and Aura."
+      }
+    },
+    "DICE_MAGICIAN": {
+      "nameJa": "ダイスマジシャン",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "2348181f724e0e0c8ae048fe1fcc5105bbe01ac426fb77d4c22e52677749326d",
+      "textSha256": "d5e3b9202224832db2c9e301a5ece0100fb3590466344b24fdc320fabe372d1e",
+      "hooks": {},
+      "before": null,
+      "after": {
+        "ja": "【ダイスを振った時】自分がダイスを1個振るたび、このモンスターは攻撃力+1を得る。出目が5以上なら、自分はマナ水晶を1個得る。\n\n【場にある間】自分の場に「反撃」か「回避」を持つモンスターがいる間、このモンスターは「反撃」と「回避」の両方を得る。",
+        "ko": "【주사위를 굴릴 때】자신이 주사위를 1개 굴릴 때마다 이 몬스터는 공격력 +1을 얻는다. 눈이 5 이상이면 마나 수정 1개를 얻는다.\n\n【필드에 있는 동안】자신의 필드에 반격 또는 회피를 가진 몬스터가 있는 동안, 이 몬스터는 반격 및 회피를 모두 얻는다.",
+        "en": "【When Dice Are Rolled】For each die you roll, this monster gains +1 ATK. For each result of 5 or higher, gain 1 mana crystal.\n\n【While on the Field】While you control a monster with Counter or Evade, this monster gains both Counter and Evade."
+      }
     }
   },
   "keywords": {
@@ -9438,6 +9534,21 @@
         "ROGUE_ART"
       ],
       "record": "docs/releases/2026-10-29-card-effect-audit/README.md"
+    },
+    {
+      "date": "2026-11-10",
+      "cards": [
+        "MANA_CYCLE",
+        "SLUM_ASSASSIN",
+        "DICE_FIGHTER",
+        "DICE_ARCHER",
+        "DICE_MAGICIAN",
+        "FIRE_ART",
+        "FIRE_ARROW",
+        "FIRE_BALL",
+        "GUILD_HALL"
+      ],
+      "reason": "Starter and dice card additions, Fire spell and Guild Branch rework."
     }
   ],
   "inlineGlossaryRevision": "2026-10-30",

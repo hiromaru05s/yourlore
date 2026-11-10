@@ -6,7 +6,7 @@ const dir=await mkdtemp(tmpdir()+'/lore-assassin-');
 try{
  await build({stdin:{contents:"export * from './client/src/ui/assassinAttack/model';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/test.mjs'});
  const E=await import(dir+'/test.mjs');let checks=0;
- assert.deepEqual(E.ASSASSIN_IDS,['ASSASSIN1','ASSASSIN2','ASSASSIN3','ASSASSIN4','ASSASSIN_SQUAD']);
+ assert.deepEqual(E.ASSASSIN_IDS,['ASSASSIN1','ASSASSIN2','ASSASSIN3','ASSASSIN4','ASSASSIN_SQUAD','SLUM_ASSASSIN']);
  for(const card of Object.values(E.DB)){assert.equal(E.usesAssassinStrike(card.id),E.ASSASSIN_IDS.includes(card.id),card.id);checks++;}
  for(const id of [undefined,'','GHOST','GUILD_HALL','GUILD_HQ','ASSASSIN5','SOLDIER2'])assert.equal(E.usesAssassinStrike(id),false);
  assert.deepEqual(E.IAI,{duration:1000,contact:310,vanish:210,returnAt:650,returnEnd:840,color:'#d8edfa'});

@@ -1,7 +1,7 @@
 // Four difficulty levels share the same rules and legal-action safety.
 // Normal and upper tiers search imperfect-information rollouts; easy retains mistakes.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
+import { fireDamageBonus, purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
 import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { cardPower } from "./cardEval";
 import { searchDecide } from "./botSearch";
@@ -106,7 +106,7 @@ function tuneFor(p: PlayerState): typeof TUNE {
 // so the lethal planner and the burn branch look their damage up here.
 // castable() already gates self-damage and the opposing mana crystals requirement.
 function burnDmg(c: CardInst, p: PlayerState, o: PlayerState): number {
-  if (c.id === "FLAME") return (p.uses.FLAME ?? 0) >= 9 ? 5 : 2;
+  if (c.id === "FLAME") return ((p.uses.FLAME ?? 0) >= 9 ? 5 : 2) + fireDamageBonus(p);
   if (c.id === "AMBUSH") return [4, 5].includes(o.maxMana) ? 13 : 0;
   return 0;
 }

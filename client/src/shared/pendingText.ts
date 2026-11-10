@@ -23,7 +23,7 @@ export const CHOICE_TEXT:Record<string,Copy>={
  Q_CHEAT:c('相手のデッキから相手のリフトへ送るカード1枚を選んでください。','상대의 덱에서 상대의 리프트로 보낼 카드 1장을 선택하세요.','Choose 1 card from the opponent’s deck to send to their Rift.'),
  CREATION:c('複製する相手のデッキのカード1枚を選んでください。複製は自分の墓地に加えます。','복제할 상대 덱의 카드 1장을 선택하세요. 복제본을 자신의 묘지에 추가합니다.','Choose 1 card in the opponent’s deck to copy. Add the new copy to your graveyard.'),
  ROGUE_ART:c('回避を付与する自分のモンスター1体を選んでください。','회피를 부여할 자신의 몬스터 1체를 선택하세요.','Choose 1 of your monsters to gain Evade.'),
- FIRE_BALL:c('7ダメージを与えるプレイヤーかモンスター1体を選んでください。','7 데미지를 줄 플레이어 또는 몬스터 1체를 선택하세요.','Choose a player or monster to deal 7 damage to.'),
+ FIRE_BALL:c('ダメージを与えるプレイヤーかモンスター1体を選んでください。','데미지를 줄 플레이어 또는 몬스터 1체를 선택하세요.','Choose a player or monster to deal damage to.'),
  FIRE_ZONE:c('自分の手札から自分のリフトへ送るカード1枚を選んでください。','자신의 패에서 자신의 리프트로 보낼 카드 1장을 선택하세요.','Choose 1 card from your hand to send to your Rift.'),
  attack:c('攻撃する相手モンスター1体を選んでください。','공격할 상대 몬스터 1체를 선택하세요.','Choose an opposing monster to attack.'),
  bounceLow:c('相手の手札に戻す、購入コスト2以下の相手モンスター1体を選んでください。','상대의 패로 되돌릴 구매 비용 2 이하의 상대 몬스터 1체를 선택하세요.','Choose 1 opposing monster with purchase cost 2 or less to return to the opponent’s hand.'),

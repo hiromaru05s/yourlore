@@ -1,4 +1,5 @@
 import { ARCANE_CARDS } from './riftReworkCards';
+import { DICE_SET_CARDS } from './diceCards';
 import { GOBLIN_CARDS } from './goblinCards';
 import { RIFT_MATTER, RIFT_METALIGHT } from './riftMatter';
 // Canonical player-facing effects. Explicit paragraphs define rule boundaries.
@@ -861,9 +862,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Field Limit】At most 2 copies across both fields.\n\n【While on the Field】All monsters on both fields have -2 ATK, including later arrivals. This reduction ends when this spell leaves the field.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
   },
   "GUILD_HALL": {
-    "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターの攻撃で相手プレイヤーにダメージを与えるたび、このモンスターにカウンター1個を付与する。3個以上になると全て取り除き、相手に14ダメージを与える。\n\n【場にある間】このモンスターはいかなる状況でも攻撃できない。",
-    "ko": "【공격으로 상대에게 데미지를 줄 때】자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 데미지를 줄 때마다 이 몬스터에 카운터 1개를 놓는다. 3개 이상이면 전부 제거하고 상대에게 14 데미지를 준다.\n\n【필드에 있는 동안】이 몬스터는 어떤 상황에서도 공격할 수 없다.",
-    "en": "【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster damages the opponent with an attack, put 1 counter on this monster. At 3 or more, remove them all and deal 14 damage to the opponent.\n\n【While on the Field】This monster cannot attack under any circumstances."
+    "ja": "【召喚条件】自分の場に「アサシンギルド支部」がいない。\n\n【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターの攻撃で相手プレイヤーにダメージを与えるたび、このモンスターにカウンター1個を付与する。3個以上になると全て取り除き、相手に14ダメージを与える。",
+    "ko": "【소환 조건】자신의 필드에 암살자 길드 지부가 없다.\n\n【공격으로 상대에게 데미지를 줄 때】자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 데미지를 줄 때마다 이 몬스터에 카운터 1개를 놓는다. 3개 이상이면 전부 제거하고 상대에게 14 데미지를 준다.",
+    "en": "【Summon Requirement】You control no Assassins' Guild Branch.\n\n【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster damages the opponent with an attack, put 1 counter on this monster. At 3 or more, remove them all and deal 14 damage to the opponent."
   },
   "FATE_WHEEL": {
     "ja": "【出目を確認した後】自分のターン中、カードの使用・攻撃・効果の選択によって自分が振ったダイスの結果を確認した後、その行動を巻き戻してダイスを振り直せる（自分の各ターン1回）。その行動で複数のダイスを振った場合は、全て振り直す。振り直さず結果を確定した場合、この回数を消費しない。ターン開始・終了時の自動処理は対象外。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
@@ -1641,14 +1642,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Deal 6 damage to all monsters on both fields."
   },
   "FIRE_BALL": {
-    "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、7ダメージを与える。",
-    "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 7 데미지를 준다.",
-    "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 7 damage to that target."
+    "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、7ダメージを与える。このターン既に自分が他のファイアー魔法を使用していれば、選んだ対象へのダメージは10になる。",
+    "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 7 데미지를 준다. 이번 턴에 이미 다른 파이어 마법을 사용했다면 선택한 대상에게 대신 10 데미지를 준다.",
+    "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 7 damage to that target. If you already played another Fire spell this turn, deal 10 damage to the chosen target instead."
   },
   "FIRE_ARROW": {
-    "ja": "【発動時】自分に1ダメージを与える。相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、1ダメージを与える処理を3回行う。",
-    "ko": "【발동 시】자신에게 1 데미지를 준다. 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위 대상 1개를 정해 1 데미지를 주는 처리를 3회 반복한다.",
-    "en": "【On Cast】You take 1 damage. Repeat 3 times: randomly select 1 target from the opponent and their monsters, then deal 1 damage to it."
+    "ja": "【発動時】自分に1ダメージを与える。相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、1ダメージを与える処理を3回行う。このターン既に自分が他のファイアー魔法を使用していれば、さらに2回行う。",
+    "ko": "【발동 시】자신에게 1 데미지를 준다. 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위 대상 1개를 정해 1 데미지를 주는 처리를 3회 반복한다. 이번 턴에 이미 다른 파이어 마법을 사용했다면 2회 더 반복한다.",
+    "en": "【On Cast】You take 1 damage. Repeat 3 times: randomly select 1 target from the opponent and their monsters, then deal 1 damage to it. If you already played another Fire spell this turn, repeat the hit 2 more times."
   },
   "FIRE_ZONE": {
     "ja": "【発動条件】この魔法以外に、除外できる自分の手札がある。\n\n【発動時】その手札1枚を選んで自分のリフトへ送る。相手の場の全モンスターと相手プレイヤーにそれぞれ5ダメージ（このターン既に自分がファイアー魔法を使用していれば、代わりに9ダメージ）。",
@@ -1661,9 +1662,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Cost】If you already played another Fire spell this turn, set this spell’s cast cost to 1.\n\n【On Cast】Reduce your mana crystals by 1. Then deal 2 damage to a random target among the opponent and their monsters, 8 times. Choose the random target again each time."
   },
   "FIRE_ART": {
-    "ja": "【発動時】このターン自分のファイアー魔法の発動コスト-2（最低0）。",
-    "ko": "【발동 시】이번 턴 자신 파이어 마법 발동 코스트 -2(최소 0).",
-    "en": "【On Cast】This turn, reduce the cast cost of your Fire spells by 2, to a minimum of 0."
+    "ja": "【発動時】このターン自分のファイアー魔法の発動コスト-2（最低0）。このターン、自分のファイアー魔法が相手プレイヤーや相手モンスターに与えるダメージは、1回につき1増える。",
+    "ko": "【발동 시】이번 턴 자신 파이어 마법 발동 코스트 -2(최소 0). 이번 턴에 자신의 파이어 마법이 상대 플레이어나 상대 몬스터에게 주는 데미지가 매번 1 증가한다.",
+    "en": "【On Cast】This turn, reduce the cast cost of your Fire spells by 2, to a minimum of 0. Each time one of your Fire spells deals damage to the opponent or an enemy monster this turn, increase that damage by 1."
   },
   "FIRE_MASTER": {
     "ja": "【場にある間】自分の「ファイアー魔法」の発動コスト-2（最低0）。\n\n【破壊時】自分のデッキ・墓地から「ファイアー魔法」を合計2枚選び、手札に加える（1枚しかなければその1枚）。",
@@ -1841,4 +1842,4 @@ for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,e
 CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};
 CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};
 
-for (const c of ARCANE_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
+for (const c of [...ARCANE_CARDS, ...DICE_SET_CARDS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};

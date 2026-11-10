@@ -21,7 +21,19 @@ try {
  check('Ember Debt 9th/10th/11th use and persisted counter',()=>{for(const [n,damage] of [[8,2],[9,5],[10,5]]){let g=fresh();g.players[0].uses.FLAME=n;g=play(g,'FLAME');assert.equal(g.players[1].hp,200-damage);assert.equal(g.players[0].hp,199);assert.equal(JSON.parse(JSON.stringify(g)).players[0].uses.FLAME,n+1);}});
  check('BOT recognizes new Ambush and tenth Ember Debt lethal before drawing',()=>{for(const [id,hp,uses] of [['AMBUSH',13,0],['FLAME',5,9]]){const g=fresh();g.players[1].hp=hp;g.players[1].maxMana=4;g.players[0].uses.FLAME=uses;g.players[0].hand=[card('S4'),card(id)];g.players[0].deck=[card('M1')];assert.deepEqual(E.greedyDecide(g,false),{type:'play',idx:1});}});
  check('Selected Sword counts only own Rift, targets own monster and expires',()=>{let g=fresh();g.players[0].removed=[card('STARTER_TRASH'),card('STARTER_TRASH')];g.players[0].field=[mon('M1')];g.players[1].field=[mon('M2')];const base=E.effAtk(g.players[0],g.players[0].field[0],g);g=play(g,'SELECTED_SWORD');assert.deepEqual(E.effectChoices(g).map(c=>c.uid),[g.players[0].field[0].uid]);g=pick(g,g.players[0].field[0].uid);assert.equal(E.effAtk(g.players[0],g.players[0].field[0],g),base+4);g=end(g);assert.equal(E.effAtk(g.players[0],g.players[0].field[0],g),base);});
- check('Guild never attacks even buffed, berserk or counter keywords',()=>{for(const fx of [undefined,'berserk']){let g=fresh();const m=mon('GUILD_HALL');m.atkMod=20;m.attackFx=fx;m.passivesG=['counter'];g.players[0].field=[m];assert.equal(E.monsterCanAttack(g,g.players[0],m),false);assert(!E.botActions(g).some(a=>a.type==='attack'));g=step(g,{type:'attack',uid:m.uid});assert.equal(g.pending,null);assert.equal(g.players[1].hp,200);}});
+ check('Guild can attack when buffed and cannot summon a duplicate',()=>{
+   let g=fresh();
+   const m=mon('GUILD_HALL');
+   g.players[0].field=[m];
+   assert(E.playBlockReason(g,0,card('GUILD_HALL')));
+   assert.equal(E.monsterCanAttack(g,g.players[0],m),false);
+   m.atkMod=2;
+   assert(E.monsterCanAttack(g,g.players[0],m));
+   assert(E.botActions(g).some(a=>a.type==='attack' && a.uid===m.uid));
+   g=step(g,{type:'attack',uid:m.uid});
+   assert.equal(g.players[1].hp,198);
+   assert.equal(g.players[0].field[0].gcount,1);
+ });
  check('Blood Rite expires after 10 total turns, not 9',()=>{let g=fresh();g=play(g,'BLOOD_RITE');for(let i=0;i<9;i++)g=end(g);assert(g.players[0].enchants.some(e=>e.card.id==='BLOOD_RITE'));g=end(g);assert(!g.players[0].enchants.some(e=>e.card.id==='BLOOD_RITE'));assert(g.players[0].removed.some(c=>c.id==='BLOOD_RITE'));});
  check('World Care destroyed to Rift',()=>{let g=fresh();ench(g,'WORLD_CARE',99,1);g.players[1].maxMana=7;g=play(g,'COUNTERCALC');assert(g.players[1].removed.some(c=>c.id==='WORLD_CARE'));});
  check('Focus exiles field monsters and enchantments without death triggers, safely validates selection',()=>{let g=fresh();g.players[0].field=[mon('RUST_SHROOM')];ench(g,'WEAKEN_ALL');const m=g.players[0].field[0],e=g.players[0].enchants[0];g=play(g,'FOCUS');const choices=E.purgeChoices(g.players[0],g.pending);assert(choices.some(c=>c.uid===m.uid));assert(choices.some(c=>c.uid===e.card.uid));g=pick(g,'forged');assert(g.pending);g=pick(g,m.uid);assert.equal(g.players[0].hp,200);assert.equal(g.pending,null);g=play(g,'FOCUS');g=pick(g,e.card.uid);assert.equal(g.players[0].enchants.length,0);assert.equal(g.players[0].removed.filter(c=>c.uid===e.card.uid).length,1);});
