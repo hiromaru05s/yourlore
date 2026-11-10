@@ -11,9 +11,9 @@ export async function startupAssets(root) {
   '/art/lounge/toon-balanced-20261026/library-wide.webp',
   '/art/lounge/toon-balanced-20261026/ivy.webp',
   '/art/lounge/toon-soft-20261026/clouds.webp',
-  '/art/ui/lore-panel-azure-cut-lossless.webp',
+  '/art/ui/lore-panel-azure-cut-ui.webp',
   '/art/seekers/faceless-v2/portrait.webp',
-  ...['single','normal','ranked','frame-pair'].map(name=>`/art/ui/home-duel-frame-01/${name}-lossless.webp`),
+  ...['single','normal','ranked','frame-pair'].map(name=>`/art/ui/home-duel-frame-01/${name}-menu.webp`),
  ];
  const urls={},assets=[];
  for(const url of paths){

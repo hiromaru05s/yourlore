@@ -3,8 +3,8 @@ import {loadAssetImage} from './imageAssets';
 
 export type Mode = 'single' | 'normal' | 'ranked';
 export const homeDuelArt = '/art/ui/home-duel-frame-01/';
-export const homeDuelImage = (mode: Mode) => startupAssetUrl(`${homeDuelArt}${mode}-lossless.webp`);
-export const homeDuelFrame = startupAssetUrl(`${homeDuelArt}frame-pair-lossless.webp`);
+export const homeDuelImage = (mode: Mode) => startupAssetUrl(`${homeDuelArt}${mode}-menu.webp`);
+export const homeDuelFrame = startupAssetUrl(`${homeDuelArt}frame-pair-menu.webp`);
 const images = new Map<Mode, Promise<HTMLImageElement>>();
 
 /** Only three approved pigments, shared by mode switches and HOME revisits. */

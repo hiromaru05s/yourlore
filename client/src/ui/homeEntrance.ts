@@ -12,6 +12,7 @@ export const homeEntranceChrome='.lounge-home';
  * transforms must survive both completion and navigation cancellation. */
 export function playHomeEntrance(root:HTMLElement,cover:HTMLElement,signal:AbortSignal):Promise<void>{
  if(signal.aborted||!root.querySelector('.lounge-home'))return Promise.resolve();
+ const durationMs=1600;
  const motion=matchMedia('(prefers-reduced-motion: reduce)');
  const chrome=[...root.querySelectorAll<HTMLElement>(homeEntranceChrome)];
  const ritual=cover.querySelector<HTMLElement>('.loading-ritual');
@@ -22,6 +23,7 @@ export function playHomeEntrance(root:HTMLElement,cover:HTMLElement,signal:Abort
  const loaderAnimations=cover.getAnimations({subtree:true});loaderAnimations.forEach(a=>a.pause());
  const measure=()=>{const r=sourceCard.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,height:sourceCard.offsetHeight};};
  let source=measure();
+ let width=innerWidth,height=innerHeight;
  const stage=document.createElement('div');stage.className='home-entrance-stage';stage.dataset.variant='azure-fan';stage.setAttribute('aria-hidden','true');
  stage.innerHTML=Array.from({length:7},(_,i)=>`<div class="home-entrance-card" data-card="${i}">${loadingCardFace()}</div>`).join('');
  const cards=[...stage.querySelectorAll<HTMLElement>('.home-entrance-card')];
@@ -36,7 +38,14 @@ export function playHomeEntrance(root:HTMLElement,cover:HTMLElement,signal:Abort
    loaderAnimations.forEach(a=>a.cancel());resolve();
   };
   const visibility=()=>{last=performance.now();};
-  const resize=()=>{source=measure();};
+  const placeCards=()=>{
+   for (const [i,el] of cards.entries()) {
+    el.style.width=source.height*.68013+'px';el.style.height=source.height+'px';
+    el.style.left=source.x+'px';el.style.top=source.y+'px';el.style.zIndex=String(20-Math.abs(i-3));
+   }
+  };
+  const resize=()=>{source=measure();width=innerWidth;height=innerHeight;placeCards();};
+  placeCards();
   document.addEventListener('visibilitychange',visibility);window.addEventListener('resize',resize);window.addEventListener('pagehide',finish,{once:true});motion.addEventListener('change',finish);signal.addEventListener('abort',finish,{once:true});
   const paint=(t:number)=>{
    stage.dataset.elapsed=String(Math.round(t*1000));
@@ -45,15 +54,21 @@ export function playHomeEntrance(root:HTMLElement,cover:HTMLElement,signal:Abort
    heading.forEach(el=>el.style.opacity=String(1-ease(.05,.65,t)));
    chrome.forEach(el=>el.style.opacity=String(ease(2.5,3.8,t)));
    cards.forEach((el,i)=>{
-    const p=azureFanPose(i,t,innerWidth,innerHeight,source.height);
-    el.style.width=source.height*.68013+'px';el.style.height=source.height+'px';
-    el.style.left=source.x+p.x+'px';el.style.top=source.y+p.y+'px';
-    el.style.transform=`translate(-50%,-50%) rotateZ(${p.rz}rad) rotateY(${p.ry}rad) rotateX(${p.rx}rad) scale(${p.scale})`;
-    el.style.opacity=String(p.alpha);el.style.zIndex=String(20-Math.abs(i-3));
-    el.style.filter=`brightness(${1-Math.min(1,Math.abs(i-3))*.14*(1-p.spread)}) drop-shadow(0 12px 10px #00122255)`;
+    const p=azureFanPose(i,t,width,height,source.height);
+    el.style.transform=`translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) rotateZ(${p.rz}rad) rotateY(${p.ry}rad) rotateX(${p.rx}rad) scale(${p.scale})`;
+    el.style.opacity=String(p.alpha);
    });
   };
-  const tick=(now:number)=>{if(finished)return;if(!document.hidden)elapsed+=Math.min(now-last,100);last=now;paint(elapsed/1000);if(elapsed>=(motion.matches?250:4000)){finish();return;}frame=requestAnimationFrame(tick);};
+  const tick=(now:number)=>{
+   if(finished)return;
+   if(!document.hidden)elapsed+=Math.max(0,now-last);
+   last=now;
+   // Sample the approved four-second trajectory on a shorter wall clock.
+   // A late frame advances to its current pose instead of extending the loader.
+   paint(motion.matches?elapsed/1000:4*Math.min(1,elapsed/durationMs));
+   if(elapsed>=(motion.matches?250:durationMs)){finish();return;}
+   frame=requestAnimationFrame(tick);
+  };
   paint(0);frame=requestAnimationFrame(tick);
  });
 }

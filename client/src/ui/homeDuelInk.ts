@@ -115,6 +115,10 @@ export class HomeDuelInk {
     private target(float = false): Target { const gl = this.gl!, texture = gl.createTexture()!; this.textures.push(texture); gl.bindTexture(gl.TEXTURE_2D, texture); gl.texImage2D(gl.TEXTURE_2D, 0, float ? gl.RGBA16F : gl.RGBA8, 256, 256, 0, gl.RGBA, float ? gl.HALF_FLOAT : gl.UNSIGNED_BYTE, null); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); const fbo = gl.createFramebuffer()!; gl.bindFramebuffer(gl.FRAMEBUFFER, fbo); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0); if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE)
         throw new Error('Framebuffer unavailable'); const t = { texture, fbo }; this.targets.push(t); return t; }
     private async init() {
+        const revision = this.modeRevision;
+        const img = await loadHomeDuelImage(this.mode);
+        if (this.disposed)
+            return;
         const gl = this.canvas.getContext('webgl2', { alpha: true, premultipliedAlpha: false, antialias: false, preserveDrawingBuffer: false, powerPreference: 'low-power' });
         this.gl = gl;
         if (!gl || !gl.getExtension('EXT_color_buffer_float'))
@@ -129,10 +133,6 @@ export class HomeDuelInk {
         this.buffers.push(buffer);
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-        const revision = this.modeRevision;
-        const img = await loadHomeDuelImage(this.mode);
-        if (this.disposed)
-            return;
         const tex = gl.createTexture()!;
         this.original = tex;
         this.textures.push(tex);

@@ -72,26 +72,36 @@ export function coverScreen(root:HTMLElement,firstMenu=false,homeEntrance=false,
  const release=()=>{cover.remove();chrome.forEach(({el,opacity})=>el.style.opacity=opacity);root.inert=false;root.removeAttribute('aria-busy');};
  const cancel=()=>{abort.abort();release();};
  return {cancel,ready:async()=>{
-  await waitAssets([...screenAssets,loadingCardUrl],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),abort.signal);
-  if(abort.signal.aborted)return false;
-  loading.update(95,loungeText("画面を仕上げています","Finishing the scene","화면 마무리 중"));
-  await withDeadline(document.fonts.ready,20000,abort.signal).catch(()=>{});
-  // imageUrls promotes rendered images to eager. Hidden tutorial chapters keep
-  // lazy images that browsers intentionally do not fetch: decoding those waits
-  // until timeout even when every visible asset is already prepared.
-  await Promise.all([...root.querySelectorAll('img')].filter(i=>i.loading!=='lazy').map(i=>withDeadline(i.decode(),20000,abort.signal).catch(()=>{})));
-  await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
+  // Menu artwork can finish behind the usable screen. Share one deadline across
+  // images, text and the optional GPU background, including offline/retry cases.
+  const preparation = new AbortController();
+  const finishPreparation = () => preparation.abort();
+  const budget = window.setTimeout(finishPreparation, 2500);
+  abort.signal.addEventListener('abort',finishPreparation,{once:true});
+  if (abort.signal.aborted) finishPreparation();
+  const signal = preparation.signal;
+  const atmosphere = new Promise<void>(resolve=>{
+    if (!homeEntrance || signal.aborted || !root.querySelector('[data-atmosphere="loading"]')) { resolve(); return; }
+    const finish = () => { observer.disconnect(); signal.removeEventListener('abort',finish); resolve(); };
+    const observer = new MutationObserver(()=>{
+      if (!root.querySelector('[data-atmosphere="loading"]')) finish();
+    });
+    observer.observe(root,{subtree:true,attributes:true,attributeFilter:['data-atmosphere'],childList:true});
+    signal.addEventListener('abort',finish,{once:true});
+  });
+  try {
+    await Promise.all([
+      waitAssets([...screenAssets,loadingCardUrl],cover,(done,total)=>loading.update(total?done/total*94:94,loungeText(`画像の準備 ${done} / ${total}`,`Artwork ${done} / ${total}`,`이미지 준비 ${done} / ${total}`)),signal),
+      withDeadline(document.fonts.ready,2500,signal).catch(()=>{}),
+      atmosphere,
+    ]);
+  } finally {
+    window.clearTimeout(budget);
+    abort.signal.removeEventListener('abort',finishPreparation);
+    finishPreparation();
+  }
   if(abort.signal.aborted)return false;
   if(firstMenu)menuReady=true;
-  // The visible HOME's first complete GPU frame belongs to this screen gate;
-  // unrelated duel and catalogue preparation does not. Cancel releases observers.
-  if(homeEntrance)await new Promise<void>(resolve=>{
-   const finish=()=>{observer.disconnect();abort.signal.removeEventListener('abort',finish);resolve();};
-   const check=()=>{if(abort.signal.aborted||!root.isConnected||!root.querySelector('[data-atmosphere="loading"]'))finish();};
-   const observer=new MutationObserver(check);observer.observe(root,{subtree:true,attributes:true,attributeFilter:['data-atmosphere'],childList:true});
-   abort.signal.addEventListener('abort',finish,{once:true});check();
-  });
-  if(abort.signal.aborted)return false;
   loading.update(100,loungeText("準備完了","Ready","준비 완료"));
   if(homeEntrance)await playHomeEntrance(root,cover,abort.signal);
   if(abort.signal.aborted)return false;

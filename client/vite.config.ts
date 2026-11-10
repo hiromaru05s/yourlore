@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 import {startupAssets} from "../scripts/startup-assets.mjs";
 import {menuCacheManifest} from "../scripts/menu-cache-manifest.mjs";
 import {furnitureCacheRevision} from "../scripts/furniture-cache-revision.mjs";
+const loadingPreview=readFileSync(new URL('./src/assets/loading/azure-card-preview.webp',import.meta.url)).toString('base64');
 const startup=await startupAssets(new URL(".",import.meta.url).pathname);
 const menuManifest=await menuCacheManifest(new URL(".",import.meta.url).pathname);
 
@@ -29,7 +30,7 @@ export default defineConfig({
       handler(html) {
         if (!html.includes('<!-- LORE_LOADING_RITUAL -->')) return html;
         return startup.rewrite(html
-          .replace('/* LORE_LOADING_CSS */', () => readFileSync(new URL('./src/styles/loadingScreen.css', import.meta.url), 'utf8'))
+          .replace('/* LORE_LOADING_CSS */', () => `:root{--loading-card-preview:url('data:image/webp;base64,${loadingPreview}')}\n` + readFileSync(new URL('./src/styles/loadingScreen.css', import.meta.url), 'utf8'))
           .replace('<!-- LORE_LOADING_RITUAL -->', () => loadingRitual()));
       },
     },

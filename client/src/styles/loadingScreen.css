@@ -3,17 +3,19 @@
 .game-loading::before,.game-loading::after{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none}
 .game-loading::before{background:#659cc0 url('/art/lounge/toon-balanced-20261026/library-wide.webp') center/cover no-repeat;filter:blur(4px);transform:scale(1.02)}
 .game-loading::after{background:radial-gradient(ellipse at 50% 42%,#213b5b38 0%,#10253dc2 62%,#071b31ed 100%),linear-gradient(#243f5f65,#071b3150)}
-.game-loading.is-home-loader{background:transparent;backdrop-filter:blur(4px)}
+.game-loading.is-home-loader{background:#13273d}
 .game-loading.is-home-loader::before{display:none}
 .game-loading>.loading-logo{position:absolute;top:5%;left:50%;transform:translateX(-50%);width:min(32vw,170px);height:70px;object-fit:contain;filter:drop-shadow(0 2px 8px #02172799)}
 .game-loading .loading-title{position:absolute;bottom:16%;left:10%;width:80%;text-align:center;font-size:13px;letter-spacing:.12em;text-shadow:0 2px 5px #001225}
 .loading-ritual{position:absolute;inset:0;pointer-events:none;--ritual-duration:5.6s}
-.loading-deck{position:absolute;inset:0;perspective:1400px;animation:loadingFloat var(--ritual-duration) ease-in-out infinite}
-.loading-card{position:absolute;height:var(--card-height);width:calc(var(--card-height)*.68013);left:50%;top:47.5%;transform:translate(-50%,-50%) rotateX(7.45deg);filter:drop-shadow(0 13px 10px #00122255)}
+.loading-deck{position:absolute;left:50%;top:47.5%;width:0;height:0;perspective:1400px;animation:loadingFloat var(--ritual-duration) ease-in-out infinite}
+.loading-card{position:absolute;height:var(--card-height);width:calc(var(--card-height)*.68013);left:0;top:0;transform:translate(-50%,-50%) rotateX(7.45deg);filter:drop-shadow(0 13px 10px #00122255)}
 .loading-card--under{margin-left:calc(var(--card-height)*-.07);margin-top:calc(var(--card-height)*.015);transform:translate(-50%,-50%) rotateZ(-6.88deg) rotateX(7.45deg);filter:brightness(.86) drop-shadow(0 13px 10px #00122255)}
 .loading-card--middle{margin-left:calc(var(--card-height)*.07);margin-top:calc(var(--card-height)*.015);transform:translate(-50%,-50%) rotateZ(6.88deg) rotateX(7.45deg);filter:brightness(.86) drop-shadow(0 13px 10px #00122255)}
+.loading-card,.home-entrance-card{background:var(--loading-card-preview,none) center/contain no-repeat}
 .loading-card-art{display:block;width:100%;height:100%;object-fit:contain}
-.loading-sheen{position:absolute;inset:0;mask:url('/art/ui/loading/azure-card-v1.webp') center/100% 100% no-repeat;background:linear-gradient(114deg,transparent 38%,#fff1bf05 44%,#fff1c539 50%,#fff8e41a 53%,transparent 61%) -200% 0/250% 100% no-repeat;mix-blend-mode:screen;animation:loadingSheen var(--ritual-duration) ease-in-out infinite}
+.loading-sheen{position:absolute;inset:0;overflow:hidden;mask:url('/art/ui/loading/azure-card-v1.webp') center/100% 100% no-repeat}
+.loading-sheen::before{content:'';position:absolute;inset:0;background:linear-gradient(114deg,transparent 30%,#fff1bf05 43%,#fff1c539 50%,#fff8e41a 55%,transparent 70%);animation:loadingSheen var(--ritual-duration,5.6s) ease-in-out infinite}
 .loading-plinth{position:absolute;left:32%;right:32%;top:79%;height:6%;border-radius:50%;background:radial-gradient(ellipse,#00122580,transparent 68%);filter:blur(6px)}
 .game-loading .loading-progress{position:absolute;left:50%;bottom:11%;transform:translateX(-50%);width:min(280px,70vw);display:flex;align-items:center;gap:16px}
 .loading-progress progress{appearance:none;width:100%;height:2px;border:0;border-radius:2px;overflow:hidden;background:#b5c9dd29}
@@ -22,7 +24,7 @@
 .game-loading .loading-phase{position:absolute;left:10%;width:80%;bottom:7%;color:#aebfcc;font:10px sans-serif;letter-spacing:.04em;text-align:center;text-shadow:0 2px 5px #001225}
 .game-loading>.asset-retry{position:absolute;bottom:1%;z-index:1}
 @keyframes loadingFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes loadingSheen{0%,15%{background-position:-200% 0}75%,100%{background-position:200% 0}}
-@media(max-width:600px){.loading-card{top:47%}.game-loading>.loading-logo{top:7%;height:58px}.game-loading .loading-title{bottom:18%;font-size:12px}.game-loading .loading-progress{bottom:13%}.game-loading .loading-phase{bottom:9%}}
+@keyframes loadingSheen{0%,15%{transform:translateX(-110%)}75%,100%{transform:translateX(110%)}}
+@media(max-width:600px){.loading-deck{top:47%}.game-loading>.loading-logo{top:7%;height:58px}.game-loading .loading-title{bottom:18%;font-size:12px}.game-loading .loading-progress{bottom:13%}.game-loading .loading-phase{bottom:9%}}
 @media(max-height:500px){.game-loading.game-loading{--card-height:min(57vh,55vw)}.game-loading>.loading-logo{top:2%;height:42px;width:110px}.game-loading .loading-title{bottom:14%;font-size:11px}.game-loading .loading-progress{bottom:8%;width:220px}.game-loading .loading-phase{bottom:2%;font-size:9px}.game-loading>.asset-retry{bottom:2%;right:2%;font-size:10px}#startup-reload{left:12px;font-size:10px!important}}
 @media(prefers-reduced-motion:reduce){.loading-ritual *{animation:none!important}.loading-sheen{display:none}}
