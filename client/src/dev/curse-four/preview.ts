@@ -1,6 +1,6 @@
 import './style.css';
 import {loadAssets,loadSkull} from './assets';import {createRenderer} from './renderer';import {designs,DURATION,stateAt,phase,type Options,type Layout,type Rect} from './model';
-type Board={ready:boolean;sample:(side:number)=>Layout;sync:(o:Options)=>void;begin:(r?:Rect)=>void;restore:()=>void;suspend:()=>void;dispose:()=>void};
+type Board={deposits:number[];ready:boolean;sample:(side:number)=>Layout;sync:(o:Options)=>void;begin:(r?:Rect)=>void;restore:()=>void;suspend:()=>void;dispose:()=>void};
 const finalPresentation=new URLSearchParams(location.search).get('final')==='1';
 const root=document.querySelector<HTMLDivElement>('#app')!;
 root.innerHTML=`<main class="shell">
@@ -26,7 +26,7 @@ if(finalPresentation){
  q('#description').textContent='墓地と同じ位置に半透明の髑髏が浮かび、黒い光を帯びた呪い5枚が扇状に生まれる。';
 }
 let ready=false,dead=false,renderer:ReturnType<typeof createRenderer>,ms=0,variant=0,side=0,dark=false,reduced=matchMedia('(prefers-reduced-motion:reduce)').matches,concurrent=false,mode='compare',speed=1,skullOpacity=.45,running=false,raf=0,last=0,gap=0,board:Board|undefined,generation=0;
-function options(v=variant):Options{return{variant:v,ms,side,dark,reduced,concurrent,skullOpacity};}
+function options(v=variant):Options{return{variant:v,ms,side,dark,reduced,concurrent,skullOpacity,count:mode==='board'?board?.deposits[side]:undefined};}
 function draw(){
  if(!ready||dead||(finalPresentation&&mode!=='board'))return;
  try{
@@ -35,7 +35,7 @@ function draw(){
    const o=options();board.sync(o);renderer.draw(boardCanvas,{...o,hideSource:true,pixelRatio:Math.min(2,devicePixelRatio),board:board.sample(side)});
    if(concurrent){if(overlay.width!==boardCanvas.width||overlay.height!==boardCanvas.height){overlay.width=boardCanvas.width;overlay.height=boardCanvas.height;}renderer.draw(overlay,{...o,side:1-side,hideSource:true,pixelRatio:Math.min(2,devicePixelRatio),board:board.sample(1-side)});const ctx=boardCanvas.getContext('2d')!;ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(overlay,0,0);}
   }else canvases.forEach((c,i)=>renderer.draw(c,options(i)));
-  q<HTMLInputElement>('#seek').value=String(ms);q('.time').textContent=`${(ms/1000).toFixed(2)} / ${(DURATION/1000).toFixed(2)} s`;q('.phase').textContent=phase(ms);q('#pause').textContent=running?'一時停止':'再開';root.dataset.running=String(running);
+  q<HTMLInputElement>('#seek').value=String(ms);q('.time').textContent=`${(ms/1000).toFixed(2)} / ${(DURATION/1000).toFixed(2)} s`;q('.phase').textContent=phase(ms).replace('5枚',String(options().count ?? 5)+'枚');q('#pause').textContent=running?'一時停止':'再開';root.dataset.running=String(running);
   root.dataset.status=JSON.stringify({ms,mode,variant,side,reduced,concurrent,state:stateAt(options()),memory:renderer.memory,raf:raf?1:0});
  }catch(e){error(e);}
 }

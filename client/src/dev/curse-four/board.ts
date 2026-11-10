@@ -6,7 +6,11 @@ setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
 const state=createGame({mode:'bot',seed:72,starting:0,p0:{id:'curse-self',name:'YOU'},p1:{id:'curse-opp',name:'OPPONENT'}}).state;state.turn=3;state.pending=null;
 for(const [side,p] of state.players.entries()){p.openingDrawReady=false;p.mana=8;p.maxMana=12;p.hp=28;p.enchants=[];p.quests=[];p.field=['VAMP1','M1'].map((id,i)=>({...DB[id],uid:`curse-mon-${side}-${i}`,exhausted:false,summonedTurn:0,tempAtk:0,atkMod:0,defMod:0,dmg:0}));p.hand=[DB.BLACK_CURSE,DB.BLACK_NOVA,STARTERS.STARTER_MANA].map((c,i)=>({...c,uid:`curse-hand-${side}-${i}`}));p.discard=Array.from({length:7},(_,i)=>({...DB.S1,uid:`curse-disc-${side}-${i}`}));}
 const original=structuredClone(state),results=[0,1].map(side=>{const s=structuredClone(original);s.cur=side as 0|1;return reduce(s,{type:'play',idx:0});});
-for(const [side,r] of results.entries()){if(r.state.players[1-side].discard.filter(c=>c.id==='CURSE').length!==5)throw Error('カースの生成効果を確認できません');}
+export const deposits=results.map(result=>{
+ const event=result.events.find(e=>e.type==='curseGenerated');
+ if(!event)throw Error('カースの生成効果を確認できません');
+ return event.after-event.before;
+});
 let currentMs=0,dragOrigin:Rect|undefined,origin:Rect|undefined;
 function captureRelease(){const el=document.querySelector('.drag-ghost');dragOrigin=el?rect(el):undefined;}
 window.addEventListener('pointerup',captureRelease,true);
@@ -46,5 +50,5 @@ function begin(r?:Rect){origin=r;}
 function suspend(){} // The paused frame and played hand state remain consistent.
 function restore(){origin=undefined;sync({side:0,ms:0,concurrent:false,variant:0,dark:false,reduced:false});}
 let disposed=false;function dispose(){if(disposed)return;disposed=true;restore();castFaces.forEach(n=>n.remove());window.removeEventListener('pointerup',captureRelease,true);stop();clearMonsterStates(root);view.destroy();}
-Object.assign(window,{curseBoard:{get ready(){return !disposed&&!root.classList.contains('duel-preparing');},sample,sync,begin,restore,suspend,dispose,get state(){return state;},engineEvidence:results.map((r,side)=>({side,mana:r.state.players[side].mana,hand:r.state.players[side].hand.length,ownGrave:r.state.players[side].discard.length,targetGrave:r.state.players[1-side].discard.length}))}});
+Object.assign(window,{curseBoard:{get ready(){return !disposed&&!root.classList.contains('duel-preparing');},deposits,sample,sync,begin,restore,suspend,dispose,get state(){return state;},engineEvidence:results.map((r,side)=>({side,mana:r.state.players[side].mana,hand:r.state.players[side].hand.length,ownGrave:r.state.players[side].discard.length,targetGrave:r.state.players[1-side].discard.length}))}});
 window.addEventListener('pagehide',dispose,{once:true});
