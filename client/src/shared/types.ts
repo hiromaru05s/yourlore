@@ -215,6 +215,7 @@ export interface TribePactDefeat {
 
 export interface GameState {
   castleReworkApplied?: boolean;
+  questReworkApplied?: boolean;
   medals?: [string|null,string|null];
   /** Server-authoritative achievement counters; never sent to the opponent. */
   medalDuel?: import("./medalTracking").MedalDuel;

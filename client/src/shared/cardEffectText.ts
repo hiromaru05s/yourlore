@@ -1377,19 +1377,19 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】If you have at least 4 cards in hand, restore 6 of your HP. If you have at least 6, also increase your mana crystals by 1.\n\n【On Destruction】If this card is destroyed by an opponent’s card effect, set your mana crystals to 3."
   },
   "Q_RIFT": {
-    "ja": "【達成条件】設置後、自分のリフトにカードが累計10枚追加される。\n\n【達成時】新しい「カル」7枚を自分のリフトに追加する。",
-    "ko": "【달성 조건】설치 후 자신의 리프트에 카드가 누적 10장 추가된다.\n\n【달성 시】새로운 컬 7장을 자신의 리프트에 추가한다.",
-    "en": "【Completion Requirement】After deployment, have a total of 10 cards added to your Rift.\n\n【On Completion】Create 7 new Culls in your Rift."
+    "ja": "【達成条件】設置後、自分のリフトにカードが累計8枚追加される。\n\n【達成時】新しい「カル」7枚を自分のリフトに追加する。",
+    "ko": "【달성 조건】설치 후 자신의 리프트에 카드가 누적 8장 추가된다.\n\n【달성 시】새로운 컬 7장을 자신의 리프트에 추가한다.",
+    "en": "【Completion Requirement】After deployment, have a total of 8 cards added to your Rift.\n\n【On Completion】Create 7 new Culls in your Rift."
   },
   "Q_BRAND": {
-    "ja": "【達成条件】設置後、相手から累計40ダメージを受ける。\n\n【達成時】相手プレイヤーに烙印カウンターを1個付与する。",
-    "ko": "【달성 조건】설치 후 상대에게 누적 40 데미지를 받는다.\n\n【달성 시】상대 플레이어에게 낙인 카운터 1개 부여한다.",
-    "en": "【Completion Requirement】After deployment, take 40 damage from your opponent.\n\n【On Completion】Give the opponent 1 Brand counter."
+    "ja": "【達成条件】設置後、相手から累計28ダメージを受ける。\n\n【達成時】相手プレイヤーに烙印カウンターを1個付与する。",
+    "ko": "【달성 조건】설치 후 상대에게 누적 28 데미지를 받는다.\n\n【달성 시】상대 플레이어에게 낙인 카운터 1개 부여한다.",
+    "en": "【Completion Requirement】After deployment, take 28 damage from your opponent.\n\n【On Completion】Give the opponent 1 Brand counter."
   },
   "Q_TORI": {
-    "ja": "【達成条件】設置後、自分の場にモンスターがいない状態で、自分のターンを5回終了する。\n\n【達成時】自分の体力+30。",
-    "ko": "【달성 조건】설치 후 자신의 필드에 몬스터가 없는 상태로 자신의 턴 5회 종료한다.\n\n【달성 시】자신의 체력 +30.",
-    "en": "【Completion Requirement】After deployment, end 5 of your turns with no monsters on your field.\n\n【On Completion】Restore 30 of your HP."
+    "ja": "【達成条件】設置後、自分の場にモンスターがいない状態で、自分のターンを3回終了する。\n\n【達成時】自分の体力+18。",
+    "ko": "【달성 조건】설치 후 자신의 필드에 몬스터가 없는 상태로 자신의 턴 3회 종료한다.\n\n【달성 시】자신의 체력 +18.",
+    "en": "【Completion Requirement】After deployment, end 3 of your turns with no monsters on your field.\n\n【On Completion】Restore 18 of your HP."
   },
   "Q_WINTER": {
     "ja": "【達成条件】設置後、自分の体力を累計30上昇させる。\n\n【達成時】自分のマナ水晶+2。",
@@ -1397,9 +1397,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Completion Requirement】After deployment, increase your HP by a total of 30.\n\n【On Completion】Increase your mana crystals by 2."
   },
   "Q_TRIBE": {
-    "ja": "【達成条件】設置後、自分が種族モンスターを累計6体召喚する。\n\n【達成時】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。",
-    "ko": "【달성 조건】설치 후 자신이 종족 몬스터를 누적 6체 소환한다.\n\n【달성 시】자신의 필드 종족 몬스터와 같은 종족이며 자신의 필드에 동명이 없는 몬스터 1체를 카드 목록에서 선택해 새로 자신의 필드에 소환한다.",
-    "en": "【Completion Requirement】After deployment, summon a total of 6 tribal monsters.\n\n【On Completion】Choose 1 monster from the catalog that shares a tribe with a monster you control and has no same-name monster on your field; summon a new copy to your field."
+    "ja": "【達成条件】設置後、自分が種族モンスターを累計3体召喚する。\n\n【達成時】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。",
+    "ko": "【달성 조건】설치 후 자신이 종족 몬스터를 누적 3체 소환한다.\n\n【달성 시】자신의 필드 종족 몬스터와 같은 종족이며 자신의 필드에 동명이 없는 몬스터 1체를 카드 목록에서 선택해 새로 자신의 필드에 소환한다.",
+    "en": "【Completion Requirement】After deployment, summon a total of 3 tribal monsters.\n\n【On Completion】Choose 1 monster from the catalog that shares a tribe with a monster you control and has no same-name monster on your field; summon a new copy to your field."
   },
   "Q_CASTLE": {
     "ja": "【達成条件】設置後、自分の場の同じ個体の「城」を、双方のターン終了時に連続5回維持する。途中でその城が場を離れたり、別の個体に替わったりした場合は数え直す。\n\n【達成時】「騎士」2体を自分の場に召喚する。",
@@ -1407,19 +1407,19 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Completion Requirement】After deployment, keep the same Castle on your field for 5 consecutive turn ends, counting both players. Restart the count if that Castle leaves or is replaced by another copy.\n\n【On Completion】Summon 2 Knights to your field."
   },
   "Q_DECAY": {
-    "ja": "【達成条件】設置後、腐敗の効果で相手モンスターを4体破壊する。\n\n【達成時】相手プレイヤーに30ダメージを与える。",
-    "ko": "【달성 조건】설치 후 부패 효과로 상대 몬스터 4체 파괴한다.\n\n【달성 시】상대 플레이어에게 30 데미지를 준다.",
-    "en": "【Completion Requirement】After deployment, destroy 4 enemy monsters through Decay.\n\n【On Completion】Deal 30 damage to the opponent."
+    "ja": "【達成条件】設置後、腐敗の効果で相手モンスターを3体破壊する。\n\n【達成時】相手プレイヤーに15ダメージを与え、烙印カウンターを1個付与する。",
+    "ko": "【달성 조건】설치 후 부패 효과로 상대 몬스터 3체 파괴한다.\n\n【달성 시】상대 플레이어에게 15 데미지를 주고 낙인 카운터 1개를 부여한다.",
+    "en": "【Completion Requirement】After deployment, destroy 3 enemy monsters through Decay.\n\n【On Completion】Deal 15 damage to the opponent and give them 1 Brand counter."
   },
   "Q_ASSASSIN": {
-    "ja": "【達成条件】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計6回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【達成時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。",
-    "ko": "【달성 조건】설치 후 자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 누적 6회 데미지(암살자 길드 지부의 추가 데미지 발동도 1회로 계산).\n\n【달성 시】상대의 필드의 아우라가 없는 몬스터·영구 마법·퀘스트 중 1장을 선택해 상대의 리프트로 보낸다.",
-    "en": "【Completion Requirement】After deployment, deal attack damage to the opponent with your Assassin-family monsters a total of 6 times; each Assassins' Guild Branch bonus-damage trigger also counts as 1.\n\n【On Completion】Choose 1 enemy monster without Aura, persistent spell, or quest and send it to the opponent's Rift."
+    "ja": "【達成条件】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計3回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【達成時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。",
+    "ko": "【달성 조건】설치 후 자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 누적 3회 데미지(암살자 길드 지부의 추가 데미지 발동도 1회로 계산).\n\n【달성 시】상대의 필드의 아우라가 없는 몬스터·영구 마법·퀘스트 중 1장을 선택해 상대의 리프트로 보낸다.",
+    "en": "【Completion Requirement】After deployment, deal attack damage to the opponent with your Assassin-family monsters a total of 3 times; each Assassins' Guild Branch bonus-damage trigger also counts as 1.\n\n【On Completion】Choose 1 enemy monster without Aura, persistent spell, or quest and send it to the opponent's Rift."
   },
   "Q_MANA": {
-    "ja": "【達成条件】設置後、魔法カードを25回使用する。\n\n【達成時】自分のマナ水晶+4。",
-    "ko": "【달성 조건】설치 후 마법 카드 25회 사용.\n\n【달성 시】자신의 마나 수정 +4.",
-    "en": "【Completion Requirement】After deployment, play 25 spell cards.\n\n【On Completion】Increase your mana crystals by 4."
+    "ja": "【達成条件】設置後、魔法カードを13回使用する。\n\n【達成時】自分のマナ水晶+3。",
+    "ko": "【달성 조건】설치 후 마법 카드 13회 사용.\n\n【달성 시】자신의 마나 수정 +3.",
+    "en": "【Completion Requirement】After deployment, play 13 spell cards.\n\n【On Completion】Increase your mana crystals by 3."
   },
   "QUICK_MIMIC": {
     "ja": "【購入時】「ミミック」1体を自分の場に召喚し、新たな「ミミック」2枚を自分のリフトに追加する。",
@@ -1537,9 +1537,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When Either Player Summons a Monster】The summoned monster gains +1 ATK and Counter.\n\n【While on the Field】Resolve your Mercenary-family monsters' summon and turn-start effects 2 times; does not stack. If your deck composition has at least 2 distinct Mercenary names, all your Mercenary-family monsters get +3 ATK and +3 HP."
   },
   "Q_CHEAT": {
-    "ja": "【達成条件】設置後、自分がダイスを累計20個振る。\n\n【達成時】相手のデッキからカード1枚を選び、相手のリフトへ送る。",
-    "ko": "【달성 조건】설치 후 자신이 주사위를 누적 20개 굴린다.\n\n【달성 시】상대의 덱에서 카드 1장을 선택해 상대의 리프트로 보낸다.",
-    "en": "【Completion Requirement】After deployment, roll a total of 20 dice.\n\n【On Completion】Choose 1 card in the opponent’s deck and send it to their Rift."
+    "ja": "【達成条件】設置後、自分がダイスを累計8個振る。\n\n【達成時】相手のデッキからカード1枚を選び、相手のリフトへ送る。",
+    "ko": "【달성 조건】설치 후 자신이 주사위를 누적 8개 굴린다.\n\n【달성 시】상대의 덱에서 카드 1장을 선택해 상대의 리프트로 보낸다.",
+    "en": "【Completion Requirement】After deployment, roll a total of 8 dice.\n\n【On Completion】Choose 1 card in the opponent’s deck and send it to their Rift."
   },
   "Q_TOWN": {
     "ja": "【達成条件】設置後、「兵士」の召喚・「カジノ」の召喚・「ワイン」の使用がそれぞれ1回以上行われる（どちらのプレイヤーでも数える）。\n\n【達成時】新しい「支配」1枚を自分の手札に加える。",

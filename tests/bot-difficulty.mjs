@@ -48,7 +48,7 @@ try {
  // A damage-taking quest is not a free early-game upgrade for an aggro deck.
  // Its engine counter ignores shields; real recovery can make it viable.
  const questGame=C.createGame({...opts,starting:0}).state,quest={...C.DB.Q_BRAND,uid:'quest-check'},buyer=questGame.players[0];
- Object.assign(buyer,{hand:Array.from({length:4},(_,i)=>({...C.DB.GOBLIN,uid:'quest-goblin-'+i})),deck:[],discard:[],field:[],enchants:[],quests:[],exile:[],hp:45,mana:4,maxMana:4,dew:0,shield:100});
+ Object.assign(buyer,{hand:Array.from({length:4},(_,i)=>({...C.DB.GOBLIN,uid:'quest-goblin-'+i})),deck:[],discard:[],field:[],enchants:[],quests:[],exile:[],hp:quest.quest.target+5,mana:4,maxMana:4,dew:0,shield:100});
  questGame.market=[quest];questGame.marketStock=[3];buyer.supply=[];
  assert(C.purchaseEvaluator(questGame,buyer)(quest).margin<=0,'shield cannot fund a damage-taking quest');
  assert.notDeepEqual(C.botDecide(questGame,'hard'),{type:'buyMarket',i:0},'develop attackers instead of an unsupported damage quest');

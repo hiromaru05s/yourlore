@@ -53,7 +53,7 @@ try{
  for(let n=0;n<2;n++){await page.locator('.picker-modal').waitFor({timeout:30000});await page.locator('.picker-grid .card').first().click();await page.evaluate(()=>qa.c.queue);}
  await page.waitForFunction(()=>qa.c.state.players[0].hand.length===2&&!qa.c.state.pending);
  report.checks.push('Fire Master death opens two consecutive owner choices during opponent turn');
- await page.evaluate(()=>{const g=qa.fresh();g.players[0].quests=[{card:qa.card('Q_CHEAT'),progress:20}];g.players[1].deck=[qa.card('M6'),qa.card('FIRE_MASTER')];qa.c.state=g;qa.c.feed(qa.E.reduce(g,{type:'pick',uid:null}));});
+ await page.evaluate(()=>{const g=qa.fresh();g.players[0].quests=[{card:qa.card('Q_CHEAT'),progress:8}];g.players[1].deck=[qa.card('M6'),qa.card('FIRE_MASTER')];qa.c.state=g;qa.c.feed(qa.E.reduce(g,{type:'pick',uid:null}));});
  await page.locator('.picker-modal').waitFor({timeout:30000});assert.equal(await page.locator('.picker-grid .card').count(),2);await page.locator('.picker-grid .card').first().click();await page.evaluate(()=>qa.c.queue);assert.equal(await page.evaluate(()=>qa.c.state.players[1].removed.length),1);
  report.checks.push('Completed Cheating quest presents enemy deck choices and exiles selected card through UI');
  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(600);await page.screenshot({path:output+'/new-board-mobile.png'});

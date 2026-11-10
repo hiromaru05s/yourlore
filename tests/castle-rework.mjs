@@ -3,7 +3,7 @@ import {build} from 'esbuild';
 import {mkdtemp,rm} from 'node:fs/promises';
 const dir=await mkdtemp('/tmp/lore-castle-rework-');
 try {
- await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/cards';export * from './client/src/shared/engine';export * from './client/src/shared/playIntent';export * from './server/src/castleReworkSnapshot';`},bundle:true,platform:'node',format:'esm',outfile:dir+'/core.mjs'});
+ await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/cards';export * from './client/src/shared/engine';export * from './client/src/shared/playIntent';export * from './server/src/reworkedCardSnapshot';`},bundle:true,platform:'node',format:'esm',outfile:dir+'/core.mjs'});
  const E=await import(dir+'/core.mjs');let seq=0,checks=0;
  const card=(id,extra={})=>({...structuredClone(E.DB[id]??E.STARTERS[id]),uid:'rework-'+(++seq),...extra});
  const mon=(id='M1',extra={})=>({...card(id),dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0,...extra});
@@ -116,10 +116,10 @@ try {
   const soldier=mon('SOLDIER2',{def:2,atkMod:4,dmg:0});
   g.players[0].field=[soldier];g.players[0].hand=[card('GENESIS_MAGIC',{play:0,passive:[]})];
   g.players[0].quests=[{card:card('Q_CASTLE',{quest:{...E.DB.Q_CASTLE.quest,target:9}}),progress:3,anchorUid:'castle'}];
-  E.restoreCastleRework(g);assert.deepEqual([soldier.def,soldier.atkMod],[1,4]);
+  E.restoreReworkedCards(g);assert.deepEqual([soldier.def,soldier.atkMod],[1,4]);
   assert.equal(g.players[0].hand[0].play,5);assert(E.hasPassive(g.players[0].hand[0],'void'));
   assert.equal(g.players[0].quests[0].card.quest.target,5);assert.equal(g.players[0].quests[0].progress,3);
-  const snapshot=JSON.stringify(g);E.restoreCastleRework(g);assert.equal(JSON.stringify(g),snapshot);
+  const snapshot=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),snapshot);
  });
  console.log(checks,'castle rework scenarios passed');
 } finally {await rm(dir,{recursive:true,force:true});}

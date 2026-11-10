@@ -6558,83 +6558,83 @@
     },
     "Q_RIFT": {
       "nameJa": "リフト研究",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "3be3ddbe64dad7c81dca63d2e1f970856bc3546e052ade82c3aeeb495bb9c8c9",
-      "textSha256": "fb71f71a488560f4ab503462729b23dc24181d7bf324f7c743c746f099c4170f",
+      "definitionSha256": "c27f6cb076f366205c4205f6215b655fea698d887aea0176038219f1946ec052",
+      "textSha256": "6fe7f221b5884eca01f9858383ec8d83e08cfda183a6732db1b83713326e21eb",
       "hooks": {
         "quest": {
           "event": "exile",
-          "target": 10
+          "target": 8
         }
       },
       "before": {
-        "ja": "【クエスト】設置後、自分のリフトにカードが累計10枚追加される。\n\n【報酬】新しい「カル」7枚を自分のリフトに追加する。",
-        "ko": "【퀘스트】설치 후 자신의 리프트에 카드가 누적 10장 추가된다.\n\n【보상】새로운 컬 7장을 자신의 리프트에 추가한다.",
-        "en": "【Quest】After deployment, have a total of 10 cards added to your Rift.\n\n【Reward】Create 7 new Culls in your Rift."
-      },
-      "after": {
         "ja": "【達成条件】設置後、自分のリフトにカードが累計10枚追加される。\n\n【達成時】新しい「カル」7枚を自分のリフトに追加する。",
         "ko": "【달성 조건】설치 후 자신의 리프트에 카드가 누적 10장 추가된다.\n\n【달성 시】새로운 컬 7장을 자신의 리프트에 추가한다.",
         "en": "【Completion Requirement】After deployment, have a total of 10 cards added to your Rift.\n\n【On Completion】Create 7 new Culls in your Rift."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、自分のリフトにカードが累計8枚追加される。\n\n【達成時】新しい「カル」7枚を自分のリフトに追加する。",
+        "ko": "【달성 조건】설치 후 자신의 리프트에 카드가 누적 8장 추가된다.\n\n【달성 시】새로운 컬 7장을 자신의 리프트에 추가한다.",
+        "en": "【Completion Requirement】After deployment, have a total of 8 cards added to your Rift.\n\n【On Completion】Create 7 new Culls in your Rift."
       }
     },
     "Q_BRAND": {
       "nameJa": "反撃の狼煙",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "236777245f464577ef781bc173e182cbf8f383378ae623b293b2b468b873ae14",
-      "textSha256": "5892cdc5a99b7a626c28399321bb7447e34693a94158863888e5a59ffd38cd63",
+      "definitionSha256": "45e3ff78fbe86ed29a997d4f79a142645374c1fe376bb636598a399c1dd570cb",
+      "textSha256": "e6a0559a596753ccb18b5f7cf22938fa070ef83aade5690a21ebdfc6be8118e4",
       "hooks": {
         "quest": {
           "event": "opponentDamage",
-          "target": 40
+          "target": 28
         }
       },
       "before": {
-        "ja": "【クエスト】設置後、相手から累計40ダメージを受ける。\n\n【報酬】相手プレイヤーに烙印カウンターを1個付与する。",
-        "ko": "【퀘스트】설치 후 상대에게 누적 40 데미지를 받는다.\n\n【보상】상대 플레이어에게 낙인 카운터 1개 부여한다.",
-        "en": "【Quest】After deployment, take 40 damage from your opponent.\n\n【Reward】Give the opponent 1 Brand counter."
-      },
-      "after": {
         "ja": "【達成条件】設置後、相手から累計40ダメージを受ける。\n\n【達成時】相手プレイヤーに烙印カウンターを1個付与する。",
         "ko": "【달성 조건】설치 후 상대에게 누적 40 데미지를 받는다.\n\n【달성 시】상대 플레이어에게 낙인 카운터 1개 부여한다.",
         "en": "【Completion Requirement】After deployment, take 40 damage from your opponent.\n\n【On Completion】Give the opponent 1 Brand counter."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、相手から累計28ダメージを受ける。\n\n【達成時】相手プレイヤーに烙印カウンターを1個付与する。",
+        "ko": "【달성 조건】설치 후 상대에게 누적 28 데미지를 받는다.\n\n【달성 시】상대 플레이어에게 낙인 카운터 1개 부여한다.",
+        "en": "【Completion Requirement】After deployment, take 28 damage from your opponent.\n\n【On Completion】Give the opponent 1 Brand counter."
       }
     },
     "Q_TORI": {
       "nameJa": "精霊 - トリ",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "feaa4cb3e92c9515754db165c8bcef9e24c7b02216e3bbf7efa7da090cdc02a9",
-      "textSha256": "27979686d2e572ab30daa43af154aa22ca2634883371c40c2155a29ed9da4259",
+      "definitionSha256": "af5dfa9ddd7ef75aa50bbdf5f2e16c69084891f1075a3a9738eb59b521219ce9",
+      "textSha256": "1fa7f7a8b626de3f8e38c1544d1c54bd535c81b8081979cb6866175d7bd6ace0",
       "hooks": {
         "quest": {
           "event": "emptyTurn",
-          "target": 5
+          "target": 3
         }
       },
       "before": {
-        "ja": "【クエスト】設置後、自分の場にモンスターがいない状態で、自分のターンを5回終了する。\n\n【報酬】自分の体力+30。",
-        "ko": "【퀘스트】설치 후 자신의 필드에 몬스터가 없는 상태로 자신의 턴 5회 종료한다.\n\n【보상】자신의 체력 +30.",
-        "en": "【Quest】After deployment, end 5 of your turns with no monsters on your field.\n\n【Reward】Restore 30 of your HP."
-      },
-      "after": {
         "ja": "【達成条件】設置後、自分の場にモンスターがいない状態で、自分のターンを5回終了する。\n\n【達成時】自分の体力+30。",
         "ko": "【달성 조건】설치 후 자신의 필드에 몬스터가 없는 상태로 자신의 턴 5회 종료한다.\n\n【달성 시】자신의 체력 +30.",
         "en": "【Completion Requirement】After deployment, end 5 of your turns with no monsters on your field.\n\n【On Completion】Restore 30 of your HP."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、自分の場にモンスターがいない状態で、自分のターンを3回終了する。\n\n【達成時】自分の体力+18。",
+        "ko": "【달성 조건】설치 후 자신의 필드에 몬스터가 없는 상태로 자신의 턴 3회 종료한다.\n\n【달성 시】자신의 체력 +18.",
+        "en": "【Completion Requirement】After deployment, end 3 of your turns with no monsters on your field.\n\n【On Completion】Restore 18 of your HP."
       }
     },
     "Q_WINTER": {
@@ -6667,29 +6667,29 @@
     },
     "Q_TRIBE": {
       "nameJa": "一族の誓い",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "6ce10e7508d0775e141cdfbf7d8a4525bf4a987023f9e9cf8a97a9c0a53038d3",
-      "textSha256": "cbf4767a8043fef37a72ef4ff1fa37b4ae59ddf29da85a8646cfa7866e1e53df",
+      "definitionSha256": "aefb86fd76d32e44fe3b3eb1a88710616c4835350a3c75023ce4ea322dc4540c",
+      "textSha256": "dee0dc9476f76c808f5e081b73f6f7fa5b305b1eb5e4bd9fdddb574e22eb01a8",
       "hooks": {
         "quest": {
           "event": "tribeSummon",
-          "target": 6
+          "target": 3
         }
       },
       "before": {
-        "ja": "【クエスト】設置後、自分が種族モンスターを累計6体召喚する。\n\n【報酬】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。",
-        "ko": "【퀘스트】설치 후 자신이 종족 몬스터를 누적 6체 소환한다.\n\n【보상】자신의 필드 종족 몬스터와 같은 종족이며 자신의 필드에 동명이 없는 몬스터 1체를 카드 목록에서 선택해 새로 자신의 필드에 소환한다.",
-        "en": "【Quest】After deployment, summon a total of 6 tribal monsters.\n\n【Reward】Choose 1 monster from the catalog that shares a tribe with a monster you control and has no same-name monster on your field; summon a new copy to your field."
-      },
-      "after": {
         "ja": "【達成条件】設置後、自分が種族モンスターを累計6体召喚する。\n\n【達成時】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。",
         "ko": "【달성 조건】설치 후 자신이 종족 몬스터를 누적 6체 소환한다.\n\n【달성 시】자신의 필드 종족 몬스터와 같은 종족이며 자신의 필드에 동명이 없는 몬스터 1체를 카드 목록에서 선택해 새로 자신의 필드에 소환한다.",
         "en": "【Completion Requirement】After deployment, summon a total of 6 tribal monsters.\n\n【On Completion】Choose 1 monster from the catalog that shares a tribe with a monster you control and has no same-name monster on your field; summon a new copy to your field."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、自分が種族モンスターを累計3体召喚する。\n\n【達成時】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。",
+        "ko": "【달성 조건】설치 후 자신이 종족 몬스터를 누적 3체 소환한다.\n\n【달성 시】자신의 필드 종족 몬스터와 같은 종족이며 자신의 필드에 동명이 없는 몬스터 1체를 카드 목록에서 선택해 새로 자신의 필드에 소환한다.",
+        "en": "【Completion Requirement】After deployment, summon a total of 3 tribal monsters.\n\n【On Completion】Choose 1 monster from the catalog that shares a tribe with a monster you control and has no same-name monster on your field; summon a new copy to your field."
       }
     },
     "Q_CASTLE": {
@@ -6721,83 +6721,85 @@
     },
     "Q_DECAY": {
       "nameJa": "どくびし",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "0ed8fd1d2560a1895b129c3478aac2578dc9022966ee9a2d1217b304958560b4",
-      "textSha256": "e904b2cd324c27811dc6ce78962f3cc327a684e7f6e702dfd80361a68ea9f1a5",
+      "definitionSha256": "5d2bcc0331867fe2004bc381b62282b364b8392c63d1d837956c158aa937e838",
+      "textSha256": "3196172a475607a60ebaf421c585416cc190a3aa90ac441b40b0bf8a6f0ca749",
       "hooks": {
         "quest": {
           "event": "decayKill",
-          "target": 4
+          "target": 3
         }
       },
       "before": {
-        "ja": "【クエスト】設置後、腐敗の効果で相手モンスターを4体破壊する。\n\n【報酬】相手プレイヤーに30ダメージを与える。",
-        "ko": "【퀘스트】설치 후 부패 효과로 상대 몬스터 4체 파괴한다.\n\n【보상】상대 플레이어에게 30 데미지를 준다.",
-        "en": "【Quest】After deployment, destroy 4 enemy monsters through Decay.\n\n【Reward】Deal 30 damage to the opponent."
-      },
-      "after": {
         "ja": "【達成条件】設置後、腐敗の効果で相手モンスターを4体破壊する。\n\n【達成時】相手プレイヤーに30ダメージを与える。",
         "ko": "【달성 조건】설치 후 부패 효과로 상대 몬스터 4체 파괴한다.\n\n【달성 시】상대 플레이어에게 30 데미지를 준다.",
         "en": "【Completion Requirement】After deployment, destroy 4 enemy monsters through Decay.\n\n【On Completion】Deal 30 damage to the opponent."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、腐敗の効果で相手モンスターを3体破壊する。\n\n【達成時】相手プレイヤーに15ダメージを与え、烙印カウンターを1個付与する。",
+        "ko": "【달성 조건】설치 후 부패 효과로 상대 몬스터 3체 파괴한다.\n\n【달성 시】상대 플레이어에게 15 데미지를 주고 낙인 카운터 1개를 부여한다.",
+        "en": "【Completion Requirement】After deployment, destroy 3 enemy monsters through Decay.\n\n【On Completion】Deal 15 damage to the opponent and give them 1 Brand counter."
       }
     },
     "Q_ASSASSIN": {
       "nameJa": "アサシンギルドの伝達",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "0e1bed57e906b86a826f74b3e6a5e5da15cfa9d83d5732c37253e1f0d6fb1480",
-      "textSha256": "a5367f2b0573fa3505f3fece29b202147e74cfbad8df06918932ece799753130",
+      "definitionSha256": "5138ef7a16d4e4c1176453af51a96cac38446774a90daf7ddf4ec0f798c41a19",
+      "textSha256": "8304443829ee3c0ef9b306d124ce44274b6fcd7881a4682678ef6a994c023181",
       "hooks": {
         "quest": {
           "event": "assassinHit",
-          "target": 6
+          "target": 3
         }
       },
       "before": {
         "ja": "【達成条件】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計6回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【達成時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。",
-        "ko": "【달성 조건】설치 후 자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 누적 6회 데미지(암살자 길드 지부의 추가 데미지 발동도 1회로 계산).\n\n【달성 시】상대의 필드의 아우라가 없는 몬스터·영구마법·퀘스트 중 1장을 선택해 상대의 리프트로 보낸다.",
+        "ko": "【달성 조건】설치 후 자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 누적 6회 데미지(암살자 길드 지부의 추가 데미지 발동도 1회로 계산).\n\n【달성 시】상대의 필드의 아우라가 없는 몬스터·영구 마법·퀘스트 중 1장을 선택해 상대의 리프트로 보낸다.",
         "en": "【Completion Requirement】After deployment, deal attack damage to the opponent with your Assassin-family monsters a total of 6 times; each Assassins' Guild Branch bonus-damage trigger also counts as 1.\n\n【On Completion】Choose 1 enemy monster without Aura, persistent spell, or quest and send it to the opponent's Rift."
       },
       "after": {
-        "ja": "【達成条件】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計6回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【達成時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。",
-        "ko": "【달성 조건】설치 후 자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 누적 6회 데미지(암살자 길드 지부의 추가 데미지 발동도 1회로 계산).\n\n【달성 시】상대의 필드의 아우라가 없는 몬스터·영구 마법·퀘스트 중 1장을 선택해 상대의 리프트로 보낸다.",
-        "en": "【Completion Requirement】After deployment, deal attack damage to the opponent with your Assassin-family monsters a total of 6 times; each Assassins' Guild Branch bonus-damage trigger also counts as 1.\n\n【On Completion】Choose 1 enemy monster without Aura, persistent spell, or quest and send it to the opponent's Rift."
+        "ja": "【達成条件】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計3回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【達成時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。",
+        "ko": "【달성 조건】설치 후 자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 누적 3회 데미지(암살자 길드 지부의 추가 데미지 발동도 1회로 계산).\n\n【달성 시】상대의 필드의 아우라가 없는 몬스터·영구 마법·퀘스트 중 1장을 선택해 상대의 리프트로 보낸다.",
+        "en": "【Completion Requirement】After deployment, deal attack damage to the opponent with your Assassin-family monsters a total of 3 times; each Assassins' Guild Branch bonus-damage trigger also counts as 1.\n\n【On Completion】Choose 1 enemy monster without Aura, persistent spell, or quest and send it to the opponent's Rift."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
     },
     "Q_MANA": {
       "nameJa": "マナ順応",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "f964bf55c3b51af666567a69a576c8ff9fb87b419f8e47e959492e58ce5c4f63",
-      "textSha256": "d871a2994c8e0fafdb444ee47d31e6b2473bc36dbe5f04ae5b05277cb312778d",
+      "definitionSha256": "53fc090dc69dd0d606f266b9c729d0fab7a067ea8ca20fe4143828f7b22b2ff3",
+      "textSha256": "41b0f1ffd210e18cc33b9088adff32c7abc21bdd7019d679a5a465fe18f57da4",
       "hooks": {
         "quest": {
           "event": "spellPlay",
-          "target": 25
+          "target": 13
         }
       },
       "before": {
-        "ja": "【達成条件】設置後、魔法カードを25回使用する。\n\n【達成時】自分の最大マナ+4。",
-        "ko": "【달성 조건】설치 후 마법 카드 25회 사용.\n\n【달성 시】자신의 최대 마나 +4.",
-        "en": "【Completion Requirement】After deployment, play 25 spell cards.\n\n【On Completion】Increase your max mana by 4."
-      },
-      "after": {
         "ja": "【達成条件】設置後、魔法カードを25回使用する。\n\n【達成時】自分のマナ水晶+4。",
         "ko": "【달성 조건】설치 후 마법 카드 25회 사용.\n\n【달성 시】자신의 마나 수정 +4.",
         "en": "【Completion Requirement】After deployment, play 25 spell cards.\n\n【On Completion】Increase your mana crystals by 4."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、魔法カードを13回使用する。\n\n【達成時】自分のマナ水晶+3。",
+        "ko": "【달성 조건】설치 후 마법 카드 13회 사용.\n\n【달성 시】자신의 마나 수정 +3.",
+        "en": "【Completion Requirement】After deployment, play 13 spell cards.\n\n【On Completion】Increase your mana crystals by 3."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -7343,30 +7345,30 @@
     },
     "Q_CHEAT": {
       "nameJa": "イカサマ",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "a20f8a641f757c08cfc3f30e31ed32a6948d6b27575883540ab1e15607c61806",
-      "textSha256": "c9ad52f4d12b651655dd8317269fa1205428d8d8047e4b4431e4e0daf2f8f2cd",
+      "definitionSha256": "b29344c6fca08988e684529319c30acd20509ddddcadc982be9413dc58833331",
+      "textSha256": "83e218b2a729ca65bb2814dd6cf14a9bdc91f23a3613a2585381de3d6966c73d",
       "hooks": {
         "act": "expansion",
         "quest": {
           "event": "dice",
-          "target": 20
+          "target": 8
         }
       },
       "before": {
-        "ja": "【クエスト】設置後、自分がダイスを累計20個振る。\n\n【報酬】相手のデッキからカード1枚を選び、相手のリフトへ送る。",
-        "ko": "【퀘스트】설치 후 자신이 주사위를 누적 20개 굴린다.\n\n【보상】상대의 덱에서 카드 1장을 선택해 상대의 리프트로 보낸다.",
-        "en": "【Quest】After deployment, roll a total of 20 dice.\n\n【Reward】Choose 1 card in the opponent’s deck and send it to their Rift."
-      },
-      "after": {
         "ja": "【達成条件】設置後、自分がダイスを累計20個振る。\n\n【達成時】相手のデッキからカード1枚を選び、相手のリフトへ送る。",
         "ko": "【달성 조건】설치 후 자신이 주사위를 누적 20개 굴린다.\n\n【달성 시】상대의 덱에서 카드 1장을 선택해 상대의 리프트로 보낸다.",
         "en": "【Completion Requirement】After deployment, roll a total of 20 dice.\n\n【On Completion】Choose 1 card in the opponent’s deck and send it to their Rift."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、自分がダイスを累計8個振る。\n\n【達成時】相手のデッキからカード1枚を選び、相手のリフトへ送る。",
+        "ko": "【달성 조건】설치 후 자신이 주사위를 누적 8개 굴린다.\n\n【달성 시】상대의 덱에서 카드 1장을 선택해 상대의 리프트로 보낸다.",
+        "en": "【Completion Requirement】After deployment, roll a total of 8 dice.\n\n【On Completion】Choose 1 card in the opponent’s deck and send it to their Rift."
       }
     },
     "Q_TOWN": {

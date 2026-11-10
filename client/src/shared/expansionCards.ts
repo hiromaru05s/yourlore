@@ -192,14 +192,14 @@ export const EXPANSION_CARDS: CardDef[] = [
     "name": "속임수",
     "nameEn": "Loaded Dice",
     "cost": 2,
-    "textJa": "【条件】自分がダイスを20個振る · 【報酬】相手のデッキからカード1枚を選び除外",
-    "text": "【조건】자신이 주사위 20개를 굴림 · 【보상】상대 덱 카드 1장 선택 제외",
-    "textEn": "【Quest】Roll 20 dice · 【Reward】Choose and exile 1 enemy deck card",
+    "textJa": "【条件】自分がダイスを8個振る · 【報酬】相手のデッキからカード1枚を選び除外",
+    "text": "【조건】자신이 주사위 8개를 굴림 · 【보상】상대 덱 카드 1장 선택 제외",
+    "textEn": "【Quest】Roll 8 dice · 【Reward】Choose and exile 1 enemy deck card",
     "t": "quest",
     "act": "expansion",
     "quest": {
       "event": "dice",
-      "target": 20
+      "target": 8
     }
   },
   {

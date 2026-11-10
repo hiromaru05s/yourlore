@@ -5,8 +5,8 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 const dir = await mkdtemp(path.join(tmpdir(), 'lore-quest-quick-'));
 try {
-  await build({ stdin: { contents: `export * from './client/src/shared/cards'; export * from './client/src/shared/engine'; export * from './client/src/shared/protocol'; export { GameRoom } from './server/src/gameRoom'; export {candidates, greedyDecide} from './client/src/shared/bot';`, resolveDir: process.cwd() }, bundle: true, platform: 'node', format: 'esm', outfile: path.join(dir, 'game.mjs') });
-  const { DB, STARTERS, BUYABLE_POOL, GameRoom, createGame, reduce, effectChoices, actingSide, playCost, effAtk, hasPassive, purchaseAllowed, candidates, greedyDecide, redactFor, frameFor } = await import(path.join(dir, 'game.mjs'));
+  await build({ stdin: { contents: `export * from './client/src/shared/cards'; export * from './client/src/shared/engine'; export * from './client/src/shared/protocol'; export { GameRoom } from './server/src/gameRoom'; export {restoreReworkedCards} from './server/src/reworkedCardSnapshot'; export {candidates, greedyDecide} from './client/src/shared/bot';`, resolveDir: process.cwd() }, bundle: true, platform: 'node', format: 'esm', outfile: path.join(dir, 'game.mjs') });
+  const { DB, STARTERS, BUYABLE_POOL, GameRoom, restoreReworkedCards, createGame, reduce, effectChoices, actingSide, playCost, effAtk, hasPassive, purchaseAllowed, candidates, greedyDecide, redactFor, frameFor } = await import(path.join(dir, 'game.mjs'));
   let seq = 0;
   const card = id => ({ ...structuredClone(DB[id] ?? STARTERS[id]), uid: `fixture-${++seq}` });
   const mon = id => ({ ...card(id), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: 0, attacksUsed: 0 });
@@ -58,7 +58,7 @@ try {
   {let g=fresh();g.players[0].removed=Array.from({length:20},()=>card('MIMIC'));g=activate(g,'Q_RIFT');assert.equal(g.players[0].quests[0].progress,0);const wire=redactFor(JSON.parse(JSON.stringify(g)),1);assert.equal(wire.players[0].quests[0].card.id,'Q_RIFT');assert.equal(wire.players[0].quests[0].progress,0);}
   // Completion creates seven fresh Culls even with none owned; existing zones stay intact.
   for (const owner of [0,1]) for (const owned of [false,true]) {
-    let g=activate(fresh(),'Q_RIFT',owner);const p=g.players[owner];p.quests[0].progress=9;
+    let g=activate(fresh(),'Q_RIFT',owner);const p=g.players[owner];p.quests[0].progress=7;
     if(owned) for(const zone of ['hand','deck','discard','removed']) p[zone]=[card('STARTER_TRASH')];
     const before=structuredClone(p);const opponent=structuredClone(g.players[1-owner]);
     g=buy(g,'QUICK_GRIMOIRE');const after=g.players[owner];
@@ -74,16 +74,16 @@ try {
     const count=after.removed.length;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[owner].removed.length,count+1);
   }
   // Generated Culls participate in existing Rift reactions.
-  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=9;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+9);}
-  {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=4;const hp=g.players[0].hp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,hp+30);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
+  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=7;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+9);}
+  {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=2;g.players[0].quests.find(q=>q.card.id==='Q_WINTER').progress=12;const hp=g.players[0].hp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,hp+18);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
   {let g=activate(fresh(),'Q_TORI');g.players[0].hand=Array.from({length:8},()=>card('STARTER_TRASH'));g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);assert.equal(g.pending.reason,'handCap');g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,1);}
   {let g=activate(fresh(),'Q_CASTLE');const castle=mon('CASTLE');g.players[0].field=[castle];for(let i=0;i<4;i++){g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,i+1);}g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests.length,0);assert.equal(g.players[0].field.filter(c=>c.id==='INFKNIGHT').length,2);}
   {let g=activate(fresh(),'Q_CASTLE');g.players[0].field=[mon('CASTLE')];g=step(g,{type:'endTurn'});g.players[0].field=[];g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);}
-  {let g=activate(fresh(),'Q_DECAY');g.players[0].quests[0].progress=3;const enemy=mon('MIMIC');enemy.decayCnt=1;g.players[1].field=[enemy];g=buy(g,'QUICK_POISON');assert.equal(g.players[1].hp,100);g=pick(g,'invalid');assert(g.pending);g=pick(g,enemy.uid);assert.equal(g.players[0].quests.length,0);assert.equal(g.players[1].field.length,0);assert.equal(g.players[1].hp,67);}
-  {let g=activate(fresh(),'Q_DECAY');g.players[0].quests[0].progress=3;const protectedMon=mon('VAMP1');protectedMon.decayCnt=1;g.players[1].field=[protectedMon];const ward=Object.values(DB).find(c=>c.ench==='vampWard');g.players[1].enchants=[{card:card(ward.id),turns:99}];g=buy(g,'QUICK_POISON');g=pick(g,protectedMon.uid);assert.equal(g.players[0].quests[0].progress,3);}
-  {let g=activate(fresh(),'Q_MANA');g.players[0].quests[0].progress=24;const mm=g.players[0].maxMana;g=buy(g,'QUICK_ATTUNE');assert.equal(g.players[0].maxMana,mm+5);assert.equal(g.players[0].quests.length,0);}
-  {let g=activate(fresh(),'Q_ASSASSIN');g.players[0].quests[0].progress=5;const assassin=mon('ASSASSIN1');g.players[0].field=[assassin];g.players[1].enchants=[{card:card('WORLD_HEART'),turns:99}];g=step(g,{type:'attack',uid:assassin.uid});assert.equal(g.pending.reason,'Q_ASSASSIN');const uid=g.players[1].enchants[0].card.uid;g=pick(g,uid);assert(g.players[1].removed.some(c=>c.uid===uid));assert(!g.pending);}
-  {let g=activate(fresh(),'Q_TRIBE');g.players[0].quests[0].progress=5;g.players[0].hand=[card('TAR3')];g=step(g,{type:'play',idx:0});assert.equal(g.pending.reason,'Q_TRIBE');assert(effectChoices(g).every(c=>c.tribe===DB.TAR3.tribe&&c.id!=='TAR3'));g=pick(g,effectChoices(g)[0].uid);assert(!g.pending);assert.equal(g.players[0].field.length,2);}
+  {let g=activate(fresh(),'Q_DECAY');g.players[0].quests[0].progress=2;const enemy=mon('MIMIC');enemy.decayCnt=1;g.players[1].field=[enemy];g=buy(g,'QUICK_POISON');assert.equal(g.players[1].hp,100);g=pick(g,'invalid');assert(g.pending);g=pick(g,enemy.uid);assert.equal(g.players[0].quests.length,0);assert.equal(g.players[1].field.length,0);assert.equal(g.players[1].hp,82);assert.equal(g.players[1].brand,1);}
+  {let g=activate(fresh(),'Q_DECAY');g.players[0].quests[0].progress=2;const protectedMon=mon('VAMP1');protectedMon.decayCnt=1;g.players[1].field=[protectedMon];const ward=Object.values(DB).find(c=>c.ench==='vampWard');g.players[1].enchants=[{card:card(ward.id),turns:99}];g=buy(g,'QUICK_POISON');g=pick(g,protectedMon.uid);assert.equal(g.players[0].quests[0].progress,2);}
+  {let g=activate(fresh(),'Q_MANA');g.players[0].quests[0].progress=12;const mm=g.players[0].maxMana;g=buy(g,'QUICK_ATTUNE');assert.equal(g.players[0].maxMana,mm+4);assert.equal(g.players[0].quests.length,0);}
+  {let g=activate(fresh(),'Q_ASSASSIN');g.players[0].quests[0].progress=2;const assassin=mon('ASSASSIN1');g.players[0].field=[assassin];g.players[1].enchants=[{card:card('WORLD_HEART'),turns:99}];g=step(g,{type:'attack',uid:assassin.uid});assert.equal(g.pending.reason,'Q_ASSASSIN');const uid=g.players[1].enchants[0].card.uid;g=pick(g,uid);assert(g.players[1].removed.some(c=>c.uid===uid));assert(!g.pending);}
+  {let g=activate(fresh(),'Q_TRIBE');g.players[0].quests[0].progress=2;g.players[0].hand=[card('TAR3')];g=step(g,{type:'play',idx:0});assert.equal(g.pending.reason,'Q_TRIBE');assert(effectChoices(g).every(c=>c.tribe===DB.TAR3.tribe&&c.id!=='TAR3'));g=pick(g,effectChoices(g)[0].uid);assert(!g.pending);assert.equal(g.players[0].field.length,2);}
   // The canonical Brand card is live in both purchase routes and rewards exactly one counter once.
   assert(BUYABLE_POOL.includes('Q_BRAND'));assert.equal(DB.Q_BRAND.val,1);
   for(const from of ['buyMarket','buySupply']) {
@@ -92,17 +92,63 @@ try {
   }
   for(const initialBrand of [0,2]) {
     let g=activate(fresh(),'Q_BRAND');g.cur=1;g.players[1].brand=initialBrand;
-    const enemy=mon('MIMIC');enemy.atk=39;g.players[1].field=[enemy];
-    g=step(g,{type:'attack',uid:enemy.uid});assert.equal(g.players[0].quests[0].progress,39);assert.equal(g.players[1].brand,initialBrand);
+    const enemy=mon('MIMIC');enemy.atk=27;g.players[1].field=[enemy];
+    g=step(g,{type:'attack',uid:enemy.uid});assert.equal(g.players[0].quests[0].progress,27);assert.equal(g.players[1].brand,initialBrand);
     g.players[1].field[0].exhausted=false;g.players[1].field[0].atk=1;
     g=step(g,{type:'attack',uid:enemy.uid});assert.equal(g.players[1].brand,initialBrand+1);assert.equal(g.players[0].quests.length,0);
     assert.equal(g.players[0].removed.filter(c=>c.id==='Q_BRAND').length,1);
     g.players[1].field[0].exhausted=false;g=step(g,{type:'attack',uid:enemy.uid});assert.equal(g.players[1].brand,initialBrand+1);
   }
   // Out-of-turn reward decisions are made by the quest owner, never the active opponent.
-  {let g=activate(fresh(),'Q_TRIBE');g.players[0].quests[0].progress=6;g.players[0].field=[mon('TAR3')];g.cur=1;g=step(g,{type:'pick',uid:null});assert.equal(actingSide(g),0);assert.equal(g.cur,1);const a=greedyDecide(g,false);assert(effectChoices(g).some(c=>c.uid===a.uid));g=step(g,a);assert.equal(g.cur,1);assert.equal(g.players[0].field.length,2);}
+  {let g=activate(fresh(),'Q_TRIBE');g.players[0].quests[0].progress=3;g.players[0].field=[mon('TAR3')];g.cur=1;g=step(g,{type:'pick',uid:null});assert.equal(actingSide(g),0);assert.equal(g.cur,1);const a=greedyDecide(g,false);assert(effectChoices(g).some(c=>c.uid===a.uid));g=step(g,a);assert.equal(g.cur,1);assert.equal(g.players[0].field.length,2);}
   // Quick cards in imported hands cannot be replayed, even by a bot.
   {let g=fresh();g.players[0].hand=[card('QUICK_ATTUNE')];const before=structuredClone(g.players[0]);g=step(g,{type:'play',idx:0});assert.deepEqual(g.players[0].hand,before.hand);assert.equal(g.players[0].maxMana,before.maxMana);assert(!candidates(g).some(a=>a.type==='play'));}
+  for (const [id,target] of Object.entries({Q_TORI:3,Q_RIFT:8,Q_CHEAT:8,Q_BRAND:28,Q_ASSASSIN:3,Q_DECAY:3,Q_MANA:13,Q_TRIBE:3})) {
+    assert.equal(DB[id].quest.target,target,id);
+  }
+  assert.equal(DB.Q_MANA.cost,2);
+  assert.equal(playCost(card('Q_MANA')),2);
+  // Two landed Assassin attacks plus the Branch's third-counter activation make three.
+  {
+    let g=activate(fresh(),'Q_ASSASSIN');
+    const attacker=mon('ASSASSIN1'),branch=mon('GUILD_HALL');
+    branch.gcount=1;g.players[0].field=[attacker,branch];
+    g.players[1].enchants=[{card:card('WORLD_HEART'),turns:99}];
+    g=step(g,{type:'attack',uid:attacker.uid});
+    assert.equal(g.players[0].quests[0].progress,1);
+    g.players[0].field[0].exhausted=false;
+    g=step(g,{type:'attack',uid:attacker.uid});
+    assert.equal(g.pending.reason,'Q_ASSASSIN');
+    g=pick(g,g.players[1].enchants[0].card.uid);
+    assert.equal(g.players[0].removed.filter(c=>c.id==='Q_ASSASSIN').length,1);
+  }
+  // An opponent's trap can deal qualifying damage during the quest owner's turn.
+  {
+    let g=activate(fresh(),'Q_BRAND');
+    const attacker=mon('M1');
+    g.players[0].field=[attacker];g.players[0].shield=2;
+    g.players[1].traps=[{card:{...card('T1'),react:'judgment',val:29},setTurn:0}];
+    g=step(g,{type:'attack',uid:attacker.uid});
+    assert.equal(g.players[0].quests[0].progress,27);
+    assert.equal(g.players[1].brand ?? 0,0);
+  }
+  // Previously deployed cards keep their physical IDs, owner and earned progress.
+  {
+    let g=activate(fresh(),'Q_TORI');
+    delete g.questReworkApplied;
+    const q=g.players[0].quests[0],uid=q.card.uid;
+    q.progress=4;q.card.quest.target=5;
+    const oldMana={...card('Q_MANA'),cost:3,play:3,quest:{event:'spellPlay',target:25}};
+    g.players[0].hand=[oldMana];
+    const serialized=JSON.parse(JSON.stringify(g));
+    restoreReworkedCards(serialized);restoreReworkedCards(serialized);
+    assert.deepEqual([serialized.players[0].quests[0].card.uid,serialized.players[0].quests[0].progress],[uid,3]);
+    assert.equal(serialized.players[0].hand[0].cost,2);
+    assert.equal(serialized.players[0].hand[0].quest.target,13);
+    g=step(serialized,{type:'pick',uid:null});assert.equal(g.players[0].hp,118);
+    g=step(g,{type:'pick',uid:null});assert.equal(g.players[0].hp,118);
+    assert.equal(g.players[0].removed.filter(c=>c.uid===uid).length,1);
+  }
   // Real authoritative action handler broadcasts quest activation and authorizes the pending owner.
   {
     const server = new GameRoom({}, {}); const sent=[];
@@ -111,7 +157,7 @@ try {
     server.room={readied:[true,true],previewDone:true,game:g,turnStartAt:Date.now(),turnBonusMs:0};
     await server.handleAction(0,{type:'play',idx:0});
     assert(sent[0].some(e=>e.type==='playSpell'&&e.id==='Q_TRIBE'));
-    server.room.game.players[0].quests[0].progress=6;server.room.game.players[0].field=[mon('TAR3')];server.room.game.cur=1;
+    server.room.game.players[0].quests[0].progress=3;server.room.game.players[0].field=[mon('TAR3')];server.room.game.cur=1;
     server.room.game=step(server.room.game,{type:'pick',uid:null});
     const chosen=effectChoices(server.room.game)[0].uid;
     await server.handleAction(1,{type:'pick',uid:chosen});assert(server.room.game.pending);

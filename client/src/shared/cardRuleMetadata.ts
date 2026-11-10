@@ -167,7 +167,7 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   Q_WINTER: {"terms":["rift"]},
   Q_TRIBE: {"terms":["rift"]},
   Q_CASTLE: {"terms":["rift"]},
-  Q_DECAY: {"terms":["rift"],"mentions":["decay"]},
+  Q_DECAY: {"terms":["rift","counters"],"mentions":["decay"]},
   Q_ASSASSIN: {"terms":["rift"],"mentions":["aura"]},
   Q_MANA: {"terms":["rift"]},
   QUICK_MIMIC: {"terms":["rift"]},

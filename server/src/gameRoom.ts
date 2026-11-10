@@ -1,5 +1,5 @@
 import { ARIES_OPPONENTS, type AriesStage } from '../../client/src/shared/ariesStory';
-import { restoreCastleRework } from './castleReworkSnapshot';
+import { restoreReworkedCards } from './reworkedCardSnapshot';
 import { reserveNpcDeck } from './botRotation';
 import {publicNameEvents} from './publicNames';
 import {newMedalDuel} from '../../client/src/shared/medalTracking';
@@ -168,7 +168,7 @@ export class GameRoom {
   private async loadRoom(): Promise<RoomData | null> {
     const r = await this.state.storage.get<Partial<RoomData>>("room");
     if (r?.game && r.players) {
-      restoreCastleRework(r.game);
+      restoreReworkedCards(r.game);
       // Old rooms may contain provider names in both snapshots and public logs.
       // Resolve names and scrub the journal before exposing any restored state.
       if (r.publicNamesVersion !== 1) {
