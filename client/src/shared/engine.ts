@@ -96,6 +96,7 @@ function resetInst(card: CardInst): CardInst {
   const def = DB[card.id] ?? STARTERS[card.id];
   if (!def) return card;
   const reset = { uid: card.uid, ...structuredClone(def) } as CardInst & { token?: boolean };
+  if (card.id === 'STARTER_MANA' && card.play != null) reset.play = card.play;
   if ("token" in card) reset.token = (card as FieldMon).token;
   return reset;
 }
@@ -1613,7 +1614,10 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       }
       if (e.card.ench === "colosseum" && ownerTurn && !g.over) {
         const count = cullExiled(pl);
-        if (count >= 8) queueExpansionChoice(g, pl, 'colosseumPick', '');
+        if (count >= 8 && pl.field.length < FIELD_MAX) {
+          if (g.pending) queueExpansionChoice(g, pl, 'colosseumPick', '');
+          else offerColosseumPick(g, ctx, pl);
+        }
         if (count <= 8) queueExpansionChoice(g, pl, 'colosseumRoll', '');
       }
       // 컬 재배: 자신의 턴 시작마다 패에 컬 1장
@@ -6404,16 +6408,20 @@ function offerLandGrantBonus(g: GameState, p: PlayerState): void {
 function queueExpansionChoice(g: GameState, p: PlayerState, reason: string, hint: string, data?: Record<string, unknown>): void {
   (g.expansionChoices ??= []).push({ owner: side(g, p), reason, hint, data });
 }
+function offerColosseumPick(g: GameState, ctx: Ctx, owner: PlayerState): void {
+  g.pending = {kind:'giantShop', owner:side(g,owner), reason:'colosseumPick', allowCancel:true,
+    hint:'콜로세움 — 소환할 선택받은 몬스터 선택', hintJa:'コロシアム — 召喚する「選ばれし」モンスターを選択',
+    data:{ids:[...CHOSEN_IDS],free:true}};
+  ctx.ev.push({type:'needTarget',pending:g.pending});
+}
+
 function drainExpansionChoices(g: GameState, ctx: Ctx): void {
   while (!g.pending && !g.over && g.expansionChoices?.length) {
     const c = g.expansionChoices.shift()!;
     const owner = g.players[c.owner];
     if (c.reason === 'colosseumPick') {
       if (owner.field.length >= FIELD_MAX) continue;
-      g.pending = {kind:'giantShop', owner:c.owner, reason:'colosseumPick', allowCancel:true,
-        hint:'콜로세움 — 소환할 선택받은 몬스터 선택', hintJa:'コロシアム — 召喚する「選ばれし」モンスターを選択',
-        data:{ids:[...CHOSEN_IDS],free:true}};
-      ctx.ev.push({type:'needTarget',pending:g.pending});
+      offerColosseumPick(g, ctx, owner);
     } else if (c.reason === 'colosseumRoll') {
       const roll = diceRoll(g,ctx.ev,c.owner,{id:'COLOSSEUM',player:c.owner},1);
       effectSummon(g,ctx,owner,roll.sum <= 4 ? 'SOLDIER2' : 'INFKNIGHT');

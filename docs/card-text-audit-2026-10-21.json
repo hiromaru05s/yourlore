@@ -1996,7 +1996,7 @@
         "en"
       ],
       "definitionSha256": "158aa238817578080eabe74b23ac75da43c4e53104363b07bc00bccd3ec885b3",
-      "textSha256": "58cb20ddfcd12157182447d0e72ec11063e690d2c7b5901793dd87df95883585",
+      "textSha256": "92c28d16b86113a847edbfddf0a7a8d6e41b232f9da47e5ff27e52c203866d6b",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分の場の全ての「始原」モンスターの攻撃力+4・体力+4（対象が場を離れるまで）。",
@@ -2005,8 +2005,8 @@
       },
       "after": {
         "ja": "【発動時】自分のデッキ構成にある各「アチューン」の発動コストを、このゲームの間1下げる（最低0）。このターン、自分が提示マーケットをリロールするたび、自分のデッキ構成にない「始原」モンスターが候補にあれば、必ず1体提示される。",
-        "ko": "【발동 시】자신의 덱 구성에 있는 각 어튠의 발동 비용을 이번 게임 동안 1 낮춘다(최소 0). 이번 턴에 자신이 제시 마켓을 다시 굴릴 때마다 자신의 덱 구성에 없는 시초 몬스터 후보가 있으면 반드시 1체가 제시된다.",
-        "en": "【On Cast】Reduce the play cost of each Attune currently in your deck composition by 1 for this game, to a minimum of 0. Each time you refresh the offer this turn, it includes an Origin monster missing from your deck composition if one is available."
+        "ko": "【발동 시】자신의 덱 구성에 있는 각 어튠의 발동 코스트을 이번 게임 동안 1 낮춘다(최소 0). 이번 턴에 자신이 제시 마켓을 다시 굴릴 때마다 자신의 덱 구성에 없는 시초 몬스터 후보가 있으면 반드시 1체가 제시된다.",
+        "en": "【On Cast】Reduce the cast cost of each Attune currently in your deck composition by 1 for this game, to a minimum of 0. Each time you refresh the offer this turn, it includes an Origin monster missing from your deck composition if one is available."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -3835,7 +3835,7 @@
         "en"
       ],
       "definitionSha256": "f98efcf4bf30c570e2b84ea8b23c42f6984ee327d57eacb4ca0aa9e5788649d6",
-      "textSha256": "609cda977c99a78e00549db3ac3d48a76c9b3d201f121ac4eabceb691449db8a",
+      "textSha256": "065981c396468e9b0bac72f8280d109fb32e7fc36b12c37c2f46790352f206f1",
       "hooks": {},
       "before": {
         "ja": "【発動条件】自分の場に「吸血鬼」系モンスターがいる。\n\n【発動時】自分に9ダメージを与える。自分の場の「吸血鬼」系モンスター1体を選んで破壊する。破壊できたら自分のマナ水晶+3、自分の体力を10回復する。",
@@ -3844,7 +3844,7 @@
       },
       "after": {
         "ja": "【発動時】自分に10ダメージを与える。自分の場のモンスター1体を選ぶ。「吸血鬼」系なら、その体力+5、自分のマナ水晶+5。それ以外なら、そのモンスターを破壊してリフトへ送る。送ったモンスターの購入コストと同じ数のダイスを振り、合計6以上なら自分のマナ水晶+3。",
-        "ko": "【발동 시】자신에게 10 데미지를 준다. 자신의 필드 몬스터 1체를 선택한다. 흡혈귀 계열이면 그 몬스터의 체력 +5, 자신의 마나 수정 +5. 그 외에는 파괴해 리프트로 보낸다. 보낸 몬스터의 구매 비용만큼 주사위를 굴려 합계가 6 이상이면 자신의 마나 수정 +3.",
+        "ko": "【발동 시】자신에게 10 데미지를 준다. 자신의 필드 몬스터 1체를 선택한다. 흡혈귀 계열이면 그 몬스터의 체력 +5, 자신의 마나 수정 +5. 그 외에는 파괴해 리프트로 보낸다. 보낸 몬스터의 구매 코스트만큼 주사위를 굴려 합계가 6 이상이면 자신의 마나 수정 +3.",
         "en": "【On Cast】Take 10 damage. Choose a monster you control. If it is a Vampire-family monster, it gains +5 HP and you gain 5 mana crystals. Otherwise, destroy it and send it to your Rift. Roll dice equal to its purchase cost. On a total of 6 or higher, gain 3 mana crystals."
       },
       "reviewedAt": "2026-10-31"
@@ -5767,7 +5767,7 @@
         "en"
       ],
       "definitionSha256": "3dc650e4262cc63964ec8765f002555550048666edc6da3a28b600445bff21ef",
-      "textSha256": "37011fa2dc94a1ab86fa75f84427d92f64bf3707a86281a073bef532151f459b",
+      "textSha256": "74b84519eb0dd8621789b1601536b568ba6e12f763771db4e64231efdd5734bd",
       "hooks": {},
       "before": {
         "ja": "【発動条件】自分の場に「城」がある。\n\n【発動時】カード一覧から購入コスト3以下の「貴族」モンスター1体を選び、新たに自分の場に召喚してよい。",
@@ -5776,7 +5776,7 @@
       },
       "after": {
         "ja": "【発動時】カード一覧から購入コスト3以下の「貴族」モンスター1体を選び、新たに自分の場に召喚してよい。その後、自分の場に「城」があれば、自分の場の「貴族」モンスター1体を選び、攻撃力+2・体力+4。",
-        "ko": "【발동 시】카드 목록에서 구매 비용 3 이하의 귀족 몬스터 1체를 선택해 자신의 필드에 새로 소환할 수 있다. 그 후 자신의 필드에 성이 있으면 자신의 귀족 몬스터 1체를 선택해 공격력 +2, 체력 +4.",
+        "ko": "【발동 시】카드 목록에서 구매 코스트 3 이하의 귀족 몬스터 1체를 선택해 자신의 필드에 새로 소환할 수 있다. 그 후 자신의 필드에 성이 있으면 자신의 귀족 몬스터 1체를 선택해 공격력 +2, 체력 +4.",
         "en": "【On Cast】You may choose and summon a new Aristocrat monster with purchase cost 3 or less from the catalog. Then, if you control a Castle, choose an Aristocrat you control. It gains +2 ATK and +4 HP."
       }
     },
@@ -7776,7 +7776,7 @@
         "en"
       ],
       "definitionSha256": "92c68731378b1dcc89607427b616f6d4ec9eb860f1e7d9f9d8168466eaa19cf0",
-      "textSha256": "f1fc91adb319526644ffd6fab97bf9e8b772adefd5c46a0702ff41f2a9065494",
+      "textSha256": "27332314e1d4f375e9ea4bc4c7f74446be3fb16af5ba1ebb5d482e70f40ae5f7",
       "hooks": {
         "act": "expansion"
       },
@@ -7787,7 +7787,7 @@
       },
       "after": {
         "ja": "【発動時】両方の場から「虚無」を持つモンスター1体を選んで破壊する。「オーラ」を持つモンスターも選べる。",
-        "ko": "【발동 시】양쪽 필드에서 공허를 가진 몬스터 1체를 선택해 파괴한다. 오라를 가진 몬스터도 선택할 수 있다.",
+        "ko": "【발동 시】양쪽 필드에서 공허를 가진 몬스터 1체를 선택해 파괴한다. 아우라를 가진 몬스터도 선택할 수 있다.",
         "en": "【On Cast】Choose and destroy 1 monster with Void on either field. You can choose a monster with Aura."
       }
     },

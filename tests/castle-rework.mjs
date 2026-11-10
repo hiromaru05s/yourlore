@@ -52,6 +52,13 @@ try {
   g.players[0].maxMana=3;g.players[0].refreshTokens=5;
   for(let i=0;i<5;i++){g=step(JSON.parse(JSON.stringify(g)),{type:'refresh'});assert(g.players[0].supply.some(c=>c?.id==='TGE7'));}
   g=end(g);assert.notEqual(g.turn,g.players[0].originOfferTurn);
+  // Time Rewind returns a reset instance from the Rift. Its game-long discount survives.
+  g.cur=0;const owner=g.players[0];
+  const discounted=[...owner.deck,...owner.hand,...owner.discard].find(c=>c.uid===attune.uid);
+  for(const zone of [owner.deck,owner.hand,owner.discard]){const index=zone.indexOf(discounted);if(index>=0)zone.splice(index,1);}
+  owner.removed.push(discounted);owner.mana=30;owner.maxMana=30;
+  g.pending={kind:'cardChoice',owner:0,reason:'TIMEWARP',allowCancel:true,hint:'',hintJa:''};
+  g=pick(g,attune.uid);assert.equal(g.players[0].discard.find(c=>c.uid===attune.uid).play,2);
  });
  check('Golem branches count distinct names and affect all allies',()=>{
   for(const [ids,amount,voided] of [[[],4,true],[['GOLEM1'],4,false],[['GOLEM1','GOLEM1'],4,false],[['GOLEM1','GOLEM2'],8,false]]){

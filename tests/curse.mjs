@@ -22,6 +22,11 @@ try{
  const count=()=>document.querySelector('#pile-oppDisc .pile-count').textContent;
  let pending=R.playCurse(source,'me',undefined,undefined,7);await flush();await flush();advance(650 * .75);const held=source.style.cssText;advance(450 * .75);assert.equal(source.style.cssText,held);assert.equal(source.style.filter,'none');assert(!source.hidden);assert.equal(draws.at(-1).hideSource,true);assert.equal(draws.at(-1).pixelRatio,2);
  advance(650 * .75);assert(source.hidden);advance(1750 * .75);assert.equal(count(),'8');advance(920 * .75);assert.equal(count(),'12');advance(1380 * .75);assert.equal(await pending,true);assert.equal(count(),'7');assert.equal(source.style.cssText,'');assert.equal(document.querySelectorAll('.curse-fx').length,0);
+ for(const generated of [2,6]){
+  pending=R.playCurse(source,'me',undefined,undefined,7,generated);await flush();await flush();
+  advance(5100 * .75);assert.equal(count(),String(7+generated));assert.equal(draws.at(-1).count,generated);
+  advance(700 * .75);assert.equal(await pending,true);assert.equal(count(),'7');
+ }
  const ac=new AbortController();pending=R.playCurse(source,'opp',ac.signal);await flush();ac.abort();assert.equal(await pending,false);assert.equal(frames.size,0);
  pending=R.playCurse(source,'me');R.cancelCurse();assert.equal(await pending,false);await flush();
  pending=R.playCurse(source,'me');await flush();window.dispatchEvent(new Event('resize'));assert.equal(await pending,false);

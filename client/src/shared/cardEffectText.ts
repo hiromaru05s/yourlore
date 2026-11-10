@@ -428,8 +428,8 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
   },
   "GENESIS_MAGIC": {
     "ja": "【発動時】自分のデッキ構成にある各「アチューン」の発動コストを、このゲームの間1下げる（最低0）。このターン、自分が提示マーケットをリロールするたび、自分のデッキ構成にない「始原」モンスターが候補にあれば、必ず1体提示される。",
-    "ko": "【발동 시】자신의 덱 구성에 있는 각 어튠의 발동 비용을 이번 게임 동안 1 낮춘다(최소 0). 이번 턴에 자신이 제시 마켓을 다시 굴릴 때마다 자신의 덱 구성에 없는 시초 몬스터 후보가 있으면 반드시 1체가 제시된다.",
-    "en": "【On Cast】Reduce the play cost of each Attune currently in your deck composition by 1 for this game, to a minimum of 0. Each time you refresh the offer this turn, it includes an Origin monster missing from your deck composition if one is available."
+    "ko": "【발동 시】자신의 덱 구성에 있는 각 어튠의 발동 코스트을 이번 게임 동안 1 낮춘다(최소 0). 이번 턴에 자신이 제시 마켓을 다시 굴릴 때마다 자신의 덱 구성에 없는 시초 몬스터 후보가 있으면 반드시 1체가 제시된다.",
+    "en": "【On Cast】Reduce the cast cost of each Attune currently in your deck composition by 1 for this game, to a minimum of 0. Each time you refresh the offer this turn, it includes an Origin monster missing from your deck composition if one is available."
   },
   "KIN_CALL": {
     "ja": "【場にある間】自分の場に種族モンスターがいれば、マーケットの種族カード購入コスト-2（最低1）。",
@@ -813,7 +813,7 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
   },
   "BLOOD_SECRET": {
     "ja": "【発動時】自分に10ダメージを与える。自分の場のモンスター1体を選ぶ。「吸血鬼」系なら、その体力+5、自分のマナ水晶+5。それ以外なら、そのモンスターを破壊してリフトへ送る。送ったモンスターの購入コストと同じ数のダイスを振り、合計6以上なら自分のマナ水晶+3。",
-    "ko": "【발동 시】자신에게 10 데미지를 준다. 자신의 필드 몬스터 1체를 선택한다. 흡혈귀 계열이면 그 몬스터의 체력 +5, 자신의 마나 수정 +5. 그 외에는 파괴해 리프트로 보낸다. 보낸 몬스터의 구매 비용만큼 주사위를 굴려 합계가 6 이상이면 자신의 마나 수정 +3.",
+    "ko": "【발동 시】자신에게 10 데미지를 준다. 자신의 필드 몬스터 1체를 선택한다. 흡혈귀 계열이면 그 몬스터의 체력 +5, 자신의 마나 수정 +5. 그 외에는 파괴해 리프트로 보낸다. 보낸 몬스터의 구매 코스트만큼 주사위를 굴려 합계가 6 이상이면 자신의 마나 수정 +3.",
     "en": "【On Cast】Take 10 damage. Choose a monster you control. If it is a Vampire-family monster, it gains +5 HP and you gain 5 mana crystals. Otherwise, destroy it and send it to your Rift. Roll dice equal to its purchase cost. On a total of 6 or higher, gain 3 mana crystals."
   },
   "VAMP1": {
@@ -1218,7 +1218,7 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
   },
   "LAND_GRANT": {
     "ja": "【発動時】カード一覧から購入コスト3以下の「貴族」モンスター1体を選び、新たに自分の場に召喚してよい。その後、自分の場に「城」があれば、自分の場の「貴族」モンスター1体を選び、攻撃力+2・体力+4。",
-    "ko": "【발동 시】카드 목록에서 구매 비용 3 이하의 귀족 몬스터 1체를 선택해 자신의 필드에 새로 소환할 수 있다. 그 후 자신의 필드에 성이 있으면 자신의 귀족 몬스터 1체를 선택해 공격력 +2, 체력 +4.",
+    "ko": "【발동 시】카드 목록에서 구매 코스트 3 이하의 귀족 몬스터 1체를 선택해 자신의 필드에 새로 소환할 수 있다. 그 후 자신의 필드에 성이 있으면 자신의 귀족 몬스터 1체를 선택해 공격력 +2, 체력 +4.",
     "en": "【On Cast】You may choose and summon a new Aristocrat monster with purchase cost 3 or less from the catalog. Then, if you control a Castle, choose an Aristocrat you control. It gains +2 ATK and +4 HP."
   },
   "TREASON": {
@@ -1623,7 +1623,7 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
   },
   "SOUL_HARVEST": {
     "ja": "【発動時】両方の場から「虚無」を持つモンスター1体を選んで破壊する。「オーラ」を持つモンスターも選べる。",
-    "ko": "【발동 시】양쪽 필드에서 공허를 가진 몬스터 1체를 선택해 파괴한다. 오라를 가진 몬스터도 선택할 수 있다.",
+    "ko": "【발동 시】양쪽 필드에서 공허를 가진 몬스터 1체를 선택해 파괴한다. 아우라를 가진 몬스터도 선택할 수 있다.",
     "en": "【On Cast】Choose and destroy 1 monster with Void on either field. You can choose a monster with Aura."
   },
   "ANESTHESIA": {
