@@ -2,7 +2,10 @@
 .single-mode-tabs [role=tab]{position:relative;min-height:42px;padding:0 3px;border:0;background:none;color:#9baab7;font:600 13px/1 inherit;letter-spacing:.08em;cursor:pointer}
 .single-mode-tabs [role=tab][aria-selected=true]{color:#edf4f8}
 .single-mode-tabs [role=tab][aria-selected=true]:after{position:absolute;right:0;bottom:-1px;left:0;height:2px;background:#9cc8df;content:""}
-.single-mode-tabs [role=tab]:disabled{opacity:.48;cursor:not-allowed}
+.single-mode-tabs [role=tab][aria-disabled=true]{cursor:help}
+.single-story-tab{position:relative;display:inline-flex}
+.single-story-hint{display:none;position:absolute;z-index:4;top:100%;left:0;width:max-content;max-width:min(32ch,calc(100vw - 118px));padding:9px 12px;border:1px solid #7594ad;background:#132c47;color:#edf4f8;font-size:13px;line-height:1.5;box-shadow:0 4px 12px #0005}
+.single-story-tab:hover .single-story-hint,.single-story-tab:focus-within .single-story-hint{display:block}
 .bot-lock{position:absolute;z-index:2;top:12px;right:12px;display:grid;width:25px;height:25px;place-items:center;color:#aab9c5}
 .bot-lock svg{width:14px;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.35}
 .diff-card:disabled{filter:saturate(.4);opacity:.62}
