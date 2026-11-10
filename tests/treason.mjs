@@ -3,10 +3,37 @@ const b=await build({stdin:{contents:"export * from './client/src/shared/engine'
 const {createGame,reduce,DB}=await import(`data:text/javascript;base64,${Buffer.from(b.outputFiles[0].text).toString('base64')}`);
 let serial=0,checks=0;const card=id=>({...structuredClone(DB[id]),uid:'treason-test-'+serial++}),mon=id=>({...card(id),exhausted:false,dmg:0,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0});
 function fixture(side){const g=createGame({mode:'online',seed:72,starting:side,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.cur=side;g.phase='main';g.pending=null;for(const p of g.players)Object.assign(p,{field:[],enchants:[],quests:[],traps:[],hand:[],deck:[],discard:[],removed:[],hp:30,mana:20,maxMana:20,brand:1});g.players[side].hand=[card('TREASON')];g.players[side].field=[mon('ELF')];g.players[1-side].field=[mon('CASTLE'),mon('ELF'),mon('INFKNIGHT')];g.players[1-side].enchants=['E2','NHEAL'].map(id=>({card:card(id),turns:3,bornTurn:1}));g.players[1-side].quests=[{card:card('Q_CASTLE'),progress:2,startedTurn:1}];return g;}
-for(const side of [0,1]){const g=fixture(side),r=reduce(g,{type:'play',idx:0}),events=r.events.filter(e=>e.type==='treason'),e=events[0];assert.equal(events.length,1);assert.equal(e.player,side);assert.equal(e.target,1-side);assert.equal(e.sourceUid,g.players[side].hand[0].uid);assert.equal(e.targets.length,5);assert(e.targets.every(t=>t.destination==='discard'));assert.equal(r.state.players[1-side].brand,4);assert.equal(r.state.players[1-side].quests.length,1);assert.equal(r.state.players[side].field.length,1);assert(r.events.indexOf(e)<r.events.findIndex(e=>e.type==='destroy'));checks++;}
-{const g=fixture(0);g.players[1].field.shift();const r=reduce(g,{type:'play',idx:0});assert(!r.events.some(e=>e.type==='treason'));assert.equal(r.state.players[1].field.length,2);checks++;}
-{const g=fixture(0);g.players[1].field[1].token=true;g.players[1].enchants[0].card.exileOnDestroy=true;const r=reduce(g,{type:'play',idx:0}),e=r.events.find(e=>e.type==='treason');assert.equal(e.targets.filter(t=>t.destination==='rift').length,2);assert.equal(r.state.players[1].removed.length,2);checks++;}
-{const g=fixture(0);g.players[1].field.push(mon('VAMP2'));g.players[1].enchants.push({card:{...card('S10'),ench:'vampWard'},turns:99});const r=reduce(g,{type:'play',idx:0}),e=r.events.find(e=>e.type==='treason');assert(r.state.players[1].field.some(m=>m.id==='VAMP2'));assert(!e.targets.some(t=>t.uid===g.players[1].field.at(-1).uid));assert(e.targets.some(t=>t.uid===g.players[1].enchants.at(-1).card.uid));checks++;}
-{const g=fixture(0);g.players[1].field.push(mon('GM6_8'));const r=reduce(g,{type:'play',idx:0}),e=r.events.find(e=>e.type==='treason'),summon=r.events.find(e=>e.type==='summon'&&e.id==='SOLDIER2');assert(summon);assert(!e.targets.some(t=>t.uid===summon.uid));assert(r.state.players[1].field.some(m=>m.uid===summon.uid));checks++;}
-{const g=fixture(0);g.players[1].traps=[{card:{...card('E2'),t:'trap'},setTurn:1}];const uid=g.players[1].traps[0].card.uid,r=reduce(g,{type:'play',idx:0}),e=r.events.find(e=>e.type==='treason');assert(!e.targets.some(t=>t.uid===uid));assert(r.state.players[1].discard.some(c=>c.uid===uid));checks++;}
-console.log(`PASS TREASON ${checks} engine cases: both sides, no castle, exile, immunity, death summons and hidden-trap privacy.`);
+
+for (const side of [0,1]) {
+  const g=fixture(side), own=g.players[side], enemy=g.players[1-side];
+  enemy.field=[mon('SOLDIER2'),mon('TAR1')];
+  const [soldier,noble]=enemy.field;
+  const r=reduce(g,{type:'play',idx:0,sourceUid:own.hand[0].uid,targets:[soldier.uid]});
+  assert.equal(r.state.players[1-side].hp,29);
+  assert.equal(r.state.pending.reason,'TREASON_DESTROY');
+  const invalid=reduce(r.state,{type:'pick',uid:own.field[0].uid});
+  assert.equal(invalid.state.pending.reason,'TREASON_DESTROY');
+  const result=reduce(invalid.state,{type:'pick',uid:noble.uid});
+  assert.equal(result.state.players[1-side].field.length,0);
+  assert.equal(result.state.players[1-side].enchants.length,2);
+  assert.equal(result.state.players[1-side].brand,1);
+  assert.deepEqual(result.events.find(e=>e.type==='treason').targets,[{uid:noble.uid,zone:'monster',destination:'discard'}]);
+  checks++;
+}
+for (const zone of ['quests','enchants','traps']) {
+  const g=fixture(0), p=g.players[1];
+  p.traps=[{card:card('T1'),setTurn:1}];
+  const target=p[zone][0].card;
+  const cast=reduce(g,{type:'play',idx:0,sourceUid:g.players[0].hand[0].uid,targets:['player-0']});
+  assert.equal(cast.state.players[0].hp,29);
+  const result=reduce(cast.state,{type:'pick',uid:target.uid});
+  assert(!result.state.players[1][zone].some(e=>e.card.uid===target.uid));
+  assert.equal(result.state.players[1].field.length,3);
+  checks++;
+}
+{
+  const g=fixture(0);g.players[1].field=[mon('SOLDIER2')];
+  const cast=reduce(g,{type:'play',idx:0,sourceUid:g.players[0].hand[0].uid,targets:[g.players[1].field[0].uid]});
+  assert.equal(cast.state.pending,null);assert.equal(cast.state.players[1].hp,29);checks++;
+}
+console.log('PASS Treason damage, kill bonus, public targets and individual destruction:',checks);

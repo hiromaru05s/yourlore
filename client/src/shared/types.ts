@@ -110,6 +110,7 @@ export interface RevealedCard {
 }
 
 export interface PlayerState {
+  originOfferTurn?: number;
   /** Server-owned lifetime duel counters; included in rollback snapshots. */
   activity?: Partial<Record<import("./progression").Activity, number>>;
   // Legacy expansion.dominion values may remain in saved states; they no longer change play costs.
@@ -213,6 +214,7 @@ export interface TribePactDefeat {
 }
 
 export interface GameState {
+  castleReworkApplied?: boolean;
   medals?: [string|null,string|null];
   /** Server-authoritative achievement counters; never sent to the opponent. */
   medalDuel?: import("./medalTracking").MedalDuel;

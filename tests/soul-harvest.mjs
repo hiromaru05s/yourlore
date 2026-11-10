@@ -20,11 +20,16 @@ try{
  assert.equal(await R.playSoulHarvest({...opts,damage:0}),false);assert.equal(alloc,disposed);assert.equal(frames.size,0);
  await build({stdin:{contents:"export * from './client/src/ui/soulHarvest/events';export {createGame,reduce} from './client/src/shared/engine';export {DB} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:path.join(dir,'engine.mjs')});
  const E=await import(path.join(dir,'engine.mjs'));
- for(const [mode,amount,recipient] of [['normal',24,1],['shield',17,1],['reverse',24,0],['zero',0,1],['blocked',0,1],['amplified',27,1]]){
-  const s=E.createGame({mode:'bot',seed:92,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;s.opening=undefined;s.turn=3;s.pending=null;for(let i=0;i<2;i++){let p=s.players[i];p.openingDrawReady=false;p.mana=10;p.maxMana=12;p.hp=60;p.enchants=[];p.field=[];p.hand=[];p.deck=Array.from({length:mode==='zero'?0:6},(_,j)=>({...E.DB.CURSE,uid:`c${i}-${j}`}));}s.players[0].hand=[{...E.DB.SOUL_HARVEST,uid:'cast'}];
-  if(mode==='shield')s.players[1].shield=7;if(mode==='blocked')s.players[1].shield=100;if(mode==='reverse')s.players[1].enchants.push({card:{...E.DB.BLACK_REVERSE,uid:'reverse'},turns:99});if(mode==='amplified')s.players[0].field.push({...E.DB.M1,uid:'amp',aura:'spellAmp',exhausted:false,summonedTurn:0,tempAtk:0,atkMod:0,defMod:0,dmg:0});
-  const r=E.reduce(s,{type:'play',idx:0}),start=r.events.findIndex(e=>e.type==='playSpell'&&e.id==='SOUL_HARVEST');assert(start>=0,mode+' play');const idx=E.soulHarvestDamageIndex(r.events,start);if(mode==='reverse'){assert.equal(idx,-1);assert.equal(r.events.filter(e=>e.type==='reverseDamage').length,1);const reflected=r.events.find(e=>e.type==='damage'&&e.reversed);assert.equal(reflected.amount,amount);assert.equal(reflected.player,recipient);assert.equal(E.isSoulHarvestDamage(reflected),false);continue;}if(!amount){assert.equal(idx,-1,mode);continue;}assert.equal(r.events[idx].amount,amount,mode);assert.equal(r.events[idx].player,recipient,mode);assert(E.isSoulHarvestDamage(r.events[idx]));
+ for(const owner of [0,1]){
+  const s=E.createGame({mode:'bot',seed:92,starting:owner,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
+  s.cur=owner;s.opening=undefined;s.turn=3;s.pending=null;
+  for(const p of s.players)Object.assign(p,{openingDrawReady:false,mana:10,maxMana:12,hp:60,enchants:[],field:[],hand:[],deck:[]});
+  s.players[owner].hand=[{...E.DB.SOUL_HARVEST,uid:'cast'}];
+  s.players[1-owner].field=[{...E.DB.M1,uid:'victim',passivesG:['void','aura'],exhausted:false,tempAtk:0,atkMod:0,defMod:0}];
+  const r=E.reduce(s,{type:'play',idx:0,sourceUid:'cast',targets:['victim']});
+  assert.equal(r.state.players[1-owner].hp,60);assert(r.state.players[1-owner].removed.some(c=>c.uid==='victim'));
+  assert.equal(E.soulHarvestDamageIndex(r.events,0),-1);
  }
  const foreign={type:'damage',player:1,amount:24,srcKo:'other'};assert.equal(E.isSoulHarvestDamage(foreign),false);assert.equal(E.soulHarvestDamageIndex([{type:'playSpell'},{type:'playSpell'}, {type:'damage',player:1,amount:4,srcKo:'<b data-card="SOUL_HARVEST">x</b>'}],0),-1);
- console.log('PASS selected 01 / authoritative 17 and 27 damage / contact once at 1120ms / full tail / reset styles / preload / abort / failure / reduced / resize / context loss / replacement / detached source / hidden / zero / no leaked GPU or RAF; reducer cases normal, shield, reverse, zero, full block, amplification and event boundary.');
+ console.log('PASS selected 01 / authoritative 17 and 27 damage / contact once at 1120ms / full tail / reset styles / preload / abort / failure / reduced / resize / context loss / replacement / detached source / hidden / zero / no leaked GPU or RAF; reworked Void/Aura removal leaves player HP unchanged.');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close();globalThis.performance=realPerformance;delete globalThis.__soulScene;}

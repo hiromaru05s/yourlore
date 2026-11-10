@@ -30,7 +30,7 @@ import {prepareDuel} from './duelReadiness';
 // ============================================================
 import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
 import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
-import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isVampFamily, isGolem, marketStockOf } from "../shared/engine";
+import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
 import { fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
 import { artUrl, cardEl, ensureCardCompositing, prefetchZoomArt, questTile } from "./cardView";
@@ -555,7 +555,6 @@ export class GameView {
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
         && !(pending!.data?.sourceId === "S3" && m.tribe)
-        && !(pending!.reason === "bloodSecret" && !isVampFamily(m))
         && (pending!.reason !== "attack" || g.players[g.cur].field.some(a => a.uid === pending!.data?.attackerUid && monsterCanTarget(g,g.players[g.cur],a,m)))
         && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능
         && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 카운터: 알 제외

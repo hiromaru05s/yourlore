@@ -88,7 +88,7 @@ try {
     g = reduce(g, { type: 'chooseTarget', uid: siege.uid }).state;
     const soldier = g.players[0].field.find(c => c.id === 'SOLDIER2');
     assert(soldier, 'siege death still summons a soldier');
-    assert.equal(soldier.atk, 2); assert.equal(soldier.def, 2);
+    assert.equal(soldier.atk, 2); assert.equal(soldier.def, 1);
   }
 
   let g = fresh();

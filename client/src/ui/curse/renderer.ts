@@ -13,9 +13,9 @@ export function createRenderer(faces:HTMLCanvasElement[],skullImage:HTMLImageEle
  scene.add(new T.AmbientLight(0xd8cdea,.9));const light=new T.DirectionalLight(0xeee5dc,1.25);light.position.set(-3,4,9);scene.add(light);
  const sourceMat=new T.MeshBasicMaterial({map:maps[0],toneMapped:false,side:T.DoubleSide,transparent:true,alphaTest:.02}),source=new Skin(sourceMat,5,8,.025);scene.add(source.mesh);
  const baseMat=new T.MeshBasicMaterial({map:maps[2],transparent:true,alphaTest:.02}),base=new Skin(baseMat,1,1,.02);scene.add(base.mesh);
- const cards=Array.from({length:5},(_,i)=>{const m=curseMaterial(maps[1],i),skin=new Skin(m.mat,8,12,.018);skin.mesh.renderOrder=10+i;scene.add(skin.mesh);return{m,skin};});
+ const cards=Array.from({length:6},(_,i)=>{const m=curseMaterial(maps[1],i),skin=new Skin(m.mat,8,12,.018);skin.mesh.renderOrder=10+i;scene.add(skin.mesh);return{m,skin};});
  const skullMat=skullMaterial(skullMap),skull=new T.Mesh(new T.PlaneGeometry(1,1),skullMat);skull.renderOrder=20;scene.add(skull);
- const mists=Array.from({length:8},(_,i)=>{const mat=mistMaterial();mat.uniforms.seed.value=i*1.7;const mesh=new T.Mesh(new T.PlaneGeometry(1,1),mat);mesh.renderOrder=i<5?8:2;scene.add(mesh);return{mat,mesh};});
+ const mists=Array.from({length:9},(_,i)=>{const mat=mistMaterial();mat.uniforms.seed.value=i*1.7;const mesh=new T.Mesh(new T.PlaneGeometry(1,1),mat);mesh.renderOrder=i<6?8:2;scene.add(mesh);return{mat,mesh};});
  const tetherMat=new T.MeshBasicMaterial({color:0x2a1137,transparent:true,opacity:.6,side:T.DoubleSide,depthWrite:false}),tether=new Skin(tetherMat,28,4,.002);scene.add(tether.mesh);tether.mesh.renderOrder=1;
  const flat=(s:Skin,r:Rect,z=.1,angle=0,curve=0)=>s.update((u,v)=>{const x=(u-.5)*r.w,y=(v-.5)*r.h;return [r.x+Math.cos(angle)*x-Math.sin(angle)*y,r.y+Math.sin(angle)*x+Math.cos(angle)*y,z+Math.sin(v*Math.PI)*curve];});
  const blend=(a:Rect,b:Rect,f:number):Rect=>({x:mix(a.x,b.x,f),y:mix(a.y,b.y,f),w:mix(a.w,b.w,f),h:mix(a.h,b.h,f)});
@@ -43,13 +43,15 @@ export function createRenderer(faces:HTMLCanvasElement[],skullImage:HTMLImageEle
   skullMat.uniforms.alpha.value=skullStrength;skullMat.uniforms.clock.value=t/1000;skullMat.uniforms.dissolve.value=out*.98;
   mists.forEach(m=>m.mesh.visible=false);
   function mist(i:number,x:number,y:number,mw:number,mh:number,a:number,ang=0){const m=mists[i];m.mesh.visible=active&&a>.002&&!o.reduced;m.mesh.position.set(x,y,.15);m.mesh.scale.set(mw,mh,1);m.mesh.rotation.z=ang;m.mat.uniforms.alpha.value=a;m.mat.uniforms.clock.value=t/1000;}
-  mist(5,R.x,R.y,U*2.45,U*1.7,bloom*(1-ease(t,4620,5460))*.52);
-  mist(6,R.x,mouthY,U*1.8,U*1.4,bloom*(1-out)*.23);
+  mist(6,R.x,R.y,U*2.45,U*1.7,bloom*(1-ease(t,4620,5460))*.52);
+  mist(7,R.x,mouthY,U*1.8,U*1.4,bloom*(1-out)*.23);
   // A single attached shadow carries the spell's intent from its revealed surface to the graveyard.
   const front=ease(t,920,1530),back=ease(t,1370,1930);tether.mesh.visible=active&&!o.reduced&&front>back;
   if(tether.mesh.visible){const dx=R.x-P.x,dy=mouthY-P.y,len=Math.hypot(dx,dy)||1;tetherMat.opacity=.36*(1-ease(t,1710,1930));tether.update((u,ww)=>{const f=mix(back,front,u),width=Math.sin(u*Math.PI)*U*.08;return[P.x+dx*f-dy/len*(ww-.5)*width,P.y+dy*f+dx/len*(ww-.5)*width,.18];});}
-  for(let i=0;i<5;i++){
-   const b=birth(v,i),a=arrival(v,i),born=ease(t,b,b+430),land=ease(t,a-470,a),k=i-2;let x=R.x,y=R.y,angle=0,curl=0,cw=U*.82,ch=U*1.23;
+  const count=o.count ?? 5;
+  for(let i=0;i<cards.length;i++){
+   if(i>=count){cards[i].skin.mesh.visible=false;continue;}
+   const b=birth(v,i),a=arrival(v,i),born=ease(t,b,b+430),land=ease(t,a-470,a),k=i-(count-1)/2;let x=R.x,y=R.y,angle=0,curl=0,cw=U*.82,ch=U*1.23;
    if(v===0){const fan=ease(t,b,b+660);x=R.x+k*U*.71*fan;y=R.y+U*(-.12+(1-Math.abs(k)/3)*.16)*fan;angle=-k*.16*(1-land);curl=.10*U*(1-land);}
    if(v===1){const fall=ease(t,b+140,a);x=R.x+Math.sin(fall*Math.PI)*(i%2?1:-1)*U*.33;y=mix(mouthY-U*.02,R.y,fall);angle=Math.sin(fall*Math.PI)*(i%2?.16:-.16);curl=Math.sin(fall*Math.PI)*U*.2;}
    if(v===2){x=R.x+(i<3?i-1:(i-3.5))*.72*U;y=R.y+U*(i<3?.03:-.72);angle=(i%2?-.04:.04)*(1-land);cw=U*.63;ch=U*.945;curl=Math.sin(born*Math.PI)*U*.16;}

@@ -1323,12 +1323,12 @@ export async function reverseDamage(from:ViewSide,to:ViewSide,sources:string[],o
  finally{contact();}
 }
 
-/** The selected Curse owns the native hand face, five arrivals and source exit. */
-export async function curseSpell(card:CardInst,side:ViewSide,targetBefore:number):Promise<void>{
+/** The selected Curse owns the native hand face, Curse arrivals and source exit. */
+export async function curseSpell(card:CardInst,side:ViewSide,targetBefore:number,count:number):Promise<void>{
  if(fxSkip||document.hidden)return;
  const from=fromRect(side,takeOrigin(side));if(!from)return;
  const node=floatAt(cardEl(card,{size:'hand',fullArt:true}),from);
- try{await boardMotionScope(signal=>playCurse(node,side,signal,from,targetBefore),13000);}
+ try{await boardMotionScope(signal=>playCurse(node,side,signal,from,targetBefore,count),13000);}
  finally{node.remove();}
 }
 

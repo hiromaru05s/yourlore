@@ -892,7 +892,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "curseGenerated": {
           const card=prev.players[e.player].hand.find(c=>c.uid===e.sourceUid)??{...DB.BLACK_CURSE,uid:e.sourceUid};
-          await A.curseSpell(card,sideOf(e.player),e.before);
+          await A.curseSpell(card,sideOf(e.player),e.before,e.after-e.before);
           break;
         }
         case "nova": {

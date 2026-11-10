@@ -35,7 +35,7 @@ try{
   if(blocked===true)s.players[1-side].traps=[{card:{id:'legacy-null',uid:'null',t:'trap',cost:0,react:'nullspell',name:'Null'},setTurn:0}];
   if(blocked==='echo'){const echo=Object.values(E.DB).find(c=>c.ench==='runeEcho');s.players[side].enchants=[{card:{...echo,uid:'echo'},turns:99}];}
   const r=E.reduce(s,{type:'play',idx:0}),ev=r.events.filter(e=>e.type==='curseGenerated');assert.equal(ev.length,blocked===true?0:blocked==='echo'?2:1);
-  if(blocked!==true){assert.equal(ev[0].player,side);assert.equal(ev[0].before,7);assert.equal(ev[0].after,12);assert.equal(ev[0].sourceUid,`c${side}`);assert.equal(r.state.players[1-side].discard.filter(c=>c.id==='CURSE').length,blocked==='echo'?10:5);if(blocked==='echo'){assert.equal(ev[1].before,12);assert.equal(ev[1].after,17);}}
+  if(blocked!==true){assert.equal(ev[0].player,side);assert.equal(ev[0].before,7);assert.equal(ev[0].after,13);assert.equal(ev[0].sourceUid,`c${side}`);assert.equal(r.state.players[1-side].discard.filter(c=>c.id==='CURSE').length,blocked==='echo'?12:6);if(blocked==='echo'){assert.equal(ev[1].before,13);assert.equal(ev[1].after,19);}}
  }
  console.log('PASS Curse: native stable face; DPR2; five synchronized arrivals; source exit; cancellation, hidden, resize, GPU failure cleanup; both engine sides and nullification.');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close();globalThis.performance=perf;delete globalThis.__curseRenderer;}

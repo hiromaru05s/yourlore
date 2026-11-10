@@ -7,7 +7,7 @@ import type {createRenderer} from './renderer';
 const active=new Map<HTMLElement,()=>void>();
 export function warmCurse(){void Promise.all([import('./renderer'),import('./assets').then(m=>m.loadCurseAssets())]).catch(()=>{});}
 export function cancelCurse(){for(const stop of [...active.values()])stop();}
-export function playCurse(source:HTMLElement,side:'me'|'opp',signal?:AbortSignal,origin?:DOMRect,targetBefore?:number):Promise<boolean>{
+export function playCurse(source:HTMLElement,side:'me'|'opp',signal?:AbortSignal,origin?:DOMRect,targetBefore?:number,count=5):Promise<boolean>{
  const own=document.querySelector<HTMLElement>(side==='me'?'#pile-myDisc':'#pile-oppDisc'),target=document.querySelector<HTMLElement>(side==='me'?'#pile-oppDisc':'#pile-myDisc');
  if(!own||!target||signal?.aborted||document.hidden)return Promise.resolve(false);
  active.get(target)?.();
@@ -31,10 +31,10 @@ export function playCurse(source:HTMLElement,side:'me'|'opp',signal?:AbortSignal
     const ms=Math.min(DURATION,now-start),targetRect=rect(saved[1].print),ownRect=rect(saved[0].print),row=document.querySelector(side==='me'?'#meRow .zone-mon':'#oppRow .zone-mon');
     const cw=Math.min(122,Math.max(74,innerWidth*.11)),layout:Layout={source:startRect,target:targetRect,ownGrave:ownRect,played:{x:innerWidth*.52,y:row?rect(row).y:innerHeight*(side==='me'?.6:.4),w:cw,h:cw*1.5}};
     placeSource(source,layout,ms);
-    const deposited=stateAt({variant:0,ms}).deposited;
+    const deposited=stateAt({variant:0,ms,count}).deposited;
     if(deposited!==shown){shown=deposited;if(deposited)setPile(1,deposited,'CURSE');}
     if(!spent&&ms>=SPELL_LAND){spent=true;setPile(0,1,'BLACK_CURSE');}
-    renderer!.draw(canvas!,{ms,variant:0,side:side==='me'?0:1,dark:false,reduced,concurrent:false,hideSource:true,skullOpacity:.45,pixelRatio:Math.min(2,devicePixelRatio),board:layout});
+    renderer!.draw(canvas!,{ms,count,variant:0,side:side==='me'?0:1,dark:false,reduced,concurrent:false,hideSource:true,skullOpacity:.45,pixelRatio:Math.min(2,devicePixelRatio),board:layout});
     canvas!.dataset.deposited=String(deposited);
     if(ms>=DURATION)finish(true);else raf=SPECIAL_FX.requestFrame(tick);
    }catch{abort();}

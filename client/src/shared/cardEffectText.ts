@@ -262,9 +262,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Deal 4 damage to the opponent."
   },
   "GS5_3": {
-    "ja": "【発動時】相手のデッキ・墓地・場にある「魔族」モンスター1枚につき、相手プレイヤーに16ダメージを与える。",
-    "ko": "【발동 시】상대의 덱·묘지·필드의 마족 몬스터 1장당 상대 플레이어에게 16 데미지를 준다.",
-    "en": "【On Cast】Deal 16 damage to the opponent for each Demonkin monster in their deck, graveyard, and field combined."
+    "ja": "【発動時】新しい「呪い」2枚を相手の墓地に追加する。その後、相手のデッキ・墓地・場にある「魔族」モンスター1枚につき、相手プレイヤーに16ダメージを与える。",
+    "ko": "【발동 시】새로운 저주 2장을 상대 묘지에 추가한다. 그 후 상대 덱·묘지·필드의 마족 몬스터 1장당 상대 플레이어에게 16 데미지를 준다.",
+    "en": "【On Cast】Add 2 new Curses to the opponent’s graveyard. Then deal 16 damage to the opponent per Demonkin monster in their deck, graveyard, and field."
   },
   "GS5_4": {
     "ja": "【発動時】自分の場のモンスター1体を選び、このターン終了までその攻撃力+8。",
@@ -422,14 +422,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】At least half the cards in your deck composition are spell cards.\n\n【While on the Field】Whenever you play a non-persistent spell from your hand, activate its effect 1 more time at no extra mana cost.\nIf its first effect requires you to choose a target, card, or other option, it does not activate again. This effect does not stack."
   },
   "GENESIS_SONG": {
-    "ja": "【発動時】自分のデッキ・墓地から「始原」モンスターをランダムに2体、自分の場に召喚する。",
-    "ko": "【발동 시】자신의 덱·묘지에서 시초 몬스터 2체를 무작위로 자신의 필드에 소환한다.",
-    "en": "【On Cast】Summon 2 random Origin monsters from your deck and graveyard to your field."
+    "ja": "【発動時】両方の場の種族モンスター全ての攻撃力+3。その後、自分のデッキ・墓地から「始原」モンスターをランダムに2体まで自分の場に召喚する。",
+    "ko": "【발동 시】양쪽 필드의 모든 종족 몬스터의 공격력 +3. 그 후 자신의 덱·묘지에서 시초 몬스터를 무작위로 최대 2체 자신의 필드에 소환한다.",
+    "en": "【On Cast】Give every tribal monster on both fields +3 ATK. Then summon up to 2 random Origin monsters from your deck and graveyard."
   },
   "GENESIS_MAGIC": {
-    "ja": "【発動時】自分の場の全ての「始原」モンスターの攻撃力+4・体力+4（対象が場を離れるまで）。",
-    "ko": "【발동 시】자신의 필드의 모든 시초 몬스터의 공격력 +4, 체력 +4(효과를 받은 몬스터가 필드를 떠날 때까지).",
-    "en": "【On Cast】All Origin monsters on your field get +4 ATK and +4 HP (until the affected monster leaves the field)."
+    "ja": "【発動時】自分のデッキ構成にある各「アチューン」の発動コストを、このゲームの間1下げる（最低0）。このターン、自分が提示マーケットをリロールするたび、自分のデッキ構成にない「始原」モンスターが候補にあれば、必ず1体提示される。",
+    "ko": "【발동 시】자신의 덱 구성에 있는 각 어튠의 발동 비용을 이번 게임 동안 1 낮춘다(최소 0). 이번 턴에 자신이 제시 마켓을 다시 굴릴 때마다 자신의 덱 구성에 없는 시초 몬스터 후보가 있으면 반드시 1체가 제시된다.",
+    "en": "【On Cast】Reduce the play cost of each Attune currently in your deck composition by 1 for this game, to a minimum of 0. Each time you refresh the offer this turn, it includes an Origin monster missing from your deck composition if one is available."
   },
   "KIN_CALL": {
     "ja": "【場にある間】自分の場に種族モンスターがいれば、マーケットの種族カード購入コスト-2（最低1）。",
@@ -557,9 +557,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Summon 3 Scarecrows (0 ATK, 1 HP) to your field."
   },
   "LEVY": {
-    "ja": "【発動時】兵士（攻撃力2・体力2）3体を自分の場に召喚する。",
-    "ko": "【발동 시】병사(공격력 2·체력 2) 3체를 자신의 필드에 소환한다.",
-    "en": "【On Cast】Summon 3 Soldiers (2 ATK, 2 HP) to your field."
+    "ja": "【発動時】兵士（攻撃力2・体力1）3体を自分の場に召喚する。",
+    "ko": "【발동 시】병사(공격력 2·체력 1) 3체를 자신의 필드에 소환한다.",
+    "en": "【On Cast】Summon 3 Soldiers (2 ATK, 1 HP) to your field."
   },
   "INQUISITION": {
     "ja": "【発動条件】相手のデッキ・墓地・場に、種族を持つモンスターがいる。\n\n【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
@@ -692,9 +692,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】All other Soldiers and Knights on your field gain +4 ATK (until the affected monster leaves the field)."
   },
   "ELITE": {
-    "ja": "【召喚時】自分のデッキ構成が7枚以下なら、「兵士」（攻撃力2・体力2）1体を自分の場に召喚する。",
-    "ko": "【소환 시】자신의 덱 구성이 7장 이하이면 병사(공격력 2·체력 2) 1체를 자신의 필드에 소환한다.",
-    "en": "【On Summon】If your deck composition contains 7 cards or fewer, summon 1 Soldier (2 ATK, 2 HP) to your field."
+    "ja": "【召喚時】自分のデッキ構成が7枚以下なら、「兵士」（攻撃力2・体力1）1体を自分の場に召喚する。",
+    "ko": "【소환 시】자신의 덱 구성이 7장 이하이면 병사(공격력 2·체력 1) 1체를 자신의 필드에 소환한다.",
+    "en": "【On Summon】If your deck composition contains 7 cards or fewer, summon 1 Soldier (2 ATK, 1 HP) to your field."
   },
   "WALLBREAK1": {
     "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる（相手のオーラ持ちは除く）。\n\n【発動時】両方の場の攻撃力2以下のモンスターのうち、攻撃力と最大体力の合計が最大の1体を自動で破壊する（相手のオーラ持ちは除く。同値は相手側、場の並び順を優先）。",
@@ -787,9 +787,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】You control fewer than 7 monsters.\n\n【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
   },
   "BLOOD_FEST": {
-    "ja": "【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分のマナ水晶+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
-    "ko": "【자신의 마법 발동 시】자신이 피의 마법을 사용할 때마다 자신의 마나 수정 +1. 피의 마법이 무효화되면 이 효과는 발동하지 않는다.",
-    "en": "【When Your Spell Takes Effect】Whenever you play Blood Magic, increase your mana crystals by 1. This effect does not trigger if the Blood Magic spell is negated."
+    "ja": "【場にある間】自分が発動したカードが自分に与える自傷ダメージを無効にする。\n\n【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分のマナ水晶+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
+    "ko": "【필드에 있는 동안】자신이 발동한 카드가 자신에게 주는 자해 데미지를 무효로 한다.\n\n【자신의 마법 발동 시】자신이 피의 마법을 사용할 때마다 자신의 마나 수정 +1. 피의 마법이 무효화되면 이 효과는 발동하지 않는다.",
+    "en": "【While on the Field】Prevent self-damage from cards you activate.\n\n【When Your Spell Takes Effect】Whenever you play Blood Magic, increase your mana crystals by 1. This effect does not trigger if the Blood Magic spell is negated."
   },
   "BLOOD_SHIELD": {
     "ja": "【場にある間】自分は「血の魔法」によるダメージを受けない。",
@@ -812,9 +812,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【After Attack】After this monster attacks, put 1 counter on it. At 3 or more, remove them all and summon 1 Apprentice Vampire to your field.\n\n【Card Rules】This monster counts as Vampire-family."
   },
   "BLOOD_SECRET": {
-    "ja": "【発動条件】自分の場に「吸血鬼」系モンスターがいる。\n\n【発動時】自分に9ダメージを与える。自分の場の「吸血鬼」系モンスター1体を選んで破壊する。破壊できたら自分のマナ水晶+3、自分の体力を10回復する。",
-    "ko": "【발동 조건】자신의 필드에 흡혈귀 계열 몬스터가 있다.\n\n【발동 시】자신에게 9 데미지를 준다. 자신의 필드의 흡혈귀 계열 몬스터 1체를 선택해 파괴한다. 파괴했다면 자신의 마나 수정 +3, 자신의 체력을 10 회복한다.",
-    "en": "【Play Requirement】You control a Vampire-family monster.\n\n【On Cast】You take 9 damage. Choose and destroy 1 Vampire-family monster on your field. If destroyed, increase your mana crystals by 3 and restore 10 of your HP."
+    "ja": "【発動時】自分に10ダメージを与える。自分の場のモンスター1体を選ぶ。「吸血鬼」系なら、その体力+5、自分のマナ水晶+5。それ以外なら、そのモンスターを破壊してリフトへ送る。送ったモンスターの購入コストと同じ数のダイスを振り、合計6以上なら自分のマナ水晶+3。",
+    "ko": "【발동 시】자신에게 10 데미지를 준다. 자신의 필드 몬스터 1체를 선택한다. 흡혈귀 계열이면 그 몬스터의 체력 +5, 자신의 마나 수정 +5. 그 외에는 파괴해 리프트로 보낸다. 보낸 몬스터의 구매 비용만큼 주사위를 굴려 합계가 6 이상이면 자신의 마나 수정 +3.",
+    "en": "【On Cast】Take 10 damage. Choose a monster you control. If it is a Vampire-family monster, it gains +5 HP and you gain 5 mana crystals. Otherwise, destroy it and send it to your Rift. Roll dice equal to its purchase cost. On a total of 6 or higher, gain 3 mana crystals."
   },
   "VAMP1": {
     "ja": "【自分の魔法発動時】自分が「血の魔法」を発動した時、「初級吸血鬼」1体を自分の場に召喚する（この個体が場にいる間1回）。 この効果は「血の魔法」が無効化された場合は発動しない。",
@@ -1069,7 +1069,7 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
   "BREWING": {
     "ja": "【自分のターン開始時】自分の手札の「ぶどう」「高品質ぶどう」「りんご」を全て自分の墓地へ送る。送った「ぶどう」1枚につき1個、「高品質ぶどう」1枚につき3個、「りんご」1枚につき5個、この魔法にカウンターを付与する。\n\n【期間】発動後、5回目の自分のターン開始時に上の処理を行った後、この魔法のカウンター数と同じ枚数の新しい「ワイン」を自分の手札に加え、この魔法を自分の墓地へ送る。",
     "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도·사과를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개, 사과 1장당 5개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 5번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
-    "en": "【At the Start of Your Turn】Send all Grapes, Premium Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Premium Grape and 5 per Apple sent.\n\n【Duration】At your 5th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
+    "en": "【At the Start of Your Turn】Send all Grapes, Fine Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Fine Grape and 5 per Apple sent.\n\n【Duration】At your 5th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
   },
   "MERCH1": {
     "ja": "【召喚時】自分の場の「商会」にカウンター3個を付与する。",
@@ -1212,19 +1212,19 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Roll 1 die.\n1–2: If you control Castle, summon 1 Soldier to your field. Otherwise, nothing happens.\n3–6: Summon 1 Soldier to your field. If you control Castle, summon 1 additional Soldier."
   },
   "EXPANSION": {
-    "ja": "【発動条件】自分の場に「城」がある。\n\n【発動時】自分の「城」にカウンター5個を付与する。",
-    "ko": "【발동 조건】자신의 필드에 성이 있다.\n\n【발동 시】자신 성에 카운터 5개를 놓는다.",
-    "en": "【Play Requirement】You control a Castle.\n\n【On Cast】Put 5 counters on your Castle."
+    "ja": "【発動時】自分のシールド+3。その後、「兵士」1体を自分の場に召喚する。自分の場に「城」があれば、その城にカウンター2個を付与する。",
+    "ko": "【발동 시】자신의 실드 +3. 그 후 병사 1체를 자신의 필드에 소환한다. 자신의 필드에 성이 있으면 그 성에 카운터 2개를 놓는다.",
+    "en": "【On Cast】Gain 3 Shield, then summon 1 Soldier. If you control a Castle, put 2 counters on it."
   },
   "LAND_GRANT": {
-    "ja": "【発動条件】自分の場に「城」がある。\n\n【発動時】カード一覧から購入コスト3以下の「貴族」モンスター1体を選び、新たに自分の場に召喚してよい。",
-    "ko": "【발동 조건】자신의 필드에 성이 있다.\n\n【발동 시】카드 목록에서 구매 코스트 3 이하 귀족 몬스터 1체를 선택해 새로 자신의 필드에 소환할 수 있다.",
-    "en": "【Play Requirement】You control a Castle.\n\n【On Cast】You may choose 1 Aristocrat monster with purchase cost 3 or less from the catalog and summon a new copy to your field."
+    "ja": "【発動時】カード一覧から購入コスト3以下の「貴族」モンスター1体を選び、新たに自分の場に召喚してよい。その後、自分の場に「城」があれば、自分の場の「貴族」モンスター1体を選び、攻撃力+2・体力+4。",
+    "ko": "【발동 시】카드 목록에서 구매 비용 3 이하의 귀족 몬스터 1체를 선택해 자신의 필드에 새로 소환할 수 있다. 그 후 자신의 필드에 성이 있으면 자신의 귀족 몬스터 1체를 선택해 공격력 +2, 체력 +4.",
+    "en": "【On Cast】You may choose and summon a new Aristocrat monster with purchase cost 3 or less from the catalog. Then, if you control a Castle, choose an Aristocrat you control. It gains +2 ATK and +4 HP."
   },
   "TREASON": {
-    "ja": "【発動条件】相手の場に「城」がある。\n\n【発動時】相手の場の全モンスターと全永続魔法を破壊する（クエストは除く）。相手に烙印カウンター3個を付与する。",
-    "ko": "【발동 조건】상대의 필드에 성이 있다.\n\n【발동 시】상대의 필드의 모든 몬스터와 영구 마법을 파괴한다(퀘스트 제외). 상대에게 낙인 카운터 3개 부여한다.",
-    "en": "【Play Requirement】The opponent controls a Castle.\n\n【On Cast】Destroy all enemy monsters and persistent spells, excluding quests. Give the opponent 3 Brand counters."
+    "ja": "【発動時】プレイヤーか場のモンスター1体を選び、1ダメージを与える。これで相手モンスターを破壊したら、相手プレイヤーにさらに1ダメージを与える。その後、相手の場に「兵士」「騎士」「傭兵」「大砲兵」「砲撃兵」または「貴族」種族のモンスターがいれば、相手の場のカード1枚を選んで破壊する。",
+    "ko": "【발동 시】플레이어 또는 필드의 몬스터 1체를 선택해 1 데미지를 준다. 이 효과로 상대 몬스터를 파괴하면 상대 플레이어에게 추가로 1 데미지를 준다. 그 후 상대 필드에 병사, 기사, 용병, 대포병, 포격병 또는 귀족 종족 몬스터가 있으면 상대 필드의 카드 1장을 선택해 파괴한다.",
+    "en": "【On Cast】Deal 1 damage to a chosen player or monster. If this destroys an enemy monster, deal 1 more damage to the opponent. Then, if the opponent controls a Soldier, Knight, Mercenary, Heavy Gunner, Gunner, or Aristocrat tribal monster, choose and destroy 1 card on their field."
   },
   "STRONG_ACID": {
     "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター2個を付与する（腐敗の処理）。\n\n【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、相手に7ダメージを与え、相手に烙印カウンター1個を付与する。",
@@ -1247,9 +1247,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Negate all effects and keywords of your Demonkin monsters.\n\n【When You Summon a Monster】Also negate those of Demonkin monsters you summon later. Negation lasts while each affected monster remains on the field, even if this spell leaves."
   },
   "AEM": {
-    "ja": "【発動条件】自分のデッキ構成に「ゴーレム」系モンスターが2種類以上あり、自分の場にもいる。\n\n【発動時】自分の場の「ゴーレム」系モンスターを2体選び、各攻撃力+7（各対象が場を離れるまで。1体しかいなければその1体）。",
-    "ko": "【발동 조건】자신의 덱 구성에 골렘 계열 몬스터가 2종류 이상이고 자신의 필드에도 있다.\n\n【발동 시】자신의 필드의 골렘 계열 몬스터 2체를 선택해 각각 공격력 +7(효과를 받은 각 몬스터가 필드를 떠날 때까지. 1체뿐이면 그 1체).",
-    "en": "【Play Requirement】Your deck composition has at least 2 distinct Golem-family monster names and you control a Golem.\n\n【On Cast】Choose 2 Golem-family monsters on your field; each gets +7 ATK (until the affected monster leaves the field); if only 1 exists, affect that 1."
+    "ja": "【発動時】自分の場の全モンスターに「虚無」を付与し、各攻撃力+4。自分の場に「ゴーレム」系がいれば「虚無」は付与しない。異なる「ゴーレム」系が2種類以上いれば、攻撃力の増加は+8になる。",
+    "ko": "【발동 시】자신의 필드의 모든 몬스터에게 공허를 부여하고 공격력 +4. 자신의 필드에 골렘 계열이 있으면 공허를 부여하지 않는다. 서로 다른 골렘 계열이 2종류 이상이면 공격력 증가량은 +8이 된다.",
+    "en": "【On Cast】Give all monsters you control Void and +4 ATK. If you control a Golem-family monster, omit Void. If you control at least 2 different Golem-family monsters, the ATK bonus is +8."
   },
   "KNIGHT_TEACH": {
     "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n既に気合を持つ：気合用カウンターを3個追加する。",
@@ -1297,9 +1297,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Restore 2 of your HP. If your Rift contains at least 10 Culls, choose 1 non-Egg monster on your field and remove all its accumulated damage."
   },
   "COLOSSEUM": {
-    "ja": "【自分のターン開始時】自分のリフトに「カル」が8枚以上あれば、「選ばれし」モンスターの一覧から1体を選び、新たに自分の場に召喚してよい。",
-    "ko": "【자신의 턴 시작 시】자신의 리프트에 컬이 8장 이상이면 선택받은 몬스터 목록에서 1체를 선택해 새로 자신의 필드에 소환할 수 있다.",
-    "en": "【At the Start of Your Turn】If your Rift contains at least 8 Culls, you may choose 1 monster from the Chosen catalog and summon a new copy to your field."
+    "ja": "【自分のターン開始時】自分のリフトに「カル」が8枚以上あれば、「選ばれし」モンスターの一覧から1体を選び、新たに自分の場に召喚してよい。 また、自分のリフトの「カル」が8枚以下なら、ダイス1個を振る。1～4なら「兵士」1体、5～6なら「騎士」1体を自分の場に召喚する。",
+    "ko": "【자신의 턴 시작 시】자신의 리프트에 컬이 8장 이상이면 선택받은 몬스터 목록에서 1체를 선택해 새로 자신의 필드에 소환할 수 있다. 또한 자신의 리프트의 컬이 8장 이하이면 주사위 1개를 굴린다. 1~4이면 병사 1체, 5~6이면 기사 1체를 자신의 필드에 소환한다.",
+    "en": "【At the Start of Your Turn】If your Rift contains at least 8 Culls, you may choose 1 monster from the Chosen catalog and summon a new copy to your field. Also, if your Rift has 8 or fewer Culls, roll 1 die. Summon 1 Soldier on 1–4 or 1 Knight on 5–6."
   },
   "UNBRANDER": {
     "ja": "【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く。\n\n【場にある間】自分が使用する「呪い」の効果を「自分の体力を3回復する」に変更する（同名は重複しない）。",
@@ -1402,9 +1402,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Completion Requirement】After deployment, summon a total of 6 tribal monsters.\n\n【On Completion】Choose 1 monster from the catalog that shares a tribe with a monster you control and has no same-name monster on your field; summon a new copy to your field."
   },
   "Q_CASTLE": {
-    "ja": "【達成条件】設置後、自分の場の同じ個体の「城」を、双方のターン終了時に連続9回維持する。途中でその城が場を離れたり、別の個体に替わったりした場合は数え直す。\n\n【達成時】「騎士」3体を自分の場に召喚する。",
-    "ko": "【달성 조건】설치 후 자신의 필드에 같은 개체의 성을 양쪽 턴 종료시 연속 9회 유지한다. 도중에 그 성이 필드를 떠나거나 다른 개체로 바뀌면 다시 센다.\n\n【달성 시】기사 3체를 자신의 필드에 소환한다.",
-    "en": "【Completion Requirement】After deployment, keep the same Castle on your field for 9 consecutive turn ends, counting both players. Restart the count if that Castle leaves or is replaced by another copy.\n\n【On Completion】Summon 3 Knights to your field."
+    "ja": "【達成条件】設置後、自分の場の同じ個体の「城」を、双方のターン終了時に連続5回維持する。途中でその城が場を離れたり、別の個体に替わったりした場合は数え直す。\n\n【達成時】「騎士」2体を自分の場に召喚する。",
+    "ko": "【달성 조건】설치 후 자신의 필드에 같은 개체의 성을 양쪽 턴 종료시 연속 5회 유지한다. 도중에 그 성이 필드를 떠나거나 다른 개체로 바뀌면 다시 센다.\n\n【달성 시】기사 2체를 자신의 필드에 소환한다.",
+    "en": "【Completion Requirement】After deployment, keep the same Castle on your field for 5 consecutive turn ends, counting both players. Restart the count if that Castle leaves or is replaced by another copy.\n\n【On Completion】Summon 2 Knights to your field."
   },
   "Q_DECAY": {
     "ja": "【達成条件】設置後、腐敗の効果で相手モンスターを4体破壊する。\n\n【達成時】相手プレイヤーに30ダメージを与える。",
@@ -1442,9 +1442,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Purchase Requirement】You control an Elf- or World Tree-family monster or persistent spell.\n\n【On Purchase】Deploy Heart of the World Tree to your field."
   },
   "QUICK_MUSTER": {
-    "ja": "【購入条件】自分の場に「城」がある。\n\n【購入時】「兵士」3体を自分の場に召喚する。",
-    "ko": "【구매 조건】자신의 필드에 성이 있다.\n\n【구매 시】병사 3체를 자신의 필드에 소환한다.",
-    "en": "【Purchase Requirement】You control a Castle.\n\n【On Purchase】Summon 3 Soldiers to your field."
+    "ja": "【購入時】「兵士」3体を自分の場に召喚する。自分の場に「城」があれば、代わりに「騎士」2体を召喚する。",
+    "ko": "【구매 시】병사 3체를 자신의 필드에 소환한다. 자신의 필드에 성이 있으면 대신 기사 2체를 소환한다.",
+    "en": "【On Purchase】Summon 3 Soldiers. If you control a Castle, summon 2 Knights instead."
   },
   "QUICK_SORT": {
     "ja": "【購入条件】自分のリフトに「カル」が10枚以上ある。\n\n【購入時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選んで破壊する。",
@@ -1507,9 +1507,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Purchase】Give the opponent 1 Brand counter if they have none, or 2 if they already have at least 1."
   },
   "STABLE": {
-    "ja": "【発動条件】自分の場に「騎士」がいる。\n\n【発動時】自分の「騎士」1体を選んで破壊する。破壊できたら「騎馬兵」1体を自分の場に召喚する。",
-    "ko": "【발동 조건】자신의 필드에 기사가 있다.\n\n【발동 시】자신의 기사 1체를 선택해 파괴한다. 파괴했다면 기마병 1체를 자신의 필드에 소환한다.",
-    "en": "【Play Requirement】You control a Knight.\n\n【On Cast】Choose and destroy 1 of your Knights. If it is destroyed, summon 1 Cavalry to your field."
+    "ja": "【発動時】ダイス1個を振る。4以上なら自分の場のモンスター1体を選び、「回避」を付与する。その後、自分の場に「騎士」がいれば、そのうち1体を墓地に送り、「騎馬兵」1体を召喚する。",
+    "ko": "【발동 시】주사위 1개를 굴린다. 4 이상이면 자신의 필드 몬스터 1체를 선택해 회피를 부여한다. 그 후 자신의 필드에 기사가 있으면 그중 1체를 묘지로 보내고 기마병 1체를 소환한다.",
+    "en": "【On Cast】Roll 1 die. On 4 or higher, give a chosen monster you control Evade. Then, if you control a Knight, send one to your graveyard and summon 1 Cavalry."
   },
   "CAVALRY": {
     "ja": "【場にある間】このモンスターが受ける反撃を無効化する。",
@@ -1532,9 +1532,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Summon 2 Soldiers to your field. If either player controls a Casino, roll 10 dice.\n\n【At the Start of Your Turn】Summon 1 Soldier to your field. If either player controls a Casino, roll 10 dice."
   },
   "MERC_ART": {
-    "ja": "【場にある間】自分の「傭兵」系モンスターの召喚時・ターン開始時効果を2回行う（重複なし）。自分のデッキ構成に「傭兵」系が2種類以上あれば、自分の場の全ての「傭兵」系モンスターの攻撃力+3・体力+3。",
-    "ko": "【필드에 있는 동안】자신 용병 계열 몬스터의 소환시·턴 시작시 효과를 2회 실행(중첩 불가). 자신의 덱 구성에 용병 계열이 2종류 이상이면 자신의 필드 모든 용병 계열 몬스터 공격력 +3, 체력 +3.",
-    "en": "【While on the Field】Resolve your Mercenary-family monsters' summon and turn-start effects 2 times; does not stack. If your deck composition has at least 2 distinct Mercenary names, all your Mercenary-family monsters get +3 ATK and +3 HP."
+    "ja": "【いずれかのモンスター召喚時】召喚されたモンスターの攻撃力+1。そのモンスターに「反撃」を付与する。\n\n【場にある間】自分の「傭兵」系モンスターの召喚時・ターン開始時効果を2回行う（重複なし）。自分のデッキ構成に「傭兵」系が2種類以上あれば、自分の場の全ての「傭兵」系モンスターの攻撃力+3・体力+3。",
+    "ko": "【어느 쪽이든 몬스터 소환 시】소환된 몬스터의 공격력 +1. 그 몬스터에게 반격을 부여한다.\n\n【필드에 있는 동안】자신 용병 계열 몬스터의 소환시·턴 시작시 효과를 2회 실행(중첩 불가). 자신의 덱 구성에 용병 계열이 2종류 이상이면 자신의 필드 모든 용병 계열 몬스터 공격력 +3, 체력 +3.",
+    "en": "【When Either Player Summons a Monster】The summoned monster gains +1 ATK and Counter.\n\n【While on the Field】Resolve your Mercenary-family monsters' summon and turn-start effects 2 times; does not stack. If your deck composition has at least 2 distinct Mercenary names, all your Mercenary-family monsters get +3 ATK and +3 HP."
   },
   "Q_CHEAT": {
     "ja": "【達成条件】設置後、自分がダイスを累計20個振る。\n\n【達成時】相手のデッキからカード1枚を選び、相手のリフトへ送る。",
@@ -1602,9 +1602,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】You control no monsters.\n\n【On Cast】Set your HP to 1. Then skip the opponent’s next turn once. If the spell resolves, Void sends this card to your Rift."
   },
   "BLACK_CURSE": {
-    "ja": "【購入条件】自分のデッキ構成に、同名以外の「黒魔法」がある。\n\n【発動時】新しい「呪い」5枚を相手の墓地に追加する。",
-    "ko": "【구매 조건】자신의 덱 구성에 같은 이름 이외 흑마법이 있다.\n\n【발동 시】새로운 저주 5장을 상대의 묘지에 추가한다.",
-    "en": "【Purchase Requirement】Your deck composition contains a Black Magic spell with a different name.\n\n【On Cast】Create 5 new Curses in the opponent's graveyard."
+    "ja": "【発動時】新しい「呪い」2枚を相手の墓地に追加する。自分のデッキ構成に同名以外の「黒魔法」があれば、代わりに6枚追加する。",
+    "ko": "【발동 시】새로운 저주 2장을 상대의 묘지에 추가한다. 자신의 덱 구성에 동명 이외의 흑마법이 있으면 대신 6장을 추가한다.",
+    "en": "【On Cast】Add 2 new Curses to the opponent’s graveyard. If your deck composition includes another Black Magic spell with a different name, add 6 instead."
   },
   "BLACK_ELSA": {
     "ja": "【召喚時】新しい「呪い」7枚を相手の墓地に追加する。\n\n【自分の魔法使用時】自分が「黒魔法」を使用するたび、相手に烙印カウンター1個を付与する。 使用した「黒魔法」が無効化されても、この効果は発動する。",
@@ -1617,14 +1617,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Create 2 new Curses in the opponent's graveyard.\n\n【When You Play a Spell】Whenever you play Black Magic, increase your mana crystals by 1. This effect triggers even if the Black Magic spell is negated."
   },
   "QUICK_CURSE": {
-    "ja": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。",
-    "ko": "【구매 시】상대의 리프트에 있는 저주 1장당 새로운 저주 1장을 상대의 묘지에 추가한다.",
-    "en": "【On Purchase】For each Curse in the opponent’s Rift, create 1 new Curse in their graveyard."
+    "ja": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。 その後、相手のリフトを除くデッキ構成の「呪い」1枚につき、相手プレイヤーに1ダメージを与える。",
+    "ko": "【구매 시】상대의 리프트에 있는 저주 1장당 새로운 저주 1장을 상대의 묘지에 추가한다. 그 후 상대 리프트를 제외한 덱 구성의 저주 1장당 상대 플레이어에게 1 데미지를 준다.",
+    "en": "【On Purchase】For each Curse in the opponent’s Rift, create 1 new Curse in their graveyard. Then deal 1 damage to the opponent per Curse in their deck composition, excluding their Rift."
   },
   "SOUL_HARVEST": {
-    "ja": "【発動時】相手のデッキ構成にある呪い1枚につき相手プレイヤーに4ダメージを与える。",
-    "ko": "【발동 시】상대의 덱 구성의 저주 1장당 상대 플레이어에게 4 데미지를 준다.",
-    "en": "【On Cast】Deal 4 damage to the opponent per Curse in their deck composition."
+    "ja": "【発動時】両方の場から「虚無」を持つモンスター1体を選んで破壊する。「オーラ」を持つモンスターも選べる。",
+    "ko": "【발동 시】양쪽 필드에서 공허를 가진 몬스터 1체를 선택해 파괴한다. 오라를 가진 몬스터도 선택할 수 있다.",
+    "en": "【On Cast】Choose and destroy 1 monster with Void on either field. You can choose a monster with Aura."
   },
   "ANESTHESIA": {
     "ja": "【発動時】このターン終了まで、現在自分の場にいる全モンスターが受けるダメージを無効にする（後から召喚するモンスターは対象外）。",
@@ -1817,9 +1817,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】If you control Farm and no Farmer’s Prayer, deploy a new Farmer’s Prayer to your field."
   },
   "HARVEST": {
-    "ja": "【場にある間】自分の「農場」の効果でりんごを収穫した時、新しい「黄金のりんご」1枚を自分の手札に加え、この魔法を自分の墓地へ送る。「農民の祈り」で収穫物が変わった場合も発動する。",
-    "ko": "【필드에 있는 동안】자신의 농장 효과로 사과를 수확하면 새 황금 사과 1장을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다. 농민의 기도로 수확물이 바뀐 경우에도 발동한다.",
-    "en": "【While on the Field】When your Farm harvests an Apple, add a new Golden Apple to your hand and send this spell to your graveyard. This also triggers when Farmer’s Prayer replaces the harvest."
+    "ja": "【各ターン開始時】新しい「高品質ぶどう」か「りんご」1枚をランダムに自分の手札に加える。\n\n【場にある間】自分が「ぶどう」「高品質ぶどう」「りんご」を使用すると、追加で自分の体力を2回復する。\n\n【場にある間】自分の「農場」の効果でりんごを収穫した時、新しい「黄金のりんご」1枚を自分の手札に加え、この魔法を自分の墓地へ送る。「農民の祈り」で収穫物が変わった場合も発動する。",
+    "ko": "【각 턴 시작 시】새로운 고급 포도 또는 사과 1장을 무작위로 자신의 패에 넣는다.\n\n【필드에 있는 동안】자신이 포도, 고급 포도 또는 사과를 사용하면 자신의 체력을 추가로 2 회복한다.\n\n【필드에 있는 동안】자신의 농장 효과로 사과를 수확하면 새 황금 사과 1장을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다. 농민의 기도로 수확물이 바뀐 경우에도 발동한다.",
+    "en": "【At the Start of Each Turn】Add a new random Fine Grape or Apple to your hand.\n\n【While on the Field】When you use a Grape, Fine Grape, or Apple, restore 2 additional HP.\n\n【While on the Field】When your Farm harvests an Apple, add a new Golden Apple to your hand and send this spell to your graveyard. This also triggers when Farmer’s Prayer replaces the harvest."
   },
   "APPLE": {
     "ja": "【発動時】自分の体力を7回復する。自分の場に「エルフ」系か「世界樹」系のカードがあれば、さらに自分の体力を7回復する。",

@@ -74,7 +74,7 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     if (c.id === 'BLOOD_SECRET' || c.ench === 'vampWard') synergy += Math.min(10,own.filter(isVampFamily).length*3);
     if (isVampFamily(c)) synergy += Math.min(8,count('NIGHT_CASTLE_GIFT')*3 + count('VAMP_PACT')*3);
     if (c.condAtk?.startsWith('cull')) synergy += Math.min(16,(p.removed ?? []).filter(x=>x.star==='trash').length*.8 + count('RIFT')*2);
-    if (c.id === 'SOUL_HARVEST') {
+    if (c.id === 'QUICK_CURSE') {
       const curses = known.filter(x=>x.id==='CURSE').length;
       synergy += Math.min(18,curses*2 + count('BLACK_CURSE')*5 + own.filter(x=>x.aura==='hexCurseOnSpell'||x.turnFx==='hexCurse').length*3);
       if (!curses && !own.some(x=>x.id==='BLACK_CURSE'||x.aura==='hexCurseOnSpell'||x.turnFx==='hexCurse')) readiness -= 13;
@@ -195,7 +195,7 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     if (c.directOnly && o.field.some(m=>m.aura==='eliteGuard')) matchup -= 10;
     if (c.t==='mon' && c.cost<=2 && o.field.some(m=>m.aura==='lowAtkBan')) matchup -= 8;
     if (c.id==='BLACK_REVERSE') {
-      const direct = own.filter(x=>x.directOnly||x.act==='dmg'||x.id==='SOUL_HARVEST').length;
+      const direct = own.filter(x=>x.directOnly||x.act==='dmg'||x.id==='TREASON').length;
       matchup -= Math.min(16,direct*3);
     }
     // Repeated monsters may be useful; do not impose a blanket one-copy rule.

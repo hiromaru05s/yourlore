@@ -140,7 +140,9 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
     if (g.pending.reason === 'WORLD_TREE_ATTACK' || g.pending.reason === 'WORLD_TREE_DEFEND') return {type:'pick',uid:(g.players[owner].dew ?? 0)>0?'grow':'pass'};
     if (g.pending.reason === 'HIGH_ELF_HAND') return {type:'pick',uid:[...pool].filter(c=>c.uid!=='done' && !hasPassive(c,'relic')).sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid ?? 'done'};
     if (g.pending.reason === 'ARMORER_MODE') {const ally=g.players[owner];return {type:'pick',uid:ally.hp+(ally.shield ?? 0)<25||!pool.some(c=>c.uid==='buff')?'shield':'buff'};}
-    if (g.pending.reason === 'FIRE_BALL') { const reversed = g.players.some(p => p.enchants.some(e => e.card.ench === 'blackReverse')), heals = g.players.some(p => p.enchants.some(e => e.card.ench === 'spellHeal')); return { type: 'pick', uid: `player-${reversed !== heals ? owner : 1-owner}` }; }
+    if (g.pending.reason === 'BLOOD_SECRET') return {type:'pick',uid:(pool.find(isVampFamily) ?? pool[0])?.uid ?? null};
+    if (g.pending.reason === 'SOUL_HARVEST') return {type:'pick',uid:(pool.find(c => g.players[1-owner].field.some(m => m.uid === c.uid)) ?? pool[0])?.uid ?? null};
+    if (g.pending.reason === 'TREASON' || g.pending.reason === 'FIRE_BALL') { const reversed = g.players.some(p => p.enchants.some(e => e.card.ench === 'blackReverse')), heals = g.players.some(p => p.enchants.some(e => e.card.ench === 'spellHeal')); return { type: 'pick', uid: `player-${reversed !== heals ? owner : 1-owner}` }; }
     if (g.pending.reason === 'COLOSSEUM_REST') return {type:'pick',uid:[...pool].sort((a,b)=>((b as FieldMon).dmg??0)-((a as FieldMon).dmg??0))[0]?.uid??null};
     if (g.pending.reason === 'SELECTED_SWORD') return {type:'pick',uid:[...g.players[owner].field].sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid??null};
     if (g.pending.reason === 'FIRE_ZONE') return { type: 'pick', uid: [...pool].sort((a,b) => cardPower(a)-cardPower(b))[0]?.uid ?? null };
@@ -220,7 +222,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.ench === "guild" && p.enchants.some((e) => e.card.ench === "guild")) return false; // 상회 중복
     if (c.id === "SLUM" && !p.enchants.some((e) => e.card.ench === "guild")) return false; // 슬럼가: 상회 필요
     if (c.ench && p.traps.length + p.enchants.length >= ST_MAX) return false;
-    if (c.id === "BLOOD_SECRET" && !p.field.some((m) => isVampFamily(m))) return false;
     if (c.id === "CHOSEN_AREA" && cullExiled(p) < 25) return false;
     // v41b 조건부 마법 (엔진이 지불 전에 거부) + 낭비 방지
     if (c.t === "mon" && o.enchants.some((e) => e.card.ench === "spaceLock")) return false;
@@ -276,9 +277,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "INCUBATOR_S" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
     if (c.id === "AMBUSH" && ![4, 5].includes(o.maxMana)) return false;
     if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length === 0)) return false;
-    if ((c.id === "EXPANSION" || c.id === "LAND_GRANT") && !p.field.some((m) => m.id === "CASTLE")) return false; // 성 필요
-    if (c.id === "TREASON" && !o.field.some((m) => m.id === "CASTLE")) return false;
-    if (c.id === "AEM" && (!p.field.some((m) => isGolem(m)) || new Set([...p.deck, ...p.hand, ...p.discard, ...p.field].filter((x) => x.t === "mon" && isGolem(x)).map((x) => x.id)).size < 2)) return false;
     if ((c.id === "KNIGHT_TEACH" || c.id === "NL_SECRET") && p.field.length === 0) return false;
     if (c.id === "TRUMPET" && p.field.length === 0) return false;
     if(c.id==='MANA_BACKFLOW') return false; // No immediate benefit; its own countdown eventually resets our mana.
@@ -722,7 +720,7 @@ function autoTarget(g: GameState): Action {
       return { type: "chooseTarget", uid: egg ? egg.uid : null };
     }
     if (pending.reason === "bloodSecret") { // 비술: 가장 약한 흡혈귀를 대가로 바친다
-      const v = [...p.field].filter((m) => isVampFamily(m)).sort((a, b) => (effAtk(p, a, g) + effDef(p, a)) - (effAtk(p, b, g) + effDef(p, b)))[0];
+      const v = p.field.find(isVampFamily) ?? [...p.field].sort((a, b) => (effAtk(p, a, g) + effDef(p, a)) - (effAtk(p, b, g) + effDef(p, b)))[0];
       return { type: "chooseTarget", uid: v ? v.uid : null };
     }
     if (pending.reason === "chosenMage") { // 선택받은 마법사: 미발동 마법사가 있으면 발동 (6뎀 이득)

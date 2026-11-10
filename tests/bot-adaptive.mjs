@@ -46,9 +46,9 @@ try {
    assert(g.players[0].discard.some(c=>c.id==='DISARM1'),tier+' must preserve resources for the missing answer');
   }
  });
- test('Soul Harvest needs a public curse plan',()=>{
-  const g=fresh();assert(value(g,'SOUL_HARVEST').margin<0);
-  g.players[1].discard=Array.from({length:5},()=>card('CURSE'));assert(value(g,'SOUL_HARVEST').margin>0);
+ test('Undying Curse gains value from public Curses',()=>{
+  const g=fresh();const before=value(g,'QUICK_CURSE').margin;
+  g.players[1].discard=Array.from({length:5},()=>card('CURSE'));assert(value(g,'QUICK_CURSE').margin>before);
  });
  test('public build, hidden inventory and removed physical cards have separate roles',()=>{
   const g=fresh(['ELF','DISARM1']);const before=value(g,'DISARM1');

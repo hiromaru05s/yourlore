@@ -35,7 +35,7 @@ try {
     const after=step(g,{type:'pick',uid:null});assert.equal(after.players[0].maxMana,mm+1);
   }
   // Conditional purchases are rejected atomically in both markets and bot candidate lists.
-  for(const [id,allow] of [ ['QUICK_SURVIVAL',p=>p.hp=15], ['QUICK_WORLD',p=>p.field.push(mon('ELF'))], ['QUICK_MUSTER',p=>p.field.push(mon('CASTLE'))], ['QUICK_SORT',p=>p.removed=Array.from({length:10},()=>card('STARTER_TRASH'))], ['QUICK_REBIRTH',p=>p.discard.push(card('MIMIC'))] ]) {
+  for(const [id,allow] of [ ['QUICK_SURVIVAL',p=>p.hp=15], ['QUICK_WORLD',p=>p.field.push(mon('ELF'))], ['QUICK_SORT',p=>p.removed=Array.from({length:10},()=>card('STARTER_TRASH'))], ['QUICK_REBIRTH',p=>p.discard.push(card('MIMIC'))] ]) {
     for(const from of ['buyMarket','buySupply']) {
       let g=fresh();const p=g.players[0];const cost=p.mana;
       g=buy(g,id,from);assert.equal(g.players[0].mana,cost,id);assert.equal(g.players[0].buys[id]??0,0,id);
@@ -47,7 +47,7 @@ try {
   {let g=buy(fresh(),'QUICK_MIMIC');assert.equal(g.players[0].field.filter(c=>c.id==='MIMIC').length,1);assert.equal(g.players[0].removed.filter(c=>c.id==='MIMIC').length,2);}
   {let g=fresh();g.players[0].hp=15;g=buy(g,'QUICK_SURVIVAL');assert.equal(g.players[0].field[0].id,'DUNGEON');assert.equal(g.players[0].field[0].aura,'dungeon');}
   {let g=fresh();g.players[0].field=[mon('ELF')];g=buy(g,'QUICK_WORLD');assert.equal(g.players[0].enchants[0].card.id,'WORLD_HEART');}
-  {let g=fresh();g.players[0].field=[mon('CASTLE')];g=buy(g,'QUICK_MUSTER');assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,3);}
+  {let g=fresh();g.players[0].field=[mon('CASTLE')];g=buy(g,'QUICK_MUSTER');assert.equal(g.players[0].field.filter(m=>m.id==='INFKNIGHT').length,2);g=buy(fresh(),'QUICK_MUSTER');assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,3);}
   {let g=fresh();g.players[0].field=[mon('MIMIC'),mon('MIMIC')];g=buy(g,'QUICK_ASSAULT');const [a,b]=g.players[0].field.map(c=>c.uid);g=pick(g,a);assert.equal(g.players[0].field[0].tempAtk,2);const invalid=pick(g,a);assert.equal(invalid.players[0].field[0].tempAtk,2);assert(invalid.pending);g=pick(g,b);assert(!g.pending);assert(g.players[0].field.every(c=>c.tempAtk===2));g=step(g,{type:'endTurn'});assert(g.players[0].field.every(c=>c.tempAtk===0));}
   {let g=buy(fresh(),'QUICK_GRIMOIRE');assert.equal(playCost(card('S1'),g.players[0]),Math.max(0,DB.S1.cost-1));g=step(g,{type:'endTurn'});assert.equal(g.players[0].spellDiscountTurn,0);}
   {let g=fresh();const dead=card('TAR3');g.players[0].discard=[dead];g=buy(g,'QUICK_REBIRTH');g=pick(g,dead.uid);assert(!g.players[0].discard.some(c=>c.uid===dead.uid));assert(hasPassive(g.players[0].field.find(c=>c.uid===dead.uid),'void'));}
@@ -77,7 +77,7 @@ try {
   {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=9;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+9);}
   {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=4;const hp=g.players[0].hp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,hp+30);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
   {let g=activate(fresh(),'Q_TORI');g.players[0].hand=Array.from({length:8},()=>card('STARTER_TRASH'));g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);assert.equal(g.pending.reason,'handCap');g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,1);}
-  {let g=activate(fresh(),'Q_CASTLE');const castle=mon('CASTLE');g.players[0].field=[castle];for(let i=0;i<8;i++){g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,i+1);}g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests.length,0);assert.equal(g.players[0].field.filter(c=>c.id==='INFKNIGHT').length,3);}
+  {let g=activate(fresh(),'Q_CASTLE');const castle=mon('CASTLE');g.players[0].field=[castle];for(let i=0;i<4;i++){g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,i+1);}g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests.length,0);assert.equal(g.players[0].field.filter(c=>c.id==='INFKNIGHT').length,2);}
   {let g=activate(fresh(),'Q_CASTLE');g.players[0].field=[mon('CASTLE')];g=step(g,{type:'endTurn'});g.players[0].field=[];g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);}
   {let g=activate(fresh(),'Q_DECAY');g.players[0].quests[0].progress=3;const enemy=mon('MIMIC');enemy.decayCnt=1;g.players[1].field=[enemy];g=buy(g,'QUICK_POISON');assert.equal(g.players[1].hp,100);g=pick(g,'invalid');assert(g.pending);g=pick(g,enemy.uid);assert.equal(g.players[0].quests.length,0);assert.equal(g.players[1].field.length,0);assert.equal(g.players[1].hp,67);}
   {let g=activate(fresh(),'Q_DECAY');g.players[0].quests[0].progress=3;const protectedMon=mon('VAMP1');protectedMon.decayCnt=1;g.players[1].field=[protectedMon];const ward=Object.values(DB).find(c=>c.ench==='vampWard');g.players[1].enchants=[{card:card(ward.id),turns:99}];g=buy(g,'QUICK_POISON');g=pick(g,protectedMon.uid);assert.equal(g.players[0].quests[0].progress,3);}

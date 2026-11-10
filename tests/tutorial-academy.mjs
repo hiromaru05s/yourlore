@@ -31,7 +31,7 @@ try{
  assert.equal(me('rift',2).removed.length,0);assert.equal(opp('rift',2).hp,32);
  assert(me('quick').removed.some(c=>c.id==='QUICK_ATTUNE'));assert.equal(me('quick').maxMana,5);assert.equal(me('quick').hp,42);
  assert.equal(me('enchant',1).maxMana,5);assert.equal(me('enchant',1).enchants.length,0);
- assert.equal(me('quest').quests[0].progress,1);assert.equal(me('quest',1).removed.filter(c=>c.id==='STARTER_TRASH').length,17);assert.equal(me('quest',2).field.filter(c=>c.id==='INFKNIGHT').length,3);
+ assert.equal(me('quest').quests[0].progress,1);assert.equal(me('quest',1).removed.filter(c=>c.id==='STARTER_TRASH').length,17);assert.equal(me('quest',2).field.filter(c=>c.id==='INFKNIGHT').length,2);
  assert.equal(me('health').hp,42);assert.equal(me('dew').hp,36);assert.equal(me('dew').dew,3);assert.equal(me('dew',1).dew,0);
  assert.equal(me('shield').hp,40);assert.equal(me('shield',1).hp,38);assert.equal(me('shield').shield,0);
  assert.equal(me('status',1).brand,0);assert.equal(me('status',1).hp,39);assert.equal(me('timing',1).field[0].atkMod,2);

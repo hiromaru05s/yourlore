@@ -1,6 +1,6 @@
 import type { CardInst, FieldMon, GameState, Side } from './types';
 import { hasPassive } from './cards';
-import { curHp, effAtk, effDef, CUSTOM_SPELLS, isAssassinCard, isGolem, isKnight, isVampFamily } from './engine';
+import { curHp, effAtk, effDef, CUSTOM_SPELLS, isAssassinCard } from './engine';
 
 /** Public, deterministic choices only. Never run effects to discover a cast's targets. */
 export interface PlayIntent {
@@ -29,14 +29,14 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
     case 'SCRAPPER': return plan('scrapper',p.hand.filter(h=>h.uid!==c.uid && h.cost===1 && !hasPassive(h,'relic')),2,2);
     case 'SELECTED_SWORD': return plan(c.id, p.field);
     case 'TRUMPET': return plan('buffTurn', p.field, 4, 0);
-    case 'AEM': return plan('golemBuff', p.field.filter(isGolem), 2, 2);
     case 'NL_SECRET': return plan('nlTarget', p.field);
     case 'MAJESTY_RITE': return plan('grantMajesty', p.field.filter(m => !hasPassive(m, 'majesty')));
-    case 'BLOOD_SECRET': return plan('bloodSecret', p.field.filter(isVampFamily));
+    case 'BLOOD_SECRET': return p.field.length ? plan(c.id, p.field) : null;
     case 'BLOOD2': return plan('bloodShower', board(true, true), 2, 0);
-    case 'STABLE': return plan(c.id, p.field.filter(isKnight));
+    case 'SOUL_HARVEST': return plan(c.id, [...p.field,...o.field].filter(m => hasPassive(m,'void')));
     case 'ROGUE_ART': return p.field.some(isAssassinCard) ? null : plan(c.id, p.field);
     case 'FIRE_ZONE': return plan(c.id, p.hand.filter(h => h.uid !== c.uid && !hasPassive(h, 'relic')));
+    case 'TREASON':
     case 'FIRE_BALL': return plan(c.id, [
       ...g.players.map((pl, i) => ({ ...c, uid: `player-${i}`, name: pl.name, nameJa: pl.name, nameEn: pl.name })),
       ...p.field, ...enemy,
