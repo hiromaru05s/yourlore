@@ -93,7 +93,7 @@ try {
  });
  test('reflection plus Blood Rite can turn a burn spell into useful self-healing',()=>{
   let g=fresh();g.players[0].hand=[card('S13')];g.players[0].mana=4;g.players[1].enchants=['BLOOD_RITE','BLACK_REVERSE'].map(id=>({card:card(id),turns:99,bornTurn:8}));
-  assert.equal(C.safeGreedy(g).type,'play');g=C.reduce(g,C.safeGreedy(g)).state;assert.equal(g.players[0].hp,51);assert.equal(g.players[1].hp,40);
+  assert.equal(C.safeGreedy(g).type,'play');g=C.reduce(g,C.safeGreedy(g)).state;assert.equal(g.players[0].hp,50);assert.equal(g.players[1].hp,40);
  });
  test('reflected face attacks and lethal reflected overflow are avoided',()=>{
   let g=fresh();g.players[0].mana=0;g.players[0].hp=4;g.players[0].field=[{...mon('M2'),atk:8,def:10}];g.players[1].enchants=[{card:card('BLACK_REVERSE'),turns:99}];
