@@ -48,6 +48,7 @@ export const CHOICE_TEXT:Record<string,Copy>={
  gamblerGuess:c('ダイスの出目を1つ予測してください。','주사위 눈 1개를 예측하세요.','Predict the result of the die.'),
  gamblerPick:c('発動する効果を1つ選んでください。','발동할 효과 1개를 선택하세요.','Choose 1 effect to activate.'),
  nightMarket:c('マナを支払って購入するアサシン系カード1枚を選んでください。','마나를 지불하고 구매할 암살자 계열 카드 1장을 선택하세요.','Choose 1 Assassin-family card to purchase by paying mana.'),
+ colosseumRoll:c('ダイス1個を振り、出目に応じて兵士か騎士を召喚します。','주사위 1개를 굴려 결과에 따라 병사 또는 기사를 소환합니다.','Roll 1 die and summon a Soldier or Knight according to the result.'),
  colosseumPick:c('召喚する選ばれしモンスター1体を選んでください。','소환할 선택받은 몬스터 1체를 선택하세요.','Choose 1 Chosen monster to summon.'),
  samsaraPick:c('召喚するモンスター1体を選んでください。','소환할 몬스터 1체를 선택하세요.','Choose 1 monster to summon.'),
  civChoice:c('手札に加える卵1枚を選んでください。','패에 추가할 알 1장을 선택하세요.','Choose 1 Egg to add to your hand.'),
