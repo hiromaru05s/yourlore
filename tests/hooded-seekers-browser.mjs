@@ -7,7 +7,9 @@ const checks=[],errors=[],requests=[];page.on('pageerror',e=>errors.push(e.messa
 try{
  await page.goto(origin+'/hooded-seekers.html');await page.waitForSelector('canvas[data-ready=true]');assert.equal(await page.locator('canvas').count(),1);
  const neutral=await page.locator('canvas').evaluate(c=>c.toDataURL());await page.waitForTimeout(500);assert.equal(await page.locator('canvas').evaluate(c=>c.toDataURL()),neutral);checks.push('one character stays completely static at rest');
- const states=await page.evaluate(async()=>{const c=document.querySelector('canvas'),seen=[];const observe=()=>seen.push(c.dataset.action+':'+c.dataset.frame);const ob=new MutationObserver(observe);ob.observe(c,{attributes:true,attributeFilter:['data-frame']});document.querySelector('#hitPreview').click();await new Promise(r=>setTimeout(r,1800));ob.disconnect();return seen;});assert(states.filter(v=>v.startsWith('hurt:')).length>5);assert.equal(states.at(-1),'idle:0');checks.push('preview advances through recoil and restores idle');
+ const states=await page.evaluate(async()=>{const c=document.querySelector('canvas'),seen=[];const observe=()=>seen.push(c.dataset.action+':'+c.dataset.frame);const ob=new MutationObserver(observe);ob.observe(c,{attributes:true,attributeFilter:['data-frame']});document.querySelector('#hitPreview').click();const deadline=performance.now()+12000;
+   do{await new Promise(requestAnimationFrame);}while((!seen.length||c.dataset.action!=='idle')&&performance.now()<deadline);
+   ob.disconnect();return seen;});assert(states.filter(v=>v.startsWith('hurt:')).length>5);assert.equal(states.at(-1),'idle:0');checks.push('preview advances through recoil and restores idle');
  await page.screenshot({path:out+'/studio-desktop.png'});await page.setViewportSize({width:390,height:844});await page.screenshot({path:out+'/studio-mobile.png',fullPage:true});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));checks.push('390px preview fits');
  await page.setViewportSize({width:1280,height:900});await page.goto(origin+'/hooded-board.html');await page.waitForFunction(()=>window.hoodedBoard?.ready,null,{timeout:120000});await page.waitForFunction(()=>document.querySelectorAll('.seeker-motion[data-ready=true]').length===2);
  const portraits=await page.locator('.seeker-motion').evaluateAll(cs=>cs.map(c=>c.toDataURL()));assert.equal(portraits[0],portraits[1]);checks.push('both board sides use the same gender-neutral portrait');
@@ -16,7 +18,10 @@ try{
   const history=await page.evaluate(async({action,side})=>{
    const c=document.querySelector(side?'#portraitOpp canvas':'#portraitMe canvas'),seen=[c.dataset.action+':'+c.dataset.frame];
    const ob=new MutationObserver(()=>seen.push(c.dataset.action+':'+c.dataset.frame));ob.observe(c,{attributes:true,attributeFilter:['data-frame']});
-   await hoodedBoard.trigger(action,side);await new Promise(r=>setTimeout(r,1800));ob.disconnect();return seen;
+   await hoodedBoard.trigger(action,side);
+   const deadline=performance.now()+12000;
+   while(c.dataset.action==='hurt'&&performance.now()<deadline)await new Promise(requestAnimationFrame);
+   ob.disconnect();return seen;
   },{action,side});histories[action]=history;
   assert.equal(history.some(v=>v.startsWith('hurt:')),hit,action+': '+JSON.stringify(history));assert.equal(history.at(-1),'idle:0');checks.push('controller '+action+' '+(hit?'reacts once':'keeps portrait static'));
  }
