@@ -989,7 +989,7 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
   "ELF_HAVEN": {
     "ja": "【場にある間】自分の「世界樹」系カードの購入コストは1、召喚コスト・発動コストは0。\n\n【回数制限】自分が「世界樹」系カードを購入できるのは、自分の各ターンに合計3枚まで。\n\n【自分のカード購入時】自分が「世界樹」系または「エルフ」系カードを購入するたび、自分は雫1を得る。",
     "ko": "【필드에 있는 동안】자신의 세계수 계열 카드의 구매 코스트는 1, 소환 코스트·발동 코스트는 0.\n\n【횟수 제한】세계수 계열 카드는 자신의 각 턴에 합계 3장까지 구매할 수 있다.\n\n【자신의 카드 구매 시】자신이 세계수 또는 엘프 계열 카드를 구매할 때마다 자신은 이슬 1을 얻는다.",
-    "en": "【While on the Field】Your World Tree-family cards cost 1 to buy and 0 to summon or cast.\n\n【Use Limit】You may buy at most 3 World Tree-family cards in total during each of your turns.\n\n【When You Buy a Card】Whenever you buy a World Tree-family or Elf-family card, gain 1 Dew."
+    "en": "【While on the Field】The purchase cost of your World Tree-family cards is 1. Their summon cost and cast cost are 0.\n\n【Use Limit】You may buy at most 3 World Tree-family cards in total during each of your turns.\n\n【When You Buy a Card】Whenever you buy a World Tree-family or Elf-family card, gain 1 Dew."
   },
   "HALF_ELF": {
     "ja": "【召喚時】自分の場に「世界樹」系カードがあれば、「世界樹の慈しみ」を自分の場に展開する。\n\n【場にある間】どちらかの場に「世界樹」系カードがあれば、このモンスターの攻撃力+3。",

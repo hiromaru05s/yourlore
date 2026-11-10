@@ -322,11 +322,8 @@ export function buyCost(p: PlayerState, c: CardInst): number {
   if (c.t === "trap" && p.field.some((m) => m.aura === "trapDiscount")) cost = Math.max(0, cost - 1);
   return cost * (p.manaCostMult ?? 1); // 마족 4종: 소모 마나 3배
 }
-/** 무료 및 쉼터 할인 구매는 턴당 이 장수까지. 고정 마켓은 재고가 줄지 않으므로 상한이 없으면
- *  엘프의 쉼터(구매 코스트 0)로 한 턴에 무한 구매가 성립한다.
- *  bot.ts 의 buyableByBot 은 봇 전용 가드였고, 사람 플레이어에겐 상한이 없었다. */
+/** Free purchases and Haven-discounted purchases share a single per-turn cap. */
 export const FREE_BUY_MAX = 3;
-/** 이번 턴 0코스트 구매 한도를 이미 소진했는가 (구매가 0일 때만 적용). */
 export function freeBuyBlocked(p: PlayerState, c: CardInst): boolean {
   return (buyCost(p, c) === 0 || havenDiscount(p, c)) && (p.freeBuysTurn ?? 0) >= FREE_BUY_MAX;
 }
