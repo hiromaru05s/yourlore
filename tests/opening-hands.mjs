@@ -10,12 +10,12 @@ for(const starting of [0,1]){
  assert.deepEqual(initial.events.filter(e=>e.type==='draw').map(e=>e.player).sort(),[0,1]);
  for(const you of [0,1]){const redacted=redactFor(initial.state,you);assert(redacted.players[1-you].hand.every(c=>c.id==='HIDDEN'));assert.equal(redacted.players[you].hand.length,3);}
  const g=reduce(initial.state,{type:'endTurn'}).state;assert.equal(g.cur,1-starting);assert.equal(g.players[g.cur].hand.length,3,'no duplicate opening draw');
- // Both now receive the usual three per later turn, with carry cap choices untouched.
- g.players.forEach(p=>{p.hand=[];});const next=reduce(g,{type:'endTurn'}).state;assert.equal(next.players[starting].hand.length,3);
- const back=reduce(next,{type:'endTurn'}).state;assert.equal(back.players[1-starting].hand.length,3);
+ // Both now receive the usual two per later turn, with carry cap choices untouched.
+ g.players.forEach(p=>{p.hand=[];});const next=reduce(g,{type:'endTurn'}).state;assert.equal(next.players[starting].hand.length,2);
+ const back=reduce(next,{type:'endTurn'}).state;assert.equal(back.players[1-starting].hand.length,2);
  // Legacy snapshots without the marker keep the old turn-start draw behavior.
  const legacy=structuredClone(initial.state);delete legacy.players[1-starting].openingDrawReady;legacy.players[1-starting].hand=[];
- assert.equal(reduce(legacy,{type:'endTurn'}).state.players[1-starting].hand.length,3);
+ assert.equal(reduce(legacy,{type:'endTurn'}).state.players[1-starting].hand.length,2);
 }
 console.log('PASS: simultaneous initial hands, both starting sides, hidden identities, no duplicate draw, later turns and legacy snapshots');
 }finally{await rm(dir,{recursive:true,force:true});}

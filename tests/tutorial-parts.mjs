@@ -44,7 +44,7 @@ try{
   assert.deepEqual(checkpoints.rewind(index),expectedBefore,'snapshot stays immutable across repeated restores');
   replayed++;
  }
- assert.deepEqual(turnDraws,[3,3],'three normal draws on each own turn, before any extra-draw teaching');
+ assert.deepEqual(turnDraws,[2,2],'two normal draws on each own turn, before any extra-draw teaching');
  assert.equal(run.state.players[1].hp,43,'one direct damage and one overflow, without unexplained kill bonuses');
  assert.equal(run.state.players[1].field.length,0);
  assert.equal(run.state.players[0].field[0].atkMod,3);

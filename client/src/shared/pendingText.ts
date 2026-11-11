@@ -4,6 +4,15 @@ type Copy=Record<Locale,string>;
 const c=(ja:string,ko:string,en:string):Copy=>({ja,ko,en});
 /** Choice instructions are authored by effect, never translated from a battle log. */
 export const CHOICE_TEXT:Record<string,Copy>={
+ MERCH1:c('交換する固定マーケットの枠を選んでください。','교체할 고정 마켓 칸을 고르세요.','Choose a fixed market slot to replace.'),
+ MERCH2:c('交換する固定マーケットの枠を選んでください。','교체할 고정 마켓 칸을 고르세요.','Choose a fixed market slot to replace.'),
+ BOUNDARY_ATTACK:c('攻撃対象を選んでください。','공격 대상을 고르세요.','Choose an attack target.'),
+ MARKET_FEVER:c('手札に得るマーケットのカードを選んでください。','패에 넣을 마켓 카드를 고르세요.','Choose a market card to add to your hand.'),
+ WANTED:c('使用を禁止するカードを選んでください。','사용을 금지할 카드를 고르세요.','Choose a card name to ban.'),
+ TIME_WRAITH:c('リフトへ送る相手の永続魔法を選んでください。','리프트로 보낼 상대 영구마법을 고르세요.','Choose an opposing persistent spell to send to the Rift.'),
+ D_BLACK:c('相手の墓地に戻すカードを選んでください。','상대 묘지로 되돌릴 카드를 고르세요.','Choose a card to return to the opposing graveyard.'),
+ ATTUNE_RETURN:c('捨てる手札を選んでください。','버릴 패를 고르세요.','Choose a card to discard.'),
+ QUEST_ATTUNE_STUDY:c('墓地に得る報酬を選んでください。','묘지에 넣을 보상을 고르세요.','Choose a reward to add to your graveyard.'),
  TIMEWARP:c('自分のリフトから墓地に戻すカードを1枚まで選んでください。','자신의 리프트에서 묘지로 되돌릴 카드를 최대 1장 선택하세요.','Choose up to 1 card from your Rift to return to your graveyard.'),
  bloodSorrow:c('自分の墓地・デッキ・場・手札から、自分のリフトへ送るカード1枚を選んでください。','자신의 묘지·덱·필드·패에서 자신의 리프트로 보낼 카드 1장을 선택하세요.','Choose 1 card from your graveyard, deck, field or hand to send to your Rift.'),
  ARMORER_MODE:c('自分のシールド獲得か、自分の他のモンスター1体の強化を選んでください。','자신이 실드를 얻거나 자신의 다른 몬스터 1체를 강화하는 효과를 선택하세요.','Choose between gaining Shield and strengthening 1 of your other monsters.'),
@@ -63,6 +72,8 @@ export const CHOICE_TEXT:Record<string,Copy>={
 export const DYNAMIC_CHOICE_REASONS=['WORLD_TREE_ATTACK','WORLD_TREE_DEFEND','SELECTED_SWORD','QUICK_ASSAULT','RIFT_MATTER','FIRE_MASTER','handCap','defDown','weaken','atkDown','blackDragon','divine','breaktrap','bloodShower','destroyTrap','destroyEnch','destroyMon','feastKill','buffTurn','buffPerm','golemBuff','grantDecay','purge','incubate'] as const;
 export function pendingText(q:Pending,lang:Locale):string {
  const d=q.data??{},v=Number(d.val??1),n=Number(d.count??1);let text=CHOICE_TEXT[q.reason];
+ if(q.reason==='MARKET_FEVER' && d.discard)return c('捨てる手札を選んでください。','버릴 패를 고르세요.','Choose a card to discard.')[lang];
+ if(q.reason==='ATTUNE_RETURN' && d.recall)return c('手札に戻すアチューンを選んでください。','패로 되돌릴 어튠을 고르세요.','Choose an Attune to return to your hand.')[lang];
  switch(q.reason){
  case 'WORLD_TREE_ATTACK':case 'WORLD_TREE_DEFEND':{const atk=q.reason==='WORLD_TREE_ATTACK';text=atk?c('雫1を消費して攻撃するモンスターの攻撃力を3上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격하는 몬스터의 공격력을 3 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the attacking monster +3 ATK until it leaves the field?'):c('雫1を消費して攻撃されるモンスターの体力を3上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격받는 몬스터의 체력을 3 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the defending monster +3 HP until it leaves the field?');break;}
  case 'SELECTED_SWORD':text=c(`このターン終了まで攻撃力+${d.amount}する自分のモンスター1体を選んでください。`,`이번 턴 종료까지 공격력을 ${d.amount} 올릴 자신의 몬스터 1체를 선택하세요.`,`Choose 1 of your monsters to gain +${d.amount} ATK until the end of this turn.`);break;

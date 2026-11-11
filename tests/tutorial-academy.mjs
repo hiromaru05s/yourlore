@@ -34,7 +34,7 @@ try{
  assert.equal(me('quest').quests[0].progress,1);assert.equal(me('quest',1).removed.filter(c=>c.id==='STARTER_TRASH').length,15);assert.equal(me('quest',2).field.filter(c=>c.id==='INFKNIGHT').length,2);
  assert.equal(me('health').hp,42);assert.equal(me('dew').hp,36);assert.equal(me('dew').dew,3);assert.equal(me('dew',1).dew,0);
  assert.equal(me('shield').hp,40);assert.equal(me('shield',1).hp,38);assert.equal(me('shield').shield,0);
- assert.equal(me('status',1).brand,0);assert.equal(me('status',1).hp,39);assert.equal(me('timing',1).field[0].atkMod,2);
+ assert.equal(me('status',1).brand,0);assert.equal(me('status',1).hp,38);assert.equal(me('timing',1).field[0].atkMod,2);
  assert.equal(me('evolution').field[0].id,'DRAGON_RIDER');assert(me('evolution').removed.some(c=>c.id==='SOLDIER2'));assert.equal(me('evolution',1).field.filter(c=>c.id==='VAMP5').length,1);
  assert.equal(me('counter').field.length,0);assert.equal(opp('counter').field.length,0);assert.equal(opp('counter',1).hp,38);assert.equal(opp('counter',1).field[0].guts,0);assert.equal(opp('counter',2).field.length,0);
  assert.equal(opp('dual').hp,4);assert.equal(opp('dual',1).hp,36);assert.equal(opp('dual',1).field.length,1);

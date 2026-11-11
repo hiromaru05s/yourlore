@@ -44,6 +44,9 @@ export const CARD_GENERATES: Record<string,string[]> = {
   FARM:['APPLE'], FARMER:['FARMER_PRAYER'], HARVEST:['GRAPE2','APPLE','GOLDEN_APPLE'], FARMER_PRAYER:['GOLDEN_APPLE'],
   SCARECROW:['TOKEN00'], LEVY:['SOLDIER2'], BUDGET:['SOLDIER2'], HALF_ELF:['WORLD_CARE'], BREWING:['WINE'],
   FORBIDDEN:ids(c=>c.t==='mon'&&!!c.tribe&&c.tribe!=='시초'), Q_TRIBE:ids(c=>c.t==='mon'&&!!c.tribe),
+  MUSTER_DIE:['COUP','SOLDIER2','GUNNER'], CANNON_COMMANDER:['GUNNER','HEAVY_GUNNER'],
+  QUICK_ESCORT:['INFKNIGHT'], DRAGON_KILLER:['MANA_HEART'], QUEST_ATTUNE_STUDY:['DUAL_ATTUNE','ATTUNE_SHINE','ATTUNE_RESEARCH'],
+  MIMIC:['CURSE'], SPIRIT_RESONANCE:['MINI_SPIRIT'], TIME_WRAITH:['TIMEWARP'],
   M11:['INFKNIGHT'], NHEX:['CURSE'], AJIN:['STARTER_MANA'], GM6_0:['DRAGON_RIDER','ANTIQUE_DK'],
   GM6_7:['INFKNIGHT','SOLDIER2'], GM6_8:['SOLDIER2','HEAVY_GUNNER'], TGE5:['ORIGIN_RITE'],
   TGE1:ids(c=>c.t==='mon'&&c.tribe==='시초'&&c.id!=='TGE1'&&c.cost<=7),
@@ -104,6 +107,8 @@ export function effectReferenceParts(text:string,lang:EffectLocale,sourceId:stri
   for(let i=0;i<text.length;) {
     const candidate=choices.find(c=>{
       if(!text.startsWith(c.text,i))return false;
+      // Marketplace is also the name of a zone. Only an explicit card citation names the spell.
+      if(c.reference.kind==='card' && c.reference.id==='SHARED_MARKET' && !['「', "'", '"'].includes(text[i-1]))return false;
       const before=text.slice(0,i),after=text.slice(i+c.text.length);
       if(lang==='en'&&(/[A-Za-z]$/.test(before)||/^[A-Za-z]/.test(after)&&!/^s\b/.test(after)))return false;
       if(lang==='ja'&&c.reference.kind==='card'&&!/^($|[」\s0-9０-９(（、。・：:]|は|を|が|に|の|で|と|から|へ)/.test(after))return false;

@@ -56,10 +56,11 @@ for (const id of trio) {
   let g = fresh();
   g.players[1].field = [mon('DICE_FIGHTER')];
   g = play(g,'SLUM_ASSASSIN');
+  assert.equal(g.players[0].field[0].id,'SLUM_ASSASSIN');
+  assert(E.hasPassive(g.players[0].field[0],'void'));
+  g = play(g,'SLUM_ASSASSIN');
+  assert.equal(g.players[0].field.length,1);
   assert.equal(g.players[0].hand.length,1);
-  assert.equal(g.players[0].mana,15);
-  g.players[1].field = [];
-  g = E.reduce(g,{type:'play',idx:0}).state;
   assert.equal(g.players[0].field[0].directOnly,true);
 }
 {

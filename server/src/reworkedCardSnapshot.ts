@@ -1,4 +1,4 @@
-import { DB } from '../../client/src/shared/cards';
+import { DB, STARTERS } from '../../client/src/shared/cards';
 import type { CardInst, GameState } from '../../client/src/shared/types';
 
 const castleCards = new Set([
@@ -7,6 +7,7 @@ const castleCards = new Set([
   'BLACK_CURSE','BLOOD_FEST','GS5_3','QUICK_CURSE','SOUL_HARVEST','Q_CASTLE','ELITE','LEVY',
 ]);
 
+const armyChanges = new Set('GUNNER HEAVY_GUNNER INFKNIGHT CAVALRY AMA SLUM_ASSASSIN DICE_ARCHER DICE_FIGHTER DICE_MAGICIAN TPO3 TOKEN00 D_BLUE D_RED D_BLACK DIVINE ANTIQUE_DK DRAGON_RIDER GM6_0 CURSE MIMIC MERCH1 MERCH2 STARTER_CHEST'.split(' '));
 const questCards = new Set(['Q_RIFT','Q_BRAND','Q_TORI','Q_TRIBE','Q_DECAY','Q_ASSASSIN','Q_MANA','Q_CHEAT']);
 
 /** Rooms persist full card instances, including their printed rules. Update only
@@ -14,12 +15,30 @@ const questCards = new Set(['Q_RIFT','Q_BRAND','Q_TORI','Q_TRIBE','Q_DECAY','Q_A
 export function restoreReworkedCards(game: GameState): void {
   const updateCastle = !game.castleReworkApplied;
   const updateQuests = !game.questReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests)) return;
+  const updateArmy = !game.armyAttuneApplied;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy)) return;
+  game.armyAttuneApplied = true;
   game.questReworkApplied = true;
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
     const revisedQuest = updateQuests && questCards.has(card.id);
+    if (updateArmy) {
+      const current = DB[card.id] ?? STARTERS[card.id];
+      if (current && armyChanges.has(card.id)) {
+        Object.assign(card,{text:current.text,textJa:current.textJa,textEn:current.textEn});
+        if (['DICE_ARCHER','DICE_FIGHTER','DICE_MAGICIAN','GM6_0','AMA'].includes(card.id)) card.cost=current.cost;
+        if (card.id==='AMA') { card.act=current.act; card.play=current.play; }
+        if (card.id==='SLUM_ASSASSIN') card.summonReq=current.summonReq;
+        if (['AMA','SLUM_ASSASSIN','DIVINE'].includes(card.id)) card.passive=[...new Set([...(card.passive??[]),...(current.passive??[])])];
+        if (['DIVINE','D_BLUE'].includes(card.id)) { delete card.aura; if(card.id==='D_BLUE'){delete card.turnFx;delete card.onSummon;} }
+        if (['DIVINE','ANTIQUE_DK','MERCH2'].includes(card.id)) {
+          const swapped='trickSwapped' in card && card.trickSwapped;
+          card.atk = swapped?current.def:current.atk;
+          card.def = swapped?current.atk:current.def;
+        }
+      }
+    }
     if (!revisedQuest && !(updateCastle && castleCards.has(card.id))) return;
     const def = DB[card.id];
     Object.assign(card, {name:def.name, nameJa:def.nameJa, nameEn:def.nameEn,

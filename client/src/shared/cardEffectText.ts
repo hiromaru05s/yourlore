@@ -1,3 +1,4 @@
+import { ARMY_ATTUNE_CARDS } from './armyAttuneCards';
 import { ARCANE_CARDS } from './riftReworkCards';
 import { DICE_SET_CARDS } from './diceCards';
 import { GOBLIN_CARDS } from './goblinCards';
@@ -127,9 +128,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】There is a monster with purchase cost 8 or less on either field.\n\n【On Cast】Choose up to 1 monster on either field with purchase cost 8 or less and destroy it."
   },
   "MIMIC": {
-    "ja": "【カードの扱い】宝箱のハズレで相手の場に召喚される。",
-    "ko": "【카드 취급】보물상자 꽝으로 상대의 필드에 소환된다.",
-    "en": "【Card Rules】Summoned to the enemy field by a failed treasure chest."
+    "ja": "【破壊時】自分の墓地に新しい呪い1枚を加える。\n\n【カードの扱い】宝箱のハズレで相手の場に召喚される。",
+    "ko": "【파괴 시】자신의 묘지에 새 저주 1장을 넣는다.\n\n【카드 취급】보물상자 꽝으로 상대의 필드에 소환된다.",
+    "en": "【On Destruction】Add one new Curse to your graveyard.\n\n【Card Rules】Summoned to the enemy field by a failed treasure chest."
   },
   "E1": {
     "ja": "【場にある間】相手は購入コスト3以下のモンスターを召喚できない。\n\n【期間】自分のターン開始を4回迎えると終了する。",
@@ -237,9 +238,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Increase your mana crystals by 1. Roll 1 die; on 4 or more, create 1 new Attune in your graveyard."
   },
   "AMA": {
-    "ja": "【発動時】自分の手札の「宝箱」1枚を自動で自分の墓地へ送る。送った場合、自分のマナ水晶+1。",
-    "ko": "【발동 시】자신의 패의 보물상자 1장을 자동으로 자신의 묘지로 보낸다. 보냈다면 자신의 마나 수정 +1.",
-    "en": "【On Cast】Automatically send 1 Treasure Chest from your hand to your graveyard. If you did, increase your mana crystals by 1."
+    "ja": "【発動時】虚無。このゲーム中、基本のアチューンに「相手墓地に呪いを3枚追加」を加える。このターン使用したアチューンの名を持つカード1枚につき発動コスト-1。",
+    "ko": "【발동 시】공허. 이번 게임 동안 기본 어튠에 상대 묘지에 저주 3장 추가를 부여한다. 이번 턴 사용한 어튠 명칭 카드마다 발동 코스트 -1.",
+    "en": "【On Cast】Void. Permanently add three Curses to the opposing graveyard whenever your basic Attune resolves. Its cast cost is reduced by 1 per Attune-named card played this turn."
   },
   "NHEAL": {
     "ja": "【いずれかのモンスター召喚時】どちらかがモンスターを召喚するたび、相手の体力を4回復し、自分の体力を8回復する。",
@@ -272,9 +273,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Choose 1 monster on your field; it gets +8 ATK until this turn ends."
   },
   "GM6_0": {
-    "ja": "【召喚時】自分の場に「兵士」か「騎士」がいれば、その1体とこのモンスターを素材にして、次のモンスターを自分の場に召喚する。両方ある場合はどちらを素材にするか選ぶ。\n兵士を使う：ドラゴンライダー1体。\n騎士を使う：アンティークドラゴンナイト1体。\n素材は自分の墓地へ送る。トークン・虚無の素材は自分のリフトへ送る。",
-    "ko": "【소환 시】자신의 필드에 병사 또는 기사가 있으면 그 1체와 이 몬스터를 재료로 다음 몬스터를 자신의 필드에 소환한다. 둘 다 있으면 사용할 재료를 선택한다.\n병사 사용: 드래곤 라이더 1체.\n기사 사용: 앤티크 드래곤 나이트 1체.\n재료는 자신의 묘지로 보낸다. 토큰·공허 재료는 자신의 리프트로 보낸다.",
-    "en": "【On Summon】If you control a Soldier or Knight, use 1 of them and this monster as materials to summon the following monster to your field. If both are available, choose which material to use.\nUsing a Soldier: 1 Dragon Rider.\nUsing a Knight: 1 Antique Dragon Knight.\nSend the materials to your graveyard. Send Token or Void materials to your Rift instead."
+    "ja": "【召喚時】自分の場に「兵士」か「騎士」がいれば、その1体とこのモンスターを素材にして、次のモンスターを自分の場に召喚する。両方ある場合はどちらを素材にするか選ぶ。\n兵士を使う：ドラゴンライダー1体。\n騎士を使う：アンティークドラゴンナイト1体。\n素材は自分の墓地へ送る。トークン・虚無の素材は自分のリフトへ送る。\n\n【召喚時】次の相手のターン、相手が使用できる魔法は1枚まで。",
+    "ko": "【소환 시】자신의 필드에 병사 또는 기사가 있으면 그 1체와 이 몬스터를 재료로 다음 몬스터를 자신의 필드에 소환한다. 둘 다 있으면 사용할 재료를 선택한다.\n병사 사용: 드래곤 라이더 1체.\n기사 사용: 앤티크 드래곤 나이트 1체.\n재료는 자신의 묘지로 보낸다. 토큰·공허 재료는 자신의 리프트로 보낸다.\n\n【소환 시】다음 상대 턴에 상대는 마법을 1장까지만 사용할 수 있다.",
+    "en": "【On Summon】If you control a Soldier or Knight, use 1 of them and this monster as materials to summon the following monster to your field. If both are available, choose which material to use.\nUsing a Soldier: 1 Dragon Rider.\nUsing a Knight: 1 Antique Dragon Knight.\nSend the materials to your graveyard. Send Token or Void materials to your Rift instead.\n\n【On Summon】On the next opposing turn, your opponent can play at most 1 spell."
   },
   "GM6_1": {
     "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、このカードの召喚時効果を発動し、その後このカードをリフトから自分の墓地に戻す。",
@@ -302,9 +303,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Randomly choose 2 cards that can be sent to the Rift from the opponent’s combined deck and graveyard, without choosing the same physical card twice, and send them to their Rift (if fewer than 2 are eligible, send all of them). Then deal damage to the opposing player equal to the total purchase cost of the cards sent by this effect."
   },
   "INFKNIGHT": {
-    "ja": "—",
-    "ko": "—",
-    "en": "—"
+    "ja": "【攻撃時】反撃を持たない相手を攻撃する場合、ダメージ計算時に攻撃力+1。",
+    "ko": "【공격 시】반격이 없는 대상을 공격할 때 피해 계산 시 공격력 +1.",
+    "en": "【On Attack】Gain 1 ATK during damage calculation when attacking a target without Counter."
   },
   "NT_SEAL3": {
     "ja": "【場にある間】両プレイヤーは発動コスト4以下の魔法を使用できない。",
@@ -322,9 +323,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】If your graveyard has no monster cards, draw 6 cards."
   },
   "TPO3": {
-    "ja": "【相手のモンスター破壊時】相手モンスターが破壊されるたび、ダイス1個を振る。5以上なら、そのモンスターの複製1体を自分の場に召喚する。",
-    "ko": "【상대의 몬스터 파괴 시】상대 몬스터가 파괴될 때마다 주사위 1개를 굴린다. 5 이상이면 그 몬스터의 복제 1체를 자신의 필드에 소환한다.",
-    "en": "【When an Enemy Monster Is Destroyed】Whenever an enemy monster is destroyed, roll 1 die. On 5 or more, summon 1 copy of that monster to your field."
+    "ja": "【相手のモンスター破壊時】相手モンスターが破壊されるたび、ダイス1個を振る。5以上なら、そのモンスターの複製1体を自分の場に召喚する。 この効果で召喚した複製には虚無を付与する。",
+    "ko": "【상대의 몬스터 파괴 시】상대 몬스터가 파괴될 때마다 주사위 1개를 굴린다. 5 이상이면 그 몬스터의 복제 1체를 자신의 필드에 소환한다. 이 효과로 소환한 복제에 공허를 부여한다.",
+    "en": "【When an Enemy Monster Is Destroyed】Whenever an enemy monster is destroyed, roll 1 die. On 5 or more, summon 1 copy of that monster to your field. The summoned copy gains Void."
   },
   "TAR3": {
     "ja": "—",
@@ -662,9 +663,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Refresh all 7 cards of the fixed market."
   },
   "TOKEN00": {
-    "ja": "【カードの扱い】このモンスターはトークン。破壊されると墓地の代わりに自分のリフトへ行く。",
-    "ko": "【카드 취급】이 몬스터는 토큰이다. 파괴되면 묘지 대신 자신의 리프트로 간다.",
-    "en": "【Card Rules】This monster is a Token. When destroyed, it goes to your Rift instead of your graveyard."
+    "ja": "【場にある間】相手のデッキ構成の呪い1枚につき攻撃力+1。\n\n【カードの扱い】このモンスターはトークン。破壊されると墓地の代わりに自分のリフトへ行く。",
+    "ko": "【필드에 있는 동안】상대 덱 구성의 저주 1장마다 공격력 +1.\n\n【카드 취급】이 몬스터는 토큰이다. 파괴되면 묘지 대신 자신의 리프트로 간다.",
+    "en": "【While on the Field】Gain 1 ATK for each Curse in the opposing deck composition.\n\n【Card Rules】This monster is a Token. When destroyed, it goes to your Rift instead of your graveyard."
   },
   "SOLDIER2": {
     "ja": "【カードの扱い】このモンスターはトークン。破壊されると墓地の代わりに自分のリフトへ行く。",
@@ -727,24 +728,24 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Attack Requirement】Cannot attack.\n\n【Durability】Enters with 7 counters; loses 1 per attack or damage hit and is destroyed at 0.\n\n【Hatching Condition】Count 10 turn starts, including both players; hatch at your turn start once none remain.\n\n【On Hatching】On hatching, send this Egg to your Rift and summon 1 Divine Beast to your field."
   },
   "D_BLACK": {
-    "ja": "【召喚時】相手の場の全モンスターの体力-3（対象が場を離れるまで）。その後、相手のリフトからカードを8枚まで選び、相手の墓地へ戻す。",
-    "ko": "【소환 시】상대의 필드 모든 몬스터 체력 -3(효과를 받은 몬스터가 필드를 떠날 때까지). 그 후 상대의 리프트에서 카드를 8장까지 선택해 상대의 묘지로 되돌린다.",
-    "en": "【On Summon】All enemy monsters get -3 HP (until the affected monster leaves the field). Then choose up to 8 cards in the opponent's Rift and return them to their graveyard."
+    "ja": "【召喚時】召喚時、相手の全モンスターに虚無を付与し、相手プレイヤーとその全モンスターに5ダメージ。自分のターン終了時、相手リフトの2枚を選び相手墓地に戻す。",
+    "ko": "【소환 시】소환 시 상대 몬스터 전체에 공허를 부여하고 상대 플레이어와 모든 상대 몬스터에게 5 피해. 자신의 턴 종료 시 상대 리프트에서 2장을 골라 상대 묘지로 되돌린다.",
+    "en": "【On Summon】On summon grant all enemy monsters Void then deal 5 damage to all enemies. At your turn end choose 2 opposing Rift cards to return to their graveyard."
   },
   "D_RED": {
-    "ja": "【召喚時】相手に15ダメージを与える。\n\n【場にある間】自分の魔法が相手プレイヤーに与える各ダメージを3増やす。",
-    "ko": "【소환 시】상대에게 15 데미지를 준다.\n\n【필드에 있는 동안】자신의 마법이 상대 플레이어에게 주는 각 데미지를 3 늘린다.",
-    "en": "【On Summon】Deal 15 damage to the opponent.\n\n【While on the Field】Increase each instance of damage your spells deal to the opponent by 3."
+    "ja": "【召喚時】相手に15ダメージを与える。\n\n【場にある間】自分の魔法が相手プレイヤーに与える各ダメージを3増やす。\n\n【破壊時】相手プレイヤーに烙印1個を付与する。",
+    "ko": "【소환 시】상대에게 15 데미지를 준다.\n\n【필드에 있는 동안】자신의 마법이 상대 플레이어에게 주는 각 데미지를 3 늘린다.\n\n【파괴 시】상대에게 낙인 1개를 준다.",
+    "en": "【On Summon】Deal 15 damage to the opponent.\n\n【While on the Field】Increase each instance of damage your spells deal to the opponent by 3.\n\n【On Destruction】Give your opponent 1 Brand."
   },
   "D_BLUE": {
-    "ja": "【召喚時】自分の体力を20回復する。\n\n【自分のターン開始時】相手の場のモンスター1体につき、自分の体力を1回復する。",
-    "ko": "【소환 시】자신의 체력을 20 회복한다.\n\n【자신의 턴 시작 시】상대의 필드의 몬스터 1체당 자신의 체력을 1 회복한다.",
-    "en": "【On Summon】Restore 20 of your HP.\n\n【At the Start of Your Turn】Restore 1 of your HP for each enemy monster."
+    "ja": "【自分のターン終了時】自分のターン終了時、シールド+5。自分が相手の永続魔法を破壊するたび雫+3。",
+    "ko": "【자신의 턴 종료 시】자신의 턴 종료 시 실드 +5. 자신이 상대 영구마법을 파괴할 때마다 이슬 +3.",
+    "en": "【At the End of Your Turn】At your turn end gain 5 Shield. Whenever you destroy an enemy persistent spell, gain 3 Dew."
   },
   "DIVINE": {
-    "ja": "【召喚時】自分のマナ水晶+15。以後、自分のターン開始時のドロー+1（このモンスターが場を離れても続く）。両方の場のモンスター・永続魔法から合計3枚まで選んで破壊する。",
-    "ko": "【소환 시】자신의 마나 수정 +15. 이후 자신 턴 시작 드로우 +1(이 몬스터가 필드를 떠나도 지속). 양쪽 필드의 몬스터·영구 마법 중 합계 3장까지 선택해 파괴한다.",
-    "en": "【On Summon】Increase your mana crystals by 15. For the rest of the game, draw 1 extra card at your turn start, even after this monster leaves. Choose and destroy up to 3 monsters or persistent spells from either field combined."
+    "ja": "【召喚時】自分のマナ水晶+12。",
+    "ko": "【소환 시】자신의 마나 수정 +12.",
+    "en": "【On Summon】Gain 12 mana crystals."
   },
   "EGG_HUNTER": {
     "ja": "【攻撃時】このモンスターが卵を攻撃した場合、その卵のカウンターを通常の1個の代わりに6個減らす。",
@@ -1072,14 +1073,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Send all Grapes, Fine Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Fine Grape and 5 per Apple sent.\n\n【Duration】At your 5th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
   },
   "MERCH1": {
-    "ja": "【召喚時】自分の場の「商会」にカウンター3個を付与する。",
-    "ko": "【소환 시】자신의 필드의 상회에 카운터 3개를 놓는다.",
-    "en": "【On Summon】Put 3 counters on your Trade Guild."
+    "ja": "【召喚時】自分の場の「商会」にカウンター3個を付与する。\n\n【召喚時】固定マーケット1枠を選び、そのカードを入れ替える。",
+    "ko": "【소환 시】자신의 필드의 상회에 카운터 3개를 놓는다.\n\n【소환 시】고정 마켓 1칸을 골라 카드를 교체한다.",
+    "en": "【On Summon】Put 3 counters on your Trade Guild.\n\n【On Summon】Choose one fixed market slot and replace its card."
   },
   "MERCH2": {
-    "ja": "【召喚時】自分の場の「商会」にカウンター8個を付与する。",
-    "ko": "【소환 시】자신의 필드의 상회에 카운터 8개를 놓는다.",
-    "en": "【On Summon】Put 8 counters on your Trade Guild."
+    "ja": "【召喚時】自分の場の「商会」にカウンター8個を付与する。\n\n【召喚時】固定マーケット1枠を選び、そのカードを入れ替える。\n\n【自分のターン開始時】固定マーケット1枠を選び、そのカードを入れ替える。",
+    "ko": "【소환 시】자신의 필드의 상회에 카운터 8개를 놓는다.\n\n【소환 시】고정 마켓 1칸을 골라 카드를 교체한다.\n\n【자신의 턴 시작 시】고정 마켓 1칸을 골라 카드를 교체한다.",
+    "en": "【On Summon】Put 8 counters on your Trade Guild.\n\n【On Summon】Choose one fixed market slot and replace its card.\n\n【At the Start of Your Turn】Choose one fixed market slot and replace its card."
   },
   "GRAPE2": {
     "ja": "【発動時】自分の体力を5回復する。",
@@ -1177,9 +1178,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Summon Requirement】You have at least 8 Dew.\n\n【On Summon】Spend 8 Dew.\n\n【While on the Field】Double your turn-start healing from Dew. This multiplier does not stack with additional World Trees.\n\n【When Your Monster Attacks】When your monster attacks, you may spend 1 Dew to give it +3 ATK (until the affected monster leaves the field).\n\n【When Your Monster Is Attacked】When your monster is attacked, you may spend 1 Dew to give it +3 HP (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Gain 3 Dew."
   },
   "CURSE": {
-    "ja": "【発動時】自分に1ダメージを与える。",
-    "ko": "【발동 시】자신에게 1 데미지를 준다.",
-    "en": "【On Cast】You take 1 damage."
+    "ja": "【発動時】自分に2ダメージ。相手に呪印1個を付与する。呪印20個を使用者の次ターン開始時に消費し、相手の体力を1にする。",
+    "ko": "【발동 시】자신에게 2 피해. 상대에게 주인 1개를 준다. 사용자의 다음 턴 시작에 주인 20개를 소비해 상대 체력을 1로 만든다.",
+    "en": "【On Cast】Take 2 damage. Give your opponent a Curse Seal. At the start of your next turn consume 20 seals to set their HP to 1."
   },
   "ORIGIN_RITE": {
     "ja": "【自分のモンスター召喚時】自分が「始原の守護者」以外の「始原」モンスターを召喚するたび、相手の場の、オーラを持たないモンスターと永続魔法からランダムに1枚を破壊する。対象がなければ代わりに相手に烙印カウンター1個を付与する。\n\n【破壊時】この魔法を自分のリフトへ送る。",
@@ -1187,14 +1188,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When You Summon a Monster】Whenever you summon an Origin monster other than Origin Guardian, destroy 1 random card among enemy monsters without Aura and enemy persistent spells. If none exist, give the opponent 1 Brand counter instead.\n\n【On Destruction】Send this spell to your Rift."
   },
   "DRAGON_RIDER": {
-    "ja": "【場にある間】2回目の攻撃は攻撃力半分(切り下げ)。",
-    "ko": "【필드에 있는 동안】2회째 공격은 공격력 절반(내림).",
-    "en": "【While on the Field】The 2nd attack has half ATK (rounded down)."
+    "ja": "【場にある間】2回目の攻撃は攻撃力半分(切り下げ)。 購入コスト1以下のモンスターはこのカードを攻撃できない。",
+    "ko": "【필드에 있는 동안】2회째 공격은 공격력 절반(내림). 구매 코스트 1 이하의 몬스터는 이 카드를 공격할 수 없다.",
+    "en": "【While on the Field】The 2nd attack has half ATK (rounded down). Monsters with purchase cost 1 or less cannot attack this card."
   },
   "ANTIQUE_DK": {
-    "ja": "—",
-    "ko": "—",
-    "en": "—"
+    "ja": "【場にある間】購入コスト3以下のモンスターはこのカードを攻撃できない。",
+    "ko": "【필드에 있는 동안】구매 코스트 3 이하의 몬스터는 이 카드를 공격할 수 없다.",
+    "en": "【While on the Field】Monsters with purchase cost 3 or less cannot attack this card."
   },
   "CASTLE": {
     "ja": "【召喚時】このモンスターにカウンター2個を付与する。\n\n【攻撃を受ける時】このモンスターが攻撃を受ける時、このモンスターのカウンター1個を消費してその攻撃を無効にする。\n\n【場にある間】自分は購入コスト5以上のモンスターを召喚できない。\n\n【自分のモンスター召喚時】自分が「兵士」「騎士」「砲撃兵」「大砲兵」を召喚するたび、このモンスターにカウンター1個を付与する。",
@@ -1482,14 +1483,14 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Summon 1 Knight, 1 Soldier, and 1 Gunner to your field. Destroy the monsters summoned by this effect at the end of the opponent’s next turn."
   },
   "GUNNER": {
-    "ja": "【自分のターン終了時】相手プレイヤーと相手の場のモンスターからランダムに対象を1つ決め、1ダメージを与える。",
-    "ko": "【자신의 턴 종료 시】상대 플레이어와 상대의 필드의 몬스터 중 무작위 대상 1개를 정해 1 데미지를 준다.",
-    "en": "【At the End of Your Turn】Randomly select 1 target from the opponent and their monsters, then deal 1 damage to it."
+    "ja": "【自分のターン終了時】相手プレイヤーと相手の場のモンスターからランダムに対象を1つ決め、1ダメージを与える。 自分の場の「兵士」1体につき、追加で1回砲撃する。",
+    "ko": "【자신의 턴 종료 시】상대 플레이어와 상대의 필드의 몬스터 중 무작위 대상 1개를 정해 1 데미지를 준다. 자신의 필드의 병사 1체마다 1회 더 포격한다.",
+    "en": "【At the End of Your Turn】Randomly select 1 target from the opponent and their monsters, then deal 1 damage to it. Fire one extra shot for each Soldier you control."
   },
   "HEAVY_GUNNER": {
-    "ja": "【自分のターン終了時】相手プレイヤーと相手の場のモンスターからランダムに対象を1つ決め、2ダメージを与える。",
-    "ko": "【자신의 턴 종료 시】상대 플레이어와 상대의 필드의 몬스터 중 무작위 대상 1개를 정해 2 데미지를 준다.",
-    "en": "【At the End of Your Turn】Randomly select 1 target from the opponent and their monsters, then deal 2 damage to it."
+    "ja": "【自分のターン終了時】相手プレイヤーと相手の場のモンスターからランダムに対象を1つ決め、2ダメージを与える。 自分の場の「兵士」1体につき、追加で1回砲撃する。",
+    "ko": "【자신의 턴 종료 시】상대 플레이어와 상대의 필드의 몬스터 중 무작위 대상 1개를 정해 2 데미지를 준다. 자신의 필드의 병사 1체마다 1회 더 포격한다.",
+    "en": "【At the End of Your Turn】Randomly select 1 target from the opponent and their monsters, then deal 2 damage to it. Fire one extra shot for each Soldier you control."
   },
   "FARM_KEEPER": {
     "ja": "【自分のターン終了時】自分の場に「農場」か「醸造」があれば、「かかし」3体を召喚する。\n\n【場にある間】自分の場の「農民」の最大体力+5。このモンスターが場を離れると、この増加はなくなる。",
@@ -1512,9 +1513,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Roll 1 die. On 4 or higher, give a chosen monster you control Evade. Then, if you control a Knight, send one to your graveyard and summon 1 Cavalry."
   },
   "CAVALRY": {
-    "ja": "【場にある間】このモンスターが受ける反撃を無効化する。",
-    "ko": "【필드에 있는 동안】이 몬스터가 받는 반격을 무효화한다.",
-    "en": "【While on the Field】Immune to Counter damage."
+    "ja": "【場にある間】このモンスターが受ける反撃を無効化する。 味方に挑発を持つモンスターがいれば、回避を得る。",
+    "ko": "【필드에 있는 동안】이 몬스터가 받는 반격을 무효화한다. 아군에 도발 몬스터가 있으면 회피를 얻는다.",
+    "en": "【While on the Field】Immune to Counter damage. Gain Evade while you control a monster with Taunt."
   },
   "MERCENARY": {
     "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス3個を振る。",
@@ -1792,9 +1793,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Play】Send this card to your Rift."
   },
   "STARTER_CHEST": {
-    "ja": "【使用時】ダイス1個を振る — 1-2: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 3-4: 自分の体力を5回復する / 5-6: 自分のマナ水晶+1。",
-    "ko": "【사용 시】주사위 1개를 굴린다 — 1-2: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 3-4: 자신의 체력을 5 회복한다 / 5-6: 자신의 마나 수정 +1.",
-    "en": "【On Play】Roll 1 die — 1-2: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 3-4: Restore 5 of your HP / 5-6: Increase your mana crystals by 1."
+    "ja": "【使用時】ダイス1個を振る — 1-2: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 3-4: 自分の体力を2回復する / 5-6: 自分のマナ水晶+1。",
+    "ko": "【사용 시】주사위 1개를 굴린다 — 1-2: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 3-4: 자신의 체력을 2 회복한다 / 5-6: 자신의 마나 수정 +1.",
+    "en": "【On Play】Roll 1 die — 1-2: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 3-4: Restore 2 of your HP / 5-6: Increase your mana crystals by 1."
   },
   "STARTER_MANA": {
     "ja": "【使用時】自分のマナ水晶+1。",
@@ -1842,4 +1843,4 @@ for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,e
 CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};
 CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};
 
-for (const c of [...ARCANE_CARDS, ...DICE_SET_CARDS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
+for (const c of [...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};

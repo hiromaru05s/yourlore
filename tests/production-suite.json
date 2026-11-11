@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/army-attune.mjs",
     "tests/castle-rework.mjs",
     "tests/dice-fire-cards.mjs",
     "tests/chosen-mage-dungeon-floor.mjs",

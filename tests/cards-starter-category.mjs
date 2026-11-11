@@ -10,10 +10,11 @@ const dir=await fs.mkdtemp('/tmp/lore-starter-category-');
 const dom=new JSDOM('<body><div id="app"></div></body>',{url:'https://lore.test'});
 for(const key of ['window','document','HTMLElement','localStorage'])globalThis[key]=dom.window[key];
 try{
- await build({stdin:{contents:`export * from './client/src/shared/cards';export * from './client/src/shared/cardPresentation';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/catalog.mjs'});
+ await build({stdin:{contents:`export * from './client/src/shared/cards';export * from './client/src/shared/cardPresentation';export {ARIES_OPPONENTS} from './client/src/shared/ariesStory';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/catalog.mjs'});
  const catalog=await import(dir+'/catalog.mjs');
  const {DB,STARTERS,DECK_POOL,sanitizeDeck}=catalog;
  const expected=[...DECK_POOL,'STARTER_MANA'].sort();
+ const bosses=new Set(Object.values(catalog.ARIES_OPPONENTS).flatMap(o=>o.deck).filter(id=>DB[id]?.noShop&&!DECK_POOL.includes(id)));
  const excluded=Object.values(DB).filter(c=>c.noShop&&!DECK_POOL.includes(c.id));
  assert(excluded.length>0);
  for(const c of excluded)assert(!sanitizeDeck([c.id]).includes(c.id),`${c.id} is not deck eligible`);
@@ -43,9 +44,9 @@ try{
   assert(!ids().includes(c.id),`${c.id} cannot leak into starters via search`);
  }
  search.value='';search.dispatchEvent(new window.Event('input'));
- clickType('all');assert.deepEqual(ids(),[...Object.keys(DB),...Object.keys(STARTERS)].sort(),'Generated cards remain browsable in All');
+ clickType('all');assert.deepEqual(ids(),[...Object.keys(DB),...Object.keys(STARTERS)].filter(id=>!bosses.has(id)).sort(),'Generated cards remain browsable in All');
  clickType('spell');const spells=ids();
- for(const c of excluded.filter(c=>c.t==='spell'))assert(spells.includes(c.id),`${c.id} remains in its normal type`);
+ for(const c of excluded.filter(c=>c.t==='spell'&&!bosses.has(c.id)))assert(spells.includes(c.id),`${c.id} remains in its normal type`);
  screen.destroy();
  console.log(`PASS: ${expected.length-1} catalog starters plus a future eligible fixture match deck eligibility; ${excluded.length} non-deck noShop cards excluded; All/type/search and future-card regressions covered`);
  console.log('Excluded:',excluded.map(c=>`${c.id} (${c.nameJa})`).join(', '));

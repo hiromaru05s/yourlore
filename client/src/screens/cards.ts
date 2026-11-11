@@ -1,3 +1,4 @@
+import { ARIES_OPPONENTS } from '../shared/ariesStory';
 import {bindTouchActivation} from '../ui/touchActivation';
 import { cardSearchText, passiveSearchKeys, type PassiveSearchScope } from '../shared/cardPresentation';
 import {passiveIcon} from '../ui/passiveIcon';
@@ -18,7 +19,9 @@ import { t, cardName, onLangChange, getLang } from "../i18n";
 import { langSelectEl } from "../ui/langSelect";
 
 // Build a stable, sorted list of every card as instances (uid = id).
+const bossDeckIds = new Set(Object.values(ARIES_OPPONENTS).flatMap(boss => boss.deck));
 const ALL: CardInst[] = [...Object.values(DB), ...Object.values(STARTERS)]
+  .filter(card => !bossDeckIds.has(card.id) || !card.noShop || DECK_POOL.includes(card.id))
   .map((d) => ({ ...d, uid: d.id }))
   .sort((a, b) => {
     const order: Record<CardType, number> = { mon: 0, spell: 1, quest: 2, trap: 3, starter: 4 };

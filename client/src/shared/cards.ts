@@ -1,3 +1,4 @@
+import { ARMY_ATTUNE_CARDS } from './armyAttuneCards';
 import { applySpellRework74 } from './spellRework74';
 import { applyLegacyCardRework } from './legacyCardRework';
 import { ARCANE_CARDS } from './riftReworkCards';
@@ -1016,6 +1017,11 @@ export const PASSIVES: Record<string, { ko: PassiveDef; ja: PassiveDef; en: Pass
     ja: { name: "二刀流", desc: "1ターンに2回攻撃できる。" },
     en: { name: "Dual Wield", desc: "Can attack twice per turn." },
   },
+  boundary: {
+    ja: {name:"境界", desc:"相手モンスターの虚無以外のパッシブを無効にする。境界同士は互いの境界と虚無を残す。相手の場にモンスターがいても相手プレイヤーを攻撃できる。"},
+    ko: {name:"경계", desc:"상대 몬스터의 공허 이외 패시브를 무효화한다. 양측에 경계가 있으면 경계와 공허는 유지된다. 상대 몬스터가 있어도 상대 플레이어를 공격할 수 있다."},
+    en: {name:"Boundary", desc:"Suppress enemy monster passives except Void. Opposing Boundaries preserve each other and Void. May attack the opposing player through monsters."},
+  },
   ambush: {
     ko: { name: "암습", desc: "상대 플레이어만 직접 공격할 수 있다 (몬스터는 공격 불가)." },
     ja: { name: "暗襲", desc: "相手プレイヤーのみ直接攻撃できる (モンスターは攻撃不可)。" },
@@ -1071,15 +1077,16 @@ export function cardPassives(c: Partial<CardDef> & {conditionalPassives?: string
   if ((c.mult ?? 1) >= 2 || has("dual")) out.push("dual");
   if (c.directOnly || has("ambush")) out.push("ambush");
   if (c.aura === "ward" || has("aura")) out.push("aura");
-  for (const k of ["taunt", "evade", "guts", "decay", "majesty", "relic", "counter"]) if (has(k)) out.push(k);
+  for (const k of ["taunt", "evade", "guts", "decay", "majesty", "relic", "counter", "boundary"]) if (has(k)) out.push(k);
   // In-progress matches can still hold Nova instances saved before it gained Void.
   const novaVoid = c.id === "BLACK_NOVA" && DB.BLACK_NOVA.passive?.includes("void");
   if (c.exileOnDestroy || has("void") || novaVoid) out.push("void");
   return out;
 }
 /** 런타임 패시브 판정 — 카드 자체 + 게임 중 부여된 패시브(passivesG)까지 포함. */
-export function hasPassive(c: Partial<CardDef> & { passivesG?: string[]; conditionalPassives?: string[] }, key: string): boolean {
+export function hasPassive(c: Partial<CardDef> & { passivesG?: string[]; conditionalPassives?: string[]; boundarySuppressed?: boolean }, key: string): boolean {
   // Persisted grants of retired keywords no longer confer an ability.
+  if (c.boundarySuppressed && key !== 'boundary' && key !== 'void') return false;
   if (!Object.hasOwn(PASSIVES, key)) return false;
   if (c.passivesG?.includes(key)) return true;
   return (c.conditionalPassives ?? []).includes(key) || cardPassives(c).includes(key);
@@ -2356,7 +2363,7 @@ DECK_POOL.push(...DEW_SHIELD_STARTERS);
 applyDewShieldRework(DB);
 localizeDewShieldCards(DB);
 DB.VAMP4.textEn = "【Passive】Blood Magic: summon Supreme Vampire once · gain HP equal to 50% of enemy damage dealt.";
-for (const lang of ['ko', 'ja', 'en'] as const) CHEST_ODDS[lang].rows = CHEST_ODDS[lang].rows.map(s => s.replace('+7', '+5'));
+for (const lang of ['ko', 'ja', 'en'] as const) CHEST_ODDS[lang].rows = CHEST_ODDS[lang].rows.map(s => s.replace('+7', '+2'));
 applyBalance57(DB);
 applyBalance58(DB);
 DB.NIGHT_CASTLE_GIFT = NIGHT_CASTLE_GIFT;
@@ -2375,6 +2382,14 @@ DB.RIFT_METALIGHT = RIFT_METALIGHT;
 DECK_POOL.push(...GOBLIN_STARTERS);
 applyLegacyCardRework(DB);
 applySpellRework74(DB);
+Object.assign(DB.DIVINE, {atk: 30, def: 30, aura: undefined, passive: [...new Set([...cardPassives(DB.DIVINE), 'majesty'])]});
+Object.assign(DB.ANTIQUE_DK, {atk: 20, def: 15});
+DB.MERCH2.def = 3;
+DB.GM6_0.cost = 5;
+for (const card of ARMY_ATTUNE_CARDS) DB[card.id] = card;
+DECK_POOL.push('ATTUNE_RETURN', 'MINI_SPIRIT');
+Object.assign(DB.AMA, {cost:5, play:5, act:'armyAttune', passive:['void']});
+Object.assign(DB.D_BLUE, {onSummon:undefined, turnFx:undefined, aura:undefined});
 DB.SOLDIER2.def = 1;
 Object.assign(DB.EXPANSION, { name: '증강', nameJa: '増強', nameEn: 'Augmentation', cost: 2, play: 2 });
 Object.assign(DB.HARVEST, { name: '수확제', nameJa: '収穫祭', nameEn: 'Harvest Festival' });
@@ -2383,11 +2398,15 @@ DB.BLOOD_SECRET.passive = ['void'];
 DB.AEM.cost = 3;
 DB.COLOSSEUM.play = 5;
 DB.SOUL_HARVEST.cost = 2;
-for (const id of ['STABLE', 'BLOOD_SECRET', 'COLOSSEUM']) RANDOM_CARDS.add(id);
+for (const id of ['STABLE','BLOOD_SECRET','COLOSSEUM','MUSTER_DIE','CAPTAIN','ATTUNE_DISSECTION','ATTUNE_RESEARCH']) RANDOM_CARDS.add(id);
 RANDOM_CARDS.add("M2");
 applyKeywordText(PASSIVES);
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
+// Drop unset patch fields so newly printed instances match a JSON-restored room exactly.
+for (const definition of Object.values(DB)) {
+  for (const key of Object.keys(definition) as (keyof CardDef)[]) if (definition[key] === undefined) delete definition[key];
+}
 export const ALL_IDS = Object.keys(DB);
 // markets never offer cost-0 tokens or noShop(스타팅 전용) cards
 export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0 && !DB[id].noShop);
@@ -2495,7 +2514,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v79"; // November card balance update
+export const BALANCE_VERSION = "v80"; // November card balance update
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

@@ -39,7 +39,7 @@ try {
  assert.equal(room.room.game.players[0].magicTrainTurns,6);assert.equal(room.room.game.players[0].enchants.find(e=>e.card.id==='MAGIC_BANK').turns,2);
  await send(0,{type:'endTurn'});assert.equal(room.room.game.turn,4);
  await send(1,{type:'endTurn'});assert.equal(room.room.game.turn,11);assert.equal(room.room.game.cur,0);
- assert.equal(room.room.game.players[0].hand.length,3);assert.equal(room.room.game.players[0].enchants.length,0);
+ assert.equal(room.room.game.players[0].hand.length,2);assert.equal(room.room.game.players[0].enchants.length,0);
  for(const socket of sockets)assert.equal(socket.messages.at(-1).state.turn,11);
  console.log('PASS authoritative Rift/Train/Bank: inactive owner authorization, invalid/cancel selection, persisted return, bank cast cost, train reservation and clocks across reconnect, both clients');
 } finally {await rm(dir,{recursive:true,force:true});}

@@ -16,6 +16,10 @@ const LABELS: Record<RuleLabel, Record<EffectLocale, string>> = {
 
 /** One source for the structured inspector and plain-text icon tooltips. */
 export const CARD_KEYWORD_RULES: Record<string, Rule[]> = {
+  boundary: [
+    {label:'effect',ja:'相手モンスターの虚無以外のパッシブを無効にする。境界同士は互いの境界と虚無を残す。',ko:'상대 몬스터의 공허 이외의 패시브를 무효화한다. 양측의 경계와 공허는 유지된다.',en:'Suppress opposing monster passives except Void. Opposing Boundaries preserve each other and Void.'},
+    {label:'result',ja:'相手の場にモンスターがいても、相手プレイヤーを攻撃対象に選べる。',ko:'상대 필드에 몬스터가 있어도 상대 플레이어를 공격 대상으로 선택할 수 있다.',en:'You may choose the opposing player as the attack target even if they control monsters.'},
+  ],
   counter: [
     {label:'effect',ja:'攻撃を受けた後、攻撃してきたモンスターに反撃する。反撃ダメージは、このモンスターの攻撃力の半分（端数切り上げ）。',ko:'공격받은 뒤 공격한 몬스터에게 반격한다. 반격 데미지는 이 몬스터 공격력의 절반(올림)이다.',en:'After receiving an attack, strike back at the attacker for half this monster’s ATK, rounded up.'},
     {label:'note',ja:'その攻撃でこのモンスターが破壊されても反撃する。攻撃を無効にした場合は反撃しない。反撃では貫通ダメージ・反撃への反撃・攻撃時効果は発生しない。',ko:'그 공격으로 이 몬스터가 파괴되어도 반격한다. 공격이 무효화되면 반격하지 않는다. 반격으로 관통 데미지, 반격에 대한 반격, 공격 시 효과는 발생하지 않는다.',en:'This monster still counters if that attack destroys it, but not if the attack is negated. A counter causes no piercing damage, counter in response, or on-attack effects.'},

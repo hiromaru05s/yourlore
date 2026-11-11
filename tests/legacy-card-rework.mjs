@@ -45,8 +45,8 @@ try {
  });
  test('Unbrander keeps summon removal and replaces Curse effect without stacking or changing Void',()=>{
   let g=fresh();g.players[0].brand=3;g=play(g,'UNBRANDER').state;assert.equal(g.players[0].brand,2);g.players[0].field.push(mon('UNBRANDER'));g=play(g,'CURSE').state;assert.equal(g.players[0].hp,103);assert(g.players[0].removed.some(c=>c.id==='CURSE'));
-  g.players[0].field=[];g=play(g,'CURSE').state;assert.equal(g.players[0].hp,102);
-  g=fresh();g.players[1].field=[mon('UNBRANDER')];g=play(g,'CURSE').state;assert.equal(g.players[0].hp,99);
+  g.players[0].field=[];g=play(g,'CURSE').state;assert.equal(g.players[0].hp,101);
+  g=fresh();g.players[1].field=[mon('UNBRANDER')];g=play(g,'CURSE').state;assert.equal(g.players[0].hp,98);
   g=fresh();g.players[0].field=[mon('UNBRANDER'),mon('ELF')];g=play(g,'CURSE').state;assert.equal(g.players[0].hp,106);
  });
  test('Budget checks all die faces with and without Castle; summons feed Castle counters',()=>{

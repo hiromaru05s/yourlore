@@ -48,7 +48,7 @@ export interface CardDef {
   textEn?: string; // English effect text (falls back to text)
 }
 
-export type QuestEvent = "dice" | "town" | "exile" | "opponentDamage" | "emptyTurn" | "healthGain" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
+export type QuestEvent = "attunePlay" | "dice" | "town" | "exile" | "opponentDamage" | "emptyTurn" | "healthGain" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
 export interface QuestState {
   card: CardInst;
   progress: number;
@@ -69,6 +69,10 @@ export interface CardInst extends CardDef {
 }
 
 export interface FieldMon extends CardInst {
+  visibleCurseAttack?: number;
+  mutedEffects?: Pick<CardDef,'onSummon'|'turnFx'|'condAtk'|'attackFx'|'aura'|'evolveTo'>;
+  escortLocked?: boolean;
+  boundarySuppressed?: boolean;
   riftAtTurnEnd?: number;
   immuneDamageTurn?: number;
   expireOpponentOf?: Side;
@@ -110,6 +114,19 @@ export interface RevealedCard {
 }
 
 export interface PlayerState {
+  attuneBonuses?: ('heal1'|'heal2'|'heal3'|'shield'|'dew'|'crystal'|'mana'|'shine'|'spirit'|'hex'|'selfHex')[];
+  attunePlaysTurn?: number;
+  attuneFlowTurn?: number;
+  attuneLockUntil?: number;
+  wantedBans?: Record<string,number>;
+  heartDue?: number;
+  curseSeals?: number;
+  crystalFloor?: number;
+  marketDiscount?: number;
+  strengthAuras?: number;
+  monsterSilence?: boolean;
+  dragonSpellLimitTurn?: number;
+  extraHitTurn?: number;
   originOfferTurn?: number;
   /** Server-owned lifetime duel counters; included in rollback snapshots. */
   activity?: Partial<Record<import("./progression").Activity, number>>;
@@ -183,7 +200,7 @@ export interface PlayerState {
   magicBankBonusTotal?: number; // Successful bank bonus gains, for action-level presentation.
   manaGainNext: number; // mana crystals to gain at the start of this player's next turn
   skipNext: boolean; // legacy: if true, this player's next turn is skipped
-  skipTurnSources?: ("TIMEWARP" | "BLACK_NOVA" | "DOMINION" | null)[]; // FIFO provenance; old saves may omit it
+  skipTurnSources?: ("TIMEWARP" | "BLACK_NOVA" | "DOMINION" | "TIME_WRAITH" | null)[]; // FIFO provenance; old saves may omit it
   skipTurns?: number; // queued turn skips; stacks when 시공간 조작 succeeds more than once
   revealedCards?: RevealedCard[]; // cards permanently known to the opponent this game (physical-card UID + card id)
   collection?: string[]; // redacted view only: public card ids the opponent may inspect
@@ -214,6 +231,10 @@ export interface TribePactDefeat {
 }
 
 export interface GameState {
+  armyAttuneApplied?: boolean;
+  heartFirstUid?: string;
+  heartUsed?: boolean;
+  lastWantedName?: string;
   castleReworkApplied?: boolean;
   questReworkApplied?: boolean;
   medals?: [string|null,string|null];
@@ -307,7 +328,7 @@ export type GameEvent =
   | { type: "voidShot"; player: Side; count: number; target: Side } // Resolved public Rift count; damage remains a separate engine event.
   | { type: "treason"; player: Side; target: Side; sourceUid: string; targets: {uid:string;zone:"monster"|"enchant";destination:"discard"|"rift"}[] }
   | { type: "timewarp"; player: Side; sourceUid: string }
-  | { type: "turnSkipped"; player: Side; source?: "TIMEWARP" | "BLACK_NOVA" | "DOMINION"; remaining: number }
+  | { type: "turnSkipped"; player: Side; source?: "TIMEWARP" | "BLACK_NOVA" | "DOMINION" | "TIME_WRAITH"; remaining: number }
   | { type: "voidGrant"; player: Side; uids: string[] } // Newly granted by Dimension Rite; public field UIDs only.
   | { type: "creationGranted"; player: Side; sourceUid: string; handIndex: number } // Public hand position, never the private generated identity or UID.
   | { type: "creationBorn"; player: Side; id: string; uid: string; sourceUid?: string; copy: boolean } // New public instance; never includes hidden deck identities.

@@ -82,7 +82,8 @@ try {
     const chips = [...root.querySelectorAll('#typeRow .chip')];
     assert.equal(chips.length, 6);
     assert(!chips.some(el => /罠|함정|Trap/.test(el.textContent)));
-    const definitions = [...Object.values(DB), ...Object.values(STARTERS)];
+    const bossOnly=new Set(['ELITE_GOBLIN','GOBLIN_ORIGIN','GOBLIN_PARTY','FORGE','ICARUS_SHOES','ICARUS_WINGS']);
+    const definitions = [...Object.values(DB), ...Object.values(STARTERS)].filter(c=>!bossOnly.has(c.id));
     const rendered = () => [...root.querySelectorAll('#grid > .card')];
     const visibleIds=()=>rendered().map(el=>el.dataset.cardId).sort();
     assert.deepEqual(visibleIds(),definitions.map(c=>c.id).sort());

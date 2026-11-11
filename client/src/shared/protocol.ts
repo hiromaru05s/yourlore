@@ -50,6 +50,11 @@ export type GameServerMsg =
  */
 export function redactFor(state: GameState, you: Side): GameState {
   const g: GameState = structuredClone(state);
+  for (const owner of [0,1] as const) {
+    const foe=g.players[1-owner];
+    for (const m of g.players[owner].field) if (m.id==='TOKEN00')
+      m.visibleCurseAttack=[...foe.hand,...foe.deck,...foe.discard,...foe.field].filter(c=>c.id==='CURSE').length;
+  }
   delete g.medalDuel;
   g._wheelSnap = null; // 운명의 수레바퀴 스냅샷은 서버 전용 (클라 불필요 + 숨김정보 보호)
   g.rng = 0; // PRNG state is server-only — leaking it lets a client replay mulberry32 and predict every future roll/shuffle

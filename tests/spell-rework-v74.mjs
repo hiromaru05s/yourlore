@@ -22,7 +22,7 @@ try {
   for(const id of E.ALL_IDS)assert(!E.relatedCardIds(id).includes('GROWTH'));
  });
  for(const n of [3,4,5,6])test(`Rich Habit restored at hand boundary ${n}, both players`,()=>{
-  for(const side of [0,1]){let g=fresh(side);ench(g,'RICH_HABIT');g.players[side].deck=Array.from({length:20},()=>card('M1'));g.players[side].hand=Array.from({length:n-3},()=>card('M1'));g.players[side].maxMana=10;
+  for(const side of [0,1]){let g=fresh(side);ench(g,'RICH_HABIT');g.players[side].deck=Array.from({length:20},()=>card('M1'));g.players[side].hand=Array.from({length:n-2},()=>card('M1'));g.players[side].maxMana=10;
    g=end(end(g));assert.equal(g.players[side].hand.length,n);assert.equal(g.players[side].hp,n>=4?106:100);assert.equal(g.players[side].maxMana,n>=6?11:10);
   }
  });

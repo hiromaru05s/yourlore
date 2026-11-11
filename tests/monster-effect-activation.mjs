@@ -20,7 +20,7 @@ try {
  for(const bad of audit.scans.filter(c=>c.noOpActivation&&c.reachableByNormalPlay&&c.label.startsWith('onSummon:'))){
   const g=fresh(),p=g.players[0],o=g.players[1],m=mon(bad.id);p.field=[m];
   if(bad.label.includes(':populated:')){p.field.push(plain({tribe:'시초'}),mon('WORLD_TREE',{turnFx:undefined}),plain({name:'골램 장비 장인',nameJa:'ゴーレム 装備職人'}));o.field=[plain(),plain({atk:10,def:20})];p.hand=[card('WINE'),card('WINE')];p.deck=Array.from({length:15},()=>card('WEAKEN_ALL'));p.discard=[card('SOLDIER2'),card('STARTER_TRASH')];o.removed=[card('SOLDIER2')];p.supplyHist=[{turn:5,ids:['ELF']}];}
-  const ev=[];E.resolveOnSummon(g,E.makeCtx(g,ev),m);expect(ev,m,bad.id==='SORTER'?1:0,bad.label);
+  const ev=[];E.resolveOnSummon(g,E.makeCtx(g,ev),m);expect(ev,m,['SORTER','GM6_0','D_BLACK','MERCH1','MERCH2'].includes(bad.id)?1:0,bad.label);
   if(bad.id==='SORTER')assert.equal(p.removed.filter(c=>c.star==='trash').length,1);
  }
  for(const owner of [0,1]){

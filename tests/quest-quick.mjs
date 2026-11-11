@@ -19,8 +19,8 @@ try {
   const activate = (g,id,s=0) => { g.cur=s; g.players[s].hand.push(card(id)); return step(g,{type:'play',idx:g.players[s].hand.length-1}); };
   const buy = (g,id,from='buyMarket') => { if(from==='buyMarket')g.market[0]=card(id);else g.players[g.cur].supply[0]=card(id); return step(g,{type:from,i:0}); };
   const pick = (g,uid) => step(g,{type:'pick',uid});
-  assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,11);
-  assert.equal(Object.values(DB).filter(c=>c.quick).length,13);
+  assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,12);
+  assert.equal(Object.values(DB).filter(c=>c.quick).length,17);
   assert(Object.values(DB).filter(c=>c.quick).every(c=>c.t==='spell'));
   assert.equal(frameFor('quest'),'/art/biblion/modular/base-quest-print.webp');
 
