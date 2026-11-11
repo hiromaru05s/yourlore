@@ -20,10 +20,10 @@ try{
    const ob=new MutationObserver(()=>seen.push(c.dataset.action+':'+c.dataset.frame));ob.observe(c,{attributes:true,attributeFilter:['data-frame']});
    await hoodedBoard.trigger(action,side);
    const deadline=performance.now()+12000;
-   while(c.dataset.action==='hurt'&&performance.now()<deadline)await new Promise(requestAnimationFrame);
+   while(c.dataset.action!=='idle'&&performance.now()<deadline)await new Promise(requestAnimationFrame);
    ob.disconnect();return seen;
   },{action,side});histories[action]=history;
-  assert.equal(history.some(v=>v.startsWith('hurt:')),hit,action+': '+JSON.stringify(history));assert.equal(history.at(-1),'idle:0');checks.push('controller '+action+' '+(hit?'reacts once':'keeps portrait static'));
+  assert.equal(history.some(v=>v.startsWith('mana:')),action==='mana');assert.equal(history.some(v=>v.startsWith('hurt:')),hit,action+': '+JSON.stringify(history));assert.equal(history.at(-1),'idle:0');checks.push('controller '+action+' '+(hit?'reacts once':'settles to idle'));
  }
  const continuity=await page.evaluate(async()=>{
    const c=document.querySelector('#portraitMe canvas');

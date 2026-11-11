@@ -8,6 +8,7 @@ export const SEEKER_HIT_MS = 800;
 export const seekerPoster = () => `${SEEKER_ROOT}/portrait.webp`;
 export const seekerAtlas = () => `${SEEKER_ROOT}/poses.webp`;
 export const seekerRecoil = () => `${SEEKER_ROOT}/recoil-a.webp`;
+export const seekerManaCrest = () => SEEKER_ROOT + '/mana-crest.webp';
 export const damageAction = (amount: number): SeekerAction | null => amount > 0 ? 'hurt' : null;
 export class SeekerMotion {
   private elapsed = 0;

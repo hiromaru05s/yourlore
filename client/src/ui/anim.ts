@@ -86,7 +86,7 @@ import {isVerdant} from './verdant/selection';
 import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
-import {damageAction, playSeekerSide, setSeekerSkip} from './seekerAnimation';
+import {damageAction, playSeekerMana, playSeekerSide, setSeekerSkip} from './seekerAnimation';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
@@ -982,10 +982,14 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
       label.remove();delete el.dataset.gainStart;delete el.dataset.gainPhase;el.style.removeProperty('--mana-bloom');resolve();};
     fxWaiters.add(finish);document.addEventListener('visibilitychange',finish,{once:true});
     const tick=()=>{
-      const age=performance.now()-start;if(fxSkip||document.hidden||!el.isConnected||age>=duration){finish();return;}
+      const age=performance.now()-start;if(fxSkip||document.hidden||!el.isConnected){finish();return;}
       const impact=age>=impactAt;el.dataset.gainPhase=impact?'bloom':'gather';
       if(readout)readout.textContent=String(impact?current:fromMana);if(max)max.textContent='/'+(impact?maximum:fromMax);
-      if(impact&&!sounded){sounded=true;sfx('mana');}
+      if(impact&&!sounded){
+        sounded=true;sfx('mana');
+        if(maximum>fromMax)playSeekerMana(side);
+      }
+      if(age>=duration){finish();return;}
       const pose=manaGainPose(age);el.style.setProperty('--mana-bloom',String(formation?0:pose.glow));
       label.style.opacity=String(impact?Math.min(1,(age-impactAt)/90)*(1-Math.max(0,(age-duration+450)/450)):0);
       label.style.transform=`translate(-50%,${-Math.max(0,age-impactAt)/90}px)`;
