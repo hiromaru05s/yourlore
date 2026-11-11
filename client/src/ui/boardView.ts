@@ -574,7 +574,7 @@ export class GameView {
       if (dualReadyActive(m, canAttack)) card.dataset.monsterDualReady = '04';
       if (pending?.reason === "attack" && isMe && myTurn && pending.data?.attackerUid === m.uid) card.onclick = () => this.h.onChooseTarget(null);
       else if (targetableMon) card.onclick = () => this.h.onChooseTarget(m.uid);
-      else if (canAttack && g.players[1 - this.you].field.length === 0) card.onclick = () => this.h.onAttack(m.uid);
+      else if (canAttack && (!g.players[1-this.you].field.length || hasPassive(m,'boundary'))) card.onclick = () => this.h.onAttack(m.uid);
       // zoom shows the monster's CURRENT atk/hp (buffs/mods applied) — and, when damaged,
       // "현재/최대" exactly like the field tile (v29: the zoom used to show HP only,
       // so a 4/20 monster read as a healthy 20 in the view players trade off).
@@ -588,7 +588,7 @@ export class GameView {
           canReorder: p.field.length > 1,
           canAttack,
           oppHasMon: opp.field.length > 0,
-          directOnly: !!m.directOnly,
+          canPassDefenders: hasPassive(m,'ambush') || hasPassive(m,'boundary'),
           targetUids: new Set(opp.field.filter(target => monsterCanTarget(g,p,m,target)).map(target => target.uid)),
         });
       }
@@ -711,7 +711,7 @@ export class GameView {
    *  Releasing away from a target cancels, so another drag can start immediately. */
   private enableMonsterDrag(
     card: HTMLElement, index: number, zone: HTMLElement,
-    o: { uid: string; canReorder: boolean; canAttack: boolean; oppHasMon: boolean; directOnly: boolean; targetUids: Set<string> },
+    o: { uid: string; canReorder: boolean; canAttack: boolean; oppHasMon: boolean; canPassDefenders: boolean; targetUids: Set<string> },
   ): void {
     card.style.touchAction = "none"; // keep pointermove alive on touch
     // native HTML5 drag (e.g. of the card art <img>) fires pointercancel and
@@ -766,12 +766,12 @@ export class GameView {
         if (mode === "attack") {
           if(ghost)ghost.style.display='none';
           if(!aim)aim=createAttackAim(()=>{
-            if(!card.isConnected)return null;const target=targetAt(pointer.x,pointer.y),valid=!!target.mon||!!target.portrait&&(!o.oppHasMon||o.directOnly);
+            if(!card.isConnected)return null;const target=targetAt(pointer.x,pointer.y),valid=!!target.mon||!!target.portrait&&(!o.oppHasMon||o.canPassDefenders);
             const a=card.getBoundingClientRect(),b=(target.mon??(target.portrait?document.querySelector('#portraitOpp .pt-ring'):null))?.getBoundingClientRect();
             return {x:a.left+a.width/2,y:a.top+a.height*.4,tx:b?b.left+b.width/2:pointer.x,ty:b?b.top+b.height/2:pointer.y,valid,blocked:!!target.portrait&&!valid};
           });
           if (marker) marker.style.display = "none";
-          const valid=!!t.mon || (!!t.portrait && (!o.oppHasMon || o.directOnly));
+          const valid=!!t.mon || (!!t.portrait && (!o.oppHasMon || o.canPassDefenders));
           setHot(valid ? t.mon ?? t.portrait : null);
           const a=card.getBoundingClientRect(),b=(t.portrait?document.querySelector('#portraitOpp .pt-ring'):hot)?.getBoundingClientRect();
           aim.update(a.left+a.width/2,a.top+a.height*.4,b?b.left+b.width/2:x,b?b.top+b.height/2:y,valid,!!t.portrait&&!valid);
@@ -835,8 +835,8 @@ export class GameView {
           const tUid = t.mon?.dataset.uid;
           if (tUid) { this.h.onAttack(o.uid, tUid); return; }               // dropped on a monster
           if (t.portrait) {                                                // dropped on the face
-            if (o.oppHasMon && !o.directOnly) { this.h.onBlockedAttack(); return; }
-            this.h.onAttack(o.uid); return;
+            if (o.oppHasMon && !o.canPassDefenders) { this.h.onBlockedAttack(); return; }
+            this.h.onAttack(o.uid,null); return;
           }
           return;                                                         // no target: cancel without opening a target picker
         }

@@ -242,7 +242,7 @@ export abstract class BaseController implements BoardHandlers {
     this.fastForward();
     // drag-to-attack already knows the defender: stash it so the "choose a target"
     // pending the engine raises right after is answered automatically.
-    this.autoTarget = targetUid ?? null;
+    this.autoTarget = targetUid === null ? 'opposing-player' : targetUid ?? null;
     this.submit({ type: "attack", uid });
   }
   onBlockedAttack() { this.cantPlayToast(t("attack.block.guarded")); }
@@ -1277,6 +1277,14 @@ export abstract class BaseController implements BoardHandlers {
         return;
       }
       if (g.pending.kind === "cardChoice") {
+        if (g.pending.reason === 'BOUNDARY_ATTACK' && this.autoTarget) {
+          const target = this.autoTarget;
+          this.autoTarget = null;
+          if (effectChoices(g).some(c => c.uid === target)) {
+            setTimeout(() => { if (this.state === g) this.submit({type:'pick',uid:target}); },0);
+            return;
+          }
+        }
         const pending=g.pending;
         const rebirth=pending.reason==='QUICK_REBIRTH',lang=getLang();
         const title=rebirth?(lang==='ja'?'墓地からモンスターを選択':lang==='en'?'Choose a monster from your graveyard':'묘지에서 몬스터 선택'):pendingText(pending,lang);
