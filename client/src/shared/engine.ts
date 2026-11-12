@@ -745,6 +745,7 @@ interface Ctx {
   destroyer?: Side;
   effectCard?: CardDef;
   runePaid?: number;
+  runePrices?:Record<string,number>;
   battleKill?: boolean;
   monsterSource?: CardInst;
   summonTurnOwner?: Side; // Actual turn owner while resolving a summon on another field.
@@ -3724,7 +3725,7 @@ function applySummonBuff(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): v
   }
   // v36: 강철의 전사 — 소환되는 몬스터의 체력 +val(지속)
   const n = p.field.filter((x) => x.uid !== m.uid && x.aura === "summonBuff").reduce((s, x) => s + (x.val || 1), 0);
-  if (n > 0) { for (const source of p.field) if (source.uid !== m.uid && source.aura === "summonBuff") ctx.ev.push({type:"monsterActivate",player:ctx.side(p),uid:source.uid}); m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, n); ctx.log(`  └ 소환 강화: ${cn(m)} 체력 +${n}`, `  └ 召喚強化: ${cn(m)} 体力+${n}`); }
+  if (n > 0) { for (const source of p.field) if (source.uid !== m.uid && source.aura === "summonBuff") monsterActivation(g,ctx.ev,p,source); m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, n); ctx.log(`  └ 소환 강화: ${cn(m)} 체력 +${n}`, `  └ 召喚強化: ${cn(m)} 体力+${n}`); }
 }
 
 // ============================================================
@@ -4339,7 +4340,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "RUNE1":
       if (runeBoost(p,card.id,true)) { for(const m of o.field) for(const k of livePassives(m)) if(k!=='void') stripRunePassive(m,k); }
       else queueExpansionChoice(g,p,'RUNE_STRIP',''); break;
-    case "RUNE2": queueExpansionChoice(g,p,'RUNE_GRANT','',{free:runeBoost(p,card.id,true),paid:ctx.runePaid??playCost(card,p)}); break;
+    case "RUNE2": queueExpansionChoice(g,p,'RUNE_GRANT','',{prices:ctx.runePrices,paid:ctx.runePaid??0}); break;
     case "RUNE3": {
       const n=g.players.flatMap(pl=>pl.field).reduce((sum,m)=>sum+livePassives(m).length,0);
       if(n) runeWave(g,ctx,p,card,n); else queueExpansionChoice(g,p,'RUNE_VOID','');
@@ -5343,6 +5344,11 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
 
     spellCostActivations(g, ctx, p, card);
     const paidCost = playCost(card, p);
+    if(card.id==='RUNE2') {
+      ctx.runePaid=paidCost;
+      ctx.runePrices=Object.fromEntries(Object.entries(runeModes).map(([key,tier])=>
+        [key,Math.max(0,playCost({...card,play:tier},p)-paidCost)]));
+    }
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= paidCost; p.hand.splice(idx, 1); p.discard.push(card);
     if (!card.ench && !hasPassive(card,"void")) graveyardArrival(g,ctx,p,card);
     if (card.id === 'AMBUSH') p.usesTurn.AMBUSH = (p.usesTurn.AMBUSH ?? 0) + 1;
@@ -5353,7 +5359,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (countBeforeReactions) p.uses[card.id] = (p.uses[card.id] ?? 0) + 1;
     // A negated cast still consumes the same-name limit; count before reactions.
     if (card.maxUsesPerTurn != null) p.usesTurn[card.id] = (p.usesTurn[card.id] ?? 0) + 1;
-    if(card.id==="RUNE2") ctx.runePaid=paidCost;
+
     const negated = registerSpellUse(g, ctx, p, card, paidCost);
     consumeGrimoire(p);
     if (negated) { if(card.id==='MANA_HEART') g.heartUsed=true; if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; }
@@ -6767,10 +6773,10 @@ function endureWithGuts(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon,
   if (attack && attack.targetUid === m.uid) attack.guts = result;
   else ctx.ev.push({type:'gutsSurvive', ...result});
 }
-function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, amount: number, combat = false, effectSource?: CardInst): boolean {
+function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, amount: number, combat = false, effectSource?: CardInst, effectOwner?:PlayerState): boolean {
   if (!owner.field.includes(m) || amount <= 0 || m.immuneDamageTurn === g.turn || (!combat && swordWarded(owner,m))) return false;
   const source = effectSource ?? ctx.monsterSource;
-  const dealer = source && g.players.find(p=>p.field.some(m=>m.uid===source.uid)) || g.players[g.cur];
+  const dealer = effectOwner ?? (source && g.players.find(p=>p.field.some(m=>m.uid===source.uid))) ?? g.players[g.cur];
   if (!combat && dealer!==owner && (spellDepth>0 || source)) amount=fireveinDamage(dealer,owner,amount);
   if (spellDepth > 0 && g.players.some(p => p.enchants.some(e => e.card.ench === 'doubleUp'))) amount *= 2;
   if (spellDepth > 0) spellDamageRecorded(g, Math.min(curHp(owner, m), amount));
@@ -6840,7 +6846,7 @@ function randomEnemyDamage(g: GameState, ctx: Ctx, p: PlayerState, amount: numbe
     const n = randInt(g, o.field.length + 1);
     fx.hit(other,n===o.field.length?null:o.field[n].uid,amount);
     if (n === o.field.length) ctx.dealDamage(o, amount, cn(src), cn(src), side(g, p));
-    else monsterDamage(g, ctx, o, o.field[n], amount,false,src);
+    else monsterDamage(g, ctx, o, o.field[n], amount,false,src,p);
   }
   fx.end();
 }
@@ -6849,7 +6855,7 @@ function areaDamage(g: GameState, ctx: Ctx, p: PlayerState, amount: number, both
   try {
    for (const pl of both ? g.players : [o]) for (const m of [...pl.field]) {
     if (g.over) return;
-    fx?.hit(side(g,pl),m.uid,amount);monsterDamage(g, ctx, pl, m, amount,false,src);
+    fx?.hit(side(g,pl),m.uid,amount);monsterDamage(g, ctx, pl, m, amount,false,src,p);
    }
    if (!both && !g.over){fx?.hit(side(g,o),null,amount);ctx.dealDamage(o, amount, cn(src), cn(src), side(g, p));}
   }finally{fx?.end();}
@@ -6949,6 +6955,7 @@ function expansionSummon(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): v
   }
 }
 function expansionEnd(g: GameState, ctx: Ctx, p: PlayerState): void {
+  delete p.runeMarket; delete p.freeOrigin;
   const defender=g.players[1-side(g,p)];
   for(const e of [...defender.enchants]) if(e.card.id==='RUNE_BARRIER' && (e.bornTurn??0)<g.turn) {
     defender.enchants.splice(defender.enchants.indexOf(e),1);binEnch(g,ctx,defender,e.card);
@@ -7275,7 +7282,7 @@ function giveRunePassive(m:FieldMon,k:string):void {
 const runeModes:Record<string,number>={guts:1,counter:2,evade:2,aura:3,majesty:3};
 function runeChoices(g:GameState):CardInst[]|null {
   const q=g.pending!,p=g.players[actingSide(g)],o=g.players[1-actingSide(g)],all=[...p.field,...o.field];
-  const grantPrice=(key:string)=>q.data?.free?0:Math.max(0,(runeModes[key]-1)*(p.manaCostMult??1));
+  const grantPrice=(key:string)=>Number((q.data?.prices as Record<string,number> | undefined)?.[key] ?? 0);
   const selectableBoard=()=>fieldCards(o).map(c=>o.traps.some(t=>t.card.uid===c.uid)?{uid:c.uid,id:'HIDDEN',t:'trap' as const,cost:0,name:'?',text:'',nameJa:'?',nameEn:'?'}:c);
   switch(q.reason){
     case 'GLYPH_REWARD': return [...RUNE_IDS].map(id=>({...DB[id],uid:id}));
@@ -7311,7 +7318,7 @@ function resolveRuneChoice(g:GameState,ctx:Ctx,p:PlayerState,q:Pending,c:CardIns
       const target=o.field.find(m=>m.uid===q.data?.target);if(target)stripRunePassive(target,c.uid);break;
     }
     case 'RUNE_GRANT':{
-      if(!q.data?.free)p.mana-=(runeModes[c.uid]-1)*(p.manaCostMult??1);
+      p.mana-=Number((q.data?.prices as Record<string,number> | undefined)?.[c.uid]??0);
       offerEffectChoice(g,ctx,p,'RUNE_GRANT_TARGET','',{key:c.uid});break;
     }
     case 'RUNE_GRANT_TARGET':case 'GLYPH_TARGET':giveRunePassive(m,String(q.data?.key));break;

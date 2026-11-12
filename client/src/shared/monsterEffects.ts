@@ -15,7 +15,8 @@ export function monsterActivation(g: GameState, events: GameEvent[], owner: Play
     for(const p of g.players) for(const devil of p.field) if(devil.id==='DEVIL_TOKEN' && !devil.mutedEffects) {
       devil.atkMod=(devil.atkMod??0)+1;devil.defMod=(devil.defMod??0)+1;
     }
-  if (!presenting) return;
+  // A Devil makes this activation a rule event even in a simulated turn.
+  if (!presenting && !g.players.some(p=>p.field.some(m=>m.id==='DEVIL_TOKEN'))) return;
   // Counter damage can remove the attacker before its post-attack effect
   // resolves. Present that source while its old-board card still exists.
   const removedAt = owner.field.some(m => m.uid === source.uid) ? -1
@@ -46,7 +47,9 @@ export function observeMonsterEffect(g: GameState, events: GameEvent[], owner: P
     // A self-reaction (e.g. Priest gaining its own Shield) shares the source.
     // Move that cue to the beginning instead of playing the same card twice.
     const existing = events.findIndex((e, i) => i >= at && e.type === 'monsterActivate' && e.uid === source.uid);
-    if (existing >= 0) events.splice(existing, 1);
-    monsterActivation(g, events, owner, source, at);
+    if (existing >= 0) {
+      // Move the recorded activation without triggering reactive monsters twice.
+      const [activation]=events.splice(existing,1);events.splice(at,0,activation);
+    } else monsterActivation(g, events, owner, source, at);
   };
 }

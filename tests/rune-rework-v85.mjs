@@ -134,6 +134,25 @@ for(const side of [0,1]){
   g=fresh(side);g.players[side].field=[m('INFKNIGHT'),m('M2')];g=play(g,'HORDE');assert.equal(g.players[side].field[0].atkMod,3);assert.equal(g.players[side].field[1].atkMod,0);
  }
 }
+{
+  let g=fresh();const mage=m('CHOSEN_MAGE'),target=m('M2');
+  g.players[0].field=[mage,target];g=play(g,'RUNE2');g=pick(g,'aura');g=pick(g,target.uid);
+  assert.equal(g.players[0].mana,18,'the three-mana tier uses the Mage discount');
+}
+{
+  let g=fresh();g.players[0].field=[m('DEVIL_TOKEN')];g.players[0].shield=0;
+  g=play(g,'M5');assert.equal(g.players[0].field[0].defMod,1);
+}
+{
+  let g=fresh();delete g.runeReworkApplied;
+  const farmer=m('FARMER',{def:1,atkMod:4,dmg:1}),retired={...c('S13'),id:'INQUISITION'};
+  g.players[0].field=[farmer];g.players[0].hand=[retired,{...c('MAGIC_BANK'),play:4}];
+  g.players[0].enchants=[{card:{...c('RUNE3'),ench:'runeEcho',cost:7},turns:99}];
+  E.restoreReworkedCards(g);assert.equal(farmer.def,2);assert.equal(farmer.dmg,1);assert.equal(farmer.atkMod,4);
+  assert.equal(g.players[0].hand.length,1);assert.equal(g.players[0].hand[0].play,3);
+  assert.equal(g.players[0].enchants.length,0);assert.equal(g.players[0].discard[0].cost,3);
+  const saved=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),saved);
+}
 assert(!E.DB.INQUISITION);assert(E.DECK_POOL.includes('Q_RUNE_SECRET'));assert(!E.BUYABLE_POOL.includes('DEVIL_TOKEN'));
 assert.equal(E.DB.MAGIC_BANK.play,3);assert.equal(E.DB.INFERNO.cost,4);assert.equal(E.DB.INFERNO.play,1);
 console.log('PASS Rune rework, quick purchase, starter reward destinations, both seats, chosen combat, farm and army rules');
