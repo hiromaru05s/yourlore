@@ -1,6 +1,10 @@
 import type { FieldMon, GameEvent, GameState, PlayerState } from './types';
 
 let presenting = true;
+// When a Devil is present, remember explicit activations in simulations too.
+// Nested summon/upkeep observations may describe the same source effect.
+const activationCounts = new WeakMap<GameEvent[],Map<string,number>>();
+
 /** Synchronous search only. Restore on nested calls and exceptions so the real
  * reducer keeps its complete presentation events after a bot decision. */
 export function withoutMonsterPresentation<T>(work: () => T): T {
@@ -11,12 +15,20 @@ export function withoutMonsterPresentation<T>(work: () => T): T {
 
 /** A resolution boundary, not an action/turn-wide deduplication key. */
 export function monsterActivation(g: GameState, events: GameEvent[], owner: PlayerState, source: FieldMon, at = events.length): void {
-  if(owner.field.includes(source) || events.some(e=>e.type==='destroy' && e.uid===source.uid))
-    for(const p of g.players) for(const devil of p.field) if(devil.id==='DEVIL_TOKEN' && !devil.mutedEffects) {
+  if (owner.field.includes(source) || events.some(e=>e.type==='destroy' && e.uid===source.uid)) {
+    let reacted=false;
+    for(const player of g.players) for(const devil of player.field) {
+      if(devil.id!=='DEVIL_TOKEN' || devil.mutedEffects) continue;
       devil.atkMod=(devil.atkMod??0)+1;devil.defMod=(devil.defMod??0)+1;
+      reacted=true;
     }
-  // A Devil makes this activation a rule event even in a simulated turn.
-  if (!presenting && !g.players.some(p=>p.field.some(m=>m.id==='DEVIL_TOKEN'))) return;
+    if (reacted) {
+      const counts=activationCounts.get(events)??new Map<string,number>();
+      counts.set(source.uid,(counts.get(source.uid)??0)+1);
+      activationCounts.set(events,counts);
+    }
+  }
+  if (!presenting) return;
   // Counter damage can remove the attacker before its post-attack effect
   // resolves. Present that source while its old-board card still exists.
   const removedAt = owner.field.some(m => m.uid === source.uid) ? -1
@@ -40,6 +52,7 @@ export function observeMonsterEffect(g: GameState, events: GameEvent[], owner: P
     choices: g.expansionChoices ?? [],
   });
   const before = consequences();
+  const priorCount=activationCounts.get(events)?.get(source.uid)??0;
   return () => {
     const effects = events.slice(at);
     const attempted = effects.some(e => e.type === 'dice' || e.type === 'needTarget');
@@ -50,6 +63,6 @@ export function observeMonsterEffect(g: GameState, events: GameEvent[], owner: P
     if (existing >= 0) {
       // Move the recorded activation without triggering reactive monsters twice.
       const [activation]=events.splice(existing,1);events.splice(at,0,activation);
-    } else monsterActivation(g, events, owner, source, at);
+    } else if ((activationCounts.get(events)?.get(source.uid)??0)===priorCount) monsterActivation(g, events, owner, source, at);
   };
 }
