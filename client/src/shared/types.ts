@@ -73,6 +73,7 @@ export interface FieldMon extends CardInst {
   mutedEffects?: Pick<CardDef,'onSummon'|'turnFx'|'condAtk'|'attackFx'|'aura'|'evolveTo'>;
   escortLocked?: boolean;
   boundarySuppressed?: boolean;
+  realmSuppressed?: boolean;
   riftAtTurnEnd?: number;
   immuneDamageTurn?: number;
   expireOpponentOf?: Side;
@@ -124,6 +125,7 @@ export interface PlayerState {
   crystalFloor?: number;
   marketDiscount?: number;
   strengthAuras?: number;
+  demonRealms?: number;
   monsterSilence?: boolean;
   dragonSpellLimitTurn?: number;
   extraHitTurn?: number;
@@ -233,6 +235,7 @@ export interface TribePactDefeat {
 export interface GameState {
   starterQuestReworkApplied?: boolean;
   fireBrandReworkApplied?: boolean;
+  demonRealmReworkApplied?: boolean;
   armyAttuneApplied?: boolean;
   heartFirstUid?: string;
   heartUsed?: boolean;

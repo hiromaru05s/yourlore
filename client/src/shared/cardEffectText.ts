@@ -1115,24 +1115,24 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Draw 1 extra card at your turn start while this monster is on the field."
   },
   "TDE1": {
-    "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【召喚時】自分のマナ水晶-1。双方通算10ターン後のターン開始時に、自分のマナ水晶+1（このモンスターが場を離れても戻る）。",
-    "ko": "【소환 조건】자신의 마나 수정 5 이상.\n\n【소환 시】자신의 마나 수정 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 마나 수정 +1(이 몬스터가 필드를 떠나도 복구).",
-    "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【On Summon】Reduce your mana crystals by 1. At turn start 10 total turns later, counting both players, increase your mana crystals by 1, even if this monster has left."
+    "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【召喚時】自分のマナ水晶-1。双方通算10ターン後のターン開始時に、自分のマナ水晶+1（このモンスターが場を離れても戻る）。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+    "ko": "【소환 조건】자신의 마나 수정 5 이상.\n\n【소환 시】자신의 마나 수정 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 마나 수정 +1(이 몬스터가 필드를 떠나도 복구).\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
+    "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【On Summon】Reduce your mana crystals by 1. At turn start 10 total turns later, counting both players, increase your mana crystals by 1, even if this monster has left.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
   },
   "TDE2": {
-    "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【場にある間】自分のマナ水晶-2（最低3）。",
-    "ko": "【소환 조건】자신의 마나 수정이 5 이상.\n\n【필드에 있는 동안】자신의 마나 수정 -2(최저 3).",
-    "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【While on the Field】Your mana crystals are reduced by 2, to a minimum of 3."
+    "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【場にある間】自分のマナ水晶-2（最低3）。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+    "ko": "【소환 조건】자신의 마나 수정이 5 이상.\n\n【필드에 있는 동안】자신의 마나 수정 -2(최저 3).\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
+    "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【While on the Field】Your mana crystals are reduced by 2, to a minimum of 3.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
   },
   "TDE3": {
-    "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分のマナ水晶を1減らし、4～6なら2減らす。この効果では3未満にならない。",
-    "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 마나 수정을 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.",
-    "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your mana crystals by 1; on 4–6, reduce them by 2. This effect cannot reduce them below 3."
+    "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分のマナ水晶を1減らし、4～6なら2減らす。この効果では3未満にならない。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+    "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 마나 수정을 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
+    "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your mana crystals by 1; on 4–6, reduce them by 2. This effect cannot reduce them below 3.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
   },
   "TDE4": {
-    "ja": "【召喚条件】自分のマナ水晶が5以上で、自分のデッキ構成に「魔王」以外の「魔族」モンスターがいる。\n\n【召喚時】自分のマナ水晶を3にする。\n\n【場にある間】自分のマナ水晶は増えない。",
-    "ko": "【소환 조건】자신의 마나 수정이 5 이상이고 자신의 덱 구성에 마왕 이외의 마족 몬스터가 있다.\n\n【소환 시】자신의 마나 수정을 3으로 만든다.\n\n【필드에 있는 동안】자신의 마나 수정은 증가하지 않는다.",
-    "en": "【Summon Requirement】Your mana crystals are at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your mana crystals to 3.\n\n【While on the Field】Your mana crystals cannot increase."
+    "ja": "【召喚条件】自分のマナ水晶が5以上で、自分のデッキ構成に「魔王」以外の「魔族」モンスターがいる。\n\n【召喚時】自分のマナ水晶を3にする。\n\n【場にある間】自分のマナ水晶は増えない。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター3個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+    "ko": "【소환 조건】자신의 마나 수정이 5 이상이고 자신의 덱 구성에 마왕 이외의 마족 몬스터가 있다.\n\n【소환 시】자신의 마나 수정을 3으로 만든다.\n\n【필드에 있는 동안】자신의 마나 수정은 증가하지 않는다.\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 3개를 준다. 실드가 데미지를 전부 막아도 준다.",
+    "en": "【Summon Requirement】Your mana crystals are at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your mana crystals to 3.\n\n【While on the Field】Your mana crystals cannot increase.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 3 Brand counters. This applies even if Shield absorbs all the damage."
   },
   "DUNGEON_FLOOR": {
     "ja": "【発動条件】相手のマナ水晶が9以上。\n\n【発動時】自身に烙印カウンターを1つ付与する。ダイス1個を振り、その出目と同じ数の「ミミック」を自分の場に召喚する。",
@@ -1245,9 +1245,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Remove all Brand counters from both players."
   },
   "DEMON_REALM": {
-    "ja": "【発動時】自分の場の全ての「魔族」モンスターの効果・キーワード能力を無効にする。\n\n【自分のモンスター召喚時】以後、自分が召喚する「魔族」モンスターにも同じ処理を行う。この無効化はこの魔法が場を離れても、そのモンスターが場にいる間続く。",
-    "ko": "【발동 시】자신의 필드의 모든 마족 몬스터의 효과·키워드 능력을 무효화한다.\n\n【자신의 몬스터 소환 시】이후 자신이 소환하는 마족 몬스터에도 같은 처리한다. 이 무효화는 이 마법이 필드를 떠나도 해당 몬스터가 필드에 있는 동안 지속.",
-    "en": "【On Cast】Negate all effects and keywords of your Demonkin monsters.\n\n【When You Summon a Monster】Also negate those of Demonkin monsters you summon later. Negation lasts while each affected monster remains on the field, even if this spell leaves."
+    "ja": "【場にある間】両方の場の全モンスターの攻撃力を1上げる。両方の場の「魔族」モンスターの効果とキーワード能力を全て無効にする。どちらかの場のモンスターが破壊されるたび、そのモンスターの持ち主がダイス1個を振る。出目が4以上なら、その持ち主に烙印カウンター1個を付与する。場の「魔界」1枚ごとに攻撃力の上昇とダイス判定を適用する。",
+    "ko": "【필드에 있는 동안】양쪽 필드의 모든 몬스터의 공격력을 1 올린다. 양쪽 필드의 마족 몬스터의 효과와 키워드 능력을 전부 무효화한다. 어느 쪽 필드에서든 몬스터가 파괴될 때마다 그 몬스터의 소유자가 주사위 1개를 굴린다. 4 이상이면 그 소유자에게 낙인 카운터 1개를 준다. 필드의 마계 1장마다 공격력 증가와 주사위 판정을 적용한다.",
+    "en": "【While on the Field】Give all monsters on both fields +1 ATK. Negate all effects and keywords of Demonkin monsters on both fields. Whenever a monster on either field is destroyed, its owner rolls 1 die. On a 4 or higher, give that owner 1 Brand counter. Apply the ATK bonus and roll separately for each Demon Realm on the field."
   },
   "AEM": {
     "ja": "【発動時】自分の場の全モンスターに「虚無」を付与し、各攻撃力+4。自分の場に「ゴーレム」系がいれば「虚無」は付与しない。異なる「ゴーレム」系が2種類以上いれば、攻撃力の増加は+8になる。",

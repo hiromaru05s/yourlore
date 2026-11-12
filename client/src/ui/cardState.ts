@@ -36,6 +36,7 @@ export function cardStateEl(c: CardInst, hp?: {now:number;max:number;turn?:numbe
   if ((m.tempAtk ?? 0)-expiring) row(loc('攻撃力補正（自分のターン終了まで）','공격력 보정 (자신 턴 종료까지)','ATK modifier (until your turn ends)'),signed((m.tempAtk ?? 0)-expiring));
   for (const e of m.tempAtkExpiry ?? []) row(loc(`攻撃力補正（ターン${e.turn}終了まで）`,`공격력 보정 (${e.turn}턴 종료까지)`,`ATK modifier (until turn ${e.turn} ends)`),signed(e.amount));
   if (m.immuneDamageTurn != null && m.immuneDamageTurn === hp?.turn) row(loc('ダメージ無効','데미지 무효','Damage prevention'),loc(`ターン${m.immuneDamageTurn}終了まで`,`${m.immuneDamageTurn}턴 종료까지`,`Until turn ${m.immuneDamageTurn} ends`));
+  if (m.realmSuppressed) row(loc('モンスター効果','몬스터 효과','Monster effects'),loc('魔界により無効','마계로 무효','Negated by Demon Realm'));
   const granted=(m.passivesG ?? []).filter(k=>!!PASSIVES[k]);
   if(granted.length) row(loc('付与された能力（持続）','부여받은 능력 (지속)','Granted abilities (lasting)'),granted.map(k=>PASSIVES[k][lang].name).join(' · '));
   if(m.conditionalPassives?.length) row(loc('条件成立中の能力','조건 충족 중인 능력','Abilities from active conditions'),m.conditionalPassives.filter(k=>!!PASSIVES[k]).map(k=>PASSIVES[k][lang].name).join(' · '));

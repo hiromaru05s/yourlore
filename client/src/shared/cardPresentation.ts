@@ -26,6 +26,7 @@ export function questProgressText(progress: number, target: number, lang: Effect
 
 /** Spell keyword metadata may describe what it grants, not an ability it owns. */
 export function displayPassives(c: CardDef & Partial<FieldMon>): string[] {
+  if (c.realmSuppressed) return [];
   return [...new Set([...cardPassives(c).filter(k => c.t === 'mon' || !(CARD_RULE_METADATA[c.id]?.grants ?? []).includes(k)), ...(c.passivesG ?? [])])].filter(k => !!PASSIVES[k] && (!c.boundarySuppressed || k==='void' || k==='boundary'));
 }
 

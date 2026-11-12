@@ -1086,7 +1086,8 @@ export function cardPassives(c: Partial<CardDef> & {conditionalPassives?: string
   return out;
 }
 /** 런타임 패시브 판정 — 카드 자체 + 게임 중 부여된 패시브(passivesG)까지 포함. */
-export function hasPassive(c: Partial<CardDef> & { passivesG?: string[]; conditionalPassives?: string[]; boundarySuppressed?: boolean }, key: string): boolean {
+export function hasPassive(c: Partial<CardDef> & { passivesG?: string[]; conditionalPassives?: string[]; boundarySuppressed?: boolean; realmSuppressed?: boolean }, key: string): boolean {
+  if (c.realmSuppressed) return false;
   // Persisted grants of retired keywords no longer confer an ability.
   if (c.boundarySuppressed && key !== 'boundary' && key !== 'void') return false;
   if (!Object.hasOwn(PASSIVES, key)) return false;
@@ -2389,6 +2390,11 @@ Object.assign(DB.DIVINE, {atk: 30, def: 30, aura: undefined, passive: [...new Se
 Object.assign(DB.ANTIQUE_DK, {atk: 20, def: 15});
 DB.MERCH2.def = 3;
 DB.GM6_0.cost = 5;
+Object.assign(DB.TDE1, {atk:3, def:3});
+Object.assign(DB.TDE2, {atk:4, def:5});
+Object.assign(DB.TDE3, {cost:4, atk:7, def:9});
+Object.assign(DB.TDE4, {cost:5, atk:14, def:14});
+DB.DEMON_REALM.cost = 2;
 for (const card of [...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS]) DB[card.id] = card;
 DECK_POOL.push('ATTUNE_RETURN', 'MINI_SPIRIT');
 Object.assign(DB.AMA, {cost:5, play:5, act:'armyAttune', passive:['void']});

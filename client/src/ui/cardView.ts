@@ -493,8 +493,8 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     //    손패/마켓/확대는 효과판의 키워드 칩 행이 같은 정보를 이미 보여준다)
     {
       const innate = displayPassives(c);
-      const granted = fm.passivesG ?? [];
-      for (const k of [...new Set([...innate,...granted,...((fm.guts??0)>0?['guts']:[])])]) {
+      const granted = fm.realmSuppressed ? [] : fm.passivesG ?? [];
+      for (const k of [...new Set([...innate,...granted,...(!fm.realmSuppressed && (fm.guts??0)>0?['guts']:[])])]) {
         const count=k==='guts'?(fm.guts??0):0;
         band.insertAdjacentHTML('beforeend',passiveIcon(k,{count,granted:granted.includes(k)}));
       }

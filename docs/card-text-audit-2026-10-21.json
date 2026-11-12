@@ -5285,104 +5285,104 @@
     },
     "TDE1": {
       "nameJa": "魔族の斥候",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "4c7472acc8d9b0417a8ac2e1b96546dd0eccc83e585e70841ddedbd803382dab",
-      "textSha256": "eacde72d261db1e8bdbabcae92b95e4fdc475ac1f35cc01fcdc0b00beabaaf82",
+      "definitionSha256": "3f42bba29c2271491bb5ed84a021214ddd3288d8418f6d5f2dddf52aa9bbc93f",
+      "textSha256": "f01fe5e5405893000b644df55db0027d43bbd7a8c8253cedfea0847436912014",
       "hooks": {
         "onSummon": "manaDebt5",
         "summonReq": "mm5"
       },
       "before": {
-        "ja": "【召喚条件】自分の最大マナが5以上。\n\n【召喚時】自分の最大マナ-1。双方通算10ターン後のターン開始時に、自分の最大マナ+1（このモンスターが場を離れても戻る）。",
-        "ko": "【소환 조건】자신의 최대 마나 5 이상.\n\n【소환 시】자신의 최대 마나 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 최대 마나 +1(이 몬스터가 필드를 떠나도 복구).",
-        "en": "【Summon Requirement】Your max mana is at least 5.\n\n【On Summon】Reduce your max mana by 1. At turn start 10 total turns later, counting both players, increase your max mana by 1, even if this monster has left."
-      },
-      "after": {
         "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【召喚時】自分のマナ水晶-1。双方通算10ターン後のターン開始時に、自分のマナ水晶+1（このモンスターが場を離れても戻る）。",
         "ko": "【소환 조건】자신의 마나 수정 5 이상.\n\n【소환 시】자신의 마나 수정 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 마나 수정 +1(이 몬스터가 필드를 떠나도 복구).",
         "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【On Summon】Reduce your mana crystals by 1. At turn start 10 total turns later, counting both players, increase your mana crystals by 1, even if this monster has left."
+      },
+      "after": {
+        "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【召喚時】自分のマナ水晶-1。双方通算10ターン後のターン開始時に、自分のマナ水晶+1（このモンスターが場を離れても戻る）。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+        "ko": "【소환 조건】자신의 마나 수정 5 이상.\n\n【소환 시】자신의 마나 수정 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 마나 수정 +1(이 몬스터가 필드를 떠나도 복구).\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
+        "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【On Summon】Reduce your mana crystals by 1. At turn start 10 total turns later, counting both players, increase your mana crystals by 1, even if this monster has left.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
       },
       "reviewedAt": "2026-10-31"
     },
     "TDE2": {
       "nameJa": "魔族の戦士",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "21829000170524dba4f03b556a5c8badecbdc31670274984284e1c13ad572e8b",
-      "textSha256": "378d4452158e1bea305b0cc32cb6a1a98fd17ce39f14164c782a72e0b43f86a6",
+      "definitionSha256": "16a9912f84dacd4bff0d0233b121207663ffde6cf4329ec7580638432b9553e4",
+      "textSha256": "b71a70935c43280dd3c0bd3dd2218ffe163939d4e90857afd01c7221a4123bb7",
       "hooks": {
         "aura": "demonTax2",
         "summonReq": "mm5"
       },
       "before": {
-        "ja": "【召喚条件】自分の最大マナが5以上。\n\n【場にある間】自分の最大マナ-2（最低3）。",
-        "ko": "【소환 조건】자신의 최대 마나가 5 이상.\n\n【필드에 있는 동안】자신의 최대 마나 -2(최저 3).",
-        "en": "【Summon Requirement】Your max mana is at least 5.\n\n【While on the Field】Your max mana is reduced by 2, to a minimum of 3."
-      },
-      "after": {
         "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【場にある間】自分のマナ水晶-2（最低3）。",
         "ko": "【소환 조건】자신의 마나 수정이 5 이상.\n\n【필드에 있는 동안】자신의 마나 수정 -2(최저 3).",
         "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【While on the Field】Your mana crystals are reduced by 2, to a minimum of 3."
+      },
+      "after": {
+        "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【場にある間】自分のマナ水晶-2（最低3）。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+        "ko": "【소환 조건】자신의 마나 수정이 5 이상.\n\n【필드에 있는 동안】자신의 마나 수정 -2(최저 3).\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
+        "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【While on the Field】Your mana crystals are reduced by 2, to a minimum of 3.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
       },
       "reviewedAt": "2026-10-31"
     },
     "TDE3": {
       "nameJa": "魔族の狂戦士",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "e3223b87e1bf1fda2940da27fbdb4b44a6642524bbda04c1278335569e525e44",
-      "textSha256": "a4107f9c165c065f5ab472f05e23192ddd7933ebeb35285a08f8e5635001e79c",
+      "definitionSha256": "b0301344fe77d1ce6daafb9d52054f4d5e65320de2393aaf207532746cb0bcc0",
+      "textSha256": "3cebb4996a32f0338de2be37d5cb0940fbd6a41fd4c85551d31563acb21128ac",
       "hooks": {
         "turnFx": "demonRoll"
       },
       "before": {
-        "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分の最大マナを1減らし、4～6なら2減らす。この効果では3未満にならない。",
-        "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 최대 마나를 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.",
-        "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your max mana by 1; on 4–6, reduce it by 2. This effect cannot reduce it below 3."
-      },
-      "after": {
         "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分のマナ水晶を1減らし、4～6なら2減らす。この効果では3未満にならない。",
         "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 마나 수정을 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.",
         "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your mana crystals by 1; on 4–6, reduce them by 2. This effect cannot reduce them below 3."
+      },
+      "after": {
+        "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分のマナ水晶を1減らし、4～6なら2減らす。この効果では3未満にならない。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+        "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 마나 수정을 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
+        "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your mana crystals by 1; on 4–6, reduce them by 2. This effect cannot reduce them below 3.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
       }
     },
     "TDE4": {
       "nameJa": "魔王",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "a15ceb23205821b9ef19353ce9678aad9b3bd182ee29874db43eae7770d0bcc8",
-      "textSha256": "e2f28bba042e7d7c6b52356e132bec425e9e79f629e2e089fce4acfe525365e6",
+      "definitionSha256": "9eda03b766d662d0f54fe32303309b84670436a1ca5e83317687a271031ea983",
+      "textSha256": "832038f91e103a68dd9beb6a2ab9ff45a888feb3ab654756a8aab25bb2bc07b3",
       "hooks": {
         "onSummon": "manaSet3",
         "aura": "manaGrowthLock",
         "summonReq": "demonKing"
       },
       "before": {
-        "ja": "【召喚条件】自分の最大マナが5以上で、自分のデッキ構成に「魔王」以外の「魔族」モンスターがいる。\n\n【召喚時】自分の最大マナを3にする。\n\n【場にある間】自分の最大マナは増えない。",
-        "ko": "【소환 조건】자신의 최대 마나가 5 이상이고 자신의 덱 구성에 마왕 이외의 마족 몬스터가 있다.\n\n【소환 시】자신의 최대 마나를 3으로 만든다.\n\n【필드에 있는 동안】자신의 최대 마나는 증가하지 않는다.",
-        "en": "【Summon Requirement】Your max mana is at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your max mana to 3.\n\n【While on the Field】Your max mana cannot increase."
-      },
-      "after": {
         "ja": "【召喚条件】自分のマナ水晶が5以上で、自分のデッキ構成に「魔王」以外の「魔族」モンスターがいる。\n\n【召喚時】自分のマナ水晶を3にする。\n\n【場にある間】自分のマナ水晶は増えない。",
         "ko": "【소환 조건】자신의 마나 수정이 5 이상이고 자신의 덱 구성에 마왕 이외의 마족 몬스터가 있다.\n\n【소환 시】자신의 마나 수정을 3으로 만든다.\n\n【필드에 있는 동안】자신의 마나 수정은 증가하지 않는다.",
         "en": "【Summon Requirement】Your mana crystals are at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your mana crystals to 3.\n\n【While on the Field】Your mana crystals cannot increase."
+      },
+      "after": {
+        "ja": "【召喚条件】自分のマナ水晶が5以上で、自分のデッキ構成に「魔王」以外の「魔族」モンスターがいる。\n\n【召喚時】自分のマナ水晶を3にする。\n\n【場にある間】自分のマナ水晶は増えない。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター3個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+        "ko": "【소환 조건】자신의 마나 수정이 5 이상이고 자신의 덱 구성에 마왕 이외의 마족 몬스터가 있다.\n\n【소환 시】자신의 마나 수정을 3으로 만든다.\n\n【필드에 있는 동안】자신의 마나 수정은 증가하지 않는다.\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 3개를 준다. 실드가 데미지를 전부 막아도 준다.",
+        "en": "【Summon Requirement】Your mana crystals are at least 5 and your deck composition contains a Demonkin monster other than Demon King.\n\n【On Summon】Set your mana crystals to 3.\n\n【While on the Field】Your mana crystals cannot increase.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 3 Brand counters. This applies even if Shield absorbs all the damage."
       }
     },
     "DUNGEON_FLOOR": {
@@ -5911,26 +5911,26 @@
     },
     "DEMON_REALM": {
       "nameJa": "魔界",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "1de78a357b5b3393b3474a6f9e53272d755437b9163175459f1d768409af95a9",
-      "textSha256": "33cb09008297c388283e704ef86d046c20d0be11cd1406f1bfed50ab41de419b",
+      "definitionSha256": "53cb2e6d114fee2061ffe1701e01a9af6177fc8861d82c59c06e53330c69ddcd",
+      "textSha256": "2c8c0b532a30106e362cdebe4d0928db96d4e43466b86bdd106edce2ef5f8b6b",
       "hooks": {
         "ench": "demonRealm"
       },
       "before": {
-        "ja": "【発動時】自分の場の全ての「魔族」モンスターの効果・キーワード能力を無効にする。\n\n【自分が召喚した時】以後、自分が召喚する「魔族」モンスターにも同じ処理を行う。この無効化はこの魔法が場を離れても、そのモンスターが場にいる間続く。",
-        "ko": "【발동시】자신의 필드의 모든 마족 몬스터의 효과·키워드 능력을 무효화한다.\n\n【자신이 소환할 때】이후 자신이 소환하는 마족 몬스터에도 같은 처리한다. 이 무효화는 이 마법이 필드를 떠나도 해당 몬스터가 필드에 있는 동안 지속.",
-        "en": "【On Cast】Negate all effects and keywords of your Demonkin monsters.\n\n【When You Summon】Also negate those of Demonkin monsters you summon later. Negation lasts while each affected monster remains on the field, even if this spell leaves."
-      },
-      "after": {
         "ja": "【発動時】自分の場の全ての「魔族」モンスターの効果・キーワード能力を無効にする。\n\n【自分のモンスター召喚時】以後、自分が召喚する「魔族」モンスターにも同じ処理を行う。この無効化はこの魔法が場を離れても、そのモンスターが場にいる間続く。",
         "ko": "【발동 시】자신의 필드의 모든 마족 몬스터의 효과·키워드 능력을 무효화한다.\n\n【자신의 몬스터 소환 시】이후 자신이 소환하는 마족 몬스터에도 같은 처리한다. 이 무효화는 이 마법이 필드를 떠나도 해당 몬스터가 필드에 있는 동안 지속.",
         "en": "【On Cast】Negate all effects and keywords of your Demonkin monsters.\n\n【When You Summon a Monster】Also negate those of Demonkin monsters you summon later. Negation lasts while each affected monster remains on the field, even if this spell leaves."
+      },
+      "after": {
+        "ja": "【場にある間】両方の場の全モンスターの攻撃力を1上げる。両方の場の「魔族」モンスターの効果とキーワード能力を全て無効にする。どちらかの場のモンスターが破壊されるたび、そのモンスターの持ち主がダイス1個を振る。出目が4以上なら、その持ち主に烙印カウンター1個を付与する。場の「魔界」1枚ごとに攻撃力の上昇とダイス判定を適用する。",
+        "ko": "【필드에 있는 동안】양쪽 필드의 모든 몬스터의 공격력을 1 올린다. 양쪽 필드의 마족 몬스터의 효과와 키워드 능력을 전부 무효화한다. 어느 쪽 필드에서든 몬스터가 파괴될 때마다 그 몬스터의 소유자가 주사위 1개를 굴린다. 4 이상이면 그 소유자에게 낙인 카운터 1개를 준다. 필드의 마계 1장마다 공격력 증가와 주사위 판정을 적용한다.",
+        "en": "【While on the Field】Give all monsters on both fields +1 ATK. Negate all effects and keywords of Demonkin monsters on both fields. Whenever a monster on either field is destroyed, its owner rolls 1 die. On a 4 or higher, give that owner 1 Brand counter. Apply the ATK bonus and roll separately for each Demon Realm on the field."
       }
     },
     "AEM": {

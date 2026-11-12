@@ -1,4 +1,5 @@
 import { DB, STARTERS } from '../../client/src/shared/cards';
+import { refreshFieldPassives } from '../../client/src/shared/engine';
 import type { CardInst, GameState } from '../../client/src/shared/types';
 
 const castleCards = new Set([
@@ -19,7 +20,9 @@ export function restoreReworkedCards(game: GameState): void {
   const updateArmy = !game.armyAttuneApplied;
   const updateStarterCosts = !game.starterQuestReworkApplied;
   const updateFire = !game.fireBrandReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire)) return;
+  const updateDemons = !game.demonRealmReworkApplied;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons)) return;
+  game.demonRealmReworkApplied = true;
   game.fireBrandReworkApplied = true;
   game.starterQuestReworkApplied = true;
   game.armyAttuneApplied = true;
@@ -27,6 +30,15 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateDemons && (card.id === 'DEMON_REALM' || card.tribe === '마족')) {
+      const def = DB[card.id];
+      Object.assign(card, {cost:def.cost, text:def.text, textJa:def.textJa, textEn:def.textEn});
+      if (def.t === 'mon') {
+        const swapped = 'trickSwapped' in card && card.trickSwapped;
+        card.atk = swapped ? def.def : def.atk;
+        card.def = swapped ? def.atk : def.def;
+      }
+    }
     if (updateFire && fireCards.has(card.id)) {
       const def = DB[card.id];
       Object.assign(card, {text:def.text, textJa:def.textJa, textEn:def.textEn});
@@ -75,6 +87,19 @@ export function restoreReworkedCards(game: GameState): void {
     for (const q of p.quests ?? []) {
       if (updateQuests && questCards.has(q.card.id)) q.progress = Math.min(q.progress, q.card.quest!.target);
     }
+  }
+  if (updateDemons) {
+    for (const p of game.players) for (const m of p.field) {
+      // Old Realm removed these printed abilities and explicitly emptied both
+      // keyword arrays. Preserve any later grants and overlapping Essence mute.
+      if (m.tribe !== '마족' || m.passive?.length !== 0 || !m.passivesG || m.onSummon || m.turnFx || m.aura) continue;
+      const def = DB[m.id];
+      if (def.passive) m.passive = [...def.passive];
+      for (const key of ['onSummon','turnFx','aura'] as const) {
+        if (def[key]) (m.mutedEffects ?? m)[key] = def[key];
+      }
+    }
+    refreshFieldPassives(game);
   }
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);

@@ -294,6 +294,7 @@ export function effAtk(p: PlayerState, m: FieldMon, g?: Pick<GameState, "players
   const bonus = p.strengthAuras ?? 0;
   const boost = (amount:number) => amount > 0 ? amount + bonus : amount;
   let extra = boost(mercBuff(p,m)); // Mercenary Arts is an enchantment.
+  if (p.demonRealms) extra += p.demonRealms * boost(1);
   if (!p.monsterSilence) {
     const enemy = g?.players[g.players[0] === p ? 1 : 0];
     if (m.id === 'TOKEN00') extra += boost(m.visibleCurseAttack ?? (enemy ? deckComp(enemy).filter(c=>c.id==='CURSE').length : 0));
@@ -455,7 +456,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -656,15 +657,19 @@ function muteMonster(m:FieldMon, mute:boolean):void {
     delete m.mutedEffects;
   }
 }
-function refreshFieldPassives(g: GameState): void {
+export function refreshFieldPassives(g: GameState): void {
   const silence = hasEssence(g);
+  const realms = g.players.reduce((n,p) => n + enchantCount(p,'DEMON_REALM'), 0);
   const markets = g.players.reduce((n,p) => n+enchantCount(p,'SHARED_MARKET'),0);
   const strength = g.players.reduce((n,p) => n+enchantCount(p,'SECRET_OF_STRENGTH'),0);
   for (const p of g.players) {
     const foe = g.players[1-side(g,p)];
-    const boundary = foe.field.some(m => m.passive?.includes('boundary') || m.passivesG?.includes('boundary'));
+    if (realms) p.demonRealms = realms; else delete p.demonRealms;
+    const boundary = foe.field.some(m => !(realms && m.tribe === '마족') && (m.passive?.includes('boundary') || m.passivesG?.includes('boundary')));
     for (const m of p.field) {
-      muteMonster(m,silence);
+      const realmSuppressed = realms > 0 && m.tribe === '마족';
+      if (realmSuppressed) m.realmSuppressed = true; else delete m.realmSuppressed;
+      muteMonster(m, silence || realmSuppressed);
       if (strength) fieldStrength.set(m,strength); else fieldStrength.delete(m);
       if (boundary) m.boundarySuppressed = true;
       else delete m.boundarySuppressed;
@@ -911,6 +916,14 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       else fieldToGrave(g,ctx,owner,resetInst(dead));
       if (cause === 'decay') trackActivity(g.players[1-side(g,owner)], 'decay');
       ev.push({ type: "destroy", player: side(g, owner), uid: m.uid, id: dead.id, ...(cause ? { cause } : {}) });
+      if (owner.demonRealms && !g.over) {
+        const roller = side(g, owner);
+        for (const pl of g.players) for (const {card} of pl.enchants) {
+          if (card.ench !== 'demonRealm') continue;
+          enchantFx(g, ev, pl, card);
+          if (diceRoll(g, ev, roller, {id:card.id, player:side(g,pl)}, 1, 4).ok) gainBrand(g, ctx, owner, 1);
+        }
+      }
       (owner.destroyedLog ??= []).push({ id: dead.id, turn: g.turn }); if (owner.destroyedLog.length > 20) owner.destroyedLog.shift(); // v41b 윤회
       // 리더 골램(v36 leaderGolem): 자신 필드의 몬스터가 쓰러질 때마다 카운터 +1
       for (const lg of owner.field) if (lg.aura === "leaderGolem") { monsterActivation(g, ev, owner, lg); lg.guts = (lg.guts || 0) + 1; log(`  └ ${cn(lg)} 카운터 +1 (${lg.guts})`, `  └ ${cn(lg)} カウンター+1 (${lg.guts})`, `  └ ${cn(lg)} gains 1 counter (${lg.guts} total)`); }
@@ -1449,7 +1462,7 @@ function unWeaken(g: GameState, ctx: Ctx): void {
 
 /** 영구마법 파괴/제거의 공용 처리: 약화술식 복구 + exileOnDestroy(혈귀술 등)는 제외존으로. */
 function binEnch(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst, forceExile = false, cause: "spell" | "other" | "self" | "exile" = spellDepth > 0 ? "spell" : "other", source?: Side): void {
-  if (card.id === "ESSENCE_OF_LIFE" || card.id === "SECRET_OF_STRENGTH" || card.id === "SHARED_MARKET") refreshFieldPassives(g);
+  if (card.id === "ESSENCE_OF_LIFE" || card.id === "SECRET_OF_STRENGTH" || card.id === "SHARED_MARKET" || card.ench === "demonRealm") refreshFieldPassives(g);
   const destroyingSide = source ?? g.cur;
   if (cause !== 'self' && cause !== 'exile' && destroyingSide !== side(g,owner) && !hasEssence(g)) {
     const destroyer = g.players[destroyingSide];
@@ -1815,7 +1828,7 @@ function noAttackActive(g: GameState): boolean {
 /** Berserk includes both players even with monsters present; normal prohibitions still apply. */
 export function berserkTargets(g: GameState, p: PlayerState, m: FieldMon): { player: Side; uid: string | null }[] {
   const own = side(g, p), enemy = (1 - own) as Side, o = g.players[enemy];
-  const targets: { player: Side; uid: string | null }[] = m.directOnly ? [] : [
+  const targets: { player: Side; uid: string | null }[] = m.directOnly && !m.realmSuppressed ? [] : [
     ...o.field.filter(x => !(x.aura === 'eliteGuard' && (m.cost ?? 0) <= 6)).map(x => ({ player: enemy, uid: x.uid })),
     ...p.field.filter(x => x.uid !== m.uid).map(x => ({ player: own, uid: x.uid })),
   ];
@@ -2726,9 +2739,9 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.dealDamage(o, atk, `${cn(att)} 의 직접 공격`, `${cn(att)} の直接攻撃`, g.cur, `Direct attack by ${cn(att)}`);
     dealtFace = Math.max(0, hpBefore - o.hp); faceDmg = dealtFace > 0;
     if (attackEvent) attackEvent.contactDamage = dealtFace;
-    if (!g.over && att.id === 'FIRE_MASTER' && !att.mutedEffects && !hasEssence(g)) {
+    if (!g.over && (att.id === 'FIRE_MASTER' || att.tribe === '마족') && !att.mutedEffects && !hasEssence(g)) {
       monsterActivation(g, ctx.ev, p, att);
-      gainBrand(g, ctx, o, 1);
+      gainBrand(g, ctx, o, att.id === 'TDE4' ? 3 : 1);
     }
     if (o.hp < hpBefore) { const x = xstate(o); if (x.directHitTurn !== g.turn) { x.directHitTurn = g.turn; x.directHits = []; } (x.directHits ??= []).push(att.uid); }
   } else {
@@ -2773,8 +2786,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       // blow's overflow pierces to the player, exactly like the old 관통.
       const maxHp = effDef(o, target);
       const before = Math.max(0, maxHp - (target.dmg || 0));
-      if (attackEvent) attackEvent.contactDamage = Math.max(0, Math.min(atk, before - (!target.boundarySuppressed && (target.guts || 0) > 0 ? 1 : 0)));
-      ctx.ev.push({ type: "hit", uid: target.uid, amount: Math.max(0, Math.min(atk, before - (!target.boundarySuppressed && (target.guts || 0) > 0 ? 1 : 0))) });
+      if (attackEvent) attackEvent.contactDamage = Math.max(0, Math.min(atk, before - (canEndure(target) ? 1 : 0)));
+      ctx.ev.push({ type: "hit", uid: target.uid, amount: Math.max(0, Math.min(atk, before - (canEndure(target) ? 1 : 0))) });
       if (atk <= 0) {
         ctx.log(
           `<span class="t">${p.name}</span> ${cn(att)}(공0) → ${cn(target)} <span class="muted">통하지 않음</span>`,
@@ -2795,7 +2808,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
         // 기합(guts): 치명타를 토큰 1개로 버티고 체력 1로 생존 (관통은 그대로)
         if (eliteSaved) {
           // Elite Goblin's one-time battle save leaves it at 1 HP.
-        } else if (!target.boundarySuppressed && (target.guts || 0) > 0) {
+        } else if (canEndure(target)) {
           endureWithGuts(g, ctx, o, target, attackEvent);
           ctx.log(
             `<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀 (남은 기합 ${target.guts})`,
@@ -2908,7 +2921,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
   countAmbushAttack(g, att);
   const atk = effAtk(p, att, g);
   const counter = hasPassive(target, "counter") ? Math.ceil(effAtk(p, target, g) / 2) : 0;
-  const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : Math.max(0, Math.min(atk, curHp(p,target) - (!target.boundarySuppressed && (target.guts || 0) > 0 ? 1 : 0)));
+  const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : Math.max(0, Math.min(atk, curHp(p,target) - (canEndure(target) ? 1 : 0)));
   const attackEvent: Extract<GameEvent,{type:"attack"}> = { type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, targetPlayer: side(g, p), contactDamage };
   ctx.ev.push(attackEvent);
   ctx.ev.push({ type: "hit", uid: target.uid, amount: contactDamage });
@@ -2921,7 +2934,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
     const before = Math.max(0, maxHp - (target.dmg || 0));
     if (atk <= 0) ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공0) → 아군 ${cn(target)} <span class="muted">통하지 않음</span>`, `<span class="t">${p.name}</span> ${cn(att)}(攻0) → 味方 ${cn(target)} <span class="muted">通らない</span>`, `<span class="t">${p.name}</span>: ${cn(att)} (0 ATK) → ally ${cn(target)}; <span class="muted">no effect</span>`);
     else if (atk >= before) {
-      if (!target.boundarySuppressed && (target.guts || 0) > 0) { endureWithGuts(g, ctx, p, target, attackEvent); ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → 아군 ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → 味方 ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた`, `<span class="t">${p.name}</span>: ${cn(att)} (${atk} ATK) → ally ${cn(target)} uses <span class="good">Guts</span> and survives with 1 HP`); }
+      if (canEndure(target)) { endureWithGuts(g, ctx, p, target, attackEvent); ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → 아군 ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → 味方 ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた`, `<span class="t">${p.name}</span>: ${cn(att)} (${atk} ATK) → ally ${cn(target)} uses <span class="good">Guts</span> and survives with 1 HP`); }
       else { ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → <span class="dmg">아군 ${cn(target)}(체력 ${before}) 파괴</span>`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → <span class="dmg">味方 ${cn(target)}(体力${before}) 破壊</span>`, `<span class="t">${p.name}</span>: ${cn(att)} (${atk} ATK) → <span class="dmg">destroy ally ${cn(target)} (${before} HP)</span>`); ctx.destroyMonster(p, target); }
       if (pierce && atk - before > 0 && !g.over) ctx.dealDamage(p, atk - before, "관통", "貫通", g.cur, "Pierce");
     } else {
@@ -4691,13 +4704,6 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
 // ============================================================
 // play / buy
 // ============================================================
-function negateDemonEffects(m: FieldMon): void {
-  delete m.mutedEffects;
-  m.onSummon = undefined; m.turnFx = undefined; m.aura = undefined;
-  m.passive = []; m.passivesG = []; m.guts = 0;
-  // Some keywords are represented by fields rather than the passive arrays.
-  m.mult = undefined; m.directOnly = undefined; m.exileOnDestroy = undefined;
-}
 function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
   if (m.id === 'CASTLE') for (const q of p.quests ?? []) {
     if (q.card.id === 'Q_CASTLE' && q.anchorUid === m.uid) q.progress = 0;
@@ -4715,12 +4721,6 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   const grantGuts = (x: FieldMon): void => { if (hasPassive(x, "guts")) return; for (const source of p.field) if (source.aura === "rallyGuts" && source.uid !== x.uid && !rallySources.has(source.uid)) { monsterActivation(g, ctx.ev, p, source); rallySources.add(source.uid); } (x.passivesG ??= []).push("guts"); x.guts = (x.guts || 0) + 1; ctx.log(`  └ 고무왕: ${cn(x)} 이(가) '기합'을 얻는다`, `  └ 鼓舞王: ${cn(x)} が「気合」を得る`, `  └ Rallying King: ${cn(x)} gains Guts`); };
   if (m.aura === "rallyGuts") p.field.forEach((x) => { if (x.uid !== m.uid && (isSoldier(x) || isKnight(x))) grantGuts(x); });
   else if ((isSoldier(m) || isKnight(m)) && p.field.some((x) => x.uid !== m.uid && x.aura === "rallyGuts")) grantGuts(m);
-  // 마계(v38 demonRealm): 자신이 소환하는 '마족' 몬스터의 효과를 전부 무효화
-  if (m.tribe === "마족" && p.enchants.some((e) => e.card.ench === "demonRealm")) {
-    enchantKindFx(g,ctx.ev,"demonRealm",p);
-    negateDemonEffects(m);
-    ctx.log(`  └ 마계: ${cn(m)} 의 효과 무효화`, `  └ 魔界: ${cn(m)} の効果を無効化`, `  └ Demon Realm: negate ${cn(m)}’s effects`);
-  }
   // 성(v37): 자신 필드에 병사·기사가 소환될 때마다 카운터 +1
   if (isSoldier(m) || isKnight(m) || m.id === "GUNNER" || m.id === "HEAVY_GUNNER") for (const cs of p.field) if (!cs.mutedEffects && cs.id === "CASTLE" && cs.uid !== m.uid) { monsterActivation(g, ctx.ev, p, cs); cs.gcount = (cs.gcount || 0) + 1; ctx.log(`  └ ${cn(cs)} 카운터 +1 (${cs.gcount})`, `  └ ${cn(cs)} カウンター+1 (${cs.gcount})`, `  └ ${cn(cs)} gains 1 counter (${cs.gcount} total)`); }
   // 무법지대(v41 lawless): 필드에 소환되는 모든 몬스터의 체력이 1 (알 제외)
@@ -5212,7 +5212,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       const discarded = p.discard.findIndex(c => c.uid === card.uid);
       if (discarded >= 0) p.discard.splice(discarded, 1);
       p.enchants.push({ card, turns: card.val || 1, bornTurn: g.turn });
-      if (card.id === "ESSENCE_OF_LIFE" || card.id === "SECRET_OF_STRENGTH" || card.id === "SHARED_MARKET") refreshFieldPassives(g);
+      if (card.id === "ESSENCE_OF_LIFE" || card.id === "SECRET_OF_STRENGTH" || card.id === "SHARED_MARKET" || card.ench === "demonRealm") refreshFieldPassives(g);
       if (card.ench === 'desertification') loseStatus(ctx, g.players[1 - g.cur], 'dew');
       if (card.ench === 'magicBank') {
         p.maxMana = Math.max(MIN_MANA, p.maxMana - 1);
@@ -5225,10 +5225,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       if (card.ench === "gemRain") {
         g.players.forEach((pl) => pl.field.forEach((mm) => { if (MIMIC_IDS.has(mm.id)) mm.atkMod = (mm.atkMod || 0) + 3; }));
         ctx.log(`  └ 필드의 모든 미믹 계열 공격력 +3`, `  └ 場の全ミミック系の攻撃力+3`, `  └ All Mimic-family monsters on the field gain +3 ATK`);
-      }
-      // 마계(v38): 발동 시 자신 필드의 마족 몬스터 효과도 무효화
-      if (card.ench === "demonRealm") {
-        for (const dm of p.field) if (dm.tribe === "마족") { negateDemonEffects(dm); ctx.log(`  └ 마계: ${cn(dm)} 의 효과 무효화`, `  └ 魔界: ${cn(dm)} の効果を無効化`, `  └ Demon Realm: negate ${cn(dm)}’s effects`); }
       }
       // 무법지대(v41): 발동 시 필드의 모든 몬스터(알 제외)의 체력을 1로
       if (card.ench === "lawless") {
@@ -6531,6 +6527,9 @@ function spellDamageRecorded(g: GameState, amount: number): void {
   g.spellDamageAmount = (g.spellDamageAmount ?? 0) + amount;
 }
 /** Emit only where survival actually consumes a counter. Costs and grants never enter here. */
+function canEndure(m: FieldMon): boolean {
+  return !m.boundarySuppressed && !m.realmSuppressed && (m.guts ?? 0) > 0;
+}
 function endureWithGuts(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, attack?: Extract<GameEvent,{type:'attack'}>): void {
   const before = m.guts ?? 0;
   m.guts = before - 1;
@@ -6543,10 +6542,10 @@ function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, 
   if (!owner.field.includes(m) || amount <= 0 || m.immuneDamageTurn === g.turn || (!combat && swordWarded(owner,m))) return false;
   if (spellDepth > 0 && g.players.some(p => p.enchants.some(e => e.card.ench === 'doubleUp'))) amount *= 2;
   if (spellDepth > 0) spellDamageRecorded(g, Math.min(curHp(owner, m), amount));
-  ctx.ev.push({ type: 'hit', uid: m.uid, amount: m.hatch != null ? 1 : Math.max(0, Math.min(amount, curHp(owner,m) - (combat && !m.boundarySuppressed && (m.guts ?? 0) > 0 ? 1 : 0))) });
+  ctx.ev.push({ type: 'hit', uid: m.uid, amount: m.hatch != null ? 1 : Math.max(0, Math.min(amount, curHp(owner,m) - (combat && canEndure(m) ? 1 : 0))) });
   if (m.hatch != null) { m.dur = (m.dur ?? 0) - 1; if (m.dur <= 0) ctx.destroyMonster(owner, m); return !owner.field.includes(m); }
   const hp = curHp(owner, m);
-  if (amount >= hp && combat && !m.boundarySuppressed && (m.guts ?? 0) > 0) { endureWithGuts(g, ctx, owner, m); }
+  if (amount >= hp && combat && canEndure(m)) { endureWithGuts(g, ctx, owner, m); }
   else { m.dmg = (m.dmg ?? 0) + amount; if (m.dmg >= effDef(owner,m)) ctx.destroyMonster(owner,m,undefined,combat && effectSource?.id==='TIME_WRAITH' && !hasEssence(g) ? effectSource.uid : undefined); }
   const origin = effectSource ?? ctx.monsterSource;
   if (!combat && origin?.t === 'mon' && !ctx.bonusDamage && owner.field.includes(m)) {
