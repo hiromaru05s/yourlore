@@ -19,10 +19,10 @@ try {
  for(const id of ['DECAY_CRAFT','KNIGHT_TEACH','NL_SECRET','TRUMPET','ROGUE_ART','MAJESTY_RITE','S15','WALLBREAK1','WALLBREAK2','SNIPE1','SNIPE2'])requirement(id,g=>g.players[0].field=[mon('M1',{atk:1,def:1})]);
  requirement('MIND_BURST',g=>g.players[0].field=[mon('GOLEM1',{guts:1})]);
  requirement('PENANCE',g=>g.players[0].brand=1);
- requirement('GS6_4',g=>g.players[1].brand=1);
+ assert.equal(E.playBlockReason(fresh(),0,card('GS6_4')),null);
  for(const id of ['INCUBATOR','INCUBATOR_S'])requirement(id,g=>g.players[0].field=[mon('DRAGON_EGG',{hatch:1,dur:6})]);
  requirement('VAMP_PACT',g=>g.players[0].field.pop(),g=>g.players[0].field=Array.from({length:7},()=>mon('M1')));
- requirement('INQUISITION',g=>g.players[1].deck.push(card('TGE3')));
+ assert(!E.DB.INQUISITION);
  requirement('MASSACRE',g=>g.players[1].field=[mon('M1')]);
  check('A Decay counter does not satisfy Mind Burst; Majesty cannot be granted twice',()=>{let g=fresh();g.players[0].field=[mon('M1',{decayCnt:2,gcount:3})];assert(E.playBlockReason(g,0,card('MIND_BURST')));g.players[0].field=[mon('M1',{passivesG:['majesty']})];assert(E.playBlockReason(g,0,card('MAJESTY_RITE')));});
  check('Guild only accrues on subsequent owner starts, pays immediately at 20',()=>{

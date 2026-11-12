@@ -27,16 +27,11 @@ try {
     g.cur=1;
     const start=E.reduce(g,{type:'endTurn'});
     assert.equal(start.state.pending?.reason,'colosseumPick');
-    assert.equal(start.state.chosenMageQueued,true);
+    assert(!start.state.chosenMageQueued);
     const chosen=E.reduce(start.state,{type:'pick',uid:'CHOSEN_KNIGHT'});
-    assert.equal(chosen.state.pending?.reason,'chosenMage');
-    assert(chosen.events.some(e=>e.type==='needTarget'&&e.pending.reason==='chosenMage'));
-    const fired=E.reduce(chosen.state,{type:'pick',uid:mage.uid});
-    assert.equal(fired.state.players[0].discard.filter(c=>c.star==='trash').length,1);
-    assert.equal(fired.state.players[1].hp,32);
-    assert.equal(fired.state.pending,null);
+    assert.equal(chosen.state.players[0].mana,start.state.players[0].mana-3);
+    assert(!chosen.state.pending);assert(chosen.state.players[0].field.some(m=>m.id==='CHOSEN_KNIGHT'));
   }
-
   // Predator cannot eat the cost-7 Chosen Mage (its ward also blocks effects).
   {
     const g=fresh(),p=g.players[0],o=g.players[1],predator=mon('TPO5'),mage=mon('CHOSEN_MAGE');

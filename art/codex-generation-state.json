@@ -48,6 +48,12 @@
     "CURSE_CONTAGION",
     "MIND_GAME",
     "TOLL_GATE",
-    "TRUCE"
+    "TRUCE",
+    "RUNE_SAI",
+    "RUNE_NIKRO",
+    "RUNE_BARRIER",
+    "RUNE_GLYPH",
+    "Q_RUNE_SECRET",
+    "DEVIL_TOKEN"
   ]
 }

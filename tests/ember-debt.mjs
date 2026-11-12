@@ -20,7 +20,7 @@ try{
   if(mode==='self-lethal')g.players[owner].hp=1;
   if(mode==='shield')g.players[1-owner].shield=3;
   const id=mode==='blood-rite'?'BLOOD_RITE':mode==='reverse'?'BLACK_REVERSE':mode==='rune'?'RUNE3':null;
-  if(id)g.players[mode==='rune'?owner:1-owner].enchants=[{card:card(id,'reaction'),turns:6,bornTurn:0}];
+  if(id)g.players[mode==='rune'?owner:1-owner].enchants=[{card:{...card(id,'reaction'),...(mode==='rune'?{ench:'runeEcho'}:{})},turns:6,bornTurn:0}];
   const a={type:'play',idx:0},before=old.reduce(g,a),after=current.reduce(g,a);
   // Fire-family membership is an intentional rule change; damage/VFX parity remains.
   assert.deepEqual(after.state.players[owner].expansion.firePlayed,['FLAME']);

@@ -34,7 +34,7 @@ try {
  assert.equal(seen.size,pool.length,'all eligible spells reachable');assert(appleSeed);
  {const g=fresh(0,appleSeed);g.players[0].enchants=[{card:card('FARMER_PRAYER'),turns:99}];const r=play(g);assert.equal(r.state.players[0].hand[0].id,'GOLDEN_APPLE','existing acquisition replacement still applies');}
  {let g=fresh();for(let i=0;i<6;i++){g=play(g).state;assert.equal(g.players[0].hand.length,i+1);}assert.equal(g.players[0].removed.length,6);assert(!playBlockReason(g,0,card('CREATION')));}
- {const g=fresh(),echo=Object.values(DB).find(c=>c.ench==='runeEcho');g.players[0].enchants=[{card:card(echo.id),turns:99}];const r=play(g);assert.equal(r.state.players[0].hand.length,2);assert.equal(r.state.players[0].removed.length,1);assert.deepEqual(r.events.filter(e=>e.type==='creationGranted').map(e=>e.handIndex),[0,1]);}
+ {const g=fresh(),echo={...DB.RUNE3,ench:'runeEcho'};g.players[0].enchants=[{card:{...card(echo.id),ench:'runeEcho'},turns:99}];const r=play(g);assert.equal(r.state.players[0].hand.length,2);assert.equal(r.state.players[0].removed.length,1);assert.deepEqual(r.events.filter(e=>e.type==='creationGranted').map(e=>e.handIndex),[0,1]);}
  {const g=fresh();g.players[1].traps=[{card:{id:'legacy-null',uid:'null',t:'trap',cost:0,react:'nullspell',name:'Null'}}];const r=play(g);assert.equal(r.state.players[0].hand.length,0);assert(!r.events.some(e=>e.type==='creationGranted'));}
  console.log(`PASS Creation: cost 0, Void, no cap; ${pool.length} eligible spells across 2000 seeded casts, both owners, deterministic replay, hidden identity, no old effects, Prayer, echo, nullification`);
 } finally {await rm(dir,{recursive:true,force:true});}

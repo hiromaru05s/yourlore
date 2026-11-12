@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/rune-rework-v85.mjs",
     "tests/diplomacy-cards.mjs",
     "tests/curse-contagion.mjs",
     "tests/mercenary-contracts.mjs",
@@ -11,9 +12,7 @@
     "tests/spell-rework-v74-server.mjs",
     "tests/balance-v73.mjs",
     "tests/balance-v73-server.mjs",
-    "tests/rune-rules.mjs",
     "tests/rotten-ground-singleton.mjs",
-    "tests/rune-intermediate.mjs",
     "tests/db-schema-contract.mjs",
     "tests/staging-audit-fixtures.mjs",
     "tests/user-data-reset.mjs",
@@ -57,7 +56,6 @@
     "tests/rune-replay.mjs",
     "tests/timewarp.mjs",
     "tests/timewarp-lifecycle.mjs",
-    "tests/forbidden-ritual.mjs",
     "tests/dragon-fusion.mjs",
     "tests/hatch-summon.mjs",
     "tests/hooded-seekers.mjs",
@@ -278,7 +276,10 @@
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
-    "tests/balance-v49.mjs": "Version 49 expectations superseded by v52-v54; retained as history."
+    "tests/balance-v49.mjs": "Version 49 expectations superseded by v52-v54; retained as history.",
+    "tests/rune-rules.mjs": "Pre-v85 card rules superseded by the Rune Studies and Forbidden Formula rework; current cases are in rune-rework-v85.mjs.",
+    "tests/rune-intermediate.mjs": "Pre-v85 card rules superseded by the Rune Studies and Forbidden Formula rework; current cases are in rune-rework-v85.mjs.",
+    "tests/forbidden-ritual.mjs": "Pre-v85 card rules superseded by the Rune Studies and Forbidden Formula rework; current cases are in rune-rework-v85.mjs."
   },
   "browser": "All *-browser.mjs require Chrome/Playwright and run separately; not Node unit tests.",
   "timeoutMs": {

@@ -20,7 +20,7 @@ try {
  for(const bad of audit.scans.filter(c=>c.noOpActivation&&c.reachableByNormalPlay&&c.label.startsWith('onSummon:'))){
   const g=fresh(),p=g.players[0],o=g.players[1],m=mon(bad.id);p.field=[m];
   if(bad.label.includes(':populated:')){p.field.push(plain({tribe:'시초'}),mon('WORLD_TREE',{turnFx:undefined}),plain({name:'골램 장비 장인',nameJa:'ゴーレム 装備職人'}));o.field=[plain(),plain({atk:10,def:20})];p.hand=[card('WINE'),card('WINE')];p.deck=Array.from({length:15},()=>card('WEAKEN_ALL'));p.discard=[card('SOLDIER2'),card('STARTER_TRASH')];o.removed=[card('SOLDIER2')];p.supplyHist=[{turn:5,ids:['ELF']}];}
-  const ev=[];E.resolveOnSummon(g,E.makeCtx(g,ev),m);expect(ev,m,['SORTER','GM6_0','D_BLACK','MERCH1','MERCH2','HEXER1','HEXER2','HEXER3','NHEX'].includes(bad.id)?1:0,bad.label);
+  const ev=[];E.resolveOnSummon(g,E.makeCtx(g,ev),m);expect(ev,m,['ELITE','SORTER','GM6_0','D_BLACK','MERCH1','MERCH2','HEXER1','HEXER2','HEXER3','NHEX'].includes(bad.id)?1:0,bad.label);
   if(bad.id==='SORTER')assert.equal(p.removed.filter(c=>c.star==='trash').length,1);
  }
  for(const owner of [0,1]){
@@ -55,11 +55,11 @@ try {
   expect(r.events,m,0,'attack ineligible '+id);
  }
  for(const id of ['CHOSEN_ARCHER','DRAGON_RIDER','M7','VAMP4','CHOSEN_KNIGHT']){
-  const g=fresh(),p=g.players[0],m=mon(id);p.field=[m];g.players[1].field=[plain({def:id==='CHOSEN_ARCHER'?15:1})];
+  const g=fresh(),p=g.players[0],m=mon(id);p.field=[m];g.players[1].field=[plain({def:1})];
   if(['CHOSEN_ARCHER','CHOSEN_KNIGHT'].includes(id))m.atkMod=1; // v55+: attack triggers require positive current ATK
   if(id==='DRAGON_RIDER')m.attacksUsed=1;if(id==='CHOSEN_KNIGHT')p.discard=[card('STARTER_TRASH'),card('STARTER_TRASH')];
   const start=reduce(g,{type:'attack',uid:m.uid});const r=start.state.pending?reduce(start.state,{type:'chooseTarget',uid:g.players[1].field[0].uid}):start;expect(r.events,m,1,'attack eligible '+id);
-  if(['CHOSEN_ARCHER','DRAGON_RIDER'].includes(id))assert(r.events.findIndex(e=>e.type==='monsterActivate')<r.events.findIndex(e=>e.type==='attack'),'modifier precedes attack');
+  if(id==='DRAGON_RIDER')assert(r.events.findIndex(e=>e.type==='monsterActivate')<r.events.findIndex(e=>e.type==='attack'),'modifier precedes attack');
  }
  for(const id of ['TGE4','TGE5','AWAKENED_MIMIC','GM6_7','MERCENARY']){
   const g=fresh(),p=g.players[0],m=card(id);p.hand=[m];
@@ -89,7 +89,7 @@ try {
  for(const id of ['FARM_KEEPER','MIMIC_HUNTER']){const g=fresh(),m=mon(id);g.players[0].field=[m];run('inactive-end:'+id,g,m,{type:'endTurn'},0);}
  {const g=fresh(),p=g.players[0],m=mon('BLACK_ALICE');p.field=[m];p.maxMana=30;p.hand=[card('BLACK_CURSE')];run('capped-mana',g,m,{type:'play',idx:0},0);}
  {const g=fresh(),p=g.players[0],m=mon('WORLD_TREE');p.field=[m,plain({uid:'attacker'})];p.dew=1;g.pending={kind:'cardChoice',owner:0,reason:'WORLD_TREE_ATTACK',data:{attackerUid:'attacker'},allowCancel:false};run('declined-world-tree',g,m,{type:'chooseTarget',uid:'pass'},0);}
- {const g=fresh(),p=g.players[0],m=mon('CHOSEN_KNIGHT',{atkMod:1});p.field=[m];p.discard=[card('STARTER_TRASH'),card('STARTER_TRASH')];g.players[1].field=[plain({atk:20,def:20,passive:['counter']})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:m.uid},allowCancel:true};const r=run('post-attack-source-died',g,m,{type:'chooseTarget',uid:g.players[1].field[0].uid},1);assert(!r.state.players[0].field.some(x=>x.uid===m.uid));assert(r.events.findIndex(e=>e.type==='monsterActivate'&&e.uid===m.uid)<r.events.findIndex(e=>e.type==='destroy'&&e.uid===m.uid));}
+ {const g=fresh(),p=g.players[0],m=mon('CHOSEN_KNIGHT',{atkMod:1});p.field=[m];p.discard=[card('STARTER_TRASH'),card('STARTER_TRASH')];g.players[1].field=[plain({atk:20,def:20,passive:['counter']})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:m.uid},allowCancel:true};const r=run('post-attack-source-died',g,m,{type:'chooseTarget',uid:g.players[1].field[0].uid},1);assert(r.state.players[0].field.some(x=>x.uid===m.uid));assert(r.events.some(e=>e.type==='attack'));}
  // Every current effect definition can resolve in a bare and populated fixture.
  // This catches omitted legacy keys and verifies all activation UIDs are sources.
  let definitions=0;

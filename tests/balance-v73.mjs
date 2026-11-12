@@ -32,8 +32,8 @@ try {
   g=play(g,'M1');assert(g.players[0].field.some(m=>m.id==='M1'));
  });
  test('Elite Commander summons one Soldier at seven cards, none at eight, respecting capacity',()=>{
-  for(const [size,expected] of [[7,1],[8,0]]){let g=fresh();g.players[0].deck=Array.from({length:size-1},()=>card('STARTER_TRASH'));g=play(g,'ELITE');assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,expected);}
-  let g=fresh();g.players[0].field=Array.from({length:6},()=>mon('M1'));g=play(g,'ELITE');assert.equal(g.players[0].field.length,7);assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,0);
+  for(const [size,expected] of [[6,1],[7,0]]){let g=fresh();g.players[0].deck=Array.from({length:size-1},()=>card('STARTER_TRASH'));g=play(g,'ELITE');assert.equal(g.players[0].field.filter(m=>m.id==='INFKNIGHT').length,expected);}
+  let g=fresh();g.players[0].field=Array.from({length:6},()=>mon('M1'));g=play(g,'ELITE');assert.equal(g.players[0].field.length,6);assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,0);
  });
  test('Wine Collector rewards the Grape user on either side, once per collector and use',()=>{
   for(const user of [0,1])for(const owner of [0,1])for(const copies of [1,2]){
@@ -45,8 +45,8 @@ try {
  });
  test('Wine Collector has no old exchange; both fields stack; other fruit and Wine do not trigger',()=>{
   let g=fresh();g.players[0].hand=[card('WINE'),card('WINE')];g=play(g,'WINE_COLLECTOR');
-  assert.equal(g.players[0].hand.filter(c=>c.id==='WINE').length,2);assert.equal(g.players[0].removed.length,0);assert(g.players[0].field.some(c=>c.id==='WINE_COLLECTOR'));
-  g.players[1].field=[mon('WINE_COLLECTOR')];g=play(g,'GRAPE');assert.equal(count(g,0,'GRAPE2'),2);
+  assert.equal(g.players[0].hand.filter(c=>c.id==='WINE').length,0);assert.equal(g.players[0].removed.length,3);assert(g.players[0].hand.some(c=>c.id==='DARK_MERCHANT'));
+  g.players[0].field=[mon('WINE_COLLECTOR')];g.players[1].field=[mon('WINE_COLLECTOR')];g=play(g,'GRAPE');assert.equal(count(g,0,'GRAPE2'),2);
   for(const id of ['GRAPE2','WINE','APPLE']){const before=count(g,0,'GRAPE2');g.players[0].deck=Array.from({length:10},()=>card('STARTER_TRASH'));g=play(g,id);assert.equal(count(g,0,'GRAPE2'),before+(id==='GRAPE2'?1:0));}
  });
  test('Wine Collector stops on leaving the field or losing its effect; sealed plays do not trigger',()=>{
@@ -80,8 +80,8 @@ try {
   for(const c of Object.values(E.DB))for(const key of ['text','textJa','textEn'])assert(!/印刷体力|인쇄\s*체력|printed\s*(?:HP|health)/i.test(c[key]),c.id+key);
   assert(!E.CARD_RULE_GLOSSARY.some(e=>e.id==='printedHp'));
   assert(E.cardRelations('WINE_COLLECTOR').references.includes('GRAPE'));
-  assert.deepEqual(E.cardRelations('WINE_COLLECTOR').generated,['GRAPE2']);
-  assert(!E.cardRelations('WINE_COLLECTOR').references.includes('DARK_MERCHANT'));
+  assert.deepEqual(new Set(E.cardRelations('WINE_COLLECTOR').generated),new Set(['GRAPE2','DARK_MERCHANT']));
+  assert(E.cardRelations('DARK_MERCHANT').sources.includes('WINE_COLLECTOR'));
  });
  console.log(`PASS ${checks} v73 balance scenario groups`);
 }finally{await rm(dir,{recursive:true,force:true});}

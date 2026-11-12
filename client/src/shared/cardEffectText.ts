@@ -1,3 +1,4 @@
+import {RUNE_RULE_TEXT} from './runeRework';
 import {DIPLOMACY_CARDS} from './diplomacyCards';
 import {CURSE_CONTAGION} from './curseContagion';
 import {MERCENARY_CARDS} from './mercenaryCards';
@@ -567,11 +568,6 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "ja": "【発動時】兵士（攻撃力2・体力1）3体を自分の場に召喚する。",
     "ko": "【발동 시】병사(공격력 2·체력 1) 3체를 자신의 필드에 소환한다.",
     "en": "【On Cast】Summon 3 Soldiers (2 ATK, 1 HP) to your field."
-  },
-  "INQUISITION": {
-    "ja": "【発動条件】相手のデッキ・墓地・場に、種族を持つモンスターがいる。\n\n【発動時】相手のデッキ・墓地・場にある種族を持つモンスター1枚につき、相手プレイヤーに6ダメージを与える。",
-    "ko": "【발동 조건】상대의 덱·묘지·필드에 종족이 있는 몬스터가 있다.\n\n【발동 시】상대의 덱·묘지·필드의 종족을 가진 몬스터 1장당 상대 플레이어에게 6 데미지를 준다.",
-    "en": "【Play Requirement】The opponent has a monster with a tribe in their deck, graveyard, or field.\n\n【On Cast】Deal 6 damage to the opponent for each tribal monster in their deck, graveyard, and field combined."
   },
   "MIMIC_LORD": {
     "ja": "【召喚時】両方の場の、このモンスター以外の「ミミック」系モンスター1体につき、このモンスターの攻撃力+3・体力+3（対象が場を離れるまで）。",
@@ -1835,3 +1831,5 @@ CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RI
 CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};
 
 for (const c of [...DIPLOMACY_CARDS, CURSE_CONTAGION, ...MERCENARY_CARDS, ...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
+
+Object.assign(CARD_EFFECT_TEXT,RUNE_RULE_TEXT);

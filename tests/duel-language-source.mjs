@@ -33,7 +33,7 @@ try {
   ts.forEachChild(n,visit);
  }
  visit(tree);
- for(const reason of reasons)assert(reason in CHOICE_TEXT||DYNAMIC_CHOICE_REASONS.includes(reason)||reason==='RIFT_TRIGGER',`Missing choice locale: ${reason}`);
+ for(const reason of reasons)assert(reason in CHOICE_TEXT||DYNAMIC_CHOICE_REASONS.includes(reason)||['RIFT_TRIGGER','RUNE_WAVE','RUNE_BURST_REPLAY','RUNE_FORESIGHT_REPLAY'].includes(reason),`Missing choice locale: ${reason}`);
  for(const file of ['client/src/game/controller.ts','client/src/ui/boardView.ts'])assert(!/logToEn\([^)]*pending\.hint/.test(await fs.readFile(file,'utf8')),'Choice instructions must not use log translation');
  console.log(`PASS ${messages} static engine message variants; ${reasons.size} directly declared choice reasons have independent locale copy`);
 } finally {await fs.rm(dir,{recursive:true,force:true});}

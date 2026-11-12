@@ -26,7 +26,7 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
     case 'WALLBREAK1': case 'SNIPE1': return null;
     case 'FOCUS': return plan('purge',[...p.deck,...p.discard,c,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),1,0);
     case 'PURGE_ALL': return plan('purge',[...p.deck,...p.discard,...p.hand,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),99,0);
-    case 'SCRAPPER': return plan('scrapper',p.hand.filter(h=>h.uid!==c.uid && h.cost===1 && !hasPassive(h,'relic')),2,2);
+    case 'SCRAPPER': return plan('SCRAP_EXILE',p.hand.filter(h=>h.uid!==c.uid && !hasPassive(h,'relic')));
     case 'SELECTED_SWORD': return plan(c.id, p.field);
     case 'TRUMPET': return plan('buffTurn', p.field, 4, 0);
     case 'NL_SECRET': return plan('nlTarget', p.field);

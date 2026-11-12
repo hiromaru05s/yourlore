@@ -87,9 +87,10 @@ try {
   ench(g,'BLACKSMITH');g.players[0].field=[];g=play(g,'DEFENSIVE_STANCE');assert.equal(g.players[0].shield,3);
   ench(g,'FURNACE',1);g=play(g,'IRON_WALL');assert.equal(g.players[0].shield,7);
  });
- test('Forbidden gives 30 Shield before the die on every face; original summon result stays',()=>{
-  const seen=new Set();for(let seed=1;seed<100 && seen.size<6;seed++){let g=fresh(0,seed);g.players[0].field=[mon('TSO2')];const r=cast(g,'FORBIDDEN');const die=r.events.find(e=>e.type==='dice'&&e.source.id==='FORBIDDEN');seen.add(die.rolls[0]);assert.equal(r.state.players[0].shield,30);assert.equal(r.state.players[0].mana,28);assert(r.events.findIndex(e=>e.type==='statusGrant'&&e.resource==='shield')<r.events.indexOf(die));if(die.rolls[0]<5)assert.equal(r.state.players[0].hp,1);else assert(r.state.players[0].field.length>1);}
-  assert.equal(seen.size,6);
+ test('Forbidden buys 30 Shield and three Devils',()=>{
+  const g=fresh();g.market[0]=card('FORBIDDEN');const result=E.reduce(g,{type:'buyMarket',i:0});
+  assert.equal(result.state.players[0].shield,30);assert.equal(result.state.players[0].hp,1);
+  assert.equal(result.state.players[0].field.filter(m=>m.id==='DEVIL_TOKEN').length,3);
  });
  test('Timewarp chooses a Rift return after either result, supports decline, invalid targets and empty Rift',()=>{
   const outcomes=new Set();for(let seed=1;seed<100 && outcomes.size<2;seed++){let g=fresh(0,seed);const a=card('M1'),b=card('M2');g.players[0].removed=[a,b];const r=cast(g,'TIMEWARP');g=r.state;const die=r.events.find(e=>e.type==='dice'&&e.source.id==='TIMEWARP');outcomes.add(die.rolls[0]>=4);assert.equal(g.pending.reason,'TIMEWARP');assert(r.events.indexOf(die)<r.events.findIndex(e=>e.type==='needTarget'));assert.equal(g.players[0].mana,23);

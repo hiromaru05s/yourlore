@@ -19,16 +19,11 @@ try {
   const g=createGame({mode:'online',seed:42,starting:owner,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.cur=owner;g.turn=5;g.pending=null;g.phase='main';
   for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],enchants:[],traps:[],quests:[],removed:[],uses:{},usesTurn:{},dew:0,shield:0,brand:0,hp:100,mana:20,maxMana:20});
   const s=card('SCRAPPER'),a=card('M1'),b=card('M1');g.players[owner].hand=[s,a,card('STARTER_TRASH')];room.room.game=g;room.room.turnStartAt=now;
-  await send(owner,{type:'play',idx:0});assert.equal(room.room.game.players[owner].mana,20);assert.equal(room.room.game.players[owner].hand.length,3);
-  room.room.game.players[owner].hand.push(b);
-  await send(owner,{type:'play',idx:0,sourceUid:s.uid,targets:[a.uid]});assert.equal(room.room.game.players[owner].mana,20);
-  await send(owner,{type:'play',idx:0});assert.equal(room.room.game.players[owner].mana,18);assert.equal(room.room.game.pending.reason,'scrapper');
-  await send(owner,{type:'pick',uid:a.uid});assert.equal(room.room.game.players[owner].maxMana,20);
+  await send(owner,{type:'play',idx:0,sourceUid:s.uid,targets:[b.uid]});assert.equal(room.room.game.players[owner].mana,20);
+  await send(owner,{type:'play',idx:0});assert.equal(room.room.game.players[owner].mana,19);
   room=new GameRoom(journalState(state),rewardTestEnv());await room.webSocketMessage(sockets[owner],JSON.stringify({type:'ready'}));
-  assert.equal(room.room.game.pending.data.val,1);assert.equal(room.room.game.pending.reason,'scrapper');
-  await send(owner,{type:'pick',uid:null});assert.equal(room.room.game.pending.data.val,1);
-  room.room.turnStartAt=now-100000;await room.alarm();assert.equal(room.room.game.players[owner].maxMana,21);assert.equal(room.room.game.players[owner].removed.length,2);assert.equal(room.room.game.cur,1-owner);
-  for(const socket of sockets){const view=socket.messages.filter(m=>m.state).at(-1).state;assert.equal(view.players[owner].maxMana,21);assert.equal(view.players[owner].removed.length,2);}
+  assert.equal(room.room.game.pending.reason,'SCRAP_EXILE');await send(owner,{type:'pick',uid:null});assert(room.room.game.pending);
+  room.room.turnStartAt=now-100000;await room.alarm();assert.equal(room.room.game.players[owner].removed.length,1);assert.equal(room.room.game.cur,1-owner);
   const current=room.room.game;current.cur=owner;room.room.turnStartAt=now;current.players[owner].hand=[card('FURNACE'),card('IRON_WALL'),card('IRON_WALL')];current.players[owner].mana=20;
   await send(owner,{type:'play',idx:0});await send(owner,{type:'play',idx:0});await send(owner,{type:'play',idx:0});assert.equal(room.room.game.players[owner].shield,7);
   room=new GameRoom(journalState(state),rewardTestEnv());await room.webSocketMessage(sockets[owner],JSON.stringify({type:'ready'}));

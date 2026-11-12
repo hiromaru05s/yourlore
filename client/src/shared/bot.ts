@@ -2,7 +2,7 @@
 // Normal and upper tiers search imperfect-information rollouts; easy retains mistakes.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
 import { fireDamageBonus, purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
-import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce, spellDeckHalf, summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
+import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce,  summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { cardPower } from "./cardEval";
 import { searchDecide } from "./botSearch";
 import { observationSample } from "./botObservation";
@@ -249,8 +249,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "S4" && (p.usesTurn?.["S4"] || 0) >= 1) return false;
     if (c.id === "GS9_0" && o.hp <= 21) return false;
     if (c.id === "GS10_0" && p.field.length > 1) return false;
-    if (c.id === "RUNE1" && !o.field.some((m) => (m.cost ?? 0) >= 5)) return false;
-    if ((c.id === "RUNE2" || c.id === "RUNE3") && !spellDeckHalf(p)) return false; // v34: 덱 절반 마법 조건
     if ((c.id === "DISARM1" || c.id === "DISARM2" || c.id === "DISARM3") && o.enchants.length === 0) return false;
     // don't waste heals at (near) full HP
     // 어튠-마: needs a chest in hand (봉인 중에도 사용 가능 — 상자를 '여는' 게 아니라 소모)
@@ -260,8 +258,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     // 안식 계열: "이번 턴 다른 플레이 없음" / "필드 비어있음" 조건
     if (c.id === "MEDITATE" && (p.maxMana > 11 || p.hp >= 40)) return false; // v34
     if (c.id === "HERMIT" && (p.field.length > 0 || (p.uses["HERMIT"] || 0) >= 5)) return false;
-    if (c.id === "MULTI_CULTURE" && new Set(p.field.filter((m) => m.tribe).map((m) => m.tribe)).size < 2) return false; // v34
-    if (c.id === "GS6_4" && !(o.brand ?? 0)) return false; // 화맥 점화: 상대 낙인 필요
     if (c.id === "S3" && !p.field.some((m) => !m.tribe)) return false; // 칼날의 속삭임: 비종족 대상 필요
     // 폐기 경제 카드: 대상이 있어야 시전
     if (c.act === "exilePick" && p.discard.length === 0) return false;
@@ -275,7 +271,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "MASSACRE" && o.field.length === 0) return false;
     // Live decisions receive a public-information hypothesis. Hidden starter
     // identities are guesses; the final acceptance guard handles a false target.
-    if (c.id === "INQUISITION" && ![...o.field, ...o.discard, ...o.hand, ...o.deck, ...o.traps.map((tr) => tr.card)].some((m) => m.t === "mon" && m.tribe)) return false;
     // blood magic hurts the caster — don't suicide
     if (c.id === "BLOOD2" && o.traps.length + o.enchants.length === 0) return false;
     if (c.id === "BLOOD_SORROW" && p.discard.length === 0) return false;
@@ -290,7 +285,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if(c.act==='relicProtection' && !(p.shield??0)) return false;
     if (c.id === "NEGOTIATE") return false; // 봇은 상대 마나를 올려주지 않는다
     // forbidden ritual: needs HP to spare AND a non-시초 tribe monster to duplicate
-    if (c.id === "FORBIDDEN" && !p.field.some((m) => m.tribe && m.tribe !== "시초")) return false;
     return true;
   };
   const spells = p.hand.map((c, i) => ({ c, i })).filter((x) => x.c.t === "spell" && playCost(x.c, p) <= p.mana && castable(x.c))

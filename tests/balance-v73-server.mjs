@@ -33,6 +33,6 @@ try {
  room=new GameRoom(journalState(state),env);await room.restore();assert.equal(room.room.game.players[0].summonLockUntil,7);
  g=fresh();g.players[0].hand=[card('TPO5')];g.players[1].field=[mon('M1',{cost:3,atk:3,def:10,dmg:9}),mon('M1',{cost:4,atk:3,def:5})];const wounded=g.players[1].field[0].uid;setup(g);
  await send(0,{type:'play',idx:0});assert.deepEqual(room.room.game.players[1].field.map(m=>m.uid),[wounded]);
- g=fresh();g.players[0].hand=[card('ELITE')];setup(g);await send(0,{type:'play',idx:0});assert.equal(room.room.game.players[0].field.filter(c=>c.id==='SOLDIER2').length,1);
+ g=fresh();g.players[0].hand=[card('ELITE')];setup(g);await send(0,{type:'play',idx:0});assert.equal(room.room.game.players[0].field.filter(c=>c.id==='INFKNIGHT').length,1);
  console.log('PASS v73 server: both players, authorization, restore, repeat handling, client views, four-turn lock, current-HP targeting and one Soldier');
 }finally{await rm(dir,{recursive:true,force:true});}

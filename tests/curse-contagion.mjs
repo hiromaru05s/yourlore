@@ -42,8 +42,8 @@ for(const side of [0,1]) {
 }
 // A separate replay counts the newly populated graveyard again.
 const replay=fixture(0);
-const echo=Object.values(E.DB).find(c=>c.ench==='runeEcho');
-replay.players[0].enchants=[{card:card(echo.id),turns:99,bornTurn:1}];
+const echo={...E.DB.RUNE3,ench:'runeEcho'};
+replay.players[0].enchants=[{card:{...card(echo.id),ench:echo.ench},turns:99,bornTurn:1}];
 replay.players[1].discard=Array.from({length:4},()=>card('CURSE'));
 const echoed=resolve(replay);
 assert.equal(count(echoed.players[1].discard),8,'4 + 1 on first resolution, then 5 + 3 on replay');

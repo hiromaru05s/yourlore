@@ -38,7 +38,7 @@ try{
   const s=E.createGame({mode:'bot',seed:72,starting:side,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;s.opening=undefined;s.cur=side;s.turn=3;s.pending=null;
   for(let i=0;i<2;i++){const p=s.players[i];p.openingDrawReady=false;p.mana=8;p.maxMana=12;p.field=[];p.enchants=[];p.traps=[];p.hand=[{...E.DB.BLACK_CURSE,uid:`c${i}`},{...E.DB.BLACK_NOVA,uid:`n${i}`}];p.discard=Array.from({length:7},(_,j)=>({...E.DB.S1,uid:`d${i}-${j}`}));}
   if(blocked===true)s.players[1-side].traps=[{card:{id:'legacy-null',uid:'null',t:'trap',cost:0,react:'nullspell',name:'Null'},setTurn:0}];
-  if(blocked==='echo'){const echo=Object.values(E.DB).find(c=>c.ench==='runeEcho');s.players[side].enchants=[{card:{...echo,uid:'echo'},turns:99}];}
+  if(blocked==='echo'){const echo={...E.DB.RUNE3,ench:'runeEcho'};s.players[side].enchants=[{card:{...echo,uid:'echo'},turns:99}];}
   const r=E.reduce(s,{type:'play',idx:0}),ev=r.events.filter(e=>e.type==='curseGenerated');assert.equal(ev.length,blocked===true?0:blocked==='echo'?2:1);
   if(blocked!==true){assert.equal(ev[0].player,side);assert.equal(ev[0].before,7);assert.equal(ev[0].after,13);assert.equal(ev[0].sourceUid,`c${side}`);assert.equal(r.state.players[1-side].discard.filter(c=>c.id==='CURSE').length,blocked==='echo'?12:6);if(blocked==='echo'){assert.equal(ev[1].before,13);assert.equal(ev[1].after,19);}}
  }

@@ -11,7 +11,7 @@ try{
   for(const p of g.players)Object.assign(p,{openingDrawReady:false,mana:30,maxMana:30,hp:300,maxHp:300,hand:[],removed:[],field:[],enchants:[],traps:[],quests:[],shield:0});
   g.players[side].hand=[{...DB.EXILE_NUKE2,uid:'cast'}];g.players[side].removed=Array.from({length:count},(_,i)=>({...DB.ELF,uid:'rift-'+i}));
   if(mode==='shield')g.players[1-side].shield=5;
-  if(mode==='reverse'||mode==='echo'){const c=Object.values(DB).find(c=>c.ench===(mode==='reverse'?'blackReverse':'runeEcho'));g.players[side].enchants.push({card:{...c,uid:mode}});}
+  if(mode==='reverse'||mode==='echo'){const c=mode==='reverse'?DB.BLACK_REVERSE:{...DB.RUNE3,ench:'runeEcho'};g.players[side].enchants.push({card:{...c,uid:mode}});}
   const r=reduce(g,{type:'play',idx:0}),cast=r.events.find(e=>e.type==='playSpell'&&e.id==='EXILE_NUKE2');assert(cast,`${side}/${count}/${mode} cast`);assert.equal(cast.riftCount,count);
   const hits=r.events.filter(e=>e.type==='damage'&&e.srcKo.includes('data-card="EXILE_NUKE2"'));assert.equal(hits.reduce((s,e)=>s+e.amount,0),Math.max(0,count*2-(mode==='shield'?5:0))*(mode==='echo'?2:1));
   for(const hit of hits)assert.equal(hit.player,mode==='reverse'?side:1-side);

@@ -28,7 +28,7 @@ try{
  // Independent rule outcomes: successful navigation alone is not coverage.
  assert.equal(opp('attack').hp,36);assert.equal(opp('combat').field[0].dmg,1);assert.equal(opp('combat',1).hp,35); // 3 overflow plus Blade Hare’s 2-damage kill trigger
  assert.equal(me('mana').mana,5);assert(me('cycle').hand.some(c=>c.id==='M4'));assert.equal(me('market').mana,1);
- assert.equal(me('rift',2).removed.length,0);assert.equal(opp('rift',2).hp,32);
+ assert.equal(me('rift',2).removed.length,0);assert.equal(opp('rift',2).hp,40);assert.equal(opp('rift',2).enchants.length,0);
  assert(me('quick').removed.some(c=>c.id==='QUICK_ATTUNE'));assert.equal(me('quick').maxMana,5);assert.equal(me('quick').hp,42);
  assert.equal(me('enchant',1).maxMana,5);assert.equal(me('enchant',1).enchants.length,0);
  assert.equal(me('quest').quests[0].progress,1);assert.equal(me('quest',1).removed.filter(c=>c.id==='STARTER_TRASH').length,15);assert.equal(me('quest',2).field.filter(c=>c.id==='INFKNIGHT').length,2);
@@ -48,7 +48,7 @@ try{
  assert.equal(state('origin').winner,0);assert.equal(opp('origin').hp,40);assert.equal(state('chosen').winner,0);assert.equal(state('judgement').winner,0);assert.equal(state('judgement',1).winner,null);assert.equal(state('judgement',2).winner,1);assert(me('defend').hp>0);assert.equal(state('duel').winner,0);
  const chosen=createLesson('chosen');advanceLesson(chosen,transcripts.chosen[0]);assert.equal(chosen.state.over,false,'25 Culls alone do not win');
  const forged=createLesson('shield');for(const a of transcripts.shield){if(lib.actingSide(forged.state)===1){assert(!tutorialActionAllowed(forged,{type:'surrender',player:1}),'client cannot make guide surrender');break;}advanceLesson(forged,a);}
- const required=createLesson('rift');for(const a of transcripts.rift){if(required.state.pending&&['chosenMage','exilePick'].includes(required.state.pending.reason)){assert(!tutorialActionAllowed(required,{type:'pick',uid:null}),'required demonstration cannot be skipped');}advanceLesson(required,a);}
+ const required=createLesson('rift');for(const a of transcripts.rift){if(required.state.pending&&['CHOSEN_DISPEL','exilePick'].includes(required.state.pending.reason)){assert(!tutorialActionAllowed(required,{type:'pick',uid:null}),'required demonstration cannot be skipped');}advanceLesson(required,a);}
  const reviewed=createLesson('rift');for(const a of transcripts.rift.slice(0,2))advanceLesson(reviewed,a);const purging=reviewed.state.players[0].hand[0];assert(!tutorialActionAllowed(reviewed,{type:'play',idx:0,sourceUid:purging.uid,targets:[]}), 'reviewed cast cannot skip required demonstration');assert(!tutorialActionAllowed(reviewed,{type:'play',idx:0,sourceUid:purging.uid,targets:[purging.uid]}),'choose the instructed other card, not the spell itself');
  const sql=new DatabaseSync(':memory:');sql.exec(await readFile('server/schema.sql','utf8'));
  const profiles=[['new',0],['partial',1250],['graduate',3000],['other',0]];

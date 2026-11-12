@@ -74,7 +74,7 @@ try {
   const faces=new Set();
   for(let seed=1;seed<=150 && faces.size<6;seed++){
    let g=fresh();g=play(g,'DEMON_REALM');g.cur=1;g=play(g,'DEMON_REALM');
-   for(const p of g.players)p.field=[{...mon('M1'),def:1},{...mon('M1'),def:1}];
+   for(const p of g.players)p.field=[{...mon('M2'),def:1},{...mon('M2'),def:1}];
    g.rng=seed;g.players[1].hand=[card('EARTHQUAKE')];
    const r=reduce(g,{type:'play',idx:0});
    for(const side of [0,1]){

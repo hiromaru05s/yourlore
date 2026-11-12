@@ -1,3 +1,4 @@
+import {RUNE_IDS} from './runeRework';
 import { FIRE_SPELL_IDS } from './fireCards';
 import {ARMY_IDS} from './armyAttuneCards';
 import {GOBLIN_IDS} from './goblinCards';
@@ -47,7 +48,7 @@ for (const [key,tribe] of Object.entries(TRIBES)) CARD_SERIES['tribe:'+key]={nam
 export const CARD_GENERATES: Record<string,string[]> = {
   FARM:['APPLE'], FARMER:['FARMER_PRAYER'], HARVEST:['GRAPE2','APPLE','GOLDEN_APPLE'], FARMER_PRAYER:['GOLDEN_APPLE'],
   SCARECROW:['TOKEN00'], LEVY:['SOLDIER2'], BUDGET:['SOLDIER2'], HALF_ELF:['WORLD_CARE'], BREWING:['WINE'],
-  FORBIDDEN:ids(c=>c.t==='mon'&&!!c.tribe&&c.tribe!=='시초'), Q_TRIBE:ids(c=>c.t==='mon'&&!!c.tribe),
+  FORBIDDEN:['DEVIL_TOKEN'], SCRAPPER:['WINE'], RUNE_GLYPH:[...RUNE_IDS].filter(id=>id!=='RUNE_GLYPH'), Q_TRIBE:ids(c=>c.t==='mon'&&!!c.tribe),
   MUSTER_DIE:['COUP','SOLDIER2','GUNNER'], CANNON_COMMANDER:['GUNNER','HEAVY_GUNNER'],
   QUICK_ESCORT:['INFKNIGHT'], DRAGON_KILLER:['MANA_HEART'], QUEST_ATTUNE_STUDY:['DUAL_ATTUNE','ATTUNE_SHINE','ATTUNE_RESEARCH'],
   MIMIC:['CURSE'], SPIRIT_RESONANCE:['MINI_SPIRIT'], TIME_WRAITH:['TIMEWARP'],
@@ -58,7 +59,7 @@ export const CARD_GENERATES: Record<string,string[]> = {
   AWAKENED_MIMIC:['MIMIC'], MIMIC_KING:['MIMIC2'], MIMIC_KING2:['MIMIC_HIDEOUT'], MIMIC_HIDEOUT:['MIMIC2'],
   VOID_APOSTLE:['STARTER_TRASH'], SORTER:['STARTER_TRASH',...CARD_SERIES.chosen.ids],
   CULL_FLOOD:['STARTER_TRASH'], PAIN_HARVEST:['STARTER_TRASH'], CULL_FARM:['STARTER_TRASH'],
-  GREED_PRICE:['MIMIC'], ELITE:['SOLDIER2'], DRAGON_EGG:['D_BLACK','D_RED','D_BLUE'], BEAST_EGG:['DIVINE'],
+  GREED_PRICE:['MIMIC'], ELITE:['INFKNIGHT'], DRAGON_EGG:['D_BLACK','D_RED','D_BLUE'], BEAST_EGG:['DIVINE'],
   VAMP_PACT:['VAMP1'], VAMP_PACT2:['VAMP2'], VAMP_BUTLER:['VAMP1'], VAMP1:['VAMP2'], VAMP2:['VAMP3'], VAMP3:['VAMP4'], VAMP4:['VAMP5'],
   CROSSROADS:['STARTER_TRASH'], TRIAL_AREA:['STARTER_TRASH'], ANCIENT_CIV:['DRAGON_EGG','BEAST_EGG'],
   GUILD_CO:['DARK_MERCHANT'], DUNGEON_FLOOR:['MIMIC'],
@@ -70,7 +71,7 @@ export const CARD_GENERATES: Record<string,string[]> = {
   REINFORCE:['INFKNIGHT','SOLDIER2','GUNNER'], FARM_KEEPER:['TOKEN00'], STABLE:['CAVALRY'],
   MERC_MASTER:['MERC_LEADER'], Q_TOWN:['DOMINION'], EMPTY_MIND:['CREATION'], CREATION:['CREATION'],
   BLACK_INFINITY:['STARTER_TRASH'], BLACK_CURSE:['CURSE'], BLACK_ELSA:['CURSE'], BLACK_ALICE:['CURSE'], QUICK_CURSE:['CURSE'],
-  ASSASSIN_SQUAD:['ASSASSIN2'], WINE_COLLECTOR:['GRAPE2'], NIGHT_CASTLE_GIFT:['VAMP_PACT','VAMP_WARD'],
+  ASSASSIN_SQUAD:['ASSASSIN2'], WINE_COLLECTOR:['GRAPE2','DARK_MERCHANT'], NIGHT_CASTLE_GIFT:['VAMP_PACT','VAMP_WARD'],
 };
 
 const nameKey = {ja:'nameJa',ko:'name',en:'nameEn'} as const;
@@ -120,9 +121,10 @@ export function effectReferenceParts(text:string,lang:EffectLocale,sourceId:stri
       if(lang==='ko'&&c.text.length===1&&(!/(^|\s|['·「])$/.test(before)||!/^($|[\s'·」]|[이을를의에은와과])/u.test(after)))return false;
       if(c.reference.kind==='series') {
         const id=c.reference.id;
-        if(id==='army')return ['VITAL4','FORTIFY_CASTLE','SIEGE_CASTLE','COUP','SWORD_GRAVE_WRAITH'].includes(sourceId);
+        if(id==='army')return ['HORDE','VITAL4','FORTIFY_CASTLE','SIEGE_CASTLE','COUP','SWORD_GRAVE_WRAITH'].includes(sourceId);
         if(id==='goblin'&&/関連|계열|-related/.test(c.text))return true;
         if(id.startsWith('tribe:')||['eggs','blood','black','fire','chosen','armorer'].includes(id))return true;
+        if(id==='mimic' && sourceId==='MIMIC_LORD' && (before.endsWith('named ') || before.endsWith('‘')))return false;
         if(lang!=='ja'&&familyNames.has(CARD_SERIES[id].names.ja))return true;
         if(lang==='ja')return /^」(?:「[^」]+」)*系/.test(after)||sourceId==='VITAL3';
         if(lang==='ko')return /^(?:['’]?\s*|·[가-힣]+\s*)계열/.test(after)||!all.some(x=>x.name===c.text);

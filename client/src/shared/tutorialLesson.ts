@@ -22,7 +22,7 @@ export function tutorialOpponentAction(run:LessonRun):Action|null {
  return {type:'endTurn'};
 }
 function choiceMatches(run:LessonRun,uid:string,id:string):boolean {
- return run.state.players.some(p=>[...p.hand,...p.deck,...p.discard,...p.field,...(p.removed??[])].some(c=>c.uid===uid&&c.id===id));
+ return run.state.players.some(p=>[...p.hand,...p.deck,...p.discard,...p.field,...p.enchants.map(e=>e.card),...(p.removed??[])].some(c=>c.uid===uid&&c.id===id));
 }
 export function tutorialActionAllowed(run:LessonRun,action:TutorialAction):boolean {
  if(run.done||run.actions.length>=TUTORIAL_ACTION_LIMIT)return false;

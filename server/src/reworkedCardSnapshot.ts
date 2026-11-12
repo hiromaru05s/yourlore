@@ -1,3 +1,4 @@
+import {NOVEMBER_PRINTS,RUNE_RULE_TEXT} from '../../client/src/shared/runeRework';
 import {MERC_IDS} from '../../client/src/shared/mercenaryCards';
 import { DB, STARTERS } from '../../client/src/shared/cards';
 import { refreshFieldPassives } from '../../client/src/shared/engine';
@@ -25,8 +26,10 @@ export function restoreReworkedCards(game: GameState): void {
   const updateHexers = !game.hexerReworkApplied;
   const updateDiplomacy = !game.diplomacyApplied;
   const updateCasinoRally = !game.casinoRallyApplied;
+  const updateRunes=!game.runeReworkApplied;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes)) return;
+  game.runeReworkApplied=true;
   game.casinoRallyApplied = true;
   game.diplomacyApplied = true;
   game.mercReworkApplied = true;
@@ -130,6 +133,37 @@ export function restoreReworkedCards(game: GameState): void {
       if (updateDiplomacy && q.card.id === 'Q_TOWN') { q.townSeen = []; q.progress = 0; }
       if (updateQuests && questCards.has(q.card.id)) q.progress = Math.min(q.progress, q.card.quest!.target);
     }
+  }
+  if(updateRunes){
+    const refreshRune=(c:CardInst|null)=>{
+      if(!c || !DB[c.id] || !(c.id in RUNE_RULE_TEXT || c.id in NOVEMBER_PRINTS || c.id==='DRAGON_KILLER'))return;
+      const def=DB[c.id], patch=NOVEMBER_PRINTS[c.id], field=c as FieldMon;
+      Object.assign(c,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      for(const k of Object.keys(patch??{}) as (keyof typeof def)[]){
+        if(k==='passive'){
+          const old=c.passive??[];
+          c.passive=[...new Set([...old.filter(p=>!(c.id==='CHOSEN_KNIGHT'&&p==='counter')),...def.passive??[]])];
+        }else if((k==='atk'||k==='def')&&field.trickSwapped)c[k]=def[k==='atk'?'def':'atk'];
+        else {
+          const target=field.mutedEffects && ['aura','condAtk','onSummon','attackFx','turnFx'].includes(k)?field.mutedEffects:c;
+          if(def[k]===undefined)Reflect.deleteProperty(target,k);else Reflect.set(target,k,def[k]);
+        }
+      }
+    };
+    game.market=game.market.map(c=>c?.id==='INQUISITION'?{...DB.M1,uid:c.uid}:c);
+    game.market.forEach(refreshRune);
+    for(const p of game.players){
+      for(const pile of [p.hand,p.deck,p.discard,p.removed??[],p.field]){
+        for(let i=pile.length-1;i>=0;i--)if(pile[i].id==='INQUISITION')pile.splice(i,1);else refreshRune(pile[i]);
+      }
+      p.supply=p.supply.map(c=>c?.id==='INQUISITION'?{...DB.M1,uid:c.uid}:c);p.supply.forEach(refreshRune);
+      for(const entry of [...p.enchants,...p.traps,...p.quests??[],...p.exile]) refreshRune(entry.card);
+      for(const e of [...p.enchants])if(e.card.id==='RUNE3'){p.enchants.splice(p.enchants.indexOf(e),1);p.discard.push(e.card);}
+      for(const e of p.enchants)if(e.card.id==='SPACE_RITE')e.turns=Math.min(e.turns,2);
+      delete p.uses.INQUISITION;
+    }
+    if(game.pending && ['chosenMage','scrapper'].includes(game.pending.reason))game.pending=null;
+    delete game.chosenMageQueued;
   }
   if (updateDemons) {
     for (const p of game.players) for (const m of p.field) {

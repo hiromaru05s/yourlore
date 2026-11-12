@@ -85,6 +85,8 @@ export interface FieldMon extends CardInst {
   atkMod: number; // permanent atk change
   defMod: number; // permanent def change
   summonedTurn: number;
+  strippedConditionals?: string[];
+  chosenBoonTurn?:number;
   attacksUsed?: number; // attacks made this turn (for multi-attack monsters)
   token?: boolean; // conjured by an effect (not a real deck card) — exiled on death, never enters the deck cycle
   hatch?: number; // 알: remaining hatch counter (both players' turns tick it)
@@ -118,6 +120,9 @@ export interface RevealedCard {
 
 export interface PlayerState {
   damageReceived?: {turn:number; total:number; previous:number};
+  runePlays?:string[];
+  runeMarket?:boolean;
+  freeOrigin?:boolean;
   lastMonsterAttackTurn?: number;
   attuneBonuses?: ('heal1'|'heal2'|'heal3'|'shield'|'dew'|'crystal'|'mana'|'shine'|'spirit'|'hex'|'selfHex')[];
   attunePlaysTurn?: number;
@@ -239,6 +244,7 @@ export interface TribePactDefeat {
 }
 
 export interface GameState {
+  runeReworkApplied?:boolean;
   diplomacyApplied?: boolean;
   truceThroughTurn?: number;
   mindSecret?: {owner:Side; attackerUid:string; targetUid:string};

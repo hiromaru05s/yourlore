@@ -11,6 +11,10 @@ export function withoutMonsterPresentation<T>(work: () => T): T {
 
 /** A resolution boundary, not an action/turn-wide deduplication key. */
 export function monsterActivation(g: GameState, events: GameEvent[], owner: PlayerState, source: FieldMon, at = events.length): void {
+  if(owner.field.includes(source) || events.some(e=>e.type==='destroy' && e.uid===source.uid))
+    for(const p of g.players) for(const devil of p.field) if(devil.id==='DEVIL_TOKEN' && !devil.mutedEffects) {
+      devil.atkMod=(devil.atkMod??0)+1;devil.defMod=(devil.defMod??0)+1;
+    }
   if (!presenting) return;
   // Counter damage can remove the attacker before its post-attack effect
   // resolves. Present that source while its old-board card still exists.
@@ -27,7 +31,7 @@ export function monsterActivation(g: GameState, events: GameEvent[], owner: Play
  * reaction hooks emit at their own successful branch instead.
  */
 export function observeMonsterEffect(g: GameState, events: GameEvent[], owner: PlayerState, source: FieldMon, maxManaLimit: number): () => void {
-  if (!presenting) return () => {};
+  if (!presenting && !g.players.some(p=>p.field.some(m=>m.id==='DEVIL_TOKEN'))) return () => {};
   const at = events.length;
   const consequences = () => JSON.stringify({
     players: g.players.map(({ onceUsed: _attempts, ...p }) => ({ ...p, maxMana: Math.min(p.maxMana, maxManaLimit), removed: p.removed ?? [] })),
