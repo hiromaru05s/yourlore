@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 430,
+  "count": 431,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -10264,6 +10264,26 @@
         "ja": "【発動時】双方のデッキ構成に「呪い」がない場合、新しい「呪い」を相手の墓地に2枚、自分の墓地に1枚加える。それ以外の場合、相手のデッキ構成の「呪い」が5枚未満なら相手の墓地に新しい「呪い」1枚、5枚以上なら3枚を加える。",
         "ko": "【발동 시】양측 덱 구성에 저주가 없으면 상대 묘지에 새 저주 2장, 자신의 묘지에 새 저주 1장을 추가한다. 그 외에는 상대 덱 구성의 저주가 5장 미만이면 상대 묘지에 새 저주 1장을, 5장 이상이면 3장을 추가한다.",
         "en": "【On Cast】If neither player has a Curse in their deck composition, add 2 new Curses to the opposing graveyard and 1 to your own graveyard. Otherwise, if the opponent has fewer than 5 Curses in their deck composition, add 1 new Curse to their graveyard. If they have 5 or more, add 3."
+      }
+    },
+    "SUPPLY_LINE": {
+      "nameJa": "補給ライン",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "0f72ce5d4099ff6e358c849f727dbe36cf07b414d2b642a89297bb6466987443",
+      "textSha256": "5cc9ea36c8f75400a5388afbe1568c1cdbe9213c5e8ea4f1862026cafdbd9c6e",
+      "hooks": {
+        "ench": "supplyLine"
+      },
+      "before": null,
+      "after": {
+        "ja": "【コスト】自分の場にモンスターがいなければ、このカードの発動コストを1下げる。\n\n【自分のモンスター召喚時】自分がモンスターを1体召喚するたび、自分はカードを1枚引く。",
+        "ko": "【코스트】자신의 필드에 몬스터가 없으면 이 카드의 발동 비용이 1 감소한다.\n\n【자신의 몬스터 소환 시】자신이 몬스터를 1체 소환할 때마다 카드를 1장 드로우한다.",
+        "en": "【Cost】This card costs 1 less mana to cast if you control no monsters.\n\n【When You Summon a Monster】Draw 1 card each time you summon a monster."
       }
     }
   },

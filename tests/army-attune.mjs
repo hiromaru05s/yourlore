@@ -19,6 +19,43 @@ const pick=(g,uid)=>step(g,{type:'pick',uid});
 const end=g=>step(g,{type:'endTurn'});
 function enchant(g,id,owner=g.cur){g.players[owner].enchants.push({card:card(id),turns:99,bornTurn:0});}
 function check(name,f){f();console.log('PASS',name);}
+check('Supply Line is a permanent starter and discounts only a cast on an empty allied field',()=>{
+  const id = 'SUPPLY_LINE';
+  assert(E.DECK_POOL.includes(id)); assert(!E.BUYABLE_POOL.includes(id));
+  assert.equal(E.sanitizeDeck([id,...Array(7).fill('STARTER_TRASH')])[0],id);
+  assert.equal(E.enchantHasTurnCountdown(E.DB[id]),false);
+  for (const occupied of [false,true]) for (const mana of [1,2,3]) {
+    let g=fresh(1); const p=g.players[1]; p.mana=mana;
+    g.players[0].field=[mon('M1')];
+    if (occupied) p.field=[mon('M1')];
+    const cost=occupied?3:2;
+    assert.equal(E.playCost(card(id),p),cost);
+    g=cast(g,id);
+    assert.equal(g.players[1].enchants.length,Number(mana>=cost));
+    assert.equal(g.players[1].mana,mana>=cost?mana-cost:mana);
+  }
+});
+check('Supply Lines draw per successful summon, including tokens, and stop when removed',()=>{
+  let g=fresh();
+  g=cast(cast(g,'SUPPLY_LINE'),'SUPPLY_LINE');
+  g.players[0].deck=Array.from({length:12},()=>card('STARTER_TRASH'));
+  g=cast(g,'M1'); assert.equal(g.players[0].hand.length,2);
+  g=cast(g,'SCARECROW'); assert.equal(g.players[0].hand.length,8);
+  g.players[0].summonCap=5; g=cast(g,'SCARECROW');
+  assert.equal(g.players[0].field.length,5);assert.equal(g.players[0].hand.length,10);
+  g.cur=1;g=cast(g,'M1');assert.equal(g.players[0].hand.length,10);
+  g.cur=0;g.players[0].enchants=[];g.players[0].summonCap=7;
+  g=cast(g,'M1');assert.equal(g.players[0].hand.length,10);
+});
+check('Supply Line credits the summoner when Rebellion sends a Soldier to the other field',()=>{
+  let g=fresh();for(const side of [0,1]) {
+    enchant(g,'SUPPLY_LINE',side);g.players[side].deck=[card('STARTER_TRASH')];
+  }
+  enchant(g,'COUP');g=cast(g,'SOLDIER2');
+  assert.equal(g.players[1].field[0].id,'SOLDIER2');
+  assert.equal(g.players[0].hand.length,1);assert.equal(g.players[1].hand.length,0);
+  assert.equal(g.players[0].expansion.extraDraw,1);
+});
 check('Rally King grants one Guts to every military rank on either summon order',()=>{
   assert.deepEqual([E.DB.VITAL4.atk,E.DB.VITAL4.def],[2,4]);
   for(const id of ['SOLDIER2','INFKNIGHT','CAVALRY','GUNNER','HEAVY_GUNNER','CAPTAIN','CANNON_COMMANDER']){

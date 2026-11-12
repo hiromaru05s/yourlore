@@ -377,6 +377,7 @@ export function playCost(c: CardInst, p?: PlayerState): number {
   if (p && c.id === "ROGUE_ART" && p.field.some(isAssassinCard)) return 0;
   if (p && havenDiscount(p, c)) return 0;
   let base = c.play ?? c.cost;
+  if (p && c.ench === 'supplyLine' && p.field.length === 0) base -= 1;
   if (p && c.id === 'FIRE_METEOR' && p.expansion?.firePlayed.some(id => id !== c.id)) base = 1;
   if (p && c.id === 'FIRE_BRANDING') base -= p.expansion?.firePlayed.length ?? 0;
   if (p && isFire(c)) base = Math.max(0, base - (p.expansion?.fireDiscount ?? 0) - 2 * p.field.filter(m => !m.mutedEffects && m.id === 'FIRE_MASTER').length);
@@ -720,11 +721,12 @@ interface Ctx {
   effectCard?: CardDef;
   battleKill?: boolean;
   monsterSource?: CardInst;
+  summonTurnOwner?: Side; // Actual turn owner while resolving a summon on another field.
   bonusDamage?: boolean;
   side(p:PlayerState):Side;
   ev: GameEvent[];
   log(ko: string, ja?: string, en?: string): void;
-  drawN(p: PlayerState, n: number, extra?: boolean): number;
+  drawN(p: PlayerState, n: number, extra?: boolean, turnOwner?: Side): number;
   heal(p: PlayerState, amt: number): void;
   dealDamage(target: PlayerState, amt: number, srcKo: string, srcJa?: string, source?: Side, srcEn?: string, bypassShield?: boolean): void;
   selfDamage(owner: PlayerState, amount: number, source: CardDef): void;
@@ -733,7 +735,7 @@ interface Ctx {
 function side(g: GameState, p: PlayerState): Side { return (g.players[0] === p ? 0 : 1) as Side; }
 function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
   const log = (ko: string, ja?: string, en?: string) => ev.push({ type: "log", html: ko, htmlJa: ja ?? ko, ...(en ? {htmlEn:en} : {}) });
-  const drawN = (p: PlayerState, n: number, extra = true): number => {
+  const drawN = (p: PlayerState, n: number, extra = true, turnOwner = g.cur): number => {
     let drawn = 0;
     for (let i = 0; i < n; i++) {
       if (!p.deck.length) {
@@ -748,7 +750,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     }
     if (extra) trackActivity(p, 'draw', drawn);
     if (drawn > 0) ev.push({ type: "draw", player: side(g, p), count: drawn });
-    if (drawn > 0 && extra && side(g, p) === g.cur) {
+    if (drawn > 0 && extra && side(g, p) === turnOwner) {
       xstate(p).extraDraw += drawn;
       for (let i = 0; i < drawn && !g.over; i++) {
         for (const e of [...p.enchants]) {
@@ -964,7 +966,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
             monsterActivation(g, ev, pl, sc);
             const { rolls: scv } = diceRoll(g, ev, side(g, pl), { id: sc.id, player: side(g, pl) }, 1, 5);
             if (scv[0] >= 5) {
-              spawnToken(g, ctx as Ctx, pl, dead.id, false, undefined, undefined, ['void']);
+              spawnToken(g, ctx as Ctx, pl, dead.id, {grantedPassives:['void']});
               log(`  └ <span class="good">${cn(sc)}</span> 🎲 ${scv[0]} → ${cn(dead)} 의 복제를 소환`, `  └ <span class="good">${cn(sc)}</span> 🎲 ${scv[0]} → ${cn(dead)} の複製を召喚`, `  └ <span class="good">${cn(sc)}</span> 🎲 ${scv[0]} → summon a copy of ${cn(dead)}`);
             } else log(`  └ ${cn(sc)} 🎲 ${scv[0]} — 복제 실패`, `  └ ${cn(sc)} 🎲 ${scv[0]} — 複製失敗`);
           }
@@ -3450,7 +3452,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     case "summonRandom": { // GM10_2
       const mons = p.deck.filter((c) => c.t === "mon");
-      if (mons.length) { const pick = mons[randInt(g, mons.length)]; if (!effectSummonAllowed(g, p, pick)) break; const di = p.deck.findIndex((c) => c.uid === pick.uid); p.deck.splice(di, 1); spawnToken(g, ctx, p, pick.id, true); ctx.log(`  └ 덱에서 ${cn(pick)} 무료 소환`, `  └ デッキから ${cn(pick)} を無料召喚`); }
+      if (mons.length) { const pick = mons[randInt(g, mons.length)]; if (!effectSummonAllowed(g, p, pick)) break; const di = p.deck.findIndex((c) => c.uid === pick.uid); p.deck.splice(di, 1); spawnToken(g, ctx, p, pick.id, {fromDeck:true}); ctx.log(`  └ 덱에서 ${cn(pick)} 무료 소환`, `  └ デッキから ${cn(pick)} を無料召喚`); }
       else ctx.log("  └ 덱에 몬스터 없음", "  └ デッキにモンスターなし", `  └ No monsters in the deck`);
       break;
     }
@@ -3642,8 +3644,11 @@ function doDragonFuse(g: GameState, ctx: Ctx, p: PlayerState, dragonUid: string,
  *  is a conjured token: exiled on death (see destroyMonster).
  *  종족 시너지는 발동한다 — 시초의 노래/금단의 술식처럼 토큰 소환으로 동족을
  *  완성하는 카드가 시너지를 못 터뜨리던 버그 수정 (2026-07-09). */
-function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck = false, ritual?: string, source?: string, grantedPassives?: string[]): boolean {
-  p = armyDestination(g,p,id);
+function spawnToken(g: GameState, ctx: Ctx, owner: PlayerState, id: string, options: {
+  fromDeck?: boolean; ritual?: string; source?: string; grantedPassives?: string[]; summoner?: PlayerState;
+} = {}): boolean {
+  const {fromDeck, ritual, source, grantedPassives, summoner = owner} = options;
+  const p = armyDestination(g,owner,id);
   if (!DB[id] || !effectSummonAllowed(g, p, DB[id])) return false;
 
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: !fromDeck };
@@ -3658,7 +3663,7 @@ function spawnToken(g: GameState, ctx: Ctx, p: PlayerState, id: string, fromDeck
   if (m.id === 'CASINO') townEvent(p, 'casino');
   if (m.tribe) advanceQuest(p, "tribeSummon");
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id, ...(ritual ? {ritual} : {}), ...(source ? {source} : {}) });
-  applyEnterAura(g, ctx, p, m);
+  applyEnterAura(g, ctx, p, m, summoner);
   applySummonBuff(g, ctx, p, m);
   if (m.tribe && !g.over) checkTribe(g, ctx, p, m); // 동족 시너지는 소환 경로와 무관하게 판정
   reactGeneralSummon(g, ctx, p);
@@ -4409,7 +4414,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`  └ 대가: 자신에게 낙인 카운터 1개 부여 (${p.brand})`, `  └ 代償: 自身に烙印カウンターを1つ付与 (${p.brand})`, `  └ Cost: gain 1 Brand counter (${p.brand})`);
       const { rolls: df } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1);
       let dn = 0;
-      for (let i = 0; i < df[0] && p.field.length < FIELD_MAX; i++) { spawnToken(g, ctx, p, "MIMIC", false, undefined, "DUNGEON_FLOOR"); dn++; }
+      for (let i = 0; i < df[0] && p.field.length < FIELD_MAX; i++) { spawnToken(g, ctx, p, "MIMIC", {source:"DUNGEON_FLOOR"}); dn++; }
       ctx.log(`${tag(p, card)} 🎲 ${df[0]} → 미믹 ${dn}마리 소환`, `${tag(p, card)} 🎲 ${df[0]} → ミミック${dn}体召喚`, `${tag(p, card)} 🎲 ${df[0]} → summon ${dn} Mimics`);
       break;
     }
@@ -4660,11 +4665,11 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       else if (gcs === 8) { addHealth(ctx, p, 10); ctx.log(`  └ 체력 +10`, `  └ 体力 +10`); }
       else if (gcs >= 9 && [...p.field, ...p.enchants.map(e => e.card), ...(p.quests ?? []).map(q => q.card)].some(isAssassinCard)) { ctx.drawN(p, 4); }
       else if (gcs <= 10) {
-        spawnToken(g, ctx, o, "ASSASSIN1"); spawnToken(g, ctx, o, "ASSASSIN2");
+        spawnToken(g, ctx, o, "ASSASSIN1", {summoner:p}); spawnToken(g, ctx, o, "ASSASSIN2", {summoner:p});
         ctx.log(`  └ <span class="dmg">경보! 상대 필드에 초급·중급 암살자 소환</span>`, `  └ <span class="dmg">警報！相手の場に初級・中級アサシン召喚</span>`);
       }
       else {
-        spawnToken(g, ctx, o, "ASSASSIN1"); spawnToken(g, ctx, o, "ASSASSIN2"); spawnToken(g, ctx, o, "ASSASSIN3");
+        spawnToken(g, ctx, o, "ASSASSIN1", {summoner:p}); spawnToken(g, ctx, o, "ASSASSIN2", {summoner:p}); spawnToken(g, ctx, o, "ASSASSIN3", {summoner:p});
         ctx.log(`  └ <span class="dmg">대참사! 상대 필드에 초급·중급·상급 암살자 소환</span>`, `  └ <span class="dmg">大惨事！相手の場に初級・中級・上級アサシン召喚</span>`);
         if (!g.over) ctx.selfDamage(p, 10, card);
       }
@@ -4705,7 +4710,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
           const have = new Set(p.field.filter((m) => m.tribe === tribe).map((m) => m.id));
           const toSummon = ALL_IDS.filter((id) => DB[id].tribe === tribe && !have.has(id) && DB[id].t === "mon");
           const ritual=`FORBIDDEN:${side(g,p)}:${ctx.ev.length}`;
-          toSummon.forEach((id) => spawnToken(g, ctx, p, id, false, ritual));
+          toSummon.forEach((id) => spawnToken(g, ctx, p, id, {ritual}));
           ctx.log(`  └ 성공! [${tribeName(tribe, "ko")}] 나머지 ${toSummon.length}체 소환`, `  └ 成功! [${tribeName(tribe, "ja")}] 残り${toSummon.length}体を召喚`, `  └ Success! Summon the remaining ${toSummon.length} monsters of the [${tribeName(tribe, "en")}] tribe`);
         } else ctx.log(`  └ 성공했지만 필드에 종족 몬스터가 없음`, `  └ 成功したが場に種族モンスターがいない`, `  └ Roll succeeded, but there is no tribal monster on the field`);
       } else ctx.log(`  └ 실패…`, `  └ 失敗…`, `  └ Failed`);
@@ -4761,7 +4766,7 @@ function luckyChest(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): voi
   } else if (sum <= 5) {
     // spawnToken 경유 필수: 인라인으로 field.push 하면 약화술식·트릭룸(applyFieldGlobals)과
     // 등장 오라(applyEnterAura)가 통째로 빠진다 — 마스터 미믹에 弱化術式이 안 걸리던 원인.
-    spawnToken(g, ctx, o, "MIMIC");
+    spawnToken(g, ctx, o, "MIMIC", {summoner:p});
     ctx.log(`  └ <span class="dmg">꽝! 상대 필드에 미믹(3/2) 소환</span>`, `  └ <span class="dmg">ハズレ！相手の場にミミック(3/2)召喚</span>`);
   } else if (sum <= 8) {
     addMaxMana(p, 1);
@@ -4784,7 +4789,7 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
   else {
     // 꽝(dud): spawn a Mimic (3/2) on the OPPONENT's field — the risk of cracking chests
     const o = g.players[0] === p ? g.players[1] : g.players[0];
-    spawnToken(g, ctx, o, "MIMIC"); // 위와 동일 — 전역 효과/오라를 타야 한다
+    spawnToken(g, ctx, o, "MIMIC", {summoner:p}); // 위와 동일 — 전역 효과/오라를 타야 한다
     txt = "🎲 " + roll + " → 꽝! 상대 필드에 미믹(3/2) 소환"; txtJa = "🎲 " + roll + " → ハズレ！相手の場にミミック(3/2)召喚"; kind = "mimic";
   }
   ctx.log(`<span class="t">${p.name}</span> 보물상자 → <span class="good">${txt}</span>`, `<span class="t">${p.name}</span> 宝箱 → <span class="good">${txtJa}</span>`);
@@ -4794,7 +4799,13 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
 // ============================================================
 // play / buy
 // ============================================================
-function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
+function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon, summoner = p): void {
+  for (const e of summoner.enchants) {
+    if (e.card.ench !== 'supplyLine') continue;
+    enchantFx(g, ctx.ev, summoner, e.card);
+    ctx.drawN(summoner, 1, true, ctx.summonTurnOwner);
+    if (g.over) return;
+  }
   if (m.id === 'CASTLE') for (const q of p.quests ?? []) {
     if (q.card.id === 'Q_CASTLE' && q.anchorUid === m.uid) q.progress = 0;
   }
@@ -4869,7 +4880,7 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
     }
   }
 }
-function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
+function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst, summoner: PlayerState): void {
   const m: FieldMon = { ...card, exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
   delete m.mercContractKey;
   delete m.bounties;
@@ -4886,7 +4897,7 @@ function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   else
     ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 소환 (공${effAtk(p, m, g)}/체${effDef(p, m)})`, `<span class="t">${p.name}</span> ${cn(card)} 召喚 (攻${effAtk(p, m, g)}/体${effDef(p, m)})`);
   ctx.ev.push({ type: "summon", player: side(g, p), uid: m.uid, id: m.id });
-  applyEnterAura(g, ctx, p, m);
+  applyEnterAura(g, ctx, p, m, summoner);
   // GM5_2: summon-buff aura grants +1/+1 to each monster you summon
   applySummonBuff(g, ctx, p, m);
   // persistent "heal on summon" enchant (생명의 가호)
@@ -5250,7 +5261,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
         const mp = takeTrap(g, ctx, o2, "mimicParty");
         if (mp) {
           ctx.log(`  └ <span class="dmg">함정 ${cn(mp)}!</span> 미믹 파티 개최 — ${p.name} 필드에 2마리, ${o2.name} 필드에 3마리`, `  └ <span class="dmg">トラップ ${cn(mp)}!</span> ミミックパーティー — ${p.name} の場に2体, ${o2.name} の場に3体`, `  └ <span class="dmg">Trap ${cn(mp)}!</span> Mimic party: summon 2 to ${p.name}’s field and 3 to ${o2.name}’s field`);
-          spawnToken(g, ctx, p, "MIMIC"); spawnToken(g, ctx, p, "MIMIC");
+          spawnToken(g, ctx, p, "MIMIC", {summoner:o2}); spawnToken(g, ctx, p, "MIMIC", {summoner:o2});
           spawnToken(g, ctx, o2, "MIMIC"); spawnToken(g, ctx, o2, "MIMIC"); spawnToken(g, ctx, o2, "MIMIC");
         }
       }
@@ -5276,7 +5287,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count (card analytics — monsters too)
     afterPlay(g, ctx, p, card);
     const receiving = armyDestination(g,p,card.id);
-    summonForOwner(g,ctx,receiving,card);
+    summonForOwner(g,ctx,receiving,card,p);
     if (!g.over) treeKeeperTrigger(g, ctx, p, card, card.uid); // 파수꾼 자신의 소환은 제외
     return;
   }
@@ -5870,7 +5881,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       const gi = p.discard.findIndex((c) => c.id === uid);
       if (gi >= 0) p.discard.splice(gi, 1); // 묘지의 그 카드를 필드로 (없으면 토큰)
       ctx.log(`<span class="t">${p.name}</span> 윤회 → ${cn(DB[uid])} 소환`, `<span class="t">${p.name}</span> 輪廻 → ${cn(DB[uid])} 召喚`);
-      spawnToken(g, ctx, p, uid, gi >= 0);
+      spawnToken(g, ctx, p, uid, {fromDeck:gi >= 0});
       return;
     }
     // 콜로세움(v41 colosseumPick): '선택받은' 몬스터 1체를 자신 필드에 소환 (취소 가능)
@@ -6042,15 +6053,16 @@ function effectSummon(g: GameState, ctx: Ctx, p: PlayerState, id: string, card?:
   const def = card ?? DB[id];
   const receiving = armyDestination(g,p,id);
   if (!def || !effectSummonAllowed(g, receiving, def)) return false;
-  if (card || id === 'CANNON_COMMANDER') summonForOwner(g,ctx,receiving,card ?? inst(g,id));
+  if (card || id === 'CANNON_COMMANDER') summonForOwner(g,ctx,receiving,card ?? inst(g,id),p);
   else return spawnToken(g,ctx,p,id);
   return true;
 }
-function summonForOwner(g:GameState,ctx:Ctx,owner:PlayerState,card:CardInst):void {
-  const cur=g.cur;
+function summonForOwner(g:GameState,ctx:Ctx,owner:PlayerState,card:CardInst,summoner=owner):void {
+  const cur=g.cur, previousTurnOwner=ctx.summonTurnOwner;
+  ctx.summonTurnOwner ??= cur;
   g.cur=side(g,owner);
-  try { summonMonster(g,ctx,owner,card); if(g.pending && g.pending.owner==null) g.pending.owner=g.cur; }
-  finally { g.cur=cur; }
+  try { summonMonster(g,ctx,owner,card,summoner); if(g.pending && g.pending.owner==null) g.pending.owner=g.cur; }
+  finally { g.cur=cur; ctx.summonTurnOwner=previousTurnOwner; }
 }
 
 function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
