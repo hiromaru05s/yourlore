@@ -1,3 +1,4 @@
+import { CurseSealBadge } from './curseSeal/badge';
 import {pendingText} from '../shared/pendingText';
 import {placeReadingHand} from './readingBoardLayout';
 import {syncCardFrames,disposeCardFrames} from './cardFrame';
@@ -102,6 +103,7 @@ export interface BoardHandlers {
 }
 
 export class GameView {
+  private readonly curseSeals = {me:new CurseSealBadge(), opp:new CurseSealBadge()};
   private handConditions = new HandConditionHighlights();
   private riftCounts = new Map<string, number>();
   root: HTMLElement;
@@ -319,6 +321,8 @@ export class GameView {
   /** Detach the window/document-level listeners this view installed. */
   destroy(): void {
     this.disposed = true;
+    this.curseSeals.me.dispose();
+    this.curseSeals.opp.dispose();
     disposeCardEffects(this.root);disposeCardFrames(this.root);
     disposeSeekers(this.root);
     this.cancelHandDrag?.();
@@ -1030,7 +1034,6 @@ export class GameView {
     const shield = Math.max(0, p.shield ?? 0), dew = Math.max(0, p.dew ?? 0), brand = Math.max(0, p.brand ?? 0);
     const sealCount = Math.max(0,p.curseSeals ?? 0);
     const sealLabel = {ja:'呪印',en:'Curse Seals',ko:'주인'}[getLang()];
-    const sealBadge = sealCount ? `<small class="pt-curse-seals" title="${sealLabel} ${sealCount}/20">${sealLabel} ${sealCount}/20</small>` : '';
     const oldRing=el.querySelector<HTMLElement>('.pt-ring');
     const oldPortrait=oldRing?.querySelector<HTMLCanvasElement>('.seeker-motion');
     const oldMana=el.querySelector<HTMLElement>('.pt-mana');
@@ -1049,15 +1052,17 @@ export class GameView {
         ${dew > 0 ? `<span class="pt-dew" role="img" aria-label="${t('game.dew')} ${p.dew ?? 0}" title="${esc(t('game.dewTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.dew ?? 0).length)}"><b id="dew-${sd}" aria-hidden="true">${dew}</b></span>` : ""}
         ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
-      <span class="pt-name"><span class="pt-player-name">${esc(p.name)}</span>${medalHtml(medal)}${sealBadge}</span>`;
+      <span class="pt-name"><span class="pt-player-name">${esc(p.name)}</span>${medalHtml(medal)}</span>`;
     const ring = el.querySelector<HTMLElement>('.pt-ring')!;
     // Keep the frame and canvas together so a counter rerender cannot interrupt a hit.
-    if (oldRing && oldRing.dataset.avatar === (avatar ?? '')) ring.replaceWith(oldRing);
+    const retained = oldRing?.dataset.avatar === (avatar ?? '') ? oldRing : null;
+    if (retained) ring.replaceWith(retained);
     else {
       if (oldPortrait) disposeSeekers(oldRing!);
       ring.dataset.avatar = avatar ?? '';
       if (!npc) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true}));
     }
+    this.curseSeals[sd].sync(retained ?? ring, sealCount, sealLabel);
   }
 
   /** MY hand — straight upright cards (no fan) in two states:

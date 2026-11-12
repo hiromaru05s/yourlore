@@ -1,0 +1,16 @@
+.pt-ring > .pt-curse-seals {
+  position:absolute; left:50%; top:0; translate:-50% 0; width:37%; height:32%;
+  z-index:4; background:url('./clasp.webp') center/contain no-repeat;
+  filter:drop-shadow(0 -.6px .3px #dac2ee) drop-shadow(0 .7px .45px #201029);
+}
+.portrait--opp .pt-ring > .pt-curse-seals {top:auto; bottom:0;}
+.pt-curse-seals b {
+  position:absolute; left:50%; top:55%; transform:translate(-50%,-50%);
+  font:600 calc(var(--portrait-size,var(--pt,100px))*.119)/1 LoreBoardSerif,Georgia,serif;
+  color:#fff8e7; text-shadow:0 1px 2px #000b; font-variant-numeric:tabular-nums; letter-spacing:-.05em;
+}
+.pt-curse-seals[data-motion] {background-image:none;}
+.pt-curse-seals canvas {
+  position:absolute; left:50%; top:50%; height:165%; width:auto; aspect-ratio:1;
+  max-width:none; transform:translate(-50%,-50%); pointer-events:none;
+}

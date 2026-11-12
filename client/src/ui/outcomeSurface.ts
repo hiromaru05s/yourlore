@@ -1,4 +1,5 @@
 import type {Anchor} from './crownRenderer';
+const claspUrl=new URL('./curseSeal/clasp.webp',import.meta.url).href;
 const SIZE=768;
 const images=new Map<string,Promise<HTMLImageElement>>();
 function image(url:string):Promise<HTMLImageElement>{let pending=images.get(url);if(!pending){pending=new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>{images.delete(url);reject(new Error('Outcome image unavailable'));};im.src=url;});images.set(url,pending);}return pending;}
@@ -6,7 +7,7 @@ function cssUrl(value:string):string|null{return value.match(/url\(["']?([^"')]+
 function portraitRect(root:HTMLElement){const n=root.querySelector<HTMLElement>('.pt-ring')!;const r=n.getBoundingClientRect(),s=getComputedStyle(n,'::after'),width=parseFloat(s.width)||r.width,height=parseFloat(s.height)||r.height;return {x:r.left+(parseFloat(s.left)||0)+width/2,y:r.top+(parseFloat(s.top)||0)+height/2,width,height};}
 export function outcomeParts(root:HTMLElement):HTMLElement[]{return [...root.querySelectorAll<HTMLElement>('.pt-ring,.pt-vitals,.pt-resources')];}
 export function outcomeAnchor(root:HTMLElement):Anchor {
- const p=portraitRect(root),rs=[...root.querySelectorAll('.pt-hp,.pt-shield,.pt-dew,.pt-brand')].map(n=>n.getBoundingClientRect());
+ const p=portraitRect(root),rs=[...root.querySelectorAll('.pt-hp,.pt-shield,.pt-dew,.pt-brand,.pt-curse-seals:not([hidden])')].map(n=>n.getBoundingClientRect());
  const left=Math.min(p.x-p.width/2,...rs.map(r=>r.left))-2,right=Math.max(p.x+p.width/2,...rs.map(r=>r.right))+2,top=Math.min(p.y-p.height/2,...rs.map(r=>r.top))-2,bottom=Math.max(p.y+p.height/2,...rs.map(r=>r.bottom))+2,size=Math.max(right-left,bottom-top);
  return {x:(left+right)/2,y:(top+bottom)/2,width:size,height:size};
 }
@@ -14,8 +15,8 @@ export function outcomeAnchor(root:HTMLElement):Anchor {
 export async function captureOutcomeSurface(root:HTMLElement,signal:AbortSignal):Promise<HTMLCanvasElement|null>{
  const ring=root.querySelector<HTMLElement>('.pt-ring'),av=root.querySelector<HTMLElement>('.avatar');if(!ring||!av)return null;
  const frameUrl=cssUrl(getComputedStyle(ring,'::after').backgroundImage),maskUrl=cssUrl(getComputedStyle(av).maskImage);
- const counters=[...root.querySelectorAll<HTMLElement>('.pt-hp,.pt-shield,.pt-dew,.pt-brand')];
- const urls=counters.map(n=>cssUrl(getComputedStyle(n).backgroundImage));
+ const counters=[...root.querySelectorAll<HTMLElement>('.pt-hp,.pt-shield,.pt-dew,.pt-brand,.pt-curse-seals:not([hidden])')];
+ const urls=counters.map(n=>n.classList.contains('pt-curse-seals')?claspUrl:cssUrl(getComputedStyle(n).backgroundImage));
  if(!frameUrl||!maskUrl||urls.some(u=>!u))return null;
  const [frame,mask,...icons]=await Promise.all([frameUrl,maskUrl,...urls as string[]].map(image));
  if(signal.aborted||!root.isConnected)return null;
@@ -35,6 +36,11 @@ export async function captureOutcomeSurface(root:HTMLElement,signal:AbortSignal)
   f.save();f.beginPath();f.rect(v.x,v.y,r.width*k,r.height*k);f.clip();f.drawImage(npc,p.x,p.y,width*k,height*k);f.restore();
  }
  f.globalCompositeOperation='destination-in';f.drawImage(mask,v.x,v.y,r.width*k,r.height*k);c.drawImage(face,0,0);c.drawImage(frame,q.x,q.y,pr.width*k,pr.height*k);
- counters.forEach((el,i)=>{const b=el.querySelector<HTMLElement>('b');if(!b)return;const r=el.getBoundingClientRect(),br=b.getBoundingClientRect(),style=getComputedStyle(b),q=point(r.left,r.top),text=point(br.left+br.width/2,br.top+br.height/2);c.drawImage(icons[i],q.x,q.y,r.width*k,r.height*k);c.save();c.fillStyle=style.color;c.font=`${style.fontWeight} ${parseFloat(style.fontSize)*k}px ${style.fontFamily}`;c.textAlign='center';c.textBaseline='middle';c.shadowColor='#000b';c.shadowBlur=2*k;c.shadowOffsetY=k;c.fillText(b.textContent??'',text.x,text.y+parseFloat(style.fontSize)*k*.055);c.restore();});
+ counters.forEach((el,i)=>{const b=el.querySelector<HTMLElement>('b');if(!b)return;const r=el.getBoundingClientRect(),br=b.getBoundingClientRect(),style=getComputedStyle(b),q=point(r.left,r.top),text=point(br.left+br.width/2,br.top+br.height/2);if(el.classList.contains('pt-curse-seals')){
+   const film=el.querySelector('canvas');
+   if(film){const f=film.getBoundingClientRect(),pos=point(f.left,f.top);c.drawImage(film,pos.x,pos.y,f.width*k,f.height*k);}
+   else {const im=icons[i],fit=Math.min(r.width/im.naturalWidth,r.height/im.naturalHeight),w=im.naturalWidth*fit,h=im.naturalHeight*fit;c.drawImage(im,q.x+(r.width-w)*k/2,q.y+(r.height-h)*k/2,w*k,h*k);}
+  }else c.drawImage(icons[i],q.x,q.y,r.width*k,r.height*k);
+  c.save();c.globalAlpha=Number(style.opacity)||0;c.fillStyle=style.color;c.font=`${style.fontWeight} ${parseFloat(style.fontSize)*k}px ${style.fontFamily}`;c.textAlign='center';c.textBaseline='middle';c.shadowColor='#000b';c.shadowBlur=2*k;c.shadowOffsetY=k;c.fillText(b.textContent??'',text.x,text.y+parseFloat(style.fontSize)*k*.055);c.restore();});
  return full;
 }
