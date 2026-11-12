@@ -246,6 +246,7 @@ export interface GameState {
   starterQuestReworkApplied?: boolean;
   fireBrandReworkApplied?: boolean;
   demonRealmReworkApplied?: boolean;
+  casinoRallyApplied?: boolean;
   mercReworkApplied?: boolean;
   hexerReworkApplied?: boolean;
   armyAttuneApplied?: boolean;

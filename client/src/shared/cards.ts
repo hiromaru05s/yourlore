@@ -799,7 +799,7 @@ const NEW_CARDS7: CardDef[] = [
     text: "영구: 양측 필드의 체력 1 이하 몬스터는 공격할 수 없다 (시전 2)", textJa: "永続: 両方の場の体力1以下のモンスターは攻撃できない (発動2)" },
   { id: "SHATTER", t: "spell", cost: 3, play: 2, name: "붕괴 진동", nameJa: "崩壊振動",
     text: "자신에게 5 데미지. 양 필드의 모든 몬스터의 체력이 1이 된다(지속) (시전 2)", textJa: "自分に5ダメージ。両方の場の全モンスターの体力が1になる(持続) (発動2)" },
-  { id: "SCARECROW", t: "spell", cost: 1, name: "허수아비 소집", nameJa: "かかし召集",
+  { id: "SCARECROW", t: "spell", cost: 1, name: "허수아비 설치", nameJa: "かかし設置",
     text: "허수아비(0/1) 3체를 자신 필드에 소환", textJa: "かかし(0/1)3体を自分の場に召喚" },
   { id: "LEVY", t: "spell", cost: 7, play: 4, name: "병력 소집", nameJa: "兵力召集",
     text: "병사(2/2) 3체를 자신 필드에 소환 (시전 4)", textJa: "兵士(2/2)3体を自分の場に召喚 (発動4)" },
@@ -1953,7 +1953,7 @@ const PATCH36: Record<string, Partial<CardDef>> = {
     text: "[시초] 소환시: 게임 중 1회, 덱 구성의 '시초' 카드 1장당 상대에게 낙인 카운터 1개", textJa: "[始原] 召喚時: ゲーム中1回、デッキ構成の「始原」カード1枚につき相手に烙印カウンター1個" },
   TRAPSMITH: { aura: "trapDiscount", text: "소환시: 덱·묘지·세트한 함정 1장당 +2/+2 · 상시: 함정 카드의 구매 코스트 -1", textJa: "召喚時: デッキ・墓地・セットした罠1枚につき+2/+2 · 常時: 罠カードの購入コスト-1" },
   TSO5: { atk: 6, def: 7 },
-  VITAL4: { name: "고무왕", nameJa: "鼓舞王", atk: 2, def: 3, condAtk: undefined, aura: "rallyGuts", text: "상시: 자신 필드의 '병사'·'기사'에 '기합'을 부여", textJa: "常時: 自分の場の「兵士」「騎士」に「気合」を付与" },
+  VITAL4: { name: "고무왕", nameJa: "鼓舞王", atk: 2, def: 4, condAtk: undefined, aura: "rallyGuts", text: "상시: 자신 필드의 병사 계열 몬스터에게 기합을 부여", textJa: "常時: 自分の場の兵士系モンスターに「気合」を付与" },
   AWAKENED_MIMIC: { atk: 3, def: 3 },
   GM5_2: { atk: 5, def: 6, val: 2, text: "상시: 몬스터 소환 시 그 몬스터의 체력 +2", textJa: "常時: モンスター召喚時、そのモンスターの体力+2" },
   GOLEM3: { atk: 7, def: 10, onSummon: undefined, summonReq: "golemKin", text: "자신의 필드·덱·패·묘지에 다른 '골램' 계열 몬스터가 있을 때만 소환 가능",
@@ -2454,7 +2454,7 @@ export const RELATED_MANUAL: Record<string, string[]> = {
   MANA_GIANT: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NGA3", "NWL3"],
   NGA3: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NWL3", "MANA_GIANT"],
   HORDE: ["SOLDIER2", "INFKNIGHT", "GOLEM1"],
-  VITAL4: ["SOLDIER2", "INFKNIGHT", "GOLEM1"],
+
   NHEX: ["CURSE", "HEXER1", "HEXER2", "HEXER3", "HEXER4"],
   HEXER1: ["CURSE", "NHEX", "HEXER2", "HEXER3", "HEXER4"],
   HEXER2: ["CURSE", "NHEX", "HEXER1", "HEXER3", "HEXER4"],
@@ -2529,7 +2529,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v82"; // November card balance update
+export const BALANCE_VERSION = "v83"; // November card balance update
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

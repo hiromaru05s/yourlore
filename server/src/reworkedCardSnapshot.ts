@@ -24,8 +24,10 @@ export function restoreReworkedCards(game: GameState): void {
   const updateDemons = !game.demonRealmReworkApplied;
   const updateHexers = !game.hexerReworkApplied;
   const updateDiplomacy = !game.diplomacyApplied;
+  const updateCasinoRally = !game.casinoRallyApplied;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally)) return;
+  game.casinoRallyApplied = true;
   game.diplomacyApplied = true;
   game.mercReworkApplied = true;
   game.hexerReworkApplied = true;
@@ -37,6 +39,14 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateCasinoRally && (MERC_IDS.has(card.id) || card.id === 'VITAL4' || card.id === 'SCARECROW')) {
+      const def = DB[card.id];
+      Object.assign(card,{name:def.name, nameJa:def.nameJa, nameEn:def.nameEn, text:def.text, textJa:def.textJa, textEn:def.textEn});
+      if (card.id === 'VITAL4') {
+        if ((card as FieldMon).trickSwapped) card.atk = def.def;
+        else card.def = def.def;
+      }
+    }
     if (updateDiplomacy && ['E2','Q_TOWN','QUICK_AID','QUICK_CURSE','GS5_3','DISARM1','MIMIC_HUNTER'].includes(card.id)) {
       const def = DB[card.id];
       Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});

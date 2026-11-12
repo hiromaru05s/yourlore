@@ -19,6 +19,16 @@ const pick=(g,uid)=>step(g,{type:'pick',uid});
 const end=g=>step(g,{type:'endTurn'});
 function enchant(g,id,owner=g.cur){g.players[owner].enchants.push({card:card(id),turns:99,bornTurn:0});}
 function check(name,f){f();console.log('PASS',name);}
+check('Rally King grants one Guts to every military rank on either summon order',()=>{
+  assert.deepEqual([E.DB.VITAL4.atk,E.DB.VITAL4.def],[2,4]);
+  for(const id of ['SOLDIER2','INFKNIGHT','CAVALRY','GUNNER','HEAVY_GUNNER','CAPTAIN','CANNON_COMMANDER']){
+    let g=fresh();g.players[0].field=[mon(id),mon('M1')];g.players[1].field=[mon(id)];
+    g=cast(g,'VITAL4');assert.equal(g.players[0].field[0].guts,1,id);
+    assert(!E.hasPassive(g.players[0].field[1],'guts'));assert(!E.hasPassive(g.players[1].field[0],'guts'));
+    g=cast(g,id);assert(g.players[0].field.filter(m=>m.id===id).length>=2);
+    assert(g.players[0].field.filter(m=>m.id===id).every(m=>m.guts===1));
+  }
+});
 check('Dragon Killer tracks both fusion names and both bonuses independently',()=>{
   for(const fused of ['DRAGON_RIDER','ANTIQUE_DK']){
     let g=fresh();g.players[1].field=[mon('GM6_0'),mon(fused)];

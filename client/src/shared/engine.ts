@@ -1,4 +1,4 @@
-import {MERC_IDS} from './mercenaryCards';
+import {MERC_IDS, MERC_CASINO_DICE} from './mercenaryCards';
 import { FIRE_SPELL_IDS } from './fireCards';
 import { ARMY_IDS, ATTUNE_REWARDS, ATTUNE_SUPPORT_IDS } from './armyAttuneCards';
 import {logToEn} from './logEn';
@@ -275,7 +275,7 @@ export function monsterOngoingActive(g: GameState, p: PlayerState, m: FieldMon):
     case 'mana1': case 'mana2': case 'manaGolem':
       return effMaxMana(p) > effMaxMana({ ...p, field: p.field.map(x => x.uid === m.uid ? { ...x, aura: undefined } : x) });
     case 'sageDiscount': return deckComp(p).filter(c => c.t === 'spell').length >= 13;
-    case 'rallyGuts': return p.field.some(x => x.uid !== m.uid && (isSoldier(x) || isKnight(x)));
+    case 'rallyGuts': return p.field.some(x => x.uid !== m.uid && ARMY_IDS.has(x.id));
     case 'hexArmy': return g.players[g.cur] === p && (p.hexerAttackCurses ?? 0) > 0;
     case 'originLord': return p.field.some(x => x.tribe === '시초');
     case 'wallDef': return p.field.length > 0;
@@ -463,7 +463,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, diplomacyApplied: true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -1303,6 +1303,11 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
     if (g.over) return;
     const v = m.val || 0, v2 = m.val2 || 0;
     if (hasEssence(g)) continue;
+    if (m.id === 'MERC_MASTER' && !m.mutedEffects) {
+      const at = ctx.ev.length;
+      rollMercenaryCasinoDice(g, ctx, p, m);
+      if (ctx.ev.length > at) monsterActivation(g, ctx.ev, p, m, at);
+    }
     if (m.id === 'MERCH2') queueExpansionChoice(g,p,'MERCH2','交換する固定マーケットの枠を選択');
     if (!m.turnFx) continue;
     const finish = observeMonsterEffect(g, ctx.ev, p, m, MAX_MANA);
@@ -4550,7 +4555,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.dealDamage(o, tn2 * 6, cn(card), cn(card));
       break;
     }
-    case "SCARECROW": { // 허수아비 소집: 0/1 x3
+    case "SCARECROW": { // 허수아비 설치: 0/1 x3
       for (let i2 = 0; i2 < 3; i2++) spawnToken(g, ctx, p, "TOKEN00");
       ctx.log(`${tag(p, card)} 허수아비(0/1) 3체 소환`, `${tag(p, card)} かかし(0/1)3体召喚`);
       break;
@@ -4813,8 +4818,8 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
   // 고무왕(v36 rallyGuts): 자신 필드의 병사·기사에 '기합' 부여 (기존 + 이후 소환분)
   const rallySources = new Set<string>();
   const grantGuts = (x: FieldMon): void => { if (hasPassive(x, "guts")) return; for (const source of p.field) if (source.aura === "rallyGuts" && source.uid !== x.uid && !rallySources.has(source.uid)) { monsterActivation(g, ctx.ev, p, source); rallySources.add(source.uid); } (x.passivesG ??= []).push("guts"); x.guts = (x.guts || 0) + 1; ctx.log(`  └ 고무왕: ${cn(x)} 이(가) '기합'을 얻는다`, `  └ 鼓舞王: ${cn(x)} が「気合」を得る`, `  └ Rallying King: ${cn(x)} gains Guts`); };
-  if (m.aura === "rallyGuts") p.field.forEach((x) => { if (x.uid !== m.uid && (isSoldier(x) || isKnight(x))) grantGuts(x); });
-  else if ((isSoldier(m) || isKnight(m)) && p.field.some((x) => x.uid !== m.uid && x.aura === "rallyGuts")) grantGuts(m);
+  if (m.aura === "rallyGuts") p.field.forEach((x) => { if (x.uid !== m.uid && ARMY_IDS.has(x.id)) grantGuts(x); });
+  else if (ARMY_IDS.has(m.id) && p.field.some((x) => x.uid !== m.uid && x.aura === "rallyGuts")) grantGuts(m);
   // 성(v37): 자신 필드에 병사·기사가 소환될 때마다 카운터 +1
   if (isSoldier(m) || isKnight(m) || m.id === "GUNNER" || m.id === "HEAVY_GUNNER") for (const cs of p.field) if (!cs.mutedEffects && cs.id === "CASTLE" && cs.uid !== m.uid) { monsterActivation(g, ctx.ev, p, cs); cs.gcount = (cs.gcount || 0) + 1; ctx.log(`  └ ${cn(cs)} 카운터 +1 (${cs.gcount})`, `  └ ${cn(cs)} カウンター+1 (${cs.gcount})`, `  └ ${cn(cs)} gains 1 counter (${cs.gcount} total)`); }
   // 무법지대(v41 lawless): 필드에 소환되는 모든 몬스터의 체력이 1 (알 제외)
@@ -6823,10 +6828,22 @@ function offerMercHire(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): 
   else if (p.mana >= 1) queueExpansionChoice(g, p, 'MERC_HIRE', '', {sourceId:card.id, sourceUid:card.uid});
 }
 
+function rollMercenaryCasinoDice(g: GameState, ctx: Ctx, owner: PlayerState, merc: FieldMon): void {
+  if (!g.players.some(player => player.field.some(card => card.id === 'CASINO'))) return;
+  const player = side(g, owner);
+  const repeats = owner.enchants.some(e => e.card.ench === 'mercArt') ? 2 : 1;
+  for (let i = 0; i < repeats && !g.over; i++) {
+    diceRoll(g, ctx.ev, player, {id:merc.id, player}, MERC_CASINO_DICE[merc.id]);
+  }
+}
+
 function expansionSummon(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
   const o = g.players[1 - side(g, p)];
-  if (MERC_IDS.has(m.id) && (m.id !== 'MERCENARY' || o.field.some(target => !hasPassive(target,'aura')))) {
-    queueExpansionChoice(g, p, 'MERC_JOB', '', {sourceId:m.id, sourceUid:m.uid, repeat:p.enchants.some(e => e.card.ench === 'mercArt')});
+  if (MERC_IDS.has(m.id)) {
+    if (m.id !== 'MERCENARY' || o.field.some(target => !hasPassive(target,'aura'))) {
+      queueExpansionChoice(g, p, 'MERC_JOB', '', {sourceId:m.id, sourceUid:m.uid, repeat:p.enchants.some(e => e.card.ench === 'mercArt')});
+    }
+    rollMercenaryCasinoDice(g, ctx, p, m);
   }
   if (m.id === 'FARMER' && p.enchants.some(e => e.card.id === 'FARM') && !p.enchants.some(e => e.card.id === 'FARMER_PRAYER') && p.enchants.length + p.traps.length + (p.quests?.length ?? 0) < ST_MAX) {
     const prayer = inst(g, 'FARMER_PRAYER');

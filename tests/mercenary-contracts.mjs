@@ -58,6 +58,28 @@ for (const [id,cost,atk,hp,reward] of ranks) {
     if(hp<=5)assert.equal(g.players[0].field.length,0,'mutual destruction still pays');
   });
 }
+check('Casino dice on summon are independent of contracts and count for either Casino',()=>{
+  for (const [id,dice] of [['MERCENARY',3],['MERC_LEADER',5],['MERC_MASTER',10]]) {
+    for (const casinoSide of [null,0,1]) for (const art of [false,true]) {
+      const g=fresh();
+      if (casinoSide!==null) g.players[casinoSide].field=[mon('CASINO')];
+      if (art) enchant(g,'MERC_ART');
+      g.players[0].hand=[card(id)];
+      const r=E.reduce(g,{type:'play',idx:0});
+      const rolls=r.events.filter(e=>e.type==='dice' && e.source.id===id);
+      assert.deepEqual(rolls.map(e=>e.rolls.length),casinoSide===null?[]:art?[dice,dice]:[dice]);
+      if (casinoSide!==null) assert.equal(r.state.players[casinoSide].field.find(m=>m.id==='CASINO').gcount,dice*(art?2:1)%12);
+    }
+  }
+});
+check('Guildmaster upkeep uses only the owner’s turn and repeats with Mercenary Arts',()=>{
+  for(const side of [0,1]) for(const ownTurn of [false,true]){
+    const g=fresh();g.cur=ownTurn?1-side:side;g.players[side].field=[mon('MERC_MASTER')];
+    g.players[1-side].field=[mon('CASINO')];enchant(g,'MERC_ART',side);
+    const {events}=E.reduce(g,{type:'endTurn'});
+    assert.deepEqual(events.filter(e=>e.type==='dice' && e.source.id==='MERC_MASTER').map(e=>e.rolls.length),ownTurn?[10,10]:[]);
+  }
+});
 check('a different killer or a bounced and replayed target earns no bounty',()=>{
   for(const bounce of [false,true]){
     let g=fresh();const target=mon('SOLDIER2');g.players[1].field=[target];

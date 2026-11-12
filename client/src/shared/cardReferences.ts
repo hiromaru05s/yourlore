@@ -1,4 +1,5 @@
 import { FIRE_SPELL_IDS } from './fireCards';
+import {ARMY_IDS} from './armyAttuneCards';
 import {GOBLIN_IDS} from './goblinCards';
 import {DB, STARTERS, TRIBES, RELATED_MANUAL} from './cards';
 import type {CardDef} from './types';
@@ -13,6 +14,7 @@ const ids = (test:(c:CardDef)=>boolean) => all.filter(test).map(c=>c.id);
 const series = (ja:string,ko:string,en:string,members:string[]):Series => ({names:{ja,ko,en},ids:members});
 // Membership mirrors rule predicates, not similarity of translated display names.
 export const CARD_SERIES: Record<string,Series> = {
+  army:series('兵士系','병사 계열','Military',[...ARMY_IDS]),
   goblin:series('ゴブリン','고블린','Goblin',ids(c=>GOBLIN_IDS.has(c.id))),
   eggs:series('卵','알','Egg',ids(c=>c.hatchTurns!=null)),
   golem:series('ゴーレム','골렘','Golem',ids(c=>/골램|골렘/.test(c.name))),
@@ -33,6 +35,7 @@ export const CARD_SERIES: Record<string,Series> = {
   militaryKnight:series('騎士','기사','Knight',ids(c=>c.t==='mon'&&/기사|騎士/.test(c.name+(c.nameJa??'')))),
   militaryGunner:series('砲撃兵','포격병','Gunner',ids(c=>c.t==='mon'&&/포격병|砲撃兵/.test(c.name+(c.nameJa??'')))),
 };
+CARD_SERIES.army.aliases={en:['military']};
 CARD_SERIES.goblin.aliases={ja:['「ゴブリン」関連'],ko:['고블린 계열'],en:['Goblin-related']};
 CARD_SERIES.eggs.aliases={en:['egg']};
 CARD_SERIES.golem.aliases={ko:['골램']};
@@ -117,6 +120,7 @@ export function effectReferenceParts(text:string,lang:EffectLocale,sourceId:stri
       if(lang==='ko'&&c.text.length===1&&(!/(^|\s|['·「])$/.test(before)||!/^($|[\s'·」]|[이을를의에은와과])/u.test(after)))return false;
       if(c.reference.kind==='series') {
         const id=c.reference.id;
+        if(id==='army')return ['VITAL4','FORTIFY_CASTLE','SIEGE_CASTLE','COUP','SWORD_GRAVE_WRAITH'].includes(sourceId);
         if(id==='goblin'&&/関連|계열|-related/.test(c.text))return true;
         if(id.startsWith('tribe:')||['eggs','blood','black','fire','chosen','armorer'].includes(id))return true;
         if(lang!=='ja'&&familyNames.has(CARD_SERIES[id].names.ja))return true;

@@ -2591,10 +2591,14 @@
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
     },
     "SCARECROW": {
-      "nameJa": "かかし召集",
-      "status": "reviewed-v73-rework",
-      "changedLocales": [],
-      "definitionSha256": "96a267ea15df505047f42a148269fc239b49cb15284f4868ebcb3b105484c0cf",
+      "nameJa": "かかし設置",
+      "status": "reworked",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "a5c13641f1753e1faf162cf071b70420c9ab1cf2cc398af70f8237e6dabcb592",
       "textSha256": "94607773a57919768748ba4040f37d0577e66c369f73de6693b4c5d08522ab41",
       "hooks": {},
       "before": {
@@ -2782,26 +2786,26 @@
     },
     "VITAL4": {
       "nameJa": "鼓舞王",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "d238c8d41aca29516c1b6030e13c667fc4bcc35460a09c06daa87e468c1d4ad1",
-      "textSha256": "3cc259faf78d7e5a9ba438e34e643315ef2c676906febbacdd11d3bb6406e489",
+      "definitionSha256": "8e1242c6aab7e35fa54084d6ad2404cc82b0133f7517e6a9c2d379568bfa0083",
+      "textSha256": "83bd5c496f419f5e59101851ec9ecde7fe33441f537e9d03c1dac157623f5a8f",
       "hooks": {
         "aura": "rallyGuts"
       },
       "before": {
-        "ja": "【召喚時】自分の場の「兵士」「騎士」のうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（持続）。\n\n【自分のモンスター召喚時】後から召喚する「兵士」「騎士」にも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
-        "ko": "【소환 시】자신의 필드의 병사·기사 중 기합이 없는 각 몬스터에 기합과 기합용 카운터 1개를 부여한다(지속).\n\n【자신의 몬스터 소환 시】이후 소환하는 병사·기사도 기합이 없으면 같은 처리를 한다. 부여한 기합과 카운터는 이 몬스터가 필드를 떠나도 남는다.",
-        "en": "【On Summon】Give each Soldier and Knight on your field that lacks Guts the Guts ability and 1 counter for Guts (lasting).\n\n【When You Summon a Monster】Apply the same effect to Soldiers and Knights you summon later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
-      },
-      "after": {
         "ja": "【召喚時】自分の場の「兵士」「騎士」のうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n\n【自分のモンスター召喚時】後から召喚する「兵士」「騎士」にも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
         "ko": "【소환 시】자신의 필드의 병사·기사 중 기합이 없는 각 몬스터에 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 몬스터 소환 시】이후 소환하는 병사·기사도 기합이 없으면 같은 처리를 한다. 부여한 기합과 카운터는 이 몬스터가 필드를 떠나도 남는다.",
         "en": "【On Summon】Give each Soldier and Knight on your field that lacks Guts the Guts ability and 1 counter for Guts (until the affected monster leaves the field).\n\n【When You Summon a Monster】Apply the same effect to Soldiers and Knights you summon later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
+      },
+      "after": {
+        "ja": "【召喚時】自分の場の兵士系モンスターのうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n\n【自分のモンスター召喚時】後から自分の場に召喚する兵士系モンスターにも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
+        "ko": "【소환 시】자신의 필드에 있는 병사 계열 몬스터 중 기합이 없는 각 몬스터에 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 몬스터 소환 시】이후 자신의 필드에 소환하는 병사 계열 몬스터도 기합이 없으면 같은 처리를 한다. 부여한 기합과 카운터는 이 몬스터가 필드를 떠나도 남는다.",
+        "en": "【On Summon】Give each Military monster on your field that lacks Guts the Guts ability and 1 counter for Guts (until the affected monster leaves the field).\n\n【When You Summon a Monster】Apply the same effect to Military monsters summoned to your field later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -7305,19 +7309,19 @@
         "en"
       ],
       "definitionSha256": "8ce85899ac2d1a8f93258e1e9090caf985616c9fba89d88d5fd143f975dbd408",
-      "textSha256": "93b1736580c8fd9f9e0e5f6895a36f174a4a0e51488a66a3af0acbb848c0d107",
+      "textSha256": "2e3cda77fe2c35f101b61cce870c5accff65b05b5947d77be11d4dd7e447433a",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
-        "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス3個を振る。",
-        "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 3개를 굴린다.",
-        "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 3 dice."
-      },
-      "after": {
         "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。このモンスターが戦闘でその相手を倒すと、自分は1マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に1ダメージを与える。",
         "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 몬스터가 전투로 그 몬스터를 처치하면 자신은 마나를 1 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 1 준다.",
         "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 1 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 1 damage to 1 opposing monster."
+      },
+      "after": {
+        "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。このモンスターが戦闘でその相手を倒すと、自分は1マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に1ダメージを与える。\n\n【召喚時】どちらかの場に「カジノ」があれば、ダイス3個を振る。",
+        "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 몬스터가 전투로 그 몬스터를 처치하면 자신은 마나를 1 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 1 준다.\n\n【소환 시】어느 쪽 필드에든 카지노가 있으면 주사위 3개를 굴린다.",
+        "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 1 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 1 damage to 1 opposing monster.\n\n【On Summon】If either player controls a Casino, roll 3 dice."
       },
       "reviewedAt": "2026-10-31",
       "reviewNote": "Base attack and health are 1/1; summon effect unchanged."
@@ -7331,19 +7335,19 @@
         "en"
       ],
       "definitionSha256": "d30dd2815ed87d7f278b46d4d48f4fb46a429984c068d2c2ffcb846596b06020",
-      "textSha256": "3b8874146143f8c87bb74b7dcd6e5e70ec563a34f4edb8a3b48ddb31e128511f",
+      "textSha256": "8456354443c94fb7615dd3fde50aeca1ae6bc0edf75f1c2f2db2460976decae7",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
-        "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
-        "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
-        "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 5 dice."
-      },
-      "after": {
         "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。このモンスターが戦闘でその相手を倒すと、自分は2マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に3ダメージを与える。\n護衛：このモンスターは挑発を得る。",
         "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 몬스터가 전투로 그 몬스터를 처치하면 자신은 마나를 2 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 3 준다.\n호위: 이 몬스터가 도발을 얻는다.",
         "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 2 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 3 damage to 1 opposing monster.\nEscort: This monster gains Taunt."
+      },
+      "after": {
+        "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。このモンスターが戦闘でその相手を倒すと、自分は2マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に3ダメージを与える。\n護衛：このモンスターは挑発を得る。\n\n【召喚時】どちらかの場に「カジノ」があれば、ダイス5個を振る。",
+        "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 몬스터가 전투로 그 몬스터를 처치하면 자신은 마나를 2 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 3 준다.\n호위: 이 몬스터가 도발을 얻는다.\n\n【소환 시】어느 쪽 필드에든 카지노가 있으면 주사위 5개를 굴린다.",
+        "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 2 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 3 damage to 1 opposing monster.\nEscort: This monster gains Taunt.\n\n【On Summon】If either player controls a Casino, roll 5 dice."
       }
     },
     "MERC_MASTER": {
@@ -7355,19 +7359,19 @@
         "en"
       ],
       "definitionSha256": "e0ca9d46aa72a88c002c863c6b16a4360236846639ce29ea5697d1f0ef8a00a8",
-      "textSha256": "e5131c063fa41a41c52e16d6dabd307562542afcacb5fdfb3161ed813aba82e6",
+      "textSha256": "455fd1ed512c8e9c7081859aad7c8b5d996784c720754c89bf8c12a9678fd171",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
-        "ja": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。\n\n【自分のターン開始時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。",
-        "ko": "【소환 시】병사 2체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 10개를 굴린다.\n\n【자신의 턴 시작 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 10개를 굴린다.",
-        "en": "【On Summon】Summon 2 Soldiers to your field. If either player controls a Casino, roll 10 dice.\n\n【At the Start of Your Turn】Summon 1 Soldier to your field. If either player controls a Casino, roll 10 dice."
-      },
-      "after": {
         "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。このモンスターが戦闘でその相手を倒すと、自分は3マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に5ダメージを与える。\n護衛：「傭兵リーダー」1体を召喚する。この依頼はこのカードの召喚1回につき1度まで選べる。",
         "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 몬스터가 전투로 그 몬스터를 처치하면 자신은 마나를 3 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 5 준다.\n호위: 용병 리더 1체를 소환한다. 이 의뢰는 이 카드의 소환당 1번만 선택할 수 있다.",
         "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 3 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 5 damage to 1 opposing monster.\nEscort: Summon 1 Mercenary Leader. You can choose Escort once per summon of this card."
+      },
+      "after": {
+        "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。このモンスターが戦闘でその相手を倒すと、自分は3マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に5ダメージを与える。\n護衛：「傭兵リーダー」1体を召喚する。この依頼はこのカードの召喚1回につき1度まで選べる。\n\n【召喚時】どちらかの場に「カジノ」があれば、ダイス10個を振る。\n\n【自分のターン開始時】どちらかの場に「カジノ」があれば、ダイス10個を振る。",
+        "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 몬스터가 전투로 그 몬스터를 처치하면 자신은 마나를 3 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 5 준다.\n호위: 용병 리더 1체를 소환한다. 이 의뢰는 이 카드의 소환당 1번만 선택할 수 있다.\n\n【소환 시】어느 쪽 필드에든 카지노가 있으면 주사위 10개를 굴린다.\n\n【자신의 턴 시작 시】어느 쪽 필드에든 카지노가 있으면 주사위 10개를 굴린다.",
+        "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 3 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 5 damage to 1 opposing monster.\nEscort: Summon 1 Mercenary Leader. You can choose Escort once per summon of this card.\n\n【On Summon】If either player controls a Casino, roll 10 dice.\n\n【At the Start of Your Turn】If either player controls a Casino, roll 10 dice."
       }
     },
     "MERC_ART": {

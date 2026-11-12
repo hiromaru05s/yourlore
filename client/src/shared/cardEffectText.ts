@@ -599,9 +599,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When You Play a Card】Gain 1 Dew whenever you play a World Tree or Elf card."
   },
   "VITAL4": {
-    "ja": "【召喚時】自分の場の「兵士」「騎士」のうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n\n【自分のモンスター召喚時】後から召喚する「兵士」「騎士」にも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
-    "ko": "【소환 시】자신의 필드의 병사·기사 중 기합이 없는 각 몬스터에 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 몬스터 소환 시】이후 소환하는 병사·기사도 기합이 없으면 같은 처리를 한다. 부여한 기합과 카운터는 이 몬스터가 필드를 떠나도 남는다.",
-    "en": "【On Summon】Give each Soldier and Knight on your field that lacks Guts the Guts ability and 1 counter for Guts (until the affected monster leaves the field).\n\n【When You Summon a Monster】Apply the same effect to Soldiers and Knights you summon later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
+    "ja": "【召喚時】自分の場の兵士系モンスターのうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n\n【自分のモンスター召喚時】後から自分の場に召喚する兵士系モンスターにも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
+    "ko": "【소환 시】자신의 필드에 있는 병사 계열 몬스터 중 기합이 없는 각 몬스터에 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 몬스터 소환 시】이후 자신의 필드에 소환하는 병사 계열 몬스터도 기합이 없으면 같은 처리를 한다. 부여한 기합과 카운터는 이 몬스터가 필드를 떠나도 남는다.",
+    "en": "【On Summon】Give each Military monster on your field that lacks Guts the Guts ability and 1 counter for Guts (until the affected monster leaves the field).\n\n【When You Summon a Monster】Apply the same effect to Military monsters summoned to your field later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
   },
   "CULL_FLOOD": {
     "ja": "【発動時】新しい「カル」4枚を自分の墓地に追加する。",
