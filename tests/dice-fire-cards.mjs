@@ -108,3 +108,110 @@ for (const id of trio) {
   assert.equal(g.players[1].hp,hp-3);
 }
 console.log('PASS starter pools, summon gates, Void, dice ownership, conditional grants and Fire damage packets');
+
+for (const [id, threshold] of [['FIRE_MARK', 6], ['FIRE_BRANDING', 3]]) {
+  assert(E.BUYABLE_POOL.includes(id));
+  const faces = new Set();
+  for (let seed = 1; seed < 200 && faces.size < 6; seed++) {
+    const g = fresh();
+    g.rng = seed;
+    g.players[0].hand = [card(id)];
+    const {state, events} = E.reduce(g,{type:'play',idx:0});
+    const die = events.find(e=>e.type==='dice' && e.source.id===id);
+    assert.equal(die.need,threshold);
+    faces.add(die.rolls[0]);
+    assert.equal(state.players[1].brand ?? 0, Number(die.rolls[0] >= threshold));
+  }
+  assert.equal(faces.size,6);
+}
+{
+  let g = fresh();
+  assert.deepEqual([E.DB.FIRE_MARK.cost,E.playCost(card('FIRE_MARK'),g.players[0])],[2,1]);
+  assert.deepEqual([E.DB.FIRE_BRANDING.cost,E.playCost(card('FIRE_BRANDING'),g.players[0])],[6,6]);
+  g = play(play(g,'FLAME'),'FLAME');
+  assert.equal(E.playCost(card('FIRE_BRANDING'),g.players[0]),4);
+  g.players[0].hand = [card('FIRE_MARK')];
+  const {state, events} = E.reduce(g,{type:'play',idx:0});
+  assert(!events.some(e=>e.type==='dice'));
+  assert.equal(state.players[1].brand,1);
+  g = play(state,'FLAME');
+  assert.equal(g.players[1].hp,190);
+  g = E.reduce(E.reduce(g,{type:'endTurn'}).state,{type:'endTurn'}).state;
+  assert.equal(E.playCost(card('FIRE_BRANDING'),g.players[0]),6);
+  g.players[0].hand = [card('FIRE_MARK')];
+  assert(E.reduce(g,{type:'play',idx:0}).events.some(e=>e.type==='dice' && e.source.id==='FIRE_MARK'));
+}
+{
+  let g = fresh();
+  g.players[1].brand = 2;
+  const target = {...mon('M1'),def:20};
+  g.players[1].field = [target];
+  g = pick(play(g,'FIRE_BALL'),target.uid);
+  assert.equal(g.players[1].field[0].dmg,7);
+  assert.deepEqual(g.players.map(p=>p.hp),[198,196]);
+  assert.equal(g.players[1].brand,2);
+}
+for (const [id,damage] of [['FIRE_ZONE',14],['FIRE_METEOR',32]]) {
+  let g = fresh();
+  g.players[1].brand = 3;
+  const payment = card('M1');
+  if (id === 'FIRE_ZONE') g.players[0].hand=[payment];
+  const cost = E.playCost(card(id),g.players[0]);
+  g=play(g,id);
+  if (id === 'FIRE_ZONE') g=pick(JSON.parse(JSON.stringify(g)),payment.uid);
+  const [p,o]=g.players;
+  assert.equal(o.hp,200-damage);
+  assert.equal(o.brand,2);
+  assert.equal(p.maxMana,id==='FIRE_ZONE'?15:14);
+  assert.equal(p.mana,15-cost);
+  assert.equal(p.removed.length,id==='FIRE_ZONE'?1:0);
+  assert.deepEqual(p.expansion.firePlayed,[id,id]);
+  assert.equal(p.spellsCastTurn,2);
+  assert.equal(p.discard.filter(c=>c.id===id).length,1);
+  assert(!g.pending);
+}
+{
+  let g=fresh();
+  g.players[0].field=[mon('FIRE_MASTER')];
+  g.players[1].shield=20;
+  const attacker=g.players[0].field[0];
+  g=E.reduce(g,{type:'attack',uid:attacker.uid}).state;
+  if (g.pending) g=E.reduce(g,{type:'chooseTarget',uid:undefined}).state;
+  assert.equal(g.players[1].brand,1);
+  const hand=Array.from({length:9},()=>card('M1'));
+  g.players[0].hand=hand;
+  g=E.reduce(g,{type:'endTurn'}).state;
+  assert.equal(g.players[0].hand.length,0);
+  assert(hand.every(c=>g.players[0].discard.some(d=>d.uid===c.uid)));
+  g=fresh();
+  g.players[0].field=[mon('FIRE_MASTER')];
+  g=play(g,'FIRE_MARK');
+  g.players[0].hand=[card('M1')];
+  g=E.reduce(g,{type:'endTurn'}).state;
+  assert.equal(g.players[0].hand.length,1);
+}
+{
+  // The opponent's Hexer rolls separately for the paid cast and the free cast.
+  let checked=false;
+  for (let seed=1; seed<=200 && !checked; seed++) {
+    let g=fresh();
+    g.rng=seed;
+    g.players[1].brand=2;
+    g.players[1].field=[{...mon('HEXER4'),def:50}];
+    const payment=card('M1');
+    g.players[0].hand=[payment];
+    g=play(g,'FIRE_ZONE');
+    if (!g.pending) continue;
+    const result=E.reduce(g,{type:'pick',uid:payment.uid});
+    const die=result.events.find(e=>e.type==='dice' && e.source.id==='HEXER4');
+    if (!die?.success) continue;
+    const [p,o]=result.state.players;
+    assert.equal(o.hp,195);
+    assert.equal(o.brand,1);
+    assert.equal(p.expansion.firePlayed.length,2);
+    assert.equal(p.discard.filter(c=>c.id==='FIRE_ZONE').length,1);
+    checked=true;
+  }
+  assert(checked);
+}
+console.log('PASS Fire Brand dice, turn counts, distinct targets, single recasts, spell negation and Fire Master');

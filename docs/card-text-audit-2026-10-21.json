@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 422,
+  "count": 424,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -3988,7 +3988,7 @@
         "en"
       ],
       "definitionSha256": "d1d855946a2f836db8d036290398eeb0ff31958bc8d4f523ba3a8ac3f1d811c5",
-      "textSha256": "1a54e693d692295f7317b196edb3bae21b6b7f45675aaf1ea0864ae6f09df55c",
+      "textSha256": "faa4fe069d3f77baed1fab3b791bdbf262f04798df8b4c99ec6789dee9f0ca8b",
       "hooks": {},
       "before": {
         "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて10回以上なら、相手へのダメージは代わりに5になる。",
@@ -3996,9 +3996,9 @@
         "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 10 times this duel, including this use, deal 5 to the opponent instead."
       },
       "after": {
-        "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて10回以上なら、相手へのダメージは代わりに5になる。",
-        "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다. 이번 사용을 포함해 이 대전에서 자신이 동명 카드를 사용한 횟수가 10회 이상이면 상대에게 주는 데미지는 대신 5가 된다.",
-        "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 10 times this duel, including this use, deal 5 to the opponent instead."
+        "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて10回以上なら、相手へのダメージは代わりに5になる。相手に烙印カウンターがある場合、追加で相手プレイヤーに4ダメージを与える。",
+        "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다. 이번 사용을 포함해 이 대전에서 자신이 동명 카드를 사용한 횟수가 10회 이상이면 상대에게 주는 데미지는 대신 5가 된다. 상대에게 낙인 카운터가 있으면 상대 플레이어에게 추가로 4 데미지를 준다.",
+        "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 10 times this duel, including this use, deal 5 to the opponent instead. If the opponent has a Brand counter, deal an additional 4 damage to the opponent."
       },
       "reviewDate": "2026-10-26",
       "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md"
@@ -7913,19 +7913,19 @@
         "en"
       ],
       "definitionSha256": "ea626a8091372c8c9aca5461d48b2ccbe398489c017f2f3c9d34e844bd7c910b",
-      "textSha256": "fdb99cad2ca4b3e0efe771c444d67b78150426e8e19326db03c36108c25f3b39",
+      "textSha256": "416ffed2ca95a845fdaaf2fef37c17027d89f1c34b6543b587ff81a28dc0ca0b",
       "hooks": {
         "act": "expansion"
       },
       "before": {
-        "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、7ダメージを与える。",
-        "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 7 데미지를 준다.",
-        "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 7 damage to that target."
-      },
-      "after": {
         "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、7ダメージを与える。このターン既に自分が他のファイアー魔法を使用していれば、選んだ対象へのダメージは10になる。",
         "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 7 데미지를 준다. 이번 턴에 이미 다른 파이어 마법을 사용했다면 선택한 대상에게 대신 10 데미지를 준다.",
         "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 7 damage to that target. If you already played another Fire spell this turn, deal 10 damage to the chosen target instead."
+      },
+      "after": {
+        "ja": "【発動時】自分に2ダメージを与える。どちらかのプレイヤー1人、またはどちらかの場のモンスター1体を選び、7ダメージを与える。このターン既に自分が他のファイアー魔法を使用していれば、選んだ対象へのダメージは10になる。使用時に相手に烙印カウンターがあった場合、選んだ対象へのダメージの後、相手プレイヤーに追加で4ダメージを与える。",
+        "ko": "【발동 시】자신에게 2 데미지를 준다. 어느 쪽 플레이어 1명 또는 어느 쪽 필드의 몬스터 1체를 선택해 7 데미지를 준다. 이번 턴에 이미 다른 파이어 마법을 사용했다면 선택한 대상에게 대신 10 데미지를 준다. 사용 시 상대에게 낙인 카운터가 있었다면 선택한 대상에게 데미지를 준 후 상대 플레이어에게 추가로 4 데미지를 준다.",
+        "en": "【On Cast】You take 2 damage. Choose either player or 1 monster on either field and deal 7 damage to that target. If you already played another Fire spell this turn, deal 10 damage to the chosen target instead. If the opponent had a Brand counter when you cast this spell, deal an additional 4 damage to the opponent after damaging the chosen target."
       }
     },
     "FIRE_ARROW": {
@@ -7954,49 +7954,50 @@
     },
     "FIRE_ZONE": {
       "nameJa": "ファイアーゾーン",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
-        "ko"
+        "ko",
+        "en"
       ],
       "definitionSha256": "b84bf4188ea25519e3a00f0949624a92bcc5be8e25f1c036029c68a19389d498",
-      "textSha256": "7798e30350bca3498a15de6ab618e0964609ebb09d8324c35a7c96edd89d0b16",
+      "textSha256": "e183f2a3f892ce490dca526ad486d52390cb87b94537e2f566b37a91f3461ce8",
       "hooks": {
         "act": "expansion"
       },
       "before": {
-        "ja": "【発動条件】この魔法以外に、除外できる自分の手札がある。\n\n【発動時】その手札1枚を選んで自分のリフトへ送る。相手の場の全モンスターと相手プレイヤーにそれぞれ5ダメージ（このターン既に自分がファイアー魔法をプレイしていれば、代わりに9ダメージ）。",
-        "ko": "【발동 조건】이 마법 외에 제외할 수 있는 자신의 패가 있다.\n\n【발동시】그 패 1장을 선택해 자신의 리프트로 보낸다. 상대의 필드의 모든 몬스터와 상대 플레이어에게 각각 5 데미지를 준다(이번 턴 이미 자신이 파이어 마법을 사용했다면 대신 9 데미지).",
-        "en": "【Play Requirement】You have another card in hand that can be exiled.\n\n【On Cast】Choose 1 such card and send it to your Rift. Deal 5 damage to each enemy monster and the opponent; deal 9 instead if you already played a Fire spell this turn."
-      },
-      "after": {
         "ja": "【発動条件】この魔法以外に、除外できる自分の手札がある。\n\n【発動時】その手札1枚を選んで自分のリフトへ送る。相手の場の全モンスターと相手プレイヤーにそれぞれ5ダメージ（このターン既に自分がファイアー魔法を使用していれば、代わりに9ダメージ）。",
         "ko": "【발동 조건】이 마법 외에 제외할 수 있는 자신의 패가 있다.\n\n【발동 시】그 패 1장을 선택해 자신의 리프트로 보낸다. 상대의 필드의 모든 몬스터와 상대 플레이어에게 각각 5 데미지를 준다(이번 턴 이미 자신이 파이어 마법을 사용했다면 대신 9 데미지).",
         "en": "【Play Requirement】You have another card in hand that can be exiled.\n\n【On Cast】Choose 1 such card and send it to your Rift. Deal 5 damage to each enemy monster and the opponent; deal 9 instead if you already played a Fire spell this turn."
+      },
+      "after": {
+        "ja": "【発動条件】この魔法以外に、除外できる自分の手札がある。\n\n【発動時】その手札1枚を選んで自分のリフトへ送る。相手の場の全モンスターと相手プレイヤーにそれぞれ5ダメージ（このターン既に自分がファイアー魔法を使用していれば、代わりに9ダメージ）。相手に烙印カウンターがある場合、1個を取り除き、通常のダメージ処理後にこの魔法をコスト0でもう1回使用する。再使用では手札をリフトへ送らず、烙印を消費しない。",
+        "ko": "【발동 조건】이 마법 외에 제외할 수 있는 자신의 패가 있다.\n\n【발동 시】그 패 1장을 선택해 자신의 리프트로 보낸다. 상대의 필드의 모든 몬스터와 상대 플레이어에게 각각 5 데미지를 준다(이번 턴 이미 자신이 파이어 마법을 사용했다면 대신 9 데미지). 상대에게 낙인 카운터가 있으면 1개를 제거하고 일반 데미지 처리 후 이 마법을 코스트 0으로 1회 더 사용한다. 재사용 시에는 패를 리프트로 보내거나 낙인을 소비하지 않는다.",
+        "en": "【Play Requirement】You have another card in hand that can be exiled.\n\n【On Cast】Choose 1 such card and send it to your Rift. Deal 5 damage to each enemy monster and the opponent; deal 9 instead if you already played a Fire spell this turn. If the opponent has a Brand counter, remove 1 and, after the normal damage, cast this spell 1 more time for 0 mana. The recast sends no hand card to the Rift and consumes no Brand."
       }
     },
     "FIRE_METEOR": {
       "nameJa": "ファイアーメテオ",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "993385c8e5638bd6396252129496fc9c0508f58d45ce3de10cfd93ada443fb73",
-      "textSha256": "8198e726149704a05df9ff021004fb5ec415d502d1e1b7cd554c03a57c641f9b",
+      "textSha256": "7f1b303fe7fe3c6a6b88354068a9d069d71a604ac40d1203bcf30c5db712d82b",
       "hooks": {
         "act": "expansion"
       },
       "before": {
-        "ja": "【コスト】このターン既に他のファイアー魔法を使用していれば、発動コストを1にする。\n\n【発動時】自分の最大マナを1減らす。その後、相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、2ダメージを与える処理を8回行う。",
-        "ko": "【코스트】이번 턴에 이미 다른 파이어 마법을 사용했다면 발동 코스트를 1로 만든다.\n\n【발동 시】자신의 최대 마나를 1 줄인다. 그 후 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위로 대상 1개를 정해 2 데미지를 주는 처리를 8회 한다.",
-        "en": "【Cost】If you already played another Fire spell this turn, set this spell’s cast cost to 1.\n\n【On Cast】Reduce your max mana by 1. Then deal 2 damage to a random target among the opponent and their monsters, 8 times. Choose the random target again each time."
-      },
-      "after": {
         "ja": "【コスト】このターン既に他のファイアー魔法を使用していれば、発動コストを1にする。\n\n【発動時】自分のマナ水晶を1減らす。その後、相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、2ダメージを与える処理を8回行う。",
         "ko": "【코스트】이번 턴에 이미 다른 파이어 마법을 사용했다면 발동 코스트를 1로 만든다.\n\n【발동 시】자신의 마나 수정을 1 줄인다. 그 후 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위로 대상 1개를 정해 2 데미지를 주는 처리를 8회 한다.",
         "en": "【Cost】If you already played another Fire spell this turn, set this spell’s cast cost to 1.\n\n【On Cast】Reduce your mana crystals by 1. Then deal 2 damage to a random target among the opponent and their monsters, 8 times. Choose the random target again each time."
+      },
+      "after": {
+        "ja": "【コスト】このターン既に他のファイアー魔法を使用していれば、発動コストを1にする。\n\n【発動時】自分のマナ水晶を1減らす。その後、相手プレイヤーと相手の場のモンスターから毎回ランダムに対象を1つ決め、2ダメージを与える処理を8回行う。相手に烙印カウンターがある場合、1個を取り除き、通常のダメージ処理後にこの魔法をコスト0でもう1回使用する。再使用ではマナ水晶を減らさず、烙印を消費しない。",
+        "ko": "【코스트】이번 턴에 이미 다른 파이어 마법을 사용했다면 발동 코스트를 1로 만든다.\n\n【발동 시】자신의 마나 수정을 1 줄인다. 그 후 상대 플레이어와 상대의 필드의 몬스터 중 매번 무작위로 대상 1개를 정해 2 데미지를 주는 처리를 8회 한다. 상대에게 낙인 카운터가 있으면 1개를 제거하고 일반 데미지 처리 후 이 마법을 코스트 0으로 1회 더 사용한다. 재사용 시에는 마나 수정을 줄이거나 낙인을 소비하지 않는다.",
+        "en": "【Cost】If you already played another Fire spell this turn, set this spell’s cast cost to 1.\n\n【On Cast】Reduce your mana crystals by 1. Then deal 2 damage to a random target among the opponent and their monsters, 8 times. Choose the random target again each time. If the opponent has a Brand counter, remove 1 and, after the normal damage, cast this spell 1 more time for 0 mana. The recast costs no mana crystal and consumes no Brand."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -8027,25 +8028,26 @@
     },
     "FIRE_MASTER": {
       "nameJa": "ファイアーマスター",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
+        "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "f555140a208c48f3ef6e3cf7232421128541be7fa54f082ee52e9b45652f5523",
-      "textSha256": "39ee0b507bc266604240765dbf5c9fe7046bb7ad9610e971432ddbffe2329a4b",
+      "textSha256": "352b69803aa0c6ef12229e075daa0258b58df590badc1178f68cc18821402a42",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
         "ja": "【場にある間】自分の「ファイアー魔法」の発動コスト-2（最低0）。\n\n【破壊時】自分のデッキ・墓地から「ファイアー魔法」を合計2枚選び、手札に加える（1枚しかなければその1枚）。",
-        "ko": "【필드에 있는 동안】자신 파이어 마법 시전 코스트 -2(최저 0).\n\n【파괴 시】자신의 덱·묘지에서 파이어 마법 합계 2장을 선택해 패에 추가한다(1장뿐이면 그 1장).",
-        "en": "【While on the Field】Your Fire spells cost 2 less to cast, to a minimum of 0.\n\n【On Destruction】Choose 2 Fire spells from your deck and graveyard combined and add them to your hand; if only 1 exists, take that 1."
-      },
-      "after": {
-        "ja": "【場にある間】自分の「ファイアー魔法」の発動コスト-2（最低0）。\n\n【破壊時】自分のデッキ・墓地から「ファイアー魔法」を合計2枚選び、手札に加える（1枚しかなければその1枚）。",
         "ko": "【필드에 있는 동안】자신 파이어 마법 발동 코스트 -2(최저 0).\n\n【파괴 시】자신의 덱·묘지에서 파이어 마법 합계 2장을 선택해 패에 추가한다(1장뿐이면 그 1장).",
         "en": "【While on the Field】Reduce the cast cost of your Fire spells by 2, to a minimum of 0.\n\n【On Destruction】Choose 2 Fire spells from your deck and graveyard combined and add them to your hand; if only 1 exists, take that 1."
+      },
+      "after": {
+        "ja": "【場にある間】自分の「ファイアー魔法」の発動コスト-2（最低0）。このモンスターが相手プレイヤーを直接攻撃した時、そのプレイヤーに烙印カウンター1個を付与する。\n\n【自分のターン終了時】このターン、自分がファイアー魔法を一度も使用していなければ、自分の手札を全て墓地に送る。\n\n【破壊時】自分のデッキ・墓地から「ファイアー魔法」を合計2枚選び、手札に加える（1枚しかなければその1枚）。",
+        "ko": "【필드에 있는 동안】자신 파이어 마법 발동 코스트 -2(최저 0). 이 몬스터가 상대 플레이어를 직접 공격하면 그 플레이어에게 낙인 카운터 1개를 준다.\n\n【자신의 턴 종료 시】이번 턴 자신이 파이어 마법을 한 번도 사용하지 않았다면 자신의 패를 전부 묘지로 보낸다.\n\n【파괴 시】자신의 덱·묘지에서 파이어 마법 합계 2장을 선택해 패에 추가한다(1장뿐이면 그 1장).",
+        "en": "【While on the Field】Reduce the cast cost of your Fire spells by 2, to a minimum of 0. When this monster directly attacks the opponent, give that player 1 Brand counter.\n\n【At the End of Your Turn】If you used no Fire spells this turn, send your entire hand to your graveyard.\n\n【On Destruction】Choose 2 Fire spells from your deck and graveyard combined and add them to your hand; if only 1 exists, take that 1."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -10090,6 +10092,46 @@
         "ja": "【場にある間】どちらかの場の「暗襲」を持つモンスターが攻撃するたび、このカードにカウンターを1個付与する。\n\n【自分のターン中】カウンターを消費して次の報酬を1つ選び、このカードを墓地に送ることができる。\n3個：相手プレイヤーに4ダメージを与える。\n5個：相手プレイヤーのマナ水晶を1減らす。\n8個：「アサシンギルドの宝箱」1枚を手札に加える。",
         "ko": "【필드에 있는 동안】양쪽 필드에서 암습을 가진 몬스터가 공격할 때마다 이 카드에 카운터 1개를 부여한다.\n\n【자신의 턴 중】카운터를 소모하여 다음 보상 중 1개를 선택하고 이 카드를 묘지로 보낼 수 있다.\n3개: 상대 플레이어에게 4 데미지를 준다.\n5개: 상대 플레이어의 마나 수정을 1 줄인다.\n8개: 암살자 길드의 보물상자 1장을 패에 넣는다.",
         "en": "【While on the Field】Whenever a monster on either field with Infiltrate attacks, put 1 counter on this card.\n\n【During Your Turn】You may spend counters to claim 1 reward and send this card to your graveyard.\n3 counters: Deal 4 damage to the opponent.\n5 counters: The opponent loses 1 mana crystal.\n8 counters: Add 1 Assassin Guild's Chest to your hand."
+      }
+    },
+    "FIRE_MARK": {
+      "nameJa": "ファイアーマーク",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "6708708232e3bf0538e77a297c47ded37632270ff5fdd56c35d0e0dce926cb36",
+      "textSha256": "bfbaa18d9c1be0c10788e0422b006394d4f9541b84178d9623745db6fcb323b6",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": {},
+      "after": {
+        "ja": "【発動時】ダイス1個を振る。出目が6なら、相手に烙印カウンター1個を付与する。このターン、このカードより前に自分がファイアー魔法を2回以上使用していれば、ダイスを振らずに付与する。",
+        "ko": "【발동 시】주사위 1개를 굴린다. 6이면 상대에게 낙인 카운터 1개를 준다. 이번 턴 이 카드보다 먼저 자신이 파이어 마법을 2회 이상 사용했다면 주사위를 굴리지 않고 준다.",
+        "en": "【On Cast】Roll 1 die. On a 6, give the opponent 1 Brand counter. If you played at least 2 Fire spells earlier this turn, give the opponent 1 Brand counter without rolling."
+      }
+    },
+    "FIRE_BRANDING": {
+      "nameJa": "ファイアーマスターの焼印術",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "2a7e9f37f9c0605e00a9ce1a7f359040eafc977e738d3d70121e88b3b0f942ff",
+      "textSha256": "7282b7672544ec6ea50a7dac2926e34a29e0c80e79009eff9ed8dceba4793418",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": {},
+      "after": {
+        "ja": "【コスト】このターン、自分が既に使用したファイアー魔法1回につき、このカードの発動コストを1下げる（最低0）。\n\n【発動時】ダイス1個を振る。出目が3以上なら、相手に烙印カウンター1個を付与する。",
+        "ko": "【코스트】이번 턴 자신이 이미 사용한 파이어 마법 1회당 이 카드의 발동 코스트를 1 줄인다(최저 0).\n\n【발동 시】주사위 1개를 굴린다. 3 이상이면 상대에게 낙인 카운터 1개를 준다.",
+        "en": "【Cost】Reduce this card’s cast cost by 1 for each Fire spell you already played this turn, to a minimum of 0.\n\n【On Cast】Roll 1 die. On a 3 or higher, give the opponent 1 Brand counter."
       }
     }
   },

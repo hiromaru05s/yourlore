@@ -1,3 +1,4 @@
+import { FIRE_BRAND_CARDS, FIRE_SPELL_IDS } from './fireCards';
 import { ARMY_ATTUNE_CARDS } from './armyAttuneCards';
 import { applySpellRework74 } from './spellRework74';
 import { applyLegacyCardRework } from './legacyCardRework';
@@ -2313,7 +2314,7 @@ Object.assign(DB.ANCIENT_CIV, {
 
 applyEnglish([DB, STARTERS as unknown as Record<string, CardDef>]);
 for (const c of EXPANSION_CARDS) DB[c.id] = c;
-for (const id of ["FIRE_ARROW", "FIRE_METEOR"]) RANDOM_CARDS.add(id);
+for (const id of ["FIRE_ARROW", "FIRE_METEOR", "FIRE_MARK", "FIRE_BRANDING"]) RANDOM_CARDS.add(id);
 // 플레이버 카드명(ko/ja/en 3개 국어) 적용 — applyEnglish 이후, standardizeCardTexts 이전
 applyFlavorCardNames([DB, STARTERS as unknown as Record<string, CardDef>]);
 // ============================================================
@@ -2388,7 +2389,7 @@ Object.assign(DB.DIVINE, {atk: 30, def: 30, aura: undefined, passive: [...new Se
 Object.assign(DB.ANTIQUE_DK, {atk: 20, def: 15});
 DB.MERCH2.def = 3;
 DB.GM6_0.cost = 5;
-for (const card of ARMY_ATTUNE_CARDS) DB[card.id] = card;
+for (const card of [...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS]) DB[card.id] = card;
 DECK_POOL.push('ATTUNE_RETURN', 'MINI_SPIRIT');
 Object.assign(DB.AMA, {cost:5, play:5, act:'armyAttune', passive:['void']});
 Object.assign(DB.D_BLUE, {onSummon:undefined, turnFx:undefined, aura:undefined});
@@ -2429,8 +2430,8 @@ export const RELATED_MANUAL: Record<string, string[]> = {
   EMPTY_MIND: ["CREATION"],
   MIMIC_KING2: ["MIMIC_HIDEOUT"],
   MIMIC_HIDEOUT: ["MIMIC2"],
-  FIRE_ART: ["FLAME", "FIRE_BALL", "FIRE_ARROW", "FIRE_ZONE", "FIRE_METEOR"],
-  FIRE_MASTER: ["FIRE_ART", "FLAME", "FIRE_BALL", "FIRE_ARROW", "FIRE_ZONE", "FIRE_METEOR"],
+  FIRE_ART: FIRE_SPELL_IDS.filter(id => id !== "FIRE_ART"),
+  FIRE_MASTER: [...FIRE_SPELL_IDS],
   ASSASSIN_SQUAD: ["ASSASSIN2"],
   ASSASSIN3: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN4", "GUILD_HALL", "GUILD_HQ"], // 상급(v36): 덱 구성에 다른 암살자 카드
   ASSASSIN4: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "GUILD_HALL", "GUILD_HQ"], // 특급(v36): 서로 다른 암살자 3종

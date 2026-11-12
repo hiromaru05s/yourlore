@@ -232,6 +232,7 @@ export interface TribePactDefeat {
 
 export interface GameState {
   starterQuestReworkApplied?: boolean;
+  fireBrandReworkApplied?: boolean;
   armyAttuneApplied?: boolean;
   heartFirstUid?: string;
   heartUsed?: boolean;

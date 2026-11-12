@@ -1,3 +1,4 @@
+import { FIRE_SPELL_IDS } from './fireCards';
 import { ARMY_IDS, ATTUNE_REWARDS, ATTUNE_SUPPORT_IDS } from './armyAttuneCards';
 import {logToEn} from './logEn';
 import {pendingText} from './pendingText';
@@ -369,6 +370,7 @@ export function playCost(c: CardInst, p?: PlayerState): number {
   if (p && havenDiscount(p, c)) return 0;
   let base = c.play ?? c.cost;
   if (p && c.id === 'FIRE_METEOR' && p.expansion?.firePlayed.some(id => id !== c.id)) base = 1;
+  if (p && c.id === 'FIRE_BRANDING') base -= p.expansion?.firePlayed.length ?? 0;
   if (p && isFire(c)) base = Math.max(0, base - (p.expansion?.fireDiscount ?? 0) - 2 * p.field.filter(m => !m.mutedEffects && m.id === 'FIRE_MASTER').length);
   // Sage cannot make a positive-cost spell free; existing zero costs stay zero.
   if (p && c.t === "spell" && base > 0 && p.field.some((m) => m.aura === "sageDiscount") && deckComp(p).filter((x) => x.t === "spell").length >= 13) base = Math.max(1, base - 1);
@@ -1883,6 +1885,11 @@ function endTurn(g: GameState, ctx: Ctx, force = false): void {
       if ((m.attacksUsed ?? 0) === used && !m.exhausted) m.exhausted = true;
     }
   }
+  const fireMaster = p.field.find(m => m.id === 'FIRE_MASTER' && !m.mutedEffects);
+  if (fireMaster && !hasEssence(g) && !p.expansion?.firePlayed.length && p.hand.length) {
+    monsterActivation(g, ctx.ev, p, fireMaster);
+    for (const c of p.hand.splice(0)) fieldToGrave(g, ctx, p, c);
+  }
   if (p.hand.length > HAND_CARRY) {
     if (force || g.pending?.reason === "handCap") {
       const dumped: CardInst[] = [];
@@ -2719,6 +2726,10 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     ctx.dealDamage(o, atk, `${cn(att)} 의 직접 공격`, `${cn(att)} の直接攻撃`, g.cur, `Direct attack by ${cn(att)}`);
     dealtFace = Math.max(0, hpBefore - o.hp); faceDmg = dealtFace > 0;
     if (attackEvent) attackEvent.contactDamage = dealtFace;
+    if (!g.over && att.id === 'FIRE_MASTER' && !att.mutedEffects && !hasEssence(g)) {
+      monsterActivation(g, ctx.ev, p, att);
+      gainBrand(g, ctx, o, 1);
+    }
     if (o.hp < hpBefore) { const x = xstate(o); if (x.directHitTurn !== g.turn) { x.directHitTurn = g.turn; x.directHits = []; } (x.directHits ??= []).push(att.uid); }
   } else {
     const target = o.field.find((m) => m.uid === targetUid);
@@ -3587,13 +3598,13 @@ function applySummonBuff(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): v
 // ============================================================
 // spells (generalized)
 // ============================================================
-function tryNullSpell(g: GameState, ctx: Ctx, card: CardInst): boolean {
+function tryNullSpell(g: GameState, ctx: Ctx, card: CardInst, paidCost = playCost(card, g.players[g.cur])): boolean {
   const p = g.players[g.cur];           // the caster
   const o = g.players[1 - g.cur];        // the trap owner
   // cost-capped null traps only trigger on spells they can afford to counter
   // 중급 마력 차단(T2, v37): 보물상자·어튠에는 무효 · 덱 구성에 초급 마력 차단이 있으면 캡 5
   const capOf = (tr: TrapSet): number | undefined => tr.card.id === "T2" ? (deckComp(o).some((c) => c.id === "NT_NULL3") ? 5 : 4) : tr.card.cap;
-  const i = o.traps.findIndex((tr) => tr.card.react === "nullspell" && !(tr.card.id === "T2" && (isChestCard(card) || isAttuneCard(card))) && (capOf(tr) === undefined || playCost(card, p) <= capOf(tr)!));
+  const i = o.traps.findIndex((tr) => tr.card.react === "nullspell" && !(tr.card.id === "T2" && (isChestCard(card) || isAttuneCard(card))) && (capOf(tr) === undefined || paidCost <= capOf(tr)!));
   if (i < 0) return false;
   const t = o.traps.splice(i, 1)[0].card;
   fieldToGrave(g,ctx,o,t);
@@ -3626,10 +3637,9 @@ function tryAttuneJam(g: GameState, ctx: Ctx, card: CardInst): boolean {
 }
 
 /** 주문 파쇄(spellSteal): 코스트 cap 이하의 마법을 무효화하고, 그 카드의 복제를 함정 주인의 패에 넣는다. */
-function trySpellSteal(g: GameState, ctx: Ctx, card: CardInst): boolean {
-  const p = g.players[g.cur];           // the caster
+function trySpellSteal(g: GameState, ctx: Ctx, card: CardInst, paidCost = playCost(card, g.players[g.cur])): boolean {
   const o = g.players[1 - g.cur];        // the trap owner
-  const i = o.traps.findIndex((tr) => tr.card.react === "spellSteal" && playCost(card, p) <= (tr.card.cap ?? 4));
+  const i = o.traps.findIndex((tr) => tr.card.react === "spellSteal" && paidCost <= (tr.card.cap ?? 4));
   if (i < 0) return false;
   const t = o.traps.splice(i, 1)[0].card;
   fieldToGrave(g,ctx,o,t);
@@ -4263,12 +4273,18 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case "FLAME": {
+      const branded = (o.brand ?? 0) > 0;
       const damage = ((p.uses.FLAME ?? 0) >= 10 ? 5 : 2) + fireDamageBonus(p);
       ctx.log(`${tag(p, card)} 상대 ${damage} / 자신 1 데미지`, `${tag(p, card)} 相手${damage} / 自分1ダメージ`);
       const fx=elementalGroup(ctx,side(g,p),card);
       try {
         fx.hit(side(g,o),null,damage);ctx.dealDamage(o, damage, cn(card), cn(card));
         if (!g.over) {fx.hit(side(g,p),null,1);ctx.selfDamage(p, 1, card);}
+        if (!g.over && branded) {
+          const bonus = 4 + fireDamageBonus(p);
+          fx.hit(side(g,o),null,bonus);
+          ctx.dealDamage(o, bonus, cn(card), cn(card), side(g,p));
+        }
       } finally {fx.end();}
       break;
     }
@@ -5088,6 +5104,17 @@ export function playBlockReason(g:GameState, who:Side, card:CardInst):{ko:string
   return null;
 }
 
+function registerSpellUse(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst, paidCost: number): boolean {
+  afterPlay(g, ctx, p, card);
+  advanceQuest(p, "spellPlay");
+  p.spellsCastTurn = (p.spellsCastTurn ?? 0) + 1;
+  treeKeeperTrigger(g, ctx, p, card);
+  tryBrandMagic(g, ctx);
+  tryHexCurseOnSpell(g, ctx);
+  return tryNullSpell(g, ctx, card, paidCost) || trySpellSteal(g, ctx, card, paidCost)
+    || trySecondNull(g, ctx, card) || tryAttuneJam(g, ctx, card) || tryHexBossNull(g, ctx, card);
+}
+
 function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   const p = g.players[g.cur];
   const card = p.hand[idx];
@@ -5157,7 +5184,8 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     // 스펠이라 star==="chest" 검사만 있던 예전 가드를 통째로 빠져나갔다.
 
     spellCostActivations(g, ctx, p, card);
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1); p.discard.push(card);
+    const paidCost = playCost(card, p);
+    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= paidCost; p.hand.splice(idx, 1); p.discard.push(card);
     if (!card.ench && !hasPassive(card,"void")) graveyardArrival(g,ctx,p,card);
     if (card.id === 'AMBUSH') p.usesTurn.AMBUSH = (p.usesTurn.AMBUSH ?? 0) + 1;
     // Synchronize old saved Reverse counters before recording this committed cast.
@@ -5167,15 +5195,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (countBeforeReactions) p.uses[card.id] = (p.uses[card.id] ?? 0) + 1;
     // A negated cast still consumes the same-name limit; count before reactions.
     if (card.maxUsesPerTurn != null) p.usesTurn[card.id] = (p.usesTurn[card.id] ?? 0) + 1;
-    afterPlay(g, ctx, p, card);
-    advanceQuest(p, "spellPlay");
-    p.spellsCastTurn = (p.spellsCastTurn || 0) + 1; // 마나 역류: 마법(t==="spell")만 카운트 (스타터 제외)
-    treeKeeperTrigger(g, ctx, p, card); // 세계수의 파수꾼: '사용'에 반응 (무효화 여부와 무관)
-    tryBrandMagic(g, ctx); // 낙인: 마법 "사용" 자체에 반응 — 무효화 여부와 무관
-    tryHexCurseOnSpell(g, ctx); // 상급 주술사(v39): 상대 마법 "사용"마다 상대 묘지에 저주 1장 — 무효화 여부와 무관
-    // Resolve cost-sensitive reactions using the paid cost, before spending the final discount charge.
-    const negated = tryNullSpell(g, ctx, card) || trySpellSteal(g, ctx, card)
-      || trySecondNull(g, ctx, card) || tryAttuneJam(g, ctx, card) || tryHexBossNull(g, ctx, card);
+    const negated = registerSpellUse(g, ctx, p, card, paidCost);
     consumeGrimoire(p);
     if (negated) { if(card.id==='MANA_HEART') g.heartUsed=true; if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; }
     // 공허(void) 마법 토큰(와인/암상인): 사용 후 묘지 대신 게임에서 제외 — 영구마법(선견지명류)은 제외
@@ -6485,7 +6505,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
 }
 
 // ---------- v50 expansion: shared rules for server, client and deterministic bots ----------
-const FIRE_IDS = new Set(['FLAME', 'FIRE_BALL', 'FIRE_ARROW', 'FIRE_ZONE', 'FIRE_METEOR', 'FIRE_ART']);
+const FIRE_IDS = new Set(FIRE_SPELL_IDS);
 const MERC_IDS = new Set(['MERCENARY', 'MERC_LEADER', 'MERC_MASTER']);
 const isFire = (c: CardDef): boolean => FIRE_IDS.has(c.id);
 const isBlack = (c: CardDef): boolean => c.t === 'spell' && c.id.startsWith('BLACK_');
@@ -6693,6 +6713,28 @@ function expansionBlock(g: GameState, p: PlayerState, c: CardInst): {ko:string;j
   if (c.id === 'ROGUE_ART' && !p.field.length) return {"ko": "자신의 몬스터가 필요합니다", "ja": "自分のモンスターが必要です", "en": "You need a monster on your field"};
   return null;
 }
+/** Resolve the paid cast, then at most one Brand-funded cast of the same card. */
+function resolveFireVolley(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst, zoneDamage?: number): void {
+  const o = g.players[1 - side(g, p)];
+  const recast = (o.brand ?? 0) > 0;
+  if (recast) loseStatus(ctx, o, 'brand', 1);
+  if (zoneDamage !== undefined) areaDamage(g, ctx, p, zoneDamage, false, card);
+  else randomEnemyDamage(g, ctx, p, 2 + fireDamageBonus(p), 8, card);
+  if (!recast || g.over) return;
+
+  p.playsTurn = (p.playsTurn ?? 0) + 1;
+  ctx.log(`${cn(card)}: 낙인으로 재사용`, `${cn(card)}：烙印で再使用`, `${cn(card)}: recast with Brand`);
+  // Cast reactions resolve outside the damage packet of the original spell.
+  const originalDepth = spellDepth;
+  spellDepth = 0;
+  try { if (registerSpellUse(g, ctx, p, card, 0) || g.over) return; }
+  finally { spellDepth = originalDepth; }
+  p.uses[card.id] = (p.uses[card.id] ?? 0) + 1;
+  p.usesTurn[card.id] = (p.usesTurn[card.id] ?? 0) + 1;
+  if (zoneDamage !== undefined) areaDamage(g, ctx, p, 9 + fireDamageBonus(p), false, card);
+  else randomEnemyDamage(g, ctx, p, 2 + fireDamageBonus(p), 8, card);
+}
+
 function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
   const p = g.players[g.cur], o = g.players[1 - g.cur], x = xstate(p);
   ctx.log(`${cn(card)} 발동`, `${cn(card)} 発動`);
@@ -6724,13 +6766,24 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'ANESTHESIA': for (const m of p.field) m.immuneDamageTurn = g.turn; break;
     case 'EARTHQUAKE': areaDamage(g, ctx, p, 4, true, card); break;
     case 'MAGMA_RAIN': areaDamage(g, ctx, p, 6, true, card); break;
-    case 'FIRE_BALL':
-      ctx.selfDamage(p, 2, card);
-      if (!g.over) queueExpansionChoice(g, p, card.id, 'ダメージを与える対象を選択', {sourceUid:card.uid});
+    case 'FIRE_MARK': case 'FIRE_BRANDING': {
+      const guaranteed = card.id === 'FIRE_MARK' && x.firePlayed.length >= 3;
+      const need = card.id === 'FIRE_MARK' ? 6 : 3;
+      if (guaranteed || diceRoll(g, ctx.ev, side(g,p), {id:card.id, player:side(g,p)}, 1, need).ok) gainBrand(g, ctx, o, 1);
       break;
+    }
+    case 'FIRE_BALL': {
+      const branded = (o.brand ?? 0) > 0;
+      ctx.selfDamage(p, 2, card);
+      if (!g.over) queueExpansionChoice(g, p, card.id, 'ダメージを与える対象を選択', {sourceUid:card.uid, ...(branded ? {branded} : {})});
+      break;
+    }
     case 'FIRE_ARROW': ctx.selfDamage(p, 1, card); if (!g.over) randomEnemyDamage(g, ctx, p, 1 + fireDamageBonus(p), x.firePlayed.length > 1 ? 5 : 3, card); break;
     case 'FIRE_ZONE': queueExpansionChoice(g, p, card.id, '除外する手札1枚を選択', { damage: (x.firePlayed.length > 1 ? 9 : 5) + fireDamageBonus(p), sourceUid:card.uid }); break;
-    case 'FIRE_METEOR': p.maxMana = Math.max(MIN_MANA, p.maxMana - 1); randomEnemyDamage(g, ctx, p, 2 + fireDamageBonus(p), 8, card); break;
+    case 'FIRE_METEOR':
+      p.maxMana = Math.max(MIN_MANA, p.maxMana - 1);
+      resolveFireVolley(g, ctx, p, card);
+      break;
     case 'FIRE_ART': x.fireDiscount += 2; break;
     case 'DISCOVERY_SMALL': ctx.drawN(p, 2); break;
     case 'DISCOVERY': { const bonus = x.extraDraw > 0 ? 1 : 0; ctx.drawN(p, 3 + bonus); break; }
@@ -6818,7 +6871,15 @@ function expansionChoiceResolve(g: GameState, ctx: Ctx, q: NonNullable<GameState
       return true;
     }
     case 'ROGUE_ART': (card as FieldMon).passivesG = [...new Set([...((card as FieldMon).passivesG ?? []), 'evade'])]; return true;
-    case 'FIRE_ZONE': p.hand.splice(p.hand.findIndex(c => c.uid === card.uid), 1); sendToRift(g, p, card, String(q.data?.sourceUid)); spellDepth++; try { areaDamage(g, ctx, p, Number(q.data?.damage ?? 5), false, { ...inst(g, 'FIRE_ZONE'), uid:String(q.data?.sourceUid??'zone') }); } finally { spellDepth--; } return true;
+    case 'FIRE_ZONE': {
+      p.hand.splice(p.hand.findIndex(c => c.uid === card.uid), 1);
+      sendToRift(g, p, card, String(q.data?.sourceUid));
+      const zone = {...inst(g, 'FIRE_ZONE'), uid:String(q.data?.sourceUid ?? 'zone')};
+      spellDepth++;
+      try { resolveFireVolley(g, ctx, p, zone, Number(q.data?.damage ?? 5)); }
+      finally { spellDepth--; }
+      return true;
+    }
     case 'FIRE_MASTER': { for (const zone of [p.deck,p.discard]) { const i = zone.findIndex(c => c.uid === card.uid); if (i >= 0) { p.hand.push(zone.splice(i, 1)[0]); break; } } if (Number(q.data?.left ?? 2) > 1) queueExpansionChoice(g, p, q.reason, '手札に加える2枚目のファイアー魔法を選択', { left: 1 }); return true; }
     case 'FIRE_BALL': {
       const playerTarget = card.uid.startsWith('player-');
@@ -6833,6 +6894,11 @@ function expansionChoiceResolve(g: GameState, ctx: Ctx, q: NonNullable<GameState
         if (playerTarget && g.players[targetSide] === p) ctx.selfDamage(p, damage, DB.FIRE_BALL);
         else if (playerTarget) ctx.dealDamage(g.players[targetSide], damage, cn(DB.FIRE_BALL), cn(DB.FIRE_BALL), side(g,p));
         else monsterDamage(g, ctx, g.players[targetSide], card as FieldMon, damage);
+        if (!g.over && q.data?.branded) {
+          const bonus = 4 + fireDamageBonus(p);
+          fx.hit(side(g,o),null,bonus);
+          ctx.dealDamage(o, bonus, cn(DB.FIRE_BALL), cn(DB.FIRE_BALL), side(g,p));
+        }
       } finally { spellDepth--; fx.end(); }
       return true;
     }

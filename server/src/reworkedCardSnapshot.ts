@@ -8,6 +8,7 @@ const castleCards = new Set([
 ]);
 
 const armyChanges = new Set('GUNNER HEAVY_GUNNER INFKNIGHT CAVALRY AMA SLUM_ASSASSIN DICE_ARCHER DICE_FIGHTER DICE_MAGICIAN TPO3 TOKEN00 D_BLUE D_RED D_BLACK DIVINE ANTIQUE_DK DRAGON_RIDER GM6_0 CURSE MIMIC MERCH1 MERCH2 STARTER_CHEST'.split(' '));
+const fireCards = new Set(['FLAME','FIRE_BALL','FIRE_ZONE','FIRE_METEOR','FIRE_MASTER']);
 const questCards = new Set(['Q_RIFT','Q_BRAND','Q_TORI','Q_TRIBE','Q_DECAY','Q_ASSASSIN','Q_MANA','Q_CHEAT']);
 
 /** Rooms persist full card instances, including their printed rules. Update only
@@ -17,13 +18,19 @@ export function restoreReworkedCards(game: GameState): void {
   const updateQuests = !game.questReworkApplied;
   const updateArmy = !game.armyAttuneApplied;
   const updateStarterCosts = !game.starterQuestReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts)) return;
+  const updateFire = !game.fireBrandReworkApplied;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire)) return;
+  game.fireBrandReworkApplied = true;
   game.starterQuestReworkApplied = true;
   game.armyAttuneApplied = true;
   game.questReworkApplied = true;
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateFire && fireCards.has(card.id)) {
+      const def = DB[card.id];
+      Object.assign(card, {text:def.text, textJa:def.textJa, textEn:def.textEn});
+    }
     if (updateStarterCosts && (card.id === 'GOBLIN_SETTLEMENT' || card.id === 'BATTLEFIELD')) {
       const def = DB[card.id];
       Object.assign(card, {cost: def.cost, text: def.text, textJa: def.textJa, textEn: def.textEn});
