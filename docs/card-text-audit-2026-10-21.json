@@ -1241,7 +1241,7 @@
         "en"
       ],
       "definitionSha256": "86bdd53986b224c4c975085cdc1bec05f07a69f5d4d4eba78d275bf01584b872",
-      "textSha256": "70407b1cba4369c3d82a32abf4c048c5c1b2d0ce62fd030709c6beca35b98924",
+      "textSha256": "49a0935900761c69392c107390185fac09980e5d086377305663e73402e75468",
       "hooks": {},
       "before": {
         "ja": "【発動時】新しい「呪い」2枚を相手の墓地に追加する。その後、相手のデッキ・墓地・場にある「魔族」モンスター1枚につき、相手プレイヤーに16ダメージを与える。",
@@ -1251,7 +1251,7 @@
       "after": {
         "ja": "【発動時】自分の烙印を1個、呪印を4個減らす。その後、相手のデッキ・墓地・場にある魔族・黒魔術師・呪術師モンスター1体につき、相手に12ダメージを与える。",
         "ko": "【발동 시】자신의 낙인을 1개, 주인을 4개 줄인다. 그 후 상대 덱·묘지·필드의 마족·흑마술사·주술사 몬스터 1장당 상대에게 12 데미지를 준다.",
-        "en": "【On Cast】Remove 1 of your Brands and 4 of your Curse Seals. Then deal 12 damage to the opponent for each Demonkin, Black Sorceress or Hexer monster in their deck, graveyard and field."
+        "en": "【On Cast】Remove 1 Brand and 4 Curse Seals from yourself. Then deal 12 damage to the opponent for each Demonkin, Black Sorceress or Hexer monster in their deck, graveyard and field."
       }
     },
     "GS5_4": {
@@ -10231,7 +10231,7 @@
         "en"
       ],
       "definitionSha256": "91c2ff5ead8b7d47f9d430a1cab068794f01a082310c0b1be81060de19416a54",
-      "textSha256": "e97e179faa20356587d82daa1b02980b518ee24df7284abb09b325ae56213051",
+      "textSha256": "f9c7dac2d2c2b786e79ab295cdc85592f8c28f660c6897d93206fb1e6b2b0036",
       "hooks": {
         "act": "truce"
       },
@@ -10239,7 +10239,7 @@
       "after": {
         "ja": "【発動条件】このターン、自分のモンスターが攻撃していない。\n\n【発動時】両方の場のモンスターをそれぞれの手札に戻す（トークンはリフトへ送る）。このターンの残りと次の相手のターンは、双方のモンスターが攻撃できない。アサシン系は手札に戻らず、この攻撃制限も受けない。",
         "ko": "【발동 조건】이번 턴 자신의 몬스터가 공격하지 않았다.\n\n【발동 시】양쪽 필드의 몬스터를 각자의 패로 되돌린다(토큰은 리프트로 보낸다). 이번 턴의 남은 시간과 다음 상대 턴에는 양측 몬스터가 공격할 수 없다. 암살자 계열은 패로 돌아가지 않으며 이 공격 제한을 받지 않는다.",
-        "en": "【Play Requirement】None of your monsters have attacked this turn.\n\n【On Cast】Return monsters on both fields to their respective hands (send tokens to the Rift). Neither side can attack with monsters for the rest of this turn and the next opposing turn. Assassin-family monsters stay on the field and ignore this attack restriction."
+        "en": "【Play Requirement】None of your monsters have attacked this turn.\n\n【On Cast】Return monsters on both fields to their respective hands (send each token to the Rift). Neither side can attack with monsters for the rest of this turn and the next opposing turn. Assassin-family monsters stay on the field and ignore this attack restriction."
       }
     },
     "CURSE_CONTAGION": {

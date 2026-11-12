@@ -271,7 +271,7 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
   "GS5_3": {
     "ja": "【発動時】自分の烙印を1個、呪印を4個減らす。その後、相手のデッキ・墓地・場にある魔族・黒魔術師・呪術師モンスター1体につき、相手に12ダメージを与える。",
     "ko": "【발동 시】자신의 낙인을 1개, 주인을 4개 줄인다. 그 후 상대 덱·묘지·필드의 마족·흑마술사·주술사 몬스터 1장당 상대에게 12 데미지를 준다.",
-    "en": "【On Cast】Remove 1 of your Brands and 4 of your Curse Seals. Then deal 12 damage to the opponent for each Demonkin, Black Sorceress or Hexer monster in their deck, graveyard and field."
+    "en": "【On Cast】Remove 1 Brand and 4 Curse Seals from yourself. Then deal 12 damage to the opponent for each Demonkin, Black Sorceress or Hexer monster in their deck, graveyard and field."
   },
   "GS5_4": {
     "ja": "【発動時】自分の場のモンスター1体を選び、このターン終了までその攻撃力+8。",

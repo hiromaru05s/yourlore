@@ -21,6 +21,6 @@ export const DIPLOMACY_CARDS: CardDef[] = [
     nameJa: '休戦', name: '휴전', nameEn: 'Truce',
     textJa: "【発動条件】このターン、自分のモンスターが攻撃していない。\n\n【発動時】両方の場のモンスターをそれぞれの手札に戻す（トークンはリフトへ送る）。このターンの残りと次の相手のターンは、双方のモンスターが攻撃できない。アサシン系は手札に戻らず、この攻撃制限も受けない。",
     text: "【발동 조건】이번 턴 자신의 몬스터가 공격하지 않았다.\n\n【발동 시】양쪽 필드의 몬스터를 각자의 패로 되돌린다(토큰은 리프트로 보낸다). 이번 턴의 남은 시간과 다음 상대 턴에는 양측 몬스터가 공격할 수 없다. 암살자 계열은 패로 돌아가지 않으며 이 공격 제한을 받지 않는다.",
-    textEn: "【Play Requirement】None of your monsters have attacked this turn.\n\n【On Cast】Return monsters on both fields to their respective hands (send tokens to the Rift). Neither side can attack with monsters for the rest of this turn and the next opposing turn. Assassin-family monsters stay on the field and ignore this attack restriction.",
+    textEn: "【Play Requirement】None of your monsters have attacked this turn.\n\n【On Cast】Return monsters on both fields to their respective hands (send each token to the Rift). Neither side can attack with monsters for the rest of this turn and the next opposing turn. Assassin-family monsters stay on the field and ignore this attack restriction.",
   },
 ];

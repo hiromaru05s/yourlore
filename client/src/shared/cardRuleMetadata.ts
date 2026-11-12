@@ -51,6 +51,8 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   AMA: {"terms":["graveyard"],"mentions":["void"]},
   GM5_0: {"terms":["lasting"]},
   GM5_2: {"terms":["lasting"]},
+  MIND_GAME: {mentions:['dual']},
+  TRUCE: {terms:['rift']},
   CURSE_CONTAGION: {terms:['composition','graveyard']},
   GS5_3: {terms:['graveyard','counters']},
   GM6_0: {"terms":["rift","graveyard"],"mentions":["void"]},
