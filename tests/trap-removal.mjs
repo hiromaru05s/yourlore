@@ -93,6 +93,7 @@ try {
       for (let stock = 0; stock < MARKET_STOCK; stock++) {
         g.players[0].mana = 30;
         g = reduce(g, { type: 'buyMarket', i: cycle }).state;
+        if (g.pending?.reason === 'MERC_HIRE') g = reduce(g, {type:'pick',uid:'pass'}).state;
         assertNoTraps(g);
       }
       assert.equal(g.marketStock[cycle], MARKET_STOCK, 'sold-out market slot replenishes');
