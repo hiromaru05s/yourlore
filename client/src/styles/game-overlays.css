@@ -906,3 +906,23 @@
 .card-rule-tooltip .rule-tooltip-close{flex:none;width:36px;height:36px;padding:0;border:1px solid #879fb6;background:#152a40;color:#eff8ff;font-size:24px;cursor:pointer}
 .rule-tooltip-content{min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-color:#a4b6c8 #101d2e;overflow-wrap:anywhere}
 .rule-tooltip-content p{margin:0 0 12px}.rule-tooltip-content p:last-child{margin-bottom:0}.rule-tooltip-label{display:block;color:#c5e7fb}
+
+/* Tribe thresholds are play decisions; show them before state and reference material. */
+.inspect-synergy { color:inherit; overflow-wrap:anywhere; }
+.inspect-synergy h2 { margin:0 0 4px; color:var(--lore-accent,#d9efff); font:700 1.125rem/1.4 var(--gothic-ui,var(--ui)); }
+.inspect-synergy p { margin:0; font-size:1rem; line-height:1.5; }
+.inspect-synergy ul { list-style:none; margin:10px 0 6px; padding:0 0 0 12px; border-inline-start:2px solid var(--lore-line,#718599); }
+.inspect-synergy li { font-size:1rem; line-height:1.5; }
+.inspect-synergy li + li { margin-top:5px; }
+.inspect-synergy strong { color:var(--lore-accent,#d9efff); }
+.inspect-synergy .synergy-note { font-size:.875rem; }
+@media(max-width:850px){
+  .zoom-overlay .zoom-wrap.has-tribe-synergy {
+    --inspect-w:clamp(52px,9dvh,80px); --inspect-h:calc(var(--inspect-w) * 1.5625);
+    grid-template-columns:auto minmax(0,1fr); grid-template-rows:auto auto auto; gap:10px 16px;
+  }
+  .has-tribe-synergy .inspect-controls { grid-column:1/-1; }
+  .has-tribe-synergy .zoom-card-stage { grid-column:1; grid-row:2; }
+  .zoom-overlay .has-tribe-synergy .inspect-heading-copy { grid-column:2; align-self:center; padding:0; }
+  .has-tribe-synergy .zoom-details { grid-column:1/-1; grid-row:3; }
+}

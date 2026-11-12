@@ -97,8 +97,36 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
   heading.onclick=e=>e.stopPropagation();
   const details = document.createElement('section'); details.className = 'zoom-details'; details.tabIndex = 0;
   details.setAttribute('aria-label', getLang() === 'ja' ? 'カード効果と関連情報' : getLang() === 'en' ? 'Card rules and related information' : '카드 효과와 관련 정보');
-  const currentState = cardStateEl(c, hp); if (currentState) details.append(currentState);
-  if (stateText) { const state = document.createElement('div'); state.className = 'inspect-state'; state.textContent = stateText; details.append(state); }
+  const tribe = c.tribe ? TRIBES[c.tribe]?.[getLang()] : undefined;
+  if (tribe) {
+    wrap.classList.add('has-tribe-synergy');
+    const synergy = document.createElement('section');
+    synergy.className = 'inspect-synergy';
+    const label = document.createElement('h2');
+    label.textContent = t('tribe.synergy') + ' · ' + tribe.name;
+    const trigger = document.createElement('p');
+    trigger.textContent = t('tribe.fieldCondition');
+    const tiers = document.createElement('ul');
+    for (const bonus of tribe.bonuses) {
+      const row = document.createElement('li');
+      const cut = bonus.indexOf(':');
+      if (cut < 0) row.textContent = bonus;
+      else {
+        const threshold = document.createElement('strong');
+        threshold.textContent = bonus.slice(0, cut + 1);
+        row.append(threshold, ' ' + bonus.slice(cut + 1).trim());
+      }
+      tiers.append(row);
+    }
+    const note = document.createElement('p'); note.className = 'synergy-note';
+    note.textContent = tribe.note;
+    synergy.append(label, trigger, tiers, note);
+    details.append(synergy);
+  }
+  const stateBlocks = document.createDocumentFragment();
+  const currentState = cardStateEl(c, hp); if (currentState) stateBlocks.append(currentState);
+  if (stateText) { const state = document.createElement('div'); state.className = 'inspect-state'; state.textContent = stateText; stateBlocks.append(state); }
+  if (!tribe) details.append(stateBlocks);
   details.append(cardRulesEl(c, key => {
     const item = details.querySelector<HTMLElement>(`.zoom-psv .psv-item[data-psv="${key}"]`);
     if (!item) return;
@@ -113,6 +141,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
     item.focus({ preventScroll: true });
     item.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
   }));
+  if (tribe) details.append(stateBlocks);
   details.onclick = e => e.stopPropagation();
   // Reserve space for the cost/ATK/HP seals outside the card face.
   const cardStage = document.createElement('div'); cardStage.className = 'zoom-card-stage';
@@ -143,21 +172,14 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
       sp.addEventListener("pointerleave", () => item.classList.remove("hl"));
     });
   }
-  if (c.tribe && TRIBES[c.tribe]) {
-    const info = TRIBES[c.tribe][getLang()];
-    const panel = document.createElement("div");
-    panel.className = "zoom-tribe";
-    panel.innerHTML = `<h3>${info.name} ${t("tribe.suffix")}</h3><div class="note">${info.note}</div>` + info.bonuses.map((b) => `<div class="b">• ${b}</div>`).join("");
-    // the OTHER cards of this tribe as clickable thumbnails, so you know what to collect
-    const members = Object.values(DB).filter((x) => x.t === "mon" && x.tribe === c.tribe && x.id !== c.id).map((x) => x.id);
+  if (tribe) {
+    const members = Object.values(DB).filter(x => x.t === 'mon' && x.tribe === c.tribe && x.id !== c.id).map(x => x.id);
     if (members.length) {
-      const box = document.createElement("div");
-      box.className = "zoom-tribe-cards";
-      box.innerHTML = `<div class="ztc-head">${t("tribe.others")}</div>`;
-      box.appendChild(miniCardGrid(members));
-      panel.appendChild(box);
+      const box = document.createElement('section');
+      box.className = 'zoom-tribe zoom-tribe-cards';
+      const label = document.createElement('h3'); label.textContent = t('tribe.others');
+      box.append(label, miniCardGrid(members)); details.append(box);
     }
-    details.appendChild(panel);
   }
   const relations=cardRelations(c.id);
   const relationTitles={

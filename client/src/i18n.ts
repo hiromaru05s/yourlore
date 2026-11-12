@@ -238,6 +238,8 @@ const D: Record<string, Entry> = {
   "net.oppback": { ko: "상대가 재접속했습니다", ja: "相手が再接続しました", en: "Opponent reconnected" },
   "result.oppdc": { ko: "상대의 접속 종료로 인한 승리", ja: "相手の接続切断による勝利", en: "Won by opponent disconnect" },
   "tribe.suffix": { ko: "종족", ja: "種族", en: "tribe" },
+  "tribe.synergy": { ko: "종족 시너지", ja: "種族シナジー", en: "Tribe synergy" },
+  "tribe.fieldCondition": { ko: "자신의 필드에 같은 종족의 서로 다른 카드를 모으면 발동합니다.", ja: "自分の場に、同じ種族の異なるカードを揃えると発動。", en: "Gather different cards of this tribe on your field to trigger these effects." },
   "tribe.others": { ko: "이 종족의 다른 카드 (클릭하면 확대)", ja: "この種族の他のカード (クリックで拡大)", en: "Other cards in this tribe (click to enlarge)" },
   "card.related": { ko: "관련 카드", ja: "関連カード", en: "Related Cards" },
   "card.related.sub": { ko: "이 카드가 소환·참조하는 카드 (클릭하면 확대)", ja: "このカードが召喚・参照するカード (クリックで拡大)", en: "Cards this one summons or references (click to enlarge)" },
