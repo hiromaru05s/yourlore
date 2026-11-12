@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 424,
+  "count": 426,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -1035,26 +1035,26 @@
     },
     "NHEX": {
       "nameJa": "見習い呪術師",
-      "status": "reviewed-legacy-rework",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "1f26d406bb33c0168c11a730854ff6ac92fad9c74f68a6abb53e357c985bfab0",
-      "textSha256": "5250e0b85b368535d24cf7fc7ace67e905efa83e955e5193b27f350cd8f4f8a1",
+      "definitionSha256": "b780a8e9c460693ade2a0403a51f625f4cddcfb0e1bd701662eccc4de67cf644",
+      "textSha256": "b856f212ee3e0697224f28d004a749d9455050b5a41b2dbba9240dcecb83cdef",
       "hooks": {
-        "turnFx": "hexCurse"
+        "onSummon": "hexSummon"
       },
       "before": {
-        "ja": "【自分のターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。",
-        "ko": "【자신의 턴 시작 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.",
-        "en": "【At the Start of Your Turn】If your deck composition contains at least 10 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard."
-      },
-      "after": {
         "ja": "【自分のターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。さらに、魔法の枚数や出目に関係なく、自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
         "ko": "【자신의 턴 시작 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다. 또한 마법의 수와 주사위 결과에 관계없이 자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
         "en": "【At the Start of Your Turn】If your deck composition contains at least 10 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard. Independently of the spell count and die result, add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+      },
+      "after": {
+        "ja": "【召喚時】相手の墓地に「呪い」を1枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【自分のターン終了時】ダイス1個を振る。4以上なら、自分の呪印の数だけ相手の墓地に「呪い」を追加する。",
+        "ko": "【소환 시】상대 묘지에 저주 1장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【자신의 턴 종료 시】주사위 1개를 굴린다. 4 이상이면 자신의 주인 수만큼 상대 묘지에 저주를 추가한다.",
+        "en": "【On Summon】Add 1 Curse to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【At the End of Your Turn】Roll 1 die. On a 4 or higher, add 1 Curse to the opponent’s graveyard for each Curse Seal you have."
       },
       "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
@@ -6043,102 +6043,104 @@
     },
     "HEXER1": {
       "nameJa": "初級呪術師",
-      "status": "reviewed-legacy-rework",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "794092b9baa7cfc14e2a597d6a8eb779bf74e75af87cdd2b36223249e7845f5c",
-      "textSha256": "124dac5dfc507d97422ef314135ee482d8c058a911dc4d3e6b0ad94797215e42",
+      "definitionSha256": "5ecfe44faa6f9c48fe8ee09c2250ff8d154764e8275b03447efd073295b60b92",
+      "textSha256": "99e6cf78bae3b8a7cbb98cf994d2c54a42dcbb8559606ea28fa62eb82e282346",
       "hooks": {
         "onSummon": "hexSummon"
       },
       "before": {
-        "ja": "【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。",
-        "ko": "【소환 시】자신의 덱 구성에 마법이 8장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.",
-        "en": "【On Summon】If your deck composition contains at least 8 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard."
-      },
-      "after": {
         "ja": "【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
         "ko": "【소환 시】자신의 덱 구성에 마법이 8장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
         "en": "【On Summon】If your deck composition contains at least 8 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+      },
+      "after": {
+        "ja": "【召喚時】相手の墓地に「呪い」を1枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【自分のターン終了時】自分の呪印の数だけシールドを得る。",
+        "ko": "【소환 시】상대 묘지에 저주 1장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【자신의 턴 종료 시】자신의 주인 수만큼 실드를 얻는다.",
+        "en": "【On Summon】Add 1 Curse to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【At the End of Your Turn】Gain 1 Shield for each Curse Seal you have."
       },
       "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "HEXER2": {
       "nameJa": "中級呪術師",
-      "status": "reviewed-legacy-rework",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "90f1eb530b9459080a5d263d247a725a9503ac753a010734adc6a83807729078",
-      "textSha256": "05b5981cb6b9edc96b7444e81809b527353897c96f0102ea2daf962cb359b1d8",
+      "definitionSha256": "63ac8cf366e3da26da8f20e841f1b9fb7be1ee2a5f891086b2680736a0e800d2",
+      "textSha256": "e2ed58c67909ca8d103f531915641285f254dfdb39fa772b31da167e25870421",
       "hooks": {
         "onSummon": "hexSummon"
       },
       "before": {
-        "ja": "【召喚時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。4以上なら、新しい「呪い」4枚を相手の墓地に追加する。",
-        "ko": "【소환 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 4 이상이면 새로운 저주 4장을 상대의 묘지에 추가한다.",
-        "en": "【On Summon】If your deck composition contains at least 10 spells, roll 1 die. On 4 or more, create 4 new Curses in the opponent's graveyard."
-      },
-      "after": {
         "ja": "【召喚時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。4以上なら、新しい「呪い」4枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
         "ko": "【소환 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 4 이상이면 새로운 저주 4장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
         "en": "【On Summon】If your deck composition contains at least 10 spells, roll 1 die. On 4 or more, create 4 new Curses in the opponent's graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+      },
+      "after": {
+        "ja": "【召喚時】相手の墓地に「呪い」を2枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【場にある間】自分のターンの間、相手のデッキ構成にある「呪い」1枚につき、このモンスターの攻撃力を1上げる。\n\n【自分のターン終了時】自分の呪印の数だけ、自分の体力を回復する。",
+        "ko": "【소환 시】상대 묘지에 저주 2장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【필드에 있는 동안】자신의 턴 동안 상대 덱 구성의 저주 1장당 이 몬스터의 공격력을 1 올린다.\n\n【자신의 턴 종료 시】자신의 주인 수만큼 자신의 체력을 회복한다.",
+        "en": "【On Summon】Add 2 Curses to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【While on the Field】During your turn, this monster gains 1 ATK for each Curse in the opponent’s deck composition.\n\n【At the End of Your Turn】Heal yourself for 1 HP per Curse Seal you have."
       },
       "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "HEXER3": {
       "nameJa": "上級呪術師",
-      "status": "reviewed-legacy-rework",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "2ecc066d6751d1e69f02adbec60e82d56824dad1a7c9586add161c8703808511",
-      "textSha256": "49fbd912b259aa5356b0814fd2b05429836676aa50ce8647249b12a35a8303b2",
+      "definitionSha256": "66b4db3959e5981753172a64ed281e968eae40153a6c310b564c843430837801",
+      "textSha256": "597aaf99dfdc77d6d812cc6518734a5e62c4dcb83449412fbb6dfcbf04119dcb",
       "hooks": {
         "onSummon": "hexSummon",
-        "aura": "hexCurseOnSpell"
+        "aura": "hexArmy"
       },
       "before": {
-        "ja": "【召喚時】自分のデッキ構成に魔法が13枚以上あれば、ダイス1個を振る。3以上なら、新しい「呪い」5枚を相手の墓地に追加する。\n\n【相手の魔法使用時】相手が魔法を使用するたび、新しい「呪い」1枚を相手の墓地に追加する。",
-        "ko": "【소환 시】자신의 덱 구성에 마법이 13장 이상이면 주사위 1개를 굴린다. 3 이상이면 새로운 저주 5장을 상대의 묘지에 추가한다.\n\n【상대 마법 사용 시】상대가 마법을 사용할 때마다 새로운 저주 1장을 상대의 묘지에 추가한다.",
-        "en": "【On Summon】If your deck composition contains at least 13 spells, roll 1 die. On 3 or more, create 5 new Curses in the opponent's graveyard.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, create 1 new Curse in their graveyard."
-      },
-      "after": {
         "ja": "【召喚時】自分のデッキ構成に魔法が13枚以上あれば、ダイス1個を振る。3以上なら、新しい「呪い」5枚を相手の墓地に追加する。\n\n【相手の魔法使用時】相手が魔法を使用するたび、新しい「呪い」1枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
         "ko": "【소환 시】자신의 덱 구성에 마법이 13장 이상이면 주사위 1개를 굴린다. 3 이상이면 새로운 저주 5장을 상대의 묘지에 추가한다.\n\n【상대 마법 사용 시】상대가 마법을 사용할 때마다 새로운 저주 1장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
         "en": "【On Summon】If your deck composition contains at least 13 spells, roll 1 die. On 3 or more, create 5 new Curses in the opponent's graveyard.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, create 1 new Curse in their graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+      },
+      "after": {
+        "ja": "【召喚時】相手の墓地に「呪い」を3枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【場にある間】自分のターンの間、相手のデッキ構成にある「呪い」1枚につき、自分の場の全モンスターの攻撃力を1上げる。\n\n【自分のターン終了時】自分に呪印が10個以上あれば、相手の場のカードを1枚選んで破壊する。",
+        "ko": "【소환 시】상대 묘지에 저주 3장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【필드에 있는 동안】자신의 턴 동안 상대 덱 구성의 저주 1장당 자신의 필드의 모든 몬스터의 공격력을 1 올린다.\n\n【자신의 턴 종료 시】자신의 주인이 10개 이상이면 상대 필드의 카드 1장을 선택해 파괴한다.",
+        "en": "【On Summon】Add 3 Curses to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【While on the Field】During your turn, all your monsters gain 1 ATK for each Curse in the opponent’s deck composition.\n\n【At the End of Your Turn】If you have at least 10 Curse Seals, choose and destroy 1 card on the opponent’s field."
       },
       "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
     "HEXER4": {
       "nameJa": "特級呪術師 - ケロイド",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
-        "ko"
+        "ko",
+        "en"
       ],
-      "definitionSha256": "5e2fec5c051e141cea9eaba46ac3572a50a79b71c471bd032dadd6e1828a9707",
-      "textSha256": "8cd69fa611cca5599fdd0defe16b672cf4ce78c3d2e3b569942d53f89d6724e7",
+      "definitionSha256": "f315414b98a22fdee462473f725a6a041f757ca4b5966ea339f9d42f622e4ce7",
+      "textSha256": "cc0e96cf946a46c90dca239805fbf50eb7676ea9355ce51755dacb3aa88bb5d6",
       "hooks": {
-        "aura": "hexBoss",
-        "summonReq": "hexBoss"
+        "onSummon": "copySeals",
+        "summonReq": "tenSeals",
+        "attackFx": "spendSeal"
       },
       "before": {
-        "ja": "【召喚条件】自分のデッキ構成に魔法が15枚以上あり、全体の半分以上を占める。\n\n【相手の魔法使用時】相手が魔法を使用するたびダイス1個を振り、3以上ならその魔法を無効にする。\n\n【場にいる間】自分の場の全ての「呪術師」系モンスターの攻撃力+5。",
-        "ko": "【소환 조건】자신의 덱 구성에 마법이 15장 이상이며 전체의 절반 이상이다.\n\n【상대 마법 사용시】상대가 마법을 사용할 때마다 주사위 1개를 굴려 3 이상이면 그 마법 무효.\n\n【필드에 있는 동안】자신의 필드의 모든 주술사 계열 몬스터 공격력 +5.",
-        "en": "【Summon Requirement】Your deck composition contains at least 15 spells and at least half its cards are spells.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, roll 1 die; on 3 or more, negate that spell.\n\n【While on the Field】All Hexer-family monsters on your field get +5 ATK."
-      },
-      "after": {
         "ja": "【召喚条件】自分のデッキ構成に魔法が15枚以上あり、全体の半分以上を占める。\n\n【相手の魔法使用時】相手が魔法を使用するたびダイス1個を振り、3以上ならその魔法を無効にする。\n\n【場にある間】自分の場の全ての「呪術師」系モンスターの攻撃力+5。",
         "ko": "【소환 조건】자신의 덱 구성에 마법이 15장 이상이며 전체의 절반 이상이다.\n\n【상대 마법 사용 시】상대가 마법을 사용할 때마다 주사위 1개를 굴려 3 이상이면 그 마법 무효.\n\n【필드에 있는 동안】자신의 필드의 모든 주술사 계열 몬스터 공격력 +5.",
         "en": "【Summon Requirement】Your deck composition contains at least 15 spells and at least half its cards are spells.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, roll 1 die; on 3 or more, negate that spell.\n\n【While on the Field】All Hexer-family monsters on your field get +5 ATK."
+      },
+      "after": {
+        "ja": "【召喚条件】自分に呪印が10個以上ある。\n\n【召喚時】自分の呪印の数の2倍の呪印を相手に付与する。\n\n【攻撃時】戦闘前、自分に呪印があれば1個を消費し、このモンスターの攻撃力を5上げる（場を離れるまで）。呪印が0個でも攻撃できる。\n\n【自分のターン終了時】次の相手のターン終了時に、相手プレイヤーにシールドを無視して10ダメージを与える。このモンスターが場を離れても、予約したダメージは発生する。",
+        "ko": "【소환 조건】자신의 주인이 10개 이상이다.\n\n【소환 시】자신의 주인 수의 2배만큼 상대에게 주인을 준다.\n\n【공격 시】전투 전 자신의 주인이 있으면 1개를 소비하고 이 몬스터의 공격력을 5 올린다(필드를 떠날 때까지). 주인이 0개여도 공격할 수 있다.\n\n【자신의 턴 종료 시】다음 상대 턴 종료 시 상대 플레이어에게 실드를 무시하고 10 데미지를 준다. 이 몬스터가 필드를 떠나도 예약된 데미지는 발생한다.",
+        "en": "【Summon Requirement】You have at least 10 Curse Seals.\n\n【On Summon】Give the opponent Curse Seals equal to 2 times your Curse Seal count.\n\n【On Attack】Before combat, if you have any Curse Seals, spend 1 and give this monster +5 ATK until it leaves the field. It can attack with 0 seals.\n\n【At the End of Your Turn】At the end of the opponent’s next turn, deal 10 damage to that player, bypassing Shield. The scheduled damage still occurs if this monster leaves the field."
       }
     },
     "SORTER": {
@@ -10132,6 +10134,46 @@
         "ja": "【コスト】このターン、自分が既に使用したファイアー魔法1回につき、このカードの発動コストを1下げる（最低0）。\n\n【発動時】ダイス1個を振る。出目が3以上なら、相手に烙印カウンター1個を付与する。",
         "ko": "【코스트】이번 턴 자신이 이미 사용한 파이어 마법 1회당 이 카드의 발동 코스트를 1 줄인다(최저 0).\n\n【발동 시】주사위 1개를 굴린다. 3 이상이면 상대에게 낙인 카운터 1개를 준다.",
         "en": "【Cost】Reduce this card’s cast cost by 1 for each Fire spell you already played this turn, to a minimum of 0.\n\n【On Cast】Roll 1 die. On a 3 or higher, give the opponent 1 Brand counter."
+      }
+    },
+    "HEX_BRAND": {
+      "nameJa": "呪術烙印",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "8784b3fd0444d75438209702082f0e73de47901995299d013aa287974c1f7230",
+      "textSha256": "5375b39c90503fc06469327113e5d02526d909cfb44d4ed42fea0a05b25f11cd",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": {},
+      "after": {
+        "ja": "【発動時】相手の墓地に「呪い」を2枚追加する。その後、条件を満たす効果を1つまで選ぶ。相手に烙印があれば相手に呪印5個を付与する。相手に呪印があれば相手に烙印1個を付与する。",
+        "ko": "【발동 시】상대 묘지에 저주 2장을 추가한다. 그 후 조건을 충족하는 효과를 최대 1개 선택한다. 상대에게 낙인이 있으면 상대에게 주인 5개를 준다. 상대에게 주인이 있으면 상대에게 낙인 1개를 준다.",
+        "en": "【On Cast】Add 2 Curses to the opponent’s graveyard. Then choose up to 1 eligible effect. If the opponent has Brand, give them 5 Curse Seals. If they have a Curse Seal, give them 1 Brand."
+      }
+    },
+    "HEX_PUPPET": {
+      "nameJa": "操り人形",
+      "status": "added",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "14815abe1a06a26ff908841dbbf67d8ecd5babc86c195233316e17fed0348dd2",
+      "textSha256": "20ab2f013a9f6d0d2aa6712ac0b75db71fd0a064153359bc8a15ca3f23ab3fb3",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": {},
+      "after": {
+        "ja": "【発動時】相手の墓地に「呪い」を4枚追加する。その後、自分の場に「かかし」1体を召喚する。",
+        "ko": "【발동 시】상대 묘지에 저주 4장을 추가한다. 그 후 자신의 필드에 허수아비 1체를 소환한다.",
+        "en": "【On Cast】Add 4 Curses to the opponent’s graveyard. Then summon 1 Scarecrow to your field."
       }
     }
   },

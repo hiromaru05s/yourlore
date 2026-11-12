@@ -1,3 +1,4 @@
+import {applyHexerRework} from './hexerCards';
 import { FIRE_BRAND_CARDS, FIRE_SPELL_IDS } from './fireCards';
 import { ARMY_ATTUNE_CARDS } from './armyAttuneCards';
 import { applySpellRework74 } from './spellRework74';
@@ -2395,6 +2396,7 @@ Object.assign(DB.TDE2, {atk:4, def:5});
 Object.assign(DB.TDE3, {cost:4, atk:7, def:9});
 Object.assign(DB.TDE4, {cost:5, atk:14, def:14});
 DB.DEMON_REALM.cost = 2;
+applyHexerRework(DB);
 for (const card of [...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS]) DB[card.id] = card;
 DECK_POOL.push('ATTUNE_RETURN', 'MINI_SPIRIT');
 Object.assign(DB.AMA, {cost:5, play:5, act:'armyAttune', passive:['void']});

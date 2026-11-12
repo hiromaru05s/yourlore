@@ -35,16 +35,18 @@ try {
   }
   assert.equal(biased,expected);
  }
- let favored=0,uniform=0;
+ const evaluate=C.purchaseEvaluator(base,base.players[1]);
+ const uniformMean=ids.reduce((sum,id)=>sum+evaluate({...C.DB[id],uid:'sample'}).value,0)/ids.length;
+ let favored=0;
  for(let seed=1;seed<=300;seed++){
   const g=structuredClone(base),twin=structuredClone(base);
   twin.players[0].hand=[{...C.DB.PRIEST,uid:'secret'}];twin.players[0].deck=[{...C.DB.WORLD_TREE,uid:'secret-deck'}];twin.rng=987;
-  const i=C.botMarketIndex(g,ids,rng(seed));assert.equal(i,C.botMarketIndex(twin,ids,rng(seed)),'private enemy cards and live RNG do not affect market scores');
-  const evaluate=C.purchaseEvaluator(base,base.players[1]);favored+=evaluate({...C.DB[ids[i]],uid:'sample'}).value;
-  uniform+=evaluate({...C.DB[ids[Math.floor(rng(seed+90000)()*ids.length)]],uid:'sample'}).value;
+  const mixedSeed=Math.imul(seed,0x9e3779b1);
+  const i=C.botMarketIndex(g,ids,rng(mixedSeed));assert.equal(i,C.botMarketIndex(twin,ids,rng(mixedSeed)),'private enemy cards and live RNG do not affect market scores');
+  favored+=evaluate({...C.DB[ids[i]],uid:'sample'}).value;
  }
- assert(favored>uniform+300,'biased sampler improves NPC-specific offer quality');
- console.log('mean market value',{favored:favored/300,uniform:uniform/300});
+ assert(favored/300>uniformMean+1,'biased sampler improves NPC-specific offer quality');
+ console.log('mean market value',{favored:favored/300,uniform:uniformMean});
  // A damage-taking quest is not a free early-game upgrade for an aggro deck.
  // Its engine counter ignores shields; real recovery can make it viable.
  const questGame=C.createGame({...opts,starting:0}).state,quest={...C.DB.Q_BRAND,uid:'quest-check'},buyer=questGame.players[0];

@@ -1,4 +1,5 @@
 import { STARTER_QUESTS } from './starterQuests';
+import {HEXER_SPELLS} from './hexerCards';
 import { FIRE_BRAND_CARDS } from './fireCards';
 import { ARMY_ATTUNE_CARDS } from './armyAttuneCards';
 import { ARCANE_CARDS } from './riftReworkCards';
@@ -225,9 +226,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【After Taking Attack Damage】After this monster takes at least 1 attack damage and survives without spending Guts, it gains 1 counter (used by Guts)."
   },
   "NHEX": {
-    "ja": "【自分のターン開始時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。さらに、魔法の枚数や出目に関係なく、自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
-    "ko": "【자신의 턴 시작 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다. 또한 마법의 수와 주사위 결과에 관계없이 자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
-    "en": "【At the Start of Your Turn】If your deck composition contains at least 10 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard. Independently of the spell count and die result, add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+    "ja": "【召喚時】相手の墓地に「呪い」を1枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【自分のターン終了時】ダイス1個を振る。4以上なら、自分の呪印の数だけ相手の墓地に「呪い」を追加する。",
+    "ko": "【소환 시】상대 묘지에 저주 1장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【자신의 턴 종료 시】주사위 1개를 굴린다. 4 이상이면 자신의 주인 수만큼 상대 묘지에 저주를 추가한다.",
+    "en": "【On Summon】Add 1 Curse to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【At the End of Your Turn】Roll 1 die. On a 4 or higher, add 1 Curse to the opponent’s graveyard for each Curse Seal you have."
   },
   "AHEUK": {
     "ja": "【発動時】相手のマナ水晶-1。相手の場にモンスターが2体以上いて、自分の場にモンスターがいなければ、相手のマナ水晶をさらに1減らす。",
@@ -1270,24 +1271,24 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (until the affected monster leaves the field). Then automatically select up to 2 of your Assassin-family monsters with the highest ATK; ties use field order. Each gets +3 ATK until it leaves the field."
   },
   "HEXER1": {
-    "ja": "【召喚時】自分のデッキ構成に魔法が8枚以上あれば、ダイス1個を振る。5以上なら、新しい「呪い」3枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
-    "ko": "【소환 시】자신의 덱 구성에 마법이 8장 이상이면 주사위 1개를 굴린다. 5 이상이면 새로운 저주 3장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
-    "en": "【On Summon】If your deck composition contains at least 8 spells, roll 1 die. On 5 or more, create 3 new Curses in the opponent's graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+    "ja": "【召喚時】相手の墓地に「呪い」を1枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【自分のターン終了時】自分の呪印の数だけシールドを得る。",
+    "ko": "【소환 시】상대 묘지에 저주 1장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【자신의 턴 종료 시】자신의 주인 수만큼 실드를 얻는다.",
+    "en": "【On Summon】Add 1 Curse to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【At the End of Your Turn】Gain 1 Shield for each Curse Seal you have."
   },
   "HEXER2": {
-    "ja": "【召喚時】自分のデッキ構成に魔法が10枚以上あれば、ダイス1個を振る。4以上なら、新しい「呪い」4枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
-    "ko": "【소환 시】자신의 덱 구성에 마법이 10장 이상이면 주사위 1개를 굴린다. 4 이상이면 새로운 저주 4장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
-    "en": "【On Summon】If your deck composition contains at least 10 spells, roll 1 die. On 4 or more, create 4 new Curses in the opponent's graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+    "ja": "【召喚時】相手の墓地に「呪い」を2枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【場にある間】自分のターンの間、相手のデッキ構成にある「呪い」1枚につき、このモンスターの攻撃力を1上げる。\n\n【自分のターン終了時】自分の呪印の数だけ、自分の体力を回復する。",
+    "ko": "【소환 시】상대 묘지에 저주 2장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【필드에 있는 동안】자신의 턴 동안 상대 덱 구성의 저주 1장당 이 몬스터의 공격력을 1 올린다.\n\n【자신의 턴 종료 시】자신의 주인 수만큼 자신의 체력을 회복한다.",
+    "en": "【On Summon】Add 2 Curses to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【While on the Field】During your turn, this monster gains 1 ATK for each Curse in the opponent’s deck composition.\n\n【At the End of Your Turn】Heal yourself for 1 HP per Curse Seal you have."
   },
   "HEXER3": {
-    "ja": "【召喚時】自分のデッキ構成に魔法が13枚以上あれば、ダイス1個を振る。3以上なら、新しい「呪い」5枚を相手の墓地に追加する。\n\n【相手の魔法使用時】相手が魔法を使用するたび、新しい「呪い」1枚を相手の墓地に追加する。\n\n【自分のターン開始時】自分の場にいる、このカードと同名でない「呪術師」系モンスターの種類数と同じ枚数の新しい「呪い」を、相手の墓地に追加する。同名の別個体は種類数に含めない。",
-    "ko": "【소환 시】자신의 덱 구성에 마법이 13장 이상이면 주사위 1개를 굴린다. 3 이상이면 새로운 저주 5장을 상대의 묘지에 추가한다.\n\n【상대 마법 사용 시】상대가 마법을 사용할 때마다 새로운 저주 1장을 상대의 묘지에 추가한다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 이 카드와 이름이 다른 「주술사」 계열 몬스터의 종류 수만큼 새로운 「저주」를 상대의 묘지에 추가한다. 동명의 다른 개체는 종류 수에 포함하지 않는다.",
-    "en": "【On Summon】If your deck composition contains at least 13 spells, roll 1 die. On 3 or more, create 5 new Curses in the opponent's graveyard.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, create 1 new Curse in their graveyard.\n\n【At the Start of Your Turn】Add new Curses to the opponent’s graveyard equal to the number of different other Hexer-family monster names on your field. Other copies with this card’s name do not count."
+    "ja": "【召喚時】相手の墓地に「呪い」を3枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【場にある間】自分のターンの間、相手のデッキ構成にある「呪い」1枚につき、自分の場の全モンスターの攻撃力を1上げる。\n\n【自分のターン終了時】自分に呪印が10個以上あれば、相手の場のカードを1枚選んで破壊する。",
+    "ko": "【소환 시】상대 묘지에 저주 3장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【필드에 있는 동안】자신의 턴 동안 상대 덱 구성의 저주 1장당 자신의 필드의 모든 몬스터의 공격력을 1 올린다.\n\n【자신의 턴 종료 시】자신의 주인이 10개 이상이면 상대 필드의 카드 1장을 선택해 파괴한다.",
+    "en": "【On Summon】Add 3 Curses to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【While on the Field】During your turn, all your monsters gain 1 ATK for each Curse in the opponent’s deck composition.\n\n【At the End of Your Turn】If you have at least 10 Curse Seals, choose and destroy 1 card on the opponent’s field."
   },
   "HEXER4": {
-    "ja": "【召喚条件】自分のデッキ構成に魔法が15枚以上あり、全体の半分以上を占める。\n\n【相手の魔法使用時】相手が魔法を使用するたびダイス1個を振り、3以上ならその魔法を無効にする。\n\n【場にある間】自分の場の全ての「呪術師」系モンスターの攻撃力+5。",
-    "ko": "【소환 조건】자신의 덱 구성에 마법이 15장 이상이며 전체의 절반 이상이다.\n\n【상대 마법 사용 시】상대가 마법을 사용할 때마다 주사위 1개를 굴려 3 이상이면 그 마법 무효.\n\n【필드에 있는 동안】자신의 필드의 모든 주술사 계열 몬스터 공격력 +5.",
-    "en": "【Summon Requirement】Your deck composition contains at least 15 spells and at least half its cards are spells.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell, roll 1 die; on 3 or more, negate that spell.\n\n【While on the Field】All Hexer-family monsters on your field get +5 ATK."
+    "ja": "【召喚条件】自分に呪印が10個以上ある。\n\n【召喚時】自分の呪印の数の2倍の呪印を相手に付与する。\n\n【攻撃時】戦闘前、自分に呪印があれば1個を消費し、このモンスターの攻撃力を5上げる（場を離れるまで）。呪印が0個でも攻撃できる。\n\n【自分のターン終了時】次の相手のターン終了時に、相手プレイヤーにシールドを無視して10ダメージを与える。このモンスターが場を離れても、予約したダメージは発生する。",
+    "ko": "【소환 조건】자신의 주인이 10개 이상이다.\n\n【소환 시】자신의 주인 수의 2배만큼 상대에게 주인을 준다.\n\n【공격 시】전투 전 자신의 주인이 있으면 1개를 소비하고 이 몬스터의 공격력을 5 올린다(필드를 떠날 때까지). 주인이 0개여도 공격할 수 있다.\n\n【자신의 턴 종료 시】다음 상대 턴 종료 시 상대 플레이어에게 실드를 무시하고 10 데미지를 준다. 이 몬스터가 필드를 떠나도 예약된 데미지는 발생한다.",
+    "en": "【Summon Requirement】You have at least 10 Curse Seals.\n\n【On Summon】Give the opponent Curse Seals equal to 2 times your Curse Seal count.\n\n【On Attack】Before combat, if you have any Curse Seals, spend 1 and give this monster +5 ATK until it leaves the field. It can attack with 0 seals.\n\n【At the End of Your Turn】At the end of the opponent’s next turn, deal 10 damage to that player, bypassing Shield. The scheduled damage still occurs if this monster leaves the field."
   },
   "SORTER": {
     "ja": "【召喚時】新しい「カル」1枚を自分のリフトに追加する。\n\n【自分のリフト追加時】自分のリフトに「カル」が追加されるたび、自分の「カル」1枚を墓地、デッキ、手札の順で追加で送る（この追加分では再発動しない）。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、「選ばれし」モンスター4種からランダムに1体を自分の場に召喚し、このカードをリフトから自分の墓地に戻す。",
@@ -1845,4 +1846,4 @@ for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,e
 CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};
 CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};
 
-for (const c of [...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
+for (const c of [...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};

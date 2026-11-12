@@ -32,7 +32,7 @@ try {
   ['BUDGET',['1～2','3～6','さらに「兵士」1体']],['S12',['ダイス5個','20以上']],
   ['NIGHT_CASTLE_GIFT',[]],['AHEUK',['2体以上','さらに1減らす']],['GS8_0',[]],['TIMEWARP',[]],
   ['S14',['両方の場','気合','カウンター1個']],['GM5_3',['4ダメージ']],
-  ...['NHEX','HEXER1','HEXER2','HEXER3'].map(id=>[id,['自分のターン開始時','同名でない','種類数','呪い']])]){
+  ...['NHEX','HEXER1','HEXER2','HEXER3'].map(id=>[id,['召喚時','異なる名前','自分のターン終了時','呪い']])]){
   const name=catalog.find(c=>c.id===id).nameJa;
   await page.locator('.cards-search').fill(name);await page.locator(`#grid [data-card-id="${id}"]`).first().click();
   await page.locator('.zoom-overlay').waitFor();const text=await page.locator('.zoom-overlay').innerText();for(const rule of rules)assert(text.includes(rule),id+': '+rule+' / '+text);

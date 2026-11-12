@@ -76,8 +76,8 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     if (c.condAtk?.startsWith('cull')) synergy += Math.min(16,(p.removed ?? []).filter(x=>x.star==='trash').length*.8 + count('RIFT')*2);
     if (c.id === 'QUICK_CURSE') {
       const curses = known.filter(x=>x.id==='CURSE').length;
-      synergy += Math.min(18,curses*2 + count('BLACK_CURSE')*5 + own.filter(x=>x.aura==='hexCurseOnSpell'||x.turnFx==='hexCurse').length*3);
-      if (!curses && !own.some(x=>x.id==='BLACK_CURSE'||x.aura==='hexCurseOnSpell'||x.turnFx==='hexCurse')) readiness -= 13;
+      synergy += Math.min(18,curses*2 + count('BLACK_CURSE')*5 + own.filter(x=>x.onSummon==='hexSummon'||x.id==='HEX_BRAND'||x.id==='HEX_PUPPET').length*3);
+      if (!curses && !own.some(x=>x.id==='BLACK_CURSE'||x.onSummon==='hexSummon'||x.id==='HEX_BRAND'||x.id==='HEX_PUPPET')) readiness -= 13;
     }
     if (c.id === 'ADVANCE') synergy += Math.min(18,monsters*2 + plan.stopped*4);
     if (c.id === 'TRAINING_GROUND') synergy += count('CASTLE') ? 12 : 5;
@@ -116,7 +116,7 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
         if (c.summonReq === 'darkElf' && p.field.some(x=>['ELF','HIGH_ELF','HALF_ELF','ELDER_ELF_KING'].includes(x.id))) factor *= .5;
       } else if (c.summonReq === 'assassinTrio') factor = new Set(own.filter(isAssassinCard).map(x=>x.id)).size / 3;
       else if (c.summonReq === 'assassinKin' || c.summonReq === 'assassinField') factor = assassins ? .75 : .15;
-      else if (c.summonReq === 'hexBoss') factor = spells >= 12 && spells * 2 >= own.length ? .75 : .15;
+      else if (c.summonReq === 'tenSeals') factor = (p.curseSeals ?? 0) / 10;
       else if (c.summonReq === 'golemKin') factor = own.some(isGolem) ? .8 : .15;
       else if (c.summonReq === 'mm5') factor = mana >= 4 ? .85 : .5;
       readiness -= base * (1-Math.min(1,factor));

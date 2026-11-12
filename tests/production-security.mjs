@@ -59,7 +59,7 @@ await test('mandatory target timeout advances the turn',async()=>{
 await test('enchantment cast preserves triggered curse and unique physical identity',()=>{
  const g=createGame({mode:'bot',seed:32,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
  g.players[0].mana=30;g.players[0].hand=[{...DB.MERC_ART,uid:'cast'}];g.players[0].discard=[];
- g.players[1].field=[{...DB.HEXER3,uid:'hex',dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0}];
+ g.players[1].field=[{...DB.HEXER3,aura:'hexCurseOnSpell',uid:'hex',dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0}];
  const p=reduce(g,{type:'play',idx:0}).state.players[0];assert.equal(p.enchants.filter(e=>e.card.uid==='cast').length,1);assert(!p.discard.some(c=>c.uid==='cast'));assert.equal(p.discard.filter(c=>c.id==='CURSE').length,1);
 });
 function dbFixture(){

@@ -23,7 +23,7 @@ try {
  room.room.game.players[1].removed=Array.from({length:10},()=>card('STARTER_TRASH'));
  room.room.game.players[1].field=[{...mon('M8'),dmg:3},{...mon('M12'),dmg:2},mon('NHEX'),mon('HEXER1')];
  await send(0,{type:'endTurn'});assert.equal(room.room.game.pending.reason,'COLOSSEUM_REST');assert.equal(room.room.game.pending.owner,1);
- assert.equal(room.room.game.players[0].discard.filter(c=>c.id==='CURSE').length,2);
+ assert.equal(room.room.game.players[0].discard.filter(c=>c.id==='CURSE').length,0);
  const targets=room.room.game.players[1].field.slice(0,2).map(m=>m.uid);
  await send(0,{type:'pick',uid:targets[0]});assert.equal(room.room.game.players[1].field[0].dmg,3);
  room=new GameRoom(journalState(state),rewardTestEnv());await room.webSocketMessage(sockets[1],JSON.stringify({type:'ready'}));
@@ -34,5 +34,24 @@ try {
  const hp=room.room.game.players[1].hp;assert.equal(hp,45); // Dew 1 + two Rest heals of 2.
  await send(1,{type:'pick',uid:targets[1]});assert.equal(room.room.game.players[1].hp,hp);
  for(const socket of sockets){const view=socket.messages.filter(m=>m.state).at(-1).state;assert.equal(view.players[1].hp,hp);assert.equal(view.players[1].field[0].dmg,0);assert.equal(view.players[1].field[1].dmg,0);}
- console.log('PASS authoritative Dew transfer, Hexer start triggers, Rest owner authorization, two queued choices, hibernation between choices, duplicate/invalid requests and both client views');
+ // End-turn targeting belongs to the active player through hibernation. A
+ // private Curse contributes to the public ATK without exposing its identity.
+ const active=room.room.game;active.cur=1;
+ active.players[1].field=[mon('HEXER3'),mon('HEXER2')];
+ active.players[1].curseSeals=10;active.players[1].hand=[card('S4')];
+ active.players[0].hand=[card('CURSE')];active.players[0].deck=[];
+ active.players[0].discard=[];active.players[0].field=[mon('M1')];
+ const victim=active.players[0].field[0].uid;
+ await send(1,{type:'endTurn'});assert.equal(room.room.game.cur,1);
+ assert.equal(room.room.game.pending.reason,'HEXER3');
+ const view=sockets[1].messages.filter(m=>m.state).at(-1).state;
+ assert(view.players[0].hand.every(c=>c.id==='HIDDEN'));
+ assert.equal(view.players[1].field[0].visibleCurseAttack,1);
+ await send(0,{type:'pick',uid:victim});assert(room.room.game.pending);
+ room=new GameRoom(journalState(state),rewardTestEnv());
+ await room.webSocketMessage(sockets[1],JSON.stringify({type:'ready'}));
+ await send(1,{type:'pick',uid:victim});
+ assert.equal(room.room.game.cur,0);assert(!room.room.game.pending);
+ assert(room.room.game.players[0].discard.concat(room.room.game.players[0].hand).some(c=>c.uid===victim));
+ console.log('PASS authoritative Dew transfer, no obsolete Hexer start triggers, Rest owner authorization, two queued choices, hibernation between choices, duplicate/invalid requests and both client views');
 }finally{await rm(dir,{recursive:true,force:true});}

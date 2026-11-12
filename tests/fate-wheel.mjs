@@ -26,7 +26,7 @@ try {
  for(const id of ['NO_PAIN','FIRE_ARROW','STARTER_MANA'])assert.notEqual(play(fresh(),id).state.pending?.kind,'reroll',id);
  {const g=fresh();g.players[0].enchants=[];assert.equal(play(g,'STARTER_CHEST').state.pending,null);}
  // A summon-time dice effect also uses the actual roll, with no manual ID list.
- {const g=fresh();g.players[0].deck=Array.from({length:8},()=>card('S1'));const r=play(g,'HEXER1');assert(dice(r).length);assert.equal(r.state.pending?.kind,'reroll');assert.equal(re(r).state.players[0].field.length,1);}
+ {const g=fresh();g.players[0].deck=Array.from({length:8},()=>card('S1'));const r=play(g,'GOBLIN_KING');assert(dice(r).length);assert.equal(r.state.pending?.kind,'reroll');assert.equal(re(r).state.players[0].field.length,1);}
  // A choice can produce dice and THEN another required choice. Preserve/resume it.
  {const g=fresh();const m=mon('LEGEND_GAMBLER');g.players[0].field=[m];g.pending={kind:'giantShop',reason:'gamblerGuess',allowCancel:false,hint:'guess',hintJa:'予測',data:{uid:m.uid}};
   const r=reduce(g,{type:'pick',uid:'2'});assert.equal(r.state.pending.kind,'reroll');assert.equal(r.state._wheelSnap.outcome.pending?.reason,'gamblerPick');assert.equal(keep(r).state.pending?.reason,'gamblerPick');assert.notEqual(keep(r).state.pending,r.state._wheelSnap.outcome.pending,'continuation must not alias prior state');assert.equal(re(r).state.players[0].wheelUsed,true);assert.notEqual(re(r).state.pending?.kind,'reroll');}

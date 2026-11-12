@@ -191,27 +191,17 @@ for (const [id,damage] of [['FIRE_ZONE',14],['FIRE_METEOR',32]]) {
   assert.equal(g.players[0].hand.length,1);
 }
 {
-  // The opponent's Hexer rolls separately for the paid cast and the free cast.
-  let checked=false;
-  for (let seed=1; seed<=200 && !checked; seed++) {
-    let g=fresh();
-    g.rng=seed;
-    g.players[1].brand=2;
-    g.players[1].field=[{...mon('HEXER4'),def:50}];
-    const payment=card('M1');
-    g.players[0].hand=[payment];
-    g=play(g,'FIRE_ZONE');
-    if (!g.pending) continue;
-    const result=E.reduce(g,{type:'pick',uid:payment.uid});
-    const die=result.events.find(e=>e.type==='dice' && e.source.id==='HEXER4');
-    if (!die?.success) continue;
-    const [p,o]=result.state.players;
-    assert.equal(o.hp,195);
-    assert.equal(o.brand,1);
-    assert.equal(p.expansion.firePlayed.length,2);
-    assert.equal(p.discard.filter(c=>c.id==='FIRE_ZONE').length,1);
-    checked=true;
-  }
-  assert(checked);
+  let g=fresh();
+  g.players[1].brand=2;
+  g.players[1].traps=[{card:{...card('S1'),react:'nullspell',cap:0,val:0,val2:0}}];
+  const payment=card('M1');
+  g.players[0].hand=[payment];
+  g=play(g,'FIRE_ZONE');
+  const result=E.reduce(g,{type:'pick',uid:payment.uid});
+  assert(result.events.some(e=>e.type==='trapReveal'));
+  const [p,o]=result.state.players;
+  assert.equal(o.hp,195);assert.equal(o.brand,1);
+  assert.equal(p.expansion.firePlayed.length,2);
+  assert.equal(p.discard.filter(c=>c.id==='FIRE_ZONE').length,1);
 }
 console.log('PASS Fire Brand dice, turn counts, distinct targets, single recasts, spell negation and Fire Master');

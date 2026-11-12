@@ -122,6 +122,8 @@ export interface PlayerState {
   wantedBans?: Record<string,number>;
   heartDue?: number;
   curseSeals?: number;
+  hexerDoom?: number;
+  hexerAttackCurses?: number;
   crystalFloor?: number;
   marketDiscount?: number;
   strengthAuras?: number;
@@ -236,6 +238,7 @@ export interface GameState {
   starterQuestReworkApplied?: boolean;
   fireBrandReworkApplied?: boolean;
   demonRealmReworkApplied?: boolean;
+  hexerReworkApplied?: boolean;
   armyAttuneApplied?: boolean;
   heartFirstUid?: string;
   heartUsed?: boolean;
@@ -249,7 +252,7 @@ export interface GameState {
   /** Only explicitly provisioned NPC challenges may bias market generation. */
   botMarket?: { side: Side; recent: string[] };
   /** Resume a requested turn end after a mandatory attack's optional choices. */
-  endingTurn?: { turn: number; force: boolean };
+  endingTurn?: { turn: number; force: boolean; hexers?: string[] };
   /** A turn-start Chosen Mage offer waiting for another turn-start choice to finish. */
   chosenMageQueued?: boolean;
   spellDamageTurn?: number;
@@ -367,7 +370,7 @@ export type GameEvent =
   | { type: "reshuffle"; player: Side; count: number } // public count only; no card order
   | { type: "treasure"; player: Side; kind: string; text: string; textJa: string; isBot: boolean }
   | { type: "dice"; source: DiceSource; player: Side; rolls: number[]; need?: number; success?: boolean; variant?: "casino"; evasion?: { targetUid: string; attackerUid: string }; taunt?: { sourceUid: string; attackerUid: string } } // evasion identifies the public defender, including granted passives and duplicates
-  | { type: "curseGenerated"; player: Side; sourceUid: string; before: number; after: number }
+  | { type: "curseGenerated"; player: Side; sourceUid: string; sourceId?: string; before: number; after: number }
   | { type: "nova"; player: Side; from: number; to: 1 } // Resolved HP cost and time theft, never spell damage.
   | { type: "playSpell"; player: Side; id: string; dest: "discard" | "field" | "vanish"; riftCount?: number } // spell/starter/enchant played from hand
   | { type: "trapSet"; player: Side } // a face-down trap was set (identity hidden)

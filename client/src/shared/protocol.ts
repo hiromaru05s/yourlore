@@ -52,7 +52,8 @@ export function redactFor(state: GameState, you: Side): GameState {
   const g: GameState = structuredClone(state);
   for (const owner of [0,1] as const) {
     const foe=g.players[1-owner];
-    for (const m of g.players[owner].field) if (m.id==='TOKEN00')
+    const army = g.cur === owner && g.players[owner].field.some(m => m.aura === 'hexArmy');
+    for (const m of g.players[owner].field) if (m.id==='TOKEN00' || army || (g.cur===owner && m.condAtk==='hexCurses'))
       m.visibleCurseAttack=[...foe.hand,...foe.deck,...foe.discard,...foe.field].filter(c=>c.id==='CURSE').length;
   }
   delete g.medalDuel;

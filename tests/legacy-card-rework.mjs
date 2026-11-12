@@ -4,7 +4,7 @@ import fs from 'node:fs/promises';
 const dir=await fs.mkdtemp('/tmp/lore-legacy-test-');
 try {
  await build({stdin:{contents:`export * from './client/src/shared/cards';export * from './client/src/shared/engine';export * from './client/src/shared/botActions';export {greedyDecide} from './client/src/shared/bot';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/engine.mjs'});
- const {DB,STARTERS,createGame,reduce,playCost,botActions,greedyDecide,effectChoices}=await import(dir+'/engine.mjs');
+ const {DB,STARTERS,createGame,reduce,playCost,botActions,greedyDecide,effectChoices,effAtk,deckComp}=await import(dir+'/engine.mjs');
  let seq=0,checks=0;
  const card=id=>({...structuredClone(DB[id]||STARTERS[id]),uid:'legacy-'+(++seq)});
  const mon=id=>({...card(id),dmg:0,exhausted:false,atkMod:0,defMod:0,tempAtk:0,summonedTurn:0});
@@ -65,16 +65,63 @@ try {
   let g=fresh();for(const p of g.players)p.field=[{...mon('GOLEM1'),dmg:1,guts:0},{...mon('M2'),dmg:2},{...mon('M4'),dmg:1,passivesG:['guts'],guts:3},{...mon('TGE1'),hatch:3,dur:1}];g=play(g,'S14').state;for(const p of g.players){assert.equal(p.hp,100);assert.equal(p.field[0].dmg,0);assert.equal(p.field[0].guts,1);assert.equal(p.field[1].dmg,0);assert.equal(p.field[1].guts,undefined);assert.equal(p.field[2].guts,4);assert.equal(p.field[3].dur,1);}
  });
  test('Inferno Drake owner-turn burn is four',()=>{let g=fresh();g.players[1].field=[mon('GM5_3')];g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,96);});
- test('Hexer bonus counts other unique names, each instance, owner starts only, including Keloid',()=>{
-  for(const [ids,count] of [[['NHEX'],0],[['NHEX','NHEX'],0],[['NHEX','HEXER1'],2],[['NHEX','NHEX','HEXER1'],3],[['NHEX','HEXER4'],1],[['NHEX','HEXER1','HEXER2','HEXER3','HEXER4'],16]]) {
-   let g=fresh();g.players[0].field=ids.map(mon);g=step(g,{type:'endTurn'});assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,0);g=step(g,{type:'endTurn'});assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,count);
+ test('Hexer summons count distinct other names on the summoning field',()=>{
+  for (const [id,base] of [['NHEX',1],['HEXER1',1],['HEXER2',2],['HEXER3',3]]) {
+   let g=fresh();const other=id==='NHEX'?'HEXER1':'NHEX';
+   g.players[0].field=[mon(id),mon(other),mon(other),mon('HEXER4')];
+   g.players[1].field=[mon('HEXER2')];g=play(g,id).state;
+   assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,base+2);
   }
-  let g=fresh();g.cur=1;g.players[0].field=[mon('NHEX')];g.players[0].deck=[card('HEXER1')];g.players[1].field=[mon('HEXER2')];g=step(g,{type:'endTurn'});assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,0);
  });
- test('Hexer existing summon rolls, apprentice roll, and High Hexer spell response remain',()=>{
-  for(const [id,spells,n] of [['HEXER1',8,3],['HEXER2',10,4],['HEXER3',13,5]]){const seen=new Set();for(let seed=1;seed<50;seed++){let g=fresh(seed);g.players[0].deck=Array.from({length:spells},()=>card('S10'));const r=play(g,id);const count=r.state.players[1].discard.filter(c=>c.id==='CURSE').length;assert([0,n].includes(count));seen.add(count);}assert.equal(seen.size,2);}
-  let g=fresh();g.players[1].field=[mon('HEXER3')];g=play(g,'CURSE').state;assert.equal(g.players[0].discard.filter(c=>c.id==='CURSE').length,1);
-  const seen=new Set();for(let seed=1;seed<100;seed++){let g=fresh(seed);g.cur=1;g.players[0].field=[mon('NHEX'),mon('HEXER1')];g.players[0].deck=Array.from({length:12},()=>card('S10'));g=step(g,{type:'endTurn'});const n=g.players[1].discard.filter(c=>c.id==='CURSE').length;assert([2,5].includes(n));seen.add(n);}assert.equal(seen.size,2);
+ test('Hexer end effects use own seals; a Senior must choose before the next turn',()=>{
+  const faces=new Set();
+  for(let seed=1; seed<=150 && faces.size<6;seed++){
+   let g=fresh(seed);const [p,o]=g.players;
+   p.curseSeals=10;p.field=['NHEX','HEXER1','HEXER2','HEXER3','HEXER3'].map(mon);
+   o.field=[mon('M1'),mon('M2')];o.deck=[card('M1'),card('M1')];
+   const r=reduce(g,{type:'endTurn'});g=r.state;
+   const face=r.events.find(e=>e.type==='dice' && e.source.id==='NHEX').rolls[0];faces.add(face);
+   assert.equal(g.players[1].discard.length,face>=4?10:0);
+   assert.equal(g.players[0].shield,10);assert.equal(g.players[0].hp,110);
+   for(const target of o.field){
+    assert.equal(g.cur,0);assert.equal(g.pending.reason,'HEXER3');
+    g=step(JSON.parse(JSON.stringify(g)),{type:'pick',uid:target.uid});
+   }
+   assert.equal(g.cur,1);assert.equal(g.players[1].field.length,0);assert.equal(g.players[0].hp,110);
+  }
+  assert.equal(faces.size,6);
+ });
+ test('curse ATK is active only during the owner turn and stacks per Senior',()=>{
+  let g=fresh();const p=g.players[0],o=g.players[1];p.field=['HEXER2','HEXER3','HEXER3','M1'].map(mon);
+  o.deck=[card('CURSE')];o.hand=[card('CURSE')];o.discard=[card('CURSE')];o.removed=[card('CURSE')];
+  assert.deepEqual(p.field.map(m=>effAtk(p,m,g)-m.atk),[9,6,6,6]);
+  g.cur=1;assert.deepEqual(p.field.map(m=>effAtk(p,m,g)-m.atk),[0,0,0,0]);
+ });
+ test('Keloid summons at ten seals, spends only available seals before combat, and schedules independent shield-bypassing damage',()=>{
+  let g=fresh();g.players[0].curseSeals=9;
+  g=play(g,'HEXER4').state;assert.equal(g.players[0].field.length,0);
+  g.players[0].curseSeals=10;g.players[1].curseSeals=1;
+  g=step(g,{type:'play',idx:0});assert.equal(g.players[1].curseSeals,21);
+  const uid=g.players[0].field[0].uid;
+  g=attack(g,uid,null).state;
+  assert.equal(g.players[0].curseSeals,9);assert.equal(g.players[0].field[0].atkMod,5);assert.equal(g.players[1].hp,81);
+  g.players[0].curseSeals=0;g.players[0].field[0].exhausted=false;g.players[0].field[0].attacksUsed=0;
+  g=attack(g,uid,null).state;assert.equal(g.players[1].hp,62);assert.equal(g.players[0].field[0].atkMod,5);
+  g.players[1].curseSeals=0;g=step(g,{type:'endTurn'});g.players[0].field=[];g.players[1].shield=30;
+  g=step(JSON.parse(JSON.stringify(g)),{type:'endTurn'});assert.equal(g.players[1].hp,52);assert.equal(g.players[1].shield,30);
+ });
+ test('Hex Brand always adds two, offers only legal options and supports skipping; Marionette adds four before summoning',()=>{
+  for(const [brand,seals] of [[0,0],[1,0],[0,2],[1,2]]){
+   let g=fresh();g.players[1].brand=brand;g.players[1].curseSeals=seals;
+   g=play(g,'HEX_BRAND').state;assert.equal(g.players[1].discard.length,2);
+   if(!brand && !seals){assert(!g.pending);continue;}
+   assert.deepEqual(effectChoices(g).map(c=>c.uid),[...(brand?['seals']:[]),...(seals?['brand']:[]),'done']);
+   for(const c of effectChoices(g)){const o=step(g,{type:'pick',uid:c.uid}).players[1];assert.equal(o.brand,brand+Number(c.uid==='brand'));assert.equal(o.curseSeals,seals+(c.uid==='seals'?5:0));}
+  }
+  let g=fresh();const r=play(g,'HEX_PUPPET');assert(r.events.findIndex(e=>e.type==='curseGenerated')<r.events.findIndex(e=>e.type==='summon'));
+  assert.equal(r.state.players[1].discard.length,4);assert.equal(r.state.players[0].field[0].id,'TOKEN00');
+  g=fresh();g.players[0].field=Array.from({length:7},()=>mon('M1'));const full=play(g,'HEX_PUPPET').state;
+  assert.equal(full.players[0].field.length,7);assert.equal(full.players[1].discard.length,4);
  });
  test('Rest heals player by two; 9/10 Cull threshold, own starts, actual choices and restored queue',()=>{
   for(const n of [9,10]){let g=fresh();g.players[0].enchants=[ench('COLOSSEUM_REST')];g.players[0].removed=Array.from({length:n},()=>card('STARTER_TRASH'));g.players[0].field=[{...mon('M8'),dmg:3},{...mon('M12'),dmg:1}];g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,100);assert.equal(g.pending,null);g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,102);if(n===9){assert.equal(g.pending,null);assert.equal(g.players[0].field[0].dmg,3);}else{assert.equal(g.pending.reason,'COLOSSEUM_REST');assert.equal(g.pending.owner,0);assert.equal(effectChoices(g).length,2);const target=g.players[0].field[0].uid;assert.equal(greedyDecide(g).uid,target);assert(botActions(g).some(a=>a.type==='pick'&&a.uid===target));g=step(JSON.parse(JSON.stringify(g)),{type:'pick',uid:target});assert.equal(g.pending,null);assert.equal(g.players[0].field[0].dmg,0);assert.equal(g.players[0].field[1].dmg,1);}}

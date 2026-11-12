@@ -8,7 +8,7 @@ const fixtures=JSON.parse(await fs.readFile(out+'/fixtures.json'));
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const page=await browser.newPage();page.setDefaultTimeout(90000);
 const checks=[],errors=[];page.on('pageerror',e=>errors.push(e.message));
-const labels=['half:0:none','half:1:own','upkeep:0:NHEX:false','upkeep:1:MANA_GIANT:false','upkeep:0:NHEX:true','summon:0:GUNNER','end:0:GUNNER','sources:0:HEXER3','sources:1:GM5_2','sources:0:PRIEST','reaction:0:GM6_8','reaction:1:CHOSEN_MAGE','reaction:0:WORLD_TREE','declined-world-tree','post-attack-source-died'];
+const labels=['half:0:none','half:1:own','upkeep:0:NHEX:false','upkeep:1:MANA_GIANT:false','upkeep:0:NHEX:true','summon:0:GUNNER','end:0:GUNNER','sources:0:HEXER1','sources:1:GM5_2','sources:0:PRIEST','reaction:0:GM6_8','reaction:1:CHOSEN_MAGE','reaction:0:WORLD_TREE','declined-world-tree','post-attack-source-died'];
 try {
  await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default');await page.waitForFunction(()=>window.atelier&&document.querySelector('[data-scene-ready=true]'));
  for(const width of [1280,390]){
@@ -25,7 +25,7 @@ try {
     return {names,expectedNames,max,remaining:document.querySelectorAll('[data-layer-policy=foreground] [data-monster-kind=trigger]').length};
    },sample);
    assert.deepEqual(result.names.sort(),result.expectedNames.sort(),label);assert.equal(result.remaining,0,label);
-   if(label==='sources:0:HEXER3'||label==='sources:1:GM5_2')assert.equal(result.max,2,'simultaneous source cards');
+   if(label==='sources:0:HEXER1'||label==='sources:1:GM5_2')assert.equal(result.max,2,'simultaneous source cards');
    checks.push({label,width,...result});console.log('PASS',width,label,result.names.length);
    await fs.writeFile(out+'/browser-progress.json',JSON.stringify({origin,checks,errors},null,2));
   }

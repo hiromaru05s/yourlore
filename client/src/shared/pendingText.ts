@@ -38,6 +38,8 @@ export const CHOICE_TEXT:Record<string,Copy>={
  BLOOD_SECRET:c('秘術の対象にする自分のモンスターを選んでください。','비술의 대상이 될 자신의 몬스터를 선택하세요.','Choose your monster for Blood Secret.'),
  SOUL_HARVEST:c('破壊する「虚無」モンスターを選んでください。','파괴할 공허 몬스터를 선택하세요.','Choose a monster with Void to destroy.'),
  STABLE_EVADE:c('「回避」を付与する自分のモンスターを選んでください。','회피를 부여할 자신의 몬스터를 선택하세요.','Choose your monster to gain Evade.'),
+ HEXER3:c('破壊する相手の場のカードを1枚選んでください。','파괴할 상대 필드 카드 1장을 선택하세요.','Choose 1 opposing field card to destroy.'),
+ HEX_BRAND:c('追加効果を1つ選ぶか、使わずに終了してください。','추가 효과 1개를 선택하거나 생략하세요.','Choose 1 additional effect or skip it.'),
  FIRE_BALL:c('ダメージを与えるプレイヤーかモンスター1体を選んでください。','데미지를 줄 플레이어 또는 몬스터 1체를 선택하세요.','Choose a player or monster to deal damage to.'),
  FIRE_ZONE:c('自分の手札から自分のリフトへ送るカード1枚を選んでください。','자신의 패에서 자신의 리프트로 보낼 카드 1장을 선택하세요.','Choose 1 card from your hand to send to your Rift.'),
  attack:c('攻撃する相手モンスター1体を選んでください。','공격할 상대 몬스터 1체를 선택하세요.','Choose an opposing monster to attack.'),

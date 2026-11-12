@@ -899,7 +899,7 @@ export abstract class BaseController implements BoardHandlers {
           break;
         }
         case "curseGenerated": {
-          const card=prev.players[e.player].hand.find(c=>c.uid===e.sourceUid)??{...DB.BLACK_CURSE,uid:e.sourceUid};
+          const card=[...prev.players[e.player].hand,...prev.players[e.player].field].find(c=>c.uid===e.sourceUid)??{...DB[e.sourceId ?? 'BLACK_CURSE'],uid:e.sourceUid};
           await A.curseSpell(card,sideOf(e.player),e.before,e.after-e.before);
           break;
         }
@@ -911,7 +911,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "playSpell": {
           const nextSpell=events.findIndex((next,j)=>j>i&&next.type==='playSpell');
-          if(e.id==='BLACK_CURSE'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='curseGenerated'&&next.player===e.player))break;
+          if(['BLACK_CURSE','HEX_PUPPET','HEX_BRAND'].includes(e.id)&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='curseGenerated'&&next.player===e.player))break;
           if(e.id==='EXILE_NUKE1'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='voidShot'&&next.player===e.player))break;
           // TIMEWARP uses the existing dice first; its typed success event owns the material reveal.
           if(e.id==='TIMEWARP'&&events.slice(i+1,nextSpell<0?events.length:nextSpell).some(next=>next.type==='dice'&&next.source.id==='TIMEWARP'))break;

@@ -64,6 +64,7 @@ assert.equal(cap.players[0].traps.length,14);
 cap=reduce(cap,{type:'play',idx:0,player:0}).state;
 assert.equal(cap.players[0].traps.length,14);assert(cap.players[0].hand.some(c=>c.uid==='fifteenth'));
 const g=createGame({mode:'bot',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
+g.market[0]={...DB.M1,uid:'fixed-buy-test'}; // This interaction needs an available, unconditional purchase.
 const mon=Object.values(DB).find(c=>c.t==='mon');
 const trap=legacyTrap;
 const spell=Object.values(DB).find(c=>c.ench);

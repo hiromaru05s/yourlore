@@ -1,6 +1,6 @@
 import { DB, STARTERS } from '../../client/src/shared/cards';
 import { refreshFieldPassives } from '../../client/src/shared/engine';
-import type { CardInst, GameState } from '../../client/src/shared/types';
+import type { CardInst, FieldMon, GameState } from '../../client/src/shared/types';
 
 const castleCards = new Set([
   'SOLDIER2','EXPANSION','LAND_GRANT','QUICK_MUSTER','TREASON','HARVEST','STABLE',
@@ -21,7 +21,9 @@ export function restoreReworkedCards(game: GameState): void {
   const updateStarterCosts = !game.starterQuestReworkApplied;
   const updateFire = !game.fireBrandReworkApplied;
   const updateDemons = !game.demonRealmReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons)) return;
+  const updateHexers = !game.hexerReworkApplied;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers)) return;
+  game.hexerReworkApplied = true;
   game.demonRealmReworkApplied = true;
   game.fireBrandReworkApplied = true;
   game.starterQuestReworkApplied = true;
@@ -30,6 +32,19 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateHexers && ['NHEX','HEXER1','HEXER2','HEXER3','HEXER4'].includes(card.id)) {
+      const def = DB[card.id];
+      const swapped = 'trickSwapped' in card && card.trickSwapped;
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn,atk:swapped?def.def:def.atk,def:swapped?def.atk:def.def});
+      const dest = (card as Partial<FieldMon>).mutedEffects ?? card;
+      for (const k of ['onSummon','turnFx','condAtk','attackFx','aura'] as const) {
+        if (def[k] && !(k==='onSummon' && 'token' in card && card.token)) dest[k]=def[k];
+        else delete dest[k];
+      }
+      for (const k of ['val','val2','summonReq'] as const) {
+        if (def[k] === undefined) delete card[k]; else Object.assign(card,{[k]:def[k]});
+      }
+    }
     if (updateDemons && (card.id === 'DEMON_REALM' || card.tribe === '마족')) {
       const def = DB[card.id];
       Object.assign(card, {cost:def.cost, text:def.text, textJa:def.textJa, textEn:def.textEn});
@@ -99,8 +114,8 @@ export function restoreReworkedCards(game: GameState): void {
         if (def[key]) (m.mutedEffects ?? m)[key] = def[key];
       }
     }
-    refreshFieldPassives(game);
   }
+  if (updateDemons || updateHexers) refreshFieldPassives(game);
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);
   if (wheel?.resolved?.state) restoreReworkedCards(wheel.resolved.state as GameState);

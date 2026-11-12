@@ -20,7 +20,7 @@ try {
  for(const bad of audit.scans.filter(c=>c.noOpActivation&&c.reachableByNormalPlay&&c.label.startsWith('onSummon:'))){
   const g=fresh(),p=g.players[0],o=g.players[1],m=mon(bad.id);p.field=[m];
   if(bad.label.includes(':populated:')){p.field.push(plain({tribe:'시초'}),mon('WORLD_TREE',{turnFx:undefined}),plain({name:'골램 장비 장인',nameJa:'ゴーレム 装備職人'}));o.field=[plain(),plain({atk:10,def:20})];p.hand=[card('WINE'),card('WINE')];p.deck=Array.from({length:15},()=>card('WEAKEN_ALL'));p.discard=[card('SOLDIER2'),card('STARTER_TRASH')];o.removed=[card('SOLDIER2')];p.supplyHist=[{turn:5,ids:['ELF']}];}
-  const ev=[];E.resolveOnSummon(g,E.makeCtx(g,ev),m);expect(ev,m,['SORTER','GM6_0','D_BLACK','MERCH1','MERCH2'].includes(bad.id)?1:0,bad.label);
+  const ev=[];E.resolveOnSummon(g,E.makeCtx(g,ev),m);expect(ev,m,['SORTER','GM6_0','D_BLACK','MERCH1','MERCH2','HEXER1','HEXER2','HEXER3','NHEX'].includes(bad.id)?1:0,bad.label);
   if(bad.id==='SORTER')assert.equal(p.removed.filter(c=>c.star==='trash').length,1);
  }
  for(const owner of [0,1]){
@@ -33,7 +33,7 @@ try {
   for(const id of ['NHEX','MANA_GIANT'])for(const met of [false,true]){
    const g=fresh(owner),p=g.players[1-owner],m=mon(id);p.field=[m];
    if(met)p.deck=id==='NHEX'?Array.from({length:13},()=>card('WEAKEN_ALL')):[card('NGA3'),card('GOLEM1'),...Array.from({length:4},()=>card('SOLDIER2'))];
-   run(`upkeep:${owner}:${id}:${met}`,g,m,{type:'endTurn'},met?1:0);
+   run(`upkeep:${owner}:${id}:${met}`,g,m,{type:'endTurn'},id==='NHEX'?0:met?1:0);
   }
   for(const id of ['GUNNER','HEAVY_GUNNER','FARM_KEEPER','MIMIC_HUNTER']){
    const g=fresh(owner),p=g.players[owner],m=card(id);p.hand=[m];const r=run(`summon:${owner}:${id}`,g,m,{type:'play',idx:0},0);
@@ -42,10 +42,10 @@ try {
    run(`end:${owner}:${id}`,r.state,m,{type:'endTurn'},1);
   }
   // Applied callbacks identify every source, not only the first matching card.
-  for(const id of ['HEXER3','GM5_2','PRIEST','CASTLE']){
+  for(const id of ['HEXER1','GM5_2','PRIEST','CASTLE']){
    const g=fresh(owner),sources=[mon(id),mon(id)],p=g.players[owner],o=g.players[1-owner];
-   if(id==='HEXER3'){o.field=sources;p.hand=[card('WEAKEN_ALL')];}else{p.field=sources;p.hand=[card(id==='PRIEST'?'HIGH_PRIEST':'SOLDIER2')];}
-   const r=reduce(g,{type:'play',idx:0});for(const m of sources)expect(r.events,m,1,'both sources '+id);
+   if(id==='HEXER1'){p.field=sources;p.curseSeals=2;}else{p.field=sources;p.hand=[card(id==='PRIEST'?'HIGH_PRIEST':'SOLDIER2')];}
+   const r=reduce(g,id==='HEXER1'?{type:'endTurn'}:{type:'play',idx:0});for(const m of sources)expect(r.events,m,1,'both sources '+id);
    browserCases.push({label:`sources:${owner}:${id}`,before:g,result:r,expectedUids:sources.map(m=>m.uid)});
   }
  }
@@ -76,7 +76,7 @@ try {
   if(id==='TPO2'){o.field=[plain({def:1,cost:3})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:m.uid},allowCancel:true};action={type:'chooseTarget',uid:o.field[0].uid};}
   if(id==='VAMP_BUTLER'){m.gcount=2;action={type:'attack',uid:m.uid};}
   if(['GM6_8','ELDER_ELF_KING','FIRE_MASTER','GOLEM2'].includes(id)){g.cur=1-owner;if(id==='ELDER_ELF_KING')p.dew=15;if(id==='FIRE_MASTER')p.deck=[card('FIRE_BALL')];let target=m;if(id==='GOLEM2'){target=plain();p.field.push(target);}g.pending={kind:'oppMon',reason:'destroyMon',allowCancel:true};action={type:'chooseTarget',uid:target.uid};if(id==='ELDER_ELF_KING'){o.field=[plain({uid:'killer',atk:20})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:'killer'},allowCancel:true};}}
-  if(id==='HEXER4'){g.cur=1-owner;o.hand=[card('WEAKEN_ALL')];action={type:'play',idx:0};}
+  if(id==='HEXER4'){action={type:'endTurn'};}
   if(id==='CASINO'){m.gcount=11;g.cur=1-owner;o.hand=[card('VITAL2')];action={type:'play',idx:0};}
   if(id==='CHOSEN_MAGE'){p.removed=[card('STARTER_TRASH')];g.pending={kind:'myMon',reason:'chosenMage',data:{fired:[]},allowCancel:true};action={type:'chooseTarget',uid:m.uid};}
   if(id==='WORLD_TREE'){p.dew=1;p.field.push(plain({uid:'attacker'}));g.pending={kind:'cardChoice',owner,reason:'WORLD_TREE_ATTACK',data:{attackerUid:'attacker',targetUid:null},allowCancel:false};action={type:'chooseTarget',uid:'grow'};}
