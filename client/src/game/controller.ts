@@ -63,7 +63,7 @@ import { DB, STARTERS, hasPassive, isChestCard } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
-import { reviewCast, cardPicker, cardPickerMulti, confirmDialog, winModal, closeOverlay } from "../ui/modal";
+import { showDealRewards, reviewCast, cardPicker, cardPickerMulti, confirmDialog, winModal, closeOverlay } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, stopSounds } from "../ui/sound";
@@ -244,6 +244,14 @@ export abstract class BaseController implements BoardHandlers {
     // pending the engine raises right after is answered automatically.
     this.autoTarget = targetUid === null ? 'opposing-player' : targetUid ?? null;
     this.submit({ type: "attack", uid });
+  }
+  onDealRewards(uid: string) {
+    const before = this.state;
+    const quest = before.players[this.you].quests?.find(q => q.card.uid === uid);
+    if (!quest || before.cur !== this.you || before.pending || before.over) return;
+    showDealRewards(quest, cost => {
+      if (!this.dead && this.state === before) this.submit({type: 'claimDeal', uid, cost});
+    });
   }
   onBlockedAttack() { this.cantPlayToast(t("attack.block.guarded")); }
   onReorder(from: number, to: number) { this.fastForward(); this.submit({ type: "reorder", from, to }); }

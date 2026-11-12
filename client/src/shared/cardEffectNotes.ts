@@ -11,7 +11,7 @@ export const RULE_TERM_NOTES = {
   counters: {ja:'カウンター：効果の回数や状態を記録する目印。個数に応じた処理は各効果に従う。用途が異なるものは別々に数える。気合・腐敗・卵の耐久などのカウンターと、プレイヤーの烙印カウンターは共有しない。',ko:'카운터: 효과의 횟수나 상태를 기록하는 표식. 개수에 따른 처리는 각 효과의 설명을 따른다. 용도가 다르면 별도로 센다. 기합·부패·알의 내구 등에 쓰는 카운터와 플레이어의 낙인 카운터는 공유하지 않는다.',en:'Counters are markers that track an effect’s uses or a state. Each effect explains what its counter amount does. Counters with different uses are tracked separately. Guts, Decay, Egg durability, and a player’s Brand counters do not share a pool.'}
 };
 
-export const QUEST_RULE = {ja:'クエスト：設置後から進捗を数える。達成するとこのカードをリフトへ送り、報酬を1回だけ得る。',ko:'퀘스트: 설치 후부터 진행을 센다. 달성하면 이 카드를 리프트로 보내고 보상을 1회 받는다.',en:'Quest: counts progress only after deployment. On completion, this card goes to your Rift and grants its reward once.'};
+export const QUEST_RULE = {ja:'クエスト：設置後から進捗を数える。達成すると報酬を1回得る。別の行き先が指定されていなければ、このカードをリフトへ送る。',ko:'퀘스트: 설치 후부터 진행을 센다. 달성하면 보상을 1회 받는다. 다른 목적지가 명시되지 않으면 이 카드를 리프트로 보낸다.',en:'Quest: counts progress only after deployment. Claim its reward once. Unless the card specifies another destination, it goes to your Rift on completion.'};
 
 /** Contextual definitions shown alongside the complete effect, in the selected language. */
 export function cardEffectNotes(card: CardDef, lang: EffectLocale): string[] {

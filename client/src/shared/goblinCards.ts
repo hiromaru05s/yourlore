@@ -3,7 +3,6 @@ import type { CardDef } from './types';
 export const GOBLIN_STARTERS = ["GOBLIN","GOBLIN_RAIDER","GOBLIN_SETTLEMENT","RELIC_PROTECTION","RELIC_BOUNTY","MANA_BACKFLOW","BATTLEFIELD"];
 export const GOBLIN_IDS = new Set(["GOBLIN","GOBLIN_RAIDER","GOBLIN_SETTLEMENT","GOBLIN_LEADER","GOBLIN_KING","ELITE_GOBLIN","GOBLIN_ORIGIN","GOBLIN_PARTY"]);
 export const GOBLIN_MONSTER_IDS = new Set(["GOBLIN","GOBLIN_RAIDER","GOBLIN_LEADER","GOBLIN_KING","ELITE_GOBLIN"]);
-export const isBasicGoblin = (card: {id:string}): boolean => card.id === 'GOBLIN' || card.id === 'GOBLIN_RAIDER';
 export const isGoblinMonster = (card: {id:string}): boolean => GOBLIN_MONSTER_IDS.has(card.id);
 export const GOBLIN_CARDS: CardDef[] = [
   {
@@ -42,10 +41,10 @@ export const GOBLIN_CARDS: CardDef[] = [
     "name": "고블린 집락",
     "nameJa": "ゴブリン集落",
     "nameEn": "Goblin Settlement",
-    "cost": 4,
-    "text": "【발동 조건】자신의 필드에 고블린 또는 돌격 고블린이 있다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 고블린과 돌격 고블린의 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【파괴 시】마법 카드의 효과로 파괴됐다면 상대에게 8 데미지를 준다.",
-    "textJa": "【発動条件】自分の場に「ゴブリン」か「特攻ゴブリン」がいる。\n\n【自分のターン開始時】自分の場の「ゴブリン」「特攻ゴブリン」の体力+1（対象が場を離れるまで）。\n\n【破壊時】魔法カードの効果で破壊された場合、相手に8ダメージを与える。",
-    "textEn": "【Play Requirement】You control a Goblin or Goblin Raider.\n\n【At the Start of Your Turn】Your Goblins and Goblin Raiders on the field gain +1 HP (until the affected monster leaves the field).\n\n【On Destruction】If destroyed by a spell card’s effect, deal 8 damage to the opponent.",
+    "cost": 3,
+    "text": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 있다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 모든 고블린 계열 몬스터의 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【파괴 시】마법 카드의 효과로 파괴됐다면 상대에게 8 데미지를 준다.",
+    "textJa": "【発動条件】自分の場に「ゴブリン」系モンスターがいる。\n\n【自分のターン開始時】自分の場の「ゴブリン」系モンスター全ての体力+1（対象が場を離れるまで）。\n\n【破壊時】魔法カードの効果で破壊された場合、相手に8ダメージを与える。",
+    "textEn": "【Play Requirement】You control a Goblin-family monster.\n\n【At the Start of Your Turn】All your Goblin-family monsters on the field gain +1 HP (until the affected monster leaves the field).\n\n【On Destruction】If destroyed by a spell card’s effect, deal 8 damage to the opponent.",
     "t": "spell",
     "noShop": true,
     "ench": "goblinSettlement",
@@ -100,7 +99,7 @@ export const GOBLIN_CARDS: CardDef[] = [
     "name": "전장",
     "nameJa": "戦場",
     "nameEn": "Battlefield",
-    "cost": 2,
+    "cost": 1,
     "text": "【각 턴 시작 시】그 턴의 플레이어에게 2 데미지를 준다.",
     "textJa": "【各ターン開始時】そのターンのプレイヤーに2ダメージを与える。",
     "textEn": "【At the Start of Each Turn】Deal 2 damage to the player whose turn is starting.",

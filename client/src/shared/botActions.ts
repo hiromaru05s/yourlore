@@ -1,3 +1,4 @@
+import { availableDealRewards } from './starterQuests';
 import type { Action, GameState } from './types';
 import { purgeChoices, effectChoices, monsterCanAttack, playBlockReason, playCost, purchaseAllowed, buyCost, freeBuyBlocked } from './engine';
 
@@ -38,6 +39,9 @@ export function botActions(g: GameState): Action[] {
     // Cancelling an already-started attack can loop attack -> cancel forever.
     if ((q.allowCancel && q.reason !== 'attack') || out.length === 0) pick(null);
   } else {
+    for (const quest of p.quests ?? []) for (const reward of availableDealRewards(quest)) {
+      out.push({type: 'claimDeal', uid: quest.card.uid, cost: reward.cost});
+    }
     p.hand.forEach((c, idx) => { if (!c.quick && playCost(c, p) <= p.mana && !playBlockReason(g, g.cur, c)) out.push({ type: 'play', idx }); });
     p.field.forEach(m => { if (monsterCanAttack(g, p, m)) out.push({ type: 'attack', uid: m.uid }); });
     for (const [pool, type] of [[p.supply, 'buySupply'], [g.market, 'buyMarket']] as const) pool.forEach((c, i) => {

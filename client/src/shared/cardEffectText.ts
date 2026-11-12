@@ -1,3 +1,4 @@
+import { STARTER_QUESTS } from './starterQuests';
 import { ARMY_ATTUNE_CARDS } from './armyAttuneCards';
 import { ARCANE_CARDS } from './riftReworkCards';
 import { DICE_SET_CARDS } from './diceCards';
@@ -1843,4 +1844,4 @@ for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,e
 CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};
 CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};
 
-for (const c of [...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
+for (const c of [...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};

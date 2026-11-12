@@ -944,3 +944,5 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .buff-frame,.buff-art {width:200%;height:200%;right:auto;bottom:auto;scale:.5;transform-origin:0 0;}
 
 .pt-curse-seals { color: #dbb2ed; font-size: .78em; white-space: nowrap; }
+
+.deal-rewards > button { display: block; width: 100%; margin-top: 8px; }

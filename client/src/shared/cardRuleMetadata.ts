@@ -3,6 +3,8 @@
 export type RuleTerm = 'composition' | 'graveyard' | 'rift' | 'lasting' | 'counters';
 export interface CardRuleMetadata { terms?: RuleTerm[]; mentions?: string[]; grants?: string[]; }
 export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
+  Q_ENJOY_THE_SHOW: {terms:['counters']},
+  Q_UNDERWORLD_DEAL: {terms:['counters','graveyard'], mentions:['ambush']},
   ATTUNE_RETURN: {"terms":["graveyard"]},
   DRAGON_KILLER: {"mentions":["dual"],"grants":["dual"]},
   FATE_WRAITH: {"terms":["composition","graveyard"]},

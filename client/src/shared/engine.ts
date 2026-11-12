@@ -3,7 +3,8 @@ import {logToEn} from './logEn';
 import {pendingText} from './pendingText';
 import { botMarketIndex, challengeMarket } from './botMarket';
 import { RIFT_REWORK_IDS } from './riftReworkCards';
-import { GOBLIN_IDS, isBasicGoblin, isGoblinMonster } from './goblinCards';
+import { availableDealRewards } from './starterQuests';
+import { GOBLIN_IDS, isGoblinMonster } from './goblinCards';
 import {trackMedalDuel} from './medalTracking';
 import { trackActivity } from "./progression";
 import { cloneGameState } from './cloneGameState';
@@ -452,7 +453,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -765,6 +766,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     spiritGain(p,1,0);
     trackActivity(p, 'heal', amt);
     advanceQuest(p,"healthGain",amt);
+    advanceQuest(p, "healOccurrence");
     ev.push({ type: "heal", player: side(g, p), amount: amt, ...(bloodRiteSources ? {bloodRiteSources} : {}) });
     // 유령 — v25: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격력 +1 (지속)
     {
@@ -2061,6 +2063,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     offerEffectChoice(g,ctx,o,'WORLD_TREE_DEFEND','雫1で被攻撃モンスターの体力+3（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
   }
+  countAmbushAttack(g, att);
   // Charge once after any World Tree continuations, before evasion or traps.
   // Choosing/cancelling a target does not enter this committed attack path.
   if (att.attackFx === 'goblinDirect' && targetUid !== null && o.field.some(m => m.uid === targetUid)) {
@@ -2891,6 +2894,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
     offerEffectChoice(g,ctx,p,treeStage===0?'WORLD_TREE_ATTACK':'WORLD_TREE_DEFEND','雫1で永続強化しますか？',{attackerUid:att.uid,targetUid:target.uid,friendly:true,pierce});
     return;
   }
+  countAmbushAttack(g, att);
   const atk = effAtk(p, att, g);
   const counter = hasPassive(target, "counter") ? Math.ceil(effAtk(p, target, g) / 2) : 0;
   const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : Math.max(0, Math.min(atk, curHp(p,target) - (!target.boundarySuppressed && (target.guts || 0) > 0 ? 1 : 0)));
@@ -2925,6 +2929,7 @@ function resolveFriendlyPlayerAttack(g: GameState, ctx: Ctx, att: FieldMon, tree
     offerEffectChoice(g, ctx, p, 'WORLD_TREE_ATTACK', '雫1で攻撃力+3（永続）しますか？', { attackerUid: att.uid, targetUid: null, friendlyPlayer: true });
     return;
   }
+  countAmbushAttack(g, att);
   let amount = effAtk(p, att, g);
   if (amount > 1 && !hasPassive(att, 'guts') && !hasPassive(att, 'evade') && g.players.some(pl => pl.field.some(m => m.aura === 'dungeon'))) amount = 1;
   const event: Extract<GameEvent, { type: 'attack' }> = { type: 'attack', player: g.cur, uid: att.uid, targetUid: null, targetPlayer: g.cur, contactDamage: 0 };
@@ -4962,7 +4967,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
     applicable = true;
     if (p.field.length < 2 || p.mana >= effMaxMana(p)) return reason('자신의 몬스터 2체와 빈 마나 수정 1개가 필요합니다', '自分のモンスター2体と空のマナ水晶1個が必要です', 'You need at least 2 monsters and 1 empty mana crystal');
   }
-  if (card.id === "GOBLIN_SETTLEMENT") { applicable=true; if (!p.field.some(isBasicGoblin)) return reason("고블린 또는 돌격 고블린이 필요합니다","自分の場にゴブリンか特攻ゴブリンが必要です", `You need a Goblin or Goblin Raider on your field`); }
+  if (card.id === "GOBLIN_SETTLEMENT") { applicable=true; if (!p.field.some(isGoblinMonster)) return reason("고블린 계열 몬스터가 필요합니다","自分の場に「ゴブリン」系モンスターが必要です", `You need a Goblin-family monster on your field`); }
   if (card.id === "GOBLIN_PARTY") { applicable=true; if (p.field.filter(isGoblinMonster).length < 3) return reason("고블린 계열 몬스터 3체가 필요합니다","ゴブリン系モンスターが3体必要です", "You need 3 Goblin-family monsters on your field"); }
   if (card.id === "BEGINNER_MIND") { applicable=true; if (p.hand.length !== 1) { return reason("  └ 패에 이 카드 외의 카드가 없어야 합니다", "  └ 手札にこのカード以外のカードがない時のみ使用可能", "Your hand must contain no card other than this one"); } }
   if (card.id === "SPACE_RITE") { applicable=true; if (o0.field.length + o0.traps.length + o0.enchants.length < 6) { return reason("  └ 상대 필드의 카드가 6장 미만이라 사용 불가", "  └ 相手の場のカードが6枚未満のため使用不可"); } }
@@ -5798,6 +5803,13 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
 }
 
 // Quest counters belong to an active, public card; pre-activation events never count.
+function countAmbushAttack(g: GameState, attacker: FieldMon): void {
+  if (!hasPassive(attacker, 'ambush')) return;
+  for (const player of g.players) {
+    for (const quest of player.quests ?? []) if (quest.card.quest?.event === 'ambushAttack') quest.progress++;
+  }
+}
+
 function advanceQuest(p: PlayerState, event: QuestEvent, amount = 1): void {
   if (amount <= 0) return;
   for (const q of p.quests ?? []) {
@@ -6061,6 +6073,7 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
   for (const p of g.players) {
     for (const q of [...(p.quests ?? [])]) {
       if (g.over || g.pending) return;
+      if (q.card.id === 'Q_UNDERWORLD_DEAL') continue;
       if (!q.card.quest || q.progress < (q.card.id === "Q_CASTLE" ? DB.Q_CASTLE.quest!.target : q.card.quest.target)) continue;
       if (automaticOnly && (q.card.id === "Q_TRIBE" || q.card.id === "Q_ASSASSIN" || q.card.id === "Q_CHEAT")) continue;
       p.quests!.splice(p.quests!.indexOf(q), 1);
@@ -6068,6 +6081,7 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
       ctx.log(`${cn(q.card)} 퀘스트 달성!`, `${cn(q.card)} クエスト達成！`, `${cn(q.card)}: Quest completed!`);
       switch (q.card.id) {
         case 'QUEST_ATTUNE_STUDY': queueExpansionChoice(g,p,q.card.id,'墓地に得る報酬を選択'); break;
+        case 'Q_ENJOY_THE_SHOW': gainBrand(g, ctx, g.players[1 - side(g, p)], 1); break;
         case 'Q_TOWN': p.hand.push(inst(g, 'DOMINION')); break;
         case 'Q_CHEAT': queueExpansionChoice(g, p, q.card.id, '除外する相手のデッキのカードを選択'); break;
         case 'Q_RIFT': for (let i = 0; i < 7; i++) rmz(p).push(starter(g, 'STARTER_TRASH')); break;
@@ -6438,6 +6452,19 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
       // 암살자(directOnly): always attacks the opponent player directly, never a monster
       if (o.field.length === 0 || hasPassive(m,'ambush')) { ev.push({ type: "attack", player: side(g, p), uid: m.uid, targetUid: null }); resolveAttackCore(g, ctx, m, null); }
       else { g.pending = { kind: "oppMon", hint: "공격할 적 몬스터 선택", hintJa: "攻撃する敵モンスターを選択", reason: "attack", allowCancel: true, data: { attackerUid: m.uid } }; ev.push({ type: "needTarget", pending: g.pending }); }
+      break;
+    }
+    case "claimDeal": {
+      const quest = p.quests?.find(q => q.card.uid === action.uid);
+      if (!quest || !availableDealRewards(quest).some(reward => reward.cost === action.cost)) break;
+      const o = g.players[1 - g.cur];
+      quest.progress -= action.cost;
+      p.quests!.splice(p.quests!.indexOf(quest), 1);
+      if (action.cost === 3) ctx.dealDamage(o, 4, cn(quest.card), cn(quest.card), g.cur);
+      else if (action.cost === 5) o.maxMana = Math.max(o.crystalFloor ?? MIN_MANA, o.maxMana - 1);
+      else p.hand.push(inst(g, 'GUILD_CHEST'));
+      fieldToGrave(g, ctx, p, quest.card);
+      ctx.log(`${cn(quest.card)}: 카운터 ${action.cost}개 소모, 보상 획득`, `${cn(quest.card)}：カウンター${action.cost}個を消費し報酬を獲得`, `${cn(quest.card)}: spend ${action.cost} counters to claim the reward`);
       break;
     }
     case "reorder": {
@@ -6928,7 +6955,7 @@ function tickGoblinEnchants(g: GameState, ctx: Ctx, current: PlayerState): void 
     }
     if (owner !== current || (e.bornTurn ?? -1) >= g.turn) continue;
     if (e.card.ench === 'goblinSettlement') {
-      const targets = owner.field.filter(isBasicGoblin);
+      const targets = owner.field.filter(isGoblinMonster);
       if (targets.length) { enchantFx(g,ctx.ev,owner,e.card); for (const m of targets) m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, 1); }
     }
     if (e.card.ench === 'manaBackflow' && --e.turns <= 0) {

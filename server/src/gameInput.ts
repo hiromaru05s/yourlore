@@ -10,6 +10,7 @@ function isAction(v: unknown): v is Action {
   switch (v.type) {
     case 'play': return index(v.idx) && (v.sourceUid === undefined || uid(v.sourceUid)) && (v.targets === undefined || Array.isArray(v.targets) && v.targets.length <= 99 && v.targets.every(uid));
     case 'buyMarket': case 'buySupply': return index(v.i);
+    case 'claimDeal': return uid(v.uid) && (v.cost === 3 || v.cost === 5 || v.cost === 8);
     case 'attack': return uid(v.uid);
     case 'pick': case 'chooseTarget': return v.uid === null || uid(v.uid);
     case 'reorder': return index(v.from) && index(v.to);

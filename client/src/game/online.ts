@@ -182,7 +182,7 @@ export class OnlineController extends BaseController {
   protected submit(action: Action): void {
     if (!this.started || this.state?.over || action.type!=="surrender"&&this.openingLocked) return;
     const locking = action.type === "play" || action.type === "buyMarket" || action.type === "buySupply"
-      || action.type === "attack" || action.type === "refresh" || action.type === "endTurn";
+      || action.type === "claimDeal" || action.type === "attack" || action.type === "refresh" || action.type === "endTurn";
     if (locking) {
       const now = Date.now();
       if (now - this.echoLockAt < 2_500) return;

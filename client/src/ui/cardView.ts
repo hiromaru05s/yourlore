@@ -34,7 +34,7 @@ export function enchantmentTile(c:CardInst,durationUi:string):HTMLDivElement {
 export function questTile(c:CardInst,progress=0):HTMLDivElement {
   const tile=enchantmentTile(c,'');tile.className='buff-icon buff-icon--quest';
   tile.querySelector<HTMLElement>('.buff-frame')!.style.backgroundImage=`url(${fieldFrameFor('quest')})`;
-  const label=document.createElement('span');label.className='quest-progress';label.textContent=`${progress}/${c.quest?.target??0}`;tile.append(label);
+  const label=document.createElement('span');label.className='quest-progress';label.textContent=c.id === 'Q_UNDERWORLD_DEAL' ? `×${progress}` : `${progress}/${c.quest?.target??0}`;tile.append(label);
   const art=tile.querySelector<HTMLElement>('.buff-art')!;art.classList.add('card-art','has-thumb','art-done');art.style.inset='0';art.style.backgroundSize='cover';
   art.style.overflow='hidden';
   attachCardEffect(tile,c.uid);

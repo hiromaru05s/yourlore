@@ -12,6 +12,7 @@ import {AnesthesiaPresentation} from './anesthesia/runtime';
 import {bindOriginTrap} from './originRite/anchors';
 import {paintSpaceRiteCard,spaceRiteReason,spaceRiteSourceText,syncSpaceRiteStatus} from './spaceRiteStatus';
 import {dualReadyActive} from './monster/dualReady';
+import {availableDealRewards} from '../shared/starterQuests';
 import { questProgressText } from '../shared/cardPresentation';
 import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
@@ -90,6 +91,7 @@ export interface BoardHandlers {
   onAttack(uid: string, targetUid?: string | null): void;
   /** Tried to hit the player directly while enemy monsters are still standing. */
   onBlockedAttack(): void;
+  onDealRewards?(uid: string): void;
   onReorder(from: number, to: number): void;
   onChooseTarget(uid: string | null): void;
   onBuyMarket(i: number): void;
@@ -634,11 +636,21 @@ export class GameView {
       const tile = questTile(q.card,q.progress);
       tile.tabIndex=0;tile.setAttribute("role","button");
       tile.dataset.uid = q.card.uid;
-      const progress = questProgressText(q.progress, q.card.quest?.target ?? 0, getLang());
+      const lang = getLang();
+      const progress = q.card.id === 'Q_UNDERWORLD_DEAL'
+        ? {ja: 'カウンター', ko: '카운터', en: 'Counters'}[lang] + ' ×' + q.progress
+        : questProgressText(q.progress, q.card.quest?.target ?? 0, lang);
       tile.title = `${cardName(q.card)} · ${progress} · ${cardText(q.card)}`;
       tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
       bindZoom(tile, q.card, undefined, progress);
       tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();zoomCard(q.card, undefined, progress);}};
+      if (isMe && myTurn && !pending && availableDealRewards(q).length && this.h.onDealRewards) {
+        const claim = {ja: '報酬を選ぶ', ko: '보상 선택', en: 'Claim reward'}[lang];
+        tile.querySelector('.quest-progress')!.textContent = q.progress + ' · ' + claim;
+        tile.setAttribute('aria-label', tile.getAttribute('aria-label') + ' · ' + claim);
+        tile.onclick = () => this.h.onDealRewards?.(q.card.uid);
+        tile.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); tile.click(); } };
+      }
       sz.appendChild(tile);
     }
     for (let i = p.traps.length + p.enchants.length + (p.quests?.length ?? 0); i < ST_SLOTS; i++) sz.appendChild(this.slotEl());

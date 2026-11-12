@@ -1,3 +1,5 @@
+import {availableDealRewards, type DEAL_REWARDS} from '../shared/starterQuests';
+import type {QuestState} from '../shared/types';
 import { installCardPickerFilters } from './cardPickerFilters';
 import { targetOwner, type PlayIntent } from '../shared/playIntent';
 import '../styles/marketPreview.css';
@@ -58,6 +60,31 @@ function mount(node: HTMLElement): void {
   getRoot().innerHTML = "";
   getRoot().appendChild(ov);
   focus();
+}
+
+export function showDealRewards(quest: QuestState, onClaim: (cost: typeof DEAL_REWARDS[number]['cost']) => void): void {
+  const modal = document.createElement('div');
+  modal.className = 'modal deal-rewards';
+  const title = document.createElement('h2');
+  title.textContent = cardName(quest.card);
+  const balance = document.createElement('p');
+  const lang = getLang();
+  balance.textContent = {ja: 'カウンター', ko: '카운터', en: 'Counters'}[lang] + ' ×' + quest.progress;
+  modal.append(title, balance);
+  for (const reward of availableDealRewards(quest)) {
+    const button = document.createElement('button');
+    button.className = 'btn btn-primary';
+    button.textContent = '−' + reward.cost + '　' + reward[lang];
+    button.onclick = () => { closeOverlay(); onClaim(reward.cost); };
+    modal.append(button);
+  }
+  const cancel = document.createElement('button');
+  cancel.className = 'btn btn-ghost';
+  cancel.textContent = t('common.cancel');
+  cancel.onclick = closeOverlay;
+  modal.append(cancel);
+  modal.onkeydown = event => { if (event.key === 'Escape') closeOverlay(); };
+  mount(modal);
 }
 
 /** YES/NO confirm. Resolves true on confirm. */

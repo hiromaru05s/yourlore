@@ -48,7 +48,7 @@ export interface CardDef {
   textEn?: string; // English effect text (falls back to text)
 }
 
-export type QuestEvent = "attunePlay" | "dice" | "town" | "exile" | "opponentDamage" | "emptyTurn" | "healthGain" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
+export type QuestEvent = "healOccurrence" | "ambushAttack" | "attunePlay" | "dice" | "town" | "exile" | "opponentDamage" | "emptyTurn" | "healthGain" | "tribeSummon" | "castleTurn" | "decayKill" | "assassinHit" | "spellPlay";
 export interface QuestState {
   card: CardInst;
   progress: number;
@@ -231,6 +231,7 @@ export interface TribePactDefeat {
 }
 
 export interface GameState {
+  starterQuestReworkApplied?: boolean;
   armyAttuneApplied?: boolean;
   heartFirstUid?: string;
   heartUsed?: boolean;
@@ -301,6 +302,7 @@ export type Action =
   | { type: "buySupply"; i: number }
   | { type: "refresh" }
   | { type: "attack"; uid: string }
+  | { type: "claimDeal"; uid: string; cost: 3 | 5 | 8 }
   | { type: "reorder"; from: number; to: number } // rearrange own field monsters (cosmetic, no rules impact)
   | { type: "chooseTarget"; uid: string | null } // null = cancel
   | { type: "pick"; uid: string | null } // resolve seek / recall (null = cancel)

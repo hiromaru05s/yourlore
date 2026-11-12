@@ -24,7 +24,21 @@ try {
  test('Origin retaliates against an enemy monster effect',()=>{let g=fresh();g.players[1].enchants=[ench('GOBLIN_ORIGIN')];g.players[0].field=[mon('M1')];g.pending={kind:'oppBoard',reason:'divine',allowCancel:true,hint:'',data:{val:1,anySide:true}};g=pick(g,g.players[1].enchants[0].card.uid);assert.equal(g.players[1].enchants.length,0);assert.equal(g.players[0].field.length,0);});
  test('Party respects the universal three-crystal minimum',()=>{for(const n of [3,4,8]){let g=fresh();g.players[0].field=[mon('GOBLIN'),mon('ELITE_GOBLIN'),mon('ELITE_GOBLIN')];g.players[1].maxMana=n;g=play(g,'GOBLIN_PARTY');assert.equal(g.players[1].maxMana,Math.max(3,n-1));}});
  test('Goblin Forge and Icarus spells resolve their targeted permanent effects',()=>{let g=fresh();g.players[0].hp=40;g.players[0].field=[mon('ELITE_GOBLIN')];const uid=g.players[0].field[0].uid;g=play(g,'FORGE');assert.equal(g.players[0].hp,37);g=pick(g,uid);assert.equal(g.players[0].field[0].atkMod,4);assert.equal(g.players[0].field[0].defMod,2);g=play(g,'ICARUS_SHOES');g=pick(g,uid);assert.equal(g.players[0].field[0].mult,2);assert(hasPassive(g.players[0].field[0],'dual'));g=play(g,'ICARUS_WINGS');g=pick(g,uid);assert(hasPassive(g.players[0].field[0],'evade'));});
- test('settlement activation condition checked before payment and correct owner tick',()=>{let g=fresh();const c=card('GOBLIN_SETTLEMENT');g.players[0].hand=[c];const blocked=step(g,{type:'play',idx:0});assert.equal(blocked.players[0].mana,30);assert.equal(blocked.players[0].hand.length,1);g.players[0].field=[mon('GOBLIN'),mon('GOBLIN_RAIDER'),mon('GOBLIN_LEADER')];g.players[1].field=[mon('GOBLIN')];g=step(g,{type:'play',idx:0});g=end(g);assert.equal(g.players[0].field[0].defMod,0);g=end(g);assert.deepEqual(g.players[0].field.map(m=>m.defMod),[1,0]);assert.equal(g.players[1].field[0].defMod,0);});
+ test('every Goblin monster enables Settlement and gains HP alongside it',()=>{
+   const goblins = ['GOBLIN','GOBLIN_RAIDER','GOBLIN_LEADER','GOBLIN_KING','ELITE_GOBLIN'];
+   assert.equal(DB.GOBLIN_SETTLEMENT.cost,3);
+   assert.equal(DB.BATTLEFIELD.cost,1);
+   for (const id of goblins) {
+     let g=fresh();
+     g.players[0].field=[mon(id),mon('M1')];
+     g=play(g,'GOBLIN_SETTLEMENT');
+     assert.equal(g.players[0].mana,27);
+     g=end(end(g));
+     assert.equal(g.players[0].field.find(m=>m.id==='M1').defMod,0);
+     if(id!=='GOBLIN_RAIDER') assert.equal(g.players[0].field.find(m=>m.id===id).defMod,1);
+   }
+ });
+ test('settlement activation condition checked before payment and correct owner tick',()=>{let g=fresh();const c=card('GOBLIN_SETTLEMENT');g.players[0].hand=[c];const blocked=step(g,{type:'play',idx:0});assert.equal(blocked.players[0].mana,30);assert.equal(blocked.players[0].hand.length,1);g.players[0].field=[mon('GOBLIN'),mon('GOBLIN_RAIDER'),mon('GOBLIN_LEADER')];g.players[1].field=[mon('GOBLIN')];g=step(g,{type:'play',idx:0});g=end(g);assert.equal(g.players[0].field[0].defMod,0);g=end(g);assert.deepEqual(g.players[0].field.map(m=>m.defMod),[1,1]);assert.equal(g.players[1].field[0].defMod,0);});
  const destroySpell=Object.values(DB).find(c=>c.act==='destroyEnch');assert(destroySpell);
  test('settlement spell destruction retaliates for eight, including own spell',()=>{for(const own of [true,false]){let g=fresh();const who=own?0:1;g.players[who].enchants=[ench('GOBLIN_SETTLEMENT')];if(own)g.players[1].enchants=[ench('WORLD_CARE')];const uid=g.players[who].enchants[0].card.uid;g=play(g,destroySpell.id);g=pick(g,uid);assert.equal(g.players[1-who].hp,92,JSON.stringify({own,spell:destroySpell,pending:g.pending,enchants:g.players[who].enchants,log:g.log?.slice(-4)}));assert.equal(g.players[who].enchants.length,0);}});
  test('settlement monster destruction and pure exile do not retaliate',()=>{for(const reason of ['divine','Q_ASSASSIN']){let g=fresh();g.players[1].enchants=[ench('GOBLIN_SETTLEMENT')];const uid=g.players[1].enchants[0].card.uid;g.pending=reason==='divine'?{kind:'oppBoard',reason,allowCancel:true,hint:'',data:{val:1,anySide:true}}:{kind:'cardChoice',reason,owner:0,allowCancel:false,hint:''};g=pick(g,uid);assert.equal(g.players[0].hp,100);assert.equal(g.players[1].enchants.length,0);}});

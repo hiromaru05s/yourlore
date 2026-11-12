@@ -6,7 +6,7 @@ import path from 'node:path';
 const dir = await mkdtemp(path.join(tmpdir(), 'lore-quest-quick-'));
 try {
   await build({ stdin: { contents: `export * from './client/src/shared/cards'; export * from './client/src/shared/engine'; export * from './client/src/shared/protocol'; export { GameRoom } from './server/src/gameRoom'; export {restoreReworkedCards} from './server/src/reworkedCardSnapshot'; export {candidates, greedyDecide} from './client/src/shared/bot';`, resolveDir: process.cwd() }, bundle: true, platform: 'node', format: 'esm', outfile: path.join(dir, 'game.mjs') });
-  const { DB, STARTERS, BUYABLE_POOL, GameRoom, restoreReworkedCards, createGame, reduce, effectChoices, actingSide, playCost, effAtk, hasPassive, purchaseAllowed, candidates, greedyDecide, redactFor, frameFor } = await import(path.join(dir, 'game.mjs'));
+  const { DB, STARTERS, DECK_POOL, BUYABLE_POOL, GameRoom, restoreReworkedCards, createGame, reduce, effectChoices, actingSide, playCost, effAtk, hasPassive, purchaseAllowed, candidates, greedyDecide, redactFor, frameFor } = await import(path.join(dir, 'game.mjs'));
   let seq = 0;
   const card = id => ({ ...structuredClone(DB[id] ?? STARTERS[id]), uid: `fixture-${++seq}` });
   const mon = id => ({ ...card(id), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: 0, attacksUsed: 0 });
@@ -19,11 +19,66 @@ try {
   const activate = (g,id,s=0) => { g.cur=s; g.players[s].hand.push(card(id)); return step(g,{type:'play',idx:g.players[s].hand.length-1}); };
   const buy = (g,id,from='buyMarket') => { if(from==='buyMarket')g.market[0]=card(id);else g.players[g.cur].supply[0]=card(id); return step(g,{type:from,i:0}); };
   const pick = (g,uid) => step(g,{type:'pick',uid});
-  assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,12);
+  assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,14);
   assert.equal(Object.values(DB).filter(c=>c.quick).length,17);
   assert(Object.values(DB).filter(c=>c.quick).every(c=>c.t==='spell'));
   assert.equal(frameFor('quest'),'/art/biblion/modular/base-quest-print.webp');
 
+  for (const [id,cost] of [['Q_ENJOY_THE_SHOW',4],['Q_UNDERWORLD_DEAL',1]]) {
+    assert(DECK_POOL.includes(id));
+    assert(!BUYABLE_POOL.includes(id));
+    assert.equal(playCost(card(id)),cost);
+  }
+  {
+    const g=fresh(), settlement=card('GOBLIN_SETTLEMENT'), battlefield=card('BATTLEFIELD');
+    delete g.starterQuestReworkApplied;
+    g.players[0].hand=[{...settlement,cost:4}];
+    g.players[1].deck=[{...battlefield,cost:2}];
+    restoreReworkedCards(g);
+    assert.deepEqual(g.players[0].hand,[settlement]);
+    assert.deepEqual(g.players[1].deck,[battlefield]);
+  }
+  {
+    let g = activate(fresh(), 'Q_ENJOY_THE_SHOW');
+    for (let i = 1; i <= 8; i++) {
+      g.players[0].mana = 20;
+      g = buy(g, 'QUICK_ATTUNE');
+      if (i < 8) assert.equal(g.players[0].quests[0].progress, i);
+    }
+    assert.equal(g.players[1].brand, 1);
+    assert.equal(g.players[0].quests.length, 0);
+    assert(g.players[0].removed.some(c => c.id === 'Q_ENJOY_THE_SHOW'));
+  }
+  {
+    let g = activate(fresh(), 'Q_UNDERWORLD_DEAL');
+    const uid = g.players[0].quests[0].card.uid;
+    g = activate(g, 'Q_UNDERWORLD_DEAL', 1);
+    const attacker = mon('M1');
+    attacker.passivesG = ['ambush'];
+    g.players[1].field = [attacker];
+    g.players[0].shield = 20;
+    g = step(g, {type:'attack', uid:attacker.uid});
+    assert.deepEqual(g.players.map(p => p.quests[0].progress), [1,1]);
+    assert.equal(g.players[0].hp, 100);
+    g.players[0].quests[0].progress = 8;
+    const claim = cost => ({type:'claimDeal', uid, cost});
+    assert.equal(step(g, claim(8)).players[0].quests.length, 1);
+    g.cur = 0;
+    for (const cost of [3,5,8]) {
+      g.players[0].quests[0].progress = cost - 1;
+      assert.equal(step(g, claim(cost)).players[0].quests.length, 1);
+      g.players[0].quests[0].progress = cost;
+      const result = step(g, claim(cost));
+      assert.equal(result.players[0].quests.length, 0);
+      assert.equal(result.players[0].discard.filter(c => c.uid === uid).length, 1);
+      assert.equal(result.players[1].hp, g.players[1].hp - (cost === 3 ? 4 : 0));
+      assert.equal(result.players[1].maxMana, g.players[1].maxMana - (cost === 5 ? 1 : 0));
+      assert.equal(result.players[0].hand.filter(c => c.id === 'GUILD_CHEST').length, cost === 8 ? 1 : 0);
+      assert.deepEqual(step(result, claim(cost)).players, result.players);
+    }
+    const waiting = step(g, {type:'endTurn'});
+    assert.equal(waiting.players[0].quests[0].progress, 8);
+  }
   for (const from of ['buyMarket','buySupply']) {
     let g=fresh();g=activate(g,'Q_WINTER');g=activate(g,'Q_MANA');const p=g.players[0];const mana=p.mana, hp=p.hp, mm=p.maxMana;
     g=buy(g,'QUICK_ATTUNE',from);

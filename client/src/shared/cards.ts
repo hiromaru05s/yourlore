@@ -3,6 +3,7 @@ import { applySpellRework74 } from './spellRework74';
 import { applyLegacyCardRework } from './legacyCardRework';
 import { ARCANE_CARDS } from './riftReworkCards';
 import { DICE_SET_CARDS } from './diceCards';
+import { STARTER_QUESTS } from './starterQuests';
 import { GOBLIN_CARDS, GOBLIN_STARTERS } from './goblinCards';
 import { RIFT_MATTER, RIFT_METALIGHT } from './riftMatter';
 import { applyBalance60 } from './balance60';
@@ -2379,7 +2380,8 @@ DB.SORTER.val = 1;
 RANDOM_CARDS.add('SORTER');
 DB.RIFT_MATTER = RIFT_MATTER;
 DB.RIFT_METALIGHT = RIFT_METALIGHT;
-DECK_POOL.push(...GOBLIN_STARTERS);
+for (const card of STARTER_QUESTS) DB[card.id] = card;
+DECK_POOL.push(...GOBLIN_STARTERS, ...STARTER_QUESTS.map(card => card.id));
 applyLegacyCardRework(DB);
 applySpellRework74(DB);
 Object.assign(DB.DIVINE, {atk: 30, def: 30, aura: undefined, passive: [...new Set([...cardPassives(DB.DIVINE), 'majesty'])]});
@@ -2432,6 +2434,7 @@ export const RELATED_MANUAL: Record<string, string[]> = {
   ASSASSIN_SQUAD: ["ASSASSIN2"],
   ASSASSIN3: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN4", "GUILD_HALL", "GUILD_HQ"], // 상급(v36): 덱 구성에 다른 암살자 카드
   ASSASSIN4: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "GUILD_HALL", "GUILD_HQ"], // 특급(v36): 서로 다른 암살자 3종
+  Q_UNDERWORLD_DEAL: ["GUILD_CHEST"],
   GUILD_CHEST: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"],  // 암살자 길드 보물상자
   GUILD_HQ: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "ASSASSIN4", "GUILD_HALL"],
   GOLEM3: ["GOLEM1", "GOLEM2", "M10", "NGA3", "NWL3", "MANA_GIANT"], // 골램 킹: '골램' 계열 체크

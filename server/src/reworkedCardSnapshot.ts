@@ -16,12 +16,18 @@ export function restoreReworkedCards(game: GameState): void {
   const updateCastle = !game.castleReworkApplied;
   const updateQuests = !game.questReworkApplied;
   const updateArmy = !game.armyAttuneApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy)) return;
+  const updateStarterCosts = !game.starterQuestReworkApplied;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts)) return;
+  game.starterQuestReworkApplied = true;
   game.armyAttuneApplied = true;
   game.questReworkApplied = true;
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateStarterCosts && (card.id === 'GOBLIN_SETTLEMENT' || card.id === 'BATTLEFIELD')) {
+      const def = DB[card.id];
+      Object.assign(card, {cost: def.cost, text: def.text, textJa: def.textJa, textEn: def.textEn});
+    }
     const revisedQuest = updateQuests && questCards.has(card.id);
     if (updateArmy) {
       const current = DB[card.id] ?? STARTERS[card.id];

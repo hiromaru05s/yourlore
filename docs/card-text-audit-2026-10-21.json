@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 420,
+  "count": 422,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -8877,29 +8877,27 @@
     },
     "GOBLIN_SETTLEMENT": {
       "nameJa": "ゴブリン集落",
-      "status": "reworded",
+      "status": "reviewed-starter-quest-rework",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "74d44f3339a8ed6f08fec63c986117979be7ab238952c749b90a8b487c065239",
-      "textSha256": "7937ebefedf91db736df2077a38fa6bbe47da2cfa38901398f46f6ae47cbb68a",
+      "definitionSha256": "a3aad392df40a19818c73ce30dbccba98350d272ba0d16a6e0768f154c527b06",
+      "textSha256": "b2eec5edff1b2398c98d0d7894f118616e029624c424e538608e6c4255ba6beb",
       "hooks": {
         "ench": "goblinSettlement"
       },
       "before": {
-        "ja": "【発動条件】自分の場に「ゴブリン」か「特攻ゴブリン」がいる。\n\n【自分のターン開始時】自分の場の「ゴブリン」「特攻ゴブリン」の体力+1（持続）。\n\n【破壊時】魔法カードの効果で破壊された場合、相手に8ダメージを与える。",
-        "ko": "【발동 조건】자신의 필드에 고블린 또는 돌격 고블린이 있다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 고블린과 돌격 고블린의 체력 +1(지속).\n\n【파괴 시】마법 카드의 효과로 파괴됐다면 상대에게 8 데미지를 준다.",
-        "en": "【Play Requirement】You control a Goblin or Goblin Raider.\n\n【At the Start of Your Turn】Your Goblins and Goblin Raiders on the field gain +1 HP (lasting).\n\n【On Destruction】If destroyed by a spell card’s effect, deal 8 damage to the opponent."
-      },
-      "after": {
         "ja": "【発動条件】自分の場に「ゴブリン」か「特攻ゴブリン」がいる。\n\n【自分のターン開始時】自分の場の「ゴブリン」「特攻ゴブリン」の体力+1（対象が場を離れるまで）。\n\n【破壊時】魔法カードの効果で破壊された場合、相手に8ダメージを与える。",
         "ko": "【발동 조건】자신의 필드에 고블린 또는 돌격 고블린이 있다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 고블린과 돌격 고블린의 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【파괴 시】마법 카드의 효과로 파괴됐다면 상대에게 8 데미지를 준다.",
         "en": "【Play Requirement】You control a Goblin or Goblin Raider.\n\n【At the Start of Your Turn】Your Goblins and Goblin Raiders on the field gain +1 HP (until the affected monster leaves the field).\n\n【On Destruction】If destroyed by a spell card’s effect, deal 8 damage to the opponent."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【発動条件】自分の場に「ゴブリン」系モンスターがいる。\n\n【自分のターン開始時】自分の場の「ゴブリン」系モンスター全ての体力+1（対象が場を離れるまで）。\n\n【破壊時】魔法カードの効果で破壊された場合、相手に8ダメージを与える。",
+        "ko": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 있다.\n\n【자신의 턴 시작 시】자신의 필드에 있는 모든 고블린 계열 몬스터의 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【파괴 시】마법 카드의 효과로 파괴됐다면 상대에게 8 데미지를 준다.",
+        "en": "【Play Requirement】You control a Goblin-family monster.\n\n【At the Start of Your Turn】All your Goblin-family monsters on the field gain +1 HP (until the affected monster leaves the field).\n\n【On Destruction】If destroyed by a spell card’s effect, deal 8 damage to the opponent."
+      }
     },
     "RELIC_PROTECTION": {
       "nameJa": "神器の加護",
@@ -8967,18 +8965,18 @@
     },
     "BATTLEFIELD": {
       "nameJa": "戦場",
-      "status": "added-reviewed-2026-10-23",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "5b71899197f14ce57c8674edc66ba7ad93c9525d1585ae78eab4cf9c27555ae9",
+      "status": "reviewed-starter-quest-rework",
+      "changedLocales": [],
+      "definitionSha256": "bf945c8e6b1f117b08c0973bc1769818eb3d2b05dd46a8803051cd8fa46bead0",
       "textSha256": "22f813e386d273fdb7117fb1f8bccb1c32fcca4e8dce92a3df43c99a01a90df6",
       "hooks": {
         "ench": "battlefield"
       },
-      "before": null,
+      "before": {
+        "ja": "【各ターン開始時】そのターンのプレイヤーに2ダメージを与える。",
+        "ko": "【각 턴 시작 시】그 턴의 플레이어에게 2 데미지를 준다.",
+        "en": "【At the Start of Each Turn】Deal 2 damage to the player whose turn is starting."
+      },
       "after": {
         "ja": "【各ターン開始時】そのターンのプレイヤーに2ダメージを与える。",
         "ko": "【각 턴 시작 시】그 턴의 플레이어에게 2 데미지를 준다.",
@@ -10047,6 +10045,52 @@
       },
       "reviewedAt": "2026-11-11",
       "reviewNote": "Army and Attune balance update."
+    },
+    "Q_ENJOY_THE_SHOW": {
+      "nameJa": "高みの見物",
+      "status": "reviewed-starter-quest-rework",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "9e23189a5c021d1cd18f4ae28c609f71b5d184480632a020a1d7b0ffacf2d1cd",
+      "textSha256": "4b41f73417bba4005a37bcc4253358b2e375652c0a82a2ba934256d82a3c85e1",
+      "hooks": {
+        "quest": {
+          "event": "healOccurrence",
+          "target": 8
+        }
+      },
+      "before": {},
+      "after": {
+        "ja": "【達成条件】設置後、自分の体力を8回回復する。\n\n【達成時】相手プレイヤーに烙印カウンターを1個付与する。",
+        "ko": "【달성 조건】설치 후 자신의 체력을 8회 회복한다.\n\n【달성 시】상대 플레이어에게 낙인 카운터 1개를 부여한다.",
+        "en": "【Completion Requirement】After deployment, restore your HP 8 times.\n\n【On Completion】Give the opponent 1 Brand counter."
+      }
+    },
+    "Q_UNDERWORLD_DEAL": {
+      "nameJa": "裏世界の取引",
+      "status": "reviewed-starter-quest-rework",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "e7d3173d6753759ef95e6ccc9eec043f920c3a3abfd3c2a4e889eaae3941d215",
+      "textSha256": "7d341279b9ee6f6b4ac33f3dfe9cc1a9bc688c4dfdbb68dfa9aff589c7739c65",
+      "hooks": {
+        "quest": {
+          "event": "ambushAttack",
+          "target": 8
+        }
+      },
+      "before": {},
+      "after": {
+        "ja": "【場にある間】どちらかの場の「暗襲」を持つモンスターが攻撃するたび、このカードにカウンターを1個付与する。\n\n【自分のターン中】カウンターを消費して次の報酬を1つ選び、このカードを墓地に送ることができる。\n3個：相手プレイヤーに4ダメージを与える。\n5個：相手プレイヤーのマナ水晶を1減らす。\n8個：「アサシンギルドの宝箱」1枚を手札に加える。",
+        "ko": "【필드에 있는 동안】양쪽 필드에서 암습을 가진 몬스터가 공격할 때마다 이 카드에 카운터 1개를 부여한다.\n\n【자신의 턴 중】카운터를 소모하여 다음 보상 중 1개를 선택하고 이 카드를 묘지로 보낼 수 있다.\n3개: 상대 플레이어에게 4 데미지를 준다.\n5개: 상대 플레이어의 마나 수정을 1 줄인다.\n8개: 암살자 길드의 보물상자 1장을 패에 넣는다.",
+        "en": "【While on the Field】Whenever a monster on either field with Infiltrate attacks, put 1 counter on this card.\n\n【During Your Turn】You may spend counters to claim 1 reward and send this card to your graveyard.\n3 counters: Deal 4 damage to the opponent.\n5 counters: The opponent loses 1 mana crystal.\n8 counters: Add 1 Assassin Guild's Chest to your hand."
+      }
     }
   },
   "keywords": {
