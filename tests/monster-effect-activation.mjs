@@ -39,7 +39,7 @@ try {
    const g=fresh(owner),p=g.players[owner],m=card(id);p.hand=[m];const r=run(`summon:${owner}:${id}`,g,m,{type:'play',idx:0},0);
    if(id==='FARM_KEEPER')r.state.players[owner].enchants=[{card:card('BREWING'),turns:99,bornTurn:1}];
    if(id==='MIMIC_HUNTER')r.state.players[1-owner].field=[mon('MIMIC')];
-   run(`end:${owner}:${id}`,r.state,m,{type:'endTurn'},1);
+   run(`end:${owner}:${id}`,r.state,m,{type:'endTurn'},id==='MIMIC_HUNTER'?0:1);
   }
   // Applied callbacks identify every source, not only the first matching card.
   for(const id of ['HEXER1','GM5_2','PRIEST','CASTLE']){

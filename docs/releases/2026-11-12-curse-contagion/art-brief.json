@@ -1,0 +1,27 @@
+{
+  "tool": "Built-in ImageGen",
+  "referenceCommit": "b59348bec405d1dedc61181a9815e118eee2fd71",
+  "referenceCards": [
+    "CURSE",
+    "BLACK_CURSE",
+    "QUICK_CURSE",
+    "GS5_3",
+    "D_BLACK",
+    "HEXER1",
+    "HEXER2",
+    "HEXER3",
+    "NHEX",
+    "BLOOD_SECRET",
+    "TREASON",
+    "ESSENCE_OF_LIFE",
+    "MANA_HEART",
+    "SWORD_GRAVE_WRAITH",
+    "FATE_WRAITH",
+    "RIFT_MATTER",
+    "VOID_RITE",
+    "SOUL_HARVEST",
+    "BLACK_NOVA",
+    "ATTUNE_DISSECTION"
+  ],
+  "prompt": "Single LORE collectible spell-card inner artwork, nearly square aspect 1.095:1, full bleed, no border or lettering. Reference sheet is for painterly style, palette, brush shapes, material language only; do not produce a collage. Curse Contagion: one small cracked bone-white curse mask resting on a slate mortuary ledger; a stain unspools from its single fissure as dark plum ink across a fold towards another sheaf of parchment, where two smaller mask-like imprints are starting to appear. The stain physically connects the source and affected pages. A creeping third stain at the far edge, minimal ornate detail. Major diagonal, large ivory shape against oxblood and bruised violet, soft cool moonlight through ironwork. Atmospheric and suggestive rather than realistic, chunky readable painted forms like the existing Curse, dark fairytale. No human hands, characters, medical diagram, text, numbered marks, UI, logo or glossy 3D rendering."
+}

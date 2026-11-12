@@ -1,0 +1,32 @@
+{
+  "referenceCommit": "b59348bec405d1dedc61181a9815e118eee2fd71",
+  "referenceCards": [
+    "SOLDIER2",
+    "INFKNIGHT",
+    "CASTLE",
+    "HEAVY_GUNNER",
+    "MERCENARY",
+    "GUNNER",
+    "FORTIFY_CASTLE",
+    "SIEGE_CASTLE",
+    "MUSTER_DIE",
+    "COUP",
+    "QUICK_ESCORT",
+    "WANTED",
+    "E2",
+    "MARKET_FEVER",
+    "SHARED_MARKET",
+    "BUDGET",
+    "TREASON",
+    "LAND_GRANT",
+    "QUICK_INSURANCE",
+    "ESSENCE_OF_LIFE"
+  ],
+  "tool": "Built-in ImageGen",
+  "style": "Full-bleed 1472×1344 spell illustrations in the hand-painted LORE style. Use objects, confident brush strokes and clear silhouettes, without faces, hands, lettering or frames.",
+  "subjects": {
+    "MIND_GAME": "A single ivory knight chess piece facing two distinct enemy pieces on a worn indigo campaign map. Its dramatic shadow forks into two potential attack paths, one destination caught in a sliver of reflected sunlight. Oblique close composition, navy, ivory, dusty gold.",
+    "TOLL_GATE": "A lowered iron toll bar in a stone city gate; a single antique bronze coin falling into an open brass collection box in the foreground. The shadow of marching spears crosses the road behind it. Late amber light, aged oak, red wax and stone gray.",
+    "TRUCE": "An unmarked ivory truce pennant tied between two grounded, opposing halberds. The blades are lowered, their ribbons hanging still above a quiet misty bridge. One small dark assassin dagger concealed in the stones near the edge. Restrained pale fog, muted olive, russet and silver; the peaceful pennant is the unmistakable focal point."
+  }
+}

@@ -1,3 +1,5 @@
+import {DIPLOMACY_CARDS} from './diplomacyCards';
+import {CURSE_CONTAGION} from './curseContagion';
 import {MERCENARY_CARDS} from './mercenaryCards';
 import { STARTER_QUESTS } from './starterQuests';
 import {HEXER_SPELLS} from './hexerCards';
@@ -267,9 +269,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the Start of Your Turn】Deal 4 damage to the opponent."
   },
   "GS5_3": {
-    "ja": "【発動時】新しい「呪い」2枚を相手の墓地に追加する。その後、相手のデッキ・墓地・場にある「魔族」モンスター1枚につき、相手プレイヤーに16ダメージを与える。",
-    "ko": "【발동 시】새로운 저주 2장을 상대 묘지에 추가한다. 그 후 상대 덱·묘지·필드의 마족 몬스터 1장당 상대 플레이어에게 16 데미지를 준다.",
-    "en": "【On Cast】Add 2 new Curses to the opponent’s graveyard. Then deal 16 damage to the opponent per Demonkin monster in their deck, graveyard, and field."
+    "ja": "【発動時】自分の烙印を1個、呪印を4個減らす。その後、相手のデッキ・墓地・場にある魔族・黒魔術師・呪術師モンスター1体につき、相手に12ダメージを与える。",
+    "ko": "【발동 시】자신의 낙인을 1개, 주인을 4개 줄인다. 그 후 상대 덱·묘지·필드의 마족·흑마술사·주술사 몬스터 1장당 상대에게 12 데미지를 준다.",
+    "en": "【On Cast】Remove 1 of your Brands and 4 of your Curse Seals. Then deal 12 damage to the opponent for each Demonkin, Black Sorceress or Hexer monster in their deck, graveyard and field."
   },
   "GS5_4": {
     "ja": "【発動時】自分の場のモンスター1体を選び、このターン終了までその攻撃力+8。",
@@ -457,9 +459,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】Draw 6 cards. You take 15 damage."
   },
   "DISARM1": {
-    "ja": "【発動条件】相手の場に永続魔法がある。\n\n【発動時】両方の場から永続魔法を1枚まで選んで破壊する。",
-    "ko": "【발동 조건】상대의 필드에 영구 마법이 있다.\n\n【발동 시】양쪽 필드에서 영구 마법 최대 1장을 선택해 파괴한다.",
-    "en": "【Play Requirement】The opponent controls a persistent spell.\n\n【On Cast】Choose and destroy up to 1 persistent spell on either field."
+    "ja": "【発動時】両方の場から永続魔法を1枚まで選んで破壊する。",
+    "ko": "【발동 시】양쪽 필드에서 영구 마법 최대 1장을 선택해 파괴한다.",
+    "en": "【On Cast】Choose and destroy up to 1 persistent spell on either field."
   },
   "DISARM2": {
     "ja": "【発動条件】相手の場に永続魔法がある。\n\n【発動時】両方の場から永続魔法を2枚まで選んで破壊する。",
@@ -1502,9 +1504,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【At the End of Your Turn】If you control Farm or Brewing, summon 3 Scarecrows.\n\n【While on the Field】Your Farmers have +5 max HP. This increase ends when this monster leaves the field."
   },
   "MIMIC_HUNTER": {
-    "ja": "【自分のターン終了時】両方の場の「ミミック」を全て破壊する（同名カードのみ）。",
-    "ko": "【자신의 턴 종료 시】양쪽 필드의 미믹을 모두 파괴한다(같은 이름 카드만).",
-    "en": "【At the End of Your Turn】Destroy all monsters named Mimic on both fields; other Mimic-family names are unaffected."
+    "ja": "【場にある間】両方の場のミミック系モンスターは攻撃できない。\n\n【攻撃を受ける時】攻撃してきたミミック系モンスターに、戦闘のダメージ計算前に6ダメージを与える。",
+    "ko": "【필드에 있는 동안】양쪽 필드의 미믹 계열 몬스터는 공격할 수 없다.\n\n【공격받을 때】공격한 미믹 계열 몬스터에게 전투 데미지 계산 전에 6 데미지를 준다.",
+    "en": "【While on the Field】Mimic-family monsters on either field cannot attack.\n\n【When Attacked】Deal 6 damage to an attacking Mimic-family monster before combat damage is calculated."
   },
   "QUICK_HELLFIRE": {
     "ja": "【購入時】相手に烙印カウンターがなければ1個、既にあれば2個を付与する。",
@@ -1532,9 +1534,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【Completion Requirement】After deployment, roll a total of 8 dice.\n\n【On Completion】Choose 1 card in the opponent’s deck and send it to their Rift."
   },
   "Q_TOWN": {
-    "ja": "【達成条件】設置後、「兵士」の召喚・「カジノ」の召喚・「ワイン」の使用がそれぞれ1回以上行われる（どちらのプレイヤーでも数える）。\n\n【達成時】新しい「支配」1枚を自分の手札に加える。",
-    "ko": "【달성 조건】설치 후 병사 소환·카지노 소환·와인 사용이 각각 1회 이상 발생(어느 플레이어든 계산).\n\n【달성 시】새로운 지배 1장을 자신의 패에 추가한다.",
-    "en": "【Completion Requirement】After deployment, a Soldier is summoned, a Casino is summoned, and Wine is played, at least 1 time each; either player's actions count.\n\n【On Completion】Create 1 new Dominion in your hand."
+    "ja": "【達成条件】設置後、自分が「兵士」の召喚・「カジノ」の召喚・「ワイン」の使用のうち異なる2種類を行う。\n\n【達成時】新しい「支配」1枚を自分の手札に加える。",
+    "ko": "【달성 조건】설치 후 자신이 병사 소환·카지노 소환·와인 사용 중 서로 다른 2가지를 달성한다.\n\n【달성 시】새로운 지배 1장을 자신의 패에 추가한다.",
+    "en": "【Completion Requirement】After deployment, complete 2 distinct actions yourself: summon Soldier, summon Casino or play Wine.\n\n【On Completion】Create 1 new Dominion in your hand."
   },
   "DOMINION": {
     "ja": "【発動時】カードを2枚引く。また、次の相手のターンをスキップする。「支配」による未消化のスキップ予約は1回まで。\n\n【回数制限】各プレイヤーは同名カード合計でこのゲーム中に3回まで使用できる。無効になった使用も回数に含む。",
@@ -1552,9 +1554,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Cast】All monsters currently on your field get +2 ATK (until the affected monster leaves the field). Soldiers, Knights and Cavalry gain +1 more."
   },
   "QUICK_AID": {
-    "ja": "【購入条件】直前の相手のターンに、異なる個体の相手モンスター3体以上から直接攻撃のダメージを受けた（同名可）。\n\n【購入時】自分の体力を25回復する。",
-    "ko": "【구매 조건】직전 상대 턴에 서로 다른 상대 몬스터 개체 3체 이상에게 직접 공격 데미지를 받았다(동명 가능).\n\n【구매 시】자신의 체력을 25 회복한다.",
-    "en": "【Purchase Requirement】During the last opponent turn, at least 3 different enemy monsters dealt direct-attack damage to you; they may share a name.\n\n【On Purchase】Restore 25 of your HP."
+    "ja": "【購入条件】直前のターンに自分が受けたダメージが合計10以上。\n\n【購入時】自分の体力を20回復する。",
+    "ko": "【구매 조건】바로 전 턴에 자신이 받은 피해가 합계 10 이상이다.\n\n【구매 시】자신의 체력을 20 회복한다.",
+    "en": "【Purchase Requirement】You took at least 10 total damage during the immediately preceding turn.\n\n【On Purchase】Restore 20 of your HP."
   },
   "EMPTY_MIND": {
     "ja": "【購入条件】自分のデッキ構成に魔法が9枚以上ある。\n\n【発動条件】このターン、自分が既に魔法を4枚以上使用している。\n\n【発動時】新しい「創造」1枚を自分の手札に加える。",
@@ -1607,9 +1609,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【On Summon】Create 2 new Curses in the opponent's graveyard.\n\n【When You Play a Spell】Whenever you play Black Magic, increase your mana crystals by 1. This effect triggers even if the Black Magic spell is negated."
   },
   "QUICK_CURSE": {
-    "ja": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。 その後、相手のリフトを除くデッキ構成の「呪い」1枚につき、相手プレイヤーに1ダメージを与える。",
-    "ko": "【구매 시】상대의 리프트에 있는 저주 1장당 새로운 저주 1장을 상대의 묘지에 추가한다. 그 후 상대 리프트를 제외한 덱 구성의 저주 1장당 상대 플레이어에게 1 데미지를 준다.",
-    "en": "【On Purchase】For each Curse in the opponent’s Rift, create 1 new Curse in their graveyard. Then deal 1 damage to the opponent per Curse in their deck composition, excluding their Rift."
+    "ja": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。 相手のリフトとデッキ構成の両方に「呪い」がなかった場合は、相手の墓地に新しい「呪い」を2枚追加する。その後、相手のリフトを除くデッキ構成の「呪い」1枚につき、相手プレイヤーに1ダメージを与える。",
+    "ko": "【구매 시】상대의 리프트에 있는 저주 1장당 새로운 저주 1장을 상대의 묘지에 추가한다. 상대 리프트와 덱 구성 모두에 저주가 없었다면 상대 묘지에 새 저주 2장을 추가한다. 그 후 상대 리프트를 제외한 덱 구성의 저주 1장당 상대 플레이어에게 1 데미지를 준다.",
+    "en": "【On Purchase】For each Curse in the opponent’s Rift, create 1 new Curse in their graveyard. If neither their Rift nor their deck composition contained a Curse, add 2 new Curses to their graveyard. Then deal 1 damage to the opponent per Curse in their deck composition, excluding their Rift."
   },
   "SOUL_HARVEST": {
     "ja": "【発動時】両方の場から「虚無」を持つモンスター1体を選んで破壊する。「オーラ」を持つモンスターも選べる。",
@@ -1832,4 +1834,4 @@ for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,e
 CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};
 CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};
 
-for (const c of [...MERCENARY_CARDS, ...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
+for (const c of [...DIPLOMACY_CARDS, CURSE_CONTAGION, ...MERCENARY_CARDS, ...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};

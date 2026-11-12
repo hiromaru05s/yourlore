@@ -23,8 +23,10 @@ export function restoreReworkedCards(game: GameState): void {
   const updateFire = !game.fireBrandReworkApplied;
   const updateDemons = !game.demonRealmReworkApplied;
   const updateHexers = !game.hexerReworkApplied;
+  const updateDiplomacy = !game.diplomacyApplied;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy)) return;
+  game.diplomacyApplied = true;
   game.mercReworkApplied = true;
   game.hexerReworkApplied = true;
   game.demonRealmReworkApplied = true;
@@ -35,6 +37,12 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateDiplomacy && ['E2','Q_TOWN','QUICK_AID','QUICK_CURSE','GS5_3','DISARM1','MIMIC_HUNTER'].includes(card.id)) {
+      const def = DB[card.id];
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      if (card.id === 'E2') card.cost = def.cost;
+      if (card.id === 'Q_TOWN') card.quest = {...def.quest!};
+    }
     if (updateMercs && MERC_IDS.has(card.id)) {
       const def = DB[card.id], swapped = (card as FieldMon).trickSwapped;
       Object.assign(card, {cost:def.cost, val:def.val, val2:def.val2, atk:swapped?def.def:def.atk, def:swapped?def.atk:def.def,
@@ -108,6 +116,8 @@ export function restoreReworkedCards(game: GameState): void {
     [...p.hand, ...p.deck, ...p.field, ...p.discard, ...(p.removed ?? []), ...p.supply].forEach(refresh);
     for (const entry of [...p.enchants,...p.traps,...(p.quests ?? []),...p.exile]) refresh(entry.card);
     for (const q of p.quests ?? []) {
+      // Old town progress included both players without recording who acted.
+      if (updateDiplomacy && q.card.id === 'Q_TOWN') { q.townSeen = []; q.progress = 0; }
       if (updateQuests && questCards.has(q.card.id)) q.progress = Math.min(q.progress, q.card.quest!.target);
     }
   }

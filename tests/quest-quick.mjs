@@ -20,7 +20,7 @@ try {
   const buy = (g,id,from='buyMarket') => { if(from==='buyMarket')g.market[0]=card(id);else g.players[g.cur].supply[0]=card(id); return step(g,{type:from,i:0}); };
   const pick = (g,uid) => step(g,{type:'pick',uid});
   assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,14);
-  assert.equal(Object.values(DB).filter(c=>c.quick).length,17);
+  assert.equal(Object.values(DB).filter(c=>c.quick).length,18);
   assert(Object.values(DB).filter(c=>c.quick).every(c=>c.t==='spell'));
   assert.equal(frameFor('quest'),'/art/biblion/modular/base-quest-print.webp');
 

@@ -4,6 +4,10 @@ type Copy=Record<Locale,string>;
 const c=(ja:string,ko:string,en:string):Copy=>({ja,ko,en});
 /** Choice instructions are authored by effect, never translated from a battle log. */
 export const CHOICE_TEXT:Record<string,Copy>={
+ MIND_ATTACKER:c('公開する攻撃モンスターを選んでください。','공개할 공격 몬스터를 선택하세요.','Choose the attacker to reveal.'),
+ MIND_TARGET:c('攻撃先を秘密に選んでください。','공격 대상을 비밀로 선택하세요.','Secretly choose its attack target.'),
+ MIND_GUESS:c('攻撃される自分のモンスターを予想してください。','공격받을 자신의 몬스터를 예측하세요.','Predict which of your monsters will be attacked.'),
+ TOLL_DISCARD:c('通行税で捨てる手札を1枚選んでください。','통행세로 버릴 패 1장을 고르세요.','Choose 1 card to discard for Toll Gate.'),
  MERCH1:c('交換する固定マーケットの枠を選んでください。','교체할 고정 마켓 칸을 고르세요.','Choose a fixed market slot to replace.'),
  MERCH2:c('交換する固定マーケットの枠を選んでください。','교체할 고정 마켓 칸을 고르세요.','Choose a fixed market slot to replace.'),
  BOUNDARY_ATTACK:c('攻撃対象を選んでください。','공격 대상을 고르세요.','Choose an attack target.'),
@@ -80,6 +84,7 @@ export function pendingText(q:Pending,lang:Locale):string {
  const d=q.data??{},v=Number(d.val??1),n=Number(d.count??1);let text=CHOICE_TEXT[q.reason];
  if(q.reason==='MARKET_FEVER' && d.discard)return c('捨てる手札を選んでください。','버릴 패를 고르세요.','Choose a card to discard.')[lang];
  if(q.reason==='ATTUNE_RETURN' && d.recall)return c('手札に戻すアチューンを選んでください。','패로 되돌릴 어튠을 고르세요.','Choose an Attune to return to your hand.')[lang];
+ if (q.reason==='MIND_GUESS' && d.attackerJa) return c(`${d.attackerJa}が攻撃するモンスターを予想してください。`,`${d.attackerKo}의 공격 대상을 예측하세요.`,`Predict which monster ${d.attackerEn} will attack.`)[lang];
  switch(q.reason){
  case 'WORLD_TREE_ATTACK':case 'WORLD_TREE_DEFEND':{const atk=q.reason==='WORLD_TREE_ATTACK';text=atk?c('雫1を消費して攻撃するモンスターの攻撃力を3上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격하는 몬스터의 공격력을 3 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the attacking monster +3 ATK until it leaves the field?'):c('雫1を消費して攻撃されるモンスターの体力を3上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격받는 몬스터의 체력을 3 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the defending monster +3 HP until it leaves the field?');break;}
  case 'SELECTED_SWORD':text=c(`このターン終了まで攻撃力+${d.amount}する自分のモンスター1体を選んでください。`,`이번 턴 종료까지 공격력을 ${d.amount} 올릴 자신의 몬스터 1체를 선택하세요.`,`Choose 1 of your monsters to gain +${d.amount} ATK until the end of this turn.`);break;

@@ -117,6 +117,8 @@ export interface RevealedCard {
 }
 
 export interface PlayerState {
+  damageReceived?: {turn:number; total:number; previous:number};
+  lastMonsterAttackTurn?: number;
   attuneBonuses?: ('heal1'|'heal2'|'heal3'|'shield'|'dew'|'crystal'|'mana'|'shine'|'spirit'|'hex'|'selfHex')[];
   attunePlaysTurn?: number;
   attuneFlowTurn?: number;
@@ -237,6 +239,10 @@ export interface TribePactDefeat {
 }
 
 export interface GameState {
+  diplomacyApplied?: boolean;
+  truceThroughTurn?: number;
+  mindSecret?: {owner:Side; attackerUid:string; targetUid:string};
+  mindCombat?: {turn:number; attackerUid:string; attacksBefore:number};
   starterQuestReworkApplied?: boolean;
   fireBrandReworkApplied?: boolean;
   demonRealmReworkApplied?: boolean;

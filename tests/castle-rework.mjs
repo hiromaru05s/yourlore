@@ -109,7 +109,7 @@ try {
   assert.equal(g.players[1].discard.length,2);assert.equal(g.players[1].hp,97);
   g=play(g,'BLACK_CURSE');assert.equal(g.players[1].discard.length,4);
   g.players[1].field=[mon('TDE1')];g.players[1].hand.push(card('TDE1'));
-  g=play(g,'GS5_3');assert.equal(g.players[1].hp,81);assert.equal(g.players[1].discard.length,6);
+  g=play(g,'GS5_3');assert.equal(g.players[1].hp,85);assert.equal(g.players[1].discard.length,4);
  });
  check('Restoring an older room updates the printed rules once and preserves live modifiers',()=>{
   const g=fresh();delete g.castleReworkApplied;

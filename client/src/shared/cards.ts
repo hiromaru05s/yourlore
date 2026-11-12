@@ -1,3 +1,5 @@
+import {DIPLOMACY_CARDS} from './diplomacyCards';
+import {CURSE_CONTAGION} from './curseContagion';
 import {applyHexerRework} from './hexerCards';
 import { FIRE_BRAND_CARDS, FIRE_SPELL_IDS } from './fireCards';
 import { ARMY_ATTUNE_CARDS } from './armyAttuneCards';
@@ -2397,7 +2399,8 @@ Object.assign(DB.TDE3, {cost:4, atk:7, def:9});
 Object.assign(DB.TDE4, {cost:5, atk:14, def:14});
 DB.DEMON_REALM.cost = 2;
 applyHexerRework(DB);
-for (const card of [...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS]) DB[card.id] = card;
+DB.E2.cost = 2;
+for (const card of [...DIPLOMACY_CARDS, CURSE_CONTAGION, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS]) DB[card.id] = card;
 DECK_POOL.push('ATTUNE_RETURN', 'MINI_SPIRIT');
 Object.assign(DB.AMA, {cost:5, play:5, act:'armyAttune', passive:['void']});
 Object.assign(DB.D_BLUE, {onSummon:undefined, turnFx:undefined, aura:undefined});
@@ -2526,7 +2529,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v81"; // November card balance update
+export const BALANCE_VERSION = "v82"; // November card balance update
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

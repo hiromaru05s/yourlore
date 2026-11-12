@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 426,
+  "count": 430,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -626,20 +626,17 @@
     },
     "E2": {
       "nameJa": "平和協定",
-      "status": "reworded",
-      "changedLocales": [
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "ddb810a6a9c289744ee768ec1e1a698507f2c340e29c229be02e3f38e8bd9996",
+      "status": "reworked",
+      "changedLocales": [],
+      "definitionSha256": "7c4af79ade16248aeb5e49f623a05f630b4874ad4c391530ebf4cfec54e3dd7e",
       "textSha256": "ecf7af063b39d8b4638067be5ad0302fca117404006742aa0c1b6710c20ef853",
       "hooks": {
         "ench": "noAttack"
       },
       "before": {
         "ja": "【場にある間】両プレイヤーのモンスターは攻撃できない。\n\n【期間】双方のターン開始を合計4回迎えると終了する。",
-        "ko": "【필드에 놓인 동안】양 플레이어의 몬스터는 공격할 수 없다.\n\n【기간】양쪽 턴 시작을 합계 4회 맞으면 종료한다.",
-        "en": "【While Deployed】Neither player's monsters can attack.\n\n【Duration】Expires after 4 subsequent turn starts, counting both players."
+        "ko": "【필드에 있는 동안】양 플레이어의 몬스터는 공격할 수 없다.\n\n【기간】양쪽 턴 시작을 합계 4회 맞으면 종료한다.",
+        "en": "【While on the Field】Neither player's monsters can attack.\n\n【Duration】Expires after 4 subsequent turn starts, counting both players."
       },
       "after": {
         "ja": "【場にある間】両プレイヤーのモンスターは攻撃できない。\n\n【期間】双方のターン開始を合計4回迎えると終了する。",
@@ -1244,17 +1241,17 @@
         "en"
       ],
       "definitionSha256": "86bdd53986b224c4c975085cdc1bec05f07a69f5d4d4eba78d275bf01584b872",
-      "textSha256": "15686e4bac3688cfc0505f6cbde5a4d3e89d1bc78544760b8d76e19fef80ccc1",
+      "textSha256": "70407b1cba4369c3d82a32abf4c048c5c1b2d0ce62fd030709c6beca35b98924",
       "hooks": {},
       "before": {
-        "ja": "【発動時】相手のデッキ・墓地・場にある「魔族」モンスター1枚につき、相手プレイヤーに16ダメージを与える。",
-        "ko": "【발동 시】상대의 덱·묘지·필드의 마족 몬스터 1장당 상대 플레이어에게 16 데미지를 준다.",
-        "en": "【On Cast】Deal 16 damage to the opponent for each Demonkin monster in their deck, graveyard, and field combined."
-      },
-      "after": {
         "ja": "【発動時】新しい「呪い」2枚を相手の墓地に追加する。その後、相手のデッキ・墓地・場にある「魔族」モンスター1枚につき、相手プレイヤーに16ダメージを与える。",
         "ko": "【발동 시】새로운 저주 2장을 상대 묘지에 추가한다. 그 후 상대 덱·묘지·필드의 마족 몬스터 1장당 상대 플레이어에게 16 데미지를 준다.",
         "en": "【On Cast】Add 2 new Curses to the opponent’s graveyard. Then deal 16 damage to the opponent per Demonkin monster in their deck, graveyard, and field."
+      },
+      "after": {
+        "ja": "【発動時】自分の烙印を1個、呪印を4個減らす。その後、相手のデッキ・墓地・場にある魔族・黒魔術師・呪術師モンスター1体につき、相手に12ダメージを与える。",
+        "ko": "【발동 시】자신의 낙인을 1개, 주인을 4개 줄인다. 그 후 상대 덱·묘지·필드의 마족·흑마술사·주술사 몬스터 1장당 상대에게 12 데미지를 준다.",
+        "en": "【On Cast】Remove 1 of your Brands and 4 of your Curse Seals. Then deal 12 damage to the opponent for each Demonkin, Black Sorceress or Hexer monster in their deck, graveyard and field."
       }
     },
     "GS5_4": {
@@ -2122,27 +2119,27 @@
     },
     "DISARM1": {
       "nameJa": "最初の螺子抜き",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "10fbc03c15851408e909ede67b714020633cc59da6ee54355cf3d83352b175ef",
-      "textSha256": "0fa5f6af1fa7237f62ffaacd99c7cc07d6ccaad05eef51e645f89f90f77d6138",
+      "textSha256": "6573f77f4acfcdeefaac721233325e0a7efd6514fb8fcec6fa539914c512a18b",
       "hooks": {
         "act": "destroyEnch"
       },
       "before": {
         "ja": "【発動条件】相手の場に永続魔法がある。\n\n【発動時】両方の場から永続魔法を1枚まで選んで破壊する。",
-        "ko": "【발동 조건】상대의 필드에 영구마법이 있다.\n\n【발동 시】양쪽 필드에서 영구마법 최대 1장을 선택해 파괴한다.",
-        "en": "【Play Requirement】The opponent controls a persistent spell.\n\n【On Cast】Choose and destroy up to 1 persistent spell on either field."
-      },
-      "after": {
-        "ja": "【発動条件】相手の場に永続魔法がある。\n\n【発動時】両方の場から永続魔法を1枚まで選んで破壊する。",
         "ko": "【발동 조건】상대의 필드에 영구 마법이 있다.\n\n【발동 시】양쪽 필드에서 영구 마법 최대 1장을 선택해 파괴한다.",
         "en": "【Play Requirement】The opponent controls a persistent spell.\n\n【On Cast】Choose and destroy up to 1 persistent spell on either field."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【発動時】両方の場から永続魔法を1枚まで選んで破壊する。",
+        "ko": "【발동 시】양쪽 필드에서 영구 마법 최대 1장을 선택해 파괴한다.",
+        "en": "【On Cast】Choose and destroy up to 1 persistent spell on either field."
+      }
     },
     "DISARM2": {
       "nameJa": "青銅解剖図",
@@ -7198,26 +7195,26 @@
     },
     "MIMIC_HUNTER": {
       "nameJa": "ミミックハンター",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "edac6b101691584a0831dc98e4c723f56c36f7e496f0afc18f82a3a3e83d9b16",
-      "textSha256": "12594be7496c7ba2a08b866d0b5d85fb89178d9f81cbc412dde0d77c786d6edd",
+      "textSha256": "da0fd7f8d944feb728dba2ef586aa9af306d5fe95b73d8ec18338b929af867e1",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
-        "ja": "【自分ターン終了時】両方の場の「ミミック」を全て破壊する（同名カードのみ）。",
-        "ko": "【자신 턴 종료시】양쪽 필드의 미믹을 모두 파괴한다(같은 이름 카드만).",
-        "en": "【Your Turn End】Destroy all monsters named Mimic on both fields; other Mimic-family names are unaffected."
-      },
-      "after": {
         "ja": "【自分のターン終了時】両方の場の「ミミック」を全て破壊する（同名カードのみ）。",
         "ko": "【자신의 턴 종료 시】양쪽 필드의 미믹을 모두 파괴한다(같은 이름 카드만).",
         "en": "【At the End of Your Turn】Destroy all monsters named Mimic on both fields; other Mimic-family names are unaffected."
+      },
+      "after": {
+        "ja": "【場にある間】両方の場のミミック系モンスターは攻撃できない。\n\n【攻撃を受ける時】攻撃してきたミミック系モンスターに、戦闘のダメージ計算前に6ダメージを与える。",
+        "ko": "【필드에 있는 동안】양쪽 필드의 미믹 계열 몬스터는 공격할 수 없다.\n\n【공격받을 때】공격한 미믹 계열 몬스터에게 전투 데미지 계산 전에 6 데미지를 준다.",
+        "en": "【While on the Field】Mimic-family monsters on either field cannot attack.\n\n【When Attacked】Deal 6 damage to an attacking Mimic-family monster before combat damage is calculated."
       }
     },
     "QUICK_HELLFIRE": {
@@ -7428,30 +7425,30 @@
     },
     "Q_TOWN": {
       "nameJa": "城下町",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "f76d920b72c3aba1dfc05134141dcaf0372c17e0d2339a1416154624d6c707fb",
-      "textSha256": "c94e6c41b16389512625e9a1ff21467fa106652d75a0c6b57309c19c110743dc",
+      "definitionSha256": "124b6aa75fffca3e2056df88652bd5cc35fabdd599df14f379accf0f5de303c3",
+      "textSha256": "cb604befe65c303f0f1caa2142d8e22538ec3c74c853a831899345ec58a1a162",
       "hooks": {
         "act": "expansion",
         "quest": {
           "event": "town",
-          "target": 3
+          "target": 2
         }
       },
       "before": {
-        "ja": "【クエスト】設置後、「兵士」の召喚・「カジノ」の召喚・「ワイン」の使用がそれぞれ1回以上行われる（どちらのプレイヤーでも数える）。\n\n【報酬】新しい「支配」1枚を自分の手札に加える。",
-        "ko": "【퀘스트】설치 후 병사 소환·카지노 소환·와인 사용이 각각 1회 이상 발생(어느 플레이어든 계산).\n\n【보상】새로운 지배 1장을 자신의 패에 추가한다.",
-        "en": "【Quest】After deployment, a Soldier is summoned, a Casino is summoned, and Wine is played, at least 1 time each; either player's actions count.\n\n【Reward】Create 1 new Dominion in your hand."
-      },
-      "after": {
         "ja": "【達成条件】設置後、「兵士」の召喚・「カジノ」の召喚・「ワイン」の使用がそれぞれ1回以上行われる（どちらのプレイヤーでも数える）。\n\n【達成時】新しい「支配」1枚を自分の手札に加える。",
         "ko": "【달성 조건】설치 후 병사 소환·카지노 소환·와인 사용이 각각 1회 이상 발생(어느 플레이어든 계산).\n\n【달성 시】새로운 지배 1장을 자신의 패에 추가한다.",
         "en": "【Completion Requirement】After deployment, a Soldier is summoned, a Casino is summoned, and Wine is played, at least 1 time each; either player's actions count.\n\n【On Completion】Create 1 new Dominion in your hand."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、自分が「兵士」の召喚・「カジノ」の召喚・「ワイン」の使用のうち異なる2種類を行う。\n\n【達成時】新しい「支配」1枚を自分の手札に加える。",
+        "ko": "【달성 조건】설치 후 자신이 병사 소환·카지노 소환·와인 사용 중 서로 다른 2가지를 달성한다.\n\n【달성 시】새로운 지배 1장을 자신의 패에 추가한다.",
+        "en": "【Completion Requirement】After deployment, complete 2 distinct actions yourself: summon Soldier, summon Casino or play Wine.\n\n【On Completion】Create 1 new Dominion in your hand."
       }
     },
     "DOMINION": {
@@ -7529,26 +7526,27 @@
     },
     "QUICK_AID": {
       "nameJa": "応急手当て",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
-        "ko"
+        "ko",
+        "en"
       ],
       "definitionSha256": "9ea155f9a6c5580cb2fab1d9c7e3d943dc49689e6fe6b8c5d33c5ddeee7439bc",
-      "textSha256": "161eb4623a0fdc053bb94c9c2f8ce4cd74a0f79232a92249fea8576aac2ce087",
+      "textSha256": "107e9747e1ffe5ae436a1d6860b6f1c8340c7b381b45c792378a5b1e0b34c328",
       "hooks": {
         "act": "expansion",
         "quick": true
       },
       "before": {
-        "ja": "【購入条件】直前の相手ターンに、異なる個体の相手モンスター3体以上から直接攻撃のダメージを受けた（同名可）。\n\n【購入時】自分の体力を25回復する。",
-        "ko": "【구매 조건】직전 상대 턴에 서로 다른 상대 몬스터 개체 3체 이상에게 직접 공격 데미지를 받았다(동명 가능).\n\n【구매시】자신의 체력을 25 회복한다.",
-        "en": "【Purchase Requirement】During the last opponent turn, at least 3 different enemy monsters dealt direct-attack damage to you; they may share a name.\n\n【On Purchase】Restore 25 of your HP."
-      },
-      "after": {
         "ja": "【購入条件】直前の相手のターンに、異なる個体の相手モンスター3体以上から直接攻撃のダメージを受けた（同名可）。\n\n【購入時】自分の体力を25回復する。",
         "ko": "【구매 조건】직전 상대 턴에 서로 다른 상대 몬스터 개체 3체 이상에게 직접 공격 데미지를 받았다(동명 가능).\n\n【구매 시】자신의 체력을 25 회복한다.",
         "en": "【Purchase Requirement】During the last opponent turn, at least 3 different enemy monsters dealt direct-attack damage to you; they may share a name.\n\n【On Purchase】Restore 25 of your HP."
+      },
+      "after": {
+        "ja": "【購入条件】直前のターンに自分が受けたダメージが合計10以上。\n\n【購入時】自分の体力を20回復する。",
+        "ko": "【구매 조건】바로 전 턴에 자신이 받은 피해가 합계 10 이상이다.\n\n【구매 시】자신의 체력을 20 회복한다.",
+        "en": "【Purchase Requirement】You took at least 10 total damage during the immediately preceding turn.\n\n【On Purchase】Restore 20 of your HP."
       }
     },
     "EMPTY_MIND": {
@@ -7808,20 +7806,20 @@
         "en"
       ],
       "definitionSha256": "8ef13dca2d9aba5e2c00cce680577b1210551434d49c60b3469643a9658e7331",
-      "textSha256": "4b329ef113b4613ebefa11202fe61c1d917d07c347ad6df9aa2261212f95e068",
+      "textSha256": "8627e07236265e3ccf50ec36742eb16d1cff5eaa307426690777cc932994bad1",
       "hooks": {
         "act": "expansion",
         "quick": true
       },
       "before": {
-        "ja": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。",
-        "ko": "【구매 시】상대의 리프트에 있는 저주 1장당 새로운 저주 1장을 상대의 묘지에 추가한다.",
-        "en": "【On Purchase】For each Curse in the opponent’s Rift, create 1 new Curse in their graveyard."
-      },
-      "after": {
         "ja": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。 その後、相手のリフトを除くデッキ構成の「呪い」1枚につき、相手プレイヤーに1ダメージを与える。",
         "ko": "【구매 시】상대의 리프트에 있는 저주 1장당 새로운 저주 1장을 상대의 묘지에 추가한다. 그 후 상대 리프트를 제외한 덱 구성의 저주 1장당 상대 플레이어에게 1 데미지를 준다.",
         "en": "【On Purchase】For each Curse in the opponent’s Rift, create 1 new Curse in their graveyard. Then deal 1 damage to the opponent per Curse in their deck composition, excluding their Rift."
+      },
+      "after": {
+        "ja": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。 相手のリフトとデッキ構成の両方に「呪い」がなかった場合は、相手の墓地に新しい「呪い」を2枚追加する。その後、相手のリフトを除くデッキ構成の「呪い」1枚につき、相手プレイヤーに1ダメージを与える。",
+        "ko": "【구매 시】상대의 리프트에 있는 저주 1장당 새로운 저주 1장을 상대의 묘지에 추가한다. 상대 리프트와 덱 구성 모두에 저주가 없었다면 상대 묘지에 새 저주 2장을 추가한다. 그 후 상대 리프트를 제외한 덱 구성의 저주 1장당 상대 플레이어에게 1 데미지를 준다.",
+        "en": "【On Purchase】For each Curse in the opponent’s Rift, create 1 new Curse in their graveyard. If neither their Rift nor their deck composition contained a Curse, add 2 new Curses to their graveyard. Then deal 1 damage to the opponent per Curse in their deck composition, excluding their Rift."
       }
     },
     "SOUL_HARVEST": {
@@ -10182,6 +10180,86 @@
         "ja": "【発動時】相手の墓地に「呪い」を4枚追加する。その後、自分の場に「かかし」1体を召喚する。",
         "ko": "【발동 시】상대 묘지에 저주 4장을 추가한다. 그 후 자신의 필드에 허수아비 1체를 소환한다.",
         "en": "【On Cast】Add 4 Curses to the opponent’s graveyard. Then summon 1 Scarecrow to your field."
+      }
+    },
+    "MIND_GAME": {
+      "nameJa": "心理戦",
+      "status": "new",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "8665c17cdcb59f2237169764890423912e0a4d209aa38aceb1b7133e3171704c",
+      "textSha256": "765783aba27b0a56334cf2b2ea9fd5ac419b1c04096323bec212a939a48e139c",
+      "hooks": {
+        "quick": true
+      },
+      "before": {},
+      "after": {
+        "ja": "【購入条件】相手の場にモンスターが2体以上いて、自分に相手モンスターを攻撃できるモンスターがいる。\n\n【購入時】攻撃する自分のモンスターを公開し、攻撃先を秘密に選ぶ。相手が攻撃先を当てると攻撃は無効になり、このターンはもう攻撃できない（二刀流は攻撃回数を1回消費する）。外れたらそのまま戦闘を行い、貫通ダメージを2倍にする。この戦闘は攻撃回数を消費しない。",
+        "ko": "【구매 조건】상대 필드에 몬스터가 2체 이상 있고 자신에게 상대 몬스터를 공격할 수 있는 몬스터가 있다.\n\n【구매 시】공격할 몬스터를 공개하고 공격 대상을 비밀로 선택한다. 상대가 대상을 맞히면 공격이 무효가 되고 이번 턴 더 공격할 수 없다(이도류는 공격 횟수 1회 소모). 틀리면 전투를 진행하고 관통 피해가 2배가 된다. 이 전투는 공격 횟수를 소모하지 않는다.",
+        "en": "【Purchase Requirement】The opponent controls at least 2 monsters and one of your monsters can attack an opposing monster.\n\n【On Purchase】Reveal your attacker and secretly choose its target. If the opponent predicts correctly, cancel the attack and the attacker cannot attack again this turn (Dual Wield spends 1 attack instead). Otherwise fight that target with double piercing damage. This battle does not spend an attack."
+      }
+    },
+    "TOLL_GATE": {
+      "nameJa": "通行税",
+      "status": "new",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "dcd74acd80da741d432ee858c6a2533de1bbbc4a1fb85e19b5e3c4bd84c617ac",
+      "textSha256": "5d4a8b0391b696e91e2dcdd171bb1a41ee25abbe9f882c11fde2b1ba9877ac21",
+      "hooks": {
+        "ench": "summonToll"
+      },
+      "before": {},
+      "after": {
+        "ja": "【相手のモンスター召喚時】相手に1ダメージを与える。自分の場に「城」があれば相手は手札を1枚選んで捨てる。傭兵系がいれば召喚されたモンスターの攻撃力を1下げる。貴族がいれば、そのモンスターの減少後の攻撃力と最大体力の合計だけ自分の体力を回復する。各条件はそれぞれ1回適用する。",
+        "ko": "【상대의 몬스터 소환 시】상대에게 1 데미지를 준다. 자신의 필드에 성이 있으면 상대는 패 1장을 골라 버린다. 용병 계열이 있으면 소환된 몬스터의 공격력을 1 줄인다. 귀족이 있으면 그 몬스터의 감소 후 공격력과 최대 체력의 합만큼 자신의 체력을 회복한다. 각 조건은 1회씩 적용한다.",
+        "en": "【When the Opponent Summons a Monster】Deal 1 damage to the opponent. If you control Castle, they choose and discard 1 card. If you control a Mercenary-family monster, reduce the summoned monster’s ATK by 1. If you control an Aristocrat, heal yourself for its resulting ATK plus maximum HP. Each condition applies once."
+      }
+    },
+    "TRUCE": {
+      "nameJa": "休戦",
+      "status": "new",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "91c2ff5ead8b7d47f9d430a1cab068794f01a082310c0b1be81060de19416a54",
+      "textSha256": "e97e179faa20356587d82daa1b02980b518ee24df7284abb09b325ae56213051",
+      "hooks": {
+        "act": "truce"
+      },
+      "before": {},
+      "after": {
+        "ja": "【発動条件】このターン、自分のモンスターが攻撃していない。\n\n【発動時】両方の場のモンスターをそれぞれの手札に戻す（トークンはリフトへ送る）。このターンの残りと次の相手のターンは、双方のモンスターが攻撃できない。アサシン系は手札に戻らず、この攻撃制限も受けない。",
+        "ko": "【발동 조건】이번 턴 자신의 몬스터가 공격하지 않았다.\n\n【발동 시】양쪽 필드의 몬스터를 각자의 패로 되돌린다(토큰은 리프트로 보낸다). 이번 턴의 남은 시간과 다음 상대 턴에는 양측 몬스터가 공격할 수 없다. 암살자 계열은 패로 돌아가지 않으며 이 공격 제한을 받지 않는다.",
+        "en": "【Play Requirement】None of your monsters have attacked this turn.\n\n【On Cast】Return monsters on both fields to their respective hands (send tokens to the Rift). Neither side can attack with monsters for the rest of this turn and the next opposing turn. Assassin-family monsters stay on the field and ignore this attack restriction."
+      }
+    },
+    "CURSE_CONTAGION": {
+      "nameJa": "呪いの伝染",
+      "status": "new",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "a1ece44d7d612b15361a31518f947c1aab5756f73748098d84bb243a9b875f15",
+      "textSha256": "a5b43ec76fda08c2d609f09be3f5929ea799805fb85226c8c4274bde93c2b57b",
+      "hooks": {
+        "act": "curseContagion"
+      },
+      "before": {},
+      "after": {
+        "ja": "【発動時】双方のデッキ構成に「呪い」がない場合、新しい「呪い」を相手の墓地に2枚、自分の墓地に1枚加える。それ以外の場合、相手のデッキ構成の「呪い」が5枚未満なら相手の墓地に新しい「呪い」1枚、5枚以上なら3枚を加える。",
+        "ko": "【발동 시】양측 덱 구성에 저주가 없으면 상대 묘지에 새 저주 2장, 자신의 묘지에 새 저주 1장을 추가한다. 그 외에는 상대 덱 구성의 저주가 5장 미만이면 상대 묘지에 새 저주 1장을, 5장 이상이면 3장을 추가한다.",
+        "en": "【On Cast】If neither player has a Curse in their deck composition, add 2 new Curses to the opposing graveyard and 1 to your own graveyard. Otherwise, if the opponent has fewer than 5 Curses in their deck composition, add 1 new Curse to their graveyard. If they have 5 or more, add 3."
       }
     }
   },

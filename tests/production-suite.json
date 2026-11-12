@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/diplomacy-cards.mjs",
+    "tests/curse-contagion.mjs",
     "tests/mercenary-contracts.mjs",
     "tests/army-attune.mjs",
     "tests/castle-rework.mjs",

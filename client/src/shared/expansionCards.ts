@@ -81,9 +81,9 @@ export const EXPANSION_CARDS: CardDef[] = [
     "name": "미믹 헌터",
     "nameEn": "Mimic Hunter",
     "cost": 3,
-    "textJa": "【自分のターン終了時】両方の場の「ミミック」を全て破壊",
-    "text": "【자신 턴 종료】 양쪽 필드의 미믹을 모두 파괴.",
-    "textEn": "【Your Turn End】 destroy all Mimics on both fields (the base Mimic only).",
+    "textJa": "【場にある間】両方の場のミミック系モンスターは攻撃できない。\n\n【攻撃を受ける時】攻撃してきたミミック系モンスターに、戦闘のダメージ計算前に6ダメージを与える。",
+    "text": "【필드에 있는 동안】양쪽 필드의 미믹 계열 몬스터는 공격할 수 없다.\n\n【공격받을 때】공격한 미믹 계열 몬스터에게 전투 데미지 계산 전에 6 데미지를 준다.",
+    "textEn": "【While on the Field】Mimic-family monsters on either field cannot attack.\n\n【When Attacked】Deal 6 damage to an attacking Mimic-family monster before combat damage is calculated.",
     "t": "mon",
     "atk": 3,
     "def": 4,
@@ -168,14 +168,14 @@ export const EXPANSION_CARDS: CardDef[] = [
     "name": "성하 마을",
     "nameEn": "Castle Town",
     "cost": 1,
-    "textJa": "【条件】発動後、両者で兵士召喚・カジノ召喚・ワイン発動を達成 · 【報酬】支配1枚を手札に得る",
-    "text": "【조건】발동 후 양측의 병사 소환·카지노 소환·와인 사용 달성 · 【보상】지배 1장을 패로",
-    "textEn": "【Quest】Either side summons Soldier and Casino, plays Wine after activation · 【Reward】Dominion to hand",
+    "textJa": "【達成条件】設置後、自分が「兵士」の召喚・「カジノ」の召喚・「ワイン」の使用のうち異なる2種類を行う。\n\n【達成時】新しい「支配」1枚を自分の手札に加える。",
+    "text": "【달성 조건】설치 후 자신이 병사 소환·카지노 소환·와인 사용 중 서로 다른 2가지를 달성한다.\n\n【달성 시】새로운 지배 1장을 자신의 패에 추가한다.",
+    "textEn": "【Completion Requirement】After deployment, complete 2 distinct actions yourself: summon Soldier, summon Casino or play Wine.\n\n【On Completion】Create 1 new Dominion in your hand.",
     "t": "quest",
     "act": "expansion",
     "quest": {
       "event": "town",
-      "target": 3
+      "target": 2
     }
   },
   {
@@ -228,9 +228,9 @@ export const EXPANSION_CARDS: CardDef[] = [
     "name": "응급 처치",
     "nameEn": "First Aid",
     "cost": 2,
-    "textJa": "【購入条件】直前の相手ターンに異なるモンスター3体以上から直接攻撃のダメージを受けた · 【購入時】自分の体力25回復",
-    "text": "【구매조건】직전 상대 턴 몬스터 3체 이상에게 직접 공격 피해를 받음 · 【구매시】자신 체력 25 회복",
-    "textEn": "【Buy Requires】Directly damaged by 3+ foes last enemy turn · 【On Purchase】Restore 25 HP",
+    "textJa": "【購入条件】直前のターンに自分が受けたダメージが合計10以上。\n\n【購入時】自分の体力を20回復する。",
+    "text": "【구매 조건】바로 전 턴에 자신이 받은 피해가 합계 10 이상이다.\n\n【구매 시】자신의 체력을 20 회복한다.",
+    "textEn": "【Purchase Requirement】You took at least 10 total damage during the immediately preceding turn.\n\n【On Purchase】Restore 20 of your HP.",
     "t": "spell",
     "act": "expansion",
     "quick": true
@@ -377,9 +377,9 @@ export const EXPANSION_CARDS: CardDef[] = [
     "name": "사라지지 않는 저주",
     "nameEn": "Undying Curse",
     "cost": 2,
-    "textJa": "【購入時】相手のリフトの呪い1枚につき相手の墓地に新しい呪い1枚を生成",
-    "text": "【구매시】 상대 리프트의 저주 1장당 상대 묘지에 새로운 저주 1장.",
-    "textEn": "【On Purchase】 for each Curse in the enemy Rift, create 1 new Curse in their graveyard.",
+    "textJa": "【購入時】相手のリフトの「呪い」1枚につき、新しい「呪い」1枚を相手の墓地に追加する。 相手のリフトとデッキ構成の両方に「呪い」がなかった場合は、相手の墓地に新しい「呪い」を2枚追加する。その後、相手のリフトを除くデッキ構成の「呪い」1枚につき、相手プレイヤーに1ダメージを与える。",
+    "text": "【구매 시】상대의 리프트에 있는 저주 1장당 새로운 저주 1장을 상대의 묘지에 추가한다. 상대 리프트와 덱 구성 모두에 저주가 없었다면 상대 묘지에 새 저주 2장을 추가한다. 그 후 상대 리프트를 제외한 덱 구성의 저주 1장당 상대 플레이어에게 1 데미지를 준다.",
+    "textEn": "【On Purchase】For each Curse in the opponent’s Rift, create 1 new Curse in their graveyard. If neither their Rift nor their deck composition contained a Curse, add 2 new Curses to their graveyard. Then deal 1 damage to the opponent per Curse in their deck composition, excluding their Rift.",
     "t": "spell",
     "act": "expansion",
     "quick": true

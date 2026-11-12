@@ -44,6 +44,10 @@
     "SPIRIT_RESONANCE",
     "SWORD_GRAVE_WRAITH",
     "TIME_WRAITH",
-    "WANTED"
+    "WANTED",
+    "CURSE_CONTAGION",
+    "MIND_GAME",
+    "TOLL_GATE",
+    "TRUCE"
   ]
 }
