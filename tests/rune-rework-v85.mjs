@@ -71,7 +71,7 @@ for(const side of [0,1]){
  }
  {
   let g=buy(fresh(side),'FORBIDDEN');const p=g.players[side];assert.equal(p.hp,1);assert.equal(p.shield,30);
-  assert.equal(p.field.length,3);g=step(g,{type:'attack',uid:p.field[0].uid});assert.equal(g.players[side].field[0].atkMod,-3);
+  assert.equal(p.field.length,3);g=step(g,{type:'attack',uid:p.field[0].uid});assert.equal(g.players[side].field[0].atkMod,-2);assert.deepEqual(g.players[side].field.map(d=>d.defMod),[1,1,1]);
   g=play(g,'M5');assert(g.players[side].field[0].defMod>=1);
  }
  {
@@ -152,6 +152,83 @@ for(const side of [0,1]){
   assert.equal(g.players[0].hand.length,1);assert.equal(g.players[0].hand[0].play,3);
   assert.equal(g.players[0].enchants.length,0);assert.equal(g.players[0].discard[0].cost,3);
   const saved=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),saved);
+}
+for (const side of [0,1]) {
+  const other = 1 - side;
+  // A saved pre-retirement trap destroys the attacker and changes its destination. Combat itself has not dealt damage.
+  let g = fresh(side);
+  const imp = m('M1'), prey = m('M2', {tribe:'포식'}), devil = m('DEVIL_TOKEN');
+  g.players[side].field = [imp, devil];
+  g.players[other].field = [prey];
+  g.players[other].traps = [{card:{...c('S13'),id:'T10',t:'trap',react:'preyGuard'}}];
+  g = pick(step(g,{type:'attack',uid:imp.uid}),prey.uid);
+  assert(g.players[side].removed.some(card=>card.uid===imp.uid));
+  assert.equal(g.players[other].brand,1);
+  assert.equal(g.players[side].field.find(card=>card.uid===devil.uid).defMod,1);
+
+  g = fresh(side);
+  const master = m('EGG_MASTER'), egg = m('DRAGON_EGG',{dur:4,hatch:12});
+  g.players[side].field = [master,egg,m('DEVIL_TOKEN')];
+  g.cur = other;
+  g = end(g);
+  assert.equal(g.pending.reason,'EGG_ADVANCE');
+  const beforeEgg = g.players[side].field[1], beforeDevil = g.players[side].field[2].defMod;
+  g = pick(g,egg.uid);
+  assert.equal(g.players[side].field[1].dur,beforeEgg.dur-1);
+  assert.equal(g.players[side].field[1].hatch,beforeEgg.hatch-5);
+  assert.equal(g.players[side].field[2].defMod,beforeDevil+1);
+
+  g = fresh(side);
+  const rotting = m('M2',{passive:['decay','void'],decayCnt:2});
+  g.players[other].field = [rotting];
+  g = pick(pick(play(g,'RUNE1'),rotting.uid),'decay');
+  assert(!E.hasPassive(g.players[other].field[0],'decay'));
+  assert(E.hasPassive(g.players[other].field[0],'void'));
+  assert.equal(g.players[other].field[0].decayCnt,2);
+
+  g = fresh(side);
+  const ward = m('SWORD_GRAVE_WRAITH');
+  g.players[other].field = [ward]; g.players[other].hand = [c('MINI_SPIRIT')];
+  g = pick(play(g,'CHOSEN_ROGUE'),ward.uid);
+  assert(g.players[other].field.some(card=>card.uid===ward.uid));
+
+  g = fresh(side);
+  const habit = c('RICH_HABIT');
+  g.players[other].enchants = [{card:habit,turns:99}];
+  g = pick(play(g,'CHOSEN_MAGE'),habit.uid);
+  assert.equal(g.players[other].maxMana,3);
+
+  g = fresh(other);
+  g.players[side].removed = Array.from({length:9},()=>c('STARTER_TRASH'));
+  g.players[side].enchants = [{card:c('COLOSSEUM'),turns:99}];
+  g = end(g);
+  const crystals = g.players[side].mana;
+  g = pick(g,'CHOSEN_ARCHER');
+  assert.equal(g.players[side].mana,crystals-3);
+  assert(g.players[side].field.some(card=>card.id==='CHOSEN_ARCHER'));
+
+  g = fresh(side);
+  g.players[side].field = [m('CHOSEN_MAGE'),m('DEVIL_TOKEN')];
+  g = play(g,'GS6_4');
+  assert.equal(g.players[side].field[1].defMod,1);
+
+  g = fresh(side);
+  const payment = c('DRAGON_KILLER'), hidden = {...c('S13'),t:'trap',id:'T1',passive:['void']}, normal = {...c('S13'),t:'trap',id:'T2'};
+  g.players[side].hand = [payment];
+  g.players[other].traps = [{card:hidden},{card:normal}];
+  g = pick(play(g,'SCRAPPER'),payment.uid);
+  assert.deepEqual(E.effectChoices(g).map(card=>[card.uid,card.id]),[[normal.uid,'HIDDEN']]);
+  g = pick(g,hidden.uid);
+  assert.equal(g.pending.reason,'SCRAP_RETURN');
+  g = pick(g,normal.uid);
+  assert(g.players[other].hand.some(card=>card.uid===normal.uid));
+}
+{
+  const g = fresh();
+  delete g.runeZonesAudited;
+  g.players[0].exile = [{card:{...c('S13'),id:'INQUISITION'},turns:1},{card:c('S13'),turns:2}];
+  E.restoreReworkedCards(g);
+  assert.deepEqual(g.players[0].exile.map(entry=>[entry.card.id,entry.turns]),[['S13',2]]);
 }
 assert(!E.DB.INQUISITION);assert(E.DECK_POOL.includes('Q_RUNE_SECRET'));assert(!E.BUYABLE_POOL.includes('DEVIL_TOKEN'));
 assert.equal(E.DB.MAGIC_BANK.play,3);assert.equal(E.DB.INFERNO.cost,4);assert.equal(E.DB.INFERNO.play,1);

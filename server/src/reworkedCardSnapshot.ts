@@ -27,9 +27,14 @@ export function restoreReworkedCards(game: GameState): void {
   const updateDiplomacy = !game.diplomacyApplied;
   const updateCasinoRally = !game.casinoRallyApplied;
   const updateRunes=!game.runeReworkApplied;
+  const auditRunes = !game.runeZonesAudited;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes)) return;
   game.runeReworkApplied=true;
+  if (auditRunes) {
+    game.runeZonesAudited = true;
+    for (const p of game.players) p.exile = p.exile.filter(entry => entry.card.id !== 'INQUISITION');
+  }
   game.casinoRallyApplied = true;
   game.diplomacyApplied = true;
   game.mercReworkApplied = true;

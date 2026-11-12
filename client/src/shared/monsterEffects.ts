@@ -14,8 +14,8 @@ export function withoutMonsterPresentation<T>(work: () => T): T {
 }
 
 /** A resolution boundary, not an action/turn-wide deduplication key. */
-export function monsterActivation(g: GameState, events: GameEvent[], owner: PlayerState, source: FieldMon, at = events.length): void {
-  if (owner.field.includes(source) || events.some(e=>e.type==='destroy' && e.uid===source.uid)) {
+export function monsterActivation(g: GameState, events: GameEvent[], owner: PlayerState, source: FieldMon, at = events.length, leavingField = false): void {
+  if (leavingField || owner.field.includes(source) || events.some(e=>e.type==='destroy' && e.uid===source.uid)) {
     let reacted=false;
     for(const player of g.players) for(const devil of player.field) {
       if(devil.id!=='DEVIL_TOKEN' || devil.mutedEffects) continue;

@@ -426,7 +426,7 @@ function fieldAccepts(p: PlayerState, card: CardDef, leavingUid?: string): boole
 function spellCostActivations(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
   if (card.t !== 'spell') return;
   const paid = playCost(card, p);
-  for (const sources of [p.field.filter(m => m.aura === 'sageDiscount'), p.field.filter(m => !m.mutedEffects && m.id === 'FIRE_MASTER')]) {
+  for (const sources of [p.field.filter(m => m.aura === 'sageDiscount'), p.field.filter(m => !m.mutedEffects && m.id === 'FIRE_MASTER'), p.field.filter(m => !m.mutedEffects && m.id === 'CHOSEN_MAGE')]) {
     if (!sources.length) continue;
     const without = { ...p, field: p.field.filter(m => !sources.includes(m)) };
     if (playCost(card, without) > paid) for (const source of sources) monsterActivation(g, ctx.ev, p, source);
@@ -484,7 +484,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -935,7 +935,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       const dead = owner.field.splice(i, 1)[0];
       refreshFieldPassives(g);
       if (dead.id==='M1' && !ctx.battleKill && ctx.destroyer==null && !dead.mutedEffects && !hasEssence(g)) {
-        monsterActivation(g,ev,owner,dead); gainBrand(g,ctx,g.players[1-side(g,owner)],1);
+        monsterActivation(g,ev,owner,dead,ev.length,true); gainBrand(g,ctx,g.players[1-side(g,owner)],1);
       }
       if (dead.id === 'TIME_WRAITH' && side(g,owner) !== (ctx.destroyer ?? g.cur) && !hasEssence(g)) {
         reserveTurnSkip(g.players[1-side(g,owner)],'TIME_WRAITH');
@@ -944,18 +944,18 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       if (dead.id === 'D_RED' && !hasEssence(g)) gainBrand(g,ctx,g.players[1-side(g,owner)],1);
       if (dead.id === 'MIMIC' && !hasEssence(g)) addCurses(g, owner, 1);
       if (!dead.mutedEffects && dead.id === 'ELDER_ELF_KING' && (owner.dew ?? 0) >= 15) {
-        monsterActivation(g, ev, owner, dead);
+        monsterActivation(g, ev, owner, dead, ev.length, true);
         loseStatus(ctx, owner, 'dew', 15);
         dealDamage(g.players[1 - side(g, owner)], 20, cn(dead), cn(dead), side(g, owner));
       }
-      if (!dead.mutedEffects && dead.id === 'FIRE_MASTER' && [...owner.deck, ...owner.discard].some(isFire)) monsterActivation(g, ev, owner, dead);
+      if (!dead.mutedEffects && dead.id === 'FIRE_MASTER' && [...owner.deck, ...owner.discard].some(isFire)) monsterActivation(g, ev, owner, dead, ev.length, true);
       if (!dead.mutedEffects && dead.id === 'FIRE_MASTER') queueExpansionChoice(g, owner, 'FIRE_MASTER', '手札に加えるファイアー魔法を最大2枚選択', { left: 2 });
       // 폭풍의 광전사(drainMana): restore the opponent's mana crystals it was draining
       if (dead.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; addMaxMana(opp2, (dead.drained ?? (dead.val || 3))); }
       // 공허(void): 토큰·공허 패시브 몬스터는 죽으면 게임에서 제외 — 덱 순환에 들어가지 않는다
       let shroomRift = false;
       if (!dead.mutedEffects && dead.id === 'RUST_SHROOM' && !g.over) {
-        monsterActivation(g, ev, owner, dead);
+        monsterActivation(g, ev, owner, dead, ev.length, true);
         const result = diceRoll(g, ev, side(g, owner), {id:dead.id, player:side(g,owner)}, 1, 4);
         shroomRift = result.rolls[0] >= 4;
         if (shroomRift) selfDamage(owner, 3, dead);
@@ -2254,7 +2254,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (tgt0?.tribe === "포식" && o.traps.some((t) => t.card.react === "preyGuard") && (tc = takeTrap(g, ctx, o, "preyGuard"))) {
     att.exhausted = true;
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + ${cn(att)} ${(att.cost ?? 0) <= 5 ? "파괴 후 게임에서 제외" : "파괴"}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + ${cn(att)} ${(att.cost ?? 0) <= 5 ? "を破壊後ゲームから除外" : "を破壊"}`, `  └ <span class="dmg">Trap ${cn(tc)}!</span> Negate the attack and destroy ${cn(att)}${(att.cost ?? 0) <= 5 ? "; send it to the Rift" : ""}`);
-    if ((att.cost ?? 0) <= 5) { const ai = p.field.findIndex((x) => x.uid === att.uid); if (ai >= 0) { const dead = p.field.splice(ai, 1)[0]; if (!dead.token) sendToRift(g, p, resetInst(dead)); ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id }); } }
+    if ((att.cost ?? 0) <= 5) ctx.destroyMonster(p, att, undefined, tc.uid);
     else trapKill(p, att);
     return;
   }
@@ -2475,13 +2475,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       `  └ <span class="dmg">함정 ${cn(tc)}!</span> 🎲 ${roll} → ${cn(att)} 파괴 후 게임에서 제외`,
       `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 🎲 ${roll} → ${cn(att)} を破壊後ゲームから除外`,
     `  └ <span class="dmg">Trap ${cn(tc)}!</span> 🎲 ${roll} → destroy ${cn(att)} and send it to the Rift`);
-    const ai = p.field.findIndex((x) => x.uid === att.uid);
-    if (ai >= 0) {
-      const dead = p.field.splice(ai, 1)[0];
-      if (dead.aura === "drainMana") addMaxMana(o, (dead.drained ?? (dead.val || 3)));
-      if (!dead.token) sendToRift(g, p, resetInst(dead)); // 파괴가 아니라 제외 — 덱 순환에서 영구히 빠진다
-      ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id });
-    }
+    ctx.destroyMonster(p, att, undefined, tc.uid);
     return;
   }
   // 아귀의 식탐(devourGuard): 무효 + 파괴, 주사위 4+면 묘지 대신 게임에서 제외
@@ -2491,13 +2485,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const dr = dgr[0];
     if (dr >= 4) {
       ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 🎲 ${dr} → ${cn(att)} 파괴 후 게임에서 제외`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 🎲 ${dr} → ${cn(att)} を破壊後ゲームから除外`, `  └ <span class="dmg">Trap ${cn(tc)}!</span> Negate the attack; 🎲 ${dr} → destroy ${cn(att)} and send it to the Rift`);
-      const di = p.field.findIndex((x) => x.uid === att.uid);
-      if (di >= 0) {
-        const dead = p.field.splice(di, 1)[0];
-        if (dead.aura === "drainMana") addMaxMana(o, (dead.val || 3));
-        if (!dead.token) sendToRift(g, p, resetInst(dead));
-        ctx.ev.push({ type: "destroy", player: side(g, p), uid: dead.uid, id: dead.id });
-      }
+      ctx.destroyMonster(p, att, undefined, tc.uid);
     } else {
       ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 🎲 ${dr} → ${cn(att)} 파괴`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + 🎲 ${dr} → ${cn(att)} を破壊`);
       trapKill(p, att);
@@ -2949,14 +2937,17 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       }
     }
   }
-  if (!att.mutedEffects && att.id==='DEVIL_TOKEN' && targetUid===null) att.atkMod-=3;
+  if (!att.mutedEffects && att.id === 'DEVIL_TOKEN' && targetUid === null) {
+    monsterActivation(g, ctx.ev, p, att);
+    att.atkMod -= 3;
+  }
   if (dealtFace>0 && !att.mutedEffects && att.id==='CHOSEN_ROGUE') att.chosenBoonTurn=g.turn+1;
   if (dealtFace>0 && !livePassives(att).length) for(const entry of [...o.enchants]) {
     if(entry.card.id==='RUNE_BARRIER') {o.enchants.splice(o.enchants.indexOf(entry),1);binEnch(g,ctx,o,entry.card);}
   }
   if (damageTarget) monsterKillBonus(g, ctx, p, att, o, damageTarget, damageStart);
   if (counterTarget && counterAmount > 0) counterHit(g, ctx, o, counterTarget, p, att, counterAmount);
-  if (!g.over && p.extraHitTurn === g.turn && damageTarget && o.field.includes(damageTarget) && curHp(o,damageTarget) === 1) monsterDamage(g,ctx,o,damageTarget,1);
+  if (!g.over && p.extraHitTurn === g.turn && damageTarget && o.field.includes(damageTarget) && curHp(o,damageTarget) === 1) monsterDamage(g,ctx,o,damageTarget,1,false,{...DB.QUICK_INSURANCE,uid:'QUICK_INSURANCE'},p);
   if (att.attackFx === 'goblinDirect' && targetUid === null && !g.over) {
     monsterActivation(g, ctx.ev, p, att);
     ctx.dealDamage(o, 1, cn(att), cn(att), side(g, p));
@@ -5943,8 +5934,10 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (uid === null) { ctx.log("  └ 콜로세움: 소환 취소", "  └ コロシアム: 召喚をキャンセル"); return; }
       if (!ids0.includes(uid) || !DB[uid]) { g.pending = pending; return; }
       if (p.field.length >= FIELD_MAX) { ctx.log("  └ 몬스터 존이 가득 차 소환 실패", "  └ モンスターゾーンが満杯で召喚失敗"); return; }
+      if (p.mana < 3 || !effectSummonAllowed(g,p,DB[uid])) return;
+      p.mana -= 3;
       ctx.log(`<span class="t">${p.name}</span> 콜로세움 → ${cn(DB[uid])} 소환`, `<span class="t">${p.name}</span> コロシアム → ${cn(DB[uid])} 召喚`);
-      if (p.mana>=3 && effectSummonAllowed(g,p,DB[uid])) {p.mana-=3;summonForOwner(g,ctx,p,inst(g,uid));}
+      summonForOwner(g,ctx,p,inst(g,uid));
       return;
     }
     if (pending.reason === "civChoice") {
@@ -6082,6 +6075,13 @@ export function effectChoices(g: GameState): CardInst[] {
     default: return [];
   }
 }
+// Restore the card responsible for a deferred destruction when the target is chosen.
+const choiceSource: Record<string,string> = {
+  RUNE_BURST: 'S15',
+  CHOSEN_KILL: 'CHOSEN_ROGUE',
+  CHOSEN_DISPEL: 'CHOSEN_MAGE',
+  CULTURE_BREAK: 'MULTI_CULTURE',
+};
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
   g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: ['CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST'].includes(reason) || reason === "SELECTED_SWORD" || reason === "RIFT_JAILER" || reason === "TIMEWARP", data };
   if (reason === 'COLOSSEUM_REST') g.pending.hint = '체력을 전부 회복할 자신의 몬스터 1체 선택';
@@ -6585,7 +6585,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
   const ev: GameEvent[] = [];
   const ctx = makeCtx(g, ev);
   if (action.type === 'play') ctx.effectCard=g.players[g.cur].hand[action.idx];
-  else if (g.pending) ctx.effectCard=DB[String(g.pending.data?.sourceId ?? g.pending.reason)];
+  else if (g.pending) ctx.effectCard=DB[String(g.pending.data?.sourceId ?? choiceSource[g.pending.reason] ?? g.pending.reason)];
   refreshFieldPassives(g);
   // 운명의 수레바퀴 스냅샷은 재굴림 응답 대기 중에만 유효 — 그 외 액션에선 정리
   if (!g.pending || g.pending.kind !== "reroll") g._wheelSnap = null;
@@ -6787,7 +6787,7 @@ function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, 
   else { m.dmg = (m.dmg ?? 0) + amount; if (m.dmg >= effDef(owner,m)) ctx.destroyMonster(owner,m,undefined,combat && effectSource?.id==='TIME_WRAITH' && !hasEssence(g) ? effectSource.uid : undefined); }
   const origin = effectSource ?? ctx.monsterSource;
   if (!combat && origin?.t === 'mon' && !ctx.bonusDamage && owner.field.includes(m)) {
-    captainBonus(g,ctx,origin,()=>{ if(owner.field.includes(m)) monsterDamage(g,ctx,owner,m,3); });
+    captainBonus(g,ctx,origin,()=>{ if(owner.field.includes(m)) monsterDamage(g,ctx,owner,m,3,false,origin,dealer); });
   }
   return !owner.field.includes(m);
 }
@@ -6874,10 +6874,12 @@ function queueExpansionChoice(g: GameState, p: PlayerState, reason: string, hint
   (g.expansionChoices ??= []).push({ owner: side(g, p), reason, hint, data });
 }
 function offerColosseumPick(g: GameState, ctx: Ctx, owner: PlayerState): void {
-  if (owner.mana<3) return;
+  if (owner.mana < 3) return;
+  const choices = CHOSEN_IDS.filter(id => effectSummonAllowed(g,owner,DB[id]));
+  if (!choices.length) return;
   g.pending = {kind:'giantShop', owner:side(g,owner), reason:'colosseumPick', allowCancel:true,
     hint:'콜로세움 — 소환할 선택받은 몬스터 선택', hintJa:'コロシアム — 召喚する「選ばれし」モンスターを選択',
-    data:{ids:[...CHOSEN_IDS],free:true}};
+    data:{ids:choices,free:true}};
   ctx.ev.push({type:'needTarget',pending:g.pending});
 }
 
@@ -7245,7 +7247,7 @@ function removeFieldCard(g:GameState,ctx:Ctx,p:PlayerState,c:CardInst,mode:'brea
     if(mode==='hand'){
       binEnch(g,ctx,p,enchant.card,true,'exile');
       const i=rmz(p).findIndex(v=>v.uid===c.uid);if(i>=0)p.hand.push(rmz(p).splice(i,1)[0]);
-    }else binEnch(g,ctx,p,enchant.card,mode==='rift','spell');
+    }else binEnch(g,ctx,p,enchant.card,mode==='rift','spell',((1-side(g,p)) as Side));
     return;
   }
   const q=p.quests?.find(q=>q.card.uid===c.uid),t=p.traps.find(t=>t.card.uid===c.uid);
@@ -7271,8 +7273,6 @@ function stripRunePassive(m:FieldMon,k:string):void {
   if(k==='ambush')delete m.directOnly;
   if(k==='aura' && m.aura==='ward')delete m.aura;
   if(k==='guts')m.guts=0;
-  if(k==='decay')m.decayCnt=0;
-
 }
 function giveRunePassive(m:FieldMon,k:string):void {
   if(m.strippedConditionals)m.strippedConditionals=m.strippedConditionals.filter(x=>x!==k);
@@ -7283,7 +7283,14 @@ const runeModes:Record<string,number>={guts:1,counter:2,evade:2,aura:3,majesty:3
 function runeChoices(g:GameState):CardInst[]|null {
   const q=g.pending!,p=g.players[actingSide(g)],o=g.players[1-actingSide(g)],all=[...p.field,...o.field];
   const grantPrice=(key:string)=>Number((q.data?.prices as Record<string,number> | undefined)?.[key] ?? 0);
-  const selectableBoard=()=>fieldCards(o).map(c=>o.traps.some(t=>t.card.uid===c.uid)?{uid:c.uid,id:'HIDDEN',t:'trap' as const,cost:0,name:'?',text:'',nameJa:'?',nameEn:'?'}:c);
+  const selectableBoard = (excludeVoid: boolean): CardInst[] => {
+    const excluded = (q.data?.excluded as string[] | undefined) ?? [];
+    return fieldCards(o)
+      .filter(c => !o.field.some(m => m.uid === c.uid && hasPassive(m,'aura')))
+      .filter(c => !excludeVoid || (!hasPassive(c,'void') && !excluded.includes(c.uid)))
+      .map(c => o.traps.some(t => t.card.uid === c.uid)
+        ? {uid:c.uid,id:'HIDDEN',t:'trap',cost:0,name:'?',text:'',nameJa:'?',nameEn:'?'} : c);
+  };
   switch(q.reason){
     case 'GLYPH_REWARD': return [...RUNE_IDS].map(id=>({...DB[id],uid:id}));
     case 'GLYPH_SOURCE': return all.length<2?[]:all.filter(m=>livePassives(m).some(k=>k!=='void'));
@@ -7304,9 +7311,9 @@ function runeChoices(g:GameState):CardInst[]|null {
     case 'EGG_ADVANCE': return p.field.filter(m=>m.hatch!=null && (m.dur??0)>0);
     case 'CHOSEN_DISPEL': return o.enchants.map(e=>e.card);
     case 'CHOSEN_KILL': return o.field.filter(m=>!hasPassive(m,'aura'));
-    case 'CULTURE_BREAK': return selectableBoard().filter(c=>!o.field.some(m=>m.uid===c.uid&&hasPassive(m,'aura')));
+    case 'CULTURE_BREAK': return selectableBoard(false);
     case 'SCRAP_EXILE': return p.hand.filter(c=>!hasPassive(c,'relic'));
-    case 'SCRAP_RETURN': return selectableBoard().filter(c=>!hasPassive(c,'void')&&!o.field.some(m=>m.uid===c.uid&&hasPassive(m,'aura')));
+    case 'SCRAP_RETURN': return selectableBoard(true);
     default:return null;
   }
 }
@@ -7334,8 +7341,16 @@ function resolveRuneChoice(g:GameState,ctx:Ctx,p:PlayerState,q:Pending,c:CardIns
       for(let i=0;i<Number(q.data?.count??1)&&choices.length;i++)giveRunePassive(m,choices.splice(randInt(g,choices.length),1)[0]);
       const source=p.field.find(m=>m.uid===q.data?.sourceUid);if(source)monsterActivation(g,ctx.ev,p,source);break;
     }
-    case 'EGG_ADVANCE':m.dur=(m.dur??1)-1;m.hatch=Math.max(0,(m.hatch??0)-5);
-      if(m.hatch===0)hatchEgg(g,ctx,p,m);else if(m.dur===0)ctx.destroyMonster(p,m);break;
+    case 'EGG_ADVANCE': {
+      const master = p.field.find(ally => ally.uid === q.data?.sourceUid);
+      if (!master || master.mutedEffects) break;
+      monsterActivation(g, ctx.ev, p, master);
+      m.dur = (m.dur ?? 1) - 1;
+      m.hatch = Math.max(0, (m.hatch ?? 0) - 5);
+      if (m.hatch === 0) hatchEgg(g, ctx, p, m);
+      else if (m.dur === 0) ctx.destroyMonster(p, m);
+      break;
+    }
     case 'CHOSEN_DISPEL':{
       if(q.data?.first){
         const i=rmz(p).findIndex(v=>v.star==='trash');if(i>=0)fieldToGrave(g,ctx,p,rmz(p).splice(i,1)[0]);
@@ -7347,7 +7362,12 @@ function resolveRuneChoice(g:GameState,ctx:Ctx,p:PlayerState,q:Pending,c:CardIns
       if(Number(q.data?.left)>1)queueExpansionChoice(g,p,'CULTURE_BREAK','',{left:1});break;
     case 'SCRAP_EXILE':p.hand.splice(p.hand.indexOf(c),1);sendToRift(g,p,c);
       if(c.cost<=1)p.mana=Math.min(effMaxMana(p),p.mana+3);
-      else if(c.cost===2)p.hand.push(inst(g,'WINE'));else queueExpansionChoice(g,p,'SCRAP_RETURN','');break;
+      else if(c.cost===2)p.hand.push(inst(g,'WINE'));
+      else {
+        const excluded = o.traps.filter(t => hasPassive(t.card,'void')).map(t => t.card.uid);
+        queueExpansionChoice(g,p,'SCRAP_RETURN','',{excluded});
+      }
+      break;
     case 'SCRAP_RETURN':removeFieldCard(g,ctx,o,c,'hand');break;
     default:return false;
   }
