@@ -1,3 +1,4 @@
+import {MERC_IDS} from '../../client/src/shared/mercenaryCards';
 import { DB, STARTERS } from '../../client/src/shared/cards';
 import { refreshFieldPassives } from '../../client/src/shared/engine';
 import type { CardInst, FieldMon, GameState } from '../../client/src/shared/types';
@@ -22,7 +23,9 @@ export function restoreReworkedCards(game: GameState): void {
   const updateFire = !game.fireBrandReworkApplied;
   const updateDemons = !game.demonRealmReworkApplied;
   const updateHexers = !game.hexerReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers)) return;
+  const updateMercs = !game.mercReworkApplied;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs)) return;
+  game.mercReworkApplied = true;
   game.hexerReworkApplied = true;
   game.demonRealmReworkApplied = true;
   game.fireBrandReworkApplied = true;
@@ -32,6 +35,11 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateMercs && MERC_IDS.has(card.id)) {
+      const def = DB[card.id], swapped = (card as FieldMon).trickSwapped;
+      Object.assign(card, {cost:def.cost, val:def.val, val2:def.val2, atk:swapped?def.def:def.atk, def:swapped?def.atk:def.def,
+        text:def.text, textJa:def.textJa, textEn:def.textEn});
+    }
     if (updateHexers && ['NHEX','HEXER1','HEXER2','HEXER3','HEXER4'].includes(card.id)) {
       const def = DB[card.id];
       const swapped = 'trickSwapped' in card && card.trickSwapped;

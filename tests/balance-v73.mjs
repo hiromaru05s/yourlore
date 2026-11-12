@@ -15,13 +15,13 @@ try {
  const count=(g,owner,id)=>g.players[owner].discard.filter(c=>c.id===id).length;
  const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
 
- test('approved costs, Mercenary body and existing summon effect',()=>{
+ test('approved costs, Mercenary body and contract summon',()=>{
   assert(Number(E.BALANCE_VERSION.slice(1))>=73);
   assert.equal(E.DB.SCARECROW.cost,1);assert.equal(E.DB.WINE_COLLECTOR.cost,1);
   let g=play(fresh(),'SCARECROW');assert.equal(g.players[0].field.filter(m=>m.id==='TOKEN00').length,3);
   g=play(fresh(),'MERCENARY');const m=g.players[0].field.find(m=>m.id==='MERCENARY');
-  assert.equal(E.effAtk(g.players[0],m,g),1);assert.equal(E.curHp(g.players[0],m),1);
-  assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,1);
+  assert.equal(E.effAtk(g.players[0],m,g),2);assert.equal(E.curHp(g.players[0],m),1);
+  assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,0);
  });
  test('Recluse blocks hand and token summons until four total turns have elapsed',()=>{
   let g=play(fresh(),'TSO1');assert.equal(g.players[0].summonLockUntil,7);

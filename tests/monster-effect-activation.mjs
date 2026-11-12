@@ -83,7 +83,7 @@ try {
   if(id==='BLACK_ELSA'||id==='BLACK_ALICE'){p.hand=[card('BLACK_CURSE')];action={type:'play',idx:0};}
   if(id==='MERC_MASTER'){g.cur=1-owner;action={type:'endTurn'};}
   if(id==='SHIELD_TITAN')action={type:'endTurn'};
-  const r=run('reaction:'+owner+':'+id,g,m,action,1);
+  const r=run('reaction:'+owner+':'+id,g,m,action,id==='MERC_MASTER'?0:1);
   if(['GM6_8','ELDER_ELF_KING','FIRE_MASTER'].includes(id))assert(r.events.findIndex(e=>e.type==='monsterActivate'&&e.uid===m.uid)<r.events.findIndex(e=>e.type==='destroy'&&e.uid===m.uid),'death cue before source disappears');
  }
  for(const id of ['FARM_KEEPER','MIMIC_HUNTER']){const g=fresh(),m=mon(id);g.players[0].field=[m];run('inactive-end:'+id,g,m,{type:'endTurn'},0);}

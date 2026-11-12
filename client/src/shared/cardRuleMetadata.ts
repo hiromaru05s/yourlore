@@ -204,6 +204,7 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   QUICK_ASSAULT: {"terms":["rift"]},
   QUICK_HELLFIRE: {"terms":["rift","counters"]},
   CAVALRY: {"mentions":["counter","taunt","evade"],"grants":["evade"]},
+  MERC_LEADER: {mentions:['taunt'], grants:['taunt']},
   MERC_ART: {terms:["composition"], mentions:["counter"], grants:["counter"]},
   Q_CHEAT: {"terms":["rift"]},
   Q_TOWN: {"terms":["rift"]},

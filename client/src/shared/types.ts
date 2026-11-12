@@ -69,6 +69,8 @@ export interface CardInst extends CardDef {
 }
 
 export interface FieldMon extends CardInst {
+  mercContractKey?: string;
+  bounties?: {hunterKey: string; hunterId: string; reward: number}[];
   visibleCurseAttack?: number;
   mutedEffects?: Pick<CardDef,'onSummon'|'turnFx'|'condAtk'|'attackFx'|'aura'|'evolveTo'>;
   escortLocked?: boolean;
@@ -238,6 +240,7 @@ export interface GameState {
   starterQuestReworkApplied?: boolean;
   fireBrandReworkApplied?: boolean;
   demonRealmReworkApplied?: boolean;
+  mercReworkApplied?: boolean;
   hexerReworkApplied?: boolean;
   armyAttuneApplied?: boolean;
   heartFirstUid?: string;

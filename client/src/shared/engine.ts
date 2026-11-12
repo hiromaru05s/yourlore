@@ -1,3 +1,4 @@
+import {MERC_IDS} from './mercenaryCards';
 import { FIRE_SPELL_IDS } from './fireCards';
 import { ARMY_IDS, ATTUNE_REWARDS, ATTUNE_SUPPORT_IDS } from './armyAttuneCards';
 import {logToEn} from './logEn';
@@ -24,7 +25,7 @@ import {monsterActivation, observeMonsterEffect} from './monsterEffects';
 // localizes the displayed name, so cn() is reused in both languages.
 // ============================================================
 import type {
-  DiceSource, OriginRiteReaction,
+  DiceSource, OriginRiteReaction, Pending,
   Action, CardDef, CardInst, Enchant, FieldMon, GameEvent, GameState, PlayerState, ReduceResult, Side, TrapSet, QuestEvent,
 } from "./types";
 import { ALL_IDS, BUYABLE_POOL, DB, STARTERS, TRIBES, DEFAULT_DECK_8, sanitizeDeck, hasPassive, PASSIVES , isChestCard, enchantHasTurnCountdown } from "./cards";
@@ -462,7 +463,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -1197,7 +1198,6 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   // 선택받은 마법사: 턴 시작 선택 발동 (다른 턴 시작 pending이 없을 때만 — 시련의 영역 제외 후에는 체인으로 이어짐)
   if (!first && !g.over) offerChosenMage(g, ctx);
   g.phase = "main";
-  for (const m of [...p.field]) if (!g.over && !m.mutedEffects && m.id === 'MERC_MASTER') { const finish = observeMonsterEffect(g, ctx.ev, p, m, MAX_MANA); mercEffect(g, ctx, p, m, true); finish(); }
 
 }
 
@@ -2168,7 +2168,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       if (!att.mutedEffects && att.id === "POISON_MASTER") monsterActivation(g, ctx.ev, p, att);
       const beforeDecay = ctx.ev.length;
       addDecay(g, ctx, o, tgt, !att.mutedEffects && att.id === "POISON_MASTER" ? 3 : 1);
-      monsterKillBonus(g, ctx, p, att, o, tgt, beforeDecay);
+      monsterKillBonus(g, ctx, p, att, o, tgt, beforeDecay, false);
       if (g.over) { att.attacksUsed = (att.attacksUsed || 0) + 1; if (att.attacksUsed >= (hasPassive(att,'dual') ? Math.max(2,att.mult ?? 1) : 1)) att.exhausted = true; return; }
     }
   }
@@ -4816,6 +4816,8 @@ function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): vo
 }
 function summonMonster(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
   const m: FieldMon = { ...card, exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn };
+  delete m.mercContractKey;
+  delete m.bounties;
   if (card.hatchTurns) { m.hatch = card.hatchTurns; m.dur = card.hatchDur ?? 4; } // 알: 부화/카운터 시작
   applyFieldGlobals(g, m); // 약화술식/트릭룸 반영
   if (m.id === 'GOBLIN_RAIDER') m.expireOpponentOf = side(g, p);
@@ -5927,6 +5929,7 @@ export function purchaseAllowed(g: GameState, p: PlayerState, c: CardInst): bool
 export function effectChoices(g: GameState): CardInst[] {
   const pending = g.pending;
   if (pending?.kind !== "cardChoice") return [];
+  const mercOptions = mercChoices(g); if (mercOptions !== null) return mercOptions;
   const dewOptions = dewShieldChoices(g); if (dewOptions !== null) return dewOptions;
   const extra = expansionChoices(g); if (extra !== null) return extra;
   const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
@@ -6001,6 +6004,7 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
   const sourceId = pending.reason === 'TREASON_DESTROY' ? 'TREASON'
     : pending.reason === 'STABLE_EVADE' ? 'STABLE'
     : pending.reason === 'RIFT_JAILER' ? 'GM6_1' : pending.reason;
+  if (resolveMercChoice(g, ctx, p, pending, card)) return;
   if (armyPick(g,ctx,p,pending,card)) return;
   if (expansionChoiceResolve(g, ctx, pending, p, card)) { ctx.log(`${cn(DB[sourceId])} → ${cn(card)}`); return; }
   switch (pending.reason) {
@@ -6383,6 +6387,10 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
   normalizeManaCaps(g2);
   refreshFieldPassives(g2);
   recheckDeaths(g2, questCtx);
+  for (const side of [0,1] as Side[]) for (const target of g2.players[side].field) {
+    if (target.bounties?.length) target.bounties = target.bounties.filter(b =>
+      g2.players[1-side].field.some(hunter => hunter.mercContractKey === b.hunterKey));
+  }
   rememberPublicCards(g2);
   for (const sx of [0,1] as Side[]) {
     const before = new Set((prev.players[sx].removed??[]).map(c=>c.uid));
@@ -6448,6 +6456,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         consumeMarketStock(g, ctx, action.i); // v40: 재고 -1, 소진 시 슬롯 교체
         if (bought.quick) resolveQuick(g, ctx, p, bought);
         tryToll(g, ctx, p, bought); // 통행세: 구매 반응
+        offerMercHire(g, ctx, p, bought);
       }
       break;
     }
@@ -6468,6 +6477,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         havenPurchase(g, ctx, p, bought);
         if (bought.quick) resolveQuick(g, ctx, p, bought);
         tryToll(g, ctx, p, bought); // 통행세: 구매 반응
+        offerMercHire(g, ctx, p, bought);
       }
       break;
     }
@@ -6550,7 +6560,6 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
 
 // ---------- v50 expansion: shared rules for server, client and deterministic bots ----------
 const FIRE_IDS = new Set(FIRE_SPELL_IDS);
-const MERC_IDS = new Set(['MERCENARY', 'MERC_LEADER', 'MERC_MASTER']);
 const isFire = (c: CardDef): boolean => FIRE_IDS.has(c.id);
 const isBlack = (c: CardDef): boolean => c.t === 'spell' && c.id.startsWith('BLACK_');
 export function fireDamageBonus(p: PlayerState): number {
@@ -6601,9 +6610,18 @@ function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, 
   }
   return !owner.field.includes(m);
 }
-function monsterKillBonus(g: GameState, ctx: Ctx, owner: PlayerState, source: FieldMon, victim: PlayerState, target: FieldMon, eventStart: number): void {
-  if (g.over || owner === victim || source.aura !== 'killBurn') return;
+function monsterKillBonus(g: GameState, ctx: Ctx, owner: PlayerState, source: FieldMon, victim: PlayerState, target: FieldMon, eventStart: number, combat = true): void {
+  if (g.over || owner === victim || (source.aura !== 'killBurn' && !source.mercContractKey)) return;
   if (!ctx.ev.slice(eventStart).some(e => e.type === 'destroy' && e.uid === target.uid)) return;
+  if (combat && source.mercContractKey && !source.mutedEffects && !owner.monsterSilence) {
+    const reward = (target.bounties ?? []).filter(b => b.hunterKey === source.mercContractKey).reduce((sum,b) => sum+b.reward, 0);
+    if (reward) {
+      owner.mana = Math.min(effMaxMana(owner), owner.mana + reward);
+      monsterActivation(g, ctx.ev, owner, source);
+      ctx.log(`${cn(source)}: 현상금 마나 ${reward}`, `${cn(source)}：賞金 ${reward}マナ`, `${cn(source)}: bounty of ${reward} mana`);
+    }
+  }
+  if (source.aura !== 'killBurn') return;
   monsterActivation(g, ctx.ev, owner, source);
   ctx.dealDamage(victim, source.val ?? 2, cn(source), cn(source), side(g, owner));
 }
@@ -6693,17 +6711,25 @@ function drainExpansionChoices(g: GameState, ctx: Ctx): void {
     else offerEffectChoice(g, ctx, g.players[c.owner], c.reason, c.hint, c.data);
   }
 }
-function mercEffect(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon, start: boolean): void {
-  const count = start || m.id !== 'MERC_MASTER' ? 1 : 2;
-  const repeats = p.enchants.some(e => e.card.ench === 'mercArt') ? 2 : 1;
-  for (let j = 0; j < repeats && !g.over; j++) {
-    for (let i = 0; i < count; i++) effectSummon(g, ctx, p, 'SOLDIER2');
-    if (g.players.some(pl => pl.field.some(x => x.id === 'CASINO'))) diceRoll(g, ctx.ev, side(g, p), { id: m.id, player: side(g, p) }, m.id === 'MERCENARY' ? 3 : m.id === 'MERC_LEADER' ? 5 : 10);
-  }
+function summonPurchasedMerc(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst, fee: number): void {
+  const i = p.discard.findIndex(c => c.uid === card.uid);
+  if (i < 0 || p.mana < fee || !effectSummonAllowed(g, p, card)) return;
+  p.discard.splice(i, 1);
+  p.mana -= fee;
+  summonForOwner(g, ctx, p, card);
 }
+
+function offerMercHire(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
+  if (!MERC_IDS.has(card.id) || !p.discard.includes(card) || !effectSummonAllowed(g, p, card)) return;
+  if (p.field.some(m => MERC_IDS.has(m.id))) summonPurchasedMerc(g, ctx, p, card, 0);
+  else if (p.mana >= 1) queueExpansionChoice(g, p, 'MERC_HIRE', '', {sourceId:card.id, sourceUid:card.uid});
+}
+
 function expansionSummon(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon): void {
   const o = g.players[1 - side(g, p)];
-  if (MERC_IDS.has(m.id)) mercEffect(g, ctx, p, m, false);
+  if (MERC_IDS.has(m.id) && (m.id !== 'MERCENARY' || o.field.some(target => !hasPassive(target,'aura')))) {
+    queueExpansionChoice(g, p, 'MERC_JOB', '', {sourceId:m.id, sourceUid:m.uid, repeat:p.enchants.some(e => e.card.ench === 'mercArt')});
+  }
   if (m.id === 'FARMER' && p.enchants.some(e => e.card.id === 'FARM') && !p.enchants.some(e => e.card.id === 'FARMER_PRAYER') && p.enchants.length + p.traps.length + (p.quests?.length ?? 0) < ST_MAX) {
     const prayer = inst(g, 'FARMER_PRAYER');
     p.enchants.push({card:prayer, turns:99, bornTurn:g.turn});
@@ -6980,6 +7006,63 @@ function expansionChoiceResolve(g: GameState, ctx: Ctx, q: NonNullable<GameState
 function dewOption(sourceId: string, uid: string, ja: string, ko: string, en: string): CardInst {
   return {...DB[sourceId],uid,name:ko,nameJa:ja,nameEn:en,text:ko,textJa:ja,textEn:en,cost:0,t:'spell'};
 }
+function mercChoices(g: GameState): CardInst[] | null {
+  const q = g.pending!;
+  if (!q.reason.startsWith('MERC_')) return null;
+  const p = g.players[actingSide(g)], o = g.players[1-actingSide(g)];
+  const id = String(q.data?.sourceId), def = DB[id];
+  const self = p.field.find(m => m.uid === q.data?.sourceUid);
+  const targets = o.field.filter(m => !hasPassive(m,'aura'));
+  switch (q.reason) {
+    case 'MERC_HIRE': return [
+      dewOption(id,'hire','1マナで即召喚','마나 1로 즉시 소환','Pay 1 mana and summon'),
+      dewOption(id,'pass','購入のみ','구매만 하기','Purchase only'),
+    ];
+    case 'MERC_BOUNTY': case 'MERC_HIT': return targets;
+    case 'MERC_JOB': {
+      const options: CardInst[] = [];
+      if (targets.length) {
+        if (self) options.push(dewOption(id,'bounty',`賞金首（${def.val}マナ）`,`현상 수배 (마나 ${def.val})`,`Bounty (${def.val} mana)`));
+        options.push(dewOption(id,'hit',`荒事（${def.val2}ダメージ）`,`무력 행사 (피해 ${def.val2})`,`Rough Work (${def.val2} damage)`));
+      }
+      if (id === 'MERC_LEADER' && self) options.push(dewOption(id,'escort','護衛（挑発）','호위 (도발)','Escort (gain Taunt)'));
+      if (id === 'MERC_MASTER' && !q.data?.escortUsed && effectSummonAllowed(g,p,DB.MERC_LEADER))
+        options.push(dewOption(id,'escort','護衛（傭兵リーダー召喚）','호위 (용병 리더 소환)','Escort (summon Mercenary Leader)'));
+      return options;
+    }
+    default: return null;
+  }
+}
+
+function resolveMercChoice(g: GameState, ctx: Ctx, p: PlayerState, q: Pending, choice: CardInst): boolean {
+  if (!q.reason.startsWith('MERC_')) return false;
+  const id = String(q.data?.sourceId), self = p.field.find(m => m.uid === q.data?.sourceUid);
+  if (q.reason === 'MERC_HIRE') {
+    const bought = p.discard.find(c => c.uid === q.data?.sourceUid);
+    if (choice.uid === 'hire' && bought) summonPurchasedMerc(g,ctx,p,bought,1);
+    return true;
+  }
+  if (q.reason === 'MERC_JOB') {
+    if (choice.uid !== 'escort') {
+      offerEffectChoice(g,ctx,p,choice.uid === 'bounty' ? 'MERC_BOUNTY' : 'MERC_HIT','',q.data);
+      return true;
+    }
+    if (id === 'MERC_MASTER') {
+      const leader = Object.assign(inst(g,'MERC_LEADER'), {token:true});
+      effectSummon(g,ctx,p,leader.id,leader);
+    } else if (self && !hasPassive(self,'taunt')) (self.passivesG ??= []).push('taunt');
+  } else if (q.reason === 'MERC_BOUNTY' && self) {
+    const target = choice as FieldMon;
+    self.mercContractKey ??= newUID(g);
+    (target.bounties ??= []).push({hunterKey:self.mercContractKey, hunterId:id, reward:DB[id].val!});
+    ctx.log(`${cn(self)}: 현상 수배 → ${cn(target)}`, `${cn(self)}：賞金首 → ${cn(target)}`, `${cn(self)} marks ${cn(target)} for a bounty`);
+  } else if (q.reason === 'MERC_HIT') {
+    monsterDamage(g,ctx,g.players[1-side(g,p)],choice as FieldMon,DB[id].val2!,false,self ?? {...DB[id],uid:String(q.data?.sourceUid)});
+  }
+  if (q.data?.repeat) queueExpansionChoice(g,p,'MERC_JOB','',{...q.data, repeat:false, escortUsed:choice.uid === 'escort'});
+  return true;
+}
+
 function dewShieldChoices(g: GameState): CardInst[] | null {
   const q=g.pending!; const p=g.players[actingSide(g)],o=g.players[1-actingSide(g)];
   const source=String(q.data?.sourceId ?? 'WORLD_TREE');

@@ -1,3 +1,4 @@
+import {MERCENARY_CARDS} from './mercenaryCards';
 import { STARTER_QUESTS } from './starterQuests';
 import {HEXER_SPELLS} from './hexerCards';
 import { FIRE_BRAND_CARDS } from './fireCards';
@@ -1520,21 +1521,6 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "ko": "【필드에 있는 동안】이 몬스터가 받는 반격을 무효화한다. 아군에 도발 몬스터가 있으면 회피를 얻는다.",
     "en": "【While on the Field】Immune to Counter damage. Gain Evade while you control a monster with Taunt."
   },
-  "MERCENARY": {
-    "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス3個を振る。",
-    "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 3개를 굴린다.",
-    "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 3 dice."
-  },
-  "MERC_LEADER": {
-    "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
-    "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
-    "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 5 dice."
-  },
-  "MERC_MASTER": {
-    "ja": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。\n\n【自分のターン開始時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。",
-    "ko": "【소환 시】병사 2체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 10개를 굴린다.\n\n【자신의 턴 시작 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 10개를 굴린다.",
-    "en": "【On Summon】Summon 2 Soldiers to your field. If either player controls a Casino, roll 10 dice.\n\n【At the Start of Your Turn】Summon 1 Soldier to your field. If either player controls a Casino, roll 10 dice."
-  },
   "MERC_ART": {
     "ja": "【いずれかのモンスター召喚時】召喚されたモンスターの攻撃力+1。そのモンスターに「反撃」を付与する。\n\n【場にある間】自分の「傭兵」系モンスターの召喚時・ターン開始時効果を2回行う（重複なし）。自分のデッキ構成に「傭兵」系が2種類以上あれば、自分の場の全ての「傭兵」系モンスターの攻撃力+3・体力+3。",
     "ko": "【어느 쪽이든 몬스터 소환 시】소환된 몬스터의 공격력 +1. 그 몬스터에게 반격을 부여한다.\n\n【필드에 있는 동안】자신 용병 계열 몬스터의 소환시·턴 시작시 효과를 2회 실행(중첩 불가). 자신의 덱 구성에 용병 계열이 2종류 이상이면 자신의 필드 모든 용병 계열 몬스터 공격력 +3, 체력 +3.",
@@ -1846,4 +1832,4 @@ for (const c of GOBLIN_CARDS) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,e
 CARD_EFFECT_TEXT.RIFT_MATTER = {ko:RIFT_MATTER.text,ja:RIFT_MATTER.textJa!,en:RIFT_MATTER.textEn!};
 CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.textJa!,en:RIFT_METALIGHT.textEn!};
 
-for (const c of [...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
+for (const c of [...MERCENARY_CARDS, ...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};

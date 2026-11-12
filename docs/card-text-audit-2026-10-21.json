@@ -7301,10 +7301,14 @@
     },
     "MERCENARY": {
       "nameJa": "傭兵",
-      "status": "reviewed-v73-rework",
-      "changedLocales": [],
-      "definitionSha256": "7e3d205c699f66898a2ae032645cd54e8bf2760e3552df5b0ecf17ebcf991065",
-      "textSha256": "909692d4a36bb9fe81ff5fdf4be4a93466e7635b981e477ba63bc2bff6913fa7",
+      "status": "reworked",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "8ce85899ac2d1a8f93258e1e9090caf985616c9fba89d88d5fd143f975dbd408",
+      "textSha256": "1881f6817917dec4f1254901f22d5275f5438ec5851c82a5eacd4bd565711e18",
       "hooks": {
         "onSummon": "expansion"
       },
@@ -7314,55 +7318,59 @@
         "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 3 dice."
       },
       "after": {
-        "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス3個を振る。",
-        "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 3개를 굴린다.",
-        "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 3 dice."
+        "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。この傭兵が戦闘でその相手を倒すと、自分は1マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に1ダメージを与える。",
+        "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 용병이 전투로 그 몬스터를 처치하면 자신은 마나를 1 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 1 준다.",
+        "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 1 mana when this Mercenary defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 1 damage to 1 opposing monster."
       },
       "reviewedAt": "2026-10-31",
       "reviewNote": "Base attack and health are 1/1; summon effect unchanged."
     },
     "MERC_LEADER": {
       "nameJa": "傭兵リーダー",
-      "status": "reviewed-november-balance",
-      "changedLocales": [],
-      "definitionSha256": "8ed50f968f61ff76224368ec27252a66a0d44a6c99fc8693c8fcdde33fd08eea",
-      "textSha256": "fb10837b58453379fffea0b04a90ee5f9b64526e4d8dada3bde8cf125a737bb3",
-      "hooks": {
-        "onSummon": "expansion"
-      },
-      "before": {
-        "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
-        "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
-        "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 5 dice."
-      },
-      "after": {
-        "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
-        "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
-        "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 5 dice."
-      }
-    },
-    "MERC_MASTER": {
-      "nameJa": "傭兵ギルドマスター",
-      "status": "reworded",
+      "status": "reworked",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "9986df2ee1465114488fdefb033df2ac3dc0463f27639327963e3dc6fc461fdc",
-      "textSha256": "a279a4964dabcbcaceb75f365d906df084a5bffcf5b16da301e2ddef92e448dd",
+      "definitionSha256": "d30dd2815ed87d7f278b46d4d48f4fb46a429984c068d2c2ffcb846596b06020",
+      "textSha256": "1e56295f897aa30ad186f9674c3ed3018f570448a5ac93b6c1e7a81d8c95ae7a",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
-        "ja": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。\n\n【自分ターン開始時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。",
-        "ko": "【소환시】병사 2체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 10개를 굴린다.\n\n【자신 턴 시작시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 10개를 굴린다.",
-        "en": "【On Summon】Summon 2 Soldiers to your field. If either player controls a Casino, roll 10 dice.\n\n【Your Turn Start】Summon 1 Soldier to your field. If either player controls a Casino, roll 10 dice."
+        "ja": "【召喚時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス5個を振る。",
+        "ko": "【소환 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 5개를 굴린다.",
+        "en": "【On Summon】Summon 1 Soldier to your field. If either player controls a Casino, roll 5 dice."
       },
       "after": {
+        "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。この傭兵が戦闘でその相手を倒すと、自分は2マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に3ダメージを与える。\n護衛：このモンスターは挑発を得る。",
+        "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 용병이 전투로 그 몬스터를 처치하면 자신은 마나를 2 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 3 준다.\n호위: 이 몬스터가 도발을 얻는다.",
+        "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 2 mana when this Mercenary defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 3 damage to 1 opposing monster.\nEscort: This monster gains Taunt."
+      }
+    },
+    "MERC_MASTER": {
+      "nameJa": "傭兵ギルドマスター",
+      "status": "reworked",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "e0ca9d46aa72a88c002c863c6b16a4360236846639ce29ea5697d1f0ef8a00a8",
+      "textSha256": "558d67b271b979fc46ad26c83eda33f7fc7707eb6d3e19b05707716fd61a6dde",
+      "hooks": {
+        "onSummon": "expansion"
+      },
+      "before": {
         "ja": "【召喚時】「兵士」2体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。\n\n【自分のターン開始時】「兵士」1体を自分の場に召喚する。どちらかの場に「カジノ」があればダイス10個を振る。",
         "ko": "【소환 시】병사 2체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 10개를 굴린다.\n\n【자신의 턴 시작 시】병사 1체를 자신의 필드에 소환한다. 어느 쪽 필드에 카지노가 있으면 주사위 10개를 굴린다.",
         "en": "【On Summon】Summon 2 Soldiers to your field. If either player controls a Casino, roll 10 dice.\n\n【At the Start of Your Turn】Summon 1 Soldier to your field. If either player controls a Casino, roll 10 dice."
+      },
+      "after": {
+        "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。この傭兵が戦闘でその相手を倒すと、自分は3マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に5ダメージを与える。\n護衛：「傭兵リーダー」1体を召喚する。この依頼はこのカードの召喚1回につき1度まで選べる。",
+        "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 용병이 전투로 그 몬스터를 처치하면 자신은 마나를 3 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 5 준다.\n호위: 용병 리더 1체를 소환한다. 이 의뢰는 이 카드의 소환당 1번만 선택할 수 있다.",
+        "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 3 mana when this Mercenary defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 5 damage to 1 opposing monster.\nEscort: Summon 1 Mercenary Leader. You can choose Escort once per summon of this card."
       }
     },
     "MERC_ART": {

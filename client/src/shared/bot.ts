@@ -131,6 +131,13 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
   if (g.pending?.kind === "cardChoice") {
     const pool = effectChoices(g).filter(c => g.pending?.reason !== "QUICK_REBIRTH" || c.cost <= 7);
     const owner = g.pending.owner ?? g.cur;
+    if (g.pending.reason === 'MERC_JOB') {
+      const sourceId = String(g.pending.data?.sourceId);
+      const foes = g.players[1-owner];
+      const canFinish = foes.field.some(m => !hasPassive(m,'aura') && curHp(foes,m) <= (DB[sourceId]?.val2 ?? 0));
+      const preferred = sourceId === 'MERC_MASTER' ? ['escort','hit','bounty'] : canFinish ? ['hit','bounty','escort'] : ['bounty','escort','hit'];
+      return {type:'pick',uid:preferred.find(id => pool.some(c => c.uid === id)) ?? pool[0]?.uid ?? null};
+    }
     if (g.pending.reason === 'NIGHT_CASTLE_GIFT') {
       const ally=g.players[owner];
       const vampire=ally.field.some(m=>/^VAMP[1-5]$/.test(m.id));

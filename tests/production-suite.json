@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/mercenary-contracts.mjs",
     "tests/army-attune.mjs",
     "tests/castle-rework.mjs",
     "tests/dice-fire-cards.mjs",

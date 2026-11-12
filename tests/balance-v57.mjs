@@ -21,8 +21,14 @@ try {
     assert.equal(DB.NGA4.mult,2);assert.equal(DB.VITAL3.onSummon,undefined);
     assert(DB.NGA4.textJa.includes('両プレイヤー'));assert(!DB.VITAL3.textJa.includes('召喚時'));
   });
-  test('Mercenary Leader summons one; art doubles to two',()=>{
-    for(const art of [false,true]){let g=fresh();if(art)g.players[0].enchants=[{card:card('MERC_ART'),turns:99}];g=play(g,'MERC_LEADER').state;assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,art?2:1);}
+  test('Mercenary Arts repeats the Leader contract',()=>{
+    for(const art of [false,true]){
+      let g=fresh();if(art)g.players[0].enchants=[{card:card('MERC_ART'),turns:99}];
+      g=play(g,'MERC_LEADER').state;
+      g=reduce(g,{type:'pick',uid:'escort'}).state;
+      assert(E.hasPassive(g.players[0].field[0],'taunt'));
+      assert.equal(g.pending?.reason,art?'MERC_JOB':undefined);
+    }
   });
   for(const ally of ['CASTLE','SOLDIER2','INFKNIGHT','GUNNER','HEAVY_GUNNER',null,'M11','GOLEM1'])test('General summon condition '+ally,()=>{
     let g=fresh();if(ally)g.players[0].field=[mon(ally)];const before=g.players[0].field.filter(m=>m.id==='INFKNIGHT').length;
@@ -43,8 +49,8 @@ try {
     assert.equal(faces.size,6);assert(six>50&&six<150);
   });
   test('General also rolls for effect summons; opposing Generals terminate at field limits',()=>{
-    let g=fresh();g.players[1].field=[mon('GM6_7')];const r=play(g,'MERC_LEADER');assert.equal(r.events.filter(e=>e.type==='dice'&&e.source.id==='GM6_7').length,2);
-    for(let seed=1;seed<=200;seed++){g=fresh(seed);g.players[0].field=[mon('GM6_7')];g.players[1].field=[mon('GM6_7')];const r=play(g,'MERC_LEADER');assert(r.events.length<500);assert(r.state.players.every(p=>p.field.length<=7));}
+    let g=fresh();g.players[1].field=[mon('GM6_7')];const r=play(g,'ELITE');assert.equal(r.events.filter(e=>e.type==='dice'&&e.source.id==='GM6_7').length,2);
+    for(let seed=1;seed<=200;seed++){g=fresh(seed);g.players[0].field=[mon('GM6_7')];g.players[1].field=[mon('GM6_7')];const r=play(g,'ELITE');assert(r.events.length<500);assert(r.state.players.every(p=>p.field.length<=7));}
   });
   test('Warlord threshold excludes itself',()=>{for(const n of [0,1,2,3]){let g=fresh();g.players[0].field=Array.from({length:n},()=>mon('SOLDIER2'));g=play(g,'M11').state;assert.equal(g.players[0].field.filter(m=>m.id==='INFKNIGHT').length,n===3?1:0);}});
   test('Warrior Golem adds one conditional counter to initial Guts',()=>{for(const ally of [null,'M1','GOLEM1']){let g=fresh();if(ally)g.players[0].field=[mon(ally)];g=play(g,'NGA3').state;assert.equal(g.players[0].field.at(-1).guts,ally==='GOLEM1'?2:1);}});

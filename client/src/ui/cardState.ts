@@ -1,5 +1,5 @@
 import type { CardInst, FieldMon } from '../shared/types';
-import { PASSIVES } from '../shared/cards';
+import { DB, PASSIVES } from '../shared/cards';
 import { displayPassives, decayStateDescription } from '../shared/cardPresentation';
 import { getLang } from '../i18n';
 
@@ -23,6 +23,10 @@ export function cardStateEl(c: CardInst, hp?: {now:number;max:number;turn?:numbe
   } else {
     row(loc('攻撃力','공격력','ATK'),String(c.atk ?? 0));
     if (hp) row(loc('現在体力／最大体力','현재 / 최대 체력','Current / max HP'),`${hp.now} / ${hp.max}`);
+  }
+  for (const bounty of m.bounties ?? []) {
+    const hunter = DB[bounty.hunterId];
+    if (hunter) row(loc('賞金首','현상 수배','Bounty'),loc(hunter.nameJa!,hunter.name,hunter.nameEn!) + loc(`（${bounty.reward}マナ）`,` (마나 ${bounty.reward})`,` (${bounty.reward} mana)`));
   }
   if (displayPassives(c).includes('guts') || (m.guts ?? 0)>0) row(loc('気合用カウンター','기합용 카운터','Counters for Guts'),String(m.guts ?? 0));
   if ((m.decayCnt ?? 0)>0) row(loc('受けている腐敗','받은 부패','Applied Decay'),decayStateDescription(m.decayCnt!,lang));

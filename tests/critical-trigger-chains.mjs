@@ -19,7 +19,7 @@ const report=[];
 {let g=play(fresh(),'VAMP_PACT');assert(g.players[0].field.some(c=>c.id==='VAMP1'));report.push({id:'pact-normal'});}
 {let g=play(fresh(),'VAMP_PACT');const vampire=g.players[0].field.find(c=>c.id==='VAMP1');g=play(g,'TSO1');g=play(g,'BLOOD_JOY');assert(!g.players[0].field.find(c=>c.uid===vampire.uid).evolvedUsed);g.players[0].summonLockUntil=g.turn;g=play(g,'BLOOD_JOY');assert(g.players[0].field.some(c=>c.id==='VAMP2'));assert(g.players[0].field.find(c=>c.uid===vampire.uid).evolvedUsed);report.push({id:'blocked-evolution-keeps-allowance'});}
 // Token summons from an existing monster must respect the same cap.
-{let g=play(fresh(),'MERC_MASTER');g.players[0].field=g.players[0].field.filter(c=>c.id==='MERC_MASTER');g.players[0].summonCap=1;g.cur=1;g=reduce(g,{type:'endTurn'}).state;assert.equal(g.players[0].field.length,1);report.push({id:'upkeep-token-cap'});}
+{let g=fresh();g.players[0].summonCap=1;g=play(g,'MERC_MASTER');assert(!g.pending);g.cur=1;g=reduce(g,{type:'endTurn'}).state;assert.equal(g.players[0].field.length,1);report.push({id:'mercenary-no-upkeep'});}
 // A rejected legacy resurrection keeps its physical graveyard card.
 {let g=fresh();const c=card('GOLEM1');g.players[0].discard=[c];g.players[0].summonLockUntil=9;g.pending={kind:'giantShop',reason:'samsaraPick',allowCancel:false,data:{ids:['GOLEM1']}};g=reduce(g,{type:'pick',uid:'GOLEM1'}).state;assert.equal(g.players[0].discard[0].uid,c.uid);assert.equal(g.players[0].field.length,0);report.push({id:'blocked-resurrection-keeps-card'});}
 // Full-board fusion replaces two slots and must not lose materials when blocked.

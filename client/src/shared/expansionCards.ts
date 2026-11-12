@@ -1,3 +1,4 @@
+import {MERCENARY_CARDS} from './mercenaryCards';
 import type { CardDef } from "./types";
 
 /** v50: counterattack and the Crown / flame / black-magic expansion. */
@@ -130,48 +131,7 @@ export const EXPANSION_CARDS: CardDef[] = [
     "def": 5,
     "onSummon": "expansion"
   },
-  {
-    "id": "MERCENARY",
-    "nameJa": "傭兵",
-    "name": "용병",
-    "nameEn": "Mercenary",
-    "cost": 2,
-    "textJa": "【召喚時】「兵士」1体を召喚 · 両方の場のいずれかに「カジノ」があればダイス3個を振る",
-    "text": "소환시: 병사 1체 소환. 양쪽 필드에 카지노가 있으면 주사위 3개.",
-    "textEn": "On summon: summon 1 Soldier. If either player controls a Casino, roll 3 dice.",
-    "t": "mon",
-    "atk": 1,
-    "def": 1,
-    "onSummon": "expansion"
-  },
-  {
-    "id": "MERC_LEADER",
-    "nameJa": "傭兵リーダー",
-    "name": "용병 리더",
-    "nameEn": "Mercenary Leader",
-    "cost": 4,
-    "textJa": "【召喚時】「兵士」2体を召喚 · 両方の場のいずれかに「カジノ」があればダイス5個を振る",
-    "text": "소환시: 병사 2체 소환. 양쪽 필드에 카지노가 있으면 주사위 5개.",
-    "textEn": "On summon: summon 2 Soldiers. If either player controls a Casino, roll 5 dice.",
-    "t": "mon",
-    "atk": 3,
-    "def": 3,
-    "onSummon": "expansion"
-  },
-  {
-    "id": "MERC_MASTER",
-    "nameJa": "傭兵ギルドマスター",
-    "name": "용병 길드 마스터",
-    "nameEn": "Mercenary Guildmaster",
-    "cost": 6,
-    "textJa": "【召喚時】兵士2体を召喚 · カジノがあればダイス10個 · 【自分のターン開始時】兵士1体を召喚 · カジノがあればダイス10個",
-    "text": "【소환시】병사 2체 소환 · 카지노가 있으면 주사위 10개 · 【자신 턴 시작】병사 1체 소환 · 카지노가 있으면 주사위 10개",
-    "textEn": "【On Summon】Summon 2 Soldiers · Any Casino: roll 10 dice · 【Your Turn Start】Summon 1 Soldier · Any Casino: roll 10 dice",
-    "t": "mon",
-    "atk": 5,
-    "def": 7,
-    "onSummon": "expansion"
-  },
+  ...MERCENARY_CARDS,
   {
     "id": "MERC_ART",
     "nameJa": "傭兵術",
