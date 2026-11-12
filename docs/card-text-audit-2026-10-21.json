@@ -10275,15 +10275,15 @@
         "en"
       ],
       "definitionSha256": "0f72ce5d4099ff6e358c849f727dbe36cf07b414d2b642a89297bb6466987443",
-      "textSha256": "5cc9ea36c8f75400a5388afbe1568c1cdbe9213c5e8ea4f1862026cafdbd9c6e",
+      "textSha256": "7b366bf5fde41ef18552894918025e7952354eac1236d58080a3251bef344581",
       "hooks": {
         "ench": "supplyLine"
       },
       "before": null,
       "after": {
         "ja": "【コスト】自分の場にモンスターがいなければ、このカードの発動コストを1下げる。\n\n【自分のモンスター召喚時】自分がモンスターを1体召喚するたび、自分はカードを1枚引く。",
-        "ko": "【코스트】자신의 필드에 몬스터가 없으면 이 카드의 발동 비용이 1 감소한다.\n\n【자신의 몬스터 소환 시】자신이 몬스터를 1체 소환할 때마다 카드를 1장 드로우한다.",
-        "en": "【Cost】This card costs 1 less mana to cast if you control no monsters.\n\n【When You Summon a Monster】Draw 1 card each time you summon a monster."
+        "ko": "【코스트】자신의 필드에 몬스터가 없으면 이 카드의 발동 코스트가 1 감소한다.\n\n【자신의 몬스터 소환 시】자신이 몬스터를 1체 소환할 때마다 카드를 1장 드로우한다.",
+        "en": "【Cost】If you control no monsters, reduce this card’s cast cost by 1.\n\n【When You Summon a Monster】Draw 1 card each time you summon a monster."
       }
     }
   },

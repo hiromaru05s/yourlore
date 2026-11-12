@@ -18,8 +18,8 @@ export const ATTUNE_REWARDS = ['DUAL_ATTUNE','ATTUNE_SHINE','ATTUNE_RESEARCH'];
 export const ARMY_ATTUNE_CARDS: CardDef[] = [
   card('SUPPLY_LINE', 3, ['補給ライン','보급로','Supply Line'], [
     '【コスト】自分の場にモンスターがいなければ、このカードの発動コストを1下げる。\n\n【自分のモンスター召喚時】自分がモンスターを1体召喚するたび、自分はカードを1枚引く。',
-    '【코스트】자신의 필드에 몬스터가 없으면 이 카드의 발동 비용이 1 감소한다.\n\n【자신의 몬스터 소환 시】자신이 몬스터를 1체 소환할 때마다 카드를 1장 드로우한다.',
-    '【Cost】This card costs 1 less mana to cast if you control no monsters.\n\n【When You Summon a Monster】Draw 1 card each time you summon a monster.',
+    '【코스트】자신의 필드에 몬스터가 없으면 이 카드의 발동 코스트가 1 감소한다.\n\n【자신의 몬스터 소환 시】자신이 몬스터를 1체 소환할 때마다 카드를 1장 드로우한다.',
+    '【Cost】If you control no monsters, reduce this card’s cast cost by 1.\n\n【When You Summon a Monster】Draw 1 card each time you summon a monster.',
   ], {...enchant('supplyLine'), noShop:true, act:undefined}),
   card('FORTIFY_CASTLE',2,['防城','수성','Castle Defense'],['味方全体に攻撃力-1・体力+4。兵士系は代わりに+1/+4。自分の城にカウンター3個を付与する。','아군 전체 공격력 -1·체력 +4. 병사 계열은 대신 +1/+4. 자신의 성에 카운터 3개를 놓는다.','Give all allies -1 ATK and +4 HP, or +1 ATK and +4 HP if military. Put 3 counters on your Castle.']),
   card('SIEGE_CASTLE',2,['攻城','공성','Castle Siege'],['味方全体に攻撃力+3・体力-2。兵士系は代わりに+4/+1。相手の城のパッシブとカウンターを全て取り除く。','아군 전체 공격력 +3·체력 -2. 병사 계열은 대신 +4/+1. 상대 성의 패시브와 카운터를 모두 제거한다.','Give all allies +3 ATK and -2 HP, or +4 ATK and +1 HP if military. Strip all passives and counters from the opposing Castle.']),
