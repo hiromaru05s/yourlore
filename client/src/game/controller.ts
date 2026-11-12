@@ -1,3 +1,4 @@
+import {playNpcReaction} from '../ui/npcReaction';
 import {pendingText} from '../shared/pendingText';
 import { nextNpcDeck, type BotRotation } from '../shared/botRotation';
 import {syncCardFrames,localCardFrame} from '../ui/cardFrame';
@@ -465,7 +466,12 @@ export abstract class BaseController implements BoardHandlers {
     // running counters for ghost slot placement + live HP readout
     const fieldCount: [number, number] = [prev.players[0].field.length, prev.players[1].field.length];
     const hpNow: [number, number] = [prev.players[0].hp, prev.players[1].hp];
-    const presentHp=(side:A.ViewSide,hp:number)=>{
+    // Compare consecutive presented HPs at their contact callback, including
+    // special spells that own their feedback instead of calling hpFeedback.
+    const shownHp = {me:hpNow[this.you],opp:hpNow[(1-this.you) as Side]};
+    const presentHp=(side:A.ViewSide,hp:number,react=true)=>{
+      if(react && hp!==shownHp[side])playNpcReaction(side,hp<shownHp[side]?'hurt':'heal');
+      shownHp[side]=hp;
       A.hpBarSet(side,hp);
       if(hp<=0 && this.lethalSide!==null && side===(this.lethalSide===this.you?"me":"opp"))this.lethalOutcome?.start();
     };
@@ -905,7 +911,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         case "nova": {
           const card=prev.players[e.player].hand.find(c=>c.id==='BLACK_NOVA')??{...DB.BLACK_NOVA,uid:'nova-source'};
-          await A.novaTimeTheft(card,sideOf(e.player),e.from,hp=>{if(!this.dead)presentHp(sideOf(e.player),hp);});
+          await A.novaTimeTheft(card,sideOf(e.player),e.from,hp=>{if(!this.dead)presentHp(sideOf(e.player),hp,false);});
           hpNow[e.player]=e.to;
           break;
         }

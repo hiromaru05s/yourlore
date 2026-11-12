@@ -86,6 +86,7 @@ import {isVerdant} from './verdant/selection';
 import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
+import {playNpcReaction, skipNpcReactions} from './npcReaction';
 import {damageAction, playSeekerMana, playSeekerSide, setSeekerSkip} from './seekerAnimation';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
@@ -124,7 +125,7 @@ export function prepareTauntActivation(uid:string){return prepareTaunt(fxSkip?nu
 const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
-  fxSkip = on; setMonsterSkip(on); setSeekerSkip(on);
+  fxSkip = on; setMonsterSkip(on); setSeekerSkip(on); skipNpcReactions(on);
   if(on){cancelManaRuptures();cancelTribePactDefeat();cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
@@ -987,7 +988,7 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
       if(readout)readout.textContent=String(impact?current:fromMana);if(max)max.textContent='/'+(impact?maximum:fromMax);
       if(impact&&!sounded){
         sounded=true;sfx('mana');
-        if(maximum>fromMax)playSeekerMana(side);
+        if(maximum>fromMax){playSeekerMana(side);playNpcReaction(side,'mana');}
       }
       if(age>=duration){finish();return;}
       const pose=manaGainPose(age);el.style.setProperty('--mana-bloom',String(formation?0:pose.glow));

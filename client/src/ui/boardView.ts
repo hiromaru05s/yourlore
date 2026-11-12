@@ -19,6 +19,7 @@ import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
 import {monsterCanAttack,monsterCanTarget} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
+import {mountNpcReaction, disposeNpcReactions} from './npcReaction';
 import {seekerPortrait, disposeSeekers} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
 import {handFan} from './handFan';
@@ -324,7 +325,7 @@ export class GameView {
     this.curseSeals.me.dispose();
     this.curseSeals.opp.dispose();
     disposeCardEffects(this.root);disposeCardFrames(this.root);
-    disposeSeekers(this.root);
+    disposeSeekers(this.root); disposeNpcReactions(this.root);
     this.cancelHandDrag?.();
     this.disposeScene?.();
     this.trickRoom.dispose();
@@ -1058,9 +1059,11 @@ export class GameView {
     const retained = oldRing?.dataset.avatar === (avatar ?? '') ? oldRing : null;
     if (retained) ring.replaceWith(retained);
     else {
+      if (oldRing) disposeNpcReactions(oldRing);
       if (oldPortrait) disposeSeekers(oldRing!);
       ring.dataset.avatar = avatar ?? '';
       if (!npc) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true}));
+      else mountNpcReaction(ring, npc);
     }
     this.curseSeals[sd].sync(retained ?? ring, sealCount, sealLabel);
   }

@@ -19,7 +19,7 @@ export function portraitImpact(side:'me'|'opp'){
  const root=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
  const ring=root?.querySelector<HTMLElement>('.pt-ring');if(!ring||document.hidden)return;
  // The seeker owns this same movement when present. Static NPC portraits need it too.
- if(ring.querySelector('.seeker-motion'))return;
+ if(ring.querySelector('.seeker-motion') || /^(NPC_|STORY_)/.test(ring.dataset.avatar ?? ''))return;
  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
  ring.getAnimations().filter(a=>a.id==='portrait-impact').forEach(a=>a.cancel());
  const kick=Math.min(7,Math.max(3,ring.getBoundingClientRect().width*.045));
