@@ -1,3 +1,4 @@
+import {recordFirstAidHistory} from './helpers/first-aid-history.mjs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdtemp,rm,writeFile} from 'node:fs/promises';
@@ -30,10 +31,7 @@ try{
   const before=run(old);
   assert.equal(r.state.players[0].lastMonsterAttackTurn,g.turn);
   before.state.players[0].lastMonsterAttackTurn=g.turn;
-  for (const [i,p] of r.state.players.entries()) {
-    const loss=g.players[i].hp-p.hp;
-    if (loss>0) before.state.players[i].damageReceived={turn:g.turn,total:loss,previous:0};
-  }
+  recordFirstAidHistory(before,g.turn);
   assert.deepEqual(r.state,before.state,name+' gameplay unchanged');
   const attack=r.events.find(e=>e.type==='attack');assert(attack,name+' attack emitted');assert.equal(attack.contactDamage,expected,name);
   report.push({name,contactDamage:attack.contactDamage});

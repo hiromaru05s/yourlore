@@ -1,3 +1,4 @@
+import {recordFirstAidHistory} from './helpers/first-aid-history.mjs';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {mkdtemp,readFile,rm} from 'node:fs/promises';
@@ -36,7 +37,9 @@ try{
   // Log wording and turn grouping are covered by battle-action-log; compare rules here.
   return events.filter(e=>e.type!=='log'&&e.type!=='turnHeader'&&!e.type.startsWith('elemental')&&e.type!=='monsterActivate'&&e.type!=='cullExile'&&e.type!=='reverseDamage').map(e=>{if(e.type!=='damage')return e;const {reversed,reverseId,...gameplay}=e;return gameplay;});
  };
- function compare(g,a){const old=baseline.reduce(g,a),now=current.reduce(g,a);assert.deepEqual(clean(now.state),clean(old.state));assert.deepEqual(clean(gameplayEvents(now.events)),clean(gameplayEvents(old.events)));for(const start of now.events.filter(e=>e.type==='elementalStart')){const impacts=now.events.filter(e=>e.type==='elementalImpact'&&e.group===start.group);assert.equal(impacts.length,start.targets.length);assert(now.events.some(e=>e.type==='elementalEnd'&&e.group===start.group));assert(!start.targets.some(t=>t.uid&&(!g.players.flatMap(p=>p.field).some(m=>m.uid===t.uid))));}cases++;return now;}
+ function compare(g,a){const old=baseline.reduce(g,a),now=current.reduce(g,a);
+  recordFirstAidHistory(old,g.turn);
+  assert.deepEqual(clean(now.state),clean(old.state));assert.deepEqual(clean(gameplayEvents(now.events)),clean(gameplayEvents(old.events)));for(const start of now.events.filter(e=>e.type==='elementalStart')){const impacts=now.events.filter(e=>e.type==='elementalImpact'&&e.group===start.group);assert.equal(impacts.length,start.targets.length);assert(now.events.some(e=>e.type==='elementalEnd'&&e.group===start.group));assert(!start.targets.some(t=>t.uid&&(!g.players.flatMap(p=>p.field).some(m=>m.uid===t.uid))));}cases++;return now;}
  for(const owner of [0,1])for(const seed of [1,7,17,58])for(const id of ['GUNNER','HEAVY_GUNNER','FIRE_ARROW','FIRE_METEOR','FIRE_BALL','FIRE_ZONE','NGA4']){
   const g=fresh(seed,owner);g.players[1-owner].field=[mon('ELF',1),mon('INFKNIGHT',30)];
   if(id==='NGA4'){

@@ -1,3 +1,4 @@
+import {recordFirstAidHistory} from './helpers/first-aid-history.mjs';
 import assert from 'node:assert/strict';import {build} from 'esbuild';import {execFileSync} from 'node:child_process';import fs from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
 const dir=await fs.mkdtemp(path.join(os.tmpdir(),'lore-ember-rules-'));
 try{
@@ -24,6 +25,7 @@ try{
   // Fire-family membership is an intentional rule change; damage/VFX parity remains.
   assert.deepEqual(after.state.players[owner].expansion.firePlayed,['FLAME']);
   before.state.players[owner].expansion.firePlayed=['FLAME'];
+  recordFirstAidHistory(before,g.turn);
   assert.deepEqual(after.state,before.state,mode+' state/RNG');assert.deepEqual(gameplay(after.events),gameplay(before.events),mode+' gameplay events');
   const groups=after.events.filter(e=>e.type==='elementalStart'&&e.id==='FLAME');assert.equal(groups.length,mode==='rune'?2:1);
   for(const group of groups){const impacts=after.events.filter(e=>e.type==='elementalImpact'&&e.group===group.group);assert.equal(impacts.length,group.targets.length);assert(after.events.some(e=>e.type==='elementalEnd'&&e.group===group.group));assert.equal(group.targets.length,mode==='lethal'?1:2);assert.equal(group.targets[0].player,1-owner);if(group.targets[1])assert.equal(group.targets[1].player,owner);}
