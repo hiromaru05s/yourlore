@@ -301,13 +301,13 @@
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
     },
     "S1": {
-      "nameJa": "三撃の火種",
+      "nameJa": "スリーファイアー",
       "status": "reworded",
       "changedLocales": [
         "ja",
         "ko"
       ],
-      "definitionSha256": "c985d16761f1e4bcdaf338d858ef4c40e1718597efb0c1390d19c4eba3ba32c0",
+      "definitionSha256": "19a560ad287e80c3f7a11af2ce5d88f58e67a7e3ed64f013e1d3300106c1b0a4",
       "textSha256": "eb8f5522ec07c654093009cf0cc4bcb89303029495b44383ad51726e3024c350",
       "hooks": {
         "act": "dmg"

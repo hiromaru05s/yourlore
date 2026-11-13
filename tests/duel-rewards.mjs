@@ -136,7 +136,12 @@ await test('a full server-controlled BOT duel settles from real actions and resu
  const id=user(),ws={deserializeAttachment:()=>({side:0,gen:0}),send(){}};let saved;
  const state={id:{toString:()=>id+'-real'},storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async()=>{},deleteAlarm:async()=>{}},getWebSockets:tag=>tag==='0'?[ws]:[]};
  let room=new GameRoom(journalState(state),env);await room.fetch(new Request('https://do/setup',{method:'POST',body:JSON.stringify({players:[{id,name:id},{id:'lore-challenge-bot-easy',name:'Lumi'}],seed:24,challengeDifficulty:'easy'})}));
- Object.assign(room.room,{readied:[true,true],opening:undefined,joinBy:null});let actions=0;
+ await room.webSocketMessage(ws,JSON.stringify({type:'ready',openingVersion:OPENING_VERSION,mulliganVersion:1}));
+ await room.webSocketMessage(ws,JSON.stringify({type:'openingReady'}));
+ room.room.turnStartAt=Date.now()-1;
+ await room.handleAction(0,{type:'mulligan',player:0,uids:[]});
+ assert.equal(room.room.game.mulligan,undefined);
+ let actions=0;
  while(!room.room.game.over&&actions++<2500){
   const g=room.room.game,side=E.actingSide(g);
   if(side===1)await room.runBot();else await room.handleAction(0,E.legalBotAction(g,E.safeGreedy(g)));
