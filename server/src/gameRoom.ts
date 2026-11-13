@@ -30,12 +30,12 @@ import { battleLogEvents, type BattleLogEvent } from '../../client/src/shared/ba
 import type { Env } from "./env";
 import type { Action, GameEvent, GameState, Side } from "../../client/src/shared/types";
 import type { GameClientMsg, GameServerMsg } from "../../client/src/shared/protocol";
-import { createGame, reduce, actingSide } from "../../client/src/shared/engine";
+import { botOpeningHand, createGame, reduce, actingSide } from "../../client/src/shared/engine";
 import { redactFor } from "../../client/src/shared/protocol";
 import { BALANCE_VERSION } from "../../client/src/shared/cards";
 import { settleRanked, type RankOutcome } from "./rank";
 import { recordRankedDecks } from "./rankedDecks";
-import { DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS, OPENING_VERSION } from "../../client/src/shared/opening";
+import { MULLIGAN_MS, DUEL_OPENING_MS, OPENING_PREPARE_MS, OPENING_LEAD_MS, OPENING_VERSION } from "../../client/src/shared/opening";
 import { isClientMessage, resolveTurnTimeout } from "./gameInput";
 import { matchBot, matchBotActions, matchBotsEnabled, MATCH_BOT_ACTION_MS } from './matchBots';
 
@@ -67,6 +67,7 @@ interface RoomData {
   /** ms epoch when the CURRENT turn began — server-authoritative turn clock, so a
       reconnecting/reopened client resumes with the correct remaining time (not a fresh turn). */
   turnStartAt: number;
+  mulliganUntil?: number;
   turnReadyCapable?: [boolean, boolean];
   /** Bounded playback wait, persisted across reconnects and hibernation. */
   turnReadyBy?: number | null;
@@ -89,7 +90,7 @@ interface RoomData {
   /** ms epoch when the room was provisioned — recorded as matches.created_at so
       the admin dashboard can chart real game duration (ended_at − created_at). */
   startedAt: number;
-  opening?: {version?:number;capable:[boolean,boolean];ready:[boolean,boolean];prepareBy:number|null;startsAt:number|null};
+  opening?: {version?:number;capable:[boolean,boolean];ready:[boolean,boolean];prepareBy:number|null;startsAt:number|null;playableAt?:number};
   bot?: { id: string; side: Side; nextAt: number | null };
 }
 
@@ -206,6 +207,7 @@ export class GameRoom {
         gen: r.gen ?? [0, 0],
         forfeitAt: r.forfeitAt ?? [null, null],
         turnStartAt: r.turnStartAt ?? Date.now(),
+        mulliganUntil: r.mulliganUntil,
         turnReadyCapable: r.turnReadyCapable,
         turnReadyBy: r.turnReadyBy,
         turnBonusMs: r.turnBonusMs ?? 0,
@@ -252,13 +254,14 @@ export class GameRoom {
       if (body.botId && (!matchBotsEnabled(this.env) || !bot || body.players[1]?.id !== bot.id || body.players[0]?.id === bot.id)) return new Response('invalid test bot', {status:403});
       if (bot) body.players[1] = {id:bot.id,name:bot.name,deck:bot.deck.cards.join(',')};
       const res = createGame({
-        mode: "online",
+        mode: "online", mulligan:true,
         challenge: body.challengeDifficulty ? {difficulty: body.challengeDifficulty, side: 1} : undefined,
         seed: body.seed,
         p0: { id: body.players[0].id, name: body.players[0].name, deck: body.players[0].deck ? body.players[0].deck.split(",") : undefined },
         p1: { scriptedDeck:!!story, id: body.players[1].id, name: body.players[1].name, deck: body.players[1].deck ? body.players[1].deck.split(",") : undefined },
         starting: (body.seed & 1) as Side, // coin toss: seed parity decides who goes first (fair, server-authoritative)
       });
+      if (bot) res.state = reduce(res.state, botOpeningHand(res.state, 1)).state;
       this.provisioning = true;
       try {
         const room: RoomData = {
@@ -400,6 +403,14 @@ export class GameRoom {
       return;
     }
     if (msg.type === "ready") {
+      // A client from before mulligans keeps its opening hand.
+      if (room.game.mulligan && msg.mulliganVersion !== 1 && !room.game.mulligan[att.side]) {
+        room.game = reduce(room.game, {type:'mulligan', player:att.side, uids:[]}).state;
+        if (!room.game.mulligan && room.mulliganUntil != null) {
+          delete room.mulliganUntil;
+          this.prepareTurnClock(); this.broadcast([]);
+        }
+      }
       (room.turnReadyCapable ??= [false, false])[att.side] = msg.turnReadyVersion === 1;
       (room.battleLogReady ??= [false,false])[att.side] = msg.battleLogVersion === 1;
       if (room.opening && room.opening.startsAt == null) room.opening.capable[att.side] = msg.openingVersion === OPENING_VERSION;
@@ -478,17 +489,17 @@ export class GameRoom {
       else await this.state.storage.deleteAlarm();
       return;
     }
-    const times = [...room.forfeitAt, room.joinBy, room.previewUntil, room.opening?.prepareBy].filter((t): t is number => t != null);
+    const times = [...room.forfeitAt, room.joinBy, room.previewUntil, room.opening?.prepareBy, room.mulliganUntil].filter((t): t is number => t != null);
     if (room.bot) {
       const bot = room.bot;
-      const canAct = room.readied.every(Boolean) && room.previewDone &&
+      const canAct = !room.game.mulligan && room.readied.every(Boolean) && room.previewDone &&
         (!room.opening || room.opening.startsAt != null) && room.forfeitAt[1-bot.side] == null && actingSide(room.game) === bot.side;
       const next = canAct ? bot.nextAt ?? Math.max(Date.now(), room.turnStartAt) + MATCH_BOT_ACTION_MS : null;
       if (next !== bot.nextAt) { bot.nextAt = next; await this.persist(); }
       if (next != null) times.push(next);
     }
     // authoritative turn clock: arm the force-end deadline for the running turn
-    if (!room.game.over && room.previewDone && room.readied[0] && room.readied[1] && (!room.opening || room.opening.startsAt != null)) {
+    if (!room.game.mulligan && !room.game.over && room.previewDone && room.readied[0] && room.readied[1] && (!room.opening || room.opening.startsAt != null)) {
       times.push(room.turnReadyBy ?? (room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS));
     }
     if (times.length) await this.state.storage.setAlarm(Math.min(...times));
@@ -554,10 +565,20 @@ export class GameRoom {
       await this.recordResult();
     }
 
+    if (room.mulliganUntil != null && room.mulliganUntil <= now && !room.game.over) {
+      for (const player of [0, 1] as const) {
+        if (room.game.mulligan && !room.game.mulligan[player])
+          room.game = reduce(room.game, {type:'mulligan', player, uids:[]}).state;
+      }
+      delete room.mulliganUntil;
+      this.prepareTurnClock();
+      this.broadcast([]);
+    }
+
     // ---- server-side turn timeout: force-end a turn the active client never ended.
     // The clock was previously display-only — a stalled or modified client on its
     // turn could freeze the opponent forever (no action → no forfeit, no end).
-    if (!room.game.over && room.previewDone && bothJoined && (!room.opening || room.opening.startsAt != null)) {
+    if (!room.game.mulligan && !room.game.over && room.previewDone && bothJoined && (!room.opening || room.opening.startsAt != null)) {
       if (room.turnReadyBy != null && room.turnReadyBy <= now) await this.startTurnClock();
       const dl = room.turnStartAt + turnMsFor(room.ranked) + (room.turnBonusMs || 0) + TURN_ENFORCE_GRACE_MS;
       if (room.turnReadyBy == null && dl <= now + 250) {
@@ -611,6 +632,21 @@ export class GameRoom {
     if (g.over) return;
     // No gameplay before both players have joined, studied the market and reached the shared start.
     if (action.type !== "surrender" && (!room.readied.every(Boolean) || !room.previewDone || (room.opening && (room.opening.startsAt == null || Date.now() < room.turnStartAt)))) return;
+    if (action.type === 'mulligan') {
+      if (action.player !== side || room.mulliganUntil == null || Date.now() >= room.mulliganUntil) return;
+      const res = reduce(g, action);
+      if (res.state === g) return;
+      room.game = res.state;
+      if (!room.game.mulligan) {
+        delete room.mulliganUntil;
+        this.prepareTurnClock();
+      }
+      await this.persist();
+      await this.syncAlarm();
+      this.broadcast(res.events);
+      return;
+    }
+    if (g.mulligan && action.type !== 'surrender') return;
     // authorization
     if (action.type === "surrender") {
       if (action.player !== side) return;
@@ -661,7 +697,7 @@ export class GameRoom {
 
   private async startTurnClock(): Promise<void> {
     const room = this.room!;
-    if (room.turnReadyBy == null || room.game.over || !room.previewDone || !room.readied.every(Boolean)
+    if (room.game.mulligan || room.turnReadyBy == null || room.game.over || !room.previewDone || !room.readied.every(Boolean)
       || (room.opening && (room.opening.startsAt == null || Date.now() < room.turnStartAt))) return;
     room.turnReadyBy = null;
     room.turnStartAt = Date.now();
@@ -684,9 +720,14 @@ export class GameRoom {
     s.turnTotalMs = total;
     s.turnClockWaiting = this.room!.turnReadyBy != null;
     s.turnLeftMs = s.turnClockWaiting ? total : Math.min(total, Math.max(0, total - (Date.now() - this.room!.turnStartAt)));
+    if (s.mulligan) {
+      s.mulliganUntil = this.room!.mulliganUntil;
+      s.turnClockWaiting = true;
+      s.turnLeftMs = total;
+    }
     if (this.room!.opening && s.turn === 1) {
       const startsAt=this.room!.opening.startsAt;
-      s.opening={startsAt,playableAt:startsAt==null?null:this.room!.turnStartAt,serverNow:Date.now()};
+      s.opening={startsAt,playableAt:startsAt==null?null:(this.room!.opening.playableAt ?? this.room!.turnStartAt),serverNow:Date.now()};
       if(startsAt==null)s.turnLeftMs=total;
     }
     const pl = this.room!.players;
@@ -749,6 +790,7 @@ export class GameRoom {
     if(opening.version!==OPENING_VERSION||!opening.capable.every(Boolean)) {
       // Mixed/older clients keep the legacy immediate-start path; never use a mismatched cinematic clock.
       delete room.opening;this.prepareTurnClock();
+      if (room.game.mulligan) room.mulliganUntil = room.turnStartAt + MULLIGAN_MS;
     } else if(opening.prepareBy==null) opening.prepareBy=Date.now()+OPENING_PREPARE_MS;
     await this.persist();
     await this.syncAlarm();
@@ -762,6 +804,10 @@ export class GameRoom {
     opening.startsAt=Date.now()+OPENING_LEAD_MS;opening.prepareBy=null;
     // Pending pre-release rooms may still have v1 clients and an already-armed alarm.
     this.prepareTurnClock(opening.startsAt+(opening.version===OPENING_VERSION?DUEL_OPENING_MS:10450));
+    if (room.game.mulligan) {
+      opening.playableAt = room.turnStartAt;
+      room.mulliganUntil = room.turnStartAt + MULLIGAN_MS;
+    }
     await this.persist();
     await this.syncAlarm();
     for(const side of [0,1] as Side[])await this.sendInit(side);

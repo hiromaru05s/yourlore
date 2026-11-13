@@ -1,4 +1,5 @@
 /** Public presentation timing only. Never contains cards, seeds or random decisions. */
+export const MULLIGAN_MS = 30_000;
 export const OPENING_VERSION = 2;
 export const OPENING_DOCK_MS = 1360;
 export const OPENING_TOSS_MS = 1460;

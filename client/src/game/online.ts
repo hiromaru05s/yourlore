@@ -51,7 +51,7 @@ export class OnlineController extends BaseController {
 
   private connect(): void {
     this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.turnReadySentKey = ""; this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:OPENING_VERSION, battleLogVersion:1, turnReadyVersion:1 }); this.startHb(); },
+      onOpen: () => { this.turnReadySentKey = ""; this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:OPENING_VERSION, mulliganVersion:1, battleLogVersion:1, turnReadyVersion:1 }); this.startHb(); },
       onMessage: (msg) => { this.lastMsgAt = Date.now(); this.onServer(msg); },
       onClose: () => this.onSockClose(),
     });

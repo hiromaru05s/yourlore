@@ -54,6 +54,42 @@ try{
   assert.equal(restored.room.game.turn,turn+1,'action accepted once playable');
   assert.equal(f.sockets[0].messages.at(-1).state.opening,undefined,'later turns have no opening metadata');
 
+  // Both players decide in parallel, including the player going second.
+  const m=await fixture();
+  for(const side of [0,1]) await m.send(side,{type:'ready',openingVersion:2,mulliganVersion:1,turnReadyVersion:1});
+  for(const side of [0,1]) await m.send(side,{type:'openingReady'});
+  now=m.saved().turnStartAt;
+  const before=structuredClone(m.room.room.game), h=before.players[1].hand;
+  const exchange=(side,player,uids)=>m.send(side,{type:'action',action:{type:'mulligan',player,uids}});
+  await exchange(0,1,[h[0].uid]);
+  await exchange(1,1,[h[0].uid,h[0].uid]);
+  await exchange(1,1,h.map(c=>c.uid));
+  await exchange(1,1,['missing']);
+  await m.send(0,{type:'action',action:{type:'endTurn'}});
+  assert.deepEqual(m.room.room.game,before);
+  await exchange(1,1,[h[0].uid,h[2].uid]);
+  const after=m.saved().game.players[1];
+  assert.deepEqual(after.deck.slice(0,2).map(c=>c.uid),[h[2].uid,h[0].uid]);
+  assert.deepEqual(after.hand.map(c=>c.uid),[h[1].uid,...before.players[1].deck.slice(-2).reverse().map(c=>c.uid)]);
+  assert.deepEqual(after.discard,before.players[1].discard);
+  assert(m.sockets[0].messages.at(-1).state.players[1].hand.every(c=>c.id==='HIDDEN'));
+  assert(!JSON.stringify(m.sockets[0].messages.at(-1)).includes(h[0].uid));
+  await exchange(1,1,[]); assert.deepEqual(m.saved().game.players[1],after);
+  const pendingRoom=new GameRoom(journalState(m.state),rewardTestEnv());
+  const message=(side,msg)=>pendingRoom.webSocketMessage(m.sockets[side],JSON.stringify(msg));
+  await message(1,{type:'ready',openingVersion:2,mulliganVersion:1,turnReadyVersion:1});
+  assert.deepEqual(m.sockets[1].messages.at(-1).state.mulligan,[false,true]);
+  await message(0,{type:'turnReady',turn:1,cur:0});
+  now=m.saved().mulliganUntil;
+  await pendingRoom.alarm();
+  assert.equal(pendingRoom.room.game.mulligan,undefined);
+  assert.deepEqual(pendingRoom.room.game.players[0].hand,before.players[0].hand);
+  assert.equal(pendingRoom.redact(0).turnLeftMs,90000);
+  assert.equal(pendingRoom.redact(0).opening.playableAt,now-30000);
+  await message(0,{type:'action',action:{type:'endTurn'}});
+  assert.equal(pendingRoom.room.game.turn,2);
+  assert.deepEqual(pendingRoom.room.game.players[1].hand,after.hand);
+
   const timeout=await fixture();await timeout.send(0,{type:'ready',openingVersion:2});await timeout.send(1,{type:'ready',openingVersion:2});
   const by=timeout.saved().opening.prepareBy;now=by;await timeout.room.alarm();
   assert.equal(timeout.saved().opening.startsAt,now+350,'missing asset acknowledgements are bounded');

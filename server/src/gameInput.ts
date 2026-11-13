@@ -8,6 +8,7 @@ const uid = (v: unknown): v is string => typeof v === 'string' && v.length > 0 &
 function isAction(v: unknown): v is Action {
   if (!object(v)) return false;
   switch (v.type) {
+    case 'mulligan': return (v.player === 0 || v.player === 1) && Array.isArray(v.uids) && v.uids.length <= 2 && v.uids.every(uid) && new Set(v.uids).size === v.uids.length;
     case 'play': return index(v.idx) && (v.sourceUid === undefined || uid(v.sourceUid)) && (v.targets === undefined || Array.isArray(v.targets) && v.targets.length <= 99 && v.targets.every(uid));
     case 'buyMarket': case 'buySupply': return index(v.i);
     case 'claimDeal': return uid(v.uid) && (v.cost === 3 || v.cost === 5 || v.cost === 8);

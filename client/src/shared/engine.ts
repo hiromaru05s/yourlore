@@ -473,7 +473,16 @@ function normalizeManaCaps(g: GameState): void {
   }
 }
 
+/** Choose using only this bot's dealt hand, without inspecting its next draw. */
+export function botOpeningHand(g: GameState, player: Side): Action {
+  const p = g.players[player];
+  const uids = p.hand.filter(c => c.id === 'STARTER_TRASH' || playCost(c, p) > p.mana)
+    .slice(0, Math.min(2, p.deck.length)).map(c => c.uid);
+  return { type:'mulligan', player, uids };
+}
+
 export interface CreateOpts {
+  mulligan?: boolean;
   challenge?: { difficulty: import("./bot").BotDifficulty; side: Side };
   seed?: number;
   mode: "bot" | "online";
@@ -516,6 +525,7 @@ export function createGame(opts: CreateOpts): ReduceResult {
   ctx.drawN(g.players[start], 3, false);
   ctx.drawN(g.players[second], 3, false);
   g.players[second].openingDrawReady = true;
+  if (opts.mulligan) g.mulligan = [false, false];
   ctx.log(
     '<span class="t">게임 시작.</span> 초기 덱 · 3장 드로우 · 마나 4.',
     '<span class="t">ゲーム開始。</span> 初期デッキ · 3枚ドロー · マナ4。',
@@ -1180,7 +1190,7 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
   p.wheelUsed = false; // 운명의 수레바퀴: 재굴림 매턴 1회
   p.trapBlockTurn = !!p.trapBlockNext || (p.trapBlockTurns ?? 0) > 0; p.trapBlockNext = false; // 협상: 함정 설치 불가 (v34: 다중 턴)
   if (p.trapBlockTurns) p.trapBlockTurns -= 1;
-  p.lowSummonBanTurn = !!p.lowSummonBanNext; p.lowSummonBanNext = false; // 삼격의 불씨: 3코 이하 소환 봉쇄
+  p.lowSummonBanTurn = !!p.lowSummonBanNext; p.lowSummonBanNext = false; // 쓰리 파이어: 3코 이하 소환 봉쇄
   p.refreshBlockTurn = !!p.refreshBlockNext; p.refreshBlockNext = false; // 마켓 크래시: 제시 갱신 봉쇄
   p.spellsCastTurn = 0; // 마나 역류: 이번 턴 마법 사용 수
   p.spellDiscountTurn = 0;
@@ -4164,10 +4174,10 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       o.curseSeals = (o.curseSeals ?? 0) + 1;
       break;
     }
-    case "S1": { // 삼격의 불씨(v34): 🎲 ①② 3뎀 / ③④ 다음 턴 마나 -1 / ⑤⑥ 다음 턴 3코 이하 소환 봉쇄
+    case "S1": { // 쓰리 파이어(v34): 🎲 ①② 3뎀 / ③④ 다음 턴 마나 -1 / ⑤⑥ 다음 턴 3코 이하 소환 봉쇄
       const { rolls: s1r } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1);
       const r1 = s1r[0];
-      if (r1 <= 2) ctx.dealDamage(o, 3, cn(card), cn(card));
+      if (r1 <= 2) ctx.dealDamage(o, 3 + fireDamageBonus(p), cn(card), cn(card));
       else if (r1 <= 4) { o.nextPenalty = (o.nextPenalty || 0) + 1; ctx.log(`${tag(p, card)} 🎲 ${r1} → 상대의 다음 턴 마나 -1`, `${tag(p, card)} 🎲 ${r1} → 相手の次のターンのマナ-1`, `${tag(p, card)} 🎲 ${r1} → the opponent gains 1 less mana next turn`); }
       else { o.lowSummonBanNext = true; ctx.log(`${tag(p, card)} 🎲 ${r1} → 상대는 다음 턴 코스트 3 이하 소환 불가`, `${tag(p, card)} 🎲 ${r1} → 相手は次のターン コスト3以下を召喚不可`, `${tag(p, card)} 🎲 ${r1} → the opponent cannot summon monsters costing 3 or less next turn`); }
       break;
@@ -5224,7 +5234,7 @@ export function playBlockReason(g:GameState, who:Side, card:CardInst):{ko:string
     if (summonBlockedLow(g, p, card)) { return reason(`  └ <span class="dmg">봉쇄령</span>: 코스트 ${card.cost} 몬스터 소환 불가`, `  └ <span class="dmg">封鎖令</span>: コスト ${card.cost} のモンスター召喚不可`, `  └ <span class="dmg">Blockade</span>: cannot summon this monster with purchase cost ${card.cost}`); }
     if ((p.summonLockUntil ?? 0) > g.turn) { return reason(`  └ <span class="dmg">은둔자</span>: 다른 몬스터를 소환할 수 없다`, `  └ <span class="dmg">隠遁者</span>: 他のモンスターを召喚できない`, `  └ <span class="dmg">Recluse</span>: you cannot summon other monsters`); }
     if (p.summonCap != null && p.field.length >= p.summonCap) { return reason(`  └ <span class="dmg">고독의 저주</span>: 몬스터를 ${p.summonCap + 1}체 이상 소환할 수 없다`, `  └ <span class="dmg">孤独の呪い</span>: モンスターを${p.summonCap + 1}体以上召喚できない`, `  └ <span class="dmg">Curse of Solitude</span>: you cannot control ${p.summonCap + 1} or more monsters`); }
-    if (p.lowSummonBanTurn && (card.cost ?? 0) <= 3) { return reason(`  └ <span class="dmg">삼격의 불씨</span>: 이번 턴 코스트 3 이하 소환 불가`, `  └ <span class="dmg">三撃の火種</span>: このターン コスト3以下は召喚不可`, `  └ <span class="dmg">Triple Spark</span>: you cannot summon monsters costing 3 or less this turn`); }
+    if (p.lowSummonBanTurn && (card.cost ?? 0) <= 3) { return reason(`  └ <span class="dmg">쓰리 파이어</span>: 이번 턴 코스트 3 이하 소환 불가`, `  └ <span class="dmg">スリーファイアー</span>: このターン コスト3以下は召喚不可`, `  └ <span class="dmg">Three Fire</span>: you cannot summon monsters costing 3 or less this turn`); }
     if (!summonReqMet(p, card, o0)) { return reason(`  └ <span class="dmg">소환 조건 미충족</span>: ${cn(card)}`, `  └ <span class="dmg">召喚条件を満たしていない</span>: ${cn(card)}`); }
     if ((card.cost ?? 0) >= 5 && castleOf(p) && !p.monsterSilence) { return reason(`  └ <span class="dmg">성</span>: 코스트 5 이상 몬스터를 소환할 수 없다`, `  └ <span class="dmg">城</span>: コスト5以上のモンスターは召喚できない`, `  └ <span class="dmg">Castle</span>: you cannot summon monsters costing 5 or more`); }
     const receiving=armyDestination(g,p,card.id);
@@ -5680,6 +5690,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (tm.hatch == null) { g.pending=pending; ctx.log("  └ 알이 아닙니다", "  └ 卵ではありません"); return; }
       tm.hatch = Math.max(0, tm.hatch - ((d.val as number) || 5));
       ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 카운터 -${d.val || 5} (남은 ${tm.hatch}턴)`, `<span class="t">${p.name}</span> → ${cn(tm)} カウンター-${d.val || 5} (残り${tm.hatch}ターン)`);
+      if (tm.hatch === 0) hatchEgg(g, ctx, p, tm);
     }
     else if (pending.reason === "bloodSecret") {
       resolveBloodSecret(g, ctx, p, tm, 'BLOOD_SECRET');
@@ -6350,6 +6361,24 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
  * target/choice resolution. Keep the result until accepted; replay from BEFORE
  * that action so mana, damage, summons and quest/casino counters are not doubled. */
 export function reduce(prev: GameState, action: Action): ReduceResult {
+  if (action.type === 'mulligan') {
+    const {player, uids} = action;
+    if (prev.over || !prev.mulligan || prev.mulligan[player] || !Array.isArray(uids)
+      || uids.length > 2 || new Set(uids).size !== uids.length
+      || uids.length > prev.players[player].deck.length
+      || uids.some(uid => !prev.players[player].hand.some(c => c.uid === uid))) return {state:prev, events:[]};
+    const g = cloneGameState(prev);
+    const p = g.players[player];
+    const returned = p.hand.filter(c => uids.includes(c.uid));
+    p.hand = p.hand.filter(c => !uids.includes(c.uid));
+    const events: GameEvent[] = [];
+    makeCtx(g, events).drawN(p, returned.length, false);
+    p.deck.unshift(...returned.slice().reverse());
+    g.mulligan![player] = true;
+    if (g.mulligan!.every(Boolean)) delete g.mulligan;
+    return {state:g, events};
+  }
+  if (prev.mulligan && action.type !== 'surrender') return {state:prev, events:[]};
   // A reviewed cast commits its choices atomically. Cancellation happens before
   // this action: no spell reactions, RNG, private information or costs to undo.
   if (action.type === "play" && (action.sourceUid !== undefined || action.targets !== undefined)) {

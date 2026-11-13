@@ -307,6 +307,9 @@ export interface GameState {
   /** Clock waits for the active client to finish turn-start playback. */
   turnClockWaiting?: boolean;
   /** Present only for new rooms' first turn. Null startsAt means asset preparation. */
+  /** Present only while the opening hands are being decided; true means confirmed. */
+  mulligan?: [boolean, boolean];
+  mulliganUntil?: number; // server deadline in a redacted snapshot
   opening?: {startsAt:number|null;playableAt:number|null;serverNow:number};
   /** server-stamped full turn length in ms (online only): ranked 65s / casual 90s.
       drives the timer ring's full-scale so it drains correctly regardless of mode. */
@@ -321,6 +324,7 @@ export interface GameState {
 
 // --- Actions: the only way to mutate a GameState ---
 export type Action =
+  | { type: "mulligan"; player: Side; uids: string[] }
   | { type: "play"; idx: number; sourceUid?: string; targets?: string[] }
   | { type: "buyMarket"; i: number }
   | { type: "buySupply"; i: number }

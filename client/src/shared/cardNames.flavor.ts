@@ -10,7 +10,7 @@ type LocalizedCardName = {
 // generated templates. IDs and effects remain unchanged.
 export const FLAVOR_CARD_NAMES: Record<string, LocalizedCardName> = {
   // Core spells
-  S1: { ko: "삼격의 불씨", ja: "三撃の火種", en: "Spark of the Third Strike" },
+  S1: { ko: "쓰리 파이어", ja: "スリーファイアー", en: "Three Fire" },
   S10: { ko: "청람 서고", ja: "青藍の書庫", en: "Cobalt Archive" },
   S3: { ko: "칼날의 속삭임", ja: "刃の囁き", en: "Whisper to the Blade" },
   S4: { ko: "쌍월의 계시", ja: "双月の啓示", en: "Twin-Moon Revelation" },

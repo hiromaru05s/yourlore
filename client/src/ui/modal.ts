@@ -277,7 +277,32 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
  * submits them to the engine one at a time (the protocol is unchanged).
  */
 /** opts.exact (v42 손패 이월): 정확히 max장 골라야 확정 가능 · 취소 버튼 없음 */
-export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void, opts: { exact?: boolean; label?: (uid:string)=>string } = {}): void {
+export function openingHandDialog(pool: CardInst[], confirmed: boolean, select: (uids:string[])=>void, secondsLeft:()=>number): ()=>void {
+  const lang = getLang();
+  const words = {
+    ja: {pick:'初手の交換', help:'山札の底に戻すカードを2枚まで選び、同じ枚数を引きます。', keep:'そのまま始める', wait:'対戦相手が初手を選んでいます', seconds:'残り'},
+    ko: {pick:'시작 패 교환', help:'덱 맨 아래로 보낼 카드를 최대 2장 고르고, 같은 수만큼 뽑습니다.', keep:'그대로 시작', wait:'상대가 시작 패를 고르고 있습니다', seconds:'남은 시간'},
+    en: {pick:'Opening hand', help:'Choose up to 2 cards to put on the bottom of your deck. Draw that many replacements.', keep:'Keep all three', wait:'Waiting for your opponent to choose', seconds:'Time left'},
+  }[lang];
+  let modal: HTMLElement;
+  if (confirmed) {
+    modal = document.createElement('div');
+    modal.className = 'modal';
+    const title = document.createElement('h2'); title.textContent = words.wait;
+    modal.append(title); mount(modal);
+  } else {
+    cardPickerMulti(words.pick, pool, Math.min(2,pool.length), select, {keepLabel:words.keep, description:words.help});
+    modal = getRoot().querySelector<HTMLElement>('.modal')!;
+  }
+  modal.classList.add('opening-hand-picker');
+  const timer = document.createElement('span');
+  const tick = () => { timer.textContent = words.seconds + ' ' + Math.max(0,Math.ceil(secondsLeft())) + 's'; };
+  modal.querySelector('.popup-heading')?.append(timer); tick();
+  const interval = window.setInterval(tick, 500);
+  return () => { clearInterval(interval); if (modal.isConnected) closeOverlay(); };
+}
+
+export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void, opts: { exact?: boolean; label?: (uid:string)=>string; keepLabel?:string; description?:string } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML =
@@ -287,6 +312,10 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
     `<div class="modal-row"></div>`;
   const grid = m.querySelector(".picker-grid")!;
   const count = m.querySelector(".picker-count") as HTMLElement;
+  if (opts.description) {
+    const help = document.createElement('p'); help.textContent = opts.description;
+    grid.before(help);
+  }
   const picked: string[] = [];
   const paint = () => {
     count.textContent = t("picker.count").replace("{n}", String(picked.length)) + (max < 99 ? ` / ${max}` : "");
@@ -295,10 +324,14 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
   };
   pool.forEach((c, i) => {
     const card = cardEl(c, { playable: true, lazyArt: i });
+    card.tabIndex = 0;
+    card.setAttribute('role','button'); card.setAttribute('aria-pressed','false');
+    card.onkeydown = e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); card.click(); } };
     card.onclick = () => {
       const i = picked.indexOf(c.uid);
       if (i >= 0) { picked.splice(i, 1); card.classList.remove("is-picked"); }
       else if (picked.length < max) { picked.push(c.uid); card.classList.add("is-picked"); }
+      card.setAttribute("aria-pressed",String(picked.includes(c.uid)));
       paint();
     };
     bindZoom(card, c); // 우클릭 / 길게 누르면 확대
@@ -308,7 +341,7 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
   ok.className = "btn btn-gold";
   ok.onclick = () => { closeOverlay(); onDone(picked); };
   const cancel = document.createElement("button");
-  cancel.className = "btn btn-ghost"; cancel.textContent = t("common.cancel");
+  cancel.className = "btn btn-ghost"; cancel.textContent = opts.keepLabel ?? t("common.cancel");
   cancel.onclick = () => { closeOverlay(); onDone([]); };
   if (opts.exact) m.querySelector(".modal-row")!.append(ok); else m.querySelector(".modal-row")!.append(ok, cancel);
   if(!opts.exact)m.addEventListener("keydown",e=>{if(e.key==="Escape")cancel.click();});

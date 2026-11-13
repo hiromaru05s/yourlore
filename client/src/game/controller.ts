@@ -59,13 +59,14 @@ import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, PlayerState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef, curHp } from "../shared/engine";
+import { botOpeningHand, createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef, curHp } from "../shared/engine";
 import { safeGreedy, legalBotAction, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive, isChestCard } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
 import { GameLog, logToText } from "../ui/log";
 import * as A from "../ui/anim";
-import { showDealRewards, reviewCast, cardPicker, cardPickerMulti, confirmDialog, winModal, closeOverlay } from "../ui/modal";
+import { MULLIGAN_MS } from "../shared/opening";
+import { openingHandDialog, showDealRewards, reviewCast, cardPicker, cardPickerMulti, confirmDialog, winModal, closeOverlay } from "../ui/modal";
 import { api } from "../net/api";
 import { aCapture } from "../net/analytics";
 import { sfx, stopSounds } from "../ui/sound";
@@ -144,6 +145,9 @@ export abstract class BaseController implements BoardHandlers {
   private lastEndTurnAt = 0;   // 턴종료 연타 가드: 마지막 endTurn 제출 시각
   private purgePicks: string[] | null = null; // multi-select purge: remaining queued picks
   private autoTarget: string | null = null; // drag-to-attack: defender chosen before the pending exists
+  private mulliganDialog?: {confirmed:boolean; close:()=>void};
+  private localMulliganUntil = 0;
+  private localMulliganTimer?: number;
   private openingRoot:HTMLElement;
   private openingAbort=new AbortController();
   private openingActive=false;
@@ -1265,6 +1269,26 @@ export abstract class BaseController implements BoardHandlers {
     if(this.openingActive&&!this.state.over)return;
     this.releaseOpening();
     if(!this.state.over)this.exits.onBattleReady?.();
+    if (!this.state.over && this.state.mulligan) {
+      this.stopTimer();
+      const confirmed = this.state.mulligan[this.you];
+      if (this.mulliganDialog?.confirmed !== confirmed) {
+        this.mulliganDialog?.close();
+        if (this.state.mode === 'bot' && !this.localMulliganUntil) {
+          this.localMulliganUntil = Date.now() + MULLIGAN_MS;
+          this.localMulliganTimer = window.setTimeout(() => {
+            if (!this.dead && this.state.mulligan && !this.state.mulligan[this.you])
+              this.submit({type:'mulligan',player:this.you,uids:[]});
+          }, MULLIGAN_MS);
+        }
+        const close = openingHandDialog(this.state.players[this.you].hand, confirmed,
+          uids => this.submit({type:'mulligan',player:this.you,uids}),
+          () => ((this.state.mulliganUntil ?? this.localMulliganUntil) - Date.now() + this.serverOffset) / 1000);
+        this.mulliganDialog = {confirmed, close};
+      }
+      return;
+    }
+    this.clearMulligan();
     this.playableTimerKey = `${this.state.turn}:${this.state.cur}`;
     this.syncTimer();
     if (!this.state.over && this.state.cur === this.you && this.state.turnClockWaiting) this.turnPlayable();
@@ -1581,6 +1605,11 @@ export abstract class BaseController implements BoardHandlers {
     setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 300); }, 1700);
   }
 
+  private clearMulligan(): void {
+    this.mulliganDialog?.close(); this.mulliganDialog = undefined;
+    clearTimeout(this.localMulliganTimer);
+  }
+
   private stopTimer(): void {
     paintTurnUrgency(0,false);
     if (this.timerInt) { clearInterval(this.timerInt); this.timerInt = null; }
@@ -1670,6 +1699,7 @@ export abstract class BaseController implements BoardHandlers {
     this.marketRefresh?.cancel();
     this.marketCrisis?.cancel();
     this.disposeHandDiscard?.();
+    this.clearMulligan();
     this.dead = true;
     this.lethalOutcome?.cancel();this.lethalOutcome=undefined;this.lethalSide=null;
     disposeStatusExtinctions();
@@ -1712,12 +1742,13 @@ export class LocalController extends BaseController {
     const bot = npc.decks[index];
     if (!opponent) lastNpcDecks.set(npc.id, rotation);
     const res = createGame({
-      mode: "bot",
+      mode: "bot", mulligan:true,
       challenge: {difficulty, side: 1},
       p0: { id: "local", name: playerName, deck },
       p1: { id: "bot", name: opponent?.name ?? npc.name[getLang()], isBot: true, deck: opponent?.deck ?? bot.cards, scriptedDeck: !!opponent },
       starting: (Math.random() < 0.5 ? 0 : 1) as Side, // coin toss for first turn
     });
+    res.state = reduce(res.state, botOpeningHand(res.state, 1)).state;
     res.state.medals=[COIN_ME.medal??null,null];
     res.state.players[1].botTune = opponent?.tune ?? bot.tune; // archetype-matched buy discipline (survives structuredClone in reduce)
     this.applyResult(res, false);
@@ -1745,7 +1776,7 @@ export class LocalController extends BaseController {
     if (this.state.over || action.type!=="surrender"&&this.openingLocked) return;
     // input is never locked during playback — so out-of-turn clicks (e.g. on a
     // stale board while the bot's turn plays out) must be rejected here
-    if (action.type !== "surrender" && actingSide(this.state) !== this.you) return;
+    if (action.type === "mulligan" ? action.player !== this.you : action.type !== "surrender" && actingSide(this.state) !== this.you) return;
     this.applyResult(reduce(this.state, action));
   }
 

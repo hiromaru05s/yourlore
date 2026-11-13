@@ -1,6 +1,6 @@
 import type { CardDef } from './types';
 
-export const FIRE_SPELL_IDS = ['FLAME', 'FIRE_BALL', 'FIRE_ARROW', 'FIRE_ZONE', 'FIRE_METEOR', 'FIRE_ART', 'FIRE_MARK', 'FIRE_BRANDING'];
+export const FIRE_SPELL_IDS = ['FLAME', 'S1', 'FIRE_BALL', 'FIRE_ARROW', 'FIRE_ZONE', 'FIRE_METEOR', 'FIRE_ART', 'FIRE_MARK', 'FIRE_BRANDING'];
 
 export const FIRE_BRAND_CARDS: CardDef[] = [
   {

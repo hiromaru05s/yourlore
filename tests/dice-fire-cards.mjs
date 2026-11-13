@@ -205,3 +205,31 @@ for (const [id,damage] of [['FIRE_ZONE',14],['FIRE_METEOR',32]]) {
   assert.equal(p.discard.filter(c=>c.id==='FIRE_ZONE').length,1);
 }
 console.log('PASS Fire Brand dice, turn counts, distinct targets, single recasts, spell negation and Fire Master');
+
+// All Fire-series consumers share the same identifiers, including Three Fire's damage roll.
+assert.equal(E.DB.S1.nameJa, 'スリーファイアー');
+{
+  let g = play(fresh(), 'FIRE_ART');
+  assert.equal(E.playCost(card('S1'),g.players[0]),0);
+  let rolledDamage = false;
+  for(let seed=1;seed<=40 && !rolledDamage;seed++){
+    g.rng=seed;
+    const result=play(structuredClone(g),'S1');
+    assert(result.players[0].expansion.firePlayed.includes('S1'));
+    if(result.players[1].hp<200){assert.equal(result.players[1].hp,196);rolledDamage=true;}
+  }
+  assert(rolledDamage);
+}
+for(const [id,advance] of [['INCUBATOR_S',2],['INCUBATOR',5]]) {
+  for(const remaining of [1,advance,advance+1]){
+    let g=fresh();
+    const egg={...mon('DRAGON_EGG'),hatch:remaining,dur:3};
+    g.players[0].field=[egg];
+    g=pick(play(g,id),egg.uid);
+    if(remaining>advance) assert.equal(g.players[0].field[0].hatch,1);
+    else {
+      assert(E.DB.DRAGON_EGG.hatchInto.includes(g.players[0].field[0].id));
+      assert.equal(g.players[0].removed.filter(c=>c.uid===egg.uid).length,1);
+    }
+  }
+}

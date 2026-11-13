@@ -22,7 +22,7 @@ export type QueueServerMsg =
 // ---- in-game (GameRoom Durable Object) ----
 export type GameClientMsg =
   | { type: "action"; action: Action }
-  | { type: "ready"; openingVersion?:1|2; battleLogVersion?:1; turnReadyVersion?:1 }
+  | { type: "ready"; openingVersion?:1|2; mulliganVersion?:1; battleLogVersion?:1; turnReadyVersion?:1 }
   | { type: "turnReady"; turn: number; cur: Side }
   | { type: "openingReady" }
   | { type: "startReady" } // ranked market-preview: this player wants to start early
