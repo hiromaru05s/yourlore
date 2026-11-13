@@ -28,8 +28,10 @@ export function restoreReworkedCards(game: GameState): void {
   const updateCasinoRally = !game.casinoRallyApplied;
   const updateRunes=!game.runeReworkApplied;
   const auditRunes = !game.runeZonesAudited;
+  const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire)) return;
+  game.threeFireNamed = true;
   game.runeReworkApplied=true;
   if (auditRunes) {
     game.runeZonesAudited = true;
@@ -47,6 +49,10 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (renameFire && card.id === "S1") {
+      const {name, nameJa, nameEn} = DB.S1;
+      Object.assign(card, {name, nameJa, nameEn});
+    }
     if (updateCasinoRally && (MERC_IDS.has(card.id) || card.id === 'VITAL4' || card.id === 'SCARECROW')) {
       const def = DB[card.id];
       Object.assign(card,{name:def.name, nameJa:def.nameJa, nameEn:def.nameEn, text:def.text, textJa:def.textJa, textEn:def.textEn});

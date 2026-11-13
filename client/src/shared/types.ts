@@ -246,6 +246,7 @@ export interface TribePactDefeat {
 export interface GameState {
   runeReworkApplied?:boolean;
   runeZonesAudited?: boolean;
+  threeFireNamed?: boolean;
   diplomacyApplied?: boolean;
   truceThroughTurn?: number;
   mindSecret?: {owner:Side; attackerUid:string; targetUid:string};

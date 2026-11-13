@@ -233,3 +233,13 @@ for (const side of [0,1]) {
 assert(!E.DB.INQUISITION);assert(E.DECK_POOL.includes('Q_RUNE_SECRET'));assert(!E.BUYABLE_POOL.includes('DEVIL_TOKEN'));
 assert.equal(E.DB.MAGIC_BANK.play,3);assert.equal(E.DB.INFERNO.cost,4);assert.equal(E.DB.INFERNO.play,1);
 console.log('PASS Rune rework, quick purchase, starter reward destinations, both seats, chosen combat, farm and army rules');
+
+{
+ const g=fresh(), card=c('S1');
+ card.nameJa='三撃の火種';
+ g.players[0].hand.push(card);
+ delete g.threeFireNamed;
+ E.restoreReworkedCards(g);
+ assert.equal(card.nameJa,'スリーファイアー');
+ assert.equal(g.mulligan,undefined,'a resumed game does not exchange its hand again');
+}
