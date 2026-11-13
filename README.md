@@ -138,6 +138,7 @@ npm run deploy
 
 ## 開発時に読むドキュメント
 
+- [LOREのVision・Mission・Value](docs/mvv.md)
 - [AGENTS.md](AGENTS.md): 作業時の共通指示
 - [世界観の正本](docs/world-bible.md): カード・画面・用語の世界観
 - [標準UI](docs/default-ui-design.md)・[メニュー設計](docs/menu-design-insights.md): 対戦画面外を含む共通UIの方針
