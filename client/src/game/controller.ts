@@ -1,3 +1,4 @@
+import {playSeekerLight} from '../ui/seekerAnimation';
 import {playNpcReaction} from '../ui/npcReaction';
 import {pendingText} from '../shared/pendingText';
 import { nextNpcDeck, type BotRotation } from '../shared/botRotation';
@@ -471,6 +472,7 @@ export abstract class BaseController implements BoardHandlers {
     const shownHp = {me:hpNow[this.you],opp:hpNow[(1-this.you) as Side]};
     const presentHp=(side:A.ViewSide,hp:number,react=true)=>{
       if(react && hp!==shownHp[side])playNpcReaction(side,hp<shownHp[side]?'hurt':'heal');
+      if (react && hp > shownHp[side]) playSeekerLight(side,'heal');
       shownHp[side]=hp;
       A.hpBarSet(side,hp);
       if(hp<=0 && this.lethalSide!==null && side===(this.lethalSide===this.you?"me":"opp"))this.lethalOutcome?.start();

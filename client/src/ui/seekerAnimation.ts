@@ -1,12 +1,17 @@
-import {SeekerMotion, SEEKER_SIZE, SEEKER_ID, seekerRecoil, seekerManaCrest, seekerAtlas, type SeekerAction} from './seekerMotion';
+import {SeekerMotion, SEEKER_SIZE, SEEKER_ID, seekerRecoil, seekerManaCrest, seekerHealRise, seekerAtlas, type SeekerAction} from './seekerMotion';
 import {seekerName} from './seekerLabels';
 export {SEEKER_ACTIONS, damageAction} from './seekerMotion';
 export type {SeekerAction} from './seekerMotion';
-export const seekerAssets = [seekerAtlas(), seekerRecoil(), seekerManaCrest()];
+export const seekerAssets = [seekerAtlas(), seekerRecoil(), seekerManaCrest(), seekerHealRise()];
 type Player = {motion: SeekerMotion; idle?: HTMLImageElement; last: string; raf: number; board: boolean; request: number};
 const players = new Map<HTMLCanvasElement, Player>();
 const images = new Map<string, Promise<HTMLImageElement>>();
-let manaCrest: HTMLImageElement | undefined;
+const lightSheets = {mana: seekerManaCrest(), heal: seekerHealRise()};
+type Light = keyof typeof lightSheets;
+const loadedLights: Partial<Record<Light, HTMLImageElement>> = {};
+function loadLight(light: Light) {
+  return load(lightSheets[light]).then(image => (loadedLights[light] = image));
+}
 let recoil: HTMLImageElement | undefined;
 let paused = false, media: MediaQueryList | undefined;
 function load(url: string): Promise<HTMLImageElement> {
@@ -62,7 +67,11 @@ export function seekerPortrait(options: {board?:boolean} = {}): HTMLCanvasElemen
     if (!player.raf) paint(canvas, player, performance.now());
   }).catch(() => { if (players.has(canvas)) canvas.dataset.ready = 'error'; });
   if (player.board && !media?.matches && !recoil) void load(seekerRecoil()).then(img => { recoil = img; }).catch(() => {});
-  if (player.board && !media?.matches && !manaCrest) void load(seekerManaCrest()).then(img => { manaCrest = img; }).catch(() => {});
+  if (player.board && !media?.matches) {
+    for (const light of ['mana', 'heal'] as const) {
+      if (!loadedLights[light]) void loadLight(light).catch(() => {});
+    }
+  }
   return canvas;
 }
 export function playSeeker(canvas: HTMLCanvasElement | null, action: SeekerAction): void {
@@ -84,13 +93,14 @@ export function playSeeker(canvas: HTMLCanvasElement | null, action: SeekerActio
   if (recoil) start();
   else void load(seekerRecoil()).then(img => { recoil = img; start(); }).catch(() => {});
 }
-/** Play the 57-pose crest study on the same canvas as idle and damage. */
-export function playSeekerMana(side: 'me' | 'opp'): void {
+/** Both light studies have 57 poses and end on the original idle portrait. */
+export function playSeekerLight(side: 'me' | 'opp', light: Light): void {
   const canvas = document.querySelector<HTMLCanvasElement>(side === 'me' ? '#portraitMe .seeker-motion' : '#portraitOpp .seeker-motion');
   if (!canvas || paused || document.hidden || media?.matches || canvas.dataset.action === 'hurt') return;
   const player = players.get(canvas);
   if (!player) return;
   const request = ++player.request;
+  const frameMs = light === 'mana' ? 26 : 32;
   const start = (image: HTMLImageElement) => {
     if (request !== player.request || !canvas.isConnected || players.get(canvas) !== player) return;
     const ctx = canvas.getContext('2d');
@@ -100,22 +110,23 @@ export function playSeekerMana(side: 'me' | 'opp'): void {
     function tick(now: number) {
       elapsed += Math.min(40, Math.max(0, now - lastTime));
       lastTime = now;
-      const frame = Math.round(elapsed / 26);
+      const frame = Math.round(elapsed / frameMs);
       if (!canvas!.isConnected) { disposeSeeker(canvas!); return; }
       if (frame >= 56) { resetSeeker(canvas!); return; }
       if (frame !== lastFrame) {
         ctx!.drawImage(image, (frame % 8) * SEEKER_SIZE, Math.floor(frame / 8) * SEEKER_SIZE,
           SEEKER_SIZE, SEEKER_SIZE, 0, 0, SEEKER_SIZE, SEEKER_SIZE);
-        player!.last = 'mana' + frame;
-        canvas!.dataset.action = 'mana'; canvas!.dataset.frame = String(frame);
+        player!.last = light + frame;
+        canvas!.dataset.action = light; canvas!.dataset.frame = String(frame);
         lastFrame = frame;
       }
       player!.raf = requestAnimationFrame(tick);
     }
     tick(lastTime);
   };
-  if (manaCrest) start(manaCrest);
-  else void load(seekerManaCrest()).then(image => { manaCrest = image; start(image); }).catch(() => {});
+  const image = loadedLights[light];
+  if (image) start(image);
+  else void loadLight(light).then(start).catch(() => {});
 }
 export function resetSeeker(canvas: HTMLCanvasElement): void {
   const player = players.get(canvas);

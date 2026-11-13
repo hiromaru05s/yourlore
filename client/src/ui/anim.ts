@@ -87,7 +87,7 @@ import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import {playNpcReaction, skipNpcReactions} from './npcReaction';
-import {damageAction, playSeekerMana, playSeekerSide, setSeekerSkip} from './seekerAnimation';
+import {damageAction, playSeekerLight, playSeekerSide, setSeekerSkip} from './seekerAnimation';
 import type {HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
@@ -988,7 +988,7 @@ export async function manaSurge(side: ViewSide, amount: number): Promise<void> {
       if(readout)readout.textContent=String(impact?current:fromMana);if(max)max.textContent='/'+(impact?maximum:fromMax);
       if(impact&&!sounded){
         sounded=true;sfx('mana');
-        if(maximum>fromMax){playSeekerMana(side);playNpcReaction(side,'mana');}
+        if(maximum>fromMax){playSeekerLight(side,'mana');playNpcReaction(side,'mana');}
       }
       if(age>=duration){finish();return;}
       const pose=manaGainPose(age);el.style.setProperty('--mana-bloom',String(formation?0:pose.glow));
