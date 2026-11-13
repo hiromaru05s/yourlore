@@ -1283,7 +1283,7 @@ export abstract class BaseController implements BoardHandlers {
         }
         const close = openingHandDialog(this.state.players[this.you].hand, confirmed,
           uids => this.submit({type:'mulligan',player:this.you,uids}),
-          () => ((this.state.mulliganUntil ?? this.localMulliganUntil) - Date.now() + this.serverOffset) / 1000);
+          () => ((this.state.mulliganUntil ?? this.localMulliganUntil) - Date.now() + (this.state.opening ? this.serverOffset : 0)) / 1000);
         this.mulliganDialog = {confirmed, close};
       }
       return;
@@ -1605,7 +1605,7 @@ export abstract class BaseController implements BoardHandlers {
     setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 300); }, 1700);
   }
 
-  private clearMulligan(): void {
+  protected clearMulligan(): void {
     this.mulliganDialog?.close(); this.mulliganDialog = undefined;
     clearTimeout(this.localMulliganTimer);
   }

@@ -643,7 +643,8 @@ export class GameRoom {
       }
       await this.persist();
       await this.syncAlarm();
-      this.broadcast(res.events);
+      // Opening exchanges are private. Only the redacted hand and confirmation update.
+      this.broadcast([]);
       return;
     }
     if (g.mulligan && action.type !== 'surrender') return;

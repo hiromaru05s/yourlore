@@ -102,6 +102,7 @@ export class OnlineController extends BaseController {
       this.started = true;
       this.banner(null); // reconnected & resynced
       this.preview?.close(); this.preview = undefined; // preview phase over → game begins (coin toss shows on turn 1)
+      this.clearMulligan();
       closeOverlay();
       this.applyResult({ state: msg.state, events: msg.events }, false);
       if (this.state?.over) { clearActiveGame(); this.retryRankResult(); this.retryRewards(); } // rejoined a game that already finished
