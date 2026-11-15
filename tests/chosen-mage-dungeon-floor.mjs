@@ -62,7 +62,8 @@ try {
     }
   }
   for (const {base, field, displayed, allowed} of [
-    {base: 8, field: ['M10', 'GOLEM1'], displayed: 9, allowed: true},
+    {base: 8, field: ['M10', 'GOLEM1'], displayed: 8, allowed: false},
+    {base: 9, field: [], displayed: 9, allowed: true},
     {base: 9, field: ['TDE2'], displayed: 7, allowed: false},
   ]) {
     const g = fresh();

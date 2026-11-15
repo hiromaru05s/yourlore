@@ -71,7 +71,7 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     if (c.id === 'STRONG_ACID' || c.id === 'DECAY_CRAFT' || c.id === 'POISON_MASTER') synergy += Math.min(12,decayers*3);
     if (c.id === 'POISON_MASTER' || c.id === 'DECAY_CRAFT') synergy += Math.min(6,count('STRONG_ACID')*6);
     if (isAssassinCard(c)) synergy += Math.min(8,assassins*2);
-    if (c.id === 'AEM' || c.aura === 'manaGolem' || c.aura === 'leaderGolem' || c.summonReq === 'golemKin') synergy += Math.min(10,own.filter(isGolem).length*2);
+    if (c.id === 'AEM' || ['NGA3','GOLEM3','MANA_GIANT'].includes(c.id)) synergy += Math.min(10,own.filter(isGolem).length*2);
     if (c.id === 'BLOOD_SECRET' || c.ench === 'vampWard') synergy += Math.min(10,own.filter(isVampFamily).length*3);
     if (isVampFamily(c)) synergy += Math.min(8,count('NIGHT_CASTLE_GIFT')*3 + count('VAMP_PACT')*3);
     if (c.condAtk?.startsWith('cull')) synergy += Math.min(16,(p.removed ?? []).filter(x=>x.star==='trash').length*.8 + count('RIFT')*2);

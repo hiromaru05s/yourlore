@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 436,
+  "count": 437,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -228,28 +228,29 @@
     },
     "M10": {
       "nameJa": "マナ・ゴーレム",
-      "status": "reworded",
+      "status": "golem-rework-v87",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "5be03e6bfb091e153f40ff49649502fb3a8adda06427036181ce19a2832b27dc",
-      "textSha256": "85d611f5daff640fd1d6c431572aabf1d7d006fb4bec6e590f4e28f4f48246b8",
+      "definitionSha256": "efb663fa1510031350a5c9a4b7fd2bec00ce4c8464ec95d7bca1228307a8f4b6",
+      "textSha256": "429701a8b86d2bb3e40107cd129d760849c1c65f3ea8a1f1e83279d0ae4212eb",
       "hooks": {
-        "aura": "manaGolem"
+        "passive": [
+          "guts"
+        ]
       },
       "before": {
-        "ja": "【場にある間】自分の場の、このモンスター以外の「ゴーレム」系モンスター1体につき、自分の最大マナ+1。",
-        "ko": "【필드에 있는 동안】자신의 필드의 이 몬스터 외 골렘 계열 몬스터 1체당 자신의 최대 마나 +1.",
-        "en": "【While on the Field】Your max mana is increased by 1 for each other Golem-family monster on your field."
-      },
-      "after": {
         "ja": "【場にある間】自分の場の、このモンスター以外の「ゴーレム」系モンスター1体につき、自分のマナ水晶+1。",
         "ko": "【필드에 있는 동안】자신의 필드의 이 몬스터 외 골렘 계열 몬스터 1체당 자신의 마나 수정 +1.",
         "en": "【While on the Field】Your mana crystals are increased by 1 for each other Golem-family monster on your field."
       },
-      "reviewedAt": "2026-10-31"
+      "after": {
+        "ja": "【召喚時】自分の場の永続魔法1枚につき、このモンスターは気合カウンターを1つ得る。\n\n【相手の魔法使用時】相手のターン中、相手が魔法カードを使用するたび、自分の体力を2回復する。\n\n【自分のターン開始時】このモンスターの気合カウンター1つとマナ2を支払い、「ガーディアンゴーレム」を自分の場に1体召喚してよい。",
+        "ko": "【소환 시】자신 필드의 영구마법 1장당 이 몬스터는 기합 카운터를 1개 얻는다.\n\n【상대 마법 사용 시】상대 턴에 상대가 마법 카드를 사용할 때마다 자신의 체력을 2 회복한다.\n\n【자신의 턴 시작 시】이 몬스터의 기합 카운터 1개와 마나 2을 지불하고 가디언 골램 1체를 자신의 필드에 소환할 수 있다.",
+        "en": "【On Summon】Gain 1 Guts counter for each persistent spell on your field.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell during their turn, restore 2 of your HP.\n\n【At the Start of Your Turn】You may spend 1 Guts counter from this monster and 2 mana to summon a Guardian Golem to your field."
+      }
     },
     "M11": {
       "nameJa": "ウォーロード",
@@ -965,25 +966,29 @@
     },
     "NGA3": {
       "nameJa": "戦士ゴーレム",
-      "status": "reworded",
+      "status": "golem-rework-v87",
       "changedLocales": [
         "ja",
-        "ko"
+        "ko",
+        "en"
       ],
-      "definitionSha256": "d2866ed403ab9114e4e723c273abaab80d88b35d4a0f8ee5be1ca0da4e992bbc",
-      "textSha256": "d86542300c240c9b2e5f339beb876645e4e882d558fe91e50bda3fb10ac8a4cd",
+      "definitionSha256": "e6038d159bc6eaba4e280710da8c7eeb9950f9a2749e28040c2636d5cf0b4cb7",
+      "textSha256": "73394cbae5732d4d4fc63c0aefcb9017d677702b084fd677801603299afd2c46",
       "hooks": {
-        "onSummon": "golemSquad"
+        "passive": [
+          "guts",
+          "counter"
+        ]
       },
       "before": {
-        "ja": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいれば、このモンスターに気合用カウンター1個を付与する。",
-        "ko": "【소환시】자신의 필드에 다른 골렘 계열 몬스터가 있으면 이 몬스터에 기합용 카운터 1개를 부여한다.",
-        "en": "【On Summon】If another Golem monster is on your field, this monster gains 1 counter (used by Guts)."
-      },
-      "after": {
         "ja": "【召喚時】自分の場に他の「ゴーレム」系モンスターがいれば、このモンスターにカウンター1個を付与する（気合用）。",
         "ko": "【소환 시】자신의 필드에 다른 골렘 계열 몬스터가 있으면 이 몬스터에 기합용 카운터 1개를 부여한다.",
         "en": "【On Summon】If another Golem monster is on your field, this monster gains 1 counter (used by Guts)."
+      },
+      "after": {
+        "ja": "【召喚時】自分の場の他の「ゴーレム」系統モンスター1体につき、このモンスターは気合カウンターを1つ得る。\n\n【相手のモンスター召喚時】相手のターン中、相手がコスト3以上のモンスターを召喚するたび、このモンスターは気合カウンターを1つ得る。\n\n【自分のターン開始時】このモンスターの気合カウンター1つとマナ3を支払い、「アンティークエンハンスマジック」を手札に1枚追加してよい。",
+        "ko": "【소환 시】자신 필드의 다른 골렘 계열 몬스터 1체당 이 몬스터는 기합 카운터를 1개 얻는다.\n\n【상대의 몬스터 소환 시】상대 턴에 상대가 코스트 3 이상인 몬스터를 소환할 때마다 이 몬스터는 기합 카운터를 1개 얻는다.\n\n【자신의 턴 시작 시】이 몬스터의 기합 카운터 1개와 마나 3을 지불하고 앤티크 인핸스 매직 1장을 패에 추가할 수 있다.",
+        "en": "【On Summon】Gain 1 Guts counter for each other Golem monster on your field.\n\n【When the Opponent Summons a Monster】Whenever the opponent summons a monster costing 3 or more during their turn, gain 1 Guts counter.\n\n【At the Start of Your Turn】You may spend 1 Guts counter from this monster and 3 mana to add Antique Enhance Magic to your hand."
       }
     },
     "NGA4": {
@@ -1012,24 +1017,29 @@
     },
     "NWL3": {
       "nameJa": "ガーディアンゴーレム",
-      "status": "reworded",
+      "status": "golem-rework-v87",
       "changedLocales": [
-        "ja"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "2bf7cd19be7dac8711f1c0bcb61e94d6bd550493d1980f9f78c7f2822722e266",
-      "textSha256": "5440093112a1b5146ceea957175f06f158676936033385274bae79f168e5f926",
+      "definitionSha256": "a3a2d30edd80aa8515e5fed32d91424474d89e321a8ac73c22dd186ed25aea48",
+      "textSha256": "ff5bb378eecf0a192bb4f3501ff56a9b44fa00ee9ead7ae4a9763d0bce992912",
       "hooks": {
-        "aura": "gutsOnHit"
+        "passive": [
+          "guts",
+          "counter"
+        ]
       },
       "before": {
-        "ja": "【攻撃ダメージを受けた後】このモンスターが攻撃で1以上のダメージを受け、気合を消費せずに生き残ると、カウンター1個を得る（気合に使用）。",
+        "ja": "【攻撃ダメージを受けた後】このモンスターが攻撃で1以上のダメージを受け、気合を消費せずに生き残ると、このモンスターにカウンター1個を付与する（気合用）。",
         "ko": "【공격 데미지를 받은 후】이 몬스터가 공격으로 1 이상의 데미지를 받고 기합을 소비하지 않고 살아남으면 카운터 1개를 얻는다(기합에 사용).",
         "en": "【After Taking Attack Damage】After this monster takes at least 1 attack damage and survives without spending Guts, it gains 1 counter (used by Guts)."
       },
       "after": {
-        "ja": "【攻撃ダメージを受けた後】このモンスターが攻撃で1以上のダメージを受け、気合を消費せずに生き残ると、このモンスターにカウンター1個を付与する（気合用）。",
-        "ko": "【공격 데미지를 받은 후】이 몬스터가 공격으로 1 이상의 데미지를 받고 기합을 소비하지 않고 살아남으면 카운터 1개를 얻는다(기합에 사용).",
-        "en": "【After Taking Attack Damage】After this monster takes at least 1 attack damage and survives without spending Guts, it gains 1 counter (used by Guts)."
+        "ja": "【召喚時】自分の場の永続魔法1枚につき、このモンスターは気合カウンターを1つ得る。\n\n【相手の魔法使用時】相手のターン中、相手が魔法カードを使用するたび、自分の体力を2回復する。\n\n【自分のターン開始時】このモンスターの気合カウンター1つとマナ3を支払い、「精神放出術」を手札に1枚追加してよい。",
+        "ko": "【소환 시】자신 필드의 영구마법 1장당 이 몬스터는 기합 카운터를 1개 얻는다.\n\n【상대 마법 사용 시】상대 턴에 상대가 마법 카드를 사용할 때마다 자신의 체력을 2 회복한다.\n\n【자신의 턴 시작 시】이 몬스터의 기합 카운터 1개와 마나 3을 지불하고 정신 방출술 1장을 패에 추가할 수 있다.",
+        "en": "【On Summon】Gain 1 Guts counter for each persistent spell on your field.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell during their turn, restore 2 of your HP.\n\n【At the Start of Your Turn】You may spend 1 Guts counter from this monster and 3 mana to add Mind Burst to your hand."
       }
     },
     "NHEX": {
@@ -2337,26 +2347,28 @@
     },
     "MANA_GIANT": {
       "nameJa": "ジャイアントゴーレム",
-      "status": "reworded",
+      "status": "golem-rework-v87",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "b9fde0d14e7fc0e57590161678d668c49aaf390013428033fd20151ea49efcee",
-      "textSha256": "075d5eceea3fa8d4b02d7d2429fb4579ae695bc7774c6f3ec58112cc21a57e38",
+      "definitionSha256": "760c964214ea87556d3b33ef03e4ee05b94342d4f7594e298422dd7bf2d69ba1",
+      "textSha256": "acb03bcf559154768300a5b63a9c89f484d06b761cadecdf564757b307e3a85b",
       "hooks": {
-        "turnFx": "giantGolem"
+        "passive": [
+          "void"
+        ]
       },
       "before": {
-        "ja": "【自分ターン開始時】自分のデッキ構成に「ジャイアントゴーレム」以外の「ゴーレム」系モンスターが2種類以上あれば、自分の体力を10回復する。",
-        "ko": "【자신 턴 시작시】자신의 덱 구성에 자이언트 골렘 이외 골렘 계열 몬스터가 2종류 이상이면 자신의 체력을 10 회복한다.",
-        "en": "【Your Turn Start】If your deck composition has at least 2 distinct Golem-family monster names other than Giant Golem, restore 10 of your HP."
-      },
-      "after": {
         "ja": "【自分のターン開始時】自分のデッキ構成に「ジャイアントゴーレム」以外の「ゴーレム」系モンスターが2種類以上あれば、自分の体力を10回復する。",
         "ko": "【자신의 턴 시작 시】자신의 덱 구성에 자이언트 골렘 이외 골렘 계열 몬스터가 2종류 이상이면 자신의 체력을 10 회복한다.",
         "en": "【At the Start of Your Turn】If your deck composition has at least 2 distinct Golem-family monster names other than Giant Golem, restore 10 of your HP."
+      },
+      "after": {
+        "ja": "【召喚時】自分のデッキ構成に同名以外の「ゴーレム」系統モンスターがいなければ、このモンスターの体力は9になる。\n\n【場にある間】相手のターン中、相手がマナ水晶を得るたび、このモンスターの「虚無」を取り除く。すでに「虚無」がなければ、代わりに攻撃力・体力が2増える。自分がマナ水晶を得るたび、マナを1得る。自分のデッキ構成に同名以外の「ゴーレム」系統モンスターがいれば、さらにマナを1得る。",
+        "ko": "【소환 시】자신의 덱 구성에 이름이 다른 골렘 계열 몬스터가 없으면 이 몬스터의 체력이 9가 된다.\n\n【필드에 있는 동안】상대 턴에 상대가 마나 수정을 얻을 때마다 이 몬스터의 공허를 제거한다. 이미 공허가 없으면 대신 공격력과 체력이 2 증가한다. 자신이 마나 수정을 얻을 때마다 마나를 1 얻는다. 자신의 덱 구성에 이름이 다른 골렘 계열 몬스터가 있으면 마나를 1 더 얻는다.",
+        "en": "【On Summon】If your deck composition contains no differently named Golem monster, set this monster’s HP to 9.\n\n【While on the Field】Whenever the opponent gains mana crystals during their turn, remove Void from this monster. If it already lacks Void, it gains +2 ATK and +2 HP instead. Whenever you gain mana crystals, gain 1 mana, plus 1 more if your deck composition contains a differently named Golem monster."
       }
     },
     "HOURGLASS": {
@@ -4261,67 +4273,80 @@
     },
     "GOLEM1": {
       "nameJa": "兵士ゴーレム",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "7d2333d36ef639045e823ab6f5f3e7cf2e65c777c8e3e95152d478ac2dc55432",
-      "textSha256": "a57bf7a34f2e47f00d87abdd18e09dd8228ed1656e60c423dc55fb6511bb0ff3",
-      "hooks": {},
-      "before": {
-        "ja": "",
-        "ko": "",
-        "en": ""
-      },
-      "after": {
-        "ja": "",
-        "ko": "",
-        "en": ""
-      }
-    },
-    "GOLEM2": {
-      "nameJa": "リーダーゴーレム",
-      "status": "reworded",
-      "changedLocales": [
-        "en"
-      ],
-      "definitionSha256": "e08dcaf69458ae5788080330e484d3d2dd95ea30e46c7aeeff84788e7325ec64",
-      "textSha256": "45b5cd08374adc88e13fae203c3ff7bc2a9e1a7b84370430f52d55d5432e7383",
-      "hooks": {
-        "aura": "leaderGolem"
-      },
-      "before": {
-        "ja": "【自分のモンスター破壊時】自分の場のモンスターが破壊されるたび、このモンスターにカウンター1個を付与する（気合用）。",
-        "ko": "【자신의 몬스터 파괴 시】자신의 필드의 몬스터가 쓰러질 때마다 이 몬스터에 카운터 1개를 얻는다(기합에 사용).",
-        "en": "【When Your Monster Is Destroyed】Whenever a monster on your field dies, this monster gains 1 counter (used by Guts)."
-      },
-      "after": {
-        "ja": "【自分のモンスター破壊時】自分の場のモンスターが破壊されるたび、このモンスターにカウンター1個を付与する（気合用）。",
-        "ko": "【자신의 몬스터 파괴 시】자신의 필드의 몬스터가 쓰러질 때마다 이 몬스터에 카운터 1개를 얻는다(기합에 사용).",
-        "en": "【When Your Monster Is Destroyed】Whenever a monster on your field is destroyed, this monster gains 1 counter (used by Guts)."
-      },
-      "reviewedAt": "2026-10-31"
-    },
-    "GOLEM3": {
-      "nameJa": "ゴーレムキング",
-      "status": "reworded",
+      "status": "golem-rework-v87",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "273119d5f1e80382732511a76ded8c041465883d67c3d8c1cb7dacbdca9ec637",
-      "textSha256": "0601ddab24cd9e1622b3b452548ce660dae4a7ee68572d393dfa5cf342b58d73",
+      "definitionSha256": "941cca133a28dfe439d62b4a6bb9afed949a84e41cd75b936be7c375f78985c5",
+      "textSha256": "5a9dc5b0ed6e96dbc327174fd415255b7accaca57021da445843c93e96e68f4a",
       "hooks": {
-        "summonReq": "golemKin"
+        "passive": [
+          "guts"
+        ]
       },
       "before": {
-        "ja": "【召喚条件】自分の場・デッキ・手札・墓地に同名以外の「ゴーレム」系モンスターがいる時のみ召喚可能。",
-        "ko": "【소환 조건】자신의 필드·덱·패·묘지에 동명 외 '골렘' 계열 몬스터가 있을 때만 소환할 수 있다.",
-        "en": "【Summon Requirement】Summonable only with a Golem-family monster with a different name in your field, deck, hand or graveyard."
+        "ja": "",
+        "ko": "",
+        "en": ""
       },
       "after": {
+        "ja": "【召喚時】自分の場の永続魔法1枚につき、このモンスターは気合カウンターを1つ得る。\n\n【自分のターン開始時】このモンスターの気合カウンター1つとマナ2を支払い、「リーダーゴーレム」か「マナ・ゴーレム」を自分の場に1体召喚してよい。",
+        "ko": "【소환 시】자신 필드의 영구마법 1장당 이 몬스터는 기합 카운터를 1개 얻는다.\n\n【자신의 턴 시작 시】이 몬스터의 기합 카운터 1개와 마나 2을 지불하고 리더 골램 또는 마나 골렘 중 1체를 자신의 필드에 소환할 수 있다.",
+        "en": "【On Summon】Gain 1 Guts counter for each persistent spell on your field.\n\n【At the Start of Your Turn】You may spend 1 Guts counter from this monster and 2 mana to summon a Leader Golem or a Mana Golem to your field."
+      }
+    },
+    "GOLEM2": {
+      "nameJa": "リーダーゴーレム",
+      "status": "golem-rework-v87",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "488d3edd289f2e5ec7573594ab1a6423c34f23e461b81018b69da99acc22d336",
+      "textSha256": "fad33a9303e5bf7b483615a93bf14ecf37bb8aa9957013be4baab0da72b5a3fd",
+      "hooks": {
+        "passive": [
+          "guts"
+        ]
+      },
+      "before": {
+        "ja": "【自分のモンスター破壊時】自分の場のモンスターが破壊されるたび、このモンスターにカウンター1個を付与する（気合用）。",
+        "ko": "【자신의 몬스터 파괴 시】자신의 필드의 몬스터가 쓰러질 때마다 이 몬스터에 카운터 1개를 얻는다(기합에 사용).",
+        "en": "【When Your Monster Is Destroyed】Whenever a monster on your field is destroyed, this monster gains 1 counter (used by Guts)."
+      },
+      "after": {
+        "ja": "【召喚時】相手の場の永続魔法1枚につき、このモンスターは気合カウンターを1つ得る。\n\n【相手の魔法使用時】相手のターン中、相手が魔法カードを使用するたび、自分の体力を1回復する。\n\n【自分のターン開始時】このモンスターの気合カウンター1つとマナ2を支払い、「戦士ゴーレム」を自分の場に1体召喚してよい。",
+        "ko": "【소환 시】상대 필드의 영구마법 1장당 이 몬스터는 기합 카운터를 1개 얻는다.\n\n【상대 마법 사용 시】상대 턴에 상대가 마법 카드를 사용할 때마다 자신의 체력을 1 회복한다.\n\n【자신의 턴 시작 시】이 몬스터의 기합 카운터 1개와 마나 2을 지불하고 전사 골램 1체를 자신의 필드에 소환할 수 있다.",
+        "en": "【On Summon】Gain 1 Guts counter for each persistent spell on your opponent’s field.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell during their turn, restore 1 of your HP.\n\n【At the Start of Your Turn】You may spend 1 Guts counter from this monster and 2 mana to summon a Warrior Golem to your field."
+      }
+    },
+    "GOLEM3": {
+      "nameJa": "ゴーレムキング",
+      "status": "golem-rework-v87",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "ed838d44b671cf96c6367c5947e977680372fbfe27eabb367386c23a3fa763c9",
+      "textSha256": "5253f152b4f38c29cd6fb3d06d255e6f398dc2d765dbe67ad244c1b4913ea1c4",
+      "hooks": {
+        "passive": [
+          "guts"
+        ]
+      },
+      "before": {
         "ja": "【召喚条件】自分のデッキ構成に、このカードと同名でない「ゴーレム」系モンスターがいる。",
         "ko": "【소환 조건】자신의 덱 구성에 이 카드와 이름이 다른 골렘 계열 몬스터가 있다.",
         "en": "【Summon Requirement】Your deck composition contains a Golem-family monster with a different name from this card."
+      },
+      "after": {
+        "ja": "【召喚時】自分のデッキ構成に同名以外の「ゴーレム」系統モンスターがいなければ、このモンスターの攻撃力は1になる。\n\n【相手の魔法使用時】相手のターン中、相手が魔法カードを使用するたび、相手の場のランダムな永続魔法1枚を破壊する。\n\n【相手のモンスター召喚時】相手のターン中、自分の場に同名以外の「ゴーレム」系統モンスターがいる場合、相手がコスト3以上のモンスターを召喚するたび、このモンスターは気合カウンターを1つ得る。\n\n【自分のターン開始時】このモンスターの気合カウンター1つとマナ2を支払い、「鉄壁」を手札に1枚追加してよい。",
+        "ko": "【소환 시】자신의 덱 구성에 이름이 다른 골렘 계열 몬스터가 없으면 이 몬스터의 공격력이 1이 된다.\n\n【상대 마법 사용 시】상대 턴에 상대가 마법 카드를 사용할 때마다 상대 필드의 무작위 영구마법 1장을 파괴한다.\n\n【상대의 몬스터 소환 시】상대 턴에 자신의 필드에 이름이 다른 골렘 계열 몬스터가 있는 동안 상대가 코스트 3 이상인 몬스터를 소환할 때마다 이 몬스터는 기합 카운터를 1개 얻는다.\n\n【자신의 턴 시작 시】이 몬스터의 기합 카운터 1개와 마나 2을 지불하고 철벽 1장을 패에 추가할 수 있다.",
+        "en": "【On Summon】If your deck composition contains no differently named Golem monster, set this monster’s ATK to 1.\n\n【Opponent Plays a Spell】Whenever the opponent plays a spell during their turn, destroy 1 random persistent spell on their field.\n\n【When the Opponent Summons a Monster】Whenever the opponent summons a monster costing 3 or more during their turn, gain 1 Guts counter if you control a differently named Golem monster.\n\n【At the Start of Your Turn】You may spend 1 Guts counter from this monster and 2 mana to add Iron Wall to your hand."
       }
     },
     "DECAY_CRAFT": {
@@ -5471,27 +5496,27 @@
     },
     "REFRESH_HAND": {
       "nameJa": "リフレッシュ",
-      "status": "reworded",
+      "status": "golem-rework-v87",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "95518253b2c04471ad83ae82ae79215f26044df4a4c5b9086afd718822142efc",
-      "textSha256": "044fb1354b4a630b40d4374f7ca6e14217f046cdcdecafac8f5ad53c662d2656",
-      "hooks": {},
-      "before": {
-        "ja": "【発動時】カードを1枚引く。引いたカードが魔法カードなら、自分の体力を2回復する。",
-        "ko": "【발동 시】카드를 1장 뽑는다. 뽑은 카드가 마법 카드라면 자신의 체력을 2 회복한다.",
-        "en": "【On Cast】Draw 1 card. If the drawn card is a spell, restore 2 of your HP."
+      "definitionSha256": "1851f15715d369febd4fb2342603eba858c2c48741a0eb2526a7ec20e83b6845",
+      "textSha256": "77f3a55059f3e0a3d05cc924404eed27a2bca0643199f36dd0ea4b4dabd8d1b8",
+      "hooks": {
+        "maxUsesPerTurn": 3
       },
-      "after": {
+      "before": {
         "ja": "【発動時】カードを1枚引く。引いたカードが魔法カードなら、自分の体力を3回復する。",
         "ko": "【발동 시】카드를 1장 뽑는다. 뽑은 카드가 마법 카드라면 자신의 체력을 3 회복한다.",
         "en": "【On Cast】Draw 1 card. If the drawn card is a spell, restore 3 of your HP."
       },
-      "reviewNote": "Draw-spell conditional healing is now 3; engine, modifiers, and three-language effect verified.",
-      "reviewedAt": "2026-10-30"
+      "after": {
+        "ja": "【発動時】カードを1枚引く。引いたカードが魔法カードなら、自分の体力を3回復する。\n\n【回数制限】同名カード合計で自分の各ターン3回まで使用できる。",
+        "ko": "【발동 시】카드를 1장 뽑는다. 뽑은 카드가 마법 카드라면 자신의 체력을 3 회복한다.\n\n【횟수 제한】같은 이름의 카드 합계로 자신의 턴마다 3회까지 사용할 수 있다.",
+        "en": "【On Cast】Draw 1 card. If the drawn card is a spell, restore 3 of your HP.\n\n【Use Limit】You may play cards with this name only 3 times during each of your turns in total."
+      }
     },
     "FOCUS": {
       "nameJa": "選択と集中",
@@ -10352,6 +10377,28 @@
         "ja": "【場にある間】このモンスターが相手プレイヤーを直接攻撃するたび攻撃力−3。どちらかの場のモンスター効果が発動するたび攻撃力と最大体力が1上がる。変化は対象が場を離れるまで続く。",
         "ko": "【필드에 있는 동안】이 몬스터가 상대 플레이어를 직접 공격할 때마다 공격력−3. 어느 쪽이든 필드의 몬스터 효과가 발동할 때마다 공격력과 최대 체력이 1 증가한다. 변화는 효과를 받은 몬스터가 필드를 떠날 때까지 지속된다.",
         "en": "【While on the Field】Each time this monster directly attacks the opponent, it loses 3 ATK. Whenever a monster effect activates on either field, gain 1 ATK and maximum HP. These changes last until the affected monster leaves the field."
+      }
+    },
+    "GOLEM_TEST": {
+      "nameJa": "試験用ゴーレム",
+      "status": "golem-rework-v87",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "6189d4aea5557c354e19ea193d69f8f67fc4d9b42ef00e98ec017c4e185b4476",
+      "textSha256": "86c20b6ef14a0a182b2a6d87eca9724a97d3e4d679f24b7aa5cc1331cbe3c4c6",
+      "hooks": {
+        "passive": [
+          "guts"
+        ]
+      },
+      "before": {},
+      "after": {
+        "ja": "【場にある間】相手のターン中、相手が自分の永続魔法を破壊するたび、「兵士ゴーレム」1体を自分の場に召喚する。",
+        "ko": "【필드에 있는 동안】상대 턴에 상대가 자신의 영구마법을 파괴할 때마다 병사 골램 1체를 자신의 필드에 소환한다.",
+        "en": "【While on the Field】Whenever the opponent destroys one of your persistent spells during their turn, summon a Soldier Golem to your field."
       }
     }
   },

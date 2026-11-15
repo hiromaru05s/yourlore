@@ -246,6 +246,7 @@ export interface TribePactDefeat {
 export interface GameState {
   runeReworkApplied?:boolean;
   runeZonesAudited?: boolean;
+  golemsReworked?: boolean;
   threeFireNamed?: boolean;
   diplomacyApplied?: boolean;
   truceThroughTurn?: number;

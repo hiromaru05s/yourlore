@@ -1,3 +1,4 @@
+import {GOLEM_TEXT} from './golemCards';
 import {RUNE_RULE_TEXT} from './runeRework';
 import {DIPLOMACY_CARDS} from './diplomacyCards';
 import {CURSE_CONTAGION} from './curseContagion';
@@ -1160,9 +1161,9 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "en": "【When Dice Are Rolled】Whenever either player rolls 1 die, put 1 counter on this monster, except for Casino dice.\n\n【When Counters Accumulate】For every 12 counters, spend 12 to roll 1 Casino die — 1-2: You take 35 damage / 3-4: Deal 35 damage to the opponent / 5: Deal 50 damage to the opponent / 6: Remove all of the opponent's Shield and Dew, then set their HP to 1."
   },
   "REFRESH_HAND": {
-    "ja": "【発動時】カードを1枚引く。引いたカードが魔法カードなら、自分の体力を3回復する。",
-    "ko": "【발동 시】카드를 1장 뽑는다. 뽑은 카드가 마법 카드라면 자신의 체력을 3 회복한다.",
-    "en": "【On Cast】Draw 1 card. If the drawn card is a spell, restore 3 of your HP."
+    "ja": "【発動時】カードを1枚引く。引いたカードが魔法カードなら、自分の体力を3回復する。\n\n【回数制限】同名カード合計で自分の各ターン3回まで使用できる。",
+    "ko": "【발동 시】카드를 1장 뽑는다. 뽑은 카드가 마법 카드라면 자신의 체력을 3 회복한다.\n\n【횟수 제한】같은 이름의 카드 합계로 자신의 턴마다 3회까지 사용할 수 있다.",
+    "en": "【On Cast】Draw 1 card. If the drawn card is a spell, restore 3 of your HP.\n\n【Use Limit】You may play cards with this name only 3 times during each of your turns in total."
   },
   "FOCUS": {
     "ja": "【発動時】自分のデッキ・墓地・場からカードを1枚まで選び、自分のリフトへ送る。",
@@ -1832,4 +1833,4 @@ CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.text
 
 for (const c of [...DIPLOMACY_CARDS, CURSE_CONTAGION, ...MERCENARY_CARDS, ...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
 
-Object.assign(CARD_EFFECT_TEXT,RUNE_RULE_TEXT);
+Object.assign(CARD_EFFECT_TEXT,RUNE_RULE_TEXT,GOLEM_TEXT);

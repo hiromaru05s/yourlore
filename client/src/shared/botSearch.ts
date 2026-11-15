@@ -64,6 +64,10 @@ export function searchDecide(g: GameState, level: 'normal' | 'hard' | 'hell', pr
   // Preserve the greedy policy's public, currently affordable escape from a
   // stalled board. Sampled refreshes must not spend its reserved purchase mana.
   const policy = safeGreedy(g), owner = g.players[side], opponent = g.players[1-side];
+  if (g.pending?.reason === 'destroyMon' && policy.type === 'chooseTarget') {
+    const walls = matchupPlan(g,owner,publicInventory(opponent)).walls;
+    if (walls.some(m => m.uid === policy.uid)) return policy;
+  }
   if (policy.type === 'buyMarket' || policy.type === 'buySupply' || policy.type === 'play') {
     // An answer already in hand needs its casting mana just as a market
     // answer needs its purchase mana. Speculative refreshes must not spend it.

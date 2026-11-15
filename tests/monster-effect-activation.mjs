@@ -33,7 +33,7 @@ try {
   for(const id of ['NHEX','MANA_GIANT'])for(const met of [false,true]){
    const g=fresh(owner),p=g.players[1-owner],m=mon(id);p.field=[m];
    if(met)p.deck=id==='NHEX'?Array.from({length:13},()=>card('WEAKEN_ALL')):[card('NGA3'),card('GOLEM1'),...Array.from({length:4},()=>card('SOLDIER2'))];
-   run(`upkeep:${owner}:${id}:${met}`,g,m,{type:'endTurn'},id==='NHEX'?0:met?1:0);
+   run(`upkeep:${owner}:${id}:${met}`,g,m,{type:'endTurn'},0);
   }
   for(const id of ['GUNNER','HEAVY_GUNNER','FARM_KEEPER','MIMIC_HUNTER']){
    const g=fresh(owner),p=g.players[owner],m=card(id);p.hand=[m];const r=run(`summon:${owner}:${id}`,g,m,{type:'play',idx:0},0);
@@ -69,13 +69,13 @@ try {
  {const g=fresh(),m=card('TGE4');g.players[0].hand=[m];run('once-marker-is-not-effect',g,m,{type:'play',idx:0},0);}
  for(const wantSuccess of [false,true]){let found=false;for(let seed=1;seed<100&&!found;seed++){const g=fresh(),m=mon('GAMBLER');g.rng=seed;g.players[0].field=[m];const events=[];E.tickTurnFx(g,E.makeCtx(g,events),g.players[0]);const dice=events.find(e=>e.type==='dice');if((dice.rolls[0]>=4)!==wantSuccess)continue;expect(events,m,1,'gambler success='+wantSuccess);assert(events.findIndex(e=>e.type==='monsterActivate')<events.findIndex(e=>e.type==='dice'));found=true;}assert(found);}
  // Real reactions outside summon/upkeep/attackFx, including choices and death.
- for(const owner of [0,1])for(const id of ['GUILD_HALL','NWL3','TPO2','VAMP_BUTLER','GM6_8','ELDER_ELF_KING','FIRE_MASTER','GOLEM2','HEXER4','CASINO','CHOSEN_MAGE','WORLD_TREE','BLACK_ELSA','BLACK_ALICE','MERC_MASTER','SHIELD_TITAN']){
+ for(const owner of [0,1])for(const id of ['GUILD_HALL','NWL3','M10','TPO2','VAMP_BUTLER','GM6_8','ELDER_ELF_KING','FIRE_MASTER','GOLEM2','HEXER4','CASINO','CHOSEN_MAGE','WORLD_TREE','BLACK_ELSA','BLACK_ALICE','MERC_MASTER','SHIELD_TITAN']){
   const g=fresh(owner),p=g.players[owner],o=g.players[1-owner],m=mon(id);p.field=[m];let action;
   if(id==='GUILD_HALL'){m.gcount=2;p.field.push(mon('ASSASSIN2',{uid:'assassin'}));action={type:'attack',uid:'assassin'};}
-  if(id==='NWL3'){g.cur=1-owner;o.field=[plain({uid:'attacker',atk:1})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:'attacker'},allowCancel:true};action={type:'chooseTarget',uid:m.uid};}
+  if(['NWL3','GOLEM2','M10'].includes(id)){g.cur=1-owner;p.hp-=5;o.hand=[card('REFRESH_HAND')];action={type:'play',idx:0};}
   if(id==='TPO2'){o.field=[plain({def:1,cost:3})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:m.uid},allowCancel:true};action={type:'chooseTarget',uid:o.field[0].uid};}
   if(id==='VAMP_BUTLER'){m.gcount=2;action={type:'attack',uid:m.uid};}
-  if(['GM6_8','ELDER_ELF_KING','FIRE_MASTER','GOLEM2'].includes(id)){g.cur=1-owner;if(id==='ELDER_ELF_KING')p.dew=15;if(id==='FIRE_MASTER')p.deck=[card('FIRE_BALL')];let target=m;if(id==='GOLEM2'){target=plain();p.field.push(target);}g.pending={kind:'oppMon',reason:'destroyMon',allowCancel:true};action={type:'chooseTarget',uid:target.uid};if(id==='ELDER_ELF_KING'){o.field=[plain({uid:'killer',atk:20})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:'killer'},allowCancel:true};}}
+  if(['GM6_8','ELDER_ELF_KING','FIRE_MASTER'].includes(id)){g.cur=1-owner;if(id==='ELDER_ELF_KING')p.dew=15;if(id==='FIRE_MASTER')p.deck=[card('FIRE_BALL')];const target=m;g.pending={kind:'oppMon',reason:'destroyMon',allowCancel:true};action={type:'chooseTarget',uid:target.uid};if(id==='ELDER_ELF_KING'){o.field=[plain({uid:'killer',atk:20})];g.pending={kind:'oppMon',reason:'attack',data:{attackerUid:'killer'},allowCancel:true};}}
   if(id==='HEXER4'){action={type:'endTurn'};}
   if(id==='CASINO'){m.gcount=11;g.cur=1-owner;o.hand=[card('VITAL2')];action={type:'play',idx:0};}
   if(id==='CHOSEN_MAGE'){p.removed=[card('STARTER_TRASH')];g.pending={kind:'myMon',reason:'chosenMage',data:{fired:[]},allowCancel:true};action={type:'chooseTarget',uid:m.uid};}
@@ -96,8 +96,8 @@ try {
  for(const def of Object.values(DB).filter(c=>c.t==='mon')){
   definitions++;for(const populated of [false,true]){const g=fresh(),p=g.players[0],m=mon(def.id);p.field=[m];if(populated){p.field.push(plain());p.deck=Array.from({length:15},()=>card('WEAKEN_ALL'));p.dew=20;g.players[1].field=[plain()];}const ev=[];E.resolveOnSummon(g,E.makeCtx(g,ev),m);assert(ev.every(e=>e.type!=='monsterActivate'||typeof e.uid==='string'));checks++;}
  }
- for(const id of ['NMD6','M10','VITAL4','HALF_ELF','CHOSEN_MAGE'])for(const enabled of [false,true]){
-  const g=fresh(),p=g.players[0],m=mon(id);p.field=[m];if(enabled){if(id==='NMD6')p.deck=Array.from({length:13},()=>card('WEAKEN_ALL'));if(id==='M10')p.field.push(mon('GOLEM1'));if(id==='VITAL4')p.field.push(mon('SOLDIER2'));if(id==='HALF_ELF')g.players[1].field=[mon('WORLD_TREE')];if(id==='CHOSEN_MAGE')p.removed=[card('STARTER_TRASH'),card('STARTER_TRASH')];}
+ for(const id of ['NMD6','VITAL4','HALF_ELF','CHOSEN_MAGE'])for(const enabled of [false,true]){
+  const g=fresh(),p=g.players[0],m=mon(id);p.field=[m];if(enabled){if(id==='NMD6')p.deck=Array.from({length:13},()=>card('WEAKEN_ALL'));if(id==='VITAL4')p.field.push(mon('SOLDIER2'));if(id==='HALF_ELF')g.players[1].field=[mon('WORLD_TREE')];if(id==='CHOSEN_MAGE')p.removed=[card('STARTER_TRASH'),card('STARTER_TRASH')];}
   assert.equal(monsterOngoingActive(g,p,m),enabled,id);for(const you of [0,1]){const view=redactFor(g,you);assert.equal(monsterOngoingActive(view,view.players[0],view.players[0].field[0]),enabled&&(id!=='NMD6'||you===0),'redacted '+id);}checks+=3;
   browserCases.push({label:'ongoing:'+id+':'+enabled,before:g,result:{state:g,events:[]},sourceUid:m.uid,ongoing:enabled});
  }

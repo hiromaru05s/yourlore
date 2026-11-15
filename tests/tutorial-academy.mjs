@@ -36,7 +36,7 @@ try{
  assert.equal(me('shield').hp,40);assert.equal(me('shield',1).hp,38);assert.equal(me('shield').shield,0);
  assert.equal(me('status',1).brand,0);assert.equal(me('status',1).hp,38);assert.equal(me('timing',1).field[0].atkMod,2);
  assert.equal(me('evolution').field[0].id,'DRAGON_RIDER');assert(me('evolution').removed.some(c=>c.id==='SOLDIER2'));assert.equal(me('evolution',1).field.filter(c=>c.id==='VAMP5').length,1);
- assert.equal(me('counter').field.length,0);assert.equal(opp('counter').field.length,0);assert.equal(opp('counter',1).hp,38);assert.equal(opp('counter',1).field[0].guts,0);assert.equal(opp('counter',2).field.length,0);
+ assert.equal(me('counter').field.length,0);assert.equal(opp('counter').field.length,0);assert.equal(opp('counter',1).hp,37);assert.equal(opp('counter',1).field[0].guts,0);assert.equal(opp('counter',2).field.length,0);
  assert.equal(opp('dual').hp,4);assert.equal(opp('dual',1).hp,36);assert.equal(opp('dual',1).field.length,1);
  assert.equal(opp('aura').field.length,0);assert.equal(opp('aura',1).field[0].def+opp('aura',1).field[0].defMod,1);
  assert.equal(opp('evasion',0).field[0].dmg??0,0);assert.equal(opp('evasion',1).field[0].dmg,4);

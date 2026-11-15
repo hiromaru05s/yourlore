@@ -1,3 +1,4 @@
+import {GOLEM_UPKEEP} from './golemCards';
 import {RUNE_IDS} from './runeRework';
 import {MERC_IDS, MERC_CASINO_DICE} from './mercenaryCards';
 import { FIRE_SPELL_IDS } from './fireCards';
@@ -220,6 +221,21 @@ function spaceLocked(g: GameState, p: PlayerState): boolean {
 }
 /** 카드를 플레이(패에서 사용)할 때마다 — 무상의 대가(v41b freeReward): 코스트 0 카드면 장당 1드로우. */
 function afterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void {
+  if ((card.t === 'spell' || card.t === 'starter') && g.players[ctx.summonTurnOwner ?? g.cur] === p) {
+    const owner = g.players[1-side(g,p)];
+    for (const m of [...owner.field]) {
+      if (g.over || m.mutedEffects || !owner.field.includes(m)) continue;
+      if (m.id === 'GOLEM2' || m.id === 'M10' || m.id === 'NWL3') {
+        monsterActivation(g,ctx.ev,owner,m);
+        ctx.heal(owner,m.id === 'GOLEM2' ? 1 : 2);
+      } else if (m.id === 'GOLEM3' && p.enchants.length) {
+        monsterActivation(g,ctx.ev,owner,m);
+        const [target] = p.enchants.splice(randInt(g,p.enchants.length),1);
+        ctx.log(`${cn(m)}: ${cn(target.card)} 파괴`,`${cn(m)}：${cn(target.card)}を破壊`,`${cn(m)} destroys ${cn(target.card)}.`);
+        binEnch(g,ctx,p,target.card,false,'other',side(g,owner));
+      }
+    }
+  }
   if (isAttuneCard(card)) {
     p.attunePlaysTurn = (p.attunePlaysTurn ?? 0) + 1;
   }
@@ -232,7 +248,7 @@ function afterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void
   if (RUNE_IDS.has(card.id)) (p.runePlays ??= []).push(card.id);
   if (card.t === 'spell') {
     for (const q of [...p.quests ?? []]) if (q.card.id === 'Q_RUNE_SECRET' && RUNE_IDS.has(card.id)) {
-      p.quests!.splice(p.quests!.indexOf(q),1); fieldToGrave(g,ctx,p,q.card); addMaxMana(p,1);
+      p.quests!.splice(p.quests!.indexOf(q),1); fieldToGrave(g,ctx,p,q.card); addMaxMana(g, ctx, p,1);
     }
     for (const m of p.field.filter(m=>!m.mutedEffects)) {
       if (m.id === 'RUNE_SAI') {
@@ -493,7 +509,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -835,7 +851,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     for (const e of p.enchants) {
       if(e.card.ench==="healMana")enchantFx(g,ev,p,e.card);
       if (e.card.ench === "healMana" && diceChanceRaw(g, ev, log, side(g, p), { id: e.card.id, player: side(g, p) }, 50)) { // v34: 🎲 4+
-        addMaxMana(p, 1);
+        addMaxMana(g, ctx, p, 1);
         log(`  └ 생명의 순환: 마나 수정 +1 (${p.maxMana})`, `  └ 生命の循環: マナ水晶 +1 (${p.maxMana})`);
       }
     }
@@ -907,7 +923,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       if (e.card.ench !== "painGain" || target.hp <= 0) continue;
       enchantFx(g,ev,target,e.card);
       const { rolls: pr } = diceRoll(g, ev, side(g, target), { id: e.card.id, player: side(g, target) }, 1);
-      if (pr[0] === 6) { addMaxMana(target, 1); log(`  └ ${cn(e.card)}: 🎲 6! 마나 수정 +1 (${target.maxMana})`, `  └ ${cn(e.card)}: 🎲 6！マナ水晶+1 (${target.maxMana})`); }
+      if (pr[0] === 6) { addMaxMana(g, ctx, target, 1); log(`  └ ${cn(e.card)}: 🎲 6! 마나 수정 +1 (${target.maxMana})`, `  └ ${cn(e.card)}: 🎲 6！マナ水晶+1 (${target.maxMana})`); }
       else log(`  └ ${cn(e.card)}: 🎲 ${pr[0]}`, `  └ ${cn(e.card)}: 🎲 ${pr[0]}`);
     }
     const dealer: Side = (target === g.players[0] ? 1 : 0);
@@ -961,7 +977,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       if (!dead.mutedEffects && dead.id === 'FIRE_MASTER' && [...owner.deck, ...owner.discard].some(isFire)) monsterActivation(g, ev, owner, dead, ev.length, true);
       if (!dead.mutedEffects && dead.id === 'FIRE_MASTER') queueExpansionChoice(g, owner, 'FIRE_MASTER', '手札に加えるファイアー魔法を最大2枚選択', { left: 2 });
       // 폭풍의 광전사(drainMana): restore the opponent's mana crystals it was draining
-      if (dead.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; addMaxMana(opp2, (dead.drained ?? (dead.val || 3))); }
+      if (dead.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; addMaxMana(g, ctx, opp2, (dead.drained ?? (dead.val || 3))); }
       // 공허(void): 토큰·공허 패시브 몬스터는 죽으면 게임에서 제외 — 덱 순환에 들어가지 않는다
       let shroomRift = false;
       if (!dead.mutedEffects && dead.id === 'RUST_SHROOM' && !g.over) {
@@ -1129,6 +1145,7 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     if (g.over) return;
   }
   const p = g.players[g.cur];
+  const upkeepGolems = p.field.filter(m => GOLEM_UPKEEP[m.id] && !m.mutedEffects);
   delete p.attunePlaysTurn;
   delete p.attuneFlowTurn;
   const foe = g.players[1-g.cur];
@@ -1171,11 +1188,11 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     if (due.length) {
       p.manaRegain = p.manaRegain.filter((r) => r.at > g.turn);
       const amt = due.reduce((a, b) => a + b.amt, 0);
-      addMaxMana(p, amt);
+      addMaxMana(g, ctx, p, amt);
       ctx.log(`  └ 마족 척후의 대가 종료 — 마나 수정 +${amt} (${p.maxMana})`, `  └ 魔族の斥候の代価終了 — マナ水晶+${amt} (${p.maxMana})`, `  └ Demon Scout’s penalty ends: mana crystals +${amt} (${p.maxMana})`);
     }
   }
-  if (p.manaGainNext) { addMaxMana(p, p.manaGainNext); p.manaGainNext = 0; } // E3 delayed mana
+  if (p.manaGainNext) { addMaxMana(g, ctx, p, p.manaGainNext); p.manaGainNext = 0; } // E3 delayed mana
   const expansion = xstate(p);
   expansion.turn = g.turn; expansion.extraDraw = 0; expansion.firePlayed = []; expansion.fireDiscount = 0; expansion.dominion = 0;
   if ((p.usesTurn.AMBUSH ?? 0) > 0) p.ambushUsedPreviousOwnTurn = true;
@@ -1246,6 +1263,10 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     }
   }
   // 선택받은 마법사: 턴 시작 선택 발동 (다른 턴 시작 pending이 없을 때만 — 시련의 영역 제외 후에는 체인으로 이어짐)
+  if (!first && !g.over) for (const m of upkeepGolems) {
+    if (!golemUpkeepCards(g,p,m).length) continue;
+    queueExpansionChoice(g,p,'GOLEM_UPKEEP','',{sourceUid:m.uid,ja:m.nameJa,ko:m.name,en:m.nameEn,mana:GOLEM_UPKEEP[m.id].mana});
+  }
   if (!first && !g.over) for(const m of p.field) if(m.id==='EGG_MASTER' && !m.mutedEffects && p.field.some(e=>e.hatch!=null && (e.dur??0)>0)) queueExpansionChoice(g,p,'EGG_ADVANCE','',{sourceUid:m.uid});
   g.phase = "main";
 
@@ -1307,7 +1328,7 @@ function tickDoomsday(g: GameState, ctx: Ctx, p: PlayerState): void {
     `<span class="dmg">Trap ${cn(c)} activates automatically!</span> Take 5 damage, give the opponent +1 mana crystal, and destroy all cards on the field`);
     ctx.selfDamage(p, 5, c);
     if (g.over) break;
-    addMaxMana(o, 1);
+    addMaxMana(g, ctx, o, 1);
     ctx.log(`  └ 상대 마나 수정 +1 (${o.maxMana})`, `  └ 相手のマナ水晶+1 (${o.maxMana})`);
     for (const pl of g.players) {
       for (const m of [...pl.field]) {
@@ -1385,7 +1406,7 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
       case "gambler": { // 도박꾼: 주사위 4·5·6 → 마나 수정 +1 (v24: 체력 +5 삭제)
         const { rolls: gr } = diceRoll(g, ctx.ev, side(g, p), { id: m.id, player: side(g, p) }, 1, 4);
         const r = gr[0];
-        if (r >= 4) { addMaxMana(p, 1); ctx.log(`  └ ${cn(m)} 🎲 ${r} → 마나 수정 +1 (${p.maxMana})`, `  └ ${cn(m)} 🎲 ${r} → マナ水晶+1 (${p.maxMana})`); }
+        if (r >= 4) { addMaxMana(g, ctx, p, 1); ctx.log(`  └ ${cn(m)} 🎲 ${r} → 마나 수정 +1 (${p.maxMana})`, `  └ ${cn(m)} 🎲 ${r} → マナ水晶+1 (${p.maxMana})`); }
         else ctx.log(`  └ ${cn(m)} 🎲 ${r}`, `  └ ${cn(m)} 🎲 ${r}`);
         break;
       }
@@ -1518,6 +1539,13 @@ function binEnch(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst, for
   } else fieldToGrave(g,ctx,owner,card);
   if (cause === 'exile' || g.over) return;
   const opponent = g.players[1-side(g,owner)];
+  if (cause !== 'self' && source === side(g,opponent) && source === (ctx.summonTurnOwner ?? g.cur)) {
+    for (const m of [...owner.field]) {
+      if (g.over || m.id !== 'GOLEM_TEST' || m.mutedEffects || !owner.field.includes(m) || !effectSummonAllowed(g,owner,DB.GOLEM1)) continue;
+      monsterActivation(g,ctx.ev,owner,m);
+      effectSummon(g,ctx,owner,'GOLEM1');
+    }
+  }
   if (card.id === 'RICH_HABIT' && cause !== 'self' && source != null && source !== side(g,owner)) {
     enchantFx(g,ctx.ev,owner,card);
     owner.maxMana = 3;
@@ -1571,7 +1599,7 @@ function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: n
       // 러스트 머쉬룸 — v25: 부패로 상대 몬스터가 파괴되면 자신의 마나 수정 +1
       const foe = g.players[1 - side(g, owner)];
       if (!g.over && foe.field.some((m) => m.id === "RUST_SHROOM")) {
-        const gained = addMaxMana(foe, 1);
+        const gained = addMaxMana(g, ctx, foe, 1);
         if (gained > 0 && foe.maxMana - gained < MAX_MANA) for (const m of foe.field) if (m.id === "RUST_SHROOM") monsterActivation(g, ctx.ev, foe, m);
         ctx.log(`  └ 러스트 머쉬룸: 마나 수정 +1 (${foe.maxMana})`, `  └ ラストマッシュルーム: マナ水晶+1 (${foe.maxMana})`, `  └ Rust Mushroom: mana crystals +1 (${foe.maxMana})`);
       }
@@ -1589,7 +1617,7 @@ function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: n
       // 러스트캡 슬러그(v36): 부패로 상대 몬스터를 파괴하면 마나 수정 +1, 체력 +5
       if (!g.over && foe.field.some((m) => m.id === "RUST_SLUG")) {
         const at = ctx.ev.length, before = [Math.min(MAX_MANA, foe.maxMana), foe.hp];
-        addMaxMana(foe, 1); addHealth(ctx, foe, 5);
+        addMaxMana(g, ctx, foe, 1); addHealth(ctx, foe, 5);
         if (before[0] !== Math.min(MAX_MANA, foe.maxMana) || before[1] !== foe.hp) for (const m of foe.field) if (m.id === "RUST_SLUG") monsterActivation(g, ctx.ev, foe, m, at);
 
         ctx.log(`  └ 러스트캡 슬러그: 마나 수정 +1 (${foe.maxMana}), 체력 +5 (${foe.hp})`, `  └ ラストキャップ・スラッグ: マナ水晶+1 (${foe.maxMana}), 体力+5 (${foe.hp})`, `  └ Rustcap Slug: mana crystals +1 (${foe.maxMana}), restore 5 HP (${foe.hp})`);
@@ -1620,20 +1648,20 @@ function spawnVampire(g: GameState, ctx: Ctx, p: PlayerState, id: string): void 
 function resolveBloodSecret(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon, sourceUid: string): void {
   if (isVampFamily(m)) {
     m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, 5);
-    addMaxMana(p, 5);
+    addMaxMana(g, ctx, p, 5);
     return;
   }
   ctx.destroyMonster(p, m, undefined, sourceUid);
   if (g.over || !rmz(p).some(c => c.uid === m.uid) || m.cost <= 0) return;
   const roll = diceRoll(g, ctx.ev, side(g,p), {id:'BLOOD_SECRET',player:side(g,p)}, m.cost, 6);
-  if (roll.ok) addMaxMana(p, 3);
+  if (roll.ok) addMaxMana(g, ctx, p, 3);
 }
 
 /** "피의 마법" 발동 후 트리거: 피의 축제(마나) + 흡혈귀 진화(각 1회). */
 function bloodTriggers(g: GameState, ctx: Ctx, p: PlayerState): void {
   if (g.over) return;
   const fest = p.enchants.filter((e) => e.card.ench === "bloodFest").length;
-  if (fest > 0) { enchantKindFx(g,ctx.ev,"bloodFest",p);addMaxMana(p, fest); ctx.log(`  └ 피의 축제: 마나 수정 +${fest} (${p.maxMana})`, `  └ 血の祝祭: マナ水晶+${fest} (${p.maxMana})`); }
+  if (fest > 0) { enchantKindFx(g,ctx.ev,"bloodFest",p);addMaxMana(g, ctx, p, fest); ctx.log(`  └ 피의 축제: 마나 수정 +${fest} (${p.maxMana})`, `  └ 血の祝祭: マナ水晶+${fest} (${p.maxMana})`); }
   // 진화는 발동 시점의 필드 스냅샷 기준 — 이번 발동으로 새로 소환된 흡혈귀는 미반응
   for (const m of [...p.field]) {
     if (g.over) return;
@@ -1729,7 +1757,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       }
       // 세계수의 씨앗: 자신의 턴 시작마다 val2%로 마나 수정 +1
       if (e.card.ench === "seedMana" && ownerTurn && !g.over && diceChance(g, ctx, pl, { id: e.card.id, player: side(g, pl) }, e.card.val2 ?? 25)) {
-        addMaxMana(pl, 1);
+        addMaxMana(g, ctx, pl, 1);
         ctx.log(`<span class="t">${cn(e.card)}</span> 발아! 마나 수정 +1 (${pl.maxMana})`, `<span class="t">${cn(e.card)}</span> 発芽！マナ水晶 +1 (${pl.maxMana})`);
       }
       // 세계수의 축복: 누구의 턴이든 시작 시 그 플레이어 마나 수정 +1, 시전자 턴이면 40%로 +2 추가
@@ -1737,7 +1765,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
         // v34: 기본 +1 · 소유자 턴 + 덱에 '엘프' 계열이 있으면 +4
         const elfy = ownerTurn && [...pl.deck, ...pl.discard, ...pl.hand].some((c) => (c.name || "").includes("엘프") || (c.id || "").includes("ELF"));
         const gain = elfy ? 4 : 1;
-        addMaxMana(cur, gain);
+        addMaxMana(g, ctx, cur, gain);
         ctx.log(`<span class="t">${cn(e.card)}</span> ${cur.name} 마나 수정 +${gain} (${cur.maxMana})`, `<span class="t">${cn(e.card)}</span> ${cur.name} マナ水晶 +${gain} (${cur.maxMana})`);
       }
       // 상회(guild): 자신의 턴마다 카운터 +1 — 20개마다 '암상인' 지급
@@ -1779,7 +1807,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       if (e.card.ench === "richHabit" && ownerTurn && !g.over) {
         const count = pl.hand.length;
         if (count >= 4) addHealth(ctx, pl, 6);
-        if (count >= 6) addMaxMana(pl, 1);
+        if (count >= 6) addMaxMana(g, ctx, pl, 1);
       }
       if (e.card.ench === "colosseumRest" && ownerTurn && !g.over) {
         ctx.heal(pl, 2);
@@ -1815,7 +1843,7 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
       }
       // 선견지명: 마나 수정 10 이상이 되면 +2 후 자괴 (필드를 떠나면 게임에서 제외) (v19: 9→10)
       if (e.card.ench === "foresight" && !g.over && pl.maxMana >= 10) {
-        addMaxMana(pl, 2);
+        addMaxMana(g, ctx, pl, 2);
         ctx.log(`<span class="t">${cn(e.card)}</span> 발현! 마나 수정 +2 (${pl.maxMana}) — 이 카드는 게임에서 제외`, `<span class="t">${cn(e.card)}</span> 発現！マナ水晶+2 (${pl.maxMana}) — このカードはゲームから除外`);
         rmz(pl).push(e.card);
         emitActivation();return false;
@@ -2289,7 +2317,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const bi = p.field.findIndex((x) => x.uid === att.uid);
     if (bi >= 0) {
       const bounced = p.field.splice(bi, 1)[0];
-      if (bounced.aura === "drainMana") addMaxMana(o, (bounced.drained ?? (bounced.val || 3)));
+      if (bounced.aura === "drainMana") addMaxMana(g, ctx, o, (bounced.drained ?? (bounced.val || 3)));
       ctx.ev.push({ type: "destroy", player: side(g, p), uid: bounced.uid, id: bounced.id });
       if (bounced.token) rmz(p).push(resetInst(bounced)); else p.hand.push(resetInst(bounced));
     }
@@ -2535,7 +2563,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     const bi = p.field.findIndex((x) => x.uid === att.uid);
     if (bi >= 0) {
       const bounced = p.field.splice(bi, 1)[0];
-      if (bounced.aura === "drainMana") addMaxMana(o, (bounced.val || 3));
+      if (bounced.aura === "drainMana") addMaxMana(g, ctx, o, (bounced.val || 3));
       ctx.ev.push({ type: "destroy", player: side(g, p), uid: bounced.uid, id: bounced.id });
       if (bounced.token) {
         rmz(p).push(resetInst(bounced));
@@ -2621,7 +2649,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     return;
   }
   if ((tc = takeTrap(g, ctx, o, "guardMana"))) { // GT8_3: negate + mana crystals +val
-    att.exhausted = true; const gm = tc.val || 1; addMaxMana(o, gm);
+    att.exhausted = true; const gm = tc.val || 1; addMaxMana(g, ctx, o, gm);
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효 + 마나 수정 +${gm}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効 + マナ水晶+${gm}`);
     return;
   }
@@ -3236,7 +3264,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
         ctx.log(`  └ ${cn(tgt)} 을(를) 포식한다`, `  └ ${cn(tgt)} を捕食する`, `  └ Devour ${cn(tgt)}`);
         ctx.destroyMonster(o, tgt);
         if (!o.field.some((x) => x.uid === tgt.uid)) {
-          addMaxMana(p, 1);
+          addMaxMana(g, ctx, p, 1);
           ctx.log(`  └ 포식 성공! 마나 수정 +1 (${p.maxMana})`, `  └ 捕食成功！マナ水晶+1 (${p.maxMana})`, `  └ Devour succeeded: mana crystals +1 (${p.maxMana})`);
         }
       } else ctx.log("  └ 코스트 3~4 대상 없음", "  └ コスト3~4の対象なし", `  └ No eligible target with purchase cost 3–4`);
@@ -3414,11 +3442,11 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     }
     case "divine":
-      addMaxMana(p, 12);
+      addMaxMana(g, ctx, p, 12);
       break;
     case "worldGuard": { // 세계수의 수호자: 최대체력 90+면 마나 수정 +1, 체력 +15
       if (p.hp >= 90) {
-        addMaxMana(p, 1); addHealth(ctx, p, 15);
+        addMaxMana(g, ctx, p, 1); addHealth(ctx, p, 15);
 
         ctx.log(`  └ 세계수의 가호: 마나 수정 +1 (${p.maxMana}), 체력 +15 (${p.hp})`, `  └ 世界樹の加護: マナ水晶 +1 (${p.maxMana}), 体力 +15 (${p.hp})`);
       } else ctx.log(`  └ 체력 ${p.hp} — 조건 미달(90)`, `  └ 体力${p.hp} — 条件未達(90)`);
@@ -3485,7 +3513,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
     case "hpMana": // GM7_2
-      addHealth(ctx, p, v); addMaxMana(p, v2);
+      addHealth(ctx, p, v); addMaxMana(g, ctx, p, v2);
 
       ctx.log(`  └ 체력 +${v}, 마나 수정 +${v2}`, `  └ 体力+${v}, マナ水晶+${v2}`);
       break;
@@ -3522,7 +3550,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     case "drakeRamp": // GM9_3
       ctx.dealDamage(o, v, cn(m), cn(m));
-      if (!g.over) { addMaxMana(p, 1); ctx.log("  └ 마나 수정 +1", "  └ マナ水晶+1"); }
+      if (!g.over) { addMaxMana(g, ctx, p, 1); ctx.log("  └ 마나 수정 +1", "  └ マナ水晶+1"); }
       break;
     case "cloneSelf": // GM8_2
       if (diceChance(g, ctx, p, { id: m.id, player: side(g, p) }, 50)) { spawnToken(g, ctx, p, m.id); ctx.log("  └ 성공 → 자신을 복제 소환", "  └ 成功 → 自身を複製召喚"); }
@@ -3661,7 +3689,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
 /** 전설의 도박꾼(v37) 효과: 1=마나 수정 +4 · 2=체력 +35 · 3=상대 필드 카드 2장 파괴 */
 function gamblerEffect(g: GameState, ctx: Ctx, p: PlayerState, key: string): void {
   const o = g.players[0] === p ? g.players[1] : g.players[0];
-  if (key === "1") { addMaxMana(p, 4); ctx.log(`  └ 마나 수정 +4 (${p.maxMana})`, `  └ マナ水晶+4 (${p.maxMana})`); }
+  if (key === "1") { addMaxMana(g, ctx, p, 4); ctx.log(`  └ 마나 수정 +4 (${p.maxMana})`, `  └ マナ水晶+4 (${p.maxMana})`); }
   else if (key === "2") { addHealth(ctx, p, 35); ctx.log(`  └ 체력 +35 (${p.hp})`, `  └ 体力+35 (${p.hp})`); }
   else { for (let i = 0; i < 2; i++) destroyRandomEnemy(g, ctx, o); }
 }
@@ -3870,7 +3898,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       for (const owner of g.players) for (const m of [...owner.field]) {
         if (isAssassinCard(m)) continue;
         owner.field.splice(owner.field.indexOf(m),1);
-        if (m.aura === 'drainMana') addMaxMana(g.players[1-side(g,owner)],m.drained ?? m.val ?? 3);
+        if (m.aura === 'drainMana') addMaxMana(g, ctx, g.players[1-side(g,owner)],m.drained ?? m.val ?? 3);
         (m.token ? rmz(owner) : owner.hand).push(resetInst(m));
         ctx.ev.push({type:'destroy',player:side(g,owner),uid:m.uid,id:m.id});
       }
@@ -3894,7 +3922,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       o.mana = Math.min(o.mana, effMaxMana(o));
       const lost = Math.max(0, before - o.maxMana);
       const previousOwn = p.maxMana;
-      addMaxMana(p, 1);
+      addMaxMana(g, ctx, p, 1);
       const gained = Math.min(MAX_MANA, p.maxMana) - previousOwn;
       ctx.log(`${cn(card)}: 고블린 ${count}체 · 상대 마나 수정 -${lost}, 자신 +${gained}`, `${cn(card)}: ゴブリン${count}体 · 相手のマナ水晶-${lost}、自分+${gained}`, `${cn(card)}: ${count} Goblins · enemy mana crystals -${lost}, yours +${gained}`);
       break;
@@ -3926,9 +3954,9 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 필드의 몬스터 ${nv}체에 '공허' 부여`, `<span class="t">${p.name}</span> ${cn(card)} → 場のモンスター${nv}体に「虚無」を付与`);
       break;
     }
-    case "buyout": addMaxMana(p, 1); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 마나 수정 +1 (${p.maxMana})`, `<span class="t">${p.name}</span> ${cn(card)} → マナ水晶+1 (${p.maxMana})`); break;
+    case "buyout": addMaxMana(g, ctx, p, 1); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 마나 수정 +1 (${p.maxMana})`, `<span class="t">${p.name}</span> ${cn(card)} → マナ水晶+1 (${p.maxMana})`); break;
     case "penance": { // 고행의 대가(v41b): 낙인 1개당 마나 수정 +2, 체력 +10
-      loseStatus(ctx,p,'brand',1); addMaxMana(p,1); ctx.heal(p,15);
+      loseStatus(ctx,p,'brand',1); addMaxMana(g, ctx, p,1); ctx.heal(p,15);
       break;
     }
     case "packInstinct": { // 무리의 본능(v41b): 같은 이름 2체 이상인 몬스터 전부 +2/+2
@@ -3972,7 +4000,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       else ctx.log("  └ 상대 패가 없음", "  └ 相手の手札がない", `  └ The opponent’s hand is empty`);
       break;
     case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 제시 강제 갱신: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`, `<span class="t">${p.name}</span> ${cn(card)} → マーケットを強制リロール: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`, `<span class="t">${p.name}</span>: ${cn(card)} refreshes the opponent’s offer: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`); if (v2 > 0) ctx.drawN(p, v2); break;
-    case "manaUp": { addMaxMana(p, v); const dn = v2 > 0 ? ctx.drawN(p, v2) : 0; ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 마나 수정 +${v}${dn ? `, ${dn}장 드로우` : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → マナ水晶 +${v}${dn ? `、${dn}枚ドロー` : ""}`); break; }
+    case "manaUp": { addMaxMana(g, ctx, p, v); const dn = v2 > 0 ? ctx.drawN(p, v2) : 0; ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 마나 수정 +${v}${dn ? `, ${dn}장 드로우` : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → マナ水晶 +${v}${dn ? `、${dn}枚ドロー` : ""}`); break; }
     case "destroyTrap": {
       const n = v || 1; let k = 0;
       if (o.traps.length && trySnare(g, ctx, o)) { /* 덫 속의 덫: 파괴 무효 */ }
@@ -3989,7 +4017,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case "manaUpGain": { // AJIN 어튠-진: mana crystals +1, 50% add an Attune to discard
-      addMaxMana(p, 1);
+      addMaxMana(g, ctx, p, 1);
       const added = diceChance(g, ctx, p, { id: card.id, player: side(g, p) }, 50);
       if (added) p.discard.push(starter(g, "STARTER_MANA"));
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 마나 수정 +1${added ? ", 묘지에 어튠 추가" : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → マナ水晶 +1${added ? "、墓地にアチューン追加" : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → mana crystals +1${added ? "; add an Attune to your graveyard" : ""}`);
@@ -3997,7 +4025,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "chestToMana": { // AMA 어튠-마: draw only if val2 set (no draw by default now)
       const ci = p.hand.findIndex((c) => c.star === "chest");
-      if (ci >= 0) { const ch = p.hand.splice(ci, 1)[0]; fieldToGrave(g,ctx,p,ch); addMaxMana(p, 1); if (v2 > 0) ctx.drawN(p, v2); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 보물상자 1장 묘지로, 마나 수정 +1${v2 > 0 ? `, ${v2}장 드로우` : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → 宝箱1枚を墓地へ、マナ水晶 +1${v2 > 0 ? `、${v2}枚ドロー` : ""}`, `<span class="t">${p.name}</span>: ${cn(card)} sends 1 Treasure Chest to the graveyard; mana crystals +1${v2 > 0 ? `; draw ${v2} cards` : ""}`); }
+      if (ci >= 0) { const ch = p.hand.splice(ci, 1)[0]; fieldToGrave(g,ctx,p,ch); addMaxMana(g, ctx, p, 1); if (v2 > 0) ctx.drawN(p, v2); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 보물상자 1장 묘지로, 마나 수정 +1${v2 > 0 ? `, ${v2}장 드로우` : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → 宝箱1枚を墓地へ、マナ水晶 +1${v2 > 0 ? `、${v2}枚ドロー` : ""}`, `<span class="t">${p.name}</span>: ${cn(card)} sends 1 Treasure Chest to the graveyard; mana crystals +1${v2 > 0 ? `; draw ${v2} cards` : ""}`); }
       else ctx.log(`  └ 패에 보물상자가 없음`, `  └ 手札に宝箱がない`);
       break;
     }
@@ -4093,7 +4121,7 @@ function diceRoll(g: GameState, ev: GameEvent[], pl: Side, source: DiceSource, n
     m.atkMod = (m.atkMod ?? 0) + amplifiedBuff(m, m.id === 'DICE_ARCHER' ? 2 : 1) * rolls.length;
     if (m.id === 'DICE_FIGHTER') m.defMod = (m.defMod ?? 0) + amplifiedBuff(m,1)*rolls.length;
     if (m.id === 'DICE_MAGICIAN') {
-      for (const face of rolls) if (face >= 5) addMaxMana(roller, 1);
+      for (const face of rolls) if (face >= 5) addMaxMana(g, makeCtx(g,ev), roller, 1);
     }
   }
   // 카지노: 주사위를 굴릴 때마다 (카지노 주사위 자신은 제외) 필드의 카지노에 카운터 +1
@@ -4198,7 +4226,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       const miss = guess[0] !== nd3[0] && guess[0] !== nd3[1];
       ctx.log(`${tag(p, card)} 상대 예측 🎲 ${guess[0]} vs [${nd3.join(", ")}] — ${miss ? `<span class="good">빗나감! 마나 수정 +4</span>` : "적중"}`,
         `${tag(p, card)} 相手の予測 🎲 ${guess[0]} vs [${nd3.join(", ")}] — ${miss ? `<span class="good">外れ！マナ水晶+4</span>` : "的中"}`, `${tag(p, card)}: opponent’s prediction 🎲 ${guess[0]} vs [${nd3.join(", ")}] — ${miss ? `<span class="good">Miss! Mana Crystals +4</span>` : "Hit"}`);
-      if (miss) addMaxMana(p, 4);
+      if (miss) addMaxMana(g, ctx, p, 4);
       break;
     }
     case "ND5": { // 고대의 지식(v34): 자신 필드 전원에 '아우라' 부여
@@ -4265,7 +4293,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "GAMBLE": { // 육면의 변덕(v37): 주사위 10개 합계 40 이상이면 마나 수정 +3
       const { rolls: gbr, sum: gsum } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 10, 40);
-      if (gsum >= 40) { addMaxMana(p, 3); ctx.log(`${tag(p, card)} 🎲 [${gbr.join(",")}] = ${gsum} → <span class="good">마나 수정 +3 (${p.maxMana})</span>`, `${tag(p, card)} 🎲 [${gbr.join(",")}] = ${gsum} → <span class="good">マナ水晶+3 (${p.maxMana})</span>`); }
+      if (gsum >= 40) { addMaxMana(g, ctx, p, 3); ctx.log(`${tag(p, card)} 🎲 [${gbr.join(",")}] = ${gsum} → <span class="good">마나 수정 +3 (${p.maxMana})</span>`, `${tag(p, card)} 🎲 [${gbr.join(",")}] = ${gsum} → <span class="good">マナ水晶+3 (${p.maxMana})</span>`); }
       else ctx.log(`${tag(p, card)} 🎲 [${gbr.join(",")}] = ${gsum} → 실패 (40 미만)`, `${tag(p, card)} 🎲 [${gbr.join(",")}] = ${gsum} → 失敗 (40未満)`, `${tag(p, card)} 🎲 [${gbr.join(",")}] = ${gsum} → failed (less than 40)`);
       break;
     }
@@ -4333,7 +4361,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
         const wiped = o.enchants; o.enchants = [];
         wiped.forEach((e) => binEnch(g, ctx, o, e.card, false, undefined, side(g,p)));
         spawnToken(g, ctx, p, "GM9_2"); spawnToken(g, ctx, p, "GM9_2");
-        addMaxMana(p, 2); ctx.heal(p, 10);
+        addMaxMana(g, ctx, p, 2); ctx.heal(p, 10);
         ctx.log(`  └ 대성공! 상대 마법/함정 전멸, 폭풍의 전사 2체, 마나 수정 +2, 체력 +10`, `  └ 大成功! 相手の魔法/罠全滅, 嵐の戦士2体, マナ水晶+2, 体力+10`, `  └ Great success! Destroy the opponent’s spells/traps, summon 2 Storm Warriors, gain 2 mana crystals and restore 10 HP`);
       }
       break;
@@ -4401,7 +4429,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "BLOOD_PLEASURE": {
       ctx.selfDamage(p, 7, card);
-      if (!g.over) addMaxMana(p, 1);
+      if (!g.over) addMaxMana(g, ctx, p, 1);
       break;
     }
     case "VAMP_PACT": { // 흡혈 계약: 자신 6뎀 + 견습 흡혈귀 소환
@@ -4440,7 +4468,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       break;
     }
     case "NEGOTIATE": { // 협상(v34): 상대 마나 수정 +1 + 2턴 동안 함정 설치 불가
-      addMaxMana(o, 1);
+      addMaxMana(g, ctx, o, 1);
       o.trapBlockTurns = 2;
       ctx.log(`${tag(p, card)} 상대 마나 수정 +1 (${o.maxMana}) · 상대는 2턴 동안 함정 설치 불가`, `${tag(p, card)} 相手のマナ水晶+1 (${o.maxMana}) · 相手は2ターンの間 罠設置不可`, `${tag(p, card)}: opponent’s mana crystals +1 (${o.maxMana}); they cannot set traps for 2 turns`);
       break;
@@ -4581,7 +4609,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "MULTI_CULTURE": {
       const n=tribeCount(g);
-      if(n===2)addMaxMana(p,1);
+      if(n===2)addMaxMana(g, ctx, p,1);
       if(n===3)queueExpansionChoice(g,p,'CULTURE_BREAK','',{left:2});
       if(n===4)gainBrand(g,ctx,o,1);
       if(n>=5)for(const c of fieldCards(o)) removeFieldCard(g,ctx,o,c,'rift');
@@ -4697,15 +4725,15 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case "GUILD_CHEST": { // 암살자 길드의 보물상자 (2d6 합계표)
       const { rolls: gcr, sum: gcs } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 2);
       ctx.log(`${tag(p, card)} 🎲 ${gcr.join("·")}=${gcs}`, `${tag(p, card)} 🎲 ${gcr.join("·")}=${gcs}`);
-      if (gcs <= 3) { addMaxMana(p, 3); ctx.log(`  └ 🎰 마나 수정 +3`, `  └ 🎰 マナ水晶 +3`); }
+      if (gcs <= 3) { addMaxMana(g, ctx, p, 3); ctx.log(`  └ 🎰 마나 수정 +3`, `  └ 🎰 マナ水晶 +3`); }
       else if (gcs === 4) {
         if (p.traps.length + p.enchants.length < ST_MAX) {
           p.enchants.push({ card: inst(g, "GUILD_EYE"), turns: 99 });
           ctx.log(`  └ 🎰 길드의 정보망 획득 — 턴 시작시 드로우 +1 (영구)`, `  └ 🎰 ギルドの情報網 — ターン開始時ドロー+1 (永続)`);
         } else ctx.log(`  └ 마법·함정 존이 가득 차 정보망을 놓쳤다`, `  └ 魔法・罠ゾーンが満杯で情報網を逃した`);
       }
-      else if (gcs <= 6) { addMaxMana(p, 2); ctx.log(`  └ 마나 수정 +2`, `  └ マナ水晶 +2`); }
-      else if (gcs === 7) { addMaxMana(p, 1); ctx.log(`  └ 마나 수정 +1`, `  └ マナ水晶 +1`); }
+      else if (gcs <= 6) { addMaxMana(g, ctx, p, 2); ctx.log(`  └ 마나 수정 +2`, `  └ マナ水晶 +2`); }
+      else if (gcs === 7) { addMaxMana(g, ctx, p, 1); ctx.log(`  └ 마나 수정 +1`, `  └ マナ水晶 +1`); }
       else if (gcs === 8) { addHealth(ctx, p, 10); ctx.log(`  └ 체력 +10`, `  └ 体力 +10`); }
       else if (gcs >= 9 && [...p.field, ...p.enchants.map(e => e.card), ...(p.quests ?? []).map(q => q.card)].some(isAssassinCard)) { ctx.drawN(p, 4); }
       else if (gcs <= 10) {
@@ -4736,7 +4764,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "CATALYST": { // 균열의 촉매: 자신 4 데미지, 마나 수정 +1
       ctx.selfDamage(p, 4, card);
-      if (!g.over) { addMaxMana(p, 1); ctx.log(`${tag(p, card)} 자신 4 데미지, 마나 수정 +1 (${p.maxMana})`, `${tag(p, card)} 自分に4ダメージ、マナ水晶 +1 (${p.maxMana})`); }
+      if (!g.over) { addMaxMana(g, ctx, p, 1); ctx.log(`${tag(p, card)} 자신 4 데미지, 마나 수정 +1 (${p.maxMana})`, `${tag(p, card)} 自分に4ダメージ、マナ水晶 +1 (${p.maxMana})`); }
       break;
     }
     case "FORBIDDEN": { // 금단의 술식(v34): 체력이 1이 된다 + 🎲 5+면 한 종족의 나머지 전부 소환 (조건은 시전 전 검사)
@@ -4805,7 +4833,7 @@ function luckyChest(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): voi
   const { rolls, sum } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 2);
   ctx.log(`  └ 🎲 ${rolls.join("·")}=${sum}`, `  └ 🎲 ${rolls.join("·")}=${sum}`);
   if (sum <= 3) {
-    addMaxMana(p, 3); const n = ctx.drawN(p, 2);
+    addMaxMana(g, ctx, p, 3); const n = ctx.drawN(p, 2);
     ctx.log(`  └ 🎰 잭팟! 마나 수정 +3, ${n}장 드로우`, `  └ 🎰 ジャックポット！マナ水晶 +3, ${n}枚ドロー`);
   } else if (sum <= 5) {
     // spawnToken 경유 필수: 인라인으로 field.push 하면 약화술식·트릭룸(applyFieldGlobals)과
@@ -4813,7 +4841,7 @@ function luckyChest(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): voi
     spawnToken(g, ctx, o, "MIMIC", {summoner:p});
     ctx.log(`  └ <span class="dmg">꽝! 상대 필드에 미믹(3/2) 소환</span>`, `  └ <span class="dmg">ハズレ！相手の場にミミック(3/2)召喚</span>`);
   } else if (sum <= 8) {
-    addMaxMana(p, 1);
+    addMaxMana(g, ctx, p, 1);
     ctx.log(`  └ 마나 수정 +1`, `  └ マナ水晶 +1`);
   } else if (sum <= 11) {
     addHealth(ctx, p, 8);
@@ -4828,7 +4856,7 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
   const { rolls: tr } = diceRoll(g, ctx.ev, side(g, p), { id: card.id, player: side(g, p) }, 1);
   const roll = tr[0]; // v24: 1·2 꽝 / 3·4 체력+7 / 5·6 마나 수정+1
   let txt = "", txtJa = "", kind = "";
-  if (roll >= 5) { addMaxMana(p, 1); txt = "🎲 " + roll + " → 마나 수정 +1"; txtJa = "🎲 " + roll + " → マナ水晶 +1"; kind = "mana"; }
+  if (roll >= 5) { addMaxMana(g, ctx, p, 1); txt = "🎲 " + roll + " → 마나 수정 +1"; txtJa = "🎲 " + roll + " → マナ水晶 +1"; kind = "mana"; }
   else if (roll >= 3) { ctx.heal(p, 2); txt = "🎲 " + roll + " → 체력 +2"; txtJa = "🎲 " + roll + " → 体力 +2"; kind = "maxhp"; }
   else {
     // 꽝(dud): spawn a Mimic (3/2) on the OPPONENT's field — the risk of cracking chests
@@ -4844,6 +4872,31 @@ function openTreasure(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
 // play / buy
 // ============================================================
 function applyEnterAura(g: GameState, ctx: Ctx, p: PlayerState, m: FieldMon, summoner = p): void {
+  const foe = g.players[1-side(g,p)];
+  if (!m.mutedEffects) {
+    let counters = 0;
+    if (['GOLEM1','M10','NWL3'].includes(m.id)) counters = p.enchants.length;
+    if (m.id === 'GOLEM2') counters = foe.enchants.length;
+    if (m.id === 'NGA3') counters = p.field.filter(ally => ally !== m && isGolem(ally)).length;
+    if (counters) {
+      monsterActivation(g,ctx.ev,p,m);
+      m.guts = (m.guts ?? 0) + counters;
+      ctx.log(`${cn(m)}: 기합 카운터 +${counters}`,`${cn(m)}：気合カウンター+${counters}`,`${cn(m)} gains ${counters} Guts counter(s).`);
+    }
+    if ((m.id === 'GOLEM3' || m.id === 'MANA_GIANT') && !otherDeckGolem(p,m)) {
+      monsterActivation(g,ctx.ev,p,m);
+      if (m.id === 'GOLEM3') m[m.trickSwapped ? 'defMod' : 'atkMod'] -= 6;
+      else m[m.trickSwapped ? 'atkMod' : 'defMod'] -= 5;
+    }
+  }
+  if (m.cost >= 3 && summoner === g.players[ctx.summonTurnOwner ?? g.cur]) {
+    const owner = g.players[1-side(g,summoner)];
+    for (const ally of owner.field) {
+      if (ally.mutedEffects || !(ally.id === 'NGA3' || (ally.id === 'GOLEM3' && owner.field.some(x => x.id !== ally.id && isGolem(x))))) continue;
+      monsterActivation(g,ctx.ev,owner,ally);
+      ally.guts = (ally.guts ?? 0) + 1;
+    }
+  }
   for (const e of summoner.enchants) {
     if (e.card.ench !== 'supplyLine') continue;
     enchantFx(g, ctx.ev, summoner, e.card);
@@ -5016,7 +5069,7 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
   ctx.ev.push({type:"tribeSynergy",player:side(g,p),tribe,threshold:n,uids:p.field.filter(m=>m.tribe===tribe).map(m=>m.uid)});
   ctx.log(`<span class="good">[${tribeName(tribe, "ko")}] 동족 ${n}마리 시너지!</span>`, `<span class="good">[${tribeName(tribe, "ja")}] 同族 ${n}体シナジー!</span>`, `<span class="good">[${tribeName(tribe, "en")}] ${n}-monster tribe synergy!</span>`);
   const gainHp = (v: number): void => { addHealth(ctx, p, v); ctx.log(`  └ 체력 +${v} (${p.hp})`, `  └ 体力+${v} (${p.hp})`); };
-  const gainMana = (v: number): void => { addMaxMana(p, v); ctx.log(`  └ 마나 수정 +${v} (${p.maxMana})`, `  └ マナ水晶+${v} (${p.maxMana})`); };
+  const gainMana = (v: number): void => { addMaxMana(g, ctx, p, v); ctx.log(`  └ 마나 수정 +${v} (${p.maxMana})`, `  └ マナ水晶+${v} (${p.maxMana})`); };
   if (tribe === "고독") {
     // v38 2종: 이 게임 동안 상대는 몬스터를 3체 이상 소환할 수 없다
     o.summonCap = 2;
@@ -5640,7 +5693,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       const bi = owner.field.findIndex((x) => x.uid === tm.uid);
       if (bi >= 0) {
         const bounced = owner.field.splice(bi, 1)[0];
-        if (bounced.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; addMaxMana(opp2, (bounced.drained ?? (bounced.val || 3))); }
+        if (bounced.aura === "drainMana") { const opp2 = g.players[0] === owner ? g.players[1] : g.players[0]; addMaxMana(g, ctx, opp2, (bounced.drained ?? (bounced.val || 3))); }
         ctx.ev.push({ type: "destroy", player: side(g, owner), uid: bounced.uid, id: bounced.id });
         if (bounced.token) { rmz(owner).push(resetInst(bounced)); ctx.log(`  └ 토큰 ${cn(bounced)} 은(는) 게임에서 제외`, `  └ トークン ${cn(bounced)} はゲームから除外`, `  └ Send Token ${cn(bounced)} to the Rift`); }
         else { owner.hand.push(resetInst(bounced)); ctx.log(`  └ ${cn(bounced)} 을(를) 상대 패로 되돌린다`, `  └ ${cn(bounced)} を相手の手札に戻す`, `  └ Return ${cn(bounced)} to the opponent’s hand`); }
@@ -5778,7 +5831,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (i >= 0) { c = zone.splice(i, 1)[0]; break; }
     }
     const mi = p.field.findIndex(m => m.uid === uid);
-    if (mi >= 0) { const m = p.field.splice(mi,1)[0]; c = resetInst(m); if(m.aura==='drainMana') addMaxMana(o,m.drained ?? m.val ?? 3); }
+    if (mi >= 0) { const m = p.field.splice(mi,1)[0]; c = resetInst(m); if(m.aura==='drainMana') addMaxMana(g, ctx, o,m.drained ?? m.val ?? 3); }
     const ei = p.enchants.findIndex(e => e.card.uid === uid);
     if (ei >= 0) { const e = p.enchants.splice(ei,1)[0]; binEnch(g,ctx,p,e.card,true,'exile'); c = e.card; }
     const ti = p.traps.findIndex(t => t.card.uid === uid);
@@ -5794,7 +5847,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
         g.pending = { kind: "purge", hint: pending.hint, hintJa: pending.hintJa, reason: pending.reason, allowCancel: pending.allowCancel, data: { ...d, val: remaining } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       } else if (pending.reason === "scrapper" && remaining === 0) {
-        addMaxMana(p, 1);
+        addMaxMana(g, ctx, p, 1);
         ctx.log(`${p.name}: 마나 수정 +1 (${p.maxMana})`, `${p.name}: マナ水晶+1 (${p.maxMana})`);
       } else if (pending.reason === "trialExile") {
         offerChosenMage(g, ctx); // 시련 제외가 소진되면 같은 턴의 마법사 발동 기회 제공
@@ -6012,7 +6065,31 @@ function advanceQuest(p: PlayerState, event: QuestEvent, amount = 1): void {
 export function maxManaGrowthBlocked(p: PlayerState): boolean {
   return p.field.some(m => m.aura === "manaGrowthLock");
 }
-function addMaxMana(p: PlayerState, amount: number): number {
+function otherDeckGolem(p: PlayerState, m: FieldMon): boolean {
+  return deckComp(p).some(c => c.t === 'mon' && c.id !== m.id && isGolem(c));
+}
+
+function giantCrystalGain(g: GameState, ctx: Ctx, p: PlayerState): void {
+  for (const m of p.field) if (m.id === 'MANA_GIANT' && !m.mutedEffects) {
+    monsterActivation(g,ctx.ev,p,m);
+    p.mana = Math.min(effMaxMana(p),p.mana + (otherDeckGolem(p,m) ? 2 : 1));
+  }
+  if (g.players[ctx.summonTurnOwner ?? g.cur] !== p) return;
+  const owner = g.players[1-side(g,p)];
+  for (const m of owner.field) if (m.id === 'MANA_GIANT' && !m.mutedEffects) {
+    monsterActivation(g,ctx.ev,owner,m);
+    if (hasPassive(m,'void')) {
+      m.passive = m.passive?.filter(k => k !== 'void');
+      m.passivesG = m.passivesG?.filter(k => k !== 'void');
+      m.conditionalPassives = m.conditionalPassives?.filter(k => k !== 'void');
+    } else {
+      m.atkMod += amplifiedBuff(m,2);
+      m.defMod += amplifiedBuff(m,2);
+    }
+  }
+}
+
+function addMaxMana(g: GameState, ctx: Ctx, p: PlayerState, amount: number): number {
   if (amount <= 0 || maxManaGrowthBlocked(p)) return 0;
   const before = p.maxMana;
   p.maxMana += amount;
@@ -6024,6 +6101,7 @@ function addMaxMana(p: PlayerState, amount: number): number {
     p.maxMana += bonus;
     p.maxManaIncreases += bonus;
     p.magicBankBonusTotal = (p.magicBankBonusTotal ?? 0) + bonus;
+    for (let i = 0; i <= bonus; i++) giantCrystalGain(g,ctx,p);
   }
   return p.maxMana - before;
 }
@@ -6059,9 +6137,21 @@ export function purchaseAllowed(g: GameState, p: PlayerState, c: CardInst): bool
   }
 }
 
+function golemUpkeepCards(g: GameState, p: PlayerState, source?: FieldMon): CardInst[] {
+  if (!source || !p.field.includes(source) || source.mutedEffects || (source.guts ?? 0) < 1) return [];
+  const offer = GOLEM_UPKEEP[source.id];
+  if (!offer || p.mana < offer.mana) return [];
+  return offer.cards.filter(id => DB[id].t !== 'mon' || effectSummonAllowed(g,armyDestination(g,p,id),DB[id]))
+    .map(id => ({...DB[id],uid:id}));
+}
+
 export function effectChoices(g: GameState): CardInst[] {
   const pending = g.pending;
   if (pending?.kind !== "cardChoice") return [];
+  if (pending.reason === 'GOLEM_UPKEEP') {
+    const owner = g.players[actingSide(g)];
+    return golemUpkeepCards(g,owner,owner.field.find(m => m.uid === pending.data?.sourceUid));
+  }
   const runeOptions=runeChoices(g); if(runeOptions!==null) return runeOptions;
   const mercOptions = mercChoices(g); if (mercOptions !== null) return mercOptions;
   const dewOptions = dewShieldChoices(g); if (dewOptions !== null) return dewOptions;
@@ -6094,7 +6184,7 @@ const choiceSource: Record<string,string> = {
   CULTURE_BREAK: 'MULTI_CULTURE',
 };
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
-  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: ['CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST'].includes(reason) || reason === "SELECTED_SWORD" || reason === "RIFT_JAILER" || reason === "TIMEWARP", data };
+  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: ['GOLEM_UPKEEP','CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST'].includes(reason) || reason === "SELECTED_SWORD" || reason === "RIFT_JAILER" || reason === "TIMEWARP", data };
   if (reason === 'COLOSSEUM_REST') g.pending.hint = '체력을 전부 회복할 자신의 몬스터 1체 선택';
   if (reason === 'NIGHT_CASTLE_GIFT') g.pending.hint = '패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택';
   if (reason === 'RIFT_JAILER') g.pending.hint = '차원 유폐자 — 자신의 리프트로 옮길 상대 리프트 카드 최대 8장 선택';
@@ -6135,7 +6225,7 @@ function summonForOwner(g:GameState,ctx:Ctx,owner:PlayerState,card:CardInst,summ
 function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
   const pending = g.pending!;
   const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
-  if (['CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST','TIME_WRAITH','BOUNDARY_ATTACK'].includes(pending.reason) && uid === null) { g.pending=null; return; }
+  if (['GOLEM_UPKEEP','CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST','TIME_WRAITH','BOUNDARY_ATTACK'].includes(pending.reason) && uid === null) { g.pending=null; return; }
   if (pending.reason === 'TIMEWARP' && uid === null && pending.allowCancel) { g.pending = null; return; }
   if (resolveDewShieldChoice(g,ctx,uid)) return;
   const choices = effectChoices(g);
@@ -6148,6 +6238,18 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
     : pending.reason === 'STABLE_EVADE' ? 'STABLE'
     : pending.reason === 'RIFT_JAILER' ? 'GM6_1' : pending.reason;
   switch (pending.reason) {
+    case 'GOLEM_UPKEEP': {
+      const m = p.field.find(m => m.uid === pending.data?.sourceUid)!;
+      p.mana -= GOLEM_UPKEEP[m.id].mana;
+      m.guts = (m.guts ?? 0) - 1;
+      monsterActivation(g,ctx.ev,p,m);
+      if (card.t === 'mon') effectSummon(g,ctx,p,card.id);
+      else {
+        p.hand.push(inst(g,card.id));
+        ctx.log(`${cn(m)}: ${cn(card)} 1장을 패에 추가`,`${cn(m)}：${cn(card)}1枚を手札に加える`,`${cn(m)} adds ${cn(card)} to hand.`);
+      }
+      return;
+    }
     case 'TOLL_DISCARD':
       fieldToGrave(g,ctx,p,p.hand.splice(p.hand.indexOf(card),1)[0]);
       return;
@@ -6230,7 +6332,7 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
       if (m) {
         if (exile) {
           o.field.splice(o.field.indexOf(m), 1);
-          if (m.aura === 'drainMana') addMaxMana(p, m.drained ?? (m.val || 3));
+          if (m.aura === 'drainMana') addMaxMana(g, ctx, p, m.drained ?? (m.val || 3));
           sendToRift(g, o, resetInst(m));
           ctx.ev.push({ type: "destroy", player: side(g, o), uid: m.uid, id: m.id });
           recheckDeaths(g, ctx);
@@ -6310,7 +6412,7 @@ function resolveQuick(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
       for (let i = 0; i < (castle ? 2 : 3); i++) effectSummon(g, ctx, p, castle ? 'INFKNIGHT' : 'SOLDIER2');
       break;
     }
-    case 'QUICK_ATTUNE': addMaxMana(p, 1); addHealth(ctx, p, 2); break;
+    case 'QUICK_ATTUNE': addMaxMana(g, ctx, p, 1); addHealth(ctx, p, 2); break;
     case 'QUICK_GRIMOIRE': p.spellDiscountCharges = [...grimoireCharges(p), 5]; p.spellDiscountTurn = p.spellDiscountCharges.length; break;
     case 'QUICK_POISON': offerEffectChoice(g, ctx, p, card.id, '腐敗カウンターを2個付与する相手モンスターを選択'); break;
     case 'QUICK_REBIRTH': offerEffectChoice(g, ctx, p, card.id, '墓地のモンスターを選択（コスト7以下なら虚無を付与して召喚）'); break;
@@ -6330,7 +6432,7 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
       rmz(p).push(q.card);
       ctx.log(`${cn(q.card)} 퀘스트 달성!`, `${cn(q.card)} クエスト達成！`, `${cn(q.card)}: Quest completed!`);
       switch (q.card.id) {
-        case 'Q_RUNE_SECRET': addMaxMana(p,1); break;
+        case 'Q_RUNE_SECRET': addMaxMana(g, ctx, p,1); break;
         case 'QUEST_ATTUNE_STUDY': queueExpansionChoice(g,p,q.card.id,'墓地に得る報酬を選択'); break;
         case 'Q_ENJOY_THE_SHOW': gainBrand(g, ctx, g.players[1 - side(g, p)], 1); break;
         case 'Q_TOWN': p.hand.push(inst(g, 'DOMINION')); break;
@@ -6338,8 +6440,8 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
         case 'Q_RIFT': for (let i = 0; i < 7; i++) rmz(p).push(starter(g, 'STARTER_TRASH')); break;
         case 'Q_BRAND': { const o = g.players[1 - side(g, p)]; gainBrand(g, ctx, o, q.card.val!); break; }
         case 'Q_TORI': addHealth(ctx, p, 18); break;
-        case 'Q_WINTER': addMaxMana(p, 2); break;
-        case 'Q_MANA': addMaxMana(p, 3); break;
+        case 'Q_WINTER': addMaxMana(g, ctx, p, 2); break;
+        case 'Q_MANA': addMaxMana(g, ctx, p, 3); break;
         case 'Q_CASTLE': for (let i = 0; i < 2 && !g.over; i++) effectSummon(g, ctx, p, 'INFKNIGHT'); break;
         case 'Q_DECAY': {
           const opponent = g.players[1 - side(g, p)];
@@ -7018,7 +7120,7 @@ function expansionAfterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardIn
   if (card.id === 'WINE') townEvent(p, 'wine');
   if (isBlack(card)) for (const m of p.field) {
     if (!m.mutedEffects && m.id === 'BLACK_ELSA') { monsterActivation(g, ctx.ev, p, m); const o = g.players[1 - side(g, p)]; gainBrand(g, ctx, o, 1); }
-    if (!m.mutedEffects && m.id === 'BLACK_ALICE') { const before = Math.min(MAX_MANA, p.maxMana); addMaxMana(p, 1); if (Math.min(MAX_MANA, p.maxMana) > before) monsterActivation(g, ctx.ev, p, m); }
+    if (!m.mutedEffects && m.id === 'BLACK_ALICE') { const before = Math.min(MAX_MANA, p.maxMana); addMaxMana(g, ctx, p, 1); if (Math.min(MAX_MANA, p.maxMana) > before) monsterActivation(g, ctx.ev, p, m); }
   }
   // Keep the list of previously played Fire spells: spell resolution uses usesTurn (incremented later).
   if (isFire(card)) x.firePlayed.push(card.id);
@@ -7267,7 +7369,7 @@ function removeFieldCard(g:GameState,ctx:Ctx,p:PlayerState,c:CardInst,mode:'brea
   if(m){
     if(mode!=='hand'){ctx.destroyMonster(p,m,undefined,mode==='rift'?'MULTI_CULTURE':undefined);return;}
     p.field.splice(p.field.indexOf(m),1);
-    if(m.aura==='drainMana')addMaxMana(g.players[1-side(g,p)],m.drained??m.val??3);
+    if(m.aura==='drainMana')addMaxMana(g, ctx, g.players[1-side(g,p)],m.drained??m.val??3);
     (m.token?rmz(p):p.hand).push(resetInst(m));return;
   }
   const enchant=p.enchants.find(e=>e.card.uid===c.uid);
@@ -7621,13 +7723,13 @@ function basicAttune(g: GameState, ctx: Ctx, p: PlayerState, c: CardInst): void 
       ctx.ev.push({type:'playSpell',player:side(g,p),id:c.id,dest:'discard'});
       if (tryNullSpell(g,ctx,c) || tryAttuneJam(g,ctx,c)) continue;
     }
-    addMaxMana(p,1);
+    addMaxMana(g, ctx, p,1);
     spiritGain(p,0,3);
     for (const bonus of p.attuneBonuses ?? []) {
       if (g.over) break;
       switch (bonus) {
         case 'heal1': case 'heal2': case 'heal3': ctx.heal(p,Number(bonus.slice(-1))); break;
-        case 'crystal': addMaxMana(p,1); break;
+        case 'crystal': addMaxMana(g, ctx, p,1); break;
         case 'mana': p.mana = Math.min(effMaxMana(p),p.mana+1); break;
         case 'spirit': effectSummon(g,ctx,p,'MINI_SPIRIT'); break;
         case 'shine': areaDamage(g,ctx,p,1,false,c); break;
@@ -7691,10 +7793,10 @@ function armySpell(g: GameState, ctx: Ctx, p: PlayerState, c: CardInst): void {
     case 'MARKET_FEVER': offerEffectChoice(g,ctx,p,c.id,'手札に得るマーケットのカードを選択',{buyer:true}); break;
     case 'MANA_HEART':
       if (g.heartFirstUid !== c.uid || g.heartUsed) { ctx.heal(p,9); ctx.heal(o,9); }
-      else { g.heartUsed = true; addMaxMana(p,3); p.heartDue = g.turn+22; }
+      else { g.heartUsed = true; addMaxMana(g, ctx, p,3); p.heartDue = g.turn+22; }
       break;
     case 'QUICK_INSURANCE': p.extraHitTurn = g.turn; break;
-    case 'ATTUNE_LOCK': addMaxMana(o,2); o.attuneLockUntil = g.turn+12; break;
+    case 'ATTUNE_LOCK': addMaxMana(g, ctx, o,2); o.attuneLockUntil = g.turn+12; break;
     case 'ATTUNE_RETURN': offerEffectChoice(g,ctx,p,c.id,'捨てる手札を1枚選択'); break;
     case 'SPIRIT_RESONANCE': addAttuneBonus(p,'spirit'); break;
     case 'ATTUNE_MANAFLOW': p.attuneFlowTurn = (p.attuneFlowTurn ?? 0)+1; break;

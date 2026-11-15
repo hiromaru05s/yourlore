@@ -1,3 +1,4 @@
+import {applyGolemCatalog} from './golemCards';
 import {applyRuneCatalog} from './runeRework';
 import {DIPLOMACY_CARDS} from './diplomacyCards';
 import {CURSE_CONTAGION} from './curseContagion';
@@ -2417,7 +2418,9 @@ for (const id of ['STABLE','BLOOD_SECRET','COLOSSEUM','MUSTER_DIE','CAPTAIN','AT
 RANDOM_CARDS.add("M2");
 applyKeywordText(PASSIVES);
 applyRuneCatalog(DB);
-DECK_POOL.push("Q_RUNE_SECRET");
+applyGolemCatalog(DB);
+DECK_POOL.push("Q_RUNE_SECRET", "GOLEM_TEST");
+RANDOM_CARDS.add("GOLEM3");
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
 // Drop unset patch fields so newly printed instances match a JSON-restored room exactly.
@@ -2452,10 +2455,14 @@ export const RELATED_MANUAL: Record<string, string[]> = {
   Q_UNDERWORLD_DEAL: ["GUILD_CHEST"],
   GUILD_CHEST: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"],  // 암살자 길드 보물상자
   GUILD_HQ: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "ASSASSIN4", "GUILD_HALL"],
-  GOLEM3: ["GOLEM1", "GOLEM2", "M10", "NGA3", "NWL3", "MANA_GIANT"], // 골램 킹: '골램' 계열 체크
-  M10: ["GOLEM1", "GOLEM2", "GOLEM3", "NGA3", "NWL3", "MANA_GIANT"],
-  MANA_GIANT: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NGA3", "NWL3"],
-  NGA3: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NWL3", "MANA_GIANT"],
+  GOLEM_TEST: ["GOLEM1"],
+  GOLEM1: ["GOLEM2", "M10"],
+  GOLEM2: ["NGA3"],
+  NWL3: ["MIND_BURST"],
+  GOLEM3: ["IRON_WALL", "GOLEM_TEST", "GOLEM1", "GOLEM2", "M10", "NGA3", "NWL3", "MANA_GIANT"], // 골램 킹: '골램' 계열 체크
+  M10: ["NWL3"],
+  MANA_GIANT: ["GOLEM_TEST", "GOLEM1", "GOLEM2", "GOLEM3", "M10", "NGA3", "NWL3"],
+  NGA3: ["AEM", "GOLEM_TEST", "GOLEM1", "GOLEM2", "GOLEM3", "M10", "NWL3", "MANA_GIANT"],
   HORDE: ["SOLDIER2", "INFKNIGHT", "GOLEM1"],
 
   NHEX: ["CURSE", "HEXER1", "HEXER2", "HEXER3", "HEXER4"],
@@ -2469,7 +2476,7 @@ export const RELATED_MANUAL: Record<string, string[]> = {
   LAND_GRANT: ["CASTLE", "TAR1", "TAR2", "TAR3"],
   T2: ["NT_NULL3"],
   T10: ["TPO1", "TPO2", "TPO3", "TPO5"],
-  AEM: ["GOLEM1", "GOLEM2", "GOLEM3", "M10", "NGA3", "NWL3", "MANA_GIANT"],
+  AEM: ["GOLEM_TEST", "GOLEM1", "GOLEM2", "GOLEM3", "M10", "NGA3", "NWL3", "MANA_GIANT"],
   DEMON_REALM: ["TDE1", "TDE2", "TDE3", "TDE4"],
   NL_SECRET: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "ASSASSIN4"],
   // v41
@@ -2532,7 +2539,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v86"; // November card balance update
+export const BALANCE_VERSION = "v87"; // November card balance update
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

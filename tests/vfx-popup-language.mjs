@@ -8,7 +8,10 @@ for(const def of Object.values(E.DB))for(const seed of [1,4,9]){
  let g=E.createGame({mode:'online',seed,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=9;g.pending=null;for(const p of g.players)Object.assign(p,{hp:100,mana:30,maxMana:30,dew:30,shield:3,brand:2,hand:[],deck:['M1','S1','S2','STARTER_TRASH','STARTER_CHEST'].map(card),discard:['M1','S2','STARTER_TRASH'].map(card),field:['M1','INFKNIGHT','ASSASSIN','ELF','GOLEM2','VAMP2'].filter(id=>E.DB[id]).map(mon),enchants:[],traps:[],quests:[],removed:['STARTER_TRASH','M1','S1'].map(card),uses:{},usesTurn:{},buys:{},playsTurn:0});g.players[0].hand=[card(def.id),card('STARTER_TRASH')];
  try{let r=E.reduce(g,{type:'play',idx:0});collect(r.events,def.id);g=r.state;
  for(let n=0;n<5&&g.pending&&!g.over;n++){const q=g.pending,p=g.players[E.actingSide(g)],o=g.players[1-E.actingSide(g)];let choices=q.kind==='cardChoice'?E.effectChoices(g):q.kind==='myMon'?p.field:q.kind==='oppMon'?(q.data?.anySide?[...o.field,...p.field]:o.field):q.kind==='oppBoard'?[...o.field,...o.enchants.map(x=>x.card),...p.enchants.map(x=>x.card)]:q.kind==='seek'?p.deck:q.kind==='recall'?p.discard:[];r=E.reduce(g,{type:'pick',uid:choices[0]?.uid??null});collect(r.events,def.id);g=r.state;}
- for(let n=0;n<3&&!g.over;n++){r=E.reduce(g,{type:'endTurn'});collect(r.events,def.id);g=r.state;}
+ for(let n=0;n<3&&!g.over;n++){
+   while(g.pending?.reason==='GOLEM_UPKEEP'){r=E.reduce(g,{type:'pick',uid:null});collect(r.events,def.id);g=r.state;}
+   r=E.reduce(g,{type:'endTurn'});collect(r.events,def.id);g=r.state;
+ }
  }catch(e){throw Error(def.id+':'+e.stack);}
 }
 

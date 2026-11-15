@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/golem-rework.mjs",
     "tests/rune-rework-v85.mjs",
     "tests/diplomacy-cards.mjs",
     "tests/curse-contagion.mjs",

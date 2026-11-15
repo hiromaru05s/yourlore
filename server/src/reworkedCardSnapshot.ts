@@ -1,7 +1,8 @@
+import {GOLEM_TEXT} from '../../client/src/shared/golemCards';
 import {NOVEMBER_PRINTS,RUNE_RULE_TEXT} from '../../client/src/shared/runeRework';
 import {MERC_IDS} from '../../client/src/shared/mercenaryCards';
 import { DB, STARTERS } from '../../client/src/shared/cards';
-import { refreshFieldPassives } from '../../client/src/shared/engine';
+import { effDef, refreshFieldPassives } from '../../client/src/shared/engine';
 import type { CardInst, FieldMon, GameState } from '../../client/src/shared/types';
 
 const castleCards = new Set([
@@ -28,9 +29,11 @@ export function restoreReworkedCards(game: GameState): void {
   const updateCasinoRally = !game.casinoRallyApplied;
   const updateRunes=!game.runeReworkApplied;
   const auditRunes = !game.runeZonesAudited;
+  const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems)) return;
+  game.golemsReworked = true;
   game.threeFireNamed = true;
   game.runeReworkApplied=true;
   if (auditRunes) {
@@ -49,6 +52,27 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateGolems && (Object.hasOwn(GOLEM_TEXT,card.id) || card.id === 'REFRESH_HAND')) {
+      const def = DB[card.id], m = card as FieldMon;
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      if (card.id === 'REFRESH_HAND') card.maxUsesPerTurn = def.maxUsesPerTurn;
+      else {
+        card.atk = m.trickSwapped ? def.def : def.atk;
+        card.def = m.trickSwapped ? def.atk : def.def;
+        for (const key of ['aura','onSummon','turnFx'] as const) {
+          delete card[key];
+          if (m.mutedEffects) delete m.mutedEffects[key];
+        }
+        delete card.summonReq;
+        // Preserve stripped or granted keywords. Introduce only the newly printed abilities.
+        if (m.summonedTurn != null) {
+          if (card.id === 'MANA_GIANT') {
+            card.passive = [...new Set([...(card.passive ?? []),'void'])];
+          }
+          if (card.id === 'GOLEM2') card.passive = card.passive?.filter(k=>k!=='counter');
+        } else card.passive = [...def.passive ?? []];
+      }
+    }
     if (renameFire && card.id === "S1") {
       const {name, nameJa, nameEn} = DB.S1;
       Object.assign(card, {name, nameJa, nameEn});
@@ -139,6 +163,10 @@ export function restoreReworkedCards(game: GameState): void {
   for (const p of game.players) {
     [...p.hand, ...p.deck, ...p.field, ...p.discard, ...(p.removed ?? []), ...p.supply].forEach(refresh);
     for (const entry of [...p.enchants,...p.traps,...(p.quests ?? []),...p.exile]) refresh(entry.card);
+    if (updateGolems) for (const m of p.field) {
+      // A live room can contain a wounded monster whose new printed HP is lower.
+      if (Object.hasOwn(GOLEM_TEXT,m.id) && (m.dmg ?? 0) >= effDef(p,m)) m.dmg = Math.max(0,effDef(p,m)-1);
+    }
     for (const q of p.quests ?? []) {
       // Old town progress included both players without recording who acted.
       if (updateDiplomacy && q.card.id === 'Q_TOWN') { q.townSeen = []; q.progress = 0; }
