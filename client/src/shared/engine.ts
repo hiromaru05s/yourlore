@@ -743,7 +743,8 @@ export function refreshFieldPassives(g: GameState): void {
     }
     if (m.id === 'DRAGON_KILLER') m.conditionalPassives = !p.monsterSilence && g.players[1-side(g,p)].field.some(x=>['DRAGON_RIDER','ANTIQUE_DK'].includes(x.id)) ? ['dual'] : [];
     if (m.id === 'SLUM_MERCHANT') {
-      m.conditionalPassives = !m.mutedEffects && deckComp(p).some(c => c.id === 'SLUM') ? ['aura'] : [];
+      if (!m.mutedEffects && deckComp(p).some(c => c.id === 'SLUM')) m.conditionalPassives = ['aura'];
+      else delete m.conditionalPassives;
     }
     if (m.id === 'CAVALRY' || m.id === 'SLUM_ASSASSIN') {
       const gainsEvade = !p.monsterSilence && (m.id === 'CAVALRY'
