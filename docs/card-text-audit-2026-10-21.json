@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 438,
+  "count": 439,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -58,24 +58,26 @@
     },
     "M3": {
       "nameJa": "ダスト・スカウト",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "dd431c1296d1e8181dc731d54f609f885f9ae06e0ff68b8579040eb42528fcb5",
-      "textSha256": "10c6086b1c12c9d496efb4f96c15d471c310033b44de6cb921b9fe6ee64bb029",
+      "definitionSha256": "234a03e2f4eeb0fdc500aac4703a19ba438dafac56a266e6324296fac7f48c18",
+      "textSha256": "637053ff3e5ea190f1b7f71cebadf147ca2e4a2e0914b9b62549c35d50eaeaaa",
       "hooks": {
         "onSummon": "draw"
       },
       "before": {
         "ja": "【召喚時】カードを1枚引く。",
-        "ko": "【소환시】카드를 1장 뽑는다.",
+        "ko": "【소환 시】카드를 1장 뽑는다.",
         "en": "【On Summon】Draw 1 card."
       },
       "after": {
-        "ja": "【召喚時】カードを1枚引く。",
-        "ko": "【소환 시】카드를 1장 뽑는다.",
-        "en": "【On Summon】Draw 1 card."
+        "ja": "【召喚時】カードを2枚引く。",
+        "ko": "【소환 시】카드를 2장 뽑는다.",
+        "en": "【On Summon】Draw 2 card."
       }
     },
     "M4": {
@@ -105,28 +107,27 @@
     },
     "M5": {
       "nameJa": "アイアン・シェル",
-      "status": "reviewed-legacy-rework",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "ac84c925d38efc3636bbf27f2f89489270fedfb0281225db4bfa6c785269fa02",
-      "textSha256": "ce28d5923a7f9ec01661376d7ef0efc328845bb969c0ed0433eacaeca6e923c1",
+      "textSha256": "f3e171d80ed618666828cf59affd5b0565f58b9007e78736af3a9d76f03fd8d0",
       "hooks": {
         "onSummon": "shield"
       },
       "before": {
-        "ja": "【召喚時】自分に2ダメージを与える。",
-        "ko": "【소환 시】자신에게 2 데미지를 준다.",
-        "en": "【On Summon】You take 2 damage."
-      },
-      "after": {
         "ja": "【召喚時】自分はシールド2を得る。",
         "ko": "【소환 시】자신은 실드 2를 얻는다.",
         "en": "【On Summon】Gain 2 Shield."
       },
-      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
+      "after": {
+        "ja": "【召喚時】自分はシールド2を得る。\n\n【自分のターン終了時】このターン、このモンスターが攻撃していなければ、自分はシールド6を得る。",
+        "ko": "【소환 시】자신은 실드 2를 얻는다.\n\n【자신의 턴 종료 시】이번 턴에 이 몬스터가 공격하지 않았다면 실드를 6 얻는다.",
+        "en": "【On Summon】Gain 2 Shield.\n\n【At the End of Your Turn】If this monster did not attack this turn, gain 6 Shield."
+      }
     },
     "M6": {
       "nameJa": "ツイン・ファング",
@@ -181,49 +182,48 @@
     },
     "M8": {
       "nameJa": "グローブ・ウォーデン",
-      "status": "reviewed-legacy-rework",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "9657f5915bfec6d1414aebab86897944a454ba24fa670d987dc198921c55666d",
-      "textSha256": "fd57d199790d81f8e573b0d7d1ad3250ee853f79c71a69667f09a0f2b58ed036",
+      "definitionSha256": "fca6c1b53134ca9b4bc04fc0045e2d9957cc6e9d741d0273f2a4aaa499009ee9",
+      "textSha256": "e931a40bab2bdfae9c7f5f1a4439d1ab5ab3f67af7530b39e53f0ced200631ff",
       "hooks": {
         "onSummon": "stealDew"
       },
       "before": {
-        "ja": "【召喚時】自分の体力を1回復する。",
-        "ko": "【소환 시】자신의 체력을 1 회복한다.",
-        "en": "【On Summon】Restore 1 of your HP."
-      },
-      "after": {
         "ja": "【召喚時】相手に雫が1以上あれば、相手の雫を1減らし、自分は雫1を得る。",
         "ko": "【소환 시】상대의 이슬이 1 이상이면 상대의 이슬을 1 줄이고 자신은 이슬 1을 얻는다.",
         "en": "【On Summon】If the opponent has at least 1 Dew, remove 1 of their Dew and gain 1 Dew."
       },
-      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
+      "after": {
+        "ja": "【召喚時】相手に雫が1以上あれば、相手の雫を1減らし、自分は雫1を得る。\n\n【召喚時】相手の場のモンスター1体を選ぶ。次の相手のターンの間、そのモンスターの攻撃力を0にする。",
+        "ko": "【소환 시】상대의 이슬이 1 이상이면 상대의 이슬을 1 줄이고 자신은 이슬 1을 얻는다.\n\n【소환 시】상대 필드의 몬스터 1체를 고른다. 다음 상대 턴 동안 그 몬스터의 공격력은 0이 된다.",
+        "en": "【On Summon】If the opponent has at least 1 Dew, remove 1 of their Dew and gain 1 Dew.\n\n【On Summon】Choose 1 enemy monster. During the opponent’s next turn, its ATK is 0."
+      }
     },
     "M9": {
       "nameJa": "レリック・ハンター",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "e480e284f4690851862375281bd1f688c9edb7606c7be9d64485bc9375cd2906",
-      "textSha256": "46cdf70a927001dd996ae56735e50aab5e96fa39f8e8d49187706e13351dbbc6",
-      "hooks": {
-        "onSummon": "refreshToken"
-      },
+      "definitionSha256": "325d165d4fe0cae80c67760c2713354cc48860b98c4393c54e1626c3dcf09984",
+      "textSha256": "9bfd3147fb8a08b48d72ce2f807b9e018f692fd9cc57e7d28003d33e1435a7ff",
+      "hooks": {},
       "before": {
-        "ja": "【召喚時】自分にカウンター1個を付与する（提示更新用）。\n\n【自分のターン中】自分のターン中、そのカウンター1個を消費して提示マーケットをマナなしで更新できる。このモンスターが場を離れても、未使用のカウンターは残る。",
-        "ko": "【소환시】자신에게 카운터 1개 부여한다(제시 갱신용).\n\n【자신의 턴 중】자신의 턴 중 그 카운터 1개를 소비해 마나 없이 제시 마켓을 갱신할 수 있다. 이 몬스터가 필드를 떠나도 사용하지 않은 카운터는 남는다.",
-        "en": "【On Summon】Gain 1 counter for refreshing offers.\n\n【During Your Turn】During your turn, you may spend 1 of these counters to refresh your offer market without paying mana. Unspent counters remain even after this monster leaves the field."
-      },
-      "after": {
         "ja": "【召喚時】自分にカウンター1個を付与する（提示更新用）。\n\n【自分のターン中】自分のターン中、そのカウンター1個を消費して提示マーケットをマナなしで更新できる。このモンスターが場を離れても、未使用のカウンターは残る。",
         "ko": "【소환 시】자신에게 카운터 1개 부여한다(제시 갱신용).\n\n【자신의 턴 중】자신의 턴 중 그 카운터 1개를 소비해 마나 없이 제시 마켓을 갱신할 수 있다. 이 몬스터가 필드를 떠나도 사용하지 않은 카운터는 남는다.",
         "en": "【On Summon】Gain 1 counter for refreshing offers.\n\n【During Your Turn】During your turn, you may spend 1 of these counters to refresh your offer market without paying mana. Unspent counters remain even after this monster leaves the field."
+      },
+      "after": {
+        "ja": "【場にある間】どちらかのプレイヤーが提示マーケットをリロールするたび、このモンスターの攻撃力+1・体力+1。",
+        "ko": "【필드에 있는 동안】어느 플레이어든 제시 마켓을 갱신할 때마다 이 몬스터의 공격력 +1, 체력 +1.",
+        "en": "【While on the Field】Whenever either player rerolls the offer market, this monster gains +1 ATK and +1 HP."
       }
     },
     "M10": {
@@ -254,24 +254,26 @@
     },
     "M11": {
       "nameJa": "ウォーロード",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "0ee300f588012cea2db9ecf0b351d6ac8c7f6d995223c9ee23d288099d248878",
-      "textSha256": "0766c8c40511ba8f6630ac2616f46945937696451dd683d308957c74d15dbba8",
+      "definitionSha256": "74686f698ad73c24357ca391edd5ef0310d2a129d0c1ada5ebf09191161b83ad",
+      "textSha256": "00a28dbaebfc5ee69885f9ca6a82f7fcb4f78973211cb7ad03062467e2b1545f",
       "hooks": {
-        "onSummon": "warlordKnight"
+        "onSummon": "warlordSoldier"
       },
       "before": {
         "ja": "【召喚時】自分の場に他のモンスターが3体以上いれば、「騎士」1体を自分の場に召喚する。",
-        "ko": "【소환시】자신의 필드에 다른 몬스터가 3체 이상이면 기사 1체를 자신의 필드에 소환한다.",
+        "ko": "【소환 시】자신의 필드에 다른 몬스터가 3체 이상이면 기사 1체를 자신의 필드에 소환한다.",
         "en": "【On Summon】If you control at least 3 other monsters, summon 1 Knight to your field."
       },
       "after": {
-        "ja": "【召喚時】自分の場に他のモンスターが3体以上いれば、「騎士」1体を自分の場に召喚する。",
-        "ko": "【소환 시】자신의 필드에 다른 몬스터가 3체 이상이면 기사 1체를 자신의 필드에 소환한다.",
-        "en": "【On Summon】If you control at least 3 other monsters, summon 1 Knight to your field."
+        "ja": "【召喚時】自分の場に他のモンスターが3体以上いれば、「兵士」1体を自分の場に召喚する。",
+        "ko": "【소환 시】자신의 필드에 다른 몬스터가 3체 이상이면 병사 1체를 자신의 필드에 소환한다.",
+        "en": "【On Summon】If you control at least 3 other monsters, summon 1 Soldier to your field."
       }
     },
     "M12": {
@@ -672,50 +674,50 @@
     },
     "TSO2": {
       "nameJa": "孤独な狼",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "d224fc76329ae9f150fbacb419efa8d29c0d1b374d27baea70bbaa65e1c03fd9",
-      "textSha256": "0af9e1fbcece0a1d0e3c8596381e87f1c84b87256492b6b7a2a9420b90d676c9",
+      "textSha256": "5afad35b6350b34a17c0911a5a6a1a8ba4362fb80dd2711c506a9fe903fbc3ad",
       "hooks": {
         "onSummon": "hermitBuff"
       },
       "before": {
-        "ja": "【召喚時】自分の場の他のモンスターと永続魔法が合計1枚以下なら、このモンスターの攻撃力+3・体力+3（持続）。",
-        "ko": "【소환 시】자신의 필드의 다른 몬스터와 영구마법이 합계 1장 이하이면 이 몬스터의 공격력 +3, 체력 +3(지속).",
-        "en": "【On Summon】If your other monsters and persistent spells total at most 1, this monster gets +3 ATK and +3 HP (lasting)."
-      },
-      "after": {
         "ja": "【召喚時】自分の場の他のモンスターと永続魔法が合計1枚以下なら、このモンスターの攻撃力+3・体力+3（対象が場を離れるまで）。",
         "ko": "【소환 시】자신의 필드의 다른 몬스터와 영구 마법이 합계 1장 이하이면 이 몬스터의 공격력 +3, 체력 +3(효과를 받은 몬스터가 필드를 떠날 때까지).",
         "en": "【On Summon】If your other monsters and persistent spells total at most 1, this monster gets +3 ATK and +3 HP (until the affected monster leaves the field)."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【召喚時】自分の場の他のモンスターと永続魔法が合計2枚以下なら、このモンスターの攻撃力+3・体力+3（対象が場を離れるまで）。",
+        "ko": "【소환 시】자신의 필드의 다른 몬스터와 영구 마법이 합계 2장 이하이면 이 몬스터의 공격력 +3, 체력 +3(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【On Summon】If your other monsters and persistent spells total at most 2, this monster gets +3 ATK and +3 HP (until the affected monster leaves the field)."
+      }
     },
     "TSO5": {
       "nameJa": "孤独な放浪者",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ja"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "19bcd1a8f6dbb48dd608e6ac18abaf8db4cb492aa78b904d50dce7a1bc4c214e",
-      "textSha256": "a4dc114ced7858e69b9ab2ad3cdaddaf6f1b50c4de627e505a25d1f4d92e17f1",
+      "definitionSha256": "b2751d20cb5308c613407ed7ae1d737657ea55fc9fce3505a37d50cdfa5c29c4",
+      "textSha256": "9b7d7e24ae6be0d190584acff34ae8f425fedef64bc99229137bcfbe34c6b508",
       "hooks": {
         "summonReq": "soloOnly"
       },
       "before": {
-        "ja": "【召喚条件】自分の場に孤独種族以外のモンスターがいない時のみ召喚可能。",
+        "ja": "【召喚条件】自分の場に孤独種族以外のモンスターがいない。",
         "ko": "【소환 조건】자신의 필드에 고독 종족 외의 몬스터가 없을 때만 소환할 수 있다.",
         "en": "【Summon Requirement】No non-Solitary monsters on your field."
       },
       "after": {
-        "ja": "【召喚条件】自分の場に孤独種族以外のモンスターがいない。",
-        "ko": "【소환 조건】자신의 필드에 고독 종족 외의 몬스터가 없을 때만 소환할 수 있다.",
-        "en": "【Summon Requirement】No non-Solitary monsters on your field."
+        "ja": "【召喚条件】自分の場に孤独種族以外のモンスターがいない。\n\n【場にある間】自分は孤独種族以外のモンスターを召喚できない。",
+        "ko": "【소환 조건】자신의 필드에 고독 종족 외의 몬스터가 없을 때만 소환할 수 있다.\n\n【필드에 있는 동안】자신은 고독 부족 이외의 몬스터를 소환할 수 없다.",
+        "en": "【Summon Requirement】No non-Solitary monsters on your field.\n\n【While on the Field】You can summon only Solitary monsters."
       }
     },
     "TPO2": {
@@ -895,40 +897,40 @@
     },
     "NMD2": {
       "nameJa": "探書の精霊",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "7ae05028137286bc480e3dd7c3b66e16670bf3d8b1489283a5338a8288ea8050",
-      "textSha256": "d950559093e02d5f36c3c7a7ddd1836e5dd3087c9dd513934f19088b9f163b76",
+      "definitionSha256": "6dd5f58b7e7656f62f84b557c3d3d28541336f47290eb94a1a382b6799211c3e",
+      "textSha256": "d904e5a289022c37a92dd8345dc2bbc16fe31d035660d42bb696cb81c298e269",
       "hooks": {
-        "onSummon": "draw"
+        "onSummon": "bookSpirit"
       },
       "before": {
         "ja": "【召喚時】カードを2枚引く。",
-        "ko": "【소환시】카드를 2장 뽑는다.",
+        "ko": "【소환 시】카드를 2장 뽑는다.",
         "en": "【On Summon】Draw 2 cards."
       },
       "after": {
-        "ja": "【召喚時】カードを2枚引く。",
-        "ko": "【소환 시】카드를 2장 뽑는다.",
-        "en": "【On Summon】Draw 2 cards."
+        "ja": "【召喚時】カードを3枚引く。その後、手札の魔法カード1枚を捨ててもよい。捨てた場合、「大きな発見」か「知識の泉」を選び、自分の墓地に1枚加える。",
+        "ko": "【소환 시】카드를 3장 뽑는다. 그 후 패의 마법 카드 1장을 버려도 된다. 버렸다면 큰 발견 또는 지식의 샘 중 1장을 골라 자신의 묘지에 추가한다.",
+        "en": "【On Summon】Draw 3 cards. You may then discard 1 spell from your hand. If you do, choose Great Discovery or Well of Knowledge and add 1 copy to your graveyard."
       }
     },
     "NMD4": {
       "nameJa": "記録者",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "cae927cda3eb5838dcfc7087423cfec0ce91fb7b70228e063ca62b0f72d393a7",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "53252926b791a93431f5f0c7d3ffe5cb461570ac6d727ae710ba57de258c3ed7",
       "textSha256": "b6d9b6478ef2c2f986da8903877efdadf4788f0aab3ea9e42e84330f52c17e87",
       "hooks": {
         "onSummon": "chronicler"
       },
       "before": {
         "ja": "【召喚時】共用の提示マーケットの直近10ターン分（双方通算）の履歴（更新分を含む）からカード1枚を選び、マナを払って購入できる。",
-        "ko": "【소환시】공유 제시 마켓의 최근 10턴(양쪽 합계) 기록(갱신 포함)에서 카드 1장을 선택해 마나를 지불하고 구매할 수 있다.",
+        "ko": "【소환 시】공유 제시 마켓의 최근 10턴(양쪽 합계) 기록(갱신 포함)에서 카드 1장을 선택해 마나를 지불하고 구매할 수 있다.",
         "en": "【On Summon】You may choose 1 card from the shared offer-market history over the last 10 turns, counting both players, including refreshes, and pay mana to buy it."
       },
       "after": {
@@ -939,30 +941,27 @@
     },
     "NMD6": {
       "nameJa": "大賢者",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
+        "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "5e981f8079f8d06094ce9d04936049e1f727f16012c9e29ec1eef172bf4943b3",
-      "textSha256": "d537e50f73d8269a01754a1d5ffb967113874ab09c2abce6f69d0502fd8aed74",
+      "definitionSha256": "cc4f3369af157202808cda693da150deba271b941bed425c3b888629bbd8dbc1",
+      "textSha256": "00cd99719bee127794482dc0d8ca2a3c6462165c7b9332dff3ecb99deccb4ee5",
       "hooks": {
         "aura": "sageDiscount"
       },
       "before": {
         "ja": "【場にある間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低1）。元から発動コスト0の魔法は0のまま。",
-        "ko": "【필드에 있는 동안】자신의 덱 구성에 마법이 13장 이상이면 자신의 마법 시전 코스트 -1(최저 1). 원래 시전 코스트가 0인 마법은 0을 유지한다.",
-        "en": "【While on the Field】If your deck composition contains at least 13 spells, your spells cost 1 less to cast, to a minimum of 1. Spells that already cost 0 to cast remain at 0."
-      },
-      "after": {
-        "ja": "【場にある間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低1）。元から発動コスト0の魔法は0のまま。",
         "ko": "【필드에 있는 동안】자신의 덱 구성에 마법이 13장 이상이면 자신의 마법 발동 코스트 -1(최저 1). 원래 발동 코스트가 0인 마법은 0을 유지한다.",
         "en": "【While on the Field】If your deck composition contains at least 13 spells, reduce the cast cost of your spells by 1, to a minimum of 1. Spells with an original cast cost of 0 remain at 0."
       },
-      "reviewDate": "2026-10-26",
-      "reviewEvidence": "docs/balance/2026-10-26-sage-goblin/README.md",
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【場にある間】自分が使う魔法の発動コスト-1（最低1、元から0なら0）。\n\n【破壊時】自分のマナ水晶+1。",
+        "ko": "【필드에 있는 동안】자신이 사용하는 마법의 발동 코스트 -1(최저 1, 원래 0이면 0).\n\n【파괴 시】자신의 마나 수정 +1.",
+        "en": "【While on the Field】Reduce the cast cost of your spells by 1, to a minimum of 1. Spells that already cost 0 still cost 0.\n\n【On Destruction】Gain 1 mana crystal."
+      }
     },
     "NGA3": {
       "nameJa": "戦士ゴーレム",
@@ -993,26 +992,26 @@
     },
     "NGA4": {
       "nameJa": "剣鬼",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "f30fb65d682257c5b024cf6854698cc787c7237d7fd81516b8c88dfb0ac9ff2b",
-      "textSha256": "6cc557a20506a67c5095c18c6bb6188e887f19eb72ea9f18ab9a4d119d315ed9",
+      "definitionSha256": "51464b1718935c05600714d3a218d7365b10006c1e79f0a14f89a11b92554e50",
+      "textSha256": "bc9192d1e82d1a50ef681d8436bb22d038ba68310590ae739bccfab96b6568d6",
       "hooks": {
         "attackFx": "berserk"
       },
       "before": {
-        "ja": "【攻撃時】このモンスター以外の両方の場のモンスターと両プレイヤーから、攻撃可能な対象1つを毎回ランダムに選ぶ。直接攻撃禁止と「貴族領主」の攻撃制限に従う。\n\n【自分ターン終了時】攻撃可能なら、残っている攻撃回数を全て自動で行ってからターンを終了する。",
-        "ko": "【공격시】이 몬스터를 제외한 양쪽 필드의 몬스터와 양쪽 플레이어 중 공격 가능한 대상 1개를 매번 무작위로 선택한다. 직접 공격 금지와 귀족 영주의 공격 제한을 따른다.\n\n【자신 턴 종료시】공격 가능하면 남은 공격 횟수를 모두 자동으로 수행한 후 턴을 종료한다.",
-        "en": "【On Attack】Each attack randomly chooses 1 legal target among all other monsters on either field and both players. Direct-attack prohibitions and Aristocrat Lord attack restrictions still apply.\n\n【Your Turn End】If able to attack, automatically use all remaining attacks before ending your turn."
-      },
-      "after": {
         "ja": "【攻撃時】このモンスター以外の両方の場のモンスターと両プレイヤーから、攻撃可能な対象1つを毎回ランダムに選ぶ。直接攻撃禁止と「貴族領主」の攻撃制限に従う。\n\n【自分のターン終了時】攻撃可能なら、残っている攻撃回数を全て自動で行ってからターンを終了する。",
         "ko": "【공격 시】이 몬스터를 제외한 양쪽 필드의 몬스터와 양쪽 플레이어 중 공격 가능한 대상 1개를 매번 무작위로 선택한다. 직접 공격 금지와 귀족 영주의 공격 제한을 따른다.\n\n【자신의 턴 종료 시】공격 가능하면 남은 공격 횟수를 모두 자동으로 수행한 후 턴을 종료한다.",
         "en": "【On Attack】Each attack randomly chooses 1 legal target among all other monsters on either field and both players. Direct-attack prohibitions and Aristocrat Lord attack restrictions still apply.\n\n【At the End of Your Turn】If able to attack, automatically use all remaining attacks before ending your turn."
+      },
+      "after": {
+        "ja": "【攻撃時】このモンスター以外の両方の場のモンスターと両プレイヤーから、攻撃可能な対象1つを毎回ランダムに選ぶ。直接攻撃禁止と「貴族領主」の攻撃制限を無視する。\n\n【自分のターン終了時】攻撃可能なら、残っている攻撃回数を全て自動で行ってからターンを終了する。\n\n【破壊時】相手の場の全モンスターに2ダメージを与える。",
+        "ko": "【공격 시】이 몬스터를 제외한 양쪽 필드의 몬스터와 양쪽 플레이어 중 공격 가능한 대상 1개를 매번 무작위로 선택한다. 직접 공격 금지와 귀족 영주의 공격 제한을 무시한다.\n\n【자신의 턴 종료 시】공격 가능하면 남은 공격 횟수를 모두 자동으로 수행한 후 턴을 종료한다.\n\n【파괴 시】상대 필드의 모든 몬스터에게 2 데미지를 준다.",
+        "en": "【On Attack】Each attack randomly chooses 1 legal target among all other monsters on either field and both players. This monster ignores direct-attack prohibitions and the attack restrictions of Aristocrat Lord.\n\n【At the End of Your Turn】If able to attack, automatically use all remaining attacks before ending your turn.\n\n【On Destruction】Deal 2 damage to each enemy monster."
       }
     },
     "NWL3": {
@@ -1169,29 +1168,23 @@
     },
     "GM5_0": {
       "nameJa": "古代の狂戦士",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "27ac08ecf3ec73d0c76f25a160906714d8ffc4008955a027baee3ea68fb3b4dd",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "e87d642d7dc80f152ea21c5bbc3f806b57765d069da541ee20b238f6f8ea827d",
       "textSha256": "23dc7a02520c7d500af06adc7f02282c7feba80387c9be0d4af5da388b8ec813",
       "hooks": {
         "turnFx": "growAtk"
       },
       "before": {
-        "ja": "【自分のターン開始時】このモンスターの攻撃力+2（持続）。",
-        "ko": "【자신의 턴 시작 시】이 몬스터의 공격력 +2(지속).",
-        "en": "【At the Start of Your Turn】This monster gets +2 ATK (lasting)."
+        "ja": "【自分のターン開始時】このモンスターの攻撃力+2（対象が場を離れるまで）。",
+        "ko": "【자신의 턴 시작 시】이 몬스터의 공격력 +2(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【At the Start of Your Turn】This monster gets +2 ATK (until the affected monster leaves the field)."
       },
       "after": {
         "ja": "【自分のターン開始時】このモンスターの攻撃力+2（対象が場を離れるまで）。",
         "ko": "【자신의 턴 시작 시】이 몬스터의 공격력 +2(효과를 받은 몬스터가 필드를 떠날 때까지).",
         "en": "【At the Start of Your Turn】This monster gets +2 ATK (until the affected monster leaves the field)."
-      },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      }
     },
     "GM5_2": {
       "nameJa": "鋼鉄の戦士",
@@ -1221,28 +1214,23 @@
     },
     "GM5_3": {
       "nameJa": "業火のドレイク",
-      "status": "reviewed-legacy-rework",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "0f042a0c0cc45822818f95183756f053a6ffbe7285fa5c4ca52e41a827884dfa",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "74286969390068ae0c587b1db0ddd9fc50b81607e44fa2e1dfa25edbb45ec25f",
       "textSha256": "2a6babc253d1776ec17abf9f3a996a9b2dd9cafdd48c0b500ae0ec27e2693246",
       "hooks": {
         "turnFx": "turnBurn"
       },
       "before": {
-        "ja": "【自分のターン開始時】相手に3ダメージを与える。",
-        "ko": "【자신의 턴 시작 시】상대에게 3 데미지를 준다.",
-        "en": "【At the Start of Your Turn】Deal 3 damage to the opponent."
+        "ja": "【自分のターン開始時】相手に4ダメージを与える。",
+        "ko": "【자신의 턴 시작 시】상대에게 4 데미지를 준다.",
+        "en": "【At the Start of Your Turn】Deal 4 damage to the opponent."
       },
       "after": {
         "ja": "【自分のターン開始時】相手に4ダメージを与える。",
         "ko": "【자신의 턴 시작 시】상대에게 4 데미지를 준다.",
         "en": "【At the Start of Your Turn】Deal 4 damage to the opponent."
-      },
-      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
+      }
     },
     "GS5_3": {
       "nameJa": "呪文書の解読",
@@ -1290,54 +1278,47 @@
     },
     "GM6_0": {
       "nameJa": "ドラゴン",
-      "status": "reworked",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "97fb87511ce1a313900e53f6740b4606ac9fb5caf801ec76d5090a69f2ee0bc2",
-      "textSha256": "bc32550230ea834c64823f080539fb6c53fae04ec047127d5ed10aa5c4184011",
+      "textSha256": "5fbb6b353c402d4470baffee41d49b0f197db541ca4c73d64f68ea8a9b259c01",
       "hooks": {
         "onSummon": "dragonFuse"
       },
       "before": {
-        "ja": "【召喚時】自分の場に「兵士」か「騎士」がいれば、その1体とこのモンスターを素材にして、次のモンスターを自分の場に召喚する。両方ある場合はどちらを素材にするか選ぶ。\n兵士を使う：ドラゴンライダー1体。\n騎士を使う：アンティークドラゴンナイト1体。\n素材は自分の墓地へ送る。トークン・虚無の素材は自分のリフトへ送る。",
-        "ko": "【소환시】자신의 필드에 병사 또는 기사가 있으면 그 1체와 이 몬스터를 재료로 다음 몬스터를 자신의 필드에 소환한다. 둘 다 있으면 사용할 재료를 선택한다.\n병사 사용: 드래곤 라이더 1체.\n기사 사용: 앤티크 드래곤 나이트 1체.\n재료는 자신의 묘지로 보낸다. 토큰·공허 재료는 자신의 리프트로 보낸다.",
-        "en": "【On Summon】If you control a Soldier or Knight, use 1 of them and this monster as materials to summon the following monster to your field. If both are available, choose which material to use.\nUsing a Soldier: 1 Dragon Rider.\nUsing a Knight: 1 Antique Dragon Knight.\nSend the materials to your graveyard. Send Token or Void materials to your Rift instead."
-      },
-      "after": {
         "ja": "【召喚時】自分の場に「兵士」か「騎士」がいれば、その1体とこのモンスターを素材にして、次のモンスターを自分の場に召喚する。両方ある場合はどちらを素材にするか選ぶ。\n兵士を使う：ドラゴンライダー1体。\n騎士を使う：アンティークドラゴンナイト1体。\n素材は自分の墓地へ送る。トークン・虚無の素材は自分のリフトへ送る。\n\n【召喚時】次の相手のターン、相手が使用できる魔法は1枚まで。",
         "ko": "【소환 시】자신의 필드에 병사 또는 기사가 있으면 그 1체와 이 몬스터를 재료로 다음 몬스터를 자신의 필드에 소환한다. 둘 다 있으면 사용할 재료를 선택한다.\n병사 사용: 드래곤 라이더 1체.\n기사 사용: 앤티크 드래곤 나이트 1체.\n재료는 자신의 묘지로 보낸다. 토큰·공허 재료는 자신의 리프트로 보낸다.\n\n【소환 시】다음 상대 턴에 상대는 마법을 1장까지만 사용할 수 있다.",
         "en": "【On Summon】If you control a Soldier or Knight, use 1 of them and this monster as materials to summon the following monster to your field. If both are available, choose which material to use.\nUsing a Soldier: 1 Dragon Rider.\nUsing a Knight: 1 Antique Dragon Knight.\nSend the materials to your graveyard. Send Token or Void materials to your Rift instead.\n\n【On Summon】On the next opposing turn, your opponent can play at most 1 spell."
       },
-      "reviewedAt": "2026-11-11",
-      "reviewNote": "Army and Attune balance update."
+      "after": {
+        "ja": "【召喚時】自分の場に「兵士」「騎士」「ゴブリン」のいずれかがいれば、その1体とこのモンスターを素材にして、次のモンスターを自分の場に召喚する。複数ある場合はどれを素材にするか選ぶ。\n兵士を使う：ドラゴンライダー1体。\n騎士を使う：アンティークドラゴンナイト1体。\nゴブリンを使う：ゴブリンドラゴンライダー1体。\n素材は自分の墓地へ送る。トークン・虚無の素材は自分のリフトへ送る。\n\n【召喚時】次の相手のターン、相手が使用できる魔法は1枚まで。",
+        "ko": "【소환 시】자신의 필드에 병사, 기사 또는 고블린이 있으면 그 1체와 이 몬스터를 재료로 다음 몬스터를 자신의 필드에 소환한다. 여러 종류가 있으면 사용할 재료를 선택한다.\n병사 사용: 드래곤 라이더 1체.\n기사 사용: 앤티크 드래곤 나이트 1체.\n고블린 사용: 고블린 드래곤 라이더 1체.\n재료는 자신의 묘지로 보낸다. 토큰·공허 재료는 자신의 리프트로 보낸다.\n\n【소환 시】다음 상대 턴에 상대는 마법을 1장까지만 사용할 수 있다.",
+        "en": "【On Summon】If you control a Soldier, Knight or Goblin, use 1 of them and this monster as materials to summon the following monster to your field. If several are available, choose which material to use.\nUsing a Soldier: 1 Dragon Rider.\nUsing a Knight: 1 Antique Dragon Knight.\nUsing a Goblin: 1 Goblin Dragon Rider.\nSend the materials to your graveyard. Send Token or Void materials to your Rift instead.\n\n【On Summon】On the next opposing turn, your opponent can play at most 1 spell."
+      }
     },
     "GM6_1": {
       "nameJa": "次元幽閉者",
-      "status": "reviewed-rework",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "4828cf76b48ec55f21d4b75cd58ee9cb00484d327cc27ca994b99fd1d9330774",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "040ae0ead3c62f8dce89d1d5e4cf893b77d92b4fc41b9dab547ae202db80395b",
       "textSha256": "13fd0c8e6a9b264debb297e339c083711eeb467a58736b43c107728c40fb6d31",
       "hooks": {
         "onSummon": "jailer"
       },
       "before": {
-        "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。",
-        "ko": "【소환 시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.",
-        "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift."
+        "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、このカードの召喚時効果を発動し、その後このカードをリフトから自分の墓地に戻す。",
+        "ko": "【소환 시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 이 카드의 소환 시 효과를 발동하고, 그 후 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
+        "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, activate its On Summon effect, then return this card from your Rift to your graveyard."
       },
       "after": {
         "ja": "【召喚時】相手のリフトからカードを8枚まで選び、自分のリフトへ移す。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、このカードの召喚時効果を発動し、その後このカードをリフトから自分の墓地に戻す。",
         "ko": "【소환 시】상대의 리프트에서 카드를 8장까지 선택해 자신의 리프트로 옮긴다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 이 카드의 소환 시 효과를 발동하고, 그 후 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
         "en": "【On Summon】Choose up to 8 cards in the opponent's Rift and move them to your Rift.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, activate its On Summon effect, then return this card from your Rift to your graveyard."
-      },
-      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
+      }
     },
     "GM6_7": {
       "nameJa": "将軍",
@@ -1366,26 +1347,21 @@
     },
     "GM6_8": {
       "nameJa": "虚空の攻城兵",
-      "status": "reviewed-rework",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "b4fba4ada17c6fac0a0f7ab18b2edcba56abb8c238ec5907a6740261cffe6b5d",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "3cb98dd786d478da6a16c5072a37467919aea474e50f0f4395b5534aa95e8006",
       "textSha256": "ba21936b4246bf5df1c3c02d708d46d8ead9ec97dea24febff9850912beb2a12",
       "hooks": {},
       "before": {
-        "ja": "【破壊時】「兵士」1体を自分の場に召喚する。",
-        "ko": "【파괴 시】병사 1체를 자신의 필드에 소환한다.",
-        "en": "【On Destruction】Summon 1 Soldier to your field."
+        "ja": "【破壊時】「兵士」1体を自分の場に召喚する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、可能な限り「大砲兵」を自分の場に召喚する。",
+        "ko": "【파괴 시】병사 1체를 자신의 필드에 소환한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 가능한 한 많은 대포병을 자신의 필드에 소환한다.",
+        "en": "【On Destruction】Summon 1 Soldier to your field.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, summon as many Heavy Gunners as possible to your field."
       },
       "after": {
         "ja": "【破壊時】「兵士」1体を自分の場に召喚する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、可能な限り「大砲兵」を自分の場に召喚する。",
         "ko": "【파괴 시】병사 1체를 자신의 필드에 소환한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 가능한 한 많은 대포병을 자신의 필드에 소환한다.",
         "en": "【On Destruction】Summon 1 Soldier to your field.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, summon as many Heavy Gunners as possible to your field."
-      },
-      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
+      }
     },
     "GS6_4": {
       "nameJa": "火脈点火",
@@ -1511,24 +1487,26 @@
     },
     "TSO3": {
       "nameJa": "孤独な狩人",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "a88f7af7273c10f7ec080558534f4cc422a7783e77cdbf0817a8bf7e5442974e",
-      "textSha256": "6b7a83e04472a9f6e2e2ecfa8bb846ed293c0f5339b5b766dd87142b88cf3093",
+      "definitionSha256": "4eebcadc693ec7b1f6246ea62a2323bf5f0994ad991e882050a0d3d407a9b70d",
+      "textSha256": "d38bc096b1675d3a8b52b3249856a93380b1e510c8f62f1369148eb229e9d4c4",
       "hooks": {
         "onSummon": "gravePure"
       },
       "before": {
         "ja": "【召喚時】自分の墓地にモンスターカードがなければカードを6枚引く。",
-        "ko": "【소환시】자신의 묘지에 몬스터 카드가 없으면 카드를 6장 뽑는다.",
+        "ko": "【소환 시】자신의 묘지에 몬스터 카드가 없으면 카드를 6장 뽑는다.",
         "en": "【On Summon】If your graveyard has no monster cards, draw 6 cards."
       },
       "after": {
-        "ja": "【召喚時】自分の墓地にモンスターカードがなければカードを6枚引く。",
-        "ko": "【소환 시】자신의 묘지에 몬스터 카드가 없으면 카드를 6장 뽑는다.",
-        "en": "【On Summon】If your graveyard has no monster cards, draw 6 cards."
+        "ja": "【召喚時】自分の墓地にモンスターカードがなければカードを6枚引く。\n\n【場にある間】自分の墓地に孤独種族以外のモンスターカードがなければ、このモンスターの攻撃力+1・体力+2。このモンスターが攻撃するとき、相手モンスターの反撃を無効にする。",
+        "ko": "【소환 시】자신의 묘지에 몬스터 카드가 없으면 카드를 6장 뽑는다.\n\n【필드에 있는 동안】자신의 묘지에 고독 부족 이외의 몬스터 카드가 없으면 이 몬스터의 공격력 +1, 체력 +2. 이 몬스터가 공격할 때 상대 몬스터의 반격을 무효화한다.",
+        "en": "【On Summon】If your graveyard has no monster cards, draw 6 cards.\n\n【While on the Field】While your graveyard contains no monster outside the Solitary tribe, this monster has +1 ATK and +2 HP. When this monster attacks, it negates the enemy monster’s Counter."
       }
     },
     "TPO3": {
@@ -1559,10 +1537,14 @@
     },
     "TAR3": {
       "nameJa": "没落した騎士",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
+      "status": "november-balance-v90",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
       "definitionSha256": "9ae728f543d4d50a19945f7fdc1aa64862ba19f3a106d874802054ae9f1e0c86",
-      "textSha256": "a196dec10633c53ae0e58d4515b76f81a768e73a61c55f2f27f1d095f80ffabd",
+      "textSha256": "051767523fc38add3eccf56d575fb20d8d0050c2c0da8a436f0d46cdded7f58a",
       "hooks": {},
       "before": {
         "ja": "—",
@@ -1570,9 +1552,9 @@
         "en": "—"
       },
       "after": {
-        "ja": "—",
-        "ko": "—",
-        "en": "—"
+        "ja": "【場にある間】このモンスターが相手モンスターを破壊した時、このモンスターを自分の墓地に送り、「騎士」1体を自分の場に召喚する。",
+        "ko": "【필드에 있는 동안】이 몬스터가 상대 몬스터를 파괴하면 이 몬스터를 자신의 묘지로 보내고 기사 1체를 자신의 필드에 소환한다.",
+        "en": "【While on the Field】When this monster destroys an enemy monster, send this monster to your graveyard and summon 1 Knight to your field."
       }
     },
     "TGE1": {
@@ -2231,24 +2213,26 @@
     },
     "MIMIC2": {
       "nameJa": "マスターミミック",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ja"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "29d373823f5c18c97d60996815305b7fcd28c521d2c2b2f8692cf69f95c91f48",
-      "textSha256": "9e50870c9ca4de89208cb27a0dabb251112d4b30ebdaf65e9b4224ef6579b9e3",
+      "textSha256": "28022abe674010b9ea80f37bcc82002504f8f8c53b7869cf3dd185085646cff6",
       "hooks": {
         "aura": "chestLock"
       },
       "before": {
-        "ja": "【場にいる間】このモンスターが場にいる限り両者は宝箱を使用できない (アチューン・魔は可能)。",
+        "ja": "【場にある間】このモンスターが場にいる限り両者は宝箱を使用できない (アチューン・魔は可能)。",
         "ko": "【필드에 있는 동안】이 몬스터가 필드에 있는 한 양 플레이어는 보물상자를 사용할 수 없다 (어튠 - 마는 가능).",
         "en": "【While on the Field】While this monster is out, neither player can use Treasure Chests (Attune - Arcane still works)."
       },
       "after": {
-        "ja": "【場にある間】このモンスターが場にいる限り両者は宝箱を使用できない (アチューン・魔は可能)。",
-        "ko": "【필드에 있는 동안】이 몬스터가 필드에 있는 한 양 플레이어는 보물상자를 사용할 수 없다 (어튠 - 마는 가능).",
-        "en": "【While on the Field】While this monster is out, neither player can use Treasure Chests (Attune - Arcane still works)."
+        "ja": "【場にある間】このモンスターが場にいる限り両者は宝箱を使用できない。",
+        "ko": "【필드에 있는 동안】이 몬스터가 필드에 있는 한 양 플레이어는 보물상자를 사용할 수 없다.",
+        "en": "【While on the Field】While this monster is out, neither player can use Treasure Chests."
       }
     },
     "GUILD_CHEST": {
@@ -2755,29 +2739,23 @@
     },
     "VITAL4": {
       "nameJa": "鼓舞王",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "8e1242c6aab7e35fa54084d6ad2404cc82b0133f7517e6a9c2d379568bfa0083",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "c3472e8b9e190b1f65d9877acbad36b335647b3ebcf72ccc9306eceb60cb3819",
       "textSha256": "83bd5c496f419f5e59101851ec9ecde7fe33441f537e9d03c1dac157623f5a8f",
       "hooks": {
         "aura": "rallyGuts"
       },
       "before": {
-        "ja": "【召喚時】自分の場の「兵士」「騎士」のうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n\n【自分のモンスター召喚時】後から召喚する「兵士」「騎士」にも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
-        "ko": "【소환 시】자신의 필드의 병사·기사 중 기합이 없는 각 몬스터에 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 몬스터 소환 시】이후 소환하는 병사·기사도 기합이 없으면 같은 처리를 한다. 부여한 기합과 카운터는 이 몬스터가 필드를 떠나도 남는다.",
-        "en": "【On Summon】Give each Soldier and Knight on your field that lacks Guts the Guts ability and 1 counter for Guts (until the affected monster leaves the field).\n\n【When You Summon a Monster】Apply the same effect to Soldiers and Knights you summon later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
+        "ja": "【召喚時】自分の場の兵士系モンスターのうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n\n【自分のモンスター召喚時】後から自分の場に召喚する兵士系モンスターにも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
+        "ko": "【소환 시】자신의 필드에 있는 병사 계열 몬스터 중 기합이 없는 각 몬스터에 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 몬스터 소환 시】이후 자신의 필드에 소환하는 병사 계열 몬스터도 기합이 없으면 같은 처리를 한다. 부여한 기합과 카운터는 이 몬스터가 필드를 떠나도 남는다.",
+        "en": "【On Summon】Give each Military monster on your field that lacks Guts the Guts ability and 1 counter for Guts (until the affected monster leaves the field).\n\n【When You Summon a Monster】Apply the same effect to Military monsters summoned to your field later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
       },
       "after": {
         "ja": "【召喚時】自分の場の兵士系モンスターのうち、気合を持たない各モンスターに、気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n\n【自分のモンスター召喚時】後から自分の場に召喚する兵士系モンスターにも、気合を持たなければ同じ処理を行う。付与済みの気合とカウンターは、このモンスターが場を離れても残る。",
         "ko": "【소환 시】자신의 필드에 있는 병사 계열 몬스터 중 기합이 없는 각 몬스터에 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 몬스터 소환 시】이후 자신의 필드에 소환하는 병사 계열 몬스터도 기합이 없으면 같은 처리를 한다. 부여한 기합과 카운터는 이 몬스터가 필드를 떠나도 남는다.",
         "en": "【On Summon】Give each Military monster on your field that lacks Guts the Guts ability and 1 counter for Guts (until the affected monster leaves the field).\n\n【When You Summon a Monster】Apply the same effect to Military monsters summoned to your field later if they lack Guts. The granted ability and counters remain even after this monster leaves the field."
-      },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      }
     },
     "CULL_FLOOD": {
       "nameJa": "カルの洗礼",
@@ -3009,35 +2987,23 @@
     },
     "ORIGIN_MIMIC": {
       "nameJa": "始原のミミック",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "6aa3abbe1d6df32c850a6a9ca1dc37fb8713b4a7c8eb379804255527ebadda5e",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "d1e653f08fea360774de6c859f3c54e95d3d5ceb03f1426a6e5be68307fad38b",
       "textSha256": "0f4ee29d5348c2482a0a4bdb92037129654d287cb569fd4bd04380852a61f96e",
       "hooks": {
         "onSummon": "originMimic"
       },
       "before": {
-        "ja": "【召喚時】この個体を除く、自分の場・墓地・リフトの「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続）。同名の別個体は数える。",
-        "ko": "【소환 시】이 개체를 제외한 자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2·체력 +2(지속). 같은 이름의 다른 개체는 센다.",
-        "en": "【On Summon】This monster gains +2 ATK and +2 HP (lasting) for each other Mimic-family monster in your field, graveyard, and Rift. Exclude this individual; count other copies with the same name."
+        "ja": "【召喚時】この個体を除く、自分の場・墓地・リフトの「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（対象が場を離れるまで）。同名の別個体は数える。",
+        "ko": "【소환 시】이 개체를 제외한 자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2·체력 +2(효과를 받은 몬스터가 필드를 떠날 때까지). 같은 이름의 다른 개체는 센다.",
+        "en": "【On Summon】This monster gains +2 ATK and +2 HP (until the affected monster leaves the field) for each other Mimic-family monster in your field, graveyard, and Rift. Exclude this individual; count other copies with the same name."
       },
       "after": {
         "ja": "【召喚時】この個体を除く、自分の場・墓地・リフトの「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（対象が場を離れるまで）。同名の別個体は数える。",
         "ko": "【소환 시】이 개체를 제외한 자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2·체력 +2(효과를 받은 몬스터가 필드를 떠날 때까지). 같은 이름의 다른 개체는 센다.",
         "en": "【On Summon】This monster gains +2 ATK and +2 HP (until the affected monster leaves the field) for each other Mimic-family monster in your field, graveyard, and Rift. Exclude this individual; count other copies with the same name."
-      },
-      "amendment": "2026-10-29: effect and requirement audit",
-      "amendmentBefore": {
-        "ja": "【召喚時】自分の場・墓地・リフトにある「ミミック」系モンスター1枚につき、このモンスターの攻撃力+2・体力+2（持続、自身を含む）。",
-        "ko": "【소환 시】자신의 필드·묘지·리프트의 미믹 계열 몬스터 1장당 이 몬스터의 공격력 +2, 체력 +2(지속, 자신 포함).",
-        "en": "【On Summon】This monster gets +2 ATK and +2 HP per Mimic-family monster on your field or in your graveyard or Rift, including itself (lasting)."
-      },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      }
     },
     "GREED_PRICE": {
       "nameJa": "強欲の代価",
@@ -3216,22 +3182,18 @@
     },
     "ELITE": {
       "nameJa": "精鋭騎士団長",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "94267e8d67c7bc7d46d8565f3d5cb477ead6b457cf39de3f2ecd41ddd3875efb",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "5a27ab5eca79bf3e1299a4b96521aaa55dc52c41c2a6654c49be20c3d3b684ca",
       "textSha256": "52c1139fb8124b793e2494ccc31c12bd79c7ba6c39a832bad244e0faf5554d46",
       "hooks": {
         "onSummon": "eliteSoldiers",
         "summonReq": "sixCards"
       },
       "before": {
-        "ja": "【召喚時】自分のデッキ構成が7枚以下なら、「兵士」（攻撃力2・体力1）1体を自分の場に召喚する。",
-        "ko": "【소환 시】자신의 덱 구성이 7장 이하이면 병사(공격력 2·체력 1) 1체를 자신의 필드에 소환한다.",
-        "en": "【On Summon】If your deck composition contains 7 cards or fewer, summon 1 Soldier (2 ATK, 1 HP) to your field."
+        "ja": "【召喚条件】自分のデッキ構成が6枚以下。\n\n【召喚時】自分の場に「騎士」1体を召喚する。",
+        "ko": "【소환 조건】자신의 덱 구성이 6장 이하이다.\n\n【소환 시】자신의 필드에 기사 1체를 소환한다.",
+        "en": "【Summon Requirement】Your deck composition has 6 cards or fewer.\n\n【On Summon】Summon 1 Knight to your field."
       },
       "after": {
         "ja": "【召喚条件】自分のデッキ構成が6枚以下。\n\n【召喚時】自分の場に「騎士」1体を召喚する。",
@@ -3506,18 +3468,16 @@
     },
     "EGG_HUNTER": {
       "nameJa": "エッグハンター",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "841b714a5a3323f389d47c17ededfdb413a18b5ca8058eb820a1dba395bad1a2",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "c2c079d3d8c64b13d210463ee7e6941be89462bde1b6ff04c6b5302ef885dedf",
       "textSha256": "362beb591c44741b2a474bea8b16f2a0a5a9dff32a877db16abddfc3f859f40a",
       "hooks": {
         "aura": "eggHunter"
       },
       "before": {
         "ja": "【攻撃時】このモンスターが卵を攻撃した場合、その卵のカウンターを通常の1個の代わりに6個減らす。",
-        "ko": "【공격시】이 몬스터가 알을 공격하면 그 알의 카운터를 보통 1개 대신 6개 감소.",
+        "ko": "【공격 시】이 몬스터가 알을 공격하면 그 알의 카운터를 보통 1개 대신 6개 감소.",
         "en": "【On Attack】When this monster attacks an Egg, remove 6 counters from that Egg instead of the usual 1."
       },
       "after": {
@@ -4460,19 +4420,15 @@
     },
     "CHOSEN_KNIGHT": {
       "nameJa": "選ばれし剣士",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "0a10824331f3cb5659de38432a09f827c3679619d92273c6a03bf7adeefc1173",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "a9bb86e781504bfebd3e8daa7910fe9de493ae583b95bf16488bacd3e3dff105",
       "textSha256": "b78567bc574505f4af2f84aafd90f91f183e8fbb14f7f2c7291a7d29044a86aa",
       "hooks": {},
       "before": {
-        "ja": "【場にある間】自分のリフトの「カル」2枚につき、このモンスターの攻撃力+1・体力+1。\n\n【攻撃後】自分の「カル」2枚を自動でリフトへ送る（墓地、デッキ、手札の順）。",
-        "ko": "【필드에 있는 동안】자신의 리프트의 컬 2장당 이 몬스터의 공격력 +1, 체력 +1.\n\n【공격 후】자신의 컬 2장을 자동으로 리프트로 보낸다(묘지, 덱, 패 순서).",
-        "en": "【While on the Field】This monster gets +1 ATK and +1 HP for every 2 Culls in your Rift.\n\n【After Attack】Automatically send 2 of your Culls to your Rift, taking from graveyard, deck, then hand."
+        "ja": "【場にある間】自分のリフトの「カル」1枚につき攻撃力と最大体力が1上がる。このモンスターが戦闘を行うたび、気合用カウンターを1個得る。",
+        "ko": "【필드에 있는 동안】자신의 리프트의 컬 1장당 공격력과 최대 체력이 1 증가한다. 이 몬스터가 전투할 때마다 기합 카운터를 1개 얻는다.",
+        "en": "【While on the Field】Gain 1 ATK and maximum HP per Cull in your Rift. Whenever this monster fights, it gains 1 Guts counter."
       },
       "after": {
         "ja": "【場にある間】自分のリフトの「カル」1枚につき攻撃力と最大体力が1上がる。このモンスターが戦闘を行うたび、気合用カウンターを1個得る。",
@@ -4697,25 +4653,26 @@
     },
     "HALF_ELF": {
       "nameJa": "ハーフエルフ",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
-        "ko"
+        "ko",
+        "en"
       ],
       "definitionSha256": "97bb6abf49ba6fbb8a727f5e442fd16f5a432c2fd1331bb1b3433abda75aec59",
-      "textSha256": "354c1e6e7fca08f51671b50d4ed2f453cc17c700acc279d03bd8d25554cc0443",
+      "textSha256": "7e98635a23a256509409fd9175fdbb1678a1a5ff4c1a01f470033a90a5b5f1fb",
       "hooks": {
         "onSummon": "halfElf"
       },
       "before": {
-        "ja": "【召喚時】自分の場に「世界樹」系カードがあれば、「世界樹の慈しみ」を自分の場に展開する。\n\n【場にいる間】どちらかの場に「世界樹」系カードがあれば、このモンスターの攻撃力+3。",
-        "ko": "【소환시】자신의 필드에 세계수 계열 카드가 있으면 세계수의 보살핌을 자신의 필드에 전개한다.\n\n【필드에 있는 동안】어느 쪽 필드에 세계수 계열 카드가 있으면 이 몬스터 공격력 +3.",
-        "en": "【On Summon】If you control a World Tree-family card, deploy World Tree's Care to your field.\n\n【While on the Field】If either player controls a World Tree-family card, this monster gets +3 ATK."
-      },
-      "after": {
         "ja": "【召喚時】自分の場に「世界樹」系カードがあれば、「世界樹の慈しみ」を自分の場に展開する。\n\n【場にある間】どちらかの場に「世界樹」系カードがあれば、このモンスターの攻撃力+3。",
         "ko": "【소환 시】자신의 필드에 세계수 계열 카드가 있으면 세계수의 보살핌을 자신의 필드에 전개한다.\n\n【필드에 있는 동안】어느 쪽 필드에 세계수 계열 카드가 있으면 이 몬스터 공격력 +3.",
         "en": "【On Summon】If you control a World Tree-family card, deploy World Tree's Care to your field.\n\n【While on the Field】If either player controls a World Tree-family card, this monster gets +3 ATK."
+      },
+      "after": {
+        "ja": "【召喚時】自分の場に「世界樹」系カードがあれば、「世界樹の慈しみ」を自分の場に展開する。\n\n【場にある間】どちらかの場に「世界樹」系カードがあれば、このモンスターの攻撃力+3・体力+2。",
+        "ko": "【소환 시】자신의 필드에 세계수 계열 카드가 있으면 세계수의 보살핌을 자신의 필드에 전개한다.\n\n【필드에 있는 동안】어느 쪽 필드에 세계수 계열 카드가 있으면 이 몬스터 공격력 +3, 체력 +2.",
+        "en": "【On Summon】If you control a World Tree-family card, deploy World Tree's Care to your field.\n\n【While on the Field】If either player controls a World Tree-family card, this monster gets +3 ATK and +2 HP."
       }
     },
     "LEGEND_GAMBLER": {
@@ -4819,26 +4776,27 @@
     },
     "ELDER_ELF_KING": {
       "nameJa": "エルダーハイエルフキング",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
-        "ko"
+        "ko",
+        "en"
       ],
       "definitionSha256": "305d775635202b3205e00e427a1e6dbae7b799d0169e65dc49842b5e11e6ec12",
-      "textSha256": "0a5d0da8ca9540f8515a6f81fed7d5a4699255f446016b814d7860eacfa01730",
+      "textSha256": "f4bd512d49c23e334fa313c94308b5e64adb3570b7bbfb9990bef4645b66c8b4",
       "hooks": {
         "onSummon": "elderDew",
         "summonReq": "dew12"
       },
       "before": {
-        "ja": "【召喚条件】自分の雫12以上。\n\n【召喚時】自分の雫12を消費する。その後、相手の場の全モンスターを破壊する。\n\n【場にいる間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+4・体力+4。相手がターン中にプレイできるカードは最大3枚。\n\n【破壊時】自分の雫が15以上あれば、雫15を消費して相手に20ダメージを与える。",
-        "ko": "【소환 조건】자신의 이슬이 12 이상이다.\n\n【소환시】자신의 이슬 12를 소비한다. 그 후 상대 필드의 모든 몬스터를 파괴한다.\n\n【필드에 있는 동안】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +4, 체력 +4. 상대는 각 턴에 카드를 최대 3장 사용할 수 있다.\n\n【파괴시】자신의 이슬이 15 이상이면 이슬 15를 소비하고 상대에게 20 데미지를 준다.",
-        "en": "【Summon Requirement】You have at least 12 Dew.\n\n【On Summon】Spend 12 Dew. Then destroy all enemy monsters.\n\n【While on the Field】This monster gets +4 ATK and +4 HP per distinct World Tree card name on your field. The opponent may play at most 3 cards per turn.\n\n【On Destruction】If you have at least 15 Dew, spend 15 Dew and deal 20 damage to the opponent."
-      },
-      "after": {
         "ja": "【召喚条件】自分の雫が12以上ある。\n\n【召喚時】自分の雫12を消費する。その後、相手の場の全モンスターを破壊する。\n\n【場にある間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+4・体力+4。相手がターン中に使用できるカードは最大3枚。\n\n【破壊時】自分の雫が15以上あれば、雫15を消費して相手に20ダメージを与える。",
         "ko": "【소환 조건】자신의 이슬이 12 이상이다.\n\n【소환 시】자신의 이슬 12를 소비한다. 그 후 상대 필드의 모든 몬스터를 파괴한다.\n\n【필드에 있는 동안】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +4, 체력 +4. 상대는 각 턴에 카드를 최대 3장 사용할 수 있다.\n\n【파괴 시】자신의 이슬이 15 이상이면 이슬 15를 소비하고 상대에게 20 데미지를 준다.",
         "en": "【Summon Requirement】You have at least 12 Dew.\n\n【On Summon】Spend 12 Dew. Then destroy all enemy monsters.\n\n【While on the Field】This monster gets +4 ATK and +4 HP per distinct World Tree card name on your field. The opponent may play at most 3 cards per turn.\n\n【On Destruction】If you have at least 15 Dew, spend 15 Dew and deal 20 damage to the opponent."
+      },
+      "after": {
+        "ja": "【召喚条件】自分の雫が12以上ある。\n\n【召喚時】自分の雫12を消費する。その後、相手の場の全モンスターを破壊する。\n\n【場にある間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+4・体力+4。相手がターン中に使用できるカードは最大3枚。\n\n【破壊時】自分の雫が5以上あれば、雫5を消費して相手に烙印カウンター5個を付与する。",
+        "ko": "【소환 조건】자신의 이슬이 12 이상이다.\n\n【소환 시】자신의 이슬 12를 소비한다. 그 후 상대 필드의 모든 몬스터를 파괴한다.\n\n【필드에 있는 동안】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +4, 체력 +4. 상대는 각 턴에 카드를 최대 3장 사용할 수 있다.\n\n【파괴 시】자신의 이슬이 5 이상이면 이슬 5를 소비하고 상대에게 낙인 카운터 5개를 부여한다.",
+        "en": "【Summon Requirement】You have at least 12 Dew.\n\n【On Summon】Spend 12 Dew. Then destroy all enemy monsters.\n\n【While on the Field】This monster gets +4 ATK and +4 HP per distinct World Tree card name on your field. The opponent may play at most 3 cards per turn.\n\n【On Destruction】If you have at least 5 Dew, spend 5 Dew and give the opponent 5 Brand counters."
       }
     },
     "WORLD_CARE": {
@@ -5203,25 +5161,27 @@
     },
     "TPO1": {
       "nameJa": "飢えた仔獣",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "c1ad01e42e514036d7ef4091c4f23f6af62368766663bbdad190a9f5a1667af9",
-      "textSha256": "b20ff209465b8d3c1430037f727a2cc31a69e80831447c54597542a0d553b9da",
+      "definitionSha256": "a3e88a70775dc94e0f466358db2bd0cbe0a291fa411ead1283a4d39f61b79600",
+      "textSha256": "d75f8d8b72d32d851d65fb5f963ec281ecc18d57719d88eb3070ca21971ba349",
       "hooks": {
         "onSummon": "preyBounce",
-        "summonReq": "preyLow2"
+        "summonReq": "preyLow3"
       },
       "before": {
         "ja": "【召喚条件】相手の場に購入コスト2以下のモンスターがいる。\n\n【召喚時】相手の場の、オーラを持たない購入コスト2以下のモンスター1体を選び、相手の手札に戻す。",
-        "ko": "【소환 조건】상대의 필드에 구매 코스트 2 이하 몬스터가 있다.\n\n【소환시】상대의 필드에서 아우라가 없는 구매 코스트 2 이하 몬스터 1체를 선택해 상대의 패로 되돌린다.",
+        "ko": "【소환 조건】상대의 필드에 구매 코스트 2 이하 몬스터가 있다.\n\n【소환 시】상대의 필드에서 아우라가 없는 구매 코스트 2 이하 몬스터 1체를 선택해 상대의 패로 되돌린다.",
         "en": "【Summon Requirement】The opponent controls a monster with purchase cost 2 or less.\n\n【On Summon】Choose 1 such enemy monster without Aura and return it to the opponent's hand."
       },
       "after": {
-        "ja": "【召喚条件】相手の場に購入コスト2以下のモンスターがいる。\n\n【召喚時】相手の場の、オーラを持たない購入コスト2以下のモンスター1体を選び、相手の手札に戻す。",
-        "ko": "【소환 조건】상대의 필드에 구매 코스트 2 이하 몬스터가 있다.\n\n【소환 시】상대의 필드에서 아우라가 없는 구매 코스트 2 이하 몬스터 1체를 선택해 상대의 패로 되돌린다.",
-        "en": "【Summon Requirement】The opponent controls a monster with purchase cost 2 or less.\n\n【On Summon】Choose 1 such enemy monster without Aura and return it to the opponent's hand."
+        "ja": "【召喚条件】相手の場に購入コスト3以下のモンスターがいる。\n\n【召喚時】相手の場の、オーラを持たない購入コスト3以下のモンスター1体を選び、相手の手札に戻す。",
+        "ko": "【소환 조건】상대의 필드에 구매 코스트 3 이하 몬스터가 있다.\n\n【소환 시】상대의 필드에서 아우라가 없는 구매 코스트 3 이하 몬스터 1체를 선택해 상대의 패로 되돌린다.",
+        "en": "【Summon Requirement】The opponent controls a monster with purchase cost 3 or less.\n\n【On Summon】Choose 1 such enemy monster without Aura and return it to the opponent's hand."
       }
     },
     "TSO1": {
@@ -5276,29 +5236,24 @@
     },
     "TDE1": {
       "nameJa": "魔族の斥候",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "3f42bba29c2271491bb5ed84a021214ddd3288d8418f6d5f2dddf52aa9bbc93f",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "d020a9ace8214fad48fbafaceb824b25c978ebb15887c62f4f5b3f28084ea399",
       "textSha256": "f01fe5e5405893000b644df55db0027d43bbd7a8c8253cedfea0847436912014",
       "hooks": {
         "onSummon": "manaDebt5",
         "summonReq": "mm5"
       },
       "before": {
-        "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【召喚時】自分のマナ水晶-1。双方通算10ターン後のターン開始時に、自分のマナ水晶+1（このモンスターが場を離れても戻る）。",
-        "ko": "【소환 조건】자신의 마나 수정 5 이상.\n\n【소환 시】자신의 마나 수정 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 마나 수정 +1(이 몬스터가 필드를 떠나도 복구).",
-        "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【On Summon】Reduce your mana crystals by 1. At turn start 10 total turns later, counting both players, increase your mana crystals by 1, even if this monster has left."
+        "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【召喚時】自分のマナ水晶-1。双方通算10ターン後のターン開始時に、自分のマナ水晶+1（このモンスターが場を離れても戻る）。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+        "ko": "【소환 조건】자신의 마나 수정 5 이상.\n\n【소환 시】자신의 마나 수정 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 마나 수정 +1(이 몬스터가 필드를 떠나도 복구).\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
+        "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【On Summon】Reduce your mana crystals by 1. At turn start 10 total turns later, counting both players, increase your mana crystals by 1, even if this monster has left.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
       },
       "after": {
         "ja": "【召喚条件】自分のマナ水晶が5以上。\n\n【召喚時】自分のマナ水晶-1。双方通算10ターン後のターン開始時に、自分のマナ水晶+1（このモンスターが場を離れても戻る）。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
         "ko": "【소환 조건】자신의 마나 수정 5 이상.\n\n【소환 시】자신의 마나 수정 -1. 양쪽 합계 10턴 후 턴 시작시 자신의 마나 수정 +1(이 몬스터가 필드를 떠나도 복구).\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
         "en": "【Summon Requirement】Your mana crystals are at least 5.\n\n【On Summon】Reduce your mana crystals by 1. At turn start 10 total turns later, counting both players, increase your mana crystals by 1, even if this monster has left.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
-      },
-      "reviewedAt": "2026-10-31"
+      }
     },
     "TDE2": {
       "nameJa": "魔族の戦士",
@@ -5328,21 +5283,17 @@
     },
     "TDE3": {
       "nameJa": "魔族の狂戦士",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "b0301344fe77d1ce6daafb9d52054f4d5e65320de2393aaf207532746cb0bcc0",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "4c305891322be16c7ca46b26e38c92fdeb757d84fbe406578456077117a6de9b",
       "textSha256": "3cebb4996a32f0338de2be37d5cb0940fbd6a41fd4c85551d31563acb21128ac",
       "hooks": {
         "turnFx": "demonRoll"
       },
       "before": {
-        "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分のマナ水晶を1減らし、4～6なら2減らす。この効果では3未満にならない。",
-        "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 마나 수정을 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.",
-        "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your mana crystals by 1; on 4–6, reduce them by 2. This effect cannot reduce them below 3."
+        "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分のマナ水晶を1減らし、4～6なら2減らす。この効果では3未満にならない。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
+        "ko": "【자신의 턴 시작 시】주사위 1개를 굴린다. 1~3이면 자신의 마나 수정을 1 줄이고, 4~6이면 2 줄인다. 이 효과로 3 미만이 되지는 않는다.\n\n【공격 시】이 몬스터가 상대 플레이어에 대한 직접 공격에 성공하면 상대에게 낙인 카운터 1개를 준다. 실드가 데미지를 전부 막아도 준다.",
+        "en": "【At the Start of Your Turn】Roll 1 die. On 1–3, reduce your mana crystals by 1; on 4–6, reduce them by 2. This effect cannot reduce them below 3.\n\n【On Attack】When this monster lands a direct attack on the opponent, give the opponent 1 Brand counter. This applies even if Shield absorbs all the damage."
       },
       "after": {
         "ja": "【自分のターン開始時】ダイス1個を振る。1～3なら自分のマナ水晶を1減らし、4～6なら2減らす。この効果では3未満にならない。\n\n【攻撃時】このモンスターが相手プレイヤーへの直接攻撃に成功した場合、相手に烙印カウンター1個を付与する。シールドでダメージを全て防がれた場合も付与する。",
@@ -5572,31 +5523,29 @@
     },
     "WORLD_TREE": {
       "nameJa": "世界樹",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "e34caae564b5e076f2dd5d9aa401832e3b8edefbe114ffa65d9e046276958663",
-      "textSha256": "8c7896b99a1da68087d44a83687a57be25d4d67a2408a8d06e8559634c0c7332",
+      "definitionSha256": "5375c72c5cc2e3073d5ef0fc08febfadd58f34996c71433a9e1953bd054f64e6",
+      "textSha256": "75a3fa8b5c50de9579d96b86a8c45b9f547ab239b0f17faf466bb0fc45ab023f",
       "hooks": {
         "onSummon": "worldTreeDew",
         "turnFx": "worldTree",
         "summonReq": "dew8"
       },
       "before": {
-        "ja": "【召喚条件】自分の雫が8以上ある。\n\n【召喚時】自分の雫8を消費する。\n\n【場にある間】自分の雫によるターン開始時の回復量を2倍にする。この倍率は「世界樹」が複数あっても重複しない。\n\n【自分のモンスター攻撃時】自分のモンスターが攻撃する時、雫1を消費してそのモンスターの攻撃力+3（持続）にしてよい。\n\n【自分のモンスター被攻撃時】自分のモンスターが攻撃される時、雫1を消費してそのモンスターの体力+3（持続）にしてよい。\n\n【自分のターン開始時】自分は雫3を得る。",
-        "ko": "【소환 조건】자신의 이슬이 8 이상이다.\n\n【소환 시】자신의 이슬 8을 소비한다.\n\n【필드에 있는 동안】자신의 이슬에 의한 턴 시작 회복량을 2배로 만든다. 세계수가 여러 체 있어도 이 배율은 중첩되지 않는다.\n\n【자신의 몬스터 공격 시】자신의 몬스터가 공격할 때, 이슬 1을 소비해 그 몬스터의 공격력 +3(지속)을 적용할 수 있다.\n\n【자신의 몬스터가 공격받을 때】자신의 몬스터가 공격받을 때, 이슬 1을 소비해 그 몬스터의 체력 +3(지속)을 적용할 수 있다.\n\n【자신의 턴 시작 시】자신은 이슬 3을 얻는다.",
-        "en": "【Summon Requirement】You have at least 8 Dew.\n\n【On Summon】Spend 8 Dew.\n\n【While on the Field】Double your turn-start healing from Dew. This multiplier does not stack with additional World Trees.\n\n【When Your Monster Attacks】When your monster attacks, you may spend 1 Dew to give it +3 ATK (lasting).\n\n【When Your Monster Is Attacked】When your monster is attacked, you may spend 1 Dew to give it +3 HP (lasting).\n\n【At the Start of Your Turn】Gain 3 Dew."
-      },
-      "after": {
         "ja": "【召喚条件】自分の雫が8以上ある。\n\n【召喚時】自分の雫8を消費する。\n\n【場にある間】自分の雫によるターン開始時の回復量を2倍にする。この倍率は「世界樹」が複数あっても重複しない。\n\n【自分のモンスター攻撃時】自分のモンスターが攻撃する時、雫1を消費してそのモンスターの攻撃力+3（対象が場を離れるまで）にしてよい。\n\n【自分のモンスター被攻撃時】自分のモンスターが攻撃される時、雫1を消費してそのモンスターの体力+3（対象が場を離れるまで）にしてよい。\n\n【自分のターン開始時】自分は雫3を得る。",
         "ko": "【소환 조건】자신의 이슬이 8 이상이다.\n\n【소환 시】자신의 이슬 8을 소비한다.\n\n【필드에 있는 동안】자신의 이슬에 의한 턴 시작 회복량을 2배로 만든다. 세계수가 여러 체 있어도 이 배율은 중첩되지 않는다.\n\n【자신의 몬스터 공격 시】자신의 몬스터가 공격할 때, 이슬 1을 소비해 그 몬스터의 공격력 +3(효과를 받은 몬스터가 필드를 떠날 때까지)을 적용할 수 있다.\n\n【자신의 몬스터가 공격받을 때】자신의 몬스터가 공격받을 때, 이슬 1을 소비해 그 몬스터의 체력 +3(효과를 받은 몬스터가 필드를 떠날 때까지)을 적용할 수 있다.\n\n【자신의 턴 시작 시】자신은 이슬 3을 얻는다.",
         "en": "【Summon Requirement】You have at least 8 Dew.\n\n【On Summon】Spend 8 Dew.\n\n【While on the Field】Double your turn-start healing from Dew. This multiplier does not stack with additional World Trees.\n\n【When Your Monster Attacks】When your monster attacks, you may spend 1 Dew to give it +3 ATK (until the affected monster leaves the field).\n\n【When Your Monster Is Attacked】When your monster is attacked, you may spend 1 Dew to give it +3 HP (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Gain 3 Dew."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【召喚条件】自分の雫が8以上ある。\n\n【召喚時】自分の雫8を消費する。\n\n【場にある間】自分の雫によるターン開始時の回復量を2倍にする。この倍率は「世界樹」が複数あっても重複しない。\n\n【自分のモンスター攻撃時】自分のモンスターが攻撃する時、雫1を消費してそのモンスターの攻撃力+6（対象が場を離れるまで）にしてよい。\n\n【自分のモンスター被攻撃時】自分のモンスターが攻撃される時、雫1を消費してそのモンスターの体力+6（対象が場を離れるまで）にしてよい。\n\n【自分のターン開始時】自分は雫3を得る。",
+        "ko": "【소환 조건】자신의 이슬이 8 이상이다.\n\n【소환 시】자신의 이슬 8을 소비한다.\n\n【필드에 있는 동안】자신의 이슬에 의한 턴 시작 회복량을 2배로 만든다. 세계수가 여러 체 있어도 이 배율은 중첩되지 않는다.\n\n【자신의 몬스터 공격 시】자신의 몬스터가 공격할 때, 이슬 1을 소비해 그 몬스터의 공격력 +6(효과를 받은 몬스터가 필드를 떠날 때까지)을 적용할 수 있다.\n\n【자신의 몬스터가 공격받을 때】자신의 몬스터가 공격받을 때, 이슬 1을 소비해 그 몬스터의 체력 +6(효과를 받은 몬스터가 필드를 떠날 때까지)을 적용할 수 있다.\n\n【자신의 턴 시작 시】자신은 이슬 3을 얻는다.",
+        "en": "【Summon Requirement】You have at least 8 Dew.\n\n【On Summon】Spend 8 Dew.\n\n【While on the Field】Double your turn-start healing from Dew. This multiplier does not stack with additional World Trees.\n\n【When Your Monster Attacks】When your monster attacks, you may spend 1 Dew to give it +6 ATK (until the affected monster leaves the field).\n\n【When Your Monster Is Attacked】When your monster is attacked, you may spend 1 Dew to give it +6 HP (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Gain 3 Dew."
+      }
     },
     "CURSE": {
       "nameJa": "呪い",
@@ -5950,33 +5899,21 @@
     },
     "KNIGHT_TEACH": {
       "nameJa": "ゴーレムキングの教え",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "6da5a2446b831302729e31e64c23eaa1a9dcab49ca6bd8a56f0f06e98142d47d",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "be3237e81dbdba550b88181cb4c35c4b9cb4b937b780ed5751652f4109c9027e",
       "textSha256": "35acddb042f463b3cdddf492215dc2a5112d3cbadba6076460018292551eade2",
       "hooks": {},
       "before": {
-        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
-        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(지속).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
-        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n既に気合を持つ：気合用カウンターを3個追加する。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (until the affected monster leaves the field).\nAlready has Guts: add 3 counters for Guts."
       },
       "after": {
         "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（対象が場を離れるまで）。\n既に気合を持つ：気合用カウンターを3個追加する。",
         "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
         "en": "【Play Requirement】You control a monster.\n\n【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (until the affected monster leaves the field).\nAlready has Guts: add 3 counters for Guts."
-      },
-      "amendment": "2026-10-29: effect and requirement audit",
-      "amendmentBefore": {
-        "ja": "【発動時】現在自分の場にいる各モンスターに、次のいずれかを適用する。\n気合を持たない：気合と気合用カウンター1個を付与する（持続）。\n既に気合を持つ：気合用カウンターを3個追加する。",
-        "ko": "【발동 시】현재 자신의 필드에 있는 각 몬스터에 다음 중 해당하는 효과를 적용한다.\n기합이 없다: 기합과 기합용 카운터 1개를 부여한다(지속).\n이미 기합이 있다: 기합용 카운터 3개를 추가한다.",
-        "en": "【On Cast】Apply the matching effect to each monster currently on your field.\nWithout Guts: give it Guts and 1 counter for Guts (lasting).\nAlready has Guts: add 3 counters for Guts."
-      },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      }
     },
     "DUNGEON": {
       "nameJa": "生きているダンジョン",
@@ -7178,26 +7115,26 @@
     },
     "MIMIC_HUNTER": {
       "nameJa": "ミミックハンター",
-      "status": "reworked",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "edac6b101691584a0831dc98e4c723f56c36f7e496f0afc18f82a3a3e83d9b16",
-      "textSha256": "da0fd7f8d944feb728dba2ef586aa9af306d5fe95b73d8ec18338b929af867e1",
+      "textSha256": "bc1107139f506a7656d8f61a71d72820c5fafc4d851b833cc2ffb2d48708ac17",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
-        "ja": "【自分のターン終了時】両方の場の「ミミック」を全て破壊する（同名カードのみ）。",
-        "ko": "【자신의 턴 종료 시】양쪽 필드의 미믹을 모두 파괴한다(같은 이름 카드만).",
-        "en": "【At the End of Your Turn】Destroy all monsters named Mimic on both fields; other Mimic-family names are unaffected."
-      },
-      "after": {
         "ja": "【場にある間】両方の場のミミック系モンスターは攻撃できない。\n\n【攻撃を受ける時】攻撃してきたミミック系モンスターに、戦闘のダメージ計算前に6ダメージを与える。",
         "ko": "【필드에 있는 동안】양쪽 필드의 미믹 계열 몬스터는 공격할 수 없다.\n\n【공격받을 때】공격한 미믹 계열 몬스터에게 전투 데미지 계산 전에 6 데미지를 준다.",
         "en": "【While on the Field】Mimic-family monsters on either field cannot attack.\n\n【When Attacked】Deal 6 damage to an attacking Mimic-family monster before combat damage is calculated."
+      },
+      "after": {
+        "ja": "【場にある間】両方の場のミミック系モンスターは攻撃できない。\n\n【攻撃時】攻撃対象のミミック系モンスターに、戦闘のダメージ計算前に6ダメージを与える。",
+        "ko": "【필드에 있는 동안】양쪽 필드의 미믹 계열 몬스터는 공격할 수 없다.\n\n【공격 시】미믹 계열 몬스터를 공격하면 전투 데미지 계산 전에 그 몬스터에게 6 데미지를 준다.",
+        "en": "【While on the Field】Mimic-family monsters on either field cannot attack.\n\n【On Attack】When this monster attacks a Mimic-family monster, deal 6 damage to that monster before calculating combat damage."
       }
     },
     "QUICK_HELLFIRE": {
@@ -7461,24 +7398,26 @@
     },
     "POISON_MASTER": {
       "nameJa": "ポイズンマスター",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "cf6aac527f1bcbac6239c229630cfb1e3d1381669f6c74cef0229a0f0ea96e17",
-      "textSha256": "4e3b2e9edbe271bde6a8e2353ac35617c180e039f70dad3b71570c7193773783",
+      "definitionSha256": "9000825fdc0e6f66c33d83749b459bc56e60627a7536ac2635c7bafb2967d150",
+      "textSha256": "1edf4890600c0b846b20567eef788860a54866aa889955eb348597327becbb82",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
         "ja": "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。",
-        "ko": "【공격시】공격 대상 상대 몬스터에 카운터 2개 추가 부여한다(부패 처리).",
+        "ko": "【공격 시】공격 대상 상대 몬스터에 카운터 2개 추가 부여한다(부패 처리).",
         "en": "【On Attack】Put 2 additional counters on the enemy monster this monster attacks, applying Decay rules."
       },
       "after": {
-        "ja": "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。",
-        "ko": "【공격 시】공격 대상 상대 몬스터에 카운터 2개 추가 부여한다(부패 처리).",
-        "en": "【On Attack】Put 2 additional counters on the enemy monster this monster attacks, applying Decay rules."
+        "ja": "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。\n\n【場にある間】相手の場のモンスターが腐敗で破壊されるたび、相手に烙印を1つ付与する。このモンスターが相手モンスターを破壊するたび、このモンスターの体力+5。",
+        "ko": "【공격 시】공격 대상 상대 몬스터에 카운터 2개 추가 부여한다(부패 처리).\n\n【필드에 있는 동안】상대 필드의 몬스터가 부패로 파괴될 때마다 상대에게 낙인 1개를 부여한다. 이 몬스터가 상대 몬스터를 파괴할 때마다 이 몬스터의 체력 +5.",
+        "en": "【On Attack】Put 2 additional counters on the enemy monster this monster attacks, applying Decay rules.\n\n【While on the Field】Whenever an enemy monster is destroyed by Decay, give the opponent 1 Brand. Whenever this monster destroys an enemy monster, it gains +5 HP."
       }
     },
     "ADVANCE": {
@@ -8019,29 +7958,23 @@
     },
     "FIRE_MASTER": {
       "nameJa": "ファイアーマスター",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "f555140a208c48f3ef6e3cf7232421128541be7fa54f082ee52e9b45652f5523",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "8b09def3a42bd1d2efa7bb5b40f84291ff3b11ba033f83e916693f94c254fbf4",
       "textSha256": "352b69803aa0c6ef12229e075daa0258b58df590badc1178f68cc18821402a42",
       "hooks": {
         "onSummon": "expansion"
       },
       "before": {
-        "ja": "【場にある間】自分の「ファイアー魔法」の発動コスト-2（最低0）。\n\n【破壊時】自分のデッキ・墓地から「ファイアー魔法」を合計2枚選び、手札に加える（1枚しかなければその1枚）。",
-        "ko": "【필드에 있는 동안】자신 파이어 마법 발동 코스트 -2(최저 0).\n\n【파괴 시】자신의 덱·묘지에서 파이어 마법 합계 2장을 선택해 패에 추가한다(1장뿐이면 그 1장).",
-        "en": "【While on the Field】Reduce the cast cost of your Fire spells by 2, to a minimum of 0.\n\n【On Destruction】Choose 2 Fire spells from your deck and graveyard combined and add them to your hand; if only 1 exists, take that 1."
+        "ja": "【場にある間】自分の「ファイアー魔法」の発動コスト-2（最低0）。このモンスターが相手プレイヤーを直接攻撃した時、そのプレイヤーに烙印カウンター1個を付与する。\n\n【自分のターン終了時】このターン、自分がファイアー魔法を一度も使用していなければ、自分の手札を全て墓地に送る。\n\n【破壊時】自分のデッキ・墓地から「ファイアー魔法」を合計2枚選び、手札に加える（1枚しかなければその1枚）。",
+        "ko": "【필드에 있는 동안】자신 파이어 마법 발동 코스트 -2(최저 0). 이 몬스터가 상대 플레이어를 직접 공격하면 그 플레이어에게 낙인 카운터 1개를 준다.\n\n【자신의 턴 종료 시】이번 턴 자신이 파이어 마법을 한 번도 사용하지 않았다면 자신의 패를 전부 묘지로 보낸다.\n\n【파괴 시】자신의 덱·묘지에서 파이어 마법 합계 2장을 선택해 패에 추가한다(1장뿐이면 그 1장).",
+        "en": "【While on the Field】Reduce the cast cost of your Fire spells by 2, to a minimum of 0. When this monster directly attacks the opponent, give that player 1 Brand counter.\n\n【At the End of Your Turn】If you used no Fire spells this turn, send your entire hand to your graveyard.\n\n【On Destruction】Choose 2 Fire spells from your deck and graveyard combined and add them to your hand; if only 1 exists, take that 1."
       },
       "after": {
         "ja": "【場にある間】自分の「ファイアー魔法」の発動コスト-2（最低0）。このモンスターが相手プレイヤーを直接攻撃した時、そのプレイヤーに烙印カウンター1個を付与する。\n\n【自分のターン終了時】このターン、自分がファイアー魔法を一度も使用していなければ、自分の手札を全て墓地に送る。\n\n【破壊時】自分のデッキ・墓地から「ファイアー魔法」を合計2枚選び、手札に加える（1枚しかなければその1枚）。",
         "ko": "【필드에 있는 동안】자신 파이어 마법 발동 코스트 -2(최저 0). 이 몬스터가 상대 플레이어를 직접 공격하면 그 플레이어에게 낙인 카운터 1개를 준다.\n\n【자신의 턴 종료 시】이번 턴 자신이 파이어 마법을 한 번도 사용하지 않았다면 자신의 패를 전부 묘지로 보낸다.\n\n【파괴 시】자신의 덱·묘지에서 파이어 마법 합계 2장을 선택해 패에 추가한다(1장뿐이면 그 1장).",
         "en": "【While on the Field】Reduce the cast cost of your Fire spells by 2, to a minimum of 0. When this monster directly attacks the opponent, give that player 1 Brand counter.\n\n【At the End of Your Turn】If you used no Fire spells this turn, send your entire hand to your graveyard.\n\n【On Destruction】Choose 2 Fire spells from your deck and graveyard combined and add them to your hand; if only 1 exists, take that 1."
-      },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      }
     },
     "DOUBLE_UP": {
       "nameJa": "ダブルアップ",
@@ -8268,30 +8201,28 @@
     },
     "SALLY_WEAPONMASTER": {
       "nameJa": "サリィ - ウェポンマスター",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "3b99f2d542dfd63d561724604ddb5c44b7f07ef46387ccffc0ad5e55a88e0cc9",
-      "textSha256": "066619bacc940cb2fb43e3f9dbdc41e3845dea826c95b0ae03a12bc181e6bf55",
+      "textSha256": "810d6cc30e109779a41c51310612d7df609effe96e9055fbe5ed4c3a5ffeaf0e",
       "hooks": {
         "onSummon": "armorer",
         "turnFx": "weaponmaster"
       },
       "before": {
-        "ja": "【召喚時】「自分がシールド30を得る」か「自分の場の他のモンスター1体を選び、攻撃力+4・体力+4（持続）」を選ぶ。\n\n【自分のターン開始時】自分の場の「装備職人」1体ごとに、別々に自分がシールド5を得る。",
-        "ko": "【소환 시】자신의 실드 30 획득 또는 자신의 필드의 다른 몬스터 1체를 선택해 공격력 +4, 체력 +4(지속) 중 하나 선택한다.\n\n【자신의 턴 시작 시】자신의 필드의 장비 장인 1체마다 따로 자신이 실드 5 획득한다.",
-        "en": "【On Summon】Choose one: gain 30 Shield; or choose 1 other monster on your field and give it +4 ATK and +4 HP (lasting).\n\n【At the Start of Your Turn】For each Armorer on your field, gain 5 Shield separately."
-      },
-      "after": {
         "ja": "【召喚時】「自分がシールド30を得る」か「自分の場の他のモンスター1体を選び、攻撃力+4・体力+4（対象が場を離れるまで）」を選ぶ。\n\n【自分のターン開始時】自分の場の「装備職人」1体ごとに、別々に自分がシールド5を得る。",
         "ko": "【소환 시】자신의 실드 30 획득 또는 자신의 필드의 다른 몬스터 1체를 선택해 공격력 +4, 체력 +4(효과를 받은 몬스터가 필드를 떠날 때까지) 중 하나 선택한다.\n\n【자신의 턴 시작 시】자신의 필드의 장비 장인 1체마다 따로 자신이 실드 5 획득한다.",
         "en": "【On Summon】Choose one: gain 30 Shield; or choose 1 other monster on your field and give it +4 ATK and +4 HP (until the affected monster leaves the field).\n\n【At the Start of Your Turn】For each Armorer on your field, gain 5 Shield separately."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【召喚時】「自分がシールド30を得る」か「自分の場の他のモンスター1体を選び、攻撃力+4・体力+4（対象が場を離れるまで）」を選ぶ。\n\n【自分のターン開始時】自分の場の「装備職人」1体ごとに、別々に自分がシールド15を得る。",
+        "ko": "【소환 시】자신의 실드 30 획득 또는 자신의 필드의 다른 몬스터 1체를 선택해 공격력 +4, 체력 +4(효과를 받은 몬스터가 필드를 떠날 때까지) 중 하나 선택한다.\n\n【자신의 턴 시작 시】자신의 필드의 장비 장인 1체마다 따로 자신이 실드 15 획득한다.",
+        "en": "【On Summon】Choose one: gain 30 Shield; or choose 1 other monster on your field and give it +4 ATK and +4 HP (until the affected monster leaves the field).\n\n【At the Start of Your Turn】For each Armorer on your field, gain 15 Shield separately."
+      }
     },
     "PRIEST": {
       "nameJa": "神官",
@@ -8366,27 +8297,26 @@
     },
     "SHIELD_TITAN": {
       "nameJa": "盾の巨神",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "df25ecf2d76778443b4fb8da503440f585317e3fbdc10b6ec4580eec3393a173",
-      "textSha256": "48a4c2df08e0d409b313ae8b3fb3651fd8924d5f3018cd3638b807231d683e1e",
+      "definitionSha256": "e02da8e1646e200f23cf1f048d29b1967d54d7bbccae2de49215550a0f78c229",
+      "textSha256": "d33c91ec823f455c9a5e05676fbd34547086db965d802528d7d0d2f1ed2603d2",
       "hooks": {
-        "aura": "doubleShieldOther",
-        "summonReq": "shield20"
+        "aura": "doubleShieldOther"
       },
       "before": {
-        "ja": "【召喚条件】直前の相手ターン中にシールド20以上を保有した。\n\n【自分ターン終了時】シールド10を得る。\n\n【場にいる間】このモンスターの効果以外で自分が得るシールド量が2倍になる。",
-        "ko": "【소환 조건】직전 상대 턴 중 실드 20 이상 보유.\n\n【자신 턴 종료시】실드 10 획득한다.\n\n【필드에 있는 동안】이 몬스터 외 효과로 자신이 얻는 실드 양 2배.",
-        "en": "【Summon Requirement】You held at least 20 Shield at some point during the opponent’s previous turn.\n\n【Your Turn End】Gain 10 Shield.\n\n【While on the Field】Double Shield you gain from sources other than this monster."
-      },
-      "after": {
         "ja": "【召喚条件】直前の相手のターン中にシールド20以上を保有した。\n\n【自分のターン終了時】シールド10を得る。\n\n【場にある間】このモンスターの効果以外で自分が得るシールド量が2倍になる。",
         "ko": "【소환 조건】직전 상대 턴 중 실드 20 이상 보유.\n\n【자신의 턴 종료 시】실드 10 획득한다.\n\n【필드에 있는 동안】이 몬스터 외 효과로 자신이 얻는 실드 양 2배.",
         "en": "【Summon Requirement】You held at least 20 Shield at some point during the opponent’s previous turn.\n\n【At the End of Your Turn】Gain 10 Shield.\n\n【While on the Field】Double Shield you gain from sources other than this monster."
+      },
+      "after": {
+        "ja": "【自分のターン終了時】シールド10を得る。\n\n【場にある間】このモンスターの効果以外で自分が得るシールド量が2倍になる。",
+        "ko": "【자신의 턴 종료 시】실드 10 획득한다.\n\n【필드에 있는 동안】이 몬스터 외 효과로 자신이 얻는 실드 양 2배.",
+        "en": "【At the End of Your Turn】Gain 10 Shield.\n\n【While on the Field】Double Shield you gain from sources other than this monster."
       }
     },
     "ARMOR_BREAK": {
@@ -8509,46 +8439,50 @@
     },
     "DEFENSIVE_STANCE": {
       "nameJa": "防御の姿勢",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "3d29a9ab8a7e9b1eff58681c322699eada50f699ed0bdc896bd4679c6ce00438",
-      "textSha256": "08a5aeeca23cd83cd409c9daba2af708eebc5106ebdcd108cb04b829693d7556",
+      "definitionSha256": "4dab36102f832541384cb0f54464ef76d4afd462bc4580c9600c0c17bd4e667b",
+      "textSha256": "95d9fd34f9b548b9a43d8af55a9e593bfde8a50a02c9a74be0e360c22f5b0677",
       "hooks": {
         "act": "golemShield"
       },
       "before": {
         "ja": "【発動時】自分はシールドを3＋（自分の場の「ゴーレム」系モンスターの種類数×2）得る（合計を1回で獲得）。",
-        "ko": "【발동시】자신은 실드를 3＋(자신의 필드의 골렘 계열 몬스터 종류 수×2) 획득(합계를 1회에 획득).",
+        "ko": "【발동 시】자신은 실드를 3＋(자신의 필드의 골렘 계열 몬스터 종류 수×2) 획득(합계를 1회에 획득).",
         "en": "【On Cast】Gain 3 plus 2 times the number of distinct Golem-family monster names on your field as Shield, in 1 gain."
       },
       "after": {
-        "ja": "【発動時】自分はシールドを3＋（自分の場の「ゴーレム」系モンスターの種類数×2）得る（合計を1回で獲得）。",
-        "ko": "【발동 시】자신은 실드를 3＋(자신의 필드의 골렘 계열 몬스터 종류 수×2) 획득(합계를 1회에 획득).",
-        "en": "【On Cast】Gain 3 plus 2 times the number of distinct Golem-family monster names on your field as Shield, in 1 gain."
+        "ja": "【発動時】自分はシールドを3＋（自分の場の「ゴーレム」系モンスターの種類数×3）得る（合計を1回で獲得）。",
+        "ko": "【발동 시】자신은 실드를 3＋(자신의 필드의 골렘 계열 몬스터 종류 수×3) 획득(합계를 1회에 획득).",
+        "en": "【On Cast】Gain 3 plus 3 times the number of distinct Golem-family monster names on your field as Shield, in 1 gain."
       }
     },
     "IRON_WALL": {
       "nameJa": "鉄壁",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "7b2c7d9a808041793b9bc60d55500f76a9f3f5e27d051361c3f6ef818c8915b6",
-      "textSha256": "084d7e97e26016875c33c7d9b525bf034bd56565029c00d7c3152e44c2575580",
+      "textSha256": "c9814a6b24d6d4922650a39c859a346fade42b43242099ab1e9641cf2051debe",
       "hooks": {
         "act": "golemShield"
       },
       "before": {
         "ja": "【発動時】自分はシールドを6＋（自分の場の「ゴーレム」系モンスターの種類数×3）得る（合計を1回で獲得）。",
-        "ko": "【발동시】자신은 실드를 6＋(자신의 필드의 골렘 계열 몬스터 종류 수×3) 획득(합계를 1회에 획득).",
+        "ko": "【발동 시】자신은 실드를 6＋(자신의 필드의 골렘 계열 몬스터 종류 수×3) 획득(합계를 1회에 획득).",
         "en": "【On Cast】Gain 6 plus 3 times the number of distinct Golem-family monster names on your field as Shield, in 1 gain."
       },
       "after": {
-        "ja": "【発動時】自分はシールドを6＋（自分の場の「ゴーレム」系モンスターの種類数×3）得る（合計を1回で獲得）。",
-        "ko": "【발동 시】자신은 실드를 6＋(자신의 필드의 골렘 계열 몬스터 종류 수×3) 획득(합계를 1회에 획득).",
-        "en": "【On Cast】Gain 6 plus 3 times the number of distinct Golem-family monster names on your field as Shield, in 1 gain."
+        "ja": "【発動時】自分はシールドを6＋（自分の場の「ゴーレム」系モンスターの種類数×3）得る（合計を1回で獲得）。\n\n【発動時】自分のデッキ構成に「防御の姿勢」があれば、さらにシールド15を得る。",
+        "ko": "【발동 시】자신은 실드를 6＋(자신의 필드의 골렘 계열 몬스터 종류 수×3) 획득(합계를 1회에 획득).\n\n【발동 시】자신의 덱 구성에 방어 태세가 있으면 실드를 15 추가로 얻는다.",
+        "en": "【On Cast】Gain 6 plus 3 times the number of distinct Golem-family monster names on your field as Shield, in 1 gain.\n\n【On Cast】If your deck composition contains Defensive Stance, gain 15 additional Shield."
       }
     },
     "DESERTIFICATION": {
@@ -9001,27 +8935,27 @@
     },
     "GOBLIN_LEADER": {
       "nameJa": "ゴブリンリーダー",
-      "status": "reworded",
+      "status": "november-balance-v90",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "437b3ae0c1c4d9c3ca8d58897813b8356b84c100f8dfd89065e0497e74696c03",
-      "textSha256": "b79bcae05417b5482b48f9a3c56924c9e7e0c4e6bdb27fc80a5f99e26d6b5d3b",
+      "textSha256": "03a5de5580d01178be46f73225dd72647f30b1e8a6a680fa1be529a9377277e1",
       "hooks": {
         "onSummon": "goblinLeader"
       },
       "before": {
         "ja": "【召喚時】自分の場の「ゴブリン」関連カードの枚数分、相手にダメージを与える。このモンスター自身と永続魔法も数える。",
-        "ko": "【소환 시】자신의 필드에 있는 고블린 계열 카드 수만큼 상대에게 데미지를 준다. 이 몬스터 자신과 지속 마법도 센다.",
-        "en": "【On Summon】Deal damage to the opponent equal to the number of Goblin-related cards on your field, including this monster and persistent spells."
-      },
-      "after": {
-        "ja": "【召喚時】自分の場の「ゴブリン」関連カードの枚数分、相手にダメージを与える。このモンスター自身と永続魔法も数える。",
         "ko": "【소환 시】자신의 필드에 있는 고블린 계열 카드 수만큼 상대에게 데미지를 준다. 이 몬스터 자신과 영구 마법도 센다.",
         "en": "【On Summon】Deal damage to the opponent equal to the number of Goblin-related cards on your field, including this monster and persistent spells."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【召喚時】自分の場の「ゴブリン」関連カードの枚数分、相手プレイヤーと相手の場の全モンスターにそれぞれダメージを与える。このモンスター自身と永続魔法も数える。",
+        "ko": "【소환 시】자신의 필드에 있는 고블린 계열 카드 수만큼 상대 플레이어와 상대 필드의 모든 몬스터에게 각각 데미지를 준다. 이 몬스터 자신과 영구마법도 센다.",
+        "en": "【On Summon】Deal damage to the opposing player and each enemy monster equal to the number of Goblin-related cards on your field, including this monster and persistent spells."
+      }
     },
     "GOBLIN_KING": {
       "nameJa": "ゴブリンキング",
@@ -9433,25 +9367,23 @@
     },
     "MUSTER_DIE": {
       "nameJa": "徴兵",
-      "status": "added",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "ec0c7d72e6f979491719466144235ea3a7cc26c06ce662627637be252472c4cb",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "a6b5871ad31fa8848fa0b98c64ab5b14430295539941e9723e05a69d64fd74f0",
       "textSha256": "554e49cf8c331541c35dfc5e5c74fb70fc8a7c184e5ad0d5581ef8ea6f4ee3dc",
       "hooks": {
         "act": "armyAttune"
       },
-      "before": null,
-      "after": {
+      "before": {
         "ja": "【発動時】ダイス1個を振る。1：反乱を自分の場に展開。2～4：兵士を1～3体召喚。5・6：砲撃兵を2・3体召喚。",
         "ko": "【발동 시】주사위 1개. 1: 자신의 필드에 반란 전개. 2~4: 병사 1~3체. 5·6: 포격병 2·3체 소환.",
         "en": "【On Cast】Roll a die. 1: deploy Rebellion. 2–4: summon one to three Soldiers. 5–6: summon two or three Gunners."
       },
-      "reviewedAt": "2026-11-11",
-      "reviewNote": "Army and Attune balance update."
+      "after": {
+        "ja": "【発動時】ダイス1個を振る。1：反乱を自分の場に展開。2～4：兵士を1～3体召喚。5・6：砲撃兵を2・3体召喚。",
+        "ko": "【발동 시】주사위 1개. 1: 자신의 필드에 반란 전개. 2~4: 병사 1~3체. 5·6: 포격병 2·3체 소환.",
+        "en": "【On Cast】Roll a die. 1: deploy Rebellion. 2–4: summon one to three Soldiers. 5–6: summon two or three Gunners."
+      }
     },
     "COUP": {
       "nameJa": "反乱",
@@ -9960,81 +9892,63 @@
     },
     "SWORD_GRAVE_WRAITH": {
       "nameJa": "剣豪の墓を彷徨う亡霊",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "0e1b6cc73cb36afc023286a7f8d18a5afbe0b7103caf3994959f8af857f687e6",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "a049467be4dfcdf05b7d564a35941dabd9179f8fb3e508e08000589dc0238db7",
       "textSha256": "0cac3d964cc59c624e980ca517031600bea6f78a9de6b309fc01b72c0c6f951c",
       "hooks": {
         "summonReq": "twentyCrystals"
       },
       "before": {
-        "ja": "【場にある間】召喚にはマナ水晶20以上が必要。兵士系はこのモンスターを攻撃できない。自分のデッキ構成にミニ精霊がいれば、魔法・モンスター効果でダメージを受けず破壊されず、腐敗カウンターも増えない。",
-        "ko": "【필드에 있는 동안】마나 수정 20개 이상이어야 소환. 병사 계열은 이 몬스터를 공격할 수 없다. 덱 구성에 미니 정령이 있으면 마법·몬스터 효과로 피해를 받거나 파괴되지 않고 부패 카운터를 받지 않는다.",
-        "en": "【While on the Field】Requires 20 mana crystals. Military monsters cannot attack it. With Mini Spirit in your deck composition, it is immune to spell and monster effect damage and destruction and gains no Decay counters."
+        "ja": "【召喚条件】マナ水晶20以上。\n\n【場にある間】兵士系はこのモンスターを攻撃できない。自分のデッキ構成にミニ精霊がいれば、魔法・モンスター効果でダメージを受けず破壊されず、腐敗カウンターも増えない。",
+        "ko": "【소환 조건】마나 수정 20개 이상.\n\n【필드에 있는 동안】병사 계열은 이 몬스터를 공격할 수 없다. 덱 구성에 미니 정령이 있으면 마법·몬스터 효과로 피해를 받거나 파괴되지 않고 부패 카운터를 받지 않는다.",
+        "en": "【Summon Requirement】Requires 20 mana crystals.\n\n【While on the Field】Military monsters cannot attack it. With Mini Spirit in your deck composition, it is immune to spell and monster effect damage and destruction and gains no Decay counters."
       },
       "after": {
         "ja": "【召喚条件】マナ水晶20以上。\n\n【場にある間】兵士系はこのモンスターを攻撃できない。自分のデッキ構成にミニ精霊がいれば、魔法・モンスター効果でダメージを受けず破壊されず、腐敗カウンターも増えない。",
         "ko": "【소환 조건】마나 수정 20개 이상.\n\n【필드에 있는 동안】병사 계열은 이 몬스터를 공격할 수 없다. 덱 구성에 미니 정령이 있으면 마법·몬스터 효과로 피해를 받거나 파괴되지 않고 부패 카운터를 받지 않는다.",
         "en": "【Summon Requirement】Requires 20 mana crystals.\n\n【While on the Field】Military monsters cannot attack it. With Mini Spirit in your deck composition, it is immune to spell and monster effect damage and destruction and gains no Decay counters."
-      },
-      "reviewedAt": "2026-11-11",
-      "reviewNote": "Army and Attune balance update."
+      }
     },
     "FATE_WRAITH": {
       "nameJa": "運命に逆らった亡霊",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "c6db9c09a516d238ae96fa2f267a1908ed950b5304ea7abdd79d3161475f479b",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "db334db43e858e8ff9ea122ee78f503bbe1376696e086df7bbd7bf042a7740fe",
       "textSha256": "ff78203ad127c6c9d04982e818c17a49e2cfce752bbcad4496e49eaae3a58707",
       "hooks": {
         "onSummon": "armyAttune"
       },
       "before": {
-        "ja": "【場にある間】召喚時、両者の手札を全て墓地に送り、両者のマナ水晶を3にする。相手の基本のアチューンに「自分の墓地に呪い1枚」を追加。自分のデッキ構成にミニ精霊がいれば自分のマナ水晶の下限は6になる。",
-        "ko": "【필드에 있는 동안】소환 시 양측 패를 전부 묘지로 보내고 양측 마나 수정을 3으로 한다. 상대 기본 어튠에 자기 묘지에 저주 1장 추가를 부여. 자신의 덱 구성에 미니 정령이 있으면 자신의 수정 하한은 6.",
-        "en": "【While on the Field】On summon both players discard their hands and set their mana crystals to 3. Opposing basic Attune also adds a Curse to its owner’s graveyard. With Mini Spirit in your deck composition your crystal floor becomes 6."
+        "ja": "【召喚時】両者の手札を全て墓地に送り、両者のマナ水晶を3にする。相手の基本のアチューンに「自分の墓地に呪い1枚」を追加。自分のデッキ構成にミニ精霊がいれば自分のマナ水晶の下限は6になる。",
+        "ko": "【소환 시】양측 패를 전부 묘지로 보내고 양측 마나 수정을 3으로 한다. 상대 기본 어튠에 자기 묘지에 저주 1장 추가를 부여. 자신의 덱 구성에 미니 정령이 있으면 자신의 수정 하한은 6.",
+        "en": "【On Summon】Both players discard their hands and set their mana crystals to 3. Opposing basic Attune also adds a Curse to its owner’s graveyard. With Mini Spirit in your deck composition your crystal floor becomes 6."
       },
       "after": {
         "ja": "【召喚時】両者の手札を全て墓地に送り、両者のマナ水晶を3にする。相手の基本のアチューンに「自分の墓地に呪い1枚」を追加。自分のデッキ構成にミニ精霊がいれば自分のマナ水晶の下限は6になる。",
         "ko": "【소환 시】양측 패를 전부 묘지로 보내고 양측 마나 수정을 3으로 한다. 상대 기본 어튠에 자기 묘지에 저주 1장 추가를 부여. 자신의 덱 구성에 미니 정령이 있으면 자신의 수정 하한은 6.",
         "en": "【On Summon】Both players discard their hands and set their mana crystals to 3. Opposing basic Attune also adds a Curse to its owner’s graveyard. With Mini Spirit in your deck composition your crystal floor becomes 6."
-      },
-      "reviewedAt": "2026-11-11",
-      "reviewNote": "Army and Attune balance update."
+      }
     },
     "TIME_WRAITH": {
       "nameJa": "時空を彷徨う亡霊",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "350b4a618993278acc5d1e477031a694c17b2eb8013a90984d3c3de016a4f299",
+      "status": "november-balance-v90",
+      "changedLocales": [],
+      "definitionSha256": "5808151de80facdebf93493030200ecfbc1a0b3d4a8e099cf1d24afd924fc79e",
       "textSha256": "e3f570aaa58a150fb4a92aa2e67a72396525ace0144ddc12c046a25c0a6449e2",
       "hooks": {
         "onSummon": "armyAttune"
       },
       "before": {
-        "ja": "【場にある間】召喚時、相手リフトの全カードを相手墓地に戻し、相手の永続魔法を3枚まで選びリフトへ送る。このカードが破壊した相手モンスターはリフトへ。相手によって破壊された時、次の相手ターンをスキップし、時空間操作1枚を自分の墓地に得る。",
-        "ko": "【필드에 있는 동안】소환 시 상대 리프트 전체를 상대 묘지로 되돌리고 상대 영구마법을 3장까지 골라 리프트로 보낸다. 이 카드가 파괴한 적 몬스터는 리프트로 보낸다. 상대에게 파괴되면 다음 상대 턴을 건너뛰고 시공간 조작을 자신의 묘지에 추가한다.",
-        "en": "【While on the Field】On summon return the opposing Rift to their graveyard, then choose up to three opposing persistent spells to send to the Rift. Enemies destroyed by this card go to the Rift. When destroyed by the opponent, skip their next turn and gain Spacetime Manipulation in your graveyard."
+        "ja": "【召喚時】相手リフトの全カードを相手墓地に戻し、相手の永続魔法を3枚まで選びリフトへ送る。\n\n【場にある間】このカードが破壊した相手モンスターはリフトへ。\n\n【破壊時】相手が破壊した場合、次の相手のターンをスキップし、時空間操作1枚を自分の墓地に得る。",
+        "ko": "【소환 시】상대 리프트 전체를 상대 묘지로 되돌리고 상대 영구마법을 3장까지 골라 리프트로 보낸다.\n\n【필드에 있는 동안】이 카드가 파괴한 적 몬스터는 리프트로 보낸다.\n\n【파괴 시】상대에게 파괴되면 다음 상대 턴을 건너뛰고 시공간 조작을 자신의 묘지에 추가한다.",
+        "en": "【On Summon】Return the opposing Rift to their graveyard, then choose up to three opposing persistent spells to send to the Rift.\n\n【While on the Field】Enemies destroyed by this card go to the Rift.\n\n【On Destruction】When destroyed by the opponent, skip their next turn and gain Spacetime Manipulation in your graveyard."
       },
       "after": {
         "ja": "【召喚時】相手リフトの全カードを相手墓地に戻し、相手の永続魔法を3枚まで選びリフトへ送る。\n\n【場にある間】このカードが破壊した相手モンスターはリフトへ。\n\n【破壊時】相手が破壊した場合、次の相手のターンをスキップし、時空間操作1枚を自分の墓地に得る。",
         "ko": "【소환 시】상대 리프트 전체를 상대 묘지로 되돌리고 상대 영구마법을 3장까지 골라 리프트로 보낸다.\n\n【필드에 있는 동안】이 카드가 파괴한 적 몬스터는 리프트로 보낸다.\n\n【파괴 시】상대에게 파괴되면 다음 상대 턴을 건너뛰고 시공간 조작을 자신의 묘지에 추가한다.",
         "en": "【On Summon】Return the opposing Rift to their graveyard, then choose up to three opposing persistent spells to send to the Rift.\n\n【While on the Field】Enemies destroyed by this card go to the Rift.\n\n【On Destruction】When destroyed by the opponent, skip their next turn and gain Spacetime Manipulation in your graveyard."
-      },
-      "reviewedAt": "2026-11-11",
-      "reviewNote": "Army and Attune balance update."
+      }
     },
     "Q_ENJOY_THE_SHOW": {
       "nameJa": "高みの見物",
@@ -10264,42 +10178,50 @@
     },
     "RUNE_SAI": {
       "nameJa": "ルーンマジシャン - サイ",
-      "status": "new",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "b02f9da58d3e99d885b2c187d8023e4b5757cd87cb22544abe9716e551e5a1da",
-      "textSha256": "150f0f5f1d1248b90f8f155312e837458e1e326419488663e0ddfcb43c58ad5a",
+      "textSha256": "1f3bed2c232685fcc12d4c5fc1261311086bb023b7b9e204ce2f2868ee579963",
       "hooks": {
         "onSummon": "runeMarket"
       },
-      "before": {},
-      "after": {
+      "before": {
         "ja": "【召喚時】このターン、自分が購入するルーン系カードの購入コストは全て1になる。\n\n【場にある間】自分が魔法を使うたび攻撃力+1。ルーン系魔法なら代わりに+2。",
         "ko": "【소환 시】이번 턴 자신이 구매하는 모든 룬 계열 카드의 구매 코스트는 1이 된다.\n\n【필드에 있는 동안】자신이 마법을 사용할 때마다 공격력+1. 룬 계열 마법이면 대신 +2.",
         "en": "【On Summon】For this turn, the purchase cost of your Rune cards is 1.\n\n【While on the Field】Whenever you play a spell, gain 1 ATK, or 2 for a Rune spell."
+      },
+      "after": {
+        "ja": "【召喚時】このターン、自分が購入するルーン系カードの購入コストは全て1になる。\n\n【場にある間】自分が魔法を使うたび、このモンスターの攻撃力+1。ルーン系魔法なら代わりに攻撃力+2・体力+1。",
+        "ko": "【소환 시】이번 턴 자신이 구매하는 모든 룬 계열 카드의 구매 코스트는 1이 된다.\n\n【필드에 있는 동안】자신이 마법을 사용할 때마다 이 몬스터의 공격력 +1. 룬 계열 마법이면 대신 공격력 +2, 체력 +1.",
+        "en": "【On Summon】For this turn, the purchase cost of your Rune cards is 1.\n\n【While on the Field】Whenever you play a spell, this monster gains +1 ATK. For a Rune spell, it gains +2 ATK and +1 HP instead."
       }
     },
     "RUNE_NIKRO": {
       "nameJa": "ルーンマジシャン - ニクロ",
-      "status": "new",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "0ebe9ac2b24fcde82eb17cd3d703b55a893161e3006d6c1eafa03e507f90f5cf",
-      "textSha256": "3c44bcbed4fb7e68c70d541d563e3896c840e460240a4d7cff749ad09c0751dc",
+      "textSha256": "1ce24e2dd069e466df45e22cd4812faba5f8835be0bcc2977cc367895839080f",
       "hooks": {
         "onSummon": "runeMarket"
       },
-      "before": {},
-      "after": {
+      "before": {
         "ja": "【召喚時】このターン、自分が購入するルーン系カードの購入コストは全て1になる。\n\n【場にある間】自分が魔法を使うたび、自分の場のモンスター1体を選び、虚無・境界を除くランダムなパッシブを1つ付与する。ルーン系魔法なら2つ付与する。",
         "ko": "【소환 시】이번 턴 자신이 구매하는 모든 룬 계열 카드의 구매 코스트는 1이 된다.\n\n【필드에 있는 동안】자신이 마법을 사용할 때마다 자신의 필드의 몬스터 1체를 골라 공허·경계를 제외한 무작위 패시브 1개를 준다. 룬 계열 마법이면 2개를 준다.",
         "en": "【On Summon】For this turn, the purchase cost of your Rune cards is 1.\n\n【While on the Field】Whenever you play a spell, choose 1 allied monster and grant it 1 random passive other than Void or Boundary, or 2 for a Rune spell."
+      },
+      "after": {
+        "ja": "【召喚時】このターン、自分が購入するルーン系カードの購入コストは全て1になる。\n\n【場にある間】自分が魔法を使うたび、自分の場のモンスター1体を選び、虚無・境界を除くランダムなパッシブを1つ付与する。ルーン系魔法なら3つ付与する。",
+        "ko": "【소환 시】이번 턴 자신이 구매하는 모든 룬 계열 카드의 구매 코스트는 1이 된다.\n\n【필드에 있는 동안】자신이 마법을 사용할 때마다 자신의 필드의 몬스터 1체를 골라 공허·경계를 제외한 무작위 패시브 1개를 준다. 룬 계열 마법이면 3개를 준다.",
+        "en": "【On Summon】For this turn, the purchase cost of your Rune cards is 1.\n\n【While on the Field】Whenever you play a spell, choose 1 allied monster and grant it 1 random passive other than Void or Boundary, or 3 for a Rune spell."
       }
     },
     "RUNE_BARRIER": {
@@ -10324,22 +10246,26 @@
     },
     "RUNE_GLYPH": {
       "nameJa": "ルーン文字",
-      "status": "new",
+      "status": "november-balance-v90",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "434e31914b6a0f1a64fc94addb39560914ab71f8049d3efaf653cad659708e49",
-      "textSha256": "71a5327e4e209a3fde629c933625c9176663f45507bf521d73359c57f6463e86",
+      "textSha256": "88064e532be60a401bf87566cce98fc164f98f71f049bf9ddac66ddb61f46a7f",
       "hooks": {
         "quick": true
       },
-      "before": {},
-      "after": {
+      "before": {
         "ja": "【購入時】場のモンスター1体を選び、その虚無以外のランダムなパッシブ1つを別の場のモンスター1体に付与する。どちらもオーラを選べる。自分のデッキ構成に同名以外のルーン系カードがあれば、さらにルーン系カード1枚を選んで手札に加える。",
         "ko": "【구매 시】필드의 몬스터 1체를 골라 공허 이외의 무작위 패시브 1개를 필드의 다른 몬스터 1체에 부여한다. 둘 다 아우라를 선택할 수 있다. 자신의 덱 구성에 다른 이름의 룬 계열 카드가 있으면 룬 계열 카드 1장도 골라 패에 넣는다.",
         "en": "【On Purchase】Choose a field monster and grant 1 random non-Void passive it has to a different field monster. Either target may have Aura. If your deck composition contains a differently named Rune card, also choose a Rune card to add to your hand."
+      },
+      "after": {
+        "ja": "【購入時】場のモンスター1体を選び、その虚無以外のランダムなパッシブ1つを別の場のモンスター1体に付与する。オーラを持つモンスターも選択対象となる。自分のデッキ構成に同名以外のルーン系カードがあれば、さらにルーン系カード1枚を選んで手札に加える。",
+        "ko": "【구매 시】필드의 몬스터 1체를 골라 공허 이외의 무작위 패시브 1개를 필드의 다른 몬스터 1체에 부여한다. 아우라를 가진 몬스터도 선택 대상이 된다. 자신의 덱 구성에 다른 이름의 룬 계열 카드가 있으면 룬 계열 카드 1장도 골라 패에 넣는다.",
+        "en": "【On Purchase】Choose a field monster and grant 1 random non-Void passive it has to a different field monster. Monsters with Aura can also be selected. If your deck composition contains a differently named Rune card, also choose a Rune card to add to your hand."
       }
     },
     "Q_RUNE_SECRET": {
@@ -10423,6 +10349,24 @@
         "ja": "【召喚時】自分の場の「商会」にカウンターを2つ付与する。固定マーケット1枠を選び、そのカードの在庫を2減らす。在庫が0になったらカードを入れ替える。新しいカードの在庫は減らさない。\n\n【場にある間】自分のデッキ構成に「スラム街」があれば、このモンスターは「オーラ」を得る。",
         "ko": "【소환 시】자신의 필드에 있는 상회에 카운터 2개를 놓는다. 고정 마켓 1칸을 골라 그 카드의 재고를 2 줄인다. 재고가 0이 되면 카드를 교체한다. 새 카드의 재고는 줄이지 않는다.\n\n【필드에 있는 동안】자신의 덱 구성에 슬럼가가 있으면 이 몬스터는 아우라를 얻는다.",
         "en": "【On Summon】Put 2 counters on your Trade Guild. Choose 1 fixed market slot and reduce its card’s stock by 2. If its stock reaches 0, replace it. The new card keeps its full stock.\n\n【While on the Field】This monster gains Aura while Slums is in your deck composition."
+      }
+    },
+    "GOBLIN_DRAGON_RIDER": {
+      "nameJa": "ゴブリンドラゴンライダー",
+      "status": "november-balance-v90",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "22d8b62027f8eed9c4dc2db1c232d27aea786f50c43d50739ca16845543e9530",
+      "textSha256": "cde83f9a807072fbf60e7fc137d5903d96cc5f4be382cd358dda0d083e440dae",
+      "hooks": {},
+      "before": {},
+      "after": {
+        "ja": "【場にある間】自分の場の「ゴブリン」系モンスターの攻撃力+3。",
+        "ko": "【필드에 있는 동안】자신의 필드에 있는 고블린 계열 몬스터의 공격력 +3.",
+        "en": "【While on the Field】Goblin-family monsters on your field gain +3 ATK."
       }
     }
   },

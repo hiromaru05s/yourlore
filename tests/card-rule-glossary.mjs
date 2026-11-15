@@ -32,7 +32,7 @@ try {
  for(const lang of ['ja','ko','en']){
   E.setLang(lang);
   for(const e of E.CARD_RULE_GLOSSARY){assert(e.names[lang]);assert(E.glossaryParagraphs(e.id,lang).every(r=>r.text.length>20),e.id+lang);}
-  for(const [id,term]of [['DUNGEON','passive:guts'],['DUNGEON','passive:evade'],['PURGE_TOUCH','brand'],['HIGH_ELF','dew'],['FURNACE','shield'],['M6','lasting'],['TPO2','passive:counter'],['TPO5','passive:aura']]){
+  for(const [id,term]of [['DUNGEON','passive:guts'],['DUNGEON','passive:evade'],['PURGE_TOUCH','brand'],['HIGH_ELF','dew'],['FURNACE','shield'],['HEXER1','curseSeal'],['M6','lasting'],['TPO2','passive:counter'],['TPO5','passive:aura']]){
    E.zoomCard({...E.REFERENCE_CARDS[id],uid:id});const overlay=document.querySelector('.zoom-overlay');
    const before=[...overlay.querySelectorAll('.card-effect-body')].map(x=>x.textContent);const button=overlay.querySelector('.card-rule-term[data-rule-term="'+term+'"]');assert(button,id+lang+term);
    button.dispatchEvent(new dom.window.Event('pointerenter'));let popup=overlay.querySelector('.card-rule-tooltip');assert(popup);assert.equal(popup.dataset.ruleTerm,term);assert.equal(button.getAttribute('aria-expanded'),'true');assert(E.glossaryParagraphs(term,lang).every(row=>popup.textContent.includes(row.text)));

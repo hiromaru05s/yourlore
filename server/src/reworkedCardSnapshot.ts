@@ -1,3 +1,4 @@
+import {balanceChanges,balanceText} from '../../client/src/shared/novemberBalance';
 import {GOLEM_TEXT} from '../../client/src/shared/golemCards';
 import {NOVEMBER_PRINTS,RUNE_RULE_TEXT} from '../../client/src/shared/runeRework';
 import {MERC_IDS} from '../../client/src/shared/mercenaryCards';
@@ -29,12 +30,14 @@ export function restoreReworkedCards(game: GameState): void {
   const updateCasinoRally = !game.casinoRallyApplied;
   const updateRunes=!game.runeReworkApplied;
   const auditRunes = !game.runeZonesAudited;
+  const updateNovember = !game.novemberBalanceApplied;
   const updateIncubators = !game.incubatorsReworked;
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updateNovember)) return;
   game.incubatorsReworked = true;
+  game.novemberBalanceApplied = true;
   game.golemsReworked = true;
   game.threeFireNamed = true;
   game.runeReworkApplied=true;
@@ -220,6 +223,33 @@ export function restoreReworkedCards(game: GameState): void {
       for (const key of ['onSummon','turnFx','aura'] as const) {
         if (def[key]) (m.mutedEffects ?? m)[key] = def[key];
       }
+    }
+  }
+  if (updateNovember) {
+    const refreshNovember = (card:CardInst|null) => {
+      if (!card || !(card.id in balanceChanges || card.id in balanceText)) return;
+      const def=DB[card.id], m=card as FieldMon;
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      for (const key of Object.keys(balanceChanges[card.id] ?? {}) as (keyof CardInst)[]) {
+        if (key==='passive') {
+          const added=card.id==='CHOSEN_KNIGHT'?['counter']:['aura','counter','majesty'];
+          card.passive=m.summonedTurn!=null?[...new Set([...(card.passive ?? []),...added])]:[...def.passive ?? []];
+          continue;
+        }
+        const prop=m.trickSwapped && key==='atk'?'def':m.trickSwapped && key==='def'?'atk':key;
+        const destination=m.mutedEffects && key==='onSummon'?m.mutedEffects:card;
+        const value=Reflect.get(def,key);
+        if (value===undefined) Reflect.deleteProperty(destination,prop); else Reflect.set(destination,prop,value);
+      }
+    };
+    game.market.forEach(refreshNovember);
+    for (const p of game.players) {
+      [...p.deck,...p.hand,...p.discard,...p.removed??[],...p.field,...p.supply].forEach(refreshNovember);
+      for (const e of [...p.enchants,...p.traps,...p.quests??[],...p.exile]) refreshNovember(e.card);
+    }
+    refreshFieldPassives(game);
+    for (const p of game.players) for (const m of p.field) {
+      if (balanceChanges[m.id]?.def != null && (m.dmg??0)>=effDef(p,m)) m.dmg=Math.max(0,effDef(p,m)-1);
     }
   }
   if (updateDemons || updateHexers) refreshFieldPassives(game);

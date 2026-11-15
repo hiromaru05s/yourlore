@@ -14,7 +14,7 @@ try {
   const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
   test('approved stats, retained keyword passives and starter eligibility',()=>{
     assert(Number(E.BALANCE_VERSION.slice(1))>=58);
-    for(const [id,atk,hp] of [['ELF',12,10],['HIGH_ELF',20,20],['ELDER_ELF_KING',8,14],['DARK_ELF',16,10],['WORLD_TREE',1,25]])assert.deepEqual([E.DB[id].atk,E.DB[id].def],[atk,hp]);
+    for(const [id,atk,hp] of [['ELF',12,10],['HIGH_ELF',20,20],['ELDER_ELF_KING',8,14],['DARK_ELF',16,10],['WORLD_TREE',1,30]])assert.deepEqual([E.DB[id].atk,E.DB[id].def],[atk,hp]);
     assert(E.hasPassive(E.DB.ELF,'evade'));for(const k of ['aura','majesty','evade'])assert(E.hasPassive(E.DB.HIGH_ELF,k));for(const k of ['aura','majesty'])assert(E.hasPassive(E.DB.ELDER_ELF_KING,k));assert(E.hasPassive(E.DB.WORLD_TREE,'guts'));assert(!E.hasPassive(E.DB.WORLD_TREE,'aura'));
     assert(E.DECK_POOL.includes('NIGHT_CASTLE_GIFT'));assert(!E.BUYABLE_POOL.includes('NIGHT_CASTLE_GIFT'));assert.equal(E.DB.NIGHT_CASTLE_GIFT.cost,3);assert.equal(E.DB.NIGHT_CASTLE_GIFT.ench,'nightCastleGift');
     for(const id of ['DRY_SCOUT','DRY_WARD','VAMP_INVITE','NIGHT_GUIDE','BLOOD_PULSE'])assert(!E.DB[id]);
@@ -24,7 +24,7 @@ try {
   test('World Tree duplication no longer multiplies healing; Elf multipliers remain',()=>{let g=fresh();g.players[0].dew=10;g.players[0].field=['ELF','ELF','WORLD_TREE','WORLD_TREE'].map(mon);g=end(end(g));assert.equal(g.players[0].hp,180);assert.equal(g.players[0].dew,16);});
   test('all three distinct-World-Tree stat passives remain',()=>{for(const [id,n]of [['ELF',1],['HIGH_ELF',2],['ELDER_ELF_KING',4]]){const g=fresh(),m=mon(id);g.players[0].field=[m];g.players[0].enchants=[ench('WORLD_CARE'),ench('WORLD_CARE'),ench('WORLD_HEART')];assert.equal(E.effAtk(g.players[0],m,g),m.atk+2*n);assert.equal(E.curHp(g.players[0],m),m.def+2*n);}});
   test('Elder wipes monsters but preserves enchantments, quests and legacy traps',()=>{let g=fresh();g.players[0].dew=12;g.players[1].field=[mon('M1')];g.players[1].enchants=[ench('WORLD_CARE')];g.players[1].quests=[{card:card('Q_CASTLE'),progress:0,startedTurn:0}];g.players[1].traps=[{card:{...card('M1'),t:'trap'}}];g=play(g,'ELDER_ELF_KING');assert.equal(g.players[1].field.length,0);for(const zone of ['enchants','quests','traps'])assert.equal(g.players[1][zone].length,1);});
-  for(const dew of [14,15,22])test('Elder death threshold '+dew,()=>{let g=fresh();g.players[1].field=[mon('ELDER_ELF_KING')];g.players[1].field[0].passive=[];g.players[1].dew=dew;g=play(g,'S15');g=pick(g,g.players[1].field[0].uid);assert.equal(g.players[0].hp,dew>=15?80:100);assert.equal(g.players[1].dew,dew>=15?dew-15:dew);});
+  for(const dew of [4,5,12])test('Elder death threshold '+dew,()=>{let g=fresh();g.players[1].field=[mon('ELDER_ELF_KING')];g.players[1].field[0].passive=[];g.players[1].dew=dew;g=play(g,'S15');g=pick(g,g.players[1].field[0].uid);assert.equal(g.players[0].hp,100);assert.equal(g.players[0].brand,dew>=5?5:0);assert.equal(g.players[1].dew,dew>=5?dew-5:dew);});
   for(const owner of [0,1])for(const reward of ['VAMP_PACT','VAMP_WARD'])test(`Gift owner ${owner}, chosen ${reward}, 4 subsequent own starts`,()=>{
     let g=play(fresh(owner),'NIGHT_CASTLE_GIFT');const uid=g.players[owner].enchants[0].card.uid;assert.equal(g.players[owner].mana,27);
     for(let n=1;n<=4;n++){g=end(g);assert.equal(g.pending,null);assert.equal(g.players[owner].enchants[0].turns,5-n);g=end(g);assert.equal(g.players[owner].enchants[0].turns,4-n);if(n<4)assert.equal(g.pending,null);}

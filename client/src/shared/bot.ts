@@ -793,7 +793,10 @@ function autoTarget(g: GameState): Action {
       const oc = o.field.length + o.traps.length + o.enchants.length;
       return { type: "pick", uid: oc >= 2 ? "3" : p.maxMana < 12 ? "1" : "2" };
     }
-    if (pending.reason === "dragonFuse") return { type: "pick", uid: "ANTIQUE_DK" };
+    if (pending.reason === "dragonFuse") {
+      const ids = pending.data?.ids as string[];
+      return {type:"pick",uid:ids.includes("ANTIQUE_DK") ? "ANTIQUE_DK" : ids[0]};
+    }
     if (pending.reason === "samsaraPick") { // 윤회(v41b): 가장 가치 높은 몬스터
       const ids0 = (pending.data?.ids as string[] | undefined) ?? [];
       const best0 = [...ids0].sort((a, b) => cardPower(DB[b]) - cardPower(DB[a]))[0];

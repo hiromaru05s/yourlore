@@ -1,0 +1,185 @@
+import type {CardDef} from './types';
+
+export const balanceChanges: Record<string, Partial<CardDef>> = {
+  M3: {"val": 2},
+  TDE1: {"def": 2},
+  DEFENSIVE_STANCE: {"val2": 3},
+  M5: {},
+  NMD2: {"onSummon": "bookSpirit", "val": 3},
+  EGG_HUNTER: {"atk": 3, "def": 4},
+  M8: {"atk": 2},
+  M9: {"atk": 1, "def": 3, "onSummon": undefined},
+  TSO3: {"atk": 3},
+  ELITE: {"atk": 5, "def": 5},
+  NGA4: {"atk": 9, "def": 2},
+  TDE3: {"atk": 7, "def": 8},
+  TSO5: {"atk": 7, "def": 8},
+  VITAL4: {"def": 5},
+  GM5_0: {"def": 3},
+  GM5_3: {"def": 3},
+  MUSTER_DIE: {"noShop": true},
+  FIRE_MASTER: {"atk": 10},
+  GM6_1: {"cost": 5, "def": 5},
+  GM6_8: {"atk": 14, "def": 2},
+  NMD6: {"atk": 7, "def": 7},
+  POISON_MASTER: {"def": 10},
+  CHOSEN_KNIGHT: {"passive": ["guts", "taunt", "counter"]},
+  SHIELD_TITAN: {"def": 20, "summonReq": undefined},
+  ORIGIN_MIMIC: {"passive": ["aura", "counter", "majesty"]},
+  WORLD_TREE: {"def": 30},
+  FATE_WRAITH: {"cost": 12, "atk": 25, "def": 20},
+  SWORD_GRAVE_WRAITH: {"cost": 12, "atk": 25, "def": 25},
+  TIME_WRAITH: {"cost": 12, "atk": 15, "def": 15},
+  KNIGHT_TEACH: {"cost": 2},
+  NMD4: {"cost": 3},
+  TPO1: {"summonReq": "preyLow3"},
+  M11: {"onSummon": "warlordSoldier"},
+};
+
+export const balanceText: Record<string, Record<"ja"|"ko"|"en",string>> = {
+  M3: {
+    ja: "【召喚時】カードを2枚引く。",
+    ko: "【소환 시】카드를 2장 뽑는다.",
+    en: "【On Summon】Draw 2 card.",
+  },
+  TPO1: {
+    ja: "【召喚条件】相手の場に購入コスト3以下のモンスターがいる。\n\n【召喚時】相手の場の、オーラを持たない購入コスト3以下のモンスター1体を選び、相手の手札に戻す。",
+    ko: "【소환 조건】상대의 필드에 구매 코스트 3 이하 몬스터가 있다.\n\n【소환 시】상대의 필드에서 아우라가 없는 구매 코스트 3 이하 몬스터 1체를 선택해 상대의 패로 되돌린다.",
+    en: "【Summon Requirement】The opponent controls a monster with purchase cost 3 or less.\n\n【On Summon】Choose 1 such enemy monster without Aura and return it to the opponent's hand.",
+  },
+  TSO2: {
+    ja: "【召喚時】自分の場の他のモンスターと永続魔法が合計2枚以下なら、このモンスターの攻撃力+3・体力+3（対象が場を離れるまで）。",
+    ko: "【소환 시】자신의 필드의 다른 몬스터와 영구 마법이 합계 2장 이하이면 이 몬스터의 공격력 +3, 체력 +3(효과를 받은 몬스터가 필드를 떠날 때까지).",
+    en: "【On Summon】If your other monsters and persistent spells total at most 2, this monster gets +3 ATK and +3 HP (until the affected monster leaves the field).",
+  },
+  DEFENSIVE_STANCE: {
+    ja: "【発動時】自分はシールドを3＋（自分の場の「ゴーレム」系モンスターの種類数×3）得る（合計を1回で獲得）。",
+    ko: "【발동 시】자신은 실드를 3＋(자신의 필드의 골렘 계열 몬스터 종류 수×3) 획득(합계를 1회에 획득).",
+    en: "【On Cast】Gain 3 plus 3 times the number of distinct Golem-family monster names on your field as Shield, in 1 gain.",
+  },
+  IRON_WALL: {
+    ja: "【発動時】自分はシールドを6＋（自分の場の「ゴーレム」系モンスターの種類数×3）得る（合計を1回で獲得）。\n\n【発動時】自分のデッキ構成に「防御の姿勢」があれば、さらにシールド15を得る。",
+    ko: "【발동 시】자신은 실드를 6＋(자신의 필드의 골렘 계열 몬스터 종류 수×3) 획득(합계를 1회에 획득).\n\n【발동 시】자신의 덱 구성에 방어 태세가 있으면 실드를 15 추가로 얻는다.",
+    en: "【On Cast】Gain 6 plus 3 times the number of distinct Golem-family monster names on your field as Shield, in 1 gain.\n\n【On Cast】If your deck composition contains Defensive Stance, gain 15 additional Shield.",
+  },
+  RUNE_GLYPH: {
+    ja: "【購入時】場のモンスター1体を選び、その虚無以外のランダムなパッシブ1つを別の場のモンスター1体に付与する。オーラを持つモンスターも選択対象となる。自分のデッキ構成に同名以外のルーン系カードがあれば、さらにルーン系カード1枚を選んで手札に加える。",
+    ko: "【구매 시】필드의 몬스터 1체를 골라 공허 이외의 무작위 패시브 1개를 필드의 다른 몬스터 1체에 부여한다. 아우라를 가진 몬스터도 선택 대상이 된다. 자신의 덱 구성에 다른 이름의 룬 계열 카드가 있으면 룬 계열 카드 1장도 골라 패에 넣는다.",
+    en: "【On Purchase】Choose a field monster and grant 1 random non-Void passive it has to a different field monster. Monsters with Aura can also be selected. If your deck composition contains a differently named Rune card, also choose a Rune card to add to your hand.",
+  },
+  HALF_ELF: {
+    ja: "【召喚時】自分の場に「世界樹」系カードがあれば、「世界樹の慈しみ」を自分の場に展開する。\n\n【場にある間】どちらかの場に「世界樹」系カードがあれば、このモンスターの攻撃力+3・体力+2。",
+    ko: "【소환 시】자신의 필드에 세계수 계열 카드가 있으면 세계수의 보살핌을 자신의 필드에 전개한다.\n\n【필드에 있는 동안】어느 쪽 필드에 세계수 계열 카드가 있으면 이 몬스터 공격력 +3, 체력 +2.",
+    en: "【On Summon】If you control a World Tree-family card, deploy World Tree's Care to your field.\n\n【While on the Field】If either player controls a World Tree-family card, this monster gets +3 ATK and +2 HP.",
+  },
+  M5: {
+    ja: "【召喚時】自分はシールド2を得る。\n\n【自分のターン終了時】このターン、このモンスターが攻撃していなければ、自分はシールド6を得る。",
+    ko: "【소환 시】자신은 실드 2를 얻는다.\n\n【자신의 턴 종료 시】이번 턴에 이 몬스터가 공격하지 않았다면 실드를 6 얻는다.",
+    en: "【On Summon】Gain 2 Shield.\n\n【At the End of Your Turn】If this monster did not attack this turn, gain 6 Shield.",
+  },
+  NMD2: {
+    ja: "【召喚時】カードを3枚引く。その後、手札の魔法カード1枚を捨ててもよい。捨てた場合、「大きな発見」か「知識の泉」を選び、自分の墓地に1枚加える。",
+    ko: "【소환 시】카드를 3장 뽑는다. 그 후 패의 마법 카드 1장을 버려도 된다. 버렸다면 큰 발견 또는 지식의 샘 중 1장을 골라 자신의 묘지에 추가한다.",
+    en: "【On Summon】Draw 3 cards. You may then discard 1 spell from your hand. If you do, choose Great Discovery or Well of Knowledge and add 1 copy to your graveyard.",
+  },
+  RUNE_NIKRO: {
+    ja: "【召喚時】このターン、自分が購入するルーン系カードの購入コストは全て1になる。\n\n【場にある間】自分が魔法を使うたび、自分の場のモンスター1体を選び、虚無・境界を除くランダムなパッシブを1つ付与する。ルーン系魔法なら3つ付与する。",
+    ko: "【소환 시】이번 턴 자신이 구매하는 모든 룬 계열 카드의 구매 코스트는 1이 된다.\n\n【필드에 있는 동안】자신이 마법을 사용할 때마다 자신의 필드의 몬스터 1체를 골라 공허·경계를 제외한 무작위 패시브 1개를 준다. 룬 계열 마법이면 3개를 준다.",
+    en: "【On Summon】For this turn, the purchase cost of your Rune cards is 1.\n\n【While on the Field】Whenever you play a spell, choose 1 allied monster and grant it 1 random passive other than Void or Boundary, or 3 for a Rune spell.",
+  },
+  RUNE_SAI: {
+    ja: "【召喚時】このターン、自分が購入するルーン系カードの購入コストは全て1になる。\n\n【場にある間】自分が魔法を使うたび、このモンスターの攻撃力+1。ルーン系魔法なら代わりに攻撃力+2・体力+1。",
+    ko: "【소환 시】이번 턴 자신이 구매하는 모든 룬 계열 카드의 구매 코스트는 1이 된다.\n\n【필드에 있는 동안】자신이 마법을 사용할 때마다 이 몬스터의 공격력 +1. 룬 계열 마법이면 대신 공격력 +2, 체력 +1.",
+    en: "【On Summon】For this turn, the purchase cost of your Rune cards is 1.\n\n【While on the Field】Whenever you play a spell, this monster gains +1 ATK. For a Rune spell, it gains +2 ATK and +1 HP instead.",
+  },
+  GOBLIN_LEADER: {
+    ja: "【召喚時】自分の場の「ゴブリン」関連カードの枚数分、相手プレイヤーと相手の場の全モンスターにそれぞれダメージを与える。このモンスター自身と永続魔法も数える。",
+    ko: "【소환 시】자신의 필드에 있는 고블린 계열 카드 수만큼 상대 플레이어와 상대 필드의 모든 몬스터에게 각각 데미지를 준다. 이 몬스터 자신과 영구마법도 센다.",
+    en: "【On Summon】Deal damage to the opposing player and each enemy monster equal to the number of Goblin-related cards on your field, including this monster and persistent spells.",
+  },
+  M8: {
+    ja: "【召喚時】相手に雫が1以上あれば、相手の雫を1減らし、自分は雫1を得る。\n\n【召喚時】相手の場のモンスター1体を選ぶ。次の相手のターンの間、そのモンスターの攻撃力を0にする。",
+    ko: "【소환 시】상대의 이슬이 1 이상이면 상대의 이슬을 1 줄이고 자신은 이슬 1을 얻는다.\n\n【소환 시】상대 필드의 몬스터 1체를 고른다. 다음 상대 턴 동안 그 몬스터의 공격력은 0이 된다.",
+    en: "【On Summon】If the opponent has at least 1 Dew, remove 1 of their Dew and gain 1 Dew.\n\n【On Summon】Choose 1 enemy monster. During the opponent’s next turn, its ATK is 0.",
+  },
+  M9: {
+    ja: "【場にある間】どちらかのプレイヤーが提示マーケットをリロールするたび、このモンスターの攻撃力+1・体力+1。",
+    ko: "【필드에 있는 동안】어느 플레이어든 제시 마켓을 갱신할 때마다 이 몬스터의 공격력 +1, 체력 +1.",
+    en: "【While on the Field】Whenever either player rerolls the offer market, this monster gains +1 ATK and +1 HP.",
+  },
+  MIMIC_HUNTER: {
+    ja: "【場にある間】両方の場のミミック系モンスターは攻撃できない。\n\n【攻撃時】攻撃対象のミミック系モンスターに、戦闘のダメージ計算前に6ダメージを与える。",
+    ko: "【필드에 있는 동안】양쪽 필드의 미믹 계열 몬스터는 공격할 수 없다.\n\n【공격 시】미믹 계열 몬스터를 공격하면 전투 데미지 계산 전에 그 몬스터에게 6 데미지를 준다.",
+    en: "【While on the Field】Mimic-family monsters on either field cannot attack.\n\n【On Attack】When this monster attacks a Mimic-family monster, deal 6 damage to that monster before calculating combat damage.",
+  },
+  TAR3: {
+    ja: "【場にある間】このモンスターが相手モンスターを破壊した時、このモンスターを自分の墓地に送り、「騎士」1体を自分の場に召喚する。",
+    ko: "【필드에 있는 동안】이 몬스터가 상대 몬스터를 파괴하면 이 몬스터를 자신의 묘지로 보내고 기사 1체를 자신의 필드에 소환한다.",
+    en: "【While on the Field】When this monster destroys an enemy monster, send this monster to your graveyard and summon 1 Knight to your field.",
+  },
+  TSO3: {
+    ja: "【召喚時】自分の墓地にモンスターカードがなければカードを6枚引く。\n\n【場にある間】自分の墓地に孤独種族以外のモンスターカードがなければ、このモンスターの攻撃力+1・体力+2。このモンスターが攻撃するとき、相手モンスターの反撃を無効にする。",
+    ko: "【소환 시】자신의 묘지에 몬스터 카드가 없으면 카드를 6장 뽑는다.\n\n【필드에 있는 동안】자신의 묘지에 고독 부족 이외의 몬스터 카드가 없으면 이 몬스터의 공격력 +1, 체력 +2. 이 몬스터가 공격할 때 상대 몬스터의 반격을 무효화한다.",
+    en: "【On Summon】If your graveyard has no monster cards, draw 6 cards.\n\n【While on the Field】While your graveyard contains no monster outside the Solitary tribe, this monster has +1 ATK and +2 HP. When this monster attacks, it negates the enemy monster’s Counter.",
+  },
+  M11: {
+    ja: "【召喚時】自分の場に他のモンスターが3体以上いれば、「兵士」1体を自分の場に召喚する。",
+    ko: "【소환 시】자신의 필드에 다른 몬스터가 3체 이상이면 병사 1체를 자신의 필드에 소환한다.",
+    en: "【On Summon】If you control at least 3 other monsters, summon 1 Soldier to your field.",
+  },
+  NGA4: {
+    ja: "【攻撃時】このモンスター以外の両方の場のモンスターと両プレイヤーから、攻撃可能な対象1つを毎回ランダムに選ぶ。直接攻撃禁止と「貴族領主」の攻撃制限を無視する。\n\n【自分のターン終了時】攻撃可能なら、残っている攻撃回数を全て自動で行ってからターンを終了する。\n\n【破壊時】相手の場の全モンスターに2ダメージを与える。",
+    ko: "【공격 시】이 몬스터를 제외한 양쪽 필드의 몬스터와 양쪽 플레이어 중 공격 가능한 대상 1개를 매번 무작위로 선택한다. 직접 공격 금지와 귀족 영주의 공격 제한을 무시한다.\n\n【자신의 턴 종료 시】공격 가능하면 남은 공격 횟수를 모두 자동으로 수행한 후 턴을 종료한다.\n\n【파괴 시】상대 필드의 모든 몬스터에게 2 데미지를 준다.",
+    en: "【On Attack】Each attack randomly chooses 1 legal target among all other monsters on either field and both players. This monster ignores direct-attack prohibitions and the attack restrictions of Aristocrat Lord.\n\n【At the End of Your Turn】If able to attack, automatically use all remaining attacks before ending your turn.\n\n【On Destruction】Deal 2 damage to each enemy monster.",
+  },
+  TSO5: {
+    ja: "【召喚条件】自分の場に孤独種族以外のモンスターがいない。\n\n【場にある間】自分は孤独種族以外のモンスターを召喚できない。",
+    ko: "【소환 조건】자신의 필드에 고독 종족 외의 몬스터가 없을 때만 소환할 수 있다.\n\n【필드에 있는 동안】자신은 고독 부족 이외의 몬스터를 소환할 수 없다.",
+    en: "【Summon Requirement】No non-Solitary monsters on your field.\n\n【While on the Field】You can summon only Solitary monsters.",
+  },
+  GM6_0: {
+    ja: "【召喚時】自分の場に「兵士」「騎士」「ゴブリン」のいずれかがいれば、その1体とこのモンスターを素材にして、次のモンスターを自分の場に召喚する。複数ある場合はどれを素材にするか選ぶ。\n兵士を使う：ドラゴンライダー1体。\n騎士を使う：アンティークドラゴンナイト1体。\nゴブリンを使う：ゴブリンドラゴンライダー1体。\n素材は自分の墓地へ送る。トークン・虚無の素材は自分のリフトへ送る。\n\n【召喚時】次の相手のターン、相手が使用できる魔法は1枚まで。",
+    ko: "【소환 시】자신의 필드에 병사, 기사 또는 고블린이 있으면 그 1체와 이 몬스터를 재료로 다음 몬스터를 자신의 필드에 소환한다. 여러 종류가 있으면 사용할 재료를 선택한다.\n병사 사용: 드래곤 라이더 1체.\n기사 사용: 앤티크 드래곤 나이트 1체.\n고블린 사용: 고블린 드래곤 라이더 1체.\n재료는 자신의 묘지로 보낸다. 토큰·공허 재료는 자신의 리프트로 보낸다.\n\n【소환 시】다음 상대 턴에 상대는 마법을 1장까지만 사용할 수 있다.",
+    en: "【On Summon】If you control a Soldier, Knight or Goblin, use 1 of them and this monster as materials to summon the following monster to your field. If several are available, choose which material to use.\nUsing a Soldier: 1 Dragon Rider.\nUsing a Knight: 1 Antique Dragon Knight.\nUsing a Goblin: 1 Goblin Dragon Rider.\nSend the materials to your graveyard. Send Token or Void materials to your Rift instead.\n\n【On Summon】On the next opposing turn, your opponent can play at most 1 spell.",
+  },
+  GOBLIN_DRAGON_RIDER: {
+    ja: "【場にある間】自分の場の「ゴブリン」系モンスターの攻撃力+3。",
+    ko: "【필드에 있는 동안】자신의 필드에 있는 고블린 계열 몬스터의 공격력 +3.",
+    en: "【While on the Field】Goblin-family monsters on your field gain +3 ATK.",
+  },
+  MIMIC2: {
+    ja: "【場にある間】このモンスターが場にいる限り両者は宝箱を使用できない。",
+    ko: "【필드에 있는 동안】이 몬스터가 필드에 있는 한 양 플레이어는 보물상자를 사용할 수 없다.",
+    en: "【While on the Field】While this monster is out, neither player can use Treasure Chests.",
+  },
+  NMD6: {
+    ja: "【場にある間】自分が使う魔法の発動コスト-1（最低1、元から0なら0）。\n\n【破壊時】自分のマナ水晶+1。",
+    ko: "【필드에 있는 동안】자신이 사용하는 마법의 발동 코스트 -1(최저 1, 원래 0이면 0).\n\n【파괴 시】자신의 마나 수정 +1.",
+    en: "【While on the Field】Reduce the cast cost of your spells by 1, to a minimum of 1. Spells that already cost 0 still cost 0.\n\n【On Destruction】Gain 1 mana crystal.",
+  },
+  POISON_MASTER: {
+    ja: "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。\n\n【場にある間】相手の場のモンスターが腐敗で破壊されるたび、相手に烙印を1つ付与する。このモンスターが相手モンスターを破壊するたび、このモンスターの体力+5。",
+    ko: "【공격 시】공격 대상 상대 몬스터에 카운터 2개 추가 부여한다(부패 처리).\n\n【필드에 있는 동안】상대 필드의 몬스터가 부패로 파괴될 때마다 상대에게 낙인 1개를 부여한다. 이 몬스터가 상대 몬스터를 파괴할 때마다 이 몬스터의 체력 +5.",
+    en: "【On Attack】Put 2 additional counters on the enemy monster this monster attacks, applying Decay rules.\n\n【While on the Field】Whenever an enemy monster is destroyed by Decay, give the opponent 1 Brand. Whenever this monster destroys an enemy monster, it gains +5 HP.",
+  },
+  ELDER_ELF_KING: {
+    ja: "【召喚条件】自分の雫が12以上ある。\n\n【召喚時】自分の雫12を消費する。その後、相手の場の全モンスターを破壊する。\n\n【場にある間】自分の場の異なる「世界樹」系カード1種類につき、このモンスターの攻撃力+4・体力+4。相手がターン中に使用できるカードは最大3枚。\n\n【破壊時】自分の雫が5以上あれば、雫5を消費して相手に烙印カウンター5個を付与する。",
+    ko: "【소환 조건】자신의 이슬이 12 이상이다.\n\n【소환 시】자신의 이슬 12를 소비한다. 그 후 상대 필드의 모든 몬스터를 파괴한다.\n\n【필드에 있는 동안】아군 필드의 서로 다른 세계수 계열 1종당 이 몬스터의 공격력 +4, 체력 +4. 상대는 각 턴에 카드를 최대 3장 사용할 수 있다.\n\n【파괴 시】자신의 이슬이 5 이상이면 이슬 5를 소비하고 상대에게 낙인 카운터 5개를 부여한다.",
+    en: "【Summon Requirement】You have at least 12 Dew.\n\n【On Summon】Spend 12 Dew. Then destroy all enemy monsters.\n\n【While on the Field】This monster gets +4 ATK and +4 HP per distinct World Tree card name on your field. The opponent may play at most 3 cards per turn.\n\n【On Destruction】If you have at least 5 Dew, spend 5 Dew and give the opponent 5 Brand counters.",
+  },
+  SHIELD_TITAN: {
+    ja: "【自分のターン終了時】シールド10を得る。\n\n【場にある間】このモンスターの効果以外で自分が得るシールド量が2倍になる。",
+    ko: "【자신의 턴 종료 시】실드 10 획득한다.\n\n【필드에 있는 동안】이 몬스터 외 효과로 자신이 얻는 실드 양 2배.",
+    en: "【At the End of Your Turn】Gain 10 Shield.\n\n【While on the Field】Double Shield you gain from sources other than this monster.",
+  },
+  SALLY_WEAPONMASTER: {
+    ja: "【召喚時】「自分がシールド30を得る」か「自分の場の他のモンスター1体を選び、攻撃力+4・体力+4（対象が場を離れるまで）」を選ぶ。\n\n【自分のターン開始時】自分の場の「装備職人」1体ごとに、別々に自分がシールド15を得る。",
+    ko: "【소환 시】자신의 실드 30 획득 또는 자신의 필드의 다른 몬스터 1체를 선택해 공격력 +4, 체력 +4(효과를 받은 몬스터가 필드를 떠날 때까지) 중 하나 선택한다.\n\n【자신의 턴 시작 시】자신의 필드의 장비 장인 1체마다 따로 자신이 실드 15 획득한다.",
+    en: "【On Summon】Choose one: gain 30 Shield; or choose 1 other monster on your field and give it +4 ATK and +4 HP (until the affected monster leaves the field).\n\n【At the Start of Your Turn】For each Armorer on your field, gain 15 Shield separately.",
+  },
+  WORLD_TREE: {
+    ja: "【召喚条件】自分の雫が8以上ある。\n\n【召喚時】自分の雫8を消費する。\n\n【場にある間】自分の雫によるターン開始時の回復量を2倍にする。この倍率は「世界樹」が複数あっても重複しない。\n\n【自分のモンスター攻撃時】自分のモンスターが攻撃する時、雫1を消費してそのモンスターの攻撃力+6（対象が場を離れるまで）にしてよい。\n\n【自分のモンスター被攻撃時】自分のモンスターが攻撃される時、雫1を消費してそのモンスターの体力+6（対象が場を離れるまで）にしてよい。\n\n【自分のターン開始時】自分は雫3を得る。",
+    ko: "【소환 조건】자신의 이슬이 8 이상이다.\n\n【소환 시】자신의 이슬 8을 소비한다.\n\n【필드에 있는 동안】자신의 이슬에 의한 턴 시작 회복량을 2배로 만든다. 세계수가 여러 체 있어도 이 배율은 중첩되지 않는다.\n\n【자신의 몬스터 공격 시】자신의 몬스터가 공격할 때, 이슬 1을 소비해 그 몬스터의 공격력 +6(효과를 받은 몬스터가 필드를 떠날 때까지)을 적용할 수 있다.\n\n【자신의 몬스터가 공격받을 때】자신의 몬스터가 공격받을 때, 이슬 1을 소비해 그 몬스터의 체력 +6(효과를 받은 몬스터가 필드를 떠날 때까지)을 적용할 수 있다.\n\n【자신의 턴 시작 시】자신은 이슬 3을 얻는다.",
+    en: "【Summon Requirement】You have at least 8 Dew.\n\n【On Summon】Spend 8 Dew.\n\n【While on the Field】Double your turn-start healing from Dew. This multiplier does not stack with additional World Trees.\n\n【When Your Monster Attacks】When your monster attacks, you may spend 1 Dew to give it +6 ATK (until the affected monster leaves the field).\n\n【When Your Monster Is Attacked】When your monster is attacked, you may spend 1 Dew to give it +6 HP (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Gain 3 Dew.",
+  },
+};

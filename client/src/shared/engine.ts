@@ -253,8 +253,9 @@ function afterPlay(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): void
     for (const m of p.field.filter(m=>!m.mutedEffects)) {
       if (m.id === 'RUNE_SAI') {
         monsterActivation(g,ctx.ev,p,m); m.atkMod += amplifiedBuff(m,RUNE_IDS.has(card.id)?2:1);
+        if (RUNE_IDS.has(card.id)) m.defMod += amplifiedBuff(m,1);
       }
-      if (m.id === 'RUNE_NIKRO') queueExpansionChoice(g,p,'NIKRO_GIFT','',{count:RUNE_IDS.has(card.id)?2:1,sourceUid:m.uid});
+      if (m.id === 'RUNE_NIKRO') queueExpansionChoice(g,p,'NIKRO_GIFT','',{count:RUNE_IDS.has(card.id)?3:1,sourceUid:m.uid});
     }
   }
   expansionAfterPlay(g, ctx, p, card);
@@ -303,7 +304,7 @@ export function monsterOngoingActive(g: GameState, p: PlayerState, m: FieldMon):
   switch (m.aura) {
     case 'mana1': case 'mana2': case 'manaGolem':
       return effMaxMana(p) > effMaxMana({ ...p, field: p.field.map(x => x.uid === m.uid ? { ...x, aura: undefined } : x) });
-    case 'sageDiscount': return deckComp(p).filter(c => c.t === 'spell').length >= 13;
+    case 'sageDiscount': return true;
     case 'rallyGuts': return p.field.some(x => x.uid !== m.uid && ARMY_IDS.has(x.id));
     case 'hexArmy': return g.players[g.cur] === p && (p.hexerAttackCurses ?? 0) > 0;
     case 'originLord': return p.field.some(x => x.tribe === '시초');
@@ -321,6 +322,7 @@ export function monsterOngoingActive(g: GameState, p: PlayerState, m: FieldMon):
 }
 /** Pass the live game for conditions that inspect both fields. */
 export function effAtk(p: PlayerState, m: FieldMon, g?: Pick<GameState, "players"> & Partial<Pick<GameState,"cur">>): number {
+  if (m.wardenZeroActive) return 0;
   const printed = (m.atk ?? 0) + (m.tempAtk ?? 0) + (m.atkMod ?? 0);
   const bonus = p.strengthAuras ?? 0;
   const boost = (amount:number) => amount > 0 ? amount + bonus : amount;
@@ -333,13 +335,15 @@ export function effAtk(p: PlayerState, m: FieldMon, g?: Pick<GameState, "players
       if (enemy.field.some(x=>['GM6_0','D_RED','D_BLUE','D_BLACK','M7','GM5_3'].includes(x.id))) extra += boost(15);
       if (enemy.field.some(x=>['DRAGON_RIDER','ANTIQUE_DK'].includes(x.id))) extra += boost(20);
     }
+    if (m.id === 'TSO3' && !m.mutedEffects && !p.discard.some(c=>c.t==='mon' && c.tribe!=='고독')) extra += boost(1);
+    if (isGoblinMonster(m)) extra += p.field.filter(x=>x.id==='GOBLIN_DRAGON_RIDER' && !x.mutedEffects).length * boost(3);
     if (isGoblinMonster(m)) extra += p.field.filter(x=>x.aura==='goblinAttack').length * boost(1);
     const hexSources = Number(m.condAtk === 'hexCurses') + p.field.filter(ally => ally.aura === 'hexArmy').length;
     if (hexSources && (g?.cur != null ? g.players[g.cur] === p : p.hexerAttackCurses != null)) {
       const curses = m.visibleCurseAttack ?? (enemy ? deckComp(enemy).filter(c=>c.id==='CURSE').length : p.hexerAttackCurses ?? 0);
       extra += hexSources * boost(curses);
     }
-    if (m.condAtk==='worldTree' && (g?.players ?? [p]).some(hasWorldTreeOnField)) extra += boost(3);
+    if (m.condAtk==='worldTree' && (g ? g.players.some(hasWorldTreeOnField) : p.worldTreePresent || hasWorldTreeOnField(p))) extra += boost(3);
     if (m.condAtk==='twoPlus' && p.field.length>=2) extra += boost(m.val ?? 2);
     if (m.condAtk==='hp45' && p.hp>=45) extra += boost(1);
     if (m.condAtk==='cullEachAttack' || m.condAtk==='cullEachBoth') extra += boost(cullExiled(p));
@@ -365,6 +369,8 @@ export function effDef(p: PlayerState, m: FieldMon): number {
       if (ally.id==='FARMER' && !ally.mutedEffects && m.id==='TOKEN00') extra+=boost(6);
       if (ally.aura==='farmerHealth' && m.id==='FARMER') extra+=boost(5);
     }
+    if(m.condAtk==='worldTree' && (p.worldTreePresent || hasWorldTreeOnField(p))) extra+=boost(2);
+    if(m.id==='TSO3' && !m.mutedEffects && !p.discard.some(c=>c.t==='mon' && c.tribe!=='고독')) extra+=boost(2);
     if(m.condAtk==='hp45' && p.hp>=45) extra+=boost(3);
     if(m.condAtk==='cullEachBoth') extra+=boost(cullExiled(p));
     if(m.condAtk==='cullPlus') extra+=boost(Math.floor(cullExiled(p)/2));
@@ -416,8 +422,7 @@ export function playCost(c: CardInst, p?: PlayerState): number {
   if (p && c.id === 'FIRE_METEOR' && p.expansion?.firePlayed.some(id => id !== c.id)) base = 1;
   if (p && c.id === 'FIRE_BRANDING') base -= p.expansion?.firePlayed.length ?? 0;
   if (p && isFire(c)) base = Math.max(0, base - (p.expansion?.fireDiscount ?? 0) - 2 * p.field.filter(m => !m.mutedEffects && m.id === 'FIRE_MASTER').length);
-  // Sage cannot make a positive-cost spell free; existing zero costs stay zero.
-  if (p && c.t === "spell" && base > 0 && p.field.some((m) => m.aura === "sageDiscount") && deckComp(p).filter((x) => x.t === "spell").length >= 13) base = Math.max(1, base - 1);
+  if (p && c.t === "spell" && base > 0 && p.field.some(m=>m.aura==="sageDiscount")) base=Math.max(1,base-1);
   if (p && c.t==='spell' && base>0) base=Math.max(1,base-p.field.filter(m=>m.id==='CHOSEN_MAGE' && !m.mutedEffects).length);
   if (p && c.t === "spell") base = Math.max(0, base - (p.spellDiscountCharges?.length ?? p.spellDiscountTurn ?? 0));
   if (p && isAttuneCard(c)) {
@@ -436,6 +441,9 @@ function consumeGrimoire(p: PlayerState): void {
   p.spellDiscountTurn = p.spellDiscountCharges.length;
 }
 /** Field uniqueness also applies to effect summons and changes of control. */
+function solitarySummonBlocked(p: PlayerState, card: CardDef): boolean {
+  return card.tribe !== '고독' && p.field.some(m => m.id === 'TSO5' && !m.mutedEffects);
+}
 function fieldAccepts(p: PlayerState, card: CardDef, leavingUid?: string): boolean {
   return (card.id !== 'GOBLIN_RAIDER' && card.id !== 'GUILD_HALL') || !p.field.some(m => m.id === card.id && m.uid !== leavingUid);
 }
@@ -509,7 +517,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -558,6 +566,13 @@ function shareSupply(g: GameState, cards: (CardInst | null)[]): void {
   for (const player of g.players) player.supply = cards.slice();
 }
 
+function rerollOffers(g: GameState, ctx: Ctx, p: PlayerState): void {
+  rollSupply(g,p);
+  for (const owner of g.players) for (const hunter of owner.field.filter(m=>m.id==='M9' && !m.mutedEffects)) {
+    monsterActivation(g,ctx.ev,owner,hunter);
+    hunter.atkMod+=amplifiedBuff(hunter,1); hunter.defMod+=amplifiedBuff(hunter,1);
+  }
+}
 function rollSupply(g: GameState, p: PlayerState, refill = false): void {
   const want = p.supplyShrink > 0 ? Math.max(2, 3 - p.supplyShrink) : 3;
   p.supplyShrink = 0;
@@ -718,6 +733,8 @@ export function refreshFieldPassives(g: GameState): void {
   const strength = g.players.reduce((n,p) => n+enchantCount(p,'SECRET_OF_STRENGTH'),0);
   for (const p of g.players) {
     const foe = g.players[1-side(g,p)];
+    if (p.field.some(m=>m.id==='HALF_ELF') && g.players.some(hasWorldTreeOnField)) p.worldTreePresent=true; else delete p.worldTreePresent;
+    for (const m of p.field) if (m.wardenZeroTurn === g.turn) m.wardenZeroActive=true; else delete m.wardenZeroActive;
     if (realms) p.demonRealms = realms; else delete p.demonRealms;
     const boundary = foe.field.some(m => !(realms && m.tribe === '마족') && (m.passive?.includes('boundary') || m.passivesG?.includes('boundary')));
     for (const m of p.field) {
@@ -973,10 +990,22 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       }
       if (dead.id === 'D_RED' && !hasEssence(g)) gainBrand(g,ctx,g.players[1-side(g,owner)],1);
       if (dead.id === 'MIMIC' && !hasEssence(g)) addCurses(g, owner, 1);
-      if (!dead.mutedEffects && dead.id === 'ELDER_ELF_KING' && (owner.dew ?? 0) >= 15) {
+      if (!dead.mutedEffects && dead.id === 'NMD6') { monsterActivation(g,ev,owner,dead,ev.length,true); addMaxMana(g,ctx,owner,1); }
+      if (!dead.mutedEffects && dead.id === 'NGA4') {
+        const opponent = g.players[1-side(g,owner)];
+        monsterActivation(g,ev,owner,dead,ev.length,true);
+        for (const enemy of [...opponent.field]) monsterDamage(g,ctx,opponent,enemy,2,false,dead,owner);
+      }
+      if (cause === 'decay') {
+        const opponent = g.players[1-side(g,owner)];
+        for (const master of opponent.field.filter(x=>x.id==='POISON_MASTER' && !x.mutedEffects)) {
+          monsterActivation(g,ev,opponent,master); gainBrand(g,ctx,owner,1);
+        }
+      }
+      if (!dead.mutedEffects && dead.id === 'ELDER_ELF_KING' && (owner.dew ?? 0) >= 5) {
         monsterActivation(g, ev, owner, dead, ev.length, true);
-        loseStatus(ctx, owner, 'dew', 15);
-        dealDamage(g.players[1 - side(g, owner)], 20, cn(dead), cn(dead), side(g, owner));
+        loseStatus(ctx, owner, 'dew', 5);
+        gainBrand(g,ctx,g.players[1-side(g,owner)],5);
       }
       if (!dead.mutedEffects && dead.id === 'FIRE_MASTER' && [...owner.deck, ...owner.discard].some(isFire)) monsterActivation(g, ev, owner, dead, ev.length, true);
       if (!dead.mutedEffects && dead.id === 'FIRE_MASTER') queueExpansionChoice(g, owner, 'FIRE_MASTER', '手札に加えるファイアー魔法を最大2枚選択', { left: 2 });
@@ -1149,6 +1178,10 @@ function beginTurn(g: GameState, ctx: Ctx, first: boolean): void {
     if (g.over) return;
   }
   const p = g.players[g.cur];
+  for (const pl of g.players) for (const m of pl.field) {
+    if (m.wardenZeroTurn===g.turn) m.wardenZeroActive=true;
+    else { delete m.wardenZeroActive; if ((m.wardenZeroTurn ?? Infinity)<g.turn) delete m.wardenZeroTurn; }
+  }
   const upkeepGolems = p.field.filter(m => GOLEM_UPKEEP[m.id] && !m.mutedEffects);
   delete p.attunePlaysTurn;
   delete p.attuneFlowTurn;
@@ -1445,7 +1478,7 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
       }
       case "worldTree": gainDew(ctx, p, 3, m.uid); break;
       case "weaponmaster":
-        for (const other of p.field) if (/장비 장인|装備職人/.test(other.name + (other.nameJa ?? ''))) gainShield(g, ctx, p, 5, m);
+        for (const other of p.field) if (/장비 장인|装備職人/.test(other.name + (other.nameJa ?? ''))) gainShield(g, ctx, p, 15, m);
         break;
     }
     finish();
@@ -1469,7 +1502,7 @@ function tickHatch(g: GameState, ctx: Ctx): void {
 function hatchEgg(g: GameState, ctx: Ctx, p: PlayerState, egg: FieldMon): void {
   const i = p.field.findIndex((x) => x.uid === egg.uid);
   if (i < 0) return;
-  const pool = egg.hatchInto ?? [];
+  const pool = (egg.hatchInto ?? []).filter(id=>DB[id] && !solitarySummonBlocked(p,DB[id]));
   const outId = pool.length ? pool[randInt(g, pool.length)] : null;
   if (!outId || !DB[outId]) return;
   p.field.splice(i, 1);
@@ -1896,17 +1929,14 @@ function tickEnchants(g: GameState, ctx: Ctx, cur: PlayerState): void {
 function noAttackActive(g: GameState): boolean {
   return g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
 }
-/** Berserk includes both players even with monsters present; normal prohibitions still apply. */
+/** Berserk can target either player and ignores Noble Lord target restrictions. */
 export function berserkTargets(g: GameState, p: PlayerState, m: FieldMon): { player: Side; uid: string | null }[] {
   const own = side(g, p), enemy = (1 - own) as Side, o = g.players[enemy];
   const targets: { player: Side; uid: string | null }[] = m.directOnly && !m.realmSuppressed ? [] : [
-    ...o.field.filter(x => !(x.aura === 'eliteGuard' && (m.cost ?? 0) <= 6)).map(x => ({ player: enemy, uid: x.uid })),
-    ...p.field.filter(x => x.uid !== m.uid).map(x => ({ player: own, uid: x.uid })),
+    ...o.field.map(x => ({player:enemy,uid:x.uid})),
+    ...p.field.filter(x => x.uid !== m.uid).map(x => ({player:own,uid:x.uid})),
   ];
-  if (!p.noDirectTurn) {
-    targets.push({ player: own, uid: null });
-    if (!o.field.some(x => x.aura === 'eliteGuard')) targets.push({ player: enemy, uid: null });
-  }
+  targets.push({player:own,uid:null},{player:enemy,uid:null});
   return targets;
 }
 function fireveinDamage(dealer:PlayerState, victim:PlayerState, damage:number):number {
@@ -2080,6 +2110,9 @@ function finishHexerTurn(g: GameState, ctx: Ctx, force: boolean, remaining: stri
     m.tempAtk-=expired.reduce((n,e)=>n+e.amount,0);
     if(m.tempAtkExpiry) m.tempAtkExpiry=m.tempAtkExpiry.filter(e=>e.turn>g.turn);
   }
+  for (const shell of p.field.filter(m=>m.id==='M5' && !m.mutedEffects && m.declaredAttackTurn!==g.turn && !m.attacksUsed)) {
+    monsterActivation(g,ctx.ev,p,shell); gainShield(g,ctx,p,6,shell);
+  }
   p.field.forEach((m) => { m.exhausted = false; m.tempAtk = 0; m.attacksUsed = 0; });
   p.spellDiscountTurn = 0;
   p.spellDiscountCharges = [];
@@ -2183,7 +2216,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   if (attackEvent) attackEvent.contactDamage = 0;
   if (treeStage === 0 && (g.players[g.cur].dew ?? 0)>0 && g.players[g.cur].field.some(m=>!m.mutedEffects && m.id==='WORLD_TREE')) {
     if (attackEvent) ctx.ev.splice(ctx.ev.indexOf(attackEvent),1);
-    offerEffectChoice(g,ctx,g.players[g.cur],'WORLD_TREE_ATTACK','雫1で攻撃力+3（永続）しますか？',{attackerUid:att.uid,targetUid});
+    offerEffectChoice(g,ctx,g.players[g.cur],'WORLD_TREE_ATTACK','雫1で攻撃力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
   }
   const p = g.players[g.cur];
@@ -2225,15 +2258,19 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   }
   if (treeStage < 2 && targetUid !== null && o.field.some(m=>m.uid===targetUid) && (o.dew ?? 0)>0 && o.field.some(m=>!m.mutedEffects && m.id==='WORLD_TREE')) {
     if (attackEvent) ctx.ev.splice(ctx.ev.indexOf(attackEvent),1);
-    offerEffectChoice(g,ctx,o,'WORLD_TREE_DEFEND','雫1で被攻撃モンスターの体力+3（永続）しますか？',{attackerUid:att.uid,targetUid});
+    offerEffectChoice(g,ctx,o,'WORLD_TREE_DEFEND','雫1で被攻撃モンスターの体力+6（永続）しますか？',{attackerUid:att.uid,targetUid});
     return;
   }
-  const hunter = targetUid && o.field.find(m => m.uid === targetUid && m.id === 'MIMIC_HUNTER');
-  if (hunter && !hunter.mutedEffects && !hasEssence(g) && MIMIC_IDS.has(att.id)) {
-    monsterActivation(g,ctx.ev,o,hunter);
-    if (monsterDamage(g,ctx,p,att,6,false,hunter) || g.over) return;
-  }
   countAmbushAttack(g, att);
+  const mimicTarget = targetUid && o.field.find(m => m.uid === targetUid && MIMIC_IDS.has(m.id));
+  if (att.id==='MIMIC_HUNTER' && !att.mutedEffects && mimicTarget) {
+    monsterActivation(g,ctx.ev,p,att);
+    if (monsterDamage(g,ctx,o,mimicTarget,6,false,att) || g.over) {
+      att.attacksUsed=(att.attacksUsed ?? 0)+1;
+      if (att.attacksUsed >= (hasPassive(att,'dual') ? Math.max(2,att.mult ?? 1) : 1)) att.exhausted=true;
+      return;
+    }
+  }
   // Charge once after any World Tree continuations, before evasion or traps.
   // Choosing/cancelling a target does not enter this committed attack path.
   if (att.attackFx === 'goblinDirect' && targetUid !== null && o.field.some(m => m.uid === targetUid)) {
@@ -3105,7 +3142,7 @@ function resolveFriendlyPlayerAttack(g: GameState, ctx: Ctx, att: FieldMon, tree
   g.players[g.cur].lastMonsterAttackTurn = g.turn;
   const p = g.players[g.cur];
   if (treeStage === 0 && (p.dew ?? 0) > 0 && p.field.some(m => !m.mutedEffects && m.id === 'WORLD_TREE')) {
-    offerEffectChoice(g, ctx, p, 'WORLD_TREE_ATTACK', '雫1で攻撃力+3（永続）しますか？', { attackerUid: att.uid, targetUid: null, friendlyPlayer: true });
+    offerEffectChoice(g, ctx, p, 'WORLD_TREE_ATTACK', '雫1で攻撃力+6（永続）しますか？', { attackerUid: att.uid, targetUid: null, friendlyPlayer: true });
     return;
   }
   countAmbushAttack(g, att);
@@ -3166,6 +3203,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
     }
     case 'goblinLeader': {
       const count = [...p.field, ...p.enchants.map(e => e.card), ...p.traps.map(t => t.card), ...(p.quests ?? []).map(q => q.card)].filter(c => GOBLIN_IDS.has(c.id)).length;
+      for (const enemy of [...o.field]) monsterDamage(g,ctx,o,enemy,count,false,m,p);
       ctx.dealDamage(o, count, cn(m), cn(m), side(g,p)); break;
     }
     case 'goblinKing': {
@@ -3239,7 +3277,13 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       }
       break;
     }
+    case 'bookSpirit': {
+      ctx.drawN(p,3);
+      if (p.hand.some(c=>c.t==='spell')) queueExpansionChoice(g,p,'BOOK_DISCARD','',{sourceId:m.id});
+      break;
+    }
     case "stealDew": {
+      if (m.id==='M8' && o.field.some(x=>!hasPassive(x,'aura'))) queueExpansionChoice(g,p,'WARDEN_ZERO','',{sourceId:m.id});
       if ((o.dew ?? 0) > 0) {
         loseStatus(ctx, o, 'dew', 1);
         gainDew(ctx, p, 1, m.uid);
@@ -3263,9 +3307,9 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       } else ctx.log("  └ 자신 필드에 '상회'가 없음", "  └ 自分の場に「商会」がない", `  └ No Trade Guild on your field`);
       break;
     }
-    case "preyBounce": { // 굶주린 새끼짐승: 상대 코스트 2 이하 1체를 패로 바운스 (선택)
-      if (o.field.some((x) => (x.cost ?? 0) <= 2 && !hasPassive(x, "aura"))) {
-        g.pending = { kind: "oppMon", hint: "패로 되돌릴 코스트 2 이하 몬스터 선택", hintJa: "手札に戻すコスト2以下のモンスターを選択", reason: "bounceLow", allowCancel: false, data: { maxCost: 2 } };
+    case "preyBounce": { // 굶주린 새끼짐승: 상대 코스트 3 이하 1체를 패로 바운스 (선택)
+      if (o.field.some((x) => (x.cost ?? 0) <= 3 && !hasPassive(x, "aura"))) {
+        g.pending = { kind: "oppMon", hint: "패로 되돌릴 코스트 3 이하 몬스터 선택", hintJa: "手札に戻すコスト3以下のモンスターを選択", reason: "bounceLow", allowCancel: false, data: { maxCost: 3 } };
         ctx.ev.push({ type: "needTarget", pending: g.pending });
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
@@ -3290,7 +3334,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
     }
     case "hermitBuff": { // 외로운 늑대: 이 카드 외 자신 필드 카드 1장 이하면 +3/+3
       const others = p.field.filter((x) => x.uid !== m.uid).length + p.traps.length + p.enchants.length;
-      if (others <= 1) { m.atkMod = (m.atkMod ?? 0) + amplifiedBuff(m, 3); m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, 3); ctx.log("  └ 고독 속에서 +3/+3", "  └ 孤独の中で+3/+3", `  └ Solitary bonus: +3 ATK and +3 HP`); }
+      if (others <= 2) { m.atkMod = (m.atkMod ?? 0) + amplifiedBuff(m, 3); m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, 3); ctx.log("  └ 고독 속에서 +3/+3", "  └ 孤独の中で+3/+3", `  └ Solitary bonus: +3 ATK and +3 HP`); }
       else ctx.log(`  └ 필드 카드 ${others}장 — 불발`, `  └ 場のカード${others}枚 — 不発`, `  └ ${others} cards on the field — condition not met`);
       break;
     }
@@ -3331,7 +3375,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
         } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       } else ctx.log("  └ 대상 없음", "  └ 対象なし");
       break;
-    case "refresh": rollSupply(g, p); logSupplyRefresh(ctx, p, "카드 효과 · 무료", "カード効果・無料", "card effect · free"); break;
+    case "refresh": rerollOffers(g,ctx,p); logSupplyRefresh(ctx, p, "카드 효과 · 무료", "カード効果・無料", "card effect · free"); break;
     case "hpUp": { // 활력 계열: 체력 +v
       addHealth(ctx, p, v);
 
@@ -3620,8 +3664,8 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
     case "hordeRally":
       for(const ally of p.field) if(ally.uid!==m.uid && ARMY_IDS.has(ally.id)) ally.atkMod+=amplifiedBuff(ally,3);
       break;
-    case "warlordKnight": { // v52: exclude the summoned Warlord itself
-      if (p.field.filter(x => x.uid !== m.uid).length >= 3) { spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 군세 결집 — 기사(4/4) 소환", "  └ 軍勢結集 — 騎士(4/4)召喚", `  └ Rally the troops: summon a Knight (4 ATK / 4 HP)`); }
+    case "warlordSoldier": { // v52: exclude the summoned Warlord itself
+      if (p.field.filter(x => x.uid !== m.uid).length >= 3) { spawnToken(g, ctx, p, "SOLDIER2"); }
       else ctx.log("  └ 자신 외 아군 몬스터 3체 미만 — 불발", "  └ 自身以外の味方モンスター3体未満 — 不発", `  └ Fewer than 3 other allied monsters — condition not met`);
       break;
     }
@@ -3658,14 +3702,14 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       o.dragonSpellLimitTurn = g.turn + 1; // 드래곤: 병사와 → 드래곤 라이더 / 기사와 → 앤티크 드래곤 나이트 · 둘 다 있으면 선택(v37)
       const soldier = p.field.find((x) => x.uid !== m.uid && isSoldier(x) && x.hatch == null);
       const knight = p.field.find((x) => x.uid !== m.uid && isKnight(x));
-      if (!soldier && !knight) { ctx.log("  └ 필드에 병사·기사 없음 — 융합 불발", "  └ 場に兵士・騎士なし — 融合不発", `  └ No Soldier or Knight on the field — cannot fuse`); break; }
-      if (soldier && knight && !g.pending) {
-        g.pending = { kind: "giantShop", reason: "dragonFuse", allowCancel: false, hint: "드래곤 — 융합 결과 선택 (병사 → 드래곤 라이더 / 기사 → 앤티크 드래곤 나이트)", hintJa: "ドラゴン — 融合先を選択 (兵士 → ドラゴンライダー / 騎士 → アンティークドラゴンナイト)",
-          data: { ids: ["DRAGON_RIDER", "ANTIQUE_DK"], free: true, dragonUid: m.uid, soldierUid: soldier.uid, knightUid: knight.uid } };
-        ctx.ev.push({ type: "needTarget", pending: g.pending });
-        break;
-      }
-      doDragonFuse(g, ctx, p, m.uid, (soldier ?? knight)!.uid, soldier ? "DRAGON_RIDER" : "ANTIQUE_DK");
+      const goblin = p.field.find(x=>x.id==='GOBLIN');
+      const options = [
+        {id:'DRAGON_RIDER', mate:soldier}, {id:'ANTIQUE_DK', mate:knight}, {id:'GOBLIN_DRAGON_RIDER', mate:goblin},
+      ].filter(x=>x.mate);
+      if (options.length > 1 && !g.pending) {
+        g.pending={kind:'giantShop',reason:'dragonFuse',allowCancel:false,hint:'융합할 몬스터 선택',hintJa:'融合先を選択',data:{ids:options.map(x=>x.id),free:true,dragonUid:m.uid,soldierUid:soldier?.uid,knightUid:knight?.uid,goblinUid:goblin?.uid}};
+        ctx.ev.push({type:'needTarget',pending:g.pending});
+      } else if (options.length) doDragonFuse(g,ctx,p,m.uid,options[0].mate!.uid,options[0].id);
       break;
     }
     case "generalKnight": {
@@ -3737,7 +3781,7 @@ function spawnToken(g: GameState, ctx: Ctx, owner: PlayerState, id: string, opti
 } = {}): boolean {
   const {fromDeck, ritual, source, grantedPassives, summoner = owner} = options;
   const p = armyDestination(g,owner,id);
-  if (!DB[id] || !effectSummonAllowed(g, p, DB[id])) return false;
+  if (!DB[id] || solitarySummonBlocked(summoner,DB[id]) || !effectSummonAllowed(g, p, DB[id])) return false;
 
   const m: FieldMon = { uid: newUID(g), ...structuredClone(DB[id]), exhausted: false, tempAtk: 0, atkMod: 0, defMod: 0, summonedTurn: g.turn, token: !fromDeck };
   if (grantedPassives) m.passivesG = grantedPassives;
@@ -3943,7 +3987,12 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'dew': gainDew(ctx,p,v); break;
     case 'desertification': loseStatus(ctx, o, 'dew'); ctx.log('상대 이슬을 0으로', '相手の雫を0にする', `Set the opponent’s Dew to 0`); break;
     case 'cullShield': gainShield(g,ctx,p,cullExiled(p)); break;
-    case 'golemShield': gainShield(g,ctx,p,v+v2*new Set(p.field.filter(isGolem).map(m=>m.id)).size); break;
+    case 'golemShield': {
+      const types = new Set(p.field.filter(isGolem).map(m=>m.id)).size;
+      gainShield(g,ctx,p,(card.val ?? 0)+v2*types);
+      if (card.id==='IRON_WALL' && deckComp(p).some(c=>c.id==='DEFENSIVE_STANCE')) gainShield(g,ctx,p,15);
+      break;
+    }
     case 'armorBreak': { const branded=(o.shield ?? 0)>=10; breakShield(ctx,o,9); if(branded)gainBrand(g, ctx, o, 1); break; }
     case 'spearShield':
       if ((o.shield ?? 0) < p.field.reduce((n,m)=>n+effAtk(p,m,g),0)) breakShield(ctx,o);
@@ -4012,7 +4061,7 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (o.hand.length) { const c = o.hand.splice(randInt(g, o.hand.length), 1)[0]; o.exile.push({ card: c, turns: 2 }); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 패 1장 2턴 제외`, `<span class="t">${p.name}</span> ${cn(card)} → 相手の手札1枚を2ターン除外`, `<span class="t">${p.name}</span>: ${cn(card)} temporarily exiles 1 card from the opponent’s hand for 2 turns`); }
       else ctx.log("  └ 상대 패가 없음", "  └ 相手の手札がない", `  └ The opponent’s hand is empty`);
       break;
-    case "crash": rollSupply(g, o); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 제시 강제 갱신: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`, `<span class="t">${p.name}</span> ${cn(card)} → マーケットを強制リロール: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`, `<span class="t">${p.name}</span>: ${cn(card)} refreshes the opponent’s offer: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`); if (v2 > 0) ctx.drawN(p, v2); break;
+    case "crash": rerollOffers(g,ctx,o); ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 상대 제시 강제 갱신: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`, `<span class="t">${p.name}</span> ${cn(card)} → マーケットを強制リロール: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`, `<span class="t">${p.name}</span>: ${cn(card)} refreshes the opponent’s offer: ${o.supply.filter((c): c is CardInst => !!c).map(cn).join(", ")}`); if (v2 > 0) ctx.drawN(p, v2); break;
     case "manaUp": { addMaxMana(g, ctx, p, v); const dn = v2 > 0 ? ctx.drawN(p, v2) : 0; ctx.log(`<span class="t">${p.name}</span> ${cn(card)} → 마나 수정 +${v}${dn ? `, ${dn}장 드로우` : ""}`, `<span class="t">${p.name}</span> ${cn(card)} → マナ水晶 +${v}${dn ? `、${dn}枚ドロー` : ""}`); break; }
     case "destroyTrap": {
       const n = v || 1; let k = 0;
@@ -5159,7 +5208,7 @@ function treeKeeperTrigger(g: GameState, ctx: Ctx, p: PlayerState, card: CardIns
 }
 /** Summon precondition check (암살자 상급/특급). */
 export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): boolean {
-  if (!fieldAccepts(p, card)) return false;
+  if (solitarySummonBlocked(p,card) || !fieldAccepts(p, card)) return false;
   if (card.summonReq==='sixCards')return deckComp(p).length<=6;
   if (card.summonReq === 'twentyCrystals') return effMaxMana(p) >= 20;
   if (card.summonReq === 'uniqueField') return !p.field.some(m => m.id === card.id);
@@ -5168,7 +5217,7 @@ export function summonReqMet(p: PlayerState, card: CardInst, o?: PlayerState): b
   if (/^dew\d+$/.test(card.summonReq)) return (p.dew ?? 0) >= Number(card.summonReq.slice(3));
   if (card.summonReq === 'shield20') return (p.previousOpponentShieldPeak ?? 0) >= 20;
   // ---- v32 종족 조건 ----
-  if (card.summonReq === "preyLow2") return !!o && o.field.some((m) => (m.cost ?? 0) <= 2); // 굶주린 새끼짐승
+  if (card.summonReq === "preyLow3") return !!o && o.field.some((m) => (m.cost ?? 0) <= 3); // 굶주린 새끼짐승
   if (card.summonReq === "soloOnly") return !p.field.some((m) => m.tribe !== "고독");        // 고독한 방랑자
   if (card.summonReq === "mm5") return effMaxMana(p) >= 5;                                    // 마족 척후·전사
   if (card.summonReq === "demonKing") return effMaxMana(p) >= 5 && deckComp(p).some(c => c.t === "mon" && c.id !== "TDE4" && c.tribe === "마족");
@@ -5992,8 +6041,8 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     // 드래곤(v37): 융합 결과 선택
     if (pending.reason === "dragonFuse") {
       if (!uid || !ids0.includes(uid)) { g.pending = pending; return; }
-      const dd = pending.data as { dragonUid: string; soldierUid: string; knightUid: string };
-      doDragonFuse(g, ctx, p, dd.dragonUid, uid === "DRAGON_RIDER" ? dd.soldierUid : dd.knightUid, uid);
+      const dd = pending.data as { dragonUid: string; soldierUid: string; knightUid: string; goblinUid: string };
+      doDragonFuse(g, ctx, p, dd.dragonUid, uid === "DRAGON_RIDER" ? dd.soldierUid : uid === "GOBLIN_DRAGON_RIDER" ? dd.goblinUid : dd.knightUid, uid);
       return;
     }
     // 영토 하사(v37): 코스트 3 이하 귀족 카드 1장을 소환 (무료)
@@ -6072,6 +6121,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
 
 // Quest counters belong to an active, public card; pre-activation events never count.
 function countAmbushAttack(g: GameState, attacker: FieldMon): void {
+  if (attacker.id==='M5') attacker.declaredAttackTurn=g.turn;
   if (!hasPassive(attacker, 'ambush')) return;
   for (const player of g.players) {
     for (const quest of player.quests ?? []) if (quest.card.quest?.event === 'ambushAttack') quest.progress++;
@@ -6236,6 +6286,10 @@ function golemUpkeepCards(g: GameState, p: PlayerState, source?: FieldMon): Card
 export function effectChoices(g: GameState): CardInst[] {
   const pending = g.pending;
   if (pending?.kind !== "cardChoice") return [];
+  const chooser = g.players[actingSide(g)];
+  if (pending.reason === 'BOOK_DISCARD') return chooser.hand.filter(c=>c.t==='spell');
+  if (pending.reason === 'BOOK_REWARD') return ['DISCOVERY_LARGE','E3'].map(id=>({...DB[id],uid:id}));
+  if (pending.reason === 'WARDEN_ZERO') return g.players[1-actingSide(g)].field.filter(m=>!hasPassive(m,'aura'));
   if (pending.reason === 'INCUBATOR_EFFECT') {
     const p = g.players[actingSide(g)], card = pending.data!.sourceCard as CardInst;
     const amount = card.id === 'INCUBATOR' ? 2 : 1;
@@ -6277,7 +6331,7 @@ const choiceSource: Record<string,string> = {
   CULTURE_BREAK: 'MULTI_CULTURE',
 };
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
-  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: ['INCUBATOR_EFFECT','GOLEM_UPKEEP','CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST'].includes(reason) || reason === "SELECTED_SWORD" || reason === "RIFT_JAILER" || reason === "TIMEWARP", data };
+  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: ['BOOK_DISCARD','INCUBATOR_EFFECT','GOLEM_UPKEEP','CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST'].includes(reason) || reason === "SELECTED_SWORD" || reason === "RIFT_JAILER" || reason === "TIMEWARP", data };
   if (reason === 'COLOSSEUM_REST') g.pending.hint = '체력을 전부 회복할 자신의 몬스터 1체 선택';
   if (reason === 'NIGHT_CASTLE_GIFT') g.pending.hint = '패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택';
   if (reason === 'RIFT_JAILER') g.pending.hint = '차원 유폐자 — 자신의 리프트로 옮길 상대 리프트 카드 최대 8장 선택';
@@ -6294,7 +6348,7 @@ function effectSummonAllowed(g: GameState, p: PlayerState, def: CardDef, leaving
   const occupied = p.field.length - leaving;
   if (def.summonReq === 'uniqueField' && p.field.some(m => m.id === def.id)) return false;
   if (def.summonReq === 'emptyEnemyField' && g.players[1 - side(g,p)].field.length) return false;
-  return !g.over && fieldAccepts(p, def) && occupied < FIELD_MAX && !spaceLocked(g, p)
+  return !g.over && !solitarySummonBlocked(p,def) && fieldAccepts(p, def) && occupied < FIELD_MAX && !spaceLocked(g, p)
     && (p.summonLockUntil ?? 0) <= g.turn && (p.summonCap == null || occupied < p.summonCap)
     && !summonBlockedLow(g, p, { ...def, uid: def.id }) && !(p.lowSummonBanTurn && def.cost <= 3)
     && !(castleOf(p) && !p.monsterSilence && def.cost >= 5);
@@ -6302,7 +6356,7 @@ function effectSummonAllowed(g: GameState, p: PlayerState, def: CardDef, leaving
 function effectSummon(g: GameState, ctx: Ctx, p: PlayerState, id: string, card?: CardInst): boolean {
   const def = card ?? DB[id];
   const receiving = armyDestination(g,p,id);
-  if (!def || !effectSummonAllowed(g, receiving, def)) return false;
+  if (!def || solitarySummonBlocked(p,def) || !effectSummonAllowed(g, receiving, def)) return false;
   if (card || id === 'CANNON_COMMANDER') summonForOwner(g,ctx,receiving,card ?? inst(g,id),p);
   else return spawnToken(g,ctx,p,id);
   return true;
@@ -6318,6 +6372,19 @@ function summonForOwner(g:GameState,ctx:Ctx,owner:PlayerState,card:CardInst,summ
 function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
   const pending = g.pending!;
   const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
+  if (pending.reason === 'BOOK_DISCARD' || pending.reason === 'BOOK_REWARD' || pending.reason === 'WARDEN_ZERO') {
+    if (uid === null && pending.reason === 'BOOK_DISCARD') { g.pending=null; return; }
+    const choice=effectChoices(g).find(c=>c.uid===uid);
+    if (!choice) return;
+    g.pending=null;
+    if (pending.reason==='BOOK_DISCARD') {
+      const discarded=p.hand.splice(p.hand.findIndex(c=>c.uid===uid),1)[0];
+      fieldToGrave(g,ctx,p,discarded);
+      offerEffectChoice(g,ctx,p,'BOOK_REWARD','',{sourceId:'NMD2'});
+    } else if (pending.reason==='BOOK_REWARD') fieldToGrave(g,ctx,p,inst(g,choice.id));
+    else (choice as FieldMon).wardenZeroTurn=g.turn+(g.players[g.cur]===p?1:2);
+    return;
+  }
   if (pending.reason === 'INCUBATOR_EFFECT') {
     const source = pending.data!.sourceCard as CardInst;
     const target = incubatorEggs(p).find(m => m.uid === uid);
@@ -6919,11 +6986,11 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
       if (p.refreshBlockTurn) { ctx.log(`  └ <span class="dmg">마켓 크래시</span>: 이번 턴 제시를 갱신할 수 없다`, `  └ <span class="dmg">マーケットクラッシュ</span>: このターン提示を更新できない`, `  └ <span class="dmg">Market Crash</span>: you cannot refresh your offer this turn`); break; }
       if ((p.refreshTokens || 0) > 0) {
         p.refreshTokens = (p.refreshTokens || 1) - 1;
-        rollSupply(g, p);
+        rerollOffers(g,ctx,p);
         logSupplyRefresh(ctx, p, `카운터 소모 · 남은 ${p.refreshTokens}`, `カウンター消費 · 残り${p.refreshTokens}`, `counter spent · ${p.refreshTokens} left`);
       } else if (p.mana >= 1) {
         p.mana -= 1;
-        rollSupply(g, p);
+        rerollOffers(g,ctx,p);
         logSupplyRefresh(ctx, p, "1 마나", "1マナ", "1 mana");
       }
       break;
@@ -7049,6 +7116,15 @@ function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, 
 }
 function monsterKillBonus(g: GameState, ctx: Ctx, owner: PlayerState, source: FieldMon, victim: PlayerState, target: FieldMon, eventStart: number, combat = true): void {
   if (g.over || owner===victim) return;
+  if (!source.mutedEffects && owner.field.includes(source) && (source.id==='POISON_MASTER' || source.id==='TAR3') && ctx.ev.slice(eventStart).some(e=>e.type==='destroy' && e.uid===target.uid)) {
+    monsterActivation(g,ctx.ev,owner,source);
+    if (source.id==='POISON_MASTER') source.defMod+=amplifiedBuff(source,5);
+    else {
+      owner.field.splice(owner.field.indexOf(source),1);
+      fieldToGrave(g,ctx,owner,resetInst(source));
+      spawnToken(g,ctx,owner,'INFKNIGHT');
+    }
+  }
   if (source.id==='CHOSEN_ARCHER' && !source.mutedEffects && ctx.ev.slice(eventStart).some(e=>e.type==='destroy' && e.uid===target.uid)) {monsterActivation(g,ctx.ev,owner,source);source.chosenBoonTurn=g.turn+(g.players[g.cur]===owner?1:2);}
   if(source.aura!=='killBurn' && !source.mercContractKey) return;
   if (!ctx.ev.slice(eventStart).some(e => e.type === 'destroy' && e.uid === target.uid)) return;
@@ -7066,7 +7142,7 @@ function monsterKillBonus(g: GameState, ctx: Ctx, owner: PlayerState, source: Fi
 }
 function counterHit(g: GameState, ctx: Ctx, owner: PlayerState, defender: FieldMon, attackerOwner: PlayerState, attacker: FieldMon, amount: number): void {
   if (g.over || amount <= 0 || !attackerOwner.field.includes(attacker)) return;
-  if (!attacker.mutedEffects && attacker.id === 'CAVALRY') { monsterActivation(g, ctx.ev, attackerOwner, attacker); return; }
+  if (!attacker.mutedEffects && (attacker.id === 'CAVALRY' || attacker.id === 'TSO3')) { monsterActivation(g, ctx.ev, attackerOwner, attacker); return; }
   ctx.log(`${cn(defender)} 반격 ${amount}`, `${cn(defender)} 反撃 ${amount}`, `${cn(defender)}: counterattack for ${amount}`);
   const event:Extract<GameEvent,{type:'counter'}>={type:'counter',player:side(g,owner),uid:defender.uid,targetUid:attacker.uid,targetPlayer:side(g,attackerOwner),contactDamage:0};
   ctx.ev.push(event);
@@ -7700,7 +7776,7 @@ function dewShieldChoices(g: GameState): CardInst[] | null {
     case 'SELECTED_SWORD': return p.field;
     case 'WORLD_TREE_ATTACK': case 'WORLD_TREE_DEFEND': return [
       dewOption('WORLD_TREE','pass','使用せず続ける','사용하지 않고 계속','Continue without spending'),
-      dewOption('WORLD_TREE','grow',q.reason==='WORLD_TREE_ATTACK'?'雫1を消費：攻撃力+3':'雫1を消費：体力+3',q.reason==='WORLD_TREE_ATTACK'?'이슬 1 소비: 공격력 +3':'이슬 1 소비: 체력 +3',q.reason==='WORLD_TREE_ATTACK'?'Spend 1 Dew: +3 ATK':'Spend 1 Dew: +3 HP')];
+      dewOption('WORLD_TREE','grow',q.reason==='WORLD_TREE_ATTACK'?'雫1を消費：攻撃力+6':'雫1を消費：体力+6',q.reason==='WORLD_TREE_ATTACK'?'이슬 1 소비: 공격력 +6':'이슬 1 소비: 체력 +6',q.reason==='WORLD_TREE_ATTACK'?'Spend 1 Dew: +6 ATK':'Spend 1 Dew: +6 HP')];
     case 'HIGH_ELF_HAND': return [dewOption('HIGH_ELF','done','確認を終える','확인 종료','Finish inspection'),...o.hand];
     default:return null;
   }
@@ -7765,8 +7841,8 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
       const target=q.reason==='WORLD_TREE_ATTACK'?attacker:p.field.find(m=>m.uid===targetUid);
       if(uid==='grow' && target && (p.dew ?? 0)>0 && p.field.some(m=>!m.mutedEffects && m.id==='WORLD_TREE')) {
         for (const tree of p.field) if (tree.id === 'WORLD_TREE') monsterActivation(g, ctx.ev, p, tree);
-        loseStatus(ctx, p, 'dew', 1); if(q.reason==='WORLD_TREE_ATTACK')target.atkMod = (target.atkMod ?? 0) + amplifiedBuff(target, 3);else target.defMod = (target.defMod ?? 0) + amplifiedBuff(target, 3);
-        ctx.log(`${p.name}: ${cn(DB.WORLD_TREE)} 이슬 1 소비 → ${cn(target)} ${q.reason==='WORLD_TREE_ATTACK'?'공격력':'체력'} +3(지속)`, `${p.name}: ${cn(DB.WORLD_TREE)} 雫1を消費 → ${cn(target)} ${q.reason==='WORLD_TREE_ATTACK'?'攻撃力':'体力'}+3 (永続)`, `${p.name}: ${cn(DB.WORLD_TREE)} spends 1 Dew → ${cn(target)} gains +3 ${q.reason==='WORLD_TREE_ATTACK'?'ATK':'HP'} while it remains on the field`);
+        loseStatus(ctx, p, 'dew', 1); if(q.reason==='WORLD_TREE_ATTACK')target.atkMod = (target.atkMod ?? 0) + amplifiedBuff(target, 6);else target.defMod = (target.defMod ?? 0) + amplifiedBuff(target, 6);
+        ctx.log(`${p.name}: ${cn(DB.WORLD_TREE)} 이슬 1 소비 → ${cn(target)} ${q.reason==='WORLD_TREE_ATTACK'?'공격력':'체력'} +6(지속)`, `${p.name}: ${cn(DB.WORLD_TREE)} 雫1を消費 → ${cn(target)} ${q.reason==='WORLD_TREE_ATTACK'?'攻撃力':'体力'}+6 (永続)`, `${p.name}: ${cn(DB.WORLD_TREE)} spends 1 Dew → ${cn(target)} gains +6 ${q.reason==='WORLD_TREE_ATTACK'?'ATK':'HP'} while it remains on the field`);
       } else ctx.log(`${p.name}: ${cn(DB.WORLD_TREE)} 이슬을 소비하지 않고 계속`, `${p.name}: ${cn(DB.WORLD_TREE)} 雫を消費せず続行`);
       const stage=q.reason==='WORLD_TREE_ATTACK'?1:2;
       if(q.data?.friendlyPlayer) resolveFriendlyPlayerAttack(g,ctx,attacker,stage);

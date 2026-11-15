@@ -26,11 +26,10 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
   results.push({tier,roster:E.botNpc(tier).decks.length,setup:true,restoredDifficulty:saved.challengeDifficulty,action:expected,reducerParity:true,persisted:true,alarmRearmed:true,ms});
   assert.equal(E.npcThinkingDifficulty(tier,45000),tier);
   assert.equal(E.npcThinkingDifficulty(tier,44999),'normal');
-  // Long-turn variant without a hand-held answer: full search ends the turn,
-  // but shallow search buys slot 5. Exercise the real route near its deadline.
+  // Exercise the shallow policy near the deadline in a position with several legal actions.
   const heavy=JSON.parse(require('node:zlib').gunzipSync(fs.readFileSync('docs/bot-strength/2026-10-27/evidence/cpu-heavy-state.json.gz')));
   heavy.players[heavy.cur].hand=heavy.players[heavy.cur].hand.filter(c=>!['destroyMon','destroyEnch'].includes(c.act));
-  const quick=E.botDecide(heavy,'normal');assert.deepEqual(quick,{type:'buyMarket',i:5});
+  const quick=E.botDecide(heavy,'normal');assert.deepEqual(quick,{type:'play',idx:7});
   Object.assign(room.room,{game:heavy,turnStartAt:Date.now()-60000,turnBonusMs:0});room.room.bot.side=0;
   const quickStart=performance.now();await room.runBot();
   assert.deepEqual(room.room.game,E.reduce(heavy,quick).state,'remaining clock selects the shallow policy');

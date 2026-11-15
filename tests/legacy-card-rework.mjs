@@ -16,7 +16,7 @@ try {
  const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
  test('all changed costs apply to buying and playing; unrequested stats/rain remain',()=>{
   for(const [id,buy,use] of [['NIGHT_CASTLE_GIFT',3,3],['AHEUK',4,4],['GS8_0',7,6],['TIMEWARP',12,7],['S14',3,3]]){assert.equal(DB[id].cost,buy);assert.equal(playCost(card(id)),use);}
-  for(const [id,a,d] of [['M2',1,3],['M4',4,2],['M5',2,5],['M8',3,5],['M12',3,4]])assert.deepEqual([DB[id].atk,DB[id].def],[a,d]);
+  for(const [id,a,d] of [['M2',1,3],['M4',4,2],['M5',2,5],['M8',2,5],['M12',3,4]])assert.deepEqual([DB[id].atk,DB[id].def],[a,d]);
   assert.equal(DB.NOURISHING_RAIN.cost,4);assert.equal(DB.NOURISHING_RAIN.val,1);
  });
  test('Warden transfers one existing Dew on either side; empty opponent grants nothing',()=>{

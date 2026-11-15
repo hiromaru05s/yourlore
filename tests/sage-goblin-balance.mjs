@@ -15,8 +15,8 @@ try {
  const target=g=>step(g,{type:'chooseTarget',uid:g.players[1-g.cur].field[0].uid});
  const sage=()=>{const g=fresh();g.players[0].field=[mon('NMD6')];g.players[0].deck=Array.from({length:13},()=>card('S10'));return g;};
  const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
- test('Sage: 12/13 spell threshold, positive floor, original zero, monsters and no stacking',()=>{
-  const g=sage(),p=g.players[0];p.deck.pop();assert.equal(playCost(card('S15'),p),DB.S15.play??DB.S15.cost);p.deck.push(card('S10'));
+ test('Sage: discount on either side of the former 13-spell threshold, positive floor, original zero, monsters and no stacking',()=>{
+  const g=sage(),p=g.players[0];p.deck.pop();assert.equal(playCost(card('S15'),p),Math.max(1,(DB.S15.play??DB.S15.cost)-1));p.deck.push(card('S10'));
   for(const cost of [0,1,2,3,6])assert.equal(playCost({...card('S10'),play:cost},p),cost===0?0:Math.max(1,cost-1));
   assert.equal(playCost(card('GOBLIN'),p),1);p.field.push(mon('NMD6'));assert.equal(playCost({...card('S10'),play:3},p),2);
   p.manaCostMult=3;assert.equal(playCost(card('S10'),p),3);
@@ -56,7 +56,7 @@ try {
   let g=duel();for(const p of g.players){p.field.push(mon('WORLD_TREE'));p.dew=2;}
   g=target(attack(g));assert.equal(g.pending.reason,'WORLD_TREE_ATTACK');assert.equal(g.players[0].hp,40);
   g=step(g,{type:'pick',uid:'grow'});assert.equal(g.pending.reason,'WORLD_TREE_DEFEND');assert.equal(g.players[0].hp,40);
-  g=step(JSON.parse(JSON.stringify(g)),{type:'pick',uid:'grow'});assert.equal(g.players[0].hp,39);assert.equal(g.players[0].field[0].attacksUsed,1);assert.equal(g.players[1].field[0].dmg,4);
+  g=step(JSON.parse(JSON.stringify(g)),{type:'pick',uid:'grow'});assert.equal(g.players[0].hp,39);assert.equal(g.players[0].field[0].attacksUsed,1);assert.equal(g.players[1].field[0].dmg,7);
  });
  test('Evasion and trap cancellation still pay the committed attack penalty',()=>{
   let evaded=false;for(let seed=1;seed<100&&!evaded;seed++){let g=duel();g.rng=seed;g.players[1].field[0].passivesG=['evade'];g=target(attack(g));assert.equal(g.players[0].hp,39);if(!g.players[1].field[0].dmg)evaded=true;}assert(evaded);

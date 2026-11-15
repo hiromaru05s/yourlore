@@ -129,11 +129,11 @@ check('First Aid counts HP damage after shields in the previous turn only',()=>{
 check('Hunter hits before damage when a previously committed attack resumes',()=>{
   for(const def of [5,10]) {
     let g=fresh();const a=mon('MIMIC',{atk:3,def,passive:[]}),h=mon('MIMIC_HUNTER',{def:12,passive:[]});
-    g.players[0].field=[a];g.players[1].field=[h];
-    g.pending={kind:'cardChoice',owner:1,reason:'WORLD_TREE_DEFEND',data:{attackerUid:a.uid,targetUid:h.uid},allowCancel:false};
-    g=pick(g,'pass');assert.equal(g.players[0].field.length,def===5?0:1);
-    if(def===10)assert.equal(g.players[0].field[0].dmg,6);
-    assert.equal(g.players[1].field[0].dmg,def===5?0:3);
+    g.players[0].field=[h];g.players[1].field=[a];
+    g.pending={kind:'cardChoice',owner:1,reason:'WORLD_TREE_DEFEND',data:{attackerUid:h.uid,targetUid:a.uid},allowCancel:false};
+    g=pick(g,'pass');assert.equal(g.players[1].field.length,def===5?0:1);
+    assert.equal(g.players[0].field[0].attacksUsed,1);
+    if(def===10)assert.equal(g.players[1].field[0].dmg,9);
   }
 });
 check('Saved game migration updates the cost in hand and market, keeping existing enchantment duration',()=>{

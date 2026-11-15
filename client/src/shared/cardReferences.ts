@@ -52,7 +52,7 @@ export const CARD_GENERATES: Record<string,string[]> = {
   MUSTER_DIE:['COUP','SOLDIER2','GUNNER'], CANNON_COMMANDER:['GUNNER','HEAVY_GUNNER'],
   QUICK_ESCORT:['INFKNIGHT'], DRAGON_KILLER:['MANA_HEART'], QUEST_ATTUNE_STUDY:['DUAL_ATTUNE','ATTUNE_SHINE','ATTUNE_RESEARCH'],
   MIMIC:['CURSE'], SPIRIT_RESONANCE:['MINI_SPIRIT'], TIME_WRAITH:['TIMEWARP'],
-  M11:['INFKNIGHT'], NHEX:['CURSE'], HEX_BRAND:['CURSE'], HEX_PUPPET:['CURSE','TOKEN00'], AJIN:['STARTER_MANA'], GM6_0:['DRAGON_RIDER','ANTIQUE_DK'],
+  NMD2:['DISCOVERY_LARGE','E3'], TAR3:['INFKNIGHT'], M11:['SOLDIER2'], NHEX:['CURSE'], HEX_BRAND:['CURSE'], HEX_PUPPET:['CURSE','TOKEN00'], AJIN:['STARTER_MANA'], GM6_0:['DRAGON_RIDER','ANTIQUE_DK','GOBLIN_DRAGON_RIDER'],
   GM6_7:['INFKNIGHT','SOLDIER2'], GM6_8:['SOLDIER2','HEAVY_GUNNER'], TGE5:['ORIGIN_RITE'],
   TGE1:ids(c=>c.t==='mon'&&c.tribe==='시초'&&c.id!=='TGE1'&&c.cost<=7),
   LUCKY_CHEST:['MIMIC'], STARTER_CHEST:['MIMIC'], GUILD_CHEST:['GUILD_EYE','ASSASSIN1','ASSASSIN2','ASSASSIN3'],
@@ -115,6 +115,7 @@ export function effectReferenceParts(text:string,lang:EffectLocale,sourceId:stri
       // Marketplace is also the name of a zone. Only an explicit card citation names the spell.
       if(c.reference.kind==='card' && c.reference.id==='SHARED_MARKET' && !['「', "'", '"'].includes(text[i-1]))return false;
       const before=text.slice(0,i),after=text.slice(i+c.text.length);
+      if(lang==='en' && c.reference.kind==='card' && c.reference.id==='CURSE' && /^ Seals?\b/i.test(after))return false;
       if(lang==='en'&&(/[A-Za-z]$/.test(before)||/^[A-Za-z]/.test(after)&&!/^s\b/.test(after)))return false;
       if(lang==='ja'&&c.reference.kind==='card'&&!/^($|[」\s0-9０-９(（、。・：:]|は|を|が|に|の|で|と|から|へ)/.test(after))return false;
       if(lang==='ja'&&c.reference.kind==='card'&&c.text.length===1&&!(before.endsWith('「')&&after.startsWith('」')))return false;

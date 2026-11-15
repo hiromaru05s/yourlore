@@ -57,7 +57,7 @@ check('Supply Line credits the summoner when Rebellion sends a Soldier to the ot
   assert.equal(g.players[0].expansion.extraDraw,1);
 });
 check('Rally King grants one Guts to every military rank on either summon order',()=>{
-  assert.deepEqual([E.DB.VITAL4.atk,E.DB.VITAL4.def],[2,4]);
+  assert.deepEqual([E.DB.VITAL4.atk,E.DB.VITAL4.def],[2,5]);
   for(const id of ['SOLDIER2','INFKNIGHT','CAVALRY','GUNNER','HEAVY_GUNNER','CAPTAIN','CANNON_COMMANDER']){
     let g=fresh();g.players[0].field=[mon(id),mon('M1')];g.players[1].field=[mon(id)];
     g=cast(g,'VITAL4');assert.equal(g.players[0].field[0].guts,1,id);
@@ -114,7 +114,7 @@ check('Fate Wraith establishes the six-crystal floor before resetting crystals',
 check('Boundary suppresses only opposing passives, offers face through monsters, and reverses on leaving',()=>{
   let g=fresh();g.players[1].field=[mon('TIME_WRAITH')];g=cast(g,'SWORD_GRAVE_WRAITH');const m=g.players[0].field[0],enemy=g.players[1].field[0];
   assert(E.hasPassive(m,'boundary'));assert(!E.hasPassive(m,'dual'));assert(E.hasPassive(enemy,'void'));assert(!E.hasPassive(enemy,'evade'));
-  g=step(g,{type:'attack',uid:m.uid});assert(E.effectChoices(g).some(c=>c.uid==='opposing-player'));g=pick(g,'opposing-player');assert.equal(g.players[1].hp,65);
+  g=step(g,{type:'attack',uid:m.uid});assert(E.effectChoices(g).some(c=>c.uid==='opposing-player'));g=pick(g,'opposing-player');assert.equal(g.players[1].hp,75);
   g.players[0].field=[];g=end(g);assert(E.hasPassive(g.players[1].field[0],'evade'));
 });
 check('Attune upgrades stack, dual replays the base only, and printed costs do not mutate',()=>{

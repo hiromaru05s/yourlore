@@ -101,7 +101,7 @@ try {
     assert.equal(g.pending.reason, 'WORLD_TREE_ATTACK');
     g = reduce(g, { type: 'pick', uid: 'grow' }).state;
     assert.equal(g.players[0].dew, 2);
-    assert.equal(g.players[0].field[0].atkMod, 3);
+    assert.equal(g.players[0].field[0].atkMod, 6);
     assert.equal(g.players[0].field[0].attacksUsed, 1);
   });
   test('Chosen Knight cannot bootstrap Cull exile; Chosen Archer cannot execute at zero', () => {

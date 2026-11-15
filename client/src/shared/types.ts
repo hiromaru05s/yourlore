@@ -70,6 +70,9 @@ export interface CardInst extends CardDef {
 }
 
 export interface FieldMon extends CardInst {
+  wardenZeroTurn?: number;
+  wardenZeroActive?: boolean;
+  declaredAttackTurn?: number;
   mercContractKey?: string;
   bounties?: {hunterKey: string; hunterId: string; reward: number}[];
   visibleCurseAttack?: number;
@@ -120,6 +123,7 @@ export interface RevealedCard {
 }
 
 export interface PlayerState {
+  worldTreePresent?: boolean;
   damageReceived?: {turn:number; total:number; previous:number};
   runePlays?:string[];
   runeMarket?:boolean;
@@ -249,6 +253,7 @@ export interface GameState {
   runeReworkApplied?:boolean;
   runeZonesAudited?: boolean;
   incubatorsReworked?: boolean;
+  novemberBalanceApplied?: boolean;
   incubatorEndTurn?: number;
   golemsReworked?: boolean;
   threeFireNamed?: boolean;

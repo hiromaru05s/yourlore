@@ -16,7 +16,7 @@ try {
   const test=(name,fn)=>{fn();cases++;console.log('PASS',name);};
   test('catalog, costs and reviewed text',()=>{
     assert(Number(E.BALANCE_VERSION.slice(1))>=58);
-    for(const [id,atk,hp] of [['M11',4,3],['NGA3',3,1],['ELITE',6,6],['GM6_8',12,1],['NGA4',7,1]])assert.deepEqual([DB[id].atk,DB[id].def],[atk,hp]);
+    for(const [id,atk,hp] of [['M11',4,3],['NGA3',3,1],['ELITE',5,5],['GM6_8',14,2],['NGA4',9,2]])assert.deepEqual([DB[id].atk,DB[id].def],[atk,hp]);
     assert.equal(playCost(card('ACID_RAIN')),5);assert.equal(DB.ACID_RAIN.cost,2);
     assert.equal(DB.NGA4.mult,2);assert.equal(DB.VITAL3.onSummon,undefined);
     assert(DB.NGA4.textJa.includes('両プレイヤー'));assert(!DB.VITAL3.textJa.includes('召喚時'));
@@ -52,7 +52,7 @@ try {
     let g=fresh();g.players[1].field=[mon('GM6_7')];const r=play(g,'ELITE');assert.equal(r.events.filter(e=>e.type==='dice'&&e.source.id==='GM6_7').length,2);
     for(let seed=1;seed<=200;seed++){g=fresh(seed);g.players[0].field=[mon('GM6_7')];g.players[1].field=[mon('GM6_7')];const r=play(g,'ELITE');assert(r.events.length<500);assert(r.state.players.every(p=>p.field.length<=7));}
   });
-  test('Warlord threshold excludes itself',()=>{for(const n of [0,1,2,3]){let g=fresh();g.players[0].field=Array.from({length:n},()=>mon('SOLDIER2'));g=play(g,'M11').state;assert.equal(g.players[0].field.filter(m=>m.id==='INFKNIGHT').length,n===3?1:0);}});
+  test('Warlord threshold excludes itself',()=>{for(const n of [0,1,2,3]){let g=fresh();g.players[0].field=Array.from({length:n},()=>mon('SOLDIER2'));g=play(g,'M11').state;assert.equal(g.players[0].field.filter(m=>m.id==='SOLDIER2').length,n+(n===3?1:0));}});
   test('Warrior Golem adds one conditional counter to initial Guts',()=>{for(const ally of [null,'M1','GOLEM1']){let g=fresh();if(ally)g.players[0].field=[mon(ally)];g=play(g,'NGA3').state;assert.equal(g.players[0].field.at(-1).guts,ally==='GOLEM1'?2:1);}});
   test('Elite six/seven composition boundary includes hand, deck, graveyard, field',()=>{for(const zone of ['hand','deck','discard','field'])for(const n of [6,7]){let g=fresh();const p=g.players[0];p.deck=Array.from({length:n-2},()=>card('STARTER_TRASH'));if(zone==='field')p.field=[mon('M1')];else p[zone].push(card('M1'));g=play(g,'ELITE').state;assert.equal(g.players[0].field.filter(m=>m.id==='INFKNIGHT').length,n===6?1:0,zone+' '+n);}});
   test('Keeper loses summon healing and retains card-play Dew',()=>{let g=play(fresh(),'VITAL3').state;assert.equal(g.players[0].hp,1000);assert.equal(g.players[0].dew,0);g=play(g,'WORLD_CARE').state;assert.equal(g.players[0].dew,1);});
@@ -63,8 +63,8 @@ try {
     assert.equal(faces.size,6);
   });
   test('Acid Rain never rolls for ordinary combat destruction',()=>{let g=fresh();g.players[0].enchants=[{card:card('ACID_RAIN'),turns:99}];g.players[0].field=[mon('M1',{atk:10})];g.players[1].field=[mon('SOLDIER2')];let r=reduce(g,{type:'attack',uid:g.players[0].field[0].uid});r=reduce(r.state,{type:'chooseTarget',uid:g.players[1].field[0].uid});assert(!r.events.some(e=>e.type==='dice'&&e.source.id==='ACID_RAIN'));assert.equal(r.state.players[1].brand??0,0);});
-  test('Berserk pool includes both players and both fields, excludes itself',()=>{const g=fresh(),m=mon('NGA4');g.players[0].field=[m,mon('M1')];g.players[1].field=[mon('M2')];assert.equal(berserkTargets(g,g.players[0],m).length,4);assert(!berserkTargets(g,g.players[0],m).some(t=>t.uid===m.uid));g.players[0].noDirectTurn=true;assert.equal(berserkTargets(g,g.players[0],m).length,2);});
-  test('Berserk does not bypass Noble Lord target restrictions',()=>{const g=fresh(),m=mon('NGA4');g.players[0].field=[m];g.players[1].field=[mon('TAR5')];assert.equal(g.players[1].field[0].aura,'eliteGuard');assert.deepEqual(berserkTargets(g,g.players[0],m),[{player:0,uid:null}]);});
+  test('Berserk pool includes both players and both fields, excludes itself',()=>{const g=fresh(),m=mon('NGA4');g.players[0].field=[m,mon('M1')];g.players[1].field=[mon('M2')];assert.equal(berserkTargets(g,g.players[0],m).length,4);assert(!berserkTargets(g,g.players[0],m).some(t=>t.uid===m.uid));g.players[0].noDirectTurn=true;assert.equal(berserkTargets(g,g.players[0],m).length,4);});
+  test('Berserk bypasses Noble Lord target restrictions',()=>{const g=fresh(),m=mon('NGA4');g.players[0].field=[m];g.players[1].field=[mon('TAR5')];assert.equal(g.players[1].field[0].aura,'eliteGuard');assert.deepEqual(berserkTargets(g,g.players[0],m),[{player:1,uid:g.players[1].field[0].uid},{player:0,uid:null},{player:1,uid:null}]);});
   test('Berserk samples all four targets approximately uniformly: 2400 seeds',()=>{
     const counts=[0,0,0,0];
     for(let seed=1;seed<=2400;seed++){let g=fresh(seed),m=mon('NGA4');g.players[0].field=[m,mon('M1',{def:100,passive:[]})];g.players[1].field=[mon('M2',{def:100,passive:[]})];const before=structuredClone(g);const r=reduce(g,{type:'attack',uid:m.uid});assert.deepEqual(g,before);const e=r.events.find(e=>e.type==='attack');assert(e);counts[e.targetUid?(e.targetPlayer===0?0:1):(e.targetPlayer===0?2:3)]++;assert.equal(r.state.players[0].field[0].attacksUsed,1);}
@@ -73,21 +73,20 @@ try {
   test('Ending turn consumes both attacks and respects prior attacks',()=>{for(const used of [0,1,2]){const g=fresh(),m=mon('NGA4',{attacksUsed:used,exhausted:used===2});g.players[0].field=[m];const r=reduce(g,{type:'endTurn'});assert.equal(r.events.filter(e=>e.type==='attack').length,2-used);assert.equal(r.state.turn,4);}});
   test('Both sides, deterministic replay, serialization and server timeout',()=>{for(const side of [0,1]){const g=fresh();g.cur=side;g.players[side].field=[mon('NGA4')];const a=reduce(g,{type:'endTurn'}),b=resolveTurnTimeout(JSON.parse(JSON.stringify(g)));assert.match(b.events[0].htmlJa,/時間切れ/);assert.deepEqual(JSON.parse(JSON.stringify(a)),JSON.parse(JSON.stringify({...b,events:b.events.slice(1)})));assert.equal(a.state.cur,1-side);assert.equal(a.events.filter(e=>e.type==='attack').length,2);}});
   test('Attack prohibitions allow ending without deadlock or attack events',()=>{
-    for(const blocked of ['zero','exhausted','noAttack','glass','highCost','majesty','noTargets']){
+    for(const blocked of ['zero','exhausted','noAttack','glass','highCost','majesty']){
       const g=fresh(),m=mon('NGA4');g.players[0].field=[m];
       if(blocked==='zero')m.atk=0;if(blocked==='exhausted')m.exhausted=true;
       if(blocked==='noAttack')g.players[0].enchants=[{card:{...card('ACID_RAIN'),ench:'noAttack'},turns:99}];
       if(blocked==='glass')g.players[0].enchants=[{card:card('GLASS_BAN'),turns:99}];
       if(blocked==='highCost')g.players[0].noHighAtkTurn=true;
       if(blocked==='majesty'){m.summonedTurn=g.turn;g.players[1].field=[mon('TDE4')];}
-      if(blocked==='noTargets')g.players[0].noDirectTurn=true;
       assert(!monsterCanAttack(g,g.players[0],m),blocked);assert(!candidates(g).some(a=>a.type==='attack'),blocked);
       const r=resolveTurnTimeout(g);assert.equal(r.events.filter(e=>e.type==='attack').length,0,blocked);assert.equal(r.state.turn,4,blocked);
     }
   });
   test('Self player damage uses shields and can lose the game',()=>{
     let hits=0;
-    for(let seed=1;seed<=100;seed++){const g=fresh(seed),m=mon('NGA4');g.players[0].field=[m];g.players[0].shield=5;const r=reduce(g,{type:'attack',uid:m.uid});const a=r.events.find(e=>e.type==='attack');if(a.targetPlayer!==0)continue;hits++;assert.equal(r.state.players[0].hp,998);assert.equal(r.state.players[0].shield,0);assert.equal(a.contactDamage,2);g.players[0].hp=2;g.players[0].shield=0;const lethal=reduce(g,{type:'endTurn'});assert(lethal.state.over);assert.equal(lethal.state.winner,1);assert.equal(lethal.state.turn,3);}
+    for(let seed=1;seed<=100;seed++){const g=fresh(seed),m=mon('NGA4');g.players[0].field=[m];g.players[0].shield=5;const r=reduce(g,{type:'attack',uid:m.uid});const a=r.events.find(e=>e.type==='attack');if(a.targetPlayer!==0)continue;hits++;assert.equal(r.state.players[0].hp,996);assert.equal(r.state.players[0].shield,0);assert.equal(a.contactDamage,4);g.players[0].hp=2;g.players[0].shield=0;const lethal=reduce(g,{type:'endTurn'});assert(lethal.state.over);assert.equal(lethal.state.winner,1);assert.equal(lethal.state.turn,3);}
     assert(hits>30);
   });
   test('World Tree choices resume forced attacks; timeout declines and ends exactly once',()=>{

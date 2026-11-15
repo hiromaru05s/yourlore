@@ -43,8 +43,8 @@ for(const side of [0,1]){
  }
  {
   let g=fresh(side);g=play(g,'RUNE_SAI');g=play(g,'RUNE_NIKRO');assert.equal(E.buyCost(g.players[side],c('RUNE3')),1);
-  g=play(g,'ND2');const sai=g.players[side].field[0];assert.equal(sai.atkMod,2);
-  g=pick(g,sai.uid);assert.equal(g.players[side].field[0].passivesG.length,2);
+  g=play(g,'ND2');const sai=g.players[side].field[0];assert.equal(sai.atkMod,2);assert.equal(sai.defMod,1);
+  g=pick(g,sai.uid);assert.equal(g.players[side].field[0].passivesG.length,3);
   assert(!g.players[side].field[0].passivesG.some(k=>['void','boundary'].includes(k)));
  }
  {

@@ -98,7 +98,7 @@ try {
  }
  for(const id of ['NMD6','VITAL4','HALF_ELF','CHOSEN_MAGE'])for(const enabled of [false,true]){
   const g=fresh(),p=g.players[0],m=mon(id);p.field=[m];if(enabled){if(id==='NMD6')p.deck=Array.from({length:13},()=>card('WEAKEN_ALL'));if(id==='VITAL4')p.field.push(mon('SOLDIER2'));if(id==='HALF_ELF')g.players[1].field=[mon('WORLD_TREE')];if(id==='CHOSEN_MAGE')p.removed=[card('STARTER_TRASH'),card('STARTER_TRASH')];}
-  assert.equal(monsterOngoingActive(g,p,m),enabled,id);for(const you of [0,1]){const view=redactFor(g,you);assert.equal(monsterOngoingActive(view,view.players[0],view.players[0].field[0]),enabled&&(id!=='NMD6'||you===0),'redacted '+id);}checks+=3;
+  assert.equal(monsterOngoingActive(g,p,m),id==='NMD6'||enabled,id);for(const you of [0,1]){const view=redactFor(g,you);assert.equal(monsterOngoingActive(view,view.players[0],view.players[0].field[0]),id==='NMD6'||enabled,'redacted '+id);}checks+=3;
   browserCases.push({label:'ongoing:'+id+':'+enabled,before:g,result:{state:g,events:[]},sourceUid:m.uid,ongoing:enabled});
  }
  {const g=fresh(),p=g.players[0],m=mon('NMD6');p.field=[m];p.deck=Array.from({length:13},()=>card('WEAKEN_ALL'));const hidden=redactFor(g,1);p.deck=p.deck.map(c=>({...DB.SOLDIER2,uid:c.uid}));assert.deepEqual(redactFor(g,1),hidden,'no private deck threshold signal');checks++;}

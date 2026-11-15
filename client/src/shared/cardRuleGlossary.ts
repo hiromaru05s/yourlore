@@ -10,6 +10,10 @@ export type GlossaryEntry = {id:string; names:Localized; aliases?:Partial<Record
 const entry=(id:string,ja:string,ko:string,en:string,dja:string,dko:string,den:string):GlossaryEntry=>({id,names:{ja,ko,en},descriptions:{ja:dja,ko:dko,en:den}});
 /** One definition for inline explanations and the existing expanded rule notes. */
 export const CARD_RULE_GLOSSARY:GlossaryEntry[] = [
+  entry('curseSeal','呪印','주인','Curse Seal',
+    'プレイヤーに蓄積するカウンター。相手のターン開始時、自分の呪印が20個以上あれば、20個を消費して自分の体力を1にする。',
+    '플레이어에게 쌓이는 카운터. 상대 턴 시작 시 자신의 주인이 20개 이상이면 20개를 소비하고 자신의 체력을 1로 만든다.',
+    'Counters on a player. At the start of the opposing turn, if you have at least 20 Curse Seals, spend 20 and set your HP to 1.'),
   entry('brand','烙印','낙인','Brand',
     'プレイヤーに蓄積するカウンター。自分のターン開始時、烙印カウンター1個につき6面ダイスを1個振り、合計のダメージを受ける。シールドで防げる。ダメージを受けてもカウンターは減らず、取り除く効果を使うまで残る。',
     '플레이어에게 쌓이는 카운터. 자신의 턴 시작 시 낙인 카운터 1개당 6면체 주사위 1개를 굴리고 합계만큼 데미지를 받는다. 실드로 막을 수 있다. 데미지를 받아도 카운터는 줄지 않으며 제거 효과를 사용하기 전까지 남는다.',
@@ -88,6 +92,7 @@ CARD_RULE_GLOSSARY.find(e=>e.id==='castCost')!.aliases={ko:['시전 코스트']}
 CARD_RULE_GLOSSARY.find(e=>e.id==='pierce')!.aliases={en:['pierce','overflow damage']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='quick')!.aliases={ko:['퀵마법'],en:['quick spells']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='maxMana')!.aliases={en:['mana crystal']};
+CARD_RULE_GLOSSARY.find(e=>e.id==='curseSeal')!.aliases={en:['Curse Seals']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='brand')!.aliases={ja:['烙印カウンター'],ko:['낙인 카운터'],en:['Brand counters','Brand counter']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='persistent')!.aliases={ko:['영구 마법','지속 마법'],en:['persistent spells']};
 CARD_RULE_GLOSSARY.find(e=>e.id==='counters')!.aliases={en:['counters']};

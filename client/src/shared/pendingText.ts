@@ -9,6 +9,9 @@ export const CHOICE_TEXT:Record<string,Copy>={
  MIND_GUESS:c('攻撃される自分のモンスターを予想してください。','공격받을 자신의 몬스터를 예측하세요.','Predict which of your monsters will be attacked.'),
  TOLL_DISCARD:c('通行税で捨てる手札を1枚選んでください。','통행세로 버릴 패 1장을 고르세요.','Choose 1 card to discard for Toll Gate.'),
  NIKRO_GIFT:c("パッシブを付与する味方を選択","패시브를 부여할 아군 선택","Choose an ally to gain random passives"),
+ BOOK_DISCARD:c('捨てる魔法カードを1枚まで選んでください。','버릴 마법 카드를 1장까지 고르세요.','Choose up to 1 spell to discard.'),
+ BOOK_REWARD:c('自分の墓地に加えるカードを選んでください。','자신의 묘지에 추가할 카드를 고르세요.','Choose a card to add to your graveyard.'),
+ WARDEN_ZERO:c('次の相手ターン中、攻撃力を0にする相手モンスターを選んでください。','다음 상대 턴 동안 공격력이 0이 될 상대 몬스터를 고르세요.','Choose an enemy monster to have 0 ATK during the opponent’s next turn.'),
  INCUBATOR_EFFECT:c('孵化を早める卵を1体選ぶか、孵化器をリフトへ送ってマナ水晶を得てください。','부화를 앞당길 알 1체를 고르거나 부화기를 리프트로 보내 마나 수정을 얻으세요.','Choose an Egg to accelerate, or send the Incubator to the Rift for mana crystals.'),
  EGG_ADVANCE:c("耐久を消費する卵を選択","내구도를 소모할 알 선택","Choose an Egg to accelerate"),
  CHOSEN_DISPEL:c("破壊する相手の永続魔法を選択","파괴할 상대 영구 마법 선택","Choose an opposing persistent spell to destroy"),
@@ -69,7 +72,7 @@ export const CHOICE_TEXT:Record<string,Copy>={
  FIRE_BALL:c('ダメージを与えるプレイヤーかモンスター1体を選んでください。','데미지를 줄 플레이어 또는 몬스터 1체를 선택하세요.','Choose a player or monster to deal damage to.'),
  FIRE_ZONE:c('自分の手札から自分のリフトへ送るカード1枚を選んでください。','자신의 패에서 자신의 리프트로 보낼 카드 1장을 선택하세요.','Choose 1 card from your hand to send to your Rift.'),
  attack:c('攻撃する相手モンスター1体を選んでください。','공격할 상대 몬스터 1체를 선택하세요.','Choose an opposing monster to attack.'),
- bounceLow:c('相手の手札に戻す、購入コスト2以下の相手モンスター1体を選んでください。','상대의 패로 되돌릴 구매 비용 2 이하의 상대 몬스터 1체를 선택하세요.','Choose 1 opposing monster with purchase cost 2 or less to return to the opponent’s hand.'),
+ bounceLow:c('相手の手札に戻す、購入コスト3以下の相手モンスター1体を選んでください。','상대의 패로 되돌릴 구매 비용 3 이하의 상대 몬스터 1체를 선택하세요.','Choose 1 opposing monster with purchase cost 3 or less to return to the opponent’s hand.'),
  setAtk2:c('攻撃力を2にする相手モンスター1体を選んでください。','공격력을 2로 만들 상대 몬스터 1체를 선택하세요.','Choose 1 opposing monster whose ATK will become 2.'),
  decayMark:c('腐敗カウンターを1個付与する相手モンスター1体を選んでください。','부패 카운터 1개를 부여할 상대 몬스터 1체를 선택하세요.','Choose 1 opposing monster to receive 1 Decay counter.'),
  emberBuff:c('攻撃力+2する自分の他の始原モンスター1体を選んでください。','공격력을 2 올릴 자신의 다른 시초 몬스터 1체를 선택하세요.','Choose 1 of your other Origin monsters to gain +2 ATK.'),
@@ -109,7 +112,7 @@ export function pendingText(q:Pending,lang:Locale):string {
      ? c(`${d.ja}の気合カウンター1つとマナ${d.mana}を支払いますか？`,`${d.ko}의 기합 카운터 1개와 마나 ${d.mana}을 지불할까요?`,`Spend 1 Guts counter from ${d.en} and ${d.mana} mana?`)
      : c('ゴーレムのターン開始時効果を使用しますか？','골렘의 턴 시작 효과를 사용할까요?','Use the Golem’s start-of-turn effect?');
    break;
- case 'WORLD_TREE_ATTACK':case 'WORLD_TREE_DEFEND':{const atk=q.reason==='WORLD_TREE_ATTACK';text=atk?c('雫1を消費して攻撃するモンスターの攻撃力を3上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격하는 몬스터의 공격력을 3 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the attacking monster +3 ATK until it leaves the field?'):c('雫1を消費して攻撃されるモンスターの体力を3上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격받는 몬스터의 체력을 3 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the defending monster +3 HP until it leaves the field?');break;}
+ case 'WORLD_TREE_ATTACK':case 'WORLD_TREE_DEFEND':{const atk=q.reason==='WORLD_TREE_ATTACK';text=atk?c('雫1を消費して攻撃するモンスターの攻撃力を6上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격하는 몬스터의 공격력을 6 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the attacking monster +6 ATK until it leaves the field?'):c('雫1を消費して攻撃されるモンスターの体力を6上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격받는 몬스터의 체력을 6 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the defending monster +6 HP until it leaves the field?');break;}
  case 'SELECTED_SWORD':text=c(`このターン終了まで攻撃力+${d.amount}する自分のモンスター1体を選んでください。`,`이번 턴 종료까지 공격력을 ${d.amount} 올릴 자신의 몬스터 1체를 선택하세요.`,`Choose 1 of your monsters to gain +${d.amount} ATK until the end of this turn.`);break;
  case 'QUICK_ASSAULT':text=c(`このターン終了まで攻撃力+2する${d.first?'2':'1'}体目の自分のモンスターを選んでください。`, `이번 턴 종료까지 공격력을 2 올릴 자신의 ${d.first?'두':'첫'} 번째 몬스터를 선택하세요.`,`Choose the ${d.first?'second':'first'} of your monsters to gain +2 ATK until the end of this turn.`);break;
  case 'RIFT_MATTER':text=c(`相手の場から相手のリフトへ送る${d.left===1?'2枚目の':'1枚目の'}カードを選んでください。`,`상대 필드에서 상대의 리프트로 보낼 ${d.left===1?'두':'첫'} 번째 카드를 선택하세요.`,`Choose the ${d.left===1?'second':'first'} card on the opponent’s field to send to their Rift.`);break;

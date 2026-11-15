@@ -57,12 +57,14 @@ try {
     if (expected.passive) expected.passive = expected.passive.filter(k => k !== 'trapmaster');
     if (expected.aura === 'trapImmune') delete expected.aura;
     if (id === 'TAR3') { delete expected.aura; expected.passive = []; }
-    if (id === 'GM6_8') { delete expected.onSummon; expected.atk = 12; } // v57 approved ATK nerf
+    if (id === 'GM6_8') { delete expected.onSummon; expected.atk = 14; expected.def = 2; }
     if (id === 'CHOSEN_ROGUE') { delete expected.attackFx; expected.onSummon='chosenAssassinate'; }
     if (id === 'HIGH_ELF') { expected.summonReq='dew10'; expected.onSummon='highElfDew'; expected.atk=20; expected.def=20; }
     const current = JSON.parse(JSON.stringify(DB[id]));
     // v50 adds Counter without restoring any retired trap abilities.
     if (current.passive?.includes("counter")) expected.passive = [...(expected.passive ?? []), "counter"];
+    if (id === 'NMD6') Object.assign(expected,{atk:7,def:7});
+    if (id === 'ORIGIN_MIMIC') expected.passive = ['aura','counter','majesty'];
     for (const field of ['text', 'textJa', 'textEn']) {
       assert(!/罠|トラップ|함정|트랩|trap/i.test(current[field] || ''), `${id} ${field}`);
       delete expected[field]; delete current[field];
@@ -70,7 +72,7 @@ try {
     assert.deepEqual(current, expected, `${id}: preserve stats, cost, names, conditions and unrelated effects`);
   }
   assert.deepEqual(cardPassives(DB.TAR3), ["counter"]);
-  for (const key of ['text', 'textJa', 'textEn']) assert.equal(DB.TAR3[key], '—');
+  assert(DB.TAR3.textJa.includes('「騎士」1体'));
 
   // Siege: neither trap destruction nor fallback exile; death summon still works.
   for (const trapCount of [0, 2]) {
@@ -127,7 +129,7 @@ try {
   g = fresh();
   g.players[0].field = [inst('NMD6')];
   g.players[0].deck = Array.from({ length: 12 }, () => inst('S1'));
-  assert.equal(playCost(inst('S13'), g.players[0]), DB.S13.play ?? DB.S13.cost);
+  assert.equal(playCost(inst('S13'), g.players[0]), (DB.S13.play ?? DB.S13.cost)-1);
   g.players[0].deck.push(inst('S1'));
   assert.equal(playCost(inst('S13'), g.players[0]), (DB.S13.play ?? DB.S13.cost) - 1);
 
