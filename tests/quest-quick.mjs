@@ -47,7 +47,19 @@ try {
     }
     assert.equal(g.players[1].brand, 1);
     assert.equal(g.players[0].quests.length, 0);
-    assert(g.players[0].removed.some(c => c.id === 'Q_ENJOY_THE_SHOW'));
+    const completed = g.players[0].discard.find(c => c.id === 'Q_ENJOY_THE_SHOW');
+    assert(completed);
+    g = activate(JSON.parse(JSON.stringify(g)), 'M3');
+    const index = g.players[0].hand.findIndex(c => c.uid === completed.uid);
+    assert(index >= 0, 'redraw the same quest after the graveyard reshuffles');
+    g = step(g, {type:'play',idx:index});
+    assert.equal(g.players[0].quests[0].progress, 0);
+    for (let i = 0; i < 8; i++) {
+      g.players[0].mana = 20;
+      g = buy(g, 'QUICK_ATTUNE');
+    }
+    assert.equal(g.players[1].brand, 2);
+    assert.equal(g.players[0].discard.filter(c => c.uid === completed.uid).length, 1);
   }
   {
     let g = activate(fresh(), 'Q_UNDERWORLD_DEAL');
@@ -118,18 +130,19 @@ try {
     const before=structuredClone(p);const opponent=structuredClone(g.players[1-owner]);
     g=buy(g,'QUICK_GRIMOIRE');const after=g.players[owner];
     assert.equal(after.quests.length,0);
-    for(const zone of ['hand','deck','discard']) assert.deepEqual(after[zone],before[zone]);
+    for(const zone of ['hand','deck']) assert.deepEqual(after[zone],before[zone]);
+    assert.deepEqual(after.discard,[...before.discard,before.quests[0].card]);
     const oldIds=new Set(before.removed.map(c=>c.uid));
     const generated=after.removed.filter(c=>c.star==='trash'&&!oldIds.has(c.uid));
     assert.equal(generated.length,7);assert.equal(new Set(generated.map(c=>c.uid)).size,7);
     const existingIds=new Set(['hand','deck','discard','removed'].flatMap(zone=>before[zone].map(c=>c.uid)));
     assert(generated.every(c=>!existingIds.has(c.uid)));
-    assert.equal(after.removed.length,before.removed.length+9); // consumed quick + completed quest + 7 Culls
+    assert.equal(after.removed.length,before.removed.length+8); // consumed quick + 7 Culls
     assert.deepEqual(g.players[1-owner].removed,opponent.removed);
     const count=after.removed.length;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[owner].removed.length,count+1);
   }
   // Generated Culls participate in existing Rift reactions.
-  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=7;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+9);}
+  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=7;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+8);}
   {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=2;g.players[0].quests.find(q=>q.card.id==='Q_WINTER').progress=12;const hp=g.players[0].hp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,hp+18);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
   {let g=activate(fresh(),'Q_TORI');g.players[0].hand=Array.from({length:8},()=>card('STARTER_TRASH'));g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);assert.equal(g.pending.reason,'handCap');g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,1);}
   {let g=activate(fresh(),'Q_CASTLE');const castle=mon('CASTLE');g.players[0].field=[castle];for(let i=0;i<4;i++){g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,i+1);}g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests.length,0);assert.equal(g.players[0].field.filter(c=>c.id==='INFKNIGHT').length,2);}
@@ -151,7 +164,7 @@ try {
     g=step(g,{type:'attack',uid:enemy.uid});assert.equal(g.players[0].quests[0].progress,27);assert.equal(g.players[1].brand,initialBrand);
     g.players[1].field[0].exhausted=false;g.players[1].field[0].atk=1;
     g=step(g,{type:'attack',uid:enemy.uid});assert.equal(g.players[1].brand,initialBrand+1);assert.equal(g.players[0].quests.length,0);
-    assert.equal(g.players[0].removed.filter(c=>c.id==='Q_BRAND').length,1);
+    assert.equal(g.players[0].discard.filter(c=>c.id==='Q_BRAND').length,1);
     g.players[1].field[0].exhausted=false;g=step(g,{type:'attack',uid:enemy.uid});assert.equal(g.players[1].brand,initialBrand+1);
   }
   // Out-of-turn reward decisions are made by the quest owner, never the active opponent.
@@ -175,7 +188,7 @@ try {
     g=step(g,{type:'attack',uid:attacker.uid});
     assert.equal(g.pending.reason,'Q_ASSASSIN');
     g=pick(g,g.players[1].enchants[0].card.uid);
-    assert.equal(g.players[0].removed.filter(c=>c.id==='Q_ASSASSIN').length,1);
+    assert.equal(g.players[0].discard.filter(c=>c.id==='Q_ASSASSIN').length,1);
   }
   // An opponent's trap can deal qualifying damage during the quest owner's turn.
   {
@@ -202,7 +215,7 @@ try {
     assert.equal(serialized.players[0].hand[0].quest.target,13);
     g=step(serialized,{type:'pick',uid:null});assert.equal(g.players[0].hp,118);
     g=step(g,{type:'pick',uid:null});assert.equal(g.players[0].hp,118);
-    assert.equal(g.players[0].removed.filter(c=>c.uid===uid).length,1);
+    assert.equal(g.players[0].discard.filter(c=>c.uid===uid).length,1);
   }
   // Real authoritative action handler broadcasts quest activation and authorizes the pending owner.
   {

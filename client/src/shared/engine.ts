@@ -6593,7 +6593,9 @@ function resolveQuests(g: GameState, ctx: Ctx, automaticOnly = false): void {
       if (!q.card.quest || q.progress < (q.card.id === "Q_CASTLE" ? DB.Q_CASTLE.quest!.target : q.card.quest.target)) continue;
       if (automaticOnly && (q.card.id === "Q_TRIBE" || q.card.id === "Q_ASSASSIN" || q.card.id === "Q_CHEAT")) continue;
       p.quests!.splice(p.quests!.indexOf(q), 1);
-      rmz(p).push(q.card);
+      // Rune plays settle Rune Secret separately. Its 20-spell reward sends it to the Rift.
+      if (q.card.id === "Q_RUNE_SECRET") rmz(p).push(q.card);
+      else fieldToGrave(g, ctx, p, q.card);
       ctx.log(`${cn(q.card)} 퀘스트 달성!`, `${cn(q.card)} クエスト達成！`, `${cn(q.card)}: Quest completed!`);
       switch (q.card.id) {
         case 'Q_RUNE_SECRET': addMaxMana(g, ctx, p,1); break;
