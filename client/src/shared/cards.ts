@@ -2419,7 +2419,11 @@ RANDOM_CARDS.add("M2");
 applyKeywordText(PASSIVES);
 applyRuneCatalog(DB);
 applyGolemCatalog(DB);
-DECK_POOL.push("Q_RUNE_SECRET", "GOLEM_TEST");
+DB.SLUM_MERCHANT = {
+  id:"SLUM_MERCHANT", name:"빈민가의 상인", nameJa:"スラム街の商人", nameEn:"Slum Merchant",
+  t:"mon", cost:1, atk:0, def:1, noShop:true, onSummon:"guildCnt", val:2, text:"",
+};
+DECK_POOL.push("Q_RUNE_SECRET", "GOLEM_TEST", "SLUM_MERCHANT");
 RANDOM_CARDS.add("GOLEM3");
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
@@ -2455,6 +2459,7 @@ export const RELATED_MANUAL: Record<string, string[]> = {
   Q_UNDERWORLD_DEAL: ["GUILD_CHEST"],
   GUILD_CHEST: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"],  // 암살자 길드 보물상자
   GUILD_HQ: ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3", "ASSASSIN4", "GUILD_HALL"],
+  SLUM_MERCHANT: ["GUILD_CO", "SLUM"],
   GOLEM_TEST: ["GOLEM1"],
   GOLEM1: ["GOLEM2", "M10"],
   GOLEM2: ["NGA3"],
@@ -2539,7 +2544,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v87"; // November card balance update
+export const BALANCE_VERSION = "v88"; // November card balance update
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

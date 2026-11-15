@@ -24,6 +24,7 @@ export const CHOICE_TEXT:Record<string,Copy>={
  CULTURE_BREAK:c("破壊する相手の場のカードを選択","파괴할 상대 필드 카드 선택","Choose an opposing field card to destroy"),
  SCRAP_EXILE:c("リフトへ送る手札を選択","리프트로 보낼 패 선택","Choose a card in hand to send to the Rift"),
  SCRAP_RETURN:c("手札に戻す相手のカードを選択","패로 되돌릴 상대 카드 선택","Choose an opposing field card to return to hand"),
+ SLUM_MERCHANT:c('在庫を2減らす固定マーケットの枠を選んでください。','재고를 2 줄일 고정 마켓 칸을 고르세요.','Choose a fixed market slot to reduce its stock by 2.'),
  MERCH1:c('交換する固定マーケットの枠を選んでください。','교체할 고정 마켓 칸을 고르세요.','Choose a fixed market slot to replace.'),
  MERCH2:c('交換する固定マーケットの枠を選んでください。','교체할 고정 마켓 칸을 고르세요.','Choose a fixed market slot to replace.'),
  BOUNDARY_ATTACK:c('攻撃対象を選んでください。','공격 대상을 고르세요.','Choose an attack target.'),

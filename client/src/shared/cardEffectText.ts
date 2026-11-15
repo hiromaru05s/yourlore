@@ -1075,6 +1075,11 @@ export const CARD_EFFECT_TEXT: Record<string, Record<EffectLocale, string>> = {
     "ko": "【자신의 턴 시작 시】자신의 패에 있는 포도·고급 포도·사과를 전부 자신의 묘지로 보낸다. 보낸 포도 1장당 1개, 고급 포도 1장당 3개, 사과 1장당 5개의 카운터를 이 마법에 놓는다.\n\n【기간】발동 후 5번째 자신의 턴 시작에 위 처리를 한 뒤, 이 마법의 카운터 수만큼 새로운 와인을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다.",
     "en": "【At the Start of Your Turn】Send all Grapes, Fine Grapes and Apples in your hand to your graveyard. Put 1 counter on this spell per Grape sent and 3 per Fine Grape and 5 per Apple sent.\n\n【Duration】At your 5th turn start after casting, perform the effect above, then create Wines in your hand equal to this spell’s counters and send this spell to your graveyard."
   },
+  "SLUM_MERCHANT": {
+    "ja": "【召喚時】自分の場の「商会」にカウンターを2つ付与する。固定マーケット1枠を選び、そのカードの在庫を2減らす。在庫が0になったらカードを入れ替える。新しいカードの在庫は減らさない。\n\n【場にある間】自分のデッキ構成に「スラム街」があれば、このモンスターは「オーラ」を得る。",
+    "ko": "【소환 시】자신의 필드에 있는 상회에 카운터 2개를 놓는다. 고정 마켓 1칸을 골라 그 카드의 재고를 2 줄인다. 재고가 0이 되면 카드를 교체한다. 새 카드의 재고는 줄이지 않는다.\n\n【필드에 있는 동안】자신의 덱 구성에 슬럼가가 있으면 이 몬스터는 아우라를 얻는다.",
+    "en": "【On Summon】Put 2 counters on your Trade Guild. Choose 1 fixed market slot and reduce its card’s stock by 2. If its stock reaches 0, replace it. The new card keeps its full stock.\n\n【While on the Field】This monster gains Aura while Slums is in your deck composition."
+  },
   "MERCH1": {
     "ja": "【召喚時】自分の場の「商会」にカウンター3個を付与する。\n\n【召喚時】固定マーケット1枠を選び、そのカードを入れ替える。",
     "ko": "【소환 시】자신의 필드의 상회에 카운터 3개를 놓는다.\n\n【소환 시】고정 마켓 1칸을 골라 카드를 교체한다.",

@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 437,
+  "count": 438,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -10399,6 +10399,26 @@
         "ja": "【場にある間】相手のターン中、相手が自分の永続魔法を破壊するたび、「兵士ゴーレム」1体を自分の場に召喚する。",
         "ko": "【필드에 있는 동안】상대 턴에 상대가 자신의 영구마법을 파괴할 때마다 병사 골램 1체를 자신의 필드에 소환한다.",
         "en": "【While on the Field】Whenever the opponent destroys one of your persistent spells during their turn, summon a Soldier Golem to your field."
+      }
+    },
+    "SLUM_MERCHANT": {
+      "nameJa": "スラム街の商人",
+      "status": "slum-merchant-v88",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "d928245cecf9cb49a70e8bf07e659a1e920c536fea9ea54769e93b5a4cdc58e5",
+      "textSha256": "21165d9130ecaedb088525bfa9b566e7548057c2f3dfd740615267815e753adb",
+      "hooks": {
+        "onSummon": "guildCnt"
+      },
+      "before": {},
+      "after": {
+        "ja": "【召喚時】自分の場の「商会」にカウンターを2つ付与する。固定マーケット1枠を選び、そのカードの在庫を2減らす。在庫が0になったらカードを入れ替える。新しいカードの在庫は減らさない。\n\n【場にある間】自分のデッキ構成に「スラム街」があれば、このモンスターは「オーラ」を得る。",
+        "ko": "【소환 시】자신의 필드에 있는 상회에 카운터 2개를 놓는다. 고정 마켓 1칸을 골라 그 카드의 재고를 2 줄인다. 재고가 0이 되면 카드를 교체한다. 새 카드의 재고는 줄이지 않는다.\n\n【필드에 있는 동안】자신의 덱 구성에 슬럼가가 있으면 이 몬스터는 아우라를 얻는다.",
+        "en": "【On Summon】Put 2 counters on your Trade Guild. Choose 1 fixed market slot and reduce its card’s stock by 2. If its stock reaches 0, replace it. The new card keeps its full stock.\n\n【While on the Field】This monster gains Aura while Slums is in your deck composition."
       }
     }
   },

@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/slum-merchant.mjs",
     "tests/golem-rework.mjs",
     "tests/rune-rework-v85.mjs",
     "tests/diplomacy-cards.mjs",

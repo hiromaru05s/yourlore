@@ -59,7 +59,7 @@ import { paintDuelClock } from '../ui/duelClock';
 // ============================================================
 import type { Action, CardInst, GameEvent, GameState, PlayerState, ReduceResult, Side } from "../shared/types";
 import { logToEn } from "../shared/logEn";
-import { botOpeningHand, createGame, reduce, playCost, actingSide, effectChoices, purchaseAllowed, buyCost, effAtk, effDef, curHp } from "../shared/engine";
+import { botOpeningHand, createGame, reduce, playCost, actingSide, effectChoices, marketStockOf, purchaseAllowed, buyCost, effAtk, effDef, curHp } from "../shared/engine";
 import { safeGreedy, legalBotAction, type BotDifficulty } from "../shared/bot";
 import { DB, STARTERS, hasPassive, isChestCard } from "../shared/cards";
 import { GameView, type BoardHandlers } from "../ui/boardView";
@@ -229,6 +229,10 @@ export abstract class BaseController implements BoardHandlers {
     } else this.submit({type:'play',idx,sourceUid:uid});
   }
   private choiceOwner(g:GameState,uid:string):string {
+    if (g.pending?.reason === 'SLUM_MERCHANT') {
+      const slot = g.market.findIndex(c => c.uid === uid);
+      if (slot >= 0) return `${t('market.stock')} ${marketStockOf(g,slot)}`;
+    }
     const owner=targetOwner(g,uid);if(owner===null)return '';
     return getLang()==='ja'?(owner===this.you?'自分':'相手'):getLang()==='ko'?(owner===this.you?'자신':'상대'):(owner===this.you?'You':'Opponent');
   }

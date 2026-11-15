@@ -603,9 +603,9 @@ export function marketStockOf(g: GameState, i: number): number {
   return g.marketStock?.[i] ?? MARKET_STOCK;
 }
 /** v40: 고정 마켓 구매 → 재고 -1. 0이 되면 그 슬롯을 현재 마켓에 없는 새 무작위 카드(1~6코, 스타팅 전용 제외)로 교체하고 재고를 채운다. */
-function consumeMarketStock(g: GameState, ctx: Ctx, i: number): void {
+function consumeMarketStock(g: GameState, ctx: Ctx, i: number, amount = 1): void {
   if (!g.marketStock || g.marketStock.length !== g.market.length) g.marketStock = g.market.map((_, k) => g.marketStock?.[k] ?? MARKET_STOCK);
-  g.marketStock[i] = marketStockOf(g, i) - 1;
+  g.marketStock[i] = Math.max(0, marketStockOf(g, i) - amount);
   if (g.marketStock[i] > 0) return;
   const inMarket = new Set(g.market.map((c) => c.id));
   const pool = ALL_IDS.filter((id) => DB[id].cost >= 1 && DB[id].cost <= 6 && !DB[id].noShop && !inMarket.has(id));
@@ -742,6 +742,9 @@ export function refreshFieldPassives(g: GameState): void {
       else delete m.conditionalPassives;
     }
     if (m.id === 'DRAGON_KILLER') m.conditionalPassives = !p.monsterSilence && g.players[1-side(g,p)].field.some(x=>['DRAGON_RIDER','ANTIQUE_DK'].includes(x.id)) ? ['dual'] : [];
+    if (m.id === 'SLUM_MERCHANT') {
+      m.conditionalPassives = !m.mutedEffects && deckComp(p).some(c => c.id === 'SLUM') ? ['aura'] : [];
+    }
     if (m.id === 'CAVALRY' || m.id === 'SLUM_ASSASSIN') {
       const gainsEvade = !p.monsterSilence && (m.id === 'CAVALRY'
         ? p.field.some(ally=>hasPassive(ally,'taunt')) : deckComp(p).some(c=>c.id==='SLUM'));
@@ -3241,6 +3244,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
     }
     case "heal": ctx.heal(p, v); ctx.log(`  └ 체력 ${v} 회복 (${p.hp})`, `  └ 体力 ${v} 回復 (${p.hp})`); break;
     case "guildCnt": {
+      if (m.id === 'SLUM_MERCHANT' && g.market.length) queueExpansionChoice(g,p,m.id,'');
       if (m.id === "MERCH1" || m.id === "MERCH2") queueExpansionChoice(g,p,m.id,"交換する固定マーケットの枠を選択"); // 견습/왕도 상인: 자신의 '상회'에 카운터 +v
       const ge = p.enchants.find((e) => e.card.ench === "guild");
       if (ge) {
@@ -7244,7 +7248,7 @@ function expansionChoices(g: GameState): CardInst[] | null {
       if (!p.noDirectTurn && !o.field.some(m=>m.aura==='eliteGuard')) options.push({...DB.SWORD_GRAVE_WRAITH,uid:'opposing-player',name:o.name,nameJa:o.name,nameEn:o.name});
       return options;
     }
-    case 'MERCH1': case 'MERCH2': return g.market;
+    case 'SLUM_MERCHANT': case 'MERCH1': case 'MERCH2': return g.market;
     case 'WANTED': return ((q.data?.ids ?? []) as string[]).map(id=>({...(DB[id] ?? STARTERS[id]),uid:id}));
     case 'MARKET_FEVER': return q.data?.discard ? p.hand : [...g.market,...p.supply.filter((c):c is CardInst => !!c)];
     case 'ATTUNE_RETURN': return q.data?.recall ? [...p.deck,...p.discard].filter(c => c.id === 'STARTER_MANA') : p.hand;
@@ -7857,6 +7861,15 @@ function armyPick(g:GameState,ctx:Ctx,p:PlayerState,q:NonNullable<GameState['pen
       const target = c.uid==='opposing-player' ? null : c.uid;
       ctx.ev.push({type:'attack',player:side(g,p),uid:m.uid,targetUid:target});
       resolveAttackCore(g,ctx,m,target);
+      return true;
+    }
+    case 'SLUM_MERCHANT': {
+      const slot = g.market.findIndex(offer => offer.uid === c.uid);
+      if (slot >= 0) {
+        const before = marketStockOf(g,slot), after = Math.max(0,before-2);
+        ctx.log(`${cn(DB.SLUM_MERCHANT)}: ${cn(c)} 재고 ${before} → ${after}`,`${cn(DB.SLUM_MERCHANT)}：${cn(c)}の在庫 ${before} → ${after}`,`${cn(DB.SLUM_MERCHANT)} reduces ${cn(c)} stock from ${before} to ${after}.`);
+        consumeMarketStock(g,ctx,slot,2);
+      }
       return true;
     }
     case 'MERCH1': case 'MERCH2': {
