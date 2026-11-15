@@ -275,8 +275,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "BLOOD2" && o.traps.length + o.enchants.length === 0) return false;
     if (c.id === "BLOOD_SORROW" && p.discard.length === 0) return false;
     if (c.id === "VAMP_PACT" && p.field.length >= 7) return false;
-    if (c.id === "INCUBATOR" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
-    if (c.id === "INCUBATOR_S" && !p.field.some((m) => m.hatch != null && m.hatch > 0)) return false;
+
     if (c.id === "AMBUSH" && ![4, 5].includes(o.maxMana)) return false;
     if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length === 0)) return false;
     if ((c.id === "KNIGHT_TEACH" || c.id === "NL_SECRET") && p.field.length === 0) return false;
@@ -717,7 +716,7 @@ function autoTarget(g: GameState): Action {
   }
   if (pending.kind === "myMon") {
     if (pending.reason === "incubate") { // 고급 부화기: 부화가 가장 임박한 알
-      const egg = [...p.field].filter((m) => m.hatch != null).sort((a, b) => (a.hatch ?? 99) - (b.hatch ?? 99))[0];
+      const egg = [...p.field].filter((m) => (m.hatch ?? 0) > 0).sort((a, b) => (a.hatch ?? 99) - (b.hatch ?? 99))[0];
       return { type: "chooseTarget", uid: egg ? egg.uid : null };
     }
     if (pending.reason === "bloodSecret") { // 비술: 가장 약한 흡혈귀를 대가로 바친다

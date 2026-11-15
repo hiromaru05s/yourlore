@@ -509,7 +509,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -2104,6 +2104,14 @@ function finishHexerTurn(g: GameState, ctx: Ctx, force: boolean, remaining: stri
     p.enchants.splice(p.enchants.indexOf(e), 1);
     binEnch(g, ctx, p, e.card, false, 'self');
   }
+  if (p.enchants.some(e => e.waitingIncubator)) {
+    wakeIncubators(g,ctx);
+    if (g.pending) { g.incubatorEndTurn = g.turn; return; }
+  }
+  advanceAfterEnd(g,ctx);
+}
+function advanceAfterEnd(g: GameState, ctx: Ctx): void {
+  const o = g.players[1-g.cur];
   // 60-turn limit: before a new turn would begin, judge the game by remaining HP
   // (higher HP wins; an exact tie is a draw).
   if (finishAtTurnLimit(g, ctx)) return;
@@ -5239,7 +5247,14 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "HERMIT") { applicable=true; if ((p.uses["HERMIT"] || 0) >= 5) { return reason("  └ 게임당 5회까지만 사용 가능", "  └ ゲーム中5回まで使用可能", `  └ This card may be played at most 5 times per game`); } }
   if (card.id === "MULTI_CULTURE") { applicable=true; if (tribeCount(g) < 2) { return reason("  └ 서로 다른 종족이 2종 이상 필요합니다", "  └ 異なる種族が2種以上必要です", `  └ You need at least 2 distinct tribes across both fields`); } }
   if (card.act === "exilePick") { applicable=true; if (p.discard.length === 0) { return reason("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); } }
-  if (card.act === "incubate") { applicable=true; if (!p.field.some((m) => m.hatch != null && m.hatch > 0)) { return reason("  └ 자신 필드에 알이 없습니다", "  └ 自分の場に卵がありません"); } }
+  if (card.act === 'incubate') {
+    applicable = true;
+    const trade = p.visibleIncubatorTrade ?? incubatorTradePresent(g);
+    if (!incubatorEggs(p).length && !(trade && canSellIncubator(p,card))) {
+      if (card.id !== 'INCUBATOR' || trade) return reason('부화 또는 거래 조건을 충족하지 않습니다','孵化・取引の発動条件を満たしていません','Neither the hatch effect nor the trade effect is available.');
+      if (p.traps.length+p.enchants.length+(p.quests?.length ?? 0) >= ST_MAX) return reason('마법·함정 존이 가득 찼습니다','魔法・罠ゾーンが満杯です','Your spell and trap zone is full.');
+    }
+  }
   if (card.id === "VAMP_PACT") { applicable=true; if (p.field.length >= FIELD_MAX) { return reason(`  └ <span class="dmg">몬스터 존이 가득 찼습니다 (최대 ${FIELD_MAX})</span>`, `  └ <span class="dmg">モンスターゾーンが満杯です (最大 ${FIELD_MAX})</span>`); } }
   if (card.id === "COUNTERCALC") { applicable=true; if (o0.maxMana > 7) { return reason("  └ 상대 마나 수정이 7을 초과해 사용 불가", "  └ 相手のマナ水晶が7を超えているため使用不可", `  └ The opponent’s mana crystals must be 7 or less`); } }
   if ((card.id === "KNIGHT_TEACH" || card.id === "NL_SECRET")) { applicable=true; if (p.field.length === 0) { return reason("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); } }
@@ -5408,8 +5423,11 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       ctx.runePrices=Object.fromEntries(Object.entries(runeModes).map(([key,tier])=>
         [key,Math.max(0,playCost({...card,play:tier},p)-paidCost)]));
     }
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= paidCost; p.hand.splice(idx, 1); p.discard.push(card);
-    if (!card.ench && !hasPassive(card,"void")) graveyardArrival(g,ctx,p,card);
+    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= paidCost; p.hand.splice(idx, 1);
+    // An Incubator has no destination until its effect resolves.
+    const incubator = card.act === 'incubate';
+    if (!incubator) p.discard.push(card);
+    if (!incubator && !card.ench && !hasPassive(card,"void")) graveyardArrival(g,ctx,p,card);
     if (card.id === 'AMBUSH') p.usesTurn.AMBUSH = (p.usesTurn.AMBUSH ?? 0) + 1;
     // Synchronize old saved Reverse counters before recording this committed cast.
     if (card.id === 'BLACK_REVERSE') p.uses.BLACK_REVERSE = Math.max(p.uses.BLACK_REVERSE ?? 0, p.expansion?.reversePlays ?? 0);
@@ -5421,15 +5439,17 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
 
     const negated = registerSpellUse(g, ctx, p, card, paidCost);
     consumeGrimoire(p);
+    if (incubator && (negated || g.over)) { fieldToGrave(g,ctx,p,card); return; }
     if (negated) { if(card.id==='MANA_HEART') g.heartUsed=true; if (card.ench || hasPassive(card,"void")) graveyardArrival(g,ctx,p,card); return; }
     // 공허(void) 마법 토큰(와인/암상인): 사용 후 묘지 대신 게임에서 제외 — 영구마법(선견지명류)은 제외
-    const voidSpell = !card.ench && hasPassive(card, "void");
+    const voidSpell = !incubator && !card.ench && hasPassive(card, "void");
     if (voidSpell) {
       const vi = p.discard.lastIndexOf(card);
       if (vi >= 0) { p.discard.splice(vi, 1); rmz(p).push(card); }
     }
     if (!countBeforeReactions) p.uses[card.id] = (p.uses[card.id] || 0) + 1; // game-long usage count
     if (card.maxUsesPerTurn == null && card.id !== "AMBUSH") p.usesTurn[card.id] = (p.usesTurn[card.id] || 0) + 1;
+    if (incubator) { startIncubator(g,ctx,p,card,false); return; }
     if (card.ench) {
       // Cast reactions may append curses (HEXER3) after this card. Move the
       // actual spell, never the last discard, or one UID occupies two zones.
@@ -5507,7 +5527,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     // Targeted spells resolve later via a pending choice and never reach applySpell's
     // "P card → effect" logs — write the cast line HERE so the card name always
     // appears in the battle log (e.g. 룬 파열's destroy used to show up nameless).
-    if (a === "buffTurn" || a === "buffPerm" || a === "destroyMon" || a === "weaken" || a === "seek" || a === "recall" || a === "exilePick" || a === "incubate" || (a === "destroyTrap" && v < 99) || a === "destroyEnch")
+    if (a === "buffTurn" || a === "buffPerm" || a === "destroyMon" || a === "weaken" || a === "seek" || a === "recall" || a === "exilePick" || (a === "destroyTrap" && v < 99) || a === "destroyEnch")
       ctx.log(`<span class="t">${p.name}</span> ${cn(card)} 발동`, `<span class="t">${p.name}</span> ${cn(card)} 発動`);
     // v21: 선택형 함정/영구마법 파괴 — 양쪽 필드에서 대상을 고른다 ("전부 파괴"형 destroyTrap(99)은 applySpell에서 일괄 처리)
     if ((a === "destroyTrap" && v < 99) || a === "destroyEnch") {
@@ -5568,10 +5588,6 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       g.pending = { kind: "recall", hint: "게임에서 제외할 카드 선택", hintJa: "ゲームから除外するカードを選択", reason: "exilePick", allowCancel: true };
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
-    if (a === "incubate") { // 고급 부화기: 자신의 알 1개 카운터 -v
-      g.pending = { kind: "myMon", hint: `부화를 ${v}턴 앞당길 알 선택`, hintJa: `孵化を${v}ターン早める卵を選択`, reason: "incubate", allowCancel: true, data: { val: v } };
-      ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
-    }
     spellDepth++; if (blood) bloodDepth++;
     try { applySpell(g, ctx, card); } finally { spellDepth--; if (blood) bloodDepth--; }
     if (blood) bloodTriggers(g, ctx, p);
@@ -5622,6 +5638,9 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
   if (uid === null) {
     if (pending.allowCancel) {
       g.pending = null;
+      if (pending.reason === 'incubate' && pending.data?.sourceCard) {
+        resolveIncubator(g,ctx,p,pending.data.sourceCard as CardInst,false,!!pending.data.fromField);
+      }
       if (pending.reason === "landGrant") offerLandGrantBonus(g, p);
       // Attack targeting is uncommitted; declining an already triggered effect is public.
       if (pending.reason !== "attack") ctx.log(`${p.name}: 선택 효과 종료 — ${pending.hint}`, `${p.name}: 選択効果を終了 — ${pending.hintJa}`, `${p.name}: finished optional effect — ${pendingText(pending, "en")}`);
@@ -5745,10 +5764,9 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (bv2 < 0) recheckDeaths(g, ctx);
     }
     else if (pending.reason === "incubate") {
-      if (tm.hatch == null) { g.pending=pending; ctx.log("  └ 알이 아닙니다", "  └ 卵ではありません"); return; }
-      tm.hatch = Math.max(0, tm.hatch - ((d.val as number) || 5));
-      ctx.log(`<span class="t">${p.name}</span> → ${cn(tm)} 카운터 -${d.val || 5} (남은 ${tm.hatch}턴)`, `<span class="t">${p.name}</span> → ${cn(tm)} カウンター-${d.val || 5} (残り${tm.hatch}ターン)`);
-      if (tm.hatch === 0) hatchEgg(g, ctx, p, tm);
+      if ((tm.hatch ?? 0) < 1) { g.pending=pending; return; }
+      if (pending.data?.sourceCard) resolveIncubator(g,ctx,p,pending.data.sourceCard as CardInst,false,!!pending.data.fromField,tm);
+      else advanceIncubation(g,ctx,p,tm,d.val ?? 5);
     }
     else if (pending.reason === "bloodSecret") {
       resolveBloodSecret(g, ctx, p, tm, 'BLOOD_SECRET');
@@ -6142,6 +6160,71 @@ export function purchaseAllowed(g: GameState, p: PlayerState, c: CardInst): bool
   }
 }
 
+const incubatorPartners = new Set(['GUILD_CO','SLUM','SLUM_MERCHANT','SHARED_MARKET','MERCH1','MERCH2','DARK_MERCHANT']);
+export function incubatorTradePresent(g: GameState): boolean {
+  const partner = (c: CardInst | null) => !!c && incubatorPartners.has(c.id);
+  return g.market.some(partner) || g.players[g.cur].supply.some(partner) || g.players.some(p => deckComp(p).some(partner));
+}
+function advanceIncubation(g: GameState, ctx: Ctx, p: PlayerState, egg: FieldMon, amount: number): void {
+  egg.hatch = Math.max(0,(egg.hatch ?? 0)-amount);
+  ctx.log(`${cn(egg)} 부화까지 ${egg.hatch}턴`,`${cn(egg)}：孵化まで残り${egg.hatch}ターン`,`${cn(egg)}: ${egg.hatch} turns left until hatching.`);
+  if (egg.hatch === 0) hatchEgg(g,ctx,p,egg);
+}
+function incubatorEggs(p: PlayerState): FieldMon[] {
+  return p.field.filter(m => (m.hatch ?? 0) > 0);
+}
+function canSellIncubator(p: PlayerState, card: CardInst): boolean {
+  return !p.onceUsed?.includes(card.id);
+}
+function resolveIncubator(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst, sell: boolean, fromField: boolean, egg?: FieldMon): void {
+  const waiting = fromField && p.enchants.find(e => e.waitingIncubator && e.card.uid === card.uid);
+  if (fromField && !waiting) return;
+  if (waiting) {
+    enchantFx(g,ctx.ev,p,card);
+  } else {
+    ctx.ev.push({type:'playSpell',player:side(g,p),id:card.id,dest:sell || hasPassive(card,'void') ? 'vanish' : 'discard'});
+  }
+  if (egg) advanceIncubation(g,ctx,p,egg,card.val!);
+  if (waiting) {
+    const index = p.enchants.indexOf(waiting);
+    if (index < 0) return;
+    p.enchants.splice(index,1);
+  }
+  if (sell) {
+    (p.onceUsed ??= []).push(card.id);
+    sendToRift(g,p,card,card.uid);
+    const amount = card.id === 'INCUBATOR' ? 2 : 1;
+    addMaxMana(g,ctx,p,amount);
+    ctx.log(`${cn(card)}를 리프트로 보내고 마나 수정 +${amount}`,`${cn(card)}をリフトへ送り、マナ水晶+${amount}`,`Send ${cn(card)} to the Rift and gain ${amount} mana crystal(s).`);
+  } else if (hasPassive(card,'void')) sendToRift(g,p,card,card.uid);
+  else fieldToGrave(g,ctx,p,card);
+}
+
+function startIncubator(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst, fromField: boolean): void {
+  const eggs = incubatorEggs(p);
+  const sale = canSellIncubator(p,card) && incubatorTradePresent(g);
+  if (eggs.length && sale) {
+    offerEffectChoice(g,ctx,p,'INCUBATOR_EFFECT','',{sourceCard:card,fromField,val:card.val});
+  } else if (sale) resolveIncubator(g,ctx,p,card,true,fromField);
+  else if (eggs.length) {
+    g.pending = {kind:'myMon',owner:side(g,p),reason:'incubate',hint:'',hintJa:'',allowCancel:true,data:{val:card.val,sourceCard:card,fromField}};
+    g.pending.hint = pendingText(g.pending,'ko'); g.pending.hintJa = pendingText(g.pending,'ja');
+    ctx.ev.push({type:'needTarget',pending:g.pending});
+  } else if (!fromField && card.id === 'INCUBATOR' && !incubatorTradePresent(g) && p.enchants.length+p.traps.length+(p.quests?.length ?? 0)<ST_MAX) {
+    p.enchants.push({card,turns:99,bornTurn:g.turn,waitingIncubator:true});
+    ctx.ev.push({type:'playSpell',player:side(g,p),id:card.id,dest:'field'});
+    ctx.log(`${cn(card)}: 영구마법으로 대기`,`${cn(card)}：永続魔法として待機`,`${cn(card)} waits on the field as a persistent spell.`);
+  } else if (!fromField) resolveIncubator(g,ctx,p,card,false,false);
+}
+
+function wakeIncubators(g: GameState, ctx: Ctx): void {
+  const p = g.players[g.cur];
+  if (!p.enchants.some(e => e.waitingIncubator)) return;
+  for (const e of [...p.enchants]) {
+    if (g.pending || g.over) return;
+    if (e.waitingIncubator) startIncubator(g,ctx,p,e.card,true);
+  }
+}
 function golemUpkeepCards(g: GameState, p: PlayerState, source?: FieldMon): CardInst[] {
   if (!source || !p.field.includes(source) || source.mutedEffects || (source.guts ?? 0) < 1) return [];
   const offer = GOLEM_UPKEEP[source.id];
@@ -6153,6 +6236,11 @@ function golemUpkeepCards(g: GameState, p: PlayerState, source?: FieldMon): Card
 export function effectChoices(g: GameState): CardInst[] {
   const pending = g.pending;
   if (pending?.kind !== "cardChoice") return [];
+  if (pending.reason === 'INCUBATOR_EFFECT') {
+    const p = g.players[actingSide(g)], card = pending.data!.sourceCard as CardInst;
+    const amount = card.id === 'INCUBATOR' ? 2 : 1;
+    return [...incubatorEggs(p),dewOption(card.id,'incubator-sale',`リフトへ送り、マナ水晶+${amount}`,`리프트로 보내고 마나 수정 +${amount}`,`Send to Rift for ${amount} mana crystal(s)`)];
+  }
   if (pending.reason === 'GOLEM_UPKEEP') {
     const owner = g.players[actingSide(g)];
     return golemUpkeepCards(g,owner,owner.field.find(m => m.uid === pending.data?.sourceUid));
@@ -6189,7 +6277,7 @@ const choiceSource: Record<string,string> = {
   CULTURE_BREAK: 'MULTI_CULTURE',
 };
 function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: string, hintJa: string, data?: Record<string, unknown>): void {
-  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: ['GOLEM_UPKEEP','CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST'].includes(reason) || reason === "SELECTED_SWORD" || reason === "RIFT_JAILER" || reason === "TIMEWARP", data };
+  g.pending = { kind: "cardChoice", owner: side(g, p), reason, hint: hintJa, hintJa, allowCancel: ['INCUBATOR_EFFECT','GOLEM_UPKEEP','CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST'].includes(reason) || reason === "SELECTED_SWORD" || reason === "RIFT_JAILER" || reason === "TIMEWARP", data };
   if (reason === 'COLOSSEUM_REST') g.pending.hint = '체력을 전부 회복할 자신의 몬스터 1체 선택';
   if (reason === 'NIGHT_CASTLE_GIFT') g.pending.hint = '패에 넣을 흡혈 계약 또는 흡혈의 극의 1장을 선택';
   if (reason === 'RIFT_JAILER') g.pending.hint = '차원 유폐자 — 자신의 리프트로 옮길 상대 리프트 카드 최대 8장 선택';
@@ -6230,6 +6318,15 @@ function summonForOwner(g:GameState,ctx:Ctx,owner:PlayerState,card:CardInst,summ
 function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
   const pending = g.pending!;
   const p = g.players[actingSide(g)], o = g.players[1 - actingSide(g)];
+  if (pending.reason === 'INCUBATOR_EFFECT') {
+    const source = pending.data!.sourceCard as CardInst;
+    const target = incubatorEggs(p).find(m => m.uid === uid);
+    const sale = uid === 'incubator-sale' && canSellIncubator(p,source) && incubatorTradePresent(g);
+    if (uid !== null && !sale && !target) return;
+    g.pending = null;
+    resolveIncubator(g,ctx,p,source,sale,!!pending.data!.fromField,target);
+    return;
+  }
   if (['GOLEM_UPKEEP','CHOSEN_DISPEL','EGG_ADVANCE','RUNE_BURST','TIME_WRAITH','BOUNDARY_ATTACK'].includes(pending.reason) && uid === null) { g.pending=null; return; }
   if (pending.reason === 'TIMEWARP' && uid === null && pending.allowCancel) { g.pending = null; return; }
   if (resolveDewShieldChoice(g,ctx,uid)) return;
@@ -6584,13 +6681,18 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
   const res = reduceCore(prev, action);
   const g2 = res.state;
   const questCtx = makeCtx(g2, res.events as GameEvent[]);
-  for (const sx of [0, 1] as Side[]) {
-    const pl = g2.players[sx], bonus = (pl.magicBankBonusTotal ?? 0) - (prev.players[sx].magicBankBonusTotal ?? 0);
-    if (bonus > 0) {
-      enchantKindFx(g2, res.events, 'magicBank', pl);
-      questCtx.log(`마도 은행: 추가 마나 수정 +${bonus}`, `魔道銀行: 追加のマナ水晶+${bonus}`, `Arcane Bank: gain ${bonus} additional mana crystals`);
+  const bankBefore = prev.players.map(pl => pl.magicBankBonusTotal ?? 0);
+  function showBankBonuses() {
+    for (const sx of [0, 1] as Side[]) {
+      const pl = g2.players[sx], bonus = (pl.magicBankBonusTotal ?? 0) - bankBefore[sx];
+      bankBefore[sx] = pl.magicBankBonusTotal ?? 0;
+      if (bonus > 0) {
+        enchantKindFx(g2, res.events, 'magicBank', pl);
+        questCtx.log(`마도 은행: 추가 마나 수정 +${bonus}`, `魔道銀行: 追加のマナ水晶+${bonus}`, `Arcane Bank: gain ${bonus} additional mana crystals`);
+      }
     }
   }
+  showBankBonuses();
   const exileSeen = prev.players.map(p => new Set((p.removed ?? []).map(c => c.uid)));
   const settle = (): void => {
     for (let pass = 0; pass < 64 && !g2.over; pass++) {
@@ -6639,13 +6741,15 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
     }
   };
   settle();
-  if (!g2.over) {
+  function reactToManaGrowth() {
+    if (g2.over) return;
     const ctx2 = makeCtx(g2, res.events as GameEvent[]);
     for (const s of [0, 1] as Side[]) {
       const owner = g2.players[s];
       const ghosts = owner.field.filter((m) => !m.mutedEffects && m.id === "GHOST").length;
-      if (!ghosts || g2.over) continue;
       const hits = (g2.players[1 - s].maxManaIncreases ?? 0) - pre[1 - s];
+      pre[1 - s] = g2.players[1 - s].maxManaIncreases ?? 0;
+      if (!ghosts || g2.over) continue;
       if (hits > 0) {
         for (const m of owner.field) if (!m.mutedEffects && m.id === "GHOST") monsterActivation(g2, res.events, owner, m);
         const dmg = 2 * hits * ghosts;
@@ -6654,6 +6758,7 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
       }
     }
   }
+  reactToManaGrowth();
   // 카지노(v34): 카운터 12개마다 카지노 주사위 발동
   if (!g2.over) {
     const ctx3 = makeCtx(g2, res.events as GameEvent[]);
@@ -6688,6 +6793,21 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
   for (let pass = 0; pass < 64 && !g2.over; pass++) {
     drainExpansionChoices(g2, questCtx);
     settle();
+    if (!g2.pending && !g2.expansionChoices?.length) {
+      if (g2.players[g2.cur].enchants.some(e => e.waitingIncubator)) {
+        wakeIncubators(g2,questCtx);
+        showBankBonuses();
+        reactToManaGrowth();
+        settle();
+      }
+      if (!g2.over && !g2.pending && g2.incubatorEndTurn === g2.turn) {
+        delete g2.incubatorEndTurn;
+        advanceAfterEnd(g2,questCtx);
+        showBankBonuses();
+        reactToManaGrowth();
+        continue;
+      }
+    }
     if (g2.pending || !g2.expansionChoices?.length) break;
   }
   // Finish earlier turn-start choices before presenting the Chosen Mage offer.

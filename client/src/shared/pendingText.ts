@@ -9,6 +9,7 @@ export const CHOICE_TEXT:Record<string,Copy>={
  MIND_GUESS:c('攻撃される自分のモンスターを予想してください。','공격받을 자신의 몬스터를 예측하세요.','Predict which of your monsters will be attacked.'),
  TOLL_DISCARD:c('通行税で捨てる手札を1枚選んでください。','통행세로 버릴 패 1장을 고르세요.','Choose 1 card to discard for Toll Gate.'),
  NIKRO_GIFT:c("パッシブを付与する味方を選択","패시브를 부여할 아군 선택","Choose an ally to gain random passives"),
+ INCUBATOR_EFFECT:c('孵化を早める卵を1体選ぶか、孵化器をリフトへ送ってマナ水晶を得てください。','부화를 앞당길 알 1체를 고르거나 부화기를 리프트로 보내 마나 수정을 얻으세요.','Choose an Egg to accelerate, or send the Incubator to the Rift for mana crystals.'),
  EGG_ADVANCE:c("耐久を消費する卵を選択","내구도를 소모할 알 선택","Choose an Egg to accelerate"),
  CHOSEN_DISPEL:c("破壊する相手の永続魔法を選択","파괴할 상대 영구 마법 선택","Choose an opposing persistent spell to destroy"),
  CHOSEN_KILL:c("破壊する相手モンスターを選択","파괴할 상대 몬스터 선택","Choose an opposing monster to destroy"),

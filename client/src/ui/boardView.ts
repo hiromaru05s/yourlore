@@ -566,7 +566,7 @@ export class GameView {
         && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능
         && !(pending!.kind === "oppMon" && pending!.reason === "decayMark" && m.hatch != null) // 카운터: 알 제외
         && !(pending!.kind === "oppMon" && pending!.reason === "destroyMon" && pending!.data?.maxCost != null && m.cost > (pending!.data.maxCost as number)) // 룬 파열: 코스트 캡
-        && !(pending!.kind === "myMon" && pending!.reason === "incubate" && m.hatch == null)
+        && !(pending!.kind === "myMon" && pending!.reason === "incubate" && (m.hatch ?? 0) < 1)
         && !(pending!.kind === "myMon" && pending!.reason === "chosenMage" && (m.id !== "CHOSEN_MAGE" || ((pending!.data?.fired as string[] | undefined) ?? []).includes(m.uid))) // 마법사만 발동 가능
         && !(pending!.kind === "myMon" && pending!.reason === "grantDecay" && hasPassive(m, "decay")) // 이미 부패 보유
         && !(pending!.kind === "myMon" && pending!.reason === "grantMajesty" && hasPassive(m, "majesty")) // 이미 위엄 보유

@@ -1,3 +1,4 @@
+import {incubatorTradePresent} from './engine';
 import type { ExperienceReceipt } from './progression';
 // ============================================================
 // LORE — WebSocket protocol shared by client and server.
@@ -63,6 +64,7 @@ export function redactFor(state: GameState, you: Side): GameState {
   // your own deck CONTENTS are yours to see, but its ORDER is hidden information
   // (you don't know your next draw) — ship it in canonical order instead.
   const me = g.players[you];
+  if (state.cur === you && me.hand.some(c => c.act === 'incubate' && (c.id === 'INCUBATOR' || !me.onceUsed?.includes(c.id)))) me.visibleIncubatorTrade = incubatorTradePresent(state);
   me.deck = [...me.deck].sort((a, b) => a.cost - b.cost || a.id.localeCompare(b.id) || a.uid.localeCompare(b.uid));
   const opp = g.players[1 - you];
   const placeholder = (uid: string): GameState["players"][0]["hand"][0] => ({

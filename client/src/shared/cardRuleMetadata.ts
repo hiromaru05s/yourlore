@@ -26,6 +26,8 @@ export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
   MIMIC: {"terms":["graveyard"]},
   TPO3: {"mentions":["void"],"grants":["void"]},
   INFKNIGHT: {"mentions":["counter"]},
+  INCUBATOR: {"terms":["composition","rift","graveyard"]},
+  INCUBATOR_S: {"terms":["composition","rift"]},
   SLUM_MERCHANT: {"terms":["counters","composition"],"mentions":["aura"],"grants":["aura"]},
   SLUM_ASSASSIN: {"terms":["composition"],"mentions":["evade"],"grants":["evade"]},
   RIFT_MATTER: {terms:['rift']},

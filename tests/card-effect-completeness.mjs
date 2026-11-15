@@ -20,7 +20,8 @@ try {
  requirement('MIND_BURST',g=>g.players[0].field=[mon('GOLEM1',{guts:1})]);
  requirement('PENANCE',g=>g.players[0].brand=1);
  assert.equal(E.playBlockReason(fresh(),0,card('GS6_4')),null);
- for(const id of ['INCUBATOR','INCUBATOR_S'])requirement(id,g=>g.players[0].field=[mon('DRAGON_EGG',{hatch:1,dur:6})]);
+ requirement('INCUBATOR_S',g=>g.players[0].field=[mon('DRAGON_EGG',{hatch:1,dur:6})],g=>{g.market=[];for(const p of g.players)p.supply=[];});
+ assert.equal(E.playBlockReason(fresh(),0,card('INCUBATOR')),null);
  requirement('VAMP_PACT',g=>g.players[0].field.pop(),g=>g.players[0].field=Array.from({length:7},()=>mon('M1')));
  assert(!E.DB.INQUISITION);
  requirement('MASSACRE',g=>g.players[1].field=[mon('M1')]);

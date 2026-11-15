@@ -29,10 +29,12 @@ export function restoreReworkedCards(game: GameState): void {
   const updateCasinoRally = !game.casinoRallyApplied;
   const updateRunes=!game.runeReworkApplied;
   const auditRunes = !game.runeZonesAudited;
+  const updateIncubators = !game.incubatorsReworked;
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators)) return;
+  game.incubatorsReworked = true;
   game.golemsReworked = true;
   game.threeFireNamed = true;
   game.runeReworkApplied=true;
@@ -52,6 +54,10 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateIncubators && card.act === 'incubate') {
+      const {text,textJa,textEn} = DB[card.id];
+      Object.assign(card,{text,textJa,textEn});
+    }
     if (updateGolems && (Object.hasOwn(GOLEM_TEXT,card.id) || card.id === 'REFRESH_HAND')) {
       const def = DB[card.id], m = card as FieldMon;
       Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});

@@ -58,6 +58,7 @@ export interface QuestState {
 }
 
 export interface Enchant {
+  waitingIncubator?: boolean;
   card: CardInst;
   turns: number;
   bornTurn?: number; // 시전 시점의 g.turn — "N턴 경과 후" 류 효과의 기준 (혈귀술 만료 / 고대 문명)
@@ -224,6 +225,7 @@ export interface PlayerState {
   botTune?: { minBuy?: number; minBuyEarly?: number; chestTurn?: number }; // per-archetype bot buy discipline (see bot.ts BOT_DECKS)
   refreshTokens?: number; // 렐릭 헌터(v36): 제시 마켓 무료 갱신 카운터 — 갱신 시 마나 대신 소모
   supplyHist?: { turn: number; ids: string[] }[]; // 기록자(v36): 최근 제시 마켓 이력 (갱신분 포함)
+  visibleIncubatorTrade?: boolean; // Private playability hint in the owner’s redacted view only.
   onceUsed?: string[]; // 게임당 1회 효과의 사용 기록 (시초의 재판관 등)
   buysTurn?: Record<string, number>; // v41b 매점: 이번 턴 카드별 구매 수 (턴 시작마다 리셋)
   destroyedLog?: { id: string; turn: number }[]; // v41b 윤회: 자신의 몬스터가 파괴된 기록 (최근 20건)
@@ -246,6 +248,8 @@ export interface TribePactDefeat {
 export interface GameState {
   runeReworkApplied?:boolean;
   runeZonesAudited?: boolean;
+  incubatorsReworked?: boolean;
+  incubatorEndTurn?: number;
   golemsReworked?: boolean;
   threeFireNamed?: boolean;
   diplomacyApplied?: boolean;
