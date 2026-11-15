@@ -18,6 +18,41 @@ function cast(g,id){const hand=g.players[g.cur].hand;hand.push(card(id));return 
 function attack(g,m,t){return pick(step(g,{type:'attack',uid:m.uid}),t.uid);}
 for(const side of [0,1]){
   const opp=1-side;
+  for (const [id, purchase, play] of [['KNIGHT_TEACH',2,3],['NMD4',3,4]]) {
+    const g=game(side), p=g.players[side], c=card(id);
+    p.field=[mon('M3')]; p.hand=[c]; p.mana=play-1;
+    assert.equal(E.buyCost(p,c),purchase);
+    assert.equal(E.playCost(c,p),play);
+    assert.equal(step(g,{type:'play',idx:0}).players[side].hand[0].uid,c.uid);
+    p.mana=play;
+    const result=step(g,{type:'play',idx:0});
+    assert.equal(result.players[side].mana,0);
+    assert.equal(result.players[side].hand.length,0);
+  }
+  {
+    const g=game(side), p=g.players[side];
+    p.deck=Array.from({length:6},()=>card('S10'));
+    const result=cast(g,'TSO3').players[side];
+    assert.equal(result.deck.length,6);
+    assert.equal(result.hand.length,0);
+    assert.equal(E.effAtk(result,result.field[0]),4);
+    assert.equal(E.effDef(result,result.field[0]),4);
+  }
+  {
+    const g=game(side), p=g.players[side], hunter=mon('TSO3');
+    g.novemberBalanceApplied=true; // A match saved by v90.
+    p.field=[Object.assign(hunter,{atkMod:2,mutedEffects:{onSummon:'gravePure'},val:6})];
+    p.hand=[Object.assign(card('TSO3'),{onSummon:'gravePure',val:6,textJa:'old'})];
+    p.deck=[card('KNIGHT_TEACH')]; delete p.deck[0].play;
+    p.discard=[card('NMD4')]; delete p.discard[0].play;
+    E.restoreReworkedCards(g);
+    assert.equal(p.field[0].atkMod,2);
+    assert.equal(p.field[0].mutedEffects.onSummon,undefined);
+    assert.equal(p.hand[0].onSummon,undefined);
+    assert.equal(p.hand[0].textJa,E.DB.TSO3.textJa);
+    assert.equal(p.deck[0].play,3);
+    assert.equal(p.discard[0].play,4);
+  }
   {
     const g=game(side),draws=['M3','S10','M4'].map(card);
     g.players[side].deck=draws;const s=cast(g,'NMD2');

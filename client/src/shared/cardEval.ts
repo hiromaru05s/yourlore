@@ -70,7 +70,7 @@ function actValue(c: CardDef): number {
 const SUMMON_FLAT: Record<string, number> = {
   casino: 0,
   voidApostle: 3, // 자해 13 대가 포함 (제외 덱에서 대형)
-  preyBounce: 4, preyExec: 6, soloLock: -3, hermitBuff: 3, gravePure: 4, manaDebt5: -2, manaSet4: -5,
+  preyBounce: 4, preyExec: 6, soloLock: -3, hermitBuff: 3, manaDebt5: -2, manaSet4: -5,
   guildCnt: 5, // 상회 카운터 가속 (상회가 없으면 불발이지만 봇 덱 시너지 기준)
   refresh: 3, breaktrap: 4, parity: 4, cullTitan: 5, worldGuard: 6, halfElf: 6,
   eggMaster: 6, decayMark: 6, hordeBuff: 6, eliteBuff: 6, trapsmithBuff: 6,

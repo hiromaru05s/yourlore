@@ -9,7 +9,7 @@ export const balanceChanges: Record<string, Partial<CardDef>> = {
   EGG_HUNTER: {"atk": 3, "def": 4},
   M8: {"atk": 2},
   M9: {"atk": 1, "def": 3, "onSummon": undefined},
-  TSO3: {"atk": 3},
+  TSO3: {"atk": 3, "onSummon": undefined, "val": undefined},
   ELITE: {"atk": 5, "def": 5},
   NGA4: {"atk": 9, "def": 2},
   TDE3: {"atk": 7, "def": 8},
@@ -30,8 +30,8 @@ export const balanceChanges: Record<string, Partial<CardDef>> = {
   FATE_WRAITH: {"cost": 12, "atk": 25, "def": 20},
   SWORD_GRAVE_WRAITH: {"cost": 12, "atk": 25, "def": 25},
   TIME_WRAITH: {"cost": 12, "atk": 15, "def": 15},
-  KNIGHT_TEACH: {"cost": 2},
-  NMD4: {"cost": 3},
+  KNIGHT_TEACH: {"cost": 2, "play": 3},
+  NMD4: {"cost": 3, "play": 4},
   TPO1: {"summonReq": "preyLow3"},
   M11: {"onSummon": "warlordSoldier"},
 };
@@ -118,9 +118,9 @@ export const balanceText: Record<string, Record<"ja"|"ko"|"en",string>> = {
     en: "【While on the Field】When this monster destroys an enemy monster, send this monster to your graveyard and summon 1 Knight to your field.",
   },
   TSO3: {
-    ja: "【召喚時】自分の墓地にモンスターカードがなければカードを6枚引く。\n\n【場にある間】自分の墓地に孤独種族以外のモンスターカードがなければ、このモンスターの攻撃力+1・体力+2。このモンスターが攻撃するとき、相手モンスターの反撃を無効にする。",
-    ko: "【소환 시】자신의 묘지에 몬스터 카드가 없으면 카드를 6장 뽑는다.\n\n【필드에 있는 동안】자신의 묘지에 고독 부족 이외의 몬스터 카드가 없으면 이 몬스터의 공격력 +1, 체력 +2. 이 몬스터가 공격할 때 상대 몬스터의 반격을 무효화한다.",
-    en: "【On Summon】If your graveyard has no monster cards, draw 6 cards.\n\n【While on the Field】While your graveyard contains no monster outside the Solitary tribe, this monster has +1 ATK and +2 HP. When this monster attacks, it negates the enemy monster’s Counter.",
+    ja: "【場にある間】自分の墓地に孤独種族以外のモンスターカードがなければ、このモンスターの攻撃力+1・体力+2。このモンスターが攻撃するとき、相手モンスターの反撃を無効にする。",
+    ko: "【필드에 있는 동안】자신의 묘지에 고독 부족 이외의 몬스터 카드가 없으면 이 몬스터의 공격력 +1, 체력 +2. 이 몬스터가 공격할 때 상대 몬스터의 반격을 무효화한다.",
+    en: "【While on the Field】While your graveyard contains no monster outside the Solitary tribe, this monster has +1 ATK and +2 HP. When this monster attacks, it negates the enemy monster’s Counter.",
   },
   M11: {
     ja: "【召喚時】自分の場に他のモンスターが3体以上いれば、「兵士」1体を自分の場に召喚する。",
@@ -153,9 +153,9 @@ export const balanceText: Record<string, Record<"ja"|"ko"|"en",string>> = {
     en: "【While on the Field】While this monster is out, neither player can use Treasure Chests.",
   },
   NMD6: {
-    ja: "【場にある間】自分が使う魔法の発動コスト-1（最低1、元から0なら0）。\n\n【破壊時】自分のマナ水晶+1。",
-    ko: "【필드에 있는 동안】자신이 사용하는 마법의 발동 코스트 -1(최저 1, 원래 0이면 0).\n\n【파괴 시】자신의 마나 수정 +1.",
-    en: "【While on the Field】Reduce the cast cost of your spells by 1, to a minimum of 1. Spells that already cost 0 still cost 0.\n\n【On Destruction】Gain 1 mana crystal.",
+    ja: "【場にある間】自分が使う魔法の発動コスト-1（最低1、元から0なら0）。大賢者が複数いても、この軽減は重複しない。\n\n【破壊時】自分のマナ水晶+1。",
+    ko: "【필드에 있는 동안】자신이 사용하는 마법의 발동 코스트 -1(최저 1, 원래 0이면 0). 대현자가 여러 체 있어도 이 감소 효과는 중첩되지 않는다.\n\n【파괴 시】자신의 마나 수정 +1.",
+    en: "【While on the Field】Reduce the cast cost of your spells by 1, to a minimum of 1. Spells that already cost 0 still cost 0. This reduction does not stack with additional copies.\n\n【On Destruction】Gain 1 mana crystal.",
   },
   POISON_MASTER: {
     ja: "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。\n\n【場にある間】相手の場のモンスターが腐敗で破壊されるたび、相手に烙印を1つ付与する。このモンスターが相手モンスターを破壊するたび、このモンスターの体力+5。",

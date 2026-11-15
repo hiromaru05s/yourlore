@@ -517,7 +517,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:2,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -3336,11 +3336,6 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       const others = p.field.filter((x) => x.uid !== m.uid).length + p.traps.length + p.enchants.length;
       if (others <= 2) { m.atkMod = (m.atkMod ?? 0) + amplifiedBuff(m, 3); m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, 3); ctx.log("  └ 고독 속에서 +3/+3", "  └ 孤独の中で+3/+3", `  └ Solitary bonus: +3 ATK and +3 HP`); }
       else ctx.log(`  └ 필드 카드 ${others}장 — 불발`, `  └ 場のカード${others}枚 — 不発`, `  └ ${others} cards on the field — condition not met`);
-      break;
-    }
-    case "gravePure": { // 고독한 사냥꾼: 묘지에 몬스터가 없으면 6드로우 (v36: 4→6)
-      if (!p.discard.some((c) => c.t === "mon")) { const n2 = ctx.drawN(p, v || 6); ctx.log(`  └ 묘지가 고요하다 — ${n2}장 드로우`, `  └ 墓地が静かだ — ${n2}枚ドロー`, `  └ No monsters in the graveyard: draw ${n2} cards`); }
-      else ctx.log("  └ 묘지에 몬스터가 있어 불발", "  └ 墓地にモンスターがいるため不発", `  └ Monsters in the graveyard — condition not met`);
       break;
     }
     case "manaDebt5": { // 마족 척후: 자신의 5턴 동안 마나 수정 -1

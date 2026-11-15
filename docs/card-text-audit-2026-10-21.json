@@ -921,9 +921,9 @@
     },
     "NMD4": {
       "nameJa": "記録者",
-      "status": "november-balance-v90",
+      "status": "confirmed-v91",
       "changedLocales": [],
-      "definitionSha256": "53252926b791a93431f5f0c7d3ffe5cb461570ac6d727ae710ba57de258c3ed7",
+      "definitionSha256": "e4e2a36052666e1068cb60e41578ef7b957cb4c3d2e661f7b4c6799c6cb0b8c1",
       "textSha256": "b6d9b6478ef2c2f986da8903877efdadf4788f0aab3ea9e42e84330f52c17e87",
       "hooks": {
         "onSummon": "chronicler"
@@ -941,26 +941,26 @@
     },
     "NMD6": {
       "nameJa": "大賢者",
-      "status": "november-balance-v90",
+      "status": "confirmed-v91",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "cc4f3369af157202808cda693da150deba271b941bed425c3b888629bbd8dbc1",
-      "textSha256": "00cd99719bee127794482dc0d8ca2a3c6462165c7b9332dff3ecb99deccb4ee5",
+      "textSha256": "e3b8eebeb1259fc807a16704d1127a3498b93f564682aa4818ed901d126c1ad9",
       "hooks": {
         "aura": "sageDiscount"
       },
       "before": {
-        "ja": "【場にある間】自分のデッキ構成に魔法が13枚以上あれば、自分の魔法の発動コスト-1（最低1）。元から発動コスト0の魔法は0のまま。",
-        "ko": "【필드에 있는 동안】자신의 덱 구성에 마법이 13장 이상이면 자신의 마법 발동 코스트 -1(최저 1). 원래 발동 코스트가 0인 마법은 0을 유지한다.",
-        "en": "【While on the Field】If your deck composition contains at least 13 spells, reduce the cast cost of your spells by 1, to a minimum of 1. Spells with an original cast cost of 0 remain at 0."
-      },
-      "after": {
         "ja": "【場にある間】自分が使う魔法の発動コスト-1（最低1、元から0なら0）。\n\n【破壊時】自分のマナ水晶+1。",
         "ko": "【필드에 있는 동안】자신이 사용하는 마법의 발동 코스트 -1(최저 1, 원래 0이면 0).\n\n【파괴 시】자신의 마나 수정 +1.",
         "en": "【While on the Field】Reduce the cast cost of your spells by 1, to a minimum of 1. Spells that already cost 0 still cost 0.\n\n【On Destruction】Gain 1 mana crystal."
+      },
+      "after": {
+        "ja": "【場にある間】自分が使う魔法の発動コスト-1（最低1、元から0なら0）。大賢者が複数いても、この軽減は重複しない。\n\n【破壊時】自分のマナ水晶+1。",
+        "ko": "【필드에 있는 동안】자신이 사용하는 마법의 발동 코스트 -1(최저 1, 원래 0이면 0). 대현자가 여러 체 있어도 이 감소 효과는 중첩되지 않는다.\n\n【파괴 시】자신의 마나 수정 +1.",
+        "en": "【While on the Field】Reduce the cast cost of your spells by 1, to a minimum of 1. Spells that already cost 0 still cost 0. This reduction does not stack with additional copies.\n\n【On Destruction】Gain 1 mana crystal."
       }
     },
     "NGA3": {
@@ -1487,26 +1487,24 @@
     },
     "TSO3": {
       "nameJa": "孤独な狩人",
-      "status": "november-balance-v90",
+      "status": "confirmed-v91",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "4eebcadc693ec7b1f6246ea62a2323bf5f0994ad991e882050a0d3d407a9b70d",
-      "textSha256": "d38bc096b1675d3a8b52b3249856a93380b1e510c8f62f1369148eb229e9d4c4",
-      "hooks": {
-        "onSummon": "gravePure"
-      },
+      "definitionSha256": "c53ac1f463499133485af1fa40d635804ec0a51506c3f79c9e67b0b393ff8fec",
+      "textSha256": "d88f98513bfa3a41dc5859a315b550d2f7de0ee24bdbb957613126528f7df510",
+      "hooks": {},
       "before": {
-        "ja": "【召喚時】自分の墓地にモンスターカードがなければカードを6枚引く。",
-        "ko": "【소환 시】자신의 묘지에 몬스터 카드가 없으면 카드를 6장 뽑는다.",
-        "en": "【On Summon】If your graveyard has no monster cards, draw 6 cards."
-      },
-      "after": {
         "ja": "【召喚時】自分の墓地にモンスターカードがなければカードを6枚引く。\n\n【場にある間】自分の墓地に孤独種族以外のモンスターカードがなければ、このモンスターの攻撃力+1・体力+2。このモンスターが攻撃するとき、相手モンスターの反撃を無効にする。",
         "ko": "【소환 시】자신의 묘지에 몬스터 카드가 없으면 카드를 6장 뽑는다.\n\n【필드에 있는 동안】자신의 묘지에 고독 부족 이외의 몬스터 카드가 없으면 이 몬스터의 공격력 +1, 체력 +2. 이 몬스터가 공격할 때 상대 몬스터의 반격을 무효화한다.",
         "en": "【On Summon】If your graveyard has no monster cards, draw 6 cards.\n\n【While on the Field】While your graveyard contains no monster outside the Solitary tribe, this monster has +1 ATK and +2 HP. When this monster attacks, it negates the enemy monster’s Counter."
+      },
+      "after": {
+        "ja": "【場にある間】自分の墓地に孤独種族以外のモンスターカードがなければ、このモンスターの攻撃力+1・体力+2。このモンスターが攻撃するとき、相手モンスターの反撃を無効にする。",
+        "ko": "【필드에 있는 동안】자신의 묘지에 고독 부족 이외의 몬스터 카드가 없으면 이 몬스터의 공격력 +1, 체력 +2. 이 몬스터가 공격할 때 상대 몬스터의 반격을 무효화한다.",
+        "en": "【While on the Field】While your graveyard contains no monster outside the Solitary tribe, this monster has +1 ATK and +2 HP. When this monster attacks, it negates the enemy monster’s Counter."
       }
     },
     "TPO3": {
@@ -5899,9 +5897,9 @@
     },
     "KNIGHT_TEACH": {
       "nameJa": "ゴーレムキングの教え",
-      "status": "november-balance-v90",
+      "status": "confirmed-v91",
       "changedLocales": [],
-      "definitionSha256": "be3237e81dbdba550b88181cb4c35c4b9cb4b937b780ed5751652f4109c9027e",
+      "definitionSha256": "7ef56833c78beeb8e82c29b421938ef86bbd1baa4d0bdb3b09d45c8ae4a557f9",
       "textSha256": "35acddb042f463b3cdddf492215dc2a5112d3cbadba6076460018292551eade2",
       "hooks": {},
       "before": {

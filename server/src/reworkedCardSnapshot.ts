@@ -31,13 +31,14 @@ export function restoreReworkedCards(game: GameState): void {
   const updateRunes=!game.runeReworkApplied;
   const auditRunes = !game.runeZonesAudited;
   const updateNovember = !game.novemberBalanceApplied;
+  const updateNovemberClarifications = game.novemberBalanceApplied !== 2;
   const updateIncubators = !game.incubatorsReworked;
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updateNovember)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updateNovemberClarifications)) return;
   game.incubatorsReworked = true;
-  game.novemberBalanceApplied = true;
+  game.novemberBalanceApplied = 2;
   game.golemsReworked = true;
   game.threeFireNamed = true;
   game.runeReworkApplied=true;
@@ -57,6 +58,19 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateNovemberClarifications) {
+      if (card.id === 'KNIGHT_TEACH' || card.id === 'NMD4') card.play = DB[card.id].play;
+      if (card.id === 'TSO3' || card.id === 'NMD6') {
+        const { text, textJa, textEn } = DB[card.id];
+        Object.assign(card, { text, textJa, textEn });
+      }
+      if (card.id === 'TSO3') {
+        delete card.onSummon;
+        delete card.val;
+        const muted = (card as FieldMon).mutedEffects;
+        if (muted) delete muted.onSummon;
+      }
+    }
     if (updateIncubators && card.act === 'incubate') {
       const {text,textJa,textEn} = DB[card.id];
       Object.assign(card,{text,textJa,textEn});
