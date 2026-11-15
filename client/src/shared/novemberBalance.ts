@@ -155,7 +155,7 @@ export const balanceText: Record<string, Record<"ja"|"ko"|"en",string>> = {
   NMD6: {
     ja: "【場にある間】自分が使う魔法の発動コスト-1（最低1、元から0なら0）。大賢者が複数いても、この軽減は重複しない。\n\n【破壊時】自分のマナ水晶+1。",
     ko: "【필드에 있는 동안】자신이 사용하는 마법의 발동 코스트 -1(최저 1, 원래 0이면 0). 대현자가 여러 체 있어도 이 감소 효과는 중첩되지 않는다.\n\n【파괴 시】자신의 마나 수정 +1.",
-    en: "【While on the Field】Reduce the cast cost of your spells by 1, to a minimum of 1. Spells that already cost 0 still cost 0. This reduction does not stack with additional copies.\n\n【On Destruction】Gain 1 mana crystal.",
+    en: "【While on the Field】Reduce the cast cost of your spells by 1, to a minimum of 1. Spells that already cost 0 still cost 0. This reduction does not stack if you control more than one Grand Sage.\n\n【On Destruction】Gain 1 mana crystal.",
   },
   POISON_MASTER: {
     ja: "【攻撃時】攻撃対象の相手モンスターにカウンター2個を追加で付与する（腐敗の処理）。\n\n【場にある間】相手の場のモンスターが腐敗で破壊されるたび、相手に烙印を1つ付与する。このモンスターが相手モンスターを破壊するたび、このモンスターの体力+5。",
