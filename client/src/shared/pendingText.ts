@@ -101,8 +101,12 @@ export function pendingText(q:Pending,lang:Locale):string {
  if(q.reason==='MARKET_FEVER' && d.discard)return c('捨てる手札を選んでください。','버릴 패를 고르세요.','Choose a card to discard.')[lang];
  if(q.reason==='ATTUNE_RETURN' && d.recall)return c('手札に戻すアチューンを選んでください。','패로 되돌릴 어튠을 고르세요.','Choose an Attune to return to your hand.')[lang];
  if (q.reason==='MIND_GUESS' && d.attackerJa) return c(`${d.attackerJa}が攻撃するモンスターを予想してください。`,`${d.attackerKo}의 공격 대상을 예측하세요.`,`Predict which monster ${d.attackerEn} will attack.`)[lang];
- if(q.reason==='GOLEM_UPKEEP') return c(`${d.ja}の気合カウンター1つとマナ${d.mana}を支払いますか？`,`${d.ko}의 기합 카운터 1개와 마나 ${d.mana}을 지불할까요?`,`Spend 1 Guts counter from ${d.en} and ${d.mana} mana?`)[lang];
  switch(q.reason){
+ case 'GOLEM_UPKEEP':
+   text = d.ja && d.ko && d.en && typeof d.mana === 'number'
+     ? c(`${d.ja}の気合カウンター1つとマナ${d.mana}を支払いますか？`,`${d.ko}의 기합 카운터 1개와 마나 ${d.mana}을 지불할까요?`,`Spend 1 Guts counter from ${d.en} and ${d.mana} mana?`)
+     : c('ゴーレムのターン開始時効果を使用しますか？','골렘의 턴 시작 효과를 사용할까요?','Use the Golem’s start-of-turn effect?');
+   break;
  case 'WORLD_TREE_ATTACK':case 'WORLD_TREE_DEFEND':{const atk=q.reason==='WORLD_TREE_ATTACK';text=atk?c('雫1を消費して攻撃するモンスターの攻撃力を3上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격하는 몬스터의 공격력을 3 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the attacking monster +3 ATK until it leaves the field?'):c('雫1を消費して攻撃されるモンスターの体力を3上げますか？場を離れるまで続きます。','이슬 1을 소비하여 공격받는 몬스터의 체력을 3 올릴까요? 필드를 떠날 때까지 유지됩니다.','Spend 1 Dew to give the defending monster +3 HP until it leaves the field?');break;}
  case 'SELECTED_SWORD':text=c(`このターン終了まで攻撃力+${d.amount}する自分のモンスター1体を選んでください。`,`이번 턴 종료까지 공격력을 ${d.amount} 올릴 자신의 몬스터 1체를 선택하세요.`,`Choose 1 of your monsters to gain +${d.amount} ATK until the end of this turn.`);break;
  case 'QUICK_ASSAULT':text=c(`このターン終了まで攻撃力+2する${d.first?'2':'1'}体目の自分のモンスターを選んでください。`, `이번 턴 종료까지 공격력을 2 올릴 자신의 ${d.first?'두':'첫'} 번째 몬스터를 선택하세요.`,`Choose the ${d.first?'second':'first'} of your monsters to gain +2 ATK until the end of this turn.`);break;
