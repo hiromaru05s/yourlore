@@ -77,6 +77,7 @@ const M: Record<string, { ja: string; en: string; ko?:string }> = {
   "링크가 만료되었거나 잘못되었습니다.": { ja: "リンクが期限切れか無効です。", en: "The link is expired or invalid." },
   // social / profile / shop
   "방 생성 실패": { ja: "ルーム作成に失敗しました", en: "Failed to create the room" },
+  "Invalid background": { ja: "一覧からアバターの背景色を選んでください。", en: "Choose a portrait background color from the palette.", ko: "목록에서 아바타 배경색을 선택해 주세요." },
   "잘못된 아바타": { ja: "無効なアバター", en: "Invalid avatar" },
   "보유하지 않은 뱃지입니다.": { ja: "所持していないバッジです。", en: "You don't own that badge." },
   "잘못된 슬리브": { ja: "無効なスリーブ", en: "Invalid sleeve" },
