@@ -1,7 +1,8 @@
-import {Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, SRGBColorSpace, Texture} from 'three';
+import {Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, SRGBColorSpace, Texture, Vector4} from 'three';
 import {createWebGLRenderer} from './webglRenderer';
 import {seekerName} from './seekerLabels';
 import {SEEKER_ROOT} from './seekerMotion';
+import {homeDaylight, onHomeDaylightReady} from './homeDaylight';
 import {homeIsCovered} from './screenCovered';
 
 // Weights are in the cropped painting's UV space, with the hood at the top.
@@ -34,12 +35,31 @@ function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
   texture.needsUpdate = true;
   const geometry = new PlaneGeometry(2, 2, 24, 40);
   const material = new ShaderMaterial({
-    uniforms:{painting:{value:texture}, time:{value:0}},
+    uniforms:{painting:{value:texture}, time:{value:0}, daylight:{value:new Vector4()}},
     vertexShader,
     fragmentShader:`uniform sampler2D painting;
+      uniform vec4 daylight;
       varying vec2 texCoord;
       void main() {
-        gl_FragColor = texture2D(painting, texCoord);
+        vec4 paint = texture2D(painting, texCoord);
+        vec2 uv = vec2(texCoord.x, 1.0-texCoord.y);
+        // The hood, shoulder and book intercept the diagonal light at different
+        // depths. Sample along their painted forms in the breathing mesh.
+        float hood = 1.0-smoothstep(.22,.44,uv.y);
+        float sleeve = smoothstep(.52,.78,uv.x)*smoothstep(.32,.55,uv.y);
+        float across = uv.x-.30*uv.y + .14*hood - .10*sleeve;
+        float aperture = mix(daylight.z,daylight.w,smoothstep(.05,.74,across));
+        float edge = .17 + .19*daylight.y + .28*clamp(aperture,0.,1.35);
+        float sunlit = 1.0-smoothstep(edge-.095,edge+.095,across);
+        float direct = sunlit*clamp(.14+.82*aperture,0.,1.);
+        // Already-dark ink receives mainly sky fill. Bright cloth and gilt
+        // lose their warm direct light as the window falls into shadow.
+        float pigment = dot(paint.rgb,vec3(.2126,.7152,.0722));
+        float receiver = smoothstep(.009,.13,pigment);
+        vec3 skylight = mix(vec3(.73,.79,.92),vec3(.44,.56,.79),receiver);
+        skylight *= .88+.12*daylight.x;
+        vec3 illumination = mix(skylight,vec3(1.07,1.035,.99),direct);
+        gl_FragColor = vec4(paint.rgb*illumination,paint.a);
         #include <colorspace_fragment>
         #include <premultiplied_alpha_fragment>
       }`,
@@ -52,6 +72,7 @@ function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
   canvas.setAttribute('aria-hidden','true');
   function draw(time: number) {
     material.uniforms.time.value = time;
+    material.uniforms.daylight.value.set(homeDaylight.sun, homeDaylight.sweep, homeDaylight.leftWindow, homeDaylight.rightWindow);
     renderer.render(scene, camera);
   }
   const resize = () => {
@@ -74,6 +95,7 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
   image.src = SEEKER_ROOT + '/home-closeup.webp';
   host.setAttribute('role', 'img');
   host.setAttribute('aria-label', seekerName(avatar ?? undefined));
+  host.style.setProperty('--seeker-silhouette',`url("${image.src}")`);
   host.append(image);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let painting: ReturnType<typeof createSeekerPainting> | undefined;
@@ -89,7 +111,7 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
   }
   function sync() {
     cancelAnimationFrame(frame); previous = 0;
-    const active = visible && decoded && !disposed && !document.hidden && !reduced.matches;
+    const active = visible && decoded && !disposed && !document.hidden;
     if (active && !painting && !fallback) {
       try {
         painting = createSeekerPainting(host, image);
@@ -98,17 +120,23 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
         }, {once:true});
       } catch { fallback = true; }
     }
-    host.classList.toggle('is-moving', active && !!painting);
-    host.classList.toggle('seeker-fallback-motion', active && fallback);
-    if (active && painting) frame = requestAnimationFrame(tick);
+    host.classList.toggle('is-painted', active && !!painting);
+    host.classList.toggle('seeker-fallback-motion', active && fallback && !reduced.matches);
+    if (active && painting) {
+      if (reduced.matches) painting.draw(0);
+      else frame = requestAnimationFrame(tick);
+    }
   }
   const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
   observer.observe(host);
+  const offDaylight = onHomeDaylightReady(() => {
+    if (visible && !document.hidden && reduced.matches) painting?.draw(0);
+  });
   reduced.addEventListener('change', sync);
   document.addEventListener('visibilitychange', sync);
   void image.decode().then(() => { if (!disposed) { decoded = true; sync(); } }).catch(() => {});
   return () => {
-    disposed = true; cancelAnimationFrame(frame); observer.disconnect();
+    offDaylight(); disposed = true; cancelAnimationFrame(frame); observer.disconnect();
     reduced.removeEventListener('change', sync);
     document.removeEventListener('visibilitychange', sync);
     painting?.destroy(); painting = undefined;

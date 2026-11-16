@@ -115,6 +115,8 @@ function update(){
  }
  lightUniforms.amount.value=totalLight/shafts.length;
  const targetSun=Math.min(1,Math.max(.2,(shafts[0].uniforms.amount.value*.55+shafts[2].uniforms.amount.value*.45)));
+ homeDaylight.leftWindow=shafts[0].uniforms.amount.value;
+ homeDaylight.rightWindow=shafts[2].uniforms.amount.value;
  homeDaylight.sun=targetSun;homeDaylight.time=cloudTime;homeDaylight.sweep=sweep;
  leafUniforms.time.value=cloudTime;leafUniforms.sun.value=targetSun;leafUniforms.wind.value=.95+.20*Math.sin(cloudTime*.31)+.10*Math.sin(cloudTime*.73);
 

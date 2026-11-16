@@ -13,8 +13,8 @@ void main(){
  vNormal=normalize(normalMatrix*normal);vView=-mv.xyz;vLocal=position;
  gl_Position=projectionMatrix*mv;
 }`;
-function cel(lit:number,shadow:number,deep:number,kind:number){
- const m=new T.ShaderMaterial({toneMapped:false,uniforms:{
+function cel(lit:number,shadow:number,deep:number,kind:number,library=false){
+ const m=new T.ShaderMaterial({toneMapped:false,defines:library?{LIBRARY_CEL:1}:{},uniforms:{
   litColor:{value:new T.Color(lit)},shadowColor:{value:new T.Color(shadow)},deepColor:{value:new T.Color(deep)},
   lightDirection:{value:new T.Vector3(-.62,.78,.68).normalize()},softness:{value:SHADOW_SOFTNESS},kind:{value:kind},daylight:{value:1},
  },vertexShader,fragmentShader:`
@@ -42,6 +42,12 @@ function cel(lit:number,shadow:number,deep:number,kind:number){
   float rim=smoothstep(.70,.86,1.-nv)*(1.-smoothstep(-.18,.35,ndl));
   rim*=smoothstep(-.3,.6,n.x);
   c=mix(c,litColor,rim*.40);
+  #ifdef LIBRARY_CEL
+  float plane=dot(n,normalize(vec3(-.86,.59,.28)));
+  c=mix(shadowColor,litColor,smoothstep(.05,.095,plane));
+  c=mix(c,deepColor,(1.-smoothstep(-.48,-.43,plane))*.74);
+  c=mix(c,vec3(.95,.71,.41),smoothstep(.67,.705,plane)*.18);
+  #endif
   c*=.97+.03*daylight;
   if(kind>1.5){
    vec3 h=normalize(l+v);
@@ -64,7 +70,7 @@ function cel(lit:number,shadow:number,deep:number,kind:number){
  };
  return m;
 }
-function contour(mesh:T.Mesh,width:number){
+function contour(mesh:T.Mesh,width:number,scale:number){
  const mat=new T.ShaderMaterial({side:T.BackSide,toneMapped:false,uniforms:{
   pixelSize:{value:new T.Vector2(1,1)},lineWidth:{value:width},
  },vertexShader:`
@@ -83,25 +89,27 @@ function contour(mesh:T.Mesh,width:number){
  #include <colorspace_fragment>
  }`});
  const size=new T.Vector2();
- mat.onBeforeRender=renderer=>{mat.uniformsNeedUpdate=true;renderer.getSize(size);mat.uniforms.pixelSize.value.set(2/size.x,2/size.y);mat.uniforms.lineWidth.value=width*OUTLINE_SCALE;};
+ mat.onBeforeRender=renderer=>{mat.uniformsNeedUpdate=true;renderer.getSize(size);mat.uniforms.pixelSize.value.set(2/size.x,2/size.y);mat.uniforms.lineWidth.value=width*scale;};
  const outline=new T.Mesh(mesh.geometry,mat);outline.name='toon-colored-contour';outline.frustumCulled=false;outline.castShadow=false;outline.receiveShadow=false;
  mesh.add(outline);
 }
-export function applyZenoToonSurface(body:T.Group,pearl:T.Material,face:T.Mesh){
+export function applyZenoToonSurface(body:T.Group,pearl:T.Material,face:T.Mesh,library=false){
  const meshes:T.Mesh[]=[];body.traverse(o=>{if(o instanceof T.Mesh)meshes.push(o);});
- const skin=cel(0xfff5e7,0xb8bfdf,0x8d9fc6,.5);
- const torso=cel(0xfff5e7,0xb8bfdf,0x8d9fc6,0);
- const inset=cel(0xbacfe7,0x8699c8,0x637aa9,1);
- const mask=cel(0x29374f,0x1e2943,0x172038,1);
- const gem=cel(0x57d3e3,0x2689ad,0x205483,2);
- const frame=cel(0xe6f5f2,0x99bbd1,0x56769d,1);
+ const ivory=library?0xfff0cf:0xfff5e7, shade=library?0xa4aaca:0xb8bfdf, deep=library?0x66769f:0x8d9fc6;
+ const skin=cel(ivory,shade,deep,.5,library);
+ const torso=cel(ivory,shade,deep,0,library);
+ const inset=cel(library?0xb6c4d4:0xbacfe7,0x8699c8,0x637aa9,1);
+ const mask=cel(library?0x323952:0x29374f,0x1e2943,0x172038,1);
+ const gem=cel(library?0x469aab:0x57d3e3,0x2689ad,0x205483,2);
+ const frame=cel(library?0xe4c488:0xe6f5f2,0x99bbd1,0x56769d,1);
+ const ink=library?1.6:OUTLINE_SCALE;
  const replaced=new Set<T.Material>();
  for(const mesh of meshes){
   const old=mesh.material;
-  if(old===pearl){mesh.material=mesh.name==='zeno-shell'?torso:skin;contour(mesh,1);}
+  if(old===pearl){mesh.material=mesh.name==='zeno-shell'?torso:skin;contour(mesh,1,ink);}
   else if(mesh===face){mesh.material=mask;replaced.add(old as T.Material);}
   else if(mesh.name==='zeno-ear-inset'){mesh.material=inset;replaced.add(old as T.Material);}
-  else if(mesh.name==='zeno-dew-glass'){mesh.material=gem;replaced.add(old as T.Material);contour(mesh,.7);}
+  else if(mesh.name==='zeno-dew-glass'){mesh.material=gem;replaced.add(old as T.Material);contour(mesh,.7,ink);}
   else if(mesh.name==='zeno-dew-rim'){mesh.material=frame;replaced.add(old as T.Material);}
   else if(old instanceof T.MeshStandardMaterial&&old.emissiveIntensity>0){
    // Keep the expression materials themselves: the shared motion code animates

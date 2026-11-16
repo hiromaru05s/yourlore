@@ -109,7 +109,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
     }});
   }
   // Keep comparison-lab custom forms and silhouettes independent of the adopted material.
-  if(!options.form&&!options.silhouette)applyZenoToonSurface(spirit,pearl,face);
+  if(!options.form&&!options.silhouette)applyZenoToonSurface(spirit,pearl,face,!!options.home);
   const {left,right}=form;
   const shadow=mesh(new THREE.CircleGeometry(.53,64),new THREE.MeshBasicMaterial({color:0x284157,transparent:true,opacity:.13,depthWrite:false}),0,-1.07,0,scene);shadow.rotation.x=-Math.PI/2;shadow.scale.y=.65;shadow.visible=!options.home;
   const silhouetteMaterial=options.silhouette?new THREE.MeshBasicMaterial({color:0x122534}):null;
