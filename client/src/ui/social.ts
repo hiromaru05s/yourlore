@@ -1,8 +1,7 @@
 import {medalHtml} from './medal';
-import { npcPortrait } from "../shared/botNpcs";
+import {characterAppearance, playableCharacters} from "./characterAppearance";
 import { homeIcon } from "./homeIcons";
-import { artUrl } from "./cardArt";
-import {seekerPoster, SEEKER_ID} from './seekerMotion';
+import {SEEKER_ID} from './seekerMotion';
 import {seekerName} from './seekerLabels';
 // ============================================================
 // LORE — social presentation helpers: preset avatars (card art)
@@ -15,19 +14,17 @@ import { getLang } from "../i18n";
 // ---- avatars: preset = a card id, art served from /art/cards/<id>.webp ----
 export function avatarHtml(avatar: string | null | undefined, display: string, size = 40): string {
   const initial = (display || "?").trim().charAt(0).toUpperCase().replace(/[&<>"\']/g, "?");
-  if (!avatar || avatar === SEEKER_ID || avatar === "SEEKER_RED" || avatar === "SEEKER_BLUE") {
-    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><img class="hooded-seeker" src="${seekerPoster()}" alt="${seekerName()}" width="512" height="512"></span>`;
+  const character = characterAppearance(avatar);
+  if (character.id === SEEKER_ID) {
+    return `<span class="avatar avatar-seeker" style="--avs:${size}px"><img class="hooded-seeker" src="${character.icon}" alt="${seekerName()}" width="512" height="512"></span>`;
   }
-  const portrait = npcPortrait(avatar);
-  const img = portrait ? `<img src="${portrait}" alt="" onerror="this.remove()">` : avatar && /^[A-Za-z0-9_]+$/.test(avatar)
-    ? `<img src="${artUrl.sm(avatar)}" alt="" loading="lazy" onerror="this.remove()">`
-    : "";
+  const img = `<img src="${character.icon}" alt="" loading="lazy" onerror="this.remove()">`;
   return `<span class="avatar" style="--avs:${size}px">${img}<span class="avatar-fb">${initial}</span></span>`;
 }
 
 /** One selectable character; legacy red/blue accounts render the same neutral portrait. */
 export function avatarPresets(): string[] {
-  return [SEEKER_ID];
+  return playableCharacters.map(character => character.id);
 }
 
 // ---- badges ----

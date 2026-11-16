@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';import {build} from 'esbuild';import fs from 'node:fs/promises';import {DatabaseSync} from 'node:sqlite';
 const dir=await fs.mkdtemp('/tmp/lore-v53-test-');
 try{
-await build({stdin:{contents:`export * from './client/src/shared/cards';export * from './client/src/shared/engine';export * from './client/src/shared/bot';export * from './client/src/shared/cosmetics';export * from './client/src/ui/menuAssets';export {handleSocial} from './server/src/social';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
-const {DB,STARTERS,createGame,reduce,playBlockReason,curHp,effAtk,HAND_CARRY,COSMETICS,handleSocial,menuAssetUrls}=await import(dir+'/module.mjs');let seq=0;
+await build({stdin:{contents:`export * from './client/src/shared/cards';export * from './client/src/shared/engine';export * from './client/src/shared/bot';export * from './client/src/shared/cosmetics';export * from './client/src/ui/menuAssets';export {starterBackgrounds} from './client/src/shared/profileAppearance';export {handleSocial} from './server/src/social';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
+const {DB,STARTERS,createGame,reduce,playBlockReason,curHp,effAtk,HAND_CARRY,COSMETICS,handleSocial,menuAssetUrls,starterBackgrounds}=await import(dir+'/module.mjs');let seq=0;
 const card=id=>({...structuredClone(DB[id]||STARTERS[id]),uid:'test-'+(++seq)});
 const mon=id=>({...card(id),dmg:0,exhausted:false,atkMod:0,defMod:0,tempAtk:0,summonedTurn:0});
 const fresh=()=>{const g=createGame({mode:'online',seed:41,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;for(const p of g.players)Object.assign(p,{hp:40,mana:30,maxMana:30,hand:[],deck:[],discard:[],field:[],traps:[],enchants:[],quests:[],removed:[],uses:{},usesTurn:{}});g.turn=3;g.phase='main';g.pending=null;return g;};
@@ -20,11 +20,19 @@ for(const n of [7,8,9,12]){let g=fresh();g.players[0].hand=Array.from({length:n}
 for(const u of menuAssetUrls())await fs.access('client/public'+u.split('?')[0]);
 const free= COSMETICS.filter(c=>!c.gachaOnly&&c.kind!=='frame'),gacha=COSMETICS.filter(c=>c.gachaOnly);assert(gacha.some(c=>c.id==='sleeve:gacha-elfweave'));assert(gacha.some(c=>c.id==='furniture:gacha-elfweave'));assert(gacha.some(c=>c.id==='sleeve:gacha-amethyst-cleft'));assert(gacha.some(c=>c.id==='furniture:gacha-amethyst-cleft'));assert.equal(free.length,0);assert(free.every(c=>c.price===0));
 const db=new DatabaseSync(':memory:');db.exec(`CREATE TABLE users(id TEXT PRIMARY KEY,display TEXT,avatar TEXT,badge TEXT,stats_public INT,credits INT,sleeve TEXT,sleeves TEXT,furniture TEXT,username_set INTEGER DEFAULT 0);INSERT INTO users VALUES('a','A',NULL,NULL,1,23,NULL,NULL,NULL,1);`);
+db.exec(await fs.readFile('server/migrations/0032_profile_background.sql','utf8'));
 const env={ALLOWED_ORIGIN:'https://test',DB:{prepare(sql){let args=[];return {bind(...a){args=a;return this;},async first(){return db.prepare(sql).get(...args)||null;},async run(){const bind=sql.includes('?1')?[Object.fromEntries(args.map((v,i)=>[String(i+1),v]))]:args;return db.prepare(sql).run(...bind);}}}}};
 const request=async(path,body)=>handleSocial(env,new Request('https://test/api'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}),path,{id:'a'});
 for(const item of gacha)assert.equal((await request('/social/buy-cosmetic',{id:item.id,price:0})).status,400);
 for(const id of ['astral','furniture:astral','nocturne','furniture:nocturne','azure-plume','furniture:azure-plume'])assert.equal((await request('/social/buy-cosmetic',{id,price:0})).status,400);
 assert.equal((await request('/social/me',{sleeve:'furniture:astral'})).status,400);assert.equal((await request('/social/buy-cosmetic',{id:'forged'})).status,400);const row=db.prepare('SELECT * FROM users').get();assert.equal(row.credits,23);assert.equal(row.sleeves,null);
+for (const background of starterBackgrounds) {
+  const response=await request('/social/me',{background});
+  assert.equal(response.status,200);
+  assert.equal((await response.json()).background,background);
+}
+assert.equal((await request('/social/me',{background:'library'})).status,400);
+assert.equal(db.prepare('SELECT credits FROM users WHERE id=?').get('a').credits,23);
 db.close();
 console.log('PASS v53: catalog, uncapped HP and events, current-health conditions, fixed recovery, current-health stat swap, 7-card carry and invalid/timeout picks, preload inventory, retired free cosmetics rejected');
 }finally{await fs.rm(dir,{recursive:true,force:true});}

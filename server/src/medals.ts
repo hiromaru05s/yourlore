@@ -70,6 +70,6 @@ export async function settleMedals(env:Env,matchId:string,g:GameState,side:Side,
 }
 
 export async function duelAppearance(env:Env,userId:string){
- const row=await env.DB.prepare('SELECT badge, profile_background FROM users WHERE id=?').bind(userId).first<{badge:string|null;profile_background:string}>();
- return {medal:row?.badge && MEDAL_BY_ID.has(row.badge) ? row.badge : null, background: profileBackground(row?.profile_background)};
+ const row=await env.DB.prepare('SELECT avatar, badge, profile_background FROM users WHERE id=?').bind(userId).first<{avatar:string|null;badge:string|null;profile_background:string}>();
+ return {avatar:row?.avatar ?? null, medal:row?.badge && MEDAL_BY_ID.has(row.badge) ? row.badge : null, background: profileBackground(row?.profile_background)};
 }

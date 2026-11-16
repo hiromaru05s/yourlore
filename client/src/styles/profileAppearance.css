@@ -10,7 +10,7 @@
 .home-standing-seeker :is(img,canvas) {display:block;position:absolute;inset:0;width:100%;height:100%;}
 .home-standing-seeker canvas,.home-standing-seeker.is-painted img {visibility:hidden;}
 .home-standing-seeker.is-painted canvas {visibility:visible;}
-.home-standing-seeker:not(.is-painted)::after {
+.home-standing-seeker[data-character="SEEKER_HOODED"]:not(.is-painted)::after {
   content:'';position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(112deg,transparent 30%,rgba(23,35,77,.28) 66%);
   mask:var(--seeker-silhouette) center/100% 100% no-repeat;
@@ -44,12 +44,13 @@
 dialog.appearance-picker {margin:auto;box-sizing:border-box;width:min(500px,94vw);max-height:90dvh;overflow:auto;color:#f2f6ff;text-align:left;}
 dialog.appearance-picker::backdrop {background:#030e1fc2;}
 .appearance-picker h2 {font-size:1.2rem;margin:0 0 10px;}
-.appearance-aperture,.appearance-swatch {background:var(--appearance-plate) center/cover;}
+.appearance-aperture,.appearance-swatch {background-color:var(--appearance-plate);}
 .appearance-preview {position:relative;margin:auto;width:min(230px,30vh);aspect-ratio:1.345;isolation:isolate;}
 .appearance-preview::after {content:'';position:absolute;inset:0;background:url('/art/biblion/refined/portrait-self.png') center/100% 100%;}
 .appearance-aperture {position:absolute;inset:0;mask:url('/art/seekers/v2/mask-self.png') center/100% 100%;display:grid;justify-items:center;}
 .appearance-aperture img {position:absolute;bottom:0;left:50%;translate:-50% 0;height:84%;width:auto;}
 .appearance-preview[data-background="plain"] img {height:100%;}
+
 .appearance-picker fieldset {margin:12px 0 0;border:0;padding:0;}
 .appearance-picker legend {font-size:.79rem;color:#c0d5e7;padding:0;margin-bottom:5px;}
 .appearance-options {display:flex;flex-wrap:wrap;gap:6px;}
@@ -60,3 +61,10 @@ dialog.appearance-picker::backdrop {background:#030e1fc2;}
 .appearance-picker .modal-row {margin-top:12px;}
 .pf-edit-look {position:relative;display:grid;justify-items:center;gap:3px;background:transparent;color:#f1f8ff;border:0;cursor:pointer;}
 .pf-edit-look small {font-size:10px;color:#deedff;}
+
+@media (prefers-reduced-motion:no-preference) {
+  .is-returning-home :is(.lounge-topbar > *, .lounge-rail, .lounge-home-main, .lounge-home-screen > #dailyReward) {
+    animation:home-return-ui 160ms ease-out 100ms backwards;
+  }
+}
+@keyframes home-return-ui {from {opacity:0} to {opacity:1}}

@@ -333,6 +333,7 @@ export interface GameState {
   /** each side's equipped card-back sleeve id (online only), so a client can render the
       OPPONENT's card backs with their chosen sleeve. index = Side. null = default back. */
   sleeves?: [string | null, string | null];
+  portraitAvatars?: [string | null, string | null];
   portraitBackgrounds?: [ProfileBackground, ProfileBackground];
   furnitures?: [string | null, string | null];
   effects?: [string | null, string | null];

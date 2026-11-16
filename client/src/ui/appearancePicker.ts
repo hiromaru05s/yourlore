@@ -1,15 +1,22 @@
 import {profileBackground, starterBackgrounds, type ProfileBackground} from '../shared/profileAppearance';
 import {loungeText as L} from './loungeText';
-import {seekerName} from './seekerLabels';
-import {SEEKER_ID, SEEKER_ROOT} from './seekerMotion';
+import {SEEKER_ID} from './seekerMotion';
+import {characterAppearance} from './characterAppearance';
 import {avatarHtml, avatarPresets} from './social';
 import {t} from '../i18n';
 import '../styles/profileAppearance.css';
 
 export const appearanceTitle = () => L('キャラクター・背景', 'Character & background', '캐릭터 · 배경');
-const backgroundName = (id: ProfileBackground) => id === 'plain' ? L('標準','Original','기본') : id === 'library'
-  ? L('ビブリオン魔導図書館', 'Biblion Library', '비블리온 마도서관')
-  : L('月明かりの回廊', 'Moonlit Cloister', '달빛 회랑');
+const backgroundNames: Record<ProfileBackground, [string,string,string]> = {
+  plain: ['白','White','흰색'],
+  slate: ['墨','Slate','먹색'],
+  navy: ['紺','Navy','남색'],
+  sky: ['空','Sky','하늘색'],
+  sage: ['若葉','Sage','연녹색'],
+  sand: ['砂','Sand','모래색'],
+  rose: ['薄紅','Rose','장미색'],
+  violet: ['藤','Wisteria','등나무색'],
+};
 
 export function openAppearancePicker(current: string | null, background: string | undefined,
   save: (avatar: string | null, background: ProfileBackground) => Promise<void>) {
@@ -25,15 +32,15 @@ export function openAppearancePicker(current: string | null, background: string 
   dialog.innerHTML = `<h2 id="appearance-title">${appearanceTitle()}</h2>
     <div class="appearance-preview" aria-hidden="true"><div class="appearance-aperture"><img alt=""></div></div>
     <fieldset><legend>${L('キャラクター','Character','캐릭터')}</legend><div class="appearance-options">
-    ${ids.map((id,i) => `<button type="button" data-character="${i}">${avatarHtml(id,'',34)} ${id===SEEKER_ID?seekerName():L('現在のアバター','Current avatar','현재 아바타')}</button>`).join('')}</div></fieldset>
+    ${ids.map((id,i) => `<button type="button" data-character="${i}">${avatarHtml(id,'',34)} ${characterAppearance(id).name()}</button>`).join('')}</div></fieldset>
     <fieldset><legend>${L('対戦アバターの背景','Duel portrait background','대전 아바타 배경')}</legend><div class="appearance-options">
-    ${starterBackgrounds.map(id => `<button type="button" data-scene="${id}"><i class="appearance-swatch" data-background="${id}"></i>${backgroundName(id)}</button>`).join('')}</div></fieldset>
+    ${starterBackgrounds.map(id => `<button type="button" data-scene="${id}"><i class="appearance-swatch" data-background="${id}"></i>${L(...backgroundNames[id])}</button>`).join('')}</div></fieldset>
     <p role="status"></p><div class="modal-row"><button class="btn btn-ghost" data-cancel>${t('common.cancel')}</button>
     <button class="btn btn-gold" data-save>${L('保存','Save','저장')}</button></div>`;
   const paint = () => {
     const preview = dialog.querySelector<HTMLElement>('.appearance-preview')!;
     preview.dataset.background = scene;
-    preview.querySelector('img')!.src = SEEKER_ROOT + '/cutout/portrait.webp';
+    preview.querySelector('img')!.src = characterAppearance(selected).portrait;
     dialog.querySelectorAll<HTMLButtonElement>('[data-character]').forEach(b => b.setAttribute('aria-pressed',String(ids[Number(b.dataset.character)]===selected)));
     dialog.querySelectorAll<HTMLButtonElement>('[data-scene]').forEach(b => b.setAttribute('aria-pressed',String(b.dataset.scene===scene)));
   };

@@ -1,4 +1,17 @@
-[data-background="plain"] {--appearance-plate:linear-gradient(#fff,#fff);}
-[data-background="library"] {--appearance-plate:url('/art/seekers/backgrounds/library.webp');}
-[data-background="moonlit-cloister"] {--appearance-plate:url('/art/seekers/backgrounds/moonlit-cloister.webp');}
-.portrait .seeker-motion[data-background]:not([data-background="plain"]) {background:var(--appearance-plate) center/cover;}
+[data-background="plain"] {--appearance-plate:#ffffff;}
+[data-background="slate"] {--appearance-plate:#424854;}
+[data-background="navy"] {--appearance-plate:#2e4160;}
+[data-background="sky"] {--appearance-plate:#a9cadb;}
+[data-background="sage"] {--appearance-plate:#9caf9d;}
+[data-background="sand"] {--appearance-plate:#ddc79e;}
+[data-background="rose"] {--appearance-plate:#c79a9e;}
+[data-background="violet"] {--appearance-plate:#aaa1c8;}
+.portrait .seeker-motion[data-background] {background-color:var(--appearance-plate);}
+
+/* Legacy illustrated avatars have opaque artwork. Leave a band of the selected
+   color inside the portrait mask without changing the surrounding game board. */
+.portrait .pt-ring[data-background]:not([data-background="plain"]) .avatar:not(.avatar-seeker) img {
+  box-sizing:border-box;
+  padding:6%;
+  background-color:var(--appearance-plate);
+}

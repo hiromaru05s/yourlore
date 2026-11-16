@@ -20,6 +20,8 @@ import {prepareManaPurchase} from './manaPurchase';
 import {monsterCanAttack,monsterCanTarget} from '../shared/engine';
 import {furnitureUrl} from '../shared/cosmetics';
 import {mountNpcReaction, disposeNpcReactions} from './npcReaction';
+import {characterAppearance} from './characterAppearance';
+import {SEEKER_ID} from './seekerMotion';
 import {seekerPortrait, disposeSeekers} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
 import {handFan} from './handFan';
@@ -476,8 +478,8 @@ export class GameView {
     }
 
     // Hearthstone-style center portraits (opp top / me bottom)
-    this.renderPortrait(this.q("portraitOpp"), opp, false, profileBackground(g.portraitBackgrounds?.[1-this.you]), g.medals?.[(1-this.you) as Side]);
-    this.renderPortrait(this.q("portraitMe"), me, true, g.portraitBackgrounds?.[this.you] ?? myPortraitBackground, g.medals?.[this.you]);
+    this.renderPortrait(this.q("portraitOpp"), opp, false, g.portraitAvatars ? g.portraitAvatars[1-this.you] : OPP_AVATAR, profileBackground(g.portraitBackgrounds?.[1-this.you]), g.medals?.[(1-this.you) as Side]);
+    this.renderPortrait(this.q("portraitMe"), me, true, g.portraitAvatars ? g.portraitAvatars[this.you] : MY_AVATAR, profileBackground(g.portraitBackgrounds?.[this.you] ?? myPortraitBackground), g.medals?.[this.you]);
     this.q("portraitMe").classList.toggle("is-active", myTurn);
     this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
 
@@ -1031,7 +1033,7 @@ export class GameView {
   }
 
   /** Portrait counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right. */
-  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean, background: ProfileBackground, medal?:string|null): void {
+  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean, avatar: string | null | undefined, background: ProfileBackground, medal?:string|null): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
@@ -1043,13 +1045,12 @@ export class GameView {
     const oldMana=el.querySelector<HTMLElement>('.pt-mana');
     const previousMax=Number(oldMana?.dataset.maximum??emax),previousMana=Number(oldMana?.dataset.mana??p.mana);
     const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
-    const avatar = isMe ? MY_AVATAR : OPP_AVATAR;
     const npc = npcPortrait(avatar);
-    const seeker = "SEEKER_HOODED";
+    const character = characterAppearance(avatar);
     el.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b></span>
       </span>
-      <span class="pt-ring">${avatarHtml(npc ? avatar : seeker, p.name, 100)}</span>
+      <span class="pt-ring">${avatarHtml(character.id, p.name, 100)}</span>
       <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${shield > 0 || dew > 0 || brand > 0 ? `<span class="pt-resources">
         ${shield > 0 ? `<span class="pt-shield" role="img" aria-label="${t('game.shield')} ${p.shield ?? 0}" title="${esc(t('game.shieldTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.shield ?? 0).length)}"><b id="shield-${sd}" aria-hidden="true">${shield}</b></span>` : ""}
@@ -1066,8 +1067,8 @@ export class GameView {
       if (oldPortrait) disposeSeekers(oldRing!);
       ring.dataset.avatar = avatar ?? '';
       ring.dataset.background = background;
-      if (!npc) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true, background}));
-      else mountNpcReaction(ring, npc);
+      if (character.id === SEEKER_ID) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true, background}));
+      else if (npc) mountNpcReaction(ring, npc);
     }
     this.curseSeals[sd].sync(retained ?? ring, sealCount, sealLabel);
   }

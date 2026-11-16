@@ -293,6 +293,7 @@ export class GameRoom {
         room.game.medalDuel=newMedalDuel();
         const [first, second] = await Promise.all(room.players.map((p,i) => bot && i === 1 ? null : duelAppearance(this.env,p.id)));
         room.game.medals = [first?.medal ?? null, second?.medal ?? null];
+        room.game.portraitAvatars = [first?.avatar ?? null, story?.avatar ?? npc?.avatar ?? (body.botId ? matchBot(body.botId)?.avatar : second?.avatar) ?? null];
         room.game.portraitBackgrounds = [first?.background ?? 'plain', second?.background ?? 'plain'];
         room.rewardDecks=room.game.players.map(p=>[...p.hand,...p.deck,...p.discard].map(c=>c.id)) as [string[],string[]];
         room.game.players.forEach(p=>{p.activity={};});

@@ -1,7 +1,6 @@
 import {Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, SRGBColorSpace, Texture, Vector4} from 'three';
 import {createWebGLRenderer} from './webglRenderer';
-import {seekerName} from './seekerLabels';
-import {SEEKER_ROOT} from './seekerMotion';
+import {characterAppearance, playableCharacters} from './characterAppearance';
 import {homeDaylight, onHomeDaylightReady} from './homeDaylight';
 import {homeIsCovered} from './screenCovered';
 
@@ -92,11 +91,19 @@ function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
 export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
   const image = new Image();
   image.alt = '';
-  image.src = SEEKER_ROOT + '/home-closeup.webp';
+  const character = characterAppearance(avatar);
+  image.src = character.home;
+  host.dataset.character = character.id;
   host.setAttribute('role', 'img');
-  host.setAttribute('aria-label', seekerName(avatar ?? undefined));
+  host.setAttribute('aria-label', character.name());
   host.style.setProperty('--seeker-silhouette',`url("${image.src}")`);
   host.append(image);
+  // Older profiles can hold a square NPC or card portrait instead of a standing painting.
+  if (!playableCharacters.some(entry => entry.id === character.id)) {
+    image.style.objectFit = 'contain';
+    image.onerror = () => { image.onerror = null; image.src = characterAppearance().home; };
+    return () => { image.onerror = null; image.remove(); };
+  }
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let painting: ReturnType<typeof createSeekerPainting> | undefined;
   let visible = false, decoded = false, disposed = false, fallback = false;
@@ -136,6 +143,7 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
   document.addEventListener('visibilitychange', sync);
   void image.decode().then(() => { if (!disposed) { decoded = true; sync(); } }).catch(() => {});
   return () => {
+    host.classList.remove('is-painted','seeker-fallback-motion'); image.remove();
     offDaylight(); disposed = true; cancelAnimationFrame(frame); observer.disconnect();
     reduced.removeEventListener('change', sync);
     document.removeEventListener('visibilitychange', sync);

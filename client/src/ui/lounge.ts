@@ -26,7 +26,7 @@ export type LoungePage = 'home'|'deck'|'cards'|'leaderboard'|'friends'|'shop'|'t
 const lastLoungePage=new WeakMap<App,string>();
 
 /** Shared navigation around the existing screen, preserving its live handlers. */
-export function mountLounge(app: App, page: LoungePage): () => void {
+export function mountLounge(app: App, page: LoungePage, returningHome = false): () => void {
   const lifecycle=new AbortController();
   document.body.classList.add('lounge-active');
   const content = document.createElement('main'); content.className='lounge-content'; content.id='loungeContent';
@@ -102,6 +102,11 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     if (dailyReward && quests && dailyReward.parentElement !== quests) quests.append(dailyReward);
   };
   layoutHome();
+  if (returningHome && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    shell.classList.add('is-returning-home');
+    const end = window.setTimeout(() => shell.classList.remove('is-returning-home'), 300);
+    lifecycle.signal.addEventListener('abort', () => clearTimeout(end), {once:true});
+  }
   if (companion) phoneHome.addEventListener('change',layoutHome,{signal:lifecycle.signal});
   const off=onLangChange(paint);
   document.addEventListener('lore:user',paint);

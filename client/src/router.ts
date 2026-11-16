@@ -114,6 +114,7 @@ export class App {
       const revision = ++this.screenRevision;
       this.closeUsernameSetup?.(); this.closeUsernameSetup = undefined;
       this.closeGraphicsNotice?.(); this.closeGraphicsNotice = undefined;
+      const returningHome = page === 'home' && this.homeEntranceShown && this.currentPage !== 'home' && this.currentPage !== 'login';
       this.currentPage = page;
       this.cancelCover?.();
       this.current?.destroy?.();
@@ -133,7 +134,7 @@ export class App {
             });
           } else this.checkGraphics(page, revision);
         };
-        this.leaveLounge = mountLounge(this, page);
+        this.leaveLounge = mountLounge(this, page, returningHome);
         const entrance=page==='home'&&!this.homeEntranceShown;
         // Admission belongs to startup. Later pages keep navigation usable while
         // their visible art loads; card galleries already own a local reveal gate.

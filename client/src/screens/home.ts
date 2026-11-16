@@ -57,7 +57,16 @@ export function mountHome(app: App): Screen {
     </section>`;
   app.root.appendChild(wrap);
   const stopGifts=mountGiftInbox(app,wrap.querySelector<HTMLButtonElement>('#homeGifts')!);
-  const stopSeeker = mountHomeSeeker(wrap.querySelector<HTMLElement>('.home-standing-seeker')!, u?.avatar);
+  const figure = wrap.querySelector<HTMLElement>('.home-standing-seeker')!;
+  let avatar = u?.avatar;
+  let stopSeeker = mountHomeSeeker(figure, avatar);
+  const syncCharacter = () => {
+    if (avatar === app.user?.avatar) return;
+    stopSeeker();
+    avatar = app.user?.avatar;
+    stopSeeker = mountHomeSeeker(figure, avatar);
+  };
+  document.addEventListener('lore:user',syncCharacter);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   const duelButton=mountHomeDuelButton(q('ranked'));
   let mode: 'ranked'|'online'|'bot'='ranked';
@@ -91,7 +100,7 @@ export function mountHome(app: App): Screen {
   const stopWarmup=scheduleGameWarmup(wrap,store.list[store.sel].cards);
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;duelButton.destroy();stopWarmup();unsub();stopSeeker();stopDaily();stopGifts();}};
+  return {destroy:()=>{disposed=true;duelButton.destroy();stopWarmup();unsub();document.removeEventListener('lore:user',syncCharacter);stopSeeker();stopDaily();stopGifts();}};
 }
 
 /** Select an NPC, then start centrally or double-click its card. */
