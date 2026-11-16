@@ -1,21 +1,6 @@
 import '../styles/loreCursor.css';
 
-// The split silver rim and its shards share the pointer's contact point.
-const angles = [8, 65, 116, 170, 224, 279, 322];
-const splinters = angles.map((angle, i) => `
-  <g transform="rotate(${angle})"><g class="splinter">
-    <path d="M0 -4.5 1.5 0 0 3.2 -1.3 1Z" fill="${i % 3 === 0 ? '#f5d69a' : '#a5deef'}"/>
-    <path d="M0 -4.5 0 2.2 -1.3 1Z" fill="#f8fdff"/>
-  </g></g>`).join('');
-const burstArt = `<svg viewBox="0 0 72 72" fill="none" aria-hidden="true">
-  <g class="wave" stroke-dasharray="24 1">
-    <circle cx="36" cy="36" r="22" pathLength="100" stroke="#315c78" stroke-width="2.7"/>
-    <circle cx="36" cy="36" r="22.4" pathLength="100" stroke="#c7f1ff" stroke-width="1.35"/>
-    <circle cx="36" cy="36" r="19.8" pathLength="100" stroke="#f2d9a7" stroke-width=".7"/>
-  </g>
-  <g transform="translate(36 36)">${splinters}</g>
-  <path class="contact" d="m36 28 1.6 5.9 4.6 2.1-4.6 1.6L36 44l-1.6-6.4L28 36l6.4-2.1Z" fill="#fff3ce"/>
-</svg>`;
+import {clickLifetime, clickSurface, paintClick, type ClickStyle} from './clickBurst';
 
 export function installLoreCursor(): () => void {
   const root = document.documentElement;
@@ -26,7 +11,45 @@ export function installLoreCursor(): () => void {
   let lastDialog: Element | null = null;
   const fine = matchMedia('(any-pointer: fine)');
   const events = new AbortController();
-  const bursts = new Set<HTMLElement>();
+  const bursts = new Map<HTMLCanvasElement, {style: ClickStyle; start: number; reduced: boolean; ctx: CanvasRenderingContext2D}>();
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let frame = 0;
+  let selected: ClickStyle = 'flare';
+  const draw = (now: number) => {
+    frame = 0;
+    for (const [canvas, burst] of bursts) {
+      const duration = burst.reduced ? 125 : clickLifetime[burst.style];
+      const t = Math.max(0, (now - burst.start) / duration);
+      if (t >= 1) {
+        canvas.remove(); bursts.delete(canvas);
+      } else paintClick(burst.ctx, burst.style, t, burst.reduced);
+    }
+    if (bursts.size) frame = requestAnimationFrame(draw);
+  };
+  const fire = (x: number, y: number) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    canvas.className = 'lore-cursor-burst';
+    canvas.dataset.clickStyle = selected;
+    canvas.setAttribute('aria-hidden', 'true');
+    canvas.width = canvas.height = Math.ceil(clickSurface * Math.min(3, devicePixelRatio || 1));
+    canvas.style.width = canvas.style.height = clickSurface + 'px';
+    canvas.style.left = (x - clickSurface / 2) + 'px';
+    canvas.style.top = (y - clickSurface / 2) + 'px';
+    if (typeof canvas.showPopover === 'function') canvas.popover = 'manual';
+    document.body.append(canvas);
+    if (canvas.popover === 'manual') canvas.showPopover();
+    const start = performance.now(), reduced = reducedMotion.matches;
+    bursts.set(canvas, {style: selected, start, reduced, ctx});
+    paintClick(ctx, selected, 0, reduced);
+    if (!frame) frame = requestAnimationFrame(draw);
+  };
+  if (import.meta.env.DEV && new URLSearchParams(location.search).has('clickFx')) {
+    void import('../dev/clickBurstPicker').then(({mountClickPicker}) => {
+      if (!events.signal.aborted) mountClickPicker(events.signal, value => { selected = value; }, fire);
+    });
+  }
   const options = {capture: true, passive: true, signal: events.signal};
   const hide = () => { delete root.dataset.loreMouse; };
   const locate = (event: PointerEvent) => {
@@ -56,26 +79,12 @@ export function installLoreCursor(): () => void {
     if (!(target instanceof Element) || target.closest(':disabled, [aria-disabled="true"], [data-block-reason]')) return;
     if (getComputedStyle(target).cursor === 'none') return;
 
-    const burst = document.createElement('div');
-    burst.className = 'lore-cursor-burst';
-    burst.setAttribute('aria-hidden', 'true');
-    burst.style.left = (event.clientX - 36) + 'px';
-    burst.style.top = (event.clientY - 36) + 'px';
-    burst.innerHTML = burstArt;
-    document.body.append(burst);
-    // A manual popover paints above native shop/tutorial dialogs without taking focus.
-    if (typeof burst.showPopover === 'function') {
-      burst.popover = 'manual';
-      burst.showPopover();
-    }
-    bursts.add(burst);
-    const finish = () => { bursts.delete(burst); burst.remove(); };
-    burst.addEventListener('animationend', e => { if (e.target === burst) finish(); });
-    burst.addEventListener('animationcancel', e => { if (e.target === burst) finish(); });
+    if (!target.closest('[data-click-fx-picker]')) fire(event.clientX, event.clientY);
   }, options);
   return () => {
     events.abort(); hide(); dial.remove();
-    for (const burst of bursts) burst.remove();
+    cancelAnimationFrame(frame);
+    for (const canvas of bursts.keys()) canvas.remove();
     bursts.clear();
   };
 }

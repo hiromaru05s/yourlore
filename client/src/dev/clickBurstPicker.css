@@ -1,0 +1,11 @@
+[data-click-fx-picker] {
+  position:fixed;left:50%;bottom:max(84px,11vh);transform:translateX(-50%);z-index:10000;
+  display:flex;gap:3px;align-items:center;padding:3px;background:#102033ed;
+  border:1px solid #8496a4;box-shadow:0 3px 12px #06101b55;
+}
+[data-click-fx-picker] button {
+  white-space:nowrap;min-height:30px;padding:3px 12px;margin:0;background:transparent;
+  color:#dde6ec;border:0;border-bottom:1px solid transparent;font:600 12px/1.3 system-ui,sans-serif;
+}
+[data-click-fx-picker] button[aria-pressed="true"] {background:#36516a;color:#fff4d9;border-color:#e6ca8d}
+[data-click-fx-picker] button:focus-visible {outline:1px solid #e3d7b6}

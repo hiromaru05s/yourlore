@@ -51,33 +51,6 @@
 .lore-cursor-dial::after { clip-path: circle(10.7px); }
 @keyframes lore-compass-turn { to { transform: rotate(1turn); } }
 
-.lore-cursor-burst { width: 72px; height: 72px; animation: lore-burst-life 410ms linear both; }
-.lore-cursor-burst svg { display: block; width: 100%; height: 100%; overflow: visible; }
-.lore-cursor-burst .wave {
-  transform-origin: 36px 36px; animation: lore-etched-wave 350ms cubic-bezier(.12,.72,.26,1) both;
-}
-.lore-cursor-burst .splinter { animation: lore-rim-splinter 340ms cubic-bezier(.16,.7,.22,1) 36ms both; }
-.lore-cursor-burst .contact { transform-origin: 36px 36px; animation: lore-contact 155ms ease-out both; }
-@keyframes lore-burst-life { from { opacity: 1; } 78% { opacity: 1; } to { opacity: 0; } }
-@keyframes lore-etched-wave {
-  0% { transform: scale(.13); stroke-dasharray: 24 1; opacity: .9; }
-  38% { stroke-dasharray: 20 5; opacity: 1; }
-  100% { transform: scale(1.03) rotate(13deg); stroke-dasharray: 0 25; opacity: 0; }
-}
-@keyframes lore-rim-splinter {
-  from { transform: translateY(-6px) scale(.3,.4); opacity: 0; }
-  24% { opacity: 1; }
-  62% { transform: translateY(-23px) scale(1,1.1); }
-  to { transform: translateY(-30px) scale(.25,.1); opacity: 0; }
-}
-@keyframes lore-contact {
-  from { transform: scale(.45); }
-  28% { transform: scale(1); opacity: 1; }
-  to { transform: scale(.25); opacity: 0; }
-}
 @media (prefers-reduced-motion: reduce) {
   .lore-cursor-dial::before { animation: none; }
-  .lore-cursor-burst { animation-duration: 130ms; }
-  .lore-cursor-burst .wave { animation: none; transform: scale(.42); stroke-dasharray: 19 6; }
-  .lore-cursor-burst :is(.contact, .splinter) { display: none; }
 }
