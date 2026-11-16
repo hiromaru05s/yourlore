@@ -1,7 +1,7 @@
 // Exercise the public reducer and the serialized view used by remote players.
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
-const result = await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/engine';export * from './client/src/shared/cards';export * from './client/src/shared/protocol';export {restoreReworkedCards} from './server/src/reworkedCardSnapshot';`},bundle:true,platform:'node',format:'esm',write:false});
+const result = await build({stdin:{resolveDir:process.cwd(),contents:`export * from './client/src/shared/engine';export * from './client/src/shared/cards';export * from './client/src/shared/protocol';export {greedyDecide} from './client/src/shared/bot';export {restoreReworkedCards} from './server/src/reworkedCardSnapshot';`},bundle:true,platform:'node',format:'esm',write:false});
 const E=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
 let serial=0;
 const card=id=>({...structuredClone(E.DB[id]??E.STARTERS[id]),uid:'army-'+(++serial)});
@@ -335,4 +335,11 @@ for (const seals of [14,15]) {
   const view=E.redactFor(g,0);assert.equal(view.players[0].field[0].visibleCurseAttack,2);
   assert.equal(E.effAtk(view.players[0],view.players[0].field[0],view),4);
   assert.equal(end(g).pending?.reason,seals===15?'HEXER3':undefined);
+}
+
+{
+  const g=fresh();const valuable=card('MERC_MASTER'),discard=card('CURSE');
+  g.players[1].hand=[valuable,discard];
+  g.pending={kind:'cardChoice',reason:'SLUM_ASSASSIN',owner:1,data:{left:2}};
+  assert.equal(E.greedyDecide(g).uid,discard.uid);
 }
