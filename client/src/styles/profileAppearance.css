@@ -2,7 +2,7 @@
 .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) {
   --figure-height:calc(100dvh - clamp(18px,5dvh,60px));
   position:absolute;inset:auto auto 0 min(48vw,calc(82vw - 400px));translate:-50% 0;
-  height:var(--figure-height);width:auto;aspect-ratio:626/940;min-height:0;margin:0;padding:0;
+  height:var(--figure-height);width:auto;aspect-ratio:2/3;min-height:0;margin:0;padding:0;
   isolation:isolate;pointer-events:none;z-index:2;
 }
 .lounge-shell.selected-menu.lounge-home .lounge-home-main {grid-column:2;}
