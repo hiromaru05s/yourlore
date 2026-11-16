@@ -27,7 +27,9 @@
   width:calc(var(--zeno-canvas) * .65);height:auto;aspect-ratio:1;max-width:none;
 }
 .lounge-home .home-companion .home-spirit-host {
-  position:absolute;inset:50% auto auto 50%;translate:-50% -50%;width:calc(100% / .65);height:calc(100% / .65);pointer-events:none;
+  /* Scale the artwork independently of the button that carries the flight path. */
+  --zeno-render-size:calc(35% / .65);
+  position:absolute;inset:50% auto auto 50%;translate:-50% -50%;width:var(--zeno-render-size);height:var(--zeno-render-size);pointer-events:none;
 }
 @media(max-height:500px) {
   .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) .home-spirit-touch {
