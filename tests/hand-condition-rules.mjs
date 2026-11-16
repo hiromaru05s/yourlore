@@ -13,7 +13,7 @@ try{
  assert.equal(cardPlayConditionMet(g,0,p.hand[0]),false);p.maxMana=5;assert.equal(cardPlayConditionMet(g,0,p.hand[0]),true);assert.ok(playBlockReason(g,0,p.hand[0]));
  assert.equal(cardPlayConditionMet(g,0,{...STARTERS.STARTER_CHEST,uid:'chest'}),null);
  assert.equal(cardPlayConditionMet(g,0,instance('INQUISITION')),null);
- p.hand=[instance('BEGINNER_MIND')];assert.equal(cardPlayConditionMet(g,0,p.hand[0]),true);p.hand.push(instance('TDE1'));assert.equal(cardPlayConditionMet(g,0,p.hand[0]),false);
+ p.hand=[instance('BEGINNER_MIND')];assert.equal(cardPlayConditionMet(g,0,p.hand[0]),true);p.hand.push(instance('TDE1'),instance('M1'));assert.equal(cardPlayConditionMet(g,0,p.hand[0]),true);p.hand.push(instance('M2'));assert.equal(cardPlayConditionMet(g,0,p.hand[0]),false);
  p.buysTurn={};assert.equal(cardPlayConditionMet(g,0,instance('BUYOUT')),false);p.buysTurn={ELF:2};assert.equal(cardPlayConditionMet(g,0,instance('BUYOUT')),true);
  const baseline=process.env.LORE_CONDITION_BASELINE;
  let old;if(baseline){await build({stdin:{contents:await fs.readFile(baseline,'utf8'),loader:'ts',resolveDir:path.resolve('client/src/shared')},bundle:true,platform:'node',format:'esm',outfile:dir+'/baseline.mjs'});old=await import(dir+'/baseline.mjs');}

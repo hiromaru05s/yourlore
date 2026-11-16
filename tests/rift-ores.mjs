@@ -14,8 +14,8 @@ try {
  const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
 
  test('ore catalog names, costs, market-only membership and play rejection',()=>{
-  assert.equal(DB.RIFT_MATTER.nameJa,'リフト鉱石 - スターライト');assert.equal(DB.RIFT_MATTER.cost,5);
-  assert.equal(DB.RIFT_METALIGHT.nameJa,'リフト鉱石 - メタライト');assert.equal(DB.RIFT_METALIGHT.cost,2);assert.equal(DB.RIFT_METALIGHT.t,'spell');
+  assert.equal(DB.RIFT_MATTER.nameJa,'リフト鉱石 - スターライト');assert.equal(DB.RIFT_MATTER.cost,3);
+  assert.equal(DB.RIFT_METALIGHT.nameJa,'リフト鉱石 - メタライト');assert.equal(DB.RIFT_METALIGHT.cost,1);assert.equal(DB.RIFT_METALIGHT.t,'spell');
   for(const id of ['RIFT_MATTER','RIFT_METALIGHT']){assert(E.BUYABLE_POOL.includes(id));assert(!E.DECK_POOL.includes(id));let g=fresh();g.players[0].hand=[card(id)];assert(playBlockReason(g,0,g.players[0].hand[0]));const r=reduce(g,{type:'play',idx:0});assert.deepEqual(r.state.players[0].hand,g.players[0].hand);assert.equal(r.state.players[0].mana,30);assert.equal(r.state.players[0].spellsCastTurn??0,0);assert.equal(r.state.pending,null);}
  });
  test('Metalight offers only opponent graveyard, rejects cancel/invalid/own-zone targets and moves exactly one UID',()=>{

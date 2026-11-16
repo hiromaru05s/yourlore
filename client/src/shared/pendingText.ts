@@ -4,6 +4,8 @@ type Copy=Record<Locale,string>;
 const c=(ja:string,ko:string,en:string):Copy=>({ja,ko,en});
 /** Choice instructions are authored by effect, never translated from a battle log. */
 export const CHOICE_TEXT:Record<string,Copy>={
+ NL_SECRET:c('暗襲か回避を付与するモンスターを選択','암습이나 회피를 부여할 몬스터 선택','Choose a monster to gain Infiltrate or Evade.'),
+ MAJESTY_RITE:c('威厳を付与するモンスターを選択','위엄을 부여할 몬스터 선택','Choose a monster to gain Majesty.'),
  MIND_ATTACKER:c('公開する攻撃モンスターを選んでください。','공개할 공격 몬스터를 선택하세요.','Choose the attacker to reveal.'),
  MIND_TARGET:c('攻撃先を秘密に選んでください。','공격 대상을 비밀로 선택하세요.','Secretly choose its attack target.'),
  MIND_GUESS:c('攻撃される自分のモンスターを予想してください。','공격받을 자신의 몬스터를 예측하세요.','Predict which of your monsters will be attacked.'),

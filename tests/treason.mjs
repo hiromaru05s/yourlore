@@ -9,7 +9,7 @@ for (const side of [0,1]) {
   enemy.field=[mon('SOLDIER2'),mon('TAR1')];
   const [soldier,noble]=enemy.field;
   const r=reduce(g,{type:'play',idx:0,sourceUid:own.hand[0].uid,targets:[soldier.uid]});
-  assert.equal(r.state.players[1-side].hp,29);
+  assert.equal(r.state.players[1-side].hp,28);
   assert.equal(r.state.pending.reason,'TREASON_DESTROY');
   const invalid=reduce(r.state,{type:'pick',uid:own.field[0].uid});
   assert.equal(invalid.state.pending.reason,'TREASON_DESTROY');
@@ -34,6 +34,6 @@ for (const zone of ['quests','enchants','traps']) {
 {
   const g=fixture(0);g.players[1].field=[mon('SOLDIER2')];
   const cast=reduce(g,{type:'play',idx:0,sourceUid:g.players[0].hand[0].uid,targets:[g.players[1].field[0].uid]});
-  assert.equal(cast.state.pending,null);assert.equal(cast.state.players[1].hp,29);checks++;
+  assert.equal(cast.state.pending,null);assert.equal(cast.state.players[1].hp,28);checks++;
 }
 console.log('PASS Treason damage, kill bonus, public targets and individual destruction:',checks);

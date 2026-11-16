@@ -25,12 +25,12 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
     // These IDs override their legacy act with automatic target rules.
     case 'WALLBREAK1': case 'SNIPE1': return null;
     case 'FOCUS': return plan('purge',[...p.deck,...p.discard,c,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),1,0);
-    case 'PURGE_ALL': return plan('purge',[...p.deck,...p.discard,...p.hand,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),99,0);
+    case 'PURGE_ALL': return plan('purge',[...p.deck,...p.discard,...p.hand,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>h.uid!==c.uid && !hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),99,0);
     case 'SCRAPPER': return plan('SCRAP_EXILE',p.hand.filter(h=>h.uid!==c.uid && !hasPassive(h,'relic')));
     case 'SELECTED_SWORD': return plan(c.id, p.field);
     case 'TRUMPET': return plan('buffTurn', p.field, 4, 0);
-    case 'NL_SECRET': return plan('nlTarget', p.field);
-    case 'MAJESTY_RITE': return plan('grantMajesty', p.field.filter(m => !hasPassive(m, 'majesty')));
+    case 'NL_SECRET': return plan(c.id,[...p.field,...enemy]);
+    case 'MAJESTY_RITE': return p.field.length || enemy.length ? plan(c.id,[...p.field,...enemy]) : null;
     case 'BLOOD_SECRET': return p.field.length ? plan(c.id, p.field) : null;
     case 'BLOOD2': return plan('bloodShower', board(true, true), 2, 0);
     case 'SOUL_HARVEST': return plan(c.id, [...p.field,...o.field].filter(m => hasPassive(m,'void')));

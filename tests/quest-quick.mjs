@@ -20,7 +20,7 @@ try {
   const buy = (g,id,from='buyMarket') => { if(from==='buyMarket')g.market[0]=card(id);else g.players[g.cur].supply[0]=card(id); return step(g,{type:from,i:0}); };
   const pick = (g,uid) => step(g,{type:'pick',uid});
   assert.equal(Object.values(DB).filter(c=>c.t==='quest').length,15);
-  assert.equal(Object.values(DB).filter(c=>c.quick).length,20);
+  assert.equal(Object.values(DB).filter(c=>c.quick).length,22);
   assert(Object.values(DB).filter(c=>c.quick).every(c=>c.t==='spell'));
   assert.equal(frameFor('quest'),'/art/biblion/modular/base-quest-print.webp');
 
@@ -134,16 +134,16 @@ try {
     assert.deepEqual(after.discard,[...before.discard,before.quests[0].card]);
     const oldIds=new Set(before.removed.map(c=>c.uid));
     const generated=after.removed.filter(c=>c.star==='trash'&&!oldIds.has(c.uid));
-    assert.equal(generated.length,7);assert.equal(new Set(generated.map(c=>c.uid)).size,7);
+    assert.equal(generated.length,10);assert.equal(new Set(generated.map(c=>c.uid)).size,10);
     const existingIds=new Set(['hand','deck','discard','removed'].flatMap(zone=>before[zone].map(c=>c.uid)));
     assert(generated.every(c=>!existingIds.has(c.uid)));
-    assert.equal(after.removed.length,before.removed.length+8); // consumed quick + 7 Culls
+    assert.equal(after.removed.length,before.removed.length+11); // consumed quick + 10 Culls
     assert.deepEqual(g.players[1-owner].removed,opponent.removed);
     const count=after.removed.length;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[owner].removed.length,count+1);
   }
   // Generated Culls participate in existing Rift reactions.
-  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=7;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+16);}
-  {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=2;g.players[0].quests.find(q=>q.card.id==='Q_WINTER').progress=12;const hp=g.players[0].hp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,hp+18);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
+  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=7;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+22);}
+  {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=2;g.players[0].quests.find(q=>q.card.id==='Q_WINTER').progress=12;const hp=g.players[0].hp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,hp+20);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
   {let g=activate(fresh(),'Q_TORI');g.players[0].hand=Array.from({length:8},()=>card('STARTER_TRASH'));g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);assert.equal(g.pending.reason,'handCap');g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,1);}
   {let g=activate(fresh(),'Q_CASTLE');const castle=mon('CASTLE');g.players[0].field=[castle];for(let i=0;i<4;i++){g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,i+1);}g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests.length,0);assert.equal(g.players[0].field.filter(c=>c.id==='INFKNIGHT').length,2);}
   {let g=activate(fresh(),'Q_CASTLE');g.players[0].field=[mon('CASTLE')];g=step(g,{type:'endTurn'});g.players[0].field=[];g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);}
@@ -213,8 +213,8 @@ try {
     assert.deepEqual([serialized.players[0].quests[0].card.uid,serialized.players[0].quests[0].progress],[uid,3]);
     assert.equal(serialized.players[0].hand[0].cost,2);
     assert.equal(serialized.players[0].hand[0].quest.target,13);
-    g=step(serialized,{type:'pick',uid:null});assert.equal(g.players[0].hp,118);
-    g=step(g,{type:'pick',uid:null});assert.equal(g.players[0].hp,118);
+    g=step(serialized,{type:'pick',uid:null});assert.equal(g.players[0].hp,120);
+    g=step(g,{type:'pick',uid:null});assert.equal(g.players[0].hp,120);
     assert.equal(g.players[0].discard.filter(c=>c.uid===uid).length,1);
   }
   // Real authoritative action handler broadcasts quest activation and authorizes the pending owner.

@@ -25,7 +25,7 @@ const end=g=>step(g,{type:'endTurn'});
 const check=(name,fn)=>{fn();console.log('PASS',name);};
 check('Three new spells enter both market pools, and Peace Treaty retains its effect',()=>{
   for(const id of ['MIND_GAME','TOLL_GATE','TRUCE'])assert(E.BUYABLE_POOL.includes(id));
-  assert.deepEqual(['MIND_GAME','TOLL_GATE','TRUCE','E2'].map(id=>E.DB[id].cost),[2,2,3,2]);
+  assert.deepEqual(['MIND_GAME','TOLL_GATE','TRUCE','E2'].map(id=>E.DB[id].cost),[2,1,2,2]);
   assert.equal(E.playCost(card('E2')),2);
   assert(E.DB.MIND_GAME.quick);assert(!E.DB.TOLL_GATE.quick);
   const g=cast(fresh(),'E2');g.players[0].field=[mon('M1')];assert(!E.monsterCanAttack(g,g.players[0],g.players[0].field[0]));

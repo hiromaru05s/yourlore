@@ -255,6 +255,7 @@ export interface GameState {
   runeReworkApplied?:boolean;
   runeZonesAudited?: boolean;
   incubatorsReworked?: boolean;
+  balance97Applied?: boolean;
   balance94Applied?: boolean | 2 | 3;
   novemberBalanceApplied?: boolean | 2 | 3; // true in v90, 2 in v91–92, 3 after the v93 adjustments
   incubatorEndTurn?: number;

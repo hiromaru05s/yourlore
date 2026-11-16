@@ -32,9 +32,10 @@ try {
  assert.equal(room.room.game.pending.reason,'RIFT_JAILER');assert.equal(room.room.game.pending.owner,1);
  await send(1,{type:'pick',uid:null});assert.equal(room.room.game.pending,null);assert(room.room.game.players[1].discard.some(c=>c.uid===jailer.uid));
  for(const socket of sockets){assert(socket.messages.at(-1).state.players[1].discard.some(c=>c.uid===jailer.uid));assert.equal(socket.messages.at(-1).state.pending,null);}
- const active=room.room.game;active.players[0].maxMana=10;active.players[0].mana=10;active.players[0].hand=[card('MAGIC_BANK'),card('MAGIC_TRAIN')];active.players[0].deck=Array.from({length:10},()=>card('M1'));active.players[0].discard=[];
- await send(0,{type:'play',idx:0});assert.equal(room.room.game.players[0].maxMana,9);assert.equal(room.room.game.players[0].mana,7);
- await send(0,{type:'play',idx:0});assert.equal(room.room.game.players[0].magicTrainTurns,6);
+ const active=room.room.game;active.players[0].maxMana=10;active.players[0].mana=10;active.players[0].hand=[card('MAGIC_BANK')];active.players[0].deck=Array.from({length:10},()=>card('M1'));active.players[0].discard=[];
+ await send(0,{type:'play',idx:0});assert.equal(room.room.game.players[0].maxMana,10);assert.equal(room.room.game.players[0].mana,8);
+ // A train already resolved in a v96 room keeps its pending turn reservation.
+ room.room.game.players[0].magicTrainTurns=6; await send(0,{type:'reorder',from:0,to:0});
  room=new GameRoom(journalState(state),rewardTestEnv());await room.webSocketMessage(sockets[0],JSON.stringify({type:'ready'}));
  assert.equal(room.room.game.players[0].magicTrainTurns,6);assert.equal(room.room.game.players[0].enchants.find(e=>e.card.id==='MAGIC_BANK').turns,2);
  await send(0,{type:'endTurn'});assert.equal(room.room.game.turn,4);

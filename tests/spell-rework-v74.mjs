@@ -17,7 +17,7 @@ try {
  const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
  test('approved costs, values, Growth absent from every active catalog',()=>{
   for(const [id,cost,playCost] of [['ANCIENT_CIV',3,3],['FORBIDDEN',5,5],['GS8_0',7,6],['TIMEWARP',12,7]])assert.deepEqual([E.DB[id].cost,E.playCost(card(id))],[cost,playCost],id);
-  assert.equal(E.DB.GRAPE2.val,5);assert.equal(E.DB.FARM.val,4);assert.equal(E.DB.DESERTIFICATION.ench,'desertification');assert.equal(E.DB.BLACK_REVERSE.maxUsesPerGame,2);
+  assert.equal(E.DB.GRAPE2.val,5);assert.equal(E.DB.FARM.val,3);assert.equal(E.DB.DESERTIFICATION.ench,'desertification');assert.equal(E.DB.BLACK_REVERSE.maxUsesPerGame,2);
   assert(!E.DB.GROWTH);for(const pool of [E.ALL_IDS,E.BUYABLE_POOL,E.DECK_POOL])assert(!pool.includes('GROWTH'));
   for(const id of E.ALL_IDS)assert(!E.relatedCardIds(id).includes('GROWTH'));
  });
@@ -30,10 +30,10 @@ try {
   let g=fresh();const rich=ench(g,'RICH_HABIT',1);g.players[1].maxMana=15;g=play(g,'DISARM1');g=pick(g,rich.card.uid);assert.equal(g.players[1].maxMana,3);
   g=fresh();const own=ench(g,'RICH_HABIT');ench(g,'E1',1);g=play(g,'DISARM1');g=pick(g,own.card.uid);assert.equal(g.players[0].maxMana,30);
  });
- test('Pleasure pays exactly 7; Fine Grape restores 5; lethal payment stops reward',()=>{
-  let g=fresh();g.players[0].maxMana=10;g=play(g,'BLOOD_PLEASURE');assert.equal(g.players[0].hp,93);assert.equal(g.players[0].maxMana,11);
-  g=play(g,'GRAPE2');assert.equal(g.players[0].hp,98);
-  g=fresh();g.players[0].hp=7;g.players[0].maxMana=10;g=play(g,'BLOOD_PLEASURE');assert(g.over);assert.equal(g.players[0].maxMana,10);
+ test('Pleasure pays exactly 4; Fine Grape restores 5; lethal payment stops reward',()=>{
+  let g=fresh();g.players[0].maxMana=10;g=play(g,'BLOOD_PLEASURE');assert.equal(g.players[0].hp,96);assert.equal(g.players[0].maxMana,11);
+  g=play(g,'GRAPE2');assert.equal(g.players[0].hp,101);
+  g=fresh();g.players[0].hp=4;g.players[0].maxMana=10;g=play(g,'BLOOD_PLEASURE');assert(g.over);assert.equal(g.players[0].maxMana,10);
  });
  for(const zone of ['deck','discard','hand','field','enchants','quests'])test(`Sorrow pays 7 and chooses exactly one own ${zone} card`,()=>{
   let g=fresh();const target=zone==='field'?mon():card(zone==='enchants'?'RICH_HABIT':zone==='quests'?'Q_TOWN':'M1');
@@ -85,7 +85,7 @@ try {
  test('Desertification composes multipliers before flooring and Furnace applies its gain cap afterward',()=>{
   let g=fresh();ench(g,'DESERTIFICATION',1);g.players[0].field=[mon('ELF')];g=play(g,'GRAPE2');assert.equal(g.players[0].hp,105);
   ench(g,'BLACKSMITH');g.players[0].field=[];g=play(g,'DEFENSIVE_STANCE');assert.equal(g.players[0].shield,3);
-  ench(g,'FURNACE',1);g=play(g,'IRON_WALL');assert.equal(g.players[0].shield,7);
+  ench(g,'FURNACE',1);g=play(g,'IRON_WALL');assert.equal(g.players[0].shield,5);
  });
  test('Forbidden buys 5 Shield and three Devils',()=>{
   const g=fresh();g.market[0]=card('FORBIDDEN');const result=E.reduce(g,{type:'buyMarket',i:0});

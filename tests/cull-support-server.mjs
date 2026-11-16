@@ -25,10 +25,10 @@ try {
   assert.equal(room.room.game.pending.reason,'SCRAP_EXILE');await send(owner,{type:'pick',uid:null});assert(room.room.game.pending);
   room.room.turnStartAt=now-100000;await room.alarm();assert.equal(room.room.game.players[owner].removed.length,1);assert.equal(room.room.game.cur,1-owner);
   const current=room.room.game;current.cur=owner;room.room.turnStartAt=now;current.players[owner].hand=[card('FURNACE'),card('IRON_WALL'),card('IRON_WALL')];current.players[owner].mana=20;
-  await send(owner,{type:'play',idx:0});await send(owner,{type:'play',idx:0});await send(owner,{type:'play',idx:0});assert.equal(room.room.game.players[owner].shield,7);
+  await send(owner,{type:'play',idx:0});await send(owner,{type:'play',idx:0});await send(owner,{type:'play',idx:0});assert.equal(room.room.game.players[owner].shield,5);
   room=new GameRoom(journalState(state),rewardTestEnv());await room.webSocketMessage(sockets[owner],JSON.stringify({type:'ready'}));
-  assert(room.room.game.players[owner].enchants.some(e=>e.card.id==='FURNACE'));assert.equal(room.room.game.players[owner].shield,7);
-  for(const socket of sockets)assert.equal(socket.messages.filter(m=>m.state).at(-1).state.players[owner].shield,7);
+  assert(room.room.game.players[owner].enchants.some(e=>e.card.id==='FURNACE'));assert.equal(room.room.game.players[owner].shield,5);
+  for(const socket of sockets)assert.equal(socket.messages.filter(m=>m.state).at(-1).state.players[owner].shield,5);
  }
  console.log('PASS authoritative Cull rework in both seats: pre-payment rejection, mandatory two-card payment, hibernation, timeout, shield cap and both socket views');
 } finally {Date.now=realNow;await rm(dir,{recursive:true,force:true});}

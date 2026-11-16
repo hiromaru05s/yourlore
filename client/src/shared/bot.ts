@@ -233,14 +233,14 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     // v41b 조건부 마법 (엔진이 지불 전에 거부) + 낭비 방지
     if (c.t === "mon" && o.enchants.some((e) => e.card.ench === "spaceLock")) return false;
     if ((c.t === "spell" || c.t === "starter") && o.enchants.some((e) => e.card.ench === "spaceLock")) return false;
-    if (c.id === "BEGINNER_MIND" && p.hand.length !== 1) return false;
+    if (c.id === "BEGINNER_MIND" && p.hand.length > 3) return false;
     if (c.id === "SPACE_RITE" && o.field.length + o.traps.length + o.enchants.length < 6) return false;
     if (c.id === "BUYOUT" && !Object.values(p.buysTurn ?? {}).some((n2) => n2 >= 2)) return false;
     if (c.id === "PACK_INSTINCT" && !p.field.some((m) => p.field.filter((x) => x.id === m.id).length >= 2)) return false;
     if (c.id === "MIND_BURST" && !p.field.some((m) => (m.guts || 0) > 0)) return false;
     if (c.id === "PENANCE" && !(p.brand ?? 0)) return false;
     if (c.id === "ORIGIN_QUEST" && !g.players.some((pl) => pl.field.some((m) => (m.cost ?? 0) === 0) || pl.enchants.some((e) => (e.card.cost ?? 0) === 0))) return false;
-    if ((c.id === "DECAY_CRAFT" || c.id === "MAJESTY_RITE") && p.field.length === 0) return false;
+    if (c.id === "DECAY_CRAFT" && p.field.length === 0) return false;
     // 버프/체력 강화 마법은 대상이 없으면 낭비 (엔진은 마나만 소모하고 "대상 없음")
     if ((c.act === "buffPerm" || c.act === "buffAllDef" || c.act === "buffTurn" || c.act === "buffAllTurn") && p.field.length === 0) return false;
     if (c.id === "VAMP_PACT" && p.field.length >= 7) return false;
@@ -256,7 +256,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     // 길드 상자: 자해 10 리스크 — 체력 여유 필요
     if (c.id === "GUILD_CHEST" && p.hp <= 12) return false;
     // 안식 계열: "이번 턴 다른 플레이 없음" / "필드 비어있음" 조건
-    if (c.id === "MEDITATE" && (p.maxMana > 11 || p.hp >= 40)) return false; // v34
     if (c.id === "HERMIT" && (p.field.length > 0 || (p.uses["HERMIT"] || 0) >= 5)) return false;
     if (c.id === "S3" && !p.field.some((m) => !m.tribe)) return false; // 칼날의 속삭임: 비종족 대상 필요
     // 폐기 경제 카드: 대상이 있어야 시전
@@ -278,7 +277,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
 
     if (c.id === "AMBUSH" && ![4, 5].includes(o.maxMana)) return false;
     if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length === 0)) return false;
-    if ((c.id === "KNIGHT_TEACH" || c.id === "NL_SECRET") && p.field.length === 0) return false;
+    if (c.id === "KNIGHT_TEACH" && p.field.length === 0) return false;
     if (c.id === "TRUMPET" && p.field.length === 0) return false;
     if(c.id==='MANA_BACKFLOW') return false; // No immediate benefit; its own countdown eventually resets our mana.
     if(c.act==='relicProtection' && !(p.shield??0)) return false;

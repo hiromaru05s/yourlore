@@ -181,7 +181,7 @@ check('Boundary suppresses only opposing passives, offers face through monsters,
 check('Attune upgrades stack, dual replays the base only, and printed costs do not mutate',()=>{
   let g=fresh();g.players[0].maxMana=28;g.players[0].mana=28;enchant(g,'DUAL_ATTUNE');g.players[0].field=[mon('MINI_SPIRIT')];
   g=cast(g,'ATTUNE_SECRET');assert.equal(g.players[0].maxMana,28);g=cast(g,'AMA');g=cast(g,'STARTER_MANA');
-  assert.equal(g.players[0].field[0].defMod,4);assert.equal(g.players[0].maxMana,30);assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,6);assert.equal(E.DB.AMA.play,5);
+  assert.equal(g.players[0].field[0].defMod,4);assert.equal(g.players[0].maxMana,30);assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,6);assert.equal(E.DB.AMA.play,3);
 });
 check('Mana Heart shared first-use delay and twenty Curse Seals survive room serialization',()=>{
   let g=fresh();g.players[0].maxMana=15;g=cast(g,'MANA_HEART');assert.equal(g.players[0].heartDue,25);assert.equal(g.players[0].maxMana,18);

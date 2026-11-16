@@ -15,7 +15,7 @@ try{
  }
  const initial=()=>{const g=createGame({mode:'bot',seed:71,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.pending=null;g.players[0].mana=30;g.players[0].maxMana=30;return g;};
  for(const [card,alter] of [
-  [DB.BEGINNER_MIND,g=>g.players[0].hand.push({...DB.ELF,uid:'other'})],
+  [DB.BEGINNER_MIND,g=>g.players[0].hand.push(...['a','b','c'].map(uid=>({...DB.ELF,uid})))],
   [DB.ELF,g=>g.players[0].summonCap=0],
   [DB.ELF,g=>g.players[0].mana=0],
   [STARTERS.STARTER_CHEST,g=>g.players[0].spellSealTurn=true],

@@ -63,6 +63,7 @@ try {
     const current = JSON.parse(JSON.stringify(DB[id]));
     // v50 adds Counter without restoring any retired trap abilities.
     if (current.passive?.includes("counter")) expected.passive = [...(expected.passive ?? []), "counter"];
+    if (id === 'NL_SECRET') expected.cost=2;
     if (id === 'NMD6') Object.assign(expected,{atk:7,def:7});
     if (id === 'ORIGIN_MIMIC') expected.passive = ['aura','counter','majesty'];
     for (const field of ['text', 'textJa', 'textEn']) {
@@ -150,7 +151,7 @@ try {
     const uid = g.players[0].field[0].uid;
     g.players[0].hand = [inst('NL_SECRET')];
     g = reduce(g, { type: 'play', idx: 0 }).state;
-    assert.equal(g.pending.reason, 'nlTarget');
+    assert.equal(g.pending.reason, 'NL_SECRET');
     g = reduce(g, { type: 'chooseTarget', uid }).state;
     assert.deepEqual(g.pending.data.ids, ['ambush', 'evade']);
     assert.deepEqual(g.pending.data.opts.map(o => o.id), ['ambush', 'evade']);

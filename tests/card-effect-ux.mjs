@@ -57,10 +57,10 @@ try {
   E.closeZoom();
   E.zoomCard(mon('CASTLE',{gcount:5,guts:0,passivesG:['guts']}));assert(document.querySelector('.inspect-current-state').textContent.includes('5'));assert(document.querySelector('.inspect-current-state dd').textContent);
   E.closeZoom();assert.equal(E.cardStateEl(card('CASTLE')),null,'catalog does not invent live counter values');
-  assert(!E.passiveSearchKeys(E.DB.ND5,'owned').includes('aura'));assert(E.passiveSearchKeys(E.DB.ND5,'granted').includes('aura'));
+  assert(!E.passiveSearchKeys(E.DB.RUNE2,'owned').includes('aura'));assert(E.passiveSearchKeys(E.DB.RUNE2,'granted').includes('aura'));
   assert(E.passiveSearchKeys(E.DB.DARK_ELF,'mentioned').includes('evade'));
   assert(!E.displayPassives(E.DB.MAJESTY_RITE).includes('majesty'),'grant spell does not own monster ability');
-  assert.equal(E.cardRulesEl(card('ND5')).querySelector('[data-psv="aura"]').dataset.abilityGroup,'granted','Ancient Knowledge grants Aura; it does not own Aura');
+  assert.equal(E.cardRulesEl(card('RUNE2')).querySelector('[data-psv="aura"]').dataset.abilityGroup,'granted','Rune grants Aura; it does not own Aura');
   assert.equal(E.cardRulesEl(card('DARK_ELF')).querySelector('[data-psv="evade"]').dataset.abilityGroup,'references','Dark Elf mentions Evade without granting it');
   assert.equal(E.cardRulesEl(card('ASSASSIN4')).querySelector('[data-psv="aura"]').dataset.abilityGroup,'owned','Nightlord owns Aura');
   const quick=E.cardEl(card('QUICK_POISON'));assert.equal(quick.querySelector('.kw').title,E.quickSpellRule(lang));

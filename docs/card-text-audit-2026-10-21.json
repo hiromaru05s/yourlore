@@ -6,7 +6,7 @@
     "ko",
     "en"
   ],
-  "count": 439,
+  "count": 436,
   "engineSha256": "22d50727dbbdfd8d9d9727af15e0908d354a1d004e308ce9477276ad5b87a4b4",
   "cards": {
     "M1": {
@@ -399,19 +399,16 @@
     },
     "S5": {
       "nameJa": "マーケット・クラッシュ",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko"
-      ],
-      "definitionSha256": "7108a1244485f5bdf0c95d39c60d221a276be0058bb038a44c55a8a142d18a5f",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "2088ec71c95ea3e9d6633f2569a66f422f1c4c941ed01f47cb27ea1f74772c60",
       "textSha256": "ea8dbf13216da626ff9802a55b776d9619dc79eaf97838b1d7d8bd9958d5dd4d",
       "hooks": {
         "act": "crash"
       },
       "before": {
-        "ja": "【発動時】次の相手ターンの提示を最大2枚にし、提示更新を封じる。",
-        "ko": "【발동시】다음 상대 턴의 제시를 최대 2장으로 하고 제시 갱신을 봉쇄한다.",
+        "ja": "【発動時】次の相手のターンの提示を最大2枚にし、提示更新を封じる。",
+        "ko": "【발동 시】다음 상대 턴의 제시를 최대 2장으로 하고 제시 갱신을 봉쇄한다.",
         "en": "【On Cast】The opponent's next offer shrinks to 2 cards and cannot be rerolled."
       },
       "after": {
@@ -422,18 +419,16 @@
     },
     "S8": {
       "nameJa": "リコール",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "81ef8fcb82686febe21f5d594ee00b74e8840f48d40d5b3c35896f2dbc1084f4",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "291aee945d2e9620f1c2fffc30da11952f3347e65f1d3c4555360d0a7f8bea49",
       "textSha256": "bc4dcfc900f5826badbba4ada58a4a41ae19617758907a69cedcf51f22f7cb3d",
       "hooks": {
         "act": "recall"
       },
       "before": {
         "ja": "【発動時】自分の墓地から、このカード以外のカードを1枚まで選び、自分の手札に加える。",
-        "ko": "【발동시】자신의 묘지에서 이 카드 이외의 카드를 최대 1장 선택해 자신의 패에 넣는다.",
+        "ko": "【발동 시】자신의 묘지에서 이 카드 이외의 카드를 최대 1장 선택해 자신의 패에 넣는다.",
         "en": "【On Cast】Choose up to 1 card other than this card in your graveyard and add it to your hand."
       },
       "after": {
@@ -444,18 +439,16 @@
     },
     "S6": {
       "nameJa": "運命の糸",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "719fb4ee1b81d4b020a82d2f89e657c491082d1f0624382fff9db57c2c35d899",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "54196415ce675e50f3d614fa53dffb7d4c51512162f97b1d10ac99144fd1d66b",
       "textSha256": "5ec9e57060ed1e03a950ec31f01e4b7c16890c65327304f25940e6b8391c42d8",
       "hooks": {
         "act": "seek"
       },
       "before": {
         "ja": "【発動時】自分のデッキからカードを1枚まで選び、自分の手札に加える。",
-        "ko": "【발동시】자신의 덱에서 카드를 최대 1장 선택해 자신의 패에 넣는다.",
+        "ko": "【발동 시】자신의 덱에서 카드를 최대 1장 선택해 자신의 패에 넣는다.",
         "en": "【On Cast】Choose up to 1 card in your deck and add it to your hand."
       },
       "after": {
@@ -466,18 +459,16 @@
     },
     "S7": {
       "nameJa": "戦場の脈動",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "d00217eec43c0e7237aac5f3a5de87295ee0c26eaa2fb394241a6ff6717772af",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "fb0365dc53d89b4c0d51f90f90bd75df3ea52381d6b21b20c25a27a693339d86",
       "textSha256": "1d08f99d066d06fd0dfd7559eba7d030998dfbfc170c798c18dd4a60c9fcc29c",
       "hooks": {
         "act": "buffAllTurn"
       },
       "before": {
         "ja": "【発動時】このターン終了まで、現在自分の場にいる全モンスターの攻撃力+3。",
-        "ko": "【발동시】이번 턴 종료까지 현재 자신의 필드에 있는 모든 몬스터의 공격력 +3.",
+        "ko": "【발동 시】이번 턴 종료까지 현재 자신의 필드에 있는 모든 몬스터의 공격력 +3.",
         "en": "【On Cast】All monsters currently on your field get +3 ATK until this turn ends."
       },
       "after": {
@@ -488,19 +479,15 @@
     },
     "S12": {
       "nameJa": "鋼脈刻印",
-      "status": "reviewed-legacy-rework",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "308539a2b165a77a183c0b135ae75e6d9d6dffca6c1e3fe9e04234a536dd5abb",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "7bf49b0ab76df4c5d20ab5f60e3bebb4685c43df2909fefcf2b70c80db82c902",
       "textSha256": "546ecf2ff0f7f4dbff4ad0209dddc150624ef43c108f645e515473b351ff9de2",
       "hooks": {},
       "before": {
-        "ja": "【発動時】ダイス1個を振る。5以上なら、相手に烙印カウンター1個を付与する。",
-        "ko": "【발동 시】주사위 1개를 굴린다. 5 이상이면 상대에게 낙인 카운터 1개를 부여한다.",
-        "en": "【On Cast】Roll 1 die. On 5 or more, give the opponent 1 Brand counter."
+        "ja": "【発動時】ダイス5個を振る。出目の合計が20以上なら、相手に烙印カウンター1個を付与する。",
+        "ko": "【발동 시】주사위 5개를 굴린다. 합계가 20 이상이면 상대에게 낙인 카운터 1개를 부여한다.",
+        "en": "【On Cast】Roll 5 dice. If their sum is at least 20, give the opponent 1 Brand counter."
       },
       "after": {
         "ja": "【発動時】ダイス5個を振る。出目の合計が20以上なら、相手に烙印カウンター1個を付与する。",
@@ -535,19 +522,15 @@
     },
     "S14": {
       "nameJa": "大地の祝福",
-      "status": "reviewed-legacy-rework",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "6dbbafd4ac3434cfd2a41f6ad6728a08b5a7c5b09c6f534f4969ba56e5151fb4",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "ad1a13d542d46e4a544b4512afaaff2ff4a27e26daf65b0cd7099343919a6607",
       "textSha256": "e6cd2e28924c8be865b31b020f458350f99075dc8d9866427287dddf4cede0f2",
       "hooks": {},
       "before": {
-        "ja": "【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。自分の体力を5回復する。",
-        "ko": "【발동 시】양쪽 필드의 알 이외 모든 몬스터의 누적 데미지를 제거한다. 자신의 체력을 5 회복한다.",
-        "en": "【On Cast】Remove all accumulated damage from every non-Egg monster on both fields. Restore 5 of your HP."
+        "ja": "【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。両方の場の「気合」を持つ全モンスターに、気合用カウンター1個を付与する。",
+        "ko": "【발동 시】양쪽 필드의 알 이외의 모든 몬스터에게 쌓인 데미지를 제거한다. 양쪽 필드의 「기합」을 가진 모든 몬스터에게 기합용 카운터 1개를 부여한다.",
+        "en": "【On Cast】Remove all accumulated damage from every non-Egg monster on both fields. Give each monster with Guts on both fields 1 Guts counter."
       },
       "after": {
         "ja": "【発動時】両方の場の、卵以外の全モンスターの蓄積ダメージを取り除く。両方の場の「気合」を持つ全モンスターに、気合用カウンター1個を付与する。",
@@ -608,23 +591,24 @@
       "nameJa": "封鎖令",
       "status": "reworded",
       "changedLocales": [
+        "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "ba1c9768e85ed61ff08637096e9545865b9eb2416c4f138a98a7754601122d5a",
-      "textSha256": "902e51612af3c1fdfaa55df70b1937a15a8965dfa845970ad6c4c7f694a6b81e",
+      "textSha256": "ccf90089f419c91d7b3a47d44dd96267c1c03b7684aa380f4e553f0c73338e23",
       "hooks": {
         "ench": "noSummonLow"
       },
       "before": {
         "ja": "【場にある間】相手は購入コスト3以下のモンスターを召喚できない。\n\n【期間】自分のターン開始を4回迎えると終了する。",
-        "ko": "【필드에 놓인 동안】상대는 구매 코스트 3 이하 몬스터를 소환할 수 없다.\n\n【기간】자신의 턴 시작을 4회 맞으면 종료한다.",
-        "en": "【While Deployed】The opponent cannot summon monsters with purchase cost 3 or less.\n\n【Duration】Expires at the start of your 4th subsequent turn."
-      },
-      "after": {
-        "ja": "【場にある間】相手は購入コスト3以下のモンスターを召喚できない。\n\n【期間】自分のターン開始を4回迎えると終了する。",
         "ko": "【필드에 있는 동안】상대는 구매 코스트 3 이하 몬스터를 소환할 수 없다.\n\n【기간】자신의 턴 시작을 4회 맞으면 종료한다.",
         "en": "【While on the Field】The opponent cannot summon monsters with purchase cost 3 or less.\n\n【Duration】Expires at the start of your 4th subsequent turn."
+      },
+      "after": {
+        "ja": "【場にある間】相手は購入コスト4以下のモンスターを召喚できない。\n\n【期間】自分のターン開始を4回迎えると終了する。",
+        "ko": "【필드에 있는 동안】상대는 구매 코스트 4 이하 몬스터를 소환할 수 없다.\n\n【기간】자신의 턴 시작을 4회 맞으면 종료한다.",
+        "en": "【While on the Field】The opponent cannot summon monsters with purchase cost 4 or less.\n\n【Duration】Expires at the start of your 4th subsequent turn."
       }
     },
     "E2": {
@@ -873,30 +857,6 @@
       },
       "reviewedAt": "2026-10-31"
     },
-    "ND5": {
-      "nameJa": "古代の知識",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "e1a7f061b5b936aafac1490be435555b046d0cb0a822eff9a5f1f7fccc5a18b7",
-      "textSha256": "1da24920156806e37c4c918c95bac82ff06639c1787feeabf859935e7a5ed387",
-      "hooks": {},
-      "before": {
-        "ja": "【発動時】自分の場の全モンスターに「オーラ」を付与（持続）。",
-        "ko": "【발동 시】자신의 필드의 모든 몬스터에 '아우라'를 부여한다(지속).",
-        "en": "【On Cast】Grant Aura to all your monsters (lasting)."
-      },
-      "after": {
-        "ja": "【発動時】自分の場の全モンスターに「オーラ」を付与（対象が場を離れるまで）。",
-        "ko": "【발동 시】자신의 필드의 모든 몬스터에 '아우라'를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
-        "en": "【On Cast】Grant Aura to all your monsters (until the affected monster leaves the field)."
-      },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
-    },
     "NMD2": {
       "nameJa": "探書の精霊",
       "status": "november-balance-v90",
@@ -923,9 +883,9 @@
     },
     "NMD4": {
       "nameJa": "記録者",
-      "status": "confirmed-v91",
+      "status": "reviewed-unchanged",
       "changedLocales": [],
-      "definitionSha256": "e4e2a36052666e1068cb60e41578ef7b957cb4c3d2e661f7b4c6799c6cb0b8c1",
+      "definitionSha256": "b56ec09aeb9afbe3adbd62d43ed28ebd07b60c6e8227431f77a536b962ba77a6",
       "textSha256": "b6d9b6478ef2c2f986da8903877efdadf4788f0aab3ea9e42e84330f52c17e87",
       "hooks": {
         "onSummon": "chronicler"
@@ -1120,21 +1080,17 @@
     },
     "AMA": {
       "nameJa": "アチューン・魔",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "7890116e6ebb04fade628386ae92d99edad5f1187467e0a23ceb37a9be18c8ac",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "38548fcac6bb38625b671c3f385e0023087106feffc3d0e0b941651c88339e96",
       "textSha256": "37227c45dbd70828a6ba63e2302344b3ad5452b85ae45cf0886fabc53e43f423",
       "hooks": {
         "act": "armyAttune"
       },
       "before": {
-        "ja": "【発動時】自分の手札の「宝箱」1枚を自動で自分の墓地へ送る。送った場合、自分の最大マナ+1。",
-        "ko": "【발동 시】자신의 패의 보물상자 1장을 자동으로 자신의 묘지로 보낸다. 보냈다면 자신의 최대 마나 +1.",
-        "en": "【On Cast】Automatically send 1 Treasure Chest from your hand to your graveyard. If you did, increase your max mana by 1."
+        "ja": "【発動時】虚無。このゲーム中、基本のアチューンに「相手墓地に呪いを3枚追加」を加える。このターン使用したアチューンの名を持つカード1枚につき発動コスト-1。",
+        "ko": "【발동 시】공허. 이번 게임 동안 기본 어튠에 상대 묘지에 저주 3장 추가를 부여한다. 이번 턴 사용한 어튠 명칭 카드마다 발동 코스트 -1.",
+        "en": "【On Cast】Void. Permanently add three Curses to the opposing graveyard whenever your basic Attune resolves. Its cast cost is reduced by 1 per Attune-named card played this turn."
       },
       "after": {
         "ja": "【発動時】虚無。このゲーム中、基本のアチューンに「相手墓地に呪いを3枚追加」を加える。このターン使用したアチューンの名を持つカード1枚につき発動コスト-1。",
@@ -1232,19 +1188,15 @@
     },
     "GS5_3": {
       "nameJa": "呪文書の解読",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "86bdd53986b224c4c975085cdc1bec05f07a69f5d4d4eba78d275bf01584b872",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "56be2670d8b291f428a033c870bc16a267b60396355ba4571d5aa0379504c514",
       "textSha256": "49a0935900761c69392c107390185fac09980e5d086377305663e73402e75468",
       "hooks": {},
       "before": {
-        "ja": "【発動時】新しい「呪い」2枚を相手の墓地に追加する。その後、相手のデッキ・墓地・場にある「魔族」モンスター1枚につき、相手プレイヤーに16ダメージを与える。",
-        "ko": "【발동 시】새로운 저주 2장을 상대 묘지에 추가한다. 그 후 상대 덱·묘지·필드의 마족 몬스터 1장당 상대 플레이어에게 16 데미지를 준다.",
-        "en": "【On Cast】Add 2 new Curses to the opponent’s graveyard. Then deal 16 damage to the opponent per Demonkin monster in their deck, graveyard, and field."
+        "ja": "【発動時】自分の烙印を1個、呪印を4個減らす。その後、相手のデッキ・墓地・場にある魔族・黒魔術師・呪術師モンスター1体につき、相手に12ダメージを与える。",
+        "ko": "【발동 시】자신의 낙인을 1개, 주인을 4개 줄인다. 그 후 상대 덱·묘지·필드의 마족·흑마술사·주술사 몬스터 1장당 상대에게 12 데미지를 준다.",
+        "en": "【On Cast】Remove 1 Brand and 4 Curse Seals from yourself. Then deal 12 damage to the opponent for each Demonkin, Black Sorceress or Hexer monster in their deck, graveyard and field."
       },
       "after": {
         "ja": "【発動時】自分の烙印を1個、呪印を4個減らす。その後、相手のデッキ・墓地・場にある魔族・黒魔術師・呪術師モンスター1体につき、相手に12ダメージを与える。",
@@ -1363,21 +1315,17 @@
     },
     "GS6_4": {
       "nameJa": "火脈点火",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "79c0a187fe059cfa538a6a9e3bb8e9db3fd4d450d07c61aeda10be646414d387",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "4244d3057e81280147a024674127039d302ab112d52e8644202e8e09a6b8ca5b",
       "textSha256": "284c8cb5f5f184528085fc247b0ddf478a1305cd245210e033e223ff7db08168",
       "hooks": {
         "ench": "firevein"
       },
       "before": {
-        "ja": "【発動条件】相手に烙印カウンターが1個以上ある。\n\n【発動時】相手に烙印カウンターが1個以上あれば、相手に烙印カウンター3個を追加する。",
-        "ko": "【발동 조건】상대에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】상대에게 낙인 카운터가 1개 이상 있으면 상대에게 낙인 카운터 3개 추가한다.",
-        "en": "【Play Requirement】The opponent has at least 1 Brand counter.\n\n【On Cast】If the opponent has at least 1 Brand counter, give them 3 additional Brand counters."
+        "ja": "【場にある間】自分の魔法・モンスター効果が相手プレイヤーまたは相手モンスターに与えるダメージを4増やす。相手に烙印があれば、代わりに元のダメージを2倍にする。",
+        "ko": "【필드에 있는 동안】자신의 마법·몬스터 효과로 상대 플레이어나 상대 몬스터에게 주는 데미지가 4 증가한다. 상대에게 낙인이 있으면 대신 원래 데미지가 2배가 된다.",
+        "en": "【While on the Field】Your spells and monster effects deal 4 extra damage to the opponent or their monsters. If the opponent has a Brand, double the original damage instead."
       },
       "after": {
         "ja": "【場にある間】自分の魔法・モンスター効果が相手プレイヤーまたは相手モンスターに与えるダメージを4増やす。相手に烙印があれば、代わりに元のダメージを2倍にする。",
@@ -1764,10 +1712,14 @@
     },
     "INFERNO": {
       "nameJa": "地獄",
-      "status": "reworked",
-      "changedLocales": [],
+      "status": "reworded",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
       "definitionSha256": "1920b6a024ed8d9c7055ee93e0ead50a3cbebb9c1d4e266d5260ab2d8b29c638",
-      "textSha256": "05f6607b93b882e37c78be60890e031e3cf348dd69b462744bce57802e5bf62e",
+      "textSha256": "2defb39713a0b6b57d54b38e5d4761921a39a5bb75a1108f4824cef36fb32d35",
       "hooks": {
         "ench": "inferno"
       },
@@ -1777,9 +1729,9 @@
         "en": "【At the Start of Your Turn】You take 5 damage. Deal 7 damage to the opponent."
       },
       "after": {
-        "ja": "【自分のターン開始時】自分に5ダメージを与える。相手に7ダメージを与える。",
-        "ko": "【자신의 턴 시작 시】자신에게 5 데미지를 준다. 상대에게 7 데미지를 준다.",
-        "en": "【At the Start of Your Turn】You take 5 damage. Deal 7 damage to the opponent."
+        "ja": "【自分のターン開始時】自分に5ダメージを与える。相手に8ダメージを与える。",
+        "ko": "【자신의 턴 시작 시】자신에게 5 데미지를 준다. 상대에게 8 데미지를 준다.",
+        "en": "【At the Start of Your Turn】You take 5 damage. Deal 8 damage to the opponent."
       }
     },
     "GAMBLE": {
@@ -1790,20 +1742,20 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "ee98a9b6749a69c2ff2a529462ec5ddcac2fa92e375f0cb4e70a534b2b2c2afb",
-      "textSha256": "12ceeaa27e4df9f76acb5daa1bf0a02d8e55b05e453d3f21881a7706373436de",
+      "definitionSha256": "07a20738bba3baa612a00c890efed326f0855e850d3e8baa11610c8555a34fd2",
+      "textSha256": "c14b9bfb3aac098638ce5e42f576b0f95bc86637d202f672d7fe6ae69919a238",
       "hooks": {
         "act": "dmg"
       },
       "before": {
-        "ja": "【発動時】ダイス1個を10回振る。出目の合計が40以上なら、自分の最大マナ+3。",
-        "ko": "【발동 시】주사위 1개를 10회 굴린다. 눈의 합이 40 이상이면 자신의 최대 마나 +3.",
-        "en": "【On Cast】Roll 1 die 10 times. If the sum is at least 40, increase your max mana by 3."
-      },
-      "after": {
         "ja": "【発動時】ダイス1個を10回振る。出目の合計が40以上なら、自分のマナ水晶+3。",
         "ko": "【발동 시】주사위 1개를 10회 굴린다. 눈의 합이 40 이상이면 자신의 마나 수정 +3.",
         "en": "【On Cast】Roll 1 die 10 times. If the sum is at least 40, increase your mana crystals by 3."
+      },
+      "after": {
+        "ja": "【発動時】ダイス1個を10回振る。出目の合計が36以上なら、自分のマナ水晶+3。",
+        "ko": "【발동 시】주사위 1개를 10회 굴린다. 눈의 합이 36 이상이면 자신의 마나 수정 +3.",
+        "en": "【On Cast】Roll 1 die 10 times. If the sum is at least 36, increase your mana crystals by 3."
       }
     },
     "ASSASSIN1": {
@@ -1955,41 +1907,37 @@
     },
     "GENESIS_SONG": {
       "nameJa": "始原の歌",
-      "status": "reworked",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "b027290c167947a4b3f22dfe5b61edac26ba0c272598ee68c3f4075435f890d9",
-      "textSha256": "f7cb816adde4ec46c338c2ababdd348654fc4728fd482225cd681cfc1b285bc8",
+      "textSha256": "a43e1faaafdfe34352fa669ded9e79279e9c26cb55e6786f1b2b3099fac29d41",
       "hooks": {},
       "before": {
-        "ja": "【発動時】自分のデッキ・墓地から「始原」モンスターをランダムに2体、自分の場に召喚する。",
-        "ko": "【발동 시】자신의 덱·묘지에서 시초 몬스터 2체를 무작위로 자신의 필드에 소환한다.",
-        "en": "【On Cast】Summon 2 random Origin monsters from your deck and graveyard to your field."
-      },
-      "after": {
         "ja": "【発動時】両方の場の種族モンスター全ての攻撃力+3。その後、自分のデッキ・墓地から「始原」モンスターをランダムに2体まで自分の場に召喚する。",
         "ko": "【발동 시】양쪽 필드의 모든 종족 몬스터의 공격력 +3. 그 후 자신의 덱·묘지에서 시초 몬스터를 무작위로 최대 2체 자신의 필드에 소환한다.",
         "en": "【On Cast】Give every tribal monster on both fields +3 ATK. Then summon up to 2 random Origin monsters from your deck and graveyard."
+      },
+      "after": {
+        "ja": "【発動時】両方の場の種族モンスター全ての攻撃力+3。その後、自分のデッキ・墓地・手札から「始原」モンスターをランダムに2体まで自分の場に召喚する。",
+        "ko": "【발동 시】양쪽 필드의 모든 종족 몬스터의 공격력 +3. 그 후 자신의 덱·묘지·패에서 시초 몬스터를 무작위로 최대 2체 자신의 필드에 소환한다.",
+        "en": "【On Cast】Give every tribal monster on both fields +3 ATK. Then summon up to 2 random Origin monsters from your deck, graveyard, and hand."
       }
     },
     "GENESIS_MAGIC": {
       "nameJa": "始原の魔法",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "158aa238817578080eabe74b23ac75da43c4e53104363b07bc00bccd3ec885b3",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "a5b33367dafe63593fddc1c479dca9ccc96dc2c2fea556831379464c459fe53c",
       "textSha256": "92c28d16b86113a847edbfddf0a7a8d6e41b232f9da47e5ff27e52c203866d6b",
       "hooks": {},
       "before": {
-        "ja": "【発動時】自分の場の全ての「始原」モンスターの攻撃力+4・体力+4（対象が場を離れるまで）。",
-        "ko": "【발동 시】자신의 필드의 모든 시초 몬스터의 공격력 +4, 체력 +4(효과를 받은 몬스터가 필드를 떠날 때까지).",
-        "en": "【On Cast】All Origin monsters on your field get +4 ATK and +4 HP (until the affected monster leaves the field)."
+        "ja": "【発動時】自分のデッキ構成にある各「アチューン」の発動コストを、このゲームの間1下げる（最低0）。このターン、自分が提示マーケットをリロールするたび、自分のデッキ構成にない「始原」モンスターが候補にあれば、必ず1体提示される。",
+        "ko": "【발동 시】자신의 덱 구성에 있는 각 어튠의 발동 코스트을 이번 게임 동안 1 낮춘다(최소 0). 이번 턴에 자신이 제시 마켓을 다시 굴릴 때마다 자신의 덱 구성에 없는 시초 몬스터 후보가 있으면 반드시 1체가 제시된다.",
+        "en": "【On Cast】Reduce the cast cost of each Attune currently in your deck composition by 1 for this game, to a minimum of 0. Each time you refresh the offer this turn, it includes an Origin monster missing from your deck composition if one is available."
       },
       "after": {
         "ja": "【発動時】自分のデッキ構成にある各「アチューン」の発動コストを、このゲームの間1下げる（最低0）。このターン、自分が提示マーケットをリロールするたび、自分のデッキ構成にない「始原」モンスターが候補にあれば、必ず1体提示される。",
@@ -2001,93 +1949,96 @@
     },
     "KIN_CALL": {
       "nameJa": "同族の呼び声",
-      "status": "reworked",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "20f2db9a888f05448fd29ad4a87e896b6cb4e31d3885353c28dc75e287390e7f",
-      "textSha256": "2c42eada45072172f5695a2d267de888ce55af8ed080d2bd8b7bad7693ec4bc0",
+      "definitionSha256": "d0cf2d98a98ce50f0b4de5eb212d44a1c5462b1e0a41f48439140b04ee74a79c",
+      "textSha256": "89b5f29d9de1a55d2a871874839a1bcddbd16c5cf15c7e8692ce2283291f17be",
       "hooks": {
         "ench": "kinDiscount"
       },
       "before": {
-        "ja": "【場にある間】自分の場に種族モンスターがいれば、マーケットの種族カード購入コスト-2（最低1）。",
-        "ko": "【필드에 있는 동안】자신의 필드에 종족 몬스터가 있으면 마켓의 종족카드 구매 코스트 -2(최소1).",
-        "en": "【While on the Field】If you control a tribal monster, reduce your purchase cost for tribal cards by 2, to a minimum of 1."
-      },
-      "after": {
         "ja": "【場にある間】自分のデッキ構成に種族を持つモンスターがあれば、自分がマーケットで購入する種族カードの購入コスト−2（最低1）。",
         "ko": "【필드에 있는 동안】자신의 덱 구성에 종족 몬스터가 있으면 마켓에서 구매하는 종족 카드의 구매 코스트−2(최소 1).",
         "en": "【While on the Field】If your deck composition contains a tribal monster, reduce the purchase cost of tribal cards in the market by 2, minimum 1."
+      },
+      "after": {
+        "ja": "【自分のカード購入時】自分のデッキ構成に種族を持つモンスターがいれば、マーケットで購入した種族モンスターをすぐに自分の場に召喚する。",
+        "ko": "【자신의 카드 구매 시】자신의 덱 구성에 종족 몬스터가 있으면 마켓에서 구매한 종족 몬스터를 즉시 자신의 필드에 소환한다.",
+        "en": "【When You Buy a Card】If your deck composition contains a monster with a tribe, immediately summon the tribal monster you bought from the market to your field."
       }
     },
     "MULTI_CULTURE": {
       "nameJa": "多様な文化",
-      "status": "reworked",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "9c4870e5419c8b18b9e7027e8eee917610cb43547f3d84fbeee4d8aed2ae15b9",
-      "textSha256": "cfaf685a1c9ffdefea57472b18df8ad0413574583964cdc60ad563c87d1b3d54",
+      "textSha256": "0a7a834f9c8325a2cbba26c87e99b817785bad9ade1181f4f6f8c6785e6a6f52",
       "hooks": {},
       "before": {
-        "ja": "【発動条件】自分の場に異なる種族のモンスターが2種類以上いる。\n\n【発動時】自分の場の全ての種族モンスターの攻撃力+6（対象が場を離れるまで）。",
-        "ko": "【발동 조건】자신의 필드에 서로 다른 종족의 몬스터가 2종류 이상 있다.\n\n【발동 시】자신의 필드의 모든 종족 몬스터 공격력 +6(효과를 받은 몬스터가 필드를 떠날 때까지).",
-        "en": "【Play Requirement】Your monsters represent at least 2 different tribes.\n\n【On Cast】All tribal monsters on your field get +6 ATK (until the affected monster leaves the field)."
-      },
-      "after": {
         "ja": "【発動条件】両方の場に異なる種族のモンスターが2種類以上いる。\n\n【発動時】種族数に一致する効果を適用する。2種類ならマナ水晶を1個得る。3種類なら相手の場のカードを2枚選んで破壊する。4種類なら相手に烙印を1個付与する。5種類以上なら相手の場のカードを全て破壊してリフトへ送る。",
         "ko": "【발동 조건】양쪽 필드에 서로 다른 종족이 2종 이상 있다.\n\n【발동 시】종족 수에 맞는 효과만 적용한다. 2종이면 마나 수정 1개를 얻는다. 3종이면 상대 필드의 카드 2장을 골라 파괴한다. 4종이면 상대에게 낙인 1개를 준다. 5종 이상이면 상대 필드의 모든 카드를 파괴하여 리프트로 보낸다.",
         "en": "【Play Requirement】Monsters on the two fields represent at least 2 distinct tribes.\n\n【On Cast】Apply the matching tier. With 2 tribes, gain 1 mana crystal. With 3, choose and destroy 2 opposing field cards. With 4, give the opponent 1 Brand. With 5 or more, destroy every opposing field card and send it to the Rift."
+      },
+      "after": {
+        "ja": "【発動条件】両方の場に異なる種族のモンスターが2種類以上いる。\n\n【発動時】種族数に一致する効果を適用する。2種類ならマナ水晶を1個得る。3種類なら相手の場のカードを2枚選んで破壊する。4種類なら相手に烙印を3個付与する。5種類以上なら相手の場のカードを全て破壊してリフトへ送る。",
+        "ko": "【발동 조건】양쪽 필드에 서로 다른 종족이 2종 이상 있다.\n\n【발동 시】종족 수에 맞는 효과만 적용한다. 2종이면 마나 수정 1개를 얻는다. 3종이면 상대 필드의 카드 2장을 골라 파괴한다. 4종이면 상대에게 낙인 3개를 준다. 5종 이상이면 상대 필드의 모든 카드를 파괴하여 리프트로 보낸다.",
+        "en": "【Play Requirement】Monsters on the two fields represent at least 2 distinct tribes.\n\n【On Cast】Apply the matching tier. With 2 tribes, gain 1 mana crystal. With 3, choose and destroy 2 opposing field cards. With 4, give the opponent 3 Brand. With 5 or more, destroy every opposing field card and send it to the Rift."
       }
     },
     "SLAY_ART": {
       "nameJa": "殺生の極意",
       "status": "reworded",
       "changedLocales": [
+        "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "02c45230ed7c38e0f837fe47d48e726d206dd107beccfc609c5cf59b90fd5fb4",
-      "textSha256": "adf00d008e14bc6d7df1609cb83a153db918fc1de602a98199a5e6f07a287e49",
+      "textSha256": "54c4e23012da07ce31911753c9f5544fd0f4d5e58ee0719c6a23ae287e76155e",
       "hooks": {
         "ench": "slayArt"
       },
       "before": {
         "ja": "【場にある間】どちらかのプレイヤーが受ける各ダメージを3増やす（モンスターへのダメージは増えない）。",
-        "ko": "【필드에 놓인 동안】어느 플레이어가 받는 각 데미지를 3 증가(몬스터 데미지는 증가하지 않음).",
-        "en": "【While Deployed】Increase each instance of damage to either player by 3; damage to monsters is unaffected."
-      },
-      "after": {
-        "ja": "【場にある間】どちらかのプレイヤーが受ける各ダメージを3増やす（モンスターへのダメージは増えない）。",
         "ko": "【필드에 있는 동안】어느 플레이어가 받는 각 데미지를 3 증가(몬스터 데미지는 증가하지 않음).",
         "en": "【While on the Field】Increase each instance of damage to either player by 3; damage to monsters is unaffected."
+      },
+      "after": {
+        "ja": "【場にある間】どちらかのプレイヤーが受ける各ダメージを5増やす（モンスターへのダメージは増えない）。",
+        "ko": "【필드에 있는 동안】어느 플레이어가 받는 각 데미지를 5 증가(몬스터 데미지는 증가하지 않음).",
+        "en": "【While on the Field】Increase each instance of damage to either player by 5; damage to monsters is unaffected."
       }
     },
     "BLOOD1": {
       "nameJa": "血の魔法 - ブラッドドロー",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "9c7b0e2cdd146de9256c9dbd06c8639bcd406e9c3948186e258344be76be0d79",
-      "textSha256": "10175ddcf09a14bac825e8ea6110b0abeeb76808d938e6ec95b72ba734834d49",
+      "textSha256": "6a2f42bda2fa71f21d0f733b37624e9e70d82b7a4f7022a5cdde6a191650a7bf",
       "hooks": {
         "act": "draw"
       },
       "before": {
         "ja": "【発動時】カードを6枚引く。自分に15ダメージを与える。",
-        "ko": "【발동시】카드를 6장 뽑는다. 자신에게 15 데미지를 준다.",
+        "ko": "【발동 시】카드를 6장 뽑는다. 자신에게 15 데미지를 준다.",
         "en": "【On Cast】Draw 6 cards. You take 15 damage."
       },
       "after": {
-        "ja": "【発動時】カードを6枚引く。自分に15ダメージを与える。",
-        "ko": "【발동 시】카드를 6장 뽑는다. 자신에게 15 데미지를 준다.",
-        "en": "【On Cast】Draw 6 cards. You take 15 damage."
+        "ja": "【発動時】自分に7ダメージを与え、カードを3枚引く。",
+        "ko": "【발동 시】자신에게 7 피해를 주고 카드를 3장 뽑는다.",
+        "en": "【On Cast】Take 7 damage, then draw 3 cards."
       }
     },
     "DISARM1": {
@@ -2193,17 +2144,17 @@
         "en"
       ],
       "definitionSha256": "80ea62d1ed21d399d64deee3f98cda72474eac5123964042597d986f3fbbf8e7",
-      "textSha256": "460bc8af8b8c3453551785ced7313757bd8ff89f2a557bd0d5d422d235eea699",
+      "textSha256": "537adbb8573d3e3dcd359d89ba77c920a7cc237de350c5dc43e85ae2dbaf7855",
       "hooks": {},
       "before": {
-        "ja": "【発動時】ダイス2個の合計 — 2-3: 自分の最大マナ+3、カードを2枚引く / 4-5: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 6-8: 自分の最大マナ+1 / 9-11: 自分の体力を8回復する / 12: 自分の体力を12回復する。",
-        "ko": "【발동 시】주사위 2개 합계 — 2-3: 자신의 최대 마나 +3, 카드를 2장 뽑는다 / 4-5: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 6-8: 자신의 최대 마나 +1 / 9-11: 자신의 체력을 8 회복한다 / 12: 자신의 체력을 12 회복한다.",
-        "en": "【On Cast】Roll 2 dice and total them — 2-3: Increase your max mana by 3, draw 2 cards / 4-5: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 6-8: Increase your max mana by 1 / 9-11: Restore 8 of your HP / 12: Restore 12 of your HP."
-      },
-      "after": {
         "ja": "【発動時】ダイス2個の合計 — 2-3: 自分のマナ水晶+3、カードを2枚引く / 4-5: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 6-8: 自分のマナ水晶+1 / 9-11: 自分の体力を8回復する / 12: 自分の体力を12回復する。",
         "ko": "【발동 시】주사위 2개 합계 — 2-3: 자신의 마나 수정 +3, 카드를 2장 뽑는다 / 4-5: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 6-8: 자신의 마나 수정 +1 / 9-11: 자신의 체력을 8 회복한다 / 12: 자신의 체력을 12 회복한다.",
         "en": "【On Cast】Roll 2 dice and total them — 2-3: Increase your mana crystals by 3, draw 2 cards / 4-5: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 6-8: Increase your mana crystals by 1 / 9-11: Restore 8 of your HP / 12: Restore 12 of your HP."
+      },
+      "after": {
+        "ja": "【発動時】ダイス2個の合計 — 2-3: 自分のマナ水晶+3、カードを2枚引く / 4-5: 相手の場に「ミミック」（攻撃力3・体力2）1体を召喚する / 6-8: 自分のマナ水晶+1 / 9-11: 自分の体力を10回復する / 12: 自分の体力を15回復する。",
+        "ko": "【발동 시】주사위 2개 합계 — 2-3: 자신의 마나 수정 +3, 카드를 2장 뽑는다 / 4-5: 상대의 필드에 미믹(공격력 3, 체력 2) 1체 소환한다 / 6-8: 자신의 마나 수정 +1 / 9-11: 자신의 체력을 10 회복한다 / 12: 자신의 체력을 15 회복한다.",
+        "en": "【On Cast】Roll 2 dice and total them — 2-3: Increase your mana crystals by 3, draw 2 cards / 4-5: Summon 1 Mimic (3 ATK, 2 HP) to the opponent's field / 6-8: Increase your mana crystals by 1 / 9-11: Restore 10 of your HP / 12: Restore 15 of your HP."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -2239,18 +2190,18 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "1470d801958a052ee7a9c1e40452d2812c5a058ed4d9efabb57f52d493043aa5",
-      "textSha256": "a37197094b5772850114bdc1b8772c31049495f05029309cd8d45249f0855830",
+      "definitionSha256": "b8e0b8d38f9d69426b81955727699a8820a464e4b65cc7794180217383f90748",
+      "textSha256": "39f85649479da02c39eb869fda6854ca5fa0d723d433fb174309402f8fff6039",
       "hooks": {},
       "before": {
-        "ja": "【発動時】ダイス2個の合計（自分の場に「アサシン」系カードがあれば、9-12は代わりにカードを4枚引く） — 2-3: 自分の最大マナ+3 / 4: 自分の場に「ギルドの情報網」を展開（自分のターン開始時に追加でカードを1枚引く） / 5-6: 自分の最大マナ+2 / 7: 自分の最大マナ+1 / 8: 自分の体力を10回復する / 9-10: 相手の場に「初級アサシン」「中級アサシン」を各1体召喚する / 11-12: 相手の場に「初級アサシン」「中級アサシン」「上級アサシン」を各1体召喚し、自分に10ダメージを与える。",
-        "ko": "【발동 시】주사위 2개 합계(자신의 필드에 암살자 계열 카드가 있으면 9-12는 대신 카드를 4장 뽑는다) — 2-3: 자신의 최대 마나 +3 / 4: 자신의 필드에 길드 정보망 전개한다(자신 턴 시작에 카드를 1장 추가로 뽑는다) / 5-6: 자신의 최대 마나 +2 / 7: 자신의 최대 마나 +1 / 8: 자신의 체력을 10 회복한다 / 9-10: 상대의 필드에 초급·중급 암살자를 각각 1체 소환한다 / 11-12: 상대의 필드에 초급·중급·상급 암살자를 각각 1체 소환하고 자신에게 10 데미지를 준다.",
-        "en": "【On Cast】Roll 2 dice and total them; if you control an Assassin-family card, results 9-12 instead draw 4 cards — 2-3: Increase your max mana by 3 / 4: Deploy Guild Network to your field (draw 1 extra card at your turn start) / 5-6: Increase your max mana by 2 / 7: Increase your max mana by 1 / 8: Restore 10 of your HP / 9-10: Summon 1 Novice and 1 Adept Assassin to the opponent's field / 11-12: Summon 1 Novice, 1 Adept, and 1 Elite Assassin to the opponent's field, then take 10 damage."
-      },
-      "after": {
         "ja": "【発動時】ダイス2個の合計（自分の場に「アサシン」系カードがあれば、9-12は代わりにカードを4枚引く） — 2-3: 自分のマナ水晶+3 / 4: 自分の場に「ギルドの情報網」を展開（自分のターン開始時に追加でカードを1枚引く） / 5-6: 自分のマナ水晶+2 / 7: 自分のマナ水晶+1 / 8: 自分の体力を10回復する / 9-10: 相手の場に「初級アサシン」「中級アサシン」を各1体召喚する / 11-12: 相手の場に「初級アサシン」「中級アサシン」「上級アサシン」を各1体召喚し、自分に10ダメージを与える。",
         "ko": "【발동 시】주사위 2개 합계(자신의 필드에 암살자 계열 카드가 있으면 9-12는 대신 카드를 4장 뽑는다) — 2-3: 자신의 마나 수정 +3 / 4: 자신의 필드에 길드 정보망 전개한다(자신 턴 시작에 카드를 1장 추가로 뽑는다) / 5-6: 자신의 마나 수정 +2 / 7: 자신의 마나 수정 +1 / 8: 자신의 체력을 10 회복한다 / 9-10: 상대의 필드에 초급·중급 암살자를 각각 1체 소환한다 / 11-12: 상대의 필드에 초급·중급·상급 암살자를 각각 1체 소환하고 자신에게 10 데미지를 준다.",
         "en": "【On Cast】Roll 2 dice and total them; if you control an Assassin-family card, results 9-12 instead draw 4 cards — 2-3: Increase your mana crystals by 3 / 4: Deploy Guild Network to your field (draw 1 extra card at your turn start) / 5-6: Increase your mana crystals by 2 / 7: Increase your mana crystals by 1 / 8: Restore 10 of your HP / 9-10: Summon 1 Novice and 1 Adept Assassin to the opponent's field / 11-12: Summon 1 Novice, 1 Adept, and 1 Elite Assassin to the opponent's field, then take 10 damage."
+      },
+      "after": {
+        "ja": "【発動時】ダイス2個の合計（自分の場に「アサシン」系カードがあれば、9-12は代わりにカードを4枚引く） — 2-3: 自分のマナ水晶+3 / 4-7: 自分のマナ水晶+2 / 8: 自分の場に「ギルドの情報網」を展開（自分のターン開始時に追加でカードを1枚引く） / 9-10: 相手の場に「初級アサシン」「中級アサシン」を各1体召喚する / 11-12: 相手の場に「初級アサシン」「中級アサシン」「上級アサシン」を各1体召喚し、自分に10ダメージを与える。",
+        "ko": "【발동 시】주사위 2개 합계(자신의 필드에 암살자 계열 카드가 있으면 9-12는 대신 카드를 4장 뽑는다) — 2-3: 자신의 마나 수정 +3 / 4-7: 자신의 마나 수정 +2 / 8: 자신의 필드에 길드 정보망 전개한다(자신 턴 시작에 카드를 1장 추가로 뽑는다) / 9-10: 상대의 필드에 초급·중급 암살자를 각각 1체 소환한다 / 11-12: 상대의 필드에 초급·중급·상급 암살자를 각각 1체 소환하고 자신에게 10 데미지를 준다.",
+        "en": "【On Cast】Roll 2 dice and total them; if you control an Assassin-family card, results 9-12 instead draw 4 cards — 2-3: Increase your mana crystals by 3 / 4-7: Increase your mana crystals by 2 / 8: Deploy Guild Network to your field (draw 1 extra card at your turn start) / 9-10: Summon 1 Novice and 1 Adept Assassin to the opponent's field / 11-12: Summon 1 Novice, 1 Adept, and 1 Elite Assassin to the opponent's field, then take 10 damage."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -2287,36 +2238,32 @@
         "en"
       ],
       "definitionSha256": "2fad78b60dcf9aaaa9f68144e771cffa0c6570debffc7be80cbc07f6c0069c2c",
-      "textSha256": "36daefc47124d8966c7195f0afddef0112610515c169136b13dedf5551c08e78",
+      "textSha256": "f8e8537e07c793575b6926de3447a5283038df4b8c823c01b541eb2ba25b9eb3",
       "hooks": {},
       "before": {
-        "ja": "【発動時】自分に4ダメージを与える。その後、自分の最大マナ+1。",
-        "ko": "【발동 시】자신에게 4 데미지를 준다. 그 후 자신의 최대 마나 +1.",
-        "en": "【On Cast】You take 4 damage. Then increase your max mana by 1."
-      },
-      "after": {
         "ja": "【発動時】自分に4ダメージを与える。その後、自分のマナ水晶+1。",
         "ko": "【발동 시】자신에게 4 데미지를 준다. 그 후 자신의 마나 수정 +1.",
         "en": "【On Cast】You take 4 damage. Then increase your mana crystals by 1."
+      },
+      "after": {
+        "ja": "【発動時】自分に3ダメージを与える。その後、自分のマナ水晶+1。",
+        "ko": "【발동 시】자신에게 3 데미지를 준다. 그 후 자신의 마나 수정 +1.",
+        "en": "【On Cast】You take 3 damage. Then increase your mana crystals by 1."
       }
     },
     "WORLD_SEED": {
       "nameJa": "世界樹の種",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "1de9673e82c058fccf418bd18926d238011bdab5ffbb386f148c1e23084fa1be",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "62b03042b3c6447f58c2046ec867eb1339935cc63e6a9850fd28e1bd0b1a32a9",
       "textSha256": "414cedd084abb237fba2e72b7843daab2530cc49f0460c500ed4dde29f7e1102",
       "hooks": {
         "ench": "seedMana"
       },
       "before": {
-        "ja": "【自分のターン開始時】ダイス1個を振り、5以上なら自分の最大マナ+1。",
-        "ko": "【자신의 턴 시작 시】주사위 1개를 굴려 5 이상이면 자신의 최대 마나 +1.",
-        "en": "【At the Start of Your Turn】Roll 1 die; on 5 or more, increase your max mana by 1."
+        "ja": "【自分のターン開始時】ダイス1個を振り、5以上なら自分のマナ水晶+1。",
+        "ko": "【자신의 턴 시작 시】주사위 1개를 굴려 5 이상이면 자신의 마나 수정 +1.",
+        "en": "【At the Start of Your Turn】Roll 1 die; on 5 or more, increase your mana crystals by 1."
       },
       "after": {
         "ja": "【自分のターン開始時】ダイス1個を振り、5以上なら自分のマナ水晶+1。",
@@ -2408,19 +2355,19 @@
         "en"
       ],
       "definitionSha256": "5e76064d8afb79ba3e9f103870caa61d3e86a2869d2a3bfb7ab7a3b958527093",
-      "textSha256": "564dbbd1b6848657e4a11d04c36856f4fccb3739152f69ce0a2d3de5d0282dea",
+      "textSha256": "315574774e2a29f82652b33ba85d1214122ff9c61d2be226c660cf631962012e",
       "hooks": {
         "ench": "sanctumField"
       },
       "before": {
-        "ja": "【自分のターン開始時】自分の場の全モンスターの体力+2（持続）。",
-        "ko": "【자신의 턴 시작 시】자신의 필드의 모든 몬스터 체력 +2(지속).",
-        "en": "【At the Start of Your Turn】All monsters on your field get +2 HP (lasting)."
-      },
-      "after": {
         "ja": "【自分のターン開始時】自分の場の全モンスターの体力+2（対象が場を離れるまで）。",
         "ko": "【자신의 턴 시작 시】자신의 필드의 모든 몬스터 체력 +2(효과를 받은 몬스터가 필드를 떠날 때까지).",
         "en": "【At the Start of Your Turn】All monsters on your field get +2 HP (until the affected monster leaves the field)."
+      },
+      "after": {
+        "ja": "【自分のターン終了時】自分の場の全モンスターの体力+2（対象が場を離れるまで）。",
+        "ko": "【자신의 턴 종료 시】자신의 필드의 모든 몬스터 체력 +2(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【At the End of Your Turn】All monsters on your field get +2 HP (until the affected monster leaves the field)."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -2457,20 +2404,20 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "6216c9bc7b9bf5dfae11dacebda17f6662d0a2675e5fb130457fdcc045c0c01b",
-      "textSha256": "ab087cac91b91ed1a96e0cf2654940ec81ba7dbd03e8386dcb63798039aa0b1a",
+      "definitionSha256": "009ecc471bdd5a8febe839a2852fcf399ef3f18022e407723a9ede71b178fa9c",
+      "textSha256": "6c70c65f7d6eabf73a87ff53c83498a30d0d266cc6b7dce0d4b16662d0a52df8",
       "hooks": {
-        "act": "heal"
+        "quick": true
       },
       "before": {
-        "ja": "【発動条件】自分の最大マナが11以下で、自分の体力が40未満。\n\n【発動時】自分の体力が40になる量だけ回復する。自分に烙印カウンター1個を付与する。",
-        "ko": "【발동 조건】자신의 최대 마나 11 이하, 자신의 체력 40 미만.\n\n【발동 시】자신의 체력이 40이 되는 양만큼 회복한다. 자신에게 낙인 카운터 1개 부여한다.",
-        "en": "【Play Requirement】Your max mana is at most 11 and your HP is below 40.\n\n【On Cast】Restore the amount of HP needed to reach 40. Give yourself 1 Brand counter."
-      },
-      "after": {
         "ja": "【発動条件】自分のマナ水晶が11以下で、自分の体力が40未満。\n\n【発動時】自分の体力が40になる量だけ回復する。自分に烙印カウンター1個を付与する。",
         "ko": "【발동 조건】자신의 마나 수정 11 이하, 자신의 체력 40 미만.\n\n【발동 시】자신의 체력이 40이 되는 양만큼 회복한다. 자신에게 낙인 카운터 1개 부여한다.",
         "en": "【Play Requirement】Your mana crystals are at most 11 and your HP is below 40.\n\n【On Cast】Restore the amount of HP needed to reach 40. Give yourself 1 Brand counter."
+      },
+      "after": {
+        "ja": "【購入時】自分のマナ水晶-1。相手より自分の体力が少なければ、その差だけ自分の体力を回復する。",
+        "ko": "【구매 시】자신의 마나 수정 -1. 자신의 체력이 상대보다 낮다면 그 차이만큼 자신의 체력을 회복한다.",
+        "en": "【On Purchase】Lose 1 mana crystal. If your HP is lower than your opponent’s, heal yourself by the difference."
       }
     },
     "HERMIT": {
@@ -2524,23 +2471,24 @@
       "nameJa": "戦略変更",
       "status": "reworded",
       "changedLocales": [
+        "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "6189a04d03961500932133d2c744dad76d1c38bf4d0e456eec711726ea46b230",
-      "textSha256": "29049d5a3b0bebd01c0a1765bfdd454ae3af85ceab829126cf3fc439d3337fed",
+      "definitionSha256": "3c8a6958d0281514dcf11b9a51f941119a9202a085762f21d0c8af9b62f965d5",
+      "textSha256": "2d0f746ec7168a05147c525b8495b8ae45236167de421af696a8cde89a5237da",
       "hooks": {
         "ench": "glassBan"
       },
       "before": {
         "ja": "【場にある間】両方の場で、現在の攻撃力と現在体力の差が4以上あるモンスターは攻撃できない。",
-        "ko": "【필드에 놓인 동안】양쪽 필드에서 현재 공격력과 현재 체력의 차이가 4 이상인 몬스터는 공격할 수 없다.",
-        "en": "【While Deployed】Monsters on either field cannot attack if their current ATK and current HP differ by 4 or more."
-      },
-      "after": {
-        "ja": "【場にある間】両方の場で、現在の攻撃力と現在体力の差が4以上あるモンスターは攻撃できない。",
         "ko": "【필드에 있는 동안】양쪽 필드에서 현재 공격력과 현재 체력의 차이가 4 이상인 몬스터는 공격할 수 없다.",
         "en": "【While on the Field】Monsters on either field cannot attack if their current ATK and current HP differ by 4 or more."
+      },
+      "after": {
+        "ja": "【場にある間】両方の場で、現在の攻撃力と現在体力の差が3以上あるモンスターは攻撃できない。",
+        "ko": "【필드에 있는 동안】양쪽 필드에서 현재 공격력과 현재 체력의 차이가 3 이상인 몬스터는 공격할 수 없다.",
+        "en": "【While on the Field】Monsters on either field cannot attack if their current ATK and current HP differ by 3 or more."
       }
     },
     "SHATTER": {
@@ -2551,18 +2499,18 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "8b5f54c478703f13e3d4248c2bbff66b9125ec535879306643655a07e11bf57c",
-      "textSha256": "f9405f1f4a6414cd225386b2af67763f5e33b0a5e8b1b065aaa93a22efb990d7",
+      "definitionSha256": "5509f815fa45c6aff7826a3feffc04748a81240438d81b1490104aed653d9bae",
+      "textSha256": "17864514195af502c7b2bcaa0c358d02fd42d5c774353c6d331c7c3253548b66",
       "hooks": {},
       "before": {
-        "ja": "【発動時】自分に5ダメージを与える。両方の場の、卵以外の全モンスターの最大体力を1にし、蓄積ダメージを取り除く（持続）。",
-        "ko": "【발동 시】자신에게 5 데미지를 준다. 양쪽 필드의 알 이외 모든 몬스터의 최대 체력을 1로 만들고 누적 데미지를 제거한다(지속).",
-        "en": "【On Cast】You take 5 damage. Set all non-Egg monsters' max HP on both fields to 1 and remove their accumulated damage (lasting)."
-      },
-      "after": {
         "ja": "【発動時】自分に5ダメージを与える。両方の場の、卵以外の全モンスターの最大体力を1にし、蓄積ダメージを取り除く（対象が場を離れるまで）。",
         "ko": "【발동 시】자신에게 5 데미지를 준다. 양쪽 필드의 알 이외 모든 몬스터의 최대 체력을 1로 만들고 누적 데미지를 제거한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
         "en": "【On Cast】You take 5 damage. Set all non-Egg monsters' max HP on both fields to 1 and remove their accumulated damage (until the affected monster leaves the field)."
+      },
+      "after": {
+        "ja": "【発動時】自分に4ダメージを与える。両方の場でダメージを受けているモンスターを全て破壊する。",
+        "ko": "【발동 시】자신에게 4 피해를 준다. 양쪽 필드의 피해를 입은 몬스터를 모두 파괴한다.",
+        "en": "【On Cast】Take 4 damage. Destroy all damaged monsters on both fields."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -2755,19 +2703,15 @@
     },
     "CULL_FLOOD": {
       "nameJa": "カルの洗礼",
-      "status": "reworked-2026-10-26",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "cb4b3788b317724064775437d183aa551e4c2180aec13d8f26a3052a8e4a4198",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "7e96e65002fc238d1ae0fa6cac21488b3c701eec35e9356703dbe14aef150106",
       "textSha256": "6464b7f65d5d7163b843e5dc8872a3a25b241b1ea0180e5cd356dc59eca9913e",
       "hooks": {},
       "before": {
-        "ja": "【発動時】新しい「カル」4枚を自分の墓地に追加する。自分のデッキ・墓地からカードを合計3枚まで選んで自分のリフトへ送る。",
-        "ko": "【발동 시】새로운 컬 4장을 자신의 묘지에 추가한다. 자신의 덱·묘지에서 카드 합계 최대 3장을 선택해 자신의 리프트로 보낸다.",
-        "en": "【On Cast】Create 4 new Culls in your graveyard. Choose up to 3 cards total from your deck and graveyard and send them to your Rift."
+        "ja": "【発動時】新しい「カル」4枚を自分の墓地に追加する。",
+        "ko": "【발동 시】새로운 컬 4장을 자신의 묘지에 추가한다.",
+        "en": "【On Cast】Create 4 new Culls in your graveyard."
       },
       "after": {
         "ja": "【発動時】新しい「カル」4枚を自分の墓地に追加する。",
@@ -2780,7 +2724,7 @@
       "nameJa": "苦痛の収穫",
       "status": "reviewed-unchanged",
       "changedLocales": [],
-      "definitionSha256": "0b8eb51188883a80baaa359b90aaa7e42b63c74af9fccc7c1217dd3b02e1b6c8",
+      "definitionSha256": "16288cb77068f98826349a6ef7411727180da1b333311b5dff25908ae7f5dff2",
       "textSha256": "2df7cba8f74e1bdf2963cba94f4947379e184e62a112a02e0a90277edf474310",
       "hooks": {
         "ench": "cullOnHit"
@@ -2798,21 +2742,17 @@
     },
     "CULL_FARM": {
       "nameJa": "カル栽培",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "9a1c0bf4fd9872061328f7d04ac08eb5c2667078f2e5d6cc6ca401c2ae806d75",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "54daa8c03f4115de34078177b31f8093dcc2b7248e64156c10b471ef7dc64981",
       "textSha256": "9ba01c945fada9bef1662d7f5fa4ab93b600c2e35c118fefd33b9a773e41f4ca",
       "hooks": {
         "ench": "cullTurn"
       },
       "before": {
-        "ja": "【自分ターン開始時】新しい「カル」1枚を自分の手札に加える。",
-        "ko": "【자신 턴 시작시】새로운 컬 1장을 자신의 패에 추가한다.",
-        "en": "【Your Turn Start】Create 1 new Cull in your hand."
+        "ja": "【自分のターン開始時】新しい「カル」1枚を自分の手札に加える。",
+        "ko": "【자신의 턴 시작 시】새로운 컬 1장을 자신의 패에 추가한다.",
+        "en": "【At the Start of Your Turn】Create 1 new Cull in your hand."
       },
       "after": {
         "ja": "【自分のターン開始時】新しい「カル」1枚を自分の手札に加える。",
@@ -2822,24 +2762,24 @@
     },
     "PURGE_ALL": {
       "nameJa": "大粛清",
-      "status": "reworked-2026-10-26",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "2b6de6d4643d6c7bba79c5df16f70cbf8ac12ae658a1878226f5b234fff9b7dc",
-      "textSha256": "a6fa9828581a1b7e1f81c4508e10195fe72276baf6065ce7a8bb016709482ed0",
+      "definitionSha256": "dc9f559b42c7ea6d4b1e92917076b02fa9123d784ea02ac56efdb62213622e5d",
+      "textSha256": "5a93d111ab0a477e23600f78378854ded0ae22dbce6d3bc29880563760534e6a",
       "hooks": {},
       "before": {
-        "ja": "【発動時】自分のデッキ・墓地からカードを好きな枚数選び、自分のリフトへ送る（0枚でもよい）。",
-        "ko": "【발동 시】자신의 덱·묘지에서 원하는 수만큼 카드를 선택해 자신의 리프트로 보낸다(0장도 가능).",
-        "en": "【On Cast】Choose any number of cards from your deck and graveyard and send them to your Rift, including 0."
-      },
-      "after": {
         "ja": "【発動時】自分のデッキ・墓地・場・手札からカードを好きな枚数選び、自分のリフトへ送る（0枚でもよい）。",
         "ko": "【발동 시】자신의 덱·묘지·필드·패에서 원하는 수의 카드를 선택해 자신의 리프트로 보낸다(0장도 가능).",
         "en": "【On Cast】Choose any number of cards from your deck, graveyard, field and hand and send them to your Rift (you may choose 0)."
+      },
+      "after": {
+        "ja": "【発動時】自分のデッキ・墓地・場・手札からカードを好きな枚数選び、自分のリフトへ送る（0枚でもよい）。 自分の体力を6回復する。虚無。",
+        "ko": "【발동 시】자신의 덱·묘지·필드·패에서 원하는 수의 카드를 선택해 자신의 리프트로 보낸다(0장도 가능). 자신의 체력을 6 회복한다. 공허.",
+        "en": "【On Cast】Choose any number of cards from your deck, graveyard, field and hand and send them to your Rift (you may choose 0). Restore 6 of your HP. Void."
       },
       "reviewNote": "Cull support rework: three-language rules reviewed against engine and tests/cull-support-rework.mjs; see docs/releases/2026-10-26-cull-support/README.md."
     },
@@ -2888,16 +2828,14 @@
     },
     "GOLIATH_HUNT": {
       "nameJa": "ジャイアントキリング",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "4f8d790dff831f1227ab6c94ccc9e5463126e693a3a443eec2431209be07b5bd",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "30ac181df01d5ba90520bd527ce630fd69b50cecf9797951ae5bb4df88a40886",
       "textSha256": "e7c9b1f1048ce102c7f731e9c05c6eb684b3c37b5ba9ae0e7c4ffd79e4a0e74d",
       "hooks": {},
       "before": {
         "ja": "【発動条件】相手の場に現在体力10以上のモンスターがいる。\n\n【発動時】その中で攻撃力と最大体力の合計が最大の1体を自動で破壊する（同値は場の並び順）。",
-        "ko": "【발동 조건】상대의 필드에 현재 체력 10 이상 몬스터가 있다.\n\n【발동시】그중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
+        "ko": "【발동 조건】상대의 필드에 현재 체력 10 이상 몬스터가 있다.\n\n【발동 시】그중 공격력과 최대 체력 합이 가장 큰 1체를 자동 파괴한다(동률은 필드 순서).",
         "en": "【Play Requirement】An enemy monster has at least 10 current HP.\n\n【On Cast】Automatically destroy the eligible monster with the highest ATK plus max HP; ties use field order."
       },
       "after": {
@@ -2908,18 +2846,16 @@
     },
     "DOUBLE_EXEC": {
       "nameJa": "二重処刑",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "6f71c544df6a4d5f1d54aeefabfd218a5c4e4f685391500b1fcc0a802fe0308d",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "7bc3e3795acb5624fa8bb08eeed52e0e5064b37e3ba47debcead6f53e4752669",
       "textSha256": "45832fca62768cb93b0c800ef693db17d632d2f1ee75c60af79d3ac87abac053",
       "hooks": {
         "act": "destroyMon"
       },
       "before": {
         "ja": "【発動時】両方の場のモンスターから合計2体まで選んで破壊する。",
-        "ko": "【발동시】양쪽 필드의 몬스터 중 합계 2체까지 선택해 파괴한다.",
+        "ko": "【발동 시】양쪽 필드의 몬스터 중 합계 2체까지 선택해 파괴한다.",
         "en": "【On Cast】Choose and destroy up to 2 monsters from either field combined."
       },
       "after": {
@@ -3023,16 +2959,14 @@
     },
     "MARKET_CRISIS": {
       "nameJa": "経済危機",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "f604a5661b2ce4ea532d875106e842da18f275116be970dbc2ca65e1f0d14d58",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "4793c98cd73decd999d55a0b22a5824e9add564af85f84c2ba26361d214a82b6",
       "textSha256": "5547a7eb3e25870bd055a168e5be096a3252c8687e440f3bf83966bcaaa452b2",
       "hooks": {},
       "before": {
         "ja": "【発動時】固定マーケット7枚を全て更新する。",
-        "ko": "【발동시】고정 마켓 7장을 전부 갱신한다.",
+        "ko": "【발동 시】고정 마켓 7장을 전부 갱신한다.",
         "en": "【On Cast】Refresh all 7 cards of the fixed market."
       },
       "after": {
@@ -3085,26 +3019,26 @@
     },
     "FURNACE": {
       "nameJa": "溶鉱炉",
-      "status": "reworked-2026-10-26",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "608bf44dffbaea2650768b859323ab77b533eb3dadf2d217e59881f2aa144314",
-      "textSha256": "8a26fa8b159ef4c3d631f04ffa595ea4944261b44e5e29e448265c511db1f380",
+      "definitionSha256": "c3646cf628767cad671c705b1aff4fc6de0d58b0ec5bffdc18b792822816db52",
+      "textSha256": "daf234c4c44170484c151288cf4ae6379aca4292a587eb795d8e4c44590ecc4d",
       "hooks": {
         "ench": "furnace"
       },
       "before": {
-        "ja": "【自分のターン開始時】自分の墓地で購入コストが最も低いカード1枚を、自動で自分のリフトへ送る（同値なら墓地の先頭を優先）。",
-        "ko": "【자신의 턴 시작 시】자신의 묘지에서 구매 코스트가 가장 낮은 카드 1장을 자동으로 자신의 리프트로 보낸다(동률이면 묘지 앞쪽 우선).",
-        "en": "【At the Start of Your Turn】Automatically send 1 card with the lowest purchase cost in your graveyard to your Rift; ties use graveyard order."
-      },
-      "after": {
         "ja": "【場にある間】両プレイヤーは、シールドが合計7を超える分を得られない（既に持っているシールドは減らない）。",
         "ko": "【필드에 있는 동안】양 플레이어는 실드 합계가 7을 넘는 만큼은 얻을 수 없다(이미 가진 실드는 줄어들지 않는다).",
         "en": "【While on the Field】Neither player can gain Shield beyond a total of 7 (existing Shield is not reduced)."
+      },
+      "after": {
+        "ja": "【場にある間】両プレイヤーは、シールドが合計5を超える分を得られない（既に持っているシールドは減らない）。",
+        "ko": "【필드에 있는 동안】양 플레이어는 실드 합계가 5을 넘는 만큼은 얻을 수 없다(이미 가진 실드는 줄어들지 않는다).",
+        "en": "【While on the Field】Neither player can gain Shield beyond a total of 5 (existing Shield is not reduced)."
       },
       "reviewNote": "Cull support rework: three-language rules reviewed against engine and tests/cull-support-rework.mjs; see docs/releases/2026-10-26-cull-support/README.md."
     },
@@ -3229,22 +3163,24 @@
       "nameJa": "攻城崩壊",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "777893a188a8ad3b83396011f62111d49bc60326ca9f4cc1a40c3b7ec30bba0c",
-      "textSha256": "5eb81e51d1497f193c0ee5182557c109e1a9b95a6faf39b88a2edd7bac9290b1",
+      "definitionSha256": "b26028015a7b06d35e71dcd12efc8347138c4c94ba5e8ccfa0de23729f5a095c",
+      "textSha256": "e181a762246f6f234ca4280d30bb277632c31274a689741859ceeb7239eb691c",
       "hooks": {
         "act": "destroyMon"
       },
       "before": {
-        "ja": "【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
-        "ko": "【발동시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
-        "en": "【On Cast】Destroy all monsters on either field with ATK 2 or less."
-      },
-      "after": {
         "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる。\n\n【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。",
         "ko": "【발동 조건】어느 쪽이든 필드에 공격력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다.",
         "en": "【Play Requirement】There is a monster with ATK 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with ATK 2 or less."
+      },
+      "after": {
+        "ja": "【発動条件】どちらかの場に攻撃力2以下のモンスターがいる。\n\n【発動時】両方の場の攻撃力2以下のモンスターを全て破壊する。 この効果による破壊に気合は発動しない。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 공격력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 공격력 2 이하 몬스터를 모두 파괴한다. 이 효과로 파괴될 때 기합은 발동하지 않는다.",
+        "en": "【Play Requirement】There is a monster with ATK 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with ATK 2 or less. Guts cannot prevent destruction by this effect."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -3285,22 +3221,24 @@
       "nameJa": "一斉射撃",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "dc8b08975d2a685b8c9117063383cd3c0716afec1db5a3ff2c64b8a0d58d4899",
-      "textSha256": "a739baede9edd69f43aea6d98f525302a76cc2c23c8610b765727fb37f71bb09",
+      "definitionSha256": "931f31942065aacf4dc08fba831c9cad63a53cd29ae8be9743d2e4602ead5868",
+      "textSha256": "78d51ecac3ba47c14b0230e867b49c8f637cf32fb46b77419d2c25ac8b18e840",
       "hooks": {
         "act": "destroyMon"
       },
       "before": {
-        "ja": "【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
-        "ko": "【발동시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
-        "en": "【On Cast】Destroy all monsters on either field with current HP 2 or less."
-      },
-      "after": {
         "ja": "【発動条件】どちらかの場に現在体力2以下のモンスターがいる。\n\n【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。",
         "ko": "【발동 조건】어느 쪽이든 필드에 현재 체력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다.",
         "en": "【Play Requirement】There is a monster with current HP 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with current HP 2 or less."
+      },
+      "after": {
+        "ja": "【発動条件】どちらかの場に現在体力2以下のモンスターがいる。\n\n【発動時】両方の場の現在体力2以下のモンスターを全て破壊する。 この効果による破壊に気合は発動しない。",
+        "ko": "【발동 조건】어느 쪽이든 필드에 현재 체력 2 이하의 몬스터가 있다.\n\n【발동 시】양쪽 필드의 현재 체력 2 이하 몬스터를 모두 파괴한다. 이 효과로 파괴될 때 기합은 발동하지 않는다.",
+        "en": "【Play Requirement】There is a monster with current HP 2 or less on either field.\n\n【On Cast】Destroy all monsters on either field with current HP 2 or less. Guts cannot prevent destruction by this effect."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -3540,20 +3478,22 @@
       "nameJa": "血の魔法 - 喜",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "ae0e72dadd12540ff22b9a3def8c9da0ab0d5aaba0c02922326f3d00846a0352",
-      "textSha256": "3985d7111d4817c4f59596ffd6294f93870011e82462a7be7bf2362e90a79581",
+      "textSha256": "f451776f787280fea6d83d6842c4dedaa56d8fd4d0a823538810bf9ba049ac1f",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分に6ダメージを与える。相手と自分は体力を12得る。",
-        "ko": "【발동시】자신에게 6 데미지를 준다. 상대와 자신은 체력을 12 얻는다.",
+        "ko": "【발동 시】자신에게 6 데미지를 준다. 상대와 자신은 체력을 12 얻는다.",
         "en": "【On Cast】You take 6 damage. Both players gain 12 HP."
       },
       "after": {
-        "ja": "【発動時】自分に6ダメージを与える。相手と自分は体力を12得る。",
-        "ko": "【발동 시】자신에게 6 데미지를 준다. 상대와 자신은 체력을 12 얻는다.",
-        "en": "【On Cast】You take 6 damage. Both players gain 12 HP."
+        "ja": "【発動時】自分に3ダメージを与える。相手と自分の体力を18回復する。",
+        "ko": "【발동 시】자신에게 3 데미지를 준다. 상대와 자신의 체력을 18 회복한다.",
+        "en": "【On Cast】You take 3 damage. Both players restore 18 HP."
       }
     },
     "BLOOD_ANGER": {
@@ -3565,17 +3505,17 @@
         "en"
       ],
       "definitionSha256": "f23798e24ad64cd0c7cd8d74e3e661ecf3d3876828ed18bba9f38864fd3e74e7",
-      "textSha256": "4fb7b4724bbf75b6455e50aa39456533a81dba9e282e7be5b151cd0fac40f266",
+      "textSha256": "57ef6257ff0599c37f6664362245f1119d12d00b6c0e9bf1ac02cf724bc916c3",
       "hooks": {},
       "before": {
-        "ja": "【発動時】自分に10ダメージを与える。両方の場の全モンスターは攻撃力+3（持続）。",
-        "ko": "【발동 시】자신에게 10 데미지를 준다. 필드 위 모든 몬스터는 공격력 +3(지속).",
-        "en": "【On Cast】You take 10 damage. All monsters on both fields gain +3 ATK (lasting)."
-      },
-      "after": {
         "ja": "【発動時】自分に10ダメージを与える。両方の場の全モンスターは攻撃力+3（対象が場を離れるまで）。",
         "ko": "【발동 시】자신에게 10 데미지를 준다. 필드 위 모든 몬스터는 공격력 +3(효과를 받은 몬스터가 필드를 떠날 때까지).",
         "en": "【On Cast】You take 10 damage. All monsters on both fields gain +3 ATK (until the affected monster leaves the field)."
+      },
+      "after": {
+        "ja": "【発動時】自分に5ダメージを与える。両方の場の全モンスターは攻撃力+3（対象が場を離れるまで）。",
+        "ko": "【발동 시】자신에게 5 데미지를 준다. 필드 위 모든 몬스터는 공격력 +3(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【On Cast】You take 5 damage. All monsters on both fields gain +3 ATK (until the affected monster leaves the field)."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -3613,19 +3553,17 @@
         "en"
       ],
       "definitionSha256": "9624646ca3dafa0d470f260de60d8aad9aecc75797aa945e949b681098c53cdf",
-      "textSha256": "6b8fcc3d16827e1a929c8514fc65d73db6d6246ae27d0d552033bc035e9acfe8",
-      "hooks": {
-        "cost": 4
-      },
+      "textSha256": "7467ed9fd534a59245a79bdbe66bc4e6886bbf1e4adaea43b06c4d09082b2370",
+      "hooks": {},
       "before": {
-        "ja": "【発動時】自分に7ダメージを与える。自分の最大マナ+1。",
-        "ko": "【발동 시】자신에게 7 데미지를 준다. 자신의 최대 마나 +1.",
-        "en": "【On Cast】You take 7 damage. Increase your max mana by 1."
-      },
-      "after": {
         "ja": "【発動時】自分に7ダメージを与える。自分のマナ水晶+1。",
         "ko": "【발동 시】자신에게 7 데미지를 준다. 자신의 마나 수정 +1.",
         "en": "【On Cast】You take 7 damage. Increase your mana crystals by 1."
+      },
+      "after": {
+        "ja": "【発動時】自分に4ダメージを与える。自分のマナ水晶+1。",
+        "ko": "【발동 시】자신에게 4 데미지를 준다. 자신의 마나 수정 +1.",
+        "en": "【On Cast】You take 4 damage. Increase your mana crystals by 1."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -3633,20 +3571,22 @@
       "nameJa": "吸血契約",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "12fa33bfd819becad4ebc3e78635e839c5874723e957883a2a0ab2835dcbc167",
-      "textSha256": "1ebd18d24bd759d05101f32132d87336108debc02119cf5d027e7514296e66f7",
+      "textSha256": "67034a52b26c284ca6134ff13d602bb913b4daaf2406ff3480ff1bdd3f2d9c6c",
       "hooks": {},
       "before": {
-        "ja": "【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
-        "ko": "【발동시】자신에게 6 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
-        "en": "【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
-      },
-      "after": {
         "ja": "【発動条件】自分の場のモンスターが7体未満。\n\n【発動時】自分に6ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
         "ko": "【발동 조건】자신의 필드의 몬스터가 7체 미만이다.\n\n【발동 시】자신에게 6 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
         "en": "【Play Requirement】You control fewer than 7 monsters.\n\n【On Cast】You take 6 damage. Summon an 'Apprentice Vampire' to your field."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場のモンスターが7体未満。\n\n【発動時】自分に2ダメージを与える。「見習い吸血鬼」を自分の場に召喚する。",
+        "ko": "【발동 조건】자신의 필드의 몬스터가 7체 미만이다.\n\n【발동 시】자신에게 2 데미지를 준다. '견습 흡혈귀'를 자신의 필드에 소환한다.",
+        "en": "【Play Requirement】You control fewer than 7 monsters.\n\n【On Cast】You take 2 damage. Summon an 'Apprentice Vampire' to your field."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -3657,21 +3597,17 @@
     },
     "BLOOD_FEST": {
       "nameJa": "血の祝祭",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "66b2aed31b99b82301d84eba298e18fc6acc09d08c5161e95b34391dc1a67df5",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "0797d76cb866252ed7cc605e644098e3e0e27dca54e037a7cebf1e899eb60629",
       "textSha256": "ead079c29872ace9fbfba403462b147986a09c856b9980ea476013b3ed39b621",
       "hooks": {
         "ench": "bloodFest"
       },
       "before": {
-        "ja": "【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分のマナ水晶+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
-        "ko": "【자신의 마법 발동 시】자신이 피의 마법을 사용할 때마다 자신의 마나 수정 +1. 피의 마법이 무효화되면 이 효과는 발동하지 않는다.",
-        "en": "【When Your Spell Takes Effect】Whenever you play Blood Magic, increase your mana crystals by 1. This effect does not trigger if the Blood Magic spell is negated."
+        "ja": "【場にある間】自分が発動したカードが自分に与える自傷ダメージを無効にする。\n\n【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分のマナ水晶+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
+        "ko": "【필드에 있는 동안】자신이 발동한 카드가 자신에게 주는 자해 데미지를 무효로 한다.\n\n【자신의 마법 발동 시】자신이 피의 마법을 사용할 때마다 자신의 마나 수정 +1. 피의 마법이 무효화되면 이 효과는 발동하지 않는다.",
+        "en": "【While on the Field】Prevent self-damage from cards you activate.\n\n【When Your Spell Takes Effect】Whenever you play Blood Magic, increase your mana crystals by 1. This effect does not trigger if the Blood Magic spell is negated."
       },
       "after": {
         "ja": "【場にある間】自分が発動したカードが自分に与える自傷ダメージを無効にする。\n\n【自分の魔法発動時】自分が「血の魔法」を発動するたび、自分のマナ水晶+1。 この効果は「血の魔法」が無効化された場合は発動しない。",
@@ -3682,20 +3618,17 @@
     },
     "BLOOD_SHIELD": {
       "nameJa": "吸血術式",
-      "status": "reworded",
-      "changedLocales": [
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "045b4ea61f8efb05db4afb2e193eee947a818017de8cf2ee25449207e02f5f2e",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "74fa13d74ff3ee7634f95d28ad2c7bce05b007ff202fc4205e41d26daa362cbe",
       "textSha256": "abae9cc514b114c66451df6d8e7bb19ce9935f8cbb84f2951416379b3fa8f467",
       "hooks": {
         "ench": "bloodShield"
       },
       "before": {
         "ja": "【場にある間】自分は「血の魔法」によるダメージを受けない。",
-        "ko": "【필드에 놓인 동안】자신은 '피의 마법'으로 인한 데미지를 받지 않는다.",
-        "en": "【While Deployed】You take no damage from 'Blood Magic'."
+        "ko": "【필드에 있는 동안】자신은 '피의 마법'으로 인한 데미지를 받지 않는다.",
+        "en": "【While on the Field】You take no damage from 'Blood Magic'."
       },
       "after": {
         "ja": "【場にある間】自分は「血の魔法」によるダメージを受けない。",
@@ -3707,43 +3640,46 @@
       "nameJa": "吸血の極意",
       "status": "reworded",
       "changedLocales": [
+        "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "81199a1ab43734f15b6ef476ee787b5cabedb2f1d573a87d28e6f421147b4baf",
-      "textSha256": "d371e06d4ff0ef1f47558ab0c2210645326259a806b16b4d523df0aca2cddf5f",
+      "definitionSha256": "3c312aee62061654398bb4827add2509f4a62e44ec625641b76c0da50b5b7876",
+      "textSha256": "9b74c052c8550fe18cbc9212af4a2bf55988e756ec1827a4ab368e1dedaa57b6",
       "hooks": {
         "ench": "vampWard"
       },
       "before": {
         "ja": "【場にある間】両方の場の全ての「吸血鬼」系モンスターは破壊されない。",
-        "ko": "【필드에 놓인 동안】양쪽 필드의 모든 흡혈귀 계열 몬스터는 파괴되지 않는다.",
-        "en": "【While Deployed】Vampire-family monsters on both fields cannot be destroyed."
-      },
-      "after": {
-        "ja": "【場にある間】両方の場の全ての「吸血鬼」系モンスターは破壊されない。",
         "ko": "【필드에 있는 동안】양쪽 필드의 모든 흡혈귀 계열 몬스터는 파괴되지 않는다.",
         "en": "【While on the Field】Vampire-family monsters on both fields cannot be destroyed."
+      },
+      "after": {
+        "ja": "【場にある間】両方の場の全ての「吸血鬼」系モンスターは破壊されない。 相手の場のモンスター1体を墓地に送るたび、自分の体力を4回復する。",
+        "ko": "【필드에 있는 동안】양쪽 필드의 모든 흡혈귀 계열 몬스터는 파괴되지 않는다. 상대 필드의 몬스터 1체를 묘지로 보낼 때마다 자신의 체력을 4 회복한다.",
+        "en": "【While on the Field】Vampire-family monsters on both fields cannot be destroyed. Each time you send a monster from the opposing field to the graveyard, Restore 4 of your HP."
       }
     },
     "VAMP_PACT2": {
       "nameJa": "吸血刻印契約",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "c75eed140a2dcf899fe5f3cb2e78588cb7147a1d4dce5ab22792cfe000d92ba7",
-      "textSha256": "db942077dd795dd3a4e8b273092229cd5a0e73e08be5d0a364d507456a1deb62",
+      "definitionSha256": "9de731311fd5c7b32d6a8720a8a4eec60a38cdcfeb5bdec4debfd2586af7296c",
+      "textSha256": "ffa68ff582f43a5c70a5c4c2562ff3c6977167680a4b310f9faf55a3252dcfda",
       "hooks": {},
       "before": {
         "ja": "【発動時】自分に15ダメージを与える。「初級吸血鬼」を自分の場に召喚する。",
-        "ko": "【발동시】자신에게 15 데미지를 준다. '초급 흡혈귀'를 자신의 필드에 소환한다.",
+        "ko": "【발동 시】자신에게 15 데미지를 준다. '초급 흡혈귀'를 자신의 필드에 소환한다.",
         "en": "【On Cast】You take 15 damage. Summon a 'Novice Vampire' to your field."
       },
       "after": {
-        "ja": "【発動時】自分に15ダメージを与える。「初級吸血鬼」を自分の場に召喚する。",
-        "ko": "【발동 시】자신에게 15 데미지를 준다. '초급 흡혈귀'를 자신의 필드에 소환한다.",
-        "en": "【On Cast】You take 15 damage. Summon a 'Novice Vampire' to your field."
+        "ja": "【発動時】自分に7ダメージを与える。「初級吸血鬼」を自分の場に召喚する。",
+        "ko": "【발동 시】자신에게 7 데미지를 준다. '초급 흡혈귀'를 자신의 필드에 소환한다.",
+        "en": "【On Cast】You take 7 damage. Summon a 'Novice Vampire' to your field."
       }
     },
     "VAMP_BUTLER": {
@@ -4318,17 +4254,17 @@
         "en"
       ],
       "definitionSha256": "bacf9814bda537e59bda6cea583ba951a42cb3fe0f547e0203a179c1f6339a7f",
-      "textSha256": "7646ec203f7c6aa000a27afa9a59b812b6e78a358b665e6f4ffa54f1f9ffb8d5",
+      "textSha256": "cf84fd7bd5f27aac3fb0d7302d1b4974b6430e274f46c7d8ed17895f288375f6",
       "hooks": {},
       "before": {
-        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（持続）。",
-        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(지속).",
-        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (lasting)."
-      },
-      "after": {
         "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを2体まで選び、「腐敗」を付与する（対象が場を離れるまで）。",
         "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 2체 선택해 부패 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
         "en": "【Play Requirement】You control a monster.\n\n【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 2 monsters on your field and give them Decay (until the affected monster leaves the field)."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】相手の場の、卵以外の全モンスターにカウンター1個を付与する（腐敗の処理）。自分の場のモンスターを3体まで選び、「腐敗」を付与する（対象が場を離れるまで）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 1개 부여한다(부패 처리). 자신의 필드의 몬스터를 최대 3체 선택해 부패 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Put 1 counter on each non-Egg monster on the enemy field, applying Decay rules. Choose up to 3 monsters on your field and give them Decay (until the affected monster leaves the field)."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -4372,18 +4308,18 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "ec6336a3e97a3a7f93504eb343d0881544e647a09f9c159bdce4859e0d1befcf",
-      "textSha256": "13d163ed2e53a102832b19ee0479897586b04b24758d0af87ad52ec80ec9f27e",
+      "definitionSha256": "e097746a7f6f5186f8763d6248e3790c817028d914529fdce1e8ff97f1abb601",
+      "textSha256": "db4743ccce46dbbdaedf2186a29ec31d1e184cb11b4243b4d02a7c2a5536196b",
       "hooks": {},
       "before": {
-        "ja": "【発動条件】自分の場に「威厳」を持たないモンスターがいる。\n\n【発動時】自分の最大マナ-1。自分の場のモンスター1体を選び、「威厳」を付与する（対象が場を離れるまで）。",
-        "ko": "【발동 조건】자신의 필드에 위엄이 없는 몬스터가 있다.\n\n【발동 시】자신의 최대 마나 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
-        "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Reduce your max mana by 1. Choose 1 monster on your field and give it Majesty (until the affected monster leaves the field)."
-      },
-      "after": {
         "ja": "【発動条件】自分の場に「威厳」を持たないモンスターがいる。\n\n【発動時】自分のマナ水晶-1。自分の場のモンスター1体を選び、「威厳」を付与する（対象が場を離れるまで）。",
         "ko": "【발동 조건】자신의 필드에 위엄이 없는 몬스터가 있다.\n\n【발동 시】자신의 마나 수정 -1. 자신의 필드의 몬스터 1체를 선택해 위엄 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
         "en": "【Play Requirement】You control a monster without Majesty.\n\n【On Cast】Reduce your mana crystals by 1. Choose 1 monster on your field and give it Majesty (until the affected monster leaves the field)."
+      },
+      "after": {
+        "ja": "【発動時】両方の場からモンスター1体を選び、威厳を付与する（対象が場を離れるまで）。",
+        "ko": "【발동 시】양쪽 필드에서 몬스터 1체를 선택해 위엄을 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【On Cast】Choose a monster on either field. Give it Majesty until the affected monster leaves the field."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -4547,21 +4483,17 @@
     },
     "TRIAL_AREA": {
       "nameJa": "試練の領域",
-      "status": "reviewed-v94",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "f0f770d3da673addd471aaf526482b06b9fa68840e2c7dbefda90ccd7c52c9e1",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "4385470b90b22a870779df97d75110862f996ec978b4ee1200362adfdf9b4824",
       "textSha256": "6a936a8d5a20e9a1b141a8536149d50821b25d6bbd8658ceff0a25e343036cfa",
       "hooks": {
         "ench": "trialArea"
       },
       "before": {
-        "ja": "【発動時】自分に5ダメージを与える。\n\n【自分のターン開始時】新しい「カル」1枚を自分の墓地に追加する。",
-        "ko": "【발동 시】자신에게 5 데미지를 준다.\n\n【자신의 턴 시작 시】새로운 컬 1장을 자신의 묘지에 추가한다.",
-        "en": "【On Cast】You take 5 damage.\n\n【At the Start of Your Turn】Create 1 new Cull in your graveyard."
+        "ja": "【発動時】自分に1ダメージを与える。\n\n【自分のターン開始時】新しい「カル」1枚を自分の墓地に追加する。",
+        "ko": "【발동 시】자신에게 1 데미지를 준다.\n\n【자신의 턴 시작 시】새로운 컬 1장을 자신의 묘지에 추가한다.",
+        "en": "【On Cast】You take 1 damage.\n\n【At the Start of Your Turn】Create 1 new Cull in your graveyard."
       },
       "after": {
         "ja": "【発動時】自分に1ダメージを与える。\n\n【自分のターン開始時】新しい「カル」1枚を自分の墓地に追加する。",
@@ -4893,21 +4825,17 @@
     },
     "HPS_SOIL": {
       "nameJa": "生命の土壌",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "17a091355335f6f8d1bd5d5af34ec60072fff2fc21820e4994c552c3eef6c817",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "4e84884baad303dde1a49a0bbb75e9ea807e23a5027a36c0217d655803eb2279",
       "textSha256": "358c39a72fe62a364a55aef8a840c3a75639419013b15c5d37c66ee5443de954",
       "hooks": {
         "ench": "soilHp"
       },
       "before": {
-        "ja": "【自分のモンスター召喚時】自分がモンスターを召喚するたび、そのモンスターの体力+2（持続）。",
-        "ko": "【자신의 몬스터 소환 시】자신이 몬스터를 소환할 때마다 그 몬스터의 체력 +2(지속).",
-        "en": "【When You Summon a Monster】Each monster you summon gets +2 HP (lasting)."
+        "ja": "【自分のモンスター召喚時】自分がモンスターを召喚するたび、そのモンスターの体力+2（対象が場を離れるまで）。",
+        "ko": "【자신의 몬스터 소환 시】자신이 몬스터를 소환할 때마다 그 몬스터의 체력 +2(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【When You Summon a Monster】Each monster you summon gets +2 HP (until the affected monster leaves the field)."
       },
       "after": {
         "ja": "【自分のモンスター召喚時】自分がモンスターを召喚するたび、そのモンスターの体力+2（対象が場を離れるまで）。",
@@ -5393,27 +5321,27 @@
     },
     "VOID_APOSTLE": {
       "nameJa": "虚無空間の使徒",
-      "status": "reviewed-november-balance",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "a10c265d136da87a1cdaf8cfef8628ad5067c1374823f037e06b637a9c753a56",
-      "textSha256": "728d59cd38908d093b02474434d17951d74191bccb8a83452799a01ca7f931aa",
+      "textSha256": "c56defb7f4194fe7373651bce26a34726654daa127cda1b202af7500de1286a5",
       "hooks": {
         "onSummon": "voidApostle",
         "turnFx": "voidRoll"
       },
       "before": {
-        "ja": "【召喚時】自分に13ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（対象が場を離れるまで）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
-        "ko": "【소환 시】자신에게 13 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
-        "en": "【On Summon】You take 13 damage. This monster gets +1 ATK and +1 HP per card in your Rift (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
-      },
-      "after": {
         "ja": "【召喚時】自分に8ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（対象が場を離れるまで）。\n\n【自分のターン開始時】ダイス1個を振り、1なら自分に10ダメージを与え、このモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の墓地に戻す。",
         "ko": "【소환 시】자신에게 8 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 자신에게 10 데미지, 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 묘지로 되돌린다.",
         "en": "【On Summon】You take 8 damage. This monster gets +1 ATK and +1 HP per card in your Rift (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Roll 1 die; on 1, deal 10 damage to yourself and destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then return this card from your Rift to your graveyard."
+      },
+      "after": {
+        "ja": "【召喚時】自分に3ダメージを与える。自分のリフトのカード1枚につき、このモンスターの攻撃力+1・体力+1（対象が場を離れるまで）。\n\n【自分のターン開始時】ダイス1個を振り、1ならこのモンスターを破壊する。\n\n【自分のリフト追加時】他のカードの効果でこのカードが自分のリフトに送られた場合、新しい「カル」5枚を自分のリフトに追加し、このカードをリフトから自分の場に召喚する。",
+        "ko": "【소환 시】자신에게 3 데미지를 준다. 자신의 리프트 카드 1장당 이 몬스터 공격력 +1, 체력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【자신의 턴 시작 시】주사위 1개를 굴려 1이면 이 몬스터 파괴한다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 이 카드가 자신의 리프트로 보내졌다면 새로운 컬 5장을 자신의 리프트에 추가하고, 이 카드를 리프트에서 자신의 필드에 소환한다.",
+        "en": "【On Summon】You take 3 damage. This monster gets +1 ATK and +1 HP per card in your Rift (until the affected monster leaves the field).\n\n【At the Start of Your Turn】Roll 1 die; on 1, destroy this monster.\n\n【Card Added to Your Rift】When another card’s effect sends this card to your Rift, add 5 new Culls to your Rift, then summon this card from your Rift to your field."
       },
       "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md",
       "reviewedAt": "2026-10-30",
@@ -5492,22 +5420,18 @@
     },
     "GUILD_HQ": {
       "nameJa": "アサシンギルド本部",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "c55a627f51daff7fc44dab2ddb987fadc89a6c0e9464e51a93432393ce4ef98e",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "b19217c09a13bc33afbd299f170b3ec5d64cd755f7ac33166a0b53986385f62c",
       "textSha256": "eecffe050a1f2222c723a75ab304de6d0be3c704452b9787a135edc43d84540b",
       "hooks": {
         "turnFx": "nightMarket",
         "aura": "assassinHQ"
       },
       "before": {
-        "ja": "【相手への攻撃命中時】自分の「アサシン」系モンスターか「アサシンギルド支部」の攻撃で相手プレイヤーにダメージを与えるたび、相手に烙印カウンター1個を付与する。\n\n【自分ターン開始時】ナイトマーケットから「アサシン」系カード1枚を選び、マナを払って購入できる。",
-        "ko": "【공격으로 상대에게 데미지】자신 암살자 계열 몬스터 또는 암살자 길드 지부의 공격으로 상대 플레이어에게 데미지를 줄 때마다 상대에게 낙인 카운터 1개 부여한다.\n\n【자신 턴 시작시】나이트 마켓에서 암살자 계열 카드 1장을 선택해 마나를 지불하고 구매할 수 있다.",
-        "en": "【Attack Hits the Opponent】Whenever an allied Assassin-family monster or Assassin Guild Branch damages the opponent with an attack, give the opponent 1 Brand counter.\n\n【Your Turn Start】You may choose 1 Assassin-family card from the Night Market and pay mana to buy it."
+        "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターか「アサシンギルド支部」の攻撃で相手プレイヤーにダメージを与えるたび、相手に烙印カウンター1個を付与する。\n\n【自分のターン開始時】ナイトマーケットから「アサシン」系カード1枚を選び、マナを払って購入できる。",
+        "ko": "【공격으로 상대에게 데미지를 줄 때】자신 암살자 계열 몬스터 또는 암살자 길드 지부의 공격으로 상대 플레이어에게 데미지를 줄 때마다 상대에게 낙인 카운터 1개 부여한다.\n\n【자신의 턴 시작 시】나이트 마켓에서 암살자 계열 카드 1장을 선택해 마나를 지불하고 구매할 수 있다.",
+        "en": "【When an Attack Damages the Opponent】Whenever an allied Assassin-family monster or Assassin Guild Branch damages the opponent with an attack, give the opponent 1 Brand counter.\n\n【At the Start of Your Turn】You may choose 1 Assassin-family card from the Night Market and pay mana to buy it."
       },
       "after": {
         "ja": "【相手への攻撃ダメージ発生時】自分の「アサシン」系モンスターか「アサシンギルド支部」の攻撃で相手プレイヤーにダメージを与えるたび、相手に烙印カウンター1個を付与する。\n\n【自分のターン開始時】ナイトマーケットから「アサシン」系カード1枚を選び、マナを払って購入できる。",
@@ -5666,9 +5590,9 @@
     },
     "ACID_RAIN": {
       "nameJa": "酸性雨",
-      "status": "reviewed-v94",
+      "status": "reviewed-unchanged",
       "changedLocales": [],
-      "definitionSha256": "1329af1a80426307f628ccd6b3c1b046245b78a6fa2cfc2a9d62584f5f38af8f",
+      "definitionSha256": "626ccd9914691dc1cc6a8374e0ed64750734b8b81f170286eb5c6ee253fe6324",
       "textSha256": "88796c06754ba2f775c0423b050ddef48375ac5f645f873f4dd16122a50cdc62",
       "hooks": {
         "ench": "acidRain"
@@ -5686,19 +5610,15 @@
     },
     "BUDGET": {
       "nameJa": "運営予算",
-      "status": "reviewed-legacy-rework",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "debbc5296950a31fd623be1a8098250801e1d5e5c22fa0d4f495a45adeb5aa19",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "022dda261203e3220a83ddd30a80e90a96a8aab049fd02aac8ba05458dbb577e",
       "textSha256": "4c8b47cd4f25d5d86e75ba0ce9c31265d9a35bf2700b66ba79f31b73158dcaac",
       "hooks": {},
       "before": {
-        "ja": "【発動時】ダイス1個を振り2以上なら兵士(2/2)1体を自分の場に召喚する。",
-        "ko": "【발동 시】주사위 1개를 굴려 2 이상이면 병사(2/2) 1체를 자신의 필드에 소환한다.",
-        "en": "【On Cast】Roll 1 die: on 2 or more, summon a Soldier (2/2) to your field."
+        "ja": "【発動時】ダイス1個を振る。\n1～2：自分の場に「城」があれば「兵士」1体を自分の場に召喚する。なければ何も起こらない。\n3～6：「兵士」1体を自分の場に召喚する。自分の場に「城」があれば、さらに「兵士」1体を召喚する。",
+        "ko": "【발동 시】주사위 1개를 굴린다.\n1~2: 자신의 필드에 「성」이 있으면 「병사」 1체를 자신의 필드에 소환한다. 없으면 아무 일도 일어나지 않는다.\n3~6: 「병사」 1체를 자신의 필드에 소환한다. 자신의 필드에 「성」이 있으면 「병사」 1체를 추가로 소환한다.",
+        "en": "【On Cast】Roll 1 die.\n1–2: If you control Castle, summon 1 Soldier to your field. Otherwise, nothing happens.\n3–6: Summon 1 Soldier to your field. If you control Castle, summon 1 additional Soldier."
       },
       "after": {
         "ja": "【発動時】ダイス1個を振る。\n1～2：自分の場に「城」があれば「兵士」1体を自分の場に召喚する。なければ何も起こらない。\n3～6：「兵士」1体を自分の場に召喚する。自分の場に「城」があれば、さらに「兵士」1体を召喚する。",
@@ -5753,45 +5673,41 @@
     },
     "TREASON": {
       "nameJa": "反逆罪",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "52fbb3911fe263ff7f922318b276aed37cb44ba36bf0d7f33f17702e6c01b2da",
-      "textSha256": "0686c5a9e362f862e4df9de9f3a1398b7cdffd451c187bf32e88421cd5387be0",
-      "hooks": {},
-      "before": {
-        "ja": "【発動条件】相手の場に「城」がある。\n\n【発動時】相手の場の全モンスターと全永続魔法を破壊する（クエストは除く）。相手に烙印カウンター3個を付与する。",
-        "ko": "【발동 조건】상대의 필드에 성이 있다.\n\n【발동 시】상대의 필드의 모든 몬스터와 영구 마법을 파괴한다(퀘스트 제외). 상대에게 낙인 카운터 3개 부여한다.",
-        "en": "【Play Requirement】The opponent controls a Castle.\n\n【On Cast】Destroy all enemy monsters and persistent spells, excluding quests. Give the opponent 3 Brand counters."
-      },
-      "after": {
-        "ja": "【発動時】プレイヤーか場のモンスター1体を選び、1ダメージを与える。これで相手モンスターを破壊したら、相手プレイヤーにさらに1ダメージを与える。その後、相手の場に「兵士」「騎士」「傭兵」「大砲兵」「砲撃兵」または「貴族」種族のモンスターがいれば、相手の場のカード1枚を選んで破壊する。",
-        "ko": "【발동 시】플레이어 또는 필드의 몬스터 1체를 선택해 1 데미지를 준다. 이 효과로 상대 몬스터를 파괴하면 상대 플레이어에게 추가로 1 데미지를 준다. 그 후 상대 필드에 병사, 기사, 용병, 대포병, 포격병 또는 귀족 종족 몬스터가 있으면 상대 필드의 카드 1장을 선택해 파괴한다.",
-        "en": "【On Cast】Deal 1 damage to a chosen player or monster. If this destroys an enemy monster, deal 1 more damage to the opponent. Then, if the opponent controls a Soldier, Knight, Mercenary, Heavy Gunner, Gunner, or Aristocrat tribal monster, choose and destroy 1 card on their field."
-      },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
-    },
-    "STRONG_ACID": {
-      "nameJa": "強酸性雨",
       "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "3dee54e944038c4f93be73612c100db2a4b93f0045d143231533926cdc3b07a6",
+      "definitionSha256": "52fbb3911fe263ff7f922318b276aed37cb44ba36bf0d7f33f17702e6c01b2da",
+      "textSha256": "5f8c4239aa47c904e26c584452816c1c009d2989ff33ae7f175edd513abd7178",
+      "hooks": {},
+      "before": {
+        "ja": "【発動時】プレイヤーか場のモンスター1体を選び、1ダメージを与える。これで相手モンスターを破壊したら、相手プレイヤーにさらに1ダメージを与える。その後、相手の場に「兵士」「騎士」「傭兵」「大砲兵」「砲撃兵」または「貴族」種族のモンスターがいれば、相手の場のカード1枚を選んで破壊する。",
+        "ko": "【발동 시】플레이어 또는 필드의 몬스터 1체를 선택해 1 데미지를 준다. 이 효과로 상대 몬스터를 파괴하면 상대 플레이어에게 추가로 1 데미지를 준다. 그 후 상대 필드에 병사, 기사, 용병, 대포병, 포격병 또는 귀족 종족 몬스터가 있으면 상대 필드의 카드 1장을 선택해 파괴한다.",
+        "en": "【On Cast】Deal 1 damage to a chosen player or monster. If this destroys an enemy monster, deal 1 more damage to the opponent. Then, if the opponent controls a Soldier, Knight, Mercenary, Heavy Gunner, Gunner, or Aristocrat tribal monster, choose and destroy 1 card on their field."
+      },
+      "after": {
+        "ja": "【発動時】プレイヤーか場のモンスター1体を選び、1ダメージを与える。これで相手モンスターを破壊したら、相手プレイヤーにさらに2ダメージを与える。その後、相手の場に「兵士」「騎士」「傭兵」「大砲兵」「砲撃兵」または「貴族」種族のモンスターがいれば、相手の場のカード1枚を選んで破壊する。",
+        "ko": "【발동 시】플레이어 또는 필드의 몬스터 1체를 선택해 1 데미지를 준다. 이 효과로 상대 몬스터를 파괴하면 상대 플레이어에게 추가로 2 데미지를 준다. 그 후 상대 필드에 병사, 기사, 용병, 대포병, 포격병 또는 귀족 종족 몬스터가 있으면 상대 필드의 카드 1장을 선택해 파괴한다.",
+        "en": "【On Cast】Deal 1 damage to a chosen player or monster. If this destroys an enemy monster, deal 2 more damage to the opponent. Then, if the opponent controls a Soldier, Knight, Mercenary, Heavy Gunner, Gunner, or Aristocrat tribal monster, choose and destroy 1 card on their field."
+      },
+      "reviewedAt": "2026-10-30",
+      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+    },
+    "STRONG_ACID": {
+      "nameJa": "強酸性雨",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "3e20bbd08fb5870c525e18ce459a4ebee6ed2aad623a28fde0868275d6d61d5f",
       "textSha256": "eaa16b03ef6503f49007fb632b07a865e299e6bccc5b381a0f8298341fd49f58",
       "hooks": {
         "ench": "strongAcid"
       },
       "before": {
-        "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター2個を付与する（腐敗の処理）。\n\n【相手の腐敗破壊時】腐敗で相手モンスターが破壊されるたび、相手に7ダメージを与え、相手に烙印カウンター1個を付与する。",
-        "ko": "【발동시】상대의 필드의 알 이외 모든 몬스터에 카운터 2개 부여한다(부패 처리).\n\n【상대 부패 파괴시】부패로 상대 몬스터가 파괴될 때마다 상대에게 7 데미지, 상대에게 낙인 카운터 1개 부여한다.",
-        "en": "【On Cast】Put 2 counters on each non-Egg enemy monster, applying Decay rules.\n\n【Enemy Destroyed by Decay】Whenever Decay destroys an enemy monster, deal 7 damage to the opponent and give them 1 Brand counter."
+        "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター2個を付与する（腐敗の処理）。\n\n【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、相手に7ダメージを与え、相手に烙印カウンター1個を付与する。",
+        "ko": "【발동 시】상대의 필드의 알 이외 모든 몬스터에 카운터 2개 부여한다(부패 처리).\n\n【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 상대에게 7 데미지, 상대에게 낙인 카운터 1개 부여한다.",
+        "en": "【On Cast】Put 2 counters on each non-Egg enemy monster, applying Decay rules.\n\n【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, deal 7 damage to the opponent and give them 1 Brand counter."
       },
       "after": {
         "ja": "【発動時】相手の場の、卵以外の全モンスターにカウンター2個を付与する（腐敗の処理）。\n\n【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、相手に7ダメージを与え、相手に烙印カウンター1個を付与する。",
@@ -5801,21 +5717,17 @@
     },
     "ROTTEN_GROUND": {
       "nameJa": "腐敗した土地",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "4b73526a9bdf14bc18ed1cb3efef8d83a5aa2074e50c67b3210a97a5aa536999",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "47ac805d822970da862483106cd5d6e3ef4bad6573998727d2589c38f434d512",
       "textSha256": "3b814edc3198a20e815c33468a19a00d0e98d1e9d2c4770b8725121aabdd743e",
       "hooks": {
         "ench": "rottenGround"
       },
       "before": {
-        "ja": "【どちらかが召喚した時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
-        "ko": "【누구든 소환할 때】누구든 알 이외 몬스터를 소환할 때마다 그 몬스터에 카운터 2개 부여한다(부패 처리).",
-        "en": "【When Either Player Summons】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
+        "ja": "【設置上限】このカードはお互いのフィールド全体で1枚しか存在できない。\n\n【いずれかのモンスター召喚時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
+        "ko": "【설치 제한】이 카드는 양쪽 필드 전체에 1장만 존재할 수 있다.\n\n【어느 쪽이든 몬스터 소환 시】누구든 알 이외 몬스터를 소환할 때마다 그 몬스터에 카운터 2개 부여한다(부패 처리).",
+        "en": "【Field Limit】Only 1 copy of this card can exist across both players' fields.\n\n【When Either Player Summons a Monster】Whenever either player summons a non-Egg monster, put 2 counters on it, applying Decay rules."
       },
       "after": {
         "ja": "【設置上限】このカードはお互いのフィールド全体で1枚しか存在できない。\n\n【いずれかのモンスター召喚時】どちらかが卵以外のモンスターを召喚するたび、そのモンスターにカウンター2個を付与する（腐敗の処理）。",
@@ -5893,9 +5805,9 @@
     },
     "KNIGHT_TEACH": {
       "nameJa": "ゴーレムキングの教え",
-      "status": "confirmed-v91",
+      "status": "reviewed-unchanged",
       "changedLocales": [],
-      "definitionSha256": "7ef56833c78beeb8e82c29b421938ef86bbd1baa4d0bdb3b09d45c8ae4a557f9",
+      "definitionSha256": "ead362d20d405980118664168b12139c9ccac1b951c189d06fd80dfca7cad0dd",
       "textSha256": "35acddb042f463b3cdddf492215dc2a5112d3cbadba6076460018292551eade2",
       "hooks": {},
       "before": {
@@ -5941,18 +5853,18 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "2714120d321330f70f059197ce8d12a40203cd0460843985a94170c82a9402f3",
-      "textSha256": "b5af861f0da6c75b28a37610cf18973a87aaadb6e25da5146cc33e477a4dde4a",
+      "definitionSha256": "781cc083550c816971b8efafb06410d8384a52b435642d5eebd843332b77e929",
+      "textSha256": "9b929a49d07e634a9d2b255fb49e65f59f19d18e78e58894be1fbbcae6c3fe21",
       "hooks": {},
       "before": {
-        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（対象が場を離れるまで）。自分の場の「アサシン」系モンスターを2体選び、各攻撃力+3（各対象が場を離れるまで。1体しかいなければその1体）。",
-        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】자신의 필드의 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지). 자신의 필드의 암살자 계열 몬스터 2체를 선택해 각각 공격력 +3(효과를 받은 각 몬스터가 필드를 떠날 때까지. 1체뿐이면 그 1체).",
-        "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (until the affected monster leaves the field). Choose 2 Assassin-family monsters on your field; each gets +3 ATK (until the affected monster leaves the field); if only 1 exists, affect that 1."
-      },
-      "after": {
         "ja": "【発動条件】自分の場にモンスターがいる。\n\n【発動時】自分の場のモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（対象が場を離れるまで）。その後、自分の場の「アサシン」系モンスターを攻撃力が高い順に2体まで自動で選び、各攻撃力+3（各対象が場を離れるまで）。同値なら場の順を優先する。",
         "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【발동 시】자신의 필드의 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지). 그 후 자신의 필드의 암살자 계열 몬스터를 공격력이 높은 순으로 최대 2체 자동으로 선택해 각각 공격력 +3(효과를 받은 각 몬스터가 필드를 떠날 때까지). 동률이면 필드 순서를 우선한다.",
         "en": "【Play Requirement】You control a monster.\n\n【On Cast】Choose 1 monster on your field and give it your choice of Infiltrate or Evade (until the affected monster leaves the field). Then automatically select up to 2 of your Assassin-family monsters with the highest ATK; ties use field order. Each gets +3 ATK until it leaves the field."
+      },
+      "after": {
+        "ja": "【発動条件】どちらかの場に選べるモンスターがいる。\n\n【発動時】両方の場からモンスター1体を選び、「暗襲」か「回避」のどちらかを選んで付与する（対象が場を離れるまで）。その後、自分の場の「アサシン」系モンスターを攻撃力が高い順に2体まで自動で選び、各攻撃力+3（各対象が場を離れるまで）。同値なら場の順を優先する。",
+        "ko": "【발동 조건】어느 필드에든 선택할 수 있는 몬스터가 있다.\n\n【발동 시】양쪽 필드에서 몬스터 1체를 선택해 암습 또는 회피 중 하나를 골라 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지). 그 후 자신의 필드의 암살자 계열 몬스터를 공격력이 높은 순으로 최대 2체 자동으로 선택해 각각 공격력 +3(효과를 받은 각 몬스터가 필드를 떠날 때까지). 동률이면 필드 순서를 우선한다.",
+        "en": "【Play Requirement】There is an eligible monster on either field.\n\n【On Cast】Choose 1 monster on either field and give it your choice of Infiltrate or Evade (until the affected monster leaves the field). Then automatically select up to 2 of your Assassin-family monsters with the highest ATK; ties use field order. Each gets +3 ATK until it leaves the field."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -6089,21 +6001,17 @@
     },
     "COLOSSEUM_REST": {
       "nameJa": "コロシアムの休憩場",
-      "status": "reviewed-legacy-rework",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "a14fb1d9dce76d35d2f6c4939f717e4c8cf1f6a22cc45286aa34fe6950cc35d3",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "d51473dea75ea73c5827de1783243288f4e9806f6e30ac36d5633bf7ed7bc3e3",
       "textSha256": "8372a38f6893726e68be940539c90ca686fbf4554da3343015eb8dde9bb6fedf",
       "hooks": {
         "ench": "colosseumRest"
       },
       "before": {
-        "ja": "【自分のターン開始時】自分のリフトの「カル」1枚につき、自分の体力を1回復する。",
-        "ko": "【자신의 턴 시작 시】자신의 리프트의 컬 1장당 자신의 체력을 1 회복한다.",
-        "en": "【At the Start of Your Turn】Restore 1 of your HP for each Cull in your Rift."
+        "ja": "【自分のターン開始時】自分の体力を2回復する。自分のリフトに「カル」が10枚以上あれば、自分の場の卵以外のモンスター1体を選び、その蓄積ダメージを全て取り除く。",
+        "ko": "【자신의 턴 시작 시】자신의 체력을 2 회복한다. 자신의 리프트에 「컬」이 10장 이상이면 자신의 필드의 알 이외의 몬스터 1체를 선택해 쌓인 데미지를 모두 제거한다.",
+        "en": "【At the Start of Your Turn】Restore 2 of your HP. If your Rift contains at least 10 Culls, choose 1 non-Egg monster on your field and remove all its accumulated damage."
       },
       "after": {
         "ja": "【自分のターン開始時】自分の体力を2回復する。自分のリフトに「カル」が10枚以上あれば、自分の場の卵以外のモンスター1体を選び、その蓄積ダメージを全て取り除く。",
@@ -6162,32 +6070,6 @@
       },
       "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
-    "LAWLESS": {
-      "nameJa": "不法地帯",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "2fece0ece5813df302da91143c482a6a74164a39d74a9176fac76730638650bc",
-      "textSha256": "b08d1695d9631441617b04da4f2b5e8ca8c74b9397e8db49a0b0bf0472d48e63",
-      "hooks": {
-        "ench": "lawless"
-      },
-      "before": {
-        "ja": "【発動時】両方の場の、卵以外の全モンスターの最大体力を1にし、蓄積ダメージを取り除く（持続）。\n\n【いずれかのモンスター召喚時】後から召喚される卵以外のモンスターにも同じ処理を行う。",
-        "ko": "【발동 시】양쪽 필드의 알 이외 모든 몬스터의 최대 체력을 1로 만들고 누적 데미지를 제거한다(지속).\n\n【어느 쪽이든 몬스터 소환 시】이후 소환되는 알 이외 몬스터에도 같은 처리한다.",
-        "en": "【On Cast】Set every non-Egg monster's max HP to 1 and remove its accumulated damage (lasting).\n\n【When Either Player Summons a Monster】Apply the same change to non-Egg monsters summoned later."
-      },
-      "after": {
-        "ja": "【発動時】両方の場の、卵以外の全モンスターの最大体力を1にし、蓄積ダメージを取り除く（対象が場を離れるまで）。\n\n【いずれかのモンスター召喚時】後から召喚される卵以外のモンスターにも同じ処理を行う。",
-        "ko": "【발동 시】양쪽 필드의 알 이외 모든 몬스터의 최대 체력을 1로 만들고 누적 데미지를 제거한다(효과를 받은 몬스터가 필드를 떠날 때까지).\n\n【어느 쪽이든 몬스터 소환 시】이후 소환되는 알 이외 몬스터에도 같은 처리한다.",
-        "en": "【On Cast】Set every non-Egg monster's max HP to 1 and remove its accumulated damage (until the affected monster leaves the field).\n\n【When Either Player Summons a Monster】Apply the same change to non-Egg monsters summoned later."
-      },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
-    },
     "RIFT": {
       "nameJa": "次元の裂け目",
       "status": "reviewed-v94",
@@ -6214,21 +6096,17 @@
     },
     "FREE_REWARD": {
       "nameJa": "無償の対価",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "51fa053fe92cdc41ebe394bdc5f6198960b63d50271e02a276296678b819537a",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "90c148c8e8d3302b768e73faac6f2483509a88d69a14c192bf10564bf8bd5256",
       "textSha256": "5f3fa989ab1a1f56be7c1b7d360f8cbab041cc5466cfbc438db2648aecaa8fb9",
       "hooks": {
         "ench": "freeReward"
       },
       "before": {
-        "ja": "【自分のカード使用時】自分が購入コスト0のカードを使用するたび、カードを1枚引く。",
-        "ko": "【자신의 카드 사용 시】자신이 구매 코스트 0 카드를 사용할 때마다 카드를 1장 뽑는다.",
-        "en": "【When You Play a Card】Whenever you play a card with purchase cost 0, draw 1 card."
+        "ja": "【場にある間】どちらかのプレイヤーが購入コスト0のカードを使うたび、自分はカードを1枚引く。",
+        "ko": "【필드에 있는 동안】누구든 구매 코스트 0인 카드를 사용할 때마다 자신은 카드 1장을 뽑는다.",
+        "en": "【While on the Field】Whenever either player plays a card with purchase cost 0, draw 1 card."
       },
       "after": {
         "ja": "【場にある間】どちらかのプレイヤーが購入コスト0のカードを使うたび、自分はカードを1枚引く。",
@@ -6238,21 +6116,17 @@
     },
     "NO_PAIN": {
       "nameJa": "ノーペインノーゲイン",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "ba4844b8c75a287de91fc6670fc772358cd169fd43e529d49df817cc3d44813e",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "02b2bccc00410437d4538222d91382ce1116559a66b19335065f16a9589cc0c3",
       "textSha256": "3e1f466b5ecf1a45f0bae46fc00f3ee684b3c7575228e0bba5e20bdd7ef7d4ec",
       "hooks": {
         "ench": "painGain"
       },
       "before": {
-        "ja": "【自分がダメージを受けた時】自分がダメージを受けるたび、ダイス1個を振る。6なら、自分の最大マナ+1。",
-        "ko": "【자신이 데미지를 받을 때】자신이 데미지를 받을 때마다 주사위 1개를 굴린다. 6이면 자신의 최대 마나 +1.",
-        "en": "【When You Take Damage】Whenever you take damage, roll 1 die. On 6, increase your max mana by 1."
+        "ja": "【自分がダメージを受けた時】自分がダメージを受けるたび、ダイス1個を振る。6なら、自分のマナ水晶+1。",
+        "ko": "【자신이 데미지를 받을 때】자신이 데미지를 받을 때마다 주사위 1개를 굴린다. 6이면 자신의 마나 수정 +1.",
+        "en": "【When You Take Damage】Whenever you take damage, roll 1 die. On 6, increase your mana crystals by 1."
       },
       "after": {
         "ja": "【自分がダメージを受けた時】自分がダメージを受けるたび、ダイス1個を振る。6なら、自分のマナ水晶+1。",
@@ -6288,22 +6162,24 @@
       "nameJa": "初心",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "c8ac3898d7fd5ee47b23535d29b324b48fa245d0c561364d054fb41ecc900ec6",
-      "textSha256": "b73eb64ce26394766be232b4d4024a4e1c4e05ab25fadcb22725ade29f80af4c",
+      "definitionSha256": "644dd6ff89ed915b483d996319c9ec918845ca1426366c2b9fd0bef5c4ae51e1",
+      "textSha256": "9b0acbf2f451733722654a6dc4f8d1fb40c554891821ea29ce94670f680f5743",
       "hooks": {
         "act": "beginnerMind"
       },
       "before": {
         "ja": "【発動条件】この魔法以外の自分の手札が0枚。\n\n【発動時】カードを4枚引く。",
-        "ko": "【발동 조건】이 마법 외 자신의 패가 0장.\n\n【발동시】카드를 4장 뽑는다.",
+        "ko": "【발동 조건】이 마법 외 자신의 패가 0장.\n\n【발동 시】카드를 4장 뽑는다.",
         "en": "【Play Requirement】You have no other cards in hand.\n\n【On Cast】Draw 4 cards."
       },
       "after": {
-        "ja": "【発動条件】この魔法以外の自分の手札が0枚。\n\n【発動時】カードを4枚引く。",
-        "ko": "【발동 조건】이 마법 외 자신의 패가 0장.\n\n【발동 시】카드를 4장 뽑는다.",
-        "en": "【Play Requirement】You have no other cards in hand.\n\n【On Cast】Draw 4 cards."
+        "ja": "【発動条件】このカード以外の自分の手札が2枚以下。\n\n【発動時】カードを7枚引く。",
+        "ko": "【발동 조건】이 카드 이외의 자신의 패가 2장 이하.\n\n【발동 시】카드를 7장 뽑는다.",
+        "en": "【Play Requirement】You have at most 2 other cards in hand.\n\n【On Cast】Draw 7 cards."
       }
     },
     "VOID_RITE": {
@@ -6314,20 +6190,20 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "ac0c1101dbcc062e9b13c22eab3e29125841dcf0f6356f030e0da65acf4aab60",
-      "textSha256": "00a52e6f39f6392564f07505ba0bb1f51ef7a77e186a5e7e3c59d8ab8ccde6e1",
+      "definitionSha256": "ac6d2301fc11f42823c17f2b2b1d0d90c4a230db4d7aadeaae95833e554cb942",
+      "textSha256": "7a6f55d7e6332b8742cadb4a2c15f835984a2bcecf18477d8b25b90f83b7c8e4",
       "hooks": {
         "act": "voidAll"
       },
       "before": {
-        "ja": "【発動時】両方の場の、卵以外の全モンスターに「虚無」を付与する（持続）。",
-        "ko": "【발동 시】양쪽 필드의 알 이외 모든 몬스터에 공허 부여한다(지속).",
-        "en": "【On Cast】Give Void to all non-Egg monsters on both fields (lasting)."
-      },
-      "after": {
         "ja": "【発動時】両方の場の、卵以外の全モンスターに「虚無」を付与する（対象が場を離れるまで）。",
         "ko": "【발동 시】양쪽 필드의 알 이외 모든 몬스터에 공허 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
         "en": "【On Cast】Give Void to all non-Egg monsters on both fields (until the affected monster leaves the field)."
+      },
+      "after": {
+        "ja": "【発動時】両方の場の、卵以外の全モンスターに「虚無」を付与する（対象が場を離れるまで）。 マナは付与前に自分の場で既に虚無を持つモンスターの数だけ得る。",
+        "ko": "【발동 시】양쪽 필드의 알 이외 모든 몬스터에 공허 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지). 부여 전에 자신의 필드에서 이미 공허를 지닌 몬스터 수만큼 마나를 얻는다.",
+        "en": "【On Cast】Give Void to all non-Egg monsters on both fields (until the affected monster leaves the field). Gain mana equal to the number of monsters on your field that already had Void before this effect."
       },
       "reviewedAt": "2026-10-30",
       "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
@@ -6385,44 +6261,45 @@
         "en"
       ],
       "definitionSha256": "477e10a3a9ba2837146ea450611d2eec7442bd7c3ac6bdbabb1e71f1a5828bb3",
-      "textSha256": "06f619206d1208e6e3312cb31e9273df1649b466a6aad1d9e9c0e2829e5c55b9",
+      "textSha256": "e339630d447a762a39e92efb790857f33c57d140e17d6ab672d6ea4c6014d976",
       "hooks": {
         "act": "buyout"
       },
       "before": {
-        "ja": "【発動条件】このターン、自分が同名カードを合計2枚以上購入している。\n\n【発動時】自分の最大マナ+1。",
-        "ko": "【발동 조건】이번 턴 자신이 같은 이름의 카드를 합계 2장 이상 구매했다.\n\n【발동 시】자신의 최대 마나 +1.",
-        "en": "【Play Requirement】You bought at least 2 cards with the same name this turn.\n\n【On Cast】Increase your max mana by 1."
-      },
-      "after": {
         "ja": "【発動条件】このターン、自分が同名カードを合計2枚以上購入している。\n\n【発動時】自分のマナ水晶+1。",
         "ko": "【발동 조건】이번 턴 자신이 같은 이름의 카드를 합계 2장 이상 구매했다.\n\n【발동 시】자신의 마나 수정 +1.",
         "en": "【Play Requirement】You bought at least 2 cards with the same name this turn.\n\n【On Cast】Increase your mana crystals by 1."
+      },
+      "after": {
+        "ja": "【発動条件】このターン、自分が同名カードを合計2枚以上購入している。\n\n【発動時】自分のマナ水晶+1。 自分の体力を8回復する。",
+        "ko": "【발동 조건】이번 턴 자신이 같은 이름의 카드를 합계 2장 이상 구매했다.\n\n【발동 시】자신의 마나 수정 +1. 자신의 체력을 8 회복한다.",
+        "en": "【Play Requirement】You bought at least 2 cards with the same name this turn.\n\n【On Cast】Increase your mana crystals by 1. Restore 8 of your HP."
       },
       "reviewedAt": "2026-10-31"
     },
     "PENANCE": {
       "nameJa": "苦行の対価",
-      "status": "reworked",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "f958c56ac8e3098dd5891b18b2ca80118cbe6983a9e438ec594c24f9c25b4c11",
-      "textSha256": "04c7bc27523a5621d41a4ad302ebc0f43d8dbf41f5e497943ef93297bbb21b42",
+      "definitionSha256": "1fe773fee8298eea535a6df26e14fd097ae24c38a8070fb3df69267543f079e5",
+      "textSha256": "036eebef2a7893e44940cb336706f08e2be553c56cc1d96c8c65128941c9275d",
       "hooks": {
-        "act": "penance"
+        "act": "penance",
+        "quick": true
       },
       "before": {
-        "ja": "【発動条件】自分に烙印カウンターが1個以上ある。\n\n【発動時】自分の烙印カウンター1個につき、自分のマナ水晶+2、自分の体力を10回復する（カウンターは消費しない）。",
-        "ko": "【발동 조건】자신에게 낙인 카운터가 1개 이상 있다.\n\n【발동 시】자신의 낙인 카운터 1개당 자신의 마나 수정 +2, 자신의 체력을 10 회복한다(카운터는 소비하지 않음).",
-        "en": "【Play Requirement】You have at least 1 Brand counter.\n\n【On Cast】For each of your Brand counters, increase your mana crystals by 2 and restore 10 of your HP; do not spend the counters."
-      },
-      "after": {
         "ja": "【発動条件】自分に烙印がある。\n\n【発動時】自分の烙印を1個消費し、マナ水晶を1個得る。自分の体力を15回復する。",
         "ko": "【발동 조건】자신에게 낙인이 있다.\n\n【발동 시】자신의 낙인 1개를 소모하고 마나 수정 1개를 얻는다. 자신의 체력을 15 회복한다.",
         "en": "【Play Requirement】You have a Brand.\n\n【On Cast】Spend 1 Brand, gain 1 mana crystal and restore 15 HP."
+      },
+      "after": {
+        "ja": "【購入条件】自分に烙印がある。\n\n【購入時】自分の烙印を1個消費し、マナ水晶を1個得る。自分の体力を15回復する。",
+        "ko": "【구매 조건】자신에게 낙인이 있다.\n\n【구매 시】자신의 낙인 1개를 소모하고 마나 수정 1개를 얻는다. 자신의 체력을 15 회복한다.",
+        "en": "【Purchase Requirement】You have Brand.\n\n【On Purchase】Spend 1 Brand, gain 1 mana crystal, and restore 15 HP."
       }
     },
     "PACK_INSTINCT": {
@@ -6455,22 +6332,24 @@
       "nameJa": "精神放出術",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "c121fa0bb91b6db8d718892326898825dde4956f2d8633e93e258d016bdbc3e7",
-      "textSha256": "aa3b95e9e1e5cf0248f69201262d0dbffa9d96c0741fa0741f7f6c6021cb8ee0",
+      "textSha256": "c9d3d743f95f6439ed557698c9d54c020ed8c1d4d367b4e38330d32f97f797a2",
       "hooks": {
         "act": "mindBurst"
       },
       "before": {
-        "ja": "【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
-        "ko": "【발동시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×4 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
-        "en": "【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
-      },
-      "after": {
         "ja": "【発動条件】自分の場に気合用カウンターを1個以上持つモンスターがいる。\n\n【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×4ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
         "ko": "【발동 조건】자신의 필드에 기합용 카운터를 1개 이상 가진 몬스터가 있다.\n\n【발동 시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×4 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
         "en": "【Play Requirement】You control a monster with at least 1 Guts counter.\n\n【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 4 times the total removed; other counters are unaffected."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場に気合用カウンターを1個以上持つモンスターがいる。\n\n【発動時】自分の場の全モンスターから、気合に使うカウンターを全て取り除く。取り除いた合計数×5ダメージを相手に与える（それ以外のカウンターは取り除かない）。",
+        "ko": "【발동 조건】자신의 필드에 기합용 카운터를 1개 이상 가진 몬스터가 있다.\n\n【발동 시】자신의 필드의 모든 몬스터에서 기합에 쓰이는 카운터를 전부 제거한다. 제거한 합계 수×5 데미지를 상대에게 준다(다른 카운터는 제거하지 않음).",
+        "en": "【Play Requirement】You control a monster with at least 1 Guts counter.\n\n【On Cast】Remove all counters used for Guts from your monsters. Deal damage to the opponent equal to 5 times the total removed; other counters are unaffected."
       },
       "amendment": "2026-10-29: effect and requirement audit",
       "amendmentBefore": {
@@ -6508,14 +6387,14 @@
     },
     "Q_RIFT": {
       "nameJa": "リフト研究",
-      "status": "reworked",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "c27f6cb076f366205c4205f6215b655fea698d887aea0176038219f1946ec052",
-      "textSha256": "6fe7f221b5884eca01f9858383ec8d83e08cfda183a6732db1b83713326e21eb",
+      "textSha256": "01334e59e66be4f247c3c7ff099442a065144ac47e636a19ab2368d865338a6f",
       "hooks": {
         "quest": {
           "event": "exile",
@@ -6523,14 +6402,14 @@
         }
       },
       "before": {
-        "ja": "【達成条件】設置後、自分のリフトにカードが累計10枚追加される。\n\n【達成時】新しい「カル」7枚を自分のリフトに追加する。",
-        "ko": "【달성 조건】설치 후 자신의 리프트에 카드가 누적 10장 추가된다.\n\n【달성 시】새로운 컬 7장을 자신의 리프트에 추가한다.",
-        "en": "【Completion Requirement】After deployment, have a total of 10 cards added to your Rift.\n\n【On Completion】Create 7 new Culls in your Rift."
-      },
-      "after": {
         "ja": "【達成条件】設置後、自分のリフトにカードが累計8枚追加される。\n\n【達成時】新しい「カル」7枚を自分のリフトに追加する。",
         "ko": "【달성 조건】설치 후 자신의 리프트에 카드가 누적 8장 추가된다.\n\n【달성 시】새로운 컬 7장을 자신의 리프트에 추가한다.",
         "en": "【Completion Requirement】After deployment, have a total of 8 cards added to your Rift.\n\n【On Completion】Create 7 new Culls in your Rift."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、自分のリフトにカードが累計8枚追加される。\n\n【達成時】新しい「カル」10枚を自分のリフトに追加する。",
+        "ko": "【달성 조건】설치 후 자신의 리프트에 카드가 누적 8장 추가된다.\n\n【달성 시】새로운 컬 10장을 자신의 리프트에 추가한다.",
+        "en": "【Completion Requirement】After deployment, have a total of 8 cards added to your Rift.\n\n【On Completion】Create 10 new Culls in your Rift."
       }
     },
     "Q_BRAND": {
@@ -6562,14 +6441,14 @@
     },
     "Q_TORI": {
       "nameJa": "精霊 - トリ",
-      "status": "reworked",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "af5dfa9ddd7ef75aa50bbdf5f2e16c69084891f1075a3a9738eb59b521219ce9",
-      "textSha256": "1fa7f7a8b626de3f8e38c1544d1c54bd535c81b8081979cb6866175d7bd6ace0",
+      "textSha256": "493c7e7dbd0d4b8b996d67bca129e128c18403d7cd8a5342e62b583fe95c7982",
       "hooks": {
         "quest": {
           "event": "emptyTurn",
@@ -6577,14 +6456,14 @@
         }
       },
       "before": {
-        "ja": "【達成条件】設置後、自分の場にモンスターがいない状態で、自分のターンを5回終了する。\n\n【達成時】自分の体力+30。",
-        "ko": "【달성 조건】설치 후 자신의 필드에 몬스터가 없는 상태로 자신의 턴 5회 종료한다.\n\n【달성 시】자신의 체력 +30.",
-        "en": "【Completion Requirement】After deployment, end 5 of your turns with no monsters on your field.\n\n【On Completion】Restore 30 of your HP."
-      },
-      "after": {
         "ja": "【達成条件】設置後、自分の場にモンスターがいない状態で、自分のターンを3回終了する。\n\n【達成時】自分の体力+18。",
         "ko": "【달성 조건】설치 후 자신의 필드에 몬스터가 없는 상태로 자신의 턴 3회 종료한다.\n\n【달성 시】자신의 체력 +18.",
         "en": "【Completion Requirement】After deployment, end 3 of your turns with no monsters on your field.\n\n【On Completion】Restore 18 of your HP."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、自分の場にモンスターがいない状態で、自分のターンを3回終了する。\n\n【達成時】自分の体力+20。",
+        "ko": "【달성 조건】설치 후 자신의 필드에 몬스터가 없는 상태로 자신의 턴 3회 종료한다.\n\n【달성 시】자신의 체력 +20.",
+        "en": "【Completion Requirement】After deployment, end 3 of your turns with no monsters on your field.\n\n【On Completion】Restore 20 of your HP."
       }
     },
     "Q_WINTER": {
@@ -6595,35 +6474,31 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "b3f673b486d0811e10319028ecc4f47353b54fd87d995d07d1153f79ceac376a",
-      "textSha256": "5a6652b38a7efe471168246833379d3c824bdad091e05e96aad27ca50d246a58",
+      "definitionSha256": "a68fc7bf0089cba498e1c9bc74c34cbddc95c65b4b2be020ace80264be2649a1",
+      "textSha256": "73440a5d19ae42d5fdd98ea9ec90c63e42dff649fdc09cb4048a07e26a1f749e",
       "hooks": {
         "quest": {
           "event": "healthGain",
-          "target": 30
+          "target": 24
         }
       },
       "before": {
-        "ja": "【達成条件】設置後、自分の体力を累計30上昇させる。\n\n【達成時】自分の最大マナ+2。",
-        "ko": "【달성 조건】설치 후 자신의 체력을 누적 30 올린다.\n\n【달성 시】자신의 최대 마나 +2.",
-        "en": "【Completion Requirement】After deployment, increase your HP by a total of 30.\n\n【On Completion】Increase your max mana by 2."
-      },
-      "after": {
         "ja": "【達成条件】設置後、自分の体力を累計30上昇させる。\n\n【達成時】自分のマナ水晶+2。",
         "ko": "【달성 조건】설치 후 자신의 체력을 누적 30 올린다.\n\n【달성 시】자신의 마나 수정 +2.",
         "en": "【Completion Requirement】After deployment, increase your HP by a total of 30.\n\n【On Completion】Increase your mana crystals by 2."
+      },
+      "after": {
+        "ja": "【達成条件】設置後、自分の体力を累計24上昇させる。\n\n【達成時】自分のマナ水晶+2。",
+        "ko": "【달성 조건】설치 후 자신의 체력을 누적 24 올린다.\n\n【달성 시】자신의 마나 수정 +2.",
+        "en": "【Completion Requirement】After deployment, increase your HP by a total of 24.\n\n【On Completion】Increase your mana crystals by 2."
       },
       "reviewedAt": "2026-10-31"
     },
     "Q_TRIBE": {
       "nameJa": "一族の誓い",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "aefb86fd76d32e44fe3b3eb1a88710616c4835350a3c75023ce4ea322dc4540c",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "e5910da48fe84dc2b0a926bf5ec77043b050a31defb41a01f03352e7a9d15311",
       "textSha256": "dee0dc9476f76c808f5e081b73f6f7fa5b305b1eb5e4bd9fdddb574e22eb01a8",
       "hooks": {
         "quest": {
@@ -6632,9 +6507,9 @@
         }
       },
       "before": {
-        "ja": "【達成条件】設置後、自分が種族モンスターを累計6体召喚する。\n\n【達成時】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。",
-        "ko": "【달성 조건】설치 후 자신이 종족 몬스터를 누적 6체 소환한다.\n\n【달성 시】자신의 필드 종족 몬스터와 같은 종족이며 자신의 필드에 동명이 없는 몬스터 1체를 카드 목록에서 선택해 새로 자신의 필드에 소환한다.",
-        "en": "【Completion Requirement】After deployment, summon a total of 6 tribal monsters.\n\n【On Completion】Choose 1 monster from the catalog that shares a tribe with a monster you control and has no same-name monster on your field; summon a new copy to your field."
+        "ja": "【達成条件】設置後、自分が種族モンスターを累計3体召喚する。\n\n【達成時】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。",
+        "ko": "【달성 조건】설치 후 자신이 종족 몬스터를 누적 3체 소환한다.\n\n【달성 시】자신의 필드 종족 몬스터와 같은 종족이며 자신의 필드에 동명이 없는 몬스터 1체를 카드 목록에서 선택해 새로 자신의 필드에 소환한다.",
+        "en": "【Completion Requirement】After deployment, summon a total of 3 tribal monsters.\n\n【On Completion】Choose 1 monster from the catalog that shares a tribe with a monster you control and has no same-name monster on your field; summon a new copy to your field."
       },
       "after": {
         "ja": "【達成条件】設置後、自分が種族モンスターを累計3体召喚する。\n\n【達成時】自分の場にいる種族モンスターと同じ種族で、自分の場に同名がいないモンスター1体をカード一覧から選び、新たに自分の場に召喚する。",
@@ -6671,13 +6546,9 @@
     },
     "Q_DECAY": {
       "nameJa": "どくびし",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "5d2bcc0331867fe2004bc381b62282b364b8392c63d1d837956c158aa937e838",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "e4a8984f0f36624e1b36a8932cf710286120cc0810d8d158ef45c73fc1aa809d",
       "textSha256": "3196172a475607a60ebaf421c585416cc190a3aa90ac441b40b0bf8a6f0ca749",
       "hooks": {
         "quest": {
@@ -6686,9 +6557,9 @@
         }
       },
       "before": {
-        "ja": "【達成条件】設置後、腐敗の効果で相手モンスターを4体破壊する。\n\n【達成時】相手プレイヤーに30ダメージを与える。",
-        "ko": "【달성 조건】설치 후 부패 효과로 상대 몬스터 4체 파괴한다.\n\n【달성 시】상대 플레이어에게 30 데미지를 준다.",
-        "en": "【Completion Requirement】After deployment, destroy 4 enemy monsters through Decay.\n\n【On Completion】Deal 30 damage to the opponent."
+        "ja": "【達成条件】設置後、腐敗の効果で相手モンスターを3体破壊する。\n\n【達成時】相手プレイヤーに15ダメージを与え、烙印カウンターを1個付与する。",
+        "ko": "【달성 조건】설치 후 부패 효과로 상대 몬스터 3체 파괴한다.\n\n【달성 시】상대 플레이어에게 15 데미지를 주고 낙인 카운터 1개를 부여한다.",
+        "en": "【Completion Requirement】After deployment, destroy 3 enemy monsters through Decay.\n\n【On Completion】Deal 15 damage to the opponent and give them 1 Brand counter."
       },
       "after": {
         "ja": "【達成条件】設置後、腐敗の効果で相手モンスターを3体破壊する。\n\n【達成時】相手プレイヤーに15ダメージを与え、烙印カウンターを1個付与する。",
@@ -6698,13 +6569,9 @@
     },
     "Q_ASSASSIN": {
       "nameJa": "アサシンギルドの伝達",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "5138ef7a16d4e4c1176453af51a96cac38446774a90daf7ddf4ec0f798c41a19",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "76e6d70c68ed4750fbc143fb8b0700992645a0430ec6b04371cf2cce5426a2c2",
       "textSha256": "8304443829ee3c0ef9b306d124ce44274b6fcd7881a4682678ef6a994c023181",
       "hooks": {
         "quest": {
@@ -6713,9 +6580,9 @@
         }
       },
       "before": {
-        "ja": "【達成条件】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計6回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【達成時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。",
-        "ko": "【달성 조건】설치 후 자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 누적 6회 데미지(암살자 길드 지부의 추가 데미지 발동도 1회로 계산).\n\n【달성 시】상대의 필드의 아우라가 없는 몬스터·영구 마법·퀘스트 중 1장을 선택해 상대의 리프트로 보낸다.",
-        "en": "【Completion Requirement】After deployment, deal attack damage to the opponent with your Assassin-family monsters a total of 6 times; each Assassins' Guild Branch bonus-damage trigger also counts as 1.\n\n【On Completion】Choose 1 enemy monster without Aura, persistent spell, or quest and send it to the opponent's Rift."
+        "ja": "【達成条件】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計3回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【達成時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。",
+        "ko": "【달성 조건】설치 후 자신 암살자 계열 몬스터의 공격으로 상대 플레이어에게 누적 3회 데미지(암살자 길드 지부의 추가 데미지 발동도 1회로 계산).\n\n【달성 시】상대의 필드의 아우라가 없는 몬스터·영구 마법·퀘스트 중 1장을 선택해 상대의 리프트로 보낸다.",
+        "en": "【Completion Requirement】After deployment, deal attack damage to the opponent with your Assassin-family monsters a total of 3 times; each Assassins' Guild Branch bonus-damage trigger also counts as 1.\n\n【On Completion】Choose 1 enemy monster without Aura, persistent spell, or quest and send it to the opponent's Rift."
       },
       "after": {
         "ja": "【達成条件】設置後、自分の「アサシン」系モンスターの攻撃で相手プレイヤーに累計3回ダメージを与える（「アサシンギルド支部」の追加ダメージ発動も1回と数える）。\n\n【達成時】相手の場の、オーラを持たないモンスター・永続魔法・クエストから1枚を選び、相手のリフトへ送る。",
@@ -6779,22 +6646,24 @@
       "nameJa": "生存をかけた戦い",
       "status": "reworded",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "5c2055231b16e3a8e858481ee5c057426623ad38603ba1208a53486ed3916d54",
-      "textSha256": "e30683583287dd9ec33dbac972dea3ad40b762fe68537af0b33bd76a5d7f80b9",
+      "textSha256": "20cfeeb4f0aa99cf485c5a951d3ff46244fcff67b9622d415810c6c12e7b2df6",
       "hooks": {
         "quick": true
       },
       "before": {
         "ja": "【購入条件】自分の体力が15以下。\n\n【購入時】「生きているダンジョン」1体を自分の場に召喚する。",
-        "ko": "【구매 조건】자신의 체력 15 이하.\n\n【구매시】살아있는 던전 1체를 자신의 필드에 소환한다.",
+        "ko": "【구매 조건】자신의 체력 15 이하.\n\n【구매 시】살아있는 던전 1체를 자신의 필드에 소환한다.",
         "en": "【Purchase Requirement】You have 15 HP or less.\n\n【On Purchase】Summon 1 Living Dungeon to your field."
       },
       "after": {
-        "ja": "【購入条件】自分の体力が15以下。\n\n【購入時】「生きているダンジョン」1体を自分の場に召喚する。",
-        "ko": "【구매 조건】자신의 체력 15 이하.\n\n【구매 시】살아있는 던전 1체를 자신의 필드에 소환한다.",
-        "en": "【Purchase Requirement】You have 15 HP or less.\n\n【On Purchase】Summon 1 Living Dungeon to your field."
+        "ja": "【購入条件】自分の体力が15以下。\n\n【購入時】「生きているダンジョン」2体を自分の場に召喚する。",
+        "ko": "【구매 조건】자신의 체력 15 이하.\n\n【구매 시】살아있는 던전 2체를 자신의 필드에 소환한다.",
+        "en": "【Purchase Requirement】You have 15 HP or less.\n\n【On Purchase】Summon 2 Living Dungeon to your field."
       }
     },
     "QUICK_POISON": {
@@ -7278,27 +7147,27 @@
     },
     "MERC_ART": {
       "nameJa": "傭兵術",
-      "status": "reworked",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "afd167413819c1734bffa8a10f1317bcfcd5770a029e6c4168fafbe396a689bd",
-      "textSha256": "b817ccaae0aa2b9f320bd2176b4a7fa20952947c6f18b0e10184eaa2612d2cfb",
+      "definitionSha256": "c99b2597b7a18be3de676d1667a933a82ac09cae044565d5fa4225957045d499",
+      "textSha256": "fb045c4d6d7e05519b106a1bb1528faddbecba273dd942dad1a393cc8890e3d4",
       "hooks": {
         "act": "expansion",
         "ench": "mercArt"
       },
       "before": {
-        "ja": "【場にある間】自分の「傭兵」系モンスターの召喚時・ターン開始時効果を2回行う（重複なし）。自分のデッキ構成に「傭兵」系が2種類以上あれば、自分の場の全ての「傭兵」系モンスターの攻撃力+3・体力+3。",
-        "ko": "【필드에 있는 동안】자신 용병 계열 몬스터의 소환시·턴 시작시 효과를 2회 실행(중첩 불가). 자신의 덱 구성에 용병 계열이 2종류 이상이면 자신의 필드 모든 용병 계열 몬스터 공격력 +3, 체력 +3.",
-        "en": "【While on the Field】Resolve your Mercenary-family monsters' summon and turn-start effects 2 times; does not stack. If your deck composition has at least 2 distinct Mercenary names, all your Mercenary-family monsters get +3 ATK and +3 HP."
-      },
-      "after": {
         "ja": "【いずれかのモンスター召喚時】召喚されたモンスターの攻撃力+1。そのモンスターに「反撃」を付与する。\n\n【場にある間】自分の「傭兵」系モンスターの召喚時・ターン開始時効果を2回行う（重複なし）。自分のデッキ構成に「傭兵」系が2種類以上あれば、自分の場の全ての「傭兵」系モンスターの攻撃力+3・体力+3。",
         "ko": "【어느 쪽이든 몬스터 소환 시】소환된 몬스터의 공격력 +1. 그 몬스터에게 반격을 부여한다.\n\n【필드에 있는 동안】자신 용병 계열 몬스터의 소환시·턴 시작시 효과를 2회 실행(중첩 불가). 자신의 덱 구성에 용병 계열이 2종류 이상이면 자신의 필드 모든 용병 계열 몬스터 공격력 +3, 체력 +3.",
         "en": "【When Either Player Summons a Monster】The summoned monster gains +1 ATK and Counter.\n\n【While on the Field】Resolve your Mercenary-family monsters' summon and turn-start effects 2 times; does not stack. If your deck composition has at least 2 distinct Mercenary names, all your Mercenary-family monsters get +3 ATK and +3 HP."
+      },
+      "after": {
+        "ja": "【自分のモンスター召喚時】召喚されたモンスターの攻撃力+1。\n\n【場にある間】自分がマナを得るたび、自分の場の全モンスターの攻撃力+1。これらの強化は対象が場を離れるまで続く。",
+        "ko": "【자신의 몬스터 소환 시】소환된 몬스터의 공격력 +1.\n\n【필드에 있는 동안】자신이 마나를 얻을 때마다 자신 필드의 모든 몬스터의 공격력 +1. 강화는 효과를 받은 몬스터가 필드를 떠날 때까지 지속된다.",
+        "en": "【When You Summon a Monster】The summoned monster gains 1 ATK.\n\n【While on the Field】Whenever you gain mana, all monsters on your field gain 1 ATK. Each bonus lasts until the affected monster leaves the field."
       }
     },
     "Q_CHEAT": {
@@ -7502,21 +7371,17 @@
     },
     "ROGUE_ART": {
       "nameJa": "盗賊の心得",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "733d0c2fd40f66fb950db829582cfa4b5b7c16fe93d212a4931d2fe4590a954f",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "cbe7d1a69df149df021c01f3a084fcd75dc5f61488f64e52762e3382d3b67feb",
       "textSha256": "503073239de89ef2f5ac921fbd36334ddd41aad342c4be9699f54ea2f661eec3",
       "hooks": {
         "act": "expansion"
       },
       "before": {
-        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（持続）。いなければ、自分の場のモンスター1体を選び、回避を付与する（持続）。",
-        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【코스트】자신의 필드에 암살자 계열 몬스터가 있으면 이 카드의 구매·시전 코스트는 0.\n\n【발동 시】자신의 필드에 암살자 계열 몬스터가 있으면 자신의 필드의 모든 몬스터에 회피를 부여한다(지속). 없으면 자신의 필드의 몬스터 1체를 선택해 회피를 부여한다(지속).",
-        "en": "【Play Requirement】You control a monster.\n\n【Cost】If you control an Assassin-family monster, this card costs 0 to buy and cast.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (lasting). Otherwise, choose 1 monster on your field and give it Evade (lasting)."
+        "ja": "【発動条件】自分の場にモンスターがいる。\n\n【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入コスト・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（対象が場を離れるまで）。いなければ、自分の場のモンスター1体を選び、回避を付与する（対象が場を離れるまで）。",
+        "ko": "【발동 조건】자신의 필드에 몬스터가 있다.\n\n【코스트】자신의 필드에 암살자 계열 몬스터가 있으면 이 카드의 구매 코스트·발동 코스트는 0.\n\n【발동 시】자신의 필드에 암살자 계열 몬스터가 있으면 자신의 필드의 모든 몬스터에 회피를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지). 없으면 자신의 필드의 몬스터 1체를 선택해 회피를 부여한다(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【Play Requirement】You control a monster.\n\n【Cost】If you control an Assassin-family monster, this card’s purchase cost and cast cost are 0.\n\n【On Cast】If you control an Assassin-family monster, give Evade to all monsters on your field (until the affected monster leaves the field). Otherwise, choose 1 monster on your field and give it Evade (until the affected monster leaves the field)."
       },
       "after": {
         "ja": "【発動条件】自分の場にモンスターがいる。\n\n【コスト】自分の場に「アサシン」系モンスターがいれば、このカードの購入コスト・発動コストは0。\n\n【発動時】自分の場に「アサシン」系モンスターがいれば、自分の場の全モンスターに回避を付与する（対象が場を離れるまで）。いなければ、自分の場のモンスター1体を選び、回避を付与する（対象が場を離れるまで）。",
@@ -7587,12 +7452,9 @@
     },
     "BLACK_INFINITY": {
       "nameJa": "黒魔法：インフィニティ",
-      "status": "reworded",
-      "changedLocales": [
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "a5b8eb0904fab1912782e99c9f94a1c1dfe25f8c7f2bd12bbdf3ac1d7c1adf58",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "e5773f843819f0e633ea73be783e3af3ad24b16841644bc02df2774b41fda6e6",
       "textSha256": "12e51ba36b6c8e1b43668722148bae3d272d2d8418e1ce1fabbe9ff012b5613f",
       "hooks": {
         "act": "expansion",
@@ -7600,8 +7462,8 @@
       },
       "before": {
         "ja": "【発動条件】このターン、両プレイヤーの魔法がプレイヤー・モンスターに与えたダメージが累計5以上。\n\n【場にある間】自分プレイヤーへの魔法ダメージを無効にし、防いだダメージ量と同じ枚数の新しい「カル」を自分のリフトに追加する。\n\n【期間】自分のターン開始を6回迎えると終了する。",
-        "ko": "【발동 조건】이번 턴 양 플레이어의 마법이 플레이어·몬스터에게 준 데미지 합계 5 이상.\n\n【필드에 놓인 동안】자신 플레이어에게 오는 마법 데미지를 막고 막은 데미지 수만큼 새로운 컬을 자신의 리프트에 추가한다.\n\n【기간】자신의 턴 시작 6회 후 종료한다.",
-        "en": "【Play Requirement】Spells from both players have dealt at least 5 total damage to players or monsters this turn.\n\n【While Deployed】Prevent spell damage to you and create that many new Culls in your Rift.\n\n【Duration】Expires at your 6th subsequent turn start."
+        "ko": "【발동 조건】이번 턴 양 플레이어의 마법이 플레이어·몬스터에게 준 데미지 합계 5 이상.\n\n【필드에 있는 동안】자신 플레이어에게 오는 마법 데미지를 막고 막은 데미지 수만큼 새로운 컬을 자신의 리프트에 추가한다.\n\n【기간】자신의 턴 시작 6회 후 종료한다.",
+        "en": "【Play Requirement】Spells from both players have dealt at least 5 total damage to players or monsters this turn.\n\n【While on the Field】Prevent spell damage to you and create that many new Culls in your Rift.\n\n【Duration】Expires at your 6th subsequent turn start."
       },
       "after": {
         "ja": "【発動条件】このターン、両プレイヤーの魔法がプレイヤー・モンスターに与えたダメージが累計5以上。\n\n【場にある間】自分プレイヤーへの魔法ダメージを無効にし、防いだダメージ量と同じ枚数の新しい「カル」を自分のリフトに追加する。\n\n【期間】自分のターン開始を6回迎えると終了する。",
@@ -7732,21 +7594,17 @@
     },
     "SOUL_HARVEST": {
       "nameJa": "魂の収穫",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "92c68731378b1dcc89607427b616f6d4ec9eb860f1e7d9f9d8168466eaa19cf0",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "29fd2e216e124fd47fb72b709c04cb71af7fa7a024bb9e09da6b0fa31f85f574",
       "textSha256": "27332314e1d4f375e9ea4bc4c7f74446be3fb16af5ba1ebb5d482e70f40ae5f7",
       "hooks": {
         "act": "expansion"
       },
       "before": {
-        "ja": "【発動時】相手のデッキ構成にある呪い1枚につき相手プレイヤーに4ダメージを与える。",
-        "ko": "【발동 시】상대의 덱 구성의 저주 1장당 상대 플레이어에게 4 데미지를 준다.",
-        "en": "【On Cast】Deal 4 damage to the opponent per Curse in their deck composition."
+        "ja": "【発動時】両方の場から「虚無」を持つモンスター1体を選んで破壊する。「オーラ」を持つモンスターも選べる。",
+        "ko": "【발동 시】양쪽 필드에서 공허를 가진 몬스터 1체를 선택해 파괴한다. 아우라를 가진 몬스터도 선택할 수 있다.",
+        "en": "【On Cast】Choose and destroy 1 monster with Void on either field. You can choose a monster with Aura."
       },
       "after": {
         "ja": "【発動時】両方の場から「虚無」を持つモンスター1体を選んで破壊する。「オーラ」を持つモンスターも選べる。",
@@ -7756,18 +7614,16 @@
     },
     "ANESTHESIA": {
       "nameJa": "麻酔",
-      "status": "reworded",
-      "changedLocales": [
-        "ko"
-      ],
-      "definitionSha256": "2d11494d532d7e175f89a2ef161fdd5f3bd2c1f39c03e3748b33ddb914062664",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "42c85ffee8fec4cf8345a6dff00500cb6331ecec3cb5dc82998782b9b41477ee",
       "textSha256": "88926430b8e1dfba02bfcc5b545946c711bf8f4eb7b53416b792495d3975c1df",
       "hooks": {
         "act": "expansion"
       },
       "before": {
         "ja": "【発動時】このターン終了まで、現在自分の場にいる全モンスターが受けるダメージを無効にする（後から召喚するモンスターは対象外）。",
-        "ko": "【발동시】이번 턴 종료까지 현재 자신의 필드의 모든 몬스터가 받는 데미지를 무효화한다(이후 소환되는 몬스터 제외).",
+        "ko": "【발동 시】이번 턴 종료까지 현재 자신의 필드의 모든 몬스터가 받는 데미지를 무효화한다(이후 소환되는 몬스터 제외).",
         "en": "【On Cast】Until this turn ends, prevent all damage to monsters currently on your field; monsters summoned later are unaffected."
       },
       "after": {
@@ -7964,12 +7820,9 @@
     },
     "DOUBLE_UP": {
       "nameJa": "ダブルアップ",
-      "status": "reworded",
-      "changedLocales": [
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "04c46b32ab0c7e228d34ebd7ccc75198754ca96c68fd2158db204fbf34136689",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "fac21fa03f05c20fcbf829a7d3a694ea3d6d92cc6764d9aff00eb28d352a3f64",
       "textSha256": "e3c07f580fc694666b9a49e3aeceac9db4d3bf62c8af449e33c289c1a68f5e6b",
       "hooks": {
         "act": "expansion",
@@ -7977,8 +7830,8 @@
       },
       "before": {
         "ja": "【場にある間】両プレイヤーの魔法によるダメージが2倍(重複なし)。",
-        "ko": "【필드에 놓인 동안】양 플레이어의 마법 데미지가 2배(중복 불가).",
-        "en": "【While Deployed】Spell damage from either player is doubled (non-stacking)."
+        "ko": "【필드에 있는 동안】양 플레이어의 마법 데미지가 2배(중복 불가).",
+        "en": "【While on the Field】Spell damage from either player is doubled (non-stacking)."
       },
       "after": {
         "ja": "【場にある間】両プレイヤーの魔法によるダメージが2倍(重複なし)。",
@@ -8111,20 +7964,17 @@
     },
     "EROSION": {
       "nameJa": "摩耗",
-      "status": "reworded",
-      "changedLocales": [
-        "ja",
-        "ko"
-      ],
-      "definitionSha256": "2f27568f8684b826c8576e5ce9a65718e03f3912d53c3ae3c1954be5b7e0387b",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "cdabd08ef14f0d1e24bd33054f76e9758893e8a043bf7ccf6335e8e728832723",
       "textSha256": "fb6a98bc8fe937e8296b9b0d4b121aee643270fd8e38e7b194f6359518da2723",
       "hooks": {
         "act": "expansion",
         "ench": "erosion"
       },
       "before": {
-        "ja": "【追加ドロー時】自分のターン中、通常の開始時ドロー以外でカードを1枚引くたび、相手に1ダメージを与える。",
-        "ko": "【추가 드로우시】자신 턴에 통상 턴 시작 드로우 이외로 카드 1장을 뽑을 때마다 상대에게 1 데미지를 준다.",
+        "ja": "【自分の追加ドロー時】自分のターン中、通常の開始時ドロー以外でカードを1枚引くたび、相手に1ダメージを与える。",
+        "ko": "【자신의 추가 드로우 시】자신 턴에 통상 턴 시작 드로우 이외로 카드 1장을 뽑을 때마다 상대에게 1 데미지를 준다.",
         "en": "【When You Draw Extra Cards】During your turn, whenever you draw 1 card outside the normal turn-start draw, deal 1 damage to the opponent."
       },
       "after": {
@@ -8329,22 +8179,17 @@
     },
     "SPEAR_AND_SHIELD": {
       "nameJa": "矛と盾",
-      "status": "reviewed-rework-v74",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "22e032cf086f57061d126e79647a45183b0e6f1620ab224bf27116f05b2bfb84",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "a01be7925878fa5cdb0fbf8a6f83d8d8dcbeae77079b0af7f0b4430757b9ef05",
       "textSha256": "9b6c5a87ecc163446da1e1fa1d8516e1de7f8678b05aa4a829a61ef4a63daa61",
       "hooks": {
-        "act": "spearShield",
-        "cost": 2
+        "act": "spearShield"
       },
       "before": {
-        "ja": "【発動時】相手のシールド量が自分の場の全モンスターの総攻撃力未満なら、相手のシールドを全て破壊する。",
-        "ko": "【발동 시】상대의 실드가 아군 전체 공격력 합계 미만이면 상대의 실드 전부 파괴한다.",
-        "en": "【On Cast】Destroy all enemy Shield if it is less than your monsters’ total ATK."
+        "ja": "【発動時】相手のシールド量が自分の場の全モンスターの総攻撃力未満なら、相手のシールドを全て破壊する。その後、相手の場にモンスターが3体以上いて、自分の場のモンスターが1体以下なら、自分はシールド12を得る（シールドを破壊しなかった場合も行う）。",
+        "ko": "【발동 시】상대의 실드가 자신의 필드의 모든 몬스터의 총 공격력 미만이면 상대의 실드를 전부 파괴한다. 그 후 상대 필드에 몬스터가 3체 이상이고 자신의 필드에는 1체 이하이면 자신은 실드 12를 얻는다(실드를 파괴하지 않았어도 적용).",
+        "en": "【On Cast】If the opponent’s Shield is less than the total ATK of all monsters on your field, destroy all of their Shield. Then, if they control at least 3 monsters and you control at most 1, gain 12 Shield (even if no Shield was destroyed)."
       },
       "after": {
         "ja": "【発動時】相手のシールド量が自分の場の全モンスターの総攻撃力未満なら、相手のシールドを全て破壊する。その後、相手の場にモンスターが3体以上いて、自分の場のモンスターが1体以下なら、自分はシールド12を得る（シールドを破壊しなかった場合も行う）。",
@@ -8400,22 +8245,18 @@
     },
     "WINE_COLLECTOR": {
       "nameJa": "ワインコレクター",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "88465b3e58b22d65c25fa0947253c4bdb4a2f3f12884c2d71e2cb65e453ae718",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "6420558d9926b42a602b2598092dcce804b638bcd072968cb36df5d6478db963",
       "textSha256": "a572e6957d74f3cb75afd0fb82578ec0ae2d5c1b3b5f60ce5a30a742d75b2340",
       "hooks": {
         "onSummon": "wineCollector",
         "aura": "wineCollector"
       },
       "before": {
-        "ja": "【場にある間】どちらかのプレイヤーが「ぶどう」を使用するたび、その使用者の墓地に新しい「高品質ぶどう」1枚を加える。",
-        "ko": "【필드에 있는 동안】어느 플레이어든 '포도'를 사용할 때마다 그 사용자의 묘지에 새로운 '고급 포도' 1장을 추가한다.",
-        "en": "【While on the Field】Whenever either player plays a Grape, create 1 Fine Grape in that player's graveyard."
+        "ja": "【召喚時】自分の手札に「ワイン」が2枚以上あれば、次の全てを行う。\nそのうち2枚を自動で自分のリフトへ送る。新しい「闇商人」1枚を自分の手札に加える。このモンスターも自分のリフトへ送る。\n\n【場にある間】どちらかのプレイヤーが「ぶどう」を使用するたび、その使用者の墓地に新しい「高品質ぶどう」1枚を加える。",
+        "ko": "【소환 시】자신의 패에 와인이 2장 이상 있으면 다음을 모두 처리한다.\n그중 2장을 자동으로 자신의 리프트로 보낸다. 새로운 암상인 1장을 자신의 패에 넣는다. 이 몬스터도 자신의 리프트로 보낸다.\n\n【필드에 있는 동안】어느 플레이어든 '포도'를 사용할 때마다 그 사용자의 묘지에 새로운 '고급 포도' 1장을 추가한다.",
+        "en": "【On Summon】If your hand contains at least 2 Wines, do all of the following.\nAutomatically send 2 of them to your Rift. Create 1 Black Market Dealer in your hand. Send this monster to your Rift.\n\n【While on the Field】Whenever either player plays a Grape, create 1 Fine Grape in that player's graveyard."
       },
       "after": {
         "ja": "【召喚時】自分の手札に「ワイン」が2枚以上あれば、次の全てを行う。\nそのうち2枚を自動で自分のリフトへ送る。新しい「闇商人」1枚を自分の手札に加える。このモンスターも自分のリフトへ送る。\n\n【場にある間】どちらかのプレイヤーが「ぶどう」を使用するたび、その使用者の墓地に新しい「高品質ぶどう」1枚を加える。",
@@ -8473,24 +8314,18 @@
     },
     "DESERTIFICATION": {
       "nameJa": "砂漠化",
-      "status": "reviewed-rework-v74",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "8bdeaf0245a8a8f457e73687136b45fa977432150ad708d8e966250ecf47734f",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "f6fd32be5a7a881021f1c0d6b6e5e35d3be4815ca22cb0025f60c65c50de8ab5",
       "textSha256": "dc7325296a72aca13df0874a7c46361861bfe36aa5571fbf84bc80469cbcf8b3",
       "hooks": {
         "act": "desertification",
-        "ench": "desertification",
-        "val": 99,
-        "cost": 4
+        "ench": "desertification"
       },
       "before": {
-        "ja": "【発動時】相手の雫を0にする。",
-        "ko": "【발동 시】상대의 이슬을 0으로 만든다.",
-        "en": "【On Cast】Set the opponent’s Dew to 0."
+        "ja": "【発動時】相手の雫を0にする。\n\n【場にある間】両プレイヤーの体力の回復・獲得量とシールド獲得量を半分にする。複数枚ある場合は各カードごとに半分にする。他の増減効果も適用した後、小数点以下を切り捨てる。既に持っている体力・シールドは減らさない。",
+        "ko": "【발동 시】상대의 이슬을 0으로 만든다.\n\n【필드에 있는 동안】양 플레이어의 체력 회복·획득량과 실드 획득량을 절반으로 만든다. 여러 장이면 각 카드마다 절반으로 만든다. 다른 증감 효과도 적용한 후 소수점 이하를 버린다. 이미 보유한 체력·실드는 줄이지 않는다.",
+        "en": "【On Cast】Set the opponent’s Dew to 0.\n\n【While on the Field】Halve both players’ HP recovery and gain amounts and Shield gains. Each copy applies this reduction once. Apply other amount multipliers as well, then round down. Existing HP and Shield are not reduced."
       },
       "after": {
         "ja": "【発動時】相手の雫を0にする。\n\n【場にある間】両プレイヤーの体力の回復・獲得量とシールド獲得量を半分にする。複数枚ある場合は各カードごとに半分にする。他の増減効果も適用した後、小数点以下を切り捨てる。既に持っている体力・シールドは減らさない。",
@@ -8524,21 +8359,17 @@
     },
     "NIGHT_CASTLE_GIFT": {
       "nameJa": "夜城からの贈り物",
-      "status": "reviewed-v94",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "f3452a994f756be797a0f937758144932b85e85a75547ea1d6272ca82bc34bda",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "fd1ec80bd0f6c40f94f5534e3cb480c92cc72c78456c349cd4dc5ff5095f5b7d",
       "textSha256": "269b5e789cf89eb70bac21390f09804637542b7115a0a739159e6267e78a4a30",
       "hooks": {
         "ench": "nightCastleGift"
       },
       "before": {
-        "ja": "【自分のターン開始時】発動後、4回目の自分のターン開始時に「吸血契約」「吸血の極意」から1枚を選び、その新しいカードを自分の手札に加える。その後、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。",
-        "ko": "【자신의 턴 시작 시】발동 후 자신의 4번째 턴 시작에 흡혈 계약 또는 흡혈의 극의 중 1장을 선택해 새 카드를 자신의 패에 넣는다. 그 후 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다.",
-        "en": "【At the Start of Your Turn】At your 4th turn start after casting this spell, choose Vampiric Pact or Vampiric Secret Art and add a new copy to your hand. Then send this spell to your graveyard. Do not count the turn it was cast or the opponent’s turns."
+        "ja": "【自分のターン開始時】発動後、3回目の自分のターン開始時に「吸血契約」「吸血の極意」から1枚を選び、その新しいカードを自分の手札に加える。その後、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。",
+        "ko": "【자신의 턴 시작 시】발동 후 자신의 3번째 턴 시작에 흡혈 계약 또는 흡혈의 극의 중 1장을 선택해 새 카드를 자신의 패에 넣는다. 그 후 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다.",
+        "en": "【At the Start of Your Turn】At your 3rd turn start after casting this spell, choose Vampiric Pact or Vampiric Secret Art and add a new copy to your hand. Then send this spell to your graveyard. Do not count the turn it was cast or the opponent’s turns."
       },
       "after": {
         "ja": "【自分のターン開始時】発動後、3回目の自分のターン開始時に「吸血契約」「吸血の極意」から1枚を選び、その新しいカードを自分の手札に加える。その後、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。",
@@ -8616,28 +8447,26 @@
     },
     "FARM": {
       "nameJa": "農場",
-      "status": "reviewed-rework-v74",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "aacc679a7ed7544790968b6bc85ea0b1c63f84515e506422a278a533228047e1",
-      "textSha256": "b95fa6d19850c7afdd064753b6fbebcb38e0048596234dc0ea5581d0386c7060",
+      "definitionSha256": "ab69294ee440289491b1666081a75482595b12d954b645cb35f97161d82ae0e8",
+      "textSha256": "eda5fb4b91b662233786870a71b1c2ffcba92666ce2f8103986dcd66ecf8c220",
       "hooks": {
-        "ench": "farm",
-        "val": 4,
-        "cost": 1
+        "ench": "farm"
       },
       "before": {
-        "ja": "【自分のターン開始時】発動後、7回目の自分のターン開始時に、新しい「りんご」1枚を自分の手札に加え、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。場を離れると経過ターン数はリセットされる。",
-        "ko": "【자신의 턴 시작 시】발동 후 자신의 7번째 턴 시작에 새 사과 1장을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다. 필드를 떠나면 경과 턴 수는 초기화된다.",
-        "en": "【At the Start of Your Turn】At your 7th turn start after casting, add a new Apple to your hand and send this spell to your graveyard. Do not count its casting turn or opposing turns. Its progress resets when it leaves the field."
-      },
-      "after": {
         "ja": "【自分のターン開始時】発動後、4回目の自分のターン開始時に、新しい「りんご」1枚を自分の手札に加え、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。場を離れると経過ターン数はリセットされる。",
         "ko": "【자신의 턴 시작 시】발동 후 자신의 4번째 턴 시작에 새 사과 1장을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다. 필드를 떠나면 경과 턴 수는 초기화된다.",
         "en": "【At the Start of Your Turn】At your 4th turn start after casting, add a new Apple to your hand and send this spell to your graveyard. Do not count its casting turn or opposing turns. Its progress resets when it leaves the field."
+      },
+      "after": {
+        "ja": "【自分のターン開始時】発動後、3回目の自分のターン開始時に、新しい「りんご」1枚を自分の手札に加え、この魔法を自分の墓地へ送る。発動したターンと相手のターンは数えない。場を離れると経過ターン数はリセットされる。",
+        "ko": "【자신의 턴 시작 시】발동 후 자신의 3번째 턴 시작에 새 사과 1장을 자신의 패에 넣고 이 마법을 자신의 묘지로 보낸다. 발동한 턴과 상대 턴은 세지 않는다. 필드를 떠나면 경과 턴 수는 초기화된다.",
+        "en": "【At the Start of Your Turn】At your 3rd turn start after casting, add a new Apple to your hand and send this spell to your graveyard. Do not count its casting turn or opposing turns. Its progress resets when it leaves the field."
       }
     },
     "FARMER": {
@@ -8875,20 +8704,20 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "1fdfc0b97f31ebe68b21b426875c95fec056aa2a77a961ce0c594327a3ab263a",
-      "textSha256": "5975c9138580ce333cca4ac40f9477d4621a0256a0275549e59b882715d294da",
+      "definitionSha256": "afa6ea6adde2591e7d58ae9662a30c22b68f5bf07cc3455e3cc39e769e6f1771",
+      "textSha256": "f4d8d4a3929870b490a747e156bdfb4153bcf0309db66326334b7d1ee6b30587",
       "hooks": {
         "ench": "manaBackflow"
       },
       "before": {
-        "ja": "【自分のターン開始時】発動した後の自分の15回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分の最大マナを3にする。他のカードの効果で破壊された場合、相手の最大マナ-1。",
-        "ko": "【자신의 턴 시작 시】발동 후 자신의 15번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 최대 마나를 3으로 만든다. 다른 카드의 효과로 파괴됐다면 상대의 최대 마나 -1.",
-        "en": "【At the Start of Your Turn】At the start of your 15th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, set your max mana to 3. If destroyed by another card’s effect, the opponent loses 1 max mana."
-      },
-      "after": {
         "ja": "【自分のターン開始時】発動した後の自分の15回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分のマナ水晶を3にする。他のカードの効果で破壊された場合、相手のマナ水晶-1。",
         "ko": "【자신의 턴 시작 시】발동 후 자신의 15번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 마나 수정을 3으로 만든다. 다른 카드의 효과로 파괴됐다면 상대의 마나 수정 -1.",
         "en": "【At the Start of Your Turn】At the start of your 15th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, set your mana crystals to 3. If destroyed by another card’s effect, the opponent loses 1 mana crystal."
+      },
+      "after": {
+        "ja": "【自分のターン開始時】発動した後の自分の25回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分のマナ水晶-2。他のカードの効果で破壊された場合、相手のマナ水晶-1。",
+        "ko": "【자신의 턴 시작 시】발동 후 자신의 25번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 마나 수정 -2. 다른 카드의 효과로 파괴됐다면 상대의 마나 수정 -1.",
+        "en": "【At the Start of Your Turn】At the start of your 25th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, lose 2 mana crystals. If destroyed by another card’s effect, the opponent loses 1 mana crystal."
       }
     },
     "BATTLEFIELD": {
@@ -8987,11 +8816,11 @@
     },
     "RIFT_MATTER": {
       "nameJa": "リフト鉱石 - スターライト",
-      "status": "renamed-reviewed",
+      "status": "reviewed-unchanged",
       "reviewDate": "2026-10-26",
       "reviewEvidence": "docs/releases/2026-10-26-rift-ores/README.md",
       "changedLocales": [],
-      "definitionSha256": "73eca4f40ed794b43b14c19eff55b91aabb772fae36ec998d06c0d3c03d514f9",
+      "definitionSha256": "ed9ac44baea2be01b8f5ca857f55a1e6d3270a8c1d25f089da15b2fe12bb400e",
       "textSha256": "ab10533d975ccd3bcfa254d2559b583f59f41673f04d428801699b8bb83b3bd4",
       "hooks": {},
       "before": {
@@ -9007,49 +8836,34 @@
     },
     "RIFT_METALIGHT": {
       "nameJa": "リフト鉱石 - メタライト",
-      "status": "new-reviewed",
+      "status": "reviewed-unchanged",
       "reviewDate": "2026-10-26",
       "reviewEvidence": "docs/releases/2026-10-26-rift-ores/README.md",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "ede5966a1d89ce147bf9c77ba44400e4cf8fa11d36afaf81f21ef11fa7a9af71",
+      "changedLocales": [],
+      "definitionSha256": "37e0852532766ceb502d8faabb7b4efc3002eb2a2d28ab2b542dc2c2b62cc3ae",
       "textSha256": "dbe33298b7c9f63482c885cbfee1a315a0b9752bf46f5a856c845130b77a2dfc",
       "hooks": {},
-      "before": null,
+      "before": {
+        "ja": "【発動条件】このカードはプレイできない。\n\n【自分のリフト追加時】他のカードの効果で自分のリフトに送られた場合のみ発動する。相手の墓地のカード1枚を選び、相手のリフトに送る。",
+        "ko": "【발동 조건】이 카드는 플레이할 수 없다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 자신의 리프트로 보내졌을 때만 발동한다. 상대 묘지의 카드 1장을 선택해 상대의 리프트로 보낸다.",
+        "en": "【Play Requirement】This card cannot be played.\n\n【Card Added to Your Rift】Activate only when another card’s effect sends this card to your Rift. Choose 1 card in the opponent’s graveyard and send it to their Rift."
+      },
       "after": {
         "ja": "【発動条件】このカードはプレイできない。\n\n【自分のリフト追加時】他のカードの効果で自分のリフトに送られた場合のみ発動する。相手の墓地のカード1枚を選び、相手のリフトに送る。",
         "ko": "【발동 조건】이 카드는 플레이할 수 없다.\n\n【자신의 리프트에 추가 시】다른 카드의 효과로 자신의 리프트로 보내졌을 때만 발동한다. 상대 묘지의 카드 1장을 선택해 상대의 리프트로 보낸다.",
         "en": "【Play Requirement】This card cannot be played.\n\n【Card Added to Your Rift】Activate only when another card’s effect sends this card to your Rift. Choose 1 card in the opponent’s graveyard and send it to their Rift."
       }
     },
-    "MAGIC_TRAIN": {
-      "nameJa": "魔道列車",
-      "status": "reviewed-rework",
+    "MAGIC_BANK": {
+      "nameJa": "魔道銀行",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "66d4be912012ee4a4cbf95109426de886670a49f51badb24c30b62d6615c8c28",
-      "textSha256": "6739df04fd57bc3da596767ac40a103fa716eb605b2030cfad23891a3d4da492",
-      "hooks": {},
-      "before": {},
-      "after": {
-        "ja": "【発動時】次の自分のターン開始直前に、双方通算6ターン分、ターン数と残り期間を進める。その間のドロー・回復などのターン開始・終了効果は発動しない。",
-        "ko": "【발동 시】다음 자신의 턴 시작 직전에 양쪽 합계 6턴만큼 턴 수와 남은 기간을 진행한다. 그동안 드로우·회복 등 턴 시작·종료 효과는 발동하지 않는다.",
-        "en": "【On Cast】Immediately before your next turn starts, advance the turn number and remaining durations by 6 turns total, counting both players. Do not trigger draws, healing, or other start/end-of-turn effects during those turns."
-      },
-      "evidence": "tests/rift-train-bank.mjs; docs/releases/2026-10-26-rift-train-bank/README.md"
-    },
-    "MAGIC_BANK": {
-      "nameJa": "魔道銀行",
-      "status": "reworked",
-      "changedLocales": [],
-      "definitionSha256": "a97766f241b224ab76244fd0fd72c6697b68472b8e24d27c990175d84b448e3e",
-      "textSha256": "e26fa795c26b324decf14c33cb9c3098a2d173281ebccbfc6ba9de9c79b8b5cf",
+      "definitionSha256": "edaab7341b0132fef6de846d41125390e6c03d449d8ad000ad40e048293a27f3",
+      "textSha256": "4d01775133035801c4453cb105ff0e9d32f3d0bd47f85ffff90e0ded5adb1524",
       "hooks": {
         "ench": "magicBank"
       },
@@ -9059,9 +8873,9 @@
         "en": "【On Cast】Reduce your mana crystals by 1.\n\n【While on the Field】For 2 of your turns, including this turn, whenever your mana crystals increase, gain 1 additional mana crystal. This extra gain does not trigger Arcane Bank again."
       },
       "after": {
-        "ja": "【発動時】自分のマナ水晶-1。\n\n【場にある間】このターンを含む自分の2ターンの間、自分のマナ水晶が増えるたび、追加でマナ水晶+1。この追加分では「魔道銀行」は再発動しない。",
-        "ko": "【발동 시】자신의 마나 수정 -1.\n\n【필드에 있는 동안】이 턴을 포함해 자신의 2턴 동안, 자신의 마나 수정이 증가할 때마다 추가로 마나 수정 +1. 이 추가분으로 마도 은행은 재발동하지 않는다.",
-        "en": "【On Cast】Reduce your mana crystals by 1.\n\n【While on the Field】For 2 of your turns, including this turn, whenever your mana crystals increase, gain 1 additional mana crystal. This extra gain does not trigger Arcane Bank again."
+        "ja": "【場にある間】このターンを含む自分の2ターンの間、自分のマナ水晶が増えるたび、追加でマナ水晶+1。この追加分では「魔道銀行」は再発動しない。",
+        "ko": "【필드에 있는 동안】이 턴을 포함해 자신의 2턴 동안, 자신의 마나 수정이 증가할 때마다 추가로 마나 수정 +1. 이 추가분으로 마도 은행은 재발동하지 않는다.",
+        "en": "【While on the Field】For 2 of your turns, including this turn, whenever your mana crystals increase, gain 1 additional mana crystal. This extra gain does not trigger Arcane Bank again."
       }
     },
     "ELITE_GOBLIN": {
@@ -9324,22 +9138,26 @@
     },
     "SIEGE_CASTLE": {
       "nameJa": "攻城",
-      "status": "added",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "9d69dd96d7e13c8a56494ae018e424cafdc08a66c37548abe13351b452c7c92f",
-      "textSha256": "df004e57e5d4ff23715a6b9fa4742e31193d55935d70ba18044c787bbf41c482",
+      "textSha256": "e00cb633a10865d56f74c7c12865511b3078cfe63a6592f36a5ca896a2f5b985",
       "hooks": {
         "act": "armyAttune"
       },
-      "before": null,
-      "after": {
+      "before": {
         "ja": "【発動時】味方全体に攻撃力+3・体力-2。兵士系は代わりに+4/+1。相手の城のパッシブとカウンターを全て取り除く。",
         "ko": "【발동 시】아군 전체 공격력 +3·체력 -2. 병사 계열은 대신 +4/+1. 상대 성의 패시브와 카운터를 모두 제거한다.",
         "en": "【On Cast】Give all allies +3 ATK and -2 HP, or +4 ATK and +1 HP if military. Strip all passives and counters from the opposing Castle."
+      },
+      "after": {
+        "ja": "【発動時】味方全体に攻撃力+3・体力-2。兵士系は代わりに+4/+1。相手の城のパッシブとカウンターを全て取り除く。 この体力減少でモンスターの現在体力は1未満にならない。",
+        "ko": "【발동 시】아군 전체 공격력 +3·체력 -2. 병사 계열은 대신 +4/+1. 상대 성의 패시브와 카운터를 모두 제거한다. 이 체력 감소로 몬스터의 현재 체력은 1 미만이 되지 않는다.",
+        "en": "【On Cast】Give all allies +3 ATK and -2 HP, or +4 ATK and +1 HP if military. Strip all passives and counters from the opposing Castle. This HP loss cannot reduce a monster’s current HP below 1."
       },
       "reviewedAt": "2026-11-11",
       "reviewNote": "Army and Attune balance update."
@@ -9489,18 +9307,18 @@
     },
     "WANTED": {
       "nameJa": "指名手配",
-      "status": "added",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "08be87d3e8205c418cc5eb2d9815c71ad62c3da24d137da864ba9f8d74c55e9c",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "f0e3095ee1ae204eea9dd40828bf512250bf0ee6989e7ba3771dbcba56cd8ed0",
       "textSha256": "04ca91d045dd8af10540aad2aed51aeb7bc5114f46aca61205d0f1a3d57e996b",
       "hooks": {
         "act": "armyAttune"
       },
-      "before": null,
+      "before": {
+        "ja": "【発動時】相手のデッキ構成から購入コスト5以下を1種類指定。相手は自分の2ターンの間、同名カードを使用できない。前回と同じ名前は指定できない。",
+        "ko": "【발동 시】상대 덱 구성에서 구매 코스트 5 이하의 카드명 하나를 지정한다. 상대는 자신의 2턴 동안 동명 카드를 사용할 수 없다. 직전 지정명은 제외한다.",
+        "en": "【On Cast】Name a card with purchase cost 5 or less in the opposing deck composition. They cannot play that name for two of their turns. The previous name cannot be repeated."
+      },
       "after": {
         "ja": "【発動時】相手のデッキ構成から購入コスト5以下を1種類指定。相手は自分の2ターンの間、同名カードを使用できない。前回と同じ名前は指定できない。",
         "ko": "【발동 시】상대 덱 구성에서 구매 코스트 5 이하의 카드명 하나를 지정한다. 상대는 자신의 2턴 동안 동명 카드를 사용할 수 없다. 직전 지정명은 제외한다.",
@@ -9535,23 +9353,27 @@
     },
     "ESSENCE_OF_LIFE": {
       "nameJa": "生物の本質",
-      "status": "added",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "83bc8287e5cd50d9a8bfb6815163029e1107851812bf4ad9a9811a53970d3e7b",
-      "textSha256": "f21c278035d6400b3d2e114aceeb6a3c74d73cc816cec6ff5c22b76f6204f6fe",
+      "definitionSha256": "cd152a4f7de0a2b4d5b65e2a7a9014773a40696421cbd1e2a45b102221f48e81",
+      "textSha256": "a4cdbc0d70df8e5f6aa1c9f6ed364ee87c37fb0eab86856bfa2a96ddebb41192",
       "hooks": {
         "act": "armyAttune",
         "ench": "essenceOfLife"
       },
-      "before": null,
-      "after": {
+      "before": {
         "ja": "【場にある間】自分の場のモンスターの攻撃力-1。双方のモンスター効果を無効にする。種族シナジーとパッシブは有効。",
         "ko": "【필드에 있는 동안】자신의 몬스터 공격력 -1. 양측 몬스터 효과는 무효. 종족 시너지와 패시브는 유효하다.",
         "en": "【While on the Field】Your monsters have -1 ATK. Suppress monster effects on both sides. Tribe synergy and passive keywords still apply."
+      },
+      "after": {
+        "ja": "【場にある間】双方のモンスター効果を無効にする。種族シナジーとパッシブは有効。\n\n【自分のターン開始時】このカードを破壊する。",
+        "ko": "【필드에 있는 동안】양쪽의 몬스터 효과를 무효화한다. 종족 시너지와 패시브는 유효하다.\n\n【자신의 턴 시작 시】이 카드를 파괴한다.",
+        "en": "【While on the Field】Negate monster effects on both sides. Tribe synergy and passives remain active.\n\n【At the Start of Your Turn】Destroy this card."
       },
       "reviewedAt": "2026-11-11",
       "reviewNote": "Army and Attune balance update."
@@ -9651,22 +9473,26 @@
     },
     "ATTUNE_LOCK": {
       "nameJa": "アチューンロック",
-      "status": "added",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "fae7173f585e62585aa17abc0a1c994d48b79d8eab53a5da131a0b4f2c794d68",
-      "textSha256": "a78c0db84c13fa43a79c68df2fa6bb79a3e13ff8a55fd695d0325ead5074f1ad",
+      "definitionSha256": "fea75ed0e0e2176884fa82d96e682a6d64e51739e65a6cc8f58501bc0a831394",
+      "textSha256": "e307e8283606b15b2c5479e2af4cdce31b7d106f63c356d18ac53ec6abfefd24",
       "hooks": {
         "act": "armyAttune"
       },
-      "before": null,
-      "after": {
+      "before": {
         "ja": "【発動時】相手はマナ水晶を2得る。相手は自分の6ターンの間、基本のアチューンを使用できない。",
         "ko": "【발동 시】상대는 마나 수정 2개를 얻고 자신의 6턴 동안 기본 어튠을 사용할 수 없다.",
         "en": "【On Cast】Give the opponent 2 mana crystals. They cannot play basic Attune for six of their turns."
+      },
+      "after": {
+        "ja": "【発動時】相手はマナ水晶を2得る。相手は自分の6ターンの間、基本のアチューンを使用できない。 同名カード合計で自分の各ターン1回まで使用できる。",
+        "ko": "【발동 시】상대는 마나 수정 2개를 얻고 자신의 6턴 동안 기본 어튠을 사용할 수 없다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.",
+        "en": "【On Cast】Give the opponent 2 mana crystals. They cannot play basic Attune for six of their turns. You may play cards with this name only 1 time during each of your turns in total."
       },
       "reviewedAt": "2026-11-11",
       "reviewNote": "Army and Attune balance update."
@@ -9792,40 +9618,44 @@
     },
     "ATTUNE_MANAFLOW": {
       "nameJa": "アチューンマナフロー",
-      "status": "added",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "c2cfc7f8a1a9ae75f1ec3184973cb7871a93c8eed41c574d4743f1def138b6dc",
-      "textSha256": "5d27c53e45d64376402c211420759930cb42e7f14ec2542d383036b98fd818df",
+      "definitionSha256": "b9d769c86aaf5cfb884bcd265538f06eb39c4b44b77e6ae94125867b4ed8ed2b",
+      "textSha256": "9e774d4bb9829b0c5c04d1e4967897ada66b0a9bbb74ef4784ad7c75b5232adb",
       "hooks": {
         "act": "armyAttune"
       },
-      "before": null,
-      "after": {
+      "before": {
         "ja": "【発動時】このターン、アチューンの名を持つカードの購入コストと発動コストを1下げる。",
         "ko": "【발동 시】이번 턴 어튠 명칭 카드 구매 코스트와 발동 코스트 -1.",
         "en": "【On Cast】This turn, reduce the purchase cost and cast cost of your Attune-named cards by 1."
+      },
+      "after": {
+        "ja": "【発動時】このターン、アチューンの名を持つカードの購入コストと発動コストを1下げる。 同名カード合計で自分の各ターン1回まで使用できる。",
+        "ko": "【발동 시】이번 턴 어튠 명칭 카드 구매 코스트와 발동 코스트 -1. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.",
+        "en": "【On Cast】This turn, reduce the purchase cost and cast cost of your Attune-named cards by 1. You may play cards with this name only 1 time during each of your turns in total."
       },
       "reviewedAt": "2026-11-11",
       "reviewNote": "Army and Attune balance update."
     },
     "ATTUNE_SECRET": {
       "nameJa": "アチューンの秘密",
-      "status": "added",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "62a58d7d8fa9829cc9a5f5dfbccf7f9916e28694fccf43f5f545d556f6533866",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "c4eae597e541ba72044f231880a716a7174b8bcd3c26cdc6fe595dd9e21e27e9",
       "textSha256": "928e391722f4ee1d0c3fb5d24cf273eded94258d8973f91745a9b36405471aa3",
       "hooks": {
         "act": "armyAttune"
       },
-      "before": null,
+      "before": {
+        "ja": "【発動時】このゲーム中、基本のアチューンに「マナ+1」を追加。このターン使用したアチューンの名を持つカード1枚につき発動コスト-1。",
+        "ko": "【발동 시】게임 동안 기본 어튠에 마나 +1 추가. 이번 턴 사용한 어튠 명칭 카드마다 발동 코스트 -1.",
+        "en": "【On Cast】Permanently add gain 1 mana to basic Attune. Its cast cost is reduced by 1 per Attune-named card played this turn."
+      },
       "after": {
         "ja": "【発動時】このゲーム中、基本のアチューンに「マナ+1」を追加。このターン使用したアチューンの名を持つカード1枚につき発動コスト-1。",
         "ko": "【발동 시】게임 동안 기본 어튠에 마나 +1 추가. 이번 턴 사용한 어튠 명칭 카드마다 발동 코스트 -1.",
@@ -9858,18 +9688,18 @@
     },
     "ATTUNE_SHINE": {
       "nameJa": "アチューンシャイン",
-      "status": "added",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "52c4365eed7741d1149fa5b59e3b8870ab96b7d30f6727cbf0fa33f0c176c0ff",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "584d3a4876b1ae05cd1fb5b557bc15b490276274458c5b484be9e2ce299dfc62",
       "textSha256": "4151560f46be186989e8264dbe7e3bd1bc953f4d18d694cb29853a810858e743",
       "hooks": {
         "act": "armyAttune"
       },
-      "before": null,
+      "before": {
+        "ja": "【発動時】このゲーム中、基本のアチューンに「相手全体に1ダメージ」を追加。このターン使用したアチューンの名を持つカード1枚につき発動コスト-1。",
+        "ko": "【발동 시】게임 동안 기본 어튠에 적 전체 1 피해 추가. 이번 턴 사용한 어튠 명칭 카드마다 발동 코스트 -1.",
+        "en": "【On Cast】Permanently add deal 1 damage to all enemies to basic Attune. Its cast cost is reduced by 1 per Attune-named card played this turn."
+      },
       "after": {
         "ja": "【発動時】このゲーム中、基本のアチューンに「相手全体に1ダメージ」を追加。このターン使用したアチューンの名を持つカード1枚につき発動コスト-1。",
         "ko": "【발동 시】게임 동안 기본 어튠에 적 전체 1 피해 추가. 이번 턴 사용한 어튠 명칭 카드마다 발동 코스트 -1.",
@@ -9880,26 +9710,30 @@
     },
     "QUEST_ATTUNE_STUDY": {
       "nameJa": "アチューン学問",
-      "status": "added",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "d48035ef8574e52095bbfba08d047825730f5ca7ee5a950f4dc21c47e5121001",
-      "textSha256": "2929c06c38d8db68b41deed01dd7d9801b0b1413bd4145632ff66aab9b414dbe",
+      "definitionSha256": "fc041d1f15a25b4409afec998ff167965bb6844482058839f1b78fa1942c9ec0",
+      "textSha256": "46dfebd3cd8bef4e0967343b9b4caf2af5b01c0b5ff56c7e50533e93be9479f6",
       "hooks": {
         "act": "armyAttune",
         "quest": {
           "event": "attunePlay",
-          "target": 8
+          "target": 6
         }
       },
-      "before": null,
-      "after": {
+      "before": {
         "ja": "【達成条件】設置後アチューン関連カードを8回使用する。報酬：デュアルアチューン・アチューンシャイン・アチューン研究から1枚選び、自分の墓地に得る。",
         "ko": "【달성 조건】설치 후 어튠 관련 카드 8회 사용. 보상: 듀얼 어튠·어튠 샤인·어튠 연구 중 1장을 골라 자신의 묘지에 추가.",
         "en": "【Completion Requirement】After installation play eight Attune-related cards. Choose Dual Attune, Attune Shine or Attune Research to add to your graveyard."
+      },
+      "after": {
+        "ja": "【達成条件】設置後アチューン関連カードを6回使用する。報酬：デュアルアチューン・アチューンシャイン・アチューン研究から1枚選び、自分の墓地に得る。",
+        "ko": "【달성 조건】설치 후 어튠 관련 카드 6회 사용. 보상: 듀얼 어튠·어튠 샤인·어튠 연구 중 1장을 골라 자신의 묘지에 추가.",
+        "en": "【Completion Requirement】After installation play six Attune-related cards. Choose Dual Attune, Attune Shine or Attune Research to add to your graveyard."
       },
       "reviewedAt": "2026-11-11",
       "reviewNote": "Army and Attune balance update."
@@ -10112,18 +9946,18 @@
     },
     "TOLL_GATE": {
       "nameJa": "通行税",
-      "status": "new",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "dcd74acd80da741d432ee858c6a2533de1bbbc4a1fb85e19b5e3c4bd84c617ac",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "7d16885db797d6d406a0f8d19c275cea006abdf988a2724371c264fe69649c3f",
       "textSha256": "5d4a8b0391b696e91e2dcdd171bb1a41ee25abbe9f882c11fde2b1ba9877ac21",
       "hooks": {
         "ench": "summonToll"
       },
-      "before": {},
+      "before": {
+        "ja": "【相手のモンスター召喚時】相手に1ダメージを与える。自分の場に「城」があれば相手は手札を1枚選んで捨てる。傭兵系がいれば召喚されたモンスターの攻撃力を1下げる。貴族がいれば、そのモンスターの減少後の攻撃力と最大体力の合計だけ自分の体力を回復する。各条件はそれぞれ1回適用する。",
+        "ko": "【상대의 몬스터 소환 시】상대에게 1 데미지를 준다. 자신의 필드에 성이 있으면 상대는 패 1장을 골라 버린다. 용병 계열이 있으면 소환된 몬스터의 공격력을 1 줄인다. 귀족이 있으면 그 몬스터의 감소 후 공격력과 최대 체력의 합만큼 자신의 체력을 회복한다. 각 조건은 1회씩 적용한다.",
+        "en": "【When the Opponent Summons a Monster】Deal 1 damage to the opponent. If you control Castle, they choose and discard 1 card. If you control a Mercenary-family monster, reduce the summoned monster’s ATK by 1. If you control an Aristocrat, heal yourself for its resulting ATK plus maximum HP. Each condition applies once."
+      },
       "after": {
         "ja": "【相手のモンスター召喚時】相手に1ダメージを与える。自分の場に「城」があれば相手は手札を1枚選んで捨てる。傭兵系がいれば召喚されたモンスターの攻撃力を1下げる。貴族がいれば、そのモンスターの減少後の攻撃力と最大体力の合計だけ自分の体力を回復する。各条件はそれぞれ1回適用する。",
         "ko": "【상대의 몬스터 소환 시】상대에게 1 데미지를 준다. 자신의 필드에 성이 있으면 상대는 패 1장을 골라 버린다. 용병 계열이 있으면 소환된 몬스터의 공격력을 1 줄인다. 귀족이 있으면 그 몬스터의 감소 후 공격력과 최대 체력의 합만큼 자신의 체력을 회복한다. 각 조건은 1회씩 적용한다.",
@@ -10132,18 +9966,18 @@
     },
     "TRUCE": {
       "nameJa": "休戦",
-      "status": "new",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "91c2ff5ead8b7d47f9d430a1cab068794f01a082310c0b1be81060de19416a54",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "860f045d1fc86b596d736d9517967bb60f8c4779b4f1b2966f700a76d80a30b8",
       "textSha256": "f9c7dac2d2c2b786e79ab295cdc85592f8c28f660c6897d93206fb1e6b2b0036",
       "hooks": {
         "act": "truce"
       },
-      "before": {},
+      "before": {
+        "ja": "【発動条件】このターン、自分のモンスターが攻撃していない。\n\n【発動時】両方の場のモンスターをそれぞれの手札に戻す（トークンはリフトへ送る）。このターンの残りと次の相手のターンは、双方のモンスターが攻撃できない。アサシン系は手札に戻らず、この攻撃制限も受けない。",
+        "ko": "【발동 조건】이번 턴 자신의 몬스터가 공격하지 않았다.\n\n【발동 시】양쪽 필드의 몬스터를 각자의 패로 되돌린다(토큰은 리프트로 보낸다). 이번 턴의 남은 시간과 다음 상대 턴에는 양측 몬스터가 공격할 수 없다. 암살자 계열은 패로 돌아가지 않으며 이 공격 제한을 받지 않는다.",
+        "en": "【Play Requirement】None of your monsters have attacked this turn.\n\n【On Cast】Return monsters on both fields to their respective hands (send each token to the Rift). Neither side can attack with monsters for the rest of this turn and the next opposing turn. Assassin-family monsters stay on the field and ignore this attack restriction."
+      },
       "after": {
         "ja": "【発動条件】このターン、自分のモンスターが攻撃していない。\n\n【発動時】両方の場のモンスターをそれぞれの手札に戻す（トークンはリフトへ送る）。このターンの残りと次の相手のターンは、双方のモンスターが攻撃できない。アサシン系は手札に戻らず、この攻撃制限も受けない。",
         "ko": "【발동 조건】이번 턴 자신의 몬스터가 공격하지 않았다.\n\n【발동 시】양쪽 필드의 몬스터를 각자의 패로 되돌린다(토큰은 리프트로 보낸다). 이번 턴의 남은 시간과 다음 상대 턴에는 양측 몬스터가 공격할 수 없다. 암살자 계열은 패로 돌아가지 않으며 이 공격 제한을 받지 않는다.",

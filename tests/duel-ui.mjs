@@ -259,7 +259,7 @@ qstate.players[0].hp=16;qstate.market[0]={...DB.QUICK_SURVIVAL,uid:'quick-market
 for (const [width,height] of [[1280,720],[1920,1080]]) {
  globalThis.innerWidth=width;globalThis.innerHeight=height;v.render(qstate);
  assert.equal(document.querySelectorAll('.buff-icon--quest').length,2);
- assert([...document.querySelectorAll('.buff-icon--quest')].every(n=>n.getAttribute('aria-label').includes('17/30')));
+ assert([...document.querySelectorAll('.buff-icon--quest')].every(n=>n.getAttribute('aria-label').includes('17/24')));
  assert(!document.querySelector('#fixedMarket .card[data-uid="quick-market"]').classList.contains('is-buyable'));
 }
 qstate.players[0].hp=15;v.render(qstate);

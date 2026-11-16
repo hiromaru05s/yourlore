@@ -67,17 +67,17 @@ check('Casino dice on summon are independent of contracts and count for either C
       g.players[0].hand=[card(id)];
       const r=E.reduce(g,{type:'play',idx:0});
       const rolls=r.events.filter(e=>e.type==='dice' && e.source.id===id);
-      assert.deepEqual(rolls.map(e=>e.rolls.length),casinoSide===null?[]:art?[dice,dice]:[dice]);
-      if (casinoSide!==null) assert.equal(r.state.players[casinoSide].field.find(m=>m.id==='CASINO').gcount,dice*(art?2:1)%12);
+      assert.deepEqual(rolls.map(e=>e.rolls.length),casinoSide===null?[]:[dice]);
+      if (casinoSide!==null) assert.equal(r.state.players[casinoSide].field.find(m=>m.id==='CASINO').gcount,dice%12);
     }
   }
 });
-check('Guildmaster upkeep uses only the owner’s turn and repeats with Mercenary Arts',()=>{
+check('Guildmaster upkeep uses only the owner’s turn with or without Mercenary Arts',()=>{
   for(const side of [0,1]) for(const ownTurn of [false,true]){
     const g=fresh();g.cur=ownTurn?1-side:side;g.players[side].field=[mon('MERC_MASTER')];
     g.players[1-side].field=[mon('CASINO')];enchant(g,'MERC_ART',side);
     const {events}=E.reduce(g,{type:'endTurn'});
-    assert.deepEqual(events.filter(e=>e.type==='dice' && e.source.id==='MERC_MASTER').map(e=>e.rolls.length),ownTurn?[10,10]:[]);
+    assert.deepEqual(events.filter(e=>e.type==='dice' && e.source.id==='MERC_MASTER').map(e=>e.rolls.length),ownTurn?[10]:[]);
   }
 });
 check('a different killer or a bounced and replayed target earns no bounty',()=>{
@@ -94,7 +94,7 @@ check('a different killer or a bounced and replayed target earns no bounty',()=>
     assert.equal(g.players[1].field.length,0);assert.equal(g.players[0].mana,mana);
   }
 });
-check('Guildmaster Escort summons an active Mercenary and Mercenary Arts repeats contracts',()=>{
+check('Guildmaster Escort summons an active Mercenary without repeating contracts',()=>{
   let g=fresh();enchant(g,'MERC_ART');const target={...mon('M1'),def:20};g.players[1].field=[target];
   g=cast(g,'MERC_MASTER');g=pick(g,'escort');
   let guards=0;
@@ -109,8 +109,8 @@ check('Guildmaster Escort summons an active Mercenary and Mercenary Arts repeats
     }
     assert(guards<=2);
   }
-  assert.equal(guards,2);assert.equal(g.players[1].field[0].dmg,5);
-  assert.deepEqual(g.players[0].field.map(m=>m.id),['MERC_MASTER','MERCENARY']);assert.equal(g.players[1].field[0].bounties.length,2);
+  assert.equal(guards,1);assert.equal(g.players[1].field[0].dmg??0,0);
+  assert.deepEqual(g.players[0].field.map(m=>m.id),['MERC_MASTER','MERCENARY']);assert.equal(g.players[1].field[0].bounties.length,1);
 });
 check('persisted rooms refresh prices and stats while retaining UIDs and damage',()=>{
   const g=fresh();delete g.mercReworkApplied;

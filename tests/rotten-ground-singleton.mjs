@@ -25,7 +25,7 @@ try {
     let g=fresh();g.cur=owner;g.players[owner].hand=[card('ROTTEN_GROUND')];
     assert.equal(cardPlayConditionMet(g,owner,g.players[owner].hand[0]),true);
     g=reduce(g,{type:'play',idx:0}).state;
-    assert.equal(count(g),1);assert.equal(g.players[owner].mana,28);
+    assert.equal(count(g),1);assert.equal(g.players[owner].mana,29);
     g.cur=caster;g.players[caster].hand=[card('ROTTEN_GROUND')];g.players[caster].spellDiscountCharges=[3];
     const p=g.players[caster],reason=playBlockReason(g,caster,p.hand[0]);
     assert.match(reason.ja,/お互いのフィールド全体で1枚/);

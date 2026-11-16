@@ -1,10 +1,11 @@
+import {balance97Prints,balance97Text,retired97} from '../../client/src/shared/balance97';
 import {balance96Prints,balance96Text} from '../../client/src/shared/balance96';
 import {balance94Prints,balance94Text} from '../../client/src/shared/balance94';
 import {balanceChanges,balanceText} from '../../client/src/shared/novemberBalance';
 import {GOLEM_TEXT} from '../../client/src/shared/golemCards';
 import {NOVEMBER_PRINTS,RUNE_RULE_TEXT} from '../../client/src/shared/runeRework';
 import {MERC_IDS} from '../../client/src/shared/mercenaryCards';
-import { DB, STARTERS } from '../../client/src/shared/cards';
+import { BUYABLE_POOL, DB, STARTERS } from '../../client/src/shared/cards';
 import { effDef, refreshFieldPassives } from '../../client/src/shared/engine';
 import type { CardInst, FieldMon, GameState } from '../../client/src/shared/types';
 
@@ -39,7 +40,7 @@ export function restoreReworkedCards(game: GameState): void {
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied)) return;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -334,6 +335,57 @@ export function restoreReworkedCards(game: GameState): void {
   }
   game.balance94Applied = 3;
   if (updateDemons || updateHexers) refreshFieldPassives(game);
+  if (!game.balance97Applied) {
+    const refresh97 = (card:CardInst | null) => {
+      if (!card || (!(card.id in balance97Text) && !(card.id in balance97Prints))) return;
+      const def=DB[card.id] ?? STARTERS[card.id];
+      const mon=card as FieldMon;
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      for (const key of Object.keys(balance97Prints[card.id] ?? {})) {
+        const prop=mon.trickSwapped && key==='atk'?'def':mon.trickSwapped && key==='def'?'atk':key;
+        const value=Reflect.get(def,key);
+        if (value===undefined) Reflect.deleteProperty(card,prop);
+        else Reflect.set(card,prop,structuredClone(value));
+      }
+    };
+    const keep = (card:{id:string}) => !retired97.has(card.id);
+    // Keep fixed market slot numbers and stock aligned when replacing retired offers.
+    const present=new Set(game.market.map(c=>c.id));
+    for (const [i,c] of game.market.entries()) {
+      if (keep(c)) { refresh97(c); continue; }
+      const def=BUYABLE_POOL.map(id=>DB[id]).find(d=>!present.has(d.id) && d.cost===c.cost);
+      if (def) {
+        game.market[i]={...structuredClone(def),uid:c.uid};
+        present.add(def.id);
+        if(game.marketStock) game.marketStock[i]=3;
+      }
+    }
+    for (const p of game.players) {
+      p.deck=p.deck.filter(keep); p.discard=p.discard.filter(keep); p.hand=p.hand.filter(keep);
+      p.field=p.field.filter(keep); if(p.removed) p.removed=p.removed.filter(keep);
+      p.supply=p.supply.map(c=>c && keep(c) ? c : null);
+      if(p.revealedCards)p.revealedCards=p.revealedCards.filter(keep);
+      p.enchants=p.enchants.filter(e=>keep(e.card)); p.exile=p.exile.filter(e=>keep(e.card));
+      for (const zone of [p.hand,p.deck,p.discard]) {
+        for (const card of [...zone]) if (card.id==='MEDITATE' || card.id==='PENANCE') {
+          zone.splice(zone.indexOf(card),1);
+          (p.removed ??= []).push(card);
+        }
+      }
+      for (const e of p.enchants) {
+        if (e.card.id==='MANA_BACKFLOW') e.turns+=10;
+        if (e.card.id==='FARM') e.turns=Math.max(1,e.turns-1);
+        if (e.card.id==='ESSENCE_OF_LIFE') e.turns=1;
+      }
+      for (const c of [...p.hand,...p.deck,...p.discard,...p.field,...p.removed??[],...p.supply]) refresh97(c);
+      for (const e of [...p.enchants,...p.exile,...p.traps,...p.quests??[]]) refresh97(e.card);
+      for (const q of p.quests ?? []) if (q.card.id==='Q_WINTER' || q.card.id==='QUEST_ATTUNE_STUDY') {
+        q.progress=Math.min(q.progress,q.card.quest!.target);
+      }
+    }
+    refreshFieldPassives(game);
+    game.balance97Applied=true;
+  }
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);
   if (wheel?.resolved?.state) restoreReworkedCards(wheel.resolved.state as GameState);

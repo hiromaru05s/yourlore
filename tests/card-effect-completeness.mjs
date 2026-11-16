@@ -16,16 +16,16 @@ try {
   setup(g);assert.equal(E.playBlockReason(g,0,c),null,id);
   for(const lang of ['textJa','text','textEn'])assert.match(c[lang],/^【(?:発動条件|발동 조건|Play Requirement)】/);
  });
- for(const id of ['DECAY_CRAFT','KNIGHT_TEACH','NL_SECRET','TRUMPET','ROGUE_ART','MAJESTY_RITE','S15','WALLBREAK1','WALLBREAK2','SNIPE1','SNIPE2'])requirement(id,g=>g.players[0].field=[mon('M1',{atk:1,def:1})]);
+ for(const id of ['DECAY_CRAFT','KNIGHT_TEACH','NL_SECRET','TRUMPET','ROGUE_ART','S15','WALLBREAK1','WALLBREAK2','SNIPE1','SNIPE2'])requirement(id,g=>g.players[0].field=[mon('M1',{atk:1,def:1})]);
  requirement('MIND_BURST',g=>g.players[0].field=[mon('GOLEM1',{guts:1})]);
- requirement('PENANCE',g=>g.players[0].brand=1);
+ {const g=fresh(),c=card('PENANCE');assert(!E.purchaseAllowed(g,g.players[0],c));g.players[0].brand=1;assert(E.purchaseAllowed(g,g.players[0],c));}
  assert.equal(E.playBlockReason(fresh(),0,card('GS6_4')),null);
  requirement('INCUBATOR_S',g=>g.players[0].field=[mon('DRAGON_EGG',{hatch:1,dur:6})],g=>{g.market=[];for(const p of g.players)p.supply=[];});
  assert.equal(E.playBlockReason(fresh(),0,card('INCUBATOR')),null);
  requirement('VAMP_PACT',g=>g.players[0].field.pop(),g=>g.players[0].field=Array.from({length:7},()=>mon('M1')));
  assert(!E.DB.INQUISITION);
  requirement('MASSACRE',g=>g.players[1].field=[mon('M1')]);
- check('A Decay counter does not satisfy Mind Burst; Majesty cannot be granted twice',()=>{let g=fresh();g.players[0].field=[mon('M1',{decayCnt:2,gcount:3})];assert(E.playBlockReason(g,0,card('MIND_BURST')));g.players[0].field=[mon('M1',{passivesG:['majesty']})];assert(E.playBlockReason(g,0,card('MAJESTY_RITE')));});
+ check('A Decay counter does not satisfy Mind Burst; Majesty cannot be granted twice',()=>{let g=fresh();g.players[0].field=[mon('M1',{decayCnt:2,gcount:3})];assert(E.playBlockReason(g,0,card('MIND_BURST')));g.players[0].field=[mon('M1',{passivesG:['majesty']})];assert.equal(E.playBlockReason(g,0,card('MAJESTY_RITE')),null);});
  check('Guild only accrues on subsequent owner starts, pays immediately at 20',()=>{
   let g=play(fresh(),'GUILD_CO').state;assert.equal(g.players[0].enchants[0].cnt??0,0);assert(E.playBlockReason(g,0,card('GUILD_CO')));
   g=E.reduce(g,{type:'endTurn'}).state;assert.equal(g.players[0].enchants[0].cnt??0,0);

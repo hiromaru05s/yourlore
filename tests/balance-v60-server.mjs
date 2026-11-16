@@ -21,7 +21,7 @@ try {
     room.room.game=g;room.room.turnStartAt=now;
     for(let i=0;i<4;i++)await send(room,owner,{type:'play',idx:0});
     assert.equal(room.room.game.players[1-owner].hp,95);assert.equal(room.room.game.players[owner].uses.FLAME,10);checks++;
-    for(let i=0;i<6;i++)await send(room,room.room.game.cur,{type:'endTurn'});
+    for(let i=0;i<4;i++)await send(room,room.room.game.cur,{type:'endTurn'});
     const restored=new GameRoom(journalState(state),rewardTestEnv());await restored.webSocketMessage(sockets[owner],JSON.stringify({type:'ready'}));
     assert.equal(restored.room.game.players[owner].enchants.find(e=>e.card.id==='FARM').turns,1);assert.equal(restored.room.game.players[owner].uses.FLAME,10);checks++;
     for(let i=0;i<2;i++)await send(restored,restored.room.game.cur,{type:'endTurn'});

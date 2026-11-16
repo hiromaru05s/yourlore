@@ -89,7 +89,7 @@ for(const side of [0,1]){
   g=play(g,'M5');assert(g.players[side].field[0].defMod>=1);
  }
  {
-  let g=fresh(side);g.players[side].brand=2;g=play(g,'PENANCE');assert.equal(g.players[side].brand,1);
+  let g=fresh(side);g.players[side].brand=2;g=buy(g,'PENANCE');assert.equal(g.players[side].brand,1);
   assert.equal(g.players[side].maxMana,21);assert.equal(g.players[side].hp,115);
   g=play(fresh(side),'GS6_4');g=play(g,'S13');const ordinary=100-g.players[opp].hp;
   let control=play(fresh(side),'S13');const base=100-control.players[opp].hp;assert.equal(ordinary,base+4);
@@ -105,7 +105,7 @@ for(const side of [0,1]){
   let g=fresh(side);const tribes=['시초','귀족','마족','포식','고독'];
   g.players[side].field=[m('M2',{tribe:tribes[0]})];g.players[opp].field=tribes.slice(1,n).map(tribe=>m('M2',{tribe}));
   g=play(g,'MULTI_CULTURE');if(n===3)while(g.pending)g=pick(g,E.effectChoices(g)[0].uid);
-  assert.equal(g.players[side].maxMana,n===2?21:20);assert.equal(g.players[opp].brand??0,n===4?1:0);
+  assert.equal(g.players[side].maxMana,n===2?21:20);assert.equal(g.players[opp].brand??0,n===4?3:0);
   if(n===5)assert.equal(g.players[opp].removed.length,4);
  }
  {
@@ -163,7 +163,7 @@ for(const side of [0,1]){
   g.players[0].field=[farmer];g.players[0].hand=[retired,{...c('MAGIC_BANK'),play:4}];
   g.players[0].enchants=[{card:{...c('RUNE3'),ench:'runeEcho',cost:7},turns:99}];
   E.restoreReworkedCards(g);assert.equal(farmer.def,2);assert.equal(farmer.dmg,1);assert.equal(farmer.atkMod,4);
-  assert.equal(g.players[0].hand.length,1);assert.equal(g.players[0].hand[0].play,3);
+  assert.equal(g.players[0].hand.length,1);assert.equal(g.players[0].hand[0].play,2);
   assert.equal(g.players[0].enchants.length,0);assert.equal(g.players[0].discard[0].cost,3);
   const saved=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),saved);
 }
@@ -245,7 +245,7 @@ for (const side of [0,1]) {
   assert.deepEqual(g.players[0].exile.map(entry=>[entry.card.id,entry.turns]),[['S13',2]]);
 }
 assert(!E.DB.INQUISITION);assert(E.DECK_POOL.includes('Q_RUNE_SECRET'));assert(!E.BUYABLE_POOL.includes('DEVIL_TOKEN'));
-assert.equal(E.DB.MAGIC_BANK.play,3);assert.equal(E.DB.INFERNO.cost,4);assert.equal(E.DB.INFERNO.play,1);
+assert.equal(E.DB.MAGIC_BANK.play,2);assert.equal(E.DB.INFERNO.cost,4);assert.equal(E.DB.INFERNO.play,1);
 console.log('PASS Rune rework, quick purchase, starter reward destinations, both seats, chosen combat, farm and army rules');
 
 {

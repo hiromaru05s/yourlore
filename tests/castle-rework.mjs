@@ -85,9 +85,10 @@ try {
   g.players[1].traps=[{card:{...card('T1'),react:'nullspell',cap:30},setTurn:0}];
   g=play(g,'BLOOD_SECRET');assert.equal(g.players[0].maxMana,11);
  });
- check('Mercenary Arts grants both players a lasting summon buff',()=>{
+ check('Mercenary Arts buffs only friendly summons',()=>{
   let g=fresh();ench(g,'MERC_ART');g=play(g,'SOLDIER2');g=end(g);g=play(g,'SOLDIER2');
-  for(const p of g.players){assert.equal(p.field[0].atkMod,1);assert(E.hasPassive(p.field[0],'counter'));}
+  assert.equal(g.players[0].field[0].atkMod,1);assert.equal(g.players[1].field[0].atkMod,0);
+  assert(!E.hasPassive(g.players[0].field[0],'counter'));
  });
  check('Harvest Festival adds exactly two HP to the fruit cast, including double-heal Apple',()=>{
   for(const [fruit,base] of [['APPLE',14],['GRAPE',2],['GRAPE2',5]]){
@@ -117,7 +118,7 @@ try {
   g.players[0].field=[soldier];g.players[0].hand=[card('GENESIS_MAGIC',{play:0,passive:[]})];
   g.players[0].quests=[{card:card('Q_CASTLE',{quest:{...E.DB.Q_CASTLE.quest,target:9}}),progress:3,anchorUid:'castle'}];
   E.restoreReworkedCards(g);assert.deepEqual([soldier.def,soldier.atkMod],[1,4]);
-  assert.equal(g.players[0].hand[0].play,5);assert(E.hasPassive(g.players[0].hand[0],'void'));
+  assert.equal(g.players[0].hand[0].play,2);assert(E.hasPassive(g.players[0].hand[0],'void'));
   assert.equal(g.players[0].quests[0].card.quest.target,5);assert.equal(g.players[0].quests[0].progress,3);
   const snapshot=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),snapshot);
  });

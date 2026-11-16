@@ -18,7 +18,7 @@ try {
 
  test('catalog: Goblin 1/1, Fire rename, market-only unplayable Rift Matter',()=>{
    assert.equal(DB.GOBLIN.atk,1);assert.equal(DB.GOBLIN.def,1);assert.equal(DB.FLAME.nameJa,'ファイアー');assert.equal(DB.FLAME.nameEn,'Fire');
-   assert.equal(DB.RIFT_MATTER.cost,5);assert.equal(DB.RIFT_MATTER.t,'spell');assert(E.BUYABLE_POOL.includes('RIFT_MATTER'));assert(!E.DECK_POOL.includes('RIFT_MATTER'));
+   assert.equal(DB.RIFT_MATTER.cost,3);assert.equal(DB.RIFT_MATTER.t,'spell');assert(E.BUYABLE_POOL.includes('RIFT_MATTER'));assert(!E.DECK_POOL.includes('RIFT_MATTER'));
    let g=fresh();g.players[0].hand=[card('RIFT_MATTER')];const before=structuredClone(g);g=step(g,{type:'play',idx:0});assert.deepEqual(g.players[0].hand,before.players[0].hand);assert.equal(g.players[0].mana,30);assert.equal(g.players[0].spellsCastTurn??0,0);assert.equal(g.pending,null);
  });
  test('Goblin direct attack adds separate damage, including shield absorption',()=>{for(const shield of [0,1,2]){let g=fresh();const m=mon('GOBLIN');g.players[0].field=[m];g.players[1].shield=shield;const r=reduce(g,{type:'attack',uid:m.uid,targetUid:null});assert.equal(r.state.players[1].hp,100-Math.max(0,2-shield));assert.equal(r.state.players[1].shield??0,0);assert(r.events.some(e=>e.type==='monsterActivate'));}});

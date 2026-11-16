@@ -18,7 +18,7 @@ function cast(g,id){const hand=g.players[g.cur].hand;hand.push(card(id));return 
 function attack(g,m,t){return pick(step(g,{type:'attack',uid:m.uid}),t.uid);}
 for(const side of [0,1]){
   const opp=1-side;
-  for (const [id, purchase, play] of [['KNIGHT_TEACH',2,3],['NMD4',3,4]]) {
+  for (const [id, purchase, play] of [['KNIGHT_TEACH',2,2],['NMD4',3,3]]) {
     const g=game(side), p=g.players[side], c=card(id);
     p.field=[mon('M3')]; p.hand=[c]; p.mana=play-1;
     assert.equal(E.buyCost(p,c),purchase);
@@ -50,8 +50,8 @@ for(const side of [0,1]){
     assert.equal(p.field[0].mutedEffects.onSummon,undefined);
     assert.equal(p.hand[0].onSummon,undefined);
     assert.equal(p.hand[0].textJa,E.DB.TSO3.textJa);
-    assert.equal(p.deck[0].play,3);
-    assert.equal(p.discard[0].play,4);
+    assert.equal(p.deck[0].play,2);
+    assert.equal(p.discard[0].play,3);
   }
   {
     const g=game(side),draws=['M3','S10','M4'].map(card);
