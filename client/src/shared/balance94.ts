@@ -178,8 +178,8 @@ export const balance94Text: Record<string, {ja:string; ko:string; en:string}> = 
     "en": "【On Cast】Gain 1 Dew. If you control both World Tree and an Elf-family card, also restore 2 of your HP."
   },
   "BATTLEFIELD": {
-    "ja": "【自分のモンスター破壊時】自分の場の購入コスト3以下のモンスターが破壊され、自分の墓地へ送られた直後、ダイス1個を振る。5以上なら、そのカードを自分の手札に加える。",
-    "ko": "【자신의 몬스터 파괴 시】자신의 필드에서 구매 코스트 3 이하인 몬스터가 파괴되어 자신의 묘지로 보내진 직후, 주사위 1개를 굴린다. 5 이상이면 그 카드를 자신의 패에 넣는다.",
-    "en": "【When Your Monster Is Destroyed】Immediately after a monster with purchase cost 3 or less is destroyed on your field and sent to your graveyard, roll 1 die. On 5 or more, return that card to your hand."
+    "ja": "【各ターン開始時】そのターンのプレイヤーに2ダメージを与える。\n\n【自分のモンスター破壊時】自分の場の購入コスト3以下のモンスターが破壊され、自分の墓地へ送られた直後、ダイス1個を振る。5以上なら、そのカードを自分の手札に加える。",
+    "ko": "【각 턴 시작 시】그 턴의 플레이어에게 2 데미지를 준다.\n\n【자신의 몬스터 파괴 시】자신의 필드에서 구매 코스트 3 이하인 몬스터가 파괴되어 자신의 묘지로 보내진 직후, 주사위 1개를 굴린다. 5 이상이면 그 카드를 자신의 패에 넣는다.",
+    "en": "【At the Start of Each Turn】Deal 2 damage to the player whose turn is starting.\n\n【When Your Monster Is Destroyed】Immediately after a monster with purchase cost 3 or less is destroyed on your field and sent to your graveyard, roll 1 die. On 5 or more, return that card to your hand."
   }
 };

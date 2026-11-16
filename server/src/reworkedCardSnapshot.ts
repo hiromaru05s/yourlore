@@ -38,7 +38,7 @@ export function restoreReworkedCards(game: GameState): void {
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 2)) return;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -60,6 +60,10 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (game.balance94Applied === true && card.id === 'BATTLEFIELD') {
+      const {text,textJa,textEn} = DB.BATTLEFIELD;
+      Object.assign(card,{text,textJa,textEn});
+    }
     if (updatePowerBalance) {
       const def = DB[card.id];
       const swapped = (card as FieldMon).trickSwapped;
@@ -291,7 +295,6 @@ export function restoreReworkedCards(game: GameState): void {
     }
   }
   if (!game.balance94Applied) {
-    game.balance94Applied = true;
     if (game.trickLeft) game.trickLeft = 1;
     const refresh94 = (card: CardInst | null) => {
       if (!card || !(card.id in balance94Prints || card.id in balance94Text)) return;
@@ -322,6 +325,7 @@ export function restoreReworkedCards(game: GameState): void {
     }
     refreshFieldPassives(game);
   }
+  game.balance94Applied = 2;
   if (updateDemons || updateHexers) refreshFieldPassives(game);
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);

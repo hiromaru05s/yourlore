@@ -343,3 +343,25 @@ for (const seals of [14,15]) {
   g.pending={kind:'cardChoice',reason:'SLUM_ASSASSIN',owner:1,data:{left:2}};
   assert.equal(E.greedyDecide(g).uid,discard.uid);
 }
+
+check('v94 rooms gain both Battlefield rules without advancing ongoing countdowns twice',()=>{
+  const g=fresh();
+  g.balance94Applied=true;
+  enchant(g,'BATTLEFIELD');enchant(g,'BREWING');
+  const [battlefield,brewing]=g.players[0].enchants;
+  const oldCard={...battlefield.card,text:'v94 ko',textJa:'v94 ja',textEn:'v94 en'};
+  battlefield.card=oldCard;
+  brewing.turns=3;
+  const copy={...oldCard,uid:'deck-copy'};
+  g.players[1].deck=[copy];
+  for (let i=0;i<2;i++) {
+    E.restoreReworkedCards(g);
+    assert.equal(g.balance94Applied,2);
+    for (const c of [oldCard,copy]) for (const key of ['text','textJa','textEn']) {
+      assert.equal(c[key],E.DB.BATTLEFIELD[key]);
+      assert.equal(c[key].split('\n\n').length,2);
+    }
+    assert.equal(battlefield.card.uid,oldCard.uid);
+    assert.equal(brewing.turns,3);
+  }
+});

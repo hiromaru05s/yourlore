@@ -519,7 +519,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:2,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -7924,6 +7924,11 @@ function fieldToGrave(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst
 function tickGoblinEnchants(g: GameState, ctx: Ctx, current: PlayerState): void {
   for (const owner of g.players) for (const e of [...owner.enchants]) {
     if (g.over || !owner.enchants.includes(e)) continue;
+    if (e.card.ench === 'battlefield') {
+      enchantFx(g,ctx.ev,owner,e.card);
+      if (owner === current) ctx.selfDamage(owner,2,e.card);
+      else ctx.dealDamage(current,2,cn(e.card),cn(e.card),side(g,owner));
+    }
     if (owner !== current || (e.bornTurn ?? -1) >= g.turn) continue;
     if (e.card.ench === 'goblinSettlement') {
       const targets = owner.field.filter(isGoblinMonster);
