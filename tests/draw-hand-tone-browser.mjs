@@ -24,16 +24,19 @@ try{
    const before=await page.evaluate(()=>{const n=document.querySelector('#hand [data-uid="new"]');return{dim:n.classList.contains('is-dim'),condition:n.classList.contains('has-play-condition'),tone:[...n.children].map(c=>({filter:getComputedStyle(c).filter,opacity:getComputedStyle(c).opacity}))};});
    assert.equal(before.dim,mana===0||!goblin);assert.equal(before.condition,goblin);
    await page.evaluate(()=>{window.drawDone=monsterQA.A.animateDraw(document.querySelector('#hand'),1,'me',{uids:['new']});});
-   await page.waitForFunction(()=>+document.querySelector('.native-draw-card')?.dataset.progress>.58);
-   const during=await page.evaluate(()=>{
+   const sample=await page.waitForFunction(()=>{
+    if(!(Number(document.querySelector('.native-draw-card')?.dataset.progress)>.58))return false;
     const n=document.querySelector('.native-draw-card .card');
     const grip=[...document.querySelector('.native-draw-layer').children].find(c=>c.classList.contains('card'));
     return{classes:n.className,effects:n.querySelectorAll('.hand-condition-effect').length,filter:getComputedStyle(n).filter,tones:[...n.children].map(c=>({filter:getComputedStyle(c).filter,opacity:getComputedStyle(c).opacity})),grip:[...grip.children].map(c=>({filter:getComputedStyle(c).filter,opacity:getComputedStyle(c).opacity}))};
    });
+   const during=await sample.jsonValue();
    assert(!/is-dim|has-play-condition|is-playable/.test(during.classes));assert.equal(during.effects,0);assert.equal(during.filter,'none');
    assert(during.tones.every(t=>!t.filter.includes('grayscale')&&t.opacity==='1'));
    assert.deepEqual(during.grip,before.tone,'existing hand preserves its per-layer presentation');
    await page.screenshot({path:`${out}/${label}-${width}-flight.png`});await page.evaluate(()=>window.drawDone);
+   // Toning starts at contact and follows the print when it returns to the hand.
+   await page.evaluate(()=>Promise.all(document.querySelector('#hand [data-uid="new"]').getAnimations({subtree:true}).filter(a=>a.id==='draw-land-tone').map(a=>a.finished)));
    const after=await page.evaluate(()=>{const n=document.querySelector('#hand [data-uid="new"]');return{visible:getComputedStyle(n).visibility,dim:n.classList.contains('is-dim'),condition:n.classList.contains('has-play-condition'),tone:[...n.children].map(c=>({filter:getComputedStyle(c).filter,opacity:getComputedStyle(c).opacity})),copies:document.querySelectorAll('.native-draw-layer').length};});
    assert.equal(after.visible,'visible');assert.equal(after.dim,before.dim);assert.equal(after.condition,before.condition);assert.deepEqual(after.tone,before.tone);assert.equal(after.copies,0);
    await page.screenshot({path:`${out}/${label}-${width}-landed.png`});checks.push({label,width,before,during,after});
@@ -44,7 +47,7 @@ try{
  await page.evaluate(()=>{const q=monsterQA;q.reset();q.g.players[0].mana=0;q.g.players[0].hand=[{...q.DB.GOBLIN_SETTLEMENT,uid:'first'},{...q.DB.GOBLIN_SETTLEMENT,uid:'second'}];q.render();window.drawDone=q.A.animateDraw(document.querySelector('#hand'),2,'me',{uids:['first','second'],durationScale:3});});
  await page.waitForFunction(()=>{const cards=document.querySelectorAll('.native-draw-card');return cards.length===2&&cards[0].style.display==='none'&&cards[1].style.display==='block'&&+cards[1].dataset.progress>.8;});
  const multi=await page.evaluate(()=>{const layer=document.querySelector('.native-draw-layer'),landed=[...layer.children].find(n=>n.classList.contains('card')),flying=layer.querySelector('.native-draw-card[style*="display: block"] .card');return{landed:getComputedStyle(landed.querySelector('.card-art')).filter,flying:getComputedStyle(flying.querySelector('.card-art')).filter};});
- assert(multi.landed.includes('grayscale(1)'));assert.equal(multi.flying,'none');await page.evaluate(()=>window.drawDone);checks.push({multi});
+ assert(multi.landed.includes('grayscale('));assert.equal(multi.flying,'none');await page.evaluate(()=>window.drawDone);checks.push({multi});
  for(const mode of ['abort','resize','skip','reduce','opponent']){
   await page.evaluate(()=>{const q=monsterQA;q.reset();q.g.players[0].mana=0;q.g.players[0].hand=[{...q.DB.GOBLIN_SETTLEMENT,uid:'new'}];q.g.players[1].hand=[{...q.DB.GOBLIN_SETTLEMENT,uid:'hidden'}];q.render();});
   if(mode==='reduce')await page.emulateMedia({reducedMotion:'reduce'});

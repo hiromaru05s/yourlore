@@ -267,10 +267,6 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   face.style.transformOrigin='0 0';
   const start=new DOMMatrix().translate(from.left,from.top).scale(from.width/w,from.height/h);
   const end=fieldPlacement(target,w,h);
-  const rw=reveal.offsetWidth,rh=reveal.offsetHeight;
-  reveal.getAnimations().forEach(a=>a.cancel());reveal.style.transition='none';reveal.style.left='0';reveal.style.top='0';reveal.style.transformOrigin='0 0';
-  const oldStart=new DOMMatrix().translate(from.left,from.top).scale(from.width/rw,from.height/rh);
-  const oldEnd=fieldPlacement(target,rw,rh);
   face.style.transform=end.toString();face.style.opacity='1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(heavy&&isPoisonSummon(face.dataset.cardId)){
@@ -339,16 +335,22 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
     reveal.remove();face.style.visibility='visible';if(!target.isConnected){face.remove();return face;}face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
   if(heavy){
-    face.style.zIndex='135';reveal.style.zIndex='135';
-    // Transfer directly into the selected card-parallel landing, without a second impact.
     const initial=summonPlacement(target,w,h,0,reduced,face.dataset.cardId),tempo=summonTempo(face.dataset.cardId);
-    const transfer=face.animate([{transform:start.toString(),opacity:0},{transform:initial.toString(),opacity:1}],{duration:tempo.milliseconds(reduced?80:300),easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
-    const fade=reveal.animate([{opacity:1},{opacity:0}],{duration:tempo.milliseconds(reduced?80:220),fill:'both'});
-    await wait(tempo.milliseconds(reduced?80:300));transfer.cancel();fade.cancel();reveal.remove();
+    // The field print takes over at the exact bounds of the focused card.
+    // Only that print travels; the enlarged hand face has finished its reveal.
+    face.style.zIndex='135';
     face.style.transform=initial.toString();
+    reveal.remove();
+    const duration=tempo.milliseconds(reduced?80:300);
+    const transfer=face.animate([{transform:start.toString()},{transform:initial.toString()}],{duration,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
+    await wait(duration);transfer.cancel();
     await boardMotionScope(signal=>playMonster(face,'summon',{anchor:target,signal,onImpact:()=>sfx(landingSound)}),(isVerdant(face.dataset.cardId)||isChosenHero(face.dataset.cardId))?10000:5000);
     face.style.transform=fieldPlacement(target,w,h).toString();return face;
   }
+  const rw=reveal.offsetWidth,rh=reveal.offsetHeight;
+  reveal.getAnimations().forEach(a=>a.cancel());reveal.style.transition='none';reveal.style.left='0';reveal.style.top='0';reveal.style.transformOrigin='0 0';
+  const oldStart=new DOMMatrix().translate(from.left,from.top).scale(from.width/rw,from.height/rh);
+  const oldEnd=fieldPlacement(target,rw,rh);
   const duration=STANDARD_FX.milliseconds(reduced?120:620);
   const options:KeyframeAnimationOptions={duration,easing:'linear',fill:'both'};
   const moving=face.animate([{transform:start.toString(),opacity:0},{transform:end.toString(),opacity:1}],options);

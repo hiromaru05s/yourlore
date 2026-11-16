@@ -16,6 +16,8 @@
       /* LORE_LOADING_CSS */
       #startup{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center}
       #startup-reload{position:absolute;bottom:max(16px,env(safe-area-inset-bottom));color:inherit;font:12px/1.6 sans-serif;letter-spacing:0;text-underline-offset:5px}
+      /* Cold-start fallback until the pointer module knows the mouse position. */
+      @media (any-pointer:fine){#startup{cursor:url('/ui/cursors/loading.svg') 18 18,progress}}
       #startup noscript{position:absolute;top:16px;font:12px sans-serif}
     </style>
     <section id="startup" class="game-loading" aria-label="LORE" role="status" aria-live="polite">
@@ -46,6 +48,7 @@
       })();
     </script>
     <div id="app"></div>
+    <script type="module" src="/src/cursorEntry.ts"></script>
     <script type="module" src="/src/startup.ts"></script>
   </body>
 </html>

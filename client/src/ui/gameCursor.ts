@@ -1,3 +1,5 @@
+import '../styles/loreCursor.css';
+
 /** One unclipped reason bubble; no invisible overlay intercepts card input. */
 export function installGameCursor(root:HTMLElement):()=>void {
   let tip:HTMLElement|null=null,owner:HTMLElement|null=null;

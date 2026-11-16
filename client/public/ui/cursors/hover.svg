@@ -1,1 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path d="M3 3 12 31 17 21 28 17Z" fill="#eee5d1" stroke="#111c30" stroke-width="2" stroke-linejoin="round"/><path d="m6 7 9 13 9-3Z" fill="#28455f"/><path d="m7 8 8 11" stroke="#c8ac6d" stroke-width="1.5"/><path d="m27 22 4 5-4 5-4-5Z" fill="#a2def0" stroke="#b49a69"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="-4 -4 48 48">
+  <defs>
+    <path id="rim" d="M3 3 12 31 17 21 28 17Z"/>
+    <linearGradient id="silver" x2=".85" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#fff5d5"/><stop offset=".35" stop-color="#faffff"/>
+      <stop offset=".68" stop-color="#7ad9fb"/><stop offset="1" stop-color="#e6fbff"/>
+    </linearGradient>
+    <filter id="bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.65"/></filter>
+  </defs>
+  <g stroke-linejoin="round">
+    <use href="#rim" fill="none" stroke="#80dfff" stroke-width="5" filter="url(#bloom)"/>
+    <use href="#rim" fill="#eee5d1" stroke="#152d42" stroke-width="2.5"/>
+    <use href="#rim" fill="none" stroke="url(#silver)" stroke-width="1.4"/>
+  </g>
+  <path d="m6 7 9 13 9-3Z" fill="#28455f"/>
+  <path d="m7 8 8 11" stroke="#c8ac6d" stroke-width="1.5"/>
+</svg>

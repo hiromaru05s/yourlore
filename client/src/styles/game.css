@@ -665,12 +665,6 @@
 
 @media(max-width:700px) and (orientation:portrait) { .game .portrait:not(.portrait--opp) .pt-mana { top:24%; } }
 
-/* Archive pointer set: same precise tip/hotspot in all five states. */
-body:has(.game) { cursor:url(/ui/cursors/normal.svg) 3 3,default; }
-body:has(.game) :is(button,a,[role=button],.card,.pile,.hand) { cursor:url(/ui/cursors/hover.svg) 3 3,pointer!important; }
-body:has(.game) :is([data-block-reason],[data-block-reason] *,button:disabled,[aria-disabled=true]) { cursor:url(/ui/cursors/blocked.svg) 3 3,not-allowed!important; }
-body:has(.game.drag-play) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!important; }
-body:has(.opening-hands) *,body:has(.game) [aria-busy=true] { cursor:url(/ui/cursors/loading.svg) 3 3,progress!important; }
 .card-block-tip { position:fixed;z-index:250;pointer-events:none;max-width:min(320px,90vw);padding:9px 14px;color:#f2e3cd;background:#20283bf5;border:1px solid #bca27a;border-radius:8px 8px 8px 2px;box-shadow:0 5px 16px #070c2350;font-size:12px;line-height:1.5; }
 .game .card-frame { filter:drop-shadow(0 1px 0 #d3c3a0) drop-shadow(0 1px 0 #655846); }
 .game .pcluster--opp { transform:translateY(calc(var(--pt) * -.15)); }
@@ -713,7 +707,6 @@ body:has(.opening-hands) *,body:has(.game) [aria-busy=true] { cursor:url(/ui/cur
 .game .rift-label { bottom:-10px; }
 
 .game.opening-hands .market-cards .card.is-dim { filter:none!important; }
-body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!important; }
 
 @media(min-width:900px) and (max-aspect-ratio:3/2){.game #oppRow{align-self:start;}.game #meRow{align-self:end;}}
 
@@ -926,6 +919,8 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .game .card.is-exhausted:not(.is-dim) .card-frame { filter:grayscale(.7) brightness(.6) drop-shadow(0 4px 8px #0009); }
 /* Floating summon faces use the same print and silhouette as a field Actor.
    Their parent is body while travelling, so .game descendant rules cannot own them. */
+/* A newly mounted blocked Actor already owns its settled transform. */
+.game .zone-mon .field-resting-face[data-monster-blocked] { transition:none; }
 .card.summon-face { filter:none!important;animation:none!important;transition:none!important; }
 .card:is(.summon-face,.field-resting-face) > :not(.card-frame),.game .zone-mon .card.field-resting-face > :not(.card-frame) { filter:var(--rest-tone,brightness(1)); }
 .card:is(.summon-face,.field-resting-face) .card-frame,.game .zone-mon .card.field-resting-face .card-frame { filter:drop-shadow(0 var(--summon-frame-unit,1px) 0 #d3c3a0) drop-shadow(0 var(--summon-frame-unit,1px) 0 #655846) drop-shadow(0 calc(2 * var(--summon-frame-unit,1px)) calc(4 * var(--summon-frame-unit,1px)) #0009) var(--rest-shadow,drop-shadow(0 0 0 #0000)) var(--rest-tone,brightness(1));animation:none!important; }

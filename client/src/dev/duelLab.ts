@@ -1,3 +1,4 @@
+import {installLoreCursor} from '../ui/loreCursor';
 import {mountTurnLightBoardLab} from './turnLightBoardLab';
 import "../styles/reading-board.css";
 /// <reference types="vite/client" />
@@ -29,6 +30,7 @@ import type { CardInst, FieldMon } from '../shared/types';
 import {mountManaBoardLab} from './manaBoardLab';
 
 if (import.meta.env.DEV) {
+  installLoreCursor();
   setLang('ja');initSound();
   localStorage.setItem('lore_help_callout_seen',new Date().toISOString().slice(0,10));
   if (new URLSearchParams(location.search).has('opening')) {
