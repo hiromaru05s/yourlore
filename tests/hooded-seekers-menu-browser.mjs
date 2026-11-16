@@ -5,11 +5,12 @@ const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out=process.e
 await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true,args:['--disable-quic','--use-angle=metal']}),page=await browser.newPage({viewport:{width:1280,height:900}});
 page.setDefaultTimeout(120000);
-const errors=[],requests=[],updates=[],failed=[];page.on('requestfailed',r=>failed.push({url:r.url(),failure:r.failure()}));page.on('response',r=>{if(r.status()>=400)failed.push({url:r.url(),status:r.status()});});page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
+const errors=[],requests=[],updates=[],failed=[];page.on('requestfailed',r=>failed.push({url:r.url(),failure:r.failure()}));page.on('response',r=>{if(r.status()>=400)failed.push({url:r.url(),status:r.status()});});page.on('pageerror',e=>errors.push(e.stack ?? e.message));page.on('request',r=>requests.push(r.url()));
 const user={id:'hooded-menu-fixture',display:'シーカー',email:'fixture@example.test',avatar:'NPC_LUMI',background:'plain',needsUsername:false,wins:3,losses:1,credits:0,sleeve:'default',furniture:'default'};
 await apiFixture(page,r=>{const path=new URL(r.url).pathname;
  if(path==='/api/auth/me')return {user};if(path==='/api/geo')return {country:'JP'};
  if(path==='/api/rank/me')return {rating:{season:'2026-10',mmr:1000,tier:'bronze',wins:3,losses:1}};
+ if(path==='/api/gifts')return {items:[],pendingCount:0,pendingAmount:0,unreadCount:0,now:Date.now()};
  if(path==='/api/onboarding')return {stage:'complete'};
  if(path==='/api/rewards/tutorial')return {offered:true,keys:[]};
  if(path==='/api/rewards/progression')return {dailies:[],online:0,ranked:0,bot:{},credits:0,resetsAt:Date.now()+86400000};
@@ -44,7 +45,8 @@ try{
  await page.locator('[data-profile]').click();
  await page.locator('[data-edit-look]').click();
  assert.equal(await picker.locator('[data-scene=navy]').getAttribute('aria-pressed'),'true');
- await page.screenshot({path:out+'/palette.png'});
+ await picker.locator('[data-save]').waitFor({state:'visible'});
+ await page.screenshot({path:out+'/palette.png',animations:'disabled'});
  await page.keyboard.press('Escape');await picker.waitFor({state:'detached'});
  assert.deepEqual(errors,[]);
  console.log('PASS profile, saved character on HOME and eight free background colors (fixture account)');
