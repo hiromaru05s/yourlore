@@ -523,7 +523,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3, balance97Applied:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3, balance97Applied:true, balance98Applied:true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -1027,7 +1027,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
         monsterActivation(g, ev, owner, dead, ev.length, true);
         const result = diceRoll(g, ev, side(g, owner), {id:dead.id, player:side(g,owner)}, 1, 3);
         shroomRift = result.rolls[0] >= 3;
-        if (shroomRift) selfDamage(owner, 3, dead);
+        if (shroomRift) selfDamage(owner, 4, dead);
       }
       if (riftSource) sendToRift(g, owner, resetInst(dead), riftSource);
       else if (shroomRift || dead.token || hasPassive(dead, "void")) rmz(owner).push(resetInst(dead));
@@ -1649,7 +1649,7 @@ function binEnch(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst, for
   if (card.id === 'MANA_BACKFLOW') {
     enchantFx(g,ctx.ev,owner,card);
     const affected = deviceExpired ? owner : opponent;
-    affected.maxMana = Math.max(affected.crystalFloor ?? MIN_MANA, affected.maxMana - (deviceExpired ? 2 : 1));
+    affected.maxMana = Math.max(affected.crystalFloor ?? MIN_MANA, affected.maxMana - 2);
   }
 }
 
@@ -3253,7 +3253,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       break;
     }
     case 'goblinLeader': {
-      const count = [...p.field, ...p.enchants.map(e => e.card), ...p.traps.map(t => t.card), ...(p.quests ?? []).map(q => q.card)].filter(c => GOBLIN_IDS.has(c.id)).length;
+      const count = [...p.field, ...p.enchants.map(e => e.card), ...p.traps.map(t => t.card), ...(p.quests ?? []).map(q => q.card)].filter(c => c.uid !== m.uid && GOBLIN_IDS.has(c.id)).length;
       for (const enemy of [...o.field]) monsterDamage(g,ctx,o,enemy,count,false,m,p);
       ctx.dealDamage(o, count, cn(m), cn(m), side(g,p)); break;
     }
@@ -4586,7 +4586,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "FLAME": {
       const branded = (o.brand ?? 0) > 0;
-      const damage = ((p.uses.FLAME ?? 0) >= 7 ? 5 : 2) + fireDamageBonus(p);
+      const damage = ((p.uses.FLAME ?? 0) >= 5 ? 5 : 2) + fireDamageBonus(p);
       ctx.log(`${tag(p, card)} 상대 ${damage} / 자신 1 데미지`, `${tag(p, card)} 相手${damage} / 自分1ダメージ`);
       const fx=elementalGroup(ctx,side(g,p),card);
       try {
@@ -4633,7 +4633,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "FOCUS": { // One optional exile from deck, graveyard or field.
       ctx.log(`${tag(p, card)} 발동`, `${tag(p, card)} 発動`);
-      g.pending = { kind: "purge", hint: "선택과 집중 — 리프트로 보낼 카드 선택 (1장까지)", hintJa: "選択と集中 — リフトへ送るカードを選択 (1枚まで)", reason: "purge", allowCancel: true, data: { val: 1, zone: "deckDiscardField" } };
+      g.pending = { kind: "purge", hint: "선택과 집중 — 리프트로 보낼 카드 선택 (1장까지)", hintJa: "選択と集中 — リフトへ送るカードを選択 (1枚まで)", reason: "purge", allowCancel: true, data: { val: 1, zone: "deckDiscardField", sourceId: card.id } };
       ctx.ev.push({ type: "needTarget", pending: g.pending });
       break;
     }
@@ -5976,6 +5976,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (c) {
       if (toDiscard) { fieldToGrave(g,ctx,p,c); ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 을(를) 버린다 (손패 이월 상한)`, `<span class="t">${p.name}</span> ${cn(c)} を捨てる (手札持ち越し上限)`); }
       else { if (!rmz(p).some(x => x.uid === c!.uid)) sendToRift(g, p, c); ctx.log(`<span class="t">${p.name}</span> ${cn(c)} 게임에서 제외`, `<span class="t">${p.name}</span> ${cn(c)} をゲームから除外`); }
+      if (d.sourceId === 'FOCUS' && c.cost >= 4) gainCurrentMana(g, ctx, p, 2);
       const remaining = toDiscard ? Math.max(0,p.hand.length-HAND_CARRY) : ((d.val as number) ?? 1) - 1;
       const poolLeft = purgeChoices(p, pending).length;
       if (remaining > 0 && poolLeft > 0) {
@@ -6263,6 +6264,7 @@ export function purchaseAllowed(g: GameState, p: PlayerState, c: CardInst): bool
   switch (c.id) {
     case 'PENANCE': return (p.brand ?? 0) > 0;
     case 'FORBIDDEN': return p.field.length === 0;
+    case 'QUICK_MUSTER': return p.field.length <= 1;
     case 'MIND_GAME': return o.field.length >= 2 && p.field.some(m => mindTargets(g,p,m).length > 0);
     case 'QUICK_AID': {
       const damage = p.damageReceived;
@@ -6823,6 +6825,16 @@ export function reduce(prev: GameState, action: Action): ReduceResult {
   return result;
 }
 
+export function clearEmptyBuffChoice(game: GameState): boolean {
+  const pending = game.pending;
+  if (pending?.kind !== 'myMon' || (pending.reason !== 'buffTurn' && pending.reason !== 'buffPerm')) return false;
+  const field = game.players[pending.owner ?? game.cur].field;
+  const excluded = (pending.data?.excl as string[] | undefined) ?? [];
+  if (field.some(m => !excluded.includes(m.uid) && (pending.data?.sourceId !== 'S3' || !m.tribe))) return false;
+  game.pending = null;
+  return true;
+}
+
 function reduceEffects(prev: GameState, action: Action): ReduceResult {
   // Count actual mana-growth events, not the amount gained or healing events.
   const pre = prev.players.map(pl => pl.maxManaIncreases ?? 0);
@@ -6969,6 +6981,12 @@ function reduceEffects(prev: GameState, action: Action): ReduceResult {
   normalizeManaCaps(g2);
   refreshFieldPassives(g2);
   recheckDeaths(g2, questCtx);
+  const pendingBuff = g2.pending;
+  if (clearEmptyBuffChoice(g2)) {
+    const prompt = res.events.findIndex(e => e.type === 'needTarget' && e.pending === pendingBuff);
+    if (prompt >= 0) res.events.splice(prompt, 1);
+    drainExpansionChoices(g2, questCtx);
+  }
   for (const side of [0,1] as Side[]) for (const target of g2.players[side].field) {
     if (target.bounties?.length) target.bounties = target.bounties.filter(b =>
       g2.players[1-side].field.some(hunter => hunter.mercContractKey === b.hunterKey));
@@ -7487,7 +7505,7 @@ function expansionSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (o.brand || o.curseSeals) offerEffectChoice(g,ctx,p,card.id,'',{sourceUid:card.uid});
       break;
     case 'HEX_PUPPET':
-      generateHexCurses(g,ctx,p,card,4);
+      generateHexCurses(g,ctx,p,card,3);
       effectSummon(g,ctx,p,'TOKEN00');
       break;
     case 'FIRE_MARK': case 'FIRE_BRANDING': {

@@ -1,3 +1,4 @@
+import {balance98Prints,balance98Text} from '../../client/src/shared/balance98';
 import {balance97Prints,balance97Text,retired97} from '../../client/src/shared/balance97';
 import {balance96Prints,balance96Text} from '../../client/src/shared/balance96';
 import {balance94Prints,balance94Text} from '../../client/src/shared/balance94';
@@ -6,7 +7,7 @@ import {GOLEM_TEXT} from '../../client/src/shared/golemCards';
 import {NOVEMBER_PRINTS,RUNE_RULE_TEXT} from '../../client/src/shared/runeRework';
 import {MERC_IDS} from '../../client/src/shared/mercenaryCards';
 import { BUYABLE_POOL, DB, STARTERS } from '../../client/src/shared/cards';
-import { effDef, refreshFieldPassives } from '../../client/src/shared/engine';
+import { clearEmptyBuffChoice, effDef, refreshFieldPassives } from '../../client/src/shared/engine';
 import type { CardInst, FieldMon, GameState } from '../../client/src/shared/types';
 
 const castleCards = new Set([
@@ -40,7 +41,7 @@ export function restoreReworkedCards(game: GameState): void {
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied)) return;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -385,6 +386,29 @@ export function restoreReworkedCards(game: GameState): void {
     }
     refreshFieldPassives(game);
     game.balance97Applied=true;
+  }
+  if (!game.balance98Applied) {
+    const refresh98 = (card:CardInst | null) => {
+      if (!card || !(card.id in balance98Prints || card.id in balance98Text)) return;
+      const def=DB[card.id] ?? STARTERS[card.id];
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      for (const [key,value] of Object.entries(balance98Prints[card.id] ?? {})) {
+        const swapped=(card as FieldMon).trickSwapped;
+        const prop=swapped && key==='atk'?'def':swapped && key==='def'?'atk':key;
+        Reflect.set(card,prop,value);
+      }
+    };
+    for (const card of game.market) refresh98(card);
+    for (const p of game.players) {
+      for (const c of [...p.hand,...p.deck,...p.discard,...p.field,...p.removed??[],...p.supply]) refresh98(c);
+      for (const e of [...p.enchants,...p.exile,...p.traps,...p.quests??[]]) refresh98(e.card);
+      for (const m of p.field) if (balance98Prints[m.id]?.def != null && (m.dmg??0)>=effDef(p,m)) {
+        m.dmg=Math.max(0,effDef(p,m)-1);
+      }
+    }
+    if (game.pending?.kind==='purge' && game.pending.reason==='purge' && game.pending.data?.zone==='deckDiscardField') game.pending.data.sourceId='FOCUS';
+    clearEmptyBuffChoice(game);
+    game.balance98Applied=true;
   }
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);

@@ -37,7 +37,7 @@ try {
  test('another friendly card destroys the Device and charges the opponent',()=>{
    let g=fresh();g.players[0].enchants=[ench('MANA_BACKFLOW')];g.players[0].heartDue=g.turn+1;
    g=end(g);assert.equal(g.players[0].enchants.length,0);
-   assert.equal(g.players[0].maxMana,24);assert.equal(g.players[1].maxMana,29);
+   assert.equal(g.players[0].maxMana,24);assert.equal(g.players[1].maxMana,28);
  });
  test('Meditation heals only missing HP up to the opponent, including Elf doubling',()=>{
    for(const hp of [20,100,120]){

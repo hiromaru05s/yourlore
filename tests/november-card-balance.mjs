@@ -112,7 +112,7 @@ for(const side of [0,1]){
   }
   {
     let g=game(side);g.players[opp].field=[{...mon('M4'),def:20},{...mon('M11'),def:20}];g.players[side].field=[mon('GOBLIN')];
-    g=cast(g,'GOBLIN_LEADER');assert.equal(g.players[opp].hp,98);assert(g.players[opp].field.every(m=>m.dmg===2));
+    g=cast(g,'GOBLIN_LEADER');assert.equal(g.players[opp].hp,99);assert(g.players[opp].field.every(m=>m.dmg===1));
   }
   {
     const g=game(side);const m={...mon('ELITE'),atk:6,def:6,dmg:5};g.players[side].field=[m];delete g.novemberBalanceApplied;

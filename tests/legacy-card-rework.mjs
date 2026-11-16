@@ -66,7 +66,7 @@ try {
  });
  test('Inferno Drake owner-turn burn is four',()=>{let g=fresh();g.players[1].field=[mon('GM5_3')];g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,96);});
  test('Hexer summons count distinct other names on the summoning field',()=>{
-  for (const [id,base] of [['NHEX',1],['HEXER1',1],['HEXER2',2],['HEXER3',3]]) {
+  for (const [id,base] of [['NHEX',1],['HEXER1',1],['HEXER2',2],['HEXER3',2]]) {
    let g=fresh();const other=id==='NHEX'?'HEXER1':'NHEX';
    g.players[0].field=[mon(id),mon(other),mon(other),mon('HEXER4')];
    g.players[1].field=[mon('HEXER2')];g=play(g,id).state;
@@ -119,9 +119,9 @@ try {
    for(const c of effectChoices(g)){const o=step(g,{type:'pick',uid:c.uid}).players[1];assert.equal(o.brand,brand+Number(c.uid==='brand'));assert.equal(o.curseSeals,seals+(c.uid==='seals'?5:0));}
   }
   let g=fresh();const r=play(g,'HEX_PUPPET');assert(r.events.findIndex(e=>e.type==='curseGenerated')<r.events.findIndex(e=>e.type==='summon'));
-  assert.equal(r.state.players[1].discard.length,4);assert.equal(r.state.players[0].field[0].id,'TOKEN00');
+  assert.equal(r.state.players[1].discard.length,3);assert.equal(r.state.players[0].field[0].id,'TOKEN00');
   g=fresh();g.players[0].field=Array.from({length:7},()=>mon('M1'));const full=play(g,'HEX_PUPPET').state;
-  assert.equal(full.players[0].field.length,7);assert.equal(full.players[1].discard.length,4);
+  assert.equal(full.players[0].field.length,7);assert.equal(full.players[1].discard.length,3);
  });
  test('Rest heals player by two; 9/10 Cull threshold, own starts, actual choices and restored queue',()=>{
   for(const n of [9,10]){let g=fresh();g.players[0].enchants=[ench('COLOSSEUM_REST')];g.players[0].removed=Array.from({length:n},()=>card('STARTER_TRASH'));g.players[0].field=[{...mon('M8'),dmg:3},{...mon('M12'),dmg:1}];g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,100);assert.equal(g.pending,null);g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,102);if(n===9){assert.equal(g.pending,null);assert.equal(g.players[0].field[0].dmg,3);}else{assert.equal(g.pending.reason,'COLOSSEUM_REST');assert.equal(g.pending.owner,0);assert.equal(effectChoices(g).length,2);const target=g.players[0].field[0].uid;assert.equal(greedyDecide(g).uid,target);assert(botActions(g).some(a=>a.type==='pick'&&a.uid===target));g=step(JSON.parse(JSON.stringify(g)),{type:'pick',uid:target});assert.equal(g.pending,null);assert.equal(g.players[0].field[0].dmg,0);assert.equal(g.players[0].field[1].dmg,1);}}

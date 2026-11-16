@@ -50,7 +50,7 @@ for (const [id,cost,atk,hp,reward] of ranks) {
   });
   check(id+' rough work and personal battle bounty',()=>{
     let g=fresh();const target={...mon('SOLDIER2'),def:10};g.players[1].field=[target];
-    g=cast(g,id);g=pick(pick(g,'hit'),target.uid);assert.equal(g.players[1].field[0].dmg,cost);
+    g=cast(g,id);g=pick(pick(g,'hit'),target.uid);assert.equal(g.players[1].field[0].dmg,id==='MERC_LEADER'?2:cost);
     g=fresh();g.players[1].field=[{...target,def:1,atk:10,passive:['counter']}];
     g=cast(g,id);g=pick(pick(g,'bounty'),target.uid);
     const hunter=g.players[0].field[0];g=step(g,{type:'attack',uid:hunter.uid});g=pick(g,target.uid);
