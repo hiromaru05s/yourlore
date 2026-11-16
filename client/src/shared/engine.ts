@@ -5463,6 +5463,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
     ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: card.star === "trash" ? "vanish" : "discard" });
     afterPlay(g, ctx, p, card);
+    if (card.star === "mana") advanceQuest(p, "spellPlay");
     if (tryNullSpell(g, ctx, card)) { fieldToGrave(g,ctx,p,card); return; } // negated → consumed, effect nullified
     if (trySpellSteal(g, ctx, card)) { fieldToGrave(g,ctx,p,card); return; } // 주문 파쇄: 무효 + 복제 강탈
     if (tryAttuneJam(g, ctx, card)) { fieldToGrave(g,ctx,p,card); return; } // 어튠 무효 장치(v37)

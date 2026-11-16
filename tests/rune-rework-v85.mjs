@@ -55,6 +55,15 @@ for(const side of [0,1]){
  {
   let g=play(fresh(side),'Q_RUNE_SECRET');g.players[side].deck=Array.from({length:5},()=>c('M2'));g=play(g,'ND2');assert.equal(g.players[side].maxMana,21);
   assert(g.players[side].discard.some(c=>c.id==='Q_RUNE_SECRET'));
+  g = play(fresh(side), 'Q_RUNE_SECRET');
+  g = play(g, 'STARTER_MANA');
+  assert.equal(g.players[side].quests[0].progress, 1);
+  g.players[side].quests[0].progress = 19;
+  const crystals = g.players[side].maxMana;
+  g = play(g, 'STARTER_MANA');
+  assert.equal(g.players[side].quests.length, 0);
+  assert.equal(g.players[side].maxMana, crystals + 2); // Attune and the quest each grant one.
+  assert(g.players[side].removed.some(card => card.id === 'Q_RUNE_SECRET'));
   g=play(fresh(side),'Q_RUNE_SECRET');g.players[side].quests[0].progress=19;g=play(g,'S13');
   assert(g.players[side].removed.some(c=>c.id==='Q_RUNE_SECRET'));
  }
