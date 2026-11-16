@@ -235,8 +235,8 @@ for (const side of [0,1]) {
       let g=fresh(side);
       if (castle) g.players[side].field.push(mon('CASTLE'));
       if (redirected) enchant(g,'COUP',side);
-      const id=castle?'INFKNIGHT':'SOLDIER2', dest=redirected?other:side, existing=mon(id);
-      g.players[dest].field.push(existing);
+      const id=castle?'INFKNIGHT':'SOLDIER2', dest=redirected?other:side, existing=castle&&!redirected?g.players[side].field[0]:mon(id);
+      if (!g.players[dest].field.includes(existing)) g.players[dest].field.push(existing);
       g=quick(g,'QUICK_MUSTER');
       const summoned=g.players[dest].field.filter(m=>m.id===id && m.uid!==existing.uid);
       assert.equal(summoned.length,castle?2:3);

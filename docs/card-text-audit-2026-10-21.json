@@ -3844,24 +3844,24 @@
     },
     "FLAME": {
       "nameJa": "ファイアー",
-      "status": "reviewed-v94",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "d1d855946a2f836db8d036290398eeb0ff31958bc8d4f523ba3a8ac3f1d811c5",
-      "textSha256": "89cf47d3095eb1ff09337a310c965ea2f642a457e25710217862aa019a76da0f",
+      "textSha256": "b8e82e26124c5e39e866622e7b20138d09ad79b466c024799e6dc3b5697562d9",
       "hooks": {},
       "before": {
-        "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて10回以上なら、相手へのダメージは代わりに5になる。相手に烙印カウンターがある場合、追加で相手プレイヤーに4ダメージを与える。",
-        "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다. 이번 사용을 포함해 이 대전에서 자신이 동명 카드를 사용한 횟수가 10회 이상이면 상대에게 주는 데미지는 대신 5가 된다. 상대에게 낙인 카운터가 있으면 상대 플레이어에게 추가로 4 데미지를 준다.",
-        "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 10 times this duel, including this use, deal 5 to the opponent instead. If the opponent has a Brand counter, deal an additional 4 damage to the opponent."
-      },
-      "after": {
         "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて7回以上なら、相手へのダメージは代わりに5になる。相手に烙印カウンターがある場合、追加で相手プレイヤーに4ダメージを与える。",
         "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다. 이번 사용을 포함해 이 대전에서 자신이 동명 카드를 사용한 횟수가 7회 이상이면 상대에게 주는 데미지는 대신 5가 된다. 상대에게 낙인 카운터가 있으면 상대 플레이어에게 추가로 4 데미지를 준다.",
         "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 7 times this duel, including this use, deal 5 to the opponent instead. If the opponent has a Brand counter, deal an additional 4 damage to the opponent."
+      },
+      "after": {
+        "ja": "【発動時】相手に2ダメージ、自分に1ダメージを与える。この対戦中、自分がこの同名カードを使用した回数が今回を含めて5回以上なら、相手へのダメージは代わりに5になる。相手に烙印カウンターがある場合、追加で相手プレイヤーに4ダメージを与える。",
+        "ko": "【발동 시】상대에게 2 데미지, 자신에게 1 데미지를 준다. 이번 사용을 포함해 이 대전에서 자신이 동명 카드를 사용한 횟수가 5회 이상이면 상대에게 주는 데미지는 대신 5가 된다. 상대에게 낙인 카운터가 있으면 상대 플레이어에게 추가로 4 데미지를 준다.",
+        "en": "【On Cast】Deal 2 damage to the opponent and take 1 damage. If you have used cards with this name at least 5 times this duel, including this use, deal 5 to the opponent instead. If the opponent has a Brand counter, deal an additional 4 damage to the opponent."
       },
       "reviewDate": "2026-10-26",
       "reviewEvidence": "docs/releases/2026-10-26-starter-rift/README.md"
@@ -3966,17 +3966,17 @@
     },
     "FATE_WHEEL": {
       "nameJa": "運命の輪",
-      "status": "balance-v60-reworked",
+      "status": "reviewed-unchanged",
       "changedLocales": [],
-      "definitionSha256": "88a9a8a988eaf6026a18dcca39e39b2d6a73fbed6a7b2be0a98ab0895c4fe373",
+      "definitionSha256": "feb28fc275ccf44c1e56f09b51b2c679698b9b862a1dc77c494d7e90d64ab3a0",
       "textSha256": "bfaa94c292c011e04283fa6a6f13021c34ebb33ab49617be1389d042f42ffdf6",
       "hooks": {
         "ench": "fateWheel"
       },
       "before": {
-        "ja": "【出目を確認した後】自分のダイス結果を確認後、その行動のダイス1個を振り直せる（自分の各ターン1回）。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
-        "ko": "【눈을 확인한 후】자신의 주사위 결과를 확인한 뒤 그 행동의 주사위를 다시 굴릴 수 있다(자신의 턴마다 1회).\n\n【파괴 시】이 마법을 묘지 대신 자신의 리프트로 보낸다.",
-        "en": "【After Seeing the Roll】After seeing your dice results, you may reroll the dice for that action, once during each of your turns.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
+        "ja": "【出目を確認した後】自分のターン中、カードの使用・攻撃・効果の選択によって自分が振ったダイスの結果を確認した後、その行動を巻き戻してダイスを振り直せる（自分の各ターン1回）。その行動で複数のダイスを振った場合は、全て振り直す。振り直さず結果を確定した場合、この回数を消費しない。ターン開始・終了時の自動処理は対象外。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
+        "ko": "【눈을 확인한 후】자신의 턴 중 카드 사용·공격·효과 선택으로 자신이 굴린 주사위의 결과를 확인한 뒤, 그 행동을 되돌리고 주사위를 다시 굴릴 수 있다(자신의 턴마다 1회). 그 행동에서 여러 주사위를 굴렸다면 전부 다시 굴린다. 다시 굴리지 않고 결과를 확정하면 횟수를 소비하지 않는다. 턴 시작·종료 시 자동 처리는 대상이 아니다.\n\n【파괴 시】이 마법을 묘지 대신 자신의 리프트로 보낸다.",
+        "en": "【After Seeing the Roll】During your turn, after seeing your dice from playing a card, attacking, or resolving an effect choice, you may rewind that action and reroll its dice (1 time during each of your turns). If that action rolled multiple dice, reroll all of them. Keeping the result does not spend this allowance. Automatic turn-start and turn-end effects are excluded.\n\n【On Destruction】Send this spell to your Rift instead of your graveyard."
       },
       "after": {
         "ja": "【出目を確認した後】自分のターン中、カードの使用・攻撃・効果の選択によって自分が振ったダイスの結果を確認した後、その行動を巻き戻してダイスを振り直せる（自分の各ターン1回）。その行動で複数のダイスを振った場合は、全て振り直す。振り直さず結果を確定した場合、この回数を消費しない。ターン開始・終了時の自動処理は対象外。\n\n【破壊時】この魔法を墓地の代わりに自分のリフトへ送る。",
@@ -4440,24 +4440,24 @@
     },
     "RUST_SHROOM": {
       "nameJa": "ラストマッシュルーム",
-      "status": "reviewed-v94",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "1755c026db821742773b8bde42c9981d60f3decb0d6e71233467bfad42ba50f5",
-      "textSha256": "2ff836ea0de7ac56e4dd67cc1f10290a33298ba594d8959e29277a4ebe4abdf4",
+      "textSha256": "f7d7877b39f0f53acc14508a5cad8c2f86d6d79fe66809d8a7a3f1fcbbe90d75",
       "hooks": {},
       "before": {
-        "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分のマナ水晶+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。4以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
-        "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 마나 수정 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 4 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
-        "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your mana crystals by 1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 4 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
-      },
-      "after": {
         "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分のマナ水晶+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。3以上なら、自分に3ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
         "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 마나 수정 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 3 이상이면 자신에게 3 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
         "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your mana crystals by 1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 3 or more, take 3 damage and send this monster to your Rift instead of your graveyard."
+      },
+      "after": {
+        "ja": "【相手のモンスター腐敗破壊時】腐敗で相手モンスターが破壊されるたび、自分のマナ水晶+1（同名は重複しない）。\n\n【破壊時】ダイス1個を振る。3以上なら、自分に4ダメージを与え、このモンスターを墓地の代わりに自分のリフトへ送る。",
+        "ko": "【상대의 몬스터가 부패로 파괴될 때】부패로 상대 몬스터가 파괴될 때마다 자신의 마나 수정 +1(동명 중첩 불가).\n\n【파괴 시】주사위 1개를 굴린다. 3 이상이면 자신에게 4 데미지를 주고 이 몬스터를 묘지 대신 자신의 리프트로 보낸다.",
+        "en": "【When Decay Destroys an Enemy Monster】Whenever Decay destroys an enemy monster, increase your mana crystals by 1; multiple copies do not stack.\n\n【On Destruction】Roll 1 die. On 3 or more, take 4 damage and send this monster to your Rift instead of your graveyard."
       },
       "reviewedAt": "2026-10-31"
     },
@@ -5183,9 +5183,9 @@
     },
     "TDE2": {
       "nameJa": "魔族の戦士",
-      "status": "reviewed-v94",
+      "status": "reviewed-unchanged",
       "changedLocales": [],
-      "definitionSha256": "21829000170524dba4f03b556a5c8badecbdc31670274984284e1c13ad572e8b",
+      "definitionSha256": "db86bea3fd962e6ac94af9dd24cda8803ab3f4514702e6cfd57f30be917d52cb",
       "textSha256": "b71a70935c43280dd3c0bd3dd2218ffe163939d4e90857afd01c7221a4123bb7",
       "hooks": {
         "aura": "demonTax2",
@@ -5205,9 +5205,9 @@
     },
     "TDE3": {
       "nameJa": "魔族の狂戦士",
-      "status": "reviewed-v94",
+      "status": "reviewed-unchanged",
       "changedLocales": [],
-      "definitionSha256": "44e22a36b8e47702f01007a87eaec328f1a542b4571d6a3cfac9482e68ac8a4e",
+      "definitionSha256": "9c6f771ecc7002c9e98d297b270af9af10b1929efd132fe8c0a4a25cb0656b6d",
       "textSha256": "3cebb4996a32f0338de2be37d5cb0940fbd6a41fd4c85551d31563acb21128ac",
       "hooks": {
         "turnFx": "demonRoll"
@@ -5397,24 +5397,24 @@
     },
     "FOCUS": {
       "nameJa": "選択と集中",
-      "status": "reworked-2026-10-26",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "340a2597f01d1b3e25ad4895f3cfd3c444a6639288729590142f83478b9f6c0d",
-      "textSha256": "d952797946bc97ffde174c78d903abdc1ba25f1a823b463a6f952e9f8df9fcb2",
+      "textSha256": "7859b4b24ac89d0d78aaf0b70e051d80a675c6bfde1cb4a62a2929cd341855b9",
       "hooks": {},
       "before": {
-        "ja": "【発動時】自分のデッキ・墓地・場からカードを合計3枚まで選び、自分のリフトへ送る。",
-        "ko": "【발동 시】자신의 덱·묘지·필드에서 카드를 합계 최대 3장 선택해 자신의 리프트로 보낸다.",
-        "en": "【On Cast】Choose up to 3 cards total from your deck, graveyard and field and send them to your Rift."
-      },
-      "after": {
         "ja": "【発動時】自分のデッキ・墓地・場からカードを1枚まで選び、自分のリフトへ送る。",
         "ko": "【발동 시】자신의 덱·묘지·필드에서 카드를 1장까지 선택해 자신의 리프트로 보낸다.",
         "en": "【On Cast】Choose up to 1 card from your deck, graveyard and field and send it to your Rift."
+      },
+      "after": {
+        "ja": "【発動時】自分のデッキ・墓地・場からカードを1枚まで選び、自分のリフトへ送る。 この効果で購入コスト4以上のカードをリフトに送った場合、自分はマナを2得る。",
+        "ko": "【발동 시】자신의 덱·묘지·필드에서 카드를 1장까지 선택해 자신의 리프트로 보낸다. 이 효과로 구매 코스트 4 이상인 카드를 리프트로 보냈다면 마나를 2 얻는다.",
+        "en": "【On Cast】Choose up to 1 card from your deck, graveyard and field and send it to your Rift. If you sent a card with purchase cost 4 or more to the Rift this way, gain 2 mana."
       },
       "reviewNote": "Cull support rework: three-language rules reviewed against engine and tests/cull-support-rework.mjs; see docs/releases/2026-10-26-cull-support/README.md."
     },
@@ -5923,27 +5923,27 @@
     },
     "HEXER3": {
       "nameJa": "上級呪術師",
-      "status": "reviewed-v94",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "d47f954598c0c2bd98f9d3cc8eaf2a925951f10172b54bb93e8d7635e163db1c",
-      "textSha256": "e5aad3b63f1b4763403225e04d89642c7bb852196b7ff254fe4207beaf424841",
+      "definitionSha256": "4db11fdf1daa73c40331726855d954c05fc6424580b041f38d232bf33d116b3e",
+      "textSha256": "0dc28f2ebc78116895186ef700ce13dbd5ec6b58968300988121df3422fe33b3",
       "hooks": {
         "onSummon": "hexSummon",
         "aura": "hexArmy"
       },
       "before": {
-        "ja": "【召喚時】相手の墓地に「呪い」を3枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【場にある間】自分のターンの間、相手のデッキ構成にある「呪い」1枚につき、自分の場の全モンスターの攻撃力を1上げる。\n\n【自分のターン終了時】自分に呪印が10個以上あれば、相手の場のカードを1枚選んで破壊する。",
-        "ko": "【소환 시】상대 묘지에 저주 3장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【필드에 있는 동안】자신의 턴 동안 상대 덱 구성의 저주 1장당 자신의 필드의 모든 몬스터의 공격력을 1 올린다.\n\n【자신의 턴 종료 시】자신의 주인이 10개 이상이면 상대 필드의 카드 1장을 선택해 파괴한다.",
-        "en": "【On Summon】Add 3 Curses to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【While on the Field】During your turn, all your monsters gain 1 ATK for each Curse in the opponent’s deck composition.\n\n【At the End of Your Turn】If you have at least 10 Curse Seals, choose and destroy 1 card on the opponent’s field."
-      },
-      "after": {
         "ja": "【召喚時】相手の墓地に「呪い」を3枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【場にある間】自分のターンの間、相手のデッキ構成にある「呪い」2枚につき、自分の場の全モンスターの攻撃力を1上げる。\n\n【自分のターン終了時】自分に呪印が15個以上あれば、相手の場のカードを1枚選んで破壊する。",
         "ko": "【소환 시】상대 묘지에 저주 3장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【필드에 있는 동안】자신의 턴 동안 상대 덱 구성의 저주 2장당 자신의 필드의 모든 몬스터의 공격력을 1 올린다.\n\n【자신의 턴 종료 시】자신의 주인이 15개 이상이면 상대 필드의 카드 1장을 선택해 파괴한다.",
         "en": "【On Summon】Add 3 Curses to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【While on the Field】During your turn, all your monsters gain 1 ATK for every 2 Curses in the opponent’s deck composition.\n\n【At the End of Your Turn】If you have at least 15 Curse Seals, choose and destroy 1 card on the opponent’s field."
+      },
+      "after": {
+        "ja": "【召喚時】相手の墓地に「呪い」を2枚追加する。自分の場にいる、このカードと異なる名前の「呪術師」モンスター1種類につき、さらに1枚追加する。\n\n【場にある間】自分のターンの間、相手のデッキ構成にある「呪い」2枚につき、自分の場の全モンスターの攻撃力を1上げる。\n\n【自分のターン終了時】自分に呪印が15個以上あれば、相手の場のカードを1枚選んで破壊する。",
+        "ko": "【소환 시】상대 묘지에 저주 2장을 추가한다. 자신의 필드에 있는 이 카드와 이름이 다른 주술사 몬스터 1종류당 1장을 더 추가한다.\n\n【필드에 있는 동안】자신의 턴 동안 상대 덱 구성의 저주 2장당 자신의 필드의 모든 몬스터의 공격력을 1 올린다.\n\n【자신의 턴 종료 시】자신의 주인이 15개 이상이면 상대 필드의 카드 1장을 선택해 파괴한다.",
+        "en": "【On Summon】Add 2 Curses to the opponent’s graveyard. Add 1 more for each differently named Hexer monster you control, counting each other name once.\n\n【While on the Field】During your turn, all your monsters gain 1 ATK for every 2 Curses in the opponent’s deck composition.\n\n【At the End of Your Turn】If you have at least 15 Curse Seals, choose and destroy 1 card on the opponent’s field."
       },
       "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
     },
@@ -6714,26 +6714,26 @@
     },
     "QUICK_MUSTER": {
       "nameJa": "緊急召集",
-      "status": "reviewed-v94",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "34b3a32b5c8bb3dfe1f6fa39b1525c85e1a544591e00c890654c061419754d74",
-      "textSha256": "17c0087d8cbecc914954e3a3073c2f8008f404e16bb79d12a3096a3770a5235b",
+      "textSha256": "ef6c8b92f51108e2280cabf72be7e24a4b42ee066e649c75b1a7471610a4e165",
       "hooks": {
         "quick": true
       },
       "before": {
-        "ja": "【購入時】「兵士」3体を自分の場に召喚する。自分の場に「城」があれば、代わりに「騎士」2体を召喚する。",
-        "ko": "【구매 시】병사 3체를 자신의 필드에 소환한다. 자신의 필드에 성이 있으면 대신 기사 2체를 소환한다.",
-        "en": "【On Purchase】Summon 3 Soldiers. If you control a Castle, summon 2 Knights instead."
-      },
-      "after": {
         "ja": "【購入時】「兵士」3体を自分の場に召喚する。自分の場に「城」があれば、代わりに「騎士」2体を召喚する。この効果で召喚されたモンスターは、このターン攻撃できない。",
         "ko": "【구매 시】병사 3체를 자신의 필드에 소환한다. 자신의 필드에 성이 있으면 대신 기사 2체를 소환한다. 이 효과로 소환된 몬스터는 이번 턴에 공격할 수 없다.",
         "en": "【On Purchase】Summon 3 Soldiers. If you control a Castle, summon 2 Knights instead. Monsters summoned this way cannot attack this turn."
+      },
+      "after": {
+        "ja": "【購入条件】自分の場のモンスターが1体以下。\n\n【購入時】「兵士」3体を自分の場に召喚する。自分の場に「城」があれば、代わりに「騎士」2体を召喚する。この効果で召喚されたモンスターは、このターン攻撃できない。",
+        "ko": "【구매 조건】자신의 필드에 몬스터가 1체 이하이다.\n\n【구매 시】병사 3체를 자신의 필드에 소환한다. 자신의 필드에 성이 있으면 대신 기사 2체를 소환한다. 이 효과로 소환된 몬스터는 이번 턴에 공격할 수 없다.",
+        "en": "【Purchase Requirement】You control 1 or fewer monsters.\n\n【On Purchase】Summon 3 Soldiers. If you control a Castle, summon 2 Knights instead. Monsters summoned this way cannot attack this turn."
       }
     },
     "QUICK_SORT": {
@@ -7103,10 +7103,14 @@
     },
     "MERC_LEADER": {
       "nameJa": "傭兵リーダー",
-      "status": "reviewed-v94",
-      "changedLocales": [],
-      "definitionSha256": "c7309f11c55c8012210b23d904781f5be26583ce9b1188dc91dfcdd7dfdc0dc2",
-      "textSha256": "8456354443c94fb7615dd3fde50aeca1ae6bc0edf75f1c2f2db2460976decae7",
+      "status": "reworded",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "aa04d1ac7b27f25cbb4e3f5217d8ebb5ee0da3581c9480ffc719222b785d5b07",
+      "textSha256": "d6a8332dfa8fc4b37eab1b222fa8faa3b2936f66dfc4083835fa30cf9b383807",
       "hooks": {
         "onSummon": "expansion"
       },
@@ -7116,9 +7120,9 @@
         "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 2 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 3 damage to 1 opposing monster.\nEscort: This monster gains Taunt.\n\n【On Summon】If either player controls a Casino, roll 5 dice."
       },
       "after": {
-        "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。このモンスターが戦闘でその相手を倒すと、自分は2マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に3ダメージを与える。\n護衛：このモンスターは挑発を得る。\n\n【召喚時】どちらかの場に「カジノ」があれば、ダイス5個を振る。",
-        "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 몬스터가 전투로 그 몬스터를 처치하면 자신은 마나를 2 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 3 준다.\n호위: 이 몬스터가 도발을 얻는다.\n\n【소환 시】어느 쪽 필드에든 카지노가 있으면 주사위 5개를 굴린다.",
-        "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 2 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 3 damage to 1 opposing monster.\nEscort: This monster gains Taunt.\n\n【On Summon】If either player controls a Casino, roll 5 dice."
+        "ja": "【購入時】マーケットからこのカードを購入した時、自分の場に「傭兵」系モンスターがいれば、購入したこのカードをそのまま召喚する。いなければ、追加で1マナを支払って召喚してもよい。\n\n【召喚時】依頼を1つ選ぶ。\n賞金首：相手の場のモンスター1体を指名する。このモンスターが戦闘でその相手を倒すと、自分は2マナを得る。相手が場を離れると指名は終了する。\n荒事：相手の場のモンスター1体に2ダメージを与える。\n護衛：このモンスターは挑発を得る。\n\n【召喚時】どちらかの場に「カジノ」があれば、ダイス5個を振る。",
+        "ko": "【구매 시】마켓에서 이 카드를 구매할 때 자신의 필드에 용병 계열 몬스터가 있으면 구매한 이 카드를 즉시 소환한다. 없으면 마나 1을 추가로 지불하고 소환할 수 있다.\n\n【소환 시】의뢰 1개를 선택한다.\n현상 수배: 상대 필드의 몬스터 1체를 지목한다. 이 몬스터가 전투로 그 몬스터를 처치하면 자신은 마나를 2 얻는다. 대상이 필드를 떠나면 지목이 끝난다.\n무력 행사: 상대 필드의 몬스터 1체에게 피해를 2 준다.\n호위: 이 몬스터가 도발을 얻는다.\n\n【소환 시】어느 쪽 필드에든 카지노가 있으면 주사위 5개를 굴린다.",
+        "en": "【On Purchase】When you buy this card from the market, summon the purchased card immediately if you control a Mercenary-family monster. Otherwise, you may pay 1 extra mana to summon it.\n\n【On Summon】Choose 1 contract.\nBounty: Mark 1 opposing monster. Gain 2 mana when this monster defeats it in battle. The mark expires when the target leaves the field.\nRough Work: Deal 2 damage to 1 opposing monster.\nEscort: This monster gains Taunt.\n\n【On Summon】If either player controls a Casino, roll 5 dice."
       }
     },
     "MERC_MASTER": {
@@ -8705,19 +8709,19 @@
         "en"
       ],
       "definitionSha256": "afa6ea6adde2591e7d58ae9662a30c22b68f5bf07cc3455e3cc39e769e6f1771",
-      "textSha256": "f4d8d4a3929870b490a747e156bdfb4153bcf0309db66326334b7d1ee6b30587",
+      "textSha256": "a4cc21f052f72cd5115f773c6d06316bd9ed3ae5381fd7f58bf8d69e75d157ec",
       "hooks": {
         "ench": "manaBackflow"
       },
       "before": {
-        "ja": "【自分のターン開始時】発動した後の自分の15回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分のマナ水晶を3にする。他のカードの効果で破壊された場合、相手のマナ水晶-1。",
-        "ko": "【자신의 턴 시작 시】발동 후 자신의 15번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 마나 수정을 3으로 만든다. 다른 카드의 효과로 파괴됐다면 상대의 마나 수정 -1.",
-        "en": "【At the Start of Your Turn】At the start of your 15th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, set your mana crystals to 3. If destroyed by another card’s effect, the opponent loses 1 mana crystal."
-      },
-      "after": {
         "ja": "【自分のターン開始時】発動した後の自分の25回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分のマナ水晶-2。他のカードの効果で破壊された場合、相手のマナ水晶-1。",
         "ko": "【자신의 턴 시작 시】발동 후 자신의 25번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 마나 수정 -2. 다른 카드의 효과로 파괴됐다면 상대의 마나 수정 -1.",
         "en": "【At the Start of Your Turn】At the start of your 25th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, lose 2 mana crystals. If destroyed by another card’s effect, the opponent loses 1 mana crystal."
+      },
+      "after": {
+        "ja": "【自分のターン開始時】発動した後の自分の25回目のターン開始時、このカードを破壊する。\n\n【破壊時】このカードの効果で破壊された場合、自分のマナ水晶-2。他のカードの効果で破壊された場合、相手のマナ水晶-2。",
+        "ko": "【자신의 턴 시작 시】발동 후 자신의 25번째 턴 시작 시 이 카드를 파괴한다.\n\n【파괴 시】이 카드의 효과로 파괴됐다면 자신의 마나 수정 -2. 다른 카드의 효과로 파괴됐다면 상대의 마나 수정 -2.",
+        "en": "【At the Start of Your Turn】At the start of your 25th turn after casting this card, destroy it.\n\n【On Destruction】If destroyed by its own effect, lose 2 mana crystals. If destroyed by another card’s effect, the opponent loses 2 mana crystals."
       }
     },
     "BATTLEFIELD": {
@@ -8766,26 +8770,26 @@
     },
     "GOBLIN_LEADER": {
       "nameJa": "ゴブリンリーダー",
-      "status": "november-balance-v90",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "437b3ae0c1c4d9c3ca8d58897813b8356b84c100f8dfd89065e0497e74696c03",
-      "textSha256": "03a5de5580d01178be46f73225dd72647f30b1e8a6a680fa1be529a9377277e1",
+      "definitionSha256": "4accad892a66f699154aa1f5f862302154d7e6660b74208aaa0fe24de5817b23",
+      "textSha256": "c781f40a03c6397254cb78286733298f1f5490240035e57602c6026e8b89512b",
       "hooks": {
         "onSummon": "goblinLeader"
       },
       "before": {
-        "ja": "【召喚時】自分の場の「ゴブリン」関連カードの枚数分、相手にダメージを与える。このモンスター自身と永続魔法も数える。",
-        "ko": "【소환 시】자신의 필드에 있는 고블린 계열 카드 수만큼 상대에게 데미지를 준다. 이 몬스터 자신과 영구 마법도 센다.",
-        "en": "【On Summon】Deal damage to the opponent equal to the number of Goblin-related cards on your field, including this monster and persistent spells."
-      },
-      "after": {
         "ja": "【召喚時】自分の場の「ゴブリン」関連カードの枚数分、相手プレイヤーと相手の場の全モンスターにそれぞれダメージを与える。このモンスター自身と永続魔法も数える。",
         "ko": "【소환 시】자신의 필드에 있는 고블린 계열 카드 수만큼 상대 플레이어와 상대 필드의 모든 몬스터에게 각각 데미지를 준다. 이 몬스터 자신과 영구마법도 센다.",
         "en": "【On Summon】Deal damage to the opposing player and each enemy monster equal to the number of Goblin-related cards on your field, including this monster and persistent spells."
+      },
+      "after": {
+        "ja": "【召喚時】自分の場の「ゴブリン」関連カードの枚数分、相手プレイヤーと相手の場の全モンスターにそれぞれダメージを与える。このモンスター自身は数えず、他の同名カードと永続魔法は数える。",
+        "ko": "【소환 시】자신의 필드에 있는 고블린 계열 카드 수만큼 상대 플레이어와 상대 필드의 모든 몬스터에게 각각 데미지를 준다. 이 몬스터 자신은 세지 않으며, 다른 동명 카드와 영구마법은 센다.",
+        "en": "【On Summon】Deal damage to the opposing player and each enemy monster equal to the number of Goblin-related cards on your field, including other copies and persistent spells. Exclude this monster."
       }
     },
     "GOBLIN_KING": {
@@ -9230,19 +9234,15 @@
     },
     "CAPTAIN": {
       "nameJa": "キャプテン",
-      "status": "reworked",
-      "changedLocales": [
-        "ja",
-        "ko",
-        "en"
-      ],
-      "definitionSha256": "4b7b1dc2e1923879e71d8ca64c42cd5e488fb2fe28379bab454a2829442f1321",
+      "status": "reviewed-unchanged",
+      "changedLocales": [],
+      "definitionSha256": "0172bde6012cffd0a51732a03cfcef04ceec4cb979e2b57f7c0874206d1c0a36",
       "textSha256": "5ae2f4b136e09dde4a25adac1b0aef74d0988cd71b6ad2ee41769a9c7b897ac0",
       "hooks": {},
       "before": {
-        "ja": "【場にある間】自分のターン終了時、相手プレイヤーかモンスターにランダムな1ダメージを4回与える。他のモンスター効果がダメージを与えるたび、同じ対象に追加で3ダメージ。追加ダメージは連鎖しない。",
-        "ko": "【필드에 있는 동안】자신의 턴 종료 시 무작위 적에게 1 피해를 4회 준다. 다른 몬스터 효과로 피해를 줄 때마다 같은 대상에게 추가 3 피해. 추가 피해는 연쇄되지 않는다.",
-        "en": "【While on the Field】At your turn end, deal 1 damage four times to random enemies. When another monster effect deals damage, deal 3 more to the same target without triggering another bonus."
+        "ja": "【自分のターン終了時】相手プレイヤーかモンスターにランダムな1ダメージを4回与える。\n\n【場にある間】他のモンスター効果がダメージを与えるたび、同じ対象に追加で3ダメージ。追加ダメージは連鎖しない。",
+        "ko": "【자신의 턴 종료 시】무작위 적에게 1 피해를 4회 준다.\n\n【필드에 있는 동안】다른 몬스터 효과로 피해를 줄 때마다 같은 대상에게 추가 3 피해. 추가 피해는 연쇄되지 않는다.",
+        "en": "【At the End of Your Turn】Deal 1 damage four times to random enemies.\n\n【While on the Field】When another monster effect deals damage, deal 3 more to the same target without triggering another bonus."
       },
       "after": {
         "ja": "【自分のターン終了時】相手プレイヤーかモンスターにランダムな1ダメージを4回与える。\n\n【場にある間】他のモンスター効果がダメージを与えるたび、同じ対象に追加で3ダメージ。追加ダメージは連鎖しない。",
@@ -9906,22 +9906,26 @@
     },
     "HEX_PUPPET": {
       "nameJa": "操り人形",
-      "status": "added",
+      "status": "reworded",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "14815abe1a06a26ff908841dbbf67d8ecd5babc86c195233316e17fed0348dd2",
-      "textSha256": "20ab2f013a9f6d0d2aa6712ac0b75db71fd0a064153359bc8a15ca3f23ab3fb3",
+      "textSha256": "f67e21114d0c1f8a0b19f5826dfb1ee02a3cc8b111823cfe36b11e387917eb74",
       "hooks": {
         "act": "expansion"
       },
-      "before": {},
-      "after": {
+      "before": {
         "ja": "【発動時】相手の墓地に「呪い」を4枚追加する。その後、自分の場に「かかし」1体を召喚する。",
         "ko": "【발동 시】상대 묘지에 저주 4장을 추가한다. 그 후 자신의 필드에 허수아비 1체를 소환한다.",
         "en": "【On Cast】Add 4 Curses to the opponent’s graveyard. Then summon 1 Scarecrow to your field."
+      },
+      "after": {
+        "ja": "【発動時】相手の墓地に「呪い」を3枚追加する。その後、自分の場に「かかし」1体を召喚する。",
+        "ko": "【발동 시】상대 묘지에 저주 3장을 추가한다. 그 후 자신의 필드에 허수아비 1체를 소환한다.",
+        "en": "【On Cast】Add 3 Curses to the opponent’s graveyard. Then summon 1 Scarecrow to your field."
       }
     },
     "MIND_GAME": {

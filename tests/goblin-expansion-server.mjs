@@ -19,8 +19,8 @@ try {
  for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],enchants:[],traps:[],quests:[],dew:0,shield:0,hp:100,mana:30,maxMana:30});
  g.players[0].enchants=[{card:card('RELIC_BOUNTY'),turns:99,bornTurn:1}];g.players[0].field=[mon('GOBLIN')];
  g.players[0].hand=[card('GOBLIN_LEADER'),card('RELIC_PROTECTION'),card('ATTUNE_RETURN')];room.room.game=g;
- await send(0,{type:'play',idx:0});assert.equal(room.room.game.players[1].hp,98);
- for(const s of sockets)assert.equal(s.messages.at(-1).state.players[1].hp,98);
+ await send(0,{type:'play',idx:0});assert.equal(room.room.game.players[1].hp,99);
+ for(const s of sockets)assert.equal(s.messages.at(-1).state.players[1].hp,99);
  assert.equal(sockets[1].messages.at(-1).state.players[0].hand[0].id,'HIDDEN');
  await send(0,{type:'play',idx:0});
  assert.equal(room.room.game.players[0].shield,0);

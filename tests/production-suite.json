@@ -1,6 +1,7 @@
 {
   "current": [
     "tests/slum-merchant.mjs",
+    "tests/balance-v98.mjs",
     "tests/balance-v97.mjs",
     "tests/golem-rework.mjs",
     "tests/rune-rework-v85.mjs",

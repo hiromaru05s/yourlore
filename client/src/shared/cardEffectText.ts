@@ -1,3 +1,4 @@
+import {balance98Text} from './balance98';
 import {balance97Text,retired97} from './balance97';
 import {balance96Text} from "./balance96";
 import {balance94Text} from "./balance94";
@@ -1842,5 +1843,5 @@ CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.text
 
 for (const c of [...DIPLOMACY_CARDS, CURSE_CONTAGION, ...MERCENARY_CARDS, ...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
 
-Object.assign(CARD_EFFECT_TEXT,RUNE_RULE_TEXT,GOLEM_TEXT,balanceText,balance94Text,balance96Text,balance97Text);
+Object.assign(CARD_EFFECT_TEXT,RUNE_RULE_TEXT,GOLEM_TEXT,balanceText,balance94Text,balance96Text,balance97Text,balance98Text);
 for (const id of retired97) delete CARD_EFFECT_TEXT[id];
