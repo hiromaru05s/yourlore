@@ -40,6 +40,7 @@ try{
  globalThis.__logout.confirm=()=>new Promise(r=>confirm=r);
  globalThis.__logout.api.profile=async()=>({self:true,display:'QA',credits:0,stats_public:true});
  const profileStubs={
+  '../ui/appearancePicker':'export const appearanceTitle=()=>"Customize";export const openAppearancePicker=()=>{};',
   '../ui/rankedProfile':'export const renderRankedProfile=()=>{};',
   '../ui/profileMedals':'export const mountProfileMedals=()=>()=>{};',
   '../ui/medal':'export const medalHtml=()=>"";',
