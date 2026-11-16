@@ -15,7 +15,7 @@ import {createHomePearl,createHomeReflectionRoom,disposeHomeReflectionRoom,finis
 export type SpiritPose = ReturnType<ReturnType<typeof createSpiritMotion>['tick']>;
 export type SpiritForm = {left:THREE.Group;right:THREE.Group;update?:(pose:SpiritPose,dt:number,time:number,flight?:RabbitFlight)=>void};
 
-/** Zeno: the approved moon rabbit, shared by HOME and tutorial. */
+/** Zeno: the approved moon rabbit guide for tutorials. */
 export function mountManaSpirit(host: HTMLElement, options: {
   home?: boolean;
   interactive?: HTMLElement | boolean;

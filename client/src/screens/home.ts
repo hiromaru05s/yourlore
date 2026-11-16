@@ -17,7 +17,6 @@ import { sanitizeDecks } from "../shared/cards";
 import { artUrl } from "../ui/cardArt";
 import {mountHomeSeeker} from '../ui/homeSeeker';
 import '../styles/profileAppearance.css';
-import { mountHomeSpirit } from '../ui/homeSpirit';
 import '../styles/homeTutorial.css';
 import '../styles/homeTier.css';
 import { homeIcon } from "../ui/homeIcons";
@@ -35,8 +34,7 @@ export function mountHome(app: App): Screen {
   wrap.className = "screen lounge-home-screen";
   const store=sanitizeDecks(u?.decks ?? null);
   wrap.innerHTML = `
-    <section class="home-companion" aria-label="${esc(loungeText('シーカーとゼノ','Seeker and Zeno','시커와 제노'))}">
-      <button class="home-spirit-touch" type="button" aria-label="${esc(loungeText('ゼノを呼ぶ','Call Zeno closer','제노 부르기'))}"><span class="home-spirit-host"></span></button>
+    <section class="home-companion" aria-label="${esc(loungeText('シーカー','Seeker','시커'))}">
       <div class="home-standing-seeker"></div>
     </section>
     <section class="lounge-home-main">
@@ -60,7 +58,6 @@ export function mountHome(app: App): Screen {
   app.root.appendChild(wrap);
   const stopGifts=mountGiftInbox(app,wrap.querySelector<HTMLButtonElement>('#homeGifts')!);
   const stopSeeker = mountHomeSeeker(wrap.querySelector<HTMLElement>('.home-standing-seeker')!, u?.avatar);
-  const stopSpirit=mountHomeSpirit(app,wrap.querySelector<HTMLButtonElement>('.home-spirit-touch')!);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
   const duelButton=mountHomeDuelButton(q('ranked'));
   let mode: 'ranked'|'online'|'bot'='ranked';
@@ -94,7 +91,7 @@ export function mountHome(app: App): Screen {
   const stopWarmup=scheduleGameWarmup(wrap,store.list[store.sel].cards);
   if(u && u.id!=='local-guest-user') void api.me().then(fresh=>{if(!disposed&&fresh?.id===u.id&&app.user?.id===u.id) { app.user=fresh; document.dispatchEvent(new Event("lore:user")); }}).catch(()=>{});
   const unsub=onLangChange(()=>app.home());
-  return {destroy:()=>{disposed=true;duelButton.destroy();stopWarmup();unsub();stopSeeker();stopSpirit();stopDaily();stopGifts();}};
+  return {destroy:()=>{disposed=true;duelButton.destroy();stopWarmup();unsub();stopSeeker();stopDaily();stopGifts();}};
 }
 
 /** Select an NPC, then start centrally or double-click its card. */

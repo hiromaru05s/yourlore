@@ -11,7 +11,6 @@ globalThis.__logout={api:{logout:()=>{requests++;return new Promise((resolve,rej
 const stubs={
  './screens/tutorialSurface':'export const mountTutorialHomePart=()=>({});export const mountTutorialDeckPart=()=>({});export const mountTutorialCardsPart=()=>({});',
  './i18n':'export const getLang=()=>"ja";',
- './ui/homeSpirit':'export const releaseHomeSpirit=()=>{};',
  './ui/loungeText':'export const loungeText=x=>x;',
  './ui/assetReadiness':'export const coverScreen=()=>({cancel(){},ready:async()=>true});export const isMenuReady=()=>true;export const imageUrls=()=>[];export const hasUnloadedAssets=()=>false;',
  './ui/graphicsNotice':'export const showGraphicsNotice=()=>()=>{};',

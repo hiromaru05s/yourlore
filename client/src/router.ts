@@ -2,7 +2,6 @@ import {TUTORIAL_PARTS} from './shared/tutorialParts';
 import {showUsernameSetup} from './ui/usernameSetup';
 import {prepareMenuCache} from './ui/menuCache';
 import { getLang } from './i18n';
-import {releaseHomeSpirit} from './ui/homeSpirit';
 import { loungeText } from './ui/loungeText';
 import { mountTutorialWelcome } from './screens/tutorialWelcome';
 import {coverScreen,isMenuReady,imageUrls} from './ui/assetReadiness';
@@ -252,7 +251,6 @@ export class App {
     aReset();
     stopPresence();
     this.user = null;
-    releaseHomeSpirit(this);
     this.login();
   }
 }

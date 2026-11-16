@@ -44,7 +44,7 @@ try{for(const width of widths){
  const started=Date.now();await p.goto(base,{waitUntil:'domcontentloaded'});
  monitor=setInterval(async()=>{try{const state=await p.evaluate(()=>({loader:document.querySelector('.screen-loader')?.textContent,retry:document.querySelector('.asset-retry')?.textContent,cache:document.documentElement.dataset.menuCache}));console.log('progress',width,JSON.stringify(state));await fs.writeFile(out+'/monitor.json',JSON.stringify({width,state,errors,httpErrors},null,2));}catch{}},15000);
  await p.waitForSelector('.lounge-home-main');await p.waitForSelector('.screen-loader',{state:'detached',timeout:600000});
- const homeMs=Date.now()-started;await p.evaluate(()=>window.__homeCanvas=document.querySelector('.home-spirit-host canvas'));await p.screenshot({path:`${out}/home-${width}.png`});
+ const homeMs=Date.now()-started;await p.screenshot({path:`${out}/home-${width}.png`});
  const actions=[],afterHome=Date.now();
  assert(![...network.values()].some(r=>/\/assets\/(art-pack-|duel-preload-|menu-manifest-)/.test(new URL(r.url).pathname)),'HOME admission must not start the duel archive');
  async function action(name,run,ready){const reads=await p.evaluate(()=>window.__styleReads);const start=Date.now(),count=networkImages.length;await run();if(ready)await ready();await p.waitForSelector('.screen-loader',{state:'detached'});await p.waitForFunction(()=>![...document.querySelectorAll('#app img')].some(i=>i.getClientRects().length&&getComputedStyle(i).visibility!=='hidden'&&(!i.complete||i.naturalWidth===0)));const data={name,ms:Date.now()-start,styleReads:await p.evaluate(reads=>window.__styleReads-reads,reads),imageNetworkResponses:networkImages.slice(count)};actions.push(data);console.log('action',width,name,data.ms,data.imageNetworkResponses.length);}
@@ -64,11 +64,11 @@ try{for(const width of widths){
  await action('profile',()=>p.locator('[data-profile]').click(),()=>p.waitForSelector('.pf-ava'));
  await action('guide',()=>p.locator('[data-nav=tutorial]').click());
  await action('home return',()=>p.locator('[data-nav=home]').click());
- const state=await p.evaluate(()=>({sameHomeCanvas:window.__homeCanvas===document.querySelector('.home-spirit-host canvas'),cache:document.documentElement.dataset.menuCache,worker:!!navigator.serviceWorker?.controller,heap:performance.memory?.usedJSHeapSize,errors:[...document.querySelectorAll('img')].filter(i=>i.getClientRects().length&&(!i.complete||!i.naturalWidth)).map(i=>i.src)}));
+ const state=await p.evaluate(()=>({homeSpirits:document.querySelectorAll('.home-spirit-host').length,cache:document.documentElement.dataset.menuCache,worker:!!navigator.serviceWorker?.controller,heap:performance.memory?.usedJSHeapSize,errors:[...document.querySelectorAll('img')].filter(i=>i.getClientRects().length&&(!i.complete||!i.naturalWidth)).map(i=>i.src)}));
  const lateImages=networkImages.filter(r=>r.at>afterHome);const wireImageTransfers=transfers.filter(r=>r.at>afterHome);const serverImageTransfers=requests.filter(r=>r.at>afterHome&&imagePath(new URL(r.url,'http://localhost').pathname));report.cases.push({width,homeMs,actions,lateImages,serverImageTransfers,wireImageTransfers,state,errors,httpErrors});
  await fs.writeFile(out+'/browser-report.json',JSON.stringify(report,null,2));
  assert.deepEqual(errors,[]);assert.deepEqual(httpErrors,[]);assert.deepEqual(state.errors,[]);
- assert.equal(state.sameHomeCanvas,true,'Returning HOME must reuse its GPU scene');
+ assert.equal(state.homeSpirits,0,'Returning HOME must not mount Zeno');
  if(process.env.LORE_EXPECT_CACHE!=='0'){
   const at=Date.now();await p.reload({waitUntil:'domcontentloaded'});await p.waitForSelector('.lounge-home-main');await p.waitForSelector('.screen-loader',{state:'detached',timeout:600000});
   report.cases.at(-1).warmReload={ms:Date.now()-at,preloadTransfers:[...network.values()].filter(r=>r.at>=at&&r.preload).length};

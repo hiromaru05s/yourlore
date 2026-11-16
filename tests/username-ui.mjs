@@ -14,7 +14,6 @@ const stubs={
  './screens/tutorialSurface':'export const mountTutorialHomePart=()=>({});export const mountTutorialDeckPart=()=>({});export const mountTutorialCardsPart=()=>({});',
  './i18n':'export const getLang=()=>"ja";',
  '../i18n':'export const getLang=()=>"ja";export const onLangChange=()=>()=>{};',
- './ui/homeSpirit':'export const releaseHomeSpirit=()=>{};',
  './ui/assetReadiness':'export const coverScreen=globalThis.__names.cover;export const isMenuReady=()=>true;export const imageUrls=()=>[];export const hasUnloadedAssets=()=>false;',
  './ui/graphicsNotice':'export const showGraphicsNotice=()=>{globalThis.__names.graphics();return()=>{};};',
  './ui/lounge':'export const mountLounge=()=>()=>{};',
