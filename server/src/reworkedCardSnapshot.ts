@@ -1,3 +1,4 @@
+import {balance94Prints,balance94Text} from '../../client/src/shared/balance94';
 import {balanceChanges,balanceText} from '../../client/src/shared/novemberBalance';
 import {GOLEM_TEXT} from '../../client/src/shared/golemCards';
 import {NOVEMBER_PRINTS,RUNE_RULE_TEXT} from '../../client/src/shared/runeRework';
@@ -37,7 +38,7 @@ export function restoreReworkedCards(game: GameState): void {
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied)) return;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -288,6 +289,38 @@ export function restoreReworkedCards(game: GameState): void {
     for (const p of game.players) for (const m of p.field) {
       if (balanceChanges[m.id]?.def != null && (m.dmg??0)>=effDef(p,m)) m.dmg=Math.max(0,effDef(p,m)-1);
     }
+  }
+  if (!game.balance94Applied) {
+    game.balance94Applied = true;
+    if (game.trickLeft) game.trickLeft = 1;
+    const refresh94 = (card: CardInst | null) => {
+      if (!card || !(card.id in balance94Prints || card.id in balance94Text)) return;
+      const def = DB[card.id] ?? STARTERS[card.id], m = card as FieldMon;
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      for (const [key,value] of Object.entries(balance94Prints[card.id] ?? {})) {
+        if (key === 'passive') {
+          card.passive = [...new Set([...(card.passive??[]).filter(k=>k!=='counter'),...def.passive??[]])];
+          if (m.summonedTurn != null && m.guts == null) m.guts=1;
+        } else {
+          const field = m.trickSwapped && key==='atk' ? 'def' : m.trickSwapped && key==='def' ? 'atk' : key;
+          Reflect.set(card,field,value);
+        }
+      }
+    };
+    game.market.forEach(refresh94);
+    for (const p of game.players) {
+      for (const card of [...p.hand,...p.deck,...p.field,...p.discard,...p.removed??[],...p.supply]) refresh94(card);
+      for (const entry of [...p.enchants,...p.traps,...p.quests??[],...p.exile]) refresh94(entry.card);
+      for (const e of p.enchants) if (['BREWING','NIGHT_CASTLE_GIFT'].includes(e.card.id) && e.turns>1) e.turns--;
+      for (const m of p.field) {
+        if (m.escortLocked && m.id === 'INFKNIGHT') {
+          m.passive = [...new Set([...(m.passive??[]).filter(k=>k!=='counter'),'taunt'])];
+          m.passivesG = m.passivesG?.filter(k=>k!=='counter');
+        }
+        if (balance94Prints[m.id]?.def != null && (m.dmg??0)>=effDef(p,m)) m.dmg=Math.max(0,effDef(p,m)-1);
+      }
+    }
+    refreshFieldPassives(game);
   }
   if (updateDemons || updateHexers) refreshFieldPassives(game);
   const wheel = game._wheelSnap;

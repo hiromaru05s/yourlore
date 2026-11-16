@@ -22,7 +22,7 @@ function buy(g,id,market='buyMarket'){
 const pick=(g,uid)=>step(g,{type:'pick',uid});
 function enchant(g,id,owner=g.cur){g.players[owner].enchants.push({card:card(id),turns:99,bornTurn:0});}
 function check(name,f){f();console.log('PASS',name);}
-const ranks = [['MERCENARY',1,2,1,1],['MERC_LEADER',3,3,3,2],['MERC_MASTER',5,6,4,3]];
+const ranks = [['MERCENARY',1,2,1,1],['MERC_LEADER',3,3,2,2],['MERC_MASTER',5,5,3,3]];
 for (const [id,cost,atk,hp,reward] of ranks) {
   check(id+' printed stats and hand cost with and without a Mercenary',()=>{
     assert.deepEqual([E.DB[id].cost,E.DB[id].atk,E.DB[id].def],[cost,atk,hp]);
@@ -94,7 +94,7 @@ check('a different killer or a bounced and replayed target earns no bounty',()=>
     assert.equal(g.players[1].field.length,0);assert.equal(g.players[0].mana,mana);
   }
 });
-check('Guildmaster Escort summons an active Leader and Mercenary Arts repeats contracts',()=>{
+check('Guildmaster Escort summons an active Mercenary and Mercenary Arts repeats contracts',()=>{
   let g=fresh();enchant(g,'MERC_ART');const target={...mon('M1'),def:20};g.players[1].field=[target];
   g=cast(g,'MERC_MASTER');g=pick(g,'escort');
   let guards=0;
@@ -104,17 +104,18 @@ check('Guildmaster Escort summons an active Leader and Mercenary Arts repeats co
       assert(!E.effectChoices(g).some(c=>c.uid==='escort'));
       g=pick(pick(g,'hit'),target.uid);
     } else {
-      guards++;g=pick(g,'escort');
+      assert.equal(g.pending.data.sourceId,'MERCENARY');
+      guards++;g=pick(pick(g,'bounty'),target.uid);
     }
     assert(guards<=2);
   }
   assert.equal(guards,2);assert.equal(g.players[1].field[0].dmg,5);
-  assert.deepEqual(g.players[0].field.map(m=>m.id),['MERC_MASTER','MERC_LEADER']);assert(E.hasPassive(g.players[0].field[1],'taunt'));
+  assert.deepEqual(g.players[0].field.map(m=>m.id),['MERC_MASTER','MERCENARY']);assert.equal(g.players[1].field[0].bounties.length,2);
 });
 check('persisted rooms refresh prices and stats while retaining UIDs and damage',()=>{
   const g=fresh();delete g.mercReworkApplied;
   const old={...mon('MERC_MASTER'),cost:6,atk:5,def:7,dmg:2};g.players[0].field=[old];
   g.market[0]={...card('MERCENARY'),cost:2};
   E.restoreReworkedCards(g);E.restoreReworkedCards(g);
-  assert.deepEqual([old.cost,old.atk,old.def,old.dmg],[5,6,4,2]);assert.equal(g.market[0].cost,1);
+  assert.deepEqual([old.cost,old.atk,old.def,old.dmg],[5,5,3,2]);assert.equal(g.market[0].cost,1);
 });

@@ -25,8 +25,8 @@ try {
  const attacker=room.room.game.players[0].field[0].uid,target=room.room.game.players[1].field[0].uid;
  await send(0,{type:'attack',uid:attacker});assert.equal(room.room.game.players[0].hp,40);
  room=new GameRoom(journalState(state),rewardTestEnv());await room.webSocketMessage(sockets[0],JSON.stringify({type:'ready'}));
- await send(0,{type:'chooseTarget',uid:target});assert.equal(room.room.game.players[0].hp,39);assert.equal(room.room.game.players[1].field[0].dmg,1);
- for(const socket of sockets){const view=socket.messages.filter(m=>m.state).at(-1).state;assert.equal(view.players[0].hp,39);assert.equal(view.players[1].field[0].dmg,1);}
- await send(0,{type:'chooseTarget',uid:target});assert.equal(room.room.game.players[0].hp,39);
+ await send(0,{type:'chooseTarget',uid:target});assert.equal(room.room.game.players[0].hp,38);assert.equal(room.room.game.players[1].field[0].dmg,1);
+ for(const socket of sockets){const view=socket.messages.filter(m=>m.state).at(-1).state;assert.equal(view.players[0].hp,38);assert.equal(view.players[1].field[0].dmg,1);}
+ await send(0,{type:'chooseTarget',uid:target});assert.equal(room.room.game.players[0].hp,38);
  console.log('PASS authoritative Sage payment and Goblin penalty, pending-attack hibernation, duplicate target action, both client views');
 }finally{await rm(dir,{recursive:true,force:true});}

@@ -1,3 +1,4 @@
+import {balance94Text} from "./balance94";
 import {balanceText} from './novemberBalance';
 import {GOLEM_TEXT} from './golemCards';
 import {RUNE_RULE_TEXT} from './runeRework';
@@ -1839,4 +1840,4 @@ CARD_EFFECT_TEXT.RIFT_METALIGHT = {ko:RIFT_METALIGHT.text,ja:RIFT_METALIGHT.text
 
 for (const c of [...DIPLOMACY_CARDS, CURSE_CONTAGION, ...MERCENARY_CARDS, ...STARTER_QUESTS, ...ARCANE_CARDS, ...DICE_SET_CARDS, ...ARMY_ATTUNE_CARDS, ...FIRE_BRAND_CARDS, ...HEXER_SPELLS]) CARD_EFFECT_TEXT[c.id] = {ko:c.text,ja:c.textJa!,en:c.textEn!};
 
-Object.assign(CARD_EFFECT_TEXT,RUNE_RULE_TEXT,GOLEM_TEXT,balanceText);
+Object.assign(CARD_EFFECT_TEXT,RUNE_RULE_TEXT,GOLEM_TEXT,balanceText,balance94Text);

@@ -53,9 +53,16 @@ export function redactFor(state: GameState, you: Side): GameState {
   const g: GameState = structuredClone(state);
   for (const owner of [0,1] as const) {
     const foe=g.players[1-owner];
-    const army = g.cur === owner && g.players[owner].field.some(m => m.aura === 'hexArmy');
-    for (const m of g.players[owner].field) if (m.id==='TOKEN00' || army || (g.cur===owner && m.condAtk==='hexCurses'))
-      m.visibleCurseAttack=[...foe.hand,...foe.deck,...foe.discard,...foe.field].filter(c=>c.id==='CURSE').length;
+    const player = g.players[owner];
+    const army = g.cur === owner && player.field.some(m => m.aura === 'hexArmy');
+    const fullCount = player.field.some(m => m.id==='TOKEN00' || (g.cur===owner && m.condAtk==='hexCurses'));
+    if (!army && !fullCount) continue;
+    const curses = [...foe.hand,...foe.deck,...foe.discard,...foe.field].filter(c=>c.id==='CURSE').length;
+    // A lone Senior reveals complete pairs through its aura, never the leftover private Curse.
+    const visible = fullCount ? curses : curses - curses % 2;
+    if (player.hexerAttackCurses != null) player.hexerAttackCurses = visible;
+    for (const m of player.field) if (m.id==='TOKEN00' || army || (g.cur===owner && m.condAtk==='hexCurses'))
+      m.visibleCurseAttack = visible;
   }
   delete g.medalDuel;
   if (g.mindSecret?.owner !== you) delete g.mindSecret;

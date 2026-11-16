@@ -78,6 +78,7 @@ export interface FieldMon extends CardInst {
   visibleCurseAttack?: number;
   mutedEffects?: Pick<CardDef,'onSummon'|'turnFx'|'condAtk'|'attackFx'|'aura'|'evolveTo'>;
   escortLocked?: boolean;
+  noAttackTurn?: number;
   boundarySuppressed?: boolean;
   realmSuppressed?: boolean;
   riftAtTurnEnd?: number;
@@ -96,6 +97,7 @@ export interface FieldMon extends CardInst {
   hatch?: number; // 알: remaining hatch counter (both players' turns tick it)
   dur?: number; // 알: remaining durability (enemy attacks consume 1 instead of combat)
   evolvedUsed?: boolean; // 흡혈귀: 진화(1회) 사용됨
+  trickOffsets?: {attack:number; health:number; wounds:number};
   trickSwapped?: boolean; // 트릭룸: 공/방 반전 적용 중
   dmg?: number; // v24 HP-combat: accumulated damage taken (current HP = effDef - dmg); cleared when the card leaves the field
   gcount?: number; // 누적 카운트 (암살자 길드 / 뱀파이어 집사 흡혈 카운트)
@@ -253,6 +255,7 @@ export interface GameState {
   runeReworkApplied?:boolean;
   runeZonesAudited?: boolean;
   incubatorsReworked?: boolean;
+  balance94Applied?: boolean;
   novemberBalanceApplied?: boolean | 2 | 3; // true in v90, 2 in v91–92, 3 after the v93 adjustments
   incubatorEndTurn?: number;
   golemsReworked?: boolean;

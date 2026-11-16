@@ -18,10 +18,12 @@ try {
  const g=createGame({mode:'online',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.pending=null;
  for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],enchants:[],traps:[],quests:[],dew:0,shield:0,hp:100,mana:30,maxMana:30});
  g.players[0].enchants=[{card:card('RELIC_BOUNTY'),turns:99,bornTurn:1}];g.players[0].field=[mon('GOBLIN')];
- g.players[0].hand=[card('GOBLIN_LEADER'),card('RELIC_PROTECTION')];room.room.game=g;
+ g.players[0].hand=[card('GOBLIN_LEADER'),card('RELIC_PROTECTION'),card('ATTUNE_RETURN')];room.room.game=g;
  await send(0,{type:'play',idx:0});assert.equal(room.room.game.players[1].hp,98);
  for(const s of sockets)assert.equal(s.messages.at(-1).state.players[1].hp,98);
  assert.equal(sockets[1].messages.at(-1).state.players[0].hand[0].id,'HIDDEN');
+ await send(0,{type:'play',idx:0});
+ assert.equal(room.room.game.players[0].shield,0);
  await send(0,{type:'play',idx:0});
  for(const s of sockets){const ev=s.messages.at(-1).events.find(e=>e.type==='statusGrant'&&e.resource==='shield');assert.equal(ev.after,1);}
  room=new GameRoom(journalState(state),rewardTestEnv());await room.webSocketMessage(sockets[0],JSON.stringify({type:'ready'}));

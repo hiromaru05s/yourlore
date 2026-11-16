@@ -30,6 +30,7 @@ import { QUEST_QUICK_CARDS } from "./questQuickCards";
 import type { CardDef, CardType } from "./types";
 import { applyEnglish } from "./cards.en";
 import { applyFlavorCardNames } from "./cardNames.flavor";
+import {balance94Prints} from "./balance94";
 import { standardizeCardTexts } from "./cardText";
 import { applyKeywordText } from "./cardKeywordText";
 
@@ -2431,6 +2432,8 @@ DB.GOBLIN_DRAGON_RIDER = {
 };
 DECK_POOL.push("MUSTER_DIE", "Q_RUNE_SECRET", "GOLEM_TEST", "SLUM_MERCHANT");
 RANDOM_CARDS.add("GOLEM3");
+for (const [id, patch] of Object.entries(balance94Prints)) Object.assign(DB[id] ?? STARTERS[id], patch);
+RANDOM_CARDS.add("BATTLEFIELD");
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
 // Drop unset patch fields so newly printed instances match a JSON-restored room exactly.
@@ -2451,7 +2454,7 @@ export const RELATED_MANUAL: Record<string, string[]> = {
   STABLE: ["INFKNIGHT", "CAVALRY"],
   MERCENARY: ["MERC_ART"],
   MERC_LEADER: ["MERC_ART"],
-  MERC_MASTER: ["MERC_LEADER", "MERC_ART"],
+  MERC_MASTER: ["MERCENARY", "MERC_ART"],
   MERC_ART: ["MERCENARY", "MERC_LEADER", "MERC_MASTER"],
   Q_TOWN: ["SOLDIER2", "CASINO", "WINE", "DOMINION"],
   EMPTY_MIND: ["CREATION"],
@@ -2550,7 +2553,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v93"; // November card balance update
+export const BALANCE_VERSION = "v94"; // November card balance update
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

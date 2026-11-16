@@ -38,7 +38,7 @@ try {
  // private Curse contributes to the public ATK without exposing its identity.
  const active=room.room.game;active.cur=1;
  active.players[1].field=[mon('HEXER3'),mon('HEXER2')];
- active.players[1].curseSeals=10;active.players[1].hand=[card('S4')];
+ active.players[1].curseSeals=15;active.players[1].hand=[card('S4')];
  active.players[0].hand=[card('CURSE')];active.players[0].deck=[];
  active.players[0].discard=[];active.players[0].field=[mon('M1')];
  const victim=active.players[0].field[0].uid;

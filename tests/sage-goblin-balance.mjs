@@ -41,29 +41,29 @@ try {
   g=step(g,{type:'chooseTarget',uid:null});assert.equal(g.players[0].hp,40);assert(!g.players[0].field[0].exhausted);
   g.players[0].field[0].tempAtk=-100;g=attack(g);assert.equal(g.players[0].hp,40);assert.equal(g.pending,null);
  });
- test('Goblin pays one player damage per committed monster attack, on either side',()=>{
-  for(const side of [0,1]){const g=target(attack(duel(side)));assert.equal(g.players[side].hp,39);assert.equal(g.players[1-side].hp,40);assert.equal(g.players[1-side].field[0].dmg,1);assert.equal(g.players[side].field[0].attacksUsed,1);}
+ test('Goblin pays two player damage per committed monster attack, on either side',()=>{
+  for(const side of [0,1]){const g=target(attack(duel(side)));assert.equal(g.players[side].hp,38);assert.equal(g.players[1-side].hp,40);assert.equal(g.players[1-side].field[0].dmg,1);assert.equal(g.players[side].field[0].attacksUsed,1);}
  });
  test('Direct attack retains bonus damage, and Raider has no Goblin penalty',()=>{
   let g=duel();g.players[1].field=[];g=attack(g);assert.equal(g.players[0].hp,40);assert.equal(g.players[1].hp,38);
   g=duel();g.players[0].field=[mon('GOBLIN_RAIDER')];g=target(attack(g));assert.equal(g.players[0].hp,40);
  });
  test('Self damage uses Shield and lethal self damage ends before combat damage',()=>{
-  let g=duel();g.players[0].shield=1;g=target(attack(g));assert.equal(g.players[0].hp,40);assert.equal(g.players[0].shield,0);
+  let g=duel();g.players[0].shield=1;g=target(attack(g));assert.equal(g.players[0].hp,39);assert.equal(g.players[0].shield,0);
   g=duel();g.players[0].hp=1;const targetUid=g.players[1].field[0].uid;g=attack(g);const r=reduce(g,{type:'chooseTarget',uid:targetUid});assert.equal(r.state.winner,1);assert(r.state.over);assert.equal(r.state.players[1].field[0].dmg,0);assert(!r.events.some(e=>e.type==='hit'&&e.uid===targetUid));
  });
  test('World Tree attack/defence continuations charge once, including restored state',()=>{
   let g=duel();for(const p of g.players){p.field.push(mon('WORLD_TREE'));p.dew=2;}
   g=target(attack(g));assert.equal(g.pending.reason,'WORLD_TREE_ATTACK');assert.equal(g.players[0].hp,40);
   g=step(g,{type:'pick',uid:'grow'});assert.equal(g.pending.reason,'WORLD_TREE_DEFEND');assert.equal(g.players[0].hp,40);
-  g=step(JSON.parse(JSON.stringify(g)),{type:'pick',uid:'grow'});assert.equal(g.players[0].hp,39);assert.equal(g.players[0].field[0].attacksUsed,1);assert.equal(g.players[1].field[0].dmg,7);
+  g=step(JSON.parse(JSON.stringify(g)),{type:'pick',uid:'grow'});assert.equal(g.players[0].hp,38);assert.equal(g.players[0].field[0].attacksUsed,1);assert.equal(g.players[1].field[0].dmg,7);
  });
  test('Evasion and trap cancellation still pay the committed attack penalty',()=>{
-  let evaded=false;for(let seed=1;seed<100&&!evaded;seed++){let g=duel();g.rng=seed;g.players[1].field[0].passivesG=['evade'];g=target(attack(g));assert.equal(g.players[0].hp,39);if(!g.players[1].field[0].dmg)evaded=true;}assert(evaded);
-  let g=duel();g.players[1].traps=[{card:{...card('COUNTERCALC'),react:'devour'}}];g=target(attack(g));assert.equal(g.players[0].hp,39);assert.equal(g.players[0].field.length,0);
+  let evaded=false;for(let seed=1;seed<100&&!evaded;seed++){let g=duel();g.rng=seed;g.players[1].field[0].passivesG=['evade'];g=target(attack(g));assert.equal(g.players[0].hp,38);if(!g.players[1].field[0].dmg)evaded=true;}assert(evaded);
+  let g=duel();g.players[1].traps=[{card:{...card('COUNTERCALC'),react:'devour'}}];g=target(attack(g));assert.equal(g.players[0].hp,38);assert.equal(g.players[0].field.length,0);
  });
  test('Multiple attacks pay each time; repeated exhausted attack does not',()=>{
-  let g=duel();g.players[0].field[0].mult=2;g=target(attack(g));g=target(attack(g));assert.equal(g.players[0].hp,38);assert(g.players[0].field[0].exhausted);g=attack(g);assert.equal(g.players[0].hp,38);
+  let g=duel();g.players[0].field[0].mult=2;g=target(attack(g));g=target(attack(g));assert.equal(g.players[0].hp,36);assert(g.players[0].field[0].exhausted);g=attack(g);assert.equal(g.players[0].hp,36);
  });
  console.log(`PASS ${checks} Sage/Goblin scenario groups`);
 }finally{await fs.rm(dir,{recursive:true,force:true});}

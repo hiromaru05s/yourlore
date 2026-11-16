@@ -70,7 +70,7 @@ for(const side of [0,1]){
   g=play(fresh(side),'RUNE_BARRIER');g=end(end(g));assert(!g.players[side].enchants.length);
  }
  {
-  let g=buy(fresh(side),'FORBIDDEN');const p=g.players[side];assert.equal(p.hp,1);assert.equal(p.shield,10);
+  let g=buy(fresh(side),'FORBIDDEN');const p=g.players[side];assert.equal(p.hp,1);assert.equal(p.shield,5);
   assert.equal(p.field.length,3);g=step(g,{type:'attack',uid:p.field[0].uid});assert.equal(g.players[side].field[0].atkMod,-2);assert.deepEqual(g.players[side].field.map(d=>d.defMod),[1,1,1]);
   g=play(g,'M5');assert(g.players[side].field[0].defMod>=1);
  }

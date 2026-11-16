@@ -73,7 +73,7 @@ for(const side of [0,1]){
     p.enchants.push({card:{...card('M1'),ench:'rift'},turns:20});p.hp=40;
     p.hand=[card('M1')];g.market=[card('MERCH1')];
     g=step(g,{type:'play',idx:0});assert(has(g.players[side],'removed',c));
-    assert.equal(g.players[side].hp,41);assert.equal(g.players[1-side].hp,98);
+    assert.equal(g.players[side].hp,42);assert.equal(g.players[1-side].hp,98);
   }
   {
     let g=fresh(side);const c=card('INCUBATOR_S'),e=egg(1);

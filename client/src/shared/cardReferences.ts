@@ -69,7 +69,7 @@ export const CARD_GENERATES: Record<string,string[]> = {
   Q_RIFT:['STARTER_TRASH'], Q_CASTLE:['INFKNIGHT'], QUICK_MIMIC:['MIMIC'], QUICK_SURVIVAL:['DUNGEON'],
   QUICK_WORLD:['WORLD_HEART'], QUICK_MUSTER:['SOLDIER2','INFKNIGHT'], INTERCEPT:['GUNNER','HEAVY_GUNNER'],
   REINFORCE:['INFKNIGHT','SOLDIER2','GUNNER'], FARM_KEEPER:['TOKEN00'], STABLE:['CAVALRY'],
-  MERC_MASTER:['MERC_LEADER'], Q_TOWN:['DOMINION'], EMPTY_MIND:['CREATION'], CREATION:['CREATION'],
+  MERC_MASTER:['MERCENARY'], Q_TOWN:['DOMINION'], EMPTY_MIND:['CREATION'], CREATION:['CREATION'],
   BLACK_INFINITY:['STARTER_TRASH'], BLACK_CURSE:['CURSE'], BLACK_ELSA:['CURSE'], BLACK_ALICE:['CURSE'], QUICK_CURSE:['CURSE'],
   ASSASSIN_SQUAD:['ASSASSIN2'], WINE_COLLECTOR:['GRAPE2','DARK_MERCHANT'], NIGHT_CASTLE_GIFT:['VAMP_PACT','VAMP_WARD'],
 };
@@ -126,7 +126,7 @@ export function effectReferenceParts(text:string,lang:EffectLocale,sourceId:stri
         if(id==='goblin'&&/関連|계열|-related/.test(c.text))return true;
         if(id.startsWith('tribe:')||['eggs','blood','black','fire','chosen','armorer'].includes(id))return true;
         if(id==='mimic' && sourceId==='MIMIC_LORD' && (before.endsWith('named ') || before.endsWith('‘')))return false;
-        if(lang!=='ja'&&familyNames.has(CARD_SERIES[id].names.ja))return true;
+        if(lang!=='ja'&&familyNames.has(CARD_SERIES[id].names.ja) && !sourceJa.includes('「'+CARD_SERIES[id].names.ja+'」1体'))return true;
         if(lang==='ja')return /^」(?:「[^」]+」)*系/.test(after)||sourceId==='VITAL3';
         if(lang==='ko')return /^(?:['’]?\s*|·[가-힣]+\s*)계열/.test(after)||!all.some(x=>x.name===c.text);
         return /^-family|^ family|^- or /.test(after)||['VITAL3','VETERAN_ARMORER'].includes(sourceId)||!all.some(x=>x.nameEn===c.text);

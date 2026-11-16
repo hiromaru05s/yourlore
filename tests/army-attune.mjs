@@ -47,7 +47,7 @@ check('Conscription resolves all six faces and transfers existing military units
       const {state,events}=E.reduce(g,{type:'play',idx:0});
       const n=events.find(e=>e.type==='dice').rolls[0]; seen.add(n);
       const own=state.players[side], other=state.players[1-side];
-      assert.equal(own.mana,21);
+      assert.equal(own.mana,20);
       if(n===1) {
         assert.deepEqual(own.field.map(m=>m.uid),[castle.uid]);
         assert.deepEqual(other.field.map(m=>m.uid),[soldier.uid,gunner.uid]);
@@ -82,7 +82,7 @@ check('Conscription resolves all six faces and transfers existing military units
   }
 });
 check('v92 saved rooms refresh the nine new prints just once and preserve live identities',()=>{
-  const g=fresh();g.novemberBalanceApplied=2;
+  const g=fresh();g.novemberBalanceApplied=2;delete g.balance94Applied;
   const p=g.players[0], leader=mon('MERC_LEADER'), master=mon('MERC_MASTER');
   Object.assign(leader,{trickSwapped:true,def:4,defMod:2,dmg:1});
   Object.assign(master,{def:5,dmg:4});p.field=[leader,master];
@@ -91,8 +91,8 @@ check('v92 saved rooms refresh the nine new prints just once and preserve live i
   p.discard=[{...card('GOLEM_TEST'),atk:1}];p.hand[3].cost=2;
   E.restoreReworkedCards(g);
   assert.equal(p.field[0].uid,leader.uid);assert.equal(leader.def,3);assert.equal(leader.defMod,2);assert.equal(leader.dmg,1);
-  assert.equal(master.def,4);assert.equal(master.dmg,3);assert.equal(p.discard[0].atk,0);
-  assert.equal(g.market[0].cost,5);assert.equal(p.supply[0].cost,4);assert.equal(p.hand[3].cost,3);
+  assert.equal(master.def,3);assert.equal(master.dmg,2);assert.equal(p.discard[0].atk,0);
+  assert.equal(g.market[0].cost,5);assert.equal(p.supply[0].cost,4);assert.equal(p.hand[3].cost,5);
   for(const c of p.hand) assert.equal(c.textJa,E.DB[c.id].textJa);
   const saved=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),saved);
 });
@@ -227,3 +227,112 @@ check('Time Wraith moves enemy Rift and chosen enchantments, and an opponent kil
   const e=g.players[1].enchants[0].card;g=pick(g,e.uid);assert(g.players[1].removed.some(c=>c.uid===e.uid));
   g=end(g);const w=g.players[0].field[0];g=pick(cast(g,'SOUL_HARVEST'),w.uid);assert(g.players[0].discard.some(c=>c.id==='TIMEWARP'));assert.equal(g.players[1].skipTurns,1);
 });
+// v94 regressions exercise public actions with both players in each role.
+for (const side of [0,1]) {
+  const other = 1-side;
+  check('Muster restricts only its summons, including Rebellion ('+side+')',()=>{
+    for (const castle of [false,true]) for (const redirected of [false,true]) {
+      let g=fresh(side);
+      if (castle) g.players[side].field.push(mon('CASTLE'));
+      if (redirected) enchant(g,'COUP',side);
+      const id=castle?'INFKNIGHT':'SOLDIER2', dest=redirected?other:side, existing=mon(id);
+      g.players[dest].field.push(existing);
+      g=quick(g,'QUICK_MUSTER');
+      const summoned=g.players[dest].field.filter(m=>m.id===id && m.uid!==existing.uid);
+      assert.equal(summoned.length,castle?2:3);
+      for (const m of summoned) {
+        assert.equal(m.noAttackTurn,g.turn);
+        assert(!E.monsterCanAttack(g,g.players[dest],m));
+        assert.equal(step(g,{type:'attack',uid:m.uid}).pending,null);
+      }
+      assert.equal(g.players[dest].field.find(m=>m.uid===existing.uid).noAttackTurn,undefined);
+      g=end(g);
+      assert(summoned.every(m=>m.noAttackTurn!==g.turn));
+    }
+    let g=quick(fresh(side),'QUICK_ESCORT');
+    for (const m of g.players[side].field) {
+      assert(E.hasPassive(m,'taunt')); assert(!E.hasPassive(m,'counter')); assert(m.escortLocked);
+    }
+    assert(E.hasPassive(E.DB.INFKNIGHT,'counter'));
+  });
+  check('Battlefield recovers the same card on 5–6 only from the grave ('+side+')',()=>{
+    const faces=new Set();
+    for(let seed=1;seed<=150 && faces.size<6;seed++) {
+      let g=fresh(side);enchant(g,'BATTLEFIELD',other);
+      const victim=mon('M2');g.players[other].field=[victim];g=cast(g,'S15');g.rng=seed*7919;
+      const result=E.reduce(g,{type:'pick',uid:victim.uid});
+      const face=result.events.find(e=>e.type==='dice' && e.source.id==='BATTLEFIELD').rolls[0];
+      faces.add(face);
+      const p=result.state.players[other];
+      assert.equal(p.hand.some(c=>c.uid===victim.uid),face>=5);
+      assert.equal(p.discard.some(c=>c.uid===victim.uid),face<=4);
+    }
+    assert.equal(faces.size,6);
+    for (const victim of [mon('MERC_MASTER'),{...mon('M2'),token:true}]) {
+      let g=fresh(side);enchant(g,'BATTLEFIELD',other);g.players[other].field=[victim];
+      g=cast(g,'S15');const r=E.reduce(g,{type:'pick',uid:victim.uid});
+      assert(!r.events.some(e=>e.type==='dice' && e.source.id==='BATTLEFIELD'));
+    }
+  });
+  check('Assassin death requires its owner to discard up to two cards ('+side+')',()=>{
+    for(const n of [0,1,2,3]) {
+      let g=fresh(side);
+      const victim=mon('SLUM_ASSASSIN');
+      g.players[other].field=[victim];g.players[other].hand=Array.from({length:n},()=>card('M2'));
+      const selected=g.players[other].hand.slice(-2).map(c=>c.uid);
+      g=pick(cast(g,'S15'),victim.uid);
+      for(const uid of selected){
+        assert.equal(E.actingSide(g),other);assert.equal(g.pending.reason,'SLUM_ASSASSIN');
+        assert(pick(g,null).pending);g=pick(JSON.parse(JSON.stringify(g)),uid);
+      }
+      assert.equal(g.pending,null);assert.equal(g.players[other].hand.length,Math.max(0,n-2));
+      assert(selected.every(uid=>g.players[other].discard.some(c=>c.uid===uid)));
+      assert(g.players[other].removed.some(c=>c.uid===victim.uid));
+    }
+  });
+  check('Single Brewing, free once-per-turn Relic, Supply Line threshold ('+side+')',()=>{
+    let g=cast(fresh(side),'BREWING');const p=g.players[side];assert.equal(p.mana,22);assert.equal(p.enchants[0].turns,4);
+    assert(E.playBlockReason(g,side,card('BREWING')));g=cast(g,'BREWING');
+    assert.equal(g.players[side].mana,22);assert.equal(g.players[side].enchants.length,1);
+    for(let n=1;n<=4;n++){g=end(g);g=end(g);assert.equal(g.players[side].enchants[0]?.turns,n===4?undefined:4-n);}
+    g=cast(fresh(side),'RELIC_PROTECTION');assert.equal(g.players[side].mana,24);
+    assert(E.playBlockReason(g,side,card('RELIC_PROTECTION')));g=end(end(g));assert.equal(E.playBlockReason(g,side,card('RELIC_PROTECTION')),null);
+    g=fresh(side);enchant(g,'SUPPLY_LINE',side);g.players[side].deck=[card('STARTER_TRASH'),card('STARTER_TRASH')];
+    g=cast(g,'M2');assert.equal(g.players[side].enchants.length,1);
+    const summon=mon('M2');summon.cost=6;g.players[side].hand.push(summon);
+    g=step(g,{type:'play',idx:g.players[side].hand.length-1});
+    assert.equal(g.players[side].hand.length,2);assert.equal(g.players[side].enchants.length,0);
+    assert(g.players[side].removed.some(c=>c.id==='SUPPLY_LINE'));
+  });
+  check('Attune Return heals only from deck, Rain needs both cards ('+side+')',()=>{
+    for(const zone of ['deck','discard']){
+      let g=fresh(side);const a=card('STARTER_MANA'),discard=card('M2');
+      g.players[side][zone]=[a];g.players[side].hand=[discard];
+      g=pick(pick(cast(g,'ATTUNE_RETURN'),discard.uid),a.uid);
+      assert.equal(g.players[side].hp,zone==='deck'?101:100);
+      assert(g.players[side].hand.some(c=>c.uid===a.uid));
+    }
+    for(const tree of [false,true]) for(const elf of [false,true]) {
+      let g=fresh(side);if(tree) g.players[side].field.push(mon('WORLD_TREE'));
+      if(elf) enchant(g,'ELF_HAVEN',side);
+      g=cast(g,'NOURISHING_RAIN');assert.equal(g.players[side].hp,tree&&elf?102:100);
+    }
+  });
+  check('Trick Room includes both boards, effective ATK, wounds and zero-ATK entrants ('+side+')',()=>{
+    let g=fresh(side);const wall={...mon('M2'),atk:3,def:10,tempAtk:4,dmg:5};
+    const zero={...mon('M2'),atk:0};g.players[side].field=[wall];g.players[other].field=[zero];
+    g=cast(g,'TRICKROOM');let p=g.players[side],m=p.field[0];
+    assert.equal(E.effAtk(p,m,g),5);assert.equal(E.curHp(p,m),7);
+    assert(g.players[other].discard.some(c=>c.uid===zero.uid));
+    g=cast(g,'GOLEM_TEST');assert(!g.players[side].field.some(m=>m.id==='GOLEM_TEST'));
+    g=end(g);p=g.players[side];m=p.field[0];assert.equal(E.effAtk(p,m,g),3);
+    assert.equal(E.curHp(p,m),5);assert.equal(m.dmg,5);assert.equal(g.trickLeft,0);
+  });
+}
+for (const seals of [14,15]) {
+  const g=fresh();g.players[0].field=[mon('HEXER3')];g.players[0].curseSeals=seals;
+  g.players[1].field=[mon('M2')];g.players[1].hand=[card('CURSE'),card('CURSE'),card('CURSE')];
+  const view=E.redactFor(g,0);assert.equal(view.players[0].field[0].visibleCurseAttack,2);
+  assert.equal(E.effAtk(view.players[0],view.players[0].field[0],view),4);
+  assert.equal(end(g).pending?.reason,seals===15?'HEXER3':undefined);
+}

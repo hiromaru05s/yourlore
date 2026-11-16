@@ -36,6 +36,7 @@ export const CHOICE_TEXT:Record<string,Copy>={
  WANTED:c('使用を禁止するカードを選んでください。','사용을 금지할 카드를 고르세요.','Choose a card name to ban.'),
  TIME_WRAITH:c('リフトへ送る相手の永続魔法を選んでください。','리프트로 보낼 상대 영구마법을 고르세요.','Choose an opposing persistent spell to send to the Rift.'),
  D_BLACK:c('相手の墓地に戻すカードを選んでください。','상대 묘지로 되돌릴 카드를 고르세요.','Choose a card to return to the opposing graveyard.'),
+ SLUM_ASSASSIN:c('捨てる手札を選んでください。','버릴 패를 고르세요.','Choose a card to discard.'),
  ATTUNE_RETURN:c('捨てる手札を選んでください。','버릴 패를 고르세요.','Choose a card to discard.'),
  QUEST_ATTUNE_STUDY:c('墓地に得る報酬を選んでください。','묘지에 넣을 보상을 고르세요.','Choose a reward to add to your graveyard.'),
  TIMEWARP:c('自分のリフトから墓地に戻すカードを1枚まで選んでください。','자신의 리프트에서 묘지로 되돌릴 카드를 최대 1장 선택하세요.','Choose up to 1 card from your Rift to return to your graveyard.'),

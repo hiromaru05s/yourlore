@@ -152,7 +152,7 @@ function auraValue(c: CardDef): number {
     case "scavenger": return 7;    // 상대 몬스터 사망시 33%로 복제
     case "pageDraw": return DRAW * 2.2; // 매턴 +1 드로우
     case "lowAtkBan": return 4;
-    case "eliteGuard": return 8;   // 직접 공격 봉쇄 + 6코 이하 도발 벽
+    case "eliteGuard": return 8;   // 직접 공격 봉쇄 + 4코 이하 도발 벽
     case "demonTax2": return -MANA * 1.6; // 몸집 대가: 마나 수정 -2
     // ---- v36 몬스터 대개편 ----
     case "manaGolem": return MANA * 0.8;

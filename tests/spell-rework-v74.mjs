@@ -16,7 +16,7 @@ try {
  const ench=(g,id,side=g.cur,turns=E.DB[id].val??99)=>{const e={card:card(id),turns,bornTurn:0};g.players[side].enchants.push(e);return e;};
  const test=(name,fn)=>{fn();checks++;console.log('PASS',name);};
  test('approved costs, values, Growth absent from every active catalog',()=>{
-  for(const [id,cost,playCost] of [['ANCIENT_CIV',3,3],['FORBIDDEN',3,3],['GS8_0',7,6],['TIMEWARP',12,7]])assert.deepEqual([E.DB[id].cost,E.playCost(card(id))],[cost,playCost],id);
+  for(const [id,cost,playCost] of [['ANCIENT_CIV',3,3],['FORBIDDEN',5,5],['GS8_0',7,6],['TIMEWARP',12,7]])assert.deepEqual([E.DB[id].cost,E.playCost(card(id))],[cost,playCost],id);
   assert.equal(E.DB.GRAPE2.val,5);assert.equal(E.DB.FARM.val,4);assert.equal(E.DB.DESERTIFICATION.ench,'desertification');assert.equal(E.DB.BLACK_REVERSE.maxUsesPerGame,2);
   assert(!E.DB.GROWTH);for(const pool of [E.ALL_IDS,E.BUYABLE_POOL,E.DECK_POOL])assert(!pool.includes('GROWTH'));
   for(const id of E.ALL_IDS)assert(!E.relatedCardIds(id).includes('GROWTH'));
@@ -87,9 +87,9 @@ try {
   ench(g,'BLACKSMITH');g.players[0].field=[];g=play(g,'DEFENSIVE_STANCE');assert.equal(g.players[0].shield,3);
   ench(g,'FURNACE',1);g=play(g,'IRON_WALL');assert.equal(g.players[0].shield,7);
  });
- test('Forbidden buys 10 Shield and three Devils',()=>{
+ test('Forbidden buys 5 Shield and three Devils',()=>{
   const g=fresh();g.market[0]=card('FORBIDDEN');const result=E.reduce(g,{type:'buyMarket',i:0});
-  assert.equal(result.state.players[0].shield,10);assert.equal(result.state.players[0].hp,1);
+  assert.equal(result.state.players[0].shield,5);assert.equal(result.state.players[0].hp,1);
   assert.equal(result.state.players[0].field.filter(m=>m.id==='DEVIL_TOKEN').length,3);
  });
  test('Timewarp chooses a Rift return after either result, supports decline, invalid targets and empty Rift',()=>{

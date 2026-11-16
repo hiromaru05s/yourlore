@@ -142,7 +142,7 @@ try {
     const count=after.removed.length;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[owner].removed.length,count+1);
   }
   // Generated Culls participate in existing Rift reactions.
-  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=7;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+8);}
+  {let g=activate(fresh(),'Q_RIFT');g.players[0].quests[0].progress=7;const rift=Object.values(DB).find(c=>c.ench==='rift');g.players[0].enchants=[{card:card(rift.id),turns:99}];const hp=g.players[0].hp;g=buy(g,'QUICK_GRIMOIRE');assert.equal(g.players[0].hp,hp+16);}
   {let g=activate(fresh(),'Q_TORI');g=activate(g,'Q_WINTER');g.players[0].quests.find(q=>q.card.id==='Q_TORI').progress=2;g.players[0].quests.find(q=>q.card.id==='Q_WINTER').progress=12;const hp=g.players[0].hp,mm=g.players[0].maxMana;g=step(g,{type:'endTurn'});assert.equal(g.players[0].hp,hp+18);assert.equal(g.players[0].maxMana,mm+2);assert.equal(g.players[0].quests.length,0);}
   {let g=activate(fresh(),'Q_TORI');g.players[0].hand=Array.from({length:8},()=>card('STARTER_TRASH'));g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,0);assert.equal(g.pending.reason,'handCap');g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,1);}
   {let g=activate(fresh(),'Q_CASTLE');const castle=mon('CASTLE');g.players[0].field=[castle];for(let i=0;i<4;i++){g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests[0].progress,i+1);}g=step(g,{type:'endTurn'});assert.equal(g.players[0].quests.length,0);assert.equal(g.players[0].field.filter(c=>c.id==='INFKNIGHT').length,2);}
