@@ -1,45 +1,46 @@
-import {createWebGLRenderer} from './webglRenderer';
-import * as T from 'three';import {vertex,fragment} from './persistentFlightMaterial';import {motion,ease} from './persistentFlightMotion';
-export type Anchor={x:number;y:number;w:number};
-export class PersistentFlightRenderer{
- readonly gl:T.WebGLRenderer;private scene=new T.Scene();private camera=new T.OrthographicCamera(-2.25,2.25,2.25,-2.25,.1,30);private mesh:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;private textures:T.Texture[];private disposed=false;
- constructor(face:HTMLCanvasElement,tile:HTMLCanvasElement){this.gl=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:false});this.gl.setClearColor(0,0);this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.setPixelRatio(1);this.camera.position.z=8;const ft=new T.CanvasTexture(face),tt=new T.CanvasTexture(tile);ft.colorSpace=tt.colorSpace=T.SRGBColorSpace;this.textures=[ft,tt];this.mesh=new T.Mesh(new T.PlaneGeometry(1.6,2.4),new T.ShaderMaterial({vertexShader:vertex,fragmentShader:fragment,transparent:true,side:T.DoubleSide,uniforms:{face:{value:ft},sourceRatio:{value:face.height/face.width},tile:{value:tt},time:{value:0},morph:{value:0},contact:{value:0}}}));this.scene.add(this.mesh);}
- async prepare(){await this.gl.compileAsync(this.scene,this.camera);}
- replaceSurfaces(face:HTMLCanvasElement,tile:HTMLCanvasElement){
-  const ft=new T.CanvasTexture(face),tt=new T.CanvasTexture(tile);ft.colorSpace=tt.colorSpace=T.SRGBColorSpace;this.textures.forEach(t=>t.dispose());this.textures=[ft,tt];
-  const u=this.mesh.material.uniforms;u.face.value=ft;u.tile.value=tt;u.sourceRatio.value=face.height/face.width;
- }
- render(ms:number,resolution:number){
-  if(this.disposed)throw Error('Disposed');const m=motion(ms),u=this.mesh.material.uniforms;
-  if(this.gl.domElement.width!==resolution)this.gl.setSize(resolution,resolution,false);
-  u.time.value=ms/1000;u.morph.value=m.morph;u.contact.value=m.contact;
-  this.gl.render(this.scene,this.camera);return this.gl.domElement;
- }
- point(ms:number,s:Anchor,d:Anchor){const m=motion(ms),p=m.p;return{x:s.x+(d.x-s.x)*p,y:s.y+(d.y-s.y)*p+m.lift*s.w,w:s.w+(d.w-s.w)*p};}
- trail(c:CanvasRenderingContext2D,ms:number,s:Anchor,d:Anchor){if(ms<270||ms>1190)return;const tail=Math.max(240,ms-170*(1-ease(890,1190,ms)));const a=this.point(tail,s,d),b=this.point(ms,s,d);if(Math.hypot(a.x-b.x,a.y-b.y)<1)return;c.save();c.lineCap='round';const grad=c.createLinearGradient(a.x,a.y,b.x,b.y);grad.addColorStop(0,'#91caff00');grad.addColorStop(1,'#bfeaffb0');c.strokeStyle=grad;c.lineWidth=s.w*.065*(1-ease(980,1190,ms));c.shadowColor='#70c9ff';c.shadowBlur=9;c.beginPath();c.moveTo(a.x,a.y);for(let j=1;j<=12;j++){const q=this.point(tail+(ms-tail)*j/12,s,d);c.lineTo(q.x,q.y);}c.stroke();c.lineWidth=1;c.strokeStyle='#effcff99';c.shadowBlur=0;c.stroke();c.restore();}
- contact(c:CanvasRenderingContext2D,ms:number,d:Anchor){const m=motion(ms),hit=880,age=(ms-hit)/520;if(age<0||age>1)return;const energy=Math.sin(Math.PI*ease(0,.16,age))*(1-age)+m.contact*.45;c.save();c.translate(d.x,d.y);const gap=d.w*(.50+age*.035);c.strokeStyle='#88c8ef';c.lineWidth=Math.max(.7,d.w*.017)*(1-age);c.shadowColor='#88c8ef';c.shadowBlur=d.w*.11*(1-age);c.globalAlpha=.85*(1-age);c.beginPath();c.roundRect(-gap,-gap,gap*2,gap*2,d.w*.07);c.stroke();c.globalAlpha=energy*.18;c.fillStyle='#88c8ef';c.fillRect(-d.w*.49,-d.w*.49,d.w*.98,d.w*.98);c.restore();}
- stats(){return{geometries:this.gl.info.memory.geometries,textures:this.gl.info.memory.textures,programs:this.gl.info.programs?.length,calls:this.gl.info.render.calls};}
- dispose(){if(this.disposed)return;this.disposed=true;this.mesh.geometry.dispose();this.mesh.material.dispose();this.textures.forEach(t=>t.dispose());this.gl.dispose();this.gl.forceContextLoss();}
+import {motion, ease} from './persistentFlightMotion';
+
+interface Anchor { x:number; y:number; w:number }
+
+function point(ms:number, source:Anchor, destination:Anchor){
+  const m=motion(ms);
+  return {
+    x:source.x+(destination.x-source.x)*m.p,
+    y:source.y+(destination.y-source.y)*m.p+m.lift*source.w,
+  };
 }
 
-// A single idle renderer retains the exact shader across consecutive flights.
-let idle:PersistentFlightRenderer|undefined,timer:ReturnType<typeof setTimeout>|undefined,duel:WeakRef<HTMLElement>|undefined;
-const clearIdle=()=>{clearTimeout(timer);idle?.dispose();idle=undefined;};
-const expire=()=>{if(duel?.deref()?.isConnected){timer=setTimeout(expire,30000);return;}clearIdle();};
-if(typeof window!=='undefined')window.addEventListener('pagehide',clearIdle);
-export function acquirePersistentFlight(face:HTMLCanvasElement,tile:HTMLCanvasElement){
- const renderer=idle;idle=undefined;clearTimeout(timer);
- if(renderer&&!renderer.gl.getContext().isContextLost()){renderer.replaceSurfaces(face,tile);return renderer;}
- renderer?.dispose();return new PersistentFlightRenderer(face,tile);
+/** A short taper follows the card centre along the same flight curve. */
+export function paintPersistentTrail(ctx:CanvasRenderingContext2D,ms:number,source:Anchor,destination:Anchor){
+  if(ms<270 || ms>1190)return;
+  const tail=Math.max(240,ms-170*(1-ease(890,1190,ms)));
+  const a=point(tail,source,destination), b=point(ms,source,destination);
+  if(Math.hypot(a.x-b.x,a.y-b.y)<1)return;
+  ctx.save();
+  const gradient=ctx.createLinearGradient(a.x,a.y,b.x,b.y);
+  gradient.addColorStop(0,'#91caff00');
+  gradient.addColorStop(1,'#bfeaffb0');
+  ctx.strokeStyle=gradient;
+  ctx.lineWidth=source.w*.065*(1-ease(980,1190,ms));
+  ctx.shadowColor='#70c9ff';ctx.shadowBlur=9;ctx.lineCap='round';
+  ctx.beginPath();
+  ctx.moveTo(a.x,a.y);
+  for(let i=1;i<=12;i++){
+    const p=point(tail+(ms-tail)*i/12,source,destination);
+    ctx.lineTo(p.x,p.y);
+  }
+  ctx.stroke();
+  ctx.lineWidth=1;ctx.strokeStyle='#effcff99';ctx.shadowBlur=0;
+  ctx.stroke();
+  ctx.restore();
 }
-export function releasePersistentFlight(renderer:PersistentFlightRenderer){
- renderer.gl.domElement.remove();if(renderer.gl.getContext().isContextLost()||idle){renderer.dispose();return;}
- // Release captured card canvases while retaining only the shared shader/geometry.
- const blank=document.createElement('canvas');blank.width=blank.height=1;renderer.replaceSurfaces(blank,blank);
- idle=renderer;timer=setTimeout(expire,30000);
-}
-export async function warmPersistentFlight(root:HTMLElement){
- duel=new WeakRef(root);const blank=document.createElement('canvas');blank.width=blank.height=1;
- const renderer=acquirePersistentFlight(blank,blank);
- try{await renderer.prepare();renderer.render(0,400);}finally{releasePersistentFlight(renderer);}
+
+/** The sweep uses the real transparent frame print as its silhouette. */
+export function frameGlint(frame:HTMLElement|null){
+  if(!frame)return;
+  const light=document.createElement('span');
+  light.style.cssText='position:absolute;inset:0;pointer-events:none;opacity:0;mask-size:100% 100%;background:linear-gradient(120deg,transparent 38%,#a5dcff 47%,#f3fcff 50%,transparent 59%) 100% 0 / 300% 100% no-repeat';
+  light.style.maskImage=getComputedStyle(frame).backgroundImage;
+  frame.append(light);
+  return light;
 }

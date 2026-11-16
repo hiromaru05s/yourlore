@@ -49,7 +49,6 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     if(!bot){
       await import('./spellFrame/scene').then(m=>m.prepareFrameRenderer()).catch(()=>{});
       await import('./drawStock').then(m=>m.warmDrawStage(root)).catch(()=>{});
-      await import('./persistentFlightRenderer').then(m=>m.warmPersistentFlight(root)).catch(()=>{});
     }
     if(!root.isConnected)return;
     loading.update(98,loungeText("もうすぐ始まります","Almost ready","곧 시작합니다"));

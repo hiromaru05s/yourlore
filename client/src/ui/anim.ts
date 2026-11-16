@@ -209,7 +209,7 @@ function backEl(side: ViewSide = "me"): HTMLElement {
 
 /** The card takes focus across the screen, then returns to its destination.
  * All waits use the existing fast-forward mechanism; the overlay never takes input. */
-async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId,playbackRate=1): Promise<void> {
+async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId,playbackRate=1, originPose?: DOMMatrix): Promise<void> {
   if (fxSkip) return;
   const veil = document.createElement("div"); veil.className = "cast-veil";
   document.body.appendChild(veil);
@@ -226,7 +226,17 @@ async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId,pla
   node.querySelectorAll<HTMLElement>('[style]').forEach(el=>{if(el.style.fontSize.endsWith('px'))el.style.fontSize=`${parseFloat(el.style.fontSize)*scale}px`;});
   node.style.transformOrigin = "top left";
   node.classList.add("cast-reveal");
-  node.style.transform = reduced ? "none" : `perspective(1400px) rotateX(12deg) rotateY(-18deg) scale(${.9/scale})`;
+  if (originPose) {
+    // Rebase the projected market/drag pose onto the larger reveal print.
+    const corner = originPose.transformPoint(new DOMPoint());
+    const left = corner.x / corner.w, top = corner.y / corner.w;
+    node.style.left = left + 'px';
+    node.style.top = top + 'px';
+    node.style.transform = new DOMMatrix().translate(-left, -top).multiply(originPose)
+      .scale(w / revealW, h / revealH).toString();
+  } else {
+    node.style.transform = reduced ? "none" : `perspective(1400px) rotateX(12deg) rotateY(-18deg) scale(${.9/scale})`;
+  }
   node.classList.toggle("fx-opp-cast", side === "opp");
   try {
     await raf();
@@ -361,7 +371,8 @@ async function flyIntoSlot(reveal:HTMLElement,target:HTMLElement,face:HTMLElemen
   return face;
 }
 export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard" | "field" | "vanish",slotIndex?:number,deferVanish=false,crystal?:VoidCrystalCast,effect?:(node:HTMLElement)=>Promise<void>,enchantment?:EnchantmentContext): Promise<HTMLElement|null> {
-  const from = fromRect(side, takeOrigin(side)); if (!from) return null;
+  const drag = takeOrigin(side);
+  const from = fromRect(side, drag); if (!from) return null;
   const node = floatAt(cardEl(card, {size:"hand"}), from);
   let held=false;
   try {
@@ -375,7 +386,9 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&!crystal&&!fxSkip)warmSpellFrame();
     const special=dark&&!fxSkip&&await boardMotionScope(signal=>playDarkMerchant(node,signal),10500);
     if(!special){
-      await focusCard(node, side,undefined,card.t==='spell'?SPELL_FRAME_RATE:STANDARD_FX.rate);
+      const dragPose = persistent && drag ? new DOMMatrix().translate(drag.left,drag.top)
+        .scale(drag.width/node.offsetWidth,drag.height/node.offsetHeight) : undefined;
+      await focusCard(node,side,undefined,persistent || card.t!=='spell' ? STANDARD_FX.rate : SPELL_FRAME_RATE,dragPose);
       if(effect){await parkQuickSpell(node,side);await effect(node);}
       else if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
       else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&card.id!=='FORBIDDEN'&&card.id!=='FLAME'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
@@ -508,7 +521,8 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
     }
   }
   const node = floatAt(cardEl(card, {effect,frame, size: "mkt" }), src);
-  const pose=source?fieldPlacement(source,node.offsetWidth,node.offsetHeight):new DOMMatrix().translate(src.left,src.top);
+  const pose=source?fieldPlacement(source,node.offsetWidth,node.offsetHeight):new DOMMatrix().translate(src.left,src.top)
+    .scale(src.width/node.offsetWidth,src.height/node.offsetHeight);
   node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transform=pose.toString();
   let held=false;
   try {
@@ -516,7 +530,7 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
       // The controller owns this face until effect playback (including choices) completes.
       node.dataset.quickPhase='reveal';
       if(!fxSkip)warmSpellFrame();
-      await focusCard(node,side,undefined,SPELL_FRAME_RATE);
+      await focusCard(node,side,undefined,STANDARD_FX.rate,pose);
       if(fxSkip)return null;
       await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
       if(fxSkip)return null;
