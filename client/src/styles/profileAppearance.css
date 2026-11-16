@@ -48,8 +48,7 @@ dialog.appearance-picker::backdrop {background:#030e1fc2;}
 .appearance-preview {position:relative;margin:auto;width:min(230px,30vh);aspect-ratio:1.345;isolation:isolate;}
 .appearance-preview::after {content:'';position:absolute;inset:0;background:url('/art/biblion/refined/portrait-self.png') center/100% 100%;}
 .appearance-aperture {position:absolute;inset:0;mask:url('/art/seekers/v2/mask-self.png') center/100% 100%;display:grid;justify-items:center;}
-.appearance-aperture img {position:absolute;bottom:0;left:50%;translate:-50% 0;height:84%;width:auto;}
-.appearance-preview[data-background="plain"] img {height:100%;}
+.appearance-aperture img {position:absolute;bottom:0;left:50%;translate:-50% 0;height:100%;width:auto;}
 
 .appearance-picker fieldset {margin:12px 0 0;border:0;padding:0;}
 .appearance-picker legend {font-size:.79rem;color:#c0d5e7;padding:0;margin-bottom:5px;}

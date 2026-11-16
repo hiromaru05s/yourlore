@@ -18,9 +18,8 @@ function drawPose(canvas: HTMLCanvasElement, player: Player, image: HTMLImageEle
   if (!ctx) return;
   const size = player.cutout ? SEEKER_SIZE / 2 : SEEKER_SIZE;
   if (player.cutout) ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const extent = player.cutout ? canvas.width * .84 : canvas.width;
   ctx.drawImage(image, (frame % 8) * size, Math.floor(frame / 8) * size,
-    size, size, (canvas.width-extent)/2, canvas.height-extent, extent, extent);
+    size, size, 0, 0, canvas.width, canvas.height);
 }
 let paused = false, media: MediaQueryList | undefined;
 function load(url: string): Promise<HTMLImageElement> {
