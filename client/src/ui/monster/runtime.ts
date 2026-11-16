@@ -112,7 +112,13 @@ export function syncMonsterStates(root:HTMLElement){
  for(const n of root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')){
   if(!n.classList.contains('is-attacker')&&!n.dataset.monsterAura&&!n.dataset.monsterBlocked)continue;
   const layer=ensureField(root),actor=new Actor(n,layer.cards,1,true);states.set(n,{actor,root,layer,opacity:n.style.opacity,dirty:true});
-  // Keep the source visible until the replacement actor has painted its first pose.
+  // A freshly rendered lane can reach the compositor before the next rAF.
+  // Paint the settled blocked pose and print together during this handoff.
+  if(n.dataset.monsterBlocked){
+   const r=monsterRect(n);
+   actor.paint('blocked','B',1,r,r,reduced());
+   paintRestingAppearance(n,'blocked',!!n.dataset.monsterAura,performance.now(),1,reduced(),r.w);
+  }
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }

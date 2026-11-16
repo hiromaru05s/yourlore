@@ -56,6 +56,16 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
   const old=previousHand?.get(node.dataset.uid||'#'+index),from=old&&!settled?old.matrix.scale(old.width/w,old.height/h):handCardMatrix(node);
   const returnPrint=borrowCardPrint(node,copy);
   copy.style.transformOrigin='0 0';copy.style.transform=from.toString();copy.style.zIndex=String(20+(parseFloat(cs.zIndex)||0));overlay.append(copy);grips.push({node,copy,visibility:node.style.visibility,from,width:w,height:h,settled,returnPrint});node.style.visibility='hidden';
+  if(settled && node.classList.contains('is-dim')){
+   // These are the actual borrowed print layers. Their animations follow
+   // them back into the hand when the last travelling card is seated.
+   for(const layer of Array.from(copy.children) as HTMLElement[]){
+    const filter=layer.style.filter;
+    if(!filter.includes('grayscale'))continue;
+    const neutral=filter.replace(/grayscale\([^)]*\)/g,'grayscale(0)').replace(/brightness\([^)]*\)/g,'brightness(1)').replace(/contrast\([^)]*\)/g,'contrast(1)');
+    layer.animate([{filter:neutral},{filter}],{duration:120*speed,easing:'ease-out'}).id='draw-land-tone';
+   }
+  }
  };
  const all=[...cards[0].parentElement!.querySelectorAll<HTMLElement>(':scope > .card,:scope > .card--back')];
  // Setup remains cancellation-safe even when image decoding or module loading stalls.
@@ -87,7 +97,9 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
      f.root.style.left=(pose.x-f.w/2)+'px';f.root.style.top=(pose.y-f.h/2)+'px';f.root.style.transform=`translateZ(${pose.z}px) rotateZ(${pose.bank}deg) rotateY(${pose.yaw}deg) rotateX(${pose.pitch}deg) scale(${pose.scale})`;
      f.finish(now,pose.bank+pose.pitch);f.root.style.zIndex=p.travel<.78?'80':'0';
      if(!stage)f.root.style.boxShadow='none';
-     f.stock?.update(pose,true,p.glow);f.root.dataset.progress=t.toFixed(3);f.root.dataset.phase=t<.18?'separate':t<.58?'turn':t<.84?'carry':'seat';f.root.dataset.thickness=(f.w*DRAW_THICKNESS_RATIO).toFixed(2);
+     // The printed face has transparent corners. Reveal the stock only as
+     // the card turns edge-on or shows its sleeve.
+     f.stock?.update(pose,pose.yaw>=65,p.glow);f.root.dataset.progress=t.toFixed(3);f.root.dataset.phase=t<.18?'separate':t<.58?'turn':t<.84?'carry':'seat';f.root.dataset.thickness=(f.w*DRAW_THICKNESS_RATIO).toFixed(2);
     });
     stage?.render();if(running)frame=requestAnimationFrame(tick);else finish();
    };frame=requestAnimationFrame(tick);

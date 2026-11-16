@@ -926,6 +926,8 @@ body:has(.game .is-aiming) * { cursor:url(/ui/cursors/drag.svg) 3 3,grabbing!imp
 .game .card.is-exhausted:not(.is-dim) .card-frame { filter:grayscale(.7) brightness(.6) drop-shadow(0 4px 8px #0009); }
 /* Floating summon faces use the same print and silhouette as a field Actor.
    Their parent is body while travelling, so .game descendant rules cannot own them. */
+/* A newly mounted blocked Actor already owns its settled transform. */
+.game .zone-mon .field-resting-face[data-monster-blocked] { transition:none; }
 .card.summon-face { filter:none!important;animation:none!important;transition:none!important; }
 .card:is(.summon-face,.field-resting-face) > :not(.card-frame),.game .zone-mon .card.field-resting-face > :not(.card-frame) { filter:var(--rest-tone,brightness(1)); }
 .card:is(.summon-face,.field-resting-face) .card-frame,.game .zone-mon .card.field-resting-face .card-frame { filter:drop-shadow(0 var(--summon-frame-unit,1px) 0 #d3c3a0) drop-shadow(0 var(--summon-frame-unit,1px) 0 #655846) drop-shadow(0 calc(2 * var(--summon-frame-unit,1px)) calc(4 * var(--summon-frame-unit,1px)) #0009) var(--rest-shadow,drop-shadow(0 0 0 #0000)) var(--rest-tone,brightness(1));animation:none!important; }

@@ -40,6 +40,8 @@ export function acquireDrawStage():DrawStage|null{
  const ground=new T.Mesh(new T.PlaneGeometry(width*2,height*2),new T.ShadowMaterial({opacity:.24}));ground.position.z=-18;ground.receiveShadow=true;scene.add(ground);
  const paper=new T.MeshStandardMaterial({color:0xb9b8af,metalness:.08,roughness:.55});
  const edge=new T.MeshStandardMaterial({color:0x879ab2,metalness:.4,roughness:.33});
+ // Only the bevel and sides supply thickness; the DOM owns both printed faces.
+ edge.visible=false;
  const ink=new T.LineBasicMaterial({color:0x182b42,transparent:true,opacity:.7});
  let disposed=false;const owners=new Set<T.Group>();
  const disposeObject=(group:T.Group)=>{group.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(m!==paper&&m!==edge&&m!==ink)m.dispose();});}});scene.remove(group);owners.delete(group);};
