@@ -1,6 +1,6 @@
 import '../styles/loreCursor.css';
 
-import {clickLifetime, clickSurface, paintClick, type ClickStyle} from './clickBurst';
+import {clickLifetime, clickSurface, paintClick} from './clickBurst';
 
 export function installLoreCursor(): () => void {
   const root = document.documentElement;
@@ -11,18 +11,17 @@ export function installLoreCursor(): () => void {
   let lastDialog: Element | null = null;
   const fine = matchMedia('(any-pointer: fine)');
   const events = new AbortController();
-  const bursts = new Map<HTMLCanvasElement, {style: ClickStyle; start: number; reduced: boolean; ctx: CanvasRenderingContext2D}>();
+  const bursts = new Map<HTMLCanvasElement, {start: number; reduced: boolean; ctx: CanvasRenderingContext2D}>();
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   let frame = 0;
-  let selected: ClickStyle = 'flare';
   const draw = (now: number) => {
     frame = 0;
     for (const [canvas, burst] of bursts) {
-      const duration = burst.reduced ? 125 : clickLifetime[burst.style];
+      const duration = burst.reduced ? 125 : clickLifetime;
       const t = Math.max(0, (now - burst.start) / duration);
       if (t >= 1) {
         canvas.remove(); bursts.delete(canvas);
-      } else paintClick(burst.ctx, burst.style, t, burst.reduced);
+      } else paintClick(burst.ctx, t, burst.reduced);
     }
     if (bursts.size) frame = requestAnimationFrame(draw);
   };
@@ -31,7 +30,7 @@ export function installLoreCursor(): () => void {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     canvas.className = 'lore-cursor-burst';
-    canvas.dataset.clickStyle = selected;
+    canvas.dataset.clickStyle = 'flare';
     canvas.setAttribute('aria-hidden', 'true');
     canvas.width = canvas.height = Math.ceil(clickSurface * Math.min(3, devicePixelRatio || 1));
     canvas.style.width = canvas.style.height = clickSurface + 'px';
@@ -41,15 +40,10 @@ export function installLoreCursor(): () => void {
     document.body.append(canvas);
     if (canvas.popover === 'manual') canvas.showPopover();
     const start = performance.now(), reduced = reducedMotion.matches;
-    bursts.set(canvas, {style: selected, start, reduced, ctx});
-    paintClick(ctx, selected, 0, reduced);
+    bursts.set(canvas, {start, reduced, ctx});
+    paintClick(ctx, 0, reduced);
     if (!frame) frame = requestAnimationFrame(draw);
   };
-  if (import.meta.env.DEV && new URLSearchParams(location.search).has('clickFx')) {
-    void import('../dev/clickBurstPicker').then(({mountClickPicker}) => {
-      if (!events.signal.aborted) mountClickPicker(events.signal, value => { selected = value; }, fire);
-    });
-  }
   const options = {capture: true, passive: true, signal: events.signal};
   const hide = () => { delete root.dataset.loreMouse; };
   const locate = (event: PointerEvent) => {
@@ -79,7 +73,7 @@ export function installLoreCursor(): () => void {
     if (!(target instanceof Element) || target.closest(':disabled, [aria-disabled="true"], [data-block-reason]')) return;
     if (getComputedStyle(target).cursor === 'none') return;
 
-    if (!target.closest('[data-click-fx-picker]')) fire(event.clientX, event.clientY);
+    fire(event.clientX, event.clientY);
   }, options);
   return () => {
     events.abort(); hide(); dial.remove();
