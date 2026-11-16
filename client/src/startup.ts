@@ -1,10 +1,7 @@
-import {installLoreCursor} from './ui/loreCursor';
 /** Small entry module: recovery stays available even if the application graph fails. */
 import { startupLanguage } from './startupLanguage';
 import {startupSession} from './startupSession';
 
-const disposeCursor = installLoreCursor();
-import.meta.hot?.dispose(disposeCursor);
 const shell = document.getElementById('startup');
 const message = document.getElementById('startup-status');
 const reload = document.getElementById('startup-reload');
