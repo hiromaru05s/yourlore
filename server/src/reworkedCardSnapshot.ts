@@ -1,3 +1,4 @@
+import {balance96Prints,balance96Text} from '../../client/src/shared/balance96';
 import {balance94Prints,balance94Text} from '../../client/src/shared/balance94';
 import {balanceChanges,balanceText} from '../../client/src/shared/novemberBalance';
 import {GOLEM_TEXT} from '../../client/src/shared/golemCards';
@@ -38,7 +39,7 @@ export function restoreReworkedCards(game: GameState): void {
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 2)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3)) return;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -294,16 +295,20 @@ export function restoreReworkedCards(game: GameState): void {
       if (balanceChanges[m.id]?.def != null && (m.dmg??0)>=effDef(p,m)) m.dmg=Math.max(0,effDef(p,m)-1);
     }
   }
-  if (!game.balance94Applied) {
-    if (game.trickLeft) game.trickLeft = 1;
+  if (game.balance94Applied !== 3) {
+    const needsOriginalMigration = !game.balance94Applied;
+    if (needsOriginalMigration && game.trickLeft) game.trickLeft = 1;
     const refresh94 = (card: CardInst | null) => {
-      if (!card || !(card.id in balance94Prints || card.id in balance94Text)) return;
+      if (!card) return;
+      const originalPrint = needsOriginalMigration ? balance94Prints[card.id] : undefined;
+      const newPrint = balance96Prints[card.id];
+      if (!originalPrint && !newPrint && !(needsOriginalMigration && card.id in balance94Text) && !(card.id in balance96Text)) return;
       const def = DB[card.id] ?? STARTERS[card.id], m = card as FieldMon;
       Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
-      for (const [key,value] of Object.entries(balance94Prints[card.id] ?? {})) {
+      for (const [key,value] of Object.entries({...originalPrint,...newPrint})) {
         if (key === 'passive') {
           card.passive = [...new Set([...(card.passive??[]).filter(k=>k!=='counter'),...def.passive??[]])];
-          if (m.summonedTurn != null && m.guts == null) m.guts=1;
+          if (def.passive?.includes('guts') && m.summonedTurn != null && m.guts == null) m.guts=1;
         } else {
           const field = m.trickSwapped && key==='atk' ? 'def' : m.trickSwapped && key==='def' ? 'atk' : key;
           Reflect.set(card,field,value);
@@ -314,18 +319,20 @@ export function restoreReworkedCards(game: GameState): void {
     for (const p of game.players) {
       for (const card of [...p.hand,...p.deck,...p.field,...p.discard,...p.removed??[],...p.supply]) refresh94(card);
       for (const entry of [...p.enchants,...p.traps,...p.quests??[],...p.exile]) refresh94(entry.card);
-      for (const e of p.enchants) if (['BREWING','NIGHT_CASTLE_GIFT'].includes(e.card.id) && e.turns>1) e.turns--;
+      if (needsOriginalMigration) for (const e of p.enchants) if (['BREWING','NIGHT_CASTLE_GIFT'].includes(e.card.id) && e.turns>1) e.turns--;
       for (const m of p.field) {
-        if (m.escortLocked && m.id === 'INFKNIGHT') {
+        // v94-v95 Escort Knights lost their lock on damage, but carry printed Taunt.
+        if (m.id === 'INFKNIGHT' && m.token && m.passive?.includes('taunt')) m.escortLocked = true;
+        if (needsOriginalMigration && m.escortLocked && m.id === 'INFKNIGHT') {
           m.passive = [...new Set([...(m.passive??[]).filter(k=>k!=='counter'),'taunt'])];
           m.passivesG = m.passivesG?.filter(k=>k!=='counter');
         }
-        if (balance94Prints[m.id]?.def != null && (m.dmg??0)>=effDef(p,m)) m.dmg=Math.max(0,effDef(p,m)-1);
+        if ((balance96Prints[m.id]?.def != null || (needsOriginalMigration && balance94Prints[m.id]?.def != null)) && (m.dmg??0)>=effDef(p,m)) m.dmg=Math.max(0,effDef(p,m)-1);
       }
     }
     refreshFieldPassives(game);
   }
-  game.balance94Applied = 2;
+  game.balance94Applied = 3;
   if (updateDemons || updateHexers) refreshFieldPassives(game);
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);

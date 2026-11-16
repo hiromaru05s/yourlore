@@ -92,7 +92,7 @@ check('v92 saved rooms refresh the nine new prints just once and preserve live i
   E.restoreReworkedCards(g);
   assert.equal(p.field[0].uid,leader.uid);assert.equal(leader.def,3);assert.equal(leader.defMod,2);assert.equal(leader.dmg,1);
   assert.equal(master.def,3);assert.equal(master.dmg,2);assert.equal(p.discard[0].atk,0);
-  assert.equal(g.market[0].cost,5);assert.equal(p.supply[0].cost,4);assert.equal(p.hand[3].cost,5);
+  assert.equal(g.market[0].cost,6);assert.equal(p.supply[0].cost,4);assert.equal(p.hand[3].cost,5);
   for(const c of p.hand) assert.equal(c.textJa,E.DB[c.id].textJa);
   const saved=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),saved);
 });
@@ -356,7 +356,7 @@ check('v94 rooms gain both Battlefield rules without advancing ongoing countdown
   g.players[1].deck=[copy];
   for (let i=0;i<2;i++) {
     E.restoreReworkedCards(g);
-    assert.equal(g.balance94Applied,2);
+    assert.equal(g.balance94Applied,3);
     for (const c of [oldCard,copy]) for (const key of ['text','textJa','textEn']) {
       assert.equal(c[key],E.DB.BATTLEFIELD[key]);
       assert.equal(c[key].split('\n\n').length,2);
@@ -364,4 +364,58 @@ check('v94 rooms gain both Battlefield rules without advancing ongoing countdown
     assert.equal(battlefield.card.uid,oldCard.uid);
     assert.equal(brewing.turns,3);
   }
+});
+
+for (const side of [0,1]) {
+  check('Forbidden Ritual needs an empty monster field before consuming an offer or mana ('+side+')',()=>{
+    for (const action of ['buyMarket','buySupply']) {
+      let g=fresh(side);
+      const p=g.players[side], offer=card('FORBIDDEN');
+      p.field=[mon('GOLEM_TEST')];
+      const offers=action==='buyMarket'?g.market:p.supply;
+      offers[0]=offer;
+      const stock=E.marketStockOf(g,0);
+      assert(!E.purchaseAllowed(g,p,offer));
+      const blocked=E.reduce(g,{type:action,i:0});
+      assert(!blocked.events.some(e=>e.type==='buy'));
+      assert.equal(blocked.state.players[side].mana,24);
+      assert.equal(E.marketStockOf(blocked.state,0),stock);
+      assert.equal((action==='buyMarket'?blocked.state.market:blocked.state.players[side].supply)[0].uid,offer.uid);
+      p.field=[];enchant(g,'BATTLEFIELD');g.players[1-side].field=[mon('M2')];
+      assert(E.purchaseAllowed(g,p,offer));g=step(g,{type:action,i:0});
+      assert.equal(g.players[side].hp,1);assert.equal(g.players[side].mana,19);
+      assert.equal(g.players[side].field.length,3);
+      assert(g.players[side].field.every(m=>m.id==='DEVIL_TOKEN' && m.noAttackTurn===g.turn));
+    }
+  });
+  check('Escort Knights alone remain unable to attack after damage and a new turn ('+side+')',()=>{
+    let g=fresh(side);g.players[side].field=[mon('INFKNIGHT'),mon('CASTLE')];
+    g=quick(g,'QUICK_ESCORT');
+    assert.equal(g.players[side].mana,18);
+    g=cast(g,'FLAME');assert(g.players[side].hp<100);
+    g=end(end(g));
+    const p=g.players[side],guards=p.field.slice(2);
+    assert.equal(guards.length,3);
+    assert(E.monsterCanAttack(g,p,p.field[0]));
+    for (const m of guards) {
+      assert(E.hasPassive(m,'taunt'));assert(!E.monsterCanAttack(g,p,m));
+      assert(!E.reduce(g,{type:'attack',uid:m.uid}).events.some(e=>e.type==='attack'));
+    }
+  });
+  check('Mini Spirit grows on the correct axis once per resource gain ('+side+')',()=>{
+    let g=fresh(side);g.players[side].field=[mon('MINI_SPIRIT')];
+    for (const [id,atk,hp] of [['STARTER_MANA',0,2],['IRON_WALL',0,3],['NOURISHING_RAIN',1,3],['GRAPE',2,3]]) {
+      g=cast(g,id);const m=g.players[side].field[0];assert.deepEqual([m.atkMod,m.defMod],[atk,hp],id);
+    }
+  });
+}
+check('v95 rooms gain the new prints, preserve granted abilities and recover unlocked escort provenance',()=>{
+  const g=fresh(),p=g.players[0];g.balance94Applied=2;
+  const unlocked={...mon('INFKNIGHT'),passive:['taunt'],token:true};
+  const ordinary={...mon('INFKNIGHT'),passivesG:['taunt'],token:true};
+  const mimic={...mon('AWAKENED_MIMIC'),atk:2,passive:['counter'],passivesG:['counter']};
+  p.field=[unlocked,ordinary,mimic];p.hand=[{...card('MERC_LEADER'),def:2}];
+  E.restoreReworkedCards(g);assert(unlocked.escortLocked);assert(!ordinary.escortLocked);
+  assert.deepEqual([mimic.atk,mimic.def,mimic.passive,mimic.passivesG,mimic.guts],[1,2,['aura'],['counter'],undefined]);
+  assert.equal(p.hand[0].def,1);const saved=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),saved);
 });

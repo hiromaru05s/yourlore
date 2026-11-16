@@ -519,7 +519,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:2,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -656,7 +656,7 @@ function gainDew(ctx: Ctx, p: PlayerState, amount: number, sourceUid?: string): 
   if (amount <= 0) return;
   const before = p.dew ?? 0;
   p.dew = before + amount;
-  spiritGain(p,1,1);
+  spiritGain(p,1,0);
   ctx.ev.push({type:"statusGrant",player:ctx.side(p),resource:"dew",before,after:p.dew,...(sourceUid?{sourceUid}:{})});
   ctx.log(`${p.name}: 이슬 +${amount} (${p.dew})`, `${p.name}: 雫+${amount} (${p.dew})`, `${p.name}: gain ${amount} Dew (${p.dew} total)`);
 }
@@ -678,7 +678,7 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   if (g.players.some(pl => pl.enchants.some(e => e.card.ench === 'furnace'))) amount = Math.min(amount, Math.max(0, 7 - before));
   if (amount <= 0) return;
   p.shield = before + amount;
-  spiritGain(p,1,1);
+  spiritGain(p,0,1);
   trackActivity(p, 'shield', amount);
   ctx.ev.push({type:"statusGrant",player:side(g,p),resource:"shield",before,after:p.shield});
   p.shieldExpiresTurn = side(g, p) === g.cur ? g.turn + 1 : g.turn;
@@ -951,7 +951,6 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     }
     const dealer: Side = (target === g.players[0] ? 1 : 0);
     g.dmgTally[dealer] += amt;
-    if (amt > 0) for (const m of target.field) delete m.escortLocked;
     const hp = Math.max(0, target.hp);
     log(
       `  └ <span class="dmg">${amt} 데미지</span> → ${target.name} (체력 ${hp}) <span class="muted">[${srcKo}]</span>`,
@@ -6249,6 +6248,7 @@ export function purchaseAllowed(g: GameState, p: PlayerState, c: CardInst): bool
   if (p.spellSealTurn || spaceLocked(g, p) || g.players.some(pl => pl.field.some(m => m.aura === "sealAll")) || sealLowBlocks(g, playCost(c, p))) return false;
   if (p.spellCastCap != null && (p.spellsCastTurn ?? 0) >= p.spellCastCap) return false;
   switch (c.id) {
+    case 'FORBIDDEN': return p.field.length === 0;
     case 'MIND_GAME': return o.field.length >= 2 && p.field.some(m => mindTargets(g,p,m).length > 0);
     case 'QUICK_AID': {
       const damage = p.damageReceived;
@@ -6607,7 +6607,11 @@ function resolveQuick(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
     case 'QUICK_ESCORT': case 'QUICK_INSURANCE': case 'MARKET_FEVER': case 'SPIRIT_RESONANCE':
       armySpell(g,ctx,p,card); break;
     case 'QUICK_HELLFIRE': { const o = g.players[1 - side(g, p)]; gainBrand(g, ctx, o, ((o.brand ?? 0) > 0 ? 2 : 1)); break; }
-    case 'FORBIDDEN': p.hp=1;gainShield(g,ctx,p,5);for(let i=0;i<3;i++)effectSummon(g,ctx,p,'DEVIL_TOKEN');break;
+    case 'FORBIDDEN':
+      p.hp = 1;
+      gainShield(g,ctx,p,5);
+      for (let i=0; i<3; i++) spawnToken(g,ctx,p,'DEVIL_TOKEN',{noAttackTurn:g.turn});
+      break;
     case 'RUNE_GLYPH':
       queueExpansionChoice(g,p,'GLYPH_SOURCE','');
       if(otherRune(p,card.id)) queueExpansionChoice(g,p,'GLYPH_REWARD','');

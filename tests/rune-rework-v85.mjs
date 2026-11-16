@@ -71,7 +71,12 @@ for(const side of [0,1]){
  }
  {
   let g=buy(fresh(side),'FORBIDDEN');const p=g.players[side];assert.equal(p.hp,1);assert.equal(p.shield,5);
-  assert.equal(p.field.length,3);g=step(g,{type:'attack',uid:p.field[0].uid});assert.equal(g.players[side].field[0].atkMod,-2);assert.deepEqual(g.players[side].field.map(d=>d.defMod),[1,1,1]);
+  assert.equal(p.field.length,3);
+  assert(p.field.every(devil=>!E.monsterCanAttack(g,p,devil)));
+  const blocked=E.reduce(g,{type:'attack',uid:p.field[0].uid});
+  assert(!blocked.events.some(e=>e.type==='attack'));
+  g=end(end(blocked.state));assert(E.monsterCanAttack(g,g.players[side],g.players[side].field[0]));
+  g=step(g,{type:'attack',uid:p.field[0].uid});assert.equal(g.players[side].field[0].atkMod,-2);assert.deepEqual(g.players[side].field.map(d=>d.defMod),[1,1,1]);
   g=play(g,'M5');assert(g.players[side].field[0].defMod>=1);
  }
  {

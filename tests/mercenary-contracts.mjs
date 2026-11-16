@@ -22,7 +22,7 @@ function buy(g,id,market='buyMarket'){
 const pick=(g,uid)=>step(g,{type:'pick',uid});
 function enchant(g,id,owner=g.cur){g.players[owner].enchants.push({card:card(id),turns:99,bornTurn:0});}
 function check(name,f){f();console.log('PASS',name);}
-const ranks = [['MERCENARY',1,2,1,1],['MERC_LEADER',3,3,2,2],['MERC_MASTER',5,5,3,3]];
+const ranks = [['MERCENARY',1,2,1,1],['MERC_LEADER',3,3,1,2],['MERC_MASTER',5,5,3,3]];
 for (const [id,cost,atk,hp,reward] of ranks) {
   check(id+' printed stats and hand cost with and without a Mercenary',()=>{
     assert.deepEqual([E.DB[id].cost,E.DB[id].atk,E.DB[id].def],[cost,atk,hp]);

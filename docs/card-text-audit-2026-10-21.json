@@ -1172,7 +1172,7 @@
       "nameJa": "古代の狂戦士",
       "status": "reviewed-v94",
       "changedLocales": [],
-      "definitionSha256": "f950f2e6dea9788e7f20f7658e6ab392bcfa39028bff82c0adba9d5261f222e9",
+      "definitionSha256": "be23802d589945b0bf1823088da4b1501c2e1e7d250d0a82f958a6ffd99acb6b",
       "textSha256": "23dc7a02520c7d500af06adc7f02282c7feba80387c9be0d4af5da388b8ec813",
       "hooks": {
         "turnFx": "growAtk"
@@ -2169,19 +2169,19 @@
         "en"
       ],
       "definitionSha256": "e96f49d35b983320058969ff8351bc65c260b9f0e64b744eeef2ab5ea7b25fc0",
-      "textSha256": "a81ba83ba1c226c7b93bd95f7207545d9fddf2978e2653dc7d87bfa51d4172a7",
+      "textSha256": "2873ab9f9bc7258476cf2244d5e34ea48443e96d66cb4d75eba8332cc309587d",
       "hooks": {
         "quick": true
       },
       "before": {
-        "ja": "【購入時】自分の体力を1にする。これはダメージとして扱わない。シールド10を得て、自分の場に「悪魔」3体を召喚する。",
-        "ko": "【구매 시】자신의 체력을 1로 설정한다. 이는 피해가 아니다. 실드 10을 얻고 자신의 필드에 악마 3체를 소환한다.",
-        "en": "【On Purchase】Set your HP to 1 without dealing damage. Gain 10 Shield and summon 3 Devils to your field."
-      },
-      "after": {
         "ja": "【購入時】自分の体力を1にする。これはダメージとして扱わない。シールド5を得て、自分の場に「悪魔」3体を召喚する。",
         "ko": "【구매 시】자신의 체력을 1로 설정한다. 이는 피해가 아니다. 실드 5을 얻고 자신의 필드에 악마 3체를 소환한다.",
         "en": "【On Purchase】Set your HP to 1 without dealing damage. Gain 5 Shield and summon 3 Devils to your field."
+      },
+      "after": {
+        "ja": "【購入条件】自分の場にモンスターがいない。\n\n【購入時】自分の体力を1にする。これはダメージとして扱わない。シールド5を得て、自分の場に「悪魔」3体を召喚する。この効果で召喚された悪魔は、このターン攻撃できない。",
+        "ko": "【구매 조건】자신의 필드에 몬스터가 없어야 한다.\n\n【구매 시】자신의 체력을 1로 한다. 이는 피해로 취급하지 않는다. 실드 5를 얻고 자신의 필드에 악마 3체를 소환한다. 이 효과로 소환한 악마는 이번 턴에 공격할 수 없다.",
+        "en": "【Purchase Requirement】You control no monsters.\n\n【On Purchase】Set your HP to 1. This does not count as damage. Gain 5 Shield and summon 3 Devils to your field. Devils summoned this way cannot attack this turn."
       }
     },
     "LUCKY_CHEST": {
@@ -2643,7 +2643,7 @@
       "nameJa": "覚醒ミミック",
       "status": "reviewed-v94",
       "changedLocales": [],
-      "definitionSha256": "58704b87611ef7e4acee2db6440c709be6cda4b42a2c53ec4e488300ce216cba",
+      "definitionSha256": "a29af4fc2ae3522008f7160376985c01dea84b4a086b1f43ac637245919f6a18",
       "textSha256": "5a28a27b02db775158ba09ce7aaec5ef4d8a92164e3c31a87832208448b6074d",
       "hooks": {
         "onSummon": "awakenMimic"
@@ -6017,7 +6017,7 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "1c25bbb37b3dcbfe9624f31d1aa132db7ad140fba49091fa644f3be42cd6856b",
+      "definitionSha256": "d47f954598c0c2bd98f9d3cc8eaf2a925951f10172b54bb93e8d7635e163db1c",
       "textSha256": "e5aad3b63f1b4763403225e04d89642c7bb852196b7ff254fe4207beaf424841",
       "hooks": {
         "onSummon": "hexSummon",
@@ -7236,7 +7236,7 @@
       "nameJa": "傭兵リーダー",
       "status": "reviewed-v94",
       "changedLocales": [],
-      "definitionSha256": "2f15e3ffff1d1abf7fb3476d18a8dc7be82d20ba92533551fc17fdd93586a732",
+      "definitionSha256": "c7309f11c55c8012210b23d904781f5be26583ce9b1188dc91dfcdd7dfdc0dc2",
       "textSha256": "8456354443c94fb7615dd3fde50aeca1ae6bc0edf75f1c2f2db2460976decae7",
       "hooks": {
         "onSummon": "expansion"
@@ -9468,21 +9468,21 @@
         "ko",
         "en"
       ],
-      "definitionSha256": "7c1eb6df01325f4882e476dfc954277761b2f559dbe5e907961595f7cc9a0b40",
-      "textSha256": "57610dd71f97c1e22aa473e51564cf5b53f6f80ba2dbea339d5f3a1a1d677010",
+      "definitionSha256": "86187a5e5ab34f2914eb3f7a6e99d178a63952b7003cd13f6fab013d8e39d676",
+      "textSha256": "6f0336342fcb4cf243bd514d9d842abaa62be0cb60751502580a5a966c8e57cf",
       "hooks": {
         "act": "armyAttune",
         "quick": true
       },
       "before": {
-        "ja": "【購入時】反撃を持つ騎士を2体召喚する。自分の城があれば3体。自分がダメージを受けるまで、これらの騎士は攻撃できない。",
-        "ko": "【구매 시】반격을 가진 기사 2체 소환. 자신의 성이 있으면 3체. 자신이 피해를 받을 때까지 이 기사들은 공격할 수 없다.",
-        "en": "【On Purchase】Summon 2 Knights with Counter, or 3 if you control a Castle. They cannot attack until you take damage."
-      },
-      "after": {
         "ja": "【購入時】挑発を持つ騎士を2体召喚する。自分の城があれば3体。自分がダメージを受けるまで、これらの騎士は攻撃できない。",
         "ko": "【구매 시】도발을 가진 기사 2체 소환. 자신의 성이 있으면 3체. 자신이 피해를 받을 때까지 이 기사들은 공격할 수 없다.",
         "en": "【On Purchase】Summon 2 Knights with Taunt, or 3 if you control a Castle. They cannot attack until you take damage."
+      },
+      "after": {
+        "ja": "【購入時】挑発を持つ「騎士」2体を自分の場に召喚する。自分の場に「城」があれば、代わりに3体召喚する。この効果で召喚された騎士は、場を離れるまで攻撃できない。",
+        "ko": "【구매 시】도발을 가진 기사 2체를 자신의 필드에 소환한다. 자신의 필드에 성이 있으면 대신 3체를 소환한다. 이 효과로 소환한 기사는 필드를 떠날 때까지 공격할 수 없다.",
+        "en": "【On Purchase】Summon 2 Knights with Taunt to your field, or 3 if you control a Castle. Knights summoned this way cannot attack until they leave the field."
       },
       "reviewedAt": "2026-11-11",
       "reviewNote": "Army and Attune balance update."
@@ -9729,17 +9729,17 @@
         "en"
       ],
       "definitionSha256": "aa3a2b24358ea41613a4248f94ff218c163d16c80f95dc25042812b0b159cd4d",
-      "textSha256": "996450b87373f0ce381bb85428ac2ba3e103eac9cc47be63a2e8cb661558463a",
+      "textSha256": "e2883bf4b923f9987136b3fd5e8c729756475f72b3945dbc7ebbcaa97617a936",
       "hooks": {},
       "before": {
-        "ja": "【場にある間】基本のアチューンを使用するたび自身の体力+2。自分が体力を得るたび攻撃力+1、シールドを得るたび+1/+1、雫を得るたび+2/+2。場を離れるとリセット。",
-        "ko": "【필드에 있는 동안】기본 어튠 사용 시 체력 +2. 자신이 체력을 얻을 때마다 공격력 +1, 실드면 +1/+1, 이슬이면 +2/+2. 필드를 떠나면 초기화한다.",
-        "en": "【While on the Field】Gain 2 HP whenever you play basic Attune. Whenever you gain HP, gain 1 ATK. Whenever you gain Shield, gain +1/+1. Whenever you gain Dew, gain +2/+2. Resets on leaving the field."
-      },
-      "after": {
         "ja": "【場にある間】基本のアチューンを使用するたび自身の体力+2。自分が体力を得るたび攻撃力+1、シールドを得るたび+1/+1、雫を得るたび+1/+1。場を離れるとリセット。",
         "ko": "【필드에 있는 동안】기본 어튠 사용 시 체력 +2. 자신이 체력을 얻을 때마다 공격력 +1, 실드면 +1/+1, 이슬이면 +1/+1. 필드를 떠나면 초기화한다.",
         "en": "【While on the Field】Gain 2 HP whenever you play basic Attune. Whenever you gain HP, gain 1 ATK. Whenever you gain Shield, gain +1/+1. Whenever you gain Dew, gain +1/+1. Resets on leaving the field."
+      },
+      "after": {
+        "ja": "【場にある間】基本のアチューンを使用するたび、このモンスターの体力+2。自分が体力を得るたび、このモンスターの攻撃力+1。自分がシールドを得るたび、このモンスターの体力+1。自分が雫を得るたび、このモンスターの攻撃力+1。これらの変化は場を離れるとリセットされる。",
+        "ko": "【필드에 있는 동안】기본 어튠을 사용할 때마다 이 몬스터의 체력 +2. 자신이 체력을 얻을 때마다 이 몬스터의 공격력 +1. 자신이 실드를 얻을 때마다 이 몬스터의 체력 +1. 자신이 이슬을 얻을 때마다 이 몬스터의 공격력 +1. 필드를 떠나면 이 변화는 초기화된다.",
+        "en": "【While on the Field】Whenever you play basic Attune, this monster gains 2 HP. Whenever you gain HP, it gains 1 ATK. Whenever you gain Shield, it gains 1 HP. Whenever you gain Dew, it gains 1 ATK. These changes reset when it leaves the field."
       },
       "reviewedAt": "2026-11-11",
       "reviewNote": "Army and Attune balance update."
