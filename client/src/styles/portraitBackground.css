@@ -1,0 +1,4 @@
+[data-background="plain"] {--appearance-plate:linear-gradient(#fff,#fff);}
+[data-background="library"] {--appearance-plate:url('/art/seekers/backgrounds/library.webp');}
+[data-background="moonlit-cloister"] {--appearance-plate:url('/art/seekers/backgrounds/moonlit-cloister.webp');}
+.portrait .seeker-motion[data-background]:not([data-background="plain"]) {background:var(--appearance-plate) center/cover;}

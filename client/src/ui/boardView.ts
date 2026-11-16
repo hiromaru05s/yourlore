@@ -51,9 +51,12 @@ import { createBoardStatRise } from './statRise';
 import {TrickRoomPresentation} from './trickRoom/runtime';
 import {createRiftRecordWindow,recordVariant} from './riftRecordCount';
 
-// the local player's profile avatar (set by the game screen), shown on MY portrait
+import {profileBackground, type ProfileBackground} from '../shared/profileAppearance';
+
+// The local player's profile appearance when playing without a room snapshot.
+let myPortraitBackground: ProfileBackground = 'plain';
 let MY_AVATAR: string | null | undefined;
-export function setMyAvatar(a?: string | null): void { MY_AVATAR = a; }
+export function setMyAvatar(a?: string | null, background?: string): void { MY_AVATAR = a; myPortraitBackground = profileBackground(background); }
 // The opponent avatar comes from the online profile or local NPC roster.
 let OPP_AVATAR: string | null | undefined;
 export function setOppAvatar(a?: string | null): void { OPP_AVATAR = a; }
@@ -473,8 +476,8 @@ export class GameView {
     }
 
     // Hearthstone-style center portraits (opp top / me bottom)
-    this.renderPortrait(this.q("portraitOpp"), opp, false, g.medals?.[(1-this.you) as Side]);
-    this.renderPortrait(this.q("portraitMe"), me, true, g.medals?.[this.you]);
+    this.renderPortrait(this.q("portraitOpp"), opp, false, profileBackground(g.portraitBackgrounds?.[1-this.you]), g.medals?.[(1-this.you) as Side]);
+    this.renderPortrait(this.q("portraitMe"), me, true, g.portraitBackgrounds?.[this.you] ?? myPortraitBackground, g.medals?.[this.you]);
     this.q("portraitMe").classList.toggle("is-active", myTurn);
     this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
 
@@ -1028,7 +1031,7 @@ export class GameView {
   }
 
   /** Portrait counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right. */
-  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean, medal?:string|null): void {
+  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean, background: ProfileBackground, medal?:string|null): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
@@ -1056,13 +1059,14 @@ export class GameView {
       <span class="pt-name"><span class="pt-player-name">${esc(p.name)}</span>${medalHtml(medal)}</span>`;
     const ring = el.querySelector<HTMLElement>('.pt-ring')!;
     // Keep the frame and canvas together so a counter rerender cannot interrupt a hit.
-    const retained = oldRing?.dataset.avatar === (avatar ?? '') ? oldRing : null;
+    const retained = oldRing?.dataset.avatar === (avatar ?? '') && oldRing.dataset.background === background ? oldRing : null;
     if (retained) ring.replaceWith(retained);
     else {
       if (oldRing) disposeNpcReactions(oldRing);
       if (oldPortrait) disposeSeekers(oldRing!);
       ring.dataset.avatar = avatar ?? '';
-      if (!npc) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true}));
+      ring.dataset.background = background;
+      if (!npc) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true, background}));
       else mountNpcReaction(ring, npc);
     }
     this.curseSeals[sd].sync(retained ?? ring, sealCount, sealLabel);

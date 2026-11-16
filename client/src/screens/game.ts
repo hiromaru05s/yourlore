@@ -35,7 +35,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   app.root.appendChild(root);
   const npc = opts.mode === "bot" ? botNpc(opts.difficulty ?? "hard") : null;
   const story = opts.mode === 'tutorial' ? undefined : opts.story;
-  setMyAvatar(app.user?.avatar);  // my profile icon on the center-bottom portrait
+  setMyAvatar(app.user?.avatar, app.user?.background);  // my profile icon on the center-bottom portrait
   setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : story?.avatar ?? npc?.avatar ?? null);
   const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
   clearCardEffectContext();setLocalCardEffect(opts.mode==='bot'?activeDeck.effect:undefined);

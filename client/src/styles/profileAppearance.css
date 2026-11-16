@@ -1,0 +1,40 @@
+@import './portraitBackground.css';
+.lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) {
+  align-items:flex-end;justify-content:flex-end;gap:0;padding-bottom:min(3vh,22px);pointer-events:none;
+}
+.lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) .home-spirit-touch {
+  pointer-events:auto;width:min(29%,190px);height:min(24vh,190px);flex:none;margin:0 -2% 0 0;
+}
+.home-standing-seeker {position:relative;isolation:isolate;height:min(56vh,525px);max-width:46%;aspect-ratio:410/1000;pointer-events:none;flex:none;}
+.home-standing-seeker::before {content:'';position:absolute;inset:auto 7% 0;height:3%;background:radial-gradient(ellipse,#12152797,transparent 69%);transform:scaleX(1.32);}
+.home-standing-seeker :is(img,canvas) {display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;}
+.home-standing-seeker canvas,.home-standing-seeker.is-moving img {visibility:hidden;}
+.home-standing-seeker.is-moving canvas {visibility:visible;}
+@media (max-width:850px) and (min-height:501px) {
+  .lounge-shell.selected-menu.lounge-home>.home-companion:has(.home-standing-seeker) {top:calc(var(--bar) + 2px);right:5vw;width:43vw;height:clamp(66px,10vh,84px);padding:0;}
+  .lounge-shell.selected-menu.lounge-home>.home-companion:has(.home-standing-seeker) .home-spirit-touch {width:70px;height:70px;}
+  .home-standing-seeker {height:100%;}
+}
+@media (max-height:500px) and (min-width:601px) {
+  .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) {width:50%;height:100%;align-self:end;}
+  .home-standing-seeker {max-width:55%;height:85%;}
+}
+dialog.appearance-picker {margin:auto;box-sizing:border-box;width:min(500px,94vw);max-height:90dvh;overflow:auto;color:#f2f6ff;text-align:left;}
+dialog.appearance-picker::backdrop {background:#030e1fc2;}
+.appearance-picker h2 {font-size:1.2rem;margin:0 0 10px;}
+.appearance-aperture,.appearance-swatch {background:var(--appearance-plate) center/cover;}
+.appearance-preview {position:relative;margin:auto;width:min(230px,30vh);aspect-ratio:1.345;isolation:isolate;}
+.appearance-preview::after {content:'';position:absolute;inset:0;background:url('/art/biblion/refined/portrait-self.png') center/100% 100%;}
+.appearance-aperture {position:absolute;inset:0;mask:url('/art/seekers/v2/mask-self.png') center/100% 100%;display:grid;justify-items:center;}
+.appearance-aperture img {position:absolute;bottom:0;left:50%;translate:-50% 0;height:84%;width:auto;}
+.appearance-preview[data-background="plain"] img {height:100%;}
+.appearance-picker fieldset {margin:12px 0 0;border:0;padding:0;}
+.appearance-picker legend {font-size:.79rem;color:#c0d5e7;padding:0;margin-bottom:5px;}
+.appearance-options {display:flex;flex-wrap:wrap;gap:6px;}
+.appearance-options button {display:inline-flex;align-items:center;gap:7px;min-height:40px;color:inherit;padding:4px 9px;}
+.appearance-options button[aria-pressed=true] {box-shadow:inset 0 -2px #abddff;background-color:#304766;}
+.appearance-swatch {width:32px;height:27px;}
+.appearance-picker p:empty {display:none;}
+.appearance-picker .modal-row {margin-top:12px;}
+.pf-edit-look {position:relative;display:grid;justify-items:center;gap:3px;background:transparent;color:#f1f8ff;border:0;cursor:pointer;}
+.pf-edit-look small {font-size:10px;color:#deedff;}

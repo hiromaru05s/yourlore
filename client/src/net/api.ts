@@ -30,6 +30,7 @@ export interface User {
   effects?:string[];
   frame?:string;
   effect?:string;
+  background?: string;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
   furniture?: string | null;
@@ -185,8 +186,8 @@ export const api = {
   },
   // ---- social: profile / friends / challenges ----
   profile: (id?: string) => call<{ profile: Profile }>(`/social/profile${id ? `?id=${encodeURIComponent(id)}` : ""}`, undefined, "GET").then((r) => r.profile),
-  updateMe: (patch: { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string; furniture?: string }) =>
-    call<{ ok: true; display: string; needsUsername: boolean; avatar: string | null; badge: string | null; stats_public: boolean; sleeve: string; furniture: string }>("/social/me", patch),
+  updateMe: (patch: { display?: string; avatar?: string; background?: string; badge?: string; stats_public?: boolean; sleeve?: string; furniture?: string }) =>
+    call<{ ok: true; display: string; needsUsername: boolean; avatar: string | null; background?: string; badge: string | null; stats_public: boolean; sleeve: string; furniture: string }>("/social/me", patch),
   buyFrame: (id:string) => {
     if(isLocalDevAccount()){const result=buyLocalGuestSleeve(id);return Promise.resolve({...result,frames:result.sleeves.filter(id=>id.startsWith('frame:'))});}
     return call<{ok:true;credits:number;frames:string[]}>('/social/buy-cosmetic',{id});
@@ -208,6 +209,7 @@ export const api = {
 };
 
 export interface Profile {
+  background?: string;
   ranked?:import('../shared/rankedProfile').RankedProfile;
   id: string; display: string; avatar: string | null; badge: string | null; created_at: number; self: boolean;
   private?: boolean;

@@ -35,14 +35,15 @@ export async function ownedBadges(env:Env,userId:string):Promise<string[]> {
 }
 
 import {isCardEffect} from '../../client/src/shared/cardEffects';
-interface ProfileRow { id: string; display: string; avatar: string | null; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; credits: number; sleeve: string | null; sleeves: string | null; furniture: string | null; }
+import {isProfileBackground} from '../../client/src/shared/profileAppearance';
+interface ProfileRow { id: string; display: string; avatar: string | null; profile_background: string; badge: string | null; stats_public: number; wins: number; losses: number; created_at: number; credits: number; sleeve: string | null; sleeves: string | null; furniture: string | null; }
 
 async function profileOf(env: Env, targetId: string, viewer: SessionUser | null): Promise<Response | Record<string, unknown> | null> {
-  const u = await env.DB.prepare(`SELECT id, display, avatar, badge, stats_public, wins, losses, created_at, credits, sleeve, sleeves, furniture FROM users WHERE id = ?`)
+  const u = await env.DB.prepare(`SELECT id, display, avatar, profile_background, badge, stats_public, wins, losses, created_at, credits, sleeve, sleeves, furniture FROM users WHERE id = ?`)
     .bind(targetId).first<ProfileRow>();
   if (!u) return null;
   const self = viewer?.id === u.id;
-  const base = { id: u.id, display: u.display, avatar: u.avatar, badge: u.badge, created_at: u.created_at, self };
+  const base = { id: u.id, display: u.display, avatar: u.avatar, background: u.profile_background, badge: u.badge, created_at: u.created_at, self };
   if (!self && !u.stats_public) return { ...base, private: true };
 
   const rating = await getRating(env, u.id).catch(() => null);
@@ -147,7 +148,7 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
   }
 
   if (path === "/social/me" && req.method === "POST") {
-    const body = (await req.json().catch(() => ({}))) as { display?: string; avatar?: string; badge?: string; stats_public?: boolean; sleeve?: string; furniture?: string };
+    const body = (await req.json().catch(() => ({}))) as { display?: string; avatar?: string; background?: string; badge?: string; stats_public?: boolean; sleeve?: string; furniture?: string };
     const sets: string[] = [];
     const args: unknown[] = [];
     if (typeof body.display === "string") {
@@ -159,6 +160,10 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     if (typeof body.avatar === "string") {
       if (!/^[A-Za-z0-9_]{0,32}$/.test(body.avatar)) return json(env, { error: "잘못된 아바타" }, 400);
       sets.push("avatar = ?"); args.push(body.avatar || null);
+    }
+    if (body.background !== undefined) {
+      if (!isProfileBackground(body.background)) return json(env, { error: "Invalid background" }, 400);
+      sets.push("profile_background = ?"); args.push(body.background);
     }
     if (typeof body.badge === "string") {
       if (body.badge) {
@@ -176,9 +181,9 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
     }
     if (!sets.length) return json(env, { error: "no changes" }, 400);
     await env.DB.prepare(`UPDATE users SET ${sets.join(", ")} WHERE id = ?`).bind(...args, user.id).run();
-    const u = await env.DB.prepare(`SELECT display, username_set, avatar, badge, stats_public, sleeve, furniture FROM users WHERE id = ?`).bind(user.id)
-      .first<{ display: string; username_set: number; avatar: string | null; badge: string | null; stats_public: number; sleeve: string | null; furniture: string | null }>();
-    return json(env, { ok: true, display: u?.display, needsUsername: u?.username_set !== 1, avatar: u?.avatar, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve||"default", furniture:u?.furniture||"default" });
+    const u = await env.DB.prepare(`SELECT display, username_set, avatar, profile_background, badge, stats_public, sleeve, furniture FROM users WHERE id = ?`).bind(user.id)
+      .first<{ display: string; username_set: number; avatar: string | null; profile_background: string; badge: string | null; stats_public: number; sleeve: string | null; furniture: string | null }>();
+    return json(env, { ok: true, display: u?.display, needsUsername: u?.username_set !== 1, avatar: u?.avatar, background: u?.profile_background, badge: u?.badge, stats_public: !!u?.stats_public, sleeve: u?.sleeve||"default", furniture:u?.furniture||"default" });
   }
 
   // Permanent purchases debit and grant in one statement. Retrying an owned item never charges again.

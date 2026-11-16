@@ -38,6 +38,7 @@ export interface SessionUser {
   effects?:string[];
   frame?:string;
   effect?:string;
+  background?: string;
   avatar?: string | null; // preset avatar (card id)
   badge?: string | null;  // equipped badge key
   furniture?: string | null;

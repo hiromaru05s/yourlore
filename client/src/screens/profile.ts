@@ -1,4 +1,7 @@
 import {renderRankedProfile} from '../ui/rankedProfile';
+import {appearanceTitle, openAppearancePicker} from '../ui/appearancePicker';
+import {profileBackground} from '../shared/profileAppearance';
+import {saveLocalAppearance} from '../dev/localAccount';
 import {mountUsernameForm} from '../ui/usernameForm';
 import {mountProfileMedals} from '../ui/profileMedals';
 import {medalHtml} from '../ui/medal';
@@ -36,6 +39,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   app.root.appendChild(wrap);
 
   let dead = false;
+  let closeAppearance: (()=>void)|undefined;
   let closeRename: (()=>void)|undefined;
   let logoutPending = false;
   let logoutError = "";
@@ -81,7 +85,12 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 
   const load = async (): Promise<void> => {
     let p: Profile;
-    try { p = await api.profile(userId); } catch { if (dead) return; body().innerHTML = `<div class="pf-loading">${t("login.err.generic")}</div>`; return; }
+    try {
+      const guest = app.user;
+      if (guest?.id === 'local-guest-user' && (!userId || userId === guest.id)) {
+        p = {id:guest.id, display:guest.display, avatar:guest.avatar ?? null, background:guest.background,
+          badge:null, created_at:0, self:true, credits:guest.credits, wins:guest.wins, losses:guest.losses};
+      } else p = await api.profile(userId); } catch { if (dead) return; body().innerHTML = `<div class="pf-loading">${t("login.err.generic")}</div>`; return; }
     if (dead) return;
     cached = p;
     build();      // rebuild so the tab bar appears once we know self/other
@@ -112,14 +121,14 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     body().innerHTML = `
       <section class="tut-sec pf-card">
         <div class="pf-head pf-rank-header">
-          <div class="pf-identity"><div class="pf-ava">${avatarHtml(p.avatar, p.display, 72)}</div>
+          <div class="pf-identity">${p.self ? `<button type="button" class="pf-ava pf-edit-look" data-edit-look aria-label="${appearanceTitle()}">${avatarHtml(p.avatar, p.display, 72)}<small>${loungeText('着せ替え','Customize','꾸미기')}</small></button>` : `<div class="pf-ava">${avatarHtml(p.avatar,p.display,72)}</div>`}
           <div class="pf-id">
             <div class="pf-name-row">
               <span class="pf-name" id="pfName">${esc(p.display)}</span>
               ${p.self ? `<button class="btn btn-ghost btn-mini" id="renameBtn">${homeIcon("edit")} ${t("profile.rename")}</button>` : ""}
             </div>
             ${medalHtml(p.medals?.equipped ?? p.badge)}
-            <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${t("mode.ranked")}`} · ${fmtDate(p.created_at)}~</div>
+            <div class="pf-joined">${t("home.record")}${p.private ? "" : ` ${t("mode.ranked")}`}${p.created_at ? ` · ${fmtDate(p.created_at)}~` : ''}</div>
           </div></div>
         </div>
       </section>
@@ -129,6 +138,24 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
     renderRankedProfile(body().querySelector<HTMLElement>('[data-ranked-profile]')!,p,body().querySelector<HTMLElement>('.pf-rank-header')!);
 
     if (!p.self) return;
+
+    body().querySelector<HTMLButtonElement>('[data-edit-look]')!.onclick = () => {
+      closeAppearance = openAppearancePicker(p.avatar, p.background, async (avatar, background) => {
+        const user = app.user;
+        if (!user || user.id !== p.id) throw new Error(t('login.err.generic'));
+        if (user.id === 'local-guest-user') saveLocalAppearance(avatar, background);
+        else {
+          const saved = await api.updateMe({...(avatar !== p.avatar && avatar ? {avatar} : {}), background});
+          avatar = saved.avatar; background = profileBackground(saved.background);
+        }
+        if (app.user?.id === p.id) {
+          Object.assign(app.user, {avatar, background});
+          document.dispatchEvent(new Event('lore:user'));
+        }
+        Object.assign(p, {avatar, background});
+        if (!dead && cached === p) renderTab();
+      });
+    };
 
     // ---- rename ----
     (body().querySelector("#renameBtn") as HTMLElement | null)?.addEventListener("click", () => {
@@ -298,7 +325,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   build();
   void load();
   const unsub = onLangChange(() => { build(); renderTab(); });
-  return { destroy: () => { dead = true; closeRename?.(); disposeMedals?.(); unsub(); } };
+  return { destroy: () => { dead = true; closeAppearance?.(); closeRename?.(); disposeMedals?.(); unsub(); } };
 }
 
 /** One ranked profile shared by the leaderboard and friends list. */

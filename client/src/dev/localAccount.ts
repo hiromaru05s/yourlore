@@ -1,3 +1,5 @@
+import {profileBackground, type ProfileBackground} from '../shared/profileAppearance';
+import {SEEKER_ID} from '../ui/seekerMotion';
 import { t } from '../i18n';
 import {cosmetic} from '../shared/cosmetics';
 import { DECK_POOL, type DeckStore, sanitizeDecks } from "../shared/cards";
@@ -7,6 +9,8 @@ export const LOCAL_GUEST_KEY = "lore_local_guest_login";
 const LOCAL_GUEST_PROFILE_KEY = "lore_local_guest_profile";
 
 export interface LocalGuestProfile {
+  avatar?: string | null;
+  background?: ProfileBackground;
   credits: number;
   sleeves: string[];
   sleeve: string;
@@ -47,7 +51,7 @@ export function loadLocalGuestProfile(): LocalGuestProfile {
   try {
     const saved = JSON.parse(localStorage.getItem(LOCAL_GUEST_PROFILE_KEY) || "null") as Partial<LocalGuestProfile> | null;
     if (saved && Number.isFinite(saved.credits) && Array.isArray(saved.sleeves)) {
-      return { credits: Math.max(0, Math.floor(saved.credits!)), sleeves: [...new Set(["default", ...saved.sleeves])], sleeve: saved.sleeve || "prism" };
+      return { avatar:saved.avatar ?? SEEKER_ID, background:profileBackground(saved.background), credits: Math.max(0, Math.floor(saved.credits!)), sleeves: [...new Set(["default", ...saved.sleeves])], sleeve: saved.sleeve || "prism" };
     }
   } catch { /* create a fresh local profile */ }
   const profile = { credits: 12, sleeves: ["default", "prism"], sleeve: "prism" };
@@ -56,9 +60,13 @@ export function loadLocalGuestProfile(): LocalGuestProfile {
 }
 
 export function saveLocalGuestProfile(profile: LocalGuestProfile): LocalGuestProfile {
-  const saved = { credits: Math.max(0, Math.floor(profile.credits)), sleeves: [...new Set(["default", ...profile.sleeves])], sleeve: profile.sleeve || "default" };
+  const saved = { avatar:profile.avatar ?? SEEKER_ID, background:profileBackground(profile.background), credits: Math.max(0, Math.floor(profile.credits)), sleeves: [...new Set(["default", ...profile.sleeves])], sleeve: profile.sleeve || "default" };
   localStorage.setItem(LOCAL_GUEST_PROFILE_KEY, JSON.stringify(saved));
   return saved;
+}
+
+export function saveLocalAppearance(avatar: string | null, background: ProfileBackground): void {
+  saveLocalGuestProfile({...loadLocalGuestProfile(), avatar, background});
 }
 
 export function buyLocalGuestSleeve(id: string): { credits: number; sleeves: string[]; furnitures:string[] } {

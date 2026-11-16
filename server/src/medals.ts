@@ -1,3 +1,4 @@
+import {profileBackground} from '../../client/src/shared/profileAppearance';
 import type {Env} from './env';
 import {MEDALS,MEDAL_BY_ID,MEDAL_SERIES,type MedalState} from '../../client/src/shared/medals';
 import {effMaxMana} from '../../client/src/shared/engine';
@@ -68,7 +69,7 @@ export async function settleMedals(env:Env,matchId:string,g:GameState,side:Side,
  await db.batch(statements);
 }
 
-export async function equippedMedal(env:Env,userId:string):Promise<string|null>{
- const row=await env.DB.prepare('SELECT badge FROM users WHERE id=?').bind(userId).first<{badge:string|null}>();
- return row?.badge&&MEDAL_BY_ID.has(row.badge)?row.badge:null;
+export async function duelAppearance(env:Env,userId:string){
+ const row=await env.DB.prepare('SELECT badge, profile_background FROM users WHERE id=?').bind(userId).first<{badge:string|null;profile_background:string}>();
+ return {medal:row?.badge && MEDAL_BY_ID.has(row.badge) ? row.badge : null, background: profileBackground(row?.profile_background)};
 }

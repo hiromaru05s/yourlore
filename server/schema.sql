@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
   invite_code TEXT,                       -- 내 초대 코드 (lazy 발급, 유니크 인덱스 별도)
   invited_by  TEXT,                       -- 나를 초대한 유저 id
   credits     INTEGER NOT NULL DEFAULT 0, -- 단일 소프트 커런시 (docs/monetization.md)
+  profile_background TEXT NOT NULL DEFAULT 'plain',
   avatar      TEXT,                       -- 프리셋 아바타 (카드 id)
   badge       TEXT,                       -- 장착 뱃지 키 (보유 여부는 서버가 계산)
   stats_public INTEGER NOT NULL DEFAULT 1, -- 프로필 전적 공개 여부
