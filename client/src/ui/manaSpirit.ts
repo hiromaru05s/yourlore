@@ -1,3 +1,4 @@
+import {restingFlight, type RabbitFlight} from './homeZenoFlight';
 import {homeIsCovered} from './screenCovered';
 import {createWebGLRenderer} from './webglRenderer';
 import {homeDaylight,onHomeDaylightReady} from './homeDaylight';
@@ -12,7 +13,7 @@ import { buildDewFront } from './manaSpiritFront';
 import {createHomePearl,createHomeReflectionRoom,disposeHomeReflectionRoom,finishHomeSpirit} from './zenoHomeSurface';
 
 export type SpiritPose = ReturnType<ReturnType<typeof createSpiritMotion>['tick']>;
-export type SpiritForm = {left:THREE.Group;right:THREE.Group;update?:(pose:SpiritPose,dt:number,time:number)=>void};
+export type SpiritForm = {left:THREE.Group;right:THREE.Group;update?:(pose:SpiritPose,dt:number,time:number,flight?:RabbitFlight)=>void};
 
 /** Zeno: the approved moon rabbit, shared by HOME and tutorial. */
 export function mountManaSpirit(host: HTMLElement, options: {
@@ -28,12 +29,13 @@ export function mountManaSpirit(host: HTMLElement, options: {
   form?: (body:THREE.Group, pearl:THREE.Material, blue:THREE.Material) => SpiritForm;
   silhouette?: boolean;
   viewYaw?: number | (()=>number);
-} = {}): { setFlightView(scale:number,bank:number):void; celebrate():void; greet():void; suspend():void; resume():void; destroy():void } {
+} = {}): { setFlightView(scale:number,pose:RabbitFlight):void; celebrate():void; greet():void; suspend():void; resume():void; destroy():void } {
   host.classList.add('mana-spirit'); host.setAttribute('aria-hidden','true');
   const fallback=()=>{host.innerHTML='<svg viewBox="0 0 120 140"><defs><linearGradient id="spiritPearl" x2=".8" y2="1"><stop stop-color="#fffdf0"/><stop offset=".55" stop-color="#e4f0eb"/><stop offset="1" stop-color="#89aec1"/></linearGradient></defs><ellipse class="mana-spirit-shadow" cx="60" cy="127" rx="26" ry="5" fill="#315569" opacity=".22"/><ellipse cx="42" cy="29" rx="9" ry="26" fill="url(#spiritPearl)"/><ellipse cx="78" cy="29" rx="9" ry="26" fill="url(#spiritPearl)"/><path d="M60 41C91 41 99 70 91 91C82 123 38 123 29 91C21 70 29 41 60 41" fill="url(#spiritPearl)" stroke="#98bdcf" stroke-width="1"/><path d="M33 60Q60 45 87 60L82 79Q60 90 38 79Z" fill="#20374e"/><ellipse cx="48" cy="68" rx="3" ry="6" fill="#9ee6f0"/><ellipse cx="72" cy="68" rx="3" ry="6" fill="#9ee6f0"/><path d="M60 89C57 95 51 101 52 106C53 115 67 115 68 106C69 101 63 95 60 89Z" fill="#9ce8ee" stroke="#c5dedf"/><ellipse cx="60" cy="107" rx="3" ry="4" fill="#ddfff2"/></svg>';if(options.home)host.querySelector('.mana-spirit-shadow')?.remove();};
   const staticSpirit=()=>{
     fallback();
     const svg=host.querySelector('svg')!;
+    const ears=svg.querySelectorAll<SVGEllipseElement>('ellipse[rx="9"]');
     const greet=()=>{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)
       svg.animate([{transform:'none'},{transform:'translateY(-4%) rotate(-6deg)'},{transform:'none'}],{duration:680});};
     const target=options.interactive;
@@ -41,7 +43,15 @@ export function mountManaSpirit(host: HTMLElement, options: {
     const unbind=target instanceof HTMLElement && activate
       ? bindZenoInteraction(target,createZenoTurn(),()=>activate(greet),()=>{})
       : ()=>{};
-    return {setFlightView(){},celebrate(){},greet,suspend(){},resume(){},destroy(){
+    return {setFlightView(_scale:number,pose:RabbitFlight){
+      const lean=pose.stroke*12-pose.brake*8+pose.turn*8;
+      svg.style.rotate=lean+'deg';
+      ears.forEach((ear,index)=>{
+        const side=index===0?-1:1;
+        const tilt=side*(pose.stroke*25+pose.gather*(index===0?17:6)-pose.brake*6);
+        ear.setAttribute('transform',`rotate(${tilt} ${index===0?42:78} 51)`);
+      });
+    },celebrate(){},greet,suspend(){},resume(){},destroy(){
       unbind();
       host.replaceChildren();
     }};
@@ -111,28 +121,59 @@ export function mountManaSpirit(host: HTMLElement, options: {
   const turn=createZenoTurn();
   const interactive=options.interactive??!options.form;
   const targetElement=interactive instanceof HTMLElement?interactive:host;
-  let flightBank=0;
+  let flight=restingFlight;
+  let gazeX=0,gazeY=0,headX=0,headY=0,targetX=0,targetY=0;
+  function followPlayer(event: PointerEvent) {
+    if (suspended || flight.attention<.9 || event.pointerType!=='mouse') return;
+    const box=targetElement.getBoundingClientRect();
+    targetX=THREE.MathUtils.clamp((event.clientX-box.left-box.width/2)/Math.max(90,box.width),-1,1);
+    targetY=THREE.MathUtils.clamp((event.clientY-box.top-box.height/2)/Math.max(90,box.height),-1,1);
+  }
+  function releaseGaze() { targetX=0; targetY=0; }
+  if(options.onActivate){
+    window.addEventListener('pointermove',followPlayer,{passive:true});
+    document.documentElement.addEventListener('pointerleave',releaseGaze);
+  }
   let pose={...rest}, dead=false, suspended=false, visible=true, raf=0, last=0, time=0;
   const render=(now:number)=>{
     raf=0;if(dead||suspended||!visible||document.hidden)return;
     if(last&&options.home&&homeIsCovered()){last=now;raf=requestAnimationFrame(render);return;}
-    if(now-last>=1000/(options.fps??60)||isStill()||!last){
+    if((options.onActivate && !options.fps) || now-last>=1000/(options.fps??60)||isStill()||!last){
       const dt=last?Math.min((now-last)/1000,.1):0;last=now;if(!isStill())time+=dt;
-      const target=isStill()?rest:motion.tick(dt);
+      const target=isStill()?rest:motion.tick(dt,flight.attention>.05);
       // A short blend lets tapping wake a drowsy spirit without snapping its body or eyelids.
       const blend=isStill()?1:1-Math.exp(-dt*18);
-      for(const k of ['x','y','yaw','roll','pitch','fin','finPitch','eye','smile','yawn'] as const)pose[k]+=(target[k]-pose[k])*blend;
+      for(const k of ['x','y','yaw','roll','pitch','fin','finPitch','eye','smile','yawn','glance'] as const)pose[k]+=(target[k]-pose[k])*blend;
       host.dataset.spiritMood=target.mood;
       const rotation=turn.tick(dt,isStill());
       const yaw=interactive?THREE.MathUtils.clamp(pose.yaw+rotation.yaw,-ZENO_TURN_LIMIT.yaw,ZENO_TURN_LIMIT.yaw):pose.yaw;
       const pitch=interactive?THREE.MathUtils.clamp(pose.pitch+rotation.pitch,-ZENO_TURN_LIMIT.pitch,ZENO_TURN_LIMIT.pitch):pose.pitch;
       host.dataset.zenoYaw=String(yaw*180/Math.PI);host.dataset.zenoPitch=String(pitch*180/Math.PI);
-      spirit.position.set(pose.x,pose.y,0);spirit.rotation.set(pitch + flightBank*.22,yaw + flightBank*.26 +(typeof options.viewYaw==='function'?options.viewYaw():options.viewYaw??0),pose.roll - flightBank*.15);
+      const acting = options.onActivate && !isStill() ? flight : undefined;
+      const glance = acting ? pose.glance*(1-acting.attention*.8) : 0;
+      // The eyes find the player before the body turns. Touch idle still uses
+      // the independent glances and listening ear of the rabbit rig.
+      const focus=acting?.attention??0;
+      gazeX+=(targetX*focus-gazeX)*(1-Math.exp(-dt*22));
+      gazeY+=(targetY*focus-gazeY)*(1-Math.exp(-dt*22));
+      headX+=(gazeX-headX)*(1-Math.exp(-dt*5));
+      headY+=(gazeY-headY)*(1-Math.exp(-dt*5));
+      const lookYaw = acting ? .31*(1-acting.attention) + glance*.19 + acting.turn + headX*.29 : 0;
+      const lean = acting ? .51*acting.stroke - .23*acting.gather - .35*acting.brake : 0;
+      const stretch = acting ? 1 - .10*acting.gather + .065*acting.stroke - .045*acting.brake : 1;
+      const viewYaw = typeof options.viewYaw==='function' ? options.viewYaw() : options.viewYaw??0;
+      spirit.position.set(pose.x,pose.y,0);
+      spirit.scale.set(1/Math.sqrt(stretch),stretch,1/Math.sqrt(stretch));
+      spirit.rotation.set(pitch+lean+(acting?headY*.15:0), yaw+viewYaw+lookYaw, pose.roll - .23*(acting?.stroke??0) + glance*.08);
+      eyes.forEach((eye,index)=>{
+        eye.position.x=(index===0?-.17:.17)+glance*.055+(acting?.turn??0)*.025+(acting?gazeX*.05:0);
+        eye.position.y=.18-(acting?gazeY*.028:0);
+      });
       left.rotation.set(pose.finPitch,0,-pose.fin);right.rotation.set(-pose.finPitch,0,pose.fin);
-      eyes.forEach(e=>{e.scale.y=1.7*Math.max(.045,pose.eye);e.visible=pose.smile<.97;});
+      eyes.forEach(e=>{e.scale.y=1.7*Math.max(.045,pose.eye*(1-.72*(acting?.gather??0)));e.visible=pose.smile<.97;});
       smiles.forEach(e=>e.scale.y=.65+.35*pose.smile);smileMat.opacity=pose.smile;yawnMat.opacity=pose.yawn;
       mouth.scale.x=.8+.2*pose.smile;shadow.scale.x=1-pose.y*.3;
-      form.update?.({...pose,mood:target.mood,elapsed:target.elapsed},isStill()?0:dt,time);
+      form.update?.({...pose,mood:target.mood,elapsed:target.elapsed},isStill()?0:dt,time,acting);
       if(options.home){
         key.intensity=.95+homeDaylight.sun*1.85;
         key.position.set(-5+homeDaylight.sweep*.65,5,2.5);
@@ -157,18 +198,24 @@ export function mountManaSpirit(host: HTMLElement, options: {
   const activate=options.onActivate;
   const unbind=interactive?bindZenoInteraction(targetElement,turn,activate?()=>activate(greet):greet,start):()=>{};
   return {
-    setFlightView(scale,bank){
+    setFlightView(scale,nextPose){
       // Dolly along the HOME camera's sightline. The button supplies the projected
       // size and hit area; compensating the lens keeps that magnification single.
       camera.position.set(0,.05+.30/scale,5.4/scale);
       camera.zoom=1/scale;camera.updateProjectionMatrix();
-      flightBank=bank;start();
+      flight=nextPose;
+      if(!flight.attention)releaseGaze();
+      start();
     },
     greet,
     suspend(){suspended=true;stop();},
     resume(){if(dead)return;suspended=false;visible=true;size();},
     celebrate(){if(dead||isStill())return;motion.celebrate();start();},
     destroy(){
+      if(options.onActivate){
+        window.removeEventListener('pointermove',followPlayer);
+        document.documentElement.removeEventListener('pointerleave',releaseGaze);
+      }
       dead=true;offDaylight();unbind();stop();resize.disconnect();intersection?.disconnect();document.removeEventListener('visibilitychange',onVisibility);reduced.removeEventListener('change',onReduced);
       const geometries=new Set<THREE.BufferGeometry>(),materials=new Set<THREE.Material>([pearl,blue]);
       scene.traverse(o=>{if(o instanceof THREE.Mesh){geometries.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material])materials.add(m);}});

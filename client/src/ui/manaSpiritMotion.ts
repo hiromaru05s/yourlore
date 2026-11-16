@@ -13,14 +13,18 @@ export function createSpiritMotion(ambient: boolean, random = Math.random) {
   let previous: SpiritMood = 'idle', repeats = 0;
   const gap = () => SPIRIT_IDLE_GAP.min + random() * (SPIRIT_IDLE_GAP.max - SPIRIT_IDLE_GAP.min);
   let next = gap();
+  let glanceAt = 1.1, glanceStart = -10, glanceSide = 1, glanceHold = .65;
   const begin = (kind: Exclude<SpiritMood,'idle'>) => { mood=kind; elapsed=0; };
   return {
     greet() { if (mood !== 'happy') begin('happy'); },
     celebrate() { if (mood !== 'flutter') begin('flutter'); },
-    tick(dt: number) {
+    tick(dt: number, attentive = false) {
       time += dt;
       elapsed += dt;
-      if (mood === 'idle' && ambient && elapsed >= next) {
+      if (attentive && (mood === 'sleepy' || mood === 'flutter')) {
+        mood='idle'; elapsed=0; next=gap();
+      }
+      if (mood === 'idle' && ambient && !attentive && elapsed >= next) {
         let chosen: Exclude<SpiritMood,'idle'> = random() < .5 ? 'flutter' : 'sleepy';
         if (chosen === previous && repeats >= 2) chosen = chosen === 'flutter' ? 'sleepy' : 'flutter';
         repeats = chosen === previous ? repeats + 1 : 1; previous = chosen;
@@ -41,8 +45,14 @@ export function createSpiritMotion(ambient: boolean, random = Math.random) {
       const blinkPhase = time % 5.8;
       const blink = 1 - .94 * envelope(blinkPhase,5.53,5.65,5.7,5.8);
       const flap = Math.sin(flutter * 16) * .34 * flight;
+      if (ambient && time >= glanceAt) {
+        glanceStart=time; glanceSide=random()<.5?-1:1; glanceHold=.38+random()*.9;
+        glanceAt=time+2.4+random()*3.6;
+      }
+      const sinceLook=time-glanceStart;
+      const glance=glanceSide*envelope(sinceLook,0,.12,glanceHold,glanceHold+.46)*(1-drowsy)*(1-pleased);
       return {
-        mood, elapsed,
+        mood, elapsed, glance,
         x: Math.sin(time*.55) * (ambient ? .08 : .025),
         y: Math.sin(time*1.8)*.05 + pleased*.065 + flight*.18 - envelope(flutter,0,.2,.3,.7)*.055 - drowsy*.08 - nod*.055,
         yaw: Math.sin(time*.8)*.16 * (1-drowsy*.7),

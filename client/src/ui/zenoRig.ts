@@ -25,7 +25,7 @@ export function buildMoonRabbit(body:T.Group,pearl:T.Material):SpiritForm{
  const add=(g:T.BufferGeometry,m:T.Material,parent:T.Object3D=body)=>{const o=new T.Mesh(g,m);parent.add(o);return o;};
  const profile=new T.SplineCurve([[0,-.70],[.29,-.66],[.49,-.42],[.55,-.01],[.54,.36],[.38,.65],[0,.76]].map(([x,y])=>new T.Vector2(x,y))).getPoints(100).map(p=>new T.Vector2(Math.max(0,p.x),p.y));
  const shell=add(new T.LatheGeometry(profile,96),pearl);shell.name='zeno-shell';shell.scale.z=.87;
- for(const side of [-1,1]){const foot=add(new T.SphereGeometry(1,40,28),pearl);foot.position.set(side*.22,-.61,0);foot.scale.set(.23,.18,.29);}
+ const feet=[-1,1].map(side=>{const foot=add(new T.SphereGeometry(1,40,28),pearl);foot.position.set(side*.22,-.61,0);foot.scale.set(.23,.18,.29);return foot;});
  const hand=(side:number)=>{
   const pivot=new T.Group();pivot.position.set(side*.47,-.06,.025);body.add(pivot);
   const palm=add(new T.SphereGeometry(1,40,28),pearl,pivot);palm.position.set(side*.175,-.055,0);palm.scale.set(.245,.135,.11);palm.rotation.z=-side*.32;
@@ -46,12 +46,12 @@ export function buildMoonRabbit(body:T.Group,pearl:T.Material):SpiritForm{
   innerMesh.name='zeno-ear-inset';
   const length=.79+(side>0?.018:0);
   const centers:Array<[number,number,number,number]>=[];
-  const update=(droop:number,sway:number,tip:number,joy:number)=>{
+  const update=(droop:number,sway:number,tip:number,joy:number,backBend=0)=>{
    let cx=0,cy=0,cz=0;
    for(let j=0;j<=rows;j++){
     const t=j/rows;
     const angle=side*(.09+droop*(.55+1.65*t*t)-joy*.035)+sway+tip*t*t;
-    if(j){cx+=Math.sin(angle)*length/rows;cy+=Math.cos(angle)*length/rows;cz+=(droop*.15*t+.018*t)*length/rows;}
+    if(j){cx+=Math.sin(angle)*length/rows;cy+=Math.cos(angle)*length/rows;cz+=(droop*.15*t+.018*t+backBend*t*t)*length/rows;}
     centers[j]=[cx,cy,cz,angle];
     const width=.139*Math.pow(Math.max(0,Math.sin(Math.PI*(.14+.86*t))),.62);
     const depth=width*.53;
@@ -73,12 +73,37 @@ export function buildMoonRabbit(body:T.Group,pearl:T.Material):SpiritForm{
  };
  const leftEar=ear(-1),rightEar=ear(1);
  let state={droop:0,flutter:0,affection:0,leftHand:.17,rightHand:.17,earLeft:0,earRight:0,tipLeft:0,tipRight:0};
- return {left,right,update(p,dt,time){
+ let leftSweep=0,rightSweep=0,tipSweep=0,footTuck=0;
+ return {left,right,update(p,dt,time,flight){
   const target=rabbitGesture(p,time),blend=dt===0?1:1-Math.exp(-dt*12);
   for(const key of Object.keys(state) as (keyof typeof state)[])state[key]+=(target[key]-state[key])*blend;
-  left.rotation.set(state.flutter*Math.sin(p.elapsed*18+.6)*.16,state.affection*.72,-state.leftHand);
-  right.rotation.set(-state.flutter*Math.sin(p.elapsed*18+.76)*.16,-state.affection*.72,state.rightHand);
-  leftEar(state.droop,state.earLeft,state.tipLeft,state.flutter);rightEar(state.droop,state.earRight,state.tipRight,state.flutter);
+  const gather=flight?.gather??0, stroke=flight?.stroke??0, brake=flight?.brake??0;
+  const attention=flight?.attention??0, glance=flight?p.glance:0;
+  // The outside ear catches a sound first. Both ears stream back during
+  // propulsion; the flexible tips catch up only after the torso has braked.
+  const earLoad=-1.25*stroke+.62*brake;
+  leftSweep+=(earLoad+.33*gather-leftSweep)*(dt ? -Math.expm1(-dt*17) : 1);
+  rightSweep+=(earLoad-.16*gather-rightSweep)*(dt ? -Math.expm1(-dt*11) : 1);
+  tipSweep+=((leftSweep+rightSweep)*.5-tipSweep)*(dt ? -Math.expm1(-dt*7) : 1);
+  const listen=.18*(1-attention)+.15*glance;
+  leftEar(state.droop,state.earLeft-(flight?listen:0)-.34*Math.max(0,-leftSweep),
+    state.tipLeft-.34*Math.max(0,-tipSweep),state.flutter,leftSweep+tipSweep*.55);
+  rightEar(state.droop,state.earRight+.27*gather+.49*Math.max(0,-rightSweep)+glance*.18,
+    state.tipRight+.43*Math.max(0,-tipSweep),state.flutter,rightSweep+tipSweep*.55);
+  // Forepaws reach, press the air back and open for braking. The feet tuck
+  // under the belly a beat later, with a small left/right difference.
+  const relaxed=flight ? (1-state.flutter)*(1-state.affection)*(1-stroke)*(1-brake) : 0;
+  const pawBreath=Math.sin(time*1.8-.4)*.055;
+  left.rotation.set(state.flutter*Math.sin(p.elapsed*18+.6)*.16,
+    state.affection*.72 + .96*gather - 1.22*stroke + .57*brake, -state.leftHand+relaxed*(.66+pawBreath+.12*glance)+.46*gather-.44*brake);
+  right.rotation.set(-state.flutter*Math.sin(p.elapsed*18+.76)*.16,
+    -state.affection*.72 - .71*gather + 1.08*stroke - .73*brake,state.rightHand-relaxed*(.82+pawBreath-.09*glance)-.31*gather+.57*brake);
+  footTuck+=(stroke+.42*gather-footTuck)*(dt ? -Math.expm1(-dt*10) : 1);
+  feet.forEach((foot,i)=>{
+    foot.position.y=-.61+footTuck*(i===0?.17:.13)-.035*brake;
+    foot.position.z=-footTuck*.22+.10*brake;
+    foot.rotation.x=-footTuck*.9+.32*brake;
+  });
   shell.scale.y=1+Math.sin(time*1.8)*.008*(1-state.flutter*.7);
  }};
 }
