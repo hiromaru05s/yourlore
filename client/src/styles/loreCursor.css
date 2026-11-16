@@ -1,0 +1,83 @@
+/* One native pointer, including descendants with their own component cursor rules.
+   Important declarations in this layer outrank unlayered screen styles. */
+@layer lore-pointer {
+  @media (any-pointer: fine) {
+    :root {
+      --lore-pointer-arrow: url('/ui/cursors/normal.svg') 3 3, default;
+      --lore-pointer-hover: url('/ui/cursors/hover.svg') 7 7, pointer;
+      --lore-pointer-blocked: url('/ui/cursors/blocked.svg') 3 3, not-allowed;
+      --lore-pointer-drag: url('/ui/cursors/drag.svg') 3 3, grabbing;
+      --lore-pointer-wait: url('/ui/cursors/loading.svg') 18 18, progress;
+    }
+    :root, body, body * {
+      cursor: var(--lore-pointer-busy, var(--lore-pointer-action, var(--lore-pointer-arrow))) !important;
+    }
+    :where(button, a, summary, select, label[for], input, textarea, [contenteditable="true"], [role="button"], [role="tab"],
+      [role="option"], [role="link"], [tabindex="0"], [draggable="true"], .card, .pile,
+      .hand, .btn, .mode-card, .tut-card, .chip, .ava-opt, .home-id, .home-credits,
+      .log-card, .buff-icon, .psv, .adm-tab, .pf-tab, .dv-tab, .h2h-row, .home-spirit-touch, .related-card-item > span, .deck-tab, .deck-entry,
+      .switch .slider, .sl-getmore, .starter-shop-face, .card-reference-link, .diff-card) {
+      --lore-pointer-action: var(--lore-pointer-hover);
+    }
+    :is(:disabled, [aria-disabled="true"], [data-block-reason]),
+    :is(:disabled, [aria-disabled="true"], [data-block-reason]) * {
+      --lore-pointer-action: var(--lore-pointer-blocked);
+    }
+    body:has(.game.drag-play, .game .is-aiming, .discard-dragging) * { --lore-pointer-action: var(--lore-pointer-drag); }
+    :root:has(.game-loading:not([data-startup-error]), .opening-hands, [aria-busy="true"]:hover) {
+      --lore-pointer-busy: var(--lore-pointer-wait);
+      --lore-pointer-dial-display: block;
+    }
+    :root[data-lore-mouse] { --lore-pointer-wait: none; }
+    .asset-retry, #startup-reload { --lore-pointer-busy: var(--lore-pointer-hover); }
+    :root:has(:is(.asset-retry, #startup-reload):hover) { --lore-pointer-dial-display: none; }
+  }
+}
+
+.lore-cursor-dial, .lore-cursor-burst {
+  position: fixed; inset: 0 auto auto 0; margin: 0; padding: 0; border: 0;
+  pointer-events: none; z-index: 2147483647; overflow: visible; background: transparent;
+}
+.lore-cursor-dial { display: none; width: 36px; height: 36px; }
+:root[data-lore-mouse] .lore-cursor-dial { display: var(--lore-pointer-dial-display, none); }
+.lore-cursor-dial::before, .lore-cursor-dial::after {
+  content: ''; position: absolute; inset: 0; background: url('/ui/cursors/loading.svg') center/contain no-repeat;
+}
+/* Spin the engraved outer ring while the eye stays level and legible. */
+.lore-cursor-dial::before {
+  mask-image: radial-gradient(circle, transparent 10px, black 11px);
+  animation: lore-compass-turn 1.15s linear infinite;
+}
+.lore-cursor-dial::after { clip-path: circle(10.7px); }
+@keyframes lore-compass-turn { to { transform: rotate(1turn); } }
+
+.lore-cursor-burst { width: 72px; height: 72px; animation: lore-burst-life 410ms linear both; }
+.lore-cursor-burst svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.lore-cursor-burst .wave {
+  transform-origin: 36px 36px; animation: lore-etched-wave 350ms cubic-bezier(.12,.72,.26,1) both;
+}
+.lore-cursor-burst .splinter { animation: lore-rim-splinter 340ms cubic-bezier(.16,.7,.22,1) 36ms both; }
+.lore-cursor-burst .contact { transform-origin: 36px 36px; animation: lore-contact 155ms ease-out both; }
+@keyframes lore-burst-life { from { opacity: 1; } 78% { opacity: 1; } to { opacity: 0; } }
+@keyframes lore-etched-wave {
+  0% { transform: scale(.13); stroke-dasharray: 24 1; opacity: .9; }
+  38% { stroke-dasharray: 20 5; opacity: 1; }
+  100% { transform: scale(1.03) rotate(13deg); stroke-dasharray: 0 25; opacity: 0; }
+}
+@keyframes lore-rim-splinter {
+  from { transform: translateY(-6px) scale(.3,.4); opacity: 0; }
+  24% { opacity: 1; }
+  62% { transform: translateY(-23px) scale(1,1.1); }
+  to { transform: translateY(-30px) scale(.25,.1); opacity: 0; }
+}
+@keyframes lore-contact {
+  from { transform: scale(.45); }
+  28% { transform: scale(1); opacity: 1; }
+  to { transform: scale(.25); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lore-cursor-dial::before { animation: none; }
+  .lore-cursor-burst { animation-duration: 130ms; }
+  .lore-cursor-burst .wave { animation: none; transform: scale(.42); stroke-dasharray: 19 6; }
+  .lore-cursor-burst :is(.contact, .splinter) { display: none; }
+}

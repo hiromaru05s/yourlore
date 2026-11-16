@@ -1,1 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><path d="M3 3 12 31 17 21 28 17Z" fill="#eee5d1" stroke="#111c30" stroke-width="2" stroke-linejoin="round"/><path d="m6 7 9 13 9-3Z" fill="#28455f"/><path d="m7 8 8 11" stroke="#c8ac6d" stroke-width="1.5"/><circle cx="28" cy="28" r="8" fill="#17263a" stroke="#826e50" stroke-width="2"/><path d="M28 20a8 8 0 0 1 8 8" fill="none" stroke="#e5d19c" stroke-width="3"/><path d="m28 24 3 4-3 4-3-4Z" fill="#a1d3e4"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="-18 -18 36 36" fill="none">
+  <defs>
+    <linearGradient id="metal" x2=".9" y2="1"><stop stop-color="#fff4cf"/><stop offset=".42" stop-color="#c1efff"/><stop offset="1" stop-color="#57819e"/></linearGradient>
+    <path id="rim" d="M-13.4-2.3A13.6 13.6 0 0 1-.9-13.6M4-13A13.6 13.6 0 0 1 13.5 1.8M11.8 6.8A13.6 13.6 0 0 1-.8 13.6M-5.5 12.4A13.6 13.6 0 0 1-13.5 1"/>
+  </defs>
+  <circle r="11" fill="#11283b" fill-opacity=".88" stroke="#35526a"/>
+  <use href="#rim" stroke="#152638" stroke-width="3.4"/><use href="#rim" stroke="url(#metal)" stroke-width="1.5"/>
+  <path d="m0-17 2.3 4.5L0-10l-2.3-2.5Z" fill="#fbe7b6" stroke="#263c50" stroke-width=".8"/>
+  <path d="M-9 0Q0-10 9 0Q0 10-9 0Z" stroke="#c0e9f3" stroke-width="1.2"/>
+  <path d="m0-3.5 2.4 3.5L0 3.5-2.4 0Z" fill="#f9e4b6"/>
+</svg>
