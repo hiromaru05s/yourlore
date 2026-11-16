@@ -3,7 +3,15 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
  const temp=fs.mkdtempSync('/tmp/lore-bot-server-challenge-'), nativeWebSocket=globalThis.WebSocket;let db;
  try {
  const {build}=require(process.cwd()+'/node_modules/esbuild');
- await build({stdin:{contents:"export {GameRoom,npcThinkingDifficulty} from './server/src/gameRoom';export {handleRewards} from './server/src/rewards';export {botNpc} from './client/src/shared/botNpcs';export {DB} from './client/src/shared/cards';export {reduce} from './client/src/shared/engine';export {botDecide} from './client/src/shared/bot';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:temp+'/server-core.mjs'});
+ // Observe only GameRoom's difficulty argument; delegate every decision to the real policy.
+ const probe={path:'npc-bot-probe',namespace:'npc-bot-probe'};
+ const observeDifficulty={name:'observe-npc-difficulty',setup(b){
+  b.onResolve({filter:/^npc-bot-probe$/},()=>probe);
+  b.onResolve({filter:/shared\/bot$/},a=>a.importer.endsWith('/server/src/gameRoom.ts')?probe:undefined);
+  b.onLoad({filter:/.*/,namespace:probe.namespace},()=>({resolveDir:process.cwd(),contents:
+   "export * from './client/src/shared/bot';import {botDecide as decide} from './client/src/shared/bot';export const calls=[];export function botDecide(...args){calls.push(args[1]);return decide(...args)}"}));
+ }};
+ await build({plugins:[observeDifficulty],stdin:{contents:"export {calls as npcPolicyCalls} from 'npc-bot-probe';export {GameRoom,npcThinkingDifficulty} from './server/src/gameRoom';export {handleRewards} from './server/src/rewards';export {botNpc} from './client/src/shared/botNpcs';export {DB} from './client/src/shared/cards';export {reduce} from './client/src/shared/engine';export {botDecide} from './client/src/shared/bot';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:temp+'/server-core.mjs'});
  const E=await import(temp+'/server-core.mjs');db=new DatabaseSync(':memory:');db.exec(fs.readFileSync('server/schema.sql','utf8'));
  class Stmt{constructor(sql,args=[]){this.sql=sql;this.args=args}bind(...args){return new Stmt(this.sql,args)}async first(){return db.prepare(this.sql).get(...this.args)??null}async all(){return {results:db.prepare(this.sql).all(...this.args)}}async run(){return {meta:{changes:Number(db.prepare(this.sql).run(...this.args).changes)}}}}
  const env={DB:{prepare:sql=>new Stmt(sql),batch:async ss=>{db.exec('BEGIN');try{const rows=[];for(const s of ss)rows.push(await s.run());db.exec('COMMIT');return rows}catch(e){db.exec('ROLLBACK');throw e}}}};
@@ -29,10 +37,11 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
   // Exercise the shallow policy near the deadline in a position with several legal actions.
   const heavy=JSON.parse(require('node:zlib').gunzipSync(fs.readFileSync('docs/bot-strength/2026-10-27/evidence/cpu-heavy-state.json.gz')));
   heavy.players[heavy.cur].hand=heavy.players[heavy.cur].hand.filter(c=>!['destroyMon','destroyEnch'].includes(c.act));
-  const quick=E.botDecide(heavy,'normal');assert.deepEqual(quick,{type:'play',idx:7});
+  const quick=E.botDecide(heavy,'normal'),next=E.reduce(heavy,quick).state;assert.notDeepEqual(next,heavy,'the reference action advances play');
   Object.assign(room.room,{game:heavy,turnStartAt:Date.now()-60000,turnBonusMs:0});room.room.bot.side=0;
-  const quickStart=performance.now();await room.runBot();
-  assert.deepEqual(room.room.game,E.reduce(heavy,quick).state,'remaining clock selects the shallow policy');
+  const callIndex=E.npcPolicyCalls.length,quickStart=performance.now();await room.runBot();
+  assert.deepEqual(E.npcPolicyCalls.slice(callIndex),['normal'],'clock pressure calls the normal policy');
+  assert.deepEqual(room.room.game,next,'server applies the real shallow decision on the authoritative state');
   assert.equal(room.room.challengeDifficulty,tier,'clock pressure does not lower the challenge or rewards');
   results.push({tier,clockPressure:true,remainingMs:30000,thinking:'normal',action:quick,reducerParity:true,ms:performance.now()-quickStart});
  }
