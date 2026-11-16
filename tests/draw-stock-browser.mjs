@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';import {createServer} from 'node:http';import {execFileSync} from 'node:child_process';import {build} from 'esbuild';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/tmp/lore-collapse-tools/node_modules/playwright/index.mjs');const out=process.env.LORE_TEST_OUT||'/tmp/lore-perf2-stock';await fs.mkdir(out,{recursive:true});
-const old=execFileSync('git',['show','1eef82f0:client/src/ui/drawStock.ts'],{encoding:'utf8'}),next=await fs.readFile('client/src/ui/drawStock.ts','utf8');
+// Compare only the original paper edges. The requested draw has no cast shadow.
+const old=execFileSync('git',['show','c97f2630:client/src/ui/drawStock.ts'],{encoding:'utf8'}).replace('ground.receiveShadow=true','ground.receiveShadow=false'),next=await fs.readFile('client/src/ui/drawStock.ts','utf8');
 const bundles=await Promise.all([['Old',old],['Next',next]].map(async([globalName,contents])=>(await build({stdin:{contents,resolveDir:process.cwd()+'/client/src/ui',loader:'ts'},bundle:true,format:'iife',globalName,write:false,define:{'import.meta.env.DEV':'false'}})).outputFiles[0].text));
 const server=createServer((req,res)=>{res.setHeader('Content-Type',req.url.endsWith('.js')?'text/javascript':'text/html');res.end(req.url==='/old.js'?bundles[0]:req.url==='/next.js'?bundles[1]:'<!doctype html><body><script src="/old.js"></script><script src="/next.js"></script>');});await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const browser=await chromium.launch({channel:'chrome',headless:true}),page=await browser.newPage({viewport:{width:1280,height:900}}),errors=[],cases=[];page.on('pageerror',e=>errors.push(e.message));

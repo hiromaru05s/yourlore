@@ -25,13 +25,13 @@ try{
  source.style.visibility='';
  let pending=call(new AbortController());await flush();
  const face=document.querySelector('.fx-field-ghost > div');
- for(const ms of [150,75,75,75,75,75,50,41]){
+ for(const ms of [150,75,75,75,75,75,50,40]){
    advance(ms);
    assert(Math.max(Number(source.style.opacity),Number(face.style.opacity))>=.999,'an opaque print spans every handoff');
    assert.equal(source.style.transform,face.style.transform);
  }
- assert.equal(document.querySelector('canvas').dataset.time,'880');
- advance(924);assert.equal(await pending,true);assert.equal(face.style.opacity,'1');
+ assert.equal(document.querySelector('canvas').dataset.time,'879');
+ advance(1);assert.equal(await pending,true);assert.equal(face.style.opacity,'1');
  assert.equal(document.querySelector('canvas'),null);assert.equal(frames.size,0);clean();
  source.style.visibility='';const original=source.style.cssText;
  const active=new AbortController();pending=call(active);await flush();advance(170);active.abort();

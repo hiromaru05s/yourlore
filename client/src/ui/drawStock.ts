@@ -32,12 +32,10 @@ export function acquireDrawStage():DrawStage|null{
  if(typeof WebGL2RenderingContext==='undefined')return null;
  let renderer:T.WebGLRenderer;try{renderer=createWebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return null;}
  const width=innerWidth,height=innerHeight;renderer.setPixelRatio(flightPixelRatio());renderer.setSize(width,height);renderer.setClearColor(0,0);renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
- renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;
  const canvas=renderer.domElement;canvas.className='draw-stock-canvas';canvas.setAttribute('aria-hidden','true');canvas.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:125';document.body.append(canvas);
  const scene=new T.Scene(),camera=new T.PerspectiveCamera(2*Math.atan(height/(2*FOCAL))*180/Math.PI,width/height,1,3000);camera.position.z=FOCAL;
  scene.add(new T.HemisphereLight(0xe8f2ff,0x283247,2));
- const light=new T.DirectionalLight(0xfff1d5,2);light.position.set(-width*.3,height*.7,800);light.castShadow=true;light.shadow.mapSize.set(1024,1024);light.shadow.camera.left=-width;light.shadow.camera.right=width;light.shadow.camera.top=height;light.shadow.camera.bottom=-height;light.shadow.camera.far=2400;light.shadow.bias=-.0003;scene.add(light);
- const ground=new T.Mesh(new T.PlaneGeometry(width*2,height*2),new T.ShadowMaterial({opacity:.24}));ground.position.z=-18;ground.receiveShadow=true;scene.add(ground);
+ const light=new T.DirectionalLight(0xfff1d5,2);light.position.set(-width*.3,height*.7,800);scene.add(light);
  const paper=new T.MeshStandardMaterial({color:0xb9b8af,metalness:.08,roughness:.55});
  const edge=new T.MeshStandardMaterial({color:0x879ab2,metalness:.4,roughness:.33});
  // Only the bevel and sides supply thickness; the DOM owns both printed faces.
@@ -45,12 +43,12 @@ export function acquireDrawStage():DrawStage|null{
  const ink=new T.LineBasicMaterial({color:0x182b42,transparent:true,opacity:.7});
  let disposed=false;const owners=new Set<T.Group>();
  const disposeObject=(group:T.Group)=>{group.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(m!==paper&&m!==edge&&m!==ink)m.dispose();});}});scene.remove(group);owners.delete(group);};
- const destroy=()=>{if(disposed)return;disposed=true;if(shared?.stage===stage){clearTimeout(shared.timer);shared=null;}canvas.removeEventListener('webglcontextlost',lost);for(const group of [...owners])disposeObject(group);paper.dispose();edge.dispose();ink.dispose();ground.geometry.dispose();ground.material.dispose();light.shadow.map?.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();};
+ const destroy=()=>{if(disposed)return;disposed=true;if(shared?.stage===stage){clearTimeout(shared.timer);shared=null;}canvas.removeEventListener('webglcontextlost',lost);for(const group of [...owners])disposeObject(group);paper.dispose();edge.dispose();ink.dispose();renderer.dispose();renderer.forceContextLoss();canvas.remove();};
  const lost=(event:Event)=>{event.preventDefault();destroy();};canvas.addEventListener('webglcontextlost',lost);
  const rest=()=>{if(shared?.stage!==stage||shared.refs)return;if(duel?.deref()?.isConnected){shared.timer=setTimeout(rest,30000);return;}destroy();};
  const stage:DrawStage={
   add(w,h,accent){const group=new T.Group();group.matrixAutoUpdate=false;group.visible=false;scene.add(group);owners.add(group);
-   const depth=w*DRAW_THICKNESS_RATIO,body=new T.Mesh(createStockGeometry(w,h,depth),[edge,paper]);body.castShadow=true;group.add(body);
+   const depth=w*DRAW_THICKNESS_RATIO,body=new T.Mesh(createStockGeometry(w,h,depth),[edge,paper]);group.add(body);
    // A dark, fine laminated seam makes the material read at grazing angles.
    const pts: T.Vector3[]=[];const r=w*.052;for(const [cx,cy,a] of [[w/2-r,h/2-r,0],[-w/2+r,h/2-r,90],[-w/2+r,-h/2+r,180],[w/2-r,-h/2+r,270]])for(let i=0;i<=5;i++){const angle=(a+i*18)*Math.PI/180;pts.push(new T.Vector3(cx+r*Math.cos(angle),cy+r*Math.sin(angle),-depth*.52));}
    const seam=new T.LineLoop(new T.BufferGeometry().setFromPoints(pts),ink);group.add(seam);
@@ -64,7 +62,7 @@ export function acquireDrawStage():DrawStage|null{
  shared={stage,refs:1,width,height,ratio:renderer.getPixelRatio(),canvas,wake(){renderer.clear();document.body.append(canvas);},destroy};return stage;
 }
 
-/** Compile stock, seam, glow and shadow programs while the duel cover is opaque.
+/** Compile stock, seam and glow programs while the duel cover is opaque.
  * Keep one idle stage for this match; no animation clock, sound or event is run. */
 export async function warmDrawStage(root:HTMLElement):Promise<void>{
  duel=new WeakRef(root);const stage=acquireDrawStage();if(!stage)return;

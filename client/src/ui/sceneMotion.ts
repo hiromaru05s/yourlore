@@ -57,7 +57,7 @@ export function installSceneMotion(root:HTMLElement,scene:T.Scene,items:Map<stri
       req.target.dataset.face=copy.querySelector<HTMLImageElement>('.card-art img')?.src||req.target.dataset.sleeve!;
       req.target.dataset.count=String(count+1);const counter=req.target.querySelector('.pile-count');if(counter)counter.textContent=String(count+1);
       refresh();landed=true;moving.style.visibility='hidden';
-      await timeline(34,req.signal,()=>{});if(!req.signal.aborted)dust(req.target);
+      await timeline(34,req.signal,()=>{});if(!req.signal.aborted && (purchase || moving.dataset.cardType!=='spell'))dust(req.target);
       }finally{delete req.target.dataset.motion;moving.classList.remove('native-card-flight');moving.style.cssText=style;
         if(wasConnected&&parent)parent.insertBefore(moving,next?.parentNode===parent?next:null);else moving.remove();
         if(landed)moving.style.visibility='hidden';

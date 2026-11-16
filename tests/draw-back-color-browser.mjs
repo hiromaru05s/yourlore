@@ -15,6 +15,15 @@ try{
  for(const width of [1280,390])for(const side of ['me','opp']){
   await page.setViewportSize({width,height:width===390?844:900});
   await page.evaluate(()=>{const q=monsterQA;q.reset();q.g.players[0].hand=[{...q.DB.ELF,uid:'new'}];q.g.players[1].hand=[{...q.DB.ELF,uid:'hidden'}];q.render();});await page.waitForTimeout(200);
+  if(side==='opp'){
+   await page.evaluate(()=>{const node=document.querySelector('#oppHand .card--back');window.restBack=node;window.restClip=getComputedStyle(node).clipPath;window.drawDone=monsterQA.A.animateDraw(node.parentElement,1,'opp',{durationScale:2});});
+   await page.waitForFunction(()=>window.restBack.getAnimations().some(a=>a.id==='opponent-sleeve-draw'));
+   const state=await page.evaluate(()=>({clip:getComputedStyle(restBack).clipPath,same:restBack===document.querySelector('#oppHand .card--back'),privateFaces:restBack.querySelectorAll('.card-art,[data-card-id]').length,original:restClip}));
+   assert.equal(state.clip,state.original);assert(state.same);assert.equal(state.privateFaces,0);
+   assert.equal(await page.locator('.draw-stock-canvas,.native-draw-layer').count(),0);
+   await page.screenshot({path:`${out}/${side}-${width}.png`});await page.evaluate(()=>window.drawDone);
+   assert(await page.evaluate(()=>restBack===document.querySelector('#oppHand .card--back')&&getComputedStyle(restBack).visibility==='visible'));checks.push({width,side,...state});continue;
+  }
   await page.evaluate(side=>{window.freezeAt=.22;window.drawDone=monsterQA.A.animateDraw(document.querySelector(side==='me'?'#hand':'#oppHand'),1,side,{durationScale:3});},side);
   await page.waitForFunction(()=>window.freezeDraw,null,{polling:50});
   const state=await page.evaluate(()=>{const root=document.querySelector('.native-draw-card'),back=root.querySelector('.draw-stock-back');return{progress:root.dataset.progress,backImage:getComputedStyle(back).backgroundImage,backFilter:getComputedStyle(back).filter,paintedPlanes:[...root.children].filter(n=>n!==back&&!n.classList.contains('card')).map(n=>({background:getComputedStyle(n).backgroundColor,opacity:getComputedStyle(n).opacity,mask:getComputedStyle(n).maskImage,backface:getComputedStyle(n).backfaceVisibility})),privateFaces:root.querySelectorAll('.card-art,[data-card-id]').length};});

@@ -7,6 +7,7 @@ import {drawMotion,drawSmooth,DRAW_DURATION,DRAW_STAGGER} from './drawMotion';
 import {handCardMatrix,type HandLayout} from './handGeometry';
 import {acquireDrawStage,type StockPose} from './drawStock';
 import {sfx} from './sound';
+import {drawOpponentSleeves} from './opponentDraw';
 export {handCardMatrix} from './handGeometry';
 export interface PaperDrawOptions {cards:HTMLElement[];origin:DOMRect;sleeve:string;reveal:boolean;signal:AbortSignal;onLand:(node:HTMLElement)=>void;previousHand?:HandLayout;durationScale?:number;}
 function nativeCopy(node:HTMLElement,arriving=false){
@@ -36,7 +37,9 @@ function mixMatrix(a:DOMMatrix,b:DOMMatrix,t:number){return new DOMMatrix([mix(a
 export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,previousHand,durationScale=1}:PaperDrawOptions):Promise<void>{
  if(reveal&&cards.some(node=>node.dataset.cardFrame))await Promise.all(cards.map(node=>ensureCardFrameReady(node)));
  if(signal.aborted||!cards.length||cards.some(n=>!n.isConnected))return;
- const speed=Math.max(.5,Math.min(5,durationScale)),overlay=document.createElement('div');overlay.className='native-draw-layer';overlay.setAttribute('aria-hidden','true');overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:126;perspective:1200px;perspective-origin:50% 50%;transform-style:preserve-3d';document.body.append(overlay);
+ const speed=Math.max(.5,Math.min(5,durationScale));
+ if(!reveal)return drawOpponentSleeves(cards,origin,signal,onLand,speed,previousHand);
+ const overlay=document.createElement('div');overlay.className='native-draw-layer';overlay.setAttribute('aria-hidden','true');overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:126;perspective:1200px;perspective-origin:50% 50%;transform-style:preserve-3d';document.body.append(overlay);
  const flights=cards.map(node=>{
   const cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight,root=document.createElement('div');
   root.className='native-draw-card';root.style.cssText=`position:absolute;left:0;top:0;width:${w}px;height:${h}px;transform-origin:50% 50%;transform-style:preserve-3d;will-change:transform;display:none`;

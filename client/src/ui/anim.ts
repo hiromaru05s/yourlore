@@ -209,10 +209,10 @@ function backEl(side: ViewSide = "me"): HTMLElement {
 
 /** The card takes focus across the screen, then returns to its destination.
  * All waits use the existing fast-forward mechanism; the overlay never takes input. */
-async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId,playbackRate=1, originPose?: DOMMatrix): Promise<void> {
+async function focusCard(node: HTMLElement, side: ViewSide, mimicId?:MimicId,playbackRate=1, originPose?: DOMMatrix, shade=true): Promise<void> {
   if (fxSkip) return;
   const veil = document.createElement("div"); veil.className = "cast-veil";
-  document.body.appendChild(veil);
+  if(shade)document.body.appendChild(veil);
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const w = node.offsetWidth || 100;
   const h = node.offsetHeight || 156;
@@ -388,7 +388,7 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
     if(!special){
       const dragPose = persistent && drag ? new DOMMatrix().translate(drag.left,drag.top)
         .scale(drag.width/node.offsetWidth,drag.height/node.offsetHeight) : undefined;
-      await focusCard(node,side,undefined,persistent || card.t!=='spell' ? STANDARD_FX.rate : SPELL_FRAME_RATE,dragPose);
+      await focusCard(node,side,undefined,persistent || card.t!=='spell' ? STANDARD_FX.rate : SPELL_FRAME_RATE,dragPose,!persistent);
       if(effect){await parkQuickSpell(node,side);await effect(node);}
       else if(crystal&&crystalModule&&!fxSkip)await boardMotionScope(async signal=>{const module=await crystalModule;if(!module||signal.aborted)return false;return module.playVoidCrystal(node,card,side,crystal,signal);},10500);
       else if(card.t==='spell'&&card.id!=='MARKET_CRISIS'&&!persistent&&card.id!=='FORBIDDEN'&&card.id!=='FLAME'&&!fxSkip)await boardMotionScope(signal=>playSpellFrame(node,signal),6500);
@@ -590,12 +590,21 @@ async function parkQuickSpell(node:HTMLElement,side:ViewSide):Promise<void>{
   const h=node.offsetHeight*scale;
   node.dataset.quickPhase='resolving';
   node.style.transition=matchMedia('(prefers-reduced-motion:reduce)').matches?'none':`left ${STANDARD_FX.milliseconds(.3)}s ${EASE},top ${STANDARD_FX.milliseconds(.3)}s ${EASE},transform ${STANDARD_FX.milliseconds(.3)}s ${EASE}`;
-  node.style.left=`${innerWidth-w-12}px`;node.style.top=`${Math.max(12,Math.min(innerHeight-h-12,(row?.top??innerHeight*.5)+12))}px`;
+  const left=node.dataset.cardId==='QUICK_ATTUNE' && row ? row.left+row.width*.70-w/2 : innerWidth-w-12;
+  node.style.left=`${Math.max(8,Math.min(innerWidth-w-8,left))}px`;node.style.top=`${Math.max(12,Math.min(innerHeight-h-12,(row?.top??innerHeight*.5)+12))}px`;
   node.style.transform=`scale(${scale})`;
   await wait(STANDARD_FX.milliseconds(310));
 }
 export async function finishQuickSpell(node:HTMLElement,side:ViewSide):Promise<void>{
-  try{node.dataset.quickPhase='exile';if(node.isConnected)await absorbIntoRift(node,side);}finally{node.remove();}
+  try{
+    node.dataset.quickPhase='exile';
+    if(!node.isConnected||fxSkip)return;
+    if(node.dataset.cardId==='QUICK_ATTUNE'){
+      // Recovery belongs to the caster. Quietly file the used card in that player's Rift.
+      const r=rectOf(side==='me'?'#rift-me':'#rift-opp');
+      if(r)await landCard(node,new DOMRect(r.left+r.width/2-2,r.top+r.height/2-3,4,6),true);
+    }else await absorbIntoRift(node,side);
+  }finally{node.remove();}
 }
 
 function byUid(uid: string): HTMLElement | null {

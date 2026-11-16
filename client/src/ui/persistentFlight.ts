@@ -12,12 +12,13 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
   if(!from.width || !rw || !rh || !w || !h)return false;
 
   const host=nativeQuestGhost(target,face);
+  host.classList.add('persistent-flight-host');
   const previous=reveal.style.cssText;
   host.style.setProperty('--board-meter',getComputedStyle(target).getPropertyValue('--board-meter'));
   const badges=face.querySelectorAll<HTMLElement>('.enchant-time,.buff-duration,.card-counter');
   let canvas:HTMLCanvasElement|undefined;
   let frame=0, completed=false;
-  let sourceLight:HTMLElement|undefined, seatLight:HTMLElement|undefined;
+  let sourceLight:HTMLElement|undefined;
   try{
     if(matchMedia('(prefers-reduced-motion: reduce)').matches){
       completed=true;
@@ -39,7 +40,6 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
     canvas.style.position='fixed';
     canvas.style.zIndex=reveal.style.zIndex;
     sourceLight=frameGlint(reveal.querySelector('.card-frame'));
-    seatLight=frameGlint(face.querySelector('.buff-frame'));
     const ctx=canvas.getContext('2d');
     ctx?.setTransform(ratio,0,0,ratio,0,0);
 
@@ -63,10 +63,6 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
           sourceLight.style.backgroundPositionX=(100*(1-ease(40,550,ms)))+'%';
           sourceLight.style.opacity=String(.34*ease(30,110,ms)*(1-ease(360,580,ms)));
         }
-        if(seatLight){
-          seatLight.style.backgroundPositionX=(100*(1-ease(870,1360,ms)))+'%';
-          seatLight.style.opacity=String(.52*m.contact);
-        }
         const pose=new DOMMatrix().translate(0,m.lift*from.width)
           .multiply(new DOMMatrix(Array.from(a,(v,i)=>v+(b[i]-v)*m.p)))
           .translate(w/2,h/2).rotate(m.angle*180/Math.PI).translate(-w/2,-h/2);
@@ -80,7 +76,7 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
         reveal.style.clipPath=m.morph===0?'none':`inset(-60% -60% ${100-seam-.3}% -60%)`;
         // Counters belong to the seated tile. Scaling them with a hand-sized face
         // would make a grey disc larger than the artwork in the middle of the flight.
-        for(const badge of badges)badge.style.opacity=String(ease(880,1080,ms));
+        for(const badge of badges)badge.style.opacity=ms<DURATION?'0':'1';
         if(ctx){
           ctx.clearRect(0,0,innerWidth,innerHeight);
           paintPersistentTrail(ctx,ms,source,destination);
@@ -95,7 +91,7 @@ export async function flyPersistentIntoSlot(reveal:HTMLElement,target:HTMLElemen
     cancelAnimationFrame(frame);
     reveal.style.cssText=previous;
     canvas?.remove();
-    sourceLight?.remove();seatLight?.remove();
+    sourceLight?.remove();
     if(completed){
       reveal.style.visibility='hidden';
       face.style.opacity='1';face.style.clipPath='none';

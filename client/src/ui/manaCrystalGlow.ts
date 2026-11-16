@@ -23,7 +23,7 @@ export function createManaCrystalGlow(){
     gl_FragColor=vec4(tint*1.8,a*strength);
    }`,
  });
- const trays:Array<{halo:T.InstancedMesh;lamp:T.PointLight;count:number}>=[];
+ const trays:Array<{halo:T.InstancedMesh;count:number}>=[];
  const matrix=new T.Matrix4(),position=new T.Vector3(),rotation=new T.Quaternion(),size=new T.Vector3();
  let lastPaint=-Infinity,worldScale=1,dead=false;
  function applyMaterial(m:T.MeshPhysicalMaterial){
@@ -53,23 +53,19 @@ export function createManaCrystalGlow(){
   const halo=new T.InstancedMesh(geometry,material,30);
   halo.name='available-mana-glow';halo.count=0;halo.visible=false;
   halo.instanceMatrix.setUsage(T.DynamicDrawUsage);
-  const lamp=new T.PointLight(0x247bff,0,0,2);lamp.name='available-mana-reflection';
-  parent.add(halo,lamp);
-  const tray={halo,lamp,count:0};trays.push(tray);
+  parent.add(halo);
+  const tray={halo,count:0};trays.push(tray);
   return {
    /** Called after the ready instance matrices change, never from future DOM totals. */
    sync(ready:T.InstancedMesh){
     if(dead)return;
     tray.count=Math.min(30,ready.count);halo.count=tray.count;halo.visible=tray.count>0;
-    lamp.position.set(0,0,0);
     for(let i=0;i<tray.count;i++){
      ready.getMatrixAt(i,matrix);matrix.decompose(position,rotation,size);
-     position.add(ready.position);lamp.position.add(position);
+     position.add(ready.position);
      position.y+=.004;size.multiplyScalar(1.18);
      matrix.compose(position,rotation,size);halo.setMatrixAt(i,matrix);
     }
-    if(tray.count){lamp.position.divideScalar(tray.count);lamp.position.y+=.035;}
-    lamp.intensity=worldScale**2*.0054*Math.min(1,tray.count/2);
     halo.instanceMatrix.needsUpdate=true;
     if(tray.count){halo.computeBoundingBox();halo.computeBoundingSphere();}
    },
@@ -78,7 +74,6 @@ export function createManaCrystalGlow(){
  function tick(now:number,scale:number,reduced:boolean){
   if(dead)return false;
   let changed=scale!==worldScale;worldScale=scale;
-  for(const t of trays){t.lamp.distance=.085*scale;t.lamp.intensity=scale**2*.0054*Math.min(1,t.count/2);}
   // The approved slow 4.5% variation does not need a full HDR board pass at 60 Hz.
   // Bound refreshes to 8 Hz and ignore sub-perceptual intensity changes. Zero mana sleeps.
   if(trays.some(t=>t.count>0)&&(reduced||now-lastPaint>=125)){
@@ -91,7 +86,7 @@ export function createManaCrystalGlow(){
  }
  return {applyMaterial,addTray,tick,dispose(){
   if(dead)return;dead=true;
-  for(const {halo,lamp}of trays){halo.removeFromParent();halo.dispose();lamp.removeFromParent();lamp.dispose();}
+  for(const {halo}of trays){halo.removeFromParent();halo.dispose();}
   trays.length=0;geometry.dispose();material.dispose();
  }};
 }

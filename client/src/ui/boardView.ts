@@ -111,7 +111,7 @@ export interface BoardHandlers {
 export class GameView {
   private readonly curseSeals = {me:new CurseSealBadge(), opp:new CurseSealBadge()};
   private handConditions = new HandConditionHighlights();
-  private riftCounts = new Map<string, number>();
+  private riftContents = new Map<string, Set<string>>();
   root: HTMLElement;
   you: Side;
   h: BoardHandlers;
@@ -692,9 +692,11 @@ export class GameView {
       const rbtn = document.createElement("button");
       rbtn.className = "rift-button";
       rbtn.id = isMe ? "rift-me" : "rift-opp";
-      const previous = this.riftCounts.get(rbtn.id);
-      if (previous != null && removed.length > previous) rbtn.classList.add("is-absorbing");
-      this.riftCounts.set(rbtn.id, removed.length);
+      const previousCards = this.riftContents.get(rbtn.id);
+      const previous = previousCards?.size;
+      if (previousCards && removed.length > previousCards.size &&
+        removed.some(c => !previousCards.has(c.uid) && c.id !== 'QUICK_ATTUNE')) rbtn.classList.add("is-absorbing");
+      this.riftContents.set(rbtn.id,new Set(removed.map(c=>c.uid)));
       rbtn.addEventListener("animationend", () => rbtn.classList.remove("is-absorbing"));
       rbtn.innerHTML = '<span class="rift-sprite" aria-hidden="true"></span>';
       rbtn.append(createRiftRecordWindow(removed.length, previous, isMe ? 'me' : 'opp', recordVariant(this.root.dataset.riftCountVariant)));
