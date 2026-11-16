@@ -36,7 +36,7 @@ export function mountHome(app: App): Screen {
   const store=sanitizeDecks(u?.decks ?? null);
   wrap.innerHTML = `
     <section class="home-companion" aria-label="${esc(loungeText('シーカーとゼノ','Seeker and Zeno','시커와 제노'))}">
-      <button class="home-spirit-touch" type="button" aria-label="${esc(loungeText('ゼノに挨拶する','Greet Zeno','제노에게 인사하기'))}"><span class="home-spirit-host"></span></button>
+      <button class="home-spirit-touch" type="button" aria-label="${esc(loungeText('ゼノを呼ぶ','Call Zeno closer','제노 부르기'))}"><span class="home-spirit-host"></span></button>
       <div class="home-standing-seeker"></div>
     </section>
     <section class="lounge-home-main">

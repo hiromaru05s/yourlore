@@ -18,6 +18,7 @@ export type SpiritForm = {left:THREE.Group;right:THREE.Group;update?:(pose:Spiri
 export function mountManaSpirit(host: HTMLElement, options: {
   home?: boolean;
   interactive?: HTMLElement | boolean;
+  onActivate?: (greet: () => void) => void;
   /** Comparison-lab injection; normal HOME and tutorial keep the default front. */
   front?: (body: THREE.Group) => void;
   motion?: ReturnType<typeof createSpiritMotion>;
@@ -27,14 +28,28 @@ export function mountManaSpirit(host: HTMLElement, options: {
   form?: (body:THREE.Group, pearl:THREE.Material, blue:THREE.Material) => SpiritForm;
   silhouette?: boolean;
   viewYaw?: number | (()=>number);
-} = {}): { celebrate():void; greet():void; suspend():void; resume():void; destroy():void } {
+} = {}): { setFlightView(scale:number,bank:number):void; celebrate():void; greet():void; suspend():void; resume():void; destroy():void } {
   host.classList.add('mana-spirit'); host.setAttribute('aria-hidden','true');
   const fallback=()=>{host.innerHTML='<svg viewBox="0 0 120 140"><defs><linearGradient id="spiritPearl" x2=".8" y2="1"><stop stop-color="#fffdf0"/><stop offset=".55" stop-color="#e4f0eb"/><stop offset="1" stop-color="#89aec1"/></linearGradient></defs><ellipse class="mana-spirit-shadow" cx="60" cy="127" rx="26" ry="5" fill="#315569" opacity=".22"/><ellipse cx="42" cy="29" rx="9" ry="26" fill="url(#spiritPearl)"/><ellipse cx="78" cy="29" rx="9" ry="26" fill="url(#spiritPearl)"/><path d="M60 41C91 41 99 70 91 91C82 123 38 123 29 91C21 70 29 41 60 41" fill="url(#spiritPearl)" stroke="#98bdcf" stroke-width="1"/><path d="M33 60Q60 45 87 60L82 79Q60 90 38 79Z" fill="#20374e"/><ellipse cx="48" cy="68" rx="3" ry="6" fill="#9ee6f0"/><ellipse cx="72" cy="68" rx="3" ry="6" fill="#9ee6f0"/><path d="M60 89C57 95 51 101 52 106C53 115 67 115 68 106C69 101 63 95 60 89Z" fill="#9ce8ee" stroke="#c5dedf"/><ellipse cx="60" cy="107" rx="3" ry="4" fill="#ddfff2"/></svg>';if(options.home)host.querySelector('.mana-spirit-shadow')?.remove();};
-  const staticSpirit=()=>{fallback();return {celebrate(){},greet(){},suspend(){},resume(){},destroy(){host.replaceChildren();}};};
+  const staticSpirit=()=>{
+    fallback();
+    const svg=host.querySelector('svg')!;
+    const greet=()=>{if(!matchMedia('(prefers-reduced-motion: reduce)').matches)
+      svg.animate([{transform:'none'},{transform:'translateY(-4%) rotate(-6deg)'},{transform:'none'}],{duration:680});};
+    const target=options.interactive;
+    const activate=options.onActivate;
+    const unbind=target instanceof HTMLElement && activate
+      ? bindZenoInteraction(target,createZenoTurn(),()=>activate(greet),()=>{})
+      : ()=>{};
+    return {setFlightView(){},celebrate(){},greet,suspend(){},resume(){},destroy(){
+      unbind();
+      host.replaceChildren();
+    }};
+  };
   if(typeof WebGL2RenderingContext==='undefined')return staticSpirit();
   let renderer: THREE.WebGLRenderer;
   try {renderer=createWebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});} catch {return staticSpirit();}
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  renderer.setPixelRatio(Math.min((devicePixelRatio||1)*(options.onActivate?1.62:1),2));
   renderer.setClearColor(0,0); renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=options.home?1.12:1.15;
   if(options.home){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;}
   host.append(renderer.domElement);
@@ -96,6 +111,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
   const turn=createZenoTurn();
   const interactive=options.interactive??!options.form;
   const targetElement=interactive instanceof HTMLElement?interactive:host;
+  let flightBank=0;
   let pose={...rest}, dead=false, suspended=false, visible=true, raf=0, last=0, time=0;
   const render=(now:number)=>{
     raf=0;if(dead||suspended||!visible||document.hidden)return;
@@ -111,7 +127,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
       const yaw=interactive?THREE.MathUtils.clamp(pose.yaw+rotation.yaw,-ZENO_TURN_LIMIT.yaw,ZENO_TURN_LIMIT.yaw):pose.yaw;
       const pitch=interactive?THREE.MathUtils.clamp(pose.pitch+rotation.pitch,-ZENO_TURN_LIMIT.pitch,ZENO_TURN_LIMIT.pitch):pose.pitch;
       host.dataset.zenoYaw=String(yaw*180/Math.PI);host.dataset.zenoPitch=String(pitch*180/Math.PI);
-      spirit.position.set(pose.x,pose.y,0);spirit.rotation.set(pitch,yaw+(typeof options.viewYaw==='function'?options.viewYaw():options.viewYaw??0),pose.roll);
+      spirit.position.set(pose.x,pose.y,0);spirit.rotation.set(pitch + flightBank*.22,yaw + flightBank*.26 +(typeof options.viewYaw==='function'?options.viewYaw():options.viewYaw??0),pose.roll - flightBank*.15);
       left.rotation.set(pose.finPitch,0,-pose.fin);right.rotation.set(-pose.finPitch,0,pose.fin);
       eyes.forEach(e=>{e.scale.y=1.7*Math.max(.045,pose.eye);e.visible=pose.smile<.97;});
       smiles.forEach(e=>e.scale.y=.65+.35*pose.smile);smileMat.opacity=pose.smile;yawnMat.opacity=pose.yawn;
@@ -129,7 +145,7 @@ export function mountManaSpirit(host: HTMLElement, options: {
   };
   const start=()=>{if(!dead&&!suspended&&!raf&&visible&&!document.hidden)raf=requestAnimationFrame(render);};
   const stop=()=>{cancelAnimationFrame(raf);raf=0;last=0;};
-  const size=()=>{const b=host.getBoundingClientRect();renderer.setSize(Math.max(1,b.width),Math.max(1,b.height),false);camera.aspect=Math.max(1,b.width)/Math.max(1,b.height);camera.updateProjectionMatrix();start();};
+  const size=()=>{const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();start();};
   const resize=new ResizeObserver(size);resize.observe(host);
   const intersection=typeof IntersectionObserver==='undefined'?null:new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??true;visible?start():stop();});intersection?.observe(host);
   const onVisibility=()=>{document.hidden?stop():start();};
@@ -138,8 +154,16 @@ export function mountManaSpirit(host: HTMLElement, options: {
   document.addEventListener('visibilitychange',onVisibility);reduced.addEventListener('change',onReduced);size();
   if(interactive&&targetElement===host){host.removeAttribute('aria-hidden');host.setAttribute('role','button');host.tabIndex=0;host.setAttribute('aria-label',loungeText('ゼノに挨拶する','Greet Zeno','제노에게 인사하기'));}
   const greet=()=>{if(dead||isStill())return;motion.greet();start();};
-  const unbind=interactive?bindZenoInteraction(targetElement,turn,greet,start):()=>{};
+  const activate=options.onActivate;
+  const unbind=interactive?bindZenoInteraction(targetElement,turn,activate?()=>activate(greet):greet,start):()=>{};
   return {
+    setFlightView(scale,bank){
+      // Dolly along the HOME camera's sightline. The button supplies the projected
+      // size and hit area; compensating the lens keeps that magnification single.
+      camera.position.set(0,.05+.30/scale,5.4/scale);
+      camera.zoom=1/scale;camera.updateProjectionMatrix();
+      flightBank=bank;start();
+    },
     greet,
     suspend(){suspended=true;stop();},
     resume(){if(dead)return;suspended=false;visible=true;size();},

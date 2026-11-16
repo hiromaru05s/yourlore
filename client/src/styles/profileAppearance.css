@@ -16,8 +16,23 @@
   to {transform:translate3d(.2%,-.15%,0) rotate(.24deg) scaleY(1.004);}
 }
 .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) .home-spirit-touch {
-  position:absolute;inset:27% auto auto 72%;translate:-50% 0;margin:0;padding:0;z-index:1;pointer-events:auto;
-  width:clamp(44px,13%,78px);height:auto;aspect-ratio:1;max-width:none;
+  position:absolute;inset:43% auto auto 3%;translate:-50% -50%;margin:0;padding:0;z-index:1;pointer-events:auto;
+  /* The visible model fills roughly two thirds of its transparent canvas. */
+  --zeno-canvas:clamp(176px,52%,312px);
+  width:calc(var(--zeno-canvas) * .65);height:auto;aspect-ratio:1;max-width:none;
+}
+.lounge-home .home-companion .home-spirit-host {
+  position:absolute;inset:50% auto auto 50%;translate:-50% -50%;width:calc(100% / .65);height:calc(100% / .65);pointer-events:none;
+}
+@media(max-height:500px) {
+  .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) .home-spirit-touch {
+    --zeno-drop:12%;left:18%;top:47%;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home #dailyReward {width:clamp(96px,19vw,205px);}
+}
+@media(max-width:600px) and (max-height:500px) {
+  .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) .home-spirit-touch {left:22%;}
+  :root body .lounge-shell.selected-menu.lounge-home .home-sound {width:clamp(96px,19vw,120px);}
 }
 @media(min-width:851px), (max-height:500px) {
   .lounge-shell.selected-menu.lounge-home .lounge-content {z-index:3;pointer-events:none;}
