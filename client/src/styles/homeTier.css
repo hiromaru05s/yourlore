@@ -50,7 +50,7 @@
 @media (max-width:850px) and (min-height:501px) {
   :root body .lounge-shell.selected-menu.lounge-home .lounge-content {overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;}
   :root body .lounge-shell.selected-menu.lounge-home:has(#dailyReward) .lounge-content>.lounge-home-screen {
-    display:flex;flex-direction:column;height:auto;min-height:100%;padding:66px 18px 20px;gap:12px;
+    display:flex;flex-direction:column;height:auto;min-height:100%;padding:0 18px 20px;gap:12px;
   }
   :root body .lounge-shell.selected-menu.lounge-home .lounge-home-main {
     height:clamp(340px,calc(100cqh - 76px),480px);min-height:340px;flex:none;
@@ -64,4 +64,26 @@
   :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy {width:auto;text-align:left;}
   :root body .lounge-shell.selected-menu.lounge-home #myTier .home-rank-copy>strong {align-items:flex-start;}
   :root body .lounge-shell.selected-menu.lounge-home #myTier .rank-link {display:none;}
+}
+
+/* A short landscape window still leaves the middle of the scene free.
+   Keep the controls reachable within their own column. */
+@media (max-width:600px) and (max-height:500px) {
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-content {top:var(--bar);}
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-content>.lounge-home-screen {
+    grid-template-columns:minmax(0,1fr) minmax(0,44%);gap:0;padding:0 8px;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-home-main {
+    display:flex;justify-content:flex-start;align-self:stretch;height:100%;padding:5px 8px;overflow-y:auto;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home:has(#dailyReward) .lounge-play {
+    display:grid;flex:none;height:auto;min-height:max-content;container-type:normal;grid-template-columns:minmax(0,1fr) 66px;
+    grid-template-rows:30px auto minmax(65px,auto);gap:3px 5px;
+  }
+  :root body .lounge-shell.selected-menu.lounge-home .lounge-mode-tabs button {padding:3px;min-height:28px;font-size:10px;}
+  :root body .lounge-shell.selected-menu.lounge-home:has(#dailyReward) #ranked.home-duel-button {width:64px;height:64px;}
+  :root body .lounge-home .lounge-active-deck {min-height:38px;padding:0;}
+  :root body .lounge-home .lounge-deck-preview img {width:19px;height:28px;}
+  :root body .lounge-home #dailyReward {top:calc(100% + 70px);width:24vw;max-height:calc(100dvh - 168px);overflow:auto;padding:8px;}
+  :root body .lounge-home .home-sound {width:24vw;}
 }

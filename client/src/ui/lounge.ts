@@ -38,6 +38,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     ['friends','friends','friends.title',()=>app.friends()],['shop','shop','shop.title',()=>app.shop()],
     ['tutorial','book','home.nav.guide',()=>app.tutorial()],
   ];
+  const phoneHome = matchMedia('(max-width:850px) and (min-height:501px)');
   const dailyReward=content.querySelector<HTMLElement>('#dailyReward');
   const gifts=content.querySelector<HTMLButtonElement>('#homeGifts');
   const friendBadge=mountFriendBadge(app,shell,page!=='friends'&&page!=='login');
@@ -63,7 +64,7 @@ export function mountLounge(app: App, page: LoungePage): () => void {
       if(page==='home'){
         stopHomeSound=mountHomeSound(seeker);
         if(dailyReward){
-          const host=matchMedia('(max-width:850px) and (min-height:501px)').matches?content.querySelector('.lounge-home-screen'):seeker;
+          const host=phoneHome.matches?content.querySelector('.lounge-home-screen'):seeker;
           host?.append(dailyReward);
         }
       }
@@ -93,13 +94,15 @@ export function mountLounge(app: App, page: LoungePage): () => void {
   const homeScreen=content.querySelector('.lounge-home-screen');
   // Portrait HOME keeps quests after the play panel in the scrolling content.
   // Reparent the existing node so progress, handlers and refreshes stay intact.
-  const dailyLayout=dailyReward?new ResizeObserver(()=>{
-    // Keep Zeno visible beside the sound row when the quest spans a phone.
-    if(companion&&homeScreen){const host=matchMedia('(max-width:850px) and (min-height:501px)').matches?shell:homeScreen;if(companion.parentElement!==host)host.prepend(companion);}
-    const host=matchMedia('(max-width:850px) and (min-height:501px)').matches?homeScreen:shell.querySelector('.lounge-seeker');
-    if(host&&dailyReward.parentElement!==host)host.append(dailyReward);
-  }):null;
-  if(dailyReward){dailyLayout?.observe(dailyReward);dailyLayout?.observe(shell);}
+  const layoutHome = () => {
+    if (!homeScreen || !companion) return;
+    const stage = phoneHome.matches ? homeScreen : shell;
+    if (companion.parentElement !== stage) stage.prepend(companion);
+    const quests = phoneHome.matches ? homeScreen : shell.querySelector('.lounge-seeker');
+    if (dailyReward && quests && dailyReward.parentElement !== quests) quests.append(dailyReward);
+  };
+  layoutHome();
+  if (companion) phoneHome.addEventListener('change',layoutHome,{signal:lifecycle.signal});
   const off=onLangChange(paint);
   document.addEventListener('lore:user',paint);
   // All existing dialogs share keyboard/focus behavior without duplicating network flows.
@@ -130,5 +133,5 @@ export function mountLounge(app: App, page: LoungePage): () => void {
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{friendBadge.destroy();lifecycle.abort();dailyLayout?.disconnect();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{friendBadge.destroy();lifecycle.abort();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
 }

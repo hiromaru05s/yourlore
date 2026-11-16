@@ -1,23 +1,38 @@
 @import './portraitBackground.css';
 .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) {
-  align-items:flex-end;justify-content:flex-end;gap:0;padding-bottom:min(3vh,22px);pointer-events:none;
+  --figure-height:calc(100dvh - clamp(18px,5dvh,60px));
+  position:absolute;inset:auto auto 0 min(48vw,calc(82vw - 400px));translate:-50% 0;
+  height:var(--figure-height);width:auto;aspect-ratio:626/940;min-height:0;margin:0;padding:0;
+  isolation:isolate;pointer-events:none;z-index:2;
 }
-.lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) .home-spirit-touch {
-  pointer-events:auto;width:min(29%,190px);height:min(24vh,190px);flex:none;margin:0 -2% 0 0;
-}
-.home-standing-seeker {position:relative;isolation:isolate;height:min(56vh,525px);max-width:46%;aspect-ratio:410/1000;pointer-events:none;flex:none;}
-.home-standing-seeker::before {content:'';position:absolute;inset:auto 7% 0;height:3%;background:radial-gradient(ellipse,#12152797,transparent 69%);transform:scaleX(1.32);}
-.home-standing-seeker :is(img,canvas) {display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;}
+.lounge-shell.selected-menu.lounge-home .lounge-home-main {grid-column:2;}
+.home-standing-seeker {position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.home-standing-seeker :is(img,canvas) {display:block;position:absolute;inset:0;width:100%;height:100%;}
 .home-standing-seeker canvas,.home-standing-seeker.is-moving img {visibility:hidden;}
 .home-standing-seeker.is-moving canvas {visibility:visible;}
-@media (max-width:850px) and (min-height:501px) {
-  .lounge-shell.selected-menu.lounge-home>.home-companion:has(.home-standing-seeker) {top:calc(var(--bar) + 2px);right:5vw;width:43vw;height:clamp(66px,10vh,84px);padding:0;}
-  .lounge-shell.selected-menu.lounge-home>.home-companion:has(.home-standing-seeker) .home-spirit-touch {width:70px;height:70px;}
-  .home-standing-seeker {height:100%;}
+.home-standing-seeker.seeker-fallback-motion img {transform-origin:50% 83%;animation:seeker-closeup-breath 4.45s ease-in-out infinite alternate;}
+@keyframes seeker-closeup-breath {
+  from {transform:translate3d(-.2%,.15%,0) rotate(-.24deg) scaleY(.996);}
+  to {transform:translate3d(.2%,-.15%,0) rotate(.24deg) scaleY(1.004);}
 }
-@media (max-height:500px) and (min-width:601px) {
-  .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) {width:50%;height:100%;align-self:end;}
-  .home-standing-seeker {max-width:55%;height:85%;}
+.lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) .home-spirit-touch {
+  position:absolute;inset:27% auto auto 72%;translate:-50% 0;margin:0;padding:0;z-index:1;pointer-events:auto;
+  width:clamp(44px,13%,78px);height:auto;aspect-ratio:1;max-width:none;
+}
+@media(min-width:851px), (max-height:500px) {
+  .lounge-shell.selected-menu.lounge-home .lounge-content {z-index:3;pointer-events:none;}
+  .lounge-shell.selected-menu.lounge-home .lounge-home-main {pointer-events:auto;}
+}
+@media(max-height:500px) {
+  .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) {
+    left:39vw;--figure-height:95dvh;
+  }
+}
+@media(max-width:850px) and (min-height:501px) {
+  .lounge-shell.selected-menu.lounge-home .home-companion:has(.home-standing-seeker) {
+    --figure-height:clamp(230px,43dvh,490px);
+    position:relative;inset:auto;translate:none;align-self:center;flex:none;margin:0 0 -12px;
+  }
 }
 dialog.appearance-picker {margin:auto;box-sizing:border-box;width:min(500px,94vw);max-height:90dvh;overflow:auto;color:#f2f6ff;text-align:left;}
 dialog.appearance-picker::backdrop {background:#030e1fc2;}

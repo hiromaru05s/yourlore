@@ -1,63 +1,116 @@
-import {SEEKER_ID, SEEKER_ROOT} from './seekerMotion';
+import {Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, SRGBColorSpace, Texture} from 'three';
+import {createWebGLRenderer} from './webglRenderer';
 import {seekerName} from './seekerLabels';
+import {SEEKER_ROOT} from './seekerMotion';
+import {homeIsCovered} from './screenCovered';
 
-const standingArt: Record<string, string> = {[SEEKER_ID]: SEEKER_ROOT + '/standing.webp'};
-export const standingSeeker = (id?: string | null) => standingArt[id ?? ''] ?? standingArt[SEEKER_ID];
+// Weights are in the cropped painting's UV space, with the hood at the top.
+// The book and belt anchor the lower torso. The shoulders lead, then the hood
+// and loose outer folds follow the same breath at slightly different phases.
+const vertexShader = `
+  uniform float time;
+  varying vec2 texCoord;
+  void main() {
+    texCoord = uv;
+    vec2 p = position.xy;
+    float y = 1.0 - uv.y;
+    float breath = sin(time * 1.42);
+    float upper = 1.0 - smoothstep(0.33, 0.80, y);
+    float shoulderDistance = (y - 0.41) / 0.19;
+    float chest = exp(-shoulderDistance * shoulderDistance);
+    float edge = smoothstep(0.18, 0.47, abs(uv.x - 0.5));
+    float fold = edge * smoothstep(0.35, 0.82, y);
+    p.y += upper * 0.009 * sin(time * 1.42 - 0.18 * upper);
+    p.x += upper * 0.012 * sin(time * 0.81);
+    p.x += p.x * chest * 0.016 * breath;
+    p.x += fold * 0.013 * sin(time * 1.23 - 3.0 * y);
+    gl_Position = vec4(p, 0.0, 1.0);
+  }`;
 
-/** Deform horizontal sections of the painting. The shoulders lead the cloth,
- * the hood follows the chest, and both boots keep their original footing. */
+function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
+  const renderer = createWebGLRenderer({alpha:true, antialias:false, powerPreference:'low-power'});
+  const texture = new Texture(image);
+  texture.colorSpace = SRGBColorSpace;
+  texture.needsUpdate = true;
+  const geometry = new PlaneGeometry(2, 2, 24, 40);
+  const material = new ShaderMaterial({
+    uniforms:{painting:{value:texture}, time:{value:0}},
+    vertexShader,
+    fragmentShader:`uniform sampler2D painting;
+      varying vec2 texCoord;
+      void main() {
+        gl_FragColor = texture2D(painting, texCoord);
+        #include <colorspace_fragment>
+        #include <premultiplied_alpha_fragment>
+      }`,
+    transparent:true, premultipliedAlpha:true, depthTest:false, depthWrite:false,
+  });
+  const scene = new Scene();
+  scene.add(new Mesh(geometry, material));
+  const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const canvas = renderer.domElement;
+  canvas.setAttribute('aria-hidden','true');
+  function draw(time: number) {
+    material.uniforms.time.value = time;
+    renderer.render(scene, camera);
+  }
+  const resize = () => {
+    const density = Math.min(devicePixelRatio, 2, image.naturalWidth / Math.max(1,host.clientWidth));
+    renderer.setSize(Math.max(1, Math.round(host.clientWidth*density)), Math.max(1, Math.round(host.clientHeight*density)), false);
+    draw(material.uniforms.time.value);
+  };
+  const observer = new ResizeObserver(resize);
+  host.append(canvas); resize(); observer.observe(host);
+  return {canvas, draw, destroy() {
+    observer.disconnect(); canvas.remove();
+    texture.dispose(); material.dispose(); geometry.dispose();
+    renderer.dispose(); renderer.forceContextLoss();
+  }};
+}
+
 export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
-  const poster = new Image();
+  const image = new Image();
+  image.alt = '';
+  image.src = SEEKER_ROOT + '/home-closeup.webp';
   host.setAttribute('role', 'img');
   host.setAttribute('aria-label', seekerName(avatar ?? undefined));
-  poster.alt = '';
-  poster.src = standingSeeker(avatar);
-  host.append(poster);
-  const canvas = document.createElement('canvas');
-  canvas.setAttribute('aria-hidden', 'true');
-  const ctx = canvas.getContext('2d');
+  host.append(image);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  let frame = 0, elapsed = 0, previous = 0, visible = true, disposed = false;
-  function draw(time: number) {
-    frame = requestAnimationFrame(draw);
-    if (!ctx || time - previous < 1000 / 30) return;
-    elapsed += Math.min(time - previous, 65) / 1000;
-    previous = time;
-    const {width, height} = canvas;
-    const sourceScale = poster.naturalHeight / height;
-    const breath = Math.sin(elapsed * 1.43);
-    ctx.clearRect(0, 0, width, height);
-    const lift = (y: number) => Math.round(y - breath * 2.7 * Math.max(0, 1 - y / (height * .63)));
-    for (let y = 0; y < height; y += 4) {
-      const end = Math.min(y + 4, height), v = y / height;
-      const shoulders = Math.exp(-Math.pow((v - .27) / .19, 2));
-      const hem = Math.exp(-Math.pow((v - .74) / .12, 2));
-      const sway = 2.8 * (1-v)**2 * Math.sin(elapsed * .77) + 2.2 * hem * Math.sin(elapsed * 1.02 - v * 6);
-      const spread = breath * shoulders * 1.8;
-      ctx.drawImage(poster, 0, y * sourceScale, poster.naturalWidth, (end-y)*sourceScale,
-        sway-spread, lift(y), width+spread*2, lift(end)-lift(y));
+  let painting: ReturnType<typeof createSeekerPainting> | undefined;
+  let visible = false, decoded = false, disposed = false, fallback = false;
+  let frame = 0, previous = 0, elapsed = 0;
+  function tick(now: number) {
+    frame = requestAnimationFrame(tick);
+    if (!homeIsCovered()) {
+      elapsed += previous ? Math.min(now - previous, 64) / 1000 : 0;
+      painting?.draw(elapsed);
     }
+    previous = now;
   }
   function sync() {
-    cancelAnimationFrame(frame);
-    const active = !!ctx && canvas.isConnected && !reduced.matches && visible && !document.hidden;
-    host.classList.toggle('is-moving', active);
-    if (active) { previous = performance.now(); frame = requestAnimationFrame(draw); }
+    cancelAnimationFrame(frame); previous = 0;
+    const active = visible && decoded && !disposed && !document.hidden && !reduced.matches;
+    if (active && !painting && !fallback) {
+      try {
+        painting = createSeekerPainting(host, image);
+        painting.canvas.addEventListener('webglcontextlost', () => {
+          fallback = true; painting?.destroy(); painting = undefined; sync();
+        }, {once:true});
+      } catch { fallback = true; }
+    }
+    host.classList.toggle('is-moving', active && !!painting);
+    host.classList.toggle('seeker-fallback-motion', active && fallback);
+    if (active && painting) frame = requestAnimationFrame(tick);
   }
-  const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); });
+  const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
   observer.observe(host);
-  void poster.decode().then(() => {
-    if (disposed || !ctx) return;
-    canvas.height = Math.min(720, poster.naturalHeight);
-    canvas.width = Math.round(canvas.height * poster.naturalWidth / poster.naturalHeight);
-    ctx.drawImage(poster, 0, 0, canvas.width, canvas.height);
-    host.append(canvas); sync();
-  }).catch(() => {});
   reduced.addEventListener('change', sync);
   document.addEventListener('visibilitychange', sync);
+  void image.decode().then(() => { if (!disposed) { decoded = true; sync(); } }).catch(() => {});
   return () => {
     disposed = true; cancelAnimationFrame(frame); observer.disconnect();
     reduced.removeEventListener('change', sync);
     document.removeEventListener('visibilitychange', sync);
+    painting?.destroy(); painting = undefined;
   };
 }
