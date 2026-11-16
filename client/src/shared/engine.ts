@@ -418,7 +418,6 @@ export function playCost(c: CardInst, p?: PlayerState): number {
   if (p && c.id==='RUNE2' && runeBoost(p,c.id,false)) return 0;
   if (p && havenDiscount(p, c)) return 0;
   let base = c.play ?? c.cost;
-  if (p && c.ench === 'supplyLine' && p.field.length === 0) base -= 1;
   if (p && c.id === 'FIRE_METEOR' && p.expansion?.firePlayed.some(id => id !== c.id)) base = 1;
   if (p && c.id === 'FIRE_BRANDING') base -= p.expansion?.firePlayed.length ?? 0;
   if (p && isFire(c)) base = Math.max(0, base - (p.expansion?.fireDiscount ?? 0) - 2 * p.field.filter(m => !m.mutedEffects && m.id === 'FIRE_MASTER').length);
@@ -517,7 +516,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:2,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -6548,7 +6547,7 @@ function resolveQuick(g: GameState, ctx: Ctx, p: PlayerState, card: CardInst): v
     case 'QUICK_ESCORT': case 'QUICK_INSURANCE': case 'MARKET_FEVER': case 'SPIRIT_RESONANCE':
       armySpell(g,ctx,p,card); break;
     case 'QUICK_HELLFIRE': { const o = g.players[1 - side(g, p)]; gainBrand(g, ctx, o, ((o.brand ?? 0) > 0 ? 2 : 1)); break; }
-    case 'FORBIDDEN': p.hp=1;gainShield(g,ctx,p,30);for(let i=0;i<3;i++)effectSummon(g,ctx,p,'DEVIL_TOKEN');break;
+    case 'FORBIDDEN': p.hp=1;gainShield(g,ctx,p,10);for(let i=0;i<3;i++)effectSummon(g,ctx,p,'DEVIL_TOKEN');break;
     case 'RUNE_GLYPH':
       queueExpansionChoice(g,p,'GLYPH_SOURCE','');
       if(otherRune(p,card.id)) queueExpansionChoice(g,p,'GLYPH_REWARD','');
@@ -7922,7 +7921,7 @@ function basicAttune(g: GameState, ctx: Ctx, p: PlayerState, c: CardInst): void 
       if (tryNullSpell(g,ctx,c) || tryAttuneJam(g,ctx,c)) continue;
     }
     addMaxMana(g, ctx, p,1);
-    spiritGain(p,0,3);
+    spiritGain(p,0,2);
     for (const bonus of p.attuneBonuses ?? []) {
       if (g.over) break;
       switch (bonus) {
@@ -7964,10 +7963,17 @@ function armySpell(g: GameState, ctx: Ctx, p: PlayerState, c: CardInst): void {
     case 'MUSTER_DIE': {
       const n = diceRoll(g,ctx.ev,side(g,p),{id:c.id,player:side(g,p)},1).rolls[0];
       if (n === 1) {
+        for (const soldier of [...p.field]) {
+          if (o.field.length >= Math.min(FIELD_MAX, o.summonCap ?? FIELD_MAX)) break;
+          if (!ARMY_IDS.has(soldier.id) || !fieldAccepts(o, soldier)) continue;
+          p.field.splice(p.field.indexOf(soldier), 1);
+          o.field.push(soldier);
+        }
+        refreshFieldPassives(g);
         if (p.enchants.length+p.traps.length+(p.quests?.length ?? 0) < ST_MAX) p.enchants.push({card:inst(g,'COUP'),turns:99,bornTurn:g.turn});
       } else {
         const id = n <= 4 ? 'SOLDIER2' : 'GUNNER';
-        const count = n <= 4 ? n-1 : n-3;
+        const count = n <= 4 ? n-1 : n-4;
         for (let i=0;i<count;i++) effectSummon(g,ctx,p,id);
       }
       break;

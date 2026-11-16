@@ -21,7 +21,7 @@ function mercenary(id: string, nameJa: string, name: string, nameEn: string, cos
 
 export const MERCENARY_CARDS = [
   mercenary('MERCENARY', '傭兵', '용병', 'Mercenary', 1, 2, 1, 1),
-  mercenary('MERC_LEADER', '傭兵リーダー', '용병 리더', 'Mercenary Leader', 3, 4, 3, 2),
-  mercenary('MERC_MASTER', '傭兵ギルドマスター', '용병 길드 마스터', 'Mercenary Guildmaster', 5, 6, 5, 3),
+  mercenary('MERC_LEADER', '傭兵リーダー', '용병 리더', 'Mercenary Leader', 3, 3, 3, 2),
+  mercenary('MERC_MASTER', '傭兵ギルドマスター', '용병 길드 마스터', 'Mercenary Guildmaster', 5, 6, 4, 3),
 ];
 export const MERC_IDS = new Set(MERCENARY_CARDS.map(card => card.id));

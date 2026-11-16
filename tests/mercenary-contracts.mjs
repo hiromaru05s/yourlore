@@ -22,7 +22,7 @@ function buy(g,id,market='buyMarket'){
 const pick=(g,uid)=>step(g,{type:'pick',uid});
 function enchant(g,id,owner=g.cur){g.players[owner].enchants.push({card:card(id),turns:99,bornTurn:0});}
 function check(name,f){f();console.log('PASS',name);}
-const ranks = [['MERCENARY',1,2,1,1],['MERC_LEADER',3,4,3,2],['MERC_MASTER',5,6,5,3]];
+const ranks = [['MERCENARY',1,2,1,1],['MERC_LEADER',3,3,3,2],['MERC_MASTER',5,6,4,3]];
 for (const [id,cost,atk,hp,reward] of ranks) {
   check(id+' printed stats and hand cost with and without a Mercenary',()=>{
     assert.deepEqual([E.DB[id].cost,E.DB[id].atk,E.DB[id].def],[cost,atk,hp]);
@@ -116,5 +116,5 @@ check('persisted rooms refresh prices and stats while retaining UIDs and damage'
   const old={...mon('MERC_MASTER'),cost:6,atk:5,def:7,dmg:2};g.players[0].field=[old];
   g.market[0]={...card('MERCENARY'),cost:2};
   E.restoreReworkedCards(g);E.restoreReworkedCards(g);
-  assert.deepEqual([old.cost,old.atk,old.def,old.dmg],[5,6,5,2]);assert.equal(g.market[0].cost,1);
+  assert.deepEqual([old.cost,old.atk,old.def,old.dmg],[5,6,4,2]);assert.equal(g.market[0].cost,1);
 });

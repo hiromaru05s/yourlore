@@ -31,14 +31,15 @@ export function restoreReworkedCards(game: GameState): void {
   const updateRunes=!game.runeReworkApplied;
   const auditRunes = !game.runeZonesAudited;
   const updateNovember = !game.novemberBalanceApplied;
-  const updateNovemberClarifications = game.novemberBalanceApplied !== 2;
+  const updateNovemberClarifications = !game.novemberBalanceApplied || game.novemberBalanceApplied === true;
+  const updatePowerBalance = game.novemberBalanceApplied !== 3;
   const updateIncubators = !game.incubatorsReworked;
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updateNovemberClarifications)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance)) return;
   game.incubatorsReworked = true;
-  game.novemberBalanceApplied = 2;
+  game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
   game.threeFireNamed = true;
   game.runeReworkApplied=true;
@@ -58,6 +59,24 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updatePowerBalance) {
+      const def = DB[card.id];
+      const swapped = (card as FieldMon).trickSwapped;
+      switch (card.id) {
+        case 'QUICK_ESCORT': case 'QUICK_MUSTER': case 'FORBIDDEN':
+          card.cost = def.cost;
+          break;
+        case 'GOLEM_TEST': case 'MERC_LEADER':
+          card[swapped ? 'def' : 'atk'] = def.atk;
+          break;
+        case 'MERC_MASTER':
+          card[swapped ? 'atk' : 'def'] = def.def;
+          break;
+      }
+      if (['MUSTER_DIE', 'MINI_SPIRIT', 'FORBIDDEN', 'SUPPLY_LINE'].includes(card.id)) {
+        Object.assign(card, {text:def.text, textJa:def.textJa, textEn:def.textEn});
+      }
+    }
     if (updateNovemberClarifications) {
       if (card.id === 'KNIGHT_TEACH' || card.id === 'NMD4') card.play = DB[card.id].play;
       if (card.id === 'TSO3' || card.id === 'NMD6') {
@@ -186,6 +205,10 @@ export function restoreReworkedCards(game: GameState): void {
   for (const p of game.players) {
     [...p.hand, ...p.deck, ...p.field, ...p.discard, ...(p.removed ?? []), ...p.supply].forEach(refresh);
     for (const entry of [...p.enchants,...p.traps,...(p.quests ?? []),...p.exile]) refresh(entry.card);
+    if (updatePowerBalance) for (const m of p.field) {
+      const lostHp = m.trickSwapped ? ['GOLEM_TEST','MERC_LEADER'].includes(m.id) : m.id === 'MERC_MASTER';
+      if (lostHp && (m.dmg ?? 0) >= effDef(p,m)) m.dmg = Math.max(0,effDef(p,m)-1);
+    }
     if (updateGolems) for (const m of p.field) {
       // A live room can contain a wounded monster whose new printed HP is lower.
       if (Object.hasOwn(GOLEM_TEXT,m.id) && (m.dmg ?? 0) >= effDef(p,m)) m.dmg = Math.max(0,effDef(p,m)-1);

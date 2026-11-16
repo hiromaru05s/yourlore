@@ -19,7 +19,7 @@ const pick=(g,uid)=>step(g,{type:'pick',uid});
 const end=g=>step(g,{type:'endTurn'});
 function enchant(g,id,owner=g.cur){g.players[owner].enchants.push({card:card(id),turns:99,bornTurn:0});}
 function check(name,f){f();console.log('PASS',name);}
-check('Supply Line is a permanent starter and discounts only a cast on an empty allied field',()=>{
+check('Supply Line is a permanent starter and costs three with or without allied monsters',()=>{
   const id = 'SUPPLY_LINE';
   assert(E.DECK_POOL.includes(id)); assert(!E.BUYABLE_POOL.includes(id));
   assert.equal(E.sanitizeDeck([id,...Array(7).fill('STARTER_TRASH')])[0],id);
@@ -28,12 +28,73 @@ check('Supply Line is a permanent starter and discounts only a cast on an empty 
     let g=fresh(1); const p=g.players[1]; p.mana=mana;
     g.players[0].field=[mon('M1')];
     if (occupied) p.field=[mon('M1')];
-    const cost=occupied?3:2;
+    const cost=3;
     assert.equal(E.playCost(card(id),p),cost);
     g=cast(g,id);
     assert.equal(g.players[1].enchants.length,Number(mana>=cost));
     assert.equal(g.players[1].mana,mana>=cost?mana-cost:mana);
   }
+});
+check('Conscription resolves all six faces and transfers existing military units before Rebellion',()=>{
+  for (const side of [0,1]) {
+    const seen = new Set();
+    for (let seed=1; seed<=500 && seen.size<6; seed++) {
+      const g=fresh(side), p=g.players[side], foe=g.players[1-side];
+      g.rng=seed;
+      const soldier=mon('SOLDIER2'), castle=mon('CASTLE'), gunner=mon('GUNNER');
+      soldier.defMod=2; soldier.dmg=1; soldier.atkMod=4;
+      p.field=[soldier,castle,gunner];p.hand=[card('MUSTER_DIE')];
+      const {state,events}=E.reduce(g,{type:'play',idx:0});
+      const n=events.find(e=>e.type==='dice').rolls[0]; seen.add(n);
+      const own=state.players[side], other=state.players[1-side];
+      assert.equal(own.mana,21);
+      if(n===1) {
+        assert.deepEqual(own.field.map(m=>m.uid),[castle.uid]);
+        assert.deepEqual(other.field.map(m=>m.uid),[soldier.uid,gunner.uid]);
+        assert.equal(other.field[0].dmg,1); assert.equal(other.field[0].atkMod,4);
+        assert.equal(own.enchants[0].card.id,'COUP');
+        for (const slots of [0,1]) {
+          foe.field=Array.from({length:E.FIELD_MAX-slots},()=>mon('M1'));
+          const next=E.reduce(g,{type:'play',idx:0}).state;
+          assert.equal(next.players[1-side].field.length,E.FIELD_MAX);
+          assert.equal(next.players[side].field.length,3-slots);
+          assert(next.players[side].enchants.some(e=>e.card.id==='COUP'));
+        }
+        const family=['SOLDIER2','INFKNIGHT','CAVALRY','GUNNER','HEAVY_GUNNER','CAPTAIN','CANNON_COMMANDER'];
+        p.field=family.map(mon);foe.field=[];
+        enchant(g,'SUPPLY_LINE',1-side);
+        foe.deck=[card('STARTER_TRASH')];
+        const transferred=E.reduce(g,{type:'play',idx:0}).state;
+        assert.deepEqual(transferred.players[1-side].field.map(m=>m.uid),p.field.map(m=>m.uid));
+        assert.equal(transferred.players[1-side].hand.length,0,'a change of control does not trigger a summon draw');
+        assert.equal(transferred.players[side].field.length,0);
+        p.enchants=Array.from({length:14},()=>({card:card('SUPPLY_LINE'),turns:99,bornTurn:0}));
+        const full=E.reduce(g,{type:'play',idx:0}).state;
+        assert.deepEqual(full.players[1-side].field.map(m=>m.id),family);
+        assert(!full.players[side].enchants.some(e=>e.card.id==='COUP'));
+      } else {
+        const tokens=own.field.slice(3).map(m=>m.id);
+        assert.deepEqual(tokens,Array(n<=4?n-1:n-4).fill(n<=4?'SOLDIER2':'GUNNER'));
+        assert.equal(other.field.length,0);
+      }
+    }
+    assert.equal(seen.size,6);
+  }
+});
+check('v92 saved rooms refresh the nine new prints just once and preserve live identities',()=>{
+  const g=fresh();g.novemberBalanceApplied=2;
+  const p=g.players[0], leader=mon('MERC_LEADER'), master=mon('MERC_MASTER');
+  Object.assign(leader,{trickSwapped:true,def:4,defMod:2,dmg:1});
+  Object.assign(master,{def:5,dmg:4});p.field=[leader,master];
+  p.hand=['MUSTER_DIE','SUPPLY_LINE','MINI_SPIRIT','FORBIDDEN'].map(id=>({...card(id),textJa:'old'}));
+  g.market=[{...card('QUICK_ESCORT'),cost:4}];p.supply=[{...card('QUICK_MUSTER'),cost:3}];
+  p.discard=[{...card('GOLEM_TEST'),atk:1}];p.hand[3].cost=2;
+  E.restoreReworkedCards(g);
+  assert.equal(p.field[0].uid,leader.uid);assert.equal(leader.def,3);assert.equal(leader.defMod,2);assert.equal(leader.dmg,1);
+  assert.equal(master.def,4);assert.equal(master.dmg,3);assert.equal(p.discard[0].atk,0);
+  assert.equal(g.market[0].cost,5);assert.equal(p.supply[0].cost,4);assert.equal(p.hand[3].cost,3);
+  for(const c of p.hand) assert.equal(c.textJa,E.DB[c.id].textJa);
+  const saved=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),saved);
 });
 check('Supply Lines draw per successful summon, including tokens, and stop when removed',()=>{
   let g=fresh();
@@ -120,7 +181,7 @@ check('Boundary suppresses only opposing passives, offers face through monsters,
 check('Attune upgrades stack, dual replays the base only, and printed costs do not mutate',()=>{
   let g=fresh();g.players[0].maxMana=28;g.players[0].mana=28;enchant(g,'DUAL_ATTUNE');g.players[0].field=[mon('MINI_SPIRIT')];
   g=cast(g,'ATTUNE_SECRET');assert.equal(g.players[0].maxMana,28);g=cast(g,'AMA');g=cast(g,'STARTER_MANA');
-  assert.equal(g.players[0].field[0].defMod,6);assert.equal(g.players[0].maxMana,30);assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,6);assert.equal(E.DB.AMA.play,5);
+  assert.equal(g.players[0].field[0].defMod,4);assert.equal(g.players[0].maxMana,30);assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,6);assert.equal(E.DB.AMA.play,5);
 });
 check('Mana Heart shared first-use delay and twenty Curse Seals survive room serialization',()=>{
   let g=fresh();g.players[0].maxMana=15;g=cast(g,'MANA_HEART');assert.equal(g.players[0].heartDue,25);assert.equal(g.players[0].maxMana,18);

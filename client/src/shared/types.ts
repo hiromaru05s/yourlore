@@ -253,7 +253,7 @@ export interface GameState {
   runeReworkApplied?:boolean;
   runeZonesAudited?: boolean;
   incubatorsReworked?: boolean;
-  novemberBalanceApplied?: boolean | 2; // true in v90 snapshots, 2 after the v91 corrections
+  novemberBalanceApplied?: boolean | 2 | 3; // true in v90, 2 in v91–92, 3 after the v93 adjustments
   incubatorEndTurn?: number;
   golemsReworked?: boolean;
   threeFireNamed?: boolean;

@@ -88,9 +88,9 @@ export const RUNE_RULE_TEXT = {
     "en": "【On Summon】For this turn, the purchase cost of your Rune cards is 1.\n\n【While on the Field】Whenever you play a spell, choose 1 allied monster and grant it 1 random passive other than Void or Boundary, or 2 for a Rune spell."
   },
   "FORBIDDEN": {
-    "ja": "【購入時】自分の体力を1にする。これはダメージとして扱わない。シールド30を得て、自分の場に「悪魔」3体を召喚する。",
-    "ko": "【구매 시】자신의 체력을 1로 설정한다. 이는 피해가 아니다. 실드 30을 얻고 자신의 필드에 악마 3체를 소환한다.",
-    "en": "【On Purchase】Set your HP to 1 without dealing damage. Gain 30 Shield and summon 3 Devils to your field."
+    "ja": "【購入時】自分の体力を1にする。これはダメージとして扱わない。シールド10を得て、自分の場に「悪魔」3体を召喚する。",
+    "ko": "【구매 시】자신의 체력을 1로 설정한다. 이는 피해가 아니다. 실드 10을 얻고 자신의 필드에 악마 3체를 소환한다.",
+    "en": "【On Purchase】Set your HP to 1 without dealing damage. Gain 10 Shield and summon 3 Devils to your field."
   },
   "DEVIL_TOKEN": {
     "ja": "【場にある間】このモンスターが相手プレイヤーを直接攻撃するたび攻撃力−3。どちらかの場のモンスター効果が発動するたび攻撃力と最大体力が1上がる。変化は対象が場を離れるまで続く。",
@@ -185,7 +185,7 @@ export const NOVEMBER_PRINTS: Record<string,Partial<CardDef>> = {
   CHOSEN_ROGUE:{onSummon:'chosenAssassinate'},
   FARM_KEEPER:{atk:0,def:3}, FARMER:{atk:1,def:2},
   SCRAPPER:{cost:1,play:1}, SPACE_RITE:{val:2}, EXILE_NUKE2:{play:5},
-  FORBIDDEN:{cost:2,quick:true}, WINE_COLLECTOR:{onSummon:'wineCollector'},
+  FORBIDDEN:{cost:3,quick:true}, WINE_COLLECTOR:{onSummon:'wineCollector'},
   RUNE1:{cost:1,play:1,act:undefined}, RUNE2:{cost:2,play:1}, RUNE3:{cost:3,ench:undefined,val:undefined},
 };
 export function applyRuneCatalog(db:Record<string,CardDef>):void {

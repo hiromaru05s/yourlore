@@ -51,7 +51,7 @@ export const GOLEM_TEXT = {
 };
 const prints:Record<keyof typeof GOLEM_TEXT,[number,number,string[]]>={
   GOLEM1:[1,1,['guts']], GOLEM2:[2,4,['guts']], M10:[1,4,['guts']], NGA3:[3,1,['guts','counter']],
-  NWL3:[1,8,['guts','counter']], GOLEM3:[7,11,['guts']], MANA_GIANT:[3,14,['void']], GOLEM_TEST:[1,1,['guts']],
+  NWL3:[1,8,['guts','counter']], GOLEM3:[7,11,['guts']], MANA_GIANT:[3,14,['void']], GOLEM_TEST:[0,1,['guts']],
 };
 export function applyGolemCatalog(db:Record<string,CardDef>) {
   db.GOLEM_TEST={id:'GOLEM_TEST',t:'mon',cost:1,noShop:true,name:'시험용 골렘',nameJa:'試験用ゴーレム',nameEn:'Prototype Golem',text:GOLEM_TEXT.GOLEM_TEST.ko};
