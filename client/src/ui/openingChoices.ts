@@ -1,6 +1,6 @@
 import {cardName,getLang,t} from '../i18n';
 import {MULLIGAN_MS} from '../shared/opening';
-import {FRAME_BACK,frameFor,sleeveUrl} from '../shared/cards';
+import {FRAME_BACK,sleeveUrl} from '../shared/cards';
 import type {CardInst,GameState,Side} from '../shared/types';
 import {cardEl} from './cardView';
 import {bindZoom,zoomCard} from './cardInspection';
@@ -85,7 +85,6 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
   const docks:HTMLElement[]=[];
   if(!confirmed){
     const back=rail(words.returnLane,'return-lane');
-    back.style.setProperty('--slot-frame',`url(${frameFor('starter')})`);
     for(let i=0;i<max;i++){
       const dock=element('div','return-socket');dock.setAttribute('aria-hidden','true');
       dock.append(element('i','return-arrow','↻'));back.append(dock);docks.push(dock);
@@ -94,9 +93,7 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
   const hand=rail(words.keepLane,'keep-lane');hand.classList.add('picker-grid');
   const cards=pool.map((c,i)=>{
     const entry=dealtCard(c,i,appearance);hand.append(entry.slot);
-    const frame=`url(${frameFor(c.t)})`;
-    entry.slot.style.setProperty('--slot-frame',frame);
-    entry.face.setAttribute('aria-pressed','false');return {...entry,uid:c.uid,frame};
+    entry.face.setAttribute('aria-pressed','false');return {...entry,uid:c.uid};
   });
   let locked=confirmed;
   function position(){
@@ -112,10 +109,6 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
       slot.classList.toggle('goes-back',chosen);face.classList.toggle('is-picked',chosen);
       face.setAttribute('aria-pressed',String(chosen));
       face.setAttribute('aria-disabled',String(locked||(!chosen&&picked.length>=max)));
-    });
-    docks.forEach((dock,i)=>{
-      const card=cards.find(c=>c.uid===assignments[i]);
-      dock.style.setProperty('--placed-frame',card?.frame??'');
     });
     count.textContent=picked.length+' / '+max;
     scene.button.textContent=picked.length?words.confirm(picked.length):words.keep;
@@ -148,7 +141,6 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
     const {card,id,hover}=drag;
     drag=null;
     hover?.classList.remove('drop-hover');
-    scene.node.style.removeProperty('--drag-frame');
     card.slot.classList.remove('is-dragging');
     card.lift.style.removeProperty('transform');
     if(card.face.hasPointerCapture(id))card.face.releasePointerCapture(id);
@@ -174,7 +166,6 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
         suppressClick=true;
         if(document.getElementById('zoomOverlay')){endDrag();return;}
         drag.moving=true;
-        scene.node.style.setProperty('--drag-frame',card.frame);
         card.slot.classList.add('is-dragging');
       }
       card.lift.style.transform=`translate(${drag.offsetX+dx}px,${drag.offsetY+dy}px)`;
