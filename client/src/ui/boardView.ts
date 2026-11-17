@@ -1088,7 +1088,12 @@ export class GameView {
       if (oldPortrait) disposeSeekers(oldRing!);
       ring.dataset.avatar = avatar ?? '';
       ring.dataset.background = background;
-      if (character.id === SEEKER_ID) ring.querySelector('.avatar')?.replaceChildren(seekerPortrait({board:true, background}));
+      if (character.id === SEEKER_ID) {
+        const loop = new Image();
+        loop.className = 'seeker-idle'; loop.alt = ''; loop.hidden = true;
+        const canvas = seekerPortrait({board:true, background, loop});
+        ring.querySelector('.avatar')!.replaceChildren(canvas, loop);
+      }
       else if (npc) mountNpcReaction(ring, npc);
     }
     this.curseSeals[sd].sync(retained ?? ring, sealCount, sealLabel);

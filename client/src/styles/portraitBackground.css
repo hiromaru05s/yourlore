@@ -7,6 +7,12 @@
 [data-background="rose"] {--appearance-plate:#c79a9e;}
 [data-background="violet"] {--appearance-plate:#aaa1c8;}
 .portrait .seeker-motion[data-background] {background-color:var(--appearance-plate);}
+.portrait .pt-ring .avatar img.seeker-idle {
+  display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain!important;
+  object-position:center!important;background:var(--appearance-plate);
+}
+.portrait .seeker-motion[data-action="idle"] + img.seeker-idle:not([hidden]) {display:block;}
+
 
 /* Legacy illustrated avatars have opaque artwork. Leave a band of the selected
    color inside the portrait mask without changing the surrounding game board. */

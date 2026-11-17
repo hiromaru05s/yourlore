@@ -18,8 +18,14 @@ m.request('hurt',1000); for(let t=1000;t<=1500;t+=20)m.sample(t);
 const before=m.sample(1500).frame;
 m.request('hurt',1500);assert.equal(m.sample(1500).frame,before);
 assert(m.sample(1520).frame<before);m.reset();assert.equal(m.sample(1600).action,'idle');
-const sheet=await sharp('client/public/art/seekers/faceless-v2/recoil-a.webp').metadata();
-assert.deepEqual([sheet.width,sheet.height],[4096,3072]);
-const meta=await sharp('client/public/art/seekers/faceless-v2/poses.webp').metadata();assert.equal(meta.width,1024);assert.equal(meta.height,512);
-const neutral=await sharp('client/public/art/seekers/faceless-v2/portrait.webp').raw().toBuffer();const hit=await sharp('client/public/art/seekers/faceless-v2/hit.webp').raw().toBuffer();assert(!neutral.equals(hit));
-console.log('PASS Seeker recoil timing, retrigger, idle and atlas');
+const {seekerPoster,seekerIdle,seekerRecoil,seekerManaCrest,seekerHealRise,SEEKER_SIZE:size}=await import(`data:text/javascript;base64,${Buffer.from(module).toString('base64')}`);
+const asset=url=>'client/public'+url;
+const idle=await sharp(asset(seekerIdle()),{animated:true}).metadata();
+assert.equal(idle.format,'gif');assert.equal(idle.loop,0);assert.equal(idle.pageHeight,size);assert.equal(idle.width,size);
+assert(idle.pages>=24 && idle.delay.every(ms=>ms>0) && idle.delay.reduce((a,b)=>a+b,0)>=2000);
+for(const [url,rows] of [[seekerRecoil(),6],[seekerManaCrest(),8],[seekerHealRise(),8]]){
+ const sheet=await sharp(asset(url)).metadata();assert.deepEqual([sheet.width,sheet.height,sheet.hasAlpha],[size*8,size*rows,true]);
+}
+const poster=await sharp(asset(seekerPoster())).metadata();
+assert.deepEqual([poster.width,poster.height,poster.hasAlpha],[size,size,true]);
+console.log('PASS Seeker recoil timing, retrigger, looping GIF and daylight atlases');

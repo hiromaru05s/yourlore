@@ -194,7 +194,7 @@ g.pending={kind:'oppMon',reason:'attack',hint:'',hintJa:'',allowCancel:true,data
 v.render(g);assert.equal(document.querySelector('#targetHint').style.display,'none');assert.equal(document.querySelector('#endBtn').disabled,false);
 g.pending={kind:'myMon',reason:'buffTurn',hint:'',hintJa:'',allowCancel:false};v.render(g);assert.equal(document.querySelector('#endBtn').disabled,true);
 g.pending=null;v.render(g);
-assert.deepEqual(avatarPresets(),['SEEKER_HOODED']);for(const id of ['SEEKER_RED','SEEKER_BLUE','SEEKER_HOODED'])assert(avatarHtml(id,'A').includes('/art/seekers/faceless-v2/portrait.webp'));
+assert.deepEqual(avatarPresets(),['SEEKER_HOODED']);for(const id of ['SEEKER_RED','SEEKER_BLUE','SEEKER_HOODED'])assert(avatarHtml(id,'A').includes('/art/seekers/daylight-v1/portrait.webp'));
 for(const [w,h] of [[1920,1080],[1280,720],[1024,768],[390,844],[320,568],[844,390]]) {const m=solveBoard(w,h);assert(m.tile>=20&&m.mktH>=31);assert.equal(m.underPile,false);}
 // Complete type-specific UI faces and live numeric overlays survive rendering.
 for (const card of document.querySelectorAll('.card[data-card-type]')) {

@@ -1,6 +1,6 @@
 import './hoodedSeekers.css';
 import {seekerPortrait, playSeeker, disposeSeeker} from '../ui/seekerAnimation';
-import {seekerPoster, SEEKER_ROOT} from '../ui/seekerMotion';
+import {seekerPoster} from '../ui/seekerMotion';
 import {setLang} from '../i18n';
 if(import.meta.env.DEV){
   setLang('ja');
@@ -8,7 +8,7 @@ if(import.meta.env.DEV){
   app.innerHTML=`<header class="review-header"><a href="/hooded-seekers.html" class="wordmark">LORE<span>CHARACTER PREVIEW</span></a><span class="review-tag">BIBLION · SEEKER</span></header>
   <section class="review-intro"><div><p class="eyebrow">THE FACELESS SEEKER</p><h1>フードのシーカー</h1><p>顔を隠し、記録と向き合う。</p></div><span class="character-count">01<span>キャラクター</span></span></section>
   <nav class="review-tabs" aria-label="プレビュー"><button data-tab="motion" aria-selected="true">キャラクター</button><button data-tab="board" aria-selected="false">実盤面</button><button data-tab="profile" aria-selected="false">プロフィール設定</button></nav>
-  <section id="motionPanel"><div class="portrait-review"><div class="portrait-paper"><div id="portraitStage"></div><div class="state-line"><span class="state-dot"></span><b id="poseStatus">通常</b><span>HOODED SEEKER</span></div></div><div class="portrait-notes"><p class="eyebrow">ONE QUIET PRESENCE</p><h2>フードの奥は、深い影。</h2><p>性別を持たない一人のシーカー。<br>肩から胸上までのシルエットを、<br>輪郭線と柔らかな色面で描きました。</p><div class="pose-pair"><figure><img src="${seekerPoster()}" alt="通常の静止画"><figcaption>通常</figcaption></figure><figure><img src="${SEEKER_ROOT}/hit.webp" alt="被弾姿勢"><figcaption>被弾姿勢</figcaption></figure></div><button id="hitPreview">被弾を確認 <span>↗</span></button><p class="review-note">通常時は静止。被弾した瞬間だけ姿勢を変え、元の絵に戻ります。</p></div></div></section>
+  <section id="motionPanel"><div class="portrait-review"><div class="portrait-paper"><div id="portraitStage"></div><div class="state-line"><span class="state-dot"></span><b id="poseStatus">通常</b><span>HOODED SEEKER</span></div></div><div class="portrait-notes"><p class="eyebrow">ONE QUIET PRESENCE</p><h2>フードの奥は、深い影。</h2><p>性別を持たない一人のシーカー。<br>肩から胸上までのシルエットを、<br>輪郭線と柔らかな色面で描きました。</p><div class="pose-pair"><figure><img src="${seekerPoster()}" alt="通常の静止画"><figcaption>通常</figcaption></figure></div><button id="hitPreview">被弾を確認 <span>↗</span></button><p class="review-note">実盤面では待機中もフードと肩が揺れ、被弾後はその呼吸に戻ります。</p></div></div></section>
   <section id="boardPanel" hidden><div class="embed-intro"><p>実際のアバター枠と盤面で、胸上までの構図と被弾を確認できます。</p><a href="/hooded-board.html" target="_blank">盤面を大きく開く ↗</a></div><iframe title="実盤面プレビュー" data-src="/hooded-board.html"></iframe></section>
   <section id="profilePanel" hidden><div class="embed-intro"><p>プロフィールの「キャラクター」から設定できます。現在は1体です。</p><span>このプレビューの保存先は端末内です。</span></div><iframe title="プロフィール設定プレビュー" data-src="/profile-lab.html"></iframe></section>
   <footer>PAINTED PORTRAIT · SHOULDER RECOIL<span>LORE — BIBLION</span></footer>`;

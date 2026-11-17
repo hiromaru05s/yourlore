@@ -17,7 +17,7 @@ interface CharacterAppearance {
 export const playableCharacters: CharacterAppearance[] = [{
   id:SEEKER_ID, name:seekerName, home:SEEKER_ROOT+'/home-closeup.webp',
   daylightPoster:'/art/seekers/faceless-v2/home-closeup-daylight.webp',
-  portrait:SEEKER_ROOT+'/cutout/portrait.webp', icon:seekerPoster(),
+  portrait:seekerPoster(), icon:seekerPoster(),
 }];
 
 export function characterAppearance(avatar?: string | null): CharacterAppearance {
