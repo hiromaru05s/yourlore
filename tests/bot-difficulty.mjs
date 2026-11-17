@@ -9,6 +9,9 @@ try {
  const opts={mode:'bot',seed:991,p0:{id:'a',name:'a'},p1:{id:'b',name:'b',isBot:true,deck:C.BOT_HELL_DECKS[0].cards}};
  for(const tier of ['easy','normal']){const plain=C.createGame(opts).state,challenge=C.createGame({...opts,challenge:{difficulty:tier,side:1}}).state;delete challenge.botDifficulty;assert.deepEqual(challenge,plain,'unbiased tiers preserve every random result');}
  for(const npc of C.BOT_NPCS){let rotation,previous;const random=rng(81);for(let cycle=0;cycle<4;cycle++){const indices=[];for(let i=0;i<npc.decks.length;i++){const next=C.nextNpcDeck(npc,rotation,random);if(npc.decks.length>1)assert.notEqual(next.index,previous);rotation=JSON.parse(JSON.stringify(next.rotation));previous=next.index;indices.push(next.index);}assert.equal(new Set(indices).size,npc.decks.length);}}
+ const changedRoster=C.nextNpcDeck(C.botNpc('hard'),{signature:'previous-seven-deck-roster',remaining:[6,5,4],previous:3},rng(71));
+ assert(changedRoster.index>=0&&changedRoster.index<C.botNpc('hard').decks.length,'a changed roster discards stale saved indices');
+ assert(changedRoster.rotation.remaining.every(i=>i<C.botNpc('hard').decks.length));
  for(const tier of ['hard','hell']){
   const rows=new Set(),cards=new Set();
   for(let seed=0;seed<180;seed++){
@@ -86,17 +89,17 @@ try {
  Object.assign(mercBuyer,{hand:[],deck:[],discard:[],field:[],enchants:[],quests:[],exile:[],mana:4,maxMana:4,supply:[]});
  mercGame.pending=null;mercGame.market=[dewCard('MERC_ART')];mercGame.marketStock=[3];
  const mercOffer=mercGame.market[0];
- assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'no Mercenary means no Arts payoff');
+ assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'no monsters means no Arts payoff');
  assert.notDeepEqual(C.botDecide(mercGame,'hard'),{type:'buyMarket',i:0},'skip unsupported Mercenary Arts');
  mercBuyer.deck.push(dewCard('MERCENARY'));
- assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin>0,'an owned Mercenary enables the first Arts');
+ assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin>0,'an owned monster enables the first Arts');
  mercBuyer.deck.push(dewCard('MERC_ART'));
- assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'an unplayed copy already covers the nonstacking effect');
+ assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'an unplayed Arts copy reduces the marginal value of another');
  mercBuyer.deck.pop();mercBuyer.enchants=[{card:dewCard('MERC_ART'),turns:99,bornTurn:0}];
- assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'an active Arts also covers the effect');
+ assert(C.purchaseEvaluator(mercGame,mercBuyer)(mercOffer).margin<0,'an active Arts also reduces redundant purchases');
  // The real reservation handler: persistence, idempotence, separate roster size.
  let data;const storage={transaction:async fn=>fn({get:async()=>structuredClone(data),put:async(_,v)=>{data=structuredClone(v);}})};
- for(let cycle=0;cycle<2;cycle++){const seen=new Set();for(let i=0;i<7;i++){const req=()=>new Request('https://internal/npc-deck',{method:'POST',body:JSON.stringify({difficulty:'hell',requestId:`test-${cycle}-${i}`})});const first=await (await C.reserveNpcDeck(storage,req())).json();const repeat=await (await C.reserveNpcDeck(storage,req())).json();assert.deepEqual(first,repeat);seen.add(first.index);}assert.equal(seen.size,7);}
+ for(let cycle=0;cycle<2;cycle++){const seen=new Set();for(let i=0;i<C.botNpc('hell').decks.length;i++){const req=()=>new Request('https://internal/npc-deck',{method:'POST',body:JSON.stringify({difficulty:'hell',requestId:`test-${cycle}-${i}`})});const first=await (await C.reserveNpcDeck(storage,req())).json();const repeat=await (await C.reserveNpcDeck(storage,req())).json();assert.deepEqual(first,repeat);seen.add(first.index);}assert.equal(seen.size,C.botNpc('hell').decks.length);}
  assert.equal((await C.reserveNpcDeck(storage,new Request('https://internal/npc-deck',{method:'POST',body:'{"difficulty":"bad","requestId":"x"}'}))).status,400);
  console.log('PASS difficulty market scope, deterministic RNG, broad diversity, hidden information, immutable transitions, shuffled rotation, idempotent persisted reservation');
 }finally{await rm(dir,{recursive:true,force:true});}

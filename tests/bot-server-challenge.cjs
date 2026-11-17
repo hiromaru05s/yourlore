@@ -21,7 +21,7 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
   const id='challenge-qa-'+tier;db.prepare('INSERT INTO users(id,email,password,display,created_at) VALUES(?,?,?,?,?)').run(id,id+'@test.invalid','disabled',id,Date.now());
   let saved,alarm;const state={id:{toString:()=>id+'-room'},storage:{get:async()=>structuredClone(saved),put:async(k,v)=>{saved=structuredClone(v)},setAlarm:async n=>{alarm=n},deleteAlarm:async()=>{alarm=null}},getWebSockets:()=>[]};
   let room=new E.GameRoom(state,env);const setup=await room.fetch(new Request('https://do/setup',{method:'POST',body:JSON.stringify({players:[{id,name:id},{id:'ignored',name:tier}],seed:1,challengeDifficulty:tier})}));assert.equal(setup.status,200);
-  assert.equal(saved.challengeDifficulty,tier);assert.equal(E.botNpc(tier).decks.length,7);
+  assert.equal(saved.challengeDifficulty,tier);assert.equal(E.botNpc(tier).decks.length,3);
   assert.equal(saved.game.botMarket.side,1);assert.equal(saved.game.botDifficulty,tier);
   const initial=saved.rewardDecks[1].filter(id=>id!=='STARTER_MANA').sort();assert(E.botNpc(tier).decks.some(d=>JSON.stringify([...d.cards].sort())===JSON.stringify(initial)));
   let g=room.room.game;g.turn=8;g.cur=1;g.pending=null;g.market=[];
