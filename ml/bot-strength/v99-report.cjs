@@ -2,7 +2,8 @@ const fs=require('node:fs'),path=require('node:path'),{gzipSync}=require('node:z
 const [lab='/tmp/lore-bot99',out='docs/bot-strength/2026-11-18-v99']=process.argv.slice(2);
 const jobs=JSON.parse(fs.readFileSync(path.join(lab,'final-jobs.json'))),provenance=JSON.parse(fs.readFileSync(path.join(out,'provenance.json')));
 const extra=path.join(lab,'release-jobs.json');if(fs.existsSync(extra))jobs.push(...JSON.parse(fs.readFileSync(extra)));
-for(const [file,hash] of Object.entries(provenance.finalPolicySourceSHA256??{})){if(createHash('sha256').update(fs.readFileSync(file)).digest('hex')!==hash)throw Error('Final source drift '+file);}
+for(const [file,hash] of Object.entries(provenance.releasePolicySourceSHA256??provenance.finalPolicySourceSHA256??{})){if(createHash('sha256').update(fs.readFileSync(file)).digest('hex')!==hash)throw Error('Final source drift '+file);}
+if(provenance.releaseCandidateSHA256){const proof=JSON.parse(fs.readFileSync(path.join(out,'integration-parity.json')));if(proof.beforeSHA256!==provenance.finalCandidateSHA256||proof.afterSHA256!==provenance.releaseCandidateSHA256||proof.reducerTransitions<1200||proof.decisions<24)throw Error('Missing integration parity evidence');}
 const groups=new Map();
 for(const job of jobs){
  const file=path.join(lab,'results',job.name+'.json');if(!fs.existsSync(file))throw Error('Incomplete: '+job.name);
