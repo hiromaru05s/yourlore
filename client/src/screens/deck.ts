@@ -19,7 +19,7 @@ import {disposeCardEffects} from '../ui/cardFinish';
 import {starterCollection,constrainDeckStore} from '../shared/collection';
 import {renderDeckAppearance,type CosmeticGroup} from '../ui/deckAppearance';
 import {isLocalDevAccount,loadLocalGuestProfile} from '../dev/localAccount';
-import {revealCards} from '../ui/assetReadiness';
+import {revealCards,cancelRevealCards} from '../ui/assetReadiness';
 import { homeIcon } from "../ui/homeIcons";
 import { loungeText } from "../ui/loungeText";
 // ============================================================
@@ -322,7 +322,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
       bindZoom(el, c);
       watchNodes.push(el);
     }
-    if(watching)void revealCards(watchEl,watchNodes,()=>watchVersion===watchRevision);else watchEl.replaceChildren();
+    if(watching)void revealCards(watchEl,watchNodes,()=>watchVersion===watchRevision);else {cancelRevealCards(watchEl);watchEl.replaceChildren();}
     if(activeTab==='appearance')renderDeckAppearance(q('deckAppearanceSection'),{
       group:cosmeticGroup,deck:store.list[cur],name:store.list[cur].name||t('deck.slot').replace('{n}',String(cur+1)),owned,error:cosmeticError,
       onPick:(kind,id)=>{if(!owned?.has(id)||saving)return;store.list[cur][kind]=id;render();msgEl.textContent=loungeText('外観を変更しました。「保存」で確定します。','Appearance changed. Save to keep your changes.','외형을 변경했습니다. 저장해 주세요.');},
@@ -404,6 +404,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { dead=true;closeRename?.();closeAppearance?.();handSize.disconnect();guide?.destroy();lifecycle.abort();disposeCardFrames(wrap);disposeCardEffects(wrap); watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { dead=true;closeRename?.();closeAppearance?.();handSize.disconnect();guide?.destroy();lifecycle.abort();disposeCardFrames(wrap);disposeCardEffects(wrap); watchRevision++; cancelRevealCards(watchEl); off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

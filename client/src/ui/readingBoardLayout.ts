@@ -1,7 +1,7 @@
 import {CARD_THICKNESS_SCALE,STOCK_THICKNESS} from './cardThickness';
 export {STOCK_THICKNESS} from './cardThickness';
 /** Meter-authored 01–06 mounts. Every DOM hit area uses the same model-space units. */
-export const READING_ASSETS='/models/reading-board/v1/';
+export const READING_ASSETS='/models/reading-board/v2-shared/';
 export const CARD_METERS=.110;
 // ANCHOR_rift_player/opponent from board.glb, shared by visuals and hit targets.
 export const RIFT_MOUNT={x:.725,z:.245,height:.012};

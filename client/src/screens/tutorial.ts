@@ -10,7 +10,7 @@ import {mountManaSpirit} from '../ui/manaSpirit';
 import {artUrl} from '../ui/cardArt';
 import {TUT_STEPS,TUTORIAL_CHAPTERS,TUTORIAL_TOTAL} from '../shared/tutorialSteps';
 import {tutorialRuleSections} from '../shared/tutorialNotes';
-import {tutorialPartKey} from '../shared/tutorialParts';
+import {tutorialPartKey} from '../shared/tutorialPartMeta';
 import {mountSeekerBook} from '../ui/seekerBook';
 export interface TutorialOptions {tab?:'basics'|'book';justCompleted?:boolean;onboarding?:boolean;}
 import '../styles/tutorialAcademy.css';

@@ -1,5 +1,9 @@
 {
   "current": [
+    "tests/reading-assets-lossless.mjs",
+    "tests/menu-code-boundaries.mjs",
+    "tests/gallery-visibility.mjs",
+    "tests/portrait-clips-lossless.mjs",
     "tests/single-pages.mjs",
     "tests/mana-spending.mjs",
     "tests/slum-merchant.mjs",

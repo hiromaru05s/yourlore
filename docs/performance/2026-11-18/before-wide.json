@@ -1,0 +1,122 @@
+{
+  "origin": "http://127.0.0.1:8798",
+  "samples": [
+    {
+      "name": "login",
+      "readyMs": 413,
+      "count": 302,
+      "p95": 16.799999999999727,
+      "over50": 0,
+      "calls": {},
+      "long": [],
+      "nodes": 70,
+      "cpu": {
+        "TaskDuration": 0.046314999999999995,
+        "ScriptDuration": 0.011485999999999996,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.0009199999999999972,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 1,
+        "JSHeapUsedSize": 9420416
+      },
+      "resourceBodyBytes": 2321498
+    },
+    {
+      "name": "home",
+      "readyMs": 2715,
+      "count": 301,
+      "p95": 16.799999999999272,
+      "over50": 0,
+      "calls": {
+        "gl:": 305,
+        "gl:home-atmosphere-canvas": 6378
+      },
+      "long": [],
+      "nodes": 285,
+      "cpu": {
+        "TaskDuration": 0.24380499999999983,
+        "ScriptDuration": 0.14211900000000002,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.016101000000000004,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 301,
+        "JSHeapUsedSize": 13689524
+      },
+      "resourceBodyBytes": 4740234
+    },
+    {
+      "name": "cards",
+      "readyMs": 913,
+      "count": 274,
+      "p95": 33.30000000000109,
+      "over50": 0,
+      "calls": {},
+      "long": [],
+      "nodes": 5935,
+      "cpu": {
+        "TaskDuration": 5.0165679999999995,
+        "ScriptDuration": 0.0019219999999999793,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0.6709010000000001,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 276,
+        "JSHeapUsedSize": 12831796
+      },
+      "resourceBodyBytes": 7629653
+    },
+    {
+      "name": "single",
+      "readyMs": 398,
+      "count": 301,
+      "p95": 16.799999999999272,
+      "over50": 0,
+      "calls": {
+        "gl:": 303
+      },
+      "long": [],
+      "nodes": 184,
+      "cpu": {
+        "TaskDuration": 0.10386500000000076,
+        "ScriptDuration": 0.038177000000000016,
+        "LayoutDuration": 0,
+        "RecalcStyleDuration": 0,
+        "LayoutCount": 0,
+        "RecalcStyleCount": 0,
+        "JSHeapUsedSize": 11238320
+      },
+      "resourceBodyBytes": 8081167
+    },
+    {
+      "name": "duel",
+      "readyMs": 12501,
+      "count": 296,
+      "p95": 16.700000000004366,
+      "over50": 1,
+      "calls": {
+        "gl:duel-objects-3d": 16912,
+        "gl:d3-canvas": 432,
+        "getComputedStyle": 483,
+        "getBoundingClientRect": 3,
+        "gl:": 23
+      },
+      "long": [
+        {
+          "start": 39934.69999998808,
+          "ms": 106
+        }
+      ],
+      "nodes": 539,
+      "cpu": {
+        "TaskDuration": 0.9660159999999998,
+        "ScriptDuration": 0.4320219999999999,
+        "LayoutDuration": 0.008024000000000031,
+        "RecalcStyleDuration": 0.17402000000000006,
+        "LayoutCount": 40,
+        "RecalcStyleCount": 471,
+        "JSHeapUsedSize": 24125972
+      },
+      "resourceBodyBytes": 44570862
+    }
+  ],
+  "errors": []
+}

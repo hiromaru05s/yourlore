@@ -46,7 +46,7 @@ dialog.appearance-picker::backdrop {background:#030e1fc2;}
 .appearance-picker h2 {font-size:1.2rem;margin:0 0 10px;}
 .appearance-aperture,.appearance-swatch {background-color:var(--appearance-plate);}
 .appearance-preview {position:relative;margin:auto;width:min(230px,30vh);aspect-ratio:1.345;isolation:isolate;}
-.appearance-preview::after {content:'';position:absolute;inset:0;background:url('/art/biblion/refined/portrait-self.png') center/100% 100%;}
+.appearance-preview::after {content:'';position:absolute;inset:0;background:url('/art/biblion/refined/portrait-self.webp') center/100% 100%;}
 .appearance-aperture {position:absolute;inset:0;mask:url('/art/seekers/v2/mask-self.png') center/100% 100%;display:grid;justify-items:center;}
 .appearance-aperture img {position:absolute;bottom:0;left:50%;translate:-50% 0;height:100%;width:auto;}
 

@@ -1,0 +1,36 @@
+[
+  {
+    "width": 1280,
+    "top": {
+      "cards": 430,
+      "paused": 400,
+      "firstPaused": false
+    },
+    "checks": [
+      "offscreen sleep",
+      "scroll resume",
+      "keyboard inspection",
+      "search and reset",
+      "language rebuild",
+      "HOME cleanup"
+    ],
+    "errors": []
+  },
+  {
+    "width": 390,
+    "top": {
+      "cards": 430,
+      "paused": 418,
+      "firstPaused": false
+    },
+    "checks": [
+      "offscreen sleep",
+      "scroll resume",
+      "keyboard inspection",
+      "search and reset",
+      "language rebuild",
+      "HOME cleanup"
+    ],
+    "errors": []
+  }
+]

@@ -237,7 +237,7 @@
 
 /* Refined Biblion materials. Numeric values and interaction remain live. */
 .game button:not(.card):not(.rift-button):not(.utility-control),.duel-dialog button {
-  background: url(/art/biblion/refined/button-idle.png) center/100% 100% no-repeat;
+  background: url(/art/biblion/refined/button-idle.webp) center/100% 100% no-repeat;
   border:0; border-radius:0; box-shadow:none; color:#eee9db;
 }
 .game button:not(.card):not(.rift-button):not(.utility-control):hover:not(:disabled),.duel-dialog button:hover { background-image:url(/art/biblion/refined/button-hover.png); }
@@ -245,8 +245,8 @@
 .stage { inset:0 3% 0; }
 .board-col { row-gap:14px; }
 .pcluster--opp { align-self:start; }
-.pt-ring::after { inset:-8% -8% -5%; background-image:url(/art/biblion/refined/portrait-self.png); background-size:100% 100%; }
-.portrait--opp .pt-ring::after { inset:-22% -3% -6%; background-image:url(/art/biblion/refined/portrait-opp.png); }
+.pt-ring::after { inset:-8% -8% -5%; background-image:url(/art/biblion/refined/portrait-self.webp); background-size:100% 100%; }
+.portrait--opp .pt-ring::after { inset:-22% -3% -6%; background-image:url(/art/biblion/refined/portrait-opp.webp); }
 .pt-ring .avatar { inset:5% 8%; width:84%; height:90%; border-radius:45% 45% 35% 35%; }
 .portrait.is-active .pt-ring::after { filter:drop-shadow(0 0 2px var(--side)); }
 .pt-name { top:auto; bottom:1%; font-size:8px; }
@@ -274,7 +274,7 @@
 .pile--deck[data-bucket="10"] .pile-card { inset:7% 12% 20%; }
 .pile--deck[data-bucket="15"] .pile-card { inset:6% 18% 20%; }
 .pile--shelf .pile-card { inset:30% 18% 30%; clip-path:none; background-size:cover; }
-.pile-count { background:url(/art/biblion/refined/stat-cost.png) center/100% 100%; border:0; width:24px; height:24px; display:grid; place-items:center; padding:0; bottom:0; }
+.pile-count { background:url(/art/biblion/refined/stat-cost.webp) center/100% 100%; border:0; width:24px; height:24px; display:grid; place-items:center; padding:0; bottom:0; }
 .pile-tag { bottom:-12px; }
 .row-aside { display:none; }
 .game .rift-button { flex:none; position:relative; width:calc(var(--field-card-size) * .68); height:calc(var(--field-card-size) * .9); padding:0; background:none; border:0; box-shadow:none; align-self:center; }
@@ -287,7 +287,7 @@
 .mid-aside { position:relative; inset:auto; flex-direction:column; width:86px; flex:0 0 86px; z-index:8; gap:4px; }
 .mp-clock.show { width:74px; height:110px; }
 .hourglass-anchor { width:74px; height:82px; }
-.mp-clock .tc-num { width:62px; padding:6px 8px; border:0; background:url(/art/biblion/refined/button-idle.png) center/100% 100%; font-size:20px; }
+.mp-clock .tc-num { width:62px; padding:6px 8px; border:0; background:url(/art/biblion/refined/button-idle.webp) center/100% 100%; font-size:20px; }
 .game .end-turn-wrap .btn { width:86px; min-height:38px; padding:8px; font-size:10px; }
 .market-counter { padding:10px; gap:12px; border:1px solid #c4c9ca; border-radius:5px; background:#1d3048ed; box-shadow:0 5px 8px #06152b55; align-items:center; }
 .market-sub--supply { padding:32px 9px 23px; border:1px solid #a3d6e3; border-radius:4px; background:#46688555; box-shadow:inset 0 0 12px #8acfe922; }
@@ -298,7 +298,7 @@
 .game .refresh-btn { min-height:26px; padding:4px 10px; }
 .reroll-focus .market-sub--supply { box-shadow:inset 0 0 20px #7aceff55,0 0 6px #a5e6ff; }
 .duel-dialog { background:url(/art/biblion/refined/panel-frame.png) center/100% 100%; border:0; border-radius:0; padding:28px; }
-.dialog-clock { position:sticky; top:0; z-index:20; margin:0 0 10px auto; width:100px; text-align:center; padding:10px 14px; background:url(/art/biblion/refined/button-idle.png) center/100% 100%; color:#fff3d8; font-size:17px; font-variant-numeric:tabular-nums; }
+.dialog-clock { position:sticky; top:0; z-index:20; margin:0 0 10px auto; width:100px; text-align:center; padding:10px 14px; background:url(/art/biblion/refined/button-idle.webp) center/100% 100%; color:#fff3d8; font-size:17px; font-variant-numeric:tabular-nums; }
 .dialog-clock::after { content:""; position:absolute; bottom:5px; left:12%; width:calc(76% * var(--remaining)); height:2px; background:#addcf5; }
 .dialog-clock.warn { color:#ffb9a1; }
 .fx-turnbanner { inset:0; width:100%; height:100%; transform:none; display:flex; flex-direction:column; justify-content:center; align-items:center; background:radial-gradient(ellipse,#0a204780,transparent 70%); border:0; animation:turnBloom .55s cubic-bezier(.15,.8,.2,1) both; }
@@ -340,7 +340,7 @@
 }
 .duel-dialog { background-size:105% 125%; }
 .duel-dialog .modal-row { position:sticky; bottom:0; padding-top:8px; }
-.duel-dialog .is-picked::after { content:"✓"; position:absolute; top:35%; left:30%; width:40%; aspect-ratio:1; display:grid; place-items:center; background:url(/art/biblion/refined/stat-cost.png) center/contain no-repeat; color:#e7faff; font-size:2em; z-index:20; }
+.duel-dialog .is-picked::after { content:"✓"; position:absolute; top:35%; left:30%; width:40%; aspect-ratio:1; display:grid; place-items:center; background:url(/art/biblion/refined/stat-cost.webp) center/contain no-repeat; color:#e7faff; font-size:2em; z-index:20; }
 .pt-mana { bottom:6%; }
 .mana-readout b { font-size:20px; }
 .mana-crystal { height:12px; }
@@ -671,7 +671,7 @@
 .game .card-frame { filter:drop-shadow(0 1px 0 #d3c3a0) drop-shadow(0 1px 0 #655846); }
 .game .pcluster--opp { transform:translateY(calc(var(--pt) * -.15)); }
 .game .pcluster--me { bottom:calc(var(--pt) * -.07); }
-.game .portrait .pt-ring::after { background-image:url(/art/biblion/refined/portrait-opp.png);background-size:contain;inset:0; }
+.game .portrait .pt-ring::after { background-image:url(/art/biblion/refined/portrait-opp.webp);background-size:contain;inset:0; }
 .game .portrait .pt-ring .avatar { inset:16% 12% 8%;width:76%;height:76%; }
 .game .pcluster--me .pt-name { bottom:8%; }
 .game .pcluster--opp .pc-side--r { position:absolute;left:calc(50% + var(--pt)/2 + clamp(95px,12vw,170px) + 24px);top:calc(var(--pt) * .15 + 3px);bottom:auto;padding:0;align-self:start; }

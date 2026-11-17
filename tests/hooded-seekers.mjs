@@ -21,11 +21,11 @@ assert(m.sample(1520).frame<before);m.reset();assert.equal(m.sample(1600).action
 const {seekerPoster,seekerIdle,seekerRecoil,SEEKER_SIZE:size}=await import(`data:text/javascript;base64,${Buffer.from(module).toString('base64')}`);
 const asset=url=>'client/public'+url;
 const idle=await sharp(asset(seekerIdle()),{animated:true}).metadata();
-assert.equal(idle.format,'gif');assert.equal(idle.loop,0);assert.equal(idle.pageHeight,size);assert.equal(idle.width,size);
+assert.equal(idle.format,'webp');assert.equal(idle.loop,0);assert.equal(idle.pageHeight,size);assert.equal(idle.width,size);
 assert(idle.pages>=24 && idle.delay.every(ms=>ms>0) && idle.delay.reduce((a,b)=>a+b,0)>=2000);
 for(const [url,rows] of [[seekerRecoil(),6]]){
  const sheet=await sharp(asset(url)).metadata();assert.deepEqual([sheet.width,sheet.height,sheet.hasAlpha],[size*8,size*rows,true]);
 }
 const poster=await sharp(asset(seekerPoster())).metadata();
 assert.deepEqual([poster.width,poster.height,poster.hasAlpha],[size,size,true]);
-console.log('PASS Seeker recoil timing, retrigger, looping GIF and daylight atlases');
+console.log('PASS Seeker recoil timing, retrigger, looping lossless WebP and daylight atlases');

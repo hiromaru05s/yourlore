@@ -109,8 +109,22 @@ export function coverScreen(root:HTMLElement,firstMenu=false,homeEntrance=false,
  }};
 }
 const reveals=new WeakMap<HTMLElement,AbortController>();
+const galleryVisibility=new WeakMap<HTMLElement,()=>void>();
 export function cancelRevealCards(grid:HTMLElement):void {
  reveals.get(grid)?.abort();reveals.delete(grid);grid.removeAttribute('aria-busy');
+ galleryVisibility.get(grid)?.();galleryVisibility.delete(grid);
+}
+/** Native lazy loading leaves distant artwork pending. Its shimmer must sleep
+ * outside the scrollport instead of repainting hundreds of invisible cards. */
+function watchGalleryVisibility(grid:HTMLElement):void {
+ if(typeof IntersectionObserver==='undefined')return;
+ const cards=[...grid.children].filter((node):node is HTMLElement=>node instanceof HTMLElement&&galleryCards.has(node));
+ if(!cards.length)return;
+ const observer=new IntersectionObserver(entries=>{
+  for(const entry of entries)entry.target.classList.toggle('gallery-offscreen',!entry.isIntersecting);
+ },{root:grid});
+ for(const card of cards){card.classList.add('gallery-offscreen');observer.observe(card);}
+ galleryVisibility.set(grid,()=>{observer.disconnect();for(const card of cards)card.classList.remove('gallery-offscreen');});
 }
 /** Swap only the latest requested page; obsolete failed loads release their retry UI. */
 export async function revealCards(grid:HTMLElement,nodes:Node[],current:()=>boolean):Promise<void>{
@@ -129,7 +143,7 @@ export async function revealCards(grid:HTMLElement,nodes:Node[],current:()=>bool
   await waitAssets(imageUrls(tray),grid,undefined,abort.signal);
   if(abort.signal.aborted)return;
   await Promise.all([...tray.querySelectorAll('img')].filter(i=>i.loading!=='lazy').map(i=>withDeadline(i.decode(),20000,abort.signal).catch(()=>{})));
-  if(!abort.signal.aborted&&current()&&grid.isConnected){grid.replaceChildren(...Array.from(tray.childNodes));grid.scrollTop=0;}
+  if(!abort.signal.aborted&&current()&&grid.isConnected){grid.replaceChildren(...Array.from(tray.childNodes));grid.scrollTop=0;watchGalleryVisibility(grid);}
  } finally {
   tray.remove();
   if(reveals.get(grid)===abort){reveals.delete(grid);grid.removeAttribute('aria-busy');}

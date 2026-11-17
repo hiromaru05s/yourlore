@@ -1,4 +1,4 @@
-import {TUTORIAL_PARTS} from './shared/tutorialParts';
+import {TUTORIAL_PARTS} from './shared/tutorialPartMeta';
 import {showUsernameSetup} from './ui/usernameSetup';
 import {prepareMenuCache} from './ui/menuCache';
 import { getLang } from './i18n';

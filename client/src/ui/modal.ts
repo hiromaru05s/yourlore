@@ -1,7 +1,8 @@
 import {availableDealRewards, type DEAL_REWARDS} from '../shared/starterQuests';
 import type {QuestState} from '../shared/types';
 import { installCardPickerFilters } from './cardPickerFilters';
-import { targetOwner, type PlayIntent } from '../shared/playIntent';
+import type {PlayIntent} from '../shared/playIntent';
+import {targetOwner} from '../shared/targetOwner';
 import {buildMarketStudy,buildHandStudy} from './openingChoices';
 import '../styles/outcomeFinale.css';
 // ============================================================

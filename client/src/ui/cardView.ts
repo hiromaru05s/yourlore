@@ -11,7 +11,7 @@ import { artUrl } from "./cardArt";
 export { ART_V, artUrl } from "./cardArt";
 import type { CardInst, FieldMon, PlayerState, GameState } from "../shared/types";
 import { FRAME_BACK, PASSIVES, cardPassives, frameFor, fieldFrameFor } from "../shared/cards";
-import { curHp, effAtk, effDef, playCost } from "../shared/engine";
+import { curHp, effAtk, effDef, playCost } from "../shared/cardStats";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable, effectSections } from "../shared/cardText";
 import { CARD_RULE_GROUP_LABELS, effectRuleGroup, type EffectRuleGroup } from "../shared/cardEffectHeadings";

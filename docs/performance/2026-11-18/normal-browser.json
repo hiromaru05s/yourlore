@@ -1,0 +1,16 @@
+{
+  "errors": [],
+  "ranked": false,
+  "roomId": "c69ddc23-77ce-4411-bb73-b9702fd3f373",
+  "turn": 3,
+  "checks": [
+    "matchmaking",
+    "opening",
+    "mulligan",
+    "endTurn",
+    "reload same room",
+    "opponent surrender",
+    "result",
+    "return HOME"
+  ]
+}

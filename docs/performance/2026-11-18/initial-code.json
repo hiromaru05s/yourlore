@@ -1,0 +1,91 @@
+{
+  "before": {
+    "entry": "main-BRwN_V7z.js",
+    "files": [
+      {
+        "file": "main-BRwN_V7z.js",
+        "raw": 425317,
+        "gzip": 161284
+      },
+      {
+        "file": "social-D4M9JVvN.js",
+        "raw": 600791,
+        "gzip": 198950
+      },
+      {
+        "file": "assetQueue-CDj-5a8P.js",
+        "raw": 1503144,
+        "gzip": 402028
+      },
+      {
+        "file": "loreCursor-DI5UMyPq.js",
+        "raw": 371,
+        "gzip": 244
+      },
+      {
+        "file": "preload-helper-BXl3LOEh.js",
+        "raw": 1110,
+        "gzip": 650
+      },
+      {
+        "file": "rankPresentation-Cz5fisrp.js",
+        "raw": 31840,
+        "gzip": 11946
+      },
+      {
+        "file": "renderDensity-eCqR3GeM.js",
+        "raw": 545,
+        "gzip": 284
+      }
+    ],
+    "raw": 2563118,
+    "gzip": 775386
+  },
+  "after": {
+    "entry": "main-RzbKZFDa.js",
+    "files": [
+      {
+        "file": "main-RzbKZFDa.js",
+        "raw": 406444,
+        "gzip": 153882
+      },
+      {
+        "file": "social-BqbudLVM.js",
+        "raw": 166036,
+        "gzip": 65432
+      },
+      {
+        "file": "assetQueue-w779RAyj.js",
+        "raw": 885456,
+        "gzip": 243880
+      },
+      {
+        "file": "three-WgZb3ylo.js",
+        "raw": 617175,
+        "gzip": 158321
+      },
+      {
+        "file": "loreCursor-DI5UMyPq.js",
+        "raw": 371,
+        "gzip": 244
+      },
+      {
+        "file": "preload-helper-BXl3LOEh.js",
+        "raw": 1110,
+        "gzip": 650
+      },
+      {
+        "file": "rankPresentation-BMBEQV4-.js",
+        "raw": 31834,
+        "gzip": 11940
+      },
+      {
+        "file": "renderDensity-eCqR3GeM.js",
+        "raw": 545,
+        "gzip": 284
+      }
+    ],
+    "raw": 2108971,
+    "gzip": 634633
+  }
+}
