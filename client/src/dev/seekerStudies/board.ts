@@ -15,7 +15,7 @@ export async function mountBoardStudy(id:string, trigger:(kind:'mana'|'heal',sid
   let last=Promise.resolve();
   function contact(event:Event){
     const selected=studies.find(s=>s.id===select.value)!;
-    if(selected.kind==='mana' || selected.id==='BASE')return; // Use the normal board renderer.
+    if(selected.kind==='mana' || selected.id==='H7')return; // Use the normal board renderer.
     if((event as CustomEvent<string>).detail!==selected.kind)return;
     const film=(event.target as HTMLElement).parentElement?.querySelector<HTMLImageElement>('img.seeker-idle');
     if(!film)return;

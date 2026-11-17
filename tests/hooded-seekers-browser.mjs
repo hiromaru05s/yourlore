@@ -21,13 +21,19 @@ try{
   const history=await page.evaluate(async({action,side})=>{
    const c=document.querySelector(side?'#portraitOpp .seeker-motion':'#portraitMe .seeker-motion'),seen=[c.dataset.action+':'+c.dataset.frame];
    const ob=new MutationObserver(()=>seen.push(c.dataset.action+':'+c.dataset.frame));ob.observe(c,{attributes:true,attributeFilter:['data-frame']});
-   const film=c.nextElementSibling;let stayedLive=true;
-   const checkLive=new MutationObserver(()=>{if(c.dataset.action!=='idle')stayedLive &&= !film.hidden && film.isConnected && (c.dataset.action==='mana'?!!c.parentNode.querySelector('canvas[data-playing=M1]:not([hidden])'):!!film.style.filter);});
+   const film=c.nextElementSibling;let stayedLive=true,usedHealingRise=false;
+   const watchHealing=()=>{
+     if(c.dataset.action!=='heal')return;
+     const filterId=film.style.filter.match(/#([^")]+)/)?.[1];
+     const filter=document.getElementById(filterId);
+     usedHealingRise ||= filter?.querySelector('[data-diffuse]')?.getAttribute('flood-color')==='#58db67';
+   };
+   const checkLive=new MutationObserver(()=>{watchHealing();if(c.dataset.action!=='idle')stayedLive &&= !film.hidden && film.isConnected && (c.dataset.action==='mana'?!!c.parentNode.querySelector('canvas[data-playing=M1]:not([hidden])'):!!film.style.filter);});
    checkLive.observe(c,{attributes:true,attributeFilter:['data-frame']});
    await hoodedBoard.trigger(action,side);
    const deadline=performance.now()+12000;
    while(c.dataset.action!=='idle'&&performance.now()<deadline)await new Promise(requestAnimationFrame);
-   ob.disconnect();checkLive.disconnect();if(!stayedLive)throw Error('Reaction replaced the breathing image');return seen;
+   ob.disconnect();checkLive.disconnect();if(action==='heal'&&!usedHealingRise)throw Error('Healing did not use H7 on the live GIF');if(!stayedLive)throw Error('Reaction replaced the breathing image');return seen;
   },{action,side});histories[action]=history;
   assert.equal(history.some(v=>v.startsWith('heal:')),action==='heal');assert.equal(history.some(v=>v.startsWith('mana:')),action==='mana');assert.equal(history.some(v=>v.startsWith('hurt:')),hit,action+': '+JSON.stringify(history));assert.equal(history.at(-1),'idle:0');checks.push('controller '+action+' '+(hit?'reacts once':'settles to idle'));
  }

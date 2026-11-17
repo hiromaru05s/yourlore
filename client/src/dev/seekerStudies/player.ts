@@ -28,7 +28,7 @@ export function mountStudy(image:HTMLImageElement){
     const complete=new Promise<void>(resolve=>{finish=resolve;});
     image.dataset.playing=study.id;
     if(study===baseline){
-      if(!reference){reference=createSeekerReaction(image,state);image.after(reference.svg);}
+      if(!reference){reference=createSeekerReaction(image,state,true);image.after(reference.svg);}
       reference.play('heal',speed);
     }else if('exposure' in study){green??=createGreenLight(image);}
     else if(!mana){mana=createLayer(image);image.after(mana.canvas);}

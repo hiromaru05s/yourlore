@@ -1,4 +1,5 @@
 // The GIF breathes continuously under the mana illustration and cloth filters.
+import {configureGreenLight,greenLightFilter,healingRise} from './seekerArt/heal';
 import fields from './seekerFields.json';
 import {manaReaction} from './seekerArt/mana';
 import {createLayer} from './seekerArt/layer';
@@ -30,12 +31,13 @@ function pose(kind:keyof typeof recipes,t:number):Pose {
 }
 
 let serial=0;
-export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasElement){
+export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasElement, useBaseline=false){
   const prefix='seeker-cloth-'+(++serial)+'-';
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
   svg.setAttribute('width','0');svg.setAttribute('height','0');svg.style.position='absolute';
   svg.setAttribute('aria-hidden','true');
   svg.innerHTML='<defs>'+kinds.map(k=>{
+    if(k==='heal' && !useBaseline)return greenLightFilter(prefix+k);
     const r=recipes[k];
     return `<filter id="${prefix+k}" x="0" y="0" width="1" height="1" primitiveUnits="objectBoundingBox" color-interpolation-filters="sRGB">
       <feImage href="${r.field}" x="0" y="0" width="1" height="1" preserveAspectRatio="none" result="cloth"/>
@@ -52,9 +54,10 @@ export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasEle
     </filter>`;
   }).join('')+'</defs>';
   const owners=kinds.map(k=>svg.querySelector('#'+prefix+k)!);
+  if(!useBaseline)configureGreenLight(owners[kinds.indexOf('heal')],healingRise);
   const tracks=kinds.map((kind,i)=>({
-    kind, time:-1, speed:1, bend:0, table:new Float32Array(32), carry:undefined as {bend:number; table:Float32Array}|undefined,
-    warp:owners[i].querySelector('feDisplacementMap')!,light:owners[i].querySelector('feFuncA')!,
+    kind, time:-1, speed:1, bend:0, table:new Float32Array(kind==='heal' && !useBaseline?48:32), carry:undefined as {bend:number; table:Float32Array}|undefined,
+    warp:owners[i].querySelector('feDisplacementMap'),light:owners[i].querySelector('feFuncA')!,
   }));
   const ink=createLayer(image);
   let raf=0,previous=0,manaElapsed=-1,repeatMana=false;
@@ -71,16 +74,17 @@ export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasEle
     const filters:string[]=[];let action:Reaction|'idle'='idle',frame=0;
     for(const tr of tracks){
       if(tr.time<0)continue;
-      tr.time+=step*tr.speed;const t=tr.time/recipes[tr.kind].ms;
+      const rising=tr.kind==='heal' && !useBaseline;
+      tr.time+=step*tr.speed;const t=tr.time/(rising?healingRise.duration:recipes[tr.kind].ms);
       if(t>=1){tr.time=-1;tr.carry=undefined;continue;}
       const p=pose(tr.kind,t),q=tr.carry?smooth(tr.time/115):1;
       tr.bend=(tr.carry?.bend??0)*(1-q)+p.bend*q;
-      tr.warp.setAttribute('scale',tr.bend.toFixed(5));
+      tr.warp?.setAttribute('scale',tr.bend.toFixed(5));
       const table=tr.table;
       for(let i=0;i<table.length;i++){
         const d=(i/(table.length-1)-p.front)/p.width;
         // A narrow leading rim, then a wider, weaker wash in its wake.
-        const a=p.strength*(.72*Math.exp(-5*d*d)+.41*Math.exp(-1.9*(d+.68)**2));
+        const a=rising?healingRise.exposure(i/(table.length-1),t):p.strength*(.72*Math.exp(-5*d*d)+.41*Math.exp(-1.9*(d+.68)**2));
         table[i]=(tr.carry?.table[i]??0)*(1-q)+clip(a)*q;
       }
       tr.light.setAttribute('tableValues',Array.from(table,n=>n.toFixed(3)).join(' '));
