@@ -1,6 +1,6 @@
 import {cardName,getLang,t} from '../i18n';
 import {MULLIGAN_MS} from '../shared/opening';
-import {FRAME_BACK,sleeveUrl} from '../shared/cards';
+import {FRAME_BACK,frameFor,sleeveUrl} from '../shared/cards';
 import type {CardInst,GameState,Side} from '../shared/types';
 import {cardEl} from './cardView';
 import {bindZoom,closeZoom,zoomCard} from './cardInspection';
@@ -37,6 +37,10 @@ type Appearance={sleeve?:string|null;frame?:string|null;effect?:string|null};
 function dealtCard(c:CardInst,index:number,appearance:Appearance={}){
   const slot=element('div','study-slot'),lift=element('div','study-lift'),leaf=element('div','study-leaf');
   const face=cardEl(c,{fullArt:true,frame:appearance.frame??undefined,effect:appearance.effect??undefined});
+  const glint=element('span','study-glint');
+  glint.setAttribute('aria-hidden','true');
+  glint.style.maskImage=`url("${frameFor(c.t,true)}")`;
+  face.append(glint);
   face.tabIndex=0;face.setAttribute('role','button');face.setAttribute('aria-label',cardName(c));
   face.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();face.click();}};
   bindZoom(face,c);
