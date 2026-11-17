@@ -271,7 +271,7 @@ export interface GameState {
   fireBrandReworkApplied?: boolean;
   demonRealmReworkApplied?: boolean;
   casinoRallyApplied?: boolean;
-  mercReworkApplied?: boolean;
+  mercReworkApplied?: boolean | 2;
   hexerReworkApplied?: boolean;
   armyAttuneApplied?: boolean;
   heartFirstUid?: string;
