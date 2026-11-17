@@ -22,7 +22,7 @@ import {furnitureUrl} from '../shared/cosmetics';
 import {mountNpcReaction, disposeNpcReactions} from './npcReaction';
 import {characterAppearance} from './characterAppearance';
 import {SEEKER_ID} from './seekerMotion';
-import {seekerPortrait, disposeSeekers} from './seekerAnimation';
+import {boardSeeker, disposeSeekers} from './seekerAnimation';
 import {HandConditionHighlights} from './handCondition';
 import {handFan} from './handFan';
 import {fieldPositions,settleField} from './fieldLayout';
@@ -1061,10 +1061,12 @@ export class GameView {
     const crystals = Array.from({ length: Math.min(MAX_MANA, Math.max(0, emax)) }, (_, i) => `<i class="mana-crystal${i < p.mana ? " is-lit" : ""}" aria-hidden="true"></i>`).join("");
     const npc = npcPortrait(avatar);
     const character = characterAppearance(avatar);
-    el.innerHTML = `
+    const retained = oldRing?.dataset.avatar === (avatar ?? '') && oldRing.dataset.background === background ? oldRing : null;
+    const content = document.createElement('template');
+    content.innerHTML = `
       <span class="pt-vitals"><span class="pt-hp" title="HP ${hp}"><span class="pt-hp-ico">HP</span><b id="hp-${sd}">${hp}</b></span>
       </span>
-      <span class="pt-ring">${avatarHtml(character.id, p.name, 100)}</span>
+      <span class="pt-ring">${retained ? '' : avatarHtml(character.id, p.name, 100)}</span>
       <span class="pt-mana pips" data-mana="${p.mana}" data-maximum="${emax}" data-previous-maximum="${previousMax}" data-previous-mana="${previousMana}" aria-label="${t("game.mana")} ${p.mana}/${emax}"><span class="mana-readout"><b>${p.mana}</b><span class="pt-mana-max">/${emax}</span></span><span class="mana-crystals" style="--mana-rows:${Math.max(1,Math.ceil(Math.min(MAX_MANA,emax)/10))}">${crystals}</span></span>
       ${shield > 0 || dew > 0 || brand > 0 ? `<span class="pt-resources">
         ${shield > 0 ? `<span class="pt-shield" role="img" aria-label="${t('game.shield')} ${p.shield ?? 0}" title="${esc(t('game.shieldTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.shield ?? 0).length)}"><b id="shield-${sd}" aria-hidden="true">${shield}</b></span>` : ""}
@@ -1072,20 +1074,20 @@ export class GameView {
         ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
       <span class="pt-name"><span class="pt-player-name">${esc(p.name)}</span>${medalHtml(medal)}</span>`;
-    const ring = el.querySelector<HTMLElement>('.pt-ring')!;
-    // Keep the frame and canvas together so a counter rerender cannot interrupt a hit.
-    const retained = oldRing?.dataset.avatar === (avatar ?? '') && oldRing.dataset.background === background ? oldRing : null;
-    if (retained) ring.replaceWith(retained);
-    else {
+    const ring = content.content.querySelector<HTMLElement>('.pt-ring')!;
+    if (retained) {
+      // Detaching a native animated image can restart its clock during an HP update.
+      for (const child of [...el.children]) if (child!==retained) child.remove();
+      while (content.content.firstChild!==ring) retained.before(content.content.firstChild!);
+      ring.remove();retained.after(content.content);
+    } else {
+      el.replaceChildren(content.content);
       if (oldRing) disposeNpcReactions(oldRing);
       if (oldPortrait) disposeSeekers(oldRing!);
       ring.dataset.avatar = avatar ?? '';
       ring.dataset.background = background;
       if (character.id === SEEKER_ID) {
-        const loop = new Image();
-        loop.className = 'seeker-idle'; loop.alt = ''; loop.hidden = true;
-        const canvas = seekerPortrait({board:true, background, loop});
-        ring.querySelector('.avatar')!.replaceChildren(canvas, loop);
+        ring.querySelector('.avatar')!.replaceChildren(...boardSeeker(background));
       }
       else if (npc) mountNpcReaction(ring, npc);
     }

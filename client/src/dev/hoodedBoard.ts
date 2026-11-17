@@ -42,10 +42,32 @@ if(import.meta.env.DEV){
  let controller:SeekerBoard;
  function reset(){controller?.destroy();closeOverlay();setFxSkip(false);controller=new SeekerBoard();}
  reset();const stop=startBoardLayout();
- const panel=document.createElement('div');panel.className='hood-board-controls';panel.innerHTML=`<label>対象 <select id="hoodSide"><option value="0">自分</option><option value="1">相手</option></select></label>${(['idle','mana','heal','hurt','heavy','brand','defeat','victory'] as const).map(action=>`<button data-hood-action="${action}">${labels[action]}</button>`).join('')}<button data-reset>リセット</button>`;document.body.append(panel);
+ const panel=document.createElement('div');panel.className='hood-board-controls';panel.innerHTML=`<label>対象 <select id="hoodSide"><option value="0">自分</option><option value="1">相手</option></select></label>${(['idle','mana','heal','hurt','heavy','brand','defeat','victory'] as const).map(action=>`<button data-hood-action="${action}">${labels[action]}</button>`).join('')}<button data-sequence>3種を順に再生</button><button data-reset>リセット</button>`;document.body.append(panel);
  const css=document.createElement('style');css.textContent='.hood-board-controls{position:fixed;z-index:10000;right:10px;top:10px;max-width:min(580px,96vw);display:flex;gap:5px;flex-wrap:wrap;padding:8px;background:#fffef4ed;border:1px solid #d5d8d8;border-radius:6px;color:#233747;font:10px sans-serif}.hood-board-controls button,.hood-board-controls select{font:inherit;padding:6px;border:1px solid #c8d0d5;color:#243748;background:white;border-radius:3px;cursor:pointer}.hood-board-controls label{display:flex;align-items:center;gap:5px}.topbar,.help-callout,.help-fab,.mute-fab{display:none!important}';document.head.append(css);
  panel.querySelectorAll<HTMLButtonElement>('[data-hood-action]').forEach(b=>b.onclick=()=>void controller.trigger(b.dataset.hoodAction as FixtureAction,Number(panel.querySelector<HTMLSelectElement>('select')!.value) as Side));
  panel.querySelector<HTMLButtonElement>('[data-reset]')!.onclick=reset;
+ const sequence=panel.querySelector<HTMLButtonElement>('[data-sequence]')!;
+ let sequenceNumber=0;
+ async function review(){
+   if(sequence.disabled)return;
+   const id=++sequenceNumber, side=Number(panel.querySelector<HTMLSelectElement>('select')!.value) as Side;
+   const board=controller;
+   sequence.disabled=true;
+   try{
+     for(const action of ['mana','heal','hurt'] as const){
+       if(id!==sequenceNumber || board!==controller || board.getState().over)break;
+       const name=side?'#portraitOpp':'#portraitMe';
+       sequence.textContent=labels[action];
+       await board.trigger(action,side);
+       const until=performance.now()+8000;
+       while(id===sequenceNumber && board===controller && performance.now()<until &&
+         document.querySelector<HTMLElement>(name+' .seeker-motion')?.dataset.action!=='idle')await new Promise(requestAnimationFrame);
+       await new Promise(resolve=>setTimeout(resolve,500));
+     }
+   }finally{sequence.disabled=false;sequence.textContent='3種を順に再生';}
+ }
+ sequence.onclick=()=>void review();
+ panel.addEventListener('click',e=>{if(e.target!==sequence)sequenceNumber++;},true);
  await waitForDuel(document.querySelector('#app')!);
  (window as any).hoodedBoard={ready:true,trigger:(action:FixtureAction,side:Side=0)=>controller.trigger(action,side),reset,rerender:()=>controller.rerender(),state:()=>controller.getState(),play:playSeekerSide,skip:setFxSkip,count:seekerPlaybackCount,destroy:()=>{controller.destroy();stop();}};
  window.addEventListener('pagehide',()=>{controller.destroy();stop();},{once:true});

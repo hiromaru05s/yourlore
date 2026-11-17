@@ -1,4 +1,4 @@
-import {playSeekerLight} from '../ui/seekerAnimation';
+import {playSeekerLight,playSeekerSide} from '../ui/seekerAnimation';
 import {playNpcReaction} from '../ui/npcReaction';
 import {pendingText} from '../shared/pendingText';
 import { nextNpcDeck, type BotRotation } from '../shared/botRotation';
@@ -482,6 +482,7 @@ export abstract class BaseController implements BoardHandlers {
     const presentHp=(side:A.ViewSide,hp:number,react=true)=>{
       if(react && hp!==shownHp[side])playNpcReaction(side,hp<shownHp[side]?'hurt':'heal');
       if (react && hp > shownHp[side]) playSeekerLight(side,'heal');
+      if (react && hp < shownHp[side]) playSeekerSide(side,'hurt');
       shownHp[side]=hp;
       A.hpBarSet(side,hp);
       if(hp<=0 && this.lethalSide!==null && side===(this.lethalSide===this.you?"me":"opp"))this.lethalOutcome?.start();
@@ -1180,6 +1181,12 @@ export abstract class BaseController implements BoardHandlers {
       effectFinishes.push(refresh.done.finally(()=>{if(this.marketRefresh===refresh)this.marketRefresh=undefined;}));
     }
     for(const gain of manaGains)effectFinishes.push(A.manaSurge(gain.side,gain.amount));
+    // Growing capacity already cues the portrait at crystal contact. A refill
+    // without a capacity gain cues it when the new readout is on the board.
+    for(const pl of [0,1] as Side[]) {
+      const before=prev.players[pl], after=res.state.players[pl];
+      if(after.mana>before.mana && after.maxMana<=before.maxMana)playSeekerLight(sideOf(pl),'mana');
+    }
     // ghosts overlap the freshly-rendered real cards — drop them next frame
     requestAnimationFrame(() => {ghosts.forEach((g) => g.el.remove());spellGhosts.forEach(g=>g.remove());});
     await Promise.all(([0, 1] as Side[]).map(player => draws[player] > 0

@@ -9,8 +9,6 @@ export const SEEKER_HIT_MS = 800;
 export const seekerPoster = () => '/art/seekers/daylight-v1/portrait.webp';
 export const seekerIdle = () => '/art/seekers/daylight-v1/idle.gif';
 export const seekerRecoil = () => '/art/seekers/daylight-v1/hurt.webp';
-export const seekerManaCrest = () => '/art/seekers/daylight-v1/mana.webp';
-export const seekerHealRise = () => '/art/seekers/daylight-v1/heal.webp';
 export const damageAction = (amount: number): SeekerAction | null => amount > 0 ? 'hurt' : null;
 export class SeekerMotion {
   private elapsed = 0;

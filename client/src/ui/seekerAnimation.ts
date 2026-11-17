@@ -1,15 +1,15 @@
 import '../styles/portraitBackground.css';
+import {createSeekerReaction} from './seekerReaction';
 import type {ProfileBackground} from '../shared/profileAppearance';
-import {SeekerMotion, SEEKER_SIZE, SEEKER_ID, seekerRecoil, seekerManaCrest, seekerHealRise, seekerPoster, seekerIdle, type SeekerAction} from './seekerMotion';
+import {SeekerMotion, SEEKER_SIZE, SEEKER_ID, seekerRecoil, seekerPoster, seekerIdle, type SeekerAction} from './seekerMotion';
 import {seekerName} from './seekerLabels';
 export {SEEKER_ACTIONS, damageAction} from './seekerMotion';
 export type {SeekerAction} from './seekerMotion';
-export const seekerAssets = [seekerPoster(), seekerIdle(), seekerRecoil(), seekerManaCrest(), seekerHealRise()];
-type Player = {motion: SeekerMotion; idle?: HTMLImageElement; recoil?: HTMLImageElement; loop?: HTMLImageElement; last: string; raf: number; board: boolean; request: number};
+export const seekerAssets = [seekerPoster(), seekerIdle(), seekerRecoil()];
+type Player = {motion: SeekerMotion; idle?: HTMLImageElement; recoil?: HTMLImageElement; loop?: HTMLImageElement; rig?: ReturnType<typeof createSeekerReaction>; last: string; raf: number; board: boolean; request: number};
 const players = new Map<HTMLCanvasElement, Player>();
 const images = new Map<string, Promise<HTMLImageElement>>();
-const lightSheets = {mana: seekerManaCrest(), heal: seekerHealRise()};
-type Light = keyof typeof lightSheets;
+type Light = 'mana' | 'heal';
 function drawPose(canvas: HTMLCanvasElement, image: HTMLImageElement, frame: number) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -47,8 +47,8 @@ function paint(canvas: HTMLCanvasElement, player: Player, now: number): void {
     });
   }
 }
-// A native image owns the idle clock; the canvas only paints reactions or a
-// still. Keep both mounted across counter updates and show one layer at a time.
+// Never swap out the GIF for a reaction. The canvas supplies the still for
+// reduced motion, loading or decode failure, and the standalone studio.
 function syncLoop(player: Player) {
   const loop = player.loop;
   if (!loop) return;
@@ -78,15 +78,16 @@ export function seekerPortrait(options: {board?:boolean; background?:ProfileBack
   void load(seekerPoster()).then(img => {
     if (!players.has(canvas)) return;
     player.idle = img;
-    if (!player.raf) paint(canvas, player, performance.now());
+    if (!player.raf && (!player.rig || !canvas.dataset.ready || canvas.dataset.action === 'idle')) paint(canvas, player, performance.now());
   }).catch(() => { if (players.has(canvas)) canvas.dataset.ready = 'error'; });
-  if (player.board && !media?.matches) {
-    void load(seekerRecoil()).then(img => { player.recoil = img; }).catch(() => {});
-    for (const light of ['mana', 'heal'] as const) {
-      void load(lightSheets[light]).catch(() => {});
-    }
-  }
   return canvas;
+}
+export function boardSeeker(background: ProfileBackground): Node[] {
+  const loop=new Image();loop.className='seeker-idle';loop.alt='';loop.hidden=true;
+  const canvas=seekerPortrait({board:true,background,loop});
+  const rig=createSeekerReaction(loop,canvas);
+  players.get(canvas)!.rig=rig;
+  return [canvas,loop,rig.svg];
 }
 export function playSeeker(canvas: HTMLCanvasElement | null, action: SeekerAction): void {
   if (!canvas) return;
@@ -96,6 +97,7 @@ export function playSeeker(canvas: HTMLCanvasElement | null, action: SeekerActio
     resetSeeker(canvas);
     return;
   }
+  if (player.rig) {player.rig.play('hurt');return;}
   const request = ++player.request;
   const start = () => {
     if (request !== player.request || !players.has(canvas)) return;
@@ -107,42 +109,17 @@ export function playSeeker(canvas: HTMLCanvasElement | null, action: SeekerActio
   if (player.recoil) start();
   else void load(seekerRecoil()).then(img => { player.recoil = img; start(); }).catch(() => {});
 }
-/** Both light studies have 57 poses and end on the original idle portrait. */
 export function playSeekerLight(side: 'me' | 'opp', light: Light): void {
-  const canvas = document.querySelector<HTMLCanvasElement>(side === 'me' ? '#portraitMe .seeker-motion' : '#portraitOpp .seeker-motion');
-  if (!canvas || paused || document.hidden || media?.matches || canvas.dataset.action === 'hurt') return;
-  const player = players.get(canvas);
-  if (!player) return;
-  const request = ++player.request;
-  const frameMs = light === 'mana' ? 26 : 32;
-  const start = (image: HTMLImageElement) => {
-    if (request !== player.request || !canvas.isConnected || players.get(canvas) !== player) return;
-    cancelAnimationFrame(player.raf);
-    let elapsed = 0, lastTime = performance.now(), lastFrame = -1;
-    function tick(now: number) {
-      elapsed += Math.min(40, Math.max(0, now - lastTime));
-      lastTime = now;
-      const frame = Math.round(elapsed / frameMs);
-      if (!canvas!.isConnected) { disposeSeeker(canvas!); return; }
-      if (frame >= 56) { resetSeeker(canvas!); return; }
-      if (frame !== lastFrame) {
-        drawPose(canvas!, image, frame);
-        player!.last = light + frame;
-        canvas!.dataset.action = light; canvas!.dataset.frame = String(frame);
-        lastFrame = frame;
-      }
-      player!.raf = requestAnimationFrame(tick);
-    }
-    tick(lastTime);
-  };
-  void load(lightSheets[light]).then(start).catch(() => {});
+  if (paused || document.hidden || media?.matches) return;
+  const canvas=document.querySelector<HTMLCanvasElement>(`#portrait${side==='me'?'Me':'Opp'} .seeker-motion`);
+  if (canvas) players.get(canvas)?.rig?.play(light);
 }
 export function resetSeeker(canvas: HTMLCanvasElement): void {
   const player = players.get(canvas);
   if (!player) return;
   player.request++;
   cancelAnimationFrame(player.raf); player.raf = 0;
-  syncLoop(player); player.motion.reset(); paint(canvas, player, performance.now());
+  player.rig?.reset(); syncLoop(player); player.motion.reset(); paint(canvas, player, performance.now());
 }
 export function playSeekerSide(side: 'me' | 'opp', action: SeekerAction): void {
   playSeeker(document.querySelector<HTMLCanvasElement>(`#portrait${side === 'me' ? 'Me' : 'Opp'} .seeker-motion`), action);
@@ -155,6 +132,7 @@ export function disposeSeeker(canvas: HTMLCanvasElement): void {
   const player = players.get(canvas);
   if (!player) return;
   cancelAnimationFrame(player.raf);
+  player.rig?.reset();
   if (player.loop) player.loop.onload = null;
   players.delete(canvas); if (!players.size) detach();
 }
