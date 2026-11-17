@@ -28,7 +28,8 @@ const vertexShader = `
     gl_Position = vec4(p, 0.0, 1.0);
   }`;
 
-function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
+/** A static scene can supply its own motion field and keep the authored pigment. */
+export function createSeekerPainting(host: HTMLElement, image: HTMLImageElement, standingVertex?: string) {
   const renderer = createWebGLRenderer({alpha:true, antialias:false, powerPreference:'low-power'});
   const texture = new Texture(image);
   texture.colorSpace = SRGBColorSpace;
@@ -36,8 +37,14 @@ function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
   const geometry = new PlaneGeometry(2, 2, 24, 40);
   const material = new ShaderMaterial({
     uniforms:{painting:{value:texture}, time:{value:0}, daylight:{value:new Vector4()}},
-    vertexShader,
-    fragmentShader:`uniform sampler2D painting;
+    vertexShader:standingVertex ?? vertexShader,
+    fragmentShader:standingVertex ? `uniform sampler2D painting;
+      varying vec2 texCoord;
+      void main() {
+        gl_FragColor = texture2D(painting, texCoord);
+        #include <colorspace_fragment>
+        #include <premultiplied_alpha_fragment>
+      }` : `uniform sampler2D painting;
       uniform vec4 daylight;
       varying vec2 texCoord;
       void main() {

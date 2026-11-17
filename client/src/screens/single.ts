@@ -11,6 +11,7 @@ import { mountHomeDuelButton } from '../ui/homeDuelButton';
 import { loungeText as L } from '../ui/loungeText';
 import { storyPortraits } from '../ui/singlePortraits';
 import pageArrow from '../assets/single/page-arrow.svg';
+import { mountSingleIdle } from '../ui/singleIdle';
 import { deckName } from './deckLibrary';
 import '../styles/singlePage.css';
 
@@ -34,8 +35,10 @@ export function mountSingle(app:App, initial:SingleLocation={}):Screen {
   let duel:ReturnType<typeof mountHomeDuelButton>|undefined;
   let drawer:HTMLDialogElement|undefined;
   let dead=false;
+  let stopIdle:(()=>void)|undefined;
   const location=():SingleLocation=>({page,tab:story?'story':'battle'});
   function paint(){
+    stopIdle?.();stopIdle=undefined;
     duel?.destroy();
     const npc=botNpc(SINGLE_DIFFICULTIES[page]),locale=getLang();
     const open=firstUncleared()<0, done=SINGLE_DIFFICULTIES.filter(d=>cleared.has(d)).length;
@@ -53,7 +56,7 @@ export function mountSingle(app:App, initial:SingleLocation={}):Screen {
     root.dataset.story=String(story);
     root.innerHTML=`
       <div class="sp-stage">
-        <div class="sp-art" aria-hidden="true"><img class="sp-figure" src="${story?storyPortraits[0]:'/art/single-standing/'+npc.id+'.webp'}" alt=""></div>
+        <div class="sp-art" aria-hidden="true">${story?`<img class="sp-figure" src="${storyPortraits[0]}" alt="">`:`<span class="sp-figure sp-standing"><img src="/art/single-standing/${npc.id}.webp" alt=""></span>`}</div>
         <div class="sp-shade"></div>
         <header class="sp-head"><nav class="sp-tabs" aria-label="${t('home.bot.title')}">
           <button data-story aria-pressed="${story}" ${open?'':'disabled'}>${open?'':lock}${storyLabel}</button>
@@ -81,6 +84,8 @@ export function mountSingle(app:App, initial:SingleLocation={}):Screen {
           <div class="sp-next"><button data-next ${nextOpen?'':'disabled aria-describedby="sp-unlock"'} aria-label="${nextLabel}">${chevron}${nextOpen?'':lock}</button>
           ${nextOpen?'':`<small id="sp-unlock">${unlock}</small>`}</div></nav>`}
       </div>`;
+    const standing=root.querySelector<HTMLElement>('.sp-standing');
+    if(standing)stopIdle=mountSingleIdle(standing,SINGLE_DIFFICULTIES[page]);
     const button=root.querySelector<HTMLButtonElement>('.single-battle')!;
     duel=mountHomeDuelButton(button);
     duel.setMode('bot');
@@ -143,5 +148,5 @@ export function mountSingle(app:App, initial:SingleLocation={}):Screen {
     paint();
   }).catch(()=>{});
   const off=onLangChange(()=>app.single(location()));
-  return {destroy(){dead=true;off();duel?.destroy();drawer?.close();drawer?.remove();root.remove();}};
+  return {destroy(){dead=true;stopIdle?.();off();duel?.destroy();drawer?.close();drawer?.remove();root.remove();}};
 }
