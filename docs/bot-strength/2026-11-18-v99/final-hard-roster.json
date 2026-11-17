@@ -1,0 +1,44 @@
+[
+  {
+    "name": "BOT \u00b7 SPIRIT_FORTRESS",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "CASTLE",
+      "WEAKEN_ALL",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "BLOOD_RITE"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT \u00b7 SPIRIT_TEMPO",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "ATTUNE_RETURN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT \u00b7 SPIRIT_GOBLIN",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "NOURISHING_RAIN",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  }
+]

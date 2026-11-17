@@ -1,0 +1,42 @@
+[
+  {
+    "name": "final-hard-normal-0",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "final-hard",
+    "rb": "normal",
+    "n": 16,
+    "start": 31002,
+    "candidateSHA256": "c84581c80dc2d83e97ae71d5fd37fee07ce299561cd54fcf5724cdc4a49e4512"
+  },
+  {
+    "name": "final-hard-normal-1",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "final-hard",
+    "rb": "normal",
+    "n": 16,
+    "start": 31010,
+    "candidateSHA256": "c84581c80dc2d83e97ae71d5fd37fee07ce299561cd54fcf5724cdc4a49e4512"
+  },
+  {
+    "name": "final-hard-normal-2",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "final-hard",
+    "rb": "normal",
+    "n": 16,
+    "start": 31018,
+    "candidateSHA256": "c84581c80dc2d83e97ae71d5fd37fee07ce299561cd54fcf5724cdc4a49e4512"
+  },
+  {
+    "name": "final-normal-easy",
+    "A": "new:normal",
+    "B": "new:easy",
+    "ra": "normal",
+    "rb": "easy",
+    "n": 48,
+    "start": 33000,
+    "candidateSHA256": "c84581c80dc2d83e97ae71d5fd37fee07ce299561cd54fcf5724cdc4a49e4512"
+  }
+]

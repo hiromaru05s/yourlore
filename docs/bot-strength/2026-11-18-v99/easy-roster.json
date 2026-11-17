@@ -1,0 +1,20 @@
+[
+  {
+    "name": "BOT · FUNDAMENTALS",
+    "cards": [
+      "HALF_ELF",
+      "GOBLIN",
+      "FLAME",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "tune": {
+      "minBuyEarly": 6,
+      "minBuy": 9,
+      "chestTurn": 4
+    }
+  }
+]

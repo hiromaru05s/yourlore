@@ -1,0 +1,42 @@
+[
+  {
+    "difficulty": "easy",
+    "turn": 5,
+    "changes": 14,
+    "ticks": 610,
+    "botName": "ルミ",
+    "busy": false,
+    "over": false,
+    "errors": []
+  },
+  {
+    "difficulty": "normal",
+    "turn": 5,
+    "changes": 11,
+    "ticks": 551,
+    "botName": "ノエル",
+    "busy": false,
+    "over": false,
+    "errors": []
+  },
+  {
+    "difficulty": "hard",
+    "turn": 5,
+    "changes": 12,
+    "ticks": 921,
+    "botName": "ヴェラ",
+    "busy": false,
+    "over": false,
+    "errors": []
+  },
+  {
+    "difficulty": "hell",
+    "turn": 5,
+    "changes": 8,
+    "ticks": 755,
+    "botName": "シオン",
+    "busy": false,
+    "over": false,
+    "errors": []
+  }
+]

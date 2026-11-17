@@ -1,0 +1,44 @@
+{
+  "BOT \u00b7 SPIRIT_FORTRESS": {
+    "games": 8,
+    "wins": 8,
+    "turnCap": 0,
+    "selected": true
+  },
+  "BOT \u00b7 SPIRIT_TEMPO": {
+    "games": 8,
+    "wins": 6,
+    "turnCap": 0,
+    "selected": true
+  },
+  "BOT \u00b7 GOBLIN": {
+    "games": 8,
+    "wins": 3,
+    "turnCap": 0,
+    "selected": false
+  },
+  "BOT \u00b7 GOLEM_CONTROL": {
+    "games": 8,
+    "wins": 3,
+    "turnCap": 1,
+    "selected": false
+  },
+  "BOT \u00b7 SPIRIT_GOBLIN": {
+    "games": 8,
+    "wins": 6,
+    "turnCap": 0,
+    "selected": true
+  },
+  "BOT \u00b7 MIXED_RALLY": {
+    "games": 8,
+    "wins": 6,
+    "turnCap": 0,
+    "selected": false
+  },
+  "BOT \u00b7 DECAY": {
+    "games": 8,
+    "wins": 4,
+    "turnCap": 0,
+    "selected": false
+  }
+}

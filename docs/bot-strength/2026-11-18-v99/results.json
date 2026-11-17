@@ -1,0 +1,550 @@
+{
+  "method": "Paired seats, real botDecide and opening mulligan, fixed v99 rules, market preference disabled. Confidence interval resamples complete seed pairs; CPU timings are from a shared batch machine.",
+  "provenance": {
+    "base": "9e99fbfd51a85a50cd025840edd333a9c892276d",
+    "baselineVerifiedFromGitArchive": true,
+    "baselineSHA256": "083d9b49e39bf42a9b35b78e65dd213edbcdc78c245df19a411e6f3c3b312f76",
+    "candidateSHA256": "c86bbe3f5663a869edfa411ae779b9ac13683d60432b2ace5954984a9aa991cb",
+    "balanceVersion": 99,
+    "thinkingNodes": {
+      "normal": 3500,
+      "hard": 14000,
+      "hell": 14000
+    },
+    "easyMistakeRate": 0.12,
+    "marketPreference": "disabled in paired benchmark; unchanged in game",
+    "implementationCommit": "70e774b324d6c9bb8356386f870b419ac5b38508",
+    "integratedSourceCommit": "e932738a9c04885a56a4ca3e1702cafb4a713029",
+    "integration": "Includes main through a85e12e67. e025f85e4 adds the public three-tier list. 108e3d16e fixes S3 target eligibility in autoTarget (exclude tribal monsters); that one policy fix is later than the frozen benchmark. Core new difficulty policy/decks and v99 engine rules otherwise match. Final release integration is regression-tested separately.",
+    "node": "v22.22.3",
+    "frozenPolicySourceSHA256": {
+      "client/src/shared/bot.ts": "b3c311586ed06ceeb30c953d8a5077d5754ee955985b335fd980597c711ed71e",
+      "client/src/shared/botActions.ts": "3b811e565262315024fea1c74efa9a032a80060074a9d05b4b02a2fd2fa4bb9a",
+      "client/src/shared/botBudget.ts": "666779363b22e5e7bb0be599e6ba432e2a850a3dbe3999ae7e66a2dc7da5131d",
+      "client/src/shared/botDecks.ts": "94e18471b6a996fb0d596cd29d7b6060e084257adc677bc01426be138fb6c279",
+      "client/src/shared/botEconomy.ts": "c43c3eba3805ce4019e4bec2d3619d89cfb86c7def634085f62f918f1452d089",
+      "client/src/shared/botSearch.ts": "963c807ee6661f379f8cb1599861cc2c3b18944a0121b62235100f86aa330c71",
+      "client/src/shared/botTactics.ts": "1b206a8131f50313a046d293cd727cb41a7fa99f402fec138549ef1b886162d3",
+      "client/src/shared/botObservation.ts": "6734ba6535ad957edcf1147b2b5ec116e70b30517e165ff44002f8b9d0e5525a",
+      "client/src/shared/botOpponentModels.ts": "e36e2414931b44f49e3df11fe1802a1b5fcf589fbe7f444213a61da69b6e93c8",
+      "client/src/shared/engine.ts": "74dd5b52a7b6e98a140d773752735272b5d159e27286b9f3c97d132228d2069a"
+    },
+    "integratedPolicySourceSHA256": {
+      "client/src/shared/bot.ts": "8e83f98a4326329a686936149971b2632203d116bc55cad246b9a2726b80649c",
+      "client/src/shared/botActions.ts": "3b811e565262315024fea1c74efa9a032a80060074a9d05b4b02a2fd2fa4bb9a",
+      "client/src/shared/botBudget.ts": "666779363b22e5e7bb0be599e6ba432e2a850a3dbe3999ae7e66a2dc7da5131d",
+      "client/src/shared/botDecks.ts": "94e18471b6a996fb0d596cd29d7b6060e084257adc677bc01426be138fb6c279",
+      "client/src/shared/botEconomy.ts": "c43c3eba3805ce4019e4bec2d3619d89cfb86c7def634085f62f918f1452d089",
+      "client/src/shared/botSearch.ts": "963c807ee6661f379f8cb1599861cc2c3b18944a0121b62235100f86aa330c71",
+      "client/src/shared/botTactics.ts": "1b206a8131f50313a046d293cd727cb41a7fa99f402fec138549ef1b886162d3",
+      "client/src/shared/botObservation.ts": "6734ba6535ad957edcf1147b2b5ec116e70b30517e165ff44002f8b9d0e5525a",
+      "client/src/shared/botOpponentModels.ts": "e36e2414931b44f49e3df11fe1802a1b5fcf589fbe7f444213a61da69b6e93c8",
+      "client/src/shared/engine.ts": "74dd5b52a7b6e98a140d773752735272b5d159e27286b9f3c97d132228d2069a"
+    },
+    "finalSourceCommit": "ceb99a3daa18ccef9031c39b35e23e8c790668b9",
+    "finalCandidateSHA256": "c84581c80dc2d83e97ae71d5fd37fee07ce299561cd54fcf5724cdc4a49e4512",
+    "finalPolicySourceSHA256": {
+      "client/src/shared/bot.ts": "8e83f98a4326329a686936149971b2632203d116bc55cad246b9a2726b80649c",
+      "client/src/shared/botActions.ts": "3b811e565262315024fea1c74efa9a032a80060074a9d05b4b02a2fd2fa4bb9a",
+      "client/src/shared/botBudget.ts": "666779363b22e5e7bb0be599e6ba432e2a850a3dbe3999ae7e66a2dc7da5131d",
+      "client/src/shared/botDecks.ts": "9f755c844e9d7cedb2c21c5089f73750a8e3bb2d659643c115129c60aa060301",
+      "client/src/shared/botEconomy.ts": "c43c3eba3805ce4019e4bec2d3619d89cfb86c7def634085f62f918f1452d089",
+      "client/src/shared/botSearch.ts": "963c807ee6661f379f8cb1599861cc2c3b18944a0121b62235100f86aa330c71",
+      "client/src/shared/botTactics.ts": "1b206a8131f50313a046d293cd727cb41a7fa99f402fec138549ef1b886162d3",
+      "client/src/shared/botObservation.ts": "6734ba6535ad957edcf1147b2b5ec116e70b30517e165ff44002f8b9d0e5525a",
+      "client/src/shared/botOpponentModels.ts": "e36e2414931b44f49e3df11fe1802a1b5fcf589fbe7f444213a61da69b6e93c8",
+      "client/src/shared/engine.ts": "74dd5b52a7b6e98a140d773752735272b5d159e27286b9f3c97d132228d2069a"
+    },
+    "finalSelection": "Three strongest full-policy starters retained (Spirit Fortress, Spirit Tempo, Spirit Goblin); independent 48-game paired holdout uses final source including S3 fix.",
+    "releaseIntegratedSourceCommit": "448035b305a9acf8a746e3eca862a10a2a7e727b",
+    "releaseCandidateSHA256": "cff57c8e02e9f9aa7ca966f8b28ded8e30c087515efcf798d0fb51f3f6bff255",
+    "releasePolicySourceSHA256": {
+      "client/src/shared/bot.ts": "8e83f98a4326329a686936149971b2632203d116bc55cad246b9a2726b80649c",
+      "client/src/shared/botActions.ts": "3b811e565262315024fea1c74efa9a032a80060074a9d05b4b02a2fd2fa4bb9a",
+      "client/src/shared/botBudget.ts": "666779363b22e5e7bb0be599e6ba432e2a850a3dbe3999ae7e66a2dc7da5131d",
+      "client/src/shared/botDecks.ts": "9f755c844e9d7cedb2c21c5089f73750a8e3bb2d659643c115129c60aa060301",
+      "client/src/shared/botEconomy.ts": "c43c3eba3805ce4019e4bec2d3619d89cfb86c7def634085f62f918f1452d089",
+      "client/src/shared/botSearch.ts": "963c807ee6661f379f8cb1599861cc2c3b18944a0121b62235100f86aa330c71",
+      "client/src/shared/botTactics.ts": "1b206a8131f50313a046d293cd727cb41a7fa99f402fec138549ef1b886162d3",
+      "client/src/shared/botObservation.ts": "6734ba6535ad957edcf1147b2b5ec116e70b30517e165ff44002f8b9d0e5525a",
+      "client/src/shared/botOpponentModels.ts": "e36e2414931b44f49e3df11fe1802a1b5fcf589fbe7f444213a61da69b6e93c8",
+      "client/src/shared/engine.ts": "03a050e18200a7ad1df7867321b283c442965222628ad765e63eb65da4a35ef6",
+      "client/src/shared/cardStats.ts": "ee417bf52d496c563e1f5c6e8e2a021a81be73159888bbc67fee512f0c57efc3",
+      "client/src/shared/botNpcs.ts": "0f2713677f45b1c74c4cd9962b7d5c6fbc2481a449e7271654ad63d4d3353a24"
+    },
+    "releaseIntegration": "4c94f2501 menu/runtime performance work preserved. cardStats extraction verified by identical AST bodies/initializers (17 extracted, 282 remaining engine declarations), 1200 reducer transitions and 24 bot decisions. Strength samples remain frozen before this semantics-preserving extraction.",
+    "shippedSourceCommit": "531091491a7e51637c17abc424eabec0ca7c2309",
+    "shippedCandidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986",
+    "shippedPolicySourceSHA256": {
+      "client/src/shared/bot.ts": "8e83f98a4326329a686936149971b2632203d116bc55cad246b9a2726b80649c",
+      "client/src/shared/botActions.ts": "3b811e565262315024fea1c74efa9a032a80060074a9d05b4b02a2fd2fa4bb9a",
+      "client/src/shared/botBudget.ts": "666779363b22e5e7bb0be599e6ba432e2a850a3dbe3999ae7e66a2dc7da5131d",
+      "client/src/shared/botDecks.ts": "d091e4c9cee59fd02f9c69c23589fbb5b6856035ca853505b4df73b8d25497b2",
+      "client/src/shared/botEconomy.ts": "c43c3eba3805ce4019e4bec2d3619d89cfb86c7def634085f62f918f1452d089",
+      "client/src/shared/botSearch.ts": "963c807ee6661f379f8cb1599861cc2c3b18944a0121b62235100f86aa330c71",
+      "client/src/shared/botTactics.ts": "1b206a8131f50313a046d293cd727cb41a7fa99f402fec138549ef1b886162d3",
+      "client/src/shared/botObservation.ts": "6734ba6535ad957edcf1147b2b5ec116e70b30517e165ff44002f8b9d0e5525a",
+      "client/src/shared/botOpponentModels.ts": "e36e2414931b44f49e3df11fe1802a1b5fcf589fbe7f444213a61da69b6e93c8",
+      "client/src/shared/engine.ts": "03a050e18200a7ad1df7867321b283c442965222628ad765e63eb65da4a35ef6",
+      "client/src/shared/cardStats.ts": "ee417bf52d496c563e1f5c6e8e2a021a81be73159888bbc67fee512f0c57efc3",
+      "client/src/shared/botNpcs.ts": "7c63ac6c608899f895e93f8c74fbc2e14057948331ac3ba18a463db08d84e244"
+    },
+    "shippedSelection": "Removed Spirit Tempo after 0/4 against old Goblin and Mixed Rally. Final roster: Spirit Fortress and Spirit Goblin. New independent 16-game normal comparison and 8-game old-aggro comparison; earlier three-deck validation remains separately reported."
+  },
+  "result": [
+    {
+      "scoreInterval95": [
+        0.48214285714285715,
+        0.7857142857142857
+      ],
+      "intervalMethod": "Seed-pair percentile bootstrap, 10000 resamples",
+      "byDeck": {
+        "BOT · SPIRIT_FORTRESS": {
+          "games": 8,
+          "wins": 8,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · SPIRIT_TEMPO": {
+          "games": 8,
+          "wins": 6,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · GOBLIN": {
+          "games": 8,
+          "wins": 3,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · GOLEM_CONTROL": {
+          "games": 8,
+          "wins": 3,
+          "draws": 0,
+          "atTurnCap": 1
+        },
+        "BOT · SPIRIT_GOBLIN": {
+          "games": 8,
+          "wins": 6,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · MIXED_RALLY": {
+          "games": 8,
+          "wins": 6,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · DECAY": {
+          "games": 8,
+          "wins": 4,
+          "draws": 0,
+          "atTurnCap": 0
+        }
+      },
+      "turnCapWins": 1,
+      "name": "bounded-hard-normal",
+      "games": 56,
+      "pairs": 28,
+      "wins": 36,
+      "draws": 0,
+      "score": 0.6428571428571429,
+      "pairedBootstrap95": [
+        0.48214285714285715,
+        0.7857142857142857
+      ],
+      "endedAtTurnCap": 1,
+      "meanTurns": 23.732142857142858,
+      "decisionMs": {
+        "A": {
+          "n": 4433,
+          "p50": 2145.4107919996604,
+          "p95": 7539.170458999928,
+          "p99": 10176.75641599996,
+          "max": 15659.092083000112,
+          "over15Seconds": 1
+        },
+        "B": {
+          "n": 3966,
+          "p50": 384.9732920001261,
+          "p95": 1641.2910000002012,
+          "p99": 2205.908124999958,
+          "max": 3785.9689589999616,
+          "over15Seconds": 0
+        }
+      }
+    },
+    {
+      "scoreInterval95": [
+        0.32142857142857145,
+        0.75
+      ],
+      "intervalMethod": "Seed-pair percentile bootstrap, 10000 resamples",
+      "byDeck": {
+        "BOT · SPIRIT_FORTRESS": {
+          "games": 4,
+          "wins": 3,
+          "draws": 0,
+          "atTurnCap": 1
+        },
+        "BOT · SPIRIT_TEMPO": {
+          "games": 4,
+          "wins": 0,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · GOBLIN": {
+          "games": 4,
+          "wins": 3,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · GOLEM_CONTROL": {
+          "games": 4,
+          "wins": 3,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · SPIRIT_GOBLIN": {
+          "games": 4,
+          "wins": 2,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · MIXED_RALLY": {
+          "games": 4,
+          "wins": 1,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · DECAY": {
+          "games": 4,
+          "wins": 3,
+          "draws": 0,
+          "atTurnCap": 0
+        }
+      },
+      "turnCapWins": 1,
+      "name": "bounded-hard-old",
+      "games": 28,
+      "pairs": 14,
+      "wins": 15,
+      "draws": 0,
+      "score": 0.5357142857142857,
+      "pairedBootstrap95": [
+        0.32142857142857145,
+        0.75
+      ],
+      "endedAtTurnCap": 1,
+      "meanTurns": 22.75,
+      "decisionMs": {
+        "A": {
+          "n": 1881,
+          "p50": 1780.951417000033,
+          "p95": 7860.376207999885,
+          "p99": 12442.171042000176,
+          "max": 17112.563457999844,
+          "over15Seconds": 2
+        },
+        "B": {
+          "n": 1984,
+          "p50": 1911.1607499998063,
+          "p95": 8802.700666000135,
+          "p99": 12044.262832999928,
+          "max": 17323.60208300012,
+          "over15Seconds": 6
+        }
+      }
+    },
+    {
+      "scoreInterval95": [
+        0.9375,
+        1
+      ],
+      "intervalMethod": "Seed-pair percentile bootstrap, 10000 resamples",
+      "byDeck": {
+        "BOT · SPIRIT_CONTROL": {
+          "games": 12,
+          "wins": 12,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · VAMPIRE": {
+          "games": 12,
+          "wins": 12,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · GOBLIN_V99": {
+          "games": 12,
+          "wins": 11,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · SPIRIT_RAMP": {
+          "games": 12,
+          "wins": 12,
+          "draws": 0,
+          "atTurnCap": 0
+        }
+      },
+      "turnCapWins": 0,
+      "name": "bounded-normal-easy",
+      "games": 48,
+      "pairs": 24,
+      "wins": 47,
+      "draws": 0,
+      "score": 0.9791666666666666,
+      "pairedBootstrap95": [
+        0.9375,
+        1
+      ],
+      "endedAtTurnCap": 0,
+      "meanTurns": 17.708333333333332,
+      "decisionMs": {
+        "A": {
+          "n": 2657,
+          "p50": 162.72862499998882,
+          "p95": 977.4176249999728,
+          "p99": 1502.173375000013,
+          "max": 1853.6290000000154,
+          "over15Seconds": 0
+        },
+        "B": {
+          "n": 2046,
+          "p50": 0.52758300001733,
+          "p95": 3.4079579999670386,
+          "p99": 5.433457999955863,
+          "max": 17.70679100000416,
+          "over15Seconds": 0
+        }
+      }
+    },
+    {
+      "scoreInterval95": [
+        0.7291666666666666,
+        0.9583333333333334
+      ],
+      "intervalMethod": "Seed-pair percentile bootstrap, 10000 resamples",
+      "byDeck": {
+        "BOT · SPIRIT_FORTRESS": {
+          "games": 16,
+          "wins": 13,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · SPIRIT_TEMPO": {
+          "games": 16,
+          "wins": 13,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · SPIRIT_GOBLIN": {
+          "games": 16,
+          "wins": 15,
+          "draws": 0,
+          "atTurnCap": 1
+        }
+      },
+      "turnCapWins": 1,
+      "name": "final-hard-normal",
+      "games": 48,
+      "pairs": 24,
+      "wins": 41,
+      "draws": 0,
+      "score": 0.8541666666666666,
+      "pairedBootstrap95": [
+        0.7291666666666666,
+        0.9583333333333334
+      ],
+      "endedAtTurnCap": 1,
+      "meanTurns": 24.583333333333332,
+      "decisionMs": {
+        "A": {
+          "n": 3876,
+          "p50": 1510.7770000000019,
+          "p95": 5522.131792000029,
+          "p99": 8021.318666999927,
+          "max": 13514.202916000038,
+          "over15Seconds": 0
+        },
+        "B": {
+          "n": 3461,
+          "p50": 332.9913749997504,
+          "p95": 1008.779749999987,
+          "p99": 1380.399999999965,
+          "max": 2251.5860000001267,
+          "over15Seconds": 0
+        }
+      }
+    },
+    {
+      "scoreInterval95": [
+        0.8575264022774743,
+        1
+      ],
+      "intervalMethod": "Conservative boundary bound using independent bounded seed-pair scores; avoids a zero-width all-win bootstrap",
+      "byDeck": {
+        "BOT · SPIRIT_CONTROL": {
+          "games": 12,
+          "wins": 12,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · VAMPIRE": {
+          "games": 12,
+          "wins": 12,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · GOBLIN_V99": {
+          "games": 12,
+          "wins": 12,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · SPIRIT_RAMP": {
+          "games": 12,
+          "wins": 12,
+          "draws": 0,
+          "atTurnCap": 0
+        }
+      },
+      "turnCapWins": 0,
+      "name": "final-normal-easy",
+      "games": 48,
+      "pairs": 24,
+      "wins": 48,
+      "draws": 0,
+      "score": 1,
+      "pairedBootstrap95": [
+        1,
+        1
+      ],
+      "endedAtTurnCap": 0,
+      "meanTurns": 16.395833333333332,
+      "decisionMs": {
+        "A": {
+          "n": 2650,
+          "p50": 176.36541700002272,
+          "p95": 953.6602080000448,
+          "p99": 1537.6537919999973,
+          "max": 2680.6663340000086,
+          "over15Seconds": 0
+        },
+        "B": {
+          "n": 1952,
+          "p50": 0.5753749999857973,
+          "p95": 3.463833000016166,
+          "p99": 7.101541999989422,
+          "max": 18.20325000002049,
+          "over15Seconds": 0
+        }
+      }
+    },
+    {
+      "scoreInterval95": [
+        0.8125,
+        1
+      ],
+      "intervalMethod": "Seed-pair percentile bootstrap, 10000 resamples",
+      "byDeck": {
+        "BOT · SPIRIT_FORTRESS": {
+          "games": 8,
+          "wins": 7,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · SPIRIT_GOBLIN": {
+          "games": 8,
+          "wins": 8,
+          "draws": 0,
+          "atTurnCap": 0
+        }
+      },
+      "turnCapWins": 0,
+      "name": "shipping-hard-normal",
+      "games": 16,
+      "pairs": 8,
+      "wins": 15,
+      "draws": 0,
+      "score": 0.9375,
+      "pairedBootstrap95": [
+        0.8125,
+        1
+      ],
+      "endedAtTurnCap": 0,
+      "meanTurns": 19.4375,
+      "decisionMs": {
+        "A": {
+          "n": 1013,
+          "p50": 1241.1703330000018,
+          "p95": 3967.9225000000442,
+          "p99": 6292.400291000027,
+          "max": 8345.508166999964,
+          "over15Seconds": 0
+        },
+        "B": {
+          "n": 765,
+          "p50": 248.21904200001154,
+          "p95": 750.528333000002,
+          "p99": 1038.9635420000122,
+          "max": 1407.222208000021,
+          "over15Seconds": 0
+        }
+      }
+    },
+    {
+      "scoreInterval95": [
+        0.25,
+        1
+      ],
+      "intervalMethod": "Seed-pair percentile bootstrap, 10000 resamples",
+      "byDeck": {
+        "BOT · SPIRIT_FORTRESS": {
+          "games": 4,
+          "wins": 3,
+          "draws": 0,
+          "atTurnCap": 0
+        },
+        "BOT · SPIRIT_GOBLIN": {
+          "games": 4,
+          "wins": 2,
+          "draws": 0,
+          "atTurnCap": 0
+        }
+      },
+      "turnCapWins": 0,
+      "name": "shipping-hard-old-aggro",
+      "games": 8,
+      "pairs": 4,
+      "wins": 5,
+      "draws": 0,
+      "score": 0.625,
+      "pairedBootstrap95": [
+        0.25,
+        1
+      ],
+      "endedAtTurnCap": 0,
+      "meanTurns": 23.5,
+      "decisionMs": {
+        "A": {
+          "n": 489,
+          "p50": 1272.0490839999984,
+          "p95": 3523.2261249999865,
+          "p99": 4306.79812500003,
+          "max": 4762.095709000016,
+          "over15Seconds": 0
+        },
+        "B": {
+          "n": 635,
+          "p50": 1177.0329580000835,
+          "p95": 4350.9337090000045,
+          "p99": 5848.468041999964,
+          "max": 6758.220292000042,
+          "over15Seconds": 0
+        }
+      }
+    }
+  ]
+}

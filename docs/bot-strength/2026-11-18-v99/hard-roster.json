@@ -1,0 +1,100 @@
+[
+  {
+    "name": "BOT · SPIRIT_FORTRESS",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "CASTLE",
+      "WEAKEN_ALL",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "BLOOD_RITE"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_TEMPO",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "ATTUNE_RETURN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · GOBLIN",
+    "cards": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN",
+      "GOBLIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "GOBLIN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · GOLEM_CONTROL",
+    "cards": [
+      "GOLEM_TEST",
+      "GOLEM_TEST",
+      "GOLEM_TEST",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "WEAKEN_ALL",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_GOBLIN",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "NOURISHING_RAIN",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · MIXED_RALLY",
+    "cards": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC",
+      "TRUMPET"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · DECAY",
+    "cards": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "STARTER_TRASH",
+      "COUNTERCALC",
+      "COUNTERCALC"
+    ],
+    "tune": {}
+  }
+]

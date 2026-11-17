@@ -1,0 +1,65 @@
+[
+  {
+    "name": "bounded-hard-normal-0",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "hard",
+    "rb": "normal",
+    "n": 14,
+    "start": 21000
+  },
+  {
+    "name": "bounded-hard-normal-1",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "hard",
+    "rb": "normal",
+    "n": 14,
+    "start": 21007
+  },
+  {
+    "name": "bounded-hard-normal-2",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "hard",
+    "rb": "normal",
+    "n": 14,
+    "start": 21014
+  },
+  {
+    "name": "bounded-hard-normal-3",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "hard",
+    "rb": "normal",
+    "n": 14,
+    "start": 21021
+  },
+  {
+    "name": "bounded-hard-old-0",
+    "A": "new:hard",
+    "B": "old:hard",
+    "ra": "hard",
+    "rb": "old-hard",
+    "n": 14,
+    "start": 23002
+  },
+  {
+    "name": "bounded-hard-old-1",
+    "A": "new:hard",
+    "B": "old:hard",
+    "ra": "hard",
+    "rb": "old-hard",
+    "n": 14,
+    "start": 23009
+  },
+  {
+    "name": "bounded-normal-easy",
+    "A": "new:normal",
+    "B": "new:easy",
+    "ra": "normal",
+    "rb": "easy",
+    "n": 48,
+    "start": 22000
+  }
+]

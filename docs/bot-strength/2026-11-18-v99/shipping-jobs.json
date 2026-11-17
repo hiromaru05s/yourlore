@@ -1,0 +1,122 @@
+[
+  {
+    "name": "shipping-hard-normal-0",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "shipping-hard",
+    "rb": "normal",
+    "n": 2,
+    "start": 34000,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-normal-1",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "shipping-hard",
+    "rb": "normal",
+    "n": 2,
+    "start": 34001,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-normal-2",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "shipping-hard",
+    "rb": "normal",
+    "n": 2,
+    "start": 34002,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-normal-3",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "shipping-hard",
+    "rb": "normal",
+    "n": 2,
+    "start": 34003,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-normal-4",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "shipping-hard",
+    "rb": "normal",
+    "n": 2,
+    "start": 34004,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-normal-5",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "shipping-hard",
+    "rb": "normal",
+    "n": 2,
+    "start": 34005,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-normal-6",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "shipping-hard",
+    "rb": "normal",
+    "n": 2,
+    "start": 34006,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-normal-7",
+    "A": "new:hard",
+    "B": "new:normal",
+    "ra": "shipping-hard",
+    "rb": "normal",
+    "n": 2,
+    "start": 34007,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-old-aggro-0",
+    "A": "new:hard",
+    "B": "old:hard",
+    "ra": "shipping-hard",
+    "rb": "old-aggro",
+    "n": 2,
+    "start": 35000,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-old-aggro-1",
+    "A": "new:hard",
+    "B": "old:hard",
+    "ra": "shipping-hard",
+    "rb": "old-aggro",
+    "n": 2,
+    "start": 35001,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-old-aggro-2",
+    "A": "new:hard",
+    "B": "old:hard",
+    "ra": "shipping-hard",
+    "rb": "old-aggro",
+    "n": 2,
+    "start": 35002,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  },
+  {
+    "name": "shipping-hard-old-aggro-3",
+    "A": "new:hard",
+    "B": "old:hard",
+    "ra": "shipping-hard",
+    "rb": "old-aggro",
+    "n": 2,
+    "start": 35003,
+    "candidateSHA256": "dcfe634c84da952cc5b37cb7d4ea08dfd6d3fe14ee16fad055629ef236acd986"
+  }
+]

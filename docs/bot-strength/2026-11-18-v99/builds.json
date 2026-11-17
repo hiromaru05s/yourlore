@@ -1,0 +1,338 @@
+[
+  {
+    "name": "OLD BOT · GOBLIN",
+    "cards": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN",
+      "GOBLIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "GOBLIN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "OLD BOT · DECAY",
+    "cards": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "STARTER_TRASH",
+      "COUNTERCALC",
+      "COUNTERCALC"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "OLD BOT · FORTRESS",
+    "cards": [
+      "CASTLE",
+      "WEAKEN_ALL",
+      "WEAKEN_ALL",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "GAMBLER",
+      "CASTLE",
+      "BLOOD_RITE"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "OLD BOT · DEW_CONTROL",
+    "cards": [
+      "ELF_HAVEN",
+      "WEAKEN_ALL",
+      "HALF_ELF",
+      "COUNTERCALC",
+      "ELF_HAVEN",
+      "STARTER_CHEST",
+      "WEAKEN_ALL",
+      "STARTER_TRASH"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "OLD BOT · FIRE_CONTROL",
+    "cards": [
+      "FLAME",
+      "FLAME",
+      "FLAME",
+      "WEAKEN_ALL",
+      "STARTER_TRASH",
+      "CASTLE",
+      "FLAME",
+      "REFRESH_HAND"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "OLD BOT · RIFT",
+    "cards": [
+      "RIFT",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "FOCUS",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "OLD BOT · MIXED_RALLY",
+    "cards": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC",
+      "TRUMPET"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_GROWTH",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "STARTER_CHEST",
+      "STARTER_CHEST",
+      "NOURISHING_RAIN",
+      "ATTUNE_RETURN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_CONTROL",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_RAMP",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GAMBLER",
+      "GAMBLER",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "ATTUNE_RETURN",
+      "STARTER_TRASH"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_FORTRESS",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "CASTLE",
+      "WEAKEN_ALL",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "BLOOD_RITE"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_FIRE",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "FLAME",
+      "FLAME",
+      "FLAME",
+      "STARTER_CHEST",
+      "COUNTERCALC"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_ELF",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "ELF_HAVEN",
+      "HALF_ELF",
+      "HALF_ELF",
+      "NOURISHING_RAIN",
+      "WEAKEN_ALL",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_RIFT",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "RIFT",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "SELECTED_SHIELD",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_GOLEM",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GOLEM_TEST",
+      "GOLEM_TEST",
+      "STARTER_CHEST",
+      "NOURISHING_RAIN",
+      "WEAKEN_ALL",
+      "ATTUNE_RETURN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_GOBLIN",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "NOURISHING_RAIN",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_SUPPLY",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "SUPPLY_LINE",
+      "SUPPLY_LINE",
+      "GAMBLER",
+      "NOURISHING_RAIN",
+      "STARTER_TRASH",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_TEMPO",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "ATTUNE_RETURN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_DEW",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "COUNTERCALC"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_SHIELD",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "RELIC_PROTECTION",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "SELECTED_SHIELD",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · VAMPIRE",
+    "cards": [
+      "NIGHT_CASTLE_GIFT",
+      "NIGHT_CASTLE_GIFT",
+      "GAMBLER",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "COUNTERCALC"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · GOLEM_CONTROL",
+    "cards": [
+      "GOLEM_TEST",
+      "GOLEM_TEST",
+      "GOLEM_TEST",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "WEAKEN_ALL",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · GOBLIN_V99",
+    "cards": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "GOBLIN_SETTLEMENT",
+      "MINI_SPIRIT",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · NORMAL_BALANCED",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GAMBLER",
+      "GHOST",
+      "FLAME",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "NOURISHING_RAIN"
+    ],
+    "tune": {}
+  }
+]

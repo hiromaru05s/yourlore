@@ -1,0 +1,30 @@
+{
+  "scope": "Identical extracted function bodies/initializers and remaining engine declarations; reachable-state reducer and bot-decision differential checks, not a new strength tournament",
+  "ref": "ceb99a3daa18ccef9031c39b35e23e8c790668b9",
+  "integratedCommit": "448035b305a9acf8a746e3eca862a10a2a7e727b",
+  "beforeSHA256": "c84581c80dc2d83e97ae71d5fd37fee07ce299561cd54fcf5724cdc4a49e4512",
+  "afterSHA256": "cff57c8e02e9f9aa7ca966f8b28ded8e30c087515efcf798d0fb51f3f6bff255",
+  "extractedDeclarations": [
+    "isAttuneCard",
+    "isAssassinCard",
+    "isHexer",
+    "deckComp",
+    "MIMIC_IDS",
+    "cullExiled",
+    "hasWorldTreeOnField",
+    "effAtk",
+    "effDef",
+    "curHp",
+    "havenDiscount",
+    "playCost",
+    "isWorldTreeCard",
+    "elfTreeBonus",
+    "runeBoost",
+    "FIRE_IDS",
+    "isFire"
+  ],
+  "unchangedEngineDeclarations": 282,
+  "reducerTransitions": 1200,
+  "games": 9,
+  "decisions": 24
+}

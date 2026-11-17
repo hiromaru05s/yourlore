@@ -1,0 +1,38 @@
+[
+  {
+    "name": "BOT \u00b7 GOBLIN",
+    "cards": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN",
+      "GOBLIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "GOBLIN"
+    ],
+    "tune": {
+      "minBuyEarly": 6,
+      "minBuy": 11,
+      "chestTurn": 6
+    }
+  },
+  {
+    "name": "BOT \u00b7 MIXED_RALLY",
+    "cards": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC",
+      "TRUMPET"
+    ],
+    "tune": {
+      "minBuyEarly": 6,
+      "minBuy": 11,
+      "chestTurn": 6
+    }
+  }
+]

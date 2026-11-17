@@ -1,0 +1,58 @@
+[
+  {
+    "name": "BOT · SPIRIT_CONTROL",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · VAMPIRE",
+    "cards": [
+      "NIGHT_CASTLE_GIFT",
+      "NIGHT_CASTLE_GIFT",
+      "GAMBLER",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "COUNTERCALC"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · GOBLIN_V99",
+    "cards": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "GOBLIN_SETTLEMENT",
+      "MINI_SPIRIT",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_RAMP",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GAMBLER",
+      "GAMBLER",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "ATTUNE_RETURN",
+      "STARTER_TRASH"
+    ],
+    "tune": {}
+  }
+]
