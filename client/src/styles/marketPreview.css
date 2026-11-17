@@ -135,16 +135,22 @@
 #overlayRoot .hand-panel-backdrop{position:absolute;inset:0;width:100%;height:100%;padding:0;border-image:none!important;background:#04102340!important;cursor:pointer}
 .hand-panel-backdrop:focus-visible{outline:2px solid #b8dafa;outline-offset:-4px}
 .hand-resume{
-  position:absolute;z-index:2;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));
-  display:flex;align-items:center;gap:14px;min-height:46px;padding:8px 16px;color:#edf5fb;
+  position:absolute;z-index:2;
+  right:calc(env(safe-area-inset-right) + clamp(24px,7vw,88px));
+  bottom:calc(env(safe-area-inset-bottom) + clamp(24px,5dvh,52px));
+  display:flex;align-items:center;gap:17px;min-height:55px;padding:10px 19px;color:#edf5fb;
   background:linear-gradient(115deg,#132d43,#0a1728);border:1px solid #99bbd1;border-radius:4px;
-  box-shadow:0 4px 14px #04102199;font:600 14px/1.2 system-ui,sans-serif;cursor:pointer;
+  box-shadow:0 4px 14px #04102199;font:600 17px/1.2 system-ui,sans-serif;cursor:pointer;
 }
-.hand-resume .study-clock{--silk:#85b6d5;display:flex;align-items:center;gap:5px;min-width:0;padding:0 0 3px}
+/* In landscape the player’s hand occupies the bottom strip. */
+@media (orientation:landscape){
+  .hand-resume{bottom:calc(env(safe-area-inset-bottom) + clamp(24px,22dvh,140px))}
+}
+.hand-resume .study-clock{--silk:#85b6d5;display:flex;align-items:center;gap:6px;min-width:0;padding:0 0 4px}
 .hand-resume .study-clock.running-low{--silk:#e1b98c}
-.hand-resume .study-seconds{font-size:22px}
-.hand-resume .study-clock-label{font-size:10px}
-.hand-resume-label::before{content:"↩";margin-right:6px;color:#b7d8ed}
+.hand-resume .study-seconds{font-size:26px}
+.hand-resume .study-clock-label{font-size:12px}
+.hand-resume-label::before{content:"↩";margin-right:7px;color:#b7d8ed}
 .hand-resume:focus-visible{outline:2px solid #c5e6fa;outline-offset:2px}
 .hand-panel[hidden],.hand-resume[hidden],.hand-panel-backdrop[hidden]{display:none}
 @media(max-width:720px) and (orientation:portrait){
