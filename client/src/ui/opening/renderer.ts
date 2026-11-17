@@ -1,11 +1,12 @@
 import {medalName} from '../medal';
 import {OPENING_PORTRAIT_URL} from './assets';
 import {npcPortrait} from "../../shared/botNpcs";
-import {resultScene,RESULT_TIMING} from './result';
+import {resultScene,RESULT_TIMING,paintOrderSurface,paintOrder,orderMetal} from './result';
 import {createOpeningCoin} from './coin';
 import {createOpeningLight} from './light';
 import {paintSeam,type Point} from './seam';
 import {getLang} from '../../i18n';
+import {OPENING_TOSS_MS} from '../../shared/opening';
 export type Options={first:boolean;light:boolean;reduced:boolean;board:boolean;names?:[string,string];avatars?:[string|null,string|null];medals?:[string|null,string|null]};
 const clamp=(n:number)=>Math.min(1,Math.max(0,n));
 const smooth=(n:number)=>{n=clamp(n);return n*n*(3-2*n);};
@@ -34,8 +35,8 @@ function dispose(){disposed=true;disposeCoin();disposeLight();portraits=[];npcIm
 function draw(c:HTMLCanvasElement,time:number,o:Options){
  const g=c.getContext('2d')!,W=1280,H=W*c.height/c.width,M=H>1000,U=M?1.25:1;
  g.setTransform(c.width/W,0,0,c.width/W,0,0);g.clearRect(0,0,W,H);
- const v={duration:RESULT_TIMING.end,exit:RESULT_TIMING.exit,land:RESULT_TIMING.land,toss:1.46},t=Math.max(0,time),cx=W/2,cy=H*(M?.475:.47);
- const gold='#e1ceac',ivory='#fff9e9',blue='#91c5df',red='#e8a093';
+ const v={duration:RESULT_TIMING.end,exit:RESULT_TIMING.exit,land:RESULT_TIMING.land,toss:OPENING_TOSS_MS/1000},t=Math.max(0,time),cx=W/2,cy=H*(M?.475:.47);
+ const ivory='#fff9e9';
  const boardReveal=smooth((t-v.exit)/(v.duration-v.exit));
  const fill=(a:number)=>{g.fillStyle=o.light?`rgba(224,219,208,${a})`:`rgba(5,10,17,${a})`;g.fillRect(0,0,W,H);};
  const poly=(points:number[][],color:string)=>{g.beginPath();points.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();g.fillStyle=color;g.fill();};
@@ -48,7 +49,14 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
   g.beginPath();g.moveTo(x-w/2,y-h/2);g.lineTo(x+w/2,y-h/2);g.lineTo(x+w/2-6,y);g.lineTo(x+w/2,y+h/2);g.lineTo(x-w/2,y+h/2);g.lineTo(x-w/2+6,y);g.closePath();g.fill();g.stroke();
   g.fillStyle='#beb6a3';g.textAlign='center';g.textBaseline='middle';g.fillText(name,x,y,w-24*U);g.restore();
  };
- const coin=(x:number,y:number,r:number,rx:number,ry:number,rz:number,alpha=1,heat=0)=>{if(r<1||alpha<.001)return;const im=coinImage(rx,ry,rz,o.first);g.save();g.globalAlpha*=alpha;if(im){const sz=r*2.82;g.drawImage(im,x-sz/2,y-sz/2,sz,sz);if(heat>0){hg.clearRect(0,0,640,640);hg.globalCompositeOperation='source-over';hg.drawImage(im,0,0);hg.globalCompositeOperation='source-in';hg.fillStyle='#fff3cd';hg.fillRect(0,0,640,640);hg.globalCompositeOperation='source-over';g.save();g.globalAlpha*=heat;g.globalCompositeOperation='screen';g.shadowColor='#ffe3a2';g.shadowBlur=20*heat;g.drawImage(hot,x-sz/2,y-sz/2,sz,sz);g.restore();}}else{g.translate(x,y);g.rotate(rz);g.scale(Math.max(.06,Math.abs(Math.cos(ry))),1);g.fillStyle='#bca273';g.beginPath();g.arc(0,0,r,0,7);g.fill();g.strokeStyle=ivory;g.lineWidth=3;g.stroke();text(o.first?'I':'II',0,0,r*.75,'#18252b');}g.restore();};
+ const coin=(x:number,y:number,r:number,rx:number,ry:number,rz:number,alpha=1,heat=0)=>{if(r<1||alpha<.001)return;const im=coinImage(rx,ry,rz,o.first);g.save();g.globalAlpha*=alpha;if(im){const sz=r*2.82;g.drawImage(im,x-sz/2,y-sz/2,sz,sz);if(heat>0){hg.clearRect(0,0,640,640);hg.globalCompositeOperation='source-over';hg.drawImage(im,0,0);hg.globalCompositeOperation='source-in';hg.fillStyle='#fff3cd';hg.fillRect(0,0,640,640);hg.globalCompositeOperation='source-over';g.save();g.globalAlpha*=heat;g.globalCompositeOperation='screen';g.shadowColor='#ffe3a2';g.shadowBlur=20*heat;g.drawImage(hot,x-sz/2,y-sz/2,sz,sz);g.restore();}}else{
+   const projection=Math.cos(ry+(o.first?0:Math.PI)),front=projection>=0;
+   g.translate(x,y);g.rotate(rz);g.scale(Math.max(.06,Math.abs(projection)),1);
+   g.beginPath();g.arc(0,0,r,0,Math.PI*2);g.fillStyle=front?'#172c3c':'#39232e';g.fill();
+   g.strokeStyle='#d2bd94';g.lineWidth=r*.08;g.stroke();
+   g.beginPath();g.arc(0,0,r*.84,0,Math.PI*2);g.lineWidth=1.5;g.stroke();
+   text(front?'I':'II',0,0,r*.75,ivory);
+  }g.restore();};
  const portrait=(side:number,x:number,y:number,w:number,h:number,zoom=1)=>{
   const avatar=o.avatars?.[side],npc=avatar?npcImages.get(avatar):undefined;
   const im=npc??portraits[side];if(!im)return;
@@ -59,40 +67,64 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
  };
  if(t>=v.duration)return;
  fill((1-boardReveal)*.99);
- if(o.reduced&&t<v.land){portrait(0,W*.26,H*.36,480,440);portrait(1,W*.74,H*.36,480,440);text('DUEL',cx,H*.73,70,gold,'Georgia',12);return;}
  const launch=clamp((t-v.toss)/(v.land-v.toss));
- const exit=out((t-v.toss)/.60),anticipate=smooth((t-1.12)/.19),hit=clamp((t-1.36)/.055);
- const contact=t>=1.36&&t<1.46;
- const impact=Math.exp(-Math.max(0,t-1.46)*14)*Number(t>=1.46);
- const enter=out(t/.5),recoil=contact?0:Math.sin(clamp((t-1.46)/.34)*Math.PI)*14;
- const shake=t>=1.46&&t<1.72?Math.sin((t-1.46)*95)*impact*4:0;
- const scale=1+anticipate*.018+impact*.035;
- // No coin is rendered before contact. VS light is the sole source of its reveal.
- if(exit<1){
-  g.save();g.translate(cx+shake,cy+shake*.4);g.scale(scale,scale);g.translate(-cx,-cy);
-  const open=out(t/.26),letterbox=(1-open)*H*.25+H*.055;
-  for(let s=0;s<2;s++){
-   const sign=s?1:-1;
-   let dx=sign*((1-enter)*W*.64-anticipate*15+hit*12+recoil+exit*760);
-   let dy=sign*exit*H*.025;
-   if(M){dx=sign*((1-enter)*W*.7+exit*700);dy=sign*exit*H*.18;}
-   const yy=M?H*(s?.29:.69):H*.50,xx=M?cx:W*(s?.755:.245);
+ const age=t-v.land,assigned=age>=0;
+ const enter=out(t/.52),anticipate=smooth((t-1.06)/.22),hit=out((t-1.29)/.17);
+ const impact=t<v.toss?0:Math.exp(-(t-v.toss)*15);
+ const recoil=Math.sin(clamp((t-v.toss)/.25)*Math.PI)*6;
+ const contactGap=(1-enter)*W*.70+anticipate*19-hit*19+recoil;
+ const bars=H*(.055+(1-out(t/.26))*.20);
+ const scale=1+impact*.012;
+ g.save();if(o.reduced)g.globalAlpha*=1-boardReveal;g.translate(cx,cy);g.scale(scale,scale);g.translate(-cx,-cy);
+ for(let s=0;s<2;s++){
+   const sign=s?1:-1, first=s===0?o.first:!o.first;
+   const away=contactGap+(o.reduced?0:boardReveal*(M?H*.50:W*.55));
+   const dx=M?0:sign*away,dy=M?-sign*away:0;
+   const yy=M?H*(s?.30:.66):H*.50,xx=M?cx:W*(s?.755:.245);
+   const edge:Point[]=M?[[26,cy+30],[W-26,cy-30]]:[[cx+58,bars],[cx-67,H-bars]];
+   const top=M?Math.max(bars,cy-H*.37):bars,base=M?Math.min(H-bars,cy+H*.37):H-bars;
+   const pts=M?(s?[[26,top+33],[W-26,top],...edge.slice().reverse()]:[...edge,[W-26,base-33],[26,base]]):
+     s?[...edge,[W+2,H-bars],[W+2,bars]]:[[-2,bars],...edge,[-2,H-bars]];
    g.save();g.translate(dx,dy);
-   const edge:Point[]=Array.from({length:41},(_,i)=>{const q=i/40;return M?[28+q*(W-60),cy+(s?-32:32)-.04*(28+q*(W-60)-cx)]:[cx+(s?66:37)-119*q,letterbox+q*(H-2*letterbox)];});
-   const pts=M?(s?[[28,yy-260],[W-32,yy-305],...edge.slice().reverse()]:[...edge,[W-12,yy+245],[48,yy+290]]):s?[...edge,[W+80,H-letterbox],[W+80,letterbox]]:[[-80,letterbox],...edge,[-80,H-letterbox]];
-   poly(pts,s?'#412730':'#192d45');g.clip();
-   const z=1+out(t/1.2)*.045+exit*.035;
-   portrait(s,xx-sign*anticipate*8,yy,M?1120:780,M?Math.max(660,H*.45):H*1.05,z);
-   // Light wraps only the contact-facing edge of the source surface.
-   const shade=g.createLinearGradient(s?W:0,0,cx,0);shade.addColorStop(0,'#05091400');shade.addColorStop(.68,'#05091400');shade.addColorStop(1,'#0509148a');g.fillStyle=shade;g.fillRect(0,0,W,H);
-   const irradiance=smooth((t-1.34)/.065)*Math.exp(-Math.max(0,t-1.395)*9);const rim=anticipate*.12+impact*.35+irradiance*.95;if(rim>0){g.save();g.globalCompositeOperation='screen';g.globalAlpha=rim;const lg=g.createLinearGradient(cx-150,0,cx+150,0);lg.addColorStop(0,'#d2e4ff00');lg.addColorStop(.43,s?'#f6c4a345':'#b8dcff60');lg.addColorStop(.52,'#fff6d190');lg.addColorStop(1,'#f6c4a300');g.fillStyle=lg;g.fillRect(cx-150,0,300,H);g.restore();}
-   const bottom=g.createLinearGradient(0,yy+70,0,yy+(M?280:H*.42));bottom.addColorStop(0,'#03081300');bottom.addColorStop(1,'#030813bd');g.fillStyle=bottom;g.fillRect(0,yy,W,H);
+   poly(pts,'#19212d');g.clip();
+   portrait(s,xx,yy,M?1190:780,M?H*.42:H*1.05,1+out(t/1.2)*.045);
+   // Local shading keeps the artwork legible behind the coin and nameplate.
+   const bottom=M?(s?cy:base):H-bars;
+   const foot=g.createLinearGradient(0,bottom-(M?H*.15:H*.37),0,bottom);
+   foot.addColorStop(0,'#05091300');foot.addColorStop(.62,'#070e1db5');foot.addColorStop(1,'#030812ed');
+   g.fillStyle=foot;g.fillRect(0,top,W,base-top);
+   const charge=smooth((t-1.31)/.12)*Math.exp(-Math.max(0,t-1.45)*11);
+   if(charge>.002){
+     const glow=g.createRadialGradient(cx,cy,0,cx,cy,W*.30);glow.addColorStop(0,'#ffe5aeba');glow.addColorStop(.55,'#e9c49028');glow.addColorStop(1,'#e9c49000');
+     g.save();g.globalAlpha*=charge;g.fillStyle=glow;g.fillRect(0,top,W,base-top);g.restore();
+   }
+   const reach=Math.hypot(W*(M?.53:.54),M?H*.4:H*.52);
+   paintOrderSurface(g,cx,cy,reach,age,first);
+   // Engraved perimeter carries the new colour even after the travelling front settles.
+   const metal=orderMetal(first);
+   if(age>0){
+     g.save();g.globalAlpha*=smooth(age/.5);
+     const enamel=g.createLinearGradient(0,bottom-(M?H*.17:H*.29),0,bottom);
+     enamel.addColorStop(0,metal.deep+'00');enamel.addColorStop(.72,metal.deep+'6b');enamel.addColorStop(1,metal.enamel+'ad');
+     g.fillStyle=enamel;g.fillRect(0,top,W,base-top);g.restore();
+   }
+   g.beginPath();pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();
+   g.strokeStyle=assigned?metal.rim:'#bfc7c9';g.lineWidth=M?4:2.2;g.stroke();
+   paintSeam(g,edge,t);
+   const orderSize=M?78:Math.min(62,H*.087);
+   const orderY=bottom-(M?H*.085:H*.155);
+   paintOrder(g,xx,orderY,orderSize,age,first);
+   const nameY=bottom-(M?H*.035:H*.06);
+   g.save();g.globalAlpha*=out((t-.22)/.42);
+   const fallbackName=getLang()==='ja'?'シーカー':getLang()==='ko'?'시커':'SEEKER';
+   const textTone=assigned?metal.metal:'#ede5d6';
+   text(s?'OPPONENT':'YOU',xx,nameY-(M?39:26),M?27:13,textTone,'sans-serif',M?5:3);
+   g.font=`500 ${M?43:23}px "Yu Mincho",serif`;g.fillStyle=ivory;g.textAlign='center';g.textBaseline='middle';
+   g.fillText(o.names?.[s]??fallbackName,xx,nameY,M?W*.72:W*.39);
+   inscription(s,xx,nameY+(M?43:26));g.restore();
    g.restore();
-   g.save();g.translate(dx,dy);g.globalAlpha=(1-exit);paintSeam(g,edge,t);g.restore();
-   if(t<1.4){g.save();g.globalAlpha=out((t-.3)/.4)*(1-smooth((t-1.1)/.28));const ny=M?yy+202:H*.81;text(s?'OPPONENT':'YOU',xx,ny,14*U,s?red:blue,'sans-serif',4);text(o.names?.[s]??(getLang()==='ja'?'シーカー':getLang()==='ko'?'시커':'SEEKER'),xx,ny+33*U,25*U,ivory,'"Yu Mincho",serif',2);inscription(s,xx,ny+65*U);g.restore();}
-  }
-  g.restore();
  }
+ g.restore();
  // A dark local backing and a keyline protect VS from both portraits and bright seams.
  // The lettering is read first, then grows, burns white, and contracts into the same light as the coin.
  const vsCharge=smooth((t-1.08)/.28),vsBurst=smooth((t-1.35)/.10),vsFold=smooth((t-1.40)/.14);
@@ -115,24 +147,13 @@ function draw(c:HTMLCanvasElement,time:number,o:Options){
   let x=cx,y=cy,r=0,rx=0,ry=0,rz=0;
   const baseR=U*mix(48,122,out(p/.30));
   x=cx+Math.sin(p*Math.PI)*65*U;y=cy-flight*155*U;r=baseR*(1+.12*flight);rx=.28*Math.sin(p*Math.PI);ry=1.28+(Math.PI*6-1.28)*out(p);rz=-.22+.30*flight;
-  // A final small rocking settle keeps the stop from looking like a frozen texture.
-  if(t>=v.land){const q=t-v.land;x=cx;y=cy;r=122*U;rx=Math.sin(q*23)*Math.exp(-q*12)*.15;ry=Math.PI*6;rz=-.22*Math.exp(-q*9);}
-  if(t<v.land){rz*=1-smooth((p-.85)/.15);}
+  rz*=1-smooth((p-.85)/.15);
   // Short authored motion arcs are anchored to the projected rim and die before apex.
   if(p<.3){const a=Math.sin(clamp(p/.3)*Math.PI)*.3;g.save();g.globalAlpha=a;g.translate(x,y);g.rotate(rz);for(let n=0;n<3;n++){g.strokeStyle=n?'#8eacc577':'#e8d7b0';g.lineWidth=n?1:2;g.beginPath();g.ellipse(-22*n,25+16*n,r*(.9+n*.15),r*(.40+n*.12),-.2,.1,1.6);g.stroke();}g.restore();}
   coin(x,y,r,rx,ry,rz,smooth((t-v.toss)/.13),1-smooth((t-v.toss-.06)/.32));
  }
  resultScene(g,t,W,H,o,coin);
- // Keep both identities readable again after the coin, including reduced motion.
- if(t>=v.land&&t<v.duration){
-  g.save();g.globalAlpha=(1-boardReveal)*smooth((t-v.land)/.25);
-  for(const s of [0,1]){const x=W*(s?.76:.24),y=H*(M?.83:.84);
-   g.font=`400 ${25*U}px "Yu Mincho",serif`;g.fillStyle=ivory;g.textAlign='center';g.textBaseline='middle';
-   g.fillText(o.names?.[s]??'',x,y,W*.40);inscription(s,x,y+34*U);
-  }g.restore();
- }
- // Quiet framing, with no floating decorative rings or random particle field.
- if(t<1.16){g.save();g.globalAlpha=out(t/.4)*.8;text('L O R E',cx,M?78:46,13,gold,'Georgia',4);g.restore();}
+
 }
 
 return {loadAssets,draw,dispose};

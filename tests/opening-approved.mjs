@@ -16,12 +16,12 @@ const qa=globalThis.openingQA={draws:[],disposed:0,cues:[],stops:0,load:()=>Prom
 const flush=async()=>{for(let i=0;i<25;i++)await Promise.resolve();};
 const step=async ms=>{now=ms;const pending=[...frames.values()];frames.clear();pending.forEach(fn=>fn(now));await flush();};
 try{
- await build({stdin:{contents:"export * from './client/src/ui/duelOpeningDirector';export {resultScene,RESULT_TIMING} from './client/src/ui/opening/result';export {setLang} from './client/src/i18n';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:dir+'/director.mjs',plugins:[{name:'isolate-gpu-and-audio',setup(b){
+ await build({stdin:{contents:"export * from './client/src/ui/duelOpeningDirector';export {resultScene,paintOrder,RESULT_TIMING} from './client/src/ui/opening/result';export {setLang} from './client/src/i18n';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:dir+'/director.mjs',plugins:[{name:'isolate-gpu-and-audio',setup(b){
   b.onResolve({filter:/opening\/renderer$/},()=>({path:'renderer',namespace:'fixture'}));
   b.onResolve({filter:/openingSound$/},()=>({path:'sound',namespace:'fixture'}));
   b.onLoad({filter:/.*/,namespace:'fixture'},({path})=>({contents:path==='renderer'?`export function createOpeningRenderer(){return {loadAssets:()=>globalThis.openingQA.load(),draw:(c,t,o)=>globalThis.openingQA.draws.push({t,o}),dispose:()=>globalThis.openingQA.disposed++};}`:`export async function warmOpeningSound(){};export function openingAudio(){return{play:c=>globalThis.openingQA.cues.push(c),stop:()=>globalThis.openingQA.stops++}}` }));
  }}]});
- const {playDuelOpening,setLang,resultScene,RESULT_TIMING}=await import(dir+'/director.mjs');setLang('ja');
+ const {playDuelOpening,setLang,resultScene,paintOrder,RESULT_TIMING}=await import(dir+'/director.mjs');setLang('ja');
  // Render the real selected result: preserve the incoming coin pose on both aspect ratios.
  const glyphs=[];const gradient={addColorStop(){}};
  const ctx=new Proxy({globalAlpha:1,fillText:s=>glyphs.push(s),measureText:s=>({width:[...s].length*60}),createLinearGradient:()=>gradient,createRadialGradient:()=>gradient},{get:(o,k)=>o[k]??(()=>{})});
@@ -32,9 +32,13 @@ try{
   assert.deepEqual(poses.pop().slice(0,6),[640,height*(height>1000?.475:.47),122*(height>1000?1.25:1),0,Math.PI*6,-0]);
   resultScene(ctx,RESULT_TIMING.end,1280,height,opts,coin);assert.equal(poses.length,0);
   for(const lang of ['ja','en','ko']){
-   setLang(lang);glyphs.length=0;resultScene(ctx,4.1,1280,height,opts,coin);
-   assert(glyphs.join('').includes(lang==='ja'?'あなたは':lang==='en'?'YOU GO':'당신은'));
-   assert(glyphs.join('').includes(lang==='ja'?(first?'先攻':'後攻'):lang==='en'?(first?'FIRST':'SECOND'):(first?'선공':'후공')));
+   setLang(lang);glyphs.length=0;
+   for(const myTurn of [first,!first])paintOrder(ctx,320,550,60,0,myTurn);
+   assert.equal(glyphs.length,0,'no turn assignment before the coin lands');
+   for(const myTurn of [first,!first])paintOrder(ctx,320,550,60,.88,myTurn);
+   const labels=lang==='ja'?['先攻','後攻']:lang==='en'?['FIRST','SECOND']:['선공','후공'];
+   assert.deepEqual(glyphs,first?labels:labels.reverse());
+
   }
   poses=[];for(const t of [3.5,4.5])resultScene(ctx,t,1280,height,{...opts,reduced:true},coin);
   assert.deepEqual(poses[0],poses[1],'reduced motion holds a static authoritative result');

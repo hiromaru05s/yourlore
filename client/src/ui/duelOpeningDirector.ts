@@ -25,7 +25,7 @@ export async function warmOpening():Promise<void>{
   await Promise.all([rendererModule().catch(()=>{}),warmImages([OPENING_PORTRAIT_URL])]);
 }
 
-/** Approved Caustic → Lumen Weave. Turn banners remain owned by the controller. */
+/** Faceoff, coin toss and battle-card turn assignment. Turn banners remain owned by the controller. */
 export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   if(o.signal.aborted)return;
   const game=o.root.querySelector<HTMLElement>('.game');
@@ -61,7 +61,7 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
       game?.classList.toggle('intro-docked',ms>=OPENING_EXIT_MS);
       host.dataset.openingPhase=openingPhase(ms);host.dataset.openingMs=String(Math.round(ms));
       host.style.background='none';
-      const visual=reduced&&ms>=0&&ms<OPENING_REVEAL_MS?4100:ms;
+      const visual=reduced&&ms>=0?Math.max(ms,OPENING_REVEAL_MS+900):ms;
       if(!skipped){
         renderer?.draw(canvas,Math.max(0,visual)/1000,{first:o.firstIsMe,light:false,reduced,board:true,names:[o.me.name,o.opp.name],avatars:[o.me.avatar,o.opp.avatar],medals:[o.me.medal??null,o.opp.medal??null]});
         if(!renderer){canvas.style.background=ms<OPENING_VISUAL_MS?'#07101d':'transparent';result.style.cssText='position:absolute;inset:40% 0 auto;text-align:center;color:'+(o.firstIsMe?'#72b7ff':'#ff8187')+';font:40px Georgia';}
