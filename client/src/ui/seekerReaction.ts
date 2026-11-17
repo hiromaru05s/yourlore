@@ -54,7 +54,7 @@ export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasEle
     </filter>`;
   }).join('')+'</defs>';
   const owners=kinds.map(k=>svg.querySelector('#'+prefix+k)!);
-  if(!useBaseline)configureGreenLight(owners[kinds.indexOf('heal')],healingRise);
+  if(!useBaseline)configureGreenLight(owners[kinds.indexOf('heal')],healingRise,fields.healingRise);
   const tracks=kinds.map((kind,i)=>({
     kind, time:-1, speed:1, bend:0, table:new Float32Array(kind==='heal' && !useBaseline?48:32), carry:undefined as {bend:number; table:Float32Array}|undefined,
     warp:owners[i].querySelector('feDisplacementMap'),light:owners[i].querySelector('feFuncA')!,

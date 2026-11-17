@@ -68,4 +68,12 @@ for (const kind of ['heal','hurt']){
  const png=await sharp(map,{raw:{width:n,height:n,channels:3}}).png({adaptiveFiltering:true}).toBuffer();
  packed[kind]='data:image/png;base64,'+png.toString('base64');
 }
+// H7 uses the same 96px red-channel field as the approved light study.
+const side=96,riseMap=Buffer.alloc(side*side*3);
+for(let y=0;y<side;y++)for(let x=0;x<side;x++){
+ const u=(x+.5)/side,v=(y+.5)/side;
+ riseMap[3*(y*side+x)]=Math.round(255*clamp(.09+.75*(1-v)+.09*(1-(2*u-1)**2)));
+}
+const risePng=await sharp(riseMap,{raw:{width:side,height:side,channels:3}}).png().toBuffer();
+packed.healingRise='data:image/png;base64,'+risePng.toString('base64');
 await writeFile('client/src/ui/seekerFields.json',JSON.stringify(packed,null,2)+'\n');

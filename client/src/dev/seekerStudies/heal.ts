@@ -1,6 +1,8 @@
 import {band,healingRise,configureGreenLight,greenLightFilter,type LightStudy} from '../../ui/seekerArt/heal';
 import {clamp,ease,envelope} from '../../ui/seekerArt/ink';
-export const greenStudies:LightStudy[]=[
+import fields from '../../ui/seekerFields.json';
+type PreviewLight=LightStudy & {distance?:(x:number,y:number)=>number};
+export const greenStudies:PreviewLight[]=[
   healingRise,
   {
     id:'H8',kind:'heal',name:'斜めからの反射光',duration:1880,color:'#78d475',
@@ -24,6 +26,23 @@ export const greenStudies:LightStudy[]=[
 
 const namespace='http://www.w3.org/2000/svg';
 let nextId=0;
+const maps=new Map<string,string>();
+function distanceMap(study:PreviewLight){
+  if(!study.distance)return fields.healingRise;
+  const cached=maps.get(study.id);
+  if(cached)return cached;
+  const size=96,canvas=document.createElement('canvas');
+  canvas.width=canvas.height=size;
+  const ctx=canvas.getContext('2d')!,pixels=ctx.createImageData(size,size);
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+    const i=4*(y*size+x);
+    pixels.data[i]=Math.round(255*clamp(study.distance((x+.5)/size,(y+.5)/size)));
+    pixels.data[i+3]=255;
+  }
+  ctx.putImageData(pixels,0,0);
+  const url=canvas.toDataURL();maps.set(study.id,url);return url;
+}
+
 export function createGreenLight(image:HTMLImageElement){
   const id='seeker-green-light-'+(++nextId);
   const svg=document.createElementNS(namespace,'svg');
@@ -33,9 +52,9 @@ export function createGreenLight(image:HTMLImageElement){
   image.after(svg);
   const curve=svg.querySelector('feFuncA')!;
   let last='';
-  function paint(study:LightStudy,t:number){
+  function paint(study:PreviewLight,t:number){
     if(last!==study.id){
-      configureGreenLight(svg,study);last=study.id;
+      configureGreenLight(svg,study,distanceMap(study));last=study.id;
     }
     const samples=Array.from({length:48},(_,i)=>clamp(study.exposure(i/47,t)).toFixed(3));
     curve.setAttribute('tableValues',samples.join(' '));
