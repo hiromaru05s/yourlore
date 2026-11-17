@@ -15,6 +15,42 @@ try{
  test('counterattack emits one explicit survival for the attacker',()=>{const g=fresh(),a=mon({atk:1}),t=mon({atk:20,def:30,passive:['counter'],guts:0});g.players[0].field=[a];g.players[1].field=[t];const r=strike(g,a,t);assert.deepEqual(outcomes(r).map(e=>e.uid),[a.uid]);assert(r.events.some(e=>e.type==='gutsSurvive'));});
  test('friendly redirected contact consumes once',()=>{const g=fresh(),a=mon(),t=mon(),enemy=mon({guts:0});g.players[0].field=[a,t];g.players[1].field=[enemy];g.players[1].traps=[{card:{...DB.GOLEM1,t:'trap',uid:'decoy',react:'decoy'}}];const r=strike(g,a,enemy);assert.deepEqual(outcomes(r).map(e=>e.uid),[t.uid]);assert(r.events.some(e=>e.type==='attack'&&e.guts?.uid===t.uid&&e.targetPlayer===0));});
  test('counterOrder legacy volley has explicit survival',()=>{const g=fresh(),a=mon(),t=mon({def:100,guts:0});g.players[0].field=[a];g.players[1].field=[t];g.players[1].traps=[{card:{...DB.GOLEM1,t:'trap',uid:'counter-order',react:'counterOrder'}}];const r=strike(g,a,t);assert.deepEqual(outcomes(r).map(e=>e.uid),[a.uid]);});
+ const vampire = (mods={}) => mon({...DB.VAMP2, def:3, passive:[], guts:0, ...mods});
+ const placeWard = (g, owner) => g.players[owner].enchants.push({card:{...DB.VAMP_WARD,uid:'ward'},turns:99});
+ for (const wardOwner of [0,1]) for (const [atk,dmg,remaining,overflow] of [
+   [1,0,2,0], [3,0,1,0], [6,0,1,3], [2,1,1,0], [1,2,1,0],
+ ]) test(`Vampire Ward on side ${wardOwner}: ${atk} ATK vs ${3-dmg} HP`,()=>{
+   const g=fresh(), a=mon({atk,guts:0}), t=vampire({dmg});
+   g.players[0].field=[a]; g.players[1].field=[t]; placeWard(g,wardOwner);
+   const r=strike(g,a,t), defender=r.state.players[1];
+   assert.equal(curHp(defender,defender.field[0]),remaining);
+   assert.equal(r.events.find(e=>e.type==='attack').contactDamage,3-dmg-remaining);
+   assert.equal(r.events.find(e=>e.type==='hit' && e.uid===t.uid).amount,3-dmg-remaining);
+   assert.equal(defender.hp,g.players[1].hp-overflow);
+   assert(!r.events.some(e=>e.type==='destroy' && e.uid===t.uid));
+ });
+ test('a vampire survives a lethal counterattack with 1 HP',()=>{
+   const g=fresh(), a=vampire(), t=mon({atk:10,passive:['counter'],guts:0});
+   g.players[0].field=[a]; g.players[1].field=[t]; placeWard(g,1);
+   const r=strike(g,a,t), owner=r.state.players[0];
+   assert.equal(curHp(owner,owner.field[0]),1);
+   assert.equal(r.events.find(e=>e.type==='counter').contactDamage,2);
+ });
+ test('a lethal redirected attack leaves a warded ally at 1 HP',()=>{
+   const g=fresh(), a=mon(), t=vampire(), enemy=mon();
+   g.players[0].field=[a,t]; g.players[1].field=[enemy]; placeWard(g,1);
+   g.players[1].traps=[{card:{...DB.GOLEM1,t:'trap',uid:'decoy',react:'decoy'}}];
+   const r=strike(g,a,enemy), owner=r.state.players[0];
+   assert.equal(curHp(owner,owner.field.find(m=>m.uid===t.uid)),1);
+   assert.equal(r.events.find(e=>e.type==='attack' && e.targetUid===t.uid).contactDamage,2);
+ });
+ test('counter order leaves a warded attacker at 1 HP',()=>{
+   const g=fresh(), a=vampire(), t=mon({atk:5});
+   g.players[0].field=[a]; g.players[1].field=[t]; placeWard(g,0);
+   g.players[1].traps=[{card:{...DB.GOLEM1,t:'trap',uid:'order',react:'counterOrder'}}];
+   const r=strike(g,a,t), owner=r.state.players[0];
+   assert.equal(curHp(owner,owner.field[0]),1);
+ });
  test('lightning trap emits one result per actually spent counter',()=>{let total=0;for(let seed=1;seed<=12;seed++){const g=fresh();g.rng=seed;const a=mon({guts:3}),t=mon({guts:3});g.players[0].field=[a];g.players[1].field=[t];g.players[1].traps=[{card:{...DB.GOLEM1,t:'trap',uid:'lightning',react:'lightning'}}];const r=strike(g,a,t),spent=g.players.flatMap(p=>p.field).reduce((n,m)=>n+3-(r.state.players.flatMap(p=>p.field).find(x=>x.uid===m.uid)?.guts??0),0);assert.equal(outcomes(r).length,spent);assert(outcomes(r).every(e=>e.type==='gutsSurvive'));total+=spent;}assert(total>0);});
  test('MIND_BURST cost never emits survival',()=>{const g=fresh();g.players[0].field=[mon()];g.players[0].hand=[{...DB.MIND_BURST,uid:'cost'}];const r=reduce(g,{type:'play',idx:0});assert.equal(r.state.players[0].field[0].guts,0);assert.equal(outcomes(r).length,0);});
  test('gutsOnHit grant never emits survival',()=>{const g=fresh(),a=mon({atk:1,guts:0}),t=mon({aura:'gutsOnHit'});g.players[0].field=[a];g.players[1].field=[t];const r=strike(g,a,t);assert.equal(r.state.players[1].field[0].guts,3);assert.equal(outcomes(r).length,0);});
