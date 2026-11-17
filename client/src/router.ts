@@ -103,12 +103,12 @@ export class App {
 
   // Clear the root BEFORE mounting the next screen. (Passing a thunk matters:
   // the mount fn appends to root, so it must run after innerHTML is cleared.)
-  private swap(make: () => Screen, page?: LoungePage): void {
+  private swap(make: (afterEntrance?: Promise<void>) => Screen, page?: LoungePage): void {
     // Unconfirmed accounts enter the real HOME, then choose their public name.
     // Keep that HOME mounted while its entrance or naming dialog is active.
     if (this.user?.needsUsername) {
       if (this.currentPage === 'home') return;
-      make = () => mountHome(this); page = 'home';
+      make = afterEntrance => mountHome(this, afterEntrance); page = 'home';
     }
     const mount = () => {
       const revision = ++this.screenRevision;
@@ -122,7 +122,9 @@ export class App {
       const keepHomeMusic = page !== undefined && HOME_MUSIC_PAGES.has(page);
       if (!keepHomeMusic) { this.stopHomeMusic?.(); this.stopHomeMusic = null; }
       this.root.innerHTML = "";
-      this.current = make();
+      let finishEntrance: (() => void) | undefined;
+      const afterEntrance = returningHome ? new Promise<void>(resolve => { finishEntrance = resolve; }) : undefined;
+      this.current = make(afterEntrance);
       if (keepHomeMusic && !this.stopHomeMusic) this.stopHomeMusic = startHomeMusic();
       if (page) {
         const onReady = () => {
@@ -134,7 +136,7 @@ export class App {
             });
           } else this.checkGraphics(page, revision);
         };
-        this.leaveLounge = mountLounge(this, page, returningHome);
+        this.leaveLounge = mountLounge(this, page, finishEntrance);
         const entrance=page==='home'&&!this.homeEntranceShown;
         // Admission belongs to startup. Later pages keep navigation usable while
         // their visible art loads; card galleries already own a local reveal gate.
@@ -153,7 +155,7 @@ export class App {
   }
 
   login(): void { this.swap(() => mountLogin(this), "login"); }
-  home(): void { setPresence("menu"); this.swap(() => mountHome(this), "home"); }
+  home(): void { setPresence("menu"); this.swap(afterEntrance => mountHome(this, afterEntrance), "home"); }
   private checkGraphics(page: LoungePage | undefined, revision: number): void {
     if (revision !== this.screenRevision || this.graphicsChecked || (page !== 'login' && page !== 'home')) return;
     this.graphicsChecked = true;

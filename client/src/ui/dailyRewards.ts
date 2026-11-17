@@ -32,24 +32,35 @@ export function rewardProgressHtml(data:ProgressionState|undefined,mode:'ranked'
  const hidden=mode==='bot';
  const rewardMode=hidden?'ranked':mode,cap=MATCH_REWARDS[rewardMode].cap,value=data?Math.min(cap,Math.max(0,data[rewardMode])):0;
  const label=L('本日のシャード','Shards today','오늘의 샤드');
- return `<div class="mode-reward-content"${hidden?' aria-hidden="true" style="visibility:hidden"':''}><span class="mode-reward-label"><span>${label}</span><b>${data?value:'—'} / ${cap}</b></span><progress value="${value}" max="${cap}" aria-label="${esc(label)}"></progress></div>`;
+ return `<div class="mode-reward-content"${hidden||!data?' aria-hidden="true" style="visibility:hidden"':''}><span class="mode-reward-label"><span>${label}</span><b>${data?value:'—'} / ${cap}</b></span><progress value="${value}" max="${cap}" aria-label="${esc(label)}"></progress></div>`;
 }
+const lastProgress = new WeakMap<App,{account:string;state:ProgressionState}>();
 export function mountDailyRewards(app:App,host:HTMLElement,onState?:(state:ProgressionState)=>void):()=>void {
  let request=0,dead=false,data:ProgressionState|undefined,timer:ReturnType<typeof setTimeout>|undefined;
  let closeConfirm:(()=>void)|undefined;
  let claiming=false,notice='';
  const guest=!app.user||app.user.id==='local-guest-user',account=app.user?.id;
+ const previous=lastProgress.get(app);
+ if(account && !guest && previous?.account===account && previous.state.resetsAt>Date.now()) {
+   data=previous.state;
+   onState?.(data);
+ }
+ const remember=(next:ProgressionState)=>{
+   data=next;
+   if(account) lastProgress.set(app,{account,state:next});
+ };
  const render=()=>{
+  host.toggleAttribute('data-home-pending', !guest && !data && !notice);
   const quests=data?.dailies??(data?[data.daily]:[]),remaining=quests[0]?.rerollsLeft;
   host.innerHTML=`<div class="dq-heading"><strong>${L('デイリークエスト','Daily quests','일일 퀘스트')}</strong><span class="${notice?'dq-notice':''}" role="status">${notice?esc(notice):remaining===undefined?'':L(`変更可能回数（残り${remaining}）`,`Changes left: ${remaining}`,`변경 가능 횟수 (남은 ${remaining})`)}</span></div><div class="dq-list">${quests.length?quests.map((q,i)=>{
    const progress=Math.min(q.quest.target,Math.max(0,q.progress));
    const ready=!q.claimed&&progress>=q.quest.target,state=q.claimed?'is-complete':ready?'is-ready':'is-active';
    const status=q.claimed?L('✓ 受取済み','✓ Received','✓ 수령 완료'):ready?L('達成・未受取','Complete · Unclaimed','달성 · 미수령'):L('進行中','In progress','진행 중');
    return `<div class="dq-entry ${state}"><button type="button" class="dq-task ${state}" data-quest="${i}" ${q.claimed||ready||!remaining||claiming?'disabled':''}><strong class="dq-title">${esc(questLabel(q.quest))}</strong><span class="dq-meta"><span class="dq-status">${status}</span>${ready?'':`<span class="dq-reward">${shardLabel(q.quest.reward)}</span>`}<span class="dq-progress">${progress} / ${q.quest.target}</span></span><progress class="dq-meter" value="${progress}" max="${q.quest.target}" aria-label="${esc(questLabel(q.quest))}"></progress></button>${ready?`<button type="button" class="dq-claim lore-button lore-button-primary" data-claim="${i}" aria-label="${esc(questLabel(q.quest)+' — '+shardLabel(q.quest.reward)+' '+L('受け取る','Claim','받기'))}" ${claiming?'disabled':''}><strong>${claiming?L('受取中…','Claiming…','수령 중…'):L('受け取る','Claim','받기')}</strong><span>${shardLabel(q.quest.reward)}</span></button>`:''}</div>`;
-  }).join(''):`<button type="button" class="dq-load">${guest?L('ログイン','Log in','로그인'):L('読み込み中…','Loading…','불러오는 중…')}</button>`}</div>`;
+  }).join(''):`<button type="button" class="dq-load">${guest?L('ログイン','Log in','로그인'):L('再読み込み','Retry','다시 시도')}</button>`}</div>`;
   host.querySelectorAll<HTMLButtonElement>('[data-quest]').forEach(button=>button.onclick=()=>{
    const q=quests[Number(button.dataset.quest)];
-   closeConfirm=confirmReplacement(app,q,button,next=>{if(dead)return;data=next;render();onState?.(next);syncCredits(app,next);document.dispatchEvent(new Event('lore:rewards'));});
+   closeConfirm=confirmReplacement(app,q,button,next=>{if(dead)return;remember(next);render();onState?.(next);syncCredits(app,next);document.dispatchEvent(new Event('lore:rewards'));});
   });
   host.querySelectorAll<HTMLButtonElement>('[data-claim]').forEach(button=>button.onclick=async()=>{
    if(claiming||dead||app.user?.id!==account)return;
@@ -58,7 +69,7 @@ export function mountDailyRewards(app:App,host:HTMLElement,onState?:(state:Progr
    try {
     const next=await api.claimDaily(q.day,q.revision,q.slot??0);
     if(dead||app.user?.id!==account)return;
-    data=next;notice=next.amount>0?L(`+${shardLabel(next.amount)}を受け取りました`,`Received +${shardLabel(next.amount)}`,`+${shardLabel(next.amount)} 수령 완료`):L('この報酬は受取済みです','Reward already received','이미 수령한 보상입니다');
+    remember(next);notice=next.amount>0?L(`+${shardLabel(next.amount)}を受け取りました`,`Received +${shardLabel(next.amount)}`,`+${shardLabel(next.amount)} 수령 완료`):L('この報酬は受取済みです','Reward already received','이미 수령한 보상입니다');
     onState?.(next);syncCredits(app,next);
    } catch {
     if(dead||app.user?.id!==account)return;
@@ -71,9 +82,9 @@ export function mountDailyRewards(app:App,host:HTMLElement,onState?:(state:Progr
   const empty=host.querySelector<HTMLButtonElement>('.dq-load');if(empty)empty.onclick=()=>guest?app.login():load();
  };
  const load=()=>{if(guest||claiming||dead)return;const serial=++request;void api.progression().then(next=>{
-  if(dead||serial!==request||app.user?.id!==account)return;data=next;render();onState?.(next);syncCredits(app,next);
+  if(dead||serial!==request||app.user?.id!==account)return;remember(next);render();onState?.(next);syncCredits(app,next);
   clearTimeout(timer);timer=setTimeout(load,Math.max(1000,next.resetsAt-Date.now()+100));
- }).catch(()=>{const button=host.querySelector('.dq-load');if(button)button.textContent=L('再読み込み','Retry','다시 시도');});};
+ }).catch(()=>{if(!dead&&serial===request)host.removeAttribute('data-home-pending');});};
  window.addEventListener('focus',load);document.addEventListener('lore:rewards',load);render();load();
  return()=>{dead=true;clearTimeout(timer);closeConfirm?.();window.removeEventListener('focus',load);document.removeEventListener('lore:rewards',load);};
 }

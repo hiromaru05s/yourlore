@@ -36,10 +36,21 @@ try{
  await picker.locator('[data-save]').click();
  await picker.waitFor({state:'detached'});
  assert.deepEqual(updates.at(-1),{avatar:'SEEKER_HOODED',background:'navy'});
- await page.locator('[data-nav=home]').click();
+ // Inspect in the navigation task, before a fast compositor can finish the entrance.
+ const entry = await page.evaluate(() => {
+   document.querySelector('[data-nav=home]').click();
+   const home = document.querySelector('.lounge-home');
+   return {
+     phase: home.dataset.homeReturn,
+     ui: ['.lounge-topbar','.lounge-home-main','.lounge-rail'].map(selector => getComputedStyle(home.querySelector(selector)).visibility),
+     loading: !!document.querySelector('.screen-loader'),
+   };
+ });
+ assert.deepEqual(entry,{phase:'scene',ui:['hidden','hidden','hidden'],loading:false});
  await page.locator('.home-standing-seeker[data-character=SEEKER_HOODED]').waitFor();
  assert.match(await figure.locator('img').getAttribute('src'),/home-closeup.webp/);
- await page.waitForTimeout(350);
+ await page.waitForFunction(() => !document.querySelector('.lounge-home').hasAttribute('data-home-return'));
+ assert.equal(await page.locator('.lounge-rail').isVisible(),true);
  await page.screenshot({path:out+'/home.png'});
  await page.setViewportSize({width:390,height:844});
  await page.locator('[data-profile]').click();

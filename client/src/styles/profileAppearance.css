@@ -61,9 +61,21 @@ dialog.appearance-picker::backdrop {background:#030e1fc2;}
 .pf-edit-look {position:relative;display:grid;justify-items:center;gap:3px;background:transparent;color:#f1f8ff;border:0;cursor:pointer;}
 .pf-edit-look small {font-size:10px;color:#deedff;}
 
+/* The standing Seeker and library are outside these four moving surfaces. */
 @media (prefers-reduced-motion:no-preference) {
-  .is-returning-home :is(.lounge-topbar > *, .lounge-rail, .lounge-home-main, .lounge-home-screen > #dailyReward) {
-    animation:home-return-ui 160ms ease-out 100ms backwards;
+  [data-home-return] .lounge-topbar {--return-x:0px;--return-y:-14px;--return-delay:75ms;}
+  [data-home-return] .lounge-home-main {--return-x:34px;--return-y:0px;--return-delay:100ms;}
+  [data-home-return] .lounge-rail,
+  [data-home-return] .lounge-home-screen > #dailyReward {--return-x:0px;--return-y:18px;--return-delay:145ms;}
+  [data-home-return="scene"] :is(.lounge-topbar,.lounge-home-main,.lounge-rail,.lounge-home-screen > #dailyReward) {
+    opacity:0;visibility:hidden;translate:var(--return-x) var(--return-y);
+  }
+  [data-home-return="controls"] :is(.lounge-topbar,.lounge-home-main,.lounge-rail,.lounge-home-screen > #dailyReward) {
+    animation:home-controls-arrive 320ms cubic-bezier(.18,.78,.22,1) var(--return-delay) backwards;
+  }
+  @keyframes home-controls-arrive {
+    from {opacity:0;visibility:hidden;translate:var(--return-x) var(--return-y);}
+    to {opacity:1;visibility:visible;translate:0 0;}
   }
 }
-@keyframes home-return-ui {from {opacity:0} to {opacity:1}}
+.lounge-home [data-home-pending] {visibility:hidden;}

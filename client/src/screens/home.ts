@@ -28,7 +28,8 @@ import { decodeAsset } from '../ui/imageAssets';
 import '../styles/singleStory.css';
 
 
-export function mountHome(app: App): Screen {
+const lastRank = new WeakMap<App,{account:string;rating:NonNullable<Awaited<ReturnType<typeof api.rankMe>>>}>();
+export function mountHome(app: App, afterEntrance?: Promise<void>): Screen {
   const u = app.user;
   const wrap = document.createElement("div");
   wrap.className = "screen lounge-home-screen";
@@ -59,16 +60,16 @@ export function mountHome(app: App): Screen {
   const stopGifts=mountGiftInbox(app,wrap.querySelector<HTMLButtonElement>('#homeGifts')!);
   const figure = wrap.querySelector<HTMLElement>('.home-standing-seeker')!;
   let avatar = u?.avatar;
-  let stopSeeker = mountHomeSeeker(figure, avatar);
+  let stopSeeker = mountHomeSeeker(figure, avatar, afterEntrance);
   const syncCharacter = () => {
     if (avatar === app.user?.avatar) return;
     stopSeeker();
     avatar = app.user?.avatar;
-    stopSeeker = mountHomeSeeker(figure, avatar);
+    stopSeeker = mountHomeSeeker(figure, avatar, afterEntrance);
   };
   document.addEventListener('lore:user',syncCharacter);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;
-  const duelButton=mountHomeDuelButton(q('ranked'));
+  const duelButton=mountHomeDuelButton(q('ranked'), afterEntrance);
   let mode: 'ranked'|'online'|'bot'='ranked';
   let rewards:ProgressionState|undefined;
   let rosterReady: Promise<unknown> = Promise.resolve();
@@ -90,9 +91,15 @@ export function mountHome(app: App): Screen {
   q('deck').onclick=()=>app.deck();
   q('myTier').onclick=()=>app.leaderboard();
   let disposed=false;
+  const rankButton=q('myTier');
+  const previousRank=lastRank.get(app);
+  if(previousRank && previousRank.account===u?.id) rankButton.innerHTML=homeRankHtml(previousRank.rating);
+  else rankButton.setAttribute('data-home-pending','');
   const loadRank = () => void api.rankMe().then(r=>{
     if(disposed)return;
-    const el=q('myTier');
+    const el=rankButton;
+    el.removeAttribute('data-home-pending');
+    if(r && u) lastRank.set(app,{account:u.id,rating:r});
     el.innerHTML=r?homeRankHtml(r):loungeText('ティアを取得できませんでした · クリックして再読み込み','Could not load rank · Click to retry','티어를 불러오지 못했습니다 · 눌러서 재시도');
     el.onclick=r?()=>app.leaderboard():loadRank;
   });

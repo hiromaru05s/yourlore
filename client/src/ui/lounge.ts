@@ -26,7 +26,7 @@ export type LoungePage = 'home'|'deck'|'cards'|'leaderboard'|'friends'|'shop'|'t
 const lastLoungePage=new WeakMap<App,string>();
 
 /** Shared navigation around the existing screen, preserving its live handlers. */
-export function mountLounge(app: App, page: LoungePage, returningHome = false): () => void {
+export function mountLounge(app: App, page: LoungePage, finishEntrance?: () => void): () => void {
   const lifecycle=new AbortController();
   document.body.classList.add('lounge-active');
   const content = document.createElement('main'); content.className='lounge-content'; content.id='loungeContent';
@@ -44,17 +44,21 @@ export function mountLounge(app: App, page: LoungePage, returningHome = false): 
   const friendBadge=mountFriendBadge(app,shell,page!=='friends'&&page!=='login');
   let stopNavMotion: (()=>void)|undefined;
   let stopHomeSound: (()=>void)|undefined;
+  const profileContents = () => {
+    const user=app.user;
+    const experience=seekerLevel(user?.exp??0);
+    return `${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small class="lounge-experience" aria-label="${esc(t('home.seekerLevel'))}">Lv.${experience.level}${experience.max?" MAX":` · ${experience.progress}/100 EXP`}</small></span>`;
+  };
   const paint=()=>{
     stopNavMotion?.();
     stopHomeSound?.();
     const user=app.user;
-    const experience=seekerLevel(user?.exp??0);
     shell.querySelectorAll(':scope > .lounge-rail, :scope > .lounge-topbar').forEach(n=>n.remove());
     if(page==='login') return;
     const rail=document.createElement('aside'); rail.className='lounge-rail'; rail.id='loungeNavigation';
     rail.innerHTML=`<nav aria-label="${esc(t('home.navigation'))}">${nav.map(([key,,label],index)=>`<button data-nav="${key}" ${key===page?'aria-current="page"':''}>${loungeNavGlyph(index)}<span>${t(label)}</span></button>`).join('')}</nav><div class="lounge-rail-bottom" id="loungeUtilities"><button data-utility-settings>${loungeUtilityGlyph('settings')}<span>${t('home.settings')}</span></button><button data-invite>${loungeUtilityGlyph('invite')}<span>${t('invite.title')}</span></button><button data-inquiry>${loungeUtilityGlyph('inquiry')}<span>${t('home.inquiry.title')}</span></button></div>`;
     const top=document.createElement('header'); top.className='lounge-topbar';
-    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile title="${esc(t('home.levelRule'))}">${avatarHtml(user?.avatar,user?.display??'P',38)}<span><b>${esc(user?.display??'PLAYER')}</b><small class="lounge-experience" aria-label="${esc(t('home.seekerLevel'))}">Lv.${experience.level}${experience.max?" MAX":` · ${experience.progress}/100 EXP`}</small></span></button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
+    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile title="${esc(t('home.levelRule'))}">${profileContents()}</button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
     shell.prepend(rail,top);
     // Keep the same profile container on every route; HOME adds sound and quests.
     {
@@ -87,8 +91,8 @@ export function mountLounge(app: App, page: LoungePage, returningHome = false): 
     top.querySelector<HTMLButtonElement>('[data-shop]')!.onclick=()=>app.shop();
     top.querySelector<HTMLButtonElement>('.lounge-menu')!.onclick=e=>{const on=shell.classList.toggle('is-menu-open');(e.currentTarget as HTMLElement).setAttribute('aria-expanded',String(on));};
   };
-  if(page==='home'){const atmosphere=document.createElement('div');atmosphere.className='lounge-atmosphere living-home';atmosphere.dataset.atmosphere='loading';atmosphere.setAttribute('aria-hidden','true');shell.append(atmosphere);
-    loadHomeAtmosphere(atmosphere,lifecycle.signal);}
+  let atmosphere: HTMLElement | undefined;
+  if(page==='home'){atmosphere=document.createElement('div');atmosphere.className='lounge-atmosphere living-home';atmosphere.dataset.atmosphere='loading';atmosphere.setAttribute('aria-hidden','true');shell.append(atmosphere);}
   shell.append(content); app.root.append(shell); paint();
   const companion=content.querySelector<HTMLElement>('.home-companion');
   const homeScreen=content.querySelector('.lounge-home-screen');
@@ -102,14 +106,25 @@ export function mountLounge(app: App, page: LoungePage, returningHome = false): 
     if (dailyReward && quests && dailyReward.parentElement !== quests) quests.append(dailyReward);
   };
   layoutHome();
-  if (returningHome && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    shell.classList.add('is-returning-home');
-    const end = window.setTimeout(() => shell.classList.remove('is-returning-home'), 300);
-    lifecycle.signal.addEventListener('abort', () => clearTimeout(end), {once:true});
-  }
+  const startSceneEffects = () => {
+    finishEntrance?.();
+    if (atmosphere && !lifecycle.signal.aborted) loadHomeAtmosphere(atmosphere,lifecycle.signal);
+  };
+  if (finishEntrance && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    revealHomeControls(shell, companion?.querySelector('img'), lifecycle.signal, startSceneEffects);
+  } else startSceneEffects();
   if (companion) phoneHome.addEventListener('change',layoutHome,{signal:lifecycle.signal});
   const off=onLangChange(paint);
-  document.addEventListener('lore:user',paint);
+  // Account refreshes can arrive during the entrance. Keep the moving header
+  // and dock mounted, including the focused button and the nav indicator.
+  const updateUser = () => {
+    const profile = shell.querySelector<HTMLButtonElement>('[data-profile]');
+    const balance = shell.querySelector<HTMLElement>('.lounge-balance b');
+    if (!profile || !balance) return;
+    profile.innerHTML = profileContents();
+    balance.textContent = (app.user?.credits ?? 0).toLocaleString();
+  };
+  document.addEventListener('lore:user',updateUser);
   // All existing dialogs share keyboard/focus behavior without duplicating network flows.
   const seen=new WeakSet<HTMLElement>(); const previous=new Map<HTMLElement,HTMLElement|null>();
   const enhance=()=>{
@@ -138,5 +153,41 @@ export function mountLounge(app: App, page: LoungePage, returningHome = false): 
     }
   };
   document.addEventListener('keydown',keyboard);
-  return ()=>{friendBadge.destroy();lifecycle.abort();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",paint);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+  return ()=>{friendBadge.destroy();lifecycle.abort();stopNavMotion?.();stopHomeSound?.();off();document.removeEventListener("lore:user",updateUser);observer.disconnect();document.removeEventListener('keydown',keyboard);document.body.classList.remove('lounge-active');document.querySelectorAll('.overlay').forEach(n=>n.remove());};
+}
+
+function revealHomeControls(shell: HTMLElement, portrait: HTMLImageElement | null | undefined, signal: AbortSignal, onFinish: () => void) {
+  shell.dataset.homeReturn = 'scene';
+  let frame = 0;
+  let started = false;
+  let finishTimer = 0;
+  const finish = () => {
+    if (!shell.dataset.homeReturn) return;
+    delete shell.dataset.homeReturn;
+    clearTimeout(finishTimer);
+    onFinish();
+  };
+  const show = () => {
+    if (started || signal.aborted) return;
+    started = true;
+    clearTimeout(deadline);
+    // Give the decoded painting a presented frame before moving the UI.
+    frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => {
+        shell.dataset.homeReturn = 'controls';
+        // Also release the scene if the system changes its motion preference mid-entrance.
+        finishTimer = window.setTimeout(finish, 750);
+      });
+    });
+  };
+  // A broken or stalled portrait must never strand navigation.
+  shell.addEventListener('animationend', event => {
+    if (event.animationName === 'home-controls-arrive' && event.target === shell.querySelector('.lounge-rail')) {
+      finish();
+    }
+  }, {signal});
+  const deadline = window.setTimeout(show, 650);
+  if (portrait) void portrait.decode().then(show, show);
+  else show();
+  signal.addEventListener('abort', () => { clearTimeout(deadline); cancelAnimationFrame(frame); finish(); }, {once:true});
 }

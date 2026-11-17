@@ -88,11 +88,20 @@ function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
   }};
 }
 
-export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
-  const image = new Image();
-  image.alt = '';
+// Keep only the last detached portrait. Returning HOME can paint its already
+// decoded pixels on the first frame while the new lighting renderer starts.
+let previousImage: HTMLImageElement | undefined;
+
+export function mountHomeSeeker(host: HTMLElement, avatar?: string | null, afterEntrance?: Promise<void>) {
   const character = characterAppearance(avatar);
-  image.src = character.home;
+  const image = previousImage?.getAttribute('src') === character.home ? previousImage : new Image();
+  previousImage = undefined;
+  image.alt = '';
+  if (image.getAttribute('src') !== character.home) image.src = character.home;
+  const detachImage = () => {
+    image.remove();
+    if (image.complete && image.naturalWidth) previousImage = image;
+  };
   host.dataset.character = character.id;
   host.setAttribute('role', 'img');
   host.setAttribute('aria-label', character.name());
@@ -102,10 +111,11 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
   if (!playableCharacters.some(entry => entry.id === character.id)) {
     image.style.objectFit = 'contain';
     image.onerror = () => { image.onerror = null; image.src = characterAppearance().home; };
-    return () => { image.onerror = null; image.remove(); };
+    return () => { image.onerror = null; detachImage(); };
   }
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let painting: ReturnType<typeof createSeekerPainting> | undefined;
+  let canPaint = !afterEntrance;
   let visible = false, decoded = false, disposed = false, fallback = false;
   let frame = 0, previous = 0, elapsed = 0;
   function tick(now: number) {
@@ -118,7 +128,7 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
   }
   function sync() {
     cancelAnimationFrame(frame); previous = 0;
-    const active = visible && decoded && !disposed && !document.hidden;
+    const active = canPaint && visible && decoded && !disposed && !document.hidden;
     if (active && !painting && !fallback) {
       try {
         painting = createSeekerPainting(host, image);
@@ -134,6 +144,7 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
       else frame = requestAnimationFrame(tick);
     }
   }
+  void afterEntrance?.then(() => { if (!disposed) { canPaint = true; sync(); } });
   const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
   observer.observe(host);
   const offDaylight = onHomeDaylightReady(() => {
@@ -143,7 +154,7 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
   document.addEventListener('visibilitychange', sync);
   void image.decode().then(() => { if (!disposed) { decoded = true; sync(); } }).catch(() => {});
   return () => {
-    host.classList.remove('is-painted','seeker-fallback-motion'); image.remove();
+    host.classList.remove('is-painted','seeker-fallback-motion'); detachImage();
     offDaylight(); disposed = true; cancelAnimationFrame(frame); observer.disconnect();
     reduced.removeEventListener('change', sync);
     document.removeEventListener('visibilitychange', sync);
