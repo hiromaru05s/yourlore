@@ -1,24 +1,21 @@
-import {boardPoint} from '../../ui/boardProjection';
-import {manaSlotLayout} from '../../ui/manaFormationTypes';
-import {readingScale} from '../../ui/readingBoardLayout';
-import {PURCHASE_CRYSTAL_ATLAS,manaTravelProgress} from '../../ui/manaPurchase';
-import {PurchaseAirWake} from '../../ui/purchaseAir';
-import {sfx} from '../../ui/sound';
+import {boardPoint} from './boardProjection';
+import {manaSlotLayout} from './manaFormationTypes';
+import {readingScale} from './readingBoardLayout';
+import {manaPurchaseAssets,manaTravelProgress} from './manaPurchase';
+import {t} from '../i18n';
+import {sfx} from './sound';
 
 type Point = {x:number;y:number};
 const clamp = (v:number) => Math.min(1,Math.max(0,v));
 const smooth = (v:number) => {const t=clamp(v);return t*t*(3-2*t);};
 const release = 170;
-const atlas = new Image();
-atlas.src=PURCHASE_CRYSTAL_ATLAS;
-const assets=Promise.all([atlas.decode().then(()=>true,()=>false),PurchaseAirWake.prepare(new AbortController().signal).catch(()=>undefined)]);
 const center=(r:DOMRect):Point=>({x:r.left+r.width/2,y:r.top+r.height/2});
 
 // The DOM grid is a hit area. Its ten columns differ from the authored crystal spacing.
 function crystalPosition(tray:HTMLElement,index:number,side:0|1){
   const maximum=Number(tray.dataset.maximum);
   if(!tray.closest('[data-widgets-ready="true"]')){
-    const rect=tray.querySelectorAll('.mana-crystal')[index].getBoundingClientRect();
+    const rect=(tray.querySelectorAll('.mana-crystal')[index]??tray).getBoundingClientRect();
     return {...center(rect),size:Math.max(6,Math.min(rect.width,rect.height))};
   }
   const slot=manaSlotLayout(index,maximum),scale=readingScale();
@@ -33,7 +30,7 @@ function curve(a:Point,b:Point,u:number,bend:number):Point{
   const x=b.x-a.x,y=b.y-a.y,d=Math.hypot(x,y)||1,h=Math.sin(Math.PI*u)*bend;
   return {x:a.x+x*u-y/d*h,y:a.y+y*u+x/d*h};
 }
-function drawFacet(c:CanvasRenderingContext2D,p:Point,size:number,spin:number,glow:number){
+function drawFacet(c:CanvasRenderingContext2D,atlas:HTMLImageElement,p:Point,size:number,spin:number,glow:number){
   if(size<.1)return;
   const frame=Math.round(spin*72)%72;
   c.save();c.translate(p.x,p.y);c.shadowColor='#439fff';c.shadowBlur=size*(.09+.14*glow);
@@ -94,14 +91,15 @@ export function setReadout(tray:HTMLElement,value:number){
   tray.dataset.mana=String(value);
   tray.querySelector('.mana-readout b')!.textContent=String(value);
   tray.querySelectorAll('.mana-crystal').forEach((c,i)=>c.classList.toggle('is-lit',i<value));
-  tray.setAttribute('aria-label',`マナ ${value}/${tray.dataset.maximum}`);
+  tray.setAttribute('aria-label',`${t("game.mana")} ${value}/${tray.dataset.maximum}`);
 }
 
-export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElement|null,rate:number,signal:AbortSignal){
+export async function spend(tray:HTMLElement,side:0|1,count:number,destination:HTMLElement|DOMRect|null,rate:number,signal:AbortSignal){
   const initial=Number(tray.dataset.mana);
-  const [loaded,wake]=card?await assets:[true,undefined] as const;
+  const {atlas,air:wake}=manaPurchaseAssets();
+  const card=destination instanceof HTMLElement?destination:null;
   if(signal.aborted||count<=0)return;
-  if(!loaded||matchMedia('(prefers-reduced-motion: reduce)').matches){
+  if((destination&&!atlas)||matchMedia('(prefers-reduced-motion: reduce)').matches){
     setReadout(tray,initial-count);sfx('mana-pay');return;
   }
   const canvas=document.createElement('canvas');canvas.className='spend-overlay';canvas.ariaHidden='true';
@@ -110,7 +108,7 @@ export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElem
   const stamp=card?.querySelector<HTMLElement>('.card-cost');
   const face=document.createElement('span');face.className='spend-face';face.ariaHidden='true';card?.append(face);
   const gap=Math.min(115,410/Math.max(1,count-1)),travel=610;
-  const duration=release+gap*(count-1)+(card?travel+195:burstMs);
+  const duration=release+gap*(count-1)+(destination?travel+195:burstMs);
   let previous=initial,contacted=false;
   try{
     await new Promise<void>(resolve=>{
@@ -125,9 +123,9 @@ export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElem
         ctx!.setTransform(dpr,0,0,dpr,0,0);ctx!.clearRect(0,0,innerWidth,innerHeight);
         const remaining=initial-Math.min(count,Math.max(0,Math.floor((age-release)/gap)+1));
         if(remaining!==previous){setReadout(tray,remaining);previous=remaining;}
-        const target=card?center((stamp??card).getBoundingClientRect()):null;
+        const target=card?center((stamp??card).getBoundingClientRect()):destination instanceof DOMRect?center(destination):null;
         const contact=age-release-travel;
-        if(!contacted&&age>=(card?release+travel:release)){contacted=true;sfx('mana-pay');}
+        if(!contacted&&age>=(destination?release+travel:release)){contacted=true;sfx('mana-pay');}
         if(card&&contact>0){
           const front=smooth(contact/(gap*(count-1)+145));
           face.style.setProperty('--front',front*125+'%');
@@ -135,7 +133,9 @@ export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElem
         }
         for(let i=0;i<count;i++){
           const local=age-i*gap;if(local<0||local>release+travel+130)continue;
-          const src=crystalPosition(tray,initial-1-i,side),d=src.size;
+          const index=initial-1-i;
+          if(index<0||index>=Number(tray.dataset.maximum))continue;
+          const src=crystalPosition(tray,index,side),d=src.size;
           if(!target){drawLocalSpend(ctx!,src,local);continue;}
           if(local<release){glint(ctx!,{x:src.x-d*.13,y:src.y-d*.13},d*.85,smooth(local/release));continue;}
           const u=clamp((local-release)/travel),q=manaTravelProgress(u);
@@ -145,7 +145,7 @@ export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElem
           ribbon(ctx!,path,q,Math.min(q,.19+.13*u),d*.15*(1-smooth((u-.88)/.12)));
           if(u<1)wake?.draw(ctx!,pos.x,pos.y,Math.atan2(next.y-pos.y,next.x-pos.x),d*1.5,local,.55*u,0);
           const scale=(1+.65*Math.sin(Math.PI*u))*(1-smooth((u-.81)/.19));
-          drawFacet(ctx!,pos,d*1.83*scale,u*.48,1-u);
+          drawFacet(ctx!,atlas!,pos,d*1.83*scale,u*.48,1-u);
           const impact=local-release-travel;
           if(impact>=0)glint(ctx!,target,d*1.05,1-smooth(impact/130));
         }

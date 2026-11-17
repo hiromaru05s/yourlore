@@ -1,7 +1,7 @@
 import type {GameState} from '../../shared/types';
 import {buyCost,marketStockOf} from '../../shared/engine';
 import {buyReveal} from '../../ui/anim';
-import {setReadout,spend} from './playback';
+import {setReadout,spend} from '../../ui/manaSpend';
 import './style.css';
 
 export function mountSpendLab(g:GameState,resetBoard:()=>void){

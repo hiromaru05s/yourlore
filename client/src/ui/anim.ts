@@ -105,7 +105,8 @@ import { sfx } from "./sound";
 import { moveOnBoard } from "./boardMotion";
 import { projectedPlacement } from "./boardProjection";
 import {playBiblionFx,clearBiblionFx} from './biblionFx';
-import {prepareManaPurchase,MANA_PURCHASE_CONTACT_MS,MANA_PURCHASE_DURATION} from './manaPurchase';
+import {prepareManaPurchase} from './manaPurchase';
+import {spend,setReadout} from './manaSpend';
 
 export type ViewSide = "me" | "opp";
 
@@ -503,8 +504,8 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
   if(fxSkip)return null;
   const destination = card.quick ? (side === "me" ? "rift-me" : "rift-opp") : discId(side);
   const to = rectOf("#" + destination);
+  if(paidMana>0){await animateManaSpend(side,paidMana,source??src);if(fxSkip)return null;}
   if (!src || !to) { sfx('buy');if(card.quick)return revealSpell(card,side,"vanish",undefined,true);pileFlash(destination); return null; }
-  if(paidMana>0){await purchaseMana(side,src);if(fxSkip)return null;}
   // The purchase is authoritative here. Free cards confirm too; payment is separate.
   sfx('buy');
   if(source){
@@ -543,20 +544,22 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
   return null;
 }
 
-/** Mana moves from the payer's crystals into the purchase before the card leaves its slot. */
-async function purchaseMana(side:ViewSide,target:DOMRect):Promise<void>{
-  if(fxSkip)return;
-  const cluster=document.getElementById(side==='me'?'portraitMe':'portraitOpp');
-  const source=cluster?.querySelector<HTMLElement>('.mana-crystals')??cluster?.querySelector<HTMLElement>('.pips');
-  if(!source)return;
-  // Preparation races a skippable deadline: cold/failed assets never trap input.
-  if(!matchMedia('(prefers-reduced-motion: reduce)').matches)await Promise.race([prepareManaPurchase(),wait(800)]);
-  if(fxSkip||document.hidden)return;
-  const stop=playBiblionFx('purchase',()=>source.isConnected?source.getBoundingClientRect():null,target);
-  try{
-    await wait(MANA_PURCHASE_CONTACT_MS);if(!fxSkip&&!document.hidden)sfx('mana-pay');
-    await wait(MANA_PURCHASE_DURATION*1000-MANA_PURCHASE_CONTACT_MS);
-  }finally{stop();}
+/** Playback uses the old board until the controller renders the authoritative result. */
+export async function animateManaSpend(side:ViewSide,amount:number,destination:HTMLElement|DOMRect|null=null,before?:number):Promise<void>{
+  if(fxSkip||document.hidden||amount<=0)return;
+  const tray=document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-mana`);
+  if(!tray)return;
+  const initial=before??Number(tray.dataset.mana);
+  if(!Number.isFinite(initial))return;
+  if(before!==undefined)setReadout(tray,initial);
+  const paid=Math.min(amount,initial);
+  if(paid<=0)return;
+  await boardMotionScope(async signal=>{
+    if(destination&&!matchMedia('(prefers-reduced-motion: reduce)').matches)await Promise.race([prepareManaPurchase(),wait(800)]);
+    if(signal.aborted)return false;
+    await spend(tray,side==='me'?0:1,paid,destination,1,signal);
+    return !signal.aborted;
+  });
 }
 
 export async function finishElementalSpell(node:HTMLElement,side:ViewSide):Promise<void>{

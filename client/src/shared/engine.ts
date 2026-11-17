@@ -1447,7 +1447,7 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
       case "turnBurn": ctx.log(`<span class="t">${cn(m)}</span> 매 턴 효과`, `<span class="t">${cn(m)}</span> 毎ターン効果`); ctx.dealDamage(o, v, cn(m), cn(m)); break;
       case "turnHeal": ctx.heal(p, v); ctx.log(`  └ ${cn(m)} 플레이어 체력 +${v} 회복`, `  └ ${cn(m)} プレイヤー体力+${v}回復`); break;
       case "payDefHeal":
-        if (p.mana >= 1) { p.mana -= 1; m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, v); ctx.heal(p, v2); ctx.log(`  └ ${cn(m)} 마나1 → 체력 +${v} · 플레이어 체력 +${v2} 회복`, `  └ ${cn(m)} マナ1 → 体力+${v} · プレイヤー体力+${v2}回復`); }
+        if (p.mana >= 1) { spendCurrentMana(ctx, p, 1); m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, v); ctx.heal(p, v2); ctx.log(`  └ ${cn(m)} 마나1 → 체력 +${v} · 플레이어 체력 +${v2} 회복`, `  └ ${cn(m)} マナ1 → 体力+${v} · プレイヤー体力+${v2}回復`); }
         break;
       case "chestDraw": {
         const ci = p.hand.findIndex((c) => c.star === "chest");
@@ -3647,7 +3647,7 @@ function resolveSummonEffect(g: GameState, ctx: Ctx, m: FieldMon): void {
       ctx.log(`  └ 체력 +${v}, 마나 수정 +${v2}`, `  └ 体力+${v}, マナ水晶+${v2}`);
       break;
     case "summonKnight": // GM6_7
-      if (p.mana >= 3) { p.mana -= 3; spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 마나3 지불 → 무한의 기사(4/4) 소환", "  └ マナ3支払い → 無限の騎士(4/4)召喚"); }
+      if (p.mana >= 3) { spendCurrentMana(ctx, p, 3); spawnToken(g, ctx, p, "INFKNIGHT"); ctx.log("  └ 마나3 지불 → 무한의 기사(4/4) 소환", "  └ マナ3支払い → 無限の騎士(4/4)召喚"); }
       else ctx.log("  └ 마나가 부족해 기사를 소환하지 못함", "  └ マナ不足で騎士を召喚できない");
       break;
     case "breaktrapDraw": // GM6_8
@@ -3879,6 +3879,12 @@ function spawnToken(g: GameState, ctx: Ctx, owner: PlayerState, id: string, opti
   if (zeroFromSwap && p.field.includes(m)) ctx.destroyMonster(p,m);
   reactGeneralSummon(g, ctx, p);
   return true;
+}
+
+function spendCurrentMana(ctx:Ctx,p:PlayerState,amount:number):void {
+  const before=p.mana;
+  p.mana-=amount;
+  if(amount>0)ctx.ev.push({type:'manaSpent',player:ctx.side(p),before,amount});
 }
 
 /** GM5_2: each monster YOU summon gains +val ATK from every summonBuff aura you control. */
@@ -5499,7 +5505,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     // Starters (컬/보물상자/어튠) are spell-type cards played from hand → they are subject to
     // the same spell seals (침묵) and null-spell trap (마법 무효화) as regular spells.
     spellCostActivations(g, ctx, p, card);
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
+    p.playsTurn = (p.playsTurn || 0) + 1; spendCurrentMana(ctx, p, playCost(card, p)); p.hand.splice(idx, 1);
     ctx.ev.push({ type: "playSpell", player: side(g, p), id: card.id, dest: card.star === "trash" ? "vanish" : "discard" });
     afterPlay(g, ctx, p, card);
     if (tryNullSpell(g, ctx, card)) { fieldToGrave(g,ctx,p,card); return; } // negated → consumed, effect nullified
@@ -5527,7 +5533,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   if (card.quick) return;
   if (card.t === "quest") {
     if (!card.quest || p.traps.length + p.enchants.length + (p.quests?.length ?? 0) >= ST_MAX) return;
-    p.mana -= playCost(card, p); p.hand.splice(idx, 1);
+    spendCurrentMana(ctx, p, playCost(card, p)); p.hand.splice(idx, 1);
     p.playsTurn = (p.playsTurn ?? 0) + 1;
     p.uses[card.id] = (p.uses[card.id] ?? 0) + 1;
     (p.quests ??= []).push({ card, progress: 0, startedTurn: g.turn, anchorUid: card.quest.event === "castleTurn" ? castleOf(p)?.uid : undefined });
@@ -5538,7 +5544,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
   }
   if (card.t === "mon") {
     spellCostActivations(g, ctx, p, card);
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
+    p.playsTurn = (p.playsTurn || 0) + 1; spendCurrentMana(ctx, p, playCost(card, p)); p.hand.splice(idx, 1);
     p.uses[card.id] = (p.uses[card.id] || 0) + 1;             // game-long usage count (card analytics — monsters too)
     afterPlay(g, ctx, p, card);
     if (card.tribe === "시초") delete p.freeOrigin;
@@ -5564,7 +5570,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       ctx.runePrices=Object.fromEntries(Object.entries(runeModes).map(([key,tier])=>
         [key,Math.max(0,playCost({...card,play:tier},p)-paidCost)]));
     }
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= paidCost; p.hand.splice(idx, 1);
+    p.playsTurn = (p.playsTurn || 0) + 1; spendCurrentMana(ctx, p, paidCost); p.hand.splice(idx, 1);
     // An Incubator has no destination until its effect resolves.
     const incubator = card.act === 'incubate';
     if (!incubator) p.discard.push(card);
@@ -5741,7 +5747,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
     if (p.trapBlockTurn) { ctx.log(`  └ <span class="dmg">협상: 이번 턴에는 함정을 설치할 수 없습니다</span>`, `  └ <span class="dmg">交渉: このターンは罠を設置できません</span>`); return; }
     if (p.traps.length + p.enchants.length + (p.quests?.length ?? 0) >= ST_MAX) { ctx.log(`  └ <span class="dmg">마법·함정 존이 가득 찼습니다 (최대 ${ST_MAX})</span>`, `  └ <span class="dmg">魔法・罠ゾーンが満杯です (最大 ${ST_MAX})</span>`); return; }
     spellCostActivations(g, ctx, p, card);
-    p.playsTurn = (p.playsTurn || 0) + 1; p.mana -= playCost(card, p); p.hand.splice(idx, 1);
+    p.playsTurn = (p.playsTurn || 0) + 1; spendCurrentMana(ctx, p, playCost(card, p)); p.hand.splice(idx, 1);
     afterPlay(g, ctx, p, card);
     const set: TrapSet = { card };
     if (card.react === "doomsday") set.cnt = 3; // 심판의 카운트다운: 3턴 후 자동 발동
@@ -6160,7 +6166,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
       if (!ids0.includes(uid) || !DB[uid]) { g.pending = pending; return; }
       if (p.field.length >= FIELD_MAX) { ctx.log("  └ 몬스터 존이 가득 차 소환 실패", "  └ モンスターゾーンが満杯で召喚失敗"); return; }
       if (p.mana < 3 || !effectSummonAllowed(g,p,DB[uid])) return;
-      p.mana -= 3;
+      spendCurrentMana(ctx, p, 3);
       ctx.log(`<span class="t">${p.name}</span> 콜로세움 → ${cn(DB[uid])} 소환`, `<span class="t">${p.name}</span> コロシアム → ${cn(DB[uid])} 召喚`);
       summonForOwner(g,ctx,p,inst(g,uid));
       return;
@@ -6190,7 +6196,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
     if (uid && ids.includes(uid) && DB[uid]) {
       const cost = DB[uid].cost;
       if (p.mana >= cost && purchaseAllowed(g, p, { ...DB[uid], uid })) {
-        p.mana -= cost;
+        spendCurrentMana(ctx, p, cost);
         p.boughtCount = (p.boughtCount || 0) + 1;
         const bought = obtainedCard(g, ctx, p, inst(g, uid));
         if (bought.quick) {
@@ -6504,7 +6510,7 @@ function resolveEffectChoice(g: GameState, ctx: Ctx, uid: string | null): void {
   switch (pending.reason) {
     case 'GOLEM_UPKEEP': {
       const m = p.field.find(m => m.uid === pending.data?.sourceUid)!;
-      p.mana -= GOLEM_UPKEEP[m.id].mana;
+      spendCurrentMana(ctx, p, GOLEM_UPKEEP[m.id].mana);
       m.guts = (m.guts ?? 0) - 1;
       monsterActivation(g,ctx.ev,p,m);
       if (card.t === 'mon') effectSummon(g,ctx,p,card.id);
@@ -7076,7 +7082,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         const bought = obtainedCard(g, ctx, p, inst(g, card.id));
         p.mana -= bc; if (!bought.quick) p.discard.push(bought); p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 고정 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[${card.quick ? "게임에서 제외" : "묘지로"}]</span>`, `<span class="t">${p.name}</span> 固定マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[${card.quick ? "ゲームから除外" : "墓地へ"}]</span>`);
-        ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i, id: card.id });
+        ev.push({ type: "buy", player: side(g, p), from: "market", i: action.i, id: card.id, paidMana: bc });
         havenPurchase(g, ctx, p, bought);
         consumeMarketStock(g, ctx, action.i); // v40: 재고 -1, 소진 시 슬롯 교체
         if (bought.quick) resolveQuick(g, ctx, p, bought);
@@ -7098,7 +7104,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         const bought = obtainedCard(g, ctx, p, inst(g, card.id));
         p.mana -= bc; if (!bought.quick) p.discard.push(bought); for (const player of g.players) player.supply[action.i] = null; p.boughtCount++; p.taxFlag = true; p.buys[card.id] = (p.buys[card.id] || 0) + 1; (p.buysTurn ??= {})[card.id] = (p.buysTurn[card.id] || 0) + 1;
         ctx.log(`<span class="t">${p.name}</span> 제시 마켓 ${cn(card)} 구매 (${bc}) <span class="muted">[${card.quick ? "게임에서 제외" : "묘지로"}]</span>`, `<span class="t">${p.name}</span> 提示マーケット ${cn(card)} 購入 (${bc}) <span class="muted">[${card.quick ? "ゲームから除外" : "墓地へ"}]</span>`);
-        ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id });
+        ev.push({ type: "buy", player: side(g, p), from: "supply", i: action.i, id: card.id, paidMana: bc });
         havenPurchase(g, ctx, p, bought);
         if (bought.quick) resolveQuick(g, ctx, p, bought);
         tryToll(g, ctx, p, bought); // 통행세: 구매 반응
@@ -7113,7 +7119,7 @@ function reduceCore(prev: GameState, action: Action): ReduceResult {
         rerollOffers(g,ctx,p);
         logSupplyRefresh(ctx, p, `카운터 소모 · 남은 ${p.refreshTokens}`, `カウンター消費 · 残り${p.refreshTokens}`, `counter spent · ${p.refreshTokens} left`);
       } else if (p.mana >= 1) {
-        p.mana -= 1;
+        spendCurrentMana(ctx, p, 1);
         rerollOffers(g,ctx,p);
         logSupplyRefresh(ctx, p, "1 마나", "1マナ", "1 mana");
       }
@@ -7384,7 +7390,7 @@ function summonPurchasedMerc(g: GameState, ctx: Ctx, p: PlayerState, card: CardI
   const i = p.discard.findIndex(c => c.uid === card.uid);
   if (i < 0 || p.mana < fee || !effectSummonAllowed(g, p, card)) return;
   p.discard.splice(i, 1);
-  p.mana -= fee;
+  spendCurrentMana(ctx, p, fee);
   summonForOwner(g, ctx, p, card);
 }
 
@@ -7817,7 +7823,7 @@ function resolveRuneChoice(g:GameState,ctx:Ctx,p:PlayerState,q:Pending,c:CardIns
       const target=o.field.find(m=>m.uid===q.data?.target);if(target)stripRunePassive(target,c.uid);break;
     }
     case 'RUNE_GRANT':{
-      p.mana-=Number((q.data?.prices as Record<string,number> | undefined)?.[c.uid]??0);
+      spendCurrentMana(ctx, p, Number((q.data?.prices as Record<string,number> | undefined)?.[c.uid]??0));
       offerEffectChoice(g,ctx,p,'RUNE_GRANT_TARGET','',{key:c.uid});break;
     }
     case 'RUNE_GRANT_TARGET':case 'GLYPH_TARGET':giveRunePassive(m,String(q.data?.key));break;

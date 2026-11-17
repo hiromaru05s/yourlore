@@ -1029,6 +1029,9 @@ export abstract class BaseController implements BoardHandlers {
           }
           break;
         }
+        case "manaSpent":
+          await A.animateManaSpend(sideOf(e.player),e.amount,null,e.before);
+          break;
         case "buy": {
           const def = DB[e.id];
           if (def) {
@@ -1036,7 +1039,7 @@ export abstract class BaseController implements BoardHandlers {
             const stock=Number(source?.querySelector('.mkt-stock')?.textContent?.replace('×',''))||1;
             const card=def.quick?res.state.players[e.player].removed?.find(c=>c.id===e.id&&!(prev.players[e.player].removed??[]).some(old=>old.uid===c.uid)):undefined;
             const shown=card??{uid:'fx',...def};
-            const node=await A.buyReveal(shown,sideOf(e.player),source?.getBoundingClientRect()??null,source,e.from==='supply'?0:Math.max(0,stock-1),buyCost(prev.players[e.player],shown),res.state.effects?.[e.player]??(e.player===this.you?localCardEffect():'default'),res.state.frames?.[e.player]??(e.player===this.you?localCardFrame():'default'));
+            const node=await A.buyReveal(shown,sideOf(e.player),source?.getBoundingClientRect()??null,source,e.from==='supply'?0:Math.max(0,stock-1),e.paidMana??buyCost(prev.players[e.player],shown),res.state.effects?.[e.player]??(e.player===this.you?localCardEffect():'default'),res.state.frames?.[e.player]??(e.player===this.you?localCardFrame():'default'));
             if(node){if(this.dead)node.remove();else this.quickFaces.push({card:shown,side:sideOf(e.player),node});}
           }
           else A.pileFlash(e.player === this.you ? "pile-myDisc" : "pile-oppDisc");
