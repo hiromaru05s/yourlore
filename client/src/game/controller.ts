@@ -150,6 +150,7 @@ export abstract class BaseController implements BoardHandlers {
   private openingRoot:HTMLElement;
   private openingAbort=new AbortController();
   private openingActive=false;
+  private openingTurnPending=false; // A reconnect directly into a playable turn 1 skips its opening banner.
   private openingAssets:Promise<void>|null=null;
   private openingWait:HTMLElement|null=null;
   private serverOffset=0;
@@ -1305,6 +1306,7 @@ export abstract class BaseController implements BoardHandlers {
       this.introShown = true;
       // Rejoins into an already playable turn (and old servers) skip the cinematic.
       if(this.state.mode!=='online'||opening?.playableAt!=null&&Date.now()-this.serverOffset<opening.playableAt){
+        this.openingTurnPending=true;
         this.openingActive=true;void this.showCoinToss(this.state.cur);return;
       }
       this.releaseOpening();
@@ -1313,6 +1315,7 @@ export abstract class BaseController implements BoardHandlers {
     this.releaseOpening();
     if(!this.state.over)this.exits.onBattleReady?.();
     if (!this.state.over && this.state.mulligan) {
+      this.openingTurnPending=true;
       this.stopTimer();
       const confirmed = this.state.mulligan[this.you];
       if (this.mulliganDialog?.confirmed !== confirmed) {
@@ -1530,7 +1533,8 @@ export abstract class BaseController implements BoardHandlers {
       const firstTurn = this.announcedTimerKey === "";
       this.announcedTimerKey = key;
       if (!firstTurn && g.cur === this.you) sfx("turn");
-      if (!(firstTurn && g.turn === 1) && !document.querySelector(".cointoss-ov")) A.turnBanner(g.cur === this.you, g.turn);
+      if ((!firstTurn || g.turn !== 1 || this.openingTurnPending) && !document.querySelector(".cointoss-ov")) A.turnBanner(g.cur === this.you, g.turn);
+      this.openingTurnPending=false;
     }
   }
 
@@ -1630,7 +1634,6 @@ export abstract class BaseController implements BoardHandlers {
     finally{
       this.openingActive=false;this.releaseOpening();
       if(!this.dead&&!this.state.over){
-        if(this.state.turn===1)A.turnBanner(this.state.cur===this.you,1);
         this.afterApply({state:this.state,events:[]});
       }
     }
