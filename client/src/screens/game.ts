@@ -70,7 +70,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onExperience: () => {if(experienceUserId && experienceUserId!=="local-guest-user")void api.me().then(fresh=>{if(fresh?.id===experienceUserId && app.user?.id===experienceUserId){app.user=fresh;document.dispatchEvent(new Event("lore:user"));}});},
     onOpeningStart: opts.mode === "tutorial" ? undefined : startMusic,
     onBattleReady: () => startMusic(),
-    onHome: () => (opts.mode === "tutorial" ? app.tutorial() : app.home()),
+    onHome: () => opts.mode === "tutorial" ? app.tutorial() : story ? app.single({tab:'story'}) : opts.mode==='bot'||opts.difficulty ? app.single() : app.home(),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
     onBattleResult: won => {
       storyWon = won;
@@ -82,7 +82,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onRematch: () => {
       if (story) {
         if (storyWon && story.stage < 2) app.storyGame(ARIES_ROUTE[1].stage, opts.mode === 'online' ? opts.roomId : undefined);
-        else if (storyWon && story.stage === 2) app.home();
+        else if (storyWon && story.stage === 2) app.single({tab:'story'});
         else app.storyGame(0);
       } else if (opts.mode === "bot") app.botGame(opts.difficulty);
       else if (opts.mode === "tutorial") opts.part===undefined?app.tutorialGame(opts.lesson):app.tutorialPart(opts.part);

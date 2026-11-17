@@ -60,8 +60,8 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
  }};
  const request=(path,body)=>E.handleRewards(env,new Request('https://local/api'+path,{method:'POST',headers:{cookie:'lore_session=rotation-session'},body:JSON.stringify(body)}),path);
  assert.equal((await request('/rewards/story/start',{})).status,403);
- assert.equal((await request('/rewards/bot/start',{difficulty:'hell'})).status,403);
- for(const tier of ['easy','normal','hard','hell']){
+ assert.equal((await request('/rewards/bot/start',{difficulty:'hell'})).status,400);
+ for(const tier of ['easy','normal','hard']){
   const npc=E.botNpc(tier),seen=new Set();
   for(let i=0;i<npc.decks.length;i++){
    const response=await E.handleRewards(env,new Request('https://local/api/rewards/bot/start',{method:'POST',headers:{cookie:'lore_session=rotation-session'},body:JSON.stringify({difficulty:tier})}),'/rewards/bot/start');

@@ -36,7 +36,6 @@ export function mountHome(app: App, afterEntrance?: Promise<void>): Screen {
         <div class="lounge-mode-tabs" role="group" aria-label="${esc(loungeText('対戦モード','Duel mode','대전 모드'))}">
           <button id="rankedMode" aria-pressed="true">${loungeText('ランク','Ranked','랭크')}</button>
           <button id="online" aria-pressed="false">${loungeText('ノーマル','Casual','일반')}</button>
-          <button id="bot">${t("home.bot.title")}</button>
         </div>
         <div class="mode-reward" id="modeReward"></div>
         <button class="lounge-play-button home-duel-button" id="ranked"><small aria-hidden="true">DUEL</small><strong>${t("home.ranked.title")}</strong><span>${t("home.enterDuel")} →</span></button>
@@ -74,7 +73,7 @@ export function mountHome(app: App, afterEntrance?: Promise<void>): Screen {
   };
   selectMode('ranked');
   q('rankedMode').onclick=()=>selectMode('ranked');
-  q('online').onclick=()=>selectMode('online');q('bot').onclick=()=>app.single();
+  q('online').onclick=()=>selectMode('online');
   q('ranked').onclick=()=>mode==='ranked'?app.rankedLobby():app.onlineLobby();
   q('deck').onclick=()=>app.deck();
   q('myTier').onclick=()=>app.leaderboard();
