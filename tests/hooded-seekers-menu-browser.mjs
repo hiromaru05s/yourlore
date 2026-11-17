@@ -41,15 +41,16 @@ try{
    document.querySelector('[data-nav=home]').click();
    const home = document.querySelector('.lounge-home');
    return {
+     daylight: getComputedStyle(home.querySelector('.living-home')).backgroundImage.includes('library-daylight'),
      phase: home.dataset.homeReturn,
      sceneAnimation: getComputedStyle(home.querySelector('.lounge-home-screen')).animationName,
      ui: ['.lounge-topbar','.lounge-home-main','.lounge-rail'].map(selector => getComputedStyle(home.querySelector(selector)).visibility),
      loading: !!document.querySelector('.screen-loader'),
    };
  });
- assert.deepEqual(entry,{phase:'scene',sceneAnimation:'none',ui:['hidden','hidden','hidden'],loading:false});
+ assert.deepEqual(entry,{daylight:true,phase:'scene',sceneAnimation:'none',ui:['hidden','hidden','hidden'],loading:false});
  await page.locator('.home-standing-seeker[data-character=SEEKER_HOODED]').waitFor();
- assert.match(await figure.locator('img').getAttribute('src'),/home-closeup.webp/);
+ assert.match(await figure.locator('img').getAttribute('src'),/home-closeup-daylight/);
  await page.waitForFunction(() => !document.querySelector('.lounge-home').hasAttribute('data-home-return'));
  assert.equal(await page.locator('.lounge-rail').isVisible(),true);
  await page.screenshot({path:out+'/home.png'});

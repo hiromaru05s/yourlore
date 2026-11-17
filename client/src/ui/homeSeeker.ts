@@ -2,6 +2,7 @@ import {Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, SRGBColo
 import {createWebGLRenderer} from './webglRenderer';
 import {characterAppearance, playableCharacters} from './characterAppearance';
 import {homeDaylight, onHomeDaylightReady} from './homeDaylight';
+import {loadAssetImage} from './imageAssets';
 import {homeIsCovered} from './screenCovered';
 
 // Weights are in the cropped painting's UV space, with the hood at the top.
@@ -92,12 +93,13 @@ function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
 // decoded pixels on the first frame while the new lighting renderer starts.
 let previousImage: HTMLImageElement | undefined;
 
-export function mountHomeSeeker(host: HTMLElement, avatar?: string | null, afterEntrance?: Promise<void>) {
+export function mountHomeSeeker(host: HTMLElement, avatar?: string | null) {
   const character = characterAppearance(avatar);
-  const image = previousImage?.getAttribute('src') === character.home ? previousImage : new Image();
+  const poster = character.daylightPoster ?? character.home;
+  const image = previousImage?.getAttribute('src') === poster ? previousImage : new Image();
   previousImage = undefined;
   image.alt = '';
-  if (image.getAttribute('src') !== character.home) image.src = character.home;
+  if (image.getAttribute('src') !== poster) image.src = poster;
   const detachImage = () => {
     image.remove();
     if (image.complete && image.naturalWidth) previousImage = image;
@@ -105,18 +107,17 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null, after
   host.dataset.character = character.id;
   host.setAttribute('role', 'img');
   host.setAttribute('aria-label', character.name());
-  host.style.setProperty('--seeker-silhouette',`url("${image.src}")`);
   host.append(image);
   // Older profiles can hold a square NPC or card portrait instead of a standing painting.
   if (!playableCharacters.some(entry => entry.id === character.id)) {
     image.style.objectFit = 'contain';
-    image.onerror = () => { image.onerror = null; image.src = characterAppearance().home; };
+    image.onerror = () => { image.onerror = null; const base = characterAppearance(); image.src = base.daylightPoster ?? base.home; };
     return () => { image.onerror = null; detachImage(); };
   }
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let painting: ReturnType<typeof createSeekerPainting> | undefined;
-  let canPaint = !afterEntrance;
-  let visible = false, decoded = false, disposed = false, fallback = false;
+  let pigment: HTMLImageElement | undefined;
+  let visible = false, disposed = false, fallback = false;
   let frame = 0, previous = 0, elapsed = 0;
   function tick(now: number) {
     frame = requestAnimationFrame(tick);
@@ -128,31 +129,33 @@ export function mountHomeSeeker(host: HTMLElement, avatar?: string | null, after
   }
   function sync() {
     cancelAnimationFrame(frame); previous = 0;
-    const active = canPaint && visible && decoded && !disposed && !document.hidden;
-    if (active && !painting && !fallback) {
+    const active = visible && !disposed && !document.hidden;
+    if (active && homeDaylight.ready && pigment && !painting && !fallback) {
       try {
-        painting = createSeekerPainting(host, image);
+        painting = createSeekerPainting(host, pigment);
         painting.canvas.addEventListener('webglcontextlost', () => {
           fallback = true; painting?.destroy(); painting = undefined; sync();
         }, {once:true});
       } catch { fallback = true; }
     }
-    host.classList.toggle('is-painted', active && !!painting);
+    const live = active && homeDaylight.ready && !!painting;
+    host.classList.toggle('is-painted', live);
     host.classList.toggle('seeker-fallback-motion', active && fallback && !reduced.matches);
-    if (active && painting) {
+    if (live && painting) {
       if (reduced.matches) painting.draw(0);
       else frame = requestAnimationFrame(tick);
     }
   }
-  void afterEntrance?.then(() => { if (!disposed) { canPaint = true; sync(); } });
   const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); });
   observer.observe(host);
-  const offDaylight = onHomeDaylightReady(() => {
-    if (visible && !document.hidden && reduced.matches) painting?.draw(0);
-  });
+  const offDaylight = onHomeDaylightReady(sync);
   reduced.addEventListener('change', sync);
   document.addEventListener('visibilitychange', sync);
-  void image.decode().then(() => { if (!disposed) { decoded = true; sync(); } }).catch(() => {});
+  // Light the original pigment exactly once. The displayed poster already
+  // contains this shader’s first frame and must never be fed back into it.
+  void loadAssetImage(character.home).then(source => {
+    if (!disposed) { pigment = source; sync(); }
+  }).catch(() => { if (!disposed) { fallback = true; sync(); } });
   return () => {
     host.classList.remove('is-painted','seeker-fallback-motion'); detachImage();
     offDaylight(); disposed = true; cancelAnimationFrame(frame); observer.disconnect();

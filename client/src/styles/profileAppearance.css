@@ -10,12 +10,12 @@
 .home-standing-seeker :is(img,canvas) {display:block;position:absolute;inset:0;width:100%;height:100%;}
 .home-standing-seeker canvas,.home-standing-seeker.is-painted img {visibility:hidden;}
 .home-standing-seeker.is-painted canvas {visibility:visible;}
-.home-standing-seeker[data-character="SEEKER_HOODED"]:not(.is-painted)::after {
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(112deg,transparent 30%,rgba(23,35,77,.28) 66%);
-  mask:var(--seeker-silhouette) center/100% 100% no-repeat;
+@media (prefers-reduced-motion:no-preference) {
+  .home-standing-seeker.seeker-fallback-motion img,
+  .lounge-home:has(.living-home[data-atmosphere="fallback"]) .home-standing-seeker[data-character="SEEKER_HOODED"] img {
+    transform-origin:50% 83%;animation:seeker-closeup-breath 4.45s ease-in-out infinite alternate;
+  }
 }
-.home-standing-seeker.seeker-fallback-motion img,.home-standing-seeker.seeker-fallback-motion::after {transform-origin:50% 83%;animation:seeker-closeup-breath 4.45s ease-in-out infinite alternate;}
 @keyframes seeker-closeup-breath {
   from {transform:translate3d(-.2%,.15%,0) rotate(-.24deg) scaleY(.996);}
   to {transform:translate3d(.2%,-.15%,0) rotate(.24deg) scaleY(1.004);}

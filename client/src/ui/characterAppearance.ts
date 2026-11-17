@@ -8,6 +8,7 @@ interface CharacterAppearance {
   id: string;
   name: () => string;
   home: string;
+  daylightPoster?: string;
   portrait: string;
   icon: string;
 }
@@ -15,6 +16,7 @@ interface CharacterAppearance {
 /** Profile choices and HOME paintings share the same character IDs. */
 export const playableCharacters: CharacterAppearance[] = [{
   id:SEEKER_ID, name:seekerName, home:SEEKER_ROOT+'/home-closeup.webp',
+  daylightPoster:'/art/seekers/faceless-v2/home-closeup-daylight.webp',
   portrait:SEEKER_ROOT+'/cutout/portrait.webp', icon:seekerPoster(),
 }];
 

@@ -60,12 +60,12 @@ export function mountHome(app: App, afterEntrance?: Promise<void>): Screen {
   const stopGifts=mountGiftInbox(app,wrap.querySelector<HTMLButtonElement>('#homeGifts')!);
   const figure = wrap.querySelector<HTMLElement>('.home-standing-seeker')!;
   let avatar = u?.avatar;
-  let stopSeeker = mountHomeSeeker(figure, avatar, afterEntrance);
+  let stopSeeker = mountHomeSeeker(figure, avatar);
   const syncCharacter = () => {
     if (avatar === app.user?.avatar) return;
     stopSeeker();
     avatar = app.user?.avatar;
-    stopSeeker = mountHomeSeeker(figure, avatar, afterEntrance);
+    stopSeeker = mountHomeSeeker(figure, avatar);
   };
   document.addEventListener('lore:user',syncCharacter);
   const q=(id:string)=>wrap.querySelector<HTMLButtonElement>('#'+id)!;

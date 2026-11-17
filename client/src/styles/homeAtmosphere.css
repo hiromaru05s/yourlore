@@ -1,11 +1,12 @@
 /* Fill the shared plate's sky cutouts on static menus; only HOME owns the animated sky. */
 .lounge-shell:not(.lounge-home){background-color:#8ab8e1}
 
-/* Generated plate is a static fallback and keeps image readiness/cache ownership. */
+/* The live scene at time zero, including window shafts, floor reflections and ivy.
+   Center/cover matches the orthographic camera at every viewport size. */
 .lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home{
  inset:0;animation:none;transform:none;will-change:auto;
- background-image:var(--menu-library-image),url('/art/lounge/toon-soft-20261026/clouds.webp'),linear-gradient(#70a9d6,#cadde6);
- background-position:center;background-size:cover,110% auto,cover;background-repeat:no-repeat;
+ background-image:url('/art/lounge/toon-balanced-20261026/library-daylight.webp');
+ background-position:center;background-size:cover;background-repeat:no-repeat;
 }
 .lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::before{display:none}
 .lounge-shell.selected-menu.lounge-home .lounge-atmosphere.living-home::after{

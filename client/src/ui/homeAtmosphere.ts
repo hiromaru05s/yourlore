@@ -155,7 +155,7 @@ async function init(){try{
 }catch(err){if(!disposed){host.dataset.atmosphere='fallback';destroy();}}}
 
 function destroy(){
- if(disposed)return;disposed=true;cancelAnimationFrame(raf);observer.disconnect();
+ if(disposed)return;disposed=true;if(ready)announceHomeDaylightReady(false);cancelAnimationFrame(raf);observer.disconnect();
  document.removeEventListener('visibilitychange',visibility);reduce.removeEventListener('change',reduced);
  renderer.domElement.removeEventListener('webglcontextlost',contextLost);
  const geometries=new Set<THREE.BufferGeometry>(),materials=new Set<THREE.Material>();

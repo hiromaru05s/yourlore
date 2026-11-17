@@ -9,6 +9,8 @@ export async function startupAssets(root) {
   '/art/brand/lore-logo-transparent.webp',
   '/art/ui/loading/azure-card-v1.webp',
   '/art/lounge/toon-balanced-20261026/library-wide.webp',
+  '/art/lounge/toon-balanced-20261026/library-daylight.webp',
+  '/art/seekers/faceless-v2/home-closeup-daylight.webp',
   '/art/lounge/toon-balanced-20261026/ivy.webp',
   '/art/lounge/toon-soft-20261026/clouds.webp',
   '/art/ui/lore-panel-azure-cut-ui.webp',
