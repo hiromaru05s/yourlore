@@ -26,8 +26,14 @@ try{
  assert.deepEqual([...visited].sort((a,b)=>a-b),[3,4,5,6,7],'+4 traverses four slots without skipping a count');assert.equal(pos('guts'),7);assert.equal(badge('guts').querySelectorAll('text').length,1);
  data={...data,guts:3};render();step(130);const moving=pos('guts');assert(moving<7&&moving>3);render();assert.equal(pos('guts'),moving,'DOM rebuild keeps the current reel position');step(390);assert.equal(pos('guts'),3,'same target keeps original deadline');
  data={...data,guts:7};render();step(200);const interrupted=pos('guts');data={...data,guts:0};render();assert.equal(pos('guts'),interrupted);step(520);assert.equal(pos('guts'),0,'reverse settles at latest authoritative target');
- data={...data,decayCnt:1};render();assert.equal(pos('decay'),0,'newly granted decay starts at zero on an existing card');step(520);assert.equal(pos('decay'),1);assert.equal(zone.querySelectorAll('.card-counter').length,2);
- data={...data,decayCnt:0};render();assert.equal(badge('decay').dataset.counterValue,'0');step(520);assert(!badge('decay'),'cleared status rolls to zero and then releases its badge');
+ data={...data,decayCnt:1};render();assert.equal(pos('decay'),1,'board snapshot keeps the well filled after the grant animation');
+ const wellOffsets=()=>Array.from(badge('decay').querySelectorAll('[data-liquid]'),well=>well.getAttribute('transform'));
+ assert.deepEqual(wellOffsets(),['translate(0 0)','translate(0 19)','translate(0 19)']);
+ assert.equal(zone.querySelectorAll('.card-counter').length,2);
+ setCardCounter(badge('decay'),2);step(75);
+ assert.notEqual(wellOffsets()[1],'translate(0 19)');assert.notEqual(wellOffsets()[1],'translate(0 0)');
+ step(75);assert.deepEqual(wellOffsets(),['translate(0 0)','translate(0 0)','translate(0 19)']);
+ data={...data,decayCnt:0};render();assert(!badge('decay'),'clearing decay removes its gauge');
  reduced=true;data={...data,guts:8};render();assert.equal(pos('guts'),8);reduced=false;
  data={...data,guts:4};render();step(100);Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new dom.window.Event('visibilitychange'));assert.equal(pos('guts'),4);Object.defineProperty(document,'hidden',{configurable:true,value:false});
  for(const id of ['DRAGON_EGG','BEAST_EGG']){const egg=cardEl({...DB[id],uid:id,hatch:4,dur:2},{field:true});assert.equal(egg.querySelector('[data-counter-kind="hatch"]').dataset.counterValue,'4');assert.equal(egg.querySelector('.ad-def--durability .seal-value').textContent,'2');assert(!egg.querySelector('.ad-atk'));assert(!egg.querySelector('.ec-h,.ec-d'));}

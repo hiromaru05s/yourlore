@@ -11,7 +11,7 @@ export async function decayFace(card:HTMLElement,signal:AbortSignal):Promise<HTM
  if(signal.aborted)throw new Error('Cancelled card capture');
  const host=document.createElement('div');host.className='game decay-counter-capture';host.style.cssText='position:fixed;left:-8000px;top:0;width:200px;pointer-events:none;visibility:hidden';
  const copy=card.cloneNode(true) as HTMLElement;copy.removeAttribute('id');copy.classList.remove('study-card');copy.style.cssText=`position:relative;transform:none;width:200px!important;height:${200*ratio}px!important;--cw:200px;--ch:${200*ratio}px;visibility:hidden`;
- copy.querySelectorAll('canvas,.card-name,.card-status,.card-cost,.ad-atk,.ad-def,.badge').forEach(el=>el.remove());
+ copy.querySelectorAll('canvas,.card-counter,.card-name,.card-status,.card-cost,.ad-atk,.ad-def,.badge').forEach(el=>el.remove());
  host.append(copy);document.body.append(host);
  const remove=()=>host.remove();signal.addEventListener('abort',remove,{once:true});
  try{
