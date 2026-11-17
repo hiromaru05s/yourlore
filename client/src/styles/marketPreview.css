@@ -58,12 +58,9 @@
 .lane-title{position:absolute;left:15px;top:12%;padding:8px 0 7px;border-bottom:1px solid #91abc161;color:#c9d7e1;font:500 clamp(13px,2vmin,21px)/1.4 "Yu Mincho",serif;letter-spacing:.14em}
 .return-lane .lane-title{color:#e2ceaa;border-color:#b7a8825e}
 .lane-slots{display:flex;justify-content:center;gap:var(--gap);align-items:center}
-.return-socket::before,.keep-lane .goes-back::before{border:1px solid #c0b79d61;border-radius:5%;box-shadow:inset 0 2px 10px #0006,0 1px #d4cbb629;background:linear-gradient(145deg,#0a1422a3,#20324480)}
 .return-socket{display:grid;place-items:center}
-.keep-lane .goes-back::after{content:"";position:absolute;inset:5px;border:1px solid #c5c1a21a;border-radius:4%;pointer-events:none}
 .return-arrow{font:normal calc(var(--unit)*.49)/1 Georgia,serif;color:#c2b89648;transform:rotate(-20deg);text-shadow:0 1px #eff1c51f}
 .keep-lane .study-slot{perspective:none}
-.keep-lane .goes-back::before{content:"";position:absolute;inset:0;border-color:#92b9d557}
 .keep-lane .study-lift{z-index:1;transform:translate(var(--dx,0),var(--dy,0));transition:transform .38s cubic-bezier(.22,.75,.16,1)}
 .keep-lane .goes-back{z-index:4}
 .opening-study .goes-back .card.is-picked{transform:none;outline:0;box-shadow:none}
@@ -95,7 +92,6 @@
 .lane-title{display:flex;align-items:center;gap:9px}
 .lane-mark{font:normal 1.35em Georgia;color:#b8d1df}
 .return-lane .lane-mark{color:#e0c797}
-.return-socket::before{content:"";position:absolute;inset:4%;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,#8b795e20,transparent 70%),linear-gradient(145deg,#090f19bf,#20324499)}
 .return-arrow{position:relative;color:#c2b89678}
 @media(max-width:720px) and (orientation:portrait){
  .hand-study{--unit:min(26vw,19dvh,155px)}
@@ -146,7 +142,18 @@
 .hand-study .keep-lane .study-slot.is-dragging{z-index:6}
 .hand-study .is-dragging .study-lift{transition:none}
 .hand-study .study-slot.is-dragging .card[aria-disabled=false]{cursor:grabbing}
-.return-socket.drop-hover::after,.keep-lane .study-slot.drop-hover::after{
-  content:"";position:absolute;inset:-3px;border:1px solid #b8e5ff;border-radius:5%;
-  box-shadow:0 0 8px #72bfff99,inset 0 0 9px #75c8ff55;pointer-events:none
+/* Use the printed face's alpha silhouette for the well and its light. */
+.return-socket::before,.keep-lane .goes-back::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:var(--placed-frame,var(--slot-frame)) center/100% 100% no-repeat;
+  filter:brightness(0) invert(.12) drop-shadow(0 0 1px #94a9b9);
+}
+.return-socket.drop-hover::before{
+  background-image:var(--drag-frame,var(--slot-frame));
+  filter:brightness(0) invert(.23) sepia(.6)
+    drop-shadow(0 0 1px #fff0cc) drop-shadow(0 0 3px var(--foil)) drop-shadow(0 0 5px #be8f5380);
+}
+.return-socket.drop-hover .return-arrow{color:#e2ceaa}
+.keep-lane .study-slot.drop-hover::before{
+  filter:brightness(0) invert(.2) drop-shadow(0 0 1px #e1f4ff) drop-shadow(0 0 4px #85b6d5);
 }
