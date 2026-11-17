@@ -8,7 +8,7 @@ export function mountSpendLab(g:GameState,resetBoard:()=>void){
   document.title='マナ消費プレビュー · LORE';
   const panel=document.createElement('section');
   panel.className='spend-panel';panel.ariaLabel='マナ消費プレビュー';
-  panel.innerHTML='<button data-mode="purchase" data-primary>購入 · 3マナ</button><button data-mode="normal">通常消費 · 2マナ</button><select aria-label="支払う側"><option value="0">自分</option><option value="1">相手</option></select><button data-speed aria-label="再生速度">1×</button>';
+  panel.innerHTML='<button data-mode="normal" data-primary>通常消費 · 2マナ</button><button data-mode="purchase">購入 · 3マナ</button><select aria-label="支払う側"><option value="0">自分</option><option value="1">相手</option></select><button data-speed aria-label="再生速度">1×</button>';
   const app=document.getElementById('app')!,modes=panel.querySelectorAll<HTMLButtonElement>('[data-mode]');
   const sideSelect=panel.querySelector('select')!,speed=panel.querySelector<HTMLButtonElement>('[data-speed]')!;
   const controller=new AbortController();
@@ -39,7 +39,7 @@ export function mountSpendLab(g:GameState,resetBoard:()=>void){
   const poll=window.setInterval(()=>{
     if(app.dataset.sceneReady!=='true'&&app.dataset.tableState!=='fallback')return;
     clearInterval(poll);
-    if(!used&&!document.hidden&&!new URLSearchParams(location.search).has('manual'))void run(true);
+    if(!used&&!document.hidden&&!new URLSearchParams(location.search).has('manual'))void run(false);
   },200);
   window.addEventListener('pagehide',()=>{clearInterval(poll);controller.abort();panel.remove();app.inert=false;},{once:true});
 }

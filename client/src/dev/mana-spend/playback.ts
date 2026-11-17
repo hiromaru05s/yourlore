@@ -60,6 +60,36 @@ function glint(c:CanvasRenderingContext2D,p:Point,size:number,power:number){
   c.beginPath();c.moveTo(0,-.96);c.lineTo(.12,-.13);c.lineTo(.72,0);c.lineTo(.1,.10);c.lineTo(0,.88);c.lineTo(-.09,.11);c.lineTo(-.68,0);c.lineTo(-.11,-.09);c.closePath();
   c.fillStyle='#e3fcff';c.shadowColor='#3aafff';c.shadowBlur=size*.34;c.fill();c.restore();
 }
+// Four cut faces share a center while charged. On spend the seams open a few
+// pixels, then the facets shrink toward their own tips above the spent stone.
+const burstMs=255;
+const rim=[{x:0,y:-.63},{x:.43,y:-.02},{x:0,y:.59},{x:-.43,y:.03}];
+const facetColors=['#c0edff','#478fdc','#70bcf7','#e2f8ff'];
+function drawLocalSpend(c:CanvasRenderingContext2D,src:Point & {size:number},local:number){
+  const age=local-release;
+  if(age>=burstMs)return;
+  const charge=smooth(local/release);
+  const open=1-(1-clamp(age/155))**3;
+  const shrink=smooth((age-25)/(burstMs-25));
+  c.save();
+  c.translate(src.x,src.y);
+  c.scale(src.size,src.size);
+  for(let i=0;i<rim.length;i++){
+    const a=rim[i],b=rim[(i+1)%rim.length];
+    const tip={x:(a.x+b.x)*.5,y:(a.y+b.y)*.5};
+    c.save();
+    c.translate(tip.x*(shrink+open*.92),tip.y*(shrink+open*.92));
+    c.scale(1-shrink,1-shrink);
+    c.globalAlpha=(age<0?.53*charge:.84*(1-shrink));
+    c.fillStyle=facetColors[i];
+    c.beginPath();c.moveTo(0,0);c.lineTo(a.x,a.y);c.lineTo(b.x,b.y);c.closePath();c.fill();
+    c.beginPath();c.moveTo(a.x,a.y);c.lineTo(0,0);c.strokeStyle='#edfbff';c.lineWidth=.042;c.stroke();
+    c.restore();
+  }
+  c.restore();
+  const flash=age<0?.32*charge:.88*(1-smooth(age/155));
+  glint(c,src,src.size,flash);
+}
 export function setReadout(tray:HTMLElement,value:number){
   tray.dataset.mana=String(value);
   tray.querySelector('.mana-readout b')!.textContent=String(value);
@@ -69,7 +99,7 @@ export function setReadout(tray:HTMLElement,value:number){
 
 export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElement|null,rate:number,signal:AbortSignal){
   const initial=Number(tray.dataset.mana);
-  const [loaded,wake]=await assets;
+  const [loaded,wake]=card?await assets:[true,undefined] as const;
   if(signal.aborted||count<=0)return;
   if(!loaded||matchMedia('(prefers-reduced-motion: reduce)').matches){
     setReadout(tray,initial-count);sfx('mana-pay');return;
@@ -79,8 +109,8 @@ export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElem
   document.body.append(canvas);
   const stamp=card?.querySelector<HTMLElement>('.card-cost');
   const face=document.createElement('span');face.className='spend-face';face.ariaHidden='true';card?.append(face);
-  const gap=Math.min(115,410/Math.max(1,count-1)),travel=card?610:340;
-  const duration=release+gap*(count-1)+travel+(card?195:135);
+  const gap=Math.min(115,410/Math.max(1,count-1)),travel=610;
+  const duration=release+gap*(count-1)+(card?travel+195:burstMs);
   let previous=initial,contacted=false;
   try{
     await new Promise<void>(resolve=>{
@@ -95,7 +125,7 @@ export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElem
         ctx!.setTransform(dpr,0,0,dpr,0,0);ctx!.clearRect(0,0,innerWidth,innerHeight);
         const remaining=initial-Math.min(count,Math.max(0,Math.floor((age-release)/gap)+1));
         if(remaining!==previous){setReadout(tray,remaining);previous=remaining;}
-        const target=center((stamp??card??tray.querySelector('.mana-readout')!).getBoundingClientRect());
+        const target=card?center((stamp??card).getBoundingClientRect()):null;
         const contact=age-release-travel;
         if(!contacted&&age>=(card?release+travel:release)){contacted=true;sfx('mana-pay');}
         if(card&&contact>0){
@@ -106,17 +136,18 @@ export async function spend(tray:HTMLElement,side:0|1,count:number,card:HTMLElem
         for(let i=0;i<count;i++){
           const local=age-i*gap;if(local<0||local>release+travel+130)continue;
           const src=crystalPosition(tray,initial-1-i,side),d=src.size;
+          if(!target){drawLocalSpend(ctx!,src,local);continue;}
           if(local<release){glint(ctx!,{x:src.x-d*.13,y:src.y-d*.13},d*.85,smooth(local/release));continue;}
-          const u=clamp((local-release)/travel),q=card?manaTravelProgress(u):smooth(u);
-          const bend=(card?Math.min(62,Math.hypot(target.x-src.x,target.y-src.y)*.16):d*.93)*(side?-1:1);
+          const u=clamp((local-release)/travel),q=manaTravelProgress(u);
+          const bend=Math.min(62,Math.hypot(target.x-src.x,target.y-src.y)*.16)*(side?-1:1);
           const path=(v:number)=>curve(src,target,v,bend);
           const pos=path(q),next=path(Math.min(1,q+.003));
-          ribbon(ctx!,path,q,Math.min(q,.19+.13*u),d*(card ? .15 : .12)*(1-smooth((u-.88)/.12)));
-          if(card&&u<1)wake?.draw(ctx!,pos.x,pos.y,Math.atan2(next.y-pos.y,next.x-pos.x),d*1.5,local,.55*u,0);
-          const scale=(card?1+.65*Math.sin(Math.PI*u):1-.4*u)*(1-smooth((u-.81)/.19));
+          ribbon(ctx!,path,q,Math.min(q,.19+.13*u),d*.15*(1-smooth((u-.88)/.12)));
+          if(u<1)wake?.draw(ctx!,pos.x,pos.y,Math.atan2(next.y-pos.y,next.x-pos.x),d*1.5,local,.55*u,0);
+          const scale=(1+.65*Math.sin(Math.PI*u))*(1-smooth((u-.81)/.19));
           drawFacet(ctx!,pos,d*1.83*scale,u*.48,1-u);
           const impact=local-release-travel;
-          if(impact>=0)glint(ctx!,target,d*(card?1.05:.66),1-smooth(impact/130));
+          if(impact>=0)glint(ctx!,target,d*1.05,1-smooth(impact/130));
         }
         if(age>=duration)done();else frame=requestAnimationFrame(draw);
       }
