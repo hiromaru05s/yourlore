@@ -35,7 +35,7 @@ import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenV
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
 import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
 import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
-import { botNpc, npcPortrait } from "../shared/botNpcs";
+import { botNpc } from "../shared/botNpcs";
 import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
@@ -1569,7 +1569,7 @@ export abstract class BaseController implements BoardHandlers {
       this.openingWait?.remove();this.openingWait=null;
       const opening=this.state.opening,startsAt=opening?.startsAt;
       const opponentAvatar = this.state.portraitAvatars?.[(1-this.you) as Side]
-        ?? (this.state.botDifficulty && !npcPortrait(COIN_OPP.avatar) ? botNpc(this.state.botDifficulty).avatar : COIN_OPP.avatar);
+        ?? (this.state.botDifficulty && !COIN_OPP.avatar?.startsWith("STORY_") ? botNpc(this.state.botDifficulty).avatar : COIN_OPP.avatar);
       await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name,medal:this.state.medals?.[this.you]},opp:{...COIN_OPP,avatar:opponentAvatar,name:this.state.players[(1-this.you) as Side].name,medal:this.state.medals?.[(1-this.you) as Side]},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
         onStart:this.exits.onOpeningStart,
         elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,

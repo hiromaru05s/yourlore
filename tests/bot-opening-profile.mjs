@@ -28,13 +28,13 @@ try {
     }}],
   });
   const {BaseController,setCoinProfiles,BOT_NPCS} = await import(path.join(dir,'controller.mjs'));
-  const run = async (avatar, difficulty, you = 0) => {
+  const run = async (avatar, difficulty, you = 0, portraitAvatars) => {
     const npc = BOT_NPCS.find(n => n.difficulty === difficulty);
     setCoinProfiles({avatar:'SEEKER_BLUE',name:'YOU'}, {avatar,name:'?'});
     const players = [{name:'YOU'},{name:npc?.name.ja ?? 'Opponent'}];
     if (you === 1) players.reverse();
     const controller = Object.assign(Object.create(BaseController.prototype), {
-      state:{players, botDifficulty:difficulty, turn:1, cur:you, over:false}, you,
+      state:{players, portraitAvatars, botDifficulty:difficulty, turn:1, cur:you, over:false}, you,
       openingRoot:document.querySelector('main'), openingAbort:new AbortController(),
       prepareOpeningAssets:async()=>{}, exits:{}, dead:false,
     });
@@ -51,6 +51,10 @@ try {
   // no profile at all. In both cases the authoritative room identifies the NPC.
   for (const npc of BOT_NPCS) for (const mountedAvatar of [null,'SEEKER_RED','NPC_LUMI']) {
     for (const you of [0,1]) assert.equal(await run(mountedAvatar,npc.difficulty,you),npc.avatar);
+  }
+  for (const story of ['STORY_LUCA','STORY_RENA','STORY_ARIES']) {
+    assert.equal(await run(story,'hell'),story,'guest story opening');
+    assert.equal(await run('NPC_SION','hell',0,[null,story]),story,'authoritative story opening');
   }
   // Local guest BOTs and ordinary online duels preserve the supplied profile.
   for (const avatar of [...BOT_NPCS.map(n=>n.avatar),'SEEKER_RED','SEEKER_BLUE',null]) {
