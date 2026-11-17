@@ -79,7 +79,9 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
     if(cls==='return-lane')label.append(count);
     row.append(label,slots);scene.content.append(row);return slots;
   };
-  const picked:string[]=[],max=Math.min(2,pool.length);
+  const max=Math.min(2,pool.length);
+  const assignments=Array<string|null>(max).fill(null);
+  const selected=()=>assignments.filter((uid):uid is string=>uid!==null);
   const docks:HTMLElement[]=[];
   if(!confirmed){
     const back=rail(words.returnLane,'return-lane');
@@ -96,41 +98,49 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
   let locked=confirmed;
   function position(){
     for(const {uid,slot,lift} of cards){
-      const target=docks[picked.indexOf(uid)],from=slot.getBoundingClientRect(),to=target?.getBoundingClientRect();
+      const target=docks[assignments.indexOf(uid)],from=slot.getBoundingClientRect(),to=target?.getBoundingClientRect();
       lift.style.setProperty('--dx',to?(to.left-from.left)+'px':'0px');lift.style.setProperty('--dy',to?(to.top-from.top)+'px':'0px');
     }
   }
   const paint=()=>{
+    const picked=selected();
     cards.forEach(({uid,slot,face})=>{
       const chosen=picked.includes(uid);
       slot.classList.toggle('goes-back',chosen);face.classList.toggle('is-picked',chosen);
       face.setAttribute('aria-pressed',String(chosen));
       face.setAttribute('aria-disabled',String(locked||(!chosen&&picked.length>=max)));
     });
-    docks.forEach((dock,i)=>dock.classList.toggle('occupied',i<picked.length));
     count.textContent=picked.length+' / '+max;
     scene.button.textContent=picked.length?words.confirm(picked.length):words.keep;
     position();
   };
-  function toggleCard(uid:string){
+  function toggleCard(uid:string,destination=assignments.indexOf(null)){
     if(locked)return;
-    const i=picked.indexOf(uid);
-    if(i>=0)picked.splice(i,1);else if(picked.length<max)picked.push(uid);else return;
+    const from=assignments.indexOf(uid);
+    if(from>=0)assignments[from]=null;
+    else if(assignments[destination]===null)assignments[destination]=uid;
+    else return;
     sfx('pop');paint();
   }
 
   type HandCard=(typeof cards)[number];
-  type Drag={card:HandCard;id:number;x:number;y:number;offsetX:number;offsetY:number;lane:HTMLElement;moving:boolean};
+  type Drag={card:HandCard;id:number;x:number;y:number;offsetX:number;offsetY:number;hover:HTMLElement|null;moving:boolean};
   let drag:Drag|null=null;
-  function overLane(lane:HTMLElement,e:PointerEvent){
-    const bounds=lane.getBoundingClientRect();
+  function containsPointer(target:HTMLElement,e:PointerEvent){
+    const bounds=target.getBoundingClientRect();
     return e.clientX>=bounds.left&&e.clientX<=bounds.right&&e.clientY>=bounds.top&&e.clientY<=bounds.bottom;
+  }
+  function dropTarget(card:HandCard,e:PointerEvent){
+    if(assignments.includes(card.uid)){
+      return containsPointer(hand.parentElement!,e)?card.slot:null;
+    }
+    return docks.find((dock,i)=>assignments[i]===null&&containsPointer(dock,e))??null;
   }
   function endDrag(){
     if(!drag)return;
-    const {card,id,lane}=drag;
+    const {card,id,hover}=drag;
     drag=null;
-    lane.classList.remove('drop-hover');
+    hover?.classList.remove('drop-hover');
     card.slot.classList.remove('is-dragging');
     card.lift.style.removeProperty('transform');
     if(card.face.hasPointerCapture(id))card.face.releasePointerCapture(id);
@@ -144,10 +154,8 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
       if(!e.isPrimary||e.button!==0||drag)return;
       suppressClick=false;
       if(locked||face.getAttribute('aria-disabled')==='true')return;
-      const chosen=picked.includes(uid);
-      const lane=scene.content.querySelector<HTMLElement>(chosen?'.keep-lane':'.return-lane')!;
       const offset=new DOMMatrixReadOnly(getComputedStyle(card.lift).transform);
-      drag={card,id:e.pointerId,x:e.clientX,y:e.clientY,offsetX:offset.m41,offsetY:offset.m42,lane,moving:false};
+      drag={card,id:e.pointerId,x:e.clientX,y:e.clientY,offsetX:offset.m41,offsetY:offset.m42,hover:null,moving:false};
       face.setPointerCapture(e.pointerId);
     };
     face.onpointermove=e=>{
@@ -161,13 +169,18 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
         card.slot.classList.add('is-dragging');
       }
       card.lift.style.transform=`translate(${drag.offsetX+dx}px,${drag.offsetY+dy}px)`;
-      drag.lane.classList.toggle('drop-hover',overLane(drag.lane,e));
+      const hover=dropTarget(card,e);
+      if(drag.hover!==hover){
+        drag.hover?.classList.remove('drop-hover');
+        hover?.classList.add('drop-hover');
+        drag.hover=hover;
+      }
     };
     face.onpointerup=e=>{
       if(!drag||drag.card!==card||drag.id!==e.pointerId)return;
-      const accept=drag.moving&&overLane(drag.lane,e);
+      const target=drag.moving?dropTarget(card,e):null;
       endDrag();
-      if(accept)toggleCard(uid);
+      if(target)toggleCard(uid,docks.indexOf(target));
     };
     face.onpointercancel=face.onlostpointercapture=e=>{
       if(drag?.card===card&&drag.id===e.pointerId)endDrag();
@@ -177,7 +190,7 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
     if(locked)return;endDrag();locked=true;scene.button.disabled=true;scene.button.textContent=words.submitted;
     scene.node.classList.add('is-submitted');select(uids);
   };
-  scene.button.onclick=()=>commit([...picked]);
+  scene.button.onclick=()=>commit(selected());
   const toggle=element('button','btn btn-ghost hand-market-toggle',words.viewMarket);
   toggle.type='button';toggle.setAttribute('aria-expanded','true');scene.foot.prepend(toggle);
   const inspection=element('div','hand-market-inspection');
