@@ -4,8 +4,8 @@ import { api } from '../net/api';
 import { botNpc, SINGLE_DIFFICULTIES } from '../shared/botNpcs';
 import { ARIES_ROUTE, ARIES_COMPLETED_KEY } from '../shared/ariesStory';
 import { STARTERS, DB, deckStoreForUser } from '../shared/cards';
-import { BOT_FIRST_CLEAR_EXP, BOT_REWARDS } from '../shared/progression';
-import { firstClearLabel } from '../ui/dailyRewards';
+import { BOT_REWARDS } from '../shared/progression';
+import { homeIcon } from '../ui/homeIcons';
 import { artUrl } from '../ui/cardArt';
 import { mountHomeDuelButton } from '../ui/homeDuelButton';
 import { loungeText as L } from '../ui/loungeText';
@@ -15,7 +15,8 @@ import '../styles/singlePage.css';
 
 export interface SingleLocation { page?:number; tab?:'story'|'battle' }
 const lock = '<svg class="sp-lock" viewBox="0 0 20 22" aria-hidden="true"><path d="M5 10V7a5 5 0 0 1 10 0v3M3 10h14v10H3z"/><path d="M10 14v3"/></svg>';
-const tiers = () => [L('かんたん','Easy','쉬움'),L('ふつう','Normal','보통'),L('むずかしい','Hard','어려움')];
+const favoriteCards = { easy:'HALF_ELF', normal:'CASTLE', hard:'FLAME' } as const;
+const chevron = '<svg class="sp-chevron" viewBox="0 0 24 32" aria-hidden="true"><path d="m7 4 11 12L7 28"/></svg>';
 
 export function mountSingle(app:App, initial:SingleLocation={}):Screen {
   const root=document.createElement('section');
@@ -45,6 +46,8 @@ export function mountSingle(app:App, initial:SingleLocation={}):Screen {
     const storyLabel=L('ストーリー','Story','스토리');
     const battleLabel=L('対戦','Battle','대전');
     const nextLabel=next?next.name[locale]:storyLabel;
+    const favoriteId=favoriteCards[SINGLE_DIFFICULTIES[page]];
+    const favoriteName=cardName({...(STARTERS[favoriteId]??DB[favoriteId]),uid:favoriteId});
     const nextOpen=page<2?page<lastOpen():open;
     root.dataset.story=String(story);
     root.innerHTML=`
@@ -57,21 +60,25 @@ export function mountSingle(app:App, initial:SingleLocation={}):Screen {
           <button disabled>${lock}${L('修練','Training','수련')}</button>
         </nav>${!open?`<small class="sp-story-hint">${storyLabel} · ${storyHint}</small>`:''}</header>
         <div class="sp-identity">
-          <div class="sp-tier">${story?L('マスターシーカーへの道','Path to the Master Seekers','마스터 시커의 길'):tiers()[page]}<i></i>${story?'ARIES':String(page+1).padStart(2,'0')+' / 03'}</div>
-          <small>${story?ARIES_ROUTE[0].title[locale]:npc.title[locale]}</small>
-          <h1>${story?ARIES_ROUTE[0].name[locale]:lastName}</h1>
-          <p>${story?L('ルカに勝利して、Ariesに挑む。','Defeat Luca to challenge Aries.','루카에게 승리하고 Aries에게 도전하세요.'):npc.style[locale]}</p>
-          <span class="sp-reward">${story?(ariesCleared?L('Aries撃破済み','Aries defeated','Aries 격파 완료'):''):(cleared.has(npc.difficulty)?'✓ '+L('クリア済み','Cleared','클리어 완료'):firstClearLabel(BOT_REWARDS[npc.difficulty])+' · '+BOT_FIRST_CLEAR_EXP[npc.difficulty]+' EXP')}</span>
+          ${story?`<div class="sp-tier">${L('マスターシーカーへの道','Path to the Master Seekers','마스터 시커의 길')}<i></i>ARIES</div>
+            <small>${ARIES_ROUTE[0].title[locale]}</small><h1>${ARIES_ROUTE[0].name[locale]}</h1>
+            <p>${L('ルカに勝利して、Ariesに挑む。','Defeat Luca to challenge Aries.','루카에게 승리하고 Aries에게 도전하세요.')}</p>
+            ${ariesCleared?L('Aries撃破済み','Aries defeated','Aries 격파 완료'):''}`:
+            `<h1>${lastName}</h1>
+            <div class="sp-favorite"><img src="${artUrl.sm(favoriteId)}" alt=""><div><small>${L('好きなカード','Favorite card','좋아하는 카드')}</small><strong>${esc(favoriteName)}</strong></div></div>
+            <div class="sp-reward"><small>${L('初回クリア報酬','First clear reward','첫 클리어 보상')}</small>
+              <span aria-label="${BOT_REWARDS[npc.difficulty]} ${t('home.shards')}">${homeIcon('shard')}${BOT_REWARDS[npc.difficulty].toLocaleString(locale)}</span>
+              ${cleared.has(npc.difficulty)?`<small>${L('受取済み','Claimed','수령 완료')}</small>`:''}</div>`}
         </div>
         <div class="sp-actions"><button class="single-battle lounge-play-button" type="button" aria-label="BATTLE"></button>
           <button class="sp-deck" type="button" aria-haspopup="dialog">
             <span class="sp-fan">${active.cards.slice(0,3).map(id=>`<img src="${artUrl.sm(id)}" alt="">`).join('')}</span>
             <span><small>${t('deck.inuse')}</small><strong>${esc(deckName(active,store.sel))}</strong></span><b>›</b>
           </button></div>
-        ${story?'':`<footer class="sp-turn"><button data-prev ${page===0?'disabled':''} aria-label="${L('前の相手','Previous opponent','이전 상대')}">‹</button>
-          <div class="sp-pages" aria-hidden="true">${SINGLE_DIFFICULTIES.map((_,i)=>`<i class="${i===page?'current':''}"></i>`).join('')}</div>
-          <button data-next ${nextOpen?'':'disabled'}><span>${nextOpen?'':lock}${nextLabel} ${nextOpen?'›':''}</span><small>${nextOpen?L('次へ','Next','다음'):unlock}</small></button>
-        </footer>`}
+        ${story?'':`<nav class="sp-turn" aria-label="${L('対戦相手','Opponent','대전 상대')}">
+          <button data-prev ${page===0?'disabled':''} aria-label="${L('前の相手','Previous opponent','이전 상대')}">${chevron}</button>
+          <div class="sp-next"><button data-next ${nextOpen?'':'disabled aria-describedby="sp-unlock"'} aria-label="${nextLabel}">${chevron}${nextOpen?'':lock}</button>
+          ${nextOpen?'':`<small id="sp-unlock">${unlock}</small>`}</div></nav>`}
       </div>`;
     const button=root.querySelector<HTMLButtonElement>('.single-battle')!;
     duel=mountHomeDuelButton(button);
