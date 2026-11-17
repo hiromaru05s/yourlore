@@ -47,7 +47,8 @@
 .sp-reward .lore-icon-shard {width:19px;height:22px;object-fit:contain}
 .sp-turn {position:absolute;left:var(--figure-x);top:calc(var(--figure-top) + var(--figure-height) * .27);width:calc(var(--turn-gap) * 2);height:54px;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:space-between;pointer-events:none;color:white}
 :root body .single-page .sp-turn button {pointer-events:auto;position:relative;display:grid;place-items:center;width:clamp(48px,4.8vw,68px);height:54px;padding:0;border:0!important;border-image:none!important;background:transparent!important}
-.sp-chevron {width:100%;height:100%;object-fit:contain;pointer-events:none;--page-arrow-light:drop-shadow(0 1px 1px #202437) drop-shadow(0 0 2px #fff4cf) drop-shadow(0 0 7px #eacd8da8);filter:drop-shadow(0 1px 1.6px #101b2dd9);transition:filter .18s ease-out}
+.sp-turn button::before {content:"";position:absolute;inset:-12.5%}
+.sp-chevron {width:100%;height:100%;scale:1.25;object-fit:contain;pointer-events:none;--page-arrow-light:drop-shadow(0 1px 1px #202437) drop-shadow(0 0 2px #fff4cf) drop-shadow(0 0 7px #eacd8da8);filter:drop-shadow(0 1px 1.6px #101b2dd9);transition:filter .18s ease-out}
 .sp-turn [data-prev] .sp-chevron {transform:scaleX(-1)}
 @media(hover:hover) {
   .sp-turn button:enabled:hover .sp-chevron {filter:var(--page-arrow-light)}
