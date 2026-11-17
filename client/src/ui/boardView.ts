@@ -33,7 +33,7 @@ import {prepareDuel} from './duelReadiness';
 // (from the viewer's perspective) and wires interaction handlers.
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
-import type { CardInst, GameState, PlayerState, Side } from "../shared/types";
+import type { CardInst, GameState, PlayerState, QuestState, Side } from "../shared/types";
 import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
 import { fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
@@ -530,6 +530,45 @@ export class GameView {
     return Promise.all([stats,this.trickRoom.present(trick)]).then(()=>{});
   }
 
+  private questCard(q: QuestState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): HTMLElement {
+    const tile = questTile(q.card,q.progress);
+    tile.tabIndex=0;tile.setAttribute("role","button");
+    tile.dataset.uid = q.card.uid;
+    const lang = getLang();
+    const progress = q.card.id === 'Q_UNDERWORLD_DEAL'
+      ? {ja: 'カウンター', ko: '카운터', en: 'Counters'}[lang] + ' ×' + q.progress
+      : questProgressText(q.progress, q.card.quest?.target ?? 0, lang);
+    tile.title = `${cardName(q.card)} · ${progress} · ${cardText(q.card)}`;
+    tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
+    bindZoom(tile, q.card, undefined, progress);
+    tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();zoomCard(q.card, undefined, progress);}};
+    if (isMe && myTurn && !pending && availableDealRewards(q).length && this.h.onDealRewards) {
+      const claim = {ja: '報酬を選ぶ', ko: '보상 선택', en: 'Claim reward'}[lang];
+      tile.querySelector('.quest-progress')!.textContent = q.progress + ' · ' + claim;
+      tile.setAttribute('aria-label', tile.getAttribute('aria-label') + ' · ' + claim);
+      tile.onclick = () => this.h.onDealRewards?.(q.card.uid);
+      tile.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); tile.click(); } };
+    }
+    return tile;
+  }
+
+  /** Show committed progress even while the hand play and mana effects are still running. */
+  syncQuestProgress(before: GameState, after: GameState): void {
+    if (before === after) return;
+    for (const side of [0, 1] as const) {
+      const previous = before.players[side].quests;
+      if (!previous?.length) continue;
+      const isMe = side === this.you;
+      const row = this.q(isMe ? "meRow" : "oppRow");
+      for (const q of after.players[side].quests ?? []) {
+        const old = previous.find(entry => entry.card.uid === q.card.uid);
+        if (!old || old.progress === q.progress) continue;
+        const tile = row.querySelector<HTMLElement>(`.buff-icon--quest[data-uid="${CSS.escape(q.card.uid)}"]`);
+        if (tile) tile.replaceWith(this.questCard(q, isMe, after.cur === this.you && !after.over, after.pending));
+      }
+    }
+  }
+
   private renderRow(row: HTMLElement, g: GameState, p: PlayerState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): void {
     const previousFaces=new Map([...row.querySelectorAll<HTMLElement>('.zone-mon > .card[data-uid]')].map(n=>[n.dataset.uid!,n]));
     const previousGrave=row.querySelector<HTMLElement>('.pile--shelf .pile-print:not([data-mana-landing]) .card');
@@ -642,27 +681,7 @@ export class GameView {
       bindZoom(card, e.card, undefined, stateText);
       sz.appendChild(card);
     });
-    for (const q of p.quests ?? []) {
-      const tile = questTile(q.card,q.progress);
-      tile.tabIndex=0;tile.setAttribute("role","button");
-      tile.dataset.uid = q.card.uid;
-      const lang = getLang();
-      const progress = q.card.id === 'Q_UNDERWORLD_DEAL'
-        ? {ja: 'カウンター', ko: '카운터', en: 'Counters'}[lang] + ' ×' + q.progress
-        : questProgressText(q.progress, q.card.quest?.target ?? 0, lang);
-      tile.title = `${cardName(q.card)} · ${progress} · ${cardText(q.card)}`;
-      tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
-      bindZoom(tile, q.card, undefined, progress);
-      tile.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();zoomCard(q.card, undefined, progress);}};
-      if (isMe && myTurn && !pending && availableDealRewards(q).length && this.h.onDealRewards) {
-        const claim = {ja: '報酬を選ぶ', ko: '보상 선택', en: 'Claim reward'}[lang];
-        tile.querySelector('.quest-progress')!.textContent = q.progress + ' · ' + claim;
-        tile.setAttribute('aria-label', tile.getAttribute('aria-label') + ' · ' + claim);
-        tile.onclick = () => this.h.onDealRewards?.(q.card.uid);
-        tile.onkeydown = ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); tile.click(); } };
-      }
-      sz.appendChild(tile);
-    }
+    for (const q of p.quests ?? []) sz.appendChild(this.questCard(q, isMe, myTurn, pending));
     for (let i = p.traps.length + p.enchants.length + (p.quests?.length ?? 0); i < ST_SLOTS; i++) sz.appendChild(this.slotEl());
 
     // Monster zone nearest the center line: me → mon on top, opp → mon on bottom.

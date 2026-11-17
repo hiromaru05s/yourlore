@@ -171,6 +171,17 @@ export class GameRoom {
     const r = await this.state.storage.get<Partial<RoomData>>("room");
     if (r?.game && r.players) {
       restoreReworkedCards(r.game);
+      if (r.storyStage === 0 && r.players[1].id === 'STORY_SHION') {
+        const luca = ARIES_OPPONENTS[0];
+        const oldName = r.players[1].name;
+        const lang = oldName.includes('시온') ? 'ko' : oldName.includes('Shion') ? 'en' : 'ja';
+        for (const player of [r.players[1], r.game.players[1]]) {
+          player.id = luca.avatar;
+          player.name = luca.name[lang];
+        }
+        if (r.bot) r.bot.id = luca.avatar;
+        if (r.game.portraitAvatars) r.game.portraitAvatars[1] = luca.avatar;
+      }
       // Old rooms may contain provider names in both snapshots and public logs.
       // Resolve names and scrub the journal before exposing any restored state.
       if (r.publicNamesVersion !== 1) {

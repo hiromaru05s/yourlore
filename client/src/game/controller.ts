@@ -35,7 +35,7 @@ import {isChosenVictory,playChosenVictory,warmChosenVictory} from '../ui/chosenV
 import { playIntent, needsCastReview, targetOwner } from '../shared/playIntent';
 import {playDewGrant,warmDewGrant} from '../ui/dew/runtime';
 import {playStatusGrant,warmStatusGrants} from '../ui/statusGrant/runtime';
-import { botNpc } from "../shared/botNpcs";
+import { botNpc, npcPortrait } from "../shared/botNpcs";
 import {synergyTier} from '../ui/tribePresentation/selection';
 import {playTribeSynergy} from '../ui/tribeSynergy/runtime';
 import type {Playback} from '../ui/elemental/runtime';
@@ -346,6 +346,7 @@ export abstract class BaseController implements BoardHandlers {
     if (this.dead) return;
     if(this.wheelDice && res.state.pending?.kind!=='reroll' && !res.events.some(e=>e.type==='wheelResolve')){this.wheelDice.close();this.wheelDice=null;}
     this.disposeHandDiscard?.();this.disposeHandDiscard=undefined;
+    this.view.syncQuestProgress(prev, res.state);
     // Hold the existing complete board until newly exposed card art is decoded.
     if(prev!==res.state){const artwork=prepareStateArtwork(res.state,this.you,this.openingRoot);if(artwork){this.view.setPlaying(true);try{await artwork;}finally{if(!this.dead)this.view.setPlaying(false);}}}
     if(this.dead)return;
@@ -1567,9 +1568,8 @@ export abstract class BaseController implements BoardHandlers {
       if(this.dead||this.state.over||this.openingAbort.signal.aborted)return;
       this.openingWait?.remove();this.openingWait=null;
       const opening=this.state.opening,startsAt=opening?.startsAt;
-      // Rejoining a server BOT room may mount without an opponent avatar. Resolve
-      // its NPC from the authoritative state, just like the board portrait.
-      const opponentAvatar=this.state.botDifficulty?botNpc(this.state.botDifficulty).avatar:COIN_OPP.avatar;
+      const opponentAvatar = this.state.portraitAvatars?.[(1-this.you) as Side]
+        ?? (this.state.botDifficulty && !npcPortrait(COIN_OPP.avatar) ? botNpc(this.state.botDifficulty).avatar : COIN_OPP.avatar);
       await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name,medal:this.state.medals?.[this.you]},opp:{...COIN_OPP,avatar:opponentAvatar,name:this.state.players[(1-this.you) as Side].name,medal:this.state.medals?.[(1-this.you) as Side]},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
         onStart:this.exits.onOpeningStart,
         elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,

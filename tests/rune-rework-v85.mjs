@@ -58,6 +58,10 @@ for(const side of [0,1]){
   g = play(fresh(side), 'Q_RUNE_SECRET');
   g = play(g, 'STARTER_MANA');
   assert.equal(g.players[side].quests[0].progress, 1);
+  g.players[side].enchants.push({card:c('DUAL_ATTUNE'),turns:99});
+  g = play(g, 'STARTER_MANA');
+  assert.equal(g.players[side].quests[0].progress, 3, 'the free replay also advances the quest');
+  g.players[side].enchants = [];
   g.players[side].quests[0].progress = 19;
   const crystals = g.players[side].maxMana;
   g = play(g, 'STARTER_MANA');

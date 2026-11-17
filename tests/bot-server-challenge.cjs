@@ -73,10 +73,37 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
   db.prepare('INSERT INTO rewards (user_id,key,amount,created_at) VALUES (?,?,0,?)').run(userId,'bot:first:'+tier,Date.now());
   assert.equal(seen.size,npc.decks.length,'HTTP start preserves every reserved strategy');
  }
+ const starterDeck = ['Q_RUNE_SECRET', ...Array(7).fill('STARTER_TRASH')];
+ db.prepare('UPDATE users SET deck=?, starter_cards=? WHERE id=?')
+   .run(starterDeck.join(','),JSON.stringify({Q_RUNE_SECRET:1}),userId);
  let prior;
  for(const stage of [0,1,2]){
    const res=await request('/rewards/story/start',{previous:prior});assert.equal(res.status,200);
-   const {roomId}=await res.json();const room=rooms.get(roomId);assert.equal(room.room.storyStage,stage);
+   const {roomId,oppName,oppAvatar}=await res.json();const room=rooms.get(roomId);assert.equal(room.room.storyStage,stage);
+   if (stage === 0) {
+     assert.equal(oppName,'火走りのルカ');
+     assert.equal(oppAvatar,'STORY_LUCA');
+     const g = room.room.game, player = g.players[0];
+     assert.equal(g.players[1].name,oppName);
+     assert.equal(g.portraitAvatars[1],oppAvatar);
+     const drawn = [...player.hand, ...player.deck];
+     player.hand = ['Q_RUNE_SECRET','STARTER_MANA'].map(id=>drawn.find(c=>c.id===id));
+     assert(player.hand.every(Boolean),'use the quest and fixed Attune from the account deck');
+     player.deck = drawn.filter(c=>!player.hand.includes(c));
+     Object.assign(g,{cur:0,turn:3,mulligan:undefined});
+     Object.assign(room.room,{readied:[true,true],opening:undefined});
+     const updates = [];
+     const ws = {deserializeAttachment:()=>({side:0,gen:room.room.gen[0]}),send:raw=>updates.push(JSON.parse(raw))};
+     room.state.getWebSockets = tag=>tag==='0'?[ws]:[];
+     for (const progress of [0,1]) {
+       const uid = room.room.game.players[0].hand[0].uid;
+       await room.webSocketMessage(ws,JSON.stringify({type:'action',action:{type:'play',idx:0,sourceUid:uid}}));
+       const update = updates.at(-1);
+       assert.equal(update.type,'update');
+       assert.equal(update.state.players[0].quests[0].progress,progress);
+       if (progress) assert(update.events.some(e=>e.type==='log' && e.html.includes('1/20')));
+     }
+   }
    assert.equal(room.room.rewardDecks[1].filter(id=>id==='ELITE_GOBLIN').length,3);
    if(stage<2)assert.equal((await request('/rewards/story/start',{previous:roomId})).status,403);
    if(prior){const retry=await request('/rewards/story/start',{previous:prior});assert.equal((await retry.json()).roomId,roomId);}
