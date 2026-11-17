@@ -24,7 +24,7 @@ function triangle(c:CanvasRenderingContext2D,image:HTMLCanvasElement,src:Point[]
 }
 
 /** No card flight: turn the raised card into a vortex, then immediately trail into the Rift. */
-export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:DOMMatrix,signal:AbortSignal,onStart:()=>void):Promise<void>{
+export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:DOMMatrix,signal:AbortSignal,onStart:()=>void,identicalCopies:HTMLElement[] = []):Promise<void>{
  const width=innerWidth,height=innerHeight,w=node.offsetWidth,h=node.offsetHeight;
  if(signal.aborted||!w||!h)return;
  const canvas=document.createElement('canvas'),c=canvas.getContext('2d');if(!c)throw new Error('Canvas unavailable');
@@ -48,7 +48,9 @@ export async function swallowRiftCard(node:HTMLElement,target:HTMLElement,start:
  // Rasterizing a 1536px capture per triangle wastes work for a 30–180px board card.
  if(face){const small=document.createElement('canvas');small.width=Math.max(192,Math.min(768,Math.ceil(sourceWidth*(devicePixelRatio||1)*(1+2*CARD_PADDING))));small.height=Math.round(small.width*face.height/face.width);const raster=small.getContext('2d');if(raster){raster.drawImage(face,0,0,small.width,small.height);face=small;}}
  let notified=false;const started=()=>{if(!notified){notified=true;onStart();}};
- if(face&&await playSilverRift(node,target,face,start,sink,signal,started))return;
+ if(face&&await playSilverRift(node,target,face,start,sink,signal,started,identicalCopies))return;
+ // If capture or WebGL failed, the caller moves every copy with one native animation.
+ if(identicalCopies.length)return;
  if(signal.aborted||!node.isConnected||!target.isConnected)return;
  const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
  canvas.className='rift-fold-canvas rift-transmute-canvas';canvas.setAttribute('aria-hidden','true');

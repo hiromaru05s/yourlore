@@ -388,6 +388,7 @@ export type GameEvent =
   | { type: "statusGrant"; player: Side; resource: "shield" | "brand" | "dew"; before: number; after: number; sourceUid?: string }
   | { type: "tribeSynergy"; player: Side; tribe: string; threshold: number; uids: string[] }
   | { type: "monsterActivate"; player: Side; uid: string }
+  | { type: "greedPriceRift"; player: Side; uids: string[] }
   | { type: "cullExile"; player: Side; sourceUid: string; cards: { card: CardInst; from: "discard" | "deck" | "hand" }[] }
   | { type: "enchantActivate"; player: Side; uid: string; id: string; originRite?: OriginRiteReaction }
   | { type: "log"; html: string; htmlJa: string; htmlEn?: string; rejected?: boolean }
