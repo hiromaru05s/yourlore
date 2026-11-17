@@ -1,5 +1,6 @@
+import { searchReduce as reduce } from './botBudget';
 import type { Action, GameState } from './types';
-import { actingSide, effAtk, monsterCanAttack, reduce } from './engine';
+import { actingSide, buyCost, effAtk, monsterCanAttack } from './engine';
 import { botActions, actionChangesState } from './botActions';
 
 /** A bounded same-turn proof search. Unknown draws, dice, face-down traps and
@@ -14,9 +15,14 @@ export function forcedWinPlan(g: GameState, nodeLimit: number): Action[] | undef
   const side = actingSide(g), other = 1 - side;
   if (side !== g.cur || g.players[other].traps.length) return;
   const p = g.players[side], o = g.players[other];
+  const immediateOffer = (c: typeof p.hand[number] | null | undefined): boolean => !!c &&
+    (c.quick === true || ['MERCENARY','MERC_LEADER','MERC_MASTER'].includes(c.id)) &&
+    !(c.id === 'QUICK_CURSE' && (o.hand.length || o.deck.length));
+  const purchasePressure = [...g.market,...p.supply].reduce((n,c) => n +
+    (c && immediateOffer(c) && buyCost(p,c)<=p.mana ? (c.atk??0)*2+(c.val??0)+8 : 0),0);
   // Only a scheduling heuristic: the reducer, not this estimate, proves a win.
   const pressure = p.field.filter(m => monsterCanAttack(g, p, m)).reduce((n, m) => n + Math.max(0, effAtk(p, m, g)) * 2, 0)
-    + p.hand.reduce((n, c) => n + (c.t === 'mon' ? (c.atk ?? 0) * 2 : c.act?.includes('buff') ? 6 * p.field.length : (c.val ?? 0) + 8), 0);
+    + p.hand.reduce((n, c) => n + (c.t === 'mon' ? (c.atk ?? 0) * 2 : c.act?.includes('buff') ? 6 * p.field.length : (c.val ?? 0) + 8), 0) + purchasePressure;
   // A spell awaiting its target has already left the hand, so its pending
   // damage/buff is absent from the estimate. Do not prune that winning line.
   if (!g.pending && pressure < o.hp + (o.shield ?? 0)) return;
@@ -32,7 +38,9 @@ export function forcedWinPlan(g: GameState, nodeLimit: number): Action[] | undef
     const seen = new Set<string>();
     const children: {a: Action; next: GameState; rank: number}[] = [];
     for (const a of botActions(st)) {
-      if (a.type === 'endTurn' || a.type === 'refresh' || a.type === 'buyMarket' || a.type === 'buySupply') continue;
+      if (a.type === 'endTurn' || a.type === 'refresh') continue;
+      if ((a.type === 'buyMarket' || a.type === 'buySupply') &&
+          !immediateOffer(a.type === 'buyMarket' ? st.market[a.i] : st.players[side].supply[a.i])) continue;
       if (a.type === 'play') {
         const signature = JSON.stringify({...st.players[side].hand[a.idx],uid:''});
         if (seen.has(signature)) continue;

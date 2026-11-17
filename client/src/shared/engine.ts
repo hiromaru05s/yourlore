@@ -6440,7 +6440,7 @@ function offerEffectChoice(g: GameState, ctx: Ctx, p: PlayerState, reason: strin
   if (!effectChoices(g).length) { if (reason === 'RIFT_JAILER') returnRiftCard(ctx, p, data?.returnUid); g.pending = null; ctx.log("대상이 없어 효과를 처리하지 않습니다", "対象がないため効果を処理しません", `No legal target — the effect cannot resolve`); return; }
   ctx.ev.push({ type: "needTarget", pending: g.pending });
 }
-function effectSummonAllowed(g: GameState, p: PlayerState, def: CardDef, leaving = 0): boolean {
+export function effectSummonAllowed(g: GameState, p: PlayerState, def: CardDef, leaving = 0): boolean {
   if (def.summonReq==='sixCards' && deckComp(p).length>6)return false;
   if (def.summonReq === 'tenSeals' && (p.curseSeals ?? 0) < 10) return false;
   if (def.summonReq === 'twentyCrystals' && effMaxMana(p) < 20) return false;

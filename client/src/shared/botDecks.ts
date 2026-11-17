@@ -42,22 +42,186 @@ export const BOT_DECKS: BotDeck[] = [
 // v20 A/B (greedy, 기존 3덱 필드 상대): GAMBLER 70% 채택 · ELF 46% 채택(아키타입 다양성)
 // 탈락: TRUMPET 더블 템포 30%(나팔 스타터 승률은 상관관계였음) · MIMIC 41% · 순정 컬덱 45%
 /** Roll a random archetype for a new bot game (caller supplies the RNG roll in [0,1)). */
-// v68: seven independently selected strategies, one per shuffled roster cycle.
-// Selection and independent validation: docs/bot-strength/2026-10-27.
+// v99: current-rule roster screening, then independent full-policy matches.
+// The strongest roster is shared by upper tiers; Hell retains its existing market rule.
 export const BOT_HELL_DECKS: BotDeck[] = [
-  { name: "BOT · GOBLIN", cards: ["GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN", "GOBLIN", "WEAKEN_ALL", "COUNTERCALC", "GOBLIN"], tune: {} },
-  { name: "BOT · DECAY", cards: ["RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "RUST_SHROOM", "STARTER_TRASH", "COUNTERCALC", "COUNTERCALC"], tune: {} },
-  { name: "BOT · FORTRESS", cards: ["CASTLE", "WEAKEN_ALL", "WEAKEN_ALL", "NOURISHING_RAIN", "NOURISHING_RAIN", "GAMBLER", "CASTLE", "BLOOD_RITE"], tune: {} },
-  { name: "BOT · DEW_CONTROL", cards: ["ELF_HAVEN", "WEAKEN_ALL", "HALF_ELF", "COUNTERCALC", "ELF_HAVEN", "STARTER_CHEST", "WEAKEN_ALL", "STARTER_TRASH"], tune: {} },
-  { name: "BOT · FIRE_CONTROL", cards: ["FLAME", "FLAME", "FLAME", "WEAKEN_ALL", "STARTER_TRASH", "CASTLE", "FLAME", "REFRESH_HAND"], tune: {} },
-  { name: "BOT · RIFT", cards: ["RIFT", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "STARTER_TRASH", "FOCUS", "STARTER_CHEST", "STARTER_CHEST"], tune: {} },
-  { name: "BOT · MIXED_RALLY", cards: ["RUST_SHROOM", "RUST_SHROOM", "GOBLIN", "GOBLIN", "GOBLIN_RAIDER", "GOBLIN_RAIDER", "COUNTERCALC", "TRUMPET"], tune: {} },
+  {
+    "name": "BOT · SPIRIT_FORTRESS",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "CASTLE",
+      "WEAKEN_ALL",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "BLOOD_RITE"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_TEMPO",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "ATTUNE_RETURN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · GOBLIN",
+    "cards": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN",
+      "GOBLIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "GOBLIN"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · GOLEM_CONTROL",
+    "cards": [
+      "GOLEM_TEST",
+      "GOLEM_TEST",
+      "GOLEM_TEST",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "WEAKEN_ALL",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_GOBLIN",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "NOURISHING_RAIN",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · MIXED_RALLY",
+    "cards": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "COUNTERCALC",
+      "TRUMPET"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · DECAY",
+    "cards": [
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "RUST_SHROOM",
+      "STARTER_TRASH",
+      "COUNTERCALC",
+      "COUNTERCALC"
+    ],
+    "tune": {}
+  }
 ];
 export const BOT_ELITE_DECKS: BotDeck[] = BOT_HELL_DECKS.map(d=>({...d,cards:[...d.cards],tune:{...d.tune}}));
-export const BOT_EASY_DECKS: BotDeck[] = [{name:'BOT · FUNDAMENTALS',cards:['HALF_ELF','HALF_ELF','FLAME','FLAME','STARTER_TRASH','STARTER_TRASH','STARTER_CHEST','STARTER_CHEST'],tune:{minBuyEarly:6,minBuy:9,chestTurn:4}}];
+export const BOT_EASY_DECKS: BotDeck[] = [
+  {
+    "name": "BOT · FUNDAMENTALS",
+    "cards": [
+      "HALF_ELF",
+      "GOBLIN",
+      "FLAME",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_TRASH",
+      "STARTER_CHEST",
+      "STARTER_CHEST"
+    ],
+    "tune": {
+      "minBuyEarly": 6,
+      "minBuy": 9,
+      "chestTurn": 4
+    }
+  }
+];
 export const BOT_NORMAL_DECKS: BotDeck[] = [
-  ...[0,1,2].map(i=>BOT_HELL_DECKS[i]),
-  { name: "BOT · RAMP", cards: ["GAMBLER", "GAMBLER", "GAMBLER", "CASINO", "NOURISHING_RAIN", "STARTER_TRASH", "WEAKEN_ALL", "STARTER_TRASH"], tune: {} },
+  {
+    "name": "BOT · SPIRIT_CONTROL",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "NOURISHING_RAIN",
+      "WEAKEN_ALL",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · VAMPIRE",
+    "cards": [
+      "NIGHT_CASTLE_GIFT",
+      "NIGHT_CASTLE_GIFT",
+      "GAMBLER",
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "COUNTERCALC"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · GOBLIN_V99",
+    "cards": [
+      "GOBLIN",
+      "GOBLIN",
+      "GOBLIN_RAIDER",
+      "GOBLIN_RAIDER",
+      "GOBLIN_SETTLEMENT",
+      "MINI_SPIRIT",
+      "COUNTERCALC",
+      "STARTER_CHEST"
+    ],
+    "tune": {}
+  },
+  {
+    "name": "BOT · SPIRIT_RAMP",
+    "cards": [
+      "MINI_SPIRIT",
+      "MINI_SPIRIT",
+      "GAMBLER",
+      "GAMBLER",
+      "NOURISHING_RAIN",
+      "STARTER_CHEST",
+      "ATTUNE_RETURN",
+      "STARTER_TRASH"
+    ],
+    "tune": {}
+  }
 ];
 export function pickBotDeck(rnd: number = Math.random(), difficulty: BotDifficulty = 'normal'): BotDeck {
   const roster = difficulty === 'hell' ? BOT_HELL_DECKS : difficulty === 'hard' ? BOT_ELITE_DECKS : difficulty==='easy'?BOT_EASY_DECKS:BOT_NORMAL_DECKS;

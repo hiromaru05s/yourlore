@@ -1,5 +1,6 @@
+import { searchReduce as reduce } from './botBudget';
 import type { Action, GameState, PlayerState, Side } from './types';
-import { actingSide, reduce, curHp, effAtk, playCost } from './engine';
+import { actingSide, curHp, effAtk, playCost } from './engine';
 import { cardPower } from './cardEval';
 import { learnedValue } from './botValue';
 import { resilience, matchupPlan, removalHits } from './botMatchup';
@@ -13,7 +14,7 @@ import { lastingValue, recoveryEngine, recoveryPerTurn, unproductiveOpponentHeal
 export const TACTICS = { proof: true, targets: true, horizon: 4, replyNodes: 64 };
 
 export const SEARCH = {
-  normal: { width: 4, samples: 1, turns: 2, finalists: 0, extraSamples: 0 },
+  normal: { width: 6, samples: 2, turns: 2, finalists: 2, extraSamples: 2 },
   hard: { width: 8, samples: 2, turns: 2, finalists: 3, extraSamples: 2 },
   hell: { width: 12, samples: 3, turns: 2, finalists: 4, extraSamples: 8 },
 };
@@ -44,7 +45,7 @@ function strength(g: GameState, p: PlayerState): number {
     // cost, redundancy or buy-delay penalty for adding another copy.
     return Math.max(0, v.base + v.synergy + v.matchup + v.readiness);
   };
-  const quality = (c: typeof deck[number]): number => Math.max(0, Math.min(55, power(c))) / (1 + Math.max(0, playCost(c, p) - p.maxMana) * 0.7);
+  const quality = (c: typeof deck[number]): number => (c.act==='mindBurst' && !p.field.some(m=>(m.guts??0)>0) ? .05 : 1) * Math.max(0, Math.min(55, power(c))) / (1 + Math.max(0, playCost(c, p) - p.maxMana) * 0.7);
   value += deck.reduce((sum, c) => sum + quality(c), 0) / Math.max(5, deck.length) * 5 * VALUE.deck;
   value += p.hand.reduce((sum, c) => sum + quality(c), 0) * VALUE.hand * 0.15;
   value -= (p.bleed ?? 0) * 2;
@@ -138,11 +139,13 @@ export function searchDecide(g: GameState, level: 'normal' | 'hard' | 'hell', pr
   for (let i = 0; i < cfg.samples; i++) {
     const sample = observationSample(g, side, i + 17);
     for (const arm of arms) { record(arm,rollout(sample, arm.a, side, cfg.turns)); }
+    const best = arms.reduce((a,b)=>score(b)>score(a)?b:a);
+    onProgress?.(level === 'hell' && baseline && score(best)<score(baseline)+.01 ? base : best.a);
   }
   arms.sort((a, b) => score(b) - score(a));
   // Publish completed comparisons so a busy device keeps the searched move
   // if the worker deadline arrives during the deeper finalist evaluation.
-  if (level === 'hard') onProgress?.(arms[0].a);
+  if (level !== 'hell') onProgress?.(arms[0].a);
   if (cfg.finalists) {
     const finalists = arms.slice(0, cfg.finalists);
     if (baseline && !finalists.includes(baseline)) finalists.push(baseline);

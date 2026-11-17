@@ -2,7 +2,7 @@ import {RUNE_IDS} from './runeRework';
 import { GOBLIN_IDS } from './goblinCards';
 import type { CardDef, CardInst, GameState, PlayerState } from './types';
 import { ALL_IDS, DB, hasPassive } from './cards';
-import { MAX_TURNS, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet } from './engine';
+import { MAX_TURNS, effectSummonAllowed, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet } from './engine';
 import { cardPower } from './cardEval';
 import { recoveryEngine, strategicPowerEvaluator } from './botStrategy';
 import { enteringAttack, matchupPlan, removalHits } from './botMatchup';
@@ -11,7 +11,7 @@ import { enteringAttack, matchupPlan, removalHits } from './botMatchup';
 export const ECONOMY_DEFAULTS = {minBuy:11,minBuyEarly:6,costW:1,floorK:1.25};
 export interface PurchaseValue {
   base: number; synergy: number; matchup: number; readiness: number;
-  redundancy: number; delay: number; denial: number; cost: number;
+  redundancy: number; delay: number; denial: number; tempo: number; cost: number;
   value: number; floor: number; margin: number;
 }
 const inventory = (p: PlayerState): CardInst[] => [...p.hand, ...p.deck, ...p.discard, ...p.field.filter(c => !c.token), ...p.enchants.map(e => e.card), ...(p.quests ?? []).map(q => q.card), ...p.exile.map(e => e.card)];
@@ -27,6 +27,13 @@ const dewSource = (c: CardDef): number => c.act === 'dew' ? c.val ?? 1 : c.ench 
 const dewSummonCost = (c: CardDef): number => c.onSummon==='darkElfDew'||c.onSummon==='elfDew' ? 4 : c.onSummon==='highElfDew' ? 10 : c.onSummon==='elderDew' ? 12 : c.onSummon==='worldTreeDew' ? 8 : 0;
 const decay = (c: CardDef): boolean => hasPassive(c, 'decay') || ['DECAY_CRAFT','STRONG_ACID','ROTTEN_GROUND'].includes(c.id);
 const enchantAnswer = (c: CardDef): boolean => c.act === 'destroyEnch' || ['DISARM3','COUNTERCALC','BLOOD2'].includes(c.id);
+
+/** Mana needed to turn a bought mercenary into an immediate body. */
+export function immediateHireMana(p: PlayerState, c: CardDef): number {
+  if (!['MERCENARY','MERC_LEADER','MERC_MASTER'].includes(c.id)) return 0;
+  if (p.field.some(m => ['MERCENARY','MERC_LEADER','MERC_MASTER'].includes(m.id))) return 0;
+  return c.id === 'MERC_LEADER' ? 2 : 1;
+}
 
 /** Build once per position; marginal purchases must not discount already-owned material. */
 export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY_DEFAULTS): (c: CardInst, marketIndex?: number) => PurchaseValue {
@@ -65,9 +72,14 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
   const floor = Math.max(p.maxMana >= 5 ? p.botTune?.minBuy ?? tuning.minBuy : p.botTune?.minBuyEarly ?? tuning.minBuyEarly, avg * tuning.floorK);
   return (c, marketIndex) => {
     const copies = count(c.id), base = power(c), cost = buyCost(p,c);
-    let synergy = 0, matchup = 0, readiness = 0, redundancy = 0, delay = 0, denial = 0;
+    const mercenary = ['MERCENARY','MERC_LEADER','MERC_MASTER'].includes(c.id);
+    const hireMana = immediateHireMana(p,c);
+    const canHire = mercenary && p.mana >= cost + hireMana && effectSummonAllowed(g,p,c);
+    let synergy = 0, matchup = 0, readiness = 0, redundancy = 0, delay = 0, denial = 0, tempo = 0;
     if (dewSource(c)) synergy += Math.min(12, own.filter(x => /^dew\d+$/.test(x.summonReq ?? '') || x.summonReq === 'darkElf').length * 4);
     if (isWorldTreeCard(c) && count('ELF_HAVEN')) synergy += 5;
+    if (canHire) tempo += Math.max(5, base*.4) - hireMana*2;
+    if (mercenary && !canHire && p.mana < cost+hireMana) tempo -= base*.65;
     if (c.id === 'STRONG_ACID' || c.id === 'DECAY_CRAFT' || c.id === 'POISON_MASTER') synergy += Math.min(12,decayers*3);
     if (c.id === 'POISON_MASTER' || c.id === 'DECAY_CRAFT') synergy += Math.min(6,count('STRONG_ACID')*6);
     if (isAssassinCard(c)) synergy += Math.min(8,assassins*2);
@@ -96,11 +108,10 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
       if(p.enchants.some(e=>e.card.ench==='farmerPrayer'))synergy+=28;
     }
     if (c.id === 'EMPTY_MIND' && spells<9) readiness -= base*.8;
-    // Mercenary Arts only repeats the three mercenary effects; it has no
-    // standalone payoff and multiple copies do not stack in mercEffect.
     if (c.ench === 'mercArt') {
-      if (!own.some(x=>['MERCENARY','MERC_LEADER','MERC_MASTER'].includes(x.id))) readiness -= base;
-      if (copies) redundancy -= base*.9;
+      synergy += Math.min(12, monsters * 2 + own.filter(x=>x.star==='mana'||x.act==='manaUpGain').length*2);
+      if (!monsters) readiness -= base*.8;
+      if (copies) redundancy -= base*.5;
     }
     if (RUNE_IDS.has(c.id)) synergy += Math.min(6,own.filter(x=>x.id!==c.id && RUNE_IDS.has(x.id)).length*2);
     if (c.act?.startsWith('buff') || c.id === 'TRUMPET') synergy += monsters ? Math.min(6,monsters*1.5) : -8;
@@ -201,19 +212,19 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     }
     // Repeated monsters may be useful; do not impose a blanket one-copy rule.
     if (!c.quick) redundancy -= Math.max(0,copies-1)*Math.min(5,base*.12);
-    if (!c.quick && (urgent || drawTurns>=ownTurnsLeft)) delay -= Math.max(0,base+synergy+readiness)*.55;
+    if (!c.quick && !canHire && (urgent || drawTurns>=ownTurnsLeft)) delay -= Math.max(0,base+synergy+readiness)*.55;
     if (marketIndex!=null && (g.marketStock?.[marketIndex]??3)===1 && cost<=o.maxMana) {
       // Only deny the last public copy when there is evidence it serves the foe.
       if (known.some(x=>x.id===c.id) || (dewSource(c)&&known.some(x=>x.summonReq?.startsWith('dew'))) || (decay(c)&&known.some(decay))) denial = 2;
     }
-    const value = Math.max(0,base+synergy+matchup+readiness+redundancy+delay+denial)-cost*tuning.costW;
+    const value = Math.max(0,base+synergy+matchup+readiness+redundancy+delay+denial+tempo)-cost*tuning.costW;
     // A strong deck can still lack an answer. Its printed average is not an
     // appropriate floor for the first card that covers an active engine.
     const firstAnswer = (usableAnswer(c) && o.enchants.length>0 && !answerCoverage && readiness>=0)
       || (wallAnswer && !own.some(x=>plan.walls.some(m=>removalHits(g,o,x,m))))
       || (plan.blocked && c.id==='ADVANCE' && !count('ADVANCE'));
-    const threshold = c.quick ? 0 : firstAnswer ? Math.min(floor,12) : floor;
-    return {base,synergy,matchup,readiness,redundancy,delay,denial,cost,value,floor:threshold,margin:value-threshold};
+    const threshold = c.quick || canHire ? 0 : firstAnswer ? Math.min(floor,12) : floor;
+    return {base,synergy,matchup,readiness,redundancy,delay,denial,tempo,cost,value,floor:threshold,margin:value-threshold};
   };
 }
 

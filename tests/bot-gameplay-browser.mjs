@@ -5,7 +5,7 @@ const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5276';
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const results=[];
 try {
- for(const difficulty of ['hard','hell']) {
+ for(const difficulty of ['easy','normal','hard','hell']) {
   const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'}),errors=[];
   page.on('requestfailed',r=>console.error('requestfailed',new URL(r.url()).pathname,r.failure()?.errorText));
   page.on('pageerror',e=>{errors.push(e.message);console.error('pageerror',e.message);});
@@ -26,6 +26,8 @@ try {
   },difficulty);console.log('controller ready',difficulty);
   try { await page.waitForFunction(()=>window.qa&&!qa.c.openingLocked&&qa.c.state.cur===0,null,{timeout:60000}); } catch(e) { console.error(await page.evaluate(()=>({cur:qa.c.state.cur,turn:qa.c.state.turn,locked:qa.c.openingLocked,active:qa.c.openingActive,pending:qa.c.state.pending,busy:qa.c.botBusy,html:document.body.innerText.slice(-2000)})),errors);throw e; }
   await page.waitForSelector('.duel-loader',{state:'detached',timeout:60000}).catch(async e=>{console.error('loader stalled',await page.evaluate(()=>[...document.querySelectorAll('[data-board-rendered]')].map(e=>({...e.dataset}))));throw e;});
+  await page.locator('.hand-study .study-action').click();
+  await page.waitForFunction(()=>!qa.c.state.mulligan,null,{timeout:15000});
   for(let round=0;round<2;round++) {
    const turn=await page.evaluate(()=>{const turn=qa.c.state.turn;qa.c.submit({type:'endTurn'});return turn;});
    try { await page.waitForFunction(turn=>qa.c.state.over||qa.c.state.turn>=turn+2&&qa.actingSide(qa.c.state)===0,turn,{timeout:45000}); }

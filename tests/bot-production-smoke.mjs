@@ -1,4 +1,4 @@
-/** Explicit live release QA: isolated temporary account/session, four private NPC
+/** Explicit live release QA: isolated temporary account/session, three private NPC
  * rooms, one observed BOT response and surrender per tier. Never public queue. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
@@ -35,7 +35,9 @@ try{
  assert(cleanupTables.some(t=>t.name==='sessions'));
  created=true; // Cleanup also covers a partially completed insertion.
  await sql(`INSERT INTO users(id,email,password,display,username_set,verified,created_at,stats_public) VALUES('${id}','${id}@example.invalid','disabled:release-qa','NPC Release QA',1,1,${now},0); INSERT INTO sessions(token,user_id,created_at,expires_at) VALUES('${token}','${id}',${now},${now+3600000});`);
- for(const tier of ['easy','normal','hard','hell']){
+ // Unlock only this isolated QA account; surrender does not count as a clear.
+ await sql(['easy','normal','hard'].map(tier=>`INSERT INTO rewards(user_id,key,amount,created_at) VALUES('${id}','bot:first:${tier}',0,${now});`).join('\n'));
+ for(const tier of ['easy','normal','hard']){
   const started=await call('/rewards/bot/start',{difficulty:tier,lang:'ja'}),peer={roomId:started.roomId,state:null,response:null,settled:false,errors:[],timer:null};
   assert.equal(started.difficulty,tier);
   const ws=peer.ws=new WebSocket(origin.replace('https','wss')+'/ws/room/'+peer.roomId,{handshakeTimeout:30000,headers:{cookie:'lore_session='+token,origin}});peers.push(peer);
@@ -51,11 +53,15 @@ try{
    }
   });
   await new Promise((resolve,reject)=>{ws.once('open',resolve);ws.once('error',reject);});
-  ws.send(JSON.stringify({type:'ready',openingVersion:2,battleLogVersion:1}));ws.send(JSON.stringify({type:'openingReady'}));
+  ws.send(JSON.stringify({type:'ready',openingVersion:2,battleLogVersion:1,mulliganVersion:1}));ws.send(JSON.stringify({type:'openingReady'}));
   await until(()=>peer.state);assert.equal(peer.state.botDifficulty,tier);assert.equal(!!peer.state.botMarket,tier==='hard'||tier==='hell');
   if(peer.state.botMarket){assert.equal(peer.state.botMarket.side,1);assert(peer.state.botMarket.recent.length>=7);}
   const initialMarket=peer.state.market.map(c=>c.id);
-  peer.timer=setInterval(()=>{const g=peer.state;if(!peer.response&&g&&!g.over&&g.cur===0&&!g.pending&&ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify({type:'action',action:{type:'endTurn'}}));},900);
+  peer.timer=setInterval(()=>{
+   const g=peer.state;if(peer.response||!g||g.over||ws.readyState!==WebSocket.OPEN)return;
+   if(g.mulligan&&!g.mulligan[0])ws.send(JSON.stringify({type:'action',action:{type:'mulligan',player:0,uids:[]}}));
+   else if(!g.mulligan&&g.cur===0&&!g.pending)ws.send(JSON.stringify({type:'action',action:{type:'endTurn'}}));
+  },900);
   await until(()=>peer.response);clearInterval(peer.timer);peer.timer=null;
   ws.send(JSON.stringify({type:'action',action:{type:'surrender',player:0}}));await until(()=>peer.settled);
   const receipt=await call('/rewards/result?roomId='+peer.roomId);assert(receipt.settled);assert.equal(receipt.amount,0);assert.equal(peer.errors.length,0,peer.errors.join('; '));

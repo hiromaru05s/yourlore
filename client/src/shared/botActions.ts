@@ -91,5 +91,6 @@ export function actionChangesState(a: GameState, b: GameState): boolean {
   }
   // Synchronizing an inactive legacy offer mirror is not a successful move.
   const players = (g: GameState) => g.players.map((p, side) => side === g.cur ? p : {...p, supply: g.players[g.cur].supply});
-  return !same(players(a), players(b)) || !same(a.marketStock, b.marketStock);
+  return !same(players(a), players(b)) || !same(a.marketStock, b.marketStock)
+    || !same(a.market, b.market) || !same(a.expansionChoices, b.expansionChoices);
 }

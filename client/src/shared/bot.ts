@@ -2,8 +2,9 @@
 // Normal and upper tiers search imperfect-information rollouts; easy retains mistakes.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
 import { attackDecayCounters, fireDamageBonus, purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
-import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce,  summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
+import { ST_MAX, effectSummonAllowed, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce as authoritativeReduce, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { cardPower } from "./cardEval";
+import { searchReduce as reduce, THINKING_NODES, withThinkingBudget } from './botBudget';
 import { searchDecide } from "./botSearch";
 import { observationSample } from "./botObservation";
 import { botActions, actionChangesState, withinBotTurnBudget } from "./botActions";
@@ -11,28 +12,42 @@ import { DB, hasPassive } from "./cards";
 import { withoutMonsterPresentation } from './monsterEffects';
 import { enteringAttack, matchupPlan, removalHits } from './botMatchup';
 import { recoveryEngine } from './botStrategy';
-import { purchaseEvaluator, refreshValue, publicInventory } from './botEconomy';
+import { purchaseEvaluator, refreshValue, publicInventory, immediateHireMana } from './botEconomy';
 
 export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
 const SELF_HARM_SPELLS = new Set(['CATALYST','BLOOD1','BLOOD2','BLOOD_JOY','BLOOD_ANGER','BLOOD_SORROW','BLOOD_PLEASURE','VAMP_PACT','SHATTER','GREED_PRICE','MASSACRE','FLAME','AMBUSH','FORBIDDEN','FORGE']);
 
-const BLUNDER: Record<BotDifficulty, number> = { easy: 0.45, normal: 0, hard: 0, hell: 0 };
+export const EASY_MISTAKE_RATE = 0.12;
 
 export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress?: (action: Action) => void): Action {
   return withoutMonsterPresentation(() => decideFromObservation(g, diff, onProgress));
 }
 
 function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void): Action {
-  // All policies, including tactical checks, see sampled hidden information.
   const view = observationSample(g, g.pending?.owner ?? g.cur, 0);
-  // Both upper tiers use the full ensemble. Challenge-market probabilities
-  // distinguish them; Hard no longer throws away most finalist samples.
-  let best = diff !== "easy" ? searchDecide(view, diff === 'normal' ? 'normal' : 'hell', true, onProgress ? a => onProgress(legalBotAction(g, a, view)) : undefined) : safeGreedy(view);
-  if (BLUNDER[diff] > 0 && Math.random() < BLUNDER[diff]) {
-    const alternatives = botActions(view).filter(a => JSON.stringify(a) !== JSON.stringify(best))
-      .filter(a => actionChangesState(view, reduce(view, a).state));
-    if (alternatives.length) best = alternatives[Math.floor(Math.random() * alternatives.length)];
+  let best = safeGreedy(view);
+  if (diff === 'easy') {
+    // Make occasional ordinary choices poorly, without abandoning a mandatory
+    // resolution or selecting an immediately losing move.
+    if (!view.pending && Math.random() < EASY_MISTAKE_RATE) {
+      const alternatives = botActions(view).filter(action =>
+        action.type !== 'endTurn' && action.type !== 'refresh' &&
+        JSON.stringify(action) !== JSON.stringify(best)).filter(action => {
+          const next = reduce(view, action).state;
+          return actionChangesState(view, next) && (!next.over || next.winner === view.cur);
+        });
+      if (alternatives.length) best = alternatives[Math.floor(Math.random() * alternatives.length)];
+    }
+  } else {
+    onProgress?.(legalBotAction(g, best, view));
+    let completed = best;
+    best = withThinkingBudget(THINKING_NODES[diff], () =>
+      searchDecide(view, diff === 'normal' ? 'normal' : 'hell', true, action => {
+        // Save only after every candidate has faced the same completed worlds.
+        completed = action;
+        onProgress?.(legalBotAction(g, action, view));
+      }), () => completed);
   }
   return legalBotAction(g, best, view);
 }
@@ -43,7 +58,7 @@ function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (
 export function legalBotAction(g: GameState, proposed: Action, view = observationSample(g, g.pending?.owner ?? g.cur, 0)): Action {
   const accepted = (a: Action): boolean => {
     if (!withinBotTurnBudget(g, a)) return false;
-    const next = reduce(g, a).state;
+    const next = authoritativeReduce(g, a).state;
     // A random action was accepted even if its actual outcome changes no material.
     // Never use the live die/draw result to reject an unlucky outcome.
     return next.rng !== g.rng || actionChangesState(g, next);
@@ -131,6 +146,21 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
   if (g.pending?.kind === "cardChoice") {
     const pool = effectChoices(g).filter(c => g.pending?.reason !== "QUICK_REBIRTH" || c.cost <= 7);
     const owner = g.pending.owner ?? g.cur;
+    if (g.pending.reason === 'GOLEM_UPKEEP') {
+      const ally = g.players[owner];
+      const source = ally.field.find(m => m.uid === g.pending?.data?.sourceUid);
+      const mana = Number(g.pending.data?.mana ?? 0);
+      const useful = pool.filter(c => {
+        if (c.t === 'mon') return true;
+        if (ally.hand.some(h => h.id === c.id)) return false;
+        if (c.id === 'MIND_BURST') {
+          const counters = ally.field.reduce((n,m) => n + (m.guts ?? 0), 0) - 1;
+          return counters > 0 && ally.mana >= mana + playCost(c, ally);
+        }
+        return ally.mana >= mana + playCost(c, ally) && !!source;
+      });
+      return {type:'pick',uid:[...useful].sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid ?? null};
+    }
     if (g.pending.reason === 'MERC_JOB') {
       const sourceId = String(g.pending.data?.sourceId);
       const foes = g.players[1-owner];
@@ -190,7 +220,6 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const noAtk = g.players.some((pl) => pl.enchants.some((e) => e.card.ench === "noAttack"));
   const reflected = g.players.some(pl=>pl.enchants.some(e=>e.card.ench==='blackReverse'));
   const damageModified = reflected || g.players.some(pl=>pl.enchants.some(e=>e.card.ench==='spellHeal'||e.card.ench==='blackInfinity'));
-  const oppNoLow = o.enchants.some((e) => e.card.ench === "noSummonLow"); // blocks my cost<=3 summons
 
   const ready = p.field.filter((m) => monsterCanAttack(g, p, m));
 
@@ -209,7 +238,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const castable = (c: CardInst): boolean => {
     if (c.quick || playBlockReason(g, g.cur, c)) return false;
     // Shields, amplification, reflection and healing can change self-damage.
-    if (SELF_HARM_SPELLS.has(c.id) && !survivesPlay(p.hand.findIndex(x=>x.uid===c.uid))) return false;
+    if ((SELF_HARM_SPELLS.has(c.id) || c.onSummon === "voidApostle") && !survivesPlay(p.hand.findIndex(x=>x.uid===c.uid))) return false;
     // 침묵 오라 / 침묵의 심판: 마법 봉인 — v5부터 스타터(컬/상자/어튠)도 대상 (엔진 거부 → 봇도 스킵)
     if (c.t === "spell" || c.t === "starter") {
       if (g.players.some((pl) => pl.field.some((m) => m.aura === "sealAll"))) return false;
@@ -295,13 +324,10 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     }).filter(x=>x.useful);
 
   const stFull = p.traps.length + p.enchants.length >= ST_MAX;
-  // summonable monsters, best value first (respect the 9-monster zone cap)
+  // summonable monsters, best value first (respect the 7-monster zone cap)
   const monsters = p.field.length >= 7 ? [] : p.hand
     .map((c, i) => ({ c, i }))
-    .filter((x) => x.c.t === "mon" && playCost(x.c, p) <= p.mana && !(oppNoLow && (x.c.cost ?? 0) <= 3) && !(p.lowSummonBanTurn && (x.c.cost ?? 0) <= 3) && summonReqMet(p, x.c, o) && (p.summonLockUntil ?? 0) <= g.turn)
-    .filter((x) => !((x.c.cost ?? 0) >= 5 && p.field.some((m2) => m2.id === "CASTLE"))) // 성: 5코 이상 소환 불가
-    .filter(() => !(p.summonCap != null && p.field.length >= p.summonCap)) // 고독의 저주(v38)
-    .filter(x=>x.c.onSummon!=='voidApostle'||survivesPlay(x.i))
+    .filter(({c}) => c.t === 'mon' && playCost(c,p) <= p.mana && castable(c))
     .sort((a, b) => cardPower(b.c) - cardPower(a.c));
 
   // 1) LETHAL: direct spells + attacks (with 관통 penetration) that kill THIS turn.
@@ -329,6 +355,11 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   const enchantRemoval = spells.find(({c}) => c.act === 'destroyEnch' || c.id === 'DISARM3');
   if (enchantRemoval && o.enchants.length) return {type:'play',idx:enchantRemoval.i};
 
+  const spirit = monsters.find(({c}) => c.id === 'MINI_SPIRIT');
+  if (spirit && p.hand.some(c => c.star === 'mana' && playCost(c,p) <= p.mana - playCost(spirit.c,p))) {
+    return {type:'play',idx:spirit.i};
+  }
+
   // A recurring removal can consume the entire budget forever. Grow past
   // that maintenance cost instead of repeatedly answering and never improving.
   const growth=p.hand.findIndex(c=>c.star==='mana' && castable(c) && playCost(c,p)<=p.mana);
@@ -347,6 +378,16 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   if (unlockAttacks && p.field.length && o.enchants.some(e=>e.card.ench==='weakenAll'||e.card.ench==='noAttack')) return {type:'play',idx:unlockAttacks.i};
   const riftSetup = spells.find(({c})=>c.ench==='rift');
   if (riftSetup && p.hand.filter(c=>c.star==='trash'&&playCost(c,p)===0).length>=2) return {type:'play',idx:riftSetup.i};
+
+  // Finish resource-to-damage conversions while their counters still exist.
+  const mindBurst = spells.find(({c}) => c.act === 'mindBurst');
+  if (mindBurst) {
+    const next = previewPlay(mindBurst.i);
+    const damage = o.hp + (o.shield ?? 0) - next.players[1-g.cur].hp - (next.players[1-g.cur].shield ?? 0);
+    const counters = p.field.reduce((n,m) => n + (m.guts ?? 0), 0);
+    if ((next.over && next.winner === g.cur) ||
+        (damage >= 10 && counters >= 2 && p.hp + (p.shield ?? 0) > 10)) return {type:'play',idx:mindBurst.i};
+  }
 
   // 3) removal on a blocker (clear the way before swinging)
   if (removal) return { type: "play", idx: removal.i };
@@ -470,10 +511,14 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   } });
   if (purchaseAction) return purchaseAction;
 
+  const pendingHire = [...g.market.filter((_,i)=>(g.marketStock?.[i]??3)>0), ...p.supply].some(c => c &&
+    immediateHireMana(p,c) > 0 && effectSummonAllowed(g,p,c) && buyCost(p,c) <= p.mana &&
+    buyCost(p,c) + immediateHireMana(p,c) > p.mana);
+
   // Spend spare mana on a refresh only when the affordable offer pool has
   // enough expected value. Public refresh history bounds repeated searches.
   const refreshes = (p.supplyHist ?? []).filter(h=>h.turn===g.turn).length;
-  if (p.mana >= 3 && refreshes <= TUNE.maxRerolls && refreshValue(g,p,T) > 2) return {type:'refresh'};
+  if (!pendingHire && p.mana >= 3 && refreshes <= TUNE.maxRerolls && refreshValue(g,p,T) > 2) return {type:'refresh'};
   // 12.6) 렐릭 헌터 카운터: 살 게 없으면 무료 갱신
   if ((p.refreshTokens || 0) > 0 && !p.refreshBlockTurn) return { type: "refresh" };
 
