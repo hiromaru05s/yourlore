@@ -39,5 +39,6 @@ try {
   assert(result.turn>=5||result.over);assert(result.changes>=4);assert(result.ticks>10);assert.deepEqual(errors,[]);
   results.push({difficulty,...result,errors});await page.close();
  }
+ await fs.mkdir(process.env.BOT_QA_OUT || 'docs/bot-strength/2026-10-13',{recursive:true});
  await fs.writeFile((process.env.BOT_QA_OUT || 'docs/bot-strength/2026-10-13')+'/gameplay-browser.json',JSON.stringify(results,null,2));console.log(JSON.stringify(results));
 }finally{await browser.close();}
