@@ -48,7 +48,7 @@
 @media(hover:hover){.market-study .study-slot:hover .study-lift{transform:translateY(-9px) rotateX(-3deg)}}
 @keyframes study-deal{0%{opacity:0;transform:translate3d(-15%,23%,0) rotateY(-115deg) rotateZ(-5deg)}22%{opacity:1}78%{transform:translateY(-2%) rotateY(7deg)}100%{transform:none}}
 @keyframes study-glint{0%{opacity:0;background-position:125% 0}24%{opacity:.8}100%{opacity:0;background-position:-25% 0}}
-.hand-study{--unit:min(18vw,20.2dvh,210px);--gap:clamp(10px,2.1vw,36px)}
+.hand-study{--hand-slot-base:min(18vw,20.2dvh,210px);--unit:calc(var(--hand-slot-base)*.85);--gap:clamp(10px,2.1vw,36px)}
 .hand-study .study-content{flex-direction:column;gap:clamp(10px,2.5vh,27px)}
 .study-lane{display:flex;align-items:center;justify-content:center;width:min(100%,990px);position:relative;isolation:isolate}
 .study-lane::before{content:"";position:absolute;inset:10% 0 6%;z-index:-1;pointer-events:none;
@@ -78,7 +78,7 @@
 @media(max-height:500px) and (orientation:landscape){
  .opening-study{padding:9px 4vw}.study-head{padding-bottom:6px}.study-title{font-size:24px}
  .study-foot{padding-top:4px;min-height:35px}.study-action{min-height:34px;padding-block:3px}
- .hand-study{--unit:min(13vw,18dvh)}.hand-study .study-content{gap:8px}
+ .hand-study .study-content{gap:8px}
  .study-rack{padding-block:16px}.study-clock{padding-bottom:4px}
 }
 @media(prefers-reduced-motion:reduce){
@@ -94,10 +94,10 @@
 .return-lane .lane-mark{color:#e0c797}
 .return-arrow{position:relative;color:#c2b89678}
 @media(max-width:720px) and (orientation:portrait){
- .hand-study{--unit:min(26vw,19dvh,155px)}
+ .hand-study{--hand-slot-base:min(26vw,19dvh,155px)}
 }
 @media(max-height:500px) and (orientation:landscape){
- .hand-study{--unit:min(14vw,19dvh)}
+ .hand-study{--hand-slot-base:min(14vw,19dvh)}
 }
 
 .hand-study .study-title{font-size:clamp(17px,2.9vmin,31px);line-height:1.45;letter-spacing:.04em}
@@ -144,7 +144,7 @@
 .hand-study .study-slot.is-dragging .card[aria-disabled=false]{cursor:grabbing}
 /* Both rows use the hand slot dimensions. Center a smaller card inside each well. */
 .hand-study{
-  --well-padding:clamp(7px,calc(var(--unit)*.09),15px);
+  --well-padding:clamp(5.95px,calc(var(--unit)*.09),12.75px);
   --hand-card-width:calc(var(--unit) - 2 * var(--well-padding));
 }
 .hand-study .study-slot{display:grid;place-items:center}
