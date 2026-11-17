@@ -53,10 +53,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
     <div class="panel deck-panel" id="deckWorkspace">
       <h2 class="menu-sr-title">${t("deck.title")}</h2>
       <aside class="deck-settings deck-frame" id="deckSettings">
-        <div class="deck-settings-heading">
-          <button id="libraryBack" title="${loungeText('デッキ一覧','Decks','덱 목록')}" aria-label="${loungeText('デッキ一覧','Decks','덱 목록')}">‹</button>
-          <button type="button" id="deckRename"><strong></strong>${homeIcon('edit')}</button>
-        </div>
+        <button type="button" id="deckRename"><strong></strong>${homeIcon('edit')}</button>
         <button type="button" data-setting="character"><img alt=""></button>
         <div class="deck-colors" role="group" aria-label="${settingLabels.background}">
           ${starterBackgrounds.map(color=>`<button type="button" data-swatch="${color}" data-background="${color}" title="${loungeText(...backgroundNames[color])}" aria-label="${loungeText(...backgroundNames[color])}"></button>`).join('')}
@@ -65,6 +62,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
       </aside>
       <div class="deck-editor">
       <div class="deck-controls editor-actions">
+        <button type="button" id="libraryBack"><span aria-hidden="true">‹</span> ${loungeText('デッキ一覧','Decks','덱 목록')}</button>
         <button id="editTab" class="deck-formation" aria-selected="true"><span>${loungeText('編成','Formation','편성')}</span><b id="deckCount"></b></button>
         <div class="deck-secondary-actions"><button id="watchTab" aria-selected="false">${t("deck.watch.title")}</button></div>
         <button class="deck-use" id="useBtn"></button>
