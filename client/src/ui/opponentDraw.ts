@@ -1,18 +1,6 @@
 import {DRAW_DURATION,DRAW_STAGGER,drawMotion} from './drawMotion';
-import {handCardMatrix,type HandLayout} from './handGeometry';
+import {handSlotSpace,type HandLayout} from './handGeometry';
 import {sfx} from './sound';
-
-/** Convert viewport poses into transforms on the actual sleeve in its hand slot. */
-function sleeveSpace(node:HTMLElement){
-  const style=getComputedStyle(node),w=parseFloat(style.width),h=parseFloat(style.height);
-  const [ox,oy]=style.transformOrigin.split(' ').map(parseFloat);
-  const rest=handCardMatrix(node);
-  const around=new DOMMatrix().translate(ox,oy);
-  const local=style.transform==='none'?new DOMMatrix():new DOMMatrix(style.transform);
-  const toLocal=local.multiply(around.inverse()).multiply(rest.inverse());
-  const transform=(pose:DOMMatrix)=>toLocal.multiply(pose).multiply(around).toString();
-  return {w,h,rest,transform};
-}
 
 /** A face-down draw never leaves the opponent hand's clipping, material or stacking context. */
 export async function drawOpponentSleeves(cards:HTMLElement[],origin:DOMRect,signal:AbortSignal,
@@ -25,7 +13,7 @@ export async function drawOpponentSleeves(cards:HTMLElement[],origin:DOMRect,sig
     const hand=cards[0].parentElement!;
     // Measure every resting pose before the first animation changes any bounding box.
     const slots=[...hand.querySelectorAll<HTMLElement>(':scope > .card--back')].map((node,i)=>({
-      node,space:sleeveSpace(node),old:previousHand?.get(node.dataset.uid||'#'+i),
+      node,space:handSlotSpace(node),old:previousHand?.get(node.dataset.uid||'#'+i),
     }));
     const finishes:Promise<unknown>[]=[];
     for(const {node,space:{w,h,rest,transform},old} of slots){

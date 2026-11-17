@@ -9,7 +9,7 @@ import {acquireDrawStage,type StockPose} from './drawStock';
 import {sfx} from './sound';
 import {drawOpponentSleeves} from './opponentDraw';
 export {handCardMatrix} from './handGeometry';
-export interface PaperDrawOptions {cards:HTMLElement[];origin:DOMRect;sleeve:string;reveal:boolean;signal:AbortSignal;onLand:(node:HTMLElement)=>void;previousHand?:HandLayout;durationScale?:number;}
+export interface PaperDrawOptions {cards:HTMLElement[];origin:DOMRect;sleeve:string;reveal:boolean;signal:AbortSignal;onLand:(node:HTMLElement)=>void;previousHand?:HandLayout;releaseHand?:()=>void;durationScale?:number;}
 function nativeCopy(node:HTMLElement,arriving=false){
  const copy=cloneCardNode(node);delete copy.dataset.cardEffect;delete copy.dataset.cardFrame;copy.removeAttribute('id');copy.removeAttribute('data-uid');copy.setAttribute('aria-hidden','true');
  const cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight;copy.classList.remove('is-picked','is-armed','is-played');copy.style.cssText+=`;position:absolute;inset:0;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px;margin:0;transform:none;transition:none;animation:none;visibility:visible;pointer-events:none;`;
@@ -34,9 +34,10 @@ const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 function mixMatrix(a:DOMMatrix,b:DOMMatrix,t:number){return new DOMMatrix([mix(a.a,b.a,t),mix(a.b,b.b,t),mix(a.c,b.c,t),mix(a.d,b.d,t),mix(a.e,b.e,t),mix(a.f,b.f,t)]);}
 /** Rigid beveled stock underneath the exact native front/back. No rasterized text
  * swap, paper bending, or flattening filter on the 3D parent. */
-export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,previousHand,durationScale=1}:PaperDrawOptions):Promise<void>{
+export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,previousHand,releaseHand,durationScale=1}:PaperDrawOptions):Promise<void>{
  if(reveal&&cards.some(node=>node.dataset.cardFrame))await Promise.all(cards.map(node=>ensureCardFrameReady(node)));
  if(signal.aborted||!cards.length||cards.some(n=>!n.isConnected))return;
+ releaseHand?.(); // Measure the resting fan and take over in this same paint.
  const speed=Math.max(.5,Math.min(5,durationScale));
  if(!reveal)return drawOpponentSleeves(cards,origin,signal,onLand,speed,previousHand);
  const all=[...cards[0].parentElement!.querySelectorAll<HTMLElement>(':scope > .card,:scope > .card--back')];

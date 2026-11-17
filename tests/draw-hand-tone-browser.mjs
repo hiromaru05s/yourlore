@@ -49,6 +49,31 @@ try{
    await page.screenshot({path:`${out}/${label}-${width}-landed.png`});checks.push({label,width,before,during,after});
   }
  }
+ // Adding four slots must not paint the expanded fan and then rewind it before flight.
+ for(const side of ['me','opp']){
+  const continuity=await page.evaluate(async side=>{
+   const {captureHandLayout}=await import('/src/ui/handGeometry.ts');
+   const q=monsterQA;q.reset();
+   const player=q.g.players[side==='me'?0:1];
+   const hand=document.querySelector(side==='me'?'#hand':'#oppHand');
+   player.hand=['a','b','c'].map(uid=>({...q.DB.ELF,uid}));q.render();
+   q.ctl.view.setHandOpen(side==='me');
+   await new Promise(r=>setTimeout(r,250));
+   const bounds=()=>['a','b','c'].flatMap(uid=>{
+    const r=hand.querySelector('[data-uid="'+uid+'"]').getBoundingClientRect();
+    return [r.x,r.y,r.width,r.height];
+   });
+   const before=bounds(),previousHand=captureHandLayout(hand),uids=['d','e','f','g'];
+   player.hand.push(...uids.map(uid=>({...q.DB.ELF,uid})));q.render();
+   const draw=q.A.animateDraw(hand,uids.length,side,{previousHand,uids});
+   const distance=()=>Math.max(...bounds().map((n,i)=>Math.abs(n-before[i])));
+   const atStart=distance();
+   await draw;
+   return {atStart,atEnd:distance()};
+  },side);
+  assert(continuity.atStart<.15,side+' hand moved before flight: '+continuity.atStart);
+  assert(continuity.atEnd>1,side+' hand did not open a gap');
+ }
  // A landed first card must already be dim while the second is still arriving.
  await page.setViewportSize({width:1280,height:900});
  await page.evaluate(()=>{const q=monsterQA;q.reset();q.g.players[0].mana=0;q.g.players[0].hand=[{...q.DB.GOBLIN_SETTLEMENT,uid:'first'},{...q.DB.GOBLIN_SETTLEMENT,uid:'second'}];q.render();q.ctl.view.setHandOpen(true);});

@@ -88,7 +88,7 @@ import {getManaFormation} from './manaFormationPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import {playNpcReaction, skipNpcReactions} from './npcReaction';
 import {damageAction, playSeekerLight, playSeekerSide, setSeekerSkip} from './seekerAnimation';
-import type {HandLayout} from './handGeometry';
+import {holdDrawHand,type HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
 import {waitForDuel} from './duelReadiness';
@@ -773,6 +773,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
   window.addEventListener('resize', cancel, { once: true });
   document.addEventListener('visibilitychange', cancel, { once: true });
   incoming.forEach(node => { node.style.visibility = 'hidden'; });
+  const releaseHand=holdDrawHand(cards,incoming,options.previousHand);
   pileFlash(deck.id);
   const deadline = setTimeout(cancel, 800+2400*(options.durationScale??1));
   try {
@@ -786,7 +787,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
     await Promise.race([cancelled, import('./paperDraw').then(async ({ drawPaperCards }) => {
       if (abort.signal.aborted || fxSkip || !handEl.isConnected) return;
       await drawPaperCards({ cards: incoming, origin, sleeve: deck.dataset.sleeve || FRAME_BACK,
-        reveal: side === 'me', signal: abort.signal, previousHand:options.previousHand,durationScale:options.durationScale, onLand: node=>{restore(node);if(deck.dataset.openingCount!=null){deck.dataset.count=String(Math.max(Number(deck.dataset.openingCount),Number(deck.dataset.count)-1));const c=deck.querySelector('.pile-count');if(c)c.textContent=deck.dataset.count;}} });
+        reveal: side === 'me', signal: abort.signal, previousHand:options.previousHand,releaseHand,durationScale:options.durationScale, onLand: node=>{restore(node);if(deck.dataset.openingCount!=null){deck.dataset.count=String(Math.max(Number(deck.dataset.openingCount),Number(deck.dataset.count)-1));const c=deck.querySelector('.pile-count');if(c)c.textContent=deck.dataset.count;}} });
     })]);
   } catch (error) { if(import.meta.env.DEV)console.warn("Draw presentation failed",error); /* Reveal the resting cards. */ }
   finally {
@@ -794,7 +795,7 @@ export async function animateDraw(handEl: HTMLElement | null, count: number, sid
     signal?.removeEventListener('abort',cancel);
     window.removeEventListener('resize', cancel);
     document.removeEventListener('visibilitychange', cancel);
-    incoming.forEach(restore);
+    releaseHand();incoming.forEach(restore);
     if(deck.dataset.openingCount!=null){deck.dataset.count=deck.dataset.openingCount;delete deck.dataset.openingCount;const c=deck.querySelector('.pile-count');if(c)c.textContent=deck.dataset.count;}
   }
 }
