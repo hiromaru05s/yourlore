@@ -26,7 +26,7 @@ const stubs={
  './dev/localAccount':'export const LOCAL_GUEST_KEY="guest";export const canUseLocalGuest=()=>false;export const loadLocalDevDecks=()=>({});export const loadLocalGuestProfile=()=>({});',
  './screens/lazyGame':'export const mountGame=()=>({});export const mountGamePreparation=(app,start,dispose)=>globalThis.__prepare(app,start,dispose);',
 };
-for(const name of ['Login','Home','Lobby','Tutorial','Cards','Leaderboard','Admin','Profile','Friends','Shop','Deck','TutorialWelcome'])stubs['./screens/'+name[0].toLowerCase()+name.slice(1)]=`export const mount${name}=app=>{app.root.textContent='${name}';return {};};`;
+for(const name of ['Login','Home','Single','Lobby','Tutorial','Cards','Leaderboard','Admin','Profile','Friends','Shop','Deck','TutorialWelcome'])stubs['./screens/'+name[0].toLowerCase()+name.slice(1)]=`export const mount${name}=app=>{app.root.textContent='${name}';return {};};`;
 try{
  await build({entryPoints:['client/src/router.ts'],bundle:true,platform:'node',format:'esm',outfile:temp+'/router.mjs',plugins:[{name:'router-boundaries',setup(b){b.onResolve({filter:/.*/},a=>a.path in stubs?{path:a.path,namespace:'stub'}:undefined);b.onLoad({filter:/.*/,namespace:'stub'},a=>({contents:stubs[a.path]}));}}]});
  const {App}=await import(temp+'/router.mjs');

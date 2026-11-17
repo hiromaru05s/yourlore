@@ -27,7 +27,7 @@ const stubs={
  './screens/lazyGame':'export const mountGame=app=>{app.root.textContent="Game";return {};};export const mountGamePreparation=()=>({});',
 };
 for(const k of ['./ui/loungeText','../ui/loungeText','./loungeText'])stubs[k]='export const loungeText=x=>x;';
-for(const name of ['Login','Home','Lobby','Tutorial','Cards','Leaderboard','Admin','Profile','Friends','Shop','Deck','TutorialWelcome'])stubs['./screens/'+name[0].toLowerCase()+name.slice(1)]=`export const mount${name}=app=>{app.root.textContent='${name}';return {};};`;
+for(const name of ['Login','Home','Single','Lobby','Tutorial','Cards','Leaderboard','Admin','Profile','Friends','Shop','Deck','TutorialWelcome'])stubs['./screens/'+name[0].toLowerCase()+name.slice(1)]=`export const mount${name}=app=>{app.root.textContent='${name}';return {};};`;
 stubs['./screens/home']='export const mountHome=app=>{globalThis.__names.home();app.root.textContent="Home";return {};};';
 try {
  await build({entryPoints:['client/src/router.ts'],bundle:true,platform:'node',format:'esm',outfile:temp+'/router.mjs',plugins:[{name:'boundaries',setup(b){b.onResolve({filter:/.*/},a=>a.path in stubs?{path:a.path,namespace:'stub'}:undefined);b.onLoad({filter:/.*/,namespace:'stub'},a=>({contents:stubs[a.path]}));}}]});

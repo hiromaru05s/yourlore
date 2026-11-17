@@ -20,7 +20,7 @@ import { seekerLevel } from './seekerLevel';
 import { showInquiryModal, showInviteModal } from '../screens/home';
 import { mountHomeSound } from './homeSound';
 
-export type LoungePage = 'home'|'cardHub'|'deck'|'cards'|'leaderboard'|'friends'|'shop'|'tutorial'|'profile'|'lobby'|'login';
+export type LoungePage = 'home'|'single'|'cardHub'|'deck'|'cards'|'leaderboard'|'friends'|'shop'|'tutorial'|'profile'|'lobby'|'login';
 
 
 const lastLoungePage=new WeakMap<App,string>();
@@ -35,7 +35,7 @@ export function mountLounge(app: App, page: LoungePage, finishEntrance?: () => v
   if (finishEntrance) shell.classList.add('home-return-visit');
   const tab = page==='cardHub'||page==='deck' ? 'cards' : page;
   const nav: [LoungePage | 'single', string, (()=>void)?][] = [
-    ['home','home.title',()=>app.home()],['single','home.bot.title'],
+    ['home','home.title',()=>app.home()],['single','home.bot.title',()=>app.single()],
     ['cards','home.nav.cards',()=>app.cardHub()],['leaderboard','home.nav.ranking',()=>app.leaderboard()],
     ['friends','friends.title',()=>app.friends()],['shop','shop.title',()=>app.shop()],
     ['tutorial','home.nav.guide',()=>app.tutorial()],
@@ -65,7 +65,7 @@ export function mountLounge(app: App, page: LoungePage, finishEntrance?: () => v
     }).join('');
     rail.innerHTML=`<nav aria-label="${esc(t('home.navigation'))}">${navButtons}</nav><div class="lounge-rail-bottom" id="loungeUtilities"><button data-utility-settings>${loungeUtilityGlyph('settings')}<span>${t('home.settings')}</span></button><button data-invite>${loungeUtilityGlyph('invite')}<span>${t('invite.title')}</span></button><button data-inquiry>${loungeUtilityGlyph('inquiry')}<span>${t('home.inquiry.title')}</span></button></div>`;
     const top=document.createElement('header'); top.className='lounge-topbar';
-    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(page==='deck'?'home.nav.deck':nav.find(n=>n[0]===tab)?.[1]??'home.title')}</span><button class="lounge-user" data-profile title="${esc(t('home.levelRule'))}">${profileContents()}</button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
+    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='single'?t('home.bot.title'):page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(page==='deck'?'home.nav.deck':nav.find(n=>n[0]===tab)?.[1]??'home.title')}</span><button class="lounge-user" data-profile title="${esc(t('home.levelRule'))}">${profileContents()}</button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
     shell.prepend(rail,top);
     // Keep the same profile container on every route; HOME adds sound and quests.
     {

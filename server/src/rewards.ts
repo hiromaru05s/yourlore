@@ -2,7 +2,7 @@ import { ARIES_OPPONENTS, ARIES_ROUTE, ariesRoomStage, type AriesStage } from '.
 import {tutorialStatus,grantTutorial} from './tutorialRewards';
 import { progressionState, rerollDaily, claimDaily } from './progression';
 import { BOT_REWARDS } from '../../client/src/shared/progression';
-import { botNpc } from '../../client/src/shared/botNpcs';
+import { SINGLE_DIFFICULTIES, botNpc } from '../../client/src/shared/botNpcs';
 import { TUT_STEPS } from '../../client/src/shared/tutorialSteps';
 import { replayLesson, TUTORIAL_ACTION_LIMIT } from '../../client/src/shared/tutorialLesson';
 import { isClientMessage } from './gameInput';
@@ -74,7 +74,7 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     return json(env,{...await progressionState(env,user.id),changed},changed?200:409);
   }
   if (path === '/rewards/story/start' && req.method === 'POST') {
-    if (!['easy','normal','hard','hell'].every(d => user.botClears?.includes(d))) {
+    if (!SINGLE_DIFFICULTIES.every(d => user.botClears?.includes(d))) {
       return json(env, {error:'Clear every dojo opponent first'}, 403);
     }
     const body = await req.json().catch(() => null) as {previous?:unknown; lang?:unknown} | null;
@@ -105,9 +105,9 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   }
   if (path === '/rewards/bot/start' && req.method === 'POST') {
     const body=await req.json().catch(()=>null) as {difficulty?:unknown;lang?:unknown}|null;
-    if(typeof body?.difficulty!=='string'||!Object.hasOwn(BOT_REWARDS,body.difficulty))return json(env,{error:'invalid difficulty'},400);
+    if(typeof body?.difficulty!=='string'||!SINGLE_DIFFICULTIES.some(d => d === body.difficulty))return json(env,{error:'invalid difficulty'},400);
     const difficulty=body.difficulty as keyof typeof BOT_REWARDS,npc=botNpc(difficulty);
-    const order = ['easy','normal','hard','hell'];
+    const order: readonly string[] = SINGLE_DIFFICULTIES;
     if (!order.slice(0,order.indexOf(difficulty)).every(d => user.botClears?.includes(d))) {
       return json(env, {error:'Clear the previous dojo opponents first'}, 403);
     }

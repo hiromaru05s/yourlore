@@ -15,6 +15,9 @@ export interface BotNpc {
 }
 const text = (ja: string, en: string, ko: string): NpcText => ({ ja, en, ko });
 
+export const SINGLE_DIFFICULTIES = ['easy', 'normal', 'hard'] as const;
+export type SingleDifficulty = typeof SINGLE_DIFFICULTIES[number];
+
 /** NPC identity is independent of the deck rolled for each duel. */
 export const BOT_NPCS: readonly BotNpc[] = [
   {
