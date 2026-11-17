@@ -38,7 +38,7 @@ import { t, cardName, onLangChange, getLang, esc } from "../i18n";
 
 const def = (id: string): CardDef => STARTERS[id] ?? DB[id];
 
-export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={}): Screen {
+export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;singleReturn?:()=>void}={}): Screen {
   if(!options.tutorial && options.slot===undefined)return mountDeckLibrary(app);
   const settingLabels={
     character:loungeText('キャラクター','Character','캐릭터'),
@@ -65,7 +65,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
       </aside>
       <div class="deck-editor">
       <div class="deck-controls editor-actions">
-        <button type="button" id="libraryBack"><span aria-hidden="true">‹</span> ${loungeText('デッキ一覧','Decks','덱 목록')}</button>
+        <button type="button" id="libraryBack"><span aria-hidden="true">‹</span> ${options.singleReturn?loungeText('シングルに戻る','Back to Single','싱글로 돌아가기'):loungeText('デッキ一覧','Decks','덱 목록')}</button>
         <button id="editTab" class="deck-formation" aria-selected="true"><span>${loungeText('編成','Formation','편성')}</span><b id="deckCount"></b></button>
         <div class="deck-secondary-actions"><button id="watchTab" aria-selected="false">${t("deck.watch.title")}</button></div>
         <button class="deck-use" id="useBtn"></button>
@@ -352,7 +352,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
     if (!dead) render();
   };
   saveBtn.onclick = () => { void doSave(); };
-  q("libraryBack").onclick = () => app.deck();
+  q("libraryBack").onclick = options.singleReturn ?? (() => app.deck());
   const handSize=new ResizeObserver(entries=>{
     const width=entries[0].contentRect.width;
     if(!width)return;

@@ -20,6 +20,7 @@ import { aIdentify, aReset, aCapture } from "./net/analytics";
 import { setPresence, stopPresence } from "./net/presence";
 import { saveActiveGame, loadActiveGame, clearActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
+import { mountSingle, type SingleLocation } from "./screens/single";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
 import { mountGame, mountGamePreparation } from "./screens/lazyGame";
@@ -36,7 +37,7 @@ import { LOCAL_GUEST_KEY, canUseLocalGuest, loadLocalDevDecks, loadLocalGuestPro
 
 export interface Screen { destroy?(): void; beforeLeave?(): Promise<boolean>; }
 
-const HOME_MUSIC_PAGES = new Set<LoungePage>(["home", "deck", "cards", "leaderboard", "friends", "shop", "tutorial"]);
+const HOME_MUSIC_PAGES = new Set<LoungePage>(["home", "single", "deck", "cards", "leaderboard", "friends", "shop", "tutorial"]);
 
 export class App {
   root: HTMLElement;
@@ -156,6 +157,7 @@ export class App {
 
   login(): void { this.swap(() => mountLogin(this), "login"); }
   home(): void { setPresence("menu"); this.swap(afterEntrance => mountHome(this, afterEntrance), "home"); }
+  single(location: SingleLocation = {}): void { setPresence("menu"); this.swap(() => mountSingle(this, location), "single"); }
   private checkGraphics(page: LoungePage | undefined, revision: number): void {
     if (revision !== this.screenRevision || this.graphicsChecked || (page !== 'login' && page !== 'home')) return;
     this.graphicsChecked = true;
