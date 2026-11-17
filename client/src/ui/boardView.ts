@@ -14,7 +14,7 @@ import {bindOriginTrap} from './originRite/anchors';
 import {paintSpaceRiteCard,spaceRiteReason,spaceRiteSourceText,syncSpaceRiteStatus} from './spaceRiteStatus';
 import {dualReadyActive} from './monster/dualReady';
 import {availableDealRewards} from '../shared/starterQuests';
-import { questProgressText } from '../shared/cardPresentation';
+import { questProgressText, sortedSupplyEntries } from '../shared/cardPresentation';
 import { npcPortrait } from "../shared/botNpcs";
 import {prepareManaPurchase} from './manaPurchase';
 import {monsterCanAttack,monsterCanTarget} from '../shared/engine';
@@ -1011,9 +1011,7 @@ export class GameView {
     // 제시(supply): show sorted by type (monster → spell → trap), keeping the
     // ORIGINAL slot index for the buy handler; bought (null) slots render last.
     const sup = this.q("supplyMarket");
-    const rank = (ty: string) => ty === "mon" ? 0 : (ty === "spell" || ty === "starter") ? 1 : 2;
-    const filled = owner.supply.map((c, i) => ({ c, i })).filter((x) => x.c) as { c: CardInst; i: number }[];
-    filled.sort((a, b) => rank(a.c.t) - rank(b.c.t) || a.c.cost - b.c.cost);
+    const filled = sortedSupplyEntries(owner.supply);
     for (const { c, i } of filled) {
       const bc = buyCost(owner, c);
       const aff = myTurn && !g.pending && me.mana >= bc && purchaseAllowed(g, me, c) && !freeBuyBlocked(me, c);

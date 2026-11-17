@@ -139,8 +139,8 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
 
 /** Ranked pre-game market preview: study the fixed market before the coin toss.
     Returns handles so the caller can update the countdown (setUntil) and dismiss it (close). */
-export function marketPreview(market: CardInst[], onReady: () => void): { setUntil(u: number | null): void; close(): void } {
-  const scene=buildMarketStudy(market,onReady);let until:number|null=null;
+export function marketPreview(market: CardInst[], supply: (CardInst|null)[] | undefined, onReady: () => void): { setUntil(u: number | null): void; close(): void } {
+  const scene=buildMarketStudy(market,supply,onReady);let until:number|null=null;
   const tick=()=>scene.update(until);
   mount(scene.node);scene.button.focus({preventScroll:true});tick();
   const close=studyLifetime(scene.node,tick);

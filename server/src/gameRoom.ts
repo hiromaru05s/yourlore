@@ -439,7 +439,7 @@ export class GameRoom {
       const other = this.sockFor((1 - att.side) as Side);
       if (other) { try { this.send(other, { type: "oppConn", connected: true }); } catch { /* dropped */ } }
 
-      // RANKED pre-game phase: show the fixed market (no coin toss / no board yet).
+      // RANKED pre-game phase: show the two public market rows before the coin toss.
       // Arm the 15s auto-start deadline once BOTH have joined; players may skip it via startReady.
       if (!room.previewDone) {
         const bothIn = room.readied[0] && room.readied[1];
@@ -448,7 +448,7 @@ export class GameRoom {
         const targets: Side[] = bothIn ? [0, 1] : [att.side];
         for (const s of targets) {
           const w = this.sockFor(s);
-          if (w) { try { this.send(w, { type: "preview", until: room.previewUntil, market: room.game.market }); } catch { /* dropped */ } }
+          if (w) { try { this.send(w, { type: "preview", until: room.previewUntil, market: room.game.market, supply: room.game.players[room.game.cur].supply }); } catch { /* dropped */ } }
         }
         return;
       }

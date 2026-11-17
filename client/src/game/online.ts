@@ -136,7 +136,7 @@ export class OnlineController extends BaseController {
       noticeModal(t("notice.voided.title"), t("notice.voided.body"), t("modal.home"), () => this.exits.onHome());
     } else if (msg.type === "preview") {
       // ranked pre-game market study (before coin toss). until=null → still waiting for the opponent.
-      if (!this.preview) this.preview = marketPreview(msg.market, () => this.sock.send({ type: "startReady" }));
+      if (!this.preview) this.preview = marketPreview(msg.market, msg.supply, () => this.sock.send({ type: "startReady" }));
       this.preview.setUntil(msg.until);
     } else if (msg.type === "experienceResult") {
       this.receiveExperience(msg);

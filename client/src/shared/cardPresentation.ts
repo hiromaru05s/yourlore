@@ -1,4 +1,4 @@
-import type { CardDef, FieldMon } from './types';
+import type { CardDef, CardInst, FieldMon } from './types';
 import type { EffectLocale } from './cardEffectText';
 import { cardPassives, PASSIVES } from './cards';
 import { CARD_RULE_METADATA } from './cardRuleMetadata';
@@ -50,4 +50,12 @@ export function decayStateDescription(count: number, lang: EffectLocale): string
     ko:`부패로 받은 카운터 ${count}/3. 이 몬스터가 부패를 받은 상태다. 3개 이상이면 파괴되고 소유자에게 3 데미지를 준다. 부패를 부여하는 능력이 아니다.`,
     en:`Counters received from Decay: ${count}/3. At 3 or more, this monster is destroyed and its owner takes 3 damage. This is an applied status, not the ability to inflict Decay.`,
   }[lang];
+}
+
+/** Visible offer order; keep each source slot for purchases. */
+export function sortedSupplyEntries(supply: (CardInst | null)[]) {
+  const rank = (ty: string) => ty === "mon" ? 0 : (ty === "spell" || ty === "starter") ? 1 : 2;
+  const filled = supply.map((c, i) => ({ c, i })).filter((x) => x.c) as { c: CardInst; i: number }[];
+  filled.sort((a, b) => rank(a.c.t) - rank(b.c.t) || a.c.cost - b.c.cost);
+  return filled;
 }

@@ -22,7 +22,6 @@
 .study-head{padding-bottom:clamp(12px,2vh,24px);border-bottom:1px solid #adbbcc44}
 .study-head::after,.study-foot::before{position:absolute;content:"";width:clamp(40px,7vw,106px);height:2px;left:0;background:linear-gradient(90deg,var(--foil),#efe9d277);transform:skewX(-42deg);bottom:-1px}
 .study-title{margin:0;color:#f7f3e8;font:500 var(--head-size)/1.18 Georgia,"Shippori Mincho","Yu Mincho",serif;letter-spacing:.095em;text-shadow:0 3px 15px #0009}
-.study-description{margin:8px 0 0;color:#c8d1dc;font-size:clamp(12px,1.6vmin,17px);letter-spacing:.07em;line-height:1.5}
 .study-clock{display:grid;grid-template-columns:auto auto;align-items:baseline;column-gap:9px;flex-shrink:0;padding:0 2px 9px;color:#edf3f5;position:relative}
 .study-clock::after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--silk) var(--remaining),#adc0cd34 var(--remaining))}
 .study-clock.running-low{--silk:#e1b98c}
@@ -79,7 +78,7 @@
  .study-lane::before{inset:22px -8px -6px}.study-status{font-size:11px}.study-action{padding-inline:12px;min-width:145px}
 }
 @media(max-height:500px) and (orientation:landscape){
- .opening-study{padding:9px 4vw}.study-head{padding-bottom:6px}.study-title{font-size:24px}.study-description{margin-top:1px;font-size:11px}
+ .opening-study{padding:9px 4vw}.study-head{padding-bottom:6px}.study-title{font-size:24px}
  .study-foot{padding-top:4px;min-height:35px}.study-action{min-height:34px;padding-block:3px}
  .hand-study{--unit:min(13vw,18dvh)}.hand-study .study-content{gap:8px}
  .study-rack{padding-block:16px}.study-clock{padding-bottom:4px}
@@ -90,21 +89,6 @@
 .hand-study.is-submitted .goes-back .study-leaf{animation:study-return .42s cubic-bezier(.48,.05,.82,.32) forwards}
 @keyframes study-return{0%{transform:none}100%{transform:perspective(800px) translate(28%,-55%) rotateY(160deg) scale(.62);opacity:0}}
 @media(prefers-reduced-motion:reduce){.hand-study.is-submitted .goes-back .study-leaf{animation:none!important}}
-/* The print and its caption come from the very card lit in the row below. */
-.market-study .study-content{flex-direction:column;gap:clamp(2px,1vh,12px);justify-content:center}
-.market-feature{position:relative;isolation:isolate;overflow:hidden;flex:1 1 0;max-height:34dvh;min-height:0;width:min(100%,1520px);display:flex;align-items:center;
-  background:linear-gradient(110deg,#0c1828ed 10%,#102137d9 58%,#16233673);border-bottom:1px solid #d5c39566}
-.feature-art{position:absolute;z-index:-1;inset:0 0 0 26%;mask-image:linear-gradient(90deg,transparent,#0008 22%,black 45%);}
-.feature-print{width:100%;height:100%;object-fit:cover;object-position:50% 41%;animation:study-print .42s ease-out both}
-.market-feature::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#0c172890 0%,#0c17284a 51%,transparent 78%),linear-gradient(0deg,#0a142a83,transparent 45%);pointer-events:none}
-.feature-caption{max-width:min(49%,620px);padding:clamp(14px,2.2vw,36px);text-align:left}
-.feature-type{color:#e4cd9f;font-size:clamp(11px,1.4vmin,15px);letter-spacing:.22em}
-.feature-name{margin:5px 0 8px;color:#fff5e4;font:500 clamp(24px,4.3vmin,50px)/1.2 Georgia,"Shippori Mincho","Yu Mincho",serif;letter-spacing:.07em}
-.feature-rules{color:#d2dbe3;font-size:clamp(12px,1.6vmin,16px);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-@keyframes study-print{from{opacity:.35;transform:scale(1.035)}to{opacity:1;transform:none}}
-.market-study .study-rack{--unit:min(215px,calc((90vw - (var(--count) - 1)*1vw - 16px)/var(--count)),22dvh);padding-block:clamp(13px,2.3vh,30px)}
-.study-slot.in-focus .study-leaf{filter:drop-shadow(0 0 2px #ffdf9e)}
-.study-slot.in-focus::after{background:#debb7c;box-shadow:0 0 8px #edcd8b;bottom:-7px;height:2px}
 .study-lane::before{background:linear-gradient(100deg,transparent 1%,#41617c3b 16%,#3c627a1a 68%,transparent 100%)}
 .return-lane::before{background:linear-gradient(100deg,transparent 1%,#8c82703b 20%,#77715b1d 68%,transparent 100%)}
 .lane-title{display:flex;align-items:center;gap:9px}
@@ -113,17 +97,27 @@
 .return-socket{background:radial-gradient(ellipse at 50% 50%,#8b795e20,transparent 70%),linear-gradient(145deg,#090f19bf,#20324499)}
 .return-arrow{color:#c2b89678}
 @media(max-width:720px) and (orientation:portrait){
- .market-feature{max-height:31dvh;margin-top:10px;flex:0 1 230px}
- .market-study .study-content{gap:8px}
- .feature-art{left:8%;mask-image:linear-gradient(90deg,transparent,#0009 32%,black 65%)}
- .feature-caption{max-width:70%;padding:14px;text-shadow:0 1px 7px #08101e}
- .feature-name{font-size:clamp(22px,5.8vw,30px)}.feature-rules{font-size:12px;line-height:1.6;-webkit-line-clamp:3}
- .market-study .study-rack{--unit:min(20.5vw,16dvh);padding-block:10px}
  .hand-study{--unit:min(26vw,19dvh,155px)}
 }
 @media(max-height:500px) and (orientation:landscape){
- .market-feature{max-height:34dvh}.feature-name{font-size:21px;margin:1px 0 3px}
- .feature-caption{padding:7px 20px}.feature-rules{line-height:1.28;font-size:11px;-webkit-line-clamp:2}
- .market-study .study-rack{--unit:min(11vw,24dvh);padding-block:8px}
  .hand-study{--unit:min(14vw,19dvh)}
+}
+
+.hand-study .study-title{font-size:clamp(17px,2.9vmin,31px);line-height:1.45;letter-spacing:.04em}
+.hand-study .study-action{margin-left:auto}
+.return-count{color:#f6e4bd;font:500 .87em/1.2 system-ui,sans-serif;letter-spacing:.04em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.market-study .study-content{flex-direction:column;align-items:stretch;gap:clamp(6px,1.8dvh,20px);max-width:1520px;width:100%;margin-inline:auto}
+.market-row{--row-accent:#e4c68d;--unit:min(11.5vw,21dvh,185px);width:100%}
+.market-row.offer-market{--row-accent:#a4d7f5}
+.market-row-title{display:flex;align-items:center;gap:12px;margin:0;padding-inline-start:9px;border-inline-start:2px solid var(--row-accent);background:linear-gradient(90deg,#081321bd,transparent 68%);color:var(--row-accent);text-shadow:0 1px 3px #06101c;font:500 clamp(16px,2.55vmin,27px)/1.3 Georgia,"Yu Mincho",serif;letter-spacing:.08em}
+.market-row-title::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--row-accent),transparent);opacity:.55}
+.market-row .study-rack{padding:clamp(7px,1.4dvh,17px) 0;gap:1vw}
+@media(max-width:720px) and (orientation:portrait){
+ .market-row{--unit:min(20vw,13.3dvh,122px)}
+ .market-row .study-rack{gap:1.4vh 2vw}
+ .market-study .study-content{gap:clamp(15px,3dvh,28px)}
+}
+@media(max-height:500px) and (orientation:landscape){
+ .market-row{--unit:min(10.2vw,16.8dvh)}.market-row-title{font-size:14px}
+ .market-row .study-rack{padding:3px 0 8px}
 }

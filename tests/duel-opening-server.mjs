@@ -97,6 +97,13 @@ try{
 
   const ranked=await fixture(true);await ranked.send(0,{type:'ready',openingVersion:2});await ranked.send(1,{type:'ready',openingVersion:2});
   assert.equal(ranked.saved().opening.prepareBy,null);assert(ranked.saved().previewUntil>now);
+  const publicGame=ranked.saved().game;
+  for(const socket of ranked.sockets){
+    const preview=socket.messages.filter(m=>m.type==='preview').at(-1);
+    assert.deepEqual(preview.market,publicGame.market);
+    assert.deepEqual(preview.supply,publicGame.players[publicGame.cur].supply);
+    assert.equal(preview.supply.filter(Boolean).length,3);
+  }
   await ranked.send(0,{type:'startReady'});await ranked.send(1,{type:'startReady'});
   assert.equal(ranked.saved().previewDone,true);assert.equal(ranked.saved().opening.prepareBy,now+8000);
   // The opening deadline participates in the existing single alarm schedule.

@@ -52,7 +52,7 @@ export async function mountOpeningLab(root:HTMLElement):Promise<void>{
       reset();panel.hidden=true;state=previewState();view.render(state);
       if(!market){hand();return;}
       const next=async()=>{reset();await launch();if(root.isConnected&&!active.signal.aborted)hand();};
-      const preview=marketPreview(state.market,()=>void next());
+      const preview=marketPreview(state.market,state.players[state.cur].supply,()=>void next());
       closeStudy=preview.close;preview.setUntil(Date.now()+15000);timer=window.setTimeout(()=>void next(),15000);
     };
     panel.style.display='';panel.style.textAlign='center';
