@@ -1,4 +1,4 @@
-/* Both opening choices sit on the duel table. Only the action button is a UI plate. */
+/* Opening choices share the live duel table. */
 #overlayRoot .overlay:has(>.opening-study){padding:0;background:transparent;backdrop-filter:none;animation:none}
 .opening-study{
   --silver:#c5d6e5;--foil:#dabf8c;--silk:#85b6d5;--head-size:clamp(30px,4.6vmin,55px);
@@ -13,7 +13,7 @@
   background:linear-gradient(180deg,#070e1bf0,#0e1c2d94 28%,#14263778 55%,#0a1324c9 81%,#050b16fa),
     url('/art/biblion/duel-table.png') center/cover #101c2e;
 }
-.hand-study::before{background:linear-gradient(115deg,#050e1bef,#0b1c2fe6 45%,#0a1526e0 74%,#060d17f2);backdrop-filter:blur(3px)}
+
 .opening-study::after{
   background:radial-gradient(ellipse at 52% 49%,#91b8d014,transparent 57%),
     linear-gradient(110deg,transparent 58%,#aac8d705 58.1%,transparent 62%);
@@ -118,23 +118,50 @@
  .market-row{--unit:min(10.2vw,16.8dvh)}.market-row-title{font-size:14px}
  .market-row .study-rack{padding:3px 0 8px}
 }
-.hand-market-toggle{min-height:42px;padding:8px 17px;cursor:pointer;letter-spacing:.04em;white-space:nowrap}
-.hand-study .study-content[hidden]{display:none}
-.hand-study.viewing-board{display:block;padding:0;background:transparent}
-.hand-study.viewing-board::before,.hand-study.viewing-board::after,
-.hand-study.viewing-board .study-heading,.hand-study.viewing-board .study-status,
-.hand-study.viewing-board .study-head::after,.hand-study.viewing-board .study-foot::before{display:none}
-.hand-study.viewing-board .study-head,.hand-study.viewing-board .study-foot{
-  position:absolute;z-index:1;right:max(14px,env(safe-area-inset-right));width:auto;min-height:0;padding:0;border:0
+.opening-study.hand-study{display:grid;grid-template:1fr / 1fr;place-items:center;padding:0}
+.hand-study::before,.hand-study::after{display:none}
+.hand-panel{
+  z-index:1;position:relative;box-sizing:border-box;width:min(880px,86vw);max-height:calc(100dvh - 36px);
+  overflow:auto;padding:clamp(14px,2.6dvh,30px) clamp(18px,2.7vw,42px);
+  border:1px solid #7897af99;border-radius:5px;
+  background:linear-gradient(115deg,#0c2134fa,#0b1728fa 64%,#0f2233fa);
+  box-shadow:0 14px 45px #020a15a6,inset 0 1px #d4eaff25;
 }
-.hand-study.viewing-board .study-head{top:max(10px,env(safe-area-inset-top));background:#0a182def;padding:5px 10px;pointer-events:none}
-.hand-study.viewing-board .study-clock{padding-bottom:3px}
-.hand-study.viewing-board .study-seconds{font-size:22px}
-.hand-study.viewing-board .study-foot{bottom:max(10px,env(safe-area-inset-bottom))}
+.hand-panel .study-content{padding:clamp(10px,1.8dvh,22px) 0}
+.hand-panel .study-lane{display:grid;grid-template-columns:minmax(max-content,22%) 1fr}
+.hand-panel .lane-title{position:static;justify-self:start;margin-left:8px}
+.hand-panel .study-foot{gap:10px}
+.hand-panel-hint{font-size:clamp(11px,1.55vmin,14px);color:#c1d2df}
+#overlayRoot .hand-panel-backdrop{position:absolute;inset:0;width:100%;height:100%;padding:0;border-image:none!important;background:#04102340!important;cursor:pointer}
+.hand-panel-backdrop:focus-visible{outline:2px solid #b8dafa;outline-offset:-4px}
+.hand-resume{
+  position:absolute;z-index:2;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:14px;min-height:46px;padding:8px 16px;color:#edf5fb;
+  background:linear-gradient(115deg,#132d43,#0a1728);border:1px solid #99bbd1;border-radius:4px;
+  box-shadow:0 4px 14px #04102199;font:600 14px/1.2 system-ui,sans-serif;cursor:pointer;
+}
+.hand-resume .study-clock{--silk:#85b6d5;display:flex;align-items:center;gap:5px;min-width:0;padding:0 0 3px}
+.hand-resume .study-clock.running-low{--silk:#e1b98c}
+.hand-resume .study-seconds{font-size:22px}
+.hand-resume .study-clock-label{font-size:10px}
+.hand-resume-label::before{content:"↩";margin-right:6px;color:#b7d8ed}
+.hand-resume:focus-visible{outline:2px solid #c5e6fa;outline-offset:2px}
+.hand-panel[hidden],.hand-resume[hidden],.hand-panel-backdrop[hidden]{display:none}
+@media(max-width:720px) and (orientation:portrait){
+  .hand-panel{width:calc(100% - 32px);padding:14px 12px}
+  .hand-panel .study-lane{display:flex}
+  .hand-panel .lane-title{position:absolute;margin:0}
+  .hand-panel .study-foot{align-items:center}
+  .hand-panel .study-action{min-width:0;flex-shrink:0}
+}
+@media(max-height:500px) and (orientation:landscape){
+  .hand-panel{padding:8px 18px;width:min(78vw,800px);max-height:calc(100dvh - 20px)}
+  .hand-panel .study-content{padding:6px 0}
+}
 .hand-market-inspection{position:absolute;inset:0}
 .hand-market-inspection .market-inspect-target{position:absolute;opacity:0;cursor:zoom-in}
 .hand-market-inspection .market-inspect-target:focus-visible{opacity:1;background:transparent!important;border:2px solid #bde3ff!important;border-image:none!important}
-@media(max-width:420px){.hand-study .study-foot{gap:6px}.hand-market-toggle{padding-inline:8px;font-size:12px}}
+
 
 .hand-study:not(.is-confirmed) .study-slot .card[aria-disabled=false]{
   cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none

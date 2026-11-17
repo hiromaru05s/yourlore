@@ -3,15 +3,15 @@ import {MULLIGAN_MS} from '../shared/opening';
 import {FRAME_BACK,sleeveUrl} from '../shared/cards';
 import type {CardInst,GameState,Side} from '../shared/types';
 import {cardEl} from './cardView';
-import {bindZoom,zoomCard} from './cardInspection';
+import {bindZoom,closeZoom,zoomCard} from './cardInspection';
 import {sfx} from './sound';
 import {sortedSupplyEntries} from '../shared/cardPresentation';
 import '../styles/marketPreview.css';
 
 const copy={
-  ja:{viewMarket:'マーケットを見る',backToHand:'初手交換に戻る',market:'マーケット',fixed:'固定マーケット',offer:'提示マーケット',inspect:'カードを選ぶと詳細を表示',ready:'準備完了',help:'タップかドラッグで、引き直すカードを2枚まで選択',keep:'そのまま始める',keepLane:'手札に残す',returnLane:'山札に戻す',waiting:'対戦相手が初手を選んでいます',submitted:'選択を送信中…',confirm:(n:number)=>n+'枚の交換を確定',confirmed:'初手が決まりました',time:'残り時間'},
-  en:{viewMarket:'View market',backToHand:'Back to hand',market:'Market',fixed:'Fixed market',offer:'Offer market',inspect:'Select a card to inspect it',ready:'Ready',help:'Tap or drag up to two cards to redraw.',keep:'Keep this hand',keepLane:'Keep in hand',returnLane:'Return to deck',waiting:'Your opponent is choosing their hand',submitted:'Submitting hand…',confirm:(n:number)=>'Exchange '+n+(n===1?' card':' cards'),confirmed:'Your opening hand',time:'Time left'},
-  ko:{viewMarket:'마켓 보기',backToHand:'시작 패로 돌아가기',market:'마켓',fixed:'고정 마켓',offer:'제시 마켓',inspect:'카드를 선택해 자세히 보기',ready:'준비 완료',help:'탭하거나 드래그해 다시 뽑을 카드를 최대 2장 선택하세요.',keep:'그대로 시작',keepLane:'손에 유지',returnLane:'덱으로 반환',waiting:'상대가 시작 패를 고르고 있습니다',submitted:'선택을 보내는 중…',confirm:(n:number)=>n+'장 교환 확정',confirmed:'시작 패가 결정되었습니다',time:'남은 시간'}
+  ja:{outside:'枠の外をタップして盤面を確認',backToHand:'初手交換に戻る',market:'マーケット',fixed:'固定マーケット',offer:'提示マーケット',inspect:'カードを選ぶと詳細を表示',ready:'準備完了',help:'タップかドラッグで、引き直すカードを2枚まで選択',keep:'そのまま始める',keepLane:'手札に残す',returnLane:'山札に戻す',waiting:'対戦相手が初手を選んでいます',submitted:'選択を送信中…',confirm:(n:number)=>n+'枚の交換を確定',confirmed:'初手が決まりました',time:'残り時間'},
+  en:{outside:'Tap outside to view the board',backToHand:'Back to hand',market:'Market',fixed:'Fixed market',offer:'Offer market',inspect:'Select a card to inspect it',ready:'Ready',help:'Tap or drag up to two cards to redraw.',keep:'Keep this hand',keepLane:'Keep in hand',returnLane:'Return to deck',waiting:'Your opponent is choosing their hand',submitted:'Submitting hand…',confirm:(n:number)=>'Exchange '+n+(n===1?' card':' cards'),confirmed:'Your opening hand',time:'Time left'},
+  ko:{outside:'바깥을 탭해 보드를 확인하세요',backToHand:'시작 패로 돌아가기',market:'마켓',fixed:'고정 마켓',offer:'제시 마켓',inspect:'카드를 선택해 자세히 보기',ready:'준비 완료',help:'탭하거나 드래그해 다시 뽑을 카드를 최대 2장 선택하세요.',keep:'그대로 시작',keepLane:'손에 유지',returnLane:'덱으로 반환',waiting:'상대가 시작 패를 고르고 있습니다',submitted:'선택을 보내는 중…',confirm:(n:number)=>n+'장 교환 확정',confirmed:'시작 패가 결정되었습니다',time:'남은 시간'}
 };
 function element<K extends keyof HTMLElementTagNameMap>(tag:K,cls:string,text?:string){
   const el=document.createElement(tag);el.className=cls;if(text!==undefined)el.textContent=text;return el;
@@ -31,7 +31,7 @@ function stage(kind:'market'|'hand',title:string){
     clock.style.setProperty('--remaining',(left===null?1:Math.min(1,left/total))*100+'%');
     clock.classList.toggle('running-low',left!==null&&left<=5);
   };
-  return {node,content,status,button,time,foot,heading};
+  return {node,head,clock,content,status,button,time,foot,heading};
 }
 type Appearance={sleeve?:string|null;frame?:string|null;effect?:string|null};
 function dealtCard(c:CardInst,index:number,appearance:Appearance={}){
@@ -191,15 +191,28 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
     scene.node.classList.add('is-submitted');select(uids);
   };
   scene.button.onclick=()=>commit(selected());
-  const toggle=element('button','btn btn-ghost hand-market-toggle',words.viewMarket);
-  toggle.type='button';toggle.setAttribute('aria-expanded','true');scene.foot.prepend(toggle);
+  const panel=element('div','hand-panel');
+  panel.append(scene.head,scene.content,scene.foot);
+  const outside=element('button','hand-panel-backdrop');
+  outside.type='button';outside.setAttribute('aria-label',words.outside);
+  const hint=element('span','hand-panel-hint',words.outside);
+  scene.foot.prepend(hint);
+  const resume=element('button','hand-resume');
+  resume.type='button';resume.hidden=true;
+  resume.append(element('span','hand-resume-label',words.backToHand));
+  scene.node.append(panel,outside,resume);
   const inspection=element('div','hand-market-inspection');
   inspection.setAttribute('role','group');inspection.setAttribute('aria-label',words.market);
   inspection.hidden=true;scene.node.append(inspection);
   const publicCards=new Map([...state.market,...state.players[state.cur].supply].flatMap(c=>c?[[c.uid,c] as const]:[]));
   const targets=new Map<string,HTMLButtonElement>();
   // Only market cards receive inspection targets. The surrounding modal keeps gameplay input locked.
+  function placeResume(){
+    const host=document.getElementById('zoomOverlay')??scene.node;
+    if(resume.parentElement!==host)host.append(resume);
+  }
   function alignMarket(){
+    placeResume();
     const visible=new Set<string>();
     for(const source of document.querySelectorAll<HTMLElement>('#fixedMarket .card[data-uid],#supplyMarket .card[data-uid]')){
       const uid=source.dataset.uid!,card=publicCards.get(uid);
@@ -208,7 +221,7 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
       let target=targets.get(uid);
       if(!target){
         target=element('button','market-inspect-target');
-        target.type='button';target.setAttribute('aria-label',cardName(card));target.onclick=()=>zoomCard(card);
+        target.type='button';target.setAttribute('aria-label',cardName(card));target.onclick=()=>{zoomCard(card);placeResume();};
         inspection.append(target);targets.set(uid,target);
       }
       const r=source.getBoundingClientRect();
@@ -220,13 +233,20 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
   function showMarket(open:boolean){
     endDrag();
     scene.node.classList.toggle('viewing-board',open);inspection.hidden=!open;
-    scene.content.hidden=open;scene.button.hidden=open||confirmed;
+    panel.hidden=open;outside.hidden=open;resume.hidden=!open;
     scene.heading.textContent=open?words.market:confirmed?words.confirmed:words.help;
-    toggle.textContent=open?words.backToHand:words.viewMarket;toggle.setAttribute('aria-expanded',String(!open));
-    if(open)alignMarket();else position();
-    toggle.focus({preventScroll:true});
+    if(open){
+      resume.prepend(scene.clock);alignMarket();resume.focus({preventScroll:true});
+    }else{
+      scene.node.append(resume);scene.head.append(scene.clock);position();scene.node.focus({preventScroll:true});
+    }
   }
-  toggle.onclick=()=>showMarket(inspection.hidden);
+  outside.onclick=()=>showMarket(true);
+  resume.onclick=e=>{
+    e.stopPropagation();
+    if(document.getElementById('zoomOverlay'))closeZoom();
+    showMarket(false);
+  };
   scene.node.addEventListener('keydown',e=>{
     if(e.key!=='Escape'||document.getElementById('zoomOverlay'))return;
     e.preventDefault();showMarket(inspection.hidden);
@@ -235,5 +255,5 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
   scene.button.hidden=confirmed;paint();
   const resize=new ResizeObserver(()=>{if(inspection.hidden)position();else alignMarket();});
   resize.observe(scene.node);resize.observe(scene.content);
-  return {node:scene.node,update:(seconds:number)=>{scene.time(seconds,MULLIGAN_MS/1000);if(!inspection.hidden)alignMarket();},dispose:()=>{endDrag();resize.disconnect();}};
+  return {node:scene.node,update:(seconds:number)=>{scene.time(seconds,MULLIGAN_MS/1000);if(!inspection.hidden)alignMarket();},dispose:()=>{endDrag();resize.disconnect();resume.remove();}};
 }
