@@ -1,7 +1,9 @@
 import {deckName,mountDeckLibrary} from './deckLibrary';
 import {backgroundNames,openAppearancePicker} from '../ui/appearancePicker';
 import {characterAppearance} from '../ui/characterAppearance';
-import {profileBackground} from '../shared/profileAppearance';
+import {profileBackground,starterBackgrounds} from '../shared/profileAppearance';
+import {deckFurniturePreview} from '../ui/deckFurniturePreview';
+import {disposeCardFrames} from '../ui/cardFrame';
 import {cosmetic} from '../shared/cosmetics';
 import {CARD_EFFECTS} from '../shared/cardEffects';
 import {TutorialSpotlight} from '../ui/tutorialSpotlight';
@@ -24,13 +26,13 @@ import { loungeText } from "../ui/loungeText";
 // 은은하게 표시된다. 저장은 서버(users.decks JSON + 활성 덱 csv 캐시).
 // ============================================================
 import type { App, Screen } from "../router";
-import { DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, WATCH_MAX, BUYABLE_POOL, deckStoreForUser, sanitizeDeckName, type DeckStore } from "../shared/cards";
+import { sleeveUrl, DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, WATCH_MAX, BUYABLE_POOL, deckStoreForUser, sanitizeDeckName, type DeckStore } from "../shared/cards";
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
 import { bindZoom, zoomCard } from "../ui/cardInspection";
 import { confirmDialog } from "../ui/modal";
 import { api } from "../net/api";
-import { t, cardName, cardText, onLangChange, getLang, esc } from "../i18n";
+import { t, cardName, onLangChange, getLang, esc } from "../i18n";
 
 const def = (id: string): CardDef => STARTERS[id] ?? DB[id];
 
@@ -51,9 +53,15 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
     <div class="panel deck-panel" id="deckWorkspace">
       <h2 class="menu-sr-title">${t("deck.title")}</h2>
       <aside class="deck-settings deck-frame" id="deckSettings">
-        <button class="deck-library-back" id="libraryBack">‹ ${loungeText('デッキ一覧','Decks','덱 목록')}</button>
-        <button type="button" id="deckRename"><strong></strong>${homeIcon('edit')}</button>
-        <div class="deck-setting-grid">${Object.entries(settingLabels).map(([key,label])=>`<button type="button" data-setting="${key}"><span>${label}</span><b></b></button>`).join('')}</div>
+        <div class="deck-settings-heading">
+          <button id="libraryBack" title="${loungeText('デッキ一覧','Decks','덱 목록')}" aria-label="${loungeText('デッキ一覧','Decks','덱 목록')}">‹</button>
+          <button type="button" id="deckRename"><strong></strong>${homeIcon('edit')}</button>
+        </div>
+        <button type="button" data-setting="character"><img alt=""></button>
+        <div class="deck-colors" role="group" aria-label="${settingLabels.background}">
+          ${starterBackgrounds.map(color=>`<button type="button" data-swatch="${color}" data-background="${color}" title="${loungeText(...backgroundNames[color])}" aria-label="${loungeText(...backgroundNames[color])}"></button>`).join('')}
+        </div>
+        <div class="deck-setting-grid">${(['sleeve','furniture','effect','frame'] as const).map(key=>`<button type="button" data-setting="${key}"><span class="equipment-art" aria-hidden="true"></span></button>`).join('')}</div>
       </aside>
       <div class="deck-editor">
       <div class="deck-controls editor-actions">
@@ -64,7 +72,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
         <button class="deck-confirm deck-action confirm" id="save"><svg class="confirm-seal" viewBox="0 0 28 28" aria-hidden="true"><path class="seal-edge" d="M14 2 26 14 14 26 2 14Z"/><path class="seal-check" d="m8.5 14 3.5 3.5 7.5-8"/></svg><span class="confirm-label">${loungeText('デッキを確定','Confirm deck','덱 확정')}</span></button>
       </div>
       <section id="deckEditSection"><div class="deck-stage" aria-hidden="true"><div class="deck-stage-depth"></div><svg class="deck-stage-floor" viewBox="0 0 1200 160" preserveAspectRatio="none"><defs><linearGradient id="deck-stone" x2="0" y2="1"><stop stop-color="#27434b" stop-opacity=".1"/><stop offset=".75" stop-color="#172b36"/><stop offset="1" stop-color="#08131d"/></linearGradient><linearGradient id="deck-rim"><stop stop-color="#829b9a" stop-opacity="0"/><stop offset=".25" stop-color="#819c9c" stop-opacity=".6"/><stop offset=".5" stop-color="#d2d6bd" stop-opacity=".7"/><stop offset=".75" stop-color="#819c9c" stop-opacity=".6"/><stop offset="1" stop-color="#829b9a" stop-opacity="0"/></linearGradient></defs><path d="M130 16 Q600 -10 1070 16 L1180 117 Q600 166 20 117Z" fill="url(#deck-stone)"/><path d="M20 117 Q600 166 1180 117L1180 128Q600 176 20 128Z" fill="#030c15"/><path d="M20 116 Q600 164 1180 116 M73 99 Q600 145 1127 99" fill="none" stroke="url(#deck-rim)"/><path d="M140 28 100 85M1060 28 1100 85M170 42Q600 21 1030 42" fill="none" stroke="#77979e" stroke-opacity=".14"/><path d="m580 139 20-7 20 7-20 7Z" fill="none" stroke="#bdd3ce" stroke-opacity=".5"/></svg></div><div class="deck-cur" id="deckCur" aria-label="${loungeText('編成中のカード','Cards in deck','편성 카드')}"></div><span id="deckHint" role="status"></span></section></div>
-      <aside class="deck-filters deck-frame" id="deckFilters"><div class="deck-search-slot"><label class="deck-pool-search">${homeIcon('search')}<input id="poolSearch" type="search" aria-label="${t('cards.search')}" placeholder="${loungeText('検索','Search','검색')}"></label></div><div class="deck-pool-types" id="poolTypes"></div></aside>
       <section id="deckCandidates" class="deck-candidate-column deck-frame"><div class="deck-pool" id="deckPool"></div></section>
       <section id="deckWatchSection" class="deck-frame" hidden><div class="deck-pool-head deck-watch-head">${homeIcon("bell")} ${t("deck.watch.title")} <b id="watchCount"></b></div>
       <div class="deck-note">${t("deck.watch.desc")}</div>
@@ -103,8 +110,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
   let dead = false;
   let pending: string | null = null;
   let undo: string[] | null = null;
-  let poolType: 'all' | 'mon' | 'spell' = 'all';
-  let poolQuery = '';
   const lifecycle=new AbortController();
   const handRows=new Map<string,HTMLElement>(),poolRows=new Map<string,HTMLElement>();
   const controlIcon=(swap=false,add=false)=>`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${swap?'M4 8h16m-4-4 4 4-4 4M20 16H4m4-4-4 4 4 4':add?'M6 12h12M12 6v12':'M6 12h12'}"/></svg>`;
@@ -122,7 +127,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
       q('deck'+key[0].toUpperCase()+key.slice(1)+'Section').hidden=key!==next;
       if(key!=='appearance')q(key+'Tab').setAttribute('aria-selected',String(key===next));
     }
-    q('deckCandidates').hidden=next!=='edit';q('deckFilters').hidden=next!=='edit';
+    q('deckCandidates').hidden=next!=='edit';
     render();
   };
   q('editTab').onclick=()=>setTab('edit');q('watchTab').onclick=()=>setTab('watch');
@@ -140,7 +145,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
     saveDraft();
     cancelDrag();
     wrap.dataset.tab=activeTab;
-    q("deckEditSection").inert = saving; q("deckWatchSection").inert = saving; q("deckAppearanceSection").inert = saving; settingsEl.inert = saving;q('deckCandidates').inert=saving;q('deckFilters').inert=saving;
+    q("deckEditSection").inert = saving; q("deckWatchSection").inert = saving; q("deckAppearanceSection").inert = saving; settingsEl.inert = saving;q('deckCandidates').inert=saving;
     const slot=store.list[cur];
     const character=characterAppearance(slot.avatar ?? app.user?.avatar);
     const background=profileBackground(slot.background ?? app.user?.background);
@@ -148,22 +153,43 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
     rename.querySelector('strong')!.textContent=deckName(slot,cur);
     rename.title=loungeText('デッキ名を変更','Rename deck','덱 이름 변경');
     rename.setAttribute('aria-label',rename.title+' · '+deckName(slot,cur));
-    for(const button of settingsEl.querySelectorAll<HTMLButtonElement>('[data-setting]')){
-      const key=button.dataset.setting as keyof typeof settingLabels;
-      const item=key==='character'||key==='background'?undefined:key==='effect'?CARD_EFFECTS.find(item=>item.id===slot.effect):cosmetic(slot[key]??'default');
-      const label=key==='character'?character.name():key==='background'?loungeText(...backgroundNames[background]):item?.[getLang()] ?? (key==='effect'?loungeText('なし','None','없음'):loungeText('標準','Default','기본'));
-      button.querySelector('b')!.textContent=label;
+    const portrait=settingsEl.querySelector<HTMLButtonElement>('[data-setting=character]')!;
+    portrait.dataset.background=background;
+    const illustration=portrait.querySelector('img')!;
+    const source=character.daylightPoster ?? character.home;
+    if(illustration.getAttribute('src')!==source)illustration.src=source;
+    portrait.title=settingLabels.character+' · '+character.name();
+    portrait.setAttribute('aria-label',portrait.title);
+    portrait.onclick=()=>openAppearancePicker(slot.avatar ?? app.user?.avatar ?? null,background,async(avatar,scene)=>{
+      if(avatar==='SEEKER_HOODED')slot.avatar=avatar;else delete slot.avatar;
+      slot.background=scene;render();
+    });
+    settingsEl.querySelectorAll<HTMLButtonElement>('[data-swatch]').forEach(button=>{
+      const color=profileBackground(button.dataset.swatch);
+      button.setAttribute('aria-pressed',String(background===color));
+      button.onclick=()=>{slot.background=color;render();};
+    });
+    for(const button of settingsEl.querySelectorAll<HTMLButtonElement>('.deck-setting-grid button')){
+      const key=button.dataset.setting as CosmeticGroup;
+      const equipped=slot[key] ?? 'default';
+      const item=key==='effect'?CARD_EFFECTS.find(item=>item.id===equipped):cosmetic(equipped);
+      const label=item?.[getLang()] ?? (key==='effect'?loungeText('なし','None','없음'):loungeText('標準','Default','기본'));
       button.title=settingLabels[key]+' · '+label;
+      button.setAttribute('aria-label',button.title);
       button.classList.toggle('is-current',activeTab==='appearance'&&key===cosmeticGroup);
-      if(key==='background')button.dataset.background=background;
-      button.onclick=()=>{
-        if(key==='character'||key==='background'){
-          openAppearancePicker(slot.avatar ?? app.user?.avatar ?? null,background,async(avatar,scene)=>{
-            if(avatar==='SEEKER_HOODED')slot.avatar=avatar;else delete slot.avatar;
-            slot.background=scene;render();
-          });
-        } else {cosmeticGroup=key;setTab('appearance');}
-      };
+      const art=button.querySelector<HTMLElement>('.equipment-art')!;
+      if(art.dataset.equipped!==equipped){
+        art.dataset.equipped=equipped;
+        disposeCardEffects(art);disposeCardFrames(art);
+        if(key==='sleeve'||key==='furniture'){
+          const img=document.createElement('img');img.alt='';img.src=key==='sleeve'?sleeveUrl(equipped):deckFurniturePreview(equipped);
+          art.replaceChildren(img);
+        }else{
+          const sample=cardEl({...STARTERS.STARTER_MANA,uid:'deck-setting-'+key},{size:'mkt',effect:key==='effect'?equipped:'default',frame:key==='frame'?equipped:'default'});
+          sample.inert=true;art.replaceChildren(sample);
+        }
+      }
+      button.onclick=()=>{cosmeticGroup=key;setTab('appearance');};
     }
     rename.onclick=()=>{
       const slot=cur,ov=document.createElement('div');ov.className='overlay';
@@ -218,16 +244,10 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
     for(let k=deck().length;k<DECK_SIZE;k++){const slot=document.createElement('div');slot.className='deck-slot deck-entry';slot.textContent='+';curEl.append(slot);}
     }
     // The collection remains mounted, so + never loses its painted face on press.
-    if(!q('poolTypes').children.length)for(const [type,label] of [['all',t('cards.f.all')],['mon',t('cards.f.mon')],['spell',t('cards.f.spell')]] as const){
-      const b=document.createElement('button');b.dataset.filter=type;b.textContent=label;b.onclick=()=>{poolType=type;render();};q('poolTypes').append(b);
-    }
-    q('poolTypes').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.filter===poolType)));
-    const visible=new Set<string>();let poolIndex=0;
+    let poolIndex=0;
     for(const id of DECK_POOL){
       const c=inst(id,'pool_'+id);
-      if(poolType!=='all'&&(poolType==='mon'?c.t!=='mon':c.t==='mon'))continue;
-      if(poolQuery&&![cardName(c),cardText(c),c.name].join(' ').toLowerCase().includes(poolQuery))continue;
-      visible.add(id);let tile=poolRows.get(id);
+      let tile=poolRows.get(id);
       if(!tile){
         tile=document.createElement('div');tile.className='deck-pool-tile';tile.dataset.deckCard=id;
         const face=document.createElement('div');face.className='deck-pool-face';
@@ -245,9 +265,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
       tile.querySelector('.card')!.classList.toggle('is-candidate',pending===id);
       if(poolEl.children[poolIndex]!==tile)poolEl.insertBefore(tile,poolEl.children[poolIndex]??null);poolIndex++;
     }
-    for(const [id,tile] of poolRows)if(!visible.has(id)){disposeCardEffects(tile);tile.remove();poolRows.delete(id);}
-    poolEl.querySelector('.deck-pool-empty')?.remove();
-    if(!visible.size){const empty=document.createElement('p');empty.className='deck-pool-empty';empty.textContent=t('cards.empty');poolEl.append(empty);}
     // ---- 마켓 알림이 픽커 ----
     watchCountEl.textContent = `${watch().length}/${WATCH_MAX}`;
     const watchVersion=++watchRevision,watchNodes:Node[]=[];
@@ -293,7 +310,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
   };
 
   searchEl.oninput = () => { watchQ = searchEl.value.trim(); watchPage=0;render(); };
-  (q('poolSearch') as HTMLInputElement).oninput=e=>{poolQuery=(e.target as HTMLInputElement).value.trim().toLowerCase();render();};
   q('deckUndo').onclick=()=>{if(pending)pending=null;else if(undo){store.list[cur].cards=[...undo];undo=null;}render();};
   q('watchPrev').onclick=()=>{watchPage--;render();};q('watchNext').onclick=()=>{watchPage++;render();};
   useBtn.onclick = () => { void doSave(cur); };
@@ -360,6 +376,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { sizeObserver.disconnect();guide?.destroy();lifecycle.abort();disposeCardEffects(wrap); dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { sizeObserver.disconnect();guide?.destroy();lifecycle.abort();disposeCardFrames(wrap);disposeCardEffects(wrap); dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

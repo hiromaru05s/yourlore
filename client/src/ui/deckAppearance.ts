@@ -1,3 +1,4 @@
+import {deckFurniturePreview} from './deckFurniturePreview';
 import {CARD_FRAMES} from '../shared/cardFrames';
 import {disposeCardEffects} from './cardFinish';
 import {disposeCardFrames} from './cardFrame';
@@ -47,7 +48,8 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
   const section=document.createElement('section');section.className='deck-cosmetic-group';section.dataset.kind=kind;section.setAttribute('aria-label',title);
   section.innerHTML=`<h4>${title}</h4><div class="deck-cosmetic-grid">${list.map(item=>{
    const selected=(deck[kind]??'default')===item.id,unlocked=!!owned?.has(item.id),label=item[getLang()];
-   return `<button type="button" class="deck-cosmetic ${selected?'is-selected':''}" data-cosmetic-kind="${kind}" data-cosmetic-id="${item.id}" aria-pressed="${selected}" aria-label="${esc(label)}" ${unlocked?'':'disabled'}><span class="deck-cosmetic-art ${kind==='furniture'?'furniture-preview':'sleeve-preview'}" style="${item.url?`background-image:url('${item.url}')`:''}"></span><span class="deck-cosmetic-name">${esc(label)}</span><span class="deck-cosmetic-state">${selected?loungeText('選択中','Selected','선택됨'):unlocked?loungeText('選択する','Select','선택'):(kind==='effect'||('gachaOnly' in (cosmetic(item.id)??{})))?loungeText('ガチャで入手','Get in gacha','뽑기로 획득'):loungeText('ショップで入手','Get in shop','상점에서 획득')}</span></button>`;
+   const url=kind==='furniture'?deckFurniturePreview(item.id):item.url;
+   return `<button type="button" class="deck-cosmetic ${selected?'is-selected':''}" data-cosmetic-kind="${kind}" data-cosmetic-id="${item.id}" aria-pressed="${selected}" aria-label="${esc(label)}" ${unlocked?'':'disabled'}><span class="deck-cosmetic-art ${kind==='furniture'?'furniture-preview':'sleeve-preview'}" style="${url?`background-image:url('${url}')`:''}"></span><span class="deck-cosmetic-name">${esc(label)}</span><span class="deck-cosmetic-state">${selected?loungeText('選択中','Selected','선택됨'):unlocked?loungeText('選択する','Select','선택'):(kind==='effect'||('gachaOnly' in (cosmetic(item.id)??{})))?loungeText('ガチャで入手','Get in gacha','뽑기로 획득'):loungeText('ショップで入手','Get in shop','상점에서 획득')}</span></button>`;
   }).join('')}</div>`;
   if(kind==='frame'){
    const scope=document.createElement('p');scope.className='deck-frame-scope';scope.textContent=loungeText('スターター・対戦中の購入カードを含む全カードに適用。プレイ後もフレームが続きます。','Applies to the whole deck, including starters and cards bought during a duel. Frames remain after play.','스타터와 대전 중 구매한 카드를 포함한 모든 카드에 적용되며 플레이 후에도 유지됩니다.');section.querySelector('h4')!.after(scope);
