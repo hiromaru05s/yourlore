@@ -133,6 +133,19 @@ function rememberPublicCards(g: GameState): void {
     }
   }
 }
+/** Public portion of the current deck viewer. Only previously revealed identities may be listed from hidden zones. */
+export function publicDeckCollection(p: PlayerState): string[] {
+  const hiddenUids = new Set([...p.deck, ...p.hand, ...p.traps.map(t => t.card)].map(c => c.uid));
+  const known = new Map<string, string>();
+  for (const card of p.revealedCards ?? []) {
+    if (hiddenUids.has(card.uid)) known.set(card.uid, card.id);
+  }
+  const visible = [...p.discard, ...p.field, ...p.enchants.map(e => e.card), ...(p.quests ?? []).map(q => q.card)];
+  for (const card of visible) {
+    if (!(card as FieldMon).token) known.set(card.uid, card.id);
+  }
+  return [...known.values()].sort();
+}
 // 적룡(spellAmp): >0 이면 지금 마법 효과가 해결되는 중 — reduce()는 동기라 모듈 플래그로 충분
 let spellDepth = 0;
 let runeEchoDepth = 0; // 룬 학문 - 상급(v34) 재발동 가드

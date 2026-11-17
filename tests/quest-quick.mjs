@@ -99,7 +99,20 @@ try {
     assert.equal(g.players[0].quests.find(q=>q.card.id==='Q_MANA').progress,1);
     assert.equal(g.players[0].removed.filter(c=>c.id==='QUICK_ATTUNE').length,1);
     assert(![...g.players[0].hand,...g.players[0].deck,...g.players[0].discard].some(c=>c.quick));
+    const opponentView = redactFor(JSON.parse(JSON.stringify(g)),1).players[0];
+    assert.equal(opponentView.removed.filter(c => c.id === 'QUICK_ATTUNE').length, 1);
+    assert(!opponentView.collection.includes('QUICK_ATTUNE'), from + ': Rift purchase in opponent deck viewer');
     const after=step(g,{type:'pick',uid:null});assert.equal(after.players[0].maxMana,mm+1);
+  }
+  {
+    const g = fresh(), p = g.players[0];
+    const kept = card('S1'), rifted = card('S1'), secret = card('S2');
+    p.hand = [kept, secret];
+    p.removed = [rifted];
+    p.revealedCards = [kept, rifted].map(({uid, id}) => ({uid, id}));
+    assert.deepEqual(redactFor(g,1).players[0].collection, ['S1']);
+    p.discard.push(p.removed.pop());
+    assert.deepEqual(redactFor(g,1).players[0].collection, ['S1', 'S1']);
   }
   // Conditional purchases are rejected atomically in both markets and bot candidate lists.
   for(const [id,allow] of [ ['QUICK_SURVIVAL',p=>p.hp=15], ['QUICK_WORLD',p=>p.field.push(mon('ELF'))], ['QUICK_SORT',p=>p.removed=Array.from({length:10},()=>card('STARTER_TRASH'))], ['QUICK_REBIRTH',p=>p.discard.push(card('MIMIC'))] ]) {
