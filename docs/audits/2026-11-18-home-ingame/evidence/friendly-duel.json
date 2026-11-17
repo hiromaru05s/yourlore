@@ -1,0 +1,13 @@
+{
+  "checks": [
+    "friend request",
+    "accept",
+    "single challenge after double tap",
+    "both enter friendly room",
+    "both confirm hand",
+    "surrender",
+    "both results",
+    "both return HOME"
+  ],
+  "errors": []
+}

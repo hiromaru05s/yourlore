@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "latest Single page",
+    "deck preview and Escape",
+    "server NPC start",
+    "mulligan",
+    "reload NPC room",
+    "surrender",
+    "result",
+    "return Single",
+    "HOME"
+  ],
+  "errors": []
+}

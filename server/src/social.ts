@@ -284,11 +284,15 @@ export async function handleSocial(env: Env, req: Request, path: string, user: S
       `SELECT 1 AS x FROM friends WHERE ((user_a = ?1 AND user_b = ?2) OR (user_a = ?2 AND user_b = ?1)) AND status = 'accepted'`
     ).bind(user.id, body.user_id).first();
     if (!isFriend) return json(env, { error: "친구에게만 대전을 신청할 수 있습니다." }, 403);
-    // 이전 pending 신청은 자동 취소
-    await env.DB.prepare(`UPDATE challenges SET status = 'cancelled' WHERE challenger = ? AND status IN ('pending','provisioning')`).bind(user.id).run();
+    // Replace the outgoing request atomically. Separate awaits let two tabs
+    // cancel first, then both insert a live request; failed inserts also lost
+    // the previous request. D1 batch serializes and rolls back the whole change.
     const id = crypto.randomUUID();
-    await env.DB.prepare(`INSERT INTO challenges (id, challenger, target, status, created_at) VALUES (?,?,?,?,?)`)
-      .bind(id, user.id, body.user_id, "pending", now).run();
+    await env.DB.batch([
+      env.DB.prepare(`UPDATE challenges SET status = 'cancelled' WHERE challenger = ? AND status IN ('pending','provisioning')`).bind(user.id),
+      env.DB.prepare(`INSERT INTO challenges (id, challenger, target, status, created_at) VALUES (?,?,?,?,?)`)
+        .bind(id, user.id, body.user_id, "pending", now),
+    ]);
     return json(env, { id });
   }
 

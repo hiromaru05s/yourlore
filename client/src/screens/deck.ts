@@ -109,6 +109,8 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
   const saveDraft=()=>{if(options.tutorial&&!deckSaved)try{sessionStorage.setItem(draftKey,JSON.stringify({cards:store.list[cur].cards}));}catch{}};
   let saving = false;
   let dead = false;
+  let closeRename:(()=>void)|undefined;
+  let closeAppearance:(()=>void)|undefined;
   let pending: string | null = null;
   let undo: string[] | null = null;
   const lifecycle=new AbortController();
@@ -175,10 +177,11 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
     if(illustration.getAttribute('src')!==source)illustration.src=source;
     portrait.title=settingLabels.character+' · '+character.name();
     portrait.setAttribute('aria-label',portrait.title);
-    portrait.onclick=()=>openAppearancePicker(slot.avatar ?? app.user?.avatar ?? null,background,async(avatar,scene)=>{
+    portrait.onclick=()=>{closeAppearance?.();closeAppearance=openAppearancePicker(slot.avatar ?? app.user?.avatar ?? null,background,async(avatar,scene)=>{
+      if(dead||saving)return;
       if(avatar==='SEEKER_HOODED')slot.avatar=avatar;else delete slot.avatar;
       slot.background=scene;render();
-    });
+    });};
     settingsEl.querySelectorAll<HTMLButtonElement>('[data-swatch]').forEach(button=>{
       const color=profileBackground(button.dataset.swatch);
       button.setAttribute('aria-pressed',String(background===color));
@@ -211,11 +214,14 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
       button.onclick=()=>{cosmeticGroup=key;setTab('appearance');};
     }
     rename.onclick=()=>{
+      if(dead||saving)return;closeRename?.();
       const slot=cur,ov=document.createElement('div');ov.className='overlay';
       ov.innerHTML=`<div class="modal"><h2>${rename.title}</h2><label for="deckNameInput">${loungeText('デッキ名（24文字まで）','Deck name (up to 24 characters)','덱 이름 (최대 24자)')}</label><input class="input" id="deckNameInput" maxlength="48" value="${esc(store.list[slot].name||'')}" placeholder="${t('deck.slot').replace('{n}',String(slot+1))}"><p class="set-desc">${loungeText('空欄で元の名前に戻せます。変更後は「保存」で確定します。','Leave blank to restore the default. Use Save to keep your changes.','비워 두면 기본 이름으로 돌아갑니다. 변경 후 저장해 주세요.')}</p><div class="modal-row"><button class="btn btn-ghost" id="deckRenameCancel">${t('common.cancel')}</button><button class="btn btn-gold" id="deckRenameApply">${t('common.confirm')}</button></div></div>`;
       document.body.append(ov);const input=ov.querySelector<HTMLInputElement>('#deckNameInput')!;
-      const apply=()=>{const name=sanitizeDeckName(input.value);if(name)store.list[slot].name=name;else delete store.list[slot].name;ov.remove();render();msgEl.textContent=loungeText('デッキ名を変更しました。「保存」で確定します。','Deck renamed. Save to keep your changes.','덱 이름을 변경했습니다. 저장해 주세요.');};
-      ov.querySelector<HTMLButtonElement>('#deckRenameCancel')!.onclick=()=>ov.remove();ov.querySelector<HTMLButtonElement>('#deckRenameApply')!.onclick=apply;input.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)apply();};input.oninput=()=>{input.value=Array.from(input.value).slice(0,24).join('');};input.focus();input.select();
+      const close=()=>{ov.remove();closeRename=undefined;if(!dead&&rename.isConnected)rename.focus();};closeRename=close;
+      ov.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close();}});
+      const apply=()=>{if(dead||saving)return;const name=sanitizeDeckName(input.value);if(name)store.list[slot].name=name;else delete store.list[slot].name;close();render();msgEl.textContent=loungeText('デッキ名を変更しました。「保存」で確定します。','Deck renamed. Save to keep your changes.','덱 이름을 변경했습니다. 저장해 주세요.');};
+      ov.querySelector<HTMLButtonElement>('#deckRenameCancel')!.onclick=close;ov.querySelector<HTMLButtonElement>('#deckRenameApply')!.onclick=apply;input.onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing)apply();};input.oninput=()=>{input.value=Array.from(input.value).slice(0,24).join('');};input.focus();input.select();
     };
     useBtn.innerHTML = cur === store.sel ? `${homeIcon("check")} ${t("deck.inuse")}` : t("deck.use");
     useBtn.disabled = saving || cur === store.sel || store.list.some(d => d.cards.length !== DECK_SIZE);
@@ -329,7 +335,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
   };
 
   searchEl.oninput = () => { watchQ = searchEl.value.trim(); watchPage=0;render(); };
-  q('deckUndo').onclick=()=>{if(pending)pending=null;else if(undo){store.list[cur].cards=[...undo];undo=null;}render();};
+  q('deckUndo').onclick=()=>{if(saving||dead)return;if(pending)pending=null;else if(undo){store.list[cur].cards=[...undo];undo=null;}render();};
   q('watchPrev').onclick=()=>{watchPage--;render();};q('watchNext').onclick=()=>{watchPage++;render();};
   useBtn.onclick = () => { void doSave(cur); };
 
@@ -398,6 +404,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { handSize.disconnect();guide?.destroy();lifecycle.abort();disposeCardFrames(wrap);disposeCardEffects(wrap); dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { dead=true;closeRename?.();closeAppearance?.();handSize.disconnect();guide?.destroy();lifecycle.abort();disposeCardFrames(wrap);disposeCardEffects(wrap); watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

@@ -105,7 +105,7 @@ export class App {
 
   // Clear the root BEFORE mounting the next screen. (Passing a thunk matters:
   // the mount fn appends to root, so it must run after innerHTML is cleared.)
-  private swap(make: (afterEntrance?: Promise<void>) => Screen, page?: LoungePage): void {
+  private swap(make: (afterEntrance?: Promise<void>) => Screen, page?: LoungePage, skipLeave = false): void {
     // Unconfirmed accounts enter the real HOME, then choose their public name.
     // Keep that HOME mounted while its entrance or naming dialog is active.
     if (this.user?.needsUsername) {
@@ -150,9 +150,12 @@ export class App {
       }
     };
     if (this.navigating || this.loggingOut) return;
-    if (this.current?.beforeLeave) {
+    if (!skipLeave && this.current?.beforeLeave) {
+      const revision = this.screenRevision;
       this.navigating = true;
-      void this.current.beforeLeave().then(ok => { if (ok) mount(); }).finally(() => { this.navigating = false; });
+      void this.current.beforeLeave().then(ok => {
+        if (ok && !this.loggingOut && revision === this.screenRevision) mount();
+      }).catch(error => console.error('Navigation confirmation failed', error)).finally(() => { this.navigating = false; });
     } else mount();
   }
 
@@ -192,34 +195,41 @@ export class App {
   }
   cardHub(): void { setPresence("menu"); this.swap(() => mountCardHub(this), "cardHub"); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this), "cards"); }
-  private startingBot=false;
+  private startingBot: symbol | undefined;
   botGame(difficulty: BotDifficulty = "hard"): void {
     const live=loadActiveGame(this.user?.id);if(live)return this.onlineGame(live.roomId,live.you,'?',null,!!live.ranked);
     if(!this.user || this.user.id==='local-guest-user'){setPresence('bot');this.swap(()=>mountGame(this,{mode:'bot',difficulty}));return;}
-    if(this.startingBot)return;this.startingBot=true;
+    if(this.startingBot)return;
     const account=this.user.id;
-    this.swap(()=>mountGamePreparation(this,async()=>{
-      try {
-        const revision=this.screenRevision;
-        const r=await api.startBot(difficulty,getLang());
-        if(this.user?.id===account&&this.screenRevision===revision)this.onlineGame(r.roomId,r.you,r.oppName,r.oppAvatar,false,difficulty);
-      } finally {this.startingBot=false;}
-    },()=>{this.startingBot=false;}));
+    this.swap(()=>{
+      const token = this.startingBot = Symbol('bot-start');
+      const release = () => { if (this.startingBot === token) this.startingBot = undefined; };
+      return mountGamePreparation(this,async()=>{
+        try {
+          const revision=this.screenRevision;
+          const r=await api.startBot(difficulty,getLang());
+          if(this.user?.id===account&&this.screenRevision===revision)this.onlineGame(r.roomId,r.you,r.oppName,r.oppAvatar,false,difficulty);
+        } finally {release();}
+      },release);
+    });
   }
   storyGame(stage: AriesStage, previous?: string): void {
     if (this.user && this.user.id !== 'local-guest-user') {
       const live = loadActiveGame(this.user.id);
       if (live) return this.onlineGame(live.roomId,live.you,'?',null,!!live.ranked);
       if (this.startingBot) return;
-      this.startingBot = true;
       const owner = this.user.id;
-      this.swap(() => mountGamePreparation(this, async () => {
-        try {
-          const revision = this.screenRevision;
-          const room = await api.startStory(getLang(),previous);
-          if (this.user?.id === owner && this.screenRevision === revision) this.onlineGame(room.roomId,0,room.oppName,room.oppAvatar);
-        } finally { this.startingBot = false; }
-      }, () => { this.startingBot = false; }));
+      this.swap(() => {
+        const token = this.startingBot = Symbol('story-start');
+        const release = () => { if (this.startingBot === token) this.startingBot = undefined; };
+        return mountGamePreparation(this, async () => {
+          try {
+            const revision = this.screenRevision;
+            const room = await api.startStory(getLang(),previous);
+            if (this.user?.id === owner && this.screenRevision === revision) this.onlineGame(room.roomId,0,room.oppName,room.oppAvatar);
+          } finally { release(); }
+        }, release);
+      });
       return;
     }
     const opponent = ARIES_OPPONENTS[stage];
@@ -237,18 +247,21 @@ export class App {
   shop(options:Parameters<typeof mountShop>[1]={}): void { setPresence("menu"); this.swap(() => mountShop(this,options), "shop"); }
   deck(options:Parameters<typeof mountDeck>[1]={}): void { setPresence("menu"); this.swap(() => mountDeck(this,options), "deck"); }
   onlineGame(roomId: string, you: Side, oppName: string, oppAvatar: string | null = null, ranked = false, difficulty?: BotDifficulty): void {
-    setPresence("online");
-    aCapture("game_start", { mode: "online" });
-    saveActiveGame(roomId, you, ranked, this.user?.id); // remember it so a crash/close can rejoin this exact room
     const stage = ariesRoomStage(roomId);
     const story = stage === undefined ? undefined : ARIES_OPPONENTS[stage];
-    this.swap(() => mountGame(this, { mode: "online", roomId, you, oppName:story?.name[getLang()] ?? oppName, oppAvatar:story?.avatar ?? oppAvatar, ranked, difficulty, story }));
+    this.swap(() => {
+      setPresence("online");
+      aCapture("game_start", { mode: "online" });
+      saveActiveGame(roomId, you, ranked, this.user?.id);
+      return mountGame(this, { mode: "online", roomId, you, oppName:story?.name[getLang()] ?? oppName, oppAvatar:story?.avatar ?? oppAvatar, ranked, difficulty, story });
+    });
   }
 
   async logout(): Promise<void> {
-    if (this.loggingOut) return;
+    if (this.loggingOut || this.navigating) return;
     this.loggingOut = true;
     try {
+      if (this.current?.beforeLeave && !await this.current.beforeLeave()) return;
       if (this.user?.id === "local-guest-user") localStorage.removeItem(LOCAL_GUEST_KEY);
       else await api.logout();
     } finally { this.loggingOut = false; }
@@ -258,6 +271,6 @@ export class App {
     aReset();
     stopPresence();
     this.user = null;
-    this.login();
+    this.swap(() => mountLogin(this), "login", true);
   }
 }

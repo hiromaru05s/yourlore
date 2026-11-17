@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "home 844,390",
+    "cards 844,390",
+    "leaderboard 844,390",
+    "friends 844,390",
+    "shop 844,390",
+    "tutorial 844,390",
+    "home 667,375",
+    "cards 667,375",
+    "leaderboard 667,375",
+    "friends 667,375",
+    "shop 667,375",
+    "tutorial 667,375"
+  ],
+  "errors": [],
+  "failures": []
+}

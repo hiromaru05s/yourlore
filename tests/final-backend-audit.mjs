@@ -47,6 +47,12 @@ try {
  let setupResponse=()=>Promise.reject(Error('network outage'));
  env.GAME_ROOM={idFromName:x=>x,get:()=>({fetch:()=>setupResponse()})};
  const create=async()=> (await (await social('a','/social/challenge',{user_id:'b'})).json()).id;
+ const simultaneous=await Promise.all([create(),create()]);
+ const pending=await env.DB.prepare("SELECT id FROM challenges WHERE challenger='a' AND status='pending'").all();assert.equal(pending.results.length,1,'simultaneous requests must leave one outgoing challenge');assert(simultaneous.includes(pending.results[0].id));
+ const randomUUID=crypto.randomUUID;crypto.randomUUID=()=>pending.results[0].id;
+ try{await assert.rejects(create());}finally{crypto.randomUUID=randomUUID;}
+ assert.equal((await env.DB.prepare('SELECT status FROM challenges WHERE id=?').bind(pending.results[0].id).first()).status,'pending','failed replacement must preserve the previous request');
+ console.log('PASS concurrent challenge replacement is atomic and failed insert rolls back cancellation');
  const challenge=await create();
  assert.equal((await social('b','/social/challenge/respond',{id:challenge,accept:true})).status,503);
  const inbox=await (await social('b','/social/friends')).json();assert(inbox.challenges.some(c=>c.id===challenge),'failed provisioning remains visible for retry');

@@ -19,7 +19,7 @@ try {
   document.querySelector('.modal button').click();
   const after=loadActiveGame('account-a');
   saveActiveGame('another-room',0,false,'account-a');
-  const app=Object.create(App.prototype);Object.assign(app,{user:{id:'account-a'},login:()=>logins++});api.logout=async()=>({ok:true});await app.logout();
+  const app=Object.create(App.prototype);Object.assign(app,{user:{id:'account-a'},swap:(_make,page,skipLeave)=>{if(page==='login'&&skipLeave)logins++;}});api.logout=async()=>({ok:true});await app.logout();
   return{before,after,homes,logins,loggedOut:app.user===null,remaining:loadActiveGame()};
  });
  assert.deepEqual(result,{before:'missing-room',after:null,homes:1,logins:1,loggedOut:true,remaining:null});assert.deepEqual(errors,[]);

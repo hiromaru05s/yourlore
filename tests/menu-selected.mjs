@@ -72,7 +72,7 @@ assert(root.querySelector('#sp-unlock').textContent.includes('ルミ'));
 root.querySelector('button[data-story]').click();assert.equal(root.querySelector('.single-page').dataset.story,'false');
 locked.destroy();assert(inkInstances.every(i=>i.disposed));assert.equal(idleDisposals,idleMounts);root.innerHTML='';
 let resolveCollection;
-const {mountShop}=await load('shop',{...base,starterCollection:()=>({}),renderShopStarters:host=>{host.textContent='daily starters';},pendingPurchase:()=>null,purchaseCollection:async()=>({}),isCardFrame:()=>false,mountShopFrames:host=>{host.textContent='frame accessories';return {update(){},dispose(){host.replaceChildren();}};},mountShopGacha:host=>{host.textContent='gacha scene';return()=>host.replaceChildren();},api:{collection:()=>new Promise(r=>resolveCollection=r)}});
+const {mountShop}=await load('shop',{...base,starterCollection:()=>({}),renderShopStarters:host=>{host.textContent='daily starters';},pendingPurchase:()=>null,purchaseCollection:async()=>({}),isCardFrame:()=>false,mountShopFrames:host=>{host.textContent='frame accessories';return {update(){},dispose(){host.replaceChildren();}};},mountShopGacha:host=>{host.textContent='gacha scene';return Object.assign(()=>host.replaceChildren(),{update(){}});},api:{collection:()=>new Promise(r=>resolveCollection=r)}});
 const shop=mountShop(app);
 assert.deepEqual([...root.querySelectorAll('[data-category]')].map(b=>b.dataset.category),['gacha','starter','accessories']);
 root.querySelector('[data-category="starter"]').click();assert.equal(root.querySelector('#shopStarters').textContent,'daily starters');assert(root.querySelector('.shop-gacha-active'));assert(root.querySelector('#shopGacha').hasAttribute('inert'));

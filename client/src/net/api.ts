@@ -59,9 +59,15 @@ async function performCall<T>(path: string, body?: unknown, method = "POST", sig
     headers: { "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const data = (await res.json().catch(error => {if(controller.signal.aborted)throw error;return {};})) as { error?: string; needVerify?: boolean } & T;
+  const data = (await res.json().catch(error => {
+    if(controller.signal.aborted)throw error;
+    if(res.ok)throw new Error(localizeServerMsg('invalid response'));
+    return {};
+  })) as { error?: string; needVerify?: boolean } & T;
+  if (res.ok && (!data || typeof data !== 'object' || Array.isArray(data)))
+    throw new Error(localizeServerMsg('invalid response'));
   if (!res.ok) {
-    const err = new Error(data?.error ? localizeServerMsg(data.error) : t("api.fail").replace("{n}", String(res.status))) as ApiError;
+    const err = new Error(typeof data?.error === 'string' ? localizeServerMsg(data.error) : t("api.fail").replace("{n}", String(res.status))) as ApiError;
     err.status=res.status;
     err.needVerify = !!data?.needVerify;
     throw err;

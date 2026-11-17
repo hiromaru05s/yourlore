@@ -796,7 +796,7 @@ function autoTarget(g: GameState): Action {
     }
     // 지원 나팔의 exclude(중복 선택 불가)를 지켜야 무한 재무장 루프에 안 빠진다
     const excl = (pending.data?.excl as string[] | undefined) ?? [];
-    const t = [...p.field].filter((x) => !excl.includes(x.uid)).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
+    const t = [...p.field].filter((x) => !excl.includes(x.uid) && (pending.data?.sourceId !== "S3" || !x.tribe)).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
     return { type: "chooseTarget", uid: t ? t.uid : null };
   }
   if (pending.kind === "seek") {
