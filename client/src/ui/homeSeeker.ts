@@ -1,4 +1,4 @@
-import {Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, SRGBColorSpace, Texture, Vector4} from 'three';
+import {Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, SRGBColorSpace, Texture, Vector4, type IUniform} from 'three';
 import {createWebGLRenderer} from './webglRenderer';
 import {characterAppearance, playableCharacters} from './characterAppearance';
 import {homeDaylight, onHomeDaylightReady} from './homeDaylight';
@@ -28,16 +28,29 @@ const vertexShader = `
     gl_Position = vec4(p, 0.0, 1.0);
   }`;
 
-function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
+interface PaintingMotion {
+  vertexShader: string;
+  fragmentShader?: string;
+  uniforms?: Record<string, IUniform>;
+}
+
+/** A static scene can supply its own motion field and keep the authored pigment. */
+export function createSeekerPainting(host: HTMLElement, image: HTMLImageElement, motion?: PaintingMotion) {
   const renderer = createWebGLRenderer({alpha:true, antialias:false, powerPreference:'low-power'});
   const texture = new Texture(image);
   texture.colorSpace = SRGBColorSpace;
   texture.needsUpdate = true;
-  const geometry = new PlaneGeometry(2, 2, 24, 40);
+  const geometry = new PlaneGeometry(2, 2, motion ? 48 : 24, motion ? 72 : 40);
   const material = new ShaderMaterial({
-    uniforms:{painting:{value:texture}, time:{value:0}, daylight:{value:new Vector4()}},
-    vertexShader,
-    fragmentShader:`uniform sampler2D painting;
+    uniforms:{painting:{value:texture}, time:{value:0}, daylight:{value:new Vector4()},...motion?.uniforms},
+    vertexShader:motion?.vertexShader ?? vertexShader,
+    fragmentShader:motion?.fragmentShader ?? (motion ? `uniform sampler2D painting;
+      varying vec2 texCoord;
+      void main() {
+        gl_FragColor = texture2D(painting, texCoord);
+        #include <colorspace_fragment>
+        #include <premultiplied_alpha_fragment>
+      }` : `uniform sampler2D painting;
       uniform vec4 daylight;
       varying vec2 texCoord;
       void main() {
@@ -62,7 +75,7 @@ function createSeekerPainting(host: HTMLElement, image: HTMLImageElement) {
         gl_FragColor = vec4(paint.rgb*illumination,paint.a);
         #include <colorspace_fragment>
         #include <premultiplied_alpha_fragment>
-      }`,
+      }`),
     transparent:true, premultipliedAlpha:true, depthTest:false, depthWrite:false,
   });
   const scene = new Scene();

@@ -9,7 +9,7 @@ const base={t:key=>key,esc:s=>String(s).replaceAll('<','&lt;'),onLangChange:()=>
 async function load(name,deps){const source=(await fs.readFile(new URL(`../client/src/screens/${name}.ts`,import.meta.url),'utf8')).replace(/^import .*;\s*$/gm,'');const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;const exports={};new Function('exports',...Object.keys(deps),js)(exports,...Object.values(deps));return exports;}
 const root=document.querySelector('#app');const calls=[];
 const app={root,user:{id:'local-guest-user',decks:null,botClears:['easy','normal','hard','hell']},rankedLobby:()=>calls.push('ranked'),onlineLobby:()=>calls.push('online'),botGame:d=>calls.push(d),storyGame:s=>calls.push('story:'+s),deck:()=>calls.push('deck'),leaderboard:()=>calls.push('rank'),home(){}};
-const npcBundle=await build({stdin:{contents:"export * from './client/src/shared/botNpcs';export {ARIES_ROUTE} from './client/src/shared/ariesStory';export {BOT_FIRST_CLEAR_EXP} from './client/src/shared/progression';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'cjs',write:false});
+const npcBundle=await build({stdin:{contents:"export * from './client/src/shared/botNpcs';export {ARIES_ROUTE} from './client/src/shared/ariesStory';export {BOT_FIRST_CLEAR_EXP, BOT_REWARDS} from './client/src/shared/progression';export {STARTERS, DB, deckStoreForUser} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'cjs',write:false});
 const npcModule={exports:{}};new Function('module','exports',npcBundle.outputFiles[0].text)(npcModule,npcModule.exports);const npcs=npcModule.exports;
 let finishPortraits;
 const portraitsReady = new Promise(resolve=>{finishPortraits=resolve;});
@@ -28,39 +28,49 @@ assert.equal(startButton.dataset.mode,'ranked');
 const rankedFrame=startButton.querySelector('.home-duel-frame').getAttribute('viewBox');
 root.querySelector('#online').click();const normalFrame=startButton.querySelector('.home-duel-frame').outerHTML;
 assert.equal(inkInstances[0].disposed,false,'Mode changes preserve the ink renderer');assert.equal(inkInstances.length,1);assert.equal(inkInstances[0].mode,'normal');
-root.querySelector('#bot').click();assert.equal(startButton.querySelector('.home-duel-frame').outerHTML,normalFrame,'Single and normal reuse the same frame asset and geometry');
+const singleButton=document.createElement('button');
+const singleDuel=mountHomeDuelButton(singleButton);singleDuel.setMode('bot');
+assert.equal(singleButton.querySelector('.home-duel-frame').outerHTML,normalFrame,'Single and normal reuse the same frame asset and geometry');singleDuel.destroy();
+assert.equal(root.querySelector('#bot'),null,'Single is reached through the bottom navigation');
+assert.equal(root.querySelectorAll('.lounge-mode-tabs button').length,2);
 assert.notEqual(startButton.querySelector('.home-duel-frame').getAttribute('viewBox'),rankedFrame,'Ranked uses its distinct crimson inlay');
 assert.equal(startButton.querySelectorAll('.home-duel-fallback').length,1,'Static pigment is available before WebGL and on unsupported devices');
-const beforeRepeat=inkInstances.length;root.querySelector('#bot').click();assert.equal(inkInstances.length,beforeRepeat,'Reselecting a mode does not allocate another renderer');
+const beforeRepeat=inkInstances.length;root.querySelector('#online').click();assert.equal(inkInstances.length,beforeRepeat,'Reselecting a mode does not allocate another renderer');
 root.querySelector('#rankedMode').click();
-assert.equal(giftMounts,1,'HOME mounts one gift inbox');assert.equal(root.querySelector('.home-spirit-touch, .home-spirit-host, .home-companion-caption, .home-spirit-speech, #spiritTutorial'),null,'HOME must not mount Zeno or a tutorial prompt');root.querySelector('#online').click();assert.deepEqual(calls,[],'Selecting a mode must not start matchmaking');root.querySelector('#ranked').click();assert.deepEqual(calls,['online']);root.querySelector('#bot').click();root.querySelector('#ranked').click();assert.equal(document.querySelectorAll('[data-diff]').length,4);document.querySelector('[data-diff="hard"]').click();assert.equal(calls.at(-1),'online','Difficulty selection must not start a duel');assert.equal(document.querySelector('[data-diff="hard"]').getAttribute('aria-pressed'),'true');assert.equal(document.querySelector('[data-diff=hard] .diff-name').textContent,'ヴェラ');assert(document.querySelector('#diffStart').textContent.includes('ヴェラ'));await new Promise(resolve=>setImmediate(resolve));assert.equal(warmups,1,'Duel preparation waits for visible portraits');finishPortraits();await new Promise(resolve=>setImmediate(resolve));document.querySelector('#diffStart').click();assert.equal(calls.at(-1),'hard');root.querySelector('#rankedMode').click();root.querySelector('#ranked').click();assert.equal(calls.at(-1),'ranked');assert.equal(warmups,2,'HOME entry and opponent selection prepare duel assets');
-root.querySelector('#bot').click();root.querySelector('#ranked').click();const storyTab=document.querySelector('[data-single-tab=story]');assert.equal(storyTab.disabled,false);storyTab.click();assert.equal(document.querySelector('#storyContent').hidden,false);assert.deepEqual([...document.querySelectorAll('.single-story-progression span')].map(node=>node.textContent),['火走りのルカ','Aries']);document.querySelector('#storyStart').click();assert.equal(calls.at(-1),'story:0','Story starts at the first subordinate seeker');
-for(const difficulty of ['easy','normal','hard','hell']){
- root.querySelector('#bot').click();root.querySelector('#ranked').click();
- const card=document.querySelector(`[data-diff="${difficulty}"]`),start=document.querySelector('#diffStart'),before=calls.length;
- card.click();card.click();assert.equal(calls.length,before,'Two selection clicks alone do not launch');
- card.dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));
- assert.equal(calls.at(-1),difficulty,'Double-click launches the clicked opponent');assert.equal(calls.length,before+1);
- start.click();card.dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));
- assert.equal(calls.length,before+1,'Detached controls cannot launch a duplicate duel');
- assert.equal(document.querySelector('.bot-diff-ov'),null);
+assert.equal(giftMounts,1,'HOME mounts one gift inbox');
+assert.equal(root.querySelector('.home-spirit-touch, .home-spirit-host, .home-companion-caption, .home-spirit-speech, #spiritTutorial'),null);
+root.querySelector('#online').click();assert.deepEqual(calls,[],'Selecting a mode must not start matchmaking');
+root.querySelector('#ranked').click();assert.deepEqual(calls,['online']);
+root.querySelector('#rankedMode').click();root.querySelector('#ranked').click();assert.equal(calls.at(-1),'ranked');
+assert.equal(warmups,1,'HOME prepares duel assets');
+home.destroy();assert(inkInstances.every(i=>i.disposed));assert.equal(giftDisposals,1);assert.equal(cancelledWarmups,1);root.innerHTML='';
+let idleMounts=0,idleDisposals=0;
+const {mountSingle}=await load('single',{
+ ...base,...npcs,L:ja=>ja,getLang:()=> 'ja',cardName:card=>card.id,
+ pageArrow:'/page-arrow.svg',ARIES_COMPLETED_KEY:'lore.story.aries.cleared.v1',
+ mountHomeDuelButton,mountSingleIdle:()=>{idleMounts++;return()=>{idleDisposals++;};},
+ storyPortraits:['/luca','/rena','/aries'],artUrl:{sm:id=>id},deckName:()=> 'Deck',
+});
+const single=mountSingle(app,{page:0});
+for(const [index,difficulty] of npcs.SINGLE_DIFFICULTIES.entries()){
+ assert.equal(root.querySelector('.sp-identity h1').textContent,npcs.botNpc(difficulty).name.ja);
+ const before=calls.length;
+ root.querySelector('.single-battle').click();assert.equal(calls.at(-1),difficulty);
+ assert.equal(root.querySelector('button[data-story]').disabled,false);
+ root.querySelector('[data-next]').click();
+ assert.equal(calls.length,before+1,'Page turns never launch a duel');
 }
-root.querySelector('#ranked').focus();root.querySelector('#ranked').click();
-const cancelledStart=document.querySelector('#diffStart'),beforeCancel=calls.length;
-document.querySelector('.bot-diff-ov').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
-cancelledStart.click();assert.equal(calls.length,beforeCancel,'Closed dialog cannot launch');
-assert.equal(document.activeElement,root.querySelector('#ranked'),'Closing restores the launch control focus');
+assert.equal(root.querySelector('.single-page').dataset.story,'true');
+assert.equal(root.querySelector('.sp-standing'),null);
+root.querySelector('.single-battle').click();assert.equal(calls.at(-1),'story:0');
+single.destroy();assert.equal(idleDisposals,idleMounts);
 app.user.botClears=['hell'];
-root.querySelector('#ranked').click();
-const lockedStory=document.querySelector('[data-single-tab=story]');
-assert.equal(lockedStory.getAttribute('aria-disabled'),'true');
-assert(document.getElementById(lockedStory.getAttribute('aria-describedby')).textContent.includes('全員に勝つ'));
-lockedStory.click();
-assert.equal(document.querySelector('#storyContent').hidden,true);
-assert.equal(document.querySelector('[data-single-tab=npc]').getAttribute('aria-selected'),'true');
-assert.equal(document.querySelector('.single-story-progression img[src]'),null);
-document.querySelector('#diffCancel').click();
-home.destroy();assert(inkInstances.every(i=>i.disposed),'Leaving HOME releases every ink renderer');assert.equal(giftDisposals,1,'Leaving HOME disposes the gift inbox');assert.equal(cancelledWarmups,1,'Leaving HOME cancels the scheduled warmup');root.innerHTML='';
+const locked=mountSingle(app);
+assert.equal(root.querySelector('[data-next]').disabled,true);
+assert.equal(root.querySelector('button[data-story]').disabled,true);
+assert(root.querySelector('#sp-unlock').textContent.includes('ルミ'));
+root.querySelector('button[data-story]').click();assert.equal(root.querySelector('.single-page').dataset.story,'false');
+locked.destroy();assert(inkInstances.every(i=>i.disposed));assert.equal(idleDisposals,idleMounts);root.innerHTML='';
 let resolveCollection;
 const {mountShop}=await load('shop',{...base,starterCollection:()=>({}),renderShopStarters:host=>{host.textContent='daily starters';},pendingPurchase:()=>null,purchaseCollection:async()=>({}),isCardFrame:()=>false,mountShopFrames:host=>{host.textContent='frame accessories';return {update(){},dispose(){host.replaceChildren();}};},mountShopGacha:host=>{host.textContent='gacha scene';return()=>host.replaceChildren();},api:{collection:()=>new Promise(r=>resolveCollection=r)}});
 const shop=mountShop(app);
@@ -68,4 +78,4 @@ assert.deepEqual([...root.querySelectorAll('[data-category]')].map(b=>b.dataset.
 root.querySelector('[data-category="starter"]').click();assert.equal(root.querySelector('#shopStarters').textContent,'daily starters');assert(root.querySelector('.shop-gacha-active'));assert(root.querySelector('#shopGacha').hasAttribute('inert'));
 root.querySelector('[data-category="accessories"]').click();assert.equal(root.querySelector('#shopFrames').textContent,'frame accessories');assert.equal(root.querySelector('[data-buy],#grid,[data-board-preview]'),null);
 root.querySelector('[data-category="gacha"]').click();assert(!root.querySelector('#shopGacha').hasAttribute('inert'));
-shop.destroy();root.innerHTML='';resolveCollection({credits:10,starterCards:{}});await Promise.resolve();await Promise.resolve();assert.equal(root.innerHTML,'','Late collection must not repaint a destroyed screen');dom.window.close();console.log('PASS: mode selection/launch, BOT difficulty, three shop tabs, inert hidden gacha, and late-response teardown');
+shop.destroy();root.innerHTML='';resolveCollection({credits:10,starterCards:{}});await Promise.resolve();await Promise.resolve();assert.equal(root.innerHTML,'','Late collection must not repaint a destroyed screen');dom.window.close();console.log('PASS: HOME mode selection, separate Single pages and progression, three shop tabs, inert hidden gacha, and late-response teardown');

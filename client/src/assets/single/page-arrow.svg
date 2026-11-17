@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="54" viewBox="0 0 64 54" fill="none">
+  <defs>
+    <linearGradient id="ivory" x1="25" y1="7" x2="38" y2="45" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fffdf2"/><stop offset=".5" stop-color="#fff5dc"/><stop offset="1" stop-color="#e2c99e"/>
+    </linearGradient>
+  </defs>
+  <!-- A split nib: the two curved cuts meet at a single bright tip. -->
+  <path d="M24 6C30 14 40 21 51 27C40 33 30 40 24 48C27 38 31 32 38 27C31 22 27 16 24 6Z"
+        fill="url(#ivory)" stroke="#6f6659" stroke-opacity=".65" stroke-width=".8"/>
+  <path d="M32 8C39 16 47 22 56 27C47 32 39 38 32 46" stroke="#efd8a5" stroke-width="1.15" stroke-linecap="round"/>
+  <path d="M21 20Q21.8 25.8 28 27Q21.8 28.2 21 34Q20.2 28.2 14 27Q20.2 25.8 21 20Z" fill="#f7e8bf"/>
+</svg>
