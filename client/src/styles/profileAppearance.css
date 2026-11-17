@@ -61,6 +61,9 @@ dialog.appearance-picker::backdrop {background:#030e1fc2;}
 .pf-edit-look {position:relative;display:grid;justify-items:center;gap:3px;background:transparent;color:#f1f8ff;border:0;cursor:pointer;}
 .pf-edit-look small {font-size:10px;color:#deedff;}
 
+/* On portrait layouts the Seeker lives inside the screen. Keep the generic
+   page-arrival fade off that parent for this whole visit. */
+.home-return-visit .lounge-content > .lounge-home-screen {animation:none;}
 /* The standing Seeker and library are outside these four moving surfaces. */
 @media (prefers-reduced-motion:no-preference) {
   [data-home-return] .lounge-topbar {--return-x:0px;--return-y:-14px;--return-delay:75ms;}

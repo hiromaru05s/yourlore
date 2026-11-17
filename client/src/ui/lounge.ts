@@ -32,6 +32,7 @@ export function mountLounge(app: App, page: LoungePage, finishEntrance?: () => v
   const content = document.createElement('main'); content.className='lounge-content'; content.id='loungeContent';
   content.append(...Array.from(app.root.childNodes));
   const shell=document.createElement('div'); shell.className=`lounge-shell lounge-${page}${page==='login'?'':' horizon-nav selected-menu'}`;
+  if (finishEntrance) shell.classList.add('home-return-visit');
   const nav: [LoungePage, HomeIcon, string, ()=>void][] = [
     ['home','home','home.title',()=>app.home()],['deck','deck','home.nav.deck',()=>app.deck()],
     ['cards','cards','home.nav.cards',()=>app.cards()],['leaderboard','trophy','home.nav.ranking',()=>app.leaderboard()],

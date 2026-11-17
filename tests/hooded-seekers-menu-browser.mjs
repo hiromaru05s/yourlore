@@ -42,11 +42,12 @@ try{
    const home = document.querySelector('.lounge-home');
    return {
      phase: home.dataset.homeReturn,
+     sceneAnimation: getComputedStyle(home.querySelector('.lounge-home-screen')).animationName,
      ui: ['.lounge-topbar','.lounge-home-main','.lounge-rail'].map(selector => getComputedStyle(home.querySelector(selector)).visibility),
      loading: !!document.querySelector('.screen-loader'),
    };
  });
- assert.deepEqual(entry,{phase:'scene',ui:['hidden','hidden','hidden'],loading:false});
+ assert.deepEqual(entry,{phase:'scene',sceneAnimation:'none',ui:['hidden','hidden','hidden'],loading:false});
  await page.locator('.home-standing-seeker[data-character=SEEKER_HOODED]').waitFor();
  assert.match(await figure.locator('img').getAttribute('src'),/home-closeup.webp/);
  await page.waitForFunction(() => !document.querySelector('.lounge-home').hasAttribute('data-home-return'));
