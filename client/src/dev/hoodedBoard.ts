@@ -76,6 +76,8 @@ if(import.meta.env.DEV){
  panel.addEventListener('click',e=>{if(e.target!==sequence)sequenceNumber++;},true);
  await waitForDuel(document.querySelector('#app')!);
  (window as any).hoodedBoard={ready:true,trigger:(action:FixtureAction,side:Side=0)=>controller.trigger(action,side),reset,rerender:()=>controller.rerender(),state:()=>controller.getState(),play:playSeekerSide,skip:setFxSkip,count:seekerPlaybackCount,destroy:()=>{controller.destroy();stop();}};
+ const studyId=new URLSearchParams(location.search).get('study');
+ if(studyId)void import('./seekerStudies/board').then(m=>m.mountBoardStudy(studyId,(kind,side)=>controller.trigger(kind,side)));
  if(reviewEntry)window.setTimeout(()=>{if(controller && !document.hidden)void review();},850);
  window.addEventListener('pagehide',()=>{controller.destroy();stop();},{once:true});
 }

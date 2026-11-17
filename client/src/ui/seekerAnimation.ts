@@ -112,7 +112,10 @@ export function playSeeker(canvas: HTMLCanvasElement | null, action: SeekerActio
 export function playSeekerLight(side: 'me' | 'opp', light: Light): void {
   if (paused || document.hidden || media?.matches) return;
   const canvas=document.querySelector<HTMLCanvasElement>(`#portrait${side==='me'?'Me':'Opp'} .seeker-motion`);
-  if (canvas) players.get(canvas)?.rig?.play(light);
+  if (!canvas) return;
+  if (import.meta.env.DEV && canvas.ownerDocument.documentElement.hasAttribute('data-seeker-study') &&
+      !canvas.dispatchEvent(new CustomEvent('seeker-study-contact',{bubbles:true,cancelable:true,detail:light}))) return;
+  players.get(canvas)?.rig?.play(light);
 }
 export function resetSeeker(canvas: HTMLCanvasElement): void {
   const player = players.get(canvas);
