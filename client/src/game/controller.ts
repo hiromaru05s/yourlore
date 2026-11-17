@@ -501,7 +501,7 @@ export abstract class BaseController implements BoardHandlers {
     const grantQueues=new Map<string,Promise<void>>();
     const shownGrants=new Set<GameEvent>();
     const summonActivations=new Set<GameEvent>();
-    const cullExits=new Set<string>();
+    const presentedRiftUids=new Set<string>();
     const health=new Map(prev.players.flatMap(p=>p.field.map(m=>[m.uid,m.hatch!=null?(m.dur??0):curHp(p,m)] as const)));
     const grant=(e:Extract<GameEvent,{type:'statusGrant'}>,source?:HTMLElement)=>{
       if(shownGrants.has(e)||A.isFxSkipped())return;
@@ -816,8 +816,13 @@ export abstract class BaseController implements BoardHandlers {
         case "gutsSurvive":
           if(!counterGuts.delete(e))await A.gutsSurvive(e,sideOf(e.player));
           break;
+        case 'greedPriceRift': {
+          e.uids.forEach(uid => presentedRiftUids.add(uid));
+          await A.exileGreedPriceMimics(e.uids, sideOf(e.player));
+          break;
+        }
         case 'cullExile': {
-          e.cards.forEach(({card})=>cullExits.add(card.uid));
+          e.cards.forEach(({card})=>presentedRiftUids.add(card.uid));
           await A.exileCulls(e.cards,sideOf(e.player));
           break;
         }
@@ -1123,7 +1128,7 @@ export abstract class BaseController implements BoardHandlers {
       const existed=new Set([...before.hand,...before.deck,...before.discard,...before.field,...before.enchants.map(e=>e.card),...before.traps.map(t=>t.card),...(before.quests??[]).map(q=>q.card),...before.exile.map(e=>e.card)].map(c=>c.uid));
       const generated:CardInst[]=[];
       for(const c of res.state.players[pl].removed??[]){
-        if(old.has(c.uid)||cullExits.has(c.uid)||treasonExits.has(c.uid)||destroyed.has(c.uid)||infinityStored.has(c.uid)||creationExits.has(c.uid))continue;
+        if(old.has(c.uid)||presentedRiftUids.has(c.uid)||treasonExits.has(c.uid)||destroyed.has(c.uid)||infinityStored.has(c.uid)||creationExits.has(c.uid))continue;
         const n=animatedIds[pl].get(c.id)||0;if(n){animatedIds[pl].set(c.id,n-1);continue;}
         if(!existed.has(c.uid)){generated.push(c);continue;}
         await A.exileCard(c,sideOf(pl),document.querySelector<HTMLElement>(`.card[data-uid="${c.uid}"],.card--back[data-uid="${c.uid}"],.buff-icon[data-uid="${c.uid}"]`));

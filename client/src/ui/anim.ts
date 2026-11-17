@@ -1111,7 +1111,7 @@ async function landOnShelf(node:HTMLElement,side:ViewSide):Promise<void>{
     observer.observe(document.body,{subtree:true,childList:true});setTimeout(()=>{copy.remove();observer.disconnect();},5000);
   }
 }
-export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<void>{
+export async function absorbIntoRift(node:HTMLElement,side:ViewSide,identicalCopies:HTMLElement[] = []):Promise<void>{
   const target=document.getElementById(side==='me'?'rift-me':'rift-opp');if(!target||fxSkip)return;
   const a=node.getBoundingClientRect();
   const releaseTarget=holdRiftTarget(target);
@@ -1125,18 +1125,22 @@ export async function absorbIntoRift(node:HTMLElement,side:ViewSide):Promise<voi
         const completed=await boardMotionScope(async signal=>{
           const {swallowRiftCard}=await import('./riftScene');
           if(signal.aborted)return false;
-          await swallowRiftCard(node,target,start,signal,()=>{started=true;sfx('void');});
+          await swallowRiftCard(node,target,start,signal,()=>{started=true;sfx('void');},identicalCopies);
           return !signal.aborted;
         },7000);
         if(!completed)return;
       }catch(error){ console.warn('[Rift animation]',error); }
       if(started||fxSkip)return;
     }
-    node.style.left='0';node.style.top='0';node.style.transformOrigin='0 0';node.style.transition='none';
-    const end=new DOMMatrix().translate(a.left+a.width/2,a.top+a.height/2).scale(0);
     const duration=SPECIAL_FX.milliseconds(reduced?100:350);
-    const motion=node.animate([{transform:start.toString()},{transform:end.toString()}],{duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
-    try{await wait(duration);}finally{motion.cancel();}
+    const motions = [node, ...identicalCopies].map(card => {
+      const rect = card.getBoundingClientRect();
+      const from = card === node ? start : new DOMMatrix().translate(rect.left, rect.top);
+      const to = new DOMMatrix().translate(rect.left + rect.width/2, rect.top + rect.height/2).scale(0);
+      Object.assign(card.style, {left:'0',top:'0',transformOrigin:'0 0',transition:'none'});
+      return card.animate([{transform:from.toString()},{transform:to.toString()}], {duration,easing:'cubic-bezier(.55,.02,.6,1)',fill:'forwards'});
+    });
+    try{await wait(duration);}finally{motions.forEach(motion => motion.cancel());}
   }finally{releaseTarget();}
 }
 export async function exileCard(card:CardInst,side:ViewSide,source?:HTMLElement|null):Promise<void>{
@@ -1163,6 +1167,32 @@ export async function exileCulls(cards:{card:CardInst;from:'discard'|'deck'|'han
   }));
  }
 }
+/** One cast generates identical public Mimics. Share the card print, sound and Rift clock. */
+export async function exileGreedPriceMimics(uids:string[], side:ViewSide):Promise<void> {
+  const row = rectOf(`${side === 'me' ? '#meRow' : '#oppRow'} .zone-mon`) ?? rowRect(side);
+  if (!row || !uids.length || fxSkip) return;
+  const width = Math.min(76, innerWidth * .15);
+  const height = width / .64;
+  const spacing = Math.min(width * 1.04, (innerWidth - 16 - width) / Math.max(1, uids.length - 1));
+  const span = width + spacing * (uids.length - 1);
+  const left = Math.max(8, Math.min(innerWidth - 8 - span, row.left + row.width * .7 - span / 2));
+  const top = Math.max(8, Math.min(innerHeight - height - 8, row.top + (row.height - height) / 2));
+  const cards = uids.map((uid,index) => {
+    const card = floatAt(cardEl({...DB.MIMIC,uid},{size:'hand'}), {left:left + index * spacing, top});
+    card.dataset.generatedExile = uid;
+    card.style.width = `${width}px`;
+    card.style.height = `${height}px`;
+    card.style.setProperty('--cw', `${width}px`);
+    card.style.setProperty('--ch', `${height}px`);
+    return card;
+  });
+  try {
+    await absorbIntoRift(cards[0], side, cards.slice(1));
+  } finally {
+    cards.forEach(card => card.remove());
+  }
+}
+
 /** Conjured removals have no library/hand origin. Show up to three staggered apparitions. */
 export async function exileGeneratedCards(cards:CardInst[],side:ViewSide,origin?:DOMRect):Promise<void>{
   const row=rectOf(`${side==='me'?'#meRow':'#oppRow'} .zone-mon`)??rowRect(side);if(!row||fxSkip)return;
