@@ -9360,7 +9360,7 @@
         "en"
       ],
       "definitionSha256": "cd152a4f7de0a2b4d5b65e2a7a9014773a40696421cbd1e2a45b102221f48e81",
-      "textSha256": "a4cdbc0d70df8e5f6aa1c9f6ed364ee87c37fb0eab86856bfa2a96ddebb41192",
+      "textSha256": "f1749daa96921f8da13a9080ee51f64d97367bdd014f4cb57fe52f63f82610c9",
       "hooks": {
         "act": "armyAttune",
         "ench": "essenceOfLife"
@@ -9371,12 +9371,12 @@
         "en": "【While on the Field】Your monsters have -1 ATK. Suppress monster effects on both sides. Tribe synergy and passive keywords still apply."
       },
       "after": {
-        "ja": "【場にある間】双方のモンスター効果を無効にする。種族シナジーとパッシブは有効。\n\n【自分のターン開始時】このカードを破壊する。",
-        "ko": "【필드에 있는 동안】양쪽의 몬스터 효과를 무효화한다. 종족 시너지와 패시브는 유효하다.\n\n【자신의 턴 시작 시】이 카드를 파괴한다.",
-        "en": "【While on the Field】Negate monster effects on both sides. Tribe synergy and passives remain active.\n\n【At the Start of Your Turn】Destroy this card."
+        "ja": "【場にある間】双方のフィールド上のモンスターの効果（召喚時効果を含む）を無効にする。種族シナジーとパッシブは有効。\n\n【自分のターン開始時】このカードを破壊する。",
+        "ko": "【필드에 있는 동안】양쪽 필드의 몬스터 효과(소환 시 효과 포함)를 무효화한다. 종족 시너지와 패시브는 유효하다.\n\n【자신의 턴 시작 시】이 카드를 파괴한다.",
+        "en": "【While on the Field】Negate the effects of monsters on either field, including their On Summon effects. Tribe synergy and passives remain active.\n\n【At the Start of Your Turn】Destroy this card."
       },
-      "reviewedAt": "2026-11-11",
-      "reviewNote": "Army and Attune balance update."
+      "reviewedAt": "2026-11-17",
+      "reviewNote": "All three texts specify monsters on the field and include On Summon effects."
     },
     "MARKET_FEVER": {
       "nameJa": "市場の熱気",

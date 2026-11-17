@@ -7,3 +7,19 @@
 .card .ad-def--durability .seal-face{filter:url(#lore-counter-black-health)}
 .card .ad-def--durability{color:#fff4df}
 @media(prefers-reduced-motion:reduce){.card-counter{transition:none;animation:none}}
+
+/* Ordinary counters sit against the art frame, just below the card name. */
+.card-counter[data-counter-kind="charge"] {
+  top:18%; right:2%; width:32%; height:auto; aspect-ratio:64/36;
+  filter:drop-shadow(0 .8px 1px #120e0ccc);
+}
+.card-counter[data-counter-kind="charge"] .counter-slot-digit { fill:#f6f3de; }
+.card-counter[data-counter-kind="charge"]:not([data-counter-index="0"]) {
+  top:calc(24% + (var(--counter-index) - 1)*26%);
+}
+.card-counter[data-counter-kind="charge"][data-counter-index="0"] ~ .card-counter[data-counter-index="1"] {
+  top:33%;
+}
+.buff-icon > .card-counter[data-counter-kind="charge"] {
+  top:3%; right:0; width:53%;
+}
