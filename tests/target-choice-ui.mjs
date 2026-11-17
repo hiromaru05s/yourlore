@@ -8,7 +8,7 @@ globalThis.requestAnimationFrame=cb=>setTimeout(cb,0);globalThis.cancelAnimation
 globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 const dir=await mkdtemp('/tmp/lore-target-ui-');
 try{
- await build({stdin:{contents:`export * from './client/src/ui/modal';export * from './client/src/shared/cards';export * from './client/src/shared/engine';export * from './client/src/shared/playIntent';export {setLang} from './client/src/i18n';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/ui.mjs',plugins:[{name:'no-animation',setup(b){b.onResolve({filter:/\/anim$/},()=>({path:'anim',namespace:'mock'}));b.onLoad({filter:/.*/,namespace:'mock'},()=>({contents:'export const bindZoom=()=>{};'}));}}]});
+ await build({stdin:{contents:`export * from './client/src/ui/modal';export * from './client/src/shared/cards';export * from './client/src/shared/engine';export * from './client/src/shared/playIntent';export {setLang} from './client/src/i18n';`,resolveDir:process.cwd()},bundle:true,external:['/art/*'],platform:'node',format:'esm',outfile:dir+'/ui.mjs',plugins:[{name:'no-animation',setup(b){b.onResolve({filter:/\/anim$/},()=>({path:'anim',namespace:'mock'}));b.onLoad({filter:/.*/,namespace:'mock'},()=>({contents:'export const bindZoom=()=>{};'}));}}]});
  const E=await import(dir+'/ui.mjs');const card=(id,uid=id)=>({...structuredClone(E.DB[id]??E.STARTERS[id]),uid});
  const g=E.createGame({mode:'online',seed:1,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.pending=null;
  g.players[1].field=[];g.players[0].field=[{...card('M1','ally'),tempAtk:0,atkMod:0,defMod:0,dmg:0,exhausted:false,summonedTurn:0}];const sword=card('SELECTED_SWORD');g.players[0].hand=[sword];
