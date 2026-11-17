@@ -14,13 +14,13 @@ import {mountFriendBadge} from './friendBadge';
 import {mountLoungeNavMotion} from './loungeNavMotion';
 import type { App } from '../router';
 import { t, esc, onLangChange } from '../i18n';
-import { homeIcon, type HomeIcon } from './homeIcons';
+import { homeIcon } from './homeIcons';
 import { avatarHtml } from './social';
 import { seekerLevel } from './seekerLevel';
 import { showInquiryModal, showInviteModal } from '../screens/home';
 import { mountHomeSound } from './homeSound';
 
-export type LoungePage = 'home'|'deck'|'cards'|'leaderboard'|'friends'|'shop'|'tutorial'|'profile'|'lobby'|'login';
+export type LoungePage = 'home'|'cardHub'|'deck'|'cards'|'leaderboard'|'friends'|'shop'|'tutorial'|'profile'|'lobby'|'login';
 
 
 const lastLoungePage=new WeakMap<App,string>();
@@ -33,11 +33,12 @@ export function mountLounge(app: App, page: LoungePage, finishEntrance?: () => v
   content.append(...Array.from(app.root.childNodes));
   const shell=document.createElement('div'); shell.className=`lounge-shell lounge-${page}${page==='login'?'':' horizon-nav selected-menu'}`;
   if (finishEntrance) shell.classList.add('home-return-visit');
-  const nav: [LoungePage, HomeIcon, string, ()=>void][] = [
-    ['home','home','home.title',()=>app.home()],['deck','deck','home.nav.deck',()=>app.deck()],
-    ['cards','cards','home.nav.cards',()=>app.cards()],['leaderboard','trophy','home.nav.ranking',()=>app.leaderboard()],
-    ['friends','friends','friends.title',()=>app.friends()],['shop','shop','shop.title',()=>app.shop()],
-    ['tutorial','book','home.nav.guide',()=>app.tutorial()],
+  const tab = page==='cardHub'||page==='deck' ? 'cards' : page;
+  const nav: [LoungePage | 'single', string, (()=>void)?][] = [
+    ['home','home.title',()=>app.home()],['single','home.bot.title'],
+    ['cards','home.nav.cards',()=>app.cardHub()],['leaderboard','home.nav.ranking',()=>app.leaderboard()],
+    ['friends','friends.title',()=>app.friends()],['shop','shop.title',()=>app.shop()],
+    ['tutorial','home.nav.guide',()=>app.tutorial()],
   ];
   const phoneHome = matchMedia('(max-width:850px) and (min-height:501px)');
   const dailyReward=content.querySelector<HTMLElement>('#dailyReward');
@@ -57,9 +58,14 @@ export function mountLounge(app: App, page: LoungePage, finishEntrance?: () => v
     shell.querySelectorAll(':scope > .lounge-rail, :scope > .lounge-topbar').forEach(n=>n.remove());
     if(page==='login') return;
     const rail=document.createElement('aside'); rail.className='lounge-rail'; rail.id='loungeNavigation';
-    rail.innerHTML=`<nav aria-label="${esc(t('home.navigation'))}">${nav.map(([key,,label],index)=>`<button data-nav="${key}" ${key===page?'aria-current="page"':''}>${loungeNavGlyph(index)}<span>${t(label)}</span></button>`).join('')}</nav><div class="lounge-rail-bottom" id="loungeUtilities"><button data-utility-settings>${loungeUtilityGlyph('settings')}<span>${t('home.settings')}</span></button><button data-invite>${loungeUtilityGlyph('invite')}<span>${t('invite.title')}</span></button><button data-inquiry>${loungeUtilityGlyph('inquiry')}<span>${t('home.inquiry.title')}</span></button></div>`;
+    const navButtons=nav.map(([key,label,go],index)=>{
+      const glyph=loungeNavGlyph(index);
+      if (!go) return `<button type="button" data-nav="${key}" disabled aria-label="${esc(t(label))}">${glyph}<span aria-hidden="true"></span></button>`;
+      return `<button type="button" data-nav="${key}" ${key===tab?'aria-current="page"':''}>${glyph}<span>${t(label)}</span></button>`;
+    }).join('');
+    rail.innerHTML=`<nav aria-label="${esc(t('home.navigation'))}">${navButtons}</nav><div class="lounge-rail-bottom" id="loungeUtilities"><button data-utility-settings>${loungeUtilityGlyph('settings')}<span>${t('home.settings')}</span></button><button data-invite>${loungeUtilityGlyph('invite')}<span>${t('invite.title')}</span></button><button data-inquiry>${loungeUtilityGlyph('inquiry')}<span>${t('home.inquiry.title')}</span></button></div>`;
     const top=document.createElement('header'); top.className='lounge-topbar';
-    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(nav.find(n=>n[0]===page)?.[2]??'home.title')}</span><button class="lounge-user" data-profile title="${esc(t('home.levelRule'))}">${profileContents()}</button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
+    top.innerHTML=`<button class="lounge-brand" data-home aria-label="LORE HOME"><img src="/art/brand/lore-logo-transparent.webp" alt="LORE"></button><button class="lounge-menu" aria-controls="loungeUtilities" aria-expanded="${shell.classList.contains('is-menu-open')}" aria-label="${esc(t('home.navigation'))}"><span class="menu-stroke" aria-hidden="true"></span><span class="menu-stroke" aria-hidden="true"></span></button><span class="lounge-location">${page==='profile'?t('profile.title'):page==='lobby'?t('mode.ranked'):t(page==='deck'?'home.nav.deck':nav.find(n=>n[0]===tab)?.[1]??'home.title')}</span><button class="lounge-user" data-profile title="${esc(t('home.levelRule'))}">${profileContents()}</button><button class="lounge-balance" data-shop>${homeIcon('shard')}<span><small>${t('home.shards')}</small><b>${(user?.credits??0).toLocaleString()}</b></span></button>`;
     shell.prepend(rail,top);
     // Keep the same profile container on every route; HOME adds sound and quests.
     {
@@ -81,10 +87,10 @@ export function mountLounge(app: App, page: LoungePage, finishEntrance?: () => v
     actions.append(giftSlot,top.querySelector('[data-shop]')!,top.querySelector('.lounge-menu')!);
     top.append(actions);
     stopNavMotion=mountLoungeNavMotion(rail.querySelector('nav')!,lastLoungePage.get(app));
-    lastLoungePage.set(app,page);
+    lastLoungePage.set(app,tab);
     friendBadge.paint();
     top.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();
-    nav.forEach(([key,,,go])=>{rail.querySelector<HTMLButtonElement>(`[data-nav="${key}"]`)!.onclick=go;});
+    nav.forEach(([key,,go])=>{if(go) rail.querySelector<HTMLButtonElement>(`[data-nav="${key}"]`)!.onclick=go;});
     rail.querySelector<HTMLButtonElement>('[data-utility-settings]')!.onclick=()=>app.settings();
     rail.querySelector<HTMLButtonElement>('[data-invite]')!.onclick=()=>void showInviteModal(lifecycle.signal);
     rail.querySelector<HTMLButtonElement>('[data-inquiry]')!.onclick=showInquiryModal;

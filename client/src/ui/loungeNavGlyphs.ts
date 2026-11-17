@@ -1,7 +1,7 @@
 /** Original monochrome menu symbols, approved HOME navigation study 01. */
 const paths = [
   '<path d="M9 26V13L20 5l11 8v13M15 30V18h10v12M7 31h26"/><path d="m16 10 4-3 4 3"/>',
-  '<path d="m9 9 17-3 5 26-17 3z"/><path d="m7 15-3 2 7 19 8-3M19 13l5 6-3 7-5-6z"/>',
+  '<path d="m15 22 2-9L30 5l-2 14-8 8M15 22l5 5M10 20l12 12M15 26l-7 7-2-2 7-7"/>',
   '<path d="M14 7h17v26H14zM9 10H7v23h3M2 14v16"/><path d="m22 12 5 8-5 8-5-8z"/>',
   '<path d="M14 7h12v8c0 7-12 7-12 0zM14 10H8v4q0 6 7 6M26 10h6v4q0 6-7 6M20 21v9M13 33h14M16 29h8"/>',
   '<circle cx="16" cy="13" r="5"/><path d="M6 31v-5c0-8 20-8 20 0v5M26 9c8 0 8 9 1 10M29 23q6 1 6 8"/>',
