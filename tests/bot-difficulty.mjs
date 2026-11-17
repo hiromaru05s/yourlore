@@ -26,7 +26,7 @@ try {
  const ids=C.BUYABLE_POOL.filter(id=>C.DB[id].cost<=6);
  // Stratified draws measure the configured bias branch itself, independently
  // of whether a random branch happens to choose a strong card too.
- for(const [tier,expected] of [['hard',5],['hell',10]]){
+ for(const [tier,expected] of [['hard',1],['hell',10]]){
   let biased=0;
   for(let i=0;i<100;i++){
    const g=structuredClone(base);g.botDifficulty=tier;let calls=0;

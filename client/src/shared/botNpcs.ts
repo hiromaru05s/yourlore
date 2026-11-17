@@ -32,7 +32,7 @@ export const BOT_NPCS: readonly BotNpc[] = [
   {
     id: "vera", difficulty: "hard", avatar: "NPC_VERA", portrait: "/art/npcs/v2/vera.webp",
     name: text("ヴェラ", "Vera", "베라"), title: text("果敢なシーカー", "Daring Seeker", "과감한 시커"),
-    style: text("7つの戦術・マーケット優遇抽選5%", "Seven strategies · 5% chance of a favored market draw", "일곱 가지 전략 · 마켓 우대 추첨 5%"),
+    style: text("7つの戦術・マーケット優遇抽選1%", "Seven strategies · 1% chance of a favored market draw", "일곱 가지 전략 · 마켓 우대 추첨 1%"),
     decks: BOT_ELITE_DECKS.map(trainedDeck),
   },
   {
