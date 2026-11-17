@@ -2,7 +2,7 @@ import {availableDealRewards, type DEAL_REWARDS} from '../shared/starterQuests';
 import type {QuestState} from '../shared/types';
 import { installCardPickerFilters } from './cardPickerFilters';
 import { targetOwner, type PlayIntent } from '../shared/playIntent';
-import '../styles/marketPreview.css';
+import {buildMarketStudy,buildHandStudy} from './openingChoices';
 import '../styles/outcomeFinale.css';
 // ============================================================
 // LORE — overlays: generic modal, confirm (surrender), win,
@@ -11,7 +11,7 @@ import '../styles/outcomeFinale.css';
 import type { CardInst, GameState, Side } from "../shared/types";
 import { attachDuelClock } from "./duelClock";
 import { cardEl } from "./cardView";
-import { bindZoom, zoomCard, closeZoom } from "./cardInspection";
+import { bindZoom, closeZoom } from "./cardInspection";
 import { TRIBES } from "../shared/cards";
 import { t, getLang, cardName } from "../i18n";
 
@@ -51,7 +51,7 @@ function mount(node: HTMLElement): void {
   }
   const ov = document.createElement("div");
   ov.className = "overlay";
-  if (!node.classList.contains("outcome-result") && !node.classList.contains("preview-modal") && document.querySelector(".game")) {
+  if (!node.classList.contains("outcome-result") && !node.classList.contains("opening-study") && document.querySelector(".game")) {
     ov.classList.add("duel-overlay");
     node.classList.add("duel-dialog");
     if (document.querySelector(".game .mp-clock.show")) attachDuelClock(heading);
@@ -140,40 +140,11 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
 /** Ranked pre-game market preview: study the fixed market before the coin toss.
     Returns handles so the caller can update the countdown (setUntil) and dismiss it (close). */
 export function marketPreview(market: CardInst[], onReady: () => void): { setUntil(u: number | null): void; close(): void } {
-  const m = document.createElement("div");
-  m.className = "preview-modal";
-  m.style.setProperty('--pv-table', "url('/art/biblion/duel-table.png')");
-  m.style.setProperty('--pv-cards', String(Math.max(1, market.length)));
-  m.innerHTML = `<header class="pv-heading"><span class="pv-eyebrow">${t("duel.previewPlace")}</span><h2>${t("game.std")}</h2><p>${t("preview.sub")}</p></header>`
-    + `<div class="pv-stage"><div class="pv-cards"></div><p class="pv-hint"><span class="pv-swipe">${t("preview.swipe")} · </span>${t("preview.inspect")}</p></div>`
-    + `<footer class="pv-foot"><div class="pv-count" id="pvCount" role="status"></div><button class="btn btn-gold" id="pvReady">${t("preview.ready")}</button></footer>`;
-  const grid = m.querySelector(".pv-cards") as HTMLElement;
-  for (const c of market) {
-    const el = cardEl(c, { fullArt: true });
-    el.tabIndex = 0; el.setAttribute('role', 'button'); el.setAttribute('aria-label', cardName(c));
-    el.onclick = () => zoomCard(c);
-    el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
-    bindZoom(el, c); grid.appendChild(el);
-  }
-  const btn = m.querySelector("#pvReady") as HTMLButtonElement;
-  const count = m.querySelector("#pvCount") as HTMLElement;
-  let until: number | null = null;
-  const tick = (): void => {
-    if (until == null) { count.textContent = t("preview.waiting"); return; }
-    const left = Math.max(0, Math.ceil((until - Date.now()) / 1000));
-    count.textContent = left > 0 ? `${left}${t("preview.secs")}` : t("preview.starting");
-  };
-  const timer = window.setInterval(tick, 250);
-  const observer = new MutationObserver(() => { if (!m.isConnected) { clearInterval(timer); observer.disconnect(); } });
-  btn.onclick = () => { btn.disabled = true; btn.textContent = t("preview.waiting"); onReady(); };
-  mount(m);
-  observer.observe(getRoot(), { childList: true });
-  btn.focus({ preventScroll: true });
-  tick();
-  return {
-    setUntil(u: number | null): void { until = u; tick(); },
-    close(): void { clearInterval(timer); observer.disconnect(); if (m.isConnected) { closeZoom(); closeOverlay(); } },
-  };
+  const scene=buildMarketStudy(market,onReady);let until:number|null=null;
+  const tick=()=>scene.update(until);
+  mount(scene.node);scene.button.focus({preventScroll:true});tick();
+  const close=studyLifetime(scene.node,tick);
+  return {setUntil(u){until=u;tick();},close};
 }
 
 /** Simple notice with a single button (e.g. disconnect). */
@@ -271,37 +242,21 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
   mount(m);
 }
 
-/**
- * Multi-select picker (대숙청/컬 세례 등): toggle up to `max` cards, then confirm once.
- * onDone receives the selected uids in pick order ([] = cancelled) — the caller
- * submits them to the engine one at a time (the protocol is unchanged).
- */
-/** opts.exact (v42 손패 이월): 정확히 max장 골라야 확정 가능 · 취소 버튼 없음 */
-export function openingHandDialog(pool: CardInst[], confirmed: boolean, select: (uids:string[])=>void, secondsLeft:()=>number): ()=>void {
-  const lang = getLang();
-  const words = {
-    ja: {pick:'初手の交換', help:'山札の底に戻すカードを2枚まで選び、同じ枚数を引きます。', keep:'そのまま始める', wait:'対戦相手が初手を選んでいます', seconds:'残り'},
-    ko: {pick:'시작 패 교환', help:'덱 맨 아래로 보낼 카드를 최대 2장 고르고, 같은 수만큼 뽑습니다.', keep:'그대로 시작', wait:'상대가 시작 패를 고르고 있습니다', seconds:'남은 시간'},
-    en: {pick:'Opening hand', help:'Choose up to 2 cards to put on the bottom of your deck. Draw that many replacements.', keep:'Keep all three', wait:'Waiting for your opponent to choose', seconds:'Time left'},
-  }[lang];
-  let modal: HTMLElement;
-  if (confirmed) {
-    modal = document.createElement('div');
-    modal.className = 'modal';
-    const title = document.createElement('h2'); title.textContent = words.wait;
-    modal.append(title); mount(modal);
-  } else {
-    cardPickerMulti(words.pick, pool, Math.min(2,pool.length), select, {keepLabel:words.keep, description:words.help});
-    modal = getRoot().querySelector<HTMLElement>('.modal')!;
-  }
-  modal.classList.add('opening-hand-picker');
-  const timer = document.createElement('span');
-  const tick = () => { timer.textContent = words.seconds + ' ' + Math.max(0,Math.ceil(secondsLeft())) + 's'; };
-  modal.querySelector('.popup-heading')?.append(timer); tick();
-  const interval = window.setInterval(tick, 500);
-  return () => { clearInterval(interval); if (modal.isConnected) closeOverlay(); };
+function studyLifetime(node:HTMLElement,tick:()=>void,dispose=()=>{}):()=>void {
+  const timer=window.setInterval(tick,250);
+  const cleanup=()=>{clearInterval(timer);observer.disconnect();dispose();};
+  const observer=new MutationObserver(()=>{if(!node.isConnected)cleanup();});
+  observer.observe(getRoot(),{childList:true});
+  return ()=>{cleanup();if(node.isConnected){closeZoom();closeOverlay();}};
 }
 
+export function openingHandDialog(pool:CardInst[],confirmed:boolean,select:(uids:string[])=>void,secondsLeft:()=>number,appearance:Parameters<typeof buildHandStudy>[3]={}):()=>void {
+  const scene=buildHandStudy(pool,confirmed,select,appearance);
+  const tick=()=>scene.update(secondsLeft());mount(scene.node);tick();
+  return studyLifetime(scene.node,tick,scene.dispose);
+}
+
+/** Select up to max cards and confirm once. */
 export function cardPickerMulti(title: string, pool: CardInst[], max: number, onDone: (uids: string[]) => void, opts: { exact?: boolean; label?: (uid:string)=>string; keepLabel?:string; description?:string } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";

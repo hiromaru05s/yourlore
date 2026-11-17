@@ -1288,7 +1288,8 @@ export abstract class BaseController implements BoardHandlers {
         }
         const close = openingHandDialog(this.state.players[this.you].hand, confirmed,
           uids => this.submit({type:'mulligan',player:this.you,uids}),
-          () => ((this.state.mulliganUntil ?? this.localMulliganUntil) - Date.now() + (this.state.opening ? this.serverOffset : 0)) / 1000);
+          () => ((this.state.mulliganUntil ?? this.localMulliganUntil) - Date.now() + (this.state.opening ? this.serverOffset : 0)) / 1000,
+          {sleeve:this.state.sleeves?.[this.you],frame:this.state.frames?.[this.you],effect:this.state.effects?.[this.you]});
         this.mulliganDialog = {confirmed, close};
       }
       return;

@@ -1,11 +1,12 @@
-import {DUEL_OPENING_MS} from '../shared/opening';
-import {createGame} from '../shared/engine';
+import {DUEL_OPENING_MS,MULLIGAN_MS} from '../shared/opening';
+import {createGame,reduce} from '../shared/engine';
 import {GameView,setMyAvatar,setOppAvatar} from '../ui/boardView';
 import {startBoardLayout} from '../ui/layout';
 import {waitForDuel} from '../ui/duelReadiness';
 import {playDuelOpening,warmOpening} from '../ui/duelOpeningDirector';
 import {animateDraw} from '../ui/anim';
 import {initSound} from '../ui/sound';
+import {marketPreview,openingHandDialog} from '../ui/modal';
 import {botNpc} from '../shared/botNpcs';
 import '../styles/defaultButtons.css';
 
@@ -14,7 +15,8 @@ export async function mountOpeningLab(root:HTMLElement):Promise<void>{
   const npc=botNpc('easy'),me={name:'シーカー',avatar:'SEEKER_BLUE'},opp={name:npc.name.ja,avatar:npc.avatar};
   initSound();setMyAvatar(me.avatar);setOppAvatar(opp.avatar);
   let first=new URLSearchParams(location.search).get('order')!=='second';
-  const previewState=()=>createGame({mode:'bot',seed:207,starting:first?0:1,p0:{id:'a',name:me.name},p1:{id:'b',name:opp.name}}).state;
+  const study=new URLSearchParams(location.search).get('study');
+  const previewState=()=>createGame({mode:'bot',mulligan:!!study,seed:207,starting:first?0:1,p0:{id:'a',name:me.name},p1:{id:'b',name:opp.name}}).state;
   const noop=()=>{};
   const view=new GameView(root,0,{onPlay:noop,onBlockedPlay:noop,onAttack:noop,onBlockedAttack:noop,onReorder:noop,onChooseTarget:noop,onBuyMarket:noop,onBuySupply:noop,onRefresh:noop,onEndTurn:noop,onSurrender:noop});
   view.render(previewState());const stop=startBoardLayout();
@@ -29,6 +31,37 @@ export async function mountOpeningLab(root:HTMLElement):Promise<void>{
       onDeal:signal=>Promise.all([animateDraw(document.getElementById('hand'),3,'me',{signal}),animateDraw(document.getElementById('oppHand'),3,'opp',{signal})]).then(()=>{})});
     await running;
   };
+  if(study){
+    let state=previewState(),closeStudy=()=>{},timer=0;
+    const reset=()=>{clearTimeout(timer);closeStudy();};
+    const hand=()=>{
+      const until=Date.now()+MULLIGAN_MS;
+      const finish=(uids:string[])=>{
+        reset();state=reduce(state,{type:'mulligan',player:0,uids}).state;
+        view.render(state);
+        closeStudy=openingHandDialog(state.players[0].hand,true,()=>{},()=>Math.max(0,(until-Date.now())/1000));
+        timer=window.setTimeout(()=>{
+          closeStudy();state=reduce(state,{type:'mulligan',player:1,uids:[]}).state;
+          view.render(state);panel.hidden=false;
+        },1250);
+      };
+      closeStudy=openingHandDialog(state.players[0].hand,false,finish,()=>(until-Date.now())/1000);
+      timer=window.setTimeout(()=>finish([]),MULLIGAN_MS);
+    };
+    const begin=(market:boolean)=>{
+      reset();panel.hidden=true;state=previewState();view.render(state);
+      if(!market){hand();return;}
+      const next=async()=>{reset();await launch();if(root.isConnected&&!active.signal.aborted)hand();};
+      const preview=marketPreview(state.market,()=>void next());
+      closeStudy=preview.close;preview.setUntil(Date.now()+15000);timer=window.setTimeout(()=>void next(),15000);
+    };
+    panel.style.display='';panel.style.textAlign='center';
+    add('マーケットから再生',()=>begin(true));add('マリガンを試す',()=>begin(false));
+    document.body.append(panel);
+    await Promise.all([waitForDuel(root),warmOpening()]);begin(study!=='hand');
+    window.addEventListener('pagehide',()=>{reset();generation++;active.abort();stop();view.destroy();panel.remove();},{once:true});
+    return;
+  }
   add('自分が先攻で再生',()=>{first=true;void launch();});
   add('自分が後攻で再生',()=>{first=false;void launch();});
   const tools=document.createElement('details'),summary=document.createElement('summary');

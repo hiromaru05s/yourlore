@@ -1,65 +1,129 @@
-/* Pregame study uses the duel's Biblion tabletop raster without another renderer. */
-body #overlayRoot .overlay:has(>.preview-modal) {
-  background:#101b2b;
-  backdrop-filter:none; animation:none;
+/* Both opening choices sit on the duel table. Only the action button is a UI plate. */
+#overlayRoot .overlay:has(>.opening-study){padding:0;background:transparent;backdrop-filter:none;animation:none}
+.opening-study{
+  --silver:#c5d6e5;--foil:#dabf8c;--silk:#85b6d5;--head-size:clamp(30px,4.6vmin,55px);
+  position:relative;isolation:isolate;display:grid;grid-template-rows:auto minmax(0,1fr) auto;
+  width:100%;height:100%;height:100dvh;overflow:hidden;box-sizing:border-box;
+  padding:clamp(20px,5vh,58px) clamp(18px,5vw,90px) max(22px,4.5vh,env(safe-area-inset-bottom));
+  color:#f3f1e9;font-family:var(--sans,system-ui),sans-serif;
 }
-.preview-modal {
-  --pv-gap:clamp(10px,1.3vw,24px);
-  position:relative; display:grid;
-  grid-template-rows:minmax(100px,1fr) auto minmax(110px,1fr);
-  align-items:center; width:100%; height:100%; height:100dvh;
-  min-height:0; overflow-y:auto; overflow-x:hidden;
-  color:#eee8da; text-align:center;
-  background:linear-gradient(180deg,#071321ed 0%,#0b192967 26%,#0a182520 48%,#08162599 76%,#071321f5 100%),var(--pv-table) center/cover no-repeat;
+.opening-study:focus{outline:0}
+.opening-study::before,.opening-study::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1}
+.market-study::before{
+  background:linear-gradient(180deg,#070e1bf0,#0e1c2d94 28%,#14263778 55%,#0a1324c9 81%,#050b16fa),
+    url('/art/biblion/duel-table.png') center/cover #101c2e;
 }
-.preview-modal .pv-heading { padding:26px 20px 8px; align-self:center; }
-.preview-modal .pv-eyebrow { font:10px var(--mono); letter-spacing:.34em; color:#b9c4cf; }
-.preview-modal h2 { margin:14px 0 10px; font:500 clamp(24px,2.8vw,40px) Georgia,'Yu Mincho',serif; letter-spacing:.12em; text-shadow:0 2px 12px #081522; }
-.preview-modal p { margin:0; font-size:13px; line-height:1.7; color:#d6dce0; }
-.preview-modal .pv-stage { min-width:0; width:100%; padding:0 24px; }
-.preview-modal .pv-cards {
-  display:flex; flex-wrap:nowrap; align-items:center; justify-content:safe center;
-  gap:var(--pv-gap); width:100%; max-width:1600px; margin:auto;
-  padding:24px 14px 30px; overflow-x:auto; overflow-y:hidden;
-  scroll-snap-type:x proximity; scroll-padding:14px; overscroll-behavior-x:contain;
-  scrollbar-width:thin; scrollbar-color:#c7b89460 #06132230;
-  border-block:1px solid #d8d0b94a;
+.hand-study::before{background:linear-gradient(115deg,#050e1bef,#0b1c2fe6 45%,#0a1526e0 74%,#060d17f2);backdrop-filter:blur(3px)}
+.opening-study::after{
+  background:radial-gradient(ellipse at 52% 49%,#91b8d014,transparent 57%),
+    linear-gradient(110deg,transparent 58%,#aac8d705 58.1%,transparent 62%);
 }
-.preview-modal .pv-cards>.card {
-  --cw:clamp(125px,calc((100vw - 100px - (var(--pv-cards) - 1)*var(--pv-gap))/var(--pv-cards)),200px);
-  --ch:calc(var(--cw)*1.4);
-  scroll-snap-align:center; cursor:pointer;
-  filter:drop-shadow(0 12px 9px #03101b80);
+.study-head,.study-foot{width:min(100%,1520px);margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:18px;position:relative}
+.study-head{padding-bottom:clamp(12px,2vh,24px);border-bottom:1px solid #adbbcc44}
+.study-head::after,.study-foot::before{position:absolute;content:"";width:clamp(40px,7vw,106px);height:2px;left:0;background:linear-gradient(90deg,var(--foil),#efe9d277);transform:skewX(-42deg);bottom:-1px}
+.study-title{margin:0;color:#f7f3e8;font:500 var(--head-size)/1.18 Georgia,"Shippori Mincho","Yu Mincho",serif;letter-spacing:.095em;text-shadow:0 3px 15px #0009}
+.study-description{margin:8px 0 0;color:#c8d1dc;font-size:clamp(12px,1.6vmin,17px);letter-spacing:.07em;line-height:1.5}
+.study-clock{display:grid;grid-template-columns:auto auto;align-items:baseline;column-gap:9px;flex-shrink:0;padding:0 2px 9px;color:#edf3f5;position:relative}
+.study-clock::after{content:"";position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--silk) var(--remaining),#adc0cd34 var(--remaining))}
+.study-clock.running-low{--silk:#e1b98c}
+.study-seconds{font:normal clamp(28px,4.8vmin,52px)/1 Georgia,serif;font-variant-numeric:tabular-nums}
+.study-clock-label,.study-status{color:#c2cdd9;font-size:clamp(11px,1.55vmin,16px);letter-spacing:.09em}
+.study-content{min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;position:relative}
+.study-foot{border-top:1px solid #acbdcd44;padding-top:clamp(10px,2.2vh,24px);min-height:49px}
+.study-foot::before{bottom:auto;top:-1px;width:34px}
+.study-action{min-width:clamp(146px,16vw,245px);min-height:44px;padding:9px 22px;font:600 clamp(14px,1.7vmin,18px)/1.3 "Yu Mincho",serif;letter-spacing:.08em;cursor:pointer}
+.study-action[hidden]{display:none}
+.study-rack{width:min(100%,1520px);position:relative;display:flex;align-items:center;justify-content:center;gap:1vw;isolation:isolate;padding:clamp(25px,5vh,70px) 0;flex-wrap:wrap}
+.study-rack::before{content:"";position:absolute;z-index:-1;inset:auto -3vw 0;height:34%;border-bottom:1px solid #bdc5c14f;
+  background:linear-gradient(180deg,transparent,#8fbed214 60%,#abcad020 80%,#2634439e 84%,#a9bfce83 86%,#28384b9c 88%,#050d196e);transform:perspective(500px) rotateX(22deg);pointer-events:none}
+.study-slot,.return-socket{width:var(--unit);height:calc(var(--unit)*1.46);flex:none;position:relative}
+.study-slot{perspective:1200px}.study-lift,.study-leaf{position:relative;width:100%;height:100%}
+.study-leaf{transform-style:preserve-3d;animation:study-deal .66s cubic-bezier(.22,.75,.17,1) both;animation-delay:calc(var(--ordinal)*65ms)}
+.study-leaf::before{content:"";position:absolute;inset:0;border-radius:5%;background:var(--back) center/100% 100%;transform:rotateY(180deg);backface-visibility:hidden}
+.study-leaf::after{content:"";pointer-events:none;position:absolute;inset:0;border-radius:5%;background:linear-gradient(115deg,transparent 30%,#ffefc666 48%,#f1f9ff9c 51%,transparent 61%) 125% 0/350% 100%;opacity:0;animation:study-glint .74s ease-out both;animation-delay:calc(var(--ordinal)*65ms + 220ms)}
+.opening-study .study-slot .card{--cw:var(--unit);--ch:calc(var(--unit)*1.46);width:100%;height:100%;margin:0;cursor:pointer;backface-visibility:hidden;filter:drop-shadow(0 6px 5px #02071188);outline:0;box-shadow:none}
+.opening-study .card:focus-visible{outline:2px solid #e4d3a9;outline-offset:3px}
+.market-study .study-slot::after{content:"";position:absolute;left:4%;right:3%;bottom:-10px;height:6px;border-radius:50%;background:#06121b9e;filter:blur(3px);z-index:-1}
+.market-study .study-lift{transition:transform .24s ease}
+@media(hover:hover){.market-study .study-slot:hover .study-lift{transform:translateY(-9px) rotateX(-3deg)}}
+@keyframes study-deal{0%{opacity:0;transform:translate3d(-15%,23%,0) rotateY(-115deg) rotateZ(-5deg)}22%{opacity:1}78%{transform:translateY(-2%) rotateY(7deg)}100%{transform:none}}
+@keyframes study-glint{0%{opacity:0;background-position:125% 0}24%{opacity:.8}100%{opacity:0;background-position:-25% 0}}
+.hand-study{--unit:min(18vw,20.2dvh,210px);--gap:clamp(10px,2.1vw,36px)}
+.hand-study .study-content{flex-direction:column;gap:clamp(10px,2.5vh,27px)}
+.study-lane{display:flex;align-items:center;justify-content:center;width:min(100%,990px);position:relative;isolation:isolate}
+.study-lane::before{content:"";position:absolute;inset:10% 0 6%;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,transparent,#5785a31c 25%,#48799720 65%,transparent);
+  border-block:1px solid #b2d1e01e;clip-path:polygon(0 0,100% 0,98% 100%,2% 100%)}
+.return-lane::before{background:linear-gradient(90deg,transparent,#ada17c17 35%,#a19b841a 65%,transparent);border-color:#d3c08b29}
+.lane-title{position:absolute;left:15px;top:12%;padding:8px 0 7px;border-bottom:1px solid #91abc161;color:#c9d7e1;font:500 clamp(13px,2vmin,21px)/1.4 "Yu Mincho",serif;letter-spacing:.14em}
+.return-lane .lane-title{color:#e2ceaa;border-color:#b7a8825e}
+.lane-slots{display:flex;justify-content:center;gap:var(--gap);align-items:center}
+.return-socket,.keep-lane .study-slot::before{border:1px solid #c0b79d61;border-radius:5%;box-shadow:inset 0 2px 10px #0006,0 1px #d4cbb629;background:linear-gradient(145deg,#0a1422a3,#20324480)}
+.return-socket{display:grid;place-items:center}
+.return-socket::before,.keep-lane .study-slot::after{content:"";position:absolute;inset:5px;border:1px solid #c5c1a21a;border-radius:4%;pointer-events:none}
+.return-arrow{font:normal calc(var(--unit)*.49)/1 Georgia,serif;color:#c2b89648;transform:rotate(-20deg);text-shadow:0 1px #eff1c51f}
+.keep-lane .study-slot{perspective:none}
+.keep-lane .study-slot::before{content:"";position:absolute;inset:0;border-color:#92b9d557}
+.keep-lane .study-lift{z-index:1;transform:translate(var(--dx,0),var(--dy,0));transition:transform .38s cubic-bezier(.22,.75,.16,1)}
+.keep-lane .goes-back{z-index:4}
+.opening-study .goes-back .card.is-picked{transform:none;filter:drop-shadow(0 0 3px #f8dfad) drop-shadow(0 6px 6px #03071399)}
+.hand-study .study-slot:not(.goes-back) .card[aria-disabled=true]{cursor:default}
+.is-confirmed .keep-lane .card{cursor:default}
+@media(max-width:720px) and (orientation:portrait){
+ .opening-study{padding:clamp(22px,5vh,60px) 16px max(20px,4vh,env(safe-area-inset-bottom))}
+ .study-clock{grid-template-columns:1fr;text-align:center;gap:2px;min-width:48px}.study-clock-label{font-size:10px}
+ .market-study .study-rack{gap:clamp(12px,2vh,24px) 2vw;align-content:center}
+ .market-study .study-rack::before{inset:auto -12px 4%;height:63%}
+ .hand-study{--gap:3vw}
+ .study-lane{padding-top:32px}.lane-title{top:0;left:0;padding:0 0 3px;font-size:14px}
+ .study-lane::before{inset:22px -8px -6px}.study-status{font-size:11px}.study-action{padding-inline:12px;min-width:145px}
 }
-.preview-modal .pv-cards>.card:hover { transform:translateY(-5px); }
-.preview-modal .pv-cards>.card:focus-visible { outline:2px solid #f2e5c9; outline-offset:5px; }
-.preview-modal .pv-hint { margin-top:14px; font-size:12px; color:#e3e3dd; text-shadow:0 1px 4px #071321; }
-.preview-modal .pv-swipe { display:none; }
-.preview-modal .pv-foot { display:grid; justify-items:center; gap:14px; padding:20px 16px max(24px,env(safe-area-inset-bottom)); }
-.preview-modal .pv-count { min-height:20px; font:13px var(--mono); color:#dce5ee; }
-.preview-modal #pvReady { min-height:48px; min-width:240px; border-radius:3px; border:1px solid #cbb68b; background:linear-gradient(180deg,#263d50,#132537); color:#f2e5c9; box-shadow:0 4px 20px #020b1650,inset 0 1px #ffffff18; font-size:14px; letter-spacing:.07em; }
-.preview-modal #pvReady:hover:not(:disabled) { background:#304b60; }
-.preview-modal #pvReady:disabled { opacity:.65; }
-@media(max-width:600px) {
-  .preview-modal { grid-template-rows:minmax(125px,1fr) auto minmax(130px,1fr); }
-  .preview-modal .pv-stage { padding:0 12px; }
-  .preview-modal .pv-swipe { display:inline; }
-  .preview-modal .pv-cards { justify-content:flex-start; gap:16px; padding:22px 12px 28px; }
-  .preview-modal .pv-cards>.card { --cw:clamp(150px,43vw,190px); }
-  .preview-modal .pv-heading { padding-top:max(24px,env(safe-area-inset-top)); }
-  .preview-modal .pv-heading p { font-size:12px; }
+@media(max-height:500px) and (orientation:landscape){
+ .opening-study{padding:9px 4vw}.study-head{padding-bottom:6px}.study-title{font-size:24px}.study-description{margin-top:1px;font-size:11px}
+ .study-foot{padding-top:4px;min-height:35px}.study-action{min-height:34px;padding-block:3px}
+ .hand-study{--unit:min(13vw,18dvh)}.hand-study .study-content{gap:8px}
+ .study-rack{padding-block:16px}.study-clock{padding-bottom:4px}
 }
-@media(max-height:540px) and (min-width:601px) {
-  .preview-modal { grid-template-rows:auto auto auto; }
-  .preview-modal .pv-heading { padding:12px 16px 8px; }
-  .preview-modal .pv-eyebrow { display:none; }
-  .preview-modal h2 { font-size:22px; margin:0 0 4px; }
-  .preview-modal .pv-cards { padding-block:12px; }
-  .preview-modal .pv-cards>.card { --cw:min(125px,25dvh); }
-  .preview-modal .pv-hint { margin-top:6px; font-size:10px; }
-  .preview-modal .pv-foot { display:flex; justify-content:center; gap:20px; padding:10px 16px max(12px,env(safe-area-inset-bottom)); }
-  .preview-modal #pvReady { min-height:44px; min-width:210px; }
+@media(prefers-reduced-motion:reduce){
+ .opening-study *,.opening-study *::after,.opening-study *::before{animation:none!important;transition:none!important}
 }
-@media(prefers-reduced-motion:reduce) {
-  .preview-modal .card { transition:none; }
+.hand-study.is-submitted .goes-back .study-leaf{animation:study-return .42s cubic-bezier(.48,.05,.82,.32) forwards}
+@keyframes study-return{0%{transform:none}100%{transform:perspective(800px) translate(28%,-55%) rotateY(160deg) scale(.62);opacity:0}}
+@media(prefers-reduced-motion:reduce){.hand-study.is-submitted .goes-back .study-leaf{animation:none!important}}
+/* The print and its caption come from the very card lit in the row below. */
+.market-study .study-content{flex-direction:column;gap:clamp(2px,1vh,12px);justify-content:center}
+.market-feature{position:relative;isolation:isolate;overflow:hidden;flex:1 1 0;max-height:34dvh;min-height:0;width:min(100%,1520px);display:flex;align-items:center;
+  background:linear-gradient(110deg,#0c1828ed 10%,#102137d9 58%,#16233673);border-bottom:1px solid #d5c39566}
+.feature-art{position:absolute;z-index:-1;inset:0 0 0 26%;mask-image:linear-gradient(90deg,transparent,#0008 22%,black 45%);}
+.feature-print{width:100%;height:100%;object-fit:cover;object-position:50% 41%;animation:study-print .42s ease-out both}
+.market-feature::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#0c172890 0%,#0c17284a 51%,transparent 78%),linear-gradient(0deg,#0a142a83,transparent 45%);pointer-events:none}
+.feature-caption{max-width:min(49%,620px);padding:clamp(14px,2.2vw,36px);text-align:left}
+.feature-type{color:#e4cd9f;font-size:clamp(11px,1.4vmin,15px);letter-spacing:.22em}
+.feature-name{margin:5px 0 8px;color:#fff5e4;font:500 clamp(24px,4.3vmin,50px)/1.2 Georgia,"Shippori Mincho","Yu Mincho",serif;letter-spacing:.07em}
+.feature-rules{color:#d2dbe3;font-size:clamp(12px,1.6vmin,16px);line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@keyframes study-print{from{opacity:.35;transform:scale(1.035)}to{opacity:1;transform:none}}
+.market-study .study-rack{--unit:min(215px,calc((90vw - (var(--count) - 1)*1vw - 16px)/var(--count)),22dvh);padding-block:clamp(13px,2.3vh,30px)}
+.study-slot.in-focus .study-leaf{filter:drop-shadow(0 0 2px #ffdf9e)}
+.study-slot.in-focus::after{background:#debb7c;box-shadow:0 0 8px #edcd8b;bottom:-7px;height:2px}
+.study-lane::before{background:linear-gradient(100deg,transparent 1%,#41617c3b 16%,#3c627a1a 68%,transparent 100%)}
+.return-lane::before{background:linear-gradient(100deg,transparent 1%,#8c82703b 20%,#77715b1d 68%,transparent 100%)}
+.lane-title{display:flex;align-items:center;gap:9px}
+.lane-mark{font:normal 1.35em Georgia;color:#b8d1df}
+.return-lane .lane-mark{color:#e0c797}
+.return-socket{background:radial-gradient(ellipse at 50% 50%,#8b795e20,transparent 70%),linear-gradient(145deg,#090f19bf,#20324499)}
+.return-arrow{color:#c2b89678}
+@media(max-width:720px) and (orientation:portrait){
+ .market-feature{max-height:31dvh;margin-top:10px;flex:0 1 230px}
+ .market-study .study-content{gap:8px}
+ .feature-art{left:8%;mask-image:linear-gradient(90deg,transparent,#0009 32%,black 65%)}
+ .feature-caption{max-width:70%;padding:14px;text-shadow:0 1px 7px #08101e}
+ .feature-name{font-size:clamp(22px,5.8vw,30px)}.feature-rules{font-size:12px;line-height:1.6;-webkit-line-clamp:3}
+ .market-study .study-rack{--unit:min(20.5vw,16dvh);padding-block:10px}
+ .hand-study{--unit:min(26vw,19dvh,155px)}
+}
+@media(max-height:500px) and (orientation:landscape){
+ .market-feature{max-height:34dvh}.feature-name{font-size:21px;margin:1px 0 3px}
+ .feature-caption{padding:7px 20px}.feature-rules{line-height:1.28;font-size:11px;-webkit-line-clamp:2}
+ .market-study .study-rack{--unit:min(11vw,24dvh);padding-block:8px}
+ .hand-study{--unit:min(14vw,19dvh)}
 }
