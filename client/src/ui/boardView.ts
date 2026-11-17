@@ -1077,7 +1077,7 @@ export class GameView {
     const ring = content.content.querySelector<HTMLElement>('.pt-ring')!;
     if (retained) {
       // Detaching a native animated image can restart its clock during an HP update.
-      for (const child of [...el.children]) if (child!==retained) child.remove();
+      for (const child of [...el.childNodes]) if (child!==retained) child.remove();
       while (content.content.firstChild!==ring) retained.before(content.content.firstChild!);
       ring.remove();retained.after(content.content);
     } else {

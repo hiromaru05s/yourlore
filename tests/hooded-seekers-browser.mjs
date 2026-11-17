@@ -14,16 +14,20 @@ try{
  await page.setViewportSize({width:1280,height:900});await page.goto(origin+'/hooded-board.html');await page.waitForFunction(()=>window.hoodedBoard?.ready,null,{timeout:120000});await page.waitForFunction(()=>document.querySelectorAll('.seeker-motion[data-ready=true]').length===2);
  const loop=page.locator('#portraitMe img.seeker-idle');await loop.waitFor({state:'visible'});assert(await page.locator('#portraitOpp img.seeker-idle').isVisible());
  const idleA=await loop.screenshot();await page.waitForTimeout(800);assert(!(await loop.screenshot()).equals(idleA),'GIF moves while the board is idle');
+ const retainedIdle=await loop.elementHandle();
  const portraits=await page.locator('.seeker-motion').evaluateAll(cs=>cs.map(c=>c.toDataURL()));assert.equal(portraits[0],portraits[1]);checks.push('both board sides use the same gender-neutral portrait');
  const histories={};
  for(const [action,side,hit] of [['hurt',0,true],['heavy',1,true],['mana',0,false],['heal',1,false],['brand',0,false]]){
   const history=await page.evaluate(async({action,side})=>{
    const c=document.querySelector(side?'#portraitOpp canvas':'#portraitMe canvas'),seen=[c.dataset.action+':'+c.dataset.frame];
    const ob=new MutationObserver(()=>seen.push(c.dataset.action+':'+c.dataset.frame));ob.observe(c,{attributes:true,attributeFilter:['data-frame']});
+   const film=c.nextElementSibling;let stayedLive=true;
+   const checkLive=new MutationObserver(()=>{if(c.dataset.action!=='idle')stayedLive &&= !film.hidden && film.isConnected && !!film.style.filter;});
+   checkLive.observe(c,{attributes:true,attributeFilter:['data-frame']});
    await hoodedBoard.trigger(action,side);
    const deadline=performance.now()+12000;
    while(c.dataset.action!=='idle'&&performance.now()<deadline)await new Promise(requestAnimationFrame);
-   ob.disconnect();return seen;
+   ob.disconnect();checkLive.disconnect();if(!stayedLive)throw Error('Reaction replaced the breathing image');return seen;
   },{action,side});histories[action]=history;
   assert.equal(history.some(v=>v.startsWith('heal:')),action==='heal');assert.equal(history.some(v=>v.startsWith('mana:')),action==='mana');assert.equal(history.some(v=>v.startsWith('hurt:')),hit,action+': '+JSON.stringify(history));assert.equal(history.at(-1),'idle:0');checks.push('controller '+action+' '+(hit?'reacts once':'settles to idle'));
  }
@@ -33,6 +37,7 @@ try{
    const frame=c.dataset.frame;hoodedBoard.rerender();hoodedBoard.play('me','hurt');
    return c===document.querySelector('#portraitMe canvas')&&frame===c.dataset.frame&&c.dataset.action==='hurt';
  });assert(continuity);
+ assert(await loop.evaluate((el,kept)=>el===kept,retainedIdle),'same GIF node across a board update');
  await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.play('opp','hurt');});
  assert.equal(await page.locator('.seeker-motion[data-action=hurt]').count(),2);
  await page.waitForFunction(()=>document.querySelectorAll('.seeker-motion[data-action=idle]').length===2);

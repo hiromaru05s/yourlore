@@ -125,6 +125,7 @@ export function playSeekerSide(side: 'me' | 'opp', action: SeekerAction): void {
   playSeeker(document.querySelector<HTMLCanvasElement>(`#portrait${side === 'me' ? 'Me' : 'Opp'} .seeker-motion`), action);
 }
 export function setSeekerSkip(value: boolean): void {
+  if (paused === value) return;
   paused = value;
   for (const [canvas, player] of players) if (player.board) resetSeeker(canvas);
 }
