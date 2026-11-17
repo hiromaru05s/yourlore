@@ -15,7 +15,7 @@ try{
   for(let i=0;g.pending&&i<5;i++)g=verify(g,C.safeGreedy(g));
  }
  let g=JSON.parse(await readFile('tests/fixtures/bot-tactical-heavy.json','utf8'));
- for(let i=0;i<1000;i++){g=verify(g,C.safeGreedy(g));if(g.over)g=C.createGame({mode:'bot',seed:15000+i,starting:i%2,p0:{id:'a',name:'a',deck:C.BOT_HELL_DECKS[i%3].cards},p1:{id:'b',name:'b',deck:C.BOT_ELITE_DECKS[i%3].cards}}).state;}
+ for(let i=0;i<1000;i++){g=verify(g,C.safeGreedy(g));if(g.over)g=C.createGame({mode:'bot',seed:15000+i,starting:i%2,p0:{id:'a',name:'a',deck:C.BOT_HELL_DECKS[i%C.BOT_HELL_DECKS.length].cards},p1:{id:'b',name:'b',deck:C.BOT_ELITE_DECKS[i%C.BOT_ELITE_DECKS.length].cards}}).state;}
  const events=[];const emit=()=>C.monsterActivation(g,events,g.players[0],{uid:'source'});
  C.withoutMonsterPresentation(()=>{C.withoutMonsterPresentation(emit);emit();});assert.equal(events.length,0);
  assert.throws(()=>C.withoutMonsterPresentation(()=>{throw Error('test');}));emit();assert.equal(events.length,1);
