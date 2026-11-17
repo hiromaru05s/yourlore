@@ -29,14 +29,14 @@ export function closeOverlay(): void {
  releaseFocus();getRoot().innerHTML='';if(returnFocus?.isConnected)returnFocus.focus();returnFocus=null;
 }
 
-function mount(node: HTMLElement): void {
+function mount(node: HTMLElement, initialFocus?: HTMLElement): void {
   if(!getRoot().children.length)returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
   releaseFocus();
   node.setAttribute('role','dialog');node.setAttribute('aria-modal','true');node.tabIndex=-1;
   const title=node.querySelector('h2');if(title){title.id ||= 'lore-dialog-'+(++dialogSerial);node.setAttribute('aria-labelledby',title.id);}
   const focusables=()=>[...node.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]')].filter(el=>el.getClientRects().length>0);
   const focus=()=>{(focusables()[0]??node).focus();};
-  const keys=(event:KeyboardEvent)=>{if(event.key!=='Tab'||document.getElementById('zoomOverlay'))return;const items=focusables(),at=items.indexOf(document.activeElement as HTMLElement);event.preventDefault();(items.length?items[(at+(event.shiftKey?-1:1)+items.length)%items.length]:node).focus();};
+  const keys=(event:KeyboardEvent)=>{if(event.key!=='Tab'||document.getElementById('zoomOverlay'))return;const items=focusables(),at=items.indexOf(document.activeElement as HTMLElement);event.preventDefault();(items.length?items[event.shiftKey?(at>0?at-1:items.length-1):(at+1)%items.length]:node).focus();};
   const keepFocus=(event:FocusEvent)=>{if(node.isConnected&&!document.getElementById('zoomOverlay')&&!node.contains(event.target as Node))focus();};
   document.addEventListener('keydown',keys);document.addEventListener('focusin',keepFocus);
   releaseFocus=()=>{document.removeEventListener('keydown',keys);document.removeEventListener('focusin',keepFocus);};
@@ -59,7 +59,7 @@ function mount(node: HTMLElement): void {
   ov.appendChild(node);
   getRoot().innerHTML = "";
   getRoot().appendChild(ov);
-  focus();
+  if(initialFocus)initialFocus.focus({preventScroll:true});else focus();
 }
 
 export function showDealRewards(quest: QuestState, onClaim: (cost: typeof DEAL_REWARDS[number]['cost']) => void): void {
@@ -142,7 +142,7 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
 export function marketPreview(market: CardInst[], supply: (CardInst|null)[] | undefined, onReady: () => void): { setUntil(u: number | null): void; close(): void } {
   const scene=buildMarketStudy(market,supply,onReady);let until:number|null=null;
   const tick=()=>scene.update(until);
-  mount(scene.node);scene.button.focus({preventScroll:true});tick();
+  mount(scene.node,scene.button);tick();
   const close=studyLifetime(scene.node,tick);
   return {setUntil(u){until=u;tick();},close};
 }
@@ -252,7 +252,7 @@ function studyLifetime(node:HTMLElement,tick:()=>void,dispose=()=>{}):()=>void {
 
 export function openingHandDialog(state:GameState,you:Side,select:(uids:string[])=>void,secondsLeft:()=>number):()=>void {
   const scene=buildHandStudy(state,you,select);
-  const tick=()=>scene.update(secondsLeft());mount(scene.node);tick();
+  const tick=()=>scene.update(secondsLeft());mount(scene.node,scene.node);tick();
   return studyLifetime(scene.node,tick,scene.dispose);
 }
 
