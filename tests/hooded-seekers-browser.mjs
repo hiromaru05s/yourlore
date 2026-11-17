@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
-const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out='docs/characters/2026-10-12-faceless-illustrated/qa';
+const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5194',out=process.env.LORE_SEEKER_QA_OUT||'/tmp/lore-daylight-seeker-qa';
 await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true}),context=await browser.newContext({viewport:{width:1280,height:900}}),page=await context.newPage();
 const checks=[],errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>requests.push(r.url()));
@@ -12,36 +12,51 @@ try{
    ob.disconnect();return seen;});assert(states.filter(v=>v.startsWith('hurt:')).length>5);assert.equal(states.at(-1),'idle:0');checks.push('preview advances through recoil and restores idle');
  await page.screenshot({path:out+'/studio-desktop.png'});await page.setViewportSize({width:390,height:844});await page.screenshot({path:out+'/studio-mobile.png',fullPage:true});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));checks.push('390px preview fits');
  await page.setViewportSize({width:1280,height:900});await page.goto(origin+'/hooded-board.html');await page.waitForFunction(()=>window.hoodedBoard?.ready,null,{timeout:120000});await page.waitForFunction(()=>document.querySelectorAll('.seeker-motion[data-ready=true]').length===2);
+ const loop=page.locator('#portraitMe img.seeker-idle');await loop.waitFor({state:'visible'});assert(await page.locator('#portraitOpp img.seeker-idle').isVisible());
+ const idleA=await loop.screenshot();await page.waitForTimeout(800);assert(!(await loop.screenshot()).equals(idleA),'GIF moves while the board is idle');
+ const retainedIdle=await loop.elementHandle();
  const portraits=await page.locator('.seeker-motion').evaluateAll(cs=>cs.map(c=>c.toDataURL()));assert.equal(portraits[0],portraits[1]);checks.push('both board sides use the same gender-neutral portrait');
  const histories={};
  for(const [action,side,hit] of [['hurt',0,true],['heavy',1,true],['mana',0,false],['heal',1,false],['brand',0,false]]){
   const history=await page.evaluate(async({action,side})=>{
-   const c=document.querySelector(side?'#portraitOpp canvas':'#portraitMe canvas'),seen=[c.dataset.action+':'+c.dataset.frame];
+   const c=document.querySelector(side?'#portraitOpp .seeker-motion':'#portraitMe .seeker-motion'),seen=[c.dataset.action+':'+c.dataset.frame];
    const ob=new MutationObserver(()=>seen.push(c.dataset.action+':'+c.dataset.frame));ob.observe(c,{attributes:true,attributeFilter:['data-frame']});
+   const film=c.nextElementSibling;let stayedLive=true,usedHealingRise=false;
+   const watchHealing=()=>{
+     if(c.dataset.action!=='heal')return;
+     const filterId=film.style.filter.match(/#([^")]+)/)?.[1];
+     const filter=document.getElementById(filterId);
+     usedHealingRise ||= filter?.querySelector('[data-diffuse]')?.getAttribute('flood-color')==='#58db67';
+   };
+   const checkLive=new MutationObserver(()=>{watchHealing();if(c.dataset.action!=='idle')stayedLive &&= !film.hidden && film.isConnected && (c.dataset.action==='mana'?!!c.parentNode.querySelector('canvas[data-playing=M1]:not([hidden])'):!!film.style.filter);});
+   checkLive.observe(c,{attributes:true,attributeFilter:['data-frame']});
    await hoodedBoard.trigger(action,side);
    const deadline=performance.now()+12000;
    while(c.dataset.action!=='idle'&&performance.now()<deadline)await new Promise(requestAnimationFrame);
-   ob.disconnect();return seen;
+   ob.disconnect();checkLive.disconnect();if(action==='heal'&&!usedHealingRise)throw Error('Healing did not use H7 on the live GIF');if(!stayedLive)throw Error('Reaction replaced the breathing image');return seen;
   },{action,side});histories[action]=history;
   assert.equal(history.some(v=>v.startsWith('heal:')),action==='heal');assert.equal(history.some(v=>v.startsWith('mana:')),action==='mana');assert.equal(history.some(v=>v.startsWith('hurt:')),hit,action+': '+JSON.stringify(history));assert.equal(history.at(-1),'idle:0');checks.push('controller '+action+' '+(hit?'reacts once':'settles to idle'));
  }
  const continuity=await page.evaluate(async()=>{
-   const c=document.querySelector('#portraitMe canvas');
+   const c=document.querySelector('#portraitMe .seeker-motion');
    hoodedBoard.play('me','hurt');await new Promise(r=>setTimeout(r,250));
    const frame=c.dataset.frame;hoodedBoard.rerender();hoodedBoard.play('me','hurt');
-   return c===document.querySelector('#portraitMe canvas')&&frame===c.dataset.frame&&c.dataset.action==='hurt';
+   return c===document.querySelector('#portraitMe .seeker-motion')&&frame===c.dataset.frame&&c.dataset.action==='hurt';
  });assert(continuity);
+ assert(await loop.evaluate((el,kept)=>el===kept,retainedIdle),'same GIF node across a board update');
  await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.play('opp','hurt');});
  assert.equal(await page.locator('.seeker-motion[data-action=hurt]').count(),2);
  await page.waitForFunction(()=>document.querySelectorAll('.seeker-motion[data-action=idle]').length===2);
  assert.deepEqual(await page.locator('.seeker-motion').evaluateAll(cs=>cs.map(c=>c.toDataURL())),portraits);
  await page.screenshot({path:out+'/board-desktop.png'});await page.setViewportSize({width:390,height:844});await page.waitForTimeout(300);await page.screenshot({path:out+'/board-mobile.png'});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));checks.push('mobile board framing');
- await page.emulateMedia({reducedMotion:'reduce'});await page.evaluate(()=>hoodedBoard.play('me','hurt'));assert.equal(await page.locator('#portraitMe canvas').getAttribute('data-frame'),'0');await page.emulateMedia({reducedMotion:'no-preference'});checks.push('reduced motion stays static');
- await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.skip(true);});assert.equal(await page.locator('#portraitMe canvas').getAttribute('data-frame'),'0');await page.evaluate(()=>hoodedBoard.skip(false));assert.equal(await page.locator('.pt-ring').evaluateAll(rs=>rs.flatMap(r=>r.getAnimations()).length),0);checks.push('skip settles hit and frame motion');
- await page.evaluate(()=>hoodedBoard.trigger('victory',0));assert.equal(await page.locator('#portraitMe canvas').getAttribute('data-frame'),'0');assert.equal(await page.locator('#portraitOpp canvas').getAttribute('data-frame'),'0');checks.push('victory and defeat keep the static portrait');
+ await page.emulateMedia({reducedMotion:'reduce'});await loop.waitFor({state:'hidden'});await page.evaluate(()=>hoodedBoard.play('me','hurt'));assert.equal(await page.locator('#portraitMe .seeker-motion').getAttribute('data-frame'),'0');await page.emulateMedia({reducedMotion:'no-preference'});await loop.waitFor({state:'visible'});checks.push('reduced motion stays static');
+ await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.skip(true);});assert.equal(await page.locator('#portraitMe .seeker-motion').getAttribute('data-frame'),'0');await page.evaluate(()=>hoodedBoard.skip(false));assert.equal(await page.locator('.pt-ring').evaluateAll(rs=>rs.flatMap(r=>r.getAnimations()).length),0);checks.push('skip settles hit and frame motion');
+ await page.evaluate(()=>hoodedBoard.trigger('victory',0));assert.equal(await page.locator('#portraitMe .seeker-motion').getAttribute('data-frame'),'0');assert.equal(await page.locator('#portraitOpp .seeker-motion').getAttribute('data-frame'),'0');checks.push('victory and defeat keep the static portrait');
  await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.destroy();});assert.equal(await page.evaluate(()=>hoodedBoard.count()),0);checks.push('destroy releases players and timers');
  await page.setViewportSize({width:1280,height:900});await page.goto(origin+'/profile-lab.html');await page.waitForSelector('.pf-ava .hooded-seeker');
- assert.equal(await page.locator('#avaBtn, .pf-ava-edit').count(),0);await page.locator('.pf-ava').click();assert.equal(await page.locator('.hooded-picker').count(),0);checks.push('fixed portrait has no edit control or picker');
+ await page.locator('[data-edit-look]').click();const picker=page.locator('dialog.appearance-picker');await picker.waitFor();
+ assert.match(await picker.locator('.appearance-aperture img').getAttribute('src'),/daylight-v1\/portrait/);
+ await picker.locator('[data-cancel]').click();checks.push('profile picker uses the refreshed deck portrait');
  await page.locator('[data-tab=settings]').click();assert.equal(await page.locator('[data-character-settings]').count(),0);assert.equal(await page.locator('#renderQuality').count(),1);checks.push('settings omit character selection and retain graphics settings');
  await page.setViewportSize({width:320,height:740});await page.locator('[data-tab=overview]').click();await page.screenshot({path:out+'/profile-mobile.png',fullPage:true});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
  const retired=requests.filter(r=>/hooded-v1|seekers\/(menu-v1|v2)\/.+\.webp|biblion\/seeker-(blue|red)(-lossless)?\.(png|webp)/.test(r));assert.deepEqual(retired,[]);assert.deepEqual(errors,[]);

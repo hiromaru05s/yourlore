@@ -7,7 +7,17 @@
 [data-background="rose"] {--appearance-plate:#c79a9e;}
 [data-background="violet"] {--appearance-plate:#aaa1c8;}
 .portrait .seeker-motion[data-background] {background-color:var(--appearance-plate);}
-
+/* Keep the GIF and its material maps in the same square on both portrait masks. */
+.portrait .pt-ring[data-background] .avatar-seeker:has(> img.seeker-idle) {
+  container-type:size;background-color:var(--appearance-plate)!important;
+}
+.portrait .pt-ring .avatar img.seeker-idle {
+  position:absolute;inset:50% auto auto 50%;translate:-50% -50%;
+  width:min(100cqw,100cqh)!important;height:min(100cqw,100cqh)!important;
+  object-fit:contain!important;object-position:center!important;background:transparent;
+}
+.portrait .pt-ring .avatar img.seeker-idle[hidden] {display:none!important;}
+.portrait .seeker-motion:has(+img.seeker-idle:not([hidden])) {opacity:0;}
 /* Legacy illustrated avatars have opaque artwork. Leave a band of the selected
    color inside the portrait mask without changing the surrounding game board. */
 .portrait .pt-ring[data-background]:not([data-background="plain"]) .avatar:not(.avatar-seeker) img {
@@ -15,3 +25,5 @@
   padding:6%;
   background-color:var(--appearance-plate);
 }
+.portrait .seeker-study-ink{position:absolute;inset:50% auto auto 50%;translate:-50% -50%;width:min(100cqw,100cqh);height:min(100cqw,100cqh);background:transparent;pointer-events:none}
+.portrait canvas.seeker-study-ink[hidden]{display:none!important}

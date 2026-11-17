@@ -1,0 +1,27 @@
+:root{color-scheme:dark;font-family:system-ui,sans-serif;color:#e8eff9;background:#081526}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:radial-gradient(ellipse at 47% 26%,#263e56,#071322 76%)}
+#studies{width:min(960px,97vw);margin:14px auto;padding:clamp(13px,2.5vw,30px);position:relative}
+#studies header,.section-title,.transport,.caption{display:flex;align-items:center}
+#studies header,.section-title{justify-content:space-between;gap:12px}h1,h2,h3{margin:0;font-weight:550}
+h1{font-size:clamp(17px,2.8vw,26px);letter-spacing:.10em}.transport{gap:15px;color:#d0ddef;font-size:12px}
+.transport label{display:flex;align-items:center;gap:4px}.transport select{font:inherit;color:inherit;background:#122941;border:1px solid #67849b;border-radius:3px}
+section{margin-top:18px;border-top:1px solid #7a98b747;padding-top:10px}.section-title h2{font-size:15px;letter-spacing:.12em;color:#c9e8ff}
+section+section h2{color:#c9e7d6}.row-play{border:1px solid #677f96;background:#152e47;color:#edf4fc;cursor:pointer;border-radius:3px;padding:4px 12px;font:inherit;font-size:12px}
+.study-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px 0}
+article{text-align:center;padding:0 6px}article+article{border-left:1px solid #8ca7bf28}
+.preview{display:block;border:0;background:none;padding:0;margin:0 auto;cursor:pointer;width:min(100%,220px,29vh)}
+.study-frame{display:block;position:relative;width:100%;aspect-ratio:1.345}
+.study-frame::after{content:'';position:absolute;inset:0;background:url('/art/biblion/refined/portrait-self.png') center/100% 100%;pointer-events:none}
+.aperture{position:absolute;inset:0;background:#fff;mask:url('/art/seekers/v2/mask-self.png') center/100% 100%;display:grid;place-items:center}
+.film-square{position:relative;height:100%;aspect-ratio:1}.gallery-film,.film-square canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.caption{justify-content:center;gap:7px;flex-wrap:wrap}.caption b{font:600 11px ui-monospace,monospace;color:#9cb7cd}.caption h3{font-size:clamp(12px,1.75vw,16px);letter-spacing:.035em}
+article a{display:inline-block;margin-top:4px;color:#b9cee2;font-size:11px;text-underline-offset:3px}.preview:focus-visible,.row-play:focus-visible,a:focus-visible{outline:2px solid #b6daee;outline-offset:2px}
+@media(max-width:520px){#studies{padding:12px 8px}.transport{gap:6px;font-size:10px}#studies header{align-items:flex-start}.caption{gap:3px}article{padding:2px}.caption b{font-size:9px}.caption h3{font-size:11px}section{margin-top:16px}}
+
+#studies:has(section[hidden]) .preview{width:min(100%,275px)}
+
+section[data-kind="heal"] .study-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:620px){
+  section[data-kind="heal"] .study-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px}
+  section[data-kind="heal"] article:nth-child(3){border-left:0}
+}

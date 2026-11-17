@@ -87,7 +87,7 @@ import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
 import {MANA_GAIN_MS,MANA_GAIN_IMPACT_MS,manaGainPose} from './manaGainTiming';
 import {playNpcReaction, skipNpcReactions} from './npcReaction';
-import {damageAction, playSeekerLight, playSeekerSide, setSeekerSkip} from './seekerAnimation';
+import {playSeekerLight, setSeekerSkip} from './seekerAnimation';
 import {holdDrawHand,type HandLayout} from './handGeometry';
 import {mountDuelOutcome,cancelDuelOutcome} from './duelOutcome';
 import {reserveMonster} from './fieldLayout';
@@ -639,8 +639,6 @@ export async function soulHarvest(source:HTMLElement|null,side:ViewSide,damage:n
 }
 
 export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number): void {
-  const action=kind==='dmg'?damageAction(amount):null;
-  if(action&&!fxSkip)playSeekerSide(side,action);
   const bar = document.getElementById("hpbar-" + side);
   const num = document.getElementById("hp-" + side);
   if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }

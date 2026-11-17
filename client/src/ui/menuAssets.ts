@@ -1,4 +1,5 @@
 export {duelFileAssets} from './duelFileAssets';
+import {seekerIdle} from './seekerMotion';
 import {DB, STARTERS, PASSIVES, SLEEVE_LIST, frameFor, fieldFrameFor} from '../shared/cards';
 import {COSMETICS} from '../shared/cosmetics';
 import {CARD_EFFECTS} from '../shared/cardEffects';
@@ -27,7 +28,7 @@ export function menuAssetUrls():string[]{
   '/art/brand/lore-logo-transparent.webp',
   '/art/lounge/toon-balanced-20261026/library-wide.webp', '/art/lounge/toon-balanced-20261026/ivy.webp', '/art/lounge/toon-soft-20261026/clouds.webp',
   '/art/lounge/stage-v1/sigil.webp', '/art/lounge/duel-ink-v1/disc.png',
-  '/art/seekers/faceless-v2/portrait.webp', '/art/seekers/faceless-v2/poses.webp',
+  seekerIdle(),
   ...BOT_NPCS.map(n=>n.portrait),
   ...Object.keys({...DB,...STARTERS}).flatMap(id=>[artUrl.sm(id),artUrl.xs(id),artUrl.full(id)]),
   ...(['mon','spell','trap','quest','starter'] as const).flatMap(t=>[frameFor(t),frameFor(t,true),fieldFrameFor(t)]),
