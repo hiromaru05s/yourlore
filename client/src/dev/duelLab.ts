@@ -70,6 +70,7 @@ if (import.meta.env.DEV) {
   const view = new GameView(document.getElementById('app')!,0,handlers);
   function render(){view.render(g);}
   render();
+  if(new URLSearchParams(location.search).has('spend'))void import('./mana-spend/lab').then(m=>m.mountSpendLab(g,render));
   let remaining=90;
   const tick=()=>paintDuelClock(document.getElementById('clock-me')!, remaining,90,g.cur===0);
   if(polish){
