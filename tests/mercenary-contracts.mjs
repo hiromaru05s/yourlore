@@ -72,12 +72,12 @@ check('Casino dice on summon are independent of contracts and count for either C
     }
   }
 });
-check('Guildmaster upkeep uses only the owner’s turn with or without Mercenary Arts',()=>{
+check('Guildmaster rolls no Casino dice at the start of either turn',()=>{
   for(const side of [0,1]) for(const ownTurn of [false,true]){
     const g=fresh();g.cur=ownTurn?1-side:side;g.players[side].field=[mon('MERC_MASTER')];
     g.players[1-side].field=[mon('CASINO')];enchant(g,'MERC_ART',side);
     const {events}=E.reduce(g,{type:'endTurn'});
-    assert.deepEqual(events.filter(e=>e.type==='dice' && e.source.id==='MERC_MASTER').map(e=>e.rolls.length),ownTurn?[10]:[]);
+    assert(!events.some(e=>e.type==='dice' && e.source.id==='MERC_MASTER'));
   }
 });
 check('a different killer or a bounced and replayed target earns no bounty',()=>{
@@ -118,4 +118,13 @@ check('persisted rooms refresh prices and stats while retaining UIDs and damage'
   g.market[0]={...card('MERCENARY'),cost:2};
   E.restoreReworkedCards(g);E.restoreReworkedCards(g);
   assert.deepEqual([old.cost,old.atk,old.def,old.dmg],[5,5,3,2]);assert.equal(g.market[0].cost,1);
+});
+check('resumed rooms refresh Guildmaster rules without restoring its field stats',()=>{
+  const g=fresh();
+  g.mercReworkApplied=true;
+  const master={...mon('MERC_MASTER'),atk:1,dmg:2,textJa:'old',text:'old',textEn:'old'};
+  g.players[0].field=[master];
+  E.restoreReworkedCards(g);
+  for (const key of ['textJa','text','textEn']) assert.equal(master[key],E.DB.MERC_MASTER[key]);
+  assert.equal(master.atk,1);assert.equal(master.dmg,2);
 });
