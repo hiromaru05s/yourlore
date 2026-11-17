@@ -1269,7 +1269,7 @@ export interface DeckPreset { representative?: string; avatar?: string; backgrou
 export function deckRepresentative(deck:Pick<DeckPreset,'cards'|'representative'>):string {
   const selected=deck.representative;
   if(selected && (selected==='STARTER_MANA' || deck.cards.includes(selected)))return selected;
-  return deck.cards.find(id=>id!=='STARTER_TRASH') ?? deck.cards[0] ?? 'STARTER_MANA';
+  return 'STARTER_MANA';
 }
 export function sanitizeDeckName(value: unknown): string {
   return typeof value === "string" ? Array.from(value.replace(/[\u0000-\u001f\u007f]/g, "").trim()).slice(0,24).join("") : "";
