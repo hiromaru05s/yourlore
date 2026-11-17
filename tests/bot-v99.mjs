@@ -19,6 +19,12 @@ try {
   p.mana=3;const low=C.purchaseEvaluator(g,p)(g.market[0]);
   p.mana=5;const ready=C.purchaseEvaluator(g,p)(g.market[0]);assert(ready.margin>low.margin+5);
   assert.equal(ready.floor,0);assert.equal(C.immediateHireMana(p,g.market[0]),2);
+  const buy=C.safeGreedy(g);assert.equal(buy.type,'buyMarket');
+  let hired=C.reduce(g,buy).state;
+  assert.equal(hired.pending?.reason,'MERC_HIRE');
+  hired=C.reduce(hired,C.safeGreedy(hired)).state;
+  assert(hired.players[0].field.some(c=>c.id==='MERC_LEADER'),'purchase leaves enough mana to actually hire the leader');
+
   p.field=[mon('MERCENARY')];assert.equal(C.immediateHireMana(p,g.market[0]),0);
   p.field=[mon('TSO1')];p.summonLockUntil=g.turn+2;
   assert.equal(C.purchaseEvaluator(g,p)(g.market[0]).tempo,0,'blocked effect summon gets no immediate-board bonus');

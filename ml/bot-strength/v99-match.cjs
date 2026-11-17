@@ -27,7 +27,7 @@ if(checkpoint){
  // Write a new result file, preserving the original evidence without edits.
  fs.writeFileSync(path.join(root,'results',dest+'.jsonl'),rows.map(r=>JSON.stringify(r)+'\n').join(''));
 }
-const pick = (label,g) => { const [version,tier] = label.split(':'); const mod=version==='old'?old:now; return tier==='greedy'? (mod.safeGreedy??mod.greedyDecide)(g,false):mod.botDecide(g,tier); };
+const pick = (label,g) => { const [version,tier] = label.split(':'); const mod=version==='old'?old:now; if(tier!=='greedy')return mod.botDecide(g,tier);const view=mod.observationSample(g,mod.actingSide(g),0);return mod.legalBotAction(g,mod.safeGreedy(view),view); };
 const rand = seed => () => {seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return (seed>>>0)/4294967296};
 let total=rows.filter(r=>r.finished&&!r.bad).length, invalid=rows.length-total, wins=rows.filter(r=>r.finished&&!r.bad&&r.winner===r.seat).length, draws=rows.filter(r=>r.finished&&!r.bad&&r.winner==null).length, times=[];
 const begin=Date.now();
