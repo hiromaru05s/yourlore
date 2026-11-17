@@ -1,0 +1,110 @@
+{
+  "checks": [
+    {
+      "stem": "aries",
+      "action": "hurt",
+      "retrigger": true
+    },
+    {
+      "stem": "aries",
+      "action": "mana",
+      "retrigger": false
+    },
+    {
+      "stem": "aries",
+      "action": "heal",
+      "retrigger": false
+    },
+    {
+      "stem": "lumi",
+      "action": "hurt",
+      "retrigger": true
+    },
+    {
+      "stem": "lumi",
+      "action": "mana",
+      "retrigger": false
+    },
+    {
+      "stem": "lumi",
+      "action": "heal",
+      "retrigger": false
+    },
+    {
+      "stem": "noel",
+      "action": "hurt",
+      "retrigger": true
+    },
+    {
+      "stem": "noel",
+      "action": "mana",
+      "retrigger": false
+    },
+    {
+      "stem": "noel",
+      "action": "heal",
+      "retrigger": false
+    },
+    {
+      "stem": "rena",
+      "action": "hurt",
+      "retrigger": true
+    },
+    {
+      "stem": "rena",
+      "action": "mana",
+      "retrigger": false
+    },
+    {
+      "stem": "rena",
+      "action": "heal",
+      "retrigger": false
+    },
+    {
+      "stem": "shion",
+      "action": "hurt",
+      "retrigger": true
+    },
+    {
+      "stem": "shion",
+      "action": "mana",
+      "retrigger": false
+    },
+    {
+      "stem": "shion",
+      "action": "heal",
+      "retrigger": false
+    },
+    {
+      "stem": "sion",
+      "action": "hurt",
+      "retrigger": true
+    },
+    {
+      "stem": "sion",
+      "action": "mana",
+      "retrigger": false
+    },
+    {
+      "stem": "sion",
+      "action": "heal",
+      "retrigger": false
+    },
+    {
+      "stem": "vera",
+      "action": "hurt",
+      "retrigger": true
+    },
+    {
+      "stem": "vera",
+      "action": "mana",
+      "retrigger": false
+    },
+    {
+      "stem": "vera",
+      "action": "heal",
+      "retrigger": false
+    }
+  ],
+  "errors": []
+}

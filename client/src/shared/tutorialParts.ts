@@ -1,9 +1,9 @@
+export {TUTORIAL_PARTS,tutorialPartKey,type TutorialPartMeta} from './tutorialPartMeta';
 import {copy as c,type Copy} from './tutorialSteps';
 import {practiceBoard,scene,play,attack,end,buy,type PracticeScene} from './tutorial/model';
 import type {LessonRun} from './tutorialLesson';
 import type {GameEvent,GameState} from './types';
 
-export interface TutorialPartMeta {title:Copy;intro:Copy;kind:'board'|'practice'|'home'|'deck';}
 export type TourPlacement='bottom-left'|'bottom-right'|'top-left'|'top-right';
 export interface TutorialTourStep {
  /** Element that receives the tight highlight ring (and the click target for action:'click'). */
@@ -44,7 +44,6 @@ const fixed='#fixedMarket .card[data-card-id="M4"]';
 const offer='#supplyMarket .card[data-card-id="M2"]';
 const openHand=()=>step('#hand',c('手札','Hand','손패'),c('下の手札を押して、カードを広げよう。','Press your hand below to spread the cards.','아래 손패를 눌러 카드를 펼쳐 봐.'),{action:'click',opened:'.game.hand-open'});
 const playCard=(id:string,body:Copy,until:(g:GameState)=>boolean):TutorialTourStep=>step(hand(id),c('カードを使う','Play a card','카드 사용'),body,{pointer:hand(id),dragTo:'#meRow .zone-mon',action:'play',until});
-export const TUTORIAL_PARTS:TutorialPartMeta[]=[{kind:'board',title:c('デュエルの基本','Duel basics','듀얼의 기본'),intro:c('召喚・攻撃・購入・ターンの流れを、自分で操作して覚えよう。','Learn summoning, attacking, buying and turns by playing.','직접 소환하고 공격하고 구매하며 턴의 흐름을 익혀 봐.')}];
 export const PART_TOURS:Partial<Record<number,TutorialTourStep[]>>={0:[
  step('#portraitOpp .pt-hp',c('勝利条件','Goal','승리 조건'),c('やあゼノだよ。\nLOREのデュエルでは、上にいる相手の体力を０にすると勝ちだよ。','Hi, I’m Zeno. In a LORE duel, reduce the opponent’s health above to zero to win.','안녕, 난 제노야. LORE 듀얼에서는 위쪽 상대의 체력을 0으로 만들면 이겨.')),
  step('#portraitMe .pt-hp',c('自分の体力','Your health','내 체력'),c('下がきみ。先攻は体力40、後攻は45で始まるよ。','You are below. The first player starts at 40 health, the second at 45.','아래가 너야. 선공은 체력 40, 후공은 45로 시작해.')),
@@ -103,7 +102,6 @@ export function partScenes(part:number):PracticeScene[]{
   b.me.supply=[b.card('M2'),b.card('M1'),b.card('M4')];
  },[play('M2'),attack('M2'),play('STARTER_MANA'),end(),buy('M4'),buy('M2',true),end(),{...play('S3'),targetId:'M2'}, {...attack('M2'),targetId:'M2'},{action:'refresh'},play('STARTER_TRASH')],c('','',''),c('','',''),undefined,'summon')];
 }
-export const tutorialPartKey=(part:number,accountId?:string)=>`lore:tutorial:parts:v5:${encodeURIComponent(accountId??'guest')}:complete:${part}`;
 export function createPartStart(part:number):{run:LessonRun;history:GameEvent[]}{
  const scenes=partScenes(part);if(!scenes.length)throw Error(`Tutorial part ${part+1} has no board scene`);
  const state=practiceBoard(scenes[0]);

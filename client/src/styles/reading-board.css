@@ -113,7 +113,7 @@
 
 /* The player's portrait is a separate, unprojected 2D layer. */
 :is(#app,.reading-board).reading-board .game .portrait .pt-ring{overflow:visible;border-radius:0;z-index:18;transform:none!important;}
-:is(#app,.reading-board).reading-board .game .portrait .pt-ring::after{display:block!important;inset:-9% -4%;background:url('/art/biblion/refined/portrait-opp.png') center/100% 100% no-repeat;transform:none!important;}
+:is(#app,.reading-board).reading-board .game .portrait .pt-ring::after{display:block!important;inset:-9% -4%;background:url('/art/biblion/refined/portrait-opp.webp') center/100% 100% no-repeat;transform:none!important;}
 :is(#app,.reading-board).reading-board .game .portrait .pt-ring .avatar{inset:12% 13%!important;width:74%!important;height:76%!important;border-radius:40% 40% 30% 30%;}
 :is(#app,.reading-board).reading-board .game .portrait .avatar-seeker .seeker-sprite{height:100%;background-size:200% 100%;}
 :is(#app,.reading-board).reading-board .game .portrait .pt-vitals{z-index:22;}
@@ -129,7 +129,7 @@
 :is(#app,.reading-board).reading-board .rift-sprite::before,:is(#app,.reading-board).reading-board .rift-sprite::after{display:none;}
 :is(#app,.reading-board).reading-board .rift-aperture{display:block;width:100%;height:100%;pointer-events:none;}
 
-:is(#app,.reading-board).reading-board #portraitMe .pt-ring::after{background-image:url('/art/biblion/refined/portrait-self.png');}
+:is(#app,.reading-board).reading-board #portraitMe .pt-ring::after{background-image:url('/art/biblion/refined/portrait-self.webp');}
 
 /* Both characters share the same opening. The blue frame has wider transparent
    side gutters, so expand its background horizontally to match the red frame. */

@@ -1,3 +1,4 @@
+export {targetOwner} from './targetOwner';
 import type { CardInst, FieldMon, GameState, Side } from './types';
 import { hasPassive } from './cards';
 import { curHp, effAtk, effDef, CUSTOM_SPELLS, isAssassinCard } from './engine';
@@ -85,15 +86,6 @@ export function needsCastReview(g: GameState, owner: Side, c: CardInst): boolean
       g.players.some(p => p.field.some(m => m.aura === fx) || p.enchants.some(e => e.card.ench === fx)));
 }
 
-export function targetOwner(g: GameState, uid: string): Side | null {
-  if (uid === 'player-0') return 0;
-  if (uid === 'player-1') return 1;
-  for (const s of [0,1] as Side[]) {
-    const p=g.players[s];
-    if ([...p.field,...p.hand,...p.deck,...p.discard,...(p.removed??[]),...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card)].some(c=>c.uid===uid)) return s;
-  }
-  return null;
-}
 
 /** Show the exact publicly determined victim before an automatic removal cast. */
 export function automaticCastTargets(g: GameState, owner: Side, c: CardInst): CardInst[] {

@@ -1,0 +1,231 @@
+{
+  "models": [
+    {
+      "name": "board-low.glb",
+      "before": 1350324,
+      "after": 831852,
+      "geometryBytesVerified": 820244
+    },
+    {
+      "name": "board.glb",
+      "before": 3717872,
+      "after": 1806652,
+      "geometryBytesVerified": 1795020
+    },
+    {
+      "name": "deck-place-lod1.glb",
+      "before": 957684,
+      "after": 87340,
+      "geometryBytesVerified": 80028
+    },
+    {
+      "name": "deck-place.glb",
+      "before": 1194232,
+      "after": 323892,
+      "geometryBytesVerified": 316560
+    },
+    {
+      "name": "mana-counter.glb",
+      "before": 131788,
+      "after": 131788,
+      "geometryBytesVerified": 126600
+    },
+    {
+      "name": "mana-crystal-ready.glb",
+      "before": 41896,
+      "after": 41896,
+      "geometryBytesVerified": 38076
+    },
+    {
+      "name": "mana-crystal-spent.glb",
+      "before": 41892,
+      "after": 41892,
+      "geometryBytesVerified": 38076
+    },
+    {
+      "name": "mana-tray.glb",
+      "before": 123440,
+      "after": 123440,
+      "geometryBytesVerified": 118560
+    },
+    {
+      "name": "market-low.glb",
+      "before": 426824,
+      "after": 40788,
+      "geometryBytesVerified": 36408
+    },
+    {
+      "name": "market.glb",
+      "before": 1668300,
+      "after": 125760,
+      "geometryBytesVerified": 121368
+    },
+    {
+      "name": "reroll-button-lod1.glb",
+      "before": 203840,
+      "after": 203840,
+      "geometryBytesVerified": 194772
+    },
+    {
+      "name": "reroll-button.glb",
+      "before": 454340,
+      "after": 454340,
+      "geometryBytesVerified": 445248
+    },
+    {
+      "name": "shelf-lod1.glb",
+      "before": 1199104,
+      "after": 328768,
+      "geometryBytesVerified": 321000
+    },
+    {
+      "name": "shelf.glb",
+      "before": 1871424,
+      "after": 1001084,
+      "geometryBytesVerified": 993552
+    },
+    {
+      "name": "supply-low.glb",
+      "before": 404764,
+      "after": 18732,
+      "geometryBytesVerified": 15396
+    },
+    {
+      "name": "supply.glb",
+      "before": 1594152,
+      "after": 51612,
+      "geometryBytesVerified": 48276
+    },
+    {
+      "name": "timer-inserts.glb",
+      "before": 90936,
+      "after": 90936,
+      "geometryBytesVerified": 72864
+    },
+    {
+      "name": "turn-button-lod1.glb",
+      "before": 144324,
+      "after": 144324,
+      "geometryBytesVerified": 138132
+    },
+    {
+      "name": "turn-button.glb",
+      "before": 347068,
+      "after": 347068,
+      "geometryBytesVerified": 340848
+    }
+  ],
+  "images": [
+    {
+      "url": "/models/reading-board/shared-textures/8a943ceb33d321f6b5e6d9f1654492b399b029bbf4b10d3211355b8d254e5634.webp",
+      "bytes": 160058,
+      "sourceHash": "56719fdce678724ff559b1ee02a9d9efc774d9031d01da5630bdb2783524f57e"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/178e3017d17172aa3992ff2c6385319bdb66c98a9459d2bc6023994f66c7f0c2.jpg",
+      "bytes": 121938,
+      "sourceHash": "178e3017d17172aa3992ff2c6385319bdb66c98a9459d2bc6023994f66c7f0c2"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/d47a076809c3bbabd3035542901da9ea19f180ba64d8421911678ab03bb0e6fe.webp",
+      "bytes": 23848,
+      "sourceHash": "aaa38e112de8ba54212711495bad2bd7bddab02aa58edebf04226cb28be81d40"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/c03afae3d7f9c6223f3fcfbd2c30e2b35aa4bbf85805db0441bce2e50d3c85d3.webp",
+      "bytes": 38,
+      "sourceHash": "2e0d8d4f34198850e904fa9ed80a8336b2763a2fcc7ebfed26f2ada2a61712dc"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/38f2c60bf6085074ea8257e5003c406b52aacfd4258d2ac27dec10625ccaaa79.webp",
+      "bytes": 14912,
+      "sourceHash": "bbce323e8636f702505066fd72ece5e513f0206bf4c57b9ef95f3b0acc3920ab"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/27dd84547946ed232290886f02752aa13be82870ebcaf372a747e0ad21741c58.webp",
+      "bytes": 4582,
+      "sourceHash": "205befc0c5327eeefa595ab5a0224b431f58f11dd75b30a0e7f4a56b94b91988"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/46b30670af4a01bcc8bfd8d930abcea86348e5de470ad7e16cd2f71246dea7ca.webp",
+      "bytes": 889128,
+      "sourceHash": "b555f2ed2ccdab56c4b321b2ee95956cd60aaaebf3aaa3e09ccf56aeb85bb611"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/3a1e7f6ff6615a9aea8e6d0fdab218e005de742bf61c576fc6a720e8b54a635c.jpg",
+      "bytes": 356091,
+      "sourceHash": "3a1e7f6ff6615a9aea8e6d0fdab218e005de742bf61c576fc6a720e8b54a635c"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/573ba4b255f8c77d51453785b62a52d1830b12b23546e3cdc33c51d23c760449.webp",
+      "bytes": 75324,
+      "sourceHash": "9fe77c0bb5e769a19c434adf6371934a16eb99c875b064d4ebb6af718face2e2"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/4d808f48c5f6d5e1d62815db08715f7bc55708b4c5ca2247b1b9575de5fa2f3d.webp",
+      "bytes": 57336,
+      "sourceHash": "7753d6419b1d6371bc502d4b13a91fe9aa4cbd5c6c41fdf16c66c4ea77cb601c"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/b9e9b765c42e68069603f82507be1bc2db4bee6b76b110a9aa47aa63ee9a0e18.webp",
+      "bytes": 16210,
+      "sourceHash": "a739bafc1445fab4191502fa5571417bdc5ec238ca05168252a612f355a66f07"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/6ea1abca0dbf33a3292e15cb6df26e6a3154b88096807aa24665093e5235eb09.webp",
+      "bytes": 131950,
+      "sourceHash": "53f426130ce8070211a1096c62a73f7d473de513e46031b1edaf9483dd909d86"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/f20bc843cec944409e967a7090561de402c61911c03f8f279fca0f0442e44d7a.jpg",
+      "bytes": 111813,
+      "sourceHash": "f20bc843cec944409e967a7090561de402c61911c03f8f279fca0f0442e44d7a"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/0e66a6db2bb9c9e4f56a2c3b7cc29b2b51a2d5d5589d99b6ed7ceea78525e74c.webp",
+      "bytes": 6232,
+      "sourceHash": "a00a7d654fa3a407eaba82c8fcf09ffc53ef79f860512aef52a070ef1703dae4"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/bdab3fec20f6a110ec25725819ac892b94ff8d69712a9b11d35b504765ce5270.webp",
+      "bytes": 914856,
+      "sourceHash": "b111eebf2765fec707490061c3592dfae359cba72beadfdc328841464e6fa6b1"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/f5b3ff049aea5e7e826a3d811dd51c50b574fe024cdb8c76aed2ef37f3b8f8db.jpg",
+      "bytes": 319095,
+      "sourceHash": "f5b3ff049aea5e7e826a3d811dd51c50b574fe024cdb8c76aed2ef37f3b8f8db"
+    },
+    {
+      "url": "/models/reading-board/shared-textures/e5d31c97a7fde9ee389ea2af2a82f0a3971e9d0d837bd6650a845570328ae418.webp",
+      "bytes": 23680,
+      "sourceHash": "fa1812151010a0c5fd60f14a0167db375eb5ac1f7b37f7e256a8afad1ac8e232"
+    }
+  ],
+  "ui": [
+    {
+      "name": "stat-cost",
+      "before": 1398002,
+      "after": 934376,
+      "rgbaIdentical": true
+    },
+    {
+      "name": "button-idle",
+      "before": 1004990,
+      "after": 729006,
+      "rgbaIdentical": true
+    },
+    {
+      "name": "portrait-self",
+      "before": 584472,
+      "after": 381246,
+      "rgbaIdentical": true
+    },
+    {
+      "name": "portrait-opp",
+      "before": 692936,
+      "after": 453838,
+      "rgbaIdentical": true
+    }
+  ]
+}

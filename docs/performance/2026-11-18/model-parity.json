@@ -1,0 +1,135 @@
+[
+  {
+    "name": "board-low.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "board.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "deck-place-lod1.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "deck-place.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 6,
+    "controlMaxDelta": 36
+  },
+  {
+    "name": "mana-counter.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "mana-crystal-ready.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "mana-crystal-spent.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "mana-tray.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "market-low.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "market.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "reroll-button-lod1.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "reroll-button.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "shelf-lod1.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 12,
+    "controlMaxDelta": 49
+  },
+  {
+    "name": "shelf.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "supply-low.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "supply.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "timer-inserts.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "turn-button-lod1.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  },
+  {
+    "name": "turn-button.glb",
+    "different": 0,
+    "maxDelta": 0,
+    "controlDifference": 0,
+    "controlMaxDelta": 0
+  }
+]

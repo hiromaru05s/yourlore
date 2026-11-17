@@ -7,7 +7,7 @@ export const SEEKER_ROOT = '/art/seekers/faceless-v2';
 export const SEEKER_HIT_MS = 800;
 // Keep the poster URL literal so the startup-asset build can fingerprint it.
 export const seekerPoster = () => '/art/seekers/daylight-v1/portrait.webp';
-export const seekerIdle = () => '/art/seekers/daylight-v1/idle.gif';
+export const seekerIdle = () => '/art/seekers/daylight-v1/idle-loop.webp';
 export const seekerRecoil = () => '/art/seekers/daylight-v1/hurt.webp';
 export const damageAction = (amount: number): SeekerAction | null => amount > 0 ? 'hurt' : null;
 export class SeekerMotion {

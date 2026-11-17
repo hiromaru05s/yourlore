@@ -53,6 +53,14 @@ export default defineConfig({
     outDir: "dist",
     sourcemap: false,
     rollupOptions: {
+      output: {
+        // Keep the stable GPU library cached across card/menu releases. Addons
+        // remain in their existing lazy effects rather than joining startup.
+        onlyExplicitManualChunks: true,
+        manualChunks(id) {
+          if(id.includes('/node_modules/three/build/'))return 'three';
+        },
+      },
       input: {
         quietLuxury: new URL('./gacha-minimal-three.html',import.meta.url).pathname,
         shieldTitanRuntime: new URL('./shield-titan-runtime.html', import.meta.url).pathname,

@@ -33,7 +33,7 @@ export class Rewards{
   scene.add(this.root);
   // Production reveals confirmed rewards in their own stage; retain pose math only.
   if(!loadModels){this.ready=Promise.resolve();return;}
-  this.ready=assetBatch([assetBatch(assets.map(url=>new T.TextureLoader().loadAsync(url))),new GLTFLoader().loadAsync('/models/reading-board/v1/deck-place.glb'),new GLTFLoader().loadAsync('/models/reading-board/v1/shelf.glb')]).then(([textures,deck,grave])=>{
+  this.ready=assetBatch([assetBatch(assets.map(url=>new T.TextureLoader().loadAsync(url))),new GLTFLoader().loadAsync('/models/reading-board/v2-shared/deck-place.glb'),new GLTFLoader().loadAsync('/models/reading-board/v2-shared/shelf.glb')]).then(([textures,deck,grave])=>{
    this.textures=textures;textures.forEach(t=>{t.colorSpace=T.NoColorSpace;t.anisotropy=8});
    // Reuse the actual board furniture, with its depth, cloth, wood, feet and metal trim.
    const assembly=new T.Group();deck.scene.position.set(-.087,0,.023);grave.scene.position.set(.093,.014,-.024);assembly.add(deck.scene,grave.scene);assembly.rotation.set(.91,-.25,-.08);assembly.updateMatrixWorld(true);

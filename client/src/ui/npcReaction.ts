@@ -1,4 +1,4 @@
-// Native, one-shot GIFs over the original poster. Each board owns only its
+// Native, lossless one-shot WebPs over the original poster. Each board owns only its
 // opponent's three clips; a fresh object URL starts repeated hits at frame zero.
 type Action = 'hurt' | 'mana' | 'heal';
 const length: Record<Action, number> = {hurt: 820, mana: 1470, heal: 1350};
@@ -16,7 +16,7 @@ function create(ring: HTMLElement, poster: string) {
   function read(action: Action) {
     let clip = cache.get(action);
     if (!clip) {
-      clip = fetch('/art/npcs/reactions-v1/' + stem + '/' + action + '.gif', {signal: abort.signal})
+      clip = fetch('/art/npcs/reactions-webp-v1/' + stem + '/' + action + '.webp', {signal: abort.signal})
         .then(r => { if (!r.ok) throw Error('Missing portrait reaction'); return r.blob(); })
         .catch(e => { cache.delete(action); throw e; });
       cache.set(action, clip);

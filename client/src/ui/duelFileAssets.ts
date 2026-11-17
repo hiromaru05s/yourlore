@@ -1,3 +1,4 @@
+import {READING_TEXTURE_ASSETS} from './readingTextureAssets';
 import {SFX_NAMES,soundUrls} from './soundAssets';
 import {WEB_FONT_FILES} from './fontAssets';
 import {readingAssetUrls} from './readingAssetCache';
@@ -6,6 +7,7 @@ import {readingAssetUrls} from './readingAssetCache';
 export function duelFileAssets(){
  const low=new Set(readingAssetUrls(true)),full=new Set(readingAssetUrls(false));
  return [
+  ...READING_TEXTURE_ASSETS.map(url=>({url,media:undefined})),
   ...SFX_NAMES.flatMap(soundUrls).map(url=>({url,media:undefined})),
   ...WEB_FONT_FILES.map(url=>({url,media:undefined})),
   ...[...new Set([...low,...full])].map(url=>({url,media:low.has(url)&&full.has(url)?undefined:low.has(url)?'narrow':'wide'})),
