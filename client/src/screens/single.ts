@@ -10,13 +10,14 @@ import { artUrl } from '../ui/cardArt';
 import { mountHomeDuelButton } from '../ui/homeDuelButton';
 import { loungeText as L } from '../ui/loungeText';
 import { storyPortraits } from '../ui/singlePortraits';
+import pageArrow from '../assets/single/page-arrow.svg';
 import { deckName } from './deckLibrary';
 import '../styles/singlePage.css';
 
 export interface SingleLocation { page?:number; tab?:'story'|'battle' }
 const lock = '<svg class="sp-lock" viewBox="0 0 20 22" aria-hidden="true"><path d="M5 10V7a5 5 0 0 1 10 0v3M3 10h14v10H3z"/><path d="M10 14v3"/></svg>';
 const favoriteCards = { easy:'HALF_ELF', normal:'CASTLE', hard:'FLAME' } as const;
-const chevron = '<svg class="sp-chevron" viewBox="0 0 24 32" aria-hidden="true"><path d="m7 4 11 12L7 28"/></svg>';
+const chevron = `<img class="sp-chevron" src="${pageArrow}" alt="" draggable="false">`;
 
 export function mountSingle(app:App, initial:SingleLocation={}):Screen {
   const root=document.createElement('section');
