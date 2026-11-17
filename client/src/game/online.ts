@@ -84,7 +84,7 @@ export class OnlineController extends BaseController {
       setTimeout(() => { if (!this.closing && !this.state?.over) this.connect(); }, 800 * this.retries);
     } else {
       this.banner(null);
-      noticeModal(t("notice.disc.title"), t("notice.disc.body"), t("modal.home"), () => {
+      noticeModal(t("notice.disc.title"), t("notice.disc.body"), this.exits.onHomeLabel?.()??t("modal.home"), () => {
         clearActiveGame();
         this.exits.onHome();
       });
@@ -148,7 +148,7 @@ export class OnlineController extends BaseController {
       // the match never really started (opponent never joined) → no rank change, back to home
       this.closing = true;
       clearActiveGame();
-      noticeModal(t("notice.voided.title"), t("notice.voided.body"), t("modal.home"), () => this.exits.onHome());
+      noticeModal(t("notice.voided.title"), t("notice.voided.body"), this.exits.onHomeLabel?.()??t("modal.home"), () => this.exits.onHome());
     } else if (msg.type === "preview") {
       // ranked pre-game market study (before coin toss). until=null → still waiting for the opponent.
       if (!this.preview) this.preview = marketPreview(msg.market, msg.supply, () => this.sock.send({ type: "startReady" }));

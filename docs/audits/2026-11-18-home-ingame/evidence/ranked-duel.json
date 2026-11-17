@@ -1,7 +1,8 @@
 {
   "errors": [],
-  "roomId": "c669ef89-b816-46cc-afd8-f0a8591d08dc",
-  "turn": 2,
+  "ranked": true,
+  "roomId": "343c6e6f-e33b-4b47-8464-74b41cbe4f7f",
+  "turn": 3,
   "checks": [
     "matchmaking",
     "opening",

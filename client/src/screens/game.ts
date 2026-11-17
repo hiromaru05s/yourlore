@@ -70,7 +70,11 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onExperience: () => {if(experienceUserId && experienceUserId!=="local-guest-user")void api.me().then(fresh=>{if(fresh?.id===experienceUserId && app.user?.id===experienceUserId){app.user=fresh;document.dispatchEvent(new Event("lore:user"));}});},
     onOpeningStart: opts.mode === "tutorial" ? undefined : startMusic,
     onBattleReady: () => startMusic(),
-    onHome: () => opts.mode === "tutorial" ? app.tutorial() : story ? app.single({tab:'story'}) : opts.mode==='bot'||opts.difficulty ? app.single() : app.home(),
+    onHome: () => opts.mode === "tutorial" ? app.tutorial() : story ? app.single({tab:'story'}) : opts.mode==='bot'||(opts.mode==='online'&&(opts.difficulty??ctrl.botDifficulty)) ? app.single() : app.home(),
+    onHomeLabel: () => opts.mode === 'tutorial'
+      ? loungeText('チュートリアルへ','Tutorial','튜토리얼로')
+      : story || opts.mode==='bot' || (opts.mode==='online'&&(opts.difficulty??ctrl.botDifficulty))
+        ? loungeText('シングルへ','Single Player','싱글로') : loungeText('ホームへ','Home','홈으로'),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
     onBattleResult: won => {
       storyWon = won;

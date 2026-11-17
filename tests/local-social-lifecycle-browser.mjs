@@ -14,7 +14,7 @@ try{
  let sends=0;p.on('request',r=>{if(new URL(r.url()).pathname==='/api/social/challenge')sends++;});
  await p.locator('[data-ch]').first().evaluate(b=>{b.click();b.click();});await q.locator('#chYes').click();assert.equal(sends,1);
  for(const page of pages){await page.locator('.game').waitFor();await page.locator('.hand-study .study-action').click();}
- await p.locator('.hand-study').waitFor({state:'detached'});await p.locator('#giveupBtn').click();await p.locator('dialog button').filter({hasText:/^YES$/}).click();
+ await p.locator('.hand-study').waitFor({state:'detached'});await p.locator('#giveupBtn').click();await p.locator('.modal .btn-danger').click();
  for(const page of pages)await page.locator('.finale-home').waitFor();
  await p.screenshot({path:out+'/result.png'});
  for(const page of pages){assert.equal(await page.evaluate(()=>localStorage.getItem('lore_game')),null);await page.locator('.finale-home').click();await page.locator('.lounge-home').waitFor();}

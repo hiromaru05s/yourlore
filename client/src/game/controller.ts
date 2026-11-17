@@ -80,6 +80,7 @@ import { diceRollAnim, cancelDiceAnimations } from "../ui/dice";
 
 export interface ControllerExits {
   onHome(): void;
+  onHomeLabel?(): string;
   onRematch(): void;
   onOpeningStart?(elapsedMs:number): void;
   onBattleReady?(): void;
@@ -1706,6 +1707,8 @@ export abstract class BaseController implements BoardHandlers {
       () => { A.removeReviewFab(); this.exits.onHome(); },
       () => A.reviewFab(() => this.openResult()),
     );
+    const homeLabel=this.exits.onHomeLabel?.();
+    if(homeLabel){const home=document.querySelector<HTMLButtonElement>('.finale-home');if(home)home.textContent=homeLabel;}
     const storyLabel=this.exits.onStoryAgainLabel?.(won);
     if(storyLabel){const again=document.querySelector<HTMLButtonElement>('.finale-again');if(again)again.textContent=storyLabel;}
     this.renderRankDelta(); // fill the ranked MMR line if we already have the result
