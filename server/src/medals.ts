@@ -1,3 +1,4 @@
+import {sanitizeDecks} from '../../client/src/shared/cards';
 import {profileBackground} from '../../client/src/shared/profileAppearance';
 import type {Env} from './env';
 import {MEDALS,MEDAL_BY_ID,MEDAL_SERIES,type MedalState} from '../../client/src/shared/medals';
@@ -70,6 +71,9 @@ export async function settleMedals(env:Env,matchId:string,g:GameState,side:Side,
 }
 
 export async function duelAppearance(env:Env,userId:string){
- const row=await env.DB.prepare('SELECT avatar, badge, profile_background FROM users WHERE id=?').bind(userId).first<{avatar:string|null;badge:string|null;profile_background:string}>();
- return {avatar:row?.avatar ?? null, medal:row?.badge && MEDAL_BY_ID.has(row.badge) ? row.badge : null, background: profileBackground(row?.profile_background)};
+ const row=await env.DB.prepare('SELECT avatar, badge, profile_background, decks FROM users WHERE id=?').bind(userId).first<{avatar:string|null;badge:string|null;profile_background:string;decks:string|null}>();
+ let presets:unknown;
+ try{presets=JSON.parse(row?.decks??'null');}catch{/* Legacy accounts inherit the profile. */}
+ const store=sanitizeDecks(presets), active=store.list[store.sel];
+ return {avatar:active.avatar ?? row?.avatar ?? null, medal:row?.badge && MEDAL_BY_ID.has(row.badge) ? row.badge : null, background: active.background ?? profileBackground(row?.profile_background)};
 }

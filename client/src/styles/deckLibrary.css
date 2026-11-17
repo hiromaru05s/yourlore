@@ -1,0 +1,89 @@
+:root body .lounge-deck .lounge-content>.deck-library {
+  display:flex; flex-direction:column; align-items:stretch; justify-content:safe center;
+  width:min(94%,1500px); height:100%; min-height:0; margin:auto; padding:12px clamp(4px,2vw,36px) 20px;
+  overflow:auto; scrollbar-width:thin;
+}
+.deck-library h2 {
+  display:flex; align-items:center; gap:16px; margin:0 0 clamp(12px,2vh,24px);
+  color:#faf4e3; font-size:clamp(19px,1.55vw,28px); letter-spacing:.12em;
+  text-shadow:0 2px 8px #020b17;
+}
+.deck-library h2::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,#d6c39d9c,transparent); }
+.deck-library-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(12px,2.4vh,25px) clamp(10px,1.3vw,24px); }
+:root body .lounge-deck .deck-library button.deck-banner {
+  position:relative; isolation:isolate; display:block; width:100%; height:auto; aspect-ratio:3.15; min-height:0;
+  padding:0!important; overflow:hidden; border:1px solid #c7bda9!important; border-radius:2px!important;
+  clip-path:none!important; background:linear-gradient(110deg,#192936,var(--appearance-plate))!important;
+  border-image:none!important; box-shadow:0 4px 12px #020b19ac,inset 0 0 0 1px #101a29!important;
+  color:#fffaf1!important; text-align:left; cursor:pointer;
+}
+:root body .lounge-deck .deck-library button.deck-banner::before {content:none!important}
+:root body .lounge-deck .deck-library button.deck-banner::after {
+  content:''; position:absolute; inset:3px; z-index:5; pointer-events:none; border:1px solid #eadfc46b;
+  background:linear-gradient(135deg,#f5e1ac 0 4px,transparent 4px) left top/14px 14px no-repeat,
+  linear-gradient(315deg,#f5e1ac 0 4px,transparent 4px) right bottom/14px 14px no-repeat;
+}
+:root body .lounge-deck .deck-library button.deck-banner:is(:hover,:focus-visible) { border-color:#f9e4af!important; outline:2px solid #ecdfba; outline-offset:2px; filter:brightness(1.12); }
+.deck-banner-land,.deck-banner-character,.deck-banner-shade,.deck-banner-sleeve {position:absolute;pointer-events:none}
+.deck-banner-land {inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 40%; opacity:.86}
+.deck-banner-character {left:34%;top:-9%;width:43%;height:213%;object-fit:cover;object-position:50% 0;filter:drop-shadow(0 1px 4px #11182487)}
+.deck-banner-shade {inset:0;background:linear-gradient(0deg,#07101cf2,transparent 46%),linear-gradient(90deg,#0b182c55,transparent 47%,transparent 68%,#0c18298c)}
+.deck-banner-sleeve {right:6.5%;top:10%;height:77%;aspect-ratio:.64;transform:rotate(8deg);border-radius:4%;box-shadow:3px 5px 6px #030916ae,-3px 1px 0 #d0bd95,-5px 2px 0 #142536;background:#0c1927}
+.deck-banner-sleeve img {width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.deck-banner strong {position:absolute;left:5.5%;right:27%;bottom:9%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(15px,1.35vw,24px);line-height:1.3;letter-spacing:.055em;text-shadow:0 2px 4px #030a13}
+.deck-banner-no,.deck-banner-active {position:absolute;top:8%;color:#fff4da;text-shadow:0 1px 3px #111}
+.deck-banner-no {left:4.5%;font:italic 15px Georgia,serif;background:#0c1423a8;padding:2px 7px;border-bottom:1px solid #dbc38a}
+.deck-banner-active {left:calc(4.5% + 34px);padding:3px 7px;font-size:10px;background:#163747eb;border:1px solid #c1cfc580}
+:root body .lounge-deck .deck-screen #deckWorkspace {--pool-cols:13;grid-template-columns:clamp(212px,17vw,310px) minmax(0,1fr);grid-template-rows:max(228px,calc(var(--formation-card-width,88px) / .64 + 86px)) minmax(0,1fr)}
+:root body .lounge-deck .deck-screen:not([data-tab=edit]) #deckWorkspace {grid-template-rows:38px minmax(0,1fr)}
+.lounge-deck #deckSettings {grid-column:1;grid-row:1;align-self:start;display:grid;gap:4px;padding:6px 8px 8px;min-width:0;--deck-cut:12px;--deck-frame:24px}
+.lounge-deck .deck-screen:not([data-tab=edit]) #deckSettings {grid-row:1/-1}
+.lounge-deck #deckSettings button {min-width:0;max-width:none;min-height:0;border:0;line-height:1.25}
+.lounge-deck #deckSettings #libraryBack {width:max-content;padding:2px 6px;color:#d3e1eb;font-size:11px}
+.lounge-deck #deckRename {display:flex;align-items:center;justify-content:space-between;gap:7px;padding:5px 8px;width:100%;text-align:left}
+.lounge-deck #deckRename strong {white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(13px,1vw,17px)}
+.lounge-deck #deckRename svg {width:15px;height:15px;flex:none}
+.deck-setting-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.lounge-deck .deck-setting-grid button {display:flex;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;padding:4px 8px;min-height:40px!important}
+.deck-setting-grid button span,.deck-setting-grid button b {display:block;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.deck-setting-grid button span {font-size:clamp(9px,.7vw,12px);color:#c8dae4;letter-spacing:.03em}
+.deck-setting-grid button b {font-size:clamp(11px,.85vw,14px);font-weight:550;color:#f4f7fb}
+.deck-setting-grid [data-setting=background] b::before {content:'';display:inline-block;width:.7em;height:.7em;margin-right:.45em;border:1px solid #e4eaf4;background:var(--appearance-plate)}
+.deck-setting-grid button.is-current {outline:1px solid #d8e7f1;outline-offset:-2px}
+.lounge-deck #deckFilters {padding:8px;gap:8px}
+.lounge-deck #deckFilters .deck-pool-search:focus-within {width:100%}
+:root body .lounge-deck #deckFilters #poolSearch,.lounge-deck #deckFilters .deck-pool-types button {font-size:13px}
+.lounge-deck #deckPool {grid-template-columns:repeat(var(--pool-cols),minmax(0,1fr));gap:24px clamp(8px,.75vw,16px);padding:15px 18px 24px;scrollbar-gutter:stable}
+.lounge-deck #deckPool .deck-pool-tile {width:100%;height:auto;aspect-ratio:.64}
+.lounge-deck #deckCur {height:calc(var(--formation-card-width,88px) / .64 + 49px);padding:16px 10px 24px;gap:clamp(7px,1.1vw,22px)}
+.lounge-deck #deckCur .deck-entry {width:var(--formation-card-width,88px);height:calc(var(--formation-card-width,88px) / .64)}
+@media(max-width:1199px){:root body .lounge-deck .deck-screen #deckWorkspace{--pool-cols:9}}
+@media(max-width:900px){:root body .lounge-deck .deck-screen #deckWorkspace{--pool-cols:7}}
+@media(max-width:760px){
+ :root body .lounge-deck .lounge-content>.deck-library {width:98%;padding:8px}
+ .deck-library-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ :root body .lounge-deck .deck-screen #deckWorkspace {--pool-cols:5;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto minmax(160px,1fr);height:100%;gap:5px}
+ .lounge-deck #deckSettings {grid-column:1;grid-row:1;display:grid;grid-template-columns:auto 1fr;gap:3px 5px;padding:3px 6px}
+ .lounge-deck #deckSettings .deck-setting-grid {grid-column:1/-1;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px}
+ .lounge-deck #deckSettings .deck-setting-grid button {padding:2px 3px;min-height:32px!important}
+ .deck-setting-grid button b {font-size:10px}
+ .lounge-deck .deck-editor {grid-column:1;grid-row:2}
+ .lounge-deck #deckFilters {grid-column:1;grid-row:3;flex-direction:row;gap:4px;padding:3px}
+ .lounge-deck #deckFilters .deck-search-slot {width:40%;height:32px}
+ .lounge-deck #deckFilters .deck-pool-search {height:32px}
+ .lounge-deck #deckFilters .deck-pool-types {flex:1;flex-direction:row;gap:3px}
+ .lounge-deck #deckFilters .deck-pool-types button {height:32px;font-size:10px}
+ .lounge-deck .deck-panel>#deckCandidates {grid-column:1;grid-row:4}
+ .lounge-deck #deckPool {padding:12px 10px 22px;column-gap:9px}
+ .lounge-deck #deckCur {justify-content:flex-start}
+ :root body .lounge-deck .deck-screen:not([data-tab=edit]) #deckWorkspace {grid-template-rows:auto 36px minmax(150px,1fr)}
+ .lounge-deck .deck-screen:not([data-tab=edit]) #deckSettings {grid-row:1}
+ .lounge-deck .deck-panel>:is(#deckWatchSection,#deckAppearanceSection) {grid-column:1;grid-row:3}
+}
+@media(max-width:480px){
+ .deck-library-grid {grid-template-columns:minmax(0,1fr);gap:10px}
+ :root body .lounge-deck .lounge-content>.deck-library {justify-content:flex-start}
+ :root body .lounge-deck .deck-screen #deckWorkspace {--pool-cols:4}
+ .lounge-deck #deckSettings .deck-setting-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-height:580px){:root body .lounge-deck .lounge-content>.deck-library {justify-content:flex-start}}

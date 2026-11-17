@@ -7,7 +7,7 @@ import {t} from '../i18n';
 import '../styles/profileAppearance.css';
 
 export const appearanceTitle = () => L('キャラクター・背景', 'Character & background', '캐릭터 · 배경');
-const backgroundNames: Record<ProfileBackground, [string,string,string]> = {
+export const backgroundNames: Record<ProfileBackground, [string,string,string]> = {
   plain: ['白','White','흰색'],
   slate: ['墨','Slate','먹색'],
   navy: ['紺','Navy','남색'],

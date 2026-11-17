@@ -44,5 +44,5 @@ export interface SessionUser {
   furniture?: string | null;
   sleeve?: string | null; // equipped card sleeve id ('default' when none)
   deck?: string[] | null; // 활성 덱 8장 카드 id (null = 기본덱)
-  decks?: unknown | null; // 덱 프리셋 5슬롯 {sel, list:[{cards, watch}]} — 클라가 사용
+  decks?: unknown | null; // 덱 프리셋 9슬롯 {sel, list:[{cards, watch}]} — 클라가 사용
 }

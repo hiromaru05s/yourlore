@@ -11,11 +11,12 @@ import {SLEEVE_LIST,type DeckPreset} from '../shared/cards';
 import {FURNITURE_LIST,cosmetic} from '../shared/cosmetics';
 import {getLang,esc} from '../i18n';
 import {loungeText} from './loungeText';
-type AppearanceOptions={deck:DeckPreset;name:string;owned:Set<string>|null;error:boolean;onPick:(kind:'sleeve'|'furniture'|'effect'|'frame',id:string)=>void;onShop:()=>void;onRetry:()=>void};
+export type CosmeticGroup='sleeve'|'furniture'|'effect'|'frame';
+type AppearanceOptions={group?:CosmeticGroup;deck:DeckPreset;name:string;owned:Set<string>|null;error:boolean;onPick:(kind:'sleeve'|'furniture'|'effect'|'frame',id:string)=>void;onShop:()=>void;onRetry:()=>void};
 const views=new WeakMap<HTMLElement,{key:string;appearance:string;options:AppearanceOptions}>();
 export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions){
  const {deck,name,owned,error}=options;
- const key=JSON.stringify([getLang(),name,error,owned?[...owned].sort():null]);
+ const key=JSON.stringify([getLang(),options.group,name,error,owned?[...owned].sort():null]);
  const current=views.get(host),appearance=JSON.stringify([deck.effect??'default',deck.frame??'default']);
  if(current?.key===key&&host.querySelector('.deck-appearance-groups')){
   current.options=options;
@@ -40,6 +41,7 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
  appendAppearancePreview(host.querySelector<HTMLElement>('.deck-appearance-preview')!,deck);
  const groups=host.querySelector('.deck-appearance-groups')!;
  for(const kind of ['frame','effect','sleeve','furniture'] as const){
+  if(options.group && options.group!==kind)continue;
   const title=kind==='frame'?loungeText('カードフレーム','Card frame','카드 프레임'):kind==='effect'?loungeText('カードエフェクト','Card effect','카드 이펙트'):kind==='sleeve'?loungeText('スリーブ','Sleeve','슬리브'):loungeText('デッキ置き場 ＆ 墓地','Deck holder & graveyard','덱 받침 & 묘지');
   const list=kind==='frame'?[{id:'default',ja:'通常の白枠',en:'Original frame',ko:'기본 프레임',url:''},...CARD_FRAMES]:kind==='effect'?[{id:'default',ja:'なし',en:'None',ko:'없음',url:''},...CARD_EFFECTS]:kind==='sleeve'?SLEEVE_LIST:[{id:'default',ja:'デフォルト',en:'Default',ko:'기본',url:''},...FURNITURE_LIST];
   const section=document.createElement('section');section.className='deck-cosmetic-group';section.dataset.kind=kind;section.setAttribute('aria-label',title);

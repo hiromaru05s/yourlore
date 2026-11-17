@@ -1,3 +1,4 @@
+import {deckStoreForUser} from '../../client/src/shared/cards';
 import { BOT_FIRST_CLEAR_EXP } from '../../client/src/shared/progression';
 // ============================================================
 // LORE server — Worker entry. Routes auth (/api/*) and WebSocket
@@ -117,7 +118,7 @@ export default {
       return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json", ...corsHeaders(env) } });
     }
     // ---- auth / REST ----
-    // ---- 덱 프리셋 저장 (덱 빌더: 5슬롯 + 마켓 알림이) ----
+    // ---- 덱 프리셋 저장 (덱 빌더: 9슬롯 + 마켓 알림이) ----
     if (path === "/api/deck" && req.method === "POST") {
       const user = await getUser(env, req);
       const hdrs = { "content-type": "application/json", ...corsHeaders(env) };
@@ -140,7 +141,8 @@ export default {
       if (!user) return new Response("unauthorized", { status: 401 });
       const fwd = new URL(req.url);
       for (const key of ["uid","name","avatar","sleeve","furniture","effect","frame","deck","mmr"]) fwd.searchParams.delete(key);
-      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("furniture",user.furniture??""); fwd.searchParams.set("effect",user.effect??"default"); fwd.searchParams.set("frame",user.frame??"default"); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
+      const presets=deckStoreForUser(user);
+      if (user) { fwd.searchParams.set("uid", user.id); fwd.searchParams.set("name", user.display); fwd.searchParams.set("avatar", presets.list[presets.sel].avatar ?? user.avatar ?? ""); fwd.searchParams.set("sleeve", user.sleeve ?? ""); fwd.searchParams.set("furniture",user.furniture??""); fwd.searchParams.set("effect",user.effect??"default"); fwd.searchParams.set("frame",user.frame??"default"); fwd.searchParams.set("deck", (user.deck ?? []).join(",")); }
       // ranked queue: must be logged in; attach current MMR for band matching
       if (fwd.searchParams.get("mode") === "ranked") {
         if (!user) return new Response("unauthorized", { status: 401 });
