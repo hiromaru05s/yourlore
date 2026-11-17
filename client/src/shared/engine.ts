@@ -4725,7 +4725,9 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "GREED_PRICE": { // 탐욕의 대가(v34): 미믹 2마리 소환 + 미믹 5장 제외
       spawnToken(g, ctx, p, "MIMIC"); spawnToken(g, ctx, p, "MIMIC");
-      for (let gi = 0; gi < 5; gi++) rmz(p).push(inst(g, "MIMIC"));
+      const mimics = Array.from({length:5}, () => inst(g, "MIMIC"));
+      rmz(p).push(...mimics);
+      ctx.ev.push({type:"greedPriceRift", player:side(g,p), uids:mimics.map(m => m.uid)});
       ctx.log(`${tag(p, card)} 미믹(3/2) 2마리 소환 + 미믹 5장 게임에서 제외`, `${tag(p, card)} ミミック(3/2)2体召喚 + ミミック5枚をゲームから除外`, `${tag(p, card)}: summon 2 Mimics (3 ATK / 2 HP) and add 5 new Mimics to your Rift`);
       break;
     }

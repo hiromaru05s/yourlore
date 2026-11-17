@@ -3,11 +3,15 @@ import {acquireSilverInk,silverInkState,SILVER_INK_DURATION} from './riftInkRend
 import type {Point} from './riftTransmute';
 
 /** Approved silver-ink surface, projected through the actual card's DOMMatrix. */
-export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HTMLCanvasElement,start:DOMMatrix,sink:Point,signal:AbortSignal,onStart:()=>void):Promise<boolean>{
+export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HTMLCanvasElement,start:DOMMatrix,sink:Point,signal:AbortSignal,onStart:()=>void,identicalCopies:HTMLElement[] = []):Promise<boolean>{
  const width=innerWidth,height=innerHeight,w=node.offsetWidth,h=node.offsetHeight,dpr=Math.min(devicePixelRatio||1,2);
  if(signal.aborted||!w||!h)return true;
  const project=(x:number,y:number):Point=>{const p=start.transformPoint(new DOMPoint(x,y));return {x:p.x/p.w,y:p.y/p.w};};
  const source=project(w/2,h/2),left=project(0,h/2),right=project(w,h/2);
+ const sources = [source, ...identicalCopies.map(card => {
+   const rect = card.getBoundingClientRect();
+   return {x:rect.left + rect.width/2, y:rect.top + rect.height/2};
+ })];
  const padded=w*(1+2*CARD_PADDING),screenWidth=Math.hypot(right.x-left.x,right.y-left.y)*(1+2*CARD_PADDING);
  if(!Number.isFinite(screenWidth)||screenWidth<1)return false;
  const unit=Math.min(320,Math.max(96,screenWidth*dpr*1.2)),ratio=(h+2*w*CARD_PADDING)/padded;
@@ -33,17 +37,26 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
   canvas.dataset.progress=(ms/SILVER_INK_DURATION).toFixed(3);canvas.dataset.phase=['浮上','カード発光','銀紋の流墨','リフトへの軌跡','到着'][s.phase];
   if(ms<2040){
    // The contact shadow stays on the board while the material rises above it.
-   c.save();c.globalAlpha=.17*s.lift*(1-s.collapse);c.fillStyle='#20102e';c.shadowColor='#281733';c.shadowBlur=screenWidth*.08;c.beginPath();c.ellipse(source.x,source.y+screenWidth*.35,screenWidth*.35,screenWidth*.08,0,0,Math.PI*2);c.fill();c.restore();
+   c.save();c.globalAlpha=.17*s.lift*(1-s.collapse);c.fillStyle='#20102e';c.shadowColor='#281733';c.shadowBlur=screenWidth*.08;for(const point of sources){c.beginPath();c.ellipse(point.x,point.y+screenWidth*.35,screenWidth*.35,screenWidth*.08,0,0,Math.PI*2);c.fill();}c.restore();
    lc.setTransform(1,0,0,1,0,0);lc.clearRect(0,0,local.width,local.height);lc.translate(local.width/2,local.height/2);
    acquired.renderer.draw(lc,face,{x:0,y:0},{x:0,y:0},unit,ms,{part:'source',heightRatio:ratio,lift:0,ground:false});
-   local.style.transform=new DOMMatrix().translate(0,-lift*s.lift).multiply(surfaceMatrix).toString();
+   if(identicalCopies.length){
+    // Generated copies are flat, equally sized public faces. Render the shader once per frame.
+    for(const point of sources) c.drawImage(local, point.x - screenWidth*1.4, point.y - lift*s.lift - screenWidth*1.7, screenWidth*2.8, screenWidth*3.4);
+   } else {
+    local.style.transform=new DOMMatrix().translate(0,-lift*s.lift).multiply(surfaceMatrix).toString();
+   }
   }else local.hidden=true;
-  acquired.renderer.draw(c,face,source,sink,screenWidth,ms,{part:'transfer',lift});
+  for(const point of sources) acquired.renderer.draw(c,face,point,sink,screenWidth,ms,{part:'transfer',lift,arrival:point===source});
  }
  try{
   // Warm the shader before starting the animation clock or hiding the live card.
   paint(0);if(invalid())return true;
-  document.body.append(canvas,local);node.style.visibility='hidden';onStart();
+  document.body.append(canvas);
+  if(!identicalCopies.length)document.body.append(local);
+  node.style.visibility='hidden';
+  for(const copy of identicalCopies)copy.style.visibility='hidden';
+  onStart();
   const begun=performance.now();
   ok=await new Promise<boolean>(resolve=>{
    let ended=false;finish=value=>{if(ended)return;ended=true;cancelAnimationFrame(frame);resolve(value);};
@@ -51,6 +64,6 @@ export async function playSilverRift(node:HTMLElement,target:HTMLElement,face:HT
    const tick=(now:number)=>{if(invalid()){finish(true);return;}const ms=Math.min(SILVER_INK_DURATION,Math.max(0,now-begun));try{paint(ms);}catch{finish(false);return;}if(ms===SILVER_INK_DURATION)finish(true);else frame=requestAnimationFrame(tick);};
    frame=requestAnimationFrame(tick);
   });
- }catch{ok=false;}finally{cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();local.remove();acquired.release();if(style===null)node.removeAttribute('style');else node.setAttribute('style',style);}
+ }catch{ok=false;}finally{cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);canvas.remove();local.remove();acquired.release();for(const copy of identicalCopies)copy.style.removeProperty('visibility');if(style===null)node.removeAttribute('style');else node.setAttribute('style',style);}
  return ok;
 }

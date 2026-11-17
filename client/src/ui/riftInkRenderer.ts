@@ -24,7 +24,7 @@ export function silverInkResourceState(){return {users,allocated:!!shared};}
 function twinScriptTime(ms:number){return ms<=1110||ms>=1990?ms:1110+Math.pow((ms-1110)/880,1.12)*880;}
 export class SilverInkRenderer {
  constructor(private material:RiftInkMaterial){}
- draw(c:C,face:HTMLCanvasElement,source:P,sink:P,width:number,ms:number,options:{heightRatio?:number;part?:'source'|'transfer';lift?:number;ground?:boolean}={}){
+ draw(c:C,face:HTMLCanvasElement,source:P,sink:P,width:number,ms:number,options:{heightRatio?:number;part?:'source'|'transfer';lift?:number;ground?:boolean;arrival?:boolean}={}){
   ms=twinScriptTime(ms);
   const u=width,s=silverInkState(ms),p={x:source.x,y:source.y-(options.lift??u*.20)*s.lift};
   const alive=1-s.collapse;
@@ -50,7 +50,7 @@ export class SilverInkRenderer {
    // Small detached tails carry the same material, never a separate projectile.
    for(let j=0;j<3;j++){const a=Math.max(0,from-.045-j*.025),b=Math.max(0,a-.026);const tail:P[]=[];for(let i=0;i<12;i++)tail.push(riftTrailPosition(origin,sink,b+(a-b)*i/11));c.globalAlpha=(1-smooth(2320,2490,ms))*(.5-j*.1);ribbon(c,tail,u*.003,'#9964be');}
   }
-  if(s.arrival>0&&options.part!=='source'){const q=smooth(2360,2800,ms);c.globalAlpha=s.arrival;c.save();c.translate(sink.x,sink.y);const gradient=c.createLinearGradient(-u*.3,-u*.2,u*.3,u*.2);gradient.addColorStop(0,'#8052aa');gradient.addColorStop(.55,'#f3dfff');gradient.addColorStop(1,'#62387e');for(let j=0;j<4;j++){const pts:P[]=[];for(let i=0;i<=24;i++){const a=j*1.7+i/24*1.1,r=u*(.15+q*.36);pts.push({x:Math.cos(a)*r,y:Math.sin(a)*r*.55});}ribbon(c,pts,u*.014*(1-q),gradient);}c.restore();glow(c,sink.x,sink.y,u*.35,'#b984ed',s.arrival*.24);}
+  if(s.arrival>0&&options.part!=='source'&&options.arrival!==false){const q=smooth(2360,2800,ms);c.globalAlpha=s.arrival;c.save();c.translate(sink.x,sink.y);const gradient=c.createLinearGradient(-u*.3,-u*.2,u*.3,u*.2);gradient.addColorStop(0,'#8052aa');gradient.addColorStop(.55,'#f3dfff');gradient.addColorStop(1,'#62387e');for(let j=0;j<4;j++){const pts:P[]=[];for(let i=0;i<=24;i++){const a=j*1.7+i/24*1.1,r=u*(.15+q*.36);pts.push({x:Math.cos(a)*r,y:Math.sin(a)*r*.55});}ribbon(c,pts,u*.014*(1-q),gradient);}c.restore();glow(c,sink.x,sink.y,u*.35,'#b984ed',s.arrival*.24);}
   }finally{c.restore();}
  }
  private surfaceAccents(c:C,p:P,u:number,ms:number){
