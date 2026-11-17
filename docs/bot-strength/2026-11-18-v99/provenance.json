@@ -87,5 +87,22 @@
     "client/src/shared/cardStats.ts": "ee417bf52d496c563e1f5c6e8e2a021a81be73159888bbc67fee512f0c57efc3",
     "client/src/shared/botNpcs.ts": "7c63ac6c608899f895e93f8c74fbc2e14057948331ac3ba18a463db08d84e244"
   },
-  "shippedSelection": "Removed Spirit Tempo after 0/4 against old Goblin and Mixed Rally. Final roster: Spirit Fortress and Spirit Goblin. New independent 16-game normal comparison and 8-game old-aggro comparison; earlier three-deck validation remains separately reported."
+  "shippedSelection": "Removed Spirit Tempo after 0/4 against old Goblin and Mixed Rally. Final roster: Spirit Fortress and Spirit Goblin. New independent 16-game normal comparison and 8-game old-aggro comparison; earlier three-deck validation remains separately reported.",
+  "productionRelease": {
+    "sourceCommit": "15155cce28c1c7e4d935ed93816b73abfbdf775a",
+    "workerVersion": "e35e0519-d93e-4b6c-93ab-4ab2b31fc7b6",
+    "origin": "https://yourlore.xyz",
+    "guardPassed": 291,
+    "guardTotal": 291,
+    "verification": {
+      "assetHashesMatched": 136,
+      "deployedWorkerCases": 28,
+      "authenticatedNpcTiers": [
+        "easy",
+        "normal",
+        "hard"
+      ],
+      "qaCleanup": true
+    }
+  }
 }

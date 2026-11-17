@@ -1,0 +1,91 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-11-17T20:44:45.815Z",
+  "scope": "temporary QA account and persisted session; authenticated API/WebSocket NPC start, observed BOT response and surrender settlement; not human strength or a full played match",
+  "results": [
+    {
+      "tier": "easy",
+      "authenticatedStart": true,
+      "marketBias": false,
+      "initialMarket": [
+        "RUNE_BARRIER",
+        "NT_SEAL5",
+        "DISCOVERY_SMALL",
+        "FIRE_MARK",
+        "QUICK_AID",
+        "Q_CHEAT",
+        "DUNGEON"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "HALF_ELF": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "manaSpent",
+          "log",
+          "summon"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "normal",
+      "authenticatedStart": true,
+      "marketBias": false,
+      "initialMarket": [
+        "HANDRESET",
+        "M1",
+        "TSO1",
+        "QUICK_CURSE",
+        "TSO5",
+        "DEFENSIVE_STANCE",
+        "NHEAL"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "MINI_SPIRIT": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "manaSpent",
+          "log",
+          "summon"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "hard",
+      "authenticatedStart": true,
+      "marketBias": true,
+      "initialMarket": [
+        "IRON_WALL",
+        "GM5_3",
+        "GM6_0",
+        "PENANCE",
+        "MERC_MASTER",
+        "M9",
+        "S7"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "NOURISHING_RAIN": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "log",
+          "turnHeader"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    }
+  ],
+  "cleanup": true
+}
