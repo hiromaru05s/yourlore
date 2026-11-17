@@ -42,10 +42,16 @@ if(import.meta.env.DEV){
  let controller:SeekerBoard;
  function reset(){controller?.destroy();closeOverlay();setFxSkip(false);controller=new SeekerBoard();}
  reset();const stop=startBoardLayout();
- const panel=document.createElement('div');panel.className='hood-board-controls';panel.innerHTML=`<label>対象 <select id="hoodSide"><option value="0">自分</option><option value="1">相手</option></select></label>${(['idle','mana','heal','hurt','heavy','brand','defeat','victory'] as const).map(action=>`<button data-hood-action="${action}">${labels[action]}</button>`).join('')}<button data-sequence>3種を順に再生</button><button data-reset>リセット</button>`;document.body.append(panel);
+ const panel=document.createElement('div');panel.className='hood-board-controls';panel.innerHTML=`<label>対象 <select id="hoodSide"><option value="0">自分</option><option value="1">相手</option></select></label>${(['idle','mana','heal','hurt','heavy','brand','defeat','victory'] as const).map(action=>`<button data-hood-action="${action}">${labels[action]}</button>`).join('')}<button data-sequence>3種を順に再生</button><label><input type="checkbox" data-review-numbers>被弾の数字を隠す</label><button data-reset>リセット</button>`;document.body.append(panel);
  const css=document.createElement('style');css.textContent='.hood-board-controls{position:fixed;z-index:10000;right:10px;top:10px;max-width:min(580px,96vw);display:flex;gap:5px;flex-wrap:wrap;padding:8px;background:#fffef4ed;border:1px solid #d5d8d8;border-radius:6px;color:#233747;font:10px sans-serif}.hood-board-controls button,.hood-board-controls select{font:inherit;padding:6px;border:1px solid #c8d0d5;color:#243748;background:white;border-radius:3px;cursor:pointer}.hood-board-controls label{display:flex;align-items:center;gap:5px}.topbar,.help-callout,.help-fab,.mute-fab{display:none!important}';document.head.append(css);
  panel.querySelectorAll<HTMLButtonElement>('[data-hood-action]').forEach(b=>b.onclick=()=>void controller.trigger(b.dataset.hoodAction as FixtureAction,Number(panel.querySelector<HTMLSelectElement>('select')!.value) as Side));
  panel.querySelector<HTMLButtonElement>('[data-reset]')!.onclick=reset;
+ const reviewEntry=new URLSearchParams(location.search).has('reactions');
+ const hideNumber=panel.querySelector<HTMLInputElement>('[data-review-numbers]')!;
+ hideNumber.checked=reviewEntry;
+ const syncNumber=()=>document.body.classList.toggle('hood-review-face',hideNumber.checked);
+ hideNumber.onchange=syncNumber;syncNumber();
+ css.textContent+='.hood-review-face .combat-damage{visibility:hidden}';
  const sequence=panel.querySelector<HTMLButtonElement>('[data-sequence]')!;
  let sequenceNumber=0;
  async function review(){
@@ -70,5 +76,6 @@ if(import.meta.env.DEV){
  panel.addEventListener('click',e=>{if(e.target!==sequence)sequenceNumber++;},true);
  await waitForDuel(document.querySelector('#app')!);
  (window as any).hoodedBoard={ready:true,trigger:(action:FixtureAction,side:Side=0)=>controller.trigger(action,side),reset,rerender:()=>controller.rerender(),state:()=>controller.getState(),play:playSeekerSide,skip:setFxSkip,count:seekerPlaybackCount,destroy:()=>{controller.destroy();stop();}};
+ if(reviewEntry)window.setTimeout(()=>{if(controller && !document.hidden)void review();},850);
  window.addEventListener('pagehide',()=>{controller.destroy();stop();},{once:true});
 }
