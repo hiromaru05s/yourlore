@@ -404,7 +404,8 @@ export type GameEvent =
   | { type: "heal"; player: Side; amount: number; growthSourceUid?: string; bloodRiteSources?: string[] }
   | { type: "decayCounterGrant"; player: Side; uid: string; before: number; after: number }
   | { type: "destroy"; player: Side; uid: string; id?: string; cause?: "decay" | "fusion" | "massacre" }
-  | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string }
+  | { type: "manaSpent"; player: Side; before: number; amount: number }
+  | { type: "buy"; player: Side; from: "market" | "supply"; i: number; id: string; paidMana?: number }
   | { type: "marketRestock"; i: number; id: string } // v40: 고정 마켓 슬롯 매진 → 새 카드 입고
   | { type: "draw"; player: Side; count: number }
   | { type: "reshuffle"; player: Side; count: number } // public count only; no card order

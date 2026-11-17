@@ -87,7 +87,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
   const store: DeckStore = isLocalDevAccount()?deckStoreForUser(app.user):constrainDeckStore(deckStoreForUser(app.user),starterCards);
   const sortCards=(cards:string[])=>cards.sort((a,b)=>Number(def(a).t!=='mon')-Number(def(b).t!=='mon')||def(a).cost-def(b).cost||a.localeCompare(b,'en'));
   const cur = options.tutorial ? store.sel : Math.min(store.list.length-1,Math.max(0,options.slot ?? store.sel)); // 현재 편집 중인 슬롯 (store.sel = 게임에 사용되는 슬롯)
-  store.list[cur].representative=deckRepresentative(store.list[cur]);
   sortCards(store.list[cur].cards);
   let watchQ = "";
   let activeTab:'edit'|'watch'|'appearance'='edit';

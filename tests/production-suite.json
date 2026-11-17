@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/mana-spending.mjs",
     "tests/slum-merchant.mjs",
     "tests/balance-v98.mjs",
     "tests/balance-v97.mjs",
