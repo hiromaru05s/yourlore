@@ -1683,6 +1683,10 @@ function applyFieldGlobals(g: GameState, m: FieldMon): void {
 }
 
 /** 부패(decay) 카운터 부여 — 3개 쌓이면 파괴 + 주인에게 3 데미지. */
+export function attackDecayCounters(att: FieldMon): number {
+  return !att.mutedEffects && att.id === "POISON_MASTER" ? 2 : 1;
+}
+
 function addDecay(g: GameState, ctx: Ctx, owner: PlayerState, tm: FieldMon, n: number): void {
   if (swordWarded(owner,tm)) return;
   const before = tm.decayCnt || 0;
@@ -2373,7 +2377,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
     if (tgt && tgt.hatch == null) {
       if (!att.mutedEffects && att.id === "POISON_MASTER") monsterActivation(g, ctx.ev, p, att);
       const beforeDecay = ctx.ev.length;
-      addDecay(g, ctx, o, tgt, !att.mutedEffects && att.id === "POISON_MASTER" ? 2 : 1);
+      addDecay(g, ctx, o, tgt, attackDecayCounters(att));
       monsterKillBonus(g, ctx, p, att, o, tgt, beforeDecay, false);
       if (g.over) { att.attacksUsed = (att.attacksUsed || 0) + 1; if (att.attacksUsed >= (hasPassive(att,'dual') ? Math.max(2,att.mult ?? 1) : 1)) att.exhausted = true; return; }
     }

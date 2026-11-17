@@ -1,7 +1,7 @@
 // Four difficulty levels share the same rules and legal-action safety.
 // Normal and upper tiers search imperfect-information rollouts; easy retains mistakes.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
-import { fireDamageBonus, purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
+import { attackDecayCounters, fireDamageBonus, purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
 import { ST_MAX, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce,  summonReqMet, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
 import { cardPower } from "./cardEval";
 import { searchDecide } from "./botSearch";
@@ -106,14 +106,14 @@ function tuneFor(p: PlayerState): typeof TUNE {
 // so the lethal planner and the burn branch look their damage up here.
 // castable() already gates self-damage and the opposing mana crystals requirement.
 function burnDmg(c: CardInst, p: PlayerState, o: PlayerState): number {
-  if (c.id === "FLAME") return ((p.uses.FLAME ?? 0) >= 6 ? 5 : 2) + fireDamageBonus(p);
+  if (c.id === "FLAME") return ((p.uses.FLAME ?? 0) >= 4 ? 5 : 2) + fireDamageBonus(p);
   if (c.id === "AMBUSH") return [4, 5].includes(o.maxMana) ? 13 : 0;
   return 0;
 }
 
 function reflectedOverflow(att: FieldMon, target: FieldMon, attack: number, hp: number): number {
   if (target.hatch!=null) return 0;
-  if (hasPassive(att,'decay') && (target.decayCnt??0)+(att.id==='POISON_MASTER'?3:1)>=3) return 0;
+  if (hasPassive(att,'decay') && (target.decayCnt??0)+(attackDecayCounters(att))>=3) return 0;
   return Math.max(0,attack-hp);
 }
 
@@ -691,7 +691,7 @@ function autoTarget(g: GameState): Action {
       const legal = (tm: FieldMon): boolean => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 3) && (!reflected || !att || reflectedOverflow(att,tm,a,curHp(o,tm)) < p.hp+(p.shield??0)); // 귀족 영주
       const killable = o.field
         .filter(legal)
-        .filter((tm) => (a >= curHp(o, tm) && !(tm.guts??0)) || tm.hatch != null || (att && hasPassive(att,'decay') && (tm.decayCnt ?? 0) + (att.id==='POISON_MASTER'?3:1) >= 3))
+        .filter((tm) => (a >= curHp(o, tm) && !(tm.guts??0)) || tm.hatch != null || (att && hasPassive(att,'decay') && (tm.decayCnt ?? 0) + (attackDecayCounters(att)) >= 3))
         .sort((x, y) => (threat(y)-(reflected&&att?reflectedOverflow(att,y,a,curHp(o,y))*2:0)) - (threat(x)-(reflected&&att?reflectedOverflow(att,x,a,curHp(o,x))*2:0)));
       const target = killable[0] ?? lowestDef(o, o.field.filter(legal));
       return { type: "chooseTarget", uid: target ? target.uid : null };
