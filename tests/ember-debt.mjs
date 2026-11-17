@@ -26,7 +26,13 @@ try{
   assert.deepEqual(after.state.players[owner].expansion.firePlayed,['FLAME']);
   before.state.players[owner].expansion.firePlayed=['FLAME'];
   recordFirstAidHistory(before,g.turn);
-  assert.deepEqual(after.state,before.state,mode+' state/RNG');assert.deepEqual(gameplay(after.events),gameplay(before.events),mode+' gameplay events');
+  // The historical reducer predates the payment cue. Check the cue as well as the original rules.
+  assert.deepEqual(after.events.filter(event=>event.type==='manaSpent'), [
+    {type:'manaSpent', player:owner, before:g.players[owner].mana, amount:current.DB.FLAME.cost}
+  ], mode+' payment');
+  const spellEvents=after.events.filter(event=>event.type!=='manaSpent');
+  assert.deepEqual(after.state,before.state,mode+' state/RNG');
+  assert.deepEqual(gameplay(spellEvents),gameplay(before.events),mode+' gameplay events');
   const groups=after.events.filter(e=>e.type==='elementalStart'&&e.id==='FLAME');assert.equal(groups.length,mode==='rune'?2:1);
   for(const group of groups){const impacts=after.events.filter(e=>e.type==='elementalImpact'&&e.group===group.group);assert.equal(impacts.length,group.targets.length);assert(after.events.some(e=>e.type==='elementalEnd'&&e.group===group.group));assert.equal(group.targets.length,mode==='lethal'?1:2);assert.equal(group.targets[0].player,1-owner);if(group.targets[1])assert.equal(group.targets[1].player,owner);}
   cases++;
