@@ -1,3 +1,4 @@
+export {holdCrystalHit,landCrystal,strikeFracture} from './crystalDestruction/runtime';
 import {detachMonsterFace,hitMonster} from './monster/runtime';
 import {playManaDestruction} from './manaDestruction/runtime';
 import {projectedPlacement} from './boardProjection';

@@ -689,6 +689,9 @@ export async function counterStrike(uid:string,targetUid:string,onImpact?:()=>vo
  if(!source||!target||fxSkip||document.hidden)return;
  await boardMotionScope(async signal=>{
   if(signal.aborted||fxSkip)return false;
+  // Let the defender receive the first hit before it starts winding up.
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches)await fxWait(160);
+  if(signal.aborted||fxSkip||!source.isConnected||!target.isConnected)return false;
   return playCounter(source,target,{signal,compact:true,onLaunch:()=>sfx('attack'),onImpact:()=>{if(contactDamage>0)sfx('impact');onImpact?.();}});
  });
 }
@@ -1093,7 +1096,7 @@ export function removeReviewFab(): void {
 }
 
 /** Every temporary renderer has one cancellation path, including tab/viewport changes. */
-async function boardMotionScope(run:(signal:AbortSignal)=>Promise<boolean>,deadline=5000):Promise<boolean>{
+export async function boardMotionScope(run:(signal:AbortSignal)=>Promise<boolean>,deadline=5000):Promise<boolean>{
   const abort=new AbortController(),cancel=()=>abort.abort();fxWaiters.add(cancel);
   window.addEventListener('resize',cancel);document.addEventListener('visibilitychange',cancel);
   const timer=setTimeout(cancel,deadline);

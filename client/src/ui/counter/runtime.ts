@@ -4,8 +4,8 @@ import {FRAME_BACK} from '../../shared/cards';
 import {combatRect} from '../combatAnchor';
 import {projectedPlacement} from '../boardProjection';
 import {attackPlan,drawAttackVisual} from '../attackVisual';
-import {counterPose,runCounterTimeline,COUNTER_PREP_MS} from './model';
-import {CounterRenderer} from './renderer';
+import {counterPose,runCounterTimeline,ease,envelope,COUNTER_PREP_MS} from './model';
+import {CounterRenderer,point} from './renderer';
 
 const active=new Map<HTMLElement,{cancel:()=>void;visibility:string}>();
 type Options={compact?:boolean;signal:AbortSignal;onLaunch:()=>void;onImpact:()=>void};
@@ -47,7 +47,7 @@ export async function playCounter(source:HTMLElement,target:HTMLElement,options:
  document.addEventListener('scroll',cancel,true);window.addEventListener('pagehide',cancel);
  const motion=matchMedia('(prefers-reduced-motion: reduce)');motion.addEventListener('change',cancel);
  const timer=setTimeout(cancel,5000),copy=copyFace(source);
- let captureCopy:HTMLElement|undefined;
+
  signal.addEventListener('abort',()=>copy.remove(),{once:true});
  let face:HTMLCanvasElement|undefined,renderer:CounterRenderer|undefined,rig:HTMLElement|undefined,fx:HTMLCanvasElement|undefined;
  try{
@@ -70,9 +70,27 @@ export async function playCounter(source:HTMLElement,target:HTMLElement,options:
   fx=document.createElement('canvas');fx.className='counter-impact';fx.setAttribute('aria-hidden','true');
   fx.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:181;width:100%;height:100%';
   const dpr=Math.min(devicePixelRatio||1,1.5);fx.width=Math.round(innerWidth*dpr);fx.height=Math.round(innerHeight*dpr);const impact=fx.getContext('2d')!;
-  let currentMs=0;
+  // The compact wind-up is only 100ms. Keep the live print on the compositor:
+  // serializing it to SVG here can occupy the entire wind-up on a cold render.
+  const sheen=document.createElement('i');
+  if(options.compact&&!reduced){
+   sheen.style.cssText='position:absolute;inset:2%;border-radius:5%;pointer-events:none;z-index:24;opacity:0;background:linear-gradient(112deg,transparent 44%,#eee9cc22 48%,#fff5d8 50%,#c3d2cc44 52%,transparent 56%) no-repeat;background-size:220% 100%;box-shadow:inset -2px 0 1px #f9e8b9';
+   copy.append(sheen);copy.style.transformOrigin='0 0';
+  }
   const paint=(ms:number)=>{
-   currentMs=ms;
+   if(sheen.isConnected){
+    const t=Math.min(COUNTER_PREP_MS,ms);
+    sheen.style.opacity=String(envelope(t));sheen.style.backgroundPositionX=(ease(30,620,t)*100)+'%';
+    // The approved mesh is planar. Project the same plane onto its native DOM face.
+    const plane=(x:number,y:number)=>{
+     const p=point(t,x-90,y-140.625),w=1-p.z/900;
+     return [(p.x+90)*w,(p.y+140.625)*w,w];
+    };
+    const a=plane(0,0),b=plane(180,0),d=plane(0,281.25),m=new DOMMatrix();
+    m.m11=(b[0]-a[0])/180;m.m12=(b[1]-a[1])/180;m.m14=(b[2]-a[2])/180;
+    m.m21=(d[0]-a[0])/281.25;m.m22=(d[1]-a[1])/281.25;m.m24=(d[2]-a[2])/281.25;
+    m.m41=a[0];m.m42=a[1];m.m44=a[2];copy.style.setProperty('transform',m.toString(),'important');
+   }
    const pose=counterPose(plan,ms,reduced);
    rig!.style.transform=new DOMMatrix().translate(pose.x-plan.origin.x,pose.y-plan.origin.y).multiply(base).translate(90,140.625).rotate(pose.turn).scale(pose.scale).translate(-90,-140.625).toString();
    rig!.dataset.counterMs=String(Math.round(ms));
@@ -85,22 +103,11 @@ export async function playCounter(source:HTMLElement,target:HTMLElement,options:
    if(!reduced&&ms>=COUNTER_PREP_MS)drawAttackVisual(impact,from,to,(ms-COUNTER_PREP_MS+180)/1000);
   };
   paint(0);source.classList.remove('mhit');source.style.visibility='hidden';document.body.append(rig,fx);
-  // Contact must never wait for image decoding. Start with the same live face,
-  // then replace only its material while the transform clock keeps running.
-  if(options.compact){
-   captureCopy=copyFace(source);const pendingCopy=captureCopy;
-   void capture(pendingCopy).then(texture=>{
-    if(signal.aborted||!rig?.isConnected){texture.width=texture.height=1;return;}
-    face=texture;const canvas=document.createElement('canvas');canvas.width=540;canvas.height=810;
-    canvas.style.cssText='position:absolute;left:-45px;top:-61.875px;width:270px;height:405px';
-    card=canvas.getContext('2d');renderer=new CounterRenderer();paint(currentMs);rig.append(canvas);copy.remove();
-   }).catch(()=>{}).finally(()=>pendingCopy.remove());
-  }
   return await runCounterTimeline({signal,reduced,compact:options.compact,isAlive:()=>source.isConnected&&target.isConnected&&!document.hidden,paint,onLaunch:options.onLaunch,onImpact:options.onImpact});
  }finally{
   clearTimeout(timer);cancel();options.signal.removeEventListener('abort',cancel);
   window.removeEventListener('resize',cancel);document.removeEventListener('visibilitychange',cancel);document.removeEventListener('scroll',cancel,true);window.removeEventListener('pagehide',cancel);motion.removeEventListener('change',cancel);
-  copy.remove();captureCopy?.remove();rig?.remove();fx?.remove();renderer?.dispose();if(face)face.width=face.height=1;
+  copy.remove();rig?.remove();fx?.remove();renderer?.dispose();if(face)face.width=face.height=1;
   if(active.get(source)?.cancel===cancel){source.style.visibility=visibility;active.delete(source);}
  }
 }

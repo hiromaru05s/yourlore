@@ -80,7 +80,11 @@ export function detachMonsterFace(source:HTMLElement):HTMLElement{
  copy.classList.remove('is-attacker','is-targetable','is-atk-target');
  copy.style.setProperty('position','fixed','important');copy.style.setProperty('opacity','1','important');copy.style.setProperty('visibility','visible','important');copy.style.setProperty('display','block');copy.style.pointerEvents='none';copy.style.zIndex='136';
  copy.dataset.combatExit='true';copy.dataset.exitUid=source.dataset.uid??source.dataset.exitUid??'';copy.setAttribute('aria-hidden','true');document.body.append(copy);
- jobs.get(source)?.finish(false);removeState(source);hits.delete(source);source.style.visibility='hidden';release();return copy;
+ releaseMonsterFace(source);return copy;
+}
+
+export function releaseMonsterFace(source:HTMLElement){
+ jobs.get(source)?.finish(false);removeState(source);hits.delete(source);source.style.visibility='hidden';release();
 }
 
 export function monsterRect(n:HTMLElement):Rect{const w=n.offsetWidth,h=n.offsetHeight,matrix=projectedPlacement(n,w,h),p=matrix.transformPoint(new DOMPoint(w/2,h/2));return{x:p.x/p.w,y:p.y/p.w,w,h,matrix};}

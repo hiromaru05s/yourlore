@@ -21,7 +21,7 @@ import {forbiddenBatches} from '../ui/forbiddenRitual/selection';
 import {fusionPairs} from '../ui/dragonFusion/selection';
 import {paintTurnUrgency} from '../ui/turnUrgency';
 import {contactPlayback} from './combatTempo';
-import {startCombatExit} from '../ui/combatExit';
+import {holdCrystalHit,landCrystal,strikeFracture,startCombatExit} from '../ui/combatExit';
 import {clearDamageFeedback} from '../ui/damageFeedback';
 import {combatCard} from '../ui/combatAnchor';
 import {hatchPairs} from '../ui/hatchSummon/selection';
@@ -496,6 +496,10 @@ export abstract class BaseController implements BoardHandlers {
     const goblinDirectFinishes=new Map<string,Promise<void>>();
     let voidShotFinish:Promise<void>|undefined;
     const counterFinishes=new Map<string,Promise<void>>();
+    const lastStriker=new Map<string,string>();
+    const fractures=new Map<string,ReturnType<typeof strikeFracture>>();
+    const shelfFlights=new Map<Side,Promise<void>>();
+    const shelvedDeaths=new Set(events.flatMap(e=>e.type==='destroy'&&!e.cause&&res.state.players[e.player].discard.some(c=>c.uid===e.uid)?[e.uid]:[]));
     const grantFinishes:Promise<void>[]=[];
     const grantQueues=new Map<string,Promise<void>>();
     const shownGrants=new Set<GameEvent>();
@@ -549,6 +553,7 @@ export abstract class BaseController implements BoardHandlers {
     for (let i = 0; i < events.length; i++) {
       if (this.dead) return;
       const e = events[i];
+      if((e.type==='attack'||e.type==='counter')&&e.targetUid && e.contactDamage!==0)lastStriker.set(e.targetUid,e.uid);
       if(growth.consumed.has(i)||summonActivations.has(e)||contactedDamage.has(e)||runeReplays.suppressed.has(i))continue;
       // glanceable icon rail (topbar): key events → small icons
       if (e.type === "summon" || e.type === "attack" || e.type === "destroy" || e.type === "buy" || e.type === "draw" || e.type === "playSpell" || e.type === "trapReveal") this.view.pushIcon(e.type);
@@ -767,7 +772,18 @@ export abstract class BaseController implements BoardHandlers {
           if(shelved&&!exiled&&e.cause!=='decay'&&live&&!A.isFxSkipped()){
             // Keep a lethal counter's own face until its short return is complete.
             const returning=counterFinishes.get(e.uid);if(returning)await returning;
-            if(!this.dead&&!A.isFxSkipped())void startCombatExit(live,sideOf(e.player),this.combatExits.signal).catch(error=>console.warn('[combat exit]',error));
+            if(!this.dead&&!A.isFxSkipped()){
+              const cards=res.state.players[e.player].discard;
+              const index=cards.findIndex(card=>card.uid===e.uid);
+              const pile=this.openingRoot?.querySelector<HTMLElement>(sideOf(e.player)==='me'?'#pile-myDisc':'#pile-oppDisc');
+              if(pile?.classList.contains('pile--3d-ready')&&index>=0){
+                const land=()=>this.dead||A.isFxSkipped()?Promise.resolve():A.boardMotionScope(signal=>landCrystal(live,pile,cards[index],index+1,fractures.get(e.uid),AbortSignal.any([signal,this.combatExits.signal])))
+                  .then(()=>{}).catch(error=>console.warn('[crystal exit]',error));
+                const prior=shelfFlights.get(e.player);
+                const flight=prior?prior.then(land):land();
+                shelfFlights.set(e.player,flight);motionFinishes.push(flight);
+              }else void startCombatExit(live,sideOf(e.player),this.combatExits.signal).catch(error=>console.warn('[combat exit]',error));
+            }
             ghosts.delete(e.uid);
           }
           else if(exiled){await (gh?A.ghostDie(gh.el,gh.side,true,false,e.cause==='decay'):A.destroyAnim(e.uid,sideOf(e.player),true,false,e.cause==='decay'));if(gh&&!gh.el.closest(".zone-mon"))gh.el.remove();ghosts.delete(e.uid);}
@@ -845,6 +861,14 @@ export abstract class BaseController implements BoardHandlers {
           const before=health.get(e.uid),after=before===undefined||e.amount===undefined?undefined:Math.max(0,before-e.amount);
           if(after!==undefined)health.set(e.uid,after);
           A.monHit(e.uid,e.amount,after,recoil);
+          const striker=lastStriker.get(e.uid);lastStriker.delete(e.uid);
+          if(recoil&&e.amount&&striker&&shelvedDeaths.has(e.uid)&&!A.isFxSkipped()){
+            const victim=combatCard(e.uid),attacker=combatCard(striker);
+            if(victim&&attacker){
+              const hit=strikeFracture(attacker,victim);fractures.set(e.uid,hit);
+              await A.boardMotionScope(signal=>holdCrystalHit(victim,hit,AbortSignal.any([signal,this.combatExits.signal])));
+            }
+          }
           break;
         }
         case 'wheelResolve': {
