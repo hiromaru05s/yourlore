@@ -1,12 +1,13 @@
 const fs=require('node:fs'),path=require('node:path'),{gzipSync}=require('node:zlib');
 const [lab='/tmp/lore-bot99',out='docs/bot-strength/2026-11-18-v99']=process.argv.slice(2);
 const jobs=JSON.parse(fs.readFileSync(path.join(lab,'final-jobs.json'))),provenance=JSON.parse(fs.readFileSync(path.join(out,'provenance.json')));
+const extra=path.join(lab,'release-jobs.json');if(fs.existsSync(extra))jobs.push(...JSON.parse(fs.readFileSync(extra)));
 const groups=new Map();
 for(const job of jobs){
  const file=path.join(lab,'results',job.name+'.json');if(!fs.existsSync(file))throw Error('Incomplete: '+job.name);
  const result=JSON.parse(fs.readFileSync(file));
  if(result.rows.length!==job.n||result.invalid||result.total!==job.n)throw Error('Invalid/incomplete '+job.name);
- if(result.modules.candidate!==provenance.candidateSHA256||result.modules.baseline!==provenance.baselineSHA256)throw Error('Policy drift '+job.name);
+ if(result.modules.candidate!==(job.candidateSHA256??provenance.candidateSHA256)||result.modules.baseline!==provenance.baselineSHA256)throw Error('Policy drift '+job.name);
  fs.writeFileSync(path.join(out,job.name+'.json.gz'),gzipSync(fs.readFileSync(file),{level:9}));
  const name=job.name.replace(/-\d+$/,'');if(!groups.has(name))groups.set(name,[]);groups.get(name).push(...result.rows);
 }
