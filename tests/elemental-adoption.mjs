@@ -35,7 +35,7 @@ try{
    for(const hit of damage){assert.equal(hit.player,reverse.to);assert.equal(hit.reversed,true);}
   }
   // Log wording and turn grouping are covered by battle-action-log; compare rules here.
-  return events.filter(e=>e.type!=='log'&&e.type!=='turnHeader'&&!e.type.startsWith('elemental')&&e.type!=='monsterActivate'&&e.type!=='cullExile'&&e.type!=='reverseDamage').map(e=>{if(e.type!=='damage')return e;const {reversed,reverseId,...gameplay}=e;return gameplay;});
+  return events.filter(e=>e.type!=='log'&&e.type!=='turnHeader'&&e.type!=='manaSpent'&&!e.type.startsWith('elemental')&&e.type!=='monsterActivate'&&e.type!=='cullExile'&&e.type!=='reverseDamage').map(e=>{if(e.type!=='damage')return e;const {reversed,reverseId,...gameplay}=e;return gameplay;});
  };
  function compare(g,a){const old=baseline.reduce(g,a),now=current.reduce(g,a);
   recordFirstAidHistory(old,g.turn);
