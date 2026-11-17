@@ -15,6 +15,24 @@ export function retainCardPrint(previous:HTMLElement,next:HTMLElement):void {
  }
 }
 
+/** Keep the condition rim's entrance and orbit clocks alive when its print changes parent. */
+function movePrintLayer(parent:HTMLElement,layer:HTMLElement,before:Element|null){
+ if(!layer.classList.contains('hand-condition-effect')||!parent.isConnected||!layer.isConnected){
+  parent.insertBefore(layer,before);return;
+ }
+ // Reparenting can recreate CSS animations, including on a state-preserving DOM move.
+ const clocks=layer.getAnimations({subtree:true}).flatMap(animation=>{
+  const target=(animation.effect as KeyframeEffect|null)?.target;
+  return animation instanceof CSSAnimation && target && animation.startTime!=null
+   ? [{target,name:animation.animationName,start:animation.startTime}] : [];
+ });
+ parent.insertBefore(layer,before);
+ for(const {target,name,start} of clocks){
+  const resumed=target.getAnimations().find(a=>a instanceof CSSAnimation && a.animationName===name);
+  if(resumed && resumed.startTime!==start)resumed.startTime=start;
+ }
+}
+
 /** Borrow the actual decoded print for a flight; leave its interaction/layout
  * owner in place. Return it atomically even when playback is interrupted. */
 export function borrowCardPrint(source:HTMLElement,flight:HTMLElement):()=>void {
@@ -24,6 +42,20 @@ export function borrowCardPrint(source:HTMLElement,flight:HTMLElement):()=>void 
  const nodes=all.filter(node=>prepared.some(copy=>copy.className===node.className));
  const styles=nodes.map(node=>node.getAttribute('style'));
  nodes.forEach(node=>{const copy=prepared.find(copy=>copy.className===node.className);if(copy)node.style.cssText=copy.style.cssText;});
- flight.replaceChildren(...nodes);let returned=false;
- return()=>{if(returned)return;returned=true;nodes.forEach((node,i)=>{const style=styles[i];if(style===null)node.removeAttribute('style');else node.setAttribute('style',style);});source.replaceChildren(...all);};
+ flight.replaceChildren();
+ for(const node of nodes)movePrintLayer(flight,node,null);
+ let returned=false;
+ return()=>{
+  if(returned)return;
+  returned=true;
+  nodes.forEach((node,i)=>{
+   const style=styles[i];
+   if(style===null)node.removeAttribute('style');
+   else node.setAttribute('style',style);
+  });
+  all.forEach((node,i)=>{
+   const at=source.children[i]??null;
+   if(at!==node)movePrintLayer(source,node,at);
+  });
+ };
 }

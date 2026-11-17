@@ -14,6 +14,8 @@ await server.listen();
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const context=await browser.newContext({viewport:{width:1280,height:900},recordVideo:{dir:out,size:{width:1280,height:900}}});
 const page=await context.newPage(),checks=[],errors=[];page.setDefaultTimeout(60000);page.on('pageerror',e=>errors.push(e.message));
+// Compare timeline origins so a natural wrap of the 2.3 s orbit still passes.
+const rimClocks=svg=>svg.getAnimations({subtree:true}).map(a=>[a.animationName,a.startTime]);
 try{
  await page.goto('http://127.0.0.1:5599/draw-tone');await page.waitForFunction(()=>window.monsterQA&&document.querySelector('[data-scene-ready=true]'));
  for(const [label,mana,goblin] of [['condition-blocked',20,false],['mana-blocked-condition-met',0,true],['playable-condition-met',20,true]]){
@@ -23,6 +25,9 @@ try{
    await page.waitForTimeout(300);
    const before=await page.evaluate(()=>{const n=document.querySelector('#hand [data-uid="new"]');return{dim:n.classList.contains('is-dim'),condition:n.classList.contains('has-play-condition'),tone:[...n.children].map(c=>({filter:getComputedStyle(c).filter,opacity:getComputedStyle(c).opacity}))};});
    assert.equal(before.dim,mana===0||!goblin);assert.equal(before.condition,goblin);
+   const rim=page.locator('#hand [data-uid="old"] .hand-condition-effect svg');
+   const clocks=goblin?await rim.evaluate(rimClocks):[];
+   if(goblin)assert(clocks.some(([name,time])=>name==='hcond-orbit' && time!=null));
    await page.evaluate(()=>{window.drawDone=monsterQA.A.animateDraw(document.querySelector('#hand'),1,'me',{uids:['new']});});
    const sample=await page.waitForFunction(()=>{
     if(!(Number(document.querySelector('.native-draw-card')?.dataset.progress)>.58))return false;
@@ -34,7 +39,9 @@ try{
    assert(!/is-dim|has-play-condition|is-playable/.test(during.classes));assert.equal(during.effects,0);assert.equal(during.filter,'none');
    assert(during.tones.every(t=>!t.filter.includes('grayscale')&&t.opacity==='1'));
    assert.deepEqual(during.grip,before.tone,'existing hand preserves its per-layer presentation');
+   if(goblin)assert.deepEqual(await page.locator('.native-draw-layer > .card .hand-condition-effect svg').first().evaluate(rimClocks),clocks);
    await page.screenshot({path:`${out}/${label}-${width}-flight.png`});await page.evaluate(()=>window.drawDone);
+   if(goblin)assert.deepEqual(await rim.evaluate(rimClocks),clocks,'existing hand rim keeps its phase at landing');
    // Toning starts at contact and follows the print when it returns to the hand.
    await page.evaluate(()=>Promise.all(document.querySelector('#hand [data-uid="new"]').getAnimations({subtree:true}).filter(a=>a.id==='draw-land-tone').map(a=>a.finished)));
    const after=await page.evaluate(()=>{const n=document.querySelector('#hand [data-uid="new"]');return{visible:getComputedStyle(n).visibility,dim:n.classList.contains('is-dim'),condition:n.classList.contains('has-play-condition'),tone:[...n.children].map(c=>({filter:getComputedStyle(c).filter,opacity:getComputedStyle(c).opacity})),copies:document.querySelectorAll('.native-draw-layer').length};});

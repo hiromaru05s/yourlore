@@ -62,8 +62,9 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
   if(grips.some(g=>g.node===node))return;
   const copy=nativeCopy(node),cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight;
   const old=previousHand?.get(node.dataset.uid||'#'+index),from=old&&!settled?old.matrix.scale(old.width/w,old.height/h):handCardMatrix(node);
+  copy.style.transformOrigin='0 0';copy.style.transform=from.toString();copy.style.zIndex=String(all.length-index);overlay.append(copy);
   const returnPrint=borrowCardPrint(node,copy);
-  copy.style.transformOrigin='0 0';copy.style.transform=from.toString();copy.style.zIndex=String(all.length-index);overlay.append(copy);grips.push({node,copy,visibility:node.style.visibility,from,width:w,height:h,settled,returnPrint});node.style.visibility='hidden';
+  grips.push({node,copy,visibility:node.style.visibility,from,width:w,height:h,settled,returnPrint});node.style.visibility='hidden';
   if(settled && node.classList.contains('is-dim')){
    // These are the actual borrowed print layers. Their animations follow
    // them back into the hand when the last travelling card is seated.
