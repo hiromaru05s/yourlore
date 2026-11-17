@@ -250,8 +250,8 @@ function studyLifetime(node:HTMLElement,tick:()=>void,dispose=()=>{}):()=>void {
   return ()=>{cleanup();if(node.isConnected){closeZoom();closeOverlay();}};
 }
 
-export function openingHandDialog(pool:CardInst[],confirmed:boolean,select:(uids:string[])=>void,secondsLeft:()=>number,appearance:Parameters<typeof buildHandStudy>[3]={}):()=>void {
-  const scene=buildHandStudy(pool,confirmed,select,appearance);
+export function openingHandDialog(state:GameState,you:Side,select:(uids:string[])=>void,secondsLeft:()=>number):()=>void {
+  const scene=buildHandStudy(state,you,select);
   const tick=()=>scene.update(secondsLeft());mount(scene.node);tick();
   return studyLifetime(scene.node,tick,scene.dispose);
 }

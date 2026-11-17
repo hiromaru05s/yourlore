@@ -39,13 +39,13 @@ export async function mountOpeningLab(root:HTMLElement):Promise<void>{
       const finish=(uids:string[])=>{
         reset();state=reduce(state,{type:'mulligan',player:0,uids}).state;
         view.render(state);
-        closeStudy=openingHandDialog(state.players[0].hand,true,()=>{},()=>Math.max(0,(until-Date.now())/1000));
+        closeStudy=openingHandDialog(state,0,()=>{},()=>Math.max(0,(until-Date.now())/1000));
         timer=window.setTimeout(()=>{
           closeStudy();state=reduce(state,{type:'mulligan',player:1,uids:[]}).state;
           view.render(state);panel.hidden=false;
         },1250);
       };
-      closeStudy=openingHandDialog(state.players[0].hand,false,finish,()=>(until-Date.now())/1000);
+      closeStudy=openingHandDialog(state,0,finish,()=>(until-Date.now())/1000);
       timer=window.setTimeout(()=>finish([]),MULLIGAN_MS);
     };
     const begin=(market:boolean)=>{

@@ -121,3 +121,20 @@
  .market-row{--unit:min(10.2vw,16.8dvh)}.market-row-title{font-size:14px}
  .market-row .study-rack{padding:3px 0 8px}
 }
+.hand-market-toggle{min-height:42px;padding:8px 17px;cursor:pointer;letter-spacing:.04em;white-space:nowrap}
+.hand-study .study-content[hidden]{display:none}
+.hand-study.viewing-board{display:block;padding:0;background:transparent}
+.hand-study.viewing-board::before,.hand-study.viewing-board::after,
+.hand-study.viewing-board .study-heading,.hand-study.viewing-board .study-status,
+.hand-study.viewing-board .study-head::after,.hand-study.viewing-board .study-foot::before{display:none}
+.hand-study.viewing-board .study-head,.hand-study.viewing-board .study-foot{
+  position:absolute;z-index:1;right:max(14px,env(safe-area-inset-right));width:auto;min-height:0;padding:0;border:0
+}
+.hand-study.viewing-board .study-head{top:max(10px,env(safe-area-inset-top));background:#0a182def;padding:5px 10px;pointer-events:none}
+.hand-study.viewing-board .study-clock{padding-bottom:3px}
+.hand-study.viewing-board .study-seconds{font-size:22px}
+.hand-study.viewing-board .study-foot{bottom:max(10px,env(safe-area-inset-bottom))}
+.hand-market-inspection{position:absolute;inset:0}
+.hand-market-inspection .market-inspect-target{position:absolute;opacity:0;cursor:zoom-in}
+.hand-market-inspection .market-inspect-target:focus-visible{opacity:1;background:transparent!important;border:2px solid #bde3ff!important;border-image:none!important}
+@media(max-width:420px){.hand-study .study-foot{gap:6px}.hand-market-toggle{padding-inline:8px;font-size:12px}}
