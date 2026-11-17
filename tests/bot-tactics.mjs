@@ -8,6 +8,10 @@ try{
  const card=id=>({...C.DB[id],uid:'tactic-'+serial++});
  const mon=(atk,exhausted=false)=>({...card('M2'),tribe:undefined,atk,def:5,dmg:0,tempAtk:0,atkMod:0,defMod:0,exhausted,summonedTurn:0});
  function fresh(){const g=C.createGame({mode:'bot',seed:27,starting:0,p0:{id:'a',name:'a'},p1:{id:'b',name:'b'}}).state;g.turn=8;g.pending=null;g.market=[];for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],traps:[],enchants:[],quests:[],supply:[],hp:40,mana:2,maxMana:8});return g;}
+ const restricted=fresh();restricted.players[0].field=[{...mon(30),tribe:'엘프'},mon(2)];
+ restricted.pending={kind:'myMon',reason:'buffPerm',allowCancel:false,hint:'',hintJa:'',data:{sourceId:'S3',val:3,val2:0}};
+ const choice=C.greedyDecide(restricted,false);assert.equal(choice.uid,restricted.players[0].field[1].uid,'S3 must choose a tribeless monster even when a tribal monster is stronger');
+ assert.equal(C.reduce(restricted,choice).state.pending,null);
  for(const difficulty of ['hard','hell']){
   let g=fresh();g.players[0].field=[mon(9,true),mon(2)];g.players[0].hand=[card('S3')];g.players[1].hp=5;
   for(let i=0;i<4&&!g.over;i++){const a=C.botDecide(g,difficulty);g=C.reduce(g,a).state;}

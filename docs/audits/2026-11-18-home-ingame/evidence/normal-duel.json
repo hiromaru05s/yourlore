@@ -1,0 +1,15 @@
+{
+  "errors": [],
+  "roomId": "1cfbacf8-45c8-456d-a658-c42f109192ba",
+  "turn": 3,
+  "checks": [
+    "matchmaking",
+    "opening",
+    "mulligan",
+    "endTurn",
+    "reload same room",
+    "opponent surrender",
+    "result",
+    "return HOME"
+  ]
+}

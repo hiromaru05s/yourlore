@@ -42,6 +42,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
   let closeAppearance: (()=>void)|undefined;
   let closeRename: (()=>void)|undefined;
   let logoutPending = false;
+  let couponPending = false;
   let logoutError = "";
   let disposeMedals: (()=>void)|undefined;
   let cached: Profile | null = null;
@@ -106,7 +107,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
       if(!profile.medals){body().innerHTML=`<p>${loungeText('勲章を読み込めませんでした。再読み込みしてください。','Could not load honors. Please reload.','훈장을 불러오지 못했습니다. 새로고침해 주세요.')}</p>`;return;}
       disposeMedals=mountProfileMedals(body(),profile.medals,tab==='owned',async id=>{
         const result=await api.updateMe({badge:id});profile.badge=result.badge;
-        if(app.user){app.user.badge=result.badge;document.dispatchEvent(new Event('lore:user'));}
+        if(app.user?.id===profile.id){app.user.badge=result.badge;document.dispatchEvent(new Event('lore:user'));}
       });
     }
     else if (tab === "h2h") renderH2H(cached);
@@ -237,7 +238,7 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
         <h3><span class="tut-ico">${homeIcon("gift")}</span>${t("settings.coupon")}</h3>
         <div class="set-row fr-add">
           <input class="input" id="coupon" aria-label="${t("settings.coupon")}" placeholder="${t("settings.coupon.ph")}" maxlength="32" style="text-transform:uppercase">
-          <button class="btn btn-gold" id="couponGo">${t("settings.coupon.apply")}</button>
+          <button class="btn btn-gold" id="couponGo" ${couponPending ? 'disabled' : ''}>${t("settings.coupon.apply")}</button>
         </div>
         <div class="fr-add-msg" id="couponMsg"></div>
       </section>
@@ -275,22 +276,40 @@ export function mountProfile(app: App, userId?: string, initialTab?: ProfileTab)
 
     // coupon
     const couponMsg = body().querySelector("#couponMsg") as HTMLElement;
+    const couponInput = body().querySelector("#coupon") as HTMLInputElement;
+    const couponButton = body().querySelector("#couponGo") as HTMLButtonElement;
     const redeem = (): void => {
-      const code = (body().querySelector("#coupon") as HTMLInputElement).value.trim();
-      if (!code) return;
+      const code = couponInput.value.trim();
+      if (!code || couponPending || dead) return;
+      couponPending = true; couponButton.disabled = true;
       couponMsg.textContent = "…";
       api.redeemCoupon(code).then((r) => {
-        couponMsg.textContent = `✓ ${t("settings.coupon.ok")} +${r.amount} ${t("home.shards")}`;
-        (body().querySelector("#credits") as HTMLElement).textContent = String(r.credits);
-        if (app.user) app.user.credits = r.credits;
-        document.dispatchEvent(new Event("lore:user"));
-        if (cached) cached.credits = r.credits;
-        (body().querySelector("#coupon") as HTMLInputElement).value = "";
+        // Keep the account balance fresh even after leaving Settings. An old
+        // request must never update the next signed-in account or a new tab's DOM.
+        if (app.user?.id === p.id) {
+          app.user.credits = r.credits;
+          document.dispatchEvent(new Event("lore:user"));
+        }
+        p.credits = r.credits;
+        if (dead) return;
+        if (tab === 'settings' && cached === p) {
+          const target = body();
+          const message = target.querySelector<HTMLElement>('#couponMsg');
+          const balance = target.querySelector<HTMLElement>('#credits');
+          const input = target.querySelector<HTMLInputElement>('#coupon');
+          if (message) message.textContent = `✓ ${t("settings.coupon.ok")} +${r.amount} ${t("home.shards")}`;
+          if (balance) balance.textContent = String(r.credits);
+          if (input && input.value.trim() === code) input.value = "";
+        }
         sfx("coin");
-      }).catch((e) => { couponMsg.textContent = (e as Error).message; sfx("error"); });
+      }).catch((e) => { if (!dead && couponMsg.isConnected) { couponMsg.textContent = (e as Error).message; sfx("error"); } })
+        .finally(() => {
+          couponPending = false;
+          if (!dead) { const button = body().querySelector<HTMLButtonElement>('#couponGo'); if (button) button.disabled = false; }
+        });
     };
-    (body().querySelector("#couponGo") as HTMLElement).onclick = redeem;
-    (body().querySelector("#coupon") as HTMLInputElement).onkeydown = (e) => { if (e.key === "Enter") redeem(); };
+    couponButton.onclick = redeem;
+    couponInput.onkeydown = (e) => { if (e.key === "Enter" && !e.isComposing) redeem(); };
 
     // logout
     const logoutButton = body().querySelector<HTMLButtonElement>("#logout")!;

@@ -50,14 +50,15 @@ export function mountLobby(app: App, ranked = false): Screen {
 
   const connect = (): void => {
     started??=Date.now();
-    sock = new Sock<QueueServerMsg, QueueClientMsg>(ranked ? "/ws/queue?mode=ranked" : "/ws/queue", {
+    const current = new Sock<QueueServerMsg, QueueClientMsg>(ranked ? "/ws/queue?mode=ranked" : "/ws/queue", {
       onOpen: () => {
-        if (done) { sock?.close(); return; }
-        sock?.send({ type: "queue" });
+        if (done || sock !== current) { current.close(); return; }
+        current.send({ type: "queue" });
         stopHb();
-        hb = setInterval(() => sock?.send({ type: "ping" }), HB_MS);
+        hb = setInterval(() => current.send({ type: "ping" }), HB_MS);
       },
       onMessage: (m) => {
+        if (done || sock !== current) return;
         if (m.type === "queued") {
           retry = 0; // the server actually processed us — reset the backoff
           title.textContent = ranked ? t("lobby.ranked") : t("lobby.searching");
@@ -76,6 +77,7 @@ export function mountLobby(app: App, ranked = false): Screen {
         }
       },
       onClose: () => {
+        if (done || sock !== current) return;
         stopHb();
         // dropped while waiting (idle timeout, deploy, network blip) — rejoin automatically,
         // with exponential backoff (max 15s) so a rejection loop can't hammer the matchmaker DO
@@ -83,8 +85,9 @@ export function mountLobby(app: App, ranked = false): Screen {
         if (!done) { title.textContent = t("lobby.connerr"); msg.textContent = t("lobby.connerr.desc"); }
         if (!done) setTimeout(() => { if (!done) connect(); }, Math.min(RETRY_MS * 2 ** (retry - 1), 15_000));
       },
-      onError: () => { title.textContent = t("lobby.connerr"); msg.textContent = t("lobby.connerr.desc"); },
+      onError: () => { if (done || sock !== current) return; title.textContent = t("lobby.connerr"); msg.textContent = t("lobby.connerr.desc"); },
     });
+    sock = current;
   };
   // Do not pair players while a cold client is still downloading its game.
   const prepare=async()=>{

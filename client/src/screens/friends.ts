@@ -61,8 +61,9 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
   let challengeModalOpen = false;
   const modals=new Set<HTMLElement>();
   let outgoingId:string|undefined;
+  let outgoingPending=false;
 
-  const cleanup = (): void => { dead = true; clearTimeout(listTimer); clearTimeout(pollTimer);modals.forEach(n=>n.remove());modals.clear();if(outgoingId){void api.challengeCancel(outgoingId);outgoingId=undefined;} };
+  const cleanup = (): void => { dead = true; clearTimeout(listTimer); clearTimeout(pollTimer);modals.forEach(n=>n.remove());modals.clear();if(outgoingId){void api.challengeCancel(outgoingId).catch(()=>{});outgoingId=undefined;} };
 
   // ---- add friend ----
   const addFriend = (): void => {
@@ -159,9 +160,11 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
 
   // ---- outgoing challenge ----
   const sendChallenge = (uid: string, name: string): void => {
+    if(dead||outgoingPending||outgoingId)return;
+    outgoingPending=true;msg.textContent='…';
     api.challenge(uid).then(({ id }) => {
       if (dead) { void api.challengeCancel(id).catch(() => {}); return; }
-      outgoingId=id;
+      outgoingId=id;msg.textContent='';
       sfx("pop");
       const ov = document.createElement("div");
       ov.className = "overlay";
@@ -179,7 +182,7 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
         ov.remove();modals.delete(ov);outgoingId=undefined;
         if (note) { msg.textContent = note; sfx("error"); }
       };
-      (ov.querySelector("#chCancel") as HTMLElement).onclick = () => { void api.challengeCancel(id); stop(); };
+      (ov.querySelector("#chCancel") as HTMLElement).onclick = () => { void api.challengeCancel(id).catch(showError); stop(); };
       const poll = (): void => {
         if (stopped || dead) return;
         api.challengePoll(id).then((r) => {
@@ -193,7 +196,7 @@ export function mountFriends(app: App, host?: HTMLElement, compact = false): Scr
         }).catch(() => { if(!stopped&&!dead)pollTimer = window.setTimeout(poll, POLL_CHALLENGE_MS); });
       };
       pollTimer = window.setTimeout(poll, POLL_CHALLENGE_MS);
-    }).catch((e) => { msg.textContent = (e as Error).message; sfx("error"); });
+    }).catch(showError).finally(()=>{outgoingPending=false;});
   };
 
   // ---- list refresh loop ----

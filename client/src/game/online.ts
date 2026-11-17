@@ -24,6 +24,7 @@ export class OnlineController extends BaseController {
   private sock!: Sock<GameServerMsg, GameClientMsg>;
   private roomId: string;
   private started = false;
+  private connected = false;
   private closing = false;
   private retries = 0;
   private openedAt = 0; // when the current socket opened; 0 = never opened
@@ -50,14 +51,26 @@ export class OnlineController extends BaseController {
   }
 
   private connect(): void {
-    this.sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
-      onOpen: () => { this.turnReadySentKey = ""; this.openedAt = Date.now(); this.lastMsgAt = Date.now(); this.sock.send({ type: "ready", openingVersion:OPENING_VERSION, mulliganVersion:1, battleLogVersion:1, turnReadyVersion:1 }); this.startHb(); },
-      onMessage: (msg) => { this.lastMsgAt = Date.now(); this.onServer(msg); },
-      onClose: () => this.onSockClose(),
+    if (this.closing) return;
+    this.connected = false;
+    const sock = new Sock<GameServerMsg, GameClientMsg>(`/ws/room/${this.roomId}`, {
+      onOpen: () => {
+        if (this.closing || this.sock !== sock) return;
+        this.turnReadySentKey = ""; this.openedAt = Date.now(); this.lastMsgAt = Date.now();
+        sock.send({ type: "ready", openingVersion:OPENING_VERSION, mulliganVersion:1, battleLogVersion:1, turnReadyVersion:1 }); this.startHb();
+      },
+      onMessage: (msg) => {
+        if (this.closing || this.sock !== sock) return;
+        this.lastMsgAt = Date.now(); this.onServer(msg);
+      },
+      onClose: () => { if (!this.closing && this.sock === sock) this.onSockClose(); },
     });
+    this.sock = sock;
   }
 
   private onSockClose(): void {
+    this.connected = false;
+    clearTimeout(this.echoTimer);
     this.stopHb();
     if (this.closing || this.state?.over) return;
     // only a connection that STAYED UP resets the retry budget — resetting on every
@@ -94,9 +107,11 @@ export class OnlineController extends BaseController {
     if(msg.type==='rewardsSettled'){this.exits.onExperience?.();document.dispatchEvent(new Event('lore:rewards'));return;}
     if (msg.type === "init" || msg.type === "update") {
       this.echoLockAt = 0;
+      clearTimeout(this.echoTimer);
       if (msg.state.ranked != null) this.ranked = msg.state.ranked;
     } // server echoed — next action may go
     if (msg.type === "init") {
+      this.connected = true;
       if(msg.state.botDifficulty && ariesRoomStage(this.roomId) === undefined)setOppAvatar(botNpc(msg.state.botDifficulty).avatar);
       const firstInit = !this.started; // 이 클라이언트가 처음 받는 init (새로고침/크래시 복귀 포함)
       this.started = true;
@@ -170,7 +185,8 @@ export class OnlineController extends BaseController {
   // one INDEX-BASED mutating action per server round-trip: a double-tap resolved
   // the same hand/market index twice, and after the first play shifted the array
   // the second played/bought whichever card slid into that slot. Cleared on every
-  // init/update; the 2.5s failsafe covers a lost echo.
+  // init/update. A missing echo reconnects for an authoritative snapshot;
+  // elapsed time must never authorize replaying an index that may have shifted.
   protected openingPrepared():void { this.sock.send({type:"openingReady"}); }
   private turnReadySentKey = "";
   protected turnPlayable():void {
@@ -180,14 +196,19 @@ export class OnlineController extends BaseController {
     this.sock.send({type:"turnReady",turn:this.state.turn,cur:this.state.cur});
   }
   private echoLockAt = 0;
+  private echoTimer?: ReturnType<typeof setTimeout>;
   protected submit(action: Action): void {
-    if (!this.started || this.state?.over || action.type!=="surrender"&&this.openingLocked) return;
+    if (this.closing || !this.connected || !this.started || this.state?.over || action.type!=="surrender"&&this.openingLocked) return;
     const locking = action.type === "play" || action.type === "buyMarket" || action.type === "buySupply"
       || action.type === "claimDeal" || action.type === "attack" || action.type === "refresh" || action.type === "endTurn";
     if (locking) {
       const now = Date.now();
-      if (now - this.echoLockAt < 2_500) return;
+      if (this.echoLockAt) return;
       this.echoLockAt = now;
+      const sock = this.sock;
+      this.echoTimer = setTimeout(() => {
+        if (!this.closing && this.sock === sock && this.echoLockAt) sock.close();
+      }, 8000);
     }
     this.sock.send({ type: "action", action });
   }
@@ -233,5 +254,5 @@ export class OnlineController extends BaseController {
     el.textContent = text;
   }
 
-  destroy(): void { this.closing = true; clearTimeout(this.rankRecoveryTimer); document.removeEventListener("visibilitychange", this.onVisible); this.stopHb(); this.stopOppTicker(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
+  destroy(): void { this.closing = true; this.connected = false; clearTimeout(this.echoTimer); clearTimeout(this.rankRecoveryTimer); document.removeEventListener("visibilitychange", this.onVisible); this.stopHb(); this.stopOppTicker(); this.preview?.close(); this.preview = undefined; this.banner(null); this.sock?.close(); super.destroy(); }
 }

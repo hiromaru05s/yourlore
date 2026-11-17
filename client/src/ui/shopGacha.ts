@@ -18,7 +18,8 @@ const cosmeticRate=()=>String(7/GACHA_COSMETICS.length);
 const sleeveCount=()=>GACHA_COSMETICS.filter(c=>c.kind==='sleeve').length;
 const furnitureCount=()=>GACHA_COSMETICS.filter(c=>c.kind==='furniture').length;
 const rateDetails=()=>`<table><tbody><tr><th>${l('スターター','Starter','스타터')}</th><td>92.5%</td></tr><tr><th>${l('スリーブ・デッキ置き場＆墓地','Sleeves & deck holder / graveyard','슬리브·덱 받침 & 묘지')}</th><td>7%</td></tr><tr><th>${l('エフェクト3種（均等）','3 effects (equal odds)','이펙트 3종 (동일 확률)')}</th><td>0.5%</td></tr></tbody></table><p>${l(`スリーブ${sleeveCount()}種とデッキ置き場＆墓地${furnitureCount()}種は別々に排出、各${cosmeticRate()}%。スターターは各種類均等、エフェクトは各1/600（約0.1667%）。10回も1回ずつ同じ抽選です。`,`${sleeveCount()} sleeves and ${furnitureCount()} deck holder/graveyard items drop separately at ${cosmeticRate()}% each. Starters have equal per-type odds. Each effect: 1/600 (about 0.1667%). Ten draws use the same independent odds.`,`슬리브 ${sleeveCount()}종과 덱 받침·묘지 ${furnitureCount()}종은 별도 배출되며 각각 ${cosmeticRate()}%. 스타터는 종류별 동일 확률, 각 이펙트는 1/600 (약 0.1667%). 10회도 매회 같은 추첨입니다.`)}</p><p>${l('重複還元：スターター8枚所持時50／スリーブ・家具100／エフェクト500シャード。','Duplicates: 50 Shards for starters at 8 copies / 100 for owned sleeves or furniture / 500 for owned effects.','중복 환급: 스타터 8장 보유 시 50 / 보유 슬리브·가구 100 / 이펙트 500샤드.')}</p>`;
-export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;credits:number;tutorial?:boolean;onResultsClosed?:()=>void;draw?:(count:number)=>Promise<CollectionResult>}):()=>void {
+export interface ShopGachaMount { ():void; update(credits:number,draw?: (count:number)=>Promise<CollectionResult>):void; }
+export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;credits:number;tutorial?:boolean;onResultsClosed?:()=>void;draw?:(count:number)=>Promise<CollectionResult>}):ShopGachaMount {
  const warmTimer=setTimeout(()=>{if(host.isConnected)void prepareGachaCinematic().catch(()=>{});},350);
  let visualCleanups:Array<()=>void>=[],stopSamples=()=>{};
  let closeConfirmation:(()=>void)|undefined;
@@ -96,5 +97,9 @@ export function mountShopGacha(host:HTMLElement,options:{variant?:GachaVariant;c
   };
   host.querySelectorAll<HTMLButtonElement>('[data-pull]').forEach(b=>b.onclick=()=>void draw(Number(b.dataset.pull)));
  }
- render();return()=>{dead=true;clearTimeout(warmTimer);stopSamples();close();host.replaceChildren();};
+ render();return Object.assign(()=>{dead=true;clearTimeout(warmTimer);stopSamples();close();host.replaceChildren();}, {
+  update(credits:number,draw?: (count:number)=>Promise<CollectionResult>){
+   if(dead)return;balance=credits;options.draw=draw;updateControls();
+  },
+ });
 }

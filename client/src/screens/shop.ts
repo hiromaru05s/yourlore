@@ -26,7 +26,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant;tutori
   let guide:TutorialSpotlight|undefined;
   const teaching=options.tutorial;
   let bought=false;
-  let destroyGacha:(()=>void)|undefined;
+  let destroyGacha:ReturnType<typeof mountShopGacha>|undefined;
   let frames:ReturnType<typeof mountShopFrames>|undefined,ownedFrames=new Set(app.user?.frames??[]);
   let category: 'gacha'|'starter'|'accessories'='gacha';
   let closePurchase:(()=>void)|undefined;
@@ -38,6 +38,7 @@ export function mountShop(app: App, options: {gachaVariant?: GachaVariant;tutori
   let notice='';
   const uid=app.user?.id??'';
   const refreshCollectionUi=()=>{
+    destroyGacha?.update(credits,collectionReady&&!collectionBusy?(count)=>transact({kind:'draw',count}):undefined);
     const recovery=wrap.querySelector<HTMLElement>('#collectionRecovery');
     if(recovery){recovery.hidden=!pendingPurchase(uid);const b=recovery.querySelector('button');if(b)b.disabled=collectionBusy;}
     const msg=wrap.querySelector<HTMLElement>('#collectionNotice');if(msg)msg.textContent=notice;
