@@ -926,3 +926,6 @@
   .zoom-overlay .has-tribe-synergy .inspect-heading-copy { grid-column:2; align-self:center; padding:0; }
   .has-tribe-synergy .zoom-details { grid-column:1/-1; grid-row:3; }
 }
+
+.spend-overlay{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:180}
+.spend-face{position:absolute;inset:2%;z-index:12;pointer-events:none;border-radius:inherit;opacity:0;background:linear-gradient(129deg,transparent calc(var(--front) - 32%),#3a83cd1a calc(var(--front) - 17%),#89d8ff85 calc(var(--front) - 3%),#efffffad var(--front),transparent calc(var(--front) + 3%));box-shadow:inset 1px 1px 2px #c3edff,inset 0 0 5px #5daafc}

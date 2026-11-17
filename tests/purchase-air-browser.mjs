@@ -27,9 +27,9 @@ try{
  for(const [width,height] of [[1280,900],[390,844]]){
   await p.setViewportSize({width,height});await p.waitForTimeout(120);
   for(const side of ['me','opp']){
-   await p.evaluate(side=>{A.setFxSkip(false);const el=document.querySelector('.card[data-uid="purchase-fixture"]');window.buyDone=false;window.buyStart=performance.now();window.buyPromise=A.buyReveal({...DB.ELF,uid:'runtime-buy'},side,el.getBoundingClientRect(),el,0,4).then(()=>{window.buyElapsed=performance.now()-buyStart;window.buyDone=true;});},side);
-   await p.waitForTimeout(400);assert.equal(await p.locator('.biblion-fx--front').getAttribute('data-effects'),'purchase');await p.screenshot({path:`${out}/runtime-${width}-${side}-flight.png`});
-   await p.waitForFunction(()=>window.buyDone);assert((await p.evaluate(()=>buyElapsed))>=900);assert.equal(await p.locator('.biblion-fx--front').getAttribute('data-effects'),'');
+   await p.evaluate(side=>{controller.view.render(controller.state);A.setFxSkip(false);const el=document.querySelector('.card[data-uid="purchase-fixture"]');window.buyDone=false;window.buyStart=performance.now();window.buyPromise=A.buyReveal({...DB.ELF,uid:'runtime-buy'},side,el.getBoundingClientRect(),el,0,4).then(()=>{window.buyElapsed=performance.now()-buyStart;window.buyDone=true;});},side);
+   await p.waitForTimeout(400);assert.equal(await p.locator('.spend-overlay').count(),1);await p.screenshot({path:`${out}/runtime-${width}-${side}-flight.png`});
+   await p.waitForFunction(()=>window.buyDone);assert((await p.evaluate(()=>buyElapsed))>=900);assert.equal(await p.locator('.spend-overlay').count(),0);assert.equal(await p.locator((side==='me'?'#portraitMe':'#portraitOpp')+' .mana-readout b').textContent(),'5');
    await p.evaluate(()=>{const el=document.querySelector('.card[data-uid="purchase-fixture"]');el.style.visibility='';el.style.pointerEvents='';el.removeAttribute('aria-hidden');});checks.push(`paid buyReveal: ${width}px ${side}`);
   }
   assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
@@ -38,14 +38,14 @@ try{
  const behavior=await p.evaluate(async()=>{
   const card={...DB.ELF,uid:'runtime-free'},el=document.querySelector('.card[data-uid="purchase-fixture"]'),rect=el.getBoundingClientRect();
   const start=performance.now();const skip=A.buyReveal(card,'me',rect,undefined,0,4);setTimeout(()=>A.setFxSkip(true),120);await skip;const skippedMs=performance.now()-start;A.setFxSkip(false);
-  const free=A.buyReveal(card,'me',rect,undefined,0,0);await new Promise(r=>setTimeout(r,100));const freePayment=!!document.querySelector('.biblion-fx--front[data-effects*="purchase"]');A.setFxSkip(true);await free;A.setFxSkip(false);
+  const free=A.buyReveal(card,'me',rect,undefined,0,0);await new Promise(r=>setTimeout(r,100));const freePayment=!!document.querySelector('.spend-overlay');A.setFxSkip(true);await free;A.setFxSkip(false);
   const quick=Object.values(DB).find(c=>c.quick),q=await A.buyReveal({...quick,uid:'quick-buy'},'me',rect,undefined,0,2);const quickHeld=!!q&&q.dataset.quickPhase==='resolving';A.setFxSkip(true);if(q)await A.finishQuickSpell(q,'me');A.setFxSkip(false);
   return {skippedMs,freePayment,quickHeld,quickRemoved:!q?.isConnected};
  });assert(behavior.skippedMs<500);assert.equal(behavior.freePayment,false);assert(behavior.quickHeld&&behavior.quickRemoved);checks.push('fast-forward interrupts payment; free bypasses payment; quick retains reveal then resolves');
- await p.emulateMedia({reducedMotion:'reduce'});await p.evaluate(()=>{const r=document.querySelector('.card[data-uid="purchase-fixture"]').getBoundingClientRect();F.playBiblionFx('purchase',r,r);});assert.equal(await p.locator('.biblion-fx--front').getAttribute('data-effects'),'');checks.push('reduced motion suppresses flight');
+ await p.emulateMedia({reducedMotion:'reduce'});await p.evaluate(async()=>{await A.animateManaSpend('me',1);});assert.equal(await p.locator('.spend-overlay').count(),0);checks.push('reduced motion suppresses flight');
  await p.evaluate(()=>{controller.destroy();stopLayout();});assert.equal(await p.locator('.biblion-fx').count(),0);
  const reopened=await p.evaluate(async()=>{const ok=await payment.prepareManaPurchase();payment.disposeManaPurchase();return ok;});assert(reopened);checks.push('board teardown releases VFX; assets can reopen');
- const failurePage=await browser.newPage();await failurePage.route('**/purchase-fixture.html',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><div></div>'}));await failurePage.route('**/vfx/purchase-air/crystal-72.png',r=>r.abort());await failurePage.goto(origin+'/purchase-fixture.html');
+ const failurePage=await browser.newPage();await failurePage.route('**/purchase-fixture.html',r=>r.fulfill({contentType:'text/html',body:'<!doctype html><div></div>'}));await failurePage.route('**/vfx/purchase-air/crystal-72.webp',r=>r.abort());await failurePage.goto(origin+'/purchase-fixture.html');
  const failure=await failurePage.evaluate(async()=>{const m=await import('/src/ui/manaPurchase.ts');return m.prepareManaPurchase();});assert.equal(failure,false);const cancelled=await failurePage.evaluate(async()=>{const m=await import('/src/ui/manaPurchase.ts');const pending=m.prepareManaPurchase();m.disposeManaPurchase();return pending;});assert.equal(cancelled,false);await failurePage.close();checks.push('asset failure and pending-load disposal settle without throwing or deadlocking');
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/browser.json',JSON.stringify({passed:true,checks,pixels,behavior,errors,fixture:'actual BaseController + buyReveal, local engine fixture; no authenticated online match'},null,2));console.log('PASS',checks.length,'browser checks');
 }finally{await browser.close();}

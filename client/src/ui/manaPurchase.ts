@@ -34,6 +34,8 @@ export function prepareManaPurchase():Promise<boolean>{
  }).finally(()=>{if(token===generation)loading=null;});
  return loading;
 }
+/** The tray payment and legacy renderer share the board's decoded crystal and wake. */
+export function manaPurchaseAssets(){return {atlas,air};}
 export function disposeManaPurchase(){generation++;airAbort?.abort();airAbort=undefined;cancelLoad?.();cancelLoad=null;loading=null;atlas=null;air?.dispose();air=null;}
 export function manaPaymentPoint(from:ManaRect,to:ManaRect,q:number,lane=0){
  const t=clamp(q),x=from.left+from.width/2,y=from.top+from.height/2;

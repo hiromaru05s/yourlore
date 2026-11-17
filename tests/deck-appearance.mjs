@@ -1,8 +1,13 @@
 import assert from 'node:assert/strict';import {DatabaseSync} from 'node:sqlite';import {build} from 'esbuild';import fs from 'node:fs/promises';
 const dir=await fs.mkdtemp('/tmp/lore-deck-test-');
 try{
- await build({stdin:{contents:`export {default as worker} from './server/src/index';export {getUser} from './server/src/auth';export {duelAppearance} from './server/src/medals';export {sanitizeDecks,deckStoreForUser} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
- const {worker,getUser,duelAppearance,sanitizeDecks,deckStoreForUser}=await import(dir+'/module.mjs');
+ await build({stdin:{contents:`export {default as worker} from './server/src/index';export {getUser} from './server/src/auth';export {duelAppearance} from './server/src/medals';export {deckRepresentative,sanitizeDecks,deckStoreForUser} from './client/src/shared/cards';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:dir+'/module.mjs'});
+ const {worker,getUser,duelAppearance,deckRepresentative,sanitizeDecks,deckStoreForUser}=await import(dir+'/module.mjs');
+ for(const cards of [[], ['STARTER_TRASH'], ['STARTER_CHEST','STARTER_TRASH'], ['STARTER_TRASH','STARTER_CHEST']]){
+  assert.equal(deckRepresentative({cards}),'STARTER_MANA','An unconfigured deck always shows Attune');
+ }
+ assert.equal(deckRepresentative({cards:['STARTER_CHEST'],representative:'STARTER_CHEST'}),'STARTER_CHEST');
+ assert.equal(deckRepresentative({cards:['STARTER_TRASH'],representative:'STARTER_CHEST'}),'STARTER_MANA','Removing the last featured copy falls back to Attune');
  const db=new DatabaseSync(':memory:');db.exec(`CREATE TABLE rewards(user_id TEXT,key TEXT,amount INTEGER,created_at INTEGER,PRIMARY KEY(user_id,key));CREATE TABLE player_experience(user_id TEXT,exp INT);CREATE TABLE experience_events(user_id TEXT,key TEXT);CREATE TABLE users(id TEXT PRIMARY KEY,email TEXT,display TEXT,wins INT,losses INT,credits INT,avatar TEXT,badge TEXT,sleeve TEXT,furniture TEXT,deck TEXT,decks TEXT,sleeves TEXT,starter_cards TEXT,username_set INTEGER DEFAULT 0);CREATE TABLE sessions(token TEXT,user_id TEXT,expires_at INT);CREATE TABLE challenges(id TEXT,challenger TEXT,target TEXT,status TEXT,created_at INT,room_id TEXT);`);
 db.exec(await fs.readFile('server/migrations/0032_profile_background.sql','utf8'));
  const own=['sleeve:gacha-goldfault','sleeve:gacha-amethyst-cleft','furniture:gacha-goldfault','furniture:gacha-amethyst-cleft'];const insert=db.prepare('INSERT INTO users(id,email,display,wins,losses,credits,avatar,badge,sleeve,furniture,deck,decks,sleeves) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');

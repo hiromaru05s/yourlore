@@ -2,6 +2,7 @@ import type {CardInst,FieldMon,Enchant} from '../shared/types';
 import {getLang} from '../i18n';
 import {decayStateDescription} from '../shared/cardPresentation';
 import './cardCounter.css';
+import {gaugeMarkup, fillGauge} from './decayCounter/gauge';
 
 export type CounterKind='guts'|'decay'|'hatch'|'charge';
 export type CounterValue={kind:CounterKind;value:number};
@@ -50,7 +51,8 @@ function chargeFace(id:string):string {
  </svg>`;
 }
 function paint(badge:HTMLElement,position:number){
- badge.querySelector('.counter-slot-reel')!.innerHTML=rows(position);
+ if (badge.dataset.counterKind === 'decay') fillGauge(badge, position);
+ else badge.querySelector('.counter-slot-reel')!.innerHTML=rows(position);
  badge.dataset.counterPosition=String(position);
 }
 function label(badge:HTMLElement,value:number){const meta=identities.get(badge)!;meta.value=value;badge.dataset.counterValue=String(value);badge.title=description(meta.kind,value);badge.setAttribute('aria-label',badge.title);}
@@ -59,7 +61,7 @@ export function createCardCounter(uid:string,cardId:string,kind:CounterKind,valu
  badge.className='card-counter'+(kind==='decay'?' ec-decay-state':'');badge.dataset.counterKind=kind;badge.dataset.counterIndex=String(index);badge.style.setProperty('--counter-index',String(index));
  if(kind==='decay')badge.dataset.status='decay';
  badge.setAttribute('role','img');identities.set(badge,{uid,cardId,kind,value:n,index});
- badge.innerHTML=kind==='charge'?chargeFace(id):`<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><radialGradient id="${id}ivory" cx=".32" cy=".23" r=".9"><stop stop-color="#fff9e8"/><stop offset=".6" stop-color="#eee4cd"/><stop offset="1" stop-color="#cdbf9f"/></radialGradient><linearGradient id="${id}gold" x2=".65" y2="1"><stop stop-color="#e5d3a7"/><stop offset=".44" stop-color="#8d7858"/><stop offset=".78" stop-color="#b9a47a"/><stop offset="1" stop-color="#63523a"/></linearGradient><linearGradient id="${id}window" x2=".2" y2="1"><stop stop-color="#c9bca1"/><stop offset=".16" stop-color="#e5d9bf"/><stop offset="1" stop-color="#fff7e3"/></linearGradient><clipPath id="${id}clip"><rect x="12.5" y="17.25" width="39" height="28.5" rx="3.5"/></clipPath></defs><circle cx="32" cy="31" r="28.5" fill="url(#${id}ivory)" stroke="url(#${id}gold)" stroke-width="2"/><circle cx="32" cy="31" r="26.1" fill="none" stroke="#fff9e5" stroke-width=".8"/><path d="M29 8l3 4 3-4M29 54l3-4 3 4" stroke="#7b6b4d" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect class="counter-number-window" x="10.5" y="15.5" width="43" height="32" rx="5" fill="url(#${id}window)" stroke="#a2906e" stroke-width="1"/><path d="M15 17h34" stroke="#b7a583" stroke-width=".6"/><path d="M15 46h34" stroke="#fff9e7" stroke-width="1"/><g class="counter-slot-reel" clip-path="url(#${id}clip)">${rows(n)}</g><path d="M14 17.8h36" stroke="#655437" stroke-opacity=".14" stroke-width="1.3"/></svg>`;
+ badge.innerHTML=kind === 'decay' ? gaugeMarkup(id) : kind === 'charge' ? chargeFace(id) : `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><radialGradient id="${id}ivory" cx=".32" cy=".23" r=".9"><stop stop-color="#fff9e8"/><stop offset=".6" stop-color="#eee4cd"/><stop offset="1" stop-color="#cdbf9f"/></radialGradient><linearGradient id="${id}gold" x2=".65" y2="1"><stop stop-color="#e5d3a7"/><stop offset=".44" stop-color="#8d7858"/><stop offset=".78" stop-color="#b9a47a"/><stop offset="1" stop-color="#63523a"/></linearGradient><linearGradient id="${id}window" x2=".2" y2="1"><stop stop-color="#c9bca1"/><stop offset=".16" stop-color="#e5d9bf"/><stop offset="1" stop-color="#fff7e3"/></linearGradient><clipPath id="${id}clip"><rect x="12.5" y="17.25" width="39" height="28.5" rx="3.5"/></clipPath></defs><circle cx="32" cy="31" r="28.5" fill="url(#${id}ivory)" stroke="url(#${id}gold)" stroke-width="2"/><circle cx="32" cy="31" r="26.1" fill="none" stroke="#fff9e5" stroke-width=".8"/><path d="M29 8l3 4 3-4M29 54l3-4 3 4" stroke="#7b6b4d" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect class="counter-number-window" x="10.5" y="15.5" width="43" height="32" rx="5" fill="url(#${id}window)" stroke="#a2906e" stroke-width="1"/><path d="M15 17h34" stroke="#b7a583" stroke-width=".6"/><path d="M15 46h34" stroke="#fff9e7" stroke-width="1"/><g class="counter-slot-reel" clip-path="url(#${id}clip)">${rows(n)}</g><path d="M14 17.8h36" stroke="#655437" stroke-opacity=".14" stroke-width="1.3"/></svg>`;
  label(badge,n);paint(badge,n);return badge;
 }
 function position(badge:HTMLElement,now=performance.now()){const m=motions.get(badge);return m?counterPosition(m.from,m.to,(now-m.start)/m.duration):identities.get(badge)?.value??0;}
@@ -75,7 +77,7 @@ export function setCardCounter(badge:HTMLElement,to:number,opt:{from?:number;ani
  const from=opt.from??sampled;
  active.delete(badge);
  if(opt.animate===false||reduced()||Math.abs(from-n)<1e-7){motions.set(badge,{from:n,to:n,start:0,duration:1});paint(badge,n);if(opt.remove)badge.remove();return;}
- const motion={from,to:n,start:performance.now(),duration:COUNTER_SLOT_MS,remove:opt.remove};motions.set(badge,motion);active.set(badge,motion);paint(badge,from);schedule();
+ const motion={from,to:n,start:performance.now(),duration:badge.dataset.counterKind === 'decay' ? 150 : COUNTER_SLOT_MS,remove:opt.remove};motions.set(badge,motion);active.set(badge,motion);paint(badge,from);schedule();
 }
 function transfer(old:HTMLElement,badge:HTMLElement,to:number,remove=false){
  const motion=motions.get(old);
@@ -97,13 +99,14 @@ export function createBoardCardCounters(root:HTMLElement){
    for(const badge of badges){
     const meta=identities.get(badge);if(!meta)continue;
     const object=objectKey(owner(badge),meta.uid,meta.cardId),key=object+':'+meta.kind,old=previous.get(key);next.set(key,badge);
-    if(ended){setCardCounter(badge,meta.value,{animate:false});continue;}
+    // The grant event already animates each well at contact. Snap the replacement DOM to that value.
+    if(ended || meta.kind === 'decay'){setCardCounter(badge,meta.value,{animate:false});continue;}
     if(old)transfer(old,badge,meta.value);else if(seen.has(object))setCardCounter(badge,meta.value,{from:0});
    }
    for(const [key,old]of previous){
     if(next.has(key))continue;const meta=identities.get(old)!;
     const object=key.slice(0,key.lastIndexOf(':')),host=objects.get(object);
-    if(!host||ended||position(old)<1e-7)continue;
+    if(!host||ended||meta.kind==='decay'||position(old)<1e-7)continue;
     const badge=createCardCounter(meta.uid,meta.cardId,meta.kind,0,host.querySelectorAll('.card-counter').length);
     identities.get(badge)!.transient=true;host.append(badge);transfer(old,badge,0,true);next.set(key,badge);
    }

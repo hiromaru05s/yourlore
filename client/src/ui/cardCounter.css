@@ -17,9 +17,16 @@
 .card-counter[data-counter-kind="charge"]:not([data-counter-index="0"]) {
   top:calc(24% + (var(--counter-index) - 1)*26%);
 }
-.card-counter[data-counter-kind="charge"][data-counter-index="0"] ~ .card-counter[data-counter-index="1"] {
+.card-counter[data-counter-kind="charge"][data-counter-index="0"] ~ .card-counter[data-counter-index="1"]:not([data-counter-kind="decay"]) {
   top:33%;
 }
 .buff-icon > .card-counter[data-counter-kind="charge"] {
   top:3%; right:0; width:53%;
 }
+
+.card .card-counter[data-counter-kind="decay"] {
+  left:22%; right:auto; top:50%; width:56%; height:auto; aspect-ratio:78/31;
+  margin-top:-11.1282%; pointer-events:none;
+}
+
+.card .card-counter[data-counter-kind="decay"][data-counter-value="0"] { visibility:hidden; }

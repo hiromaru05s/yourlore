@@ -10,9 +10,9 @@ type Job={node:HTMLElement;canvas:HTMLCanvasElement;face:HTMLCanvasElement|null;
 const jobs=new Map<HTMLElement,Job>();
 let material:Material|null=null,raf=0,idle:ReturnType<typeof setTimeout>|undefined;
 function setCount(badge:HTMLElement,count:number,animate=true){
- if(badge.classList.contains('card-counter')){setCardCounter(badge,count,{animate});badge.style.visibility=count?'visible':'hidden';return;}
+ if(badge.classList.contains('card-counter')){setCardCounter(badge,count,{animate});badge.style.visibility=count?'inherit':'hidden';return;}
  const lang=getLang();badge.textContent=`${lang==='ja'?'腐敗':lang==='en'?'Decay':'부패'} ${count}/3`;
- badge.title=decayStateDescription(count,lang);badge.setAttribute('aria-label',badge.title);badge.style.visibility=count?'visible':'hidden';
+ badge.title=decayStateDescription(count,lang);badge.setAttribute('aria-label',badge.title);badge.style.visibility=count?'inherit':'hidden';
 }
 function stopRenderer(){if(raf)cancelAnimationFrame(raf);raf=0;clearTimeout(idle);material?.dispose();material=null;}
 /** Explicit teardown for skip, root removal and tests. The authoritative count still settles. */
@@ -31,6 +31,9 @@ function tick(now:number){
   job.badge.style.transform=`scale(${1+pulse*.12})`;job.badge.style.filter=pulse>0?`brightness(${1+pulse*.65})`:'';
   let x=0,y=0,node:HTMLElement|null=job.badge;while(node&&node!==job.node){x+=node.offsetLeft;y+=node.offsetTop;node=node.offsetParent as HTMLElement|null;}
   const anchor:[number,number]=[(x+job.badge.offsetWidth/2)/job.node.offsetWidth,(y+job.badge.offsetHeight/2)/job.node.offsetHeight];
+  // The coating withdraws into the particular well receiving this grant.
+  const destinationWell = Math.min(3, Math.max(1, job.after)) - 1;
+  anchor[0] += (destinationWell - 1) * (18 / 78) * job.badge.offsetWidth / job.node.offsetWidth;
   if(!anchor.every(Number.isFinite)){job.finish(false);continue;}
   job.canvas.dataset.phase=phase.toFixed(3);
   ready.push({job,request:{phase,anchor,face:job.face}});
