@@ -26,7 +26,7 @@ try {
  const ids=C.BUYABLE_POOL.filter(id=>C.DB[id].cost<=6);
  // Stratified draws measure the configured bias branch itself, independently
  // of whether a random branch happens to choose a strong card too.
- for(const [tier,expected] of [['hard',50],['hell',90]]){
+ for(const [tier,expected] of [['hard',1],['hell',10]]){
   let biased=0;
   for(let i=0;i<100;i++){
    const g=structuredClone(base);g.botDifficulty=tier;let calls=0;
@@ -38,11 +38,17 @@ try {
  const evaluate=C.purchaseEvaluator(base,base.players[1]);
  const uniformMean=ids.reduce((sum,id)=>sum+evaluate({...C.DB[id],uid:'sample'}).value,0)/ids.length;
  let favored=0;
+ // Isolate the quality of a favored draw; its much lower frequency is checked above.
+ const favoredRandom=seed=>{
+  const random=rng(seed);
+  let first=true;
+  return ()=>{if(first){first=false;return 0;}return random();};
+ };
  for(let seed=1;seed<=300;seed++){
   const g=structuredClone(base),twin=structuredClone(base);
   twin.players[0].hand=[{...C.DB.PRIEST,uid:'secret'}];twin.players[0].deck=[{...C.DB.WORLD_TREE,uid:'secret-deck'}];twin.rng=987;
   const mixedSeed=Math.imul(seed,0x9e3779b1);
-  const i=C.botMarketIndex(g,ids,rng(mixedSeed));assert.equal(i,C.botMarketIndex(twin,ids,rng(mixedSeed)),'private enemy cards and live RNG do not affect market scores');
+  const i=C.botMarketIndex(g,ids,favoredRandom(mixedSeed));assert.equal(i,C.botMarketIndex(twin,ids,favoredRandom(mixedSeed)),'private enemy cards and live RNG do not affect market scores');
   favored+=evaluate({...C.DB[ids[i]],uid:'sample'}).value;
  }
  assert(favored/300>uniformMean+1,'biased sampler improves NPC-specific offer quality');

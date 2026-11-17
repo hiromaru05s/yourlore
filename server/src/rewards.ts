@@ -1,4 +1,4 @@
-import { ARIES_OPPONENTS, ariesRoomStage, type AriesStage } from '../../client/src/shared/ariesStory';
+import { ARIES_OPPONENTS, ARIES_ROUTE, ariesRoomStage, type AriesStage } from '../../client/src/shared/ariesStory';
 import {tutorialStatus,grantTutorial} from './tutorialRewards';
 import { progressionState, rerollDaily, claimDaily } from './progression';
 import { BOT_REWARDS } from '../../client/src/shared/progression';
@@ -88,7 +88,7 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
       const prior = env.GAME_ROOM.get(env.GAME_ROOM.idFromName(body.previous));
       const proof = await prior.fetch(new Request('https://room/story-win', {method:'POST', body:user.id}));
       if (!proof.ok) return json(env, {error:'Win the previous duel first'}, 403);
-      stage = (priorStage + 1) as AriesStage;
+      stage = ARIES_ROUTE[1].stage;
       // Each win has exactly one successor, even across concurrent retries.
       roomId = body.previous.slice(0,-1) + stage;
     }
