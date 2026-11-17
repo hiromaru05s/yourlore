@@ -11,13 +11,14 @@ if(import.meta.env.DEV){
   const repeat=root.querySelector<HTMLInputElement>('[data-repeat]')!, rate=root.querySelector('select')!;
   const rows=(['mana','heal'] as const).map(kind=>{
     const section=document.createElement('section');
+    section.dataset.kind=kind;
     const title=kind==='mana'?'マナ増加 · M1採用':'体力回復';
-    section.innerHTML=`<div class="section-title"><h2>${title}</h2><button class="row-play" type="button">${kind==='mana'?'M1を再生':'3案を同時再生'}</button></div><div class="study-grid"></div>`;
+    section.innerHTML=`<div class="section-title"><h2>${title}</h2><button class="row-play" type="button">${kind==='mana'?'M1を再生':'基準と3案を同時再生'}</button></div><div class="study-grid"></div>`;
     root.append(section);
     const reduced=matchMedia('(prefers-reduced-motion: reduce)');
     const slots=studies.filter(s=>s.kind===kind).map(study=>{
       const card=document.createElement('article');
-      card.innerHTML=`<button class="preview" aria-label="${study.id} ${study.name}を再生"><span class="study-frame"><span class="aperture"><span class="film-square"><img class="gallery-film" alt="" src="${reduced.matches?seekerPoster():seekerIdle()}"></span></span></span></button><div class="caption"><b>${study.id}</b><h3>${study.name}</h3></div><a href="/hooded-board.html?study=${study.id}" aria-label="${study.name}を実盤面で見る">実盤面で見る ↗</a>`;
+      card.innerHTML=`<button class="preview" aria-label="${study.id} ${study.name}を再生"><span class="study-frame"><span class="aperture"><span class="film-square"><img class="gallery-film" alt="" src="${reduced.matches?seekerPoster():seekerIdle()}"></span></span></span></button><div class="caption"><b>${study.id==='BASE'?'基準':study.id}</b><h3>${study.name}</h3></div><a href="/hooded-board.html?study=${study.id}" aria-label="${study.name}を実盤面で見る">実盤面で見る ↗</a>`;
       section.querySelector('.study-grid')!.append(card);
       const img=card.querySelector('img')!, player=mountStudy(img);
       const sync=()=>{img.src=reduced.matches?seekerPoster():seekerIdle();};

@@ -53,7 +53,7 @@ export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasEle
   }).join('')+'</defs>';
   const owners=kinds.map(k=>svg.querySelector('#'+prefix+k)!);
   const tracks=kinds.map((kind,i)=>({
-    kind, time:-1, bend:0, table:new Float32Array(32), carry:undefined as {bend:number; table:Float32Array}|undefined,
+    kind, time:-1, speed:1, bend:0, table:new Float32Array(32), carry:undefined as {bend:number; table:Float32Array}|undefined,
     warp:owners[i].querySelector('feDisplacementMap')!,light:owners[i].querySelector('feFuncA')!,
   }));
   const ink=createLayer(image);
@@ -71,7 +71,7 @@ export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasEle
     const filters:string[]=[];let action:Reaction|'idle'='idle',frame=0;
     for(const tr of tracks){
       if(tr.time<0)continue;
-      tr.time+=step;const t=tr.time/recipes[tr.kind].ms;
+      tr.time+=step*tr.speed;const t=tr.time/recipes[tr.kind].ms;
       if(t>=1){tr.time=-1;tr.carry=undefined;continue;}
       const p=pose(tr.kind,t),q=tr.carry?smooth(tr.time/115):1;
       tr.bend=(tr.carry?.bend??0)*(1-q)+p.bend*q;
@@ -105,14 +105,14 @@ export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasEle
     state.dataset.action=action;state.dataset.frame=String(frame);
     if(filters.length || manaElapsed>=0)raf=requestAnimationFrame(tick);
   }
-  return {svg,overlay:ink.canvas,reset,play(kind:Reaction){
+  return {svg,overlay:ink.canvas,reset,play(kind:Reaction,speed=1){
     if(kind==='mana'){
       if(manaElapsed<0)manaElapsed=0;
       else repeatMana=true;
       if(!raf){previous=performance.now();tick(previous);}
       return;
     }
-    const tr=tracks[kinds.indexOf(kind)];
+    const tr=tracks[kinds.indexOf(kind)];tr.speed=speed;
     tr.carry=tr.time<0?undefined:{bend:tr.bend,table:tr.table.slice()};tr.time=0;
     if(!raf){previous=performance.now();tick(previous);}
   }};

@@ -1,115 +1,99 @@
-import {clasp,ease,envelope,glint,pool,taper,type Brush,type Point} from '../../ui/seekerArt/ink';
+// Each map measures the travel of the light in the coordinates of the breathing
+// portrait. The filter derives the actual reflected light from each live pixel.
+import {clamp,ease,envelope} from '../../ui/seekerArt/ink';
 
-const collar:Point[][]=[
-  [clasp,[95,187],[70,179],[53,171],[45,158]],
-  [clasp,[136,185],[164,176],[187,167],[199,153]],
+type LightStudy = {
+  id:string; kind:'heal'; name:string; duration:number; color:string;
+  distance:(x:number,y:number)=>number;
+  exposure:(position:number,t:number)=>number;
+};
+const band=(d:number,width:number)=>Math.exp(-.5*(d/width)**2);
+
+export const greenStudies:LightStudy[]=[
+  {
+    id:'H7',kind:'heal',name:'裾から昇る光',duration:1824,color:'#58db67',
+    distance:(x,y)=>.09+.75*(1-y)+.09*(1-(2*x-1)**2),
+    exposure:(p,t)=>{
+      const front=-.11+1.29*ease(.02,.95,t);
+      const d=p-front, tail=d+.14;
+      return envelope(t,0,.15,.76,1)*(.89*band(d,.135)+.40*band(tail,.22));
+    },
+  },
+  {
+    id:'H8',kind:'heal',name:'斜めからの反射光',duration:1880,color:'#78d475',
+    distance:(x,y)=>.05+.57*x+.32*y+.075*Math.sin(y*3.8+x*.8),
+    exposure:(p,t)=>{
+      const d=p-(-.12+1.34*ease(.01,.94,t));
+      return envelope(t,0,.18,.73,1)*(.82*band(d,.105)+.35*band(d+.10,.19));
+    },
+  },
+  {
+    id:'H9',kind:'heal',name:'胸元に灯る光',duration:2050,color:'#48d778',
+    distance:(x,y)=>Math.hypot((x-.445)*1.06,(y-.775)*.91),
+    exposure:(p,t)=>{
+      const breath=envelope(t,0,.40,.53,1);
+      const width=.09+.28*ease(.10,.53,t)-.13*ease(.66,.97,t);
+      const core=envelope(t,.02,.24,.39,.78);
+      return breath*.94*band(p,width)+core*.45*band(p,.12);
+    },
+  },
 ];
 
-function paintedShape(c:Brush,path:string,color:string|CanvasGradient){
-  c.fillStyle=color;
-  c.fill(new Path2D(path));
-}
-
-// The pin acts as a wick. Two tongues open around the warm heart of the flame,
-// then pull back through the collar as the figure lifts its head.
-export function votive(c:Brush,t:number){
-  const rise=envelope(t,.04,.46,.58,.91);
-  const beat=envelope(t,.28,.43,.48,.61)+.65*envelope(t,.60,.68,.71,.84);
-  pool(c,115,181,55,46,'#ff9668',rise*.62);
-  collar.forEach(path=>taper(c,path,ease(.73,.98,t),ease(.45,.76,t),5,'#ffc98b'));
-  if(rise<=0)return;
-  c.save();
-  c.translate(113,198);
-  c.rotate(-.07+.055*Math.sin(2*Math.PI*t));
-  c.scale((.55+.45*rise+.07*beat)*rise,rise);
-  const fire=c.createLinearGradient(0,-77,0,1);
-  fire.addColorStop(0,'#ffe4a3');fire.addColorStop(.37,'#ffa665');
-  fire.addColorStop(.70,'#ee7260');fire.addColorStop(1,'#ae4051');
-  paintedShape(c,'M0 1 C-18 -4 -31 -18 -27 -35 Q-26 -43 -19 -49 Q-20 -35 -12 -33 C-16 -52 -1 -61 -5 -82 C15 -66 16 -54 12 -40 Q22 -44 23 -55 C37 -32 25 -14 12 -7 Q6 -3 0 1Z',fire);
-  // A deep cut on either side lets the narrow tongues read against the dark hood.
-  paintedShape(c,'M-21 -20 Q-29 -33 -21 -42 Q-24 -30 -15 -24Z','#ffd999');
-  paintedShape(c,'M4 -55 Q8 -64 1 -75 Q13 -67 12 -55 Q10 -49 6 -44Z','#fff1b7');
-  c.save();c.translate(0,-22);c.scale(1+.13*beat,1+.13*beat);
-  paintedShape(c,'M0 12 C-7 5 -19 -2 -17 -11 C-14 -20 -4 -19 0 -11 C6 -22 18 -19 18 -10 C18 -2 6 6 0 12Z','#fff0ae');
-  paintedShape(c,'M-12 -9 Q-11 -15 -5 -13 Q-9 -12 -11 -6Z','#ffffe3');
-  c.restore();
-  taper(c,[[0,0],[-4,-7],[-2,-13],[0,-17]],0,1,3.8,'#fff4bb');
-  c.restore();
-  glint(c,...clasp,5*beat,'#fff4cc');
-}
-
-// A hanging bead narrows at the hood seam, falls into the brooch, then spills
-// along the two folds. Both splash crests start on the same frame as contact.
-export function dew(c:Brush,t:number){
-  const form=ease(.045,.28,t), fall=ease(.31,.50,t);
-  const impact=envelope(t,.485,.535,.565,.77);
-  const x=135-22*fall, y=78+87*fall;
-  const bead=form*(1-ease(.486,.545,t));
-  const seam:Point[]=[[129,51],[135,62],[138,73],[135,80]];
-  taper(c,seam,ease(.20,.36,t),ease(.005,.17,t),3.8,'#9bd9bb');
-  if(bead>0){
-    c.save();c.translate(x,y);
-    const stretch=envelope(t,.28,.41,.435,.505);
-    c.scale(bead*(1-.22*stretch),bead*(1+.32*stretch));
-    pool(c,0,14,26,29,'#6ee4aa',.40);
-    const water=c.createLinearGradient(-12,0,11,29);
-    water.addColorStop(0,'#d6ffe1');water.addColorStop(.30,'#86e6b9');
-    water.addColorStop(.72,'#2aab94');water.addColorStop(1,'#18757e');
-    paintedShape(c,'M0 -5 C-1 4 -15 13 -14 23 C-13 38 8 41 14 27 C19 15 4 5 0 -5Z',water);
-    paintedShape(c,'M-10 18 Q-13 28 -5 31 Q-1 32 -2 28 Q-8 26 -7 17Z','#efffe8');
-    paintedShape(c,'M9 16 Q18 27 5 33 Q12 27 9 16Z','#82dfbd');c.restore();
+const namespace='http://www.w3.org/2000/svg';
+const maps=new Map<string,string>();
+let nextId=0;
+function distanceMap(study:LightStudy){
+  const cached=maps.get(study.id);
+  if(cached)return cached;
+  const size=96,canvas=document.createElement('canvas');
+  canvas.width=canvas.height=size;
+  const ctx=canvas.getContext('2d')!,pixels=ctx.createImageData(size,size);
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+    const i=4*(y*size+x);
+    pixels.data[i]=Math.round(255*clamp(study.distance((x+.5)/size,(y+.5)/size)));
+    pixels.data[i+3]=255;
   }
-  pool(c,...clasp,55,31,'#8bf0ae',impact*.87);
-  collar.forEach((path,index)=>{
-    const q=t-.014*index,head=ease(.49,.73,q),tail=ease(.59,.94,q);
-    taper(c,path,tail,head,13,'#399e8b');
-    taper(c,path,tail,head,7,'#8af2ba');
-    taper(c,path,tail,head,2,'#efffd9');
-    const sign=index?1:-1;
-    const splash:Point[]=[clasp,[113+sign*17,191],[113+sign*30,172],[113+sign*39,169],[113+sign*41,179]];
-    taper(c,splash,ease(.57,.79,q),ease(.49,.62,q),8,'#a6f4cd');
-    taper(c,splash,ease(.57,.80,q),ease(.50,.63,q),2.6,'#f1ffdc');
-    const down:Point[]=[clasp,[113+sign*10,216],[113+sign*18,236],[113+sign*25,254]];
-    taper(c,down,ease(.71,.98,q),ease(.53,.80,q),4,'#89dcab');
-  });
+  ctx.putImageData(pixels,0,0);
+  const url=canvas.toDataURL();maps.set(study.id,url);return url;
 }
 
-// The gold shoulder seams open like a fan. Each overlapping feather pivots
-// at its root and folds back into that same seam, tips settling last.
-export function pinions(c:Brush,t:number){
-  for(const sign of [-1,1]){
-    c.save();c.translate(...clasp);c.scale(sign,1);
-    const line:Point[]=[[0,0],[23,-7],[44,-15],[62,-21],[77,-30]];
-    const reach=envelope(t,.02,.34,.63,.92);
-    taper(c,line,0,reach,5.5,'#ded3a4');
-    const lift=envelope(t,.11,.47,.61,.91);
-    if(lift>0){
-      c.save();c.rotate(.52*(1-lift));c.scale(lift,.3+.7*lift);
-      const cover=c.createLinearGradient(0,0,78,-64);
-      cover.addColorStop(0,'#477875');cover.addColorStop(.46,'#8ec0b0');cover.addColorStop(1,'#e9eace');
-      paintedShape(c,'M0 0 Q12 -22 41 -37 Q60 -45 76 -73 Q80 -62 72 -47 Q94 -62 100 -83 Q101 -58 84 -39 L94 -46 Q83 -24 61 -19 L69 -21 Q45 -4 18 -5 Q8 -5 0 0Z',cover);
-      // The primaries share a folded base, with a different trailing edge on each quill.
-      const tips:Point[]=[[100,-83],[96,-60],[89,-43],[75,-30],[56,-20]];
-      tips.forEach(([x,y],i)=>{
-        const rootX=12+i*1.8,rootY=-7+i*.5;
-        c.save();c.translate(rootX,rootY);
-        c.rotate((1-lift)*.09*i);
-        const dx=x-rootX,dy=y-rootY;
-        c.beginPath();c.moveTo(0,0);
-        c.bezierCurveTo(dx*.45,dy*.53,dx*.83,dy*.46,dx,dy);
-        c.bezierCurveTo(dx*.98,dy*.46,dx*.48,dy*.03,0,0);
-        c.fillStyle=['#f8efd0','#e8e5c7','#c9dbc4','#a9cabc','#88b5ac'][i];c.fill();
-        taper(c,[[0,0],[dx*.41,dy*.20],[dx*.74,dy*.47],[dx*.93,dy*.78]],0,1,1.8,'#749f99');
-        c.restore();
-      });
-      paintedShape(c,'M0 0 Q11 -21 34 -33 Q50 -40 62 -55 Q61 -39 48 -29 L54 -32 Q44 -18 29 -15 L35 -17 Q24 -6 9 -5Z','#b5d5c1');
-      taper(c,[[0,0],[13,-14],[34,-29],[49,-39],[62,-55]],0,1,3,'#fff0c6');
-      c.restore();
+export function createGreenLight(image:HTMLImageElement){
+  const id='seeker-green-light-'+(++nextId);
+  const svg=document.createElementNS(namespace,'svg');
+  svg.setAttribute('width','0');svg.setAttribute('height','0');
+  svg.setAttribute('aria-hidden','true');svg.style.position='absolute';
+  // Keep the hue and weave of the blue cloth under the diffuse reflection.
+  // Warm pigments in the gold trim give a smaller, brighter specular response.
+  svg.innerHTML=`<filter id="${id}" primitiveUnits="objectBoundingBox" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+    <feImage x="0" y="0" width="1" height="1" preserveAspectRatio="none"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1 0 0 0 0"/>
+    <feComponentTransfer result="exposure"><feFuncA type="table" tableValues="0 0"/></feComponentTransfer>
+    <feColorMatrix in="SourceGraphic" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .55 .90 .69 0 .035"/>
+    <feComposite in2="SourceAlpha" operator="in"/><feComposite in2="exposure" operator="in" result="lit"/>
+    <feFlood data-diffuse=""/><feComposite in2="lit" operator="in" result="diffuse"/>
+    <feGaussianBlur stdDeviation=".035"/>
+    <feComponentTransfer result="spill"><feFuncA type="linear" slope=".57"/></feComponentTransfer>
+    <feComposite in="SourceGraphic" in2="spill" operator="over" result="ambient"/>
+    <feBlend in="diffuse" in2="ambient" mode="screen" result="fabric"/>
+    <feColorMatrix in="SourceGraphic" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.70 .48 -.66 0 -.19"/>
+    <feComposite in2="lit" operator="in" result="litGold"/><feFlood flood-color="#c9efaf" flood-opacity=".46" result="sheenColor"/>
+    <feComposite in="sheenColor" in2="litGold" operator="in" result="sheen"/>
+    <feBlend in="sheen" in2="fabric" mode="screen"/>
+  </filter>`;
+  image.after(svg);
+  const field=svg.querySelector('feImage')!,curve=svg.querySelector('feFuncA')!,diffuse=svg.querySelector('[data-diffuse]')!;
+  let last='';
+  function paint(study:LightStudy,t:number){
+    if(last!==study.id){
+      field.setAttribute('href',distanceMap(study));diffuse.setAttribute('flood-color',study.color);last=study.id;
     }
-    taper(c,line,ease(.64,.96,t),ease(.27,.55,t),3,'#fff0bd');
-    c.restore();
+    const samples=Array.from({length:48},(_,i)=>clamp(study.exposure(i/47,t)).toFixed(3));
+    curve.setAttribute('tableValues',samples.join(' '));
+    image.style.filter=`url(#${id})`;
+    image.dataset.playing=study.id;
   }
-  const open=envelope(t,.27,.5,.59,.88);
-  pool(c,...clasp,28,22,'#e2dda0',open*.63);
-  glint(c,...clasp,7*open,'#fff0c0');
+  function clear(){
+    if(image.dataset.playing){image.style.removeProperty('filter');delete image.dataset.playing;}
+  }
+  return {paint,clear,destroy(){clear();svg.remove();}};
 }

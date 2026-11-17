@@ -19,3 +19,9 @@ article a{display:inline-block;margin-top:4px;color:#b9cee2;font-size:11px;text-
 @media(max-width:520px){#studies{padding:12px 8px}.transport{gap:6px;font-size:10px}#studies header{align-items:flex-start}.caption{gap:3px}article{padding:2px}.caption b{font-size:9px}.caption h3{font-size:11px}section{margin-top:16px}}
 
 #studies:has(section[hidden]) .preview{width:min(100%,275px)}
+
+section[data-kind="heal"] .study-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:620px){
+  section[data-kind="heal"] .study-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px}
+  section[data-kind="heal"] article:nth-child(3){border-left:0}
+}
