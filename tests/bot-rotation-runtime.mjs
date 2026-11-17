@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {Miniflare,convertV4MiniflareOptions} from 'miniflare';
 import {mkdtemp,rm,readFile} from 'node:fs/promises';
-const dir=await mkdtemp('/tmp/lore-npc-rotation-');let mf;const deckCount=3;
+const dir=await mkdtemp('/tmp/lore-npc-rotation-');let mf;const deckCount=2;
 try{
  await build({stdin:{contents:`import {reserveNpcDeck} from './server/src/botRotation';export class Rotation {constructor(state){this.state=state;}fetch(req){return reserveNpcDeck(this.state.storage,req)}}export default{fetch(req,env){return env.ROSTER.get(env.ROSTER.idFromName(req.headers.get('x-player')||'a')).fetch(req)}};`,resolveDir:process.cwd(),loader:'ts'},bundle:true,format:'esm',platform:'browser',outfile:dir+'/worker.mjs'});
  const options={name:'lore-npc-rotation-proof',resourcePersistencePath:dir+'/state',modules:true,script:await readFile(dir+'/worker.mjs','utf8'),compatibilityDate:'2024-11-01',compatibilityFlags:['nodejs_compat'],durableObjects:{ROSTER:{className:'Rotation',useSQLite:true}}};

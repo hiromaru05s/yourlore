@@ -35,13 +35,13 @@ export const BOT_NPCS: readonly BotNpc[] = [
   {
     id: "vera", difficulty: "hard", avatar: "NPC_VERA", portrait: "/art/npcs/v2/vera.webp",
     name: text("ヴェラ", "Vera", "베라"), title: text("果敢なシーカー", "Daring Seeker", "과감한 시커"),
-    style: text("3つの戦術・マーケット優遇抽選1%", "Three strategies · 1% chance of a favored market draw", "세 가지 전략 · 마켓 우대 추첨 1%"),
+    style: text("2つの戦術・マーケット優遇抽選1%", "Two strategies · 1% chance of a favored market draw", "두 가지 전략 · 마켓 우대 추첨 1%"),
     decks: BOT_ELITE_DECKS.map(trainedDeck),
   },
   {
     id: "sion", difficulty: "hell", avatar: "NPC_SION", portrait: "/art/npcs/v2/sion.webp",
     name: text("シオン", "Sion", "시온"), title: text("熟練のシーカー", "Master Seeker", "숙련된 시커"),
-    style: text("3つの戦術・マーケット優遇抽選10%", "Three strategies · 10% chance of a favored market draw", "세 가지 전략 · 마켓 우대 추첨 10%"),
+    style: text("2つの戦術・マーケット優遇抽選10%", "Two strategies · 10% chance of a favored market draw", "두 가지 전략 · 마켓 우대 추첨 10%"),
     decks: BOT_HELL_DECKS.map(trainedDeck),
   },
 ];

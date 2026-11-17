@@ -60,20 +60,6 @@ export const BOT_HELL_DECKS: BotDeck[] = [
     "tune": {}
   },
   {
-    "name": "BOT · SPIRIT_TEMPO",
-    "cards": [
-      "MINI_SPIRIT",
-      "MINI_SPIRIT",
-      "MINI_SPIRIT",
-      "MINI_SPIRIT",
-      "MINI_SPIRIT",
-      "NOURISHING_RAIN",
-      "STARTER_CHEST",
-      "ATTUNE_RETURN"
-    ],
-    "tune": {}
-  },
-  {
     "name": "BOT · SPIRIT_GOBLIN",
     "cards": [
       "MINI_SPIRIT",

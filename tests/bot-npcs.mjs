@@ -13,7 +13,7 @@ try {
     assert.equal(botNpc(npc.difficulty), npc);
     assert.equal(npcPortrait(npc.avatar), npc.portrait);
     await access('client/public' + npc.portrait);
-    const count = {easy:1,normal:4,hard:3,hell:3}[npc.difficulty];
+    const count = {easy:1,normal:4,hard:2,hell:2}[npc.difficulty];
     const signatures = new Set();
     assert.equal(npc.decks.length, count);
     for (const lang of ['ja', 'en', 'ko']) assert(npc.name[lang] && npc.title[lang] && npc.style[lang]);
