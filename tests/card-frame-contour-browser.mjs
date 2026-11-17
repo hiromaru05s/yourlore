@@ -41,6 +41,7 @@ try{
   new MutationObserver(records=>{
    for(const {target:n}of records)if(n instanceof HTMLElement&&n.matches('.cast-reveal')){
     const s=getComputedStyle(n),after=getComputedStyle(n,'::after');
+    if(n.dataset.uid==='contour-summon')qa.print=['.card-art img','.card-frame','.ad-atk','.ad-def'].map(selector=>n.querySelector(selector));
     qa.reveals.push({background:s.backgroundColor,image:s.backgroundImage,border:s.borderTopWidth,shadow:s.boxShadow,outline:s.outlineStyle,after:after.content});
    }
   }).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']});
@@ -132,10 +133,14 @@ try{
    await page.screenshot({path:path.join(out,`${viewport.width}-${side}-reveal.png`)});
    await page.waitForSelector('.slate-summon');
    await page.waitForFunction(()=>Number(document.querySelector('.slate-summon')?.dataset.time)>=350);
+   const ownsPrint=()=>page.evaluate(()=>qa.print.every(node=>node?.closest('.zone-mon > [data-uid="contour-summon"]'))
+     && qa.print[0].currentSrc.includes('/art/cards/M2.webp') && qa.print[0].naturalWidth>0);
+   assert(await ownsPrint(),'Contact must use the original decoded reveal, already mounted in the lane');
    await page.screenshot({path:path.join(out,`${viewport.width}-${side}-landing.png`)});
    await page.waitForFunction(()=>qa.done);
    assert.equal(await page.locator('.slate-summon,.fx-card-flight,.cast-reveal').count(),0);
    assert.equal(await page.locator(`#${side}Row .zone-mon [data-uid="contour-summon"]`).count(),1);
+   assert(await ownsPrint(),'The controller snapshot must retain the landed print');
    checks.push({viewport,side,reveal,complete:true});
   }
  }

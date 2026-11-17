@@ -82,6 +82,7 @@ import {mountTurnBanner,cancelTurnBanner} from './turnBanner';
 import {isMimic,focusScale,type MimicId} from './mimic/selection';
 import {playMonster,setMonsterSkip,playGutsEndurance} from './monster/runtime';
 import {summonPlacement} from './summon/runtime';
+import {borrowCardPrint} from './cardContinuity';
 import {isVerdant} from './verdant/selection';
 import {foldQuestIntoSlot,nativeQuestGhost,warmQuestPact} from './questFold';
 import {getManaFormation} from './manaFormationPreview';
@@ -421,10 +422,61 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   } finally { if(!held)node.remove(); }
   return null;
 }
-function summonTempo(id:string|undefined){
- if(!id)return STANDARD_FX;
- return isCastle(id)||isPoisonSummon(id)||isWeaponmaster(id)||isShieldTitan(id)||isSilenceSummon(id)||isVoidSummon(id)||isCasino(id)||isDungeon(id)||isVampire(id)||isAssassin(id)||isMage(id)||isMercenary(id)||isGambler(id)||isHexer(id)||isGolem(id)||isChosenHero(id)||isVerdant(id)||isMimic(id)||selectedTribeSummon(id)||merchantCount(id)?SPECIAL_FX:STANDARD_FX;
+function hasSpecialSummon(id:string|undefined){
+ if(!id)return false;
+ return isCastle(id)||isPoisonSummon(id)||isWeaponmaster(id)||isShieldTitan(id)||isSilenceSummon(id)||isVoidSummon(id)||isCasino(id)||isDungeon(id)||isVampire(id)||isAssassin(id)||isMage(id)||isMercenary(id)||isGambler(id)||isHexer(id)||isGolem(id)||isChosenHero(id)||isVerdant(id)||isMimic(id)||selectedTribeSummon(id)||merchantCount(id);
 }
+function summonTempo(id:string|undefined){
+ return hasSpecialSummon(id)?SPECIAL_FX:STANDARD_FX;
+}
+/** Carry the lane's own decoded print at reveal resolution until the flight
+ * meets the lifted card. The whole descent, impact and rest happen in the lane. */
+async function carrySlatePrint(face:HTMLElement,from:DOMRect,side:ViewSide,onReveal?:(node:HTMLElement)=>void){
+  const previousVisibility=face.style.visibility;
+  const flight=cloneCardNode(face);
+  flight.removeAttribute('style');
+  prepareSummonAppearance(flight);
+  flight.classList.remove('field-resting-face');
+  flight.classList.add('card--hand');
+  floatAt(flight,from);
+  flight.style.zIndex='135';
+  const restorePrint=borrowCardPrint(face,flight);
+  face.style.visibility='hidden';
+  try{
+    onReveal?.(flight);
+    await focusCard(flight,side,undefined,STANDARD_FX.rate);
+    if(!fxSkip && face.isConnected && !document.hidden){
+      const w=flight.offsetWidth,h=flight.offsetHeight;
+      const r=flight.getBoundingClientRect();
+      const start=new DOMMatrix().translate(r.left,r.top).scale(r.width/w,r.height/h);
+      const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const end=summonPlacement(face,w,h,0,reduced);
+      flight.style.transition='none';
+      flight.style.left=flight.style.top='0';
+      flight.style.transformOrigin='0 0';
+      flight.style.transform=end.toString();
+      const duration=STANDARD_FX.milliseconds(reduced?80:300);
+      // Fade in the field lighting while the print is travelling. Compensate
+      // for the reveal's larger raster so the rim meets the native shadow.
+      const frame=flight.querySelector<HTMLElement>('.card-frame');
+      const before=frame && getComputedStyle(frame).filter;
+      refreshSummonAppearance(flight);
+      if(flight.dataset.summonRest==='plain'&&!flight.dataset.monsterAura){
+        flight.style.setProperty('--summon-frame-unit',2*w/face.offsetWidth+'px');
+      }
+      const lighting=frame && before ? frame.animate([{filter:before},{filter:getComputedStyle(frame).filter}],{duration,fill:'both'}):null;
+      const transfer=flight.animate([{transform:start.toString()},{transform:end.toString()}],
+        {duration,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
+      try{await wait(duration);}finally{transfer.cancel();lighting?.cancel();}
+    }
+  }finally{
+    restorePrint();
+    flight.remove();
+    face.style.visibility=previousVisibility;
+  }
+  if(!fxSkip && face.isConnected)await boardMotionScope(signal=>playMonster(face,'summon',{signal,onImpact:()=>sfx('summon')}));
+}
+
 /** Both hand plays and engine-generated summon events share this selected reveal. */
 async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise<void>{
  const id=card.id;
@@ -456,6 +508,10 @@ export async function summonFromHand(card: CardInst, uid: string, side: ViewSide
   if (!from || !to || !target) { summonIn(uid); return; }
   if(isCastle(card.id)){
     if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(target,{from,signal,onImpact:()=>sfx('summon')}),10000);
+    return;
+  }
+  if(!hasSpecialSummon(card.id)){
+    await carrySlatePrint(target,from,side);
     return;
   }
   const ghost = floatAt(cardEl(card, {size:"hand",fullArt:isMimic(card.id)}), from); target.style.visibility = "hidden";
@@ -933,6 +989,14 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
     const countLabel={ja:'カウント',en:'Count',ko:'카운트'}[getLang()];
     const face=makeFace(card,{badge:`${countLabel} ${(card as typeof card & {gcount?:number}).gcount||0}`});target.replaceWith(face);onReveal?.(face);
     if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(face,{from,signal,onImpact:()=>sfx('summon')}),10000);
+    return face.isConnected?face:null;
+  }
+  if(!hasSpecialSummon(card.id)){
+    const face=makeFace(card);
+    target.replaceWith(face);
+    mountSummonAppearance(face);
+    if(face.dataset.summonRest==='plain'&&!face.dataset.monsterAura)face.style.setProperty('--summon-frame-unit','2px');
+    await carrySlatePrint(face,from,side,onReveal);
     return face.isConnected?face:null;
   }
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);

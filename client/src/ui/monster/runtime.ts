@@ -22,7 +22,7 @@ import {playTribeSummon,cancelTribeSummons,cancelTribeSummon} from '../tribePres
 import {selectedTribeSummon} from '../tribePresentation/selection';
 import {playRiftDestruction,cancelRiftDestruction} from '../riftDestruction/runtime';
 import {playManaDestruction,cancelManaDestruction} from '../manaDestruction/runtime';
-import {playSlateSummon,cancelSummons,cancelSummon} from '../summon/runtime';
+import {playSlateSummon,cancelSummons,cancelSummon,slateOwnsPose} from '../summon/runtime';
 import {Actor} from './actor';
 import {cancelMaterial,cancelMaterials,playMaterial} from '../cardMaterial/effect';
 import {duration,ease,isStat, type Kind, type Variant, type Rect} from './catalog';
@@ -151,7 +151,7 @@ function tick(now:number){
  let animated=false;
  for(const [n,s] of states){
   if(!n.isConnected){removeState(n);continue;}
-  if(hidden.has(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'){s.actor.hide();s.dirty=true;continue;}
+  if(hidden.has(n)||slateOwnsPose(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'){s.actor.hide();s.dirty=true;continue;}
   const r=s.rect!,ready=n.classList.contains('is-attacker'),blocked=!!n.dataset.monsterBlocked,dual=ready&&n.dataset.monsterDualReady==='04';
   const dynamic=hits.has(n)||n.getAnimations().length>0||!reduced()&&(ready||!!n.dataset.monsterAura);animated||=dynamic;
   if(!s.dirty&&!dynamic){if(ready&&!dual)drawEffect(s.layer.foreground,'ready','C',0,r,r,{active:true,reduced:true,side:n.closest('#oppRow')?-1:1,pass:'front'});continue;}

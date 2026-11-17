@@ -1,3 +1,4 @@
+import {paintRestingAppearance} from './appearance';
 import {isMimic} from '../mimic/selection';
 import {STANDARD_FX,SPECIAL_FX} from '../animationTempo';
 import {sizeSummonPlane} from './quality';
@@ -37,6 +38,7 @@ import {playVerdant,cancelVerdant,cancelVerdants} from '../verdant/runtime';
 /** Approved #3. The same material and timeline power the six-way preview. */
 export const SUMMON_VARIANT=2;
 const jobs=new Map<HTMLElement,{anchor:HTMLElement;cancel:()=>void}>();
+export const slateOwnsPose=(card:HTMLElement)=>jobs.has(card);
 type Options={anchor?:HTMLElement;signal?:AbortSignal;onImpact?:()=>void};
 export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduced=false,cardId=target.dataset.cardId){
  if(isCastle(cardId))return projectedPlacement(target,w,h);
@@ -54,6 +56,12 @@ export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduce
  if(!plane)return projectedPlacement(target,w,h).translate(0,-m.lift*w);
  const r=layoutRect(target);
  return boardMatrix(r.left,r.top,(Number(plane.dataset.boardPlane)||0)+m.lift*r.width).scale(r.width/w,r.height/h);
+}
+// A lane flattens its children. Preserve the projected x/y/w of the lifted
+// print when expressing its screen pose inside that lane.
+function planeProjection(m:DOMMatrix){
+ return new DOMMatrix([m.m11,m.m12,0,m.m14, m.m21,m.m22,0,m.m24,
+  0,0,1,0, m.m41,m.m42,0,m.m44]);
 }
 export function cancelSummon(source:HTMLElement){cancelCastleSummon(source);cancelPoisonSummon(source);cancelShieldTitanSummon(source);cancelWeaponmasterSummon(source);cancelDungeonSummon(source);cancelVampireSummon(source);jobs.get(source)?.cancel();cancelAssassinSummon(source);cancelMageSummon(source);cancelVerdant(source);cancelChosenSummon(source);cancelHexerSummon(source);cancelGamblerSummon(source);cancelMercenarySummon(source);}
 export function cancelSummons(root?:HTMLElement){cancelCastleSummons(root);cancelPoisonSummons(root);cancelShieldTitanSummons(root);cancelWeaponmasterSummons(root);cancelDungeonSummons(root);cancelVampireSummons(root);cancelAssassinSummons(root);cancelMageSummons(root);cancelMercenarySummons(root);cancelGamblerSummons(root);cancelVerdants(root);cancelChosenSummons(root);cancelHexerSummons(root);for(const [source,j] of [...jobs])if(!root||root.contains(source)||root.contains(j.anchor))j.cancel();}
@@ -77,14 +85,14 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
  const clock=coinsCount||isMimic(source.dataset.cardId??'')?SPECIAL_FX:STANDARD_FX;
  if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted)return Promise.resolve(false);
  return new Promise(resolve=>{
-  const visibility=source.style.visibility,originalTransform=source.style.transform,originalOrigin=source.style.transformOrigin;
+  const visibility=source.style.visibility,originalTransform=source.style.transform,originalOrigin=source.style.transformOrigin,originalTransition=source.style.transition;
   let coins:Coins|undefined,coinSound:ContactSound|undefined;
   const reflections:HTMLElement[]=[];
   let ended=false,frame=0,renderer:Renderer|undefined,host:HTMLElement|undefined,captureHost:HTMLElement|undefined;
   const finish=(complete=false)=>{
    if(ended)return;ended=true;clearTimeout(timeout);cancelAnimationFrame(frame);
    options.signal?.removeEventListener('abort',abort);host?.remove();captureHost?.remove();renderer?.dispose();coins?.dispose();coinSound?.dispose();
-   reflections.forEach(n=>n.remove());source.style.visibility=visibility;source.style.transform=originalTransform;source.style.transformOrigin=originalOrigin;jobs.delete(source);resolve(complete);
+   reflections.forEach(n=>n.remove());source.style.visibility=visibility;source.style.transform=originalTransform;source.style.transformOrigin=originalOrigin;source.style.transition=originalTransition;jobs.delete(source);resolve(complete);
   };
   const abort=()=>finish(false),timeout=setTimeout(abort,6000);
   jobs.set(source,{anchor,cancel:abort});options.signal?.addEventListener('abort',abort,{once:true});
@@ -113,6 +121,14 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
    });
    document.body.append(host);source.style.visibility='visible';
    const ground=projectedPlacement(anchor,180,270).toString(),start=clock.now();let impacted=false;
+   const w=source.offsetWidth,h=source.offsetHeight;
+   const native=source===anchor && !source.classList.contains('fx-field-ghost');
+   if(native)source.style.transition='none';
+   const flat=native && !source.closest('[data-board-plane]');
+   const previousPose=source.style.transform;
+   if(flat)source.style.transform='none';
+   const flatBase=flat?projectedPlacement(source,w,h):undefined;
+   if(flat)source.style.transform=previousPose;
    const tick=(now:number)=>{
     if(ended)return;
     if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
@@ -124,11 +140,20 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
      el.style.transform=pass==='ground'?ground:summonPlacement(anchor,180,270,ms).toString();
      c.clearRect(0,0,684,684);renderer!.draw(c,face,SUMMON_VARIANT,Math.min(DURATION,ms),342,342,180,false,pass,false);if(pass==='ground')coins?.draw(c,MERCHANT_VARIANT,coinsCount,ms,342,342,180,false);
     }
-    const w=source.offsetWidth,h=source.offsetHeight;source.style.transformOrigin='0 0';
-    let pose=summonPlacement(anchor,w,h,ms);
+    source.style.transformOrigin='0 0';
+    let pose=flatBase?flatBase.translate(0,-motion(SUMMON_VARIANT,ms).lift*w):summonPlacement(anchor,w,h,ms);
     const arrival=source.dataset.summonRest==='blocked'?ease(DURATION-180,DURATION,ms):0,scale=motion(SUMMON_VARIANT,Math.min(DURATION,ms)).scale*(1-.018*arrival);
     pose=pose.translate(w/2,h/2+w*.035*arrival).scale(scale).translate(-w/2,-h/2);
-    source.style.transform=(source.classList.contains('fx-field-ghost')?pose:projectedPlacement(source,w,h).inverse().multiply(pose)).toString();
+    if(native){
+     const base=flatBase??projectedPlacement(source,w,h);
+     source.style.transform=planeProjection(base).inverse().multiply(planeProjection(pose)).toString();
+     if(source.classList.contains('summon-face')&&(source.dataset.summonRest==='ready'||source.dataset.monsterAura)){
+      const kind=source.dataset.summonRest==='ready'?'ready':source.dataset.summonRest==='blocked'?'blocked':'plain';
+      paintRestingAppearance(source,kind,!!source.dataset.monsterAura,performance.now(),1,false,w);
+     }
+    }else{
+     source.style.transform=(source.classList.contains('fx-field-ghost')?pose:projectedPlacement(source,w,h).inverse().multiply(pose)).toString();
+    }
     if(ms===total){finish(true);return;}frame=clock.requestFrame(tick);
    };tick(start);
   })().catch(error=>{if(!ended){console.warn('[summon] Native card fallback',error);options.onImpact?.();finish();}});
