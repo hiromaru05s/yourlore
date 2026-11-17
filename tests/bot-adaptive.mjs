@@ -123,10 +123,18 @@ try {
   const g=fresh();g.players[0].hp=1;g.players[0].mana=20;g.players[0].maxMana=20;g.players[0].hand=[card('VOID_APOSTLE')];
   assert(C.reduce(g,{type:'play',idx:0}).state.over);assert.notEqual(C.safeGreedy(g).type,'play');
  });
- test('Poison Master removes the large threat instead of wasting decay on the weakest body',()=>{
-  const g=fresh();g.players[0].field=[mon('POISON_MASTER')];g.players[1].field=[{...mon('M2'),atk:1,def:2},{...mon('M2'),atk:12,def:25}];
-  const target=g.players[1].field[1].uid;const attack=C.reduce(g,{type:'attack',uid:g.players[0].field[0].uid}).state;
-  assert.equal(C.safeGreedy(attack).uid,target);const next=C.reduce(attack,C.safeGreedy(attack)).state;assert(!next.players[1].field.some(m=>m.uid===target));
+ test('Poison Master recognizes the one prior counter needed to destroy a large target',()=>{
+  for(const initialDecay of [0,1]){
+   const g=fresh();
+   g.players[0].field=[mon('POISON_MASTER')];
+   const weak={...mon('M2'),atk:1,def:1},large={...mon('M2'),atk:12,def:25,decayCnt:initialDecay};
+   g.players[1].field=[weak,large];
+   const attack=C.reduce(g,{type:'attack',uid:g.players[0].field[0].uid}).state;
+   const choice=C.safeGreedy(attack);
+   assert.equal(choice.uid,initialDecay ? large.uid : weak.uid);
+   const next=C.reduce(attack,choice).state;
+   assert(!next.players[1].field.some(m=>m.uid===choice.uid));
+  }
  });
  test('suppression reserves mana before developing another small body',()=>{
   const g=fresh();g.players[0].hp=20;g.players[0].mana=2;g.players[0].hand=[card('WEAKEN_ALL'),card('RUST_SHROOM')];g.players[1].field=Array.from({length:3},()=>mon('GHOST'));

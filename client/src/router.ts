@@ -21,6 +21,7 @@ import { setPresence, stopPresence } from "./net/presence";
 import { saveActiveGame, loadActiveGame, clearActiveGame } from "./net/resume";
 import { mountLogin } from "./screens/login";
 import { mountSingle, type SingleLocation } from "./screens/single";
+import { mountCardHub } from "./screens/cardHub";
 import { mountHome } from "./screens/home";
 import { mountLobby } from "./screens/lobby";
 import { mountGame, mountGamePreparation } from "./screens/lazyGame";
@@ -37,7 +38,7 @@ import { LOCAL_GUEST_KEY, canUseLocalGuest, loadLocalDevDecks, loadLocalGuestPro
 
 export interface Screen { destroy?(): void; beforeLeave?(): Promise<boolean>; }
 
-const HOME_MUSIC_PAGES = new Set<LoungePage>(["home", "single", "deck", "cards", "leaderboard", "friends", "shop", "tutorial"]);
+const HOME_MUSIC_PAGES = new Set<LoungePage>(["home", "single", "cardHub", "deck", "cards", "leaderboard", "friends", "shop", "tutorial"]);
 
 export class App {
   root: HTMLElement;
@@ -189,6 +190,7 @@ export class App {
     const index=Number.isFinite(part)?Math.max(0,Math.min(TUTORIAL_PARTS.length-1,Math.floor(part))):0;
     setPresence('bot');aCapture('game_start',{mode:'tutorial_part',part:index+1});this.swap(()=>mountGame(this,{mode:'tutorial',part:index}));
   }
+  cardHub(): void { setPresence("menu"); this.swap(() => mountCardHub(this), "cardHub"); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this), "cards"); }
   private startingBot=false;
   botGame(difficulty: BotDifficulty = "hard"): void {

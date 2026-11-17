@@ -22,7 +22,7 @@ export function mountLoungeNavMotion(nav:HTMLElement, previous:string|undefined)
   });
   const keydown=(event:KeyboardEvent)=>{
     if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
-    const buttons=Array.from(nav.querySelectorAll<HTMLButtonElement>('[data-nav]'));
+    const buttons=Array.from(nav.querySelectorAll<HTMLButtonElement>('[data-nav]:enabled'));
     const index=buttons.indexOf(event.target as HTMLButtonElement);if(index<0)return;
     event.preventDefault();
     // Arrow keys move focus only; Enter/Space uses the existing guarded router handler.
