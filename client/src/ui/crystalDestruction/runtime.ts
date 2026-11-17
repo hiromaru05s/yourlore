@@ -20,8 +20,6 @@ export function holdCrystalHit(victim:HTMLElement,hit:Fracture,signal:AbortSigna
   return {mark,ctx:mark.getContext('2d')!};
  });
  sfx('facehit',{rate:.66,gain:.74,signal});
- const amount=document.querySelector<HTMLElement>(`.combat-damage[data-damage-uid="${CSS.escape(victim.dataset.uid!)}"]`);
- if(amount){amount.style.translate='38% -30%';amount.style.scale='.74'}
  const squash=owners.map(node=>node.animate([
   {scale:'1',offset:0},{scale:'.90 1.09',offset:.12},{scale:'.96 1.035',offset:.47},
   {scale:'.985 1.012',offset:.78},{scale:'1',offset:1}
