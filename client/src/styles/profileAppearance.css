@@ -81,4 +81,5 @@ dialog.appearance-picker::backdrop {background:#030e1fc2;}
     to {opacity:1;visibility:visible;translate:0 0;}
   }
 }
-.lounge-home [data-home-pending] {visibility:hidden;}
+/* Pending data also stays hidden during the mobile quest panel’s entrance keyframes. */
+.lounge-home [data-home-pending] {visibility:hidden!important;}
