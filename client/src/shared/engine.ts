@@ -985,7 +985,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
   const destroyMonsterCore = (owner: PlayerState, m: FieldMon, cause?: "decay" | "massacre", riftSource?: string): void => {
     if (!ctx.battleKill && ctx.destroyer == null && swordWarded(owner,m) && (spellDepth > 0 || ctx.monsterSource || ctx.effectCard?.t === 'spell' || ctx.effectCard?.t === 'mon')) return;
     // 흡혈의 극의(vampWard): 필드에 있는 한 양 필드의 '흡혈귀'는 파괴되지 않는다
-    if (isVampFamily(m) && g.players.some((pl) => pl.enchants.some((e2) => e2.card.ench === "vampWard"))) {
+    if (hasVampWard(g, m)) {
       enchantKindFx(g,ev,"vampWard");
       log(`  └ 흡혈의 극의: ${cn(m)} 파괴되지 않음`, `  └ 吸血の極意: ${cn(m)} は破壊されない`);
       return;
@@ -2935,6 +2935,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
         if ((att.guts || 0) > 0) {
           endureWithGuts(g, ctx, p, att);
           ctx.log(`  └ 반격 합계 ${volley} → ${cn(att)} — <span class="good">기합!</span> 체력 1로 버팀`, `  └ 反撃合計 ${volley} → ${cn(att)} — <span class="good">気合！</span> 体力1で耐えた`, `  └ Total counterattack damage ${volley} → ${cn(att)} uses <span class="good">Guts</span> and survives with 1 HP`);
+        } else if (hasVampWard(g, att)) {
+          surviveWithVampWard(g, ctx, p, att);
         } else {
           ctx.log(`  └ 반격 합계 ${volley} → ${cn(att)} 파괴${over2 > 0 ? ` + <span class="dmg">${over2} 관통</span>` : ""}`, `  └ 反撃合計 ${volley} → ${cn(att)} 破壊${over2 > 0 ? ` + <span class="dmg">${over2} 貫通</span>` : ""}`, `  └ Total counterattack damage ${volley} → destroy ${cn(att)}${over2 > 0 ? `; <span class="dmg">${over2} piercing damage</span>` : ""}`);
           trapKill(p, att);
@@ -3022,8 +3024,9 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
       // blow's overflow pierces to the player, exactly like the old 관통.
       const maxHp = effDef(o, target);
       const before = Math.max(0, maxHp - (target.dmg || 0));
-      if (attackEvent) attackEvent.contactDamage = Math.max(0, Math.min(atk, before - (canEndure(target) ? 1 : 0)));
-      ctx.ev.push({ type: "hit", uid: target.uid, amount: Math.max(0, Math.min(atk, before - (canEndure(target) ? 1 : 0))) });
+      const contactDamage = combatHpLoss(g, target, before, atk);
+      if (attackEvent) attackEvent.contactDamage = contactDamage;
+      ctx.ev.push({ type: "hit", uid: target.uid, amount: contactDamage });
       if (atk <= 0) {
         ctx.log(
           `<span class="t">${p.name}</span> ${cn(att)}(공0) → ${cn(target)} <span class="muted">통하지 않음</span>`,
@@ -3051,6 +3054,8 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
             `<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀 (남은 기합 ${target.guts})`,
             `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた (残り気合 ${target.guts})`,
           );
+        } else if (hasVampWard(g, target)) {
+          surviveWithVampWard(g, ctx, o, target);
         } else {
           ctx.log(
             over > 0
@@ -3170,7 +3175,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
     monsterActivation(g,ctx.ev,p,fighter);fighter.guts=(fighter.guts??0)+1;
   }
   const counter = hasPassive(target, "counter") ? Math.ceil(effAtk(p, target, g) / 2) : 0;
-  const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : Math.max(0, Math.min(atk, curHp(p,target) - (canEndure(target) ? 1 : 0)));
+  const contactDamage = target.immuneDamageTurn === g.turn ? 0 : target.hatch != null ? 1 : combatHpLoss(g, target, curHp(p, target), atk);
   const attackEvent: Extract<GameEvent,{type:"attack"}> = { type: "attack", player: side(g, p), uid: att.uid, targetUid: target.uid, targetPlayer: side(g, p), contactDamage };
   ctx.ev.push(attackEvent);
   ctx.ev.push({ type: "hit", uid: target.uid, amount: contactDamage });
@@ -3184,6 +3189,7 @@ function resolveFriendlyFire(g: GameState, ctx: Ctx, att: FieldMon, target: Fiel
     if (atk <= 0) ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공0) → 아군 ${cn(target)} <span class="muted">통하지 않음</span>`, `<span class="t">${p.name}</span> ${cn(att)}(攻0) → 味方 ${cn(target)} <span class="muted">通らない</span>`, `<span class="t">${p.name}</span>: ${cn(att)} (0 ATK) → ally ${cn(target)}; <span class="muted">no effect</span>`);
     else if (atk >= before) {
       if (canEndure(target)) { endureWithGuts(g, ctx, p, target, attackEvent); ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → 아군 ${cn(target)} — <span class="good">기합!</span> 체력 1로 버팀`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → 味方 ${cn(target)} — <span class="good">気合！</span> 体力1で耐えた`, `<span class="t">${p.name}</span>: ${cn(att)} (${atk} ATK) → ally ${cn(target)} uses <span class="good">Guts</span> and survives with 1 HP`); }
+      else if (hasVampWard(g, target)) surviveWithVampWard(g, ctx, p, target);
       else { ctx.log(`<span class="t">${p.name}</span> ${cn(att)}(공${atk}) → <span class="dmg">아군 ${cn(target)}(체력 ${before}) 파괴</span>`, `<span class="t">${p.name}</span> ${cn(att)}(攻${atk}) → <span class="dmg">味方 ${cn(target)}(体力${before}) 破壊</span>`, `<span class="t">${p.name}</span>: ${cn(att)} (${atk} ATK) → <span class="dmg">destroy ally ${cn(target)} (${before} HP)</span>`); {ctx.battleKill=true;try{ctx.destroyMonster(p,target);}finally{ctx.battleKill=false;}} }
       if (pierce && atk - before > 0 && !g.over) ctx.dealDamage(p, atk - before, "관통", "貫通", g.cur, "Pierce");
     } else {
@@ -7190,6 +7196,18 @@ function spellDamageRecorded(g: GameState, amount: number): void {
 function canEndure(m: FieldMon): boolean {
   return !m.boundarySuppressed && !m.realmSuppressed && (m.guts ?? 0) > 0;
 }
+function hasVampWard(g: GameState, m: FieldMon): boolean {
+  return isVampFamily(m) && g.players.some(p => p.enchants.some(e => e.card.ench === 'vampWard'));
+}
+function combatHpLoss(g: GameState, target: FieldMon, hp: number, amount: number): number {
+  const floor = canEndure(target) || hasVampWard(g, target) ? 1 : 0;
+  return Math.max(0, Math.min(amount, hp - floor));
+}
+function surviveWithVampWard(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon): void {
+  m.dmg = effDef(owner, m) - 1;
+  enchantKindFx(g, ctx.ev, 'vampWard');
+  ctx.log(`  └ 흡혈의 극의: ${cn(m)} 체력 1로 생존`, `  └ 吸血の極意: ${cn(m)} は体力1で耐えた`, `  └ ${cn(DB.VAMP_WARD)}: ${cn(m)} survives with 1 HP`);
+}
 function endureWithGuts(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, attack?: Extract<GameEvent,{type:'attack'}>): void {
   const before = m.guts ?? 0;
   m.guts = before - 1;
@@ -7205,15 +7223,17 @@ function monsterDamage(g: GameState, ctx: Ctx, owner: PlayerState, m: FieldMon, 
   if (!combat && dealer!==owner && (spellDepth>0 || source)) amount=fireveinDamage(dealer,owner,amount);
   if (spellDepth > 0 && g.players.some(p => p.enchants.some(e => e.card.ench === 'doubleUp'))) amount *= 2;
   if (spellDepth > 0) spellDamageRecorded(g, Math.min(curHp(owner, m), amount));
-  ctx.ev.push({ type: 'hit', uid: m.uid, amount: m.hatch != null ? 1 : Math.max(0, Math.min(amount, curHp(owner,m) - (combat && canEndure(m) ? 1 : 0))) });
+  const hp = curHp(owner, m);
+  const hpLoss = combat ? combatHpLoss(g, m, hp, amount) : Math.min(amount, hp);
+  ctx.ev.push({ type: 'hit', uid: m.uid, amount: m.hatch != null ? 1 : hpLoss });
   const destroyDamaged = (riftSource?:string) => {
     const prev = ctx.graveSource;
     ctx.graveSource = side(g,dealer);
     try { ctx.destroyMonster(owner,m,undefined,riftSource); } finally { ctx.graveSource=prev; }
   };
   if (m.hatch != null) { m.dur = (m.dur ?? 0) - 1; if (m.dur <= 0) destroyDamaged(); return !owner.field.includes(m); }
-  const hp = curHp(owner, m);
   if (amount >= hp && combat && canEndure(m)) { endureWithGuts(g, ctx, owner, m); }
+  else if (amount >= hp && combat && hasVampWard(g, m)) surviveWithVampWard(g, ctx, owner, m);
   else { m.dmg = (m.dmg ?? 0) + amount; if (m.dmg >= effDef(owner,m)) destroyDamaged(combat && effectSource?.id==='TIME_WRAITH' && !hasEssence(g) ? effectSource.uid : undefined); }
   const origin = effectSource ?? ctx.monsterSource;
   if (!combat && origin?.t === 'mon' && !ctx.bonusDamage && owner.field.includes(m)) {
