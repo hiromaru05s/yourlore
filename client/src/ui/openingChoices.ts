@@ -9,9 +9,9 @@ import {sortedSupplyEntries} from '../shared/cardPresentation';
 import '../styles/marketPreview.css';
 
 const copy={
-  ja:{viewMarket:'マーケットを見る',backToHand:'初手交換に戻る',market:'マーケット',fixed:'固定マーケット',offer:'提示マーケット',inspect:'カードを選ぶと詳細を表示',ready:'準備完了',help:'引き直すカードを2枚まで選んでください。',keep:'そのまま始める',keepLane:'手札に残す',returnLane:'山札に戻す',waiting:'対戦相手が初手を選んでいます',submitted:'選択を送信中…',confirm:(n:number)=>n+'枚の交換を確定',confirmed:'初手が決まりました',time:'残り時間'},
-  en:{viewMarket:'View market',backToHand:'Back to hand',market:'Market',fixed:'Fixed market',offer:'Offer market',inspect:'Select a card to inspect it',ready:'Ready',help:'Choose up to two cards to redraw.',keep:'Keep this hand',keepLane:'Keep in hand',returnLane:'Return to deck',waiting:'Your opponent is choosing their hand',submitted:'Submitting hand…',confirm:(n:number)=>'Exchange '+n+(n===1?' card':' cards'),confirmed:'Your opening hand',time:'Time left'},
-  ko:{viewMarket:'마켓 보기',backToHand:'시작 패로 돌아가기',market:'마켓',fixed:'고정 마켓',offer:'제시 마켓',inspect:'카드를 선택해 자세히 보기',ready:'준비 완료',help:'다시 뽑을 카드를 최대 2장 선택하세요.',keep:'그대로 시작',keepLane:'손에 유지',returnLane:'덱으로 반환',waiting:'상대가 시작 패를 고르고 있습니다',submitted:'선택을 보내는 중…',confirm:(n:number)=>n+'장 교환 확정',confirmed:'시작 패가 결정되었습니다',time:'남은 시간'}
+  ja:{viewMarket:'マーケットを見る',backToHand:'初手交換に戻る',market:'マーケット',fixed:'固定マーケット',offer:'提示マーケット',inspect:'カードを選ぶと詳細を表示',ready:'準備完了',help:'タップかドラッグで、引き直すカードを2枚まで選択',keep:'そのまま始める',keepLane:'手札に残す',returnLane:'山札に戻す',waiting:'対戦相手が初手を選んでいます',submitted:'選択を送信中…',confirm:(n:number)=>n+'枚の交換を確定',confirmed:'初手が決まりました',time:'残り時間'},
+  en:{viewMarket:'View market',backToHand:'Back to hand',market:'Market',fixed:'Fixed market',offer:'Offer market',inspect:'Select a card to inspect it',ready:'Ready',help:'Tap or drag up to two cards to redraw.',keep:'Keep this hand',keepLane:'Keep in hand',returnLane:'Return to deck',waiting:'Your opponent is choosing their hand',submitted:'Submitting hand…',confirm:(n:number)=>'Exchange '+n+(n===1?' card':' cards'),confirmed:'Your opening hand',time:'Time left'},
+  ko:{viewMarket:'마켓 보기',backToHand:'시작 패로 돌아가기',market:'마켓',fixed:'고정 마켓',offer:'제시 마켓',inspect:'카드를 선택해 자세히 보기',ready:'준비 완료',help:'탭하거나 드래그해 다시 뽑을 카드를 최대 2장 선택하세요.',keep:'그대로 시작',keepLane:'손에 유지',returnLane:'덱으로 반환',waiting:'상대가 시작 패를 고르고 있습니다',submitted:'선택을 보내는 중…',confirm:(n:number)=>n+'장 교환 확정',confirmed:'시작 패가 결정되었습니다',time:'남은 시간'}
 };
 function element<K extends keyof HTMLElementTagNameMap>(tag:K,cls:string,text?:string){
   const el=document.createElement(tag);el.className=cls;if(text!==undefined)el.textContent=text;return el;
@@ -112,14 +112,69 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
     scene.button.textContent=picked.length?words.confirm(picked.length):words.keep;
     position();
   };
-  cards.forEach(({uid,face})=>{face.onclick=()=>{
+  function toggleCard(uid:string){
     if(locked)return;
     const i=picked.indexOf(uid);
     if(i>=0)picked.splice(i,1);else if(picked.length<max)picked.push(uid);else return;
     sfx('pop');paint();
-  };});
+  }
+
+  type HandCard=(typeof cards)[number];
+  type Drag={card:HandCard;id:number;x:number;y:number;offsetX:number;offsetY:number;lane:HTMLElement;moving:boolean};
+  let drag:Drag|null=null;
+  function overLane(lane:HTMLElement,e:PointerEvent){
+    const bounds=lane.getBoundingClientRect();
+    return e.clientX>=bounds.left&&e.clientX<=bounds.right&&e.clientY>=bounds.top&&e.clientY<=bounds.bottom;
+  }
+  function endDrag(){
+    if(!drag)return;
+    const {card,id,lane}=drag;
+    drag=null;
+    lane.classList.remove('drop-hover');
+    card.slot.classList.remove('is-dragging');
+    card.lift.style.removeProperty('transform');
+    if(card.face.hasPointerCapture(id))card.face.releasePointerCapture(id);
+  }
+  for(const card of cards){
+    const {face,uid}=card;
+    let suppressClick=false;
+    face.onclick=e=>{if(!suppressClick||e.detail===0)toggleCard(uid);};
+    face.ondragstart=e=>e.preventDefault();
+    face.onpointerdown=e=>{
+      if(!e.isPrimary||e.button!==0||drag)return;
+      suppressClick=false;
+      if(locked||face.getAttribute('aria-disabled')==='true')return;
+      const chosen=picked.includes(uid);
+      const lane=scene.content.querySelector<HTMLElement>(chosen?'.keep-lane':'.return-lane')!;
+      const offset=new DOMMatrixReadOnly(getComputedStyle(card.lift).transform);
+      drag={card,id:e.pointerId,x:e.clientX,y:e.clientY,offsetX:offset.m41,offsetY:offset.m42,lane,moving:false};
+      face.setPointerCapture(e.pointerId);
+    };
+    face.onpointermove=e=>{
+      if(!drag||drag.card!==card||drag.id!==e.pointerId)return;
+      const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+      if(!drag.moving){
+        if(Math.max(Math.abs(dx),Math.abs(dy))<=(e.pointerType==='touch'?12:5))return;
+        suppressClick=true;
+        if(document.getElementById('zoomOverlay')){endDrag();return;}
+        drag.moving=true;
+        card.slot.classList.add('is-dragging');
+      }
+      card.lift.style.transform=`translate(${drag.offsetX+dx}px,${drag.offsetY+dy}px)`;
+      drag.lane.classList.toggle('drop-hover',overLane(drag.lane,e));
+    };
+    face.onpointerup=e=>{
+      if(!drag||drag.card!==card||drag.id!==e.pointerId)return;
+      const accept=drag.moving&&overLane(drag.lane,e);
+      endDrag();
+      if(accept)toggleCard(uid);
+    };
+    face.onpointercancel=face.onlostpointercapture=e=>{
+      if(drag?.card===card&&drag.id===e.pointerId)endDrag();
+    };
+  }
   const commit=(uids:string[])=>{
-    if(locked)return;locked=true;scene.button.disabled=true;scene.button.textContent=words.submitted;
+    if(locked)return;endDrag();locked=true;scene.button.disabled=true;scene.button.textContent=words.submitted;
     scene.node.classList.add('is-submitted');select(uids);
   };
   scene.button.onclick=()=>commit([...picked]);
@@ -150,6 +205,7 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
     for(const [uid,target] of targets)if(!visible.has(uid))target.hidden=true;
   }
   function showMarket(open:boolean){
+    endDrag();
     scene.node.classList.toggle('viewing-board',open);inspection.hidden=!open;
     scene.content.hidden=open;scene.button.hidden=open||confirmed;
     scene.heading.textContent=open?words.market:confirmed?words.confirmed:words.help;
@@ -166,5 +222,5 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
   scene.button.hidden=confirmed;paint();
   const resize=new ResizeObserver(()=>{if(inspection.hidden)position();else alignMarket();});
   resize.observe(scene.node);resize.observe(scene.content);
-  return {node:scene.node,update:(seconds:number)=>{scene.time(seconds,MULLIGAN_MS/1000);if(!inspection.hidden)alignMarket();},dispose:()=>resize.disconnect()};
+  return {node:scene.node,update:(seconds:number)=>{scene.time(seconds,MULLIGAN_MS/1000);if(!inspection.hidden)alignMarket();},dispose:()=>{endDrag();resize.disconnect();}};
 }

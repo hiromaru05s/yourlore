@@ -138,3 +138,12 @@
 .hand-market-inspection .market-inspect-target{position:absolute;opacity:0;cursor:zoom-in}
 .hand-market-inspection .market-inspect-target:focus-visible{opacity:1;background:transparent!important;border:2px solid #bde3ff!important;border-image:none!important}
 @media(max-width:420px){.hand-study .study-foot{gap:6px}.hand-market-toggle{padding-inline:8px;font-size:12px}}
+
+.hand-study:not(.is-confirmed) .study-slot .card[aria-disabled=false]{
+  cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none
+}
+.hand-study .keep-lane .study-slot.is-dragging{z-index:6}
+.hand-study .is-dragging .study-lift{transition:none}
+.hand-study .study-slot.is-dragging .card[aria-disabled=false]{cursor:grabbing}
+.study-lane.drop-hover::before{border-color:#b5dded;background-color:#79a7c62c}
+.return-lane.drop-hover::before{border-color:#e5caa1;background-color:#cfb17e29}
