@@ -20,6 +20,9 @@ export const ARIES_OPPONENTS: Record<AriesStage, StoryOpponent> = {
   2: { stage: 2, avatar: 'STORY_ARIES', name: {ja:'Aries',en:'Aries',ko:'Aries'}, title: {ja:'マスターシーカー · 神速アグロ',en:'Master Seeker · Flash Aggro',ko:'마스터 시커 · 신속 어그로'}, deck: ['ELITE_GOBLIN','ELITE_GOBLIN','ELITE_GOBLIN','GOBLIN_ORIGIN','GOBLIN_PARTY','FORGE','ICARUS_SHOES','ICARUS_WINGS'], difficulty:'hell', tune:eliteAggroTune },
 };
 
+// Preserve persisted room IDs: stage 1 is the former Rena encounter.
+export const ARIES_ROUTE = [ARIES_OPPONENTS[0], ARIES_OPPONENTS[2]] as const;
+
 export const ARIES_COMPLETED_KEY = 'lore.story.aries.cleared.v1';
 export const ARIES_STARTER_NAMES: Record<'ja'|'en'|'ko', string[]> = {
   ja:['アチューン','精鋭ゴブリン ×3','ゴブリンの起源','ゴブリンパーティー','ゴブリン鍛冶屋','イカロスの靴','イカロスの翼'],

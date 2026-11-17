@@ -22,7 +22,7 @@ import '../styles/homeTier.css';
 import { homeIcon } from "../ui/homeIcons";
 import {scheduleGameWarmup,warmGame} from './lazyGame';
 import {mountHomeDuelButton} from '../ui/homeDuelButton';
-import { ARIES_OPPONENTS, ARIES_COMPLETED_KEY, ARIES_STARTER_NAMES } from '../shared/ariesStory';
+import { ARIES_ROUTE, ARIES_COMPLETED_KEY, ARIES_STARTER_NAMES } from '../shared/ariesStory';
 import { rosterPortraits, storyPortraits } from '../ui/singlePortraits';
 import { decodeAsset } from '../ui/imageAssets';
 import '../styles/singleStory.css';
@@ -157,9 +157,9 @@ function showBotNpcModal(app: App, rosterReady: Promise<unknown>): void {
         <p>${loungeText('短気で勝負を急ぐ。精鋭ゴブリンを軸に、序盤から攻め切る神速アグロ。','Impatient and decisive. A lightning aggro style built around Elite Goblins.','성급하고 승부를 서두른다. 정예 고블린 중심의 신속 어그로.')}</p>
         <div class="single-story-deck-label">${loungeText('Ariesのスターター','Aries Starter','Aries 스타터')}</div>
         <div class="single-story-deck">${ariesDeckNames.map(name=>`<span>${esc(name)}</span>`).join('')}</div>
-        <div class="single-story-progression">${Object.values(ARIES_OPPONENTS).map(opponent =>
+        <div class="single-story-progression">${ARIES_ROUTE.map(opponent =>
           `<span><img data-src="${storyPortraits[opponent.stage]}" alt="">${esc(opponent.name[getLang()])}</span>`).join('<i></i>')}</div>
-        <p class="single-story-note">${loungeText('配下のシーカー2人に連勝してから挑戦。途中で敗れると最初からやり直し。','Defeat two of Aries’s seekers in a row. Any loss restarts the sequence.','부하 시커 2명을 연속으로 이긴 뒤 도전한다. 한 번이라도 지면 처음부터 다시 시작.')}</p>
+        <p class="single-story-note">${loungeText('ルカに勝つとAriesに挑戦できる。敗れるとルカ戦から再開。','Defeat Luca to challenge Aries. A loss takes you back to Luca.','루카를 이기면 Aries에게 도전할 수 있다. 패배하면 루카전부터 다시 시작한다.')}</p>
         <div class="single-story-character">${(app.user?.id === "local-guest-user" && localStorage.getItem(ARIES_COMPLETED_KEY + ".guest"))?loungeText('Aries撃破済み','Aries defeated','Aries 격파 완료'):loungeText('NPC全員クリア · 挑戦可能','All NPCs cleared · Ready','모든 NPC 클리어 · 도전 가능')}</div>
         <button type="button" class="challenge-start" id="storyStart">${loungeText('Ariesへの道を始める →','Begin the Aries challenge →','Aries 도전 시작 →')}</button>
       </section>

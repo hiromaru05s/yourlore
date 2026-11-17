@@ -18,7 +18,7 @@ function publicRival(g: GameState, side: Side): GameState {
 /** Challenge-only sampling. Percentages are bias probabilities, not win rates.
  * Uses the NPC's inventory and the opponent's public board/history only.
  * No card stats, player dice, draws, costs, or PvP distributions are changed. */
-export const BOT_MARKET_BIAS = { easy: 0, normal: 0, hard: .5, hell: .9 } as const;
+export const BOT_MARKET_BIAS = { easy: 0, normal: 0, hard: .05, hell: .10 } as const;
 export function botMarketIndex(g: GameState, ids: string[], random: () => number): number {
   const setting = g.botMarket;
   if (!setting || !g.botDifficulty || !BOT_MARKET_BIAS[g.botDifficulty]) return Math.floor(random() * ids.length);

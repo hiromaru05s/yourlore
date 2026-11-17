@@ -20,8 +20,8 @@ import { setMarketWatch, setMyAvatar, setMySleeve, setMyFurniture, setOppAvatar 
 import { startBoardLayout } from "../ui/layout";
 import { setCoinProfiles } from "../game/controller";
 import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
-import type { AriesStage, StoryOpponent } from "../shared/ariesStory";
-import { ARIES_COMPLETED_KEY } from "../shared/ariesStory";
+import type { StoryOpponent } from "../shared/ariesStory";
+import { ARIES_COMPLETED_KEY, ARIES_ROUTE } from "../shared/ariesStory";
 import { loungeText } from "../ui/loungeText";
 
 export type GameOpts =
@@ -81,7 +81,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onStoryAgainLabel: won => !story ? undefined : won ? story.stage < 2 ? loungeText('次の試練へ →','Continue →','다음 시련으로 →') : loungeText('ストーリーを閉じる','Finish story','스토리 마치기') : loungeText('最初からやり直す →','Restart the sequence →','처음부터 다시 →'),
     onRematch: () => {
       if (story) {
-        if (storyWon && story.stage < 2) app.storyGame((story.stage + 1) as AriesStage, opts.mode === 'online' ? opts.roomId : undefined);
+        if (storyWon && story.stage < 2) app.storyGame(ARIES_ROUTE[1].stage, opts.mode === 'online' ? opts.roomId : undefined);
         else if (storyWon && story.stage === 2) app.home();
         else app.storyGame(0);
       } else if (opts.mode === "bot") app.botGame(opts.difficulty);

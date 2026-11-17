@@ -77,7 +77,7 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
  db.prepare('UPDATE users SET deck=?, starter_cards=? WHERE id=?')
    .run(starterDeck.join(','),JSON.stringify({Q_RUNE_SECRET:1}),userId);
  let prior;
- for(const stage of [0,1,2]){
+ for(const stage of [0,2]){
    const res=await request('/rewards/story/start',{previous:prior});assert.equal(res.status,200);
    const {roomId,oppName,oppAvatar}=await res.json();const room=rooms.get(roomId);assert.equal(room.room.storyStage,stage);
    if (stage === 0) {
