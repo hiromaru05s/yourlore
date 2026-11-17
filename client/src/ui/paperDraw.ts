@@ -39,26 +39,31 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
  if(signal.aborted||!cards.length||cards.some(n=>!n.isConnected))return;
  const speed=Math.max(.5,Math.min(5,durationScale));
  if(!reveal)return drawOpponentSleeves(cards,origin,signal,onLand,speed,previousHand);
- const overlay=document.createElement('div');overlay.className='native-draw-layer';overlay.setAttribute('aria-hidden','true');overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:126;perspective:1200px;perspective-origin:50% 50%;transform-style:preserve-3d';document.body.append(overlay);
+ const all=[...cards[0].parentElement!.querySelectorAll<HTMLElement>(':scope > .card,:scope > .card--back')];
+ const overlay=document.createElement('div');overlay.className='native-draw-layer';overlay.setAttribute('aria-hidden','true');overlay.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:126';document.body.append(overlay);
  const flights=cards.map(node=>{
   const cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight,root=document.createElement('div');
+  // Each card has its own perspective so its lift cannot cross another hand slot.
+  const slot=document.createElement('div');
+  slot.style.cssText='position:absolute;inset:0;perspective:1200px;pointer-events:none';
+  slot.style.zIndex=String(all.length-all.indexOf(node));
+  overlay.append(slot);
   root.className='native-draw-card';root.style.cssText=`position:absolute;left:0;top:0;width:${w}px;height:${h}px;transform-origin:50% 50%;transform-style:preserve-3d;will-change:transform;display:none`;
   let returnPrint=()=>{};
   if(reveal){const front=nativeCopy(node,true);returnPrint=borrowCardPrint(node,front);front.style.backfaceVisibility='hidden';front.style.transform='translateZ(.015px)';root.append(front);}
   const back=document.createElement('div');back.className='draw-stock-back';back.style.cssText=`position:absolute;inset:0;border-radius:5.2%;background-image:url("${sleeve}");background-size:100% 100%;backface-visibility:hidden;transform:translateZ(${-w*DRAW_THICKNESS_RATIO}px) rotateY(180deg);box-shadow:inset 0 0 0 1px #b1c3d155`;root.append(back);
   // Keep the sleeve's native colors. The stock renderer supplies the narrow
   // edge light; a filled DOM plane would tint the entire back during lift.
-  const finish=decorateDrawBack(back,sleeve);overlay.append(root);return {finish,returnPrint,node,w,h,root,landed:false,sounded:false,stock:null as ReturnType<NonNullable<ReturnType<typeof acquireDrawStage>>['add']>|null};
+  const finish=decorateDrawBack(back,sleeve);slot.append(root);return {finish,returnPrint,node,w,h,root,landed:false,sounded:false,stock:null as ReturnType<NonNullable<ReturnType<typeof acquireDrawStage>>['add']>|null};
  });
- // Foreground cards open a gap from their pre-render poses. Copies stay above
- // the arriving card only in its last approach, so it is actually inserted.
+ // Reflow and landing use the same back-to-front order as the resting hand.
  const grips:Array<{node:HTMLElement;copy:HTMLElement;visibility:string;from:DOMMatrix;width:number;height:number;settled:boolean;returnPrint:()=>void}>=[];
  const grip=(node:HTMLElement,index:number,settled=false)=>{
   if(grips.some(g=>g.node===node))return;
   const copy=nativeCopy(node),cs=getComputedStyle(node),w=parseFloat(cs.width)||node.offsetWidth,h=parseFloat(cs.height)||node.offsetHeight;
   const old=previousHand?.get(node.dataset.uid||'#'+index),from=old&&!settled?old.matrix.scale(old.width/w,old.height/h):handCardMatrix(node);
   const returnPrint=borrowCardPrint(node,copy);
-  copy.style.transformOrigin='0 0';copy.style.transform=from.toString();copy.style.zIndex=String(20+(parseFloat(cs.zIndex)||0));overlay.append(copy);grips.push({node,copy,visibility:node.style.visibility,from,width:w,height:h,settled,returnPrint});node.style.visibility='hidden';
+  copy.style.transformOrigin='0 0';copy.style.transform=from.toString();copy.style.zIndex=String(all.length-index);overlay.append(copy);grips.push({node,copy,visibility:node.style.visibility,from,width:w,height:h,settled,returnPrint});node.style.visibility='hidden';
   if(settled && node.classList.contains('is-dim')){
    // These are the actual borrowed print layers. Their animations follow
    // them back into the hand when the last travelling card is seated.
@@ -70,7 +75,6 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
    }
   }
  };
- const all=[...cards[0].parentElement!.querySelectorAll<HTMLElement>(':scope > .card,:scope > .card--back')];
  // Setup remains cancellation-safe even when image decoding or module loading stalls.
  const width=innerWidth,height=innerHeight;let frame=0,finish=()=>{},stage:ReturnType<typeof acquireDrawStage>=null,decodeTimer=0;
  let cancelDecode=()=>{};const cancelled=new Promise<void>(resolve=>{cancelDecode=resolve;}),cancel=()=>{cancelDecode();finish();};signal.addEventListener('abort',cancel,{once:true});
@@ -98,7 +102,7 @@ export async function drawPaperCards({cards,origin,sleeve,reveal,signal,onLand,p
       z:Math.min(origin.width*.72,65)*p.lift,pitch:p.pitch,yaw:180*(1-p.reveal),bank:angle*p.travel+side*10*p.bank,scale:mix(startScale,targetScale,p.travel)};
      // Projection enlarges by depth naturally. No extra scale pulse is layered on.
      f.root.style.left=(pose.x-f.w/2)+'px';f.root.style.top=(pose.y-f.h/2)+'px';f.root.style.transform=`translateZ(${pose.z}px) rotateZ(${pose.bank}deg) rotateY(${pose.yaw}deg) rotateX(${pose.pitch}deg) scale(${pose.scale})`;
-     f.finish(now,pose.bank+pose.pitch);f.root.style.zIndex=p.travel<.78?'80':'0';
+     f.finish(now,pose.bank+pose.pitch);
      if(!stage)f.root.style.boxShadow='none';
      // The printed face has transparent corners. Reveal the stock only as
      // the card turns edge-on or shows its sleeve.

@@ -44,7 +44,25 @@ try{
  }
  // A landed first card must already be dim while the second is still arriving.
  await page.setViewportSize({width:1280,height:900});
- await page.evaluate(()=>{const q=monsterQA;q.reset();q.g.players[0].mana=0;q.g.players[0].hand=[{...q.DB.GOBLIN_SETTLEMENT,uid:'first'},{...q.DB.GOBLIN_SETTLEMENT,uid:'second'}];q.render();window.drawDone=q.A.animateDraw(document.querySelector('#hand'),2,'me',{uids:['first','second'],durationScale:3});});
+ await page.evaluate(()=>{const q=monsterQA;q.reset();q.g.players[0].mana=0;q.g.players[0].hand=[{...q.DB.GOBLIN_SETTLEMENT,uid:'first'},{...q.DB.GOBLIN_SETTLEMENT,uid:'second'}];q.render();q.ctl.view.setHandOpen(true);});
+ // Hit-test where both prints overlap while they are still travelling.
+ const hitStyle=await page.addStyleTag({content:'.native-draw-card{pointer-events:auto!important}'});
+ // Let the preceding viewport resize reach the board before starting a cancellable flight.
+ await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+ await page.evaluate(()=>{window.drawDone=monsterQA.A.animateDraw(document.querySelector('#hand'),2,'me',{uids:['first','second'],durationScale:3});});
+ const overlap=await page.waitForFunction(()=>{
+  const [first,second]=document.querySelectorAll('.native-draw-card');
+  if(!first||!second)return false;
+  const a=first.getBoundingClientRect(),b=second.getBoundingClientRect();
+  const left=Math.max(a.left,b.left),right=Math.min(a.right,b.right);
+  const top=Math.max(a.top,b.top),bottom=Math.min(a.bottom,b.bottom);
+  if(left>=right||top>=bottom)return false;
+  const stack=document.elementsFromPoint((left+right)/2,(top+bottom)/2);
+  if(!stack.includes(first)||!stack.includes(second))return false;
+  return {firstInFront:stack.indexOf(first)<stack.indexOf(second)};
+ });
+ assert((await overlap.jsonValue()).firstInFront,'later draws must stay behind earlier cards');
+ await hitStyle.evaluate(el=>el.remove());
  await page.waitForFunction(()=>{const cards=document.querySelectorAll('.native-draw-card');return cards.length===2&&cards[0].style.display==='none'&&cards[1].style.display==='block'&&+cards[1].dataset.progress>.8;});
  const multi=await page.evaluate(()=>{const layer=document.querySelector('.native-draw-layer'),landed=[...layer.children].find(n=>n.classList.contains('card')),flying=layer.querySelector('.native-draw-card[style*="display: block"] .card');return{landed:getComputedStyle(landed.querySelector('.card-art')).filter,flying:getComputedStyle(flying.querySelector('.card-art')).filter};});
  assert(multi.landed.includes('grayscale('));assert.equal(multi.flying,'none');await page.evaluate(()=>window.drawDone);checks.push({multi});
@@ -53,9 +71,13 @@ try{
   if(mode==='reduce')await page.emulateMedia({reducedMotion:'reduce'});
   await page.evaluate(mode=>{window.drawAbort=new AbortController();window.drawDone=monsterQA.A.animateDraw(document.querySelector(mode==='opponent'?'#oppHand':'#hand'),1,mode==='opponent'?'opp':'me',{signal:window.drawAbort.signal});},mode);
   if(mode!=='reduce'){
-   await page.waitForSelector('.native-draw-card');
-   if(mode==='opponent')assert.equal(await page.locator('.native-draw-card .card-art,.native-draw-card [data-card-id]').count(),0);
-   else await page.evaluate(mode=>{if(mode==='abort')window.drawAbort.abort();if(mode==='resize')dispatchEvent(new Event('resize'));if(mode==='skip')monsterQA.A.setFxSkip(true);},mode);
+   if(mode==='opponent'){
+    await page.waitForFunction(()=>document.querySelector('#oppHand .card--back').getAnimations().some(a=>a.id==='opponent-sleeve-draw'));
+    assert.equal(await page.locator('#oppHand .card-art,#oppHand [data-card-id],.native-draw-layer').count(),0);
+   }else{
+    await page.waitForSelector('.native-draw-card');
+    await page.evaluate(mode=>{if(mode==='abort')window.drawAbort.abort();if(mode==='resize')dispatchEvent(new Event('resize'));if(mode==='skip')monsterQA.A.setFxSkip(true);},mode);
+   }
   }
   await page.evaluate(()=>window.drawDone);assert.equal(await page.locator('.native-draw-layer,.draw-stock-canvas').count(),0);assert.equal(await page.locator('#hand .card').evaluate(n=>getComputedStyle(n).visibility),'visible');await page.emulateMedia({reducedMotion:'no-preference'});checks.push(mode);
  }
