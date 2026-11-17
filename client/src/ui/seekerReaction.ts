@@ -1,26 +1,20 @@
-// The animated GIF remains the only visible painting. Each filter takes its
-// current pixels as SourceGraphic, so cloth, light and silhouette share its breath.
+// The GIF breathes continuously under the mana illustration and cloth filters.
 import fields from './seekerFields.json';
+import {manaReaction} from './seekerArt/mana';
+import {createLayer} from './seekerArt/layer';
 
 export type Reaction = 'hurt' | 'mana' | 'heal';
 const recipes = {
   hurt:{field:fields.hurt, color:'#d35a42', glint:'#ffe0a6', pigment:'.82 .45 .08 0 .12', ms:820},
-  mana:{field:fields.mana, color:'#31afff', glint:'#dbfaff', pigment:'2.30 .70 -1.35 0 .34', ms:1480},
   heal:{field:fields.heal, color:'#40cb8a', glint:'#dbffc8', pigment:'.88 .92 .40 0 .16', ms:1780},
 };
-const kinds = Object.keys(recipes) as Reaction[];
+const kinds = Object.keys(recipes) as (keyof typeof recipes)[];
 const clip=(n:number)=>Math.min(1,Math.max(0,n));
 const smooth=(n:number)=>{n=clip(n);return n*n*(3-2*n);};
 const rise=(t:number,a:number,b:number)=>smooth((t-a)/(b-a));
 const pulse=(t:number,a:number,b:number,c:number,d:number)=>rise(t,a,b)*(1-rise(t,c,d));
 type Pose={bend:number; front:number; width:number; strength:number};
-function pose(kind:Reaction,t:number):Pose {
-  if(kind==='mana')return {
-    // Settle into the clasp; straighten as the bright edge runs up the gold.
-    bend:-.025*pulse(t,0,.12,.13,.28)+.17*pulse(t,.10,.42,.48,1),
-    front:-.05+1.25*rise(t,.04,.85),width:.17,
-    strength:.98*pulse(t,0,.12,.68,1),
-  };
+function pose(kind:keyof typeof recipes,t:number):Pose {
   if(kind==='heal')return {
     // A small exhale/bow opens the folds. Lift the hood after the green front.
     bend:.12*pulse(t,0,.25,.29,.61)-.096*pulse(t,.34,.62,.67,1),
@@ -62,9 +56,11 @@ export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasEle
     kind, time:-1, bend:0, table:new Float32Array(32), carry:undefined as {bend:number; table:Float32Array}|undefined,
     warp:owners[i].querySelector('feDisplacementMap')!,light:owners[i].querySelector('feFuncA')!,
   }));
-  let raf=0,previous=0;
+  const ink=createLayer(image);
+  let raf=0,previous=0,manaElapsed=-1,repeatMana=false;
   function reset(){
     cancelAnimationFrame(raf);raf=0;previous=0;
+    manaElapsed=-1;repeatMana=false;ink.clear();
     for(const tr of tracks){tr.time=-1;tr.carry=undefined;}
     image.style.removeProperty('filter');state.dataset.action='idle';state.dataset.frame='0';
   }
@@ -92,11 +88,30 @@ export function createSeekerReaction(image:HTMLImageElement, state:HTMLCanvasEle
       filters.push('url(#'+prefix+tr.kind+')');
       if(action==='idle'){action=tr.kind;frame=Math.round(t*(tr.kind==='hurt'?40:56));}
     }
+    if(manaElapsed>=0){
+      manaElapsed+=step;
+      if(manaElapsed>=manaReaction.duration){
+        manaElapsed=repeatMana?0:-1;
+        repeatMana=false;
+      }
+      if(manaElapsed<0)ink.clear();
+      else{
+        const t=manaElapsed/manaReaction.duration;
+        ink.paint(manaReaction,t);
+        if(action==='idle'){action='mana';frame=Math.round(t*56);}
+      }
+    }
     image.style.filter=filters.join(' ');
     state.dataset.action=action;state.dataset.frame=String(frame);
-    if(filters.length)raf=requestAnimationFrame(tick);
+    if(filters.length || manaElapsed>=0)raf=requestAnimationFrame(tick);
   }
-  return {svg,reset,play(kind:Reaction){
+  return {svg,overlay:ink.canvas,reset,play(kind:Reaction){
+    if(kind==='mana'){
+      if(manaElapsed<0)manaElapsed=0;
+      else repeatMana=true;
+      if(!raf){previous=performance.now();tick(previous);}
+      return;
+    }
     const tr=tracks[kinds.indexOf(kind)];
     tr.carry=tr.time<0?undefined:{bend:tr.bend,table:tr.table.slice()};tr.time=0;
     if(!raf){previous=performance.now();tick(previous);}

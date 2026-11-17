@@ -11,8 +11,8 @@ if(import.meta.env.DEV){
   const repeat=root.querySelector<HTMLInputElement>('[data-repeat]')!, rate=root.querySelector('select')!;
   const rows=(['mana','heal'] as const).map(kind=>{
     const section=document.createElement('section');
-    const title=kind==='mana'?'マナ増加':'体力回復';
-    section.innerHTML=`<div class="section-title"><h2>${title}</h2><button class="row-play" type="button">3案を同時再生</button></div><div class="study-grid"></div>`;
+    const title=kind==='mana'?'マナ増加 · M1採用':'体力回復';
+    section.innerHTML=`<div class="section-title"><h2>${title}</h2><button class="row-play" type="button">${kind==='mana'?'M1を再生':'3案を同時再生'}</button></div><div class="study-grid"></div>`;
     root.append(section);
     const reduced=matchMedia('(prefers-reduced-motion: reduce)');
     const slots=studies.filter(s=>s.kind===kind).map(study=>{

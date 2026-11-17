@@ -87,7 +87,7 @@ export function boardSeeker(background: ProfileBackground): Node[] {
   const canvas=seekerPortrait({board:true,background,loop});
   const rig=createSeekerReaction(loop,canvas);
   players.get(canvas)!.rig=rig;
-  return [canvas,loop,rig.svg];
+  return [canvas,loop,rig.overlay,rig.svg];
 }
 export function playSeeker(canvas: HTMLCanvasElement | null, action: SeekerAction): void {
   if (!canvas) return;

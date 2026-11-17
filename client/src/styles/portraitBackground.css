@@ -25,3 +25,5 @@
   padding:6%;
   background-color:var(--appearance-plate);
 }
+.portrait .seeker-study-ink{position:absolute;inset:50% auto auto 50%;translate:-50% -50%;width:min(100cqw,100cqh);height:min(100cqw,100cqh);background:transparent;pointer-events:none}
+.portrait canvas.seeker-study-ink[hidden]{display:none!important}

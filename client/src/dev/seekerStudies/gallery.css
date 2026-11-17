@@ -17,3 +17,5 @@ article{text-align:center;padding:0 6px}article+article{border-left:1px solid #8
 .caption{justify-content:center;gap:7px;flex-wrap:wrap}.caption b{font:600 11px ui-monospace,monospace;color:#9cb7cd}.caption h3{font-size:clamp(12px,1.75vw,16px);letter-spacing:.035em}
 article a{display:inline-block;margin-top:4px;color:#b9cee2;font-size:11px;text-underline-offset:3px}.preview:focus-visible,.row-play:focus-visible,a:focus-visible{outline:2px solid #b6daee;outline-offset:2px}
 @media(max-width:520px){#studies{padding:12px 8px}.transport{gap:6px;font-size:10px}#studies header{align-items:flex-start}.caption{gap:3px}article{padding:2px}.caption b{font-size:9px}.caption h3{font-size:11px}section{margin-top:16px}}
+
+#studies:has(section[hidden]) .preview{width:min(100%,275px)}

@@ -44,19 +44,15 @@ await sharp({create:{width:size*8,height:size*6,channels:4,background:'#0000'}})
  .webp({quality:90,alphaQuality:100}).toFile(dir+'/hurt.webp');
 
 // R/G are inverse displacement vectors. B encodes the journey of the light through
-// this crop: distance from the clasp, distance up the folded cloth, or impact side.
+// this crop: distance up the folded cloth or distance from the impact side.
 const packed={}, n=64;
-for (const kind of ['mana','heal','hurt']){
+for (const kind of ['heal','hurt']){
  const map=Buffer.alloc(n*n*3);
  for(let y=0;y<n;y++)for(let x=0;x<n;x++){
   const u=(x+.5)/n,v=(y+.5)/n, hood=1-smooth((v-.44)/.52);
   const shoulders=band(v,.77,.18),cloth=1-smooth((v-.86)/.14);
   let dx,dy,travel;
-  if(kind==='mana'){
-   dx=(u-.46)*(.59*shoulders+.16*hood);
-   dy=-.16*hood-.32*shoulders;
-   travel=Math.hypot((u-.445)*.93,(v-.78)*1.02)/.88;
-  }else if(kind==='heal'){
+  if(kind==='heal'){
    dx=(.45-u)*.50*shoulders-.09*hood;
    dy=.40*hood+.25*shoulders;
    travel=1-v+.16*(1-(2*u-1)**2)+.024*Math.sin(u*7+v*2);

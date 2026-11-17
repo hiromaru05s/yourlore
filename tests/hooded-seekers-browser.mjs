@@ -19,10 +19,10 @@ try{
  const histories={};
  for(const [action,side,hit] of [['hurt',0,true],['heavy',1,true],['mana',0,false],['heal',1,false],['brand',0,false]]){
   const history=await page.evaluate(async({action,side})=>{
-   const c=document.querySelector(side?'#portraitOpp canvas':'#portraitMe canvas'),seen=[c.dataset.action+':'+c.dataset.frame];
+   const c=document.querySelector(side?'#portraitOpp .seeker-motion':'#portraitMe .seeker-motion'),seen=[c.dataset.action+':'+c.dataset.frame];
    const ob=new MutationObserver(()=>seen.push(c.dataset.action+':'+c.dataset.frame));ob.observe(c,{attributes:true,attributeFilter:['data-frame']});
    const film=c.nextElementSibling;let stayedLive=true;
-   const checkLive=new MutationObserver(()=>{if(c.dataset.action!=='idle')stayedLive &&= !film.hidden && film.isConnected && !!film.style.filter;});
+   const checkLive=new MutationObserver(()=>{if(c.dataset.action!=='idle')stayedLive &&= !film.hidden && film.isConnected && (c.dataset.action==='mana'?!!c.parentNode.querySelector('canvas[data-playing=M1]:not([hidden])'):!!film.style.filter);});
    checkLive.observe(c,{attributes:true,attributeFilter:['data-frame']});
    await hoodedBoard.trigger(action,side);
    const deadline=performance.now()+12000;
@@ -32,10 +32,10 @@ try{
   assert.equal(history.some(v=>v.startsWith('heal:')),action==='heal');assert.equal(history.some(v=>v.startsWith('mana:')),action==='mana');assert.equal(history.some(v=>v.startsWith('hurt:')),hit,action+': '+JSON.stringify(history));assert.equal(history.at(-1),'idle:0');checks.push('controller '+action+' '+(hit?'reacts once':'settles to idle'));
  }
  const continuity=await page.evaluate(async()=>{
-   const c=document.querySelector('#portraitMe canvas');
+   const c=document.querySelector('#portraitMe .seeker-motion');
    hoodedBoard.play('me','hurt');await new Promise(r=>setTimeout(r,250));
    const frame=c.dataset.frame;hoodedBoard.rerender();hoodedBoard.play('me','hurt');
-   return c===document.querySelector('#portraitMe canvas')&&frame===c.dataset.frame&&c.dataset.action==='hurt';
+   return c===document.querySelector('#portraitMe .seeker-motion')&&frame===c.dataset.frame&&c.dataset.action==='hurt';
  });assert(continuity);
  assert(await loop.evaluate((el,kept)=>el===kept,retainedIdle),'same GIF node across a board update');
  await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.play('opp','hurt');});
@@ -43,9 +43,9 @@ try{
  await page.waitForFunction(()=>document.querySelectorAll('.seeker-motion[data-action=idle]').length===2);
  assert.deepEqual(await page.locator('.seeker-motion').evaluateAll(cs=>cs.map(c=>c.toDataURL())),portraits);
  await page.screenshot({path:out+'/board-desktop.png'});await page.setViewportSize({width:390,height:844});await page.waitForTimeout(300);await page.screenshot({path:out+'/board-mobile.png'});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));checks.push('mobile board framing');
- await page.emulateMedia({reducedMotion:'reduce'});await loop.waitFor({state:'hidden'});await page.evaluate(()=>hoodedBoard.play('me','hurt'));assert.equal(await page.locator('#portraitMe canvas').getAttribute('data-frame'),'0');await page.emulateMedia({reducedMotion:'no-preference'});await loop.waitFor({state:'visible'});checks.push('reduced motion stays static');
- await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.skip(true);});assert.equal(await page.locator('#portraitMe canvas').getAttribute('data-frame'),'0');await page.evaluate(()=>hoodedBoard.skip(false));assert.equal(await page.locator('.pt-ring').evaluateAll(rs=>rs.flatMap(r=>r.getAnimations()).length),0);checks.push('skip settles hit and frame motion');
- await page.evaluate(()=>hoodedBoard.trigger('victory',0));assert.equal(await page.locator('#portraitMe canvas').getAttribute('data-frame'),'0');assert.equal(await page.locator('#portraitOpp canvas').getAttribute('data-frame'),'0');checks.push('victory and defeat keep the static portrait');
+ await page.emulateMedia({reducedMotion:'reduce'});await loop.waitFor({state:'hidden'});await page.evaluate(()=>hoodedBoard.play('me','hurt'));assert.equal(await page.locator('#portraitMe .seeker-motion').getAttribute('data-frame'),'0');await page.emulateMedia({reducedMotion:'no-preference'});await loop.waitFor({state:'visible'});checks.push('reduced motion stays static');
+ await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.skip(true);});assert.equal(await page.locator('#portraitMe .seeker-motion').getAttribute('data-frame'),'0');await page.evaluate(()=>hoodedBoard.skip(false));assert.equal(await page.locator('.pt-ring').evaluateAll(rs=>rs.flatMap(r=>r.getAnimations()).length),0);checks.push('skip settles hit and frame motion');
+ await page.evaluate(()=>hoodedBoard.trigger('victory',0));assert.equal(await page.locator('#portraitMe .seeker-motion').getAttribute('data-frame'),'0');assert.equal(await page.locator('#portraitOpp .seeker-motion').getAttribute('data-frame'),'0');checks.push('victory and defeat keep the static portrait');
  await page.evaluate(()=>{hoodedBoard.play('me','hurt');hoodedBoard.destroy();});assert.equal(await page.evaluate(()=>hoodedBoard.count()),0);checks.push('destroy releases players and timers');
  await page.setViewportSize({width:1280,height:900});await page.goto(origin+'/profile-lab.html');await page.waitForSelector('.pf-ava .hooded-seeker');
  await page.locator('[data-edit-look]').click();const picker=page.locator('dialog.appearance-picker');await picker.waitFor();

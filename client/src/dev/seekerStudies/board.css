@@ -1,3 +1,2 @@
-.portrait .seeker-study-ink{position:absolute;inset:50% auto auto 50%;translate:-50% -50%;width:min(100cqw,100cqh);height:min(100cqw,100cqh);background:transparent;pointer-events:none}
 .study-board-panel{position:fixed;z-index:10001;right:8px;top:8px;max-width:96vw;display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:8px;color:#eef7ff;background:#102a42f2;border:1px solid #9eb6c9;font:12px system-ui,sans-serif}
 .study-board-panel :is(button,select){background:#1b384e;color:inherit;border:1px solid #65829c;border-radius:2px;padding:4px;font:inherit}.study-board-panel a{color:#c9e5fa}.study-board-panel button{cursor:pointer}

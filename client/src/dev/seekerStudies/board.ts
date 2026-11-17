@@ -7,7 +7,7 @@ export async function mountBoardStudy(id:string, trigger:(kind:'mana'|'heal',sid
   const sideSelect=document.querySelector<HTMLSelectElement>('#hoodSide')!;
   const controls=sideSelect.closest<HTMLElement>('.hood-board-controls')!;
   const panel=document.createElement('div');panel.className='study-board-panel';
-  panel.innerHTML='<a href="/seeker-six.html">← 6案の比較</a><select aria-label="再生する案"></select><button type="button">再生</button>';
+  panel.innerHTML='<a href="/seeker-six.html?group=heal">← 回復3案の比較</a><select aria-label="再生する案"></select><button type="button">再生</button>';
   const select=panel.querySelector('select')!, replay=panel.querySelector('button')!;
   studies.forEach(s=>select.add(new Option(`${s.id}　${s.name}`,s.id)));
   select.value=id;panel.prepend(sideSelect.parentElement!);controls.replaceWith(panel);
@@ -15,6 +15,7 @@ export async function mountBoardStudy(id:string, trigger:(kind:'mana'|'heal',sid
   let last=Promise.resolve();
   function contact(event:Event){
     const selected=studies.find(s=>s.id===select.value)!;
+    if(selected.kind==='mana')return; // M1 uses the normal board renderer.
     if((event as CustomEvent<string>).detail!==selected.kind)return;
     const film=(event.target as HTMLElement).parentElement?.querySelector<HTMLImageElement>('img.seeker-idle');
     if(!film)return;
