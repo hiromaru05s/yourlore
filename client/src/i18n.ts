@@ -227,7 +227,7 @@ const D: Record<string, Entry> = {
   "deck.tab.all": { ko: "전체 구성", ja: "全体構成", en: "Full Deck" },
   "deck.tab.remain": { ko: "덱에 남음", ja: "デッキに残り", en: "In Deck" },
   "deck.all.note": { ko: "이 덱이 보유한 모든 카드 (손패·필드·묘지 포함)", ja: "このデッキの全カード (手札・場・墓地含む)", en: "Every card this deck owns (incl. hand, field, graveyard)" },
-  "deck.public.note": { ko: "이 게임에서 공개된 상대 카드", ja: "このゲーム中に公開された相手カード", en: "Opponent cards revealed during this game" },
+  "deck.public.note": { ko: "상대 덱 구성 중 공개된 카드", ja: "相手のデッキ構成のうち、公開済みのカード", en: "Revealed cards in the opponent’s current deck composition" },
   "deck.remain.note": { ko: "아직 뽑지 않고 덱에 남아있는 카드", ja: "まだ引いておらずデッキに残っているカード", en: "Cards still in your deck, not yet drawn" },
   "deck.empty": { ko: "카드가 없습니다.", ja: "カードがありません。", en: "No cards." },
   "deck.removed": { ko: "리프트", ja: "リフト", en: "Rift" },

@@ -1,4 +1,4 @@
-import {incubatorTradePresent} from './engine';
+import {incubatorTradePresent, publicDeckCollection} from './engine';
 import type { ExperienceReceipt } from './progression';
 // ============================================================
 // LORE — WebSocket protocol shared by client and server.
@@ -77,20 +77,7 @@ export function redactFor(state: GameState, you: Side): GameState {
   const placeholder = (uid: string): GameState["players"][0]["hand"][0] => ({
     uid, id: "HIDDEN", t: "mon", cost: 0, name: "", text: "",
   });
-  // The opponent deck viewer receives only identities that have become public.
-  // Once learned, a physical card remains listed even if it returns to hand/deck.
-  const known = new Map((opp.revealedCards ?? []).map((c) => [c.uid, c.id]));
-  const currentlyPublic: CardInst[] = [
-    ...opp.discard,
-    ...(opp.field as CardInst[]),
-    ...opp.enchants.map((e) => e.card),
-    ...(opp.quests ?? []).map(q => q.card),
-    ...(opp.removed ?? []),
-  ];
-  for (const card of currentlyPublic) {
-    if (!(card as CardInst & { token?: boolean }).token) known.set(card.uid, card.id);
-  }
-  opp.collection = [...known.values()];
+  opp.collection = publicDeckCollection(opp);
   const revealingHand = g.pending?.kind === 'cardChoice' && g.pending.reason === 'HIGH_ELF_HAND' && (g.pending.owner ?? g.cur) === you;
   // Stable physical UIDs link these backs to revealedCards and expose both the
   // current hand and future draw order. Hidden slots must carry no such link.

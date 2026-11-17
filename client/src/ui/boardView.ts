@@ -34,7 +34,7 @@ import {prepareDuel} from './duelReadiness';
 // All animation lives in anim.ts; this file only draws + binds.
 // ============================================================
 import type { CardInst, GameState, PlayerState, QuestState, Side } from "../shared/types";
-import { purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
+import { publicDeckCollection, purchaseAllowed, freeBuyBlocked, playBlockReason, cardPlayConditionMet } from "../shared/engine";
 import { MAX_MANA, FIELD_MAX, ST_MAX, effMaxMana, playCost, buyCost, effAtk, effDef, curHp, isGolem, marketStockOf } from "../shared/engine";
 import { fieldFrameFor, frameFor, FRAME_BACK, sleeveUrl, DB as DBC, STARTERS, hasPassive } from "../shared/cards";
 import { cardPicker, deckViewer , showControlsHelp } from "./modal";
@@ -904,16 +904,9 @@ export class GameView {
     let pool: CardInst[];
     if (isMe) {
       pool = [...p.deck, ...p.hand, ...p.discard, ...fieldCards, ...p.traps.map((tr) => tr.card), ...(p.quests ?? []).map(q=>q.card), ...enchCards];
-    } else if (p.collection) {
-      // Online: server-provided game-long reveal history. Current public zones are
-      // already included, so adding them again would double-count those cards.
-      pool = p.collection.map((id, i) => { const d = DBC[id] ?? STARTERS[id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
-    } else if (p.revealedCards) {
-      // Bot/local games keep the same information boundary without server redaction.
-      pool = p.revealedCards.map((known, i) => { const d = DBC[known.id] ?? STARTERS[known.id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
     } else {
-      // Legacy state fallback: show only cards that are public right now.
-      pool = [...p.discard, ...fieldCards, ...(p.quests ?? []).map(q=>q.card), ...enchCards];
+      const ids = p.collection ?? publicDeckCollection(p);
+      pool = ids.map((id, i) => { const d = DBC[id] ?? STARTERS[id]; return d ? { uid: `v_${i}`, ...d } : null; }).filter((c): c is CardInst => !!c);
     }
     return pool.filter((c) => c && c.id !== "HIDDEN").sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
   }
