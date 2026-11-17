@@ -1265,7 +1265,12 @@ export const DECK_SLOTS = 9;
 export const WATCH_MAX = 12; // 알림이 최대 — 너무 많으면 하이라이트가 의미 없어짐
 import {cardFrameId} from './cardFrames';
 import {isProfileBackground, type ProfileBackground} from './profileAppearance';
-export interface DeckPreset { avatar?: string; background?: ProfileBackground; cards: string[]; watch: string[]; name?: string; sleeve: string; furniture: string; effect?:string; frame?:string }
+export interface DeckPreset { representative?: string; avatar?: string; background?: ProfileBackground; cards: string[]; watch: string[]; name?: string; sleeve: string; furniture: string; effect?:string; frame?:string }
+export function deckRepresentative(deck:Pick<DeckPreset,'cards'|'representative'>):string {
+  const selected=deck.representative;
+  if(selected && (selected==='STARTER_MANA' || deck.cards.includes(selected)))return selected;
+  return deck.cards.find(id=>id!=='STARTER_TRASH') ?? deck.cards[0] ?? 'STARTER_MANA';
+}
 export function sanitizeDeckName(value: unknown): string {
   return typeof value === "string" ? Array.from(value.replace(/[\u0000-\u001f\u007f]/g, "").trim()).slice(0,24).join("") : "";
 }
@@ -1276,7 +1281,7 @@ export function sanitizeDecks(raw: unknown, legacy: {sleeve?:string|null;furnitu
   const listIn = Array.isArray(o.list) ? o.list : [];
   const list: DeckPreset[] = [];
   for (let i = 0; i < DECK_SLOTS; i++) {
-    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown; name?: unknown; sleeve?:unknown; furniture?:unknown;effect?:unknown;frame?:unknown;avatar?:unknown;background?:unknown };
+    const d = (listIn[i] ?? {}) as { cards?: unknown; watch?: unknown; name?: unknown; sleeve?:unknown; furniture?:unknown;effect?:unknown;frame?:unknown;avatar?:unknown;background?:unknown;representative?:unknown };
     const cards = sanitizeDeck(d.cards ?? DEFAULT_DECK_8);
     const wIn = Array.isArray(d.watch) ? d.watch : [];
     const watch: string[] = [];
@@ -1285,7 +1290,8 @@ export function sanitizeDecks(raw: unknown, legacy: {sleeve?:string|null;furnitu
       if (!watch.includes(id) && watch.length < WATCH_MAX) watch.push(id);
     }
     const name = sanitizeDeckName(d.name);
-    list.push({ cards, watch, ...(d.avatar==='SEEKER_HOODED'?{avatar:d.avatar}:{}), ...(isProfileBackground(d.background)?{background:d.background}:{}), effect:cardEffectId(d.effect), frame:cardFrameId(d.frame), ...(name ? {name} : {}), sleeve:equipmentId(d.sleeve===undefined?legacy.sleeve:d.sleeve,'sleeve'), furniture:equipmentId(d.furniture===undefined?legacy.furniture:d.furniture,'furniture') });
+    const representative=typeof d.representative==='string'?deckRepresentative({cards,representative:d.representative}):undefined;
+    list.push({ cards, watch, ...(representative?{representative}:{}), ...(d.avatar==='SEEKER_HOODED'?{avatar:d.avatar}:{}), ...(isProfileBackground(d.background)?{background:d.background}:{}), effect:cardEffectId(d.effect), frame:cardFrameId(d.frame), ...(name ? {name} : {}), sleeve:equipmentId(d.sleeve===undefined?legacy.sleeve:d.sleeve,'sleeve'), furniture:equipmentId(d.furniture===undefined?legacy.furniture:d.furniture,'furniture') });
   }
   let sel = typeof o.sel === "number" && Number.isFinite(o.sel) ? Math.floor(o.sel) : 0;
   if (sel < 0 || sel >= DECK_SLOTS) sel = 0;

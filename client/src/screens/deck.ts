@@ -2,6 +2,8 @@ import {deckName,mountDeckLibrary} from './deckLibrary';
 import {backgroundNames,openAppearancePicker} from '../ui/appearancePicker';
 import {characterAppearance} from '../ui/characterAppearance';
 import {profileBackground,starterBackgrounds} from '../shared/profileAppearance';
+import {finishArtPreview} from '../ui/finishArtPreview';
+import {artUrl} from '../ui/cardArt';
 import {deckFurniturePreview} from '../ui/deckFurniturePreview';
 import {disposeCardFrames} from '../ui/cardFrame';
 import {cosmetic} from '../shared/cosmetics';
@@ -26,11 +28,11 @@ import { loungeText } from "../ui/loungeText";
 // 은은하게 표시된다. 저장은 서버(users.decks JSON + 활성 덱 csv 캐시).
 // ============================================================
 import type { App, Screen } from "../router";
-import { sleeveUrl, DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, WATCH_MAX, BUYABLE_POOL, deckStoreForUser, sanitizeDeckName, type DeckStore } from "../shared/cards";
+import { deckRepresentative, sleeveUrl, DB, STARTERS, DECK_POOL, DECK_SIZE, DECK_MAX_COPIES, WATCH_MAX, BUYABLE_POOL, deckStoreForUser, sanitizeDeckName, type DeckStore } from "../shared/cards";
 import type { CardDef, CardInst } from "../shared/types";
 import { cardEl } from "../ui/cardView";
 import { bindZoom, zoomCard } from "../ui/cardInspection";
-import { confirmDialog } from "../ui/modal";
+import { cardPicker, confirmDialog } from "../ui/modal";
 import { api } from "../net/api";
 import { t, cardName, onLangChange, getLang, esc } from "../i18n";
 
@@ -58,6 +60,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
         <div class="deck-colors" role="group" aria-label="${settingLabels.background}">
           ${starterBackgrounds.map(color=>`<button type="button" data-swatch="${color}" data-background="${color}" title="${loungeText(...backgroundNames[color])}" aria-label="${loungeText(...backgroundNames[color])}"></button>`).join('')}
         </div>
+        <button type="button" id="deckRepresentative"><img alt=""><span>${loungeText('代表カード','Featured card','대표 카드')}</span></button>
         <div class="deck-setting-grid">${(['sleeve','furniture','effect','frame'] as const).map(key=>`<button type="button" data-setting="${key}"><span class="equipment-art" aria-hidden="true"></span></button>`).join('')}</div>
       </aside>
       <div class="deck-editor">
@@ -84,6 +87,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
   const store: DeckStore = isLocalDevAccount()?deckStoreForUser(app.user):constrainDeckStore(deckStoreForUser(app.user),starterCards);
   const sortCards=(cards:string[])=>cards.sort((a,b)=>Number(def(a).t!=='mon')-Number(def(b).t!=='mon')||def(a).cost-def(b).cost||a.localeCompare(b,'en'));
   const cur = options.tutorial ? store.sel : Math.min(store.list.length-1,Math.max(0,options.slot ?? store.sel)); // 현재 편집 중인 슬롯 (store.sel = 게임에 사용되는 슬롯)
+  store.list[cur].representative=deckRepresentative(store.list[cur]);
   sortCards(store.list[cur].cards);
   let watchQ = "";
   let activeTab:'edit'|'watch'|'appearance'='edit';
@@ -151,6 +155,20 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
     rename.querySelector('strong')!.textContent=deckName(slot,cur);
     rename.title=loungeText('デッキ名を変更','Rename deck','덱 이름 변경');
     rename.setAttribute('aria-label',rename.title+' · '+deckName(slot,cur));
+    const featured=deckRepresentative(slot);
+    const representative=q('deckRepresentative') as HTMLButtonElement;
+    const artwork=artUrl.full(featured);
+    const banner=representative.querySelector('img')!;
+    if(banner.getAttribute('src')!==artwork)banner.src=artwork;
+    const pickTitle=loungeText('代表カードを選択','Choose featured card','대표 카드 선택');
+    representative.setAttribute('aria-label',pickTitle+' · '+cardName(inst(featured,featured)));
+    representative.onclick=()=>{
+      const cards=[...new Set(['STARTER_MANA',...slot.cards])].map(id=>inst(id,id));
+      cardPicker(pickTitle,cards,id=>{
+        if(!id || dead)return;
+        slot.representative=id;render();
+      });
+    };
     const portrait=settingsEl.querySelector<HTMLButtonElement>('[data-setting=character]')!;
     portrait.dataset.background=background;
     const illustration=portrait.querySelector('img')!;
@@ -176,14 +194,18 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
       button.setAttribute('aria-label',button.title);
       button.classList.toggle('is-current',activeTab==='appearance'&&key===cosmeticGroup);
       const art=button.querySelector<HTMLElement>('.equipment-art')!;
-      if(art.dataset.equipped!==equipped){
+      const sampleId=key==='effect'||key==='frame'?featured:'';
+      if(art.dataset.equipped!==equipped || art.dataset.sample!==sampleId){
+        art.dataset.sample=sampleId;
         art.dataset.equipped=equipped;
         disposeCardEffects(art);disposeCardFrames(art);
         if(key==='sleeve'||key==='furniture'){
           const img=document.createElement('img');img.alt='';img.src=key==='sleeve'?sleeveUrl(equipped):deckFurniturePreview(equipped);
           art.replaceChildren(img);
+        }else if(key==='effect'){
+          art.replaceChildren(finishArtPreview(featured,equipped));
         }else{
-          const sample=cardEl({...STARTERS.STARTER_MANA,uid:'deck-setting-'+key},{size:'mkt',effect:key==='effect'?equipped:'default',frame:key==='frame'?equipped:'default'});
+          const sample=cardEl(inst(featured,'deck-setting-frame'),{size:'mkt',effect:'default',frame:equipped});
           sample.inert=true;art.replaceChildren(sample);
         }
       }
@@ -332,12 +354,15 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
   };
   saveBtn.onclick = () => { void doSave(); };
   q("libraryBack").onclick = () => app.deck();
-  const sizeObserver=new ResizeObserver(()=>{
-    if(poolEl.clientWidth===0)return;
-    const width=parseFloat(getComputedStyle(poolEl).gridTemplateColumns);
-    if(width>0)wrap.style.setProperty('--formation-card-width',width+'px');
+  const handSize=new ResizeObserver(entries=>{
+    const width=entries[0].contentRect.width;
+    if(!width)return;
+    const gap=parseFloat(getComputedStyle(curEl).columnGap)||0;
+    const slots=DECK_SIZE+1;
+    // Leave room for the rotated outside edges of the first and last cards.
+    wrap.style.setProperty('--nine-card-width',(Math.max(0,width-gap*(slots-1)-10)/slots)+'px');
   });
-  sizeObserver.observe(poolEl);
+  handSize.observe(curEl);
   const dirty = () => JSON.stringify(store) !== saved;
   const beforeUnload = (e: BeforeUnloadEvent) => { if (dirty()) { e.preventDefault(); e.returnValue = ""; } };
   window.addEventListener("beforeunload", beforeUnload);
@@ -374,6 +399,6 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number}={})
       if (!dirty()) return true;
       return confirmDialog({title: loungeText("未保存の変更", "Unsaved changes", "저장하지 않은 변경"), body: loungeText("変更を破棄して移動しますか？", "Discard your changes and leave?", "변경을 취소하고 이동할까요?"), confirm: loungeText("破棄して移動", "Discard & leave", "취소하고 이동"), cancel: t("common.cancel")});
     },
-    destroy: () => { sizeObserver.disconnect();guide?.destroy();lifecycle.abort();disposeCardFrames(wrap);disposeCardEffects(wrap); dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
+    destroy: () => { handSize.disconnect();guide?.destroy();lifecycle.abort();disposeCardFrames(wrap);disposeCardEffects(wrap); dead = true;watchRevision++; off(); window.removeEventListener("beforeunload", beforeUnload); wrap.remove(); }
   };
 }

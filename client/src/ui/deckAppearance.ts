@@ -7,7 +7,8 @@ import '../styles/shopFrames.css';
 import {CARD_EFFECTS} from '../shared/cardEffects';
 import {cardEl} from './cardView';
 import {bindZoom,zoomCard} from './cardInspection';
-import {STARTERS} from '../shared/cards';
+import {DB,STARTERS,deckRepresentative} from '../shared/cards';
+import {finishArtPreview} from './finishArtPreview';
 import {SLEEVE_LIST,type DeckPreset} from '../shared/cards';
 import {FURNITURE_LIST,cosmetic} from '../shared/cosmetics';
 import {getLang,esc} from '../i18n';
@@ -17,7 +18,9 @@ type AppearanceOptions={group?:CosmeticGroup;deck:DeckPreset;name:string;owned:S
 const views=new WeakMap<HTMLElement,{key:string;appearance:string;options:AppearanceOptions}>();
 export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions){
  const {deck,name,owned,error}=options;
- const key=JSON.stringify([getLang(),options.group,name,error,owned?[...owned].sort():null]);
+ const featured=deckRepresentative(deck);
+ host.dataset.group=options.group ?? '';
+ const key=JSON.stringify([getLang(),options.group,featured,name,error,owned?[...owned].sort():null]);
  const current=views.get(host),appearance=JSON.stringify([deck.effect??'default',deck.frame??'default']);
  if(current?.key===key&&host.querySelector('.deck-appearance-groups')){
   current.options=options;
@@ -29,9 +32,9 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
   }
   if(current.appearance!==appearance){
    const section=host.querySelector<HTMLElement>('.deck-appearance-preview')!;
-   const previous=section.querySelector<HTMLElement>(':scope > .card');
+   const previous=section.querySelector<HTMLElement>(':scope > .card,:scope > .deck-finish-art');
    if(previous){disposeCardFrames(previous);disposeCardEffects(previous);previous.remove();}
-   appendAppearancePreview(section,deck);current.appearance=appearance;
+   appendAppearancePreview(section,deck,options.group);current.appearance=appearance;
   }
   return;
  }
@@ -39,7 +42,7 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
  disposeCardEffects(host);
  disposeCardFrames(host);
  host.innerHTML=`<header class="deck-appearance-head"><div><h3>${esc(name)} · ${loungeText('外観','Appearance','외형')}</h3><p>${loungeText('このデッキのカード構成と一緒に保存されます。','Saved together with this deck’s cards.','이 덱의 카드 구성과 함께 저장됩니다.')}</p></div><button class="btn btn-ghost" data-cosmetic-shop>${loungeText('ショップ','Shop','상점')}</button></header><div class="deck-cosmetic-status" role="status">${error?loungeText('所持アイテムを読み込めませんでした。','Could not load owned items.','보유 아이템을 불러오지 못했습니다.'):!owned?loungeText('所持アイテムを確認中…','Loading owned items…','보유 아이템 확인 중…'):''}${error?` <button class="btn btn-mini" data-cosmetic-retry>${loungeText('再試行','Retry','재시도')}</button>`:''}</div><figure class="deck-appearance-preview"><figcaption>${loungeText('見本カード','Preview card','미리보기 카드')}</figcaption></figure><div class="deck-appearance-groups"></div>`;
- appendAppearancePreview(host.querySelector<HTMLElement>('.deck-appearance-preview')!,deck);
+ appendAppearancePreview(host.querySelector<HTMLElement>('.deck-appearance-preview')!,deck,options.group);
  const groups=host.querySelector('.deck-appearance-groups')!;
  for(const kind of ['frame','effect','sleeve','furniture'] as const){
   if(options.group && options.group!==kind)continue;
@@ -53,7 +56,12 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
   }).join('')}</div>`;
   if(kind==='frame'){
    const scope=document.createElement('p');scope.className='deck-frame-scope';scope.textContent=loungeText('スターター・対戦中の購入カードを含む全カードに適用。プレイ後もフレームが続きます。','Applies to the whole deck, including starters and cards bought during a duel. Frames remain after play.','스타터와 대전 중 구매한 카드를 포함한 모든 카드에 적용되며 플레이 후에도 유지됩니다.');section.querySelector('h4')!.after(scope);
-   section.querySelectorAll<HTMLElement>('[data-cosmetic-id]').forEach(button=>{const slot=button.querySelector('.deck-cosmetic-art')!;slot.className='deck-frame-preview';slot.removeAttribute('style');slot.append(cardEl({...STARTERS.STARTER_MANA,uid:'frame-picker-'+button.dataset.cosmeticId},{size:'mkt',effect:'default',frame:button.dataset.cosmeticId}));});
+   section.querySelectorAll<HTMLElement>('[data-cosmetic-id]').forEach(button=>{const slot=button.querySelector('.deck-cosmetic-art')!;slot.className='deck-frame-preview';slot.removeAttribute('style');slot.append(cardEl({...(STARTERS[featured] ?? DB[featured]),uid:'frame-picker-'+button.dataset.cosmeticId},{size:'mkt',effect:'default',frame:button.dataset.cosmeticId}));});
+  }
+  if(kind==='effect'){
+   section.querySelectorAll<HTMLElement>('[data-cosmetic-id]').forEach(button=>{
+    button.querySelector('.deck-cosmetic-art')!.replaceWith(finishArtPreview(featured,button.dataset.cosmeticId));
+   });
   }
   section.querySelectorAll<HTMLButtonElement>('[data-cosmetic-id]').forEach(b=>b.onclick=()=>views.get(host)?.options.onPick(kind,b.dataset.cosmeticId!));groups.append(section);
  }
@@ -61,8 +69,13 @@ export function renderDeckAppearance(host:HTMLElement,options:AppearanceOptions)
  const retry=host.querySelector<HTMLButtonElement>('[data-cosmetic-retry]');if(retry)retry.onclick=()=>views.get(host)?.options.onRetry();
 }
 
-function appendAppearancePreview(section:HTMLElement,deck:DeckPreset){
- const card={...STARTERS.STARTER_MANA,uid:'appearance-preview'};
+function appendAppearancePreview(section:HTMLElement,deck:DeckPreset,group?:CosmeticGroup){
+ const featured=deckRepresentative(deck);
+ if(group==='effect'){
+   section.append(finishArtPreview(featured,deck.effect));
+   return;
+ }
+ const card={...(STARTERS[featured] ?? DB[featured]),uid:'appearance-preview'};
  const preview=cardEl(card,{size:'mkt',effect:deck.effect,frame:deck.frame});
  bindZoom(preview,card,undefined,undefined,deck.effect,deck.frame);
  preview.tabIndex=0;preview.setAttribute('role','button');

@@ -55,7 +55,8 @@ export class CrystalRenderer {
   if(img)void img.decode().then(()=>{
    if(entry.disposed)return;const mask=canvas(),c=mask.getContext('2d')!;const compact=node.classList.contains('card--field');
    const x=W*.075,y=H*(compact?.045:.18),w=W*.85,h=H*(compact?.91:.77),scale=Math.max(w/img.naturalWidth,h/img.naturalHeight),sw=w/scale,sh=h/scale;
-   c.drawImage(img,(img.naturalWidth-sw)*.5,(img.naturalHeight-sh)*.22,sw,sh,x,y,w,h);
+   if(node.classList.contains('deck-finish-art'))c.drawImage(img,0,0,W,H);
+   else c.drawImage(img,(img.naturalWidth-sw)*.5,(img.naturalHeight-sh)*.22,sw,sh,x,y,w,h);
    const p=c.getImageData(0,0,W,H);for(let i=0;i<p.data.length;i+=4){const lum=(p.data[i]*.2126+p.data[i+1]*.7152+p.data[i+2]*.0722)/255;const next=(p.data[Math.min(p.data.length-4,i+4)]+p.data[Math.min(p.data.length-3,i+5)]+p.data[Math.min(p.data.length-2,i+6)])/765;const relief=Math.min(1,Math.abs(lum-next)*5);p.data[i+3]=Math.round(255*(.38+lum*.35+relief*.27));}c.putImageData(p,0,0);entry.detail=mask;
   }).catch(()=>{});
  }

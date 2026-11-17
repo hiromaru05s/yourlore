@@ -33,12 +33,14 @@ export class PrismVeilMaterial {
  }
  private makeRelief(img:HTMLImageElement){
   const tile=this.card.classList.contains('buff-icon'),field=this.card.classList.contains('card--field');
-  const key=JSON.stringify([img.currentSrc||img.src,tile,field]);
+  const fullArt=this.card.classList.contains('deck-finish-art');
+  const key=JSON.stringify([img.currentSrc||img.src,tile,field,fullArt]);
   const cached=reliefs.get(key);if(cached){this.ridges=cached;return;}
   const c=document.createElement('canvas');this.ridges=c;c.width=320;c.height=500;const g=c.getContext('2d',{willReadFrequently:true})!;
   const x=tile?0:24,y=tile?0:field?22.5:90,h=tile?500:field?455:385,w=tile?320:272;
   const s=Math.max(w/img.naturalWidth,h/img.naturalHeight),sw=w/s,sh=h/s;
-  g.drawImage(img,(img.naturalWidth-sw)*.5,(img.naturalHeight-sh)*(tile?.5:.22),sw,sh,x,y,w,h);
+  if(fullArt)g.drawImage(img,0,0,320,500);
+  else g.drawImage(img,(img.naturalWidth-sw)*.5,(img.naturalHeight-sh)*(tile?.5:.22),sw,sh,x,y,w,h);
   const pixels=g.getImageData(0,0,320,500),a=pixels.data,luma=new Float32Array(320*500);
   for(let i=0;i<luma.length;i++)luma[i]=(a[i*4]*.2126+a[i*4+1]*.7152+a[i*4+2]*.0722)/255;
   for(let i=0;i<luma.length;i++){const edge=Math.abs(luma[i]-luma[Math.max(0,i-1)])+Math.abs(luma[i]-luma[Math.max(0,i-320)]);a[i*4]=186;a[i*4+1]=224;a[i*4+2]=255;a[i*4+3]=Math.min(140,(edge*290+luma[i]*16))*(a[i*4+3]/255);}

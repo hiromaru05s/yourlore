@@ -63,7 +63,7 @@ export function attachCardEffect(node:HTMLElement,uid:string,explicit?:string){
   let clip:Path2D|undefined;
   draw=t=>{
    ctx.clearRect(0,0,256,h);ctx.save();
-   if(!clip){const path=document.querySelector(node.matches('.card--field,.buff-icon')?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d');if(path)clip=new Path2D(path);}
+   if(!clip&&!node.classList.contains('deck-finish-art')){const path=document.querySelector(node.matches('.card--field,.buff-icon')?'#celestial-field-spell path':'#celestial-base-spell path')?.getAttribute('d');if(path)clip=new Path2D(path);}
    if(clip){ctx.scale(256,h);ctx.clip(clip);ctx.scale(1/256,1/h);}
    drawStardustFinish(ctx,256,h,t,seed);
    if(clip){ctx.save();ctx.scale(256,h);ctx.globalAlpha=.58;ctx.strokeStyle=STARDUST_FINISH_EDGE;ctx.lineWidth=1.6/256;ctx.stroke(clip);ctx.restore();}

@@ -1,5 +1,5 @@
 import type {App, Screen} from '../router';
-import {deckStoreForUser, sleeveUrl, type DeckPreset} from '../shared/cards';
+import {deckRepresentative,deckStoreForUser, sleeveUrl, type DeckPreset} from '../shared/cards';
 import {profileBackground} from '../shared/profileAppearance';
 import {t, esc, onLangChange} from '../i18n';
 import {artUrl} from '../ui/cardArt';
@@ -18,7 +18,7 @@ export function mountDeckLibrary(app:App):Screen {
   grid.className='deck-library-grid';
   store.list.forEach((deck,index)=>{
     const character=characterAppearance(deck.avatar ?? app.user?.avatar);
-    const featured=deck.cards.find(id=>id!=='STARTER_TRASH') ?? deck.cards[0] ?? 'STARTER_MANA';
+    const featured=deckRepresentative(deck);
     const button=document.createElement('button');
     button.type='button';button.className='deck-banner';
     button.dataset.slot=String(index);
