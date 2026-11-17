@@ -28,7 +28,7 @@ export interface CardDef {
   quest?: { event: QuestEvent; target: number };
   ench?: string; // persistent field-enchantment key (spell stays on field)
   tribe?: string; // tribe key (고독/고귀/포식/귀족) for synergy monsters
-  turnFx?: string; // per-turn effect while on field (fires on owner's turn start)
+  turnFx?: string; // per-turn effect while on field (fires on owner's turn start or end)
   attackFx?: string; // effect that fires whenever this monster attacks
   mult?: number; // attacks allowed per turn (default 1)
   directOnly?: boolean; // can ONLY attack the opponent player directly (never monsters) — 암살자
@@ -258,6 +258,7 @@ export interface GameState {
   incubatorsReworked?: boolean;
   balance97Applied?: boolean;
   balance98Applied?: boolean;
+  balance99Applied?: boolean;
   balance94Applied?: boolean | 2 | 3;
   novemberBalanceApplied?: boolean | 2 | 3; // true in v90, 2 in v91–92, 3 after the v93 adjustments
   incubatorEndTurn?: number;

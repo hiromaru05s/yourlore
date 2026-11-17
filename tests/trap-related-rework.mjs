@@ -57,7 +57,7 @@ try {
     if (expected.passive) expected.passive = expected.passive.filter(k => k !== 'trapmaster');
     if (expected.aura === 'trapImmune') delete expected.aura;
     if (id === 'TAR3') { delete expected.aura; expected.passive = []; }
-    if (id === 'GM6_8') { delete expected.onSummon; expected.atk = 14; expected.def = 2; }
+    if (id === 'GM6_8') { delete expected.onSummon; expected.atk = 12; expected.def = 2; }
     if (id === 'CHOSEN_ROGUE') { delete expected.attackFx; expected.onSummon='chosenAssassinate'; }
     if (id === 'HIGH_ELF') { expected.summonReq='dew10'; expected.onSummon='highElfDew'; expected.atk=20; expected.def=20; }
     const current = JSON.parse(JSON.stringify(DB[id]));
@@ -72,7 +72,7 @@ try {
     }
     assert.deepEqual(current, expected, `${id}: preserve stats, cost, names, conditions and unrelated effects`);
   }
-  assert.deepEqual(cardPassives(DB.TAR3), ["counter"]);
+  assert.deepEqual(cardPassives(DB.TAR3), []);
   assert(DB.TAR3.textJa.includes('「騎士」1体'));
 
   // Siege: neither trap destruction nor fallback exile; death summon still works.

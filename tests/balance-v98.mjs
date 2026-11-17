@@ -23,7 +23,7 @@ try {
     const offer=card('QUICK_MUSTER');if(shop==='buyMarket'){g.market[0]=offer;g.marketStock[0]=1;}else {p.supply[0]=offer;}
     const result=reduce(g,{type:shop,i:0}),after=result.state;
     assert.equal(result.events.some(e=>e.type==='buy'&&e.id===offer.id),count<=1);
-    assert.equal(after.players[side].field.length,count+(count<=1?3:0));
+    assert.equal(after.players[side].field.length,count+(count<=1?2:0));
     if(count>1){assert.equal(after.players[side].mana,p.mana);assert.equal(shop==='buyMarket'?after.marketStock[0]:after.players[side].supply[0].uid,shop==='buyMarket'?1:offer.uid);}
    }
   });
@@ -62,7 +62,7 @@ try {
   for(const [id,market,hand] of [['TDE2',2,3],['TDE3',4,5]]){
    let g=fresh();const c=card(id),p=g.players[0];assert.equal(E.buyCost(p,c),market);assert.equal(E.playCost(c,p),hand);p.mana=hand-1;p.hand=[c];assert.equal(step(g,{type:'play',idx:0}).players[0].field.length,0);p.mana=hand;assert.equal(step(g,{type:'play',idx:0}).players[0].field[0].uid,c.uid);
   }
-  for(const [id,a,d] of [['CAPTAIN',5,1],['TDE3',7,5],['GOBLIN_LEADER',4,2]])assert.deepEqual([DB[id].atk,DB[id].def],[a,d]);
+  for(const [id,a,d] of [['CAPTAIN',5,1],['TDE3',7,4],['GOBLIN_LEADER',4,2]])assert.deepEqual([DB[id].atk,DB[id].def],[a,d]);
  });
  console.log(checks,'v98 integration cases passed');
 } finally {await fs.rm(dir,{recursive:true,force:true});}

@@ -69,7 +69,7 @@ try {
   ]){
    let g=fresh();g.players[0].mana=g.players[0].maxMana=10;
    g.players[1].field=[mon('M1',{cost:3,...first}),mon('M1',{cost:4,...second})];
-   const ids=g.players[1].field.map(m=>m.uid);g=play(g,'TPO5');assert(!g.players[1].field.some(m=>m.uid===ids[removed]));assert(g.players[1].field.some(m=>m.uid===ids[1-removed]));assert.equal(g.players[0].maxMana,11);
+   const ids=g.players[1].field.map(m=>m.uid);g=play(g,'TPO5');assert(!g.players[1].field.some(m=>m.uid===ids[removed]));assert(g.players[1].field.some(m=>m.uid===ids[1-removed]));assert.equal(g.players[0].maxMana,10);
   }
  });
  test('Predator still excludes Aura and purchase costs outside 3–4',()=>{

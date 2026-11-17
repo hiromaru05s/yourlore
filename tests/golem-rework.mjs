@@ -28,7 +28,7 @@ try {
   assert(E.COLLECTIBLE_STARTERS.includes('GOLEM_TEST'));
   assert(!E.BUYABLE_POOL.includes('GOLEM_TEST'));
   for(const side of [0,1]) {
-    for(const [id,n] of [['GOLEM1',3],['M10',3],['NWL3',3],['GOLEM2',2],['NGA3',3]]) {
+    for(const [id,n] of [['GOLEM1',1],['M10',3],['NWL3',3],['GOLEM2',2],['NGA3',3]]) {
       let g=game(side);
       g.players[side].enchants=[enchant('SUPPLY_LINE'),enchant('SUPPLY_LINE')];
       g.players[1-side].enchants=[enchant('SUPPLY_LINE')];
@@ -56,7 +56,7 @@ try {
     for(const id of ['GOLEM3','MANA_GIANT']) for(const kin of [false,true]) {
       let g=game(side);g.players[side].discard=[card(kin?'GOLEM_TEST':id)];g=play(g,id);
       const p=g.players[side],m=p.field[0];assert(m,id);
-      assert.equal(id==='GOLEM3'?E.effAtk(p,m,g):E.curHp(p,m),id==='GOLEM3'?(kin?7:1):(kin?14:9));
+      assert.equal(id==='GOLEM3'?E.effAtk(p,m,g):E.curHp(p,m),id==='GOLEM3'?(kin?7:1):(kin?14:7));
     }
     {
       let g=game(side);g.players[1-side].field=['GOLEM2','NWL3','M10','GOLEM3'].map(id=>mon(id));g.players[side].enchants=[enchant('SUPPLY_LINE')];
@@ -102,7 +102,7 @@ try {
     const g=game(),p=g.players[0];delete g.golemsReworked;
     p.field=[mon('GOLEM2',{guts:0,passive:['guts','counter'],aura:'leaderGolem',def:6,dmg:2})];
     p.hand=[card('REFRESH_HAND')];delete p.hand[0].maxUsesPerTurn;
-    E.restoreReworkedCards(g);assert.deepEqual([p.field[0].aura,p.field[0].guts,p.field[0].def,p.field[0].dmg],[undefined,0,4,2]);
+    E.restoreReworkedCards(g);assert.deepEqual([p.field[0].aura,p.field[0].guts,p.field[0].def,p.field[0].dmg],[undefined,0,3,2]);
     assert.deepEqual(p.field[0].passive,['guts']);assert.equal(p.hand[0].maxUsesPerTurn,3);
     const snapshot=structuredClone(g);E.restoreReworkedCards(g);assert.deepEqual(g,snapshot);
   }

@@ -22,7 +22,7 @@ function buy(g,id,market='buyMarket'){
 const pick=(g,uid)=>step(g,{type:'pick',uid});
 function enchant(g,id,owner=g.cur){g.players[owner].enchants.push({card:card(id),turns:99,bornTurn:0});}
 function check(name,f){f();console.log('PASS',name);}
-const ranks = [['MERCENARY',1,2,1,1],['MERC_LEADER',3,3,1,2],['MERC_MASTER',5,5,3,3]];
+const ranks = [['MERCENARY',1,2,1,1],['MERC_LEADER',3,3,1,2],['MERC_MASTER',5,5,2,3]];
 for (const [id,cost,atk,hp,reward] of ranks) {
   check(id+' printed stats and hand cost with and without a Mercenary',()=>{
     assert.deepEqual([E.DB[id].cost,E.DB[id].atk,E.DB[id].def],[cost,atk,hp]);
@@ -40,7 +40,7 @@ for (const [id,cost,atk,hp,reward] of ranks) {
       const bought=g.players[side].discard.at(-1);
       assert.equal(pick(g,'invalid').pending.reason,'MERC_HIRE');
       const declined=pick(g,'pass');assert.equal(declined.players[side].mana,24-cost);assert.equal(declined.players[side].discard.at(-1).uid,bought.uid);
-      const paid=pick(g,'hire');assert.equal(paid.players[side].mana,24-cost-1);assert.equal(paid.players[side].field.at(-1).uid,bought.uid);assert.equal(paid.players[side].discard.length,0);
+      const paid=pick(g,'hire');assert.equal(paid.players[side].mana,24-cost-(id==='MERC_LEADER'?2:1));assert.equal(paid.players[side].field.at(-1).uid,bought.uid);assert.equal(paid.players[side].discard.length,0);
       g=fresh(side);g.players[side].mana=cost;g=buy(g,id,market);assert.equal(g.pending,null);assert.equal(g.players[side].discard.at(-1).id,id);
       g=fresh(side);g.players[side].field=[mon(id)];g.players[side].mana=cost;g=buy(g,id,market);
       assert.equal(g.players[side].mana,0);assert.equal(g.players[side].field.length,2);assert.equal(g.players[side].discard.length,0);
@@ -50,9 +50,11 @@ for (const [id,cost,atk,hp,reward] of ranks) {
   });
   check(id+' rough work and personal battle bounty',()=>{
     let g=fresh();const target={...mon('SOLDIER2'),def:10};g.players[1].field=[target];
-    g=cast(g,id);g=pick(pick(g,'hit'),target.uid);assert.equal(g.players[1].field[0].dmg,id==='MERC_LEADER'?2:cost);
+    g=cast(g,id);
+    if(id==='MERCENARY') assert.equal(g.pending.reason,'MERC_BOUNTY');
+    else {g=pick(pick(g,'hit'),target.uid);assert.equal(g.players[1].field[0].dmg,id==='MERC_LEADER'?2:4);}
     g=fresh();g.players[1].field=[{...target,def:1,atk:10,passive:['counter']}];
-    g=cast(g,id);g=pick(pick(g,'bounty'),target.uid);
+    g=cast(g,id);g=pick(id==='MERCENARY'?g:pick(g,'bounty'),target.uid);
     const hunter=g.players[0].field[0];g=step(g,{type:'attack',uid:hunter.uid});g=pick(g,target.uid);
     assert.equal(g.players[0].mana,24-cost+reward);assert.equal(g.players[1].field.length,0);
     if(hp<=5)assert.equal(g.players[0].field.length,0,'mutual destruction still pays');
@@ -83,7 +85,7 @@ check('Guildmaster rolls no Casino dice at the start of either turn',()=>{
 check('a different killer or a bounced and replayed target earns no bounty',()=>{
   for(const bounce of [false,true]){
     let g=fresh();const target=mon('SOLDIER2');g.players[1].field=[target];
-    g=cast(g,'MERCENARY');g=pick(pick(g,'bounty'),target.uid);
+    g=cast(g,'MERCENARY');g=pick(g,target.uid);
     let hunter=g.players[0].field[0];
     if(bounce){
       g.pending={kind:'oppMon',reason:'bounceLow',allowCancel:false,data:{maxCost:2}};
@@ -99,13 +101,14 @@ check('Guildmaster Escort summons an active Mercenary without repeating contract
   g=cast(g,'MERC_MASTER');g=pick(g,'escort');
   let guards=0;
   while(g.pending){
-    assert.equal(g.pending.reason,'MERC_JOB');
     if(g.pending.data.sourceId==='MERC_MASTER'){
+      assert.equal(g.pending.reason,'MERC_JOB');
       assert(!E.effectChoices(g).some(c=>c.uid==='escort'));
       g=pick(pick(g,'hit'),target.uid);
     } else {
       assert.equal(g.pending.data.sourceId,'MERCENARY');
-      guards++;g=pick(pick(g,'bounty'),target.uid);
+      assert.equal(g.pending.reason,'MERC_BOUNTY');
+      guards++;g=pick(g,target.uid);
     }
     assert(guards<=2);
   }
@@ -113,11 +116,11 @@ check('Guildmaster Escort summons an active Mercenary without repeating contract
   assert.deepEqual(g.players[0].field.map(m=>m.id),['MERC_MASTER','MERCENARY']);assert.equal(g.players[1].field[0].bounties.length,1);
 });
 check('persisted rooms refresh prices and stats while retaining UIDs and damage',()=>{
-  const g=fresh();delete g.mercReworkApplied;
+  const g=fresh();delete g.mercReworkApplied;delete g.balance99Applied;
   const old={...mon('MERC_MASTER'),cost:6,atk:5,def:7,dmg:2};g.players[0].field=[old];
   g.market[0]={...card('MERCENARY'),cost:2};
   E.restoreReworkedCards(g);E.restoreReworkedCards(g);
-  assert.deepEqual([old.cost,old.atk,old.def,old.dmg],[5,5,3,2]);assert.equal(g.market[0].cost,1);
+  assert.deepEqual([old.cost,old.atk,old.def,old.dmg],[5,5,2,1]);assert.equal(g.market[0].cost,1);
 });
 check('resumed rooms refresh Guildmaster rules without restoring its field stats',()=>{
   const g=fresh();

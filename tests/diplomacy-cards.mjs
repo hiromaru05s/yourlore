@@ -41,7 +41,7 @@ check('Toll Gate taxes play and effect summons but not the spell owner',()=>{
   let g=cast(fresh(),'TOLL_GATE');
   g=cast(g,'M1');assert.equal(g.players[0].hp,40);
   g=end(g);g=cast(g,'M1');assert.equal(g.players[1].hp,39);
-  g=buy(g,'QUICK_MUSTER');assert.equal(g.players[1].hp,36);
+  g=buy(g,'QUICK_MUSTER');assert.equal(g.players[1].hp,37);
 });
 check('Truce blocks new ordinary attackers but Assassins still obey Peace Treaty',()=>{
   let g=fresh();g.truceThroughTurn=g.turn+1;

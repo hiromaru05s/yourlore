@@ -103,8 +103,8 @@ for(const side of [0,1]){
     g=attack(g,m,enemy);assert.deepEqual(g.players[side].field.map(c=>c.id),['INFKNIGHT']);assert.equal(g.players[side].discard[0].uid,m.uid);
   }
   {
-    let g=game(side);const master=mon('POISON_MASTER'),enemy=mon('M11');g.players[side].field=[master];g.players[opp].field=[enemy];
-    g=attack(g,master,enemy);assert.equal(g.players[opp].brand,1);assert.equal(g.players[side].field[0].defMod,5);
+    let g=game(side);const master=mon('POISON_MASTER'),enemy={...mon('M11'),decayCnt:1};g.players[side].field=[master];g.players[opp].field=[enemy];
+    g=attack(g,master,enemy);assert.equal(g.players[opp].brand,1);assert.equal(g.players[side].field[0].defMod,0);
   }
   {
     let g=game(side);g=cast(g,'M5');assert.equal(end(g).players[side].shield,8);

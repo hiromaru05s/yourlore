@@ -82,7 +82,7 @@ check('Conscription resolves all six faces and transfers existing military units
   }
 });
 check('v92 saved rooms refresh the nine new prints just once and preserve live identities',()=>{
-  const g=fresh();g.novemberBalanceApplied=2;delete g.balance94Applied;
+  const g=fresh();g.novemberBalanceApplied=2;delete g.balance94Applied;delete g.balance99Applied;
   const p=g.players[0], leader=mon('MERC_LEADER'), master=mon('MERC_MASTER');
   Object.assign(leader,{trickSwapped:true,def:4,defMod:2,dmg:1});
   Object.assign(master,{def:5,dmg:4});p.field=[leader,master];
@@ -91,7 +91,7 @@ check('v92 saved rooms refresh the nine new prints just once and preserve live i
   p.discard=[{...card('GOLEM_TEST'),atk:1}];p.hand[3].cost=2;
   E.restoreReworkedCards(g);
   assert.equal(p.field[0].uid,leader.uid);assert.equal(leader.def,3);assert.equal(leader.defMod,2);assert.equal(leader.dmg,1);
-  assert.equal(master.def,3);assert.equal(master.dmg,2);assert.equal(p.discard[0].atk,0);
+  assert.equal(master.def,2);assert.equal(master.dmg,1);assert.equal(p.discard[0].atk,0);
   assert.equal(g.market[0].cost,6);assert.equal(p.supply[0].cost,4);assert.equal(p.hand[3].cost,5);
   for(const c of p.hand) assert.equal(c.textJa,E.DB[c.id].textJa);
   const saved=JSON.stringify(g);E.restoreReworkedCards(g);assert.equal(JSON.stringify(g),saved);
@@ -139,7 +139,7 @@ check('Dragon Killer tracks both fusion names and both bonuses independently',()
 check('Captain shots and every allied Soldier generate separate packets without Captain recursion',()=>{
   let g=fresh();g.players[0].field=['CAPTAIN','GUNNER','SOLDIER2','SOLDIER2','CANNON_COMMANDER'].map(mon);
   g=end(g);
-  assert.equal(g.players[1].hp,100-8-6*(1+3));
+  assert.equal(g.players[1].hp,100-6-6*(1+3));
 });
 check('Rebellion moves a hand summon and resolves its summons on the receiving side',()=>{
   let g=fresh();enchant(g,'COUP');g=cast(g,'CANNON_COMMANDER');
@@ -239,7 +239,7 @@ for (const side of [0,1]) {
       if (!g.players[dest].field.includes(existing)) g.players[dest].field.push(existing);
       g=quick(g,'QUICK_MUSTER');
       const summoned=g.players[dest].field.filter(m=>m.id===id && m.uid!==existing.uid);
-      assert.equal(summoned.length,castle?2:3);
+      assert.equal(summoned.length,2);
       for (const m of summoned) {
         assert.equal(m.noAttackTurn,g.turn);
         assert(!E.monsterCanAttack(g,g.players[dest],m));
@@ -331,8 +331,8 @@ for (const side of [0,1]) {
 }
 for (const seals of [14,15]) {
   const g=fresh();g.players[0].field=[mon('HEXER3')];g.players[0].curseSeals=seals;
-  g.players[1].field=[mon('M2')];g.players[1].hand=[card('CURSE'),card('CURSE'),card('CURSE')];
-  const view=E.redactFor(g,0);assert.equal(view.players[0].field[0].visibleCurseAttack,2);
+  g.players[1].field=[mon('M2')];g.players[1].hand=[card('CURSE'),card('CURSE'),card('CURSE'),card('CURSE')];
+  const view=E.redactFor(g,0);assert.equal(view.players[0].field[0].visibleCurseAttack,3);
   assert.equal(E.effAtk(view.players[0],view.players[0].field[0],view),4);
   assert.equal(end(g).pending?.reason,seals===15?'HEXER3':undefined);
 }

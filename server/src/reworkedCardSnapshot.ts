@@ -1,3 +1,4 @@
+import {balance99Prints,balance99Text} from '../../client/src/shared/balance99';
 import {balance98Prints,balance98Text} from '../../client/src/shared/balance98';
 import {balance97Prints,balance97Text,retired97} from '../../client/src/shared/balance97';
 import {balance96Prints,balance96Text} from '../../client/src/shared/balance96';
@@ -42,7 +43,7 @@ export function restoreReworkedCards(game: GameState): void {
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
   const updateGuildmasterText = game.mercReworkApplied !== 2;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied && game.balance99Applied)) return;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -414,6 +415,37 @@ export function restoreReworkedCards(game: GameState): void {
     if (game.pending?.kind==='purge' && game.pending.reason==='purge' && game.pending.data?.zone==='deckDiscardField') game.pending.data.sourceId='FOCUS';
     clearEmptyBuffChoice(game);
     game.balance98Applied=true;
+  }
+  if (!game.balance99Applied) {
+    const refresh = (card:CardInst | null) => {
+      if (!card || !(card.id in balance99Prints || card.id in balance99Text)) return;
+      const def = DB[card.id], m = card as FieldMon;
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      for (const [key,value] of Object.entries(balance99Prints[card.id] ?? {})) {
+        if (key === 'passive' && card.id === 'TAR3') {
+          card.passive = card.passive?.filter(k => k !== 'counter');
+          continue;
+        }
+        const prop = m.trickSwapped && key === 'atk' ? 'def' : m.trickSwapped && key === 'def' ? 'atk' : key;
+        const dest = key === 'turnFx' && m.mutedEffects ? m.mutedEffects : card;
+        if (value === undefined) Reflect.deleteProperty(dest,prop);
+        else Reflect.set(dest,prop,value);
+      }
+    };
+    game.market.forEach(refresh);
+    for (const p of game.players) {
+      for (const c of [...p.hand,...p.deck,...p.discard,...p.field,...p.removed??[],...p.supply]) refresh(c);
+      for (const e of [...p.enchants,...p.exile,...p.traps,...p.quests??[]]) refresh(e.card);
+      for (const regain of p.manaRegain ?? []) regain.at += 6;
+    }
+    for (const choice of [game.pending,...game.expansionChoices??[]]) {
+      if (choice?.data?.sourceId === 'MERCENARY' && ['MERC_JOB','MERC_HIT'].includes(choice.reason)) choice.reason = 'MERC_BOUNTY';
+    }
+    refreshFieldPassives(game);
+    for (const p of game.players) for (const m of p.field) {
+      if (balance99Prints[m.id] && (m.dmg ?? 0) >= effDef(p,m)) m.dmg = Math.max(0,effDef(p,m)-1);
+    }
+    game.balance99Applied = true;
   }
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);

@@ -62,6 +62,6 @@ export function resilience(g: GameState, p: PlayerState, m: FieldMon): number {
   // Counterattack and high defensive walls make zero-ATK units useful blockers,
   // but cannot pretend that these units are advancing an attack plan.
   if (effAtk(p,m,g)<=0 && !m.turnFx && !m.aura) value-=1.5;
-  if (m.aura==='eliteGuard') value+=Math.min(10,attackers.filter(x=>x.cost<=4).length*3);
+  if (m.aura==='eliteGuard') value+=Math.min(10,attackers.filter(x=>x.cost<=3).length*3);
   return value;
 }

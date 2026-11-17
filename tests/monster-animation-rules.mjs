@@ -9,7 +9,7 @@ try{
  for(const field of ['exhausted','noHighAtkTurn','noDirectTurn']){const x=field==='exhausted'?m:p;x[field]=true;assert.equal(monsterCanAttack(g,p,m),false,field);x[field]=false;}
  m.hatch=1;assert.equal(monsterCanAttack(g,p,m),false);delete m.hatch;
  o.field=[mon('guard',{aura:'lowAtkBan'})];m.cost=2;assert.equal(monsterCanAttack(g,p,m),false);m.cost=4;assert(monsterCanAttack(g,p,m));
- o.field[0].aura='eliteGuard';assert.equal(monsterCanAttack(g,p,m),false);m.cost=7;assert(monsterCanAttack(g,p,m));o.field=[];
+ o.field[0].aura='eliteGuard';m.cost=3;assert.equal(monsterCanAttack(g,p,m),false);m.cost=4;assert(monsterCanAttack(g,p,m));o.field=[];
  p.enchants=[{card:{...DB.ELF,ench:'noAttack'}}];assert.equal(monsterCanAttack(g,p,m),false);p.enchants=[];
  const summon=fresh();summon.players[0].hand=[mon('source-a',{onSummon:'shield',val:3,cost:0,summonReq:undefined})];const res=reduce(summon,{type:'play',idx:0});assert(res.events.some(e=>e.type==='monsterActivate'&&e.uid==='source-a'&&e.player===0));assert(res.events.findIndex(e=>e.type==='summon')<res.events.findIndex(e=>e.type==='monsterActivate'));
  const turn=fresh();turn.players[1].field=[mon('source-b',{turnFx:'growAtk',val:3}),mon('source-c',{turnFx:'payDefHeal',val:1,val2:1})];turn.players[1].mana=0;turn.players[1].maxMana=0;const tick=reduce(turn,{type:'endTurn'});assert(tick.events.some(e=>e.type==='monsterActivate'&&e.uid==='source-b'&&e.player===1));

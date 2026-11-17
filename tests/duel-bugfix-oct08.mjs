@@ -22,6 +22,6 @@ try{
   if(hasTarget)assert.equal(after.pending?.reason,'buffTurn');
   else {assert.equal(after.pending,null);assert.equal(reduce(after,{type:'endTurn'}).state.cur,1);}
  }
- {const g=fresh(),att=mon(3,4),target=mon();g.players[0].field=[att];g.players[1].field=[target,mon(3,4)];target.exhausted=true;assert(monsterCanTarget(g,g.players[0],att,target));target.aura='eliteGuard';att.cost=4;assert(!monsterCanTarget(g,g.players[0],att,target));att.cost=5;assert(monsterCanTarget(g,g.players[0],att,target));}
+ {const g=fresh(),att=mon(3,4),target=mon();g.players[0].field=[att];g.players[1].field=[target,mon(3,4)];target.exhausted=true;assert(monsterCanTarget(g,g.players[0],att,target));target.aura='eliteGuard';att.cost=3;assert(!monsterCanTarget(g,g.players[0],att,target));att.cost=4;assert(monsterCanTarget(g,g.players[0],att,target));}
  console.log('PASS: both-side Siege Collapse/Volley Fire, friendly-only activation, owner stats, atomic attack-cancel/end-turn, mandatory selection, defender eligibility');
 }finally{await fs.rm(dir,{recursive:true,force:true});}

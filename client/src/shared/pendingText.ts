@@ -43,7 +43,7 @@ export const CHOICE_TEXT:Record<string,Copy>={
  QUEST_ATTUNE_STUDY:c('墓地に得る報酬を選んでください。','묘지에 넣을 보상을 고르세요.','Choose a reward to add to your graveyard.'),
  TIMEWARP:c('自分のリフトから墓地に戻すカードを1枚まで選んでください。','자신의 리프트에서 묘지로 되돌릴 카드를 최대 1장 선택하세요.','Choose up to 1 card from your Rift to return to your graveyard.'),
  bloodSorrow:c('自分の墓地・デッキ・場・手札から、自分のリフトへ送るカード1枚を選んでください。','자신의 묘지·덱·필드·패에서 자신의 리프트로 보낼 카드 1장을 선택하세요.','Choose 1 card from your graveyard, deck, field or hand to send to your Rift.'),
- MERC_HIRE:c('購入した傭兵を追加1マナで今すぐ召喚しますか？','구매한 용병을 추가 마나 1로 즉시 소환할까요?','Pay 1 extra mana to summon the Mercenary you just bought?'),
+ MERC_HIRE:c('購入した傭兵を追加マナで今すぐ召喚しますか？','구매한 용병을 추가 마나로 즉시 소환할까요?','Pay extra mana to summon the Mercenary you just bought?'),
  MERC_JOB:c('依頼を1つ選んでください。','의뢰 1개를 선택하세요.','Choose a contract.'),
  MERC_BOUNTY:c('賞金首にする相手モンスターを選んでください。','현상 수배할 상대 몬스터를 고르세요.','Choose an opposing monster to mark for the bounty.'),
  MERC_HIT:c('荒事でダメージを与える相手モンスターを選んでください。','무력 행사로 피해를 줄 상대 몬스터를 고르세요.','Choose an opposing monster to damage with Rough Work.'),

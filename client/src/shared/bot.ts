@@ -405,7 +405,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     for (const m of [...ready].filter((m2) => canSwing(m2) && !m2.directOnly).sort((a, b) => effAtk(p, b, g) - effAtk(p, a, g))) {
       if (o.field.length === 0) { if (p.noDirectTurn || reflected || eliteWall) break; return { type: "attack", uid: m.uid }; } // 천궁의 폐문 / 귀족 영주
       const a = effAtk(p, m, g);
-      if (a > 0 && o.field.some((tm) => !(tm.aura === "eliteGuard" && (m.cost ?? 0) <= 4) && (!reflected || reflectedOverflow(m,tm,a,curHp(o,tm)) < p.hp+(p.shield??0)))) return { type: "attack", uid: m.uid };
+      if (a > 0 && o.field.some((tm) => !(tm.aura === "eliteGuard" && (m.cost ?? 0) <= 3) && (!reflected || reflectedOverflow(m,tm,a,curHp(o,tm)) < p.hp+(p.shield??0)))) return { type: "attack", uid: m.uid };
     }
   }
 
@@ -522,8 +522,8 @@ function facePlan(p: PlayerState, o: PlayerState, ready: FieldMon[], spells: { c
         if (p.noDirectTurn || o.field.some((tm) => tm.aura === "eliteGuard")) continue; // 폐문/귀족 영주 — 리썰 계산 제외
         total += a; if (!attackUid) attackUid = m.uid; continue;
       }
-      // 귀족 영주(eliteGuard)는 코스트 4 이하 공격자가 칠 수 없다 — 리썰 후보에서 제외
-      const k = defs.findIndex((d) => a > d.hp && !(d.elite && (m.cost ?? 0) <= 4));
+      // 귀족 영주(eliteGuard)는 코스트 3 이하 공격자가 칠 수 없다 — 리썰 후보에서 제외
+      const k = defs.findIndex((d) => a > d.hp && !(d.elite && (m.cost ?? 0) <= 3));
       if (k >= 0) { total += a - defs[k].hp; defs.splice(k, 1); if (!attackUid) attackUid = m.uid; }
     }
   }
@@ -688,7 +688,7 @@ function autoTarget(g: GameState): Action {
         tm.hatch != null ? Math.max(0, (tm.hatchTurns ?? 8) - tm.hatch) * 4 * (tm.id === "BEAST_EGG" ? 1.4 : 1)
         : effAtk(o, tm, g) * 2 + effDef(o, tm) + recoveryEngine(tm) * 2;
       const reflected = [p,o].some(pl=>pl.enchants.some(e=>e.card.ench==='blackReverse'));
-      const legal = (tm: FieldMon): boolean => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 4) && (!reflected || !att || reflectedOverflow(att,tm,a,curHp(o,tm)) < p.hp+(p.shield??0)); // 귀족 영주
+      const legal = (tm: FieldMon): boolean => !(tm.aura === "eliteGuard" && (att?.cost ?? 0) <= 3) && (!reflected || !att || reflectedOverflow(att,tm,a,curHp(o,tm)) < p.hp+(p.shield??0)); // 귀족 영주
       const killable = o.field
         .filter(legal)
         .filter((tm) => (a >= curHp(o, tm) && !(tm.guts??0)) || tm.hatch != null || (att && hasPassive(att,'decay') && (tm.decayCnt ?? 0) + (att.id==='POISON_MASTER'?3:1) >= 3))

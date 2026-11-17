@@ -16,7 +16,7 @@ try {
   const test=(name,fn)=>{fn();cases++;console.log('PASS',name);};
   test('catalog, costs and reviewed text',()=>{
     assert(Number(E.BALANCE_VERSION.slice(1))>=58);
-    for(const [id,atk,hp] of [['M11',4,3],['NGA3',3,1],['ELITE',5,5],['GM6_8',14,2],['NGA4',9,2]])assert.deepEqual([DB[id].atk,DB[id].def],[atk,hp]);
+    for(const [id,atk,hp] of [['M11',4,3],['NGA3',3,1],['ELITE',5,5],['GM6_8',12,2],['NGA4',9,2]])assert.deepEqual([DB[id].atk,DB[id].def],[atk,hp]);
     assert.equal(playCost(card('ACID_RAIN')),3);assert.equal(DB.ACID_RAIN.cost,2);
     assert.equal(DB.NGA4.mult,2);assert.equal(DB.VITAL3.onSummon,undefined);
     assert(DB.NGA4.textJa.includes('両プレイヤー'));assert(!DB.VITAL3.textJa.includes('召喚時'));
