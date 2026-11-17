@@ -5,8 +5,10 @@ export function cloneCardNode(source:HTMLElement):HTMLElement {
  const copy=source.cloneNode(true) as HTMLElement;
  const originals=source.querySelectorAll<HTMLCanvasElement>('canvas');
  copy.querySelectorAll<HTMLCanvasElement>('canvas').forEach((canvas,index)=>{
+  if(canvas.classList.contains('card-material-light')){canvas.remove();return;}
   const original=originals[index];
   if(original?.width&&original.height)canvas.getContext('2d')!.drawImage(original,0,0);
  });
+ copy.querySelectorAll('.card-material-amount').forEach(n=>n.remove());
  copyCardCounters(source,copy);return copy;
 }

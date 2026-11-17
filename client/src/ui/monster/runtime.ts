@@ -24,7 +24,8 @@ import {playRiftDestruction,cancelRiftDestruction} from '../riftDestruction/runt
 import {playManaDestruction,cancelManaDestruction} from '../manaDestruction/runtime';
 import {playSlateSummon,cancelSummons,cancelSummon} from '../summon/runtime';
 import {Actor} from './actor';
-import {duration,ease, type Kind, type Variant, type Rect} from './catalog';
+import {cancelMaterial,cancelMaterials,playMaterial} from '../cardMaterial/effect';
+import {duration,ease,isStat, type Kind, type Variant, type Rect} from './catalog';
 import {drawEffect} from './renderer';
 import {mountAnimationLayers} from './layers';
 import {projectedPlacement} from '../boardProjection';
@@ -57,6 +58,7 @@ export function combatVisualRect(source:HTMLElement):DOMRect|null{
  return actor?.isConnected?actor.getBoundingClientRect():source.isConnected?source.getBoundingClientRect():null;
 }
 export function monsterHealth(source:HTMLElement,value:number){
+ cancelMaterial(source);
  for(const node of [source,states.get(source)?.actor.el,jobs.get(source)?.actor.el,gutsJobs.get(source)?.actor.el]){
   const label=node?.querySelector('.ad-def .seal-value');if(label)label.textContent=String(Math.max(0,value));
  }
@@ -122,8 +124,8 @@ export function syncMonsterStates(root:HTMLElement){
  }
  if([...states.values()].some(s=>s.root===root))observeField(root);release();if(states.size)schedule();
 }
-export function clearMonsterStates(root:HTMLElement){for(const node of hits.keys())if(root.contains(node)||!node.isConnected)hits.delete(node);for(const j of [...gutsJobs.values()])if(root.contains(j.source))j.finish(false);cancelSilenceSummons(root);cancelVoidSummons(root);cancelCasinoSummons(root);cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
-export function setMonsterSkip(value:boolean){skipped=value;if(value){hits.clear();for(const j of [...gutsJobs.values()])j.finish(false);cancelSilenceSummons();cancelVoidSummons();cancelCasinoSummons();cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
+export function clearMonsterStates(root:HTMLElement){cancelMaterials(root);for(const node of hits.keys())if(root.contains(node)||!node.isConnected)hits.delete(node);for(const j of [...gutsJobs.values()])if(root.contains(j.source))j.finish(false);cancelSilenceSummons(root);cancelVoidSummons(root);cancelCasinoSummons(root);cancelGolems(root);cancelTribeSummons(root);cancelRiftDestruction(root);cancelManaDestruction(root);cancelSummons(root);for(const j of [...jobs.values()])if(root.contains(j.source))j.finish(false);for(const [n,s] of states)if(s.root===root)removeState(n);release();}
+export function setMonsterSkip(value:boolean){skipped=value;if(value){cancelMaterials();hits.clear();for(const j of [...gutsJobs.values()])j.finish(false);cancelSilenceSummons();cancelVoidSummons();cancelCasinoSummons();cancelGolems();cancelTribeSummons();cancelSummons();cancelRiftDestruction();cancelManaDestruction();}if(value)for(const j of [...jobs.values()])j.finish(false);}
 function release(){
  for(const [root,layer] of fieldLayers)if(![...states.values()].some(s=>s.root===root)){layer.dispose();fieldLayers.delete(root);observers.get(root)?.disconnect();observers.delete(root);}
  if(!jobs.size&&!gutsJobs.size){layers?.dispose();layers=undefined;}
@@ -217,6 +219,11 @@ export function playGutsEndurance(source:HTMLElement,result:GutsSurvival,signal?
 export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Promise<boolean>{
  cancelSilenceSummon(source);cancelVoidSummon(source);cancelCasinoSummon(source);cancelGolem(source);cancelTribeSummon(source);cancelRiftDestruction(source);cancelSummon(source);jobs.get(source)?.finish(false);
  if(skipped||!source.isConnected||options.signal?.aborted)return Promise.resolve(false);
+ if(!options.variant&&(kind==='trigger'||(isStat(kind)&&options.stats))){
+  const changes=(['atk','def'] as const).flatMap(key=>{const stat=options.stats?.[key];return stat&&stat.from!==stat.to?[{key,...stat}]:[];});
+  return playMaterial(source,monsterPresentationNodes(source),changes,options.signal);
+ }
+ cancelMaterial(source);
  if(kind==='destroy'&&options.variant==='B'&&options.destination){removeState(source);release();return playRiftDestruction(source,options.destination,options.signal);}
  if(kind==='summon'&&isSilenceSummon(source.dataset.cardId))return playSilenceSummon(source,options);
  if(kind==='summon'&&isVoidSummon(source.dataset.cardId))return playVoidSummon(source,options);

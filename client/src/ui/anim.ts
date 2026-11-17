@@ -697,7 +697,7 @@ export async function gutsSurvive(result:GutsSurvival,side?:ViewSide):Promise<vo
  const card=combatCard(result.uid);if(card&&!fxSkip)await boardMotionScope(signal=>playGutsEndurance(card,result,signal,side==='opp'?-1:side==='me'?1:undefined));
 }
 export async function monsterActivation(uid:string):Promise<void>{
- const n=byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));
+ const n=combatCard(uid)??byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));
 }
 
 export function monHit(uid:string,amount?:number,hp?:number,recoil=true):void{
@@ -1244,7 +1244,7 @@ export async function originRite(uid:string,reaction:OriginRiteReaction,side:Vie
 }
 
 /** Pulse the exact public source, not every remaining spell on the board. */
-export function enchantActivation(uid:string):void{if(fxSkip)return;const source=document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(uid)}"]`);if(source)playBiblionFx('enchant',source);}
+export async function enchantActivation(uid:string):Promise<void>{if(fxSkip)return;const source=document.querySelector<HTMLElement>(`.buff-icon[data-uid="${CSS.escape(uid)}"]`);if(source)await boardMotionScope(signal=>playMonster(source,'trigger',{signal}));}
 
 /** One clock owns the selected blood pulse, source cards and HP conversion. */
 export async function bloodRiteRecovery(side:ViewSide,sources:string[],onHeal:()=>void):Promise<void>{

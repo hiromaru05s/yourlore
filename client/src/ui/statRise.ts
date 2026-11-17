@@ -27,12 +27,9 @@ export function createBoardStatRise(root:HTMLElement){
     if(choosingBuff){next.set(m.uid,old);return;}
     const stats={...(da?{atk:{from:old.atk,to:value.atk}}:{}),...(dh?{def:{from:value.hp-dh,to:value.hp}}:{})};
     effects.push(async()=>{
-     // Opposite-sign changes use two coherent motions, never conflicting clones.
-     for(const down of [false,true]){
-      const atk=down?da<0:da>0,hp=down?dh<0:dh>0;if(!atk&&!hp)continue;
-      const kind=((atk&&hp?'both':atk?'atk':'hp')+(down?'Down':'')) as Kind;
-      await playMonster(n,kind,{stats:{...(atk?{atk:stats.atk}:{}),...(hp?{def:stats.def}:{})},side:n.closest('#oppRow')?-1:1});
-     }
+     // One surface carries both values, including opposite directions.
+     const kind=((da&&dh?'both':da?'atk':'hp')+(da<=0&&dh<=0?'Down':'')) as Kind;
+     await playMonster(n,kind,{stats,side:n.closest('#oppRow')?-1:1});
     });
    }));
    previous=next;syncMonsterStates(root);await Promise.all(effects.map(run=>run()));

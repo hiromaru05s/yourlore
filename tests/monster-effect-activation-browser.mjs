@@ -18,11 +18,11 @@ try {
    const result=await page.evaluate(async sample=>{
     const c=atelier.controller;c.show(sample.before);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
     const seen=new WeakSet(),names=[];let running=true,max=0;
-    const tick=()=>{const nodes=[...document.querySelectorAll('[data-layer-policy=foreground] [data-monster-kind=trigger]')];max=Math.max(max,nodes.length);for(const n of nodes)if(!seen.has(n)){seen.add(n);names.push(n.querySelector('.card-name')?.textContent);}if(running)requestAnimationFrame(tick);};requestAnimationFrame(tick);
+    const tick=()=>{const nodes=[...document.querySelectorAll('.card-material-light[data-material-effect=activation]')];max=Math.max(max,nodes.length);for(const n of nodes)if(!seen.has(n)){seen.add(n);names.push(n.parentElement.querySelector('.card-name')?.textContent);}if(running)requestAnimationFrame(tick);};requestAnimationFrame(tick);
     c.applyResult(sample.result);await c.queue;running=false;
     const cards=[...sample.before.players.flatMap(p=>[...p.field,...p.hand]),...sample.result.state.players.flatMap(p=>[...p.field,...p.discard,...p.removed??[]])];
     const expectedNames=sample.result.events.filter(e=>e.type==='monsterActivate').map(e=>cards.find(c=>c.uid===e.uid)?.nameJa).filter(Boolean);
-    return {names,expectedNames,max,remaining:document.querySelectorAll('[data-layer-policy=foreground] [data-monster-kind=trigger]').length};
+    return {names,expectedNames,max,remaining:document.querySelectorAll('.card-material-light[data-material-effect=activation]').length};
    },sample);
    assert.deepEqual(result.names.sort(),result.expectedNames.sort(),label);assert.equal(result.remaining,0,label);
    if(label==='sources:0:HEXER1'||label==='sources:1:GM5_2')assert.equal(result.max,2,'simultaneous source cards');

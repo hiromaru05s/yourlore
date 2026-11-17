@@ -1,0 +1,4 @@
+.card-material-light{position:absolute;left:-12%;top:-12%;width:124%;height:124%;z-index:4;pointer-events:none}
+.card-material-amount{position:absolute;left:50%;bottom:105%;transform:translateX(-50%);display:grid;place-items:center;width:160%;aspect-ratio:1;color:white;background:linear-gradient(115deg,#9bd7f9,#1f6997 36%,#163e63 67%,#8fc9ef);font:900 1.3em/1 system-ui;text-shadow:0 1px 2px #101b26;clip-path:polygon(50% 0,100% 52%,77% 52%,77% 100%,23% 100%,23% 52%,0 52%);padding-top:12%;box-sizing:border-box;pointer-events:none}
+.ad-def .card-material-amount{background:linear-gradient(115deg,#f9c1a0,#a7473d 36%,#722d29 67%,#eda88e)}
+.card-material-amount[data-direction=down]{clip-path:polygon(23% 0,77% 0,77% 48%,100% 48%,50% 100%,0 48%,23% 48%);padding:0 0 12%}

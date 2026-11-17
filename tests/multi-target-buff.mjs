@@ -30,5 +30,10 @@ try{
   calls.length=0;const done=track.update(g);assert.equal(calls.length,cancel?1:0,'cancel flushes chosen cards; match end suppresses them');finish();await done;track.dispose();
  }
  {let g=fresh();const track=createBoardStatRise(root);await track.update(g);calls.length=0;g.players.forEach(p=>p.field.forEach(m=>m.atkMod+=3));const done=track.update(g);assert.equal(calls.length,6,'all targets on both sides start concurrently');finish();await done;track.dispose();}
+ {const g=fresh(),track=createBoardStatRise(root);await track.update(g);calls.length=0;
+  const m=g.players[0].field[0];m.atkMod+=3;m.defMod-=1;
+  const done=track.update(g);assert.equal(calls.length,1,'opposite signs share one card surface');
+  const {atk,def}=calls[0].options.stats;assert.equal(atk.to-atk.from,3);assert.equal(def.to-def.from,-1);
+  finish();await done;track.dispose();}
  console.log('PASS multi-target baseline, both owners, repeated snapshots, all-target completion, partial cancel, match end and simultaneous buffs');
 }finally{delete globalThis.__playStat;await rm(dir,{recursive:true,force:true});}

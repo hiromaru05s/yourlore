@@ -9,7 +9,7 @@ try{
  for(let i=0;i<3;i++)await p.evaluate(async()=>{monsterQA.reset();await monsterQA.A.attackStrike('mon-0','mon-1','opp',()=>{},false)});checks.push('three consecutive attacks complete without transient residue');
  const policy=await p.evaluate(async()=>{
   monsterQA.reset();const {confirmDialog}=await import('/src/ui/modal.ts');window.confirmed=confirmDialog({title:'Layer audit',body:'Confirm dialog during VFX',confirm:'OK',cancel:'Cancel'});
-  window.playing=monsterQA.A.monsterActivation('mon-0');await new Promise(r=>setTimeout(r,500));const transient=document.querySelector('[data-layer-policy=foreground]'),dialog=document.querySelector('.overlay');
+  window.playing=monsterQA.A.monsterActivation('mon-0');await new Promise(r=>setTimeout(r,500));const transient=document.querySelector('.card-material-light[data-material-effect=activation]'),dialog=document.querySelector('.overlay');
   return {foreground:Number(getComputedStyle(transient).zIndex),dialog:Number(getComputedStyle(dialog).zIndex),pointerEvents:getComputedStyle(transient).pointerEvents,overlayCount:document.querySelectorAll('.overlay').length};
  });await p.screenshot({path:out+'/dialog-during-vfx.png'});assert.equal(policy.pointerEvents,'none');assert(policy.foreground<policy.dialog,'modal must cover foreground VFX');await p.locator('.modal .btn-ghost').click();await p.evaluate(()=>Promise.all([window.playing,window.confirmed]));checks.push('dialog stays visible and clickable above visual compositor');
  for(const [width,height] of [[1280,900],[390,844],[844,390]]){

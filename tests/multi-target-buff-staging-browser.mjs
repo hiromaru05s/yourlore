@@ -12,7 +12,7 @@ const browser=await chromium.launch({channel:'chrome',headless:true});const cont
 try{
  await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default');await page.waitForFunction(()=>window.atelier&&document.querySelector('[data-scene-ready=true]'));
  await page.evaluate(()=>{
-  window.buffWatch=async action=>{const frames=[];let running=true;const tick=()=>{const cards=[...document.querySelectorAll('[data-layer-policy=foreground] [data-monster-kind=atk]')];frames.push({count:cards.length,surfaces:cards.filter(n=>{const c=n.querySelector('.stat-surface');return c&&c.width>1&&c.getContext('2d').getImageData(0,0,c.width,c.height).data.some((v,i)=>i%4===3&&v>0);}).length});if(running)requestAnimationFrame(tick);};requestAnimationFrame(tick);await action();running=false;return {max:Math.max(...frames.map(f=>f.count)),visible:Math.max(...frames.map(f=>f.surfaces)),remaining:document.querySelectorAll('[data-layer-policy=foreground] [data-monster-kind=atk]').length};};
+  window.buffWatch=async action=>{const frames=[];let running=true;const tick=()=>{const cards=[...document.querySelectorAll('.card-material-light[data-material-effect=stats]')];frames.push({count:cards.length,surfaces:cards.filter(c=>{return c.width>1&&c.getContext('2d').getImageData(0,0,c.width,c.height).data.some((v,i)=>i%4===3&&v>0);}).length});if(running)requestAnimationFrame(tick);};requestAnimationFrame(tick);await action();running=false;return {max:Math.max(...frames.map(f=>f.count)),visible:Math.max(...frames.map(f=>f.surfaces)),remaining:document.querySelectorAll('.card-material-light[data-material-effect=stats]').length};};
   window.buffReset=(owner,count)=>{const c=atelier.controller,g=structuredClone(c.state);g.cur=owner;g.pending=null;g.over=false;for(const [side,p] of g.players.entries()){const m=p.field[0];p.field=Array.from({length:count},(_,i)=>({...m,uid:'stage-'+side+'-'+i,atkMod:0,tempAtk:0,defMod:0,aura:undefined}));}c.show(g);};
   window.buffSnapshot=async g=>{const c=atelier.controller;c.applyResult({state:g,events:[]});await c.queue;};
  });
@@ -24,7 +24,7 @@ try{
     for(let i=0;i<2;i++)await page.evaluate(async({owner,i})=>{const g=structuredClone(atelier.controller.state);g.players[owner].field[i].tempAtk=1;g.pending={kind:'myMon',reason:'buffTurn',hint:'',hintJa:'',allowCancel:true,data:{count:2-i,val:1,excl:g.players[owner].field.slice(0,i+1).map(m=>m.uid)}};await buffSnapshot(g);},{owner,i});
    }
    await page.evaluate(({owner,count})=>{const g=structuredClone(atelier.controller.state);g.pending=null;g.players[owner].field.forEach(m=>m.tempAtk=count===3?1:3);window.playing=buffWatch(()=>buffSnapshot(g));},{owner,count});
-   await page.waitForSelector('[data-layer-policy=foreground] [data-monster-kind=atk]');await page.screenshot({path:out+`/buff-${width}-${owner}-${count}.png`});
+   await page.waitForSelector('.card-material-light[data-material-effect=stats]');await page.screenshot({path:out+`/buff-${width}-${owner}-${count}.png`});
    const result=await page.evaluate(()=>window.playing);assert.equal(result.max,count);assert.equal(result.visible,count);assert.equal(result.remaining,0);checks.push({width,height,owner,count,...result});
   }
  }
