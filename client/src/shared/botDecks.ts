@@ -74,34 +74,6 @@ export const BOT_HELL_DECKS: BotDeck[] = [
     "tune": {}
   },
   {
-    "name": "BOT · GOBLIN",
-    "cards": [
-      "GOBLIN",
-      "GOBLIN",
-      "GOBLIN_RAIDER",
-      "GOBLIN",
-      "GOBLIN",
-      "WEAKEN_ALL",
-      "COUNTERCALC",
-      "GOBLIN"
-    ],
-    "tune": {}
-  },
-  {
-    "name": "BOT · GOLEM_CONTROL",
-    "cards": [
-      "GOLEM_TEST",
-      "GOLEM_TEST",
-      "GOLEM_TEST",
-      "MINI_SPIRIT",
-      "MINI_SPIRIT",
-      "WEAKEN_ALL",
-      "NOURISHING_RAIN",
-      "STARTER_CHEST"
-    ],
-    "tune": {}
-  },
-  {
     "name": "BOT · SPIRIT_GOBLIN",
     "cards": [
       "MINI_SPIRIT",
@@ -112,34 +84,6 @@ export const BOT_HELL_DECKS: BotDeck[] = [
       "NOURISHING_RAIN",
       "COUNTERCALC",
       "STARTER_CHEST"
-    ],
-    "tune": {}
-  },
-  {
-    "name": "BOT · MIXED_RALLY",
-    "cards": [
-      "RUST_SHROOM",
-      "RUST_SHROOM",
-      "GOBLIN",
-      "GOBLIN",
-      "GOBLIN_RAIDER",
-      "GOBLIN_RAIDER",
-      "COUNTERCALC",
-      "TRUMPET"
-    ],
-    "tune": {}
-  },
-  {
-    "name": "BOT · DECAY",
-    "cards": [
-      "RUST_SHROOM",
-      "RUST_SHROOM",
-      "RUST_SHROOM",
-      "RUST_SHROOM",
-      "RUST_SHROOM",
-      "STARTER_TRASH",
-      "COUNTERCALC",
-      "COUNTERCALC"
     ],
     "tune": {}
   }
