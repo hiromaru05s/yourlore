@@ -142,12 +142,11 @@
 .hand-study .keep-lane .study-slot.is-dragging{z-index:6}
 .hand-study .is-dragging .study-lift{transition:none}
 .hand-study .study-slot.is-dragging .card[aria-disabled=false]{cursor:grabbing}
-/* Both rows use the hand slot dimensions. Center a smaller card inside each well. */
+/* Size the card from the original hand layout, independently of the well scale. */
 .hand-study{
-  --well-padding:clamp(5.95px,calc(var(--unit)*.09),12.75px);
-  --hand-card-width:calc(var(--unit) - 2 * var(--well-padding));
+  --hand-card-width:calc(var(--hand-slot-base) - 2 * clamp(7px,var(--hand-slot-base)*.09,15px));
 }
-.hand-study .study-slot{display:grid;place-items:center}
+.hand-study .study-slot{display:grid;grid-template:100% / 100%;place-items:center}
 .hand-study .study-lift{
   width:var(--hand-card-width);height:calc(var(--hand-card-width)*1.46);
 }
