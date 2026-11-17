@@ -543,7 +543,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: true, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3, balance97Applied:true, balance98Applied:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: 2, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3, balance97Applied:true, balance98Applied:true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -1433,11 +1433,6 @@ function tickTurnFx(g: GameState, ctx: Ctx, p: PlayerState): void {
     if (g.over) return;
     const v = m.val || 0, v2 = m.val2 || 0;
     if (hasEssence(g)) continue;
-    if (m.id === 'MERC_MASTER' && !m.mutedEffects) {
-      const at = ctx.ev.length;
-      rollMercenaryCasinoDice(g, ctx, p, m);
-      if (ctx.ev.length > at) monsterActivation(g, ctx.ev, p, m, at);
-    }
     if (m.id === 'MERCH2') queueExpansionChoice(g,p,'MERCH2','交換する固定マーケットの枠を選択');
     if (!m.turnFx) continue;
     const finish = observeMonsterEffect(g, ctx.ev, p, m, MAX_MANA);

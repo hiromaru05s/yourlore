@@ -41,7 +41,8 @@ export function restoreReworkedCards(game: GameState): void {
   const updateGolems = !game.golemsReworked;
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateMercs && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied)) return;
+  const updateGuildmasterText = game.mercReworkApplied !== 2;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied)) return;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -53,7 +54,7 @@ export function restoreReworkedCards(game: GameState): void {
   }
   game.casinoRallyApplied = true;
   game.diplomacyApplied = true;
-  game.mercReworkApplied = true;
+  game.mercReworkApplied = 2;
   game.hexerReworkApplied = true;
   game.demonRealmReworkApplied = true;
   game.fireBrandReworkApplied = true;
@@ -145,6 +146,10 @@ export function restoreReworkedCards(game: GameState): void {
       const def = DB[card.id], swapped = (card as FieldMon).trickSwapped;
       Object.assign(card, {cost:def.cost, val:def.val, val2:def.val2, atk:swapped?def.def:def.atk, def:swapped?def.atk:def.def,
         text:def.text, textJa:def.textJa, textEn:def.textEn});
+    }
+    if (updateGuildmasterText && card.id === 'MERC_MASTER') {
+      const {text, textJa, textEn} = DB.MERC_MASTER;
+      Object.assign(card, {text, textJa, textEn});
     }
     if (updateHexers && ['NHEX','HEXER1','HEXER2','HEXER3','HEXER4'].includes(card.id)) {
       const def = DB[card.id];
