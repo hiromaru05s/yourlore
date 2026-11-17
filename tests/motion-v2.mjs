@@ -40,14 +40,12 @@ try {
  globalThis.getComputedStyle=dom.window.getComputedStyle.bind(dom.window);globalThis.innerWidth=1280;globalThis.innerHeight=720;
  globalThis.requestAnimationFrame=cb=>setTimeout(()=>cb(performance.now()),16);globalThis.cancelAnimationFrame=clearTimeout;
  const origin={left:100,top:200,width:50,height:78};
- for(const reveal of [true,false]){
-  const abort=new AbortController();let landed=false;
-  const draw=drawPaperCards({cards:[node],origin,sleeve:'/back.webp',reveal,signal:abort.signal,onLand:()=>{landed=true;}});
-  if(!reveal)assert.equal(document.querySelectorAll('.native-draw-layer .private-art').length,0);
-  assert.equal(document.querySelector('.native-draw-card').style.display,'none','unstarted fronts must not flash at the screen origin');
-  abort.abort();
-  await Promise.race([draw,new Promise((_,reject)=>{const timer=setTimeout(()=>reject(new Error('cancelled decode leaked')),150);timer.unref();})]);
-  assert.equal(document.querySelectorAll('.native-draw-layer').length,0);assert.equal(landed,false);
- }
+ // Only the local player's flying face decodes an illustration. Native sleeve cancellation is checked in the browser.
+ const abort=new AbortController();let landed=false;
+ const draw=drawPaperCards({cards:[node],origin,sleeve:'/back.webp',reveal:true,signal:abort.signal,onLand:()=>{landed=true;}});
+ assert.equal(document.querySelector('.native-draw-card').style.display,'none','unstarted fronts must not flash at the screen origin');
+ abort.abort();
+ await Promise.race([draw,new Promise((_,reject)=>{const timer=setTimeout(()=>reject(new Error('cancelled decode leaked')),150);timer.unref();})]);
+ assert.equal(document.querySelectorAll('.native-draw-layer').length,0);assert.equal(landed,false);
  console.log('PASS: native draw endpoints/privacy; disappearance before reconstruction; compact exile bounds; stable independent labels for all cards in JA/EN/KO');
 }finally{dom.window.close();await rm(dir,{recursive:true,force:true});}

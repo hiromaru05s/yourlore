@@ -22,7 +22,16 @@ try{
    assert.equal(state.clip,state.original);assert(state.same);assert.equal(state.privateFaces,0);
    assert.equal(await page.locator('.draw-stock-canvas,.native-draw-layer').count(),0);
    await page.screenshot({path:`${out}/${side}-${width}.png`});await page.evaluate(()=>window.drawDone);
-   assert(await page.evaluate(()=>restBack===document.querySelector('#oppHand .card--back')&&getComputedStyle(restBack).visibility==='visible'));checks.push({width,side,...state});continue;
+   assert(await page.evaluate(()=>restBack===document.querySelector('#oppHand .card--back')&&getComputedStyle(restBack).visibility==='visible'));checks.push({width,side,...state});
+   await page.evaluate(()=>{window.abortSleeve=new AbortController();window.drawDone=monsterQA.A.animateDraw(restBack.parentElement,1,'opp',{signal:abortSleeve.signal,durationScale:2});});
+   await page.waitForFunction(()=>restBack.getAnimations().some(a=>a.id==='opponent-sleeve-draw'));
+   const cancelled=await page.evaluate(async()=>{
+    abortSleeve.abort();await drawDone;
+    return restBack===document.querySelector('#oppHand .card--back')&&getComputedStyle(restBack).visibility==='visible'&&
+      !restBack.getAnimations().some(a=>a.id==='opponent-sleeve-draw')&&!document.querySelector('.native-draw-layer,#oppHand .card-art');
+   });
+   assert(cancelled,'cancelling an opponent draw restores the same private sleeve');
+   continue;
   }
   await page.evaluate(side=>{window.freezeAt=.22;window.drawDone=monsterQA.A.animateDraw(document.querySelector(side==='me'?'#hand':'#oppHand'),1,side,{durationScale:3});},side);
   await page.waitForFunction(()=>window.freezeDraw,null,{polling:50});
