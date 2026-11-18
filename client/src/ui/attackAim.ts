@@ -49,13 +49,27 @@ export function createAttackAim(follow?:()=>AimPose|null) {
      c.beginPath();points.forEach((p,i)=>{const px=p.x+p.nx*p.r*offset,py=p.y+p.ny*p.r*offset;i?c.lineTo(px,py):c.moveTo(px,py);});
      c.strokeStyle=offset>.5?'#123c59':pale;c.globalAlpha=alpha;c.lineWidth=lineWidth;c.stroke();
     }c.globalAlpha=1;
-    // Moving light is clipped into the material: no detached dots or chevrons.
+    // Reflections and directional fins share the ribbon surface and its curve.
     c.save();band(c,points,-1,1);c.clip();c.globalCompositeOperation='screen';
     const travel=reduced?.36:(now*.00038)%1;
     for(let k=0;k<2;k++){
      const t=((travel+k*.5)%1)*end,p=curve.point(t),n=curve.tangent(t),length=Math.min(33,curve.length*.12),q=Math.sin(Math.PI*t/end);
      c.save();c.translate(p.x,p.y);c.rotate(Math.atan2(n.y,n.x));c.scale(length,width*1.2);
      const g=c.createRadialGradient(0,0,0,0,0,1);g.addColorStop(0,blocked?`rgba(255,220,228,${q*.48})`:`rgba(194,243,255,${q*.62})`);g.addColorStop(.32,`rgba(100,191,231,${q*.22})`);g.addColorStop(1,'#79d4ff00');c.fillStyle=g;c.fillRect(-1,-1,2,2);c.restore();
+    }c.restore();
+    // Forward-facing light fins make the travel direction readable at a glance.
+    // They use the actual curve tangent and stay bonded to the shaded ribbon.
+    const spacing=Math.max(23,Math.min(48,unit*.5)),phase=reduced?spacing*.35:(now*.12)%spacing;
+    const finLength=Math.min(11,width*1.8),finWidth=width*.78;
+    c.save();band(c,points,-1,1);c.clip();
+    for(let distance=phase;distance<curve.length*end;distance+=spacing){
+     const t=distance/curve.length,p=curve.point(t),n=curve.tangent(t);
+     const alpha=Math.min(1,distance/spacing,(curve.length*end-distance)/spacing);
+     c.save();c.translate(p.x,p.y);c.rotate(Math.atan2(n.y,n.x));c.globalAlpha=alpha*.95;
+     c.beginPath();c.moveTo(finLength*.4,0);c.lineTo(-finLength*.65,-finWidth);c.lineTo(-finLength*.3,0);c.lineTo(-finLength*.65,finWidth);c.closePath();
+     c.shadowColor=main;c.shadowBlur=3;c.fillStyle=pale;c.fill();c.shadowBlur=0;
+     c.beginPath();c.moveTo(-finLength*.65,-finWidth);c.lineTo(finLength*.4,0);c.lineTo(-finLength*.65,finWidth);c.strokeStyle=blocked?'#783c54':'#205c85';c.lineWidth=.7;c.stroke();
+     c.restore();
     }c.restore();
     // The arrowhead is a small faceted prism continuing the central ridge.
     const n=curve.tangent(1),wing=head*.39,neck=head*.73;

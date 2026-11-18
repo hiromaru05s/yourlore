@@ -8,10 +8,12 @@ export function prepareAttackTarget(card:HTMLElement):Promise<Outline|null>{retu
 
 /** A light just outside the actual print, plus a small additive lift. The native
  * resting/combat transform keeps ownership of the card's underlying pose. */
-export function highlightAttackTarget(card:HTMLElement): (immediate?:boolean)=>void {
+export function highlightAttackTarget(card:HTMLElement): (immediate?:boolean)=>void {return highlightAttackCard(card,'target');}
+export function highlightAttackSource(card:HTMLElement): (immediate?:boolean)=>void {return highlightAttackCard(card,'source');}
+function highlightAttackCard(card:HTMLElement,role:'source'|'target'): (immediate?:boolean)=>void {
   const shape=prepareAttackTarget(card);
-  const layer=document.createElement('div');layer.className='attack-target-outline';layer.setAttribute('aria-hidden','true');card.append(layer);
-  let disposed=false;const releaseLift=liftAttackCard(card,'target');
+  const layer=document.createElement('div');layer.className=`attack-target-outline attack-${role}-light`;layer.setAttribute('aria-hidden','true');card.append(layer);
+  let disposed=false;const releaseLift=liftAttackCard(card,role);
   void shape.then(outline=>{
     if(disposed||!outline||!layer.isConnected)return;
     const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox',`0 0 ${outline.width} ${outline.height}`);svg.setAttribute('preserveAspectRatio','none');

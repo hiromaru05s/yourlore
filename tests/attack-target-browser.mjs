@@ -9,7 +9,7 @@ try{
  for(const mobile of [false,true]){
   const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:960},hasTouch:mobile,isMobile:mobile,...(process.env.LORE_RECORD_VIDEO==='1'&&!mobile?{recordVideo:{dir:out,size:{width:1440,height:960}}}:{})});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(origin+'/attack-target-preview.html?v=4');await page.waitForSelector('[data-scene-ready=true]');
+  await page.goto(origin+'/attack-target-preview.html?v=5');await page.waitForSelector('[data-scene-ready=true]');
   await page.evaluate(()=>attackTargetPreview.stopDemo());await page.waitForTimeout(350);
   const node=uid=>page.locator(`.zone-mon [data-uid="${uid}"]`);
   const rect=async uid=>node(uid).boundingBox();
@@ -33,6 +33,10 @@ try{
   assert(Math.abs(emitter[0]-middle(sourceRaised).x)<1.5);
   assert(Math.abs(emitter[1]-(sourceRaised.y+sourceRaised.height*.045))<1.5);
   assert.equal(await page.locator('.attack-aim').getAttribute('data-material'),'bevelled-light');
+  await page.waitForSelector('[data-uid="attacker"] .attack-source-light svg');
+  const sourceLight=await node('attacker').evaluate(e=>{const light=e.querySelector('.attack-source-light');return {rim:getComputedStyle(light.querySelector('.attack-target-rim')).stroke,outline:light.querySelector('.attack-target-rim').getAttribute('d'),mask:light.querySelector('mask path').getAttribute('d'),artTint:getComputedStyle(e.querySelector('.card-art'),'::before').content};});
+  assert.equal(sourceLight.rim,'rgb(54, 184, 255)');assert.equal(sourceLight.outline,sourceLight.mask);assert(sourceLight.outline.length>100);assert.equal(sourceLight.artTint,'none');
+
 
   assert(raised.width/baseline.width>1.04&&raised.width/baseline.width<1.09);
   assert(middle(raised).y<middle(baseline).y-baseline.height*.025);
@@ -42,20 +46,20 @@ try{
   // Hold the pointer at the original bottom edge after the print lifts away.
   const bottom={x:baseline.x+baseline.width/2,y:baseline.y+baseline.height-1};
   for(let i=0;i<3;i++){await move(bottom);await page.waitForTimeout(200);assert.equal(await page.locator('.card.is-atk-target').getAttribute('data-uid'),'target-center');}
-  checks.push({mobile,baseline,raised,originalBottomEdgeStable:true,printUnchanged:true,sourceBaseline,sourceRaised,originFollowsCrest:true});
+  checks.push({mobile,baseline,raised,originalBottomEdgeStable:true,printUnchanged:true,sourceBaseline,sourceRaised,originFollowsCrest:true,blueSourceContour:true});
   await cancel();await clean();const restored=await rect('target-center');assert(Math.abs(restored.width-baseline.width)<.7);assert(Math.abs(restored.y-baseline.y)<.7);
   // Quick retargeting while both lift and return are still in flight.
   await down(middle(await rect('attacker')));
   for(const uid of ['target-left','target-right','target-left','target-center']){await move(middle(await rect(uid)));await page.waitForTimeout(40);}
   await page.waitForFunction(()=>document.querySelector('.card.is-atk-target')?.getAttribute('data-uid')==='target-center');await page.waitForTimeout(250);
-  assert.equal(await page.locator('.attack-target-outline').count(),1);await cancel();await clean();
+  assert.equal(await page.locator('.attack-target-outline').count(),2);await cancel();await clean();
   checks.push({mobile,rapidRetarget:true,cancelRestoresPose:true});
   // Persistent aura actors own their own transform; selection must compose with it.
   await page.evaluate(()=>{const c=attackTargetPreview.controller;c.state.players[1].field[1]={...c.state.players[1].field[2],uid:'target-center',exhausted:true};c.state.frames=['default','frame:obsidian-ember'];c.view.render(c.state);});await page.waitForTimeout(500);
   await page.waitForSelector('[data-uid="target-center"].field-resting-face');
   const blocked=await rect('target-center');await down(middle(await rect('attacker')));await select('target-center');const blockedRaised=await rect('target-center');
   assert(blockedRaised.width/blocked.width>1.04&&blockedRaised.width/blocked.width<1.09);assert(middle(blockedRaised).y<middle(blocked).y-blocked.height*.025);
-  assert.equal(await page.locator('.attack-target-outline').evaluate(e=>getComputedStyle(e).filter),'none');
+  assert.equal(await page.locator('.attack-target-light').evaluate(e=>getComputedStyle(e).filter),'none');
   await page.screenshot({path:`${out}/${mobile?'mobile':'desktop'}-aura.png`});await cancel();await clean();
   checks.push({mobile,persistentNativePose:true,equippedFrame:true});
   await page.emulateMedia({reducedMotion:'reduce'});
@@ -63,9 +67,9 @@ try{
   const reducedBase=await rect('target-center');await down(middle(await rect('attacker')));await select('target-center');const reducedRaised=await rect('target-center');
   assert(Math.abs(reducedBase.width-reducedRaised.width)<.7);assert(Math.abs(reducedBase.y-reducedRaised.y)<.7);
   assert(Math.abs((await rect('attacker')).width-reducedSource.width)<.7);
-  assert.equal(await page.locator('.attack-target-travel').evaluate(e=>getComputedStyle(e).display),'none');
+  assert.equal(await page.locator('.attack-target-light .attack-target-travel').evaluate(e=>getComputedStyle(e).display),'none');
   await cancel();await clean();checks.push({mobile,reducedStatic:true});
   await context.close();
  }
- assert.deepEqual(errors,[]);await fs.writeFile(out+'/checks.json',JSON.stringify({checks,errors,source:'d815a6ac9',origin,boundary:'Local real-board mouse/touch fixtures; no authenticated PvP.'},null,2));console.log('PASS attack target contour, float, original hit area, retargeting, cancellation, persistent actor, materials and reduced motion');
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/checks.json',JSON.stringify({checks,errors,source:'a67ceafdf',origin,boundary:'Local real-board mouse/touch fixtures; no authenticated PvP.'},null,2));console.log('PASS attack target contour, float, original hit area, retargeting, cancellation, persistent actor, materials and reduced motion');
 }finally{await browser.close();}

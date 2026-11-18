@@ -1,6 +1,5 @@
 import '../styles/handPhysics.css';
-import {highlightAttackTarget,prepareAttackTarget} from './attackTarget';
-import {liftAttackCard} from './attackLift';
+import {highlightAttackTarget,highlightAttackSource,prepareAttackTarget} from './attackTarget';
 import '../styles/duelNameplate.css';
 import {prepareHeldOutline,showHeldOutline} from './heldCardOutline';
 import {holdPhysicalCard} from './handPhysics';
@@ -798,6 +797,7 @@ export class GameView {
       let releaseHot:((immediate?:boolean)=>void)|null=null;
       let releaseSource:((immediate?:boolean)=>void)|null=null;
       let finishHotImmediately=true;
+      void prepareAttackTarget(card);
       // Warm the shared contour before the pointer reaches the opposing row.
       for(const target of this.root.querySelectorAll<HTMLElement>('#oppRow .zone-mon .card'))void prepareAttackTarget(target);
       let pointer={x:sx,y:sy};
@@ -840,7 +840,7 @@ export class GameView {
         card.classList.toggle('is-aiming',mode==='attack');
         card.classList.toggle('is-dragging',mode==='reorder');
         if (mode === "attack") {
-          releaseSource??=liftAttackCard(card,'source');
+          releaseSource??=highlightAttackSource(card);
           if(ghost)ghost.style.display='none';
           if(!aim)aim=createAttackAim(()=>{
             if(!card.isConnected)return null;const target=targetAt(pointer.x,pointer.y),valid=!!target.mon||!!target.portrait&&(!o.oppHasMon||o.canPassDefenders);
