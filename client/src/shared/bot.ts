@@ -33,7 +33,7 @@ function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (
   best=withThinkingBudget(THINKING_NODES[diff],()=>
     searchDecide(view,diff==='hard'||diff==='normal'?'hell':diff,true,action=>{
       completed=action;onProgress?.(legalBotAction(g,action,view));
-    }),()=>completed);
+    },diff==='hard'||diff==='hell'),()=>completed);
   // Easy occasionally retains the sound greedy alternative instead of the
   // searched move. Never inject a random legal but strategically absurd action.
   if(diff==='easy'&&!view.pending&&Math.random()<EASY_MISTAKE_RATE){

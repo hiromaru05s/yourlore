@@ -3,7 +3,7 @@ import { reduce } from './engine';
 
 // Count hypothetical transitions, not wall time: a slower device should reach
 // the same completed comparison. The browser still has its final time guard.
-export const THINKING_NODES = { easy: 1800, normal: 10000, hard: 18000, hell: 18000 };
+export const THINKING_NODES = { easy: 1800, normal: 10000, hard: 30000, hell: 30000 };
 const exhausted = Symbol('bot-thinking-budget');
 let remaining: number | undefined;
 export function withThinkingBudget<T>(nodes: number, work: () => T, completed: () => T): T {

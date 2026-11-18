@@ -1,0 +1,37 @@
+{
+  "at": "2026-11-18T11:15:06.506857+00:00",
+  "candidateSHA256": "9bd0e3f4e5d41c74ead59c20c6ebc5be5780cb56c000cdb3029050322ef0b57a",
+  "referenceSHA256": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac",
+  "hardGames": 24,
+  "hardPairSeeds": [
+    9500,
+    9511
+  ],
+  "batches": [
+    [
+      "holdout3-hard-a",
+      9500,
+      8
+    ],
+    [
+      "holdout3-hard-b",
+      9504,
+      8
+    ],
+    [
+      "holdout3-hard-c",
+      9508,
+      8
+    ]
+  ],
+  "change": "Hard/Hell: 30000 transitions and a completed Hard search as the expert baseline before broader Hell search. Easy and Normal routes unchanged.",
+  "development": "r12-hard-expert: 8 games seeds 8600-8603 (separate from final set, still running when plan fixed)",
+  "protocol": "Same starter mirrors, paired seats, unbiased market, actual full botDecide on both sides; no wall clock cutoff",
+  "priorHardDiagnostic": {
+    "at": "2026-11-18T11:15:06.506068+00:00",
+    "status": "superseded initial Hard, incomplete planned 24-game set",
+    "completedGames": 16,
+    "wins": 8,
+    "reason": "Initial Hard did not establish improvement. Preserve completed rows; cancel unfinished old-policy matches before testing expert-baseline candidate. Exclude these rows from final candidate results."
+  }
+}

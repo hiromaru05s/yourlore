@@ -45,5 +45,6 @@
     ],
     "finalNormalPlan": "normal-deep-plan.json"
   },
-  "changeExplanation": "Normal only was superseded after the initial comparison. Its partial outcomes are diagnostic, and the replacement has separate predeclared fresh seeds in normal-deep-plan.json. Easy and Hard policies are unchanged."
+  "changeExplanation": "Normal only was superseded after the initial comparison. Its partial outcomes are diagnostic, and the replacement has separate predeclared fresh seeds in normal-deep-plan.json. Easy and Hard policies are unchanged.",
+  "hardExecution": "Superseded after 16/24 completed games; 8 wins. See development/initial-hard-diagnostic.json and hard-expert-plan.json for replacement policy and independent seed range."
 }

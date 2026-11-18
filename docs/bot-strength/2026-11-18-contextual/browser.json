@@ -11,7 +11,7 @@
   "stats": [
     {
       "difficulty": "easy",
-      "ms": 130.10000002384186,
+      "ms": 184.0999999642372,
       "action": {
         "type": "buySupply",
         "i": 0
@@ -21,7 +21,7 @@
     },
     {
       "difficulty": "normal",
-      "ms": 505.9000000357628,
+      "ms": 826.5,
       "action": {
         "type": "buySupply",
         "i": 0
@@ -31,7 +31,7 @@
     },
     {
       "difficulty": "hard",
-      "ms": 493.7999999523163,
+      "ms": 918.5,
       "action": {
         "type": "buySupply",
         "i": 0
@@ -41,7 +41,7 @@
     },
     {
       "difficulty": "hell",
-      "ms": 481,
+      "ms": 1004,
       "action": {
         "type": "buySupply",
         "i": 0
@@ -51,23 +51,23 @@
     }
   ],
   "stress": {
-    "ms": 4763.199999988079,
-    "ticks": 952,
+    "ms": 8952.100000023842,
+    "ticks": 1790,
     "action": {
       "type": "refresh"
     },
     "advanced": true
   },
   "heavy": {
-    "ms": 3236.099999964237,
-    "ticks": 648,
+    "ms": 6395.800000011921,
+    "ticks": 1280,
     "action": {
       "type": "chooseTarget",
       "uid": "u206"
     },
     "advanced": true
   },
-  "ticks": 2306,
+  "ticks": 4357,
   "budgetAdvanced": true,
   "fallbackAdvanced": true,
   "timeoutResult": null,

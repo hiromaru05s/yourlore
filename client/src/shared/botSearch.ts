@@ -89,12 +89,12 @@ export function positionValue(g: GameState, s: Side): number {
 }
 
 /** Compare complete own-turn / opponent-reply sequences under common random samples. */
-export function searchDecide(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void): Action {
+export function searchDecide(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void, expertBaseline = false): Action {
   const previous=materialCache;materialCache=new WeakMap();
-  try{return decideSearch(g,level,prove,onProgress);}finally{materialCache=previous;}
+  try{return decideSearch(g,level,prove,onProgress,expertBaseline);}finally{materialCache=previous;}
 }
 
-function decideSearch(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', prove: boolean, onProgress?: (action: Action) => void): Action {
+function decideSearch(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', prove: boolean, onProgress: ((action: Action) => void) | undefined, expertBaseline: boolean): Action {
   if (prove && TACTICS.proof) { const win = forcedWin(g, level === 'hell' ? 1400 : level === 'hard' ? 550 : 160); if (win) return win; }
   const side = actingSide(g), cfg = SEARCH[level];
   // Preserve the greedy policy's public, currently affordable escape from a
@@ -125,7 +125,9 @@ function decideSearch(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', 
   const purchases=[...acquisition.values()].filter(a=>a.margin>0).sort((a,b)=>b.margin-a.margin);
   if(purchases.length&&(policy.type==='buyMarket'||policy.type==='buySupply'||policy.type==='refresh'||policy.type==='endTurn'))onProgress?.(purchases[0].action);
   // Complete a sequence-aware baseline before spending the rest on long rollouts.
-  const base = turnPlan(observationSample(g,side,41),policy,merit,acquisition,level==='easy'?2:level==='normal'?3:4,level==='easy'?3:5);
+  const base = expertBaseline
+    ? searchDecide(g,'hard',false,onProgress)
+    : turnPlan(observationSample(g,side,41),policy,merit,acquisition,level==='easy'?2:level==='normal'?3:4,level==='easy'?3:5);
   // A completed lower-cost policy remains available if the worker hits its deadline.
   onProgress?.(base);
   const seenPlays = new Set<string>();
