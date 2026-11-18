@@ -1,0 +1,17 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-11-18T11:46:38.437Z",
+  "source": "356f27f53747cb59082ac5bb2fa10e5199f53777",
+  "checks": [
+    "new account cannot bypass qualification or chapter locks",
+    "live UI reads and saves chapter 1; SKIP does not complete the tutorial",
+    "live Worker validates a generated basic-tutorial transcript",
+    "account-backed progress resumes at chapter 2",
+    "chapter 5 and Aries personal story verified with isolated preloaded battle receipts",
+    "live entry, story bundles, stylesheet and portrait match the source build by SHA-256"
+  ],
+  "pageErrors": [],
+  "badResponses": [],
+  "cleanup": true,
+  "scope": "real authenticated production API and browser; later battle receipts preloaded only for isolated QA; no public queue or live PvP"
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "file": "index.html",
+    "sha256": "bcc2475effeed8706d81791be7ae38aa9e4f1e6506de33d1bda3a6d88f5968bb",
+    "bytes": 11023
+  },
+  {
+    "file": "art/single-story/aries-cutout-v1.webp",
+    "sha256": "3816f22aecd2ce7bed2d5203ca22620d5b64c17bf33c81118478476b1a938fac",
+    "bytes": 1528814
+  },
+  {
+    "file": "assets/main-BBYLzLuo.js",
+    "sha256": "43ddf18e5c7bbc85c256949d40b16675799e59095a8452d4963a5e0e117f48d8",
+    "bytes": 439889
+  },
+  {
+    "file": "assets/main-C74wplEh.css",
+    "sha256": "8e57097f99a98a520eca1bf230bd9367e01d8751da34fa6aaff13eab099b1889",
+    "bytes": 1132080
+  },
+  {
+    "file": "assets/rankPresentation-CnmU7g8C.js",
+    "sha256": "386166006e92d20d1f633a171c206bde026daa0944be0c3c0229ab105531e612",
+    "bytes": 32806
+  }
+]
