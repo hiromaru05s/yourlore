@@ -4,12 +4,19 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const root=path.resolve(process.argv[2]),out=path.resolve(process.argv[3]);fs.mkdirSync(out,{recursive:true});
 const batches=[['easy','holdout-easy',32,9100],['normal','holdout2-normal-a',16,9400],['normal','holdout2-normal-b',16,9408],['hard','holdout3-hard-a',8,9500],['hard','holdout3-hard-b',8,9504],['hard','holdout3-hard-c',8,9508]];
 const hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
-const initial=fs.readFileSync(root+'/final/candidate.cjs','utf8'),normal=fs.readFileSync(root+'/r11/candidate.cjs','utf8'),release=fs.readFileSync(root+'/r12/candidate.cjs','utf8');
+const initial=fs.readFileSync(root+'/final/candidate.cjs','utf8'),normal=fs.readFileSync(root+'/r11/candidate.cjs','utf8'),expert=fs.readFileSync(root+'/r12/candidate.cjs','utf8'),release=fs.readFileSync(root+'/release/candidate.cjs','utf8');
+const withoutLimit=release
+ .replace('function botDecide(g, diff = "hard", onProgress, nodeLimit)', 'function botDecide(g, diff = "hard", onProgress)')
+ .replace('decideFromObservation(g, diff, onProgress, nodeLimit)', 'decideFromObservation(g, diff, onProgress)')
+ .replace('function decideFromObservation(g, diff, onProgress, nodeLimit)', 'function decideFromObservation(g, diff, onProgress)')
+ .replace('  const nodes = nodeLimit === void 0 ? THINKING_NODES[diff] : Math.min(THINKING_NODES[diff], Math.max(1, Math.floor(nodeLimit) || 1));\n', '')
+ .replace('best = withThinkingBudget(nodes,', 'best = withThinkingBudget(THINKING_NODES[diff],');
+assert.equal(withoutLimit,expert,'Optional server clock-pressure limit must leave default full-search behavior unchanged');
 assert.equal(normal.replace('normal: 1e4','normal: 6e3').replace('diff === \"hard\" || diff === \"normal\" ? \"hell\" : diff','diff === \"hard\" ? \"hell\" : diff'),initial,'The r11 changes must affect Normal only');
 // These exact transformations remove only the Hard/Hell budget and the expert
 // branch whose flag is false for Easy/Normal. Verify the entire bundled module,
 // not just a selected snippet, before reusing the unchanged tier experiments.
-const withoutExpert=release
+const withoutExpert=expert
  .replace('hard: 3e4, hell: 3e4','hard: 18e3, hell: 18e3')
  .replace('function searchDecide(g, level, prove = true, onProgress, expertBaseline = false)', 'function searchDecide(g, level, prove = true, onProgress)')
  .replace('return decideSearch(g, level, prove, onProgress, expertBaseline);','return decideSearch(g, level, prove, onProgress);')
@@ -34,7 +41,7 @@ for(const tier of ['easy','normal','hard']){
  const boot=[];for(let i=0;i<10000;i++){let sum=0;for(let j=0;j<paired.length;j++)sum+=paired[Math.floor(random()*paired.length)];boot.push(sum/paired.length);}boot.sort((a,b)=>a-b);
  const score=(wins+draws*.5)/rows.length,radius=Math.sqrt(Math.log(40)/(2*paired.length)),timings=rows.flatMap(r=>r.actionTimes.filter(t=>t.side===r.seat).map(t=>t.ms)).sort((a,b)=>a-b);
  const counts=rr=>({n:rr.length,wins:rr.filter(r=>r.winner===r.seat).length,draws:rr.filter(r=>r.winner==null).length});
- totals[tier]={n:rows.length,wins,draws,score,independentPairs:paired.length,pairedBootstrap95:[boot[250],boot[9750]],pairedHoeffding95:[Math.max(0,score-radius),Math.min(1,score+radius)],bySeat:[0,1].map(s=>counts(rows.filter(r=>r.seat===s))),byStarter:Object.fromEntries([...new Set(rows.map(r=>r.decks[0]))].map(name=>[name,counts(rows.filter(r=>r.decks[0]===name))])),decisionMs:{p50:timings[Math.floor(timings.length*.5)],p95:timings[Math.floor(timings.length*.95)],max:timings.at(-1)}};
+ totals[tier]={n:rows.length,wins,draws,score,independentPairs:paired.length,pairedBootstrap95:[boot[250],boot[9750]],pairedHoeffding95:[Math.max(0,score-radius),Math.min(1,score+radius)],bySeat:[0,1].map(s=>counts(rows.filter(r=>r.seat===s))),byStarter:Object.fromEntries([...new Set(rows.map(r=>r.decks[0]))].map(name=>[name,counts(rows.filter(r=>r.decks[0]===name))])),reachedTurnLimit:counts(rows.filter(r=>r.turns>=60)),decisionMs:{p50:timings[Math.floor(timings.length*.5)],p95:timings[Math.floor(timings.length*.95)],max:timings.at(-1)}};
 }
-const result={baselineCommit:'914dc9bab',balance:'v101',modules:{candidateByTier,baseline,release:candidateByTier.hard},unaffectedTierProof:'r11 is byte-identical to initial after two Normal-only substitutions. r12 is byte-identical to r11 after removing the Hard/Hell-only budget and expert branch (flag false for Easy/Normal). Each tier retains its actual tested module hash.',games:all.length,invalid:0,protocol:'Fixed current starter cards, identical deck mirror, paired seats and shared seeds; actual botDecide on both sides; unbiased market; no wall-clock server deadline',uncertainty:'Pairs are independent units. Small-sample bootstrap can be narrow; bounded Hoeffding intervals are also supplied. These are Bot-versus-Bot results, not human win rates.',timingScope:'Concurrent and CPU-scheduled local simulations; process pauses may inflate timings. Not production latency',tiers:totals};
+const result={baselineCommit:'914dc9bab',balance:'v101',modules:{candidateByTier,baseline,release:hash(root+'/release/candidate.cjs')},unaffectedTierProof:'r11 is byte-identical to initial after two Normal-only substitutions. r12 is byte-identical to r11 after removing the Hard/Hell-only budget and expert branch (flag false for Easy/Normal). Release differs only in an optional per-call node cap, omitted in full-search comparisons. Each tier retains its actual tested module hash.',games:all.length,invalid:0,protocol:'Fixed current starter cards, identical deck mirror, paired seats and shared seeds; actual botDecide on both sides; unbiased market; no wall-clock server deadline',uncertainty:'Pairs are independent units. Small-sample bootstrap can be narrow; bounded Hoeffding intervals are also supplied. These are Bot-versus-Bot results, not human win rates.',timingScope:'Concurrent and CPU-scheduled local simulations; process pauses may inflate timings. Not production latency',tiers:totals};
 fs.writeFileSync(out+'/holdout.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));

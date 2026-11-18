@@ -21,16 +21,17 @@ const SELF_HARM_SPELLS = new Set(['CATALYST','BLOOD1','BLOOD2','BLOOD_JOY','BLOO
 
 export const EASY_MISTAKE_RATE = 0.03;
 
-export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress?: (action: Action) => void): Action {
-  return withoutMonsterPresentation(() => decideFromObservation(g, diff, onProgress));
+export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress?: (action: Action) => void, nodeLimit?: number): Action {
+  return withoutMonsterPresentation(() => decideFromObservation(g, diff, onProgress, nodeLimit));
 }
 
-function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void): Action {
+function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void, nodeLimit?: number): Action {
   const view = observationSample(g, g.pending?.owner ?? g.cur, 0);
   let best = safeGreedy(view);
   onProgress?.(legalBotAction(g,best,view));
   let completed=best;
-  best=withThinkingBudget(THINKING_NODES[diff],()=>
+  const nodes=nodeLimit===undefined?THINKING_NODES[diff]:Math.min(THINKING_NODES[diff],Math.max(1,Math.floor(nodeLimit)||1));
+  best=withThinkingBudget(nodes,()=>
     searchDecide(view,diff==='hard'||diff==='normal'?'hell':diff,true,action=>{
       completed=action;onProgress?.(legalBotAction(g,action,view));
     },diff==='hard'||diff==='hell'),()=>completed);
