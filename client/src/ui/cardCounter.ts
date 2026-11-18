@@ -1,5 +1,6 @@
 import type {CardInst,FieldMon,Enchant} from '../shared/types';
 import {getLang} from '../i18n';
+import {passiveIconUrl} from './passiveIcon';
 import {decayStateDescription} from '../shared/cardPresentation';
 import './cardCounter.css';
 import {gaugeMarkup, fillGauge} from './decayCounter/gauge';
@@ -50,6 +51,22 @@ function counterFace(id:string):string {
    <g clip-path="url(#${id}clip)"><g class="counter-slot-reel" transform="translate(37 17.8) scale(1.18) translate(-32 -29.5)"></g></g>
  </svg>`;
 }
+function gutsFace(id:string):string {
+ return `<span class="guts-counter-plate" aria-hidden="true"></span>
+   <img class="guts-counter-icon" src="${passiveIconUrl('guts')}" alt="">
+   <svg class="guts-counter-value" viewBox="0 0 64 64" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+     <defs><clipPath id="${id}clip"><rect width="64" height="64"/></clipPath></defs>
+     <g clip-path="url(#${id}clip)"><g class="counter-slot-reel" transform="translate(32 32) scale(2) translate(-32 -29.5)"></g></g>
+   </svg>`;
+}
+/** Keep Guts in the status band, including its temporary depletion reel. */
+export function attachCardCounter(host:HTMLElement,badge:HTMLElement):void {
+ if(badge.dataset.counterKind!=='guts'){host.append(badge);return;}
+ let band=host.querySelector<HTMLElement>('.card-status');
+ if(!band){band=document.createElement('div');band.className='card-status';host.append(band);}
+ const icon=band.querySelector('[data-psv="guts"]');
+ if(icon)icon.replaceWith(badge);else band.append(badge);
+}
 function paint(badge:HTMLElement,position:number){
  if (badge.dataset.counterKind === 'decay') fillGauge(badge, position);
  else badge.querySelector('.counter-slot-reel')!.innerHTML=rows(position);
@@ -60,8 +77,9 @@ export function createCardCounter(uid:string,cardId:string,kind:CounterKind,valu
  const n=count(value),id='lore-counter-'+(++sequence),badge=document.createElement('span');
  badge.className='card-counter'+(kind==='decay'?' ec-decay-state':'');badge.dataset.counterKind=kind;badge.dataset.counterIndex=String(index);badge.style.setProperty('--counter-index',String(index));
  if(kind==='decay')badge.dataset.status='decay';
+ if(kind==='guts'){badge.dataset.psv='guts';badge.classList.add('psv','passive-icon');}
  badge.setAttribute('role','img');identities.set(badge,{uid,cardId,kind,value:n,index});
- badge.innerHTML=kind === 'decay' ? gaugeMarkup(id) : counterFace(id);
+ badge.innerHTML=kind === 'decay' ? gaugeMarkup(id) : kind === 'guts' ? gutsFace(id) : counterFace(id);
  label(badge,n);paint(badge,n);return badge;
 }
 function position(badge:HTMLElement,now=performance.now()){const m=motions.get(badge);return m?counterPosition(m.from,m.to,(now-m.start)/m.duration):identities.get(badge)?.value??0;}
@@ -107,8 +125,9 @@ export function createBoardCardCounters(root:HTMLElement){
     if(next.has(key))continue;const meta=identities.get(old)!;
     const object=key.slice(0,key.lastIndexOf(':')),host=objects.get(object);
     if(!host||ended||meta.kind==='decay'||position(old)<1e-7)continue;
-    const badge=createCardCounter(meta.uid,meta.cardId,meta.kind,0,host.querySelectorAll('.card-counter').length);
-    identities.get(badge)!.transient=true;host.append(badge);transfer(old,badge,0,true);next.set(key,badge);
+    if(meta.kind==='guts'&&host.querySelector('.card-status [data-psv="guts"]'))continue;
+    const badge=createCardCounter(meta.uid,meta.cardId,meta.kind,0,host.querySelectorAll('.card-counter:not([data-counter-kind="guts"])').length);
+    identities.get(badge)!.transient=true;attachCardCounter(host,badge);transfer(old,badge,0,true);next.set(key,badge);
    }
    previous=next;seen=new Set(objects.keys());
   },

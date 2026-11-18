@@ -1,5 +1,5 @@
 import {attachCardFrame} from './cardFrame';
-import {createCardCounter,fieldCounters} from './cardCounter';
+import {attachCardCounter,createCardCounter,fieldCounters} from './cardCounter';
 import {attachCardEffect} from './cardFinish';
 import {assetHints,galleryCards} from './assetHints';
 import {passiveIcon} from './passiveIcon';
@@ -499,11 +499,13 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
         band.insertAdjacentHTML('beforeend',passiveIcon(k,{count,granted:granted.includes(k)}));
       }
     }
-    // Resource counts use the upper-right ivory register. Ability icons stay in this band.
-    if(fieldCounters(c,!!opt.field).some(value=>value.kind==='guts'))band.querySelector('[data-psv="guts"] b')?.remove();
     if (band.childElementCount) node.appendChild(band);
   }
-  fieldCounters(c,!!opt.field).forEach((counter,index)=>node.append(createCardCounter(c.uid,c.id,counter.kind,counter.value,index)));
+  let counterIndex=0;
+  for(const counter of fieldCounters(c,!!opt.field)){
+    const index=counter.kind==='guts'?0:counterIndex++;
+    attachCardCounter(node,createCardCounter(c.uid,c.id,counter.kind,counter.value,index));
+  }
   // Keep long names inside their frame using a stable card-local scale.
   if (!opt.compactField) nameEl2.style.fontSize = `calc(var(--cw) * ${cardNameScale(nm).toFixed(5)})`;
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
