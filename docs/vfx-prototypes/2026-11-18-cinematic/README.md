@@ -1,4 +1,4 @@
-> 最新：[第6稿 — 中央開示・白い光球・着弾・再着地](REVISION-6.md)。以下は初稿の制作記録です。
+> 最新：[第7稿 — 奥行きで縮む光球と進行方向に沿う尾](REVISION-7.md)。以下は初稿の制作記録です。
 
 # LORE — cinematic battle VFX study
 

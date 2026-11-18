@@ -4,7 +4,7 @@
 export const arrivalVertex=`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
 export const arrivalFragment=`
 precision highp float;
-uniform float clock;uniform float variant;uniform vec2 origin;uniform vec4 heldBounds;uniform vec2 extent;uniform vec2 anchor;uniform vec3 orb;varying vec2 vUv;
+uniform float clock;uniform float variant;uniform vec2 origin;uniform vec4 heldBounds;uniform vec2 extent;uniform vec2 anchor;uniform vec3 orb;uniform vec3 flight;varying vec2 vUv;
 float sat(float x){return clamp(x,0.,1.);}
 float E(float a,float b,float t){return smoothstep(a,b,t);}
 float H(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
@@ -25,16 +25,23 @@ void main(){
   float line=gauss(sd,.013)*frameLife,wide=gauss(sd,.055)*frameLife;
   energy+=vec3(.92,1.,.69)*(line*1.6+wide*.36);density+=line+wide*.30;
   // A bright central expansion condenses before travelling the full arc to the board.
-  vec2 q=p-orb.xy;float r=length(q),angle=atan(q.y,q.x);
-  float cloud=F(q*6.5+vec2(t*.8,-t*1.3));
-  float radius=orb.z;
+  vec2 q=p-orb.xy;float radius=orb.z;
+  float axial=dot(q,flight.xy),lateral=dot(q,vec2(-flight.y,flight.x));
+  // Compress the leading face; stretch the rear into the attached wake.
+  float stretch=mix(1.,axial>0.?.86:1.35,flight.z);
+  float r=mix(length(q),length(vec2(axial/stretch,lateral)),flight.z),angle=atan(q.y,q.x);
+  float cloud=F(vec2(axial,lateral)/max(.02,radius)*3.+vec2(-t*9.,t*.7));
   float life=E(1.22,1.30,t)*(1.-E(1.94,1.97,t));
-  float edge=r-radius-(cloud-.5)*.09;
-  float core=(1.-E(-.10,.045,edge))*life;
-  float scatter=exp(-r*r/max(.02,radius*radius*3.5))*life;
-  float rays=pow(abs(sin(angle*13.+F(q*3.)*2.)),22.)*gauss(r-radius*.9,.20)*life*.23;
+  float edge=r-radius-(cloud-.5)*radius*.16;
+  float core=(1.-E(-radius*.22,radius*.10,edge))*life;
+  float scatter=exp(-r*r/max(.0001,radius*radius*3.5))*life;
+  float rays=pow(abs(sin(angle*13.+F(q*3.)*2.)),22.)*gauss(r-radius*.9,radius*.35)*life*.23;
   energy+=vec3(.60,.87,.91)*(scatter*.48+rays)+vec3(1.)*core*1.8;
   density+=core+scatter*.44+rays*.5;
+  // A thin forward pressure cap wraps around the nose and opens towards the tail.
+  float capRadius=length(vec2(axial/.94,lateral));
+  float cap=gauss(capRadius-radius*1.07,max(.003,radius*.045))*E(-.2,.65,axial/max(radius,.01))*flight.z*life;
+  energy+=vec3(.70,.92,1.)*cap*.90;density+=cap*.62;
   // Impact and one rapidly contracting circle expose the full-colour monster beneath.
   float impact=gauss(t-1.955,.031)*exp(-dot(p,p)/.60);
   energy+=vec3(.88,1.,.86)*impact*2.;density+=impact;

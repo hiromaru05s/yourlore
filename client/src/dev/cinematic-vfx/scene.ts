@@ -23,7 +23,7 @@ import {projectedPlacement} from '../../ui/boardProjection';
 import {exposure,haze,contactDust,planeShadow} from './realistic';
 import {clearMonsterStates} from '../../ui/monster/runtime';
 import {SpellPresentation} from './spell';
-import {SV,summonHero,summonOrb,orbPath,reboundAngle,summonPhase,impactShake,cardScatter,groundCracks} from './shadowverse';
+import {SV,summonHero,summonOrb,orbWake,reboundAngle,summonPhase,impactShake,cardScatter,groundCracks} from './shadowverse';
 import {MaterialStage,type Pose} from './material';
 import {DURATIONS,clamp,ease,out,lerp,point,rnd,phase,type Kind,type Rect} from './direction';
 import {glow,shadow,ribbon,splinters} from './paint';
@@ -153,7 +153,7 @@ function summon(){
   if(time>=SV.light&&time<1.16){material.pose(sourceActor,pose(hero,{flash:.84,edgeLight:.55,alpha:(1-ease(1.09,1.16,time))*.48,color:'#ffffc9'}));}
   cardScatter(fc,hero,u,time);
   const orb=summonOrb(hero,dest,time);
-  if(time>=SV.flight&&time<SV.impact+.05){const q=Math.min(1,orb.travel*orb.travel),tail=Math.max(0,q-.25);exposure(rc,v=>orbPath(hero,dest,v),u*.10,'#eaffed',(1-ease(SV.impact,SV.impact+.05,time))*.50,tail,q);}
+  orbWake(rc,hero,dest,time);
   material.shadowverse(dest,time,hero,orb);
   const base=flatCard(nodes.source,dest);
   const project=(x:number,y:number)=>{if(base.matrix){const point=base.matrix.transformPoint(new DOMPoint(base.w*(.5+x),base.h*.5+base.w*y));return{x:point.x/point.w,y:point.y/point.w};}return{x:dest.x+x*u,y:dest.y+y*u*.82};};
@@ -201,7 +201,7 @@ function tick(now:number){if(disposed)return;const dt=Math.max(0,(now-last)/1000
 const api={async set(options:{kind?:Kind;mode?:string;side?:number;loop?:boolean;speed?:number;sound?:boolean;spell?:string;summonVersion?:'hearthstone'|'shadowverse'}){if(options.loop!==undefined)loop=options.loop;if(options.speed)speed=options.speed;if(options.sound!==undefined){soundOn=options.sound;if(soundOn){audio??=new AudioContext();await audio.resume();}}
  let recapture=false,reconfigure=false;if(options.summonVersion&&options.summonVersion!==summonVersion){summonVersion=options.summonVersion;reconfigure=true;}if(options.spell&&g.players[0].hand[1].id!==options.spell&&['S3','S4','S8'].includes(options.spell)){restore();for(let i=0;i<2;i++)g.players[i].hand[1]={...DB[options.spell],uid:`hand-${i}-1`};view.render(g);view.setHandOpen(true);recapture=true;}if(options.kind&&options.kind!==kind){kind=options.kind;reconfigure=true;}if(options.mode&&options.mode!==mode){mode=options.mode;reconfigure=true;}if(options.side!==undefined&&options.side!==side){side=options.side;recapture=true;}
  if(recapture){await prepare();return;}if(reconfigure&&ready){configure();time=0;cycleGap=0;playedCues.clear();playing=true;render();}
- },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'d815a6ac9',revision:6,summonVersion,summonContact:summonVersion==='hearthstone'?1.38:SV.impact,hero:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight):null,orb:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonOrb(summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight),rects.source,time):null}),dispose(){document.body.style.translate='';disposed=true;++prepareId;cancelAnimationFrame(raf);restore();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
+ },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'a67ceafdf',revision:7,summonVersion,summonContact:summonVersion==='hearthstone'?1.38:SV.impact,hero:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight):null,orb:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonOrb(summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight),rects.source,time):null}),dispose(){document.body.style.translate='';disposed=true;++prepareId;cancelAnimationFrame(raf);restore();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
 Object.assign(window,{vfx:api});
 let resizeTimer=0;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=window.setTimeout(()=>{resize();if(ready){configure();render();}},150);});
 window.addEventListener('pagehide',()=>api.dispose(),{once:true});document.addEventListener('visibilitychange',()=>{last=performance.now();});
