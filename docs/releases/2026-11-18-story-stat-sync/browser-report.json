@@ -1,0 +1,14 @@
+{
+  "origin": "http://127.0.0.1:5438",
+  "checks": [
+    "both sides, ATK/HP up/down 1280",
+    "both sides, ATK/HP up/down 390",
+    "multi-pick repeated snapshot and partial cancel",
+    "contact damage not replayed, current HP recovery animated",
+    "skip settles final values",
+    "resize settles final values",
+    "hidden settles final values",
+    "reduced settles final values"
+  ],
+  "errors": []
+}

@@ -11,7 +11,7 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
   b.onLoad({filter:/.*/,namespace:probe.namespace},()=>({resolveDir:process.cwd(),contents:
    "export * from './client/src/shared/bot';import {botDecide as decide} from './client/src/shared/bot';export const calls=[];export function botDecide(...args){calls.push(args[1]);return decide(...args)}"}));
  }};
- await build({plugins:[observeDifficulty],stdin:{contents:"export {calls as npcPolicyCalls} from 'npc-bot-probe';export {GameRoom,npcThinkingDifficulty} from './server/src/gameRoom';export {handleRewards} from './server/src/rewards';export {botNpc} from './client/src/shared/botNpcs';export {DB} from './client/src/shared/cards';export {reduce} from './client/src/shared/engine';export {botDecide} from './client/src/shared/bot';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:temp+'/server-core.mjs'});
+ await build({plugins:[observeDifficulty],stdin:{contents:"export {calls as npcPolicyCalls} from 'npc-bot-probe';export {GameRoom,npcThinkingDifficulty} from './server/src/gameRoom';export {handleRewards} from './server/src/rewards';export {botNpc} from './client/src/shared/botNpcs';export {ARIES_OPPONENTS} from './client/src/shared/ariesStory';export {DB} from './client/src/shared/cards';export {reduce} from './client/src/shared/engine';export {botDecide} from './client/src/shared/bot';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:temp+'/server-core.mjs'});
  const E=await import(temp+'/server-core.mjs');db=new DatabaseSync(':memory:');db.exec(fs.readFileSync('server/schema.sql','utf8'));
  class Stmt{constructor(sql,args=[]){this.sql=sql;this.args=args}bind(...args){return new Stmt(this.sql,args)}async first(){return db.prepare(this.sql).get(...this.args)??null}async all(){return {results:db.prepare(this.sql).all(...this.args)}}async run(){return {meta:{changes:Number(db.prepare(this.sql).run(...this.args).changes)}}}}
  const env={DB:{prepare:sql=>new Stmt(sql),batch:async ss=>{db.exec('BEGIN');try{const rows=[];for(const s of ss)rows.push(await s.run());db.exec('COMMIT');return rows}catch(e){db.exec('ROLLBACK');throw e}}}};
@@ -80,6 +80,8 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
  for(const stage of [0,2]){
    const res=await request('/rewards/story/start',{previous:prior});assert.equal(res.status,200);
    const {roomId,oppName,oppAvatar}=await res.json();const room=rooms.get(roomId);assert.equal(room.room.storyStage,stage);
+   assert.deepEqual(room.room.rewardDecks[1].filter(id=>id!=='STARTER_MANA').sort(),[...E.ARIES_OPPONENTS[stage].deck].sort(),'HTTP story start installs the updated deck');
+   assert.deepEqual(room.room.game.players[1].botTune,E.ARIES_OPPONENTS[stage].tune,'HTTP story start installs the updated purchase policy');
    if (stage === 0) {
      assert.equal(oppName,'火走りのルカ');
      assert.equal(oppAvatar,'STORY_LUCA');
