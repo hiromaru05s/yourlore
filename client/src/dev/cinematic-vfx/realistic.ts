@@ -1,0 +1,17 @@
+import {clamp,ease,out,rnd,type Point,type Rect} from './direction';
+type C=CanvasRenderingContext2D;
+/** Low-frequency density with fine breakup; cached once, never randomized per frame. */
+const smoke=document.createElement('canvas');smoke.width=smoke.height=96;
+const sc=smoke.getContext('2d')!,pixels=sc.createImageData(96,96);
+const hash=(x:number,y:number)=>rnd(x*3.17+y*91.2);
+function noise(x:number,y:number){const ix=Math.floor(x),iy=Math.floor(y);let a=x-ix,b=y-iy;a=a*a*(3-2*a);b=b*b*(3-2*b);return(hash(ix,iy)*(1-a)+hash(ix+1,iy)*a)*(1-b)+(hash(ix,iy+1)*(1-a)+hash(ix+1,iy+1)*a)*b;}
+for(let y=0;y<96;y++)for(let x=0;x<96;x++){const u=(x-48)/48,v=(y-48)/48,n=noise(x*.065,y*.065)*.6+noise(x*.16+11,y*.16)*.28+noise(x*.45,y*.45)*.12;const fall=Math.max(0,1-Math.hypot(u,v));const i=(y*96+x)*4;pixels.data[i]=pixels.data[i+1]=pixels.data[i+2]=76+n*68;pixels.data[i+3]=255*Math.pow(fall,1.4)*Math.max(0,n-.16);}
+sc.putImageData(pixels,0,0);
+export function haze(c:C,p:Point,w:number,h:number,alpha:number,rotation=0){if(alpha<=0)return;c.save();c.translate(p.x,p.y);c.rotate(rotation);c.globalAlpha=alpha;c.drawImage(smoke,-w/2,-h/2,w,h);c.restore();}
+/** Dense, directional motion exposure. No opaque polygon or illustrated outline. */
+export function exposure(c:C,path:(t:number)=>Point,width:number,color:string,alpha:number,start=0,end=1){if(alpha<=0||end<=start)return;const a=path(start),b=path(end);c.save();c.lineCap='round';c.lineJoin='round';
+ for(const [thickness,opacity] of [[width*2.5,.06],[width,.16],[width*.33,.30],[Math.max(.6,width*.055),.8]]){const g=c.createLinearGradient(a.x,a.y,b.x+.01,b.y+.01);g.addColorStop(0,color+'00');g.addColorStop(.65,color+'80');g.addColorStop(1,color);c.strokeStyle=g;c.globalAlpha=alpha*opacity;c.lineWidth=thickness;c.beginPath();for(let j=0;j<=36;j++){const p=path(start+(end-start)*j/36);j?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y);}c.stroke();}c.restore();}
+export function sparks(c:C,p:Point,age:number,size:number,count=32,seed=0,direction?:number){if(age<0||age>=1)return;c.save();c.lineCap='round';for(let i=0;i<count;i++){const delay=rnd(i+seed)*.08,t=clamp((age-delay)/(1-delay));if(!t)continue;const angle=direction===undefined?rnd(i*7+seed)*Math.PI*2:direction+(rnd(i*7+seed)-.5)*2.8;const velocity=size*(.25+rnd(i+seed)*1.3),drag=1-Math.exp(-t*3.4);const travel=velocity*drag,x=p.x+Math.cos(angle)*travel,y=p.y+Math.sin(angle)*travel+t*t*size*.36,tail=(1-t)*(2+rnd(i+41)*9);c.globalAlpha=(1-ease(.25,1,t))*(.3+rnd(i+3)*.7);c.lineWidth=.5+rnd(i)*.7;c.strokeStyle=i%4?'#f5b576':'#fff1cd';c.beginPath();c.moveTo(x-Math.cos(angle)*tail,y-Math.sin(angle)*tail);c.lineTo(x,y);c.stroke();if(i%5===0){c.fillStyle='#fff9e7';c.fillRect(x-.65,y-.65,1.3,1.3);}}c.restore();}
+/** Dust is emitted from the footprint's perimeter, never from a standing card's foot. */
+export function contactDust(c:C,r:Rect,age:number){if(age<0||age>=1)return;const travel=out(age)*r.w*.43;for(let i=0;i<26;i++){const edge=i%4,q=rnd(i+90)-.5;const x=r.x+(edge<2?(edge===0?-1:1)*(r.w*.48+travel):q*r.w),y=r.y+(edge>=2?(edge===2?-1:1)*(r.h*.47+travel*.32):q*r.h);const spread=r.w*(.16+.35*age)*(1+rnd(i+17)*.6);haze(c,{x,y},spread,spread*.50,(1-ease(.1,1,age))*.5,i*.73);}}
+export function planeShadow(c:C,quad:Point[],height:number,unit:number){c.save();const high=clamp(height/(unit*2));c.filter=`blur(${1+high*unit*.12}px)`;c.fillStyle=`rgba(7,15,23,${.38-high*.23})`;c.beginPath();quad.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();c.fill();c.restore();}

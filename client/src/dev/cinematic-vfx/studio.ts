@@ -4,8 +4,8 @@ type API={set(o:object):Promise<void>;play():void;pause():void;replay():void;see
 const frame=document.querySelector('iframe')!;
 const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const api=()=>((frame.contentWindow as unknown as {vfx:API}).vfx);
-const descriptions:Record<Kind,[string,string,string]>={draw:['01 / DRAW','銀光のドロー','束から引き抜いた一枚が、銀の光を引いて手札へ。'],summon:['02 / SUMMON','蒼銀の実体化','記録の輪郭から魔力が立ち上がり、重さを伴って着地する。'],attack:['03 / STRIKE','閃刃の一撃','引き絞る溜め、鋭い踏み込み。命中の一瞬に、重さを。'],spell:['04 / CAST','焔の解放','カードの表面が燃えほどけ、ひとつの火球になって相手へ。']};
-let current:Kind='draw',playing=false,ready=false;
+const descriptions:Record<Kind,[string,string,string]>={draw:['01 / DRAW','銀光のドロー','束から引き抜いた一枚が、銀の光を引いて手札へ。'],summon:['02 / SUMMON','裏面の衝突','カードを盤面に寝かせ、裏面全体を打ちつける。'],attack:['03 / STRIKE','閃刃の一撃','鋭い踏み込みと接触。微細な火花と粉塵が遅れて散る。'],spell:['04 / CAST','焔の解放','表面から燃え広がる炎、厚みのある火球と冷えて残る煙。']};
+let current:Kind='summon',playing=false,ready=false;
 function caption(){const d=descriptions[current];$('eyebrow').textContent=d[0];$('effect-title').textContent=d[1];$('description').textContent=d[2];document.querySelectorAll<HTMLButtonElement>('[data-kind]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.kind===current)));}
 function guard(fn:()=>void){if(ready)fn();}
 document.querySelectorAll<HTMLButtonElement>('[data-kind]').forEach(b=>b.onclick=()=>guard(()=>{current=b.dataset.kind as Kind;$<HTMLInputElement>('playlist').checked=false;caption();void api().set({kind:current});}));

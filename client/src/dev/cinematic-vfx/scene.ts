@@ -22,10 +22,12 @@ import {setLang} from '../../i18n';
 import {startBoardLayout} from '../../ui/layout';
 import {waitForDuel} from '../../ui/duelReadiness';
 import {captureNativePrint} from '../../ui/cardPrintCapture';
+import {projectedPlacement} from '../../ui/boardProjection';
+import {exposure,sparks,haze,contactDust,planeShadow} from './realistic';
 import {clearMonsterStates} from '../../ui/monster/runtime';
 import {MaterialStage,type Pose} from './material';
 import {DURATIONS,clamp,ease,out,lerp,point,bezier,rnd,phase,type Kind,type Rect} from './direction';
-import {glow,shadow,ribbon,burst,splinters,shock,sigil} from './paint';
+import {glow,shadow,ribbon,splinters} from './paint';
 setLang('ja');setMyAvatar('SEEKER_BLUE');setOppAvatar('SEEKER_RED');
 const root=document.getElementById('app')!;const noop=()=>{};
 const view=new GameView(root,0,{onPlay:noop,onBlockedPlay:noop,onAttack:noop,onBlockedAttack:noop,onReorder:noop,onChooseTarget:noop,onBuyMarket:noop,onBuySupply:noop,onRefresh:noop,onEndTurn:noop,onSurrender:noop});
@@ -42,7 +44,7 @@ view.render(g);view.setHandOpen(true);
 const material=new MaterialStage(document.getElementById('material')!);
 const rear=document.getElementById('rear') as HTMLCanvasElement,front=document.getElementById('front') as HTMLCanvasElement;
 const rc=rear.getContext('2d')!,fc=front.getContext('2d')!;
-let kind:Kind='draw',mode='focus',side=0,time=0,playing=false,loop=true,speed=1,ready=false,disposed=false,last=0,raf=0,cycleGap=0,soundOn=false,playedCues=new Set<string>();
+let kind:Kind='summon',mode='board',side=0,time=0,playing=false,loop=true,speed=1,ready=false,disposed=false,last=0,raf=0,cycleGap=0,soundOn=false,playedCues=new Set<string>();
 let nodes:Record<string,HTMLElement>={},rects:Record<string,Rect>={},surfaces:Record<string,HTMLCanvasElement|HTMLImageElement>={};
 let sourceActor=-1,targetActor=-1,hidden=new Map<HTMLElement,string>(),prepareId=0;
 const post=(value:object)=>parent.postMessage({type:'cinematic-vfx',...value},location.origin);
@@ -56,12 +58,19 @@ resize();
 const image=new Image();image.src=FRAME_BACK;
 function pose(r:Rect,extra:Partial<Pose>={}):Pose{return{...r,time,...extra};}
 function mixRect(a:Rect,b:Rect,q:number):Rect{return{...point(a,b,q),w:lerp(a.w,b.w,q),h:lerp(a.h,b.h,q)};}
+function flatCard(n:HTMLElement,p:Rect,height=0,rock=0):Pose {
+ if(focused()){const scale=1+height/(innerHeight*2.2);return pose({...p,y:p.y-height*.33,w:p.w*scale,h:p.h*scale},{rx:.42+rock*Math.PI/180});}
+ const r=box(n),w=n.offsetWidth,h=n.offsetHeight;
+ const m=new DOMMatrix().translate(p.x,p.y).scale(p.w/r.w,p.h/r.h).translate(-r.x,-r.y).multiply(projectedPlacement(n,w,h)).translate(w/2,h/2,height).rotateAxisAngle(1,0,0,rock).translate(-w/2,-h/2);
+ return pose({...p,w,h},{matrix:m});
+}
+function footprint(p:Pose){if(p.matrix)return[[0,0],[p.w,0],[p.w,p.h],[0,p.h]].map(([x,y])=>{const q=p.matrix!.transformPoint(new DOMPoint(x,y));return{x:q.x/q.w,y:q.y/q.w};});return[{x:p.x-p.w/2,y:p.y-p.h*.45},{x:p.x+p.w/2,y:p.y-p.h*.45},{x:p.x+p.w/2,y:p.y+p.h*.45},{x:p.x-p.w/2,y:p.y+p.h*.45}];}
 function focused(){return mode!=='board';}
 function layout(){
  const opponent=side===1;
  for(const key of Object.keys(nodes))rects[key]=box(nodes[key]);
  rects.deck=box(document.getElementById(opponent?'pile-oppDeck':'pile-myDeck')!);
- rects.portrait=box(document.getElementById(opponent?'portraitMe':'portraitOpp')!);
+ rects.portrait=box(document.querySelector<HTMLElement>(opponent?'#portraitMe .pt-ring':'#portraitOpp .pt-ring')!);
  if(opponent){const hand=box(document.getElementById('oppHand')!);rects.hand={...hand,x:hand.x-12,w:rects.source.w*.65,h:rects.source.w*.95};rects.draw={...rects.hand,x:hand.x+20};rects.spell={...rects.hand,x:hand.x+30};}
  if(focused()){
  const w=innerWidth,h=innerHeight,u=Math.min(w*(w<700?.27:.19),h*.34,190),sign=opponent?-1:1;
@@ -128,33 +137,39 @@ function draw(){
 }
 function summon(){
  const dest=rects.source,hand=rects.hand,u=dest.w;
- const hero:Rect={x:dest.x,y:Math.max(innerHeight*.39,dest.y-u*.42),w:u*1.34,h:dest.h*1.28};
- const lift=ease(.06,.64,time),drop=clamp((time-1.20)/.27);let p=mixRect(hand,hero,lift);
- if(time>=1.20){p=mixRect(hero,dest,drop*drop*drop);if(time>1.47){const settle=Math.exp(-(time-1.47)*16)*Math.sin((time-1.47)*35);p={...dest,y:dest.y-settle*u*.07,h:dest.h*(1-settle*.06)};}}
- const charge=ease(.25,.95,time)*(1-ease(1.38,1.72,time));
- const foot={x:dest.x,y:dest.y+dest.h*.40};shadow(rc,{x:p.x,y:foot.y},u*.68,u*.13,.32);
- sigil(rc,foot,u*(.42+.44*ease(.3,1.1,time)),time,charge*.8);glow(rc,p,u*1.1,'#55aabf',charge*.27);
- // Ribbons are rooted to the moving card edges, growing from its physical surface.
- for(let j=0;j<6;j++){const sign=j%2?-1:1,z=Math.floor(j/2),reach=charge*(1-ease(1.32,1.60,time));const path=(q:number)=>({x:p.x+sign*(p.w*.44+Math.sin(q*Math.PI)*u*(.18+z*.08)*reach)+Math.sin(q*9+time*6+j)*u*.025*reach,y:p.y+p.h*.42-q*(p.h*(.70+z*.09)+u*.12*reach)});ribbon(j%3?fc:rc,path,u*(.038+z*.008)*reach,j%2?'#263e5b':'#467e96',reach*.8,0,1,j);}
- for(let j=0;j<2;j++)material.energy.paint(j,p.x+(j?1:-1)*p.w*.48,p.y-p.h*.08,u*.52,p.h*1.28,time,.3,charge*.9,1);
- material.pose(sourceActor,pose(p,{mix:ease(.73,1.45,time),ry:Math.sin(lift*Math.PI)*-.4,rx:Math.sin(lift*Math.PI)*.23,rz:-.10*(1-lift),glow:charge*1.3,color:'#a3e7f1'}));
- const impact=(time-1.47)/.66;
- shock(rc,foot,impact,u*1.35,'#6593a3',.35);splinters(fc,foot,impact,u*1.8,'#a5bbc2',33,34,true);
- if(impact>=0&&impact<1){glow(rc,foot,u*1.6,'#bde3e1',(1-out(impact))*.55,.25);for(let j=0;j<7;j++){const a=j/7*6.28;const dust={x:foot.x+Math.cos(a)*u*(.4+out(impact)*.8),y:foot.y+Math.sin(a)*u*.26};glow(rc,dust,u*.28*(1+impact),'#8caaa8',(1-ease(.25,1,impact))*.28,.33);}}
- cue('summon-rise',.1,.7,360,.12);cue('summon-charge',.65,.65,580,.08);cue('summon-impact',1.47,.62,135,.32);
+ const lift=ease(.06,.66,time),fall=clamp((time-1.20)/.27),landed=time>=1.47;
+ const scale=lerp(hand.w/dest.w,1.05,lift)*(1-.05*fall*fall*fall);
+ const ground:Rect={...point(hand,dest,lift),w:dest.w*scale,h:dest.h*scale};
+ let altitude=u*2.0*lift*(1-fall*fall*fall);
+ if(landed){ground.x=dest.x;ground.y=dest.y;ground.w=dest.w;ground.h=dest.h;const a=time-1.47;altitude=u*.08*Math.max(0,Math.sin(a*24))*Math.exp(-a*16);}
+ const rock=landed?Math.sin((time-1.47)*35)*Math.exp(-(time-1.47)*18)*1.6:Math.sin(lift*Math.PI)*6;
+ const p=flatCard(nodes.source,ground,altitude,rock),base=flatCard(nodes.source,ground);
+ // The footprint is the whole back of the card. It tightens before all four edges contact.
+ planeShadow(rc,footprint(base),altitude,u);
+ const charge=ease(.25,.96,time)*(1-ease(1.30,1.65,time));
+ material.pose(sourceActor,{...p,mix:ease(.40,1.12,time),glow:charge*.68,color:'#b0d8e6'});
+ const impact=(time-1.47)/.74;
+ contactDust(rc,dest,impact);
+ if(impact>=0&&impact<1){glow(rc,dest,u*1.15,'#cbd9dc',.18*(1-out(impact)),.74);for(let i=0;i<4;i++){const e=footprint(flatCard(nodes.source,dest))[i];sparks(fc,e,impact,u*.3,4,40+i*9);}}
+ cue('summon-rise',.10,.55,310,.09);cue('summon-impact',1.47,.58,95,.30);
 }
 function attack(){
- const a=rects.source,b=rects.target,u=a.w,dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1,n={x:dx/len,y:dy/len},contact={x:b.x-n.x*b.w*.12,y:b.y-n.y*b.h*.16};
- const wind=ease(.05,.43,time),dash=clamp((time-.43)/.24),back=ease(.81,1.37,time);let p:Rect={...a,x:a.x-n.x*u*.20*wind,y:a.y-n.y*u*.20*wind,w:a.w*(1+.08*wind),h:a.h*(1+.08*wind)};
+ const a=rects.source,b=rects.target,u=a.w,dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1,n={x:dx/len,y:dy/len},angle=Math.atan2(dy,dx),contact={x:b.x-n.x*b.w*.12,y:b.y-n.y*b.h*.16};
+ const wind=ease(.05,.43,time),dash=clamp((time-.43)/.24),back=ease(.81,1.37,time);let p:Rect={...a,x:a.x-n.x*u*.20*wind,y:a.y-n.y*u*.20*wind,w:a.w*(1+.04*wind),h:a.h*(1+.04*wind)};
  const start={...p};if(time>=.43){p=mixRect(start,{...a,x:contact.x-n.x*u*.55,y:contact.y-n.y*u*.55},dash*dash*dash);if(time>=.74)p=mixRect(p,a,back);}
- const impact=(time-.67)/.64;const hitstop=time>=.67&&time<.74;
+ const impact=(time-.67)/.75,hitstop=time>=.67&&time<.74;
  const recoil=impact>=0?Math.sin(clamp(impact/.45)*Math.PI)*Math.exp(-impact*1.5):0;
- material.pose(targetActor,pose({...b,x:b.x+n.x*u*.13*recoil,y:b.y+n.y*u*.13*recoil},{rx:recoil*.23,rz:recoil*.04,glow:(hitstop?.8:.35*(1-ease(.75,.95,time)))*Number(time>=.67),color:'#ffb984'}));
- shadow(rc,{x:p.x,y:p.y+p.h*.49+7},u*.6,u*.13,.32);material.pose(sourceActor,pose(p,{ry:Math.sin(dash*Math.PI)*.12,rz:Math.sin(wind*Math.PI)*-.07,glow:wind*(1-ease(.67,.95,time))*.8,color:'#e6cca2'}));
- if(time>.12&&time<.67){const q=ease(.12,.43,time)*(1-ease(.48,.67,time));for(const s of[-1,1])ribbon(fc,t=>({x:p.x-n.x*u*.5+n.y*s*u*(.45-t*.1),y:p.y-n.y*u*.5-n.x*s*u*(.45-t*.1)+u*t*.8}),u*.026*q,'#d9b989',q*.7);}
- if(time>=.44&&time<1.05){const q=clamp((time-.44)/.24),tail=ease(.71,1.05,time);const path=(t:number)=>({x:lerp(a.x,contact.x,t)+Math.sin(t*Math.PI)*n.y*u*.15,y:lerp(a.y,contact.y,t)-Math.sin(t*Math.PI)*n.x*u*.15});ribbon(rc,path,u*.12*(1-tail),'#477c9d',.85,Math.max(0,q-.8+tail*.8),q);}
- if(impact>=0&&impact<1){burst(fc,contact,impact/.65,u*.75,'#e5bd78',22);splinters(fc,contact,impact,u*1.6,'#d2a477',45,35);shock(rc,contact,impact,u*.9,'#d7b782',.65);
- const slashAge=clamp(impact*2);ribbon(fc,q=>({x:contact.x+(q-.5)*u*1.7,y:contact.y+(q-.5)*u*1.25-Math.sin(q*Math.PI)*u*.17}),u*.065*(1-slashAge),'#84bfdb',1-slashAge,slashAge*.6,1);glow(rc,contact,u*.95,'#f0c684',.4*(1-ease(.1,.6,impact)));}
+ material.pose(targetActor,{...flatCard(nodes.target,{...b,x:b.x+n.x*u*.13*recoil,y:b.y+n.y*u*.13*recoil},0,recoil*4),glow:hitstop?.28:0,color:'#ffe5b6'});
+ planeShadow(rc,footprint(flatCard(nodes.source,p)),u*.16,u);
+ material.pose(sourceActor,{...flatCard(nodes.source,p,u*.16*(1-back),Math.sin(dash*Math.PI)*3),glow:wind*(1-ease(.67,.95,time))*.22,color:'#c9d9e3'});
+ if(time>=.44&&time<1.02){const q=clamp((time-.44)/.24),tail=ease(.69,1.02,time);const path=(t:number)=>({x:lerp(a.x,contact.x,t),y:lerp(a.y,contact.y,t)});exposure(rc,path,u*.19,'#b9d1e2',.65*(1-tail),Math.max(0,q-.72+tail*.72),q);}
+ if(impact>=0&&impact<1){
+  sparks(fc,contact,impact,u*1.1,38,45,angle);
+  const slash=clamp(impact*2.8),line=(q:number)=>({x:contact.x+(q-.5)*u*1.45,y:contact.y+(q-.5)*u*.72-Math.sin(q*Math.PI)*u*.08});
+  exposure(fc,line,u*.055,'#e9f6ff',1-slash,slash*.55,1);
+  glow(fc,contact,u*(.16+.20*out(impact/.14)),'#fff0cf',.72*(1-ease(.01,.22,impact)),.78);
+  for(let i=0;i<6;i++){const spread=out(impact)*u*.65;haze(rc,{x:contact.x+Math.cos(i*1.7)*spread,y:contact.y+Math.sin(i*1.7)*spread*.55},u*(.32+impact*.52),u*(.28+impact*.34),.32*(1-ease(.1,1,impact)),i+impact*.3);}
+ }
  cue('attack-wind',.16,.3,410,.10);cue('attack-hit',.67,.34,115,.36);
 }
 function spell(){
@@ -164,10 +179,20 @@ function spell(){
  material.pose(sourceActor,pose(p,{rz:.08*Math.sin(lift*Math.PI),ry:.2*Math.sin(lift*Math.PI),glow:charge*1.5,burn,color:'#ffb45f',alpha:1-ease(1.48,1.56,time)}));
  if(time>.55&&time<1.52){for(let i=0;i<8;i++){const q=(i+.5)/8,x=p.x+(q-.5)*p.w*.9,age=clamp((time-.82+i*.025)/.7);if(age<=0)continue;material.energy.paint(i,x,p.y+p.h*.4-burn*p.h,u*.39,u*.63,time,age*.7,Math.min(1,charge+burn),0);}}
  const origin={x:hero.x,y:hero.y+hero.h*.40-burn*hero.h};const path=(q:number)=>bezier(origin,{x:origin.x+(target.x-origin.x)*.25,y:origin.y-u*.80},{x:target.x+(side?u*.2:-u*.2),y:target.y+u*.6},target,q);
- const head=clamp((time-1.13)/.57),tail=ease(1.55,1.94,time);if(time>1.05&&time<1.96){const end=path(head);ribbon(rc,path,u*.27*(1-tail),'#e26c25',.95,Math.max(0,head-.66+tail*.66),head);
- for(let i=0;i<4;i++){const strand=(q:number)=>{const v=path(q);return{x:v.x+Math.sin(q*19+time*13+i)*u*.085,y:v.y+Math.cos(q*17+time*10+i)*u*.065};};ribbon(fc,strand,u*(.03-i*.004)*(1-tail),i%2?'#ffbc45':'#bd431f',.8,Math.max(0,head-.50+tail*.5),head,i);}
- material.energy.paint(6,end.x,end.y,u*.94,u*.94,time,.20+head*.35,1-tail);glow(rc,end,u*.6,'#f79031',.4*(1-tail));if(time>1.38)for(let j=0;j<5;j++){const q=head-j*.07;if(q<=0)continue;const z=path(q);material.energy.paint(j,z.x,z.y,u*(.65-j*.06),u*(.65-j*.06),time+j*.08,.25+j*.08,(1-tail)*.8);}}
- const impact=(time-1.70)/.95;if(impact>=0&&impact<1){material.energy.paint(0,target.x,target.y,u*(1.20+out(impact)*1.4),u*(1.20+out(impact)*1.4),time,impact,1);material.energy.paint(1,target.x-u*.26,target.y+u*.17,u*1.8,u*1.6,time,clamp(impact-.06),.65);burst(fc,target,impact/.43,u*.8,'#f9a23d',74);splinters(fc,target,impact,u*1.7,'#ffb250',55,42);shock(rc,target,impact,u*1.25,'#da9f69',.7);glow(rc,target,u*1.5,'#fb9548',.35*(1-ease(.12,.8,impact)));}
+ const head=clamp((time-1.13)/.57),tail=ease(1.65,2.05,time);
+ if(time>1.05&&time<2.06){
+  const end=path(head);exposure(rc,path,u*.24,'#f99f49',.50*(1-tail),Math.max(0,head-.55+tail*.55),head);
+  // Overlapping advected volumes form the body and cool downstream into smoke.
+  for(let j=0;j<6;j++){const q=head-j*.055;if(q<0)continue;const z=path(q),r=u*(.90-j*.085);material.energy.paint(j,z.x,z.y,r,r,time-j*.045,.12+j*.095,(1-tail)*(1-j*.09));if(j>2)haze(rc,{x:z.x,y:z.y-u*j*.017},r*.8,r*.65,.22*(1-tail),j*.7);}
+  material.energy.paint(6,end.x,end.y,u*.95,u*.95,time,.18,1-tail);glow(rc,end,u*.66,'#fb9a43',.30*(1-tail));
+ }
+ const impact=(time-1.70)/.95;
+ if(impact>=0&&impact<1){
+  material.energy.paint(0,target.x,target.y,u*(1.05+out(impact)*1.35),u*(1.05+out(impact)*1.35),time,impact,1);
+  material.energy.paint(1,target.x-u*.17,target.y-u*impact*.25,u*1.55,u*1.85,time,clamp(impact-.08),.66);
+  sparks(fc,target,impact,u*1.22,46,55);glow(rc,target,u*1.3,'#e98236',.27*(1-ease(.06,.65,impact)));
+  for(let i=0;i<5;i++){const r=u*(.45+impact*.68);haze(rc,{x:target.x+Math.cos(i*1.7)*u*impact*.38,y:target.y-u*impact*.45+Math.sin(i)*u*.14},r,r*.85,ease(.08,.32,impact)*(1-ease(.48,1,impact))*.52,i*.6);}
+ }
  if(focused()&&impact>=0){const r=rects.target;material.pose(targetActor,pose({...r,y:r.y-u*.08*Math.sin(clamp(impact/.3)*Math.PI)},{glow:Math.max(0,1-impact*4),color:'#ffb077'}));}
  cue('spell-charge',.25,.85,520,.12);cue('spell-fire',1.12,.55,250,.18);cue('spell-impact',1.70,.7,95,.30);
 }
@@ -175,7 +200,7 @@ function tick(now:number){if(disposed)return;const dt=Math.min((now-last)/1000,.
 const api={async set(options:{kind?:Kind;mode?:string;side?:number;loop?:boolean;speed?:number;sound?:boolean}){if(options.loop!==undefined)loop=options.loop;if(options.speed)speed=options.speed;if(options.sound!==undefined){soundOn=options.sound;if(soundOn){audio??=new AudioContext();await audio.resume();}}
  let recapture=false,reconfigure=false;if(options.kind&&options.kind!==kind){kind=options.kind;reconfigure=true;}if(options.mode&&options.mode!==mode){mode=options.mode;reconfigure=true;}if(options.side!==undefined&&options.side!==side){side=options.side;recapture=true;}
  if(recapture){await prepare();return;}if(reconfigure&&ready){configure();time=0;cycleGap=0;playedCues.clear();playing=true;render();}
- },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'914dc9bab'}),dispose(){disposed=true;++prepareId;cancelAnimationFrame(raf);restore();material.dispose();stopLayout();view.destroy();void audio?.close();}};
+ },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'914dc9bab',revision:2,summonContact:1.47}),dispose(){disposed=true;++prepareId;cancelAnimationFrame(raf);restore();material.dispose();stopLayout();view.destroy();void audio?.close();}};
 Object.assign(window,{vfx:api});
 let resizeTimer=0;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=window.setTimeout(()=>{resize();if(ready){configure();render();}},150);});
 window.addEventListener('pagehide',()=>api.dispose(),{once:true});document.addEventListener('visibilitychange',()=>{last=performance.now();});

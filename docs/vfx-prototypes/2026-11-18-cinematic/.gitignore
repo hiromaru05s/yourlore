@@ -1,3 +1,6 @@
+qa/**/video/
 qa/video/
+qa/**/*.png
 qa/*.png
+qa/**/*.webm
 qa/*.webm
