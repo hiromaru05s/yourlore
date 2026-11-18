@@ -1,0 +1,182 @@
+{
+  "pairedHoeffding95": [
+    0.07094924212969023,
+    1
+  ],
+  "resume": null,
+  "A": "new:hard",
+  "B": "new:normal",
+  "n": 8,
+  "start": 9600,
+  "mirror": true,
+  "search": {
+    "easy": {
+      "width": 4,
+      "samples": 1,
+      "turns": 2,
+      "finalists": 0,
+      "extraSamples": 0
+    },
+    "normal": {
+      "width": 6,
+      "samples": 2,
+      "turns": 2,
+      "finalists": 2,
+      "extraSamples": 2
+    },
+    "hard": {
+      "width": 8,
+      "samples": 2,
+      "turns": 2,
+      "finalists": 3,
+      "extraSamples": 2
+    },
+    "hell": {
+      "width": 12,
+      "samples": 3,
+      "turns": 2,
+      "finalists": 4,
+      "extraSamples": 8
+    }
+  },
+  "tactics": {
+    "proof": true,
+    "targets": true,
+    "horizon": 4,
+    "replyNodes": 64
+  },
+  "valueModel": null,
+  "value": {
+    "hp": 1,
+    "attack": 1.7,
+    "health": 0.65,
+    "mana": 3.5,
+    "deck": 0.65,
+    "hand": 0.8,
+    "enchant": 0.55,
+    "learned": 0
+  },
+  "baselineValue": {
+    "hp": 1,
+    "attack": 1.7,
+    "health": 0.65,
+    "mana": 3.5,
+    "deck": 0.65,
+    "hand": 0.8,
+    "enchant": 0.55,
+    "learned": 0.25
+  },
+  "modules": {
+    "candidate": "66698587db47c227653e5a69a99eb6b8121298e65d9fb0b027faccc8c044d118",
+    "baseline": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac"
+  },
+  "completePairs": 4,
+  "pairedScore": 0.75,
+  "pairedBootstrap95": [
+    0.5,
+    1
+  ],
+  "draws": 0,
+  "customA": [
+    {
+      "name": "BOT · SPIRIT_FORTRESS",
+      "cards": [
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "CASTLE",
+        "WEAKEN_ALL",
+        "NOURISHING_RAIN",
+        "NOURISHING_RAIN",
+        "BLOOD_RITE"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    },
+    {
+      "name": "BOT · SPIRIT_GOBLIN",
+      "cards": [
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "NOURISHING_RAIN",
+        "COUNTERCALC",
+        "STARTER_CHEST"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    }
+  ],
+  "customB": [
+    {
+      "name": "BOT · SPIRIT_FORTRESS",
+      "cards": [
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "CASTLE",
+        "WEAKEN_ALL",
+        "NOURISHING_RAIN",
+        "NOURISHING_RAIN",
+        "BLOOD_RITE"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    },
+    {
+      "name": "BOT · SPIRIT_GOBLIN",
+      "cards": [
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "NOURISHING_RAIN",
+        "COUNTERCALC",
+        "STARTER_CHEST"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    }
+  ],
+  "rosterA": "balanced",
+  "rosterB": "balanced",
+  "wins": 6,
+  "total": 8,
+  "invalid": 0,
+  "rate": 0.75,
+  "wilson95": [
+    0.40926987910258916,
+    0.9285223111419724
+  ],
+  "seconds": 1466.34,
+  "ms": {
+    "p50": 1297.3747079999885,
+    "p95": 5412.6715829999885,
+    "max": 21166.663500000024
+  },
+  "bySeat": [
+    {
+      "n": 4,
+      "wins": 3
+    },
+    {
+      "n": 4,
+      "wins": 3
+    }
+  ]
+}
