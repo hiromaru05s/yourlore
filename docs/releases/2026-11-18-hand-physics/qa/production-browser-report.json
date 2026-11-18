@@ -1,0 +1,25 @@
+{
+  "at": "2026-11-18T14:57:56.032Z",
+  "origin": "https://yourlore.xyz",
+  "boundary": "Real deployed assets and normal HOME/local BOT route; account API fixture only, no authenticated PvP or account writes",
+  "http": 200,
+  "defaultPhysics": true,
+  "heldHome": true,
+  "outlinePaths": 5,
+  "cancelCleanup": true,
+  "assets": [
+    {
+      "url": "https://yourlore.xyz/assets/layout-D1zsT7qg.css",
+      "status": 200,
+      "physics": true,
+      "outline": true
+    },
+    {
+      "url": "https://yourlore.xyz/assets/layout-BbMDL-7U.js",
+      "status": 200,
+      "physics": true,
+      "outline": true
+    }
+  ],
+  "errors": []
+}

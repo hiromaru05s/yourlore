@@ -21,4 +21,14 @@
 - 自動検証は `qa/browser-report.json`。実盤面画像は同じQAフォルダにローカル保存。機能検証の合格と見た目の採用は別: 見た目は本チャットの第4稿をユーザーが採用済み。
 - 検証起動元: `/Users/hiromaru05s/.codex/worktrees/hand-physics-production-1118/LORE_TCG`。ローカルfixture URL: `http://127.0.0.1:5319/hand-physics-check`（ブラウザ検証スクリプトが一時提供）。
 
-本番デプロイ結果は完了後に追記する。実ユーザー同士の認証済みPvPは検証対象外。
+実装コミットは `9af927a69aa339237b457f7c2cb4eb6cd84038b9`。リリース検証中に追加された対戦修正 `8400b596a`、採用済みプレイ位置の光 `60cbd9160`、回帰テスト更新を含む `d815a6ac9364fc8040f8f069122dfc06ac5f1a68` でも、同じ3条件のブラウザ検証と本番ビルドを再確認した。結果は `qa/integrated-browser-report.json`、照合用ファイルは `qa/built-assets.json`。
+
+再確認時のコールド読み込みではテストがローダー消去前に操作を始めたため、検証スクリプトに `.duel-loader` の消去待ちを追加。その後3条件とも合格。ゲーム本体の追加修正はなし。
+
+## 本番反映
+
+2026-11-18 23:55 JST、統合コミット `d815a6ac9364fc8040f8f069122dfc06ac5f1a68` を既存のguard付きリリース手順で公開。全298件のproduction suite、client/server型検査、デザインガード、本番ビルドが成功。Cloudflare version `0626fd5c-60a2-42e4-bb49-f08e7ea946c6` を100%配信。`qa/deployment.json` と `qa/production-suite.json` に記録。
+
+`https://yourlore.xyz` のJavaScript/CSSについて、検証済みビルドとSHA-256が一致（`qa/production-assets.json`）。本番配信の通常HOME→シングル→対戦→初手確定からカードをドラッグし、物理処理の標準有効化、元カード非表示、保持中の手札サイズ復帰、フレーム輪郭5パス、手札でのキャンセルと一時ノード除去を確認。ブラウザ例外0件。`qa/production-browser-report.json` に記録。
+
+公開後のブラウザ確認はアカウントAPIのみをローカルゲストfixtureに置換し、公開済みアセットと通常のローカルBOT対戦を利用。実アカウントの書き換えは行っておらず、実ユーザー同士の認証済みPvPは未検証。画像 `qa/production-held.png` と `qa/production-home.png` はローカル保存し、最新版のネームプレート・盤面・保持輪郭を目視確認した。
