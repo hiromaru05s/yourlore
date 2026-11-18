@@ -77,7 +77,7 @@ export function createCardCounter(uid:string,cardId:string,kind:CounterKind,valu
  const n=count(value),id='lore-counter-'+(++sequence),badge=document.createElement('span');
  badge.className='card-counter'+(kind==='decay'?' ec-decay-state':'');badge.dataset.counterKind=kind;badge.dataset.counterIndex=String(index);badge.style.setProperty('--counter-index',String(index));
  if(kind==='decay')badge.dataset.status='decay';
- if(kind==='guts')badge.dataset.psv='guts';
+ if(kind==='guts'){badge.dataset.psv='guts';badge.classList.add('psv','passive-icon');}
  badge.setAttribute('role','img');identities.set(badge,{uid,cardId,kind,value:n,index});
  badge.innerHTML=kind === 'decay' ? gaugeMarkup(id) : kind === 'guts' ? gutsFace(id) : counterFace(id);
  label(badge,n);paint(badge,n);return badge;

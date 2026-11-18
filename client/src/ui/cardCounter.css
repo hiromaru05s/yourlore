@@ -31,7 +31,7 @@
   align-items:center;
   translate:0 -24%;
 }
-.card .card-status > .card-counter[data-counter-kind="guts"] {
+.card .card-status > .card-counter.passive-icon[data-counter-kind="guts"] {
   position:relative; top:auto; right:auto; left:auto; bottom:auto;
   width:calc(var(--cw, 100px)*.38); height:calc(var(--cw, 100px)*.215);
   aspect-ratio:auto; flex:none; display:flex; align-items:center;
@@ -48,7 +48,7 @@
   background:linear-gradient(145deg,#243b47,#0d1b27);
   clip-path:polygon(12% 0,88% 0,100% 18%,100% 82%,88% 100%,12% 100%,0 82%,0 18%);
 }
-.guts-counter-icon {
+.card-counter .guts-counter-icon {
   position:relative; display:block; width:50%; height:96%; margin-left:2%;
   object-fit:contain;
 }
