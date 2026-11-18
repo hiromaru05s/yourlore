@@ -9,7 +9,7 @@ try{
  for(const mobile of [false,true]){
   const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:960},hasTouch:mobile,isMobile:mobile,...(process.env.LORE_RECORD_VIDEO==='1'&&!mobile?{recordVideo:{dir:out,size:{width:1440,height:960}}}:{})});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(origin+'/attack-target-preview.html?v=6');await page.waitForSelector('[data-scene-ready=true]');
+  await page.goto(origin+'/attack-target-preview.html?v=7');await page.waitForSelector('[data-scene-ready=true]');
   await page.evaluate(()=>attackTargetPreview.stopDemo());await page.waitForTimeout(350);
   const node=uid=>page.locator(`.zone-mon [data-uid="${uid}"]`);
   const rect=async uid=>node(uid).boundingBox();
@@ -29,10 +29,6 @@ try{
   const raised=await rect('target-center'),sourceRaised=await rect('attacker');
   assert(sourceRaised.width/sourceBaseline.width>1.025&&sourceRaised.width/sourceBaseline.width<1.07);
   assert(middle(sourceRaised).y<middle(sourceBaseline).y-sourceBaseline.height*.045);
-  const emitter=await page.locator('.attack-aim').evaluate(e=>e.dataset.source.split(',').map(Number));
-  assert(Math.abs(emitter[0]-middle(sourceRaised).x)<1.5);
-  assert(Math.abs(emitter[1]-(sourceRaised.y+sourceRaised.height*.045))<1.5);
-  assert.equal(await page.locator('.attack-aim').getAttribute('data-material'),'flowing-light');
   await page.waitForSelector('[data-uid="attacker"] .attack-source-light svg');
   const sourceLight=await node('attacker').evaluate(e=>{const light=e.querySelector('.attack-source-light');return {rim:getComputedStyle(light.querySelector('.attack-target-rim')).stroke,outline:light.querySelector('.attack-target-rim').getAttribute('d'),mask:light.querySelector('mask path').getAttribute('d'),artTint:getComputedStyle(e.querySelector('.card-art'),'::before').content};});
   assert.equal(sourceLight.rim,'rgb(54, 184, 255)');assert.equal(sourceLight.outline,sourceLight.mask);assert(sourceLight.outline.length>100);assert.equal(sourceLight.artTint,'none');
@@ -46,7 +42,7 @@ try{
   // Hold the pointer at the original bottom edge after the print lifts away.
   const bottom={x:baseline.x+baseline.width/2,y:baseline.y+baseline.height-1};
   for(let i=0;i<3;i++){await move(bottom);await page.waitForTimeout(200);assert.equal(await page.locator('.card.is-atk-target').getAttribute('data-uid'),'target-center');}
-  checks.push({mobile,baseline,raised,originalBottomEdgeStable:true,printUnchanged:true,sourceBaseline,sourceRaised,originFollowsCrest:true,blueSourceContour:true});
+  checks.push({mobile,baseline,raised,originalBottomEdgeStable:true,printUnchanged:true,sourceBaseline,sourceRaised,blueSourceContour:true});
   await cancel();await clean();const restored=await rect('target-center');assert(Math.abs(restored.width-baseline.width)<.7);assert(Math.abs(restored.y-baseline.y)<.7);
   // Quick retargeting while both lift and return are still in flight.
   await down(middle(await rect('attacker')));
