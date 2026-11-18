@@ -9,7 +9,7 @@ try{
  for(const mobile of [false,true]){
   const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:960},hasTouch:mobile,isMobile:mobile,...(process.env.LORE_RECORD_VIDEO==='1'&&!mobile?{recordVideo:{dir:out,size:{width:1440,height:960}}}:{})});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(origin+'/attack-target-preview.html?v=7');await page.waitForSelector('[data-scene-ready=true]');
+  await page.goto(origin+'/attack-target-preview.html?v=8');await page.waitForSelector('[data-scene-ready=true]');
   await page.evaluate(()=>attackTargetPreview.stopDemo());await page.waitForTimeout(350);
   const node=uid=>page.locator(`.zone-mon [data-uid="${uid}"]`);
   const rect=async uid=>node(uid).boundingBox();
@@ -65,6 +65,14 @@ try{
   assert(Math.abs((await rect('attacker')).width-reducedSource.width)<.7);
   assert.equal(await page.locator('.attack-target-light .attack-target-travel').evaluate(e=>getComputedStyle(e).display),'none');
   await cancel();await clean();checks.push({mobile,reducedStatic:true});
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.click('#preview-player');await page.evaluate(()=>attackTargetPreview.stopDemo());await page.waitForTimeout(300);
+  await down(middle(await rect('attacker')));await move(middle(await page.locator('#portraitOpp .pt-ring').boundingBox()));
+  await page.waitForFunction(()=>document.querySelector('.attack-aim')?.dataset.targetLock==='active');await page.waitForTimeout(300);
+  assert.equal(await page.locator('.attack-aim').getAttribute('data-valid'),'true');
+  assert.equal(await page.locator('#portraitOpp .is-atk-target').count(),1);
+  await page.screenshot({path:`${out}/${mobile?'mobile':'desktop'}-player.png`});await cancel();await clean();
+  checks.push({mobile,playerLock:true,playerCancelClean:true});
   await context.close();
  }
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/checks.json',JSON.stringify({checks,errors,source:'fe168a872',origin,boundary:'Local real-board mouse/touch fixtures; no authenticated PvP.'},null,2));console.log('PASS attack target contour, float, original hit area, retargeting, cancellation, persistent actor, materials and reduced motion');

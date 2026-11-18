@@ -34,6 +34,7 @@ import {createAttackAim} from '../ui/attackAim';
 import {highlightAttackTarget,highlightAttackSource,prepareAttackTarget} from '../ui/attackTarget';
 
 setLang('ja');
+let previewPlayer=false;
 class PreviewController extends BaseController {
   protected get useTurnClock(){return false;}
   submit(action:Action){stopDemo();this.applyResult(reduce(this.state,action),false);}
@@ -42,6 +43,7 @@ class PreviewController extends BaseController {
     g.pending=null;g.turn=4;g.phase='main';
     const mon=(id:string,uid:string):FieldMon=>({...DB[id],uid,atk:DB[id].atk!,def:DB[id].def!,exhausted:false,summonedTurn:0,dmg:0,tempAtk:0,atkMod:0,defMod:0}) as FieldMon;
     g.players.forEach((p,i)=>Object.assign(p,{openingDrawReady:false,field:i?[mon('M1','target-left'),mon('M2','target-center'),mon('ELF','target-right')]:[mon('M4','attacker'),mon('ELF','ally')],hand:[],enchants:[],traps:[],quests:[],hp:40,maxHp:40,mana:8,maxMana:8}));
+    if(previewPlayer)g.players[1].field=[];
     this.state=g;this.introShown=true;this.view.render(g);
     document.getElementById('app')!.classList.remove('opening-pending');
   }
@@ -49,7 +51,7 @@ class PreviewController extends BaseController {
 const controller=new PreviewController(document.getElementById('app')!,0,{onHome(){},onRematch(){}});
 const stopLayout=startBoardLayout();
 const panel=document.createElement('aside');panel.className='attack-preview-controls lore-surface';
-panel.innerHTML='<strong>攻撃ドラッグ · 青い起点と進行方向</strong><p>手前のモンスターから相手へドラッグして確認できます。</p><output role="status">矢印は現行版。攻撃元と対象の発光・浮上を確認できます。</output><div><button class="btn" id="preview-demo" aria-pressed="true">選択表示</button><button class="btn" id="preview-replay">浮上を再生</button><button class="btn" id="preview-reset">盤面を戻す</button></div>';
+panel.innerHTML='<strong>攻撃ドラッグ · 青い起点と進行方向</strong><p>手前のモンスターから相手へドラッグして確認できます。</p><output role="status">赤い照準が狙っている相手を示します。カードとプレイヤーを切り替えて確認できます。</output><div><button class="btn" id="preview-demo" aria-pressed="true">選択表示</button><button class="btn" id="preview-replay">浮上を再生</button><button class="btn" id="preview-player">プレイヤーを狙う</button><button class="btn" id="preview-reset">盤面を戻す</button></div>';
 document.body.append(panel);
 let demo:ReturnType<typeof createAttackAim>|null=null,locked:HTMLElement|null=null,releaseDemo:((immediate?:boolean)=>void)|null=null,releaseSource:((immediate?:boolean)=>void)|null=null;
 function stopDemo(immediate=true){
@@ -60,19 +62,20 @@ function stopDemo(immediate=true){
 }
 function startDemo(){
   stopDemo();
-  locked=document.querySelector<HTMLElement>('#oppRow [data-uid="target-center"]');
+  locked=document.querySelector<HTMLElement>(previewPlayer?'#portraitOpp .pt-ring':'#oppRow [data-uid="target-center"]');
   locked?.classList.add('is-atk-target');
-  if(locked)releaseDemo=highlightAttackTarget(locked);
+  if(locked?.classList.contains('card'))releaseDemo=highlightAttackTarget(locked);
   const source=document.querySelector<HTMLElement>('#meRow [data-uid="attacker"]');
   source?.classList.add('is-aiming');if(source)releaseSource=highlightAttackSource(source);
   demo=createAttackAim(()=>{
     const a=document.querySelector('#meRow [data-uid="attacker"]')?.getBoundingClientRect(),b=locked?.getBoundingClientRect();
-    return a&&b?{x:a.left+a.width/2,y:a.top+a.height*.045,sourceWidth:a.width,tx:b.left+b.width/2,ty:b.top+b.height/2,valid:true,blocked:false}:null;
+    return a&&b?{x:a.left+a.width/2,y:a.top+a.height*.045,sourceWidth:a.width,targetWidth:b.width,tx:b.left+b.width/2,ty:b.top+b.height/2,valid:true,blocked:false}:null;
   });
   document.getElementById('preview-demo')!.setAttribute('aria-pressed','true');
 }
 document.getElementById('preview-demo')!.onclick=()=>demo?stopDemo(false):startDemo();
 document.getElementById('preview-replay')!.onclick=()=>{stopDemo();requestAnimationFrame(startDemo);};
+document.getElementById('preview-player')!.onclick=()=>{stopDemo();previewPlayer=!previewPlayer;controller.reset();document.getElementById('preview-player')!.textContent=previewPlayer?'カードを狙う':'プレイヤーを狙う';startDemo();};
 document.getElementById('preview-reset')!.onclick=()=>{if(document.querySelector('.fx-playing'))return;stopDemo();controller.reset();
 for(const card of document.querySelectorAll<HTMLElement>('.zone-mon .card'))void prepareAttackTarget(card);
 startDemo();};
@@ -83,4 +86,4 @@ startDemo();
 Object.assign(window,{attackTargetPreview:{controller,startDemo,stopDemo}});
 window.addEventListener('pagehide',()=>{stopDemo();stopLayout();controller.destroy();},{once:true});
 
-const previewUrl=new URL(location.href);previewUrl.searchParams.delete('look');previewUrl.searchParams.set('v','7');history.replaceState(null,'',previewUrl);
+const previewUrl=new URL(location.href);previewUrl.searchParams.delete('look');previewUrl.searchParams.set('v','8');history.replaceState(null,'',previewUrl);

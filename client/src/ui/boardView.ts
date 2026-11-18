@@ -845,7 +845,7 @@ export class GameView {
           if(!aim)aim=createAttackAim(()=>{
             if(!card.isConnected)return null;const target=targetAt(pointer.x,pointer.y),valid=!!target.mon||!!target.portrait&&(!o.oppHasMon||o.canPassDefenders);
             const a=card.getBoundingClientRect(),b=(target.mon??(target.portrait?document.querySelector('#portraitOpp .pt-ring'):null))?.getBoundingClientRect();
-            return {x:a.left+a.width/2,y:a.top+a.height*.045,sourceWidth:a.width,tx:b?b.left+b.width/2:pointer.x,ty:b?b.top+b.height/2:pointer.y,valid,blocked:!!target.portrait&&!valid};
+            return {x:a.left+a.width/2,y:a.top+a.height*.045,sourceWidth:a.width,targetWidth:b?.width,tx:b?b.left+b.width/2:pointer.x,ty:b?b.top+b.height/2:pointer.y,valid,blocked:!!target.portrait&&!valid};
           });
           if (marker) marker.style.display = "none";
           const valid=!!t.mon || (!!t.portrait && (!o.oppHasMon || o.canPassDefenders));
