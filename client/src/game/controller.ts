@@ -863,6 +863,7 @@ export abstract class BaseController implements BoardHandlers {
           const before=health.get(e.uid),after=before===undefined||e.amount===undefined?undefined:Math.max(0,before-e.amount);
           if(after!==undefined)health.set(e.uid,after);
           A.monHit(e.uid,e.amount,after,recoil);
+          if(!A.isFxSkipped() && events.slice(i+1).some(next=>next.type==='hit' && next.uid===e.uid)) await wait(850);
           const striker=lastStriker.get(e.uid);lastStriker.delete(e.uid);
           if(recoil&&e.amount&&striker&&shelvedDeaths.has(e.uid)&&!A.isFxSkipped()){
             const victim=combatCard(e.uid),attacker=combatCard(striker);
@@ -930,6 +931,7 @@ export abstract class BaseController implements BoardHandlers {
           hpNow[e.player] -= e.amount;
           if(!e.reversed)A.hpFeedback(sideOf(e.player), "dmg", e.amount);
           presentHp(sideOf(e.player), hpNow[e.player]);
+          if(!A.isFxSkipped()) await wait(850);
           break;
         }
         case "heal": {

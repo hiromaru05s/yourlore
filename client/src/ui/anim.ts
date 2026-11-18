@@ -626,7 +626,7 @@ export async function beginElemental(event:ElementalEvent,you:0|1,source?:HTMLEl
  if(fxSkip)return idle;
  const {startElemental}=await import('./elemental/runtime');if(fxSkip)return idle;
  const playback=startElemental(event,you,source);
- void boardMotionScope(async signal=>{signal.addEventListener('abort',playback.cancel,{once:true});await playback.finished;return !signal.aborted;},6500);
+ void boardMotionScope(async signal=>{signal.addEventListener('abort',playback.cancel,{once:true});await playback.finished;return !signal.aborted;},6500*Math.max(1,event.targets.length));
  return playback;
 }
 export async function berserkStrike(uid:string,targetUid:string|null,player:0|1,you:0|1,targetPlayer:0|1,onImpact:()=>void,exhaust:boolean,amount=0):Promise<void>{

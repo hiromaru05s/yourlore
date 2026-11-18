@@ -1,0 +1,55 @@
+{
+  "source": "27381029c76bfdf5309ab8695603bcf3178384df",
+  "origin": "https://yourlore.xyz",
+  "checkedAt": "2026-11-18T09:44:26.721Z",
+  "files": [
+    {
+      "path": "/",
+      "status": 200,
+      "sha256": "41d20b07d007f3e21ccb54a3a792321dd1fe3fc1f0e39d15ed11029cc65696b1",
+      "matches": true
+    },
+    {
+      "path": "/assets/assetQueue-CklNUM-m.js",
+      "status": 200,
+      "sha256": "9fa576e9a3f0f66a6924cd5879fa1eb9ce39c67c08039bfccf7293f82b58aa8a",
+      "matches": true
+    },
+    {
+      "path": "/assets/bot.worker-cLCT8Vk3.js",
+      "status": 200,
+      "sha256": "2b37e5b4be7408106cd0bcf59a198655eb27d9e03d813445cd611534950fd3de",
+      "matches": true
+    },
+    {
+      "path": "/assets/layout-CIiPa7OW.js",
+      "status": 200,
+      "sha256": "6b6db43c18fff144ad343bfd72414dc513180aa29baf57d7d8716ee4c559dd51",
+      "matches": true
+    },
+    {
+      "path": "/assets/main-BEK2MhX0.js",
+      "status": 200,
+      "sha256": "b2a9d01bb64e2c3f80caa77b1a10a4b188c916ea9b102e6758de442d8cc84f9f",
+      "matches": true
+    },
+    {
+      "path": "/assets/runtime-CoUydJbM.js",
+      "status": 200,
+      "sha256": "e9e6932ce1c4fb627d7a038ac7078906a2ae48640877f95e4001387589f01c88",
+      "matches": true
+    },
+    {
+      "path": "/assets/social-ByiBmxcP.js",
+      "status": 200,
+      "sha256": "c26b623103aa268a4cc47793bfecffb20bbce76377f29fa68ca3639618a86168",
+      "matches": true
+    },
+    {
+      "path": "/assets/main-CpH2ExRU.js",
+      "status": 200,
+      "sha256": "fc9e20bf73e36a6950ca4ae12836fa60c181a6239f86e71092ab073e10eb06c0",
+      "matches": true
+    }
+  ]
+}

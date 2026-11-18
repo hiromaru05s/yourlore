@@ -1,3 +1,4 @@
+import {isGoblinMonster} from '../shared/goblinCards';
 import { CurseSealBadge } from './curseSeal/badge';
 import {pendingText} from '../shared/pendingText';
 import {placeReadingHand} from './readingBoardLayout';
@@ -614,6 +615,7 @@ export class GameView {
       // 아우라(ward): 공격 대상으로는 지정 가능하지만 마법·몬스터 "효과"의 대상은 안 됨
       // 고급 부화기(incubate): 자신의 "알"만 선택 가능
       const targetableMon = targetableZone
+        && !(pending!.data?.sourceId === "FORGE" && !isGoblinMonster(m))
         && !(pending!.data?.sourceId === "S3" && m.tribe)
         && (pending!.reason !== "attack" || g.players[g.cur].field.some(a => a.uid === pending!.data?.attackerUid && monsterCanTarget(g,g.players[g.cur],a,m)))
         && !(pending!.kind === "oppMon" && !isMe && pending!.reason !== "attack" && hasPassive(m, "aura")) // 아우라는 상대 효과만 차단 — 내 카드는 내 효과로 파괴 가능

@@ -1,3 +1,4 @@
+import {isGoblinMonster} from './goblinCards';
 import { availableDealRewards } from './starterQuests';
 import type { Action, GameState } from './types';
 import { purgeChoices, effectChoices, monsterCanAttack, playBlockReason, playCost, purchaseAllowed, buyCost, freeBuyBlocked } from './engine';
@@ -18,7 +19,7 @@ export function botActions(g: GameState): Action[] {
   if (q) {
     const pick = (uid: string | null): void => { out.push({ type: q.kind === 'myMon' || q.kind === 'oppMon' ? 'chooseTarget' : 'pick', uid }); };
     if (q.kind === 'cardChoice') effectChoices(g).forEach(c => pick(c.uid));
-    else if (q.kind === 'myMon') p.field.forEach(c => pick(c.uid));
+    else if (q.kind === 'myMon') p.field.filter(c=>q.data?.sourceId!=='FORGE'||isGoblinMonster(c)).forEach(c => pick(c.uid));
     else if (q.kind === 'oppMon') {
       o.field.forEach(c => pick(c.uid));
       if (q.data?.anySide) p.field.forEach(c => pick(c.uid));

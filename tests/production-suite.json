@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/combat-feedback-v101.mjs",
     "tests/story-bot-update.mjs",
     "tests/reading-assets-lossless.mjs",
     "tests/menu-code-boundaries.mjs",

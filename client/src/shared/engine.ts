@@ -438,7 +438,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: 2, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3, balance97Applied:true, balance98Applied:true, balance99Applied:true, balance100Applied:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: 2, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3, balance97Applied:true, balance98Applied:true, balance99Applied:true, balance100Applied:true, balance101Applied:true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -575,7 +575,7 @@ function gainDew(ctx: Ctx, p: PlayerState, amount: number, sourceUid?: string): 
   if (amount <= 0) return;
   const before = p.dew ?? 0;
   p.dew = before + amount;
-  spiritGain(p,1,0);
+  spiritGain(ctx,p,1,0);
   ctx.ev.push({type:"statusGrant",player:ctx.side(p),resource:"dew",before,after:p.dew,...(sourceUid?{sourceUid}:{})});
   ctx.log(`${p.name}: 이슬 +${amount} (${p.dew})`, `${p.name}: 雫+${amount} (${p.dew})`, `${p.name}: gain ${amount} Dew (${p.dew} total)`);
 }
@@ -597,7 +597,7 @@ function gainShield(g: GameState, ctx: Ctx, p: PlayerState, amount: number, sour
   if (g.players.some(pl => pl.enchants.some(e => e.card.ench === 'furnace'))) amount = Math.min(amount, Math.max(0, 5 - before));
   if (amount <= 0) return;
   p.shield = before + amount;
-  spiritGain(p,0,1);
+  spiritGain(ctx,p,0,1);
   trackActivity(p, 'shield', amount);
   ctx.ev.push({type:"statusGrant",player:side(g,p),resource:"shield",before,after:p.shield});
   p.shieldExpiresTurn = side(g, p) === g.cur ? g.turn + 1 : g.turn;
@@ -715,6 +715,7 @@ interface Ctx {
   summonTurnOwner?: Side; // Actual turn owner while resolving a summon on another field.
   bonusDamage?: boolean;
   side(p:PlayerState):Side;
+  activate(p:PlayerState,m:FieldMon):void;
   ev: GameEvent[];
   log(ko: string, ja?: string, en?: string): void;
   drawN(p: PlayerState, n: number, extra?: boolean, turnOwner?: Side): number;
@@ -773,11 +774,11 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
       return;
     }
     p.hp += amt;
-    spiritGain(p,1,0);
     trackActivity(p, 'heal', amt);
     advanceQuest(p,"healthGain",amt);
     advanceQuest(p, "healOccurrence");
     ev.push({ type: "heal", player: side(g, p), amount: amt, ...(bloodRiteSources ? {bloodRiteSources} : {}) });
+    spiritGain(ctx,p,1,0);
     // 유령 — v25: 상대가 체력을 회복할 때마다 필드의 모든 유령 공격력 +1 (지속)
     {
       const foe = g.players[1 - side(g, p)];
@@ -1009,7 +1010,7 @@ function makeCtx(g: GameState, ev: GameEvent[]): Ctx {
     }
     dealDamage(owner, amount, cn(source), cn(source), side(g, owner));
   };
-  const ctx: Ctx = { side:p=>side(g,p), ev, log, drawN, heal, selfDamage, dealDamage, destroyMonster };
+  const ctx: Ctx = { activate:(p,m)=>monsterActivation(g,ev,p,m), side:p=>side(g,p), ev, log, drawN, heal, selfDamage, dealDamage, destroyMonster };
   return ctx;
 }
 
@@ -1546,10 +1547,10 @@ function binEnch(g: GameState, ctx: Ctx, owner: PlayerState, card: CardInst, for
     const depth = spellDepth; spellDepth++;
     try { ctx.dealDamage(opponent,8,cn(card),cn(card),side(g,owner)); } finally { spellDepth=depth; }
   }
-  if (card.id === 'GOBLIN_ORIGIN' && cause !== 'self' && source != null && source !== side(g, owner) && opponent.field.length) {
-    const target = opponent.field[randInt(g, opponent.field.length)];
-    ctx.log(`${cn(card)}: 상대 카드 효과로 파괴 → ${cn(target)} 무작위 파괴`, `${cn(card)}: 相手の効果で破壊 → ${cn(target)}をランダム破壊`, `${cn(card)} is destroyed by an enemy effect → randomly destroy ${cn(target)}`);
-    ctx.destroyMonster(opponent, target);
+  if (card.id === 'GOBLIN_ORIGIN' && cause !== 'self' && source != null && source !== side(g, owner)) {
+    enchantFx(g,ctx.ev,owner,card);
+    for (const m of owner.field) if (isGoblinMonster(m)) m.atkMod = (m.atkMod ?? 0) + amplifiedBuff(m,1);
+    ctx.log(`${cn(card)}: 자신의 고블린 계열 몬스터 전부 공격력 +1`, `${cn(card)}: 自分のゴブリン系モンスター全ての攻撃力+1`, `${cn(card)}: all your Goblin-family monsters gain +1 ATK`);
   }
   if (card.id === 'MANA_BACKFLOW') {
     enchantFx(g,ctx.ev,owner,card);
@@ -3951,14 +3952,8 @@ function applySpell(g: GameState, ctx: Ctx, card: CardInst): void {
     case 'goblinParty': {
       const count = p.field.filter(isGoblinMonster).length;
       if (count < 3) break;
-      const before = o.maxMana;
-      o.maxMana = Math.max(MIN_MANA, before - 1);
-      o.mana = Math.min(o.mana, effMaxMana(o));
-      const lost = Math.max(0, before - o.maxMana);
-      const previousOwn = p.maxMana;
       addMaxMana(g, ctx, p, 1);
-      const gained = Math.min(MAX_MANA, p.maxMana) - previousOwn;
-      ctx.log(`${cn(card)}: 고블린 ${count}체 · 상대 마나 수정 -${lost}, 자신 +${gained}`, `${cn(card)}: ゴブリン${count}体 · 相手のマナ水晶-${lost}、自分+${gained}`, `${cn(card)}: ${count} Goblins · enemy mana crystals -${lost}, yours +${gained}`);
+      ctx.log(`${cn(card)}: 자신의 마나 수정 +1`, `${cn(card)}: 自分のマナ水晶+1`, `${cn(card)}: gain 1 mana crystal`);
       break;
     }
     case 'dew': {
@@ -5247,6 +5242,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
     if (p.field.length < 2 || p.mana >= effMaxMana(p)) return reason('자신의 몬스터 2체와 빈 마나 수정 1개가 필요합니다', '自分のモンスター2体と空のマナ水晶1個が必要です', 'You need at least 2 monsters and 1 empty mana crystal');
   }
   if (card.id === "GOBLIN_SETTLEMENT") { applicable=true; if (!p.field.some(isGoblinMonster)) return reason("고블린 계열 몬스터가 필요합니다","自分の場に「ゴブリン」系モンスターが必要です", `You need a Goblin-family monster on your field`); }
+  if (card.id === "FORGE") { applicable=true; if (!p.field.some(isGoblinMonster)) return reason("고블린 계열 몬스터가 필요합니다", "自分の場にゴブリン系モンスターが必要です", "You need a friendly Goblin-family monster"); }
   if (card.id === "GOBLIN_PARTY") { applicable=true; if (p.field.filter(isGoblinMonster).length < 3) return reason("고블린 계열 몬스터 3체가 필요합니다","ゴブリン系モンスターが3体必要です", "You need 3 Goblin-family monsters on your field"); }
   if (card.id === "BEGINNER_MIND") { applicable=true; if (p.hand.filter(c=>c.uid!==card.uid).length > 2) { return reason("  └ 패에 이 카드 외의 카드가 2장 이하여야 합니다", "  └ 手札にこのカード以外のカードが2枚以下の時のみ使用可能", "Your hand must contain at most 2 other cards"); } }
   if (card.id === "SPACE_RITE") { applicable=true; if (o0.field.length + o0.traps.length + o0.enchants.length < 6) { return reason("  └ 상대 필드의 카드가 6장 미만이라 사용 불가", "  └ 相手の場のカードが6枚未満のため使用不可"); } }
@@ -5277,7 +5273,7 @@ function spellCondition(g: GameState, who: Side, card: CardInst) {
   if (card.id === "HERMIT") { applicable=true; if (p.field.length > 0) { return reason("  └ 필드에 몬스터가 있어 사용 불가", "  └ 場にモンスターがいるため使用不可", `  └ You must control no monsters to play this card`); } }
   if (card.id === "HERMIT") { applicable=true; if ((p.uses["HERMIT"] || 0) >= 5) { return reason("  └ 게임당 5회까지만 사용 가능", "  └ ゲーム中5回まで使用可能", `  └ This card may be played at most 5 times per game`); } }
   if (card.id === "MULTI_CULTURE") { applicable=true; if (tribeCount(g) < 2) { return reason("  └ 서로 다른 종족이 2종 이상 필요합니다", "  └ 異なる種族が2種以上必要です", `  └ You need at least 2 distinct tribes across both fields`); } }
-  if (card.act === "exilePick") { applicable=true; if (p.discard.length === 0) { return reason("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); } }
+  if (card.act === "exilePick") { applicable=true; if (p.discard.length === 0 && !(card.id === "PURGE_TOUCH" && (p.brand ?? 0) > 0)) { return reason("  └ 묘지가 비어 있습니다", "  └ 墓地が空です"); } }
   if (card.act === 'incubate') {
     applicable = true;
     const trade = p.visibleIncubatorTrade ?? incubatorTradePresent(g);
@@ -5573,7 +5569,7 @@ function playFromHand(g: GameState, ctx: Ctx, idx: number): void {
       ctx.ev.push({ type: "needTarget", pending: g.pending }); return;
     }
     if (a === "buffTurn" || a === "buffPerm") {
-      if (card.id === 'FORGE') { ctx.selfDamage(p, 3, card); if (g.over) return; }
+      if (card.id === 'FORGE') { ctx.selfDamage(p, 8, card); if (g.over) return; }
       // 칼날의 속삭임(v34): 종족 몬스터는 대상 불가
       if (card.id === "S3" && !p.field.some((m) => !m.tribe)) { ctx.log("  └ 종족이 아닌 몬스터가 없습니다", "  └ 種族でないモンスターがいません", `  └ No non-tribal monster on your field`); return; }
       if (!p.field.length) { ctx.log("  └ 대상 몬스터 없음", "  └ 対象モンスターなし"); return; }
@@ -5761,6 +5757,7 @@ function resolveTarget(g: GameState, ctx: Ctx, uid: string | null): void {
   } else if (pending.kind === "myMon") {
     const tm = p.field.find((m) => m.uid === uid);
     if (!tm) { g.pending=pending; return; }
+    if (d.sourceId === "FORGE" && !isGoblinMonster(tm)) { g.pending=pending; return; }
     if (d.sourceId === "S3" && tm.tribe) { g.pending=pending; return; }
     if (pending.reason === "buffTurn") {
       const picked = d.excl ?? [];
@@ -6746,7 +6743,7 @@ export function clearEmptyBuffChoice(game: GameState): boolean {
   if (pending?.kind !== 'myMon' || (pending.reason !== 'buffTurn' && pending.reason !== 'buffPerm')) return false;
   const field = game.players[pending.owner ?? game.cur].field;
   const excluded = (pending.data?.excl as string[] | undefined) ?? [];
-  if (field.some(m => !excluded.includes(m.uid) && (pending.data?.sourceId !== 'S3' || !m.tribe))) return false;
+  if (field.some(m => !excluded.includes(m.uid) && (pending.data?.sourceId !== 'S3' || !m.tribe) && (pending.data?.sourceId !== 'FORGE' || isGoblinMonster(m)))) return false;
   game.pending = null;
   return true;
 }
@@ -7959,9 +7956,10 @@ function hasMini(p: PlayerState): boolean {
 function swordWarded(p: PlayerState, m: FieldMon): boolean {
   return !p.monsterSilence && m.id === 'SWORD_GRAVE_WRAITH' && hasMini(p);
 }
-function spiritGain(p: PlayerState, atk: number, hp: number): void {
+function spiritGain(ctx: Ctx, p: PlayerState, atk: number, hp: number): void {
   if (p.monsterSilence) return;
-  for (const m of p.field) if (m.id === 'MINI_SPIRIT') {
+  for (const m of p.field) if (m.id === 'MINI_SPIRIT' && !m.mutedEffects) {
+    ctx.activate(p,m);
     m.atkMod = (m.atkMod ?? 0) + amplifiedBuff(m, atk);
     m.defMod = (m.defMod ?? 0) + amplifiedBuff(m, hp);
   }
@@ -7979,7 +7977,7 @@ function basicAttune(g: GameState, ctx: Ctx, p: PlayerState, c: CardInst): void 
       if (tryNullSpell(g,ctx,c) || tryAttuneJam(g,ctx,c)) continue;
     }
     addMaxMana(g, ctx, p,1);
-    spiritGain(p,0,2);
+    spiritGain(ctx,p,0,2);
     for (const bonus of p.attuneBonuses ?? []) {
       if (g.over) break;
       switch (bonus) {

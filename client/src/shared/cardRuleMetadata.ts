@@ -3,6 +3,8 @@
 export type RuleTerm = 'composition' | 'graveyard' | 'rift' | 'lasting' | 'counters';
 export interface CardRuleMetadata { terms?: RuleTerm[]; mentions?: string[]; grants?: string[]; }
 export const CARD_RULE_METADATA: Record<string, CardRuleMetadata> = {
+  FORGE: {terms:["lasting"]},
+  GOBLIN_ORIGIN: {terms:["lasting"]},
   S15: {"terms":["composition"]},
   ND2: {"terms":["composition"]},
   RUNE1: {"mentions":["aura","void"]},

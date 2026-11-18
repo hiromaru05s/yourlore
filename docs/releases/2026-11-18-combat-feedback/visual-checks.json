@@ -1,0 +1,79 @@
+{
+  "checks": [
+    {
+      "owner": 0,
+      "times": [
+        {
+          "at": 6211.5,
+          "amount": "7"
+        },
+        {
+          "at": 8839.699999988079,
+          "amount": "4"
+        }
+      ],
+      "overlap": 1,
+      "canvases": [
+        5024.300000011921,
+        7658.300000011921
+      ]
+    },
+    {
+      "owner": 1,
+      "times": [
+        {
+          "at": 14620.5,
+          "amount": "7"
+        },
+        {
+          "at": 17219.899999976158,
+          "amount": "4"
+        }
+      ],
+      "overlap": 1,
+      "canvases": [
+        13447.899999976158,
+        16041.899999976158
+      ]
+    },
+    {
+      "reduced": false,
+      "overlap": 1,
+      "hits": 3,
+      "remaining": 0
+    },
+    {
+      "reduced": true,
+      "overlap": 1,
+      "hits": 2,
+      "remaining": 0
+    },
+    {
+      "interrupt": "skip",
+      "cleanup": true
+    },
+    {
+      "interrupt": "resize",
+      "cleanup": true
+    },
+    {
+      "spirits": {
+        "values": [
+          {
+            "uid": "mini-a",
+            "atk": 1
+          },
+          {
+            "uid": "mini-b",
+            "atk": 1
+          }
+        ],
+        "uids": [
+          "mini-a",
+          "mini-b"
+        ]
+      }
+    }
+  ],
+  "errors": []
+}
