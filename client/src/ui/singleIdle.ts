@@ -77,14 +77,22 @@ export function standingVertex(key:SingleDifficulty) {
       float loose=smoothstep(0.,56.,max(outside.x,outside.y));
       point=art+(point-art)*loose;
       ${key==='normal' ? `
-      // Noel's short crown lies inside the broad face guard. Animate only the
-      // painted hair above the forehead (skin starts below y=102), after that
-      // guard. The root is still by y=98; eyes, glasses and jaw remain rigid.
-      float shortHair=(1.-smoothstep(62.,98.,art.y));
-      shortHair*=brush(art,vec2(500.,50.),vec2(120.,85.));
-      float hairWind=time*1.15-art.x*.008;
-      point.x+=20.*shortHair*sin(hairWind);
-      point.y+=3.5*shortHair*sin(hairWind-.55);
+      // Keep the entire scalp and face rigid. Only isolated silhouette locks
+      // bend about their roots; no translation field crosses the crown.
+      point=mix(art,point,smoothstep(285.,345.,art.y));
+      float wind=time*.98;
+      float curl=(1.-smoothstep(26.,46.,art.y));
+      curl*=1.-smoothstep(.5,1.2,length((art-vec2(475.,22.))/vec2(43.,28.)));
+      point+=curl*(turn(art,vec2(465.,50.),.11*sin(wind))-art);
+      float upperLock=smoothstep(570.,595.,art.x);
+      upperLock*=1.-smoothstep(.5,1.2,length((art-vec2(592.,65.))/vec2(36.,20.)));
+      point+=upperLock*(turn(art,vec2(558.,76.),.10*sin(wind-.35))-art);
+      float lowerLock=smoothstep(570.,595.,art.x);
+      lowerLock*=1.-smoothstep(.5,1.2,length((art-vec2(598.,123.))/vec2(29.,28.)));
+      point+=lowerLock*(turn(art,vec2(568.,108.),.09*sin(wind-.65))-art);
+      float leftLock=1.-smoothstep(403.,430.,art.x);
+      leftLock*=1.-smoothstep(.5,1.2,length((art-vec2(407.,137.))/vec2(30.,30.)));
+      point+=leftLock*(turn(art,vec2(432.,118.),.10*sin(wind-.9))-art);
       ` : ''}
       // The skull is one rigid piece. Blend only below the jaw, through the neck.
       float head=1.-smoothstep(${pose.headEnd}.,${pose.headEnd+90}.,art.y);
