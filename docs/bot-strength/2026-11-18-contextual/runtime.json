@@ -1,0 +1,70 @@
+{
+  "runtime": "local workerd",
+  "compatibilityDate": "2024-11-01",
+  "scope": "Host elapsed time in three fixtures; not production CPU billing, not a maximum latency guarantee. The dense fixture is synthetic and uses current card definitions.",
+  "rows": [
+    {
+      "name": "historical-heavy-filtered",
+      "tier": "hard",
+      "nodeLimit": null,
+      "hostWallMs": 9367.721667,
+      "action": {
+        "type": "buyMarket",
+        "i": 1
+      },
+      "advanced": true,
+      "pure": true,
+      "turn": 17,
+      "fields": [
+        4,
+        3
+      ],
+      "cycle": [
+        8,
+        9
+      ]
+    },
+    {
+      "name": "dense-late-current-cards",
+      "tier": "hard",
+      "nodeLimit": null,
+      "hostWallMs": 7335.1979999999985,
+      "action": {
+        "type": "play",
+        "idx": 2
+      },
+      "advanced": true,
+      "pure": true,
+      "turn": 55,
+      "fields": [
+        7,
+        7
+      ],
+      "cycle": [
+        35,
+        35
+      ]
+    },
+    {
+      "name": "historical-clock-pressure",
+      "tier": "normal",
+      "nodeLimit": 500,
+      "hostWallMs": 45.12354200000118,
+      "action": {
+        "type": "play",
+        "idx": 7
+      },
+      "advanced": true,
+      "pure": true,
+      "turn": 17,
+      "fields": [
+        4,
+        3
+      ],
+      "cycle": [
+        8,
+        9
+      ]
+    }
+  ]
+}

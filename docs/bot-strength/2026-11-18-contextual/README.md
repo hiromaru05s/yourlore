@@ -60,3 +60,9 @@ v101 ルールで 8,000 試合、109,115 局面を使って評価モデルも再
 ## ブラウザ検証
 
 隔離した当方の比較プロセスを一時停止して Worker を確認した。通常の検証局面は Easy 184 ms、Normal 827 ms、Hard 919 ms。長時間対戦 fixture は 8,952 ms、複雑な対象選択 fixture は 6,396 ms で合法な手を返し、その間も UI のタイマーが進んだ。キャンセル、古い結果の破棄、Worker 不可、期限時の完了済み判断も通過。これは少数の fixture の実測であり、全局面の最大応答時間ではない。起動元は本作業 worktree、Vite は `http://127.0.0.1:5279`。詳細は `browser.json`。
+
+## サーバーと同じ実行基盤での負荷確認
+
+当方の比較プロセスを一時停止し、ローカル workerd（本番と同じ compatibility date `2024-11-01`）で確認した。重い既存局面は Hard 9,368 ms、現行カードを使い双方の場に 7 体・手札／山札に計 35 枚ずつ置いた合成終盤は 7,335 ms。残り時間用の 500 ノード制限は 45 ms。3 ケースとも実エンジン上で合法な行動を返し、入力を変更しなかった。`runtime.json` と `ml/bot-strength/runtime-probe.mjs` に結果・再現手順を残す。
+
+これはホスト側で測った経過時間であり、本番の課金 CPU 時間や全局面の最大値ではない。[Cloudflare の Durable Objects 制限](https://developers.cloudflare.com/durable-objects/platform/limits/)では、既定の CPU 上限は呼び出しごとに 30 秒とされる。ノード制限・ターン残り時間への対応と、実際の本番 NPC 応答は別々に確認する。
