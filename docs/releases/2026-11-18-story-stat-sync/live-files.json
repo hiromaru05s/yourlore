@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-18T08:17:44.909Z",
+  "base": "https://yourlore.xyz",
+  "checks": [
+    {
+      "file": "assetQueue-C2uewsLP.js",
+      "sha256": "81e53077cb3c801c516d65f4a4f9227a0304516a53b0383be9469b52b58d9bfa",
+      "bytes": 885456
+    },
+    {
+      "file": "bot.worker-Cz0Md10j.js",
+      "sha256": "3cd474d8c425a79e0209d372138469e2b3c9be75769b89ff0c4beaa2d7be0eaf",
+      "bytes": 1264659
+    },
+    {
+      "file": "game-DTFFkwhE.js",
+      "sha256": "9ef7440aabc8a12b3b0e9154d6688ddb41f71514a6d41ddc4291514131c1ac13",
+      "bytes": 166625
+    },
+    {
+      "file": "main-B1w1-OIv.js",
+      "sha256": "7d9ebc3eecf5a638baea0094ab470a5053e243a4b66badd146614d56abde507f",
+      "bytes": 409484
+    },
+    {
+      "file": "main-BtfMroF3.js",
+      "sha256": "cc0afda37ac4f5af477f25033ca09ca0db1da698adbe30bf98bea53c8f444253",
+      "bytes": 7522
+    },
+    {
+      "file": "social-mkvLyGs8.js",
+      "sha256": "b4a0aa9e69a826ee869de42f5a50d545a64e27b44ad7bcdfa3085a256bb6676d",
+      "bytes": 165836
+    }
+  ],
+  "home": 200,
+  "apiGeo": 200
+}

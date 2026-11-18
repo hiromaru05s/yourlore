@@ -6,7 +6,7 @@
 
 ## Source and verification
 
-Starting adopted source: `ea3152936`; integrated newer main `fe4200486` (NPC idle faces). Existing board `client/src/ui/boardView.ts`, material `client/src/ui/cardMaterial/effect.ts`, monster runtime `client/src/ui/monster/runtime.ts` and controller `client/src/game/controller.ts` are used directly. No replacement art or board design was introduced.
+Starting adopted source: `ea3152936`; integrated newer main `fe4200486` and `383e23717` (NPC idle faces and motion). Existing board `client/src/ui/boardView.ts`, material `client/src/ui/cardMaterial/effect.ts`, monster runtime `client/src/ui/monster/runtime.ts` and controller `client/src/game/controller.ts` are used directly. No replacement art or board design was introduced.
 
 Preview launched from `/Users/hiromaru05s/.codex/worktrees/goblin-bot-stat-sync-1118/LORE_TCG` at `http://127.0.0.1:5438`. `tests/stat-sync-browser.mjs` mounts the actual controller and board renderer. Browser evidence covers both sides at 1280px/390px, increase/decrease, repeated selection snapshots, partial cancellation, contact damage, current-HP recovery, skip, resize, hidden-tab and reduced motion. Screenshots and continuous recording: `/tmp/lore-stat-sync/`.
 
@@ -14,6 +14,14 @@ Functional checks and visual review are distinct: frame-value assertions passed 
 
 `tests/story-bot-update.mjs` exercises all six die faces, persisted-card text preservation, Goblin Party, nonredundant Icarus grants, and buffing an available dual attacker. Existing tactics tests verify the improved fallback can now see a previously missed lethal reply.
 
-The 64-game proxy in `bot-proxy.json` uses current rules, paired seats and the same seeds. Luca changed from 9/16 to 14/16 wins and Aries stayed at 15/16, without invalid actions. This is a greedy screening result, not a measured human difficulty or a statistically established win-rate improvement. The nine-roster, 288-game selection screen is in `bot-screen.json` (selected roster 31/32, old roster 24/32). The 64-game proxy uses different seeds from selection. Full search smoke evidence is recorded separately when complete.
+The 64-game proxy in `bot-proxy.json` uses current rules, paired seats and the same seeds. Luca changed from 9/16 to 14/16 wins and Aries stayed at 15/16, without invalid actions. This is a greedy screening result, not a measured human difficulty or a statistically established win-rate improvement. The nine-roster, 288-game selection screen is in `bot-screen.json` (selected roster 31/32, old roster 24/32). The 64-game proxy uses different seeds from selection. The final full-search smoke in `bot-full-smoke.json` completed four matches: both Luca and Aries won in both seats against Spirit Fortress. This is one opponent/seed, not a general win-rate estimate.
 
 An initial mixed Luca roster was rejected after a full-search pilot lost the matched first-seat case that the old roster won. `bot-initial-smoke.json` preserves that evidence; its supplemental second-seed baseline has no paired candidate and is not a comparison. The first deployment was interrupted during tests, before upload, to revise this roster.
+
+## Production release
+
+- Deployed source: `872243b2d627c616f005b66ac859bed3e875d151` (v100).
+- Worker version: `3a424eb0-dcbc-404d-aec1-423055a749eb`, 100% production traffic, 2026-11-18 17:16 KST.
+- Guarded committed snapshot: production schema check, client/server typechecks, all 292 production tests, and build passed.
+- `live-files.json` verifies six deployed JavaScript files byte-for-byte against the local build, including card data, game, Bot worker and story/menu modules. Home and public API returned 200; the fresh browser reached login with no page errors (`live-browser.json`).
+- Permanent local visual evidence: `/Users/hiromaru05s/.codex/visualizations/2026/11/18/01a1ed9f-da87-70d1-befb-68692945c68e/stat-sync/`.

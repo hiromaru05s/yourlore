@@ -1,0 +1,59 @@
+{
+  "method": "Full botDecide hell, actual opening selection, current rules, paired first/second seats; no market favoritism. One opponent roster and seed: smoke coverage, not a general win-rate estimate.",
+  "source": "872243b2d627c616f005b66ac859bed3e875d151",
+  "candidateModuleSha256": "dcff6df257fbeba17875f603ec0cfe522dc4b722346475b93f7325b1426e34f7",
+  "rows": [
+    {
+      "stage": 0,
+      "version": "after",
+      "seed": 802100,
+      "seat": 0,
+      "opponent": "BOT \u00b7 SPIRIT_FORTRESS",
+      "winner": 0,
+      "win": true,
+      "finished": true,
+      "steps": 197,
+      "turn": 31,
+      "bad": null
+    },
+    {
+      "stage": 0,
+      "version": "after",
+      "seed": 802100,
+      "seat": 1,
+      "opponent": "BOT \u00b7 SPIRIT_FORTRESS",
+      "winner": 1,
+      "win": true,
+      "finished": true,
+      "steps": 202,
+      "turn": 30,
+      "bad": null
+    },
+    {
+      "stage": 2,
+      "version": "after",
+      "seed": 802100,
+      "seat": 0,
+      "opponent": "BOT \u00b7 SPIRIT_FORTRESS",
+      "winner": 0,
+      "win": true,
+      "finished": true,
+      "steps": 155,
+      "turn": 25,
+      "bad": null
+    },
+    {
+      "stage": 2,
+      "version": "after",
+      "seed": 802100,
+      "seat": 1,
+      "opponent": "BOT \u00b7 SPIRIT_FORTRESS",
+      "winner": 1,
+      "win": true,
+      "finished": true,
+      "steps": 118,
+      "turn": 16,
+      "bad": null
+    }
+  ]
+}
