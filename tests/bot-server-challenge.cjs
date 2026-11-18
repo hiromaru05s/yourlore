@@ -76,10 +76,26 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
  const starterDeck = ['Q_RUNE_SECRET', ...Array(7).fill('STARTER_TRASH')];
  db.prepare('UPDATE users SET deck=?, starter_cards=? WHERE id=?')
    .run(starterDeck.join(','),JSON.stringify({Q_RUNE_SECRET:1}),userId);
+ assert.equal((await request('/rewards/story/start',{})).status,403,'NPC wins alone do not qualify');
+ db.prepare('INSERT INTO rewards(user_id,key,amount,created_at) VALUES(?,?,0,?)').run(userId,'tutorial:onboarding:v1:basics',Date.now());
+ assert.equal((await request('/rewards/story/start',{})).status,403,'normal matches are also required');
+ for(let i=0;i<2;i++)db.prepare('INSERT INTO duel_reward_receipts(user_id,match_id,day,mode,amount,created_at) VALUES(?,?,?,?,0,?)').run(userId,'normal-'+i,'2026-11-18','online',Date.now());
+ const direct=await request('/rewards/story/start',{});assert.equal(direct.status,200);
+ const directBody=await direct.json();assert.equal(rooms.get(directBody.roomId).room.storyStage,2,'new challenges go directly to Aries');
+ assert.equal(directBody.oppAvatar,E.ARIES_OPPONENTS[2].avatar);
+ // An already running legacy Luca room can still finish and advance to Aries.
  let prior;
  for(const stage of [0,2]){
-   const res=await request('/rewards/story/start',{previous:prior});assert.equal(res.status,200);
-   const {roomId,oppName,oppAvatar}=await res.json();const room=rooms.get(roomId);assert.equal(room.room.storyStage,stage);
+   let body;
+   if(stage===0){
+     const roomId='aries-'+crypto.randomUUID()+'-0',opponent=E.ARIES_OPPONENTS[0];
+     const legacy=env.GAME_ROOM.get(roomId);
+     const setup=await legacy.fetch(new Request('https://room/setup',{method:'POST',body:JSON.stringify({players:[{id:userId,name:userId,deck:starterDeck.join(',')},{id:opponent.avatar,name:opponent.name.ja}],seed:1,challengeDifficulty:'hell',storyStage:0})}));
+     assert.equal(setup.status,200);body={roomId,oppName:opponent.name.ja,oppAvatar:opponent.avatar};
+   }else{
+     const res=await request('/rewards/story/start',{previous:prior});assert.equal(res.status,200);body=await res.json();
+   }
+   const {roomId,oppName,oppAvatar}=body;const room=rooms.get(roomId);assert.equal(room.room.storyStage,stage);
    assert.deepEqual(room.room.rewardDecks[1].filter(id=>id!=='STARTER_MANA').sort(),[...E.ARIES_OPPONENTS[stage].deck].sort(),'HTTP story start installs the updated deck');
    assert.deepEqual(room.room.game.players[1].botTune,E.ARIES_OPPONENTS[stage].tune,'HTTP story start installs the updated purchase policy');
    if (stage === 0) {
