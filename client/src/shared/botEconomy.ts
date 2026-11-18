@@ -2,7 +2,7 @@ import {RUNE_IDS} from './runeRework';
 import { GOBLIN_IDS } from './goblinCards';
 import type { CardDef, CardInst, GameState, PlayerState } from './types';
 import { ALL_IDS, DB, hasPassive } from './cards';
-import { MAX_TURNS, effectSummonAllowed, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet } from './engine';
+import { MAX_TURNS, TURN_DRAW, effectSummonAllowed, buyCost, curHp, effAtk, effMaxMana, isAssassinCard, isGolem, isVampFamily, isWorldTreeCard, playCost, purchaseAllowed, freeBuyBlocked, summonReqMet } from './engine';
 import { cardPower } from './cardEval';
 import { recoveryEngine, strategicPowerEvaluator } from './botStrategy';
 import { enteringAttack, matchupPlan, removalHits } from './botMatchup';
@@ -64,7 +64,8 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
   const monsters = own.filter(c => c.t === 'mon').length;
   const opponentAttack = o.field.reduce((n,m) => n + effAtk(o,m,g) * (m.mult ?? 1),0);
   const urgent = opponentAttack > p.hp + (p.shield ?? 0) + p.field.reduce((n,m) => n + curHp(p,m),0);
-  const drawTurns = Math.max(1, (p.deck.length + 1) / 3);
+  const drawRate = TURN_DRAW + (p.bonusDrawPerm ?? 0) + p.enchants.reduce((n,e)=>n+(e.card.ench==='bonusDraw'?(e.card.val2??0):0),0) + p.field.filter(m=>m.aura==='pageDraw').length;
+  const drawTurns = Math.max(1, (p.deck.length + (p.discard.length+1)/2) / Math.max(1,drawRate));
   const ownTurnsLeft = Math.max(0, Math.ceil((MAX_TURNS - g.turn) / 2));
   // Evaluate baseline quality at usable cost; a hand of uncastable bombs must
   // not prevent acquiring the enablers that make those bombs work.
@@ -148,6 +149,13 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     // Attack-dependent bodies cannot deliver their payoff at zero ATK.
     // Account for the public global stat swap and suppression on entry.
     if (c.t==='mon') {
+      if(c.attackFx==='berserk') {
+        // Forced random attacks include our own player and allies. Printed
+        // double-attack damage is not controlled damage against the opponent.
+        const balance=(o.field.length-p.field.length)/(o.field.length+p.field.length+2);
+        readiness-=base*Math.max(.25,Math.min(1.15,.8-balance*.65));
+        if(p.hp+(p.shield??0)<=(c.atk??0))readiness-=base*.5;
+      }
       const attack=enteringAttack(g,p,c);
       if (suppression && attack<=0) {
         const reliant=c.directOnly||hasPassive(c,'decay')||(!c.onSummon&&!c.turnFx&&!c.aura);

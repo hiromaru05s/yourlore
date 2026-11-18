@@ -102,9 +102,9 @@ else {
   for(const [pi,name] of names.entries())weights[name]=Object.fromEntries(cards.map((id,i)=>[id,+((best.w[offset+i]+best.w[offset+cards.length*(pi+1)+i])*20).toFixed(4)]));
   const result={balance:C.BALANCE_VERSION,games:rows.length,reusedGames,profiles,baseline:baseline.validation,validation:best.validation,penalty:best.penalty,grid:fits.map(({w,...v})=>v),weights,seconds:(Date.now()-begin)/1000};fs.writeFileSync(out,JSON.stringify(result,null,2));console.log(JSON.stringify({...result,weights:undefined,profiles:undefined}));
  }else if(command==='train'){
-  const selected=JSON.parse(fs.readFileSync(lab+'/select.json')).scores.map(s=>s.selected.deck),decks=[...selected,...Object.values(opponents),...C.BOT_DECKS.map(d=>d.cards)];const random=rng(281027),X=[],Y=[],V=[];let invalid=0;
+  const selected=process.env.TRAIN_ROSTER_FILE?JSON.parse(fs.readFileSync(process.env.TRAIN_ROSTER_FILE)).map(d=>d.cards):JSON.parse(fs.readFileSync(lab+'/select.json')).scores.map(s=>s.selected.deck),decks=[...selected,...Object.values(opponents),...C.BOT_DECKS.map(d=>d.cards)];const random=rng(281027),X=[],Y=[],V=[];let invalid=0;
   const games=+(process.env.GAMES||8000);
-  for(let beginIndex=0;beginIndex<games;beginIndex+=100){const jobs=Array.from({length:Math.min(100,games-beginIndex)},(_,i)=>({deck:decks[Math.floor(random()*decks.length)],other:decks[Math.floor(random()*decks.length)],seed:28100000+beginIndex+i,seat:(beginIndex+i)%2,bias:['hard','hell',undefined,undefined][i%4],record:true}));
+  for(let beginIndex=0;beginIndex<games;beginIndex+=100){const jobs=Array.from({length:Math.min(100,games-beginIndex)},(_,i)=>({deck:decks[Math.floor(random()*decks.length)],other:decks[Math.floor(random()*decks.length)],seed:Number(process.env.TRAIN_SEED||28100000)+beginIndex+i,seat:(beginIndex+i)%2,bias:['hard','hell',undefined,undefined][i%4],record:true}));
    const rows=await runJobs(jobs);for(const [i,r] of rows.entries()){if(r.result==null){invalid++;continue;}for(const x of r.states){X.push(x);Y.push(r.label);V.push((beginIndex+i)%10===0);}}
    fs.appendFileSync(lab+'/training-games.jsonl',rows.map(({states,...r})=>JSON.stringify(r)).join('\n')+'\n');
    if(completed%500===0)console.log(JSON.stringify({games:completed,invalid,samples:X.length,seconds:(Date.now()-begin)/1000}));
