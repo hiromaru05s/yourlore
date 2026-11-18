@@ -16,14 +16,14 @@ globalThis.cancelAnimationFrame=()=>{};
 globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 globalThis.ResizeObserver=class{observe(){} unobserve(){} disconnect(){}};
 const temp=await mkdtemp(path.join(tmpdir(),'lore-ui-'));
-const entry=`export { findOriginTrap } from './client/src/ui/originRite/anchors'; export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
+const entry=`export {holdRiftTarget} from './client/src/ui/riftActivity'; export { findOriginTrap } from './client/src/ui/originRite/anchors'; export { BaseController } from './client/src/game/controller'; export { cardEl, cardRulesEl } from './client/src/ui/cardView'; export { zoomCard, closeZoom, revealSpell, setFxSkip, animateDraw } from './client/src/ui/anim'; export { paintDuelClock } from './client/src/ui/duelClock'; export { GameView, setMyAvatar, setOppAvatar } from './client/src/ui/boardView'; export { cardPickerMulti, closeOverlay } from './client/src/ui/modal'; export { deckBucket } from './client/src/ui/duelMaterials'; export { createGame, reduce, ST_MAX, FIELD_MAX } from './client/src/shared/engine'; export { DB, STARTERS } from './client/src/shared/cards'; export { avatarPresets, avatarHtml } from './client/src/ui/social'; export { solveBoard } from './client/src/ui/layout'; export { setLang } from './client/src/i18n'; export { mountProfile } from './client/src/screens/profile'; export { api } from './client/src/net/api';`;
 await build({stdin:{contents:entry,resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',loader:{'.css':'empty'},outfile:path.join(temp,'ui.mjs'),plugins:[{name:'dom-only-monster-renderer',setup(b){
  // JSDOM has no Canvas or DOMMatrix. Exercise the real renderer separately in
  // monster-adoption-browser.mjs; this suite checks game DOM and interaction.
  b.onResolve({filter:/monster\/runtime$/},()=>({path:'monster-runtime',namespace:'dom-test'}));
  b.onLoad({filter:/.*/,namespace:'dom-test'},()=>({contents:'export const monsterPresentationNodes=n=>[n],hitMonster=()=>{},monsterHealth=()=>{},combatVisualRect=()=>null,releaseMonsterFace=n=>{n.style.visibility="hidden"},detachMonsterFace=n=>n.cloneNode(true),syncMonsterStates=()=>{},clearMonsterStates=()=>{},setMonsterSkip=()=>{},monsterRect=()=>null,playMonster=async()=>false,playGutsEndurance=async()=>false;',loader:'js'}));
 }}]});
-const {findOriginTrap,STARTERS,cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
+const {holdRiftTarget,findOriginTrap,STARTERS,cardEl,cardRulesEl,zoomCard,closeZoom,BaseController,animateDraw,cardPickerMulti,closeOverlay,deckBucket,reduce,ST_MAX,FIELD_MAX,revealSpell,setFxSkip,paintDuelClock,GameView,createGame,DB,avatarPresets,avatarHtml,solveBoard,setLang,setMyAvatar,setOppAvatar,mountProfile,api}=await import(path.join(temp,'ui.mjs'));
 setLang('ja');
 // Clock values and accessibility survive the absence of a GPU, reconnect totals and expiry.
 const clock=document.createElement('div');clock.setAttribute('aria-hidden','true');
@@ -117,7 +117,11 @@ assert.equal(document.querySelectorAll('#market .card-type').length,0);
 assert.equal(document.querySelectorAll('#oppRow .buff-icon--trap').length,7);
 assert(!document.querySelector('#rift-me').classList.contains('is-absorbing'));
 g.players[0].removed=[{...mon,uid:'removed-new'}];v.render(g);
-assert(document.querySelector('#rift-me').classList.contains('is-absorbing'));
+assert(!document.querySelector('#rift-me').classList.contains('is-absorbing'),'a count snapshot must not invent a new arrival');
+const releaseArrival=holdRiftTarget(document.querySelector('#rift-me'));
+assert(document.querySelector('#rift-me').classList.contains('is-absorbing'),'the actual transfer owns receiving light');
+releaseArrival();releaseArrival();
+assert(!document.querySelector('#rift-me').classList.contains('is-absorbing'),'receiving light ends without waiting for a CSS animation');
 // Inspection never selects, plays or buys a card; pile gestures browse first.
 const rightClick=el=>{assert(el);const e=new dom.window.MouseEvent('contextmenu',{bubbles:true,cancelable:true,button:2});el.dispatchEvent(e);assert(e.defaultPrevented);};
 const beforeInspect=JSON.stringify(g);
