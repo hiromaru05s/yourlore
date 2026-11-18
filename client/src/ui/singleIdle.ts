@@ -9,27 +9,30 @@ const poses = {
   easy: {
     id:'lumi', neck:[510,248], waist:[515,558], hand:[483,456],
     hairLeft:[395,206], hairRight:[605,205], hairRadius:[52,68],
-    hemLeft:[265,950], hemRight:[765,985], tilt:-.065,
+    hemLeft:[265,950], hemRight:[765,985], tilt:-.024,
+    face:[500,167,98,113], headEnd:280, hairSway:7,
     eyeA:[466,165,18.5,10.5], eyeB:[535,151,18.5,7.5],
     eyeSlopeA:-.09, eyeSlopeB:-.30, eyeLowerA:10, eyeLowerB:12,
   },
   normal: {
     id:'noel', neck:[513,233], waist:[510,575], hand:[465,470],
     hairLeft:[428,138], hairRight:[578,105], hairRadius:[45,58],
-    hemLeft:[280,1050], hemRight:[751,1005], tilt:.06,
+    hemLeft:[280,1050], hemRight:[751,1005], tilt:.022,
+    face:[505,148,93,102], headEnd:250, hairSway:3.5,
     eyeA:[473,148.4,19,6.7], eyeB:[535.5,140,17,6],
     eyeSlopeA:-.03, eyeSlopeB:-.20, eyeLowerA:4.5, eyeLowerB:5.5,
   },
   hard: {
     id:'vera', neck:[511,251], waist:[495,584], hand:[408,492],
     hairLeft:[418,240], hairRight:[623,206], hairRadius:[48,100],
-    hemLeft:[280,1050], hemRight:[716,1010], tilt:-.07,
+    hemLeft:[280,1050], hemRight:[716,1010], tilt:-.025,
+    face:[500,175,100,110], headEnd:285, hairSway:8,
     eyeA:[464.4,180,16.5,7.7], eyeB:[526.5,164,17,7],
     eyeSlopeA:.07, eyeSlopeB:-.28, eyeLowerA:7, eyeLowerB:9,
   },
 } as const;
 
-function standingVertex(key:SingleDifficulty) {
+export function standingVertex(key:SingleDifficulty) {
   const pose=poses[key];
   return `
     uniform float time;
@@ -50,9 +53,9 @@ function standingVertex(key:SingleDifficulty) {
       float hairLeft=brush(art,vec2(${pose.hairLeft}),vec2(${pose.hairRadius}));
       float hairRight=brush(art,vec2(${pose.hairRight}),vec2(${pose.hairRadius}));
       // Loose locks and coat tails lag behind the same slow draught.
-      point.x+=10.*hairLeft*sin(time*1.35-art.y*.009);
-      point.x+=12.*hairRight*sin(time*1.35-art.y*.008-.65);
-      point.y+=3.*hairRight*sin(time*1.35-.8);
+      point.x+=${pose.hairSway.toFixed(3)}*hairLeft*sin(time*1.05-art.y*.009);
+      point.x+=${pose.hairSway.toFixed(3)}*hairRight*sin(time*1.05-art.y*.008-.65);
+      point.y+=1.5*hairRight*sin(time*1.05-.8);
       float hemLeft=brush(art,vec2(${pose.hemLeft}),vec2(95.,300.));
       float hemRight=brush(art,vec2(${pose.hemRight}),vec2(105.,300.));
       point.x+=18.*hemLeft*sin(time*1.05-art.y*.004);
@@ -61,13 +64,20 @@ function standingVertex(key:SingleDifficulty) {
       // Card and fingers move together, supported by the forearm.
       float hand=brush(art,vec2(${pose.hand}),vec2(100.,130.));
       point+=vec2(4.,-16.)*hand*gesture;
-      float head=1.-smoothstep(235.,315.,art.y);
-      float headAngle=.012*sin(time*.76-.6)+${pose.tilt}*gesture;
+      // Protect the whole face, jaw and glasses, including a mesh-cell margin.
+      // Gaussian hair/hand/cloth fields must contribute exactly zero here.
+      vec4 face=vec4(${pose.face});
+      vec2 outside=abs(art-face.xy)-face.zw;
+      float loose=smoothstep(0.,36.,max(outside.x,outside.y));
+      point=art+(point-art)*loose;
+      // The skull is one rigid piece. Blend only below the jaw, through the neck.
+      float head=1.-smoothstep(${pose.headEnd}.,${pose.headEnd+90}.,art.y);
+      float headAngle=.004*sin(time*.62-.6)+${pose.tilt}*gesture;
       point=mix(point,turn(point,vec2(${pose.neck}),headAngle),head);
       // A small weight transfer rotates the upper body around the waist.
       // There is no chest scaling or cyclical vertical breathing displacement.
       float upper=1.-smoothstep(650.,1330.,art.y);
-      float bodyAngle=.008*sin(time*.76)+.012*gesture;
+      float bodyAngle=.005*sin(time*.62)+.006*gesture;
       point=mix(point,turn(point,vec2(${pose.waist}),bodyAngle),upper);
       point.x+=upper*(5.*sin(time*.54-.4)-5.*gesture);
       gl_Position=vec4(point/vec2(512.,-768.)+vec2(-1.,1.),0.,1.);
