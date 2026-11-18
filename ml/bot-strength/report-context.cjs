@@ -25,10 +25,14 @@ const withoutExpert=expert
  .replace('}, diff === "hard" || diff === "hell"), () => completed);','}), () => completed);');
 assert.equal(withoutExpert,normal,'The r12 changes must affect Hard/Hell only');
 const candidateByTier={easy:hash(root+'/final/candidate.cjs'),normal:hash(root+'/r11/candidate.cjs'),hard:hash(root+'/r12/candidate.cjs')},baseline=hash(root+'/before.cjs'),all=[];
+const current=require(root+'/release/candidate.cjs'),reference=require(root+'/before.cjs');
 for(const [tier,name,n,seed] of batches){
  const r=JSON.parse(fs.readFileSync(root+'/results/'+name+'.json'));
+ assert.equal(r.A,'new:'+tier);assert.equal(r.B,'old:'+tier);assert.equal(r.valueModel,null);
+ assert.deepEqual(r.value,current.VALUE);assert.deepEqual(r.baselineValue,reference.VALUE);assert.deepEqual(r.search,current.SEARCH);assert.deepEqual(r.tactics,current.TACTICS);
+ assert.deepEqual(r.customA,current.botNpc(tier).decks);assert.deepEqual(r.customB,current.botNpc(tier).decks);
  assert.deepEqual(r.modules,{candidate:candidateByTier[tier],baseline});assert.equal(r.n,n);assert.equal(r.start,seed);assert.equal(r.total,n);assert.equal(r.invalid,0);assert.equal(r.rows.length,n);assert.equal(r.mirror,true);assert.equal(r.value.learned,0);
- for(const [i,row] of r.rows.entries()){assert(row.finished&&!row.bad);assert.equal(row.pair,seed+Math.floor(i/2));assert.equal(row.seat,i%2);assert.equal(row.decks[0],row.decks[1]);all.push({...row,tier,batch:name});}
+ for(const [i,row] of r.rows.entries()){assert(row.finished&&!row.bad);assert.equal(row.pair,seed+Math.floor(i/2));assert.equal(row.seat,i%2);assert.equal(row.decks[0],row.decks[1]);assert.equal(row.decks[0],r.customA[row.pair%r.customA.length].name);all.push({...row,tier,batch:name});}
  fs.writeFileSync(out+'/'+name+'.json',JSON.stringify({...r,rows:undefined},null,2)+'\n');
  fs.writeFileSync(out+'/'+name+'.jsonl.gz',gzipSync(fs.readFileSync(root+'/results/'+name+'.jsonl')));
 }
@@ -45,3 +49,14 @@ for(const tier of ['easy','normal','hard']){
 }
 const result={baselineCommit:'914dc9bab',balance:'v101',modules:{candidateByTier,baseline,release:hash(root+'/release/candidate.cjs')},unaffectedTierProof:'r11 is byte-identical to initial after two Normal-only substitutions. r12 is byte-identical to r11 after removing the Hard/Hell-only budget and expert branch (flag false for Easy/Normal). Release differs only in an optional per-call node cap, omitted in full-search comparisons. Each tier retains its actual tested module hash.',games:all.length,invalid:0,protocol:'Fixed current starter cards, identical deck mirror, paired seats and shared seeds; actual botDecide on both sides; unbiased market; no wall-clock server deadline',uncertainty:'Pairs are independent units. Small-sample bootstrap can be narrow; bounded Hoeffding intervals are also supplied. These are Bot-versus-Bot results, not human win rates.',timingScope:'Concurrent and CPU-scheduled local simulations; process pauses may inflate timings. Not production latency',tiers:totals};
 fs.writeFileSync(out+'/holdout.json',JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));
+const order=[];
+for(const [name,tier,opponent,seed] of [['order-hard-normal','hard','normal',9600],['order-normal-easy','normal','easy',9700]]){
+ const r=JSON.parse(fs.readFileSync(root+'/results/'+name+'.json'));
+ assert.equal(r.A,'new:'+tier);assert.equal(r.B,'new:'+opponent);assert.equal(r.n,8);assert.equal(r.total,8);assert.equal(r.start,seed);assert.equal(r.invalid,0);assert.equal(r.mirror,true);assert.equal(r.rows.length,8);
+ assert.equal(r.modules.candidate,hash(root+'/release/candidate.cjs'));assert.deepEqual(r.value,current.VALUE);assert.deepEqual(r.search,current.SEARCH);assert.deepEqual(r.tactics,current.TACTICS);
+ assert.deepEqual(r.customA,current.botNpc(tier).decks);assert.deepEqual(r.customB,r.customA);
+ for(const [i,row] of r.rows.entries()){assert(row.finished&&!row.bad);assert.equal(row.pair,seed+Math.floor(i/2));assert.equal(row.seat,i%2);assert.deepEqual(row.decks,[r.customA[row.pair%r.customA.length].name,r.customA[row.pair%r.customA.length].name]);}
+ const summary={...r,rows:undefined,bySeat:[0,1].map(seat=>{const rr=r.rows.filter(x=>x.seat===seat);return {n:rr.length,wins:rr.filter(x=>x.winner===x.seat).length};})};order.push(summary);
+ fs.writeFileSync(out+'/'+name+'.json',JSON.stringify(summary,null,2)+'\n');fs.writeFileSync(out+'/'+name+'.jsonl.gz',gzipSync(fs.readFileSync(root+'/results/'+name+'.jsonl')));
+}
+fs.writeFileSync(out+'/difficulty-order.json',JSON.stringify({scope:'Small current-policy difficulty-order diagnostic; four independent seat pairs per comparison. Identical starter mirrors isolate logic, not the additional strength difference of the real tier-specific rosters. Both sides use the candidate module; the baseline is loaded only for DB/version parity checks. Excluded from old-policy rates.',comparisons:order},null,2)+'\n');

@@ -1,0 +1,173 @@
+{
+  "baselineCommit": "914dc9bab",
+  "balance": "v101",
+  "modules": {
+    "candidateByTier": {
+      "easy": "f73e991cd7f83b14a18a8dfa74ba03c5672e9e27fb162993e02c69b3ca256ee1",
+      "normal": "97c2dbbf98c3060a1bda8ff1170d4c4e6f1df9928544372c2162eff905609e90",
+      "hard": "9bd0e3f4e5d41c74ead59c20c6ebc5be5780cb56c000cdb3029050322ef0b57a"
+    },
+    "baseline": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac",
+    "release": "66698587db47c227653e5a69a99eb6b8121298e65d9fb0b027faccc8c044d118"
+  },
+  "unaffectedTierProof": "r11 is byte-identical to initial after two Normal-only substitutions. r12 is byte-identical to r11 after removing the Hard/Hell-only budget and expert branch (flag false for Easy/Normal). Release differs only in an optional per-call node cap, omitted in full-search comparisons. Each tier retains its actual tested module hash.",
+  "games": 88,
+  "invalid": 0,
+  "protocol": "Fixed current starter cards, identical deck mirror, paired seats and shared seeds; actual botDecide on both sides; unbiased market; no wall-clock server deadline",
+  "uncertainty": "Pairs are independent units. Small-sample bootstrap can be narrow; bounded Hoeffding intervals are also supplied. These are Bot-versus-Bot results, not human win rates.",
+  "timingScope": "Concurrent and CPU-scheduled local simulations; process pauses may inflate timings. Not production latency",
+  "tiers": {
+    "easy": {
+      "n": 32,
+      "wins": 25,
+      "draws": 0,
+      "score": 0.78125,
+      "independentPairs": 16,
+      "pairedBootstrap95": [
+        0.625,
+        0.90625
+      ],
+      "pairedHoeffding95": [
+        0.4417246210648451,
+        1
+      ],
+      "bySeat": [
+        {
+          "n": 16,
+          "wins": 13,
+          "draws": 0
+        },
+        {
+          "n": 16,
+          "wins": 12,
+          "draws": 0
+        }
+      ],
+      "byStarter": {
+        "BOT · FUNDAMENTALS": {
+          "n": 32,
+          "wins": 25,
+          "draws": 0
+        }
+      },
+      "reachedTurnLimit": {
+        "n": 0,
+        "wins": 0,
+        "draws": 0
+      },
+      "decisionMs": {
+        "p50": 69.66104199999245,
+        "p95": 833.1915420000441,
+        "max": 8738.420083999983
+      }
+    },
+    "normal": {
+      "n": 32,
+      "wins": 28,
+      "draws": 0,
+      "score": 0.875,
+      "independentPairs": 16,
+      "pairedBootstrap95": [
+        0.75,
+        0.96875
+      ],
+      "pairedHoeffding95": [
+        0.5354746210648451,
+        1
+      ],
+      "bySeat": [
+        {
+          "n": 16,
+          "wins": 13,
+          "draws": 0
+        },
+        {
+          "n": 16,
+          "wins": 15,
+          "draws": 0
+        }
+      ],
+      "byStarter": {
+        "BOT · SPIRIT_CONTROL": {
+          "n": 8,
+          "wins": 7,
+          "draws": 0
+        },
+        "BOT · VAMPIRE": {
+          "n": 8,
+          "wins": 8,
+          "draws": 0
+        },
+        "BOT · GOBLIN_V99": {
+          "n": 8,
+          "wins": 6,
+          "draws": 0
+        },
+        "BOT · SPIRIT_RAMP": {
+          "n": 8,
+          "wins": 7,
+          "draws": 0
+        }
+      },
+      "reachedTurnLimit": {
+        "n": 1,
+        "wins": 1,
+        "draws": 0
+      },
+      "decisionMs": {
+        "p50": 1771.3066659998149,
+        "p95": 9473.84312500013,
+        "max": 548740.6745
+      }
+    },
+    "hard": {
+      "n": 24,
+      "wins": 14,
+      "draws": 0,
+      "score": 0.5833333333333334,
+      "independentPairs": 12,
+      "pairedBootstrap95": [
+        0.4166666666666667,
+        0.75
+      ],
+      "pairedHoeffding95": [
+        0.19128319548349065,
+        0.9753834711831761
+      ],
+      "bySeat": [
+        {
+          "n": 12,
+          "wins": 9,
+          "draws": 0
+        },
+        {
+          "n": 12,
+          "wins": 5,
+          "draws": 0
+        }
+      ],
+      "byStarter": {
+        "BOT · SPIRIT_FORTRESS": {
+          "n": 12,
+          "wins": 8,
+          "draws": 0
+        },
+        "BOT · SPIRIT_GOBLIN": {
+          "n": 12,
+          "wins": 6,
+          "draws": 0
+        }
+      },
+      "reachedTurnLimit": {
+        "n": 0,
+        "wins": 0,
+        "draws": 0
+      },
+      "decisionMs": {
+        "p50": 1790.184750000015,
+        "p95": 7974.663625000045,
+        "max": 18910.393124999944
+      }
+    }
+  }
+}
