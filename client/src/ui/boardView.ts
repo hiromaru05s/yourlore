@@ -4,6 +4,7 @@ import '../styles/duelNameplate.css';
 import {prepareHeldOutline,showHeldOutline} from './heldCardOutline';
 import {holdPhysicalCard} from './handPhysics';
 import {cloneCardNode} from './cardClone';
+import {PlayDropGuide} from './playDropGuide';
 import {isGoblinMonster} from '../shared/goblinCards';
 import { CurseSealBadge } from './curseSeal/badge';
 import {pendingText} from '../shared/pendingText';
@@ -339,6 +340,7 @@ export class GameView {
     disposeCardEffects(this.root);disposeCardFrames(this.root);
     disposeSeekers(this.root); disposeNpcReactions(this.root);
     this.cancelHandDrag?.();
+    this.playGuide?.destroy();
     this.disposeScene?.();
     this.trickRoom.dispose();
     this.anesthesia.dispose();
@@ -354,6 +356,7 @@ export class GameView {
 
   private handOpen = false;
   private handDock: { parent: Node; next: Node | null } | null = null;
+  private playGuide: PlayDropGuide | null = null;
   private cancelHandDrag: (() => void) | null = null;
   private physicalHandUid: string | null = null;
   setHandOpen(open: boolean): void {
@@ -731,10 +734,9 @@ export class GameView {
       rbtn.id = isMe ? "rift-me" : "rift-opp";
       const previousCards = this.riftContents.get(rbtn.id);
       const previous = previousCards?.size;
-      if (previousCards && removed.length > previousCards.size &&
-        removed.some(c => !previousCards.has(c.uid) && c.id !== 'QUICK_ATTUNE')) rbtn.classList.add("is-absorbing");
+      // Receiving light belongs exclusively to the actual transfer clock.
+      // A rendered count delta is not a second arrival (or a CSS animation).
       this.riftContents.set(rbtn.id,new Set(removed.map(c=>c.uid)));
-      rbtn.addEventListener("animationend", () => rbtn.classList.remove("is-absorbing"));
       rbtn.innerHTML = '<span class="rift-sprite" aria-hidden="true"></span>';
       rbtn.append(createRiftRecordWindow(removed.length, previous, isMe ? 'me' : 'opp', recordVariant(this.root.dataset.riftCountVariant)));
       rbtn.title = `${t("deck.removed")} ${removed.length}`;
@@ -1238,6 +1240,7 @@ export class GameView {
       const outline=physical?prepareHeldOutline(card):null;
       let clearOutline:(()=>void)|null=null;
       let releasing=false;
+      this.playGuide?.destroy();
       const wasOpen = this.handOpen;
       if (!wasOpen) { this.setHandOpen(true); swallowNextClick(card); }
       e.preventDefault();
@@ -1248,7 +1251,7 @@ export class GameView {
       const sourceWidth=card.offsetWidth,sourceHeight=card.offsetHeight;
       let ghost: HTMLElement | null = null;
       let done = false;
-      let guide: HTMLElement | null = null;
+      let guide: PlayDropGuide | null = null;
       const destination = c.t === "mon" ? this.root.querySelector<HTMLElement>("#meRow .zone-mon") : null;
       // Gesture-space cancellation is stable even when opening/re-rendering the
       // hand moves its DOM underneath the pointer. Both types use the whole board.
@@ -1280,7 +1283,7 @@ export class GameView {
         motion?.dispose();
         clearOutline?.();
         ghost?.remove();
-        guide?.remove();
+        guide?.destroy();
         destination?.classList.remove("drop-destination", "drop-ready");
         card.classList.remove("is-dragging","is-physical-dragging");
         liveSource().classList.remove("is-dragging","is-physical-dragging");
@@ -1330,11 +1333,8 @@ export class GameView {
           card.classList.add("is-dragging");
           if(motion){this.physicalHandUid=c.uid;liveSource().classList.add('is-dragging','is-physical-dragging');}
           if (aff) game?.classList.add("drag-play");
-          guide = document.createElement("div");
-          guide.className = "play-drop-guide";
-          guide.setAttribute("role", "status");
-          guide.setAttribute("aria-live", "polite");
-          document.body.appendChild(guide);
+          guide = new PlayDropGuide();
+          this.playGuide = guide;
           if (aff) destination?.classList.add("drop-destination");
         }
         if(motion){const home=handReturnPose(ev.clientX,ev.clientY);motion.move(ev.clientX,ev.clientY,home.scale,home.proximity);}
@@ -1343,13 +1343,8 @@ export class GameView {
         destination?.classList.toggle("drop-ready", ready && aff);
         ghost.classList.toggle("drop-ready", ready && aff);
         if (guide) {
-          const r = dropBounds();
-          guide.style.left = `${r.left}px`; guide.style.top = `${r.top}px`;
-          guide.style.width = `${r.right - r.left}px`; guide.style.height = `${r.bottom - r.top}px`;
-          guide.classList.toggle("is-ready", ready && aff);
-          guide.classList.toggle("is-blocked", !aff);
           const label = !aff ? t("play.drop.blocked") : ready ? t("play.drop.release") : t("play.drop.guide");
-          if (guide.textContent !== label) guide.textContent = label;
+          guide.update({...dropBounds(),x:ev.clientX,y:ev.clientY,ghostHeight:ghost.offsetHeight,card:ghost,ready:ready&&aff,blocked:!aff,label});
         }
       };
       const onUp = async (ev: PointerEvent): Promise<void> => {
@@ -1365,8 +1360,9 @@ export class GameView {
         // include the ghost's scale/rotate and land a few px off.
         const gw = ghost ? ghost.offsetWidth : 0, gh = ghost ? ghost.offsetHeight : 0;
         const rel = motion ? motion.rect() : ghost ? { left: ev.clientX - gw / 2, top: ev.clientY - gh * 0.58, width: gw, height: gh } : null;
+        guide?.finish();
+        guide = null;
         if(motion&&!inPlayArea&&liveSource().isConnected){
-          guide?.remove();
           await motion.returnTo(liveSource());
           if(done)return;
         }

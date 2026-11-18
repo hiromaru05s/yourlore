@@ -1,0 +1,156 @@
+{
+  "checks": [
+    {
+      "mobile": false,
+      "badges": [
+        {
+          "a": 357.5409851074219,
+          "b": 357.5409851074219,
+          "delta": 0
+        },
+        {
+          "a": 637.7622375488281,
+          "b": 637.7622375488281,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "mobile": false,
+      "hand": [
+        {
+          "uid": "cost",
+          "index": "0",
+          "played": false
+        },
+        {
+          "uid": "extra1",
+          "index": "1",
+          "played": false
+        },
+        {
+          "uid": "extra2",
+          "index": "2",
+          "played": false
+        }
+      ]
+    },
+    {
+      "mobile": false,
+      "rifts": [
+        {
+          "id": "rift-opp",
+          "absorbing": false
+        },
+        {
+          "id": "rift-me",
+          "absorbing": false
+        }
+      ]
+    },
+    {
+      "mobile": true,
+      "badges": [
+        {
+          "a": 391.3224792480469,
+          "b": 391.3224792480469,
+          "delta": 0
+        },
+        {
+          "a": 475.34136962890625,
+          "b": 475.34136962890625,
+          "delta": 0
+        }
+      ]
+    },
+    {
+      "mobile": true,
+      "hand": [
+        {
+          "uid": "cost",
+          "index": "0",
+          "played": false
+        },
+        {
+          "uid": "extra1",
+          "index": "1",
+          "played": false
+        },
+        {
+          "uid": "extra2",
+          "index": "2",
+          "played": false
+        }
+      ]
+    },
+    {
+      "mobile": true,
+      "rifts": [
+        {
+          "id": "rift-opp",
+          "absorbing": false
+        },
+        {
+          "id": "rift-me",
+          "absorbing": false
+        }
+      ]
+    },
+    {
+      "owner": 0,
+      "cannon": {
+        "shots": [
+          20169.5,
+          22707.399999976158
+        ],
+        "times": [
+          {
+            "time": 21373.799999952316,
+            "text": "1"
+          },
+          {
+            "time": 23881.600000023842,
+            "text": "1"
+          }
+        ],
+        "hp": 79,
+        "targetHp": 1
+      }
+    },
+    {
+      "owner": 1,
+      "cannon": {
+        "shots": [
+          27502,
+          30015.399999976158
+        ],
+        "times": [
+          {
+            "time": 28687.100000023842,
+            "text": "1"
+          },
+          {
+            "time": 31193.600000023842,
+            "text": "1"
+          }
+        ],
+        "hp": 79,
+        "targetHp": 1
+      }
+    },
+    {
+      "targets": {
+        "a": {
+          "type": "pick",
+          "uid": "enemy-enchant"
+        },
+        "elapsed": 6,
+        "enchants": 0,
+        "held": true,
+        "cleared": true,
+        "deltaActive": false
+      }
+    }
+  ],
+  "errors": []
+}

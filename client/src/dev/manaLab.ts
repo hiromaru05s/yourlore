@@ -82,7 +82,7 @@ function draw(){if(!ready)return;resize();
  const magnification=height/(2*Math.tan(T.MathUtils.degToRad(camera.fov/2))*distance);
  handles.forEach(h=>h.group.traverse(o=>{if(o instanceof T.Points)(o.material as T.ShaderMaterial).uniforms.uPixels.value=Math.min(8,magnification*.0015)*renderer.getPixelRatio();}));
  scene.background=new T.Color(dark?0x0a1523:0xe9ece8);groundMaterial.color.set(dark?0x101e2b:0xe5e9e6);
- renderer.setRenderTarget(target);renderer.clear();renderer.render(scene,camera);if(id!=='original'&&!reduced)applyFormationBloom(renderer,target);renderer.setRenderTarget(null);renderer.render(presentScene,presentCamera);
+ renderer.setRenderTarget(target);renderer.clear();renderer.render(scene,camera);if(id!=='original'&&!reduced)applyFormationBloom(renderer,target,scene,camera);renderer.setRenderTarget(null);renderer.render(presentScene,presentCamera);
  const c=overlay.getContext('2d')!;c.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);c.clearRect(0,0,width,height);
  if(id==='original'&&!reduced){const project=(x:number,z:number)=>{const v=new T.Vector3(x,.014,z).project(camera);return {x:(v.x+1)*width/2,y:(1-v.y)*height/2};};const a=project(-.175,-.0385),b=project(.175,.0385);drawManaGain(c,{left:a.x,top:a.y,width:b.x-a.x,height:b.y-a.y},t/1000);}
 }

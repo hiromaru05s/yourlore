@@ -29,6 +29,10 @@ function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (
   const view = observationSample(g, g.pending?.owner ?? g.cur, 0);
   let best = safeGreedy(view);
   onProgress?.(legalBotAction(g,best,view));
+  // Resolve a started board-removal choice before exploring purchases/rerolls.
+  // A whole-turn stochastic rollout could cancel a useful cast for a sampled
+  // refresh, and consumed the same 30,000-node budget as a new turn.
+  if (view.pending?.kind === 'oppBoard') return legalBotAction(g, best, view);
   let completed=best;
   const nodes=nodeLimit===undefined?THINKING_NODES[diff]:Math.min(THINKING_NODES[diff],Math.max(1,Math.floor(nodeLimit)||1));
   best=withThinkingBudget(nodes,()=>

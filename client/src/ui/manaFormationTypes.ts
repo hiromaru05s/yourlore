@@ -1,7 +1,7 @@
 import type * as T from 'three';
 export type FormationInput={parent:T.Group;parts:T.InstancedMesh[];slot:number;maximum:number;ordinal:number;count:number};
 export type FormationHandle={update:(age:number,worldScale:number)=>void;dispose:()=>void;group:T.Group};
-export type FormationPreview={id:string;duration:number;impact:number;create:(input:FormationInput)=>FormationHandle;postprocess:(renderer:T.WebGLRenderer,target:T.WebGLRenderTarget)=>void};
+export type FormationPreview={id:string;duration:number;impact:number;create:(input:FormationInput)=>FormationHandle;postprocess:(renderer:T.WebGLRenderer,target:T.WebGLRenderTarget,scene:T.Scene,camera:T.Camera)=>void};
 /** Same authored placement is shared by the final instances and forming geometry. */
 export function manaSlotLayout(index:number,maximum:number){
  const rows=maximum<=10?1:maximum<=20?2:3;

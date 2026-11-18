@@ -178,7 +178,14 @@ function fromRect(side: ViewSide, org: PlayOrigin | null): DOMRect | null {
   if (org) return new DOMRect(org.left, org.top, org.width, org.height);
   return handRect(side);
 }
-const handRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#hand" : "#oppHand");
+const presentedHandOrigins = new Map<ViewSide, DOMRect>();
+/** Capture before re-seating, so even the last played card retains its origin. */
+export function capturePlayHand(side:ViewSide):void {
+  const rect=rectOf(side==='me'?'#hand':'#oppHand');
+  if(rect)presentedHandOrigins.set(side,rect);
+}
+export function clearPlayHands():void {presentedHandOrigins.clear();}
+const handRect = (side: ViewSide): DOMRect | null => presentedHandOrigins.get(side)??rectOf(side === "me" ? "#hand" : "#oppHand");
 const rowRect = (side: ViewSide): DOMRect | null => rectOf(side === "me" ? "#meRow .zone-mon" : "#oppRow .zone-mon");
 const discId = (side: ViewSide): string => (side === "me" ? "pile-myDisc" : "pile-oppDisc");
 function trapZoneRect(side: ViewSide): DOMRect | null {

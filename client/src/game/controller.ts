@@ -374,7 +374,7 @@ export abstract class BaseController implements BoardHandlers {
         }
       }
       if(this.dead)return;
-      await this.playEvents(prev, res, presentedHandDiscards);
+      try { await this.playEvents(prev, res, presentedHandDiscards); } finally { A.clearPlayHands(); }
       if(loser!==null && this.lethalOutcome){
         if(A.isFxSkipped())this.lethalOutcome.cancel();
         else this.lethalOutcome.start(); // Missing-contact fallback uses the final native HP display.
@@ -423,14 +423,14 @@ export abstract class BaseController implements BoardHandlers {
 
   /** Play a batch of events one at a time on the OLD board, then re-render. */
   private async playEvents(prev: GameState, res: ReduceResult, presentedHandDiscards:Set<string>): Promise<void> {
-    // Cards that left my hand must disappear from it IMMEDIATELY — seeing a
-    // card fly onto the field while its copy still sits in the hand is confusing.
-    // (The hand itself only re-renders after the whole batch has played out.)
-    const newHand = new Set(res.state.players[this.you].hand.map((c) => c.uid));
-    for (const c of prev.players[this.you].hand) {
-      if (!newHand.has(c.uid)) {
-        (document.querySelector(`#hand .card[data-uid="${c.uid}"]`) as HTMLElement | null)?.classList.add("is-played");
-      }
+    // Re-seat the native hand at play acceptance, while the detached face owns
+    // the flight. Do not add new draws before their presentation event.
+    for (const player of [0,1] as Side[]) {
+      const kept=new Set(res.state.players[player].hand.map(c=>c.uid));
+      const remaining=prev.players[player].hand.filter(c=>kept.has(c.uid));
+      if(remaining.length===prev.players[player].hand.length)continue;
+      A.capturePlayHand(player===this.you?'me':'opp');
+      this.view.presentDrawHand(prev,player,remaining);
     }
     const events = counterPresentationEvents(res.events);
     const growth=growthGroups(events),growthHands=growthDrawHands(prev,res.state,events);
