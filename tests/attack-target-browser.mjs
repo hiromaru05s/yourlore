@@ -9,7 +9,7 @@ try{
  for(const mobile of [false,true]){
   const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:960},hasTouch:mobile,isMobile:mobile,...(process.env.LORE_RECORD_VIDEO==='1'&&!mobile?{recordVideo:{dir:out,size:{width:1440,height:960}}}:{})});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(origin+'/attack-target-preview.html?v=5');await page.waitForSelector('[data-scene-ready=true]');
+  await page.goto(origin+'/attack-target-preview.html?v=6');await page.waitForSelector('[data-scene-ready=true]');
   await page.evaluate(()=>attackTargetPreview.stopDemo());await page.waitForTimeout(350);
   const node=uid=>page.locator(`.zone-mon [data-uid="${uid}"]`);
   const rect=async uid=>node(uid).boundingBox();
@@ -32,7 +32,7 @@ try{
   const emitter=await page.locator('.attack-aim').evaluate(e=>e.dataset.source.split(',').map(Number));
   assert(Math.abs(emitter[0]-middle(sourceRaised).x)<1.5);
   assert(Math.abs(emitter[1]-(sourceRaised.y+sourceRaised.height*.045))<1.5);
-  assert.equal(await page.locator('.attack-aim').getAttribute('data-material'),'bevelled-light');
+  assert.equal(await page.locator('.attack-aim').getAttribute('data-material'),'flowing-light');
   await page.waitForSelector('[data-uid="attacker"] .attack-source-light svg');
   const sourceLight=await node('attacker').evaluate(e=>{const light=e.querySelector('.attack-source-light');return {rim:getComputedStyle(light.querySelector('.attack-target-rim')).stroke,outline:light.querySelector('.attack-target-rim').getAttribute('d'),mask:light.querySelector('mask path').getAttribute('d'),artTint:getComputedStyle(e.querySelector('.card-art'),'::before').content};});
   assert.equal(sourceLight.rim,'rgb(54, 184, 255)');assert.equal(sourceLight.outline,sourceLight.mask);assert(sourceLight.outline.length>100);assert.equal(sourceLight.artTint,'none');
@@ -71,5 +71,5 @@ try{
   await cancel();await clean();checks.push({mobile,reducedStatic:true});
   await context.close();
  }
- assert.deepEqual(errors,[]);await fs.writeFile(out+'/checks.json',JSON.stringify({checks,errors,source:'a67ceafdf',origin,boundary:'Local real-board mouse/touch fixtures; no authenticated PvP.'},null,2));console.log('PASS attack target contour, float, original hit area, retargeting, cancellation, persistent actor, materials and reduced motion');
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/checks.json',JSON.stringify({checks,errors,source:'fe168a872',origin,boundary:'Local real-board mouse/touch fixtures; no authenticated PvP.'},null,2));console.log('PASS attack target contour, float, original hit area, retargeting, cancellation, persistent actor, materials and reduced motion');
 }finally{await browser.close();}

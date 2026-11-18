@@ -49,7 +49,7 @@ class PreviewController extends BaseController {
 const controller=new PreviewController(document.getElementById('app')!,0,{onHome(){},onRematch(){}});
 const stopLayout=startBoardLayout();
 const panel=document.createElement('aside');panel.className='attack-preview-controls lore-surface';
-panel.innerHTML='<strong>攻撃ドラッグ · 青い起点と進行方向</strong><p>手前のモンスターから相手へドラッグして確認できます。</p><output role="status">青く光る攻撃元から、矢じりの光が赤い対象へ流れます。</output><div><button class="btn" id="preview-demo" aria-pressed="true">選択表示</button><button class="btn" id="preview-replay">浮上を再生</button><button class="btn" id="preview-reset">盤面を戻す</button></div>';
+panel.innerHTML='<strong>攻撃ドラッグ · 青い起点と進行方向</strong><p>手前のモンスターから相手へドラッグして確認できます。</p><output role="status">青い起点から、細い光の軌跡が対象へ流れます。</output><div><button class="btn" id="preview-demo" aria-pressed="true">選択表示</button><button class="btn" id="preview-replay">浮上を再生</button><button class="btn" id="preview-reset">盤面を戻す</button></div>';
 document.body.append(panel);
 let demo:ReturnType<typeof createAttackAim>|null=null,locked:HTMLElement|null=null,releaseDemo:((immediate?:boolean)=>void)|null=null,releaseSource:((immediate?:boolean)=>void)|null=null;
 function stopDemo(immediate=true){
@@ -83,4 +83,4 @@ startDemo();
 Object.assign(window,{attackTargetPreview:{controller,startDemo,stopDemo}});
 window.addEventListener('pagehide',()=>{stopDemo();stopLayout();controller.destroy();},{once:true});
 
-const previewUrl=new URL(location.href);previewUrl.searchParams.delete('look');previewUrl.searchParams.set('v','5');history.replaceState(null,'',previewUrl);
+const previewUrl=new URL(location.href);previewUrl.searchParams.delete('look');previewUrl.searchParams.set('v','6');history.replaceState(null,'',previewUrl);
