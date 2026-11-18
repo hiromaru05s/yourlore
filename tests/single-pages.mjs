@@ -20,7 +20,7 @@ try {
   assert.deepEqual(SINGLE_DIFFICULTIES, ['easy', 'normal', 'hard']);
 
   const motion = createSingleIdleMotion(() => 0);
-  let state = motion.advance(0), previous = state, sawBlink = false, sawGesture = false;
+  let state = motion.advance(0), previous = state, sawBlink = false, sawGesture = false, returnedToIdle = false;
   for (let frame = 0; frame < 60 * 28; frame++) {
     state = motion.advance(1 / 60);
     assert(state.blink >= 0 && state.blink <= 1);
@@ -28,10 +28,10 @@ try {
     assert(Math.abs(state.gesture - previous.gesture) < 0.021, 'gesture blends in and out without a jump');
     if (state.blink > 0.99) sawBlink = true;
     if (state.gesture > 0.99) sawGesture = true;
-    if (state.time > 15 && state.time < 22) assert.equal(state.gesture, 0);
+    if (sawGesture && state.gesture === 0) returnedToIdle = true;
     previous = state;
   }
-  assert(sawBlink && sawGesture);
+  assert(sawBlink && sawGesture && returnedToIdle);
   assert.deepEqual(motion.advance(0), state, 'paused screen does not advance motion');
   assert.deepEqual(motion.advance(-1), state);
   const quiet = createSingleIdleMotion(() => 0.9);

@@ -32,6 +32,7 @@ interface PaintingMotion {
   vertexShader: string;
   fragmentShader?: string;
   uniforms?: Record<string, IUniform>;
+  pixelRatio?: number;
 }
 
 /** A static scene can supply its own motion field and keep the authored pigment. */
@@ -40,7 +41,7 @@ export function createSeekerPainting(host: HTMLElement, image: HTMLImageElement,
   const texture = new Texture(image);
   texture.colorSpace = SRGBColorSpace;
   texture.needsUpdate = true;
-  const geometry = new PlaneGeometry(2, 2, motion ? 48 : 24, motion ? 72 : 40);
+  const geometry = new PlaneGeometry(2, 2, motion ? 96 : 24, motion ? 144 : 40);
   const material = new ShaderMaterial({
     uniforms:{painting:{value:texture}, time:{value:0}, daylight:{value:new Vector4()},...motion?.uniforms},
     vertexShader:motion?.vertexShader ?? vertexShader,
@@ -89,7 +90,9 @@ export function createSeekerPainting(host: HTMLElement, image: HTMLImageElement,
     renderer.render(scene, camera);
   }
   const resize = () => {
-    const density = Math.min(devicePixelRatio, 2, image.naturalWidth / Math.max(1,host.clientWidth));
+    const density = motion?.pixelRatio
+      ? Math.min(motion.pixelRatio, 3072 / Math.max(1, host.clientHeight))
+      : Math.min(devicePixelRatio, 2, image.naturalWidth / Math.max(1,host.clientWidth));
     renderer.setSize(Math.max(1, Math.round(host.clientWidth*density)), Math.max(1, Math.round(host.clientHeight*density)), false);
     draw(material.uniforms.time.value);
   };

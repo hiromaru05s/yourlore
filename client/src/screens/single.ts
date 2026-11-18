@@ -56,7 +56,7 @@ export function mountSingle(app:App, initial:SingleLocation={}):Screen {
     root.dataset.story=String(story);
     root.innerHTML=`
       <div class="sp-stage">
-        <div class="sp-art" aria-hidden="true">${story?`<img class="sp-figure" src="${storyPortraits[0]}" alt="">`:`<span class="sp-figure sp-standing"><img src="/art/single-standing/${npc.id}.webp" alt=""></span>`}</div>
+        <div class="sp-art" aria-hidden="true">${story?`<img class="sp-figure" src="${storyPortraits[0]}" alt="">`:`<span class="sp-figure sp-standing"><img src="/art/single-standing/refined-v2/${npc.id}.webp" alt=""></span>`}</div>
         <div class="sp-shade"></div>
         <header class="sp-head"><nav class="sp-tabs" aria-label="${t('home.bot.title')}">
           <button data-story aria-pressed="${story}" ${open?'':'disabled'}>${open?'':lock}${storyLabel}</button>
