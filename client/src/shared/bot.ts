@@ -1,3 +1,4 @@
+import {isGoblinMonster} from './goblinCards';
 // Four difficulty levels share the same rules and legal-action safety.
 // Normal and upper tiers search imperfect-information rollouts; easy retains mistakes.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
@@ -174,6 +175,16 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
       const protectedAlready=g.players.some(p=>p.enchants.some(e=>e.card.ench==='vampWard')) || ally.hand.some(c=>c.id==='VAMP_WARD');
       return {type:'pick',uid:vampire && !protectedAlready ? 'VAMP_WARD' : 'VAMP_PACT'};
     }
+    if (g.pending.reason === 'RUNE_STRIP') {
+      const ally=g.players[owner];
+      const canAttack=ally.field.some(m=>monsterCanAttack(g,ally,m));
+      const score=(c:CardInst)=>cardPower(c)+(hasPassive(c,'taunt')&&canAttack?100:0)+(hasPassive(c,'evade')?20:0);
+      return {type:'pick',uid:[...pool].sort((a,b)=>score(b)-score(a))[0]?.uid??null};
+    }
+    if (g.pending.reason === 'RUNE_STRIP_KEY') {
+      const priorities=['taunt','evade','guts','counter','dual','aura'];
+      return {type:'pick',uid:priorities.find(key=>pool.some(c=>c.uid===key))??pool[0]?.uid??null};
+    }
     if (g.pending.reason === 'WORLD_TREE_ATTACK' || g.pending.reason === 'WORLD_TREE_DEFEND') return {type:'pick',uid:(g.players[owner].dew ?? 0)>0?'grow':'pass'};
     if (g.pending.reason === 'HIGH_ELF_HAND') return {type:'pick',uid:[...pool].filter(c=>c.uid!=='done' && !hasPassive(c,'relic')).sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid ?? 'done'};
     if (g.pending.reason === 'ARMORER_MODE') {const ally=g.players[owner];return {type:'pick',uid:ally.hp+(ally.shield ?? 0)<25||!pool.some(c=>c.uid==='buff')?'shield':'buff'};}
@@ -288,7 +299,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "HERMIT" && (p.field.length > 0 || (p.uses["HERMIT"] || 0) >= 5)) return false;
     if (c.id === "S3" && !p.field.some((m) => !m.tribe)) return false; // 칼날의 속삭임: 비종족 대상 필요
     // 폐기 경제 카드: 대상이 있어야 시전
-    if (c.act === "exilePick" && p.discard.length === 0) return false;
+    if (c.act === "exilePick" && p.discard.length === 0 && !(c.id === "PURGE_TOUCH" && (p.brand ?? 0) > 0)) return false;
     if (c.act === 'destroyMon' && !o.field.some(m=>removalHits(g,o,c,m))) return false;
     if (c.act === "destroyMon" && c.cap && !o.field.some((m) => m.cost <= c.cap!)) return false; // 룬 파열: 코스트 캡 대상 필요
     if (c.id === "WALLBREAK1" && ![...o.field, ...p.field].some((m) => effAtk(o, m, g) <= 2)) return false;
@@ -395,6 +406,18 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   if (removal) return { type: "play", idx: removal.i };
 
   // Remove sustained recovery / shield before spending mana on chip attackers.
+  const cleanse=spells.find(({c})=>c.id==='PURGE_TOUCH' && (p.brand ?? 0)>0);
+  if(cleanse)return {type:'play',idx:cleanse.i};
+  if((p.brand ?? 0)>0 && ![...p.hand,...p.deck,...p.discard].some(c=>c.id==='PURGE_TOUCH')) {
+    // Save the price of the first cleanse before developing another body.
+    const evaluate=purchaseEvaluator(g,p,T);
+    for(const [pool,type] of [[p.supply,'buySupply'],[g.market,'buyMarket']] as const) {
+      const i=pool.findIndex(c=>c?.id==='PURGE_TOUCH' && buyableByBot(p,c,g) && evaluate(c).margin>0);
+      if(i>=0)return {type,i};
+    }
+  }
+  const strip=spells.find(({c})=>c.id==='RUNE1');
+  if(strip && ready.length && o.field.some(m=>hasPassive(m,'taunt')))return {type:'play',idx:strip.i};
   const counter = spells.find(({c}) => (c.act === 'desertification' && (o.dew ?? 0) >= 2)
     || (c.act === 'armorBreak' && (o.shield ?? 0) >= 3)
     || (c.act === 'spearShield' && (o.shield ?? 0) > 0 && (o.shield ?? 0) < p.field.reduce((n,m) => n + Math.max(0,effAtk(p,m,g)),0)));
@@ -799,7 +822,7 @@ function autoTarget(g: GameState): Action {
     if (pending.reason === 'buffPerm' || pending.reason === 'buffTurn') {
       const d=pending.data,grant=d?.grant as Parameters<typeof hasPassive>[1]|undefined;
       const excluded=(d?.excl as string[]|undefined)??[];
-      const candidates=p.field.filter(m=>!excluded.includes(m.uid)&&(d?.sourceId!=='S3'||!m.tribe));
+      const candidates=p.field.filter(m=>!excluded.includes(m.uid)&&(d?.sourceId!=='S3'||!m.tribe)&&(d?.sourceId!=='FORGE'||isGoblinMonster(m)));
       const score=(m:FieldMon):number=>{
         if(grant&&hasPassive(m,grant))return -1000;
         const attack=effAtk(p,m,g),hp=curHp(p,m),ready=monsterCanAttack(g,p,m);

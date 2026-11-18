@@ -8948,10 +8948,14 @@
     },
     "GOBLIN_ORIGIN": {
       "nameJa": "ゴブリンの起源",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "2d0217a07ce13ccd1e3851321e48d5c827e5b5d79bbf36e40b4047a71739ff1c",
-      "textSha256": "c8d3c526aa9ab170937dba9a371a9e8c9e9d364285cd68016e85f54a4ca51a4c",
+      "status": "reviewed-v101",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "2c3e984ac82ea96e3b0c8fe7afbe5469e8c6e866db8cf6916dacdeb057476a88",
+      "textSha256": "3c6961f9c44407fb97788b70cc1a2eb0644b695bdbd91e44af4720f191a7d9be",
       "hooks": {
         "ench": "goblinOrigin"
       },
@@ -8961,37 +8965,45 @@
         "en": "【At the Start of Your Turn】Summon 1 Goblin to your field.\n\n【On Destruction】If an opponent's card effect destroys this, randomly destroy 1 monster on their field."
       },
       "after": {
-        "ja": "【自分のターン開始時】自分のフィールドに「ゴブリン」1体を召喚する。\n\n【破壊時】相手のカード効果で破壊された場合、相手フィールドのモンスター1体をランダムに破壊する。",
-        "ko": "【자신의 턴 시작 시】자신의 필드에 '고블린' 1체를 소환한다.\n\n【파괴 시】상대 카드 효과로 파괴되면, 상대 필드의 몬스터 1체를 무작위로 파괴한다.",
-        "en": "【At the Start of Your Turn】Summon 1 Goblin to your field.\n\n【On Destruction】If an opponent's card effect destroys this, randomly destroy 1 monster on their field."
+        "ja": "【自分のターン開始時】自分のフィールドに「ゴブリン」1体を召喚する。\n\n【破壊時】相手のカード効果で破壊された場合、自分の場の「ゴブリン」系モンスター全ての攻撃力+1（対象が場を離れるまで）。",
+        "ko": "【자신의 턴 시작 시】자신의 필드에 '고블린' 1체를 소환한다.\n\n【파괴 시】상대 카드 효과로 파괴되면, 자신의 필드에 있는 모든 고블린 계열 몬스터의 공격력 +1(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【At the Start of Your Turn】Summon 1 Goblin to your field.\n\n【On Destruction】If an opponent's card effect destroys this, give all your Goblin-family monsters on the field +1 ATK (until the affected monster leaves the field)."
       }
     },
     "GOBLIN_PARTY": {
       "nameJa": "ゴブリンパーティー",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "b7824bfcefe9b7aac6909bf3db6010a4e53ed938cc6478b42e2ba10497b6f491",
-      "textSha256": "e577dd34559b5b544305320f72d88c8b24f2e6873672a4cc30e8a54f7f747413",
+      "status": "reviewed-v101",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "74f15ce411bc096a721562502e99212193654add70832351774fb84c8484412d",
+      "textSha256": "155cfe6e88dbde7626547f4a26b7f04c83c493312c8d16e27c83b15de549a8e3",
       "hooks": {
         "act": "goblinParty"
       },
       "before": {
-        "ja": "【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】相手のマナ水晶を1減らし、自分のマナ水晶を1増やす。",
-        "ko": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】상대의 마나 수정을 1 감소시키고 자신의 마나 수정을 1 증가시킨다.",
-        "en": "【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 and increase yours by 1."
-      },
-      "after": {
         "ja": "【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】相手のマナ水晶を1減らし（最低3）、自分のマナ水晶を1増やす。",
         "ko": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】상대의 마나 수정을 1 감소시키고(최소 3) 자신의 마나 수정을 1 증가시킨다.",
         "en": "【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Reduce the opponent's mana crystals by 1 (minimum 3) and increase yours by 1."
+      },
+      "after": {
+        "ja": "【発動条件】自分の場にゴブリン系モンスターが3体以上いる。\n\n【発動時】自分のマナ水晶を1増やす。",
+        "ko": "【발동 조건】자신의 필드에 고블린 계열 몬스터가 3체 이상 있어야 한다.\n\n【발동 시】자신의 마나 수정을 1 증가시킨다.",
+        "en": "【Play Requirement】You need at least 3 Goblin-family monsters on your field.\n\n【On Cast】Increase your mana crystals by 1."
       }
     },
     "FORGE": {
       "nameJa": "ゴブリン鍛冶屋",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "b2a5ea96071163a3e80ddce4cfb7ff47cb1313efa882fc2633b4fd9046d27f21",
-      "textSha256": "768434d0ab67c59db5870b4916b090f4fb5d74f7e3144df106447ee3bb0a4551",
+      "status": "reviewed-v101",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "15a9561b6bd72b7194f5a8b157652de8b3f1965ce0b35d66b19867d7725766df",
+      "textSha256": "89c1bf9ee0f1097e6cf3fcaa11a37da3b4e86106ce45001316543fc741adab62",
       "hooks": {
         "act": "buffPerm"
       },
@@ -9001,16 +9013,20 @@
         "en": "【On Cast】Take 3 damage. Choose a friendly monster; it gets +4 ATK and +2 HP."
       },
       "after": {
-        "ja": "【発動時】自分は3ダメージを受ける。自分のモンスター1体を選び、攻撃力+4・体力+2。",
-        "ko": "【발동 시】자신은 3 데미지를 받는다. 자신의 몬스터 1체를 선택해 공격력 +4, 체력 +2.",
-        "en": "【On Cast】Take 3 damage. Choose a friendly monster; it gets +4 ATK and +2 HP."
+        "ja": "【発動時】自分は8ダメージを受ける。自分の「ゴブリン」系モンスター1体を選び、攻撃力+4（対象が場を離れるまで）。",
+        "ko": "【발동 시】자신은 8 데미지를 받는다. 자신의 고블린 계열 몬스터 1체를 선택해 공격력 +4(효과를 받은 몬스터가 필드를 떠날 때까지).",
+        "en": "【On Cast】Take 8 damage. Choose a friendly Goblin-family monster; it gains +4 ATK (until the affected monster leaves the field)."
       }
     },
     "ICARUS_SHOES": {
       "nameJa": "イカロスの靴",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "7b8596c4c3a32f98b36c1398f18a8c6e0108e20682cdb7718ff1d22f920dab9a",
+      "status": "reviewed-v101",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "78e7c51e11cec0a756fd5ddee57c685c3a677db0f0c86bb0025b620f44678520",
       "textSha256": "e62192eee20910451cfca8acd4b45ca5fdf327ceb450fc156bf914c8267048d6",
       "hooks": {
         "act": "buffPerm"
@@ -9028,9 +9044,13 @@
     },
     "ICARUS_WINGS": {
       "nameJa": "イカロスの翼",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "92853c61137f98b93a43d208c5e1ba65d7e3b3bfb69cfe4b56c475de3d57eafa",
+      "status": "reviewed-v101",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "da3899085427e02acaaafb303f36c6e745ed50caab2283046a4cdcb425cae394",
       "textSha256": "dbfea10abcba2575b90035f4066de0637edc4f97967229f1fba6bf14141ed8f4",
       "hooks": {
         "act": "buffPerm"

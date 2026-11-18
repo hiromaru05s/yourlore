@@ -1,3 +1,4 @@
+import {isGoblinMonster} from './goblinCards';
 export {targetOwner} from './targetOwner';
 import type { CardInst, FieldMon, GameState, Side } from './types';
 import { hasPassive } from './cards';
@@ -23,6 +24,7 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
     ...(enchants ? p.enchants.map(e => e.card) : []),
   ];
   switch (c.id) {
+    case 'FORGE': return plan('buffPerm',p.field.filter(isGoblinMonster));
     // These IDs override their legacy act with automatic target rules.
     case 'WALLBREAK1': case 'SNIPE1': return null;
     case 'FOCUS': return plan('purge',[...p.deck,...p.discard,c,...p.field,...p.enchants.map(e=>e.card),...p.traps.map(t=>t.card),...(p.quests??[]).map(q=>q.card)].filter(h=>!hasPassive(h,'relic')).sort((a,b)=>a.cost-b.cost||a.id.localeCompare(b.id)||a.uid.localeCompare(b.uid)),1,0);

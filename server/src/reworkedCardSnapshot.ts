@@ -24,6 +24,7 @@ const questCards = new Set(['Q_RIFT','Q_BRAND','Q_TORI','Q_TRIBE','Q_DECAY','Q_A
 /** Rooms persist full card instances, including their printed rules. Update only
  * revised print fields so UID, counters, damage and granted abilities survive. */
 export function restoreReworkedCards(game: GameState): void {
+  const updateFeedback = !game.balance101Applied;
   const updateEliteGoblin = !game.balance100Applied;
   const updateCastle = !game.castleReworkApplied;
   const updateQuests = !game.questReworkApplied;
@@ -44,8 +45,9 @@ export function restoreReworkedCards(game: GameState): void {
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
   const updateGuildmasterText = game.mercReworkApplied !== 2;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied && game.balance99Applied && !updateEliteGoblin)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied && game.balance99Applied && !updateEliteGoblin && !updateFeedback)) return;
   game.balance100Applied = true;
+  game.balance101Applied = true;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -67,6 +69,12 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateFeedback && ['FORGE','GOBLIN_ORIGIN','GOBLIN_PARTY','ICARUS_SHOES','ICARUS_WINGS'].includes(card.id)) {
+      const def=DB[card.id];
+      for (const key of ['cost','play','val','val2','text','textJa','textEn'] as const) {
+        if(def[key]===undefined) Reflect.deleteProperty(card,key); else Reflect.set(card,key,def[key]);
+      }
+    }
     if (updateEliteGoblin && card.id === 'ELITE_GOBLIN') {
       const {text,textJa,textEn}=DB.ELITE_GOBLIN;
       Object.assign(card,{text,textJa,textEn});
@@ -452,6 +460,12 @@ export function restoreReworkedCards(game: GameState): void {
       if (balance99Prints[m.id] && (m.dmg ?? 0) >= effDef(p,m)) m.dmg = Math.max(0,effDef(p,m)-1);
     }
     game.balance99Applied = true;
+  }
+  if(updateFeedback){
+    for(const choice of [game.pending,...game.expansionChoices??[]]) if(choice?.data?.sourceId==='FORGE') {
+      choice.data.val=4;choice.data.val2=0;
+    }
+    clearEmptyBuffChoice(game);
   }
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);

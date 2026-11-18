@@ -208,15 +208,37 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
   const inspection=element('div','hand-market-inspection');
   inspection.setAttribute('role','group');inspection.setAttribute('aria-label',words.market);
   inspection.hidden=true;scene.node.append(inspection);
+  // Keep inspection inside this opening modal: mounting a second global modal
+  // would dispose the mulligan selection and its timer.
+  const deckPanel=element('div','hand-panel mulligan-deck-panel lore-surface');deckPanel.hidden=true;
+  deckPanel.setAttribute('role','dialog');deckPanel.setAttribute('aria-label',t('deck.view'));
+  const deckTitle=element('h2','study-title',t('deck.view'));
+  const deckGrid=element('div','mulligan-deck-grid');
+  const me=state.players[you];
+  for(const card of [...me.hand,...me.deck,...me.discard,...me.field,...me.enchants.map(e=>e.card),...me.traps.map(e=>e.card)].sort((a,b)=>a.cost-b.cost)) {
+    const face=cardEl(card);face.tabIndex=0;face.setAttribute('role','button');
+    face.onclick=()=>{zoomCard(card);placeResume();};bindZoom(face,card);
+    face.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();face.click();}};
+    deckGrid.append(face);
+  }
+  const deckClose=element('button','btn',t('help.close'));
+  deckClose.onclick=()=>{deckPanel.hidden=true;inspection.hidden=false;};
+  const deckHeading=element('div','mulligan-deck-heading');deckHeading.append(deckTitle,deckClose);
+  deckPanel.append(deckHeading,deckGrid);scene.node.append(deckPanel);
+  const deckTarget=element('button','market-inspect-target');deckTarget.type='button';deckTarget.setAttribute('aria-label',t('deck.view'));
+  deckTarget.onclick=()=>{deckPanel.hidden=false;inspection.hidden=true;deckClose.focus();};
+  inspection.append(deckTarget);
   const publicCards=new Map([...state.market,...state.players[state.cur].supply].flatMap(c=>c?[[c.uid,c] as const]:[]));
   const targets=new Map<string,HTMLButtonElement>();
-  // Only market cards receive inspection targets. The surrounding modal keeps gameplay input locked.
+  // Public market and own deck are inspectable; gameplay stays locked.
   function placeResume(){
     const host=document.getElementById('zoomOverlay')??scene.node;
     if(resume.parentElement!==host)host.append(resume);
   }
   function alignMarket(){
     placeResume();
+    const pile=document.getElementById('pile-myDeck');
+    if(pile){const r=pile.getBoundingClientRect();Object.assign(deckTarget.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'});}
     const visible=new Set<string>();
     for(const source of document.querySelectorAll<HTMLElement>('#fixedMarket .card[data-uid],#supplyMarket .card[data-uid]')){
       const uid=source.dataset.uid!,card=publicCards.get(uid);
@@ -226,6 +248,7 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
       if(!target){
         target=element('button','market-inspect-target');
         target.type='button';target.setAttribute('aria-label',cardName(card));target.onclick=()=>{zoomCard(card);placeResume();};
+        target.oncontextmenu=e=>{e.preventDefault();e.stopPropagation();zoomCard(card);placeResume();};
         inspection.append(target);targets.set(uid,target);
       }
       const r=source.getBoundingClientRect();
@@ -235,7 +258,7 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
     for(const [uid,target] of targets)if(!visible.has(uid))target.hidden=true;
   }
   function showMarket(open:boolean){
-    endDrag();
+    endDrag();deckPanel.hidden=true;
     scene.node.classList.toggle('viewing-board',open);inspection.hidden=!open;
     panel.hidden=open;outside.hidden=open;resume.hidden=!open;
     scene.heading.textContent=open?words.market:confirmed?words.confirmed:words.help;
@@ -253,6 +276,7 @@ export function buildHandStudy(state:GameState,you:Side,select:(uids:string[])=>
   };
   scene.node.addEventListener('keydown',e=>{
     if(e.key!=='Escape'||document.getElementById('zoomOverlay'))return;
+    if(!deckPanel.hidden){e.preventDefault();deckClose.click();return;}
     e.preventDefault();showMarket(inspection.hidden);
   });
   if(confirmed)scene.status.textContent=words.waiting;else scene.status.remove();

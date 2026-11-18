@@ -199,3 +199,11 @@
 .hand-study:not(.is-confirmed) .keep-lane .study-slot.drop-hover::before{
   border-color:var(--silk);box-shadow:inset 0 0 10px #80bde345,0 0 6px #89c7ea66;
 }
+
+.mulligan-deck-panel { z-index:5; max-height:85vh; overflow:auto; padding:20px; pointer-events:auto; }
+.mulligan-deck-panel[hidden] { display:none!important; }
+.mulligan-deck-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:16px 0; }
+.mulligan-deck-grid .card { --cw:100px; --ch:146px; flex:none; cursor:pointer; }
+
+.mulligan-deck-heading { position:sticky; top:0; z-index:2; display:flex; align-items:center; justify-content:space-between; gap:12px; background:#0b2034; }
+.mulligan-deck-heading .study-title { font-size:20px; }

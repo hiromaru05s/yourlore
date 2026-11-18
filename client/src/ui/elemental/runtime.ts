@@ -12,6 +12,35 @@ export const supportsElemental=(id:string)=>id==='FLAME'||Object.hasOwn(visualEn
 const anchor=(el:HTMLElement|null|undefined):Anchor|null=>{const r=combatRect(el);return r?{el:el!,x:r.x+r.width/2,y:r.y+r.height/2,w:r.width,h:r.height}:null};
 /** The reducer owns targets and damage. This clock only reveals its public results. */
 export function startElemental(event:ElementalEvent,you:Side,sourceNode?:HTMLElement):Playback {
+ // A repeated target starts a new complete cast. Distinct targets keep their
+ // shared volley; follow-up damage never borrows the first hit's timestamp.
+ const phases:Array<{indexes:number[];targets:ElementalEvent['targets']}>=[];
+ let seen=new Set<string>();
+ event.targets.forEach((target,index)=>{
+  const key=target.uid??'player-'+target.player;
+  if(!phases.length||seen.has(key)||event.id==='FIRE_BALL'){phases.push({indexes:[],targets:[]});seen=new Set();}
+  seen.add(key);phases.at(-1)!.indexes.push(index);phases.at(-1)!.targets.push(target);
+ });
+ if(phases.length<=1)return startElementalBatch(event,you,sourceNode);
+ let active:Playback|undefined,cancelled=false;
+ let delayDone:(()=>void)|undefined;
+ const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const resolve:Array<()=>void>=[],impacts=event.targets.map((_,i)=>new Promise<void>(done=>resolve[i]=done));
+ const finished=(async()=>{
+  try {
+   for(const phase of phases){
+    if(cancelled)break;
+    active=startElementalBatch({...event,targets:phase.targets},you,sourceNode);
+    const current=active;
+    await Promise.all([current.finished,...phase.indexes.map((index,i)=>current.impact(i).then(()=>resolve[index]()))]);
+    // Reduced VFX still leave enough time to read and clear the damage number.
+    if(reduced&&!cancelled)await new Promise<void>(done=>{const timer=setTimeout(done,500);delayDone=()=>{clearTimeout(timer);done();};});
+   }
+  } finally {resolve.forEach(done=>done());}
+ })();
+ return {impact:index=>impacts[index]??Promise.resolve(),finished,cancel(){cancelled=true;active?.cancel();delayDone?.();}};
+}
+function startElementalBatch(event:ElementalEvent,you:Side,sourceNode?:HTMLElement):Playback {
  if(event.id==='FLAME')return startEmberDebt(event,you,sourceNode);
  const entry=visualEntries[event.id],source=sourceNode??combatCard(event.uid),nodes=event.targets.map(t=>t.uid?combatCard(t.uid):combatPortrait(t.player===you?'me':'opp'));
  const measuredOrigin=anchor(source);

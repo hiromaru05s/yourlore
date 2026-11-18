@@ -113,6 +113,13 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
       if (!monsters) readiness -= base*.8;
       if (copies) redundancy -= base*.5;
     }
+    if (c.id === 'PURGE_TOUCH' && (p.brand ?? 0) > 0) {
+      const coverage=own.filter(x=>x.id==='PURGE_TOUCH').length;
+      matchup += Math.min(60,(p.brand ?? 0)*10+12)/(1+coverage*2);
+    }
+    if (c.id === 'RUNE1') {
+      matchup += Math.min(24,o.field.filter(m=>hasPassive(m,'taunt')).length*12);
+    }
     if (RUNE_IDS.has(c.id)) synergy += Math.min(6,own.filter(x=>x.id!==c.id && RUNE_IDS.has(x.id)).length*2);
     if (c.act?.startsWith('buff') || c.id === 'TRUMPET') synergy += monsters ? Math.min(6,monsters*1.5) : -8;
     // Market support is an option, discounted heavily compared with owned support.
@@ -220,7 +227,8 @@ export function purchaseEvaluator(g: GameState, p: PlayerState, tuning = ECONOMY
     const value = Math.max(0,base+synergy+matchup+readiness+redundancy+delay+denial+tempo)-cost*tuning.costW;
     // A strong deck can still lack an answer. Its printed average is not an
     // appropriate floor for the first card that covers an active engine.
-    const firstAnswer = (usableAnswer(c) && o.enchants.length>0 && !answerCoverage && readiness>=0)
+    const firstAnswer = (c.id==='PURGE_TOUCH' && (p.brand ?? 0)>0 && !count('PURGE_TOUCH'))
+      || (usableAnswer(c) && o.enchants.length>0 && !answerCoverage && readiness>=0)
       || (wallAnswer && !own.some(x=>plan.walls.some(m=>removalHits(g,o,x,m))))
       || (plan.blocked && c.id==='ADVANCE' && !count('ADVANCE'));
     const threshold = c.quick || canHire ? 0 : firstAnswer ? Math.min(floor,12) : floor;

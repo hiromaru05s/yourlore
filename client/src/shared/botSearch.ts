@@ -49,6 +49,8 @@ function strength(g: GameState, p: PlayerState): number {
   value += deck.reduce((sum, c) => sum + quality(c), 0) / Math.max(5, deck.length) * 5 * VALUE.deck;
   value += p.hand.reduce((sum, c) => sum + quality(c), 0) * VALUE.hand * 0.15;
   value -= (p.bleed ?? 0) * 2;
+  // Brand rolls damage every owner turn; cleansing it is a durable survival gain.
+  value -= (p.brand ?? 0) * 7;
   value += lastingValue(g, p);
   return value;
 }
