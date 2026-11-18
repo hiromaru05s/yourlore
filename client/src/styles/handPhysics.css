@@ -1,0 +1,15 @@
+.physical-card{isolation:isolate;backface-visibility:hidden;cursor:grabbing;transition:none!important;animation:none!important}
+.physical-card-sheen{position:absolute;inset:1.4% 2.5%;border-radius:5%;pointer-events:none;z-index:8;mix-blend-mode:soft-light}
+
+/* Thin continuous selection edge follows the real printed alpha, not the box. */
+.held-card-outline{position:absolute;inset:0;z-index:12;pointer-events:none}
+.held-card-outline svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.held-card-outline path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.held-aura{stroke:#65caff;stroke-width:6;opacity:.5;filter:blur(1.4px)}
+.held-rim{stroke:#77d5ff;stroke-width:3;opacity:.95}
+.held-core{stroke:#e5faff;stroke-width:1;opacity:.95}
+.held-travel{stroke:#fff;stroke-width:4;stroke-dasharray:14 86;animation:held-edge-travel 1900ms linear infinite}
+@keyframes held-edge-travel{from{stroke-dashoffset:0}to{stroke-dashoffset:-100}}
+@media(prefers-reduced-motion:reduce){.held-travel{animation:none;display:none}}
+
+.game #hand .card.is-physical-dragging{opacity:0!important}
