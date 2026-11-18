@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict';
+import path from 'node:path';
 import {build} from 'esbuild';
 import {mkdtemp,rm,writeFile,mkdir} from 'node:fs/promises';
 const tmp=await mkdtemp('/tmp/lore-contextual-');
 try {
- await build({stdin:{contents:`export * from './client/src/shared/engine';export * from './client/src/shared/cards';export * from './client/src/shared/bot';export * from './client/src/shared/botSearch';export * from './client/src/shared/botActions';export * from './client/src/shared/botAcquisition';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:tmp+'/core.mjs'});
+ await build({stdin:{contents:`export * from './client/src/shared/engine';export * from './client/src/shared/cards';export * from './client/src/shared/bot';export * from './client/src/shared/botSearch';export * from './client/src/shared/botActions';export * from './client/src/shared/botAcquisition';export * from './client/src/shared/botMatchup';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:tmp+'/core.mjs'});
  const C=await import(tmp+'/core.mjs');let serial=0;const evidence=[];
  const card=id=>{const c=C.DB[id]??C.STARTERS[id];assert(c,id);return {...c,uid:'context-'+serial++};};
  const mon=(id,overrides={})=>({...card(id),dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0,...overrides});
@@ -82,6 +83,12 @@ try {
   assert(paired.cooperation>0,'owned setup and payoff are tried in both orders');
   assert(paired.impact>score(plain,'NOURISHING_RAIN').impact);
  }
+ {
+  for(const side of [0,1]){
+   const g=fresh();g.cur=side;g.players[1-side].deck=Array.from({length:3},()=>card('CURSE'));
+   assert.equal(C.enteringAttack(g,g.players[side],C.DB.TOKEN00),3,'entry forecast preserves player identity when reading enemy composition');
+  }
+ }
  console.log('PASS contextual acquisition: actual effect, collateral, recovery conversion, draw horizon and privacy');
- if(process.env.BOT_CONTEXT_REPORT){await mkdir(new URL('.', 'file://'+process.env.BOT_CONTEXT_REPORT).pathname,{recursive:true});await writeFile(process.env.BOT_CONTEXT_REPORT,JSON.stringify(evidence,null,2));}
+ if(process.env.BOT_CONTEXT_REPORT){await mkdir(path.dirname(path.resolve(process.env.BOT_CONTEXT_REPORT)),{recursive:true});await writeFile(process.env.BOT_CONTEXT_REPORT,JSON.stringify(evidence,null,2));}
 }finally{await rm(tmp,{recursive:true,force:true});}

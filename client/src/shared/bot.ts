@@ -1,6 +1,6 @@
 import {isGoblinMonster} from './goblinCards';
 // Four difficulty levels share the same rules and legal-action safety.
-// Normal and upper tiers search imperfect-information rollouts; easy retains mistakes.
+// Every tier searches public-information hypotheses; Easy uses a smaller budget.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
 import { attackDecayCounters, fireDamageBonus, purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
 import { ST_MAX, effectSummonAllowed, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce as authoritativeReduce, sealLowBlocks, isGolem, isAssassinCard } from "./engine";

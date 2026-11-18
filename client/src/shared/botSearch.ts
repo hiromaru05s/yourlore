@@ -21,11 +21,16 @@ export const SEARCH = {
   hard: { width: 8, samples: 2, turns: 2, finalists: 3, extraSamples: 2 },
   hell: { width: 12, samples: 3, turns: 2, finalists: 4, extraSamples: 8 },
 };
-export const VALUE = { hp: 1, attack: 1.7, health: 0.65, mana: 3.5, deck: 0.65, hand: 0.8, enchant: 0.55, learned: 0.25 };
+export const VALUE = { hp: 1, attack: 1.7, health: 0.65, mana: 3.5, deck: 0.65, hand: 0.8, enchant: 0.55, learned: 0 };
+// Reducer states are immutable during a decision. Discard this cache afterwards:
+// callers/tests can legitimately update a state or evaluation tuning between moves.
+let materialCache: WeakMap<GameState, number> | undefined;
 
 function strength(g: GameState, p: PlayerState): number {
-  let value = VALUE.hp * (Math.min(100, p.hp) + Math.log1p(Math.max(0, p.hp - 100)) * 10 + (p.shield ?? 0) * 0.8 + (p.dew ?? 0) * 2.5);
-  value += Math.min(p.maxMana, 20) * VALUE.mana;
+  let value = VALUE.hp * (Math.min(100, p.hp)*.65 + Math.log1p(Math.max(0,p.hp))*10 + Math.log1p(Math.max(0, p.hp - 100)) * 7 + (p.shield ?? 0) * 0.8 + (p.dew ?? 0) * 2.5);
+  const curve=[...p.hand,...p.deck,...p.discard].filter(c=>!c.quick).map(c=>playCost(c,p)).sort((a,b)=>b-a);
+  const usefulMana=Math.max(6,Math.min(12,(curve[0]??3)+(curve[1]??3)));
+  value += (Math.min(p.maxMana,4)*.6+Math.max(0,Math.min(p.maxMana,usefulMana)-4)*1.7+Math.max(0,Math.min(p.maxMana,20)-usefulMana)*.55)*VALUE.mana;
   const opponent=g.players[p===g.players[0]?1:0];
   const attacksStopped=g.players.some(q=>q.enchants.some(e=>e.card.ench==='noAttack'));
   const defending=p.field.reduce((n,m)=>n+curHp(p,m)+Math.min(3,m.guts??0)*3+(m.aura==='castle'?Math.min(3,m.gcount??0)*4:0),0);
@@ -73,16 +78,23 @@ function strength(g: GameState, p: PlayerState): number {
 }
 export function positionMerit(g: GameState, s: Side): number {
   if(g.over)return g.winner===s?1000:g.winner==null?0:-1000;
-  return strength(g,g.players[s])-strength(g,g.players[1-s]);
+  let difference=materialCache?.get(g);
+  if(difference===undefined){difference=strength(g,g.players[0])-strength(g,g.players[1]);materialCache?.set(g,difference);}
+  return s===0?difference:-difference;
 }
 export function positionValue(g: GameState, s: Side): number {
   if (g.over) return g.winner === s ? 1 : g.winner == null ? 0.5 : 0;
-  const material = 1 / (1 + Math.exp(-(strength(g, g.players[s]) - strength(g, g.players[1 - s])) / 28));
-  return material * (1 - VALUE.learned) + learnedValue(g, s) * VALUE.learned;
+  const material = 1 / (1 + Math.exp(-positionMerit(g,s) / 28));
+  return VALUE.learned ? material * (1 - VALUE.learned) + learnedValue(g, s) * VALUE.learned : material;
 }
 
 /** Compare complete own-turn / opponent-reply sequences under common random samples. */
 export function searchDecide(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void): Action {
+  const previous=materialCache;materialCache=new WeakMap();
+  try{return decideSearch(g,level,prove,onProgress);}finally{materialCache=previous;}
+}
+
+function decideSearch(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', prove: boolean, onProgress?: (action: Action) => void): Action {
   if (prove && TACTICS.proof) { const win = forcedWin(g, level === 'hell' ? 1400 : level === 'hard' ? 550 : 160); if (win) return win; }
   const side = actingSide(g), cfg = SEARCH[level];
   // Preserve the greedy policy's public, currently affordable escape from a
@@ -106,8 +118,7 @@ export function searchDecide(g: GameState, level: 'easy' | 'normal' | 'hard' | '
     if (card && ((plan.blocked && (card.act === 'destroyEnch' || card.id === 'DISARM3' || card.id === 'ADVANCE'))
         || plan.walls.some(m => removalHits(g, opponent, card, m)))) return policy;
   }
-  // Hell retains Hard's move as its expert baseline. More breadth alone can
-  // overfit a lucky hidden-card sample and make an otherwise strong move worse.
+  // Reuse material evaluations only within this search over immutable states.
   const merits=new WeakMap<GameState,number>();
   const merit=(st:GameState,s:Side):number=>{let v=merits.get(st);if(v===undefined){v=positionMerit(st,side);merits.set(st,v);}return s===side?v:-v;};
   const acquisition=assessAcquisitions(g,merit,level==='easy'?1:2);
@@ -156,7 +167,7 @@ export function searchDecide(g: GameState, level: 'easy' | 'normal' | 'hard' | '
       }
     }
     if (key(a) === baseKey) prior += 0.02;
-    return { a, legal, prior, winsNow: !g.players[1 - side].traps.length && next.over && next.winner === side && next.rng === firstSample.rng, development: Math.max(-.08,Math.min(.08,(acquisition.get(actionKey(a))?.margin??0)/250)), sum: 0, n: 0, worst: 1 };
+    return { a, legal, prior, winsNow: !g.players[1 - side].traps.length && next.over && next.winner === side && next.rng === firstSample.rng && JSON.stringify(next.players[side].deck)===JSON.stringify(firstSample.players[side].deck) && JSON.stringify(next.players[1-side].deck)===JSON.stringify(firstSample.players[1-side].deck) && JSON.stringify(next.players[1-side].hand)===JSON.stringify(firstSample.players[1-side].hand), development: Math.max(-.04,Math.min(.04,(acquisition.get(actionKey(a))?.margin??0)/600)), sum: 0, n: 0, worst: 1 };
   }).filter(x => x.legal).sort((a, b) => b.prior - a.prior);
   const win = ranked.find(arm => arm.winsNow);
   if (win) return win.a;

@@ -289,6 +289,7 @@
     "tests/mana-crystal-glow.mjs",
     "tests/bot-v99.mjs",
     "tests/bot-contextual.mjs",
+    "tests/bot-contextual-catalog.mjs",
     "tests/online-connection-lifecycle.mjs",
     "tests/shop-balance-sync.mjs",
     "tests/api-response-recovery.mjs",

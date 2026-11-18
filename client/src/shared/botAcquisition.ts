@@ -24,7 +24,7 @@ export function resolveAssessment(g: GameState, score: (g: GameState, side: Side
     for(const a of botActions(st)) {
       if((a.type==='pick'||a.type==='chooseTarget')&&a.uid) {
         const c=[...st.players[side].hand,...st.players[side].deck,...st.players[side].discard].find(c=>c.uid===a.uid);
-        if(c){const key=c.id;if(seen.has(key))continue;seen.add(key);}
+        if(c){const key=JSON.stringify({...c,uid:''});if(seen.has(key))continue;seen.add(key);}
       }
       const next=reduce(st,a).state;
       if(!actionChangesState(st,next))continue;
@@ -63,7 +63,7 @@ export function assessAcquisitions(g: GameState, score: (g: GameState, side: Sid
     const supports=supportPool.sort((a,b)=>Number(p.hand.includes(b))-Number(p.hand.includes(a))||playCost(a,p)-playCost(b,p))
       .filter(x=>{if(supportIds.has(x.id))return false;supportIds.add(x.id);return true;}).slice(0,samples===1?1:3);
     for(const world of worlds) {
-      let before=world,after:GameState;
+      let before=world,after:GameState,applied=true;
       if(immediate){after=resolveAssessment(reduce(before,action).state,score);}
       else {
         before=cloneGameState(world);
@@ -72,13 +72,15 @@ export function assessAcquisitions(g: GameState, score: (g: GameState, side: Sid
         // normal per-turn spending counters are renewed for this forecast.
         owner.mana=effMaxMana(owner);owner.spellsCastTurn=0;owner.playsTurn=0;owner.usesTurn={};
         const trial={...c,uid:'acquisition-trial-'+c.uid};
-        if(playCost(trial,owner)>owner.mana||playBlockReason(before,side,trial)){impacts.push(0);continue;}
-        const idx=owner.hand.length;
-        const trialState=cloneGameState(before);trialState.players[side].hand.push(trial);
-        after=resolveAssessment(reduce(trialState,{type:'play',idx}).state,score);
-        if(after.players[side].hand.some(x=>x.uid===trial.uid)){impacts.push(0);continue;}
+        if(playCost(trial,owner)>owner.mana||playBlockReason(before,side,trial)){after=before;applied=false;}
+        else {
+          const idx=owner.hand.length;
+          const trialState=cloneGameState(before);trialState.players[side].hand.push(trial);
+          after=resolveAssessment(reduce(trialState,{type:'play',idx}).state,score);
+          if(after.players[side].hand.some(x=>x.uid===trial.uid)){after=before;applied=false;}
+        }
       }
-      usable++;
+      if(applied)usable++;
       // Compare c+owned support with support alone under the SAME mana budget.
       // Trying both orders recognizes setup-before-payoff without an ID whitelist.
       // An owned deck/discard card is a discounted future draw, never a free card.
@@ -99,6 +101,7 @@ export function assessAcquisitions(g: GameState, score: (g: GameState, side: Sid
         const control=cast(delivered,support);if(!control||control.over)continue;
         const trial={...c,uid:'acquisition-pair-'+c.uid};
         const first=cast(delivered,trial),a=first&&cast(first,support),b=cast(control,trial);
+        if(!applied&&(a||b)){usable++;applied=true;}
         const pair=Math.max(a?score(a,side)-score(control,side):-Infinity,b?score(b,side)-score(control,side):-Infinity);
         const access=p.hand.some(x=>x.uid===support.uid)?.65:Math.min(.4,drawRate/Math.max(1,p.deck.length+p.discard.length));
         cooperation=Math.max(cooperation,Math.min(20,Math.max(0,pair-one))*access);
@@ -115,6 +118,9 @@ export function assessAcquisitions(g: GameState, score: (g: GameState, side: Sid
     const correction=usable?Math.max(-45,Math.min(45,impact-h.base*.5))*access:0;
     let margin=h.margin*access+correction-(1-access)*h.floor;
     if(immediate&&worst<=-80)margin=-100;
+    // A conditional bomb without a currently executable route is an option,
+    // not an available threat. Do not spend development turns hoarding it.
+    if(!usable&&c.summonReq)margin=Math.min(margin,h.margin*.2-h.cost-h.floor*.5);
     if(!immediate&&arrival>turnsLeft)margin-=Math.max(0,h.value)*.8;
     out.set(actionKey(action),{action,id:c.id,immediate,arrival:immediate?0:arrival,heuristic:h.margin,impact,cooperation,worst,margin,usable});
   }

@@ -6,6 +6,8 @@ const {createHash} = require('node:crypto');
 const root = path.resolve(process.env.BOT_LAB || '.bot-strength');
 const old = require(process.env.BOT_BASELINE || path.join(root,'baseline.cjs'));
 const now = require(process.env.BOT_MODULE || path.join(root,'candidate.cjs'));
+assert.equal(old.BALANCE_VERSION,now.BALANCE_VERSION,'Compare policies on identical card rules');
+assert.deepEqual(old.DB,now.DB,'Card definitions must match');
 const [A='new:hard', B='old:hard', count='20', offset='0', dest='smoke'] = process.argv.slice(2);
 if(process.env.SEARCH) Object.assign(now.SEARCH,JSON.parse(process.env.SEARCH));
 if(process.env.VALUE_MODEL) Object.assign(now.VALUE_WEIGHTS,JSON.parse(fs.readFileSync(process.env.VALUE_MODEL)));
@@ -13,6 +15,7 @@ if(process.env.TACTICS) Object.assign(now.TACTICS,JSON.parse(process.env.TACTICS
 if(process.env.VALUE) Object.assign(now.VALUE,JSON.parse(process.env.VALUE));
 if(process.env.BASELINE_VALUE) Object.assign(old.VALUE,JSON.parse(process.env.BASELINE_VALUE));
 const checkpoint=process.env.RESUME_FROM?JSON.parse(fs.readFileSync(process.env.RESUME_FROM)):null;
+const mirror=process.env.MIRROR_ROSTERS==='1';
 const n=Number(count), start=Number(offset), rows=checkpoint?.rows??[];
 const resumedGames=rows.length;
 if(!Number.isInteger(n)||n<=0||n%2)throw new Error('Use a positive even game count for paired seats');
@@ -20,10 +23,10 @@ fs.mkdirSync(path.join(root,'results'),{recursive:true});
 if(fs.existsSync(path.join(root,'results',dest+'.jsonl')))throw new Error('Choose a new output name; existing game evidence is never appended to');
 const customA=process.env.ROSTER_A_FILE?JSON.parse(fs.readFileSync(process.env.ROSTER_A_FILE)):null,customB=process.env.ROSTER_B_FILE?JSON.parse(fs.readFileSync(process.env.ROSTER_B_FILE)):null;
 const digest=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
-const config=JSON.parse(JSON.stringify({A,B,n,start,search:now.SEARCH,tactics:now.TACTICS,valueModel:process.env.VALUE_MODEL?digest(process.env.VALUE_MODEL):null,value:now.VALUE,baselineValue:old.VALUE,modules:{candidate:digest(process.env.BOT_MODULE||path.join(root,'candidate.cjs')),baseline:digest(process.env.BOT_BASELINE||path.join(root,'baseline.cjs'))},customA,customB,rosterA:process.env.ROSTER_A??'balanced',rosterB:process.env.ROSTER_B??'balanced'}));
+const config=JSON.parse(JSON.stringify({A,B,n,start,mirror,search:now.SEARCH,tactics:now.TACTICS,valueModel:process.env.VALUE_MODEL?digest(process.env.VALUE_MODEL):null,value:now.VALUE,baselineValue:old.VALUE,modules:{candidate:digest(process.env.BOT_MODULE||path.join(root,'candidate.cjs')),baseline:digest(process.env.BOT_BASELINE||path.join(root,'baseline.cjs'))},customA,customB,rosterA:process.env.ROSTER_A??'balanced',rosterB:process.env.ROSTER_B??'balanced'}));
 if(checkpoint){
  assert.deepEqual(checkpoint.config,config,'Resume requires identical policy hashes, parameters, rosters and seed range');
- assert(rows.length<=n);rows.forEach((r,i)=>{assert.equal(r.pair,start+Math.floor(i/2));assert.equal(r.seat,i%2);if(customA&&customB){const a=customA[r.pair%customA.length],b=customB[(Math.floor(r.pair/customA.length)+3*(r.pair%customA.length))%customB.length];assert.deepEqual(r.decks,r.seat===0?[a.name,b.name]:[b.name,a.name]);}});
+ assert(rows.length<=n);rows.forEach((r,i)=>{assert.equal(r.pair,start+Math.floor(i/2));assert.equal(r.seat,i%2);if(customA&&customB){const a=customA[r.pair%customA.length],b=customB[mirror?r.pair%customB.length:(Math.floor(r.pair/customA.length)+3*(r.pair%customA.length))%customB.length];assert.deepEqual(r.decks,r.seat===0?[a.name,b.name]:[b.name,a.name]);}});
  // Write a new result file, preserving the original evidence without edits.
  fs.writeFileSync(path.join(root,'results',dest+'.jsonl'),rows.map(r=>JSON.stringify(r)+'\n').join(''));
 }
@@ -36,8 +39,9 @@ for(let i=resumedGames;i<n;i++){
  const da=pair%old.BOT_DECKS.length, db=Math.floor(pair/old.BOT_DECKS.length)%old.BOT_DECKS.length;
  const rosterA=customA??(process.env.ROSTER_A==='counter'?now.BOT_ELITE_DECKS.filter(d=>d.name==='BOT · COUNTER'):process.env.ROSTER_A==='hell'?now.BOT_HELL_DECKS:process.env.ROSTER_A==='elite'?now.BOT_ELITE_DECKS:old.BOT_DECKS);
  const rosterB=customB??(process.env.ROSTER_B==='hell'?now.BOT_HELL_DECKS:process.env.ROSTER_B==='elite'?now.BOT_ELITE_DECKS:old.BOT_DECKS);
- const aDeck=rosterA[pair%rosterA.length],bDeck=rosterB[(Math.floor(pair/rosterA.length)+3*(pair%rosterA.length))%rosterB.length];
- const [d0,d1]=customA||customB||process.env.ROSTER_A||process.env.ROSTER_B?(seat===0?[aDeck,bDeck]:[bDeck,aDeck]):[old.BOT_DECKS[da],old.BOT_DECKS[db]];
+ const aDeck=rosterA[pair%rosterA.length],bDeck=rosterB[mirror?pair%rosterB.length:(Math.floor(pair/rosterA.length)+3*(pair%rosterA.length))%rosterB.length];
+ if(mirror)assert.deepEqual(aDeck.cards,bDeck.cards,'Mirror isolates policy with identical starter cards');
+ const [d0,d1]=mirror||customA||customB||process.env.ROSTER_A||process.env.ROSTER_B?(seat===0?[aDeck,bDeck]:[bDeck,aDeck]):[old.BOT_DECKS[da],old.BOT_DECKS[db]];
  let g=now.createGame({seed:712000+pair,mode:'bot',mulligan:true,starting:0,p0:{id:'A',name:'A',isBot:true,deck:d0.cards},p1:{id:'B',name:'B',isBot:true,deck:d1.cards}}).state;
  g=now.reduce(g,now.botOpeningHand(g,0)).state;
  g=now.reduce(g,now.botOpeningHand(g,1)).state;
@@ -73,5 +77,9 @@ const validPairs=[...pairs.values()].filter(pair=>pair.length===2&&pair.every(r=
 const pairedScores=validPairs.map(pair=>pair.reduce((s,r)=>s+(r.winner==null?.5:r.winner===r.seat?1:0),0)/2);
 const boot=[],bootstrapRng=rand(650813);
 for(let b=0;b<5000&&pairedScores.length;b++){let sum=0;for(let j=0;j<pairedScores.length;j++)sum+=pairedScores[Math.floor(bootstrapRng()*pairedScores.length)];boot.push(sum/pairedScores.length);}boot.sort((a,b)=>a-b);
-const result={resume:checkpoint?{games:resumedGames,checkpointSHA256:digest(process.env.RESUME_FROM),timingScope:"current process only; prior observations excluded"}:null,A,B,n,start,search:now.SEARCH,tactics:now.TACTICS,valueModel:process.env.VALUE_MODEL?digest(process.env.VALUE_MODEL):null,value:now.VALUE,baselineValue:old.VALUE,modules:{candidate:digest(process.env.BOT_MODULE||path.join(root,'candidate.cjs')),baseline:digest(process.env.BOT_BASELINE||path.join(root,'baseline.cjs'))},completePairs:validPairs.length,pairedScore:pairedScores.reduce((s,v)=>s+v,0)/Math.max(1,pairedScores.length),pairedBootstrap95:[boot[Math.floor(boot.length*.025)],boot[Math.floor(boot.length*.975)]],draws,customA,customB,rosterA:process.env.ROSTER_A??'balanced',rosterB:process.env.ROSTER_B??'balanced',wins,total,invalid,rate:p,wilson95:[center-half,center+half],seconds:(Date.now()-begin)/1000,ms:{p50:times[Math.floor(times.length*.5)],p95:times[Math.floor(times.length*.95)],max:times.at(-1)},rows};
+const pairMean=pairedScores.reduce((s,v)=>s+v,0)/Math.max(1,pairedScores.length);
+// Pair is the independent unit. A bounded-score interval remains nondegenerate
+// even when a small batch happens to win every game; bootstrap alone does not.
+const pairRadius=Math.sqrt(Math.log(40)/(2*Math.max(1,pairedScores.length)));
+const result={pairedHoeffding95:[Math.max(0,pairMean-pairRadius),Math.min(1,pairMean+pairRadius)],resume:checkpoint?{games:resumedGames,checkpointSHA256:digest(process.env.RESUME_FROM),timingScope:"current process only; prior observations excluded"}:null,A,B,n,start,mirror,search:now.SEARCH,tactics:now.TACTICS,valueModel:process.env.VALUE_MODEL?digest(process.env.VALUE_MODEL):null,value:now.VALUE,baselineValue:old.VALUE,modules:{candidate:digest(process.env.BOT_MODULE||path.join(root,'candidate.cjs')),baseline:digest(process.env.BOT_BASELINE||path.join(root,'baseline.cjs'))},completePairs:validPairs.length,pairedScore:pairedScores.reduce((s,v)=>s+v,0)/Math.max(1,pairedScores.length),pairedBootstrap95:[boot[Math.floor(boot.length*.025)],boot[Math.floor(boot.length*.975)]],draws,customA,customB,rosterA:process.env.ROSTER_A??'balanced',rosterB:process.env.ROSTER_B??'balanced',wins,total,invalid,rate:p,wilson95:[center-half,center+half],seconds:(Date.now()-begin)/1000,ms:{p50:times[Math.floor(times.length*.5)],p95:times[Math.floor(times.length*.95)],max:times.at(-1)},rows};
 fs.writeFileSync(path.join(root,'results',dest+'.json'),JSON.stringify(result,null,2));console.log(JSON.stringify({...result,rows:undefined}));

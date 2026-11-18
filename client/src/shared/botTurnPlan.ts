@@ -41,7 +41,7 @@ export function turnPlan(g: GameState, fallback: Action, score: (g:GameState,s:S
         const sig=signature(state);if(seen.has(sig))continue;seen.add(sig);
         const first=d===0?action:node.first;
         const a=acquisition.get(actionKey(first));
-        const value=score(state,side)+(a?Math.max(-8,Math.min(8,a.margin*.2)):0);
+        const value=score(state,side)+(a?Math.max(-3,Math.min(3,a.margin*.08)):0);
         const ended=state.cur!==side||state.over||actingSide(state)!==side;
         const child={state,first,value,ended};children.push(child);
         if(ended&&(!best||value>best.value))best=child;
@@ -57,7 +57,7 @@ export function turnPlan(g: GameState, fallback: Action, score: (g:GameState,s:S
   for(const node of frontier) {
     const state=node.ended?node.state:resolveAssessment(reduce(node.state,{type:'endTurn'}).state,score,4);
     const a=acquisition.get(actionKey(node.first));
-    const value=score(state,side)+(a?Math.max(-8,Math.min(8,a.margin*.2)):0);
+    const value=score(state,side)+(a?Math.max(-3,Math.min(3,a.margin*.08)):0);
     if(!best||value>best.value)best={...node,state,value,ended:true};
   }
   return best?.first??fallback;

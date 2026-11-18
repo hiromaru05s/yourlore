@@ -1,0 +1,30 @@
+{
+  "frozenCandidateSHA256": "f73e991cd7f83b14a18a8dfa74ba03c5672e9e27fb162993e02c69b3ca256ee1",
+  "baselineCommit": "914dc9bab",
+  "tiers": {
+    "easy": {
+      "games": 32,
+      "pairSeeds": [
+        9100,
+        9115
+      ]
+    },
+    "normal": {
+      "games": 32,
+      "pairSeeds": [
+        9200,
+        9215
+      ]
+    },
+    "hard": {
+      "games": 24,
+      "pairSeeds": [
+        9300,
+        9311
+      ]
+    }
+  },
+  "marketBias": false,
+  "mirrorStarter": true,
+  "changeAfterViewingResults": false
+}
