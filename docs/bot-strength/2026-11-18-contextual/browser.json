@@ -1,0 +1,84 @@
+{
+  "anytimeResult": {
+    "type": "endTurn"
+  },
+  "anytimeTerminated": true,
+  "supersededResult": null,
+  "newResult": {
+    "type": "buySupply",
+    "i": 0
+  },
+  "stats": [
+    {
+      "difficulty": "easy",
+      "ms": 130.10000002384186,
+      "action": {
+        "type": "buySupply",
+        "i": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "normal",
+      "ms": 505.9000000357628,
+      "action": {
+        "type": "buySupply",
+        "i": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hard",
+      "ms": 493.7999999523163,
+      "action": {
+        "type": "buySupply",
+        "i": 0
+      },
+      "advanced": true,
+      "pure": true
+    },
+    {
+      "difficulty": "hell",
+      "ms": 481,
+      "action": {
+        "type": "buySupply",
+        "i": 0
+      },
+      "advanced": true,
+      "pure": true
+    }
+  ],
+  "stress": {
+    "ms": 4763.199999988079,
+    "ticks": 952,
+    "action": {
+      "type": "refresh"
+    },
+    "advanced": true
+  },
+  "heavy": {
+    "ms": 3236.099999964237,
+    "ticks": 648,
+    "action": {
+      "type": "chooseTarget",
+      "uid": "u206"
+    },
+    "advanced": true
+  },
+  "ticks": 2306,
+  "budgetAdvanced": true,
+  "fallbackAdvanced": true,
+  "timeoutResult": null,
+  "timeoutTerminated": true,
+  "canceledResult": null,
+  "staleApplied": 0,
+  "disposedApplied": 0,
+  "activeApplied": 1,
+  "defense": {
+    "type": "pick",
+    "uid": "grow"
+  },
+  "errors": []
+}

@@ -31,7 +31,7 @@ function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (
   onProgress?.(legalBotAction(g,best,view));
   let completed=best;
   best=withThinkingBudget(THINKING_NODES[diff],()=>
-    searchDecide(view,diff==='hard'?'hell':diff,true,action=>{
+    searchDecide(view,diff==='hard'||diff==='normal'?'hell':diff,true,action=>{
       completed=action;onProgress?.(legalBotAction(g,action,view));
     }),()=>completed);
   // Easy occasionally retains the sound greedy alternative instead of the

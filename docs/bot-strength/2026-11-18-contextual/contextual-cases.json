@@ -1,0 +1,317 @@
+[
+  {
+    "name": "meditation-ahead",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "MEDITATE",
+        "immediate": true,
+        "arrival": 0,
+        "heuristic": 1,
+        "impact": -1.9250000000000114,
+        "cooperation": 0,
+        "worst": -1.9250000000000114,
+        "margin": -3.9250000000000114,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "MERCENARY",
+        "immediate": true,
+        "arrival": 0,
+        "heuristic": 10.4,
+        "impact": 6.450000000000004,
+        "cooperation": 0,
+        "worst": 6.450000000000003,
+        "margin": 12.650000000000004,
+        "usable": 2
+      }
+    ]
+  },
+  {
+    "name": "meditation-behind",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "MEDITATE",
+        "immediate": true,
+        "arrival": 0,
+        "heuristic": 1,
+        "impact": 53.225661634962705,
+        "cooperation": 0,
+        "worst": 53.225661634962705,
+        "margin": 46,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "MERCENARY",
+        "immediate": true,
+        "arrival": 0,
+        "heuristic": 10.4,
+        "impact": 6.449999999999996,
+        "cooperation": 0,
+        "worst": 6.449999999999996,
+        "margin": 12.649999999999995,
+        "usable": 2
+      }
+    ]
+  },
+  {
+    "name": "shatter-enemy-damaged",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "SHATTER",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -9,
+        "impact": 8.030208459399148,
+        "cooperation": 0,
+        "worst": 8.030208459399148,
+        "margin": -3.469791540600852,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "M4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -0.1999999999999993,
+        "impact": 21.622124999999986,
+        "cooperation": 0,
+        "worst": 21.622124999999983,
+        "margin": 15.022124999999987,
+        "usable": 2
+      }
+    ]
+  },
+  {
+    "name": "shatter-own-damaged",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "SHATTER",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -9,
+        "impact": -14.045791540600803,
+        "cooperation": 0,
+        "worst": -14.045791540600803,
+        "margin": -25.545791540600803,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "M4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -0.1999999999999993,
+        "impact": 5.209875000000012,
+        "cooperation": 0,
+        "worst": 5.209875000000011,
+        "margin": -1.3901249999999878,
+        "usable": 2
+      }
+    ]
+  },
+  {
+    "name": "burn-heals-opponent",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "S13",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -14,
+        "impact": -4.413785660200176,
+        "cooperation": 0,
+        "worst": -4.413785660200176,
+        "margin": -23.413785660200176,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "M4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -0.1999999999999993,
+        "impact": 13.715999999999994,
+        "cooperation": 0,
+        "worst": 13.715999999999994,
+        "margin": 7.115999999999994,
+        "usable": 2
+      }
+    ]
+  },
+  {
+    "name": "cannot-draw-before-end",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "S13",
+        "immediate": false,
+        "arrival": 10.25,
+        "heuristic": -10.5,
+        "impact": 10.089080765048752,
+        "cooperation": 0.003946428571428839,
+        "worst": 10.085134336477324,
+        "margin": -11.040674680593161,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "M4",
+        "immediate": false,
+        "arrival": 10.25,
+        "heuristic": -7.24,
+        "impact": 13.715999999999994,
+        "cooperation": 0,
+        "worst": 13.715999999999994,
+        "margin": -13.295917386587377,
+        "usable": 2
+      }
+    ]
+  },
+  {
+    "name": "berserk-empty-board",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "NGA4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -8.180000000000003,
+        "impact": 5.349999999999994,
+        "cooperation": 0,
+        "worst": 5.349999999999994,
+        "margin": -19.880000000000006,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "M4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -0.1999999999999993,
+        "impact": 13.715999999999994,
+        "cooperation": 0,
+        "worst": 13.715999999999994,
+        "margin": 7.115999999999994,
+        "usable": 2
+      }
+    ]
+  },
+  {
+    "name": "berserk-enemy-crowd",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "NGA4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": 7.652142857142852,
+        "impact": 24.707142857142856,
+        "cooperation": 0,
+        "worst": 24.707142857142856,
+        "margin": 15.30928571428571,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "M4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -0.1999999999999993,
+        "impact": 13.715999999999994,
+        "cooperation": 0,
+        "worst": 13.715999999999994,
+        "margin": 7.115999999999994,
+        "usable": 2
+      }
+    ]
+  },
+  {
+    "name": "berserk-own-crowd",
+    "rows": [
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 0
+        },
+        "id": "NGA4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -15,
+        "impact": 12.850000000000023,
+        "cooperation": 0,
+        "worst": 12.850000000000023,
+        "margin": -19.199999999999974,
+        "usable": 2
+      },
+      {
+        "action": {
+          "type": "buyMarket",
+          "i": 1
+        },
+        "id": "M4",
+        "immediate": false,
+        "arrival": 1,
+        "heuristic": -0.1999999999999993,
+        "impact": 13.716000000000008,
+        "cooperation": 0,
+        "worst": 13.716000000000008,
+        "margin": 7.1160000000000085,
+        "usable": 2
+      }
+    ]
+  }
+]

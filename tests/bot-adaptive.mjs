@@ -39,12 +39,15 @@ try {
   let g=fresh();g.players[0].hand=[card('DISARM1')];g.players[1].enchants=[{card:card('STRONG_ACID'),turns:99}];
   const a=C.safeGreedy(g);assert.equal(a.type,'play');g=C.reduce(g,a).state;g=C.reduce(g,C.safeGreedy(g)).state;assert.equal(g.players[1].enchants.length,0);
  });
- test('actual Hard and Hell acquire the missing answer within their purchase turn',()=>{
-  for(const tier of ['hard','hell']) {
+ test('all actual tiers acquire the missing answer within their purchase turn',()=>{
+  const random=Math.random;
+  try { Math.random=()=>.5;
+  for(const tier of ['easy','normal','hard','hell']) {
    let g=fresh(['DISARM1']);g.players[0].deck=Array.from({length:3},()=>card('POISON_MASTER'));g.players[1].enchants=['STRONG_ACID','BLACK_INFINITY'].map(id=>({card:card(id),turns:99}));
    for(let i=0;i<16&&!g.over&&g.cur===0;i++)g=C.reduce(g,C.botDecide(g,tier)).state;
    assert(g.players[0].discard.some(c=>c.id==='DISARM1'),tier+' must preserve resources for the missing answer');
   }
+  } finally {Math.random=random;}
  });
  test('Undying Curse gains value from public Curses',()=>{
   const g=fresh();const before=value(g,'QUICK_CURSE').margin;
