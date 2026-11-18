@@ -1,0 +1,206 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "sequence": "current:hearthstone"
+    },
+    {
+      "sequence": "study:hearthstone"
+    },
+    {
+      "sequence": "study:shadowverse"
+    },
+    {
+      "summon": "hearthstone",
+      "frames": true
+    },
+    {
+      "playback": "hearthstone",
+      "restored": true
+    },
+    {
+      "summon": "shadowverse",
+      "frames": true
+    },
+    {
+      "playback": "shadowverse",
+      "restored": true
+    },
+    {
+      "spell": "S3",
+      "side": "0",
+      "nativeFrame": {
+        "cards": 1,
+        "frame": "03",
+        "opacity": "1",
+        "width": 151.186767578125
+      }
+    },
+    {
+      "spell": "S4",
+      "side": "0",
+      "nativeFrame": {
+        "cards": 1,
+        "frame": "03",
+        "opacity": "1",
+        "width": 151.186767578125
+      }
+    },
+    {
+      "spell": "S8",
+      "side": "0",
+      "nativeFrame": {
+        "cards": 1,
+        "frame": "03",
+        "opacity": "1",
+        "width": 151.186767578125
+      }
+    },
+    {
+      "spell": "S3",
+      "side": "1",
+      "nativeFrame": {
+        "cards": 1,
+        "frame": "03",
+        "opacity": "1",
+        "width": 142.4029541015625
+      }
+    },
+    {
+      "spell": "S4",
+      "side": "1",
+      "nativeFrame": {
+        "cards": 1,
+        "frame": "03",
+        "opacity": "1",
+        "width": 142.4029541015625
+      }
+    },
+    {
+      "spell": "S8",
+      "side": "1",
+      "nativeFrame": {
+        "cards": 1,
+        "frame": "03",
+        "opacity": "1",
+        "width": 142.4029541015625
+      }
+    },
+    {
+      "spellPlayback": true
+    },
+    {
+      "mode": "focus",
+      "kind": "summon",
+      "variant": "hearthstone"
+    },
+    {
+      "mode": "focus",
+      "kind": "summon",
+      "variant": "shadowverse"
+    },
+    {
+      "mode": "focus",
+      "kind": "spell",
+      "variant": "hearthstone"
+    },
+    {
+      "mode": "white",
+      "kind": "summon",
+      "variant": "hearthstone"
+    },
+    {
+      "mode": "white",
+      "kind": "summon",
+      "variant": "shadowverse"
+    },
+    {
+      "mode": "white",
+      "kind": "spell",
+      "variant": "hearthstone"
+    },
+    {
+      "mobile": "summon",
+      "variant": "hearthstone"
+    },
+    {
+      "mobile": "summon",
+      "variant": "shadowverse"
+    },
+    {
+      "mobile": "spell",
+      "variant": "hearthstone"
+    },
+    {
+      "interruptSpell": true
+    },
+    {
+      "disposed": true
+    },
+    {
+      "reducedMotion": true
+    }
+  ],
+  "assets": [
+    "/art/biblion/refined/button-idle.webp",
+    "/art/lounge/toon-balanced-20261026/library-wide.webp",
+    "/art/ui/loading/azure-card-v1.webp",
+    "/art/biblion/modular/health-print.webp",
+    "/art/seekers/v2/mask-opp.png",
+    "/art/biblion/refined/portrait-opp.webp",
+    "/art/seekers/v2/mask-self.png",
+    "/art/biblion/refined/portrait-self.webp",
+    "/art/biblion/modular/base-mon-print.webp",
+    "/art/cards-sm/M4.webp?v=20260910-theme-identity-v3",
+    "/art/biblion/modular/cost-print.webp",
+    "/art/biblion/modular/attack-print.webp",
+    "/art/cards-sm/M2.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/M5.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/S8.webp?v=20260910-theme-identity-v3",
+    "/art/biblion/refined/stat-cost.webp",
+    "/art/biblion/modular/base-spell-print.webp",
+    "/art/biblion/modular/base-quest-print.webp",
+    "/art/cards-sm/Q_DECAY.webp?v=20260910-theme-identity-v3",
+    "/art/biblion/modular/plaque-print.webp",
+    "/art/cards-sm/DRAGON_KILLER.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/RUST_SLUG.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/QUICK_MIMIC.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/BUDGET.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/Q_CHEAT.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/ND2.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/COLOSSEUM_REST.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/S4.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/M3.webp?v=20260910-theme-identity-v3",
+    "/art/brand/lore-logo-transparent.webp",
+    "/art/biblion/modular/attack-ui.webp",
+    "/art/seekers/daylight-v1/portrait.webp",
+    "/art/seekers/daylight-v1/idle-loop.webp",
+    "/art/cards/M4.webp?v=20260910-theme-identity-v3",
+    "/art/cards/M2.webp?v=20260910-theme-identity-v3",
+    "/art/cards/M5.webp?v=20260910-theme-identity-v3",
+    "/art/cards/DRAGON_KILLER.webp?v=20260910-theme-identity-v3",
+    "/art/cards/RUST_SLUG.webp?v=20260910-theme-identity-v3",
+    "/art/cards/QUICK_MIMIC.webp?v=20260910-theme-identity-v3",
+    "/art/cards/BUDGET.webp?v=20260910-theme-identity-v3",
+    "/art/cards/Q_CHEAT.webp?v=20260910-theme-identity-v3",
+    "/art/cards/ND2.webp?v=20260910-theme-identity-v3",
+    "/art/cards/COLOSSEUM_REST.webp?v=20260910-theme-identity-v3",
+    "/art/cards/S8.webp?v=20260910-theme-identity-v3",
+    "/art/cards/Q_DECAY.webp?v=20260910-theme-identity-v3",
+    "/art/cards/M3.webp?v=20260910-theme-identity-v3",
+    "/art/cards/S4.webp?v=20260910-theme-identity-v3",
+    "/art/biblion/modular/health-ui.webp",
+    "/art/biblion/modular/field-mon-print.webp",
+    "/art/biblion/modular/field-spell-print.webp",
+    "/art/biblion/modular/field-quest-print.webp",
+    "/art/biblion/modular/field-trap-print.webp",
+    "/art/biblion/modular/base-trap-print.webp",
+    "/art/biblion/modular/brand-seal-ui.webp",
+    "/art/biblion/modular/infinity-print.webp",
+    "/art/biblion/modular/shield-print.webp",
+    "/art/biblion/modular/dew-print.webp",
+    "/art/biblion/arcana/dice-enamel.webp",
+    "/art/cards-sm/S3.webp?v=20260910-theme-identity-v3",
+    "/art/cards/S3.webp?v=20260910-theme-identity-v3"
+  ]
+}

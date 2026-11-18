@@ -20,15 +20,19 @@ import {DB,FRAME_BACK} from '../../shared/cards';
 import {waitForDuel} from '../../ui/duelReadiness';
 import {captureNativePrint} from '../../ui/cardPrintCapture';
 import {projectedPlacement} from '../../ui/boardProjection';
-import {exposure,sparks,haze,contactDust,planeShadow} from './realistic';
+import {exposure,haze,contactDust,planeShadow} from './realistic';
 import {clearMonsterStates} from '../../ui/monster/runtime';
+import {SpellPresentation} from './spell';
+import {shadowverseArrival,hearthstoneArrival} from './arrival';
 import {MaterialStage,type Pose} from './material';
-import {DURATIONS,clamp,ease,out,lerp,point,bezier,rnd,phase,type Kind,type Rect} from './direction';
+import {DURATIONS,clamp,ease,out,lerp,point,rnd,phase,type Kind,type Rect} from './direction';
 import {glow,shadow,ribbon,splinters} from './paint';
 const {root,view,g,stopLayout}=mountFixture();
+const spellPrint=new SpellPresentation();
 const material=new MaterialStage(document.getElementById('material')!);
 const rear=document.getElementById('rear') as HTMLCanvasElement,front=document.getElementById('front') as HTMLCanvasElement;
 const rc=rear.getContext('2d')!,fc=front.getContext('2d')!;
+let summonVersion:'hearthstone'|'shadowverse'='hearthstone';
 let kind:Kind='summon',mode='board',side=0,time=0,playing=false,loop=true,speed=1,ready=false,disposed=false,last=0,raf=0,cycleGap=0,soundOn=false,playedCues=new Set<string>();
 let nodes:Record<string,HTMLElement>={},rects:Record<string,Rect>={},surfaces:Record<string,HTMLCanvasElement|HTMLImageElement>={};
 let sourceActor=-1,targetActor=-1,hidden=new Map<HTMLElement,string>(),prepareId=0;
@@ -77,7 +81,7 @@ async function prepare(){
  // Native snapshots preserve the adopted frame, art, printed text, and numeric seals.
  const results=await Promise.all(Object.entries(nodes).map(async([key,n])=>[key,await captureNativePrint(n,640,0)] as const));
  if(id!==prepareId||disposed)return;surfaces=Object.fromEntries(results);await image.decode();surfaces.back=image;
- configure();ready=true;time=0;playedCues.clear();playing=!new URLSearchParams(location.search).has('controlled')&&!matchMedia('(prefers-reduced-motion:reduce)').matches;last=performance.now();render();post({ready:true,kind});
+ await spellPrint.prepare(nodes.spell);if(id!==prepareId||disposed)return;configure();ready=true;time=0;playedCues.clear();playing=!new URLSearchParams(location.search).has('controlled')&&!matchMedia('(prefers-reduced-motion:reduce)').matches;last=performance.now();render();post({ready:true,kind});
 }
 function configure(){restore();material.clearActors();layout();
  const face=kind==='draw'?(side?surfaces.back:surfaces.draw):kind==='summon'?surfaces.hand:kind==='attack'?surfaces.source:surfaces.spell;
@@ -97,7 +101,7 @@ function cue(key:string,at:number,duration:number,base:number,volume:number){if(
  const osc=audio.createOscillator();osc.type='sine';osc.frequency.setValueAtTime(base,now);osc.frequency.exponentialRampToValueAtTime(Math.max(25,base*.22),now+duration);osc.connect(gain);osc.start(now);osc.stop(now+duration);
  const buffer=audio.createBuffer(1,audio.sampleRate*duration,audio.sampleRate);const data=buffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(rnd(i+77)*2-1)*.55;const noise=audio.createBufferSource();noise.buffer=buffer;const filter=audio.createBiquadFilter();filter.type='bandpass';filter.frequency.setValueAtTime(base*5,now);filter.frequency.exponentialRampToValueAtTime(base,now+duration);noise.connect(filter);filter.connect(gain);noise.start(now);noise.stop(now+duration);
 }
-function render(){if(!ready)return;layout();rc.clearRect(0,0,innerWidth,innerHeight);fc.clearRect(0,0,innerWidth,innerHeight);material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});
+function render(){if(!ready)return;spellPrint.hide();layout();rc.clearRect(0,0,innerWidth,innerHeight);fc.clearRect(0,0,innerWidth,innerHeight);material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});
  if(focused()){
   const ground={x:innerWidth/2,y:innerHeight*.76};shadow(rc,ground,innerWidth*.38,innerHeight*.07,.26);
   if(kind==='draw'){const r=rects.deck;for(let i=5;i>=0;i--){rc.save();rc.translate(r.x+i*.8,r.y+i*1.5);rc.rotate(.10);rc.drawImage(image,-r.w/2,-r.h/2,r.w,r.h);rc.restore();}}
@@ -106,8 +110,8 @@ function render(){if(!ready)return;layout();rc.clearRect(0,0,innerWidth,innerHei
  }
  if(!focused()){if(kind==='draw'&&!side)hide(nodes.draw);if(kind==='summon'){hide(nodes.source);if(!side)hide(nodes.hand);}if(kind==='attack'){hide(nodes.source);hide(nodes.target);}}
  if(kind==='draw')draw();if(kind==='summon')summon();if(kind==='attack')attack();if(kind==='spell')spell();
- if(!focused()){const complete=time>({draw:2.08,summon:2.35,attack:1.62,spell:99}[kind]);if(complete){material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});if(kind==='draw'&&!side)show(nodes.draw);if(kind==='summon'||kind==='attack')show(nodes.source);if(kind==='attack'){show(nodes.target);material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});}}}
- material.render();post({time,duration:DURATIONS[kind],phase:phase(kind,time),playing,kind});
+ if(!focused()){const complete=time>({draw:2.08,summon:2.20,attack:1.62,spell:99}[kind]);if(complete){material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});if(kind==='draw'&&!side)show(nodes.draw);if(kind==='summon'||kind==='attack')show(nodes.source);if(kind==='attack'){show(nodes.target);material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});}}}
+ material.render();post({time,duration:DURATIONS[kind],phase:kind==='summon'?(summonVersion==='hearthstone'?['移動','青い発光','実体化・接地','定着'][[.32,.87,1.14].filter(t=>time>=t).length]:['カード提示','光への変化','収束・出現','定着'][[.68,1.10,2.12].filter(t=>time>=t).length]):phase(kind,time),playing,kind});
 }
 function draw(){
  const deck=rects.deck,hand=rects.draw,u=focused()?Math.min(innerWidth*(innerWidth<700?.25:.19),innerHeight*.30,170):Math.max(rects.source.w*1.2,95);
@@ -126,32 +130,26 @@ function draw(){
 }
 function summon(){
  const dest=rects.source,hand=rects.hand,u=dest.w;
- const lift=ease(.06,.66,time),fall=clamp((time-1.20)/.27),landed=time>=1.47;
- const scale=lerp(hand.w/dest.w,1.05,lift)*(1-.05*fall*fall*fall);
- const ground:Rect={...point(hand,dest,lift),w:dest.w*scale,h:dest.h*scale};
- let altitude=u*2.0*lift*(1-fall*fall*fall);
- if(landed){ground.x=dest.x;ground.y=dest.y;ground.w=dest.w;ground.h=dest.h;const a=time-1.47;altitude=u*.08*Math.max(0,Math.sin(a*24))*Math.exp(-a*16);}
- const rock=landed?Math.sin((time-1.47)*35)*Math.exp(-(time-1.47)*18)*1.6:Math.sin(lift*Math.PI)*6;
- const p=flatCard(nodes.source,ground,altitude,rock),base=flatCard(nodes.source,ground);
- // The footprint is the whole back of the card. It tightens before all four edges contact.
- planeShadow(rc,footprint(base),altitude,u);
- const charge=ease(.25,.96,time)*(1-ease(1.30,1.65,time));
- const forming=ease(.30,1.20,time),spectral=ease(.08,.29,time)*(1-forming);
- material.pose(sourceActor,{...p,mix:ease(.40,1.12,time),formation:1-spectral,glow:charge*1.3,color:'#a0dcff'});
- const corners=footprint(p),center={x:corners.reduce((v,q)=>v+q.x,0)/4,y:corners.reduce((v,q)=>v+q.y,0)/4};
- glow(rc,center,u*1.55,'#5eaeeb',charge*.40,.8);
- if(time>.15&&time<1.36)for(let i=0;i<4;i++){
-  const tip=corners[i],origin={x:rects.mana.x+(i-1.5)*rects.mana.w*.15,y:rects.mana.y};
-  const stream=(q:number)=>bezier(origin,{x:lerp(origin.x,tip.x,.28)+(i%2?1:-1)*u*.55,y:origin.y-u*.6},{x:tip.x+(i%2?1:-1)*u*.48,y:tip.y+u*.50},tip,q);
-  const power=charge*(1-ease(1.1,1.36,time));exposure(rc,stream,u*.14,'#2869b5',power*1.2,0,1);exposure(rc,stream,u*.065,'#9cdaff',power*.95,0,1);
-  for(let j=0;j<9;j++){const q=(time*1.3+j/9+i*.13)%1,v=stream(q);glow(fc,v,u*(.016+.009*Math.sin(j)),j%3?'#9cdfff':'#ecf8ff',power*.8);}
+ if(summonVersion==='hearthstone'){
+  const move=ease(.04,.32,time),convert=ease(.82,1.03,time),drop=ease(.89,1.04,time);
+  const size=lerp(hand.w/dest.w,1.30,move)*(1-.30/1.30*convert);
+  const ground:Rect={...point(hand,dest,move),w:dest.w*size,h:lerp(hand.h,dest.h*1.30,move)*(1-.30/1.30*convert)};
+  let altitude=u*.38*move*(1-drop);
+  if(time>=1.04){const q=time-1.04;altitude=u*.055*Math.max(0,Math.sin(q*24))*Math.exp(-q*16);ground.x=dest.x;ground.y=dest.y;ground.w=dest.w;ground.h=dest.h;}
+  const p=flatCard(nodes.source,ground,altitude),base=flatCard(nodes.source,ground);
+  planeShadow(rc,footprint(base),altitude,u);
+  const blue=ease(.28,.48,time)*(1-ease(.92,1.14,time));
+  material.pose(sourceActor,{...p,mix:convert,edgeLight:blue*1.8,flash:Math.sin(clamp((time-.87)/.22)*Math.PI)*.62,color:'#8bdcff'});
+  hearthstoneArrival(fc,dest,time);contactDust(rc,dest,(time-1.04)/.65);
+  cue('hs-card',.12,.16,500,.07);cue('hs-materialize',.89,.23,850,.09);cue('hs-contact',1.04,.22,110,.15);
+ }else{
+  const reveal=ease(.05,.25,time),burn=ease(.68,.82,time),form=ease(1.27,1.74,time);
+  const hero:Rect={x:lerp(hand.x,dest.x,.75),y:dest.y-u*.42,w:u*1.65,h:u*1.65*hand.h/hand.w};
+  if(time<.84){const p=mixRect(hand,hero,reveal);material.pose(sourceActor,pose(p,{ry:Math.sin(reveal*Math.PI)*.55,flash:burn,alpha:1-ease(.78,.84,time),color:'#faffd7'}));shadow(rc,{x:p.x,y:p.y+p.h*.52},p.w*.52,p.h*.07,.22);}
+  else{const scale=1+.06*(1-form),p=flatCard(nodes.source,{...dest,w:dest.w*scale,h:dest.h*scale},u*.04*(1-form));planeShadow(rc,footprint(flatCard(nodes.source,dest)),0,u);material.pose(sourceActor,{...p,mix:1,alpha:form,flash:(1-form)*.40,color:'#d6ffe9'});}
+  shadowverseArrival(fc,dest,time);
+  cue('sv-reveal',.14,.16,650,.07);cue('sv-release',.82,.35,1000,.10);cue('sv-form',1.40,.4,520,.08);
  }
- if(charge>0)for(let i=0;i<12;i++){const a=i*2.4+time*.8,r=u*(1.1-.7*forming),v={x:center.x+Math.cos(a)*r,y:center.y+Math.sin(a)*r*.7};exposure(rc,q=>({x:lerp(v.x,center.x,q),y:lerp(v.y,center.y,q)}),u*.022,'#92d0ff',charge*.35,.08,.55);}
-
- const impact=(time-1.47)/.74;
- contactDust(rc,dest,impact);
- if(impact>=0&&impact<1){glow(rc,dest,u*1.15,'#cbd9dc',.18*(1-out(impact)),.74);for(let i=0;i<4;i++){const e=footprint(flatCard(nodes.source,dest))[i];sparks(fc,e,impact,u*.3,4,40+i*9);}}
- cue('summon-rise',.10,.55,310,.09);cue('summon-impact',1.47,.58,95,.30);
 }
 function attack(){
  const a=rects.source,b=rects.target,u=a.w,dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1,n={x:dx/len,y:dy/len},contact={x:b.x-n.x*b.w*.12,y:b.y-n.y*b.h*.16};
@@ -170,23 +168,21 @@ function attack(){
  cue('attack-wind',.16,.3,410,.10);cue('attack-hit',.67,.34,115,.36);
 }
 function spell(){
- const hand=rects.spell,discard=rects.discard,u=focused()?Math.min(innerWidth*.24,innerHeight*.29,170):Math.max(rects.source.w*1.35,90);
- const hero:Rect={x:side?innerWidth*.60:innerWidth*.40,y:innerHeight*.49,w:u,h:u*1.46};
- const lift=ease(.04,.44,time),flight=ease(1.03,1.57,time);let p=mixRect(hand,hero,lift);
- if(time>=1.03){p=mixRect(hero,{...discard,w:discard.w*.55,h:discard.h*.65},flight);p.y-=Math.sin(flight*Math.PI)*u*.24;}
- const activate=ease(.43,.72,time)*(1-ease(.76,1.04,time));
- shadow(rc,{x:p.x,y:p.y+p.h*.54},p.w*.55,p.h*.08,.20);
- glow(rc,p,p.w*.90,'#c4e4f5',activate*.30,.9);
- material.pose(sourceActor,pose(p,{glow:activate*.95,rz:.035*Math.sin(lift*Math.PI)*(1-flight),rx:flight*.28,color:'#c9e8f7',alpha:1-ease(1.54,1.68,time)}));
- // A brief acknowledgement on the card itself, independent of its effect or element.
- if(time>.70&&time<.98){const q=(time-.70)/.28;glow(fc,{x:p.x,y:p.y-p.h*.34},p.w*.60,'#eff9ff',(1-q)*.18,.12);}
- cue('spell-present',.10,.25,580,.06);cue('spell-activate',.72,.35,880,.09);cue('spell-settle',1.58,.18,350,.06);
+ const hand=rects.spell,discard=rects.discard,u=focused()?Math.min(innerWidth*.28,innerHeight*.34,200):Math.max(rects.source.w*1.72,106);
+ const hero:Rect={x:side?innerWidth*.60:innerWidth*.40,y:innerHeight*.47,w:u,h:u*hand.h/hand.w};
+ const lift=ease(.04,.36,time),fly=ease(1.53,2.13,time);let p=mixRect(hand,hero,lift);
+ if(time>=1.53){p=mixRect(hero,{...discard,w:discard.w*.56,h:discard.h*.64},fly);p.y-=Math.sin(fly*Math.PI)*u*.20;}
+ const charge=ease(.45,.83,time)*(1-ease(1.25,1.53,time));
+ shadow(rc,{x:p.x,y:p.y+p.h*.52},p.w*.51,p.h*.09,.24);
+ glow(rc,p,p.w*.82,'#69adf4',charge*.14,.95);
+ spellPrint.pose(p,time,1-ease(2.08,2.20,time),Math.sin(fly*Math.PI)*.42,fly*.36);
+ cue('spell-present',.12,.22,580,.06);cue('spell-frame',.70,.40,880,.08);cue('spell-release',1.48,.30,1040,.07);cue('spell-file',2.14,.16,320,.05);
 }
 function tick(now:number){if(disposed)return;const dt=Math.min((now-last)/1000,.05);last=now;if(playing&&ready&&!document.hidden){if(time>=DURATIONS[kind]){cycleGap+=dt;if(loop&&cycleGap>.8){post({cycle:true});time=0;cycleGap=0;playedCues.clear();}else if(!loop)playing=false;}else time=Math.min(DURATIONS[kind],time+dt*speed);render();}raf=requestAnimationFrame(tick);}
-const api={async set(options:{kind?:Kind;mode?:string;side?:number;loop?:boolean;speed?:number;sound?:boolean;spell?:string}){if(options.loop!==undefined)loop=options.loop;if(options.speed)speed=options.speed;if(options.sound!==undefined){soundOn=options.sound;if(soundOn){audio??=new AudioContext();await audio.resume();}}
- let recapture=false,reconfigure=false;if(options.spell&&g.players[0].hand[1].id!==options.spell&&['S3','S4','S8'].includes(options.spell)){restore();for(let i=0;i<2;i++)g.players[i].hand[1]={...DB[options.spell],uid:`hand-${i}-1`};view.render(g);view.setHandOpen(true);recapture=true;}if(options.kind&&options.kind!==kind){kind=options.kind;reconfigure=true;}if(options.mode&&options.mode!==mode){mode=options.mode;reconfigure=true;}if(options.side!==undefined&&options.side!==side){side=options.side;recapture=true;}
+const api={async set(options:{kind?:Kind;mode?:string;side?:number;loop?:boolean;speed?:number;sound?:boolean;spell?:string;summonVersion?:'hearthstone'|'shadowverse'}){if(options.loop!==undefined)loop=options.loop;if(options.speed)speed=options.speed;if(options.sound!==undefined){soundOn=options.sound;if(soundOn){audio??=new AudioContext();await audio.resume();}}
+ let recapture=false,reconfigure=false;if(options.summonVersion&&options.summonVersion!==summonVersion){summonVersion=options.summonVersion;reconfigure=true;}if(options.spell&&g.players[0].hand[1].id!==options.spell&&['S3','S4','S8'].includes(options.spell)){restore();for(let i=0;i<2;i++)g.players[i].hand[1]={...DB[options.spell],uid:`hand-${i}-1`};view.render(g);view.setHandOpen(true);recapture=true;}if(options.kind&&options.kind!==kind){kind=options.kind;reconfigure=true;}if(options.mode&&options.mode!==mode){mode=options.mode;reconfigure=true;}if(options.side!==undefined&&options.side!==side){side=options.side;recapture=true;}
  if(recapture){await prepare();return;}if(reconfigure&&ready){configure();time=0;cycleGap=0;playedCues.clear();playing=true;render();}
- },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'914dc9bab',revision:3,summonContact:1.47}),dispose(){disposed=true;++prepareId;cancelAnimationFrame(raf);restore();material.dispose();stopLayout();view.destroy();void audio?.close();}};
+ },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'db23af652',revision:4,summonVersion,summonContact:summonVersion==='hearthstone'?1.04:null}),dispose(){disposed=true;++prepareId;cancelAnimationFrame(raf);restore();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
 Object.assign(window,{vfx:api});
 let resizeTimer=0;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=window.setTimeout(()=>{resize();if(ready){configure();render();}},150);});
 window.addEventListener('pagehide',()=>api.dispose(),{once:true});document.addEventListener('visibilitychange',()=>{last=performance.now();});
