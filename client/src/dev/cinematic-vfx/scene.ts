@@ -159,16 +159,23 @@ function summon(){
   material.shadowverse(dest,time,hero,orb);
   const base=flatCard(nodes.source,dest);
   const project=(x:number,y:number)=>{if(base.matrix){const point=base.matrix.transformPoint(new DOMPoint(base.w*(.5+x),base.h*.5+base.w*y));return{x:point.x/point.w,y:point.y/point.w};}return{x:dest.x+x*u,y:dest.y+y*u*.82};};
-  groundCracks(rc,project,u,time);
+  // The ground fractures stay behind the physical card, including its small rock.
+  rc.save();
+  if(time>=SV.impact+.035){
+   const height=u*.028*(1-ease(SV.impact+.035,SV.contact,time)),angle=reboundAngle(time);
+   const occupied=base.matrix?{...base,matrix:base.matrix.translate(0,0,height).rotateAxisAngle(1,-1,0,angle)}:base;
+   const corners=footprint(occupied);rc.beginPath();rc.rect(0,0,innerWidth,innerHeight);corners.forEach((p,i)=>i?rc.lineTo(p.x,p.y):rc.moveTo(p.x,p.y));rc.closePath();rc.clip('evenodd');
+  }
+  groundCracks(rc,project,u,time);rc.restore();
   if(time>=SV.impact+.035){
    const land=1-ease(SV.impact+.035,SV.contact,time),angle=reboundAngle(time);
    const alpha=ease(SV.impact+.035,SV.impact+.060,time);
    if(focused()){
-    let p=flatCard(nodes.source,dest,u*.12*land);
-    p={...p,rx:(p.rx??0)+angle*Math.PI/180,ry:-angle*Math.PI/180,y:p.y-angle*.25,alpha};
+    let p=flatCard(nodes.source,dest,u*.028*land);
+    p={...p,rx:(p.rx??0)+angle*Math.PI/180/Math.SQRT2,ry:-angle*Math.PI/180/Math.SQRT2,alpha};
     summonPrint.focusAt(p);
    }else{
-    show(nodes.source);summonPrint.land(u*.12*land,angle,alpha);
+    show(nodes.source);summonPrint.land(u*.028*land,angle,alpha);
    }
   }
   cue('sv-reveal',.14,.16,650,.06);cue('sv-fracture',SV.scatter,.18,1150,.08);cue('sv-orb',1.30,.30,850,.08);cue('sv-impact',SV.impact,.24,100,.19);cue('sv-settle',SV.settled,.10,170,.045);
@@ -206,7 +213,7 @@ function tick(now:number){if(disposed)return;const dt=Math.max(0,(now-last)/1000
 const api={async set(options:{kind?:Kind;mode?:string;side?:number;loop?:boolean;speed?:number;sound?:boolean;spell?:string;summonVersion?:'hearthstone'|'shadowverse'}){if(options.loop!==undefined)loop=options.loop;if(options.speed)speed=options.speed;if(options.sound!==undefined){soundOn=options.sound;if(soundOn){audio??=new AudioContext();await audio.resume();}}
  let recapture=false,reconfigure=false;if(options.summonVersion&&options.summonVersion!==summonVersion){summonVersion=options.summonVersion;reconfigure=true;}if(options.spell&&g.players[0].hand[1].id!==options.spell&&['S3','S4','S8'].includes(options.spell)){restore();for(let i=0;i<2;i++)g.players[i].hand[1]={...DB[options.spell],uid:`hand-${i}-1`};view.render(g);view.setHandOpen(true);recapture=true;}if(options.kind&&options.kind!==kind){kind=options.kind;reconfigure=true;}if(options.mode&&options.mode!==mode){mode=options.mode;reconfigure=true;}if(options.side!==undefined&&options.side!==side){side=options.side;recapture=true;}
  if(recapture){await prepare();return;}if(reconfigure&&ready){configure();time=0;cycleGap=0;playedCues.clear();playing=true;render();}
- },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'fe168a872',revision:8,summonVersion,summonContact:summonVersion==='hearthstone'?1.38:SV.impact,hero:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight):null,orb:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonOrb(summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight),rects.source,time):null}),dispose(){document.body.style.translate='';disposed=true;++prepareId;cancelAnimationFrame(raf);restore();summonPrint.dispose();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
+ },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'fe168a872',revision:9,summonVersion,summonContact:summonVersion==='hearthstone'?1.38:SV.impact,hero:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight):null,orb:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonOrb(summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight),rects.source,time):null}),dispose(){document.body.style.translate='';disposed=true;++prepareId;cancelAnimationFrame(raf);restore();summonPrint.dispose();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
 Object.assign(window,{vfx:api});
 let resizeTimer=0;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=window.setTimeout(()=>{resize();if(ready){configure();render();}},150);});
 window.addEventListener('pagehide',()=>api.dispose(),{once:true});document.addEventListener('visibilitychange',()=>{last=performance.now();});

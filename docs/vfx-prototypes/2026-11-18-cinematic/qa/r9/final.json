@@ -1,0 +1,17 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "side": 0,
+      "cracksOverCenter": 0,
+      "filterPriority": "important",
+      "plane": "preserve-3d"
+    },
+    {
+      "side": 1,
+      "cracksOverCenter": 0,
+      "filterPriority": "important",
+      "plane": "preserve-3d"
+    }
+  ]
+}

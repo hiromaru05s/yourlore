@@ -1,4 +1,4 @@
-> 最新：[第8稿 — カード端の欠け・手札との重なり・終了時の切替を修正](REVISION-8.md)。以下は初稿の制作記録です。
+> 最新：[第9稿 — 小さく重い反動](REVISION-9.md)。以下は初稿の制作記録です。
 
 # LORE — cinematic battle VFX study
 

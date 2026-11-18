@@ -1,6 +1,6 @@
 import {bezier,clamp,ease,lerp,rnd,type Rect,type Point} from './direction';
 import {glow} from './paint';
-export const SV={vanish:.94,light:1.00,scatter:1.14,orb:1.22,flight:1.57,impact:1.94,contact:1.99,rebound:2.04,settled:2.43};
+export const SV={vanish:.94,light:1.00,scatter:1.14,orb:1.22,flight:1.57,impact:1.94,contact:1.99,rebound:2.005,settled:2.165};
 export function summonHero(w:number,h:number,nativeWidth:number,nativeHeight:number):Rect{
  const scale=Math.min(h*.62/nativeHeight,w*.58/nativeWidth,3.4);
  return{x:w/2,y:h/2,w:nativeWidth*scale,h:nativeHeight*scale};
@@ -18,8 +18,9 @@ export function summonOrb(hero:Rect,dest:Rect,t:number){
  const length=Math.hypot(after.x-before.x,after.y-before.y)||1;
  return{x:center.x,y:center.y,radius:radius*dest.w*depth,travel:q,dx:(after.x-before.x)/length,dy:(after.y-before.y)/length};
 }
-export function reboundAngle(t:number){return t<2.17?13*ease(SV.rebound,2.17,t):13*(1-ease(2.17,SV.settled,t));}
-export function summonPhase(t:number){return t<.38?'中央へ拡大':t<SV.vanish?'中央で開示':t<SV.light?'一瞬の消失':t<SV.scatter?'光のカード・枠の拡大':t<SV.orb?'光の粒へ':t<SV.flight?'中央で光球を形成':t<SV.impact?'円弧で着弾へ':t<2.00?'衝突・ヒビ':t<2.23?'光円の収束・出現':t<SV.settled?'右下の反動・再着地':'定着';}
+/** One low rigid-body rock: impact impulse, gravity, then immediate rest. */
+export function reboundAngle(t:number){const q=clamp((t-SV.rebound)/(SV.settled-SV.rebound));return 2.2*4*q*(1-q);}
+export function summonPhase(t:number){return t<.38?'中央へ拡大':t<SV.vanish?'中央で開示':t<SV.light?'一瞬の消失':t<SV.scatter?'光のカード・枠の拡大':t<SV.orb?'光の粒へ':t<SV.flight?'中央で光球を形成':t<SV.impact?'円弧で着弾へ':t<2.00?'衝突・ヒビ':t<SV.settled?'光円の収束・小さな反動':t<2.26?'接地・光の収束':'定着';}
 export function impactShake(t:number){const a=t-SV.impact;if(a<0||a>.24)return{x:0,y:0};const amp=2.4*Math.pow(1-a/.24,2);return{x:Math.cos(a*111)*amp,y:Math.sin(a*147+.6)*amp*.75};}
 const light=document.createElement('canvas');light.width=light.height=64;const lc=light.getContext('2d')!;const g=lc.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'#ffffff');g.addColorStop(.12,'#ffffeaff');g.addColorStop(.28,'#eaffd7bb');g.addColorStop(1,'#d9ffdf00');lc.fillStyle=g;lc.fillRect(0,0,64,64);
 /** Particles begin on the disappearing print and its border, not at an unrelated emitter. */

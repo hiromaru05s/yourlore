@@ -5,7 +5,7 @@ import type {Pose} from './material';
 /** Reveal with the native DOM; land using the actual board node, never a raster substitute. */
 export class SummonPrint {
  private reveal?:HTMLElement;private focus?:HTMLElement;private field?:HTMLElement;
- private changed:Array<[string,string,string]>=[];
+ private changed:Array<[HTMLElement,string,string,string]>=[];
  async prepare(hand:HTMLElement,field:HTMLElement){
   this.dispose();this.field=field;
   this.reveal=this.clone(hand,'study-summon-reveal');this.focus=this.clone(field,'study-summon-focus');
@@ -22,7 +22,11 @@ export class SummonPrint {
   node.style.width=w+'px';node.style.height=h+'px';node.style.setProperty('--cw',w+'px');node.style.setProperty('--ch',h+'px');
  }
  reset(){
-  if(this.field)for(const [key,value,priority]of this.changed){if(value)this.field.style.setProperty(key,value,priority);else this.field.style.removeProperty(key);}this.changed=[];
+  // Restore the native pose while transitions are still disabled. Otherwise the
+  // browser interpolates the reset and the next frame compounds the previous tilt.
+  for(const [node,key,value,priority]of this.changed){if(key==='transition')continue;if(value)node.style.setProperty(key,value,priority);else node.style.removeProperty(key);}
+  for(const [node,key,value,priority]of this.changed){if(key!=='transition')continue;void node.offsetWidth;if(value)node.style.setProperty(key,value,priority);else node.style.removeProperty(key);}
+  this.changed=[];
   if(this.reveal)this.reveal.style.visibility='hidden';if(this.focus)this.focus.style.visibility='hidden';
  }
  revealAt(p:Rect,hero:Rect,rx=0,ry=0,alpha=1,light=false){
@@ -35,11 +39,25 @@ export class SummonPrint {
   const node=this.field;if(!node)return;
   // Once grounded, leave every native property untouched. There is no end-of-effect handoff.
   if(height===0&&angle===0&&alpha===1)return;
+  for(const key of['transform','opacity','transition'])this.changed.push([node,key,node.style.getPropertyValue(key),node.style.getPropertyPriority(key)]);
+  node.style.setProperty('transition','none','important');
+  const plane=node.parentElement!;
+  this.changed.push([plane,'transform-style',plane.style.getPropertyValue('transform-style'),plane.style.getPropertyPriority('transform-style')]);
+  plane.style.transformStyle='preserve-3d';
   const cs=getComputedStyle(node),origin=cs.transformOrigin.split(' ').map(parseFloat);
   const transform=new DOMMatrix(cs.transform==='none'?undefined:cs.transform)
    .translate(-origin[0],-origin[1]).translate(0,0,height).rotateAxisAngle(1,-1,0,angle).translate(origin[0],origin[1]);
-  for(const key of['transform','opacity','transition'])this.changed.push([key,node.style.getPropertyValue(key),node.style.getPropertyPriority(key)]);
-  node.style.setProperty('transition','none','important');node.style.transform=transform.toString();node.style.opacity=String(alpha);
+  node.style.transform=transform.toString();node.style.opacity=String(alpha);
+  // Follow the actual frame alpha, including its chamfers. A subpixel bevel and
+  // tight contact shadow give the rigid print depth without adding a rectangle.
+  const frame=node.querySelector<HTMLElement>('.card-frame');
+  if(frame){
+   const amount=Math.min(1,angle/2.2+height/3),density=frame.offsetWidth/node.offsetWidth;
+   const edge=.55*density*amount,offset=(.4+angle*.3+height*.15)*density,blur=(.5+angle*.24)*density;
+   const previous=getComputedStyle(frame).filter;
+   this.changed.push([frame,'filter',frame.style.getPropertyValue('filter'),frame.style.getPropertyPriority('filter')]);
+   frame.style.setProperty('filter',`${previous==='none'?'':previous} drop-shadow(0 ${edge}px 0 rgba(43,48,52,${amount*.46})) drop-shadow(0 ${offset}px ${blur}px rgba(12,20,28,${amount*.25}))`,'important');
+  }
  }
  focusAt(p:Pose){
   const node=this.focus;if(!node)return;this.size(node,p.w,p.h);node.style.visibility='visible';node.style.opacity=String(p.alpha??1);

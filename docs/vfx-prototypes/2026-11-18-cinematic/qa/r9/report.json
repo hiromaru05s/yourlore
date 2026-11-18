@@ -1,0 +1,243 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "side": 0,
+      "t": 2.01,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none; transition: none !important; transform: matrix3d(0.999995, -5.4e-06, 0.0032877, 0, -5.4e-06, 0.999995, 0.0032877, 0, -0.0032877, -0.0032877, 0.999989, 0, -0.0004534, -0.0004534, 0.275841, 1); opacity: 1;",
+      "rect": {
+        "x": 404.8758239746094,
+        "y": 361.7396240234375,
+        "w": 69.1240234375,
+        "h": 102.82745361328125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0.26874127354587635,
+      "frameFilter": "drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px) drop-shadow(rgba(255, 122, 77, 0.624) 0px 0px 11.7305px) drop-shadow(rgba(43, 48, 52, 0.055) 0px 0.134228px 0px) drop-shadow(rgba(12, 20, 28, 0.03) 0px 0.967227px 1.13655px)"
+    },
+    {
+      "side": 0,
+      "t": 2.085,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none; transition: none !important; transform: matrix3d(0.999631, -0.0003685, 0.0271442, 0, -0.0003685, 0.999631, 0.0271442, 0, -0.0271442, -0.0271442, 0.999263, 0, -0.03092, -0.03092, 2.27736, 1); opacity: 1;",
+      "rect": {
+        "x": 404.1921691894531,
+        "y": 362.2167663574219,
+        "w": 69.29086303710938,
+        "h": 102.74847412109375
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 2.1998752350166972,
+      "frameFilter": "drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px) drop-shadow(rgba(255, 122, 77, 0.624) 0px 0px 11.7305px) drop-shadow(rgba(43, 48, 52, 0.46) 0px 1.10846px 0px) drop-shadow(rgba(12, 20, 28, 0.25) 0px 2.13631px 2.07182px)"
+    },
+    {
+      "side": 0,
+      "t": 2.5,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.8023986816406,
+        "y": 362.6957702636719,
+        "w": 69.102783203125,
+        "h": 102.83642578125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0,
+      "frameFilter": ""
+    },
+    {
+      "side": 0,
+      "t": 3.045,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.8023986816406,
+        "y": 362.6957702636719,
+        "w": 69.102783203125,
+        "h": 102.83642578125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0,
+      "frameFilter": ""
+    },
+    {
+      "side": 0,
+      "t": 3.055,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.8023986816406,
+        "y": 362.6957702636719,
+        "w": 69.102783203125,
+        "h": 102.83642578125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0,
+      "frameFilter": ""
+    },
+    {
+      "side": 0,
+      "t": 3.2,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.8023986816406,
+        "y": 362.6957702636719,
+        "w": 69.102783203125,
+        "h": 102.83642578125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0,
+      "frameFilter": ""
+    },
+    {
+      "side": 0,
+      "continuousMaxTilt": 2.177370640032766
+    },
+    {
+      "side": 1,
+      "t": 2.01,
+      "same": true,
+      "visibility": "visible",
+      "style": "transition: none !important; transform: matrix3d(0.999995, -5.4e-06, 0.0032877, 0, -5.4e-06, 0.999995, 0.0032877, 0, -0.0032877, -0.0032877, 0.999989, 0, -0.0004534, -0.0004534, 0.275841, 1); opacity: 1;",
+      "rect": {
+        "x": 410.6122741699219,
+        "y": 145.89842224121094,
+        "w": 65.37771606445312,
+        "h": 92.21669006347656
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0.26874127354587635,
+      "frameFilter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px) drop-shadow(rgba(43, 48, 52, 0.055) 0px 0.134228px 0px) drop-shadow(rgba(12, 20, 28, 0.03) 0px 0.967227px 1.13655px)"
+    },
+    {
+      "side": 1,
+      "t": 2.085,
+      "same": true,
+      "visibility": "visible",
+      "style": "transition: none !important; transform: matrix3d(0.999631, -0.0003685, 0.0271442, 0, -0.0003685, 0.999631, 0.0271442, 0, -0.0271442, -0.0271442, 0.999263, 0, -0.03092, -0.03092, 2.27736, 1); opacity: 1;",
+      "rect": {
+        "x": 409.9510803222656,
+        "y": 146.1659698486328,
+        "w": 65.52777099609375,
+        "h": 91.98445129394531
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 2.1998752350166972,
+      "frameFilter": "drop-shadow(rgb(211, 195, 160) 0px 2px 0px) drop-shadow(rgb(101, 88, 70) 0px 2px 0px) drop-shadow(rgba(0, 0, 0, 0.6) 0px 4px 8px) drop-shadow(rgba(43, 48, 52, 0.46) 0px 1.10846px 0px) drop-shadow(rgba(12, 20, 28, 0.25) 0px 2.13631px 2.07182px)"
+    },
+    {
+      "side": 1,
+      "t": 2.5,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.5360107421875,
+        "y": 146.88368225097656,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0,
+      "frameFilter": ""
+    },
+    {
+      "side": 1,
+      "t": 3.045,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.5360107421875,
+        "y": 146.88368225097656,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0,
+      "frameFilter": ""
+    },
+    {
+      "side": 1,
+      "t": 3.055,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.5360107421875,
+        "y": 146.88368225097656,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0,
+      "frameFilter": ""
+    },
+    {
+      "side": 1,
+      "t": 3.2,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.5360107421875,
+        "y": 146.88368225097656,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0,
+      "tilt": 0,
+      "frameFilter": ""
+    },
+    {
+      "side": 1,
+      "continuousMaxTilt": 2.1879015770119117
+    }
+  ],
+  "handoffPixels": [
+    {
+      "side": 0,
+      "region": {
+        "left": 390,
+        "top": 348,
+        "width": 98,
+        "height": 131
+      },
+      "changedChannels": 0,
+      "maxDifference": 0,
+      "meanDifference": 0
+    },
+    {
+      "side": 1,
+      "region": {
+        "left": 396,
+        "top": 132,
+        "width": 94,
+        "height": 121
+      },
+      "changedChannels": 0,
+      "maxDifference": 0,
+      "meanDifference": 0
+    }
+  ]
+}
