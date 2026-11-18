@@ -1,0 +1,36 @@
+{
+  "sourceCommit": "6be5d9148b10387d7ea963fed49ac72c0286774a",
+  "policyModuleSha256": "66698587db47c227653e5a69a99eb6b8121298e65d9fb0b027faccc8c044d118",
+  "guardExitCode": 0,
+  "suite": {
+    "passed": 296,
+    "failed": 0
+  },
+  "deployment": {
+    "id": "4ba9284a-ca20-4b26-b8ac-b49e0d77c558",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "annotations": {
+      "workers/message": "6be5d9148b10387d7ea963fed49ac72c0286774a guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "8d466114-298c-4bbe-8e61-37d3b95c8aad",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-11-18T12:16:58.540574Z"
+  },
+  "liveVerification": {
+    "at": "2026-11-18T12:19:21.159Z",
+    "assetHashes": 136,
+    "publicWorkerCases": 30,
+    "authenticatedNpcTiers": [
+      "easy",
+      "normal",
+      "hard"
+    ],
+    "qaCleanup": true
+  }
+}
