@@ -20,7 +20,7 @@ const poses = {
     hairLeft:[395,120], hairRight:[620,100], hairRadius:[45,58],
     hemLeft:[280,1050], hemRight:[751,1005], tilt:.022,
     face:[505,148,93,102], headEnd:250, hairSway:11,
-    crown:[495,24], crownSway:9,
+    crown:[495,24], crownSway:0,
     eyeA:[473,148.4,19,6.7], eyeB:[535.5,140,17,6],
     eyeSlopeA:-.03, eyeSlopeB:-.20, eyeLowerA:4.5, eyeLowerB:5.5,
   },
@@ -76,6 +76,16 @@ export function standingVertex(key:SingleDifficulty) {
       vec2 outside=abs(art-face.xy)-face.zw;
       float loose=smoothstep(0.,56.,max(outside.x,outside.y));
       point=art+(point-art)*loose;
+      ${key==='normal' ? `
+      // Noel's short crown lies inside the broad face guard. Animate only the
+      // painted hair above the forehead (skin starts below y=102), after that
+      // guard. The root is still by y=98; eyes, glasses and jaw remain rigid.
+      float shortHair=(1.-smoothstep(62.,98.,art.y));
+      shortHair*=brush(art,vec2(500.,50.),vec2(120.,85.));
+      float hairWind=time*1.15-art.x*.008;
+      point.x+=20.*shortHair*sin(hairWind);
+      point.y+=3.5*shortHair*sin(hairWind-.55);
+      ` : ''}
       // The skull is one rigid piece. Blend only below the jaw, through the neck.
       float head=1.-smoothstep(${pose.headEnd}.,${pose.headEnd+90}.,art.y);
       float headAngle=.004*sin(time*.62-.6)+${pose.tilt}*gesture;
