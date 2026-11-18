@@ -28,7 +28,7 @@ void main(){
    float tube=exp(-dot(radial,radial)/(radius*radius*(.45+n)));
    vapor+=tube*smoothstep(-.035,.025,travel)*(1.-smoothstep(length*.36,length,travel))*(.35+n*.85)*charge*(1.-release*.85)*(1.-decay);
   }
-  float burst=exp(-pow((time-2180.)/115.,2.));
+  float burst=exp(-pow((time-1130.)/65.,2.));
   float dust=exp(-length(p*vec3(1.,1.,1.3))*3.)*max(0.,turbulence-.43)*release*(1.-decay)*.5;
   float density=core*1.5+vapor*1.35+dust;
   float extinction=1.-exp(-density*stepSize*2.7);

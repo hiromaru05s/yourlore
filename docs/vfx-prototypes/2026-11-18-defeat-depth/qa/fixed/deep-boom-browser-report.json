@@ -1,0 +1,11 @@
+{
+  "before": 0,
+  "impact": [
+    {
+      "starts": 1,
+      "stops": 1,
+      "duration": 2.35
+    }
+  ],
+  "context": "closed"
+}

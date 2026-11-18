@@ -9,10 +9,10 @@ function inside(p:P,poly:P[]){let hit=false;for(let i=0,j=poly.length-1;i<poly.l
 export interface Fragment{node:T.Group;center:T.Vector3;poly:P[];seed:number;depth:number;leak:T.Vector3|null;front:T.MeshStandardMaterial;back:T.MeshStandardMaterial;edge:T.MeshStandardMaterial}
 export interface FragmentSet{pieces:Fragment[];cracks:HTMLCanvasElement;dispose():void}
 /** Textured faces plus real side walls clipped to the native artwork's alpha silhouette. */
-export function fractureSurface(source:HTMLCanvasElement,texture:T.Texture):FragmentSet{
+export function fractureSurface(source:HTMLCanvasElement,texture:T.Texture,patternSeed=0):FragmentSet{
  const src=source.getContext('2d')!.getImageData(0,0,SIZE,SIZE).data;
  const alpha=(x:number,y:number)=>x<0||y<0||x>=SIZE||y>=SIZE?0:src[(Math.floor(y)*SIZE+Math.floor(x))*4+3];
- const sites:P[]=[{x:SIZE*.48,y:SIZE*.43}];for(let i=1;i<64;i++){let best={x:0,y:0},score=-1;for(let j=0;j<9;j++){const p={x:random(i*71+j*7)*SIZE,y:random(i*71+j*7+2)*SIZE},s=Math.min(...sites.map(q=>Math.hypot(p.x-q.x,p.y-q.y)));if(s>score){score=s;best=p;}}sites.push(best);}
+ const sites:P[]=[{x:SIZE*.48,y:SIZE*.43}];for(let i=1;i<64;i++){let best={x:0,y:0},score=-1;for(let j=0;j<9;j++){const p={x:random(i*71+j*7+patternSeed)*SIZE,y:random(i*71+j*7+2+patternSeed)*SIZE},s=Math.min(...sites.map(q=>Math.hypot(p.x-q.x,p.y-q.y)));if(s>score){score=s;best=p;}}sites.push(best);}
  // The native alpha boundary also gets side walls; no rectangular invisible backing slab.
  const silhouette:[P,P][]=[];const step=4;for(let y=0;y<SIZE;y+=step)for(let x=0;x<SIZE;x+=step){if(alpha(x+2,y+2)<90)continue;if(alpha(x-2,y+2)<90)silhouette.push([{x,y},{x,y:y+step}]);if(alpha(x+6,y+2)<90)silhouette.push([{x:x+step,y:y+step},{x:x+step,y}]);if(alpha(x+2,y-2)<90)silhouette.push([{x:x+step,y},{x,y}]);if(alpha(x+2,y+6)<90)silhouette.push([{x,y:y+step},{x:x+step,y:y+step}]);}
  const cracks=document.createElement('canvas');cracks.width=cracks.height=SIZE;const cc=cracks.getContext('2d')!;
@@ -20,7 +20,7 @@ export function fractureSurface(source:HTMLCanvasElement,texture:T.Texture):Frag
  for(const [i,site] of sites.entries()){
   let poly:P[]=[{x:0,y:0},{x:SIZE,y:0},{x:SIZE,y:SIZE},{x:0,y:SIZE}];for(const other of sites)if(other!==site&&poly.length)poly=half(poly,site,other);if(poly.length<3)continue;poly=perimeter(poly);
   let area=0;for(let y=Math.floor(Math.min(...poly.map(p=>p.y)));y<Math.max(...poly.map(p=>p.y));y+=5)for(let x=Math.floor(Math.min(...poly.map(p=>p.x)));x<Math.max(...poly.map(p=>p.x));x+=5)if(alpha(x,y)>90&&inside({x,y},poly))area++;if(area<3)continue;
-  const center=new T.Vector3(poly.reduce((v,p)=>v+p.x/SIZE-.5,0)/poly.length,poly.reduce((v,p)=>v+.5-p.y/SIZE,0)/poly.length,0),seed=random(i+19),depth=.014+seed*.022;
+  const center=new T.Vector3(poly.reduce((v,p)=>v+p.x/SIZE-.5,0)/poly.length,poly.reduce((v,p)=>v+.5-p.y/SIZE,0)/poly.length,0),seed=random(i+19+patternSeed),depth=.014+seed*.022;
   const shape=new T.Shape();poly.forEach((p,j)=>{const x=p.x/SIZE-.5-center.x,y=.5-p.y/SIZE-center.y;j?shape.lineTo(x,y):shape.moveTo(x,y);});shape.closePath();
   const faceGeo=new T.ShapeGeometry(shape),uv=faceGeo.getAttribute('uv'),pos=faceGeo.getAttribute('position');for(let j=0;j<uv.count;j++)uv.setXY(j,pos.getX(j)+center.x+.5,pos.getY(j)+center.y+.5);
   const front=new T.MeshStandardMaterial({map:texture,metalness:.045,roughness:.48,envMapIntensity:.12,emissive:0xffffff,emissiveMap:texture,emissiveIntensity:.55,alphaTest:.08,side:T.FrontSide});
