@@ -1,0 +1,3054 @@
+{
+  "method": "greedy screening; current rules, common seeds, paired seats",
+  "summary": [
+    {
+      "build": {
+        "name": "old",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "TRUMPET",
+          "TRUMPET",
+          "COUNTERCALC",
+          "WEAKEN_ALL",
+          "STARTER_TRASH"
+        ],
+        "tune": {
+          "minBuyEarly": 4,
+          "minBuy": 8,
+          "chestTurn": 4
+        }
+      },
+      "wins": 24,
+      "n": 32,
+      "invalid": 0
+    },
+    {
+      "build": {
+        "name": "initial",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "GOBLIN_RAIDER",
+          "MINI_SPIRIT",
+          "NOURISHING_RAIN",
+          "WEAKEN_ALL",
+          "TRUMPET"
+        ]
+      },
+      "wins": 29,
+      "n": 32,
+      "invalid": 0
+    },
+    {
+      "build": {
+        "name": "raider",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "GOBLIN_RAIDER",
+          "GOBLIN_RAIDER",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN",
+          "COUNTERCALC"
+        ]
+      },
+      "wins": 25,
+      "n": 32,
+      "invalid": 0
+    },
+    {
+      "build": {
+        "name": "settlement",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "GOBLIN_RAIDER",
+          "GOBLIN_SETTLEMENT",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN",
+          "COUNTERCALC"
+        ]
+      },
+      "wins": 25,
+      "n": 32,
+      "invalid": 0
+    },
+    {
+      "build": {
+        "name": "rain",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN",
+          "COUNTERCALC",
+          "TRUMPET"
+        ]
+      },
+      "wins": 20,
+      "n": 32,
+      "invalid": 0
+    },
+    {
+      "build": {
+        "name": "spirits",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "MINI_SPIRIT",
+          "MINI_SPIRIT",
+          "MINI_SPIRIT",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN"
+        ]
+      },
+      "wins": 31,
+      "n": 32,
+      "invalid": 0
+    },
+    {
+      "build": {
+        "name": "spirit-defense",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "MINI_SPIRIT",
+          "MINI_SPIRIT",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN",
+          "COUNTERCALC"
+        ]
+      },
+      "wins": 28,
+      "n": 32,
+      "invalid": 0
+    },
+    {
+      "build": {
+        "name": "fortress",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "CASTLE",
+          "WEAKEN_ALL",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN",
+          "COUNTERCALC"
+        ]
+      },
+      "wins": 25,
+      "n": 32,
+      "invalid": 0
+    },
+    {
+      "build": {
+        "name": "elite-spells",
+        "cards": [
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "ELITE_GOBLIN",
+          "GOBLIN_SETTLEMENT",
+          "NOURISHING_RAIN",
+          "NOURISHING_RAIN",
+          "WEAKEN_ALL",
+          "COUNTERCALC"
+        ]
+      },
+      "wins": 24,
+      "n": 32,
+      "invalid": 0
+    }
+  ],
+  "rows": [
+    {
+      "build": "old",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 26
+    },
+    {
+      "build": "old",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 34
+    },
+    {
+      "build": "old",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "old",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 26
+    },
+    {
+      "build": "old",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "old",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 8
+    },
+    {
+      "build": "old",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 23
+    },
+    {
+      "build": "old",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 33
+    },
+    {
+      "build": "old",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "old",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "old",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "old",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "old",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "old",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "old",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 24
+    },
+    {
+      "build": "old",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 40
+    },
+    {
+      "build": "old",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 25
+    },
+    {
+      "build": "old",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 22
+    },
+    {
+      "build": "old",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "old",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "old",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 30
+    },
+    {
+      "build": "old",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 35
+    },
+    {
+      "build": "old",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "old",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 16
+    },
+    {
+      "build": "old",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "old",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 18
+    },
+    {
+      "build": "old",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "old",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 45
+    },
+    {
+      "build": "old",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 25
+    },
+    {
+      "build": "old",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 31
+    },
+    {
+      "build": "old",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 32
+    },
+    {
+      "build": "old",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 28
+    },
+    {
+      "build": "initial",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 29
+    },
+    {
+      "build": "initial",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 37
+    },
+    {
+      "build": "initial",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "initial",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "initial",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "initial",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 8
+    },
+    {
+      "build": "initial",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 31
+    },
+    {
+      "build": "initial",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 30
+    },
+    {
+      "build": "initial",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "initial",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "initial",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "initial",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "initial",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "initial",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "initial",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 43
+    },
+    {
+      "build": "initial",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 30
+    },
+    {
+      "build": "initial",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "initial",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 24
+    },
+    {
+      "build": "initial",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "initial",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "initial",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "initial",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "initial",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "initial",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "initial",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "initial",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "initial",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "initial",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "initial",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 60
+    },
+    {
+      "build": "initial",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 21
+    },
+    {
+      "build": "initial",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 25
+    },
+    {
+      "build": "initial",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 18
+    },
+    {
+      "build": "raider",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 36
+    },
+    {
+      "build": "raider",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 24
+    },
+    {
+      "build": "raider",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "raider",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 20
+    },
+    {
+      "build": "raider",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "raider",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 8
+    },
+    {
+      "build": "raider",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 44
+    },
+    {
+      "build": "raider",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 37
+    },
+    {
+      "build": "raider",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "raider",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "raider",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "raider",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "raider",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "raider",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "raider",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 36
+    },
+    {
+      "build": "raider",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 49
+    },
+    {
+      "build": "raider",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "raider",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 24
+    },
+    {
+      "build": "raider",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "raider",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 8
+    },
+    {
+      "build": "raider",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "raider",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "raider",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "raider",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "raider",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "raider",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "raider",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "raider",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 39
+    },
+    {
+      "build": "raider",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "raider",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 60
+    },
+    {
+      "build": "raider",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 23
+    },
+    {
+      "build": "raider",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 30
+    },
+    {
+      "build": "settlement",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "settlement",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 26
+    },
+    {
+      "build": "settlement",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "settlement",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "settlement",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "settlement",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 8
+    },
+    {
+      "build": "settlement",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 33
+    },
+    {
+      "build": "settlement",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 34
+    },
+    {
+      "build": "settlement",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "settlement",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "settlement",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "settlement",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "settlement",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "settlement",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "settlement",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "settlement",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 21
+    },
+    {
+      "build": "settlement",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 38
+    },
+    {
+      "build": "settlement",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "settlement",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "settlement",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "settlement",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 32
+    },
+    {
+      "build": "settlement",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 31
+    },
+    {
+      "build": "settlement",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "settlement",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "settlement",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "settlement",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "settlement",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "settlement",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 51
+    },
+    {
+      "build": "settlement",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "settlement",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "settlement",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 56
+    },
+    {
+      "build": "settlement",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 23
+    },
+    {
+      "build": "rain",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 24
+    },
+    {
+      "build": "rain",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 21
+    },
+    {
+      "build": "rain",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "rain",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 23
+    },
+    {
+      "build": "rain",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "rain",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 8
+    },
+    {
+      "build": "rain",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 50
+    },
+    {
+      "build": "rain",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 37
+    },
+    {
+      "build": "rain",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "rain",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "rain",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "rain",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "rain",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "rain",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "rain",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 22
+    },
+    {
+      "build": "rain",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 21
+    },
+    {
+      "build": "rain",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 25
+    },
+    {
+      "build": "rain",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 28
+    },
+    {
+      "build": "rain",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "rain",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "rain",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 28
+    },
+    {
+      "build": "rain",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 22
+    },
+    {
+      "build": "rain",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "rain",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "rain",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "rain",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 36
+    },
+    {
+      "build": "rain",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "rain",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 39
+    },
+    {
+      "build": "rain",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 46
+    },
+    {
+      "build": "rain",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 17
+    },
+    {
+      "build": "rain",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 60
+    },
+    {
+      "build": "rain",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 26
+    },
+    {
+      "build": "spirits",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "spirits",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 22
+    },
+    {
+      "build": "spirits",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "spirits",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 16
+    },
+    {
+      "build": "spirits",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "spirits",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 8
+    },
+    {
+      "build": "spirits",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 23
+    },
+    {
+      "build": "spirits",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 24
+    },
+    {
+      "build": "spirits",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "spirits",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "spirits",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "spirits",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "spirits",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "spirits",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "spirits",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "spirits",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 20
+    },
+    {
+      "build": "spirits",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "spirits",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 32
+    },
+    {
+      "build": "spirits",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "spirits",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "spirits",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "spirits",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "spirits",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "spirits",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "spirits",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "spirits",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "spirits",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "spirits",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "spirits",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 60
+    },
+    {
+      "build": "spirits",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 26
+    },
+    {
+      "build": "spirits",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "spirits",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 22
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 22
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 18
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 9
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 8
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 23
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 34
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 35
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 26
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 33
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 36
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 21
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 25
+    },
+    {
+      "build": "spirit-defense",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 21
+    },
+    {
+      "build": "fortress",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 41
+    },
+    {
+      "build": "fortress",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "fortress",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 25
+    },
+    {
+      "build": "fortress",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 26
+    },
+    {
+      "build": "fortress",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "fortress",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "fortress",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "fortress",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 53
+    },
+    {
+      "build": "fortress",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "fortress",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "fortress",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "fortress",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 16
+    },
+    {
+      "build": "fortress",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "fortress",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "fortress",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 24
+    },
+    {
+      "build": "fortress",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 25
+    },
+    {
+      "build": "fortress",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "fortress",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "fortress",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "fortress",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "fortress",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 36
+    },
+    {
+      "build": "fortress",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 57
+    },
+    {
+      "build": "fortress",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "fortress",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 16
+    },
+    {
+      "build": "fortress",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "fortress",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 16
+    },
+    {
+      "build": "fortress",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "fortress",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 33
+    },
+    {
+      "build": "fortress",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "fortress",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 35
+    },
+    {
+      "build": "fortress",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 27
+    },
+    {
+      "build": "fortress",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 22
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912200,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 60
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912200,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 33
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912201,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 27
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912201,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912202,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912202,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 10
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912203,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 33
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912203,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 44
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912204,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 26
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912204,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 14
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912205,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 19
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912205,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 16
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912206,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912206,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 16
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912207,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 46
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912207,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 25
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912208,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912208,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 36
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912209,
+      "seat": 0,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 11
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912209,
+      "seat": 1,
+      "opponent": "BOT · AGGRO",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 12
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912210,
+      "seat": 0,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 37
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912210,
+      "seat": 1,
+      "opponent": "BOT · RAMP",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 33
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912211,
+      "seat": 0,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 17
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912211,
+      "seat": 1,
+      "opponent": "BOT · MIDRANGE",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 13
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912212,
+      "seat": 0,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 15
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912212,
+      "seat": 1,
+      "opponent": "BOT · GAMBLER",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 46
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912213,
+      "seat": 0,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 21
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912213,
+      "seat": 1,
+      "opponent": "BOT · ELF",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 60
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912214,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 50
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912214,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "finished": true,
+      "bad": null,
+      "win": false,
+      "turn": 19
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912215,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 23
+    },
+    {
+      "build": "elite-spells",
+      "seed": 912215,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "finished": true,
+      "bad": null,
+      "win": true,
+      "turn": 20
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 # Elite Goblin, story bots and stat presentation — 2026-11-18
 
 - Elite Goblin prevents lethal battle destruction on 5–6 instead of 3–6. The existing two player damage and one remaining monster HP are unchanged. Japanese, Korean and English prints and logs agree. Active persisted rooms refresh only its text, preserving damage, modifiers, counters and granted passives. Balance version: v100.
-- Luca keeps three Elite Goblins and adds Goblin Raider, Mini Spirit and Nourishing Rain, alongside Weaken All and Trumpet. Luca and Aries use more selective purchases. Aries keeps all eight signature cards. The common policy now uses Goblin Party, avoids redundant passive grants, and values available double attacks when choosing buff targets.
+- Luca keeps three Elite Goblins and now runs three Mini Spirits and two Nourishing Rains. This supports Attune growth and sustained attacks without suppressing his own small attackers. Luca and Aries use more selective purchases. Aries keeps all eight signature cards. The common policy now uses Goblin Party, avoids redundant passive grants, and values available double attacks when choosing buff targets.
 - The presentation layer holds old ATK/current HP synchronously before field actors are created and while a multi-target selection is pending. Values commit at the adopted material animation's beat. Current-HP recovery also receives feedback. Combat damage uses the value actually printed at contact, so it is not replayed as a debuff. Initial/restored/skipped snapshots settle immediately; interruption releases the held values.
 
 ## Source and verification
@@ -14,4 +14,6 @@ Functional checks and visual review are distinct: frame-value assertions passed 
 
 `tests/story-bot-update.mjs` exercises all six die faces, persisted-card text preservation, Goblin Party, nonredundant Icarus grants, and buffing an available dual attacker. Existing tactics tests verify the improved fallback can now see a previously missed lethal reply.
 
-The 64-game proxy in `bot-proxy.json` uses current rules, paired seats and the same seeds. Luca changed from 9/16 to 10/16 wins and Aries stayed at 15/16, without invalid actions. This is a greedy screening result, not a measured human difficulty or a statistically established win-rate improvement. Full search smoke evidence is recorded separately when complete.
+The 64-game proxy in `bot-proxy.json` uses current rules, paired seats and the same seeds. Luca changed from 9/16 to 14/16 wins and Aries stayed at 15/16, without invalid actions. This is a greedy screening result, not a measured human difficulty or a statistically established win-rate improvement. The nine-roster, 288-game selection screen is in `bot-screen.json` (selected roster 31/32, old roster 24/32). The 64-game proxy uses different seeds from selection. Full search smoke evidence is recorded separately when complete.
+
+An initial mixed Luca roster was rejected after a full-search pilot lost the matched first-seat case that the old roster won. `bot-initial-smoke.json` preserves that evidence; its supplemental second-seed baseline has no paired candidate and is not a comparison. The first deployment was interrupted during tests, before upload, to revise this roster.

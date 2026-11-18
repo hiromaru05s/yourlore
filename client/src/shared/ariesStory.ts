@@ -15,7 +15,7 @@ export interface StoryOpponent {
 const elites = ['ELITE_GOBLIN', 'ELITE_GOBLIN', 'ELITE_GOBLIN'];
 const eliteAggroTune: PlayerState['botTune'] = { minBuyEarly: 6, minBuy: 11, chestTurn: 6 };
 export const ARIES_OPPONENTS: Record<AriesStage, StoryOpponent> = {
-  0: { stage: 0, avatar: 'STORY_LUCA', name: {ja:'火走りのルカ',en:'Luca, the Quickstep',ko:'불걸음 루카'}, title: {ja:'先遣シーカー',en:'Pathfinder Seeker',ko:'선봉 시커'}, deck: [...elites, 'GOBLIN_RAIDER','MINI_SPIRIT','NOURISHING_RAIN','WEAKEN_ALL','TRUMPET'], difficulty:'hell', tune:eliteAggroTune },
+  0: { stage: 0, avatar: 'STORY_LUCA', name: {ja:'火走りのルカ',en:'Luca, the Quickstep',ko:'불걸음 루카'}, title: {ja:'先遣シーカー',en:'Pathfinder Seeker',ko:'선봉 시커'}, deck: [...elites, 'MINI_SPIRIT','MINI_SPIRIT','MINI_SPIRIT','NOURISHING_RAIN','NOURISHING_RAIN'], difficulty:'hell', tune:eliteAggroTune },
   1: { stage: 1, avatar: 'STORY_RENA', name: {ja:'紅刃のレナ',en:'Rena, the Red Edge',ko:'붉은 칼날 레나'}, title: {ja:'先遣シーカー',en:'Pathfinder Seeker',ko:'선봉 시커'}, deck: [...elites, 'FLAME','FLAME','WEAKEN_ALL','COUNTERCALC','STARTER_TRASH'], difficulty:'hell', tune:{minBuyEarly:4,minBuy:8,chestTurn:4} },
   2: { stage: 2, avatar: 'STORY_ARIES', name: {ja:'Aries',en:'Aries',ko:'Aries'}, title: {ja:'マスターシーカー · 神速アグロ',en:'Master Seeker · Flash Aggro',ko:'마스터 시커 · 신속 어그로'}, deck: ['ELITE_GOBLIN','ELITE_GOBLIN','ELITE_GOBLIN','GOBLIN_ORIGIN','GOBLIN_PARTY','FORGE','ICARUS_SHOES','ICARUS_WINGS'], difficulty:'hell', tune:eliteAggroTune },
 };

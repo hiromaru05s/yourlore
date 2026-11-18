@@ -1,0 +1,57 @@
+{
+  "method": "botDecide hell, opening hand, paired seats, current rules for both",
+  "rows": [
+    {
+      "stage": 0,
+      "version": "before",
+      "seed": 802100,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "winner": 0,
+      "win": true,
+      "finished": true,
+      "steps": 108,
+      "turn": 13,
+      "bad": null
+    },
+    {
+      "stage": 0,
+      "version": "before",
+      "seed": 802100,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "winner": 0,
+      "win": false,
+      "finished": true,
+      "steps": 91,
+      "turn": 15,
+      "bad": null
+    },
+    {
+      "stage": 0,
+      "version": "before",
+      "seed": 802101,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "winner": 0,
+      "win": true,
+      "finished": true,
+      "steps": 103,
+      "turn": 17,
+      "bad": null
+    },
+    {
+      "stage": 0,
+      "version": "after",
+      "seed": 802100,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "winner": 1,
+      "win": false,
+      "finished": true,
+      "steps": 211,
+      "turn": 34,
+      "bad": null
+    }
+  ]
+}

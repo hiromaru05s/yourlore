@@ -215,11 +215,11 @@
       "seed": 802100,
       "seat": 0,
       "opponent": "BOT · SPIRIT_FORTRESS",
-      "winner": 1,
-      "win": false,
+      "winner": 0,
+      "win": true,
       "finished": true,
-      "steps": 247,
-      "turn": 36,
+      "steps": 376,
+      "turn": 59,
       "bad": null
     },
     {
@@ -231,8 +231,8 @@
       "winner": 0,
       "win": false,
       "finished": true,
-      "steps": 173,
-      "turn": 27,
+      "steps": 120,
+      "turn": 17,
       "bad": null
     },
     {
@@ -244,8 +244,8 @@
       "winner": 0,
       "win": true,
       "finished": true,
-      "steps": 107,
-      "turn": 17,
+      "steps": 100,
+      "turn": 15,
       "bad": null
     },
     {
@@ -257,8 +257,8 @@
       "winner": 1,
       "win": true,
       "finished": true,
-      "steps": 187,
-      "turn": 28,
+      "steps": 140,
+      "turn": 20,
       "bad": null
     },
     {
@@ -267,11 +267,11 @@
       "seed": 802102,
       "seat": 0,
       "opponent": "BOT · SPIRIT_FORTRESS",
-      "winner": 0,
-      "win": true,
+      "winner": 1,
+      "win": false,
       "finished": true,
-      "steps": 83,
-      "turn": 17,
+      "steps": 181,
+      "turn": 30,
       "bad": null
     },
     {
@@ -283,7 +283,7 @@
       "winner": 1,
       "win": true,
       "finished": true,
-      "steps": 92,
+      "steps": 97,
       "turn": 16,
       "bad": null
     },
@@ -296,7 +296,7 @@
       "winner": 0,
       "win": true,
       "finished": true,
-      "steps": 105,
+      "steps": 110,
       "turn": 15,
       "bad": null
     },
@@ -309,8 +309,8 @@
       "winner": 1,
       "win": true,
       "finished": true,
-      "steps": 92,
-      "turn": 14,
+      "steps": 108,
+      "turn": 16,
       "bad": null
     },
     {
@@ -319,11 +319,11 @@
       "seed": 802104,
       "seat": 0,
       "opponent": "BOT · SPIRIT_FORTRESS",
-      "winner": 1,
-      "win": false,
+      "winner": 0,
+      "win": true,
       "finished": true,
-      "steps": 311,
-      "turn": 48,
+      "steps": 152,
+      "turn": 25,
       "bad": null
     },
     {
@@ -332,11 +332,11 @@
       "seed": 802104,
       "seat": 1,
       "opponent": "BOT · SPIRIT_FORTRESS",
-      "winner": 0,
-      "win": false,
+      "winner": 1,
+      "win": true,
       "finished": true,
-      "steps": 386,
-      "turn": 60,
+      "steps": 329,
+      "turn": 52,
       "bad": null
     },
     {
@@ -348,8 +348,8 @@
       "winner": 0,
       "win": true,
       "finished": true,
-      "steps": 179,
-      "turn": 29,
+      "steps": 128,
+      "turn": 19,
       "bad": null
     },
     {
@@ -361,60 +361,60 @@
       "winner": 1,
       "win": true,
       "finished": true,
-      "steps": 132,
-      "turn": 20,
-      "bad": null
-    },
-    {
-      "stage": 0,
-      "version": "after",
-      "seed": 802106,
-      "seat": 0,
-      "opponent": "BOT · SPIRIT_FORTRESS",
-      "winner": 1,
-      "win": false,
-      "finished": true,
-      "steps": 416,
-      "turn": 60,
-      "bad": null
-    },
-    {
-      "stage": 0,
-      "version": "after",
-      "seed": 802106,
-      "seat": 1,
-      "opponent": "BOT · SPIRIT_FORTRESS",
-      "winner": 0,
-      "win": false,
-      "finished": true,
-      "steps": 176,
-      "turn": 27,
-      "bad": null
-    },
-    {
-      "stage": 0,
-      "version": "after",
-      "seed": 802107,
-      "seat": 0,
-      "opponent": "BOT · SPIRIT_GOBLIN",
-      "winner": 0,
-      "win": true,
-      "finished": true,
-      "steps": 114,
-      "turn": 17,
-      "bad": null
-    },
-    {
-      "stage": 0,
-      "version": "after",
-      "seed": 802107,
-      "seat": 1,
-      "opponent": "BOT · SPIRIT_GOBLIN",
-      "winner": 1,
-      "win": true,
-      "finished": true,
-      "steps": 116,
+      "steps": 131,
       "turn": 18,
+      "bad": null
+    },
+    {
+      "stage": 0,
+      "version": "after",
+      "seed": 802106,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "winner": 0,
+      "win": true,
+      "finished": true,
+      "steps": 141,
+      "turn": 25,
+      "bad": null
+    },
+    {
+      "stage": 0,
+      "version": "after",
+      "seed": 802106,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_FORTRESS",
+      "winner": 1,
+      "win": true,
+      "finished": true,
+      "steps": 136,
+      "turn": 24,
+      "bad": null
+    },
+    {
+      "stage": 0,
+      "version": "after",
+      "seed": 802107,
+      "seat": 0,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "winner": 0,
+      "win": true,
+      "finished": true,
+      "steps": 84,
+      "turn": 13,
+      "bad": null
+    },
+    {
+      "stage": 0,
+      "version": "after",
+      "seed": 802107,
+      "seat": 1,
+      "opponent": "BOT · SPIRIT_GOBLIN",
+      "winner": 1,
+      "win": true,
+      "finished": true,
+      "steps": 163,
+      "turn": 20,
       "bad": null
     },
     {
