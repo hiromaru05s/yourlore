@@ -1,0 +1,211 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "side": 0,
+      "t": 2.01,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.9034118652344,
+        "y": 361.79766845703125,
+        "w": 69.102783203125,
+        "h": 102.83642578125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 0,
+      "t": 2.17,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none; transition: none !important; transform: matrix3d(0.987185, -0.0128149, 0.159064, 0, -0.0128149, 0.987185, 0.159064, 0, -0.159064, -0.159064, 0.97437, 0, -1.07516, -1.07516, 13.3452, 1); opacity: 1;",
+      "rect": {
+        "x": 403.4763488769531,
+        "y": 361.8734130859375,
+        "w": 69.58828735351562,
+        "h": 102.3089599609375
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 0,
+      "t": 2.5,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.80108642578125,
+        "y": 362.6944885253906,
+        "w": 69.102783203125,
+        "h": 102.83636474609375
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 0,
+      "t": 3.045,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.8023986816406,
+        "y": 362.6957702636719,
+        "w": 69.102783203125,
+        "h": 102.83642578125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 0,
+      "t": 3.055,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.8023986816406,
+        "y": 362.6957702636719,
+        "w": 69.102783203125,
+        "h": 102.83642578125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 0,
+      "t": 3.2,
+      "same": true,
+      "visibility": "visible",
+      "style": "touch-action: none;",
+      "rect": {
+        "x": 404.8023986816406,
+        "y": 362.6957702636719,
+        "w": 69.102783203125,
+        "h": 102.83642578125
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 1,
+      "t": 2.01,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.63702392578125,
+        "y": 145.98558044433594,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 1,
+      "t": 2.17,
+      "same": true,
+      "visibility": "visible",
+      "style": "transition: none !important; transform: matrix3d(0.987185, -0.0128149, 0.159064, 0, -0.0128149, 0.987185, 0.159064, 0, -0.159064, -0.159064, 0.97437, 0, -1.07516, -1.07516, 13.3452, 1); opacity: 1;",
+      "rect": {
+        "x": 409.2793273925781,
+        "y": 146.14511108398438,
+        "w": 65.81857299804688,
+        "h": 91.77629089355469
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 1,
+      "t": 2.5,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.5360107421875,
+        "y": 146.88368225097656,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 1,
+      "t": 3.045,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.5360107421875,
+        "y": 146.88368225097656,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 1,
+      "t": 3.055,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.5360107421875,
+        "y": 146.88368225097656,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    },
+    {
+      "side": 1,
+      "t": 3.2,
+      "same": true,
+      "visibility": "visible",
+      "style": "",
+      "rect": {
+        "x": 410.5360107421875,
+        "y": 146.88368225097656,
+        "w": 65.35870361328125,
+        "h": 92.24693298339844
+      },
+      "parent": "zone zone-mon",
+      "canvas": 0
+    }
+  ],
+  "handoffPixels": [
+    {
+      "side": 0,
+      "region": {
+        "left": 390,
+        "top": 348,
+        "width": 98,
+        "height": 131
+      },
+      "changedChannels": 0,
+      "maxDifference": 0,
+      "meanDifference": 0
+    },
+    {
+      "side": 1,
+      "region": {
+        "left": 396,
+        "top": 132,
+        "width": 94,
+        "height": 121
+      },
+      "changedChannels": 0,
+      "maxDifference": 0,
+      "meanDifference": 0
+    }
+  ]
+}
