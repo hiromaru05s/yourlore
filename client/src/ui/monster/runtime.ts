@@ -162,7 +162,8 @@ function tick(now:number){
   if(dual){s.dual??=new DualReadySurface(s.actor,1);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
   paintRestingAppearance(s.actor.el,ready?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,1,reduced(),r.w);
   for(const cls of ['is-aiming','is-atk-target','is-targetable'])s.actor.el.classList.toggle(cls,n.classList.contains(cls));
-  if(n.classList.contains('is-atk-target')||n.classList.contains('is-targetable'))s.actor.el.style.setProperty('filter','drop-shadow(0 0 5px #ff7955)','important');
+  // Attack lock lights the frame print itself; a whole-card filter softens its text.
+  if(n.classList.contains('is-targetable')&&!n.classList.contains('is-atk-target'))s.actor.el.style.setProperty('filter','drop-shadow(0 0 5px #ff7955)','important');
   s.actor.el.style.removeProperty('translate');delete s.actor.el.dataset.hitReaction;paintHit(n,s.actor,now);
   if(ready&&!dual)drawEffect(s.layer.foreground,'ready','C',t,r,r,{active:true,reduced:reduced(),side,pass:'front'});
  }
