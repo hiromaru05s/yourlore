@@ -1,0 +1,24 @@
+const {chromium}=await import(process.env.LORE_PLAYWRIGHT??'/tmp/lore-defeat-preview-tools/node_modules/playwright-core/index.mjs');
+import assert from 'node:assert/strict';import fs from 'node:fs/promises';
+const out='docs/vfx-prototypes/2026-11-18-defeat-depth/qa/fixed';await fs.mkdir(out,{recursive:true});
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']});
+const errors=[];
+try{
+ const page=await browser.newPage({viewport:{width:1120,height:800},recordVideo:{dir:out,size:{width:1120,height:800}}});page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://127.0.0.1:5538/defeat-depth-preview.html');await page.waitForFunction(()=>window.defeatPreview?.ready,null,{timeout:90000});console.log('board ready');
+ const cache=await page.evaluate(async()=>{const {loadCharacterFracture}=await import('/src/ui/manaRupture/bakedFragments.ts'),root=document.querySelector('#portraitMe'),a=await loadCharacterFracture(root);outcomeLab.setStats({hp:999,shield:123,dew:88,brand:77});const b=await loadCharacterFracture(root);return {same:a===b&&a.geometry[0].face===b.geometry[0].face,key:a.key,pieces:a.data.pieces.length};});assert(cache.same);
+ await page.evaluate(()=>{const get=CanvasRenderingContext2D.prototype.getImageData;window.fracturePixelReads=0;CanvasRenderingContext2D.prototype.getImageData=function(...args){if(this.canvas.width===768&&this.canvas.height===768){window.fracturePixelReads++;throw Error('Runtime fracture pixel scan');}return get.apply(this,args);};});
+ await page.evaluate(()=>defeatPreview.play());await page.waitForTimeout(3900);console.log('normal playback');
+ for(const time of [950,1040,1180,1600,3000]){await page.evaluate(t=>defeatPreview.seek(t),time);await page.screenshot({path:out+`/hooded-${time}.png`});}
+ assert.equal(await page.locator('#hp-me').textContent(),'999');assert.equal(await page.locator('#hp-me').evaluate(n=>getComputedStyle(n).visibility),'hidden');
+ await page.evaluate(()=>defeatPreview.seek(1040));for(const selector of ['.pt-hp','.pt-shield','.pt-dew']){const n=page.locator('#portraitMe '+selector);assert.equal(await n.evaluate(n=>getComputedStyle(n).visibility),'visible');assert.equal(await n.evaluate(n=>getComputedStyle(n,'::after').content),'""');}
+ await page.evaluate(()=>defeatPreview.seek(1080));for(const selector of ['.pt-hp','.pt-shield','.pt-dew'])assert.equal(await page.locator('#portraitMe '+selector).evaluate(n=>getComputedStyle(n).visibility),'hidden');
+ await page.evaluate(()=>defeatPreview.seek(2580));assert.equal(await page.locator('#app').evaluate(n=>n.style.translate),'');assert.equal(await page.locator('.mana-rupture').getAttribute('data-pieces'),String(cache.pieces));
+ await page.selectOption('[aria-label=キャラクター]','STORY_RENA');await page.waitForSelector('.mana-rupture[data-fracture="STORY_RENA-me"]');await page.evaluate(()=>defeatPreview.seek(1600));await page.screenshot({path:out+'/rena-1600.png'});
+ await page.selectOption('[aria-label=陣営]','opp');await page.waitForSelector('.mana-rupture[data-fracture="STORY_RENA-opp"]');await page.evaluate(()=>defeatPreview.seek(950));await page.screenshot({path:out+'/rena-opponent-950.png'});
+ // Exercise the real controller, not just the standalone draw function.
+ await page.click('[data-action=lethal]');await page.waitForSelector('.outcome-result',{timeout:20000});assert.equal(await page.locator('.mana-rupture').count(),0);console.log('native lethal result');
+ await page.click('[data-action=reset]');await page.waitForSelector('#app[data-scene-ready=true]:not([aria-busy=true])');await page.setViewportSize({width:390,height:844});await page.waitForSelector('#app[data-scene-ready=true]:not([aria-busy=true])');await page.selectOption('[aria-label=陣営]','me');await page.waitForSelector('.mana-rupture[data-fracture="STORY_RENA-me"]');await page.evaluate(()=>defeatPreview.seek(1600));await page.screenshot({path:out+'/mobile-1600.png'});
+ await page.evaluate(()=>defeatPreview.clear());assert.equal(await page.locator('[data-mana-ruined]').count(),0);assert.equal(await page.locator('[data-mana-counters]').count(),0);assert.equal(await page.locator('#hp-me').evaluate(n=>getComputedStyle(n).visibility),'visible');assert.equal(await page.evaluate(()=>window.fracturePixelReads),0);assert.deepEqual(errors,[]);
+ await fs.writeFile(out+'/report.json',JSON.stringify({passed:true,cache,errors,checks:['normal playback and held-frame review','counter changes keep fixed geometry','counter cracks before impact, hidden at impact, restored on cancel', 'aftershake ends at 1.5 seconds','zero runtime fracture pixel reads','character and side-specific fixed assets','HP zero → result','mobile and cancellation']},null,2));await page.close();console.log('PASS fixed-fracture board');
+}finally{await browser.close();}
