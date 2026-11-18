@@ -1,0 +1,228 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "comparison": "draw",
+      "passed": true
+    },
+    {
+      "comparison": "summon",
+      "passed": true
+    },
+    {
+      "comparison": "attack",
+      "passed": true
+    },
+    {
+      "comparison": "spell",
+      "passed": true
+    },
+    {
+      "mode": "board",
+      "kind": "draw",
+      "peak": 0.73
+    },
+    {
+      "mode": "board",
+      "kind": "summon",
+      "peak": 0.72
+    },
+    {
+      "mode": "board",
+      "kind": "attack",
+      "peak": 0.72
+    },
+    {
+      "mode": "board",
+      "kind": "spell",
+      "peak": 0.72
+    },
+    {
+      "mode": "focus",
+      "kind": "draw",
+      "peak": 0.73
+    },
+    {
+      "mode": "focus",
+      "kind": "summon",
+      "peak": 0.72
+    },
+    {
+      "mode": "focus",
+      "kind": "attack",
+      "peak": 0.72
+    },
+    {
+      "mode": "focus",
+      "kind": "spell",
+      "peak": 0.72
+    },
+    {
+      "mode": "white",
+      "kind": "draw",
+      "peak": 0.73
+    },
+    {
+      "mode": "white",
+      "kind": "summon",
+      "peak": 0.72
+    },
+    {
+      "mode": "white",
+      "kind": "attack",
+      "peak": 0.72
+    },
+    {
+      "mode": "white",
+      "kind": "spell",
+      "peak": 0.72
+    },
+    {
+      "genericSpell": "S3",
+      "side": 0
+    },
+    {
+      "genericSpell": "S4",
+      "side": 0
+    },
+    {
+      "genericSpell": "S8",
+      "side": 0
+    },
+    {
+      "genericSpell": "S3",
+      "side": 1
+    },
+    {
+      "genericSpell": "S4",
+      "side": 1
+    },
+    {
+      "genericSpell": "S8",
+      "side": 1
+    },
+    {
+      "native": "draw",
+      "side": 0,
+      "reset": true
+    },
+    {
+      "native": "summon",
+      "side": 0,
+      "reset": true
+    },
+    {
+      "native": "attack",
+      "side": 0,
+      "reset": true
+    },
+    {
+      "native": "spell",
+      "side": 0,
+      "reset": true
+    },
+    {
+      "native": "draw",
+      "side": 1,
+      "reset": true
+    },
+    {
+      "native": "summon",
+      "side": 1,
+      "reset": true
+    },
+    {
+      "native": "attack",
+      "side": 1,
+      "reset": true
+    },
+    {
+      "native": "spell",
+      "side": 1,
+      "reset": true
+    },
+    {
+      "mobile": "draw"
+    },
+    {
+      "mobile": "summon"
+    },
+    {
+      "mobile": "attack"
+    },
+    {
+      "mobile": "spell"
+    },
+    {
+      "paused": true
+    },
+    {
+      "interrupt": true
+    },
+    {
+      "reducedMotion": true
+    }
+  ],
+  "assets": [
+    "/art/biblion/refined/button-idle.webp",
+    "/art/lounge/toon-balanced-20261026/library-wide.webp",
+    "/art/ui/loading/azure-card-v1.webp",
+    "/art/biblion/modular/health-print.webp",
+    "/art/biblion/refined/portrait-opp.webp",
+    "/art/seekers/v2/mask-opp.png",
+    "/art/seekers/v2/mask-self.png",
+    "/art/biblion/refined/portrait-self.webp",
+    "/art/cards-sm/M4.webp?v=20260910-theme-identity-v3",
+    "/art/biblion/modular/base-mon-print.webp",
+    "/art/biblion/modular/cost-print.webp",
+    "/art/biblion/modular/attack-print.webp",
+    "/art/cards-sm/M5.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/M2.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/S8.webp?v=20260910-theme-identity-v3",
+    "/art/biblion/refined/stat-cost.webp",
+    "/art/biblion/modular/base-spell-print.webp",
+    "/art/cards-sm/Q_DECAY.webp?v=20260910-theme-identity-v3",
+    "/art/biblion/modular/base-quest-print.webp",
+    "/art/biblion/modular/plaque-print.webp",
+    "/art/cards-sm/QUICK_MIMIC.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/RUST_SLUG.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/DRAGON_KILLER.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/Q_CHEAT.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/BUDGET.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/ND2.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/COLOSSEUM_REST.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/S4.webp?v=20260910-theme-identity-v3",
+    "/art/cards-sm/M3.webp?v=20260910-theme-identity-v3",
+    "/art/brand/lore-logo-transparent.webp",
+    "/art/biblion/modular/attack-ui.webp",
+    "/art/seekers/daylight-v1/idle-loop.webp",
+    "/art/seekers/daylight-v1/portrait.webp",
+    "/art/cards/M4.webp?v=20260910-theme-identity-v3",
+    "/art/cards/M2.webp?v=20260910-theme-identity-v3",
+    "/art/cards/M5.webp?v=20260910-theme-identity-v3",
+    "/art/cards/DRAGON_KILLER.webp?v=20260910-theme-identity-v3",
+    "/art/cards/RUST_SLUG.webp?v=20260910-theme-identity-v3",
+    "/art/cards/QUICK_MIMIC.webp?v=20260910-theme-identity-v3",
+    "/art/cards/BUDGET.webp?v=20260910-theme-identity-v3",
+    "/art/cards/Q_CHEAT.webp?v=20260910-theme-identity-v3",
+    "/art/cards/ND2.webp?v=20260910-theme-identity-v3",
+    "/art/cards/COLOSSEUM_REST.webp?v=20260910-theme-identity-v3",
+    "/art/cards/S8.webp?v=20260910-theme-identity-v3",
+    "/art/cards/Q_DECAY.webp?v=20260910-theme-identity-v3",
+    "/art/cards/S4.webp?v=20260910-theme-identity-v3",
+    "/art/cards/M3.webp?v=20260910-theme-identity-v3",
+    "/art/biblion/modular/health-ui.webp",
+    "/art/biblion/modular/field-spell-print.webp",
+    "/art/biblion/modular/field-mon-print.webp",
+    "/art/biblion/modular/field-quest-print.webp",
+    "/art/biblion/modular/base-trap-print.webp",
+    "/art/biblion/modular/field-trap-print.webp",
+    "/art/biblion/modular/shield-print.webp",
+    "/art/biblion/modular/dew-print.webp",
+    "/art/biblion/modular/infinity-print.webp",
+    "/art/biblion/modular/brand-seal-ui.webp",
+    "/art/biblion/arcana/dice-enamel.webp",
+    "/art/cards-sm/S3.webp?v=20260910-theme-identity-v3",
+    "/art/cards/S3.webp?v=20260910-theme-identity-v3"
+  ]
+}
