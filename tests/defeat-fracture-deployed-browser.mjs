@@ -1,0 +1,33 @@
+/** Read-only deployed-client check: API and WebSocket responses are isolated fixtures. */
+import {build} from 'esbuild';import assert from 'node:assert/strict';import fs from 'node:fs/promises';import os from 'node:os';import path from 'node:path';
+import {apiFixture} from './helpers/api-fixture.mjs';
+const {chromium}=await import(process.env.LORE_PLAYWRIGHT??'/tmp/lore-defeat-preview-tools/node_modules/playwright-core/index.mjs');
+const origin=process.env.LORE_TEST_ORIGIN??'https://yourlore.xyz',out=process.env.LORE_TEST_OUTPUT??'docs/releases/2026-11-19-defeat-fracture/qa';await fs.mkdir(out,{recursive:true});
+const temp=await fs.mkdtemp(path.join(os.tmpdir(),'lore-defeat-live-'));
+await build({stdin:{contents:"export {createGame,reduce} from './client/src/shared/engine';export {DB,STARTERS} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:temp+'/fixture.mjs'});
+const {createGame,reduce,DB,STARTERS}=await import(temp+'/fixture.mjs');
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal','--autoplay-policy=no-user-gesture-required']}),results=[];
+try{for(const [width,height,loser] of [[1280,900,0],[390,844,1]]){
+ const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage(),errors=[],assetFailures=[];page.setDefaultTimeout(90000);page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().includes('/vfx/character-fractures/')&&r.status()!==200)assetFailures.push(r.url());});
+ const winner=1-loser,side=loser===0?'me':'opp',state=createGame({mode:'online',seed:71,starting:winner,p0:{id:'defeat-fixture',name:'YOU'},p1:{id:'opp',name:'OPPONENT'}}).state;
+ state.turn=3;state.phase='main';state.cur=winner;state.pending=null;delete state.opening;
+ for(const [i,p]of state.players.entries())Object.assign(p,{openingDrawReady:false,hp:i===loser?3:32,shield:0,dew:4,mana:8,maxMana:12,hand:[{...STARTERS.STARTER_CHEST,uid:'chest-'+i}],field:[],traps:[],quests:[],enchants:[]});
+ state.players[winner].field=[{...DB.M4,uid:'lethal',tempAtk:40,atkMod:0,defMod:0,dmg:0,exhausted:false,summonedTurn:0}];
+ const terminal=reduce(state,{type:'attack',uid:'lethal'});assert(terminal.state.over);assert.equal(terminal.state.winner,winner);
+ await apiFixture(page,req=>new URL(req.url).pathname==='/api/auth/me'?{user:{id:'defeat-fixture',display:'シーカー',avatar:'SEEKER_HOODED',credits:0,unlocks:[],deckPresets:null}}:{ok:true,keys:[],friends:[],incoming:[],outgoing:[]});
+ let socket;await page.routeWebSocket('**/ws/room/**',ws=>{socket=ws;ws.onMessage(raw=>{const msg=JSON.parse(String(raw));if(msg.type==='ready')ws.send(JSON.stringify({type:'init',you:0,state,events:[]}));if(msg.type==='ping')ws.send(JSON.stringify({type:'pong'}));});});
+ await page.addInitScript(()=>{localStorage.setItem('lore_lang','ja');localStorage.setItem('lore_sfx','0.7');localStorage.setItem('lore_game',JSON.stringify({roomId:'defeat-fracture-fixture',you:0,ts:Date.now(),ranked:false}));localStorage.setItem('lore_help_callout_seen',new Date().toISOString().slice(0,10));window.impactStarts=0;const original=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const n=original.call(this),start=n.start.bind(n);n.start=(...args)=>{if(Math.abs((n.buffer?.duration??0)-2.35)<.001)window.impactStarts++;return start(...args);};return n;};});
+ try{
+  await page.goto(origin,{waitUntil:'domcontentloaded',timeout:120000});await page.waitForSelector('#hand .card');await page.waitForSelector('.duel-loader',{state:'detached'});await page.waitForSelector('[data-scene-ready=true]');await page.waitForTimeout(300);console.log('board ready',width,side);
+  await page.evaluate(side=>{window.defeatSamples=[];const root=document.getElementById(side==='me'?'portraitMe':'portraitOpp');window.defeatObserver=new MutationObserver(()=>{const fx=document.querySelector('.mana-rupture');if(fx)window.defeatSamples.push({t:Number(fx.dataset.time),phase:root.dataset.manaCounters,shake:document.querySelector('#app').style.translate,result:!!document.querySelector('.outcome-result')});});window.defeatObserver.observe(document.querySelector('#app'),{attributes:true,childList:true,subtree:true});},side);
+  socket.send(JSON.stringify({type:'update',state:terminal.state,events:terminal.events}));
+  await page.waitForSelector('.mana-rupture');assert.equal(await page.locator('.mana-rupture').getAttribute('data-fracture'),'SEEKER_HOODED-'+side);
+  await page.waitForFunction(()=>Number(document.querySelector('.mana-rupture')?.dataset.time)>=1450);await page.screenshot({path:out+`/production-${side}-${width}.png`});
+  await page.waitForSelector('.outcome-result');assert.equal(await page.locator('.mana-rupture').count(),0);
+  const observed=await page.evaluate(()=>{defeatObserver.disconnect();return {impactStarts,phases:[...new Set(defeatSamples.map(s=>s.phase))],earlyResult:defeatSamples.some(s=>s.result),settled:defeatSamples.some(s=>s.t>=2580&&s.shake===''),finalTranslate:document.querySelector('#app').style.translate};});
+  assert(observed.phases.includes('cracked'));assert(observed.phases.includes('gone'));assert.equal(observed.earlyResult,false);assert(observed.settled);assert.equal(observed.finalTranslate,'');assert.equal(observed.impactStarts,1);assert.deepEqual(errors,[]);assert.deepEqual(assetFailures,[]);
+  results.push({width,height,side,observed,errors,assetFailures});console.log('PASS deployed defeat',width,side);
+ }catch(error){await page.screenshot({path:out+`/failure-${width}.png`}).catch(()=>{});console.error({errors,assetFailures,body:(await page.locator('body').innerText()).slice(0,1000)});throw error;}finally{await context.close();}
+}
+ await fs.writeFile(out+'/production-browser-report.json',JSON.stringify({origin,passed:true,results,boundary:'Production client/CSS/art/models fetched from origin; API and WebSocket fixtures supply engine-generated lethal results. No real accounts or matches modified.'},null,2));
+}finally{await browser.close();await fs.rm(temp,{recursive:true,force:true});}
