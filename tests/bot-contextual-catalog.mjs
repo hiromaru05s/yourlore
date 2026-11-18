@@ -9,7 +9,7 @@ try {
  const card=id=>({...C.DB[id]??C.STARTERS[id],uid:'catalog-'+serial++});
  const mon=(id,extra={})=>({...card(id),dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0,...extra});
  const pool=C.BUYABLE_POOL.filter(id=>C.DB[id]);
- for(let scenario=0;scenario<4;scenario++)for(let offset=0;offset<pool.length;offset+=7){
+ for(let scenario=0;scenario<5;scenario++)for(let offset=0;offset<pool.length;offset+=7){
   const g=C.createGame({mode:'bot',seed:8120+offset+scenario,starting:scenario%2,p0:{id:'a',name:'a'},p1:{id:'b',name:'b'}}).state;
   g.turn=scenario===3?55:15;g.pending=null;g.market=pool.slice(offset,offset+7).map(card);g.marketStock=g.market.map(()=>3);
   for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],enchants:[],traps:[],quests:[],exile:[],removed:[],revealedCards:[],supply:[],hp:40,mana:20,maxMana:20});
@@ -17,13 +17,16 @@ try {
   if(scenario===1){p.hp=6;o.field=[mon('M12',{dmg:2}),mon('M7',{dmg:1})];}
   if(scenario===2){p.field=[mon('MINI_SPIRIT',{atkMod:4,defMod:4,dmg:2}),mon('M4',{dmg:1})];o.enchants=['BLOOD_RITE','WEAKEN_ALL'].map(id=>({card:card(id),turns:99,bornTurn:0}));}
   if(scenario===3){p.deck.push(...Array.from({length:15},()=>card('STARTER_TRASH')));p.field=[mon('CASTLE',{gcount:2})];o.field=[mon('NGA4')];}
+  // A prepared midgame exercises conditional purchases excluded by the other
+  // boards: recent damage, Brand, Rift thinning, revival, Elf and spell builds.
+  if(scenario===4){p.brand=1;p.hp=12;p.damageReceived={turn:g.turn-1,total:12,previous:0};p.removed=Array.from({length:10},()=>card('STARTER_TRASH'));p.discard=[card('M4')];p.deck=Array.from({length:9},()=>card('S13'));p.field=[mon('ELF'),mon('M4')];o.field=[mon('M2'),mon('M4')];}
   const before=JSON.stringify(g),start=performance.now(),result=[...C.assessAcquisitions(g,C.positionMerit,1).values()];
   assert.equal(JSON.stringify(g),before,'every card trial preserves its input');
   for(const r of result){assert([r.impact,r.worst,r.cooperation,r.arrival,r.heuristic,r.margin].every(Number.isFinite),r.id);ids.add(r.id);assessed++;}
   rows.push({scenario,offset,count:result.length,ms:performance.now()-start});
  }
- assert(ids.size>300,'broad current purchase pool');
- const report={pool:pool.length,uniqueAssessed:ids.size,trials:assessed,scenarios:4,rows};
+ assert.equal(ids.size,pool.length,'every current purchase card receives at least one eligible contextual trial');
+ const report={pool:pool.length,uniqueAssessed:ids.size,notAssessed:pool.filter(id=>!ids.has(id)),trials:assessed,scenarios:5,rows};
  if(process.env.BOT_CONTEXT_CATALOG_REPORT){await mkdir(path.dirname(path.resolve(process.env.BOT_CONTEXT_CATALOG_REPORT)),{recursive:true});await writeFile(process.env.BOT_CONTEXT_CATALOG_REPORT,JSON.stringify(report,null,2));}
  console.log(JSON.stringify({...report,rows:undefined}));
 }finally{await rm(tmp,{recursive:true,force:true});}
