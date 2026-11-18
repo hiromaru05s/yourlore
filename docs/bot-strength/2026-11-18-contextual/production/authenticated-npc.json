@@ -1,0 +1,95 @@
+{
+  "origin": "https://yourlore.xyz",
+  "at": "2026-11-18T12:19:21.159Z",
+  "scope": "temporary QA account and persisted session; authenticated API/WebSocket NPC start, observed BOT response and surrender settlement; not human strength or a full played match",
+  "results": [
+    {
+      "tier": "easy",
+      "authenticatedStart": true,
+      "marketBias": false,
+      "initialMarket": [
+        "ATTUNE_LOCK",
+        "MERC_LEADER",
+        "E3",
+        "LEVY",
+        "M1",
+        "TPO1",
+        "TPO5"
+      ],
+      "botResponse": {
+        "turn": 2,
+        "uses": {
+          "STARTER_MANA": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "manaSpent",
+          "playSpell",
+          "log"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "normal",
+      "authenticatedStart": true,
+      "marketBias": false,
+      "initialMarket": [
+        "TGE2",
+        "GENESIS_MAGIC",
+        "HOURGLASS",
+        "QUICK_MIMIC",
+        "CAPTAIN",
+        "TSO3",
+        "EXILE_NUKE1"
+      ],
+      "botResponse": {
+        "turn": 1,
+        "uses": {
+          "QUICK_MIMIC": 1
+        },
+        "buys": {
+          "QUICK_MIMIC": 1
+        },
+        "eventTypes": [
+          "log",
+          "buy",
+          "playSpell",
+          "summon"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    },
+    {
+      "tier": "hard",
+      "authenticatedStart": true,
+      "marketBias": true,
+      "initialMarket": [
+        "APPLE",
+        "AWAKENED_MIMIC",
+        "DICE_FIGHTER",
+        "HOURGLASS",
+        "BLOOD_JOY",
+        "NHEX",
+        "FIRE_ARROW"
+      ],
+      "botResponse": {
+        "turn": 1,
+        "uses": {
+          "MINI_SPIRIT": 1
+        },
+        "buys": {},
+        "eventTypes": [
+          "manaSpent",
+          "log",
+          "summon"
+        ]
+      },
+      "surrenderSettled": true,
+      "receiptAmount": 0
+    }
+  ],
+  "cleanup": true
+}

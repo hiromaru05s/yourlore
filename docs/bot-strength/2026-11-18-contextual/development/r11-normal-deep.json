@@ -1,0 +1,245 @@
+{
+  "pairedHoeffding95": [
+    0.3209492421296902,
+    1
+  ],
+  "resume": null,
+  "A": "new:normal",
+  "B": "old:normal",
+  "n": 8,
+  "start": 8500,
+  "mirror": true,
+  "search": {
+    "easy": {
+      "width": 4,
+      "samples": 1,
+      "turns": 2,
+      "finalists": 0,
+      "extraSamples": 0
+    },
+    "normal": {
+      "width": 6,
+      "samples": 2,
+      "turns": 2,
+      "finalists": 2,
+      "extraSamples": 2
+    },
+    "hard": {
+      "width": 8,
+      "samples": 2,
+      "turns": 2,
+      "finalists": 3,
+      "extraSamples": 2
+    },
+    "hell": {
+      "width": 12,
+      "samples": 3,
+      "turns": 2,
+      "finalists": 4,
+      "extraSamples": 8
+    }
+  },
+  "tactics": {
+    "proof": true,
+    "targets": true,
+    "horizon": 4,
+    "replyNodes": 64
+  },
+  "valueModel": null,
+  "value": {
+    "hp": 1,
+    "attack": 1.7,
+    "health": 0.65,
+    "mana": 3.5,
+    "deck": 0.65,
+    "hand": 0.8,
+    "enchant": 0.55,
+    "learned": 0
+  },
+  "baselineValue": {
+    "hp": 1,
+    "attack": 1.7,
+    "health": 0.65,
+    "mana": 3.5,
+    "deck": 0.65,
+    "hand": 0.8,
+    "enchant": 0.55,
+    "learned": 0.25
+  },
+  "modules": {
+    "candidate": "97c2dbbf98c3060a1bda8ff1170d4c4e6f1df9928544372c2162eff905609e90",
+    "baseline": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac"
+  },
+  "completePairs": 4,
+  "pairedScore": 1,
+  "pairedBootstrap95": [
+    1,
+    1
+  ],
+  "draws": 0,
+  "customA": [
+    {
+      "name": "BOT \u00b7 SPIRIT_CONTROL",
+      "cards": [
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "NOURISHING_RAIN",
+        "NOURISHING_RAIN",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "STARTER_CHEST"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    },
+    {
+      "name": "BOT \u00b7 VAMPIRE",
+      "cards": [
+        "NIGHT_CASTLE_GIFT",
+        "NIGHT_CASTLE_GIFT",
+        "GAMBLER",
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "NOURISHING_RAIN",
+        "STARTER_CHEST",
+        "COUNTERCALC"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    },
+    {
+      "name": "BOT \u00b7 GOBLIN_V99",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_SETTLEMENT",
+        "MINI_SPIRIT",
+        "COUNTERCALC",
+        "STARTER_CHEST"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    },
+    {
+      "name": "BOT \u00b7 SPIRIT_RAMP",
+      "cards": [
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "GAMBLER",
+        "GAMBLER",
+        "NOURISHING_RAIN",
+        "STARTER_CHEST",
+        "ATTUNE_RETURN",
+        "STARTER_TRASH"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    }
+  ],
+  "customB": [
+    {
+      "name": "BOT \u00b7 SPIRIT_CONTROL",
+      "cards": [
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "NOURISHING_RAIN",
+        "NOURISHING_RAIN",
+        "WEAKEN_ALL",
+        "COUNTERCALC",
+        "STARTER_CHEST"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    },
+    {
+      "name": "BOT \u00b7 VAMPIRE",
+      "cards": [
+        "NIGHT_CASTLE_GIFT",
+        "NIGHT_CASTLE_GIFT",
+        "GAMBLER",
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "NOURISHING_RAIN",
+        "STARTER_CHEST",
+        "COUNTERCALC"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    },
+    {
+      "name": "BOT \u00b7 GOBLIN_V99",
+      "cards": [
+        "GOBLIN",
+        "GOBLIN",
+        "GOBLIN_RAIDER",
+        "GOBLIN_RAIDER",
+        "GOBLIN_SETTLEMENT",
+        "MINI_SPIRIT",
+        "COUNTERCALC",
+        "STARTER_CHEST"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    },
+    {
+      "name": "BOT \u00b7 SPIRIT_RAMP",
+      "cards": [
+        "MINI_SPIRIT",
+        "MINI_SPIRIT",
+        "GAMBLER",
+        "GAMBLER",
+        "NOURISHING_RAIN",
+        "STARTER_CHEST",
+        "ATTUNE_RETURN",
+        "STARTER_TRASH"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 11,
+        "chestTurn": 6
+      }
+    }
+  ],
+  "rosterA": "balanced",
+  "rosterB": "balanced",
+  "wins": 8,
+  "total": 8,
+  "invalid": 0,
+  "rate": 1,
+  "wilson95": [
+    0.6755843804891231,
+    1
+  ],
+  "seconds": 743.369,
+  "ms": {
+    "p50": 1048.9233329999843,
+    "p95": 2885.2246249999735,
+    "max": 13545.842417000007
+  },
+  "scope": "development only; independent final Normal seeds are 9400-9415"
+}

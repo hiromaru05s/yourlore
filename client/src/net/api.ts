@@ -1,3 +1,4 @@
+import type { SingleProgress, StoryScene } from '../shared/singleStory';
 import type {OnboardingStatus} from '../shared/onboarding';
 import {ReadRequests} from './readRequests';
 import type {GiftInbox,GiftClaim} from '../shared/gifts';
@@ -176,6 +177,8 @@ export const api = {
   rankedDecks: (userId:string,signal?:AbortSignal) => call<{display:string;rank:number;decks:RankedDeck[]}>("/rank/decks?userId="+encodeURIComponent(userId),undefined,"GET",signal),
   rankHistory: () => call<{ seasons: (RankInfo & { season: string })[] }>("/rank/history", undefined, "GET").then((r) => r.seasons).catch(() => []),
   // credit rewards (server-authoritative amounts; key e.g. "tut:1")
+  singleProgress: () => call<SingleProgress>('/rewards/single',undefined,'GET'),
+  readSingleScene: (scene:StoryScene) => call<SingleProgress>('/rewards/single/read',{scene}),
   tutorialStatus: () => call<{ keys:string[]; credits:number; offered:boolean; awarded:number; legacyPaid:number; amounts:Record<string,number> }>("/rewards/tutorial", undefined, "GET"),
   tutorialDecision: (decision:'start'|'skip') => call<{ok:true}>("/rewards/tutorial/decision", {decision}),
   completeTutorial: (lesson:LessonId, actions:TutorialAction[]) => call<ClaimResult>("/rewards/tutorial/complete", {lesson,actions}),

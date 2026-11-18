@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-18T11:34:19.086590+00:00",
+  "completed": 2,
+  "wins": 2,
+  "planned": 8,
+  "status": "diagnostic development stopped to dedicate CPU to already fixed independent final 24 games; all completed rows retained, no outcomes pooled into final rates",
+  "interruptedGame": {
+    "pair": 8601,
+    "seat": 0
+  }
+}

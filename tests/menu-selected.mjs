@@ -8,7 +8,7 @@ Object.assign(globalThis,{window:dom.window,document:dom.window.document,localSt
 const base={t:key=>key,esc:s=>String(s).replaceAll('<','&lt;'),onLangChange:()=>()=>{},loungeText:ja=>ja,homeIcon:()=>'<i></i>'};
 async function load(name,deps){const source=(await fs.readFile(new URL(`../client/src/screens/${name}.ts`,import.meta.url),'utf8')).replace(/^import .*;\s*$/gm,'');const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;const exports={};new Function('exports',...Object.keys(deps),js)(exports,...Object.values(deps));return exports;}
 const root=document.querySelector('#app');const calls=[];
-const app={root,user:{id:'local-guest-user',decks:null,botClears:['easy','normal','hard','hell']},rankedLobby:()=>calls.push('ranked'),onlineLobby:()=>calls.push('online'),botGame:d=>calls.push(d),storyGame:s=>calls.push('story:'+s),deck:()=>calls.push('deck'),leaderboard:()=>calls.push('rank'),home(){}};
+const app={root,user:{id:'local-guest-user',decks:null,botClears:['easy','normal','hard','hell']},rankedLobby:()=>calls.push('ranked'),onlineLobby:()=>calls.push('online'),botGame:d=>calls.push(d),storyGame:s=>calls.push('story:'+s),single:loc=>calls.push('single:'+loc.tab),deck:()=>calls.push('deck'),leaderboard:()=>calls.push('rank'),home(){}};
 const npcBundle=await build({stdin:{contents:"export * from './client/src/shared/botNpcs';export {ARIES_ROUTE} from './client/src/shared/ariesStory';export {BOT_FIRST_CLEAR_EXP, BOT_REWARDS} from './client/src/shared/progression';export {STARTERS, DB, deckStoreForUser} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'cjs',write:false});
 const npcModule={exports:{}};new Function('module','exports',npcBundle.outputFiles[0].text)(npcModule,npcModule.exports);const npcs=npcModule.exports;
 let finishPortraits;
@@ -45,7 +45,7 @@ root.querySelector('#rankedMode').click();root.querySelector('#ranked').click();
 assert.equal(warmups,1,'HOME prepares duel assets');
 home.destroy();assert(inkInstances.every(i=>i.disposed));assert.equal(giftDisposals,1);assert.equal(cancelledWarmups,1);root.innerHTML='';
 let idleMounts=0,idleDisposals=0;
-const {mountSingle}=await load('single',{
+const {mountSingleBattle:mountSingle}=await load('singleBattle',{
  ...base,...npcs,L:ja=>ja,getLang:()=> 'ja',cardName:card=>card.id,
  pageArrow:'/page-arrow.svg',ARIES_COMPLETED_KEY:'lore.story.aries.cleared.v1',
  mountHomeDuelButton,mountSingleIdle:()=>{idleMounts++;return()=>{idleDisposals++;};},
@@ -58,18 +58,19 @@ for(const [index,difficulty] of npcs.SINGLE_DIFFICULTIES.entries()){
  root.querySelector('.single-battle').click();assert.equal(calls.at(-1),difficulty);
  assert.equal(root.querySelector('button[data-story]').disabled,false);
  root.querySelector('[data-next]').click();
- assert.equal(calls.length,before+1,'Page turns never launch a duel');
+ assert.equal(calls.slice(before).filter(c=>npcs.SINGLE_DIFFICULTIES.includes(c)).length,1,'Page turns never launch another duel');
 }
-assert.equal(root.querySelector('.single-page').dataset.story,'true');
-assert.equal(root.querySelector('.sp-standing'),null);
-root.querySelector('.single-battle').click();assert.equal(calls.at(-1),'story:0');
+assert.equal(calls.at(-1),'single:story','the last NPC page returns to the chapter hub');
+assert.equal(root.querySelector('.single-page').dataset.story,'false');
+assert(root.querySelector('.sp-standing'));
+root.querySelector('[data-training]').click();assert.equal(calls.at(-1),'single:training');
 single.destroy();assert.equal(idleDisposals,idleMounts);
 app.user.botClears=['hell'];
 const locked=mountSingle(app);
 assert.equal(root.querySelector('[data-next]').disabled,true);
-assert.equal(root.querySelector('button[data-story]').disabled,true);
+assert.equal(root.querySelector('button[data-story]').disabled,false,'the story starts before NPC qualification');
 assert(root.querySelector('#sp-unlock').textContent.includes('ルミ'));
-root.querySelector('button[data-story]').click();assert.equal(root.querySelector('.single-page').dataset.story,'false');
+root.querySelector('button[data-story]').click();assert.equal(calls.at(-1),'single:story');assert.equal(root.querySelector('.single-page').dataset.story,'false');
 locked.destroy();assert(inkInstances.every(i=>i.disposed));assert.equal(idleDisposals,idleMounts);root.innerHTML='';
 let resolveCollection;
 const {mountShop}=await load('shop',{...base,starterCollection:()=>({}),renderShopStarters:host=>{host.textContent='daily starters';},pendingPurchase:()=>null,purchaseCollection:async()=>({}),isCardFrame:()=>false,mountShopFrames:host=>{host.textContent='frame accessories';return {update(){},dispose(){host.replaceChildren();}};},mountShopGacha:host=>{host.textContent='gacha scene';return Object.assign(()=>host.replaceChildren(),{update(){}});},api:{collection:()=>new Promise(r=>resolveCollection=r)}});

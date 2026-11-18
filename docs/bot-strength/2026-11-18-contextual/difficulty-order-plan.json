@@ -1,0 +1,30 @@
+{
+  "at": "2026-11-18T11:44:03.013187+00:00",
+  "module": "66698587db47c227653e5a69a99eb6b8121298e65d9fb0b027faccc8c044d118",
+  "scope": "Small additional difficulty-order diagnostic, not pooled into old-policy win rates",
+  "batches": [
+    {
+      "name": "order-hard-normal",
+      "A": "new:hard",
+      "B": "new:normal",
+      "games": 8,
+      "pairSeeds": [
+        9600,
+        9603
+      ],
+      "roster": "hard-roster.json"
+    },
+    {
+      "name": "order-normal-easy",
+      "A": "new:normal",
+      "B": "new:easy",
+      "games": 8,
+      "pairSeeds": [
+        9700,
+        9703
+      ],
+      "roster": "normal-roster.json"
+    }
+  ],
+  "protocol": "Identical starter mirror, paired seats, actual botDecide; no market preference; same release module for both sides"
+}

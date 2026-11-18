@@ -37,7 +37,7 @@ try{
   else assert.equal(action.type,'buyMarket');
   cases.push({tier,deck:scenario,state:g,expected:action});
  }
- for(const tier of ['hard','hell']){
+ for(const tier of ['easy','normal','hard','hell']){
   let g=C.createGame({mode:'bot',seed:115,starting:0,p0:{id:'qa-bot',name:'QA BOT'},p1:{id:'qa-human',name:'QA'}}).state;
   g.turn=8;g.pending=null;g.market=[];
   for(const p of g.players)Object.assign(p,{hand:[],deck:[],discard:[],field:[],traps:[],enchants:[],quests:[],supply:[],hp:40,mana:2,maxMana:8});

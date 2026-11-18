@@ -30,7 +30,7 @@ export function projectBoardDOM(root:HTMLElement):void {
   if(typeof DOMMatrix==='undefined')return;
   placeReadingBoard(root);
   const unit=cardUnit(root);
-  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button,.pt-mana,.portrait>.pt-name,.pt-name--vitals')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('rift-button')?unit*RIFT_MOUNT.height/.110:element.classList.contains('market-counter')?unit*marketHeight():element.classList.contains('mid-aside')?unit*.028/.110:element.classList.contains('pt-ring')?unit*.009/.110:element.classList.contains('pt-mana')?unit*.0165/.110:0)+(Number(element.dataset.introHeight)||0)}));
+  const planes=[...root.querySelectorAll<HTMLElement>('.zone-row,.market-counter,.mid-aside,.pile,.rift-button,.pt-mana')].map(element=>({element,rect:layoutRect(element),elevation:(element.classList.contains('rift-button')?unit*RIFT_MOUNT.height/.110:element.classList.contains('market-counter')?unit*marketHeight():element.classList.contains('mid-aside')?unit*.028/.110:element.classList.contains('pt-ring')?unit*.009/.110:element.classList.contains('pt-mana')?unit*.0165/.110:0)+(Number(element.dataset.introHeight)||0)}));
   for(const {element,rect,elevation} of planes){
     element.dataset.boardPlane=String(elevation);element.style.transformOrigin='0 0';
     element.style.transform=new DOMMatrix().translate(-rect.left,-rect.top).multiply(boardMatrix(rect.left,rect.top,elevation)).toString();
@@ -43,6 +43,29 @@ export function projectBoardDOM(root:HTMLElement):void {
     element.style.transform=`translateZ(${unit*(marketHeight(true)-marketHeight())}px)`;
   });
   root.querySelectorAll<HTMLElement>('.pile--shelf').forEach(el=>{const n=Number(el.dataset.count)||0;el.style.setProperty('--shelf-elevation',`${unit*pileFace(n,true)}px`);});
+  // Identity is readable screen-space UI, anchored to the projected mana tray.
+  // Flip to the other edge when there is no room, keeping it attached to the tray.
+  for(const side of ['Me','Opp']){
+    const label=root.querySelector<HTMLElement>(`#portrait${side}>.pt-name`);
+    const mana=root.querySelector<HTMLElement>(`#portrait${side} .pt-mana`);
+    const ring=root.querySelector<HTMLElement>(`#portrait${side} .pt-ring`);
+    if(!label||!mana||!ring)continue;
+    const tray=mana.getBoundingClientRect(),portrait=ring.getBoundingClientRect();
+    const width=Math.max(150,tray.width*.97),height=width*44/342;
+    const medal=!!label.querySelector('.medal-inscription'),reserve=medal?30:0;
+    const below=tray.bottom+2,above=tray.top-height-2;
+    const fitsBelow=below+height+reserve<=innerHeight-3;
+    const fitsAbove=above-reserve>=3;
+    const useBelow=side==='Me'?fitsBelow:!fitsAbove;
+    const top=useBelow?below:above;
+    // The small-screen minimum must not slide underneath the portrait or HP.
+    const left=Math.min(tray.x+(tray.width-width)/2,portrait.left-10-width*.85);
+    label.style.left=`${Math.max(4,Math.min(innerWidth-width-4,left))}px`;
+    label.style.top=`${Math.max(3+(!useBelow?reserve:0),Math.min(innerHeight-height-3-(useBelow?reserve:0),top))}px`;
+    label.style.width=`${width}px`;label.style.height=`${height}px`;
+    label.style.transform='none';delete label.dataset.boardPlane;
+    label.classList.toggle('pt-name--medal-above',!useBelow);
+  }
   root.classList.add('board-projected');
   root.dispatchEvent(new Event('lore:board-projected',{bubbles:true}));
 }

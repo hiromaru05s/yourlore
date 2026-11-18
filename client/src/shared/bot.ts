@@ -1,6 +1,6 @@
 import {isGoblinMonster} from './goblinCards';
 // Four difficulty levels share the same rules and legal-action safety.
-// Normal and upper tiers search imperfect-information rollouts; easy retains mistakes.
+// Every tier searches public-information hypotheses; Easy uses a smaller budget.
 import type { Action, CardInst, FieldMon, GameState, PlayerState, Side } from "./types";
 import { attackDecayCounters, fireDamageBonus, purgeChoices, effectChoices, purchaseAllowed, playBlockReason, monsterCanAttack } from "./engine";
 import { ST_MAX, effectSummonAllowed, buyCost, chestLocked, cullExiled, curHp, effAtk, effDef, freeBuyBlocked, isVampFamily, playCost, reduce as authoritativeReduce, sealLowBlocks, isGolem, isAssassinCard } from "./engine";
@@ -19,36 +19,27 @@ export type BotDifficulty = "easy" | "normal" | "hard" | "hell";
 
 const SELF_HARM_SPELLS = new Set(['CATALYST','BLOOD1','BLOOD2','BLOOD_JOY','BLOOD_ANGER','BLOOD_SORROW','BLOOD_PLEASURE','VAMP_PACT','SHATTER','GREED_PRICE','MASSACRE','FLAME','AMBUSH','FORBIDDEN','FORGE']);
 
-export const EASY_MISTAKE_RATE = 0.12;
+export const EASY_MISTAKE_RATE = 0.03;
 
-export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress?: (action: Action) => void): Action {
-  return withoutMonsterPresentation(() => decideFromObservation(g, diff, onProgress));
+export function botDecide(g: GameState, diff: BotDifficulty = "hard", onProgress?: (action: Action) => void, nodeLimit?: number): Action {
+  return withoutMonsterPresentation(() => decideFromObservation(g, diff, onProgress, nodeLimit));
 }
 
-function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void): Action {
+function decideFromObservation(g: GameState, diff: BotDifficulty, onProgress?: (action: Action) => void, nodeLimit?: number): Action {
   const view = observationSample(g, g.pending?.owner ?? g.cur, 0);
   let best = safeGreedy(view);
-  if (diff === 'easy') {
-    // Make occasional ordinary choices poorly, without abandoning a mandatory
-    // resolution or selecting an immediately losing move.
-    if (!view.pending && Math.random() < EASY_MISTAKE_RATE) {
-      const alternatives = botActions(view).filter(action =>
-        action.type !== 'endTurn' && action.type !== 'refresh' &&
-        JSON.stringify(action) !== JSON.stringify(best)).filter(action => {
-          const next = reduce(view, action).state;
-          return actionChangesState(view, next) && (!next.over || next.winner === view.cur);
-        });
-      if (alternatives.length) best = alternatives[Math.floor(Math.random() * alternatives.length)];
-    }
-  } else {
-    onProgress?.(legalBotAction(g, best, view));
-    let completed = best;
-    best = withThinkingBudget(THINKING_NODES[diff], () =>
-      searchDecide(view, diff === 'normal' ? 'normal' : 'hell', true, action => {
-        // Save only after every candidate has faced the same completed worlds.
-        completed = action;
-        onProgress?.(legalBotAction(g, action, view));
-      }), () => completed);
+  onProgress?.(legalBotAction(g,best,view));
+  let completed=best;
+  const nodes=nodeLimit===undefined?THINKING_NODES[diff]:Math.min(THINKING_NODES[diff],Math.max(1,Math.floor(nodeLimit)||1));
+  best=withThinkingBudget(nodes,()=>
+    searchDecide(view,diff==='hard'||diff==='normal'?'hell':diff,true,action=>{
+      completed=action;onProgress?.(legalBotAction(g,action,view));
+    },diff==='hard'||diff==='hell'),()=>completed);
+  // Easy occasionally retains the sound greedy alternative instead of the
+  // searched move. Never inject a random legal but strategically absurd action.
+  if(diff==='easy'&&!view.pending&&Math.random()<EASY_MISTAKE_RATE){
+    const alternative=safeGreedy(view),next=reduce(view,alternative).state;
+    if(!next.over||next.winner===view.cur)best=alternative;
   }
   return legalBotAction(g, best, view);
 }

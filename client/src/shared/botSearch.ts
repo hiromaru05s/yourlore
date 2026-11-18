@@ -1,6 +1,8 @@
+import {assessAcquisitions, actionKey, resolveAssessment} from './botAcquisition';
+import {turnPlan} from './botTurnPlan';
 import { searchReduce as reduce } from './botBudget';
 import type { Action, GameState, PlayerState, Side } from './types';
-import { actingSide, curHp, effAtk, playCost } from './engine';
+import { actingSide, curHp, effAtk, monsterCanAttack, playCost } from './engine';
 import { cardPower } from './cardEval';
 import { learnedValue } from './botValue';
 import { resilience, matchupPlan, removalHits } from './botMatchup';
@@ -14,24 +16,44 @@ import { lastingValue, recoveryEngine, recoveryPerTurn, unproductiveOpponentHeal
 export const TACTICS = { proof: true, targets: true, horizon: 4, replyNodes: 64 };
 
 export const SEARCH = {
+  easy: { width: 4, samples: 1, turns: 2, finalists: 0, extraSamples: 0 },
   normal: { width: 6, samples: 2, turns: 2, finalists: 2, extraSamples: 2 },
   hard: { width: 8, samples: 2, turns: 2, finalists: 3, extraSamples: 2 },
   hell: { width: 12, samples: 3, turns: 2, finalists: 4, extraSamples: 8 },
 };
-export const VALUE = { hp: 1, attack: 1.7, health: 0.65, mana: 3.5, deck: 0.65, hand: 0.8, enchant: 0.55, learned: 0.25 };
+export const VALUE = { hp: 1, attack: 1.7, health: 0.65, mana: 3.5, deck: 0.65, hand: 0.8, enchant: 0.55, learned: 0 };
+// Reducer states are immutable during a decision. Discard this cache afterwards:
+// callers/tests can legitimately update a state or evaluation tuning between moves.
+let materialCache: WeakMap<GameState, number> | undefined;
 
 function strength(g: GameState, p: PlayerState): number {
-  let value = VALUE.hp * (Math.min(100, p.hp) + Math.log1p(Math.max(0, p.hp - 100)) * 10 + (p.shield ?? 0) * 0.8 + (p.dew ?? 0) * 2.5);
-  value += Math.min(p.maxMana, 20) * VALUE.mana;
+  let value = VALUE.hp * (Math.min(100, p.hp)*.65 + Math.log1p(Math.max(0,p.hp))*10 + Math.log1p(Math.max(0, p.hp - 100)) * 7 + (p.shield ?? 0) * 0.8 + (p.dew ?? 0) * 2.5);
+  const curve=[...p.hand,...p.deck,...p.discard].filter(c=>!c.quick).map(c=>playCost(c,p)).sort((a,b)=>b-a);
+  const usefulMana=Math.max(6,Math.min(12,(curve[0]??3)+(curve[1]??3)));
+  value += (Math.min(p.maxMana,4)*.6+Math.max(0,Math.min(p.maxMana,usefulMana)-4)*1.7+Math.max(0,Math.min(p.maxMana,20)-usefulMana)*.55)*VALUE.mana;
+  const opponent=g.players[p===g.players[0]?1:0];
+  const attacksStopped=g.players.some(q=>q.enchants.some(e=>e.card.ench==='noAttack'));
+  const defending=p.field.reduce((n,m)=>n+curHp(p,m)+Math.min(3,m.guts??0)*3+(m.aura==='castle'?Math.min(3,m.gcount??0)*4:0),0);
+  const direct=opponent.field.filter(m=>!m.escortLocked&&(m.directOnly||hasPassive(m,'ambush'))).reduce((n,m)=>n+effAtk(opponent,m,g),0);
+  const regular=opponent.field.filter(m=>!m.escortLocked&&!m.directOnly&&!hasPassive(m,'ambush')).reduce((n,m)=>n+effAtk(opponent,m,g)*(hasPassive(m,'dual')?2:1),0);
+  const exposure=attacksStopped?0:(p.field.some(m=>m.aura==='eliteGuard')?0:direct)+Math.max(0,regular-defending);
+  value-=Math.max(0,exposure-p.hp-(p.shield??0))*2.5;
+  value-=Math.max(0,8-p.hp-(p.shield??0))*1.5;
   for (const m of p.field) {
     if (m.hatch != null) { value += 3 + (m.dur ?? 1) * 2 + Math.max(0, (m.hatchTurns ?? 8) - m.hatch) * 2; continue; }
-    const atk = Math.max(0, effAtk(p, m, g));
+    const rawAttack=Math.max(0,effAtk(p,m,g));
+    const randomBalance=m.attackFx==='berserk'?Math.max(0,(opponent.field.length-(p.field.length-1))/(opponent.field.length+p.field.length+1)):1;
+    const atk = m.escortLocked ? 0 : rawAttack*(attacksStopped?.25:1)*randomBalance;
+    if(m.attackFx==='berserk')value-=Math.max(0,rawAttack-p.hp-(p.shield??0)+1)*2;
     value += atk * VALUE.attack + curHp(p, m) * VALUE.health + (atk>0 || m.aura || m.turnFx ? 2 : 0);
     if (m.directOnly) value += atk * 0.5;
     if (hasPassive(m, 'dual')) value += atk * 0.8;
-    if (hasPassive(m, 'counter')) value += atk * 0.45;
+    if (hasPassive(m, 'counter')) value += rawAttack * 0.45;
     if (hasPassive(m, 'evade')) value += 2;
     value += resilience(g,p,m);
+    if(m.aura==='castle')value+=Math.min(4,m.gcount??0)*3.5;
+    if(m.id==='MINI_SPIRIT')value+=((p.dew??0)>0?3:0)+Math.min(4,p.hand.filter(c=>c.star==='mana'||c.act==='heal'||c.act==='dew').length);
+    if(g.players[g.cur]===p&&monsterCanAttack(g,p,m))value+=Math.min(12,atk)*.2;
     if (m.aura || m.turnFx) value += Math.min(20, cardPower(m) * 0.22);
   }
   for (const e of p.enchants) value += Math.min(30, cardPower(e.card)) * VALUE.enchant;
@@ -46,7 +68,7 @@ function strength(g: GameState, p: PlayerState): number {
     return Math.max(0, v.base + v.synergy + v.matchup + v.readiness);
   };
   const quality = (c: typeof deck[number]): number => (c.act==='mindBurst' && !p.field.some(m=>(m.guts??0)>0) ? .05 : 1) * Math.max(0, Math.min(55, power(c))) / (1 + Math.max(0, playCost(c, p) - p.maxMana) * 0.7);
-  value += deck.reduce((sum, c) => sum + quality(c), 0) / Math.max(5, deck.length) * 5 * VALUE.deck;
+  value += deck.reduce((sum, c) => sum + quality(c), 0) / Math.max(8, deck.length) * 3 * VALUE.deck;
   value += p.hand.reduce((sum, c) => sum + quality(c), 0) * VALUE.hand * 0.15;
   value -= (p.bleed ?? 0) * 2;
   // Brand rolls damage every owner turn; cleansing it is a durable survival gain.
@@ -54,14 +76,25 @@ function strength(g: GameState, p: PlayerState): number {
   value += lastingValue(g, p);
   return value;
 }
+export function positionMerit(g: GameState, s: Side): number {
+  if(g.over)return g.winner===s?1000:g.winner==null?0:-1000;
+  let difference=materialCache?.get(g);
+  if(difference===undefined){difference=strength(g,g.players[0])-strength(g,g.players[1]);materialCache?.set(g,difference);}
+  return s===0?difference:-difference;
+}
 export function positionValue(g: GameState, s: Side): number {
   if (g.over) return g.winner === s ? 1 : g.winner == null ? 0.5 : 0;
-  const material = 1 / (1 + Math.exp(-(strength(g, g.players[s]) - strength(g, g.players[1 - s])) / 28));
-  return material * (1 - VALUE.learned) + learnedValue(g, s) * VALUE.learned;
+  const material = 1 / (1 + Math.exp(-positionMerit(g,s) / 28));
+  return VALUE.learned ? material * (1 - VALUE.learned) + learnedValue(g, s) * VALUE.learned : material;
 }
 
 /** Compare complete own-turn / opponent-reply sequences under common random samples. */
-export function searchDecide(g: GameState, level: 'normal' | 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void): Action {
+export function searchDecide(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', prove = true, onProgress?: (action: Action) => void, expertBaseline = false): Action {
+  const previous=materialCache;materialCache=new WeakMap();
+  try{return decideSearch(g,level,prove,onProgress,expertBaseline);}finally{materialCache=previous;}
+}
+
+function decideSearch(g: GameState, level: 'easy' | 'normal' | 'hard' | 'hell', prove: boolean, onProgress: ((action: Action) => void) | undefined, expertBaseline: boolean): Action {
   if (prove && TACTICS.proof) { const win = forcedWin(g, level === 'hell' ? 1400 : level === 'hard' ? 550 : 160); if (win) return win; }
   const side = actingSide(g), cfg = SEARCH[level];
   // Preserve the greedy policy's public, currently affordable escape from a
@@ -85,9 +118,16 @@ export function searchDecide(g: GameState, level: 'normal' | 'hard' | 'hell', pr
     if (card && ((plan.blocked && (card.act === 'destroyEnch' || card.id === 'DISARM3' || card.id === 'ADVANCE'))
         || plan.walls.some(m => removalHits(g, opponent, card, m)))) return policy;
   }
-  // Hell retains Hard's move as its expert baseline. More breadth alone can
-  // overfit a lucky hidden-card sample and make an otherwise strong move worse.
-  const base = level === 'hell' ? searchDecide(g, 'hard', false, onProgress) : policy;
+  // Reuse material evaluations only within this search over immutable states.
+  const merits=new WeakMap<GameState,number>();
+  const merit=(st:GameState,s:Side):number=>{let v=merits.get(st);if(v===undefined){v=positionMerit(st,side);merits.set(st,v);}return s===side?v:-v;};
+  const acquisition=assessAcquisitions(g,merit,level==='easy'?1:2);
+  const purchases=[...acquisition.values()].filter(a=>a.margin>0).sort((a,b)=>b.margin-a.margin);
+  if(purchases.length&&(policy.type==='buyMarket'||policy.type==='buySupply'||policy.type==='refresh'||policy.type==='endTurn'))onProgress?.(purchases[0].action);
+  // Complete a sequence-aware baseline before spending the rest on long rollouts.
+  const base = expertBaseline
+    ? searchDecide(g,'hard',false,onProgress)
+    : turnPlan(observationSample(g,side,41),policy,merit,acquisition,level==='easy'?2:level==='normal'?3:4,level==='easy'?3:5);
   // A completed lower-cost policy remains available if the worker hits its deadline.
   onProgress?.(base);
   const seenPlays = new Set<string>();
@@ -113,30 +153,33 @@ export function searchDecide(g: GameState, level: 'normal' | 'hard' | 'hell', pr
   }
   const purchase = purchaseEvaluator(g, g.players[g.cur], TUNE);
   const ranked = root.map(a => {
-    const next = reduce(firstSample, a).state;
+    const raw = reduce(firstSample, a).state;
+    const next = raw.cur===side ? resolveAssessment(raw,merit,4) : raw;
     let legal = actionChangesState(firstSample, next) && !unproductiveOpponentHeal(firstSample,a,next);
     let prior = positionValue(next, side);
     const p = g.players[g.cur];
     if (a.type === 'buyMarket' || a.type === 'buySupply') {
       const c = a.type === 'buyMarket' ? g.market[a.i] : p.supply[a.i];
       if (c) {
-        const margin=purchase(c,a.type==='buyMarket'?a.i:undefined).margin;
-        prior += Math.max(-0.08,Math.min(0.08,margin/150));
+        const margin=acquisition.get(actionKey(a))?.margin ?? purchase(c,a.type==='buyMarket'?a.i:undefined).margin;
+        prior += Math.max(-0.12,Math.min(0.12,margin/100));
         // Uncastable speculation must not gain deck-material points merely by
         // being purchased. Immediate engine-proven wins retain their priority.
         if(margin<=0 && !(next.over&&next.winner===side))legal=false;
       }
     }
-    if (key(a) === baseKey) prior += 0.08;
-    return { a, legal, prior, winsNow: !g.players[1 - side].traps.length && next.over && next.winner === side && next.rng === firstSample.rng, sum: 0, n: 0, worst: 1 };
+    if (key(a) === baseKey) prior += 0.02;
+    return { a, legal, prior, winsNow: !g.players[1 - side].traps.length && next.over && next.winner === side && next.rng === firstSample.rng && JSON.stringify(next.players[side].deck)===JSON.stringify(firstSample.players[side].deck) && JSON.stringify(next.players[1-side].deck)===JSON.stringify(firstSample.players[1-side].deck) && JSON.stringify(next.players[1-side].hand)===JSON.stringify(firstSample.players[1-side].hand), development: Math.max(-.04,Math.min(.04,(acquisition.get(actionKey(a))?.margin??0)/600)), sum: 0, n: 0, worst: 1 };
   }).filter(x => x.legal).sort((a, b) => b.prior - a.prior);
   const win = ranked.find(arm => arm.winsNow);
   if (win) return win.a;
   const arms = ranked.slice(0, cfg.width);
   const baseline = ranked.find(x => key(x.a) === baseKey);
   if (baseline && !arms.includes(baseline)) arms[arms.length - 1] = baseline;
+  const development=ranked.filter(x=>acquisition.has(actionKey(x.a))).sort((a,b)=>(acquisition.get(actionKey(b.a))?.margin??0)-(acquisition.get(actionKey(a.a))?.margin??0))[0];
+  if(development&&!arms.includes(development)){const replace=arms.length-1-(arms[arms.length-1]===baseline?1:0);if(replace>=0)arms[replace]=development;}
   if (!arms.length) return base;
-  const score=(arm: typeof arms[number]):number=>.85*arm.sum/arm.n+.15*arm.worst;
+  const score=(arm: typeof arms[number]):number=>.85*arm.sum/arm.n+.15*arm.worst+arm.development;
   const record=(arm:typeof arms[number],v:number):void=>{arm.sum+=v;arm.n++;arm.worst=Math.min(arm.worst,v);};
   for (let i = 0; i < cfg.samples; i++) {
     const sample = observationSample(g, side, i + 17);

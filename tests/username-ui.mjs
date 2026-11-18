@@ -10,7 +10,7 @@ const covers=[];const tick=()=>new Promise(r=>setTimeout(r,0));
 const api={onboarding:async()=>({stage:journey,credits:0}),updateMe:()=>{calls++;return new Promise((resolve,reject)=>{resolveSave=resolve;rejectSave=reject;});},tutorialStatus:async()=>{tutorialCalls++;return {offered};},logout:async()=>({ok:true})};
 globalThis.__names={api,active:()=>active,home:()=>homeMounts++,graphics:()=>graphics++,cover:()=>{let resolve;const promise=new Promise(r=>resolve=r);const cover={cancel:()=>resolve(false),ready:()=>promise,finish:()=>resolve(true)};covers.push(cover);return cover;}};
 const stubs={
- './screens/onboarding':'export const mountOnboarding=app=>{app.root.textContent="Onboarding";return {};};export const basicsPendingKey=id=>"pending:"+id;',
+ './screens/onboarding':'export const mountOnboarding=app=>{app.root.textContent="Onboarding";return {};};export const basicsPendingKey=id=>"pending:"+id;export const onboardingJourneyKey=id=>"journey:"+id;',
  './screens/tutorialSurface':'export const mountTutorialHomePart=()=>({});export const mountTutorialDeckPart=()=>({});export const mountTutorialCardsPart=()=>({});',
  './i18n':'export const getLang=()=>"ja";',
  '../i18n':'export const getLang=()=>"ja";export const onLangChange=()=>()=>{};',
@@ -63,7 +63,9 @@ try {
  await fresh.logout();pendingEntrance.finish();await tick();assert(!document.querySelector('.username-setup'),'cancelled entrance never opens stale dialog');
  const first=new App(app.root);first.user={id:'new',needsUsername:true};first.afterLogin();covers.at(-1).finish();await tick();
  const firstInput=document.querySelector('input');firstInput.value='FirstSeeker';firstInput.dispatchEvent(new Event('input'));document.querySelector('form').dispatchEvent(new Event('submit',{cancelable:true}));
- resolveSave({ok:true,display:'FirstSeeker',needsUsername:false});await tick();assert.equal(first.root.textContent,'TutorialWelcome');assert(!document.querySelector('.username-setup'));
- journey='gacha';first.afterLogin();await tick();assert.equal(first.root.textContent,'Onboarding','unfinished shop/deck journey resumes after username setup');
+ resolveSave({ok:true,display:'FirstSeeker',needsUsername:false});await tick();assert.equal(first.root.textContent,'Single','new users enter the story after choosing a name');assert(!document.querySelector('.username-setup'));
+ journey='gacha';first.afterLogin();await tick();assert.equal(first.root.textContent,'Home','optional deck journey does not interrupt story completion');
+ localStorage.setItem('journey:new','1');first.afterLogin();await tick();assert.equal(first.root.textContent,'Onboarding','explicitly started shop/deck journey resumes after username setup');
+ localStorage.removeItem('journey:new');localStorage.setItem('pending:new','[]');first.afterLogin();await tick();assert.equal(first.root.textContent,'Onboarding','pending tutorial receipt is retried before returning to the story');
  console.log('PASS HOME entrance before modal, inert background, deferred tutorial/reconnect, no HOME remount, navigation gate, blank private input, save retry, duplicate prevention and logout races');
 }finally {dom.window.close();delete globalThis.__names;await rm(temp,{recursive:true,force:true});}

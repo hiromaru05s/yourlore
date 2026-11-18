@@ -8,7 +8,10 @@ export function enteringAttack(g: GameState, p: PlayerState, c: CardDef): number
   const suppression = g.players.reduce((n,q)=>n+q.enchants.filter(e=>e.card.ench==='weakenAll').length,0);
   const m: FieldMon = {...c,uid:'estimate',atk:swapped?c.def:c.atk,def:swapped?c.atk:c.def,
     atkMod:-2*suppression,defMod:0,dmg:0,tempAtk:0,exhausted:false,summonedTurn:g.turn};
-  return Math.max(0,effAtk({...p,field:[...p.field,m]},m,g));
+  const side=g.players[0]===p?0:1;
+  const owner={...p,field:[...p.field,m]},players:[PlayerState,PlayerState]=[...g.players];
+  players[side]=owner;
+  return Math.max(0,effAtk(owner,m,{...g,players}));
 }
 
 export function removalHits(g: GameState, owner: PlayerState, c: CardDef, m: CardDef): boolean {

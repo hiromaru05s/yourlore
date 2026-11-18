@@ -1,0 +1,158 @@
+[
+  {
+    "name": "r5-normal",
+    "balance": "v101",
+    "finishedBatch": true,
+    "completedGames": 8,
+    "wins": 3,
+    "invalid": 0,
+    "modules": {
+      "candidate": "c14e343e4c011bca2ec15c856e868b381851e0d91d4ae9d55434a7aded402225",
+      "baseline": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac"
+    },
+    "value": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0.25
+    },
+    "stopReason": null,
+    "scope": "development only; not included in final independent rates"
+  },
+  {
+    "name": "r6-hard",
+    "balance": "v101",
+    "finishedBatch": false,
+    "completedGames": 2,
+    "wins": 2,
+    "invalid": 0,
+    "modules": null,
+    "value": null,
+    "stopReason": "Superseded module; switch remaining compute to frozen final independent seeds",
+    "scope": "development only; not included in final independent rates"
+  },
+  {
+    "name": "r6-normal",
+    "balance": "v101",
+    "finishedBatch": true,
+    "completedGames": 8,
+    "wins": 4,
+    "invalid": 0,
+    "modules": {
+      "candidate": "1d7434c1ca1f08dd993a1296b5271cf9ec7db028b3758e0ca172c4d474f2cd4f",
+      "baseline": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac"
+    },
+    "value": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0
+    },
+    "stopReason": null,
+    "scope": "development only; not included in final independent rates"
+  },
+  {
+    "name": "r7-normal",
+    "balance": "v101",
+    "finishedBatch": true,
+    "completedGames": 8,
+    "wins": 5,
+    "invalid": 0,
+    "modules": {
+      "candidate": "1d7434c1ca1f08dd993a1296b5271cf9ec7db028b3758e0ca172c4d474f2cd4f",
+      "baseline": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac"
+    },
+    "value": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0.25
+    },
+    "stopReason": null,
+    "scope": "development only; not included in final independent rates"
+  },
+  {
+    "name": "r8-normal",
+    "balance": "v101",
+    "finishedBatch": false,
+    "completedGames": 4,
+    "wins": 1,
+    "invalid": 0,
+    "modules": null,
+    "value": null,
+    "stopReason": "Removed acquisition credit failed missing-answer tactical regression; rejected",
+    "scope": "development only; not included in final independent rates"
+  },
+  {
+    "name": "r9-mirror-easy",
+    "balance": "v101",
+    "finishedBatch": true,
+    "completedGames": 32,
+    "wins": 25,
+    "invalid": 0,
+    "modules": {
+      "candidate": "f73e991cd7f83b14a18a8dfa74ba03c5672e9e27fb162993e02c69b3ca256ee1",
+      "baseline": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac"
+    },
+    "value": {
+      "hp": 1,
+      "attack": 1.7,
+      "health": 0.65,
+      "mana": 3.5,
+      "deck": 0.65,
+      "hand": 0.8,
+      "enchant": 0.55,
+      "learned": 0
+    },
+    "stopReason": null,
+    "scope": "development only; not included in final independent rates"
+  },
+  {
+    "name": "r9-mirror-hard",
+    "balance": "v101",
+    "finishedBatch": false,
+    "completedGames": 1,
+    "wins": 1,
+    "invalid": 0,
+    "modules": null,
+    "value": null,
+    "stopReason": "Policy selected on tactical regressions; transfer compute to predeclared independent final 88-game comparison. Partial development outcomes excluded from final estimates.",
+    "scope": "development only; not included in final independent rates"
+  },
+  {
+    "name": "r9-mirror-normal",
+    "balance": "v101",
+    "finishedBatch": false,
+    "completedGames": 2,
+    "wins": 2,
+    "invalid": 0,
+    "modules": null,
+    "value": null,
+    "stopReason": "Candidate frozen; transfer compute to independent final tests. Partial development outcomes excluded from final estimates.",
+    "scope": "development only; not included in final independent rates"
+  },
+  {
+    "name": "r9-mirror-trained",
+    "balance": "v101",
+    "finishedBatch": false,
+    "completedGames": 1,
+    "wins": 1,
+    "invalid": 0,
+    "modules": null,
+    "value": null,
+    "stopReason": "Candidate rejected by missing-answer tactical regression; strength cannot override failed requirement",
+    "scope": "development only; not included in final independent rates"
+  }
+]

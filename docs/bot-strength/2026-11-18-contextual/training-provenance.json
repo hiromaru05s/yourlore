@@ -1,0 +1,13 @@
+{
+  "balance": "v101",
+  "baselineCommit": "914dc9bab",
+  "games": 8000,
+  "gameSeedStart": 119000000,
+  "policy": "public-observation safeGreedy with 6% legal-action exploration; not full production search",
+  "validation": "every tenth whole game; separate from final match holdout",
+  "marketRules": "training mixes unbiased, hard and hell market draws; policy matches use unbiased markets",
+  "trainingPolicySHA256": "ccd52551615cf2f5a176ba2063d7b9dd84b20dee1bb0870ac636d7f54dc71f9b",
+  "baselineSHA256": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac",
+  "adopted": false,
+  "rejection": "Reduced validation loss but failed actual Hard acquisition of a needed enchantment answer. Production learned blend is zero."
+}

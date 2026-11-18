@@ -1,0 +1,13 @@
+{
+  "candidateSHA256": "97c2dbbf98c3060a1bda8ff1170d4c4e6f1df9928544372c2162eff905609e90",
+  "initialSHA256": "f73e991cd7f83b14a18a8dfa74ba03c5672e9e27fb162993e02c69b3ca256ee1",
+  "normalGames": 32,
+  "normalPairSeeds": [
+    9400,
+    9415
+  ],
+  "change": "Normal uses the Hard search configuration with 10000 nodes versus Hard 18000. Easy and Hard behavior are unchanged.",
+  "unaffectedTierProof": "Normal-only budget and search routing replacements make the complete bundled modules byte-identical; neither replacement executes for Easy or Hard.",
+  "reuse": "Easy and Hard results retain their original module hashes; no changed-policy games are pooled with them.",
+  "reason": "Initial Normal candidate did not show improvement; extend purposeful reply search, preserve Easy and Hard."
+}

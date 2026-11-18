@@ -1,0 +1,137 @@
+{
+  "pairedHoeffding95": [
+    0.4417246210648451,
+    1
+  ],
+  "resume": null,
+  "A": "new:easy",
+  "B": "old:easy",
+  "n": 32,
+  "start": 8700,
+  "search": {
+    "easy": {
+      "width": 4,
+      "samples": 1,
+      "turns": 2,
+      "finalists": 0,
+      "extraSamples": 0
+    },
+    "normal": {
+      "width": 6,
+      "samples": 2,
+      "turns": 2,
+      "finalists": 2,
+      "extraSamples": 2
+    },
+    "hard": {
+      "width": 8,
+      "samples": 2,
+      "turns": 2,
+      "finalists": 3,
+      "extraSamples": 2
+    },
+    "hell": {
+      "width": 12,
+      "samples": 3,
+      "turns": 2,
+      "finalists": 4,
+      "extraSamples": 8
+    }
+  },
+  "tactics": {
+    "proof": true,
+    "targets": true,
+    "horizon": 4,
+    "replyNodes": 64
+  },
+  "valueModel": null,
+  "value": {
+    "hp": 1,
+    "attack": 1.7,
+    "health": 0.65,
+    "mana": 3.5,
+    "deck": 0.65,
+    "hand": 0.8,
+    "enchant": 0.55,
+    "learned": 0
+  },
+  "baselineValue": {
+    "hp": 1,
+    "attack": 1.7,
+    "health": 0.65,
+    "mana": 3.5,
+    "deck": 0.65,
+    "hand": 0.8,
+    "enchant": 0.55,
+    "learned": 0.25
+  },
+  "modules": {
+    "candidate": "f73e991cd7f83b14a18a8dfa74ba03c5672e9e27fb162993e02c69b3ca256ee1",
+    "baseline": "a91f1191219d622bd922d97b3df54078fa98eff1962e73953dc4f9b561daeeac"
+  },
+  "completePairs": 16,
+  "pairedScore": 0.78125,
+  "pairedBootstrap95": [
+    0.65625,
+    0.90625
+  ],
+  "draws": 0,
+  "customA": [
+    {
+      "name": "BOT \u00b7 FUNDAMENTALS",
+      "cards": [
+        "HALF_ELF",
+        "GOBLIN",
+        "FLAME",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "STARTER_CHEST"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 9,
+        "chestTurn": 4
+      }
+    }
+  ],
+  "customB": [
+    {
+      "name": "BOT \u00b7 FUNDAMENTALS",
+      "cards": [
+        "HALF_ELF",
+        "GOBLIN",
+        "FLAME",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_TRASH",
+        "STARTER_CHEST",
+        "STARTER_CHEST"
+      ],
+      "tune": {
+        "minBuyEarly": 6,
+        "minBuy": 9,
+        "chestTurn": 4
+      }
+    }
+  ],
+  "rosterA": "balanced",
+  "rosterB": "balanced",
+  "wins": 25,
+  "total": 32,
+  "invalid": 0,
+  "rate": 0.78125,
+  "wilson95": [
+    0.6124466920955516,
+    0.8897630306846815
+  ],
+  "seconds": 343.757,
+  "ms": {
+    "p50": 67.78254099999322,
+    "p95": 544.2845419999794,
+    "max": 2977.029165999964
+  },
+  "rows": null,
+  "scope": "development only, excluded from final holdout; same frozen candidate hash"
+}

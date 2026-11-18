@@ -1,3 +1,5 @@
+import { singleProgress, saveSingleScene } from './singleStory';
+import { STORY_SCENES, canReadScene, masterQualified, type StoryScene } from '../../client/src/shared/singleStory';
 import { ARIES_OPPONENTS, ARIES_ROUTE, ariesRoomStage, type AriesStage } from '../../client/src/shared/ariesStory';
 import {tutorialStatus,grantTutorial} from './tutorialRewards';
 import { progressionState, rerollDaily, claimDaily } from './progression';
@@ -54,6 +56,15 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
   const user = await getUser(env, req);
   if (!user) return json(env, { error: "로그인이 필요합니다." }, 401);
 
+  if(path==='/rewards/single' && req.method==='GET')return json(env,await singleProgress(env,user.id));
+  if(path==='/rewards/single/read' && req.method==='POST'){
+    const body=await req.json().catch(()=>null) as {scene?:unknown}|null;
+    if(typeof body?.scene!=='string'||!STORY_SCENES.includes(body.scene as StoryScene))return json(env,{error:'Invalid scene'},400);
+    const scene=body.scene as StoryScene,state=await singleProgress(env,user.id);
+    if(!canReadScene(state,scene))return json(env,{error:'Complete the chapter objectives first'},403);
+    await saveSingleScene(env,user.id,scene);
+    return json(env,{...state,read:[...new Set([...state.read,scene])]});
+  }
   if(path==='/rewards/result'&&req.method==='GET') {
     const roomId=new URL(req.url).searchParams.get('roomId')??'';
     if(!/^[A-Za-z0-9_-]{1,128}$/.test(roomId))return json(env,{error:'invalid room'},400);
@@ -74,13 +85,13 @@ export async function handleRewards(env: Env, req: Request, path: string): Promi
     return json(env,{...await progressionState(env,user.id),changed},changed?200:409);
   }
   if (path === '/rewards/story/start' && req.method === 'POST') {
-    if (!SINGLE_DIFFICULTIES.every(d => user.botClears?.includes(d))) {
-      return json(env, {error:'Clear every dojo opponent first'}, 403);
+    if (!masterQualified(await singleProgress(env,user.id))) {
+      return json(env, {error:'Complete the tutorial, two normal matches and all three dojo opponents'}, 403);
     }
     const body = await req.json().catch(() => null) as {previous?:unknown; lang?:unknown} | null;
     if (!body) return json(env, {error:'Invalid request'}, 400);
-    let roomId = 'aries-' + crypto.randomUUID() + '-0';
-    let stage: AriesStage = 0;
+    let roomId = 'aries-' + crypto.randomUUID() + '-2';
+    let stage: AriesStage = 2;
     if (body.previous !== undefined) {
       if (typeof body.previous !== 'string') return json(env, {error:'Invalid story room'}, 400);
       const priorStage = ariesRoomStage(body.previous);

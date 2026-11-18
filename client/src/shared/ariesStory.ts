@@ -1,3 +1,4 @@
+// Stages 0/1 remain only for already-created room compatibility. New challenges enter stage 2 directly.
 import type { BotDifficulty } from './bot';
 import type { PlayerState } from './types';
 

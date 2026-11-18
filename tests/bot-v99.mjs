@@ -70,6 +70,10 @@ try {
    assert.deepEqual(a,C.botDecide(g,'hard'),'progress callbacks do not change the search budget');
    assert(C.actionChangesState(g,C.reduce(g,a).state));
   } finally {C.THINKING_NODES.hard=budget;}
+  const limited=[];const emergency=C.botDecide(g,'hard',a=>limited.push(a),1);
+  assert.deepEqual(emergency,limited.at(-1),'per-call clock pressure preserves the last completed judgment');
+  assert(C.actionChangesState(g,C.reduce(g,emergency).state));
+  assert.equal(C.THINKING_NODES.hard,budget,'per-call limit never changes another match difficulty budget');
   assert.doesNotThrow(()=>C.reduce(g,C.safeGreedy(g)),'budget is restored after early exit');
  }
  console.log('PASS v99 sequencing, hire budget and restrictions, Golem conversion, purchase lethal, bounded Easy mistakes');

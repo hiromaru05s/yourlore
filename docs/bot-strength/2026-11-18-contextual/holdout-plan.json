@@ -1,0 +1,50 @@
+{
+  "frozenCandidateSHA256": "f73e991cd7f83b14a18a8dfa74ba03c5672e9e27fb162993e02c69b3ca256ee1",
+  "baselineCommit": "914dc9bab",
+  "tiers": {
+    "easy": {
+      "games": 32,
+      "pairSeeds": [
+        9100,
+        9115
+      ]
+    },
+    "normal": {
+      "games": 32,
+      "pairSeeds": [
+        9200,
+        9215
+      ]
+    },
+    "hard": {
+      "games": 24,
+      "pairSeeds": [
+        9300,
+        9311
+      ]
+    }
+  },
+  "marketBias": false,
+  "mirrorStarter": true,
+  "changeAfterViewingResults": true,
+  "normalExecutionStatus": {
+    "status": "superseded; incomplete initial comparison",
+    "completedBatches": [
+      {
+        "name": "holdout-normal-a",
+        "completed": 10,
+        "wins": 4,
+        "reason": "Initial Normal configuration superseded by deeper reply search. Transfer compute to independent new Normal seeds 9400-9415. Completed partial outcomes remain diagnostic only, not final strength estimates."
+      },
+      {
+        "name": "holdout-normal-b",
+        "completed": 10,
+        "wins": 7,
+        "reason": "Initial Normal configuration superseded by deeper reply search. Transfer compute to independent new Normal seeds 9400-9415. Completed partial outcomes remain diagnostic only, not final strength estimates."
+      }
+    ],
+    "finalNormalPlan": "normal-deep-plan.json"
+  },
+  "changeExplanation": "Normal only was superseded after the initial comparison. Its partial outcomes are diagnostic, and the replacement has separate predeclared fresh seeds in normal-deep-plan.json. Easy and Hard policies are unchanged.",
+  "hardExecution": "Superseded after 16/24 completed games; 8 wins. See development/initial-hard-diagnostic.json and hard-expert-plan.json for replacement policy and independent seed range."
+}

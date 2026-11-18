@@ -3,7 +3,6 @@ import {showUsernameSetup} from './ui/usernameSetup';
 import {prepareMenuCache} from './ui/menuCache';
 import { getLang } from './i18n';
 import { loungeText } from './ui/loungeText';
-import { mountTutorialWelcome } from './screens/tutorialWelcome';
 import {coverScreen,isMenuReady,imageUrls} from './ui/assetReadiness';
 import {showGraphicsNotice} from './ui/graphicsNotice';
 import { mountLounge, type LoungePage } from "./ui/lounge";
@@ -30,7 +29,7 @@ import { mountCards } from "./screens/cards";
 import { mountLeaderboard } from "./screens/leaderboard";
 import { mountProfile, type ProfileTab } from "./screens/profile";
 import { mountFriends } from "./screens/friends";
-import {mountOnboarding,basicsPendingKey} from './screens/onboarding';
+import {mountOnboarding,basicsPendingKey,onboardingJourneyKey} from './screens/onboarding';
 import type {TutorialAction} from './shared/tutorialLesson';
 import { mountShop } from "./screens/shop";
 import { mountDeck } from "./screens/deck";
@@ -160,8 +159,9 @@ export class App {
   }
 
   login(): void { this.swap(() => mountLogin(this), "login"); }
-  home(): void { setPresence("menu"); this.swap(afterEntrance => mountHome(this, afterEntrance), "home"); }
-  single(location: SingleLocation = {}): void { setPresence("menu"); this.swap(() => mountSingle(this, location), "single"); }
+  singleNormalReturn=false;
+  home(): void { this.singleNormalReturn=false;setPresence("menu"); this.swap(afterEntrance => mountHome(this, afterEntrance), "home"); }
+  single(location: SingleLocation = {}): void { this.singleNormalReturn=false;setPresence("menu"); this.swap(() => mountSingle(this, location), "single"); }
   private checkGraphics(page: LoungePage | undefined, revision: number): void {
     if (revision !== this.screenRevision || this.graphicsChecked || (page !== 'login' && page !== 'home')) return;
     this.graphicsChecked = true;
@@ -177,8 +177,10 @@ export class App {
     void Promise.all([api.tutorialStatus(),api.onboarding()]).then(([status,journey])=>{
       if(this.user?.id!==id || this.screenRevision!==revision)return;
       let pending=false;try{pending=!!localStorage.getItem(basicsPendingKey(id));}catch{}
-      if(pending||journey.stage!=='basics'&&journey.stage!=='complete'){this.onboarding();return;}
-      if(!status.offered)this.swap(()=>mountTutorialWelcome(this), 'tutorial');
+      if(pending){this.completeSingleTutorial();return;}
+      let optionalJourney=false;try{optionalJourney=localStorage.getItem(onboardingJourneyKey(id))==='1';}catch{}
+      if(optionalJourney&&journey.stage!=='basics'&&journey.stage!=='complete'){this.onboarding();return;}
+      if(!status.offered&&journey.stage==='basics')this.single();
       else if(homeReady)this.checkGraphics('home',revision);
     }).catch(()=>{
       if(this.user?.id!==id || this.screenRevision!==revision)return;
@@ -187,7 +189,7 @@ export class App {
       retry.onclick=()=>this.afterLogin();this.root.append(retry);
     });
   }
-  tutorial(options:TutorialOptions = {}): void { setPresence("menu"); this.swap(() => mountTutorial(this,options), "tutorial"); }
+  tutorial(options:TutorialOptions = {}): void { if(!options.onboarding){this.single({tab:"training",book:options.tab==="book"});return;}setPresence("menu"); this.swap(() => mountTutorial(this,options), "tutorial"); }
   tutorialGame(lesson = 0): void { setPresence("bot"); aCapture("game_start", { mode: "tutorial" }); this.swap(() => mountGame(this, { mode: "tutorial", lesson })); }
   tutorialPart(part = 0): void {
     const index=Number.isFinite(part)?Math.max(0,Math.min(TUTORIAL_PARTS.length-1,Math.floor(part))):0;
@@ -243,6 +245,7 @@ export class App {
   profile(userId?: string, tab?: ProfileTab): void { setPresence("menu"); this.swap(() => mountProfile(this, userId, tab), "profile"); }
   friends(): void { setPresence("menu"); this.swap(() => mountFriends(this), "friends"); }
   settings(): void { this.profile(undefined, "settings"); } // settings now lives as a profile tab
+  completeSingleTutorial(actions?:TutorialAction[]):void {setPresence("menu");this.swap(()=>mountOnboarding(this,actions,true),"tutorial");}
   onboarding(actions?:TutorialAction[]):void {setPresence("menu");this.swap(()=>mountOnboarding(this,actions),"tutorial");}
   shop(options:Parameters<typeof mountShop>[1]={}): void { setPresence("menu"); this.swap(() => mountShop(this,options), "shop"); }
   deck(options:Parameters<typeof mountDeck>[1]={}): void { setPresence("menu"); this.swap(() => mountDeck(this,options), "deck"); }

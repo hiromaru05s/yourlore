@@ -1,3 +1,4 @@
+import '../styles/duelNameplate.css';
 import {isGoblinMonster} from '../shared/goblinCards';
 import { CurseSealBadge } from './curseSeal/badge';
 import {pendingText} from '../shared/pendingText';
@@ -1082,7 +1083,7 @@ export class GameView {
         ${dew > 0 ? `<span class="pt-dew" role="img" aria-label="${t('game.dew')} ${p.dew ?? 0}" title="${esc(t('game.dewTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.dew ?? 0).length)}"><b id="dew-${sd}" aria-hidden="true">${dew}</b></span>` : ""}
         ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
-      <span class="pt-name"><span class="pt-player-name">${esc(p.name)}</span>${medalHtml(medal)}</span>`;
+      <span class="pt-name pt-name--azure"><span class="pt-player-name" title="${esc(p.name)}">${esc(p.name)}</span>${medalHtml(medal)}</span>`;
     const ring = content.content.querySelector<HTMLElement>('.pt-ring')!;
     if (retained) {
       // Detaching a native animated image can restart its clock during an HP update.
