@@ -1,0 +1,16 @@
+[
+  {
+    "path": "/assets/layout-BbMDL-7U.js",
+    "sha256": "30c2e20b2570d204755323ae19f324505f5b1bb9cf91198f29bb90ab61de9b7f",
+    "bytes": 1383751,
+    "status": 200,
+    "matched": true
+  },
+  {
+    "path": "/assets/layout-D1zsT7qg.css",
+    "sha256": "96754dac42c35ead24cb8bd3990c60d90e6b78841d54202e2367e69c918147f4",
+    "bytes": 13255,
+    "status": 200,
+    "matched": true
+  }
+]

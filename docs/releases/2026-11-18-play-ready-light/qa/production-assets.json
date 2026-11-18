@@ -1,0 +1,28 @@
+{
+  "source": "d815a6ac9364fc8040f8f069122dfc06ac5f1a68",
+  "checkedAt": "2026-11-18T14:56:18.025Z",
+  "origin": "https://yourlore.xyz",
+  "checks": [
+    {
+      "path": "assets/layout-BbMDL-7U.js",
+      "status": 200,
+      "expected": "30c2e20b2570d204755323ae19f324505f5b1bb9cf91198f29bb90ab61de9b7f",
+      "actual": "30c2e20b2570d204755323ae19f324505f5b1bb9cf91198f29bb90ab61de9b7f",
+      "match": true
+    },
+    {
+      "path": "assets/layout-D1zsT7qg.css",
+      "status": 200,
+      "expected": "96754dac42c35ead24cb8bd3990c60d90e6b78841d54202e2367e69c918147f4",
+      "actual": "96754dac42c35ead24cb8bd3990c60d90e6b78841d54202e2367e69c918147f4",
+      "match": true
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "expected": "0d9a0cd282cd5f923c45f0f8de3e090d8960154fc146da392579081016fe61a1",
+      "actual": "0d9a0cd282cd5f923c45f0f8de3e090d8960154fc146da392579081016fe61a1",
+      "match": true
+    }
+  ]
+}

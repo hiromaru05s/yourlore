@@ -20,7 +20,7 @@ try{for(const [width,height,reduced] of [[1280,900,false],[390,844,false],[390,8
   }
   window.physicsActions=[];window.physicsController=new Controller();startBoardLayout();await waitForDuel(document.querySelector('#app'));document.body.dataset.ready='true';
  });
- await page.waitForSelector('body[data-ready=true]',{timeout:90000});await page.waitForTimeout(350);
+ await page.waitForSelector('body[data-ready=true]',{timeout:90000});await page.waitForSelector('.duel-loader',{state:'detached',timeout:120000});await page.waitForTimeout(350);
  assert.equal(await page.evaluate(()=>document.documentElement.dataset.handPhysics),undefined,'no preview opt-in flag');
  const point=async()=>page.evaluate(()=>{const c=document.querySelector('#hand .card[data-card-id="GOBLIN"]'),r=c.getBoundingClientRect();for(const yy of [.4,.6,.8])for(const xx of [.8,.65,.5,.25]){const x=r.left+r.width*xx,y=r.top+r.height*yy;if(document.elementFromPoint(x,y)?.closest('#hand .card')===c)return {x,y};}throw Error('no exposed card');});
  const home=async()=>page.locator('#hand .card[data-card-id="GOBLIN"]').evaluate(e=>{const r=e.getBoundingClientRect(),m=new DOMMatrix(getComputedStyle(e).transform);return {x:r.left+r.width/2,y:r.top+r.height*.6,width:e.offsetWidth*Math.hypot(m.a,m.b)};});
