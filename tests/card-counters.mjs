@@ -21,6 +21,10 @@ try{
  const badge=kind=>zone.querySelector(`[data-counter-kind="${kind}"]`),pos=kind=>Number(badge(kind).dataset.counterPosition);
  const render=()=>{zone.replaceChildren(cardEl(data,{field:true}));controller.sync();};
  render();assert.equal(pos('guts'),3,'initial state snaps to authoritative count');
+ assert(badge('guts').parentElement.classList.contains('card-status'),'Guts counter belongs to the status band');
+ assert.equal(zone.querySelectorAll('[data-psv="guts"]').length,1,'the count replaces the separate Guts icon');
+ const mixed=cardEl({...DB.CASTLE,uid:'mixed',guts:2,gcount:6},{field:true});
+ assert.equal(mixed.querySelector('[data-counter-kind="charge"]').dataset.counterIndex,'0','Guts does not leave an empty upper-right counter slot');
  data={...data,guts:7};render();assert.equal(pos('guts'),3);
  const visited=new Set([3]);for(let i=0;i<20;i++){step(26);zone.querySelectorAll('[data-counter-kind="guts"] text').forEach(t=>visited.add(Number(t.textContent)));}
  assert.deepEqual([...visited].sort((a,b)=>a-b),[3,4,5,6,7],'+4 traverses four slots without skipping a count');assert.equal(pos('guts'),7);assert.equal(badge('guts').querySelectorAll('text').length,1);
@@ -50,6 +54,12 @@ try{
  setLang('ja');const secret=createCardCounter('DO-NOT-SERIALIZE','HIDDEN-CARD','charge',4);assert(!secret.outerHTML.includes('DO-NOT-SERIALIZE'));assert(!secret.outerHTML.includes('HIDDEN-CARD'));
  zone.append(secret);setCardCounter(secret,8);step(100);setCardCounter(secret,2);step(520);assert.equal(secret.dataset.counterPosition,'2');
  const prior=pos('guts');data={...DB.M4,uid:'same-mon',guts:1};render();assert.equal(pos('guts'),1);assert.notEqual(prior,1,'changed card identity does not borrow old counters');
+ data={...data,guts:0};render();
+ assert(badge('guts').parentElement.classList.contains('card-status'),'removing granted Guts keeps the depletion reel in its band');
+ step(520);assert(!badge('guts'),'temporary depleted Guts is released');
+ data={...DB.GOLEM1,uid:'same-mon',guts:3};render();step(520);
+ data={...DB.GOLEM1,uid:'same-mon'};render();step(520);
+ assert(zone.querySelector('.card-status [data-psv="guts"]'),'a passive-only snapshot retains its Guts icon');
  controller.dispose();step(1000);assert.equal(frames.size,0);dom.window.close();
  console.log('PASS card counters: +4 four slots; reversal; DOM rebuild and deadline; grant/clear; reduced/hidden; eggs; zero; public metadata; locale; identity; disposal');
 }finally{await rm(dir,{recursive:true,force:true});}

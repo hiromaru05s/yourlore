@@ -25,3 +25,36 @@
 }
 
 .card .card-counter[data-counter-kind="decay"][data-counter-value="0"] { visibility:hidden; }
+
+/* Approved horizontal Guts plate, integrated with the passive status band. */
+.card .card-status:has(.card-counter[data-counter-kind="guts"]) {
+  align-items:center;
+  translate:0 -24%;
+}
+.card .card-status > .card-counter[data-counter-kind="guts"] {
+  position:relative; top:auto; right:auto; left:auto; bottom:auto;
+  width:calc(var(--cw, 100px)*.38); height:calc(var(--cw, 100px)*.215);
+  aspect-ratio:auto; flex:none; display:flex; align-items:center;
+  justify-content:center; gap:calc(var(--cw, 100px)*.013);
+  clip-path:polygon(12% 0,88% 0,100% 18%,100% 82%,88% 100%,12% 100%,0 82%,0 18%);
+  filter:drop-shadow(0 1px 1px #07121be0);
+}
+.guts-counter-plate {
+  position:absolute; inset:0;
+  background:linear-gradient(150deg,#bed1d6,#718e9d 45%,#c4c4b2 58%,#506571);
+}
+.guts-counter-plate::before {
+  content:""; position:absolute; inset:1px;
+  background:linear-gradient(145deg,#243b47,#0d1b27);
+  clip-path:polygon(12% 0,88% 0,100% 18%,100% 82%,88% 100%,12% 100%,0 82%,0 18%);
+}
+.guts-counter-icon {
+  position:relative; display:block; width:50%; height:96%; margin-left:2%;
+  object-fit:contain;
+}
+.card-counter .guts-counter-value {
+  position:relative; width:40%; height:100%; margin-right:4%; overflow:hidden;
+}
+.card-counter[data-counter-kind="guts"] .counter-slot-digit { fill:#fff1df; }
+.card-counter[data-counter-kind="guts"][data-counter-value="0"] .guts-counter-icon { filter:grayscale(1); opacity:.52; }
+.card-counter[data-counter-kind="guts"][data-counter-value="0"] .counter-slot-digit { fill:#9dabad; }
