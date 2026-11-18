@@ -308,6 +308,8 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length === 0)) return false;
     if (c.id === "KNIGHT_TEACH" && p.field.length === 0) return false;
     if (c.id === "TRUMPET" && p.field.length === 0) return false;
+    // Reapplying an already-owned passive wastes a scarce story buff.
+    if (c.grantPassive && !(c.val || c.val2) && !p.field.some(m => !hasPassive(m,c.grantPassive!))) return false;
     if(c.id==='MANA_BACKFLOW') return false; // No immediate benefit; its own countdown eventually resets our mana.
     if(c.act==='relicProtection' && !(p.shield??0)) return false;
     if (c.id === "NEGOTIATE") return false; // 봇은 상대 마나를 올려주지 않는다
@@ -475,7 +477,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
   if (expanded) return { type: 'play', idx: expanded.i };
 
   // 8) utility spells (draw / ramp / disruption)
-  const util = spells.find((x) => x.c.id === "CATALYST" || ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana"].includes(x.c.act || ""));
+  const util = spells.find((x) => x.c.id === "CATALYST" || ["draw", "seek", "crash", "exile", "recall", "heal", "manaUp", "manaDown", "manaUpGain", "chestToMana", "goblinParty"].includes(x.c.act || ""));
   if (util) return { type: "play", idx: util.i };
   const sustain = spells.find(({c}) => c.act === 'apple' || c.act === 'relicProtection' || c.act === 'dew' || c.act === 'golemShield' || c.act === 'cullShield');
   if (sustain) return {type:'play',idx:sustain.i};
@@ -793,6 +795,21 @@ function autoTarget(g: GameState): Action {
       const excl = (pending.data?.excl as string[] | undefined) ?? [];
       const t0 = [...p.field].filter((m) => m.tribe === "시초" && !excl.includes(m.uid)).sort((x, y) => effAtk(p, y, g) - effAtk(p, x, g))[0];
       return { type: "chooseTarget", uid: t0 ? t0.uid : null };
+    }
+    if (pending.reason === 'buffPerm' || pending.reason === 'buffTurn') {
+      const d=pending.data,grant=d?.grant as Parameters<typeof hasPassive>[1]|undefined;
+      const excluded=(d?.excl as string[]|undefined)??[];
+      const candidates=p.field.filter(m=>!excluded.includes(m.uid)&&(d?.sourceId!=='S3'||!m.tribe));
+      const score=(m:FieldMon):number=>{
+        if(grant&&hasPassive(m,grant))return -1000;
+        const attack=effAtk(p,m,g),hp=curHp(p,m),ready=monsterCanAttack(g,p,m);
+        if(grant==='dual')return attack*(ready?3:2)+hp*.2;
+        if(grant==='evade')return attack*(hasPassive(m,'dual')?2:1)+hp*.3;
+        const attacks=hasPassive(m,'dual')?2:1;
+        return Number(d?.val??0)*attacks*(ready?3:1)+attack*.2+hp*.1;
+      };
+      const target=candidates.sort((a,b)=>score(b)-score(a))[0];
+      return {type:'chooseTarget',uid:target?.uid??null};
     }
     // 지원 나팔의 exclude(중복 선택 불가)를 지켜야 무한 재무장 루프에 안 빠진다
     const excl = (pending.data?.excl as string[] | undefined) ?? [];

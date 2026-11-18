@@ -7124,15 +7124,15 @@
 
 **ja**
 
-> 【破壊時】戦闘で破壊される時、ダイスを振る。3以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする。
+> 【破壊時】戦闘で破壊される時、ダイスを振る。5以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする。
 
 **ko**
 
-> 【파괴 시】전투로 파괴될 때 주사위를 굴린다. 3 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다.
+> 【파괴 시】전투로 파괴될 때 주사위를 굴린다. 5 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다.
 
 **en**
 
-> 【On Destruction】If battle would destroy this, roll a die. On 3+, you take 2 damage and prevent that battle destruction.
+> 【On Destruction】If battle would destroy this, roll a die. On 5+, you take 2 damage and prevent that battle destruction.
 
 
 ### GOBLIN_ORIGIN — ゴブリンの起源

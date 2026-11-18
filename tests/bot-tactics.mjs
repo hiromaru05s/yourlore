@@ -17,8 +17,8 @@ try{
   for(let i=0;i<4&&!g.over;i++){const a=C.botDecide(g,difficulty);g=C.reduce(g,a).state;}
   assert.equal(g.winner,0,'buff the ready small attacker, not the exhausted large one');
  }
- // A greedy opponent buffs the exhausted 9 ATK body and misses lethal.
- // The reply simulation must instead finish buff -> ready target -> attack.
+ // Both the updated greedy continuation and proof search must complete
+ // buff -> ready target -> attack, rather than buff the exhausted body.
  const reply=fresh();reply.players[0].hp=5;
  reply.players[1].field=[mon(9,true),mon(2)];reply.players[1].hand=[card('S3')];
  const nextTurn=C.reduce(reply,{type:'endTurn'}).state;
@@ -28,7 +28,7 @@ try{
  const nodes=C.TACTICS.replyNodes;
  try {
   C.TACTICS.replyNodes=0;
-  assert(C.rollout(reply,{type:'endTurn'},0,2)>0,'the old continuation misses the loss');
+  assert.equal(C.rollout(reply,{type:'endTurn'},0,2),0,'the updated greedy continuation also sees the loss');
  } finally {C.TACTICS.replyNodes=nodes;}
  assert.equal(C.rollout(reply,{type:'endTurn'},0,2),0,'do not assume the opponent misses lethal');
  const own=fresh();own.players[0].field=[mon(9,true),mon(2)];own.players[0].hand=[card('S3')];own.players[1].hp=5;

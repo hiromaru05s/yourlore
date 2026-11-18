@@ -358,7 +358,7 @@ export abstract class BaseController implements BoardHandlers {
     if (!animate) {
       this.clearQuickFaces();
       if(wheelResolution){this.wheelDice?.close();this.wheelDice=null;this.wheelReplayUid=undefined;this.consumeLogs(res.events);}
-      this.view.render(res.state);
+      this.view.render(res.state,new Set(),false);
       this.afterApply(res);
       return;
     }
@@ -1193,7 +1193,7 @@ export abstract class BaseController implements BoardHandlers {
     this.marketCrisis=crisis;
     if(crisis)await crisis.destroy();
     if(this.dead){crisis?.cancel();return;}
-    effectFinishes.push(this.view.render(res.state));
+    effectFinishes.push(this.view.render(res.state,new Set(events.flatMap(e=>e.type==='hit'?[e.uid]:[])),!A.isFxSkipped()));
     if(crisis)effectFinishes.push(crisis.reveal().finally(()=>{if(this.marketCrisis===crisis)this.marketCrisis=undefined}));
     // The existing draw and HP feedback run alongside birth, once each. Public new
     // UIDs come from the reducer, so a same-name original never becomes a second copy.

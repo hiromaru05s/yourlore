@@ -11,7 +11,7 @@ try{
  const {createBoardStatRise,createGame,reduce,DB}=await import(path.join(dir,'test.mjs'));
  const mon=uid=>({...DB.ELF,uid,dmg:0,atkMod:0,defMod:0,tempAtk:0,exhausted:false,summonedTurn:0});
  const fresh=()=>{const g=createGame({mode:'bot',seed:71,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;g.turn=3;g.pending=null;g.players.forEach((p,s)=>Object.assign(p,{field:Array.from({length:3},(_,i)=>mon(s+'-'+i)),hand:[{...DB.TRUMPET,uid:'trumpet-'+s}],mana:20,enchants:[],traps:[],quests:[]}));return g;};
- const nodes=Array.from({length:6},(_,i)=>({dataset:{uid:Math.floor(i/3)+'-'+i%3},classList:{remove(){}},closest(){return i>=3?{}:null;}}));
+ const nodes=Array.from({length:6},(_,i)=>({dataset:{uid:Math.floor(i/3)+'-'+i%3},classList:{remove(){}},querySelector(){return null;},closest(){return i>=3?{}:null;}}));
  const root={querySelectorAll(){return nodes;}};
  const finish=()=>{for(const f of finishes.splice(0))f(true);};
  for(const owner of [0,1]){

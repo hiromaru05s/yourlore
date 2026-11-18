@@ -1,5 +1,6 @@
 {
   "current": [
+    "tests/story-bot-update.mjs",
     "tests/reading-assets-lossless.mjs",
     "tests/menu-code-boundaries.mjs",
     "tests/gallery-visibility.mjs",

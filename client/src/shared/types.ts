@@ -259,6 +259,7 @@ export interface GameState {
   balance97Applied?: boolean;
   balance98Applied?: boolean;
   balance99Applied?: boolean;
+  balance100Applied?: boolean;
   balance94Applied?: boolean | 2 | 3;
   novemberBalanceApplied?: boolean | 2 | 3; // true in v90, 2 in v91–92, 3 after the v93 adjustments
   incubatorEndTurn?: number;

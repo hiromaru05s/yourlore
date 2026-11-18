@@ -8923,27 +8923,28 @@
     },
     "ELITE_GOBLIN": {
       "nameJa": "精鋭ゴブリン",
-      "status": "reworded",
+      "status": "reviewed-balance-v100",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "4acbb7ccc5ae210f3e1508277b790d600bf45222dabcbf0d6c4af5e4579bcb3a",
-      "textSha256": "7ef0c7d64176bedc27c5e75caf681deccbe20dadcbca2d23011fcf583d3eefab",
+      "textSha256": "06c7e06dcb8a77d825bd7af1d5909e6acb8f5faec0247d20e27c36c1fcf8c1df",
       "hooks": {
         "aura": "eliteGoblin"
       },
       "before": {
-        "ja": "【破壊時】戦闘で破壊される時、ダイスを振る。3以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする（カードごとに1回）。",
-        "ko": "【파괴 시】전투로 파괴될 때 주사위를 굴린다. 3 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다(카드당 1회).",
-        "en": "【On Destruction】If battle would destroy this, roll a die. On 3+, you take 2 damage and prevent that battle destruction once per card."
-      },
-      "after": {
         "ja": "【破壊時】戦闘で破壊される時、ダイスを振る。3以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする。",
         "ko": "【파괴 시】전투로 파괴될 때 주사위를 굴린다. 3 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다.",
         "en": "【On Destruction】If battle would destroy this, roll a die. On 3+, you take 2 damage and prevent that battle destruction."
-      }
+      },
+      "after": {
+        "ja": "【破壊時】戦闘で破壊される時、ダイスを振る。5以上なら自分は2ダメージを受け、その戦闘による破壊を無効にする。",
+        "ko": "【파괴 시】전투로 파괴될 때 주사위를 굴린다. 5 이상이면 자신은 2 데미지를 받고, 그 전투에 의한 파괴를 무효화한다.",
+        "en": "【On Destruction】If battle would destroy this, roll a die. On 5+, you take 2 damage and prevent that battle destruction."
+      },
+      "review": "2026-11-18: battle destruction save changed from 3+ to 5+ in Japanese, Korean and English; all six die faces verified in tests/story-bot-update.mjs."
     },
     "GOBLIN_ORIGIN": {
       "nameJa": "ゴブリンの起源",

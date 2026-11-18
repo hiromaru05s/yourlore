@@ -438,7 +438,7 @@ export interface CreateOpts {
 
 export function createGame(opts: CreateOpts): ReduceResult {
   const g: GameState = {
-    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: 2, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3, balance97Applied:true, balance98Applied:true, balance99Applied:true,
+    castleReworkApplied: true, questReworkApplied: true, armyAttuneApplied: true, starterQuestReworkApplied: true, fireBrandReworkApplied: true, demonRealmReworkApplied: true, hexerReworkApplied: true, mercReworkApplied: 2, casinoRallyApplied: true, diplomacyApplied: true, runeReworkApplied:true, runeZonesAudited:true, threeFireNamed:true, golemsReworked:true, incubatorsReworked:true, novemberBalanceApplied:3, balance94Applied:3, balance97Applied:true, balance98Applied:true, balance99Applied:true, balance100Applied:true,
     players: [null as never, null as never],
     cur: opts.starting ?? 0,
     turn: 1, phase: "main", pending: null, over: false, winner: null,
@@ -2937,10 +2937,10 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
         let eliteSaved = false;
         if (!target.mutedEffects && target.id === 'ELITE_GOBLIN') {
           const { rolls } = diceRoll(g, ctx.ev, side(g, o), { id: target.id, player: side(g, o) }, 1);
-          if ((rolls[0] ?? 0) >= 3) {
+          if ((rolls[0] ?? 0) >= 5) {
             target.dmg = Math.max(0, maxHp - 1);
             ctx.dealDamage(o, 2, cn(target), cn(target), side(g, o));
-            ctx.log(`  └ ${cn(target)} 주사위 ${rolls[0]} · 3+ → 자신에게 2 데미지, 전투 파괴 무효`, `  └ ${cn(target)} ダイス${rolls[0]} · 3以上 → 自身に2ダメージ、戦闘破壊を無効`, `  └ ${cn(target)} rolls ${rolls[0]} · 3+ → takes 2 damage and prevents battle destruction`);
+            ctx.log(`  └ ${cn(target)} 주사위 ${rolls[0]} · 5+ → 자신에게 2 데미지, 전투 파괴 무효`, `  └ ${cn(target)} ダイス${rolls[0]} · 5以上 → 自身に2ダメージ、戦闘破壊を無効`, `  └ ${cn(target)} rolls ${rolls[0]} · 5+ → takes 2 damage and prevents battle destruction`);
             eliteSaved = true;
           } else ctx.log(`  └ ${cn(target)} 주사위 ${rolls[0]} · 실패`, `  └ ${cn(target)} ダイス${rolls[0]} · 失敗`, `  └ ${cn(target)} rolls ${rolls[0]} · fails`);
         }

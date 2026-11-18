@@ -24,6 +24,7 @@ const questCards = new Set(['Q_RIFT','Q_BRAND','Q_TORI','Q_TRIBE','Q_DECAY','Q_A
 /** Rooms persist full card instances, including their printed rules. Update only
  * revised print fields so UID, counters, damage and granted abilities survive. */
 export function restoreReworkedCards(game: GameState): void {
+  const updateEliteGoblin = !game.balance100Applied;
   const updateCastle = !game.castleReworkApplied;
   const updateQuests = !game.questReworkApplied;
   const updateArmy = !game.armyAttuneApplied;
@@ -43,7 +44,8 @@ export function restoreReworkedCards(game: GameState): void {
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
   const updateGuildmasterText = game.mercReworkApplied !== 2;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied && game.balance99Applied)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied && game.balance99Applied && !updateEliteGoblin)) return;
+  game.balance100Applied = true;
   game.incubatorsReworked = true;
   game.novemberBalanceApplied = 3;
   game.golemsReworked = true;
@@ -65,6 +67,10 @@ export function restoreReworkedCards(game: GameState): void {
   game.castleReworkApplied = true;
   function refresh(card: CardInst | null) {
     if (!card) return;
+    if (updateEliteGoblin && card.id === 'ELITE_GOBLIN') {
+      const {text,textJa,textEn}=DB.ELITE_GOBLIN;
+      Object.assign(card,{text,textJa,textEn});
+    }
     if (game.balance94Applied === true && card.id === 'BATTLEFIELD') {
       const {text,textJa,textEn} = DB.BATTLEFIELD;
       Object.assign(card,{text,textJa,textEn});

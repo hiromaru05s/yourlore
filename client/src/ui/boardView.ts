@@ -451,8 +451,17 @@ export class GameView {
     this.layoutOpponentHand();
   }
 
-  render(g: GameState): Promise<void> {
+  render(g: GameState, healthPresented:ReadonlySet<string>=new Set(), animate=true): Promise<void> {
     syncCardEffects(g,this.you);syncCardFrames(g,this.you);
+    // Contact callbacks own battle damage. Capture the value they actually
+    // printed before replacing the row, including endurance and recovery.
+    const shownHealth=new Map<string,number>();
+    for(const node of this.root.querySelectorAll<HTMLElement>('.zone-mon .card[data-uid]')){
+      if(!healthPresented.has(node.dataset.uid!))continue;
+      const label=node.querySelector('.ad-def .seal-value');
+      const hp=label?Number(label.textContent):NaN;
+      if(Number.isFinite(hp))shownHealth.set(node.dataset.uid!,hp);
+    }
     this.trickRoom.finish();
     const fieldBefore=fieldPositions(this.root);
     const readyPiles=new Set([...this.root.querySelectorAll('.pile--3d-ready')].map(el=>el.id));
@@ -526,7 +535,7 @@ export class GameView {
     this.anesthesia.sync(g);
     settleField(this.root,fieldBefore);
     const trick=this.trickRoom.track(g);
-    const stats=this.statRise.update(g,new Set(trick.changes.map(c=>c.uid)));
+    const stats=this.statRise.update(g,new Set(trick.changes.map(c=>c.uid)),shownHealth,animate);
     return Promise.all([stats,this.trickRoom.present(trick)]).then(()=>{});
   }
 
