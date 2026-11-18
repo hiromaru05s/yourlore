@@ -1,0 +1,18 @@
+{
+  "source": "27381029c76bfdf5309ab8695603bcf3178384df",
+  "deploymentId": "eb071650-7357-447d-903b-5325626c6c7e",
+  "versionId": "43c38bec-ae72-4ac3-a79f-8bc4cf9f1b08",
+  "createdOn": "2026-11-18T09:42:50.836703Z",
+  "percentage": 100,
+  "productionSuite": {
+    "passed": 293,
+    "total": 293
+  },
+  "typecheck": "passed",
+  "build": "passed",
+  "liveBrowserChecks": [
+    "PASS https://yourlore.xyz あなたのターンです ターン · 01 once, after both hands are confirmed",
+    "PASS https://yourlore.xyz 相手のターンです ターン · 01 once, after both hands are confirmed"
+  ],
+  "liveBrowserScope": "Deployed client with local deterministic API/WebSocket fixture; no real-account match was run."
+}

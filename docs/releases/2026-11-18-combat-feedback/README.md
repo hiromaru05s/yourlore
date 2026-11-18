@@ -15,4 +15,16 @@
 
 プレビュー起動元：`/Users/hiromaru05s/.codex/worktrees/combat-feedback-1118/LORE_TCG`。実アプリは `http://127.0.0.1:5198`、実盤面の再現fixtureは `http://127.0.0.1:5438/feedback-qa`。Fixtureも同じコンポーネント・CSS・アセットを読み込む。
 
-機能検証は `tests/combat-feedback-v101.mjs`、既存Goblin／BOT／サーバー回帰テスト、`tests/mulligan-turn-banner-browser.mjs`、`tests/combat-feedback-browser.mjs`。表示検証ではPC・スマホの両陣営、連続再生、2体の精霊の数値と演出、低減モーション、中断後の片付けを記録。採用済み演出の素材・造形を維持し、今回は再生順のみを変更した。最終本番検証結果はリリース記録に追記。
+機能検証は `tests/combat-feedback-v101.mjs`、既存Goblin／BOT／サーバー回帰テスト、`tests/mulligan-turn-banner-browser.mjs`、`tests/combat-feedback-browser.mjs`。表示検証ではPC・スマホの両陣営、連続再生、2体の精霊の数値と演出、低減モーション、中断後の片付けを記録。採用済み演出の素材・造形を維持し、今回は再生順のみを変更した。最終本番検証結果は以下。
+
+
+## 本番検証結果
+
+- 配信ソース：`27381029c76bfdf5309ab8695603bcf3178384df`。最新mainのGutsカウンター修正 `d34355fe3` も統合。
+- 2026-11-18 09:42:50 UTC、Workerバージョン `43c38bec-ae72-4ac3-a79f-8bc4cf9f1b08` を100%配信。デプロイ注釈のソース一致を確認。
+- 型検査・ビルド・本番回帰テスト293/293件が成功。
+- 本番トップページと対象コードを含む7個のJSファイルについて、ローカルの当該ソースからのビルドとSHA-256が一致。詳細は [production-assets.json](production-assets.json)。
+- 本番URL `https://yourlore.xyz` のクライアントで、PC／スマホのマーケット左・右クリック、デッキ全体表示、カード拡大、初手選択への復帰、初手確定後の開始表示を検証。API／WebSocketは再現用fixtureで、実アカウントの対戦ではない。
+- 表示検証ではファイアーボールの7→4ダメージを別々の演出として再生し、両陣営とも数字の同時表示は最大1個。3連撃・低減モーション・中断・リサイズも確認。機能結果は [visual-checks.json](visual-checks.json)。見た目は既存の盤面・素材の連続再生とPC／スマホ画像で確認した。
+- 元のミニ精霊不具合が起きた対戦状態は未取得。複数体の数値反映と各個体の発動演出を再現ケースで検証し、発動経路を共通化した。
+- 配信メタデータは [deployment.json](deployment.json)。この記録を追加したコミットは文書のみで、上記の配信ソースとは区別する。
