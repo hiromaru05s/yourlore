@@ -1,4 +1,9 @@
+import '../styles/handPhysics.css';
 import '../styles/duelNameplate.css';
+import {prepareHeldOutline,showHeldOutline} from './heldCardOutline';
+import {holdPhysicalCard} from './handPhysics';
+import {cloneCardNode} from './cardClone';
+import {PlayDropGuide} from './playDropGuide';
 import {isGoblinMonster} from '../shared/goblinCards';
 import { CurseSealBadge } from './curseSeal/badge';
 import {pendingText} from '../shared/pendingText';
@@ -334,6 +339,7 @@ export class GameView {
     disposeCardEffects(this.root);disposeCardFrames(this.root);
     disposeSeekers(this.root); disposeNpcReactions(this.root);
     this.cancelHandDrag?.();
+    this.playGuide?.destroy();
     this.disposeScene?.();
     this.trickRoom.dispose();
     this.anesthesia.dispose();
@@ -349,7 +355,9 @@ export class GameView {
 
   private handOpen = false;
   private handDock: { parent: Node; next: Node | null } | null = null;
+  private playGuide: PlayDropGuide | null = null;
   private cancelHandDrag: (() => void) | null = null;
+  private physicalHandUid: string | null = null;
   setHandOpen(open: boolean): void {
     if (this.handOpen === open) return;
     this.handOpen = open;
@@ -725,10 +733,9 @@ export class GameView {
       rbtn.id = isMe ? "rift-me" : "rift-opp";
       const previousCards = this.riftContents.get(rbtn.id);
       const previous = previousCards?.size;
-      if (previousCards && removed.length > previousCards.size &&
-        removed.some(c => !previousCards.has(c.uid) && c.id !== 'QUICK_ATTUNE')) rbtn.classList.add("is-absorbing");
+      // Receiving light belongs exclusively to the actual transfer clock.
+      // A rendered count delta is not a second arrival (or a CSS animation).
       this.riftContents.set(rbtn.id,new Set(removed.map(c=>c.uid)));
-      rbtn.addEventListener("animationend", () => rbtn.classList.remove("is-absorbing"));
       rbtn.innerHTML = '<span class="rift-sprite" aria-hidden="true"></span>';
       rbtn.append(createRiftRecordWindow(removed.length, previous, isMe ? 'me' : 'opp', recordVariant(this.root.dataset.riftCountVariant)));
       rbtn.title = `${t("deck.removed")} ${removed.length}`;
@@ -1137,6 +1144,7 @@ export class GameView {
       if(spaceReason)card.dataset.spaceRiteReason=spaceReason+" "+spaceRiteSourceText(g,this.you);
       if(!g.over && !discarding && !spaceReason && cardPlayConditionMet(g,this.you,c)===true)conditionCards.push(card);
       card.classList.remove('is-played');
+      if(this.physicalHandUid===c.uid)card.classList.add('is-dragging','is-physical-dragging');
       if(!aff&&!discarding)card.dataset.blockReason=!myTurn?t('play.block.turn'):g.pending?t('play.block.pending'):me.mana<pc?t('play.block.mana'):(getLang()==='ja'?blocked?.ja:getLang()==='ko'?blocked?.ko:null)||t('play.block.cond');
       else delete card.dataset.blockReason;
       if(spaceReason)card.dataset.blockReason=card.dataset.spaceRiteReason;
@@ -1211,6 +1219,15 @@ export class GameView {
     card.addEventListener("pointerdown", (e: PointerEvent) => {
       if (e.button !== 0) return;
       this.cancelHandDrag?.();
+      const sourceRect=card.getBoundingClientRect();
+      const physical=typeof DOMMatrix!=='undefined' && !(import.meta.env?.DEV && document.documentElement.dataset.handPhysics==='off');
+      const sourceMatrix=physical?new DOMMatrix(getComputedStyle(card).transform):null;
+      const sourceAngle=sourceMatrix?Math.atan2(sourceMatrix.b,sourceMatrix.a)*180/Math.PI:0;
+      let motion:ReturnType<typeof holdPhysicalCard>|null=null;
+      const outline=physical?prepareHeldOutline(card):null;
+      let clearOutline:(()=>void)|null=null;
+      let releasing=false;
+      this.playGuide?.destroy();
       const wasOpen = this.handOpen;
       if (!wasOpen) { this.setHandOpen(true); swallowNextClick(card); }
       e.preventDefault();
@@ -1221,12 +1238,24 @@ export class GameView {
       const sourceWidth=card.offsetWidth,sourceHeight=card.offsetHeight;
       let ghost: HTMLElement | null = null;
       let done = false;
-      let guide: HTMLElement | null = null;
+      let guide: PlayDropGuide | null = null;
       const destination = c.t === "mon" ? this.root.querySelector<HTMLElement>("#meRow .zone-mon") : null;
       // Gesture-space cancellation is stable even when opening/re-rendering the
       // hand moves its DOM underneath the pointer. Both types use the whole board.
       const dropBounds = () => ({left:8,right:innerWidth-8,top:24,bottom:innerHeight-8});
+      const liveSource=()=>this.root.querySelector<HTMLElement>(`#hand .card[data-uid="${CSS.escape(c.uid)}"]`)??card;
+      const handReturnPose=(x:number,y:number)=>{
+        const source=liveSource();
+        if(!source.isConnected)return {proximity:0,scale:1};
+        const r=source.getBoundingClientRect();
+        const distance=Math.hypot(Math.max(r.left-x,0,x-r.right),Math.max(r.top-y,0,y-r.bottom));
+        const t=Math.min(1,distance/Math.max(28,r.width*.65));
+        const proximity=1-t*t*(3-2*t);
+        const m=new DOMMatrix(getComputedStyle(source).transform);
+        return {proximity,scale:source.offsetWidth*Math.hypot(m.a,m.b)/(ghost?.offsetWidth||sourceWidth)};
+      };
       const canDropAt = (x:number,y:number) => {
+        if(physical&&handReturnPose(x,y).proximity>.55)return false;
         const r=dropBounds(),hand=this.q('hand').getBoundingClientRect();
         const upward=sy-y>=28;
         const aboveHand=y<hand.top-8;
@@ -1238,10 +1267,14 @@ export class GameView {
       const cleanup = (): void => {
         if (done) return;
         done = true;
+        motion?.dispose();
+        clearOutline?.();
         ghost?.remove();
-        guide?.remove();
+        guide?.destroy();
         destination?.classList.remove("drop-destination", "drop-ready");
-        card.classList.remove("is-dragging");
+        card.classList.remove("is-dragging","is-physical-dragging");
+        liveSource().classList.remove("is-dragging","is-physical-dragging");
+        this.physicalHandUid=null;
         game?.classList.remove("drag-play");
         this.cancelHandDrag = null;
         try { card.releasePointerCapture(e.pointerId); } catch { /* already released */ }
@@ -1254,12 +1287,12 @@ export class GameView {
         document.removeEventListener("visibilitychange", cleanup);
       };
       const onMove = (ev: PointerEvent): void => {
-        if (done || ev.pointerId !== e.pointerId) return;
+        if (done || releasing || ev.pointerId !== e.pointerId) return;
         const aff=playableNow();
         if (!ghost) {
           if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < (e.pointerType === 'touch' ? 10 : 6)) return;
           try { card.setPointerCapture(ev.pointerId); } catch { /* ok */ }
-          ghost = card.cloneNode(true) as HTMLElement;
+          ghost = cloneCardNode(card);
           ghost.className = card.className + " drag-ghost drag-ghost--hand";
           ghost.classList.remove('is-played', 'is-dragging', 'tilt-live');
           // A hand card has inline z-index 0..N. That must never override the
@@ -1282,32 +1315,29 @@ export class GameView {
             if (label.style.fontSize.endsWith("px")) label.style.fontSize = `${parseFloat(label.style.fontSize) * width / sourceWidth}px`;
           }
           document.body.appendChild(ghost);
+          if(physical)motion=holdPhysicalCard(ghost,sourceRect,{x:sx,y:sy},sourceAngle,{width:sourceWidth*Math.hypot(sourceMatrix!.a,sourceMatrix!.b),height:sourceHeight*Math.hypot(sourceMatrix!.c,sourceMatrix!.d)});
+          if(outline)clearOutline=showHeldOutline(ghost,outline);
           card.classList.add("is-dragging");
+          if(motion){this.physicalHandUid=c.uid;liveSource().classList.add('is-dragging','is-physical-dragging');}
           if (aff) game?.classList.add("drag-play");
-          guide = document.createElement("div");
-          guide.className = "play-drop-guide";
-          guide.setAttribute("role", "status");
-          guide.setAttribute("aria-live", "polite");
-          document.body.appendChild(guide);
+          guide = new PlayDropGuide();
+          this.playGuide = guide;
           if (aff) destination?.classList.add("drop-destination");
         }
-        ghost.style.left = `${ev.clientX}px`;
-        ghost.style.top = `${ev.clientY}px`;
+        if(motion){const home=handReturnPose(ev.clientX,ev.clientY);motion.move(ev.clientX,ev.clientY,home.scale,home.proximity);}
+        else {ghost.style.left = `${ev.clientX}px`;ghost.style.top = `${ev.clientY}px`;}
         const ready = canDropAt(ev.clientX, ev.clientY);
         destination?.classList.toggle("drop-ready", ready && aff);
         ghost.classList.toggle("drop-ready", ready && aff);
         if (guide) {
-          const r = dropBounds();
-          guide.style.left = `${r.left}px`; guide.style.top = `${r.top}px`;
-          guide.style.width = `${r.right - r.left}px`; guide.style.height = `${r.bottom - r.top}px`;
-          guide.classList.toggle("is-ready", ready && aff);
-          guide.classList.toggle("is-blocked", !aff);
           const label = !aff ? t("play.drop.blocked") : ready ? t("play.drop.release") : t("play.drop.guide");
-          if (guide.textContent !== label) guide.textContent = label;
+          guide.update({...dropBounds(),x:ev.clientX,y:ev.clientY,ghostHeight:ghost.offsetHeight,card:ghost,ready:ready&&aff,blocked:!aff,label});
         }
       };
-      const onUp = (ev: PointerEvent): void => {
+      const onUp = async (ev: PointerEvent): Promise<void> => {
         if (done || ev.pointerId !== e.pointerId) return;
+        if(releasing)return;
+        releasing=true;
         const dragged = !!ghost;
         const inPlayArea = canDropAt(ev.clientX, ev.clientY);
         // Where the card actually IS when you let go — the play FX continues from
@@ -1316,7 +1346,13 @@ export class GameView {
         // = translate(-50%,-58%)) rather than getBoundingClientRect(), which would
         // include the ghost's scale/rotate and land a few px off.
         const gw = ghost ? ghost.offsetWidth : 0, gh = ghost ? ghost.offsetHeight : 0;
-        const rel = ghost ? { left: ev.clientX - gw / 2, top: ev.clientY - gh * 0.58, width: gw, height: gh } : null;
+        const rel = motion ? motion.rect() : ghost ? { left: ev.clientX - gw / 2, top: ev.clientY - gh * 0.58, width: gw, height: gh } : null;
+        guide?.finish();
+        guide = null;
+        if(motion&&!inPlayArea&&liveSource().isConnected){
+          await motion.returnTo(liveSource());
+          if(done)return;
+        }
         cleanup();
         if (!dragged) return; // a plain primary click only opens/holds the hand
         swallowNextClick(card);

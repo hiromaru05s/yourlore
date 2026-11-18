@@ -13,12 +13,13 @@ const anchor=(el:HTMLElement|null|undefined):Anchor|null=>{const r=combatRect(el
 /** The reducer owns targets and damage. This clock only reveals its public results. */
 export function startElemental(event:ElementalEvent,you:Side,sourceNode?:HTMLElement):Playback {
  // A repeated target starts a new complete cast. Distinct targets keep their
- // shared volley; follow-up damage never borrows the first hit's timestamp.
+ // shared volley. Cannon draws one projectile per cast, including distinct targets;
+ // every shot must have its own visible contact before its damage is presented.
  const phases:Array<{indexes:number[];targets:ElementalEvent['targets']}>=[];
  let seen=new Set<string>();
  event.targets.forEach((target,index)=>{
   const key=target.uid??'player-'+target.player;
-  if(!phases.length||seen.has(key)||event.id==='FIRE_BALL'){phases.push({indexes:[],targets:[]});seen=new Set();}
+  if(!phases.length||seen.has(key)||event.id==='FIRE_BALL'||visualEntries[event.id]?.kind==='cannon'){phases.push({indexes:[],targets:[]});seen=new Set();}
   seen.add(key);phases.at(-1)!.indexes.push(index);phases.at(-1)!.targets.push(target);
  });
  if(phases.length<=1)return startElementalBatch(event,you,sourceNode);

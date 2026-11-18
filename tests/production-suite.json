@@ -1,5 +1,7 @@
 {
   "current": [
+    "tests/hand-physics-motion.mjs",
+    "tests/duel-four-fixes.mjs",
     "tests/combat-feedback-v101.mjs",
     "tests/story-bot-update.mjs",
     "tests/reading-assets-lossless.mjs",

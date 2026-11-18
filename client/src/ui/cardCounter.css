@@ -29,11 +29,10 @@
 /* Approved horizontal Guts plate, integrated with the passive status band. */
 .card .card-status:has(.card-counter[data-counter-kind="guts"]) {
   align-items:center;
-  translate:0 -24%;
 }
 .card .card-status > .card-counter.passive-icon[data-counter-kind="guts"] {
   position:relative; top:auto; right:auto; left:auto; bottom:auto;
-  width:calc(var(--cw, 100px)*.38); height:calc(var(--cw, 100px)*.215);
+  width:calc(var(--cw, 100px)*.38); height:var(--passive-size);
   aspect-ratio:auto; flex:none; display:flex; align-items:center;
   justify-content:center; gap:calc(var(--cw, 100px)*.013);
   clip-path:polygon(12% 0,88% 0,100% 18%,100% 82%,88% 100%,12% 100%,0 82%,0 18%);

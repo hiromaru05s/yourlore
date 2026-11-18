@@ -1,0 +1,41 @@
+[
+  {
+    "width": 1280,
+    "height": 900,
+    "reduced": false,
+    "defaultEnabled": true,
+    "sourceReplacement": true,
+    "heldHome": true,
+    "backToBoard": true,
+    "cancel": true,
+    "abort": true,
+    "compactSummon": true,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "reduced": false,
+    "defaultEnabled": true,
+    "sourceReplacement": true,
+    "heldHome": true,
+    "backToBoard": true,
+    "cancel": true,
+    "abort": true,
+    "compactSummon": true,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "reduced": true,
+    "defaultEnabled": true,
+    "sourceReplacement": true,
+    "heldHome": true,
+    "backToBoard": true,
+    "cancel": true,
+    "abort": true,
+    "compactSummon": true,
+    "errors": []
+  }
+]
