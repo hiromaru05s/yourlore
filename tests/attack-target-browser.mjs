@@ -9,7 +9,7 @@ try{
  for(const mobile of [false,true]){
   const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:960},hasTouch:mobile,isMobile:mobile,...(process.env.LORE_RECORD_VIDEO==='1'&&!mobile?{recordVideo:{dir:out,size:{width:1440,height:960}}}:{})});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(origin+'/attack-target-preview.html?v=3');await page.waitForSelector('[data-scene-ready=true]');
+  await page.goto(origin+'/attack-target-preview.html?v=4');await page.waitForSelector('[data-scene-ready=true]');
   await page.evaluate(()=>attackTargetPreview.stopDemo());await page.waitForTimeout(350);
   const node=uid=>page.locator(`.zone-mon [data-uid="${uid}"]`);
   const rect=async uid=>node(uid).boundingBox();
@@ -21,12 +21,19 @@ try{
   const select=async uid=>{await move(middle(await rect(uid)));await page.waitForFunction(uid=>document.querySelector('.is-atk-target')?.getAttribute('data-uid')===uid,uid);await page.waitForSelector('.attack-target-outline svg');await page.waitForTimeout(230);};
   const clean=async()=>{
    assert.equal(await page.locator('.attack-target-outline,.is-atk-target,.attack-aim').count(),0);
-   assert.equal(await page.evaluate(()=>document.getAnimations().filter(a=>a.id.startsWith('attack-target-')).length),0);
+   assert.equal(await page.evaluate(()=>document.getAnimations().filter(a=>/^attack-(target|source)-/.test(a.id)).length),0);
   };
-  const baseline=await rect('target-center');
+  const baseline=await rect('target-center'),sourceBaseline=await rect('attacker');
   const print=await node('target-center').evaluate(e=>({art:e.querySelector('.card-art img').currentSrc,frame:e.querySelector('.card-frame').style.backgroundImage,numbers:[...e.querySelectorAll('.seal-value')].map(n=>n.textContent)}));
   await down(middle(await rect('attacker')));await select('target-center');
-  const raised=await rect('target-center');
+  const raised=await rect('target-center'),sourceRaised=await rect('attacker');
+  assert(sourceRaised.width/sourceBaseline.width>1.025&&sourceRaised.width/sourceBaseline.width<1.07);
+  assert(middle(sourceRaised).y<middle(sourceBaseline).y-sourceBaseline.height*.045);
+  const emitter=await page.locator('.attack-aim').evaluate(e=>e.dataset.source.split(',').map(Number));
+  assert(Math.abs(emitter[0]-middle(sourceRaised).x)<1.5);
+  assert(Math.abs(emitter[1]-(sourceRaised.y+sourceRaised.height*.045))<1.5);
+  assert.equal(await page.locator('.attack-aim').getAttribute('data-material'),'bevelled-light');
+
   assert(raised.width/baseline.width>1.04&&raised.width/baseline.width<1.09);
   assert(middle(raised).y<middle(baseline).y-baseline.height*.025);
   const after=await node('target-center').evaluate(e=>({art:e.querySelector('.card-art img').currentSrc,frame:e.querySelector('.card-frame').style.backgroundImage,numbers:[...e.querySelectorAll('.seal-value')].map(n=>n.textContent)}));assert.deepEqual(after,print);
@@ -35,7 +42,7 @@ try{
   // Hold the pointer at the original bottom edge after the print lifts away.
   const bottom={x:baseline.x+baseline.width/2,y:baseline.y+baseline.height-1};
   for(let i=0;i<3;i++){await move(bottom);await page.waitForTimeout(200);assert.equal(await page.locator('.card.is-atk-target').getAttribute('data-uid'),'target-center');}
-  checks.push({mobile,baseline,raised,originalBottomEdgeStable:true,printUnchanged:true});
+  checks.push({mobile,baseline,raised,originalBottomEdgeStable:true,printUnchanged:true,sourceBaseline,sourceRaised,originFollowsCrest:true});
   await cancel();await clean();const restored=await rect('target-center');assert(Math.abs(restored.width-baseline.width)<.7);assert(Math.abs(restored.y-baseline.y)<.7);
   // Quick retargeting while both lift and return are still in flight.
   await down(middle(await rect('attacker')));
@@ -52,11 +59,13 @@ try{
   await page.screenshot({path:`${out}/${mobile?'mobile':'desktop'}-aura.png`});await cancel();await clean();
   checks.push({mobile,persistentNativePose:true,equippedFrame:true});
   await page.emulateMedia({reducedMotion:'reduce'});
+  const reducedSource=await rect('attacker');
   const reducedBase=await rect('target-center');await down(middle(await rect('attacker')));await select('target-center');const reducedRaised=await rect('target-center');
   assert(Math.abs(reducedBase.width-reducedRaised.width)<.7);assert(Math.abs(reducedBase.y-reducedRaised.y)<.7);
+  assert(Math.abs((await rect('attacker')).width-reducedSource.width)<.7);
   assert.equal(await page.locator('.attack-target-travel').evaluate(e=>getComputedStyle(e).display),'none');
   await cancel();await clean();checks.push({mobile,reducedStatic:true});
   await context.close();
  }
- assert.deepEqual(errors,[]);await fs.writeFile(out+'/checks.json',JSON.stringify({checks,errors,source:'9af927a69',origin,boundary:'Local real-board mouse/touch fixtures; no authenticated PvP.'},null,2));console.log('PASS attack target contour, float, original hit area, retargeting, cancellation, persistent actor, materials and reduced motion');
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/checks.json',JSON.stringify({checks,errors,source:'d815a6ac9',origin,boundary:'Local real-board mouse/touch fixtures; no authenticated PvP.'},null,2));console.log('PASS attack target contour, float, original hit area, retargeting, cancellation, persistent actor, materials and reduced motion');
 }finally{await browser.close();}

@@ -1,5 +1,6 @@
 import '../styles/handPhysics.css';
 import {highlightAttackTarget,prepareAttackTarget} from './attackTarget';
+import {liftAttackCard} from './attackLift';
 import '../styles/duelNameplate.css';
 import {prepareHeldOutline,showHeldOutline} from './heldCardOutline';
 import {holdPhysicalCard} from './handPhysics';
@@ -795,6 +796,7 @@ export class GameView {
       let hot: HTMLElement | null = null; // currently highlighted attack target
       let hotBounds:DOMRect|null=null;
       let releaseHot:((immediate?:boolean)=>void)|null=null;
+      let releaseSource:((immediate?:boolean)=>void)|null=null;
       let finishHotImmediately=true;
       // Warm the shared contour before the pointer reaches the opposing row.
       for(const target of this.root.querySelectorAll<HTMLElement>('#oppRow .zone-mon .card'))void prepareAttackTarget(target);
@@ -838,20 +840,22 @@ export class GameView {
         card.classList.toggle('is-aiming',mode==='attack');
         card.classList.toggle('is-dragging',mode==='reorder');
         if (mode === "attack") {
+          releaseSource??=liftAttackCard(card,'source');
           if(ghost)ghost.style.display='none';
           if(!aim)aim=createAttackAim(()=>{
             if(!card.isConnected)return null;const target=targetAt(pointer.x,pointer.y),valid=!!target.mon||!!target.portrait&&(!o.oppHasMon||o.canPassDefenders);
             const a=card.getBoundingClientRect(),b=(target.mon??(target.portrait?document.querySelector('#portraitOpp .pt-ring'):null))?.getBoundingClientRect();
-            return {x:a.left+a.width/2,y:a.top+a.height*.4,tx:b?b.left+b.width/2:pointer.x,ty:b?b.top+b.height/2:pointer.y,valid,blocked:!!target.portrait&&!valid};
+            return {x:a.left+a.width/2,y:a.top+a.height*.045,sourceWidth:a.width,tx:b?b.left+b.width/2:pointer.x,ty:b?b.top+b.height/2:pointer.y,valid,blocked:!!target.portrait&&!valid};
           });
           if (marker) marker.style.display = "none";
           const valid=!!t.mon || (!!t.portrait && (!o.oppHasMon || o.canPassDefenders));
           setHot(valid ? t.mon ?? t.portrait : null);
           const a=card.getBoundingClientRect(),b=(t.portrait?document.querySelector('#portraitOpp .pt-ring'):hot)?.getBoundingClientRect();
-          aim.update(a.left+a.width/2,a.top+a.height*.4,b?b.left+b.width/2:x,b?b.top+b.height/2:y,valid,!!t.portrait&&!valid);
+          aim.update(a.left+a.width/2,a.top+a.height*.045,b?b.left+b.width/2:x,b?b.top+b.height/2:y,valid,!!t.portrait&&!valid);
           return;
         }
         aim?.remove();aim=null;
+        releaseSource?.(true);releaseSource=null;
         if(!ghost){ghost=card.cloneNode(true) as HTMLElement;ghost.className=card.className+' drag-ghost';ghost.classList.remove('is-attacker','is-aiming','is-dragging');ghost.style.opacity='1';ghost.style.zIndex='135';ghost.style.width=`${card.offsetWidth}px`;ghost.style.height=`${card.offsetHeight}px`;document.body.append(ghost);}
         ghost.style.display='';ghost.style.left=`${x}px`;ghost.style.top=`${y}px`;
         setHot(null);
@@ -869,6 +873,7 @@ export class GameView {
         if (started) swallowNextClick(card);
         ghost?.remove(); marker?.remove(); aim?.remove();
         setHot(null,finishHotImmediately);
+        releaseSource?.(finishHotImmediately);releaseSource=null;
         card.classList.remove("is-dragging", "is-aiming");
         try { if(card.hasPointerCapture(e.pointerId))card.releasePointerCapture(e.pointerId); } catch { /* detached */ }
         window.removeEventListener("pointermove", onMove);

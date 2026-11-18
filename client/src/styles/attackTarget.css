@@ -14,6 +14,10 @@
 .game .zone-mon .card.is-atk-target:not(.drag-ghost) .card-frame{
   filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 12px 9px #18213080) var(--rest-tone,brightness(1));
 }
+.game .zone-mon .card.is-aiming:not(.drag-ghost){z-index:9;}
+.game .zone-mon .card.is-aiming:not(.drag-ghost) .card-frame{
+  filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 16px 10px #11213380) drop-shadow(0 0 3px #b3e7ff88);
+}
 @keyframes attackTargetEnter{from{opacity:.25;}to{opacity:1;}}
 @keyframes attackTargetBreathe{0%,100%{opacity:.38;}50%{opacity:.6;}}
 @keyframes attackTargetTravel{from{stroke-dashoffset:0;}to{stroke-dashoffset:-100;}}

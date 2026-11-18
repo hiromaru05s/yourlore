@@ -1,34 +1,37 @@
-# 攻撃対象ハイライト — 第3稿・赤い外周と浮上
+# 攻撃ドラッグ — 第4稿・攻撃元の浮上と光の立体感
 
-2026-11-18。ユーザーの追加指定: 赤に戻す、少し大袈裟に、カードフレームの周りだけを変える、選択されたカードのサイズ・浮上にも工夫する。
+2026-11-18。ユーザーの追加指定: ドラッグ中に攻撃元も浮上させる。ドラッグ演出の品質を上げ、よりリアルにする。
 
-ローカルプレビュー: http://127.0.0.1:5286/attack-target-preview.html?v=3
+プレビュー: http://127.0.0.1:5286/attack-target-preview.html?v=4
 
-「選択表示」で通常と比較。「浮上を再生」で同じカードが浮く動きを再確認。手前のカードからドラッグすると実際の対象選択になる。「盤面を戻す」で再試行できる。
+「選択表示」で通常と比較。「浮上を再生」で攻撃元・対象の浮上を再確認。手前のカードから相手へドラッグして実操作できる。「盤面を戻す」で再試行。
 
-## 見た目
+## 変更
 
-- 元のフレームと数値シールの画像から実際の外形を抽出。外周のすぐ外側だけに赤い面と明るい芯を置き、光が輪郭に沿って動く。
-- マスクによってカードの内側には光を描かない。フレームの素材・名前・数値・絵柄の色を維持。矩形の囲み、面全体の色変更は使用しない。
-- 選ばれたカードは180msで6.5%拡大し、カード高の5.5%だけ上がる。下に落ちる影で高さを補う。
-- 対象変更・キャンセル時は150msで元の姿勢へ戻る。攻撃確定時は選択用の姿勢を即時解除し、既存の戦闘演出へ渡す。
-- 低減モーションでは拡大・浮上・外周の移動光を止め、静止した赤いハイライトを維持。
+- 攻撃元は190msで4.5%拡大し、カード高の9%浮上。影で盤面との距離を補う。カードの絵柄・文字・数値は色替えしない。
+- 対象側は前稿の赤い実輪郭と6.5%拡大・5.5%浮上を継続。
+- 青い矢印は暗い側面、細い明部、明暗の連続した断面、面取りした先端を持つ光の帯へ更新。帯の内部を反射が前進する。細い影を同じ形に沿わせ、卓上から持ち上がった厚みを表現する。
+- 光の起点は浮いた攻撃元の上端。カードの動き・サイズに毎フレーム追従する。矢印の幅はカードの実寸に合わせ、スマホでは細くなる。
+- 照準中はその攻撃元の待機用山形を止め、操作中の矢印へ表示を集中。解除時は元の待機表示へ戻る。
+- 低減モーションでは両カードの浮上と光の移動を止める。対象の赤い外周と矢印自体は残す。
 
 ## 採用済み実装との照合
 
-着手時に `gh/main` をfetchし、最新が `9af927a69`（Apply approved physical hand dragging and held-card outline）へ更新されていることを確認。第2稿を `d11e4c7e2` に保存し、mainを `4af5a4ae0` でマージ。最新の手札操作を含む実盤面を土台にした。
+着手時に `gh/main` をfetch。最新main `d815a6ac9`（Update hand and Rift playback regressions for the corrected lifecycle）を作業ブランチにマージし、手札の物理操作・青いドロップ受付表示・修正済みの対戦処理を含めた実盤面を使用。
 
 参照:
 - `client/src/ui/boardView.ts`、`client/src/ui/cardView.ts`
-- `client/src/styles/card.css`、`client/src/styles/game.css`
 - `client/src/ui/monster/runtime.ts`、`client/src/ui/monster/actor.ts`
-- 最新採用の輪郭抽出: `client/src/ui/handConditionOutline.ts`（手札の採用済み外周演出と同じラスタ形状）
-- 読み込まれたフレーム: `/art/biblion/modular/base-mon-print.webp`
+- `client/src/styles/card.css`、`client/src/styles/game.css`
+- 実カードフレーム: `/art/biblion/modular/base-mon-print.webp`
 
 変更:
-- `client/src/ui/attackTarget.ts` / `client/src/styles/attackTarget.css`: 外周マスクと加算方式の浮上。元のActorが持つ姿勢に重ねる。
-- `client/src/ui/boardView.ts`: 実際の対象切り替えに接続。浮上前の領域を保持し、元のカード下端にポインターを置いたとき対象が点滅しないようにする。
-- `client/src/dev/attackTargetPreview.ts` / `.css`: 既存の比較ページを第3稿へ更新。
+- `client/src/ui/attackLift.ts`: 攻撃元と対象の共通の加算方式の浮上・復帰。
+- `client/src/ui/attackAim.ts`: 立体的な帯・反射・先端・光の接続。
+- `client/src/ui/boardView.ts`: 実ドラッグの開始／中断／確定へ接続。
+- `client/src/ui/monster/runtime.ts`: 照準中の待機用表示を抑え、安定した浮上姿勢へ。
+- `client/src/ui/attackTarget.ts`、`client/src/styles/attackTarget.css`: 共通浮上へ整理し、攻撃元の影を追加。
+- `client/src/dev/attackTargetPreview.ts`: 実盤面プレビュー。
 
 起動元: `/Users/hiromaru05s/.codex/worktrees/attack-target-frame-1118/LORE_TCG/client`
 
@@ -38,10 +41,8 @@ node ../node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5286 --strictPort
 
 ## 確認
 
-機能と見た目は分けて記録する。
+機能: client型チェック、`git diff --check`、`tests/attack-drag-browser.mjs`。`tests/attack-target-browser.mjs` に攻撃元の拡大率・浮上・矢印起点の追従・両側の解除・低減モーションを追加。マウス／タッチ、対象の下端での保持、素早い対象変更、常時効果Actor、装備フレームも確認する。結果は `qa-v4/checks.json`。
 
-機能: client型チェック、`git diff --check`、既存の `tests/attack-drag-browser.mjs`。追加の `tests/attack-target-browser.mjs` はマウス／タッチの対象変更、浮上前の下端での選択保持、拡大・浮上の寸法、素早い対象往復、キャンセルでの復帰、既存の常時効果Actorとの共存、装備フレーム、低減モーションを検証する。結果・境界は `qa-v3/checks.json`。
+見た目: 白い採用済み盤面、PC1440×960・スマホ390×844。光の断面・暗い側面・先端の明部、両カードの浮上、光の付け根を画像と連続録画で確認。最終的な見た目の承認はユーザー判断。
 
-見た目: 白い採用済み盤面、PC1440×960・スマホ390×844で、赤い外周が実フレームに合うこと、元のカード面が維持されること、拡大時に隣のカードを大きく隠さないことを確認。連続録画と途中フレームで浮上・対象変更・戻り方を確認。ユーザーの見た目の承認は未取得。
-
-過去稿は `round1.md` / `qa/` と `round2.md` / `qa-v2/`。本番未反映。認証済みオンライン対戦は未検証。
+過去稿は `round1.md` / `round2.md` / `round3.md` とそれぞれのQAフォルダ。本番未反映。認証済みオンライン対戦は未検証。
