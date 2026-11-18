@@ -3,6 +3,8 @@ import path from 'node:path';
 import {build} from 'esbuild';
 import {mkdtemp,rm,writeFile,mkdir} from 'node:fs/promises';
 const tmp=await mkdtemp('/tmp/lore-contextual-');
+// Test the deliberate decision, not Easy's separately tested occasional lapse.
+const originalRandom=Math.random;Math.random=()=>.5;
 try {
  await build({stdin:{contents:`export * from './client/src/shared/engine';export * from './client/src/shared/cards';export * from './client/src/shared/bot';export * from './client/src/shared/botSearch';export * from './client/src/shared/botActions';export * from './client/src/shared/botAcquisition';export * from './client/src/shared/botMatchup';`,resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:tmp+'/core.mjs'});
  const C=await import(tmp+'/core.mjs');let serial=0;const evidence=[];
@@ -91,4 +93,4 @@ try {
  }
  console.log('PASS contextual acquisition: actual effect, collateral, recovery conversion, draw horizon and privacy');
  if(process.env.BOT_CONTEXT_REPORT){await mkdir(path.dirname(path.resolve(process.env.BOT_CONTEXT_REPORT)),{recursive:true});await writeFile(process.env.BOT_CONTEXT_REPORT,JSON.stringify(evidence,null,2));}
-}finally{await rm(tmp,{recursive:true,force:true});}
+}finally{Math.random=originalRandom;await rm(tmp,{recursive:true,force:true});}
