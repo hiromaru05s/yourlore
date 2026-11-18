@@ -35,6 +35,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   app.root.appendChild(root);
   const npc = opts.mode === "bot" ? botNpc(opts.difficulty ?? "hard") : null;
   const story = opts.mode === 'tutorial' ? undefined : opts.story;
+  const singleNormalReturn=opts.mode==='online'&&!opts.ranked&&!story&&!opts.difficulty&&app.singleNormalReturn;
   const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
   setMyAvatar(activeDeck.avatar ?? app.user?.avatar, activeDeck.background ?? app.user?.background);  // my profile icon on the center-bottom portrait
   setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : story?.avatar ?? npc?.avatar ?? null);
@@ -70,10 +71,10 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     onExperience: () => {if(experienceUserId && experienceUserId!=="local-guest-user")void api.me().then(fresh=>{if(fresh?.id===experienceUserId && app.user?.id===experienceUserId){app.user=fresh;document.dispatchEvent(new Event("lore:user"));}});},
     onOpeningStart: opts.mode === "tutorial" ? undefined : startMusic,
     onBattleReady: () => startMusic(),
-    onHome: () => opts.mode === "tutorial" ? app.tutorial() : story ? app.single({tab:'story'}) : opts.mode==='bot'||(opts.mode==='online'&&(opts.difficulty??ctrl.botDifficulty)) ? app.single() : app.home(),
+    onHome: () => opts.mode === "tutorial" ? app.tutorial() : story ? app.single({tab:'story'}) : opts.mode==='bot'||(opts.mode==='online'&&(opts.difficulty??ctrl.botDifficulty)) ? app.single() : singleNormalReturn ? app.single({chapter:3}) : app.home(),
     onHomeLabel: () => opts.mode === 'tutorial'
-      ? loungeText('チュートリアルへ','Tutorial','튜토리얼로')
-      : story || opts.mode==='bot' || (opts.mode==='online'&&(opts.difficulty??ctrl.botDifficulty))
+      ? loungeText('修練へ','Training','수련으로')
+      : singleNormalReturn || story || opts.mode==='bot' || (opts.mode==='online'&&(opts.difficulty??ctrl.botDifficulty))
         ? loungeText('シングルへ','Single Player','싱글로') : loungeText('ホームへ','Home','홈으로'),
     // 랭크전 "다시하기"는 랭크 큐로 돌아가야 한다 (노말 큐로 새던 버그 수정)
     onBattleResult: won => {
@@ -82,12 +83,12 @@ export function mountGame(app: App, opts: GameOpts): Screen {
       if (!story) localStorage.setItem('lore.guest.dojo.' + opts.difficulty, '1');
       else if (story.stage === 2) localStorage.setItem(ARIES_COMPLETED_KEY + '.guest', '1');
     },
-    onStoryAgainLabel: won => !story ? undefined : won ? story.stage < 2 ? loungeText('次の試練へ →','Continue →','다음 시련으로 →') : loungeText('ストーリーを閉じる','Finish story','스토리 마치기') : loungeText('最初からやり直す →','Restart the sequence →','처음부터 다시 →'),
+    onStoryAgainLabel: won => !story ? undefined : won ? story.stage < 2 ? loungeText('次の試練へ →','Continue →','다음 시련으로 →') : loungeText('ストーリーを閉じる','Finish story','스토리 마치기') : loungeText('再挑戦する →','Try again →','다시 도전 →'),
     onRematch: () => {
       if (story) {
         if (storyWon && story.stage < 2) app.storyGame(ARIES_ROUTE[1].stage, opts.mode === 'online' ? opts.roomId : undefined);
         else if (storyWon && story.stage === 2) app.single({tab:'story'});
-        else app.storyGame(0);
+        else app.storyGame(2);
       } else if (opts.mode === "bot") app.botGame(opts.difficulty);
       else if (opts.mode === "tutorial") opts.part===undefined?app.tutorialGame(opts.lesson):app.tutorialPart(opts.part);
       else (opts.difficulty??ctrl.botDifficulty) ? app.botGame(opts.difficulty??ctrl.botDifficulty) : opts.ranked ? app.rankedLobby() : app.onlineLobby();
@@ -99,7 +100,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
     opts.mode === "bot"
       ? new LocalController(root, exits, app.user?.display ?? "PLAYER 1", activeDeck.cards, opts.difficulty ?? "hard", story ? {name:story.name[getLang()],deck:story.deck,tune:story.tune} : undefined)
       : opts.mode === "tutorial" && opts.part!==undefined
-        ? new TutorialPartController(root,exits,opts.part,(next,actions)=>next<TUTORIAL_PARTS.length?app.tutorialPart(next):app.onboarding(actions),app.user?.id)
+        ? new TutorialPartController(root,exits,opts.part,(next,actions)=>next<TUTORIAL_PARTS.length?app.tutorialPart(next):app.completeSingleTutorial(actions),app.user?.id)
       : opts.mode === "tutorial"
         ? new TutorialController(root, exits, app.user?.display ?? "PLAYER", {
             lesson: opts.lesson,

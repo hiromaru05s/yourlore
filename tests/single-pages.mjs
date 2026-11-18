@@ -53,9 +53,9 @@ try {
     }
     await env.DB.prepare('INSERT INTO rewards VALUES(?,?,?,?)').bind('a', 'bot:first:' + difficulty, 1, Date.now()).run();
   }
-  assert.equal((await request('/rewards/story/start')).status, 200, 'three existing first-win receipts unlock story');
+  assert.equal((await request('/rewards/story/start')).status, 403, 'three wins alone do not replace tutorial and normal matches');
   assert.equal((await request('/rewards/bot/start', {difficulty: 'hell'})).status, 400);
-  console.log('PASS single idle continuity, random gesture, pause, sequential opponents and three-win story unlock');
+  console.log('PASS single idle continuity, random gesture, pause, sequential opponents and master qualification gate');
 } finally {
   await rm(dir, {recursive: true, force: true});
 }

@@ -1,0 +1,19 @@
+{
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/single-story-chapters-1118/LORE_TCG",
+  "origin": "http://127.0.0.1:5173/",
+  "errors": [],
+  "apiErrors": [],
+  "basicTutorial": "played via visible controls; Worker validated transcript",
+  "laterBattles": "settled receipt fixtures",
+  "storyRequest": true,
+  "referenceCommit": "914dc9bab",
+  "portraitReview": {
+    "origin": "http://127.0.0.1:5188/",
+    "asset": "/art/single-story/aries-cutout-v1.webp",
+    "viewports": [
+      "1440x900",
+      "390x844"
+    ],
+    "voice": false
+  }
+}

@@ -33,12 +33,11 @@ export function mountLounge(app: App, page: LoungePage, finishEntrance?: () => v
   content.append(...Array.from(app.root.childNodes));
   const shell=document.createElement('div'); shell.className=`lounge-shell lounge-${page}${page==='login'?'':' horizon-nav selected-menu'}`;
   if (finishEntrance) shell.classList.add('home-return-visit');
-  const tab = page==='cardHub'||page==='deck' ? 'cards' : page;
+  const tab = page==='cardHub'||page==='deck' ? 'cards' : page==='tutorial'?'single':page;
   const nav: [LoungePage | 'single', string, (()=>void)?][] = [
     ['home','home.title',()=>app.home()],['single','home.bot.title',()=>app.single()],
     ['cards','home.nav.cards',()=>app.cardHub()],['leaderboard','home.nav.ranking',()=>app.leaderboard()],
     ['friends','friends.title',()=>app.friends()],['shop','shop.title',()=>app.shop()],
-    ['tutorial','home.nav.guide',()=>app.tutorial()],
   ];
   const phoneHome = matchMedia('(max-width:850px) and (min-height:501px)');
   const dailyReward=content.querySelector<HTMLElement>('#dailyReward');
