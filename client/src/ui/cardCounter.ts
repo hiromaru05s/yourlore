@@ -37,7 +37,7 @@ function rows(position:number){
  const row=(value:number,y:number)=>{const digits=String(value).length,size=digits===1?24:digits===2?22:digits===3?18:54/digits;return `<text class="counter-slot-digit" data-value="${value}" x="32" y="29.5" dominant-baseline="central" transform="translate(0 ${y})" text-anchor="middle" font-family="Georgia,serif" font-weight="bold" font-size="${size}" fill="#28352e">${value}</text>`;};
  return row(base,-fraction*32)+(fraction>1e-7?row(base+1,(1-fraction)*32):'');
 }
-function chargeFace(id:string):string {
+function counterFace(id:string):string {
  return `<svg viewBox="0 0 64 36" preserveAspectRatio="none" aria-hidden="true" focusable="false">
    <defs>
      <linearGradient id="${id}silver" x2=".7" y2="1"><stop stop-color="#e8edf0"/><stop offset=".27" stop-color="#7e99a6"/><stop offset=".54" stop-color="#d5e1e8"/><stop offset="1" stop-color="#5e7783"/></linearGradient>
@@ -61,7 +61,7 @@ export function createCardCounter(uid:string,cardId:string,kind:CounterKind,valu
  badge.className='card-counter'+(kind==='decay'?' ec-decay-state':'');badge.dataset.counterKind=kind;badge.dataset.counterIndex=String(index);badge.style.setProperty('--counter-index',String(index));
  if(kind==='decay')badge.dataset.status='decay';
  badge.setAttribute('role','img');identities.set(badge,{uid,cardId,kind,value:n,index});
- badge.innerHTML=kind === 'decay' ? gaugeMarkup(id) : kind === 'charge' ? chargeFace(id) : `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><radialGradient id="${id}ivory" cx=".32" cy=".23" r=".9"><stop stop-color="#fff9e8"/><stop offset=".6" stop-color="#eee4cd"/><stop offset="1" stop-color="#cdbf9f"/></radialGradient><linearGradient id="${id}gold" x2=".65" y2="1"><stop stop-color="#e5d3a7"/><stop offset=".44" stop-color="#8d7858"/><stop offset=".78" stop-color="#b9a47a"/><stop offset="1" stop-color="#63523a"/></linearGradient><linearGradient id="${id}window" x2=".2" y2="1"><stop stop-color="#c9bca1"/><stop offset=".16" stop-color="#e5d9bf"/><stop offset="1" stop-color="#fff7e3"/></linearGradient><clipPath id="${id}clip"><rect x="12.5" y="17.25" width="39" height="28.5" rx="3.5"/></clipPath></defs><circle cx="32" cy="31" r="28.5" fill="url(#${id}ivory)" stroke="url(#${id}gold)" stroke-width="2"/><circle cx="32" cy="31" r="26.1" fill="none" stroke="#fff9e5" stroke-width=".8"/><path d="M29 8l3 4 3-4M29 54l3-4 3 4" stroke="#7b6b4d" stroke-width="1.1" fill="none" stroke-linecap="round"/><rect class="counter-number-window" x="10.5" y="15.5" width="43" height="32" rx="5" fill="url(#${id}window)" stroke="#a2906e" stroke-width="1"/><path d="M15 17h34" stroke="#b7a583" stroke-width=".6"/><path d="M15 46h34" stroke="#fff9e7" stroke-width="1"/><g class="counter-slot-reel" clip-path="url(#${id}clip)">${rows(n)}</g><path d="M14 17.8h36" stroke="#655437" stroke-opacity=".14" stroke-width="1.3"/></svg>`;
+ badge.innerHTML=kind === 'decay' ? gaugeMarkup(id) : counterFace(id);
  label(badge,n);paint(badge,n);return badge;
 }
 function position(badge:HTMLElement,now=performance.now()){const m=motions.get(badge);return m?counterPosition(m.from,m.to,(now-m.start)/m.duration):identities.get(badge)?.value??0;}
