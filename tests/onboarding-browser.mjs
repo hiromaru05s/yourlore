@@ -24,7 +24,7 @@ try{
   try{
    await page.goto(process.env.ONBOARDING_ORIGIN||server.resolvedUrls.local[0],{waitUntil:'domcontentloaded'});
    if(index===0&&process.env.ONBOARDING_SKIP_BASICS!=='1'){
-    await page.locator('[data-nav="tutorial"]').click({timeout:90000});await page.locator('#continuePart').click();await page.locator('.game-loading').waitFor({state:'hidden',timeout:90000});
+    await page.locator('[data-nav="single"]').click({timeout:90000});await page.locator('[data-tab="training"]').click();await page.locator('[data-tutorial]').click();await page.locator('.game-loading').waitFor({state:'hidden',timeout:90000});
     await page.locator('.tutorial-tour-next').waitFor({state:'visible',timeout:90000});
     assert.equal(await page.locator('.tutorial-tour-bubble p').innerText(),'やあゼノだよ。\nLOREのデュエルでは、上にいる相手の体力を０にすると勝ちだよ。');
     await page.screenshot({path:out+'/greeting-'+width+'.png'});
@@ -49,6 +49,7 @@ try{
      await page.waitForFunction(i=>!document.querySelector('.tutorial-part-tour')||document.querySelector('.tutorial-part-tour').dataset.step!==i,step,{timeout:25000});
     }
    }
+   await page.locator('[data-nav="single"]').click({timeout:90000});await page.locator('[data-tab="training"]').click();await page.locator('[data-deck-tutorial]').click();
    await page.locator('[data-pull="10"]').waitFor({timeout:90000});
    await page.locator('.tutorial-tour-next').click();await page.screenshot({path:out+'/gacha-'+width+'.png'});
    await page.locator('[data-pull="10"]').click();await page.locator('.gacha-cinematic').waitFor({timeout:30000});

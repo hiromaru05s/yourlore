@@ -1,152 +1,92 @@
 import type { App, Screen } from '../router';
-import { cardName, esc, getLang, onLangChange, t } from '../i18n';
+import { getLang, onLangChange } from '../i18n';
 import { api } from '../net/api';
-import { botNpc, SINGLE_DIFFICULTIES } from '../shared/botNpcs';
-import { ARIES_ROUTE, ARIES_COMPLETED_KEY } from '../shared/ariesStory';
-import { STARTERS, DB, deckStoreForUser } from '../shared/cards';
-import { BOT_REWARDS } from '../shared/progression';
-import { homeIcon } from '../ui/homeIcons';
-import { artUrl } from '../ui/cardArt';
-import { mountHomeDuelButton } from '../ui/homeDuelButton';
+import { SINGLE_DIFFICULTIES, botNpc } from '../shared/botNpcs';
+import { ARIES_COMPLETED_KEY } from '../shared/ariesStory';
+import { NORMAL_EXAM_MATCHES, STORY_SCENES, emptySingleProgress, chapterOpen, chapterObjective, masterQualified, type StoryScene } from '../shared/singleStory';
+import { SINGLE_CHAPTERS, STORY_NAMES } from '../shared/singleStoryText';
+import { tutorialPartKey } from '../shared/tutorialPartMeta';
 import { loungeText as L } from '../ui/loungeText';
-import { storyPortraits } from '../ui/singlePortraits';
-import pageArrow from '../assets/single/page-arrow.svg';
-import { mountSingleIdle } from '../ui/singleIdle';
-import { deckName } from './deckLibrary';
-import '../styles/singlePage.css';
-
-export interface SingleLocation { page?:number; tab?:'story'|'battle' }
-const lock = '<svg class="sp-lock" viewBox="0 0 20 22" aria-hidden="true"><path d="M5 10V7a5 5 0 0 1 10 0v3M3 10h14v10H3z"/><path d="M10 14v3"/></svg>';
-const favoriteCards = { easy:'HALF_ELF', normal:'CASTLE', hard:'FLAME' } as const;
-const chevron = `<img class="sp-chevron" src="${pageArrow}" alt="" draggable="false">`;
-
-export function mountSingle(app:App, initial:SingleLocation={}):Screen {
-  const root=document.createElement('section');
-  root.className='screen single-page';
-  app.root.append(root);
-  const cleared=new Set(app.user?.botClears ?? []);
-  const guest=app.user?.id==='local-guest-user';
-  if(guest) for(const d of SINGLE_DIFFICULTIES) if(localStorage.getItem('lore.guest.dojo.'+d)) cleared.add(d);
-  const firstUncleared=()=>SINGLE_DIFFICULTIES.findIndex(d=>!cleared.has(d));
-  const lastOpen=()=>firstUncleared()<0?2:firstUncleared();
-  let page=Math.min(lastOpen(),Math.max(0,initial.page ?? lastOpen()));
-  let story=initial.tab==='story' && firstUncleared()<0;
-  let ariesCleared=guest && !!localStorage.getItem(ARIES_COMPLETED_KEY+'.guest');
-  let duel:ReturnType<typeof mountHomeDuelButton>|undefined;
-  let drawer:HTMLDialogElement|undefined;
-  let dead=false;
-  let stopIdle:(()=>void)|undefined;
-  const location=():SingleLocation=>({page,tab:story?'story':'battle'});
-  function paint(){
-    stopIdle?.();stopIdle=undefined;
-    duel?.destroy();
-    const npc=botNpc(SINGLE_DIFFICULTIES[page]),locale=getLang();
-    const open=firstUncleared()<0, done=SINGLE_DIFFICULTIES.filter(d=>cleared.has(d)).length;
-    const store=deckStoreForUser(app.user),active=store.list[store.sel];
-    const next=page<2?botNpc(SINGLE_DIFFICULTIES[page+1]):undefined;
-    const lastName=npc.name[locale];
-    const unlock=L(lastName+'に勝つと解放','Defeat '+lastName+' to unlock',lastName+' 승리 시 해금');
-    const storyHint=L('対戦の3人に勝利','Defeat all 3 opponents','대전 상대 3명에게 승리')+' · '+done+'/3';
-    const storyLabel=L('ストーリー','Story','스토리');
-    const battleLabel=L('対戦','Battle','대전');
-    const nextLabel=next?next.name[locale]:storyLabel;
-    const favoriteId=favoriteCards[SINGLE_DIFFICULTIES[page]];
-    const favoriteName=cardName({...(STARTERS[favoriteId]??DB[favoriteId]),uid:favoriteId});
-    const nextOpen=page<2?page<lastOpen():open;
-    root.dataset.story=String(story);
-    root.innerHTML=`
-      <div class="sp-stage">
-        <div class="sp-art" aria-hidden="true">${story?`<img class="sp-figure" src="${storyPortraits[0]}" alt="">`:`<span class="sp-figure sp-standing"><img src="/art/single-standing/refined-v2/${npc.id}.webp" alt=""></span>`}</div>
-        <div class="sp-shade"></div>
-        <header class="sp-head"><nav class="sp-tabs" aria-label="${t('home.bot.title')}">
-          <button data-story aria-pressed="${story}" ${open?'':'disabled'}>${open?'':lock}${storyLabel}</button>
-          <button data-battle-tab aria-pressed="${!story}">${battleLabel}</button>
-          <button disabled>${lock}${L('修練','Training','수련')}</button>
-        </nav>${!open?`<small class="sp-story-hint">${storyLabel} · ${storyHint}</small>`:''}</header>
-        <div class="sp-identity">
-          ${story?`<div class="sp-tier">${L('マスターシーカーへの道','Path to the Master Seekers','마스터 시커의 길')}<i></i>ARIES</div>
-            <small>${ARIES_ROUTE[0].title[locale]}</small><h1>${ARIES_ROUTE[0].name[locale]}</h1>
-            <p>${L('ルカに勝利して、Ariesに挑む。','Defeat Luca to challenge Aries.','루카에게 승리하고 Aries에게 도전하세요.')}</p>
-            ${ariesCleared?L('Aries撃破済み','Aries defeated','Aries 격파 완료'):''}`:
-            `<h1>${lastName}</h1>
-            <div class="sp-favorite"><img src="${artUrl.sm(favoriteId)}" alt=""><div><small>${L('好きなカード','Favorite card','좋아하는 카드')}</small><strong>${esc(favoriteName)}</strong></div></div>
-            <div class="sp-reward"><small>${L('初回クリア報酬','First clear reward','첫 클리어 보상')}</small>
-              <span aria-label="${BOT_REWARDS[npc.difficulty]} ${t('home.shards')}">${homeIcon('shard')}${BOT_REWARDS[npc.difficulty].toLocaleString(locale)}</span>
-              ${cleared.has(npc.difficulty)?`<small>${L('受取済み','Claimed','수령 완료')}</small>`:''}</div>`}
-        </div>
-        <div class="sp-actions"><button class="single-battle lounge-play-button" type="button" aria-label="BATTLE"></button>
-          <button class="sp-deck" type="button" aria-haspopup="dialog">
-            <span class="sp-fan">${active.cards.slice(0,3).map(id=>`<img src="${artUrl.sm(id)}" alt="">`).join('')}</span>
-            <span><small>${t('deck.inuse')}</small><strong>${esc(deckName(active,store.sel))}</strong></span><b>›</b>
-          </button></div>
-        ${story?'':`<nav class="sp-turn" aria-label="${L('対戦相手','Opponent','대전 상대')}">
-          <button data-prev ${page===0?'disabled':''} aria-label="${L('前の相手','Previous opponent','이전 상대')}">${chevron}</button>
-          <div class="sp-next"><button data-next ${nextOpen?'':'disabled aria-describedby="sp-unlock"'} aria-label="${nextLabel}">${chevron}${nextOpen?'':lock}</button>
-          ${nextOpen?'':`<small id="sp-unlock">${unlock}</small>`}</div></nav>`}
-      </div>`;
-    const standing=root.querySelector<HTMLElement>('.sp-standing');
-    if(standing)stopIdle=mountSingleIdle(standing,SINGLE_DIFFICULTIES[page]);
-    const button=root.querySelector<HTMLButtonElement>('.single-battle')!;
-    duel=mountHomeDuelButton(button);
-    duel.setMode('bot');
-    button.querySelector('strong')!.textContent='BATTLE';
-    button.onclick=()=>{if(story && open)app.storyGame(0);else if(!story && page<=lastOpen())app.botGame(npc.difficulty);};
-    root.querySelector<HTMLButtonElement>('[data-story]')!.onclick=()=>{if(open && !story){story=true;paint();}};
-    root.querySelector<HTMLButtonElement>('[data-battle-tab]')!.onclick=()=>{if(story){story=false;paint();}};
-    const prev=root.querySelector<HTMLButtonElement>('[data-prev]');
-    const nextButton=root.querySelector<HTMLButtonElement>('[data-next]');
-    if(prev)prev.onclick=()=>{if(page>0){page--;paint();}};
-    if(nextButton)nextButton.onclick=()=>{if(!nextOpen)return;if(next)page++;else story=true;paint();};
-    root.querySelector<HTMLButtonElement>('.sp-deck')!.onclick=openDeck;
+import { mountSeekerBook } from '../ui/seekerBook';
+import { openStoryScene } from '../ui/storyScene';
+import { mountSingleBattle } from './singleBattle';
+import '../styles/singleStory.css';
+export interface SingleLocation { page?:number; tab?:'story'|'battle'|'training'; chapter?:number; book?:boolean; }
+export function mountSingle(app:App,initial:SingleLocation={}):Screen {
+ if(initial.tab==='battle')return mountSingleBattle(app,initial);
+ const root=document.createElement('section');root.className='screen single-story-page';app.root.append(root);
+ const account=app.user?.id??'guest',guest=!app.user||account==='local-guest-user';
+ const guestKey='lore:single:read:v1:guest';
+ let state=emptySingleProgress(),dead=false,selected=initial.chapter??1,loaded=false,closeScene:(()=>void)|undefined,book:ReturnType<typeof mountSeekerBook>|undefined;
+ const tab=initial.tab??'story';let bookOpen=!!initial.book;
+ const read=(scene:StoryScene)=>state.read.includes(scene);
+ const header=()=>`<nav class="ss-tabs" aria-label="${L('シングル','Single','싱글')}">${(['story','battle','training'] as const).map((id,i)=>`<button data-tab="${id}" aria-pressed="${tab===id}">${[L('ストーリー','Story','스토리'),L('対戦','Battle','대전'),L('修練','Training','수련')][i]}</button>`).join('')}</nav>`;
+ const bindNav=()=>root.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach(b=>b.onclick=()=>app.single({tab:b.dataset.tab as SingleLocation['tab']}));
+ function showScene(scene:StoryScene){
+  if(closeScene)return;
+  closeScene=openStoryScene(scene,account,async()=>{
+   if(guest){const next=[...new Set([...state.read,scene])];localStorage.setItem(guestKey,JSON.stringify(next));state={...state,read:next};}
+   else {const next=await api.readSingleScene(scene);if(dead||app.user?.id!==account)return;state=next;}
+  },()=>{closeScene=undefined;if(!dead){render();root.querySelector<HTMLButtonElement>('[data-scene]')?.focus();}});
+ }
+ function renderTraining(){
+  book?.destroy();book=undefined;
+  root.innerHTML=header()+`<main class="ss-training"><header><span class="ss-eyebrow">BIBLION / PRACTICE</span><h1>${L('修練','Training','수련')}</h1><p>${L('必要なときに読み、何度でも試す。','Read when you need to. Practice as often as you like.','필요할 때 읽고, 몇 번이고 연습하세요.')}</p></header>
+   <section class="ss-book-card"><div><small>01 / COMPANION</small><h2>${L('シーカー修練書','Seeker’s Companion','시커 수련서')}</h2><p>${L('基本からカード・種族・効果のルールまで。','From the basics to cards, tribes and effects.','기본부터 카드·종족·효과의 규칙까지.')}</p></div><button class="lore-button lore-button-primary" data-book>${bookOpen?L('本を閉じる','Close book','책 닫기'):L('修練書を開く','Open book','수련서 열기')}</button></section><div class="ss-book-host" ${bookOpen?'':'hidden'}></div>
+   <section class="ss-practices"><div><h2>${L('基礎チュートリアル','Basic tutorial','기초 튜토리얼')}</h2><p>${L('召喚・攻撃・購入を実際の盤面で練習。','Practice summoning, attacking and buying on the board.','실제 보드에서 소환·공격·구매를 연습해요.')}</p><button class="lore-button" data-tutorial>${L('実習する','Practice','실습하기')} →</button></div><div><h2>${L('デッキ作りの実習','Deck-building practice','덱 만들기 실습')}</h2><p>${L('ガチャ・スターター購入・デッキ編集を体験。','Try drawing cards, buying starters and editing a deck.','뽑기·스타터 구매·덱 편집을 체험해요.')}</p><button class="lore-button" data-deck-tutorial>${L('案内を受ける','Get guidance','안내받기')} →</button></div></section></main>`;
+  bindNav();if(bookOpen)book=mountSeekerBook(root.querySelector('.ss-book-host')!,app);
+  root.querySelector<HTMLButtonElement>('[data-book]')!.onclick=()=>{bookOpen=!bookOpen;renderTraining();};
+  root.querySelector<HTMLButtonElement>('[data-tutorial]')!.onclick=()=>app.tutorialPart(0);
+  root.querySelector<HTMLButtonElement>('[data-deck-tutorial]')!.onclick=()=>app.onboarding();
+ }
+ function render(){
+  if(dead)return;if(tab==='training'){renderTraining();return;}
+  const chapter=SINGLE_CHAPTERS[selected-1],lang=getLang(),before=`${selected}:before` as StoryScene,after=`${selected}:after` as StoryScene;
+  const completed=SINGLE_CHAPTERS.filter(c=>read(`${c.id}:after` as StoryScene)).length;
+  const objectives=[
+   {done:state.tutorial,text:L('基礎チュートリアルを修了','Complete the basic tutorial','기초 튜토리얼 수료')},
+   {done:state.normalMatches>=NORMAL_EXAM_MATCHES,text:L(`ノーマル対戦 ${Math.min(2,state.normalMatches)} / 2（勝敗不問）`,`Normal duels ${Math.min(2,state.normalMatches)} / 2 (any result)`,`노멀 대전 ${Math.min(2,state.normalMatches)} / 2 (승패 무관)`)},
+   ...SINGLE_DIFFICULTIES.map(d=>({done:state.botClears.includes(d),text:L(`${botNpc(d).name.ja}に勝利`,`Defeat ${botNpc(d).name.en}`,`${botNpc(d).name.ko}에게 승리`)})),
+  ];
+  const relevant=selected===5?[{done:masterQualified(state),text:L('マスターシーカーへの挑戦資格','Master Seeker qualification','마스터 시커 도전 자격')}]:selected===1?[objectives[0]]:selected===2?[objectives[2]]:selected===3?[objectives[1]]:objectives;
+  const scene=read(before)&&chapterObjective(state,selected)&&!read(after)?after:before;
+  root.innerHTML=header()+`<main class="ss-layout"><aside class="ss-index"><span class="ss-eyebrow">THE SEEKER'S JOURNEY</span><h1>${L('父の記録を求めて','In search of Father','아버지의 기록을 찾아')}</h1><p class="ss-volume">${L('導入読了','INTRO READ','도입 읽음')} · ${completed} / 5</p><nav aria-label="${L('チャプター','Chapters','장')}">${SINGLE_CHAPTERS.map(c=>`<button data-chapter="${c.id}" ${chapterOpen(state,c.id)?'':'disabled'} ${selected===c.id?'aria-current="page"':''}><span>${String(c.id).padStart(2,'0')}</span><b>${c.title[lang]}</b><small>${read(`${c.id}:after` as StoryScene)?'✓':chapterOpen(state,c.id)?'›':L('未解放','Locked','잠김')}</small></button>`).join('')}</nav><p class="ss-index-note">${L('会話はSKIP可能。実習と対戦の記録は別に残ります。','Conversations can be skipped. Practice and duel records are tracked separately.','대화는 SKIP 가능. 실습과 대전 기록은 별도로 남아요.')}</p></aside>
+  <section class="ss-chapter" aria-labelledby="ss-title"><div class="ss-chapter-art" data-actor="${chapter.actor}" aria-hidden="true">${chapter.actor==='zeno'?'':`<img src="/art/single-standing/refined-v2/${chapter.actor}.webp" alt="">`}</div><div class="ss-chapter-copy"><span class="ss-eyebrow">CHAPTER ${String(selected).padStart(2,'0')}</span><h2 id="ss-title">${chapter.title[lang]}</h2><p class="ss-synopsis">${chapter.summary[lang]}</p><small>${chapter.place[lang]}</small><div class="ss-objectives">${relevant.map(o=>`<p data-complete="${o.done}"><span>${o.done?'✓':'◇'}</span>${o.text}</p>`).join('')}</div><div class="ss-actions"><button class="lore-button lore-button-primary" data-scene="${scene}">${!read(before)?L('物語を読む','Read story','이야기 읽기'):scene===after?L('実習後の物語へ','Continue the story','실습 후 이야기로'):L('導入を読み返す','Reread introduction','도입 다시 읽기')} →</button>${read(after)?`<button class="lore-button lore-button-quiet" data-scene="${after}">${L('結末を読み返す','Reread closing scene','마무리 다시 읽기')}</button>`:''}</div><div class="ss-task-actions"></div>${guest?`<p class="ss-guest">${L('ゲストの読了・実習はこのブラウザに保存。ノーマル対戦と挑戦資格にはログインが必要です。','Guest reading and practice stay in this browser. Sign in for normal duels and Master qualification.','게스트의 읽기·실습은 이 브라우저에 저장돼요. 노멀 대전과 도전 자격에는 로그인이 필요해요.')}</p>`:''}</div></section></main>`;
+  bindNav();
+  root.querySelectorAll<HTMLButtonElement>('[data-chapter]').forEach(b=>b.onclick=()=>{selected=Number(b.dataset.chapter);render();});
+  root.querySelectorAll<HTMLButtonElement>('[data-scene]').forEach(b=>b.onclick=()=>showScene(b.dataset.scene as StoryScene));
+  const actions=root.querySelector<HTMLElement>('.ss-task-actions')!;
+  const action=(label:string,fn:()=>void,id:string)=>{const b=document.createElement('button');b.className='lore-button';b.textContent=label;b.dataset.action=id;b.onclick=fn;actions.append(b);};
+  if(read(before)){
+   if(selected===1)action(L('基礎実習へ','Start basic practice','기초 실습으로'),()=>app.tutorialPart(0),'tutorial');
+   if(selected===2){action(L('ルミと対戦','Challenge Lumi','루미와 대전'),()=>app.single({tab:'battle',page:0}),'lumi');action(L('デッキ作りの案内','Deck-building guidance','덱 만들기 안내'),()=>app.onboarding(),'deck-guidance');}
+   if(selected===3)action(guest?L('ログインしてノーマルへ','Sign in for normal duels','로그인하고 노멀로'):L('ノーマル対戦へ','Play a normal duel','노멀 대전으로'),()=>{if(guest)app.login();else{app.singleNormalReturn=true;app.onlineLobby();}},'normal');
+   if(selected===4)action(L('認定実技へ','Qualification duels','인증 실기로'),()=>app.single({tab:'battle'}),'qualification');
+   if(selected===5){
+    action(L('使用デッキを確認','Review your deck','사용 덱 확인'),()=>app.deck({singleReturn:()=>app.single({chapter:5})}),'master-deck');
+    const masters=document.createElement('div');masters.className='ss-masters';
+    masters.innerHTML=`<h3>${L('挑戦するマスターを選ぶ','Choose a Master','도전할 마스터 선택')}</h3><p>${L('順番は自由です。公開された相手から選べます。','Choose any available Master, in any order.','공개된 상대를 자유로운 순서로 선택할 수 있어요.')} · ${state.ariesCleared?1:0} / 7</p><div class="ss-master-grid"><button data-aries><img src="/art/npcs/v2/aries.webp" alt=""><span><b>${STORY_NAMES.aries[lang]}</b><small>${state.ariesCleared?L('認証取得済み','Authorized','인증 획득'):L('挑戦する','Challenge','도전하기')}</small></span></button><button disabled><span><b>${L('レグルス','Regulus','레굴루스')}</b><small>${L('後日公開','Coming later','추후 공개')}</small></span></button>${Array.from({length:5},(_,i)=>`<button disabled><span><b>${L('未公開のマスター','Unrevealed Master','미공개 마스터')} ${i+3}</b><small>${L('後日公開','Coming later','추후 공개')}</small></span></button>`).join('')}</div>${state.ariesCleared?`<button class="lore-button" data-personal>${L('アリエス人物編「合格者名簿」','Aries: The register','아리에스 인물편 「합격자 명부」')} ${read('aries:after')?'✓':'NEW'}</button>`:''}`;
+    actions.append(masters);
+    masters.querySelector<HTMLButtonElement>('[data-aries]')!.onclick=()=>read('aries:before')?app.storyGame(2):showScene('aries:before');
+    masters.querySelector<HTMLButtonElement>('[data-personal]')?.addEventListener('click',()=>showScene('aries:after'));
+    if(read('aries:before'))action(L('アリエスとの会話を読み返す','Reread Aries’s introduction','아리에스 도입 다시 읽기'),()=>showScene('aries:before'),'aries-reread');
+   }
   }
-  function openDeck(){
-    if(drawer?.open)return;
-    const dlg=document.createElement('dialog');drawer=dlg;
-    dlg.className='sp-deck-sheet';dlg.setAttribute('aria-labelledby','sp-deck-title');
-    document.body.append(dlg);
-    let store=deckStoreForUser(app.user),slot=store.sel,busy=false;
-    const user=app.user;
-    const render=()=>{
-      const deck=store.list[slot],name=deckName(deck,slot);
-      dlg.innerHTML=`<header><div><small>${L('使用デッキの確認','Deck preview','덱 미리보기')}</small><h2 id="sp-deck-title">${esc(name)}</h2></div>
-        <button data-close class="lore-button lore-button-quiet" aria-label="${t('common.close')}">×</button></header>
-        <label class="sp-choose">${L('デッキ切り替え','Choose deck','덱 전환')}<select ${busy?'disabled':''}>${store.list.map((d,i)=>`<option value="${i}" ${slot===i?'selected':''}>${esc(deckName(d,i))}${store.sel===i?' ✓':''}</option>`).join('')}</select></label>
-        <div class="sp-cards">${['STARTER_MANA',...deck.cards].map(id=>{
-          const def=STARTERS[id]??DB[id];
-          return `<figure><img src="${artUrl.sm(id)}" alt=""><figcaption>${esc(cardName({...def,uid:id}))}</figcaption></figure>`;
-        }).join('')}</div>
-        <footer><span role="status"></span><button data-edit class="lore-button" ${busy?'disabled':''}>${L('デッキ編集','Edit deck','덱 편집')}</button>
-        <button data-use class="lore-button lore-button-primary" ${busy||slot===store.sel?'disabled':''}>${slot===store.sel?t('deck.inuse'):L('このデッキを使う','Use this deck','이 덱 사용')}</button></footer>`;
-      dlg.querySelector<HTMLSelectElement>('select')!.onchange=e=>{slot=Number((e.target as HTMLSelectElement).value);render();};
-      dlg.querySelector<HTMLButtonElement>('[data-close]')!.onclick=()=>dlg.close();
-      dlg.querySelector<HTMLButtonElement>('[data-edit]')!.onclick=()=>{
-        const back=location();dlg.close();app.deck({slot,singleReturn:()=>app.single(back)});
-      };
-      dlg.querySelector<HTMLButtonElement>('[data-use]')!.onclick=async()=>{
-        if(busy||!user)return;
-        busy=true;render();
-        try{
-          const r=await api.saveDecks({...store,sel:slot});
-          if(app.user?.id!==user.id)return;
-          const active=r.decks.list[r.decks.sel];
-          Object.assign(app.user,{decks:r.decks,deck:r.deck,sleeve:active.sleeve,furniture:active.furniture,effect:active.effect,frame:active.frame});
-          store=r.decks;busy=false;
-          if(!dead){paint();if(dlg.open)render();}
-        }catch{busy=false;if(dlg.open){render();dlg.querySelector('[role=status]')!.textContent=t('api.fail');}}
-      };
-    };
-    dlg.addEventListener('close',()=>{dlg.remove();if(drawer===dlg)drawer=undefined;if(!dead)root.querySelector<HTMLButtonElement>('.sp-deck')?.focus();},{once:true});
-    render();dlg.showModal();
-  }
-  paint();
-  if(!guest && app.user)void api.progression().then(state=>{
-    if(dead)return;
-    const was=lastOpen();
-    for(const d of SINGLE_DIFFICULTIES)if(state.bot[d])cleared.add(d);
-    ariesCleared=!!state.ariesCleared;
-    if(page===was && initial.page===undefined)page=lastOpen();
-    paint();
-  }).catch(()=>{});
-  const off=onLangChange(()=>app.single(location()));
-  return {destroy(){dead=true;stopIdle?.();off();duel?.destroy();drawer?.close();drawer?.remove();root.remove();}};
+  if(read(after)&&selected<5)action(L('次の章へ →','Next chapter →','다음 장으로 →'),()=>{selected++;render();},'next-chapter');
+ }
+ async function load(){
+  if(tab==='training'){render();return;}
+  root.innerHTML=header()+`<p class="ss-loading" role="status">${L('記録を照合しています…','Checking your records…','기록 확인 중…')}</p>`;bindNav();
+  try{
+   if(guest){
+    let scenes:unknown;try{scenes=JSON.parse(localStorage.getItem(guestKey)??'[]');}catch{}
+    state={...emptySingleProgress(),tutorial:localStorage.getItem(tutorialPartKey(0,app.user?.id))==='1',botClears:SINGLE_DIFFICULTIES.filter(d=>localStorage.getItem('lore.guest.dojo.'+d)),ariesCleared:!!localStorage.getItem(ARIES_COMPLETED_KEY+'.guest'),read:Array.isArray(scenes)?scenes.filter((s):s is StoryScene=>STORY_SCENES.includes(s)):[]};
+   }else state=await api.singleProgress();
+   if(dead||app.user?.id!==account&&!guest)return;
+   if(!loaded){selected=initial.chapter&&chapterOpen(state,initial.chapter)?initial.chapter:SINGLE_CHAPTERS.find(c=>chapterOpen(state,c.id)&&!read(`${c.id}:after` as StoryScene))?.id??5;loaded=true;}
+   render();
+  }catch{if(dead)return;root.innerHTML=header()+`<div class="ss-loading"><p role="alert">${L('進行記録を読み込めませんでした。','Could not load your progress.','진행 기록을 불러오지 못했어요.')}</p><button class="lore-button" data-retry>${L('再試行','Retry','다시 시도')}</button></div>`;bindNav();root.querySelector<HTMLButtonElement>('[data-retry]')!.onclick=()=>void load();}
+ }
+ void load();const off=onLangChange(()=>app.single({tab,chapter:selected,book:bookOpen}));
+ return{destroy(){dead=true;off();closeScene?.();book?.destroy();root.remove();}};
 }

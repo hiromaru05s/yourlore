@@ -3,16 +3,19 @@ import {api} from '../net/api';
 import type {TutorialAction} from '../shared/tutorialLesson';
 import {loungeText as l} from '../ui/loungeText';
 import {esc} from '../i18n';
+export const onboardingJourneyKey=(id:string)=>'lore:onboarding:journey:'+id;
 export const basicsPendingKey=(id:string)=>'lore:onboarding:basics-pending:'+id;
 /** Reward receipt is persisted before entering the real shop; failed requests are retryable. */
-export function mountOnboarding(app:App,actions?:TutorialAction[]):Screen {
+export function mountOnboarding(app:App,actions?:TutorialAction[],returnToSingle=false):Screen {
  const uid=app.user?.id,wrap=document.createElement('div');wrap.className='screen tut-screen tutorial-parts-screen';app.root.append(wrap);
  let dead=false,busy=false;
+ if(uid&&!returnToSingle)try{localStorage.setItem(onboardingJourneyKey(uid),'1');}catch{}
  if(uid&&actions)try{localStorage.setItem(basicsPendingKey(uid),JSON.stringify(actions));}catch{}
  const load=async()=>{
   if(busy)return;busy=true;
   wrap.innerHTML=`<main class="tutorial-parts-shell lore-surface"><p role="status">${l('続きの案内を準備しているよ…','Preparing your next steps…','다음 안내를 준비하고 있어…')}</p></main>`;
   try{
+   if((!uid||uid==='local-guest-user')&&returnToSingle){queueMicrotask(()=>{if(!dead)app.single({chapter:1});});return;}
    if(!uid||uid==='local-guest-user'){wrap.innerHTML=`<main class="tutorial-parts-shell lore-surface"><p>${l('基本をクリアしたね！ 報酬を受け取り、ガチャとデッキ作りへ進むにはログインしてね。','Basics complete! Sign in to claim your reward and continue to the shop and deck builder.','기본 완료! 보상을 받고 뽑기와 덱 만들기를 계속하려면 로그인해 줘.')}</p><button class="lore-button" data-home>${l('ホームへ','Home','홈으로')}</button></main>`;wrap.querySelector<HTMLButtonElement>('[data-home]')!.onclick=()=>app.home();return;}
    let transcript=actions;
    if(!transcript)try{transcript=JSON.parse(localStorage.getItem(basicsPendingKey(uid))??'null')??undefined;}catch{}
@@ -20,6 +23,7 @@ export function mountOnboarding(app:App,actions?:TutorialAction[]):Screen {
    if(dead||app.user?.id!==uid)return;
    if(transcript)try{localStorage.removeItem(basicsPendingKey(uid));}catch{}
    app.user.credits=status.credits;document.dispatchEvent(new Event('lore:user'));
+   if(returnToSingle&&status.stage!=='basics'){app.single({chapter:1});return;}
    if(status.stage==='basics'){app.tutorialPart(0);return;}
    if(status.stage==='gacha'||status.stage==='starter'){app.shop({tutorial:status.stage});return;}
    if(status.stage==='deck'){
