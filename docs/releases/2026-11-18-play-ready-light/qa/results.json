@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "1440x900: native card play and cleanup",
+    "390x844: native card play and cleanup",
+    "844x390: native card play and cleanup",
+    "Return-to-hand cancellation",
+    "Blocked card and pointercancel",
+    "Spell drag; EN/KO labels; blur cancellation",
+    "Reduced-motion release",
+    "Canvas-unavailable semantic/CSS fallback",
+    "Native touch drag/release",
+    "GameView destruction during drag"
+  ],
+  "errors": []
+}
