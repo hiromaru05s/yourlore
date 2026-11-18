@@ -1,7 +1,7 @@
 export type Kind='draw'|'summon'|'attack'|'spell';
 export type Point={x:number;y:number};
 export type Rect=Point&{w:number;h:number};
-export const DURATIONS:Record<Kind,number>={draw:2.35,summon:2.5,attack:1.9,spell:2.5};
+export const DURATIONS:Record<Kind,number>={draw:2.35,summon:3.2,attack:1.9,spell:2.5};
 export const clamp=(x:number)=>Math.max(0,Math.min(1,x));
 export const ease=(a:number,b:number,t:number)=>{const q=clamp((t-a)/(b-a));return q*q*(3-2*q);};
 export const out=(x:number)=>1-Math.pow(1-clamp(x),3);

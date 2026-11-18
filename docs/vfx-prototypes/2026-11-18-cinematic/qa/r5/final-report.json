@@ -1,0 +1,33 @@
+{
+  "errors": [],
+  "missing": [],
+  "checks": [
+    {
+      "side": "0",
+      "variant": "hearthstone",
+      "completed": true,
+      "wallSeconds": 3.302
+    },
+    {
+      "side": "0",
+      "variant": "shadowverse",
+      "completed": true,
+      "wallSeconds": 3.241
+    },
+    {
+      "side": "1",
+      "variant": "hearthstone",
+      "completed": true,
+      "wallSeconds": 3.254
+    },
+    {
+      "side": "1",
+      "variant": "shadowverse",
+      "completed": true,
+      "wallSeconds": 3.232
+    },
+    {
+      "disposed": true
+    }
+  ]
+}

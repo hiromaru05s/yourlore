@@ -1,0 +1,22 @@
+type Variant='hearthstone'|'shadowverse';
+type Player={cueVideoById(o:{videoId:string;startSeconds:number;endSeconds?:number}):void;loadVideoById(o:{videoId:string;startSeconds:number;endSeconds?:number}):void;getCurrentTime():number;getPlayerState():number;seekTo(t:number,allow:boolean):void;pauseVideo():void;playVideo():void;mute():void;setPlaybackRate(rate:number):void;destroy():void};
+type Scene={set(o:object):Promise<void>;seek(t:number):void;pause():void;info():{ready:boolean};dispose():void};
+const refs={hearthstone:{id:'8RN9ui-wPXI',start:175.8},shadowverse:{id:'j9drRwDyuBk',start:111.3}};
+const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
+const api=()=>(($<HTMLIFrameElement>('scene').contentWindow as unknown as {vfx?:Scene})?.vfx);
+let pendingSeek:number|undefined;
+let variant:Variant='hearthstone',player:Player|undefined,playerReady=false,playerCued=false,sceneReady=false,serial=0,playing=false,armed=false,frame=0,lastT=-1;
+function source(){const r=refs[variant];$<HTMLAnchorElement>('source').href=`https://www.youtube.com/watch?v=${r.id}&t=${Math.floor(r.start)}s`;return r;}
+function render(t:number){t=Math.max(0,Math.min(3.2,t));if(Math.abs(t-lastT)<.008)return;lastT=t;api()?.seek(t);$<HTMLInputElement>('seek').value=String(Math.round(t*1000));$('time').textContent=t.toFixed(2)+'s';}
+async function configure(){const id=++serial;playing=false;playerCued=false;$<HTMLButtonElement>('play').disabled=true;player?.pauseVideo();const r=source();if(playerReady)player?.cueVideoById({videoId:r.id,startSeconds:r.start});if(sceneReady){await api()!.set({kind:'summon',summonVersion:variant,loop:false});if(id!==serial)return;api()!.pause();lastT=-1;render(0);}const ready=sceneReady&&playerReady&&playerCued;$<HTMLButtonElement>('play').disabled=!ready;$('status').textContent=ready?'原映像の再生時刻にLOREを追従':'映像を準備しています';}
+$<HTMLSelectElement>('variant').onchange=()=>{variant=$<HTMLSelectElement>('variant').value as Variant;void configure();};
+$('play').onclick=()=>{if(!playerReady||!sceneReady)return;const r=source();lastT=-1;render(0);playing=true;armed=false;player!.loadVideoById({videoId:r.id,startSeconds:r.start});player!.setPlaybackRate(Number($<HTMLSelectElement>('speed').value));};
+$('pause').onclick=()=>{playing=false;player?.pauseVideo();};
+$<HTMLSelectElement>('speed').onchange=()=>player?.setPlaybackRate(Number($<HTMLSelectElement>('speed').value));
+$<HTMLInputElement>('seek').onpointerdown=()=>{playing=false;player?.pauseVideo();};
+$<HTMLInputElement>('seek').onkeydown=()=>{playing=false;player?.pauseVideo();};
+$<HTMLInputElement>('seek').oninput=()=>{playing=false;const t=Number($<HTMLInputElement>('seek').value)/1000;player?.pauseVideo();pendingSeek=source().start+t;player?.seekTo(pendingSeek,true);render(t);};
+function tick(){if(playerReady&&player){const absolute=player.getCurrentTime()??0;if(pendingSeek!==undefined&&Math.abs(absolute-pendingSeek)<.18){pendingSeek=undefined;player.pauseVideo();render(absolute-source().start);}$('status').textContent=pendingSeek!==undefined?'原映像の位置を合わせています':`原映像 ${absolute.toFixed(2)}s / 再現 ${Math.max(0,lastT).toFixed(2)}s`;}if(playing&&playerReady&&player){const t=player.getCurrentTime()-source().start;if(!armed&&t>=-.3&&t<8.0)armed=true;if(armed&&t>=0)render(t);if(armed&&t>=3.19){playing=false;player.pauseVideo();render(3.2);}}frame=requestAnimationFrame(tick);}
+window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==$<HTMLIFrameElement>('scene').contentWindow||e.data?.type!=='cinematic-vfx')return;if(!sceneReady&&api()?.info().ready){sceneReady=true;void configure();}});
+Object.assign(window,{onYouTubeIframeAPIReady:()=>{const YT=(window as unknown as {YT:{Player:new(id:string,options:object)=>Player}}).YT;player=new YT.Player('player',{videoId:source().id,playerVars:{playsinline:1,origin:location.origin,rel:0},events:{onStateChange:(event:{data:number})=>{if(event.data===5){playerCued=true;$<HTMLButtonElement>('play').disabled=!sceneReady;}if(event.data===1&&!playing)player?.pauseVideo();},onReady:()=>{playerReady=true;player!.mute();void configure();},onError:()=>{playing=false;$('status').textContent='埋め込みを再生できません。「元映像を開く」で確認できます。';}}});}});
+const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.onerror=()=>{$('status').textContent='元映像を開くリンクから確認できます。';};document.head.append(script);source();tick();window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);player?.destroy();api()?.dispose();},{once:true});

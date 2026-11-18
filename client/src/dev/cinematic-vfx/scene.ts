@@ -23,7 +23,6 @@ import {projectedPlacement} from '../../ui/boardProjection';
 import {exposure,haze,contactDust,planeShadow} from './realistic';
 import {clearMonsterStates} from '../../ui/monster/runtime';
 import {SpellPresentation} from './spell';
-import {shadowverseArrival,hearthstoneArrival} from './arrival';
 import {MaterialStage,type Pose} from './material';
 import {DURATIONS,clamp,ease,out,lerp,point,rnd,phase,type Kind,type Rect} from './direction';
 import {glow,shadow,ribbon,splinters} from './paint';
@@ -86,7 +85,7 @@ async function prepare(){
 function configure(){restore();material.clearActors();layout();
  const face=kind==='draw'?(side?surfaces.back:surfaces.draw):kind==='summon'?surfaces.hand:kind==='attack'?surfaces.source:surfaces.spell;
  sourceActor=material.add(kind==='draw'?surfaces.back:face,kind==='draw'?face:kind==='summon'?surfaces.source:face);
- targetActor=material.add(surfaces.target);
+ targetActor=material.add(kind==='summon'?surfaces.hand:surfaces.target);if(kind==='summon'){material.layer(sourceActor,2);material.layer(targetActor,1);}
  if(!focused()){
   if(kind==='draw')hide(side?undefined:nodes.draw);
   if(kind==='summon'){hide(nodes.source);if(!side)hide(nodes.hand);}
@@ -101,7 +100,7 @@ function cue(key:string,at:number,duration:number,base:number,volume:number){if(
  const osc=audio.createOscillator();osc.type='sine';osc.frequency.setValueAtTime(base,now);osc.frequency.exponentialRampToValueAtTime(Math.max(25,base*.22),now+duration);osc.connect(gain);osc.start(now);osc.stop(now+duration);
  const buffer=audio.createBuffer(1,audio.sampleRate*duration,audio.sampleRate);const data=buffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(rnd(i+77)*2-1)*.55;const noise=audio.createBufferSource();noise.buffer=buffer;const filter=audio.createBiquadFilter();filter.type='bandpass';filter.frequency.setValueAtTime(base*5,now);filter.frequency.exponentialRampToValueAtTime(base,now+duration);noise.connect(filter);filter.connect(gain);noise.start(now);noise.stop(now+duration);
 }
-function render(){if(!ready)return;spellPrint.hide();layout();rc.clearRect(0,0,innerWidth,innerHeight);fc.clearRect(0,0,innerWidth,innerHeight);material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});
+function render(){if(!ready)return;spellPrint.hide();material.hideArrival();layout();rc.clearRect(0,0,innerWidth,innerHeight);fc.clearRect(0,0,innerWidth,innerHeight);material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});
  if(focused()){
   const ground={x:innerWidth/2,y:innerHeight*.76};shadow(rc,ground,innerWidth*.38,innerHeight*.07,.26);
   if(kind==='draw'){const r=rects.deck;for(let i=5;i>=0;i--){rc.save();rc.translate(r.x+i*.8,r.y+i*1.5);rc.rotate(.10);rc.drawImage(image,-r.w/2,-r.h/2,r.w,r.h);rc.restore();}}
@@ -110,8 +109,8 @@ function render(){if(!ready)return;spellPrint.hide();layout();rc.clearRect(0,0,i
  }
  if(!focused()){if(kind==='draw'&&!side)hide(nodes.draw);if(kind==='summon'){hide(nodes.source);if(!side)hide(nodes.hand);}if(kind==='attack'){hide(nodes.source);hide(nodes.target);}}
  if(kind==='draw')draw();if(kind==='summon')summon();if(kind==='attack')attack();if(kind==='spell')spell();
- if(!focused()){const complete=time>({draw:2.08,summon:2.20,attack:1.62,spell:99}[kind]);if(complete){material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});if(kind==='draw'&&!side)show(nodes.draw);if(kind==='summon'||kind==='attack')show(nodes.source);if(kind==='attack'){show(nodes.target);material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});}}}
- material.render();post({time,duration:DURATIONS[kind],phase:kind==='summon'?(summonVersion==='hearthstone'?['移動','青い発光','実体化・接地','定着'][[.32,.87,1.14].filter(t=>time>=t).length]:['カード提示','光への変化','収束・出現','定着'][[.68,1.10,2.12].filter(t=>time>=t).length]):phase(kind,time),playing,kind});
+ if(!focused()){const complete=time>({draw:2.08,summon:3.05,attack:1.62,spell:99}[kind]);if(complete){material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});if(kind==='draw'&&!side)show(nodes.draw);if(kind==='summon'||kind==='attack')show(nodes.source);if(kind==='attack'){show(nodes.target);material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});}}}
+ material.render();post({time,duration:DURATIONS[kind],phase:kind==='summon'?(summonVersion==='hearthstone'?['移動','青い発光','実体化・接地','定着'][[.20,1.06,2.60].filter(t=>time>=t).length]:['カード提示','光への変化・移動','収束・出現','定着'][[.92,1.80,3.0].filter(t=>time>=t).length]):phase(kind,time),playing,kind});
 }
 function draw(){
  const deck=rects.deck,hand=rects.draw,u=focused()?Math.min(innerWidth*(innerWidth<700?.25:.19),innerHeight*.30,170):Math.max(rects.source.w*1.2,95);
@@ -131,24 +130,31 @@ function draw(){
 function summon(){
  const dest=rects.source,hand=rects.hand,u=dest.w;
  if(summonVersion==='hearthstone'){
-  const move=ease(.04,.32,time),convert=ease(.82,1.03,time),drop=ease(.89,1.04,time);
-  const size=lerp(hand.w/dest.w,1.30,move)*(1-.30/1.30*convert);
-  const ground:Rect={...point(hand,dest,move),w:dest.w*size,h:lerp(hand.h,dest.h*1.30,move)*(1-.30/1.30*convert)};
-  let altitude=u*.38*move*(1-drop);
-  if(time>=1.04){const q=time-1.04;altitude=u*.055*Math.max(0,Math.sin(q*24))*Math.exp(-q*16);ground.x=dest.x;ground.y=dest.y;ground.w=dest.w;ground.h=dest.h;}
-  const p=flatCard(nodes.source,ground,altitude),base=flatCard(nodes.source,ground);
-  planeShadow(rc,footprint(base),altitude,u);
-  const blue=ease(.28,.48,time)*(1-ease(.92,1.14,time));
-  material.pose(sourceActor,{...p,mix:convert,edgeLight:blue*1.8,flash:Math.sin(clamp((time-.87)/.22)*Math.PI)*.62,color:'#8bdcff'});
-  hearthstoneArrival(fc,dest,time);contactDust(rc,dest,(time-1.04)/.65);
-  cue('hs-card',.12,.16,500,.07);cue('hs-materialize',.89,.23,850,.09);cue('hs-contact',1.04,.22,110,.15);
+  const move=ease(.0,.20,time),convert=ease(1.06,1.19,time),drop=ease(1.17,1.38,time);
+  const ground=mixRect(hand,{...dest,w:u*1.55,h:u*1.55*hand.h/hand.w},move);
+  ground.w=lerp(ground.w,dest.w,convert);ground.h=lerp(ground.h,dest.h,convert);
+  const height=u*(.64+convert*.95)*move*(1-drop);
+  const p=flatCard(nodes.source,ground,height),base=flatCard(nodes.source,ground);
+  if(time>1.06&&time<1.38){const memory=flatCard(nodes.source,{...dest,w:u*1.55,h:u*1.55*hand.h/hand.w},u*.64);material.pose(targetActor,{...memory,flash:.94,color:'#dce5ff',alpha:(1-ease(1.10,1.38,time))*.48});}
+  planeShadow(rc,footprint(base),height,u);
+  const blue=ease(.10,.24,time)*(1-ease(1.10,1.24,time));
+  material.pose(sourceActor,{...p,mix:convert,edgeLight:blue*.80,flash:Math.sin(clamp((time-1.05)/.18)*Math.PI)*.76,color:'#258aff'});
+  const corners=footprint(p),xs=corners.map(v=>v.x),ys=corners.map(v=>v.y);const held={x:(Math.max(...xs)+Math.min(...xs))/2,y:(Math.max(...ys)+Math.min(...ys))/2,w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)};
+  material.arrival(dest,time,'hearthstone',dest,held);contactDust(rc,dest,(time-1.38)/.92);
+  cue('hs-card',.12,.16,500,.07);cue('hs-materialize',1.10,.23,850,.09);cue('hs-contact',1.38,.22,110,.15);
  }else{
-  const reveal=ease(.05,.25,time),burn=ease(.68,.82,time),form=ease(1.27,1.74,time);
-  const hero:Rect={x:lerp(hand.x,dest.x,.75),y:dest.y-u*.42,w:u*1.65,h:u*1.65*hand.h/hand.w};
-  if(time<.84){const p=mixRect(hand,hero,reveal);material.pose(sourceActor,pose(p,{ry:Math.sin(reveal*Math.PI)*.55,flash:burn,alpha:1-ease(.78,.84,time),color:'#faffd7'}));shadow(rc,{x:p.x,y:p.y+p.h*.52},p.w*.52,p.h*.07,.22);}
-  else{const scale=1+.06*(1-form),p=flatCard(nodes.source,{...dest,w:dest.w*scale,h:dest.h*scale},u*.04*(1-form));planeShadow(rc,footprint(flatCard(nodes.source,dest)),0,u);material.pose(sourceActor,{...p,mix:1,alpha:form,flash:(1-form)*.40,color:'#d6ffe9'});}
-  shadowverseArrival(fc,dest,time);
-  cue('sv-reveal',.14,.16,650,.07);cue('sv-release',.82,.35,1000,.10);cue('sv-form',1.40,.4,520,.08);
+  const hero:Rect={x:dest.x,y:dest.y-u*.58,w:u*1.80,h:u*1.80*hand.h/hand.w};
+  const lift=ease(.02,.44,time),flash=ease(.92,1.04,time),collapse=ease(1.04,1.18,time);
+  if(time<1.18){const p=mixRect(hand,hero,lift);p.w*=1-collapse*.65;p.h*=1-collapse*.65;
+   material.pose(sourceActor,pose(p,{ry:Math.sin(clamp((time-.15)/.30)*Math.PI)*1.50,flash:Math.max(flash,(1-ease(.20,.28,time))*ease(.12,.20,time)),alpha:1-ease(1.11,1.18,time),color:'#ffffb8'}));
+   shadow(rc,{x:p.x,y:p.y+p.h*.52},p.w*.48,p.h*.07,.22);
+  }else{const form=ease(1.94,2.78,time),p=flatCard(nodes.source,dest);planeShadow(rc,footprint(p),0,u);
+   material.pose(sourceActor,{...p,mix:1,alpha:ease(1.81,2.02,time),glow:0,formation:1,color:'#d6ffe9',flash:0});
+   // An opaque silhouette first, then the face emerges through the opening vortex.
+   material.shade(sourceActor,.12+.88*form);
+  }
+  material.arrival(dest,time,'shadowverse',hero);
+  cue('sv-reveal',.24,.16,650,.07);cue('sv-release',1.12,.35,1000,.10);cue('sv-form',2.28,.4,520,.08);
  }
 }
 function attack(){
@@ -178,11 +184,11 @@ function spell(){
  spellPrint.pose(p,time,1-ease(2.08,2.20,time),Math.sin(fly*Math.PI)*.42,fly*.36);
  cue('spell-present',.12,.22,580,.06);cue('spell-frame',.70,.40,880,.08);cue('spell-release',1.48,.30,1040,.07);cue('spell-file',2.14,.16,320,.05);
 }
-function tick(now:number){if(disposed)return;const dt=Math.min((now-last)/1000,.05);last=now;if(playing&&ready&&!document.hidden){if(time>=DURATIONS[kind]){cycleGap+=dt;if(loop&&cycleGap>.8){post({cycle:true});time=0;cycleGap=0;playedCues.clear();}else if(!loop)playing=false;}else time=Math.min(DURATIONS[kind],time+dt*speed);render();}raf=requestAnimationFrame(tick);}
+function tick(now:number){if(disposed)return;const dt=Math.max(0,(now-last)/1000);last=now;if(playing&&ready&&!document.hidden){if(time>=DURATIONS[kind]){cycleGap+=dt;if(loop&&cycleGap>.8){post({cycle:true});time=0;cycleGap=0;playedCues.clear();}else if(!loop)playing=false;}else time=Math.min(DURATIONS[kind],time+dt*speed);render();}raf=requestAnimationFrame(tick);}
 const api={async set(options:{kind?:Kind;mode?:string;side?:number;loop?:boolean;speed?:number;sound?:boolean;spell?:string;summonVersion?:'hearthstone'|'shadowverse'}){if(options.loop!==undefined)loop=options.loop;if(options.speed)speed=options.speed;if(options.sound!==undefined){soundOn=options.sound;if(soundOn){audio??=new AudioContext();await audio.resume();}}
  let recapture=false,reconfigure=false;if(options.summonVersion&&options.summonVersion!==summonVersion){summonVersion=options.summonVersion;reconfigure=true;}if(options.spell&&g.players[0].hand[1].id!==options.spell&&['S3','S4','S8'].includes(options.spell)){restore();for(let i=0;i<2;i++)g.players[i].hand[1]={...DB[options.spell],uid:`hand-${i}-1`};view.render(g);view.setHandOpen(true);recapture=true;}if(options.kind&&options.kind!==kind){kind=options.kind;reconfigure=true;}if(options.mode&&options.mode!==mode){mode=options.mode;reconfigure=true;}if(options.side!==undefined&&options.side!==side){side=options.side;recapture=true;}
  if(recapture){await prepare();return;}if(reconfigure&&ready){configure();time=0;cycleGap=0;playedCues.clear();playing=true;render();}
- },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'db23af652',revision:4,summonVersion,summonContact:summonVersion==='hearthstone'?1.04:null}),dispose(){disposed=true;++prepareId;cancelAnimationFrame(raf);restore();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
+ },play(){if(!ready)return;if(time>=DURATIONS[kind])time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(DURATIONS[kind],t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'e5a8c53fd',revision:5,summonVersion,summonContact:summonVersion==='hearthstone'?1.38:null}),dispose(){disposed=true;++prepareId;cancelAnimationFrame(raf);restore();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
 Object.assign(window,{vfx:api});
 let resizeTimer=0;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=window.setTimeout(()=>{resize();if(ready){configure();render();}},150);});
 window.addEventListener('pagehide',()=>api.dispose(),{once:true});document.addEventListener('visibilitychange',()=>{last=performance.now();});

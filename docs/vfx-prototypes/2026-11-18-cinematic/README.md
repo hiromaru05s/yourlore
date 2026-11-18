@@ -1,4 +1,4 @@
-> 最新：[第4稿 — 召喚2種の模倣比較・現行の枠を使う魔法](REVISION-4.md)。以下は初稿の制作記録です。
+> 最新：[第5稿 — 原映像の時計で通常召喚を比較](REVISION-5.md)。以下は初稿の制作記録です。
 
 # LORE — cinematic battle VFX study
 

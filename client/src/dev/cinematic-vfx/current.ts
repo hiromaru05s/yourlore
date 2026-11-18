@@ -29,6 +29,6 @@ async function run(options:{kind:Kind;side:number;spell:string}){
  })().catch(error=>{post({error:String(error)});console.error(error);}).finally(()=>{if(serial===generation)post({playing:false,ended:true,kind,elapsed:(performance.now()-started)/1000});});
  await active;
 }
-Object.assign(window,{currentVfx:{run,cancel,info:()=>({ready,kind,side,spell,source:'db23af652',implementation:'client/src/ui/anim.ts'})}});
+Object.assign(window,{currentVfx:{run,cancel,info:()=>({ready,kind,side,spell,source:'e5a8c53fd',implementation:'client/src/ui/anim.ts'})}});
 void waitForDuel(root).then(()=>{ready=true;clearMonsterStates(root);post({ready:true});});
 window.addEventListener('pagehide',()=>{generation++;setFxSkip(true);stopLayout();view.destroy();},{once:true});
