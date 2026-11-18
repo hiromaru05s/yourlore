@@ -1,0 +1,41 @@
+{
+  "checks": [
+    {
+      "side": "Me",
+      "probe": false,
+      "maxRift": 0,
+      "energy": 334.45181208848953,
+      "bloomMax": 68.5,
+      "bloomOutput": 0.71630859375,
+      "cameraMask": 1
+    },
+    {
+      "side": "Me",
+      "probe": true,
+      "maxRift": 5.960464477539063e-8,
+      "energy": 1680.275089919567,
+      "bloomMax": 40.1875,
+      "bloomOutput": 1.880859375,
+      "cameraMask": 1
+    },
+    {
+      "side": "Opp",
+      "probe": false,
+      "maxRift": 0,
+      "energy": 0,
+      "bloomMax": 12.0859375,
+      "bloomOutput": 0,
+      "cameraMask": 1
+    },
+    {
+      "side": "Opp",
+      "probe": true,
+      "maxRift": 0,
+      "energy": 398.1861373782158,
+      "bloomMax": 40,
+      "bloomOutput": 0.5439453125,
+      "cameraMask": 1
+    }
+  ],
+  "errors": []
+}

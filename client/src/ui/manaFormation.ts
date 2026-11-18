@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {FullScreenQuad} from 'three/examples/jsm/postprocessing/Pass.js';
 import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import {manaSlotLayout,type FormationInput,type FormationHandle,type FormationPreview} from './manaFormationTypes';
 export const FORMATION_MS=2200,FORMATION_IMPACT=1280;
@@ -155,12 +156,30 @@ export function createManaFormation(input:FormationInput,id:FormationId):Formati
   light.intensity=energy*worldScale*worldScale*.00065;light.distance=worldScale*.11;
  },dispose(){if(dead)return;dead=true;activeGroups.delete(group);group.removeFromParent();geos.forEach(g=>g.dispose());mats.forEach(m=>m.mat.dispose());ribbons.forEach(r=>{r.geo.dispose();r.mat.dispose();});volumes.forEach(v=>{v.geo.dispose();v.mat.dispose();});pg.dispose();pm.dispose();eg.dispose();em.dispose();glowGeo.dispose();glowMat.dispose();light.dispose();}};
 }
-let bloom:UnrealBloomPass|undefined,bloomWidth=0,bloomHeight=0;
-export function applyFormationBloom(renderer:T.WebGLRenderer,target:T.WebGLRenderTarget){
- if(![...activeGroups].some(g=>g.userData.age>0&&g.userData.age<1720))return;
- if(!bloom)bloom=new UnrealBloomPass(new T.Vector2(target.width,target.height),.38,.25,2.8);
- if(target.width!==bloomWidth||target.height!==bloomHeight){bloomWidth=target.width;bloomHeight=target.height;bloom.setSize(bloomWidth,bloomHeight);}
- bloom.render(renderer,target,target,0,false);
+// Bloom only the authored formation. Sampling the HDR board also bloomed the
+// opponent's silver rift rails whenever a chest created mana.
+const FORMATION_BLOOM_LAYER=29;
+let bloom:UnrealBloomPass|undefined,bloomSource:T.WebGLRenderTarget|undefined,bloomQuad:FullScreenQuad|undefined;
+export function applyFormationBloom(renderer:T.WebGLRenderer,target:T.WebGLRenderTarget,scene:T.Scene,camera:T.Camera){
+ const groups=[...activeGroups].filter(g=>g.userData.age>0&&g.userData.age<1720);
+ if(!groups.length)return;
+ if(!bloom){
+  bloom=new UnrealBloomPass(new T.Vector2(target.width,target.height),.38,.25,2.8);
+  bloomSource=new T.WebGLRenderTarget(target.width,target.height,{type:T.HalfFloatType});
+  bloomQuad=new FullScreenQuad(bloom.blendMaterial);
+ }
+ if(target.width!==bloomSource!.width||target.height!==bloomSource!.height){bloomSource!.setSize(target.width,target.height);bloom.setSize(target.width,target.height);}
+ const layers=new Map<T.Object3D,number>();
+ groups.forEach(g=>g.traverse(o=>{layers.set(o,o.layers.mask);o.layers.enable(FORMATION_BLOOM_LAYER);}));
+ const mask=camera.layers.mask,background=scene.background,oldTarget=renderer.getRenderTarget(),clear=renderer.getClearColor(new T.Color()),alpha=renderer.getClearAlpha(),shadows=renderer.shadowMap.autoUpdate;
+ try{
+  camera.layers.set(FORMATION_BLOOM_LAYER);scene.background=null;renderer.shadowMap.autoUpdate=false;
+  renderer.setRenderTarget(bloomSource!);renderer.setClearColor(0,0);renderer.clear();renderer.render(scene,camera);
+  bloom.render(renderer,bloomSource!,bloomSource!,0,false);
+  renderer.setRenderTarget(target);bloomQuad!.render(renderer);
+ }finally{
+  layers.forEach((mask,o)=>o.layers.mask=mask);camera.layers.mask=mask;scene.background=background;renderer.shadowMap.autoUpdate=shadows;renderer.setClearColor(clear,alpha);renderer.setRenderTarget(oldTarget);
+ }
 }
-export function disposeFormationBloom(){bloom?.dispose();bloom=undefined;}
+export function disposeFormationBloom(){bloom?.dispose();bloomSource?.dispose();bloomQuad?.dispose();bloom=undefined;bloomSource=undefined;bloomQuad=undefined;}
 export function formationPreview(id:FormationId):FormationPreview{return {id,duration:FORMATION_MS,impact:FORMATION_IMPACT,create:input=>createManaFormation(input,id),postprocess:applyFormationBloom};}

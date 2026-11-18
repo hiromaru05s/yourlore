@@ -183,7 +183,7 @@ function createDuelScene(root:HTMLElement,onContextLost:()=>void):()=>void {
       // the last user is disposed first, Three deletes shared GPU programs and
       // recompiles them on every deck/shelf count update.
       releaseRetired();
-      if(root.querySelector('.pt-mana[data-gain-start]'))getManaFormation()?.postprocess(renderer,cachedBoard);
+      if(root.querySelector('.pt-mana[data-gain-start]'))getManaFormation()?.postprocess(renderer,cachedBoard,scene,camera);
       fullPasses++;
     }else if(riftMotion){
       renderer.setRenderTarget(cachedBoard);camera.layers.set(2);renderer.render(scene,camera);camera.layers.set(0);portalPasses++;

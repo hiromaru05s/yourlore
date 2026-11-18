@@ -33,6 +33,8 @@ export class BotThinker {
     if (this.dead) return null;
     // Terminate superseded computation rather than queueing another expensive search.
     if (this.pending) this.cancel();
+    // Public board-removal targets need no worker rollout or its 15s deadline.
+    if (state.pending?.kind === 'oppBoard') return legalBotAction(state, safeGreedy(observationSample(state, state.pending.owner ?? state.cur, 0)));
     this.start();
     if (!this.worker) return legalBotAction(state, safeGreedy(observationSample(state, state.pending?.owner ?? state.cur, 0)));
     // Only the most recent request can apply an action.
