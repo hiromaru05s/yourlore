@@ -31,6 +31,7 @@ import type {Action,FieldMon} from '../shared/types';
 import {setLang} from '../i18n';
 import {startBoardLayout} from '../ui/layout';
 import {createAttackAim} from '../ui/attackAim';
+import {highlightAttackTarget,prepareAttackTarget} from '../ui/attackTarget';
 
 setLang('ja');
 class PreviewController extends BaseController {
@@ -48,11 +49,11 @@ class PreviewController extends BaseController {
 const controller=new PreviewController(document.getElementById('app')!,0,{onHome(){},onRematch(){}});
 const stopLayout=startBoardLayout();
 const panel=document.createElement('aside');panel.className='attack-preview-controls lore-surface';
-panel.innerHTML='<strong>攻撃対象のハイライト · 2案</strong><p>手前のモンスターから相手へドラッグして確認できます。</p><div class="attack-preview-looks"><button class="btn" id="preview-silver" aria-pressed="true">① 銀白</button><button class="btn" id="preview-gold" aria-pressed="false">② シャンパン</button></div><output role="status"></output><div><button class="btn" id="preview-demo" aria-pressed="true">選択表示</button><button class="btn" id="preview-reset">盤面を戻す</button></div>';
+panel.innerHTML='<strong>攻撃対象 · 赤い輪郭と浮上</strong><p>手前のモンスターから相手へドラッグして確認できます。</p><output role="status">選ばれたカードが少し浮いて拡大。赤い光はカードの外周だけ。</output><div><button class="btn" id="preview-demo" aria-pressed="true">選択表示</button><button class="btn" id="preview-replay">浮上を再生</button><button class="btn" id="preview-reset">盤面を戻す</button></div>';
 document.body.append(panel);
-let demo:ReturnType<typeof createAttackAim>|null=null,locked:HTMLElement|null=null;
-const status=panel.querySelector('output')!;
-function stopDemo(){
+let demo:ReturnType<typeof createAttackAim>|null=null,locked:HTMLElement|null=null,releaseDemo:((immediate?:boolean)=>void)|null=null;
+function stopDemo(immediate=true){
+  releaseDemo?.(immediate);releaseDemo=null;
   demo?.remove();demo=null;locked?.classList.remove('is-atk-target');locked=null;
   document.querySelector('#meRow .is-aiming')?.classList.remove('is-aiming');
   document.getElementById('preview-demo')!.setAttribute('aria-pressed','false');
@@ -61,6 +62,7 @@ function startDemo(){
   stopDemo();
   locked=document.querySelector<HTMLElement>('#oppRow [data-uid="target-center"]');
   locked?.classList.add('is-atk-target');
+  if(locked)releaseDemo=highlightAttackTarget(locked);
   document.querySelector('#meRow [data-uid="attacker"]')?.classList.add('is-aiming');
   demo=createAttackAim(()=>{
     const a=document.querySelector('#meRow [data-uid="attacker"]')?.getBoundingClientRect(),b=locked?.getBoundingClientRect();
@@ -68,17 +70,16 @@ function startDemo(){
   });
   document.getElementById('preview-demo')!.setAttribute('aria-pressed','true');
 }
-function selectLook(look:'silver'|'gold'){
-  document.body.dataset.attackLook=look;
-  for(const name of ['silver','gold'])document.getElementById('preview-'+name)!.setAttribute('aria-pressed',String(name===look));
-  status.textContent=look==='silver'?'銀白のフレームを、一筋の澄んだ光が流れる。':'淡い金のフレームに、上下から柔らかな光が満ちる。';
-  const url=new URL(location.href);url.searchParams.set('look',look);history.replaceState(null,'',url);
-}
-for(const look of ['silver','gold'] as const)document.getElementById('preview-'+look)!.onclick=()=>selectLook(look);
-selectLook(new URLSearchParams(location.search).get('look')==='gold'?'gold':'silver');
-document.getElementById('preview-demo')!.onclick=()=>demo?stopDemo():startDemo();
-document.getElementById('preview-reset')!.onclick=()=>{if(document.querySelector('.fx-playing'))return;stopDemo();controller.reset();startDemo();};
-document.getElementById('app')!.addEventListener('pointerdown',stopDemo,true);
-controller.reset();startDemo();
-Object.assign(window,{attackTargetPreview:{controller,startDemo,stopDemo,selectLook}});
+document.getElementById('preview-demo')!.onclick=()=>demo?stopDemo(false):startDemo();
+document.getElementById('preview-replay')!.onclick=()=>{stopDemo();requestAnimationFrame(startDemo);};
+document.getElementById('preview-reset')!.onclick=()=>{if(document.querySelector('.fx-playing'))return;stopDemo();controller.reset();
+for(const card of document.querySelectorAll<HTMLElement>('#oppRow .zone-mon .card'))void prepareAttackTarget(card);
+startDemo();};
+document.getElementById('app')!.addEventListener('pointerdown',()=>stopDemo(),true);
+controller.reset();
+for(const card of document.querySelectorAll<HTMLElement>('#oppRow .zone-mon .card'))void prepareAttackTarget(card);
+startDemo();
+Object.assign(window,{attackTargetPreview:{controller,startDemo,stopDemo}});
 window.addEventListener('pagehide',()=>{stopDemo();stopLayout();controller.destroy();},{once:true});
+
+const previewUrl=new URL(location.href);previewUrl.searchParams.delete('look');previewUrl.searchParams.set('v','3');history.replaceState(null,'',previewUrl);

@@ -441,49 +441,6 @@
 }
 @keyframes atkTargetPulse { to { box-shadow: 0 0 26px #ff5b45aa; } }
 .portrait.is-atk-target { border-radius: 12px; }
-/* Attack lock belongs to the printed frame, never the card's rectangular
-   interaction box. Reuse its exact raster (including equipped frame layers)
-   and keep illustration / combat numbers on their original upper layers. */
-.card.is-atk-target {
-  outline:none; box-shadow:none; z-index:8;
-}
-.game .zone-mon .card.is-atk-target:not(.drag-ghost) .card-frame {
-  filter:drop-shadow(0 2px 1px #152c4699) drop-shadow(0 0 2px #d6f5ff) drop-shadow(0 0 7px #6ccaffaa);
-}
-.card.is-atk-target .card-frame::before,
-.card.is-atk-target .card-frame::after {
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background:inherit; border-radius:0; z-index:2;
-}
-.card.is-atk-target .card-frame::before {
-  /* Preserve the engraved dark grooves under a clean, cool silver reflection. */
-  filter:grayscale(1) brightness(1.14) contrast(1.08);
-  animation:attackFrameLock 180ms ease-out both;
-}
-.card.is-atk-target .card-frame::after {
-  z-index:3; filter:grayscale(1) brightness(1.85);
-  mask-image:linear-gradient(115deg,transparent 42%,#0005 47%,#000 49.5%,#000 50.5%,#0005 53%,transparent 58%);
-  mask-size:300% 100%; mask-repeat:no-repeat;
-  animation:attackFrameGlint 2.6s ease-in-out infinite;
-}
-.card.is-atk-target .card-art::before {
-  content:""; position:absolute; inset:0; z-index:3; pointer-events:none;
-  background:radial-gradient(ellipse at 50% 48%,transparent 52%,#a6e1ff0d 74%,#a6e1ff2e 100%);
-  animation:attackFrameLock 180ms ease-out both;
-}
-@keyframes attackFrameLock { from { opacity:0; } to { opacity:1; } }
-@keyframes attackFrameGlint {
-  0%,12% {mask-position:150% 0;opacity:0;}
-  24% {opacity:.85;}
-  68% {opacity:.85;}
-  88%,100% {mask-position:-50% 0;opacity:0;}
-}
-@media(prefers-reduced-motion:reduce) {
-  .card.is-atk-target .card-frame::before,
-  .card.is-atk-target .card-art::before {animation:none;opacity:1;}
-  .card.is-atk-target .card-frame::after {animation:none;opacity:0;}
-  .is-atk-target:not(.card) {animation:none;}
-}
 .drop-marker {
   position: absolute; top: 2px; bottom: 2px; width: 3px; border-radius: 2px;
   background: #63a6ff; box-shadow: 0 0 9px rgba(255, 209, 102, .85);

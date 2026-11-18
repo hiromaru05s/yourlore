@@ -1,19 +1,34 @@
-# 攻撃対象ハイライト — 第2稿・2案
+# 攻撃対象ハイライト — 第3稿・赤い外周と浮上
 
-2026-11-18。ユーザーの「色が微妙。もっとシンプルかつ、綺麗、ただ豪華な感じ。2パターン」に合わせ、赤橙の第1稿を差し替えた。2案ともローカル比較用。本番未反映・ユーザー未採用。
+2026-11-18。ユーザーの追加指定: 赤に戻す、少し大袈裟に、カードフレームの周りだけを変える、選択されたカードのサイズ・浮上にも工夫する。
 
-## プレビュー
+ローカルプレビュー: http://127.0.0.1:5286/attack-target-preview.html?v=3
 
-- ① 銀白: http://127.0.0.1:5286/attack-target-preview.html?look=silver
-- ② シャンパン: http://127.0.0.1:5286/attack-target-preview.html?look=gold
+「選択表示」で通常と比較。「浮上を再生」で同じカードが浮く動きを再確認。手前のカードからドラッグすると実際の対象選択になる。「盤面を戻す」で再試行できる。
 
-同じ相手カードの選択状態で切り替え可能。手前のカードからドラッグすると実操作に切り替わる。「選択表示」で再度固定表示、「盤面を戻す」でリセット。
+## 見た目
 
-①は銀白のフレームに2.6秒周期で細い反射が流れる。②は低彩度の淡い金のフレームに、上下の紋章から3.2秒周期で柔らかく光が満ちる。元の画像の彫り・曲線・透明な輪郭をそのまま使う。光の色を絵柄の中央や数値には重ねず、独立した飾りを追加しない。低減モーションではどちらも静止表示。
+- 元のフレームと数値シールの画像から実際の外形を抽出。外周のすぐ外側だけに赤い面と明るい芯を置き、光が輪郭に沿って動く。
+- マスクによってカードの内側には光を描かない。フレームの素材・名前・数値・絵柄の色を維持。矩形の囲み、面全体の色変更は使用しない。
+- 選ばれたカードは180msで6.5%拡大し、カード高の5.5%だけ上がる。下に落ちる影で高さを補う。
+- 対象変更・キャンセル時は150msで元の姿勢へ戻る。攻撃確定時は選択用の姿勢を即時解除し、既存の戦闘演出へ渡す。
+- 低減モーションでは拡大・浮上・外周の移動光を止め、静止した赤いハイライトを維持。
 
-## 参照・起動元
+## 採用済み実装との照合
 
-再作業前に `gh/main` をfetchし、現在も基準コミット `e5a8c53fd` であることを確認。未コミットの第1稿を保持した専用ブランチ `codex/attack-target-frame-1118` で改修。
+着手時に `gh/main` をfetchし、最新が `9af927a69`（Apply approved physical hand dragging and held-card outline）へ更新されていることを確認。第2稿を `d11e4c7e2` に保存し、mainを `4af5a4ae0` でマージ。最新の手札操作を含む実盤面を土台にした。
+
+参照:
+- `client/src/ui/boardView.ts`、`client/src/ui/cardView.ts`
+- `client/src/styles/card.css`、`client/src/styles/game.css`
+- `client/src/ui/monster/runtime.ts`、`client/src/ui/monster/actor.ts`
+- 最新採用の輪郭抽出: `client/src/ui/handConditionOutline.ts`（手札の採用済み外周演出と同じラスタ形状）
+- 読み込まれたフレーム: `/art/biblion/modular/base-mon-print.webp`
+
+変更:
+- `client/src/ui/attackTarget.ts` / `client/src/styles/attackTarget.css`: 外周マスクと加算方式の浮上。元のActorが持つ姿勢に重ねる。
+- `client/src/ui/boardView.ts`: 実際の対象切り替えに接続。浮上前の領域を保持し、元のカード下端にポインターを置いたとき対象が点滅しないようにする。
+- `client/src/dev/attackTargetPreview.ts` / `.css`: 既存の比較ページを第3稿へ更新。
 
 起動元: `/Users/hiromaru05s/.codex/worktrees/attack-target-frame-1118/LORE_TCG/client`
 
@@ -21,21 +36,12 @@
 node ../node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5286 --strictPort
 ```
 
-採用済み実装:
-- `client/src/ui/boardView.ts` / `client/src/ui/cardView.ts`
-- `client/src/styles/card.css` / `client/src/styles/game.css`
-- `client/src/ui/monster/runtime.ts`
-- 実盤面のフレーム: `/art/biblion/modular/base-mon-print.webp`
-
-今回の実装:
-- `client/src/styles/game-overlays.css`: カード自身の印刷フレームを使うハイライト。ローカルの既定表示は①。
-- `client/src/dev/attackTargetPreview.css`: ②の比較用スタイル。
-- `client/src/dev/attackTargetPreview.ts`: 実盤面・実ドラッグ・2案の切り替え。
-
 ## 確認
 
-機能: client型チェック、差分の書式チェック成功。実盤面で①②の切り替え、マウス／タッチでの対象変更とキャンセル、低減モーションを確認。タッチの検証は入力送信直後ではなく、DOMに選択対象が反映された時点で判定する。
+機能と見た目は分けて記録する。
 
-見た目: 1440×960、390×844で元のフレームとの一致、絵柄・数値、2案の色を確認。連続録画とフレーム列で光の動きも確認。①は白銀の狭い反射、②は淡い金のゆっくりした明暗。最終的な好み・採用はユーザー判断。
+機能: client型チェック、`git diff --check`、既存の `tests/attack-drag-browser.mjs`。追加の `tests/attack-target-browser.mjs` はマウス／タッチの対象変更、浮上前の下端での選択保持、拡大・浮上の寸法、素早い対象往復、キャンセルでの復帰、既存の常時効果Actorとの共存、装備フレーム、低減モーションを検証する。結果・境界は `qa-v3/checks.json`。
 
-検証画像・録画: `qa-v2/`。第1稿の記録と検証は `round1.md` / `qa/` に区別して保存。認証済みオンライン対戦は未検証。
+見た目: 白い採用済み盤面、PC1440×960・スマホ390×844で、赤い外周が実フレームに合うこと、元のカード面が維持されること、拡大時に隣のカードを大きく隠さないことを確認。連続録画と途中フレームで浮上・対象変更・戻り方を確認。ユーザーの見た目の承認は未取得。
+
+過去稿は `round1.md` / `qa/` と `round2.md` / `qa-v2/`。本番未反映。認証済みオンライン対戦は未検証。

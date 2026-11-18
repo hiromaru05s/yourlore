@@ -1,4 +1,5 @@
 import '../styles/handPhysics.css';
+import {highlightAttackTarget,prepareAttackTarget} from './attackTarget';
 import '../styles/duelNameplate.css';
 import {prepareHeldOutline,showHeldOutline} from './heldCardOutline';
 import {holdPhysicalCard} from './handPhysics';
@@ -790,6 +791,11 @@ export class GameView {
       let done = false;
       let mode: "reorder" | "attack" = "reorder";
       let hot: HTMLElement | null = null; // currently highlighted attack target
+      let hotBounds:DOMRect|null=null;
+      let releaseHot:((immediate?:boolean)=>void)|null=null;
+      let finishHotImmediately=true;
+      // Warm the shared contour before the pointer reaches the opposing row.
+      for(const target of this.root.querySelectorAll<HTMLElement>('#oppRow .zone-mon .card'))void prepareAttackTarget(target);
       let pointer={x:sx,y:sy};
 
       const others = (): DOMRect[] =>
@@ -797,17 +803,23 @@ export class GameView {
           .filter((el) => el.classList.contains("card") && el !== card)
           .map((el) => el.getBoundingClientRect());
 
-      const setHot = (el: HTMLElement | null): void => {
+      const setHot = (el: HTMLElement | null,immediate=false): void => {
         if (hot === el) return;
         hot?.classList.remove("is-atk-target");
+        releaseHot?.(immediate);releaseHot=null;
         hot = el;
+        hotBounds=el?.getBoundingClientRect()??null;
         hot?.classList.add("is-atk-target");
+        if(hot?.classList.contains('card'))releaseHot=highlightAttackTarget(hot);
       };
 
       /** What is under the pointer? (the ghost is pointer-events:none so it never blocks) */
       const targetAt = (x: number, y: number): { mon: HTMLElement | null; portrait: HTMLElement | null } => {
         const el = document.elementFromPoint(x, y) as HTMLElement | null;
-        const mon = el?.closest<HTMLElement>("#oppRow .zone-mon .card") ?? null;
+        let mon = el?.closest<HTMLElement>("#oppRow .zone-mon .card") ?? null;
+        // Lifting must not make a stationary pointer near the original lower
+        // edge lose its target. Keep the original hit area during this lock.
+        if(!mon&&hot?.classList.contains('card')&&hotBounds&&x>=hotBounds.left&&x<=hotBounds.right&&y>=hotBounds.top&&y<=hotBounds.bottom)mon=hot;
         return {
           mon: mon?.dataset.uid && o.targetUids.has(mon.dataset.uid) ? mon : null,
           portrait: (el?.closest("#portraitOpp .pt-ring,#portraitOpp .pt-vitals") as HTMLElement | null) ?? null,
@@ -854,12 +866,12 @@ export class GameView {
         done = true;
         if (started) swallowNextClick(card);
         ghost?.remove(); marker?.remove(); aim?.remove();
-        setHot(null);
+        setHot(null,finishHotImmediately);
         card.classList.remove("is-dragging", "is-aiming");
         try { if(card.hasPointerCapture(e.pointerId))card.releasePointerCapture(e.pointerId); } catch { /* detached */ }
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerup", onUp);
-        window.removeEventListener("pointercancel", cleanup);
+        window.removeEventListener("pointercancel", onCancel);
         window.removeEventListener("blur", cleanup);
         window.removeEventListener("resize", cleanup);
         document.removeEventListener("visibilitychange", cleanup);
@@ -867,7 +879,8 @@ export class GameView {
         const idx=this.cleanups.indexOf(cleanup);if(idx>=0)this.cleanups.splice(idx,1);
       };
 
-      const onKey=(ev:KeyboardEvent):void=>{if(ev.key==="Escape")cleanup();};
+      const onCancel=():void=>{finishHotImmediately=false;cleanup();};
+      const onKey=(ev:KeyboardEvent):void=>{if(ev.key==="Escape")onCancel();};
       const onMove = (ev: PointerEvent): void => {
         if (done || ev.pointerId !== e.pointerId) return;
         if (!started) {
@@ -905,7 +918,7 @@ export class GameView {
 
       window.addEventListener("pointermove", onMove);
       window.addEventListener("pointerup", onUp);
-      window.addEventListener("pointercancel", cleanup);
+      window.addEventListener("pointercancel", onCancel);
       window.addEventListener("blur", cleanup);
       window.addEventListener("resize", cleanup);
       document.addEventListener("visibilitychange", cleanup);
