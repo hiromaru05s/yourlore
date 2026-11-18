@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "sourceCommit": "e5a8c53fd",
+  "generator": "scripts/bake-character-fractures.mjs",
+  "items": [
+    {
+      "key": "SEEKER_HOODED-me",
+      "pieces": 33,
+      "bytes": 778042,
+      "sha256": "0dae07364f5f5065eb0039b2f102a13c20ac07b6c6de4ff1b6c9312b2126d2fb",
+      "surfaceHash": "f18eee64d546b5a39c79714ed4798e726464c6cb547e68942efc989a28d18678",
+      "bakeMs": 140
+    },
+    {
+      "key": "SEEKER_HOODED-opp",
+      "pieces": 58,
+      "bytes": 1426443,
+      "sha256": "f973ce53f9c7112a9ef3320eb4d6f1fb2ad7c31dcd196b1cfe70695767d27649",
+      "surfaceHash": "a9a8021c0c8c09a11cf39647a15aec48b0ac7d1015e70bad86cce9941da90c8c",
+      "bakeMs": 123.29999995231628
+    },
+    {
+      "key": "NPC_LUMI-me",
+      "pieces": 35,
+      "bytes": 772619,
+      "sha256": "1fed1fd05cd4529434261fc71791db0cb46ee2f209c843656c87b063607402ed",
+      "surfaceHash": "fa7b883d142751dfd2a6670a5635e323cf834cd22ff69341eed82f94e29a77d5",
+      "bakeMs": 108.5
+    },
+    {
+      "key": "NPC_LUMI-opp",
+      "pieces": 56,
+      "bytes": 1400416,
+      "sha256": "2eaedd552deed22278817d604f13cc09d556a12ab995a653b464d2f57eea61da",
+      "surfaceHash": "dace13c31bfb3ef22af035930fa72f2d0fb7eb0374ca59b9fbfba54122cbe994",
+      "bakeMs": 92.69999992847443
+    },
+    {
+      "key": "NPC_NOEL-me",
+      "pieces": 32,
+      "bytes": 763579,
+      "sha256": "bd9e0a580be58f7515c6001ccf4bd68d291e660e7735e03c4750718d6c224789",
+      "surfaceHash": "6185579d7944245e06c0c7f0b814bff61166438ecfd9cbbbb5396b42dbac59f7",
+      "bakeMs": 103.10000002384186
+    },
+    {
+      "key": "NPC_NOEL-opp",
+      "pieces": 57,
+      "bytes": 1397716,
+      "sha256": "fa0e157de3953ea046bc55a7beed30805eea6460a6e39bb628dd205ba98f42b0",
+      "surfaceHash": "bf00cf84e13092584ae350e50433768e7b949354f81928c9802cc1c33f46cfff",
+      "bakeMs": 101.70000004768372
+    },
+    {
+      "key": "NPC_VERA-me",
+      "pieces": 32,
+      "bytes": 761817,
+      "sha256": "3d528ad20894d5fdc166004280706e64e53c45905fec890ce2072c30e35122ee",
+      "surfaceHash": "c8df15937f04d759cbbebfa1015fa44a4e33c33bb6ead0d8225fce62649f6a56",
+      "bakeMs": 84.70000004768372
+    },
+    {
+      "key": "NPC_VERA-opp",
+      "pieces": 55,
+      "bytes": 1381490,
+      "sha256": "f08218267440ed652758634e0d8cbbf106d17054ea3662ec0e8ae7442c802b52",
+      "surfaceHash": "6e03a468783f7ec1301a073c17389269bed443a1141165ae8965a89be7f16f82",
+      "bakeMs": 99.09999990463257
+    },
+    {
+      "key": "NPC_SION-me",
+      "pieces": 32,
+      "bytes": 752287,
+      "sha256": "de4c6330d7786ed99d0a95ae48f7ad0b53e680f8c0b893cbddf6dc775bd76a9c",
+      "surfaceHash": "42d55891aea7a6bd844634fe34fa06cd9659635042405f6fe9f7854f2368512b",
+      "bakeMs": 67.79999995231628
+    },
+    {
+      "key": "NPC_SION-opp",
+      "pieces": 54,
+      "bytes": 1373065,
+      "sha256": "0842662b01aa58344242aa4e75ab3599bf890dc3b80e18449d44a71000cc8811",
+      "surfaceHash": "50db688916c7758a24569f7699ab4b066200529ff4a5780359f8a9d59c74a636",
+      "bakeMs": 63.89999997615814
+    },
+    {
+      "key": "STORY_SHION-me",
+      "pieces": 31,
+      "bytes": 731531,
+      "sha256": "8ab43af2783d70abe311aaae080ac2f507104b68ce0d5d7816d26bffc921d262",
+      "surfaceHash": "17636fc8e6b763abfad05249591020d5c7b7cb81457ae1d698ba72f6f8040186",
+      "bakeMs": 65.30000007152557
+    },
+    {
+      "key": "STORY_SHION-opp",
+      "pieces": 57,
+      "bytes": 1365608,
+      "sha256": "58025fb3befbb6f25553403ffc77f972360d3841d364ed4f4d9b0b185c418957",
+      "surfaceHash": "2bc4b36e897a5125d1bdeefc31d44fd5627d4b0820a0bf148d5585ab49dda330",
+      "bakeMs": 63.90000009536743
+    },
+    {
+      "key": "STORY_RENA-me",
+      "pieces": 37,
+      "bytes": 790596,
+      "sha256": "00e97be9b77d05d35b302fa2435c2eb9a5e07e8f717a3ce90e7a85ab69a8c710",
+      "surfaceHash": "a5c0cea3b4eebd5bb6931e1bc124b75ba216854e6f7b7fe5fb9b2fe7355ec225",
+      "bakeMs": 72.19999992847443
+    },
+    {
+      "key": "STORY_RENA-opp",
+      "pieces": 59,
+      "bytes": 1422807,
+      "sha256": "41bb2a897d18200bf3ae4604a2a74e30aa197739789c3c158869d37f1db1981c",
+      "surfaceHash": "f3188f8c7c2add3e688c680860b8641e2c7385442a9d8b4d485bb58e18c4e32f",
+      "bakeMs": 58.40000009536743
+    },
+    {
+      "key": "STORY_ARIES-me",
+      "pieces": 36,
+      "bytes": 796290,
+      "sha256": "2f31d779d736ba3ae4822704fa3ecfad4e2123b7a83b3c925aa32981780b8947",
+      "surfaceHash": "1bc9cbb3158a7cb2a0d9e7f0ded28e4986ab8c7b01e52122d218c070aa2f5a0a",
+      "bakeMs": 66.39999997615814
+    },
+    {
+      "key": "STORY_ARIES-opp",
+      "pieces": 58,
+      "bytes": 1426543,
+      "sha256": "a38415a966d1f01785db327c232f1d5e9b3c1b9fd13bca74a434645e99befc18",
+      "surfaceHash": "8a4bc3b4c0b9419160ca9a82915ab9352b2addecef2e5cf2be1e6a76332c72bd",
+      "bakeMs": 57.59999990463257
+    }
+  ]
+}

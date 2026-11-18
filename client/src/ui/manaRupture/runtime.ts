@@ -1,7 +1,8 @@
-import {captureOutcomeSurface,outcomeAnchor} from '../outcomeSurface';
+import {captureCharacterSurface as captureOutcomeSurface,characterAnchor as outcomeAnchor} from '../outcomeSurface';
 import type {ManaRuptureRenderer} from './renderer';
 import {ruptureSound} from './sound';
 import './runtime.css';
+import {BURST,ruptureShake,counterFracturePhase} from './timing';
 
 export interface ManaRupture {
   ready:Promise<void>;
@@ -16,12 +17,13 @@ export function cancelManaRuptures():void {for(const effect of [...active])effec
 
 /** One bounded lifetime owns loading, native capture, GPU, sound and result gating. */
 export function prepareManaRupture(root:HTMLElement):ManaRupture {
+  const board=root.closest<HTMLElement>('#app'),initialTranslate=board?.style.translate??'';
   const abort=new AbortController(),motion=matchMedia('(prefers-reduced-motion: reduce)');
   let renderer:ManaRuptureRenderer|undefined,canvas:HTMLCanvasElement|undefined,host:HTMLElement|undefined;
   let sound:ReturnType<typeof ruptureSound>|undefined,frame=0,timer=0,ended=false,started=false;
   let settle!:()=>void;
   const finished=new Promise<void>(resolve=>{settle=resolve;});
-  const cancel=()=>{finish(false);root.removeAttribute('data-mana-ruined');};
+  const cancel=()=>{finish(false);root.removeAttribute('data-mana-ruined');root.removeAttribute('data-mana-counters');};
   const visibility=()=>{if(document.hidden)cancel();};
   function finish(complete:boolean):void {
     if(ended)return;
@@ -30,11 +32,11 @@ export function prepareManaRupture(root:HTMLElement):ManaRupture {
     document.removeEventListener('visibilitychange',visibility);motion.removeEventListener('change',cancel);
     // A driver/audio teardown error must never keep the result promise pending.
     try{sound?.close();}catch(error){console.warn('[mana rupture audio cleanup]',error);}
-    host?.remove();
+    host?.remove();if(board)board.style.translate=initialTranslate;
     try{renderer?.dispose();}catch(error){console.warn('[mana rupture GPU cleanup]',error);}
     renderer=undefined;
     if(canvas)canvas.width=canvas.height=1;
-    if(!complete)root.removeAttribute('data-mana-ruined');
+    if(!complete){root.removeAttribute('data-mana-ruined');root.removeAttribute('data-mana-counters');}
     else root.dataset.manaFxFinished=String(Math.round(performance.now()));
     active.delete(handle);settle();
   }
@@ -48,9 +50,9 @@ export function prepareManaRupture(root:HTMLElement):ManaRupture {
       if(!surface || !renderer || !canvas || !root.isConnected){cancel();return;}
       renderer.updateSurface(surface);
       host=document.createElement('div');host.className='mana-rupture';host.setAttribute('aria-hidden','true');
-      host.dataset.renderer='perspective-3d';host.dataset.pieces=String(renderer.count);
-      host.append(canvas);document.body.append(host);
-      root.dataset.manaRuined='true';root.dataset.manaFxStarted=String(Math.round(performance.now()));
+      host.dataset.renderer='perspective-3d';host.dataset.pieces=String(renderer.count);host.dataset.fracture=renderer.blueprint.key;
+      host.append(canvas);(board??document.body).append(host);
+      root.dataset.manaRuined='character';root.dataset.manaFxStarted=String(Math.round(performance.now()));
       sound=ruptureSound();
       const origin=performance.now();
       const draw=(now:number)=>{
@@ -58,7 +60,11 @@ export function prepareManaRupture(root:HTMLElement):ManaRupture {
         if(!root.isConnected){cancel();return;}
         const time=Math.min(3550,Math.max(0,now-origin));
         try {
-          renderer!.draw(innerWidth,innerHeight,time,outcomeAnchor(root));sound?.tick(time,false);
+          const shake=ruptureShake(time);if(board)board.style.translate=shake.x||shake.y?`${shake.x}px ${shake.y}px`:initialTranslate;
+          host!.style.zIndex=time<BURST?'5':'130';
+          root.dataset.manaCounters=counterFracturePhase(time);
+          const anchor=outcomeAnchor(root),bounds=canvas!.getBoundingClientRect();anchor.x-=bounds.left;anchor.y-=bounds.top;
+          renderer!.draw(innerWidth,innerHeight,time,anchor);sound?.tick(time,false);
           host!.dataset.time=String(Math.round(time));
         }catch(error){console.warn('[mana rupture playback]',error);cancel();return;}
         if(time>=3550)finish(true);else frame=requestAnimationFrame(draw);
@@ -81,7 +87,9 @@ export function prepareManaRupture(root:HTMLElement):ManaRupture {
       const [surface,module]=await Promise.all([captureOutcomeSurface(root,abort.signal),import('./renderer')]);
       if(ended){if(surface)surface.width=surface.height=1;return;}
       if(!surface){cancel();return;}
-      canvas=document.createElement('canvas');renderer=new module.ManaRuptureRenderer(surface,canvas);
+      const blueprint=await module.loadCharacterFracture(root);
+      if(ended||!blueprint){surface.width=surface.height=1;if(!ended)cancel();return;}
+      canvas=document.createElement('canvas');renderer=new module.ManaRuptureRenderer(surface,canvas,blueprint);
       canvas.addEventListener('webglcontextlost',()=>{if(!ended)cancel();},{once:true});
       renderer.draw(innerWidth,innerHeight,0,outcomeAnchor(root));clearTimeout(timer);
     }catch(error){console.warn('[mana rupture prepare]',error);cancel();}

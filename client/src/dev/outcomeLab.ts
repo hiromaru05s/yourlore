@@ -9,11 +9,12 @@ if(import.meta.env.DEV){
    for(const [i,p] of g.players.entries()){p.openingDrawReady=false;p.hp=32;p.shield=6;p.dew=4;p.mana=8;p.maxMana=12;p.hand=[STARTERS.STARTER_CHEST,STARTERS.STARTER_MANA,DB.ND2].map((c,j)=>({...c,uid:`hand-${i}-${j}`}));p.field=['M4','ELF','GM6_0'].map((id,j)=>({...DB[id],uid:`field-${i}-${j}`,exhausted:false,summonedTurn:0,tempAtk:0,atkMod:0,defMod:0,dmg:0}));}this.state=g;this.view.render(g);
   }
   protected submit(a:Action){this.applyResult(reduce(this.state,a));}
-  finish(loser:Side,hpDeath=false){if(hpDeath){const g=structuredClone(this.state);g.players[loser].hp=0;g.over=true;g.phase='over';g.winner=(1-loser) as Side;this.applyResult({state:g,events:[{type:'win',winner:g.winner}]});}else this.submit({type:'surrender',player:loser});}
+  finish(loser:Side,hpDeath=false){if(hpDeath){const g=structuredClone(this.state);g.players[loser].hp=0;g.over=true;g.phase='over';g.winner=(1-loser) as Side;this.applyResult({state:g,events:[{type:'damage',player:loser,amount:this.state.players[loser].hp},{type:'win',winner:g.winner}]});}else this.submit({type:'surrender',player:loser});}
   earlyResult(){this.showWin();}
   getState(){return this.state;}
+  refresh(){this.view.render(this.state);}
  }
  let controller=new OutcomeLab();const stop=startBoardLayout();await waitForDuel(document.querySelector('#app')!);await new Promise<void>(resolve=>{const check=()=>[...document.querySelectorAll<HTMLCanvasElement>('.seeker-motion')].every(c=>c.dataset.frame)?resolve():requestAnimationFrame(check);check();});
- (window as any).outcomeLab={ready:true,finish:(side:Side,hp=false)=>controller.finish(side,hp),earlyResult:()=>controller.earlyResult(),getState:()=>controller.getState(),destroy:()=>controller.destroy(),skip:()=>setFxSkip(true),mount:(side:'me'|'opp')=>mountDuelOutcome(document.querySelector(side==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring'),side==='opp',null),reset:(you:Side=0)=>{controller.destroy();closeOverlay();setFxSkip(false);controller=new OutcomeLab(you);}};
+ (window as any).outcomeLab={ready:true,setCharacters:(me:string,opp:string)=>{setMyAvatar(me);setOppAvatar(opp);controller.refresh();},setStats:(values:Record<string,number>)=>{for(const p of controller.getState().players)Object.assign(p,values);controller.refresh();},finish:(side:Side,hp=false)=>controller.finish(side,hp),earlyResult:()=>controller.earlyResult(),getState:()=>controller.getState(),destroy:()=>controller.destroy(),skip:()=>setFxSkip(true),mount:(side:'me'|'opp')=>mountDuelOutcome(document.querySelector(side==='me'?'#portraitMe .pt-ring':'#portraitOpp .pt-ring'),side==='opp',null),reset:(you:Side=0)=>{controller.destroy();closeOverlay();setFxSkip(false);controller=new OutcomeLab(you);}};
  window.addEventListener('pagehide',()=>{controller.destroy();stop();},{once:true});
 }
