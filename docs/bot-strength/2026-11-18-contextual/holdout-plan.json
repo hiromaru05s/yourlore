@@ -26,5 +26,24 @@
   },
   "marketBias": false,
   "mirrorStarter": true,
-  "changeAfterViewingResults": false
+  "changeAfterViewingResults": true,
+  "normalExecutionStatus": {
+    "status": "superseded; incomplete initial comparison",
+    "completedBatches": [
+      {
+        "name": "holdout-normal-a",
+        "completed": 10,
+        "wins": 4,
+        "reason": "Initial Normal configuration superseded by deeper reply search. Transfer compute to independent new Normal seeds 9400-9415. Completed partial outcomes remain diagnostic only, not final strength estimates."
+      },
+      {
+        "name": "holdout-normal-b",
+        "completed": 10,
+        "wins": 7,
+        "reason": "Initial Normal configuration superseded by deeper reply search. Transfer compute to independent new Normal seeds 9400-9415. Completed partial outcomes remain diagnostic only, not final strength estimates."
+      }
+    ],
+    "finalNormalPlan": "normal-deep-plan.json"
+  },
+  "changeExplanation": "Normal only was superseded after the initial comparison. Its partial outcomes are diagnostic, and the replacement has separate predeclared fresh seeds in normal-deep-plan.json. Easy and Hard policies are unchanged."
 }
