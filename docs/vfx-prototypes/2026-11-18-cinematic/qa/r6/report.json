@@ -1,0 +1,114 @@
+{
+  "source": "d815a6ac9",
+  "errors": [],
+  "missing": [],
+  "checks": [
+    {
+      "reducedMotion": "no autoplay"
+    },
+    {
+      "side": "0",
+      "center": {
+        "x": 720,
+        "y": 354.5,
+        "w": 281.6568148148148,
+        "h": 439.58
+      },
+      "bounds": {
+        "n": 119308,
+        "x": 719.5,
+        "y": 355,
+        "w": 281,
+        "h": 440
+      }
+    },
+    {
+      "side": "0",
+      "emptyBeat": "material transparent"
+    },
+    {
+      "side": "0",
+      "impact": {
+        "orb": {
+          "x": 627.7379760742188,
+          "y": 499.4293212890625,
+          "radius": 38.81632734375,
+          "travel": 1
+        },
+        "target": {
+          "x": 627.7380004882813,
+          "y": 499.4293187109375
+        },
+        "shake": [
+          2.4,
+          1.01636
+        ]
+      }
+    },
+    {
+      "side": "0",
+      "normalPlaybackSeconds": 3.23
+    },
+    {
+      "side": "1",
+      "center": {
+        "x": 720,
+        "y": 354.5,
+        "w": 281.6568148148148,
+        "h": 439.58
+      },
+      "bounds": {
+        "n": 119308,
+        "x": 719.5,
+        "y": 355,
+        "w": 281,
+        "h": 440
+      }
+    },
+    {
+      "side": "1",
+      "emptyBeat": "material transparent"
+    },
+    {
+      "side": "1",
+      "impact": {
+        "orb": {
+          "x": 633.0166320800781,
+          "y": 219.25165557861328,
+          "radius": 36.561132421875,
+          "travel": 1
+        },
+        "target": {
+          "x": 633.0166564941406,
+          "y": 219.2516530004883
+        },
+        "shake": [
+          2.4,
+          1.01636
+        ]
+      }
+    },
+    {
+      "side": "1",
+      "normalPlaybackSeconds": 3.229
+    },
+    {
+      "currentComparison": "current to Shadowverse"
+    },
+    {
+      "mobile": {
+        "hero": {
+          "x": 195,
+          "y": 267,
+          "w": 200.6,
+          "h": 316.2
+        },
+        "width": 390,
+        "height": 534
+      }
+    },
+    {
+      "cancelAndDispose": "restored and removed GPU canvas"
+    }
+  ]
+}

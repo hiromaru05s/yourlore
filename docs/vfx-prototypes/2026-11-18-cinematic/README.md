@@ -1,4 +1,4 @@
-> 最新：[第5稿 — 原映像の時計で通常召喚を比較](REVISION-5.md)。以下は初稿の制作記録です。
+> 最新：[第6稿 — 中央開示・白い光球・着弾・再着地](REVISION-6.md)。以下は初稿の制作記録です。
 
 # LORE — cinematic battle VFX study
 

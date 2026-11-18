@@ -4,7 +4,7 @@
 export const arrivalVertex=`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
 export const arrivalFragment=`
 precision highp float;
-uniform float clock;uniform float variant;uniform vec2 origin;uniform vec4 heldBounds;varying vec2 vUv;
+uniform float clock;uniform float variant;uniform vec2 origin;uniform vec4 heldBounds;uniform vec2 extent;uniform vec2 anchor;uniform vec3 orb;varying vec2 vUv;
 float sat(float x){return clamp(x,0.,1.);}
 float E(float a,float b,float t){return smoothstep(a,b,t);}
 float H(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
@@ -12,51 +12,39 @@ float N(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(H(i),H
 float F(vec2 p){return N(p)*.55+N(p*2.03+1.7)*.27+N(p*4.11-3.1)*.13+N(p*8.13)*.05;}
 float gauss(float d,float w){return exp(-d*d/max(.00001,w*w));}
 void main(){
- // Plane is 5 card widths across and 7 high, centred on the final print.
- vec2 p=(vUv-.5)*vec2(5.,7.);float t=clock;
+ // Coordinates remain relative to the final print, including the central reveal and flight.
+ vec2 p=(vUv-.5)*extent+anchor;float t=clock;
  vec3 energy=vec3(0.);float density=0.;
  if(variant>.5){
-  // The original luminous mass lifts to the upper right before the landing pulse.
-  float travel=E(1.36,1.72,t);vec2 center=mix(origin,vec2(.84,-2.20),travel);
-  vec2 q=p-center;float angle=atan(q.y,q.x);float r=length(q);
-  float cloud=F(q*5.5+vec2(t*1.8,-t*2.3));
-  float radius=mix(.18,.87,E(1.08,1.31,t))*(1.-.87*E(1.42,1.74,t));
-  float life=E(1.06,1.20,t)*(1.-E(1.68,1.78,t));
-  float edge=r-radius-(cloud-.5)*.18;
-  float core=(1.-E(-.12,.07,edge))*life;
-  float scatter=exp(-r*r/max(.02,radius*radius*2.6))*life;
-  float rays=pow(abs(sin(angle*11.+F(q*3.)*3.)),20.)*gauss(r-radius*.75,.28)*life*.34;
-  energy+=vec3(.58,.87,1.)*(scatter*.38+rays)+vec3(1.)*core*2.1;
-  density+=core+scatter*.30+rays*.5;
-  // One fast expanding rim, not a stationary ring decoration.
-  float ringLife=E(1.79,1.84,t)*(1.-E(1.96,2.04,t));
-  float ringRadius=mix(.24,1.30,E(1.80,1.98,t));
-  float ringNoise=F(p*7.+t*.4)-.5;
-  float rd=length(p*vec2(1.,.88))-ringRadius-ringNoise*.028;
-  float ring=gauss(rd,.045)*ringLife,ringHalo=gauss(rd,.13)*ringLife;
-  energy+=vec3(.8,1.,.92)*ring*1.9+vec3(.34,.69,.64)*ringHalo*.26;
-  density+=ring+ringHalo*.30;
-  // Rotating sheets of vapour: an opening centre exposes the same forming print.
-  float vLife=E(2.20,2.36,t)*(1.-E(2.74,3.00,t));
-  vec2 v=p*vec2(1.,1.04);float vr=length(v),va=atan(v.y,v.x);
-  float age=sat((t-2.20)/.80),hole=mix(.08,.65,E(2.35,2.95,t));
-  float outer=.92-.10*age;
-  float swirl=va+vr*6.2-t*12.5;
-  vec2 advected=vec2(cos(swirl),sin(swirl))*(vr*5.+.2);
-  float smoke=F(advected+vec2(t*.22,-t*.44));
-  float ridges=pow(.5+.5*sin(swirl*4.+smoke*5.),1.2);
-  float broken=.045*sin(va*5.+t*8.)+.025*sin(va*11.-t*4.);
-  float shell=E(hole-.065,hole+.07,vr)*(1.-E(outer-.12+broken,outer+.04+broken,vr));
-  float striation=pow(.5+.5*sin(va*2.3+vr*20.-t*13.+smoke*2.),12.);
-  striation*=E(.28,.74,.5+.5*sin(va*2.0+vr*4.+t*.7));
-  float sheet=shell*(.84+.16*smoke)*(1.-striation*.50);
-  // Fine, irregular striations break up the luminous surface at the inner lip.
-  float inner=gauss(vr-hole-.03,.025)*( .35+.65*ridges);
-  float streak=gauss(vr-outer+.045,.018)*shell*.12;
-  float vapor=(sheet+inner*.48+streak)*vLife;
-  float halo=gauss(vr-(hole+outer)*.5,max(.09,(outer-hole)*.7))*vLife*.16;
-  energy+=vec3(.78,.89,.86)*vapor*(.72+E(.20,.75,smoke)*1.10)+vec3(.38,.62,.61)*halo;
-  density+=vapor+halo;
+  // The card-shaped light and its rectangular frame are separate from the final card.
+  vec2 h=p-origin;
+  float frameScale=mix(1.,1.43,E(1.04,1.20,t));
+  vec2 distance=abs(h)-heldBounds.zw*.5*frameScale;
+  float sd=max(distance.x,distance.y);
+  float frameLife=E(1.00,1.035,t)*(1.-E(1.16,1.23,t));
+  float line=gauss(sd,.013)*frameLife,wide=gauss(sd,.055)*frameLife;
+  energy+=vec3(.92,1.,.69)*(line*1.6+wide*.36);density+=line+wide*.30;
+  // A bright central expansion condenses before travelling the full arc to the board.
+  vec2 q=p-orb.xy;float r=length(q),angle=atan(q.y,q.x);
+  float cloud=F(q*6.5+vec2(t*.8,-t*1.3));
+  float radius=orb.z;
+  float life=E(1.22,1.30,t)*(1.-E(1.94,1.97,t));
+  float edge=r-radius-(cloud-.5)*.09;
+  float core=(1.-E(-.10,.045,edge))*life;
+  float scatter=exp(-r*r/max(.02,radius*radius*3.5))*life;
+  float rays=pow(abs(sin(angle*13.+F(q*3.)*2.)),22.)*gauss(r-radius*.9,.20)*life*.23;
+  energy+=vec3(.60,.87,.91)*(scatter*.48+rays)+vec3(1.)*core*1.8;
+  density+=core+scatter*.44+rays*.5;
+  // Impact and one rapidly contracting circle expose the full-colour monster beneath.
+  float impact=gauss(t-1.955,.031)*exp(-dot(p,p)/.60);
+  energy+=vec3(.88,1.,.86)*impact*2.;density+=impact;
+  float ringLife=E(1.98,2.015,t)*(1.-E(2.20,2.26,t));
+  float collapse=1.-pow(1.-sat((t-2.01)/.23),2.);
+  float ringRadius=mix(1.34,.025,collapse);
+  float rd=length(p*vec2(1.,1.04))-ringRadius;
+  float ring=gauss(rd,.075)*ringLife,halo=gauss(rd,.22)*ringLife;
+  energy+=vec3(.92,1.,.90)*ring*1.9+vec3(.45,.77,.66)*halo*.30;
+  density+=ring+halo*.30;
  }else{
   // Blue surface conversion, followed by white/ochre vapour above the grounded card.
   vec2 boxDistance=abs(p-heldBounds.xy)-heldBounds.zw*.5;

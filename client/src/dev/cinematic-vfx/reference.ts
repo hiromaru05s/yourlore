@@ -5,7 +5,7 @@ const refs={hearthstone:{id:'8RN9ui-wPXI',start:175.8},shadowverse:{id:'j9drRwDy
 const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const api=()=>(($<HTMLIFrameElement>('scene').contentWindow as unknown as {vfx?:Scene})?.vfx);
 let pendingSeek:number|undefined;
-let variant:Variant='hearthstone',player:Player|undefined,playerReady=false,playerCued=false,sceneReady=false,serial=0,playing=false,armed=false,frame=0,lastT=-1;
+let variant:Variant='shadowverse',player:Player|undefined,playerReady=false,playerCued=false,sceneReady=false,serial=0,playing=false,armed=false,frame=0,lastT=-1;
 function source(){const r=refs[variant];$<HTMLAnchorElement>('source').href=`https://www.youtube.com/watch?v=${r.id}&t=${Math.floor(r.start)}s`;return r;}
 function render(t:number){t=Math.max(0,Math.min(3.2,t));if(Math.abs(t-lastT)<.008)return;lastT=t;api()?.seek(t);$<HTMLInputElement>('seek').value=String(Math.round(t*1000));$('time').textContent=t.toFixed(2)+'s';}
 async function configure(){const id=++serial;playing=false;playerCued=false;$<HTMLButtonElement>('play').disabled=true;player?.pauseVideo();const r=source();if(playerReady)player?.cueVideoById({videoId:r.id,startSeconds:r.start});if(sceneReady){await api()!.set({kind:'summon',summonVersion:variant,loop:false});if(id!==serial)return;api()!.pause();lastT=-1;render(0);}const ready=sceneReady&&playerReady&&playerCued;$<HTMLButtonElement>('play').disabled=!ready;$('status').textContent=ready?'原映像の再生時刻にLOREを追従':'映像を準備しています';}

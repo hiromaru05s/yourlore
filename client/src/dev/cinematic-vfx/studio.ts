@@ -6,11 +6,11 @@ const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const trial=$<HTMLIFrameElement>('study-frame'),native=$<HTMLIFrameElement>('current-frame');
 const api=()=>((trial.contentWindow as unknown as {vfx:API}).vfx);
 const adopted=()=>((native.contentWindow as unknown as {currentVfx:Native}).currentVfx);
-const descriptions:Record<Kind,[string,string,string]>={draw:['01 / DRAW','マナ光のドロー','カードのめくれと軌跡に、広がる光と余韻を。'],summon:['02 / SUMMON','召喚の模倣比較','現行・ハースストーン・シャドバの動きを比較。'],attack:['03 / ATTACK','攻撃（前稿）','今回は召喚と魔法を再制作。攻撃は前稿のまま。'],spell:['04 / CAST','四隅の共鳴・再制作','現行の枠の彫りと発光を引き継ぎ、光の走りと収束を見せる。']};
-let activeSummon:'hearthstone'|'shadowverse'='hearthstone';
+const descriptions:Record<Kind,[string,string,string]>={draw:['01 / DRAW','マナ光のドロー','カードのめくれと軌跡に、広がる光と余韻を。'],summon:['02 / SUMMON','召喚の模倣比較','現行LOREとシャドバ版の動きを比較。'],attack:['03 / ATTACK','攻撃（前稿）','攻撃は前稿。今回の更新はシャドバ版の召喚。'],spell:['04 / CAST','四隅の共鳴・再制作','現行の枠の彫りと発光を引き継ぎ、光の走りと収束を見せる。']};
+let activeSummon:'hearthstone'|'shadowverse'='shadowverse';
 let current:Kind='summon',active:'current'|'study'='current',ready=false,playing=false,preparing=false,started=false,runId=0,ended=false,timer=0;
 const options=()=>({kind:current,summonVersion:activeSummon,side:Number($<HTMLSelectElement>('side').value),spell:$<HTMLSelectElement>('spell-card').value});
-function caption(){const d=descriptions[current];$('eyebrow').textContent=d[0];$('effect-title').textContent=active==='current'?'現行の'+({draw:'ドロー',summon:'召喚',attack:'攻撃',spell:'魔法発動'}[current]):d[1];$('description').textContent=active==='current'?'採用中のアニメーションを、そのまま再生。':d[2];$('version-badge').textContent=active==='current'?'A · 現行':'B · 試作';$('viewport').dataset.active=active;if(current==='summon'&&active==='study'){$('effect-title').textContent=activeSummon==='hearthstone'?'ハースストーン VER':'シャドバ VER';$('description').textContent=activeSummon==='hearthstone'?'盤面へ移動 → 青い発光 → カードから実体へ → 接地。':'カード提示 → 光の塊へ変化・移動 → 盤面で収束・出現。';$('version-badge').textContent=activeSummon==='hearthstone'?'B · HEARTHSTONE':'C · SHADOWVERSE';}
+function caption(){const d=descriptions[current];$('eyebrow').textContent=d[0];$('effect-title').textContent=active==='current'?'現行の'+({draw:'ドロー',summon:'召喚',attack:'攻撃',spell:'魔法発動'}[current]):d[1];$('description').textContent=active==='current'?'採用中のアニメーションを、そのまま再生。':d[2];$('version-badge').textContent=active==='current'?'A · 現行':'B · 試作';$('viewport').dataset.active=active;if(current==='summon'&&active==='study'){$('effect-title').textContent=activeSummon==='hearthstone'?'ハースストーン VER':'シャドバ VER';$('description').textContent=activeSummon==='hearthstone'?'盤面へ移動 → 青い発光 → カードから実体へ → 接地。':'中央で開示 → カード光・粒子化 → 光球が円弧で着弾 → ヒビ・光円の収束 → 反動で再着地。';$('version-badge').textContent=activeSummon==='hearthstone'?'B · HEARTHSTONE':'B · SHADOWVERSE';}
  document.querySelectorAll<HTMLButtonElement>('[data-kind]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.kind===current)));
  $('spell-label').hidden=current!=='spell';$('summon-label').hidden=current!=='summon';$<HTMLSelectElement>('summon-version').disabled=$<HTMLSelectElement>('compare').value!=='study';const manualStudy=$<HTMLSelectElement>('compare').value==='study';for(const id of['mode','speed','seek','sound'])($<HTMLInputElement>(id)).disabled=!manualStudy;$('pause').textContent=active==='current'?(playing?'停止':'再生'):(playing?'一時停止':'再開');
 }
@@ -22,7 +22,7 @@ async function start(version:'current'|'study'=($<HTMLSelectElement>('compare').
  else{await api().set({...options(),loop:false,mode:manual?$<HTMLSelectElement>('mode').value:'board',speed:manual?Number($<HTMLSelectElement>('speed').value):1});if(id!==runId)return;preparing=false;ended=false;api().replay();}
 }
 function finish(){if(ended)return;ended=true;playing=false;caption();const compare=$<HTMLSelectElement>('compare').value;
- const next=compare==='alternate'?(active==='current'?'hearthstone':current==='summon'&&activeSummon==='hearthstone'?'shadowverse':null):null;
+ const next=compare==='alternate'?(active==='current'?'shadowverse':null):null;
  if(!next&&!$<HTMLInputElement>('loop').checked)return;const id=runId;timer=window.setTimeout(()=>{if(id!==runId)return;
  if(!next&&$<HTMLInputElement>('playlist').checked){const order:Kind[]=['draw','summon','attack','spell'];current=order[(order.indexOf(current)+1)%4];}
  void start(next?'study':compare==='study'?'study':'current',next??activeSummon);},850);
