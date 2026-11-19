@@ -13,3 +13,5 @@
 
 公開には既存のコミット固定デプロイガードを使用。DB整合、client/server型検査、production suite、design guard、build、mainと本番稼働版の整合を確認する。
 公開後は配信済みJS/CSSと実盤面のPC・タッチを、隔離したAPI/room fixtureで検証する。公開結果は完了後に追記。
+
+公開前の初回suiteは端末負荷下で `bot-npcs.mjs`（15分）と `bot-server-challenge.cjs`（2分）がETIMEDOUT。機能assertionの不一致ではない。両テストの判定とシナリオを維持し、上限のみそれぞれ30分・10分へ変更してガードから再実行する。
