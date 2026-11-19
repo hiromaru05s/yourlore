@@ -24,4 +24,13 @@
 - ブラウザの盤面はローカル状態fixture。実アカウントでのオンライン対戦はこの検証に含まない。
 - 詳細: `verification.json`。通常速度録画は作業フォルダ `output/rift-surface-three/bolder/video/`。
 
-公開結果は反映後に追記する。
+## 本番公開
+
+- 公開コミット: `6459c4fd40d9a27106095940078b05158ba7d6be`（変更コミット `765516d91`）。
+- Worker version: `6af1c7c4-a749-460f-b31c-2088e46c5c1c`、100%。
+- 2026-11-19 21:00 JST/KST、`https://yourlore.xyz` へ guarded release。
+- DB整合性・client/server型検査・標準テスト304/304・本番ビルド合格。
+- 公開後、実際に配信されたJS/CSS/画像で②のシェーダーがコンパイルされることを確認。PC・スマホ双方で時間更新、両側の配置、低減モーションによる時刻0への遷移と静止、通常への復帰、ページエラーなし。API/対戦状態のみブラウザ内fixtureで、実アカウントや対戦記録は変更していない。
+- 配信JSのURLとSHA256、検査結果: `production-verification.json`。
+- 公開メタデータ: `deployment.json`。
+
