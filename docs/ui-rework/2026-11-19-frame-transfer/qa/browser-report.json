@@ -1,0 +1,155 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "width": 1100,
+      "side": 0,
+      "nativePrint": true,
+      "landingDifference": {
+        "x": 0.4000244140625,
+        "y": -0.27667236328125
+      },
+      "crackDuration": 1011.3999999761581,
+      "samples": [
+        {
+          "age": 78.19999992847443,
+          "sum": 82772
+        },
+        {
+          "age": 478.6999999284744,
+          "sum": 39552
+        },
+        {
+          "age": 812.0999999046326,
+          "sum": 6187
+        }
+      ]
+    },
+    {
+      "width": 1100,
+      "side": 1,
+      "nativePrint": true,
+      "landingDifference": {
+        "x": 0.389434814453125,
+        "y": 0.3118743896484375
+      },
+      "crackDuration": 1013.3999999761581,
+      "samples": [
+        {
+          "age": 81.89999997615814,
+          "sum": 76248
+        },
+        {
+          "age": 480.10000002384186,
+          "sum": 36604
+        },
+        {
+          "age": 813.3999999761581,
+          "sum": 5484
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "nativePrint": true,
+      "landingDifference": {
+        "x": -0.2300262451171875,
+        "y": -0.28521728515625
+      },
+      "crackDuration": 1011.1000000238419,
+      "samples": [
+        {
+          "age": 76.60000002384186,
+          "sum": 28004
+        },
+        {
+          "age": 476.60000002384186,
+          "sum": 13474
+        },
+        {
+          "age": 810.6000000238419,
+          "sum": 2048
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "nativePrint": true,
+      "landingDifference": {
+        "x": -0.2326812744140625,
+        "y": 0.292327880859375
+      },
+      "crackDuration": 1005.6000000238419,
+      "samples": [
+        {
+          "age": 104.5,
+          "sum": 25388
+        },
+        {
+          "age": 472.60000002384186,
+          "sum": 13270
+        },
+        {
+          "age": 809.3999999761581,
+          "sum": 2014
+        }
+      ]
+    },
+    {
+      "cancelDuringTransfer": true
+    },
+    {
+      "resizeDuringTransfer": true
+    },
+    {
+      "reducedMotion": true
+    },
+    {
+      "livePlayback": {
+        "frames": 177,
+        "median": 16.69999999999709,
+        "p95": 16.799999999999272,
+        "trace": [
+          {
+            "phase": "中央拡大（現行）",
+            "at": 0
+          },
+          {
+            "phase": "青い枠の残像",
+            "at": 430.3000000715256
+          },
+          {
+            "phase": "光の粒が高速移動",
+            "at": 626.1000000238419
+          },
+          {
+            "phase": "着地直前で枠を再形成",
+            "at": 975.6000000238419
+          },
+          {
+            "phase": "カードが現れる",
+            "at": 1076.3000000715256
+          },
+          {
+            "phase": "現行の落下・接地",
+            "at": 1274.8000000715256
+          },
+          {
+            "phase": "接地・ヒビがゆっくり消える",
+            "at": 1889.6000000238419
+          },
+          {
+            "phase": "ヒビ消失・定着",
+            "at": 2891.8000000715256
+          }
+        ]
+      }
+    },
+    {
+      "originalPreviewUnaffected": true
+    }
+  ],
+  "scope": "Local real-board fixture calling existing ghostSummon/focusCard/slate runtime; no live PvP or deployment"
+}

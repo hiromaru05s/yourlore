@@ -438,7 +438,12 @@ function summonTempo(id:string|undefined){
 }
 /** Carry the lane's own decoded print at reveal resolution until the flight
  * meets the lifted card. The whole descent, impact and rest happen in the lane. */
-async function carrySlatePrint(face:HTMLElement,from:DOMRect,side:ViewSide,onReveal?:(node:HTMLElement)=>void){
+export type SummonTransferPresentation={
+ transfer:(flight:HTMLElement,face:HTMLElement,signal:AbortSignal)=>Promise<boolean>;
+ impact:(face:HTMLElement)=>void;
+ dispose:()=>void;
+};
+async function carrySlatePrint(face:HTMLElement,from:DOMRect,side:ViewSide,onReveal?:(node:HTMLElement)=>void,presentation?:SummonTransferPresentation){
   const previousVisibility=face.style.visibility;
   const flight=cloneCardNode(face);
   flight.removeAttribute('style');
@@ -472,16 +477,19 @@ async function carrySlatePrint(face:HTMLElement,from:DOMRect,side:ViewSide,onRev
         flight.style.setProperty('--summon-frame-unit',2*w/face.offsetWidth+'px');
       }
       const lighting=frame && before ? frame.animate([{filter:before},{filter:getComputedStyle(frame).filter}],{duration,fill:'both'}):null;
-      const transfer=flight.animate([{transform:start.toString()},{transform:end.toString()}],
+      const transfer=presentation&&!reduced?null:flight.animate([{transform:start.toString()},{transform:end.toString()}],
         {duration,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
-      try{await wait(duration);}finally{transfer.cancel();lighting?.cancel();}
+      try{
+        if(presentation&&!reduced){flight.style.transform=start.toString();await boardMotionScope(signal=>presentation.transfer(flight,face,signal));}
+        else await wait(duration);
+      }finally{transfer?.cancel();lighting?.cancel();}
     }
   }finally{
     restorePrint();
     flight.remove();
     face.style.visibility=previousVisibility;
   }
-  if(!fxSkip && face.isConnected)await boardMotionScope(signal=>playMonster(face,'summon',{signal,onImpact:()=>sfx('summon')}));
+  if(!fxSkip && face.isConnected)await boardMotionScope(signal=>playMonster(face,'summon',{signal,onImpact:()=>{sfx('summon');presentation?.impact(face);}}));
 }
 
 /** Both hand plays and engine-generated summon events share this selected reveal. */
@@ -987,7 +995,7 @@ export function startDungeonFloor(cards:CardInst[],side:ViewSide,makeFace:Summon
  return session;
 }
 
-export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void,makeFace:SummonFaceFactory=defaultSummonFace): Promise<HTMLElement | null> {
+export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void,makeFace:SummonFaceFactory=defaultSummonFace,presentation?:SummonTransferPresentation): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   if(!from||!zone)return null;
   const target=reserveMonster(zone,card.uid);
@@ -1003,7 +1011,8 @@ export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: nu
     target.replaceWith(face);
     mountSummonAppearance(face);
     if(face.dataset.summonRest==='plain'&&!face.dataset.monsterAura)face.style.setProperty('--summon-frame-unit','2px');
-    await carrySlatePrint(face,from,side,onReveal);
+    const study=import.meta.env.DEV?presentation:undefined;
+    try{await carrySlatePrint(face,from,side,onReveal,study);}finally{study?.dispose();}
     return face.isConnected?face:null;
   }
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);

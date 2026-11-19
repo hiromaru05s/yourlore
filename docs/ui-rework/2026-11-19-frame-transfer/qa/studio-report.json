@@ -1,0 +1,6 @@
+{
+  "errors": [],
+  "compare": "current then study, then stops when loop is off",
+  "rapidReplayStop": true,
+  "desktopAndMobile": true
+}
