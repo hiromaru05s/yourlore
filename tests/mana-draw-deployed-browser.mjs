@@ -1,0 +1,16 @@
+/** The deployed game controller/animation modules, on the shipped isolated board fixture. */
+import fs from 'node:fs/promises';import assert from 'node:assert/strict';
+import {chromium} from '/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+const origin=process.env.LORE_TEST_ORIGIN||'https://yourlore.xyz',out=process.env.LORE_TEST_OUT||'docs/releases/2026-11-19-mana-draw/qa';await fs.mkdir(out,{recursive:true});
+const b=await chromium.launch({channel:'chrome',headless:true}),results=[],errors=[];
+try{for(const width of[1100,390]){const p=await b.newPage({viewport:{width,height:680}});p.setDefaultTimeout(120000);p.on('pageerror',e=>errors.push(e.message));
+ await p.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await p.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]')&&!document.querySelector('.screen-loader'));await p.evaluate(()=>document.querySelector('.tempo-controls').style.display='none');
+ for(const side of[0,1])for(const count of[2,4]){
+  await p.evaluate(async({side,count})=>{const c=combatTempo.controller;c.fastForward();await c.queue;const f=combatTempo.fixture('counter',1-side).prev;f.cur=1-side;delete f.opening;f.phase='main';for(let i=0;i<2;i++){const base=f.players[i].field[0];f.players[i].hand=Array.from({length:3},(_,n)=>({...base,uid:'draw-old-'+i+'-'+n}));f.players[i].deck=Array.from({length:10},(_,n)=>({...base,uid:'draw-new-'+i+'-'+n}));}c.show(f);c.view.setHandOpen(true);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));window.drawSeen=[];window.drawSampling=true;const sample=()=>{const incoming=[...document.querySelectorAll('[data-mana-draw][data-incoming=true]')];if(incoming.length)drawSeen.push({count:incoming.length,privateFaces:document.querySelectorAll('#oppHand .card-art').length});if(drawSampling)requestAnimationFrame(sample)};requestAnimationFrame(sample);
+  if(count===2)c.submit({type:'endTurn'});else{const g=structuredClone(f);g.players[side].hand.push(...g.players[side].deck.splice(0,4));c.applyResult({state:g,events:[{type:'draw',player:side,count:4}]});}window.drawQueue=c.queue;}, {side,count});
+  await p.waitForSelector('.mana-draw-layer');await p.waitForTimeout(450);await p.screenshot({path:`${out}/production-${width}-${side}-${count}.png`});await p.evaluate(()=>drawQueue);
+  const result=await p.evaluate(()=>{drawSampling=false;return{seen:drawSeen.length,maxIncoming:Math.max(0,...drawSeen.map(x=>x.count)),privateFaces:Math.max(0,...drawSeen.map(x=>x.privateFaces)),remaining:document.querySelectorAll('.mana-draw-layer,[data-mana-draw],.draw-stock-back').length}});assert(result.seen>0);assert.equal(result.maxIncoming,count);assert.equal(result.privateFaces,0);assert.equal(result.remaining,0);results.push({width,side,count,...result});console.log('PASS deployed draw',width,side,count);
+ }
+ await p.close();}
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'/production-browser-report.json',JSON.stringify({origin,errors,results,boundary:'Unmodified production modules, styles and assets on the shipped isolated cosmetic-studio board; actual reducer turn-start and controller draw events. No authenticated PvP or account mutation.'},null,2));
+}finally{await b.close()}
