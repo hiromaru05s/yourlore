@@ -195,7 +195,7 @@ export class App {
     const index=Number.isFinite(part)?Math.max(0,Math.min(TUTORIAL_PARTS.length-1,Math.floor(part))):0;
     setPresence('bot');aCapture('game_start',{mode:'tutorial_part',part:index+1});this.swap(()=>mountGame(this,{mode:'tutorial',part:index}));
   }
-  cardHub(): void { setPresence("menu"); this.swap(() => mountCardHub(this), "cardHub"); }
+  cardHub(): void { if(this.currentPage==='cardHub')return; setPresence("menu"); this.swap(() => mountCardHub(this), "cardHub"); }
   cards(): void { setPresence("menu"); this.swap(() => mountCards(this), "cards"); }
   private startingBot: symbol | undefined;
   botGame(difficulty: BotDifficulty = "hard"): void {

@@ -4,12 +4,15 @@ import {onLangChange} from '../i18n';
 import {artUrl} from '../ui/cardArt';
 import {loungeText as L} from '../ui/loungeText';
 import '../styles/cardHub.css';
+import {playCardHubEntrance} from '../ui/cardHubEntrance';
 
 export function mountCardHub(app:App):Screen {
   const store=deckStoreForUser(app.user);
   const root=document.createElement('section');
+  let stopEntrance=()=>{};
   root.className='card-hub';
   const paint=()=>{
+    stopEntrance();
     root.setAttribute('aria-label',L('カード','Cards','카드'));
     root.replaceChildren();
     const choices=[
@@ -26,5 +29,7 @@ export function mountCardHub(app:App):Screen {
     });
   };
   paint(); app.root.append(root);
-  return {destroy:onLangChange(paint)};
+  stopEntrance=playCardHubEntrance(root);
+  const unsubscribe=onLangChange(paint);
+  return {destroy:()=>{stopEntrance();unsubscribe();}};
 }
