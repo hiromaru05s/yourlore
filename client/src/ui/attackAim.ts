@@ -1,16 +1,18 @@
 import {aimCurve} from './aimGeometry';
-export type AimPose={x:number;y:number;tx:number;ty:number;valid:boolean;blocked:boolean};
+export type AimPose={x:number;y:number;tx:number;ty:number;valid:boolean;blocked:boolean;targetWidth?:number};
 /** Continuous forward energy runs along the actual screen-space targeting arc. */
 export function createAttackAim(follow?:()=>AimPose|null) {
  const canvas=document.createElement('canvas');canvas.className='attack-aim';canvas.setAttribute('aria-hidden','true');document.body.append(canvas);
  const c=canvas.getContext('2d')!;let pose:AimPose|null=null,frame=0,dead=false;
- const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ const motion=matchMedia('(prefers-reduced-motion:reduce)');
+ let wasValid=false,lockAt=0,lastTarget={x:0,y:0};
  function draw(now:number){
   if(dead||!canvas.isConnected)return;if(document.hidden){remove();return;}
   if(follow)pose=follow();
   const dpr=Math.min(devicePixelRatio||1,1.5),w=innerWidth,h=innerHeight;
   if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
   c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+  const reduced=motion.matches;
   if(pose){
    const {x,y,tx,ty,valid,blocked}=pose,curve=aimCurve({x,y},{x:tx,y:ty});
    canvas.dataset.valid=String(valid);canvas.dataset.target=`${tx.toFixed(1)},${ty.toFixed(1)}`;
@@ -31,7 +33,33 @@ export function createAttackAim(follow?:()=>AimPose|null) {
     const n=curve.tangent(1);c.save();c.translate(tx,ty);c.rotate(Math.atan2(n.y,n.x));c.beginPath();c.moveTo(0,0);c.lineTo(-head,head*.44);c.lineTo(-head*.73,0);c.lineTo(-head,-head*.44);c.closePath();
     c.fillStyle=light;c.shadowBlur=valid?12:4;c.shadowColor=main;c.fill();c.shadowBlur=0;c.strokeStyle='#547fb0';c.lineWidth=1;c.stroke();c.beginPath();c.moveTo(-3,0);c.lineTo(-head*.87,head*.26);c.lineTo(-head*.73,0);c.closePath();c.fillStyle=main;c.fill();c.restore();
     c.strokeStyle=main;c.lineWidth=1.6;c.globalAlpha=.8;c.beginPath();c.arc(x,y,5,0,Math.PI*2);c.stroke();
-    if(valid||blocked){const rotation=reduced?0:now*.001;c.lineWidth=1.2;for(let i=0;i<3;i++){c.beginPath();c.arc(tx,ty,20,rotation+i*2.094,rotation+i*2.094+1.1);c.stroke();}c.globalAlpha=.15;c.beginPath();c.arc(tx,ty,24,0,Math.PI*2);c.stroke();}c.globalAlpha=1;
+    c.globalAlpha=1;
+    if(valid){
+     const radius=Math.max(8,Math.min(38,(pose.targetWidth??90)*.3));
+     if(!wasValid||Math.hypot(tx-lastTarget.x,ty-lastTarget.y)>radius*1.5)lockAt=now;
+     const enter=reduced?1:Math.min(1,(now-lockAt)/180),pulse=reduced?0:(1-Math.cos((now-lockAt)*Math.PI*2/1100))*.5;
+     const r=radius*(1+(1-enter)*.24-pulse*.045),weight=Math.max(1.5,Math.min(3.6,radius*.12));
+     c.save();c.translate(tx,ty);c.lineCap='round';c.globalAlpha=.65+enter*.35;
+     // Four substantial red brackets lock around the aim point. The open center
+     // leaves the character/card art readable, while inward teeth say "target".
+     const brackets=()=>{c.beginPath();for(let i=0;i<4;i++){const a=i*Math.PI/2;c.moveTo(r*Math.cos(a+.2),r*Math.sin(a+.2));c.arc(0,0,r,a+.2,a+Math.PI/2-.2);}};
+     brackets();c.strokeStyle='#631526';c.lineWidth=weight+1.6;c.stroke();
+     brackets();c.strokeStyle='#ff353e';c.lineWidth=weight;c.shadowColor='#ff243b';c.shadowBlur=7+pulse*5;c.stroke();c.shadowBlur=0;
+     c.beginPath();for(let i=0;i<4;i++){const a=i*Math.PI/2,inner=r-weight*.28;c.moveTo(inner*Math.cos(a+.24),inner*Math.sin(a+.24));c.arc(0,0,inner,a+.24,a+Math.PI/2-.24);}
+     c.strokeStyle='#ffe2d7';c.lineWidth=Math.max(.65,weight*.26);c.stroke();
+     for(let i=0;i<4;i++){
+      c.save();c.rotate(i*Math.PI/2);const reach=r+weight*1.7;
+      c.beginPath();c.moveTo(reach-weight*2.7,0);c.lineTo(reach+weight*.7,-weight*1.2);c.lineTo(reach+weight*.7,weight*1.2);c.closePath();
+      c.fillStyle='#ff3d46';c.shadowColor='#ff263d';c.shadowBlur=4;c.fill();c.shadowBlur=0;c.strokeStyle='#ffc5bf';c.lineWidth=.6;c.stroke();c.restore();
+     }
+     // A restrained echo breathes with the bracket contraction, not a flash.
+     c.beginPath();c.arc(0,0,r+weight*2.8+pulse*weight,0,Math.PI*2);c.strokeStyle=`rgba(255,55,65,${.12+pulse*.22})`;c.lineWidth=Math.max(.8,weight*.45);c.stroke();c.restore();
+     canvas.dataset.targetLock='active';
+    }else{
+     canvas.dataset.targetLock=blocked?'blocked':'none';
+     if(blocked){c.strokeStyle=main;c.lineWidth=1.2;c.globalAlpha=.5;c.beginPath();c.arc(tx,ty,20,0,Math.PI*2);c.stroke();c.globalAlpha=1;}
+    }
+    wasValid=valid;lastTarget={x:tx,y:ty};
    }
   }
   frame=requestAnimationFrame(draw);

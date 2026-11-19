@@ -1,35 +1,22 @@
-/** A deep pressure boom with damped room resonance, cached once per sample rate. */
-let cached:{rate:number;samples:Float32Array}|undefined;
-export function ruptureImpactSamples(rate:number):Float32Array {
- if(cached?.rate===rate)return cached.samples;
- // Ends before the 3.55 s presentation closes its audio context (burst at 1.08 s).
- const duration=2.35,samples=new Float32Array(Math.ceil(rate*duration));
- const pole=(hz:number)=>1-Math.exp(-2*Math.PI*hz/rate);
- const lowPole=pole(110),bodyPole=pole(520),outPole=pole(1350),dcPole=pole(24),roomPole=pole(280);
- const rooms=[.073,.101,.139,.173].map((delay,i)=>({buffer:new Float32Array(Math.round(rate*delay)),index:0,damped:0,feedback:[.70,.67,.64,.61][i]}));
- let seed=0x71ac39,low=0,thud=0,output=0,dc=0,phase=0,bodyPhase=0,peak=0;
- for(let i=0;i<samples.length;i++){
-  const t=i/rate;seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;
-  const white=(seed>>>0)/2147483648-1;
-  low+=(white-low)*lowPole;thud+=(white-thud)*bodyPole;
-  phase+=2*Math.PI*(41+51*Math.exp(-t/.055))/rate;
-  bodyPhase+=2*Math.PI*(83+57*Math.exp(-t/.04))/rate;
-  const attack=Math.min(1,t/.004);
-  // A broad low-frequency onset opens into a sustained, textured pressure wave.
-  const boom=(Math.sin(phase)+.16*Math.sin(phase*2))*1.05*Math.exp(-t/.48);
-  const chest=Math.sin(bodyPhase)*.30*Math.exp(-t/.23);
-  const strike=(thud-low)*1.8*Math.exp(-t/.045);
-  const pressure=low*4.1*(1-Math.exp(-t/.012))*Math.exp(-t/.64);
-  const dry=Math.tanh((boom+chest+strike+pressure)*1.1)*attack;
-  // Diffuse, low-passed reflections: no glass tinkles or distinct repeat hits.
-  let room=0;
-  for(const r of rooms){const delayed=r.buffer[r.index];r.damped+=(delayed-r.damped)*roomPole;r.buffer[r.index]=dry+r.damped*r.feedback;r.index=(r.index+1)%r.buffer.length;room+=r.damped;}
-  const signal=dry*.88+room*.16;
-  output+=(signal-output)*outPole;dc+=(output-dc)*dcPole;
-  const end=Math.min(1,(duration-t)/.30),fade=end*end*(3-2*end);
-  samples[i]=(output-dc)*fade;peak=Math.max(peak,Math.abs(samples[i]));
+/** Approved revision-4 option 1: crystal fracture, mana burst and rising resonance. */
+import {crystalBaseSamples} from './crystalImpactBase';
+const cache=new Map<string,Float32Array>();
+const smooth=(a:number,b:number,t:number)=>{const x=Math.min(1,Math.max(0,(t-a)/(b-a)));return x*x*(3-2*x);};
+export function ruptureImpactSamples(rate:number):Float32Array{
+ const base=crystalBaseSamples(rate);
+ const key=String(rate),existing=cache.get(key);if(existing)return existing;
+ const setting={start:.055,rise:.30,decay:.22,from:640,to:1100,gain:.080,harmonic:.25,ratio:1.51};
+ const a=new Float32Array(base.length);let phase=0,phase2=0,peak=0;
+ for(let i=0;i<a.length;i++){
+  const t=i/rate,z=t-setting.start;
+  const rise=smooth(0,setting.rise,z),freq=setting.from+(setting.to-setting.from)*rise;
+  phase+=Math.PI*2*freq/rate;phase2+=Math.PI*2*(freq*setting.ratio+1.7*Math.sin(t*8))/rate;
+  const attack=smooth(0,.055,z);
+  const envelope=attack*Math.exp(-Math.max(0,z-setting.rise*.6)/setting.decay)*(1-smooth(1.25,1.65,t));
+  const shimmer=(Math.sin(phase)+setting.harmonic*Math.sin(phase2))*(.9+.1*Math.sin(t*27));
+  a[i]=base[i]+shimmer*envelope*setting.gain;peak=Math.max(peak,Math.abs(a[i]));
  }
- const scale=.9/Math.max(.001,peak);for(let i=0;i<samples.length;i++)samples[i]*=scale;
- samples[0]=samples[samples.length-1]=0;
- cached={rate,samples};return samples;
+ // Preserve the chosen transient and loudness unless the new layer needs headroom.
+ const gain=Math.min(1,.88/Math.max(.001,peak));for(let i=0;i<a.length;i++)a[i]*=gain;
+ a[0]=a[a.length-1]=0;cache.set(key,a);return a;
 }

@@ -23,4 +23,13 @@
 
 固定モデル16個・タイミング・音声波形、致死時の演出→結果遷移、表面採取、実盤面PC/スマホ幅・数値非破砕・ヒビ・キャンセルを確認する。公開は既存のコミット固定デプロイガードで、型検査・production suite・build・DBスキーマ整合・mainの一致を確認する。
 
-公開結果はデプロイ後に追記。
+## 本番反映・確認結果
+
+- 2026-11-19 07:34 KST、本番 `https://yourlore.xyz` へ反映。
+- ソース: `fe168a872aa9e28a51b7c152c01a13e04995d9a1`。
+- Worker version: `dc2e9cf4-d500-4ad7-84d4-dd6bde5fd9b7`、100%。[deployment.json](qa/deployment.json)
+- production suite **299/299**、client/server型検査、design guard、build、DBスキーマ確認が成功。[production-suite.json](qa/production-suite.json)
+- 本番から取得したHTML・JS・CSSと固定モデル16種のJSON/ヒビ画像、計170ファイルがコミット固定ビルドとバイト単位で一致。[production-assets.json](qa/production-assets.json)
+- 本番配信クライアントでPC 1280×900の自分側敗北、スマホ390×844の相手側敗北を確認。ヒビ→バッジ消失、破裂音1回、1.5秒で揺れ停止、演出終了後の結果表示、位置の復元を確認。ブラウザエラー・素材読込エラー0。[production-browser-report.json](qa/production-browser-report.json)
+- 上記ブラウザ検証のAPI・WebSocketは隔離fixture。engineが生成した致死イベントを本番クライアントへ渡し、実際の対戦画面で検証した。実アカウント・実対戦データへの変更なし。実プレイヤー同士の対戦は今回の確認範囲外。
+- 見た目はユーザーが承認したプレビューの仕様で反映。本番配信素材で保存した [PC](qa/production-me-1280.png) / [スマホ](qa/production-opp-390.png) でも奥行き・破片・盤面との重なりを確認。

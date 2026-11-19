@@ -1,0 +1,35 @@
+/* Both selection colors follow the print alpha; the artwork stays unpainted. */
+.card.is-atk-target{outline:none;box-shadow:none;z-index:8;}
+.game .zone-mon .card>.attack-target-outline{
+  position:absolute;inset:0;z-index:14;pointer-events:none;filter:none!important;
+  animation:attackTargetEnter 140ms ease-out both;
+}
+.attack-target-outline svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+.attack-target-outline path{fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.attack-target-outline mask path{fill:#000;stroke:none;}
+.attack-target-aura{stroke:var(--attack-aura,#ed2027);stroke-width:16;opacity:.45;filter:blur(3px);animation:attackTargetBreathe 1.5s ease-in-out infinite;}
+.attack-target-rim{stroke:var(--attack-rim,#ff3434);stroke-width:6;opacity:.98;}
+.attack-target-core{stroke:var(--attack-core,#ffdad3);stroke-width:1.8;opacity:.96;}
+.attack-target-travel{stroke:var(--attack-travel,#fff1e9);stroke-width:3.5;stroke-dasharray:9 91;opacity:.9;animation:attackTargetTravel 2s linear infinite;}
+.game .zone-mon .card.is-atk-target:not(.drag-ghost) .card-frame{
+  filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 12px 9px #18213080) var(--rest-tone,brightness(1));
+}
+.game .zone-mon .card.is-aiming:not(.drag-ghost){z-index:9;}
+.game .zone-mon .card.is-aiming:not(.drag-ghost) .card-frame{
+  filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 16px 10px #11213380) drop-shadow(0 0 3px #b3e7ff88);
+}
+@keyframes attackTargetEnter{from{opacity:.25;}to{opacity:1;}}
+@keyframes attackTargetBreathe{0%,100%{opacity:.38;}50%{opacity:.6;}}
+@keyframes attackTargetTravel{from{stroke-dashoffset:0;}to{stroke-dashoffset:-100;}}
+@media(prefers-reduced-motion:reduce){
+  .game .zone-mon .card>.attack-target-outline,.attack-target-aura{animation:none;}
+  .attack-target-travel{animation:none;display:none;}
+}
+
+.attack-source-light{--attack-aura:#168cff;--attack-rim:#36b8ff;--attack-core:#dcf7ff;--attack-travel:#f1fcff;}
+
+/* The portrait's own alpha supplies its selection silhouette, not its box. */
+:is(#app,.reading-board).reading-board .game #portraitOpp .pt-ring.is-atk-target{
+  outline:none;box-shadow:none;animation:none;
+  filter:drop-shadow(0 0 3px #ff3434) drop-shadow(0 0 8px #ff263d99);
+}

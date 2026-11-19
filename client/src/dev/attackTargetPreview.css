@@ -1,0 +1,10 @@
+.attack-preview-controls{position:fixed;z-index:500;left:14px;top:14px;width:min(350px,calc(100vw - 28px));padding:14px 18px;color:#e5f3ff;font:12px/1.55 sans-serif;}
+.attack-preview-controls strong{font-size:16px;}
+.attack-preview-controls p{margin:5px 0 10px;color:#b6c9dc;}
+.attack-preview-controls>div{display:flex;gap:5px;flex-wrap:wrap;}
+.attack-preview-controls button{font-size:11px;padding:7px 9px;}
+.attack-preview-controls button[aria-pressed=true]{color:#fff;background-color:#246797;}
+.attack-preview-controls output{display:block;margin-top:9px;color:#c8ddeb;}
+@media(max-width:600px){.attack-preview-controls{left:8px;top:8px;width:calc(100vw - 16px);padding:9px 14px;font-size:10px;}.attack-preview-controls strong{font-size:13px;}.attack-preview-controls p{margin:2px 0 5px;}.attack-preview-controls output{margin-top:4px;}}
+
+.attack-preview-controls output{margin:7px 0 11px;color:#f0dfe4;}
