@@ -217,6 +217,11 @@ function exileCulls(g: GameState, events: GameEvent[], p: PlayerState, n: number
   if (cards.length) events.push({type:'cullExile', player:side(g,p), sourceUid, cards});
   return ex;
 }
+/** Report only restored wounds; stat swaps and maximum-health buffs are not healing. */
+function restoreMonsterHealth(g:GameState,ctx:Ctx,p:PlayerState,m:FieldMon):void {
+ const before=curHp(p,m);m.dmg=0;const hp=curHp(p,m),amount=hp-before;
+ if(amount>0)ctx.ev.push({type:'monsterHeal',player:side(g,p),uid:m.uid,amount,hp});
+}
 /** 무법지대(v41 lawless): 몬스터의 체력(최대)을 1로 만든다 — 누적 데미지도 초기화. */
 function setHpOne(p: PlayerState, m: FieldMon): void {
   m.defMod = (m.defMod || 0) - (effDef(p, m) - 1);
@@ -4640,7 +4645,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
     }
     case "S14": {
       for (const pl of g.players) for (const m of pl.field) {
-        if (m.hatch == null) m.dmg = 0;
+        if (m.hatch == null) restoreMonsterHealth(g,ctx,pl,m);
         if (hasPassive(m, 'guts')) m.guts = (m.guts ?? 0) + 1;
       }
       ctx.log(`${tag(p,card)} 양측 몬스터 체력 전부 회복, 기합 카운터 +1`, `${tag(p,card)} 両陣営のモンスターを全回復、気合用カウンター+1`, `${tag(p,card)}: restore all monsters on both fields to full HP; add 1 Guts counter to those with Guts`);
@@ -7844,7 +7849,7 @@ function resolveDewShieldChoice(g: GameState, ctx: Ctx, uid: string | null): boo
   if(q.reason==='HIGH_ELF_HAND' && uid!=='done' && hasPassive(chosen,'relic')) {ctx.log('신기는 제외할 수 없습니다','神器はゲームから除外できません', `Relics cannot be sent to the Rift`);return true;}
   g.pending=null;
   switch(q.reason){
-    case 'COLOSSEUM_REST': (chosen as FieldMon).dmg = 0; break;
+    case 'COLOSSEUM_REST': restoreMonsterHealth(g,ctx,p,chosen as FieldMon); break;
     case 'NIGHT_CASTLE_GIFT': {
       const i=p.enchants.findIndex(e=>e.card.uid===q.data?.sourceUid && e.card.ench==='nightCastleGift' && e.turns===0);
       if(i<0)break;

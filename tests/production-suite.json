@@ -303,7 +303,8 @@
     "tests/lobby-lifecycle.mjs",
     "tests/friends-lifecycle.mjs",
     "tests/defeat-crystal-sound.mjs",
-    "tests/mana-scatter.mjs"
+    "tests/mana-scatter.mjs",
+    "tests/healing-feedback.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

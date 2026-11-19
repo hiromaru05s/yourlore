@@ -935,12 +935,21 @@ export abstract class BaseController implements BoardHandlers {
           if(!A.isFxSkipped()) await wait(850);
           break;
         }
+        case "monsterHeal": {
+          health.set(e.uid,e.hp);A.monHeal(e.uid,e.amount,e.hp);
+          // A mass recovery lands together, then lets the selected cloud finish before rerender.
+          if(events[i+1]?.type!=='monsterHeal')await wait(1500);
+          break;
+        }
         case "heal": {
           const healed=Math.max(0,e.amount);
           hpNow[e.player] += healed;
           if(e.bloodRiteSources?.length){
             await A.bloodRiteRecovery(sideOf(e.player),e.bloodRiteSources,()=>{
-              if(!this.dead)presentHp(sideOf(e.player),hpNow[e.player]);
+              if(!this.dead){
+                if(healed>0)A.hpFeedback(sideOf(e.player),'heal',healed);
+                presentHp(sideOf(e.player),hpNow[e.player]);
+              }
             });
           }else{
             if(healed>0)A.hpFeedback(sideOf(e.player), "heal", healed);
