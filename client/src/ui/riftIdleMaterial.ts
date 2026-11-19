@@ -28,10 +28,10 @@ void main(){
  float mist=smoothstep(.25,.76,near)*(.62+.18*roll)+smoothstep(.30,.78,far)*.26;
  float width=.13+.035*sin(p.y*2.4-t*.56);
  float depth=exp(-pow(seam/width,2.));
- vec3 col=mix(vec3(.019,.018,.032),vec3(.32,.265,.405),clamp(mist,0.,1.));
- // Restrained silver-lilac crests reveal volume without a glowing outline.
+ vec3 col=mix(vec3(.019,.018,.032),vec3(.235,.205,.285),clamp(mist,0.,1.));
+ // Dark violet crests retain volume while keeping attention on the board.
  float crest=pow(smoothstep(.47,.78,near),2.)*(.35+.65*roll);
- col+=vec3(.08,.075,.11)*crest;
+ col+=vec3(.04,.04,.055)*crest;
  col*=1.-depth*.86;
  float rim=smoothstep(0.,.13,v.x)*smoothstep(0.,.13,1.-v.x)*smoothstep(0.,.09,v.y)*smoothstep(0.,.09,1.-v.y);
  col*=.56+.44*rim;
