@@ -1,0 +1,54 @@
+{
+  "sha": "4cdb1e1c5cdcbe94973d70608abdac25e610683b",
+  "at": "2026-11-19T17:30:31.202Z",
+  "assets": [
+    {
+      "file": "index.html",
+      "sha256": "57e366255fc5eb7cab4770296093e1cd752fec631fbb94249bee0b8bc5306579",
+      "status": 200,
+      "matched": true
+    },
+    {
+      "file": "cosmetic-studio.html",
+      "sha256": "9d8e2f2af8bab99d944113fce532bce26abdbf368868a0ec655e7758c9bb0da5",
+      "status": 200,
+      "matched": true
+    },
+    {
+      "file": "assets/cosmeticStudio-BfqCUYCv.js",
+      "sha256": "f31aad5910187df8e5861de9b2584d3c440e6577dfc814000168e046ec11e551",
+      "status": 200,
+      "matched": true
+    },
+    {
+      "file": "assets/layout-7XXnH5OG.js",
+      "sha256": "4b1a8d47ce5df92f14e478194dd88700626ab3201f129ebb191bef362ecaf872",
+      "status": 200,
+      "matched": true
+    },
+    {
+      "file": "assets/main-CtvyyBED.js",
+      "sha256": "588b845ca0b15f0105b0a243838e97ad2fe65aa119acb35d9a4ce1cb5691a120",
+      "status": 200,
+      "matched": true
+    },
+    {
+      "file": "assets/main-fz_n2tLI.js",
+      "sha256": "c10b753cdbaf562a83521935fd28242d63758191a51da2be11e1da58d297f6ed",
+      "status": 200,
+      "matched": true
+    },
+    {
+      "file": "assets/layout-Bt03AW4y.css",
+      "sha256": "afb04395a212778b21092cbad31b5140004c53dd3d20a610b7f493219a3f16ab",
+      "status": 200,
+      "matched": true
+    },
+    {
+      "file": "assets/main-BalXma47.css",
+      "sha256": "583a9f0ec21a6d067578aa00e19d6520552b8bee7f84c0b45a03ef7391036ba8",
+      "status": 200,
+      "matched": true
+    }
+  ]
+}
