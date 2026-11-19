@@ -7,7 +7,7 @@ const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;
 const trial=$<HTMLIFrameElement>('study-frame'),native=$<HTMLIFrameElement>('current-frame');
 const api=()=>((trial.contentWindow as unknown as {vfx:API}).vfx);
 const adopted=()=>((native.contentWindow as unknown as {currentVfx:Native}).currentVfx);
-const descriptions:Record<Kind,[string,string,string]>={draw:['01 / DRAW','マナ光のドロー','時間差で引き抜き、青いマナ光を引いて手札へ。'],summon:['02 / SUMMON','召喚の模倣比較','現行LOREとシャドバ版の動きを比較。'],attack:['03 / ATTACK','攻撃（前稿）','攻撃は前稿を再生。'],spell:['04 / CAST','四隅の共鳴・再制作','現行の枠の彫りと発光を引き継ぎ、光の走りと収束を見せる。']};
+const descriptions:Record<Kind,[string,string,string]>={draw:['01 / DRAW','マナ光のドロー','時間差で引き抜き、青いマナ光を引いて手札へ。'],summon:['02 / SUMMON','蒼晶の記録召喚','刻印の解錠、結晶化、盤面への転写と実体化。'],attack:['03 / ATTACK','攻撃（前稿）','攻撃は前稿を再生。'],spell:['04 / CAST','四隅の共鳴・再制作','現行の枠の彫りと発光を引き継ぎ、光の走りと収束を見せる。']};
 let activeSummon:'hearthstone'|'shadowverse'|'lore'='lore';
 let current:Kind='summon',active:'current'|'study'='current',ready=false,playing=false,preparing=false,started=false,runId=0,ended=false,timer=0;
 const options=()=>({kind:current,drawCount:Number($<HTMLSelectElement>('draw-count').value),summonVersion:activeSummon,side:Number($<HTMLSelectElement>('side').value),spell:$<HTMLSelectElement>('spell-card').value});
