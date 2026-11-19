@@ -54,6 +54,7 @@ export class LoreCrystals{
    const u=mesh.material.uniforms;u.clock.value=t;u.conversion.value=ease(.83,1.22,t);u.opacity.value=ease(.80,.87,t)*(1-ease(1.84+i*.010,1.94+i*.010,t));
   });
  }
+ info(){return{visible:this.group.visible,pieces:this.pieces.length};}
  hide(){this.group.visible=false;}
  clear(){for(const {mesh} of this.pieces){this.group.remove(mesh);mesh.geometry.dispose();mesh.material.dispose();}this.pieces=[];this.texture?.dispose();this.texture=undefined;}
  dispose(){this.clear();this.group.removeFromParent();}

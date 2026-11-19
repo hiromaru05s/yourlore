@@ -1,0 +1,113 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "width": 1100,
+      "side": 0,
+      "rest": {
+        "same": true,
+        "style": true,
+        "transform": true,
+        "frame": true,
+        "visible": "visible",
+        "gpu": {
+          "geometries": 7,
+          "textures": 1
+        },
+        "lore": {
+          "visible": false,
+          "pieces": 7
+        }
+      }
+    },
+    {
+      "width": 1100,
+      "side": 1,
+      "rest": {
+        "same": true,
+        "style": true,
+        "transform": true,
+        "frame": true,
+        "visible": "visible",
+        "gpu": {
+          "geometries": 7,
+          "textures": 1
+        },
+        "lore": {
+          "visible": false,
+          "pieces": 7
+        }
+      }
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "rest": {
+        "same": true,
+        "style": true,
+        "transform": true,
+        "frame": true,
+        "visible": "visible",
+        "gpu": {
+          "geometries": 7,
+          "textures": 1
+        },
+        "lore": {
+          "visible": false,
+          "pieces": 7
+        }
+      }
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "rest": {
+        "same": true,
+        "style": true,
+        "transform": true,
+        "frame": true,
+        "visible": "visible",
+        "gpu": {
+          "geometries": 7,
+          "textures": 1
+        },
+        "lore": {
+          "visible": false,
+          "pieces": 7
+        }
+      }
+    },
+    {
+      "reprepareGpu": [
+        {
+          "geometries": 7,
+          "textures": 1
+        },
+        {
+          "geometries": 7,
+          "textures": 1
+        },
+        {
+          "geometries": 7,
+          "textures": 1
+        },
+        {
+          "geometries": 7,
+          "textures": 1
+        }
+      ]
+    },
+    {
+      "playback": {
+        "frames": 190,
+        "median": 16.69999999999709,
+        "p95": 16.799999999999272,
+        "duration": 3.2
+      }
+    },
+    {
+      "interruption": true
+    }
+  ],
+  "scope": "Actual adopted board fixture; prototype only, not connected to live summon event queue"
+}

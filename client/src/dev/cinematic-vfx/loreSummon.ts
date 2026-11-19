@@ -22,7 +22,9 @@ export function loreEtching(c:CanvasRenderingContext2D,hero:Rect,dest:Rect,t:num
  for(const s of[-1,1]){
   const leaf=[project(s*.04,.45),project(s*.50,.57),project(s*.64,.45),project(s*.64,-.43),project(s*.11,-.57),project(s*.04,-.48),project(s*.04,.45)];
   line(c,leaf,blue,u*.065,receiving*.035);line(c,leaf,blue,u*.025,receiving*.16);line(c,leaf,white,Math.max(.65,u*.006),receiving*.9);
-  for(let j=0;j<5;j++){const y=-.32+j*.14;line(c,[project(s*.15,y),project(s*.49,y+.10)],gold,.6,receiving*.75);}
+  for(let j=0;j<5;j++){const y=-.32+j*.14;
+   for(let k=0;k<4;k++){const x=s*(.15+k*.078),dy=k*.019,tip=(j+k)%2?.025:-.025;line(c,[project(x,y+dy+.038),project(x,y+dy-.025),project(x+s*.038,y+dy+tip),project(x+s*.022,y+dy+.048)],gold,.55,receiving*.72);}
+  }
   const rail=[project(s*.15,.76),project(s*.76,.92),project(s*.91,.72),project(s*.91,-.69),project(s*.23,-.92)];
   line(c,rail,blue,u*.022,receiving*.10);line(c,rail,gold,.75,receiving*.55);
   for(let j=0;j<4;j++){const y=-.55+j*.33;const rune=[project(s*.85,y-.045),project(s*.91,y),project(s*.85,y+.045),project(s*.79,y),project(s*.85,y-.045)];line(c,rune,white,.65,receiving*.75);}
