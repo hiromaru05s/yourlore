@@ -42,11 +42,19 @@ try{
   const card=await page.locator('[data-chapter="1"]').boundingBox();assert(card.height>card.width);
   await page.screenshot({path:out+`/gallery-${width}.png`});
  }
+ await page.setViewportSize({width:390,height:844});await track.evaluate(e=>e.scrollLeft=0);await page.waitForTimeout(300);
+ const touch=await context.newCDPSession(page),touchBox=await track.boundingBox();
+ await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:touchBox.x+260,y:touchBox.y+120}]});
+ for(let x=240;x>=50;x-=20)await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:touchBox.x+x,y:touchBox.y+120}]});
+ await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(600);
+ assert(await track.evaluate(e=>e.scrollLeft)>100,'native touch swipe scrolls');await touch.detach();
+ await track.evaluate(e=>e.scrollLeft=0);await page.waitForTimeout(400);await page.locator('[data-chapter="1"]').click();
+ await page.locator('[data-scene="1:before"]').click();await page.locator('.single-vn').waitFor();await page.keyboard.press('Escape');
  for(const lang of ['en','ko','ja']){
   await page.evaluate(async lang=>{const {setLang}=await import('/src/i18n.ts');setLang(lang);},lang);await page.locator('#ss-title').waitFor();
   await page.screenshot({path:out+`/gallery-${lang}.png`});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(apiErrors,[]);
- await fs.writeFile(out+'/gallery-report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],errors,apiErrors,checks:['images loaded','locked chapters','arrow boundaries','mouse drag without click','keyboard','portrait cards','320/390/844/1280 widths','ja/en/ko']},null,2));
+ await fs.writeFile(out+'/gallery-report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],errors,apiErrors,checks:['images loaded','locked chapters','arrow boundaries','mouse drag without click','native touch swipe','card selection and story entry','keyboard','portrait cards','320/390/844/1280 widths','ja/en/ko']},null,2));
  console.log('PASS chapter gallery browser checks');
 }finally{await browser.close();await server.close();await f.close();}

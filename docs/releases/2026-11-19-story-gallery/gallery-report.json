@@ -1,0 +1,18 @@
+{
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/story-gallery-1119/LORE_TCG",
+  "origin": "http://127.0.0.1:5173/",
+  "errors": [],
+  "apiErrors": [],
+  "checks": [
+    "images loaded",
+    "locked chapters",
+    "arrow boundaries",
+    "mouse drag without click",
+    "native touch swipe",
+    "card selection and story entry",
+    "keyboard",
+    "portrait cards",
+    "320/390/844/1280 widths",
+    "ja/en/ko"
+  ]
+}
