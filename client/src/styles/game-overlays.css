@@ -434,7 +434,7 @@
   filter: drop-shadow(0 0 14px #ff5b4599);
   box-shadow: 0 14px 34px rgba(0, 0, 0, .55), 0 0 0 2px #ff5b4588;
 }
-.is-atk-target {
+.is-atk-target:not(.card) {
   outline: 2px solid #ff5b45; outline-offset: 1px; border-radius: 6px;
   box-shadow: 0 0 18px #ff5b4577; z-index: 8;
   animation: atkTargetPulse .7s ease-in-out infinite alternate;

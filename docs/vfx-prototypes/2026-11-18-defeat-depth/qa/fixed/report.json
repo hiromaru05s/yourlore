@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "cache": {
+    "same": true,
+    "key": "SEEKER_HOODED-me",
+    "pieces": 33
+  },
+  "errors": [],
+  "checks": [
+    "normal playback and held-frame review",
+    "counter changes keep fixed geometry",
+    "counter cracks before impact, hidden at impact, restored on cancel",
+    "aftershake ends at 1.5 seconds",
+    "zero runtime fracture pixel reads",
+    "character and side-specific fixed assets",
+    "HP zero → result",
+    "mobile and cancellation"
+  ]
+}

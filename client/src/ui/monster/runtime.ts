@@ -152,19 +152,20 @@ function tick(now:number){
  for(const [n,s] of states){
   if(!n.isConnected){removeState(n);continue;}
   if(hidden.has(n)||slateOwnsPose(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'){s.actor.hide();s.dirty=true;continue;}
-  const r=s.rect!,ready=n.classList.contains('is-attacker'),blocked=!!n.dataset.monsterBlocked,dual=ready&&n.dataset.monsterDualReady==='04';
+  const r=s.rect!,ready=n.classList.contains('is-attacker'),aiming=n.classList.contains('is-aiming'),blocked=!!n.dataset.monsterBlocked,dual=ready&&n.dataset.monsterDualReady==='04';
   const dynamic=hits.has(n)||n.getAnimations().length>0||!reduced()&&(ready||!!n.dataset.monsterAura);animated||=dynamic;
-  if(!s.dirty&&!dynamic){if(ready&&!dual)drawEffect(s.layer.foreground,'ready','C',0,r,r,{active:true,reduced:true,side:n.closest('#oppRow')?-1:1,pass:'front'});continue;}
+  if(!s.dirty&&!dynamic){if(ready&&!dual&&!aiming)drawEffect(s.layer.foreground,'ready','C',0,r,r,{active:true,reduced:true,side:n.closest('#oppRow')?-1:1,pass:'front'});continue;}
   s.dirty=false;
   const side=n.closest('#oppRow')?-1:1;
-  const k=ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
+  const k=aiming?'aura':ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
   s.actor.paint(k,v,t,r,r,reduced(),true,side);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':v;
-  if(dual){s.dual??=new DualReadySurface(s.actor,1);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
-  paintRestingAppearance(s.actor.el,ready?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,1,reduced(),r.w);
+  if(dual&&!aiming){s.dual??=new DualReadySurface(s.actor,1);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
+  paintRestingAppearance(s.actor.el,ready&&!aiming?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,1,reduced(),r.w);
   for(const cls of ['is-aiming','is-atk-target','is-targetable'])s.actor.el.classList.toggle(cls,n.classList.contains(cls));
-  if(n.classList.contains('is-atk-target')||n.classList.contains('is-targetable'))s.actor.el.style.setProperty('filter','drop-shadow(0 0 5px #ff7955)','important');
+  // Attack lock lights the frame print itself; a whole-card filter softens its text.
+  if(n.classList.contains('is-targetable')&&!n.classList.contains('is-atk-target'))s.actor.el.style.setProperty('filter','drop-shadow(0 0 5px #ff7955)','important');
   s.actor.el.style.removeProperty('translate');delete s.actor.el.dataset.hitReaction;paintHit(n,s.actor,now);
-  if(ready&&!dual)drawEffect(s.layer.foreground,'ready','C',t,r,r,{active:true,reduced:reduced(),side,pass:'front'});
+  if(ready&&!dual&&!aiming)drawEffect(s.layer.foreground,'ready','C',t,r,r,{active:true,reduced:reduced(),side,pass:'front'});
  }
  for(const j of [...jobs.values()]){
   if(!active)break;

@@ -3,7 +3,7 @@ export const volumeVertex=`varying vec3 vLocal;void main(){vLocal=position;gl_Po
 export const volumeFragment=`precision highp float;
 varying vec3 vLocal;
 uniform vec3 eye;uniform vec3 anchor;uniform float worldScale;uniform mat4 viewProjection;
-uniform vec2 resolution;uniform sampler2D opaqueDepth;uniform float time;uniform float charge;uniform float release;uniform float decay;
+uniform vec2 resolution;uniform sampler2D opaqueDepth;uniform float time;uniform float charge;uniform float scatter;uniform float release;uniform float decay;
 uniform vec3 jets[6];uniform vec3 directions[6];
 float hash(vec3 p){p=fract(p*.3183099+vec3(.1,.2,.3));p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
 float noise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(mix(hash(i),hash(i+vec3(1,0,0)),f.x),mix(hash(i+vec3(0,1,0)),hash(i+vec3(1,1,0)),f.x),f.y),mix(mix(hash(i+vec3(0,0,1)),hash(i+vec3(1,0,1)),f.x),mix(hash(i+vec3(0,1,1)),hash(i+vec3(1,1,1)),f.x),f.y),f.z);}
@@ -23,17 +23,17 @@ void main(){
   float core=exp(-dot(q,q)*1.35)*(.3+turbulence*.95)*smoothstep(.55,.98,charge)*(1.-decay);
   float vapor=0.;float n=fbm(p*12.+vec3(0,-flow*3.,flow));
   for(int j=0;j<6;j++){
-   vec3 delta=p-jets[j],dir=directions[j];float travel=dot(delta,dir),length=.10+charge*.56;
-   float radius=.012+max(0.,travel)*.055;vec3 radial=delta-dir*travel;
+   vec3 delta=p-jets[j],dir=directions[j];float travel=dot(delta,dir),length=.10+charge*.56+scatter*release*.42;
+   float radius=.012+max(0.,travel)*(.055+scatter*release*.05);vec3 radial=delta-dir*travel;
    float tube=exp(-dot(radial,radial)/(radius*radius*(.45+n)));
-   vapor+=tube*smoothstep(-.035,.025,travel)*(1.-smoothstep(length*.36,length,travel))*(.35+n*.85)*charge*(1.-release*.85)*(1.-decay);
+   vapor+=tube*smoothstep(-.035,.025,travel)*(1.-smoothstep(length*.36,length,travel))*(.35+n*.85)*charge*(1.-release*.85+scatter*release*1.5)*(1.-decay);
   }
-  float burst=exp(-pow((time-2180.)/115.,2.));
+  float burst=exp(-pow((time-1130.)/65.,2.));
   float dust=exp(-length(p*vec3(1.,1.,1.3))*3.)*max(0.,turbulence-.43)*release*(1.-decay)*.5;
   float density=core*1.5+vapor*1.35+dust;
   float extinction=1.-exp(-density*stepSize*2.7);
-  vec3 cold=vec3(.035,.29,.75),hot=vec3(.76,.94,1.);float heat=clamp(core*1.8+vapor*.3+burst*.6,0.,1.);
-  vec3 emission=mix(cold,hot,heat)*(core*(5.+burst*12.)+vapor*4.5+dust*.6);
+  vec3 cold=vec3(.035,.29,.75),hot=mix(vec3(.76,.94,1.),vec3(.16,.65,1.),scatter*release);float heat=clamp(core*1.8+vapor*.3+burst*.6,0.,1.);
+  vec3 emission=mix(cold,hot,heat)*(core*(5.+burst*12.)+vapor*(4.5+scatter*release*3.)+dust*(.6+scatter*release*1.8));
   accum+=trans*emission*stepSize;trans*=1.-extinction;if(trans<.025)break;
  }
  gl_FragColor=vec4(accum,1.-trans);

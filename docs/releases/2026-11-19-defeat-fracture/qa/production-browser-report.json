@@ -1,0 +1,43 @@
+{
+  "origin": "https://yourlore.xyz",
+  "passed": true,
+  "results": [
+    {
+      "width": 1280,
+      "height": 900,
+      "side": "me",
+      "observed": {
+        "impactStarts": 1,
+        "phases": [
+          "intact",
+          "cracked",
+          "gone"
+        ],
+        "earlyResult": false,
+        "settled": true,
+        "finalTranslate": ""
+      },
+      "errors": [],
+      "assetFailures": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "side": "opp",
+      "observed": {
+        "impactStarts": 1,
+        "phases": [
+          "intact",
+          "cracked",
+          "gone"
+        ],
+        "earlyResult": false,
+        "settled": true,
+        "finalTranslate": ""
+      },
+      "errors": [],
+      "assetFailures": []
+    }
+  ],
+  "boundary": "Production client/CSS/art/models fetched from origin; API and WebSocket fixtures supply engine-generated lethal results. No real accounts or matches modified."
+}

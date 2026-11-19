@@ -1,0 +1,18 @@
+[
+  {
+    "origin": "https://yourlore.xyz",
+    "width": 1280,
+    "errors": [],
+    "play": true,
+    "cleanup": true,
+    "fixture": "API and WebSocket mocked; client, CSS and art loaded from origin"
+  },
+  {
+    "origin": "https://yourlore.xyz",
+    "width": 390,
+    "errors": [],
+    "play": true,
+    "cleanup": true,
+    "fixture": "API and WebSocket mocked; client, CSS and art loaded from origin"
+  }
+]

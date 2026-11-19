@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "mobile": false,
+      "baseline": {
+        "x": 674.5451049804688,
+        "y": 263.7122802734375,
+        "width": 90.86663818359375,
+        "height": 130.55841064453125
+      },
+      "raised": {
+        "x": 671.6146240234375,
+        "y": 252.540771484375,
+        "width": 96.727783203125,
+        "height": 138.73269653320312
+      },
+      "originalBottomEdgeStable": true,
+      "printUnchanged": true,
+      "sourceBaseline": {
+        "x": 621.162353515625,
+        "y": 567.79638671875,
+        "width": 95.43072509765625,
+        "height": 143.6260986328125
+      },
+      "sourceRaised": {
+        "x": 619.1622924804688,
+        "y": 552.2349853515625,
+        "width": 99.5340576171875,
+        "height": 149.5147705078125
+      },
+      "originFollowsCrest": true
+    },
+    {
+      "mobile": false,
+      "rapidRetarget": true,
+      "cancelRestoresPose": true
+    },
+    {
+      "mobile": false,
+      "persistentNativePose": true,
+      "equippedFrame": true
+    },
+    {
+      "mobile": false,
+      "reducedStatic": true
+    },
+    {
+      "mobile": true,
+      "baseline": {
+        "x": 182.5657958984375,
+        "y": 362.07073974609375,
+        "width": 24.834014892578125,
+        "height": 36.51873779296875
+      },
+      "raised": {
+        "x": 181.76055908203125,
+        "y": 358.8976135253906,
+        "width": 26.44439697265625,
+        "height": 38.864990234375
+      },
+      "originalBottomEdgeStable": true,
+      "printUnchanged": true,
+      "sourceBaseline": {
+        "x": 168.86683654785156,
+        "y": 445.48309326171875,
+        "width": 25.209030151367188,
+        "height": 37.61602783203125
+      },
+      "sourceRaised": {
+        "x": 168.31085205078125,
+        "y": 441.39324951171875,
+        "width": 26.328445434570312,
+        "height": 39.26336669921875
+      },
+      "originFollowsCrest": true
+    },
+    {
+      "mobile": true,
+      "rapidRetarget": true,
+      "cancelRestoresPose": true
+    },
+    {
+      "mobile": true,
+      "persistentNativePose": true,
+      "equippedFrame": true
+    },
+    {
+      "mobile": true,
+      "reducedStatic": true
+    }
+  ],
+  "errors": [],
+  "source": "d815a6ac9",
+  "origin": "http://127.0.0.1:5286",
+  "boundary": "Local real-board mouse/touch fixtures; no authenticated PvP."
+}
