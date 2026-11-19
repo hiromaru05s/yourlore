@@ -1214,13 +1214,13 @@ export class GameView {
     const openStep = n <= 1 ? cw : Math.min(cw + 8, Math.max(cw * 0.42, (Math.min(vw * 0.86, 960) - cw) / (n - 1)));
     const compactStep = n <= 1 ? cw : Math.min(cw * 0.6, Math.max(cw*.16, (cw*3.4) / (n - 1)));
     const compact=handFan(n,cw,Math.min(vw*.42/.42,cw*4.4));
-    const opened=handFan(n,cw,Math.min(vw*.88/.58,cw*6.3),18);
+    const opened=handFan(n,cw,Math.min(vw*.88/.667,cw*6.3),18);
     [...handEl.children].forEach((el,i)=>{const card=el as HTMLElement;const p=compact.cards[i],o=opened.cards[i];
       card.style.setProperty('--hand-angle',`${p.angle}deg`);card.style.setProperty('--fan-x',`${p.x}px`);card.style.setProperty('--fan-y',`${p.y}px`);
       card.style.setProperty('--fan-open-angle',`${o.angle}deg`);card.style.setProperty('--fan-open-x',`${o.x}px`);card.style.setProperty('--fan-open-y',`${o.y}px`);
     });
     const overhang=(fan:ReturnType<typeof handFan>,scale:number)=>Math.max(0,...fan.cards.map(p=>(p.y+cw*.5*Math.abs(Math.sin(p.angle*Math.PI/180)))*scale));
-    handEl.style.setProperty('--fan-overhang',`${overhang(compact,.42)}px`);handEl.style.setProperty('--fan-open-overhang',`${overhang(opened,.58)}px`);
+    handEl.style.setProperty('--fan-overhang',`${overhang(compact,.42)}px`);handEl.style.setProperty('--fan-open-overhang',`${overhang(opened,.667)}px`);
     handEl.style.setProperty('--fan-width',`${compact.width}px`);handEl.style.setProperty('--fan-open-width',`${opened.width}px`);
     handEl.style.setProperty("--h-step-open", `${openStep}px`);
     handEl.style.setProperty("--h-step-compact", `${compactStep}px`);
