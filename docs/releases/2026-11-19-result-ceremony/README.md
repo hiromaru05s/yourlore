@@ -13,3 +13,7 @@ Approved result wave sources were encoded to 192 kbps MP3 under `client/public/s
 Validation before release: client/server typecheck and build; result modal tests cover win/loss/draw, delayed and duplicate receipts, reconnect, zero MMR, reduced motion, actions, focus restoration and RAF teardown. PCM tests cover both directions for 1–34 points, timing against integer score thresholds and headroom. Shared audio tests cover generated-voice cancellation/mute. Browser checked production controller → verdict → actual sample receipt, desktop victory, 390×844 defeat, review/reopen and home. Screenshots are attached here. This is visual/integration verification, not a new subjective art selection or a live human PvP test.
 
 The guarded production command rechecks main and deployment version, validates schema/typecheck/production tests/build in a committed snapshot, and deploys under a cross-worktree lock. Deployment identifiers and final checks are recorded after publication.
+
+## Production verification
+
+Deployed source `f87eca10e3b1dac1180c10671ddfe1487b1d5548` to `https://yourlore.xyz` at 2026-11-19 08:35 UTC. Worker version `50d491f7-3ac5-446c-9275-5e4ba4282fd6` serves 100% traffic. Guarded snapshot: 303/303 production tests passed, client/server typecheck and build passed. Both selected outcome MP3s and the served result-code bundle match the local production build byte-for-byte; all 12 referenced HTML entry assets correspond to the new build. See `deployment.json`. Live human-versus-human play was not performed.

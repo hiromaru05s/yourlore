@@ -1,0 +1,60 @@
+{
+  "source": "f87eca10e3b1dac1180c10671ddfe1487b1d5548",
+  "verifiedAt": "2026-11-19T08:36:45.155614+00:00",
+  "production": "https://yourlore.xyz",
+  "deployment": {
+    "id": "8ef68ac4-e8fc-4c3f-83ba-325a5c78fab2",
+    "source": "wrangler",
+    "strategy": "percentage",
+    "author_email": "maruru836818@gmail.com",
+    "annotations": {
+      "workers/message": "f87eca10e3b1dac1180c10671ddfe1487b1d5548 guarded release",
+      "workers/triggered_by": "deployment"
+    },
+    "versions": [
+      {
+        "version_id": "50d491f7-3ac5-446c-9275-5e4ba4282fd6",
+        "percentage": 100
+      }
+    ],
+    "created_on": "2026-11-19T08:35:07.133542Z"
+  },
+  "productionSuite": "303/303 passed",
+  "typecheck": "client and server passed",
+  "build": "passed",
+  "assetChecks": [
+    {
+      "url": "https://yourlore.xyz/sfx/result-v1/victory.mp3",
+      "status": 200,
+      "sha256": "c04ec0de3ed890d970ff743bf21490fd19c8c0d3ec4711460e58e34b3efa909c",
+      "matchesBuiltAsset": true
+    },
+    {
+      "url": "https://yourlore.xyz/sfx/result-v1/defeat.mp3",
+      "status": 200,
+      "sha256": "21f8cccef09e6359063c64d03df1329e0aab0db7d46d699cad164f8b844f9ff7",
+      "matchesBuiltAsset": true
+    },
+    {
+      "url": "https://yourlore.xyz/assets/social-BRzE-ss_.js",
+      "status": 200,
+      "sha256": "d5b3865ab41c16961229aa09c4d55a240492bfc131c5d4e7b48bb61d32f663d3",
+      "matchesBuiltAsset": true
+    }
+  ],
+  "htmlAssets": [
+    "/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+    "/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+    "/assets/startup-library-wide-888ec274d6a7e913cd69.webp",
+    "/assets/main-D7VF56zB.js",
+    "/assets/modulepreload-polyfill-B5Qt9EMX.js",
+    "/assets/loreCursor-DI5UMyPq.js",
+    "/assets/preload-helper-BXl3LOEh.js",
+    "/assets/loreCursor-D3Zb1t8q.css",
+    "/assets/startup-lore-logo-transparent-1f17f895cc9401502405.webp",
+    "/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+    "/assets/startup-azure-card-v1-c8edc164c94578786764.webp",
+    "/assets/startup-azure-card-v1-c8edc164c94578786764.webp"
+  ],
+  "liveHumanPvP": "not performed"
+}
