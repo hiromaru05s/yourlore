@@ -48,7 +48,7 @@ export function prepareDuel(root:HTMLElement,mount:Promise<void>):void{
     else await scene();
     if(!bot){
       await import('./spellFrame/scene').then(m=>m.prepareFrameRenderer()).catch(()=>{});
-      await import('./drawStock').then(m=>m.warmDrawStage(root)).catch(()=>{});
+      // Mana draws use the existing DOM print and a 2D light pass; no extra WebGL stage.
     }
     if(!root.isConnected)return;
     loading.update(98,loungeText("もうすぐ始まります","Almost ready","곧 시작합니다"));
