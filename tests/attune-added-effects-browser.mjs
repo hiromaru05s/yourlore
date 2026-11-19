@@ -40,7 +40,8 @@ try {for(const [width,height] of [[1280,900],[390,844]]){
   await page.locator('.picker-grid .card[data-card-id="STARTER_MANA"]').first().dispatchEvent('contextmenu');
   assert((await page.locator('.attune-added-effects').innerText()).includes(expected));
   if(pile==='#pile-oppDisc')assert(!(await page.locator('.attune-added-effects').innerText()).includes('回復'));
-  await page.evaluate(async()=>{(await import('/src/ui/cardInspection.ts')).closeZoom();(await import('/src/ui/modal.ts')).closeOverlay();});
+  await page.locator('.inspect-close').click();
+  await page.locator('#overlayRoot .modal-row button').last().click();
  }
  assert.deepEqual(errors,[]);console.log('PASS',width,'research result, stacked update, own deck/graveyard, opponent isolation, no overflow');await context.close();
 }} finally {await browser.close();}
