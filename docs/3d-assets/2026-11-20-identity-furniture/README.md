@@ -16,6 +16,8 @@ Requested by the user: compress the seven persistent cards to the character's ri
 
 The two frames reuse the production tray's five imported materials and its layered plinth/bezel/recess geometry. They have actual depth, chamfers, cast/received shadows, and use the same scene/camera/light as the mana tray. Tenons join each frame to the tray. The name is projected onto the inset face; it is still dynamic DOM text, with only Lv before the name.
 
+Follow-up: the user retained the frame sizes and requested more readable angles plus a slightly larger rank icon. Starting from the reviewed model in `76699e257`, the opponent plate now pitches 28° toward the viewer and the self plate 8°. The near edge at the mana rail is the pivot. `identityFurnitureLayout.ts` supplies the same physical pose to the 3D mesh and projected text, including the enamel face's height. The underlying GLB and editable Blender geometry are unchanged. Rank artwork is 115% of the previous size within the existing socket; the medal and frame sizes are unchanged.
+
 The rank/medal frame has two recessed sockets. Gold rank SVG and removable generic medal are placement samples, not actual account rewards. The preview checkbox hides both. The 3D furniture is enabled only by the preview root's `data-identity-furniture` attribute; it has not been adopted or deployed.
 
 The permanent-card lane uses a 0.002 m gap, starts just beyond the portrait and ends before the deck column. The existing seven-slot rule, multilingual rulebook and tutorial work remain on this branch.
@@ -40,3 +42,4 @@ The review iframe supports native 1920×1080, native 1280×720 and window-sized 
 - Portrait clearances: 47.09/32.84 px at 1920; 31.21/21.68 px at 1280.
 - Rank/medal sample toggle and native-size selector checked in the review page.
 - Full board screenshots visually inspected at both sizes. Visual adoption remains the user's decision.
+- Pitched follow-up inspected at 1920×1080 and 1280×720, with both names seated inside their physical inset faces and the enlarged rank icons inside the original sockets. Browser page errors: zero. Opponent text-plane projected height at 1920 increased from 19.27 px to 22.10 px; the self plate has the requested subtle tilt.

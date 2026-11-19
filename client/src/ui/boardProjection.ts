@@ -1,4 +1,5 @@
 import {placeReadingBoard,placeReadingHand,placeReadingOpponentHand,marketHeight,pileFace,RIFT_MOUNT} from './readingBoardLayout';
+import {identityNameplatePose,IDENTITY_RANK_SCALE} from './identityFurnitureLayout';
 /** One perspective and one physical card unit for the DOM and WebGL board.
  * CSS x/y maps to world X/Z; world Y is height above the table. */
 export const BOARD_TILT = 18;
@@ -52,15 +53,17 @@ export function projectBoardDOM(root:HTMLElement):void {
     const label=root.querySelector<HTMLElement>(`#portrait${side}>.pt-name`);
     if(!label)continue;
     if(root.dataset.identityFurniture==='true'){
-      const seat=(el:HTMLElement,x:number,z:number,w:number,h:number,elevation:number)=>{
+      const seat=(el:HTMLElement,x:number,z:number,w:number,h:number,elevation:number,pitch=0)=>{
         const left=innerWidth/2+(x-w/2)*scale,top=innerHeight/2+(z-h/2)*scale;
         el.style.left=`${left}px`;el.style.top=`${top}px`;el.style.width=`${w*scale}px`;el.style.height=`${h*scale}px`;
         el.style.transformOrigin='0 0';el.dataset.boardPlane=String(elevation*scale);
-        el.style.transform=new DOMMatrix().translate(-left,-top).multiply(boardMatrix(left,top,elevation*scale)).toString();
+        el.style.transform=new DOMMatrix().translate(-left,-top).multiply(boardMatrix(left,top,elevation*scale))
+          .translate(w*scale/2,h*scale/2).rotateAxisAngle(1,0,0,-pitch).translate(-w*scale/2,-h*scale/2).toString();
       };
-      seat(label,-.3035,sign*.397-.055,.237,.0205,.0163);
+      const pose=identityNameplatePose(side);
+      seat(label,-.3035,sign*.397+pose.faceZ,.237,.0205,.012+pose.faceY,pose.pitch);
       const rank=root.querySelector<HTMLElement>(`.identity-rank-sample[data-side="${side}"]`);
-      if(rank)seat(rank,-.135,sign*.397-.016,.031,.024,.0175);
+      if(rank)seat(rank,-.135,sign*.397-.016,.031*IDENTITY_RANK_SCALE,.024*IDENTITY_RANK_SCALE,.0175);
       continue;
     }
     const topZ=sign*.397-.0385;
