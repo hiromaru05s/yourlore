@@ -1,5 +1,6 @@
 /** Cooperative cross-worktree lock, source/version guards and committed snapshot build. */
 import fs from 'node:fs/promises';import os from 'node:os';import path from 'node:path';import {execFileSync,spawn} from 'node:child_process';
+import {checkoutReleaseSnapshot} from './release-snapshot.mjs';
 const env=process.argv[2];if(!['staging','production'].includes(env))throw Error('Usage: node scripts/deploy-guard.mjs staging|production');
 const git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trim();
 const common=path.resolve(git('rev-parse','--git-common-dir')),lock=path.join(common,'lore-deploy-'+env+'.lock');
@@ -21,7 +22,7 @@ try{
   try{git('merge-base','--is-ancestor','main',sha);}catch{throw Error('Local main has unintegrated commits; inspect it before deploying');}
  };check();
  if(!process.argv.includes('--check')){
-  snapshot=await fs.mkdtemp(path.join(os.tmpdir(),'lore-release-'));git('worktree','add','--detach',snapshot,sha);
+  snapshot=await fs.mkdtemp(path.join(os.tmpdir(),'lore-release-'));checkoutReleaseSnapshot(snapshot,sha);
   await run('npm',['ci','--no-fund'],snapshot);
   await run(process.execPath,['scripts/check-db-schema.mjs',env],snapshot);
   const status=()=>JSON.parse(execFileSync('npm',['exec','--','wrangler','deployments','status','-c','server/wrangler.toml',...(env==='staging'?['--env','staging']:[]),'--json'],{cwd:snapshot,encoding:'utf8'}));

@@ -28,3 +28,7 @@ Built preview: same worktree, Vite preview at `http://127.0.0.1:5592`.
 
 Local evidence: `/tmp/lore-resolution-qa/sharp-*` and `before-after.png`; persisted release evidence is under the current Codex visualization directory.
 Browser-emulated viewports and real controller with synthetic states; not authenticated PvP or physical-device verification. Small cards still have fewer final display pixels than the enlarged inspector.
+
+## Release storage prerequisite
+
+The first complete guarded validation passed all 303 production tests, then failed during the build with `ENOSPC` before deployment. The guard now uses `scripts/release-snapshot.mjs` to omit only historical raster images/videos under `docs/` from its temporary Git checkout (about 3.8 GiB). It retains documentation text, every application asset, source and test. Locking, clean-source checks, deployed-version checks, full validation and deployment order are unchanged. `tests/release-snapshot.mjs` verifies exact committed contents, retained build assets, clean snapshot and preservation of an uncommitted caller edit; it is included in the production suite.
