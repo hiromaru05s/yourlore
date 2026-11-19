@@ -39,3 +39,5 @@ Preview: http://127.0.0.1:5298/cinematic-vfx.html
 `qa/studio-report.json`: default original summon, previous-study selector and current LORE comparison controls. `qa/preview.mp4` trims the loading/preparation intervals from a real-time browser recording of both sides; `qa/normal-playback.webm` retains the full capture.
 
 Functional checks do not certify visual approval or parity with a commercial game. The user has not yet approved this new original design. This is a real-board fixture, not a live PvP summon implementation.
+
+`qa/preview60.mp4` renders the same browser timeline in exact 1/60-second steps for a smooth review clip. It is not a real-time performance measurement; the separate real-time capture and RAF measurements above provide that evidence.
