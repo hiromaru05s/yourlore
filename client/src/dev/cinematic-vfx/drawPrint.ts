@@ -3,8 +3,7 @@ import {drawMotion,drawSmooth} from '../../ui/drawMotion';
 import {FRAME_BACK} from '../../shared/cards';
 import {DRAW_THICKNESS_RATIO} from '../../ui/cardThickness';
 
-export const DRAW_FLIGHT=1.38,DRAW_GAP=.24;
-export const drawDuration=(count:number)=>DRAW_FLIGHT+(count-1)*DRAW_GAP+.28;
+import {DRAW_FLIGHT,DRAW_GAP,DRAW_WAKE} from './drawTiming';
 const mix=(a:number,b:number,t:number)=>a+(b-a)*t;
 const affine=(a:DOMMatrix,b:DOMMatrix,t:number)=>new DOMMatrix([mix(a.a,b.a,t),mix(a.b,b.b,t),mix(a.c,b.c,t),mix(a.d,b.d,t),mix(a.e,b.e,t),mix(a.f,b.f,t)]);
 type Slot={node:HTMLElement;w:number;h:number;to:DOMMatrix;from:DOMMatrix;index:number;visibility:string;transform:(pose:DOMMatrix)=>string;className:string;style:string|null;layers:Array<{node:HTMLElement;style:string|null}>;back?:HTMLElement;active:boolean};
@@ -66,7 +65,7 @@ export class DrawPrint {
   const strength=drawSmooth(.02,.18,t)*(1-drawSmooth(.78,1,t));if(strength<=0)return;
   // Two narrow wakes originate at the moving printed edge; history follows the
   // actual curve. Smooth density falloff replaces the old opaque ribbon/splinters.
-  const samples=28,tail=.29/DRAW_FLIGHT;
+  const samples=28,tail=DRAW_WAKE/DRAW_FLIGHT;
   for(const edge of[-.34,.34]){
    const points:Array<{x:number;y:number;q:number}>=[];
    for(let j=0;j<=samples;j++){

@@ -1,6 +1,6 @@
 import './studio.css';
 import {DURATIONS,type Kind} from './direction';
-const drawDuration=(count:number)=>1.38+(count-1)*.24+.28;
+import {drawDuration} from './drawTiming';
 type API={set(o:object):Promise<void>;play():void;pause():void;replay():void;seek(t:number):void;info():{ready:boolean;kind:Kind;time:number;playing:boolean}};
 type Native={run(o:object):Promise<void>;cancel():Promise<void>;info():{ready:boolean}};
 const $=<T extends HTMLElement>(id:string)=>document.getElementById(id) as T;

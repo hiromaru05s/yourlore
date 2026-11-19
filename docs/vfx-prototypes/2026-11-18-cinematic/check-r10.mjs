@@ -15,7 +15,7 @@ try{
    const mid=await page.evaluate(()=>({nativePrint:window.__prints.every(layers=>layers.every(n=>n.isConnected&&n.parentElement.matches('.card,.card--back'))),sourcesStable:window.__sources.every(o=>o.n.src===o.src&&o.n.width===o.w&&o.n.height===o.h),flights:document.querySelectorAll('[data-study-draw][data-incoming="true"]').length,cardClip:[...document.querySelectorAll('[data-study-draw].card')].map(n=>getComputedStyle(n).overflow),opponentFaces:document.querySelectorAll('[data-study-draw][data-incoming="true"] .card-art').length}));
    assert.ok(mid.nativePrint);assert.ok(mid.sourcesStable);assert.equal(mid.flights,count);assert.ok(mid.cardClip.every(v=>v==='visible'));if(side)assert.equal(mid.opponentFaces,0);
    if(count===4)await page.screenshot({path:`${dir}/${width}-${side}-flight.png`});
-   const landing=1.38+(count-1)*.24;
+   const landing=(1.38+(count-1)*.24)/1.15;
    await page.evaluate(t=>{window.vfx.seek(t);for(const a of document.getAnimations()){a.pause();a.currentTime=1000;}},landing-.00001);
    const beforeRects=await page.evaluate(side=>[...document.querySelectorAll(`${side?'#oppHand':'#hand'} > .card,${side?'#oppHand':'#hand'} > .card--back`)].map(n=>{const r=n.getBoundingClientRect();return [r.x,r.y,r.width,r.height]}),side);const before=await page.screenshot();
    await page.evaluate(t=>{window.vfx.seek(t);for(const a of document.getAnimations()){a.pause();a.currentTime=1000;}},landing+.00001);

@@ -16,7 +16,8 @@ import '../../styles/presentation.css';
 import '../../styles/defaultUI.css';
 import './scene.css';
 import {mountFixture,prepareDrawFixture,resetFixtureHands} from './fixture';
-import {DrawPrint,drawDuration,DRAW_FLIGHT,DRAW_GAP} from './drawPrint';
+import {DrawPrint} from './drawPrint';
+import {drawDuration,DRAW_FLIGHT,DRAW_GAP,DRAW_RATE} from './drawTiming';
 import type {HandLayout} from '../../ui/handGeometry';
 import {DB,FRAME_BACK} from '../../shared/cards';
 import {waitForDuel} from '../../ui/duelReadiness';
@@ -126,7 +127,7 @@ function render(){if(!ready)return;document.body.style.translate='';summonPrint.
 }
 function draw(){
  drawPrint.render(time);
- for(let i=0;i<drawCount;i++)cue(`draw-${i}`,i*DRAW_GAP+.06,.23,760,.06);
+ for(let i=0;i<drawCount;i++)cue(`draw-${i}`,i*DRAW_GAP+.06/DRAW_RATE,.23/DRAW_RATE,760,.06);
 }
 function summon(){
  const dest=rects.source,hand=rects.hand,u=dest.w;
