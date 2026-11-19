@@ -16,14 +16,14 @@ export function bindStoryGallery(root:HTMLElement,selected:number):()=>void {
  const move=(direction:number)=>track.scrollBy({left:step()*direction,behavior:reduce?'instant':'smooth'});
  prev.onclick=()=>move(-1);next.onclick=()=>move(1);
  track.onkeydown=e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();move(e.key==='ArrowRight'?1:-1);}};
- let pointer:number|undefined,start=0,left=0,dragged=false;
+ let pointer:number|undefined,start=0,left=0,dragged=false,suppressUntil=0;
  track.onpointerdown=e=>{
   if(e.pointerType!=='mouse'||e.button!==0)return;
   pointer=e.pointerId;start=e.clientX;left=track.scrollLeft;dragged=false;
  };
  track.onpointermove=e=>{
   if(pointer!==e.pointerId)return;
-  if(Math.abs(e.clientX-start)>6&&!dragged){dragged=true;track.classList.add('is-dragging');track.setPointerCapture(e.pointerId);}
+  if(Math.abs(e.clientX-start)>6&&!dragged){dragged=true;suppressUntil=performance.now()+600;track.classList.add('is-dragging');track.setPointerCapture(e.pointerId);}
   if(dragged){e.preventDefault();track.scrollLeft=left-(e.clientX-start);}
  };
  const finish=()=>{
@@ -33,6 +33,7 @@ export function bindStoryGallery(root:HTMLElement,selected:number):()=>void {
  track.onpointerup=finish;track.onpointercancel=finish;track.onlostpointercapture=finish;
  track.onpointerleave=()=>{if(!dragged)pointer=undefined;};
  track.addEventListener('click',e=>{if(dragged){e.preventDefault();e.stopImmediatePropagation();dragged=false;}},true);
+ track.addEventListener('dblclick',e=>{if(performance.now()<suppressUntil){e.preventDefault();e.stopImmediatePropagation();}},true);
  track.ondragstart=e=>e.preventDefault();
  track.addEventListener('scroll',update,{passive:true});
  const observer=new ResizeObserver(update);observer.observe(track);

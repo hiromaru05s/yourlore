@@ -165,7 +165,7 @@ export function mountSingleIdle(host:HTMLElement,key:SingleDifficulty):()=>void 
   let frame=0,last=0;
   function tick(now:number) {
     frame=requestAnimationFrame(tick);
-    if(!homeIsCovered() && !document.querySelector('.sp-deck-sheet[open]')) {
+    if(!homeIsCovered() && !document.querySelector('.sp-deck-sheet[open], .single-vn[open], .ss-master-sheet[open]')) {
       const state=motion.advance(last?Math.min(now-last,64)/1000:0);
       uniforms.blink.value=state.blink;
       uniforms.gesture.value=state.gesture;
