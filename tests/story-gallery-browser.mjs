@@ -26,7 +26,8 @@ try{
  await page.goto(server.resolvedUrls.local[0],{waitUntil:'domcontentloaded'});
  await page.locator('[data-nav="single"]').waitFor({timeout:90000});await page.locator('.screen-loader').waitFor({state:'hidden',timeout:90000});await reopen();
  const track=page.locator('.ss-gallery-track');
- await page.waitForFunction(()=>Array.from(document.querySelectorAll('.ss-card-landscape')).every(i=>i.complete&&i.naturalWidth>0));
+ await page.waitForFunction(()=>Array.from(document.querySelectorAll('.ss-gallery img')).every(i=>i.complete&&i.naturalWidth>0));
+ await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(800);
  assert.equal(await page.locator('[data-chapter]:disabled').count(),4);
  assert(await page.locator('[data-gallery-prev]').isDisabled());
  await page.screenshot({path:out+'/gallery-desktop.png'});
