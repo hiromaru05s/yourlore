@@ -1,0 +1,13 @@
+{
+  "reference": "v2-shared/shelf.glb",
+  "base_footprint_m": [
+    0.136,
+    0.198
+  ],
+  "card_contact_m": 0.009,
+  "wall_top_m": 0.014,
+  "deck_reference_footprint_m": [
+    0.136,
+    0.198
+  ]
+}

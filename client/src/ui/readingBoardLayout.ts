@@ -1,4 +1,5 @@
 import {CARD_THICKNESS_SCALE,STOCK_THICKNESS} from './cardThickness';
+import {identityRailLayout,RAIL} from './identityRailLayout';
 export {STOCK_THICKNESS} from './cardThickness';
 /** Meter-authored 01–06 mounts. Every DOM hit area uses the same model-space units. */
 export const READING_ASSETS='/models/reading-board/v2-shared/';
@@ -14,6 +15,8 @@ export function readingScale(width=innerWidth,height=innerHeight){return Math.mi
 /** Containers are display:contents, so placements have the viewport as offset parent. */
 export function placeReadingBoard(root:HTMLElement):void {
  const s=readingScale(),cx=innerWidth/2,cy=innerHeight/2;
+ const rail=root.dataset.alignedRail==='true'?identityRailLayout(s):undefined;
+ if(rail)root.style.setProperty('--identity-alignment-line',`${rail.line}px`);
  // Both portraits keep the same size, including their attached resource badges.
  const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.195);root.style.setProperty('--portrait-size',`${portraitSize}px`);
  root.classList.add('reading-board');root.style.setProperty('--board-meter',`${s}px`);
@@ -36,9 +39,11 @@ export function placeReadingBoard(root:HTMLElement):void {
   const spellsLeft=Math.max(buffIcons?.105:.13,portraitSize/(2*s)+.015);
   const spellsRight=buffIcons?.444:Math.min(.46,spellsLeft+7*.0384+6*.002);
   const spellDepth=buffIcons?(spellsRight-spellsLeft-6*.002)/7:.048;
-  place(`#${id}Row .zone-row:has(.zone-st)`,(spellsLeft+spellsRight)/2,sign*.34-(buffIcons?.006:0),spellsRight-spellsLeft,spellDepth);
-  place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,sign*.205,.136,.198);
-  place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
+  const spellZ=rail&&id==='me'?rail.planeZ(rail.line)+spellDepth/2:sign*.34-(buffIcons?.006:0);
+  place(`#${id}Row .zone-row:has(.zone-st)`,(spellsLeft+spellsRight)/2,spellZ,spellsRight-spellsLeft,spellDepth);
+  const pileZ=rail?(id==='me'?rail.pileSelfZ:-rail.pileSelfZ):sign*.205;
+  place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,pileZ,.136,.198);
+  place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,rail?pileZ:sign*.245,rail?.136:.166,rail?.198:.232);
   place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);
   const p=id==='me'?'Me':'Opp';
   // Match the far/near edge clearance. Counters stay within the frame height,
@@ -51,7 +56,7 @@ export function placeReadingBoard(root:HTMLElement):void {
   if(ring){ring.style.left=`${cx-size/2}px`;ring.style.top=`${portraitTop}px`;ring.style.width=ring.style.height=`${size}px`;}
   if(hp){hp.style.left=`${cx-size*.58}px`;hp.style.top=`${portraitTop+size*.06}px`;hp.style.width=`${size*.30}px`;hp.style.height=`${size*.36}px`;}
 
-  place(`#portrait${p} .pt-mana`,-.345,sign*.397,.350,.077);
+  place(`#portrait${p} .pt-mana`,rail?RAIL.manaX:-.345,rail?.[p].manaZ??sign*.397,.350,.077);
   const resources=root.querySelector<HTMLElement>(`#portrait${p} .pt-resources`);
   if(resources){resources.style.left=`${cx-size*.5}px`;resources.style.top=`${portraitTop}px`;resources.style.width=resources.style.height=`${size}px`;}
  }

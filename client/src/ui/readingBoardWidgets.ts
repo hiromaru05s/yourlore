@@ -1,4 +1,5 @@
 import {mountIdentityFurniture} from './identityFurniture';
+import {identityRailLayout,RAIL} from './identityRailLayout';
 import {t as translate} from '../i18n';
 import {turnUrgency} from './turnUrgency';
 import {readingAssetBytes} from './readingAssetCache';
@@ -46,7 +47,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   for(const gem of [jewel,spent])gem.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial&&o.material.transmission>0){addCrystalOptics(o.material,cut);o.material.userData.authoredAttenuation=o.material.attenuationDistance;opticalMaterials.push(o.material);}});
   jewel.traverse(o=>{if(o instanceof T.Mesh&&o.material instanceof T.MeshPhysicalMaterial&&o.material.transmission>0)manaGlow.applyMaterial(o.material);});
   for(const [side,z] of [['Me',.397],['Opp',-.397]] as const){
-   const mana=new T.Group();mana.position.set(-.345,.012,z);group.add(mana);
+   const mana=new T.Group();mana.position.set(root.dataset.alignedRail==='true'?RAIL.manaX:-.345,.012,z);group.add(mana);
    const a=tray.clone(true),b=counter.clone(true);a.position.x=.0415;b.position.x=-.132;mana.add(a,b);
    const batches:{ready:T.InstancedMesh[];spent:T.InstancedMesh[]}={ready:[],spent:[]};
    for(const [state,asset] of [['ready',jewel],['spent',spent]] as const){
@@ -72,11 +73,14 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const click=(e:Event)=>{const button=(e.target as Element).closest<HTMLButtonElement>('button'),control=id(e);if(!control||button?.disabled)return;const now=performance.now();if(control==='refreshBtn')rerollTime=now;if(control==='endBtn')turnTime=now;animateUntil=now+1000;};
  root.addEventListener('pointerover',over);root.addEventListener('pointerdown',down);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);root.addEventListener('click',click,true);
  let clockSegments=-1;
+ let railViewport='';
  function tick(now:number){
   if(dead)return false;const scale=readingScale();group.scale.setScalar(scale);
 
   if(!ready)return false;
   const dt=Math.min(.06,(now-last)/1000);last=now;let changed=identity?.tick()??false;if(changed)shadowDirty=true;
+  const viewport=`${innerWidth}:${innerHeight}`;
+  if(root.dataset.alignedRail==='true'&&viewport!==railViewport){railViewport=viewport;const rail=identityRailLayout(scale);for(const mana of manas)mana.root.position.z=rail[mana.side==='Me'?'Me':'Opp'].manaZ;changed=true;shadowDirty=true;}
   for(const material of opticalMaterials)material.attenuationDistance=Number(material.userData.authoredAttenuation)*scale;
   for(const mana of manas){
    const el=root.querySelector<HTMLElement>(`#portrait${mana.side} .pt-mana`);if(!el)continue;

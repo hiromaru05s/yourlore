@@ -3,10 +3,11 @@ import * as T from 'three';
 import {loadReadingModel} from './readingModel';
 export type FurnitureKind='deck'|'shelf'|'market'|'supply';
 /** Cached GLBs own textures; scene instances own their cloned meshes/materials. */
-export function loadLibraryAssets(onReady:()=>void, kinds:readonly FurnitureKind[]=['deck','shelf','market','supply']) {
+export function loadLibraryAssets(onReady:()=>void, kinds:readonly FurnitureKind[]=['deck','shelf','market','supply'],overrides:Partial<Record<FurnitureKind,string>>={}) {
   const cache=new Map<FurnitureKind,T.Group>();let dead=false,revision=0,pending=kinds.length;
   const low=matchMedia('(max-width:700px)').matches;
   const paths:Record<FurnitureKind,string>={deck:READING_ASSETS+`deck-place${low?'-lod1':''}.glb`,shelf:READING_ASSETS+`shelf${low?'-lod1':''}.glb`,market:READING_ASSETS+`market${low?'-low':''}.glb`,supply:READING_ASSETS+`supply${low?'-low':''}.glb`};
+  Object.assign(paths,overrides);
   function release(root:T.Object3D){
     const geos=new Set<T.BufferGeometry>(),mats=new Set<T.Material>(),maps=new Set<T.Texture>();
     root.traverse(o=>{if(o instanceof T.Mesh){geos.add(o.geometry);for(const m of Array.isArray(o.material)?o.material:[o.material]){mats.add(m);for(const v of Object.values(m))if(v instanceof T.Texture)maps.add(v);}}});

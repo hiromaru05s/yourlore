@@ -12,4 +12,5 @@ projectBoardDOM(root);
 window.addEventListener('message',e=>{
  if(e.origin!==location.origin||e.source!==parent)return;
  if(e.data?.type==='identity-samples')root.dataset.insigniaSamples=e.data.show?'on':'off';
+ if(e.data?.type==='identity-guides')root.dataset.showAlignment=e.data.show?'true':'false';
 });

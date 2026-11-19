@@ -1,30 +1,16 @@
 import {placeReadingBoard,placeReadingHand,placeReadingOpponentHand,marketHeight,pileFace,RIFT_MOUNT} from './readingBoardLayout';
 import {identityNameplatePose,IDENTITY_RANK_SCALE} from './identityFurnitureLayout';
+import {identityRailLayout,RAIL} from './identityRailLayout';
 /** One perspective and one physical card unit for the DOM and WebGL board.
  * CSS x/y maps to world X/Z; world Y is height above the table. */
-export const BOARD_TILT = 18;
-export const CARD_RATIO = .64;
-export function boardLens(width=innerWidth,height=innerHeight) {
-  return {width,height,cx:width/2,cy:height/2,focal:height*2.2,angle:BOARD_TILT*Math.PI/180};
-}
+export {BOARD_TILT,CARD_RATIO,boardLens,boardMatrix,boardPoint,screenToBoard} from './boardLens';
+import {boardMatrix,boardPoint} from './boardLens';
 /** Layout coordinates before any ancestor's projective transform. */
 export function layoutRect(element:HTMLElement):DOMRect {
   let x=0,y=0,node:HTMLElement|null=element;
   while(node){x+=node.offsetLeft;y+=node.offsetTop;const parent=node.offsetParent as HTMLElement|null;if(parent){x+=parent.clientLeft;y+=parent.clientTop;}node=parent;}
   const style=getComputedStyle(element);
   return new DOMRect(x,y,parseFloat(style.width)||element.offsetWidth,parseFloat(style.height)||element.offsetHeight);
-}
-export function boardMatrix(x:number,y:number,elevation=0,width=innerWidth,height=innerHeight):DOMMatrix {
-  const {cx,cy,focal}=boardLens(width,height),perspective=new DOMMatrix();perspective.m34=-1/focal;
-  return new DOMMatrix().translate(cx,cy).multiply(perspective).rotateAxisAngle(1,0,0,BOARD_TILT).translate(x-cx,y-cy,elevation);
-}
-export function boardPoint(x:number,y:number,elevation=0) {
-  const p=boardMatrix(x,y,elevation).transformPoint(new DOMPoint());return {x:p.x/p.w,y:p.y/p.w};
-}
-export function screenToBoard(x:number,y:number,elevation=0) {
-  const {cx,cy,focal,angle}=boardLens(),s=Math.sin(angle),c=Math.cos(angle),v=y-cy;
-  const z=(v*focal-v*c*elevation+focal*s*elevation)/(focal*c+v*s);
-  return {x:cx+(x-cx)*(focal-s*z-c*elevation)/focal,y:cy+z};
 }
 export function cardUnit(root:HTMLElement):number {return parseFloat(getComputedStyle(root).getPropertyValue('--card-w'))||60;}
 export function projectBoardDOM(root:HTMLElement):void {
@@ -49,6 +35,7 @@ export function projectBoardDOM(root:HTMLElement):void {
   // ±.0385, top .011, with the widget's .0415 X / .012 Y mounting offsets.
   // Both names stay attached above the tray; no viewport-driven side swap.
   const scale=unit/.110;
+  const rail=root.dataset.alignedRail==='true'?identityRailLayout(scale):undefined;
   for(const [side,sign] of [['Me',1],['Opp',-1]] as const){
     const label=root.querySelector<HTMLElement>(`#portrait${side}>.pt-name`);
     if(!label)continue;
@@ -60,10 +47,14 @@ export function projectBoardDOM(root:HTMLElement):void {
         el.style.transform=new DOMMatrix().translate(-left,-top).multiply(boardMatrix(left,top,elevation*scale))
           .translate(w*scale/2,h*scale/2).rotateAxisAngle(1,0,0,-pitch).translate(-w*scale/2,-h*scale/2).toString();
       };
-      const pose=identityNameplatePose(side);
-      seat(label,-.3035,sign*.397+pose.faceZ,.237,.0205,.012+pose.faceY,pose.pitch);
+      const pose=rail?.[side].name??identityNameplatePose(side);
+      const manaZ=rail?.[side].manaZ??sign*.397;
+      seat(label,(rail?RAIL.manaX:-.345)+.0415,manaZ+pose.faceZ,.237,rail?rail.nameDepth-.020:.0205,.012+pose.faceY,pose.pitch);
       const rank=root.querySelector<HTMLElement>(`.identity-rank-sample[data-side="${side}"]`);
-      if(rank)seat(rank,-.135,sign*.397-.016,.031*IDENTITY_RANK_SCALE,.024*IDENTITY_RANK_SCALE,.0175);
+      if(rank){
+        if(rail)seat(rank,RAIL.manaX+RAIL.badgeX,manaZ+rail[side].badgeCenterZ-RAIL.socketOffset*rail[side].badgeScaleZ,.059,.047,.0175);
+        else seat(rank,-.135,sign*.397-.016,.031*IDENTITY_RANK_SCALE,.024*IDENTITY_RANK_SCALE,.0175);
+      }
       continue;
     }
     const topZ=sign*.397-.0385;

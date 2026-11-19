@@ -7,3 +7,13 @@
 .identity-rank-sample{position:absolute;pointer-events:none;z-index:30;line-height:0}
 .identity-rank-sample svg{display:block;width:100%;height:100%;overflow:visible}
 #app:not([data-insignia-samples=on]) .identity-rank-sample{visibility:hidden}
+#app.reading-board[data-aligned-rail=true] .portrait .pt-name.pt-name--azure {
+ font-size:clamp(10px,calc(var(--board-meter)*.020),23px);
+}
+#app.reading-board[data-aligned-rail=true] .pile .pile-count {
+ bottom:calc(var(--board-meter)*.004);right:4%;
+}
+#app[data-show-alignment=true]::after {
+ content:'';position:absolute;left:8%;right:8%;top:var(--identity-alignment-line);border-top:1px dashed #f1b869;
+ pointer-events:none;z-index:500;
+}

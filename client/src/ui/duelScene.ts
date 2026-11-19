@@ -61,7 +61,7 @@ function createDuelScene(root:HTMLElement,onContextLost:()=>void):()=>void {
   let dead=false,dirty=true,flightActive=false,frame=0,last=0,width=0,height=0,lastPaint=0;
   let openingDirty=false;
   const disposeOpening=bindOpeningScene(root,scene,()=>{openingDirty=true;keyLight.shadow.needsUpdate=true;});
-  const furniture=loadLibraryAssets(()=>{dirty=true;});
+  const furniture=loadLibraryAssets(()=>{dirty=true;},undefined,root.dataset.alignedRail==='true'?{shelf:'/models/reading-board/identity-aligned-1120/shelf.glb'}:{});
   const items=new Map<string,Item>(),textures=new Map<string,T.Texture>();const loading=new T.LoadingManager();let pendingTextures=0;loading.onStart=()=>{pendingTextures++;};loading.onLoad=()=>{pendingTextures=0;};const loader=new T.TextureLoader(loading);
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   function texture(url:string){let t=textures.get(url);if(!t){t=loader.load(url,()=>{dirty=true;});t.userData.url=url;t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;textures.set(url,t);}return t;}

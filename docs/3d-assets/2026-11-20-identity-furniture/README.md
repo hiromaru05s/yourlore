@@ -54,3 +54,7 @@ The user asked to use more horizontal/upper space and present permanent spells a
 - Remaining-turn numerals, infinity and quest progress sit at the lower right. The old circular countdown surround/fill is hidden in this study; its authoritative remaining value, accessible timing description and inspection bindings are retained.
 - Visual checks: both sides × 1920×1080 and 1280×720, seven square art icons, no card-frame clipping. New deck clearances self/opponent: 12.38/31.22 px at 1920; 8.32/20.82 px at 1280. Portrait clearances: 22.50/10.53 px and 14.99/7.05 px respectively.
 - TypeScript check passed; browser page errors: zero. This is static fixture presentation, not a live gameplay or VFX continuity test. No production deployment.
+
+## Alignment and compact-grave follow-up
+
+See [the aligned preview record](aligned/README.md) for the user-confirmed grave/deck sizing correction, expanded name and insignia frames, shared screen-space baseline, native-size screenshots and exported-mesh verification.
