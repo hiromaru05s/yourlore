@@ -43,12 +43,12 @@ try{
   else {assert(r.hp[1-side]>40);assert(r.frames.some(f=>f.amount===r.hp[1-side]-40));}
   assert.equal(r.left,0);assert.equal(r.overflow,false);checks.push({...r,frames:undefined,samples:r.frames.length});console.log('PASS',width,kind,side,amount);
  }
- await page.emulateMedia({reducedMotion:'reduce'});const reduced=await page.evaluate(()=>healCase('player',0,10));assert(reduced.frames.length);assert(reduced.frames.every(f=>f.cloud==='none'));assert.equal(reduced.left,0);checks.push({reduced:true});
+ await page.emulateMedia({reducedMotion:'reduce'});const reduced=await page.evaluate(()=>healCase('player',0,10));assert(reduced.frames.length);assert(reduced.frames.every(f=>f.cloud==='none'));assert.equal(reduced.left,0);checks.push({reduced:true});console.log('PASS reduced motion');
  await page.emulateMedia({reducedMotion:'no-preference'});
  for(const action of ['skip','resize','destroy']){
-  await page.evaluate(()=>{window.healRun=healCase('player',0,8)});await page.waitForSelector('.combat-heal');
+  await page.evaluate(()=>{window.healRun=healCase('player',0,8)});await page.waitForSelector('.combat-heal .ch-digit');
   if(action==='resize')await page.setViewportSize({width:1100,height:850});else await page.evaluate(action=>action==='skip'?combatTempo.controller.fastForward():combatTempo.controller.destroy(),action);
-  assert.equal(await page.locator('.combat-heal').count(),0);await page.evaluate(()=>healRun);checks.push({action,clean:true});
+  assert.equal(await page.locator('.combat-heal').count(),0);await page.evaluate(()=>healRun);checks.push({action,clean:true});console.log('PASS cleanup',action);
  }
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({origin,checks,errors,boundary:'Real reducer/controller fixtures and adopted UI. Browser-generated player amount fixtures exercise 9/10/128. Not authenticated multiplayer.'},null,2));console.log('PASS healing feedback');
 }finally{await context.close();await page.video().saveAs(out+'/playback.webm');await browser.close();await fs.rm(temp,{recursive:true,force:true});}
