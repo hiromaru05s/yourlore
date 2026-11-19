@@ -4,7 +4,8 @@ import {createServer} from 'vite';
 import {onboardingFixture} from './fixtures/onboardingEnv.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'/Users/hiromaru05s/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
 const f=await onboardingFixture(),out=process.env.SINGLE_STORY_QA_DIR||'/tmp/lore-single-story-qa';await fs.mkdir(out,{recursive:true});
-const server=await createServer({root:'client',configFile:'client/vite.config.ts',logLevel:'error',server:{host:'127.0.0.1',port:0,hmr:false}});await server.listen();
+const liveOrigin=process.env.LORE_GALLERY_LIVE_ORIGIN;
+const server=liveOrigin?{resolvedUrls:{local:[liveOrigin]},listen:async()=>{},close:async()=>{}}:await createServer({root:'client',configFile:'client/vite.config.ts',logLevel:'error',server:{host:'127.0.0.1',port:0,hmr:false}});await server.listen();
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const uid='single-story-browser';f.addUser(uid);f.db.prepare('UPDATE users SET username_set=1 WHERE id=?').run(uid);
 const context=await browser.newContext({viewport:{width:1440,height:900}}),page=await context.newPage(),errors=[],apiErrors=[];let rejectRead=false,storyRequest=false;
@@ -50,11 +51,11 @@ try{
  assert(await track.evaluate(e=>e.scrollLeft)>100,'native touch swipe scrolls');await touch.detach();
  await track.evaluate(e=>e.scrollLeft=0);await page.waitForTimeout(400);await page.locator('[data-chapter="1"]').click();
  await page.locator('[data-scene="1:before"]').click();await page.locator('.single-vn').waitFor();await page.keyboard.press('Escape');
- for(const lang of ['en','ko','ja']){
+ for(const lang of liveOrigin?[]:['en','ko','ja']){
   await page.evaluate(async lang=>{const {setLang}=await import('/src/i18n.ts');setLang(lang);},lang);await page.locator('#ss-title').waitFor();
   await page.screenshot({path:out+`/gallery-${lang}.png`});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(apiErrors,[]);
- await fs.writeFile(out+'/gallery-report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],errors,apiErrors,checks:['images loaded','locked chapters','arrow boundaries','mouse drag without click','native touch swipe','card selection and story entry','keyboard','portrait cards','320/390/844/1280 widths','ja/en/ko']},null,2));
+ await fs.writeFile(out+'/gallery-report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],api:'isolated fixture; actual application assets',liveAssets:!!liveOrigin,errors,apiErrors,checks:['images loaded','locked chapters','arrow boundaries','mouse drag without click','native touch swipe','card selection and story entry','keyboard','portrait cards','320/390/844/1280 widths','ja/en/ko']},null,2));
  console.log('PASS chapter gallery browser checks');
 }finally{await browser.close();await server.close();await f.close();}
