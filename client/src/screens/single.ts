@@ -8,7 +8,7 @@ import { SINGLE_CHAPTERS, STORY_NAMES } from '../shared/singleStoryText';
 import { tutorialPartKey } from '../shared/tutorialPartMeta';
 import { loungeText as L } from '../ui/loungeText';
 import { mountSeekerBook } from '../ui/seekerBook';
-import { openStoryScene } from '../ui/storyScene';
+import { openStoryScene, savedStoryCursor, storyCursorKey } from '../ui/storyScene';
 import { mountSingleBattle } from './singleBattle';
 import '../styles/singleStory.css';
 import '../styles/storyGallery.css';
@@ -24,7 +24,7 @@ export function mountSingle(app:App,initial:SingleLocation={}):Screen {
  let state=emptySingleProgress(),dead=false,selected=initial.chapter??1,loaded=false,closeScene:(()=>void)|undefined,book:ReturnType<typeof mountSeekerBook>|undefined;
  const tab=initial.tab??'story';let bookOpen=!!initial.book;
  let galleryCleanup:(()=>void)|undefined,artCleanup:(()=>void)|undefined;
- let masterSheet:HTMLDialogElement|undefined;
+ let masterSheet:HTMLDialogElement|undefined,restartSheet:HTMLDialogElement|undefined;
  const read=(scene:StoryScene)=>state.read.includes(scene);
  const header=()=>`<nav class="ss-tabs" aria-label="${L('シングル','Single','싱글')}">${(['story','battle','training'] as const).map((id,i)=>`<button data-tab="${id}" aria-pressed="${tab===id}">${[L('ストーリー','Story','스토리'),L('対戦','Battle','대전'),L('修練','Training','수련')][i]}</button>`).join('')}</nav>`;
  const bindNav=()=>root.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach(b=>b.onclick=()=>app.single({tab:b.dataset.tab as SingleLocation['tab']}));
@@ -35,7 +35,7 @@ export function mountSingle(app:App,initial:SingleLocation={}):Screen {
    if(guest){const next=[...new Set([...state.read,scene])];localStorage.setItem(guestKey,JSON.stringify(next));state={...state,read:next};}
    else {const next=await api.readSingleScene(scene);if(dead||app.user?.id!==account)return;state=next;}
    completed=true;
-  },()=>{closeScene=undefined;if(!dead){render();if(completed&&afterComplete)afterComplete();else root.querySelector<HTMLButtonElement>(`[data-chapter="${selected}"]`)?.focus({preventScroll:true});}});
+  },()=>{closeScene=undefined;if(!dead){render();if(completed&&afterComplete)afterComplete();else root.querySelector<HTMLButtonElement>(`[data-continue="${selected}"]:enabled, [data-restart="${selected}"]`)?.focus({preventScroll:true});}});
  }
  function renderTraining(){
   book?.destroy();book=undefined;
@@ -71,13 +71,39 @@ export function mountSingle(app:App,initial:SingleLocation={}):Screen {
   else if(id===4)app.single({tab:'battle'});
   else openMasters();
  }
- function startChapter(id:number){
+ function canContinue(id:number){
+  if(!chapterOpen(state,id))return false;
+  const before=`${id}:before` as StoryScene,after=`${id}:after` as StoryScene;
+  return savedStoryCursor(account,before)!==null||
+   (chapterObjective(state,id)&&savedStoryCursor(account,after)!==null)||
+   (read(before)&&(!read(after)||id===5));
+ }
+ function confirmRestart(id:number){
+  if(dead||closeScene||restartSheet||!chapterOpen(state,id))return;
+  selectChapter(id);
+  const dialog=document.createElement('dialog');restartSheet=dialog;dialog.className='ss-restart-sheet';
+  dialog.setAttribute('aria-labelledby','ss-restart-title');
+  dialog.setAttribute('aria-describedby','ss-restart-description');
+  dialog.innerHTML=`<h2 id="ss-restart-title">${L('この章を最初から始めますか？','Start this chapter from the beginning?','이 장을 처음부터 시작할까요?')}</h2><p id="ss-restart-description">${L('中断位置を戻し、章の冒頭から読み直します。クリア済みの実習・対戦や章の解放状況は保持されます。','Restart this chapter’s conversations. Completed practice, battles and unlocked chapters are kept.','이 장의 대화를 처음부터 다시 읽습니다. 완료한 실습·대전과 해금한 장은 유지됩니다.')}</p><div class="ss-restart-actions"><button class="lore-button" data-no autofocus>NO</button><button class="lore-button lore-button-primary" data-yes>YES</button></div>`;
+  const dismiss=()=>{dialog.close();dialog.remove();if(restartSheet===dialog)restartSheet=undefined;root.querySelector<HTMLButtonElement>(`[data-restart="${id}"]`)?.focus({preventScroll:true});};
+  dialog.querySelector<HTMLButtonElement>('[data-no]')!.onclick=dismiss;
+  dialog.oncancel=e=>{e.preventDefault();dismiss();};
+  dialog.querySelector<HTMLButtonElement>('[data-yes]')!.onclick=()=>{dismiss();if(!dead)startChapter(id,true);};
+  document.body.append(dialog);dialog.showModal();
+ }
+ function startChapter(id:number,restart=false){
   if(closeScene||!chapterOpen(state,id))return;
   selected=id;
   const before=`${id}:before` as StoryScene,after=`${id}:after` as StoryScene;
   const closeChapter=()=>{if(id===5)openMasters();else{selected=Math.min(5,id+1);render();}};
   const proceed=()=>chapterObjective(state,id)?showScene(after,closeChapter):activity(id);
-  if(!read(before))showScene(before,proceed);
+  if(restart){
+   for(const scene of [before,after]){try{localStorage.removeItem(storyCursorKey(account,scene));}catch{}}
+   showScene(before,proceed);
+  }
+  else if(savedStoryCursor(account,before)!==null)showScene(before,proceed);
+  else if(chapterObjective(state,id)&&savedStoryCursor(account,after)!==null)showScene(after,closeChapter);
+  else if(!read(before))showScene(before,proceed);
   else if(!chapterObjective(state,id))activity(id);
   else if(!read(after))showScene(after,closeChapter);
   else if(id===5)openMasters();
@@ -85,7 +111,7 @@ export function mountSingle(app:App,initial:SingleLocation={}):Screen {
  }
  function selectChapter(id:number){
   selected=id;
-  root.querySelectorAll<HTMLButtonElement>('[data-chapter]').forEach(card=>{
+  root.querySelectorAll<HTMLElement>('[data-chapter]').forEach(card=>{
    const current=Number(card.dataset.chapter)===id;
    card.toggleAttribute('data-selected',current);
    if(current)card.setAttribute('aria-current','page');else card.removeAttribute('aria-current');
@@ -99,14 +125,14 @@ export function mountSingle(app:App,initial:SingleLocation={}):Screen {
   root.innerHTML=header()+`<main class="ss-layout ss-gallery-layout"><header class="ss-journey-heading"><div><span class="ss-eyebrow">THE SEEKER'S JOURNEY</span><h1>${L('父の記録を求めて','In search of Father','아버지의 기록을 찾아')}</h1></div><p class="ss-volume">${L('導入読了','INTRO READ','도입 읽음')} <b>${completed}</b> / 5</p></header>
   <section class="ss-gallery" aria-label="${L('チャプター','Chapters','장')}"><div class="ss-gallery-track" tabindex="0" aria-label="${L('左右に送って章を選択','Scroll sideways to choose a chapter','좌우로 넘겨 장 선택')}">${SINGLE_CHAPTERS.map(c=>{
    const open=chapterOpen(state,c.id),done=read(`${c.id}:after` as StoryScene);
-   return `<button class="ss-chapter-card" data-chapter="${c.id}" ${open?'':'disabled'} ${selected===c.id?'aria-current="page" data-selected':''} aria-label="${c.title[lang]} · ${open?L('ダブルクリックまたはEnterで開始','Double-click or Enter to start','더블 클릭 또는 Enter로 시작'):L('未解放','Locked','잠김')}"><img class="ss-card-landscape" data-chapter-art="${c.id}" src="/art/single-story/chapters-v2/chapter-${c.id}.webp" alt="" draggable="false">${c.actor==='zeno'?'':`<span class="ss-card-actor" data-idle="${c.actor}"><img src="/art/single-standing/refined-v2/${c.actor}.webp" alt="" draggable="false"></span>`}<span class="ss-card-number">${String(c.id).padStart(2,'0')}</span>${open?(done?`<span class="ss-card-status">${L('✓ 読了','✓ READ','✓ 읽음')}</span>`:''):`<span class="ss-card-seal">${lock}<b>${L('未解放','LOCKED','잠김')}</b><small>${L(`第${c.id-1}章を完了して解放`,`Complete Chapter ${c.id-1}`,`${c.id-1}장 완료 시 개방`)}</small></span>`}<span class="ss-card-copy"><small>CHAPTER ${String(c.id).padStart(2,'0')}</small><b>${c.title[lang]}</b><span class="ss-card-place">${c.place[lang]}</span><span class="ss-card-summary">${c.summary[lang]}</span><span class="ss-card-enter">${L('ダブルクリックで開始','Double-click to start','더블 클릭으로 시작')} <i>›</i></span></span></button>`;
-  }).join('')}</div><button class="ss-gallery-arrow ss-gallery-prev" data-gallery-prev aria-label="${L('前の章を表示','Show previous chapters','이전 장 보기')}"><img src="${pageArrow}" alt="" draggable="false"></button><button class="ss-gallery-arrow ss-gallery-next" data-gallery-next aria-label="${L('次の章を表示','Show next chapters','다음 장 보기')}"><img src="${pageArrow}" alt="" draggable="false"></button></section><div class="ss-gallery-caption"><span>${L('クリックで選択 · ダブルクリックで開始','Click to select · Double-click to start','클릭으로 선택 · 더블 클릭으로 시작')}</span><span class="ss-gallery-position" aria-live="polite"></span></div></main>`;
+   return `<article class="ss-chapter-card" data-chapter="${c.id}" ${open?'':'aria-disabled="true"'} ${selected===c.id?'aria-current="page" data-selected':''} aria-label="${c.title[lang]} · ${open?L('章の開始方法を選択','Choose how to start','시작 방법 선택'):L('未解放','Locked','잠김')}"><img class="ss-card-landscape" data-chapter-art="${c.id}" src="/art/single-story/chapters-v2/chapter-${c.id}.webp" alt="" draggable="false">${c.actor==='zeno'?'':`<span class="ss-card-actor" data-idle="${c.actor}"><img src="/art/single-standing/refined-v2/${c.actor}.webp" alt="" draggable="false"></span>`}<span class="ss-card-number">${String(c.id).padStart(2,'0')}</span>${open?(done?`<span class="ss-card-status">${L('✓ 読了','✓ READ','✓ 읽음')}</span>`:''):`<span class="ss-card-seal">${lock}<b>${L('未解放','LOCKED','잠김')}</b><small>${L(`第${c.id-1}章を完了して解放`,`Complete Chapter ${c.id-1}`,`${c.id-1}장 완료 시 개방`)}</small></span>`}<span class="ss-card-copy"><small>CHAPTER ${String(c.id).padStart(2,'0')}</small><b>${c.title[lang]}</b><span class="ss-card-place">${c.place[lang]}</span><span class="ss-card-summary">${c.summary[lang]}</span><span class="ss-card-actions"><button class="lore-button" data-restart="${c.id}" ${open?'':'disabled'}>${L('最初から','Start over','처음부터')}</button><button class="lore-button lore-button-primary" data-continue="${c.id}" ${canContinue(c.id)?'':'disabled'}>${L('続きから','Continue','이어하기')}</button></span></span></article>`;
+  }).join('')}</div><button class="ss-gallery-arrow ss-gallery-prev" data-gallery-prev aria-label="${L('前の章を表示','Show previous chapters','이전 장 보기')}"><img src="${pageArrow}" alt="" draggable="false"></button><button class="ss-gallery-arrow ss-gallery-next" data-gallery-next aria-label="${L('次の章を表示','Show next chapters','다음 장 보기')}"><img src="${pageArrow}" alt="" draggable="false"></button></section><div class="ss-gallery-caption"><span>${L('ボタンをクリックして開始','Click a button to start','버튼을 눌러 시작')}</span><span class="ss-gallery-position" aria-live="polite"></span></div></main>`;
   bindNav();galleryCleanup=bindStoryGallery(root,selected);artCleanup=mountStoryArt(root);
-  root.querySelectorAll<HTMLButtonElement>('[data-chapter]').forEach(card=>{
+  root.querySelectorAll<HTMLElement>('[data-chapter]').forEach(card=>{
    const id=Number(card.dataset.chapter);
-   card.onclick=()=>selectChapter(id);
-   card.ondblclick=e=>{e.preventDefault();startChapter(id);};
-   card.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();startChapter(id);}};
+   card.onclick=()=>{if(chapterOpen(state,id))selectChapter(id);};
+   card.querySelector<HTMLButtonElement>('[data-restart]')!.onclick=e=>{e.stopPropagation();confirmRestart(id);};
+   card.querySelector<HTMLButtonElement>('[data-continue]')!.onclick=e=>{e.stopPropagation();if(canContinue(id))startChapter(id);};
   });
  }
  async function load(){
@@ -123,5 +149,5 @@ export function mountSingle(app:App,initial:SingleLocation={}):Screen {
   }catch{if(dead)return;root.innerHTML=header()+`<div class="ss-loading"><p role="alert">${L('進行記録を読み込めませんでした。','Could not load your progress.','진행 기록을 불러오지 못했어요.')}</p><button class="lore-button" data-retry>${L('再試行','Retry','다시 시도')}</button></div>`;bindNav();root.querySelector<HTMLButtonElement>('[data-retry]')!.onclick=()=>void load();}
  }
  void load();const off=onLangChange(()=>app.single({tab,chapter:selected,book:bookOpen}));
- return{destroy(){dead=true;galleryCleanup?.();artCleanup?.();masterSheet?.close();off();closeScene?.();book?.destroy();root.remove();}};
+ return{destroy(){dead=true;galleryCleanup?.();artCleanup?.();masterSheet?.close();restartSheet?.close();restartSheet?.remove();off();closeScene?.();book?.destroy();root.remove();}};
 }

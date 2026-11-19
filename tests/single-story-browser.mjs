@@ -19,7 +19,11 @@ await page.route('**/api/**',async route=>{
 });
 await page.addLocatorHandler(page.locator('.graphics-notice [data-continue]'),async()=>page.locator('.graphics-notice [data-continue]').click());
 const reopen=async()=>{await page.locator('[data-nav="single"]').click();await page.locator('.ss-gallery-track').waitFor({timeout:90000});};
-const openChapter=async id=>{await page.locator(`[data-chapter="${id}"]`).dblclick();};
+const openChapter=async id=>{
+ const resume=page.locator(`[data-continue="${id}"]`);
+ if(await resume.isEnabled())await resume.click();
+ else{await page.locator(`[data-restart="${id}"]`).click();await page.locator('.ss-restart-sheet [data-yes]').click();}
+};
 const skip=async scene=>{await openChapter(Number(scene.split(':')[0]));await page.locator('.single-vn [data-skip]').click();await page.locator('.single-vn').waitFor({state:'detached'});};
 const receipt=key=>f.db.prepare('INSERT OR IGNORE INTO rewards VALUES(?,?,0,?)').run(uid,key,Date.now());
 try{
@@ -27,7 +31,7 @@ try{
  await page.locator('[data-nav="single"]').waitFor({timeout:90000});await page.locator('.screen-loader').waitFor({state:'hidden',timeout:90000});await reopen();
  assert.equal(await page.locator('[data-nav="tutorial"]').count(),0);
  assert.equal(await page.locator('.lounge-rail [data-nav]').count(),6);
- assert.equal(await page.locator('[data-chapter]:disabled').count(),4);
+ assert.equal(await page.locator('[data-chapter][aria-disabled="true"]').count(),4);
  await page.waitForTimeout(400);
  assert((await page.locator('.ss-gallery-track').boundingBox()).width>900,'chapter gallery uses available desktop width');
  await page.screenshot({path:out+'/chapter-1.png'});
@@ -37,7 +41,7 @@ try{
  await page.locator('.single-vn [data-pause]').click();await openChapter(1);
  assert.equal(await page.locator('.svn-count').innerText(),'2 / 5','pause resumes the same line');
  rejectRead=true;await page.locator('.single-vn [data-skip]').click();await page.locator('.svn-error:not(:empty)').waitFor();
- assert.equal(await page.locator('[data-chapter="2"]').isDisabled(),true);
+ assert.equal(await page.locator('[data-restart="2"]').isDisabled(),true);
  await page.locator('.single-vn [data-skip]').click();await page.locator('.single-vn').waitFor({state:'detached'});
  assert.equal((await f.call('/rewards/single',undefined,uid).then(r=>r.json())).tutorial,false,'SKIP does not complete tutorial');
  // Play the real guided board through visible controls. The real Worker validates the transcript.
@@ -66,7 +70,7 @@ try{
  assert.equal(await page.locator('[data-training]').count(),1);await reopen();
  // Seed settled victories/matches only for later visual states; no claim of playing live PvP.
  receipt('bot:first:easy');await reopen();await skip('2:after');await skip('3:before');await reopen();
- assert.equal(await page.locator('[data-chapter="4"]').isDisabled(),true);
+ assert.equal(await page.locator('[data-restart="4"]').isDisabled(),true);
  for(let i=0;i<2;i++)f.db.prepare('INSERT INTO duel_reward_receipts(user_id,match_id,day,mode,amount,created_at) VALUES(?,?,?,?,0,?)').run(uid,'normal-'+i,'2026-11-18','online',Date.now());
  await reopen();await skip('3:after');
  await openChapter(4);await page.screenshot({path:out+'/dialogue-vera.png'});

@@ -20,7 +20,11 @@ await page.route('**/api/**',async route=>{
 });
 await page.addLocatorHandler(page.locator('.graphics-notice [data-continue]'),async()=>page.locator('.graphics-notice [data-continue]').click());
 const reopen=async()=>{await page.locator('[data-nav="single"]').click();await page.locator('.ss-gallery-track').waitFor({timeout:90000});};
-const openChapter=async id=>{await page.locator(`[data-chapter="${id}"]`).dblclick();};
+const openChapter=async id=>{
+ const resume=page.locator(`[data-continue="${id}"]`);
+ if(await resume.isEnabled())await resume.click();
+ else{await page.locator(`[data-restart="${id}"]`).click();await page.locator('.ss-restart-sheet [data-yes]').click();}
+};
 const skip=async scene=>{await openChapter(Number(scene.split(':')[0]));await page.locator('.single-vn [data-skip]').click();await page.locator('.single-vn').waitFor({state:'detached'});};
 const receipt=key=>f.db.prepare('INSERT OR IGNORE INTO rewards VALUES(?,?,0,?)').run(uid,key,Date.now());
 try{
@@ -31,8 +35,32 @@ try{
  assert.equal(await page.locator('.ss-chapter,.ss-objectives,.ss-task-actions').count(),0);
  assert.equal(await page.locator('.ss-card-seal').count(),4);assert.equal(await page.locator('[data-chapter="2"] .ss-card-status').count(),0);
  await one.click();assert.equal(await page.locator('.single-vn').count(),0);assert.equal(await one.getAttribute('aria-current'),'page');
- await one.dblclick();await page.locator('.single-vn').waitFor();await page.keyboard.press('Escape');
- await one.press('Enter');await page.locator('.single-vn').waitFor();await page.keyboard.press('Escape');
+ assert(await page.locator('[data-continue="1"]').isDisabled(),'no save disables Continue');
+ assert(await page.locator('[data-restart="2"]').isDisabled(),'locked chapter cannot restart');
+ await page.locator('[data-restart="1"]').click();await page.locator('.ss-restart-sheet').waitFor();
+ await page.screenshot({path:out+'/restart-confirm.png'});
+ await page.locator('.ss-restart-sheet [data-no]').click();assert.equal(await page.locator('.single-vn').count(),0);
+ assert(await page.locator('[data-continue="1"]').isDisabled());
+ await openChapter(1);await page.locator('.single-vn [data-next]').click();
+ assert.equal(await page.locator('.svn-count').innerText(),'2 / 5');
+ await page.locator('.single-vn [data-pause]').click();
+ assert(await page.locator('[data-continue="1"]').isEnabled());
+ await page.locator('[data-restart="1"]').click();await page.locator('.ss-restart-sheet [data-no]').click();
+ await page.locator('[data-continue="1"]').click();assert.equal(await page.locator('.svn-count').innerText(),'2 / 5','NO preserves cursor');
+ await page.keyboard.press('Escape');
+ await page.locator('[data-restart="1"]').press('Enter');await page.keyboard.press('Escape');
+ await page.locator('[data-continue="1"]').press('Space');assert.equal(await page.locator('.svn-count').innerText(),'2 / 5');await page.keyboard.press('Escape');
+ await page.locator('[data-restart="1"]').click();await page.locator('.ss-restart-sheet [data-yes]').click();
+ assert.equal(await page.locator('.svn-count').innerText(),'1 / 5','YES starts at first line');await page.keyboard.press('Escape');
+ await reopen();await page.locator('[data-continue="1"]').click();assert.equal(await page.locator('.svn-count').innerText(),'1 / 5','line zero is resumable');await page.keyboard.press('Escape');
+ // Completed chapters only resume when an actual reread was paused.
+ receipt(f.lib.ONBOARDING_BASICS);receipt('story:single:v1:1:before');receipt('story:single:v1:1:after');
+ await page.evaluate(()=>{localStorage.removeItem('lore:single:cursor:v1:single-story-browser:1:before');});
+ await reopen();assert(await page.locator('[data-continue="1"]').isDisabled(),'completed chapter has no pending continuation');
+ await page.evaluate(()=>localStorage.setItem('lore:single:cursor:v1:single-story-browser:1:before','2'));
+ await reopen();await page.locator('[data-continue="1"]').click();assert.equal(await page.locator('.svn-count').innerText(),'3 / 5','completed reread resumes saved line');await page.keyboard.press('Escape');
+ // Keep the gallery fixture at its original locked state for layout checks.
+ f.db.prepare('DELETE FROM rewards WHERE user_id=? AND key IN (?,?,?)').run(uid,f.lib.ONBOARDING_BASICS,'story:single:v1:1:before','story:single:v1:1:after');await reopen();
  await page.waitForFunction(()=>document.querySelector('[data-idle="lumi"]').classList.contains('is-painted'));
  const moving=await page.locator('[data-chapter-art="1"]').getAttribute('src');assert.match(moving,/\.gif$/);
  await page.screenshot({path:out+'/gallery-desktop.png'});
@@ -49,5 +77,5 @@ try{
  for(const lang of (liveOrigin?[]:['en','ko','ja'])){await page.evaluate(async lang=>{const {setLang}=await import('/src/i18n.ts');setLang(lang);},lang);await track.waitFor();await page.screenshot({path:out+`/gallery-${lang}.png`});}
  await page.setViewportSize({width:1440,height:900});await page.locator('[data-tab="battle"]').click();await page.waitForFunction(()=>document.querySelector('.sp-standing')?.classList.contains('is-painted'));await page.screenshot({path:out+'/battle-idle.png'});
  assert.deepEqual(errors,[]);assert.deepEqual(apiErrors,[]);
- await fs.writeFile(out+'/report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],errors,apiErrors,checks:['click selects only','double-click and Enter launch','no lower detail panel','central locks','five GIF assets','NPC idle canvas changes','arrow/drag/touch','reduced motion','three languages','battle idle'],visual:'continuous recording provided; aesthetic review is separate'},null,2));console.log('PASS living story gallery browser checks');
+ await fs.writeFile(out+'/report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],errors,apiErrors,checks:['click selects only','single-click restart/continue, YES/NO, Escape and keyboard controls, cursor persistence and completed reread','no lower detail panel','central locks','five GIF assets','NPC idle canvas changes','arrow/drag/touch','reduced motion','three languages','battle idle'],visual:'continuous recording provided; aesthetic review is separate'},null,2));console.log('PASS living story gallery browser checks');
 }catch(error){await page.screenshot({path:out+'/failure.png'});throw error;}finally{await context.close();await browser.close();await server.close();await f.close();}

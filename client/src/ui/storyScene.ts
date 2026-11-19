@@ -4,12 +4,20 @@ import type { StoryScene } from '../shared/singleStory';
 import { loungeText as L } from './loungeText';
 import { mountManaSpirit } from './manaSpirit';
 export const storyCursorKey=(account:string,scene:StoryScene)=>`lore:single:cursor:v1:${encodeURIComponent(account)}:${scene}`;
+export function savedStoryCursor(account:string,scene:StoryScene):number|null {
+ try {
+  const raw=localStorage.getItem(storyCursorKey(account,scene));
+  if(raw===null||raw.trim()==='')return null;
+  const index=Number(raw);
+  return Number.isInteger(index)&&index>=0&&index<SINGLE_SCENES[scene].length?index:null;
+ }catch{return null;}
+}
 /** Pause preserves the current line. SKIP completes only this conversation. */
 export function openStoryScene(scene:StoryScene,account:string,onComplete:()=>Promise<void>,onClose:()=>void):()=>void {
  const dialog=document.createElement('dialog');dialog.className='single-vn';
  const lines=SINGLE_SCENES[scene],lang=getLang();let index=0,busy=false,closed=false,actor:StoryActor|undefined;
  let spirit:ReturnType<typeof mountManaSpirit>|undefined;
- try{const saved=Number(localStorage.getItem(storyCursorKey(account,scene)));if(Number.isInteger(saved)&&saved>=0&&saved<lines.length)index=saved;}catch{}
+ index=savedStoryCursor(account,scene)??0;
  const chapter=SINGLE_CHAPTERS.find(c=>c.id===Number(scene.split(':')[0]));
  dialog.setAttribute('aria-label',chapter?.title[lang]??STORY_NAMES.aries[lang]);
  dialog.innerHTML=`<div class="svn-background"></div><div class="svn-shade"></div><div class="svn-portrait" aria-hidden="true"></div>

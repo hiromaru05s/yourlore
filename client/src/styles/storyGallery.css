@@ -15,9 +15,9 @@
 .ss-card-status{position:absolute;right:17px;top:24px;z-index:2;font-size:10px;letter-spacing:.1em;background:#071827bf;padding:5px 9px;color:#e5eefa}
 .ss-card-copy{position:absolute;bottom:27px;left:25px;right:25px;z-index:2;display:flex;flex-direction:column;gap:11px}
 .ss-card-copy>small{font-size:9px;letter-spacing:.25em;color:#c1d7e5}.ss-card-copy>b{font:500 clamp(23px,2vw,29px)/1.3 serif;letter-spacing:.04em;text-wrap:balance}.ss-card-place{font-size:10px;line-height:1.6;color:#b8cedd;border-top:1px solid #d0dfe244;padding-top:12px}.ss-card-summary{font-size:12px;line-height:1.8;color:#dce4ea}
-.ss-chapter-card:disabled{cursor:grab}.ss-chapter-card:disabled .ss-card-landscape{filter:saturate(.65) brightness(.8)}
+.ss-chapter-card[aria-disabled="true"]{cursor:grab}.ss-chapter-card[aria-disabled="true"] .ss-card-landscape{filter:saturate(.65) brightness(.8)}
 .ss-chapter-card[aria-current]{border-color:#d1ebff;box-shadow:inset 0 0 0 2px #bddcf5}.ss-chapter-card[aria-current]::after{border-color:#d4e9ffb3}
-.ss-chapter-card:enabled:hover::after{border-color:#fff5d3}.ss-chapter-card:focus-visible{outline:none}.ss-chapter-card:focus-visible::after{border:3px solid #fff3c3}
+.ss-chapter-card:not([aria-disabled]):hover::after{border-color:#fff5d3}.ss-chapter-card:focus-visible{outline:none}.ss-chapter-card:focus-visible::after{border:3px solid #fff3c3}
 .ss-gallery-track:focus-visible{outline:1px solid #cde5f8;outline-offset:3px}
 .ss-gallery-arrow{position:absolute;z-index:4;top:calc(50% - 30px);width:54px;height:60px;border:0;background:transparent;padding:0;cursor:pointer;filter:drop-shadow(0 2px 4px #03111f)}
 .ss-gallery-arrow img{width:100%;height:100%;pointer-events:none}.ss-gallery-prev{left:-10px;transform:scaleX(-1)}.ss-gallery-next{right:-10px}.ss-gallery-arrow:disabled{opacity:.25;cursor:default}.ss-gallery-arrow:enabled:hover{filter:drop-shadow(0 0 7px #dfc48d)}.ss-gallery-arrow:focus-visible{outline:2px solid #c9e7fc;outline-offset:3px}
@@ -37,17 +37,17 @@
 :root body .single-story-page .ss-gallery-arrow{border:0!important;border-image:none!important;background:transparent!important}
 :root body .single-story-page .ss-gallery-arrow:disabled{opacity:.25!important}
 :root body .single-story-page .ss-chapter-card{clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px)!important}
-:root body .single-story-page .ss-chapter-card:disabled{cursor:grab!important}
+:root body .single-story-page .ss-chapter-card[aria-disabled="true"]{cursor:grab!important}
 /* Living chapter covers; the gallery is the whole selection screen. */
 .ss-gallery-layout .ss-chapter-card{height:clamp(430px,58vh,620px)}
 .ss-card-actor{display:block;aspect-ratio:2/3;width:115%;height:auto;left:4%;top:12%;filter:drop-shadow(-8px 5px 12px #03132280);pointer-events:none}
 .ss-card-actor :is(img,canvas){position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none}
 .ss-card-actor canvas,.ss-card-actor.is-painted img{visibility:hidden}.ss-card-actor.is-painted canvas{visibility:visible}
 .ss-card-copy{gap:9px;bottom:24px}.ss-card-enter{border-top:1px solid #b9ddff55;padding-top:10px;font-size:11px;letter-spacing:.06em;color:#e1f1ff;visibility:hidden}.ss-card-enter i{float:right;font-size:20px;line-height:12px;font-style:normal}.ss-chapter-card[aria-current] .ss-card-enter{visibility:visible}
-.ss-chapter-card:disabled .ss-card-landscape{filter:grayscale(.45) saturate(.45) brightness(.63)}
-.ss-chapter-card:disabled .ss-card-actor{filter:grayscale(.4) saturate(.45) brightness(.65);opacity:.62}
-.ss-chapter-card:disabled::before{background:linear-gradient(180deg,#071c3a80,#071a32a3 55%,#051322f5);z-index:1}
-.ss-chapter-card:disabled .ss-card-copy{color:#91a8bc}.ss-chapter-card:disabled .ss-card-copy :is(small,.ss-card-place,.ss-card-summary){color:#7d98b0}
+.ss-chapter-card[aria-disabled="true"] .ss-card-landscape{filter:grayscale(.45) saturate(.45) brightness(.63)}
+.ss-chapter-card[aria-disabled="true"] .ss-card-actor{filter:grayscale(.4) saturate(.45) brightness(.65);opacity:.62}
+.ss-chapter-card[aria-disabled="true"]::before{background:linear-gradient(180deg,#071c3a80,#071a32a3 55%,#051322f5);z-index:1}
+.ss-chapter-card[aria-disabled="true"] .ss-card-copy{color:#91a8bc}.ss-chapter-card[aria-disabled="true"] .ss-card-copy :is(small,.ss-card-place,.ss-card-summary){color:#7d98b0}
 .ss-card-seal{position:absolute;inset:26% 14% auto;z-index:4;display:flex;flex-direction:column;align-items:center;gap:10px;color:#c2d7e9;text-align:center;text-shadow:0 2px 8px #03101f}
 .ss-card-seal::before{content:'';position:absolute;inset:-20px -20px;background:radial-gradient(ellipse,#06172cce,transparent 72%);z-index:-1}
 .ss-card-seal svg{width:42px;height:52px;fill:#102941;stroke:#bdd7eb;stroke-width:1.5;filter:drop-shadow(0 2px 4px #0008)}.ss-card-seal svg circle{fill:#bdd7eb;stroke:none}.ss-card-seal b{font-size:13px;letter-spacing:.22em;font-weight:500}.ss-card-seal small{font-size:10px;line-height:1.7;color:#a6bed3}
@@ -63,3 +63,15 @@
 }
 .ss-gallery-caption{display:none}
 @media(min-width:651px) and (max-height:800px){.ss-card-seal{inset:12% 8% auto;gap:7px}.ss-card-seal svg{width:32px;height:40px}.ss-card-seal b{font-size:11px}.ss-card-seal small{font-size:9px}}
+
+/* Explicit chapter actions keep starting and resuming one click away. */
+.ss-card-actions{display:flex;gap:8px;border-top:1px solid #b9ddff55;padding-top:10px}
+.ss-card-actions .lore-button{flex:1;min-width:0;min-height:44px;padding:9px 6px;font-size:12px;white-space:nowrap;letter-spacing:0}
+.ss-chapter-card .ss-card-actions button:disabled{cursor:default}
+.ss-restart-sheet{position:fixed;inset:0;margin:auto;width:min(480px,calc(100vw - 32px));box-sizing:border-box;padding:30px;color:var(--paper);max-height:85dvh}
+.ss-restart-sheet::backdrop{background:#020b19cc}
+.ss-restart-sheet h2{font-size:20px;line-height:1.5;margin:0 0 14px}
+.ss-restart-sheet p{font-size:14px;line-height:1.8;margin:0 0 22px}
+.ss-restart-actions{display:flex;justify-content:flex-end;gap:12px}
+.ss-restart-actions button{min-width:90px;min-height:44px}
+@media(min-width:651px) and (max-height:800px){.ss-card-summary{display:none}}
