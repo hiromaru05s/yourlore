@@ -1,0 +1,58 @@
+{
+  "errors": [],
+  "currentCounts": [
+    2,
+    4
+  ],
+  "recordingSeconds": 3.899,
+  "trial": {
+    "ready": true,
+    "kind": "draw",
+    "mode": "board",
+    "side": 0,
+    "time": 2.38,
+    "playing": false,
+    "hidden": 0,
+    "surfaces": [
+      "source",
+      "target",
+      "hand",
+      "draw",
+      "spell",
+      "back"
+    ],
+    "width": 1200,
+    "height": 609,
+    "source": "cf2e89503",
+    "revision": 10,
+    "duration": 2.38,
+    "draw": {
+      "count": 4,
+      "mounted": false,
+      "flight": 1.38,
+      "stagger": 0.24,
+      "arrivals": [
+        {
+          "uid": "draw-0-0",
+          "progress": 1
+        },
+        {
+          "uid": "draw-0-1",
+          "progress": 1
+        },
+        {
+          "uid": "draw-0-2",
+          "progress": 1
+        },
+        {
+          "uid": "draw-0-3",
+          "progress": 1
+        }
+      ]
+    },
+    "summonVersion": "shadowverse",
+    "summonContact": 1.94,
+    "hero": null,
+    "orb": null
+  }
+}

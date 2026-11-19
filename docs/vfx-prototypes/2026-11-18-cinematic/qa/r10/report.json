@@ -1,0 +1,259 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "width": 1024,
+      "side": 0,
+      "count": 1,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 1,
+        "cardClip": [
+          "visible",
+          "visible",
+          "visible",
+          "visible"
+        ],
+        "opponentFaces": 1
+      },
+      "continuity": {
+        "changedChannels": 0,
+        "channelFraction": 0,
+        "meanDelta": 0.0008355129322871258,
+        "geometryDelta": 0.00006103515625
+      }
+    },
+    {
+      "width": 1024,
+      "side": 0,
+      "count": 2,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 2,
+        "cardClip": [
+          "visible",
+          "visible",
+          "visible",
+          "visible",
+          "visible"
+        ],
+        "opponentFaces": 2
+      },
+      "continuity": {
+        "changedChannels": 2,
+        "channelFraction": 0.00001490623975196017,
+        "meanDelta": 0.003406075783322899,
+        "geometryDelta": 0.00006103515625
+      }
+    },
+    {
+      "width": 1024,
+      "side": 0,
+      "count": 4,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 4,
+        "cardClip": [
+          "visible",
+          "visible",
+          "visible",
+          "visible",
+          "visible",
+          "visible",
+          "visible"
+        ],
+        "opponentFaces": 4
+      },
+      "continuity": {
+        "changedChannels": 14,
+        "channelFraction": 0.00007894351027957281,
+        "meanDelta": 0.008153736847447305,
+        "geometryDelta": 0.00006103515625
+      }
+    },
+    {
+      "width": 1024,
+      "side": 1,
+      "count": 1,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 1,
+        "cardClip": [],
+        "opponentFaces": 0
+      },
+      "continuity": {
+        "changedChannels": 0,
+        "channelFraction": 0,
+        "meanDelta": 0.000017312419930057825,
+        "geometryDelta": 0.0001220703125
+      }
+    },
+    {
+      "width": 1024,
+      "side": 1,
+      "count": 2,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 2,
+        "cardClip": [],
+        "opponentFaces": 0
+      },
+      "continuity": {
+        "changedChannels": 0,
+        "channelFraction": 0,
+        "meanDelta": 0.000014218279019507479,
+        "geometryDelta": 0.0001220703125
+      }
+    },
+    {
+      "width": 1024,
+      "side": 1,
+      "count": 4,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 4,
+        "cardClip": [],
+        "opponentFaces": 0
+      },
+      "continuity": {
+        "changedChannels": 17,
+        "channelFraction": 0.00017922847413311404,
+        "meanDelta": 0.01682639086567353,
+        "geometryDelta": 0.0001220703125
+      }
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 1,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 1,
+        "cardClip": [
+          "visible",
+          "visible",
+          "visible",
+          "visible"
+        ],
+        "opponentFaces": 1
+      },
+      "continuity": {
+        "changedChannels": 0,
+        "channelFraction": 0,
+        "meanDelta": 0,
+        "geometryDelta": 0.000030517578125
+      }
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 2,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 2,
+        "cardClip": [
+          "visible",
+          "visible",
+          "visible",
+          "visible",
+          "visible"
+        ],
+        "opponentFaces": 2
+      },
+      "continuity": {
+        "changedChannels": 0,
+        "channelFraction": 0,
+        "meanDelta": 0,
+        "geometryDelta": 0.0000152587890625
+      }
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 4,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 4,
+        "cardClip": [
+          "visible",
+          "visible",
+          "visible",
+          "visible",
+          "visible",
+          "visible",
+          "visible"
+        ],
+        "opponentFaces": 4
+      },
+      "continuity": {
+        "changedChannels": 0,
+        "channelFraction": 0,
+        "meanDelta": 0,
+        "geometryDelta": 0.0000152587890625
+      }
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 1,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 1,
+        "cardClip": [],
+        "opponentFaces": 0
+      },
+      "continuity": {
+        "changedChannels": 6,
+        "channelFraction": 0.0007176175098672408,
+        "meanDelta": 0.09221385001794044,
+        "geometryDelta": 0.000030517578125
+      }
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 2,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 2,
+        "cardClip": [],
+        "opponentFaces": 0
+      },
+      "continuity": {
+        "changedChannels": 0,
+        "channelFraction": 0,
+        "meanDelta": 0.0001955607705094358,
+        "geometryDelta": 0.0000457763671875
+      }
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 4,
+      "mid": {
+        "nativePrint": true,
+        "sourcesStable": true,
+        "flights": 4,
+        "cardClip": [],
+        "opponentFaces": 0
+      },
+      "continuity": {
+        "changedChannels": 4,
+        "channelFraction": 0.0002901073397156948,
+        "meanDelta": 0.022991006672468815,
+        "geometryDelta": 0.0000152587890625
+      }
+    }
+  ]
+}

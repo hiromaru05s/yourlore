@@ -36,3 +36,23 @@ for(const [i,p] of g.players.entries()){
 view.render(g);view.setHandOpen(true);
 return {root,view,g,stopLayout};
 }
+
+/** Real before/after hand snapshots shared by both sides of the comparison. */
+export function resetFixtureHands(g:ReturnType<typeof mountFixture>['g'],spell='S4'){
+ for(const [i,p] of g.players.entries())p.hand=['M4',spell,'M3'].map((id,n)=>({...DB[id],uid:`hand-${i}-${n}`}));
+}
+export async function prepareDrawFixture(f:ReturnType<typeof mountFixture>,count:number,side:number,spell='S4'){
+ const {captureHandLayout}=await import('../../ui/handGeometry');
+ resetFixtureHands(f.g,spell);f.view.render(f.g);f.view.setHandOpen(true);
+ await settleFixtureHand();
+ const hand=document.getElementById(side?'oppHand':'hand')!;
+ const previous=captureHandLayout(hand);
+ const incoming=['M2','M5','S3','M4'].slice(0,count).map((id,i)=>({...DB[id],uid:`draw-${side}-${i}`}));
+ f.g.players[side].hand.push(...incoming);f.view.render(f.g);
+ await settleFixtureHand();
+ return {previous,uids:incoming.map(c=>c.uid)};
+}
+async function settleFixtureHand(){
+ await new Promise<void>(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r())));
+ for(const a of document.getAnimations())if(a instanceof CSSTransition)a.finish();
+}

@@ -1,3 +1,5 @@
+最新: [第10稿 — ２枚・４枚の連続ドローと青いマナ光](REVISION-10.md)。
+
 > 最新：[第9稿 — 小さく重い反動](REVISION-9.md)。以下は初稿の制作記録です。
 
 # LORE — cinematic battle VFX study
