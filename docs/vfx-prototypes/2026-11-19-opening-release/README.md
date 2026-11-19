@@ -36,3 +36,9 @@ Opening artwork is warmed for the actual selected opponent before readiness; gal
 - Full production suite initially exposed two stale fixture/inventory assumptions; the tier fixture and sound manifest checks were updated and their tests pass. Final clean-snapshot suite/build/deploy status is recorded in the release report after deployment.
 
 Visual inspection and functional tests are distinct: screenshots and enlarged frame strips were inspected for intact forelocks, no white gaps, stable anatomy and compact panels. They are not a substitute for the user's artistic judgment or a physical-phone test.
+
+## Production verification
+
+Released source `1166b8625f4fee3507b39e6edfeaa360bf525f76`, Worker version `0a019838-5f46-4d52-8f86-51451d8b2a44`. The existing guard completed schema validation, typechecks, **302/302** tests, clean-snapshot production build and deployment. Details: `release.json`.
+
+`production-assets.json` records 27 matching served SHA256s: all eight GIFs, PNG layers, seven selected sounds, adopted nameplate and empty-medal art. `production-app.json` records the actual production-bundled app for all four dojo difficulties: each rendered the correct character, played all seven sounds including III-C within 150 ms of the intended timestamps, and returned to an unlocked board without JS errors. Noel/Vera frames are `production-noel.png` / `production-vera.png`. Public production code/assets were real; account/API/WebSocket state was supplied by fixtures. Authenticated live PvP and physical-phone playback were not performed.

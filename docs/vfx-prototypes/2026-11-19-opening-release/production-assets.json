@@ -1,0 +1,170 @@
+{
+  "checkedAt": "2026-11-19T03:03:54.924Z",
+  "origin": "https://yourlore.xyz",
+  "source": "1166b8625f4fee3507b39e6edfeaa360bf525f76",
+  "allHashesMatch": true,
+  "assets": [
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-v5/lumi-background.png",
+      "bytes": 1944794,
+      "sha256": "c0dcca77d658b1d1fa6af3e4f877f3661e65a0c9d569a8fc459d9e34307a317e",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-v5/lumi-forehead.png",
+      "bytes": 1761673,
+      "sha256": "888a760c327d2397ddf4a3c2acc9c6f1a307fccef528fd56e6ae1cfadaf57c54",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-v5/lumi-left.gif",
+      "bytes": 9065367,
+      "sha256": "727d6fda2e271f4b563a701c3d212d7fb815d067ca87c79fe3834b2c77f879f2",
+      "type": "image/gif"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-v5/lumi-right.png",
+      "bytes": 1796569,
+      "sha256": "c7b52384bd5dffd29ef95cb2b61439adfb4116439c4db6e01e89e3922cfff64c",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-v5/seeker-right.gif",
+      "bytes": 8434109,
+      "sha256": "5d0e1c66fb0ec9278b7189928bc9b63d7bd537cd48d18b2090df64b6444ec335",
+      "type": "image/gif"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-v5/lumi-right.gif",
+      "bytes": 9064111,
+      "sha256": "ce88f50cf09f8ce0ced5bbfbde7699e531742b09aa7282678a63a390284581d9",
+      "type": "image/gif"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-v5/seeker-left.gif",
+      "bytes": 8425907,
+      "sha256": "ff24cefb8ce0333f3d4a104e98b9e76309d7036afca3d123408497ecc6e34bb1",
+      "type": "image/gif"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/noel-fringe.png",
+      "bytes": 271580,
+      "sha256": "356287a341454b616e196bca0bf0d28d00fb573704d28ede879625beb9b8248a",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/noel-forehead.png",
+      "bytes": 1677704,
+      "sha256": "e9562fcaf069a4f596b3e4e99d7da45a3e80a7481b30ac93f56159fe37854efa",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-v5/seeker-right.png",
+      "bytes": 1473579,
+      "sha256": "7eaac3390defb17a70a8c4925f3fd8b960f23e130e3b62950ff85eb796e438a3",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/noel-right.gif",
+      "bytes": 9369333,
+      "sha256": "ff36edc43795d432de916ea2afafadb7d12091f7fa8957eec89470ff4f0216ad",
+      "type": "image/gif"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/noel-left.gif",
+      "bytes": 9370253,
+      "sha256": "29df5ce47fefa62e9b9427ce56d8492be9d567f14a77fbe945fa03881ffc3f0d",
+      "type": "image/gif"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/noel-right.png",
+      "bytes": 1716955,
+      "sha256": "1a860fb57d094424a0f7add46a10fdb9cdf1bb569964024fd46eeb304eb999f7",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/vera-forehead.png",
+      "bytes": 1962782,
+      "sha256": "e0e4a8759327fdb077bdf688f4c755aed1c37069c064e388dbefd7c543a049a1",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/vera-fringe.png",
+      "bytes": 84215,
+      "sha256": "916e2b948a072bcd724d707008f60a90ca21518ad7f254749e3c67f8d1102440",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/vera-right.png",
+      "bytes": 2010123,
+      "sha256": "d0ad42bf54e3dd81e8a134fcf8505cbd20fb8301b6468e9eb8a6041a3910d330",
+      "type": "image/png"
+    },
+    {
+      "url": "https://yourlore.xyz/sfx/opening-mana-v1/b-rise.wav",
+      "bytes": 215084,
+      "sha256": "1d65036bab63b8fcc8ad706c9991a017540046b3fe1aeca0a5fd367bedc87a61",
+      "type": "audio/wav"
+    },
+    {
+      "url": "https://yourlore.xyz/sfx/opening-mana-v1/b-impact.wav",
+      "bytes": 105644,
+      "sha256": "bf9c0c85439f511e37247a9e1515ad65fb7aeeca3b4272995cb504ad49705499",
+      "type": "audio/wav"
+    },
+    {
+      "url": "https://yourlore.xyz/sfx/opening-mana-v1/b-toss.wav",
+      "bytes": 337964,
+      "sha256": "cb754aa9a9bea1002c89a6e7e5e901c3188a2852843c7eafdd5c3391753bce96",
+      "type": "audio/wav"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/vera-right.gif",
+      "bytes": 10417116,
+      "sha256": "0a2be221cd2bcf1759eab008ad23ba4cd06e4872116d113d15f2a251024086ad",
+      "type": "image/gif"
+    },
+    {
+      "url": "https://yourlore.xyz/sfx/opening-mana-v1/a-rejoin.wav",
+      "bytes": 145964,
+      "sha256": "85c8ef8f275598863fe931aee5433f59e8e0fad5874add16295eb109a32ea904",
+      "type": "audio/wav"
+    },
+    {
+      "url": "https://yourlore.xyz/sfx/opening-mana-v1/a-friction.wav",
+      "bytes": 729644,
+      "sha256": "6154205964724a8fef54df4fc70792ea910a19ae96d761d0fb290eaea71cb3ac",
+      "type": "audio/wav"
+    },
+    {
+      "url": "https://yourlore.xyz/sfx/opening-mana-v1/h-land.wav",
+      "bytes": 307244,
+      "sha256": "059586d081a2492d04b36c94cce18773b68081c8eea9836aecb900417a074adb",
+      "type": "audio/wav"
+    },
+    {
+      "url": "https://yourlore.xyz/sfx/opening-mana-v1/a-exit.wav",
+      "bytes": 88364,
+      "sha256": "6bb0382a921c4bb056f58d4cdbb923c8f912f9f3a117e883d47ec18b56226c17",
+      "type": "audio/wav"
+    },
+    {
+      "url": "https://yourlore.xyz/art/duel-portraits/wind-npcs-v1/vera-left.gif",
+      "bytes": 10434667,
+      "sha256": "caf6a31b9d4c6b3b5bd6bb5baa7cea5563b82d2db90b33cb51ff1daf9e033605",
+      "type": "image/gif"
+    },
+    {
+      "url": "https://yourlore.xyz/art/ui/duel-nameplate-azure.svg",
+      "bytes": 898,
+      "sha256": "ceb4b0255ef492a91897bdf051f4e355e2ff7a3287534a5a910655f07ea67d33",
+      "type": "image/svg+xml"
+    },
+    {
+      "url": "https://yourlore.xyz/art/ui/medal-empty-azure.svg",
+      "bytes": 860,
+      "sha256": "153d4a12ed96bc24780e1cb6ffae59b9550faf5316dcaa55343fee6fc8d50fc3",
+      "type": "image/svg+xml"
+    }
+  ]
+}

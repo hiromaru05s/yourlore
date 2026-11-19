@@ -1,0 +1,41 @@
+{
+  "deployedSource": "1166b8625f4fee3507b39e6edfeaa360bf525f76",
+  "versionId": "0a019838-5f46-4d52-8f86-51451d8b2a44",
+  "deploymentId": "cf6da966-78a4-4cb8-888b-3d5512f51e8f",
+  "createdAt": "2026-11-19T03:03:07.919032Z",
+  "verifiedAt": "2026-11-19T03:06:53.750Z",
+  "production": "https://yourlore.xyz",
+  "releaseGuard": "npm run deploy: clean committed snapshot, schema contract, typechecks, 302/302 production tests, production build, main/source/version guards",
+  "artifacts": {
+    "count": 27,
+    "sha256AllMatch": true,
+    "report": "production-assets.json"
+  },
+  "browser": {
+    "characters": [
+      "lumi",
+      "noel",
+      "vera",
+      "sion"
+    ],
+    "everyOpeningSevenCues": true,
+    "result": "h-land / III-C",
+    "allReturnedToBoard": true,
+    "errors": [],
+    "report": "production-app.json",
+    "boundary": "Real app startup/resume, OnlineController and opening renderer; account/API/WebSocket responses are fixtures, not authenticated live gameplay."
+  },
+  "visualQA": {
+    "directions": 2,
+    "framesPerDirection": 48,
+    "protectedAnatomyChangedPixels": 0,
+    "fringeContinuityInspected": true,
+    "physicalPhone": false
+  },
+  "changesExclude": [
+    "Aries redesign",
+    "NPC board IDLE/reaction replacement"
+  ],
+  "previewRoot": "/Users/hiromaru05s/.codex/worktrees/opening-flame-1118/LORE_TCG/client",
+  "preview": "http://127.0.0.1:5278/duel-lab.html?opening&playable&npc=hard"
+}

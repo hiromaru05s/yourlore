@@ -1,0 +1,166 @@
+{
+  "origin": "https://yourlore.xyz",
+  "boundary": "Real app startup/resume, OnlineController and opening renderer; account/API/WebSocket responses are fixtures, not authenticated live gameplay.",
+  "checks": [
+    {
+      "audio": [
+        {
+          "url": "/sfx/opening-mana-v1/b-rise.wav",
+          "ms": 192
+        },
+        {
+          "url": "/sfx/opening-mana-v1/b-impact.wav",
+          "ms": 1461
+        },
+        {
+          "url": "/sfx/opening-mana-v1/b-toss.wav",
+          "ms": 1461
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-rejoin.wav",
+          "ms": 1725
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-friction.wav",
+          "ms": 1725
+        },
+        {
+          "url": "/sfx/opening-mana-v1/h-land.wav",
+          "ms": 3225
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-exit.wav",
+          "ms": 5124
+        }
+      ],
+      "difficulty": "easy",
+      "npc": "lumi",
+      "opening": [
+        "wind:lumi"
+      ],
+      "board": true,
+      "unlocked": true,
+      "errors": []
+    },
+    {
+      "audio": [
+        {
+          "url": "/sfx/opening-mana-v1/b-rise.wav",
+          "ms": 183
+        },
+        {
+          "url": "/sfx/opening-mana-v1/b-impact.wav",
+          "ms": 1466
+        },
+        {
+          "url": "/sfx/opening-mana-v1/b-toss.wav",
+          "ms": 1466
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-rejoin.wav",
+          "ms": 1717
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-friction.wav",
+          "ms": 1717
+        },
+        {
+          "url": "/sfx/opening-mana-v1/h-land.wav",
+          "ms": 3234
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-exit.wav",
+          "ms": 5133
+        }
+      ],
+      "difficulty": "normal",
+      "npc": "noel",
+      "opening": [
+        "wind:noel"
+      ],
+      "board": true,
+      "unlocked": true,
+      "errors": []
+    },
+    {
+      "audio": [
+        {
+          "url": "/sfx/opening-mana-v1/b-rise.wav",
+          "ms": 186
+        },
+        {
+          "url": "/sfx/opening-mana-v1/b-impact.wav",
+          "ms": 1470
+        },
+        {
+          "url": "/sfx/opening-mana-v1/b-toss.wav",
+          "ms": 1470
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-rejoin.wav",
+          "ms": 1721
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-friction.wav",
+          "ms": 1721
+        },
+        {
+          "url": "/sfx/opening-mana-v1/h-land.wav",
+          "ms": 3220
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-exit.wav",
+          "ms": 5138
+        }
+      ],
+      "difficulty": "hard",
+      "npc": "vera",
+      "opening": [
+        "wind:vera"
+      ],
+      "board": true,
+      "unlocked": true,
+      "errors": []
+    },
+    {
+      "audio": [
+        {
+          "url": "/sfx/opening-mana-v1/b-rise.wav",
+          "ms": 182
+        },
+        {
+          "url": "/sfx/opening-mana-v1/b-impact.wav",
+          "ms": 1464
+        },
+        {
+          "url": "/sfx/opening-mana-v1/b-toss.wav",
+          "ms": 1464
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-rejoin.wav",
+          "ms": 1715
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-friction.wav",
+          "ms": 1715
+        },
+        {
+          "url": "/sfx/opening-mana-v1/h-land.wav",
+          "ms": 3233
+        },
+        {
+          "url": "/sfx/opening-mana-v1/a-exit.wav",
+          "ms": 5131
+        }
+      ],
+      "difficulty": "hell",
+      "npc": "sion",
+      "opening": [
+        "https://yourlore.xyz/art/npcs/v2/sion.webp"
+      ],
+      "board": true,
+      "unlocked": true,
+      "errors": []
+    }
+  ]
+}
