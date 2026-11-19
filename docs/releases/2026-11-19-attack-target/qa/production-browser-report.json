@@ -1,0 +1,33 @@
+{
+  "origin": "https://yourlore.xyz",
+  "passed": true,
+  "results": [
+    {
+      "mobile": false,
+      "sourceLift": true,
+      "targetLift": true,
+      "blueSource": true,
+      "redTarget": true,
+      "monsterLock": true,
+      "blockedPlayer": true,
+      "playerLock": true,
+      "cancelClean": true,
+      "attackSubmitted": true,
+      "errors": []
+    },
+    {
+      "mobile": true,
+      "sourceLift": true,
+      "targetLift": true,
+      "blueSource": true,
+      "redTarget": true,
+      "monsterLock": true,
+      "blockedPlayer": true,
+      "playerLock": true,
+      "cancelClean": true,
+      "attackSubmitted": true,
+      "errors": []
+    }
+  ],
+  "boundary": "Production client, CSS and art; local API/WebSocket fixtures. No real accounts or matches modified."
+}

@@ -6,7 +6,7 @@ const origin=process.env.LORE_TEST_ORIGIN||'https://yourlore.xyz',out=process.en
 const temp=await fs.mkdtemp(path.join(os.tmpdir(),'lore-attack-live-'));
 await build({stdin:{contents:"export {createGame,reduce} from './client/src/shared/engine';export {DB,STARTERS} from './client/src/shared/cards';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:temp+'/fixture.mjs'});
 const {createGame,reduce,DB,STARTERS}=await import(temp+'/fixture.mjs');
-const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal']}),results=[];
 try{for(const mobile of [false,true]){
  const context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:960},hasTouch:mobile,isMobile:mobile}),page=await context.newPage(),errors=[],actions=[];page.setDefaultTimeout(60000);page.on('pageerror',e=>errors.push(e.message));
  let state=createGame({mode:'online',seed:71,starting:0,p0:{id:'attack-fixture',name:'YOU'},p1:{id:'opp',name:'OPPONENT'}}).state;state.turn=4;state.phase='main';state.pending=null;delete state.opening;

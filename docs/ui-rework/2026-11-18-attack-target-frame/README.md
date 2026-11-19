@@ -27,4 +27,4 @@
 
 見た目: 白い実盤面のPC・スマホでカード対象／肖像対象を比較。`qa-v8/*-selected.png`、`qa-v8/*-player.png`、`qa-v8/motion-*.png` の連続フレームに保存。機能成功と見た目の採用は分け、最終採用はユーザー確認待ち。
 
-本番未反映。過去稿は `round1.md`〜`round7.md`。
+本番反映済み。公開ソース `be26c91fa`、[公開・検証記録](../../releases/2026-11-19-attack-target/README.md)。過去稿は `round1.md`〜`round7.md`。

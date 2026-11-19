@@ -1,0 +1,18 @@
+{
+  "source": "5de0b41ef839c2df1dd74b9de2a33d2292eac40d",
+  "passed": 297,
+  "total": 299,
+  "failures": [
+    {
+      "file": "tests/bot-npcs.mjs",
+      "passed": false,
+      "ms": 900054
+    },
+    {
+      "file": "tests/bot-server-challenge.cjs",
+      "passed": false,
+      "ms": 120322
+    }
+  ],
+  "reason": "ETIMEDOUT under host contention; assertions unchanged. Longer time limits passed in the guarded rerun."
+}
