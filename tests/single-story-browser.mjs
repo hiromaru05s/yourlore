@@ -28,7 +28,7 @@ try{
  assert.equal(await page.locator('.lounge-rail [data-nav]').count(),6);
  assert.equal(await page.locator('[data-chapter]:disabled').count(),4);
  await page.waitForTimeout(400);
- assert((await page.locator('.ss-index').boundingBox()).x<200,'chapter index uses available desktop width');
+ assert((await page.locator('.ss-gallery-track').boundingBox()).width>900,'chapter gallery uses available desktop width');
  await page.screenshot({path:out+'/chapter-1.png'});
  await page.locator('[data-scene="1:before"]').click();await page.locator('.single-vn [data-next]').click();
  assert.equal(await page.locator('.svn-name').innerText(),'ゼノ');
