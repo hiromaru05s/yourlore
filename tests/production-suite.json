@@ -298,7 +298,9 @@
     "tests/shop-balance-sync.mjs",
     "tests/api-response-recovery.mjs",
     "tests/lobby-lifecycle.mjs",
-    "tests/friends-lifecycle.mjs"
+    "tests/friends-lifecycle.mjs",
+    "tests/defeat-crystal-sound.mjs",
+    "tests/mana-scatter.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",
