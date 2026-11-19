@@ -27,6 +27,7 @@ import {exposure,haze,contactDust,planeShadow} from './realistic';
 import {clearMonsterStates} from '../../ui/monster/runtime';
 import {SpellPresentation} from './spell';
 import {SummonPrint} from './summonPrint';
+import {alignManaBase,manaPose,manaDetails,manaPhase,MANA_CONTACT,type ManaVariant} from './manaSummon';
 import {loreEtching,lorePhase,LORE_CONTACT} from './loreSummon';
 import {SV,summonHero,summonOrb,orbWake,reboundAngle,summonPhase,impactShake,cardScatter,groundCracks} from './shadowverse';
 import {MaterialStage,type Pose} from './material';
@@ -42,7 +43,7 @@ const summonPrint=new SummonPrint();
 const material=new MaterialStage(document.getElementById('material')!);
 const rear=document.getElementById('rear') as HTMLCanvasElement,front=document.getElementById('front') as HTMLCanvasElement;
 const rc=rear.getContext('2d')!,fc=front.getContext('2d')!;
-let summonVersion:'hearthstone'|'shadowverse'|'lore'='lore';
+let summonVersion:'hearthstone'|'shadowverse'|'lore'|'resonance'|'weave'='resonance';
 let kind:Kind='summon',mode='board',side=0,time=0,playing=false,loop=true,speed=1,ready=false,disposed=false,last=0,raf=0,cycleGap=0,soundOn=false,playedCues=new Set<string>();
 let nodes:Record<string,HTMLElement>={},rects:Record<string,Rect>={},surfaces:Record<string,HTMLCanvasElement|HTMLImageElement>={};
 let sourceActor=-1,targetActor=-1,hidden=new Map<HTMLElement,string>(),prepareId=0;
@@ -84,7 +85,7 @@ function layout(){
  }
 }
 async function prepare(){
- const id=++prepareId;playing=false;ready=false;post({ready:false});restore();
+ const id=++prepareId;playing=false;ready=false;post({ready:false});restore();summonPrint.resetDensity();
  if(kind==='draw'){const prepared=await prepareDrawFixture(fixture,drawCount,side,g.players[0].hand[1].id);if(id!==prepareId||disposed)return;drawPrevious=prepared.previous;}
  else{resetFixtureHands(g,g.players[0].hand[1].id);view.render(g);view.setHandOpen(true);}
  clearMonsterStates(root);
@@ -92,12 +93,12 @@ async function prepare(){
  await Promise.all([...root.querySelectorAll('img')].map(i=>i.decode().catch(()=>{})));
  // Raster surfaces remain for attack; draw and Shadowverse summon use native print layers.
  const results=await Promise.all(Object.entries(nodes).map(async([key,n])=>[key,kind==='draw'?document.createElement('canvas'):await captureNativePrint(n,640,0)] as const));
- if(id!==prepareId||disposed)return;surfaces=Object.fromEntries(results);if(kind==='summon')surfaces.lore=await captureNativePrint(nodes.hand,768,.10);await image.decode();surfaces.back=image;
+ if(id!==prepareId||disposed)return;surfaces=Object.fromEntries(results);if(kind==='summon'){surfaces.lore=await captureNativePrint(nodes.hand,768,.10);surfaces.mana=await captureNativePrint(nodes.source,1024,.10);}await image.decode();surfaces.back=image;
  await spellPrint.prepare(nodes.spell);if(id!==prepareId||disposed)return;await summonPrint.prepare(nodes.hand,nodes.source);if(id!==prepareId||disposed)return;configure();ready=true;time=0;playedCues.clear();playing=!new URLSearchParams(location.search).has('controlled')&&!matchMedia('(prefers-reduced-motion:reduce)').matches;last=performance.now();render();post({ready:true,kind});
 }
-function configure(){restore();material.clearActors();layout();
+function configure(){restore();summonPrint.resetDensity();material.clearActors();layout();
  const face=kind==='draw'?(side?surfaces.back:surfaces.draw):kind==='summon'?surfaces.hand:kind==='attack'?surfaces.source:surfaces.spell;
- if(kind==='summon')material.lore.prepare(surfaces.lore);
+ if(kind==='summon'){material.lore.prepare(surfaces.lore);material.mana.prepare(surfaces.mana);}
  sourceActor=material.add(kind==='draw'?surfaces.back:face,kind==='draw'?face:kind==='summon'?surfaces.source:face);
  targetActor=material.add(kind==='summon'?surfaces.hand:surfaces.target);if(kind==='summon'){material.layer(sourceActor,2);material.layer(targetActor,1);}
  if(!focused()){
@@ -106,6 +107,7 @@ function configure(){restore();material.clearActors();layout();
   if(kind==='attack'){hide(nodes.source);hide(nodes.target);}
   if(kind==='spell'&&!side)hide(nodes.spell);
  }
+ if(kind==='summon'&&(summonVersion==='resonance'||summonVersion==='weave'))summonPrint.highDensity();
  if(kind==='draw')drawPrint.prepare(document.getElementById(side?'oppHand':'hand')!,drawCount,!!side,drawPrevious);
  document.body.dataset.mode=mode;
 }
@@ -115,7 +117,7 @@ function cue(key:string,at:number,duration:number,base:number,volume:number){if(
  const osc=audio.createOscillator();osc.type='sine';osc.frequency.setValueAtTime(base,now);osc.frequency.exponentialRampToValueAtTime(Math.max(25,base*.22),now+duration);osc.connect(gain);osc.start(now);osc.stop(now+duration);
  const buffer=audio.createBuffer(1,audio.sampleRate*duration,audio.sampleRate);const data=buffer.getChannelData(0);for(let i=0;i<data.length;i++)data[i]=(rnd(i+77)*2-1)*.55;const noise=audio.createBufferSource();noise.buffer=buffer;const filter=audio.createBiquadFilter();filter.type='bandpass';filter.frequency.setValueAtTime(base*5,now);filter.frequency.exponentialRampToValueAtTime(base,now+duration);noise.connect(filter);filter.connect(gain);noise.start(now);noise.stop(now+duration);
 }
-function render(){if(!ready)return;document.body.style.translate='';summonPrint.reset();spellPrint.hide();material.hideArrival();layout();rc.clearRect(0,0,innerWidth,innerHeight);fc.clearRect(0,0,innerWidth,innerHeight);material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});
+function render(){if(!ready)return;const groundedMana=kind==='summon'&&(summonVersion==='resonance'||summonVersion==='weave')&&time>=1.65&&!focused();rear.style.zIndex=groundedMana?'134':'';document.getElementById('material')!.style.zIndex=groundedMana?'136':'';front.style.zIndex=groundedMana?'137':'';document.body.style.translate='';summonPrint.reset();spellPrint.hide();material.hideArrival();layout();rc.clearRect(0,0,innerWidth,innerHeight);fc.clearRect(0,0,innerWidth,innerHeight);material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});
  if(focused()){
   const ground={x:innerWidth/2,y:innerHeight*.76};shadow(rc,ground,innerWidth*.38,innerHeight*.07,.26);
   if(kind==='draw'){const r=rects.deck;for(let i=5;i>=0;i--){rc.save();rc.translate(r.x+i*.8,r.y+i*1.5);rc.rotate(.10);rc.drawImage(image,-r.w/2,-r.h/2,r.w,r.h);rc.restore();}}
@@ -125,7 +127,7 @@ function render(){if(!ready)return;document.body.style.translate='';summonPrint.
  if(!focused()){if(kind==='summon'){hide(nodes.source);if(!side)hide(nodes.hand);}if(kind==='attack'){hide(nodes.source);hide(nodes.target);}}
  if(kind==='draw')draw();if(kind==='summon')summon();if(kind==='attack')attack();if(kind==='spell')spell();
  if(!focused()){const complete=time>({draw:99,summon:3.05,attack:1.62,spell:99}[kind]);if(complete){material.pose(sourceActor,{x:0,y:0,w:1,h:1,alpha:0});if(kind==='summon'||kind==='attack')show(nodes.source);if(kind==='attack'){show(nodes.target);material.pose(targetActor,{x:0,y:0,w:1,h:1,alpha:0});}}}
- material.render();if(kind==='summon'&&summonVersion==='shadowverse'){const shake=impactShake(time);document.body.style.translate=`${shake.x}px ${shake.y}px`;}post({time,duration:duration(),phase:kind==='draw'?`${drawCount}枚ドロー · ${time<DRAW_FLIGHT+(drawCount-1)*DRAW_GAP?'引き抜き → 反転 → 手札へ':'定着'}`:kind==='summon'?(summonVersion==='lore'?lorePhase(time):summonVersion==='hearthstone'?['移動','青い発光','実体化・接地','定着'][[.20,1.06,2.60].filter(t=>time>=t).length]:summonPhase(time)):phase(kind,time),playing,kind});
+ material.render();if(kind==='summon'&&summonVersion==='shadowverse'){const shake=impactShake(time);document.body.style.translate=`${shake.x}px ${shake.y}px`;}post({time,duration:duration(),phase:kind==='draw'?`${drawCount}枚ドロー · ${time<DRAW_FLIGHT+(drawCount-1)*DRAW_GAP?'引き抜き → 反転 → 手札へ':'定着'}`:kind==='summon'?(summonVersion==='resonance'||summonVersion==='weave'?manaPhase(time,summonVersion):summonVersion==='lore'?lorePhase(time):summonVersion==='hearthstone'?['移動','青い発光','実体化・接地','定着'][[.20,1.06,2.60].filter(t=>time>=t).length]:summonPhase(time)):phase(kind,time),playing,kind});
 }
 function draw(){
  drawPrint.render(time);
@@ -133,6 +135,7 @@ function draw(){
 }
 function summon(){
  const dest=rects.source,hand=rects.hand,u=dest.w;
+ if(summonVersion==='resonance'||summonVersion==='weave'){normalManaSummon(summonVersion);return;}
  if(summonVersion==='lore'){loreSummon();return;}
  if(summonVersion==='hearthstone'){
   const move=ease(.0,.20,time),convert=ease(1.06,1.19,time),drop=ease(1.17,1.38,time);
@@ -184,6 +187,18 @@ function summon(){
 
  }
 }
+function normalManaSummon(variant:ManaVariant){
+ const field=nodes.source,dest=rects.source,cs=getComputedStyle(field),w=parseFloat(cs.width),h=parseFloat(cs.height);
+ const heroScale=Math.min(innerHeight*.55/h,innerWidth*.58/w),hero={x:innerWidth/2,y:innerHeight/2,w:w*heroScale,h:h*heroScale},base=focused()?new DOMMatrix().translate(dest.x,dest.y).rotateAxisAngle(1,0,0,18).scale(dest.w/w,dest.h/h).translate(-w/2,-h/2):alignManaBase(projectedPlacement(field,w,h),w,h,dest);
+ const state=manaPose(time,hero,rects.hand,base,w,h,variant);
+ show(field);
+ if(time<MANA_CONTACT||focused()){summonPrint.nativePose(state.matrix,state.alpha,time<1.65);}
+ else{const q=clamp((time-MANA_CONTACT)/.17);summonPrint.land(0,q>=1?0:.9*Math.sin(q*Math.PI),1);}
+ const pad=w*.10;
+ material.mana.render(state.matrix.translate(-pad,-pad),w+pad*2,h+pad*2,time,variant,state.charge,state.conversion);
+ manaDetails(rc,fc,time,variant,state.matrix,w,h,base,dest);
+ cue('mana-reveal',.12,.16,650,.045);cue('mana-charge',.80,.23,720,.055);cue('mana-land',MANA_CONTACT,.16,130,.07);
+}
 function loreSummon(){
  const dest=rects.source,hand=rects.hand,u=dest.w;
  const hero=summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight);
@@ -230,10 +245,10 @@ function spell(){
  cue('spell-present',.12,.22,580,.06);cue('spell-frame',.70,.40,880,.08);cue('spell-release',1.48,.30,1040,.07);cue('spell-file',2.14,.16,320,.05);
 }
 function tick(now:number){if(disposed)return;const dt=Math.max(0,(now-last)/1000);last=now;if(playing&&ready&&!document.hidden){if(time>=duration()){cycleGap+=dt;if(loop&&cycleGap>.8){post({cycle:true});time=0;cycleGap=0;playedCues.clear();}else if(!loop)playing=false;}else time=Math.min(duration(),time+dt*speed);render();}raf=requestAnimationFrame(tick);}
-const api={async set(options:{drawCount?:number;kind?:Kind;mode?:string;side?:number;loop?:boolean;speed?:number;sound?:boolean;spell?:string;summonVersion?:'hearthstone'|'shadowverse'|'lore'}){if(options.loop!==undefined)loop=options.loop;if(options.speed)speed=options.speed;if(options.sound!==undefined){soundOn=options.sound;if(soundOn){audio??=new AudioContext();await audio.resume();}}
+const api={async set(options:{drawCount?:number;kind?:Kind;mode?:string;side?:number;loop?:boolean;speed?:number;sound?:boolean;spell?:string;summonVersion?:'hearthstone'|'shadowverse'|'lore'|'resonance'|'weave'}){if(options.loop!==undefined)loop=options.loop;if(options.speed)speed=options.speed;if(options.sound!==undefined){soundOn=options.sound;if(soundOn){audio??=new AudioContext();await audio.resume();}}
  let recapture=false,reconfigure=false;if(options.drawCount&&[1,2,4].includes(options.drawCount)&&options.drawCount!==drawCount){drawCount=options.drawCount;recapture=true;}if(options.summonVersion&&options.summonVersion!==summonVersion){summonVersion=options.summonVersion;reconfigure=true;}if(options.spell&&g.players[0].hand[1].id!==options.spell&&['S3','S4','S8'].includes(options.spell)){restore();for(let i=0;i<2;i++)g.players[i].hand[1]={...DB[options.spell],uid:`hand-${i}-1`};view.render(g);view.setHandOpen(true);recapture=true;}if(options.kind&&options.kind!==kind){kind=options.kind;recapture=true;}if(options.mode&&options.mode!==mode){mode=options.mode;reconfigure=true;}if(options.side!==undefined&&options.side!==side){side=options.side;recapture=true;}
  if(recapture){await prepare();return;}if(reconfigure&&ready){configure();time=0;cycleGap=0;playedCues.clear();playing=true;render();}
- },play(){if(!ready)return;if(time>=duration())time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(duration(),t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'33c8700c9',revision:11,duration:duration(),gpu:material.stats(),lore:material.lore.info(),draw:drawPrint.info(),summonVersion,summonContact:summonVersion==='lore'?LORE_CONTACT:summonVersion==='hearthstone'?1.38:SV.impact,hero:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight):null,orb:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonOrb(summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight),rects.source,time):null}),dispose(){document.body.style.translate='';disposed=true;++prepareId;cancelAnimationFrame(raf);restore();summonPrint.dispose();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
+ },play(){if(!ready)return;if(time>=duration())time=0;playing=true;last=performance.now();},replay(){if(!ready)return;time=0;cycleGap=0;playedCues.clear();playing=true;last=performance.now();render();},pause(){playing=false;render();},seek(t:number){playing=false;time=Math.max(0,Math.min(duration(),t));render();},info:()=>({ready,kind,mode,side,time,playing,hidden:hidden.size,surfaces:Object.keys(surfaces),width:innerWidth,height:innerHeight,source:'65f0775f7',revision:12,duration:duration(),gpu:material.stats(),lore:material.lore.info(),draw:drawPrint.info(),summonVersion,summonContact:summonVersion==='resonance'||summonVersion==='weave'?MANA_CONTACT:summonVersion==='lore'?LORE_CONTACT:summonVersion==='hearthstone'?1.38:SV.impact,hero:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight):null,orb:ready&&kind==='summon'&&summonVersion==='shadowverse'?summonOrb(summonHero(innerWidth,innerHeight,nodes.hand.offsetWidth,nodes.hand.offsetHeight),rects.source,time):null}),dispose(){document.body.style.translate='';disposed=true;++prepareId;cancelAnimationFrame(raf);restore();summonPrint.dispose();spellPrint.dispose();material.dispose();stopLayout();view.destroy();void audio?.close();}};
 Object.assign(window,{vfx:api});
 let resizeTimer=0;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=window.setTimeout(()=>{resize();if(ready){configure();render();}},150);});
 window.addEventListener('pagehide',()=>api.dispose(),{once:true});document.addEventListener('visibilitychange',()=>{last=performance.now();});

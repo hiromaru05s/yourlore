@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {ManaIllumination} from './manaIllumination';
 import {LoreCrystals} from './loreCrystals';
 import {arrivalVertex,arrivalFragment} from './arrivalShader';
 export interface Pose {x:number;y:number;w:number;h:number;rz?:number;ry?:number;rx?:number;glow?:number;burn?:number;mix?:number;alpha?:number;time?:number;color?:string;matrix?:DOMMatrix;formation?:number;flash?:number;edgeLight?:number;}
@@ -35,6 +36,7 @@ void main(){
 export class MaterialStage {
  private gl:T.WebGLRenderer|null=null;private fallback:HTMLCanvasElement|null=null;private scene=new T.Scene();private camera=new T.OrthographicCamera();private actors: {mesh:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;side:T.Mesh<T.BoxGeometry,T.MeshBasicMaterial>;textures:T.Texture[]}[]=[];
  readonly lore=new LoreCrystals(this.scene);
+ readonly mana=new ManaIllumination(this.scene);
  private arrivalMesh=new T.Mesh(new T.PlaneGeometry(1,1),new T.ShaderMaterial({vertexShader:arrivalVertex,fragmentShader:arrivalFragment,side:T.DoubleSide,transparent:true,depthTest:false,depthWrite:false,uniforms:{clock:{value:0},variant:{value:0},origin:{value:new T.Vector2()},heldBounds:{value:new T.Vector4()},extent:{value:new T.Vector2(5,7)},anchor:{value:new T.Vector2()},orb:{value:new T.Vector3()},flight:{value:new T.Vector3()}}}));
  constructor(private root:HTMLElement){this.arrivalMesh.visible=false;this.arrivalMesh.renderOrder=100;this.scene.add(this.arrivalMesh);try{this.gl=new T.WebGLRenderer({alpha:true,antialias:true,preserveDrawingBuffer:true});this.gl.setPixelRatio(Math.min(devicePixelRatio,2));this.gl.outputColorSpace=T.SRGBColorSpace;this.gl.setClearColor(0,0);root.append(this.gl.domElement);this.gl.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();this.useFallback();},{once:true});}catch{this.useFallback();}this.resize();}
  private useFallback(){if(this.fallback)return;this.gl?.domElement.remove();this.gl?.dispose();this.gl=null;this.fallback=document.createElement('canvas');this.root.append(this.fallback);parent.postMessage({type:'cinematic-vfx',fallback:true},location.origin);this.resize();}
@@ -49,9 +51,9 @@ export class MaterialStage {
  shadowverse(p:{x:number;y:number;w:number},t:number,hero:{x:number;y:number;w:number;h:number},orb:{x:number;y:number;radius:number;dx:number;dy:number;travel:number}){const m=this.arrivalMesh;m.visible=true;m.position.set(innerWidth/2,innerHeight/2,100);m.scale.set(innerWidth,innerHeight,1);const u=m.material.uniforms;u.clock.value=t;u.variant.value=1;u.extent.value.set(innerWidth/p.w,innerHeight/p.w);u.anchor.value.set((innerWidth/2-p.x)/p.w,(innerHeight/2-p.y)/p.w);u.origin.value.set((hero.x-p.x)/p.w,(hero.y-p.y)/p.w);u.heldBounds.value.set(0,0,hero.w/p.w,hero.h/p.w);u.orb.value.set((orb.x-p.x)/p.w,(orb.y-p.y)/p.w,orb.radius/p.w);u.flight.value.set(orb.dx,orb.dy,Math.min(1,orb.travel*8));}
  layer(index:number,order:number){const actor=this.actors[index];if(actor)actor.mesh.renderOrder=order;}
  shade(index:number,value:number){const actor=this.actors[index];if(actor)actor.mesh.material.uniforms.illumination.value=value;}
- hideArrival(){this.arrivalMesh.visible=false;this.lore.hide();}
+ hideArrival(){this.arrivalMesh.visible=false;this.lore.hide();this.mana.hide();}
  stats(){return this.gl?{...this.gl.info.memory}:null;}
  render(){if(this.gl){this.gl.render(this.scene,this.camera);return;}const c=this.fallback?.getContext('2d');if(!c)return;c.clearRect(0,0,innerWidth,innerHeight);for(const a of this.actors){if(!a.mesh.visible)continue;const u=a.mesh.material.uniforms,w=a.mesh.scale.x,h=a.mesh.scale.y;c.save();if(u.projected.value){const m=new DOMMatrix(u.planeMatrix.value.elements),a=m.transformPoint(new DOMPoint()),b=m.transformPoint(new DOMPoint(w,0)),d=m.transformPoint(new DOMPoint(0,h));c.transform((b.x/b.w-a.x/a.w)/w,(b.y/b.w-a.y/a.w)/w,(d.x/d.w-a.x/a.w)/h,(d.y/d.w-a.y/a.w)/h,a.x/a.w,a.y/a.w);c.translate(w/2,h/2);}else{c.translate(a.mesh.position.x,a.mesh.position.y);c.rotate(a.mesh.rotation.z);}c.scale(Math.max(.06,Math.cos(a.mesh.rotation.y)),1);c.globalAlpha=u.opacity.value;c.beginPath();c.rect(-w/2,-h/2,w,h*(1-u.burn.value));c.clip();c.drawImage(a.textures[0].image as CanvasImageSource,-w/2,-h/2,w,h);c.globalAlpha*=u.blend.value;c.drawImage(a.textures[1].image as CanvasImageSource,-w/2,-h/2,w,h);c.restore();}}
  clearActors(){for(const a of this.actors){this.scene.remove(a.mesh,a.side);a.mesh.geometry.dispose();a.mesh.material.dispose();a.side.geometry.dispose();a.side.material.dispose();a.textures.forEach(t=>t.dispose());}this.actors=[];}
- dispose(){this.lore.dispose();this.arrivalMesh.geometry.dispose();this.arrivalMesh.material.dispose();this.clearActors();this.gl?.dispose();this.gl?.domElement.remove();this.fallback?.remove();}
+ dispose(){this.mana.dispose();this.lore.dispose();this.arrivalMesh.geometry.dispose();this.arrivalMesh.material.dispose();this.clearActors();this.gl?.dispose();this.gl?.domElement.remove();this.fallback?.remove();}
 }

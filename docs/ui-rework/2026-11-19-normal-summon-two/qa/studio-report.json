@@ -1,0 +1,34 @@
+{
+  "errors": [],
+  "order": [
+    {
+      "ready": true,
+      "active": "current",
+      "activeSummon": "weave",
+      "kind": "summon",
+      "playing": true,
+      "preparing": false,
+      "mode": "alternate"
+    },
+    {
+      "ready": true,
+      "active": "study",
+      "activeSummon": "resonance",
+      "kind": "summon",
+      "playing": true,
+      "preparing": false,
+      "mode": "alternate"
+    },
+    {
+      "ready": true,
+      "active": "study",
+      "activeSummon": "weave",
+      "kind": "summon",
+      "playing": true,
+      "preparing": false,
+      "mode": "alternate"
+    }
+  ],
+  "variants": 2,
+  "controls": true
+}

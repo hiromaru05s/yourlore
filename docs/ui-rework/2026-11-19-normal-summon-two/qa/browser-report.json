@@ -1,0 +1,115 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "width": 1100,
+      "variant": "resonance",
+      "side": 0,
+      "nativeIdentity": true,
+      "landingContinuity": true,
+      "restoration": true
+    },
+    {
+      "width": 1100,
+      "variant": "resonance",
+      "side": 1,
+      "nativeIdentity": true,
+      "landingContinuity": true,
+      "restoration": true
+    },
+    {
+      "width": 1100,
+      "variant": "weave",
+      "side": 0,
+      "nativeIdentity": true,
+      "landingContinuity": true,
+      "restoration": true
+    },
+    {
+      "width": 1100,
+      "variant": "weave",
+      "side": 1,
+      "nativeIdentity": true,
+      "landingContinuity": true,
+      "restoration": true
+    },
+    {
+      "width": 390,
+      "variant": "resonance",
+      "side": 0,
+      "nativeIdentity": true,
+      "landingContinuity": true,
+      "restoration": true
+    },
+    {
+      "width": 390,
+      "variant": "resonance",
+      "side": 1,
+      "nativeIdentity": true,
+      "landingContinuity": true,
+      "restoration": true
+    },
+    {
+      "width": 390,
+      "variant": "weave",
+      "side": 0,
+      "nativeIdentity": true,
+      "landingContinuity": true,
+      "restoration": true
+    },
+    {
+      "width": 390,
+      "variant": "weave",
+      "side": 1,
+      "nativeIdentity": true,
+      "landingContinuity": true,
+      "restoration": true
+    },
+    {
+      "reprepareGpu": [
+        {
+          "geometries": 1,
+          "textures": 1
+        },
+        {
+          "geometries": 1,
+          "textures": 1
+        },
+        {
+          "geometries": 1,
+          "textures": 1
+        },
+        {
+          "geometries": 1,
+          "textures": 1
+        }
+      ]
+    },
+    {
+      "variant": "resonance",
+      "livePlayback": {
+        "frames": 190,
+        "medianMs": 16.700000000000728,
+        "p95Ms": 16.799999999999272
+      }
+    },
+    {
+      "variant": "weave",
+      "livePlayback": {
+        "frames": 190,
+        "medianMs": 16.700000000000728,
+        "p95Ms": 16.799999999999272
+      }
+    },
+    {
+      "interruptionToDraw": true
+    },
+    {
+      "disposeDuringFlight": true
+    },
+    {
+      "reducedMotionAutoplayOff": true
+    }
+  ],
+  "scope": "Local adopted-board fixture; no live event queue, PvP or visual approval asserted."
+}

@@ -5,6 +5,8 @@ import type {Pose} from './material';
 /** Reveal with the native DOM; land using the actual board node, never a raster substitute. */
 export class SummonPrint {
  private reveal?:HTMLElement;private focus?:HTMLElement;private field?:HTMLElement;
+ private carried?:{node:HTMLElement;placeholder:HTMLElement;style:string;classes:string};
+ private density:Array<[HTMLElement,string]>=[];
  private changed:Array<[HTMLElement,string,string,string]>=[];
  async prepare(hand:HTMLElement,field:HTMLElement){
   this.dispose();this.field=field;
@@ -18,10 +20,13 @@ export class SummonPrint {
   copy.style.cssText='position:fixed;inset:auto;left:0;top:0;margin:0;transform-origin:0 0;pointer-events:none;z-index:200;visibility:hidden;transition:none;animation:none;overflow:visible;';
   document.body.append(copy);return copy;
  }
+ resetDensity(){for(const [layer,style]of this.density)layer.style.cssText=style;this.density=[];}
+ highDensity(){if(this.density.length||!this.field)return;const fieldStyle=getComputedStyle(this.field),sampling=Math.max(6,Math.ceil(2*Math.min(innerHeight*.55/parseFloat(fieldStyle.height),innerWidth*.58/parseFloat(fieldStyle.width))));for(const layer of this.field.querySelectorAll<HTMLElement>('.card-art,.card-frame')){const cs=getComputedStyle(layer);if(cs.scale!=='.5'&&cs.scale!=='0.5')continue;this.density.push([layer,layer.style.cssText]);layer.style.width=parseFloat(cs.width)*sampling/2+'px';layer.style.height=parseFloat(cs.height)*sampling/2+'px';layer.style.scale=String(1/sampling);}}
  private size(node:HTMLElement,w:number,h:number){
   node.style.width=w+'px';node.style.height=h+'px';node.style.setProperty('--cw',w+'px');node.style.setProperty('--ch',h+'px');
  }
  reset(){
+  if(this.carried){const {node,placeholder,style,classes}=this.carried;placeholder.replaceWith(node);node.style.cssText=style;node.className=classes;this.carried=undefined;}
   // Restore the native pose while transitions are still disabled. Otherwise the
   // browser interpolates the reset and the next frame compounds the previous tilt.
   for(const [node,key,value,priority]of this.changed){if(key==='transition')continue;if(value)node.style.setProperty(key,value,priority);else node.style.removeProperty(key);}
@@ -59,9 +64,20 @@ export class SummonPrint {
    frame.style.setProperty('filter',`${previous==='none'?'':previous} drop-shadow(0 ${edge}px 0 rgba(43,48,52,${amount*.46})) drop-shadow(0 ${offset}px ${blur}px rgba(12,20,28,${amount*.25}))`,'important');
   }
  }
+ /** Carry the same DOM print in a temporary screen layer. Its empty slot
+  * reserves layout; reattachment occurs before paint, without a replacement image. */
+ nativePose(target:DOMMatrix,alpha=1,foreground=false){
+  const n=this.field;if(!n||!n.parentElement)return;
+  const cs=getComputedStyle(n),w=parseFloat(cs.width),h=parseFloat(cs.height),fontSize=cs.fontSize,fontFamily=cs.fontFamily,lineHeight=cs.lineHeight,style=n.style.cssText,classes=n.className;
+  const placeholder=n.cloneNode(false) as HTMLElement;placeholder.removeAttribute('data-uid');placeholder.removeAttribute('id');placeholder.style.visibility='hidden';
+  n.replaceWith(placeholder);document.body.append(n);this.carried={node:n,placeholder,style,classes};
+  n.classList.remove('is-attacker','is-playable','is-targetable','selected','hovered');n.classList.add('fx-card-flight');
+  n.style.cssText=`position:fixed;inset:auto;left:0;top:0;width:${w}px;height:${h}px;--cw:${w}px;--ch:${h}px;--card-w:${w}px;margin:0;transform-origin:0 0;translate:none;rotate:none;scale:none;transition:none;animation:none;overflow:visible;visibility:visible;pointer-events:none;z-index:${foreground?200:135};font-size:${fontSize};font-family:${fontFamily};line-height:${lineHeight};`;
+  n.style.setProperty('box-shadow','none','important');n.style.transform=target.toString();n.style.opacity=String(alpha);
+ }
  focusAt(p:Pose){
   const node=this.focus;if(!node)return;this.size(node,p.w,p.h);node.style.visibility='visible';node.style.opacity=String(p.alpha??1);
   node.style.transform=`translate(${p.x-p.w/2}px,${p.y-p.h/2}px) perspective(1400px) rotateX(${p.rx??0}rad) rotateY(${p.ry??0}rad)`;
  }
- dispose(){this.reset();this.reveal?.remove();this.focus?.remove();this.reveal=undefined;this.focus=undefined;this.field=undefined;}
+ dispose(){this.reset();this.resetDensity();this.reveal?.remove();this.focus?.remove();this.reveal=undefined;this.focus=undefined;this.field=undefined;}
 }
