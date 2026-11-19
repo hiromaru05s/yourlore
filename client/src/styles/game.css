@@ -801,7 +801,7 @@
 /* Purchase selection follows the cutout frame and stat seals, never a box. */
 .game .market-cards .card.is-armed { outline:0;box-shadow:none; }
 .game .market-cards .card.is-armed .card-frame,
-.game .market-cards .card.is-armed .seal-face { filter:drop-shadow(0 0 1px #d4f3ff) drop-shadow(0 0 3px #68c3f6); }
+.game .market-cards .card.is-armed .seal-face { filter:drop-shadow(0 0 calc(1px * var(--card-print-density)) #d4f3ff) drop-shadow(0 0 calc(3px * var(--card-print-density)) #68c3f6); }
 .draw-grip { isolation:isolate; }
 
 .game .portrait .mana-readout { border:1px solid #baa77888;border-radius:3px;background:linear-gradient(145deg,#294155ed,#142537ed);box-shadow:inset 0 1px 0 #e6dbbd26,inset 0 -2px 0 #080f2070,0 2px 3px #13203126;color:#f4ead3; }
@@ -911,40 +911,35 @@
 /* Keep projected lettering in the final screen raster. Group filters on the
    whole card force Chromium to enlarge a low-resolution intermediate bitmap. */
 .game .card,.game .card:is(.is-dim,.is-exhausted,.is-playable,.is-buyable):hover { filter:none; }
-/* Keep the same small compositor surfaces in both states. Switching between
-   an unfiltered print and filtered child groups can change their raster scale
-   under the board/hand projection. Never promote the whole projected card:
-   its art/frame already supersample independently of the live lettering.
-   Limit this to visible game prints, not the hundreds of gallery cards. */
-.game .card > :is(.card-art,.card-frame,.card-cost,.card-name,.ad-atk,.ad-def,.card-status,.badge,.mkt-stock),
-.card.summon-face > :is(.card-art,.card-frame,.card-cost,.card-name,.ad-atk,.ad-def,.card-status,.badge) { will-change:filter; }
-.game .card > :is(.card-art,.card-name,.ad-atk,.ad-def,.card-status,.badge,.mkt-stock) { filter:grayscale(0) brightness(1) contrast(1); }
-.game .card-frame,.card:is(.fx-card-flight,.cast-reveal,.native-card-flight) .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009); }
-.game .card.is-playable:hover .card-frame,.game .card.is-buyable:hover .card-frame { filter:drop-shadow(0 16px 28px #000c); }
-.game .card.is-dim > :not(.card-frame) { filter:grayscale(1) brightness(.55) contrast(.9); }
-.game .card.is-dim .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009) grayscale(1) brightness(.55) contrast(.9); }
-.game .card.is-dim:hover > :not(.card-frame) { filter:grayscale(.95) brightness(.65) contrast(.9); }
-.game .card.is-dim:hover .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009) grayscale(.95) brightness(.65) contrast(.9); }
-.game .card.is-exhausted:not(.is-dim) > :not(.card-frame) { filter:grayscale(.7) brightness(.6); }
-.game .card.is-exhausted:not(.is-dim) .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009) grayscale(.7) brightness(.6); }
-/* The cost seal's alpha shadow is part of its contour in both states too. */
-.game .card.is-dim > .card-cost { filter:drop-shadow(0 .1em .22em #000b) grayscale(1) brightness(.55) contrast(.9); }
-.game .card.is-dim:hover > .card-cost { filter:drop-shadow(0 .1em .22em #000b) grayscale(.95) brightness(.65) contrast(.9); }
-.game .card.is-exhausted:not(.is-dim) > .card-cost { filter:drop-shadow(0 .1em .22em #000b) grayscale(.7) brightness(.6); }
+/* Prepare the independently sampled print, never its small interaction boxes. */
+.game .card > :is(.card-art,.card-frame,.card-name,.card-status,.badge,.mkt-stock),
+.card.summon-face > :is(.card-art,.card-frame,.card-name,.card-status,.badge),
+.game .card .seal-print,.card.summon-face .seal-print {will-change:filter;}
+.game .card > :is(.card-art,.card-name,.card-status,.badge,.mkt-stock) {filter:grayscale(0) brightness(1) contrast(1);}
+.game .card,.card:is(.fx-card-flight,.cast-reveal,.native-card-flight) {--card-frame-shadow:drop-shadow(0 calc(1px * var(--card-image-density)) 0 #d3c3a0) drop-shadow(0 calc(1px * var(--card-image-density)) 0 #655846) drop-shadow(0 calc(2px * var(--card-image-density)) calc(4px * var(--card-image-density)) #0009);}
+.game .card-frame,.card:is(.fx-card-flight,.cast-reveal,.native-card-flight) .card-frame {filter:var(--card-frame-shadow,drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009));}
+.game .card.is-playable:hover .card-frame,.game .card.is-buyable:hover .card-frame {filter:drop-shadow(0 calc(8px * var(--card-image-density)) calc(14px * var(--card-image-density)) #000c);}
+.game .card.is-dim {--card-seal-tone:grayscale(1) brightness(.55) contrast(.9);}
+.game .card.is-dim:hover {--card-seal-tone:grayscale(.95) brightness(.65) contrast(.9);}
+.game .card.is-exhausted:not(.is-dim) {--card-seal-tone:grayscale(.7) brightness(.6);}
+.game .card:is(.is-dim,.is-exhausted) > :not(.card-frame,.card-cost,.ad-atk,.ad-def) {filter:var(--card-seal-tone);}
+.game .card:is(.is-dim,.is-exhausted) .card-frame {filter:var(--card-frame-shadow) var(--card-seal-tone);}
 /* Floating summon faces use the same print and silhouette as a field Actor.
    Their parent is body while travelling, so .game descendant rules cannot own them. */
 /* A newly mounted blocked Actor already owns its settled transform. */
 .game .zone-mon .field-resting-face[data-monster-blocked] { transition:none; }
+.card:is(.summon-face,.field-resting-face),.game .zone-mon .card.field-resting-face {--card-seal-tone:var(--rest-tone,brightness(1));}
+.card:is(.summon-face,.field-resting-face) .card-cost .seal-print {filter:var(--card-seal-tone);}
 .card.summon-face { filter:none!important;animation:none!important;transition:none!important; }
-.card:is(.summon-face,.field-resting-face) > :not(.card-frame),.game .zone-mon .card.field-resting-face > :not(.card-frame) { filter:var(--rest-tone,brightness(1)); }
+.card:is(.summon-face,.field-resting-face) > :not(.card-frame,.card-cost,.ad-atk,.ad-def),.game .zone-mon .card.field-resting-face > :not(.card-frame,.card-cost,.ad-atk,.ad-def) { filter:var(--rest-tone,brightness(1)); }
 .card:is(.summon-face,.field-resting-face) .card-frame,.game .zone-mon .card.field-resting-face .card-frame { filter:drop-shadow(0 var(--summon-frame-unit,1px) 0 #d3c3a0) drop-shadow(0 var(--summon-frame-unit,1px) 0 #655846) drop-shadow(0 calc(2 * var(--summon-frame-unit,1px)) calc(4 * var(--summon-frame-unit,1px)) #0009) var(--rest-shadow,drop-shadow(0 0 0 #0000)) var(--rest-tone,brightness(1));animation:none!important; }
 
 .game .card:is(.is-attacker,.is-targetable) { animation:none; }
 .game .card.is-attacker .card-frame { animation:projectedAttackerPulse 1.1s infinite; }
 .game .card.is-targetable .card-frame { animation:projectedAttackerPulse .8s infinite; }
 @keyframes projectedAttackerPulse {
-  0%,100% { filter:drop-shadow(0 4px 8px #0009) drop-shadow(0 0 8px #ff7a4d66); }
-  50% { filter:drop-shadow(0 4px 8px #0009) drop-shadow(0 0 18px #ff7a4d); }
+  0%,100% { filter:drop-shadow(0 calc(2px * var(--card-image-density)) calc(4px * var(--card-image-density)) #0009) drop-shadow(0 0 calc(4px * var(--card-image-density)) #ff7a4d66); }
+  50% { filter:drop-shadow(0 calc(2px * var(--card-image-density)) calc(4px * var(--card-image-density)) #0009) drop-shadow(0 0 calc(9px * var(--card-image-density)) #ff7a4d); }
 }
 
 /* Permanent spell/quest plates share the bounded native print sampling.

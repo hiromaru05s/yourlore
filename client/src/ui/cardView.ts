@@ -435,10 +435,12 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
   const numericSeal = (cls: string, value: number): HTMLElement => {
     const seal = el("div", cls);
     const face = el('span','seal-face'); face.setAttribute('aria-hidden','true');
-    seal.appendChild(face);
+    const print = el('span','seal-print');
+    seal.appendChild(print);
+    print.appendChild(face);
     const label = el('span','seal-value',String(value));
     if (String(value).length > 3) label.style.fontSize = `${300 / String(value).length}%`;
-    seal.appendChild(label);
+    print.appendChild(label);
     return seal;
   };
   node.appendChild(numericSeal("card-cost" + (cost >= 10 ? " card-cost--2d" : ""), cost));
@@ -507,7 +509,7 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     attachCardCounter(node,createCardCounter(c.uid,c.id,counter.kind,counter.value,index));
   }
   // Keep long names inside their frame using a stable card-local scale.
-  if (!opt.compactField) nameEl2.style.fontSize = `calc(var(--cw) * ${cardNameScale(nm).toFixed(5)})`;
+  if (!opt.compactField) nameEl2.style.fontSize = `calc(var(--cw) * ${cardNameScale(nm).toFixed(5)} * var(--card-print-density,1))`;
   if (opt.badge) node.appendChild(el("span", "badge", opt.badge));
   if(opt.lazyArt!==undefined){galleryCards.add(node);assetHints.set(node,()=>[
     opt.compactField?fieldFrameFor(c.t):frameFor(c.t,opt.fullArt || opt.lazyArt === undefined),

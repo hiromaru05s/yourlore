@@ -93,7 +93,8 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   };
   // The matte is already rasterized. Preserve the remaining native CSS filters
   // at capture density instead of replacing the frame with a flat, bright print.
-  const filter=(el:Element)=>getComputedStyle(el).filter.replace(/url\([^)]*\)/g,'').replace(/(-?[\d.]+)px/g,(_,n)=>`${Number(n)*w/(node.offsetWidth||r.width)}px`).trim()||'none';
+  const layerScale=(el:Element)=>{let scale=1;for(let n:Element|null=el;n&&n!==node;n=n.parentElement){const value=parseFloat(getComputedStyle(n).scale);if(value>0)scale*=value;}return scale;};
+  const filter=(el:Element)=>getComputedStyle(el).filter.replace(/url\([^)]*\)/g,'').replace(/(-?[\d.]+)px/g,(_,n)=>`${Number(n)*layerScale(el)*w/(node.offsetWidth||r.width)}px`).trim()||'none';
   const stateFilter=node.matches('.is-dim,.is-exhausted,[data-summon-rest="blocked"],.field-resting-face')?getComputedStyle(node.querySelector('.card-art')??node).filter:'none';
   const rootFilter=filter(node)==='none'?stateFilter:filter(node);
   const layers: (() => Promise<void>)[] = [];
@@ -150,7 +151,7 @@ export async function captureCardSurface(node: HTMLElement, sleeve: string, reve
   // Capture text measurements BEFORE awaits or hiding the destination.
   const drawText = (el: HTMLElement): (() => Promise<void>) => {
     const style = getComputedStyle(el), b = box(el);
-    const size = parseFloat(style.fontSize) * r.width / (node.offsetWidth || r.width) * w / r.width;
+    const size = parseFloat(style.fontSize) * layerScale(el) * r.width / (node.offsetWidth || r.width) * w / r.width;
     const text = el.textContent || '';
     return async () => {
       ctx.save(); ctx.beginPath(); ctx.rect(b.x,b.y,b.w,b.h); ctx.clip();

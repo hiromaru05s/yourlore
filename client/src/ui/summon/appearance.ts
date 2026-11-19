@@ -12,17 +12,17 @@ export function restingCardFilter(kind:RestingKind,aura:boolean,now:number,densi
 export function refreshSummonAppearance(node:HTMLElement,density=Number(node.dataset.summonDensity)||1){
  if(!node.classList.contains('summon-face'))return;
  node.dataset.summonDensity=String(density);
- node.style.setProperty('--summon-frame-unit','calc(var(--cw) / 41)');
+ node.style.setProperty('--summon-frame-unit','calc(var(--cw) / 82 * var(--card-image-density,2))');
  setRestingFilters(node,(node.dataset.summonRest??'plain') as RestingKind,!!node.dataset.monsterAura,performance.now(),(parseFloat(getComputedStyle(node).width)||180*density)/41,matchMedia('(prefers-reduced-motion:reduce)').matches);
 }
 function setRestingFilters(node:HTMLElement,kind:RestingKind,aura:boolean,now:number,density:number,reduced:boolean){
  const filter=restingCardFilter(kind,aura,now,density,reduced).replace(/(?:grayscale|brightness)\([^)]*\)/g,'').trim();
  node.style.setProperty('--rest-tone',kind==='blocked'?'grayscale(1) brightness(.57)':'brightness(1)');
- node.style.setProperty('--rest-shadow',filter&&filter!=='none'?filter:'drop-shadow(0 0 0 #0000)');
+ node.style.setProperty('--rest-shadow',filter&&filter!=='none'?filter.replace(/(-?[\d.]+)px/g,(_,n)=>`calc(${n}px * var(--card-image-density,2) / 2)`):'drop-shadow(0 0 0 #0000)');
 }
 /** Keep the illustration out of a filtered root's flattened compositor bitmap. */
 export function paintRestingAppearance(node:HTMLElement,kind:RestingKind,aura:boolean,now:number,density:number,reduced:boolean,width=82*density){
- node.style.setProperty('--summon-frame-unit','calc(var(--cw) / 41)');
+ node.style.setProperty('--summon-frame-unit','calc(var(--cw) / 82 * var(--card-image-density,2))');
  node.classList.add('field-resting-face');node.style.setProperty('filter','none','important');
  setRestingFilters(node,kind,aura,now,width/41,reduced);
 }

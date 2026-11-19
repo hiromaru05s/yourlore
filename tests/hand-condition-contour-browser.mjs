@@ -39,7 +39,7 @@ async function contours(label){
  }));
  await page.screenshot({path:out+'/'+label+'.png'});
  for(const v of values){
-  assert(Math.abs(v.frameWidth*.5-v.cardWidth)<.1,'product still uses supersampled frame');
+  assert(Math.abs(v.frameWidth*parseFloat(v.scale)-v.cardWidth)<.1,'product still uses supersampled frame');
   // Monster stat seals intentionally protrude 4% right and 2% below the card.
   assert(v.bounds.right<=v.width*1.04+1,`${label}: contour extends beyond the actual right edge: ${JSON.stringify(v)}`);
   assert(v.bounds.bottom<=v.height*1.02+1,`${label}: contour extends below the actual bottom edge: ${JSON.stringify(v)}`);

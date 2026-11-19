@@ -58,18 +58,18 @@ export async function captureNativePrint(source:HTMLElement,width:number,padding
  await Promise.all([...source.querySelectorAll('img')].map(image=>image.decode().catch(()=>{})));
  const originals=[source,...source.querySelectorAll('*')];
  const copy=source.cloneNode(true) as HTMLElement,copies=[copy,...copy.querySelectorAll('*')];
- // Native layers supersample at 2x then scale down. This document already lays
- // out in output pixels: normalize that extra layer scale to avoid a 4800px
- // filtered intermediate on WebKit and four times the unnecessary raster work.
- const sampled=originals.filter(n=>n.matches('.card-art,.card-frame,.buff-art,.buff-frame')&&getComputedStyle(n).scale==='0.5');
+ // The live print uses independently sampled image, title and seal layers.
+ // This document already lays out in output pixels; flatten their sampling
+ // scale while preserving outer anchors in the parent coordinate system.
+ const sampled=new Map(originals.filter(n=>n.matches('.card-art,.card-frame,.buff-art,.buff-frame,.card-name,.seal-print')).map(n=>[n,parseFloat(getComputedStyle(n).scale)] as const).filter(([,s])=>s>0&&s<1));
  const liveCanvases=[...liveSource.querySelectorAll('canvas')],sourceCanvases=[...source.querySelectorAll('canvas')];
  await Promise.all(originals.map(async(node,i)=>{
-  let target=copies[i];const cs=getComputedStyle(node),style=(target as HTMLElement|SVGElement).style,factor=scale*(sampled.some(layer=>layer===node||layer.contains(node))?.5:1);
+  let target=copies[i];const cs=getComputedStyle(node),style=(target as HTMLElement|SVGElement).style,factor=scale*[...sampled].reduce((f,[layer,s])=>layer===node||layer.contains(node)?f*s:f,1);
   if(!style)return;
   const declarations:string[]=[];
-  for(const key of cs){if(!visualProperty.test(key))continue;const value=cs.getPropertyValue(key);declarations.push(`${key}:${(node instanceof SVGElement&&!(node instanceof SVGSVGElement))?value:scaled(key,value.includes('url(')?await inlineValue(value):value,factor)}`);}
+  for(const key of cs){if(!visualProperty.test(key))continue;const value=cs.getPropertyValue(key);declarations.push(`${key}:${(node instanceof SVGElement&&!(node instanceof SVGSVGElement))?value:scaled(key,value.includes('url(')?await inlineValue(value):value,sampled.has(node)&&/^(?:top|right|bottom|left|margin)/.test(key)?scale:factor)}`);}
   style.cssText=declarations.join(';')+';animation:none!important;transition:none!important;visibility:visible!important';
-  if(sampled.includes(node)){style.scale='1';style.right='auto';style.bottom='auto';}
+  if(sampled.has(node)){style.scale='1';style.right='auto';style.bottom='auto';}
   if(i===0)target.removeAttribute('id');target.removeAttribute('data-uid');
   if(node instanceof HTMLImageElement){(target as HTMLImageElement).removeAttribute('srcset');(target as HTMLImageElement).removeAttribute('sizes');(target as HTMLImageElement).src=await dataUrl(node.currentSrc||node.src);}
   if(node instanceof HTMLCanvasElement){const original=liveCanvases[sourceCanvases.indexOf(node)]??node;if(original.width&&original.height){const img=document.createElement('img');img.style.cssText=style.cssText;img.src=original.toDataURL();await img.decode();target.replaceWith(img);target=img;}}

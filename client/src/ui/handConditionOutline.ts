@@ -7,10 +7,10 @@ const images=new Map<string,Promise<HTMLImageElement>>();
 function load(url:string){let p=images.get(url);if(!p){p=new Promise<HTMLImageElement>((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error('輪郭画像を読み込めません: '+url));im.src=url;});images.set(url,p);}return p;}
 function geometry(node:HTMLElement){const scale=200/parseFloat(getComputedStyle(node).width),height=parseFloat(getComputedStyle(node).height)*scale;
  const layers:Layer[]=[];
- for(const el of node.querySelectorAll<HTMLElement>(':scope > .card-frame, :scope > .card-cost > .seal-face, :scope > .ad-atk > .seal-face, :scope > .ad-def > .seal-face')){
+ for(const el of node.querySelectorAll<HTMLElement>(':scope > .card-frame, :scope > .card-cost .seal-face, :scope > .ad-atk .seal-face, :scope > .ad-def .seal-face')){
  const cs=getComputedStyle(el),url=cs.backgroundImage.match(/url\(["']?(.*?)["']?\)/)?.[1];if(!url)continue;
  let x=0,y=0,w=parseFloat(cs.width),h=parseFloat(cs.height),current:HTMLElement|null=el;
- // The frame is rasterized at 200% and displayed with scale:.5. Trace its
+ // Image and seal layers have independent sampling scales. Trace their
  // displayed footprint in card-local coordinates, not its rasterization box.
  // Keep the card's own fan rotation/scale out: the child SVG already inherits it.
  while(current&&current!==node){

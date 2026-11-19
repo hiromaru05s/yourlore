@@ -5,6 +5,8 @@
    (board / market / hand / pile) stay perfectly consistent.
    ============================================================ */
 .card {
+  --card-print-density:1;
+  --card-image-density:2;
   --cw: var(--card-w);
   --ch: var(--card-h);
   position: relative;
@@ -403,12 +405,24 @@
 /* Optical baseline compensation shared by cost, attack and health seals. */
 .seal-value { transform:translateY(-.075em); }
 
-/* Rasterize the clipped illustration at twice its layout size before projection.
+/* Rasterize the clipped illustration above its layout size before projection.
    This is bounded to the art layer, not a permanent full-screen GPU surface. */
-.card .card-art{width:200%;height:200%;right:auto;bottom:auto;scale:.5;transform-origin:0 0;}
+.card .card-art{width:calc(100% * var(--card-image-density));height:calc(100% * var(--card-image-density));right:auto;bottom:auto;scale:calc(1 / var(--card-image-density));transform-origin:0 0;}
 
 /* Shadows stay on the printed alpha silhouette. Give only that small layer
-   extra sampling room; typography remains native screen text. */
-.card .card-frame { width:200%;height:200%;right:auto;bottom:auto;scale:.5;transform-origin:0 0; }
-.zoom-overlay .card .card-art,.zoom-overlay .card .card-frame {width:100%;height:100%;scale:1;}
+   extra sampling room alongside the independently sampled lettering. */
+.card .card-frame { width:calc(100% * var(--card-image-density));height:calc(100% * var(--card-image-density));right:auto;bottom:auto;scale:calc(1 / var(--card-image-density));transform-origin:0 0; }
+/* Paint a larger local print before the board's perspective transform. The
+   interaction owner never changes size, so hit tests and animation anchors stay
+   in board coordinates. Retina already supplies part of the sampling budget. */
+.game .card,.card:is(.fx-card-flight,.cast-reveal,.native-card-flight,.summon-face,.duet-card) {--card-print-density:4;--card-image-density:4;}
+@media(min-resolution:2dppx){.game .card,.card:is(.fx-card-flight,.cast-reveal,.native-card-flight,.summon-face,.duet-card){--card-print-density:2;--card-image-density:2;}}
+.zoom-overlay .card {--card-print-density:1;--card-image-density:1;}
+.card .card-name {right:auto;width:calc(74% * var(--card-print-density));height:calc(8.8% * var(--card-print-density));scale:calc(1 / var(--card-print-density));transform-origin:0 0;text-shadow:0 calc(1px * var(--card-print-density)) calc(2px * var(--card-print-density)) #000;}
+/* Keep the seal's interaction/animation box native. Only its printed contents
+   grow, so attack/stat pulses still pivot around the same physical centre. */
+.card .card-cost {filter:none;}
+.seal-print {position:absolute;left:0;top:0;width:calc(100% * var(--card-print-density));height:calc(100% * var(--card-print-density));font-size:calc(1em * var(--card-print-density));scale:calc(1 / var(--card-print-density));transform-origin:0 0;filter:var(--card-seal-tone,brightness(1));text-shadow:0 calc(1px * var(--card-print-density)) calc(3px * var(--card-print-density)) #000;}
+.card-cost .seal-print {filter:drop-shadow(0 .1em .22em #000b) var(--card-seal-tone,brightness(1));}
+.ad-def--hurt .seal-print {text-shadow:0 0 calc(6px * var(--card-print-density)) #a3160bcc,0 calc(1px * var(--card-print-density)) calc(2px * var(--card-print-density)) #000c;}
 .card:is(.fx-card-flight,.cast-reveal,.native-card-flight) {filter:none!important;}

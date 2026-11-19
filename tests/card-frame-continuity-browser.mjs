@@ -13,7 +13,7 @@ try{for(const width of (process.env.LORE_QA_WIDTHS||'1280,390').split(',').map(N
   g.players[0].field=[{...DB.SOLDIER2,uid:'frame-field',exhausted:true,summonedTurn:g.turn,tempAtk:0,atkMod:0,defMod:0,dmg:0}];g.players[0].hand=[{...DB.RUST_SHROOM,uid:'frame-hand'}];g.players[0].discard=[{...DB.ELF,uid:'frame-old'}];g.market[0]={...DB.SOLDIER2,uid:'frame-market'};
   c.show(redactFor(g,0));await new Promise(r=>setTimeout(r,500));
   const source=document.querySelector('[data-uid="frame-hand"]');await F.ensureCardFrameReady(source);const layer=source.querySelector('.card-frame-material'),initial=layer?.toDataURL();
-  let seen=false,same=true,live=false,running=true;const sample=()=>{const card=document.querySelector('.native-draw-card .card');if(card){seen=true;same&&=card.querySelector('.card-frame-material')===layer;live||=layer.toDataURL()!==initial;}if(running)requestAnimationFrame(sample);};sample();
+  let seen=false,same=true,live=false,running=true;const sample=()=>{const card=document.querySelector('.native-draw-card.card');if(card){seen=true;same&&=card.querySelector('.card-frame-material')===layer;live||=layer.toDataURL()!==initial;}if(running)requestAnimationFrame(sample);};sample();
   await A.animateDraw(document.querySelector('#hand'),1,'me',{uids:['frame-hand']});running=false;
   const draw={seen,same,live,returned:source.querySelector('.card-frame-material')===layer};
   const {captureCardSurface}=await import('/src/ui/cardSurface.ts');const capture=await captureCardSurface(source,FRAME_BACK,true,false);const print=capture.face.toDataURL();

@@ -139,7 +139,7 @@ export class CardFrameMaterial {
   // Read styles before appending any canvas, avoiding read/write layout thrashing.
   const parts=[...node.querySelectorAll<HTMLElement>('.card-frame,.seal-face,.buff-frame,.buff-cost')].map(part=>{
    const style=getComputedStyle(part),url=(style.backgroundImage||part.style.backgroundImage).match(/url\(["']?(.*?)["']?\)/)?.[1]??(part.matches('.buff-cost')?getComputedStyle(part,'::before').backgroundImage.match(/url\(["']?(.*?)["']?\)/)?.[1]:undefined);
-   const seal=part.matches('.buff-cost')||part.parentElement?.matches('.card-cost')?'cost':part.parentElement?.matches('.ad-atk')?'attack':part.parentElement?.matches('.ad-def')?'health':null;
+   const seal=part.matches('.buff-cost')||part.closest('.card-cost')?'cost':part.closest('.ad-atk')?'attack':part.closest('.ad-def')?'health':null;
    const source=url??(seal?`/art/biblion/modular/${seal}-print.webp`:undefined);
    return {part,source};
   });
