@@ -1,5 +1,6 @@
 import './nameplateBoard';
 import './identityFurniturePreview.css';
+import './buffIconPreview.css';
 import {rankEmblem} from '../ui/rankEmblem';
 import {projectBoardDOM} from '../ui/boardProjection';
 const root=document.getElementById('app')!;

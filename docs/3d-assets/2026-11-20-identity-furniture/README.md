@@ -43,3 +43,14 @@ The review iframe supports native 1920×1080, native 1280×720 and window-sized 
 - Rank/medal sample toggle and native-size selector checked in the review page.
 - Full board screenshots visually inspected at both sizes. Visual adoption remains the user's decision.
 - Pitched follow-up inspected at 1920×1080 and 1280×720, with both names seated inside their physical inset faces and the enlarged rank icons inside the original sockets. Browser page errors: zero. Opponent text-plane projected height at 1920 increased from 19.27 px to 22.10 px; the self plate has the requested subtle tilt.
+
+## Buff-icon follow-up
+
+The user asked to use more horizontal/upper space and present permanent spells and quests as lightly rounded MMORPG-style buff icons, based on the existing card art. The reviewed `2f09c571a` board/nameplates remain the base; the same preview origin above serves the update.
+
+- Preview-only opt-in: `data-buff-icons=true`, styled by `client/src/dev/buffIconPreview.css`. The standard card builders/engine are unchanged.
+- The original `artUrl.full(card.id)` artwork fills each square with a thin silver edge (a subtle violet edge for quests), approximately 5 px corners at 1920. The old miniature card frame/cost seal is hidden.
+- The row starts closer to the portrait, ends at model X=.444 before the deck column, and moves .006 m upward. Square icons are about 20% wider than the preceding miniature-card layout. The seven-slot limit remains intact.
+- Remaining-turn numerals, infinity and quest progress sit at the lower right. The old circular countdown surround/fill is hidden in this study; its authoritative remaining value, accessible timing description and inspection bindings are retained.
+- Visual checks: both sides × 1920×1080 and 1280×720, seven square art icons, no card-frame clipping. New deck clearances self/opponent: 12.38/31.22 px at 1920; 8.32/20.82 px at 1280. Portrait clearances: 22.50/10.53 px and 14.99/7.05 px respectively.
+- TypeScript check passed; browser page errors: zero. This is static fixture presentation, not a live gameplay or VFX continuity test. No production deployment.

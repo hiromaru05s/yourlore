@@ -32,9 +32,11 @@ export function placeReadingBoard(root:HTMLElement):void {
  for(const [id,sign] of [['me',1],['opp',-1]] as const){
   place(`#${id}Row .zone-row:has(.zone-mon)`,0,sign*.195,.85,.171875);
   // Keep all seven persistent cards between the portrait and the deck column.
-  const spellsLeft=Math.max(.13,portraitSize/(2*s)+.015);
-  const spellsRight=Math.min(.46,spellsLeft+7*.0384+6*.002);
-  place(`#${id}Row .zone-row:has(.zone-st)`,(spellsLeft+spellsRight)/2,sign*.34,spellsRight-spellsLeft,.048);
+  const buffIcons=root.dataset.buffIcons==='true';
+  const spellsLeft=Math.max(buffIcons?.105:.13,portraitSize/(2*s)+.015);
+  const spellsRight=buffIcons?.444:Math.min(.46,spellsLeft+7*.0384+6*.002);
+  const spellDepth=buffIcons?(spellsRight-spellsLeft-6*.002)/7:.048;
+  place(`#${id}Row .zone-row:has(.zone-st)`,(spellsLeft+spellsRight)/2,sign*.34-(buffIcons?.006:0),spellsRight-spellsLeft,spellDepth);
   place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,sign*.205,.136,.198);
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
   place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);
