@@ -1,3 +1,4 @@
+import {mountIdentityFurniture} from './identityFurniture';
 import {t as translate} from '../i18n';
 import {turnUrgency} from './turnUrgency';
 import {readingAssetBytes} from './readingAssetCache';
@@ -14,6 +15,7 @@ import {createManaCrystalGlow} from './manaCrystalGlow';
 /** Geometry-only UI; the original native buttons retain keyboard/game authority. */
 export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
  const group=new T.Group();group.name='Reading board 02 05 06';scene.add(group);
+ const identity=root.dataset.identityFurniture==='true'?mountIdentityFurniture(root,group):undefined;
  const manaGlow=createManaCrystalGlow();
  const apertures=mountRiftApertures(group);let shadowDirty=true;
  const templates:T.Group[]=[];const owned:T.Material[]=[];const geometries:T.BufferGeometry[]=[];
@@ -74,7 +76,7 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   if(dead)return false;const scale=readingScale();group.scale.setScalar(scale);
 
   if(!ready)return false;
-  const dt=Math.min(.06,(now-last)/1000);last=now;let changed=false;
+  const dt=Math.min(.06,(now-last)/1000);last=now;let changed=identity?.tick()??false;if(changed)shadowDirty=true;
   for(const material of opticalMaterials)material.attenuationDistance=Number(material.userData.authoredAttenuation)*scale;
   for(const mana of manas){
    const el=root.querySelector<HTMLElement>(`#portrait${mana.side} .pt-mana`);if(!el)continue;
@@ -170,5 +172,5 @@ export function mountReadingWidgets(root:HTMLElement,scene:T.Scene){
   group.visible=true;if(reroll)reroll.visible=true;
   for(const {mesh,count} of saved){if(!count){mesh.setMatrixAt(0,new T.Matrix4());mesh.instanceMatrix.needsUpdate=true;mesh.count=1;}mesh.visible=true;}
   try{render();}finally{group.visible=wasVisible;if(reroll)reroll.visible=rerollVisible??true;for(const {mesh,count,visible} of saved){mesh.count=count;mesh.visible=visible;}}
- },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready;},dispose(){if(dead)return;dead=true;manaGlow.dispose();root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>{m.formation?.handles.forEach(h=>h.dispose());Object.values(m.batches).flat().forEach(b=>b.dispose());});geometries.forEach(g=>g.dispose());turnLights?.dispose();apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;delete root.dataset.turnlight;}};
+ },setMarketMotion(height:number,z:number,visible:boolean){if(reroll){const s=readingScale();reroll.position.set(-.694,.016+height/s,z/s);reroll.visible=visible;}},get settled(){return ready&&(!identity||identity.settled);},dispose(){if(dead)return;dead=true;identity?.dispose();manaGlow.dispose();root.removeEventListener('pointerover',over);root.removeEventListener('pointerdown',down);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);root.removeEventListener('click',click,true);manas.forEach(m=>{m.formation?.handles.forEach(h=>h.dispose());Object.values(m.batches).flat().forEach(b=>b.dispose());});geometries.forEach(g=>g.dispose());turnLights?.dispose();apertures.dispose();templates.forEach(releaseTemplate);owned.forEach(m=>m.dispose());group.removeFromParent();delete root.dataset.widgetsReady;delete root.dataset.turnlight;}};
 }

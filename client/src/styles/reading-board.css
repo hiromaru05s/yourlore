@@ -92,7 +92,7 @@
 :is(#app,.reading-board).reading-board .portrait .avatar-seeker .seeker-sprite{width:100%;height:calc(var(--board-meter)*.181);top:0;background-size:200% 100%;}
 :is(#app,.reading-board).reading-board .portrait .pt-name--vitals{position:absolute;}
 
-:is(#app,.reading-board).reading-board .zone-st{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:calc(var(--board-meter)*.005);align-items:center;}
+:is(#app,.reading-board).reading-board .zone-st{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:calc(var(--board-meter)*.002);align-items:center;}
 :is(#app,.reading-board).reading-board .zone-st>.buff-icon{width:min(100%,calc(var(--board-meter)*.0384));height:calc(var(--board-meter)*.048);justify-self:center;}
 
 /* Invisible slots still have physical dimensions for summon/enchantment flights. */

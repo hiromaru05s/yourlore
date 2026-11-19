@@ -31,8 +31,9 @@ export function placeReadingBoard(root:HTMLElement):void {
  place('.mid-aside',.7,0,.13,.13);
  for(const [id,sign] of [['me',1],['opp',-1]] as const){
   place(`#${id}Row .zone-row:has(.zone-mon)`,0,sign*.195,.85,.171875);
-  // One shared seven-slot row, right of the portrait and below the deck.
-  const spellsLeft=Math.max(.22,portraitSize/(2*s)+.02),spellsRight=.61;
+  // Keep all seven persistent cards between the portrait and the deck column.
+  const spellsLeft=Math.max(.13,portraitSize/(2*s)+.015);
+  const spellsRight=Math.min(.46,spellsLeft+7*.0384+6*.002);
   place(`#${id}Row .zone-row:has(.zone-st)`,(spellsLeft+spellsRight)/2,sign*.34,spellsRight-spellsLeft,.048);
   place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,sign*.205,.136,.198);
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);

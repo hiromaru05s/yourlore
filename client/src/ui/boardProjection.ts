@@ -51,6 +51,18 @@ export function projectBoardDOM(root:HTMLElement):void {
   for(const [side,sign] of [['Me',1],['Opp',-1]] as const){
     const label=root.querySelector<HTMLElement>(`#portrait${side}>.pt-name`);
     if(!label)continue;
+    if(root.dataset.identityFurniture==='true'){
+      const seat=(el:HTMLElement,x:number,z:number,w:number,h:number,elevation:number)=>{
+        const left=innerWidth/2+(x-w/2)*scale,top=innerHeight/2+(z-h/2)*scale;
+        el.style.left=`${left}px`;el.style.top=`${top}px`;el.style.width=`${w*scale}px`;el.style.height=`${h*scale}px`;
+        el.style.transformOrigin='0 0';el.dataset.boardPlane=String(elevation*scale);
+        el.style.transform=new DOMMatrix().translate(-left,-top).multiply(boardMatrix(left,top,elevation*scale)).toString();
+      };
+      seat(label,-.3035,sign*.397-.055,.237,.0205,.0163);
+      const rank=root.querySelector<HTMLElement>(`.identity-rank-sample[data-side="${side}"]`);
+      if(rank)seat(rank,-.135,sign*.397-.016,.031,.024,.0175);
+      continue;
+    }
     const topZ=sign*.397-.0385;
     const left=boardPoint(innerWidth/2+(-.345+.0415-.1325)*scale,innerHeight/2+topZ*scale,.023*scale);
     const right=boardPoint(innerWidth/2+(-.345+.0415+.1325)*scale,innerHeight/2+topZ*scale,.023*scale);
