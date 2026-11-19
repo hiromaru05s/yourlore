@@ -1,0 +1,17 @@
+/* Three unselected studies; only the review entry imports these overrides. */
+html[data-nameplate-look] #app.reading-board .portrait .pt-name.pt-name--azure {
+  color:#ede4cd;text-shadow:0 1px 1px #101b22;font-family:LoreBoardSerif,Georgia,serif;
+  background-image:var(--nameplate-study-art);
+  /* Seat the plaque on the visible bevel, rather than the model bounding box. */
+  transform:translateY(calc(var(--board-meter)*.006))!important;
+}
+html[data-nameplate-look=brass]{--nameplate-study-art:url('/art/ui/nameplate-study-brass.svg')}
+html[data-nameplate-look=ivory]{--nameplate-study-art:url('/art/ui/nameplate-study-ivory.svg')}
+html[data-nameplate-look=leather]{--nameplate-study-art:url('/art/ui/nameplate-study-leather.svg')}
+html[data-nameplate-look] #app.reading-board .portrait .pt-name .pt-level{color:#cbb78d}
+html[data-nameplate-look=brass] #app.reading-board .portrait .pt-name .pt-identity{width:79%}
+html[data-nameplate-look=ivory] #app.reading-board .portrait .pt-name.pt-name--azure{color:#293d49;text-shadow:0 1px 0 #fff8}
+html[data-nameplate-look=ivory] #app.reading-board .portrait .pt-name .pt-level{color:#75623f}
+html[data-nameplate-look=ivory] #app.reading-board .portrait .pt-name .pt-identity{width:75%}
+html[data-nameplate-look=leather] #app.reading-board .portrait .pt-name .pt-identity{width:63%}
+html[data-nameplate-look=leather] #app.reading-board .portrait .pt-name.pt-name--azure{color:#dfd3b9;letter-spacing:.055em}
