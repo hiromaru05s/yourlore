@@ -8,7 +8,7 @@ Approved reference: local `client/src/dev/attack-ready-three/effect.ts`, study 0
 
 Workspace/preview origin: `/Users/hiromaru05s/.codex/worktrees/attack-ready-three-1119/LORE_TCG`, `http://127.0.0.1:5198/`. The baseline includes `6459c4fd4` and thus the current card-print sampling, mana summon and rift material changes. No account data, game rules or attack eligibility were changed.
 
-Validation and deployment results are appended after completion. Browser tests use the real GameView/controller and synthetic match state; authenticated PvP and physical-device GPU performance are not covered by those fixtures.
+Browser tests use the real GameView/controller and synthetic match state; authenticated PvP and physical-device GPU performance are not covered by those fixtures.
 
 ## Completed local checks
 
@@ -16,3 +16,11 @@ Validation and deployment results are appended after completion. Browser tests u
 - Accepted-preview parity: 20/20 (exact canvas pixels and shadow string, numerically equal pose).
 - `tests/attack-ready-browser.mjs`: 12 check groups passed, no page errors. Covers the shipped controller/native field actor, seal layering, aiming/cancel, interrupted attack clone cleanup, gold dual → blue single → exhausted → ready, repeated rerenders, both directions, landscape resize, reduced motion and destruction. See `qa/report.json`; full-size screenshots are retained locally beside it.
 - A fixture initially imported a second Vite HMR-stamped runtime instance, which made its manually created opponent states escape controller cleanup. The test now reuses the exact runtime URL loaded by the controller. The normal runtime disposal passes without any cleanup workaround.
+
+## Production verification
+
+- Implementation: `f429427003ca316e81d0be475e85f67f9110b3b6`. Released source: `9a809bc61518a2642f988e78353d9e9a3ad7850d`, incorporating the prior release verification records.
+- Guarded `npm run deploy` completed successfully on 2026-11-19 at 12:16 UTC. Both client/server typechecks, the production suite (304/304), and the production build passed in a clean committed snapshot. See `production-suite.json`.
+- Cloudflare version `1c840b91-bc83-41e2-83a3-9366fa1b8500` receives 100% of traffic; the deployment annotation identifies the released source above. See `deployment.json`.
+- Fetched the live root entry `/assets/main-Dt1vB_c4.js` and its reachable 113 JavaScript modules, with no fetch failures. The served `/assets/layout-CH-StTkA.js` contains `azure-03` and the ready canvas at `z-index:4`; the served card-surface module removes that canvas from transient clones. Checksums and excerpts are in `production-verification.json`.
+- Production verification confirms the live artifact and deployment. Visual/lifecycle checks use the real local GameView fixture described above; authenticated live PvP was not exercised.

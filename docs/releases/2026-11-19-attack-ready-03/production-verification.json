@@ -1,0 +1,24 @@
+{
+  "at": "2026-11-19T12:17:14.054Z",
+  "origin": "https://yourlore.xyz",
+  "source": "9a809bc61518a2642f988e78353d9e9a3ad7850d",
+  "entry": "/assets/main-Dt1vB_c4.js",
+  "modulesFetched": 113,
+  "failures": [],
+  "matches": [
+    {
+      "url": "https://yourlore.xyz/assets/cardSurface-z5NbU1D_.js",
+      "sha256": "e0ec3fbc264019334db7a0d38d574537533b2ff03d458abc070cfa7a2afae3fa",
+      "readySurface": true,
+      "azure03": false,
+      "snippet": "List.contains(\"card-material-light\")||o.classList.contains(\"attack-ready-surface\")){o.remove();return}const i=n[e];i?.width&&i.height&&o.getContext(\"2d\").drawImage(i,0,0)}),a.querySelectorAll(\".card-material-amount\").forEach(o=>o.remove()),ft(t,a),a}const N=new Map;function lt(t){if(t.startsWith(\"data:\"))retu"
+    },
+    {
+      "url": "https://yourlore.xyz/assets/layout-CH-StTkA.js",
+      "sha256": "efbd4f87636bcc27823554929fa8963e9507827e2f01792828d4664ab8f7e695",
+      "readySurface": true,
+      "azure03": true,
+      "snippet": ")`}class Xy{constructor(t){this.el=t,this.canvas.className=\"attack-ready-surface\",this.canvas.setAttribute(\"aria-hidden\",\"true\"),this.canvas.style.cssText=\"position:absolute;pointer-events:none;z-index:4;max-width:none\",t.append(this.canvas)}el;canvas=document.createElement(\"canvas\");paint(t,n,a,s=!1,r=1){if("
+    }
+  ]
+}
