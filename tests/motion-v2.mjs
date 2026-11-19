@@ -43,7 +43,8 @@ try {
  // Only the local player's flying face decodes an illustration. Native sleeve cancellation is checked in the browser.
  const abort=new AbortController();let landed=false;
  const draw=drawPaperCards({cards:[node],origin,sleeve:'/back.webp',reveal:true,signal:abort.signal,onLand:()=>{landed=true;}});
- assert.equal(document.querySelector('.native-draw-card').style.display,'none','unstarted fronts must not flash at the screen origin');
+ assert.equal(document.querySelector('.native-draw-layer'),null,'stalled decode must not create a flight or expose a replacement face');
+ assert.equal(container.firstElementChild,node,'the native card remains the sole print owner');
  abort.abort();
  await Promise.race([draw,new Promise((_,reject)=>{const timer=setTimeout(()=>reject(new Error('cancelled decode leaked')),150);timer.unref();})]);
  assert.equal(document.querySelectorAll('.native-draw-layer').length,0);assert.equal(landed,false);
