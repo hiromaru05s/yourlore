@@ -8,7 +8,7 @@ const results=[];
 try{for(const [width,dpr] of [[1746,1],[1280,2],[390,3]]){
  const ctx=await browser.newContext({viewport:{width,height:width===390?844:900},deviceScaleFactor:dpr,reducedMotion:'reduce'}),page=await ctx.newPage(),errors=[];
  page.setDefaultTimeout(120000);page.on('pageerror',e=>errors.push(e.message));
- await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]'));
+ await page.goto(origin+'/cosmetic-studio.html?board=1&runtime=1&set=default&tempo=1');await page.waitForFunction(()=>window.combatTempo&&document.querySelector('[data-scene-ready=true]')&&!document.querySelector('.duel-loader,.duel-preparing'));
  await page.evaluate(()=>{
   document.querySelector('.tempo-controls').style.display='none';const g=combatTempo.fixture('summon',0).prev;g.opening=undefined;
   const card=g.players[0].hand[0];g.players[0].field=[{...combatTempo.fixture('counter',0).prev.players[0].field[0],uid:'resolution-field'}];g.market[0]={...card,uid:'resolution-market'};
