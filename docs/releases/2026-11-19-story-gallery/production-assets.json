@@ -1,0 +1,32 @@
+[
+  {
+    "path": "/art/single-story/chapters-v1/chapter-1.webp",
+    "status": 200,
+    "sha256": "34fce3f22d9294e27ca73b43191910fb312cc879e4eb4d1214f68c827e9b33e0",
+    "bytes": 184374
+  },
+  {
+    "path": "/art/single-story/chapters-v1/chapter-2.webp",
+    "status": 200,
+    "sha256": "af709e2a8e9d01e7fe7f27d59f76fe0aa46d2ca2a8726298efc4414dc61ce5bd",
+    "bytes": 194920
+  },
+  {
+    "path": "/art/single-story/chapters-v1/chapter-3.webp",
+    "status": 200,
+    "sha256": "5353e1001215d84130b42c8005517040e223d735f34de4fab6068e5e2eca333b",
+    "bytes": 206114
+  },
+  {
+    "path": "/art/single-story/chapters-v1/chapter-4.webp",
+    "status": 200,
+    "sha256": "62499570d2c75d40264ef11f6c81eeba6aa3b9b529996c0f0eff019d53bd9da8",
+    "bytes": 134706
+  },
+  {
+    "path": "/art/single-story/chapters-v1/chapter-5.webp",
+    "status": 200,
+    "sha256": "990bff825ee3d028c5cba96e24592ff656b6bb300824e931f8b09cdbfa2db887",
+    "bytes": 159492
+  }
+]

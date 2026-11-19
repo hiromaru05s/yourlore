@@ -56,6 +56,6 @@ try{
   await page.screenshot({path:out+`/gallery-${lang}.png`});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(apiErrors,[]);
- await fs.writeFile(out+'/gallery-report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],api:'isolated fixture; actual application assets',liveAssets:!!liveOrigin,errors,apiErrors,checks:['images loaded','locked chapters','arrow boundaries','mouse drag without click','native touch swipe','card selection and story entry','keyboard','portrait cards','320/390/844/1280 widths','ja/en/ko']},null,2));
+ await fs.writeFile(out+'/gallery-report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],api:'isolated fixture; actual application assets',liveAssets:!!liveOrigin,errors,apiErrors,checks:['images loaded','locked chapters','arrow boundaries','mouse drag without click','native touch swipe','card selection and story entry','keyboard','portrait cards','320/390/844/1280 widths',liveOrigin?'ja (live)':'ja/en/ko']},null,2));
  console.log('PASS chapter gallery browser checks');
 }finally{await browser.close();await server.close();await f.close();}
