@@ -60,6 +60,6 @@ export function healingNumber(anchor:HTMLElement|null,amount:number,follow?:()=>
  timer=window.setTimeout(stop,duration+40);return stop;
 }
 if(typeof window!=='undefined'){
-addEventListener('pagehide',clearHealingFeedback);addEventListener('resize',clearHealingFeedback);document.addEventListener('visibilitychange',()=>{if(document.hidden)clearHealingFeedback();});
+window.addEventListener('pagehide',clearHealingFeedback);window.addEventListener('resize',clearHealingFeedback);document.addEventListener('visibilitychange',()=>{if(document.hidden)clearHealingFeedback();});
 
 }
