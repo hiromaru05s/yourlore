@@ -11,6 +11,8 @@ import {playVoidSummon,cancelVoidSummon,cancelVoidSummons} from '../voidSummon/r
 import {isCasino} from '../casinoSummon/selection';
 import {playCasinoSummon,cancelCasinoSummons,cancelCasinoSummon} from '../casinoSummon/runtime';
 import {DualReadySurface} from './dualReady';
+import {AttackReadySurface,attackReadyOffset,attackReadyShadow} from './attackReady';
+import {ongoingFilter} from './resting';
 import {AmberSurface,showGutsResult} from '../guts/surface';
 import {GUTS_DURATION} from '../guts/timing';
 import type {GutsSurvival} from '../../shared/types';
@@ -38,7 +40,7 @@ const observers=new Map<HTMLElement,MutationObserver>();
 const motion=matchMedia('(prefers-reduced-motion:reduce)');
 let frame=0, skipped=false;
 const jobs=new Map<HTMLElement,Job>();
-const states=new Map<HTMLElement,{actor:Actor;opacity:string;root:HTMLElement;layer:Layers;rect?:Rect;dirty:boolean;dual?:DualReadySurface}>();
+const states=new Map<HTMLElement,{actor:Actor;opacity:string;root:HTMLElement;layer:Layers;rect?:Rect;dirty:boolean;dual?:DualReadySurface;ready?:AttackReadySurface}>();
 const gutsJobs=new Map<HTMLElement,{source:HTMLElement;actor:Actor;surface:AmberSurface;start:number;ms:number;r:Rect;finish:(complete:boolean)=>void}>();
 type Options={tempo?:boolean;mana?:boolean;variant?:Variant;anchor?:HTMLElement;target?:HTMLElement;destination?:HTMLElement;side?:number;signal?:AbortSignal;onImpact?:()=>void;exhaust?:boolean;stats?:Actor['stats']};
 type Job={source:HTMLElement;actor:Actor;kind:Kind;variant:Variant;start:number;ms:number;r:Rect;target:Rect;destination?:Rect;options:Options;opacity:string;finish:(complete:boolean)=>void;impacted:boolean;hit?:{actor:Actor;node:HTMLElement;opacity:string}};
@@ -107,7 +109,7 @@ function observeField(root:HTMLElement){
  for(const [n,s] of states)if(s.root===root)observer.observe(n,{attributes:true,attributeFilter:['class','style','data-monster-aura','data-monster-blocked','data-monster-dual-ready']});
  for(const zone of root.querySelectorAll('.zone-mon'))observer.observe(zone,{childList:true,subtree:true,attributes:true,attributeFilter:['data-reserved-uid']});
 }
-function removeState(n:HTMLElement){const s=states.get(n);if(!s)return;s.dual?.canvas.remove();s.actor.dispose();n.style.opacity=s.opacity;states.delete(n);}
+function removeState(n:HTMLElement){const s=states.get(n);if(!s)return;s.dual?.canvas.remove();s.ready?.dispose();s.actor.dispose();n.style.opacity=s.opacity;states.delete(n);}
 /** Live presentation owners for attached UI effects, including persistent field actors. */
 export function monsterPresentationNodes(source:HTMLElement):HTMLElement[]{
  return [...new Set([source,states.get(source)?.actor.el,jobs.get(source)?.actor.el,gutsJobs.get(source)?.actor.el])].filter((n):n is HTMLElement=>!!n&&n.isConnected);
@@ -151,21 +153,27 @@ function tick(now:number){
  let animated=false;
  for(const [n,s] of states){
   if(!n.isConnected){removeState(n);continue;}
-  if(hidden.has(n)||slateOwnsPose(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'){s.actor.hide();s.dirty=true;continue;}
+  if(hidden.has(n)||slateOwnsPose(n)||n.classList.contains('is-dragging')||n.style.visibility==='hidden'){s.ready?.hide();s.actor.hide();s.dirty=true;continue;}
   const r=s.rect!,ready=n.classList.contains('is-attacker'),aiming=n.classList.contains('is-aiming'),blocked=!!n.dataset.monsterBlocked,dual=ready&&n.dataset.monsterDualReady==='04';
   const dynamic=hits.has(n)||n.getAnimations().length>0||!reduced()&&(ready||!!n.dataset.monsterAura);animated||=dynamic;
-  if(!s.dirty&&!dynamic){if(ready&&!dual&&!aiming)drawEffect(s.layer.foreground,'ready','C',0,r,r,{active:true,reduced:true,side:n.closest('#oppRow')?-1:1,pass:'front'});continue;}
+  if(!s.dirty&&!dynamic)continue;
   s.dirty=false;
   const side=n.closest('#oppRow')?-1:1;
   const k=aiming?'aura':ready?'ready':blocked?'blocked':'aura',v=ready?'C':blocked?'B':'C',t=ready?(now%2200)/2200:blocked?1:(now%4400)/4400;
-  s.actor.paint(k,v,t,r,r,reduced(),true,side);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':v;
+  s.actor.paint(k,v,t,r,r,reduced(),true,side);s.actor.el.dataset.monsterKind=k;s.actor.el.dataset.monsterVariant=dual?'dual-04':ready&&!aiming?'azure-03':v;
   if(dual&&!aiming){s.dual??=new DualReadySurface(s.actor,1);s.dual.paint(r,now,reduced(),side);}else s.dual?.hide();
   paintRestingAppearance(s.actor.el,ready&&!aiming?'ready':blocked?'blocked':'plain',!!n.dataset.monsterAura,now,1,reduced(),r.w);
+  if(ready&&!dual&&!aiming){
+   s.ready??=new AttackReadySurface(s.actor.el);
+   s.actor.matrix=s.actor.style(s.actor.el,r,r.x,r.y+attackReadyOffset(now,reduced(),r.w,side),0,1);
+   s.ready.paint(r.w,r.h,now,reduced(),side);
+   const aura=n.dataset.monsterAura?' '+ongoingFilter('C',(now%4400)/4400,reduced()).replace('drop-shadow(0 2px 4px #0009)',''):'';
+   s.actor.el.style.setProperty('--rest-shadow',attackReadyShadow(r.w,now,reduced())+aura);
+  }else s.ready?.hide();
   for(const cls of ['is-aiming','is-atk-target','is-targetable'])s.actor.el.classList.toggle(cls,n.classList.contains(cls));
   // Attack lock lights the frame print itself; a whole-card filter softens its text.
   if(n.classList.contains('is-targetable')&&!n.classList.contains('is-atk-target'))s.actor.el.style.setProperty('filter','drop-shadow(0 0 5px #ff7955)','important');
   s.actor.el.style.removeProperty('translate');delete s.actor.el.dataset.hitReaction;paintHit(n,s.actor,now);
-  if(ready&&!dual&&!aiming)drawEffect(s.layer.foreground,'ready','C',t,r,r,{active:true,reduced:reduced(),side,pass:'front'});
  }
  for(const j of [...jobs.values()]){
   if(!active)break;

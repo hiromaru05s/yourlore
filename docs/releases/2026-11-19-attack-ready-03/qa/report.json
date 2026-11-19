@@ -1,0 +1,171 @@
+{
+  "checks": [
+    {
+      "name": "ready/layers",
+      "reduced": false,
+      "layers": [
+        {
+          "uid": "field-0-0",
+          "variant": "azure-03",
+          "rootFilter": "none",
+          "light": 4,
+          "seals": [
+            5,
+            5,
+            5
+          ],
+          "shadow": "drop-shadow(0 2px 3px #0005) drop-shadow(0 0 1.7278384984949222px rgba(28,148,255,0.6432816216208366))  drop-shadow(0 0 3.5269876806703424px rgba(53,154,102,0.4879686448737377))"
+        },
+        {
+          "uid": "field-0-1",
+          "variant": "azure-03",
+          "rootFilter": "none",
+          "light": 4,
+          "seals": [
+            5,
+            5,
+            5
+          ],
+          "shadow": "drop-shadow(0 2px 3px #0005) drop-shadow(0 0 1.7278384984949222px rgba(28,148,255,0.6432816216208366))"
+        }
+      ]
+    },
+    {
+      "name": "eligibility",
+      "reduced": false,
+      "mult": 2,
+      "used": 0,
+      "exhausted": false,
+      "state": {
+        "variant": "dual-04",
+        "blue": 0,
+        "gold": 1
+      }
+    },
+    {
+      "name": "eligibility",
+      "reduced": false,
+      "mult": 2,
+      "used": 1,
+      "exhausted": false,
+      "state": {
+        "variant": "azure-03",
+        "blue": 1,
+        "gold": 0
+      }
+    },
+    {
+      "name": "eligibility",
+      "reduced": false,
+      "mult": 2,
+      "used": 2,
+      "exhausted": true,
+      "state": {
+        "variant": "B",
+        "blue": 0,
+        "gold": 0
+      }
+    },
+    {
+      "name": "eligibility",
+      "reduced": false,
+      "mult": 1,
+      "used": 0,
+      "exhausted": false,
+      "state": {
+        "variant": "azure-03",
+        "blue": 1,
+        "gold": 0
+      }
+    },
+    {
+      "name": "aim/abort/dual/resize/rerender/dispose",
+      "reduced": false,
+      "passed": true
+    },
+    {
+      "name": "ready/layers",
+      "reduced": true,
+      "layers": [
+        {
+          "uid": "field-0-0",
+          "variant": "azure-03",
+          "rootFilter": "none",
+          "light": 4,
+          "seals": [
+            5,
+            5,
+            5
+          ],
+          "shadow": "drop-shadow(0 2px 3px #0005) drop-shadow(0 0 1.753285738817984px rgba(28,148,255,0.6488676012039477))  drop-shadow(0 0 3.5px rgba(53,154,102,0.485))"
+        },
+        {
+          "uid": "field-0-1",
+          "variant": "azure-03",
+          "rootFilter": "none",
+          "light": 4,
+          "seals": [
+            5,
+            5,
+            5
+          ],
+          "shadow": "drop-shadow(0 2px 3px #0005) drop-shadow(0 0 1.753285738817984px rgba(28,148,255,0.6488676012039477))"
+        }
+      ]
+    },
+    {
+      "name": "eligibility",
+      "reduced": true,
+      "mult": 2,
+      "used": 0,
+      "exhausted": false,
+      "state": {
+        "variant": "dual-04",
+        "blue": 0,
+        "gold": 1
+      }
+    },
+    {
+      "name": "eligibility",
+      "reduced": true,
+      "mult": 2,
+      "used": 1,
+      "exhausted": false,
+      "state": {
+        "variant": "azure-03",
+        "blue": 1,
+        "gold": 0
+      }
+    },
+    {
+      "name": "eligibility",
+      "reduced": true,
+      "mult": 2,
+      "used": 2,
+      "exhausted": true,
+      "state": {
+        "variant": "B",
+        "blue": 0,
+        "gold": 0
+      }
+    },
+    {
+      "name": "eligibility",
+      "reduced": true,
+      "mult": 1,
+      "used": 0,
+      "exhausted": false,
+      "state": {
+        "variant": "azure-03",
+        "blue": 1,
+        "gold": 0
+      }
+    },
+    {
+      "name": "aim/abort/dual/resize/rerender/dispose",
+      "reduced": true,
+      "passed": true
+    }
+  ],
+  "errors": []
+}

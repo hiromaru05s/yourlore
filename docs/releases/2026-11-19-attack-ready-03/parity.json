@@ -1,0 +1,162 @@
+[
+  {
+    "side": 1,
+    "reduced": false,
+    "ms": 0,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": false,
+    "ms": 650,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": false,
+    "ms": 1300,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": false,
+    "ms": 1950,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": false,
+    "ms": 2599,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": true,
+    "ms": 0,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": true,
+    "ms": 650,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": true,
+    "ms": 1300,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": true,
+    "ms": 1950,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": 1,
+    "reduced": true,
+    "ms": 2599,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": false,
+    "ms": 0,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": false,
+    "ms": 650,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": false,
+    "ms": 1300,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": false,
+    "ms": 1950,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": false,
+    "ms": 2599,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": true,
+    "ms": 0,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": true,
+    "ms": 650,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": true,
+    "ms": 1300,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": true,
+    "ms": 1950,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  },
+  {
+    "side": -1,
+    "reduced": true,
+    "ms": 2599,
+    "samePixels": true,
+    "sameOffset": true,
+    "sameShadow": true
+  }
+]
