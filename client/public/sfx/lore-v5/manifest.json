@@ -493,34 +493,22 @@
     ],
     "win": [
       {
-        "file": "win.mp3",
-        "url": "/sfx/lore-v5/win.mp3",
-        "seconds": 1.65,
-        "peakDb": -15.6,
-        "rmsDb": -28.78,
-        "sha256": "f1537029896503796f0e18cc1dde0e20e9771bd4c8e5fcbbd66c8cec19c5b47c",
-        "sources": [
-          "original: damped impact body",
-          "original: damped resonator"
-        ],
-        "decision": "rebuilt",
-        "description": "明るく開く短い決着のフレーズ。"
+        "file": "victory.mp3",
+        "url": "/sfx/result-v1/victory.mp3",
+        "sha256": "c04ec0de3ed890d970ff743bf21490fd19c8c0d3ec4711460e58e34b3efa909c",
+        "seconds": 4.8,
+        "peakDb": -7.1,
+        "source": "Original result study synthesis; approved victory-01.wav"
       }
     ],
     "lose": [
       {
-        "file": "lose.mp3",
-        "url": "/sfx/lore-v5/lose.mp3",
-        "seconds": 1.3,
-        "peakDb": -18.3,
-        "rmsDb": -31.92,
-        "sha256": "cac6c8e267a41416f0f3f2abe411d65886408e3b82cfd60ff78e6a107c0617b9",
-        "sources": [
-          "original: damped impact body",
-          "original: damped resonator"
-        ],
-        "decision": "rebuilt",
-        "description": "低い着地から音程が沈む短い決着。"
+        "file": "defeat.mp3",
+        "url": "/sfx/result-v1/defeat.mp3",
+        "sha256": "21f8cccef09e6359063c64d03df1329e0aab0db7d46d699cad164f8b844f9ff7",
+        "seconds": 4.8,
+        "peakDb": -9.3,
+        "source": "Original result study synthesis; approved defeat-03.wav"
       }
     ],
     "drawGame": [

@@ -1,3 +1,4 @@
+import {mountResultCeremony} from './resultCeremony';
 import {availableDealRewards, type DEAL_REWARDS} from '../shared/starterQuests';
 import type {QuestState} from '../shared/types';
 import { installCardPickerFilters } from './cardPickerFilters';
@@ -17,6 +18,7 @@ import { TRIBES } from "../shared/cards";
 import { t, getLang, cardName } from "../i18n";
 
 let root: HTMLElement | null = null;
+let resultCeremony:ReturnType<typeof mountResultCeremony>|undefined;
 let returnFocus:HTMLElement|null=null;
 let releaseFocus:()=>void=()=>{};
 let dialogSerial=0;
@@ -27,15 +29,15 @@ function getRoot(): HTMLElement {
 const notices=new Map<HTMLElement,ReturnType<typeof setTimeout>>();
 export function closeTreasureNotices():void {notices.forEach((timer,node)=>{clearTimeout(timer);node.remove();});notices.clear();}
 export function closeOverlay(): void {
- releaseFocus();getRoot().innerHTML='';if(returnFocus?.isConnected)returnFocus.focus();returnFocus=null;
+ resultCeremony?.destroy();resultCeremony=undefined;releaseFocus();getRoot().innerHTML='';if(returnFocus?.isConnected)returnFocus.focus();returnFocus=null;
 }
 
 function mount(node: HTMLElement, initialFocus?: HTMLElement): void {
   if(!getRoot().children.length)returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
-  releaseFocus();
+  resultCeremony?.destroy();resultCeremony=undefined;releaseFocus();
   node.setAttribute('role','dialog');node.setAttribute('aria-modal','true');node.tabIndex=-1;
   const title=node.querySelector('h2');if(title){title.id ||= 'lore-dialog-'+(++dialogSerial);node.setAttribute('aria-labelledby',title.id);}
-  const focusables=()=>[...node.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]')].filter(el=>el.getClientRects().length>0);
+  const focusables=()=>[...node.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]')].filter(el=>el.getClientRects().length>0&&!el.closest('[inert]')&&window.getComputedStyle(el).visibility!=='hidden');
   const focus=()=>{(focusables()[0]??node).focus();};
   const keys=(event:KeyboardEvent)=>{if(event.key!=='Tab'||document.getElementById('zoomOverlay'))return;const items=focusables(),at=items.indexOf(document.activeElement as HTMLElement);event.preventDefault();(items.length?items[event.shiftKey?(at>0?at-1:items.length-1):(at+1)%items.length]:node).focus();};
   const keepFocus=(event:FocusEvent)=>{if(node.isConnected&&!document.getElementById('zoomOverlay')&&!node.contains(event.target as Node))focus();};
@@ -116,13 +118,12 @@ export function confirmDialog(opts: { title: string; body?: string; confirm: str
 }
 
 /** won: true=victory, false=defeat, null=draw (60-turn HP tie). */
-export function winModal(won: boolean | null, detail: string, onAgain: () => void, onHome: () => void, onReview?: () => void): void {
+export function winModal(won: boolean | null, detail: string, onAgain: () => void, onHome: () => void, onReview?: () => void, replay=false): void {
   const m = document.createElement("div");
   m.className = "modal";
-  const title = won == null ? t("modal.draw") : won ? t("modal.win") : t("modal.lose");
-  m.className='modal outcome-result outcome-finale '+(won==null?'is-draw':won?'is-victory':'is-defeat');
-  const verdict = title;
-  m.innerHTML = `<header class="finale-banner"><div class="finale-eyebrow">${t("duel.complete")}</div><div class="finale-title"><h2 aria-label="${title}">${verdict}</h2></div></header><section class="finale-progress"><div class="win-rank" id="winRankDelta" style="display:none"></div><div id="winDetail" class="finale-detail">${detail}</div></section><div class="modal-row finale-actions"></div>`;
+  const title=won===null?'DRAW':won?'VICTORY':'DEFEAT';
+  m.className='modal outcome-result outcome-finale result-ceremony '+(won===null?'is-draw':won?'is-victory':'is-defeat');
+  m.innerHTML=`<h2 class="result-accessible-title">${title}</h2><section class="finale-progress"><div class="win-rank" id="winRankDelta" style="display:none"></div><div id="winDetail" class="finale-detail">${detail}</div></section><div class="modal-row finale-actions"></div>`;
   const row = m.querySelector(".modal-row")!;
   const home = document.createElement("button"); home.className = "btn btn-ghost finale-home"; home.textContent = t("modal.home");
   home.onclick = () => { closeOverlay(); onHome(); };
@@ -136,6 +137,7 @@ export function winModal(won: boolean | null, detail: string, onAgain: () => voi
   again.onclick = () => { closeOverlay(); onAgain(); };
   row.append(again);
   mount(m);
+  resultCeremony=mountResultCeremony(m,won,replay);
 }
 
 /** Ranked pre-game market preview: study the fixed market before the coin toss.

@@ -1676,7 +1676,7 @@ export abstract class BaseController implements BoardHandlers {
     if (this.winShown || !this.state.over || this.outcomePending) return;
     this.winShown = true;
     const won: boolean | null = this.state.winner == null ? null : this.state.winner === this.you;
-    sfx(won===null ? "drawGame" : won ? "win" : "lose");
+    // The result presentation owns its synchronized outcome sound.
     // bot games are client-local — report the result for analytics (online games are recorded server-side)
     if (won !== null) this.exits.onBattleResult?.(won);
     if (this.state.mode === "bot") this.reportBotResult(won);
@@ -1686,6 +1686,7 @@ export abstract class BaseController implements BoardHandlers {
 
   protected reportBotResult(_won: boolean | null): void {}
   private experienceNote = '';
+  private resultOpened = false;
   protected receiveExperience(receipt: ExperienceReceipt): void {
     this.exits.onExperience?.();
     if(this.dead)return;
@@ -1709,7 +1710,9 @@ export abstract class BaseController implements BoardHandlers {
       () => { A.removeReviewFab(); this.exits.onRematch(); },
       () => { A.removeReviewFab(); this.exits.onHome(); },
       () => A.reviewFab(() => this.openResult()),
+      this.resultOpened,
     );
+    this.resultOpened=true;
     const homeLabel=this.exits.onHomeLabel?.();
     if(homeLabel){const home=document.querySelector<HTMLButtonElement>('.finale-home');if(home)home.textContent=homeLabel;}
     const storyLabel=this.exits.onStoryAgainLabel?.(won);
@@ -1755,6 +1758,7 @@ export abstract class BaseController implements BoardHandlers {
     this.lethalOutcome?.cancel();this.lethalOutcome=undefined;this.lethalSide=null;
     disposeStatusExtinctions();
     this.rankPresentation.destroy();
+    if(this.winShown)closeOverlay();
     stopSounds();
     this.openingAbort.abort();this.releaseOpening();
     this.clearQuickFaces();

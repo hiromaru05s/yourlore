@@ -12,6 +12,7 @@ const param=()=>({value:0,setTargetAtTime(){},cancelScheduledValues(){}});
 class Node{connect(){return this;}disconnect(){}}
 class FakeAudio extends Node{
  constructor(){super();this.state='running';this.currentTime=0;this.destination={};}
+ createBuffer(channels,length,sampleRate){return {channels,length,sampleRate,data:[],copyToChannel(values,ch){this.data[ch]=values;}};}
  createGain(){const n=new Node();n.gain=param();return n;}
  createDynamicsCompressor(){const n=new Node();for(const k of ['threshold','knee','ratio','attack','release'])n[k]=param();return n;}
  decodeAudioData(b){return Promise.resolve({name:new TextDecoder().decode(b)});}
@@ -35,8 +36,9 @@ try{
  // The approved click/confirmation bank is kept exactly; only duel cues change.
  for(const name of ['click','pop','error'])assert(a.soundUrls(name).every(u=>u.includes('/lore-v3/')));
  for(const name of ['coin','match','buy'])assert.deepEqual(a.soundUrls(name),[`/sfx/lore-v4/${name}.mp3`]);
+ assert.deepEqual(a.soundUrls('win'),['/sfx/result-v1/victory.mp3']);assert.deepEqual(a.soundUrls('lose'),['/sfx/result-v1/defeat.mp3']);
  assert.deepEqual(a.soundUrls('draw'),['/sfx/lore-v4/draw-3.mp3']);
- for(const name of a.SFX_NAMES.filter(n=>!n.startsWith('opening-')&&!['click','pop','error','coin','match','buy','draw','play','summon','chosenCrown'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v5/')));
+ for(const name of a.SFX_NAMES.filter(n=>!n.startsWith('opening-')&&!['click','pop','error','coin','match','buy','draw','play','summon','chosenCrown','win','lose'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v5/')));
  for(let i=0;i<5;i++){time+=100;a.sfx('draw');assert(starts.at(-1).buffer.name.endsWith('/draw-3.mp3'),'draw never cycles to rejected variants');}
  a.stopSounds();time+=1000;a.sfx('attack');const sweep=starts.at(-1);a.sfx('impact');assert(stops.includes(sweep),'landing fades the outgoing attack sweep');
  time+=1000;a.sfx('mana');a.sfx('draw');const battle=starts.slice(-3);a.sfx('win');assert(battle.every(v=>stops.includes(v)),'outcome clears lingering battle voices');
@@ -58,5 +60,7 @@ try{
  e.contact(null,1);assert.equal(e.cue({type:'damage',player:1,amount:3}),undefined);assert.equal(e.cue({type:'damage',player:1,amount:2}),'damage');
  assert.equal(e.cue({type:'heal',player:1,amount:5}),'heal','both players audible');assert.equal(e.cue({type:'heal',player:0,amount:0}),undefined);assert.equal(e.cue({type:'damage',player:0,amount:0}),undefined);
  assert.equal(e.cue({type:'summon',id:'MIMIC',player:0,uid:'m'}),undefined,'landing owns summon');
+ a.stopSounds();a.setSfxVolume(.7);time+=1000;const fresh=new AbortController();a.playMmrCount(1100,1118,{signal:fresh.signal});const countVoice=starts.at(-1);assert.equal(countVoice.buffer.length,101430);assert.equal(countVoice.buffer.channels,2);fresh.abort();assert(stops.includes(countVoice),'closing result cancels generated count');
+ a.setSfxVolume(0);const mutedCount=starts.length;a.playMmrCount(1100,1084);assert.equal(starts.length,mutedCount,'generated count respects shared mute');a.setSfxVolume(.7);time+=1000;a.playMmrCount(1100,1100);assert.equal(starts.length,mutedCount,'zero delta has no count');
  console.log('PASS: late decode/mute/navigation cancellation, 90 ms deadline, shared opening lifecycle, eight-voice budget, UI coalescing, attack/counter/piercing/zero-heal event ownership');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close();globalThis.performance=originalPerformance;}
