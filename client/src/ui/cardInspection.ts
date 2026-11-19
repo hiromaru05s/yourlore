@@ -2,7 +2,7 @@ import {bindCardRuleTerms} from './cardRuleTooltip';
 import {mountQuickSpellFrame,type QuickSpellFrame} from './quickSpellFrame';
 import {cardRelations,REFERENCE_CARDS} from '../shared/cardReferences';
 import {bindCardReferences} from './cardReferencePreview';
-import type {CardInst} from '../shared/types';
+import type {CardInst,PlayerState} from '../shared/types';
 import {DB,TRIBES,CHEST_ODDS,PASSIVES} from '../shared/cards';
 import {cardTypeLabel,displayPassives,referencedPassives} from '../shared/cardPresentation';
 import {cardStateEl} from './cardState';
@@ -62,12 +62,12 @@ function backToPreviousCard(): void {
 }
 
 // Public entry starts a new inspection; only related-card navigation keeps history.
-export function zoomCard(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string): void {
+export function zoomCard(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string, owner?:PlayerState): void {
   closeZoom();
   zoomOpener = document.activeElement as HTMLElement | null;
-  renderZoom(c, hp, stateText, effect, frame);
+  renderZoom(c, hp, stateText, effect, frame, owner);
 }
-function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string): void {
+function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string, owner?:PlayerState): void {
   const ov = document.createElement("div");
   ov.className = "zoom-overlay";
   ov.id = "zoomOverlay";
@@ -140,7 +140,7 @@ function renderZoom(c: CardInst, hp?: { now: number; max: number; turn?: number 
     item.style.scrollMarginTop = `${getComputedStyle(wrap).overflowY === 'auto' ? controls.offsetHeight + 16 : 16}px`;
     item.focus({ preventScroll: true });
     item.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'auto' });
-  }));
+  }, owner));
   if (tribe) details.append(stateBlocks);
   details.onclick = e => e.stopPropagation();
   // Reserve space for the cost/ATK/HP seals outside the card face.
@@ -250,8 +250,8 @@ export function bindInspectContext(el: HTMLElement, inspect: () => void): void {
  * Bind "enlarge" to an element: right-click on desktop, long-press on touch.
  * A long-press swallows the tap so it does NOT also play/attack with the card.
  */
-export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string): void {
-  bindInspectContext(el, () => zoomCard(card, hp, stateText, effect??el.dataset.cardEffect,frame??el.dataset.cardFrame));
+export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; max: number; turn?: number }, stateText?: string, effect?:string, frame?:string, owner?:PlayerState): void {
+  bindInspectContext(el, () => zoomCard(card, hp, stateText, effect??el.dataset.cardEffect,frame??el.dataset.cardFrame, owner));
   // Intent, not speculation: by the time a pointer is resting on a card, a
   // right-click or a 380ms long-press is at most a few hundred ms away. Start
   // the full-resolution art then, so the overlay has it by the time it opens.
@@ -265,7 +265,7 @@ export function bindZoom(el: HTMLElement, card: CardInst, hp?: { now: number; ma
     fired = false;
     sx = e.touches[0].clientX; sy = e.touches[0].clientY;
     clearTimeout(timer);
-    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp, stateText, effect??el.dataset.cardEffect,frame??el.dataset.cardFrame); }, 380);
+    timer = window.setTimeout(() => { fired = true; zoomCard(card, hp, stateText, effect??el.dataset.cardEffect,frame??el.dataset.cardFrame, owner); }, 380);
   }, { passive: true });
   const cancel = () => clearTimeout(timer);
   el.addEventListener("touchmove", (e) => {
