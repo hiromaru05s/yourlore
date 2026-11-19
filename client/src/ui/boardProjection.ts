@@ -1,4 +1,4 @@
-import {placeReadingBoard,marketHeight,pileFace,RIFT_MOUNT} from './readingBoardLayout';
+import {placeReadingBoard,placeReadingHand,placeReadingOpponentHand,marketHeight,pileFace,RIFT_MOUNT} from './readingBoardLayout';
 /** One perspective and one physical card unit for the DOM and WebGL board.
  * CSS x/y maps to world X/Z; world Y is height above the table. */
 export const BOARD_TILT = 18;
@@ -43,29 +43,23 @@ export function projectBoardDOM(root:HTMLElement):void {
     element.style.transform=`translateZ(${unit*(marketHeight(true)-marketHeight())}px)`;
   });
   root.querySelectorAll<HTMLElement>('.pile--shelf').forEach(el=>{const n=Number(el.dataset.count)||0;el.style.setProperty('--shelf-elevation',`${unit*pileFace(n,true)}px`);});
-  // Identity is readable screen-space UI, anchored to the projected mana tray.
-  // Flip to the other edge when there is no room, keeping it attached to the tray.
-  for(const side of ['Me','Opp']){
+  // Align the visible silver nameplate to the crystal tray itself, excluding
+  // the separate numeric counter. Bounds come from mana-tray.glb: ±.1325,
+  // ±.0385, top .011, with the widget's .0415 X / .012 Y mounting offsets.
+  // Both names stay attached above the tray; no viewport-driven side swap.
+  const scale=unit/.110;
+  for(const [side,sign] of [['Me',1],['Opp',-1]] as const){
     const label=root.querySelector<HTMLElement>(`#portrait${side}>.pt-name`);
-    const mana=root.querySelector<HTMLElement>(`#portrait${side} .pt-mana`);
-    const ring=root.querySelector<HTMLElement>(`#portrait${side} .pt-ring`);
-    if(!label||!mana||!ring)continue;
-    const tray=mana.getBoundingClientRect(),portrait=ring.getBoundingClientRect();
-    const width=Math.max(150,tray.width*.97),height=width*44/342;
-    const medal=!!label.querySelector('.medal-inscription'),reserve=medal?30:0;
-    const below=tray.bottom+2,above=tray.top-height-2;
-    const fitsBelow=below+height+reserve<=innerHeight-3;
-    const fitsAbove=above-reserve>=3;
-    const useBelow=side==='Me'?fitsBelow:!fitsAbove;
-    const top=useBelow?below:above;
-    // The small-screen minimum must not slide underneath the portrait or HP.
-    const left=Math.min(tray.x+(tray.width-width)/2,portrait.left-10-width*.85);
-    label.style.left=`${Math.max(4,Math.min(innerWidth-width-4,left))}px`;
-    label.style.top=`${Math.max(3+(!useBelow?reserve:0),Math.min(innerHeight-height-3-(useBelow?reserve:0),top))}px`;
+    if(!label)continue;
+    const topZ=sign*.397-.0385;
+    const left=boardPoint(innerWidth/2+(-.345+.0415-.1325)*scale,innerHeight/2+topZ*scale,.023*scale);
+    const right=boardPoint(innerWidth/2+(-.345+.0415+.1325)*scale,innerHeight/2+topZ*scale,.023*scale);
+    const width=right.x-left.x,height=width*35/239;
+    label.style.left=`${left.x}px`;label.style.top=`${left.y-height+1}px`;
     label.style.width=`${width}px`;label.style.height=`${height}px`;
     label.style.transform='none';delete label.dataset.boardPlane;
-    label.classList.toggle('pt-name--medal-above',!useBelow);
   }
+  placeReadingHand(root);placeReadingOpponentHand(root);
   root.classList.add('board-projected');
   root.dispatchEvent(new Event('lore:board-projected',{bubbles:true}));
 }

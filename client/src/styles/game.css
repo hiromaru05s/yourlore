@@ -253,7 +253,7 @@
 .pcluster--me .pt-name { bottom:4px; }
 .mana-crystal { background-image:url(/art/biblion/refined/mana-empty.png); }
 .mana-crystal.is-lit { background-image:url(/art/biblion/refined/mana-filled.png); filter:none; }
-.zone-st { display:grid; grid-template-columns:repeat(14,minmax(0,1fr)); gap:3px; width:calc(7 * var(--field-card-size) + 6 * var(--slot-gap)); }
+.zone-st { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:3px; width:calc(7 * var(--field-card-size) + 6 * var(--slot-gap)); }
 .zone-st .slot,.buff-icon { width:100%; height:auto; aspect-ratio:1; min-width:0; --ch:auto; --cw:auto; }
 .buff-icon { position:relative; background-position:center; background-size:cover; border:1px solid #b7c4cf; border-radius:5px; box-shadow:0 2px 4px #0b162c66; cursor:pointer; }
 .buff-icon--spell { border-color:#adced9; }
@@ -398,7 +398,7 @@
  .pcluster--opp .pc-side--r { bottom:-21px; }
 }
 
-/* Nameless spell/trap faces retain the smaller 14-slot buff lane. */
+/* Nameless spell/trap faces retain the smaller 7-slot buff lane. */
 .zone-st .slot,.buff-icon { aspect-ratio:4/5; }
 .buff-icon { background:none; border:0; border-radius:0; box-shadow:none; }
 .buff-frame,.buff-art { position:absolute; inset:0; background-size:100% 100%; background-position:center; pointer-events:none; }
@@ -558,7 +558,7 @@
 .game .zones { gap:16px; }
 .game .zone-mon .card,.game .zone-mon .slot { --cw:var(--card-w); --ch:var(--card-h); width:var(--card-w); height:var(--card-h); }
 .game .zone-mon { width:calc(7 * var(--card-w) + 6 * var(--slot-gap)); }
-.game .zone-st { display:grid; grid-template-columns:repeat(14,minmax(0,1fr)); width:calc(7 * var(--card-w) + 6 * var(--slot-gap)); gap:3px; }
+.game .zone-st { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); width:calc(7 * var(--card-w) + 6 * var(--slot-gap)); gap:3px; }
 .game .zone-st .slot,.game .zone-st .buff-icon { width:100%; height:auto; aspect-ratio:4/5; justify-self:stretch; }
 .game .pile-col { gap:var(--slot-gap); align-items:center; }
 .game .pile--deck { width:calc(var(--card-w) * 1.3); height:calc(var(--card-w) * 1.95); }
@@ -587,7 +587,7 @@
  .game .field-block { display:flex; flex-direction:column; gap:9px; padding:0; }
  .game #oppRow .field-block { flex-direction:column-reverse; }
  .game .pile-col { height:calc(var(--card-w) * 1.7); width:100%; justify-content:flex-end; gap:10px; }
- .game .zone-st { grid-template-columns:repeat(14,minmax(0,1fr)); gap:2px; }
+ .game .zone-st { grid-template-columns:repeat(7,minmax(0,1fr)); gap:2px; }
  .game .zone-row::before { font-size:7px; top:-11px; }
  .game .zones { gap:13px; }
  .game .mid-row { gap:12px; }

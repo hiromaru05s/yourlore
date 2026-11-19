@@ -217,7 +217,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (lethal) return lethal;
   }
 
-  const quest = p.hand.findIndex(c => c.t === "quest" && playCost(c, p) <= p.mana && p.traps.length + p.enchants.length + (p.quests?.length ?? 0) < 14);
+  const quest = p.hand.findIndex(c => c.t === "quest" && playCost(c, p) <= p.mana && p.traps.length + p.enchants.length + (p.quests?.length ?? 0) < ST_MAX);
   if (!g.pending && quest >= 0) return { type: "play", idx: quest };
 
   // 0) resolve a pending target/pick automatically

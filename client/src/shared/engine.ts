@@ -2439,7 +2439,7 @@ function resolveAttackCore(g: GameState, ctx: Ctx, att: FieldMon, targetUid: str
   // 정보상(informant): 무효 + '길드의 정보망' 전개
   if ((tc = takeTrap(g, ctx, o, "informant"))) {
     att.exhausted = true;
-    const room = o.traps.length + o.enchants.length < ST_MAX;
+    const room = o.traps.length + o.enchants.length + (o.quests?.length ?? 0) < ST_MAX;
     if (room) o.enchants.push({ card: inst(g, "GUILD_EYE"), turns: 99, bornTurn: g.turn });
     ctx.log(`  └ <span class="dmg">함정 ${cn(tc)}!</span> 공격 무효${room ? " + 길드의 정보망 전개" : ""}`, `  └ <span class="dmg">トラップ ${cn(tc)}!</span> 攻撃無効${room ? " + ギルドの情報網を展開" : ""}`, `  └ <span class="dmg">Trap ${cn(tc)}!</span> Negate the attack${room ? `; place ${cn(DB.GUILD_EYE)} on your field` : ""}`);
     return;
@@ -4765,7 +4765,7 @@ function customSpell(g: GameState, ctx: Ctx, card: CardInst): void {
       if (gcs <= 3) { addMaxMana(g, ctx, p, 3); ctx.log(`  └ 🎰 마나 수정 +3`, `  └ 🎰 マナ水晶 +3`); }
       else if (gcs <= 7) addMaxMana(g,ctx,p,2);
       else if (gcs === 8) {
-        if (p.traps.length + p.enchants.length < ST_MAX) {
+        if (p.traps.length + p.enchants.length + (p.quests?.length ?? 0) < ST_MAX) {
           p.enchants.push({ card: inst(g, "GUILD_EYE"), turns: 99 });
           ctx.log(`  └ 🎰 길드의 정보망 획득 — 턴 시작시 드로우 +1 (영구)`, `  └ 🎰 ギルドの情報網 — ターン開始時ドロー+1 (永続)`);
         } else ctx.log(`  └ 마법·함정 존이 가득 차 정보망을 놓쳤다`, `  └ 魔法・罠ゾーンが満杯で情報網を逃した`);
@@ -5161,11 +5161,11 @@ function applyTribe(g: GameState, ctx: Ctx, p: PlayerState, o: PlayerState, trib
   }
 }
 
-// Zone capacity: 7 monsters and 14 shared spell/trap slots.
+// Zone capacity: 7 monsters and 7 shared persistent spell/quest slots.
 export const FIELD_MAX = 7;
 export /** 고정 마켓 슬롯 수 (reading-board: 7). 경제 위기(MARKET_CRISIS)의 재구성도 이 값을 쓴다. */
 const MARKET_SIZE = 7;
-export const ST_MAX = 14;
+export const ST_MAX = 7;
 const ASSASSIN_IDS = ["ASSASSIN1", "ASSASSIN2", "ASSASSIN3"];
 /** 침묵의 파수꾼/거신(sealLow, v36): 필드의 봉인 몬스터 중 가장 높은 코스트 상한 (없으면 -1). */
 export function sealLowCap(g: GameState): number {

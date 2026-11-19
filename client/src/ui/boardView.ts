@@ -15,7 +15,6 @@ import {createBoardEnchantTimes,enchantTimeState,enchantTimeDescription} from '.
 import {activeEnchantmentTile} from './enchantmentView';
 import {createBoardCardCounters,createCardCounter,enchantCounterValue} from './cardCounter';
 import {syncCardEffects,disposeCardEffects} from './cardFinish';
-import {medalHtml} from './medal';
 import {MarketCrashPresentation} from './marketCrash/runtime';
 import {AnesthesiaPresentation} from './anesthesia/runtime';
 import {bindOriginTrap} from './originRite/anchors';
@@ -65,6 +64,8 @@ import {profileBackground, type ProfileBackground} from '../shared/profileAppear
 
 // The local player's profile appearance when playing without a room snapshot.
 let myPortraitBackground: ProfileBackground = 'plain';
+let MY_LEVEL: number | undefined;
+export function setMyLevel(level?:number):void { MY_LEVEL=level; }
 let MY_AVATAR: string | null | undefined;
 export function setMyAvatar(a?: string | null, background?: string): void { MY_AVATAR = a; myPortraitBackground = profileBackground(background); }
 // The opponent avatar comes from the online profile or local NPC roster.
@@ -498,8 +499,8 @@ export class GameView {
     }
 
     // Hearthstone-style center portraits (opp top / me bottom)
-    this.renderPortrait(this.q("portraitOpp"), opp, false, g.portraitAvatars ? g.portraitAvatars[1-this.you] : OPP_AVATAR, profileBackground(g.portraitBackgrounds?.[1-this.you]), g.medals?.[(1-this.you) as Side]);
-    this.renderPortrait(this.q("portraitMe"), me, true, g.portraitAvatars ? g.portraitAvatars[this.you] : MY_AVATAR, profileBackground(g.portraitBackgrounds?.[this.you] ?? myPortraitBackground), g.medals?.[this.you]);
+    this.renderPortrait(this.q("portraitOpp"), opp, false, g.portraitAvatars ? g.portraitAvatars[1-this.you] : OPP_AVATAR, profileBackground(g.portraitBackgrounds?.[1-this.you]), g.duelProfiles?.[(1-this.you) as Side]?.level);
+    this.renderPortrait(this.q("portraitMe"), me, true, g.portraitAvatars ? g.portraitAvatars[this.you] : MY_AVATAR, profileBackground(g.portraitBackgrounds?.[this.you] ?? myPortraitBackground), g.duelProfiles?.[this.you]?.level ?? MY_LEVEL);
     this.q("portraitMe").classList.toggle("is-active", myTurn);
     this.q("portraitOpp").classList.toggle("is-active", !myTurn && !g.over);
 
@@ -1082,7 +1083,7 @@ export class GameView {
   }
 
   /** Portrait counters: health upper-left, shield lower-left, Dew upper-right, Brand lower-right. */
-  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean, avatar: string | null | undefined, background: ProfileBackground, medal?:string|null): void {
+  private renderPortrait(el: HTMLElement, p: PlayerState, isMe: boolean, avatar: string | null | undefined, background: ProfileBackground, level?:number|null): void {
     const sd = isMe ? "me" : "opp";
     const emax = effMaxMana(p);
     const hp = Math.max(0, p.hp);
@@ -1108,7 +1109,7 @@ export class GameView {
         ${dew > 0 ? `<span class="pt-dew" role="img" aria-label="${t('game.dew')} ${p.dew ?? 0}" title="${esc(t('game.dewTip'))}" style="--resource-number-scale:${Math.min(.14,.32/String(p.dew ?? 0).length)}"><b id="dew-${sd}" aria-hidden="true">${dew}</b></span>` : ""}
         ${brand > 0 ? `<span class="pt-brand" role="img" aria-label="${esc(t('game.brand'))} ${brand}" title="${esc(t('game.brandTip').replace('{n}', String(brand)))}" style="--resource-number-scale:${Math.min(.14,.32/String(brand).length)}"><b id="brand-${sd}" aria-hidden="true">${brand}</b></span>` : ""}
       </span>` : ""}
-      <span class="pt-name pt-name--azure"><span class="pt-player-name" title="${esc(p.name)}">${esc(p.name)}</span>${medalHtml(medal)}</span>`;
+      <span class="pt-name pt-name--azure"><span class="pt-identity">${typeof level === 'number' && Number.isFinite(level) && level >= 1 ? `<span class="pt-level">Lv.${Math.floor(level)}</span>` : ''}<span class="pt-player-name" title="${esc(p.name)}">${esc(p.name)}</span></span></span>`;
     const ring = content.content.querySelector<HTMLElement>('.pt-ring')!;
     if (retained) {
       // Detaching a native animated image can restart its clock during an HP update.

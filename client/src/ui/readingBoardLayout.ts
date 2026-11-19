@@ -31,8 +31,10 @@ export function placeReadingBoard(root:HTMLElement):void {
  place('.mid-aside',.7,0,.13,.13);
  for(const [id,sign] of [['me',1],['opp',-1]] as const){
   place(`#${id}Row .zone-row:has(.zone-mon)`,0,sign*.195,.85,.171875);
-  place(`#${id}Row .zone-row:has(.zone-st)`,0,sign*.326,.83,.048);
-  place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,sign*.245,.136,.198);
+  // One shared seven-slot row, right of the portrait and below the deck.
+  const spellsLeft=Math.max(.22,portraitSize/(2*s)+.02),spellsRight=.61;
+  place(`#${id}Row .zone-row:has(.zone-st)`,(spellsLeft+spellsRight)/2,sign*.34,spellsRight-spellsLeft,.048);
+  place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,sign*.205,.136,.198);
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,sign*.245,.166,.232);
   place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);
   const p=id==='me'?'Me':'Opp';
@@ -47,18 +49,13 @@ export function placeReadingBoard(root:HTMLElement):void {
   if(hp){hp.style.left=`${cx-size*.58}px`;hp.style.top=`${portraitTop+size*.06}px`;hp.style.width=`${size*.30}px`;hp.style.height=`${size*.36}px`;}
 
   place(`#portrait${p} .pt-mana`,-.345,sign*.397,.350,.077);
-  const hasMedal=!!root.querySelector(`#portrait${p} .medal-inscription`);
-  // Keep the two-line identity clear of the lower viewport edge on short displays.
-  const identityZ=sign>0&&hasMedal&&innerHeight<500?.375:sign*.455;
-  const identityX=sign>0&&hasMedal&&innerHeight<500?-.75:-.345;
-  place(`#portrait${p}>.pt-name,#portrait${p} .pt-name--vitals`,identityX,identityZ,.34,.017);
   const resources=root.querySelector<HTMLElement>(`#portrait${p} .pt-resources`);
   if(resources){resources.style.left=`${cx-size*.5}px`;resources.style.top=`${portraitTop}px`;resources.style.width=resources.style.height=`${size}px`;}
  }
  // Hand cards float over the board, outside the play lanes. They are not sockets.
  placeReadingHand(root);
  const opp=root.querySelector<HTMLElement>('#oppHand');
- if(opp){opp.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;opp.style.top=`${cy-.452*s}px`;}
+ if(opp){opp.style.left=`${Math.max(cx+.16*s,cx+portraitSize*.5+8)}px`;opp.style.top=`${Math.max(2,cy-.57*s)}px`;}
 }
 
 /** Recompute after closing/resizing the expanded hand; its anchor is viewport based. */
@@ -67,9 +64,25 @@ export function placeReadingHand(root:HTMLElement):void {
  if(!hand||root.querySelector('.game.hand-open'))return;
  const s=readingScale(),cx=innerWidth/2,cy=innerHeight/2;
  const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.195);
- const css=getComputedStyle(hand),height=parseFloat(css.getPropertyValue('--card-h-hand'))*.42||0,edge=parseFloat(css.getPropertyValue('--fan-overhang'))||0;
- const width=(parseFloat(css.getPropertyValue('--fan-width'))||0)*.42;
+ const css=getComputedStyle(hand),cardHeight=parseFloat(css.getPropertyValue('--card-h-hand'))||270;
+ const overhang=(parseFloat(css.getPropertyValue('--fan-overhang'))||0)/.42;
+ const lane=root.querySelector<HTMLElement>('#meRow .zone-row:has(.zone-st)');
+ const laneBottom=lane?.dataset.boardPlane?lane.getBoundingClientRect().bottom:0;
+ const top=Math.max(cy+.365*s,laneBottom+6);
+ const compactScale=Math.min(.42,Math.max(0,innerHeight-top-8)/(cardHeight+overhang));
+ hand.style.setProperty('--compact-hand-scale',String(compactScale));
+ const width=(parseFloat(css.getPropertyValue('--fan-width'))||0)*compactScale;
  hand.style.left=`${Math.min(innerWidth-width-12,Math.max(cx+.16*s,cx+portraitSize*.5+8))}px`;
- hand.style.top=`${Math.min(cy+.365*s,innerHeight-height-edge-10)}px`;
- hand.style.bottom='auto';
+ hand.style.top=`${top}px`;hand.style.bottom='auto';
+}
+
+/** Fit the closed opponent hand above its persistent row on short windows. */
+export function placeReadingOpponentHand(root:HTMLElement):void {
+ const hand=root.querySelector<HTMLElement>('#oppHand'),lane=root.querySelector<HTMLElement>('#oppRow .zone-row:has(.zone-st)');
+ if(!hand||!lane)return;
+ hand.style.transform='none';hand.style.transformOrigin='0 0';
+ const top=hand.getBoundingClientRect().top;
+ const bottom=Math.max(top+hand.offsetHeight,...[...hand.querySelectorAll('.card')].map(c=>c.getBoundingClientRect().bottom));
+ const scale=Math.min(1,Math.max(0,lane.getBoundingClientRect().top-top-6)/Math.max(1,bottom-top));
+ hand.style.transform=`scale(${scale})`;
 }

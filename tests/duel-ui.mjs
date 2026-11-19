@@ -57,12 +57,12 @@ const legacyTrap={id:'T9',t:'trap',cost:2,play:1,react:'thornShield',val:3,name:
 const boundary=createGame({mode:'bot',seed:7,starting:0,p0:{id:'x',name:'X'},p1:{id:'y',name:'Y'}}).state;
 const trapDef=legacyTrap;
 boundary.pending=null;boundary.players[0].mana=30;
-boundary.players[0].traps=Array.from({length:13},(_,i)=>({card:{...trapDef,uid:'b-'+i}}));
-boundary.players[0].hand=[{...trapDef,uid:'fourteenth'},{...trapDef,uid:'fifteenth'}];
+boundary.players[0].traps=Array.from({length:6},(_,i)=>({card:{...trapDef,uid:'b-'+i}}));
+boundary.players[0].hand=[{...trapDef,uid:'seventh'},{...trapDef,uid:'eighth'}];
 let cap=reduce(boundary,{type:'play',idx:0,player:0}).state;
-assert.equal(cap.players[0].traps.length,14);
+assert.equal(cap.players[0].traps.length,7);
 cap=reduce(cap,{type:'play',idx:0,player:0}).state;
-assert.equal(cap.players[0].traps.length,14);assert(cap.players[0].hand.some(c=>c.uid==='fifteenth'));
+assert.equal(cap.players[0].traps.length,7);assert(cap.players[0].hand.some(c=>c.uid==='eighth'));
 const g=createGame({mode:'bot',seed:42,starting:0,p0:{id:'a',name:'A'},p1:{id:'b',name:'B'}}).state;
 g.market[0]={...DB.M1,uid:'fixed-buy-test'}; // This interaction needs an available, unconditional purchase.
 const mon=Object.values(DB).find(c=>c.t==='mon');
@@ -71,8 +71,8 @@ const spell=Object.values(DB).find(c=>c.ench);
 for(const [i,p] of g.players.entries()){
  p.maxMana=30;p.mana=23;p.hp=20;
  p.field=Array.from({length:7},(_,n)=>({...mon,uid:`mon-${i}-${n}`,exhausted:false,tempAtk:0,atkMod:0,defMod:0,summonedTurn:0}));
- p.traps=Array.from({length:7},(_,n)=>({card:{...trap,uid:`secret-${i}-${n}`}}));
- p.enchants=Array.from({length:7},(_,n)=>({card:{...spell,uid:`spell-${i}-${n}`},turns:99}));
+ p.traps=Array.from({length:3},(_,n)=>({card:{...trap,uid:`secret-${i}-${n}`}}));
+ p.enchants=Array.from({length:4},(_,n)=>({card:{...spell,uid:`spell-${i}-${n}`},turns:99}));
  p.discard=[{...mon,uid:`discard-${i}`}];
 }
 const monCap=structuredClone(g);monCap.pending=null;
@@ -104,17 +104,21 @@ assert.deepEqual(attackCalls,[['tap-attacker']],'empty enemy field permits tap d
 attackCalls.length=0;
 attackView.destroy();attackRoot.remove();
 const v=new GameView(document.getElementById('app'),0,{onPlay:noop,onBlockedPlay:noop,onAttack:noop,onBlockedAttack:noop,onReorder:noop,onChooseTarget:noop,onBuyMarket:i=>boughtFixed=i,onBuySupply:i=>boughtSupply=i,onRefresh:()=>rerolls++,onEndTurn:noop,onSurrender:noop});
+g.duelProfiles=[{level:27},{level:48}];
 v.render(g);
+assert.equal(document.querySelector('#portraitMe .pt-level').textContent,'Lv.27');
+assert.equal(document.querySelector('#portraitOpp .pt-level').textContent,'Lv.48');
+assert(!document.querySelector('.portrait .medal-inscription'));
 for(const id of ['meRow','oppRow']) {
  assert.equal(document.querySelectorAll(`#${id} .zone-mon > .card`).length,7);
- assert.equal(document.querySelectorAll(`#${id} .zone-st > .buff-icon`).length,14);
+ assert.equal(document.querySelectorAll(`#${id} .zone-st > .buff-icon`).length,7);
  assert.equal(document.querySelector(`#${id} .pile-col`).children[0].classList.contains('pile--deck'),true);
  assert.equal(document.querySelector(`#${id} .pile-col`).children[1].classList.contains('pile--shelf'),true);
 }
-assert.equal(ST_MAX,14); assert.equal(FIELD_MAX,7);
+assert.equal(ST_MAX,7); assert.equal(FIELD_MAX,7);
 assert.deepEqual([0,1,2,3,4,5,9,10,14,15,30].map(deckBucket),[0,1,1,3,3,5,5,10,10,15,15]);
 assert.equal(document.querySelectorAll('#market .card-type').length,0);
-assert.equal(document.querySelectorAll('#oppRow .buff-icon--trap').length,7);
+assert.equal(document.querySelectorAll('#oppRow .buff-icon--trap').length,3);
 assert(!document.querySelector('#rift-me').classList.contains('is-absorbing'));
 g.players[0].removed=[{...mon,uid:'removed-new'}];v.render(g);
 assert(!document.querySelector('#rift-me').classList.contains('is-absorbing'),'a count snapshot must not invent a new arrival');

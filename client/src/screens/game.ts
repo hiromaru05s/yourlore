@@ -17,7 +17,7 @@ import { TutorialController } from "../game/tutorial";
 import { TutorialPartController } from "../game/tutorialParts";
 import { TUTORIAL_PARTS } from '../shared/tutorialParts';
 import { OnlineController } from "../game/online";
-import { setMarketWatch, setMyAvatar, setMySleeve, setMyFurniture, setOppAvatar } from "../ui/boardView";
+import { setMarketWatch, setMyLevel, setMyAvatar, setMySleeve, setMyFurniture, setOppAvatar } from "../ui/boardView";
 import { startBoardLayout } from "../ui/layout";
 import { setCoinProfiles } from "../game/controller";
 import { HOME_MUSIC_GAIN, startBackgroundMusic } from "../ui/backgroundMusic";
@@ -38,6 +38,7 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   const story = opts.mode === 'tutorial' ? undefined : opts.story;
   const singleNormalReturn=opts.mode==='online'&&!opts.ranked&&!story&&!opts.difficulty&&app.singleNormalReturn;
   const decks=deckStoreForUser(app.user),activeDeck=decks.list[decks.sel];
+  setMyLevel(seekerLevel(app.user?.exp).level);
   setMyAvatar(activeDeck.avatar ?? app.user?.avatar, activeDeck.background ?? app.user?.background);  // my profile icon on the center-bottom portrait
   setOppAvatar(opts.mode === "online" ? opts.oppAvatar ?? null : story?.avatar ?? npc?.avatar ?? null);
   clearCardEffectContext();setLocalCardEffect(opts.mode==='bot'?activeDeck.effect:undefined);
