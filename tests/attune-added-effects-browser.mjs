@@ -25,6 +25,7 @@ try {for(const [width,height] of [[1280,900],[390,844]]){
  await page.locator('#hand .card[data-card-id="STARTER_MANA"]').dispatchEvent('contextmenu');
  assert.equal(await page.locator('.attune-added-effects [data-attune-bonus]').count(),1);
  assert.match(await page.locator('.attune-added-effects').innerText(),/自分の体力を[123]回復/);
+ if(width===390)await page.locator('.attune-added-effects').evaluate(el=>el.scrollIntoView({block:'center'}));
  await page.screenshot({path:`${out}/${width}-research.png`});
  await page.locator('.inspect-close').click();
  // A new authoritative state updates the retained hand's count and inspector.
@@ -32,6 +33,7 @@ try {for(const [width,height] of [[1280,900],[390,844]]){
  assert.equal(await page.locator('#hand .attune-bonus-badge').textContent(),'追加効果 5');
  await page.locator('#hand .card[data-card-id="STARTER_MANA"]').dispatchEvent('contextmenu');
  assert((await page.locator('.attune-added-effects').innerText()).includes('自分の墓地に'));
+ if(width===390)await page.locator('.attune-added-effects').evaluate(el=>el.scrollIntoView({block:'center'}));
  await page.screenshot({path:`${out}/${width}-stacked.png`});
  assert(await page.locator('.attune-added-effects').evaluate(el=>el.scrollWidth<=el.clientWidth+1));
  await page.locator('.inspect-close').click();
