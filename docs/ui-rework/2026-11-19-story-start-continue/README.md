@@ -20,4 +20,10 @@ Validation:
 
 - A targeted copy of the story browser flow using a settled basic-practice receipt passed: VN save retry, later chapters, NPC entries, normal-match gates, Master selection, Aries dialogue/personal story, training book and three languages. Evidence: `/tmp/lore-story-entry-flow-fixture-qa/report.json`. This uses fixtures for completed battles/practice and does not establish live PvP or full tutorial play.
 
-Local implementation only; not deployed.
+## Full-screen advance and release authorization
+
+The user additionally requested advancing by clicking anywhere on the conversation screen and deploying both changes to production. The whole native conversation dialog now advances on a click, including the background, character area, text, name and header. Dedicated buttons are excluded from the shared handler, retaining Back / Pause / SKIP / Next without double advancement. Busy and closed conversations do not advance. Keyboard navigation is preserved.
+
+Integrated remote main `f87eca10e3b1dac1180c10671ddfe1487b1d5548` before this follow-up, retaining the accepted result ceremony changes. `client/src/styles/singleStory.css` adds the pointer cursor; no character, painting, animation or dialogue changes.
+
+Release authorization covers Start over / Continue and full-screen advance together. The guarded production deploy validates the committed remote-main snapshot and holds the shared release lock; deployment result is reported after publication.

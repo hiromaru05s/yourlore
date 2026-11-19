@@ -41,7 +41,13 @@ try{
  await page.screenshot({path:out+'/restart-confirm.png'});
  await page.locator('.ss-restart-sheet [data-no]').click();assert.equal(await page.locator('.single-vn').count(),0);
  assert(await page.locator('[data-continue="1"]').isDisabled());
- await openChapter(1);await page.locator('.single-vn [data-next]').click();
+ await openChapter(1);await page.mouse.click(720,350);
+ assert.equal(await page.locator('.svn-count').innerText(),'2 / 5','background advances once');
+ await page.locator('.svn-top>span').click();assert.equal(await page.locator('.svn-count').innerText(),'3 / 5','header advances once');
+ await page.locator('.svn-text').click();assert.equal(await page.locator('.svn-count').innerText(),'4 / 5','text advances once, without bubbling twice');
+ await page.locator('.single-vn [data-prev]').click();assert.equal(await page.locator('.svn-count').innerText(),'3 / 5','back does not also advance');
+ await page.locator('.single-vn [data-next]').click();assert.equal(await page.locator('.svn-count').innerText(),'4 / 5','Next advances only once');
+ await page.locator('.single-vn [data-prev]').click();await page.locator('.single-vn [data-prev]').click();
  assert.equal(await page.locator('.svn-count').innerText(),'2 / 5');
  await page.locator('.single-vn [data-pause]').click();
  assert(await page.locator('[data-continue="1"]').isEnabled());
@@ -71,11 +77,14 @@ try{
  await track.evaluate(e=>e.scrollLeft=0);await page.waitForTimeout(300);const box=await track.boundingBox();await page.mouse.move(box.x+220,box.y+180);await page.mouse.down();await page.mouse.move(box.x+30,box.y+180,{steps:15});await page.mouse.up();await page.waitForTimeout(300);assert(await track.evaluate(e=>e.scrollLeft)>100);assert.equal(await page.locator('.single-vn').count(),0);
  await track.evaluate(e=>e.scrollLeft=e.scrollWidth);await page.waitForTimeout(500);assert(await page.locator('[data-gallery-next]').isDisabled());await page.screenshot({path:out+'/gallery-later.png'});
  for(const [width,height] of [[320,740],[390,844],[844,390],[1280,720]]){await page.setViewportSize({width,height});await track.evaluate(e=>e.scrollLeft=0);await page.waitForTimeout(500);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);if(width===1280){const card=await one.boundingBox(),dock=await page.locator('.lounge-rail').boundingBox();assert(card.y+card.height<=dock.y,'card clears bottom navigation');}await page.screenshot({path:out+`/gallery-${width}.png`});}
- await page.setViewportSize({width:390,height:844});await track.evaluate(e=>e.scrollLeft=0);await page.waitForTimeout(300);
+ await page.setViewportSize({width:390,height:844});
+ await page.locator('[data-continue="1"]').click();const lineBefore=Number((await page.locator('.svn-count').innerText()).split(' / ')[0]);
+ await page.mouse.click(190,250);assert.equal(Number((await page.locator('.svn-count').innerText()).split(' / ')[0]),lineBefore+1,'mobile portrait area advances once');await page.keyboard.press('Escape');
+ await track.evaluate(e=>e.scrollLeft=0);await page.waitForTimeout(300);
  const touch=await context.newCDPSession(page),tb=await track.boundingBox();await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:tb.x+260,y:tb.y+100}]});for(let x=240;x>=50;x-=20)await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:tb.x+x,y:tb.y+100}]});await touch.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(600);assert(await track.evaluate(e=>e.scrollLeft)>100);await touch.detach();
  await page.emulateMedia({reducedMotion:'reduce'});await page.waitForTimeout(300);assert.equal(await page.locator('.ss-card-landscape[src$=".gif"]').count(),0);assert.equal(await page.locator('.ss-card-actor.is-painted').count(),0);await page.emulateMedia({reducedMotion:'no-preference'});
  for(const lang of (liveOrigin?[]:['en','ko','ja'])){await page.evaluate(async lang=>{const {setLang}=await import('/src/i18n.ts');setLang(lang);},lang);await track.waitFor();await page.screenshot({path:out+`/gallery-${lang}.png`});}
  await page.setViewportSize({width:1440,height:900});await page.locator('[data-tab="battle"]').click();await page.waitForFunction(()=>document.querySelector('.sp-standing')?.classList.contains('is-painted'));await page.screenshot({path:out+'/battle-idle.png'});
  assert.deepEqual(errors,[]);assert.deepEqual(apiErrors,[]);
- await fs.writeFile(out+'/report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],errors,apiErrors,checks:['click selects only','single-click restart/continue, YES/NO, Escape and keyboard controls, cursor persistence and completed reread','no lower detail panel','central locks','five GIF assets','NPC idle canvas changes','arrow/drag/touch','reduced motion','three languages','battle idle'],visual:'continuous recording provided; aesthetic review is separate'},null,2));console.log('PASS living story gallery browser checks');
+ await fs.writeFile(out+'/report.json',JSON.stringify({sourceRoot:process.cwd(),origin:server.resolvedUrls.local[0],errors,apiErrors,checks:['full-screen click, text, header and mobile portrait advance once; controls remain independent','click selects only','single-click restart/continue, YES/NO, Escape and keyboard controls, cursor persistence and completed reread','no lower detail panel','central locks','five GIF assets','NPC idle canvas changes','arrow/drag/touch','reduced motion','three languages','battle idle'],visual:'continuous recording provided; aesthetic review is separate'},null,2));console.log('PASS living story gallery browser checks');
 }catch(error){await page.screenshot({path:out+'/failure.png'});throw error;}finally{await context.close();await browser.close();await server.close();await f.close();}

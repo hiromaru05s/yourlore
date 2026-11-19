@@ -52,10 +52,14 @@ export function openStoryScene(scene:StoryScene,account:string,onComplete:()=>Pr
   try{await onComplete();if(closed)return;try{localStorage.removeItem(storyCursorKey(account,scene));}catch{}close();}
   catch{if(!closed){busy=false;error.textContent=L('保存できませんでした。もう一度お試しください。','Could not save. Please try again.','저장하지 못했어요. 다시 시도해 주세요.');render();}}
  }
- const advance=()=>{if(busy)return;if(index===lines.length-1)void finish();else{index++;error.textContent='';render();}};
+ const advance=()=>{if(busy||closed)return;if(index===lines.length-1)void finish();else{index++;error.textContent='';render();}};
  next.onclick=advance;skip.onclick=()=>void finish();prev.onclick=()=>{if(index&&!busy){index--;render();}};
  dialog.querySelector<HTMLButtonElement>('[data-pause]')!.onclick=close;
- dialog.querySelector<HTMLElement>('.svn-text')!.onclick=advance;
+ // The whole conversation surface advances; dedicated controls act only once.
+ dialog.addEventListener('click',event=>{
+  if(event.target instanceof Element&&event.target.closest('button'))return;
+  advance();
+ });
  dialog.addEventListener('cancel',e=>{e.preventDefault();close();});
  dialog.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();advance();}else if(e.key==='ArrowLeft'){e.preventDefault();prev.click();}else if((e.key===' '||e.key==='Enter')&&!(e.target instanceof HTMLButtonElement)){e.preventDefault();advance();}});
  render();next.focus();return close;
