@@ -715,16 +715,16 @@ Uploaded 112 of 112 assets
 Total Upload: 2563.33 KiB / gzip: 556.54 KiB
 Worker Startup Time: 29 ms
 Your Worker has access to the following bindings:
-Binding                                                                    Resource                  
-env.MATCHMAKER (MatchmakerFresh20261027)                                   Durable Object            
-env.GAME_ROOM (GameRoomFresh20261027)                                      Durable Object            
-env.DB (lore-db)                                                           D1 Database               
-env.AUTH_RATE_LIMITER (30 requests/60s)                                    Rate Limit                
-env.INQUIRY_RATE_LIMITER (5 requests/60s)                                  Rate Limit                
-env.ASSETS                                                                 Assets                    
-env.APP_ORIGIN ("*")                                                       Environment Variable      
-env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")          Environment Variable      
-env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")              Environment Variable      
+Binding                                                                    Resource
+env.MATCHMAKER (MatchmakerFresh20261027)                                   Durable Object
+env.GAME_ROOM (GameRoomFresh20261027)                                      Durable Object
+env.DB (lore-db)                                                           D1 Database
+env.AUTH_RATE_LIMITER (30 requests/60s)                                    Rate Limit
+env.INQUIRY_RATE_LIMITER (5 requests/60s)                                  Rate Limit
+env.ASSETS                                                                 Assets
+env.APP_ORIGIN ("*")                                                       Environment Variable
+env.GOOGLE_CLIENT_ID ("955911680552-9i1tcrojam3v759dmampaga6...")          Environment Variable
+env.ADMIN_EMAILS ("maruru836818@gmail.com,suhwoo3@gmail....")              Environment Variable
 
 Uploaded lore-server (9.42 sec)
 Deployed lore-server triggers (2.15 sec)
