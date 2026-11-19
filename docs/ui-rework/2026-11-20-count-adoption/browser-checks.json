@@ -1,0 +1,276 @@
+{
+  "checks": [
+    "desktop/mobile visible counters",
+    "plain numeric counts",
+    "pointer pass-through",
+    "zero piles",
+    "last stock rerender"
+  ],
+  "details": [
+    {
+      "width": 1360,
+      "height": 820,
+      "read": [
+        {
+          "text": "18",
+          "color": "rgb(37, 58, 80)",
+          "bg": "linear-gradient(rgb(243, 239, 223), rgb(210, 201, 174) 54%, rgb(178, 165, 136))",
+          "w": 47.0032958984375,
+          "h": 16.611572265625,
+          "inside": true,
+          "events": "auto"
+        },
+        {
+          "text": "12",
+          "color": "rgb(37, 58, 80)",
+          "bg": "linear-gradient(rgb(243, 239, 223), rgb(210, 201, 174) 54%, rgb(178, 165, 136))",
+          "w": 47.51518249511719,
+          "h": 16.808929443359375,
+          "inside": true,
+          "events": "auto"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 30.3115234375,
+          "h": 14.742889404296875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 30.067626953125,
+          "h": 14.742889404296875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 29.82373046875,
+          "h": 14.742889404296875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×3",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 29.4503173828125,
+          "h": 14.7088623046875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×2",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 29.19708251953125,
+          "h": 14.7088623046875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 29.03753662109375,
+          "h": 14.7088623046875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×3",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 29.290771484375,
+          "h": 14.7088623046875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×2",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 29.5439453125,
+          "h": 14.7088623046875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×3",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 29.79718017578125,
+          "h": 14.7088623046875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 30.05029296875,
+          "h": 14.7088623046875,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "24",
+          "color": "rgb(37, 58, 80)",
+          "bg": "linear-gradient(rgb(243, 239, 223), rgb(210, 201, 174) 54%, rgb(178, 165, 136))",
+          "w": 50.3653564453125,
+          "h": 19.001220703125,
+          "inside": true,
+          "events": "auto"
+        },
+        {
+          "text": "7",
+          "color": "rgb(37, 58, 80)",
+          "bg": "linear-gradient(rgb(243, 239, 223), rgb(210, 201, 174) 54%, rgb(178, 165, 136))",
+          "w": 50.86094665527344,
+          "h": 19.2230224609375,
+          "inside": true,
+          "events": "auto"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "read": [
+        {
+          "text": "18",
+          "color": "rgb(37, 58, 80)",
+          "bg": "linear-gradient(rgb(243, 239, 223), rgb(210, 201, 174) 54%, rgb(178, 165, 136))",
+          "w": 13.40576171875,
+          "h": 4.893829345703125,
+          "inside": true,
+          "events": "auto"
+        },
+        {
+          "text": "12",
+          "color": "rgb(37, 58, 80)",
+          "bg": "linear-gradient(rgb(243, 239, 223), rgb(210, 201, 174) 54%, rgb(178, 165, 136))",
+          "w": 13.449905395507812,
+          "h": 4.91143798828125,
+          "inside": true,
+          "events": "auto"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 8.303123474121094,
+          "h": 4.12359619140625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 8.284255981445312,
+          "h": 4.12359619140625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 8.265388488769531,
+          "h": 4.12359619140625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×3",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 8.236587524414062,
+          "h": 4.121002197265625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×2",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 8.2169189453125,
+          "h": 4.121002197265625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 8.205108642578125,
+          "h": 4.121002197265625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×3",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 8.224777221679688,
+          "h": 4.121002197265625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×2",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 8.244430541992188,
+          "h": 4.121002197265625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×3",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(173, 197, 220) 45%, rgb(83, 111, 139))",
+          "w": 8.26409912109375,
+          "h": 4.121002197265625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "×1",
+          "color": "rgb(239, 246, 255)",
+          "bg": "linear-gradient(140deg, rgb(231, 240, 246), rgb(215, 185, 136) 45%, rgb(83, 111, 139))",
+          "w": 8.28375244140625,
+          "h": 4.121002197265625,
+          "inside": true,
+          "events": "none"
+        },
+        {
+          "text": "24",
+          "color": "rgb(37, 58, 80)",
+          "bg": "linear-gradient(rgb(243, 239, 223), rgb(210, 201, 174) 54%, rgb(178, 165, 136))",
+          "w": 13.658660888671875,
+          "h": 5.078704833984375,
+          "inside": true,
+          "events": "auto"
+        },
+        {
+          "text": "7",
+          "color": "rgb(37, 58, 80)",
+          "bg": "linear-gradient(rgb(243, 239, 223), rgb(210, 201, 174) 54%, rgb(178, 165, 136))",
+          "w": 13.697956085205078,
+          "h": 5.095428466796875,
+          "inside": true,
+          "events": "auto"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

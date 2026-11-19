@@ -587,7 +587,7 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
     // geometry stable until the authoritative board render replaces the market.
     source.classList.remove('is-armed');source.dataset.purchaseSource='true';
     if(remaining<=0){source.style.visibility='hidden';source.style.pointerEvents='none';source.setAttribute('aria-hidden','true');}
-    else {const stock=source.querySelector('.mkt-stock');if(stock)stock.textContent=`×${remaining}`;}
+    else {const stock=source.querySelector('.mkt-stock');if(stock){stock.textContent=`×${remaining}`;stock.classList.toggle('mkt-stock--last',remaining<=1);}}
     if(!card.quick){
       const target=document.getElementById(destination),print=cardEl(card,{effect,frame,size:'mkt'});
       try {if(target&&await boardMotionScope(signal=>moveOnBoard({kind:'purchase',source,target,card:print,signal}),3500))return null;}
