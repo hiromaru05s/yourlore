@@ -1,0 +1,172 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "width": 1024,
+      "side": 0,
+      "count": 2,
+      "mid": {
+        "same": true,
+        "privateFaces": 0,
+        "neutral": true,
+        "wakes": 1
+      },
+      "after": {
+        "layers": 0,
+        "same": true,
+        "visible": true,
+        "classes": true
+      }
+    },
+    {
+      "width": 1024,
+      "side": 0,
+      "count": 4,
+      "mid": {
+        "same": true,
+        "privateFaces": 0,
+        "neutral": true,
+        "wakes": 1
+      },
+      "after": {
+        "layers": 0,
+        "same": true,
+        "visible": true,
+        "classes": true
+      }
+    },
+    {
+      "width": 1024,
+      "side": 1,
+      "count": 2,
+      "mid": {
+        "same": true,
+        "privateFaces": 0,
+        "neutral": true,
+        "wakes": 1
+      },
+      "after": {
+        "layers": 0,
+        "same": true,
+        "visible": true,
+        "classes": true
+      }
+    },
+    {
+      "width": 1024,
+      "side": 1,
+      "count": 4,
+      "mid": {
+        "same": true,
+        "privateFaces": 0,
+        "neutral": true,
+        "wakes": 1
+      },
+      "after": {
+        "layers": 0,
+        "same": true,
+        "visible": true,
+        "classes": true
+      }
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 2,
+      "mid": {
+        "same": true,
+        "privateFaces": 0,
+        "neutral": true,
+        "wakes": 1
+      },
+      "after": {
+        "layers": 0,
+        "same": true,
+        "visible": true,
+        "classes": true
+      }
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 4,
+      "mid": {
+        "same": true,
+        "privateFaces": 0,
+        "neutral": true,
+        "wakes": 1
+      },
+      "after": {
+        "layers": 0,
+        "same": true,
+        "visible": true,
+        "classes": true
+      }
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 2,
+      "mid": {
+        "same": true,
+        "privateFaces": 0,
+        "neutral": true,
+        "wakes": 1
+      },
+      "after": {
+        "layers": 0,
+        "same": true,
+        "visible": true,
+        "classes": true
+      }
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 4,
+      "mid": {
+        "same": true,
+        "privateFaces": 0,
+        "neutral": true,
+        "wakes": 1
+      },
+      "after": {
+        "layers": 0,
+        "same": true,
+        "visible": true,
+        "classes": true
+      }
+    },
+    {
+      "cancel": "abort"
+    },
+    {
+      "cancel": "resize"
+    },
+    {
+      "cancel": "skip"
+    },
+    {
+      "cancel": "detach"
+    },
+    {
+      "turn": {
+        "draws": [
+          2
+        ],
+        "layers": 0
+      }
+    },
+    {
+      "simultaneousOpening": true
+    },
+    {
+      "customSleeve": true
+    },
+    {
+      "normalSix": true,
+      "reducedMotion": true
+    }
+  ],
+  "scope": "Actual controller/animateDraw with real board fixture, not authenticated PvP"
+}

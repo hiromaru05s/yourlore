@@ -22,3 +22,14 @@
 - 追加メッシュの上限、破片追従、表示時間、有限な頂点座標、geometry/material解放。
 - デプロイガードでコミット固定・最新main一致・DBスキーマ・client/server型検査・production suite・buildを確認する。
 - 公開後は配信素材の一致、本番クライアントの自分/相手側敗北、PC/スマホ、発音1回と採用音PCMハッシュ、結果遷移を確認する。API/WSは隔離fixtureで、実アカウント・実対戦データを変更しない。
+
+## 本番反映結果
+
+- 2026-11-19 10:46 KST、https://yourlore.xyz へ100%反映。
+- 公開ソース: `d1e1aff204b72516c947e2908c723b0161c2e9e5`。
+- Worker version: `a0c03cc8-175f-4175-b6d2-ca267f3a86d8`。deployment: `ff0093fa-3e6f-435d-a48e-6d1984251dd0`。[状態](qa/deployment.json)
+- production suite **301/301**、client/server型検査、DBスキーマ整合、design guard、buildが成功。[全体検査](qa/production-suite.json)
+- コミット固定ビルドのHTML/JS/CSS/JSONと固定モデル16種のデータ・画像、**172ファイル**が本番配信とSHA-256一致。[ビルド](qa/build-assets.json) / [配信確認](qa/production-assets.json)
+- PC 1280×900の自分側敗北、スマホ390×844の相手側敗北で、ヒビ→破裂・数値消失→1.5秒で揺れ停止→結果まで確認。音は各1回、48kHzの全PCMを使ったハッシュ `212725738` が選定音①と一致。ブラウザエラーと固定モデル読込エラーは0。[ブラウザ確認](qa/production-browser-report.json)
+- 本番配信素材による [PC画像](qa/production-me-1280.png) / [スマホ画像](qa/production-opp-390.png) を目視し、青い飛散と破片への追従を確認。
+- ブラウザ検証のAPI・WebSocketのみ隔離fixture。実ユーザー同士の対戦は今回の確認範囲外。見た目・音の採用判断は本チャットのユーザー指定に基づく。
