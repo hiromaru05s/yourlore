@@ -8,8 +8,8 @@ const api=(version:Version)=>((frames[version].contentWindow as unknown as {curr
 let ready=false,active:Version='study',generation=0,timer=0,playing=false;
 function caption(){
  $('viewport').dataset.active=active;$('version-badge').textContent=active==='study'?'B · 今回の試作':'A · 現行';
- $('effect-title').textContent=active==='study'?'青い枠と光の粒':'現行の通常召喚';
- $('description').textContent=active==='study'?'中央拡大と着地は現行。光の粒が着地直前で枠を作り直す。':'採用中の中央拡大・移動・落下・接地を再生。';
+ $('effect-title').textContent=active==='study'?'満ちる光と二重の枠':'現行の通常召喚';
+ $('description').textContent=active==='study'?'外枠は広がって消え、内側のマナは凝縮して着地先へ。':'採用中の中央拡大・移動・落下・接地を再生。';
 }
 async function stop(){++generation;clearTimeout(timer);playing=false;await Promise.all([api('current')?.cancel(),api('study')?.cancel()]);$('phase').textContent='停止';}
 async function start(version:Version=$<HTMLSelectElement>('compare').value==='study'?'study':'current'){

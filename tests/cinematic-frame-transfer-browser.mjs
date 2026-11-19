@@ -13,6 +13,8 @@ try{
   await page.waitForSelector('.mana-frame-transfer');
   const reveal=await page.evaluate(()=>{const n=document.querySelector('[data-borrowed-card-print="true"]');window.borrowed={children:[...n.children],images:[...n.querySelectorAll('img')].map(i=>i.currentSrc)};const r=n.getBoundingClientRect();return {opacity:Number(n.style.opacity),x:r.x+r.width/2,y:r.y+r.height/2};});
   assert.equal(reveal.opacity,0);assert(Math.abs(reveal.x-width/2)<1);assert(Math.abs(reveal.y-340)<1);
+  const interior=await page.evaluate(()=>{const c=document.querySelector('.mana-frame-transfer'),dpr=c.width/innerWidth,r=document.querySelector('[data-borrowed-card-print="true"]').getBoundingClientRect();return[.35,.5,.65].map(q=>[...c.getContext('2d').getImageData(Math.round((r.x+r.width*q)*dpr),Math.round((r.y+r.height*.5)*dpr),1,1).data]);});
+  assert(interior.every(([red,green,blue,a])=>a>220&&blue>red&&green>red),JSON.stringify(interior));
   for(const time of [140,340,580,710,810]){
    await page.evaluate(t=>currentVfx.reviewTime(t),time);await page.waitForFunction(t=>Number(document.querySelector('.mana-frame-transfer')?.dataset.time)===t,time);
    assert(await page.evaluate(()=>borrowed.children.every(n=>n.parentElement?.dataset.borrowedCardPrint==='true')));
@@ -33,7 +35,7 @@ try{
   assert(await field.evaluate(n=>borrowed.children.every(c=>c.parentElement===n)));
   assert.deepEqual(await field.locator('img').evaluateAll(a=>a.map(i=>i.currentSrc)),await page.evaluate(()=>borrowed.images));
   const trace=await page.evaluate(()=>currentVfx.info().trace),impact=trace.find(e=>e.phase==='接地・ヒビがゆっくり消える'),gone=trace.find(e=>e.phase==='ヒビ消失・定着');
-  assert(gone.at-impact.at>=980&&gone.at-impact.at<1100);checks.push({width,side,nativePrint:true,landingDifference:{x:after.x-before.x,y:after.y-before.y},crackDuration:gone.at-impact.at,samples});
+  assert(gone.at-impact.at>=980&&gone.at-impact.at<1100);checks.push({width,side,nativePrint:true,filledManaPixels:interior,landingDifference:{x:after.x-before.x,y:after.y-before.y},crackDuration:gone.at-impact.at,samples});
  }
  await page.setViewportSize({width:1100,height:680});await page.waitForTimeout(200);
  await page.evaluate(()=>{currentVfx.reviewTime(340);void currentVfx.run({kind:'summon',side:0,spell:'S4'});});await page.waitForSelector('.mana-frame-transfer');await page.evaluate(()=>currentVfx.cancel());

@@ -31,25 +31,59 @@ export function createFrameTransfer(report:(phase:string,detail?:object)=>void,r
    const destination=summonPlacement(face,w,h,0,false);
    flight.style.transition='none';flight.style.left=flight.style.top='0';flight.style.transformOrigin='0 0';
    const start=performance.now();let complete=false;
-   const particles=Array.from({length:216},(_,i)=>({p:perimeter(i/216),delay:random(i+3)*.092,flight:.24+random(i+10)*.065,size:.38+random(i+32)*.55,spread:random(i+82)-.5}));
+   const particles=Array.from({length:336},(_,i)=>({p:i<216?perimeter(i/216):{x:.09+random(i+4)*.82,y:.07+random(i+12)*.86},delay:random(i+3)*.075,flight:.22+random(i+10)*.05,size:.9+random(i+32)*1.6,spread:random(i+82)-.5}));
+   const contracted=source.translate(w/2,h/2).scale(.78).translate(-w/2,-h/2);
    const path=(i:number,t:number)=>{
-    const p=particles[i],a=project(source,w,h,p.p),b=project(destination,w,h,p.p),q=clamp((t-.18-p.delay)/p.flight),u=q*q*(3-2*q),fan=Math.sin(q*Math.PI);
+    const p=particles[i],a=project(contracted,w,h,p.p),b=project(destination,w,h,p.p),q=clamp((t-.24-p.delay)/p.flight),u=q*q*(3-2*q),fan=Math.sin(q*Math.PI);
     return{x:mix(a.x,b.x,u)+p.spread*r.width*.18*fan,y:mix(a.y,b.y,u)-r.width*(.10+.07*random(i+15))*fan,q};
    };
    const rim=(m:DOMMatrix,alpha:number,broken:boolean,t:number)=>{
     // A continuous luminous edge, with its body wider than the fine moving core.
     // At the destination individual pieces join only as their particles arrive.
     const points=Array.from({length:109},(_,i)=>project(m,w,h,perimeter(i/108)));
-    if(broken&&t<.16){
+    if(broken&&t<.23){
      c.beginPath();points.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();
-     for(const [width,color,strength,blur]of [[3.2,'#219eea',.85,14],[1.6,'#8fe2ff',.85,5],[.7,'#edfcff',.92,0]] as const){c.lineWidth=width;c.strokeStyle=color;c.shadowColor='#168ded';c.shadowBlur=blur;c.globalAlpha=alpha*strength;c.stroke();}c.shadowBlur=0;
-    }else for(let i=0;i<108;i++){
-     const p=particles[i*2],arrival=.18+p.delay+p.flight;
-     const life=broken?1-ease(.16+p.delay,.22+p.delay,t):ease(arrival-.035,arrival+.055,t);
-     const strength=alpha*life*(.8+.2*Math.sin(i*.19-t*12)**2),a=points[i],b=points[i+1];
-     c.lineCap='butt';c.shadowColor='#168ded';c.shadowBlur=5;line(c,a,b,2.1,'#43b8f2',strength*.72);c.shadowBlur=0;line(c,a,b,.65,'#e2faff',strength*.84);
+     for(const [width,color,strength,blur]of [[10,'#168de5',.9,25],[5,'#65d7ff',1,11],[1.8,'#edfcff',1,2]] as const){c.lineWidth=width;c.strokeStyle=color;c.shadowColor='#168ded';c.shadowBlur=blur;c.globalAlpha=alpha*strength;c.stroke();}c.shadowBlur=0;
+    }else{
+     // Batch equal-brightness fragments: a few soft light passes instead of
+     // one expensive blur for each tiny perimeter segment.
+     const bands=Array.from({length:8},()=>[] as Array<[Point,Point]>);
+     for(let i=0;i<108;i++){
+      const p=particles[i*2],arrival=.24+p.delay+p.flight;
+      const life=broken?1-ease(.23+p.delay,.29+p.delay,t):ease(arrival-.035,arrival+.055,t);
+      const strength=alpha*life*(.8+.2*Math.sin(i*.19-t*12)**2);
+      if(strength>.005)bands[Math.min(7,Math.floor(strength*8))].push([points[i],points[i+1]]);
+     }
+     c.lineCap='butt';
+     bands.forEach((segments,index)=>{
+      if(!segments.length)return;c.beginPath();for(const [a,b]of segments){c.moveTo(a.x,a.y);c.lineTo(b.x,b.y);}
+      c.shadowColor='#168ded';c.shadowBlur=9;c.lineWidth=4.8;c.strokeStyle='#25b3fa';c.globalAlpha=(index+1)/8*.9;c.stroke();
+      c.shadowBlur=2;c.lineWidth=1.5;c.strokeStyle='#e2faff';c.globalAlpha=(index+1)/8;c.stroke();
+     });c.shadowBlur=0;
     }
     c.lineCap='round';
+   };
+   const filledMana=(m:DOMMatrix,alpha:number,heat:number,t:number)=>{
+    if(alpha<=0)return;
+    const corners=[0,.25,.5,.75].map(q=>project(m,w,h,perimeter(q))),center=project(m,w,h,{x:.5,y:.5});
+    const ww=Math.hypot(corners[1].x-corners[0].x,corners[1].y-corners[0].y);
+    c.save();c.beginPath();corners.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();c.clip();
+    const tone=c.createLinearGradient(corners[0].x,corners[0].y,corners[2].x,corners[2].y);
+    tone.addColorStop(0,'#137ac1');tone.addColorStop(.42,'#74dcfa');tone.addColorStop(.64,'#a9efff');tone.addColorStop(1,'#1166b5');
+    c.globalAlpha=alpha*.94;c.fillStyle=tone;c.fillRect(0,0,innerWidth,innerHeight);
+    // Moving broad filaments give the filled face internal flow, rather than an empty border.
+    for(let i=0;i<7;i++){
+     const points=Array.from({length:25},(_,j)=>{const q=j/24;return project(m,w,h,{x:q,y:.13+i*.12+Math.sin(q*4.5+t*8+i*.8)*(.035+.04*heat)});});
+     c.beginPath();points.forEach((p,j)=>j?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.strokeStyle=i%2?'#b9f3ff':'#1686d7';c.lineWidth=ww*(i%2?.016:.032);c.globalAlpha=alpha*(i%2?.30:.20);c.stroke();
+    }
+    c.globalAlpha=alpha*(.42+.55*heat);c.drawImage(sprite,center.x-ww*.85,center.y-ww*1.05,ww*1.7,ww*2.1);c.restore();
+   };
+   const outerFrame=(t:number)=>{
+    const q=ease(.04,.34,t),scale=mix(1.08,1.46,q),alpha=ease(.025,.075,t)*(1-ease(.10,.34,t));
+    if(alpha<=0)return;
+    const m=source.translate(w/2,h/2).scale(scale).translate(-w/2,-h/2),points=[0,.25,.5,.75].map(q=>project(m,w,h,perimeter(q)));
+    c.save();c.beginPath();points.forEach((p,i)=>i?c.lineTo(p.x,p.y):c.moveTo(p.x,p.y));c.closePath();
+    c.shadowColor='#189fee';c.shadowBlur=20;c.strokeStyle='#32baff';c.lineWidth=7;c.globalAlpha=alpha*.8;c.stroke();c.shadowBlur=5;c.strokeStyle='#d1f7ff';c.lineWidth=2.2;c.globalAlpha=alpha*.9;c.stroke();c.restore();
    };
    try{return await new Promise<boolean>(resolve=>{
     const finish=(ok=false)=>{cancelAnimationFrame(frame);signal.removeEventListener('abort',abort);window.removeEventListener('resize',abort);document.removeEventListener('visibilitychange',hidden);abortTransfer=undefined;complete=ok;resolve(ok);};
@@ -58,21 +92,25 @@ export function createFrameTransfer(report:(phase:string,detail?:object)=>void,r
     const tick=()=>{
      if(signal.aborted||document.hidden||!face.isConnected||!flight.isConnected){finish();return;}
      const ms=Math.min(TRANSFER_MS,reviewTime()??performance.now()-start),t=ms/1000;
-     canvas!.dataset.time=String(ms);canvas!.dataset.phase=t<.18?'afterimage':t<.54?'transfer':t<.64?'reform':'materialize';
-     report(t<.18?'青い枠の残像':t<.54?'光の粒が高速移動':t<.64?'着地直前で枠を再形成':'カードが現れる',{transferMs:ms});
+     canvas!.dataset.time=String(ms);canvas!.dataset.phase=t<.24?'afterimage':t<.54?'transfer':t<.64?'reform':'materialize';
+     report(t<.24?'満ちたマナを凝縮':t<.54?'光の粒が高速移動':t<.64?'着地直前で枠を再形成':'カードが現れる',{transferMs:ms});
      c.clearRect(0,0,innerWidth,innerHeight);
      flight.style.transform=(t<.30?source:destination).toString();
      flight.style.opacity=String(t<.30?1-ease(.015,.13,t):ease(.59,.79,t));
-     rim(source,ease(0,.08,t),true,t);
+     const compression=ease(.075,.235,t),inner=source.translate(w/2,h/2).scale(mix(1,.78,compression)).translate(-w/2,-h/2);
+     outerFrame(t);
+     filledMana(inner,ease(.01,.095,t)*(1-ease(.23,.345,t)),compression,t);
+     rim(inner,ease(0,.08,t),true,t);
+     filledMana(destination,ease(.47,.62,t)*(1-ease(.66,.81,t))*.85,1,t);
      rim(destination,ease(.47,.63,t)*(1-ease(.66,.82,t)),false,t);
      for(let i=0;i<particles.length;i++){
-      const p=particles[i],position=path(i,t),age=t-.18-p.delay;
+      const p=particles[i],position=path(i,t),age=t-.24-p.delay;
       if(age<-.045||t>.80)continue;
-      const before=path(i,t-.014),alpha=ease(-.045,0,age)*(1-ease(.62+p.delay*.25,.79,t));
+      const before=path(i,t-.022),alpha=ease(-.045,0,age)*(1-ease(.62+p.delay*.25,.79,t));
       const size=p.size*mix(1,.58,position.q);
       // A short directional streak has a soft blue body and a narrow white core.
-      line(c,before,position,size*4,'#279ce6',alpha*.15);line(c,before,position,size,'#bdefff',alpha*.75);
-      c.globalAlpha=alpha*.77;c.drawImage(sprite,position.x-size*5,position.y-size*5,size*10,size*10);
+      line(c,before,position,size*5.5,'#198ee5',alpha*.30);line(c,before,position,size*2.1,'#77dbff',alpha*.85);line(c,before,position,size*.65,'#effcff',alpha);
+      c.globalAlpha=alpha*.95;c.drawImage(sprite,position.x-size*7,position.y-size*7,size*14,size*14);
      }
      c.globalAlpha=1;
      if(ms===TRANSFER_MS){finish(true);return;}frame=requestAnimationFrame(tick);
