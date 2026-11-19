@@ -1,0 +1,19 @@
+{
+  "sourceRoot": "/Users/hiromaru05s/.codex/worktrees/story-gallery-1119/LORE_TCG",
+  "origin": "https://yourlore.xyz",
+  "errors": [],
+  "apiErrors": [],
+  "checks": [
+    "click selects only",
+    "double-click and Enter launch",
+    "no lower detail panel",
+    "central locks",
+    "five GIF assets",
+    "NPC idle canvas changes",
+    "arrow/drag/touch",
+    "reduced motion",
+    "three languages",
+    "battle idle"
+  ],
+  "visual": "continuous recording provided; aesthetic review is separate"
+}

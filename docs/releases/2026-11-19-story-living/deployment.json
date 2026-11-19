@@ -1,0 +1,10 @@
+{
+  "source": "65f0775f772e0e3551ef745573c0fe66dffe09fa",
+  "implementation": "8f2fcb723",
+  "workerVersion": "5cfaba40-d699-464c-a4f5-8328a58334a6",
+  "url": "https://yourlore.xyz",
+  "environment": "production",
+  "date": "2026-11-19",
+  "guardedSnapshot": true,
+  "productionTests": {"passed": 301, "total": 301}
+}

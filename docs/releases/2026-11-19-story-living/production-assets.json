@@ -1,0 +1,82 @@
+[
+  {
+    "path": "/art/single-story/chapters-v2/chapter-1.gif",
+    "status": 200,
+    "type": "image/gif",
+    "bytes": 884598,
+    "sha256": "12c597765c935d18aada1fe2ee5d666f786416d33e71c93dc14069a96ac1dbc1",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-1.webp",
+    "status": 200,
+    "type": "image/webp",
+    "bytes": 157040,
+    "sha256": "c46102383959473f54c2bd2adfd881e7ca9921aa824d6708e931af991f6b5868",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-2.gif",
+    "status": 200,
+    "type": "image/gif",
+    "bytes": 910824,
+    "sha256": "eedc227a470edd56a6edfa7ff5e4ae5217b9fb2beacfd2e4ba97967403a3d403",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-2.webp",
+    "status": 200,
+    "type": "image/webp",
+    "bytes": 157156,
+    "sha256": "80f564d5bb45a1e50e6fbc1944d6af820f496acc5e4f559f56de5eedf975a5eb",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-3.gif",
+    "status": 200,
+    "type": "image/gif",
+    "bytes": 2286477,
+    "sha256": "9981809bbac9e379fbb481f443875cd0b4db381ccd72fda478ca39aa1a9eaa2b",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-3.webp",
+    "status": 200,
+    "type": "image/webp",
+    "bytes": 165334,
+    "sha256": "9dfb981242d5a7e842fb53809a16ffc824ec50208dc8c485be7eeffc203c72a0",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-4.gif",
+    "status": 200,
+    "type": "image/gif",
+    "bytes": 791420,
+    "sha256": "c26a5a8f06d8a805443daccde463a1de0590dce14d8612bc879108afb78fa6c4",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-4.webp",
+    "status": 200,
+    "type": "image/webp",
+    "bytes": 129858,
+    "sha256": "bc31145cfece62dd1328804fa9c4729b42edd857b2eda2de4248ae967c0e0fcc",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-5.gif",
+    "status": 200,
+    "type": "image/gif",
+    "bytes": 631561,
+    "sha256": "cd0951f443082aa57eb1bb48f4efa9d1f7459ed01512763e52ae6b47cc2b919c",
+    "matchesSource": true
+  },
+  {
+    "path": "/art/single-story/chapters-v2/chapter-5.webp",
+    "status": 200,
+    "type": "image/webp",
+    "bytes": 159028,
+    "sha256": "ad02bdc17bbbce3380b33155b1c7451604b7b85f85089f742b52b9d97917d2d6",
+    "matchesSource": true
+  }
+]
