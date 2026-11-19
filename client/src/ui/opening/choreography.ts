@@ -1,0 +1,5 @@
+import {OPENING_TOSS_MS} from '../../shared/opening';
+export const OPENING_RECOIL_SECONDS=.25;
+export const OPENING_REJOIN_SECONDS=OPENING_TOSS_MS/1000+OPENING_RECOIL_SECONDS;
+
+export const MOBILE_OPENING_COIN_SCALE=.9;

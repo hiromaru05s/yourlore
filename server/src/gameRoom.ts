@@ -4,6 +4,7 @@ import { reserveNpcDeck } from './botRotation';
 import {publicNameEvents} from './publicNames';
 import {newMedalDuel} from '../../client/src/shared/medalTracking';
 import {duelAppearance,settleMedals} from './medals';
+import {duelProfile} from './duelProfile';
 import { actionChangesState } from '../../client/src/shared/botActions';
 import { experienceStatements, experienceReceipt } from './progression';
 import { BOT_FIRST_CLEAR_EXP, ONLINE_WIN_EXP, ONLINE_LOSS_EXP, type ExperienceReceipt } from '../../client/src/shared/progression';
@@ -309,6 +310,7 @@ export class GameRoom {
         room.game.medalDuel=newMedalDuel();
         const [first, second] = await Promise.all(room.players.map((p,i) => bot && i === 1 ? null : duelAppearance(this.env,p.id)));
         room.game.medals = [first?.medal ?? null, second?.medal ?? null];
+        room.game.duelProfiles = await Promise.all(room.players.map((p,i)=>bot&&i===1?Promise.resolve(null):duelProfile(this.env,p.id,room.ranked))) as NonNullable<GameState["duelProfiles"]>;
         room.game.portraitAvatars = [first?.avatar ?? null, story?.avatar ?? npc?.avatar ?? (body.botId ? matchBot(body.botId)?.avatar : second?.avatar) ?? null];
         room.game.portraitBackgrounds = [first?.background ?? 'plain', second?.background ?? 'plain'];
         room.rewardDecks=room.game.players.map(p=>[...p.hand,...p.deck,...p.discard].map(c=>c.id)) as [string[],string[]];

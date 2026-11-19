@@ -1,0 +1,12 @@
+{
+  "errors": [],
+  "loopSeamsEqual": {
+    "SEEKER_BLUE": true,
+    "NPC_LUMI": true,
+    "NPC_NOEL": true,
+    "NPC_VERA": true
+  },
+  "frames": 48,
+  "fps": 20,
+  "size": 768
+}

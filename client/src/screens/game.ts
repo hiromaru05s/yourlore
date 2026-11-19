@@ -1,3 +1,4 @@
+import {seekerLevel} from '../shared/progression';
 import {setLocalCardFrame,clearCardFrameContext,disposeCardFrames} from '../ui/cardFrame';
 import {setLocalCardEffect,clearCardEffectContext,disposeCardEffects} from '../ui/cardFinish';
 import { api } from '../net/api';
@@ -47,29 +48,26 @@ export function mountGame(app: App, opts: GameOpts): Screen {
   // coin-toss faces = the two players' profile avatars (opponent falls back to initial)
   const ownSeeker = app.user?.avatar === "SEEKER_RED" ? "SEEKER_RED" : "SEEKER_BLUE";
   setCoinProfiles(
-    { avatar: ownSeeker, name: app.user?.display ?? "YOU", medal:app.user?.badge },
+    { avatar: ownSeeker, name: app.user?.display ?? "YOU", medal:app.user?.badge, level:seekerLevel(app.user?.exp).level },
     opts.mode === "online"
       ? { avatar: opts.oppAvatar ?? "SEEKER_RED", name: opts.oppName }
       : { avatar: story?.avatar ?? npc?.avatar ?? "SEEKER_RED", name: story?.name[getLang()] ?? npc?.name[getLang()] ?? "TUTOR" },
   );
 
   let stopMusic: (() => void) | undefined;
-  const startMusic = (elapsedMs?: number) => {
+  const startMusic = () => {
     if (stopMusic || opts.mode === "tutorial") return;
     stopMusic = startBackgroundMusic({
       url: "/music/poised-opening.mp3",
       gain: HOME_MUSIC_GAIN * .6,
       gapMs: 3000,
-      intro: elapsedMs != null && elapsedMs < 6520
-        ? { url: "/music/clash-of-blades.mp3", durationSeconds: 6.52, offsetSeconds: Math.max(0, elapsedMs) / 1000 }
-        : undefined,
     });
   };
   const experienceUserId=app.user?.id;
   let storyWon: boolean | null = null;
   const exits: ControllerExits = {
     onExperience: () => {if(experienceUserId && experienceUserId!=="local-guest-user")void api.me().then(fresh=>{if(fresh?.id===experienceUserId && app.user?.id===experienceUserId){app.user=fresh;document.dispatchEvent(new Event("lore:user"));}});},
-    onOpeningStart: opts.mode === "tutorial" ? undefined : startMusic,
+    // The opening owns its seven synchronized cues; battle music begins after it.
     onBattleReady: () => startMusic(),
     onHome: () => opts.mode === "tutorial" ? app.tutorial() : story ? app.single({tab:'story'}) : opts.mode==='bot'||(opts.mode==='online'&&(opts.difficulty??ctrl.botDifficulty)) ? app.single() : singleNormalReturn ? app.single({chapter:3}) : app.home(),
     onHomeLabel: () => opts.mode === 'tutorial'

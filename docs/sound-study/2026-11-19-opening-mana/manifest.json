@@ -1,0 +1,161 @@
+{
+  "sampleRate": 48000,
+  "channels": 2,
+  "timing": {
+    "rise": 0.18,
+    "impact": 1.46,
+    "toss": 1.46,
+    "rejoin": 1.71,
+    "friction": 1.71,
+    "land": 3.22,
+    "exit": 5.12
+  },
+  "mixes": {
+    "a": {
+      "peakDb": -4.9,
+      "clippedSamples": 0
+    },
+    "b": {
+      "peakDb": -5.53,
+      "clippedSamples": 0
+    }
+  },
+  "assets": [
+    {
+      "variant": "a",
+      "cue": "rise",
+      "file": "client/public/sfx/opening-mana-v1/a-rise.wav",
+      "seconds": 1.12,
+      "peakDb": -13.0,
+      "rmsDb": -28.35,
+      "sha256": "d8b71656903965e96c3f31af20b221859db08a8a1d01e46fe85e3250b692922c"
+    },
+    {
+      "variant": "a",
+      "cue": "impact",
+      "file": "client/public/sfx/opening-mana-v1/a-impact.wav",
+      "seconds": 0.55,
+      "peakDb": -7.5,
+      "rmsDb": -23.85,
+      "sha256": "576165e17b9353e050d1d0e7ebff4bbacb8f4a7c90f0d9707f19a66e7d482849"
+    },
+    {
+      "variant": "a",
+      "cue": "toss",
+      "file": "client/public/sfx/opening-mana-v1/a-toss.wav",
+      "seconds": 1.76,
+      "peakDb": -12.0,
+      "rmsDb": -33.57,
+      "sha256": "5d8be19d28590458b32dc2de75ff130746e9b51171a8889f297093b60ce46675"
+    },
+    {
+      "variant": "a",
+      "cue": "rejoin",
+      "file": "client/public/sfx/opening-mana-v1/a-rejoin.wav",
+      "seconds": 0.76,
+      "peakDb": -9.0,
+      "rmsDb": -28.56,
+      "sha256": "85c8ef8f275598863fe931aee5433f59e8e0fad5874add16295eb109a32ea904"
+    },
+    {
+      "variant": "a",
+      "cue": "friction",
+      "file": "client/public/sfx/opening-mana-v1/a-friction.wav",
+      "seconds": 3.8,
+      "peakDb": -17.0,
+      "rmsDb": -31.01,
+      "sha256": "6154205964724a8fef54df4fc70792ea910a19ae96d761d0fb290eaea71cb3ac"
+    },
+    {
+      "variant": "a",
+      "cue": "land",
+      "file": "client/public/sfx/opening-mana-v1/a-land.wav",
+      "seconds": 1.65,
+      "peakDb": -7.5,
+      "rmsDb": -27.24,
+      "sha256": "6db7b90d7f9f663315afaa1d872693ad15dcf9c8f2813c682bfb40c1bc43562f"
+    },
+    {
+      "variant": "a",
+      "cue": "exit",
+      "file": "client/public/sfx/opening-mana-v1/a-exit.wav",
+      "seconds": 0.46,
+      "peakDb": -13.0,
+      "rmsDb": -28.72,
+      "sha256": "6bb0382a921c4bb056f58d4cdbb923c8f912f9f3a117e883d47ec18b56226c17"
+    },
+    {
+      "variant": "b",
+      "cue": "rise",
+      "file": "client/public/sfx/opening-mana-v1/b-rise.wav",
+      "seconds": 1.12,
+      "peakDb": -13.0,
+      "rmsDb": -29.84,
+      "sha256": "1d65036bab63b8fcc8ad706c9991a017540046b3fe1aeca0a5fd367bedc87a61"
+    },
+    {
+      "variant": "b",
+      "cue": "impact",
+      "file": "client/public/sfx/opening-mana-v1/b-impact.wav",
+      "seconds": 0.55,
+      "peakDb": -7.5,
+      "rmsDb": -23.28,
+      "sha256": "bf9c0c85439f511e37247a9e1515ad65fb7aeeca3b4272995cb504ad49705499"
+    },
+    {
+      "variant": "b",
+      "cue": "toss",
+      "file": "client/public/sfx/opening-mana-v1/b-toss.wav",
+      "seconds": 1.76,
+      "peakDb": -12.0,
+      "rmsDb": -34.31,
+      "sha256": "cb754aa9a9bea1002c89a6e7e5e901c3188a2852843c7eafdd5c3391753bce96"
+    },
+    {
+      "variant": "b",
+      "cue": "rejoin",
+      "file": "client/public/sfx/opening-mana-v1/b-rejoin.wav",
+      "seconds": 0.76,
+      "peakDb": -9.0,
+      "rmsDb": -28.79,
+      "sha256": "d651596e2dd107148efbf55c068d2e6eb076383e18990721eed793b82b1af8e6"
+    },
+    {
+      "variant": "b",
+      "cue": "friction",
+      "file": "client/public/sfx/opening-mana-v1/b-friction.wav",
+      "seconds": 3.8,
+      "peakDb": -17.0,
+      "rmsDb": -34.18,
+      "sha256": "d3bea93f35dc33a91192d22d3a32afc8e00f30b25b763d47419aa19eef6a5281"
+    },
+    {
+      "variant": "b",
+      "cue": "land",
+      "file": "client/public/sfx/opening-mana-v1/b-land.wav",
+      "seconds": 1.65,
+      "peakDb": -7.5,
+      "rmsDb": -29.21,
+      "sha256": "11f3772b6d1ff3ea4aca1d9f6143cb5612289e7f5d84ad961ad758bf643e8de8"
+    },
+    {
+      "variant": "b",
+      "cue": "exit",
+      "file": "client/public/sfx/opening-mana-v1/b-exit.wav",
+      "seconds": 0.46,
+      "peakDb": -13.0,
+      "rmsDb": -27.3,
+      "sha256": "2d85409c41194f117dd5928b38bb919ca7d104e543c10d825e949c86bc615e30"
+    }
+  ],
+  "sources": [
+    "impactMetal_heavy_002.ogg",
+    "impactMetal_light_001.ogg",
+    "impactMetal_light_002.ogg",
+    "impactMetal_light_004.ogg",
+    "impactMetal_medium_003.ogg",
+    "impactMetal_medium_004.ogg"
+  ],
+  "license": "Kenney Impact Sounds CC0; original procedural air/pressure/arc layers",
+  "sourceDirectory": "docs/sound-study/2026-10-08-chosen-seven/sources"
+}

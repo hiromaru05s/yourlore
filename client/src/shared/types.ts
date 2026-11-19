@@ -283,6 +283,7 @@ export interface GameState {
   castleReworkApplied?: boolean;
   questReworkApplied?: boolean;
   medals?: [string|null,string|null];
+  duelProfiles?: [import("./duelProfile").DuelProfile|null,import("./duelProfile").DuelProfile|null];
   /** Server-authoritative achievement counters; never sent to the opponent. */
   medalDuel?: import("./medalTracking").MedalDuel;
   botDifficulty?: import("./bot").BotDifficulty;

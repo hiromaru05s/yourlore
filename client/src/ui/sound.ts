@@ -1,10 +1,11 @@
 /** TCG v5 sound bank; preserve approved HOME, purchase and draw recordings. */
-import {SFX_NAMES,soundUrls,type SfxName} from './soundAssets';
+import {SFX_NAMES,soundUrls,type SoundName} from './soundAssets';
 export {SFX_NAMES,soundUrls,type SfxName} from './soundAssets';
-const UI=new Set<SfxName>(['click','pop','error']);
-type Family='ui'|'paper'|'combat'|'magic'|'ceremony';
+const UI=new Set<SoundName>(['click','pop','error']);
+type Family='ui'|'paper'|'combat'|'magic'|'ceremony'|'opening';
 interface Policy {family:Family;gap:number;priority:number;}
-const policy=(name:SfxName):Policy=>{
+const policy=(name:SoundName):Policy=>{
+ if(name.startsWith('opening-'))return {family:'opening',gap:65,priority:3};
  if(UI.has(name))return {family:'ui',gap:90,priority:0};
  if(['draw','discard','shuffle','trapSet','buy','coin','mana-pay'].includes(name))return {family:'paper',gap:name==='draw'?65:120,priority:1};
  if(name==='play')return {family:'magic',gap:120,priority:2};
@@ -12,15 +13,15 @@ const policy=(name:SfxName):Policy=>{
  if(['win','lose','drawGame','duel-start','match','rankUp','rankDown','rankPromote','chosenCrown'].includes(name))return {family:'ceremony',gap:500,priority:4};
  return {family:'combat',gap:65,priority:3};
 };
-const LIMIT:Record<Family,number>={ui:1,paper:3,combat:3,magic:2,ceremony:1};
+const LIMIT:Record<Family,number>={ui:1,paper:3,combat:3,magic:2,ceremony:1,opening:6};
 let volume=.7;try{const v=parseFloat(localStorage.getItem('lore_sfx')??'');if(Number.isFinite(v))volume=Math.max(0,Math.min(1,v));}catch{}
 let lastAudibleVolume=.7;
 try{const v=Number(localStorage.getItem('lore_sfx_last_audible'));if(Number.isFinite(v)&&v>0)lastAudibleVolume=Math.min(1,v);}catch{}
 if(volume>0)lastAudibleVolume=volume;
 let ctx:AudioContext|null=null,master:GainNode|null=null,installed=false,unlocked=false,epoch=0;
 const encoded=new Map<string,Promise<ArrayBuffer>>(),decoded=new Map<string,Promise<AudioBuffer>>(),ready=new Map<string,AudioBuffer>();
-const last=new Map<SfxName,number>(),cycle=new Map<SfxName,number>();
-interface Voice {name:SfxName;source:AudioBufferSourceNode;gain:GainNode;family:Family;priority:number;finish:()=>void;}
+const last=new Map<SoundName,number>(),cycle=new Map<SoundName,number>();
+interface Voice {name:SoundName;source:AudioBufferSourceNode;gain:GainNode;family:Family;priority:number;finish:()=>void;}
 const active=new Set<Voice>();
 function bytes(url:string){let p=encoded.get(url);if(!p){p=fetch(url).then(r=>{if(!r.ok)throw new Error('sound unavailable');return r.arrayBuffer();}).catch(e=>{encoded.delete(url);throw e;});encoded.set(url,p);}return p;}
 function buffer(url:string){let p=decoded.get(url);if(!p){p=bytes(url).then(b=>ctx!.decodeAudioData(b.slice(0))).then(b=>{ready.set(url,b);return b;}).catch(e=>{decoded.delete(url);throw e;});decoded.set(url,p);}return p;}
@@ -40,7 +41,7 @@ export function initSound(){
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopSounds();});
 }
 /** Two background requests; artwork and gameplay never wait for audio. */
-export async function warmSounds(names:readonly SfxName[]=SFX_NAMES):Promise<void>{
+export async function warmSounds(names:readonly SoundName[]=SFX_NAMES):Promise<void>{
  const urls=[...new Set(names.flatMap(soundUrls))];let index=0;
  const worker=async()=>{while(index<urls.length){const url=urls[index++];try{if(ctx)await buffer(url);else await bytes(url);}catch{/* Optional. */}}};
  await Promise.all([worker(),worker()]);
@@ -58,7 +59,7 @@ export function getSfxVolume(){return volume;}
 export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));if(volume>0)lastAudibleVolume=volume;try{localStorage.setItem('lore_sfx',String(volume));localStorage.setItem('lore_sfx_last_audible',String(lastAudibleVolume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();document.dispatchEvent(new Event('lore:volume-change'));}
 export function toggleSfxMuted(){setSfxVolume(volume>0?0:lastAudibleVolume);}
 export interface SoundOptions {signal?:AbortSignal;gain?:number;rate?:number;pan?:number;}
-export function sfx(name:SfxName,options:SoundOptions={}):void{
+export function sfx(name:SoundName,options:SoundOptions={}):void{
  if(!unlocked||!ctx||!master||volume<=0||document.hidden||options.signal?.aborted)return;
  if(ctx.state==='suspended')void ctx.resume().catch(()=>{});
  const now=performance.now(),p=policy(name);if(now-(last.get(name)??-Infinity)<p.gap)return;

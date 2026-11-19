@@ -7,7 +7,7 @@ const origin=process.env.LORE_TEST_ORIGIN||'http://127.0.0.1:5637';
 const out=process.env.LORE_TEST_OUTPUT||'/tmp/lore-bot-opening-browser';
 await fs.mkdir(out,{recursive:true});
 const dir=await fs.mkdtemp('/tmp/lore-bot-opening-core-');
-const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader','--disable-quic']});
+const browser=await chromium.launch({channel:'chrome',headless:true,args:['--use-angle=metal','--disable-quic']});
 const checks=[];
 try{
  await build({stdin:{contents:"export {createGame} from './client/src/shared/engine'; export {BOT_NPCS} from './client/src/shared/botNpcs'; export {DUEL_OPENING_MS} from './client/src/shared/opening';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',outfile:dir+'/core.mjs'});
@@ -40,7 +40,7 @@ try{
    window.openingNpcs=[];
    const draw=CanvasRenderingContext2D.prototype.drawImage;
    CanvasRenderingContext2D.prototype.drawImage=function(image,...args){
-    if(this.canvas.closest('.duel-opening')&&image instanceof HTMLImageElement&&image.src.includes('/art/npcs/'))window.openingNpcs.push(image.src);
+    if(this.canvas.closest('.duel-opening')){if(image instanceof HTMLImageElement&&image.src.includes('/art/npcs/'))window.openingNpcs.push(image.src);if(image instanceof HTMLCanvasElement&&['lumi','noel','vera'].includes(image.dataset.duelPortrait))window.openingNpcs.push('wind:'+image.dataset.duelPortrait);}
     return draw.call(this,image,...args);
    };
    const raf=window.requestAnimationFrame;
@@ -50,7 +50,7 @@ try{
   await page.waitForFunction(()=>window.openingFrame);
   await fs.writeFile(`${out}/opening-${npc.id}.png`,Buffer.from((await page.evaluate(()=>window.openingFrame)).split(',')[1],'base64'));
   const sources=await page.evaluate(()=>[...new Set(window.openingNpcs)]);
-  assert.deepEqual(sources.map(s=>new URL(s).pathname),[npc.portrait]);
+  assert.deepEqual(sources.map(s=>s.startsWith('wind:')?s:new URL(s).pathname),[npc.id==='sion'?npc.portrait:'wind:'+npc.id]);
   await page.waitForFunction(()=>!document.querySelector('.duel-opening')&&!document.querySelector('.game')?.inert);
   assert.equal(await page.locator('#portraitOpp .pt-name').textContent(),npc.name.ja);
   assert((await page.locator('#portraitOpp .avatar img').getAttribute('src')).endsWith('/'+npc.id+'.webp'));

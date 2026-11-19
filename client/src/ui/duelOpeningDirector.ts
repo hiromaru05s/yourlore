@@ -2,10 +2,14 @@ import {medalName} from './medal';
 import {DUEL_OPENING_MS,OPENING_TOSS_MS,OPENING_REVEAL_MS,OPENING_EXIT_MS,OPENING_VISUAL_MS,OPENING_DEAL_MS,openingPhase} from '../shared/opening';
 import {getLang} from '../i18n';
 import {openingAudio,warmOpeningSound} from './openingSound';
+import type {OpeningCue,OpeningSoundMix} from './opening/soundBank';
+import {OPENING_REJOIN_SECONDS} from './opening/choreography';
 import type {createOpeningRenderer} from './opening/renderer';
+import {duelWindAssets} from './opening/windAssets';
 import {warmImages} from './imageAssets';
-import {OPENING_PORTRAIT_URL} from './opening/assets';
-export interface OpeningProfile {name:string;avatar:string|null;medal?:string|null;}
+import {OPENING_PORTRAIT_URL,OPENING_NAMEPLATE_URL} from './opening/assets';
+import type {DuelProfile} from '../shared/duelProfile';
+export interface OpeningProfile extends DuelProfile {name:string;avatar:string|null;medal?:string|null;}
 export interface OpeningOptions {
   root:HTMLElement;me:OpeningProfile;opp:OpeningProfile;firstIsMe:boolean;signal:AbortSignal;
   /** Adjusted to the authoritative server clock; negative during lead-in. */
@@ -16,13 +20,17 @@ export interface OpeningOptions {
   onStart?:(elapsedMs:number)=>void;
   /** Developer preview only; never advances a game. */
   sampleMs?:number;
+  /** Optional audition override; production defaults to the approved seven-cue mix. */
+  soundMix?:OpeningSoundMix;
+  soundRate?:number;
+  ranked?:boolean;
 }
 const label=(ja:string,en:string,ko:string)=>getLang()==='ja'?ja:getLang()==='en'?en:ko;
 let modulePromise:Promise<typeof import('./opening/renderer')>|undefined;
 const rendererModule=()=>modulePromise??=import('./opening/renderer').catch(error=>{modulePromise=undefined;throw error;});
-export async function warmOpening():Promise<void>{
+export async function warmOpening(avatars:readonly (string|null)[]=[null]):Promise<void>{
   void warmOpeningSound();
-  await Promise.all([rendererModule().catch(()=>{}),warmImages([OPENING_PORTRAIT_URL])]);
+  await Promise.all([rendererModule().catch(()=>{}),warmImages([OPENING_PORTRAIT_URL,OPENING_NAMEPLATE_URL,...duelWindAssets(avatars)])]);
 }
 
 /** Faceoff, coin toss and battle-card turn assignment. Turn banners remain owned by the controller. */
@@ -33,14 +41,14 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
   host.style.cssText='display:block;background:#07101d;backdrop-filter:none;animation:none';
   host.setAttribute('role','region');
   host.dataset.medals=JSON.stringify([o.me.medal??null,o.opp.medal??null]);
-  host.setAttribute('aria-description',[o.me,o.opp].map(p=>`${p.name}: ${medalName(p.medal)}`).join(' / '));host.setAttribute('aria-label',label('デュエル開幕','Duel opening','듀얼 시작'));
+  host.setAttribute('aria-description',[o.me,o.opp].map(p=>`${p.name}: Lv. ${p.level??'—'} / ${medalName(p.medal)||label('勲章なし','No medal','훈장 없음')}${o.ranked?` / ${p.rating?.tier??'—'} MMR ${p.rating?.mmr??'—'}`:''}`).join(' / '));host.setAttribute('aria-label',label('デュエル開幕','Duel opening','듀얼 시작'));
   const canvas=document.createElement('canvas');canvas.style.cssText='display:block;width:100%;height:100%';canvas.setAttribute('aria-hidden','true');
   const result=document.createElement('div');result.setAttribute('role','status');result.setAttribute('aria-live','polite');
   result.style.cssText='position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)';
   host.append(canvas,result);document.body.append(host);game?.classList.add('duel-intro-active');
   // The opaque cinematic is mounted before releasing the pre-opening cover.
   o.root.classList.remove('opening-pending');
-  const life=new AbortController(),audio=openingAudio();
+  const life=new AbortController(),audio=openingAudio(o.soundMix,o.soundRate);
   let closed=false,redraw=()=>{};
   let renderer:ReturnType<typeof createOpeningRenderer>|undefined,frame=0,last=-1,started=false,skipped=false,dealt=false;
   let deal:Promise<void>=Promise.resolve(),release=()=>{},loadTimer:ReturnType<typeof setTimeout>|undefined;
@@ -63,14 +71,15 @@ export async function playDuelOpening(o:OpeningOptions):Promise<void>{
       host.style.background='none';
       const visual=reduced&&ms>=0?Math.max(ms,OPENING_REVEAL_MS+900):ms;
       if(!skipped){
-        renderer?.draw(canvas,Math.max(0,visual)/1000,{first:o.firstIsMe,light:false,reduced,board:true,names:[o.me.name,o.opp.name],avatars:[o.me.avatar,o.opp.avatar],medals:[o.me.medal??null,o.opp.medal??null]});
+        renderer?.draw(canvas,Math.max(0,visual)/1000,{first:o.firstIsMe,light:false,reduced,board:true,names:[o.me.name,o.opp.name],avatars:[o.me.avatar,o.opp.avatar],medals:[o.me.medal??null,o.opp.medal??null],profiles:[o.me,o.opp],ranked:o.ranked});
         if(!renderer){canvas.style.background=ms<OPENING_VISUAL_MS?'#07101d':'transparent';result.style.cssText='position:absolute;inset:40% 0 auto;text-align:center;color:'+(o.firstIsMe?'#72b7ff':'#ff8187')+';font:40px Georgia';}
       }
       const showResult=!skipped&&visual>=OPENING_REVEAL_MS&&ms<OPENING_VISUAL_MS;
       result.textContent=showResult?(o.firstIsMe?label('あなたは先攻','You go first','당신은 선공'):label('あなたは後攻','You go second','당신은 후공')):'';
       if(!reduced&&!skipped&&o.sampleMs==null){
-        for(const [at,key] of [[180,'rise'],[OPENING_TOSS_MS,'toss'],[OPENING_REVEAL_MS,'land']] as const)
-          if(!(key==='rise'&&o.onStart)&&last<at&&ms>=at&&ms-at<150)audio.play(key);
+        const cues:ReadonlyArray<readonly [number,OpeningCue]>=[[180,'rise'],[OPENING_TOSS_MS,'impact'],[OPENING_TOSS_MS,'toss'],[OPENING_REJOIN_SECONDS*1000,'rejoin'],[OPENING_REJOIN_SECONDS*1000,'friction'],[OPENING_REVEAL_MS,'land'],[OPENING_EXIT_MS,'exit']];
+        for(const [at,key] of cues)
+          if(last<at&&ms>=at&&ms-at<150)audio.play(key);
       }
       last=ms;
       if(o.sampleMs!=null&&ms>=OPENING_DEAL_MS)game?.classList.add('intro-dealing');

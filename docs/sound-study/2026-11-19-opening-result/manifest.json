@@ -1,0 +1,26 @@
+[
+  {
+    "variant": "c",
+    "title": "刻印の確定",
+    "file": "client/public/sfx/opening-mana-v1/c-land.wav",
+    "seconds": 0.82,
+    "peakDb": -9,
+    "sha256": "24d6e39468775e5e29dd8d82560629442c0ce4ca504bc9dee04d19ef18572cff"
+  },
+  {
+    "variant": "d",
+    "title": "蒼圧の収束",
+    "file": "client/public/sfx/opening-mana-v1/d-land.wav",
+    "seconds": 1.12,
+    "peakDb": -9,
+    "sha256": "bae747ef630806de798c7c624bfa04f02d41e89d0f1119511b32b5bf4941b09d"
+  },
+  {
+    "variant": "e",
+    "title": "星紋の調律",
+    "file": "client/public/sfx/opening-mana-v1/e-land.wav",
+    "seconds": 1.42,
+    "peakDb": -9,
+    "sha256": "be98e3f86a6a26db4dd687ff9e0c666d3bc94d32f5e27781fe6fca15198c2f18"
+  }
+]

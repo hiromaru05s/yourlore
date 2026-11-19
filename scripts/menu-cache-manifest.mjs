@@ -3,7 +3,7 @@ import {readFile,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
-const mime={'.gif':'image/gif','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.jpg':'image/jpeg','.glb':'model/gltf-binary','.json':'application/json','.ttf':'font/ttf','.woff2':'font/woff2','.mp3':'audio/mpeg'};
+const mime={'.gif':'image/gif','.webp':'image/webp','.png':'image/png','.svg':'image/svg+xml','.jpg':'image/jpeg','.glb':'model/gltf-binary','.json':'application/json','.ttf':'font/ttf','.woff2':'font/woff2','.mp3':'audio/mpeg','.wav':'audio/wav'};
 /** Original files, grouped into bounded immutable transfers. Entries retain their
  * own hash: a patch can fetch just its changed files instead of the whole pack. */
 export async function menuCacheManifest(root) {

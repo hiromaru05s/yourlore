@@ -1,3 +1,4 @@
+import {MOBILE_OPENING_COIN_SCALE} from './choreography';
 import {OPENING_REVEAL_MS,OPENING_EXIT_MS,OPENING_VISUAL_MS} from '../../shared/opening';
 import {getLang} from '../../i18n';
 
@@ -53,7 +54,7 @@ export function paintOrder(g:CanvasRenderingContext2D,x:number,y:number,size:num
 export function resultScene(g:CanvasRenderingContext2D,t:number,W:number,H:number,o:ResultOptions,coin:CoinDraw){
   const {land,exit,end}=RESULT_TIMING;
   if(t<land||t>=end)return;
-  const mobile=H>1000,unit=mobile?1.25:1,cx=W/2,cy=H*(mobile?.475:.47);
+  const mobile=H>1000,unit=mobile?MOBILE_OPENING_COIN_SCALE:1,cx=W/2,cy=H*(mobile?.475:.47);
   const age=o.reduced?1:t-land,settle=ease(age/.52);
   const visible=1-clamp((t-exit)/(end-exit));
   const radius=(122-64*settle)*unit*(o.reduced?1:visible);

@@ -16,7 +16,7 @@ class FakeAudio extends Node{
  createDynamicsCompressor(){const n=new Node();for(const k of ['threshold','knee','ratio','attack','release'])n[k]=param();return n;}
  decodeAudioData(b){return Promise.resolve({name:new TextDecoder().decode(b)});}
  resume(){this.state='running';return Promise.resolve();}
- createBufferSource(){const n=new Node();n.start=()=>starts.push(n);n.stop=()=>{stops.push(n);n.onended?.();};return n;}
+ createBufferSource(){const n=new Node();n.playbackRate=param();n.start=()=>starts.push(n);n.stop=()=>{stops.push(n);n.onended?.();};return n;}
 }
 globalThis.AudioContext=FakeAudio;
 globalThis.fetch=async url=>{fetches++;if(pending)await pending;return {ok:true,arrayBuffer:async()=>new TextEncoder().encode(url).buffer};};
@@ -36,13 +36,14 @@ try{
  for(const name of ['click','pop','error'])assert(a.soundUrls(name).every(u=>u.includes('/lore-v3/')));
  for(const name of ['coin','match','buy'])assert.deepEqual(a.soundUrls(name),[`/sfx/lore-v4/${name}.mp3`]);
  assert.deepEqual(a.soundUrls('draw'),['/sfx/lore-v4/draw-3.mp3']);
- for(const name of a.SFX_NAMES.filter(n=>!['click','pop','error','coin','match','buy','draw','play','summon','chosenCrown'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v5/')));
+ for(const name of a.SFX_NAMES.filter(n=>!n.startsWith('opening-')&&!['click','pop','error','coin','match','buy','draw','play','summon','chosenCrown'].includes(n)))assert(a.soundUrls(name).every(u=>u.includes('/lore-v5/')));
  for(let i=0;i<5;i++){time+=100;a.sfx('draw');assert(starts.at(-1).buffer.name.endsWith('/draw-3.mp3'),'draw never cycles to rejected variants');}
  a.stopSounds();time+=1000;a.sfx('attack');const sweep=starts.at(-1);a.sfx('impact');assert(stops.includes(sweep),'landing fades the outgoing attack sweep');
  time+=1000;a.sfx('mana');a.sfx('draw');const battle=starts.slice(-3);a.sfx('win');assert(battle.every(v=>stops.includes(v)),'outcome clears lingering battle voices');
  // UI remains subordinate to an outcome; no more than eight concurrent voices.
  for(const name of a.SFX_NAMES){time+=501;a.sfx(name);assert(starts.length-stops.length<=8);}
  assert.equal(fetches,fetched,'only one download per URL');
+ assert.deepEqual(a.soundUrls('opening-h-land'),['/sfx/opening-mana-v1/h-land.wav']);
  a.stopSounds();const opening=a.openingAudio();time+=1000;opening.play('rise');opening.play('toss');assert.equal(starts.length-stops.length,2);opening.stop();assert.equal(starts.length-stops.length,0);opening.play('land');assert.equal(starts.length-stops.length,0);
  time+=1000;a.sfx('click');a.sfx('pop');assert.equal(starts.length-stops.length,1,'confirmation replaces generic click');a.stopSounds();
  let aborted=new AbortController();aborted.abort();const count=starts.length;a.sfx('diceRoll',{signal:aborted.signal});assert.equal(starts.length,count);

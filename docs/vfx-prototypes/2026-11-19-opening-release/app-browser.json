@@ -1,0 +1,46 @@
+{
+  "origin": "http://127.0.0.1:5278",
+  "boundary": "Real app startup/resume, OnlineController and opening renderer; account/API/WebSocket responses are fixtures, not authenticated live gameplay.",
+  "checks": [
+    {
+      "difficulty": "easy",
+      "npc": "lumi",
+      "opening": [
+        "wind:lumi"
+      ],
+      "board": true,
+      "unlocked": true,
+      "errors": []
+    },
+    {
+      "difficulty": "normal",
+      "npc": "noel",
+      "opening": [
+        "wind:noel"
+      ],
+      "board": true,
+      "unlocked": true,
+      "errors": []
+    },
+    {
+      "difficulty": "hard",
+      "npc": "vera",
+      "opening": [
+        "wind:vera"
+      ],
+      "board": true,
+      "unlocked": true,
+      "errors": []
+    },
+    {
+      "difficulty": "hell",
+      "npc": "sion",
+      "opening": [
+        "http://127.0.0.1:5278/art/npcs/v2/sion.webp"
+      ],
+      "board": true,
+      "unlocked": true,
+      "errors": []
+    }
+  ]
+}

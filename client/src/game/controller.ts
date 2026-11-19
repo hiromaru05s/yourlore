@@ -90,7 +90,8 @@ export interface ControllerExits {
 }
 
 // ---- coin-toss profiles (set by the game screen at mount): the two coin faces ----
-interface CoinProfile { avatar: string | null; name: string; medal?:string|null; }
+import type {DuelProfile} from '../shared/duelProfile';
+interface CoinProfile extends DuelProfile { avatar: string | null; name: string; medal?:string|null; }
 let COIN_ME: CoinProfile = { avatar: null, name: "YOU" };
 let COIN_OPP: CoinProfile = { avatar: null, name: "OPP" };
 export function setCoinProfiles(me: CoinProfile, opp: CoinProfile): void { COIN_ME = me; COIN_OPP = opp; }
@@ -1593,7 +1594,7 @@ export abstract class BaseController implements BoardHandlers {
       let timer:ReturnType<typeof setTimeout>|undefined;
       let cancel=()=>{};
       const cancelled=new Promise<void>(resolve=>{cancel=resolve;this.openingAbort.signal.addEventListener('abort',cancel,{once:true});});
-      try{await Promise.race([Promise.all([waitForDuel(this.openingRoot),warmOpening()]),cancelled]);}
+      try{await Promise.race([Promise.all([waitForDuel(this.openingRoot),warmOpening([COIN_ME.avatar,this.state.portraitAvatars?.[(1-this.you) as Side]??(this.state.botDifficulty&&!COIN_OPP.avatar?.startsWith('STORY_')?botNpc(this.state.botDifficulty).avatar:COIN_OPP.avatar)])]),cancelled]);}
       finally{clearTimeout(timer);this.openingAbort.signal.removeEventListener('abort',cancel);}
     })();return this.openingAssets;
   }
@@ -1615,7 +1616,7 @@ export abstract class BaseController implements BoardHandlers {
       const opening=this.state.opening,startsAt=opening?.startsAt;
       const opponentAvatar = this.state.portraitAvatars?.[(1-this.you) as Side]
         ?? (this.state.botDifficulty && !COIN_OPP.avatar?.startsWith("STORY_") ? botNpc(this.state.botDifficulty).avatar : COIN_OPP.avatar);
-      await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,name:this.state.players[this.you].name,medal:this.state.medals?.[this.you]},opp:{...COIN_OPP,avatar:opponentAvatar,name:this.state.players[(1-this.you) as Side].name,medal:this.state.medals?.[(1-this.you) as Side]},firstIsMe:firstSide===this.you,signal:this.openingAbort.signal,
+      await playDuelOpening({root:this.openingRoot,me:{...COIN_ME,...this.state.duelProfiles?.[this.you],name:this.state.players[this.you].name,medal:this.state.medals?.[this.you]},opp:{...COIN_OPP,...this.state.duelProfiles?.[(1-this.you) as Side],avatar:opponentAvatar,name:this.state.players[(1-this.you) as Side].name,medal:this.state.medals?.[(1-this.you) as Side]},firstIsMe:firstSide===this.you,ranked:this.state.ranked??this.ranked,signal:this.openingAbort.signal,
         onStart:this.exits.onOpeningStart,
         elapsed:startsAt!=null?()=>Date.now()-this.serverOffset-startsAt:undefined,
         durationMs:startsAt!=null&&opening?.playableAt!=null?opening.playableAt-startsAt:undefined,
