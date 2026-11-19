@@ -37,6 +37,6 @@ try{
  const ac=new AbortController();ac.abort();assert.equal(await play(source,{signal:ac.signal}),false);source.dataset.cardId='ELF';assert.equal(await play(source),false);source.dataset.cardId='CASTLE';
  const warn=console.warn;console.warn=()=>{};checks.fail=true;const failed=play(source,{onImpact:()=>impacts++});await flush();assert.equal(await failed,false);assert.equal(source.style.visibility,'visible');assert.equal(source.style.transform,'rotate(0deg)');checks.fail=false;console.warn=warn;
  assert.equal(checks.created,checks.released);assert.equal(frames.size,0);assert.equal(document.querySelectorAll('.castle-summon').length,0);
- for(const file of ['client/src/ui/anim.ts','client/src/ui/monster/runtime.ts','client/src/ui/summon/runtime.ts'])assert.match(await readFile(file,'utf8'),/isCastle/);
+ for(const file of ['client/src/ui/summon/selection.ts'])assert.match(await readFile(file,'utf8'),/isCastle/);
  console.log('PASS Castle 01: native face continuity, contact once, hand flight, quiet ending, cancellation, replacement, concurrent GPU sharing, reduced motion, fallback, disposal');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close()}

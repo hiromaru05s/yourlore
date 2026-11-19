@@ -1,11 +1,10 @@
+import {replacesDedicatedSummon} from './selection';
 import {paintRestingAppearance} from './appearance';
 import {isMimic} from '../mimic/selection';
 import {STANDARD_FX,SPECIAL_FX} from '../animationTempo';
 import {sizeSummonPlane} from './quality';
-import {isCastle} from '../castleSummon/catalog';
-import {playCastleSummon,cancelCastleSummon,cancelCastleSummons} from '../castleSummon/runtime';
-import {isPoisonSummon} from '../poisonSummon/selection';
-import {playPoisonSummon,cancelPoisonSummon,cancelPoisonSummons} from '../poisonSummon/runtime';
+import {cancelCastleSummon,cancelCastleSummons} from '../castleSummon/runtime';
+import {cancelPoisonSummon,cancelPoisonSummons} from '../poisonSummon/runtime';
 import {isWeaponmaster} from '../weaponmasterSummon/selection';
 import {playWeaponmasterSummon,cancelWeaponmasterSummon,cancelWeaponmasterSummons} from '../weaponmasterSummon/runtime';
 import {isShieldTitan} from '../shieldTitanSummon/selection';
@@ -38,11 +37,12 @@ import {playVerdant,cancelVerdant,cancelVerdants} from '../verdant/runtime';
 /** Approved #3. The same material and timeline power the six-way preview. */
 export const SUMMON_VARIANT=2;
 const jobs=new Map<HTMLElement,{anchor:HTMLElement;cancel:()=>void}>();
+const clocks=new WeakMap<HTMLElement,number>();
+export const summonTime=(source:HTMLElement)=>clocks.get(source)??0;
 export const slateOwnsPose=(card:HTMLElement)=>jobs.has(card);
 type Options={anchor?:HTMLElement;signal?:AbortSignal;onImpact?:()=>void};
 export function summonPlacement(target:HTMLElement,w:number,h:number,ms=0,reduced=false,cardId=target.dataset.cardId){
- if(isCastle(cardId))return projectedPlacement(target,w,h);
- if(isPoisonSummon(cardId))return projectedPlacement(target,w,h);
+ if(replacesDedicatedSummon(cardId))cardId=undefined;
  if(isWeaponmaster(cardId))return projectedPlacement(target,w,h);
  if(isShieldTitan(cardId))return projectedPlacement(target,w,h);
  if(isDungeon(cardId))return projectedPlacement(target,w,h);
@@ -68,8 +68,7 @@ export function cancelSummons(root?:HTMLElement){cancelCastleSummons(root);cance
 
 export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<boolean>{
  cancelSummon(source);
- if(isCastle(source.dataset.cardId))return playCastleSummon(source,options);
- if(isPoisonSummon(source.dataset.cardId))return playPoisonSummon(source,options);
+ if(!replacesDedicatedSummon(source.dataset.cardId)){
  if(isShieldTitan(source.dataset.cardId))return playShieldTitanSummon(source,options);
  if(isWeaponmaster(source.dataset.cardId))return playWeaponmasterSummon(source,options);
  if(isDungeon(source.dataset.cardId))return playDungeonSummon(source,options);
@@ -81,6 +80,7 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
  if(isHexer(source.dataset.cardId))return playHexerSummon(source,options);
  if(isChosenHero(source.dataset.cardId))return playChosenSummon(source,options);
  if(isVerdant(source.dataset.cardId))return playVerdant(source,source.dataset.cardId,options);
+ }
  const anchor=options.anchor??source,coinsCount=merchantCount(source.dataset.cardId),total=coinsCount?3100:DURATION;
  const clock=coinsCount||isMimic(source.dataset.cardId??'')?SPECIAL_FX:STANDARD_FX;
  if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted)return Promise.resolve(false);
@@ -92,7 +92,7 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
   const finish=(complete=false)=>{
    if(ended)return;ended=true;clearTimeout(timeout);cancelAnimationFrame(frame);
    options.signal?.removeEventListener('abort',abort);host?.remove();captureHost?.remove();renderer?.dispose();coins?.dispose();coinSound?.dispose();
-   reflections.forEach(n=>n.remove());source.style.visibility=visibility;source.style.transform=originalTransform;source.style.transformOrigin=originalOrigin;source.style.transition=originalTransition;jobs.delete(source);resolve(complete);
+   reflections.forEach(n=>n.remove());source.style.visibility=visibility;source.style.transform=originalTransform;source.style.transformOrigin=originalOrigin;source.style.transition=originalTransition;jobs.delete(source);clocks.delete(source);resolve(complete);
   };
   const abort=()=>finish(false),timeout=setTimeout(abort,6000);
   jobs.set(source,{anchor,cancel:abort});options.signal?.addEventListener('abort',abort,{once:true});
@@ -134,7 +134,7 @@ export function playSlateSummon(source:HTMLElement,options:Options={}):Promise<b
     if(!source.isConnected||!anchor.isConnected||document.hidden||options.signal?.aborted){finish();return;}
     const ms=Math.max(0,Math.min(total,now-start));
     const hit=motion(SUMMON_VARIANT,ms).hit,charge=ease(70,hit*.75,ms)*(1-ease(hit+45,hit+350,ms));for(const sheen of reflections){sheen.style.opacity=String(charge*.075);sheen.style.backgroundPosition=`50% ${100-ease(0,hit+180,ms)*100}%`;}
-    host!.dataset.time=String(Math.round(ms));host!.dataset.variant=coinsCount?'merchant-03':'slate';if(coinsCount)host!.dataset.coinCount=String(coinsCount);coinSound?.advance(ms);
+    clocks.set(source,Math.round(ms));host!.dataset.time=String(Math.round(ms));host!.dataset.variant=coinsCount?'merchant-03':'slate';if(coinsCount)host!.dataset.coinCount=String(coinsCount);coinSound?.advance(ms);
     if(!impacted&&ms>=790){impacted=true;options.onImpact?.();if(ended)return;}
     for(const {el,c,pass} of planes){
      el.style.transform=pass==='ground'?ground:summonPlacement(anchor,180,270,ms).toString();

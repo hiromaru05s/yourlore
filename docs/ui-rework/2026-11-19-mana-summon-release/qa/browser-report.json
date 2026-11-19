@@ -1,0 +1,338 @@
+{
+  "errors": [],
+  "checks": [
+    {
+      "width": 1100,
+      "side": 0,
+      "nativePrint": true,
+      "localTeleport": true,
+      "cardNormalPortal": true,
+      "translucentMana": true,
+      "earlySparks": true,
+      "noOrb": true,
+      "contact": {
+        "nativeMs": 927,
+        "lightMs": 927,
+        "contactMs": 927,
+        "crackMs": 927,
+        "mana": 0,
+        "progress": 1,
+        "burst": 72,
+        "burstLeadMs": 45,
+        "afterimages": 5,
+        "clip": "none"
+      },
+      "duringLanding": {
+        "opacity": 1,
+        "maskedFromCenter": true,
+        "progress": 0.424563843224628,
+        "sparks": 49,
+        "afterimages": 7,
+        "time": 499
+      },
+      "filledManaPixels": [
+        [
+          190,
+          224,
+          255,
+          150
+        ],
+        [
+          195,
+          225,
+          255,
+          153
+        ],
+        [
+          179,
+          214,
+          253,
+          150
+        ]
+      ],
+      "landingDifference": {
+        "x": 0.4000244140625,
+        "y": -0.27667236328125
+      },
+      "crackDuration": 1011.1999999284744,
+      "samples": [
+        {
+          "age": 77.20000004768372,
+          "sum": 82958
+        },
+        {
+          "age": 478.2999999523163,
+          "sum": 39605
+        },
+        {
+          "age": 810.7999999523163,
+          "sum": 6414
+        }
+      ]
+    },
+    {
+      "width": 1100,
+      "side": 1,
+      "nativePrint": true,
+      "localTeleport": true,
+      "cardNormalPortal": true,
+      "translucentMana": true,
+      "earlySparks": true,
+      "noOrb": true,
+      "contact": {
+        "nativeMs": 791,
+        "lightMs": 791,
+        "contactMs": 791,
+        "crackMs": 791,
+        "mana": 0,
+        "progress": 1,
+        "burst": 72,
+        "burstLeadMs": 45,
+        "afterimages": 13,
+        "clip": "none"
+      },
+      "duringLanding": {
+        "opacity": 1,
+        "maskedFromCenter": true,
+        "progress": 0.4384062043356594,
+        "sparks": 49,
+        "afterimages": 8,
+        "time": 505
+      },
+      "filledManaPixels": [
+        [
+          190,
+          224,
+          255,
+          150
+        ],
+        [
+          195,
+          225,
+          255,
+          153
+        ],
+        [
+          179,
+          214,
+          253,
+          150
+        ]
+      ],
+      "landingDifference": {
+        "x": 0.389434814453125,
+        "y": 0.3118743896484375
+      },
+      "crackDuration": 1010.2999999523163,
+      "samples": [
+        {
+          "age": 77.89999997615814,
+          "sum": 76983
+        },
+        {
+          "age": 477.39999997615814,
+          "sum": 36883
+        },
+        {
+          "age": 809.6000000238419,
+          "sum": 5953
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "nativePrint": true,
+      "localTeleport": true,
+      "cardNormalPortal": true,
+      "translucentMana": true,
+      "earlySparks": true,
+      "noOrb": true,
+      "contact": {
+        "nativeMs": 793,
+        "lightMs": 793,
+        "contactMs": 793,
+        "crackMs": 793,
+        "mana": 0,
+        "progress": 1,
+        "burst": 72,
+        "burstLeadMs": 45,
+        "afterimages": 12,
+        "clip": "none"
+      },
+      "duringLanding": {
+        "opacity": 1,
+        "maskedFromCenter": true,
+        "progress": 0.44302093073316584,
+        "sparks": 49,
+        "afterimages": 3,
+        "time": 507
+      },
+      "filledManaPixels": [
+        [
+          190,
+          224,
+          255,
+          150
+        ],
+        [
+          195,
+          225,
+          255,
+          153
+        ],
+        [
+          177,
+          214,
+          253,
+          150
+        ]
+      ],
+      "landingDifference": {
+        "x": -0.2300262451171875,
+        "y": -0.28521728515625
+      },
+      "crackDuration": 1009.8999999761581,
+      "samples": [
+        {
+          "age": 76.89999997615814,
+          "sum": 27989
+        },
+        {
+          "age": 477,
+          "sum": 13452
+        },
+        {
+          "age": 809.8999999761581,
+          "sum": 2048
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "nativePrint": true,
+      "localTeleport": true,
+      "cardNormalPortal": true,
+      "translucentMana": true,
+      "earlySparks": true,
+      "noOrb": true,
+      "contact": {
+        "nativeMs": 882,
+        "lightMs": 882,
+        "contactMs": 882,
+        "crackMs": 882,
+        "mana": 0,
+        "progress": 1,
+        "burst": 72,
+        "burstLeadMs": 45,
+        "afterimages": 7,
+        "clip": "none"
+      },
+      "duringLanding": {
+        "opacity": 1,
+        "maskedFromCenter": true,
+        "progress": 0.42917720606101856,
+        "sparks": 49,
+        "afterimages": 4,
+        "time": 501
+      },
+      "filledManaPixels": [
+        [
+          190,
+          224,
+          255,
+          150
+        ],
+        [
+          195,
+          225,
+          255,
+          153
+        ],
+        [
+          177,
+          214,
+          253,
+          150
+        ]
+      ],
+      "landingDifference": {
+        "x": -0.2326812744140625,
+        "y": 0.292327880859375
+      },
+      "crackDuration": 1013.2999999523163,
+      "samples": [
+        {
+          "age": 80.29999995231628,
+          "sum": 27175
+        },
+        {
+          "age": 480,
+          "sum": 13021
+        },
+        {
+          "age": 813.0999999046326,
+          "sum": 1855
+        }
+      ]
+    },
+    {
+      "cancelDuringTransfer": true
+    },
+    {
+      "resizeDuringTransfer": true
+    },
+    {
+      "cancelDuringLanding": true
+    },
+    {
+      "reducedMotion": true
+    },
+    {
+      "livePlayback": {
+        "frames": 176,
+        "median": 16.700000000000728,
+        "p95": 16.799999999999272,
+        "trace": [
+          {
+            "phase": "中央拡大（現行）",
+            "at": 0
+          },
+          {
+            "phase": "青白いマナと火花",
+            "at": 383.09999990463257
+          },
+          {
+            "phase": "中央で光の縁へ消失",
+            "at": 606.0999999046326
+          },
+          {
+            "phase": "空間転移",
+            "at": 839.0999999046326
+          },
+          {
+            "phase": "召喚先でマナが再形成",
+            "at": 906.0999999046326
+          },
+          {
+            "phase": "中央から火花とともに具現化",
+            "at": 1214.6999999284744
+          },
+          {
+            "phase": "接地・ヒビがゆっくり消える",
+            "at": 1799.0999999046326
+          },
+          {
+            "phase": "ヒビ消失・定着",
+            "at": 2808.1999999284744
+          }
+        ]
+      }
+    },
+    {
+      "originalPreviewUnaffected": true
+    }
+  ],
+  "scope": "Local real-board fixture calling existing ghostSummon/focusCard/slate runtime; no live PvP or deployment"
+}

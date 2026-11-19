@@ -16,7 +16,7 @@ import {GUTS_DURATION} from '../guts/timing';
 import type {GutsSurvival} from '../../shared/types';
 import {isAssassin} from '../assassinSummon/selection';
 import {isGolem} from '../golem/selection';
-import {playGolem,cancelGolems,cancelGolem} from '../golem/runtime';
+import {cancelGolems,cancelGolem} from '../golem/runtime';
 import {combatRect} from '../combatAnchor';
 import {playTribeSummon,cancelTribeSummons,cancelTribeSummon} from '../tribePresentation/runtime';
 import {selectedTribeSummon} from '../tribePresentation/selection';
@@ -236,7 +236,7 @@ export function playMonster(source:HTMLElement,kind:Kind,options:Options={}):Pro
  if(kind==='summon'&&isCastle(source.dataset.cardId))return playSlateSummon(source,options);
  if(kind==='summon'&&isPoisonSummon(source.dataset.cardId))return playSlateSummon(source,options);
  if(kind==='summon'&&(isShieldTitan(source.dataset.cardId)||isAssassin(source.dataset.cardId)))return playSlateSummon(source,options);
- if(kind==='summon'&&isGolem(source.dataset.cardId))return playGolem(source,options);
+ if(kind==='summon'&&isGolem(source.dataset.cardId))return playSlateSummon(source,options);
  if(kind==='summon')return selectedTribeSummon(source.dataset.cardId)?playTribeSummon(source,options):playSlateSummon(source,options);
  if(kind==='destroy'&&options.variant==='A'&&options.mana!==false&&options.destination){removeState(source);release();return playManaDestruction(source,options.destination,options.signal);}
  if(!combatRect(options.anchor??source)||(options.target&&!combatRect(options.target)))return Promise.resolve(false);

@@ -32,6 +32,6 @@ try{
  const warn=console.warn;console.warn=()=>{};checks.fail=true;const failed=play(source,{onImpact:()=>impacts++});await flush();assert.equal(await failed,false);assert.equal(source.style.visibility,'visible');checks.fail=false;
  const p=play(source,{onImpact:()=>impacts++});await flush();advance(640 * .75);const beforeContact=impacts;checks.fail=true;advance(16 * .75);assert.equal(await p,false);assert.equal(impacts,beforeContact);checks.fail=false;console.warn=warn;
  assert.equal(frames.size,0);assert.equal(document.querySelectorAll('.poison-summon').length,0);
- for(const file of ['client/src/ui/anim.ts','client/src/ui/monster/runtime.ts','client/src/ui/summon/runtime.ts'])assert.match(await readFile(file,'utf8'),/isPoisonSummon/);
+ for(const file of ['client/src/ui/summon/selection.ts'])assert.match(await readFile(file,'utf8'),/isPoisonSummon/);
  console.log('PASS poison selection 03/01/04: contact once, frame zero, both native routes, cancellation during capture, replacement, concurrency isolation, reduced motion, GPU fallback and cleanup');
 }finally{await rm(dir,{recursive:true,force:true});dom.window.close()}

@@ -1,0 +1,15 @@
+# Adopted mana summon — 2026-11-19
+
+User-approved prototype: `ed18d81ad`, `client/src/dev/cinematic-vfx/frameTransfer.ts` and `frameTransferSound.ts`. Adopt only those visuals/sounds, not the prototype branch's rejected variants. Initial production reference: `fd0e65230`. Final integration also includes `e3f4a6ca6` (current card print sharpness); both browser suites were rerun successfully on that base.
+
+Production implementation: `client/src/ui/summon/manaTransfer.ts`, `manaTransferSound.ts`, `selection.ts`; native entry points remain `ui/anim.ts` (`ghostSummon`, `summonFromHand`, fallback `summonIn`). The controller's hand plays and generated summon events already share `ghostSummon`. Castle count badges, decoded print nodes, per-player reveals, reduced-motion, cancellation and all other dedicated summons remain intact.
+
+Scope: every previously ordinary summon plus CASTLE; POISON_MASTER / RUST_SLUG / RUST_SHROOM; GOLEM1 / GOLEM2 / GOLEM3 / M10 / NGA3 / NWL3 / MANA_GIANT. Gameplay rules and special event-owned rituals/fusion/rebirth/hatching are unchanged.
+
+The accepted 820 ms transfer follows the central reveal. The card disappears along its own negative Z normal, reappears at its destination and leaves complete fading frame afterimages. The center-out material reveal, 72 restrained contact sparks, native dust and cracks share the native impact callback. Cracks fade over 1000 ms. Native landing timing and bounce are unchanged. Mana cues reuse approved opening samples and the original summon contact, through the existing mute/volume bus. Each landing reads its own native clock so concurrent summons cannot take another card's time.
+
+QA: `tests/mana-summon-browser.mjs` checks both sides at 1100 and 390 px, exact borrowed DOM, translucent fill, depth portal geometry, complete afterimages, transfer/landing continuity, synchronized contact, crack fade, cancellation, resize, reduced motion and stable return. `tests/mana-summon-routing-browser.mjs` exercises all 12 representative IDs through both public production entry points without injecting an effect (24 cases), five actual Web Audio starts, contact sync and an unaffected Mimic special summon. `tests/slate-summon.mjs` covers routing and native landing fallback for replaced families. Browser evidence is under `qa/`; it is not authenticated live PvP or a new artistic approval.
+
+Preview source: `/Users/hiromaru05s/.codex/worktrees/mana-summon-release-1119/LORE_TCG/client`, `http://127.0.0.1:5300/mana-summon.html?preview`. Uses the production GameView, board CSS, Seeker avatars and assets. No production build entry is added for this developer fixture.
+
+Validation on the integrated source: 24/24 production entry-point cases; desktop/mobile and both sides; native print identity and contact clocks match; five audible source starts per summon. Browser console errors: zero. Geometry suite also passed interruption, resize, reduced motion and fading crack checks. Full guarded production-suite/build/deployment verification follows in the release log.

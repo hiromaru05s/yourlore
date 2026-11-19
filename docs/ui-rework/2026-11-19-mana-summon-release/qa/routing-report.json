@@ -1,0 +1,1183 @@
+{
+  "checks": [
+    {
+      "id": "M4",
+      "path": "hand",
+      "side": 0,
+      "width": 1100,
+      "contact": {
+        "native": 901,
+        "crack": 901,
+        "light": 901,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "M4",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 12.900000095367432,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 196.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 545.8000000715256,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 901
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 901
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "M4",
+      "path": "generated",
+      "side": 1,
+      "width": 1100,
+      "contact": {
+        "native": 813,
+        "crack": 813,
+        "light": 813,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "M4",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 8.399999976158142,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 208.80000007152557,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 541.8000000715256,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 813
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 813
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "CASTLE",
+      "path": "hand",
+      "side": 1,
+      "width": 390,
+      "contact": {
+        "native": 792,
+        "crack": 792,
+        "light": 792,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "CASTLE",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 16.399999976158142,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 199.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 549.7999999523163,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 792
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 792
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "CASTLE",
+      "path": "generated",
+      "side": 0,
+      "width": 390,
+      "contact": {
+        "native": 792,
+        "crack": 792,
+        "light": 792,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "CASTLE",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 20.90000009536743,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 204.20000004768372,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 537,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 792
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 792
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "POISON_MASTER",
+      "path": "hand",
+      "side": 0,
+      "width": 1100,
+      "contact": {
+        "native": 793,
+        "crack": 793,
+        "light": 793,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "POISON_MASTER",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 17.100000023841858,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 199.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 549.8999999761581,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 793
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 793
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "POISON_MASTER",
+      "path": "generated",
+      "side": 1,
+      "width": 1100,
+      "contact": {
+        "native": 793,
+        "crack": 793,
+        "light": 793,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "POISON_MASTER",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 10.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 208.70000004768372,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 543.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 793
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 793
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "RUST_SLUG",
+      "path": "hand",
+      "side": 1,
+      "width": 390,
+      "contact": {
+        "native": 791,
+        "crack": 791,
+        "light": 791,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "RUST_SLUG",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 17.100000023841858,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 200.79999995231628,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 534,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 791
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 791
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "RUST_SLUG",
+      "path": "generated",
+      "side": 0,
+      "width": 390,
+      "contact": {
+        "native": 793,
+        "crack": 793,
+        "light": 793,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "RUST_SLUG",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 18.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 201.10000002384186,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 534.7000000476837,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 793
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 793
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "RUST_SHROOM",
+      "path": "hand",
+      "side": 0,
+      "width": 1100,
+      "contact": {
+        "native": 791,
+        "crack": 791,
+        "light": 791,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "RUST_SHROOM",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 16,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 198.20000004768372,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 548.7000000476837,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 791
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 791
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "RUST_SHROOM",
+      "path": "generated",
+      "side": 1,
+      "width": 1100,
+      "contact": {
+        "native": 790,
+        "crack": 790,
+        "light": 790,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "RUST_SHROOM",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 24.799999952316284,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 207.60000002384186,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 541.3999999761581,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 790
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 790
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "GOLEM1",
+      "path": "hand",
+      "side": 1,
+      "width": 390,
+      "contact": {
+        "native": 792,
+        "crack": 792,
+        "light": 792,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "GOLEM1",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 17.800000071525574,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 201.10000002384186,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 534.3000000715256,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 792
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 792
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "GOLEM1",
+      "path": "generated",
+      "side": 0,
+      "width": 390,
+      "contact": {
+        "native": 813,
+        "crack": 813,
+        "light": 813,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "GOLEM1",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 19.399999976158142,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 202.20000004768372,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 535.8000000715256,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 813
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 813
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "GOLEM2",
+      "path": "hand",
+      "side": 0,
+      "width": 1100,
+      "contact": {
+        "native": 791,
+        "crack": 791,
+        "light": 791,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "GOLEM2",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 17.300000071525574,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 202.30000007152557,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 533.8999999761581,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 791
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 791
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "GOLEM2",
+      "path": "generated",
+      "side": 1,
+      "width": 1100,
+      "contact": {
+        "native": 813,
+        "crack": 813,
+        "light": 813,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "GOLEM2",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 19.799999952316284,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 202.79999995231628,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 536.8999999761581,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 813
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 813
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "GOLEM3",
+      "path": "hand",
+      "side": 1,
+      "width": 390,
+      "contact": {
+        "native": 813,
+        "crack": 813,
+        "light": 813,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "GOLEM3",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 18.700000047683716,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 203.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 535.3999999761581,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 813
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 813
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "GOLEM3",
+      "path": "generated",
+      "side": 0,
+      "width": 390,
+      "contact": {
+        "native": 791,
+        "crack": 791,
+        "light": 791,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "GOLEM3",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 21,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 202.30000007152557,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 535.7000000476837,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 791
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 791
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "M10",
+      "path": "hand",
+      "side": 0,
+      "width": 1100,
+      "contact": {
+        "native": 792,
+        "crack": 792,
+        "light": 792,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "M10",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 12.599999904632568,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 195.89999997615814,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 546.0999999046326,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 792
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 792
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "M10",
+      "path": "generated",
+      "side": 1,
+      "width": 1100,
+      "contact": {
+        "native": 794,
+        "crack": 794,
+        "light": 794,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "M10",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 9.399999976158142,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 193.69999992847443,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 543.3999999761581,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 794
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 794
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "NGA3",
+      "path": "hand",
+      "side": 1,
+      "width": 390,
+      "contact": {
+        "native": 792,
+        "crack": 792,
+        "light": 792,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "NGA3",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 18,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 201.39999997615814,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 534.7999999523163,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 792
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 792
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "NGA3",
+      "path": "generated",
+      "side": 0,
+      "width": 390,
+      "contact": {
+        "native": 793,
+        "crack": 793,
+        "light": 793,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "NGA3",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 15.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 198.29999995231628,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 549.1000000238419,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 793
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 793
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "NWL3",
+      "path": "hand",
+      "side": 0,
+      "width": 1100,
+      "contact": {
+        "native": 792,
+        "crack": 792,
+        "light": 792,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "NWL3",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 19.800000071525574,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 202.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 535.8000000715256,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 792
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 792
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "NWL3",
+      "path": "generated",
+      "side": 1,
+      "width": 1100,
+      "contact": {
+        "native": 791,
+        "crack": 791,
+        "light": 791,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "NWL3",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 24.600000023841858,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 207.70000004768372,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 540.9000000953674,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 791
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 791
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "MANA_GIANT",
+      "path": "hand",
+      "side": 1,
+      "width": 390,
+      "contact": {
+        "native": 791,
+        "crack": 791,
+        "light": 791,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "MANA_GIANT",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 18.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 202.69999992847443,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 535.8999999761581,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 791
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 791
+        }
+      ],
+      "remaining": 0
+    },
+    {
+      "id": "MANA_GIANT",
+      "path": "generated",
+      "side": 0,
+      "width": 390,
+      "contact": {
+        "native": 814,
+        "crack": 814,
+        "light": 814,
+        "mana": "0"
+      },
+      "printRetained": true,
+      "opacity": "",
+      "clip": "",
+      "card": "MANA_GIANT",
+      "audio": [
+        {
+          "state": "running",
+          "rate": 3,
+          "transfer": 11.5,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.649999976158142,
+          "transfer": 194.20000004768372,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1.75,
+          "transfer": 544.6000000238419,
+          "contact": null
+        },
+        {
+          "state": "running",
+          "rate": 1,
+          "transfer": null,
+          "contact": 814
+        },
+        {
+          "state": "running",
+          "rate": 1.7999999523162842,
+          "transfer": null,
+          "contact": 814
+        }
+      ],
+      "remaining": 0
+    }
+  ],
+  "preservedSpecial": "MIMIC",
+  "errors": [],
+  "scope": "Real GameView, production hand/generated public entry points without presentation injection; no authenticated PvP"
+}

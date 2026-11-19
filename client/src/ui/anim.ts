@@ -1,13 +1,15 @@
+import {hasSpecialSummon} from './summon/selection';
+import {createFrameTransfer} from './summon/manaTransfer';
+import {warmTransferSounds} from './summon/manaTransferSound';
 import {activeEnchantmentTile,type EnchantmentContext} from './enchantmentView';
 import {cancelManaRuptures} from './manaRupture/runtime';
 import {cancelTribePactDefeat} from './tribePactDefeat/runtime';
 import {STANDARD_FX,SPECIAL_FX} from './animationTempo';
-import {merchantCount} from './merchant/selection';
 import {prepareSummonAppearance,refreshSummonAppearance,mountSummonAppearance} from './summon/appearance';
 import {defaultSummonFace,type SummonFaceFactory} from './summon/face';
 import {cloneCardNode} from './cardClone';
 import {isCastle} from './castleSummon/catalog';
-import {playCastleSummon,cancelCastleSummons} from './castleSummon/runtime';
+import {cancelCastleSummons} from './castleSummon/runtime';
 import {isPoisonSummon} from './poisonSummon/selection';
 import {playPoisonSummon,cancelPoisonSummons} from './poisonSummon/runtime';
 import {playErosion} from './erosion/runtime';
@@ -429,17 +431,24 @@ export async function revealSpell(card: CardInst, side: ViewSide, dest: "discard
   } finally { if(!held)node.remove(); }
   return null;
 }
-function hasSpecialSummon(id:string|undefined){
- if(!id)return false;
- return isCastle(id)||isPoisonSummon(id)||isWeaponmaster(id)||isShieldTitan(id)||isSilenceSummon(id)||isVoidSummon(id)||isCasino(id)||isDungeon(id)||isVampire(id)||isAssassin(id)||isMage(id)||isMercenary(id)||isGambler(id)||isHexer(id)||isGolem(id)||isChosenHero(id)||isVerdant(id)||isMimic(id)||selectedTribeSummon(id)||merchantCount(id);
-}
 function summonTempo(id:string|undefined){
  return hasSpecialSummon(id)?SPECIAL_FX:STANDARD_FX;
 }
 /** Carry the lane's own decoded print at reveal resolution until the flight
  * meets the lifted card. The whole descent, impact and rest happen in the lane. */
-async function carrySlatePrint(face:HTMLElement,from:DOMRect,side:ViewSide,onReveal?:(node:HTMLElement)=>void){
+export type SummonTransferPresentation={
+ transfer:(flight:HTMLElement,face:HTMLElement,signal:AbortSignal)=>Promise<boolean>;
+ landing?:(face:HTMLElement)=>void;
+ impact:(face:HTMLElement)=>void;
+ dispose:()=>void;
+};
+async function carrySlatePrint(face:HTMLElement,from:DOMRect,side:ViewSide,onReveal?:(node:HTMLElement)=>void,presentation:SummonTransferPresentation|null=createFrameTransfer()){
+  void warmTransferSounds();
+  try{await carrySlatePrintWithPresentation(face,from,side,onReveal,presentation??undefined);}finally{presentation?.dispose();}
+}
+async function carrySlatePrintWithPresentation(face:HTMLElement,from:DOMRect,side:ViewSide,onReveal?:(node:HTMLElement)=>void,presentation?:SummonTransferPresentation){
   const previousVisibility=face.style.visibility;
+  let transferred=true;
   const flight=cloneCardNode(face);
   flight.removeAttribute('style');
   prepareSummonAppearance(flight);
@@ -472,16 +481,22 @@ async function carrySlatePrint(face:HTMLElement,from:DOMRect,side:ViewSide,onRev
         flight.style.setProperty('--summon-frame-unit',2*w/face.offsetWidth+'px');
       }
       const lighting=frame && before ? frame.animate([{filter:before},{filter:getComputedStyle(frame).filter}],{duration,fill:'both'}):null;
-      const transfer=flight.animate([{transform:start.toString()},{transform:end.toString()}],
+      const transfer=presentation&&!reduced?null:flight.animate([{transform:start.toString()},{transform:end.toString()}],
         {duration,easing:'cubic-bezier(.2,.7,.3,1)',fill:'both'});
-      try{await wait(duration);}finally{transfer.cancel();lighting?.cancel();}
+      try{
+        if(presentation&&!reduced){flight.style.transform=start.toString();transferred=await boardMotionScope(signal=>presentation.transfer(flight,face,signal));}
+        else await wait(duration);
+      }finally{transfer?.cancel();lighting?.cancel();}
     }
   }finally{
     restorePrint();
     flight.remove();
     face.style.visibility=previousVisibility;
   }
-  if(!fxSkip && face.isConnected)await boardMotionScope(signal=>playMonster(face,'summon',{signal,onImpact:()=>sfx('summon')}));
+  if(transferred && !fxSkip && face.isConnected && !document.hidden){
+    if(!matchMedia('(prefers-reduced-motion:reduce)').matches)presentation?.landing?.(face);
+    await boardMotionScope(signal=>playMonster(face,'summon',{signal,onImpact:()=>{sfx('summon');presentation?.impact(face);}}));
+  }
 }
 
 /** Both hand plays and engine-generated summon events share this selected reveal. */
@@ -513,10 +528,6 @@ async function focusSummon(node:HTMLElement,card:CardInst,side:ViewSide):Promise
 export async function summonFromHand(card: CardInst, uid: string, side: ViewSide): Promise<void> {
   const from = fromRect(side, takeOrigin(side)); const target = byUid(uid); const to = rectOf(target);
   if (!from || !to || !target) { summonIn(uid); return; }
-  if(isCastle(card.id)){
-    if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(target,{from,signal,onImpact:()=>sfx('summon')}),10000);
-    return;
-  }
   if(!hasSpecialSummon(card.id)){
     await carrySlatePrint(target,from,side);
     return;
@@ -716,6 +727,10 @@ export function pileFlash(id: string): void {
 
 export function summonIn(uid: string): void {
   const n = byUid(uid);
+  if(n&&!fxSkip&&!hasSpecialSummon(n.dataset.cardId)){
+    const side=n.closest('#oppRow')?'opp':'me';
+    void carrySlatePrint(n,n.getBoundingClientRect(),side);return;
+  }
   if(n&&!fxSkip)void boardMotionScope(signal=>playMonster(n,'summon',{signal}),(isShieldTitan(n.dataset.cardId)||isSilenceSummon(n.dataset.cardId)||isVoidSummon(n.dataset.cardId)||isWeaponmaster(n.dataset.cardId)||isMage(n.dataset.cardId)||isMercenary(n.dataset.cardId)||isVerdant(n.dataset.cardId)||isHexer(n.dataset.cardId)||isGolem(n.dataset.cardId))?10000:5000);
 }
 
@@ -987,23 +1002,18 @@ export function startDungeonFloor(cards:CardInst[],side:ViewSide,makeFace:Summon
  return session;
 }
 
-export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void,makeFace:SummonFaceFactory=defaultSummonFace): Promise<HTMLElement | null> {
+export async function ghostSummon(card: CardInst, side: ViewSide, _slotIndex: number,onReveal?:(node:HTMLElement)=>void,makeFace:SummonFaceFactory=defaultSummonFace,presentation?:SummonTransferPresentation|null): Promise<HTMLElement | null> {
   const from = fromRect(side, takeOrigin(side)); const zone=monZoneEl(side);
   if(!from||!zone)return null;
   const target=reserveMonster(zone,card.uid);
   if (!target) return null;
-  if(isCastle(card.id)){
-    const countLabel={ja:'カウント',en:'Count',ko:'카운트'}[getLang()];
-    const face=makeFace(card,{badge:`${countLabel} ${(card as typeof card & {gcount?:number}).gcount||0}`});target.replaceWith(face);onReveal?.(face);
-    if(!fxSkip)await boardMotionScope(signal=>playCastleSummon(face,{from,signal,onImpact:()=>sfx('summon')}),10000);
-    return face.isConnected?face:null;
-  }
   if(!hasSpecialSummon(card.id)){
-    const face=makeFace(card);
+    const countLabel={ja:'カウント',en:'Count',ko:'카운트'}[getLang()];
+    const face=makeFace(card,isCastle(card.id)?{badge:`${countLabel} ${(card as typeof card & {gcount?:number}).gcount||0}`}:undefined);
     target.replaceWith(face);
     mountSummonAppearance(face);
     if(face.dataset.summonRest==='plain'&&!face.dataset.monsterAura)face.style.setProperty('--summon-frame-unit','2px');
-    await carrySlatePrint(face,from,side,onReveal);
+    await carrySlatePrint(face,from,side,onReveal,presentation);
     return face.isConnected?face:null;
   }
   const node = floatAt(cardEl(card, { size: "hand", fullArt:true }), from);
