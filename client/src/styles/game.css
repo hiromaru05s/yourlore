@@ -911,14 +911,26 @@
 /* Keep projected lettering in the final screen raster. Group filters on the
    whole card force Chromium to enlarge a low-resolution intermediate bitmap. */
 .game .card,.game .card:is(.is-dim,.is-exhausted,.is-playable,.is-buyable):hover { filter:none; }
+/* Keep the same small compositor surfaces in both states. Switching between
+   an unfiltered print and filtered child groups can change their raster scale
+   under the board/hand projection. Never promote the whole projected card:
+   its art/frame already supersample independently of the live lettering.
+   Limit this to visible game prints, not the hundreds of gallery cards. */
+.game .card > :is(.card-art,.card-frame,.card-cost,.card-name,.ad-atk,.ad-def,.card-status,.badge,.mkt-stock),
+.card.summon-face > :is(.card-art,.card-frame,.card-cost,.card-name,.ad-atk,.ad-def,.card-status,.badge) { will-change:filter; }
+.game .card > :is(.card-art,.card-name,.ad-atk,.ad-def,.card-status,.badge,.mkt-stock) { filter:grayscale(0) brightness(1) contrast(1); }
 .game .card-frame,.card:is(.fx-card-flight,.cast-reveal,.native-card-flight) .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009); }
 .game .card.is-playable:hover .card-frame,.game .card.is-buyable:hover .card-frame { filter:drop-shadow(0 16px 28px #000c); }
 .game .card.is-dim > :not(.card-frame) { filter:grayscale(1) brightness(.55) contrast(.9); }
-.game .card.is-dim .card-frame { filter:grayscale(1) brightness(.55) contrast(.9) drop-shadow(0 4px 8px #0009); }
+.game .card.is-dim .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009) grayscale(1) brightness(.55) contrast(.9); }
 .game .card.is-dim:hover > :not(.card-frame) { filter:grayscale(.95) brightness(.65) contrast(.9); }
-.game .card.is-dim:hover .card-frame { filter:grayscale(.95) brightness(.65) contrast(.9) drop-shadow(0 4px 8px #0009); }
+.game .card.is-dim:hover .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009) grayscale(.95) brightness(.65) contrast(.9); }
 .game .card.is-exhausted:not(.is-dim) > :not(.card-frame) { filter:grayscale(.7) brightness(.6); }
-.game .card.is-exhausted:not(.is-dim) .card-frame { filter:grayscale(.7) brightness(.6) drop-shadow(0 4px 8px #0009); }
+.game .card.is-exhausted:not(.is-dim) .card-frame { filter:drop-shadow(0 2px 0 #d3c3a0) drop-shadow(0 2px 0 #655846) drop-shadow(0 4px 8px #0009) grayscale(.7) brightness(.6); }
+/* The cost seal's alpha shadow is part of its contour in both states too. */
+.game .card.is-dim > .card-cost { filter:drop-shadow(0 .1em .22em #000b) grayscale(1) brightness(.55) contrast(.9); }
+.game .card.is-dim:hover > .card-cost { filter:drop-shadow(0 .1em .22em #000b) grayscale(.95) brightness(.65) contrast(.9); }
+.game .card.is-exhausted:not(.is-dim) > .card-cost { filter:drop-shadow(0 .1em .22em #000b) grayscale(.7) brightness(.6); }
 /* Floating summon faces use the same print and silhouette as a field Actor.
    Their parent is body while travelling, so .game descendant rules cannot own them. */
 /* A newly mounted blocked Actor already owns its settled transform. */
