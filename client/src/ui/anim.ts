@@ -37,7 +37,7 @@ import {isSilenceSummon} from './silenceSummon/selection';
 import {playSilenceSummon} from './silenceSummon/runtime';
 import {playCounter} from './counter/runtime';
 import {warmCardSurface} from './cardSurface';
-import {damageNumber,portraitImpact} from './damageFeedback';
+import {damageNumber,portraitImpact,clearDamageFeedback} from './damageFeedback';
 import {hitMonster,monsterHealth,combatVisualRect} from './monster/runtime';
 import {isVoidSummon} from './voidSummon/selection';
 import {playVoidSummon} from './voidSummon/runtime';
@@ -128,7 +128,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on); skipNpcReactions(on);
-  if(on){cancelManaRuptures();cancelTribePactDefeat();cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){clearDamageFeedback();cancelManaRuptures();cancelTribePactDefeat();cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */

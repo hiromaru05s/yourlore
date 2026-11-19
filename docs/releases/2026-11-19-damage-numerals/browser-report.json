@@ -1,0 +1,79 @@
+{
+  "origin": "http://127.0.0.1:5739",
+  "checks": [
+    {
+      "kind": "counter",
+      "side": 0,
+      "amount": 9,
+      "hp": 60,
+      "monsterDamage": 11,
+      "left": 0,
+      "overflow": false,
+      "samples": 58
+    },
+    {
+      "kind": "counter",
+      "side": 1,
+      "amount": 10,
+      "hp": 60,
+      "monsterDamage": 12,
+      "left": 0,
+      "overflow": false,
+      "samples": 61
+    },
+    {
+      "kind": "face",
+      "side": 0,
+      "amount": 10,
+      "hp": 50,
+      "left": 0,
+      "overflow": false,
+      "samples": 77
+    },
+    {
+      "kind": "face",
+      "side": 1,
+      "amount": 9,
+      "hp": 51,
+      "left": 0,
+      "overflow": false,
+      "samples": 76
+    },
+    {
+      "kind": "counter",
+      "side": 0,
+      "amount": 10,
+      "hp": 60,
+      "monsterDamage": 12,
+      "left": 0,
+      "overflow": false,
+      "samples": 57
+    },
+    {
+      "kind": "face",
+      "side": 1,
+      "amount": 10,
+      "hp": 50,
+      "left": 0,
+      "overflow": false,
+      "samples": 74
+    },
+    {
+      "reducedMotion": true
+    },
+    {
+      "action": "skip",
+      "clean": true
+    },
+    {
+      "action": "resize",
+      "clean": true
+    },
+    {
+      "action": "destroy",
+      "clean": true
+    }
+  ],
+  "errors": [],
+  "boundary": "Actual reducer/controller fixture with production damage runtime; no authenticated multiplayer match."
+}
