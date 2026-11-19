@@ -53,7 +53,7 @@ const mocks={
  'dice':'export const diceRollAnim=(...a)=>globalThis.__fx("diceRoll",...a),cancelDiceAnimations=()=>{};',
  'duelClock':'export const paintDuelClock=()=>{};',
  'social':'export const avatarHtml=()=>"";',
- 'tier':'export const tierOf=()=>0,tierLabel=()=>"";',
+ 'tier':'export const TIER_META={};export const tierOf=()=>0,tierLabel=()=>"";',
  'api':'export const api={};',
  'analytics':'export const aCapture=()=>{};',
  'i18n':'export const esc=s=>String(s),t=s=>s,getLang=()=>"ja",localizedInterfaceText=()=>"",cardName=c=>c.id,onLangChange=()=>()=>{};'

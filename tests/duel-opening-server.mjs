@@ -26,6 +26,7 @@ async function fixture(ranked=false){
 }
 try{
   const f=await fixture();
+  assert.deepEqual(f.saved().game.duelProfiles,[{level:1},{level:1}],'casual room persists public levels without ladder data');
   await f.send(0,{type:'ready',openingVersion:2});
   const turn=f.room.room.game.turn;
   await f.send(0,{type:'action',action:{type:'endTurn'}});
@@ -95,7 +96,9 @@ try{
   assert.equal(timeout.saved().opening.startsAt,now+350,'missing asset acknowledgements are bounded');
   const original=timeout.saved().opening.startsAt;await timeout.room.alarm();assert.equal(timeout.saved().opening.startsAt,original,'alarm retry is idempotent');
 
-  const ranked=await fixture(true);await ranked.send(0,{type:'ready',openingVersion:2});await ranked.send(1,{type:'ready',openingVersion:2});
+  const ranked=await fixture(true);
+  assert(ranked.saved().game.duelProfiles.every(p=>p.level===1&&p.rating.mmr===1000&&p.rating.tier==='iron'),'ranked room captures both ratings before playback');
+  await ranked.send(0,{type:'ready',openingVersion:2});await ranked.send(1,{type:'ready',openingVersion:2});
   assert.equal(ranked.saved().opening.prepareBy,null);assert(ranked.saved().previewUntil>now);
   const publicGame=ranked.saved().game;
   for(const socket of ranked.sockets){

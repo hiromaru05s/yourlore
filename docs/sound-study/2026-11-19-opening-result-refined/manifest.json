@@ -1,0 +1,39 @@
+{
+  "basis": "e-land.wav (original third candidate)",
+  "assets": [
+    {
+      "variant": "f",
+      "title": "③-A 銀晶の余韻",
+      "file": "client/public/sfx/opening-mana-v1/f-land.wav",
+      "seconds": 1.48,
+      "peakDb": -6.0,
+      "rmsDb": -23.91,
+      "mixPeakDb": -5.53,
+      "clippedSamples": 0,
+      "sha256": "855d2de7c638c25f0115988cbb8bfb34c89c15f680d6eac1329ae2eca4869c0e"
+    },
+    {
+      "variant": "g",
+      "title": "③-B 聖堂の響き",
+      "file": "client/public/sfx/opening-mana-v1/g-land.wav",
+      "seconds": 1.84,
+      "peakDb": -6.0,
+      "rmsDb": -23.26,
+      "mixPeakDb": -5.53,
+      "clippedSamples": 0,
+      "sha256": "e44ffa82726a5a45b1a2c106e839e726a19fb2841e86e65990185cb3f0fc2413"
+    },
+    {
+      "variant": "h",
+      "title": "③-C 深蒼の確定",
+      "file": "client/public/sfx/opening-mana-v1/h-land.wav",
+      "seconds": 1.6,
+      "peakDb": -6.0,
+      "rmsDb": -24.7,
+      "mixPeakDb": -5.53,
+      "clippedSamples": 0,
+      "sha256": "059586d081a2492d04b36c94cce18773b68081c8eea9836aecb900417a074adb"
+    }
+  ],
+  "source": "Kenney CC0 impactMetal_light_002.ogg + original modal synthesis / diffuse room"
+}

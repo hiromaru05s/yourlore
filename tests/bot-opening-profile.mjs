@@ -28,13 +28,13 @@ try {
     }}],
   });
   const {BaseController,setCoinProfiles,BOT_NPCS} = await import(path.join(dir,'controller.mjs'));
-  const run = async (avatar, difficulty, you = 0, portraitAvatars) => {
+  const run = async (avatar, difficulty, you = 0, portraitAvatars, duelProfiles) => {
     const npc = BOT_NPCS.find(n => n.difficulty === difficulty);
     setCoinProfiles({avatar:'SEEKER_BLUE',name:'YOU'}, {avatar,name:'?'});
     const players = [{name:'YOU'},{name:npc?.name.ja ?? 'Opponent'}];
     if (you === 1) players.reverse();
     const controller = Object.assign(Object.create(BaseController.prototype), {
-      state:{players, portraitAvatars, botDifficulty:difficulty, turn:1, cur:you, over:false}, you,
+      state:{players, portraitAvatars,duelProfiles,ranked:!!duelProfiles, botDifficulty:difficulty, turn:1, cur:you, over:false}, you,
       openingRoot:document.querySelector('main'), openingAbort:new AbortController(),
       prepareOpeningAssets:async()=>{}, exits:{}, dead:false,
     });
@@ -59,6 +59,12 @@ try {
   // Local guest BOTs and ordinary online duels preserve the supplied profile.
   for (const avatar of [...BOT_NPCS.map(n=>n.avatar),'SEEKER_RED','SEEKER_BLUE',null]) {
     assert.equal(await run(avatar,undefined),avatar);
+  }
+  const details=[{level:24,rating:{tier:'gold',mmr:1218}},{level:37,rating:{tier:'diamond',mmr:1462}}];
+  for(const you of [0,1]){
+    await run('SEEKER_RED',undefined,you,undefined,details);
+    const o=globalThis.botOpeningQA.options;
+    assert.equal(o.ranked,true);assert.equal(o.me.level,details[you].level);assert.deepEqual(o.opp.rating,details[1-you].rating);
   }
   console.log('PASS: all four authoritative BOT opening profiles, missing/stale resume profiles, both seats, local NPC and human profile preservation');
 } finally {

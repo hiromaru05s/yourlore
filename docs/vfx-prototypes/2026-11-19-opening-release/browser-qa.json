@@ -1,0 +1,131 @@
+{
+  "origin": "http://127.0.0.1:5278",
+  "errors": [],
+  "failed": [],
+  "runs": [
+    {
+      "npc": "normal",
+      "cues": [
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/b-rise.wav",
+          "rate": 1,
+          "ms": 190,
+          "duration": 1.12
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/b-impact.wav",
+          "rate": 1,
+          "ms": 1472,
+          "duration": 0.55
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/b-toss.wav",
+          "rate": 1,
+          "ms": 1472,
+          "duration": 1.76
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/a-rejoin.wav",
+          "rate": 1,
+          "ms": 1723,
+          "duration": 0.76
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/a-friction.wav",
+          "rate": 1,
+          "ms": 1723,
+          "duration": 3.8
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/h-land.wav",
+          "rate": 1,
+          "ms": 3222,
+          "duration": 1.6
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/a-exit.wav",
+          "rate": 1,
+          "ms": 5122,
+          "duration": 0.46
+        }
+      ],
+      "rms": 0.06116936345799855,
+      "loaded": [
+        "http://127.0.0.1:5278/art/duel-portraits/wind-v5/seeker-right.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/noel-right.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/noel-forehead.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/noel-fringe.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-v5/lumi-background.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-v5/seeker-right.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/noel-forehead.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/noel-right.png"
+      ]
+    },
+    {
+      "npc": "hard",
+      "cues": [
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/b-rise.wav",
+          "rate": 1,
+          "ms": 189,
+          "duration": 1.12
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/b-impact.wav",
+          "rate": 1,
+          "ms": 1473,
+          "duration": 0.55
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/b-toss.wav",
+          "rate": 1,
+          "ms": 1473,
+          "duration": 1.76
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/a-rejoin.wav",
+          "rate": 1,
+          "ms": 1723,
+          "duration": 0.76
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/a-friction.wav",
+          "rate": 1,
+          "ms": 1723,
+          "duration": 3.8
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/h-land.wav",
+          "rate": 1,
+          "ms": 3223,
+          "duration": 1.6
+        },
+        {
+          "url": "http://127.0.0.1:5278/sfx/opening-mana-v1/a-exit.wav",
+          "rate": 1,
+          "ms": 5123,
+          "duration": 0.46
+        }
+      ],
+      "rms": 0.06116936345799855,
+      "loaded": [
+        "http://127.0.0.1:5278/art/duel-portraits/wind-v5/seeker-right.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/vera-right.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/vera-forehead.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/vera-fringe.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-v5/lumi-background.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-v5/seeker-right.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/vera-forehead.png",
+        "http://127.0.0.1:5278/art/duel-portraits/wind-npcs-v1/vera-right.png"
+      ]
+    }
+  ],
+  "checks": [
+    "production default seven-cue mix incl III-C",
+    "normal/hard actual assets",
+    "three viewport ratios",
+    "full return to real board",
+    "abort silence",
+    "reduced motion silence"
+  ]
+}

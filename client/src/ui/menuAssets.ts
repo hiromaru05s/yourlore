@@ -8,6 +8,7 @@ import {artUrl} from './cardArt';
 import {duelImageUrls} from './duelAssets';
 import {deckDisplayArt} from './deckMasterArt';
 import {homeDuelFrame,homeDuelImage} from './homeDuelAssets';
+import {duelWindAssets} from './opening/windAssets';
 import {HOME_ICONS} from './homeIcons';
 /** Every image reachable from the lounge, including filters, zoom and dialogs.
  * Compressed bytes are stored on disk; only visible images need decoded pixels. */
@@ -16,6 +17,7 @@ export function menuAssetUrls():string[]{
   ...Object.values(deckDisplayArt),
   ...['base-mon-print','base-spell-print','base-trap-print','base-quest-print','cost','attack','health'].map(name=>`/art/deck-mattes-v1/${name}.webp`),
   homeDuelFrame, ...(['single','normal','ranked'] as const).map(homeDuelImage),
+  ...duelWindAssets(['SEEKER_BLUE','NPC_LUMI','NPC_NOEL','NPC_VERA']),'/art/ui/duel-nameplate-azure.svg','/art/ui/medal-empty-azure.svg',
   ...duelImageUrls(),'/art/biblion/duel-table.png',
   '/vfx/purchase-air/crystal-72.webp','/vfx/chosen-victory/crown.webp','/vfx/merchant/balance.webp',
   ...['knight','mage','archer','rogue'].map(k=>`/vfx/chosen-heroes/${k}.webp`),

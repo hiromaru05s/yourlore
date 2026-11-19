@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8); selected Chosen Domain crown completion (chosen-v2, user-selected sound 02)",
+  "status": "active bank with user-selected spell 01 (lore-v7) and summon 04 (lore-v8); selected Chosen Domain crown completion (chosen-v2, user-selected sound 02); approved opening seven cues with result III-C (opening-mana-v1)",
   "sampleRate": 44100,
   "sounds": {
     "click": [
@@ -724,6 +724,90 @@
         "sha256": "405c0d6a81ee7ffb41ebf4cc6f2c5af95b4790c791d1388e4edd84459835e330",
         "url": "/sfx/chosen-v2/heavy-blade.mp3",
         "decision": "User selected 02 重刃の確定 on 2026-10-08; one cue at 2700ms crown completion light"
+      }
+    ],
+    "opening-b-rise": [
+      {
+        "seconds": 1.12,
+        "peakDb": -13.0,
+        "rmsDb": -29.84,
+        "sha256": "1d65036bab63b8fcc8ad706c9991a017540046b3fe1aeca0a5fd367bedc87a61",
+        "url": "/sfx/opening-mana-v1/b-rise.wav",
+        "file": "b-rise.wav",
+        "sampleRate": 48000,
+        "decision": "2026-11-19 user approved seven-cue opening; result III-C"
+      }
+    ],
+    "opening-b-impact": [
+      {
+        "seconds": 0.55,
+        "peakDb": -7.5,
+        "rmsDb": -23.28,
+        "sha256": "bf9c0c85439f511e37247a9e1515ad65fb7aeeca3b4272995cb504ad49705499",
+        "url": "/sfx/opening-mana-v1/b-impact.wav",
+        "file": "b-impact.wav",
+        "sampleRate": 48000,
+        "decision": "2026-11-19 user approved seven-cue opening; result III-C"
+      }
+    ],
+    "opening-b-toss": [
+      {
+        "seconds": 1.76,
+        "peakDb": -12.0,
+        "rmsDb": -34.31,
+        "sha256": "cb754aa9a9bea1002c89a6e7e5e901c3188a2852843c7eafdd5c3391753bce96",
+        "url": "/sfx/opening-mana-v1/b-toss.wav",
+        "file": "b-toss.wav",
+        "sampleRate": 48000,
+        "decision": "2026-11-19 user approved seven-cue opening; result III-C"
+      }
+    ],
+    "opening-a-rejoin": [
+      {
+        "seconds": 0.76,
+        "peakDb": -9.0,
+        "rmsDb": -28.56,
+        "sha256": "85c8ef8f275598863fe931aee5433f59e8e0fad5874add16295eb109a32ea904",
+        "url": "/sfx/opening-mana-v1/a-rejoin.wav",
+        "file": "a-rejoin.wav",
+        "sampleRate": 48000,
+        "decision": "2026-11-19 user approved seven-cue opening; result III-C"
+      }
+    ],
+    "opening-a-friction": [
+      {
+        "seconds": 3.8,
+        "peakDb": -17.0,
+        "rmsDb": -31.01,
+        "sha256": "6154205964724a8fef54df4fc70792ea910a19ae96d761d0fb290eaea71cb3ac",
+        "url": "/sfx/opening-mana-v1/a-friction.wav",
+        "file": "a-friction.wav",
+        "sampleRate": 48000,
+        "decision": "2026-11-19 user approved seven-cue opening; result III-C"
+      }
+    ],
+    "opening-h-land": [
+      {
+        "seconds": 1.6,
+        "peakDb": -6.0,
+        "rmsDb": -24.7,
+        "sha256": "059586d081a2492d04b36c94cce18773b68081c8eea9836aecb900417a074adb",
+        "url": "/sfx/opening-mana-v1/h-land.wav",
+        "file": "h-land.wav",
+        "sampleRate": 48000,
+        "decision": "2026-11-19 user approved seven-cue opening; result III-C"
+      }
+    ],
+    "opening-a-exit": [
+      {
+        "seconds": 0.46,
+        "peakDb": -13.0,
+        "rmsDb": -28.72,
+        "sha256": "6bb0382a921c4bb056f58d4cdbb923c8f912f9f3a117e883d47ec18b56226c17",
+        "url": "/sfx/opening-mana-v1/a-exit.wav",
+        "file": "a-exit.wav",
+        "sampleRate": 48000,
+        "decision": "2026-11-19 user approved seven-cue opening; result III-C"
       }
     ]
   }

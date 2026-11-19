@@ -1,0 +1,310 @@
+[
+  {
+    "key": "seeker",
+    "direction": "right",
+    "frames": 48,
+    "frameMs": 50,
+    "checks": {
+      "face": {
+        "pixels": 15894,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "body": {
+        "pixels": 128474,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "arms": {
+        "pixels": 78104,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      }
+    },
+    "movingPixels": 89096,
+    "headFabricMovingPixels": 30072,
+    "frontHairMovingPixels": 0
+  },
+  {
+    "key": "seeker",
+    "direction": "left",
+    "frames": 48,
+    "frameMs": 50,
+    "checks": {
+      "face": {
+        "pixels": 15894,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "body": {
+        "pixels": 128474,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "arms": {
+        "pixels": 78104,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      }
+    },
+    "movingPixels": 89184,
+    "headFabricMovingPixels": 30114,
+    "frontHairMovingPixels": 0
+  },
+  {
+    "key": "lumi",
+    "direction": "right",
+    "frames": 48,
+    "frameMs": 50,
+    "checks": {
+      "face": {
+        "pixels": 5895,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "leftEyeLandmarks": {
+        "pixels": 1247,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "rightEyeLandmarks": {
+        "pixels": 336,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "scalp": {
+        "pixels": 3446,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "ear": {
+        "pixels": 2572,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "body": {
+        "pixels": 131389,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "arms": {
+        "pixels": 66642,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      }
+    },
+    "movingPixels": 100258,
+    "headFabricMovingPixels": 44290,
+    "frontHairMovingPixels": 3183
+  },
+  {
+    "key": "lumi",
+    "direction": "left",
+    "frames": 48,
+    "frameMs": 50,
+    "checks": {
+      "face": {
+        "pixels": 5895,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "leftEyeLandmarks": {
+        "pixels": 1247,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "rightEyeLandmarks": {
+        "pixels": 336,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "scalp": {
+        "pixels": 3446,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "ear": {
+        "pixels": 2572,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "body": {
+        "pixels": 131389,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "arms": {
+        "pixels": 66642,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      }
+    },
+    "movingPixels": 100264,
+    "headFabricMovingPixels": 44257,
+    "frontHairMovingPixels": 3187
+  },
+  {
+    "key": "noel",
+    "direction": "right",
+    "frames": 48,
+    "frameMs": 50,
+    "checks": {
+      "face": {
+        "pixels": 3904,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "ear": {
+        "pixels": 475,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "leftEye": {
+        "pixels": 99,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "glasses": {
+        "pixels": 78,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "torso": {
+        "pixels": 63043,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "arms": {
+        "pixels": 33217,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      }
+    },
+    "movingPixels": 64559,
+    "headFabricMovingPixels": 25326,
+    "frontHairMovingPixels": 3039
+  },
+  {
+    "key": "noel",
+    "direction": "left",
+    "frames": 48,
+    "frameMs": 50,
+    "checks": {
+      "face": {
+        "pixels": 3904,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "ear": {
+        "pixels": 475,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "leftEye": {
+        "pixels": 99,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "glasses": {
+        "pixels": 78,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "torso": {
+        "pixels": 63043,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "arms": {
+        "pixels": 33217,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      }
+    },
+    "movingPixels": 64571,
+    "headFabricMovingPixels": 25364,
+    "frontHairMovingPixels": 3021
+  },
+  {
+    "key": "vera",
+    "direction": "right",
+    "frames": 48,
+    "frameMs": 50,
+    "checks": {
+      "face": {
+        "pixels": 505,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "ear": {
+        "pixels": 246,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "leftEye": {
+        "pixels": 196,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "rightEye": {
+        "pixels": 144,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "torso": {
+        "pixels": 60907,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "arms": {
+        "pixels": 49410,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      }
+    },
+    "movingPixels": 137010,
+    "headFabricMovingPixels": 75141,
+    "frontHairMovingPixels": 2300
+  },
+  {
+    "key": "vera",
+    "direction": "left",
+    "frames": 48,
+    "frameMs": 50,
+    "checks": {
+      "face": {
+        "pixels": 505,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "ear": {
+        "pixels": 246,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "leftEye": {
+        "pixels": 196,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "rightEye": {
+        "pixels": 144,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "torso": {
+        "pixels": 60907,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "arms": {
+        "pixels": 49410,
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      }
+    },
+    "movingPixels": 137006,
+    "headFabricMovingPixels": 75138,
+    "frontHairMovingPixels": 2330
+  }
+]

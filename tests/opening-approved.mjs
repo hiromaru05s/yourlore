@@ -29,7 +29,7 @@ try{
   let poses=[];const coin=(...v)=>poses.push(v),opts={first,light:false,reduced:false};
   resultScene(ctx,RESULT_TIMING.land-.001,1280,height,opts,coin);assert.equal(poses.length,0);
   resultScene(ctx,RESULT_TIMING.land,1280,height,opts,coin);
-  assert.deepEqual(poses.pop().slice(0,6),[640,height*(height>1000?.475:.47),122*(height>1000?1.25:1),0,Math.PI*6,-0]);
+  assert.deepEqual(poses.pop().slice(0,6),[640,height*(height>1000?.475:.47),122*(height>1000?.9:1),0,Math.PI*6,-0]);
   resultScene(ctx,RESULT_TIMING.end,1280,height,opts,coin);assert.equal(poses.length,0);
   for(const lang of ['ja','en','ko']){
    setLang(lang);glyphs.length=0;
@@ -58,6 +58,17 @@ try{
   await step(6930);await p;assert(!document.querySelector('.duel-opening'));assert(!document.querySelector('.game').classList.contains('duel-intro-active'));
  }
  assert.equal(starts,2);assert(!qa.cues.includes('reveal'),'no duplicated turn cue');
+ // Candidate audio follows the same visual contacts, without replay on redraw or static seeks.
+ const soundMix=Object.fromEntries(['rise','impact','toss','rejoin','friction','land','exit'].map(c=>[c,'a']));
+ {now=0;const abort=new AbortController(),before=qa.cues.length;
+  const p=playDuelOpening({...options(abort),onStart:undefined,soundMix});await flush();
+  for(const ms of [180,1460,1710,3220,5120]){await step(ms);await step(ms);}
+  assert.deepEqual(qa.cues.slice(before),['rise','impact','toss','rejoin','friction','land','exit']);
+  abort.abort();await p;
+  const frozenBefore=qa.cues.length,frozen=new AbortController();
+  const sample=playDuelOpening({...options(frozen),soundMix,sampleMs:4400});await flush();
+  assert.equal(qa.cues.length,frozenBefore,'scrubbing must not emit audio');frozen.abort();await sample;
+ }
  // A deployed room can still carry the earlier persisted deadline.
  now=0;let abort=new AbortController();let p=playDuelOpening({...options(abort),durationMs:10450});await flush();await step(6930);assert(document.querySelector('.duel-opening'));await step(10450);await p;
  // Online backgrounding skips visuals, never the authoritative gate.

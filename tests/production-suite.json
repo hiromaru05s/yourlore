@@ -161,6 +161,7 @@
     "tests/asset-readiness-retry.mjs",
     "tests/purchase-air-worker.mjs",
     "tests/duel-opening-server.mjs",
+    "tests/duel-profile.mjs",
     "tests/dew-shield-server.mjs",
     "tests/deck-hand-editor.mjs",
     "tests/turn-banner.mjs",

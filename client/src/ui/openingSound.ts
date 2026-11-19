@@ -1,9 +1,8 @@
-import {sfx,warmSounds,type SfxName} from './sound';
-type Cue='rise'|'toss'|'land';
-const cues:Record<Cue,SfxName>={rise:'duel-start',toss:'coinToss',land:'coinLand'};
-export function warmOpeningSound():Promise<void>{return warmSounds([...Object.values(cues),'draw']);}
-/** The same mix, mute, voice budget and decode cache as the rest of the game. */
-export function openingAudio(){
- const life=new AbortController();void warmOpeningSound();
- return {play(cue:Cue){sfx(cues[cue],{signal:life.signal});},stop(){life.abort();}};
+import {sfx,warmSounds} from './sound';
+import {OPENING_SOUND_CUES,openingSoundName,approvedOpeningMix,type OpeningCue,type OpeningSoundMix} from './opening/soundBank';
+export function warmOpeningSound(mix:OpeningSoundMix=approvedOpeningMix()):Promise<void>{return warmSounds([...OPENING_SOUND_CUES.map(cue=>openingSoundName(cue,mix[cue])),'draw']);}
+/** Production and auditions share mute, limiter, decode cache and cancellable voice budget. */
+export function openingAudio(mix:OpeningSoundMix=approvedOpeningMix(),rate=1){
+ const life=new AbortController();void warmOpeningSound(mix);
+ return {play(cue:OpeningCue){sfx(openingSoundName(cue,mix[cue]),{signal:life.signal,rate});},stop(){life.abort();}};
 }
