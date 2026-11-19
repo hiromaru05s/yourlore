@@ -1,3 +1,4 @@
+import {mountCeremonyRank} from './resultCeremony';
 import type { RankInfo } from '../net/api';
 import type { RankChange } from '../shared/rank';
 import { tierOf, TIERS } from '../shared/rank';
@@ -25,6 +26,7 @@ const order = (key:string) => key === 'gm' ? 7 : TIERS.findIndex(t=>t.key===key)
 
 /** The result owns one cancellable clock; no server state is mutated by playback. */
 export class RankPresentation {
+  private ceremony?:ReturnType<typeof mountCeremonyRank>;
   private frame = 0;
   private observer?: MutationObserver;
   private el?: HTMLElement;
@@ -56,6 +58,11 @@ export class RankPresentation {
     if(!this.change){
       el.innerHTML=`<div class="rank-pending" role="status">${this.slow?tr('MMRの確定を待っています。HOMEに戻っても確定処理は続きます。','Awaiting MMR confirmation. Processing continues if you return home.','MMR 확정 대기 중입니다. 홈으로 돌아가도 처리는 계속됩니다.'):tr('MMRを確認中…','Confirming MMR…','MMR 확인 중…')}${this.slow&&this.retry?`<button class="btn btn-ghost rank-retry">${tr('再確認','Check again','다시 확인')}</button>`:''}</div>`;
       el.querySelector<HTMLButtonElement>('button')?.addEventListener('click',()=>this.retry?.());return;
+    }
+    if(el.closest('.result-ceremony')){
+      let seen=this.played;
+      if(this.change.matchId)try{const ids:string[]=JSON.parse(sessionStorage.getItem('lore_rank_seen')??'[]');seen ||= ids.includes(this.change.matchId);sessionStorage.setItem('lore_rank_seen',JSON.stringify([...ids.filter(id=>id!==this.change!.matchId),this.change.matchId].slice(-50)));}catch{}
+      this.ceremony?.destroy();this.ceremony=mountCeremonyRank(el,this.change,seen);this.played=true;return;
     }
     const c=this.change, before=c.tierBefore??tierOf(c.before), after=c.tierAfter??tierOf(c.after), delta=c.after-c.before;
     const direction=order(after)-order(before), changed=before!==after;
@@ -112,6 +119,6 @@ export class RankPresentation {
       if(time>=(changed?RANK_PROMOTION_END:3000)){complete();return;}this.frame=requestAnimationFrame(tick);
     };this.frame=requestAnimationFrame(tick);
   }
-  private detach():void {this.soundAbort?.abort();this.soundAbort=undefined;cancelAnimationFrame(this.frame);this.frame=0;this.finish=undefined;this.observer?.disconnect();this.observer=undefined;this.el=undefined;}
+  private detach():void {this.ceremony?.destroy();this.ceremony=undefined;this.soundAbort?.abort();this.soundAbort=undefined;cancelAnimationFrame(this.frame);this.frame=0;this.finish=undefined;this.observer?.disconnect();this.observer=undefined;this.el=undefined;}
   destroy():void {this.disposed=true;this.detach();document.removeEventListener('visibilitychange',this.hidden);}
 }

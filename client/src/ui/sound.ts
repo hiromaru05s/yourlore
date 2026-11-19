@@ -1,3 +1,4 @@
+import {resultCountPcm} from './resultCountSound';
 /** TCG v5 sound bank; preserve approved HOME, purchase and draw recordings. */
 import {SFX_NAMES,soundUrls,type SoundName} from './soundAssets';
 export {SFX_NAMES,soundUrls,type SfxName} from './soundAssets';
@@ -59,7 +60,7 @@ export function getSfxVolume(){return volume;}
 export function setSfxVolume(v:number){if(!Number.isFinite(v))return;volume=Math.max(0,Math.min(1,v));if(volume>0)lastAudibleVolume=volume;try{localStorage.setItem('lore_sfx',String(volume));localStorage.setItem('lore_sfx_last_audible',String(lastAudibleVolume));}catch{}if(master&&ctx)master.gain.setTargetAtTime(volume*volume,ctx.currentTime,.015);if(!volume)stopSounds();document.dispatchEvent(new Event('lore:volume-change'));}
 export function toggleSfxMuted(){setSfxVolume(volume>0?0:lastAudibleVolume);}
 export interface SoundOptions {signal?:AbortSignal;gain?:number;rate?:number;pan?:number;}
-export function sfx(name:SoundName,options:SoundOptions={}):void{
+export function sfx(name:SoundName,options:SoundOptions={},generated?:AudioBuffer):void{
  if(!unlocked||!ctx||!master||volume<=0||document.hidden||options.signal?.aborted)return;
  if(ctx.state==='suspended')void ctx.resume().catch(()=>{});
  const now=performance.now(),p=policy(name);if(now-(last.get(name)??-Infinity)<p.gap)return;
@@ -86,5 +87,13 @@ export function sfx(name:SoundName,options:SoundOptions={}):void{
   const voice:Voice={name,source,gain,...p,finish:()=>{active.delete(voice);options.signal?.removeEventListener('abort',abort);source.disconnect();gain.disconnect();pan?.disconnect();}};
   source.onended=voice.finish;active.add(voice);options.signal?.addEventListener('abort',abort,{once:true});source.start();
  };
- const cached=ready.get(url);if(cached)play(cached);else void buffer(url).then(play).catch(()=>{});
+ const cached=generated??ready.get(url);if(cached)play(cached);else void buffer(url).then(play).catch(()=>{});
+}
+
+/** Uses the same unlock, volume, voice limit and cancellation as other game sounds. */
+export function playMmrCount(before:number,after:number,options:SoundOptions={},settleOnly=false):void{
+ if(!ctx||!unlocked||volume<=0||document.hidden||before===after||options.signal?.aborted)return;
+ const pcm=resultCountPcm(before,after,44100,settleOnly),buffer=ctx.createBuffer(2,pcm[0].length,44100);
+ buffer.copyToChannel(pcm[0],0);buffer.copyToChannel(pcm[1],1);
+ sfx(after>before?'rankUp':'rankDown',options,buffer);
 }
