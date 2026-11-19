@@ -1,0 +1,79 @@
+{
+  "origin": "https://yourlore.xyz",
+  "errors": [],
+  "results": [
+    {
+      "width": 1100,
+      "side": 0,
+      "count": 2,
+      "seen": 83,
+      "maxIncoming": 2,
+      "privateFaces": 0,
+      "remaining": 0
+    },
+    {
+      "width": 1100,
+      "side": 0,
+      "count": 4,
+      "seen": 111,
+      "maxIncoming": 4,
+      "privateFaces": 0,
+      "remaining": 0
+    },
+    {
+      "width": 1100,
+      "side": 1,
+      "count": 2,
+      "seen": 86,
+      "maxIncoming": 2,
+      "privateFaces": 0,
+      "remaining": 0
+    },
+    {
+      "width": 1100,
+      "side": 1,
+      "count": 4,
+      "seen": 111,
+      "maxIncoming": 4,
+      "privateFaces": 0,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 2,
+      "seen": 86,
+      "maxIncoming": 2,
+      "privateFaces": 0,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 0,
+      "count": 4,
+      "seen": 111,
+      "maxIncoming": 4,
+      "privateFaces": 0,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 2,
+      "seen": 86,
+      "maxIncoming": 2,
+      "privateFaces": 0,
+      "remaining": 0
+    },
+    {
+      "width": 390,
+      "side": 1,
+      "count": 4,
+      "seen": 111,
+      "maxIncoming": 4,
+      "privateFaces": 0,
+      "remaining": 0
+    }
+  ],
+  "boundary": "Unmodified production modules, styles and assets on the shipped isolated cosmetic-studio board; actual reducer turn-start and controller draw events. No authenticated PvP or account mutation."
+}
