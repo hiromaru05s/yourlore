@@ -13,4 +13,13 @@ Checks: root TypeScript passed; `tests/healing-feedback.mjs` verifies real reduc
 
 Local browser verification passed with zero page errors, no horizontal overflow and complete skip/resize/destruction cleanup. The first cleanup assertion incorrectly waited for the zero-size positioning root to be visible; it now waits for the actual numeral, and the complete run passed on merged main `ddd8ccfe0`. Recorded motion confirms the same white-cloud expansion/dissolve and numeral gradient as the approved preview. Evidence: `qa/local-browser.json`; local video/screenshots in `/tmp/lore-healing-release/`.
 
-Release status: awaiting guarded production deploy. The deployment must use `npm run deploy` with a clean commit equal to current `gh/main`, after the shared release lock is available. No guard bypass.
+Production deployed through the shared guarded release on 2026-11-20 02:29 KST/JST (2026-11-19 17:29 UTC). Source `4cdb1e1c5cdcbe94973d70608abdac25e610683b`; Worker version `90d7c2e3-6cd7-4e0e-8508-767b2b9d4cb8`, traffic 100%. This source includes the adopted healing commit and the subsequent window-listener compatibility fix. Another authorized release held the shared lock; its exact main snapshot included this change and completed `npm run deploy`. No duplicate deploy or guard bypass was needed.
+
+Release verification:
+
+- Root TypeScript, production tests **306/306**, and production build passed. The first shared run found unqualified `addEventListener` incompatible with Node DOM fixtures; `window.addEventListener` fixed it, and the 1,308-card inspection test and full suite passed.
+- Captured hashes from the guard's actual build snapshot before cleanup. All **143 HTML/JS/CSS artifacts** fetched from `https://yourlore.xyz` match the build SHA-256. HTML checks follow the host's canonical redirects.
+- Full browser integration against the **production URL** passed with zero page errors, no horizontal overflow, both sides, monster and player healing, Blood Rite, 9/10/128, reduced motion, skip, resize and controller destruction. Resize QA waits for the real resize event before asserting cleanup; an immediate count after the viewport command could run before that event.
+- Evidence: `qa/deployment.json`, `production-suite.json`, `served-assets.json`, `live-browser.json`. Production video/screenshots remain in `/tmp/lore-healing-live-final/`; the local source of all three comparison variants remains the approved preview worktree.
+
+The production browser check uses reducer/controller fixtures on the live served application. It does not establish an authenticated multiplayer-match result.

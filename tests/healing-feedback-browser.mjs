@@ -47,7 +47,7 @@ try{
  await page.emulateMedia({reducedMotion:'no-preference'});
  for(const action of ['skip','resize','destroy']){
   await page.evaluate(()=>{window.healRun=healCase('player',0,8)});await page.waitForSelector('.combat-heal .ch-digit');
-  if(action==='resize')await page.setViewportSize({width:1100,height:850});else await page.evaluate(action=>action==='skip'?combatTempo.controller.fastForward():combatTempo.controller.destroy(),action);
+  if(action==='resize'){await page.evaluate(()=>{window.healResizeObserved=false;addEventListener('resize',()=>window.healResizeObserved=true,{once:true});});await page.setViewportSize({width:1100,height:850});await page.waitForFunction(()=>window.healResizeObserved);}else await page.evaluate(action=>action==='skip'?combatTempo.controller.fastForward():combatTempo.controller.destroy(),action);
   assert.equal(await page.locator('.combat-heal').count(),0);await page.evaluate(()=>healRun);checks.push({action,clean:true});console.log('PASS cleanup',action);
  }
  assert.deepEqual(errors,[]);await fs.writeFile(out+'/report.json',JSON.stringify({origin,checks,errors,boundary:'Real reducer/controller fixtures and adopted UI. Browser-generated player amount fixtures exercise 9/10/128. Not authenticated multiplayer.'},null,2));console.log('PASS healing feedback');
