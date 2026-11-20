@@ -6,8 +6,8 @@
     "ko",
     "en"
   ],
-  "count": 436,
-  "engineSha256": "7ef08860d89c9f9db37621153552e69a3ff11ad34d73a2517a81e321bbb729d8",
+  "count": 446,
+  "engineSha256": "d3e894ab97894c442ceec5ff4d45966ee5e53e774fd8487109b90b286cd3bdce",
   "cards": {
     "M1": {
       "nameJa": "スパーク・インプ",
@@ -323,26 +323,29 @@
       }
     },
     "S10": {
-      "nameJa": "青藍の書庫",
-      "status": "reworded",
+      "nameJa": "マナドロー",
+      "status": "reworked-2026-11-20",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
-      "definitionSha256": "7f31d9575f6ca21452683dcf1b7f8067f3e488544e6dd364f6a1948683d4a018",
+      "definitionSha256": "97e8eb42f55bb11d7cfdb72a2eb71ed819efab515321954427699fd2287a7e46",
       "textSha256": "b1d966e8bc1b943e6ade534c760bba05861002b20e3c708f3f2cb6c6701e6724",
       "hooks": {
         "act": "draw"
       },
       "before": {
         "ja": "【発動時】カードを2枚引く。",
-        "ko": "【발동시】카드를 2장 뽑는다.",
+        "ko": "【발동 시】카드를 2장 뽑는다.",
         "en": "【On Cast】Draw 2 cards."
       },
       "after": {
         "ja": "【発動時】カードを2枚引く。",
         "ko": "【발동 시】카드를 2장 뽑는다.",
         "en": "【On Cast】Draw 2 cards."
-      }
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "S3": {
       "nameJa": "刃の囁き",
@@ -2583,27 +2586,28 @@
     },
     "MIMIC_LORD": {
       "nameJa": "ミミックリーダー",
-      "status": "reworked",
+      "status": "reworked-2026-11-20",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "2eec84590b5b73d0eea1efa0a921995eb7f16c340c7e9a548392adde31333ed1",
-      "textSha256": "19d642d3c2959fc0a9c8a63cc81501a81a2ae26a69df9ba1ce135ab5abb09d90",
+      "definitionSha256": "1a3be323cd9d23a9af14674e8b124ae7661163caec74642c0d95fd367eaff1a8",
+      "textSha256": "24c9ead29b4273d39f39efc595b32435ea5fb3bc23830ccf91d3ad823af974cf",
       "hooks": {
         "onSummon": "mimicLord"
       },
       "before": {
-        "ja": "【召喚時】両方の場の、このモンスター以外の「ミミック」系モンスター1体につき、このモンスターの攻撃力+3・体力+3（対象が場を離れるまで）。",
-        "ko": "【소환 시】양쪽 필드의 이 몬스터 외 미믹 계열 몬스터 1체당 이 몬스터의 공격력 +3, 체력 +3(효과를 받은 몬스터가 필드를 떠날 때까지).",
-        "en": "【On Summon】This monster gets +3 ATK and +3 HP for each other Mimic-family monster on either field (until the affected monster leaves the field)."
-      },
-      "after": {
         "ja": "【召喚時】両方の場の、このモンスター以外の「ミミック」系モンスター1体につき、このモンスターの攻撃力+3・体力+3（対象が場を離れるまで）。 さらに相手の場の「ミミック」1体を自分の場に移す。",
         "ko": "【소환 시】양쪽 필드의 이 몬스터 외 미믹 계열 몬스터 1체당 이 몬스터의 공격력 +3, 체력 +3(효과를 받은 몬스터가 필드를 떠날 때까지). 또한 상대 필드의 ‘미믹’ 1체를 자신의 필드로 옮긴다.",
         "en": "【On Summon】This monster gets +3 ATK and +3 HP for each other Mimic-family monster on either field (until the affected monster leaves the field). Also take control of 1 opposing monster named Mimic."
-      }
+      },
+      "after": {
+        "ja": "【召喚時】両方の場の、このモンスター以外の「ミミック」系モンスター1体につき、このモンスターの攻撃力+2・体力+2（対象が場を離れるまで）。 さらに相手の場の「ミミック」1体を自分の場に移す。",
+        "ko": "【소환 시】양쪽 필드의 이 몬스터 외 미믹 계열 몬스터 1체당 이 몬스터의 공격력 +2, 체력 +2(효과를 받은 몬스터가 필드를 떠날 때까지). 또한 상대 필드의 ‘미믹’ 1체를 자신의 필드로 옮긴다.",
+        "en": "【On Summon】This monster gets +2 ATK and +2 HP for each other Mimic-family monster on either field (until the affected monster leaves the field). Also take control of 1 opposing monster named Mimic."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "AWAKENED_MIMIC": {
       "nameJa": "覚醒ミミック",
@@ -3067,25 +3071,28 @@
     },
     "PURGE_TOUCH": {
       "nameJa": "浄化の手",
-      "status": "reworded",
+      "status": "reworked-2026-11-20",
       "changedLocales": [
-        "ko"
+        "ja",
+        "ko",
+        "en"
       ],
       "definitionSha256": "e78f0b809c9a698671d3be3bb10cc67dca9c1cac8bcddc88b71008b7e305a348",
-      "textSha256": "ae6f9c5c47270aff5426efa1e9cdd3562d41160aeac837a5d67b3f6a3927a0cf",
+      "textSha256": "54d913bf4c35c6347dbb99b5d92465e7d876f71313fe3c4c42029a8bfe348d57",
       "hooks": {
         "act": "exilePick"
       },
       "before": {
         "ja": "【発動条件】自分の墓地にカードがある。\n\n【発動時】自分の烙印カウンターを全て取り除く。自分の墓地からカードを1枚まで選び、自分のリフトへ送る。送った場合、カードを1枚引く。",
-        "ko": "【발동 조건】자신의 묘지에 카드가 있다.\n\n【발동시】자신의 낙인 카운터를 전부 제거한다. 자신의 묘지에서 카드를 최대 1장 선택해 자신의 리프트로 보낸다. 보냈다면 카드를 1장 뽑는다.",
+        "ko": "【발동 조건】자신의 묘지에 카드가 있다.\n\n【발동 시】자신의 낙인 카운터를 전부 제거한다. 자신의 묘지에서 카드를 최대 1장 선택해 자신의 리프트로 보낸다. 보냈다면 카드를 1장 뽑는다.",
         "en": "【Play Requirement】Your graveyard is not empty.\n\n【On Cast】Remove all your Brand counters. Choose up to 1 card in your graveyard and send it to your Rift. If you do, draw 1 card."
       },
       "after": {
-        "ja": "【発動条件】自分の墓地にカードがある。\n\n【発動時】自分の烙印カウンターを全て取り除く。自分の墓地からカードを1枚まで選び、自分のリフトへ送る。送った場合、カードを1枚引く。",
-        "ko": "【발동 조건】자신의 묘지에 카드가 있다.\n\n【발동 시】자신의 낙인 카운터를 전부 제거한다. 자신의 묘지에서 카드를 최대 1장 선택해 자신의 리프트로 보낸다. 보냈다면 카드를 1장 뽑는다.",
-        "en": "【Play Requirement】Your graveyard is not empty.\n\n【On Cast】Remove all your Brand counters. Choose up to 1 card in your graveyard and send it to your Rift. If you do, draw 1 card."
-      }
+        "ja": "【発動条件】自分の墓地にカードがある。\n\n【発動時】自分の烙印カウンターを1個取り除く。自分の墓地からカードを1枚まで選び、自分のリフトへ送る。送った場合、カードを1枚引く。",
+        "ko": "【발동 조건】자신의 묘지에 카드가 있다.\n\n【발동 시】자신의 낙인 카운터를 1개 제거한다. 자신의 묘지에서 카드를 최대 1장 선택해 자신의 리프트로 보낸다. 보냈다면 카드를 1장 뽑는다.",
+        "en": "【Play Requirement】Your graveyard is not empty.\n\n【On Cast】Remove 1 of your Brand counters. Choose up to 1 card in your graveyard and send it to your Rift. If you do, draw 1 card."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "SCRAPPER": {
       "nameJa": "スクラップ収集家",
@@ -4015,27 +4022,26 @@
     },
     "COUNTERCALC": {
       "nameJa": "逆算",
-      "status": "reworded",
+      "status": "reworked-2026-11-20",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "732180b9d442de05565ea0c2edc249effb7f2f5459e540cf8826450f7b9725e4",
-      "textSha256": "49db323b418ed027d8bf72ae292e913c2305fec435323458cf0ae9dd8c7786aa",
+      "textSha256": "b828990fc3cd46fc78e4dff7d22deba42ec4c9ee2cd28b64d16578959fac45ed",
       "hooks": {},
       "before": {
-        "ja": "【発動条件】相手の最大マナが7以下で、相手の場に永続魔法がある。 同名カード合計で自分の各ターン1回まで使用できる。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。",
-        "ko": "【발동 조건】상대의 최대 마나가 7 이하이고 상대의 필드에 영구 마법이 있다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.\n\n【발동 시】상대 영구 마법 1장을 무작위로 파괴한다.",
-        "en": "【Play Requirement】The opponent's max mana is at most 7 and they control a persistent spell. You may play cards with this name only 1 time during each of your turns in total.\n\n【On Cast】Destroy 1 random enemy persistent spell."
-      },
-      "after": {
         "ja": "【発動条件】相手のマナ水晶が7以下で、相手の場に永続魔法がある。 同名カード合計で自分の各ターン1回まで使用できる。\n\n【発動時】相手の永続魔法1枚をランダムに破壊する。",
         "ko": "【발동 조건】상대의 마나 수정이 7 이하이고 상대의 필드에 영구 마법이 있다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.\n\n【발동 시】상대 영구 마법 1장을 무작위로 파괴한다.",
         "en": "【Play Requirement】The opponent's mana crystals are at most 7 and they control a persistent spell. You may play cards with this name only 1 time during each of your turns in total.\n\n【On Cast】Destroy 1 random enemy persistent spell."
       },
-      "reviewedAt": "2026-10-30",
-      "reviewNote": "Explicit monster-bound duration, unified ability/cost vocabulary, or clarified condition; mechanics unchanged."
+      "after": {
+        "ja": "【発動条件】相手のマナ水晶が7以下で、どちらかの場に永続魔法がある。同名カード合計で自分の各ターン1回まで使用できる。\n\n【発動時】両方の場の永続魔法から1枚をランダムに選び、破壊する。",
+        "ko": "【발동 조건】상대의 마나 수정이 7 이하이고 어느 쪽 필드에든 영구 마법이 있다. 같은 이름의 카드 합계로 자신의 턴마다 1회까지 사용할 수 있다.\n\n【발동 시】양쪽 필드의 영구 마법 중 1장을 무작위로 골라 파괴한다.",
+        "en": "【Play Requirement】The opponent has at most 7 mana crystals and either player controls a persistent spell. You may play cards with this name only 1 time during each of your turns in total.\n\n【On Cast】Destroy 1 random persistent spell on either field."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "AMBUSH": {
       "nameJa": "奇襲",
@@ -6079,29 +6085,29 @@
     },
     "UNBRANDER": {
       "nameJa": "除印師",
-      "status": "reviewed-legacy-rework",
+      "status": "reworked-2026-11-20",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "a9edff36954295eaa0506ad9fcf93e62a482b21b5b3b3a89c284f1214886cb2d",
-      "textSha256": "41a1a4ddaa4180974b501edf64284f4bdc449f932a518cbe4bd63fac0ee315e8",
+      "textSha256": "a786b910c3a44b89094437382a290f3d59345c9e182be003c6e420337b4872d1",
       "hooks": {
         "onSummon": "unbrand",
         "aura": "curseHeal"
       },
       "before": {
-        "ja": "【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く。",
-        "ko": "【소환 시】자신에게 낙인 카운터가 있으면 자신의 낙인 카운터 1개를 제거한다.",
-        "en": "【On Summon】If you have a Brand counter, remove 1 of your Brand counters."
-      },
-      "after": {
         "ja": "【召喚時】自分に烙印カウンターがあれば自分の烙印カウンターを1個取り除く。\n\n【場にある間】自分が使用する「呪い」の効果を「自分の体力を3回復する」に変更する（同名は重複しない）。",
         "ko": "【소환 시】자신에게 낙인 카운터가 있으면 1개 제거한다.\n\n【필드에 있는 동안】자신이 사용하는 「저주」의 효과를 「자신의 체력을 3 회복한다」로 변경한다(동명 중복 없음).",
         "en": "【On Summon】Remove 1 of your Brand counters if you have any.\n\n【While on the Field】Replace the effect of each Curse you use with “Restore 3 of your HP” (does not stack)."
       },
-      "review": "2026-10-27: user-approved rework; tests/legacy-card-rework.mjs and legacy-card-rework-server.mjs"
+      "after": {
+        "ja": "【召喚時】自分と相手の烙印カウンターを1個ずつ取り除く。\n\n【場にある間】自分が使用する「呪い」の効果を「自分の体力を3回復する」に変更する（同名は重複しない）。",
+        "ko": "【소환 시】자신과 상대의 낙인 카운터를 각각 1개 제거한다.\n\n【필드에 있는 동안】자신이 사용하는 「저주」의 효과를 「자신의 체력을 3 회복한다」로 변경한다(동명 중복 없음).",
+        "en": "【On Summon】Remove 1 Brand counter from each player.\n\n【While on the Field】Replace the effect of each Curse you use with “Restore 3 of your HP” (does not stack)."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "RIFT": {
       "nameJa": "次元の裂け目",
@@ -8007,9 +8013,13 @@
     },
     "EROSION": {
       "nameJa": "摩耗",
-      "status": "reviewed-unchanged",
-      "changedLocales": [],
-      "definitionSha256": "cdabd08ef14f0d1e24bd33054f76e9758893e8a043bf7ccf6335e8e728832723",
+      "status": "reworked-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "28d43c5150d3878f4611afbcebb85f5d3b51e41bf2d1dfc119fae433331a9102",
       "textSha256": "fb6a98bc8fe937e8296b9b0d4b121aee643270fd8e38e7b194f6359518da2723",
       "hooks": {
         "act": "expansion",
@@ -8024,7 +8034,8 @@
         "ja": "【自分の追加ドロー時】自分のターン中、通常の開始時ドロー以外でカードを1枚引くたび、相手に1ダメージを与える。",
         "ko": "【자신의 추가 드로우 시】자신 턴에 통상 턴 시작 드로우 이외로 카드 1장을 뽑을 때마다 상대에게 1 데미지를 준다.",
         "en": "【When You Draw Extra Cards】During your turn, whenever you draw 1 card outside the normal turn-start draw, deal 1 damage to the opponent."
-      }
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "APPRENTICE_ARMORER": {
       "nameJa": "見習い装備職人",
@@ -9612,27 +9623,26 @@
     },
     "MINI_SPIRIT": {
       "nameJa": "ミニ精霊",
-      "status": "reviewed-v94",
+      "status": "reworked-2026-11-20",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
       "definitionSha256": "aa3a2b24358ea41613a4248f94ff218c163d16c80f95dc25042812b0b159cd4d",
-      "textSha256": "e2883bf4b923f9987136b3fd5e8c729756475f72b3945dbc7ebbcaa97617a936",
+      "textSha256": "9f56cba5210884937bba40e651d02ed08b0d8bae2e726f47f2af076e1c68a611",
       "hooks": {},
       "before": {
-        "ja": "【場にある間】基本のアチューンを使用するたび自身の体力+2。自分が体力を得るたび攻撃力+1、シールドを得るたび+1/+1、雫を得るたび+1/+1。場を離れるとリセット。",
-        "ko": "【필드에 있는 동안】기본 어튠 사용 시 체력 +2. 자신이 체력을 얻을 때마다 공격력 +1, 실드면 +1/+1, 이슬이면 +1/+1. 필드를 떠나면 초기화한다.",
-        "en": "【While on the Field】Gain 2 HP whenever you play basic Attune. Whenever you gain HP, gain 1 ATK. Whenever you gain Shield, gain +1/+1. Whenever you gain Dew, gain +1/+1. Resets on leaving the field."
-      },
-      "after": {
         "ja": "【場にある間】基本のアチューンを使用するたび、このモンスターの体力+2。自分が体力を得るたび、このモンスターの攻撃力+1。自分がシールドを得るたび、このモンスターの体力+1。自分が雫を得るたび、このモンスターの攻撃力+1。これらの変化は場を離れるとリセットされる。",
         "ko": "【필드에 있는 동안】기본 어튠을 사용할 때마다 이 몬스터의 체력 +2. 자신이 체력을 얻을 때마다 이 몬스터의 공격력 +1. 자신이 실드를 얻을 때마다 이 몬스터의 체력 +1. 자신이 이슬을 얻을 때마다 이 몬스터의 공격력 +1. 필드를 떠나면 이 변화는 초기화된다.",
         "en": "【While on the Field】Whenever you play basic Attune, this monster gains 2 HP. Whenever you gain HP, it gains 1 ATK. Whenever you gain Shield, it gains 1 HP. Whenever you gain Dew, it gains 1 ATK. These changes reset when it leaves the field."
       },
-      "reviewedAt": "2026-11-11",
-      "reviewNote": "Army and Attune balance update."
+      "after": {
+        "ja": "【場にある間】基本のアチューンを使用するたび、このモンスターの体力+1。自分が体力を得るたび、このモンスターの攻撃力+1。自分がシールドを得るたび、このモンスターの体力+1。自分が雫を得るたび、このモンスターの攻撃力+1。これらの変化は場を離れるとリセットされる。\n\n【パッシブの追加・除去時】両方の場のモンスターにパッシブが1つ追加されるたび、または取り除かれるたび、このモンスターの攻撃力+2・体力+2（このモンスターが場を離れるまで）。",
+        "ko": "【필드에 있는 동안】기본 어튠을 사용할 때마다 이 몬스터의 체력 +1. 자신이 체력을 얻을 때마다 이 몬스터의 공격력 +1. 자신이 실드를 얻을 때마다 이 몬스터의 체력 +1. 자신이 이슬을 얻을 때마다 이 몬스터의 공격력 +1. 필드를 떠나면 이 변화는 초기화된다.\n\n【패시브 추가·제거 시】양쪽 필드의 몬스터에게 패시브가 1개 추가되거나 제거될 때마다 이 몬스터의 공격력 +2, 체력 +2(이 몬스터가 필드를 떠날 때까지).",
+        "en": "【While on the Field】Whenever you play basic Attune, this monster gains 1 HP. Whenever you gain HP, it gains 1 ATK. Whenever you gain Shield, it gains 1 HP. Whenever you gain Dew, it gains 1 ATK. These changes reset when it leaves the field.\n\n【When a Passive Is Added or Removed】Whenever a passive is added to or removed from a monster on either field, this monster gains +2 ATK and +2 HP until it leaves the field."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "SPIRIT_RESONANCE": {
       "nameJa": "精霊共鳴",
@@ -10186,26 +10196,31 @@
     },
     "Q_RUNE_SECRET": {
       "nameJa": "ルーンの秘密",
-      "status": "new",
+      "status": "reworked-2026-11-20",
       "changedLocales": [
         "ja",
         "ko",
         "en"
       ],
-      "definitionSha256": "0270da6cac2171d9827ae9e2159eac4f0c2c64dbbc004601ed7b4fcedf5af532",
-      "textSha256": "eaaa0677f6b3132472f3214d6e2fc7ac9cd194c4fa871997b2ac3afbd0c87864",
+      "definitionSha256": "a4f65af459533f9e229bd3580dc84bf3a751a9884d642035d46d37ad51891de5",
+      "textSha256": "724a18ab1248eddaad4b390254c57d03f15a2a4400b350f12c1cf60114a89d0e",
       "hooks": {
         "quest": {
           "event": "spellPlay",
-          "target": 20
+          "target": 18
         }
       },
-      "before": {},
-      "after": {
+      "before": {
         "ja": "【達成条件】設置後、自分が魔法を20回使用するか、ルーン系魔法を1回使用する。\n\n【達成時】自分のマナ水晶+1。ルーン系魔法で達成した場合、このカードを墓地へ送る。それ以外はリフトへ送る。",
         "ko": "【달성 조건】설치 후 자신이 마법을 20회 사용하거나 룬 계열 마법을 1회 사용한다.\n\n【달성 시】자신의 마나 수정+1. 룬 계열 마법으로 달성했으면 이 카드를 묘지로, 아니면 리프트로 보낸다.",
         "en": "【Completion Requirement】After deployment, play 20 spells or play 1 Rune spell.\n\n【On Completion】Gain 1 mana crystal. Send this card to your graveyard if completed by a Rune spell, otherwise to your Rift."
-      }
+      },
+      "after": {
+        "ja": "【設置上限】自分の場に最大1枚。\n\n【達成条件】設置後、自分が魔法を18回使用するか、ルーン系魔法を2回使用する。\n\n【達成時】自分のマナ水晶+1。ルーン系魔法2回で達成した場合、このカードを墓地へ送る。それ以外はリフトへ送る。",
+        "ko": "【설치 제한】자신의 필드에 최대 1장.\n\n【달성 조건】설치 후 자신이 마법을 18회 사용하거나 룬 계열 마법을 2회 사용한다.\n\n【달성 시】자신의 마나 수정 +1. 룬 계열 마법 2회로 달성했다면 이 카드를 묘지로, 아니면 리프트로 보낸다.",
+        "en": "【Field Limit】At most 1 on your field.\n\n【Completion Requirement】After deployment, play 18 spells or 2 Rune spells.\n\n【On Completion】Gain 1 mana crystal. Send this card to your graveyard if completed by playing 2 Rune spells, otherwise to your Rift."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "DEVIL_TOKEN": {
       "nameJa": "悪魔",
@@ -10227,25 +10242,26 @@
     },
     "GOLEM_TEST": {
       "nameJa": "試験用ゴーレム",
-      "status": "november-balance-v93",
-      "changedLocales": [],
+      "status": "reworked-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
       "definitionSha256": "a81290635b457ac77b490a9a293e404ca6ec5a1bc68910473eae91f78cdbd76a",
-      "textSha256": "86c20b6ef14a0a182b2a6d87eca9724a97d3e4d679f24b7aa5cc1331cbe3c4c6",
-      "hooks": {
-        "passive": [
-          "guts"
-        ]
-      },
+      "textSha256": "2124ecbec9ff2f2329037f7c0d069d8e754532e9a78575f26e8eb504e83692c0",
+      "hooks": {},
       "before": {
         "ja": "【場にある間】相手のターン中、相手が自分の永続魔法を破壊するたび、「兵士ゴーレム」1体を自分の場に召喚する。",
         "ko": "【필드에 있는 동안】상대 턴에 상대가 자신의 영구마법을 파괴할 때마다 병사 골램 1체를 자신의 필드에 소환한다.",
         "en": "【While on the Field】Whenever the opponent destroys one of your persistent spells during their turn, summon a Soldier Golem to your field."
       },
       "after": {
-        "ja": "【場にある間】相手のターン中、相手が自分の永続魔法を破壊するたび、「兵士ゴーレム」1体を自分の場に召喚する。",
-        "ko": "【필드에 있는 동안】상대 턴에 상대가 자신의 영구마법을 파괴할 때마다 병사 골램 1체를 자신의 필드에 소환한다.",
-        "en": "【While on the Field】Whenever the opponent destroys one of your persistent spells during their turn, summon a Soldier Golem to your field."
-      }
+        "ja": "【場にある間】自分の場の永続魔法が破壊されるたび、「兵士ゴーレム」1体を自分の場に召喚する。",
+        "ko": "【필드에 있는 동안】자신의 필드의 영구 마법이 파괴될 때마다 병사 골램 1체를 자신의 필드에 소환한다.",
+        "en": "【While on the Field】Whenever a persistent spell on your field is destroyed, summon 1 Soldier Golem to your field."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     },
     "SLUM_MERCHANT": {
       "nameJa": "スラム街の商人",
@@ -10284,6 +10300,216 @@
         "ko": "【필드에 있는 동안】자신의 필드에 있는 고블린 계열 몬스터의 공격력 +3.",
         "en": "【While on the Field】Goblin-family monsters on your field gain +3 ATK."
       }
+    },
+    "EXECUTION": {
+      "nameJa": "処刑",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "189c87aac6a2e76365a3e23ce0c34329e485af33f67ca1050a96c2f304a05975",
+      "textSha256": "e6822ab42ce78043d03d11025c36de310a84f1ec07e1f2e3f65a392529071a89",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動時】両方の場のモンスターから1体をランダムに選び、破壊する。",
+        "ko": "【발동 시】양쪽 필드의 몬스터 중 1체를 무작위로 골라 파괴한다.",
+        "en": "【On Cast】Destroy 1 random monster on either field."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "ARCANE_DISMANTLER": {
+      "nameJa": "魔道具解体屋",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "5f72d8d0081e6ad4578cc2702d6152970ffb3fb0bd3914e87b462d624a212ae3",
+      "textSha256": "ea1a7d900518cc651b0a3008635e6f9ff243d2995448fd3ae42604110a1d1932",
+      "hooks": {
+        "onSummon": "arcaneDismantle"
+      },
+      "before": null,
+      "after": {
+        "ja": "【召喚時】両方の場から購入コスト2以下の永続魔法1枚を選び、破壊する。",
+        "ko": "【소환 시】양쪽 필드에서 구매 코스트 2 이하인 영구 마법 1장을 선택해 파괴한다.",
+        "en": "【On Summon】Choose and destroy 1 persistent spell with purchase cost 2 or less on either field."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "BLOOD_BIRTH": {
+      "nameJa": "血の魔法 - 誕生",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "c385e1eba26a2c135130de836a8c61dcb2a33da186716e2f868fc88b296625f7",
+      "textSha256": "f66c1413a25a505e8d96718788c1b137057609e675f134bccd7eba84522eb036",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動時】自分に5ダメージを与え、相手にシールド5を付与する。新しい「血の魔法」1枚をランダムに自分の手札に加える。",
+        "ko": "【발동 시】자신에게 5 데미지를 주고 상대에게 실드 5를 부여한다. 새로운 피의 마법 1장을 무작위로 자신의 패에 넣는다.",
+        "en": "【On Cast】Deal 5 damage to yourself and grant the opponent 5 Shield. Add 1 new random Blood Magic spell to your hand."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "RUNE_GUIDANCE": {
+      "nameJa": "ルーンの導き",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "6cb595822f6eaa634e3b1f1cb4b9c8f11c56eb25e35682205376580fd4a2a907",
+      "textSha256": "2011236969a73843e87bfd945e12f6506e047facb3b06122fde3a7989dcacaa8",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動時】カードを3枚引き、自分の体力を1回復する。\n\n【使用時】このゲーム中、自分の同名カード全ての発動コストを1下げる（最低0）。\n\n【発動時】発動コスト0で使用した場合、さらに、新しいルーン系魔法カード1枚をランダムに自分の手札に加える。",
+        "ko": "【발동 시】카드를 3장 뽑고 자신의 체력을 1 회복한다.\n\n【사용 시】이번 게임 동안 자신의 같은 이름의 카드 전체의 발동 코스트를 1 낮춘다(최소 0).\n\n【발동 시】발동 코스트 0으로 사용했다면 추가로 새로운 룬 계열 마법 카드 1장을 무작위로 자신의 패에 넣는다.",
+        "en": "【On Cast】Draw 3 cards and restore 1 of your HP.\n\n【On Play】Reduce the cast cost of all your cards with this name by 1 for the rest of the game (minimum 0).\n\n【On Cast】If played at cast cost 0, also add 1 new random Rune spell card to your hand."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "RUNE_PEBBLE": {
+      "nameJa": "ルーンの礫",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "b54aeb615f049e544df561cfab4d9b38db7334954b0e0c394d40236121893dc1",
+      "textSha256": "23fe12d4b361eb4c100f9a7f734c88a21f9c822cd6e2281ab44767926e3ddc54",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": null,
+      "after": {
+        "ja": "【コスト】このターン、既に自分がルーン系魔法を使用していれば0。\n\n【発動時】プレイヤーか場のモンスター1体を選ぶ。自分のデッキ構成にある、「ルーンの導き」以外のルーン系魔法カードとルーン系モンスターカードの合計枚数×7ダメージを、その対象に一度に与える。",
+        "ko": "【코스트】이번 턴에 이미 자신이 룬 계열 마법을 사용했다면 0.\n\n【발동 시】플레이어 또는 필드의 몬스터 1체를 선택한다. 자신의 덱 구성에 있는 룬의 인도 이외의 룬 계열 마법 카드와 룬 계열 몬스터 카드의 총 장수×7 데미지를 그 대상에게 한 번에 준다.",
+        "en": "【Cost】Costs 0 if you have already played a Rune spell this turn.\n\n【On Cast】Choose a player or a monster on the field. Deal 7 damage to it for each Rune spell or Rune monster card in your deck composition, excluding Rune Guidance, as a single hit."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "PRIMAL_CIVILIZATION": {
+      "nameJa": "原始文明",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "41cb256fb5d3857f20648662bd06ac403f8984f102a8d8a4e91536ff6cd5f55b",
+      "textSha256": "20acccb7640e7e8adfa08b8c2e7c46480cfde6d5099bcdb48b49271b7499818c",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動時】自分の次のターン開始時に、相手の体力を8回復し、新しい「始原の卵」1枚を自分の手札に加える。",
+        "ko": "【발동 시】자신의 다음 턴 시작에 상대의 체력을 8 회복하고 새로운 시초의 알 1장을 자신의 패에 넣는다.",
+        "en": "【On Cast】At the start of your next turn, restore 8 of the opponent’s HP and add 1 new Origin Egg to your hand."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "COMRADE_AID": {
+      "nameJa": "同志の助け",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "3a42e33b236906c6dceca8f7239126bec4c824cf06b10f40569ab0e0cc69da8e",
+      "textSha256": "6722d4a39904983180258e6daabfe014f29a2da61ceb40a50045a7f0c77c2208",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動時】自分の場のモンスターが持つ種族から、始原以外の種族を1種類ランダムに選ぶ。その種族の購入コスト4以下のモンスター1体をランダムに自分の場に召喚する。この効果は召喚条件を無視する。",
+        "ko": "【발동 시】자신의 필드의 몬스터가 가진 종족 중 시초 이외의 종족 1종류를 무작위로 고른다. 그 종족의 구매 코스트 4 이하인 몬스터 1체를 무작위로 자신의 필드에 소환한다. 이 효과는 소환 조건을 무시한다.",
+        "en": "【On Cast】Randomly choose 1 non-Origin tribe among monsters on your field. Summon 1 random monster of that tribe with purchase cost 4 or less to your field, ignoring its summon requirements."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "EXILED_HEXER": {
+      "nameJa": "破門された呪術師",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "21b53b2fc43265972627a5162d7b7fb8647cc772df5cde74c931f925d2fe8a48",
+      "textSha256": "e80b6e4960049e04b03b1f183f894c0d5543b84abb60eb980e0a3f0e69b5e1f6",
+      "hooks": {
+        "onSummon": "exiledHexer"
+      },
+      "before": null,
+      "after": {
+        "ja": "【召喚時】相手の墓地に新しい「呪い」1枚を追加する。相手のデッキ構成に「呪い」が3枚以上あれば、この効果は発動しない。",
+        "ko": "【소환 시】상대의 묘지에 새로운 저주 1장을 추가한다. 상대의 덱 구성에 저주가 3장 이상 있으면 이 효과는 발동하지 않는다.",
+        "en": "【On Summon】Add 1 new Curse to the opponent’s graveyard. This effect does not activate if their deck composition already contains at least 3 Curses."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "SUBSTITUTE": {
+      "nameJa": "身代わり",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "465c6250727bff62cfb59553eec1dad08a9574e0813a458e73284cc7bb06cf23",
+      "textSha256": "45268c1e73b1dfa298f81f48129c52fababe0dc56b0535faeeeeab433e7679c2",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動時】挑発を持つ「かかし」2体を自分の場に召喚する。",
+        "ko": "【발동 시】도발을 가진 허수아비 2체를 자신의 필드에 소환한다.",
+        "en": "【On Cast】Summon 2 Scarecrows with Taunt to your field."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
+    },
+    "SHIELD_STRIKE": {
+      "nameJa": "シールドアタック",
+      "status": "added-2026-11-20",
+      "changedLocales": [
+        "ja",
+        "ko",
+        "en"
+      ],
+      "definitionSha256": "a54d9561cfb7463540e8e99ea0669fe1ab6a5d95fe86a913fbc8aaf5cb65385f",
+      "textSha256": "bcee6de228bbc639c820b758a28b389363dbb451803bcfb29e561c43c94080da",
+      "hooks": {
+        "act": "expansion"
+      },
+      "before": null,
+      "after": {
+        "ja": "【発動時】プレイヤーか場のモンスター1体を選ぶ。自分のシールドを全て消費し、消費した数だけその対象にダメージを与える。",
+        "ko": "【발동 시】플레이어 또는 필드의 몬스터 1체를 선택한다. 자신의 실드를 전부 소비하고 소비한 수만큼 그 대상에게 데미지를 준다.",
+        "en": "【On Cast】Choose a player or a monster on the field. Consume all your Shield and deal that much damage to that target."
+      },
+      "review": "docs/releases/2026-11-20-cards/verification.md"
     }
   },
   "keywords": {

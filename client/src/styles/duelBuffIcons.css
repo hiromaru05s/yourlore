@@ -41,3 +41,8 @@
  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 #app.reading-board[data-buff-icons=true] .buff-icon:focus-visible {outline:2px solid #e8d9ab;outline-offset:2px}
+
+.game .buff-icon--quest .quest-progress--rune,
+#app.reading-board[data-buff-icons=true] .buff-icon--quest .quest-progress--rune {
+ white-space:pre-line;line-height:1.05;text-align:right;font-size:clamp(8px,calc(var(--board-meter, 800px)*.011),13px);
+}

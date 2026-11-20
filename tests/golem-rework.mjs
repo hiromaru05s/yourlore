@@ -74,7 +74,7 @@ try {
       assert.deepEqual(g.players[1-side].field.map(m=>m.id),['GOLEM_TEST','GOLEM1']);
       assert.equal(g.players[1-side].field[1].guts,1);
       g=game(side);g.players[1-side].field=[mon('GOLEM_TEST')];g.players[1-side].enchants=[enchant('RUNE_BARRIER')];
-      g=end(g);assert.equal(g.players[1-side].field.length,1,'natural expiry');
+      g=end(g);assert.equal(g.players[1-side].field.length,2,'Rune Barrier destroys itself and now triggers Trial Golem');
     }
     {
       let g=game(side);g.players[side].field=[mon('MANA_GIANT'),mon('GOLEM_TEST')];g.players[1-side].field=[mon('MANA_GIANT')];

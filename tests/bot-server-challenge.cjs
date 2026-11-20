@@ -129,7 +129,7 @@ const fs=require('fs'),assert=require('assert/strict'),{DatabaseSync}=require('n
        const update = updates.at(-1);
        assert.equal(update.type,'update');
        assert.equal(update.state.players[0].quests[0].progress,progress);
-       if (progress) assert(update.events.some(e=>e.type==='log' && e.html.includes('1/20')));
+       if (progress) assert(update.events.some(e=>e.type==='log' && e.html.includes('1/18')));
      }
    }
    assert.equal(room.room.rewardDecks[1].filter(id=>id==='ELITE_GOBLIN').length,3);

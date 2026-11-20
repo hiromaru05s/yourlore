@@ -1,0 +1,47 @@
+{
+  "origin": "http://127.0.0.1:5473",
+  "cwd": "/Users/hiromaru05s/.codex/worktrees/nameplate-board-1119/LORE_TCG",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "report": [
+    {
+      "counters": [
+        {
+          "text": "7/18\n1/2",
+          "width": 29,
+          "scrollWidth": 29,
+          "height": 26,
+          "scrollHeight": 26,
+          "title": "ルーンの秘密 · クエスト進捗 7/18 · ルーン魔法 1/2 · 【設置上限】自分の場に最大1枚。\n\n【達成条件】設置後、自分が魔法を18回使用するか、ルーン系魔法を2回使用する。\n\n【達成時】自分のマナ水晶+1。ルーン系魔法2回で達成した場合、このカードを墓地へ送る。それ以外はリフトへ送る。"
+        },
+        {
+          "text": "7/18\n1/2",
+          "width": 29,
+          "scrollWidth": 29,
+          "height": 26,
+          "scrollHeight": 26,
+          "title": "ルーンの秘密 · クエスト進捗 7/18 · ルーン魔法 1/2 · 【設置上限】自分の場に最大1枚。\n\n【達成条件】設置後、自分が魔法を18回使用するか、ルーン系魔法を2回使用する。\n\n【達成時】自分のマナ水晶+1。ルーン系魔法2回で達成した場合、このカードを墓地へ送る。それ以外はリフトへ送る。"
+        }
+      ]
+    },
+    {
+      "id": "ARCANE_DISMANTLER",
+      "reason": "ARCANE_DISMANTLER",
+      "selected": "visual-26"
+    },
+    {
+      "id": "RUNE_PEBBLE",
+      "reason": "RUNE_PEBBLE",
+      "selected": "player-1"
+    },
+    {
+      "id": "SHIELD_STRIKE",
+      "reason": "SHIELD_STRIKE",
+      "selected": "visual-38"
+    }
+  ],
+  "errors": [],
+  "scope": "Current adopted GameView fixture, actual choice modal clicks and confirmations. No authenticated PvP."
+}

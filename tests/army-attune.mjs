@@ -181,7 +181,7 @@ check('Boundary suppresses only opposing passives, offers face through monsters,
 check('Attune upgrades stack, dual replays the base only, and printed costs do not mutate',()=>{
   let g=fresh();g.players[0].maxMana=28;g.players[0].mana=28;enchant(g,'DUAL_ATTUNE');g.players[0].field=[mon('MINI_SPIRIT')];
   g=cast(g,'ATTUNE_SECRET');assert.equal(g.players[0].maxMana,28);g=cast(g,'AMA');g=cast(g,'STARTER_MANA');
-  assert.equal(g.players[0].field[0].defMod,4);assert.equal(g.players[0].maxMana,30);assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,6);assert.equal(E.DB.AMA.play,3);
+  assert.equal(g.players[0].field[0].defMod,2);assert.equal(g.players[0].maxMana,30);assert.equal(g.players[1].discard.filter(c=>c.id==='CURSE').length,6);assert.equal(E.DB.AMA.play,3);
 });
 check('Mana Heart shared first-use delay and twenty Curse Seals survive room serialization',()=>{
   let g=fresh();g.players[0].maxMana=15;g=cast(g,'MANA_HEART');assert.equal(g.players[0].heartDue,25);assert.equal(g.players[0].maxMana,18);
@@ -404,7 +404,7 @@ for (const side of [0,1]) {
   });
   check('Mini Spirit grows on the correct axis once per resource gain ('+side+')',()=>{
     let g=fresh(side);g.players[side].field=[mon('MINI_SPIRIT')];
-    for (const [id,atk,hp] of [['STARTER_MANA',0,2],['IRON_WALL',0,3],['NOURISHING_RAIN',1,3],['GRAPE',2,3]]) {
+    for (const [id,atk,hp] of [['STARTER_MANA',0,1],['IRON_WALL',0,2],['NOURISHING_RAIN',1,2],['GRAPE',2,2]]) {
       g=cast(g,id);const m=g.players[side].field[0];assert.deepEqual([m.atkMod,m.defMod],[atk,hp],id);
     }
   });

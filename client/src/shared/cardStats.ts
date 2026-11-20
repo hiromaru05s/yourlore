@@ -1,5 +1,6 @@
 /** Read-only card calculations shared by menus and the reducer. No action resolution dependencies. */
 import type {CardDef,CardInst,FieldMon,GameState,PlayerState} from './types';
+import {RUNE_SPELL_IDS} from './runeRework';
 import {FIRE_SPELL_IDS} from './fireCards';
 import {isGoblinMonster} from './goblinCards';
 
@@ -107,7 +108,9 @@ export function playCost(c: CardInst, p?: PlayerState): number {
   if (p && c.tribe==='시초' && c.t==='mon' && p.freeOrigin) return 0;
   if (p && c.id==='RUNE2' && runeBoost(p,c.id,false)) return 0;
   if (p && havenDiscount(p, c)) return 0;
+  if (p && c.id === "RUNE_PEBBLE" && p.runePlays?.some(id => RUNE_SPELL_IDS.has(id))) return 0;
   let base = c.play ?? c.cost;
+  if (p && c.id === "RUNE_GUIDANCE") base = Math.max(0, base - (p.runeGuidanceUses ?? 0));
   if (p && c.id === 'FIRE_METEOR' && p.expansion?.firePlayed.some(id => id !== c.id)) base = 1;
   if (p && c.id === 'FIRE_BRANDING') base -= p.expansion?.firePlayed.length ?? 0;
   if (p && isFire(c)) base = Math.max(0, base - (p.expansion?.fireDiscount ?? 0) - 2 * p.field.filter(m => !m.mutedEffects && m.id === 'FIRE_MASTER').length);

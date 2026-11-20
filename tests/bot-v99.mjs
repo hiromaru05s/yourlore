@@ -12,7 +12,7 @@ try {
   const g=fresh(),p=g.players[0];p.hand=[card('STARTER_MANA'),card('MINI_SPIRIT')];
   const action=C.safeGreedy(g);assert.deepEqual(action,{type:'play',idx:1},'summon growth body before Attune');
   let next=C.reduce(g,action).state;next=C.reduce(next,C.safeGreedy(next)).state;
-  assert.equal(C.curHp(next.players[0],next.players[0].field[0]),3,'Attune growth is actually received');
+  assert.equal(C.curHp(next.players[0],next.players[0].field[0]),2,'Attune growth is actually received');
  }
  {
   const g=fresh(),p=g.players[0];g.market=[card('MERC_LEADER')];g.marketStock=[3];

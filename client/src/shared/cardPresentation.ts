@@ -20,8 +20,8 @@ export function quickSpellRule(lang: EffectLocale): string {
   return {ja:'購入すると手札に入らず、このカードをリフトに置いてから効果を処理する。無効にされてもリフトに残る。',ko:'구매하면 패에 넣지 않고 이 카드를 리프트에 놓은 뒤 효과를 처리한다. 무효화되어도 리프트에 남는다.',en:'On purchase, this card goes directly to your Rift before its effect resolves. It stays there even if negated.'}[lang];
 }
 
-export function questProgressText(progress: number, target: number, lang: EffectLocale): string {
-  return `${{ja:'クエスト進捗',ko:'퀘스트 진행',en:'Quest progress'}[lang]} ${progress}/${target}`;
+export function questProgressText(progress: number, target: number, lang: EffectLocale, runes?: number): string {
+  return `${{ja:'クエスト進捗',ko:'퀘스트 진행',en:'Quest progress'}[lang]} ${progress}/${target}` + (runes == null ? '' : ` · ${{ja:'ルーン魔法',ko:'룬 마법',en:'Rune spells'}[lang]} ${runes}/2`);
 }
 
 /** Spell keyword metadata may describe what it grants, not an ability it owns. */

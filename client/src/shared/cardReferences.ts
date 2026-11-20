@@ -46,6 +46,10 @@ for (const [key,tribe] of Object.entries(TRIBES)) CARD_SERIES['tribe:'+key]={nam
 
 /** Explicit creation/summon/deploy results. Existing-card retrieval is not creation. */
 export const CARD_GENERATES: Record<string,string[]> = {
+  PRIMAL_CIVILIZATION:['TGE1'], SUBSTITUTE:['TOKEN00'], EXILED_HEXER:['CURSE'],
+  BLOOD_BIRTH:ids(c=>c.t==='spell' && c.name.startsWith('피의 마법')),
+  RUNE_GUIDANCE:ids(c=>c.t==='spell' && RUNE_IDS.has(c.id)),
+  COMRADE_AID:ids(c=>c.t==='mon' && !!c.tribe && c.tribe!=='시초' && c.cost<=4),
   FARM:['APPLE'], FARMER:['FARMER_PRAYER'], HARVEST:['GRAPE2','APPLE','GOLDEN_APPLE'], FARMER_PRAYER:['GOLDEN_APPLE'],
   SCARECROW:['TOKEN00'], LEVY:['SOLDIER2'], BUDGET:['SOLDIER2'], HALF_ELF:['WORLD_CARE'], BREWING:['WINE'],
   FORBIDDEN:['DEVIL_TOKEN'], SCRAPPER:['WINE'], RUNE_GLYPH:[...RUNE_IDS].filter(id=>id!=='RUNE_GLYPH'), Q_TRIBE:ids(c=>c.t==='mon'&&!!c.tribe),

@@ -184,8 +184,9 @@ export function greedyDecide(g: GameState, useLethal = true): Action {
     if (g.pending.reason === 'HIGH_ELF_HAND') return {type:'pick',uid:[...pool].filter(c=>c.uid!=='done' && !hasPassive(c,'relic')).sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid ?? 'done'};
     if (g.pending.reason === 'ARMORER_MODE') {const ally=g.players[owner];return {type:'pick',uid:ally.hp+(ally.shield ?? 0)<25||!pool.some(c=>c.uid==='buff')?'shield':'buff'};}
     if (g.pending.reason === 'BLOOD_SECRET') return {type:'pick',uid:(pool.find(isVampFamily) ?? pool[0])?.uid ?? null};
+    if (g.pending.reason === 'ARCANE_DISMANTLER') return {type:'pick',uid:(pool.find(c=>g.players[1-owner].enchants.some(e=>e.card.uid===c.uid)) ?? pool[0])?.uid ?? null};
     if (g.pending.reason === 'SOUL_HARVEST') return {type:'pick',uid:(pool.find(c => g.players[1-owner].field.some(m => m.uid === c.uid)) ?? pool[0])?.uid ?? null};
-    if (g.pending.reason === 'TREASON' || g.pending.reason === 'FIRE_BALL') { const reversed = g.players.some(p => p.enchants.some(e => e.card.ench === 'blackReverse')), heals = g.players.some(p => p.enchants.some(e => e.card.ench === 'spellHeal')); return { type: 'pick', uid: `player-${reversed !== heals ? owner : 1-owner}` }; }
+    if (['TREASON','FIRE_BALL','RUNE_PEBBLE','SHIELD_STRIKE'].includes(g.pending.reason)) { const reversed = g.players.some(p => p.enchants.some(e => e.card.ench === 'blackReverse')), heals = g.players.some(p => p.enchants.some(e => e.card.ench === 'spellHeal')); return { type: 'pick', uid: `player-${reversed !== heals ? owner : 1-owner}` }; }
     if (g.pending.reason === 'COLOSSEUM_REST') return {type:'pick',uid:[...pool].sort((a,b)=>((b as FieldMon).dmg??0)-((a as FieldMon).dmg??0))[0]?.uid??null};
     if (g.pending.reason === 'SELECTED_SWORD') return {type:'pick',uid:[...g.players[owner].field].sort((a,b)=>cardPower(b)-cardPower(a))[0]?.uid??null};
     if (g.pending.reason === 'FIRE_ZONE' || g.pending.reason === 'SLUM_ASSASSIN') return { type: 'pick', uid: [...pool].sort((a,b) => cardPower(a)-cardPower(b))[0]?.uid ?? null };
@@ -311,7 +312,7 @@ function greedyDecideRaw(g: GameState, useLethal = true, blocked?: Set<string>):
     if (c.id === "VAMP_PACT" && p.field.length >= 7) return false;
 
     if (c.id === "AMBUSH" && ![4, 5].includes(o.maxMana)) return false;
-    if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length === 0)) return false;
+    if (c.id === "COUNTERCALC" && (o.maxMana > 7 || o.enchants.length + p.enchants.length === 0)) return false;
     if (c.id === "KNIGHT_TEACH" && p.field.length === 0) return false;
     if (c.id === "TRUMPET" && p.field.length === 0) return false;
     // Reapplying an already-owned passive wastes a scarce story buff.

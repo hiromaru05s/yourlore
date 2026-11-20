@@ -174,7 +174,7 @@ export const RUNE_RULE_TEXT = {
   }
 };
 
-export const RUNE_IDS = new Set(['RUNE1','RUNE2','RUNE3','S15','ND2','RUNE_SAI','RUNE_NIKRO','RUNE_BARRIER','RUNE_GLYPH','Q_RUNE_SECRET']);
+export const RUNE_IDS = new Set(['RUNE_GUIDANCE','RUNE_PEBBLE','RUNE1','RUNE2','RUNE3','S15','ND2','RUNE_SAI','RUNE_NIKRO','RUNE_BARRIER','RUNE_GLYPH','Q_RUNE_SECRET']);
 export const NOVEMBER_PRINTS: Record<string,Partial<CardDef>> = {
   ELITE:{atk:6,def:6,summonReq:"sixCards"}, HORDE:{atk:2,def:3},
   INFERNO:{cost:4}, MAGIC_BANK:{play:3},
@@ -202,3 +202,5 @@ export function applyRuneCatalog(db:Record<string,CardDef>):void {
   add('DEVIL_TOKEN',['悪魔','악마','Devil'],0,{t:'mon',atk:5,def:5,noShop:true,passive:['void','aura']});
   delete db.INQUISITION;
 }
+
+export const RUNE_SPELL_IDS = new Set([...RUNE_IDS].filter(id=>!['RUNE_SAI','RUNE_NIKRO','Q_RUNE_SECRET'].includes(id)));

@@ -1,3 +1,4 @@
+import {CARD_REWORK_1120, CARD_REWORK_1120_PRINTS, STARTERS_1120} from './cardRework1120';
 import {FREE_SLEEVES} from './freeSleeves';
 import {balance99Prints} from './balance99';
 import {balance98Prints} from './balance98';
@@ -2452,6 +2453,10 @@ for (const id of retired97) {
   RANDOM_CARDS.delete(id);
 }
 RANDOM_CARDS.add("BATTLEFIELD");
+for (const card of CARD_REWORK_1120) DB[card.id] = card;
+for (const [id, patch] of Object.entries(CARD_REWORK_1120_PRINTS)) Object.assign(DB[id], patch);
+DECK_POOL.push(...STARTERS_1120);
+for (const id of STARTERS_1120) RANDOM_CARDS.delete(id);
 standardizeCardTexts([DB, STARTERS as unknown as Record<string, CardDef>]);
 
 // Drop unset patch fields so newly printed instances match a JSON-restored room exactly.
@@ -2466,6 +2471,9 @@ export const BUYABLE_POOL = ALL_IDS.filter((id) => DB[id].cost > 0 && !DB[id].no
 // Auto-derived by matching OTHER cards' names inside a card's text, plus a manual
 // map for abbreviated references (e.g. "초급·중급 암살자") the name-scan can't catch.
 export const RELATED_MANUAL: Record<string, string[]> = {
+  PRIMAL_CIVILIZATION: ['TGE1'],
+  SUBSTITUTE: ['TOKEN00'],
+  EXILED_HEXER: ['CURSE'],
   INTERCEPT: ["GUNNER", "HEAVY_GUNNER", "CASTLE", "SOLDIER2"],
   REINFORCE: ["INFKNIGHT", "SOLDIER2", "GUNNER"],
   FARM_KEEPER: ["FARM", "BREWING", "TOKEN00", "FARMER"],
@@ -2571,7 +2579,7 @@ export function relatedCardIds(id: string): string[] {
 // Format: "v<N>" (or a date). Only bump for gameplay-affecting
 // card edits — not art, text, or localization tweaks.
 // ============================================================
-export const BALANCE_VERSION = "v101"; // November card balance update
+export const BALANCE_VERSION = "v102"; // November card balance update
 // v43: all trap cards retired; related monsters/spells await rework decisions
 // v42: 매 턴 3장 드로우 · 손패 이월 상한 5(턴 종료 시 6장 이상이면 선택 폐기 · +10초 · 시간 초과 시 오른쪽부터) · 카운터 명칭 통일(낙인/부패/기합/성/마켓… 카운터 → 카운터)
 // v41(구): // v41: 컬 0코스트 · 세척 장치/선별자/콜로세움 휴게소/콜로세움/제인사/책략/무법지대 + 스타터 차원의 균열 · 카운터 UI 표시 · v41b: 무상의 대가/노 페인 노 게인/기원의 탐구/초심/차원 술식/공간 술식/행운의 잔향/선별의 규율/매점/윤회/고행의 대가/무리의 본능/정신 방출술/부호의 습관

@@ -15,8 +15,8 @@ try{
   assert.deepEqual(extinct(ev),[{type:'statusExtinction',player,resource,before:5,after:0}]);checks.push('zero-edge-'+player+'-'+resource);
  }
  for(const owner of [0,1])for(const [id,resource,target] of [['ARMOR_BREAK','shield',1-owner],['DESERTIFICATION','dew',1-owner],['UNBRAND','brand',owner],['UNBRANDER','brand',owner],['PURGE_TOUCH','brand',owner]]){
-  const g=fresh(owner);g.players[target][resource]=id==='UNBRANDER'?1:8;g.players[owner].hand=[{...E.DB[id],uid:'play'}];if(id==='PURGE_TOUCH')g.players[owner].discard=[{...E.DB.M1,uid:'purge-target'}];const r=E.reduce(g,{type:'play',idx:0});
-  assert.equal(r.state.players[target][resource],0,id);assert.equal(g.players[target][resource],id==='UNBRANDER'?1:8,'input immutable');assert.deepEqual(extinct(r.events).map(e=>[e.player,e.resource]),[[target,resource]]);checks.push('card-'+owner+'-'+id);
+  const g=fresh(owner);g.players[target][resource]=['UNBRANDER','PURGE_TOUCH'].includes(id)?1:8;g.players[owner].hand=[{...E.DB[id],uid:'play'}];if(id==='PURGE_TOUCH')g.players[owner].discard=[{...E.DB.M1,uid:'purge-target'}];const r=E.reduce(g,{type:'play',idx:0});
+  assert.equal(r.state.players[target][resource],0,id);assert.equal(g.players[target][resource],['UNBRANDER','PURGE_TOUCH'].includes(id)?1:8,'input immutable');assert.deepEqual(extinct(r.events).map(e=>[e.player,e.resource]),[[target,resource]]);checks.push('card-'+owner+'-'+id);
  }
  {const g=fresh();g.players[0].brand=3;g.players[1].brand=4;g.players[0].hand=[{...E.DB.UNBRAND,uid:'clear'}];const r=E.reduce(g,{type:'play',idx:0});assert.deepEqual(extinct(r.events).map(e=>[e.player,e.before]),[[0,3],[1,4]]);checks.push('clear-both');}
  {const g=fresh(),p=g.players[1],ev=[],ctx=E.makeCtx(g,ev);p.shield=8;ctx.dealDamage(p,8,'test');assert.equal(p.hp,100);assert.equal(extinct(ev).length,1);ctx.dealDamage(p,2,'test');assert.equal(p.hp,98);assert.equal(extinct(ev).length,1);checks.push('shield-damage-no-double');}

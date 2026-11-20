@@ -40,6 +40,7 @@ export function playIntent(g: GameState, owner: Side, c: CardInst): PlayIntent |
     case 'ROGUE_ART': return p.field.some(isAssassinCard) ? null : plan(c.id, p.field);
     case 'FIRE_ZONE': return plan(c.id, p.hand.filter(h => h.uid !== c.uid && !hasPassive(h, 'relic')));
     case 'TREASON':
+    case 'RUNE_PEBBLE': case 'SHIELD_STRIKE':
     case 'FIRE_BALL': return plan(c.id, [
       ...g.players.map((pl, i) => ({ ...c, uid: `player-${i}`, name: pl.name, nameJa: pl.name, nameEn: pl.name })),
       ...p.field, ...enemy,
@@ -70,6 +71,7 @@ export const FOLLOWUP_CASTS = new Set([
 /** Explicit rule metadata, not text parsing. These can hurt the caster/board or
  * benefit the opponent even when they have no selectable target. */
 export const RISKY_CASTS = new Set([
+  'EXECUTION','BLOOD_BIRTH','PRIMAL_CIVILIZATION','COUNTERCALC',
   'WALLBREAK1','WALLBREAK2','SNIPE1','SNIPE2','BLOOD1','BLOOD2','BLOOD_JOY',
   'BLOOD_ANGER','BLOOD_SORROW','BLOOD_PLEASURE','BLOOD_SECRET','VAMP_PACT','VAMP_PACT2',
   'FLAME','AMBUSH','SHATTER','CATALYST','FORBIDDEN','BLACK_NOVA','FIRE_BALL','FIRE_ARROW',

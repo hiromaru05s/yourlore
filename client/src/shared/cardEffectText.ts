@@ -1,3 +1,4 @@
+import {CARD_REWORK_1120_TEXT} from './cardRework1120';
 import {balance99Text} from './balance99';
 import {balance98Text} from './balance98';
 import {balance97Text,retired97} from './balance97';
@@ -1846,3 +1847,5 @@ for (const c of [...DIPLOMACY_CARDS, CURSE_CONTAGION, ...MERCENARY_CARDS, ...STA
 
 Object.assign(CARD_EFFECT_TEXT,RUNE_RULE_TEXT,GOLEM_TEXT,balanceText,balance94Text,balance96Text,balance97Text,balance98Text,balance99Text);
 for (const id of retired97) delete CARD_EFFECT_TEXT[id];
+
+Object.assign(CARD_EFFECT_TEXT, CARD_REWORK_1120_TEXT);

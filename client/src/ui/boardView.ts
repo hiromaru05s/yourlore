@@ -558,13 +558,13 @@ export class GameView {
   }
 
   private questCard(q: QuestState, isMe: boolean, myTurn: boolean, pending: GameState["pending"]): HTMLElement {
-    const tile = questTile(q.card,q.progress);
+    const tile = questTile(q.card,q.progress,q.runeProgress ?? 0);
     tile.tabIndex=0;tile.setAttribute("role","button");
     tile.dataset.uid = q.card.uid;
     const lang = getLang();
     const progress = q.card.id === 'Q_UNDERWORLD_DEAL'
       ? {ja: 'カウンター', ko: '카운터', en: 'Counters'}[lang] + ' ×' + q.progress
-      : questProgressText(q.progress, q.card.quest?.target ?? 0, lang);
+      : questProgressText(q.progress, q.card.quest?.target ?? 0, lang, q.card.id === 'Q_RUNE_SECRET' ? q.runeProgress ?? 0 : undefined);
     tile.title = `${cardName(q.card)} · ${progress} · ${cardText(q.card)}`;
     tile.setAttribute("aria-label", `${cardName(q.card)} ${progress}`);
     bindZoom(tile, q.card, undefined, progress);
@@ -589,7 +589,7 @@ export class GameView {
       const row = this.q(isMe ? "meRow" : "oppRow");
       for (const q of after.players[side].quests ?? []) {
         const old = previous.find(entry => entry.card.uid === q.card.uid);
-        if (!old || old.progress === q.progress) continue;
+        if (!old || (old.progress === q.progress && old.runeProgress === q.runeProgress)) continue;
         const tile = row.querySelector<HTMLElement>(`.buff-icon--quest[data-uid="${CSS.escape(q.card.uid)}"]`);
         if (tile) tile.replaceWith(this.questCard(q, isMe, after.cur === this.you && !after.over, after.pending));
       }

@@ -307,7 +307,8 @@
     "tests/mana-scatter.mjs",
     "tests/healing-feedback.mjs",
     "tests/seven-spell-slots.mjs",
-    "tests/default-sleeve-api.mjs"
+    "tests/default-sleeve-api.mjs",
+    "tests/card-rework-1120.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

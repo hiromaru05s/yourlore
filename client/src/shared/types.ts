@@ -53,6 +53,7 @@ export type QuestEvent = "healOccurrence" | "ambushAttack" | "attunePlay" | "dic
 export interface QuestState {
   card: CardInst;
   progress: number;
+  runeProgress?: number;
   startedTurn: number;
   anchorUid?: string;
   townSeen?: string[];
@@ -129,6 +130,8 @@ export interface PlayerState {
   worldTreePresent?: boolean;
   damageReceived?: {turn:number; total:number; previous:number};
   runePlays?:string[];
+  runeGuidanceUses?: number;
+  primalCivilizations?: number;
   runeMarket?:boolean;
   freeOrigin?:boolean;
   lastMonsterAttackTurn?: number;
@@ -261,6 +264,7 @@ export interface GameState {
   balance99Applied?: boolean;
   balance100Applied?: boolean;
   balance101Applied?: boolean;
+  cardRework1120Applied?: boolean;
   balance94Applied?: boolean | 2 | 3;
   novemberBalanceApplied?: boolean | 2 | 3; // true in v90, 2 in v91–92, 3 after the v93 adjustments
   incubatorEndTurn?: number;

@@ -1,0 +1,17 @@
+{
+  "baseCommit": "0213c98d2203cdec2192837ab316d87a058b715a",
+  "tool": "built-in imagegen",
+  "normalization": "1472x1344 WebP quality 92; 384px and 192px thumbnails",
+  "files": {
+    "ARCANE_DISMANTLER": "39e488bd-58e1-496a-83d0-9ad3164a2e17",
+    "EXECUTION": "316fd8b4-5b8f-49d2-97a3-cb5a9bf0c68a",
+    "BLOOD_BIRTH": "76344a64-78fa-465e-9d76-d22dadb398f9",
+    "RUNE_GUIDANCE": "5d8d54df-fdf7-4fbc-9452-501509e58517",
+    "RUNE_PEBBLE": "933bb39b-0a2f-456d-8242-933d1e37554b",
+    "PRIMAL_CIVILIZATION": "e2ed4e9c-0823-460d-9bfc-b8d3b4449c83",
+    "SUBSTITUTE": "74180a76-990f-45f3-a05d-5ce068da610b",
+    "SHIELD_STRIKE": "16706d38-bbe7-487c-8a2b-087c11513bd0",
+    "EXILED_HEXER": "7616da89-7e14-41f1-8dad-0dde10c2f33d",
+    "COMRADE_AID": "13d3e1e3-0ee2-4d6d-bb08-0e10d0d90f55"
+  }
+}

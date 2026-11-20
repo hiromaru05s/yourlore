@@ -1,3 +1,4 @@
+import {CARD_REWORK_1120_PRINTS, CARD_REWORK_1120_TEXT, MOVED_STARTERS_1120} from '../../client/src/shared/cardRework1120';
 import {balance99Prints,balance99Text} from '../../client/src/shared/balance99';
 import {balance98Prints,balance98Text} from '../../client/src/shared/balance98';
 import {balance97Prints,balance97Text,retired97} from '../../client/src/shared/balance97';
@@ -24,6 +25,7 @@ const questCards = new Set(['Q_RIFT','Q_BRAND','Q_TORI','Q_TRIBE','Q_DECAY','Q_A
 /** Rooms persist full card instances, including their printed rules. Update only
  * revised print fields so UID, counters, damage and granted abilities survive. */
 export function restoreReworkedCards(game: GameState): void {
+  const update1120 = !game.cardRework1120Applied;
   const updateFeedback = !game.balance101Applied;
   const updateEliteGoblin = !game.balance100Applied;
   const updateCastle = !game.castleReworkApplied;
@@ -45,7 +47,7 @@ export function restoreReworkedCards(game: GameState): void {
   const renameFire = !game.threeFireNamed;
   const updateMercs = !game.mercReworkApplied;
   const updateGuildmasterText = game.mercReworkApplied !== 2;
-  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied && game.balance99Applied && !updateEliteGoblin && !updateFeedback)) return;
+  if (game.over || (!updateCastle && !updateQuests && !updateArmy && !updateStarterCosts && !updateFire && !updateDemons && !updateHexers && !updateGuildmasterText && !updateDiplomacy && !updateCasinoRally && !updateRunes && !auditRunes && !renameFire && !updateGolems && !updateIncubators && !updatePowerBalance && game.balance94Applied === 3 && game.balance97Applied && game.balance98Applied && game.balance99Applied && !updateEliteGoblin && !updateFeedback && !update1120)) return;
   game.balance100Applied = true;
   game.balance101Applied = true;
   game.incubatorsReworked = true;
@@ -466,6 +468,35 @@ export function restoreReworkedCards(game: GameState): void {
       choice.data.val=4;choice.data.val2=0;
     }
     clearEmptyBuffChoice(game);
+  }
+  if (update1120) {
+    const refresh1120 = (card: CardInst | null): void => {
+      if (!card || !Object.hasOwn(CARD_REWORK_1120_TEXT,card.id)) return;
+      const def=DB[card.id];
+      Object.assign(card,{text:def.text,textJa:def.textJa,textEn:def.textEn});
+      for (const key of Object.keys(CARD_REWORK_1120_PRINTS[card.id] ?? {})) Reflect.set(card,key,structuredClone(Reflect.get(def,key)));
+    };
+    const moved=new Set(MOVED_STARTERS_1120);
+    const present=new Set(game.market.filter(c=>!moved.has(c.id)).map(c=>c.id));
+    game.market=game.market.map((c,i)=>{
+      if(!moved.has(c.id))return c;
+      const pool=BUYABLE_POOL.map(id=>DB[id]).filter(d=>!present.has(d.id));
+      const def=pool.find(d=>d.cost===c.cost) ?? pool[0] ?? DB.M1;
+      present.add(def.id);if(game.marketStock)game.marketStock[i]=3;
+      return {...structuredClone(def),uid:c.uid};
+    });
+    for(const p of game.players) {
+      // Clear removed offers; owned copies remain in their existing zones.
+      p.supply=p.supply.map(c=>c && moved.has(c.id) ? null : c);
+      for(const c of [...p.hand,...p.deck,...p.discard,...p.field,...p.removed??[],...p.supply])refresh1120(c);
+      for(const e of [...p.enchants,...p.traps,...p.quests??[],...p.exile])refresh1120(e.card);
+      let kept=false;
+      for(const q of [...p.quests??[]]) if(q.card.id==='Q_RUNE_SECRET') {
+        if(kept){p.quests!.splice(p.quests!.indexOf(q),1);p.discard.push(q.card);continue;}
+        kept=true;q.progress=Math.min(q.progress,18);q.runeProgress??=0;
+      }
+    }
+    game.cardRework1120Applied=true;
   }
   const wheel = game._wheelSnap;
   if (wheel?.state) restoreReworkedCards(wheel.state as GameState);

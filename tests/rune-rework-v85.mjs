@@ -53,7 +53,7 @@ for(const side of [0,1]){
   assert(E.hasPassive(g.players[opp].field[1],'aura'));assert(g.players[side].hand.some(c=>c.id==='RUNE_SAI'));
  }
  {
-  let g=play(fresh(side),'Q_RUNE_SECRET');g.players[side].deck=Array.from({length:5},()=>c('M2'));g=play(g,'ND2');assert.equal(g.players[side].maxMana,21);
+  let g=play(fresh(side),'Q_RUNE_SECRET');g.players[side].deck=Array.from({length:5},()=>c('M2'));g=play(g,'ND2');assert.equal(g.players[side].quests[0].runeProgress,1);g=play(g,'RUNE_GUIDANCE');assert.equal(g.players[side].maxMana,21);
   assert(g.players[side].discard.some(c=>c.id==='Q_RUNE_SECRET'));
   g = play(fresh(side), 'Q_RUNE_SECRET');
   g = play(g, 'STARTER_MANA');
@@ -62,13 +62,13 @@ for(const side of [0,1]){
   g = play(g, 'STARTER_MANA');
   assert.equal(g.players[side].quests[0].progress, 3, 'the free replay also advances the quest');
   g.players[side].enchants = [];
-  g.players[side].quests[0].progress = 19;
+  g.players[side].quests[0].progress = 17;
   const crystals = g.players[side].maxMana;
   g = play(g, 'STARTER_MANA');
   assert.equal(g.players[side].quests.length, 0);
   assert.equal(g.players[side].maxMana, crystals + 2); // Attune and the quest each grant one.
   assert(g.players[side].removed.some(card => card.id === 'Q_RUNE_SECRET'));
-  g=play(fresh(side),'Q_RUNE_SECRET');g.players[side].quests[0].progress=19;g=play(g,'S13');
+  g=play(fresh(side),'Q_RUNE_SECRET');g.players[side].quests[0].progress=17;g=play(g,'S13');
   assert(g.players[side].removed.some(c=>c.id==='Q_RUNE_SECRET'));
  }
  {
@@ -114,7 +114,7 @@ for(const side of [0,1]){
  }
  {
   let g=fresh(side);g.players[opp].field=[m('MIMIC')];g=play(g,'MIMIC_LORD');assert.equal(g.players[opp].field.length,0);
-  assert.equal(g.players[side].field[0].atkMod,3);
+  assert.equal(g.players[side].field[0].atkMod,2);
   g=fresh(side);g.players[opp].enchants=[{card:c('E1'),turns:3},{card:c('E2'),turns:4}];
   g=play(g,'CHOSEN_MAGE');while(g.pending)g=pick(g,E.effectChoices(g)[0].uid);
   assert.equal(g.players[opp].enchants.length,0);assert.equal(E.playCost(c('S15'),g.players[side]),2);

@@ -6,6 +6,7 @@ export const CARD_EFFECT_HEADINGS = [
   ["発動条件", "발동 조건", "Play Requirement", "requirements"],
   ["購入条件", "구매 조건", "Purchase Requirement", "requirements"],
   ["攻撃条件", "공격 조건", "Attack Requirement", "requirements"],
+  ["パッシブの追加・除去時", "패시브 추가·제거 시", "When a Passive Is Added or Removed", "effects"],
   ["召喚時", "소환 시", "On Summon", "effects"],
   ["発動時", "발동 시", "On Cast", "effects"],
   ["使用時", "사용 시", "On Play", "effects"],
