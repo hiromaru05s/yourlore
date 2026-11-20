@@ -41,7 +41,7 @@ export function placeReadingBoard(root:HTMLElement):void {
   const spellDepth=buffIcons?(spellsRight-spellsLeft-6*.002)/7:.048;
   const spellZ=rail?(id==='me'?rail.planeZ(rail.line)+spellDepth/2:rail.planeZ(rail.opponentLine)-spellDepth/2):sign*.34-(buffIcons?.006:0);
   place(`#${id}Row .zone-row:has(.zone-st)`,(spellsLeft+spellsRight)/2,spellZ,spellsRight-spellsLeft,spellDepth);
-  const pileZ=rail?(id==='me'?rail.pileSelfZ:-rail.pileSelfZ):sign*.205;
+  const pileZ=rail?(id==='me'?rail.pileSelfZ:rail.pileOppZ):sign*.205;
   place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,pileZ,.136,.198);
   place(`#pile-${id==='me'?'my':'opp'}Disc`,-.54,rail?pileZ:sign*.245,rail?.136:.166,rail?.198:.232);
   place(`#rift-${id}`,RIFT_MOUNT.x,sign*RIFT_MOUNT.z,.125,.268);

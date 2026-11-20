@@ -19,6 +19,10 @@ Runtime model: `client/public/models/reading-board/identity-folded-1120/identity
 
 - TypeScript and diff whitespace checks passed.
 - Native 1920×1080 and 1280×720 boards visually inspected, including both guide lines; no browser page errors.
-- Exported GLB vertex checks at 1920×1080, 1280×720 and 1440×900: self name/rank/icon tops and opponent mana/medal/icon bottoms match the visible portrait reference within 0.1 px. See `projection-check.json`.
+- Exported GLB vertex checks at 1920×1080, 1280×720 and 1440×900: self name/rank/icon tops match the self guide and opponent mana/medal/icon bottoms match the visible portrait reference within 0.1 px. See `projection-check.json`.
 - Both upper hinge coordinates coincide with their corresponding lower bezels to floating-point precision; physical left/right bounds verify no gap at the two side joins.
 - Placement icons remain samples. This is fixture/browser/model validation, not live PvP or full animation-continuity validation. No deployment or production adoption.
+
+## Additional self-side optical correction
+
+After reviewing `685e064c0`, the user requested a further small downward correction. The self-side guide and its furniture/icon edges move another 4 px at 1920×1080 (2.67 px at 1280×720). The portrait stays fixed. Nameplate dimensions, pitch and the opponent-side layout stay unchanged; the entire self mana/name/insignia assembly moves together. This is an intentional optical offset beyond the source image alpha bounds, and the updated mesh measurements use that corrected guide.

@@ -11,14 +11,16 @@ export function identityRailLayout(scale:number,width=innerWidth,height=innerHei
  const portraitSize=Math.min(210,Math.max(104,scale*.30),height*.195);
  const farTop=Math.max(2,cy-scale*.326-portraitSize);
  // Visible alpha bounds of the actual 1254px portrait frames, not their transparent canvases.
- const line=height-farTop-portraitSize+portraitSize*12/1254;
+ const portraitLine=height-farTop-portraitSize+portraitSize*12/1254;
+ // Requested optical adjustment: move the self rail 4px down at a 210px portrait.
+ const line=portraitLine+portraitSize*4/210;
  const opponentLine=farTop+portraitSize*1244/1254;
  const nameTop=(side:'Me'|'Opp',depth:number,manaDistance=.397)=>{
   const p=identityNameplatePose(side,depth,RAIL.hingeHeight),c=Math.cos(p.radians),s=Math.sin(p.radians),manaZ=side==='Me'?manaDistance:-manaDistance;
   return Math.min(...profile.map(([y,extra])=>{const z=-depth/2-extra*depth/RAIL.nameDepth;return screenY(manaZ+p.centerZ+z*c+y*s,.012+p.centerY-z*s+y*c);}));
  };
  const solve=(value:(d:number)=>number,target:number,lo:number,hi:number)=>{for(let i=0;i<40;i++){const mid=(lo+hi)/2;if(value(mid)>target)lo=mid;else hi=mid;}return (lo+hi)/2;};
- const nameDepth=Math.max(.050,solve(d=>nameTop('Me',d),line,.015,.11));
+ const nameDepth=Math.max(.050,solve(d=>nameTop('Me',d),portraitLine,.015,.11));
  // Taller windows need the rail slightly nearer the rim, not a thin unreadable name face.
  const manaDistance=nameTop('Me',nameDepth)<line?solve(z=>-nameTop('Me',nameDepth,z),-line,.397,.47):.397;
  // The near-facing edge of the lower plinth is the visible bottom of both lower trays.
@@ -27,5 +29,5 @@ export function identityRailLayout(scale:number,width=innerWidth,height=innerHei
   const manaZ=id==='Me'?manaDistance:opponentManaZ,top=nameTop(id,nameDepth,Math.abs(manaZ));
   return {manaZ,name:identityNameplatePose(id,nameDepth,RAIL.hingeHeight),nameTop:top};
  };
- return {line,opponentLine,nameDepth,Me:side('Me'),Opp:side('Opp'),planeZ,screenY,pileSelfZ:planeZ(line)-RAIL.deckDepth/2};
+ return {line,opponentLine,nameDepth,Me:side('Me'),Opp:side('Opp'),planeZ,screenY,pileSelfZ:planeZ(line)-RAIL.deckDepth/2,pileOppZ:-(planeZ(portraitLine)-RAIL.deckDepth/2)};
 }
