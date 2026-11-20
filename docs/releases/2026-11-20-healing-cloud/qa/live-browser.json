@@ -1,0 +1,122 @@
+{
+  "origin": "https://yourlore.xyz",
+  "checks": [
+    {
+      "kind": "monster",
+      "side": 0,
+      "amount": 0,
+      "hp": [
+        40,
+        40
+      ],
+      "wounds": [
+        0,
+        0
+      ],
+      "left": 0,
+      "overflow": false,
+      "samples": 180
+    },
+    {
+      "kind": "monster",
+      "side": 1,
+      "amount": 0,
+      "hp": [
+        40,
+        40
+      ],
+      "wounds": [
+        0,
+        0
+      ],
+      "left": 0,
+      "overflow": false,
+      "samples": 184
+    },
+    {
+      "kind": "player",
+      "side": 0,
+      "amount": 9,
+      "hp": [
+        49,
+        40
+      ],
+      "wounds": [],
+      "left": 0,
+      "overflow": false,
+      "samples": 93
+    },
+    {
+      "kind": "player",
+      "side": 1,
+      "amount": 10,
+      "hp": [
+        40,
+        50
+      ],
+      "wounds": [],
+      "left": 0,
+      "overflow": false,
+      "samples": 94
+    },
+    {
+      "kind": "blood",
+      "side": 0,
+      "amount": 0,
+      "hp": [
+        40,
+        43
+      ],
+      "wounds": [],
+      "left": 0,
+      "overflow": false,
+      "samples": 91
+    },
+    {
+      "kind": "monster",
+      "side": 0,
+      "amount": 0,
+      "hp": [
+        40,
+        40
+      ],
+      "wounds": [
+        0,
+        0
+      ],
+      "left": 0,
+      "overflow": false,
+      "samples": 178
+    },
+    {
+      "kind": "player",
+      "side": 1,
+      "amount": 128,
+      "hp": [
+        40,
+        168
+      ],
+      "wounds": [],
+      "left": 0,
+      "overflow": false,
+      "samples": 92
+    },
+    {
+      "reduced": true
+    },
+    {
+      "action": "skip",
+      "clean": true
+    },
+    {
+      "action": "resize",
+      "clean": true
+    },
+    {
+      "action": "destroy",
+      "clean": true
+    }
+  ],
+  "errors": [],
+  "boundary": "Real reducer/controller fixtures and adopted UI. Browser-generated player amount fixtures exercise 9/10/128. Not authenticated multiplayer."
+}

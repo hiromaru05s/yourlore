@@ -3,6 +3,7 @@
 export function holdPhysicalCard(node: HTMLElement, source: DOMRect, pointer: {x:number;y:number}, angle:number, sourceSize:{width:number;height:number}) {
  const clamp=(v:number,a:number,b:number)=>Math.max(a,Math.min(b,v));
  const strong=document.documentElement.dataset.handPhysicsStrength!=='soft';
+ const dragTilt=strong?.8:1; // 20% softer air resistance, with the same grip and settling.
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const w=node.offsetWidth,h=node.offsetHeight;
  const rad=angle*Math.PI/180,dx=pointer.x-(source.left+source.width/2),dy=pointer.y-(source.top+source.height/2);
@@ -28,9 +29,9 @@ export function holdPhysicalCard(node: HTMLElement, source: DOMRect, pointer: {x
    const stiffness=returning?170:strong?700:1150,damping=returning?25:strong?34:57;
    vx+=((tx-x)*stiffness-vx*damping)*s;vy+=((ty-y)*stiffness-vy*damping)*s;
    x+=vx*s;y+=vy*s;
-   const targetX=returning||reduced?0:clamp(-vy*(strong?.0459:.016),strong?-28.8:-18,strong?28.8:18);
-   const targetY=returning||reduced?0:clamp(vx*(strong?.0576:.018),strong?-37.8:-22,strong?37.8:22);
-   const targetZ=returning?goalZ:reduced?0:clamp(-vx*(strong?.0279:.009)+(gx-.5)*vy*(strong?.0387:.014),strong?-25.2:-16,strong?25.2:16);
+   const targetX=returning||reduced?0:dragTilt*clamp(-vy*(strong?.0459:.016),strong?-28.8:-18,strong?28.8:18);
+   const targetY=returning||reduced?0:dragTilt*clamp(vx*(strong?.0576:.018),strong?-37.8:-22,strong?37.8:22);
+   const targetZ=returning?goalZ:reduced?0:dragTilt*clamp(-vx*(strong?.0279:.009)+(gx-.5)*vy*(strong?.0387:.014),strong?-25.2:-16,strong?25.2:16);
    const rotationDamping=strong&&!returning?13.5:18,rotationSpring=strong?205:155;
    vrx+=((targetX-rx)*rotationSpring-vrx*rotationDamping)*s;
    vry+=((targetY-ry)*rotationSpring-vry*rotationDamping)*s;

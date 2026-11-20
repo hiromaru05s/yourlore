@@ -120,9 +120,9 @@
 /* Same circular fan for both states; no mismatched corner pivots. */
 :is(#app,.reading-board).reading-board .game:not(.hand-open) #hand{width:calc(var(--fan-width)*var(--compact-hand-scale,.42));height:calc(var(--card-h-hand)*var(--compact-hand-scale,.42));}
 :is(#app,.reading-board).reading-board .game:not(.hand-open) #hand .card{left:calc(50% + var(--fan-x)*var(--compact-hand-scale,.42) - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-y)*var(--compact-hand-scale,.42)*-1);transform:scale(var(--compact-hand-scale,.42)) rotate(var(--hand-angle,0deg));transform-origin:50% 100%;}
-:is(#app,.reading-board).reading-board .game.hand-open #hand{width:calc(var(--fan-open-width)*.58);height:calc(var(--card-h-hand)*.58);transform:translateX(-50%);bottom:max(24px,calc(var(--fan-open-overhang,0px) + 10px))!important;filter:drop-shadow(0 5px 9px #0006);}
-:is(#app,.reading-board).reading-board .game.hand-open #hand .card{left:calc(50% + var(--fan-open-x)*.58 - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-open-y)*-.58);transform:scale(.58) rotate(var(--fan-open-angle,0deg));transform-origin:50% 100%;}
-:is(#app,.reading-board).reading-board .game.hand-open #hand .card:hover{transform:translateY(-16px) scale(.66) rotate(var(--fan-open-angle,0deg));}
+:is(#app,.reading-board).reading-board .game.hand-open #hand{width:calc(var(--fan-open-width)*.667);height:calc(var(--card-h-hand)*.667);transform:translateX(-50%);bottom:max(24px,calc(var(--fan-open-overhang,0px) + 10px))!important;filter:drop-shadow(0 5px 9px #0006);}
+:is(#app,.reading-board).reading-board .game.hand-open #hand .card{left:calc(50% + var(--fan-open-x)*.667 - var(--card-w-hand)*.5);top:auto;bottom:calc(var(--fan-open-y)*-.667);transform:scale(.667) rotate(var(--fan-open-angle,0deg));transform-origin:50% 100%;}
+:is(#app,.reading-board).reading-board .game.hand-open #hand .card:hover{transform:translateY(-16px) scale(.759) rotate(var(--fan-open-angle,0deg));}
 :is(#app,.reading-board).reading-board .game #endBtn .end-turn-label{transform:translateY(calc(var(--cap-press,0px)*-.309)) rotate(var(--cap-turn,0deg));}
 :is(#app,.reading-board).reading-board .rift-sprite{display:block;inset:0;opacity:1;}
 :is(#app,.reading-board).reading-board .rift-sprite::before,:is(#app,.reading-board).reading-board .rift-sprite::after{display:none;}
@@ -179,3 +179,47 @@
 /* The hand must not be flattened into one small, filtered compositor bitmap.
    Individual card frames already own their contact shadow. */
 :is(#app,.reading-board).reading-board .game.hand-open #hand{filter:none;}
+
+/* Approved count UI, 2026-11-20: pile B (porcelain plaque), stock A (silver tag).
+   Keep plain numeric text and the existing pile elevation/interaction anchors. */
+:is(#app,.reading-board).reading-board .pile-count{
+  --count-unit:calc(var(--board-meter)*.001);
+  display:flex;align-items:center;justify-content:center;box-sizing:border-box;
+  left:auto;right:calc(50% - var(--count-unit)*29.5);bottom:calc(var(--count-unit)*-10);
+  width:calc(var(--count-unit)*59);min-width:0;height:calc(var(--count-unit)*23);padding:0;
+  border:0;border-radius:0;
+  border-top:calc(var(--count-unit)*2) solid #fff5dd;
+  border-bottom:calc(var(--count-unit)*3) solid #34485d;
+  background:linear-gradient(180deg,#f3efdf,#d2c9ae 54%,#b2a588);
+  color:#253a50;font-family:Alegreya,Georgia,serif;font-size:calc(var(--count-unit)*23);
+  font-weight:700;font-variant-numeric:tabular-nums;line-height:1;text-shadow:0 1px #fff9;
+  box-shadow:inset 0 0 0 1px #8d816a;
+  clip-path:polygon(5px 0,calc(100% - 5px) 0,100% 5px,100% 100%,0 100%,0 5px);
+  filter:drop-shadow(0 2px 2px #050a1480);isolation:isolate;
+}
+:is(#app,.reading-board).reading-board .pile-count::before,
+:is(#app,.reading-board).reading-board .pile-count::after{
+  content:"";position:absolute;width:calc(var(--count-unit)*8);height:1px;background:#7d8c93;
+}
+:is(#app,.reading-board).reading-board .pile-count::before{left:calc(var(--count-unit)*5);}
+:is(#app,.reading-board).reading-board .pile-count::after{right:calc(var(--count-unit)*5);}
+:is(#app,.reading-board).reading-board .mkt-stock{
+  --count-unit:calc(var(--board-meter)*.001);--stock-accent:#adc5dc;--stock-face:#152d43;
+  position:absolute;left:50%;right:auto;bottom:calc(var(--count-unit)*-8);
+  transform:translateX(-50%);z-index:20;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;
+  width:calc(var(--count-unit)*36);min-width:0;height:calc(var(--count-unit)*19);padding:0;
+  border:0;border-radius:0;box-shadow:none;isolation:isolate;
+  background:linear-gradient(140deg,#e7f0f6,var(--stock-accent) 45%,#536f8b);
+  color:#eff6ff;font:700 calc(var(--count-unit)*17)/1 Alegreya,Georgia,serif;
+  font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #071222;
+  clip-path:polygon(5px 0,100% 0,100% calc(100% - 5px),calc(100% - 5px) 100%,0 100%,0 5px);
+  filter:drop-shadow(0 2px 2px #06132480);
+}
+:is(#app,.reading-board).reading-board .mkt-stock::before{
+  content:"";position:absolute;inset:1px;background:linear-gradient(160deg,#29415a,var(--stock-face));
+  z-index:-1;clip-path:inherit;
+}
+:is(#app,.reading-board).reading-board :is(.mkt-stock--last,.mkt-stock--single){
+  --stock-accent:#d7b988;--stock-face:#433426;
+}

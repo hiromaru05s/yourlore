@@ -1,0 +1,11 @@
+.combat-heal{position:fixed;z-index:450;pointer-events:none;user-select:none;width:0;height:0;font-size:var(--size);line-height:1}
+.ch-local{position:absolute;width:3.1em;height:1.5em;left:-1.55em;top:-.75em;display:grid;place-items:center;isolation:isolate}
+.ch-digit,.ch-infill{grid-area:1/1;z-index:2;display:flex;align-items:center;font-family:Arial,sans-serif;font-weight:900;font-variant-numeric:lining-nums tabular-nums;letter-spacing:-.035em;paint-order:stroke fill;color:#82bda0;-webkit-text-stroke:.036em #163b2b;text-shadow:.025em .04em 0 #317f66,.04em .075em 0 #143f32,0 .07em .08em #082b1e65}
+.ch-infill{display:flex;z-index:3;background-image:linear-gradient(0deg,#347e5b 0%,#8ade9c 30%,#efffd6 51%,#c6f9b6 73%,#a9ebb0 100%);background-size:100% 260%;background-position:50% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none;-webkit-text-stroke:.016em #c2efb7;clip-path:inset(100% 0 0 0)}
+.combat-heal .ch-infill{background-image:linear-gradient(0deg,#39835f 0%,#7ad697 25%,#f0ffda 52%,#a6edac 76%,#c4f5b8 100%)}
+.combat-heal.heavy .ch-digit{color:#288256;-webkit-text-stroke:.036em #f3ffe8;text-shadow:.025em .04em 0 #f3ffe8,.04em .075em 0 #183d2b,0 .07em .08em #082b1e65}
+.combat-heal.heavy .ch-infill{background-image:linear-gradient(0deg,#246443 0%,#38a16a 30%,#d8ffd5 51%,#348557 73%,#288256 100%);-webkit-text-stroke:.016em #f3ffe8}
+.combat-heal.reduced .ch-digit{color:#f1ffe6}.reduced.combat-heal.heavy .ch-digit{color:#288256}
+/* Compact white cloud; the horizontal clip stays strictly inside its target frame. */
+.ch-field{position:absolute;left:0;top:0;translate:-50% -55%;width:min(1.8em,calc(var(--anchor-w)*.88));height:min(2.05em,calc(var(--anchor-h)*.84));overflow:visible;clip-path:inset(-40% 0 -40% 0);z-index:-1;pointer-events:none}
+.ch-cloud-bed{transform-origin:100px 142px}.ch-cloud-bank{transform-origin:0 12px}

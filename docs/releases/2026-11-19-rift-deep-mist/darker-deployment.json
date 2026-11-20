@@ -1,0 +1,26 @@
+{
+  "source": "d3ca461a7ce9e3197a9c16c2db8dadc2ef98dd72",
+  "deployment_id": "e9177560-4f98-4563-ab72-3754774b7ca3",
+  "versions": [
+    {
+      "version_id": "dad6699e-edfc-4d96-91c0-c926f7410ecf",
+      "percentage": 100
+    }
+  ],
+  "created_on": "2026-11-19T16:42:10.07844Z",
+  "typecheck": "passed client and server",
+  "production_suite": "304/304 passed",
+  "build": "passed",
+  "approved_preview_color_match": true,
+  "served_shader_assets": [
+    {
+      "url": "https://yourlore.xyz/assets/duelScene-CI0z7H53.js",
+      "sha256": "6af88f3cf24093ca6dc3d50842dfdc2ff95d9ee1755f2ebc78cd402f074e17c0"
+    }
+  ],
+  "post_deploy_browser_check": {
+    "status": "incomplete",
+    "reason": "Desktop fixture timed out waiting for data-scene-ready after 90 seconds. The fallback board was visible. No JavaScript or captured shader errors. Retry interrupted before a final result. Mobile check was not reached.",
+    "model_head_requests": "board.glb and mana-tray.glb responded HTTP 200; cause of browser readiness timeout not established."
+  }
+}

@@ -40,6 +40,7 @@ import {playSilenceSummon} from './silenceSummon/runtime';
 import {playCounter} from './counter/runtime';
 import {warmCardSurface} from './cardSurface';
 import {damageNumber,portraitImpact,clearDamageFeedback} from './damageFeedback';
+import {healingNumber,clearHealingFeedback} from './healingFeedback';
 import {hitMonster,monsterHealth,combatVisualRect} from './monster/runtime';
 import {isVoidSummon} from './voidSummon/selection';
 import {playVoidSummon} from './voidSummon/runtime';
@@ -130,7 +131,7 @@ const fxWaiters = new Set<() => void>();
 /** Turn fast-forward on/off. Turning it on flushes every pending FX wait. */
 export function setFxSkip(on: boolean): void {
   fxSkip = on; setMonsterSkip(on); setSeekerSkip(on); skipNpcReactions(on);
-  if(on){clearDamageFeedback();cancelManaRuptures();cancelTribePactDefeat();cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
+  if(on){clearDamageFeedback();clearHealingFeedback();cancelManaRuptures();cancelTribePactDefeat();cancelCastleSummons();cancelPoisonSummons();cancelOriginRites();cancelSoulHarvest();cancelCurse();cancelVoidShots();cancelMassacres();cancelCasinoSummons();cancelTaunts();cancelEvades();cancelStatusExtinctions();cancelDarkMerchants();cancelChosenVictory();cancelDewGrants();cancelStatusGrants();cancelTribeSummons();cancelTribeSynergy();cancelSpellFrames();clearBiblionFx();cancelDuelOutcome();cancelTurnBanner();}
   if (on) for (const r of [...fxWaiters]) r();
 }
 /** Timeout that resolves instantly while fast-forwarding. */
@@ -587,7 +588,7 @@ export async function buyReveal(card: CardInst, side: ViewSide, src: DOMRect | n
     // geometry stable until the authoritative board render replaces the market.
     source.classList.remove('is-armed');source.dataset.purchaseSource='true';
     if(remaining<=0){source.style.visibility='hidden';source.style.pointerEvents='none';source.setAttribute('aria-hidden','true');}
-    else {const stock=source.querySelector('.mkt-stock');if(stock)stock.textContent=`×${remaining}`;}
+    else {const stock=source.querySelector('.mkt-stock');if(stock){stock.textContent=`×${remaining}`;stock.classList.toggle('mkt-stock--last',remaining<=1);}}
     if(!card.quick){
       const target=document.getElementById(destination),print=cardEl(card,{effect,frame,size:'mkt'});
       try {if(target&&await boardMotionScope(signal=>moveOnBoard({kind:'purchase',source,target,card:print,signal}),3500))return null;}
@@ -717,6 +718,7 @@ export function hpFeedback(side: ViewSide, kind: "dmg" | "heal", amount: number)
   const num = document.getElementById("hp-" + side);
   if (bar && kind==='dmg') { bar.classList.add("shake"); setTimeout(() => bar.classList.remove("shake"), 400); }
   if (num) { num.classList.add(kind === "dmg" ? "hp-hit" : "hp-heal"); setTimeout(() => num.classList.remove("hp-hit", "hp-heal"), 450); }
+  if(kind==='heal'&&!fxSkip)healingNumber(document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-ring`)??combatPortrait(side),amount);
   if(kind==='dmg'&&!fxSkip){portraitImpact(side);damageNumber(document.querySelector<HTMLElement>(`#portrait${side==='me'?'Me':'Opp'} .pt-ring`)??combatPortrait(side),amount);}
 }
 
@@ -779,6 +781,12 @@ export async function gutsSurvive(result:GutsSurvival,side?:ViewSide):Promise<vo
 }
 export async function monsterActivation(uid:string):Promise<void>{
  const n=combatCard(uid)??byUid(uid);if(n&&!fxSkip)await boardMotionScope(signal=>playMonster(n,'trigger',{signal,side:n.closest('#oppRow')?-1:1}));
+}
+
+export function monHeal(uid:string,amount:number,hp:number):void{
+ const node=combatCard(uid);if(!node)return;
+ monsterHealth(node,hp);
+ if(!fxSkip)healingNumber(node,amount,()=>combatVisualRect(node));
 }
 
 export function monHit(uid:string,amount?:number,hp?:number,recoil=true):void{

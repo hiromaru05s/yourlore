@@ -23,6 +23,7 @@
     "tests/curse-contagion.mjs",
     "tests/mercenary-contracts.mjs",
     "tests/army-attune.mjs",
+    "tests/attune-added-effects.mjs",
     "tests/castle-rework.mjs",
     "tests/dice-fire-cards.mjs",
     "tests/incubator-trade.mjs",
@@ -303,7 +304,8 @@
     "tests/lobby-lifecycle.mjs",
     "tests/friends-lifecycle.mjs",
     "tests/defeat-crystal-sound.mjs",
-    "tests/mana-scatter.mjs"
+    "tests/mana-scatter.mjs",
+    "tests/healing-feedback.mjs"
   ],
   "historical": {
     "tests/balance-v47.mjs": "Version 47 expectations superseded by v52-v54; retained as history.",

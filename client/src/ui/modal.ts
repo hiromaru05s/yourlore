@@ -10,7 +10,7 @@ import '../styles/outcomeFinale.css';
 // LORE — overlays: generic modal, confirm (surrender), win,
 // treasure reveal, and the seek/recall card picker.
 // ============================================================
-import type { CardInst, GameState, Side } from "../shared/types";
+import type { PlayerState, CardInst, GameState, Side } from "../shared/types";
 import { attachDuelClock } from "./duelClock";
 import { cardEl } from "./cardView";
 import { bindZoom, closeZoom } from "./cardInspection";
@@ -208,7 +208,7 @@ export function showControlsHelp(): void {
 }
 
 /** Seek/Recall picker. Calls onPick with chosen uid (or null on cancel). */
-export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string; description?: string; browse?: boolean; filters?: boolean } = {}): void {
+export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string | null) => void, allowCancel = true, opts: { confirm?: boolean; label?: (uid:string)=>string; description?: string; browse?: boolean; filters?: boolean; owner?: PlayerState } = {}): void {
   const m = document.createElement("div");
   m.className = "modal picker-modal"; m.style.maxWidth = "720px";
   m.innerHTML = `<h2 style="font-size:14px">${title}</h2><div class="picker-grid" style="display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin:16px 0;max-height:54vh;overflow:auto"></div><div class="modal-row"></div>`;
@@ -226,7 +226,7 @@ export function cardPicker(title: string, pool: CardInst[], onPick: (uid: string
       selected=c.uid;grid.querySelectorAll('.is-picked').forEach(el=>el.classList.remove('is-picked'));card.classList.add('is-picked');ok.disabled=false;
     };
     if(opts.label){const label=document.createElement('div');label.textContent=opts.label(c.uid);label.className='picker-owner';const wrap=document.createElement('div');wrap.append(label,card);grid.append(wrap);}
-    bindZoom(card, c); // 우클릭 / 길게 누르면 확대
+    bindZoom(card, c, undefined, undefined, undefined, undefined, opts.owner); // 우클릭 / 길게 누르면 확대
     if(!opts.label) grid.appendChild(card);
     entries.push({card:c,node:opts.label ? card.parentElement! : card});
   });
@@ -312,7 +312,7 @@ export function cardPickerMulti(title: string, pool: CardInst[], max: number, on
  * still REMAINING in the deck (undrawn). `remaining` is null for the opponent,
  * and `publicOnly` labels that composition as cards revealed during this game.
  */
-export function deckViewer(title: string, composition: CardInst[], remaining: CardInst[] | null, publicOnly = false): void {
+export function deckViewer(title: string, composition: CardInst[], remaining: CardInst[] | null, publicOnly = false, owner?: PlayerState): void {
   const m = document.createElement("div");
   m.className = "modal"; m.style.maxWidth = "760px";
   const two = remaining != null;
@@ -331,7 +331,7 @@ export function deckViewer(title: string, composition: CardInst[], remaining: Ca
     grid.innerHTML = "";
     note.textContent = isDeck ? t("deck.remain.note") : t(publicOnly ? "deck.public.note" : "deck.all.note");
     if (!pool.length) { grid.innerHTML = `<div style="color:var(--paper-faint);padding:20px">${t("deck.empty")}</div>`; return; }
-    pool.forEach((c, i) => { const card = cardEl(c, { lazyArt: i }); bindZoom(card, c); grid.appendChild(card); });
+    pool.forEach((c, i) => { const card = cardEl(c, { lazyArt: i }); bindZoom(card, c, undefined, undefined, undefined, undefined, owner); grid.appendChild(card); });
   };
   render(composition, false);
   if (two) {

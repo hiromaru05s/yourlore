@@ -119,6 +119,7 @@ export interface BoardHandlers {
 
 export class GameView {
   private readonly curseSeals = {me:new CurseSealBadge(), opp:new CurseSealBadge()};
+  private inspectionOwner?: PlayerState;
   private handConditions = new HandConditionHighlights();
   private riftContents = new Map<string, Set<string>>();
   root: HTMLElement;
@@ -603,7 +604,7 @@ export class GameView {
     const graveTop = p.discard[p.discard.length - 1];
     const graveArt = graveTop && graveTop.id !== "HIDDEN" ? artUrl.full(graveTop.id) : graveTop ? frameFor(graveTop.t) : null;
     const gravePile = this.pileEl(isMe ? "pile-myDisc" : "pile-oppDisc", p.discard.length, graveArt, graveTop ?? null, t("game.discard"),
-      () => cardPicker(`${esc(p.name)} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => {}, true, { browse: true }));
+      () => cardPicker(`${esc(p.name)} — ${t("game.discard")} (${p.discard.length})`, sortByCost(p.discard), () => {}, true, { browse: true, owner: p }));
     const nextGrave=gravePile.querySelector<HTMLElement>('.pile-print .card');
     if(previousGrave&&nextGrave&&previousGrave.dataset.cardId===nextGrave.dataset.cardId)retainCardPrint(previousGrave,nextGrave);
     // clicking the DECK opens the full composition (own or opponent's public aggregate)
@@ -611,7 +612,7 @@ export class GameView {
     // my deck → also show the cards still remaining (undrawn); opponent's remaining deck is hidden
     const remaining = isMe ? [...p.deck].sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name)) : null;
     const deckPile = this.pileEl(isMe ? "pile-myDeck" : "pile-oppDeck", p.deck.length, backFor(isMe), null, t("game.deck"),
-      () => deckViewer(`${esc(p.name)} — ${t("deck.view")}`, collection, remaining, !isMe));
+      () => deckViewer(`${esc(p.name)} — ${t("deck.view")}`, collection, remaining, !isMe, p));
 
     gravePile.dataset.material=material||"";deckPile.dataset.material=material||"";
     const block = document.createElement("div");
@@ -742,7 +743,7 @@ export class GameView {
       rbtn.append(createRiftRecordWindow(removed.length, previous, isMe ? 'me' : 'opp', recordVariant(this.root.dataset.riftCountVariant)));
       rbtn.title = `${t("deck.removed")} ${removed.length}`;
       rbtn.setAttribute('aria-label', rbtn.title);
-      const openRift = () => cardPicker(`${esc(p.name)} — ${t("deck.removed")} (${removed.length})`, removed, () => {}, true, { browse: true });
+      const openRift = () => cardPicker(`${esc(p.name)} — ${t("deck.removed")} (${removed.length})`, removed, () => {}, true, { browse: true, owner: p });
       rbtn.onclick = openRift;
       bindInspectContext(rbtn, openRift);
       piles.appendChild(rbtn);
@@ -1136,6 +1137,7 @@ export class GameView {
    *    Any press on it just expands the hand.
    *  - open: large, bottom-center. Click a card = zoom preview; DRAG it up = play. */
   private renderHand(g: GameState, me: PlayerState, myTurn: boolean): void {
+    this.inspectionOwner = me;
     // Preserve an in-flight pointer session across authoritative board renders.
     const handEl = this.q("hand");
     const discarding = myTurn && g.pending?.reason === 'handCap';
@@ -1149,10 +1151,10 @@ export class GameView {
       const pc = playCost(c, me);
       const blocked=playBlockReason(g,this.you,c);
       const aff = myTurn && !g.pending && !blocked;
-      const key=JSON.stringify([c,pc,aff,blocked,discarding,getLang()]);
+      const key=JSON.stringify([c,pc,aff,blocked,discarding,getLang(),c.id === 'STARTER_MANA' ? me.attuneBonuses : null]);
       let card=old.get(c.uid);
       if(!card||card.dataset.handSnapshot!==key){
-        const next=cardEl(c,{size:'hand',playable:aff,dim:!aff&&!discarding,costOverride:pc});
+        const next=cardEl(c,{size:'hand',owner:me,playable:aff,dim:!aff&&!discarding,costOverride:pc});
         next.dataset.handSnapshot=key;
         this.bindHandCard(next,c);
         if(card)card.replaceWith(next);
@@ -1215,13 +1217,13 @@ export class GameView {
     const openStep = n <= 1 ? cw : Math.min(cw + 8, Math.max(cw * 0.42, (Math.min(vw * 0.86, 960) - cw) / (n - 1)));
     const compactStep = n <= 1 ? cw : Math.min(cw * 0.6, Math.max(cw*.16, (cw*3.4) / (n - 1)));
     const compact=handFan(n,cw,Math.min(vw*.42/.42,cw*4.4));
-    const opened=handFan(n,cw,Math.min(vw*.88/.58,cw*6.3),18);
+    const opened=handFan(n,cw,Math.min(vw*.88/.667,cw*6.3),18);
     [...handEl.children].forEach((el,i)=>{const card=el as HTMLElement;const p=compact.cards[i],o=opened.cards[i];
       card.style.setProperty('--hand-angle',`${p.angle}deg`);card.style.setProperty('--fan-x',`${p.x}px`);card.style.setProperty('--fan-y',`${p.y}px`);
       card.style.setProperty('--fan-open-angle',`${o.angle}deg`);card.style.setProperty('--fan-open-x',`${o.x}px`);card.style.setProperty('--fan-open-y',`${o.y}px`);
     });
     const overhang=(fan:ReturnType<typeof handFan>,scale:number)=>Math.max(0,...fan.cards.map(p=>(p.y+cw*.5*Math.abs(Math.sin(p.angle*Math.PI/180)))*scale));
-    handEl.style.setProperty('--fan-overhang',`${overhang(compact,.42)}px`);handEl.style.setProperty('--fan-open-overhang',`${overhang(opened,.58)}px`);
+    handEl.style.setProperty('--fan-overhang',`${overhang(compact,.42)}px`);handEl.style.setProperty('--fan-open-overhang',`${overhang(opened,.667)}px`);
     handEl.style.setProperty('--fan-width',`${compact.width}px`);handEl.style.setProperty('--fan-open-width',`${opened.width}px`);
     handEl.style.setProperty("--h-step-open", `${openStep}px`);
     handEl.style.setProperty("--h-step-compact", `${compactStep}px`);
@@ -1231,7 +1233,7 @@ export class GameView {
 
   /** Drag onto the visible board to play; return to the hand to cancel. */
   private bindHandCard(card: HTMLElement, c: CardInst): void {
-    bindInspectContext(card, () => zoomCard(c, undefined, [card.dataset.cardStateText, card.dataset.spaceRiteReason].filter(Boolean).join(' · ')));
+    bindInspectContext(card, () => zoomCard(c, undefined, [card.dataset.cardStateText, card.dataset.spaceRiteReason].filter(Boolean).join(' · '), undefined, undefined, this.inspectionOwner));
     card.style.touchAction = "none";
     card.draggable = false;
     card.addEventListener("dragstart", (e) => e.preventDefault());

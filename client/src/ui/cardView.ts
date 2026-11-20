@@ -15,6 +15,7 @@ import { curHp, effAtk, effDef, playCost } from "../shared/cardStats";
 import { cardName, cardText, getLang, t } from "../i18n";
 import { parseDiceTable, effectSections } from "../shared/cardText";
 import { CARD_RULE_GROUP_LABELS, effectRuleGroup, type EffectRuleGroup } from "../shared/cardEffectHeadings";
+import { attuneBonusRulesEl } from './attuneBonusRules';
 import { cardEffectNotes } from "../shared/cardEffectNotes";
 import { cardTypeLabel, quickSpellRule, displayPassives, referencedPassives, passiveSearchKeys } from '../shared/cardPresentation';
 
@@ -303,7 +304,7 @@ function ruleBlock(heading: string, body: string): HTMLElement {
 }
 
 /** Complete rules, including costs, keyword names and dice tables. Never fitted to card pixels. */
-export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void): HTMLElement {
+export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void, owner?: PlayerState): HTMLElement {
   const pc = playCost(c);
   const rawTxt = cardText(c).trim();
   const txt = rawTxt;
@@ -375,6 +376,8 @@ export function cardRulesEl(c: CardInst, onPassiveClick?: (key: string) => void)
         } else eff.append(keywordGroup);
       }
     }
+    const added = attuneBonusRulesEl(c, owner);
+    if (added) eff.append(added);
     const notes = cardEffectNotes(c, getLang());
     if (notes.length) {
       const glossary = el("details", "card-rule-notes");
@@ -485,6 +488,12 @@ export function cardEl(c: CardInst, opt: CardOpts = {}): HTMLElement {
     const lang0 = getLang();
     const label = (ja:string, en:string, ko:string):string => lang0 === 'ja' ? ja : lang0 === 'en' ? en : ko;
     const band = el("div", "card-status");
+    if (c.id === 'STARTER_MANA' && opt.owner?.attuneBonuses?.length) {
+      const count = opt.owner.attuneBonuses.length;
+      const chip = el('span', 'kw attune-bonus-badge');
+      chip.textContent = label(`追加効果 ${count}`, `Added effects ${count}`, `추가 효과 ${count}`);
+      band.append(chip);
+    }
     if (c.quick || c.t === "quest") {
       const chip = el("span", "kw", typeLabel);
       chip.title = c.quick ? quickSpellRule(lang0) : label("発動後から条件を数え、達成時に報酬を1回獲得", "Counts progress after activation; earn the reward once", "발동 후 조건을 세고 달성시 보상 1회 획득");
