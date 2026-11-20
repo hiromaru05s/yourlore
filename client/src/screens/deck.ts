@@ -86,7 +86,10 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
   // ---- 상태: 서버 저장분(프리셋 9슬롯) 로드, 없으면 기존 단일 덱을 1번 슬롯에 승계 ----
   const starterCards=starterCollection(app.user?.starterCards);
   const store: DeckStore = isLocalDevAccount()?deckStoreForUser(app.user):constrainDeckStore(deckStoreForUser(app.user),starterCards);
-  const sortCards=(cards:string[])=>cards.sort((a,b)=>Number(def(a).t!=='mon')-Number(def(b).t!=='mon')||def(a).cost-def(b).cost||a.localeCompare(b,'en'));
+  // Cull and Chest use the spell group, as in the visible supply order.
+  const typeOrder:Record<CardDef['t'],number>={mon:0,spell:1,starter:1,quest:2,trap:3};
+  const sortCards=(cards:string[])=>cards.sort((a,b)=>typeOrder[def(a).t]-typeOrder[def(b).t]||def(a).cost-def(b).cost||a.localeCompare(b,'en'));
+  const sortedPool=sortCards([...DECK_POOL]);
   const cur = options.tutorial ? store.sel : Math.min(store.list.length-1,Math.max(0,options.slot ?? store.sel)); // 현재 편집 중인 슬롯 (store.sel = 게임에 사용되는 슬롯)
   sortCards(store.list[cur].cards);
   let watchQ = "";
@@ -271,7 +274,7 @@ export function mountDeck(app: App, options:{tutorial?:boolean;slot?:number;sing
     }
     // The collection remains mounted, so + never loses its painted face on press.
     let poolIndex=0;
-    for(const id of DECK_POOL){
+    for(const id of sortedPool){
       const c=inst(id,'pool_'+id);
       let tile=poolRows.get(id);
       if(!tile){
