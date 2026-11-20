@@ -36,3 +36,7 @@ Authored assets and editable source:
 - Deck/grave base widths match within floating-point export precision. Persistent icons remain seven slots and stay before the deck column.
 - Review-page guide/sample toggles work. A populated grave was rendered on both sides and inspected: cards remain seated inside the compact tray.
 - These are fixture, geometry and browser checks. Live PvP and complete animation continuity were not tested, and visual adoption remains the user's decision.
+
+## Visible artwork and folded insignia correction
+
+The next review identified the transparent margin in the portrait artwork and requested a folded insignia unit plus opponent-side lower-edge alignment. See [the folded revision](folded/README.md). Its visible-art reference lines supersede the CSS-box reference lines measured above.

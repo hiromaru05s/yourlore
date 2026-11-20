@@ -13,7 +13,9 @@
 #app.reading-board[data-aligned-rail=true] .pile .pile-count {
  bottom:calc(var(--board-meter)*.004);right:4%;
 }
+#app[data-show-alignment=true]::before,
 #app[data-show-alignment=true]::after {
  content:'';position:absolute;left:8%;right:8%;top:var(--identity-alignment-line);border-top:1px dashed #f1b869;
  pointer-events:none;z-index:500;
 }
+#app[data-show-alignment=true]::before {top:var(--opponent-alignment-line)}

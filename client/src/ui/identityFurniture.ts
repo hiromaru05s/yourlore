@@ -10,7 +10,7 @@ export function mountIdentityFurniture(root:HTMLElement,parent:T.Group){
  const sampleMedals:T.Object3D[]=[];
  const aligned=root.dataset.alignedRail==='true',instances:Array<{side:'Me'|'Opp';model:T.Group}>=[];
  let lastViewport='';
- const url=aligned?'/models/reading-board/identity-aligned-1120/identity-addon.glb':'/models/reading-board/identity-11120/identity-addon.glb';
+ const url=aligned?'/models/reading-board/identity-folded-1120/identity-addon.glb':'/models/reading-board/identity-11120/identity-addon.glb';
  function placeModels(){
   const rail=aligned?identityRailLayout(readingScale()):undefined;
   for(const {side,model} of instances){
@@ -19,7 +19,11 @@ export function mountIdentityFurniture(root:HTMLElement,parent:T.Group){
    model.position.z=rail?.[side].manaZ??(side==='Me'?.397:-.397);
    if(plate){plate.position.set(.0415,pose.centerY,pose.centerZ);plate.rotation.x=pose.radians;plate.scale.z=rail?rail.nameDepth/RAIL.nameDepth:1;}
    const badge=model.getObjectByName('RANK_AND_MEDAL_FRAME');
-   if(rail&&badge){badge.position.set(RAIL.badgeX,0,rail[side].badgeCenterZ);badge.scale.z=rail[side].badgeScaleZ;const medal=model.getObjectByName('MEDAL_SAMPLE');if(medal)medal.scale.z=1/badge.scale.z;}
+   if(rail&&badge){
+    badge.position.set(RAIL.badgeX,0,0);
+    const upper=badge.getObjectByName('RANK_HALF');
+    if(upper){upper.position.set(0,pose.centerY,pose.centerZ);upper.rotation.x=pose.radians;upper.scale.z=rail.nameDepth/RAIL.nameDepth;}
+   }
   }
   dirty=true;
  }

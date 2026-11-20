@@ -1,0 +1,31 @@
+{
+  "reference": "models/reading-board/v2-shared/mana-tray.glb",
+  "materials": [
+    "Champagne brass / matches board 01",
+    "Warm silver edge",
+    "Ink blue enamel",
+    "Deep navy inset",
+    "Soft graphite mounting pad"
+  ],
+  "nameplate": {
+    "width": 0.263,
+    "depth": 0.06,
+    "center": [
+      0.0415,
+      0,
+      -0.0675
+    ]
+  },
+  "insignia": {
+    "width": 0.106,
+    "depth": 0.135,
+    "center": [
+      0.226,
+      0,
+      0
+    ],
+    "folded": true
+  },
+  "objects": 47,
+  "bytes": 384024
+}

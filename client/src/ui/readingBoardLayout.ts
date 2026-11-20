@@ -16,7 +16,7 @@ export function readingScale(width=innerWidth,height=innerHeight){return Math.mi
 export function placeReadingBoard(root:HTMLElement):void {
  const s=readingScale(),cx=innerWidth/2,cy=innerHeight/2;
  const rail=root.dataset.alignedRail==='true'?identityRailLayout(s):undefined;
- if(rail)root.style.setProperty('--identity-alignment-line',`${rail.line}px`);
+ if(rail){root.style.setProperty('--identity-alignment-line',`${rail.line}px`);root.style.setProperty('--opponent-alignment-line',`${rail.opponentLine}px`);}
  // Both portraits keep the same size, including their attached resource badges.
  const portraitSize=Math.min(210,Math.max(104,s*.30),innerHeight*.195);root.style.setProperty('--portrait-size',`${portraitSize}px`);
  root.classList.add('reading-board');root.style.setProperty('--board-meter',`${s}px`);
@@ -39,7 +39,7 @@ export function placeReadingBoard(root:HTMLElement):void {
   const spellsLeft=Math.max(buffIcons?.105:.13,portraitSize/(2*s)+.015);
   const spellsRight=buffIcons?.444:Math.min(.46,spellsLeft+7*.0384+6*.002);
   const spellDepth=buffIcons?(spellsRight-spellsLeft-6*.002)/7:.048;
-  const spellZ=rail&&id==='me'?rail.planeZ(rail.line)+spellDepth/2:sign*.34-(buffIcons?.006:0);
+  const spellZ=rail?(id==='me'?rail.planeZ(rail.line)+spellDepth/2:rail.planeZ(rail.opponentLine)-spellDepth/2):sign*.34-(buffIcons?.006:0);
   place(`#${id}Row .zone-row:has(.zone-st)`,(spellsLeft+spellsRight)/2,spellZ,spellsRight-spellsLeft,spellDepth);
   const pileZ=rail?(id==='me'?rail.pileSelfZ:-rail.pileSelfZ):sign*.205;
   place(`#pile-${id==='me'?'my':'opp'}Deck`,.54,pileZ,.136,.198);
